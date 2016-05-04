@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta  content="text/html; charset=UTF-8"  http-equiv="content-type">
+    <title>接口</title>
+    <style>
+		.pln{color:#000}@media screen{.str{color:#080}.kwd{color:#008}.com{color:#800}.typ{color:#606}.lit{color:#066}.pun,.opn,.clo{color:#660}.tag{color:#008}.atn{color:#606}.atv{color:#080}.dec,.var{color:#606}.fun{color:red}}@media print,projection{.str{color:#060}.kwd{color:#006;font-weight:bold}.com{color:#600;font-style:italic}.typ{color:#404;font-weight:bold}.lit{color:#044}.pun,.opn,.clo{color:#440}.tag{color:#006;font-weight:bold}.atn{color:#404}.atv{color:#060}}pre.prettyprint{padding:2px;border:1px solid #888}ol.linenums{margin-top:0;margin-bottom:0}li.L0,li.L1,li.L2,li.L3,li.L5,li.L6,li.L7,li.L8{list-style-type:none}li.L1,li.L3,li.L5,li.L7,li.L9{background:#eee}
+	</style>
+    <link  rel="stylesheet"  type="text/css"  href="../common.css">
+    <script  src="http://bigfoot.ajaxjs.com/bigfoot/public/run_prettify.js"></script>
+  </head>
+  <body>
+  <p> Web 项目运行起来有其一套的“虚拟目录”。下面组件能提供这些目录（也就是 url），其中最为直观的自然是“一个文件夹一个目录”，目录里面包含若干 html/jsp 这样子。另外我们还可以不用磁盘文件/文件夹定义虚拟目录，各种 servlet 也行，通过 web.xml 或者注释定义，这种方式不容易看一目了然（但是 Eclipse 也为我们准备了可以查阅的地方）。</p>
+    <br>
+    <table  style="width: 100%"  border="0">
+      <tbody>
+        <tr>
+          <td><img  alt="a"  src="http://img.blog.csdn.net/20150621145821155"></td>
+          <td><img  alt="a"  src="dd.png"></td>
+        </tr>
+      </tbody>
+    </table>
+    <h4> 通用 Web 模块</h4>
+    <p>提供基础 Web 服务，可选择使用</p>
+    <ul>
+      <li>/util_service/htmleditor_iframe：可设置 basePath 的 iframe 页面，参数：basePath</li>
+      <li>/util_service/captchaImg：简易图片验证码</li>
+      <li>/util_service/http_proxy：HTTP 代理</li>
+      <li>/util_service/ip_location：根据请求 ip 显示所在区域</li>
+      <li>/util_service/weather：如果没有指定城市，则默认依据 ip 地址来得到城市（TODO）</li>
+      <li>/util_service/remoteConsole：方便手机 web 开发调试输出调试信息</li>
+      <li>/util_service/under_construction：显示“网站正在建设中的”图片</li>
+      <li>/util_service/sendMail：通过 Socket 发送邮件</li>
+    </ul>
+     <h4>接口服务</h4>
+    <p>接口不限定特定的客户端或服务端，使得 Android/iOS 客户端/HTML5和后台 WebService 数据操作均可适用。接口遵循以下原则。</p>
+    <ul>
+      <li>HTTP 协议通信和 JSON 数据格式，其响应 ContentType 为“application/json”</li>
+      <li>URL 面向资源设计，即采用 HTTP RESTful 之风格</li>
+      <li>字符使用 UTF-8 编码</li>
+    </ul>
+    <h5>加密策略</h5>
+    <p>todo</p>
+  </body>
+</html>

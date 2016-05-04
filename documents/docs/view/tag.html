@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <title>tags</title>
+    <link rel="stylesheet" type="text/css" href="../common.css">
+    <script src="http://bigfoot.ajaxjs.com/bigfoot/public/run_prettify.js"></script>
+  </head>
+  <body>模板标签包括：El 表达式、标签库和自定义标签库。<br>
+    <ul>
+    </ul>
+    <h4>El&nbsp;表达式</h4>
+    <p>常见的 el 表达式如下。</p>
+    <ul>
+      <li>${pageContext.request.contextPath} 项目变量</li>
+      <li>${requestScope['javax.servlet.forward.request_uri']}&nbsp;获取原请求的&nbsp;uri，而非模版所在的&nbsp;uri</li>
+      <li>${viewUtils.formatDateShorter(current.createDate)}&nbsp;调用方法并传参，要求 viewUtils&nbsp;&nbsp; 在上下文</li>
+      <li>${empty value ？foo：bar}/${not empty value ？ bar：foo} 判断值是否为空，${param.xxx} 请求参数</li>
+    </ul>
+    <h4>JSTL 标签库</h4>
+    <p>JSP 标准标签库（JSTL）是一个 JSP 标签集合，它封装了 JSP 应用的通用核心功能。使用前须引入相关&nbsp;jar&nbsp;包，并在 JSP 页面声明头：&lt;%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%&gt;，其中 prefix 前缀可自定义。</p>
+    <p>请参阅 <a href="http://www.runoob.com/jsp/jsp-jstl.html">JSTL&nbsp;教程</a>。</p>
+    <h4>判断、迭代标签 </h4>
+    <p>自定义标签库基于 JSP 2.0 新提供的 SimpleTagSupport 实现，比 JSTL&nbsp;简单。使用前请将 tag.tld 文件复制在项目 WEB-INF 目录下方可。tag.tld&nbsp;位于 /tag_v2/tag.tld。</p>
+    <p>在 JSP 页面声明头：&lt;%@taglib uri="/ajaxjs" prefix="c"%&gt;，其中 prefix 前缀可自定义。</p>
+    <h5>If&nbsp;条件判断逻辑</h5>
+    <p>若条件为真，渲染标签内的内容。If 语句暂不提供 else 子语句。要执行 else 语句请使用下面的 choose。</p>
+    <table style="width: 100%" border="0">
+      <tbody>
+        <tr>
+          <td>
+            <pre class="prettyprint">Hello,
+&lt;c:if test="true"&gt;
+	World
+&lt;/c:if&gt;
+</pre> </td>
+          <td>
+            <pre class="prettyprint">Hello,
+&lt;c:if test="${bar &gt; 10}"&gt;
+	World
+&lt;/c:if&gt;
+</pre></td>
+        </tr>
+      </tbody>
+    </table>
+    <h5>choose 条件判断逻辑</h5>
+    <p>提供类似 if……else……逻辑的判断。</p>
+    <pre class="prettyprint">&lt;c:choose&gt;
+	&lt;c:when test="${user==null }"&gt;
+		用户不存在
+	&lt;/c:when&gt;
+	&lt;c:otherwise&gt;
+		用户名是 ：${user.name}
+	&lt;/c:otherwise&gt;
+&lt;/c:choose&gt;
+</pre>
+    <h5>foreach 迭代逻辑</h5>
+    <p>foreach&nbsp;既支持&nbsp;Collection 集合，也支持&nbsp;Map 的迭代，还有 Java&nbsp;数组的遍历。${currentcnt}&nbsp;是当前索引，${cnt} 是集合总数。</p>
+    <table style="width: 100%" border="0">
+      <tbody>
+        <tr>
+          <td>
+            <pre class="prettyprint">&lt;% 
+	Map&lt;String, String&gt; map = new HashMap&lt;String, String&gt;();
+	map.put("aa","111");
+	map.put("bb","222");
+	map.put("cc","333");
+	map.put("dd","444");
+	request.setAttribute("map", map);
+%&gt;
+&lt;c:foreach var="entry" items="${map}"&gt;
+	键名：${entry.key } = 值：${entry.value }
+&lt;/c:foreach&gt; 
+</pre> </td>
+          <td width="50%">
+            <pre class="prettyprint">&lt;% 
+	List&lt;String&gt; list = new ArrayList&lt;String&gt;();
+	list.add("aaa");
+	list.add("bbb");
+	list.add("ccc");
+	list.add("ddd");
+	request.setAttribute("list", list);
+%&gt;
+&lt;c:foreach var="str" items="${list}"&gt;
+	${str},当前 ${currentcnt}/一共 ${cnt}<br>
+</pre></td>
+        </tr>
+      </tbody>
+    </table>
+    <p> </p>
+    <p>各种标签之间允许嵌套。</p>
+    <h4>页面常见标签库 </h4>
+    <p>内容标签基于&nbsp;JSP&nbsp;Tag&nbsp;Files 实现。相关教程请参阅<a href="http://blog.csdn.net/zhangxin09/article/details/5099329">《JSP Tag Files 技术总结》</a>。 </p>
+    <p>使用前，请把源码目录下的 /tags_v2&nbsp;通过 Eclipse 的 link file&nbsp;关联到当前项目的 /WEB-INF/tags，这个 /WEB-INF/tags 位置不能修改；然后重命名 tags_v2&nbsp;为 public（推荐 public，可修改），于是，引用头便是：</p>
+    <pre class="prettyprint">&lt;%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common/html"%&gt;
+&lt;commonTag:head /&gt;</pre>
+    <p>上例子调用了 HTML head 标签。下述 page.tag 依赖此上述 head 头文件，封装了常见的标签。</p>
+    <p> </p>
+    <h5>遍历导航</h5>
+    <p>列出配置文件中的导航，也就是一级菜单。下面分别是遍历一级菜单和二级菜单。</p>
+    <table style="width: 100%" border="0">
+      <tbody>
+        <tr>
+          <td>
+            <pre class="prettyprint">&lt;commonTag:page type="navMenu" /&gt;
+</pre></td>
+          <td width="50%">
+            <pre class="prettyprint">&lt;commonTag:page type="secondLevelMenu" /&gt;
+</pre></td>
+        </tr>
+      </tbody>
+    </table>
+    <h5>URI 位置</h5>
+    <p>报告页面位置。</p>
+    <pre class="prettyprint">&lt;commonTag:page type="anchor" /&gt;</pre>
+    <p> </p>
+    <h5>分页控件<br>
+    </h5>
+    <p>分页。</p>
+    <pre class="prettyprint">&lt;commonTag:page type="page" /&gt;</pre>
+    <h5>相邻的两笔记录<br>
+    </h5>
+    <p>相邻的两笔记录，需要 neighborRecord&nbsp;变量。</p>
+    <pre class="prettyprint">&lt;commonTag:page type="neighborRecord" /&gt;</pre>
+    <p> Tag 的一个限制是标签内不允许再有&lt;%.. Java..%&gt; 语句。对此做法的是把欲输出内容定义在 request 对象中。</p>
+    <pre class="prettyprint">&lt;%@page pageEncoding="UTF-8"%&gt;
+&lt;%@taglib prefix="tags" tagdir="/WEB-INF/tags/"%&gt;
+&lt;%
+	request.setAttribute("html", com.ajaxjs.app.App.jsRuntime.eval("JSON_Tree.util.makeSiteMap(bf.AppStru.data, 'aa')"));
+%&gt;
+&lt;tags:content&gt;
+	&lt;jsp:attribute name="body"&gt;
+		${html}
+	&lt;/jsp:attribute&gt;
+&lt;/tags:content&gt;</pre>
+  </body>
+</html>

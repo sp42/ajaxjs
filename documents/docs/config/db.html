@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <title>数据库</title>
+    <style>
+	</style>
+    <link rel="stylesheet" type="text/css" href="../common.css">
+    <script src="http://bigfoot.ajaxjs.com/bigfoot/public/run_prettify.js"></script>
+  </head>
+  <body> 数据库当前支持 MySQL/SQLite。如果项目并发量不大可使用 SQLite，更简单。相关驱动下载如下。<br>
+    <ul>
+      <li>MySQL <a href="http://www.mysql.com/products/connector/">驱动</a></li>
+      <li>SQLite <a href="https://bitbucket.org/xerial/sqlite-jdbc">驱动</a></li>
+    </ul>
+    <h4>数据库连接池</h4>
+    <p>开始的时候， AJAXJS 选择了 Tomcat 自带的<a href="https://tomcat.apache.org/tomcat-7.0-doc/jdbc-pool.html">数据库连接池</a>。后来加入 Mybatis，里面也包含了一个连接池，但一般情况下仍旧使用 Tomcat 连接池配置，位于 /META-INF/context.xml。</p>
+    <pre class="prettyprint">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/2002/xmlspec/dtd/2.10/xmlspec.dtd"&gt;
+&lt;Context&gt;
+	&lt;Resource 
+		name="jdbc/sqlite" 
+		auth="Container" 
+		type="javax.sql.DataSource"
+		maxActive="100" maxIdle="30" maxWait="10000" 
+		username="user2" password="password1" 
+		driverClassName="org.sqlite.JDBC"
+		url="jdbc:sqlite:c:\project\grand\WebContent\META-INF\grand.sqlite" /&gt;
+
+	&lt;Resource 
+		name="jdbc/sqlite_deploy" 
+		auth="Container" 
+		type="javax.sql.DataSource"
+		maxActive="100" maxIdle="30" maxWait="10000" 
+		username="user2" password="password1" 
+		driverClassName="org.sqlite.JDBC"
+		url="jdbc:sqlite:/home/tomcat/webapps/ROOT/META-INF/grand.sqlite" /&gt;
+&lt;/Context&gt;</pre>
+    <p> 上述例子提供了 Sqlite 单文件的 win/linux 磁盘路径。</p>
+    <script src="../common.js"></script>
+  </body>
+</html>
