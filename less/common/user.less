@@ -1,0 +1,365 @@
+@import 'common/libs.less';
+@import 'common/component.less';
+@import 'UI/calendar.less';
+a{
+	color:gray;
+}
+a:visited{
+	color:rgb(170, 153, 32);
+}
+a:hover{
+	color:black;
+}
+header {
+    background-color: #F0F0F0;
+    border-bottom: 1px solid #D7D7D7;
+    span{
+	    text-shadow: 0px 0px 0.2rem rgba(0, 0, 0, 0.2);
+    }
+    & > div {
+        max-width: 993px;
+        margin: 0px auto;
+        height: 30px;
+        font-size: 95%;
+        line-height: 30px;
+        color: #333;
+        & > div {
+            float:right;
+            font-size:90%;
+        }
+    }
+}
+section {
+//    .center;
+}
+footer {
+	margin-top:20px;
+    border-top: 1px solid #D7D7D7;
+    background-color: #F0F0F0;
+    height: 90px;
+    text-align: center;
+    padding-top:30px;
+    line-height:20px;
+    color:gray;
+    font-size:.9rem;
+}
+.center{
+	max-width:600px;
+	margin:0 auto;
+}
+
+h1{
+	.center;
+	font-weight: bold;
+	font-size: 3rem;
+	color: lightgray;
+	font-style: italic;
+	padding:20px 0 20px;
+	
+}
+h2{
+	.center;
+	text-align:center;
+	padding-top:20px;
+	letter-spacing:2px;
+}
+
+form{
+	input[type=text], input[type=password], textarea{
+		.my-inputField;
+		&:focus{
+			border-color:#21a9ff!important;
+		}
+	}
+	input[type=submit],input[type=file]{
+		.my-btn-2();
+	}
+	
+	button{
+		.my-btn;
+	}
+}
+ 
+.tipsNote{
+	line-height: 20px;
+	color: #ff865d;
+	border: solid 1px #ffcc9e;
+	background-color: #fffce9;
+	padding: 8px 12px;
+	width: 70%;
+	left:30%;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	margin-top: 10px;
+	font-size: .8rem;
+	box-sizing: border-box;
+	position:relative;
+	text-align:left;
+	.arrow{
+		position: absolute;
+		top: -9px;
+	}
+	
+	.arrow:after, .arrow:before {
+	  border: solid transparent;
+	  content: ' ';
+	  height: 0;
+	  position: absolute;
+	  width: 0;
+	  border-width: 5px;
+	  left: 15px;
+	  top: -1px;
+	}
+	
+	.arrow:after {
+	  border-bottom-color: #fffce9; // 背景颜色
+	}
+	
+	.arrow:before {
+	 	border-bottom-color: #ffcc9e; // 边框颜色
+		top: -2px;
+	}
+}
+.single_tips, .tipsNote2{
+	position:fixed;
+	background-color:#f5faff;
+	border:1px solid #0066cc;
+	font-size:.9rem;
+	border-radius: 3px;
+	color: #0066cc;
+	padding: 7px 12px 8px 12px;
+	margin-left:10px;
+
+	.arrow{
+		position: absolute;
+		left:-9px;
+	}
+	
+	.arrow:after, .arrow:before {
+	  border: solid transparent;
+	  content: ' ';
+	  height: 0;
+	  left: 0;
+	  position: absolute;
+	  width: 0;
+	  border-width: 5px;
+	  top: 5px;
+	}
+	
+	.arrow:after {
+	  border-right-color: #f5faff; // 背景颜色
+	}
+	
+	.arrow:before {
+	 	border-right-color: #0066cc; // 边框颜色
+		left: -2px;
+	}
+}
+
+	p.text_1{
+		color: #ff865d;
+		border: solid 1px #ffcc9e;
+		background-color: #fffce9;
+		padding: 8px 12px;
+		border-radius: 3px;
+		text-indent:2em;
+		margin:10px 0;
+	}
+table.form{
+	width: 100%;
+	td{
+		padding:2% 0;
+		font-size:.9rem;
+		div{
+			text-align:right;
+		}
+	}
+	input[type=text], select{
+		margin-left:7%;
+	}
+	input[type=text]{
+		width:85%;
+		float:left;
+	}
+	select{
+		width:80%;
+		height:26px;
+		font-size:.9rem;
+		.noSelect{
+			color:gray;
+		}
+	}
+}
+form {
+    & > label, .labelGroup label, .labelRow {
+        display:block;
+        //max-width: 60%;
+        min-height: 30px;
+        line-height: 30px;
+        margin: 0 auto;
+        margin-top:20px;
+        overflow: hidden;
+        text-align: right;
+        resize:none;
+	    span.required-note{
+	    	color:red;
+	    	padding-right:5px;
+	    }
+    }
+    
+    .captchaCode{
+    	input[type="text"]{
+    		width:50%;
+    	}
+    	img{
+    		float:right;
+    		cursor: pointer;
+    		padding: 5px 10px 0 30px;
+			width: 20%;
+			box-sizing: border-box;
+    	}
+    }
+    &>div{
+		.center;
+		text-align: center;
+		padding:10px 0;
+	}
+	
+	// 表单验证是否通过的图标
+	.icon{
+		width:16px;
+		height:16px;
+		position:fixed;
+		background: url(http://gtms04.alicdn.com/tps/i4/T16CUPFJlXXXbS0S25-50-500.png) no-repeat;
+		&.error{
+			background-position: 0 -73px;
+		}
+		&.pass{
+			background-position: 0 -31px;
+		}
+	}
+	
+	input[type="text"], input[type="password"], label .right, textarea, .input {
+	    float:right;
+	    width:70%;
+	    text-align: left;
+	}
+	.input{
+		line-height: 20px;
+	}
+}
+
+.login{
+	padding-top: 40px;
+	padding-bottom: 50px;
+}
+fieldset{
+	border:1px solid lightgray;
+	margin-top:20px;
+	padding:1% 5%;
+	padding-bottom:3%;
+	border-radius: 3px;
+	legend{
+		letter-spacing:3px;
+		background: #DCDCDC url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAZCAYAAADwkER/AAAAXklEQVQImQXBCQqAIAAAwf3/G7swJIoQJaTocJtBldaafN8n7/vK8zxy37dc1yXneUqtVY7jkFKK5JwlpST7vsu2bbKuqyzLIjFGmedZQggyTZOM4yjDMEjf99J1nT+NEl6NABJRPAAAAABJRU5ErkJggg==") repeat-x scroll left top;
+		padding: 5px 10px;
+		line-height: 16px;
+		box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);
+		border: 1px solid #FFF;
+		border-radius: 5px;
+	}
+	p{
+		font-size:.9rem;
+		padding:2%;
+		letter-spacing:2px;
+	}
+}
+.captchaCode {
+//    img {
+//        clear: right;
+//        display: block;
+//        margin-left: 30%;
+//    }
+}
+.warning {
+    color:red;
+}
+
+.niceTable{
+	.name{
+		min-width:300px;
+	}
+	.control{
+		min-width:150px;
+	}
+	
+	.filter{
+		float:left;
+		label{
+			display:block;
+			float:left;
+			margin-right:10px;
+		}
+	}
+	.page{
+		float:right;
+	}
+} 
+
+
+.panel{
+	h4{
+		background-color: #f0f0f0;
+		border-top: 1px solid white;
+		border-bottom: 1px solid #ccc;
+		padding: 5px 15px;
+	}
+	background-color:white;
+	border: 1px solid lightgray;
+	overflow: auto;
+	resize: both;
+	margin:1% auto;
+	width:60%;
+	form{
+		margin:3%;
+	}
+	textarea {
+		height: 95px;
+		resize: none;
+	}
+	//  比较高的一行可以利用左边写提示文字
+	.heightLabel{
+		float:left;
+		width:28%;
+		line-height: 130%;
+		
+		&.required-note{
+			color:red;
+		}
+		.sub{
+			font-size:.8rem;
+			color:gray;
+			text-align:right;
+		}
+	}
+}
+
+.noRecord{
+	text-align:center;
+	display:block;
+	padding:2%;
+}
+.openAuth {
+	h4{
+		font-weight:normal;
+	}
+	li{
+		float:left;
+		width:20%;
+		text-align:center;
+		img{
+			width:60%;
+			max-height: 7%;
+		}
+	}
+}

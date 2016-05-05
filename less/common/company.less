@@ -1,0 +1,444 @@
+@import 'common/libs.less';
+@import 'common/component.less';
+
+header{
+	overflow: hidden;
+	box-shadow: 0px 5px 5px #CFCFCF;
+	-moz-box-shadow: 0px 5px 5px #CFCFCF;
+	-webkit-box-shadow: 0px 5px 5px #CFCFCF;
+	&>div{
+		.centerWidth;
+		h1{
+			padding:1% 0;
+		}
+		
+		.right {
+		    float: right;
+		    position: relative;
+		    height: 100%;
+		    
+		    form{
+		    	line-height: 60px;
+				float: right;
+				input{
+					border-radius: 3px;
+					padding: 8px 6px;
+					background-color: #eaeaea;
+					border: 1px solid #ccc;
+					font-size: 9pt;
+					width: 210px;
+					outline:none;
+					&:focus{
+						border-color:gray;
+					}
+				}
+				
+				 div {
+				    width: 32px;
+				    height: 32px;
+				    background: url("@{assetFilePath}/bigfoot/asset/images/search.png") no-repeat;
+				    position: absolute;
+				    right: 0;
+				    bottom: 10px;
+				    cursor: pointer;
+				}
+		    }
+		}
+	}
+	
+	nav {
+		clear: both;
+		background: -moz-linear-gradient(top, white, #fff 1px, #eee 20px);
+		background: -webkit-gradient(linear, left top, left 40, from(#e0e0e0), color-stop(36%, #eee), to(#e0e0e0));
+		ul{
+			.centerWidth;
+			overflow: hidden;
+			li{
+				float:left;
+				padding:1% 2%;
+				font-size:1.15rem;
+				letter-spacing:3px;
+				text-align:center;
+				font-weight:bold;
+				&.selected{
+					background: -webkit-gradient(linear, left top, left 40, from(#e0e0e0), color-stop(66%, #fff), to(#fff));
+					background: linear-gradient(to bottom, #e0e0e0, #fff 66%, #fff);
+				}
+				a:hover{
+					color: #e04828;
+				}
+			}
+		}
+	} 
+}
+
+footer{
+	width:100%;
+	margin-top:2%;
+	clear: both;
+	a{
+		font-size:.9rem;
+		color: inherit;
+		text-decoration: underline;
+	}
+	.sitemap {
+		background-color: #ededed;
+		border-top: 1px solid #dedede;
+		color: #606871;
+		overflow:hidden;
+		height:180px;
+		transition: height 300ms;
+		& > div {
+			.centerWidth;
+			padding:2% 0;
+			position:relative;
+		}
+	
+		.btn{
+		    width: 45px;
+		    height: 32px;
+		    position: absolute;
+		    cursor: pointer;
+		    top: 0;
+		    right: 0;
+			background: url("@{assetFilePath}/bigfoot/asset/images/closeBtn.png") no-repeat;
+		}
+	    &.open{
+	    	height: 35px;
+		    .btn {
+			    background: url("@{assetFilePath}/bigfoot/asset/images/openBtn.png") no-repeat;
+			}
+	    }
+		table {
+			width: 80%;
+		}
+	
+		td {
+			vertical-align: top;
+		}
+	
+		td a {
+			display: block;
+			color: #666;
+		}
+	
+		.indentBlock_0 {
+			font-weight: bold;
+		}
+	
+		.indentBlock_1 {
+		}
+	
+		.indentBlock_2 {
+			padding-left: 15%;
+		}
+	}
+	.copyright{
+		background-color:#3c4249;
+		text-align:center;
+		color:#606871;
+		&>div {
+			.centerWidth;
+			padding:1% 0;
+			.ChinaRules{
+				float:right;
+				width:25%;
+				text-align:center;
+			}
+
+		}
+	}
+}
+
+.index{
+	.centerWidth;
+	margin-top:10px;
+	.banner{
+		img{
+			width:100%;
+		}
+	}
+	&>ul{
+		margin-top:10px;
+		overflow: hidden;
+		&>li{
+			width:32.3%;
+			float:left;
+			background-color:#e0e0e0;
+			margin-right:1%;
+			padding:2%;
+			box-sizing: border-box;
+		}
+	}
+}
+
+.body{
+	.centerWidth;
+	margin-top:10px;
+	.imgBanner{
+		img{
+			width:100%;
+		}
+	}
+}
+
+menu{
+	float:right;
+	width: 20%;
+	margin: 2% 0;
+	padding: 0 0 1% 2%;
+	fieldset{
+		border-radius:5px;
+		
+	}
+	legend{
+		text-align: center;
+		font-weight:bold;
+		letter-spacing:2px;
+		font-size:1.2rem;
+	}
+	ul{
+		padding-left: 20%;
+		padding-bottom:5%;
+		li{
+			list-style:disc;
+			padding:2% 0;
+		}
+	}
+}
+
+.anchor {
+	padding-top:1%;
+	color:gray;
+	a{
+		color:gray;
+	}
+	font-size:1rem;
+}
+article{
+	h3{
+		text-align:center;
+		font-size:1.3rem;
+		padding:2% 0;
+		padding-top:1%;
+		letter-spacing:2px;
+	}
+	p{
+		color:#333;
+	    padding: 0 2%;
+	    line-height: 140%;
+	    margin: 20px 0;
+	    letter-spacing: 1px;
+	    text-align: justify;
+	    text-indent: 2em;
+	}
+} 
+
+.index{
+	li li{
+		list-style: disc;
+		margin-left: 20px;
+	}
+}
+
+// Color variables (appears count calculates by raw css)
+@color0: #d9534f; // Appears 2 times
+@color1: #46b8da; // Appears 2 times
+
+// Width variables (appears count calculates by raw css)
+@width2: 18%; // Appears 2 times
+
+h1 {
+	text-align: left;
+	letter-spacing: 3px;
+	margin: 10px 0;
+}
+
+.title {
+	font-weight: bold;
+	border-bottom: 1px solid lightgray;
+	clear: both;
+	overflow: hidden;
+	li {
+		float: left;
+		letter-spacing: 3px;
+		line-height: 40px;
+	}
+}
+
+.cover_img{
+	display:none;
+	position: fixed;
+	width:300px;
+	height:150px;
+	img {
+		width:100%;
+	}
+}
+.show{
+	display:block;
+}
+
+.list {
+	li {
+		border-top: 1px solid lightgray;
+		color: gray;
+		line-height: 40px;
+		overflow: hidden;
+		&:nth-child(even) {
+			background-color: #f5f5f5;
+		}
+		div {
+			float: left;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+	}
+	a {
+		color: #333333;
+		text-decoration: none;
+		&:visited {
+			color: gray;
+		}
+		&:hover {
+			color: @color0;
+			text-decoration: underline;
+		}
+	}
+	button {
+		border-radius: 3px;
+		border: 1px solid;
+		color: white;
+		cursor: pointer;
+		font-size: 14px;
+		letter-spacing: 5px;
+		padding: 5px 10px;
+		transition : background-color 250ms ease-in-out;
+		&.b1 {
+			background-color: #5bc0de;
+			border-color: @color1;
+			&:hover{
+				background-color:darken(#5bc0de, 30%);
+			}
+		}
+		&.b2 {
+			background-color: #2e6da4;
+			border-color: @color1;
+			&:hover{
+				background-color:darken(#2e6da4, 20%);
+			}
+		}
+		&.b3 {
+			background-color: @color0;
+			border-color: #d43f3a;
+			&:hover{
+				background-color:darken(#d43f3a, 30%);
+			}
+		}
+	}
+}
+
+// 列表
+.col_id {
+	text-align: center;
+	width: 6%;
+}
+li.col_name{
+	text-align: center;
+}
+.col_name {
+	font-size:1rem;
+	text-align: left;
+	width: 30%;
+	.col_createDate {
+		text-align: center;
+	}
+}
+.col_createDate {
+	font-size:.9rem;
+	text-align: center;
+	width: 17%;
+}
+.col_meta {
+	font-size:.9rem;
+	text-align: center;
+	width: 26%;
+}
+.col_action {
+	text-align: center;
+	width: 21%;
+	button{
+		outline:none;
+	}
+}
+
+
+.tab{
+	overflow:hidden;
+	position: relative;
+	header{
+		height:30px;
+		ul{
+			li{
+				float:left;
+			}
+			background-color:gray;
+		}
+	}
+	&>div{ // mover
+		//position:absolute;
+		white-space: nowrap;
+		.fixTransitionFlash();
+//		.transition(200ms left linear);
+		.transition(400ms all linear);
+//		transition : transform 400ms linear;
+		&>div{
+			white-space: normal;//reset
+			float:left;
+			min-height:10px; // 必须有高度，否则作0x0 块处理
+		}
+	}
+}
+
+section.banner{
+	.tab;
+	position:relative;
+	margin-bottom: 15px;
+	min-height: 140px;
+	width:98%;
+	max-height:280px; // 防止加载中扯高容器
+	&>div>div img{
+		width:100%;
+	}
+	ol{
+		background:rgba(0, 0, 0, .5);
+		width:100%;
+		margin:0;
+		padding:0;
+		padding-right:60px;
+		height:18px;
+		line-height:25px;
+		position:absolute;
+		bottom:0;
+		left:0;
+		text-align:right;
+		li{
+			list-style-type:none;
+			height:5px;
+			width:5px;
+			display:inline-block;
+			margin:6px 3px;
+			color:white;
+			text-indent:99em;
+			background:rgba(255, 255, 255, .5);
+			cursor: pointer;
+			&:last-child{
+				margin-right: 20px;
+			}
+			&.active{
+				background:white;
+			}
+		}
+	}
+}

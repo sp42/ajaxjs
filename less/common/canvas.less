@@ -1,0 +1,34 @@
+.new_arrowL {
+	-webkit-transform: rotateZ(-90deg);
+	left: 10px;
+}
+.new_arrowR {
+	-webkit-transform: rotateZ(90deg);
+	right: 10px;
+}
+.new_arrowL, .new_arrowR {
+	width: 85px;
+	height: 40px;
+	cursor: pointer;
+	bottom: 26px;
+	position:fixed;
+}
+ .new_arrowL::before ,  .new_arrowL::after , .new_arrowR::before,.new_arrowR::after{
+	content: "";
+	display: block;
+	width: 45px;
+	height: 10px;
+	background-color: white;
+	border-radius: 6px;
+	position: absolute;
+	top: 12px;
+	
+}
+
+.new_arrowL::before, .new_arrowR::before{
+	-webkit-transform: rotateZ(-30deg);
+}
+.new_arrowL::after, .new_arrowR::after{
+	-webkit-transform: rotateZ(30deg);
+	left: 32px;
+}

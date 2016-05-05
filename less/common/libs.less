@@ -1,0 +1,231 @@
+html{
+	font-size:14px;
+	body{
+		background-color: #f8f8f8;
+		a{
+			text-decoration:none;
+			color:#333;
+//			color:inherit;
+			transition : color 200ms ease-in-out;
+			&:hover{
+				color:black;
+				text-decoration:underline;
+			}
+		}
+	}
+}
+
+.hide{
+	display:none;
+}
+
+.centerWidth() {
+	margin:0 auto;
+	max-width:1000px;
+}
+
+.disable {
+	cursor: not-allowed;
+	opacity: .65;
+	box-shadow: none;
+	background-image: none;
+}
+
+select,input, button{
+	outline:none;
+}
+
+// 文字段落
+.aj-pText, .p_text {
+	color:#333;
+	line-height: 160%;
+	text-indent: 2em;
+	margin: 15px 5px;
+	font-size: 1rem;
+	letter-spacing:1px;
+}
+
+// 引用
+.aj-pText.quotation {
+	color: gray;
+	&:before {
+		content: '‟';
+		font-size: 3rem;
+	}
+
+	&:after {
+		content: '”';
+		font-size: 3rem;
+		font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif; // 必须加上字体才有那个样子
+	}
+}
+
+// 水平线
+hr.aj {
+	margin: 0;
+	border: 0;
+	border-top: 1px solid #eee;
+	border-bottom: 1px solid #fff;
+	width:100%;
+}
+
+// 快速制作1px 表格边框，为需要设置的table元素加上border的class即可
+.aj-borderTable {
+	border: 1px gray solid;
+	border-collapse: collapse;
+	border-spacing: 0;
+	th{
+		background-color: #efefef;
+	}
+	td, th{
+		border: 1px gray solid;
+		line-height:160%;
+		height:120%;
+		padding:6px;		
+	}
+}
+
+.aj-fullScreenMask {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top:0;
+	left:0;
+	z-index: 9999998;
+	background-color:rgba(0, 0, 0, .5);
+}
+
+// 实现CSS 文本溢出省略号
+.aj-noWarp li{
+	white-space: nowrap;
+	text-overflow:ellipsis;
+	overflow: hidden;
+}
+
+.transition(@t){	
+    -webkit-transition: @t;
+	   -moz-transition: @t;
+	    -ms-transition: @t;
+	     -o-transition: @t;
+	        transition: @t;
+}
+
+.transition_withTransform(@t){
+    -webkit-transition: -webkit-transform @t;
+       -moz-transition: -moz-transform @t;
+        -ms-transition: -moz-transform @t;
+    	 -o-transition: -o-transform @t;
+    	    transition: transform @t;
+}
+
+.transform(@t){
+   -webkit-transform: @t;
+      -moz-transform: @t;
+       -ms-transform: @t;
+        -o-transform: @t;
+          -transform: @t;
+}
+
+.heightFx(){
+	.transition(300ms height ease-out);
+}
+
+.widthFx(){
+	.transition(200ms width ease-out);
+}
+
+.leftFx(){
+	.transition(200ms left linear); 
+}
+
+// 解决使用CSS动画时闪烁的问题
+// http://ued.taobao.com/blog/2012/01/chrome%E6%B8%B2%E6%9F%93transition%E6%97%B6%E9%A1%B5%E9%9D%A2%E9%97%AA%E5%8A%A8bug/
+.fixTransitionFlash(){
+	backface-visibility: hidden; 
+	-webkit-backface-visibility: hidden; 
+	-moz-backface-visibility: hidden; 		 
+}
+
+// 解决高度塌陷的问题 – 清除浮动 或叫 闭合浮动
+// http://www.iyunlu.com/view/css-xhtml/55.html
+// http://www.zhangxinxu.com/wordpress/2010/01/css-float%E6%B5%AE%E5%8A%A8%E7%9A%84%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%E3%80%81%E8%AF%A6%E8%A7%A3%E5%8F%8A%E6%8B%93%E5%B1%95%E4%BA%8C/
+// 强制换行
+.forceBreak(){
+	word-wrap: break-word;
+	word-break: break-all;
+}
+
+
+
+.giveHeight(){
+	overflow:hidden; 
+	zoom:1;
+}
+
+
+
+// 透明度
+.imgOpacityShow(@time : 300ms){
+	.transition(opacity @time ease-in);
+}
+
+/*
+	旋转角度
+	IE不支持 滤镜支持0，1，2，3
+*/
+.rotate(@ro:30deg){
+	.transform(rotate(@ro));
+	//filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
+
+// 垂直渐变
+.verticalityGradient(@startColor, @endColor){
+	background: -webkit-gradient(linear, center top, center bottom, from(@startColor), to(@endColor));
+	background: -moz-linear-gradient(top, @startColor, @endColor); /* for firefox 3.6+ */
+	background: -ms-linear-gradient(@startColor 0%, @endColor 100%); 
+	//filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=@startColor, endColorstr=@endColor); /* for IE */
+}
+.hozGradient_2(@startColor, @endColor){
+	background:  -moz-linear-gradient(left center, @startColor 0%, @endColor 100%);
+	background:  -webkit-linear-gradient(left, @startColor 0%, @endColor 100%);
+}
+.hozGradient_3(@endColor, @startColor){
+	background:  -moz-linear-gradient(left center, @startColor 0%, @endColor 100%);
+	background:  -webkit-linear-gradient(left, @startColor 0%, @endColor 100%);
+}
+// 水平渐变
+.hozGradient(@startColor, @midColor, @endColor){
+//  android 2.2 css
+//  background-image: -webkit-gradient(linear, left top, right top, color-stop(0, rgba(255, 255, 255, 0.2)), color-stop(1, #9ba1a6));
+	background-image: -webkit-linear-gradient(left, @startColor, @midColor, @endColor);
+	background-image: -moz-linear-gradient(left, @startColor, @midColor, @endColor);
+   	background-image: -ms-linear-gradient(left, @startColor, @midColor, @endColor);
+	background-image: -o-linear-gradient(left, @startColor, @midColor, @endColor);
+}
+ 
+@keyframes fade-in {  
+    0% {opacity: 0;}/*初始状态 透明度为0*/  
+    40% {opacity: 0;}/*过渡状态 透明度为0*/  
+    100% {opacity: 1;}/*结束状态 透明度为1*/  
+}  
+@-webkit-keyframes fade-in {/*针对webkit内核*/  
+    0% {opacity: 0;}  
+    40% {opacity: 0;}  
+    100% {opacity: 1;}  
+}
+@keyframes fade-out {  
+    0% {opacity: 1;}/*初始状态 透明度为0*/  
+    40% {opacity: 1;}/*过渡状态 透明度为0*/  
+    100% {opacity: 0;}/*结束状态 透明度为1*/  
+}  
+@-webkit-keyframes fade-out {/*针对webkit内核*/  
+    0% {opacity: 1;}  
+    40% {opacity: 1;}  
+    100% {opacity: 0;}  
+}
+
+.fadeIn(@duration){
+	animation: fade-in;/*动画名称*/  
+	animation-duration: @duration;/*动画持续时间*/  
+	-webkit-animation:fade-in @duration;/*针对webkit内核*/  
+}
