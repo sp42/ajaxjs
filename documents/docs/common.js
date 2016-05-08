@@ -44,15 +44,19 @@ var html = [
 		'			log.warning(e);', '		}', '	}', '}</pre>', '    <p><br>',
 		'    </p>', '    <p> </p>' ].join("");
 var MAX = 20;
-var reg = /\d/;
-var result = {
+var reg = /\d/; // 解析数字出来
+var result = { 	// 结果
 };
+
+/**
+ * 
+ */
 function foo(html) {
 	var lastIndex = 1, parentNode;
-	for (var i = 0, j = html.length; i < j; i++) {
-		var l = html[i + 2], i_int = parseInt(l);
+	for (var i = 0, j = html.length; i < j; i++) { // 遍历字符串
+		var l = html[i + 2], i_int = parseInt(l);// <h1、<h2
 		if (html[i] == '<' && html[i + 1] == 'h' && reg.test(l)) {
-			var sub = html.substr(i, MAX).replace(/<[^>]*>?/g, '').trim();
+			var sub = html.substr(i, MAX).replace(/<[^>]*>?/g, '').trim();// 闭合标签
 			// if(sub.indexOf('工具选用') != -1)debugger;
 			// if(sub.indexOf('日志服务') != -1)debugger;
 			if (i_int > lastIndex) {
@@ -73,6 +77,8 @@ function foo(html) {
 				}
 
 			} else if (i_int < lastIndex) {
+				
+				
 				while (parentNode && parentNode.parentNode) {
 					if (parentNode.level == (i_int - 1))
 						break;
