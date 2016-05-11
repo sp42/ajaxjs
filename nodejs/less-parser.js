@@ -1,6 +1,16 @@
-const less = require('less'), fs = require('fs'), Step = require('./lib/step'), webUtils = require('./lib/webserver-utils');
+const HTTP = require('http'), less = require('less'), fs = require('fs'), Step = require('./lib/step'), webUtils = require('./lib/webserver-utils');
 
-exports.init = function (request, response) {
+
+const port = 80, server = HTTP.createServer((req, res) => {
+	init(req, res);
+});
+
+server.listen(port, null, () => {
+	var host = '';
+	console.log(`Image Server running at http://${host}:${port}/`);
+});
+
+init = function (request, response) {
 	console.log('Current Less.js vresion:' + less.version.join('.'));
 	var _req = webUtils.url2json(request.url),
 		lessFile = _req.lessFile,
