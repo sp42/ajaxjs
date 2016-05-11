@@ -1,3 +1,4 @@
+﻿// 依赖 Step.js 异步流程库 http://blog.csdn.net/zhangxin09/article/details/13018739
 const
 	HTTP = require('http'), PATH = require('path'), fs = require('fs'), CRYPTO = require('crypto'),
     url = require("url"), querystring = require("querystring"),
@@ -5,8 +6,8 @@ const
 
 // 配置对象。
 var staticFileServer_CONFIG = {
-	'host': '127.0.0.1',			// 服务器地址
-	'port': 3000,						// 端口
+	'host': '192.168.1.141',			// 服务器地址
+	'port': 3001,						// 端口
 	'site_base': 'C:/project/bigfoot', 			// 根目录，虚拟目录的根目录
 	'file_expiry_time': 480, 		// 缓存期限 HTTP cache expiry time, minutes
 	'directory_listing': true 		// 是否打开 文件 列表
@@ -20,8 +21,10 @@ server.listen(staticFileServer_CONFIG.port, staticFileServer_CONFIG.host, () => 
 	console.log(`Image Server running at http://${staticFileServer_CONFIG.host}:${staticFileServer_CONFIG.port}/`);
 });
 
+const quality = 25, maxLength = 10 * 1024 * 1024; // 10mb;
+
 // 当前支持的 文件类型，你可以不断扩充。
-var MIME_TYPES = {
+const MIME_TYPES = {
 	'.txt': 'text/plain',
 	'.md': 'text/plain',
 	'': 'text/plain',
@@ -42,20 +45,20 @@ var httpEntity = {
 	getHeaders: function (EXPIRY_TIME) {
 		// 返回 HTTP Meta 的 Etag。可以了解 md5 加密方法
 		var hash = CRYPTO.createHash('md5');
-		//hash.update(this.data);
-		//var etag = hash.digest('hex');
+		hash.update(this.data);
+		var etag = hash.digest('hex');
 
 		return {
 			'Content-Type': this.contentType,
 			'Content-Length': this.data.length,
-			//'Cache-Control': 'max-age=' + EXPIRY_TIME,
-			//'ETag': etag
+			'Cache-Control': 'max-age=' + EXPIRY_TIME,
+			'ETag': etag
 		};
 	}
 };
 
 function init(request, response) {
-	var args = url.parse(request.url).query,         //arg => name=a&id=5  
+	var args = url.parse(request.url).query,    //arg => name=a&id=5  
 		params = querystring.parse(args);
 
 	if (params.url) {
@@ -71,41 +74,42 @@ function getRemoteImg(request, response, params) {
 	var size = 0;
     var chunks = [];
 
+	if('url' in params && params.url == 'null'){
+		server500(response, 'url 参数为空');
+		return false;
+	}
+	
 	Step(function () {
+			console.log('load img url:' + params.url);
 			HTTP.get(params.url, this);
 		},
 		function (res) {
-			var maxLength = 10; // 10mb
 			var imgData = "";
-			if (res.headers['content-length'] > maxLength * 1024 * 1024) {
-				server500(response, new Error('Image too large.'));
-			} else if (!~[200, 304].indexOf(res.statusCode)) {
-				server500(response, new Error('Received an invalid status code.'));
-			} else if (!res.headers['content-type'].match(/image/)) {
-				server500(response, new Error('Not an image.'));
-			} else {
-				// res.setEncoding("binary"); //一定要设置response的编码为binary否则会下载下来的图片打不开
-				res.on("data", function (chunk) {
-					// imgData+=chunk;
-					size += chunk.length;
-					chunks.push(chunk);
-				});
-
-				res.on("end", this);
-			}
 			
+			try{
+				if (res.headers['content-length'] > maxLength) {
+					server500(res, new Error('Image too large.'));
+				} else if (!~[200, 304].indexOf(res.statusCode)) {
+					server500(res, new Error('Received an invalid status code.'));
+				// } else if (!res.headers['content-type'].match(/image/)) {
+				// 	console.log('chunk:3');
+				// 	server500(res, new Error('Not an image.'));
+				} else {
+					// res.setEncoding("binary"); //一定要设置response的编码为binary否则会下载下来的图片打不开
+					res.on("data", function (chunk) {
+						size += chunk.length;
+						chunks.push(chunk);
+					});
+
+					res.on("end", this);
+				}
+			}catch(e) {
+				server500(response, e.toString());
+			}
 		},
 		function () { 
-			imgData = Buffer.concat(chunks, size);
-		
-			var _httpEntity = Object.create(httpEntity);
-			_httpEntity.contentType = MIME_TYPES['.png'];
-			_httpEntity.data = imgData;
-			// console.log('imgData.length:::' + imgData.length)
-			// 缓存过期时限
-			var EXPIRY_TIME = (staticFileServer_CONFIG.file_expiry_time * 60).toString();
-			response.writeHead(200);
-			response.end(_httpEntity.data);
+			var buData = Buffer.concat(chunks, size);
+			outputImg(buData, params, request.headers, response);
 		}
 	);
 	
@@ -143,44 +147,54 @@ function load_local_img(request, response, params) {
 				server500(response, '读取文件失败！');
 				return;
 			}
-			var extName = '.' + path.split('.').pop();
-			var extName = MIME_TYPES[extName] || 'text/plain';
+			
+			// var extName = '.' + path.split('.').pop();
+			// 	   extName = MIME_TYPES[extName] || 'text/plain';
 
-			var _httpEntity = Object.create(httpEntity);
-			_httpEntity.contentType = extName;
 			var buData = new Buffer(data);
-			//images(buData).height(100);
-
-			var newImage;
-
-			if (params.w && params.h) {
-				newImage = images(buData).resize(Number(params.w), Number(params.h)).encode("jpg", { operation: 50 });
-			} else if (params.w) {
-				newImage = images(buData).resize(Number(params.w)).encode("jpg", { operation: 50 });
-			} else if (params.h) {
-				newImage = images(buData).resize(null, Number(params.h)).encode("jpg", { operation: 50 });
-			} else {
-				newImage = buData; // 原图
-			}
-
-			_httpEntity.data = newImage;
-
-			// 命中缓存，Not Modified返回 304
-			if (request.headers.hasOwnProperty('if-none-match') && request.headers['if-none-match'] === _httpEntity.ETag) {
-				response.writeHead(304);
-				response.end();
-			} else {
-				// 缓存过期时限
-				var EXPIRY_TIME = (staticFileServer_CONFIG.file_expiry_time * 60).toString();
-
-				response.writeHead(200, _httpEntity.getHeaders(EXPIRY_TIME));
-				response.end(_httpEntity.data);
-			}
+			outputImg(buData, params, request.headers, response);
 		});
 	}
 }
+
+function outputImg(buData, params, requestHeader, response) {	
+	var newImage, _httpEntity;
+
+	try{		
+		if (params.w && params.h) {
+			newImage = images(buData).resize(Number(params.w), Number(params.h)).encode("jpg", { quality: quality });
+		} else if (params.w) {
+			newImage = images(buData).resize(Number(params.w)).encode("jpg", { quality: quality });
+		} else if (params.h) {
+			newImage = images(buData).resize(null, Number(params.h)).encode("jpg", { quality: quality });
+		} else {
+			newImage = buData; // 原图
+		}
+		
+		_httpEntity = Object.create(httpEntity);
+		_httpEntity.contentType = MIME_TYPES['.jpg'];
+		_httpEntity.data = newImage;
+
+		// 命中缓存，Not Modified返回 304
+		if (requestHeader.hasOwnProperty('if-none-match') && requestHeader['if-none-match'] === _httpEntity.ETag) {
+			response.writeHead(304);
+			response.end();
+		} else {
+			// 缓存过期时限
+			var EXPIRY_TIME = (staticFileServer_CONFIG.file_expiry_time * 60).toString();
+
+			response.writeHead(200, _httpEntity.getHeaders(EXPIRY_TIME));
+			response.end(_httpEntity.data);
+		}
+	} catch(e) {
+		var msg = params.url + ' ' + e.toString();
+		console.log(msg);
+		server500(response, msg);
+	}
+}
+
 function server500(response, msg) {
 	console.log(msg);
-	response.writeHead(404, { 'Content-Type': 'text/plain;charset=utf-8' });
+	response.writeHead(500, { 'Content-Type': 'text/plain;charset=utf-8' });
 	response.end(msg + '\n');
 }
