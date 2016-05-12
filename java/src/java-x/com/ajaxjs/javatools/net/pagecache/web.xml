@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="GB18030"?>
+<web-app version="3.0" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd
+	http://java.sun.com/xml/ns/javaee/web-common_3_0.xsd
+	http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd
+	">
+	
+	
+	<filter>
+		<filter-name>ConnectionLimitFilter</filter-name>
+		<filter-class>org.pagecache.ConnectionLimitFilter</filter-class>
+		<init-param>
+			<param-name>resourceLimit</param-name>
+			<param-value>20</param-value>
+		</init-param>		
+	</filter>
+		
+	<filter>
+		<filter-name>pageCacheFilter</filter-name>
+		<filter-class>org.pagecache.PageCacheFilter</filter-class>
+		<init-param>
+			<param-name>urlPattern</param-name>
+			<param-value>/brand/[0-9]+*.htm[lL],/spubrand/brand_offer_[0-9]*.htm</param-value>
+		</init-param>
+		<init-param>
+			<param-name>cacheExpireTime</param-name>
+			<param-value>5,10</param-value>
+		</init-param>
+		<init-param>
+			<param-name>cacheSize</param-name>
+			<param-value>2000</param-value>
+		</init-param>
+		<init-param>
+			<param-name>includeParams</param-name>
+			<param-value>id,name;brandId,brandName</param-value>
+		</init-param>
+		<init-param>
+			<param-name>excludeParams</param-name>
+			<param-value>tracelog;tracelog</param-value>
+		</init-param>
+		<init-param>
+			<param-name>cacheStore</param-name>
+			<param-value>org.pagecache.cache.SimpleLRUCacheStore</param-value>
+		</init-param>	
+				<init-param>
+			<param-name>cacheStoreParams</param-name>
+			<param-value>cacheSize:2000</param-value>
+		</init-param>			
+	</filter>
+
+	<filter-mapping>
+		<filter-name>testFilter</filter-name>
+		<url-pattern>/plugin/*</url-pattern>
+	</filter-mapping>
+	
+
+
+</web-app>
