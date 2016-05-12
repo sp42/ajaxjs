@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.web.mail;
+package com.ajaxjs.net.mail;
 
 import com.ajaxjs.util.StringUtil;
 
@@ -33,7 +33,7 @@ public class Mail {
 	private String subject;
 	private boolean isHTML_body;
 
-	public int port = 25;
+	private int port = 25;
 
 	public String getContent() {
 		return content;
@@ -103,5 +103,13 @@ public class Mail {
 
 	public void setHTML_body(boolean isHTML_body) {
 		this.isHTML_body = isHTML_body;
+	}
+
+	public int getPort() {
+		return port;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
 	}
 }

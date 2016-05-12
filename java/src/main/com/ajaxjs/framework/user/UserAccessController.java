@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.ajaxjs.framework.exception.ServiceException;
 import com.ajaxjs.framework.user.captcha.IncorrectCaptchaException;
+import com.ajaxjs.net.IP;
 import com.ajaxjs.web.Captcha;
-import com.ajaxjs.web.IP;
 import com.ajaxjs.web.Responser;
 
 

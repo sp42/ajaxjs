@@ -132,7 +132,7 @@ public class App implements ServletContextListener/*, WebApplicationInitializer*
 			return Helper.getDataSource("jdbc/sqlite_mac");
 		}
 		if (isUsingMySQL) {
-			return Helper.getDataSource("jdbc/mysql");
+			return Helper.getDataSource("jdbc/mysql_test");
 		} else {
 			if (isDebug)
 				str = isMac ? "" : "jdbc/sqlite";

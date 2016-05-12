@@ -21,9 +21,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.Constant;
 import com.ajaxjs.app.App;
+import com.ajaxjs.net.IP;
 import com.ajaxjs.util.Util;
 import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.web.IP;
 import com.ajaxjs.web.Requester;
 import com.ajaxjs.web.UA;
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.web.mail;
+package com.ajaxjs.net.mail;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -49,7 +49,7 @@ public class Sender extends Socket {
 	 * @throws UnknownHostException
 	 */
 	public Sender(Mail bean) throws UnknownHostException, IOException {
-		super(bean.getMailServer(), bean.port);
+		super(bean.getMailServer(), bean.getPort());
 		this.bean = bean;
 	}
 
