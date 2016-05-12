@@ -17,17 +17,15 @@ public class download {
 			// 设置断点续传的开始位置
 			httpConnection.setRequestProperty("RANGE", "bytes=" + nPos);
 
-			RandomAccessFile oSavedFile = new RandomAccessFile(savePathAndFile, "rw");
-
-			// 定位文件指针到nPos位置
-			oSavedFile.seek(nPos);
 			byte[] b = new byte[1024];
 			int nRead;
 
 			// 获得输入流
-			try (InputStream input = httpConnection.getInputStream();) {
-				// 从输入流中读入字节流，然后写到文件中
-				while ((nRead = input.read(b, 0, 1024)) > 0) {
+			try (RandomAccessFile oSavedFile = new RandomAccessFile(savePathAndFile, "rw");
+				InputStream input = httpConnection.getInputStream();) {
+				oSavedFile.seek(nPos);	// 定位文件指针到nPos位置
+				
+				while ((nRead = input.read(b, 0, 1024)) > 0) { // 从输入流中读入字节流，然后写到文件中
 					oSavedFile.write(b, 0, nRead);
 				}
 			}
@@ -70,13 +68,6 @@ public class download {
 		String savePath = "F:\\";
 		String fileName = url.substring(url.lastIndexOf("/"));
 		String fileNam = fileName;
-		HttpURLConnection conn = null;
-
-		try {
-			conn = (HttpURLConnection) (new URL(url)).openConnection();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 
 		File file = new File(savePath + fileName);
 		// 获得远程文件大小
