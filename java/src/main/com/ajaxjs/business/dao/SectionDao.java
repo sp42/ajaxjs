@@ -8,7 +8,6 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 
-import com.ajaxjs.business.model.Catalog;
 import com.ajaxjs.business.model.Section;
 import com.ajaxjs.framework.dao.DAO;
 import com.ajaxjs.framework.dao.DynamicSqlProvider;
