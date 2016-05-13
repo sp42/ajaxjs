@@ -35,7 +35,9 @@ public class Query {
 	
 	private Filter<String, String> filter;
 	private Search<String, String> Search;
-	private Order<String, String>  Order;
+	private Match<String, String> Match;
+	private Order<String, String> Order;
+	private Map<String, String> db_field_mapping;
 	
 	/**
 	 * 用于指定查询条件的过滤器
@@ -92,6 +94,27 @@ public class Query {
 			return super.put(key, value);
 		}
 	}
+	
+	/**
+	 * 用于指定搜索的内部类（精确匹配）
+	 * @author frank
+	 *
+	 * @param <K>
+	 * @param <V>
+	 */
+	public static class Match<K, V> extends HashMap<String, String> {
+		private static final long serialVersionUID = 1L;
+		
+		@Override
+		public String put(String key, String value) {
+			sqlCheck(key);
+			sqlCheck(value);
+			
+			value = PageUtil.urlChinese(value);
+			return super.put(key, value);
+		}
+	}
+	
 	/**
 	 * 用于指定排序的内部类
 	 * @author frank
@@ -202,7 +225,7 @@ public class Query {
 		}
 		
 		if(request.getParameter("searchField") != null) {
-			// search 查询
+			// search 查询（模糊）
 			Search<String, String> search = new Search<>();
 			String[] searchField = map.get("searchField"), searchValue = map.get("searchValue");
 			
@@ -211,6 +234,18 @@ public class Query {
 			}
 			
 			query.setSearch(search);
+		}
+		
+		if(request.getParameter("matchField") != null) {
+			// match 查询（精确）
+			Match<String, String> match = new Match<>();
+			String[] matchField = map.get("matchField"), matchValue = map.get("matchValue");
+			
+			for(int i = 0; i < matchField.length; i++) {
+				match.put(matchField[i], matchValue[i]);
+			}
+			
+			query.setMatch(match);
 		}
 		
 		if(request.getParameter("orderField") != null) {
@@ -225,6 +260,22 @@ public class Query {
 		}
 		
 		return query;
+	}
+
+	public Map<String, String> getDb_field_mapping() {
+		return db_field_mapping;
+	}
+
+	public void setDb_field_mapping(Map<String, String> db_field_mapping) {
+		this.db_field_mapping = db_field_mapping;
+	}
+
+	public Match<String, String> getMatch() {
+		return Match;
+	}
+
+	public void setMatch(Match<String, String> match) {
+		Match = match;
 	}
 
 

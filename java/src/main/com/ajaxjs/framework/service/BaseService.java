@@ -16,7 +16,9 @@
 package com.ajaxjs.framework.service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.ui.Model;
@@ -105,6 +107,10 @@ public abstract class BaseService<T extends BaseModel, Mapper extends DAO<T>> im
 				query = new Query(){}; // 空，因为 MyBatis 传 null 报错：result.setRows(dao.page(start, limit, getTableName(), query));
 			}
 			
+			if(getHidden_db_field_mapping().size() > 0) { // 字段映射
+				query.setDb_field_mapping(getHidden_db_field_mapping());
+			}
+			
 			// 先查询总数
 			result.setTotalCount(dao.pageCount(getSQL_TableName(), query));
 
@@ -181,8 +187,8 @@ public abstract class BaseService<T extends BaseModel, Mapper extends DAO<T>> im
 			throw new BusinessException(e.getMessage());
 		}
 		
-		com.ajaxjs.framework.model.Entity e22 = (com.ajaxjs.framework.model.Entity)entry;
-		System.out.println(e22.isOnline());
+//		com.ajaxjs.framework.model.Entity e22 = (com.ajaxjs.framework.model.Entity)entry;
+//		System.out.println(e22.isOnline());
 		try(SqlSession session = DBinit.loadSession(mapperClz);) {
 			effectedRows = session.getMapper(mapperClz).update(entry);
 			session.commit();
@@ -315,5 +321,16 @@ public abstract class BaseService<T extends BaseModel, Mapper extends DAO<T>> im
 
 	public void setModel(Model model) {
 		this.model = model;
+	}
+	
+	// 表映射
+	private Map<String, String> hidden_db_field_mapping = new HashMap<>();
+
+	public Map<String, String> getHidden_db_field_mapping() {
+		return hidden_db_field_mapping;
+	}
+
+	public void setHidden_db_field_mapping(Map<String, String> hidden_db_field_mapping) {
+		this.hidden_db_field_mapping = hidden_db_field_mapping;
 	}
 }

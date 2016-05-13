@@ -9,8 +9,8 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.ajaxjs.net.http.HttpClient;
-import com.ajaxjs.net.http.Post;
+import com.ajaxjs.web.httpclient.HttpClient;
+import com.ajaxjs.web.httpclient.Post;
 
 public class TestHttpClient {
 

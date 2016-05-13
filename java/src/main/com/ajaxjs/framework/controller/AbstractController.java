@@ -71,6 +71,7 @@ public abstract class AbstractController<T extends BaseModel> implements IContro
 			PageResult<T> pageResult = null;
 			if(request.getParameter("filterField") != null 
 				|| request.getParameter("searchField") != null
+				|| request.getParameter("matchField")  != null
 				|| request.getParameter("orderField")  != null) {
 				// 其他丰富的查询参数
 				pageResult = getService().getPageRows(start, limit, Query.getQueryFactory(request));

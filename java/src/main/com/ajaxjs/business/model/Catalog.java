@@ -1,7 +1,7 @@
 package com.ajaxjs.business.model;
 
 import com.ajaxjs.framework.model.BaseModel;
- 
+
 public class Catalog extends BaseModel {
 	private Integer parentId;
 

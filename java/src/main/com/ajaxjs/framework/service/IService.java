@@ -1,5 +1,7 @@
 package com.ajaxjs.framework.service;
 
+import java.util.Map;
+
 import org.springframework.ui.Model;
 
 import com.ajaxjs.framework.exception.ServiceException;
@@ -101,6 +103,9 @@ public interface IService<T> {
 	 * @return
 	 */
 	public String getMappingTableName();
+	
+	// 字段名映射
+	public Map<String, String> getHidden_db_field_mapping();
 
 	public String getSQL_TableName();
 	

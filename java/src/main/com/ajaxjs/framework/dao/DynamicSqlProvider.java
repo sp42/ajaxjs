@@ -27,6 +27,7 @@ import com.ajaxjs.framework.model.Query.Filter;
 import com.ajaxjs.framework.model.Query.Order;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.map.MapHelper;
 
 /**
  * 动态的 SQL，定义于此。静态的 SQL，请参见 SQLProvider.java。
@@ -73,7 +74,7 @@ public class DynamicSqlProvider {
  
 		String sql = new SQL() {
 			{
-				SELECT("*");
+				SELECT(getFileds(parames));
 				FROM(tablename);
 				
 				if (parames.containsKey("query")) {
@@ -100,6 +101,25 @@ public class DynamicSqlProvider {
 		LOGGER.info("-------------->" + sql);
 		
 		return sql;
+	}
+	
+	private String getFileds(Map<String, Object> parames) {
+		String addStr = "*";
+		
+		if (parames.containsKey("query") ) {
+			Query query = (Query) parames.get("query");
+			if(query.getDb_field_mapping() != null && query.getDb_field_mapping().size() > 0) {
+				String [] pairs = new String[query.getDb_field_mapping().size()];
+				
+				int i = 0;
+				for (String key : query.getDb_field_mapping().keySet())
+					pairs[i++] = query.getDb_field_mapping().get(key) + " AS " + key;
+				
+				addStr += " ," + StringUtil.stringJoin(pairs, ",");
+			}
+		}
+		
+		return addStr;
 	}
 
 	/**
@@ -167,14 +187,23 @@ public class DynamicSqlProvider {
 		for (Method method : methods) {	// 反射获取字段
 			String methodName = method.getName();
 			
+			Map<String, String> fieldMap = model.getService().getHidden_db_field_mapping();
+			
 			if (isOk_field(methodName)) {
 				try {
 					if (method.invoke(model) != null) {
 						methodName = getFieldName(methodName);
+						String pojoName = methodName;
+						// 字段映射
+						if (fieldMap.size() > 0 && fieldMap.containsKey(methodName)) {
+							pojoName = methodName;
+							methodName = fieldMap.get(methodName);
+						}
+						
 						if(isSet)
-							sql.SET(methodName + "= #{" + methodName + "}");
+							sql.SET(methodName + "= #{" + pojoName + "}");
 						else
-							sql.VALUES(methodName, "#{" + methodName + "}");
+							sql.VALUES(methodName, "#{" + pojoName + "}");
 					}
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 					LOGGER.warning(e);
@@ -226,6 +255,13 @@ public class DynamicSqlProvider {
 			for (String key : map.keySet()) {
 				if(!StringUtil.isEmptyString(map.get(key)))
 					sql.WHERE(key + " LIKE '%" + map.get(key) + "%'");
+			}
+		}
+		if (query.getMatch() != null) {
+			map = query.getMatch();
+			for (String key : map.keySet()) {
+				if(!StringUtil.isEmptyString(map.get(key)))
+					sql.WHERE(key + " LIKE '" + map.get(key) + "'");
 			}
 		}
 	}

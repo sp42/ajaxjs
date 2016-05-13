@@ -16,6 +16,8 @@
 package com.ajaxjs.framework.model;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.ajaxjs.framework.service.IService;
 
@@ -110,4 +112,5 @@ public class BaseModel {
 	public void setService(IService<? extends BaseModel> service) {
 		this.service = service;
 	}
+	
 }

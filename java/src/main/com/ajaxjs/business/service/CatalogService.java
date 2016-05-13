@@ -8,7 +8,9 @@ public class CatalogService extends BaseService<Catalog, CatalogDao> {
 	public CatalogService() {
 		setMapper(CatalogDao.class);
 		setTableName("catalog");
-		setMappingTableName("category");
+		setMappingTableName("TOPIC_CATEGORY_INFO");
+		
+		getHidden_db_field_mapping().put("name", "categoryName");
 		setUiName("分类");
 	}
 }

@@ -56,7 +56,7 @@ public class DBinit {
 		}
 		
 		if (isUsingMySQL) {
-			return Helper.getDataSource("jdbc/mysql");
+			return Helper.getDataSource("jdbc/mysql_test");
 		} else {
 			if (App.isDebug)
 				str = App.isMac ? "" : "jdbc/sqlite";

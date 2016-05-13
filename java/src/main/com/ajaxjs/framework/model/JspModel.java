@@ -110,6 +110,9 @@ public class JspModel extends HttpServletRequestWrapper implements Model {
 	 * @return
 	 */
 	public static Map<Integer, BaseModel> list_bean2map_id_as_key(List<? extends BaseModel> bean) {
+		if(bean == null || bean.size() == 0) 
+			return null;
+		
 		Map<Integer, BaseModel> map = new HashMap<>();
 		
 		for (BaseModel item : bean) {
