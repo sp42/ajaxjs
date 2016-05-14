@@ -64,7 +64,7 @@ public class Sender extends Socket {
 	/**
 	 * 发送邮件
 	 * 
-	 * @return
+	 * @return 是否成功
 	 * @throws MailException
 	 */
 	public boolean sendMail() throws MailException {
@@ -75,48 +75,48 @@ public class Sender extends Socket {
 			this.os = os;
 
 			String result = in.readLine();// 初始化连接
-			if (!isOkCode(result, 220)) 
+			if (!isOkCode(result, 220))
 				throw new MailException("初始化连接：" + result, 220);
 
 			// 进行握手
 			result = sendCommand("HELO %s", bean.getMailServer());
-			if (!isOkCode(result, ok_250_Code)) 
+			if (!isOkCode(result, ok_250_Code))
 				throw new MailException("握手失败：" + result, ok_250_Code);
 
 			// 验证发信人信息
 			result = sendCommand("AUTH LOGIN");
-			if (!isOkCode(result, 334)) 
+			if (!isOkCode(result, 334))
 				throw new MailException("验证发信人信息失败：" + result, 334);
 
 			result = sendCommand(toBase64(bean.getAccount()));
-			if (!isOkCode(result, 334)) 
+			if (!isOkCode(result, 334))
 				throw new MailException("发信人名称发送失败：" + result, 334);
 
 			result = sendCommand(toBase64(bean.getPassword()));
-			if (!isOkCode(result, 235)) 
+			if (!isOkCode(result, 235))
 				throw new MailException("認証不成功" + result, 235);
 
 			// 发送指令
 			result = sendCommand("Mail From:<%s>", bean.getFrom());
-			if (!isOkCode(result, ok_250_Code)) 
+			if (!isOkCode(result, ok_250_Code))
 				throw new MailException("发送指令 From 不成功" + result, ok_250_Code);// 235?
 
 			result = sendCommand("RCPT TO:<%s>", bean.getTo());
-			if (!isOkCode(result, ok_250_Code)) 
+			if (!isOkCode(result, ok_250_Code))
 				throw new MailException("发送指令 To 不成功" + result, ok_250_Code);
 
 			result = sendCommand("DATA");
-			if (!isOkCode(result, 354)) 
+			if (!isOkCode(result, 354))
 				throw new MailException("認証不成功" + result, 354);
 
 			result = sendCommand(data());
-			if (!isOkCode(result, ok_250_Code)) 
+			if (!isOkCode(result, ok_250_Code))
 				throw new MailException("发送邮件失败：" + result, ok_250_Code);
 
 			result = sendCommand("QUIT");// quit
-			if (!isOkCode(result, 221)) 
+			if (!isOkCode(result, 221))
 				throw new MailException("QUIT 失败：" + result, 221);
-			
+
 		} catch (UnknownHostException e) {
 			LOGGER.warning("初始化 失败！建立连接失败！", e);
 			return false;
@@ -135,8 +135,9 @@ public class Sender extends Socket {
 	}
 
 	/**
-	 * 生成正文 
-	 * @return
+	 * 生成正文
+	 * 
+	 * @return 正文
 	 */
 	private String data() {
 		StringBuilder sb = new StringBuilder();
@@ -144,16 +145,26 @@ public class Sender extends Socket {
 		sb.append("To:<" + bean.getTo() + ">" + Constant.lineFeet);
 		sb.append("Subject:=?UTF-8?B?" + toBase64(bean.getSubject()) + "?=" + Constant.lineFeet);
 		sb.append("Date:2016/10/27 17:30" + Constant.lineFeet);
-//		sb.append("MIME-Version: 1.0" + Constant.lineFeet);
-		sb.append((bean.isHTML_body() ? "Content-Type:text/html;charset=\"utf-8\"" : "Content-Type:text/plain;charset=\"utf-8\"") + Constant.lineFeet);
+		// sb.append("MIME-Version: 1.0" + Constant.lineFeet);
+		sb.append((bean.isHTML_body() ? "Content-Type:text/html;charset=\"utf-8\""
+				: "Content-Type:text/plain;charset=\"utf-8\"") + Constant.lineFeet);
 		sb.append("Content-Transfer-Encoding: base64" + Constant.lineFeet);
 		sb.append(Constant.lineFeet);
 		sb.append(toBase64(bean.getContent()));
 		sb.append(Constant.lineFeet + ".");
-		
+
 		return sb.toString();
 	}
 
+	/**
+	 * 发送smtp指令 并返回服务器响应信息
+	 * 
+	 * @param string
+	 *            指令
+	 * @param from
+	 *            指令参数
+	 * @return 服务器响应信息
+	 */
 	private String sendCommand(String string, String from) {
 		return sendCommand(String.format(string, from));
 	}
@@ -163,7 +174,7 @@ public class Sender extends Socket {
 	 * 
 	 * @param msg
 	 *            指令，会在字符串后面自动加上 Constant.lineFeet
-	 * @return
+	 * @return 服务器响应信息
 	 */
 	private String sendCommand(String msg) {
 		try {
@@ -176,15 +187,25 @@ public class Sender extends Socket {
 		}
 	}
 
+	/**
+	 * Base64 编码的一种实现
+	 * 
+	 * @param str
+	 *            待编码的字符串
+	 * @return 已编码的字符串
+	 */
 	public static String toBase64(String str) {
 		return new String(Base64.encode(str.getBytes()));
 	}
-	
+
 	/**
+	 * 输入期望 code，然后查找字符串中的数字，看是否与之匹配。匹配则返回 true。
 	 * 
 	 * @param str
+	 *            输入的字符串，应该要包含数字
 	 * @param code
-	 * @return
+	 *            期望值
+	 * @return 是否与之匹配
 	 */
 	private static boolean isOkCode(String str, int code) {
 		int _code = 0;

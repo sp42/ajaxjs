@@ -159,6 +159,7 @@ public class Web extends IO {
 		}
 		
 		printw.flush();
+		
 		try (FileOutputStream fileos = new FileOutputStream("/index_jsp.html", false);){
 			// 把jsp输出的内容写到xxx.htm
 			byteos.writeTo(fileos);

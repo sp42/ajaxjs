@@ -25,16 +25,6 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class UA {
 	/**
-	 * 送入一个请求
-	 * 
-	 * @param request
-	 *            请求对象
-	 */
-	public UA(HttpServletRequest request) {
-		this.ua = getUA_String(request);
-	}
-
-	/**
 	 * 送入一个浏览器 UA 标识字符串
 	 * 
 	 * @param ua
@@ -42,6 +32,16 @@ public class UA {
 	 */
 	public UA(String ua) {
 		this.ua = ua;
+	}
+
+	/**
+	 * 送入一个请求
+	 * 
+	 * @param request
+	 *            请求对象
+	 */
+	public UA(HttpServletRequest request) {
+		this.ua = getUA_String(request);
 	}
 	
 	private String ua;
