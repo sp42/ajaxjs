@@ -36,6 +36,17 @@ public class SecurityFilter implements Filter {
 	 * 白名单
 	 */
 	public static final List<String> cookieWhiteList = new ArrayList<>();
+	
+	/**
+	 * 程序入口。启动过滤器，加载配置
+	 */
+	@Override
+	public void init(FilterConfig filterConfig) throws ServletException {
+		// 初始化过滤器白名单
+		loadParams(filterConfig, "cookieWhiteList", 	 cookieWhiteList);
+		loadParams(filterConfig, "whitefilePostFixList", whitefilePostFixList);
+		loadParams(filterConfig, "onlyPostUrlList", 	 onlyPostUrlList);
+	}
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
@@ -49,29 +60,21 @@ public class SecurityFilter implements Filter {
 	}
 
 	/**
-	 * 启动过滤器，加载配置
-	 */
-	@Override
-	public void init(FilterConfig filterConfig) throws ServletException {
-		// 初始化过滤器白名单
-		loadParams(filterConfig, "cookieWhiteList", 	 cookieWhiteList);
-		loadParams(filterConfig, "whitefilePostFixList", whitefilePostFixList);
-		loadParams(filterConfig, "onlyPostUrlList", 	 onlyPostUrlList);
-	}
-
-	/**
 	 * 读取配置参数
 	 * 
 	 * @param filterConfig
-	 * @param param
+	 *            过滤器全部配置，可以从 XML 配置文件中获得
+	 * @param configName
+	 *            指定哪个的配置
 	 * @param list
+	 *            配置值要保存到列表
 	 */
-	private void loadParams(FilterConfig filterConfig, String param, List<String> list) {
-		String paramList = filterConfig.getInitParameter(param);
+	private void loadParams(FilterConfig filterConfig, String configName, List<String> list) {
+		String paramList = filterConfig.getInitParameter(configName);
 
 		if (!StringUtil.isEmptyString(paramList)) {
-			String[] cookieList = paramList.split(",");
-			list.addAll(Arrays.asList(cookieList));
+			String[] arr = paramList.split(",");
+			list.addAll(Arrays.asList(arr));
 		}
 	}
 
@@ -92,15 +95,14 @@ public class SecurityFilter implements Filter {
 	//////////////////////////////////////////////////////////////////////////////
 	
 	/**
+	 * 禁止非法 POST 请求。
 	 * 只允许 post 提交的 url 列表，需要配置 onlyPostUrlList 参数
 	 * 
-	 * @param request
+	 * @param request 请求对象
 	 */
-	private void formPostPermitCheck(HttpServletRequest request) {
-		String uri = request.getRequestURI(),
-			   method = request.getRequestURI();
-		
-		if (!Valid(uri, method)) {
+	private void formPostPermitCheck(HttpServletRequest request) {		
+		if (!Valid(request.getRequestURI(), request.getMethod())) {
+			String msg = "";
 			throw new RuntimeException("this requestUrI : " + uri + " only permit post, but now is " + method);
 		}
 	}
