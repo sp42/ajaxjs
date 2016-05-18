@@ -185,22 +185,40 @@ public class Helper {
 		return obj;
 	}
 
-	private static Map<String, String> getResultMap(ResultSet rs) throws SQLException {
-		Map<String, String> hm = new HashMap<>();
-		ResultSetMetaData rsmd = rs.getMetaData();
-		int count = rsmd.getColumnCount();
-		
-		for (int i = 1; i <= count; i++) {
-			String key = rsmd.getColumnLabel(i);
-			String value = rs.getString(i);
-			hm.put(key, value);
+	/**
+	 * 记录集合转换为 Map
+	 * 
+	 * @param rs
+	 *            记录集合
+	 * @return
+	 */
+	private static Map<String, Object> getResultMap(ResultSet rs) {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int count = rsmd.getColumnCount();
+			
+			for (int i = 1; i <= count; i++) {
+				String key = rsmd.getColumnLabel(i);
+				Object value = rs.getObject(i);
+				map.put(key, value);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
 		}
 		
-		return hm;
+		return map;
 	} 
     
-	public static List<Map<String, String>> queryList(Connection conn, String sql) {
-		List<Map<String, String>> list = new ArrayList<>();
+	/**
+	 * 记录集合列表转换为 Map[]
+	 * @param conn
+	 * @param sql
+	 * @return
+	 */
+	public static List<Map<String, Object>> queryList(Connection conn, String sql) {
+		List<Map<String, Object>> list = new ArrayList<>();
 		
 		try (Statement statement = conn.createStatement(); ResultSet rs = statement.executeQuery(sql);) {
 			while (rs.next()) {
