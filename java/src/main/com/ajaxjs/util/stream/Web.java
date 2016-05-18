@@ -35,8 +35,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
+import com.ajaxjs.net.http.HttpClient.Request;
 import com.ajaxjs.util.IO;
-import com.ajaxjs.web.httpclient.HttpClient.Request;
 
 /**
  * Web 方面的流

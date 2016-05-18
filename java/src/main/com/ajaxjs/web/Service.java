@@ -27,10 +27,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ajaxjs.net.IP;
+import com.ajaxjs.net.http.HttpClient;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.map.MapHelper;
-import com.ajaxjs.web.httpclient.HttpClient;
 
 @WebServlet(
 		urlPatterns = {
