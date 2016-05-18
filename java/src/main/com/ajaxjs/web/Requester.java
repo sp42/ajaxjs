@@ -15,7 +15,7 @@ import com.ajaxjs.util.StringUtil;
  * @author frank
  *
  */
-public class Requester extends HttpServletRequestWrapper{
+public class Requester extends HttpServletRequestWrapper {
 	/**
 	 * 创建一个 RequestHelper 对象
 	 * 

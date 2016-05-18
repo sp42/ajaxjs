@@ -27,7 +27,6 @@ import com.ajaxjs.framework.model.Query.Filter;
 import com.ajaxjs.framework.model.Query.Order;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.util.map.MapHelper;
 
 /**
  * 动态的 SQL，定义于此。静态的 SQL，请参见 SQLProvider.java。

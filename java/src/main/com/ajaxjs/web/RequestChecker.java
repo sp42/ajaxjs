@@ -19,67 +19,22 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.ajaxjs.util.StringUtil;
 import com.sun.xml.internal.fastinfoset.stax.events.Util;
 
 /**
  * 注意:如果form表单里增加了enctype="multipart/form-data" 这个属性,会导致 HttpServletRequestWrapper 里取不到表单里的内容
  * 表单重复提交处理:
-1. 在生成表单时执行如下:
-//   session.setAttribute("forum_add", "forum_add");
-2. 提交处理时作如下判断
-//        if (isRedo(request, "forum_add")) {
-//            //提示重复提交,作相关处理
-//        }
+
  * 
 《CSRF 攻击的应对之道》
 http://www.ibm.com/developerworks/cn/web/1102_niugang_csrf/
-《JSP 防止重复提交方法 》
-http://blog.csdn.net/seablue_xj/article/details/4934367
-《javaEE开发中使用session同步和token机制来防止并发重复提交》
-http://www.iflym.com/index.php/code/avoid-conrrent-duplicate-submit-by-use-session-synchronized-and-token.html
+
  
  * @author frank
  *
  */
 public class RequestChecker {
-	public RequestChecker(HttpServletRequest request) {
-		this.request = request;
-	}
-
-	private HttpServletRequest request;
-
-	/**
-	 * 利用 Referer 请求头阻止"盗链"
-	 * 
-	 * @return true 表示为同域
-	 */
-	public boolean isSameDomain() {
-		String referer = request.getHeader("referer");
-		if (Util.isEmptyString(referer)) return false;
-		
-		String site = "http://" + request.getServerName();
-		return referer.startsWith(site);
-	}
-	
-	/**
-	 * 一种表单重复提交处理方法 http://blog.csdn.net/5iasp/article/details/4268710 
-	 * 判断是否为重复提交
-	 * 1，检查Session中是否含有指定名字的属性 
-	 * 2，如果Session中没有该属性或者属性为空，证明已被处理过，判断为重复提交
-	 * 3，否则，证明是第一次处理，并将属性从Session中删除。
-	 * 
-	 * @param key
-	 *            键
-	 */
-	public boolean isRedo(String key) {
-		String value = (String) request.getSession().getAttribute(key);
-		if (value == null) {
-			return true;
-		} else {
-			request.getSession().removeAttribute(key);
-			return false;
-		}
-	}
 	
 	/**
 	 * 过滤 XSS字符

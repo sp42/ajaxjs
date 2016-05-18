@@ -25,20 +25,21 @@ import javax.servlet.jsp.PageContext;
 
 import java.awt.Font;
 
+import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.stream.Web;
 
 /**
- * 验证码的简单实现
- * http://a455360448201209214217.iteye.com/blog/1953785
- * 调用方式：
- * <%@ page language="java" contentType="image/JPEG; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>  
-   <%@page contentType="image/JPEG; charset=UTF-8" trimDirectiveWhitespaces="true"%>
-   <%com.ajaxjs.bigfoot.tools.VcodeImg.init(pageContext);%>
+ * 验证码的简单实现 http://a455360448201209214217.iteye.com/blog/1953785 调用方式： <%@ page
+ * language="java" contentType="image/JPEG; charset=UTF-8" pageEncoding="UTF-8"
+ * trimDirectiveWhitespaces="true"%> <%@page contentType=
+ * "image/JPEG; charset=UTF-8" trimDirectiveWhitespaces="true"%>
+ * <%com.ajaxjs.bigfoot.tools.VcodeImg.init(pageContext);%>
+ * 
  * @author 网上收集
  */
 public class Captcha {
-	private static final com.ajaxjs.util.LogHelper LOGGER = com.ajaxjs.util.LogHelper.getLog(Captcha.class);
-	
+	private static final LogHelper LOGGER = LogHelper.getLog(Captcha.class);
+
 	/**
 	 * 生成随机颜色
 	 * 
@@ -59,7 +60,7 @@ public class Captcha {
 
 		return new Color(r, g, b);
 	}
-	
+
 	/**
 	 * 默认宽度 60
 	 */
@@ -78,11 +79,12 @@ public class Captcha {
 	 * 设置宽度
 	 * 
 	 * @param width
+	 *            宽度
 	 */
 	public void setWidth(int width) {
 		this.width = width;
 	}
-	
+
 	/**
 	 * 默认高度 20
 	 */
@@ -90,6 +92,7 @@ public class Captcha {
 
 	/**
 	 * 获取高度
+	 * 
 	 * @return
 	 */
 	public int getHeight() {
@@ -98,16 +101,19 @@ public class Captcha {
 
 	/**
 	 * 设置高度
+	 * 
 	 * @param height
+	 *            高度
 	 */
 	public void setHeight(int height) {
 		this.height = height;
 	}
-	
+
 	private String code;
-	
+
 	/**
 	 * 获取验证码
+	 * 
 	 * @return
 	 */
 	public String getCode() {
@@ -116,7 +122,9 @@ public class Captcha {
 
 	/**
 	 * 设置验证码
+	 * 
 	 * @param code
+	 *            验证码
 	 */
 	public void setCode(String code) {
 		this.code = code;
@@ -124,6 +132,7 @@ public class Captcha {
 
 	/**
 	 * 生成验证码图片
+	 * 
 	 * @return
 	 */
 	public BufferedImage get() {
@@ -138,8 +147,8 @@ public class Captcha {
 
 		Random random = new Random();
 		for (int i = 0; i < 155; i++) {
-			int x = random.nextInt(width), y  = random.nextInt(height);
-			int xl = random.nextInt(12),   yl = random.nextInt(12);
+			int x = random.nextInt(width), y = random.nextInt(height);
+			int xl = random.nextInt(12), yl = random.nextInt(12);
 			g.drawLine(x, y, x + xl, y + yl);
 		}
 
@@ -158,9 +167,9 @@ public class Captcha {
 
 		return image;
 	}
-	
+
 	public static final String SESSION_KEY = "rand";
-	
+
 	/**
 	 * 显示验证码图片并将认证码存入 Session
 	 * 
@@ -170,14 +179,14 @@ public class Captcha {
 	public static void init(HttpServletResponse response, HttpSession session) {
 		Captcha img = new Captcha();
 		Responser rh = new Responser(response);
-		
+
 		rh.noCache(); // 不用缓存
 		Web.loadImage(img.get(), response);
 
 		session.setAttribute(SESSION_KEY, img.getCode());
 		LOGGER.info("生成验证码:" + img.getCode());
 	}
-	
+
 	/**
 	 * For JSP
 	 * 
@@ -187,7 +196,7 @@ public class Captcha {
 		HttpServletResponse response = (HttpServletResponse) pageContext.getResponse();
 		init(response, pageContext.getSession());
 	}
-	
+
 	/**
 	 * 判断用户输入的验证码是否通过
 	 * 
@@ -198,7 +207,7 @@ public class Captcha {
 		boolean isCaptchaPass = false;
 
 		String rand = (String) pageContext.getSession().getAttribute(SESSION_KEY),
-			CaptchaCode = pageContext.getRequest().getParameter("CaptchaCode");
+				CaptchaCode = pageContext.getRequest().getParameter("CaptchaCode");
 
 		LOGGER.info("rand:" + rand);
 		LOGGER.info("CaptchaCode:" + CaptchaCode);
