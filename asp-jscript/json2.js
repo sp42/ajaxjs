@@ -1,4 +1,4 @@
-$$.JSON = function(){}
+$$.JSON = function(){} 
 $$.JSON.prototype = {
 	 toObject: function() {
 		return eval("(" + arguments[0] + ')'); 
