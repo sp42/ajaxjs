@@ -283,7 +283,7 @@ public class DynamicSqlProvider {
 	 *            方法名称
 	 * @return
 	 */
-	private static String getFieldName(String methodName) {
+	public static String getFieldName(String methodName) {
 		methodName = methodName.replace("get", "");
 		methodName = Character.toString(methodName.charAt(0)).toLowerCase() + methodName.substring(1);
 		return methodName;

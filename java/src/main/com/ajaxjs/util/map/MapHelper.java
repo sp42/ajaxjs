@@ -15,9 +15,12 @@
  */
 package com.ajaxjs.util.map;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.ajaxjs.framework.dao.DynamicSqlProvider;
+import com.ajaxjs.util.Reflect;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.Util;
 
@@ -309,5 +312,29 @@ public class MapHelper<K, V extends IValue> extends HashMap<K, V> implements IRe
 		}
 		
 		return b;
+	}
+	public static String getFieldName(String methodName) {
+		methodName = methodName.replace("set", "");
+		methodName = Character.toString(methodName.charAt(0)).toLowerCase() + methodName.substring(1);
+		return methodName;
+	}
+	
+	public static void setMapValueToPojo(Map<String, Object> map, Object obj) {
+		if (obj != null) {
+			for (Method method : obj.getClass().getMethods()) {
+				String methodName = method.getName();
+				if (methodName.startsWith("set")) {
+					methodName = getFieldName(methodName);
+					System.out.println(methodName);
+					if (map.containsKey(methodName)) {
+						System.out.println(methodName);
+						Reflect.executeMethod(obj, method, map.get(methodName));
+					}
+				}
+
+			}
+		} else {
+			System.err.println("Null pointer");
+		}
 	}
 }

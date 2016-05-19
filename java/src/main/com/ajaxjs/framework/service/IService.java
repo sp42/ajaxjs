@@ -103,8 +103,11 @@ public interface IService<T> {
 	 * @return
 	 */
 	public String getMappingTableName();
-	
-	// 字段名映射
+
+	/**
+	 * 字段名映射
+	 * @return
+	 */
 	public Map<String, String> getHidden_db_field_mapping();
 
 	public String getSQL_TableName();
