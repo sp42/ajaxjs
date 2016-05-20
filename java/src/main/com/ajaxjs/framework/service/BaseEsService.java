@@ -2,9 +2,13 @@ package com.ajaxjs.framework.service;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
@@ -78,11 +82,29 @@ public class BaseEsService<T extends BaseModel> implements IService<T> {
 		checkPOJO_Class();
 
 		T pojo = Reflect.newInstance(reference);
-
+	
 		GetResponse response = connectES().prepareGet(getIndex(), getTableName(), Long.toString(id)).get();
-		MapHelper.setMapValueToPojo(response.getSourceAsMap(), pojo);
+		
+		Map<String, Object> map = parseDate(response.getSourceAsMap());
+		MapHelper.setMapValueToPojo(map, pojo);
 
 		return pojo;
+	}
+
+	private static Map<String, Object> parseDate(Map<String, Object> map) {
+		String timestamp_createDate = ((String)map.get("createDate")).replace("Z", " UTC"), 
+			   timestamp_updateDate = ((String)map.get("updateDate")).replace("Z", " UTC");
+		
+		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS Z");
+		
+		try {
+			map.put("createDate", f.parse(timestamp_createDate));
+			map.put("updateDate", f.parse(timestamp_updateDate));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		return map;
 	}
 
 	private void checkPOJO_Class() {
@@ -98,7 +120,7 @@ public class BaseEsService<T extends BaseModel> implements IService<T> {
 
 	@Override
 	public int create(T entry) throws ServiceException {
-		// TODO Auto-generated method stub
+		IndexRequest request = connectES().prepareIndex("dept", "test", item.get("id").toString()).setSource(item).get();
 		return 0;
 	}
 

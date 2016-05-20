@@ -18,7 +18,7 @@ public class TestBaseEsService {
 		news.setReference(Video.class);
 		news.setIndex("dept");
 		news.setTableName("test");
-		Video video = news.getById(1);
+		Video video = news.getById(2539);
 		System.out.println(video.getName());
 		assertNotNull(video);
 		

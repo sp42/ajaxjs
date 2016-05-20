@@ -179,6 +179,7 @@ public class Reflect {
 		try {
 			return method.invoke(instance, args);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			System.err.println(method.getName());
 			LOGGER.warning(e);
 			return null;
 		}

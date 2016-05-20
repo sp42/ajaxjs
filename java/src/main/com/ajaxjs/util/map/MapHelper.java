@@ -19,7 +19,6 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.ajaxjs.framework.dao.DynamicSqlProvider;
 import com.ajaxjs.util.Reflect;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.Util;
@@ -319,19 +318,22 @@ public class MapHelper<K, V extends IValue> extends HashMap<K, V> implements IRe
 		return methodName;
 	}
 	
+	/**
+	 * 将 map 中数据填入到 obj 中。obj 是 POJO。 如果 POJO 有这个 setter，那就根据 setter 中 setXxx 获取 xxx，作为 map 的 key 读取 map 的那個 value。
+	 * @param map
+	 * @param obj
+	 */
 	public static void setMapValueToPojo(Map<String, Object> map, Object obj) {
-		if (obj != null) {
+		if (obj != null && map != null) {
 			for (Method method : obj.getClass().getMethods()) {
 				String methodName = method.getName();
 				if (methodName.startsWith("set")) {
 					methodName = getFieldName(methodName);
-					System.out.println(methodName);
 					if (map.containsKey(methodName)) {
 						System.out.println(methodName);
 						Reflect.executeMethod(obj, method, map.get(methodName));
 					}
 				}
-
 			}
 		} else {
 			System.err.println("Null pointer");
