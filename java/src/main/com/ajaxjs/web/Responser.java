@@ -127,7 +127,7 @@ public class Responser extends HttpServletResponseWrapper{
 	}
 	
 	public void outputJSON(Map<String, ?> map) {
-		outputJSON(com.ajaxjs.javascript.Util.stringify(map));
+		outputJSON(com.ajaxjs.json.Json.stringify(map));
 	}
 	
 	/**
@@ -142,7 +142,7 @@ public class Responser extends HttpServletResponseWrapper{
 			if (output instanceof String) {
 				outputJSON(output.toString());
 			} else { // simple object
-				outputJSON(com.ajaxjs.javascript.Util.stringify(output));
+				outputJSON(com.ajaxjs.json.Json.stringify(output));
 			}
 		}
 	}
@@ -164,7 +164,7 @@ public class Responser extends HttpServletResponseWrapper{
 		hash.put("isOk", isOk);
 		hash.put("msg", msg);
 
-		String output = com.ajaxjs.javascript.Util.stringify(hash);
+		String output = com.ajaxjs.json.Json.stringify(hash);
 		outputJSON(output);
 	}
 
@@ -206,7 +206,7 @@ public class Responser extends HttpServletResponseWrapper{
 	 * @return JSON，其中 total = 0
 	 */
 	public static String queryZero() {
-		return com.ajaxjs.javascript.Util.stringify(new Object() {
+		return com.ajaxjs.json.Json.stringify(new Object() {
 			@SuppressWarnings("unused")
 			public int total = 0;
 			@SuppressWarnings("unused")
@@ -222,7 +222,7 @@ public class Responser extends HttpServletResponseWrapper{
 	 * @return JSON
 	 */
 	public static String overPage(final int _total) {
-		return com.ajaxjs.javascript.Util.stringify(new Object() {
+		return com.ajaxjs.json.Json.stringify(new Object() {
 			@SuppressWarnings("unused")
 			public int total = _total;
 			@SuppressWarnings("unused")

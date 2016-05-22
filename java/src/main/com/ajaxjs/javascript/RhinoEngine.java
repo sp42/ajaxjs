@@ -21,6 +21,7 @@ import java.util.Map;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import com.ajaxjs.json.AbstractJsEngine;
 import com.ajaxjs.util.LogHelper;
 
 import sun.org.mozilla.javascript.internal.NativeArray;
@@ -34,9 +35,9 @@ import sun.org.mozilla.javascript.internal.NativeObject;
  */
 public class RhinoEngine extends AbstractJsEngine {
 	private static final LogHelper LOGGER = LogHelper.getLog(RhinoEngine.class);
-	
-	static {
-		js = new ScriptEngineManager().getEngineByName("rhino");
+
+	public RhinoEngine(){
+		super("rhino");
 	}
 	
 	public static void main(String[] args) throws ScriptException, IOException {

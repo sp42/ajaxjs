@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import com.ajaxjs.json.AbstractJsEngine;
 import com.ajaxjs.util.LogHelper;
 
 //import jdk.nashorn.api.scripting.ScriptObjectMirror;

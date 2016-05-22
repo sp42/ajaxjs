@@ -109,7 +109,7 @@ public class Service {
 						|| strFileName.contains(".gif")
 						|| strFileName.contains(".png")) {
 
-					String el = com.ajaxjs.javascript.Util.stringify(new Object() {
+					String el = com.ajaxjs.json.Json.stringify(new Object() {
 						@SuppressWarnings("unused")
 						public Boolean isOk = true;
 						@SuppressWarnings("unused")

@@ -18,6 +18,7 @@ package com.ajaxjs.javascript;
 import javax.servlet.jsp.PageContext;
 
 import com.ajaxjs.app.App;
+import com.ajaxjs.json.IEngine;
 
 public class Cross{
 	

@@ -23,6 +23,7 @@ import com.ajaxjs.util.IO.text;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.app.App;
 import com.ajaxjs.javascript.RhinoEngine;
+import com.ajaxjs.json.JsonUtil;
 
 /**
  * JSON 配置保存器
@@ -57,7 +58,7 @@ public class Service extends RhinoEngine {
 		if (JSON_as_String != null) {
 			String fileBody = topVarName + " = " + JSON_as_String + ";";
 
-			fileBody = com.ajaxjs.javascript.Utils.format(fileBody);
+			fileBody = JsonUtil.format(fileBody);
 //			LOGGER.info(fileBody);
 //			LOGGER.info(jsonFileFullPath);
 			try {

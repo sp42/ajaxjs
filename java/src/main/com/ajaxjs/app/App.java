@@ -22,9 +22,9 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.servlet.DispatcherServlet;
 
 import com.ajaxjs.Constant;
-import com.ajaxjs.javascript.AbstractJsEngine;
-import com.ajaxjs.javascript.IEngine;
 import com.ajaxjs.javascript.RhinoEngine;
+import com.ajaxjs.json.AbstractJsEngine;
+import com.ajaxjs.json.IEngine;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.Util;
 import com.ajaxjs.util.db.Helper;
@@ -111,7 +111,7 @@ public class App implements ServletContextListener/*, WebApplicationInitializer*
 			config = jsRuntime.eval_return_Map("JSON_Tree.util.flat(bf_Config);");
 			
 			LOGGER.info("加载配置信息如下：" + System.getProperty("line.separator")
-					+ com.ajaxjs.javascript.Util.format(com.ajaxjs.javascript.Util.stringify(config))
+					+ com.ajaxjs.javascript.Util.format(com.ajaxjs.json.Json.stringify(config))
 					+ Constant.ConsoleDiver);
 		}
 	}

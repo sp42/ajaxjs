@@ -27,7 +27,7 @@
     <h4>工具选用</h4>
     <h5>日志服务</h5>
     <p> AJAXJS 本身并不强制依赖第三方日志，而是采用 JDK 自带的 logger。如果你执意要加入其他 log，建议使用&nbsp; slf4j 或 apache common logging。</p>
-    <img src="http://a.hiphotos.baidu.com/exp/w=480/sign=814868bad31373f0f53f6e97940e4b8b/a08b87d6277f9e2f5703edc91d30e924b899f339.jpg"><br>
+
     <p>相关教程请参阅<a href="http://blog.csdn.net/zhangxin09/article/details/50611373">《使用 slf4j + Java.util.logger》</a>。代码模板如下。</p>
     <pre class="prettyprint">private static final LogHelper log = LogHelper.getLog(TestLogHelper.class);
 log.warning("fooo");

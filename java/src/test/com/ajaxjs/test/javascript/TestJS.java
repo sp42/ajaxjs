@@ -5,10 +5,10 @@ import static org.junit.Assert.*;
 import org.junit.*;
 
 import com.ajaxjs.app.App;
-import com.ajaxjs.javascript.IEngine;
 import com.ajaxjs.javascript.Nashorn;
-import com.ajaxjs.javascript.Util;
 import com.ajaxjs.javascript.Utils;
+import com.ajaxjs.json.IEngine;
+import com.ajaxjs.json.Json;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -136,7 +136,7 @@ public class TestJS {
 		map.put("bar2", null);
 		map.put("bar3", true);
 		
-		String jsonStr = Util.stringify(map);
+		String jsonStr = Json.stringify(map);
 		assertNotNull(jsonStr);
 		assertEquals(jsonStr, "{\"foo\":\"11\",\"bar3\":true,\"bar\":2222,\"bar2\":null}");
 	}
@@ -166,7 +166,7 @@ public class TestJS {
 			};
 	    };
 		
-		String jsonStr = Util.stringify(obj);
+		String jsonStr = Json.stringify(obj);
 		// 输出 {"foo":"11","bar":"2222"}
 		assertNotNull(jsonStr);
 		assertEquals(jsonStr, "{\"NULL\":null,\"str\":null,\"isOk\":false,\"n0\":0,\"n1\":111,\"n2\":222,\"msg\":\"Hello world\",\"arr\":[1,\"2\",null]}");

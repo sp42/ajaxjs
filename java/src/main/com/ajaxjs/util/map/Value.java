@@ -165,7 +165,7 @@ public class Value implements IValue{
 	
 	@Override
 	public String toJSONType() {
-		return com.ajaxjs.javascript.Util.obj2jsonVaule(getValueOf());
+		return com.ajaxjs.json.Json.obj2jsonVaule(getValueOf());
 	}
 
 }
