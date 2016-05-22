@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.IOException;
 import org.junit.Test;
 
+import com.ajaxjs.test.util.timer.task_v2.TaskA;
+import com.ajaxjs.util.IO;
 import com.ajaxjs.util.IO.text;
 import com.ajaxjs.util.Util;
 
@@ -29,6 +31,6 @@ public class TestFile {
 		String content = text.readFile(fullpath);
 		assertNotNull(content);
 
-		Base.delete(fullpath);
+		IO.delete(fullpath);
 	}
 }

@@ -38,19 +38,36 @@ import org.xml.sax.SAXException;
 import com.ajaxjs.Constant;
 
 /**
- * DOM 操控 XML 可参考：http://yuancihang.iteye.com/blog/592678
+ * DOM 操控 XML
  */
 public class XML_Wrapper {
 	private Element element;
 
+	/**
+	 * 传入一个元素
+	 * 
+	 * @param element
+	 *            元素
+	 */
 	private XML_Wrapper(Element element) {
 		this.element = element;
 	}
 
+	/**
+	 * 返回元素
+	 * 
+	 * @return 元素
+	 */ 
 	public Element getDomElement() {
 		return element;
 	}
 
+	/**
+	 * 设置属性
+	 * 
+	 * @param name
+	 * @param value
+	 */
 	public void setAttribute(String name, String value) {
 		element.setAttribute(name, value);
 	}
@@ -101,7 +118,7 @@ public class XML_Wrapper {
 	 */
 	public XML_Wrapper addElement(String name, String value) {
 		XML_Wrapper child = addElement(name);
-//		child.getDomElement().appendChild(element.getOwnerDocument().createTextNode(value));
+		child.getDomElement().appendChild(element.getOwnerDocument().createTextNode(value));
 
 		return child;
 	}
@@ -229,8 +246,7 @@ public class XML_Wrapper {
 			transformer.setOutputProperty(OutputKeys.ENCODING, encoding);
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			transformer.setOutputProperty(OutputKeys.STANDALONE, "yes");
-			transformer.transform(new DOMSource(element.getOwnerDocument()),
-					new StreamResult(new OutputStreamWriter(os)));
+			transformer.transform(new DOMSource(element.getOwnerDocument()), new StreamResult(new OutputStreamWriter(os)));
 		} catch (TransformerFactoryConfigurationError | TransformerException e) {
 			e.printStackTrace();
 		}
@@ -309,44 +325,21 @@ public class XML_Wrapper {
 	}
 
 	/**
+	 * XPath
 	 * 
-	 * 实用XPATH解析xml的工具 xpath表达式用法: /图书馆/书/@名称 , /configuration/property[name
-	 * ='host']/value http://yuancihang.iteye.com/blog/592705
-	 * 
-	 * <?xml version="1.0"?>
-	 * 
-	 * <configuration>
-	 * 
-	 * <property> <name a="1">host</name> <value>http://192.168.3.249</value>
-	 * <description>系统主机地址</description> </property>
-	 * 
-	 * <property> <name>login</name> <value>/page/Default.aspx</value>
-	 * <description>登陆页面</description> </property>
-	 * 
-	 * </configuration> XpathTool xpath = new XpathTool("d:/test.xml");
-	 * System.out.println(xpath.compute(
-	 * "/configuration/property[name = 'host']/value", null));
-	 * 
-	 * @author yuan
 	 * @param xmlFile
+	 *            XML 文件路径
 	 * @param encoding
+	 *            XML 文件编码
 	 * @param expression
+	 *            XPath 表达式
 	 * @param namespaceMap
+	 *            命名空间
 	 * @return
 	 */
-	public static String xpath(String xmlFile, String encoding, String expression,
-			final Map<String, String> namespaceMap) {
-		String value = null;
-		InputSource source = null;
-
-		try (InputStreamReader isr = new InputStreamReader(XML_Wrapper.class.getResourceAsStream(xmlFile), encoding);) {
-			source = new InputSource(isr);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+	public static String xpath(String xmlFile, String encoding, String expression, final Map<String, String> namespaceMap) {
 		XPath xpath = XPathFactory.newInstance().newXPath();
-
+		
 		if (namespaceMap != null) {
 			xpath.setNamespaceContext(new NamespaceContext() {
 				@Override
@@ -357,26 +350,36 @@ public class XML_Wrapper {
 						return XMLConstants.XML_NS_URI;
 					else if (namespaceMap.containsKey(prefix))
 						return namespaceMap.get(prefix);
-
+					
 					return XMLConstants.NULL_NS_URI;
 				}
-
+				
 				@Override
 				public String getPrefix(String namespaceURI) {
 					throw new UnsupportedOperationException();
 				}
-
+				
 				@Override
 				public Iterator<?> getPrefixes(String namespaceURI) {
 					throw new UnsupportedOperationException();
 				}
 			});
-			System.out.println("设置名称空间...");
 		}
-
-		try {
-			value = xpath.evaluate(expression, source);
-		} catch (XPathExpressionException e) {
+		
+		String value = null;
+		
+		try (
+			FileInputStream is = new FileInputStream(xmlFile);
+			InputStreamReader isr = new InputStreamReader(is, encoding);
+		) {
+			InputSource source = new InputSource(isr);
+			
+			try {
+				value = xpath.evaluate(expression, source);
+			} catch (XPathExpressionException e) {
+				e.printStackTrace();
+			}
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 

@@ -58,4 +58,12 @@ public class TestXML {
 
 		root.write(saveTo);
 	}
+	
+	@Test
+	public void testXPath() {
+		String result = XML_Wrapper.xpath("d:/temp/test.xml", "utf-8",  "/configuration/property[name = 'host']/value", null);
+		System.out.println(result);
+		assertNotNull(result);
+		
+	}
 }

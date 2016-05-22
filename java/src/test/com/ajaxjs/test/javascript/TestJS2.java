@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.util.Map;
 import javax.script.ScriptException;
 
-import com.ajaxjs.framework.RhinoApplication;
-import com.ajaxjs.framework.javascript.JsEngine;
 
 public class TestJS2 {
 	JsEngine js;
