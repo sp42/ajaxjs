@@ -54,7 +54,7 @@ public class TestHttpClient {
 				+ "{ content: \"朝鲜氢弹试验不成功又怎样？朝鲜氢弹试验不成功又怎样？\", 	 sourceUrl: 	 \"http://od.qingting.fm/m4a/5692efe57b28aa1a69426337_4663983_64.m4a\", 	 createDate: \"2016-01-20 21:32:12\", updateDate: \"2016-01-20 21:32:12\", name: 	 \"朝鲜氢弹试验不成功又怎样？\" }, "
 				+ "{ content: \"朝鲜氢弹试验不成功又怎样？朝鲜氢弹试验不成功又怎样？\", 	 sourceUrl: 	 \"http://od.qingting.fm/m4a/5692efe57b28aa1a69426337_4663983_64.m4a\", 	 createDate: \"2016-01-20 21:32:12\", updateDate: \"2016-01-20 21:32:12\", name: 	 \"朝鲜氢弹试验不成功又怎样？\" } 	"
 				+ "] 	" + "}");
-		System.out.println(post.getText());
+		System.out.println(post.text());
 	}
 
 	@Test
@@ -72,7 +72,7 @@ public class TestHttpClient {
 		}
 		post.setRequestData(str);
 		post.setRequestData("name=hjj&aaa=564&564");
-		System.out.println(post.getText());
+		System.out.println(post.text());
 	}
 
 	@Test
@@ -89,7 +89,7 @@ public class TestHttpClient {
 		// e.printStackTrace();
 		// }
 		post.setRequestData(str);
-		System.out.println(post.getText());
+		System.out.println(post.text());
 	}
 
 }
