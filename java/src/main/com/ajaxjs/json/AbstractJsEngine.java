@@ -1,6 +1,7 @@
 package com.ajaxjs.json;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
@@ -16,18 +17,30 @@ import com.ajaxjs.util.LogHelper;
  * JS 引擎公共基类
  *
  */
-public abstract class AbstractJsEngine implements IEngine {
+public abstract class AbstractJsEngine implements IEngine, ToJavaType {
 	private static final LogHelper LOGGER = LogHelper.getLog(AbstractJsEngine.class);
 
 	/**
-	 * 创建一个 JS 运行时
+	 * JS 运行时
 	 */
 	public ScriptEngine js;
 
+	/**
+	 * 创建一个 JS 运行时
+	 * 
+	 * @param js
+	 *            JS 运行时
+	 */
 	public AbstractJsEngine(ScriptEngine js) {
 		this.js = js;
 	}
 
+	/**
+	 * 创建一个 JS 运行时
+	 * 
+	 * @param jsEngineName
+	 *            JS 运行时名称
+	 */
 	public AbstractJsEngine(String jsEngineName) {
 		js = new ScriptEngineManager().getEngineByName(jsEngineName);
 		if (js == null) {
@@ -108,6 +121,54 @@ public abstract class AbstractJsEngine implements IEngine {
 	@Override
 	public void put(String varName, Object obj) {
 		js.put(varName, obj);
+	}
+	
+	@Override
+	public String eval_return_String(String code) {
+		return eval(code, String.class);
+	}
+
+	@Override
+	public int eval_return_Int(String code) {
+		Double d = eval(code, Double.class);
+		if (d > Integer.MAX_VALUE) {
+			LOGGER.warning(d + "数值太大，不应用这个方法");
+			return 0;
+		} else {
+			return d.intValue();
+		}
+	}
+
+	@Override
+	public boolean eval_return_Boolean(String code) {
+		return eval(code, Boolean.class);
+	}
+	
+	@Override
+	public Map<String, Object> eval_return_Map(String json) {
+		return eval_return_Map("_json = " + json, "_json");
+	}
+	
+	/**
+	 * 序列化 JSON
+	 * 
+	 * @param code
+	 *            JS 代碼
+	 * @return JSON
+	 */
+	public String nativeStringify(String code) {
+		return eval_return_String("JSON.stringify(" + code + ");");
+	}
+	
+	/**
+	 * 借助 Rhino 序列化
+	 * 
+	 * @param obj
+	 *            NativeArray | NativeObject 均可
+	 * @return JSON 字符串
+	 */
+	public String nativeStringify(Object obj) {
+		return call("stringify", String.class, eval("JSON"), obj);
 	}
 
 	/**

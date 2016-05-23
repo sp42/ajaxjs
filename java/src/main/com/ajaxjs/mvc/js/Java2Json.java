@@ -16,7 +16,7 @@
 package com.ajaxjs.mvc.js;
 import java.util.List;
 
-import com.ajaxjs.javascript.RhinoEngine;
+import com.ajaxjs.json.Rhino;
 import com.ajaxjs.util.StringUtil;
 
 import sun.org.mozilla.javascript.internal.NativeArray;
@@ -30,7 +30,7 @@ import sun.org.mozilla.javascript.internal.NativeObject;
  */
 public class Java2Json {
 	
-	public static RhinoEngine js = new RhinoEngine(); // 单例
+	public static Rhino js = new Rhino(); // 单例
 
 	static {
 		final String[] a = {
@@ -114,7 +114,7 @@ public class Java2Json {
 	 * @return JSON 字符串
 	 */
 	public static String JSON_stringify(Object obj) {
-		return js.call("stringify", String.class, js.eval("JSON"), obj);
+		return js.nativeStringify(obj);
 	}
 	
 	public static String list(List<?> list) {

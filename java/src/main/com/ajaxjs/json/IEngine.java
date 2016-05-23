@@ -55,50 +55,6 @@ public interface IEngine {
 	public void load(Class<?> cls, String js);
 	
 	/**
-	 * 运算输入的 JS 代码，该方法封装了异常，不抛出。输入 class 进行类型转换
-	 * 
-	 * @param code
-	 *            JS 脚本代码
-	 * @param clazz
-	 *            目标类型
-	 * @return JS 运算后的返回值，字符串类型的值，也可能是 null 没有返回
-	 */
-	public <T> T eval(String code, Class<T> clazz);
-	
-	/**
-	 * 运算输入的 JS 代码，该方法封装了异常，不抛出
-	 * 
-	 * @param code
-	 *            JS 脚本代码
-	 * @return JS 运算后的返回值，也可能是 null 没有返回
-	 */
-	public Object eval(String code);
-	
-	/**
-	 * 如果需要返回 {a:xx, b:xx} JSON 这样 JSON 的结构，要把这个 JSON 赋予一个全局变量
-	 * 
-	 * @param code
-	 *            JS 脚本代码
-	 * @return
-	 */
-	public Map<String, Object> eval_return_Map(String code);
-	
-	/**
-	 * 调用脚本的方法
-	 * 
-	 * @param method
-	 *            js 脚本代码
-	 * @param clazz
-	 *            目标类型
-	 * @param binding
-	 *            可以为 null，则表示调用全局方法
-	 * @param args
-	 *            参数列表
-	 * @return JS 运算后的返回值，也可能是 null 没有返回
-	 */
-	public <T> T call(String method, Class<T> clazz, Object binding, Object... args);
-	
-	/**
 	 * 写变量 在 Java 中向脚本引擎 (Script Engine) 传递变量，即脚本语言用 java 的变量。当然，使用 eval()
 	 * 也可以了。注意可以直接赋值 Java 对象。
 	 * 
@@ -117,5 +73,40 @@ public interface IEngine {
 	 * @return NativeObject 或 Object
 	 */
 	public Object get(String... namespace);
+
+	/**
+	 * 调用脚本的方法
+	 * 
+	 * @param method
+	 *            js 脚本代码
+	 * @param clazz
+	 *            目标类型
+	 * @param binding
+	 *            可以为 null，则表示调用全局方法
+	 * @param args
+	 *            参数列表
+	 * @return JS 运算后的返回值，也可能是 null 没有返回
+	 */
+	public <T> T call(String method, Class<T> clazz, Object binding, Object... args);
+	
+	/**
+	 * 运算输入的 JS 代码，该方法封装了异常，不抛出。输入 class 进行类型转换
+	 * 
+	 * @param code
+	 *            JS 脚本代码
+	 * @param clazz
+	 *            目标类型
+	 * @return JS 运算后的返回值，字符串类型的值，也可能是 null 没有返回
+	 */
+	public <T> T eval(String code, Class<T> clazz);
+	
+	/**
+	 * 运算输入的 JS 代码，该方法封装了异常，不抛出
+	 * 
+	 * @param code
+	 *            JS 脚本代码
+	 * @return JS 运算后的返回值，也可能是 null 没有返回
+	 */
+	public Object eval(String code);
 	
 }

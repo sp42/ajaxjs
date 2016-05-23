@@ -22,15 +22,15 @@ import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.IO.text;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.app.App;
-import com.ajaxjs.javascript.RhinoEngine;
 import com.ajaxjs.json.JsonUtil;
+import com.ajaxjs.json.Rhino;
 
 /**
  * JSON 配置保存器
  * @author Frank Cheung
  *
  */
-public class Service extends RhinoEngine {
+public class Service extends Rhino {
 	private static final LogHelper LOGGER = LogHelper.getLog(Service.class);
 
 	/**

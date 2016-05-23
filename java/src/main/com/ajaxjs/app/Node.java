@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.Constant;
 import com.ajaxjs.app.App;
+import com.ajaxjs.json.ToJavaType;
 import com.ajaxjs.net.IP;
 import com.ajaxjs.util.Util;
 import com.ajaxjs.util.StringUtil;
@@ -36,19 +37,22 @@ import com.ajaxjs.web.UA;
 public class Node extends Requester {
 	private Map<String, Object> pageNode;
 	
+	private ToJavaType js; 
+	
 	/**
 	 * 创建一个节点对象
 	 * @param request
 	 */
 	public Node(HttpServletRequest request) {
 		super(request);
-
 		setAttribute("PageNode", this);
+		js = (ToJavaType)App.jsRuntime;
 
 		String route = getRoute();
+		
 		if (App.isSite_stru_Loaded && !route.equals("/")) {// 获取当前页面节点，并带有丰富的节点信息
-			String js = String.format("bf.AppStru.getPageNode('%s', '%s');", route, getContextPath());
-			pageNode = App.jsRuntime.eval_return_Map(js);
+			String jsCode = String.format("bf.AppStru.getPageNode('%s', '%s');", route, getContextPath());
+			pageNode = js.eval_return_Map(jsCode);
 			setAttribute("PageConfig_Node", pageNode);
 		}
 		
@@ -68,7 +72,7 @@ public class Node extends Requester {
 	 * @return
 	 */
 	public Map<String, Object> getNode(String nodePath) {
-		return App.jsRuntime.eval_return_Map(String.format("bf.AppStru.getNode('%s');", nodePath));
+		return js.eval_return_Map(String.format("bf.AppStru.getNode('%s');", nodePath));
 	}
 
 	/**
@@ -97,7 +101,7 @@ public class Node extends Requester {
 	public Map<String, Object>[] getNavBar() {
 		Object obj = App.jsRuntime.eval("bf.AppStru.getNav();");
 //		return App.jsRuntime.eval_return_MapArray("bf.AppStru.getNav();");
-		return com.ajaxjs.javascript.Util.toMapArray(obj);
+		return  js.toMapArray(obj);
 	}
 
 	/**

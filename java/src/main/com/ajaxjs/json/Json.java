@@ -10,7 +10,7 @@ import com.ajaxjs.util.DateTools;
 import com.ajaxjs.util.StringUtil;
 
 public class Json {
-	private IEngine engine;
+	public static ToJavaType js; // 新建一个 js mapper 专用于 json 转换，以免影响 配置 js runtime
 	
 	/**
 	 * 输入一个 Map，将其转换为 JSON Str
@@ -90,4 +90,32 @@ public class Json {
 		}
 	}
 
+	public static Map<String, Object> callExpect_Map(String code, String varName) {
+		return js.eval_return_Map(code, varName);
+	}
+	public static String[] callExpect_StringArray(String code) {
+		return js.eval_return_StringArray(code);
+	}
+
+	public static Map<String, Object>[] callExpect_MapArray(String code) {
+		return js.eval_return_MapArray(code);
+	}
+	
+//	/**
+//	 * 输入 JSON 字符串，返回 Map
+//	 * @param jsonStr
+//	 * @return
+//	 */
+//	public Map<String, Object> parse(String jsonStr){
+//		return callExpect_Map(jsonStr);
+//	}
+//	
+//	/**
+//	 *  输入 JSON 字符串，返回 Map 数组
+//	 * @param jsonStr
+//	 * @return
+//	 */
+//	public Map<String, Object>[] parseArr(String jsonStr){
+//		return callExpect_MapArray(jsonStr);
+//	}
 }

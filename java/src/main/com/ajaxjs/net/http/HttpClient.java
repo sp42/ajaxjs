@@ -32,6 +32,7 @@ import java.util.concurrent.Future;
 
 import com.ajaxjs.Constant;
 import com.ajaxjs.javascript.RhinoMapper;
+import com.ajaxjs.json.AbstractJsEngine;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.Util;
 import com.ajaxjs.util.IO.text;
@@ -95,7 +96,7 @@ public class HttpClient {
 
 		if (!StringUtil.isEmptyString(json)) {
 //			LOGGER.info(json);
-			return RhinoMapper.callExpect_Map(json);
+			return AbstractJsEngine.callExpect_Map(json);
 		} else {
 			LOGGER.warning("异常：读取远程接口，不能把返回的 JSON 转换为 Map！");
 			return null;

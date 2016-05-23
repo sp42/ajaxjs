@@ -22,9 +22,11 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.servlet.DispatcherServlet;
 
 import com.ajaxjs.Constant;
-import com.ajaxjs.javascript.RhinoEngine;
 import com.ajaxjs.json.AbstractJsEngine;
 import com.ajaxjs.json.IEngine;
+import com.ajaxjs.json.JsonUtil;
+import com.ajaxjs.json.Rhino;
+import com.ajaxjs.json.ToJavaType;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.Util;
 import com.ajaxjs.util.db.Helper;
@@ -45,7 +47,7 @@ public class App implements ServletContextListener/*, WebApplicationInitializer*
 	public static boolean isSite_stru_Loaded = false;		// 标识有否加载 Web 目录文件
 	public static Map<String, Object> config; 				// 原始配置信息（包含所有的）
 	public static final boolean isEnableJS = true;			// 是否启动 JavaScript 引擎
-	public static final IEngine jsRuntime = new RhinoEngine();// 主 JS runtime，其他 js 包都导进这里来
+	public static final IEngine jsRuntime = new Rhino();// 主 JS runtime，其他 js 包都导进这里来
 	public static final Configuration configuration;		// Configuration 需要设为 public 以便加入 mapper
 	public static final SqlSessionFactory sqlSessionFactory;
 	private static ServletContext context;
@@ -108,10 +110,10 @@ public class App implements ServletContextListener/*, WebApplicationInitializer*
 			});
 			
 			// 保存全局信息，无论 JSON 配置文件里面嵌套多少层，到这里都扁平化每一条配置
-			config = jsRuntime.eval_return_Map("JSON_Tree.util.flat(bf_Config);");
+			config = ((ToJavaType)jsRuntime).eval_return_Map("JSON_Tree.util.flat(bf_Config);");
 			
 			LOGGER.info("加载配置信息如下：" + System.getProperty("line.separator")
-					+ com.ajaxjs.javascript.Util.format(com.ajaxjs.json.Json.stringify(config))
+					+ JsonUtil.format(com.ajaxjs.json.Json.stringify(config))
 					+ Constant.ConsoleDiver);
 		}
 	}
@@ -161,7 +163,7 @@ public class App implements ServletContextListener/*, WebApplicationInitializer*
 	 * 修改了配置之后，更新。即时出现效果。
 	 */
 	public static void updateConfig() {
-		config = jsRuntime.eval_return_Map("JSON_Tree.util.flat(bf_Config);");
+		config = ((ToJavaType)jsRuntime).eval_return_Map("JSON_Tree.util.flat(bf_Config);");
 		context.setAttribute("global_config", config); // 重新保存 config 对象
 	}
 	
