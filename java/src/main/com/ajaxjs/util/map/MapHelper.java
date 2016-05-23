@@ -312,10 +312,40 @@ public class MapHelper<K, V extends IValue> extends HashMap<K, V> implements IRe
 		
 		return b;
 	}
-	public static String getFieldName(String methodName) {
-		methodName = methodName.replace("set", "");
+	
+	/**
+	 * 
+	 * @param methodName
+	 * @param action set|get
+	 * @return
+	 */
+	public static String getFieldName(String methodName, String action) {
+		methodName = methodName.replace(action, "");
 		methodName = Character.toString(methodName.charAt(0)).toLowerCase() + methodName.substring(1);
 		return methodName;
+	}
+	
+	
+	public static Map<String, Object> setPojoToMapValue(Object obj) {
+		if (obj != null) {
+			Map<String, Object> map = new HashMap<>();
+			
+			for (Method method : obj.getClass().getMethods()) {
+				String methodName = method.getName();
+				if (methodName.startsWith("get")) {
+					Object value = Reflect.executeMethod(obj, method);
+					
+					if(value != null) {
+						map.put(getFieldName(methodName, "get"), value);
+					}
+				}
+			}
+			
+			return map;
+		} else {
+			System.err.println("Null pointer");
+			return null;
+		}
 	}
 	
 	/**
@@ -328,9 +358,8 @@ public class MapHelper<K, V extends IValue> extends HashMap<K, V> implements IRe
 			for (Method method : obj.getClass().getMethods()) {
 				String methodName = method.getName();
 				if (methodName.startsWith("set")) {
-					methodName = getFieldName(methodName);
+					methodName = getFieldName(methodName, "set");
 					if (map.containsKey(methodName)) {
-						System.out.println(methodName);
 						Reflect.executeMethod(obj, method, map.get(methodName));
 					}
 				}
