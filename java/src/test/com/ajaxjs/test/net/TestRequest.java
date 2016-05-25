@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import org.junit.*;
 
 import com.ajaxjs.test.framework.MockRequest;
+import com.ajaxjs.util.map.Value;
 import com.ajaxjs.web.Requester;
 
 import java.io.IOException;
@@ -12,10 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 
 public class TestRequest extends MockRequest{
 	@BeforeClass
-	public static void init(){}
+	public static void init() {
+	}
+
 	@Before
-	public void setUp(){
-		
+	public void setUp() {
 	}
 
 	@Test
@@ -37,21 +39,20 @@ public class TestRequest extends MockRequest{
 		assertEquals("bar", requestHelper.getParameter("name"));
 		
 		IllegalArgumentException knownException = null;
-		try{
+		
+		try {
 			requestHelper.getParameter("你好");
-		}catch(IllegalArgumentException e){
+		} catch (IllegalArgumentException e) {
 			knownException = e;
-		}finally{
+		} finally {
 			// 总是有异常的
 			assertNotNull("捕获已知异常", knownException);
 		}
 		
-		requestHelper.isTypeCast = true;
 		
-		assertEquals(1001, (int)requestHelper.getWithTypeCast("id"));
-		assertTrue((boolean)requestHelper.getWithTypeCast("isGood"));
+		assertEquals(1001, (int)Value.toJavaValue(requestHelper.getParameter("id")));
+		assertTrue((boolean)Value.toJavaValue(requestHelper.getParameter("isGood")));
 
-		requestHelper.isAutoEncodeChinese = true;
-		assertEquals("张三", requestHelper.get("ChineseName"));
+		assertEquals("张三", requestHelper.getParameter("ChineseName"));
 	}
 }

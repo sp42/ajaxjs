@@ -24,7 +24,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 import com.ajaxjs.Constant;
 import com.ajaxjs.json.AbstractJsEngine;
 import com.ajaxjs.json.IEngine;
-import com.ajaxjs.json.JsonUtil;
+import com.ajaxjs.json.Json;
 import com.ajaxjs.json.Rhino;
 import com.ajaxjs.json.ToJavaType;
 import com.ajaxjs.util.LogHelper;
@@ -113,7 +113,7 @@ public class App implements ServletContextListener/*, WebApplicationInitializer*
 			config = ((ToJavaType)jsRuntime).eval_return_Map("JSON_Tree.util.flat(bf_Config);");
 			
 			LOGGER.info("加载配置信息如下：" + System.getProperty("line.separator")
-					+ JsonUtil.format(com.ajaxjs.json.Json.stringify(config))
+					+ Json.format(com.ajaxjs.json.Json.stringify(config))
 					+ Constant.ConsoleDiver);
 		}
 	}

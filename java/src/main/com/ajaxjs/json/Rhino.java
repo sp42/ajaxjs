@@ -81,6 +81,10 @@ public class Rhino extends AbstractJsEngine {
 		return NativeArray2MapArray(arr);
 	}
 
+	public Map<String, Object>[] eval_return_MapArray(NativeArray arr) {
+		return NativeArray2MapArray(arr);
+	}
+		
 	/**
 	 * JS Object 对象转换到 Java Hash 对象
 	 * 
@@ -134,8 +138,7 @@ public class Rhino extends AbstractJsEngine {
 	 * @return Java 里面的 Map[]
 	 */
 	public static String[] NativeArray2StringArray(NativeArray arr) {
-		if (!com.ajaxjs.util.Util.isNotNull(arr))
-			return null;
+		if (arr == null || arr.size() < 1) return null;
 
 		return (String[]) arr.toArray(new String[arr.size()]);
 	}
@@ -152,13 +155,11 @@ public class Rhino extends AbstractJsEngine {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T[] NativeArrayAs(NativeArray arr, Class<T> clazz) {
-		if (!com.ajaxjs.util.Util.isNotNull(arr))
-			return null;
+		if (arr == null || arr.size() < 1) return null;
 
 		return (T[]) arr.toArray((T[]) Array.newInstance(clazz, arr.size()));
 	}
 
-	
 	/**
 	 * JS Array 对象转换到 Java Map Array 对象
 	 * 
@@ -168,14 +169,15 @@ public class Rhino extends AbstractJsEngine {
 	 */
 	@SuppressWarnings("unchecked")
 	public static Map<String, Object>[] NativeArray2MapArray(NativeArray arr) {
-		if (!com.ajaxjs.util.Util.isNotNull(arr))
-			return null;
-
-		// if (arr != null && arr.size() > 0) { // NativeArray.isEmpty 有 bug，
+//		if (!com.ajaxjs.util.Util.isNotNull(arr))// NativeArray.isEmpty 有 bug，
+//			return null;
+		if (arr == null || arr.size() < 1) return null;
+		 
 		// Not real Map!
 		// return (Map<String, Object>[])arr.toArray(new Map[arr.size()]);
 
 		Map<String, Object>[] _arr = new HashMap[arr.size()]; // java 不支持泛型数组
+		
 		int i = 0;
 		for (Object obj : arr) { // JDK7 supports directly
 			if (obj instanceof NativeObject) {
@@ -186,7 +188,28 @@ public class Rhino extends AbstractJsEngine {
 		}
 
 		return _arr;
-		// } else
-		// return null;
+	}
+	
+	
+	/**
+	 * 借助 Rhino 序列化 JS数组，返回 JSON 字符串
+	 * 
+	 * @param jsonObj
+	 *            JS 数组
+	 * @return JSON 字符串
+	 */
+	public String JSON_Stringify(NativeArray jsonObj) {
+		return super.JSON_Stringify(jsonObj);
+	}
+
+	/**
+	 * 借助 Rhino 序列化 JS 对象，返回 JSON 字符串
+	 * 
+	 * @param jsonObj
+	 *            JS 里面的 Map
+	 * @return JSON 字符串
+	 */
+	public String JSON_Stringify(NativeObject jsonObj) {
+		return super.JSON_Stringify(jsonObj);
 	}
 }

@@ -91,6 +91,11 @@ public class BaseEsService<T extends BaseModel> implements IService<T> {
 		return pojo;
 	}
 
+	/**
+	 * es 的日期有点奇怪。这里转换一下吧。
+	 * @param map
+	 * @return
+	 */
 	private static Map<String, Object> parseDate(Map<String, Object> map) {
 		String timestamp_createDate = ((String)map.get("createDate")).replace("Z", " UTC"), 
 			   timestamp_updateDate = ((String)map.get("updateDate")).replace("Z", " UTC");
@@ -120,7 +125,10 @@ public class BaseEsService<T extends BaseModel> implements IService<T> {
 
 	@Override
 	public int create(T entry) throws ServiceException {
-		IndexRequest request = connectES().prepareIndex("dept", "test", item.get("id").toString()).setSource(item).get();
+		Map<String, Object> map = MapHelper.setPojoToMapValue(entry);
+		
+
+		IndexRequest request = connectES().prepareIndex("dept", "test", map.get("id").toString()).setSource(map).get();
 		return 0;
 	}
 

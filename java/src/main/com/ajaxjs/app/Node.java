@@ -99,9 +99,7 @@ public class Node extends Requester {
 	 * @return 获取导航
 	 */
 	public Map<String, Object>[] getNavBar() {
-		Object obj = App.jsRuntime.eval("bf.AppStru.getNav();");
-//		return App.jsRuntime.eval_return_MapArray("bf.AppStru.getNav();");
-		return  js.toMapArray(obj);
+		return ((ToJavaType)App.jsRuntime).eval_return_MapArray("bf.AppStru.getNav();");
 	}
 
 	/**

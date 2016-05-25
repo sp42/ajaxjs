@@ -22,7 +22,7 @@ import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.IO.text;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.app.App;
-import com.ajaxjs.json.JsonUtil;
+import com.ajaxjs.json.Json;
 import com.ajaxjs.json.Rhino;
 
 /**
@@ -58,7 +58,7 @@ public class Service extends Rhino {
 		if (JSON_as_String != null) {
 			String fileBody = topVarName + " = " + JSON_as_String + ";";
 
-			fileBody = JsonUtil.format(fileBody);
+			fileBody = Json.format(fileBody);
 //			LOGGER.info(fileBody);
 //			LOGGER.info(jsonFileFullPath);
 			try {

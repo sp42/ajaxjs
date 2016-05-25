@@ -1,3 +1,18 @@
+/**
+ * Copyright 2015 Frank Cheung
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.ajaxjs.json;
 
 import java.io.IOException;
@@ -17,7 +32,7 @@ import com.ajaxjs.util.LogHelper;
  * JS 引擎公共基类
  *
  */
-public abstract class AbstractJsEngine implements IEngine, ToJavaType {
+public abstract class AbstractJsEngine implements IEngine, ToJavaType, ToJsType {
 	private static final LogHelper LOGGER = LogHelper.getLog(AbstractJsEngine.class);
 
 	/**
@@ -89,10 +104,11 @@ public abstract class AbstractJsEngine implements IEngine, ToJavaType {
 			LOGGER.warning("脚本eval()运算发生异常！eval 代码：" + code, e);
 		}
 
-		if (obj != null)
+		if (obj != null) {
 			// return Util.TypeConvert(js.eval(code), clazz); // 为什么要执行多次？
-			return Util.TypeConvert(obj, clazz);
-		else
+			T _obj = Util.TypeConvert(obj, clazz);
+			return _obj;
+		} else
 			return null;
 	}
 
@@ -149,25 +165,13 @@ public abstract class AbstractJsEngine implements IEngine, ToJavaType {
 		return eval_return_Map("_json = " + json, "_json");
 	}
 	
-	/**
-	 * 序列化 JSON
-	 * 
-	 * @param code
-	 *            JS 代碼
-	 * @return JSON
-	 */
-	public String nativeStringify(String code) {
+	@Override
+	public String JSON_Stringify(String code) {
 		return eval_return_String("JSON.stringify(" + code + ");");
 	}
 	
-	/**
-	 * 借助 Rhino 序列化
-	 * 
-	 * @param obj
-	 *            NativeArray | NativeObject 均可
-	 * @return JSON 字符串
-	 */
-	public String nativeStringify(Object obj) {
+	@Override
+	public String JSON_Stringify(Object obj) {
 		return call("stringify", String.class, eval("JSON"), obj);
 	}
 

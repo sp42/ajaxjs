@@ -16,7 +16,6 @@
 package com.ajaxjs.json;
 
 import java.io.IOException;
-import java.util.Map;
 
 import javax.script.ScriptException;
 

@@ -121,12 +121,12 @@ public class JspModel extends HttpServletRequestWrapper implements Model {
 		return map;
 	}
 	
-	public static Map<Integer, Object> list2map_id_as_key(List<Map<String, String>> list) {
+	public static Map<Integer, Object> list2map_id_as_key(List<Map<String, Object>> list) {
 		if(list == null) return null;
 		Map<Integer, Object> map = new HashMap<>();
 		
-		for (Map<String, String> item : list) {
-			map.put(new Long(item.get("id")).intValue(), item);
+		for (Map<String, Object> item : list) {
+			map.put(new Long(item.get("id").toString()).intValue(), item);
 		}
 		return map;
 	}
