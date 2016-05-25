@@ -206,6 +206,7 @@ public abstract class AbstractController<T extends BaseModel> implements IContro
 		model.addAttribute("requestTimeRecorder",  System.currentTimeMillis());
 		
 		model.addAttribute("uiName", getService().getUiName());
+		System.out.println(getService().getClass().getName());
 		model.addAttribute("tableName", getService().getTableName());
 	}
 	
