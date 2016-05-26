@@ -57,6 +57,8 @@ public class App implements ServletContextListener/*, WebApplicationInitializer*
 															// 是否苹果系统
 	
 	static {
+		System.setProperty("user.timezone", "GMT +08");// 微软云设置时区
+		
 		LOGGER.info("启动 App……" + Constant.ConsoleDiver);
 		osDectect();
 		loadConfig();
