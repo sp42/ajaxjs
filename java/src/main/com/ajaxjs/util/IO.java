@@ -142,7 +142,7 @@ public class IO {
 			int i = 0;
 			while ((length = in.read(buffer)) != -1) {
 				_out.write(buffer, 0, length);
-				LOGGER.info((i++ + ":") + length);
+//				LOGGER.info((i++ + ":") + length);
 			}
 		} catch (IOException e) {
 			LOGGER.warning(e);
