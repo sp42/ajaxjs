@@ -6,7 +6,7 @@ import java.io.File;
 
 import org.junit.Test;
 
-import com.ajaxjs.util.stream.Img;
+import com.ajaxjs.util.Img;
 
 public class TestImage {
 

@@ -9,8 +9,9 @@ import java.net.URL;
 
 import org.junit.Test;
 
+import com.ajaxjs.util.Img;
 import com.ajaxjs.util.IO.text;
-import com.ajaxjs.util.stream.Img;
+
 import static com.ajaxjs.util.stream.Web.*;
 
 

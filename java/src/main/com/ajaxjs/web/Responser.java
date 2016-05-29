@@ -1,5 +1,7 @@
 package com.ajaxjs.web;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
@@ -27,6 +29,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,9 +44,11 @@ import javax.servlet.http.HttpServletResponseWrapper;
 
 import com.ajaxjs.Constant;
 import com.ajaxjs.net.http.ConnectException;
+import com.ajaxjs.net.http.Get;
 import com.ajaxjs.net.http.Request;
 import com.ajaxjs.net.http.RequestClient;
 import com.ajaxjs.util.IO;
+import com.ajaxjs.util.Img;
 import com.ajaxjs.util.Util;
 
 /**
@@ -441,5 +446,93 @@ public class Responser extends HttpServletResponseWrapper{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * 图片服务器
+	 * 
+	 *  * <%@page pageEncoding="utf-8" import="com.ajaxjs.util.stream.Web" contentType="image/jpeg"%>
+<%
+Web.getImg("http://desk.fd.zol-img.com.cn/t_s1920x1200c5/g5/M00/0F/04/ChMkJ1dGqWOITU3xAA5PBuQ0iRMAAR6mAAAAAAADk8e103.jpg", request, response);
+//清除输出流，防止释放时被捕获异常
+out.clear();
+out = pageContext.pushBody(); 
+	 * 
+	 * @param url
+	 *            图片地址
+	 * @throws IOException
+	 */
+	public void getImg(String url) throws IOException {
+		System.out.println("请求地址：" + url);
+		long imgSize = Get.getFileSize(url);
+		
+		if (imgSize < (1024 * 100)) {
+			sendRedirect(url);// 发送重定向
+			return;
+		} else {
+//			System.out.println("BigImg");
+			
+			String imgType = getImgType(url);
+			
+			setContentType(getContentType(imgType));
+			try (
+				InputStream is = new URL(url).openStream();
+				ServletOutputStream op = getOutputStream();
+			){
+				String height = request.getParameter("h"), width = request.getParameter("w");
+				
+				if (height != null && width != null) {
+					BufferedImage bufImg = Img.setResize(ImageIO.read(is), Integer.parseInt(height), Integer.parseInt(width));
+					ImageIO.write(bufImg, imgType, op);
+				} else if (height != null) {
+					Image img = ImageIO.read(is);// 将输入流转换为图片对象
+					int[] size = Img.resize(img, Integer.parseInt(height), 0);
+					
+					BufferedImage bufImg = Img.setResize(img, size[0], size[1]);
+					ImageIO.write(bufImg, imgType, op);
+				} else if (width != null) {
+					Image img = ImageIO.read(is);// 将输入流转换为图片对象
+					int[] size = Img.resize(img, 0, Integer.parseInt(width));
+					
+					BufferedImage bufImg = Img.setResize(img, size[0], size[1]);
+					ImageIO.write(bufImg, imgType, op);
+				} else {
+					IO.write(is, op);// 直接写浏览器
+				} 
+			}  
+		}
+	}
+	
+	
+	
+	/**
+	 * 返回 Content type
+	 * @param imgType
+	 * @return
+	 */
+	private static String getContentType(String imgType) {
+		switch (imgType) {
+		case "jpg":
+			return "image/jpeg";
+		case "gif":
+			return "image/gif";
+		case "png":
+			return "image/png";
+		default:
+			return null;
+		}
+	}
+
+	/**
+	 * 获取 url 最后的 .jpg/.png/.gif
+	 * @param url
+	 * @return
+	 */
+	private static String getImgType(String url) {
+		String[] arr = url.split("/");
+		arr = arr[arr.length - 1].split("\\.");
+		String t = arr[1];
+		
+		return t.replace('.', ' ').trim().toLowerCase();
 	}
 }
