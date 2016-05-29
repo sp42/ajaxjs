@@ -25,9 +25,6 @@ import javax.servlet.jsp.PageContext;
 
 import java.awt.Font;
 
-import com.ajaxjs.util.LogHelper;
-import com.ajaxjs.util.stream.Web;
-
 /**
  * 验证码的简单实现 http://a455360448201209214217.iteye.com/blog/1953785 调用方式： <%@ page
  * language="java" contentType="image/JPEG; charset=UTF-8" pageEncoding="UTF-8"
@@ -38,8 +35,6 @@ import com.ajaxjs.util.stream.Web;
  * @author 网上收集
  */
 public class Captcha {
-	private static final LogHelper LOGGER = LogHelper.getLog(Captcha.class);
-
 	/**
 	 * 生成随机颜色
 	 * 
@@ -181,10 +176,14 @@ public class Captcha {
 		Responser rh = new Responser(response);
 
 		rh.noCache(); // 不用缓存
-		Web.loadImage(img.get(), response);
+		if(response instanceof Responser){
+			((Responser)response).loadImage(img.get());
+		}else {
+			new Responser(response).loadImage(img.get());
+		}
 
 		session.setAttribute(SESSION_KEY, img.getCode());
-		LOGGER.info("生成验证码:" + img.getCode());
+		System.out.println("生成验证码:" + img.getCode());
 	}
 
 	/**
@@ -209,8 +208,8 @@ public class Captcha {
 		String rand = (String) pageContext.getSession().getAttribute(SESSION_KEY),
 				CaptchaCode = pageContext.getRequest().getParameter("CaptchaCode");
 
-		LOGGER.info("rand:" + rand);
-		LOGGER.info("CaptchaCode:" + CaptchaCode);
+		System.out.println("rand:" + rand);
+		System.out.println("CaptchaCode:" + CaptchaCode);
 
 		if (rand == null)
 			throw new UnsupportedOperationException("请刷新验证码。");

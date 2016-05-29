@@ -125,6 +125,34 @@ public class IO {
 			}
 		}
 	}
+	
+	/**
+	 * 将 in 的写入到 out 之中去
+	 * 
+	 * @param in
+	 *            输入流
+	 * @param out
+	 *            输出流
+	 * @return 若写入成功则返回 true
+	 */
+	public static boolean write(InputStream in, OutputStream out) {
+		int length = 1024;
+		byte[] buf = new byte[length];
+		
+		try {
+			int len = in.read(buf, 0, length);
+			while (len != -1) {
+				out.write(buf, 0, len);
+				len = in.read(buf, 0, length);
+			}
+			out.flush();
+		} catch (IOException e) {
+			LOGGER.warning(e);
+			return false;
+		}
+
+		return true;
+	}
 
 	/**
 	 * 两端速度不匹配，需要协调 理想环境下，速度一样快，那就没必要搞流，直接一坨给弄过去就可以了 流的意思很形象，就是一点一滴的，不是一坨坨大批量的
@@ -139,7 +167,6 @@ public class IO {
 		int length;// 读取到的数据长度
 
 		try (OutputStream _out = new BufferedOutputStream(out);) {// 加入缓冲功能
-			int i = 0;
 			while ((length = in.read(buffer)) != -1) {
 				_out.write(buffer, 0, length);
 //				LOGGER.info((i++ + ":") + length);
@@ -180,6 +207,19 @@ public class IO {
 		return new File(filename).delete();
 	}
 
+	/**
+	 * 输入 /foo/bar/foo.jpg 返回 foo.jpg
+	 * 
+	 * @param str
+	 *            输入的字符串
+	 * @return 文件名
+	 */
+	public static String getFileName(String str) {
+		String[] arr = str.split("/");
+		
+		return arr[arr.length - 1];
+	}
+	
 	/**
 	 * 獲取文件名的擴展名
 	 * 
@@ -223,8 +263,6 @@ public class IO {
 	 *
 	 */
 	public static class text {
-		private static final com.ajaxjs.util.LogHelper LOGGER = com.ajaxjs.util.LogHelper.getLog(text.class);
-
 		/**
 		 * 字节流转换为字符串。注意对于送入的流，执行完毕后会自动关闭。 input=读、output=写
 		 * 

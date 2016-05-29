@@ -23,7 +23,6 @@ import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -31,10 +30,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import com.ajaxjs.Constant;
-import com.ajaxjs.json.Json;
-import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.util.Util;
-import com.ajaxjs.util.IO.text;
 import com.ajaxjs.util.LogHelper;
 
 /**
@@ -43,127 +38,8 @@ import com.ajaxjs.util.LogHelper;
  *
  */
 public class HttpClient {
-	private static final LogHelper LOGGER = LogHelper.getLog(HttpClient.class);
-	
-	/**
-	 * 简单 GET 请求
-	 * 
-	 * @param url
-	 *            请求目标地址
-	 * @return 响应内容
-	 */
-	public static String GET(String url) {
-		return new Request(url).getText();
-	}
-
-	/**
-	 * 简单 GET 请求（原始 API 版）
-	 * 
-	 * @param url
-	 *            请求目标地址
-	 * @return 响应内容
-	 */
-	public static String simpleGET(String url) {
-		try {
-			return text.readStream(new URL(url).openStream());
-		} catch (IOException e) {
-			LOGGER.warning("请求出错" + url, e);
-			return null;
-		}
-	}
-	
-	/**
-	 * 简单 GET 请求
-	 * 
-	 * @param url
-	 *            请求目标地址
-	 * @return 响应内容
-	 */
-	public static String POST(String url) {
-		return new Post(url).getText();
-	}
-	
-	/**
-	 * 读取远程接口，把返回的 JSON 转换为 Map
-	 * 
-	 * @param url
-	 *            远程接口地址
-	 * @return 响应内容 Map
-	 */
-	public static Map<String, Object> getRemoteJSON_Object(String url) {
-		String json = GET(url);
-
-		if (!StringUtil.isEmptyString(json)) {
-//			LOGGER.info(json);
-			return Json.callExpect_Map(json);
-		} else {
-			LOGGER.warning("异常：读取远程接口，不能把返回的 JSON 转换为 Map！");
-			return null;
-		}
-	}
-	
-	/**
-	 * 读取远程接口，把返回的 JSON 转换为 Map[]
-	 * 
-	 * @param url
-	 *            远程接口地址
-	 * @return 响应内容 Map[]
-	 */
-	public static Map<String, Object>[] getRemoteJSON_Array(String url) {
-		String json = GET(url);
-
-		if (!StringUtil.isEmptyString(json)) {
-			return Json.callExpect_MapArray(json);
-		} else {
-			LOGGER.warning("异常：读取远程接口，不能把返回的 JSON 转换为 Map[]！");
-			return null;
-		}
-	}
-	
-	/**
-	 * 得到 http 302 的跳转地址
-	 * 
-	 * @param url
-	 *            目标地址
-	 * @return
-	 * @throws IOException
-	 */
-	public static String get302redirect(String url) throws IOException {
-		URL urlObj = new URL(url);
-
-		HttpURLConnection conn = (HttpURLConnection) urlObj.openConnection();
-		conn.setRequestMethod("HEAD"); // head 请求即可
-		conn.setInstanceFollowRedirects(false); // 必须设置false，否则会自动redirect到Location的地址
-		conn.addRequestProperty("Accept-Charset", "UTF-8;");
-		conn.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.9.2.8) Firefox/3.6.8");
-		conn.addRequestProperty("Referer", urlObj.getHost());
-		conn.connect();
-
-		return conn.getHeaderField("Location");
-	}
-	
-	public static void main(String[] args) {
-		URL urlObj;
-		try {
-//			urlObj = new URL("http://ck2.diediao.com/api23/dy.php?vid=3032807.acfun");
-			urlObj = new URL("http://ck2.diediao.com/api23/dy.php?vid=2169045.acfun");
-			HttpURLConnection conn = (HttpURLConnection) urlObj.openConnection();
-			conn.setRequestMethod("GET"); // head 请求即可
-			conn.setInstanceFollowRedirects(false); // 必须设置false，否则会自动redirect到Location的地址
-//			conn.addRequestProperty("Accept-Charset", "UTF-8;");
-			conn.addRequestProperty("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25");
-//			conn.addRequestProperty("Referer", urlObj.getHost());
-			conn.connect();
-			
-			String l =  conn.getHeaderField("Location");
-			System.out.println(l);
-			 
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
+	static final LogHelper LOGGER = LogHelper.getLog(HttpClient.class);
+	 
 	
 	/**
 	 * 不要使用 很多坑
@@ -277,6 +153,7 @@ public class HttpClient {
 		 * 异步调用的
 		 */
 		@Override
+		@Deprecated
 		public Request call() {
 			LOGGER.info("请求地址：" + getUrlStr());
 
@@ -321,9 +198,9 @@ public class HttpClient {
 		 * @param conn
 		 *            HTTP 链接
 		 */
+		@Deprecated
 		public void initConn(HttpURLConnection conn) {
 			conn.setRequestProperty("Host", url.getHost());
-			conn.setRequestProperty("User-Agent", ua);
 			conn.setConnectTimeout(5000);// 设置超时
 			conn.setReadTimeout(30000);
 		}
@@ -333,6 +210,7 @@ public class HttpClient {
 		 * 
 		 * @return
 		 */
+		@Deprecated
 		public String getText() {
 			if (!called) call();
 
@@ -340,46 +218,8 @@ public class HttpClient {
 			closeConn();
 			return text;
 		}
-		
-		/**
-		 * 在请求中塞入 cookie
-		 * 
-		 * @param conn
-		 *            HTTP 链接
-		 * @param cookies
-		 */
-		public static void setCookie(HttpURLConnection conn, Map<String, String> cookies) {
-			String cookieStr = StringUtil.HashJoin(cookies, ";");
-			conn.setRequestProperty("Cookie", cookieStr);
-		}
-		
-		/**
-		 * 浏览器标识
-		 */
-		public String ua = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2";
+	 
 	}
 	
-	
-	/**
-	 * HTTP Basic 认证
-	 * 
-	 * @author frank
-	 *
-	 */
-	public static class BasicAuthRequest extends Request {
-		public String theUsername;
-		public String thePassword;
-
-		public BasicAuthRequest(String url) {
-			super(url);
-		}
-
-		@Override
-		public void initConn(HttpURLConnection conn) {
-			super.initConn(conn);
-
-			String encoding = Util.base64Encode(theUsername + ":" + thePassword);
-			conn.setRequestProperty("Authorization", "Basic " + encoding);
-		}
-	}
+	 
 }

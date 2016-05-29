@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ajaxjs.net.IP;
-import com.ajaxjs.net.http.HttpClient;
+import com.ajaxjs.net.http.Get;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.map.MapHelper;
@@ -174,7 +174,7 @@ public class Service extends HttpServlet{
 //	}
 
 	private String getIp_JSON() {
-		return HttpClient.GET(ip_location + IP.getIP(request));
+		return Get.GET(ip_location + IP.getIP(request));
 	}
 
 	/**
@@ -198,7 +198,7 @@ public class Service extends HttpServlet{
 		String url = request.getParameter("url");
 		String params = MapHelper.join(getAll("url"), "&"); // 不要 url 参数
 
-		return HttpClient.GET(url + '?' + params);
+		return Get.GET(url + '?' + params);
 	}
 	
 	/**

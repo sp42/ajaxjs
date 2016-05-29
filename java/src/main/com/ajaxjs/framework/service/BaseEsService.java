@@ -83,7 +83,7 @@ public class BaseEsService<T extends BaseModel> implements IService<T> {
 
 		T pojo = Reflect.newInstance(reference);
 	
-		GetResponse response = connectES().prepareGet(getIndex(), getTableName(), Long.toString(id)).get();
+		GetResponse response = connectES().prepareGet(getIndex(), getTableName(), Long.toString(id)).getUUID();
 		
 		Map<String, Object> map = parseDate(response.getSourceAsMap());
 		MapHelper.setMapValueToPojo(map, pojo);
@@ -128,7 +128,7 @@ public class BaseEsService<T extends BaseModel> implements IService<T> {
 		Map<String, Object> map = MapHelper.setPojoToMapValue(entry);
 		
 
-		IndexRequest request = connectES().prepareIndex("dept", "test", map.get("id").toString()).setSource(map).get();
+		IndexRequest request = connectES().prepareIndex("dept", "test", map.get("id").toString()).setSource(map).getUUID();
 		return 0;
 	}
 

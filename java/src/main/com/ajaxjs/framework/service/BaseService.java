@@ -35,7 +35,7 @@ import com.ajaxjs.framework.model.Query;
 import com.ajaxjs.framework.model.PageResult;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.util.UUID;
+import com.ajaxjs.util.Util;
 
 /**
  * 基础业务类，围绕数据库的增删改查。
@@ -137,7 +137,7 @@ public abstract class BaseService<T extends BaseModel, Mapper extends DAO<T>> im
 				throw new IllegalAccessException("不能为空标题");
 			}
 
-			entry.setUid(UUID.get()); // 创建 uuid
+			entry.setUid(Util.getUUID()); // 创建 uuid
 
 			Date now = new Date();// 记录创建時間
 			entry.setCreateDate(now);

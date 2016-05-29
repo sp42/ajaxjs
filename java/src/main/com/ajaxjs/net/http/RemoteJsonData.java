@@ -20,18 +20,20 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.ajaxjs.json.Json;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.web.Requester;
 
 /**
  * 请求远程的 JSON 接口基类
+ * 
  * @author frank
  *
  */
 public abstract class RemoteJsonData implements RemoteData {
 	private static final LogHelper LOGGER = LogHelper.getLog(RemoteJsonData.class);
-	
+
 	/**
 	 * 读取本地接口，把返回的 JSON 转换为 Map
 	 * 
@@ -42,9 +44,9 @@ public abstract class RemoteJsonData implements RemoteData {
 	 */
 	public Map<String, Object>[] getLocalJSON_Array(HttpServletRequest request, String url) {
 		String serviceUrl = new Requester(request).getBasePath() + url;
-		return HttpClient.getRemoteJSON_Array(serviceUrl);
+		return RemoteJsonData.getRemoteJSON_Array(serviceUrl);
 	}
-	
+
 	/**
 	 * 默认为 /service 目录
 	 * 
@@ -53,7 +55,6 @@ public abstract class RemoteJsonData implements RemoteData {
 	public String getApiBaseUrl(HttpServletRequest request) {
 		return new Requester(request).getBasePath() + "/service";
 	}
-	
 
 	@Override
 	public String getApiUrl(String url, Map<String, String> params) {
@@ -75,7 +76,7 @@ public abstract class RemoteJsonData implements RemoteData {
 	@Override
 	public Map<String, Object> getInfo(String url, Map<String, String> params) {
 		String _url = getApiUrl(url, params); // 注入！
-		return HttpClient.getRemoteJSON_Object(_url);
+		return RemoteJsonData.getRemoteJSON_Object(_url);
 	}
 
 	@Override
@@ -94,9 +95,10 @@ public abstract class RemoteJsonData implements RemoteData {
 	@SuppressWarnings("unchecked")
 	@Override
 	public ListResult getList(String url, Map<String, String> params) {
-		ListResult result = new ListResult(); // 不要这个对象 null，让 result.results 可以 null
-		Map<String, Object> response = HttpClient.getRemoteJSON_Object(getApiUrl(url, params));
-		
+		ListResult result = new ListResult(); // 不要这个对象 null，让 result.results 可以
+												// null
+		Map<String, Object> response = RemoteJsonData.getRemoteJSON_Object(getApiUrl(url, params));
+
 		if (response != null && response.get(getTotalToken()) != null) {
 			result.total = (Integer) response.get(getTotalToken());
 
@@ -132,7 +134,7 @@ public abstract class RemoteJsonData implements RemoteData {
 	 * @return
 	 */
 	public Map<String, Object>[] getFlatList(String url, Map<String, String> params) {
-		return HttpClient.getRemoteJSON_Array(getApiUrl(url, params));
+		return RemoteJsonData.getRemoteJSON_Array(getApiUrl(url, params));
 	}
 
 	@Override
@@ -148,5 +150,42 @@ public abstract class RemoteJsonData implements RemoteData {
 	@Override
 	public String getResultToken() {
 		return "result";
+	}
+
+	/**
+	 * 读取远程接口，把返回的 JSON 转换为 Map[]
+	 * 
+	 * @param url
+	 *            远程接口地址
+	 * @return 响应内容 Map[]
+	 */
+	public static Map<String, Object>[] getRemoteJSON_Array(String url) {
+		String json = Get.GET(url);
+
+		if (!StringUtil.isEmptyString(json)) {
+			return Json.callExpect_MapArray(json);
+		} else {
+			LOGGER.warning("异常：读取远程接口，不能把返回的 JSON 转换为 Map[]！");
+			return null;
+		}
+	}
+
+	/**
+	 * 读取远程接口，把返回的 JSON 转换为 Map
+	 * 
+	 * @param url
+	 *            远程接口地址
+	 * @return 响应内容 Map
+	 */
+	public static Map<String, Object> getRemoteJSON_Object(String url) {
+		String json = Get.GET(url);
+
+		if (!StringUtil.isEmptyString(json)) {
+			// LOGGER.info(json);
+			return Json.callExpect_Map(json);
+		} else {
+			LOGGER.warning("异常：读取远程接口，不能把返回的 JSON 转换为 Map！");
+			return null;
+		}
 	}
 }

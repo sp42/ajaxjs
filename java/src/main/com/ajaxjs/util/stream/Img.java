@@ -85,19 +85,64 @@ public class Img extends IO {
 		}
 	}
 
+
+	/**
+	 * 完成设置图片大小
+	 * 
+	 * @param img
+	 *            图片对象
+	 * @param newHeight
+	 *            高
+	 * @param newWidth
+	 *            宽
+	 * @return 缓冲的图片对象
+	 */
+	public static BufferedImage setResize(Image img, int newHeight, int newWidth) {
+		BufferedImage newImg = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
+		newImg.getGraphics().drawImage(img, 0, 0, newWidth, newHeight, null);
+		
+		return newImg;
+	}
+
+	/**
+	 * 缩放比例
+	 * 
+	 * @param img
+	 *            图片对象
+	 * @param height
+	 *            高
+	 * @param width
+	 *            宽
+	 * @return
+	 */
+	public static int[] resize(Image img, int height, int width) {
+		int oHeight = img.getHeight(null), oWidth = img.getWidth(null);
+		double ratio = (new Integer(oHeight)).doubleValue() / (new Integer(oWidth)).doubleValue();
+		
+		if(width != 0) {
+			height =  (int) (ratio * width); 
+		}else {
+			width = (int) ( height / ratio);
+		} 
+		
+		return new int[]{height, width};
+	}
+	
 	/**
 	 * 保存图片 TODO 其实可以考虑使用 bufferedWrite(InputStream is, OutputStream out) 保存的
 	 * 《使用ImageIO.write存储png格式图片性能较差问题》http://zhang-xzhi-xjtu.iteye.com/blog/
 	 * 1328084
 	 * 
-	 * @param imgPath
+	 * @param filePathName
 	 *            图片路径
-	 * @param bufImg
+	 * @param img
+	 *            图片对象
 	 * @param imgType
+	 *            图片类型
 	 */
-	public static boolean saveImgfile(String imgPath, BufferedImage bufImg, String imgType) {
-		try (FileOutputStream outImgStream = new FileOutputStream(imgPath);) {
-			return ImageIO.write(bufImg, imgType, outImgStream);
+	public static boolean saveImgfile(String filePathName, BufferedImage img, String imgType) {
+		try (FileOutputStream outImgStream = new FileOutputStream(filePathName);) {
+			return ImageIO.write(img, imgType, outImgStream);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
@@ -122,19 +167,6 @@ public class Img extends IO {
 	}
 
 	/**
-	 * 图片高度宽度
-	 * 
-	 * @param filename
-	 *            图片文件名
-	 * @return 图片高度宽度
-	 */
-	public static int[] getImgSize(String filename) {
-		Image img = readImg(filename);
-
-		return new int[] { img.getHeight(null), img.getHeight(null) };
-	}
-
-	/**
 	 * BufferedImage 转换为 byte[]
 	 * 
 	 * @param image
@@ -152,22 +184,6 @@ public class Img extends IO {
 		}
 	}
 
-	/**
-	 * 修改图片大小
-	 * 
-	 * @param srcImgPath
-	 * @param outImgPath
-	 *            如果为 null 覆盖原文件
-	 * @param new_w
-	 * @param new_h
-	 */
-	public static void modiflySize(String srcImgPath, String outImgPath, int new_w, int new_h) {
-		BufferedImage bufImg = new BufferedImage(new_w, new_h, BufferedImage.TYPE_INT_RGB);
-		bufImg.getGraphics().drawImage(readImg(srcImgPath), 0, 0, new_w, new_h, null);
-
-		// 输出图片
-		saveImgfile(outImgPath == null ? srcImgPath : outImgPath, bufImg, "jpg");
-	}
 
 	/**
 	 * 图片裁切
@@ -180,17 +196,17 @@ public class Img extends IO {
 	 *            选择区域的宽度
 	 * @param height
 	 *            选择区域的高度
-	 * @param srcImgPath
+	 * @param src
 	 *            源图片路径
-	 * @param outImgPath
+	 * @param out
 	 *            裁切后图片的保存路径
 	 */
-	public static void cut(String srcImgPath, String outImgPath, int x1, int y1, int width, int height) {
-		String fileSuffix = getFileSuffix(srcImgPath);
+	public static void cut(String src, String out, int x1, int y1, int width, int height) {
+		String fileSuffix = getFileSuffix(src);
 		BufferedImage bufImg = null;
 
-		try (FileInputStream is = new FileInputStream(srcImgPath);
-				ImageInputStream iis = ImageIO.createImageInputStream(is);) {
+		try (FileInputStream is = new FileInputStream(src);
+			ImageInputStream iis = ImageIO.createImageInputStream(is);) {
 			Iterator<ImageReader> it = ImageIO.getImageReadersByFormatName(fileSuffix);
 			ImageReader reader = it.next();
 			reader.setInput(iis, true);
@@ -204,49 +220,47 @@ public class Img extends IO {
 		}
 
 		if (bufImg != null)
-			saveImgfile(new File(outImgPath == null ? srcImgPath : outImgPath), bufImg, fileSuffix);
+			saveImgfile(new File(out == null ? src : out), bufImg, fileSuffix);
 	}
 
 	/**
 	 * 为图片添加水印文字
 	 * 
-	 * @param srcImgPath
+	 * @param src
 	 *            原图位置
-	 * @param outImgPath
+	 * @param out
 	 *            输出图片位置。如果为 null 覆盖原文件
-	 * @param watermarkStr
+	 * @param watermark
 	 *            水印文字
 	 */
-	public static void mark(String srcImgPath, String outImgPath, String watermarkStr) {
+	public static void mark(String src, String out, String watermark) {
 		// 读取原图片信息
-		Image srcImg = readImg(srcImgPath);
-		int srcImgWidth = srcImg.getWidth(null), srcImgHeight = srcImg.getHeight(null);
+		Image srcImg = readImg(src);
+		int width = srcImg.getWidth(null), height = srcImg.getHeight(null);
 
 		// 加水印
-		BufferedImage bufImg = new BufferedImage(srcImgWidth, srcImgHeight, BufferedImage.TYPE_INT_RGB);
-		Graphics2D g = bufImg.createGraphics();
-		g.drawImage(srcImg, 0, 0, srcImgWidth, srcImgHeight, null);
+		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g = img.createGraphics();
+		g.drawImage(srcImg, 0, 0, width, height, null);
 		g.setColor(Color.white); // 根据图片的背景设置水印颜色
 
-		// Font font = new Font("微软雅黑", Font.PLAIN, 18);
 		Font font = new Font("楷书", Font.PLAIN, 15);
 		g.setFont(font);
 
 		// int x = (srcImgWidth - getWatermarkLength(watermarkStr, g)) / 1;
 		// int y = srcImgHeight / 1;
 
-		// ------------------------------------------------------------------
 		FontMetrics fm = g.getFontMetrics(font);
 		// 设置换行操作
 		int fontHeight = fm.getHeight(); // 字符的高度
-		int offsetLeft = 30;
-		int rowIndex = 12;
-		for (int i = 0; i < watermarkStr.length(); i++) {
-			char c = watermarkStr.charAt(i);
+		int offsetLeft = 30, rowIndex = 12;
+		
+		for (int i = 0; i < watermark.length(); i++) {
+			char c = watermark.charAt(i);
 			int charWidth = fm.charWidth(c); // 字符的宽度
 
 			// 另起一行
-			if (Character.isISOControl(c) || offsetLeft >= (srcImgWidth - charWidth)) {
+			if (Character.isISOControl(c) || offsetLeft >= (width - charWidth)) {
 				rowIndex++;
 				offsetLeft = 16;
 			}
@@ -254,41 +268,42 @@ public class Img extends IO {
 			g.drawString(String.valueOf(c), offsetLeft, rowIndex * fontHeight); // 把一个个写到图片上
 			offsetLeft += charWidth; // 设置下字符的间距
 		}
-		// ------------------------------------------------------------------
 		// g.drawString(watermarkStr, x+10, y-5);
 
 		g.dispose();
 
 		// 输出图片
-		saveImgfile(outImgPath == null ? srcImgPath : outImgPath, bufImg, "jpg");
+		saveImgfile(out == null ? src : out, img, "jpg");
 	}
 
 	/**
 	 * 为图片添加水印图片
 	 * 
-	 * @param srcImgPath
-	 * @param outImgPath
+	 * @param src
+	 *            要添加的图片
+	 * @param out
 	 *            如果为 null 覆盖原文件
-	 * @param watermarkImg
+	 * @param watermark
 	 *            水印文件
 	 */
-	public static void mark(String srcImgPath, String outImgPath, File watermarkImg) {
-		Image imageOriginal = readImg(srcImgPath), imageWaterMark = readImg(watermarkImg);
+	public static void mark(String src, String out, File watermark) {
+		Image srcImg = readImg(src), watermarkImg = readImg(watermark);
 
-		int widthOriginal = imageOriginal.getWidth(null), heightOriginal = imageOriginal.getHeight(null),
-				widthWaterMark = imageWaterMark.getWidth(null), heightWaterMark = imageWaterMark.getHeight(null);
+		int width = srcImg.getWidth(null), height = srcImg.getHeight(null),
+			widthWaterMark = watermarkImg.getWidth(null), heightWaterMark = watermarkImg.getHeight(null);
 
-		BufferedImage bufImg = new BufferedImage(widthOriginal, heightOriginal, BufferedImage.TYPE_INT_RGB);
-		Graphics g = bufImg.createGraphics();
-		g.drawImage(imageOriginal, 0, 0, widthOriginal, heightOriginal, null);
+		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		Graphics g = img.createGraphics();
+		
+		g.drawImage(srcImg, 0, 0, width, height, null);
 		// 水印文件在源文件的右下角
-		g.drawImage(imageWaterMark, widthOriginal - widthWaterMark, heightOriginal - heightWaterMark, widthWaterMark,
-				heightWaterMark, null);
+		g.drawImage(watermarkImg, width - widthWaterMark, height - heightWaterMark, widthWaterMark, heightWaterMark, null);
 		g.dispose();
 
 		// 输出图片
-		saveImgfile(outImgPath == null ? srcImgPath : outImgPath, bufImg, "jpg");
+		saveImgfile(out == null ? src : out, img, "jpg");
 	}
+
 
 	// 获取水印文字总长度
 	// private static int getWatermarkLength(String str, Graphics2D g) {

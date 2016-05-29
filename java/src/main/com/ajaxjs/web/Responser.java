@@ -1,5 +1,9 @@
 package com.ajaxjs.web;
 
+import java.awt.image.RenderedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+
 /**
  * Copyright 2015 Frank Cheung
  *
@@ -18,16 +22,28 @@ package com.ajaxjs.web;
 
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
 import com.ajaxjs.Constant;
+import com.ajaxjs.net.http.ConnectException;
+import com.ajaxjs.net.http.Request;
+import com.ajaxjs.net.http.RequestClient;
+import com.ajaxjs.util.IO;
 import com.ajaxjs.util.Util;
 
 /**
@@ -276,5 +292,154 @@ public class Responser extends HttpServletResponseWrapper{
 		request.setAttribute("javax.servlet.error.message", ex.getMessage());
 		
 		sendRequestDispatcher("/public/error.jsp");
+	}
+	
+	/**
+	 * web文件下载功能实现
+	 * @param url
+	 * @return
+	 */
+	public boolean download(String url, boolean isShowOnBrowser) {
+		String filename = IO.getFileName(url);
+		
+		ServletContext context = getRequest().getServletContext();
+		setContentType(context.getMimeType(filename));// 设置文件 MIME 类型
+		
+		if(!isShowOnBrowser)
+			setHeader("Content-Disposition", "attachment;filename=" + filename);// 设置 Content-Disposition
+		
+		final OutputStream out;
+		
+		try {
+			out = getOutputStream();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		if(url.startsWith("http://")) { // 远程网络资源
+			Request req = new Request();
+			req.setUrl(url);
+			final RequestClient rc = new RequestClient(req);
+			
+			req.setCallback(new Request.Callback() {
+				@Override
+				public void onDataLoad(InputStream is) {
+					IO.write(is, out);// 直接写浏览器
+				}
+			});
+
+			try {
+				rc.connect();
+			} catch (ConnectException e) {
+				System.out.println(e);
+				return false;
+			}
+		} else { 
+			IO.readFile_save2(url, out);// 文件在服务器的磁盘上，读取目标文件，通过 response 将目标文件写到浏览器
+		}
+
+		try {
+			// jsp 需要加上下面代码,运行时才不会出现 java.lang.IllegalStateException: getOutputStream() has already been called ..........等异常
+			// out.clear();
+			// out = pageContext.pushBody();
+			out.flush();
+			out.close();
+			flushBuffer();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
+	}
+
+	/**
+	 * 把图片流显示出来
+	 * 
+	 * @param im
+	 * @param response
+	 */
+	public void loadImage(RenderedImage im) {
+		try {
+			ImageIO.write(im, "JPEG", getOutputStream());
+	
+			/*
+			 * 加上下面代码,运行时才不会出现java.lang.IllegalStateException: getOutputStream() has already been called ..........等异常
+			 * response.getOutputStream().flush();
+			 * response.getOutputStream().close(); 
+			 * response.flushBuffer();
+			 */
+	
+			// JSP内置对象out和response.getWrite()的区别，两者的主要区别：1. 这两个对象的类型是完全不同的……
+			// response.getWriter();
+			// http://blog.sina.com.cn/s/blog_7217e4320101l8gq.html
+			// http://www.2cto.com/kf/201109/103284.html
+	
+			// pageContext.getOut().clear();
+		} catch (IOException e) {
+			e.printStackTrace();
+			// TODO 跳转
+		}
+	}
+	
+	/**
+	 * servlet生成
+	 * html http://my.oschina.net/mengdejun/blog/9434 TODO
+	 * 
+	 * @param context
+	 * @param req
+	 * @param resp
+	 */
+	public static void servlet2html(ServletContext context, HttpServletRequest req, HttpServletResponse resp) {
+		RequestDispatcher dispatcher = context.getRequestDispatcher("/index.jsp");
+
+		final ByteArrayOutputStream byteos = new ByteArrayOutputStream();
+		final ServletOutputStream stream = new ServletOutputStream() {
+			// 只是处理字节流，而PrintWriter则是处理字符流,和
+			public void write(byte[] data, int offset, int length) {
+				byteos.write(data, offset, length);
+			}
+
+			public void write(int b) throws IOException {
+				byteos.write(b);
+			}
+		};
+		OutputStreamWriter osw = null;
+		try {
+			osw = new OutputStreamWriter(byteos, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		final PrintWriter printw = new PrintWriter(osw);
+
+		// 进行编码转换,当输出流从比特流转换为字符流的时候设置才是有效的。
+		HttpServletResponse rep = new HttpServletResponseWrapper(resp) {
+			@Override
+			public ServletOutputStream getOutputStream() {
+				return stream;
+			}
+
+			@Override
+			public PrintWriter getWriter() {
+				return printw;
+			}
+		};
+
+		try {
+			dispatcher.include(req, rep);
+		} catch (ServletException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		printw.flush();
+
+		try (FileOutputStream fileos = new FileOutputStream("/index_jsp.html", false);) {
+			byteos.writeTo(fileos);// 把 jsp 输出的内容写到 xxx.htm
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

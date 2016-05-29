@@ -17,11 +17,6 @@ package com.ajaxjs.web;
 
 import java.util.regex.Pattern;
 
-import javax.servlet.http.HttpServletRequest;
-
-import com.ajaxjs.util.StringUtil;
-import com.sun.xml.internal.fastinfoset.stax.events.Util;
-
 /**
  * 注意:如果form表单里增加了enctype="multipart/form-data" 这个属性,会导致 HttpServletRequestWrapper 里取不到表单里的内容
  * 表单重复提交处理:
