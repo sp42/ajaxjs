@@ -292,6 +292,7 @@ public class MapHelper<K, V extends IValue> extends HashMap<K, V> implements IRe
 		}
 		return _map;
 	}
+	
 	/**
 	 * 免去强类型转换的麻烦
 	 * 
@@ -301,15 +302,18 @@ public class MapHelper<K, V extends IValue> extends HashMap<K, V> implements IRe
 	 *            键
 	 * @return 布尔型
 	 */
-	public static boolean getBoolean(Map<String, ?> map, String key){
+	public static boolean getBoolean(Map<String, ?> map, String key) {
 		boolean b = false;
-		if(map == null)b = false;
-		else{
+		if (map == null)
+			b = false;
+		else {
 			Object obj = map.get(key);
-			if(obj == null)b = false;
-			else b = (boolean)obj;
+			if (obj == null)
+				b = false;
+			else
+				b = (boolean) obj;
 		}
-		
+
 		return b;
 	}
 	
@@ -324,8 +328,7 @@ public class MapHelper<K, V extends IValue> extends HashMap<K, V> implements IRe
 		methodName = Character.toString(methodName.charAt(0)).toLowerCase() + methodName.substring(1);
 		return methodName;
 	}
-	
-	
+		
 	public static Map<String, Object> setPojoToMapValue(Object obj) {
 		if (obj != null) {
 			Map<String, Object> map = new HashMap<>();

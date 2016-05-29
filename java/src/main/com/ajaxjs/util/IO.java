@@ -33,8 +33,7 @@ import javax.activation.MimetypesFileTypeMap;
 import com.ajaxjs.Constant;
 
 /**
- * 流工具类 
- * http://www.cnblogs.com/skywang12345/archive/2013/02/24/2936044.html
+ * 流工具类 http://www.cnblogs.com/skywang12345/archive/2013/02/24/2936044.html
  * http://coach.iteye.com/blog/856429
  * http://www.cnblogs.com/lovebread/archive/2009/11/23/1609122.html
  * 
@@ -125,7 +124,7 @@ public class IO {
 			}
 		}
 	}
-	
+
 	/**
 	 * 将 in 的写入到 out 之中去
 	 * 
@@ -138,7 +137,7 @@ public class IO {
 	public static boolean write(InputStream in, OutputStream out) {
 		int length = 1024;
 		byte[] buf = new byte[length];
-		
+
 		try {
 			int len = in.read(buf, 0, length);
 			while (len != -1) {
@@ -169,7 +168,7 @@ public class IO {
 		try (OutputStream _out = new BufferedOutputStream(out);) {// 加入缓冲功能
 			while ((length = in.read(buffer)) != -1) {
 				_out.write(buffer, 0, length);
-//				LOGGER.info((i++ + ":") + length);
+				// LOGGER.info((i++ + ":") + length);
 			}
 		} catch (IOException e) {
 			LOGGER.warning(e);
@@ -216,10 +215,10 @@ public class IO {
 	 */
 	public static String getFileName(String str) {
 		String[] arr = str.split("/");
-		
+
 		return arr[arr.length - 1];
 	}
-	
+
 	/**
 	 * 獲取文件名的擴展名
 	 * 
@@ -238,6 +237,15 @@ public class IO {
 	 */
 	public static String getMime(String filename) {
 		return new MimetypesFileTypeMap().getContentType(filename);
+	}
+
+	public static String getMime(File file) {
+		String contentType = new MimetypesFileTypeMap().getContentType(file);
+		if (file.getName().endsWith(".png"))
+			contentType = "image/png"; // TODO needs?
+		if (StringUtil.isEmptyString(contentType))
+			contentType = "application/octet-stream";
+		return contentType;
 	}
 
 	/**
@@ -294,7 +302,7 @@ public class IO {
 					result.append(Constant.newline);
 				}
 			} catch (IOException e) {
-					LOGGER.warning(e);
+				LOGGER.warning(e);
 			} finally {
 				try {
 					if (is != null)
@@ -351,7 +359,7 @@ public class IO {
 					OutputStreamWriter writer = new OutputStreamWriter(out, Constant.encoding_UTF8);) {
 				writer.write(content);
 			} catch (IOException e) {
-				LOGGER.warning("写入文件" + filename + "失败" , e);
+				LOGGER.warning("写入文件" + filename + "失败", e);
 				throw e;
 			}
 		}
