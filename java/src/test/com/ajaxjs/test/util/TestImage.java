@@ -1,4 +1,4 @@
-package com.ajaxjs.test.util.stream;
+package com.ajaxjs.test.util;
 
 import static org.junit.Assert.*;
 
@@ -11,7 +11,7 @@ import com.ajaxjs.util.Img;
 public class TestImage {
 	@Test
 	public void 修改图片大小(){
-		Img.modiflySize("c://temp//XMM.jpg", "c://temp//baitian---2.jpg", 20, 150);  
+		Img.setResize("c://temp//XMM.jpg", "c://temp//baitian---2.jpg", 20, 150);  
 		
 		assertNotNull(true);
 	}
