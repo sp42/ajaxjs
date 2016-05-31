@@ -1,17 +1,40 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta  content="text/html; charset=UTF-8"  http-equiv="content-type">
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
     <title>web.xml</title>
     <style>
 	</style>
-    <link  rel="stylesheet"  type="text/css"  href="../common.css">
-    <script  src="http://bigfoot.ajaxjs.com/bigfoot/public/run_prettify.js"></script>
+    <link rel="stylesheet" type="text/css" href="../common.css">
+    <script src="http://bigfoot.ajaxjs.com/bigfoot/public/run_prettify.js"></script>
   </head>
   <body>
     <p>web.xml 文件可谓 Web 程序的入口。</p>
-    <p>现今的 Java Web 程序既支持 xml 配置方式，也支持注解的方式。虽然可以做到“零 XML 配置，但 AJAXJS 还是推荐传统的 xml 配置。当然，也有部分配置以支持注解的方式出现。</p>
-    <pre  class="prettyprint">&lt;!-- JSP 页面编码 --&gt;
+    <p>现今的 Java Web 程序既支持 xml 配置方式，也支持注解的方式。虽然可以做到“零 XML 配置，但某些地方 AJAXJS 还是推荐传统的 xml 配置。相对地，某些地方也会使用注解的方式来配置。</p>
+    <p>首先是升级一下&nbsp;JSP 的 Java 版本为 1.7，不然会抛出 Resource specification not allowed here for source level below 1.7 的异常。修改 Tomcat 的 web.xml，注意不是 default&nbsp;那项。</p>
+    <pre class="prettyprint">&lt;servlet&gt;
+      &lt;servlet-name&gt;jsp&lt;/servlet-name&gt;
+      &lt;servlet-class&gt;org.apache.jasper.servlet.JspServlet&lt;/servlet-class&gt;
+      &lt;init-param&gt;
+          &lt;param-name&gt;fork&lt;/param-name&gt;
+          &lt;param-value&gt;false&lt;/param-value&gt;
+      &lt;/init-param&gt;
+      &lt;init-param&gt;
+          &lt;param-name&gt;xpoweredBy&lt;/param-name&gt;
+          &lt;param-value&gt;false&lt;/param-value&gt;
+      &lt;/init-param&gt;
+        &lt;init-param&gt;
+          &lt;param-name&gt;compilerSourceVM&lt;/param-name&gt;
+          &lt;param-value&gt;1.7&lt;/param-value&gt;
+      &lt;/init-param&gt;
+      &lt;init-param&gt;
+          &lt;param-name&gt;compilerTargetVM&lt;/param-name&gt;
+          &lt;param-value&gt;1.7&lt;/param-value&gt;
+      &lt;/init-param&gt;
+      &lt;load-on-startup&gt;3&lt;/load-on-startup&gt;
+&lt;/servlet&gt;</pre>
+    <p>修改页面编码。</p>
+    <pre class="prettyprint">&lt;!-- JSP 页面编码 --&gt;
 &lt;jsp-config&gt;
 	&lt;jsp-property-group&gt;
 		&lt;url-pattern&gt;*.jsp&lt;/url-pattern&gt;
@@ -22,7 +45,7 @@
 &lt;!-- // --&gt;	</pre>
     <p>这样 jsp 就不需要每张页面设置 &lt;%@page pageEncoding="UTF-8"%&gt; 头。</p>
     <p>如果使用 Spring，还可以使用下面过滤器代替上配置（此项可选）。</p>
-    <pre  class="prettyprint">&lt;!-- UTF-8 页面编码 --&gt;
+    <pre class="prettyprint">&lt;!-- UTF-8 页面编码 --&gt;
 &lt;filter&gt;
 	&lt;filter-name&gt;encodingFilter&lt;/filter-name&gt;
 	&lt;filter-class&gt;org.springframework.web.filter.CharacterEncodingFilter&lt;/filter-class&gt;
@@ -36,8 +59,9 @@
 	&lt;url-pattern&gt;/*&lt;/url-pattern&gt;
 &lt;/filter-mapping&gt;
 &lt;!-- // --&gt;	</pre>
-    <p> 修改 Tomcat 默认的出错页。相关教程请参阅本博客<a  href="http://blog.csdn.net/zhangxin09">《Java Web 错误/异常处理页面 》</a>。</p>
-    <pre  class="prettyprint">&lt;!-- 404 页面不存在错误 --&gt;
+    <p>然而在接受 POST&nbsp;表单中文乱码的时候，你可能要执行 request.setCharacterEncoding("utf-8");&nbsp;才可以。</p>
+    <p>修改 Tomcat 默认的出错页。相关教程请参阅本博客<a href="http://blog.csdn.net/zhangxin09">《Java Web 错误/异常处理页面 》</a>。</p>
+    <pre class="prettyprint">&lt;!-- 404 页面不存在错误 --&gt;
 &lt;error-page&gt;
 	&lt;error-code&gt;404&lt;/error-code&gt;
 	&lt;location&gt;/WEB-INF/jsp/common/default/error.jsp&lt;/location&gt;
@@ -52,56 +76,8 @@
 &lt;!-- // --&gt;</pre>
     <p> 你可以自定义页面样式，以符合你项目的需求。 </p>
     <p> </p>
-    
-    	<!-- 防御 -->
-	<filter>
-		<filter-name>HttpSessionCookitStoreFilter</filter-name>
-		<filter-class>com.ajaxjs.web.security.HttpSessionCookitStoreFilter</filter-class>
-		<init-param>	
-			<param-name>encryKey</param-name>
-			<param-value>1234567887654321</param-value>
-		</init-param>
-	</filter>
-
-	<filter>
-		<filter-name>DefaultBaseSecurityFilter</filter-name>
-		<filter-class>com.ajaxjs.web.security.SecurityFilter</filter-class>
-		<init-param>
-			<param-name>securityFilterList</param-name>
-			<!-- ,com.ajaxjs.web.security.filter.CsrfTokenCkeckFilter -->
-			<param-value>com.ajaxjs.web.security.filter.CookieWhiteListFilter,com.ajaxjs.web.security.filter.FormPostPermitCheckFilter</param-value>
-		</init-param>
-		<init-param>
-			<param-name>cookieWhiteList</param-name>
-			<param-value>id,JESSIONID,name,clrf</param-value>
-		</init-param>
-		<init-param>
-			<param-name>onlyPostUrlList</param-name>
-			<param-value>/d/sssecurity, /user/aaa/name*</param-value><!-- 支持正则匹配 -->
-		</init-param>
-		<init-param>
-			<param-name>whitefilePostFixList</param-name>
-			<param-value>jpg,png,doc,xls</param-value>
-		</init-param>
-		<init-param>
-			<param-name>encryKey</param-name>
-			<param-value>1234567887654321</param-value>
-		</init-param>
-		<init-param>
-			<param-name>redirectWhiteList</param-name>
-			<param-value>http://localhost:8080/[0-9A-Za-z]*,http://www.taobao.com/[0-9A-Za-z]*</param-value>
-		</init-param>
-	</filter>
-
-	<filter-mapping>
-		<filter-name>HttpSessionCookitStoreFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-
-	<filter-mapping>
-		<filter-name>DefaultBaseSecurityFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	<!-- // -->
+    <!-- 防御 --> <filter> <filter-name>HttpSessionCookitStoreFilter</filter-name> <filter-class>com.ajaxjs.web.security.HttpSessionCookitStoreFilter</filter-class> <init-param> <param-name>encryKey</param-name> <param-value>1234567887654321</param-value> </init-param> </filter> <filter> <filter-name>DefaultBaseSecurityFilter</filter-name> <filter-class>com.ajaxjs.web.security.SecurityFilter</filter-class> <init-param> <param-name>securityFilterList</param-name>
+        <!-- ,com.ajaxjs.web.security.filter.CsrfTokenCkeckFilter --> <param-value>com.ajaxjs.web.security.filter.CookieWhiteListFilter,com.ajaxjs.web.security.filter.FormPostPermitCheckFilter</param-value> </init-param> <init-param> <param-name>cookieWhiteList</param-name> <param-value>id,JESSIONID,name,clrf</param-value> </init-param> <init-param> <param-name>onlyPostUrlList</param-name> <param-value>/d/sssecurity, /user/aaa/name*</param-value><!-- 支持正则匹配 --> </init-param> <init-param> <param-name>whitefilePostFixList</param-name> <param-value>jpg,png,doc,xls</param-value> </init-param> <init-param> <param-name>encryKey</param-name> <param-value>1234567887654321</param-value> </init-param> <init-param> <param-name>redirectWhiteList</param-name> <param-value>http://localhost:8080/[0-9A-Za-z]*,http://www.taobao.com/[0-9A-Za-z]*</param-value> </init-param> </filter> <filter-mapping> <filter-name>HttpSessionCookitStoreFilter</filter-name> <url-pattern>/*</url-pattern> </filter-mapping> <filter-mapping> <filter-name>DefaultBaseSecurityFilter</filter-name> <url-pattern>/*</url-pattern> </filter-mapping>
+    <!-- // -->
   </body>
 </html>
