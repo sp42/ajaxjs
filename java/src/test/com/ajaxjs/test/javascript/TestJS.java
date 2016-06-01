@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.*;
 
 import com.ajaxjs.app.App;
-import com.ajaxjs.javascript.Utils;
 import com.ajaxjs.json.IEngine;
 import com.ajaxjs.json.Json;
 import com.ajaxjs.json.Nashorn;
