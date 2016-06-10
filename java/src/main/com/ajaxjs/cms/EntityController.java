@@ -9,7 +9,7 @@ public class EntityController {
 	private static final com.ajaxjs.util.LogHelper LOGGER = com.ajaxjs.util.LogHelper.getLog(EntityController.class);
 	
 	/**
-	 * 分类界面
+	 * 分类界面 
 	 * @return
 	 */
 	@RequestMapping(value = "/cms/catalog", method = RequestMethod.GET)
