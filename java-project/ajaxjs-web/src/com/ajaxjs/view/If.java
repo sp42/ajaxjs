@@ -20,18 +20,20 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 /**
- * 判断 if逻辑
+ * 判断 if 逻辑
  * 
  * @author frank
  *
  */
 public class If extends SimpleTagSupport {
+	/**
+	 * true 表示执行 when 标签内容，否则执行 otherwise 标签内容
+	 */
 	private boolean test;
 
 	/**
 	 * 用于保存 if 判断是否为 true
-	 * 
-	 * @return true 表示执行 when 标签内容，否则执行 otherwise 标签内容
+	 * @param test true 表示执行 when 标签内容，否则执行 otherwise 标签内容
 	 */
 	public void setTest(boolean test) {
 		this.test = test;

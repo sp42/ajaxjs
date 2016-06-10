@@ -224,9 +224,7 @@ public class Requester extends HttpServletRequestWrapper {
 	
 	/**
 	 * 获取请求的 IP 地址
-	 * 
-	 * @param request
-	 *            请求对象
+
 	 * @return IP 地址
 	 */
 	public String getIP() {

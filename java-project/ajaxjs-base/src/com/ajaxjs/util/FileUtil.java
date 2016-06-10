@@ -206,9 +206,9 @@ public class FileUtil {
 	/**
 	 * 从输入流中获取数据， 转换到 byte[] 也就是 in 转到内存 虽然大家可能都在内存里面了但还不能直接使用，要转换
 	 * 
-	 * @param in
+	 * @param is
 	 *            输入流
-	 * @return
+	 * @return 字节数据
 	 * @throws IOException
 	 */
 	public static byte[] stream2byte(InputStream is) throws IOException {

@@ -110,7 +110,7 @@ public class StringUtil {
 	 * 
 	 * @param map
 	 *            输入的 map
-	 * @param cha
+	 * @param div
 	 *            分隔符
 	 * @return 连接后的字符串
 	 */

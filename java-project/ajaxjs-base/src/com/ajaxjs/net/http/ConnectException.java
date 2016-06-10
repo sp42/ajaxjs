@@ -47,7 +47,7 @@ public class ConnectException extends Exception {
 	/**
 	 * 设置服务端返回的出错信息
 	 * 
-	 * @param msg
+	 * @param feedback
 	 *            出错信息
 	 */
 	public void setFeedback(String feedback) {

@@ -25,7 +25,6 @@ public class UploadFtp extends FtpClient {
 	 *            上传文件的本地路径
 	 * @param target
 	 *            上传到ftp的文件路径
-	 * @return
 	 */
 	public void upload(String source, String target) {
 		TelnetOutputStream ftp = null;
@@ -60,7 +59,6 @@ public class UploadFtp extends FtpClient {
 	 *            在ftp上路径及文件名
 	 * @param target
 	 *            要保存的本地的路径
-	 * @return
 	 */
 	public void getFile(String source, String target) {
 		TelnetInputStream ftp = null;

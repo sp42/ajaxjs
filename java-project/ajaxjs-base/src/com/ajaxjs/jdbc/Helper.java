@@ -190,7 +190,7 @@ public class Helper {
 	 * 
 	 * @param rs
 	 *            记录集合
-	 * @return
+	 * @return Map 结果
 	 */
 	private static Map<String, Object> getResultMap(ResultSet rs) {
 		Map<String, Object> map = new HashMap<>();
@@ -213,9 +213,9 @@ public class Helper {
     
 	/**
 	 * 记录集合列表转换为 Map[]
-	 * @param conn
-	 * @param sql
-	 * @return
+	 * @param conn 数据库连接对象
+	 * @param sql 查询的 SQL 语句
+	 * @return Map[] 结果
 	 */
 	public static List<Map<String, Object>> queryList(Connection conn, String sql) {
 		List<Map<String, Object>> list = new ArrayList<>();
@@ -231,13 +231,15 @@ public class Helper {
 		return list;
 	}
 	
+
 	/**
-	 * 查询结果作为 String 返回
-	 * 查询的 SQL 语句，如果查询成功有这笔记录，返回 true，否则返回 false（检查有无记录）
+	 * 查询结果作为 String 返回 查询的 SQL 语句，如果查询成功有这笔记录，返回 true，否则返回 false（检查有无记录）
 	 * 
-	 * @param sql
-	 *            查询的 SQL 语句
-	 * @return 字符串
+	 * @param rs
+	 *            结果集
+	 * @param classz
+	 *            期望的类型
+	 * @return 数据库里面的值作为 T 出现
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T queryAs(ResultSet rs, Class<T> classz) {

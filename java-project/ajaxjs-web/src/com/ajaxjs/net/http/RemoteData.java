@@ -87,7 +87,7 @@ public interface RemoteData {
 	 *            不包含前缀的 url 部分
 	 * @param params
 	 *            请求的参数
-	 * @return
+	 * @return 数据列表，用特定对象来保存
 	 */
 	ListResult getList(String url, Map<String, String> params);
 

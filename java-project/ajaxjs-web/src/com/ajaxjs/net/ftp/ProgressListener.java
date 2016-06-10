@@ -24,8 +24,8 @@ public class ProgressListener {
 
 	/**
 	 * 
-	 * @param pIn
-	 * @param pOut
+	 * @param in
+	 * @param out
 	 * @return
 	 * @throws IOException
 	 */

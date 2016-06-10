@@ -97,12 +97,13 @@ public class Post {
 	/**
 	 * 多段上传
 	 * 
-	 * @param urlStr
+	 * @param url
 	 *            请求目标地址
 	 * @param text
+	 *            文本数据
 	 * @param fileMap
-	 *            二进制数据
-	 * @return
+	 *            二进制（文件）数据
+	 * @return 请求对象
 	 */
 	public static Request MultiPOST(String url, Map<String, Object> text, Map<String, String> fileMap) {
 		Request request = new Request();

@@ -74,7 +74,8 @@ public class Util {
 	/**
 	 * 强类型转换，有 null 检测
 	 * 
-	 * @param obj输入的对象
+	 * @param obj
+	 *            输入的对象
 	 * @param clazz
 	 *            目标类型
 	 * @return T型结果

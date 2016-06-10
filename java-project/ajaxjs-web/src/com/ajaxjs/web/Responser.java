@@ -370,7 +370,7 @@ public class Responser extends HttpServletResponseWrapper{
 	 * 把图片流显示出来
 	 * 
 	 * @param im
-	 * @param response
+	 *            已渲染的图片对象
 	 */
 	public void loadImage(RenderedImage im) {
 		try {
