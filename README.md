@@ -21,8 +21,7 @@ AJAXJS Web 是一款基于 Java 平台原创的 Web 框架，继承了 Java 平�
 
 服务端采用分层的思想分为以下几个部分。
 
-    *   ajaxjs-base 基础模块，包含相当多的工具类或静态方法 [jar 包下载](http://git.oschina.net/sp42/ajaxjs/raw/master/java-project/ajaxjs-ssm/WebContent/WEB-INF/lib/ajaxjs-base-1.0.0.jar) [源码直达](http://git.oschina.net/sp42/ajaxjs/tree/master/java-project/ajaxjs-base/src?dir=1&amp;filepath=java-project%2Fajaxjs-base%2Fsrc) [文档](http://framework.ajaxjs.com/framework/javadoc2/ajaxjs-base/)。该模块下又包含以下子模块：
-
+ *   ajaxjs-base 基础模块，包含相当多的工具类或静态方法 [jar 包下载](http://git.oschina.net/sp42/ajaxjs/raw/master/java-project/ajaxjs-ssm/WebContent/WEB-INF/lib/ajaxjs-base-1.0.0.jar) [源码直达](http://git.oschina.net/sp42/ajaxjs/tree/master/java-project/ajaxjs-base/src?dir=1&amp;filepath=java-project%2Fajaxjs-base%2Fsrc) [文档](http://framework.ajaxjs.com/framework/javadoc2/ajaxjs-base/)。该模块下又包含以下子模块：
     1.  util 通用工具类，有集合工具类、字符串工具类、反射工具类、文件和流工具类、日期工具类，缓存类，还有一个基于 java.util.logger 日志，简易图片处理器，一个小巧 ioc 依赖注射实现。
     2.  net 网络通讯类，当前是类似 HttpClient 的一个“轮子”，可发送 GET/POST 请求。
     3.  json 解析包。本着 Json/Js 亲缘的关系，大胆采用 JDK 自带的 JavaScript 实现做一个 JSON 解析器。
