@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.apache.ibatis.session.SqlSession;
 
-import com.ajaxjs.app.App;
+import com.ajaxjs.app.MyBatis;
 import com.ajaxjs.framework.exception.DaoException;
 import com.ajaxjs.framework.exception.ServiceException;
 import com.ajaxjs.framework.service.BaseService;
@@ -26,7 +26,7 @@ public class Service extends BaseService<User, Mapper> {
 		int effectedRows = 0;
 		
 		try {
-			try (SqlSession session = App.sqlSessionFactory.openSession();) {
+			try (SqlSession session = MyBatis.sqlSessionFactory.openSession();) {
 				UserDao dao = session.getMapper(UserDao.class);
 				effectedRows = dao.updateLoginInfo(user.getId(), new Date(), ip);
 				session.commit();

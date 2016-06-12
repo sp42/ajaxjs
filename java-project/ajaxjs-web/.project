@@ -33,11 +33,4 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.wst.jsdt.core.jsNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>ajaxjs-base</name>
-			<type>2</type>
-			<location>/Users/sp42/Documents/workspace/ajaxjs-base/src</location>
-		</link>
-	</linkedResources>
 </projectDescription>

@@ -10,6 +10,8 @@ import javax.servlet.ServletException;
 import org.junit.Before;
 import org.junit.Test;
 
+import test.com.ajaxjs.web.MockRequest;
+
 
 
 public class TestApplication {

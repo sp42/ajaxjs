@@ -30,7 +30,7 @@ import javax.validation.constraints.Size;
 
 import org.apache.ibatis.session.SqlSession;
 
-import com.ajaxjs.app.App;
+import com.ajaxjs.app.MyBatis;
 import com.ajaxjs.framework.model.BaseModel;
 import com.ajaxjs.framework.model.EntityDescription;
 import com.ajaxjs.framework.model.FieldDescription;
@@ -91,7 +91,7 @@ public class DocumentRenderer {
 	 * @return
 	 */
 	private static Map<String, FieldMetaInfo> getColumnsMetaInfo(String tablename) {
-		SqlSession session = App.sqlSessionFactory.openSession();
+		SqlSession session = MyBatis.sqlSessionFactory.openSession();
 		Map<String, FieldMetaInfo> cols = new HashMap<>();
 		
 		try{

@@ -23,8 +23,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.ui.Model;
 
-import com.ajaxjs.app.App;
-import com.ajaxjs.app.DBinit;
+import com.ajaxjs.app.MyBatis;
 import com.ajaxjs.framework.dao.DAO;
 import com.ajaxjs.framework.dao.SqlProvider;
 import com.ajaxjs.framework.exception.BusinessException;
@@ -67,7 +66,7 @@ public abstract class BaseService<T extends BaseModel, Mapper extends DAO<T>> im
 			throw new BusinessException(e.getMessage());
 		}
 
-		try (SqlSession session = DBinit.loadSession(mapperClz);) {
+		try (SqlSession session = MyBatis.loadSession(mapperClz);) {
 			Mapper _mapper = session.getMapper(mapperClz);
 			entry = _mapper.selectById(id, getSQL_TableName());
 		} catch (Throwable e) {
@@ -99,7 +98,7 @@ public abstract class BaseService<T extends BaseModel, Mapper extends DAO<T>> im
 		result.setStart(start);
 		result.setPageSize(limit);
 		
-		try (SqlSession session = DBinit.loadSession(mapperClz);){
+		try (SqlSession session = MyBatis.loadSession(mapperClz);){
 			Mapper dao = session.getMapper(mapperClz);
 			
 			if (query == null) {
@@ -148,9 +147,9 @@ public abstract class BaseService<T extends BaseModel, Mapper extends DAO<T>> im
 		
 		LOGGER.info("插入一条新记录：" + entry.getName());
 		
-		try (SqlSession session = DBinit.loadSession(mapperClz);) {
-			if (!App.configuration.hasMapper(mapperClz)) {
-				App.configuration.addMapper(mapperClz);
+		try (SqlSession session = MyBatis.loadSession(mapperClz);) {
+			if (!MyBatis.configuration.hasMapper(mapperClz)) {
+				MyBatis.configuration.addMapper(mapperClz);
 			}
 			
 			Mapper dao = session.getMapper(mapperClz);
@@ -188,7 +187,7 @@ public abstract class BaseService<T extends BaseModel, Mapper extends DAO<T>> im
 		
 //		com.ajaxjs.framework.model.Entity e22 = (com.ajaxjs.framework.model.Entity)entry;
 //		System.out.println(e22.isOnline());
-		try(SqlSession session = DBinit.loadSession(mapperClz);) {
+		try(SqlSession session = MyBatis.loadSession(mapperClz);) {
 			effectedRows = session.getMapper(mapperClz).update(entry);
 			session.commit();
 		} catch (Throwable e) {
@@ -217,7 +216,7 @@ public abstract class BaseService<T extends BaseModel, Mapper extends DAO<T>> im
 		
 		SqlProvider p = null;
 		
-		try(SqlSession session = DBinit.loadSession(null);){
+		try(SqlSession session = MyBatis.loadSession(null);){
 			p = session.getMapper(SqlProvider.class);
 			effectedRows = p.deleteById(getSQL_TableName(), id);
 			session.commit();

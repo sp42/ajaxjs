@@ -20,7 +20,7 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
-import com.ajaxjs.app.App;
+import com.ajaxjs.app.MyBatis;
 import com.ajaxjs.framework.dao.SqlProvider;
 import com.ajaxjs.framework.exception.DaoException;
 
@@ -28,11 +28,11 @@ public class EntityUtil {
 	public static List<Map<String, String>> getNeighbor(String tablename, long id) throws DaoException {
 		List<Map<String, String>> neighbors = null;
 		try {
-			if (!App.configuration.hasMapper(SqlProvider.class)) {
-				 App.configuration.addMapper(SqlProvider.class);
+			if (!MyBatis.configuration.hasMapper(SqlProvider.class)) {
+				MyBatis.configuration.addMapper(SqlProvider.class);
 			}
 			
-			SqlSession session = App.sqlSessionFactory.openSession();
+			SqlSession session = MyBatis.sqlSessionFactory.openSession();
 
 			try {
 				SqlProvider _mapper = session.getMapper(SqlProvider.class);

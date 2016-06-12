@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import test.com.ajaxjs.framework.TestApplication;
+import test.com.ajaxjs.web.MockRequest;
  
 
 /**
