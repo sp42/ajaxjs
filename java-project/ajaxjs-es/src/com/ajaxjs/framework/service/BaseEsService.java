@@ -1,18 +1,13 @@
 package com.ajaxjs.framework.service;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+
 import java.util.Map;
 
-import org.elasticsearch.action.get.GetResponse;
-import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.client.Client;
-import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.action.get.GetRequestBuilder;
+
+import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.springframework.ui.Model;
 
 import com.ajaxjs.framework.exception.ServiceException;
@@ -21,7 +16,7 @@ import com.ajaxjs.framework.model.PageResult;
 import com.ajaxjs.framework.model.Query;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.Reflect;
-import com.ajaxjs.util.map.MapHelper;
+import com.ajaxjs.util.MapHelper;
 
 public class BaseEsService<T extends BaseModel> implements IService<T> {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseService.class);
@@ -36,41 +31,6 @@ public class BaseEsService<T extends BaseModel> implements IService<T> {
 		this.reference = reference;
 	}
 
-	/**
-	 * 连接本地 es 数据，返回 Client 对象。
-	 * 
-	 * @return
-	 */
-	private static Client connectES() {
-		return connectES(null);
-	}
-
-	/**
-	 * 连接本地 es 数据，返回 Client 对象。
-	 * 
-	 * @param clusterName
-	 *            要连接的集群名称
-	 * @return
-	 */
-	private static Client connectES(String clusterName) {
-		InetAddress address = null;
-		try {
-			address = InetAddress.getByName("localhost");
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-			return null;
-		}
-
-		if (clusterName == null)
-			clusterName = "elasticsearch";
-
-		Settings settings = Settings.settingsBuilder().put("cluster.name", clusterName).build();
-		Client client = TransportClient.builder().settings(settings).build()
-				.addTransportAddress(new InetSocketTransportAddress(address, 9300));
-
-		return client;
-
-	}
 
 	/**
 	 * 库名
@@ -83,9 +43,9 @@ public class BaseEsService<T extends BaseModel> implements IService<T> {
 
 		T pojo = Reflect.newInstance(reference);
 	
-		GetResponse response = connectES().prepareGet(getIndex(), getTableName(), Long.toString(id)).getUUID();
+		GetRequestBuilder response = EsUtil.connectES().prepareGet(getIndex(), getTableName(), Long.toString(id));
 		
-		Map<String, Object> map = parseDate(response.getSourceAsMap());
+		Map<String, Object> map = parseDate(response.get().getSourceAsMap());
 		MapHelper.setMapValueToPojo(map, pojo);
 
 		return pojo;
@@ -127,8 +87,7 @@ public class BaseEsService<T extends BaseModel> implements IService<T> {
 	public int create(T entry) throws ServiceException {
 		Map<String, Object> map = MapHelper.setPojoToMapValue(entry);
 		
-
-		IndexRequest request = connectES().prepareIndex("dept", "test", map.get("id").toString()).setSource(map).getUUID();
+		IndexRequestBuilder request = EsUtil.connectES().prepareIndex("dept", "test", map.get("id").toString()).setSource(map);
 		return 0;
 	}
 
@@ -205,5 +164,4 @@ public class BaseEsService<T extends BaseModel> implements IService<T> {
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
 	}
-
 }

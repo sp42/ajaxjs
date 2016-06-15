@@ -6,15 +6,12 @@ import org.junit.Test;
 
 import com.ajaxjs.framework.exception.ServiceException;
 import com.ajaxjs.framework.service.BaseEsService;
-
-import crawler.model.Video;
-
-
+import com.egdtv.crawler.model.Video;
 
 public class TestBaseEsService {
 	@Test
 	public void testBaseESService() throws ServiceException {
-		BaseEsService<Video> news = new BaseEsService<>();
+		BaseEsService<Video> news = new BaseEsService<Video>();
 		news.setReference(Video.class);
 		news.setIndex("dept");
 		news.setTableName("test");
