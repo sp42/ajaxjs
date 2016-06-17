@@ -37,7 +37,7 @@ public class Entity extends BaseModel {
 	private String cover;
 	
 	@FieldDescription(doc="标签，用逗号（,）分割") 
-	private String tags;
+	private String[] tags;
 
 	public String getIntro() {
 		return intro;
@@ -71,11 +71,11 @@ public class Entity extends BaseModel {
 		this.cover = cover;
 	}
 
-	public String getTags() {
+	public String[] getTags() {
 		return tags;
 	}
 
-	public void setTags(String tags) {
+	public void setTags(String tags[]) {
 		this.tags = tags;
 	}
 }

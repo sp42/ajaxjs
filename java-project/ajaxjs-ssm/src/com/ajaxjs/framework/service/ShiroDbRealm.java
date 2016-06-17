@@ -25,13 +25,13 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthenticatingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
-import com.ajaxjs.framework.user.Service;
-import com.ajaxjs.framework.user.User;
+//import com.ajaxjs.framework.user.Service;
+//import com.ajaxjs.framework.user.User;
 import com.ajaxjs.util.LogHelper;
 
 public class ShiroDbRealm extends AuthenticatingRealm {
 	private static final LogHelper LOGGER = LogHelper.getLog(ShiroDbRealm.class);
-	private Service service = new Service(); 
+//	private Service service = new Service(); 
 	
 	/**
 	 * 认证回调函数,登录时调用
@@ -62,15 +62,15 @@ public class ShiroDbRealm extends AuthenticatingRealm {
 		String loginName = (String) principals.fromRealm(getName()).iterator().next();
 
 		LOGGER.info("doGetAuthorizationInfo:" + loginName);
-		Object user = "";
-
-		if (user != null) {
+//		Object user = "";
+//
+//		if (user != null) {
 			SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 			info.addStringPermission("common-user");
 			return info;
-		} else {
-			return null;
-		}
+//		} else {
+//			return null;
+//		}
 	}
 
 }

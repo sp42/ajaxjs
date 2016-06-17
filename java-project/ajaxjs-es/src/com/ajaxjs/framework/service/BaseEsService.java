@@ -14,13 +14,27 @@ import com.ajaxjs.framework.exception.ServiceException;
 import com.ajaxjs.framework.model.BaseModel;
 import com.ajaxjs.framework.model.PageResult;
 import com.ajaxjs.framework.model.Query;
-import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.Reflect;
 import com.ajaxjs.util.MapHelper;
 
 public class BaseEsService<T extends BaseModel> implements IService<T> {
-	private static final LogHelper LOGGER = LogHelper.getLog(BaseService.class);
+//	private static final com.ajaxjs.util.LogHelper LOGGER = com.ajaxjs.util.LogHelper.getLog(BaseService.class);
+	
+	/**
+	 * 索引名称
+	 */
+	private String indexName;
 
+	/**
+	 * 类型名称
+	 */
+	private String typeName;
+	
+	/**
+	 * UI 显示的文字
+	 */
+	private String uiName; 		
+	
 	private Class<T> reference;
 
 	public Class<T> getReference() {
@@ -30,7 +44,6 @@ public class BaseEsService<T extends BaseModel> implements IService<T> {
 	public void setReference(Class<T> reference) {
 		this.reference = reference;
 	}
-
 
 	/**
 	 * 库名
@@ -113,43 +126,38 @@ public class BaseEsService<T extends BaseModel> implements IService<T> {
 
 	@Override
 	public String getTableName() {
-		// TODO Auto-generated method stub
-		return null;
+		return tableName;
 	}
 
 	@Override
 	public String getUiName() {
-		// TODO Auto-generated method stub
-		return null;
+		return uiName;
+	}
+	public void setUiName(String uiName){
+		this.uiName = uiName;
 	}
 
 	@Override
 	public Model getModel() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void setModel(Model model) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public String getMappingTableName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Map<String, String> getHidden_db_field_mapping() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getSQL_TableName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -164,4 +172,33 @@ public class BaseEsService<T extends BaseModel> implements IService<T> {
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
 	}
+
+	/**
+	 * @return {@link #indexName}
+	 */
+	public String getIndexName() {
+		return indexName;
+	}
+
+	/**
+	 * @param indexName {@link #indexName}
+	 */
+	public void setIndexName(String indexName) {
+		this.indexName = indexName;
+	}
+
+	/**
+	 * @return {@link #typeName}
+	 */
+	public String getTypeName() {
+		return typeName;
+	}
+
+	/**
+	 * @param typeName {@link #typeName}
+	 */
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
+
 }

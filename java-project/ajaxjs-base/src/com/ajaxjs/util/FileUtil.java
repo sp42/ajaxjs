@@ -40,7 +40,7 @@ public class FileUtil {
 	 */
 	public static String readFileAsText(File file) throws IOException {
 		if (!file.exists())
-			throw new FileNotFoundException(file.getPath() + file.getName() + " 不存在！");
+			throw new FileNotFoundException(file.getPath() + " 不存在！");
 		try (InputStream is = new FileInputStream(file)) {
 			return readText(is);
 		} catch (IOException e) {
