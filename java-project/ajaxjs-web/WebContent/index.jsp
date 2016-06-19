@@ -4,6 +4,6 @@
 <html>
 	<common:head title="首页" />
 <body>
-
+${handler.someProperty}
 </body>
 </html>
