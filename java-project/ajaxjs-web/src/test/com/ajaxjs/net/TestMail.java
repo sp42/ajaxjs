@@ -30,24 +30,4 @@ public class TestMail {
 //			assertTrue(isOk);
 //		};
 //	}
-	
-	@Test
-	public void testQQ() throws MailException, UnknownHostException, IOException {
-		Mail mail = new Mail();
-		mail.setMailServer("smtp.exmail.qq.com");
-//		mail.setPort(465);
-		mail.setAccount("zhangxin@3gtv.net");
-		mail.setPassword("Tomcom1120");
-		mail.setFrom("zhangxin@3gtv.net");
-		mail.setTo("zhongxiaoming@3gtv.net");
-		mail.setSubject("晓鸣 ，hihi你好，这是我这里发出的测试");
-		mail.setHTML_body(true);
-		mail.setContent("Test 测试<a href=\"http://qq.com\">fdsfds</a>");
-		
-		try(Sender sender = new Sender(mail)){
-			boolean isOk = sender.sendMail();
-			System.out.println(isOk);
-			assertTrue(isOk);
-		};
-	}
 }
