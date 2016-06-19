@@ -16,13 +16,9 @@
 package com.ajaxjs.app;
 
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 
-import com.ajaxjs.Constant;
+import com.ajaxjs.json.IEngine;
 import com.ajaxjs.json.ToJavaType;
-import com.ajaxjs.util.Util;
-import com.ajaxjs.web.UA;
 
 /**
  * JSONPath
@@ -30,51 +26,135 @@ import com.ajaxjs.web.UA;
  * @author frank
  *
  */
-public class NodeProcessor extends HttpServletRequestWrapper {
-	private Map<String, Object> pageNode;
+public class NodeProcessor {
+	/**
+	 * 项目地址
+	 */
+	private String contextPath;
+
+	/**
+	 * 请求地址
+	 */
+	private String uri;
 	
+	/**
+	 * js 引擎
+	 */
 	private ToJavaType js; 
 	
 	/**
-	 * 创建一个节点对象
-	 * @param request
+	 * 页头导航的缓存
 	 */
-	public NodeProcessor(HttpServletRequest request) {
-		super(request);
-		setAttribute("PageNode", this);// 
-		js = (ToJavaType)ConfigListener.jsRuntime;
+	private static Map<String, Object>[] navList; 
+	
+	/**
+	 * 页面节点信息
+	 */
+	private Map<String, Object> pageNode;
 
-		String route = getRoute();
-		
-//		if (ConfigListener.isSite_stru_Loaded && !route.equals("/")) {// 获取当前页面节点，并带有丰富的节点信息
-//			String jsCode = String.format("bf.AppStru.getPageNode('%s', '%s');", route, getContextPath());
-//			pageNode = js.eval_return_Map(jsCode);
-//			setAttribute("PageConfig_Node", pageNode);
-//		}
-		
-//		LOGGER.info("读取节点");
+	/**
+	 * 页脚导航的缓存
+	 */
+	private static String footerList;
+	
+	/**
+	 * 创建一个节点对象
+	 * 
+	 * @param contextPath
+	 *            项目名称
+	 * @param uri
+	 *            请求路径
+	 * @param js
+	 *            JS 引擎
+	 */
+	public NodeProcessor(String contextPath, String uri, ToJavaType js) {
+		this.contextPath = contextPath;
+		this.uri = uri;
+		this.js = js;
 	}
 
-	public String getName() {
-		if(getNode() == null || getNode().get("name") == null) return Constant.emptyString;
-		return Util.to_String(getNode().get("name"));
+	/**
+	 * 获取导航
+	 * @return 导航数据
+	 */
+	public Map<String, Object>[] getNavBar() {
+		if (navList == null) 
+			navList = js.eval_return_MapArray("bf.AppStru.getNav();");
+
+		return navList;
 	}
 	
 	/**
-	 * 读取网站结构中的某个节点。 如果网站结构中没有这个节点对象信息返回 null。
+	 * 获取当前页面节点，并带有丰富的节点信息
+	 * @return 当前页面节点
+	 */
+	public Map<String, Object> getPageNode() {
+		if (pageNode == null) {
+			String jsCode = String.format("bf.AppStru.getPageNode('%s', '%s');", getRoute(), contextPath);
+			pageNode = js.eval_return_Map(jsCode);
+		}
+		
+		return pageNode;
+	} 
+	
+	/**
+	 * 获取页脚的网站地图，有缓冲考虑
+	 * 
+	 * @return 页脚的网站地图
+	 */
+	public String getSiteMap() {
+		if (footerList == null) {
+			String code = String.format("JSON_Tree.util.makeSiteMap(bf.AppStru.data, '%s');", contextPath);
+			footerList = ((IEngine) js).eval(code, String.class);
+		}
+
+		return footerList;
+	}
+	
+	/**
+	 * 获取资源 URI，忽略项目前缀和最后的文件名（如 index.jsp） 分析 URL 目标资源（最原始的版本）
+	 * @return
+	 */
+	public String getRoute() {
+		return uri.replace(contextPath, "").replaceFirst("/\\w+\\.\\w+$", ""); // 删除 index.jsp
+	}
+
+	/**
+	 * 用于 current 的对比
+	 * <li
+	 * ${pageContext.request.contextPath.concat('/').concat(menu.fullPath).concat('/')
+	 * == pageContext.request.requestURI ? ' class=selected' : ''}> IDE
+	 * 语法报错，其实正确的 于是，为了不报错 <li ${PageNode.isCurrentNode(menu) ? '
+	 * class=selected' : ''}>
+	 * 
+	 * @param node
+	 *            节点
+	 * @return true 表示为是当前节点
+	 */
+	public boolean isCurrentNode(Map<String, ?> node) {
+		if (node == null || node.get("fullPath") == null)
+			return false;
+
+		String fullPath = node.get("fullPath").toString(), ui = contextPath.concat("/").concat(fullPath).concat("/");
+
+		return uri.equals(ui) || uri.indexOf(fullPath) != -1;
+	}
+
+	/**
+	 * 读取网站结构中的某个节点。如果网站结构中没有这个节点对象信息返回 null。
 	 * 
 	 * @param nodePath
-	 *            节点路径，以 / 分隔，例如 /product/app
-	 * @return
+	 *            指定的节点路径，以 / 分隔，例如 /product/app
+	 * @return 如果网站结构中没有这个节点对象信息返回 null
 	 */
 	public Map<String, Object> getNode(String nodePath) {
 		return js.eval_return_Map(String.format("bf.AppStru.getNode('%s');", nodePath));
 	}
 
 	/**
-	 * 读取节点信息，返回 hash 结构（详细信息） ${pageNode.node.name}
-	 * 
-	 * @return
+	 * 读取当前节点信息，返回 hash 结构（详细信息） ${pageNode.node.name}
+	 * @deprecated 与 getPageNode 重复
+	 * @return 当前节点信息
 	 */
 	public Map<String, Object> getNode() {
 		return getNode(getRoute());
@@ -90,85 +170,4 @@ public class NodeProcessor extends HttpServletRequestWrapper {
 //		String[] arr = route.split("/");
 //		return arr.length;
 //	}
-//
-	/**
-	 * @return 获取导航
-	 */
-	public Map<String, Object>[] getNavBar() {
-		return ((ToJavaType)ConfigListener.jsRuntime).eval_return_MapArray("bf.AppStru.getNav();");
-	}
-
-	/**
-	 * @return 页脚的网站地图
-	 */
-	public String getSiteMap() {
-		String js = String.format("JSON_Tree.util.makeSiteMap(bf.AppStru.data, '%s');", getContextPath());
-		return ConfigListener.jsRuntime.eval(js, String.class);
-	}
- 
-//
-//	/**
-//	 * @return 获取静态资源库（js地址）
-//	 */
-//	public String getJsSrc() {
-//		return App.isDebug ? String.format(Constant.JsSrc_local, IP.getLocalIp()) : getContextPath();
-//	}
-	
-	/**
-	 * 获取资源 URI，忽略项目前缀和最后的文件名（如 index.jsp） 分析 URL 目标资源（最原始的版本）
-	 * @return
-	 */
-	public String getRoute() {
-		String route = getRequestURI().replace(getContextPath(), Constant.emptyString);
-		
-		return route.replaceFirst("/\\w+\\.\\w+$", Constant.emptyString); // 删除 index.jsp
-	}
-
-	/**
-	 * 用于 current 的对比
-	 * <li
-	 * ${pageContext.request.contextPath.concat('/').concat(menu.fullPath).concat('/')
-	 * == pageContext.request.requestURI ? ' class=selected' : ''}> IDE
-	 * 语法报错，其实正确的 于是，为了不报错 <li ${PageNode.isCurrentNode(menu) ? '
-	 * class=selected' : ''}>
-	 * 
-	 * @param node
-	 *            节点
-	 * @return
-	 */
-	public boolean isCurrentNode(Map<String, ?> node) {
-		if (node == null || node.get("fullPath") == null)
-			return false;
-
-		String fullPath = node.get("fullPath").toString(),
-				ui = getContextPath().concat("/").concat(fullPath).concat("/"), uri = getRequestURI();
-
-		return uri.equals(ui) || uri.indexOf(fullPath) != -1; //
-	}
-	
-	private UA ua;
-	
-	/**
-	 * 获取浏览器的 User Agent
-	 * 
-	 * @return User Agent
-	 */
-	public UA getUa() {
-		return ua;
-	}
-
-	/**
-	 * 保存一个浏览器的 User Agent
-	 * 
-	 * @param ua
-	 *            User Agent
-	 */
-	public void setUa(UA ua) {
-		this.ua = ua;
-	}
-	
-
-	public Map<String, Object> getPageNode() {
-		return pageNode;
-	}
 }

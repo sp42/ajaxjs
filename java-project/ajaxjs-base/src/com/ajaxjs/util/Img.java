@@ -116,7 +116,7 @@ public class Img {
 	 *            高
 	 * @param width
 	 *            宽
-	 * @return
+	 * @return 缩放比例之后的高宽
 	 */
 	public static int[] resize(Image img, int height, int width) {
 		int oHeight = img.getHeight(null), oWidth = img.getWidth(null);

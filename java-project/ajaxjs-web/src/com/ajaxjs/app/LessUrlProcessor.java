@@ -1,3 +1,18 @@
+/**
+ * Copyright 2015 Frank Cheung
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.ajaxjs.app;
 
 import java.net.InetAddress;
@@ -10,7 +25,16 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.util.StringUtil;
 
+/**
+ * 提供样式的 url 地址的支持。由 ConfigListener 启动
+ * @author frank
+ *
+ */
 public class LessUrlProcessor {
+	/**
+	 * 获取本机 IP
+	 * @return IP 地址
+	 */
 	public static String getLocalIp() {
 		String ip = null;
 		try {
@@ -49,6 +73,15 @@ public class LessUrlProcessor {
 		return css;
 	}
 	
+	/**
+	 * 获取磁盘真實地址。
+	 * 
+	 * @param cxt
+	 *            Web 上下文
+	 * @param lessPath
+	 *            LESS 预编译文件路径
+	 * @return LESS 预编译文件完整的磁盘路径
+	 */
 	private static String Mappath(ServletContext cxt, String lessPath) {
 		String absoluteAddress = cxt.getRealPath(lessPath); // 绝对地址
 

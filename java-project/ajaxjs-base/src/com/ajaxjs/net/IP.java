@@ -18,33 +18,29 @@ package com.ajaxjs.net;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import com.ajaxjs.util.LogHelper;
-import com.ajaxjs.util.Util;
-
 /**
  * IP 工具类
  */
 public class IP {
-	private static final LogHelper LOGGER = LogHelper.getLog(IP.class);
-
 	/**
 	 * 返回本地主机 InetAddress 对象
 	 * 
-	 * @return
+	 * @return InetAddress 对象
 	 */
 	private static InetAddress getLocalhost() {
 		try {
 			return InetAddress.getLocalHost();
 		} catch (UnknownHostException e) {
-			LOGGER.warning("返回本地主机失败！", e);
+			System.out.println("返回本地主机失败！");
+			e.printStackTrace();
 			return null;
 		}
 	}
 
 	/**
-	 * 获取本机的IP 地址字符串
+	 * 获取本机的 IP 地址字符串
 	 * 
-	 * @return
+	 * @return 本机 IP
 	 */
 	public static String getLocalHostIP() {
 		return getLocalhost().getHostAddress();
@@ -53,7 +49,7 @@ public class IP {
 	/**
 	 * 获取本机主机名
 	 * 
-	 * @return
+	 * @return 本机主机名
 	 */
 	public static String getLocalHostName() {
 		return getLocalhost().getHostName();
@@ -61,15 +57,13 @@ public class IP {
 
 	/**
 	 * 用于局域网内的测试机器
-	 * 
-	 * @cache
 	 */
 	private static String localIp = null;
 
 	/**
-	 * 获取本机 ip 地址
+	 * 获取本机 IP 地址
 	 * 
-	 * @return
+	 * @return 本机 IP
 	 */
 	public static String getLocalIp() {
 		if (localIp == null) {
@@ -82,11 +76,10 @@ public class IP {
 	}
 
 	/**
-	 * 获得本地所有的IP地址
+	 * 获得本地所有的 IP 地址
 	 * 
-	 * @return
+	 * @return 本机所有 IP
 	 */
-
 	public static String[] getAllLocalHostIP() {
 		String[] ips = null;
 
@@ -97,10 +90,11 @@ public class IP {
 			// 在给定主机名的情况下，根据系统上配置的名称服务返回其 IP 地址所组成的数组。
 			addrs = InetAddress.getAllByName(hostName);
 		} catch (UnknownHostException e) {
-			LOGGER.warning("未知主机：" + hostName, e);
+			System.out.println("未知主机：" + hostName);
+			e.printStackTrace();
 		}
 
-		if (Util.isNotNull(addrs)) {
+		if (addrs !=null ) {
 			ips = new String[addrs.length];
 			int i = 0;
 			for (InetAddress addr : addrs)
@@ -111,9 +105,9 @@ public class IP {
 	}
 
 	/**
-	 * 以 192.168.x.x 开头的都是局域网内的 ip
+	 * 以 192.168.x.x 开头的都是局域网内的 IP
 	 * 
-	 * @return
+	 * @return 局域网内的 IP
 	 */
 	public static String getReal_LAN_IP() {
 		for (String ip : getAllLocalHostIP()) {
@@ -125,11 +119,11 @@ public class IP {
 	}
 
 	/**
-	 * 输入主机名，返回其 ip，相当于cmd 的 ping
+	 * 输入主机名，返回其 IP，相当于 cmd 的 ping
 	 * 
 	 * @param hostname
 	 *            例如 www.baidu.com
-	 * @return
+	 * @return 主机对应的 IP
 	 */
 	public static String getIpByHostName(String hostname) {
 		InetAddress ia = null;
@@ -137,7 +131,8 @@ public class IP {
 		try {
 			ia = InetAddress.getByName("www.baidu.com");
 		} catch (UnknownHostException e) {
-			LOGGER.warning("获取 ip 失败！" + hostname, e);
+			System.err.println("获取 ip 失败！" + hostname);
+			e.printStackTrace();
 		}
 
 		return ia == null ? null : ia.getHostAddress();

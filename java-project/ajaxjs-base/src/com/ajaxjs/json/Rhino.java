@@ -26,6 +26,7 @@ import com.ajaxjs.util.LogHelper;
 
 import sun.org.mozilla.javascript.internal.NativeArray;
 import sun.org.mozilla.javascript.internal.NativeObject;
+import sun.org.mozilla.javascript.internal.Undefined;
 
 /**
  * JS 引擎
@@ -112,7 +113,7 @@ public class Rhino extends AbstractJsEngine {
 	 * @return Java 里面的值
 	 */
 	public static Object jsValue2java(Object value) {
-		if (value == null || value instanceof Boolean || value instanceof String) {
+		if (value == null || value instanceof Boolean || value instanceof String || value instanceof Undefined) {
 			// js 为 null，所以 java hash 也为null
 			// nothing but still value;
 		} else if (value instanceof Double) {

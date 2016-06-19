@@ -25,7 +25,9 @@ public class ConnectException extends Exception {
 
 	/**
 	 * 创建一个请求异常
-	 * @param msg 错误信息
+	 * 
+	 * @param msg
+	 *            错误信息
 	 */
 	public ConnectException(String msg) {
 		super(msg);

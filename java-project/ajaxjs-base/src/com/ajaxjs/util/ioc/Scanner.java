@@ -23,9 +23,8 @@ import java.util.Enumeration;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
- 
 import com.ajaxjs.util.StringUtil;
-
+ 
 /**
  * spring 中的，我就直接拿来用
  * 
@@ -48,7 +47,6 @@ import com.ajaxjs.util.StringUtil;
  *
  */
 public class Scanner {
-	private static final com.ajaxjs.util.LogHelper LOGGER = com.ajaxjs.util.LogHelper.getLog(Scanner.class);	
 	private ClassLoader classLoader = null;
 
 	/**
@@ -118,7 +116,7 @@ public class Scanner {
 	private void findAndAddClassesInPackageByFile(String packageName, String packagePath, final boolean recursive, Set<Class<?>> classes) {
 		File dir = new File(packagePath); // 获取此包的目录 建立一个File
 		if (!dir.exists() || !dir.isDirectory()) { // 如果不存在或者 也不是目录就直接返回
-			LOGGER.warning("用户定义包名 {0} 下没有任何文件", packageName);
+			System.out.println("用户定义包名 " + packageName + " 下没有任何文件");
 			return;
 		}
 		
@@ -142,7 +140,8 @@ public class Scanner {
 					clazz = classLoader.loadClass(packageName + '.' + className);
 					// 添加到集合中去
 				} catch (ClassNotFoundException e) {
-					LOGGER.warning("添加用户自定义视图类错误 找不到此类的.class文件", e);
+					System.err.println("添加用户自定义视图类错误 找不到此类的.class文件");
+					e.printStackTrace();
 				}
 				
 				if(clazz != null) classes.add(clazz);

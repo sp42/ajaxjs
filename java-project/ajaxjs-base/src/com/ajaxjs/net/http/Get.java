@@ -26,7 +26,6 @@ import java.util.zip.GZIPInputStream;
 
 import com.ajaxjs.util.FileUtil;
 import com.ajaxjs.util.LogHelper;
-import com.ajaxjs.Constant;
 
 /**
  * HTTP GET 请求
@@ -45,7 +44,7 @@ public class Get {
 	 */
 	public static String simpleGET(String url) {
 		try {
-			return RequestClient.stream2String(new URL(url).openStream(), Constant.encoding_UTF8);
+			return FileUtil.readText(new URL(url).openStream(), "UTF-8");
 		} catch (IOException e) {
 			LOGGER.warning("请求出错" + url, e);
 			return null;
@@ -143,7 +142,7 @@ public class Get {
 	 * 
 	 * @param url
 	 *            目标地址
-	 * @return
+	 * @return 请求执行对象
 	 */
 	private static RequestClient initHEAD_reqeust(String url) {
 		Request req = new Request();

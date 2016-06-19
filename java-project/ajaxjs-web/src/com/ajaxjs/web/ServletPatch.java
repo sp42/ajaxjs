@@ -30,7 +30,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ajaxjs.Constant;
 import com.ajaxjs.util.FileUtil;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.Util;
@@ -87,9 +86,9 @@ public class ServletPatch {
 	public static void setCharacterEncoding(HttpServletRequest request, HttpServletResponse response) {	
 		// 为防止中文乱码，统一设置 UTF-8
 		try {
-			request.setCharacterEncoding(Constant.encoding_UTF8);
+			request.setCharacterEncoding("UTF-8");
 		} catch (UnsupportedEncodingException e) { }
-		response.setCharacterEncoding(Constant.encoding_UTF8);
+		response.setCharacterEncoding("UTF-8");
 	}
 	
 	/**

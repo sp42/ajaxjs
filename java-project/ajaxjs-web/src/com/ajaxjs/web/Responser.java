@@ -41,7 +41,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
-import com.ajaxjs.Constant;
 import com.ajaxjs.net.http.ConnectException;
 import com.ajaxjs.net.http.Get;
 import com.ajaxjs.net.http.Request;
@@ -94,7 +93,7 @@ public class Responser extends HttpServletResponseWrapper{
 	 */
 	public void output(String output) {
 		PrintWriter writer = null;
-		setCharacterEncoding(Constant.encoding_UTF8);
+		setCharacterEncoding("UTF-8");
 
 		try {
 			writer = getWriter();
@@ -220,6 +219,8 @@ public class Responser extends HttpServletResponseWrapper{
 				outputAction(true, Util.to_String(request.getAttribute("msg")));
 		}
 	}
+	
+	public static final String sql_query_zero = "此次查询没有符合条件的任何数据。";
 
 	/**
 	 * 让接口返回没有数据
@@ -230,7 +231,7 @@ public class Responser extends HttpServletResponseWrapper{
 			@SuppressWarnings("unused")
 			public int total = 0;
 			@SuppressWarnings("unused")
-			public String msg = Constant.sql_query_zero;
+			public String msg = sql_query_zero;
 		});
 	}
 	

@@ -232,7 +232,7 @@ public class LogHelper {
 	/**
 	 * 获取原生的 logger
 	 * 
-	 * @return
+	 * @return 原生的 logger
 	 */
 	public Logger getLogger() {
 		return logger;

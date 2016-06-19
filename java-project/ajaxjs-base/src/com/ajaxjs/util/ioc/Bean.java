@@ -21,9 +21,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author malongbo
- * @date 2014/12/29
- * @package com.mlongbo.sunflower.ioc.annotation
+ * @author malongbo 2014/12/29
  */
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)

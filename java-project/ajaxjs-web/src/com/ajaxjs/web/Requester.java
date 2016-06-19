@@ -22,7 +22,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-import com.ajaxjs.Constant;
 import com.ajaxjs.util.StringUtil;
 
 /**
@@ -93,9 +92,9 @@ public class Requester extends HttpServletRequestWrapper {
 	 * @return
 	 */
 	public String getRoute() {
-		String route = getRequestURI().replace(getContextPath(), Constant.emptyString);
+		String route = getRequestURI().replace(getContextPath(), "");
 		
-		return route.replaceFirst("/\\w+\\.\\w+$", Constant.emptyString); // 删除 index.jsp
+		return route.replaceFirst("/\\w+\\.\\w+$", ""); // 删除 index.jsp
 	}
 
 	/**
@@ -103,7 +102,7 @@ public class Requester extends HttpServletRequestWrapper {
 	 * @return
 	 */
 	public String getLastRoute() {
-		String route = getRequestURI().replace(getContextPath(), Constant.emptyString);
+		String route = getRequestURI().replace(getContextPath(), "");
 		String [] arr = route.split("/");
 		
 		return arr != null && arr.length > 0 ? arr[arr.length - 1] : null;

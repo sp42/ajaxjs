@@ -24,14 +24,19 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.ajaxjs.Constant;
-
 /**
  * 字符串相关的工具类
  * @author frank
  *
  */
 public class StringUtil {
+	/**
+	 * 空字符串常量
+	 */
+	public static final String emptyString = "";
+	
+	public static final String encoding_UTF8 = "UTF-8";
+	
 	/**
 	 * 是否空字符串
 	 * 
@@ -41,8 +46,8 @@ public class StringUtil {
 	 */
 	public static boolean isEmptyString(String str) {
 		if (str == null || str.isEmpty() || str.length() == 0
-				|| str.trim().isEmpty() || Constant.emptyString.equals(str)
-				|| Constant.emptyString.equals(str.trim()))
+				|| str.trim().isEmpty() || emptyString.equals(str)
+				|| emptyString.equals(str.trim()))
 			return true;
 
 		return false;
@@ -56,7 +61,7 @@ public class StringUtil {
 	 * @return 字符串本身或者 null
 	 */
 	public static String emptyStringIfNull(String str) {
-		return str == null ? Constant.emptyString : str;
+		return str == null ? emptyString : str;
 	}
 	
 	/**
@@ -162,7 +167,7 @@ public class StringUtil {
 	 */
 	public static String urlDecode(String str) {
 		try {
-			return URLDecoder.decode(str, Constant.encoding_UTF8);
+			return URLDecoder.decode(str, encoding_UTF8);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			return null;
@@ -178,7 +183,7 @@ public class StringUtil {
 	 */
 	public static String urlEecode(String str) {
 		try {
-			return URLEncoder.encode(str, Constant.encoding_UTF8);
+			return URLEncoder.encode(str, encoding_UTF8);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			return null;
@@ -194,7 +199,7 @@ public class StringUtil {
 	 */
 	public static String byte2String(byte[] bytes) {
 		try {
-			return new String(bytes, Constant.encoding_UTF8);
+			return new String(bytes, encoding_UTF8);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			return null;
@@ -258,41 +263,45 @@ public class StringUtil {
 	}
 	
 	/**
+	 * unicode 编码
 	 * 
-	 * @param gbString
-	 * @return
+	 * @param str
+	 *            输入的字符串
+	 * @return 已编码的字符串
 	 */
-	public static String gbEncoding(String gbString) {
-		char[] utfBytes = gbString.toCharArray();
-		String unicodeBytes = "";
+	public static String encodeUnicode(String str) {
+		char[] chars = str.toCharArray();
+		StringBuilder sb = new StringBuilder();
 		
-		for (int byteIndex = 0; byteIndex < utfBytes.length; byteIndex++) {
-			String hexB = Integer.toHexString(utfBytes[byteIndex]);
-			if (hexB.length() <= 2) {
-				hexB = "00" + hexB;
+		for (int i = 0; i < chars.length; i++) {
+			String hex = Integer.toHexString(chars[i]);
+			if (hex.length() <= 2) {
+				hex = "00" + hex;
 			}
-			unicodeBytes = unicodeBytes + "\\u" + hexB;
+			sb.append("\\u" + hex);
 		}
 		
-		return unicodeBytes;
+		return sb.toString();
 	}
 
 	/**
+	 * unicode 解码
 	 * 
-	 * @param dataStr
-	 * @return
+	 * @param str
+	 *            输入的字符串
+	 * @return 已解码的字符串
 	 */
-	public static String decodeUnicode(String dataStr) {
+	public static String decodeUnicode(String str) {
 		int start = 0, end = 0;
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 		
 		while (start > -1) {
-			end = dataStr.indexOf("\\u", start + 2);
+			end = str.indexOf("\\u", start + 2);
 			String charStr = "";
 			if (end == -1) {
-				charStr = dataStr.substring(start + 2, dataStr.length());
+				charStr = str.substring(start + 2, str.length());
 			} else {
-				charStr = dataStr.substring(start + 2, end);
+				charStr = str.substring(start + 2, end);
 			}
 			char letter = (char) Integer.parseInt(charStr, 16); // 16进制parse整形字符串。
 			buffer.append(new Character(letter).toString());
@@ -303,14 +312,16 @@ public class StringUtil {
 	}
 	
 	/**
+	 * unicode 解码（版本二）
 	 * 
 	 * @param str
-	 * @return
+	 *            输入的字符串
+	 * @return 已解码的字符串
 	 */
 	public static String decodeUnicode2(String str) {
 		char aChar;
 		int len = str.length();
-		StringBuffer outBuffer = new StringBuffer(len);
+		StringBuilder outBuffer = new StringBuilder(len);
 		
 		for (int x = 0; x < len;) {
 			aChar = str.charAt(x++);

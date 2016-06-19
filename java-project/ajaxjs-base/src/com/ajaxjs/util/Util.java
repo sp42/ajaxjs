@@ -27,8 +27,6 @@ import java.util.Random;
 
 import javax.xml.bind.DatatypeConverter;
 
-import com.ajaxjs.Constant;
-
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -202,7 +200,7 @@ public class Util {
 		byte[] b = null;
 
 		try {
-			b = str.getBytes(Constant.encoding_UTF8);
+			b = str.getBytes("UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			return null;
@@ -270,6 +268,9 @@ public class Util {
 				+ uuid.substring(24);
 	}
 
+	/**
+	 * 是否 uuid 的正则表达式
+	 */
 	private static final String uuid_regExp = "[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}";
 
 	/**

@@ -50,8 +50,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.ajaxjs.Constant;
-
 /**
  * DOM 操控 XML
  * 
@@ -83,7 +81,9 @@ public class XML_Wrapper {
 	 * 设置属性
 	 * 
 	 * @param name
+	 *            属性名称
 	 * @param value
+	 *            属性值
 	 */
 	public void setAttribute(String name, String value) {
 		element.setAttribute(name, value);
@@ -145,7 +145,7 @@ public class XML_Wrapper {
 	 * 
 	 * @param name
 	 *            子节点 tag
-	 * @return
+	 * @return 子节点列表
 	 */
 	public NodeList getChildren(String name) {
 		NodeList nodeList = element.getElementsByTagName(name);
@@ -156,11 +156,11 @@ public class XML_Wrapper {
 	}
 
 	/**
-	 * 是否某个子节点
+	 * 是否拥有某个子节点
 	 * 
 	 * @param name
 	 *            子节点 tag
-	 * @return
+	 * @return true 表示有该子节点
 	 */
 	public boolean hasChild(String name) {
 		return getChildren(name) != null;
@@ -171,7 +171,7 @@ public class XML_Wrapper {
 	 * 
 	 * @param name
 	 *            子节点 tag
-	 * @return
+	 * @return 第一个子节点，如果没有则返回 null
 	 */
 	public XML_Wrapper child(String name) {
 		return getFirstChild(name);
@@ -182,7 +182,7 @@ public class XML_Wrapper {
 	 * 
 	 * @param name
 	 *            子节点 tag
-	 * @return
+	 * @return 第一个子节点
 	 */
 	public XML_Wrapper getFirstChild(String name) {
 		if (hasChild(name)) {
@@ -197,7 +197,7 @@ public class XML_Wrapper {
 	 * 
 	 * @param name
 	 *            子节点 tag
-	 * @return
+	 * @return 子节点
 	 */
 	public List<XML_Wrapper> getChildrenElement(String name) {
 		NodeList nodeList = getChildren(name);
@@ -245,14 +245,23 @@ public class XML_Wrapper {
 		}
 	}
 
+	/**
+	 * 保存 XML 文件
+	 * 
+	 * @param os
+	 *            输入流
+	 */
 	public void write(OutputStream os) {
-		write(os, Constant.encoding_UTF8);
+		write(os, "UTF-8");
 	}
 
 	/**
+	 * 保存 XML 文件
 	 * 
 	 * @param os
+	 *            输入流
 	 * @param encoding
+	 *            编码
 	 */
 	public void write(OutputStream os, String encoding) {
 		TransformerFactory tFactory = TransformerFactory.newInstance();
@@ -263,17 +272,30 @@ public class XML_Wrapper {
 			transformer.setOutputProperty(OutputKeys.ENCODING, encoding);
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			transformer.setOutputProperty(OutputKeys.STANDALONE, "yes");
-			transformer.transform(new DOMSource(element.getOwnerDocument()),
-					new StreamResult(new OutputStreamWriter(os)));
+			transformer.transform(new DOMSource(element.getOwnerDocument()), new StreamResult(new OutputStreamWriter(os)));
 		} catch (TransformerFactoryConfigurationError | TransformerException e) {
 			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * 保存 XML 文件
+	 * 
+	 * @param xmlFile
+	 *            XML 文件保存路径
+	 */
 	public void write(String xmlFile) {
-		write(xmlFile, Constant.encoding_UTF8);
+		write(xmlFile, "UTF-8");
 	}
 
+	/**
+	 * 保存 XML 文件
+	 * 
+	 * @param xmlFile
+	 *            XML 文件保存路径
+	 * @param encoding
+	 *            编码
+	 */
 	public void write(String xmlFile, String encoding) {
 		try (OutputStream os = new FileOutputStream(xmlFile);) {
 			write(os, encoding);
@@ -287,7 +309,7 @@ public class XML_Wrapper {
 	 * 
 	 * @param rootName
 	 *            根节点名称
-	 * @return
+	 * @return XML 实例
 	 */
 	public static XML_Wrapper newDom(String rootName) {
 		Document doc = getDocBuilder().newDocument();
@@ -300,6 +322,10 @@ public class XML_Wrapper {
 		return new XML_Wrapper(root);
 	}
 
+	/**
+	 * 获取文档构建器
+	 * @return 文档构建器
+	 */
 	private static DocumentBuilder getDocBuilder() {
 		try {
 			return DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -308,20 +334,20 @@ public class XML_Wrapper {
 			return null;
 		}
 	}
-
+ 
 	/**
-	 * 送入流创建 XML 文档
+	 * 读取 XML 文件
 	 * 
-	 * @param is
-	 *            流，并不会自动关闭的
-	 * @return
+	 * @param xmlFile
+	 *            文件路径
+	 * @return XML 实例
 	 */
-	public static Element getRoot(InputStream is) {
-		Document doc = null;
-
-		try {
-			doc = getDocBuilder().parse(is);
-			return doc.getDocumentElement();
+	public static XML_Wrapper getRoot(String xmlFile) {
+		try (InputStream is = new FileInputStream(xmlFile);) {
+			Document doc = getDocBuilder().parse(is);
+			Element root = doc.getDocumentElement();
+			
+			return new XML_Wrapper(root);
 		} catch (SAXException | IOException e) {
 			e.printStackTrace();
 			return null;
@@ -329,21 +355,7 @@ public class XML_Wrapper {
 	}
 
 	/**
-	 * 
-	 * @param xmlFile
-	 * @return
-	 */
-	public static XML_Wrapper getRoot(String xmlFile) {
-		try (InputStream is = new FileInputStream(xmlFile);) {
-			return new XML_Wrapper(getRoot(is));
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	/**
-	 * XPath
+	 * 按照 XPath 查询
 	 * 
 	 * @param xmlFile
 	 *            XML 文件路径
@@ -353,10 +365,9 @@ public class XML_Wrapper {
 	 *            XPath 表达式
 	 * @param namespaceMap
 	 *            命名空间
-	 * @return
+	 * @return XPath 的值
 	 */
-	public static String xpath(String xmlFile, String encoding, String expression,
-			final Map<String, String> namespaceMap) {
+	public static String xpath(String xmlFile, String encoding, String expression, final Map<String, String> namespaceMap) {
 		XPath xpath = XPathFactory.newInstance().newXPath();
 
 		if (namespaceMap != null) {
@@ -389,10 +400,8 @@ public class XML_Wrapper {
 
 		try (FileInputStream is = new FileInputStream(xmlFile);
 				InputStreamReader isr = new InputStreamReader(is, encoding);) {
-			InputSource source = new InputSource(isr);
-
 			try {
-				value = xpath.evaluate(expression, source);
+				value = xpath.evaluate(expression, new InputSource(isr));
 			} catch (XPathExpressionException e) {
 				e.printStackTrace();
 			}

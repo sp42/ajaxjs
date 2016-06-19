@@ -15,19 +15,16 @@
  */
 package com.ajaxjs.net.http;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.UnknownHostException;
 
-import com.ajaxjs.Constant;
-import com.ajaxjs.util.LogHelper;
+import com.ajaxjs.util.FileUtil;
 import com.ajaxjs.util.StringUtil;
 
 import sun.misc.BASE64Encoder;
@@ -38,7 +35,6 @@ import sun.misc.BASE64Encoder;
  *
  */
 public class RequestClient {
-	private static final LogHelper LOGGER = LogHelper.getLog(RequestClient.class);
 
 	/**
 	 * 请求目标地址
@@ -68,7 +64,8 @@ public class RequestClient {
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod(request.getMethod());
 		} catch (IOException e) {
-			LOGGER.warning("初始化连接出错！" + request.getUrl(), e);
+			System.err.println("初始化连接出错！" + request.getUrl());
+			e.printStackTrace();
 		}
 	}
 
@@ -96,7 +93,7 @@ public class RequestClient {
 	/**
 	 * 发起请求
 	 * 
-	 * @return
+	 * @return true 表示为发起请求成功
 	 * @throws ConnectException
 	 */
 	public boolean connect() throws ConnectException {
@@ -109,7 +106,7 @@ public class RequestClient {
 				os.write(request.getWriteData());
 				os.flush();
 			} catch (IOException e) {
-				LOGGER.warning(e);
+				e.printStackTrace();
 				return false;
 			}
 		}
@@ -125,7 +122,7 @@ public class RequestClient {
 					e = new ConnectException(connection.getResponseCode() + "：抱歉！我们服务端出错了！");
 				}
 
-				String msg = stream2String(is, request.getEncoding());
+				String msg = FileUtil.readText(is, request.getEncoding());
 				e.setFeedback(msg);
 
 				if (request.isTextResponse())
@@ -136,7 +133,7 @@ public class RequestClient {
 				request.getCallback().onDataLoad(is);
 			}
 			if (request.isTextResponse())
-				request.setFeedback(stream2String(is, request.getEncoding()));
+				request.setFeedback(FileUtil.readText(is, request.getEncoding()));
 
 		} catch (UnknownHostException e) {
 			throw new ConnectException("未知地址！" + request.getUrl());
@@ -154,44 +151,7 @@ public class RequestClient {
 		}
 
 		return true;
-	}
-
-	/**
-	 * 字节流转换为字符串。注意对于送入的流，执行完毕后会自动关闭。 input=读、output=写
-	 * 
-	 * @param is
-	 *            流对象
-	 * @param charset
-	 *            字符集
-	 * @return
-	 */
-	static String stream2String(InputStream is, String charset) {
-		String line = null;
-		StringBuilder result = new StringBuilder();
-
-		// InputStreamReader从一个数据源读取字节，并自动将其转换成Unicode字符
-		// OutputStreamWriter将字符的Unicode编码写到字节输出流
-		try (
-				// 指定编码
-				InputStreamReader isReader = new InputStreamReader(is, charset);
-				/*
-				 * Decorator，装饰模式，又称为 Wrapper，使它具有了缓冲功能
-				 * BufferedInputStream、BufferedOutputStream
-				 * 只是在这之前动态的为它们加上一些功能（像是缓冲区功能）
-				 */
-				BufferedReader reader = new BufferedReader(isReader);) {
-			while ((line = reader.readLine()) != null) { // 一次读入一行，直到读入null为文件结束
-				// 指定编码集的另外一种方法 line = new String(line.getBytes(),
-				// encodingSet);
-				result.append(line);
-				result.append(Constant.newline);
-			}
-		} catch (IOException e) {
-			LOGGER.warning(e);
-		}
-
-		return result.toString();
-	}
+	} 
 
 	public URL getUrl() {
 		return url;

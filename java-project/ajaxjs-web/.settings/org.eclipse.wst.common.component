@@ -2,6 +2,7 @@
     <wb-module deploy-name="ajaxjs-web">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/ajaxjs-base"/>
         <property name="context-root" value="ajaxjs-web"/>
         <property name="java-output-path" value="/ajaxjs-web/build/classes"/>
     </wb-module>

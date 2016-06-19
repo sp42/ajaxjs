@@ -15,8 +15,11 @@ import java.io.OutputStreamWriter;
 
 import javax.activation.MimetypesFileTypeMap;
 
-import com.ajaxjs.Constant;
-
+/**
+ * 打开、保存字符流的文件；或者读取字符流，将其转为 String；删除文件；获取文件扩展名；获取文件的 MIMI 类型
+ * @author frank
+ *
+ */
 public class FileUtil {
 	/**
 	 * 读取文件，以文本格式返回。如果失败则返回 null。
@@ -47,16 +50,18 @@ public class FileUtil {
 			throw e;
 		}
 	}
-
+	
 	/**
-	 * 读输入流，将其转换为文本（多行）
+	 * 读输入流，将其转换为文本（多行） 字节流转换为字符串
 	 * 
 	 * @param is
 	 *            输入流
+	 * @param encoding
+	 *            编码
 	 * @return 文本
 	 * @throws IOException
 	 */
-	public static String readText(InputStream is) throws IOException {
+	public static String readText(InputStream is, String encoding) throws IOException {
 		String line = null;
 		StringBuilder result = new StringBuilder();
 
@@ -72,7 +77,7 @@ public class FileUtil {
 			while ((line = reader.readLine()) != null) { // 一次读入一行，直到读入null为文件结束
 				// 指定编码集的另外一种方法 line = new String(line.getBytes(), encodingSet);
 				result.append(line);
-				result.append(Constant.newline);
+				result.append('\n');
 			}
 		} catch (IOException e) {
 			System.err.println(e);
@@ -81,6 +86,19 @@ public class FileUtil {
 
 		return result.toString();
 	}
+	
+	/**
+	 * 读输入流，将其转换为文本（多行）
+	 * 字节流转换为字符串
+	 * 指定 UTF-8
+	 * @param is
+	 *            输入流
+	 * @return 文本
+	 * @throws IOException
+	 */
+	public static String readText(InputStream is) throws IOException {
+		return readText(is, "UTF-8");
+	}
 
 	/**
 	 * 写文件不能用 FileWriter，原因是会中文乱码
@@ -88,12 +106,13 @@ public class FileUtil {
 	 * @param filepath
 	 *            文件路径
 	 * @param content
+	 *            文件内容，文本
 	 * @throws IOException
 	 */
 	public static void save2file(String filepath, String content) throws IOException {
 		try (OutputStream out = new FileOutputStream(filepath);
 				// OutputStreramWriter将输出的字符流转化为字节流输出（字符流已带缓冲）
-				OutputStreamWriter writer = new OutputStreamWriter(out, Constant.encoding_UTF8);) {
+				OutputStreamWriter writer = new OutputStreamWriter(out, "UTF-8");) {
 			writer.write(content);
 		} catch (IOException e) {
 			System.err.println("写入文件" + filepath + "失败");
@@ -105,6 +124,7 @@ public class FileUtil {
 	 * 删除文件
 	 * 
 	 * @param filename
+	 *            文件名
 	 */
 	public static boolean delete(String filename) {
 		return new File(filename).delete();
@@ -127,7 +147,8 @@ public class FileUtil {
 	 * 獲取文件名的擴展名
 	 * 
 	 * @param filename
-	 * @return
+	 *            文件名
+	 * @return 擴展名
 	 */
 	public static String getFileSuffix(String filename) {
 		return filename.substring(filename.lastIndexOf(".") + 1);
@@ -137,12 +158,20 @@ public class FileUtil {
 	 * 获取文件名的 MIME 类型
 	 * 
 	 * @param filename
-	 * @return
+	 *            文件名
+	 * @return MIME 类型
 	 */
 	public static String getMime(String filename) {
 		return new MimetypesFileTypeMap().getContentType(filename);
 	}
 
+	/**
+	 * 获取文件名的 MIME 类型
+	 * 
+	 * @param file
+	 *            文件对象
+	 * @return MIME 类型
+	 */
 	public static String getMime(File file) {
 		String contentType = new MimetypesFileTypeMap().getContentType(file);
 		if (file.getName().endsWith(".png"))
@@ -155,14 +184,13 @@ public class FileUtil {
 	/**
 	 * 根据日期字符串得到目录名 格式: /2008/10/15/
 	 * 
-	 * @return
+	 * @return 如 /2008/10/15/ 格式的字符串
 	 */
 	public static String getDirnameByDate() {
 		String datatime = DateTools.now("yyyy-MM-dd");
 		String year = datatime.substring(0, 4), mouth = datatime.substring(5, 7), day = datatime.substring(8, 10);
 
-		return Constant.file_pathSeparator + year + Constant.file_pathSeparator + mouth + Constant.file_pathSeparator
-				+ day + Constant.file_pathSeparator;
+		return File.separator + year + File.separator + mouth + File.separator + day + File.separator;
 	}
 
 	/**
@@ -175,7 +203,7 @@ public class FileUtil {
 	 *            输出流
 	 * @param isBuffer
 	 *            是否加入缓冲功能
-	 * @return
+	 * @return 是否成功
 	 */
 	public static boolean write(InputStream is, OutputStream os, boolean isBuffer) throws IOException {
 		boolean isOk = false;

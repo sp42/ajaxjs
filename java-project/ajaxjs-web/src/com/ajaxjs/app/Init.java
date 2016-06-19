@@ -1,7 +1,25 @@
+/**
+ * Copyright 2015 Frank Cheung
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.ajaxjs.app;
 
-import com.ajaxjs.Constant;
-
+/**
+ * 初始化，检测是否可以运行
+ * @author frank
+ *
+ */
 public class Init {
 	/**
 	 * 是否调试模式（开发模式）
@@ -18,8 +36,10 @@ public class Init {
 	 */
 	public static final boolean isMac = System.getProperty("os.name").toLowerCase().contains("mac");
 
+	public static final String ConsoleDiver = System.getProperty("line.separator") + "---------------------------------";
+	
 	static {
-		System.out.println("启动 App……" + Constant.ConsoleDiver);
+		System.out.println("---------------------------------" + System.getProperty("line.separator") + "初始化，检测是否可以运行" + ConsoleDiver);
 		System.setProperty("user.timezone", "GMT +08");// 微软云设置时区
 		osDectect();
 	}
@@ -50,5 +70,3 @@ public class Init {
 		// isDebug = false;
 	}
 }
-
-

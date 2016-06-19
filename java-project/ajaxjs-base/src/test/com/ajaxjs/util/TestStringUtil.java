@@ -9,27 +9,21 @@ import java.sql.ResultSet;
 
 import org.junit.Test;
 
-import com.ajaxjs.util.StringUtil;
+import static com.ajaxjs.util.StringUtil.*;
 
 public class TestStringUtil {
 	@Test
 	public void testIsEmptyString() {
-		assertTrue(StringUtil.isEmptyString(""));
-		assertTrue(StringUtil.isEmptyString(" "));
-		assertTrue(StringUtil.isEmptyString(null));
+		assertTrue(isEmptyString(""));
+		assertTrue(isEmptyString(" "));
+		assertTrue(isEmptyString(null));
 	}
 	
 	@Test
 	public void testUnicodeHex() {
-	    String s = "简介";   
-        String tt = StringUtil.gbEncoding(s);   
-        tt = "你好，我想给你说一个事情";  
-        System.out.println(StringUtil.decodeUnicode("\\u7b80\\u4ecb"));   
-        System.out.println(StringUtil.decodeUnicode(tt));   
-//        System.out.println(HTMLDecoder.decode("中国"));  
-        tt = "\u7b80\u4ecb";  
-        System.out.println(s.indexOf("\\")); 
-        assertNull(s);
+		String str = "中国";
+		System.out.println(encodeUnicode(str));
+		assertTrue(str.equals(decodeUnicode(encodeUnicode(str))));
 	}
 	
 	@Test

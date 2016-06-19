@@ -313,7 +313,7 @@ public class Reflect {
 	 *            必须是接口类
 	 * @param cb
 	 *            回调
-	 * @return
+	 * @return 指定类型的实例
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T proxy(final Object obj, Class<T> _interface, final ProxyCallback cb) {

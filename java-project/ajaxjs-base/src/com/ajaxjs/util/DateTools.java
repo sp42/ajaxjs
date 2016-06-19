@@ -22,8 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 日期工具类
- * <% request.setAttribute("fn", new Util()); %>
+ * 日期工具类 <% request.setAttribute("fn", new Util()); %>
  * ${fn.shortDate_YYYY_MM_DD(current.createDate)}
  * 
  * @author frank
@@ -33,10 +32,10 @@ public class DateTools {
 	/**
 	 * 常见的日期格式
 	 */
-	public static final String commonDateFormat 		 = "yyyy-MM-dd HH:mm:ss";
-	public static final String commonDateFormat_shorter  = "yyyy-MM-dd HH:mm";
+	public static final String commonDateFormat = "yyyy-MM-dd HH:mm:ss";
+	public static final String commonDateFormat_shorter = "yyyy-MM-dd HH:mm";
 	public static final String commonDateFormat_shortest = "yyyy-MM-dd";
-	
+
 	/**
 	 * 返回当前时间的 YYYY-MM-dd HH:MM:ss 字符串类型
 	 * 
@@ -56,7 +55,7 @@ public class DateTools {
 	public static String now(String format) {
 		return formatDate(new Date(), format);
 	}
-	
+
 	/**
 	 * 对输入的时间进行格式化，采用格式 yyyy-MM-dd HH:mm:ss
 	 * 
@@ -67,30 +66,33 @@ public class DateTools {
 	public static String formatDate(Date date) {
 		return formatDate(date, commonDateFormat);
 	}
-	
+
 	/**
-	 *  对输入的时间进行格式化，采用格式 YYYY-MM-dd HH:MM
+	 * 对输入的时间进行格式化，采用格式 YYYY-MM-dd HH:MM
+	 * 
 	 * @param date
-	 * @return
+	 *            输入的时间
+	 * @return 转换到 YYYY-MM-dd HH:MM 格式的时间
 	 */
 	public static String formatDateShorter(Date date) {
 		return formatDate(date, commonDateFormat_shorter);
 	}
-	
+
 	/**
-	 *  对输入的时间进行格式化，采用格式 YYYY-MM-dd
+	 * 对输入的时间进行格式化，采用格式 YYYY-MM-dd
+	 * 
 	 * @param date
-	 * @return
+	 *            输入的时间
+	 * @return 转换到 YYYY-MM-dd 格式的时间
 	 */
 	public static String formatDateShortest(Date date) {
 		return formatDate(date, commonDateFormat_shortest);
 	}
 
 	/**
-	 * 对输入的时间进行格式化
-	 * 有 SimpleDateFormat 缓存
-	 * 格式化的另外一种方法
-	 * new SimpleDateFormat(format).format(System.currentTimeMillis());
+	 * 对输入的时间进行格式化 有 SimpleDateFormat 缓存 格式化的另外一种方法 new
+	 * SimpleDateFormat(format).format(System.currentTimeMillis());
+	 * 
 	 * @param date
 	 *            输入的时间
 	 * @param format
@@ -98,16 +100,17 @@ public class DateTools {
 	 * @return 转换到期望格式的时间
 	 */
 	public static String formatDate(Date date, String format) {
-		if (date == null || format == null) return null;
+		if (date == null || format == null)
+			return null;
 		SimpleDateFormat formater;
 		if (!formaters.containsValue(format)) {
 			formaters.put(format, new SimpleDateFormat(format));
 		}
 		formater = formaters.get(format);
-		
+
 		return formater.format(date);
 	}
-	
+
 	/**
 	 * SimpleDateFormat caches
 	 */
@@ -117,7 +120,7 @@ public class DateTools {
 	public static String shortDate_YYYY_MM_DD(String dateStr) {
 		return dateStr.split(" ")[0];
 	}
- 
+
 	/**
 	 * 转换字符串类型的日期到 Date 类型
 	 * 

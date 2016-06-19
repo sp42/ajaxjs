@@ -19,8 +19,6 @@ package com.ajaxjs.net.http;
 import java.io.InputStream;
 import java.util.Map;
 
-import com.ajaxjs.Constant;
-
 /**
  * 携带请求信息的 Bean
  * @author frank
@@ -57,7 +55,7 @@ public class Request {
 	/**
 	 * 设置响应内容的编码
 	 */
-	private String encoding = Constant.encoding_UTF8;
+	private String encoding = "UTF-8";
 
 	/**
 	 * BASIC HTTP 认证，数组[0] = 用户名/数组[1] = 密码

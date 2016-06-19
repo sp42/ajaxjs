@@ -59,8 +59,11 @@ public class Helper {
 	 * "jdbc:sqlite:c:\\project\\foo\\work\\work.sqlite", null);
 	 * 
 	 * @param driver
+	 *            驱动字符串
 	 * @param jdbcUrl
+	 *            链接字符串
 	 * @param props
+	 *            参数属性
 	 */
 	public static Connection getConnection(String driver, String jdbcUrl, Properties props) {
 		Connection conn = null;
@@ -267,11 +270,11 @@ public class Helper {
 	}
 	
 	/**
-	 * 简单格式化 sql，当前对 SELECT 语句有效
+	 * 简单格式化 SQL，当前对 SELECT 语句有效
 	 * 
 	 * @param sql
 	 *            SELECT 语句
-	 * @return
+	 * @return 美化后的 SQL
 	 */
 	public static String formatSql(String sql) {
 		String separator = System.getProperty("line.separator");
@@ -292,7 +295,8 @@ public class Helper {
 	 * 返回供 perpareStatement 所用的 ?。 INSERT INTO 所用
 	 * 
 	 * @param len
-	 * @return
+	 *            长度
+	 * @return Holder
 	 */
 	public static String getPlaceHolder(int len) {
 		String[] placeHolders = new String[len];
@@ -306,7 +310,8 @@ public class Helper {
 	 * 返回字段名，供 INSERT/UPDATE 用
 	 * 
 	 * @param pair
-	 * @return
+	 *            数据
+	 * @return 结对的结构
 	 */
 	public static String getFields(Map<String, Object> pair, boolean isFieldName_Only) {
 		String[] fields = new String[pair.size()];

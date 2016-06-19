@@ -212,9 +212,11 @@ public class MapHelper {
 	}
 
 	/**
+	 * Map<String, String[]> 转换为 Map<String, String>，其中 value[] 变成 , 分割的单个字符串。
 	 * 
 	 * @param map
-	 * @return
+	 *            输入的 Map
+	 * @return 以 , 分割的单个字符串
 	 */
 	public static Map<String, String> toMap(Map<String, String[]> map) {
 		Map<String, String> _map = new HashMap<>();
@@ -258,6 +260,7 @@ public class MapHelper {
 	/**
 	 * 
 	 * @param methodName
+	 *            方法名称
 	 * @param action
 	 *            set|get
 	 * @return

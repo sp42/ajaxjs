@@ -25,8 +25,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
-import com.ajaxjs.Constant;
-import com.ajaxjs.util.LogHelper;
 
 /**
  * 参考 http://fuyanqing03.iteye.com/blog/796860
@@ -39,8 +37,6 @@ import com.ajaxjs.util.LogHelper;
  *
  */
 public class Sender extends Socket {
-	private static final LogHelper LOGGER = LogHelper.getLog(Sender.class);
-
 	/**
 	 * 
 	 * @param bean
@@ -68,7 +64,6 @@ public class Sender extends Socket {
 	 * @throws MailException
 	 */
 	public boolean sendMail() throws MailException {
-
 		try (BufferedReader in = new BufferedReader(new InputStreamReader(getInputStream()));
 				DataOutputStream os = new DataOutputStream(getOutputStream());) {
 			this.in = in;
@@ -118,16 +113,18 @@ public class Sender extends Socket {
 				throw new MailException("QUIT 失败：" + result, 221);
 
 		} catch (UnknownHostException e) {
-			LOGGER.warning("初始化 失败！建立连接失败！", e);
+			System.err.println("初始化 失败！建立连接失败！");
+			e.printStackTrace();
 			return false;
 		} catch (IOException e) {
-			LOGGER.warning("初始化 失败！读取流失败！", e);
+			System.err.println("初始化 失败！读取流失败！");
+			e.printStackTrace();
 			return false;
 		} finally {
 			try {
 				close();
 			} catch (IOException e) {
-				LOGGER.warning(e);
+				e.printStackTrace();
 			}
 		}
 
@@ -141,17 +138,17 @@ public class Sender extends Socket {
 	 */
 	private String data() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("From:<" + bean.getFrom() + ">" + Constant.lineFeet);
-		sb.append("To:<" + bean.getTo() + ">" + Constant.lineFeet);
-		sb.append("Subject:=?UTF-8?B?" + toBase64(bean.getSubject()) + "?=" + Constant.lineFeet);
-		sb.append("Date:2016/10/27 17:30" + Constant.lineFeet);
-		// sb.append("MIME-Version: 1.0" + Constant.lineFeet);
+		sb.append("From:<" + bean.getFrom() + ">" + lineFeet);
+		sb.append("To:<" + bean.getTo() + ">" + lineFeet);
+		sb.append("Subject:=?UTF-8?B?" + toBase64(bean.getSubject()) + "?=" + lineFeet);
+		sb.append("Date:2016/10/27 17:30" + lineFeet);
+		// sb.append("MIME-Version: 1.0" + lineFeet);
 		sb.append((bean.isHTML_body() ? "Content-Type:text/html;charset=\"utf-8\""
-				: "Content-Type:text/plain;charset=\"utf-8\"") + Constant.lineFeet);
-		sb.append("Content-Transfer-Encoding: base64" + Constant.lineFeet);
-		sb.append(Constant.lineFeet);
+				: "Content-Type:text/plain;charset=\"utf-8\"") + lineFeet);
+		sb.append("Content-Transfer-Encoding: base64" + lineFeet);
+		sb.append(lineFeet);
 		sb.append(toBase64(bean.getContent()));
-		sb.append(Constant.lineFeet + ".");
+		sb.append(lineFeet + ".");
 
 		return sb.toString();
 	}
@@ -173,16 +170,16 @@ public class Sender extends Socket {
 	 * 发送smtp指令 并返回服务器响应信息
 	 * 
 	 * @param msg
-	 *            指令，会在字符串后面自动加上 Constant.lineFeet
+	 *            指令，会在字符串后面自动加上 lineFeet
 	 * @return 服务器响应信息
 	 */
 	private String sendCommand(String msg) {
 		try {
-			os.writeBytes(msg + Constant.lineFeet);
+			os.writeBytes(msg + lineFeet);
 			os.flush();
 			return in.readLine(); // 读取服务器端响应信息
 		} catch (IOException e) {
-			LOGGER.warning(e);
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -219,4 +216,6 @@ public class Sender extends Socket {
 
 		return _code == code;
 	}
+	
+	public static final String lineFeet = "\r\n";
 }

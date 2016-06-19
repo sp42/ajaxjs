@@ -37,7 +37,7 @@ public class Post {
 	 *            请求目标地址
 	 * @param data
 	 *            表单数据 KeyValue的请求数据，注意要进行 ? & 编码，使用 URLEncoder.encode()
-	 * @return
+	 * @return 携带请求信息的 Bean
 	 */
 	public static Request POST(String url, Map<String, Object> data) {
 		Request request = new Request();
@@ -66,9 +66,11 @@ public class Post {
 	}
 
 	/**
+	 * Map 转换为 String
 	 * 
 	 * @param map
-	 * @return
+	 *            Map
+	 * @return String
 	 */
 	public static String join(Map<String, Object> map) {
 		String[] pairs = new String[map.size()];
@@ -103,7 +105,7 @@ public class Post {
 	 *            文本数据
 	 * @param fileMap
 	 *            二进制（文件）数据
-	 * @return 请求对象
+	 * @return 携带请求信息的 Bean
 	 */
 	public static Request MultiPOST(String url, Map<String, Object> text, Map<String, String> fileMap) {
 		Request request = new Request();
