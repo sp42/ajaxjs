@@ -62,8 +62,7 @@ public class Reflect {
 	public static <T> T newInstance(Constructor<T> constructor, Object... args) {
 		try {
 			return constructor.newInstance(args);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			LOGGER.warning("实例化对象失败：" + constructor.getDeclaringClass(), e);
 			return null;
 		}
@@ -173,7 +172,7 @@ public class Reflect {
 	 * 调用方法
 	 * 
 	 * @param instance
-	 *            对象实例
+	 *            对象实例，bean
 	 * @param method
 	 *            方法对象
 	 * @param args
@@ -189,12 +188,30 @@ public class Reflect {
 			return null;
 		}
 	}
+	
+	/**
+	 * 调用方法。 注意获取方法对象，原始类型和包装类型不能混用，否则得不到正确的方法，例如 Integer 不能与 int 混用。 这里提供一个
+	 * argType 的参数，指明参数类型为何。
+	 * 
+	 * @param instnace
+	 *            对象实例，bean
+	 * @param methodName
+	 *            方法名称
+	 * @param argType
+	 *            参数类型
+	 * @param value
+	 *            参数值
+	 */
+	public static void executeMethod(Object instnace, String methodName, Class<?> argType, Object value) {
+		Method m = Reflect.getMethod(instnace.getClass(), methodName, argType);
+		Reflect.executeMethod(instnace, m, value);
+	}
 
 	/**
 	 * 调用方法
 	 * 
 	 * @param instnace
-	 *            对象实例
+	 *            对象实例，bean
 	 * @param method
 	 *            方法对象名称
 	 * @param args
@@ -230,6 +247,7 @@ public class Reflect {
 	 * getDeclaredMethod()获取的是类自身声明的所有方法，包含public、protected和private方法。
 	 * 
 	 * @param hostClazz
+	 *            主类
 	 * @param method
 	 *            方法名称
 	 * @param arg
@@ -388,7 +406,7 @@ public class Reflect {
 	public static void setProperty(Object bean, String name, Object value) {
 		if (bean == null)
 			throw new NullPointerException("未发现类");
-		String setMethodName = "set" + name.substring(0, 1).toUpperCase() + name.substring(1);
+		String setMethodName = "set" + firstLetterUpper(name);
 
 		Class<?> clazz = bean.getClass();
 		if (clazz == null)
@@ -407,5 +425,17 @@ public class Reflect {
 		}
 
 		executeMethod(bean, method, value);
+	}
+	
+	/**
+	 * 将第一个字母大写
+	 * 
+	 * @param str
+	 *            字符串
+	 * @return 字符串
+	 */
+	public static String firstLetterUpper(String str) {
+//		return str.substring(0, 1).toUpperCase() + str.substring(1); // 另外一种写法
+		return Character.toString(str.charAt(0)).toUpperCase() + str.substring(1);
 	}
 }

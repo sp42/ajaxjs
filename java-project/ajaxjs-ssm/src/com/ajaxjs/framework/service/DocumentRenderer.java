@@ -42,6 +42,12 @@ import com.ajaxjs.util.Reflect;
  *
  */
 public class DocumentRenderer {
+	/**
+	 * 
+	 * @param clz
+	 * @param tablename
+	 * @return
+	 */
 	public static List<Map<String, Object>> getDocument(Class<? extends BaseModel> clz, String tablename) {
 		Map<String, FieldMetaInfo> colsInfo = DocumentRenderer.getColumnsMetaInfo(tablename);
 		
@@ -118,6 +124,11 @@ public class DocumentRenderer {
 		return cols;
 	}
 
+	/**
+	 * 
+	 * @param clazz
+	 * @return
+	 */
 	public static String[] getEntityInfo(Class<? extends BaseModel> clazz) {
 		EntityDescription annotation = clazz.getAnnotation(EntityDescription.class);
 		String[] strs = new String[2];

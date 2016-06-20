@@ -10,7 +10,9 @@ public class VideoService extends BaseEsService<Video> {
 	public VideoService() {
 		setIndexName("crawler");
 		setTypeName("video");
+		setTableName(getTypeName());
 		setUiName("视频");
+		setReference(Video.class);
 	}
 	
 	@Override

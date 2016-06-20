@@ -14,6 +14,7 @@ import org.elasticsearch.client.Client;
 import org.junit.Test;
 
 import com.ajaxjs.framework.model.BaseModel;
+import com.ajaxjs.framework.model.Map2Pojo;
 import com.ajaxjs.framework.service.EsUtil;
 import com.ajaxjs.jdbc.Helper;
 import com.ajaxjs.json.Json;

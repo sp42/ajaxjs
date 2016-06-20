@@ -13,7 +13,7 @@ import com.ajaxjs.business.model.Catalog;
 import com.ajaxjs.business.service.CatalogService;
 import com.ajaxjs.framework.controller.AbstractController;
 
-@Controller
+//@Controller
 @RequestMapping(value = "/service/catalog")
 public class CatalogController extends AbstractController<Catalog> {
 	public CatalogController() {

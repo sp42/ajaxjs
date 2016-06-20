@@ -1,6 +1,5 @@
 package com.egdtv.crawler.controller;
 
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -28,7 +27,6 @@ import com.egdtv.crawler.model.Video;
 import com.egdtv.crawler.remote_call.IService;
 import com.egdtv.crawler.service.Common;
 import com.egdtv.crawler.service.VideoService;
- 
 
 @Controller
 @RequestMapping(value = "/show_video")
@@ -54,7 +52,6 @@ public class VideoController extends AbstractController<Video> {
 		) {
 		super.list(start, limit, request, model);
 		Common.initFilters(request, "video");
-		
 		return formatDectect(request, 0);
 	}
 	

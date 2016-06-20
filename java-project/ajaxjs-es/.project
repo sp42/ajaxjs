@@ -49,5 +49,10 @@
 			<type>2</type>
 			<location>C:/project/ajaxjs/java-project/ajaxjs-web/src</location>
 		</link>
+		<link>
+			<name>WebContent/WEB-INF/tags/common</name>
+			<type>2</type>
+			<locationURI>PARENT-1-PROJECT_LOC/ajaxjs-web/WebContent/WEB-INF/tags/common</locationURI>
+		</link>
 	</linkedResources>
 </projectDescription>

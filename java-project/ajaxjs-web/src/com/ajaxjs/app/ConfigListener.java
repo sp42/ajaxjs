@@ -36,7 +36,7 @@ public class ConfigListener implements ServletContextListener {
 	
 	@Override
 	public void contextInitialized(ServletContextEvent e) {
-		System.out.println("配置启动");
+		System.out.println("ConfigListener 配置启动");
 		ServletContext cxt = e.getServletContext();
 		initLoggerFileHandler(cxt);
 		

@@ -38,11 +38,11 @@ public class NodeListener implements ServletRequestListener {
 		HttpServletRequest request = (HttpServletRequest) e.getServletRequest();
 
 		String uri = request.getRequestURI();
-		if(StringUtil.regMatch("\\.jpg|\\.gif|\\.png|\\.icon|\\.htm|\\.css|\\.js", uri) != null) {
+		if(StringUtil.regMatch("\\.jpg|\\.gif|\\.png|\\.icon|\\.htm|\\.css|\\.js[^p]", uri) != null) {
 			return;
 		}
-		
 		if(!isInited) {
+			System.out.println("初始化 NodeListener");
 			ConfigListener.jsRuntime.load(Init.srcFolder + "site_stru.js"); // 加载 Web 目录文件
 			ConfigListener.jsRuntime.eval("bf.AppStru.init();");
 			

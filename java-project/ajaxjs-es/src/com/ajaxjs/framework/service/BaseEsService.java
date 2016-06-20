@@ -2,24 +2,29 @@ package com.ajaxjs.framework.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.elasticsearch.action.get.GetRequestBuilder;
 
 import org.elasticsearch.action.index.IndexRequestBuilder;
+import org.elasticsearch.action.search.SearchRequestBuilder;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchType;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
 import org.springframework.ui.Model;
 
 import com.ajaxjs.framework.exception.ServiceException;
 import com.ajaxjs.framework.model.BaseModel;
+import com.ajaxjs.framework.model.Map2Pojo;
 import com.ajaxjs.framework.model.PageResult;
 import com.ajaxjs.framework.model.Query;
 import com.ajaxjs.util.Reflect;
 import com.ajaxjs.util.MapHelper;
 
 public class BaseEsService<T extends BaseModel> implements IService<T> {
-//	private static final com.ajaxjs.util.LogHelper LOGGER = com.ajaxjs.util.LogHelper.getLog(BaseService.class);
-	
 	/**
 	 * 索引名称
 	 */
@@ -45,21 +50,21 @@ public class BaseEsService<T extends BaseModel> implements IService<T> {
 		this.reference = reference;
 	}
 
-	/**
-	 * 库名
-	 */
-	private String index;
-
 	@Override
 	public T getById(long id) throws ServiceException {
 		checkPOJO_Class();
 
 		T pojo = Reflect.newInstance(reference);
 	
-		GetRequestBuilder response = EsUtil.connectES().prepareGet(getIndex(), getTableName(), Long.toString(id));
+		GetRequestBuilder response = EsUtil.connectES().prepareGet(getIndexName(), getTypeName(), Long.toString(id));
 		
+		System.out.println(response.get().getSourceAsMap());
 		Map<String, Object> map = parseDate(response.get().getSourceAsMap());
 		MapHelper.setMapValueToPojo(map, pojo);
+	
+		System.out.println(map);
+		System.out.println(pojo.getName());
+		
 
 		return pojo;
 	}
@@ -70,6 +75,8 @@ public class BaseEsService<T extends BaseModel> implements IService<T> {
 	 * @return
 	 */
 	private static Map<String, Object> parseDate(Map<String, Object> map) {
+		if(map.get("createDate") == null || map.get("updateDate") == null)return map;
+		
 		String timestamp_createDate = ((String)map.get("createDate")).replace("Z", " UTC"), 
 			   timestamp_updateDate = ((String)map.get("updateDate")).replace("Z", " UTC");
 		
@@ -92,8 +99,31 @@ public class BaseEsService<T extends BaseModel> implements IService<T> {
 
 	@Override
 	public PageResult<T> getPageRows(int start, int limit, Query query) throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+		SearchRequestBuilder searchRequestBuilder = EsUtil.connectES().prepareSearch(getIndexName());  
+		searchRequestBuilder.setTypes(getTypeName()); 
+		//设置查询类型  
+		searchRequestBuilder.setSearchType(SearchType.DFS_QUERY_THEN_FETCH);  
+		//设置分页信息  
+		searchRequestBuilder.setFrom(start).setSize(limit);
+		SearchResponse response = searchRequestBuilder.execute().actionGet();
+		
+		SearchHits searchHits = response.getHits();  // 总数
+		SearchHit[] hits = searchHits.getHits();  
+
+		List<Map<String, Object>> list = new ArrayList<>();
+		
+		for (SearchHit hit : hits) { 
+			list.add(hit.getSource());
+		}  
+		
+		List<T> videos = new Map2Pojo<>(getReference()).map2pojo(list);
+		PageResult<T> result =new PageResult<>();
+		result.setStart(start);
+		result.setPageSize(limit);
+		result.setTotalCount((int)searchHits.getTotalHits());
+		result.setRows(videos);
+		
+		return result;
 	}
 
 	@Override
@@ -159,14 +189,6 @@ public class BaseEsService<T extends BaseModel> implements IService<T> {
 	@Override
 	public String getSQL_TableName() {
 		return null;
-	}
-
-	public String getIndex() {
-		return index;
-	}
-
-	public void setIndex(String index) {
-		this.index = index;
 	}
 
 	public void setTableName(String tableName) {

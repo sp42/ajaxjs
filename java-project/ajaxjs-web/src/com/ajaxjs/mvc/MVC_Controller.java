@@ -6,7 +6,7 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletResponse;
-@WebFilter("/test")
+//@WebFilter("/test")
 public class MVC_Controller extends LiteMvcFilter {
 
 	@Override

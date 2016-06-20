@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package com.ajaxjs.framework.model;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -28,10 +29,15 @@ import com.ajaxjs.web.Requester;
 
 /**
  * 符合 Spring MVC model 接口的实现类，多用于前端 JSP 用，因为控制器都是 Spring MVC 写的要调用的话，必须符合一致的接口。
+ * 
  * @author frank
  *
  */
 public class JspModel extends HttpServletRequestWrapper implements Model {
+	/**
+	 * 
+	 * @param request
+	 */
 	public JspModel(HttpServletRequest request) {
 		super(request);
 	}
@@ -50,9 +56,9 @@ public class JspModel extends HttpServletRequestWrapper implements Model {
 	public Model addAttribute(Object arg0) {
 		return null;
 	}
-	
+
 	private Map<String, Object> map = new HashMap<>();
-	
+
 	@Override
 	public Model addAttribute(String arg0, Object arg1) {
 		setAttribute(arg0, arg1);
@@ -75,28 +81,32 @@ public class JspModel extends HttpServletRequestWrapper implements Model {
 		return null;
 	}
 
-	public int getStart(){
+	public int getStart() {
 		String start = getParameter("start");
-		if(start == null)start = "0";
-		
+		if (start == null)
+			start = "0";
+
 		return Integer.parseInt(start);
 	}
-	public int getLimit(){
+
+	public int getLimit() {
 		String limit = getParameter("limit");
-		if(limit == null)limit = "8";
-		
+		if (limit == null)
+			limit = "8";
+
 		return Integer.parseInt(limit);
 	}
 
 	/**
 	 * 获取 id
+	 * 
 	 * @return
 	 */
-	public int getId(){
+	public int getId() {
 		String id = new Requester(this).getParameter("id");
 		return Integer.parseInt(id);
 	}
-	
+
 	public Entity getBean() {
 		Object obj = getAttribute("info");
 		return (Entity) obj;
@@ -110,21 +120,22 @@ public class JspModel extends HttpServletRequestWrapper implements Model {
 	 * @return
 	 */
 	public static Map<Integer, BaseModel> list_bean2map_id_as_key(List<? extends BaseModel> bean) {
-		if(bean == null || bean.size() == 0) 
+		if (bean == null || bean.size() == 0)
 			return null;
-		
+
 		Map<Integer, BaseModel> map = new HashMap<>();
-		
+
 		for (BaseModel item : bean) {
 			map.put(new Long(item.getId()).intValue(), item);
 		}
 		return map;
 	}
-	
+
 	public static Map<Integer, Object> list2map_id_as_key(List<Map<String, Object>> list) {
-		if(list == null) return null;
+		if (list == null)
+			return null;
 		Map<Integer, Object> map = new HashMap<>();
-		
+
 		for (Map<String, Object> item : list) {
 			map.put(new Long(item.get("id").toString()).intValue(), item);
 		}

@@ -13,7 +13,7 @@ public class TestBaseEsService {
 	public void testBaseESService() throws ServiceException {
 		BaseEsService<Video> news = new BaseEsService<Video>();
 		news.setReference(Video.class);
-		news.setIndex("dept");
+		news.setIndexName("dept");
 		news.setTableName("test");
 		Video video = news.getById(2539);
 		System.out.println(video.getName());

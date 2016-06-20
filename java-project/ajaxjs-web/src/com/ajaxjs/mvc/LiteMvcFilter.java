@@ -34,8 +34,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.PropertyUtils;
+//import org.apache.commons.beanutils.BeanUtils;
+//import org.apache.commons.beanutils.PropertyUtils;
 
 
 public abstract class LiteMvcFilter implements Filter {
@@ -107,12 +107,12 @@ public abstract class LiteMvcFilter implements Filter {
                     }
                 }
                 
-                for (Object oParmName : request.getParameterMap().keySet()) {
-                    String parmName = (String) oParmName;
-                    if (PropertyUtils.isWriteable(controller, parmName)) {
-                        BeanUtils.setProperty(controller, parmName, request.getParameter(parmName));
-                    }
-                }
+//                for (Object oParmName : request.getParameterMap().keySet()) {
+//                    String parmName = (String) oParmName;
+//                    if (PropertyUtils.isWriteable(controller, parmName)) {
+//                        BeanUtils.setProperty(controller, parmName, request.getParameter(parmName));
+//                    }
+//                }
                 
                 boolean isError = false;
                 String result = null; 

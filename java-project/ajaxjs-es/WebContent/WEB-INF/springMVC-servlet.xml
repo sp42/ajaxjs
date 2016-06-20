@@ -16,7 +16,7 @@
        http://www.springframework.org/schema/util/spring-util-4.2.xsd">
        
 	<!-- 需要使用 @Controller 注解   -->
-	<context:component-scan base-package="com.ajaxjs.framework.user, com.ajaxjs.cms, com.egdtv.crawler.*" />
+	<context:component-scan base-package="com.ajaxjs.business.controller, com.ajaxjs.framework.user, com.ajaxjs.cms, com.egdtv.crawler.*" />
 	<!-- <bean name="/greeting" class="com.ajaxjs.business.controller.NewsController" 
 		/> -->
 		
