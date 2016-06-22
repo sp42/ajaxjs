@@ -9,7 +9,7 @@
 	    <meta name="keywords"    content="${_config.site_keywords}" />
 	    <meta name="description" content="${_config.site_description}" />
 	    <meta name="author"      content="Frank Chueng, frank@ajaxjs.com" />
-    	<title>${_config.title} ${title}</title>
+    	<title>${_config.site_titlePrefix} ${title}</title>
 		<noscript>如要享受本网站服务，请您不要禁用  JavaScript 支持。</noscript>
 		<%-- pageContext.request.contextPath 作用是取出部署的应用程序名，这样不管如何部署，所用路径都是正确的。 --%>
 		<link rel="icon"		  type="image/x-icon" href="${pageContext.request.contextPath}/asset/images/favicon.ico" />

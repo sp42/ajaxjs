@@ -14,7 +14,13 @@
 		 */
 		var cb = (function (json, xhr, dataKey, tplEl, tpl, renderer){
 			// 数据为 array 还有数据行数
-			var data = json[dataKey], j = data ? data.length : 0;
+			var data;
+			if(dataKey.indexOf('.') != -1) {
+				var arr = dataKey.split('.');
+				data = json[arr[0]][arr[1]]; // 一般只有两层
+				json = json[arr[0]];
+			}else data = json[dataKey];
+			var j = data ? data.length : 0;
 			// 符合记录的总数，不过该字段的 key 不支持配置，写死了
 			config.lastQueryLength = json['totalCount'] || json['total'];
 			
@@ -53,11 +59,12 @@
 			// AOP after
 			afterLoad_Fn && typeof afterLoad_Fn == 'function' && afterLoad_Fn(data, tplEl);
 		}).delegate(null, null, dataKey, el, tpl, renderer);
-		
+
 		// 发起请求
-		if(typeof isJSONP == 'undefined' || isJSONP == true){
+		if (typeof isJSONP == 'undefined' || isJSONP == true) {
 			XMLHttpRequest.jsonp(url, args, cb);
-		}else XMLHttpRequest.get(url, args, cb);
+		} else
+			XMLHttpRequest.get(url, args, cb);
 	}
 	
 	function getCellRequestWidth(){
@@ -295,14 +302,14 @@ bf_scrollViewer_list = function(
 	var _event = new UserEvent();// 没有 Object.watch() ，只能用事件代替
 	_event.addEvents('update');
 	
-	_event.on('update', function(activeId){// activeId = 选中 id
+	_event.on('update', function(activeId){ // activeId = 选中 id
 		data.activeId = activeId;
 		
 		var _requestParams = {}; // 请求参数，附加上 id
 		if(requestParams){
 			for(var i in requestParams)_requestParams[i] = requestParams[i];
 		}
-		_requestParams.id = activeId;
+		_requestParams[cfg.id_fieldName || 'id'] = activeId;
 		
 		// tab hightlight
 		tabHeader.eachChild('li', function(li){
@@ -335,7 +342,9 @@ bf_scrollViewer_list = function(
 							pageSize : cfg.pageSize || 10, // 海报 col3 读9条
 							renderer : renderItem,
 							isAppend : true,
-							cb : cfg.cb
+							cb : cfg.cb,
+							isJSONP : cfg.isJSONP,
+							dataKey : cfg.dataKey
 						}
 					);
 					data.sectionsIds[i].loaded = true;
@@ -354,7 +363,13 @@ bf_scrollViewer_list = function(
 	
 	// 先获取所有 section id
 	tabHeader.eachChild('li', function(li){
-		var id = li.className && li.className.match(/\d+/).pop();
+		var id;
+		id = li.className && li.className.match(/id_(\w+)/).pop();
+//		if(cfg.isTextId) { // id 不是 数字，是 text
+//		} else {
+//			id = li.className && li.className.match(/\d+/).pop();
+//		}
+		
 		if(id){
 			data.sectionsIds.push({
 				id : id,
@@ -378,7 +393,8 @@ bf_scrollViewer_list = function(
 	
 	var load_id;
 	if(location.hash.indexOf('id=') != -1){// 有 hash id 读取
-		load_id = location.hash.match(/id=(\d+)/).pop();
+		
+		load_id = location.hash.match(/id=(\w+)/).pop();
 		
 		if(!data.sectionsIds[0]){
 			data.sectionsIds[0] = {
@@ -396,7 +412,7 @@ bf_scrollViewer_list = function(
 			load_id = data.sectionsIds[0].id;
 		}else{
 			// 没有子栏目，读取父栏目
-			load_id = location.search.match(/id=(\d+)/).pop(); 
+			load_id = location.search.match(/id=(\w+)/).pop(); 
 			data.sectionsIds[0] = {
 				id : load_id,
 				loaded : false
@@ -412,7 +428,7 @@ bf_scrollViewer_list = function(
 		if(el.tagName != 'LI')el = el.parentNode;
 		tabHeader.eachChild('li', function(li, i){
 			if(el == li){
-				var id = li.className.match(/\d+/).pop();
+				var id = li.className.match(/id_(\w+)/).pop();
 				_event.fireEvent('update', id);
 				return;
 			}

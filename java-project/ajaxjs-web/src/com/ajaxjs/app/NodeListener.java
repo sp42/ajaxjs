@@ -36,6 +36,11 @@ public class NodeListener implements ServletRequestListener {
 	@Override
 	public void requestInitialized(ServletRequestEvent e) {
 		HttpServletRequest request = (HttpServletRequest) e.getServletRequest();
+		
+		if(!ConfigListener.isJSON_Config_loaded) {
+			System.err.println(" 系统配置未加载，该服务依赖 系统配置");
+			return;
+		}
 
 		String uri = request.getRequestURI();
 		if(StringUtil.regMatch("\\.jpg|\\.gif|\\.png|\\.icon|\\.htm|\\.css|\\.js[^p]", uri) != null) {

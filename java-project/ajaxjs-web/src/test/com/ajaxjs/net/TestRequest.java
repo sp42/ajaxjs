@@ -5,8 +5,7 @@ import org.junit.*;
 
 import com.ajaxjs.util.MapHelper;
 import com.ajaxjs.web.Requester;
-
-import test.com.ajaxjs.web.MockRequest;
+import com.ajaxjs.web.test.MockRequest;
 
 import java.io.IOException;
 import java.util.*;

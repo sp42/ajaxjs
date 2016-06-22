@@ -8,7 +8,7 @@
 		<li><a href="${pageContext.request.contextPath}/">首页</a></li>
 	<c:foreach items="${PageNode.navBar}" var="menu">
 		<li ${PageNode.isCurrentNode(menu) ? ' class="selected"' : ''}>
-			<a href="${pageContext.request.contextPath}/${menu.fullPath}/">${menu.name}</a>
+			<a href="${pageContext.request.contextPath}/${menu.id}/">${menu.name}</a>
 		</li>
 	</c:foreach>
 	</ul>

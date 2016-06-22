@@ -20,13 +20,13 @@ import java.util.List;
 import com.ajaxjs.framework.model.Query;
 
 /**
- * 
- * 数据访问对象（Data Access Object），提供数据库的增删改查服务。
- * 子类 DAO 不能继承，只能重新写一遍才可以。
+ * 数据访问对象（Data Access Object），提供数据库的增删改查服务。 子类 DAO 不能继承，只能重新写一遍才可以。
  * 但是注解可以访问字符串，所以这样也是可以得 //@Select(SqlProvider.selectById)
+ * 
  * @author frank
  *
  * @param <T>
+ *            实体类型
  */
 public interface DAO<T> {
 	/**
@@ -40,6 +40,9 @@ public interface DAO<T> {
 	 */
 	T selectById(long id, String tablename);
 	
+	/**
+	 * 用于注解的 SQL，写在这里比较方便维护
+	 */
 	public static final String selectById = "SELECT * FROM ${tablename} WHERE id = ${id}";
 
 	/**
@@ -53,6 +56,9 @@ public interface DAO<T> {
 	 */
 	T selectByUUID(String uuid, String tablename);
 	
+	/**
+	 * 用于注解的 SQL，写在这里比较方便维护
+	 */
 	public static final String selectByUUID = "SELECT * FROM ${tablename} WHERE uid = ${uid}";
 
 	/**

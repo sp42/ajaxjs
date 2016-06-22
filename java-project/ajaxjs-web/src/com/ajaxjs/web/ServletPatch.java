@@ -171,10 +171,9 @@ public class ServletPatch {
 	 * 
 	 * @param value
 	 *            参数
-	 * @return
+	 * @return 中文
 	 */
-	public String toChinese(String value) {
-
+	public static String toChinese(String value) {
 		byte[] bytes = null;
 
 		try {

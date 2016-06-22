@@ -15,11 +15,9 @@
  */
 package com.ajaxjs.util;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.ajaxjs.util.Reflect;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.Util;
 
@@ -255,64 +253,5 @@ public class MapHelper {
 		}
 
 		return b;
-	}
-
-	/**
-	 * 
-	 * @param methodName
-	 *            方法名称
-	 * @param action
-	 *            set|get
-	 * @return
-	 */
-	public static String getFieldName(String methodName, String action) {
-		methodName = methodName.replace(action, "");
-		methodName = Character.toString(methodName.charAt(0)).toLowerCase() + methodName.substring(1);
-		return methodName;
-	}
-
-	public static Map<String, Object> setPojoToMapValue(Object obj) {
-		if (obj != null) {
-			Map<String, Object> map = new HashMap<>();
-
-			for (Method method : obj.getClass().getMethods()) {
-				String methodName = method.getName();
-				if (methodName.startsWith("get")) {
-					Object value = Reflect.executeMethod(obj, method);
-
-					if (value != null) {
-						map.put(getFieldName(methodName, "get"), value);
-					}
-				}
-			}
-
-			return map;
-		} else {
-			System.err.println("Null pointer");
-			return null;
-		}
-	}
-
-	/**
-	 * 将 map 中数据填入到 obj 中。obj 是 POJO。 如果 POJO 有这个 setter，那就根据 setter 中 setXxx 获取
-	 * xxx，作为 map 的 key 读取 map 的那個 value。
-	 * 
-	 * @param map
-	 * @param obj
-	 */
-	public static void setMapValueToPojo(Map<String, Object> map, Object obj) {
-		if (obj != null && map != null) {
-			for (Method method : obj.getClass().getMethods()) {
-				String methodName = method.getName();
-				if (methodName.startsWith("set")) {
-					methodName = getFieldName(methodName, "set");
-					if (map.containsKey(methodName)) {
-						Reflect.executeMethod(obj, method, map.get(methodName));
-					}
-				}
-			}
-		} else {
-			System.err.println("Null pointer");
-		}
 	}
 }

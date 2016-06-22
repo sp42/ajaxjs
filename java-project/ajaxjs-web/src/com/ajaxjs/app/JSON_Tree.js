@@ -388,7 +388,10 @@ bf.AppStru = (function() {
 			this.tree = new JSON_Tree(this.data);
 		},
 		getNav : function() {
-			return this.tree.levelAt(0);
+			var arr = this.tree.levelAt(0);
+			println(arr);
+			println(JSON.stringify(arr));
+			return arr;
 		},
 
 		/**

@@ -22,7 +22,6 @@ import com.ajaxjs.framework.model.Map2Pojo;
 import com.ajaxjs.framework.model.PageResult;
 import com.ajaxjs.framework.model.Query;
 import com.ajaxjs.util.Reflect;
-import com.ajaxjs.util.MapHelper;
 
 public class BaseEsService<T extends BaseModel> implements IService<T> {
 	/**
@@ -54,18 +53,21 @@ public class BaseEsService<T extends BaseModel> implements IService<T> {
 	public T getById(long id) throws ServiceException {
 		checkPOJO_Class();
 
-		T pojo = Reflect.newInstance(reference);
+//		T pojo = Reflect.newInstance(reference);
 	
 		GetRequestBuilder response = EsUtil.connectES().prepareGet(getIndexName(), getTypeName(), Long.toString(id));
 		
 		System.out.println(response.get().getSourceAsMap());
 		Map<String, Object> map = parseDate(response.get().getSourceAsMap());
-		MapHelper.setMapValueToPojo(map, pojo);
+		
+		Map2Pojo<T> covernt = new Map2Pojo<>(reference);
+		
+		T pojo = covernt.map2pojo(map);
+//		Map2Pojo.setMapValueToPojo_Simple(map, pojo);
 	
-		System.out.println(map);
+		System.out.println(pojo);
 		System.out.println(pojo.getName());
 		
-
 		return pojo;
 	}
 
@@ -128,7 +130,7 @@ public class BaseEsService<T extends BaseModel> implements IService<T> {
 
 	@Override
 	public int create(T entry) throws ServiceException {
-		Map<String, Object> map = MapHelper.setPojoToMapValue(entry);
+		Map<String, Object> map = Map2Pojo.setPojoToMapValue(entry);
 		
 		IndexRequestBuilder request = EsUtil.connectES().prepareIndex("dept", "test", map.get("id").toString()).setSource(map);
 		return 0;

@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.ajaxjs.framework.controller.IController;
 import com.ajaxjs.framework.exception.ServiceException;
 import com.ajaxjs.framework.model.BaseModel;
 import com.ajaxjs.framework.model.Query;

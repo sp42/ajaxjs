@@ -10,13 +10,11 @@ import javax.servlet.ServletException;
 import org.junit.Before;
 import org.junit.Test;
 
-import test.com.ajaxjs.web.MockRequest;
-
-
+import com.ajaxjs.web.test.MockRequest;
 
 public class TestApplication {
 	private ServletContext sc;
-	
+
 	@Before
 	public void setUp() throws Exception {
 		try {
@@ -24,25 +22,24 @@ public class TestApplication {
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
-		
+
 		sc = mock(ServletContext.class);
 		// 指定类似 Tomcat 的虚拟目录，若设置为 "" 表示 Root 根目录
-		when(sc.getContextPath()).thenReturn("/new_test"); 
+		when(sc.getContextPath()).thenReturn("/new_test");
 		// 设置项目真实的目录，当前是 返回 一个特定的 目录，你可以不执行该步
 		when(sc.getRealPath(anyString())).thenReturn("f:\\project\\new_test\\WebContent");
 		// 设置 /META-INF 目录，当前使用该目录来保存 配置
 		when(sc.getRealPath("/META-INF")).thenReturn("f:\\project\\new_test\\WebContent\\META-INF");
-		
 
-//		RhinoApplication.isDebug = false; // 模拟真实状态
+		// RhinoApplication.isDebug = false; // 模拟真实状态
 	}
-	
+
 	@Test
 	public void testContextInitialized() throws IOException, ServletException {
 		ServletContextEvent sce = mock(ServletContextEvent.class);
 		when(sce.getServletContext()).thenReturn(sc);
-//		app.contextInitialized(sce);
+		// app.contextInitialized(sce);
 		assertNotNull(sce);
-//		assertTrue("App started OK!", App.isConfig_Loaded);
+		// assertTrue("App started OK!", App.isConfig_Loaded);
 	}
 }
