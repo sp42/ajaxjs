@@ -124,7 +124,7 @@
 		if(config.pager) {
 			var pageSize = config.pageSize || 10, // 每页显示多少笔记录，默认十笔
 				pageNo = 1;// 已加载第一页，所以从第二页开始
-			_args.limit = pageSize;
+			_args.limit = _args.pageSize =pageSize; // limit 和 pageSize 两种方式都传
 			
 			var loadMoreBtn = typeof config.loadMoreBtn == 'string' ? document.querySelector(config.loadMoreBtn) : config.loadMoreBtn;
 			// 这里不要用  addEventListener(),否则会形成一个堆栈，
@@ -146,6 +146,8 @@
 					}
 					//var offset = start + pageSize; // 
 					_args.start = start;
+					_args.pageNo = pageNo;
+					
 					var cb = config && config.cb ? _imageHandler.after(config.cb) : _imageHandler;
 					config.afterLoad_Fn = cb;
 					binding(url, _args, el, tpl, config);
@@ -358,7 +360,9 @@ bf_scrollViewer_list = function(
 		
 		// set hash
 		if(cfg.isNoHash){
-		}else location.setUrl_hash('id', activeId);
+		}else {
+			location.setUrl_hash('id', activeId);
+		} 
 	});
 	
 	// 先获取所有 section id
@@ -392,27 +396,27 @@ bf_scrollViewer_list = function(
 	
 	
 	var load_id;
-	if(location.hash.indexOf('id=') != -1){// 有 hash id 读取
-		
+	if (location.hash.indexOf('id=') != -1) {// 有 hash id 读取
+
 		load_id = location.hash.match(/id=(\w+)/).pop();
-		
-		if(!data.sectionsIds[0]){
+
+		if (!data.sectionsIds[0]) {
 			data.sectionsIds[0] = {
-					id : load_id,
-					loaded : false
-			};	
+				id : load_id,
+				loaded : false
+			};
 			_tab.el.querySelector('div').innerHTML = tpl;
 			_tab.init();
 		}
 
 		_event.fireEvent('update', load_id);
-	}else{
+	} else {
 		// 默认 选中第一 tab
-		if(data.sectionsIds.length){
+		if (data.sectionsIds.length) {
 			load_id = data.sectionsIds[0].id;
-		}else{
+		} else {
 			// 没有子栏目，读取父栏目
-			load_id = location.search.match(/id=(\w+)/).pop(); 
+			load_id = location.search.match(/id=(\w+)/).pop();
 			data.sectionsIds[0] = {
 				id : load_id,
 				loaded : false
@@ -423,11 +427,13 @@ bf_scrollViewer_list = function(
 		_event.fireEvent('update', load_id);
 	}
 	
-	tabHeader.onclick =  function(e){
+
+	tabHeader.onclick = function(e) {
 		var el = e.target;
-		if(el.tagName != 'LI')el = el.parentNode;
-		tabHeader.eachChild('li', function(li, i){
-			if(el == li){
+		if (el.tagName != 'LI')
+			el = el.parentNode;
+		tabHeader.eachChild('li', function(li, i) {
+			if (el == li) {
 				var id = li.className.match(/id_(\w+)/).pop();
 				_event.fireEvent('update', id);
 				return;
