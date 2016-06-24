@@ -383,5 +383,77 @@ public class StringUtil {
 		}
 
 		return outBuffer.toString();
-	}     
+	}   
+
+	private static int by2int(int b) {
+		return b & 0xff;
+	}
+
+	/**
+	 * 过滤utf8 特殊字符的方式处理如●■★
+	 * @param buf
+	 * @return
+	 */
+	public static String UTF82GB2312(byte buf[]) {
+		int len = buf.length;
+		StringBuffer sb = new StringBuffer(len / 2);
+		for (int i = 0; i < len; i++) {
+			if (by2int(buf[i]) <= 0x7F) {
+				sb.append((char) buf[i]);
+			} else if (by2int(buf[i]) <= 0xDF && by2int(buf[i]) >= 0xC0) {
+				int bh = by2int(buf[i] & 0x1F), bl = by2int(buf[++i] & 0x3F);
+				bl = by2int(bh << 6 | bl);
+				bh = by2int(bh >> 2);
+				int c = bh << 8 | bl;
+				sb.append((char) c);
+			} else if (by2int(buf[i]) <= 0xEF && by2int(buf[i]) >= 0xE0) {
+				int bh = by2int(buf[i] & 0x0F), bl = by2int(buf[++i] & 0x3F), bll = by2int(buf[++i] & 0x3F);
+				bh = by2int(bh << 4 | bl >> 2);
+				bl = by2int(bl << 6 | bll);
+				int c = bh << 8 | bl;
+				// 空格转换为半角
+				if (c == 58865)
+					c = 32;
+
+				sb.append((char) c);
+			}
+		}
+		return sb.toString();
+	} 
+	
+	public byte[] gbk2utf8(String chenese) {
+		char c[] = chenese.toCharArray();
+		byte[] fullByte = new byte[3 * c.length];
+		for (int i = 0; i < c.length; i++) {
+			int m = (int) c[i];
+			String word = Integer.toBinaryString(m);
+
+			StringBuffer sb = new StringBuffer();
+			int len = 16 - word.length();
+			for (int j = 0; j < len; j++) {
+				sb.append("0");
+			}
+			sb.append(word);
+			sb.insert(0, "1110");
+			sb.insert(8, "10");
+			sb.insert(16, "10");
+
+			String s1 = sb.substring(0, 8);
+			String s2 = sb.substring(8, 16);
+			String s3 = sb.substring(16);
+
+			byte b0 = Integer.valueOf(s1, 2).byteValue();
+			byte b1 = Integer.valueOf(s2, 2).byteValue();
+			byte b2 = Integer.valueOf(s3, 2).byteValue();
+			byte[] bf = new byte[3];
+			bf[0] = b0;
+			fullByte[i * 3] = bf[0];
+			bf[1] = b1;
+			fullByte[i * 3 + 1] = bf[1];
+			bf[2] = b2;
+			fullByte[i * 3 + 2] = bf[2];
+
+		}
+		return fullByte;
+	}
 }

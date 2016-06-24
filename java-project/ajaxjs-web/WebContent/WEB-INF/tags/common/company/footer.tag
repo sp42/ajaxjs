@@ -25,7 +25,7 @@
 			<script src="${pageContext.request.contextPath}/asset/bigfoot/js/libs/chinese.js"></script>
 			<br />
 			粤ICP备15007080号-1
-			Powered by <a target="_blank" href="http://framework.ajaxjs.com">Ajaxjs</a>
+			Powered by <a target="_blank" href="http://framework.ajaxjs.com">AJAXJS</a>
 			<br />
 			<%
 			

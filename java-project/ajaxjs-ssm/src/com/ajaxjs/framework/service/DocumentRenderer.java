@@ -30,7 +30,7 @@ import javax.validation.constraints.Size;
 
 import org.apache.ibatis.session.SqlSession;
 
-import com.ajaxjs.app.MyBatis;
+import com.ajaxjs.framework.dao.MyBatis;
 import com.ajaxjs.framework.model.BaseModel;
 import com.ajaxjs.framework.model.EntityDescription;
 import com.ajaxjs.framework.model.FieldDescription;

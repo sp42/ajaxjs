@@ -20,7 +20,7 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
-import com.ajaxjs.app.MyBatis;
+import com.ajaxjs.framework.dao.MyBatis;
 import com.ajaxjs.framework.dao.SqlProvider;
 import com.ajaxjs.framework.exception.DaoException;
 

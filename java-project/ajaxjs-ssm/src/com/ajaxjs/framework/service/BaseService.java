@@ -23,8 +23,8 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.ui.Model;
 
-import com.ajaxjs.app.MyBatis;
 import com.ajaxjs.framework.dao.DAO;
+import com.ajaxjs.framework.dao.MyBatis;
 import com.ajaxjs.framework.dao.SqlProvider;
 import com.ajaxjs.framework.exception.BusinessException;
 import com.ajaxjs.framework.exception.DaoException;

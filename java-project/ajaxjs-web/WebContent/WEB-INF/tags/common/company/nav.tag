@@ -8,7 +8,7 @@
 		<h1>
 			<a href="${pageContext.request.contextPath}/">
 				<img src="${pageContext.request.contextPath}/asset/images/logo.png" style="height: 40px;" />
-				${global_config.site_description}
+				${_config.clientFullName}
 			</a>
 		</h1>
 	</div>
