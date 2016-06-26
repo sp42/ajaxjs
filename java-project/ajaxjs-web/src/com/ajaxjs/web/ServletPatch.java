@@ -50,7 +50,7 @@ public class ServletPatch {
 	 *            这两个参数任选一个，但不能同时传
 	 * @return 指定的 Servlet 或 Filter 配置对象
 	 */
-	public static Map<String, String> parseInitParams(ServletConfig servletCfg, FilterConfig filterCfg ){
+	public static Map<String, String> parseInitParams(ServletConfig servletCfg, FilterConfig filterCfg) {
 		
 		/*
 		 * 基于注解的配置方式

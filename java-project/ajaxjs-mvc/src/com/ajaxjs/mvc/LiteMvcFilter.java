@@ -39,7 +39,7 @@ import javax.servlet.http.HttpServletResponse;
 
 
 public abstract class LiteMvcFilter implements Filter {
-    private static Map<Pattern, ActionAndView> bindingsMap = new HashMap<>();
+    private static Map<Pattern, ActionAndView2> bindingsMap = new HashMap<>();
     
     private static Map<String, Action> globalResults = new HashMap<>();
 
@@ -52,7 +52,7 @@ public abstract class LiteMvcFilter implements Filter {
         RequestHelper.setHttpServletRequest(request);
         RequestHelper.setHttpServletResponse(response);
 
-        ActionAndView binding = null;
+        ActionAndView2 binding = null;
         Matcher matcher = null;
         String servletPath = request.getServletPath();
         
@@ -84,7 +84,7 @@ public abstract class LiteMvcFilter implements Filter {
 	@Override
 	public void destroy() {}
 
-    private boolean tryToExecuteMethod(HttpServletRequest request, HttpServletResponse response, Matcher matcher, ActionAndView binding, Object controller)  throws Exception {
+    private boolean tryToExecuteMethod(HttpServletRequest request, HttpServletResponse response, Matcher matcher, ActionAndView2 binding, Object controller)  throws Exception {
         Method[] methods = binding.getHandlerClass().getMethods();
         
         for (Method method : methods) {
@@ -166,7 +166,7 @@ public abstract class LiteMvcFilter implements Filter {
         return false;
     }
 
-    private boolean isMappedMethod(HttpServletRequest request, Method method, ActionAndView binding) {
+    private boolean isMappedMethod(HttpServletRequest request, Method method, ActionAndView2 binding) {
         if (binding.getMethodName() == null) {
             return method.getName().equals(request.getMethod().toLowerCase());
         } else {
@@ -189,8 +189,8 @@ public abstract class LiteMvcFilter implements Filter {
      * @param handler
      * @return the binding object builder
      */
-    protected final ActionAndView map(String regex, Class<?> handler) {
-        ActionAndView binding = new ActionAndView(regex, handler);
+    protected final ActionAndView2 map(String regex, Class<?> handler) {
+        ActionAndView2 binding = new ActionAndView2(regex, handler);
         bindingsMap.put(binding.getPattern(), binding);
        
         return binding;
@@ -205,8 +205,8 @@ public abstract class LiteMvcFilter implements Filter {
      * @param handler
      * @return the binding object builder
      */
-    protected final ActionAndView map(String regex, Class<?> handler, String methodName) {
-        ActionAndView binding = new ActionAndView(regex, handler, methodName);
+    protected final ActionAndView2 map(String regex, Class<?> handler, String methodName) {
+        ActionAndView2 binding = new ActionAndView2(regex, handler, methodName);
         bindingsMap.put(binding.getPattern(), binding);
         
         return binding;
@@ -225,7 +225,7 @@ public abstract class LiteMvcFilter implements Filter {
         globalResults.put(result, action);
     }
     
-    public boolean customActionProcessor(ActionAndView binding, HttpServletRequest request, HttpServletResponse response, Action action) {
+    public boolean customActionProcessor(ActionAndView2 binding, HttpServletRequest request, HttpServletResponse response, Action action) {
         return false;
     }
 }

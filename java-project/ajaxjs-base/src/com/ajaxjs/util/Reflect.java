@@ -183,6 +183,25 @@ public class Reflect {
 		try {
 			return method.invoke(instance, args);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			System.err.println("method.getName():" + method.getName());
+			LOGGER.warning(e);
+			return null;
+		}
+	}
+	/**
+	 * 调用方法，方法没有参数的
+	 * 
+	 * @param instance
+	 *            对象实例，bean
+	 * @param method
+	 *            方法对象
+
+	 * @return 执行结果
+	 */
+	public static Object executeMethod(Object instance, Method method) {
+		try {
+			return method.invoke(instance);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			System.err.println(method.getName());
 			LOGGER.warning(e);
 			return null;

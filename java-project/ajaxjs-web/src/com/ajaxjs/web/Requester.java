@@ -19,6 +19,7 @@ package com.ajaxjs.web;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
@@ -32,13 +33,23 @@ import com.ajaxjs.util.StringUtil;
  */
 public class Requester extends HttpServletRequestWrapper {
 	/**
-	 * 创建一个 RequestHelper 对象
+	 * 创建一个 Requester 对象
 	 * 
 	 * @param request
 	 *            原生的 request 对象
 	 */
 	public Requester(HttpServletRequest request) {
 		super(request);
+	}
+	
+	/**
+	 * 创建一个 Requester 对象
+	 * 
+	 * @param request
+	 *            ServletRequest 对象
+	 */
+	public Requester(ServletRequest request) {
+		this((HttpServletRequest)request);
 	}
 	
 	/**

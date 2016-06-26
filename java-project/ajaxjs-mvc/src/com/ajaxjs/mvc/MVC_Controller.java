@@ -21,7 +21,6 @@ public class MVC_Controller extends LiteMvcFilter {
 	 * * Handles HTTP GET requests * * @return OK if everything runs smooth
 	 */
 	public String get() {
-		
 		return "OK";
 	}
 

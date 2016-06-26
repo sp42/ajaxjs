@@ -37,6 +37,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
@@ -55,7 +56,7 @@ import com.ajaxjs.util.Util;
  */
 public class Responser extends HttpServletResponseWrapper{
 	/**
-	 * 创建一个 ResponseHelper 对象
+	 * 创建一个 Responser 对象
 	 * 
 	 * @param response
 	 *            原生 response 对象
@@ -63,7 +64,17 @@ public class Responser extends HttpServletResponseWrapper{
 	public Responser(HttpServletResponse response) {
 		super(response);
 	}
-	
+
+	/**
+	 * 创建一个 Responser 对象
+	 * 
+	 * @param resp
+	 *            原生 ServletResponse 对象
+	 */
+	public Responser(ServletResponse resp) {
+		this((HttpServletResponse) resp);
+	}
+
 	private HttpServletRequest request;
 
 	/**
@@ -341,7 +352,7 @@ public class Responser extends HttpServletResponseWrapper{
 			try {
 				rc.connect();
 			} catch (ConnectException e) {
-				System.out.println(e);
+				System.err.println(e);
 				return false;
 			}
 		} else { 
