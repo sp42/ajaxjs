@@ -138,7 +138,7 @@ public class WebBaseInit {
 		when(filterConfig.getServletContext()).thenReturn(context);
 		
 		// 模拟注解
-		Vector<String> v = new Vector<String>();
+		Vector<String> v = new Vector<>();
 		v.addElement("urlPatterns");
 		when(filterConfig.getInitParameter("urlPatterns")).thenReturn("/service/*");
 

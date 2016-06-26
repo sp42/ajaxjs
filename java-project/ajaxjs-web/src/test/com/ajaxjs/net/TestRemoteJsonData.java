@@ -1,10 +1,9 @@
 package test.com.ajaxjs.net;
 
 import static org.junit.Assert.*;
+import org.junit.*;
 
 import java.util.Map;
-
-import org.junit.*;
 
 import com.ajaxjs.net.http.RemoteJsonData;
 

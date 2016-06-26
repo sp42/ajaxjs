@@ -69,7 +69,8 @@ public class MockRequest extends WebBaseInit {
 	 * @return
 	 * @throws IOException
 	 */
-	public HttpServletRequest initRequest(HttpServletRequest request, Map<String, String> formBody, boolean isByGetParams) throws IOException {
+	public HttpServletRequest initRequest(HttpServletRequest request, Map<String, String> formBody,
+			boolean isByGetParams) throws IOException {
 		if (isByGetParams) {
 			for (String key : formBody.keySet()) {
 				when(request.getParameter(key)).thenReturn(formBody.get(key));
