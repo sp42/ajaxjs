@@ -58,13 +58,14 @@ new bf_acMenu(document.querySelector('.leftSidebar'));
     	var target = e.target.getAttribute('href');
 
     	window.location.assign('#target=' + target); // 为主窗体添加描点记录，以便 F5 刷新可以回到这里
-        return false; // onhashchange() 里面已经跳转了，这里避免 a 再次跳转
+        //alert(99)
+    	return false; // onhashchange() 里面已经跳转了，这里避免 a 再次跳转
     }
     
     window.onhashchange = function(e) {
     	var target = getTarget();
     	iframeEl.src = target;
-    	highlightMenu(target);
+//    	highlightMenu(target);
     }
 })();
 	

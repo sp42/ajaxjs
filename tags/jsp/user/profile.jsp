@@ -1,6 +1,6 @@
 <%@page pageEncoding="UTF-8"%>
-<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/public"%>
-<%@taglib prefix="commonUI"  tagdir="/WEB-INF/tags/public/UI"%>
+<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
+<%@taglib prefix="commonUI"  tagdir="/WEB-INF/tags/common/UI"%>
 <!DOCTYPE html>
 <html>
 	<commonTag:head lessFile="/asset/bigfoot/asset/less/user.less" title="个人信息" />

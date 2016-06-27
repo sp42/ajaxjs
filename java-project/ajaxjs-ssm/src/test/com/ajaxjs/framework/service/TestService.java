@@ -4,8 +4,7 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-import test.com.ajaxjs.framework.model.News;
-
+import test.com.ajaxjs.framework.business.News;
 
 public class TestService {
 	@Test

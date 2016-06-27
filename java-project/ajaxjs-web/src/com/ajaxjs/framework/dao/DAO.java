@@ -38,7 +38,7 @@ public interface DAO<T> {
 	 *            查询的表名
 	 * @return POJO
 	 */
-	T selectById(long id, String tablename);
+	public T selectById(long id, String tablename);
 	
 	/**
 	 * 用于注解的 SQL，写在这里比较方便维护
@@ -76,7 +76,7 @@ public interface DAO<T> {
 	 *            特定查询对象，不能为 null，否则 MyBatis 无法通过。如果无特定查询对象，可创建空的 Query 类型。
 	 * @return 所有的记录一共有多少？
 	 */
-	int pageCount(String tablename, Query query);
+	public int pageCount(String tablename, Query query);
 	
 	/**
 	 * 支持分页的查询。执行这个方法之前应先查询符合条件的记录总数，即 pageCount()。
@@ -91,7 +91,7 @@ public interface DAO<T> {
 	 *            特定查询对象，不能为 null，否则 MyBatis 无法通过。如果无特定查询对象，可创建空的 Query 类型。
 	 * @return 分页结果
 	 */
-	List<T> page(int start, int limit, String tablename, Query query);
+	public List<T> page(int start, int limit, String tablename, Query query);
 	
 	/**
 	 * 新建记录
@@ -100,7 +100,7 @@ public interface DAO<T> {
 	 *            POJO 对象
 	 * @return 新建记录之 id
 	 */
-	int create(T bean);
+	public int create(T bean);
 	
 	/**
 	 * 修改记录
@@ -109,5 +109,5 @@ public interface DAO<T> {
 	 *            POJO 对象
 	 * @return 影响的行数
 	 */
-	int update(T bean);
+	public int update(T bean);
 }

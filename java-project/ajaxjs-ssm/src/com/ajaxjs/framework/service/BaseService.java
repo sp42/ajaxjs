@@ -29,9 +29,9 @@ import com.ajaxjs.framework.dao.SqlProvider;
 import com.ajaxjs.framework.exception.BusinessException;
 import com.ajaxjs.framework.exception.DaoException;
 import com.ajaxjs.framework.exception.ServiceException;
-import com.ajaxjs.framework.model.BaseModel;
-import com.ajaxjs.framework.model.Query;
-import com.ajaxjs.framework.model.PageResult;
+import com.ajaxjs.mvc.model.BaseModel;
+import com.ajaxjs.mvc.model.PageResult;
+import com.ajaxjs.mvc.model.Query;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.Util;
@@ -46,7 +46,7 @@ import com.ajaxjs.util.Util;
  * @param <Mapper>
  *            DAO
  */
-public abstract class BaseService<T extends BaseModel, Mapper extends DAO<T>> implements IService<T> {
+public abstract class BaseService<T extends BaseModel, Mapper extends DAO<T>> implements Service<T> {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseService.class);
 	private Class<Mapper> mapperClz; 	// 映射器
 	private String uiName; 				// UI 显示的文字
@@ -245,23 +245,24 @@ public abstract class BaseService<T extends BaseModel, Mapper extends DAO<T>> im
 		pageBean.setCurrentPage(currentPage);
 	}
 	
-	public void createTable(T entry) throws DaoException{
+	public void createTable(T entry) throws DaoException{}
+
+	@Override
+	public List<T> getAll() throws ServiceException {
+		return getAll(null);
 	}
 	
-	/**
-	 * 获取全部数据
-	 * 
-	 * @return
-	 */
-	public List<T> getAll() {
+	@Override
+	public List<T> getAll(Query query) throws ServiceException {
 		PageResult<T> result;
+		
 		try {
-			result = getPageRows(0, 999, null);
+			result = query == null ? getPageRows(0, 999, null) : getPageRows(0, 999, query);
 		} catch (ServiceException e) {
 			LOGGER.warning(e);
 			return null;
 		}
-
+		
 		if (result == null || result.getTotalCount() == 0) {
 			return null;
 		} else {

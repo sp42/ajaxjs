@@ -31,10 +31,10 @@ import javax.validation.constraints.Size;
 import org.apache.ibatis.session.SqlSession;
 
 import com.ajaxjs.framework.dao.MyBatis;
-import com.ajaxjs.framework.model.BaseModel;
-import com.ajaxjs.framework.model.EntityDescription;
-import com.ajaxjs.framework.model.FieldDescription;
 import com.ajaxjs.jdbc.FieldMetaInfo;
+import com.ajaxjs.mvc.model.BaseModel;
+import com.ajaxjs.mvc.model.EntityDescription;
+import com.ajaxjs.mvc.model.FieldDescription;
 import com.ajaxjs.util.Reflect;
 
 /**

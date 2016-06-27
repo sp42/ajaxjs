@@ -1,6 +1,6 @@
 <%@ page pageEncoding="UTF-8"%>	
-<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/public"%>
-<%@taglib prefix="commonUI"  tagdir="/WEB-INF/tags/public/UI"%>
+<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
+<%@taglib prefix="commonUI"  tagdir="/WEB-INF/tags/common/UI"%>
 <!DOCTYPE html>
 <html>
 	<commonTag:head lessFile="/asset/bigfoot/asset/less/pages.less" />
@@ -20,7 +20,7 @@
 <%-- 		   <jsp:setProperty name="HtmlEditor" property="simple"  value="true"/> --%>
 <%-- 		   <jsp:setProperty name="HtmlEditor" property="basePath"  value="${basePath}"/> --%>
 <%-- 		</jsp:useBean> --%>
-<%--     	<%@taglib prefix="commonUI" tagdir="/WEB-INF/tags/public/UI"%> --%>
+<%--     	<%@taglib prefix="commonUI" tagdir="/WEB-INF/tags/common/UI"%> --%>
 <%--     	<commonUI:htmlEditor model="<%=HtmlEditor%>" /> --%>
 
     	<div class="btns">

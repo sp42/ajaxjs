@@ -1,7 +1,7 @@
 <%@page pageEncoding="UTF-8"%>	
 <%@taglib uri="/ajaxjs" prefix="c"%>
-<%@taglib prefix="commonUI" tagdir="/WEB-INF/tags/public/UI"%>
-<%@taglib prefix="adminUI"  tagdir="/WEB-INF/tags/public/admin"%>
+<%@taglib prefix="commonUI" tagdir="/WEB-INF/tags/common/UI"%>
+<%@taglib prefix="adminUI"  tagdir="/WEB-INF/tags/common/admin"%>
 <adminUI:edit type="main">
 	<div class="row">
 		<div>

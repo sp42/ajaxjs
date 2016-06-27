@@ -35,11 +35,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.ajaxjs.framework.controller.IController;
 import com.ajaxjs.framework.exception.ServiceException;
-import com.ajaxjs.framework.model.BaseModel;
-import com.ajaxjs.framework.model.Query;
-import com.ajaxjs.framework.model.PageResult;
 import com.ajaxjs.framework.service.DocumentRenderer;
 import com.ajaxjs.framework.service.IService;
+import com.ajaxjs.framework.service.Service;
+import com.ajaxjs.mvc.model.BaseModel;
+import com.ajaxjs.mvc.model.PageResult;
+import com.ajaxjs.mvc.model.Query;
 import com.ajaxjs.util.LogHelper;
 
 /**
@@ -53,6 +54,7 @@ import com.ajaxjs.util.LogHelper;
  */
 public abstract class AbstractController<T extends BaseModel> implements IController<T> {
 	private static final LogHelper LOGGER = LogHelper.getLog(AbstractController.class);
+	
 	private IService<T> service; 	// 对应的业务类
 	private boolean isEnableDefaultWrite = true;
 
@@ -104,7 +106,7 @@ public abstract class AbstractController<T extends BaseModel> implements IContro
 	@Override
 	public String getById(long id, Model model, HttpServletRequest request) {
 		System.out.println("model::1::：" + model);
-		getService().setModel(model);
+		((Service<T>)getService()).setModel(model);
 		
 		try {
 			BaseModel bean = getService().getById(id);

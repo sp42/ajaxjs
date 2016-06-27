@@ -12,6 +12,8 @@ import javax.validation.ValidatorFactory;
 import org.apache.bval.jsr.ApacheValidationProvider;
 import org.junit.Test;
 
+import test.com.ajaxjs.framework.business.News;
+
 public class TestValidation {
 	@Test
 	public void testValid() {

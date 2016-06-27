@@ -1,6 +1,6 @@
 <%@page pageEncoding="UTF-8"%>
-<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/public"%>
-<%@taglib prefix="UI"        tagdir="/WEB-INF/tags/public/UI"%>
+<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
+<%@taglib prefix="UI"        tagdir="/WEB-INF/tags/common/UI"%>
 <!DOCTYPE html>
 <html>
 <commonTag:head lessFile="/asset/less/user.less" title="列表" />

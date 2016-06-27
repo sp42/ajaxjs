@@ -15,6 +15,7 @@
  */
 package com.ajaxjs.framework.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.framework.exception.ServiceException;
@@ -52,6 +53,24 @@ public interface IService<T> {
 	 * @throws ServiceException
 	 */
 	public PageResult<T> getPageRows(int start, int limit, Query query) throws ServiceException;
+	
+	/**
+	 * 根据 query 查询条件来查询记录，不分页。如果 query 为 null 则表示查询所有记录，与 getAll() 作用相同。
+	 * 
+	 * @param query
+	 *            查询条件。如果 query 为 null 则表示查询所有记录，与 getAll() 作用相同。
+	 * @return 记录的列表
+	 * @throws ServiceException
+	 */
+	public List<T> getAll(Query query) throws ServiceException;
+
+	/**
+	 * 查询所有记录
+	 * 
+	 * @return 所有记录的列表
+	 * @throws ServiceException
+	 */
+	public List<T> getAll() throws ServiceException;
 
 	/**
 	 * 创建记录
@@ -107,14 +126,6 @@ public interface IService<T> {
 	 */
 	public String getUiName();
 
-	// /**
-	// * 额外字段的存放
-	// * @return
-	// */
-	// public Model getModel();
-	//
-	// public void setModel(Model model);
-
 	/**
 	 * 数据库里面真实的表名，可不设置（这时候读取 tableName 的）
 	 * 
@@ -130,5 +141,4 @@ public interface IService<T> {
 	public Map<String, String> getHidden_db_field_mapping();
 
 	public String getSQL_TableName();
-
 }

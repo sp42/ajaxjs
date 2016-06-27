@@ -21,10 +21,10 @@ import java.util.Map;
 
 import org.apache.ibatis.jdbc.SQL;
 
-import com.ajaxjs.framework.model.BaseModel;
-import com.ajaxjs.framework.model.Query;
-import com.ajaxjs.framework.model.Query.Filter;
-import com.ajaxjs.framework.model.Query.Order;
+import com.ajaxjs.mvc.model.BaseModel;
+import com.ajaxjs.mvc.model.Query;
+import com.ajaxjs.mvc.model.Query.Filter;
+import com.ajaxjs.mvc.model.Query.Order;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 

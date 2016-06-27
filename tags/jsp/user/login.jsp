@@ -5,7 +5,7 @@
 %>
 <html>
 	<head>
-		<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/public"%>
+		<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 		<commonTag:head title="后台" lessFile="/asset/bigfoot/asset/less/user.less" />
 		<style>
 			.memberNav{

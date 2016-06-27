@@ -1,7 +1,7 @@
 <%@ page pageEncoding="UTF-8"%>	
 <!DOCTYPE html>
 <html>	
-	<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/public"%>
+	<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 	<commonTag:head lessFile="/admin/asset/less/main.less">
 		<style type="text/css">
 			html{

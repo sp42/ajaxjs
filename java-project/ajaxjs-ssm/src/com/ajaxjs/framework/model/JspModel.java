@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.springframework.ui.Model;
 
+import com.ajaxjs.mvc.model.BaseModel;
+import com.ajaxjs.mvc.model.Entity;
 import com.ajaxjs.web.Requester;
 
 /**

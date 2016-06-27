@@ -1,5 +1,5 @@
 <%@page pageEncoding="UTF-8"%>
-<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/public"%>
+<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>

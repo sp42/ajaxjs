@@ -1,7 +1,7 @@
 <%@page pageEncoding="UTF-8"%>	
 <!-- 简单的 crud 页面 -->
-<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/public"%>
-<%@taglib prefix="UI"  		 tagdir="/WEB-INF/tags/public/UI"%>
+<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
+<%@taglib prefix="UI"  		 tagdir="/WEB-INF/tags/common/UI"%>
 <%@taglib prefix="c"  		 uri="/ajaxjs"%>
 <!DOCTYPE html>
 <html>

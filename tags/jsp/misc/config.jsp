@@ -1,7 +1,7 @@
 <%@page pageEncoding="UTF-8"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/public"%>
-<%@taglib prefix="commonUI"  tagdir="/WEB-INF/tags/public/UI"%>
+<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
+<%@taglib prefix="commonUI"  tagdir="/WEB-INF/tags/common/UI"%>
 <%-- <jsp:useBean id="bean" class="com.ajaxjs.framework.javascript.JSON_Saver" /> --%>
 <%
 // 	if (request.getParameter("getConfig") != null) {

@@ -70,7 +70,7 @@
 </c:if>
 
 <%-- 分页 --%>
-<%@attribute name="pageInfo" type="com.ajaxjs.view.PageResultView" required="false" description="分页对象"%>
+<%@attribute name="pageInfo" type="com.ajaxjs.mvc.model.PageResult" required="false" description="分页对象"%>
 <c:if test="${type == 'page'}">
 	<section class="pageInfo">
 	<c:choose>
