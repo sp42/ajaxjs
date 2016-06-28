@@ -77,7 +77,7 @@ public class MvcDispatcher implements Filter {
             return;
 		}
 
-		chain.doFilter(request, response);
+		chain.doFilter(req, resp);// 不要传 ServletRequest，以免影响其他框架
 	}
 
 	private static void resultHandler(Object result, Requester request, Responser response) {
@@ -144,7 +144,6 @@ public class MvcDispatcher implements Filter {
 		
 		for (String path : AnnotationUtils.controllers.keySet()) {
 			
-			System.out.println(uri + "---" + path);
 			if (uri.startsWith(path)) {
 				LOGGER.info(path + "命中！！！");
 				
