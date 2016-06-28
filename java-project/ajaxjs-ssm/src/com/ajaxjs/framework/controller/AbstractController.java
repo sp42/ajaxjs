@@ -37,11 +37,11 @@ import com.ajaxjs.framework.controller.IController;
 import com.ajaxjs.framework.exception.ServiceException;
 import com.ajaxjs.framework.service.DocumentRenderer;
 import com.ajaxjs.framework.service.IService;
-import com.ajaxjs.framework.service.Service;
 import com.ajaxjs.mvc.model.BaseModel;
 import com.ajaxjs.mvc.model.PageResult;
 import com.ajaxjs.mvc.model.Query;
 import com.ajaxjs.util.LogHelper;
+import com.ajaxjs.framework.service.BaseService;
 
 /**
  * 基础的控制器公共类，该类不能直接使用，必须继承之。
@@ -106,14 +106,19 @@ public abstract class AbstractController<T extends BaseModel> implements IContro
 	@Override
 	public String getById(long id, Model model, HttpServletRequest request) {
 		System.out.println("model::1::：" + model);
-		((Service<T>)getService()).setModel(model);
+		IService<T> service = getService();
 		
 		try {
-			BaseModel bean = getService().getById(id);
+			BaseModel bean = service.getById(id);
 			model.addAttribute("info", bean);
+			System.out.println(service.getModel());
+			System.out.println(model);
+			BaseService.toSpringMVC_model(service.getModel(), model);
 		} catch (ServiceException e) {
 			model.addAttribute("ServiceException", e);
 		}
+		
+		
 		
 		// 相邻记录
 //		try {

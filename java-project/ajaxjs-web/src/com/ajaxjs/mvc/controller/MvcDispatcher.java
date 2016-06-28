@@ -72,7 +72,7 @@ public class MvcDispatcher implements Filter {
             }
             
             
-            resultHandler(result, response);
+            resultHandler(result, request, response);
 			
             return;
 		}
@@ -80,7 +80,7 @@ public class MvcDispatcher implements Filter {
 		chain.doFilter(request, response);
 	}
 
-	private static void resultHandler(Object result, Responser response) {
+	private static void resultHandler(Object result, Requester request, Responser response) {
 		if (result != null) {
 			if (result instanceof String) {
 				String str = (String) result, html = "html::";
@@ -143,6 +143,8 @@ public class MvcDispatcher implements Filter {
 		Method method = null;
 		
 		for (String path : AnnotationUtils.controllers.keySet()) {
+			
+			System.out.println(uri + "---" + path);
 			if (uri.startsWith(path)) {
 				LOGGER.info(path + "命中！！！");
 				

@@ -12,16 +12,32 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
+import com.ajaxjs.framework.service.DocumentRenderer;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.web.Requester;
 import com.ajaxjs.web.Responser;
+import com.egdtv.crawler.model.Video;
 
 @Path("/hello")
 @Controller
 public class NewsController implements IController {
 	@GET
-	public void a(Requester request, Responser response) throws IOException {
-		response.getWriter().print("hihi");
+	public String a(Requester request, Responser response) throws IOException {
+		System.out.println("======================" + request.getRequestURI().contains(".doc"));
+		if(request.getRequestURI().contains(".doc")) {
+			String[] strs = DocumentRenderer.getEntityInfo(Video.class);
+			request.setAttribute("entityInfo", strs[0]);
+			
+			if(strs[1] != null) { // 更多关于该实体的文档
+				request.setAttribute("moreDocument", strs[1]);
+			}
+			
+//			request.setAttribute("meta", DocumentRenderer.getDocument(Video.class, getService().getSQL_TableName()));
+			System.out.println("----------------");
+			return "/WEB-INF/jsp/common/entity/showDocument.jsp";
+		}
+		return null;
+		//response.getWriter().print("hihi");
 	}
 
 	@POST

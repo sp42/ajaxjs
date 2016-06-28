@@ -46,13 +46,13 @@ import com.ajaxjs.util.Util;
  * @param <Mapper>
  *            DAO
  */
-public abstract class BaseService<T extends BaseModel, Mapper extends DAO<T>> implements Service<T> {
+public abstract class BaseService<T extends BaseModel, Mapper extends DAO<T>> implements IService<T> {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseService.class);
 	private Class<Mapper> mapperClz; 	// 映射器
 	private String uiName; 				// UI 显示的文字
 	private String tableName; 			// 实体表名
 	private String mappingTableName; 	// 数据库里面真实的表名，可不设置（这时候读取 tableName 的）
-	private Model model; 				// Extra data field container
+	private Map<String, Object> model = new HashMap<>(); 	// Extra data field container
 	
 	@Override
 	public T getById(long id) throws ServiceException {
@@ -314,12 +314,24 @@ public abstract class BaseService<T extends BaseModel, Mapper extends DAO<T>> im
 	/**
 	 * MVC 通过 Model 交换数据。没 model 表示不深入获取信息
 	 */
-	public Model getModel() {
+	@Override
+	public Map<String, Object> getModel() {
 		return model;
 	}
 
-	public void setModel(Model model) {
+	@Override
+	public void setModel(Map<String, Object> model) {
 		this.model = model;
+	}
+	
+	/**
+	 * 普通 map 转换到 SpringMVC model
+	 * @param sModel
+	 */
+	public static void toSpringMVC_model(Map<String, Object> model, Model sModel) {
+		for(String key : model.keySet()) {
+			sModel.addAttribute(key, model.get(key));
+		}
 	}
 	
 	// 表映射

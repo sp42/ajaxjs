@@ -141,4 +141,12 @@ public interface IService<T> {
 	public Map<String, String> getHidden_db_field_mapping();
 
 	public String getSQL_TableName();
+	
+	/**
+	 * 设置一个模型
+	 * @param model
+	 */
+	public void setModel(Map<String, Object> model);
+	
+	public Map<String, Object> getModel();
 }

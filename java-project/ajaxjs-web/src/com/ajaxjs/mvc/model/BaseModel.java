@@ -22,7 +22,7 @@ import com.ajaxjs.framework.service.IService;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.apache.bval.constraints.NotEmpty;
+//import org.apache.bval.constraints.NotEmpty;
 
 /**
  * 基础模型类
@@ -31,7 +31,6 @@ import org.apache.bval.constraints.NotEmpty;
  */
 public class BaseModel {
 	@FieldDescription(doc="id 序列")  
-	@NotEmpty
 	@NotNull(message="id不能为空")
 	private long id;
 	

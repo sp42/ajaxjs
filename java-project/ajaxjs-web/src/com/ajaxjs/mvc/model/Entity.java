@@ -18,7 +18,7 @@ package com.ajaxjs.mvc.model;
 import javax.validation.constraints.Size;
 
 /**
- * 实体模型
+ * 比 BaseModel 更丰富的实体模型
  * @author frank
  *
  */
@@ -36,6 +36,23 @@ public class Entity extends BaseModel {
 	@FieldDescription(doc="封面图路径") 
 	private String cover;
 	
+	@FieldDescription(doc="当前状态") 
+	private String status;
+	
+	/**
+	 * @return {@link #status}
+	 */
+	public String getStatus() {
+		return status;
+	}
+
+	/**
+	 * @param status {@link #status}
+	 */
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	@FieldDescription(doc="标签，用逗号（,）分割") 
 	private String[] tags;
 
