@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.ajaxjs.web;
 
 import java.awt.Image;
@@ -29,6 +28,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,6 +49,7 @@ import com.ajaxjs.net.http.RequestClient;
 import com.ajaxjs.util.FileUtil;
 import com.ajaxjs.util.Img;
 import com.ajaxjs.util.Util;
+import com.ajaxjs.util.json.JsonHelper;
 
 /**
  * 建立一个响应包装器
@@ -104,7 +105,7 @@ public class Responser extends HttpServletResponseWrapper{
 	 */
 	public void output(String output) {
 		PrintWriter writer = null;
-		setCharacterEncoding("UTF-8");
+		setCharacterEncoding(StandardCharsets.UTF_8.toString());
 
 		try {
 			writer = getWriter();
@@ -157,7 +158,7 @@ public class Responser extends HttpServletResponseWrapper{
 	}
 	
 	public void outputJSON(Map<String, ?> map) {
-		outputJSON(com.ajaxjs.json.Json.stringify(map));
+		outputJSON(JsonHelper.stringify(map));
 	}
 	
 	/**
@@ -172,7 +173,7 @@ public class Responser extends HttpServletResponseWrapper{
 			if (output instanceof String) {
 				outputJSON(output.toString());
 			} else { // simple object
-				outputJSON(com.ajaxjs.json.Json.stringify(output));
+				outputJSON(JsonHelper.stringify(output));
 			}
 		}
 	}
@@ -194,7 +195,7 @@ public class Responser extends HttpServletResponseWrapper{
 		hash.put("isOk", isOk);
 		hash.put("msg", msg);
 
-		String output = com.ajaxjs.json.Json.stringify(hash);
+		String output = JsonHelper.stringify(hash);
 		outputJSON(output);
 	}
 
@@ -238,7 +239,7 @@ public class Responser extends HttpServletResponseWrapper{
 	 * @return JSON，其中 total = 0
 	 */
 	public static String queryZero() {
-		return com.ajaxjs.json.Json.stringify(new Object() {
+		return JsonHelper.stringify(new Object() {
 			@SuppressWarnings("unused")
 			public int total = 0;
 			@SuppressWarnings("unused")
@@ -254,7 +255,7 @@ public class Responser extends HttpServletResponseWrapper{
 	 * @return JSON
 	 */
 	public static String overPage(final int _total) {
-		return com.ajaxjs.json.Json.stringify(new Object() {
+		return JsonHelper.stringify(new Object() {
 			@SuppressWarnings("unused")
 			public int total = _total;
 			@SuppressWarnings("unused")
@@ -287,7 +288,8 @@ public class Responser extends HttpServletResponseWrapper{
 			throw new NullPointerException("未设置 request 请求对象！");
 		
 		try {
-			request.getRequestDispatcher(path).forward(request, this);
+			RequestDispatcher rd = request.getRequestDispatcher(path);
+			if(rd != null)rd.forward(request, this);
 		} catch (ServletException | IOException e) {
 			e.printStackTrace();
 		} 
@@ -429,12 +431,8 @@ public class Responser extends HttpServletResponseWrapper{
 				byteos.write(b);
 			}
 		};
-		OutputStreamWriter osw = null;
-		try {
-			osw = new OutputStreamWriter(byteos, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		OutputStreamWriter osw = new OutputStreamWriter(byteos, StandardCharsets.UTF_8);
+		
 		final PrintWriter printw = new PrintWriter(osw);
 
 		// 进行编码转换,当输出流从比特流转换为字符流的时候设置才是有效的。

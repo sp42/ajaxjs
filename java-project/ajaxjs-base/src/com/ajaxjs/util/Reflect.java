@@ -305,6 +305,25 @@ public class Reflect {
 
 		return fields;
 	}
+	
+	/**
+	 * 获取某个类的所有接口
+	 * 
+	 * @param clazz
+	 *            目标类
+	 * @return 类的所有接口
+	 */
+	public static Class<?>[] getDeclaredInterface(Class<?> clazz) {
+		List<Class<?>> fields = new ArrayList<>();
+		
+		for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
+			Class<?>[] currentInterfaces = clazz.getInterfaces();
+			fields.addAll(Arrays.asList(currentInterfaces));
+		}
+		Class<?>[] clz = new Class[fields.size()];
+		
+		return fields.toArray(clz);
+	}
 
 	/**
 	 * 循环 object 向上转型（接口）, 获取 hostClazz 对象的 DeclaredMethod

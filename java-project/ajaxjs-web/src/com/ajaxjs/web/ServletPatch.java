@@ -18,6 +18,7 @@ package com.ajaxjs.web;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -86,9 +87,9 @@ public class ServletPatch {
 	public static void setCharacterEncoding(HttpServletRequest request, HttpServletResponse response) {	
 		// 为防止中文乱码，统一设置 UTF-8
 		try {
-			request.setCharacterEncoding("UTF-8");
+			request.setCharacterEncoding(StandardCharsets.UTF_8.toString());
 		} catch (UnsupportedEncodingException e) { }
-		response.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
 	}
 	
 	/**

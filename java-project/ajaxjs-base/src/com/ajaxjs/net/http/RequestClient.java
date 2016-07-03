@@ -122,7 +122,7 @@ public class RequestClient {
 					e = new ConnectException(connection.getResponseCode() + "：抱歉！我们服务端出错了！");
 				}
 
-				String msg = FileUtil.readText(is, request.getEncoding());
+				String msg = FileUtil.readText(is);
 				e.setFeedback(msg);
 
 				if (request.isTextResponse())
@@ -133,7 +133,7 @@ public class RequestClient {
 				request.getCallback().onDataLoad(is);
 			}
 			if (request.isTextResponse())
-				request.setFeedback(FileUtil.readText(is, request.getEncoding()));
+				request.setFeedback(FileUtil.readText(is));
 
 		} catch (UnknownHostException e) {
 			throw new ConnectException("未知地址！" + request.getUrl());

@@ -20,19 +20,22 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import com.ajaxjs.json.AbstractJsEngine;
-import com.ajaxjs.json.IEngine;
-import com.ajaxjs.json.Json;
-import com.ajaxjs.json.Rhino;
-import com.ajaxjs.json.ToJavaType;
 import com.ajaxjs.util.FileUtil;
 import com.ajaxjs.util.LogHelper;
+import com.ajaxjs.util.json.JSON;
+import com.ajaxjs.util.json.JsLib;
+import com.ajaxjs.util.json.JsonHelper;
 
 public class ConfigListener implements ServletContextListener {
+	/**
+	 * 所有配置保存在这里
+	 */
 	public static Map<String, Object> config;
 	
 	@Override
@@ -40,8 +43,6 @@ public class ConfigListener implements ServletContextListener {
 		System.out.println("ConfigListener 配置启动");
 		ServletContext cxt = e.getServletContext();
 		initLoggerFileHandler(cxt);
-		
-		
 		
 		String _isEnableJSON_Config = cxt.getInitParameter("isEnableJSON_Config");
 		if (_isEnableJSON_Config == null) {
@@ -62,7 +63,7 @@ public class ConfigListener implements ServletContextListener {
 		System.out.println("配置启动完毕" + Init.ConsoleDiver);
 	}
 	
-	public static final IEngine jsRuntime = new Rhino();// 主 JS runtime，其他 js 包都导进这里来
+	public static final ScriptEngine jsRuntime = JSON.engineFatory();// 主 JS runtime，其他 js 包都导进这里来
 	public static boolean isEnableJSON_Config;			// 是否通过 JS 来定义配置文件
 	public static boolean isJSON_Config_loaded = false;
 	
@@ -78,37 +79,49 @@ public class ConfigListener implements ServletContextListener {
 	 * 加载配置
 	 */
 	private static void loadJsonConfig() {
-		jsRuntime.eval(AbstractJsEngine.baseJavaScriptCode);
 		
 		String code = null;
 		try {
-			code = FileUtil.readText(Init.class.getResourceAsStream("JSON_Tree.js"), "UTF-8");
+			code = FileUtil.readText(Init.class.getResourceAsStream("JSON_Tree.js"));
 		} catch (IOException e) {
 			e.printStackTrace();
 			return;
 		}
 		
-		jsRuntime.eval(code);
-		jsRuntime.load(new String[] {
+		try {
+			jsRuntime.eval(JsLib.baseJavaScriptCode);
+			jsRuntime.eval(code);
+		} catch (ScriptException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		JsonHelper jh = new JsonHelper(jsRuntime);
+		jh.load(new String[] {
 //			Util.getClassFolder_FilePath(Init.class, "JSON_Tree.js"), 
 			Init.srcFolder + "site_config.js", // 加载配置文件
 		});
 		
-		// 保存全局信息，无论 JSON 配置文件里面嵌套多少层，到这里都扁平化每一条配置
-		config = ((ToJavaType)jsRuntime).eval_return_Map("JSON_Tree.util.flat(bf_Config);");
+		updateConfig();
 		
 		isJSON_Config_loaded =  true;
 		
 		System.out.println(("加载配置信息如下：" + System.getProperty("line.separator")
-				+ Json.format(com.ajaxjs.json.Json.stringify(config))
+				+ JsonHelper.format(JsonHelper.stringify(config))
 				+ Init.ConsoleDiver));
 	}
 	
 	/**
+	 * 保存全局信息，无论 JSON 配置文件里面嵌套多少层，到这里都扁平化每一条配置
 	 * 修改了配置之后，更新。即时出现效果。
 	 */
+	@SuppressWarnings("unchecked")
 	public static void updateConfig() {
-		config = ((ToJavaType)jsRuntime).eval_return_Map("JSON_Tree.util.flat(bf_Config);");
+		try {
+			config = (Map<String, Object>) jsRuntime.eval("JSON_Tree.util.flat(bf_Config);");
+		} catch (ScriptException e) {
+			e.printStackTrace();
+		}
 //		context.setAttribute("global_config", config); // 重新保存 config 对象
 	}
 

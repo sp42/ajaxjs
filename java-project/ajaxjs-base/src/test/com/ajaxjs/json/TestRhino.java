@@ -3,8 +3,8 @@ package test.com.ajaxjs.json;
 import static org.junit.Assert.*;
 import org.junit.*;
 
-import com.ajaxjs.json.Json;
 import com.ajaxjs.json.Rhino;
+import com.ajaxjs.util.json.JsonHelper;
 
 import java.io.IOException;
 import java.util.Map;
@@ -121,7 +121,7 @@ public class TestRhino {
 	@Test
 	public void testFormatter() {
 		String jsonStr = "{\"id\":\"1\",\"name\":\"a1\",\"obj\":{\"id\":11,\"name\":\"a11\",\"array\":[{\"id\":111,\"name\":\"a111\"},{\"id\":112,\"name\":\"a112\"}]}}";
-		String fotmatStr = Json.format(jsonStr);
+		String fotmatStr = JsonHelper.format(jsonStr);
 		// fotmatStr = fotmatStr.replaceAll("\n", "<br/>");
 		// fotmatStr = fotmatStr.replaceAll("\t", "    ");
 		System.out.println(fotmatStr);

@@ -17,6 +17,7 @@
 package com.ajaxjs.net.http;
 
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -55,7 +56,7 @@ public class Request {
 	/**
 	 * 设置响应内容的编码
 	 */
-	private String encoding = "UTF-8";
+	private String encoding = StandardCharsets.UTF_8.toString();
 
 	/**
 	 * BASIC HTTP 认证，数组[0] = 用户名/数组[1] = 密码

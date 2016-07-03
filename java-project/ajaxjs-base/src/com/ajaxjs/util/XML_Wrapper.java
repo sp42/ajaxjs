@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -252,7 +253,7 @@ public class XML_Wrapper {
 	 *            输入流
 	 */
 	public void write(OutputStream os) {
-		write(os, "UTF-8");
+		write(os, StandardCharsets.UTF_8.toString());
 	}
 
 	/**
@@ -277,7 +278,7 @@ public class XML_Wrapper {
 			e.printStackTrace();
 		}
 	}
-
+	
 	/**
 	 * 保存 XML 文件
 	 * 
@@ -285,7 +286,7 @@ public class XML_Wrapper {
 	 *            XML 文件保存路径
 	 */
 	public void write(String xmlFile) {
-		write(xmlFile, "UTF-8");
+		write(xmlFile, StandardCharsets.UTF_8.toString());
 	}
 
 	/**

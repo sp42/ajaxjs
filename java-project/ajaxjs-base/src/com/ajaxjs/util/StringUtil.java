@@ -19,6 +19,7 @@ package com.ajaxjs.util;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -34,8 +35,6 @@ public class StringUtil {
 	 * 空字符串常量
 	 */
 	public static final String emptyString = "";
-	
-	public static final String encoding_UTF8 = "UTF-8";
 	
 	/**
 	 * 是否空字符串
@@ -167,7 +166,7 @@ public class StringUtil {
 	 */
 	public static String urlDecode(String str) {
 		try {
-			return URLDecoder.decode(str, encoding_UTF8);
+			return URLDecoder.decode(str, StandardCharsets.UTF_8.toString());
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			return null;
@@ -183,7 +182,7 @@ public class StringUtil {
 	 */
 	public static String urlEecode(String str) {
 		try {
-			return URLEncoder.encode(str, encoding_UTF8);
+			return URLEncoder.encode(str, StandardCharsets.UTF_8.toString());
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			return null;
@@ -198,12 +197,7 @@ public class StringUtil {
 	 * @return UTF-8 字符串
 	 */
 	public static String byte2String(byte[] bytes) {
-		try {
-			return new String(bytes, encoding_UTF8);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			return null;
-		}
+		return new String(bytes, StandardCharsets.UTF_8);		
 	}
 	
 	/**

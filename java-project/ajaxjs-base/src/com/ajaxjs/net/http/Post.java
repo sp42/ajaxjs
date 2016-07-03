@@ -18,6 +18,7 @@ package com.ajaxjs.net.http;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import com.ajaxjs.util.FileUtil;
@@ -78,7 +79,7 @@ public class Post {
 		int i = 0;
 		try {
 			for (String key : map.keySet())
-				pairs[i++] = key + "=" + URLEncoder.encode(map.get(key).toString(), "UTF-8");
+				pairs[i++] = key + "=" + URLEncoder.encode(map.get(key).toString(), StandardCharsets.UTF_8.toString());
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

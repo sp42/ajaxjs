@@ -17,6 +17,7 @@
 package com.ajaxjs.web;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -136,10 +137,6 @@ public class PageUtil extends DateTools {
 	 * @return
 	 */
 	public static String urlChinese(String str) {
-		try {
-			return new String(str.getBytes("ISO-8859-1"),"UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			return null;
-		}
+		return new String(str.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
 	}
 }

@@ -19,8 +19,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.framework.exception.ServiceException;
-import com.ajaxjs.mvc.model.PageResult;
+import com.ajaxjs.mvc.controller.ModelAndView;
 import com.ajaxjs.mvc.model.Query;
+import com.ajaxjs.mvc.view.PageResult;
 
 /**
  * 业务逻辑层
@@ -53,7 +54,7 @@ public interface IService<T> {
 	 * @throws ServiceException
 	 */
 	public PageResult<T> getPageRows(int start, int limit, Query query) throws ServiceException;
-	
+
 	/**
 	 * 根据 query 查询条件来查询记录，不分页。如果 query 为 null 则表示查询所有记录，与 getAll() 作用相同。
 	 * 
@@ -141,12 +142,13 @@ public interface IService<T> {
 	public Map<String, String> getHidden_db_field_mapping();
 
 	public String getSQL_TableName();
-	
+
 	/**
 	 * 设置一个模型
+	 * 
 	 * @param model
 	 */
-	public void setModel(Map<String, Object> model);
-	
-	public Map<String, Object> getModel();
+	public void setModel(ModelAndView model);
+
+	public ModelAndView getModel();
 }

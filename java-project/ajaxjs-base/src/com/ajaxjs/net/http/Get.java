@@ -44,7 +44,7 @@ public class Get {
 	 */
 	public static String simpleGET(String url) {
 		try {
-			return FileUtil.readText(new URL(url).openStream(), "UTF-8");
+			return FileUtil.readText(new URL(url).openStream());
 		} catch (IOException e) {
 			LOGGER.warning("请求出错" + url, e);
 			return null;

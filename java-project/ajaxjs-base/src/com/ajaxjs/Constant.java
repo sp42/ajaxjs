@@ -31,7 +31,6 @@ public interface Constant {
 	public static final String file_pathSeparator = File.separator;
 	public static final String sql_query_zero = "此次查询没有符合条件的任何数据。";
 	public static final String outputKeyName = "output";
-	public static final String encoding_UTF8 = "UTF-8";
 	public static final String lineFeet = "\r\n";
 	public final static char newline = '\n';
 

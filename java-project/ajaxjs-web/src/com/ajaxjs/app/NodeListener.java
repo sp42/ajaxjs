@@ -15,12 +15,14 @@
  */
 package com.ajaxjs.app;
 
+import javax.script.ScriptException;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.json.ToJavaType;
 import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.json.JsonHelper;
 
 /**
  * 加入 Node。每次请求都会调用，所以要规避静态资源的
@@ -48,8 +50,14 @@ public class NodeListener implements ServletRequestListener {
 		}
 		if(!isInited) {
 			System.out.println("初始化 NodeListener");
-			ConfigListener.jsRuntime.load(Init.srcFolder + "site_stru.js"); // 加载 Web 目录文件
-			ConfigListener.jsRuntime.eval("bf.AppStru.init();");
+			new JsonHelper(ConfigListener.jsRuntime).load(Init.srcFolder + "site_stru.js"); // 加载 Web 目录文件
+
+			try {
+				ConfigListener.jsRuntime.eval("bf.AppStru.init();");
+			} catch (ScriptException e1) {
+				e1.printStackTrace();
+				return;
+			}
 			
 			isInited = true;
 			System.out.println("---------------------------------" + System.getProperty("line.separator") + "加载 site_stru.js 成功" + Init.ConsoleDiver);

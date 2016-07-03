@@ -39,4 +39,4 @@ AJAXJS Web 是一款基于 Java 平台原创的 Web 框架，继承了 Java 平�
 *   ajaxjs-ssm Spring+Spring MVC+Mybatis 框架的一个实现
 *   ajaxjs-es 基于 Elasticsearch 实现（TODO）
 
-上述提供的 JAR 包里面已经包含源码和文档了，无须额外附加。
+上述提供的 JAR 包里面已经包含源码和文档了，无须额外附加。源码分别在不同的项目之中，项目是标准的Eclipse EE结构，导入即可。

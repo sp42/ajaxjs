@@ -17,6 +17,7 @@ package com.ajaxjs.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.FileHandler;
@@ -48,7 +49,7 @@ public class LogHelper {
 
 		@Override
 		public String format(LogRecord record) {
-			return String.format(tpl, DateTools.now(), record.getLevel(), record.getLoggerName(),
+			return String.format(tpl, new Date(), record.getLevel(), record.getLoggerName(),
 					record.getSourceMethodName(), record.getMessage());
 		}
 	};

@@ -17,7 +17,7 @@
 package com.ajaxjs.util;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
@@ -197,15 +197,8 @@ public class Util {
 	 * @return MD5 摘要
 	 */
 	public static String md5(String str) {
-		byte[] b = null;
-
-		try {
-			b = str.getBytes("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			return null;
-		}
-
+		byte[] b = str.getBytes(StandardCharsets.UTF_8);
+		
 		try {
 			b = MessageDigest.getInstance("MD5").digest(b);
 		} catch (NoSuchAlgorithmException e) {

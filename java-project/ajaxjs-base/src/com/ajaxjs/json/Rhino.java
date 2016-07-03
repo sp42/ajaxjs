@@ -23,10 +23,10 @@ import java.util.Map;
 import javax.script.ScriptException;
 
 import com.ajaxjs.util.LogHelper;
+import com.ajaxjs.util.json.JsonHelper;
 
 import sun.org.mozilla.javascript.internal.NativeArray;
 import sun.org.mozilla.javascript.internal.NativeObject;
-import sun.org.mozilla.javascript.internal.Undefined;
 
 /**
  * JS 引擎
@@ -35,7 +35,7 @@ import sun.org.mozilla.javascript.internal.Undefined;
  *
  */
 public class Rhino extends AbstractJsEngine {
-	private static final LogHelper LOGGER = LogHelper.getLog(Rhino.class);
+	public static final LogHelper LOGGER = LogHelper.getLog(Rhino.class);
 	
 	public Rhino() {
 		super("rhino");
@@ -101,34 +101,10 @@ public class Rhino extends AbstractJsEngine {
 		for (Object id : obj.getAllIds()) {// 遍历对象
 			String newId = id.toString();
 			Object value = obj.get(newId, obj);
-			map.put(newId, jsValue2java(value));
+			map.put(newId, JsonHelper.jsValue2java(value));
 		}
 
 		return map;
-	}
-	
-	/**
-	 * 
-	 * @param value Js 里面的值
-	 * @return Java 里面的值
-	 */
-	public static Object jsValue2java(Object value) {
-		if (value == null || value instanceof Boolean || value instanceof String || value instanceof Undefined) {
-			// js 为 null，所以 java hash 也为null
-			// nothing but still value;
-		} else if (value instanceof Double) {
-			value = ((Double) value).intValue();// js number 转换为 short
-		} else if (value instanceof NativeObject) {
-			// value = jsValue2java(value);
-		} else if (value instanceof NativeArray) {
-			value = NativeArray2MapArray((NativeArray) value); // 这是规则的情况，数组中每个都是对象，而非
-																// string/int/boolean
-																// TODO
-		} else {
-			LOGGER.info("未知 JS 类型：" + value.getClass().getName());
-		}
-
-		return value;
 	}
 	
 	/**

@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 
 import javax.activation.MimetypesFileTypeMap;
 
@@ -56,18 +57,16 @@ public class FileUtil {
 	 * 
 	 * @param is
 	 *            输入流
-	 * @param encoding
-	 *            编码
 	 * @return 文本
 	 * @throws IOException
 	 */
-	public static String readText(InputStream is, String encoding) throws IOException {
+	public static String readText(InputStream is) throws IOException {
 		String line = null;
 		StringBuilder result = new StringBuilder();
 
 		// InputStreamReader从一个数据源读取字节，并自动将其转换成Unicode字符
 		// OutputStreamWriter将字符的Unicode编码写到字节输出流
-		try (InputStreamReader isReader = new InputStreamReader(is, "UTF-8"); // 字节流转换到字符流
+		try (InputStreamReader isReader = new InputStreamReader(is, StandardCharsets.UTF_8); // 字节流转换到字符流
 				/*
 				 * Decorator，装饰模式，又称为 Wrapper，使它具有了缓冲功能
 				 * BufferedInputStream、BufferedOutputStream
@@ -86,19 +85,7 @@ public class FileUtil {
 
 		return result.toString();
 	}
-	
-	/**
-	 * 读输入流，将其转换为文本（多行）
-	 * 字节流转换为字符串
-	 * 指定 UTF-8
-	 * @param is
-	 *            输入流
-	 * @return 文本
-	 * @throws IOException
-	 */
-	public static String readText(InputStream is) throws IOException {
-		return readText(is, "UTF-8");
-	}
+
 
 	/**
 	 * 写文件不能用 FileWriter，原因是会中文乱码
@@ -112,7 +99,7 @@ public class FileUtil {
 	public static void save2file(String filepath, String content) throws IOException {
 		try (OutputStream out = new FileOutputStream(filepath);
 				// OutputStreramWriter将输出的字符流转化为字节流输出（字符流已带缓冲）
-				OutputStreamWriter writer = new OutputStreamWriter(out, "UTF-8");) {
+				OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);) {
 			writer.write(content);
 		} catch (IOException e) {
 			System.err.println("写入文件" + filepath + "失败");
