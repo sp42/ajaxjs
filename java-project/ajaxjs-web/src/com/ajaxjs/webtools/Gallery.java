@@ -13,17 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.cms.gallery;
+package com.ajaxjs.webtools;
 
 import java.io.File;
- 
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.ajaxjs.web.Requester;
+
 /**
- * 相册
- * 
- * @author Frank Cheung
+ * /cms/gallery
+ * @author frank
  *
  */
-public class Service {
+public class Gallery {
+	public String doGet(HttpServletRequest request) {
+		if (request.getParameter("getJs") != null) {
+			return "";
+		} else {
+			request.setAttribute("imgs", getImgs(new Requester(request).Mappath("/images")));
+			return "common/misc/gallery";
+		}
+	}
+	
 	/**
 	 * 返回某个文件夹里面的所有文件
 	 * 
