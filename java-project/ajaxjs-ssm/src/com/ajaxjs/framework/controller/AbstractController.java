@@ -38,7 +38,7 @@ import com.ajaxjs.framework.exception.ServiceException;
 import com.ajaxjs.framework.service.DocumentRenderer;
 import com.ajaxjs.framework.service.IService;
 import com.ajaxjs.mvc.model.BaseModel;
-import com.ajaxjs.mvc.model.PageResult;
+import com.ajaxjs.mvc.view.PageResult;
 import com.ajaxjs.mvc.model.Query;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.framework.service.BaseService;
