@@ -22,6 +22,9 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.Util;
+
 /**
  * json 转为 java 对象的工具类
  * 
@@ -81,30 +84,43 @@ public class JSON {
 	 * @return 目标对象
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T accessMember(String js, String key, Class<T> clazz) {
+	public static <T> T accessMember(ScriptEngine engine, String js, String key, Class<T> clazz) {
 		T result = null;
 
+		String jsCode = null;
+		System.out.println("var obj = " + js);
 		try {
-			engine.eval("var obj = " + js);// rhino 不能直接返回 map，如 eval("{a:1}")
+			jsCode = "var obj = " + js;
+			engine.eval(jsCode);// rhino 不能直接返回 map，如 eval("{a:1}")
 											// -->null，必须加变量，例如 执行 var xx =
 											// {...};
 			Object obj;
 			if (key == null) {
-				obj = engine.eval("obj;");
+				jsCode = "obj;";
+				obj = engine.eval(jsCode);
 			} else {
 				if (key.contains(".")) {
-					obj = engine.eval("obj." + key + ";");
+					jsCode = "obj." + key + ";";
+					obj = engine.eval(jsCode);
 				} else {
-					obj = engine.eval("obj['" + key + "'];");
+					jsCode = "obj['" + key + "'];";
+					obj = engine.eval(jsCode);
 				}
 			}
 			result = (T) obj;
 		} catch (ScriptException e) {
-			System.err.println("脚本eval()运算发生异常！eval 代码：" + js);
+			System.err.println("脚本eval()运算发生异常！eval 代码：" + jsCode);
 			e.printStackTrace();
 		}
 
 		return result;
+	}
+	
+	public static <T> T accessMember(ScriptEngine engine, String js, Class<T> clazz) {
+		return accessMember(engine, js, null, clazz);
+	}
+	public static <T> T accessMember(String js, String key, Class<T> clazz) {
+		return accessMember(engine, js, key, clazz);
 	}
 
 	/**
@@ -172,5 +188,26 @@ public class JSON {
 			return d.intValue();
 		}
 
+	}
+	
+	public static <T> T eval(ScriptEngine engine, String code, Class<T> clazz) {
+		if (StringUtil.isEmptyString(code))
+			throw new UnsupportedOperationException("JS 代码不能为空！");
+
+		Object obj = null;
+
+		try {
+			obj = engine.eval(code);
+		} catch (ScriptException e) {
+			System.err.println("脚本eval()运算发生异常！eval 代码：" + code);
+			e.printStackTrace();
+		}
+
+		if (obj != null) {
+			// return Util.TypeConvert(js.eval(code), clazz); // 为什么要执行多次？
+			T _obj = Util.TypeConvert(obj, clazz);
+			return _obj;
+		} else
+			return null;
 	}
 }

@@ -5,6 +5,7 @@
 
 <%@attribute name="type" type="String" required="true" description="该属性选择类型"%>
 <%@attribute name="hasCatalog" type="Boolean" required="fasle" description="是否需要分类"%>
+<%@attribute name="moreBtn"  required="false" fragment="true"  description="是否需要分类"%>
 
 <c:if test="${type=='main'}">
 	<!DOCTYPE html>
@@ -46,6 +47,7 @@
 		</c:choose>
 			<div class="row">
 				<div style="text-align:center;">
+					<jsp:invoke fragment="moreBtn" />
 					<button class="my-btn-3" style="width:15%;">
 						<img src="${pageContext.request.contextPath}/asset/bigfoot/skin/icon/save.gif" /> 提 交</button> 
 					<button class="my-btn-3" style="width:10%;" onclick="this.up('form').reset();return false;">复 位</button> 

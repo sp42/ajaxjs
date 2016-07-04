@@ -20,7 +20,6 @@ import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
 import javax.servlet.http.HttpServletRequest;
 
-import com.ajaxjs.json.ToJavaType;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.json.JsonHelper;
 
@@ -63,7 +62,7 @@ public class NodeListener implements ServletRequestListener {
 			System.out.println("---------------------------------" + System.getProperty("line.separator") + "加载 site_stru.js 成功" + Init.ConsoleDiver);
 		}
 		
-		request.setAttribute("PageNode", new NodeProcessor(request.getContextPath(), uri, (ToJavaType)ConfigListener.jsRuntime));
+		request.setAttribute("PageNode", new NodeProcessor(request.getContextPath(), uri));
 	}
 
 	@Override

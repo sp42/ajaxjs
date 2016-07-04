@@ -254,4 +254,19 @@ public class MapHelper {
 
 		return b;
 	}
+	
+	/**
+	 * 有些 map 只能读不能写，现在为真正的 hashmap
+	 * 
+	 * @param map
+	 * @return
+	 */
+	public static Map<String, Object> toRealMap(Map<String, ?> map) {
+		Map<String, Object> _map = new HashMap<>();
+		for (String key : map.keySet()) {
+			_map.put(key, map.get(key));
+		}
+
+		return _map;
+	}
 }

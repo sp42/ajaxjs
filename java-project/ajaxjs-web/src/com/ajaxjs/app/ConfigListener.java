@@ -102,6 +102,15 @@ public class ConfigListener implements ServletContextListener {
 			Init.srcFolder + "site_config.js", // 加载配置文件
 		});
 		
+//		try {
+//			System.out.println(ConfigListener.jsRuntime.eval("bf.AppStru.getNav();"));
+//			
+//		} catch (ScriptException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		JSON.getMapArray(ConfigListener.jsRuntime, "bf.AppStru.getNav();");
+		
 		updateConfig();
 		
 		isJSON_Config_loaded =  true;
@@ -117,12 +126,19 @@ public class ConfigListener implements ServletContextListener {
 	 */
 	@SuppressWarnings("unchecked")
 	public static void updateConfig() {
+		Map<String, Object> map = null;
 		try {
-			config = (Map<String, Object>) jsRuntime.eval("JSON_Tree.util.flat(bf_Config);");
+			map = (Map<String, Object>) jsRuntime.eval("JSON_Tree.util.flat(bf_Config);");
 		} catch (ScriptException e) {
 			e.printStackTrace();
 		}
-//		context.setAttribute("global_config", config); // 重新保存 config 对象
+		if (map != null) { // 还是要转换一下
+			config = new HashMap<>();
+			for (String key : map.keySet()) {
+				config.put(key, map.get(key));
+			}
+		}
+		// context.setAttribute("global_config", config); // 重新保存 config 对象
 	}
 
 	@Override

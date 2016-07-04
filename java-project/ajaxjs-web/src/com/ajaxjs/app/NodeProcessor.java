@@ -15,10 +15,13 @@
  */
 package com.ajaxjs.app;
 
+import java.util.List;
 import java.util.Map;
 
+import javax.script.ScriptEngine;
+
 import com.ajaxjs.json.IEngine;
-import com.ajaxjs.json.ToJavaType;
+import com.ajaxjs.util.json.JSON;
 
 /**
  * JSONPath
@@ -38,14 +41,9 @@ public class NodeProcessor {
 	private String uri;
 	
 	/**
-	 * js 引擎
-	 */
-	private ToJavaType js; 
-	
-	/**
 	 * 页头导航的缓存
 	 */
-	private static Map<String, Object>[] navList; 
+	private static List<Map<String, Object>> navList; 
 	
 	/**
 	 * 页面节点信息
@@ -64,22 +62,23 @@ public class NodeProcessor {
 	 *            项目名称
 	 * @param uri
 	 *            请求路径
-	 * @param js
+	 * @param jsruntime
 	 *            JS 引擎
 	 */
-	public NodeProcessor(String contextPath, String uri, ToJavaType js) {
+	public NodeProcessor(String contextPath, String uri) {
 		this.contextPath = contextPath;
 		this.uri = uri;
-		this.js = js;
 	}
 
 	/**
 	 * 获取导航
 	 * @return 导航数据
 	 */
-	public Map<String, Object>[] getNavBar() {
-		if (navList == null) 
-			navList = js.eval_return_MapArray("bf.AppStru.getNav();");
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> getNavBar() {
+		if (navList == null) {
+			navList = JSON.eval(ConfigListener.jsRuntime, "bf.AppStru.getNav();", List.class);
+		}
 
 		return navList;
 	}
@@ -88,10 +87,11 @@ public class NodeProcessor {
 	 * 获取当前页面节点，并带有丰富的节点信息
 	 * @return 当前页面节点
 	 */
+	@SuppressWarnings("unchecked")
 	public Map<String, Object> getPageNode() {
 		if (pageNode == null) {
 			String jsCode = String.format("bf.AppStru.getPageNode('%s', '%s');", getRoute(), contextPath);
-			pageNode = js.eval_return_Map(jsCode);
+			pageNode = (Map<String, Object>)JSON.eval(ConfigListener.jsRuntime, jsCode, Map.class);
 		}
 		
 		return pageNode;
@@ -105,7 +105,7 @@ public class NodeProcessor {
 	public String getSiteMap() {
 		if (footerList == null) {
 			String code = String.format("JSON_Tree.util.makeSiteMap(bf.AppStru.data, '%s');", contextPath);
-			footerList = ((IEngine) js).eval(code, String.class);
+			footerList = JSON.eval(ConfigListener.jsRuntime, code, String.class);
 		}
 
 		return footerList;
@@ -147,8 +147,9 @@ public class NodeProcessor {
 	 *            指定的节点路径，以 / 分隔，例如 /product/app
 	 * @return 如果网站结构中没有这个节点对象信息返回 null
 	 */
+	@SuppressWarnings("unchecked")
 	public Map<String, Object> getNode(String nodePath) {
-		return js.eval_return_Map(String.format("bf.AppStru.getNode('%s');", nodePath));
+		return JSON.eval(ConfigListener.jsRuntime, String.format("bf.AppStru.getNode('%s');", nodePath), Map.class);
 	}
 
 	/**

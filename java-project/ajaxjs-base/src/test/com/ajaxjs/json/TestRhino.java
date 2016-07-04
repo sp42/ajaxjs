@@ -124,7 +124,7 @@ public class TestRhino {
 		String fotmatStr = JsonHelper.format(jsonStr);
 		// fotmatStr = fotmatStr.replaceAll("\n", "<br/>");
 		// fotmatStr = fotmatStr.replaceAll("\t", "    ");
-		System.out.println(fotmatStr);
+//		System.out.println(fotmatStr);
 		assertNotNull(fotmatStr);
 	}
 }

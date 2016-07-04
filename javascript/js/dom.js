@@ -493,6 +493,16 @@ function Step() {
 }).call(window.navigator);
 
 ;(function(){	
+
+	// Get a element
+	$$ = function(cssSelector) {
+		var el = document.querySelector(cssSelector);// class name if matched
+		if (!el)
+			el = document.querySelector('input[name="' + cssSelector + '"]'); // form
+																				// input
+		return el;
+	}
+	
 	/**
 	 * 增加元素样式。
 	 * @param {String} cls

@@ -17,6 +17,8 @@ package com.ajaxjs.framework.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -30,6 +32,7 @@ import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import com.ajaxjs.app.ConfigListener;
 import com.ajaxjs.app.Init;
 import com.ajaxjs.framework.dao.DAO;
+import com.ajaxjs.framework.exception.DaoException;
 import com.ajaxjs.jdbc.Helper;
 import com.ajaxjs.mvc.model.BaseModel;
 
@@ -119,5 +122,31 @@ public class MyBatis {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public static List<Map<String, String>> getNeighbor(String tablename, long id) throws DaoException {
+		List<Map<String, String>> neighbors = null;
+		try {
+			if (!MyBatis.configuration.hasMapper(SqlProvider.class)) {
+				MyBatis.configuration.addMapper(SqlProvider.class);
+			}
+			
+			SqlSession session = MyBatis.sqlSessionFactory.openSession();
+
+			try {
+				SqlProvider _mapper = session.getMapper(SqlProvider.class);
+				neighbors = _mapper.getNeighbor(tablename, id);
+			} catch (Throwable e) {
+				throw e;
+			} finally {
+				session.close();
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+//			LOGGER.warning(e);
+			throw new DaoException(e.getMessage());
+		}
+		
+		return neighbors;
 	}
 }

@@ -16,7 +16,6 @@
 
 package com.ajaxjs.web;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
