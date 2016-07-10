@@ -31,6 +31,7 @@ import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.json.JSON;
 import com.ajaxjs.util.json.JsLib;
 import com.ajaxjs.util.json.JsonHelper;
+import com.ajaxjs.web.PageUtil;
 
 public class ConfigListener implements ServletContextListener {
 	/**
@@ -43,21 +44,23 @@ public class ConfigListener implements ServletContextListener {
 		System.out.println("ConfigListener 配置启动");
 		ServletContext cxt = e.getServletContext();
 		initLoggerFileHandler(cxt);
-		
+
 		String _isEnableJSON_Config = cxt.getInitParameter("isEnableJSON_Config");
 		if (_isEnableJSON_Config == null) {
 			isEnableJSON_Config = false; // 默认情况
 		} else {
 			isEnableJSON_Config = new Boolean(_isEnableJSON_Config);
 		}
-		
-		if(isEnableJSON_Config){
+
+		if (isEnableJSON_Config) {
 			loadJsonConfig();
 		}
-		
-		if(config == null)config = new HashMap<>();
+
+		if (config == null)
+			config = new HashMap<>();
 		cxt.setAttribute("_config", config);
 		cxt.setAttribute("bigfoot", cxt.getContextPath() + "/bigfoot");
+		cxt.setAttribute("PageUtil", new PageUtil()); // 一些页面实用的函数
 		config.put("LessUrlProcessor", new LessUrlProcessor());
 
 		System.out.println("配置启动完毕" + Init.ConsoleDiver);

@@ -20,6 +20,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 日期工具类 <% request.setAttribute("fn", new Util()); %>
@@ -140,5 +142,36 @@ public class DateTools {
 				return null;
 			}
 		}
+	}
+
+	private final static String format = "((19|20)[0-9]{2})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01]) "
+			+ "([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]";
+	private final static Pattern pattern = Pattern.compile(format);
+
+	public static Date Objet2Date(Object obj) {
+		Date date = null;
+		if (obj == null)
+			return null;
+		if (obj instanceof Date)
+			return (Date) obj;
+		else if (obj instanceof Number) {
+			if (obj instanceof Integer) {
+				// 10 位长int，后面补充三个零为 13位long时间戳
+				long times = Long.parseLong(obj + "000");
+				date = new Date(times);
+			} else {
+				date = new Date((long) obj);
+			}
+		} else if (obj instanceof String) {
+			Matcher matcher = pattern.matcher(obj.toString());
+			if (matcher.matches()) {
+				date = string2date(obj.toString());
+			} else {
+				System.err.println("非法字符串日期" + obj);
+			}
+		} else {
+			System.err.println("不能识别类型，不能转为日期" + obj);
+		}
+		return date;
 	}
 }

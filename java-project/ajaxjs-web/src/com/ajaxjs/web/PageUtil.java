@@ -138,4 +138,8 @@ public class PageUtil extends DateTools {
 	public static String urlChinese(String str) {
 		return new String(str.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
 	}
+	
+	public static String arrayJoin(String[] arr) {
+		return StringUtil.stringJoin(arr, ",");
+	}
 }

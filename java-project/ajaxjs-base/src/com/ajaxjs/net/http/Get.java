@@ -236,6 +236,7 @@ public class Get {
 	/**
 	 * 基本原理：利用URLConnection获取要下载文件的长度、头部等相关信息，并设置响应的头部信息。并且通过URLConnection获取输入流，将文件分成指定的块，每一块单独开辟一个线程完成数据的读取、写入。通过输入流读取下载文件的信息，然后将读取的信息用RandomAccessFile随机写入到本地文件中。同时，每个线程写入的数据都文件指针也就是写入数据的长度，需要保存在一个临时文件中。这样当本次下载没有完成的时候，下次下载的时候就从这个文件中读取上一次下载的文件长度，然后继续接着上一次的位置开始下载。并且将本次下载的长度写入到这个文件中。 
 	 * Java 多线程断点下载文件 http://blog.csdn.net/ycb1689/article/details/8229585
+	 * TODO
 	 */
 	public static void multi_line_download(){}
 

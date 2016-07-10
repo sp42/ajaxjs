@@ -190,3 +190,34 @@ header {
 		}
 	}
 }
+
+
+.panelHolder{
+	position: relative;  
+    &:hover .panel, .panel:hover{ // 因为有“登录”和“找回密码”，所以写 2x2个，其中有一组 for 面板 hover 的。  
+        display: block;  
+    }  
+   .panel{  
+        display: none;  // 开始是隐藏的  
+        position: absolute;  
+        top:24px;  
+        top:24px;  
+        left: 0;  
+        background-color: #f5f5f5;  
+        border: 1px solid lightgray;  
+        border-top:0;  
+        padding: 5px;  
+        width:850px;  
+    } 
+}
+
+.tagsPanel ul{
+	width: 33%;
+	float:left
+}
+.tagsPanel li{
+	float:left;
+	width:30%;
+	padding-left:3%;
+	text-align:left;
+}

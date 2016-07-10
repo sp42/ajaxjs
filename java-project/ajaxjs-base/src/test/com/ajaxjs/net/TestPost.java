@@ -13,17 +13,18 @@ public class TestPost {
 	@Test
 	public void testPOST() {
 		// TEST FILE <%=com.ajaxjs.util.map.MapHelper.toMap(request.getParameterMap())%>
-		String url = "http://localhost:8080/pachong/post.jsp";
-		Request request = Post.POST(url, new HashMap<String, Object>() {
-			private static final long serialVersionUID = 1L;
-			{
-					put("foo", "bar");
-			}
-		});
-		System.out.println("Feedback:" + request.getFeedback());
-		assertNotNull(request);
-		assertTrue(request.isDone());
+String url = "http://localhost:8080/pachong/post.jsp";
+Request request = Post.POST(url, new HashMap<String, Object>() {
+	private static final long serialVersionUID = 1L;
+	{
+			put("foo", "bar");
 	}
+});
+System.out.println("Feedback:" + request.getFeedback());
+assertNotNull(request);
+assertTrue(request.isDone());
+	}
+	
 	@Test
 	public void testMultiPOST() {
 		// TEST FILE <%=com.ajaxjs.util.map.MapHelper.toMap(request.getParameterMap())%>

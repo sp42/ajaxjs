@@ -41,17 +41,25 @@ public class Post {
 	 * @return 携带请求信息的 Bean
 	 */
 	public static Request POST(String url, Map<String, Object> data) {
+		if (data != null && data.size() > 0) {
+			return POST(url, join(data).getBytes());
+		} else {
+			return null;
+		}
+	}
+	
+	public static Request POST(String url, String params) {
+		return POST(url, params.getBytes());
+	}
+	
+	public static Request POST(String url, byte[] b) {
 		Request request = new Request();
 		request.setMethod("POST");
 		request.setUrl(url);
-		if (data != null && data.size() > 0) {
-			byte[] b = join(data).getBytes();
-			request.setWriteData(b);
-		}
+		request.setWriteData(b);
 
 		RequestClient client = new RequestClient(request);
-		client.getConnection().setDoOutput(true); // for
-													// conn.getOutputStream().write(someBytes);
+		client.getConnection().setDoOutput(true); // for conn.getOutputStream().write(someBytes);
 		client.getConnection().setDoInput(true);
 		client.getConnection().setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 

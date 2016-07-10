@@ -62,7 +62,7 @@
 	如果插入多个日历的时候，
 	可能会重复加载，但暂时没应对的方法，希望浏览器不会重复加载 
 -->
-<script src="${bigfoot}/js/form/calendar.js"></script>
+<script src="${pageContext.request.contextPath}/asset/bigfoot/js/form/calendar.js"></script>
 <script>
 	var calendar = Object.create(bf_calendar);
 	calendar.el = document.querySelector('.Calendar.id_<%=randomInt%>');
