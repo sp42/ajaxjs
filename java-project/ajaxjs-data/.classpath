@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/validation/commons-beanutils-1.9.2.jar"/>
+	<classpathentry kind="lib" path="lib/validation/commons-lang3-3.4.jar"/>
+	<classpathentry kind="lib" path="lib/validation/org.apache.bval.bundle-1.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/validation/validation-api-1.1.0.Final.jar"/>
+	<classpathentry kind="lib" path="lib/mybatis/mybatis-3.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/mybatis/mybatis-spring-1.2.3.jar"/>
+	<classpathentry kind="lib" path="lib/mybatis/mysql-connector-java-5.1.38-bin.jar"/>
+	<classpathentry kind="lib" path="lib/mybatis/sqlite-jdbc-3.8.11.2.jar"/>
+	<classpathentry kind="lib" path="lib/ajaxjs-base.jar"/>
+	<classpathentry kind="lib" path="lib/mockito-all-2.0.2-beta.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
