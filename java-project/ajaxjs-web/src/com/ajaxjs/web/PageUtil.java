@@ -16,7 +16,6 @@
 
 package com.ajaxjs.web;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -128,15 +127,6 @@ public class PageUtil extends DateTools {
 
 	public int[] jumpPage(int totalPage) {
 		return new int[totalPage];
-	}
-	
-	/**
-	 * url 网址中文乱码处理
-	 * @param str
-	 * @return
-	 */
-	public static String urlChinese(String str) {
-		return new String(str.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
 	}
 	
 	public static String arrayJoin(String[] arr) {

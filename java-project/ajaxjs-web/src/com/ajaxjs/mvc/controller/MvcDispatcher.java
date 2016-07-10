@@ -34,6 +34,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.mvc.AnnotationUtils;
+import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.mvc.ActionAndView;
 import com.ajaxjs.util.ClassScaner;
 import com.ajaxjs.util.LogHelper;

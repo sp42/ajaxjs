@@ -17,17 +17,18 @@ package com.ajaxjs.mvc.controller;
  
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+//import javax.validation.Valid;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
 import com.ajaxjs.framework.exception.ServiceException;
+import com.ajaxjs.framework.model.BaseModel;
+import com.ajaxjs.framework.model.ModelAndView;
+import com.ajaxjs.framework.model.PageResult;
+import com.ajaxjs.framework.model.Query;
 import com.ajaxjs.framework.service.IService;
-import com.ajaxjs.mvc.model.BaseModel;
-import com.ajaxjs.mvc.view.PageResult;
-import com.ajaxjs.mvc.model.Query;
 import com.ajaxjs.util.LogHelper;
 
 /**
@@ -66,10 +67,7 @@ public abstract class AbstractCrudController<T extends BaseModel> implements Cru
 		HttpServletRequest request = RequestHelper.getHttpServletRequest();
 		PageResult<T> pageResult = null;
 		try {
-			if(request.getParameter("filterField") != null 
-				|| request.getParameter("searchField") != null
-				|| request.getParameter("matchField")  != null
-				|| request.getParameter("orderField")  != null) {
+			if(Query.isAnyMatch(request)) {
 				// 其他丰富的查询参数
 				pageResult = getService().getPageRows(start, limit, Query.getQueryFactory(request));
 			} else {
@@ -234,7 +232,7 @@ public abstract class AbstractCrudController<T extends BaseModel> implements Cru
 	//----------------POST-------------------
 	@POST
 	@Override
-	public String create(@Valid T entity, ModelAndView model) {
+	public String create(/*@Valid*/ T entity, ModelAndView model) {
 		if (!isEnableDefaultWrite()) {
 			return "common/entity/json_noWrite";
 		}

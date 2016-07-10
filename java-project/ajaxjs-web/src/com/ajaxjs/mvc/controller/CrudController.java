@@ -17,6 +17,8 @@ package com.ajaxjs.mvc.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.ajaxjs.framework.model.ModelAndView;
+
 /**
  * 为注入而设的对象标识。
  * 

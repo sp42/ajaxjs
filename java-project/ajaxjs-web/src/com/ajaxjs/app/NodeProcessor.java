@@ -18,9 +18,6 @@ package com.ajaxjs.app;
 import java.util.List;
 import java.util.Map;
 
-import javax.script.ScriptEngine;
-
-import com.ajaxjs.json.IEngine;
 import com.ajaxjs.util.json.JSON;
 
 /**
@@ -39,12 +36,12 @@ public class NodeProcessor {
 	 * 请求地址
 	 */
 	private String uri;
-	
+
 	/**
 	 * 页头导航的缓存
 	 */
-	private static List<Map<String, Object>> navList; 
-	
+	private static List<Map<String, Object>> navList;
+
 	/**
 	 * 页面节点信息
 	 */
@@ -54,7 +51,7 @@ public class NodeProcessor {
 	 * 页脚导航的缓存
 	 */
 	private static String footerList;
-	
+
 	/**
 	 * 创建一个节点对象
 	 * 
@@ -72,6 +69,7 @@ public class NodeProcessor {
 
 	/**
 	 * 获取导航
+	 * 
 	 * @return 导航数据
 	 */
 	@SuppressWarnings("unchecked")
@@ -82,21 +80,22 @@ public class NodeProcessor {
 
 		return navList;
 	}
-	
+
 	/**
 	 * 获取当前页面节点，并带有丰富的节点信息
+	 * 
 	 * @return 当前页面节点
 	 */
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> getPageNode() {
 		if (pageNode == null) {
 			String jsCode = String.format("bf.AppStru.getPageNode('%s', '%s');", getRoute(), contextPath);
-			pageNode = (Map<String, Object>)JSON.eval(ConfigListener.jsRuntime, jsCode, Map.class);
+			pageNode = (Map<String, Object>) JSON.eval(ConfigListener.jsRuntime, jsCode, Map.class);
 		}
-		
+
 		return pageNode;
-	} 
-	
+	}
+
 	/**
 	 * 获取页脚的网站地图，有缓冲考虑
 	 * 
@@ -110,21 +109,22 @@ public class NodeProcessor {
 
 		return footerList;
 	}
-	
+
 	/**
 	 * 获取资源 URI，忽略项目前缀和最后的文件名（如 index.jsp） 分析 URL 目标资源（最原始的版本）
+	 * 
 	 * @return
 	 */
 	public String getRoute() {
-		return uri.replace(contextPath, "").replaceFirst("/\\w+\\.\\w+$", ""); // 删除 index.jsp
+		return uri.replace(contextPath, "").replaceFirst("/\\w+\\.\\w+$", ""); // 删除
+																				// index.jsp
 	}
 
 	/**
-	 * 用于 current 的对比
-	 * <li
-	 * ${pageContext.request.contextPath.concat('/').concat(menu.fullPath).concat('/')
-	 * == pageContext.request.requestURI ? ' class=selected' : ''}> IDE
-	 * 语法报错，其实正确的 于是，为了不报错 <li ${PageNode.isCurrentNode(menu) ? '
+	 * 用于 current 的对比 <li
+	 * ${pageContext.request.contextPath.concat('/').concat(menu.fullPath).
+	 * concat('/') == pageContext.request.requestURI ? ' class=selected' : ''}>
+	 * IDE 语法报错，其实正确的 于是，为了不报错 <li ${PageNode.isCurrentNode(menu) ? '
 	 * class=selected' : ''}>
 	 * 
 	 * @param node
@@ -154,21 +154,22 @@ public class NodeProcessor {
 
 	/**
 	 * 读取当前节点信息，返回 hash 结构（详细信息） ${pageNode.node.name}
+	 * 
 	 * @deprecated 与 getPageNode 重复
 	 * @return 当前节点信息
 	 */
 	public Map<String, Object> getNode() {
 		return getNode(getRoute());
 	}
-//
-//	/**
-//	 * 返回第几级
-//	 * 
-//	 * @return
-//	 */
-//	public int getLevels() {
-//		String route = getRoute();
-//		String[] arr = route.split("/");
-//		return arr.length;
-//	}
+	//
+	// /**
+	// * 返回第几级
+	// *
+	// * @return
+	// */
+	// public int getLevels() {
+	// String route = getRoute();
+	// String[] arr = route.split("/");
+	// return arr.length;
+	// }
 }

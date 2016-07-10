@@ -46,10 +46,9 @@ public class HttpSessionCookieStore {
 	 */
 	public void deseriable(HttpSession session) {
 		Cookie[] cookies = httpServletRequest.getCookies();
-		if (!Util.isNotNull(cookies)) {
+		if (cookies == null || cookies.length <= 0) 
 			return;
-		}
-
+		
 		AesCipherService aesCipherService = new AesCipherService();
 		aesCipherService.setKeySize(64); // 设置key长度
 
@@ -59,15 +58,14 @@ public class HttpSessionCookieStore {
 					String value = aesCipherService.encrypt(cookie.getValue().getBytes(), key.getBytes()).toHex();
 					String[] kvs = value.split(sep2 + "");
 					
-					if (!Util.isNotNull(kvs)) {
+					if (kvs == null || kvs.length <= 0) 
 						return;
-					}
 					
 					for (String kv : kvs) {
 						String[] param = kv.split(sep + "");
-						if (!Util.isNotNull(param) || param.length != 2) {
+						if (param == null || param.length != 2) 
 							continue;
-						}
+						
 						session.setAttribute(param[0], param[1]);
 					}
 				} catch (Exception e) {

@@ -215,6 +215,17 @@ public class StringUtil {
 	}
 	
 	/**
+	 * url 网址中文乱码处理
+	 * 
+	 * @param str
+	 *            通常是 url Query String 参数
+	 * @return 中文
+	 */
+	public static String urlChinese(String str) {
+		return byte2String(str.getBytes(StandardCharsets.ISO_8859_1));
+	}
+	
+	/**
 	 * 使用正则的快捷方式
 	 * 
 	 * @param regexp
