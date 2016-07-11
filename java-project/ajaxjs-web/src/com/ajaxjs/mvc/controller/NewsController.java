@@ -21,9 +21,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
+import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.framework.model.News;
 import com.ajaxjs.framework.service.NewsService;
-import com.ajaxjs.mvc.controller.ModelAndView;
 
 
 /**

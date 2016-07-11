@@ -126,6 +126,18 @@ public class Reflect {
 			return null;
 		}
 	}
+	
+	/**
+	 * 根据类全称创建实例，并转换到其接口的类型
+	 * @param className 实际类的类型
+	 * @param clazz 接口类型
+	 * @return 对象实例
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T newInstance(String className, Class<T> clazz) {
+		Class<?> clz = getClassByName(className);
+		return clazz != null ? (T)newInstance(clz) : null;
+	}
 
 	/**
 	 * 根据类全称创建实例

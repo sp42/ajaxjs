@@ -132,4 +132,5 @@ public class PageUtil extends DateTools {
 	public static String arrayJoin(String[] arr) {
 		return StringUtil.stringJoin(arr, ",");
 	}
+
 }

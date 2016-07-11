@@ -26,8 +26,10 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import com.ajaxjs.framework.dao.MyBatis;
 import com.ajaxjs.util.FileUtil;
 import com.ajaxjs.util.LogHelper;
+import com.ajaxjs.util.Reflect;
 import com.ajaxjs.util.json.JSON;
 import com.ajaxjs.util.json.JsLib;
 import com.ajaxjs.util.json.JsonHelper;
@@ -62,7 +64,21 @@ public class ConfigListener implements ServletContextListener {
 		cxt.setAttribute("bigfoot", cxt.getContextPath() + "/bigfoot");
 		cxt.setAttribute("PageUtil", new PageUtil()); // 一些页面实用的函数
 		config.put("LessUrlProcessor", new LessUrlProcessor());
+		Event event = Reflect.newInstance("com.egdtv.crawler.App", Event.class);
+		event.onConfigLoaded();
+//		boolean isUsingMySQL = false;// 是否使用 MySql
 
+//		if (ConfigListener.config.containsKey("app_isUsingMySQL"))
+//			isUsingMySQL = (boolean) ConfigListener.config.get("app_isUsingMySQL");
+//
+//		if (isUsingMySQL) {
+//			return Helper.getDataSource("jdbc/mysql_test");
+//		} else {
+//			String str;
+//			if (Init.isDebug)
+//				str = Init.isMac ? "" : "jdbc/sqlite";
+//			else
+//				str = "jdbc/sqlite_deploy";
 		System.out.println("配置启动完毕" + Init.ConsoleDiver);
 	}
 	

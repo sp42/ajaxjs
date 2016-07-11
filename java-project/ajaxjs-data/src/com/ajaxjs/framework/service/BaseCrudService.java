@@ -52,11 +52,10 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 	private String uiName; 				// UI 显示的文字
 	private String tableName; 			// 实体表名
 	private String mappingTableName; 	// 数据库里面真实的表名，可不设置（这时候读取 tableName 的）
-	private ModelAndView model; 				// Extra data field container
+	private ModelAndView model; 	// Extra data field container
 	
 	@Override
 	public T getById(long id) throws ServiceException {
-		System.out.println(this.getClass().getName() + "::BaseService:::model：" );
 		T entry = null;
 
 		try {
@@ -67,13 +66,13 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 			throw new BusinessException(e.getMessage());
 		}
 
-		try (SqlSession session = MyBatis.loadSession(mapperClz);){
+		try (SqlSession session = MyBatis.loadSession(mapperClz);) {
 			Mapper _mapper = session.getMapper(mapperClz);
 			entry = _mapper.selectById(id, getSQL_TableName());
 		} catch (Throwable e) {
 			LOGGER.warning(e);
 			throw new DaoException(e.getMessage());
-		} 
+		}
 
 		return entry;
 	}
@@ -103,7 +102,7 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 			Mapper dao = session.getMapper(mapperClz);
 			
 			if (query == null) 
-				query = new Query(){}; // 空，因为 MyBatis 传 null 报错：result.setRows(dao.page(start, limit, getTableName(), query));
+				query = new Query(){}; // 空，因为 MyBatis22 传 null 报错：result.setRows(dao.page(start, limit, getTableName(), query));
 			
 			if(getHidden_db_field_mapping().size() > 0) // 字段映射
 				query.setDb_field_mapping(getHidden_db_field_mapping());
@@ -247,21 +246,17 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 	public void createTable(T entry) throws DaoException{
 	}
 	
-	/**
-	 * 获取全部数据
-	 * 
-	 * @return
-	 */
 	@Override
 	public List<T> getAll(Query query) {
 		PageResult<T> result;
+		
 		try {
-			result = getPageRows(0, 999, query);
+			result = query == null ? getPageRows(0, 999, null) : getPageRows(0, 999, query);
 		} catch (ServiceException e) {
 			LOGGER.warning(e);
 			return null;
 		}
-
+		
 		if (result == null || result.getTotalCount() == 0) {
 			return null;
 		} else {
@@ -315,6 +310,19 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 		this.mappingTableName = mappingTableName;
 	}
 
+	/**
+	 * MVC 通过 Model 交换数据。没 model 表示不深入获取信息
+	 */
+	@Override
+	public ModelAndView getModel() {
+		return model;
+	}
+
+	@Override
+	public void setModel(ModelAndView model) {
+		this.model = model;
+	}
+	
 	// 表映射
 	private Map<String, String> hidden_db_field_mapping = new HashMap<>();
 
@@ -324,15 +332,5 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 
 	public void setHidden_db_field_mapping(Map<String, String> hidden_db_field_mapping) {
 		this.hidden_db_field_mapping = hidden_db_field_mapping;
-	}
-
-	@Override
-	public ModelAndView getModel() {
-		return model;
-	}
-
-	@Override
-	public void setModel(ModelAndView model) {
-		this.model = model;
 	}
 }

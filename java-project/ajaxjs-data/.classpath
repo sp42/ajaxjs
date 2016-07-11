@@ -12,6 +12,7 @@
 	<classpathentry kind="lib" path="lib/mybatis/sqlite-jdbc-3.8.11.2.jar"/>
 	<classpathentry kind="lib" path="lib/ajaxjs-base.jar"/>
 	<classpathentry kind="lib" path="lib/mockito-all-2.0.2-beta.jar"/>
+	<classpathentry kind="lib" path="lib/javax-servlet.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

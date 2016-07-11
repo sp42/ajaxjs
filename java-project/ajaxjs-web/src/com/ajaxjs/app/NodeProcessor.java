@@ -91,6 +91,7 @@ public class NodeProcessor {
 		if (pageNode == null) {
 			String jsCode = String.format("bf.AppStru.getPageNode('%s', '%s');", getRoute(), contextPath);
 			pageNode = (Map<String, Object>) JSON.eval(ConfigListener.jsRuntime, jsCode, Map.class);
+			pageNode = (Map<String, Object>)JSON.eval(ConfigListener.jsRuntime, jsCode, Map.class);
 		}
 
 		return pageNode;
