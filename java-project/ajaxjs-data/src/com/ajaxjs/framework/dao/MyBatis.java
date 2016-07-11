@@ -29,8 +29,6 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 
-import com.ajaxjs.app.ConfigListener;
-import com.ajaxjs.app.Init;
 import com.ajaxjs.framework.dao.DAO;
 import com.ajaxjs.framework.exception.DaoException;
 import com.ajaxjs.framework.model.BaseModel;
@@ -46,14 +44,19 @@ public class MyBatis {
 	/**
 	 * Configuration 需要设为 public 以便加入 mapper
 	 */
-	public static final Configuration configuration;
+	public static Configuration configuration;
 
 	/**
 	 * 
 	 */
-	public static final SqlSessionFactory sqlSessionFactory;
+	public static SqlSessionFactory sqlSessionFactory;
+	
+	/**
+	 * 使用哪一种的数据库连接
+	 */
+	public static String db_context_path = "jdbc/mysql_test";
 
-	static {
+	public static void  init() {
 		final DataSource ds = getDataSource();// 启动 MyBatis 数据源
 		if (ds != null) {
 			Environment environment = new Environment("development", new JdbcTransactionFactory(), ds);
@@ -91,23 +94,11 @@ public class MyBatis {
 	 * @param isUsingMySQL 是否使用 MySql
 	 * @return
 	 */
-	public static DataSource getDataSource(boolean isUsingMySQL) {
-		boolean isUsingMySQL = false;// 是否使用 MySql
+	public static DataSource getDataSource() {
+		if(db_context_path == null)
+			throw new IllegalArgumentException("参数错误，db_context_path 不能为空！");
 
-		if (ConfigListener.config.containsKey("app_isUsingMySQL"))
-			isUsingMySQL = (boolean) ConfigListener.config.get("app_isUsingMySQL");
-
-		if (isUsingMySQL) {
-			return Helper.getDataSource("jdbc/mysql_test");
-		} else {
-			String str;
-			if (Init.isDebug)
-				str = Init.isMac ? "" : "jdbc/sqlite";
-			else
-				str = "jdbc/sqlite_deploy";
-
-			return Helper.getDataSource(str);
-		}
+		return Helper.getDataSource(db_context_path);
 	}
 
 	/**
