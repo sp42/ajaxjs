@@ -76,13 +76,13 @@
 	<c:choose>
 	<c:when test="${pageInfo.totalCount > 0}">
 		<c:if test="${pageInfo.start > 0}">
-			<a href="?start=${pageInfo.start - pageInfo.pageSize}${viewUtils.getParams_without('start', pageContext.request.queryString)}">上一页</a>
+			<a href="?start=${pageInfo.start - pageInfo.pageSize}${PageUtil.getParams_without('start', pageContext.request.queryString)}">上一页</a>
 		</c:if>
 		<c:if test="${(pageInfo.start > 0 )&& (pageInfo.start + pageInfo.pageSize < pageInfo.totalCount)}">
 			<a href="#" style="text-decoration: none;">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>
 		</c:if>
 		<c:if test="${pageInfo.start + pageInfo.pageSize < pageInfo.totalCount}"> 
-			<a href="?start=${pageInfo.start + pageInfo.pageSize}${viewUtils.getParams_without('start', pageContext.request.queryString)}">下一页</a>
+			<a href="?start=${pageInfo.start + pageInfo.pageSize}${PageUtil.getParams_without('start', pageContext.request.queryString)}">下一页</a>
 		</c:if>
 		<div class="info" style="vertical-align: bottom;">
 		 	页数：${pageInfo.currentPage}/${pageInfo.totalPage} 记录数：${pageInfo.start}/${pageInfo.totalCount} 
@@ -91,7 +91,7 @@
 			 	<input size="4" title="输入一个数字确定每页记录数" type="text" name="limit" value="${pageInfo.pageSize}" 
 			 	style="text-align:center;width:40px;height:22px;float: none;" />
 				<!-- 其他参数 -->
-				<c:foreach items="${viewUtils.getParams_without_asMap('limit', pageContext.request.queryString)}" var="current">
+				<c:foreach items="${PageUtil.getParams_without_asMap('limit', pageContext.request.queryString)}" var="current">
 					<input type="hidden" name="${current.key}" value="${current.value}" />
 				</c:foreach>
 		 	</form>
@@ -99,7 +99,7 @@
 		 	<c:if test="${pageInfo.totalPage < 1000}">
 		 	跳转：
 		 	<select onchange="jumpPage(this);" style="text-align:center;width:40px;height:22px;" class="select_1">
-			 	<c:foreach items="${viewUtils.jumpPage(pageInfo.totalPage)}" var="i">
+			 	<c:foreach items="${PageUtil.jumpPage(pageInfo.totalPage)}" var="i">
 			 		<option value="${currentIndex * pageInfo.pageSize}" 
 			 		${(currentIndex + 1)==pageInfo.currentPage ? ' selected' : ''}>${currentIndex + 1}</option>
 			 	</c:foreach>

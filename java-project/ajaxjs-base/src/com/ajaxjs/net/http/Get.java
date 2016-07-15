@@ -178,6 +178,8 @@ public class Get {
 			public void onDataLoad(InputStream is) {
 				try {
 					if ("gzip".equals(rc.getConnection().getHeaderField("Content-Encoding"))) {
+//						System.out.println(FileUtil.readText(new GZIPInputStream(is)));
+//						FileUtil.readText(new GZIPInputStream(is));
 						FileUtil.write(new GZIPInputStream(is), new FileOutputStream(filePathName), true); // 自动处理图片是否经过服务器gzip压缩的问题
 					} else {
 						FileUtil.write(is, new FileOutputStream(filePathName), true);

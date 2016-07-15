@@ -17,6 +17,7 @@
 package com.ajaxjs.web;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +33,7 @@ import com.ajaxjs.util.MapHelper;
  * @author frank
  *
  */
-public class PageUtil extends DateTools {
+public class PageUtil {
 	/**
 	 * 对某段 URL 参数剔除其中的一个。
 	 * 
@@ -133,4 +134,10 @@ public class PageUtil extends DateTools {
 		return StringUtil.stringJoin(arr, ",");
 	}
 
+	public String formatDate(Date date) {
+		return DateTools.formatDateShorter(date);
+	}
+	public String formatShortDate(Date date) {
+		return DateTools.formatDateShortest(date);
+	}
 }

@@ -394,38 +394,37 @@ bf_scrollViewer_list = function(
 	_tab.el.querySelector('div').innerHTML = new Array(data.sectionsIds.length + 1).join(tpl);
 	_tab.init();
 	
-	
-	var load_id;
-	if (location.hash.indexOf('id=') != -1) {// 有 hash id 读取
-
-		load_id = location.hash.match(/id=(\w+)/).pop();
-
-		if (!data.sectionsIds[0]) {
-			data.sectionsIds[0] = {
-				id : load_id,
-				loaded : false
-			};
-			_tab.el.querySelector('div').innerHTML = tpl;
-			_tab.init();
-		}
-
-		_event.fireEvent('update', load_id);
-	} else {
-		// 默认 选中第一 tab
-		if (data.sectionsIds.length) {
-			load_id = data.sectionsIds[0].id;
+		var load_id;
+		if (location.hash.indexOf('id=') != -1) {// 有 hash id 读取
+			
+			load_id = location.hash.match(/id=(\w+)/).pop();
+			
+			if (!data.sectionsIds[0]) {
+				data.sectionsIds[0] = {
+						id : load_id,
+						loaded : false
+				};
+				_tab.el.querySelector('div').innerHTML = tpl;
+				_tab.init();
+			}
+			
+			_event.fireEvent('update', load_id);
 		} else {
-			// 没有子栏目，读取父栏目
-			load_id = location.search.match(/id=(\w+)/).pop();
-			data.sectionsIds[0] = {
-				id : load_id,
-				loaded : false
-			};
-			_tab.el.querySelector('div').innerHTML = tpl;
-			_tab.init();
+			// 默认 选中第一 tab
+			if (data.sectionsIds.length) {
+				load_id = data.sectionsIds[0].id;
+			} else {
+				// 没有子栏目，读取父栏目
+				load_id = location.search.match(/id=(\w+)/).pop();
+				data.sectionsIds[0] = {
+						id : load_id,
+						loaded : false
+				};
+				_tab.el.querySelector('div').innerHTML = tpl;
+				_tab.init();
+			}
+			_event.fireEvent('update', load_id);
 		}
-		_event.fireEvent('update', load_id);
-	}
 	
 
 	tabHeader.onclick = function(e) {

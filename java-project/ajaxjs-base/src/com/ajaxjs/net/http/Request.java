@@ -52,6 +52,16 @@ public class Request {
 	private String host;
 
 	private Map<String, String> cookies;
+	
+	/**
+	 * 自定义 http 头
+	 */
+	private Map<String, String> headers;
+	
+	/**
+	 * 是否启动 GZip 请求，默认为 false
+	 */
+	private boolean isEnableGzip;
 
 	/**
 	 * 设置响应内容的编码
@@ -205,5 +215,33 @@ public class Request {
 
 	public void setWriteData(byte[] writeData) {
 		this.writeData = writeData;
+	}
+
+	/**
+	 * @return {@link #headers}
+	 */
+	public Map<String, String> getHeaders() {
+		return headers;
+	}
+
+	/**
+	 * @param headers {@link #headers}
+	 */
+	public void setHeaders(Map<String, String> headers) {
+		this.headers = headers;
+	}
+
+	/**
+	 * @return {@link #isEnableGzip}
+	 */
+	public boolean isEnableGzip() {
+		return isEnableGzip;
+	}
+
+	/**
+	 * @param isEnableGzip {@link #isEnableGzip}
+	 */
+	public void setEnableGzip(boolean isEnableGzip) {
+		this.isEnableGzip = isEnableGzip;
 	}
 }

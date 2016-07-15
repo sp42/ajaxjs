@@ -10,7 +10,7 @@
 				 	<a href="javascript:maxWin();" >最大化窗体</a> |
 				 	<%}%>
 				 	
-				 	<a href="?" target="_blank">新窗口打开</a>
+				 	<a href="#" target="_blank">新窗口打开</a>
 				</div>
 				<span>${pageTitle}</span>
 			</div>

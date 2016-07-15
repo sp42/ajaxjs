@@ -32,28 +32,28 @@
 		return index;
 	}
 
-	public String upload() {
+	public String upload(HttpServletRequest request) {
 		//定义上传的最大文件字节数1M
 		int MAX_SIZE = 1024000;
 		DataInputStream in = null;
 		FileOutputStream fileOut = null;
 
-		String rootPath, remoteAddr = req.getRemoteAddr(), serverName = req.getServerName(),
-				realPath = req.getRealPath("/");
+		String rootPath, remoteAddr = request.getRemoteAddr(), serverName = request.getServerName(),
+				realPath = request.getRealPath("/");
 
 		realPath = realPath.substring(0, realPath.lastIndexOf("\\"));
 		//设置保存文件的目录
 		rootPath = realPath + "\\upload\\";
 		//取得客户端上传的数据类型
-		String contentType = req.getContentType();
+		String contentType = request.getContentType();
 
 		try {
 			if (contentType.indexOf("multipart/form-data") >= 0) {
-				in = new DataInputStream(req.getInputStream());
-				int formDataLength = req.getContentLength();
+				in = new DataInputStream(request.getInputStream());
+				int formDataLength = request.getContentLength();
 				if (formDataLength > MAX_SIZE) {
-					respWriter.println("0,文件大小超过系统限制！");
-					respWriter.flush();
+/* 					respWriter.println("0,文件大小超过系统限制！");
+					respWriter.flush(); */
 					return "文件大小超过系统限制！";
 				}
 				//保存上传的文件数据

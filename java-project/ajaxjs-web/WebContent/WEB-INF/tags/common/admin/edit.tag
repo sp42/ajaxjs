@@ -21,7 +21,7 @@
 				</c:otherwise>
 			</c:choose>
 			<c:if test="${hasCatalog || empty hasCatalog}">
-				<a href="edit">${uiName}列表</a> |  
+				<a href="list">${uiName}列表</a> |  
 			</c:if>
 		</commonUI:adminHeader>
 	
@@ -73,7 +73,8 @@
 			form.action = '../${tableName}';
 			form.on('afterSubmit', function(form, json){
 				if(json.isOk && json.newlyId){
-					location.assign(json.newlyId);
+					//location.assign(json.newlyId); // 跳转编辑模式
+					location.assign('new?' + (still_params ? still_params() : ''));// 提交后回到新建
 				}
 			});
 		</script>

@@ -11,7 +11,7 @@
 	</commonUI:adminHeader>
 	<h2>${uiName}列表</h2>
 	<br />
-	<table class="niceTable" align="center">
+	<table class="niceTable" align="center" width="90%">
 		<colgroup>  
             <col />     
             <col />     

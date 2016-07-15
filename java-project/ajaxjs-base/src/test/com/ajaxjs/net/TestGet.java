@@ -6,56 +6,86 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import com.ajaxjs.net.http.ConnectException;
 import com.ajaxjs.net.http.Get;
+import com.ajaxjs.net.http.Request;
+import com.ajaxjs.net.http.RequestClient;
 import com.ajaxjs.util.FileUtil;
 
 public class TestGet {
+//	@Test
+//	public void testSimpleGET() {
+//		String url = "https://baidu.com";
+//		String html = Get.simpleGET(url);
+//		System.out.println(html);
+//		assertNotNull(html);
+//	}
+//
+//	@Test
+//	public void testGet() {
+//		String url = "https://baidu.com";
+//		String html = Get.GET(url);
+//		System.out.println(html);
+//		assertNotNull(html);
+//	}
+	
 	@Test
-	public void testSimpleGET() {
-		String url = "https://baidu.com";
-		String html = Get.simpleGET(url);
+	public void testGZipGet() {
+		Request request = new Request();
+		request.setUrl("http://u.3gtv.net");
+		request.setEnableGzip(true);
+		
+		RequestClient rc = new RequestClient(request);
+		try {
+			rc.connect();
+		} catch (ConnectException e) {
+			System.out.println("请求出错" + request.getUrl());
+		}
+		
+		String html = request.getFeedback();
 		System.out.println(html);
 		assertNotNull(html);
 	}
-
+	// B 站强制 Gzip 返回，無論请求是否带有 GZIP
 	@Test
-	public void testGet() {
-		String url = "https://baidu.com";
+	public void testForce_GZipGet() {
+		String url = "http://www.bilibili.com/video/av5178498/";
 		String html = Get.GET(url);
 		System.out.println(html);
 		assertNotNull(html);
 	}
-
-	@Test
-	public void testGet302redirect() {
-		String url = "http://baidu.com";
-		String location = Get.get302redirect(url);
-		System.out.println(location);
-		assertNotNull(location);
-	}
-
-	@Test
-	public void testIs404() {
-		String url = "http://c.csdnimg.cn/jifen/images/xunzhang/xunzhang/bokezhuanjiamiddle.png";
-		assertTrue(!Get.is404(url));
-		assertTrue(Get.is404("http://www.qq.com/54543"));
-	}
-
-	@Test
-	public void testGetFileSize() {
-		String url = "http://c.csdnimg.cn/jifen/images/xunzhang/xunzhang/bokezhuanjiamiddle.png";
-		long size = Get.getFileSize(url);
-		assertEquals(size, 4102L);
-	}
+//
+//	@Test
+//	public void testGet302redirect() {
+//		String url = "http://baidu.com";
+//		String location = Get.get302redirect(url);
+//		System.out.println(location);
+//		assertNotNull(location);
+//	}
+//
+//	@Test
+//	public void testIs404() {
+//		String url = "http://c.csdnimg.cn/jifen/images/xunzhang/xunzhang/bokezhuanjiamiddle.png";
+//		assertTrue(!Get.is404(url));
+//		assertTrue(Get.is404("http://www.qq.com/54543"));
+//	}
+//
+//	@Test
+//	public void testGetFileSize() {
+//		String url = "http://c.csdnimg.cn/jifen/images/xunzhang/xunzhang/bokezhuanjiamiddle.png";
+//		long size = Get.getFileSize(url);
+//		assertEquals(size, 4102L);
+//	}
 	
-	@Test
+//	@Test
 	public void testDownload2disk() throws IOException {
 		String url = "http://c.csdnimg.cn/jifen/images/xunzhang/xunzhang/bokezhuanjiamiddle.png";
 		Get.download2disk(url, "c:/temp/dd.png");
 		
-		String saveTo = "c:/temp/js.js";
-		Get.download2disk("http://bdimg.share.baidu.com/static/api/js/base/tangram.js?v=37768233.js", saveTo);
-		assertNotNull(FileUtil.readFileAsText(saveTo));
+		
+//		String saveTo = "c:/temp/js.js";
+//		Get.download2disk("http://bdimg.share.baidu.com/static/api/js/base/tangram.js?v=37768233.js", saveTo);
+//		assertNotNull(FileUtil.readFileAsText(saveTo));
 	}
 	
 

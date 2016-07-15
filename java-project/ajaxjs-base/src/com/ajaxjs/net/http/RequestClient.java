@@ -23,6 +23,7 @@ import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.zip.GZIPInputStream;
 
 import com.ajaxjs.util.FileUtil;
 import com.ajaxjs.util.StringUtil;
@@ -82,6 +83,9 @@ public class RequestClient {
 			String cookieStr = StringUtil.HashJoin(request.getCookies(), ";");
 			connection.setRequestProperty("Cookie", cookieStr);
 		}
+		
+		if(request.isEnableGzip()) // 是否启动 GZip 请求
+			connection.addRequestProperty("Accept-Encoding", "gzip, deflate"); 
 
 		if (request.getBasicAuthorization() != null) { // HTTP 用户认证
 			String username = request.getBasicAuthorization()[0], password = request.getBasicAuthorization()[1];
@@ -110,9 +114,13 @@ public class RequestClient {
 				return false;
 			}
 		}
-
+		
 		// 接受响应
 		try (InputStream is = connection.getInputStream();) {
+			// 是否启动 GZip 请求
+			// 有些网站强制加入 Content-Encoding:gzip，而不管之前的是否有 GZip 的请求
+			boolean isGzip = request.isEnableGzip() || "gzip".equals(connection.getHeaderField("Content-Encoding"));
+			
 			if (connection.getResponseCode() >= 400) {// 如果返回的结果是400以上，那么就说明出问题了
 				ConnectException e = null;
 
@@ -121,8 +129,7 @@ public class RequestClient {
 				} else {
 					e = new ConnectException(connection.getResponseCode() + "：抱歉！我们服务端出错了！");
 				}
-
-				String msg = FileUtil.readText(is);
+				String msg = FileUtil.readText(isGzip ? new GZIPInputStream(is) : is);
 				e.setFeedback(msg);
 
 				if (request.isTextResponse())
@@ -133,7 +140,7 @@ public class RequestClient {
 				request.getCallback().onDataLoad(is);
 			}
 			if (request.isTextResponse())
-				request.setFeedback(FileUtil.readText(is));
+				request.setFeedback(FileUtil.readText(isGzip ? new GZIPInputStream(is) : is));
 
 		} catch (UnknownHostException e) {
 			throw new ConnectException("未知地址！" + request.getUrl());
