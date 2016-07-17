@@ -50,14 +50,13 @@ public class MyBatis {
 	 * 
 	 */
 	public static SqlSessionFactory sqlSessionFactory;
-	
+
 	/**
 	 * 使用哪一种的数据库连接
 	 */
-	public static String db_context_path = "jdbc/mysql_test";
+	public static String db_context_path = "jdbc/sqlite";
 
-	public static void  init() {
-		final DataSource ds = getDataSource();// 启动 MyBatis 数据源
+	public static void init(final DataSource ds) {
 		if (ds != null) {
 			Environment environment = new Environment("development", new JdbcTransactionFactory(), ds);
 			configuration = new Configuration(environment);
@@ -73,6 +72,13 @@ public class MyBatis {
 		// 加载通用的映射器
 		if (!configuration.hasMapper(SqlProvider.class))
 			configuration.addMapper(SqlProvider.class);
+	}
+	
+	/**
+	 * 启动 MyBatis 数据源
+	 */
+	public static void init() {
+		init(getDataSource());
 	}
 
 	/**
@@ -91,11 +97,13 @@ public class MyBatis {
 
 	/**
 	 * 创建数据源连接，这是 Web 框架运行时才能调用的方法。
-	 * @param isUsingMySQL 是否使用 MySql
+	 * 
+	 * @param isUsingMySQL
+	 *            是否使用 MySql
 	 * @return
 	 */
 	public static DataSource getDataSource() {
-		if(db_context_path == null)
+		if (db_context_path == null)
 			throw new IllegalArgumentException("参数错误，db_context_path 不能为空！");
 
 		return Helper.getDataSource(db_context_path);
@@ -114,14 +122,14 @@ public class MyBatis {
 			return null;
 		}
 	}
-	
+
 	public static List<Map<String, String>> getNeighbor(String tablename, long id) throws DaoException {
 		List<Map<String, String>> neighbors = null;
 		try {
 			if (!MyBatis.configuration.hasMapper(SqlProvider.class)) {
 				MyBatis.configuration.addMapper(SqlProvider.class);
 			}
-			
+
 			SqlSession session = MyBatis.sqlSessionFactory.openSession();
 
 			try {
@@ -134,10 +142,10 @@ public class MyBatis {
 			}
 		} catch (Throwable e) {
 			e.printStackTrace();
-//			LOGGER.warning(e);
+			// LOGGER.warning(e);
 			throw new DaoException(e.getMessage());
 		}
-		
+
 		return neighbors;
 	}
 }

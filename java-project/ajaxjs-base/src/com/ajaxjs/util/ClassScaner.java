@@ -30,6 +30,8 @@ import java.util.List;
  * @param <T>
  */
 public class ClassScaner<T> {
+	private static final LogHelper LOGGER = LogHelper.getLog(ClassScaner.class);
+
 	/**
 	 * 目标类型
 	 */
@@ -57,6 +59,8 @@ public class ClassScaner<T> {
 	 * @return 类集合
 	 */
 	public List<Class<T>> scan(String packageName) {
+		LOGGER.info("扫描包名：" + packageName);
+		
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		Enumeration<URL> dirs = null;
 		classes = new ArrayList<>();// 新的一个容器
@@ -94,9 +98,10 @@ public class ClassScaner<T> {
 	private void findAndAddClassesInPackageByFile(String packageName, String filePath) {
 		File dir = new File(filePath); // 获取此包的目录 建立一个File
 		if (!dir.exists() || !dir.isDirectory()) { // 如果不存在或者 也不是目录就直接返回
-			System.err.println("用户定义包名 " + packageName + " 下没有任何文件");
+			LOGGER.warning("用户定义包名{0}下没有任何文件", packageName);
 			return;
 		}
+		LOGGER.info("正在dirFiles类：" + packageName);
 
 		// 如果存在 就获取包下的所有文件 包括目录
 		File[] dirFiles = dir.listFiles(new FileFilter() {
@@ -106,6 +111,7 @@ public class ClassScaner<T> {
 				return (file.isDirectory()) || file.getName().endsWith(".class");
 			}
 		});
+		
 
 		for (File file : dirFiles) { // 循环所有文件
 			if (file.isDirectory()) { // 如果是目录 则递归继续扫描
@@ -116,6 +122,7 @@ public class ClassScaner<T> {
 				className = (packageName + '.' + className).trim();
 				Class<?> clazz = Reflect.getClassByName(className);
 
+				LOGGER.info("正在检查类：" + className);
 				// 添加到集合中去
 				if (clazz != null && targetClz.isAssignableFrom(clazz)) {
 					classes.add((Class<T>) clazz);

@@ -21,7 +21,7 @@
 		<init-param>
 			<description>配置FilterDemo02过滤器的初始化参数</description>
 			<param-name>controller</param-name>
-			<param-value>test.com.ajaxjs.mvc.NewsController, com.ajaxjs.framework.controller</param-value>
+			<param-value>test.com.ajaxjs.mvc</param-value>
 		</init-param>
 	</filter>
 

@@ -64,8 +64,12 @@ public class ConfigListener implements ServletContextListener {
 		cxt.setAttribute("bigfoot", cxt.getContextPath() + "/bigfoot");
 		cxt.setAttribute("PageUtil", new PageUtil()); // 一些页面实用的函数
 		config.put("LessUrlProcessor", new LessUrlProcessor());
-		Event event = Reflect.newInstance("com.egdtv.crawler.App", Event.class);
-		event.onConfigLoaded();
+		
+		MyBatis.init();
+		
+//		Event event = Reflect.newInstance("com.egdtv.crawler.App", Event.class);
+//		event.onConfigLoaded();
+		
 //		boolean isUsingMySQL = false;// 是否使用 MySql
 
 //		if (ConfigListener.config.containsKey("app_isUsingMySQL"))

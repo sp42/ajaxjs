@@ -21,7 +21,8 @@ import com.ajaxjs.framework.model.News;
 
 public class NewsService extends BaseCrudService<News, NewsDAO> {
 	public NewsService() {
-		setTableName("news");
+		setMapper(NewsDAO.class);
+		setTableName("NEWS");
 		setUiName("视频");
 //		setReference(News.class);
 	}

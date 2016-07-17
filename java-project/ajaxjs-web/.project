@@ -39,5 +39,10 @@
 			<type>2</type>
 			<location>C:/project/ajaxjs/java-project/ajaxjs-base/src</location>
 		</link>
+		<link>
+			<name>ajaxjs-data</name>
+			<type>2</type>
+			<location>C:/project/ajaxjs/java-project/ajaxjs-data/src</location>
+		</link>
 	</linkedResources>
 </projectDescription>

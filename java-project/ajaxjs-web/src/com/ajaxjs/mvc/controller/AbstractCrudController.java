@@ -66,6 +66,7 @@ public abstract class AbstractCrudController<T extends BaseModel> implements Cru
 		LOGGER.info("获取列表 GET list:{0}/{1}", start, limit);
 		HttpServletRequest request = RequestHelper.getHttpServletRequest();
 		PageResult<T> pageResult = null;
+		
 		try {
 			if(Query.isAnyMatch(request)) {
 				// 其他丰富的查询参数
@@ -77,14 +78,14 @@ public abstract class AbstractCrudController<T extends BaseModel> implements Cru
 			model.put("PageResult", pageResult);
 		} catch (ServiceException e) {
 			model.put("ServiceException", e);
+			e.printStackTrace();
 		}
 		
 		prepareData(request, model);
-		
 		if(request.getRequestURI().endsWith(".list")) {
 			return "common/list/simple";		// return html
 		} else {
-			return "common/list/pageList_json";	// return JSON
+			return "/common_jsp/json/pagedList.jsp";	// return JSON
 		}
 	}
 
@@ -116,7 +117,7 @@ public abstract class AbstractCrudController<T extends BaseModel> implements Cru
 //			model.put("DaoException", e);
 //		}
 		
-		return formatDectect(null, null);
+		return "/common_jsp/json/showInfo.jsp";
 	}
 	
 	/**

@@ -129,6 +129,8 @@ public class DynamicSqlProvider {
 	 */
 	public String create(final BaseModel model) {
 		SQL sql = new SQL();
+		System.out.println(model);
+		System.out.println(getTableName(model));
 		sql.INSERT_INTO(getTableName(model));
 		addFieldValues(sql, model, model.getClass().getMethods(), false);
 

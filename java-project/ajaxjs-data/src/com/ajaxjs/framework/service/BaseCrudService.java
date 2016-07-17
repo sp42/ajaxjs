@@ -111,19 +111,43 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 			result.setTotalCount(dao.pageCount(getSQL_TableName(), query));
 
 			if (result.getTotalCount() > 0) { // 然后执行分页
-				page(result);
+				result.page();
 				result.setRows(dao.page(start, limit, getSQL_TableName(), query));
 			} else {
 //				result.setRows(null);
 			}
 		} catch(Throwable e) {
+			e.printStackTrace();
 			LOGGER.warning(e);
 			throw new DaoException(e.getMessage());
 		} 
 	
 		return result;
 	}
-	 
+	
+	@Override
+	public List<T> getAll(Query query) {
+		PageResult<T> result;
+		
+		try {
+			result = query == null ? getPageRows(0, 999, null) : getPageRows(0, 999, query);
+		} catch (ServiceException e) {
+			LOGGER.warning(e);
+			return null;
+		}
+		
+		if (result == null || result.getTotalCount() == 0) {
+			return null;
+		} else {
+			return result.getRows();
+		}
+	}
+
+	@Override
+	public List<T> getAll() {
+		return getAll(null);
+	}
+	
 	@Override
 	public int create(T entry) throws ServiceException {
 		int effectedRows = 0; // 受影响的行数
@@ -226,47 +250,7 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 		return effectedRows > 0;
 	}
 	
-	/**
-	 * 分页的逻辑运算
-	 * 
-	 * @param pageBean
-	 *            结果集对象
-	 */
-	public static void page(PageResult<?> pageBean) {
-		int totalPage = pageBean.getTotalCount() / pageBean.getPageSize(),
-				yushu = pageBean.getTotalCount() % pageBean.getPageSize();
-		
-		totalPage = (yushu == 0 ? totalPage : totalPage + 1);
-		pageBean.setTotalPage(totalPage);	
-		
-		int currentPage = (pageBean.getStart() / pageBean.getPageSize()) + 1;
-		pageBean.setCurrentPage(currentPage);
-	}
-	
-	public void createTable(T entry) throws DaoException{
-	}
-	
-	@Override
-	public List<T> getAll(Query query) {
-		PageResult<T> result;
-		
-		try {
-			result = query == null ? getPageRows(0, 999, null) : getPageRows(0, 999, query);
-		} catch (ServiceException e) {
-			LOGGER.warning(e);
-			return null;
-		}
-		
-		if (result == null || result.getTotalCount() == 0) {
-			return null;
-		} else {
-			return result.getRows();
-		}
-	}
-
-	@Override
-	public List<T> getAll() {
-		return getAll(null);
+	public void createTable(T entry) throws DaoException {
 	}
 	
 	/**

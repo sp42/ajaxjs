@@ -59,8 +59,7 @@ public class Requester extends HttpServletRequestWrapper {
 	 *            键
 	 * @return 参数值
 	 */
-	@Override
-	public String getParameter(String key){
+	public String getForceParameter(String key){
 		String value = super.getParameter(key);
 
 		if (value == null)

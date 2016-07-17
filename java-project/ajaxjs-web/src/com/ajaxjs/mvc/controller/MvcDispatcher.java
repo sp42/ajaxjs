@@ -109,7 +109,16 @@ public class MvcDispatcher implements Filter {
 		return null;
 	}
 
+	/**
+	 * 执行逻辑完成，现在控制输出（响应）
+	 * @param result
+	 * @param request
+	 * @param response
+	 * @param model
+	 */
 	private static void resultHandler(Object result, Requester request, Responser response, ModelAndView model) {
+		LOGGER.info("执行逻辑完成，现在控制输出（响应）" + result);
+		
 		if (model != null)
 			model.saveToReuqest(request);
 
@@ -126,7 +135,6 @@ public class MvcDispatcher implements Filter {
 						LOGGER.warning(e);
 					}
 				} else { // JSP
-					LOGGER.info("Going to " + str);
 					response.sendRequestDispatcher(str);
 				}
 			}
@@ -337,6 +345,7 @@ public class MvcDispatcher implements Filter {
 	 */
 	@Override
 	public void init(FilterConfig fConfig) throws ServletException {
+		LOGGER.info("Ajaxjs MVC 服务启动之中……");
 		/* 获取web.xml 配置 */
 		Map<String, String> config = ServletPatch.parseInitParams(null, fConfig);
 

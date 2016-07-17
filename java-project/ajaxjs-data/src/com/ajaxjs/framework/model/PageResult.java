@@ -87,4 +87,17 @@ public class PageResult<T> {
 	public void setTotalPage(int totalPage) {
 		this.totalPage = totalPage;
 	}
+
+	/**
+	 * 分页的逻辑运算
+	 */
+	public void page() {
+		int totalPage = getTotalCount() / getPageSize(), yushu = getTotalCount() % getPageSize();
+
+		totalPage = (yushu == 0 ? totalPage : totalPage + 1);
+		setTotalPage(totalPage);
+
+		int currentPage = (getStart() / getPageSize()) + 1;
+		setCurrentPage(currentPage);
+	}
 }
