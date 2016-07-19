@@ -61,7 +61,7 @@ public class TestJsonHelper {
 			public Object[] arr = new Object[] { 1, "2", null };
 		};
 
-		String jsonStr = JsonHelper.stringify(obj);
+		String jsonStr = JsonHelper.stringify_object(obj);
 		// 输出 {"foo":"11","bar":"2222"}
 		assertNotNull(jsonStr);
 		assertEquals(jsonStr,

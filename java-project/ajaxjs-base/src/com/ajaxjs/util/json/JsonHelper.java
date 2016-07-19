@@ -206,6 +206,29 @@ public class JsonHelper {
 		return '{' + StringUtil.stringJoin(arr, ",") + '}';
 	}
 
+//	public static String stringify(List<Map<String, ?>> list) {
+//		if (null == list)
+//			return null;
+//		String[] strArr = new String[list.size()];
+//		
+//		for (int i = 0; i < list.size(); i ++) {
+//			strArr[i] = stringify(list.get(i));
+//		}
+//
+//		return StringUtil.stringJoin(strArr, ",");
+//	}
+	public static String stringify(List<Map<String, Object>> list) {
+		if (null == list)
+			return null;
+		String[] strArr = new String[list.size()];
+		
+		for (int i = 0; i < list.size(); i ++) {
+			strArr[i] = stringify(list.get(i));
+		}
+		
+		return "[" + StringUtil.stringJoin(strArr, ",") + "]";
+	}
+
 	/**
 	 * 将 Simple Object 对象转换成JSON格式的字符串:JAVA-->JS
 	 * 
@@ -213,7 +236,7 @@ public class JsonHelper {
 	 *            输入数据
 	 * @return JSON 字符串
 	 */
-	public static String stringify(Object obj) {
+	public static String stringify_object(Object obj) {
 		if (obj == null)
 			return null;
 		// 检查是否可以交由 JS 转换的类型

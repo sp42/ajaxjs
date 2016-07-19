@@ -172,7 +172,7 @@ public class Responser extends HttpServletResponseWrapper{
 			if (output instanceof String) {
 				outputJSON(output.toString());
 			} else { // simple object
-				outputJSON(JsonHelper.stringify(output));
+				outputJSON(JsonHelper.stringify_object(output));
 			}
 		}
 	}
@@ -238,7 +238,7 @@ public class Responser extends HttpServletResponseWrapper{
 	 * @return JSON，其中 total = 0
 	 */
 	public static String queryZero() {
-		return JsonHelper.stringify(new Object() {
+		return JsonHelper.stringify_object(new Object() {
 			@SuppressWarnings("unused")
 			public int total = 0;
 			@SuppressWarnings("unused")
@@ -254,7 +254,7 @@ public class Responser extends HttpServletResponseWrapper{
 	 * @return JSON
 	 */
 	public static String overPage(final int _total) {
-		return JsonHelper.stringify(new Object() {
+		return JsonHelper.stringify_object(new Object() {
 			@SuppressWarnings("unused")
 			public int total = _total;
 			@SuppressWarnings("unused")
