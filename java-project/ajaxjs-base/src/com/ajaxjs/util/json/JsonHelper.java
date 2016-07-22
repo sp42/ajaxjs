@@ -271,13 +271,46 @@ public class JsonHelper {
 	 *            任意一个 Java 值
 	 * @return JSON 形式的值
 	 */
+	@SuppressWarnings("unchecked")
 	public static String obj2jsonVaule(Object value) {
 		if (value == null) {
 			return "null";
+		} else if(value instanceof Double){
+			return JSON.double2int((Double)value) + "";
 		} else if (value instanceof Boolean || value instanceof Number) {
 			return value.toString();
 		} else if (value instanceof Date) {
 			return '\"' + DateTools.formatDate((Date) value, DateTools.commonDateFormat) + '\"';
+		} else if(value instanceof Map){
+			return stringify((Map<String, ?>)value);
+		} else if(value instanceof List){
+			List<?> list = (List<?>)value;
+			if(list.size() == 0){
+				return "[]";
+			} else if (list.get(0) instanceof String) {
+				System.out.println("111111111111111111" + list);
+				List<String> strList = (List<String>)list;
+				StringBuilder sb = new StringBuilder();
+				
+				for (int i = 0; i < strList.size(); i++) {
+					if (i == (strList.size() - 1))sb.append("\"" + strList.get(i) + "\"");
+					else sb.append("\"" + strList.get(i) + "\"").append(",");
+				}
+				
+				return '[' + sb.toString() + ']';
+			} else if (list.get(0) instanceof Map) {
+				List<String> jsonStrList = new ArrayList<>();
+				List<Map<String, ?>> maps = (List<Map<String, ?>>) list;
+				for (Map<String, ?> map : maps) {
+					jsonStrList.add(stringify(map));
+				}
+				System.out.println("2222222222222222222222");
+				return obj2jsonVaule(jsonStrList);
+			} else {
+				// 未知类型数组，
+				return "[]";
+			}
+			//return stringify((Map<String, ?>)value);
 		} else if (value instanceof Object[]) {
 			Object[] arr = (Object[]) value;
 			String[] strs = new String[arr.length];

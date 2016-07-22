@@ -262,6 +262,8 @@ public class MapHelper {
 	 * @return
 	 */
 	public static Map<String, Object> toRealMap(Map<String, ?> map) {
+		if (map == null)
+			return null;
 		Map<String, Object> _map = new HashMap<>();
 		for (String key : map.keySet()) {
 			_map.put(key, map.get(key));
