@@ -54,7 +54,7 @@ public class MyBatis {
 	/**
 	 * 使用哪一种的数据库连接
 	 */
-	public static String db_context_path = "jdbc/sqlite";
+	public static String db_context_path = "jdbc/mysql_test";
 
 	public static void init(final DataSource ds) {
 		if (ds != null) {

@@ -200,7 +200,7 @@ public class Helper {
 		try {
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int count = rsmd.getColumnCount();
-			
+
 			for (int i = 1; i <= count; i++) {
 				String key = rsmd.getColumnLabel(i);
 				Object value = rs.getObject(i);
@@ -210,15 +210,18 @@ public class Helper {
 			e.printStackTrace();
 			return null;
 		}
-		
+
 		return map;
-	} 
+	}
     
 	/**
-	 * 记录集合列表转换为 Map[]
-	 * @param conn 数据库连接对象
-	 * @param sql 查询的 SQL 语句
-	 * @return Map[] 结果
+	 * 记录集合列表转换为 List
+	 * 
+	 * @param conn
+	 *            数据库连接对象
+	 * @param sql
+	 *            查询的 SQL 语句
+	 * @return List 结果
 	 */
 	public static List<Map<String, Object>> queryList(Connection conn, String sql) {
 		List<Map<String, Object>> list = new ArrayList<>();
