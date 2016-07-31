@@ -260,7 +260,7 @@ public class MvcDispatcher implements Filter {
 		// System.out.println(paramName);
 		String regExp = "(?!" + value.replace("{" + paramName + "}",
 				")(\\d+)");/* 获取正则 暂时写死 数字 TODO */
-		// System.out.println(regExp);
+		 System.out.println(regExp);
 		String result = StringUtil.regMatch(regExp, requestURI);
 		if (result == null)
 			throw new IllegalArgumentException("在 " + requestURI + "不能获取 " + paramName + "参数");

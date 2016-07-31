@@ -19,6 +19,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.Random;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.PageContext;
@@ -123,14 +125,18 @@ public class Captcha {
 	 * @throws Throwable
 	 */
 	public static boolean isPass(PageContext pageContext) throws Throwable {
+		HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
+		return isPass(request, request.getParameter("CaptchaCode"));
+	}
+	
+	public static boolean isPass(HttpServletRequest request, String CaptchaCode) throws Throwable {
 		boolean isCaptchaPass = false;
-
-		String rand = (String) pageContext.getSession().getAttribute(SESSION_KEY),
-				CaptchaCode = pageContext.getRequest().getParameter("CaptchaCode");
-
+		
+		String rand = (String) request.getSession().getAttribute(SESSION_KEY);
+		
 		System.out.println("rand:" + rand);
 		System.out.println("CaptchaCode:" + CaptchaCode);
-
+		
 		if (rand == null)
 			throw new UnsupportedOperationException("请刷新验证码。");
 		else if (CaptchaCode == null || CaptchaCode.equals("")) {
@@ -140,7 +146,7 @@ public class Captcha {
 			if (!isCaptchaPass)
 				throw new IllegalAccessError("验证码不正确");
 		}
-
+		
 		return isCaptchaPass;
 	}
 
