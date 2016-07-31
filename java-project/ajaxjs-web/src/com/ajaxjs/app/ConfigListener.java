@@ -29,7 +29,6 @@ import javax.servlet.ServletContextListener;
 import com.ajaxjs.framework.dao.MyBatis;
 import com.ajaxjs.util.FileUtil;
 import com.ajaxjs.util.LogHelper;
-import com.ajaxjs.util.Reflect;
 import com.ajaxjs.util.json.JSON;
 import com.ajaxjs.util.json.JsLib;
 import com.ajaxjs.util.json.JsonHelper;
@@ -64,6 +63,11 @@ public class ConfigListener implements ServletContextListener {
 		cxt.setAttribute("bigfoot", cxt.getContextPath() + "/bigfoot");
 		cxt.setAttribute("PageUtil", new PageUtil()); // 一些页面实用的函数
 		config.put("LessUrlProcessor", new LessUrlProcessor());
+		
+		// 初始化数据库连接
+		if(cxt.getInitParameter("DATABASE_TYPE") != null) {
+			MyBatis.db_context_path = cxt.getInitParameter("DATABASE_TYPE");
+		}
 		
 		MyBatis.init();
 		

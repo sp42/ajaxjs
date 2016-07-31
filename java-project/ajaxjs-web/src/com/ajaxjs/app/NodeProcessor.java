@@ -74,7 +74,9 @@ public class NodeProcessor {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> getNavBar() {
+		System.out.println("1111111");
 		if (navList == null) {
+			System.out.println("2222");
 			navList = JSON.eval(ConfigListener.jsRuntime, "bf.AppStru.getNav();", List.class);
 		}
 

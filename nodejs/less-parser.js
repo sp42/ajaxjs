@@ -20,7 +20,7 @@ init = function (request, response) {
 
 	// 指定包空间
 	var ns_arr = [
-		'c:/project/bigfoot/less'
+		'c:/project/ajaxjs/less'
     ];
 	ns && ns_arr.push(ns);
 

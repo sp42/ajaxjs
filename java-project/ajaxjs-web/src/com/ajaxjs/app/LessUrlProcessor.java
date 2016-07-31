@@ -31,6 +31,10 @@ import com.ajaxjs.util.StringUtil;
  *
  */
 public class LessUrlProcessor {
+	
+	// 默认 8080 端口
+	private final static String picPath = "http://%s:8080/%s/asset/";
+	
 	/**
 	 * 获取本机 IP
 	 * @return IP 地址
@@ -89,9 +93,6 @@ public class LessUrlProcessor {
 			absoluteAddress = absoluteAddress.replace('\\', '/');
 		return absoluteAddress;
 	}
-	
-	// 默认 8080 端口
-	private final static String picPath = "http://%s:8080/%s/asset/";
 	
 	/**
 	 * 返回样式文件

@@ -1,13 +1,10 @@
-<%@tag pageEncoding="UTF-8" description="输出头部文件" body-content="scriptless" import="com.ajaxjs.web.UA, com.ajaxjs.app.Node"%>
+<%@tag pageEncoding="UTF-8" description="输出头部文件" body-content="scriptless" import="com.ajaxjs.web.UA"%>
 <%@tag trimDirectiveWhitespaces="true"%>
 <%@taglib prefix="html_ie6"	tagdir="/WEB-INF/tags/public"%>
 <%@attribute name="title" 		required="false" description="其他标题"%> 
 <%@attribute name="extraTitle" 	required="false" description="在读取结构标题之外，再补充的标题"%> 
 <%@attribute name="lessFile" 	required="false" description="指定 LESS 样式文件"%> 
 <head>
-<%
-	Node node = new Node(request);
-%>
 <%-- <!doctype html> --%>
 <%-- <html lang="zh-cmn-Hans"> --%>
 		<meta charset="utf-8" />
@@ -67,7 +64,7 @@
 	<%-- 定义网页搜索引擎索引方式，robotterms 是一组使用英文逗号「,」分割的值，通常有如下几种取值：none，noindex，nofollow，all，index和follow --%>
 	<meta name="robots" content="index,follow" />
 	
-	<link rel="stylesheet" type="text/css" href="${PageNode.getCssUrl(lessFile)}" />
+	<link rel="stylesheet" type="text/css" href="${LessUrlProcessor.getCssUrl(lessFile)}" />
     <script src="${pageContext.request.contextPath}/asset/bigfoot/js/dom.js"></script>
 
     <jsp:doBody />

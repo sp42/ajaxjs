@@ -6,7 +6,7 @@
 <%
 	final String jsCode = "JSON_Tree.util.makeSiteMap(bf.AppStru.data, '" + request.getContextPath() + "')";
 %>
-<%=com.ajaxjs.app.App.jsRuntime.eval(jsCode)%>
+<%//=com.ajaxjs.app.App.jsRuntime.eval(jsCode)%>
 			</div>
 		</div>
 
