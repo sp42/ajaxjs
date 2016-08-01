@@ -17,7 +17,7 @@ import com.ajaxjs.web.Responser;
 @Controller
 @Path("/admin/member")
 public class UserLogin implements IController {
-	private static final String perfix = "/WEB-INF/jsp/admin/";
+	private static final String perfix = "/WEB-INF/jsp/common/admin/";
 	
 	@GET
 	@Path("/login")
@@ -27,7 +27,15 @@ public class UserLogin implements IController {
 	
 	@POST
 	@Path("/login")
-	public void doLogin(@QueryParam("captchaImgCode") String captcha, HttpServletRequest request, Responser response) {
+	public void doLogin(@QueryParam("captchaImgCode") String captcha,
+			@QueryParam("name") String name,
+			@QueryParam("password") String password, HttpServletRequest request, Responser response) {
+		// 临时的
+		if(!"admin".equals(name) || !"admin".equals(password)) {
+			response.outputJSON("{\"isOk\":false, \"msg\": \"用户名或密码错误！\"}");
+			return;
+		}
+		
 		try {
 			if(Captcha.isPass(request, captcha)){
 				response.outputJSON("{\"isOk\":true, \"msg\": \"登录成功！\"}");
