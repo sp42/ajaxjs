@@ -34,6 +34,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.mvc.AnnotationUtils;
+import com.ajaxjs.framework.model.BaseModel;
 import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.mvc.ActionAndView;
 import com.ajaxjs.util.ClassScaner;
@@ -153,8 +154,7 @@ public class MvcDispatcher implements Filter {
 	 */
 	private static Object[] getArgs(Requester request, Responser response, Method method) {
 		ArrayList<Object> args = new ArrayList<>();// 参数列表
-		Annotation[][] annotation = method
-				.getParameterAnnotations(); /* 方法所有的注解，length和参数总数一样 */
+		Annotation[][] annotation = method.getParameterAnnotations(); /* 方法所有的注解，length和参数总数一样 */
 
 		Class<?>[] parmTypes = method.getParameterTypes();
 		for (int i = 0; i < parmTypes.length; i++) {
@@ -169,7 +169,9 @@ public class MvcDispatcher implements Filter {
 				args.add(response);
 			} else if (clazz.equals(ModelAndView.class)) {
 				args.add(new ModelAndView());
-			} else {
+			} else if(BaseModel.class.isAssignableFrom(clazz)){
+				args.add(Reflect.newInstance(clazz)); // 实体类参数
+ 			}else {
 				Annotation[] annotations = annotation[i];
 				getArgValue(clazz, annotations, request, args, method);
 			}

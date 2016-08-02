@@ -17,15 +17,15 @@
 				<c:when test="${isCreate}">
 				</c:when>
 				<c:otherwise>
-					<a href="new">新建${uiName}</a> | 
+					<a href="../create.do">新建${uiName}</a> | 
 				</c:otherwise>
 			</c:choose>
 			<c:if test="${hasCatalog || empty hasCatalog}">
-				<a href="list">${uiName}列表</a> |  
+				<a href="${isCreate ? '' : '../'}list/do.do?start=0&limit=9">${uiName}列表</a> |  
 			</c:if>
 		</commonUI:adminHeader>
 	
-		<form class="form_style_2" action="${isCreate ? '../'.concat(tableName) : id}" method="POST">
+		<form class="form_style_2" action="${isCreate ? 'createAction.do' : id}" method="POST">
 			<jsp:doBody />
 		<c:choose>
 			<c:when test="${isCreate}">
@@ -70,7 +70,6 @@
 		<c:when test="${isCreate}">
 		<script>
 			form = new bf_form(document.querySelector('form'), formConfig);
-			form.action = '../${tableName}';
 			form.on('afterSubmit', function(form, json){
 				if(json.isOk && json.newlyId){
 					//location.assign(json.newlyId); // 跳转编辑模式

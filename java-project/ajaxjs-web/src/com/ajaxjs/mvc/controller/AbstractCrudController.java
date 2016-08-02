@@ -36,7 +36,7 @@ import com.ajaxjs.util.LogHelper;
  * 一般推荐前台一套接口，后台一套接口，分开来，例如 NewsController、NewsAdminController。
  * 各自的接口都集成于这个抽象控制器类。
  * @author frank
- *
+ * @deprecated
  * @param <T>
  *            实体
  */
@@ -90,7 +90,7 @@ public abstract class AbstractCrudController<T extends BaseModel> implements Cru
 	}
 
 	@Override
-	public String list_all(HttpServletRequest request, ModelAndView model) {
+	public String list_all(ModelAndView model) {
 		LOGGER.info("获取全部列表 ");
 		return list(0, 999,  model);
 	}

@@ -15,8 +15,6 @@
  */
 package com.ajaxjs.mvc.controller;
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.ajaxjs.framework.model.ModelAndView;
 
 /**
@@ -37,8 +35,8 @@ public interface CrudController<T> extends IController {
 	 * @param request
 	 *            请求对象，可考虑 //@RequestParam Map<String, String> allRequestParams？
 	 * @param ModelAndView
-	 *            SpringMVC 模型
-	 * @return JSP 路径
+	 *            Model 模型
+	 * @return JSP 路径。我们会提供一个默认路径，但你不一定要使用它，换别的也可以。
 	 */
 	public String list(int start, int limit, ModelAndView ModelAndView);
 
@@ -48,10 +46,10 @@ public interface CrudController<T> extends IController {
 	 * @param request
 	 *            请求对象
 	 * @param ModelAndView
-	 *            SpringMVC 模型
-	 * @return
+	 *            Model 模型
+	 * @return JSP 路径。我们会提供一个默认路径，但你不一定要使用它，换别的也可以。
 	 */
-	public String list_all(HttpServletRequest request, ModelAndView ModelAndView);
+	public String list_all(ModelAndView ModelAndView);
 
 	/**
 	 * 读取单个记录，保存到 ModelAndView 中，供视图渲染用。
@@ -62,7 +60,7 @@ public interface CrudController<T> extends IController {
 	 *            SpringMVC 模型
 	 * @param reqeust
 	 *            请求对象
-	 * @return JSP 路径
+	 * @return JSP 路径。我们会提供一个默认路径，但你不一定要使用它，换别的也可以。
 	 */
 	public String getById(long id, ModelAndView ModelAndView);
 
