@@ -60,7 +60,7 @@
 	<%-- 定义网页搜索引擎索引方式，robotterms 是一组使用英文逗号「,」分割的值，通常有如下几种取值：none，noindex，nofollow，all，index和follow --%>
 	<meta name="robots" content="index,follow" />
 	
-	<link rel="stylesheet" type="text/css" href="${_config.LessUrlProcessor.getCssUrl(pageContext.request, lessFile, true)}" />
+	<link rel="stylesheet" type="text/css" href="${_config.LessUrlProcessor.getCssUrl(pageContext.request, lessFile, false)}" />
     <script src="${pageContext.request.contextPath}/asset/bigfoot/js/dom.js"></script>
 
     <jsp:doBody />
