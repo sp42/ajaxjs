@@ -23,12 +23,13 @@
 				ps.println();
 			}
 			
-			for (Cookie cookie : request.getCookies()) {
-				ps.println("请求中的 Cookie 包括：");
-				ps.println(cookie.getName() + "=" + cookie.getValue());
-				ps.println();
+			if(request.getCookies() != null){
+				for (Cookie cookie : request.getCookies()) {
+					ps.println("请求中的 Cookie 包括：");
+					ps.println(cookie.getName() + "=" + cookie.getValue());
+					ps.println();
+				}
 			}
-	
 			// javax.servlet.jspException 等于 JSP 里面的 exception 对象
 			if (ex != null) { 
 				ps.println("堆栈信息");

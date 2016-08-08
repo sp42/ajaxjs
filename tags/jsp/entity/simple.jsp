@@ -76,7 +76,7 @@
 		function create(){
 			var nameField = document.querySelector('input.createName').value;
 			if (nameField){
-				XMLHttpRequest.post('../${tableName}', { // 自动上一级似乎不行
+				XMLHttpRequest.post('create.do', { // 自动上一级似乎不行
 					name : nameField
 					//belongsto : '${tableName}'.toLowerCase()
 				}, callback);
@@ -87,7 +87,7 @@
 		function update(){
 			var idField = document.querySelector('input.currentId');
 			if (idField.value){							
-				XMLHttpRequest.post(idField.value, {
+				XMLHttpRequest.put(idField.value + '/update.do', {
 					name : document.querySelector('input[name=name]').value,
 				}, callback);
 			}
@@ -98,7 +98,7 @@
 			var idField = document.querySelector('input[name=id]');
 			if (idField.value){
 				if(confirm('确定删除该${uiName}？')){
-					XMLHttpRequest.dele(idField.value, {
+					XMLHttpRequest.dele(idField.value + '/delete.do', {
 		
 					}, callback);
 				}

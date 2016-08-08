@@ -1,5 +1,4 @@
 <%@page pageEncoding="UTF-8"%>
-<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <%@taglib prefix="commonUI"  tagdir="/WEB-INF/tags/common/UI"%>
 <%-- <jsp:useBean id="bean" class="com.ajaxjs.framework.javascript.JSON_Saver" /> --%>
@@ -25,7 +24,7 @@
 	</style>
 	<div class="panel">
 		<h4>请输入网址配置</h4>
-		<form:form  action="?" method="POST" class="aj">
+		<form action="?" method="POST" class="aj">
 			<input type="hidden" name="jsonFile" value="/WEB-INF/src/site_config.js" />
 			<input type="hidden" name="topVarName" value="bf_Config" />
 
@@ -89,7 +88,7 @@
 			<div> 
 				&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value="保存" class="my-btn-3" /> &nbsp;&nbsp;&nbsp;&nbsp;
 			</div>
-	</form:form>
+	</form>
 	</div>
  
 	<script>

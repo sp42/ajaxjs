@@ -31,8 +31,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 
-import org.sqlite.SQLiteDataSource;
-import org.sqlite.SQLiteJDBCLoader;
+//import org.sqlite.SQLiteDataSource;
+//import org.sqlite.SQLiteJDBCLoader;
 
 // import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
@@ -53,16 +53,16 @@ public class WebBaseInit {
 		ic.createSubcontext("java:/comp/env");
 		ic.createSubcontext("java:/comp/env/jdbc");
 		// Construct DataSource
-		try {
-			SQLiteJDBCLoader.initialize();
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
+//		try {
+//			SQLiteJDBCLoader.initialize();
+//		} catch (Exception e1) {
+//			e1.printStackTrace();
+//		}
 
-		SQLiteDataSource dataSource = new SQLiteDataSource();
-		dataSource.setUrl("jdbc:sqlite:F:\\project\\bigfoot\\sql\\foo.sqlite");
+//		SQLiteDataSource dataSource = new SQLiteDataSource();
+//		dataSource.setUrl("jdbc:sqlite:F:\\project\\bigfoot\\sql\\foo.sqlite");
 
-		ic.bind("java:/comp/env/jdbc/sqlite", dataSource);
+//		ic.bind("java:/comp/env/jdbc/sqlite", dataSource);
 	}
 
 	public static void initDBConnection_Mysql(String MYSQL_DB_URL, String MYSQL_DB_USERNAME, String MYSQL_DB_PASSWORD)

@@ -5,7 +5,6 @@
 <html>
 <commonTag:head lessFile="/asset/less/user.less" title="列表" />
 <body>
-	<%@ include file="/WEB-INF/jsp/public/nav.jsp" %>
 	<style>
 html, body {
 	height: 100%;
@@ -205,6 +204,5 @@ button.b3 {
 		</tr>
 	</table>
 	
-	<%@ include file="/WEB-INF/jsp/public/footer.jsp" %>
 </body>
 </html>

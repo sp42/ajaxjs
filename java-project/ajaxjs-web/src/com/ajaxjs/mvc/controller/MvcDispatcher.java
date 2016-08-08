@@ -35,10 +35,12 @@ import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.mvc.AnnotationUtils;
 import com.ajaxjs.framework.model.BaseModel;
+import com.ajaxjs.framework.model.Map2Pojo;
 import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.mvc.ActionAndView;
 import com.ajaxjs.util.ClassScaner;
 import com.ajaxjs.util.LogHelper;
+import com.ajaxjs.util.MapHelper;
 import com.ajaxjs.util.Reflect;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.web.Requester;
@@ -136,6 +138,10 @@ public class MvcDispatcher implements Filter {
 						LOGGER.warning(e);
 					}
 				} else { // JSP
+					if(!str.startsWith("/WEB-INF/jsp/"))// 自动补充前缀
+						str = "/WEB-INF/jsp/" + str;
+					if(!str.endsWith(".jsp"))			// 自动补充 .jsp 扩展名
+						str += ".jsp";
 					response.sendRequestDispatcher(str);
 				}
 			}
@@ -170,7 +176,17 @@ public class MvcDispatcher implements Filter {
 			} else if (clazz.equals(ModelAndView.class)) {
 				args.add(new ModelAndView());
 			} else if(BaseModel.class.isAssignableFrom(clazz)){
-				args.add(Reflect.newInstance(clazz)); // 实体类参数
+//				Object bean = Reflect.newInstance(clazz);
+				Map2Pojo<?> m = new Map2Pojo<>(clazz);
+				
+				Map<String, String> map = MapHelper.toMap(request.getParameterMap());
+				for(String s : map.keySet()) {
+					map.put(s, StringUtil.urlChinese(map.get(s)));
+				}
+				
+				Map<String, Object> _map = MapHelper.asObject(map, true);
+				Object bean = m.map2pojo(_map);
+				args.add(bean); // 实体类参数
  			}else {
 				Annotation[] annotations = annotation[i];
 				getArgValue(clazz, annotations, request, args, method);

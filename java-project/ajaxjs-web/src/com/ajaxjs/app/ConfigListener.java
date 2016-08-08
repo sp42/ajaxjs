@@ -33,6 +33,7 @@ import com.ajaxjs.util.json.JSON;
 import com.ajaxjs.util.json.JsLib;
 import com.ajaxjs.util.json.JsonHelper;
 import com.ajaxjs.web.PageUtil;
+import com.egdtv.crawler.service.Common;
 
 public class ConfigListener implements ServletContextListener {
 	/**
@@ -70,6 +71,8 @@ public class ConfigListener implements ServletContextListener {
 		}
 		
 		MyBatis.init();
+		
+		Common.load();
 		
 //		Event event = Reflect.newInstance("com.egdtv.crawler.App", Event.class);
 //		event.onConfigLoaded();

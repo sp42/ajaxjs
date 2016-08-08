@@ -49,10 +49,9 @@ public abstract class AbstractController<T extends BaseModel> implements CrudCon
 	
 	@Override
 	public String list_all(ModelAndView model) {
-		LOGGER.info("获取全部列表 ");
+		LOGGER.info("----获取全部列表----");
 		
 		prepareData(null, model);
-		
 		return list(0, 999,  model);
 	}
 
@@ -131,7 +130,7 @@ public abstract class AbstractController<T extends BaseModel> implements CrudCon
 		model.put("requestTimeRecorder", System.currentTimeMillis());
 
 		// 设置实体 id 和 现实名称 。
-		System.out.println(getService().getUiName());
+//		System.out.println(getService().getUiName());
 		model.put("uiName", getService().getUiName());
 		model.put("tableName", getService().getTableName());
 	}
