@@ -71,9 +71,9 @@
 		<script>
 			form = new bf_form(document.querySelector('form'), formConfig);
 			form.on('afterSubmit', function(form, json){
-				if(json.isOk && json.newlyId){
+				if(json.isOk){
 					//location.assign(json.newlyId); // 跳转编辑模式
-					location.assign('new?' + (still_params ? still_params() : ''));// 提交后回到新建
+					location.assign('create.do?' + (still_params ? still_params() : ''));// 提交后回到新建
 				}
 			});
 		</script>

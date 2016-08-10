@@ -230,7 +230,7 @@ public class MvcDispatcher implements Filter {
 						if (argValue.equals("true"))
 							args.add(true);
 						else if (argValue.equals("false"))
-							args.add(true);
+							args.add(false);
 					} else {
 						args.add(new Object());// 也不要空的参数，不然反射那里执行不了
 						LOGGER.warning("不支持类型");
