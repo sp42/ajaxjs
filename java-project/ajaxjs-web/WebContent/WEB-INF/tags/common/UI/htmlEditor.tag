@@ -3,11 +3,11 @@
 <%@attribute name="basePath" required="false" type="String" description="指定 iframe src 静态资源的路径"%>
 
 <!-- HTML 编辑器控件 --> 
-<script src="${bigfoot}/js/form/htmlEditor.js"></script>
+<script src="${pageContext.request.contextPath}/asset/bigfoot/js/form/htmlEditor.js"></script>
 <div class="htmlEditor">
 	<ul class="toolbar">
 		<li class="dorpdown">
-			<img title="字体" src="${bigfoot}/asset/htmlEditor/4.gif" />
+			<img title="字体" src="${pageContext.request.contextPath}/asset/bigfoot/asset/htmlEditor/4.gif" />
 			<div class="fontfamilyChoser">
 				<a href="javascript:;" style="font-family: '宋体'">宋体</a>
 				<a href="javascript:;" style="font-family: '黑体'">黑体</a>
@@ -26,7 +26,7 @@
 			</div>
 		</li>		
 		<li class="dorpdown">
-			<img title="字号" src="${bigfoot}/asset/htmlEditor/5.gif" />
+			<img title="字号" src="${pageContext.request.contextPath}/asset/bigfoot/asset/htmlEditor/5.gif" />
 			<div class="fontsizeChoser">
 				<a href="javascript:;" style="font-size: xx-small; line-height: 120%">极小</a>
 				<a href="javascript:;" style="font-size: x-small;  line-height: 120%">特小</a>
@@ -38,18 +38,18 @@
 			</div>
 		</li>		
 	
-		<li title="加粗"><img class="bold" src="${bigfoot}/asset/htmlEditor/6.gif" /></li>		
-		<li><img title="斜体"   class="italic" src="${bigfoot}/asset/htmlEditor/7.gif" /></li>		
-		<li><img title="下划线"  class="underline" src="${bigfoot}/asset/htmlEditor/8.gif" /></li>
-		<li><img title="左对齐"  class="justifyleft" src="${bigfoot}/asset/htmlEditor/9.gif" /></li>
-		<li><img title="中间对齐" class="justifycenter" src="${bigfoot}/asset/htmlEditor/10.gif" /></li>
-		<li><img title="右对齐"  class="justifyright" src="${bigfoot}/asset/htmlEditor/11.gif" /></li>
-		<li><img title="数字编号" class="insertorderedlist" src="${bigfoot}/asset/htmlEditor/12.gif" /></li>
-		<li><img title="项目编号" class="insertunorderedlist" src="${bigfoot}/asset/htmlEditor/13.gif" /></li>
-		<li><img title="增加缩进" class="outdent" src="${bigfoot}/asset/htmlEditor/14.gif" /></li>
-		<li><img title="减少缩进" class="indent" src="${bigfoot}/asset/htmlEditor/15.gif" /></li>
+		<li title="加粗"><img class="bold" src="${pageContext.request.contextPath}/asset/bigfoot/asset/htmlEditor/6.gif" /></li>		
+		<li><img title="斜体"   class="italic" src="${pageContext.request.contextPath}/asset/bigfoot/asset/htmlEditor/7.gif" /></li>		
+		<li><img title="下划线"  class="underline" src="${pageContext.request.contextPath}/asset/bigfoot/asset/htmlEditor/8.gif" /></li>
+		<li><img title="左对齐"  class="justifyleft" src="${pageContext.request.contextPath}/asset/bigfoot/asset/htmlEditor/9.gif" /></li>
+		<li><img title="中间对齐" class="justifycenter" src="${pageContext.request.contextPath}/asset/bigfoot/asset/htmlEditor/10.gif" /></li>
+		<li><img title="右对齐"  class="justifyright" src="${pageContext.request.contextPath}/asset/bigfoot/asset/htmlEditor/11.gif" /></li>
+		<li><img title="数字编号" class="insertorderedlist" src="${pageContext.request.contextPath}/asset/bigfoot/asset/htmlEditor/12.gif" /></li>
+		<li><img title="项目编号" class="insertunorderedlist" src="${pageContext.request.contextPath}/asset/bigfoot/asset/htmlEditor/13.gif" /></li>
+		<li><img title="增加缩进" class="outdent" src="${pageContext.request.contextPath}/asset/bigfoot/asset/htmlEditor/14.gif" /></li>
+		<li><img title="减少缩进" class="indent" src="${pageContext.request.contextPath}/asset/bigfoot/asset/htmlEditor/15.gif" /></li>
 		<li class="dorpdown">
-			<img title="字体颜色" src="${bigfoot}/asset/htmlEditor/16.gif" />
+			<img title="字体颜色" src="${pageContext.request.contextPath}/asset/bigfoot/asset/htmlEditor/16.gif" />
 			<div class="fontColor colorPicker">
 				<script>
 					document.write(bf_EditHTML.createColorPickerHTML());
@@ -57,7 +57,7 @@
 			</div>
 		</li>
 		<li class="dorpdown">
-			<img title="背景颜色" class="backColor" src="${bigfoot}/asset/htmlEditor/17.gif" />
+			<img title="背景颜色" class="backColor" src="${pageContext.request.contextPath}/asset/bigfoot/asset/htmlEditor/17.gif" />
 			<div class="bgColor colorPicker">
 				<script>
 					document.write(bf_EditHTML.createColorPickerHTML());
@@ -65,10 +65,10 @@
 			</div>
 		</li>
 		<li>
-			<img title="增加链接" class="createLink" src="${bigfoot}/asset/htmlEditor/18.gif" />
+			<img title="增加链接" class="createLink" src="${pageContext.request.contextPath}/asset/bigfoot/asset/htmlEditor/18.gif" />
 		</li>
 		<li>
-			<img title="增加图片" class="insertImage" src="${bigfoot}/asset/htmlEditor/19.gif" />
+			<img title="增加图片" class="insertImage" src="${pageContext.request.contextPath}/asset/bigfoot/asset/htmlEditor/19.gif" />
 		</li>
 		<li>
 			<span class="switchMode">HTML</span>

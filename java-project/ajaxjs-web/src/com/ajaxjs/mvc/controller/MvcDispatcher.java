@@ -227,9 +227,9 @@ public class MvcDispatcher implements Filter {
 					} else if (clz == long.class || clz == Long.class) {
 						args.add(Long.parseLong(argValue));
 					} else if (clz == boolean.class || clz == Boolean.class) {
-						if (argValue.equals("true"))
+						if (argValue.equals("true") || argValue.equals("1") || argValue.equals("on"))
 							args.add(true);
-						else if (argValue.equals("false"))
+						else if (argValue.equals("false") || argValue.equals("0") || argValue.equals("off"))
 							args.add(false);
 					} else {
 						args.add(new Object());// 也不要空的参数，不然反射那里执行不了
