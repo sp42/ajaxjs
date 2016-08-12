@@ -68,9 +68,9 @@ public class ConfigListener implements ServletContextListener {
 		// 初始化数据库连接
 		if(cxt.getInitParameter("DATABASE_TYPE") != null) {
 			MyBatis.db_context_path = cxt.getInitParameter("DATABASE_TYPE");
+			MyBatis.init();
 		}
 		
-		MyBatis.init();
 		
 //		Common.load();
 		

@@ -24,7 +24,7 @@ import javax.validation.constraints.Size;
  */
 public class Entity extends BaseModel {
 	@FieldDescription(doc="是否线上<br />true=线上显示（默认）/false=不显示") 
-	private boolean isOnline;
+	private boolean online;
 
 	@FieldDescription(doc="内容简介") 
 	@Size(max=60000)
@@ -65,11 +65,11 @@ public class Entity extends BaseModel {
 	}
 
 	public boolean isOnline() {
-		return isOnline;
+		return online;
 	}
 
 	public void setOnline(boolean isOnline) {
-		this.isOnline = isOnline;
+		this.online = isOnline;
 	}
 
 	public Integer getCatalog() {

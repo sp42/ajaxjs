@@ -6,10 +6,11 @@
 	 *            请求对象
 	 */
 	public static OutputStream getError(HttpServletRequest request, Throwable ex) {
-		try(
-			OutputStream os = new ByteArrayOutputStream();// 创建一个空的字节流，保存错误信息
-			PrintStream ps = new PrintStream(os);
-		){
+		OutputStream os = new ByteArrayOutputStream();// 创建一个空的字节流，保存错误信息
+		PrintStream ps = new PrintStream(os);
+		
+		// 不要用 java 7 的 autoClose，因为要在 tomcat 里面手动打开
+		try{
 			// 收集错误信息
 			ps.println("错误代码: " +     request.getAttribute("javax.servlet.error.status_code")); 
 			ps.println("异常 Servlet: " + request.getAttribute("javax.servlet.error.servlet_name"));
@@ -38,9 +39,16 @@
 			}
 
 			return os; 
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
+		} finally{
+			try{
+				os.close();
+				ps.close();
+			} catch(IOException e){
+				e.printStackTrace();
+			}
 		}
 	}
 %>

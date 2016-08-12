@@ -74,15 +74,16 @@ public class Map2Pojo<T> {
 			Object value = map.get(key);
 
 			if (value != null) {
-				// System.out.println(key + ":" +
-				// map.get(key).getClass().getName());
+				 System.out.println(key + ":" + map.get(key).getClass().getName());
 
 				String methodName = "set" + Reflect.firstLetterUpper(key);
 
 				if (t == boolean.class) {
+					System.out.println("methodName：：：：：" + methodName);
 					// 布尔型
 					methodName = key.replace("is", "");
 					methodName = "set" + Reflect.firstLetterUpper(methodName);
+					System.out.println("methodName：：：：：" + "set" + Reflect.firstLetterUpper(methodName));
 					Reflect.executeMethod(pojo, methodName, t, (boolean) value);
 					
 				} else if (t == int.class) {

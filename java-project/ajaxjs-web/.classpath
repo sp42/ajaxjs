@@ -18,5 +18,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ajaxjs-data-validtion"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ajaxjs-data"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

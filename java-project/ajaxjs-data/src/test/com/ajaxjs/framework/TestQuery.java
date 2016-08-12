@@ -30,32 +30,33 @@ public class TestQuery {
 
 		when(request.getParameterMap()).thenReturn(mock);
 		Query query = Query.getQueryFactory(request);
-		
+
 		assertNotNull(query);
 	}
+
 	@Test
-	public void testDynamicSqlProvider(){
+	public void testDynamicSqlProvider() {
 		HttpServletRequest request = mock(HttpServletRequest.class);
 		when(request.getParameter("filterField")).thenReturn("name");
 		when(request.getParameter("filterValue")).thenReturn("jack");
-		
+
 		Map<String, String[]> mock = new HashMap<>();
 		mock.put("filterField", new String[] { "name" });
 		mock.put("filterValue", new String[] { "jack" });
 
 		when(request.getParameterMap()).thenReturn(mock);
 		Query query = Query.getQueryFactory(request);
-		
+
 		assertNotNull(query.getFilter());
-		
+
 		Map<String, Object> parames = new HashMap<>();
 		parames.put("tablename", "user");
 		parames.put("query", query);
-		
+
 		DynamicSqlProvider provider = new DynamicSqlProvider();
 		String sql = provider.pageCount(parames);
 		System.out.println(sql);
-//		Query query = Query.getQueryFactory(request);
-		
+		// Query query = Query.getQueryFactory(request);
+
 	}
 }

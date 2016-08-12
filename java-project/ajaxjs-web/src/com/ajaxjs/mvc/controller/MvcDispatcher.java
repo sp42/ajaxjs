@@ -180,11 +180,13 @@ public class MvcDispatcher implements Filter {
 				Map2Pojo<?> m = new Map2Pojo<>(clazz);
 				
 				Map<String, String> map = MapHelper.toMap(request.getParameterMap());
+				System.out.println("isLive::::::" + map.get("liveSource"));
 				for(String s : map.keySet()) {
 					map.put(s, StringUtil.urlChinese(map.get(s)));
 				}
 				
 				Map<String, Object> _map = MapHelper.asObject(map, true);
+				System.out.println("isLive::::::" + _map.get("liveSource"));
 				Object bean = m.map2pojo(_map);
 				args.add(bean); // 实体类参数
  			}else {
