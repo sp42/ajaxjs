@@ -30,7 +30,7 @@
 	        
 			<div class="btns">
 		        <input type="button" value="上一年" class="idCalendarPreYear" />
-		        <input type="button" value="当前月" class="idCalendarNow" />
+		        <input type="button" value="今日" class="idCalendarNow" />
 		        <input type="button" value="下一年" class="idCalendarNextYear" />
 			</div>
     	</div>

@@ -175,21 +175,28 @@ public class MvcDispatcher implements Filter {
 				args.add(response);
 			} else if (clazz.equals(ModelAndView.class)) {
 				args.add(new ModelAndView());
-			} else if(BaseModel.class.isAssignableFrom(clazz)){
-//				Object bean = Reflect.newInstance(clazz);
+			} else if (BaseModel.class.isAssignableFrom(clazz)) {
+				// Object bean = Reflect.newInstance(clazz);
+				System.out.println(clazz.getName());
 				Map2Pojo<?> m = new Map2Pojo<>(clazz);
-				
-				Map<String, String> map = MapHelper.toMap(request.getParameterMap());
-				System.out.println("isLive::::::" + map.get("liveSource"));
-				for(String s : map.keySet()) {
-					map.put(s, StringUtil.urlChinese(map.get(s)));
+
+				Map<String, String> map;
+				if(request.getMethod().toUpperCase().equals("PUT")) {
+					map = ServletPatch.getPutRequest(request); // Servlet 没有 PUT 获取表单，要自己处理
+					// 已经中文转码，不用担心乱码
+				} else {
+					map = MapHelper.toMap(request.getParameterMap());
+					// 以防中文乱码
+					for (String s : map.keySet()) {
+						map.put(s, StringUtil.urlChinese(map.get(s)));
+					}
 				}
 				
+
 				Map<String, Object> _map = MapHelper.asObject(map, true);
-				System.out.println("isLive::::::" + _map.get("liveSource"));
 				Object bean = m.map2pojo(_map);
 				args.add(bean); // 实体类参数
- 			}else {
+			} else {
 				Annotation[] annotations = annotation[i];
 				getArgValue(clazz, annotations, request, args, method);
 			}
@@ -366,6 +373,7 @@ public class MvcDispatcher implements Filter {
 	@Override
 	public void init(FilterConfig fConfig) throws ServletException {
 		LOGGER.info("Ajaxjs MVC 服务启动之中……");
+		
 		/* 获取web.xml 配置 */
 		Map<String, String> config = ServletPatch.parseInitParams(null, fConfig);
 

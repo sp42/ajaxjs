@@ -9,6 +9,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.framework.model.BaseModel;
+import com.ajaxjs.framework.model.Entity;
 import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.mvc.controller.AbstractController;
 
@@ -44,8 +45,11 @@ public class AdminController<T extends BaseModel> extends AbstractController<T> 
 	@PUT
 	@Path("/{id}")
 	@Override
-	public String update(@PathParam("id") long id, T news, ModelAndView model) {
-		return super.update(id, news, model);
+	public String update(@PathParam("id") long id, T entry, ModelAndView model) {
+		System.out.println(entry);
+		System.out.println(entry.getClass().getName());
+		System.out.println(((Entity)entry).getCatalog());
+		return super.update(id, entry, model);
 	}
 	
 	@DELETE

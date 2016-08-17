@@ -942,11 +942,11 @@ function openClient(el, downloadUrl){
 		if(!this.formEl)throw '未设置表单元素！';
 		if(!this.formEl.action)throw '未设置接口地址！';
 		
-		// put --> update(有 id 是 update) | post --> create
-		this.PUT = /id=\d+/.test(location.search) || /\/\d+/.test(location);
-		this.PUT = false;
-		if(this.formEl.method == 'post') this.PUT = false;
-		
+		// this.formEl.method always GET, so this.formEl.getAttribute('method') instead
+		var method = this.formEl.getAttribute('method').toLowerCase();
+		if(method== 'post') this.PUT = false;
+		if(method == 'put') this.PUT = true;
+
 		UserEvent.call(this);
 		
 		this.addEvents('beforeSubmit', 'submit', 'afterSubmit');

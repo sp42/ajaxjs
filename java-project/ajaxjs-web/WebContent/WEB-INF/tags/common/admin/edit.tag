@@ -25,31 +25,22 @@
 			</c:if>
 		</commonUI:adminHeader>
 	
-		<form class="form_style_2" action="${isCreate ? 'createAction.do' : id}" method="POST">
+		<form class="form_style_2" action="${isCreate ? 'createAction.do' : id}" method="${isCreate ? 'POST' : 'PUT'}">
 			<jsp:doBody />
+		
 		<c:choose>
 			<c:when test="${isCreate}">
 			</c:when>
 			<c:otherwise>
-			<div class="row">
-				<div>
-					<label>
-						<div class="label">创建日期：</div>
-					</label> 
-						<commonUI:calendar>
-							<input type="text" value="${viewUtils.formatDateShorter(info.createDate)}" class="my-inputField" />
-						</commonUI:calendar>
-					<label><div class="label">修改日期：</div>${viewUtils.formatDateShorter(info.updateDate)}</label>
-				</div>
-	<%-- 				<input type="hidden" value="${info.id}" /> --%>
-			</div>
+
 			</c:otherwise>
 		</c:choose>
+		
 			<div class="row">
 				<div style="text-align:center;">
 					<jsp:invoke fragment="moreBtn" />
 					<button class="my-btn-3" style="width:15%;">
-						<img src="${pageContext.request.contextPath}/asset/bigfoot/skin/icon/save.gif" /> 提 交</button> 
+						<img src="${pageContext.request.contextPath}/asset/bigfoot/skin/icon/save.gif" /> ${isCreate ? '新建' : '修改'}</button> 
 					<button class="my-btn-3" style="width:10%;" onclick="this.up('form').reset();return false;">复 位</button> 
 					<c:if test="${!isCreate}">
 					<button class="my-btn-3" style="width:10%;" onclick="this.up('form').reset();return false;">删 除</button> 
