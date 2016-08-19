@@ -61,6 +61,9 @@ public class MvcDispatcher implements Filter {
 			throws IOException, ServletException {
 		Requester request = new Requester(req);
 		Responser response = new Responser(resp);
+		
+		request.setCharacterEncoding("utf-8"); 
+		
 		response.setRequest(request);
 
 		String uri = request.getRoute(), httpMethod = request.getMethod();
@@ -177,7 +180,6 @@ public class MvcDispatcher implements Filter {
 				args.add(new ModelAndView());
 			} else if (BaseModel.class.isAssignableFrom(clazz)) {
 				// Object bean = Reflect.newInstance(clazz);
-				System.out.println(clazz.getName());
 				Map2Pojo<?> m = new Map2Pojo<>(clazz);
 
 				Map<String, String> map;
@@ -187,9 +189,9 @@ public class MvcDispatcher implements Filter {
 				} else {
 					map = MapHelper.toMap(request.getParameterMap());
 					// 以防中文乱码
-					for (String s : map.keySet()) {
-						map.put(s, StringUtil.urlChinese(map.get(s)));
-					}
+//					for (String s : map.keySet()) {
+//						map.put(s, StringUtil.urlChinese(map.get(s)));
+//					}
 				}
 				
 
@@ -282,13 +284,9 @@ public class MvcDispatcher implements Filter {
 	 * @return
 	 */
 	private static String getValueFromPath(String requestURI, String value, String paramName) {
-		// System.out.println(requestURI);
-		// System.out.println(value);
-		// System.out.println(paramName);
-		String regExp = "(?!" + value.replace("{" + paramName + "}",
-				")(\\d+)");/* 获取正则 暂时写死 数字 TODO */
-		 System.out.println(regExp);
+		String regExp = "(?!" + value.replace("{" + paramName + "}", ")(\\d+)");/* 获取正则 暂时写死 数字 TODO */
 		String result = StringUtil.regMatch(regExp, requestURI);
+		
 		if (result == null)
 			throw new IllegalArgumentException("在 " + requestURI + "不能获取 " + paramName + "参数");
 		return result;
@@ -407,11 +405,7 @@ public class MvcDispatcher implements Filter {
 			this.subPath = subPath;
 			/* like foo/123 means info */
 			String reg = "(?!/" + subPath.replaceAll("(\\{|\\})", "") + "/)(\\d+)";
-			// System.out.println(subUri);
-			// System.out.println(reg);
 			info_id = StringUtil.regMatch(reg, subUri);
-			// System.out.println(info_id);
-
 		}
 
 		/**

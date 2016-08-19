@@ -54,7 +54,7 @@ import com.ajaxjs.util.json.JsonHelper;
  * 建立一个响应包装器
  * @author Frank Chueng
  */
-public class Responser extends HttpServletResponseWrapper{
+public class Responser extends HttpServletResponseWrapper {
 	/**
 	 * 创建一个 Responser 对象
 	 * 
@@ -479,18 +479,15 @@ out = pageContext.pushBody();
 	 * @throws IOException
 	 */
 	public void getImg(String url) throws IOException {
-		System.out.println("请求地址：" + url);
 		long imgSize = Get.getFileSize(url);
 		
 		if (imgSize < (1024 * 100)) {
 			sendRedirect(url);// 发送重定向
 			return;
 		} else {
-//			System.out.println("BigImg");
-			
 			String imgType = getImgType(url);
-			
 			setContentType(getContentType(imgType));
+			
 			try (
 				InputStream is = new URL(url).openStream();
 				ServletOutputStream op = getOutputStream();
@@ -518,8 +515,6 @@ out = pageContext.pushBody();
 			}  
 		}
 	}
-	
-	
 	
 	/**
 	 * 返回 Content type

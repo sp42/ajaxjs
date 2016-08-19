@@ -123,8 +123,6 @@
 	public static void save_jsp_fileContent(String rawFullFilePath, String newContent) throws IOException {
 		String fullFilePath = getFullPathByRequestUrl(rawFullFilePath); // 真实的磁盘文件路径
 		String jsp_fileContent = readFile(fullFilePath), toDel_fileContent = read_jsp_fileContent(fullFilePath);// 读取旧内容
-//System.out.println(jsp_fileContent);
-//System.out.println(toDel_fileContent);
 		if (toDel_fileContent != null) {
 			jsp_fileContent = jsp_fileContent.replace(toDel_fileContent, newContent);
 			save2file(fullFilePath, jsp_fileContent); // 保存新内容

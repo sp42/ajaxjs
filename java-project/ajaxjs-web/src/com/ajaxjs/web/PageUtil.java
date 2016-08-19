@@ -107,13 +107,10 @@ public class PageUtil {
 				aa = name + "=" + StringUtil.stringJoin(values, "&" + name + "=");
 			}
 
-			System.out.println(aa);
 			list.add(aa);
 		}
+		
 		String s = StringUtil.stringJoin(list, "&");
-
-		System.out.println(s);
-
 		return s;
 
 		// Service service = new Service();

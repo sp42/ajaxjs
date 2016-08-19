@@ -58,7 +58,6 @@ public class NewsController extends AbstractCrudController<News> {
 	@Path("/{id}")
 	@Override
 	public String getById(@PathParam("id") long id, ModelAndView model) {
-		System.out.println("---------------------" + id);
 		super.getById(id, model);
 		
 		return "home.jsp";

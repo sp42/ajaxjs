@@ -22,7 +22,6 @@ import com.ajaxjs.web.Responser;
 public class FooController implements IController {
 	@GET
 	public String a(Requester request, Responser response) throws IOException {
-		System.out.println("======================" + request.getRequestURI().contains(".doc"));
 		// if(request.getRequestURI().contains(".doc")) {
 		// String[] strs = DocumentRenderer.getEntityInfo(Video.class);
 		// request.setAttribute("entityInfo", strs[0]);
@@ -34,7 +33,6 @@ public class FooController implements IController {
 		//// request.setAttribute("meta",
 		// DocumentRenderer.getDocument(Video.class,
 		// getService().getSQL_TableName()));
-		// System.out.println("----------------");
 		// return "/WEB-INF/jsp/common/entity/showDocument.jsp";
 		// }
 		response.getWriter().print("hihi");

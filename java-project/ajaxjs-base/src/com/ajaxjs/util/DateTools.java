@@ -147,6 +147,9 @@ public class DateTools {
 	private final static String format = "((19|20)[0-9]{2})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01]) "
 			+ "([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]";
 	private final static Pattern pattern = Pattern.compile(format);
+	
+	private final static String format2 = "((19|20)[0-9]{2})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])";
+	private final static Pattern pattern2 = Pattern.compile(format2);
 
 	public static Date Objet2Date(Object obj) {
 		Date date = null;
@@ -167,7 +170,11 @@ public class DateTools {
 			if (matcher.matches()) {
 				date = string2date(obj.toString());
 			} else {
-				System.err.println("非法字符串日期" + obj);
+				// 可能是这种格式 2016-08-18
+				if (pattern2.matcher(obj.toString()).matches()) {
+					date = string2date(obj.toString());
+				} else
+					System.err.println("非法字符串日期" + obj);
 			}
 		} else {
 			System.err.println("不能识别类型，不能转为日期" + obj);

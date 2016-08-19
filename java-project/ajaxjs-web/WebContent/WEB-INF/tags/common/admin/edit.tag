@@ -10,7 +10,7 @@
 <c:if test="${type=='main'}">
 	<!DOCTYPE html>
 	<html>
-		<commonTag:head lessFile="/asset/bigfoot/asset/less/pages.less" />
+		<commonTag:head lessFile="/asset/bigfoot/asset/less/pages.less" title="${isCreate ? '新建' : '编辑'}${uiName}" />
 	<body>
 		<commonUI:adminHeader maxWin="false" pageTitle="${isCreate ? '新建' : '编辑'}${uiName}►${not empty info.id ? '#': ''}${info.id}">
 			<c:choose>

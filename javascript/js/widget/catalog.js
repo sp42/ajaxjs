@@ -7,7 +7,13 @@
  * @param {Number} selected_id 可选，如果指定了 id，则会默认显示那个 id
  */
 
-function CatalogSelectList(json, TOP_ID, selected_id) {
+function CatalogSelectList(json, TOP_ID, selected_id, cfg) {
+	if(cfg){
+		for(var i in cfg) {
+			this[i] = cfg[i];
+		}
+	}
+		
 	var ids = this.init(json);
 	
 	var tree = [];
@@ -59,6 +65,8 @@ CatalogSelectList.prototype.flat = function(arr, deep) {
 			 arguments.callee.call(this, item.children, deep + 1);
 	 }
 }
+// 获取 name 的 key
+CatalogSelectList.prototype.nameField = 'name';
 
 CatalogSelectList.prototype.render = function(data) {
 	// 渲染 DOM
@@ -73,7 +81,7 @@ CatalogSelectList.prototype.render = function(data) {
 			html += (new Array(data[i].deep * 4)).join('&nbsp;'); // 缩进
 			html += '└';
 		}
-		html += data[i].name;// 名称字段
+		html += data[i][this.nameField];// 名称字段
 
 		document.writeln(option.format(data[i].id, this.selected_id == data[i].id ? 'selected' : '', html));
 	}

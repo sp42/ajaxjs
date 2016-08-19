@@ -207,8 +207,6 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 			throw new BusinessException(e.getMessage());
 		}
 		
-//		com.ajaxjs.framework.model.Entity e22 = (com.ajaxjs.framework.model.Entity)entry;
-//		System.out.println(e22.isOnline());
 		try(SqlSession session = MyBatis.loadSession(mapperClz);) {
 			effectedRows = session.getMapper(mapperClz).update(entry);
 			session.commit();

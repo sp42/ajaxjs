@@ -148,7 +148,6 @@ public abstract class RemoteJsonData implements RemoteData {
 		Map<String, String> params = new HashMap<>();
 		params.put(getId_field(), id);
 		Map<String, Object> map = getInfo(url, params);
-		System.out.println("mads" + map);
 		return map;
 	}
 

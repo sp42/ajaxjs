@@ -73,11 +73,8 @@ public class ServletPatch {
 		// Enumeration 转换为 MAP
 		while (initParams.hasMoreElements()) {
 			String initParamName 	= initParams.nextElement(),
-				   initParamValue 	= servletCfg == null 
-							? filterCfg.getInitParameter(initParamName) 
-							: servletCfg.getInitParameter(initParamName);
+				   initParamValue 	= servletCfg == null ? filterCfg.getInitParameter(initParamName) : servletCfg.getInitParameter(initParamName);
 
-//			System.out.println("initParamName：" + initParamName + ", initParamValue:" + initParamValue);
 			initParamsMap.put(initParamName, initParamValue);
 		}
 		

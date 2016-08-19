@@ -35,7 +35,6 @@
 				float _requestTimeRecorder = (float)requestTimeRecorder;
 				_requestTimeRecorder = _requestTimeRecorder / 1000;
 				// float seconds = (endTime - startTime) / 1000F;
-		        // System.out.println(Float.toString(seconds) + " seconds.");
 				request.setAttribute("requestTimeRecorder", _requestTimeRecorder); 
 			}
 			%>

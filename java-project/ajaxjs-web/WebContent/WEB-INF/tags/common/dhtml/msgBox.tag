@@ -8,7 +8,6 @@
 </script>
 <%
 if(msgBox_type == null)msgBox_type = 0; // 默认值
-// System.out.println("dfd" + msgBox_type);
 if(msgBox_type == 0){
 %>
 <fieldset class="warningMsgBox">

@@ -102,9 +102,6 @@ public abstract class AbstractCrudController<T extends BaseModel> implements Cru
 		try {
 			BaseModel bean = service.getById(id);
 			model.put("info", bean);
-//			System.out.println(service.getModelAndView());
-//			System.out.println(model);
-//			BaseService.toSpringMVC_model(service.getModelAndView(), model);
 		} catch (ServiceException e) {
 			model.put("ServiceException", e);
 		}
@@ -203,7 +200,6 @@ public abstract class AbstractCrudController<T extends BaseModel> implements Cru
 		model.put("requestTimeRecorder",  System.currentTimeMillis());
 		
 		model.put("uiName", getService().getUiName());
-		System.out.println(getService().getClass().getName());
 		model.put("tableName", getService().getTableName());
 	}
 	

@@ -88,7 +88,7 @@ public class JSON {
 		T result = null;
 
 		String jsCode = null;
-		System.out.println("var obj = " + js);
+//		System.out.println("var obj = " + js);
 		try {
 			jsCode = "var obj = " + js;
 			engine.eval(jsCode);// rhino 不能直接返回 map，如 eval("{a:1}")

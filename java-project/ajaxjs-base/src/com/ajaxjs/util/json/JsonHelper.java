@@ -288,7 +288,6 @@ public class JsonHelper {
 			if(list.size() == 0){
 				return "[]";
 			} else if (list.get(0) instanceof String) {
-				System.out.println("111111111111111111" + list);
 				List<String> strList = (List<String>)list;
 				StringBuilder sb = new StringBuilder();
 				
