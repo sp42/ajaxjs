@@ -39,13 +39,14 @@
 			<div class="row">
 				<div style="text-align:center;">
 					<jsp:invoke fragment="moreBtn" />
-					<button class="my-btn-3" style="width:15%;">
-						<img src="${pageContext.request.contextPath}/asset/bigfoot/skin/icon/save.gif" /> ${isCreate ? '新建' : '修改'}</button> 
-					<button class="my-btn-3" style="width:10%;" onclick="this.up('form').reset();return false;">复 位</button> 
+						<button class="my-btn-3" style="width:15%;">
+							<img src="${pageContext.request.contextPath}/asset/bigfoot/skin/icon/save.gif" /> ${isCreate ? '新建' : '修改'}
+						</button> 
+						<button class="my-btn-3" style="width:10%;" onclick="this.up('form').reset();return false;">复 位</button> 
 					<c:if test="${!isCreate}">
-					<button class="my-btn-3" style="width:10%;" onclick="del();return false;">
-						<img src="${pageContext.request.contextPath}/asset/bigfoot/skin/icon/delete.gif" /> 删 除
-					</button> 
+						<button class="my-btn-3" style="width:10%;" onclick="del();return false;">
+							<img src="${pageContext.request.contextPath}/asset/bigfoot/skin/icon/delete.gif" /> 删 除
+						</button> 
 					</c:if>
 				</div> 
 			</div>

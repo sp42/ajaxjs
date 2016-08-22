@@ -99,6 +99,9 @@ public class Map2Pojo<T> {
 						LOGGER.info("what's this!!? " + value);
 					}
 					
+				} else if (t == String.class) {
+					// 字符型
+					Reflect.executeMethod(pojo, methodName, t, value.toString());
 				} else if (t == String[].class) {
 					// 复数
 					if (value instanceof String[]) {

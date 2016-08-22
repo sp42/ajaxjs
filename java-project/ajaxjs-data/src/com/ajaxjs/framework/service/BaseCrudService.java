@@ -160,7 +160,9 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 			entry.setUid(Util.getUUID()); // 创建 uuid
 
 			Date now = new Date();// 记录创建時間
-			entry.setCreateDate(now);
+			if(entry.getCreateDate() == null) {
+				entry.setCreateDate(now); // 如果不指定创建时间，则采用当前时期。即允许 创建时间可以指定
+			}
 			entry.setUpdateDate(now);
 		} catch (Throwable e) {
 			LOGGER.warning(e);

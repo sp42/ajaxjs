@@ -172,7 +172,7 @@ public class Reflect {
 		try {
 			return clazz.getMethod(method, args);
 		} catch (NoSuchMethodException e) {
-			LOGGER.warning("类找不到这个方法 {0}.{1}。", clazz.getName(), method);
+			LOGGER.warning("类找不到这个方法 {0}.{1}({2})。", clazz.getName(), method, printArgs(args));
 		} catch (SecurityException e) {
 			LOGGER.warning(e);
 		}
@@ -180,6 +180,15 @@ public class Reflect {
 		return null;
 	}
 
+	private static String printArgs(Class<?>[] args) {
+		String str = "";
+		for(Class<?> clz : args) {
+			str += clz.getName();
+		}
+		
+		return str.equals("") ? "void" : str;
+	}
+	
 	/**
 	 * 调用方法
 	 * 
