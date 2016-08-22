@@ -14,7 +14,7 @@ import com.ajaxjs.util.LogHelper;
 public abstract class AbstractController<T extends BaseModel> implements CrudController<T> {
 	private static final LogHelper LOGGER = LogHelper.getLog(AbstractController.class);
 	
-	private static final String perfix = "/WEB-INF/jsp/common/entity/";
+	private static final String perfix = "/common_jsp/json/";
 	
 	/**
 	 * 对应的业务类
@@ -159,7 +159,7 @@ public abstract class AbstractController<T extends BaseModel> implements CrudCon
 		
 //			}
 		
-		return perfix + "json_cud.jsp";
+		return perfix + "cud.jsp";
 	}
 
 	@Override
@@ -176,7 +176,7 @@ public abstract class AbstractController<T extends BaseModel> implements CrudCon
 			model.put("errMsg", e.getMessage());
 		}
 
-		return perfix + "json_cud.jsp";
+		return perfix + "cud.jsp";
 	}
 
 	@Override
@@ -191,7 +191,7 @@ public abstract class AbstractController<T extends BaseModel> implements CrudCon
 			model.put("ServiceException", e);
 		}
 
-		return perfix + "/json_delete.jsp";
+		return perfix + "delete.jsp";
 	}
 	
 	public IService<T> getService() {

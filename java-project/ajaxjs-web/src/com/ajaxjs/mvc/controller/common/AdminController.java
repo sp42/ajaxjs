@@ -35,18 +35,14 @@ public class AdminController<T extends BaseModel> extends AbstractController<T> 
 		return perfix + super.updateUI(id, model) + "/adminInfo.jsp";
 	}
 	
-	@POST
-	@Override
-	public String create(T entity, ModelAndView model) {
-		return super.create(entity, model);
-	}
-	
-	@PUT
-	@Path("/{id}")
-	@Override
-	public String update(@PathParam("id") long id, T entry, ModelAndView model) {
-		return super.update(id, entry, model);
-	}
+//	@POST
+//	@Override
+//	public abstract String create(T entity, ModelAndView model);
+//	
+//	@PUT
+//	@Path("/{id}")
+//	@Override
+//	public abstract String update(@PathParam("id") long id, T entry, ModelAndView model);
 	
 	@DELETE
 	@Path("/{id}")

@@ -11,7 +11,7 @@
     <c:otherwise>
 {
 	"isOk" : true,
-	"msg" : "删除建成功"
+	"msg" : "删除成功！"
 } 
     </c:otherwise>
 </c:choose>

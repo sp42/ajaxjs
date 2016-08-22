@@ -123,8 +123,6 @@ public class MvcDispatcher implements Filter {
 	 * @param model
 	 */
 	private static void resultHandler(Object result, Requester request, Responser response, ModelAndView model) {
-		LOGGER.info("执行逻辑完成，现在控制输出（响应）" + result);
-		
 		if (model != null)
 			model.saveToReuqest(request);
 
@@ -141,10 +139,12 @@ public class MvcDispatcher implements Filter {
 						LOGGER.warning(e);
 					}
 				} else { // JSP
-					if(!str.startsWith("/WEB-INF/jsp/"))// 自动补充前缀
-						str = "/WEB-INF/jsp/" + str;
+//					if(!str.startsWith("/WEB-INF/jsp/"))// 自动补充前缀
+//						str = "/WEB-INF/jsp/" + str;
 					if(!str.endsWith(".jsp"))			// 自动补充 .jsp 扩展名
 						str += ".jsp";
+					
+					LOGGER.info("执行逻辑完成，现在控制输出（响应 JSP）" + result);
 					response.sendRequestDispatcher(str);
 				}
 			}
@@ -305,6 +305,7 @@ public class MvcDispatcher implements Filter {
 		Object[] objs = new Object[2];
 		Method method = null;
 
+		System.out.println("HTTP:" + httpMethod);
 		for (String path : AnnotationUtils.controllers.keySet()) {
 			if (uri.startsWith(path)) { // 匹配对应的控制器
 				LOGGER.info(path + " 控制器命中！！！");

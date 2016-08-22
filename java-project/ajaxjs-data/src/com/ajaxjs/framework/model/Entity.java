@@ -23,9 +23,6 @@ import javax.validation.constraints.Size;
  *
  */
 public class Entity extends BaseModel {
-	@FieldDescription(doc="是否线上<br />true=线上显示（默认）/false=不显示") 
-	private boolean online;
-
 	@FieldDescription(doc="内容简介") 
 	@Size(max=60000)
 	private String intro;
@@ -37,7 +34,7 @@ public class Entity extends BaseModel {
 	private String cover;
 	
 	@FieldDescription(doc="当前状态") 
-	private String status;
+	private int status;
 	
 	@FieldDescription(doc="标签，用逗号（,）分割") 
 	private String[] tags;
@@ -45,14 +42,14 @@ public class Entity extends BaseModel {
 	/**
 	 * @return {@link #status}
 	 */
-	public String getStatus() {
+	public int getStatus() {
 		return status;
 	}
 
 	/**
 	 * @param status {@link #status}
 	 */
-	public void setStatus(String status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 
@@ -62,14 +59,6 @@ public class Entity extends BaseModel {
 
 	public void setIntro(String intro) {
 		this.intro = intro;
-	}
-
-	public boolean isOnline() {
-		return online;
-	}
-
-	public void setOnline(boolean isOnline) {
-		this.online = isOnline;
 	}
 
 	public Integer getCatalog() {

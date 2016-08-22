@@ -43,7 +43,9 @@
 						<img src="${pageContext.request.contextPath}/asset/bigfoot/skin/icon/save.gif" /> ${isCreate ? '新建' : '修改'}</button> 
 					<button class="my-btn-3" style="width:10%;" onclick="this.up('form').reset();return false;">复 位</button> 
 					<c:if test="${!isCreate}">
-					<button class="my-btn-3" style="width:10%;" onclick="this.up('form').reset();return false;">删 除</button> 
+					<button class="my-btn-3" style="width:10%;" onclick="del();return false;">
+						<img src="${pageContext.request.contextPath}/asset/bigfoot/skin/icon/delete.gif" /> 删 除
+					</button> 
 					</c:if>
 				</div> 
 			</div>
@@ -56,6 +58,8 @@
 			if(this.htmlEditor) {
 				formConfig.htmlEditor_hook = htmlEditor;
 			}
+			
+			
 		</script>
 	<c:choose>
 		<c:when test="${isCreate}">
@@ -72,9 +76,18 @@
 		<c:otherwise>
 		<script>
 			new bf_form(document.querySelector('form'), formConfig);
+			
+			function del() {
+				if(confirm('确定删除 \n${info.name}？'))
+					XMLHttpRequest.dele('delete.do', {}, function(json) {
+						if(json && json.isOk){
+							alert(json.msg);
+						}
+					});
+			}
 		</script>
 		</c:otherwise>
-	</c:choose>
+	</c:choose> 
 	</body>
 	</html>
  </c:if>
