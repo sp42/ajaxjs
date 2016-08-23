@@ -137,4 +137,8 @@ public class PageUtil {
 	public String formatShortDate(Date date) {
 		return DateTools.formatDateShortest(date);
 	}
+	
+	public static String jsonString_covernt(String str){
+		return str.replace("\r\n", "\\n");
+	}
 }
