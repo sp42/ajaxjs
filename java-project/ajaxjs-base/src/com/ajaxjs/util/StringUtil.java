@@ -183,7 +183,7 @@ public class StringUtil {
 	 *            已 URL 编码的字符串
 	 * @return 正常的 Java 字符串
 	 */
-	public static String urlEecode(String str) {
+	public static String urlEncode(String str) {
 		try {
 			return URLEncoder.encode(str, StandardCharsets.UTF_8.toString());
 		} catch (UnsupportedEncodingException e) {
