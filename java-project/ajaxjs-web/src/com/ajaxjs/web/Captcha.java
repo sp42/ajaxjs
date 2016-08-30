@@ -147,6 +147,10 @@ public class Captcha {
 				throw new IllegalAccessError("验证码不正确");
 		}
 		
+		if(isCaptchaPass) {
+			request.getSession().removeAttribute(SESSION_KEY);// 通过之后记得要 清除验证码
+		}
+		
 		return isCaptchaPass;
 	}
 

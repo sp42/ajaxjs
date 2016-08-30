@@ -26,6 +26,11 @@ import com.ajaxjs.framework.model.ModelAndView;
  */
 public interface CrudController<T> extends IController {
 	/**
+	 * 默认的模板路径
+	 */
+	public static final String perfix = "/common_jsp/json/";
+	
+	/**
 	 * 分页查询
 	 * 
 	 * @param start

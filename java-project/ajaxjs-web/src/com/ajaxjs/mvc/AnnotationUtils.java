@@ -80,9 +80,12 @@ public class AnnotationUtils {
 			// 总路径
 			Path path = clz.getAnnotation(Path.class);
 			if (path != null) {
-				controllers.put(path.value(), cInfo); // save the controller
-														// instance, path as key
-				LOGGER.info(path.value() + " 登记路径成功！");
+				if(controllers.containsKey(path.value())) {
+					LOGGER.warning("重复的 URL Mapping: {0}，请检查代码的 控制器 {1} 是否重复？", path.value(), clz.getName());
+				} else {
+					controllers.put(path.value(), cInfo); /* save the controller instance, path as key */
+					LOGGER.info(path.value() + " 登记路径成功！");
+				}
 			} else {
 				LOGGER.warning("No Path info!");
 			}

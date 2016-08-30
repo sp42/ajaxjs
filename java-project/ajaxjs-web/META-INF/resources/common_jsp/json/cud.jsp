@@ -4,7 +4,7 @@
     <c:when test="${not empty errMsg}">
 {
 	"isOk" : false,
-	"msg" : "${not empty isUpdate ? '修改' : '创建'}失败！原因：${PageUtil.jsonString_covernt(errMsg)}"
+	"msg" : "${isUpdate || not empty isUpdate? '修改' : '创建'}失败！原因：${PageUtil.jsonString_covernt(errMsg)}"
 }
     </c:when>
      <c:when test="${not empty isUpdate}">
