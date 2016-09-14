@@ -393,8 +393,9 @@ bf.AppStru = (function() {
 				return;
 			}
 			var arr = this.tree.levelAt(0);
-			println(arr);
-			println(JSON.stringify(arr));
+			this.tree.buildPath();
+//			println('arr::' +arr);
+//			println('JSON.stringify(arr)::' + JSON.stringify(arr));
 			return arr;
 		},
 

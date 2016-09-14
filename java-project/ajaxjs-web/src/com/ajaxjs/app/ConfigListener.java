@@ -93,7 +93,10 @@ public class ConfigListener implements ServletContextListener {
 		System.out.println("配置启动完毕" + Init.ConsoleDiver);
 	}
 	
-	public static final ScriptEngine jsRuntime = JSON.engineFatory();// 主 JS runtime，其他 js 包都导进这里来
+	/**
+	 * 主 JS runtime，其他 js 包都导进这里来
+	 */
+	public static final ScriptEngine jsRuntime = JSON.engineFatory();// 
 	public static boolean isEnableJSON_Config;			// 是否通过 JS 来定义配置文件
 	public static boolean isJSON_Config_loaded = false;
 	
