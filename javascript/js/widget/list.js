@@ -37,7 +37,7 @@
 					if(_data === false) continue; // 返回 false 则跳过该记录，不会被渲染
 					var li = tpl.format(_data);
 					
-					if(isAppend_DOM){ // 分页是累加的
+					if (isAppend_DOM) { // 分页是累加的
 						// 利用 div 添加到 tplEl
 						var temp = document.createElement('div');
 						temp.innerHTML = li;
@@ -45,9 +45,9 @@
 						if (loadingIndicator) { // 如果有 loadingIndicator，則干掉
 							tplEl.removeChild(loadingIndicator);
 						}
-				
+
 						tplEl.appendChild(temp.querySelector('li'));
-					}else{
+					} else {
 						lis.push(li);// 之前的 tag 不要了
 					}
 				}
@@ -172,6 +172,7 @@
 					}
 					//var offset = start + pageSize; // 
 					_args.start = start;
+					
 					var cb = config && config.cb ? _imageHandler.after(config.cb) : _imageHandler;
 					config.afterLoad_Fn = cb;
 					binding(url, _args, el, tpl, config);

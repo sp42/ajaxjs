@@ -1023,6 +1023,7 @@ function openClient(el, downloadUrl){
 		return isStringOutput ? utils.json2url(formData) : formData;
 	}
 	
+	var url_regexp = /(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/;
 	/**
 	 * 输入参数，还原它的primitive值。有点类似 eval() 的作用，却不使用 eval()。
 	 * @param  {Mixed} v
@@ -1035,6 +1036,9 @@ function openClient(el, downloadUrl){
 			if(v.toString() == (new Date(v)).toString()) return new Date(v); // v is a date but in Stirng Type
 	      	if(v == String(Number(v))) return Number(v);
 		}
+		
+		// 检查 url 编码
+		if(url_regexp.test(v)){ v = encodeURIComponent(v);}
 	  	return v;
 	}
 
