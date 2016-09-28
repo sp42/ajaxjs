@@ -14,6 +14,5 @@
 	<classpathentry kind="lib" path="lib/validation/commons-beanutils-1.9.2.jar"/>
 	<classpathentry kind="lib" path="lib/validation/commons-lang3-3.4.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ajaxjs-data-validtion"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
