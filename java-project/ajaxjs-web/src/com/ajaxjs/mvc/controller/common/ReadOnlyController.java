@@ -14,14 +14,14 @@ public class ReadOnlyController<T extends BaseModel> extends AbstractController<
 	@Path("/list")
 	@Override
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
-		return super.list(start, limit, model);
+		return AdminController.perfix + super.list(start, limit, model) + "/frontEnd_list";
 	}
 	
 	@GET
 	@Path("/{id}")
 	@Override
 	public String updateUI(@PathParam("id") long id, ModelAndView model) {
-		return super.updateUI(id, model);
+		System.out.println("id:::" + id);
+		return AdminController.perfix + super.updateUI(id, model) + "/frontEnd_info";
 	}
-
 }

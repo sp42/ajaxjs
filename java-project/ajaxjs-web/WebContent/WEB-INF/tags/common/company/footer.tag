@@ -9,6 +9,7 @@
 
 		<div class="copyright">
 		<div>
+			<jsp:doBody />
 			<a href="#">
 				<img src="${pageContext.request.contextPath}/asset/bigfoot/asset/images/gs.png" />
 			</a> 

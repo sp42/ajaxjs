@@ -13,7 +13,7 @@
 					</div>
 				</a>
 				<div align="right" class="misc">
-					${viewUtils.shortDate_YYYY_MM_DD(current.createDate)} 分类：${current.seciotnName}
+					${PageUtil.formatDate(current.createDate)} 分类：${current.seciotnName}
 				</div>
 
 	</div>
@@ -37,7 +37,7 @@
 			<h2>${info.name}</h2>
 			<h3 class="createDate">
 <%-- 			栏目： ${sectionInfo.name}  --%>
-			创建日期：${info.createDate}</h3>
+			创建日期：${PageUtil.formatDate(info.createDate)}</h3>
 			<div>${info.content}</div>
 			<div style="margin-top:5%;font-size:.8rem;padding-left:2%;">
 			<c:if test="${not empty neighbor.perRecord.id}">
@@ -52,7 +52,7 @@
 			</c:if>
 			</div>
 		</article>
-		<div style="max-width: 600px;margin: 1% auto;overflow: hidden;">
+		<div style="overflow: hidden;">
 			<table align="right">
 				<tr>
 					<td valign="middle">

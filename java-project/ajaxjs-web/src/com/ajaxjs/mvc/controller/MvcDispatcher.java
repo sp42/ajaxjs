@@ -20,6 +20,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -247,7 +249,7 @@ public class MvcDispatcher implements Filter {
 						LOGGER.warning("不支持类型");
 					}
 					break; // 只需要执行一次，参见调用的那个方法就知道了
-				} else if (a instanceof PathParam) {
+				} else if (a instanceof PathParam) { // URL 上面的参数
 					Path path = method.getAnnotation(Path.class);
 					if (path != null) {
 						String paramName = ((PathParam) a).value();
@@ -274,6 +276,12 @@ public class MvcDispatcher implements Filter {
 			args.add("nothing to add args"); // 不知道传什么，就空字符串吧
 		}
 	}
+	
+	static String matchList(String regexp, String str) {
+		Matcher m = Pattern.compile(regexp).matcher(str);
+
+		return m.find() ? m.group(m.groupCount()) : null;
+	}
 
 	/**
 	 * 取去 url 上的值
@@ -284,8 +292,10 @@ public class MvcDispatcher implements Filter {
 	 * @return
 	 */
 	private static String getValueFromPath(String requestURI, String value, String paramName) {
-		String regExp = "(?!" + value.replace("{" + paramName + "}", ")(\\d+)");/* 获取正则 暂时写死 数字 TODO */
-		String result = StringUtil.regMatch(regExp, requestURI);
+		String regExp = "(" + value.replace("{" + paramName + "}", ")(\\d+)");/* 获取正则 暂时写死 数字 TODO */
+//		System.out.println(regExp);
+		String result = matchList(regExp, requestURI);
+//		System.out.println(result);
 		
 		if (result == null)
 			throw new IllegalArgumentException("在 " + requestURI + "不能获取 " + paramName + "参数");

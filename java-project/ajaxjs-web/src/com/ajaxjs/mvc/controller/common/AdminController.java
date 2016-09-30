@@ -11,7 +11,7 @@ import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.mvc.controller.AbstractController;
 
 public class AdminController<T extends BaseModel> extends AbstractController<T> {
-	private static final String perfix = "/WEB-INF/jsp/entry/";
+	static final String perfix = "/WEB-INF/jsp/entry/";
 	
 	@GET
 	@Path("/list")
