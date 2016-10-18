@@ -12,7 +12,7 @@
 		 * @param {JSON} json 服务端返回 JSON
 		 * 
 		 */
-		var cb = (function (json, xhr, dataKey, tplEl, tpl, renderer){
+		var cb = (function (json, xhr, dataKey, tplEl, tpl, renderer) {
 			// 数据为 array 还有数据行数
 			var data;
 			if(dataKey.indexOf('.') != -1) {
@@ -202,11 +202,13 @@
 			var loadMoreBtn = typeof config.loadMoreBtn == 'string' ? 
 					document.querySelector(config.loadMoreBtn)
 					: config.loadMoreBtn;
-			if(config.lastQueryLength != null && (config.lastQueryLength <= config.pageSize && loadMoreBtn)){ // 足够容纳，无须分页
-				// 不能超出更多
-				loadMoreBtn.innerHTML = '最后一页';
-			}else{
-				loadMoreBtn.innerHTML = '下一页';
+			if(loadMoreBtn) {	
+				if(config.lastQueryLength != null && (config.lastQueryLength <= config.pageSize && loadMoreBtn)){ // 足够容纳，无须分页
+					// 不能超出更多
+					loadMoreBtn.innerHTML = '最后一页';
+				}else{
+					loadMoreBtn.innerHTML = '下一页';
+				}
 			}
 		}
 		var imgs = [];
