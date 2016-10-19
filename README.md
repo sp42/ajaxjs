@@ -1,8 +1,10 @@
 #AJAXJS Web
 =================================== 
-AJAXJS Web 是一款基于 Java 平台原创的 Web 框架，继承了 Java 平台的高效、安全、稳定、跨平台等诸多优势， 但却摒弃了传统 SSH 企业级架构所带来的庞大和臃肿，非常适合互联网中小型网站的应用。
+AJAXJS Web 是一款基于 Java 平台原创的 Web 框架，继承了 Java 平台的高效、安全、稳定、跨平台等诸多优势， 但却摒弃了传统 SSH 企业级架构所带来的庞大和臃肿，强调高效、务实。非常适合互联网中小型网站的应用。
 
 设计目标：clean, simple, fast.
+
+AJAXJS Framework 基于 [Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html) 开源协议发布。
 
 [点击这里你可以链接到主页](http://framework.ajaxjs.com/framework/)
 [作者博客](http://blog.csdn.net/zhangxin09/) 欢迎加入 QQ 群讨论：3150067
@@ -18,8 +20,7 @@ AJAXJS Web 是一款基于 Java 平台原创的 Web 框架，继承了 Java 平�
 实体快速 CRUD 并装配；前端基于 TypeScript+React 组件，提供 List/Carousel/Grid/Tree/HTMLEditor 等控件；响应式设计兼容 PC/H5App/微信公众号
 
 ### 基于分层的模块化思想
-
-服务端采用分层的思想分为以下几个部分。
+基于 IOC、AOP、ORM、DAO、MVC 思想。服务端采用分层的思想分为以下几个部分。
 
  *   ajaxjs-base 基础模块，包含相当多的工具类或静态方法 [jar 包下载（去除注释和单测仅77kb大小，约七千多行代码）](http://git.oschina.net/sp42/ajaxjs/raw/master/java-project/ajaxjs-ssm/WebContent/WEB-INF/lib/ajaxjs-base-1.0.0.jar) [源码直达](http://git.oschina.net/sp42/ajaxjs/tree/master/java-project/ajaxjs-base/src?dir=1&amp;filepath=java-project%2Fajaxjs-base%2Fsrc) [文档](http://framework.ajaxjs.com/framework/javadoc2/ajaxjs-base/)。该模块下又包含以下子模块：
     
