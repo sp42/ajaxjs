@@ -25,7 +25,7 @@
 			<a href="javascript:;" class="Chinese" onclick="toChinese(this);">正体中文</a>
 			<script src="${pageContext.request.contextPath}/asset/bigfoot/js/libs/chinese.js"></script>
 			<br />
-			粤ICP备15007080号-1
+			${empty _config.site_icp ? '粤ICP备15007080号-2' :  _config.site_icp}
 			Powered by <a target="_blank" href="http://framework.ajaxjs.com">AJAXJS</a>
 			<br />
 			<%
@@ -39,7 +39,7 @@
 				request.setAttribute("requestTimeRecorder", _requestTimeRecorder); 
 			}
 			%>
-	 	©Copyright <%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%> 版权所有， ${global_config.clientFullName} ${empty requestTimeRecorder ? '' : '请求完成耗时：'.concat(requestTimeRecorder).concat('秒') }
+	 	©Copyright <%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%> 版权所有， ${_config.clientFullName} ${empty requestTimeRecorder ? '' : '请求完成耗时：'.concat(requestTimeRecorder).concat('秒') }
 	
 	</div>
 		</div>

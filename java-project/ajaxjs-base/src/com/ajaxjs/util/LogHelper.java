@@ -38,7 +38,7 @@ public class LogHelper {
 	private Logger logger;					// 包装这个 logger
 	private static int max_size = 1; 		// 最大文件大小，1 = 一兆
 	private static int max_number = 10;
-	private static String logFilePath = "%t/log%g.log"; // 日志文件，在系统环境变量 temp 目录下 logX.log，其中 X 会自增。
+//	private static String logFilePath = "%t/log%g.log"; // 日志文件，在系统环境变量 temp 目录下 logX.log，其中 X 会自增。
 	private static Map<String, LogHelper> cache = new HashMap<>();// 缓存
 	
 	/**
@@ -73,7 +73,8 @@ public class LogHelper {
 	public LogHelper(Class<?> clazz) {
 		packageName = clazz.getName();
 		logger = Logger.getLogger(packageName);
-		logger.addHandler(fileHandlerFactory(logFilePath));// 初始化保存到磁盤的處理器
+// 经常会 eclipse 下报错，原因未知
+//		logger.addHandler(fileHandlerFactory(logFilePath));// 初始化保存到磁盤的處理器
 		logger.setFilter(filter);
 	}
 	
@@ -113,9 +114,9 @@ public class LogHelper {
 		} catch (IOException e) {
 			// 如果文件目录不存在会报错
 			File file = new File(logFilePath);
-			if(!file.exists() && !file.getParentFile().exists()){
+			if (!file.exists() && !file.getParentFile().exists()) {
 				System.out.printf("日志文件夹 %s 不存在，现在创建！", logFilePath);
-				if(file.getParentFile().mkdirs()){
+				if (file.getParentFile().mkdirs()) {
 					System.out.println(logFilePath + " 创建成功");
 					return fileHandlerFactory(logFilePath); // 重新调用一次
 				}

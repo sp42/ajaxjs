@@ -13,15 +13,21 @@
     <p>常见的 el 表达式如下。</p>
     <ul>
       <li>${pageContext.request.contextPath} 项目变量</li>
-      <li>${requestScope['javax.servlet.forward.request_uri']}&nbsp;获取原请求的&nbsp;uri，而非模版所在的&nbsp;uri</li>
-      <li>${viewUtils.formatDateShorter(current.createDate)}&nbsp;调用方法并传参，要求 viewUtils&nbsp;&nbsp; 在上下文</li>
-      <li>${empty value ？foo：bar}/${not empty value ？ bar：foo} 判断值是否为空，${param.xxx} 请求参数</li>
+      <li>${requestScope['javax.servlet.forward.request_uri']}&nbsp;获取原请求
+        的&nbsp;uri，而非模版所在的&nbsp;uri</li>
+      <li>${viewUtils.formatDateShorter(current.createDate)}&nbsp;调用方法并传参，要求
+        viewUtils&nbsp;&nbsp; 在上下文</li>
+      <li>${empty value ？foo：bar}/${not empty value ？ bar：foo}
+        判断值是否为空，${param.xxx} 请求参数</li>
     </ul>
     <h4>JSTL 标签库</h4>
-    <p>JSP 标准标签库（JSTL）是一个 JSP 标签集合，它封装了 JSP 应用的通用核心功能。使用前须引入相关&nbsp;jar&nbsp;包，并在 JSP 页面声明头：&lt;%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%&gt;，其中 prefix 前缀可自定义。</p>
+    <p>JSP 标准标签库（JSTL）是一个 JSP 标签集合，它封装了 JSP
+      应用的通用核心功能。使用前须引入相关&nbsp;jar&nbsp;包，并在 JSP 页面声明头：&lt;%@taglib
+      uri="http://java.sun.com/jsp/jstl/core" prefix="c"%&gt;，其中 prefix 前缀可自定义。</p>
     <p>请参阅 <a href="http://www.runoob.com/jsp/jsp-jstl.html">JSTL&nbsp;教程</a>。</p>
     <h4>判断、迭代标签 </h4>
-    <p>自定义标签库基于 JSP 2.0 新提供的 SimpleTagSupport 实现，比 JSTL&nbsp;简单。使用前请将 tag.tld 文件复制在项目 WEB-INF 目录下方可。tag.tld&nbsp;位于 /tag_v2/tag.tld。</p>
+    <p>自定义标签库基于 JSP 2.0 新提供的 SimpleTagSupport 实现，比 JSTL&nbsp;简单。使用前请将 tag.tld
+      文件复制在项目 WEB-INF 目录下方可。tag.tld&nbsp;位于 /tag_v2/tag.tld。</p>
     <p>在 JSP 页面声明头：&lt;%@taglib uri="/ajaxjs" prefix="c"%&gt;，其中 prefix 前缀可自定义。</p>
     <h5>If&nbsp;条件判断逻辑</h5>
     <p>若条件为真，渲染标签内的内容。If 语句暂不提供 else 子语句。要执行 else 语句请使用下面的 choose。</p>
@@ -55,7 +61,8 @@
 &lt;/c:choose&gt;
 </pre>
     <h5>foreach 迭代逻辑</h5>
-    <p>foreach&nbsp;既支持&nbsp;Collection 集合，也支持&nbsp;Map 的迭代，还有 Java&nbsp;数组的遍历。${currentcnt}&nbsp;是当前索引，${cnt} 是集合总数。</p>
+    <p>foreach&nbsp;既支持&nbsp;Collection 集合，也支持&nbsp;Map 的迭代，还有
+      Java&nbsp;数组的遍历。${currentcnt}&nbsp;是当前索引，${cnt} 是集合总数。</p>
     <table style="width: 100%" border="0">
       <tbody>
         <tr>
@@ -90,8 +97,11 @@
     <p> </p>
     <p>各种标签之间允许嵌套。</p>
     <h4>页面常见标签库 </h4>
-    <p>内容标签基于&nbsp;JSP&nbsp;Tag&nbsp;Files 实现。相关教程请参阅<a href="http://blog.csdn.net/zhangxin09/article/details/5099329">《JSP Tag Files 技术总结》</a>。 </p>
-    <p>使用前，请把源码目录下的 /tags_v2&nbsp;通过 Eclipse 的 link file&nbsp;关联到当前项目的 /WEB-INF/tags，这个 /WEB-INF/tags 位置不能修改；然后重命名 tags_v2&nbsp;为 public（推荐 public，可修改），于是，引用头便是：</p>
+    <p>内容标签基于&nbsp;JSP&nbsp;Tag&nbsp;Files 实现。相关教程请参阅<a href="http://blog.csdn.net/zhangxin09/article/details/5099329">《JSP
+        Tag Files 技术总结》</a>。 </p>
+    <p>使用前，请把源码目录下的 /tags_v2&nbsp;通过 Eclipse 的 link file&nbsp;关联到当前项目的
+      /WEB-INF/tags（也就是导入标签库的过程），这个 /WEB-INF/tags 位置不能修改；然后重命名 tags_v2&nbsp;为
+      public（推荐 public，可修改），于是，引用头便是：</p>
     <pre class="prettyprint">&lt;%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common/html"%&gt;
 &lt;commonTag:head /&gt;</pre>
     <p>上例子调用了 HTML head 标签。下述 page.tag 依赖此上述 head 头文件，封装了常见的标签。</p>
@@ -110,6 +120,35 @@
         </tr>
       </tbody>
     </table>
+    <p>标签库在 ajaxjs-web 模块下的 WEB-INF\tags\common\page.tag 中。自定义标签
+      page.tag&nbsp;整合了多个常见的 HTML&nbsp;片断，例如导航、页脚之类的，通过&nbsp;Tag&nbsp;Files
+      的属性指定哪个片断（type=XXX）。例如&nbsp;type=navMenu 则指定引入导航片断，具体被导入如下代码</p>
+    <pre class="prettyprint">&lt;%-- 导航 --%&gt;
+&lt;c:if test="${type == 'navMenu'}"&gt;
+	&lt;ul&gt;
+		&lt;li&gt;&lt;a href="${pageContext.request.contextPath}/"&gt;首页&lt;/a&gt;&lt;/li&gt;
+	&lt;c:foreach items="${PageNode.navBar}" var="menu"&gt;
+		&lt;li ${PageNode.isCurrentNode(menu) ? ' class="selected"' : ''}&gt;
+			&lt;a href="${pageContext.request.contextPath}/${menu.id}/"&gt;${menu.name}&lt;/a&gt;
+		&lt;/li&gt;
+	&lt;/c:foreach&gt;
+	&lt;/ul&gt;
+&lt;/c:if&gt;</pre>
+    <p>可见，如果在当前页面则会高亮显示，加上 class="selected" 样式类。PageNode.isCurrentNode(menu) 是
+      EL 表达式调用 Java 方法的写法，这里调用 isCurrentNode 方法（Java 实例方法、静态方法均可）。</p>
+    <p>EL 表达式中的 PageNode 对象是哪里的呢？怎么传进来的呢？从最根源开始说就是…… WEB-INF&nbsp;里面的
+      web.xml，加入一个监听器</p>
+    <pre class="prettyprint">&lt;!-- 是否启动 JSON 作为网站结构 --&gt;
+&lt;listener&gt;
+	&lt;listener-class&gt;com.ajaxjs.app.NodeListener&lt;/listener-class&gt;
+&lt;/listener&gt;
+&lt;!-- // 是否启动 JSON 作为网站结构 --&gt;</pre>
+    <p>每次请求都会调用 com.ajaxjs.app.NodeListener，该类实现了
+      javax.servlet.ServletRequestListener 接口。每次请求&nbsp;request 都会保存
+      NodeProcessor 对象，即 request.setAttribute("PageNode", new
+      NodeProcessor(request.getContextPath(), uri));。上述
+      PageNode.isCurrentNode(menu)&nbsp;就是调用 com.ajaxjs.app.NodeProcessor.isCurrentNode(Map&lt;String,
+      ?&gt; node) 方法。</p>
     <h5>URI 位置</h5>
     <p>报告页面位置。</p>
     <pre class="prettyprint">&lt;commonTag:page type="anchor" /&gt;</pre>

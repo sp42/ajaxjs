@@ -21,3 +21,17 @@ pre.prettyprint {
 	font-size:14px;
 	font-family:Monaco, Consolas, Courier New;
 }
+table.table{
+	border: 1px gray solid;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+table.table th{
+  background-color: #efefef;
+}
+table.table td, table.table th{
+  border: 1px gray solid;
+  line-height:160%;
+  height:120%;
+  padding:6px;		
+}

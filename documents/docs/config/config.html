@@ -8,13 +8,42 @@
     <link rel="stylesheet" type="text/css" href="../common.css">
     <script src="http://bigfoot.ajaxjs.com/bigfoot/public/run_prettify.js"></script>
   </head>
-  <body> 数据库当前支持 MySQL/SQLite。如果项目并发量不大可使用 SQLite，更简单。相关驱动下载如下。<br>
+  <body>
+    <p><br>
+    </p>
+    <table class="table">
+      <tbody>
+        <tr>
+          <th>键名称 </th>
+          <th>含义</th>
+          <th>调用例子</th>
+        </tr>
+        <tr>
+          <td>_config</td>
+          <td>全局配置</td>
+          <td>_config.clientFullName&nbsp;客户名称</td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p><br>
+    </p>
+    <p>数据库当前支持 MySQL/SQLite。如果项目并发量不大可使用 SQLite，更简单。相关驱动下载如下。</p>
     <ul>
       <li>MySQL <a href="http://www.mysql.com/products/connector/">驱动</a></li>
       <li>SQLite <a href="https://bitbucket.org/xerial/sqlite-jdbc">驱动</a></li>
     </ul>
     <h4>数据库连接池</h4>
-    <p>开始的时候， AJAXJS 选择了 Tomcat 自带的<a href="https://tomcat.apache.org/tomcat-7.0-doc/jdbc-pool.html">数据库连接池</a>。后来加入 Mybatis，里面也包含了一个连接池，但一般情况下仍旧使用 Tomcat 连接池配置，位于 /META-INF/context.xml。</p>
+    <p>开始的时候， AJAXJS 选择了 Tomcat 自带的<a href="https://tomcat.apache.org/tomcat-7.0-doc/jdbc-pool.html">数
+        据库连接池</a>。后来加入 Mybatis，里面也包含了一个连接池，但一般情况下仍旧使用 Tomcat 连接池配置，位于
+      /META-INF/context.xml。</p>
     <pre class="prettyprint">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
 &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/2002/xmlspec/dtd/2.10/xmlspec.dtd"&gt;
 &lt;Context&gt;

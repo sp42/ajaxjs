@@ -1,5 +1,5 @@
 <%@tag pageEncoding="UTF-8" description="Page HTML"%>
-<%@attribute name="type" type="String" required="true" description="该属性选择类型"%>
+<%@attribute name="type" type="String" required="true" description="指定哪种 HTML 片断"%>
 <%@ taglib uri="/ajaxjs" prefix="c"%>
 
 <%-- 导航 --%>
