@@ -45,7 +45,8 @@ public class ConfigListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent e) {
 		System.out.println("ConfigListener 配置启动");
 		ServletContext cxt = e.getServletContext();
-		initLoggerFileHandler(cxt);
+// eclipse 不能删除
+//		initLoggerFileHandler(cxt);
 
 		String _isEnableJSON_Config = cxt.getInitParameter("isEnableJSON_Config");
 		if (_isEnableJSON_Config == null) {
