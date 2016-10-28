@@ -88,7 +88,7 @@ public class MvcDispatcher implements Filter {
 			if (method.getParameterTypes().length > 0) {
 				Object[] args = getArgs(request, response, method);
 				model = findModel(args);
-				result = Reflect.executeMethod(controller, method, args);// 通过反射执行方法
+				result = Reflect.executeMethod(controller, method, args);// 通过反射执行控制器方法
 			} else {
 				// 方法没有参数
 				result = Reflect.executeMethod(controller, method);
@@ -315,7 +315,7 @@ public class MvcDispatcher implements Filter {
 		Object[] objs = new Object[2];
 		Method method = null;
 
-		System.out.println("HTTP:" + httpMethod);
+		System.out.println("HTTP::" + httpMethod);
 		for (String path : AnnotationUtils.controllers.keySet()) {
 			if (uri.startsWith(path)) { // 匹配对应的控制器
 				LOGGER.info(path + " 控制器命中！！！");
