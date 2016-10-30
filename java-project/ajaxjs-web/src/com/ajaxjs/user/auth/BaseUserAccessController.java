@@ -25,6 +25,8 @@ import com.ajaxjs.web.Responser;
 
 public abstract class BaseUserAccessController implements IController {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseUserAccessController.class);
+	
+	public static final String request_exception_key = "exObj";
 
 	private UserService service = new UserService();
 

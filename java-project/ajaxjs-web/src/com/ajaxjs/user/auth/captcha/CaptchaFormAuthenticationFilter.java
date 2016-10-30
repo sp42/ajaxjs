@@ -23,6 +23,7 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 
+import com.ajaxjs.user.auth.BaseUserAccessController;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.web.Captcha;
@@ -63,8 +64,8 @@ public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
 		try {
 			token = createToken(request, response);
 		} catch (IllegalArgumentException e) {
-			AuthenticationException ae = new AuthenticationException(e.getMessage());
-			request.setAttribute("exObj", e);
+			AuthenticationException ae = new AuthenticationException(e.getMessage());// 封装一下
+			request.setAttribute(BaseUserAccessController.request_exception_key, e);
 			return onLoginFailure(token, ae, request, response);
 		}
 		
@@ -94,7 +95,7 @@ public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
 //			return onLoginSuccess(token, subject, request, response);
 			return true; // 返回 true 让过滤器继续（而不是调到默认的 welcome），返回的 controller 那里去，因为我要在那裏返回 json ！
 		} catch (AuthenticationException e) {
-			request.setAttribute("exObj", e);
+			request.setAttribute(BaseUserAccessController.request_exception_key, e);
 			return onLoginFailure(token, e, request, response);
 		}
 	}

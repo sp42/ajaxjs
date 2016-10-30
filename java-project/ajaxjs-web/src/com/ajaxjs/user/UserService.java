@@ -38,25 +38,30 @@ import com.ajaxjs.framework.dao.MyBatis;
 import com.ajaxjs.framework.exception.DaoException;
 import com.ajaxjs.framework.exception.ServiceException;
 import com.ajaxjs.framework.service.BaseCrudService;
+import com.ajaxjs.user.auth.ShiroDbRealm;
+import com.ajaxjs.util.LogHelper;
 
 public class UserService extends BaseCrudService<User, UserDao> {
+	private static final LogHelper LOGGER = LogHelper.getLog(UserService.class);
+
 	public UserService() {
 		setMapper(UserDao.class);
 		setTableName("user");
 		setUiName("用户");
 	}
-	
+
 	/**
 	 * 用户登录之后……
+	 * 
 	 * @param user
 	 * @param ip
 	 * @throws ServiceException
 	 */
 	public void afterLogin(User user, String ip) throws ServiceException {
 		int effectedRows = 0;
-		if(user == null || user.getId() == 0)
+		if (user == null || user.getId() == 0)
 			throw new ServiceException("非法用户！");
-		
+
 		try {
 			try (SqlSession session = MyBatis.sqlSessionFactory.openSession();) {
 				UserDao dao = session.getMapper(UserDao.class);
@@ -72,8 +77,35 @@ public class UserService extends BaseCrudService<User, UserDao> {
 		}
 	}
 
-	public User findByUserName(String userName) {
-		return null;
-		
+	public User findByUserName(String userName) throws ServiceException {
+		User user = null;
+
+		try (SqlSession session = MyBatis.loadSession(UserDao.class);) {
+
+			UserDao userDao = session.getMapper(UserDao.class);
+			user = userDao.findByUserName(userName);
+
+		} catch (Throwable e) {
+			LOGGER.warning(e);
+			throw new DaoException(e.getMessage());
+		}
+
+		return user;
+	}
+
+	public User findByUserNameAndPassword(String userName, String password) throws ServiceException {
+		User user = null;
+
+		try (SqlSession session = MyBatis.loadSession(UserDao.class);) {
+
+			UserDao userDao = session.getMapper(UserDao.class);
+			user = userDao.findByUserNameAndPassword(userName, password);
+
+		} catch (Throwable e) {
+			LOGGER.warning(e);
+			throw new DaoException(e.getMessage());
+		}
+
+		return user;
 	}
 }

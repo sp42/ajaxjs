@@ -20,6 +20,7 @@ import java.util.Date;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.Update;
 
@@ -27,9 +28,9 @@ import com.ajaxjs.framework.dao.DAO;
 import com.ajaxjs.framework.dao.DynamicSqlProvider;
 
 public interface UserDao extends DAO<User> {
-	@SelectProvider(type = DynamicSqlProvider.class, method = "selectById")
-	@Override
-	User selectById(@Param("id") long id, @Param("tablename") String tablename);
+//	@SelectProvider(type = DynamicSqlProvider.class, method = "selectById")
+//	@Override
+//	User selectById(@Param("id") long id, @Param("tablename") String tablename);
 	
 	@InsertProvider(type = DynamicSqlProvider.class, method = "create")
 	@Options(useGeneratedKeys = true, keyProperty = "id")
@@ -38,4 +39,10 @@ public interface UserDao extends DAO<User> {
 	
 	@Update("UPDATE SET user loginDate = ${loginDate}, ip = ${ip} WHERE id = ${id}")
 	int updateLoginInfo(long id, Date loginDate, String ip);
+	
+	@Select("SELECT * FROM user WHERE name = '${userName}'")
+	User findByUserName(@Param("userName") String userName);
+	
+	@Select("SELECT * FROM user WHERE name = '${userName}' AND password = '${password}'")
+	User findByUserNameAndPassword(@Param("userName") String userName, @Param("password") String password);
 }

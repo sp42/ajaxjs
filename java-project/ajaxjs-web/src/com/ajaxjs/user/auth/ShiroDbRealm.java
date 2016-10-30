@@ -18,20 +18,24 @@ package com.ajaxjs.user.auth;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthenticatingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
-//import com.ajaxjs.framework.user.Service;
-//import com.ajaxjs.framework.user.User;
 import com.ajaxjs.util.LogHelper;
+import com.ajaxjs.framework.exception.ServiceException;
+import com.ajaxjs.user.User;
+import com.ajaxjs.user.UserService;
 
 public class ShiroDbRealm extends AuthenticatingRealm {
 	private static final LogHelper LOGGER = LogHelper.getLog(ShiroDbRealm.class);
-	// private Service service = new Service();
+
+	private UserService service = new UserService();
 
 	/**
 	 * 认证回调函数,登录时调用
@@ -41,18 +45,29 @@ public class ShiroDbRealm extends AuthenticatingRealm {
 			throws AuthenticationException {
 		UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
 
-		String userName = token.getUsername();
-		LOGGER.info(userName);
+		String userName = token.getUsername(), password = new String((char[]) token.getCredentials());
+		LOGGER.info("登陆用户名：：" + userName);
 
-		// User user = service.findByUserName(userName);
+		User user;
+		try {
+			user = service.findByUserName(userName);
+
+			if (user == null || !user.getName().equals(userName)) {
+				throw new UnknownAccountException(); // 如果用户名错误
+			}
+
+//			user = service.findByUserNameAndPassword(userName, password);
+	
+			if (!user.getPassword().equals(password)) {
+				throw new IncorrectCredentialsException(); // 如果密码错误
+			}
+			
+		} catch (ServiceException e) {
+			LOGGER.warning(e);
+			throw new AuthenticationException(e.getMessage());
+		}
 
 		return new SimpleAuthenticationInfo(userName, token.getPassword(), getName());
-		// if (user != null) {
-		// return new SimpleAuthenticationInfo(userName, token.getPassword(),
-		// getName());
-		// } else {
-		// return null;
-		// }
 	}
 
 	/**
