@@ -15,7 +15,15 @@
         <archive path="/ajaxjs-data/lib/validation/org.apache.bval.bundle-1.1.1.jar" source="/ajaxjs-data/lib/validation/bval-parent-1.1.1-source-release.zip" />
         <archive path="/ajaxjs-data/lib/validation/validation-api-1.1.0.Final.jar"   source="/ajaxjs-data/lib/validation/validation-api-1.1.0.Final-sources.jar" />
     </library>
- 
+
+
+    <library name="ajaxjs-web-lib" systemlibrary="false">
+        <archive path="/ajaxjs-web/WebContent/WEB-INF/lib/ajaxjs-web-tag.jar" />
+        <archive path="/ajaxjs-web/WebContent/WEB-INF/lib/javax.ws.rs-api-2.0.rev.A.jar" source="/ajaxjs-web/WebContent/WEB-INF/lib/javax.ws.rs-api-2.0.rev.A-sources.jar" />
+        <archive path="/ajaxjs-web/WebContent/WEB-INF/lib/taglibs-standard-spec-1.2.5.jar" />
+        <archive path="/ajaxjs-web/WebContent/WEB-INF/lib/taglibs-standard-impl-1.2.5.jar" />
+    </library>
+
     <library name="shiro" systemlibrary="false">
         <archive path="/ajaxjs-data/lib/shiro/slf4j-api-1.7.13.jar" 				 source="/ajaxjs-data/lib/shiro/slf4j-api-1.7.14-sources.jar" />
         <archive path="/ajaxjs-data/lib/shiro/slf4j-jdk14-1.7.17.jar" />
