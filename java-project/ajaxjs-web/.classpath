@@ -12,13 +12,8 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ajaxjs-data-sqlite">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ajaxjs-data-validtion"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ajaxjs-data"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/shiro"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ajaxjs-data-mybatis-libs"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ajaxjs-data-validation-libs"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

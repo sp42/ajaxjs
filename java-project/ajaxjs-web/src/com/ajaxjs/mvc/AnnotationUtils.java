@@ -46,6 +46,10 @@ public class AnnotationUtils {
 	 */
 	public static Map<String, ActionAndView> controllers = new HashMap<>();
 
+	/**
+	 * 从指定的包里面扫描 IController 的功能（扫描路径在 web.xml 里配）
+	 * @param clz
+	 */
 	public static void scan(Class<? extends IController> clz) {
 		Controller controller = clz.getAnnotation(Controller.class);
 
