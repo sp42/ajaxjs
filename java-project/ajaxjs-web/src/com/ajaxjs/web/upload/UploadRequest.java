@@ -54,6 +54,11 @@ public class UploadRequest {
 	private boolean isFileOverwrite = true;
 	
 	private HttpServletRequest request;
+	
+	/**
+	 * 允许上传的文件类型，如果为空数组则不限制上传类型。
+	 */
+	private String[] extFilenames;
 
 	/**
 	 * @return the maxFileSize
@@ -151,5 +156,13 @@ public class UploadRequest {
 	 */
 	public void setRequest(HttpServletRequest request) {
 		this.request = request;
+	}
+
+	public String[] getExtFilenames() {
+		return extFilenames;
+	}
+
+	public void setExtFilenames(String[] extFilenames) {
+		this.extFilenames = extFilenames;
 	}	
 }
