@@ -18,6 +18,7 @@ package com.ajaxjs.mvc.controller;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -50,21 +51,29 @@ import com.ajaxjs.web.Responser;
 import com.ajaxjs.web.ServletPatch;
 
 /**
- * MVC框架的核心是一个 Dispatcher，用于接收所有的HTTP请求，并根据URL选择合适的Action对其进行处理
- * 
+ * 采用jave ee 版的 eclipse开发，项目工程是一个dynamic web project，采用了servlet3的一些特性，jdk要求1.7及以上
+ * MVC 框架的核心是一个 Dispatcher，用于接收所有的 HTTP 请求，并根据 URL 选择合适的Action对其进行处理。
+ * 这是一个 RESTful 风格的 MVC 框架，功能简单，但是 MVC 的核心功能基本具备了，很适合想了解 MVC 的学习者。 
+ * 这是一个纯粹的mvc框架，是在 Servlet之上做了浅层包装而做出来的，它做的事情很简单：接收请求->封装参数->将请求交给开发者这编写的逻辑处理->返回处理结果。
+ * 该类是一个前置控制器，用于接收所有的请求，并作出合适的转发。
  * @author frank
  *
  */
 public class MvcDispatcher implements Filter {
 	private static final LogHelper LOGGER = LogHelper.getLog(MvcDispatcher.class);
 
+	/**
+	 * 虽然 REST 风格的 URL 一般不含后缀，我们只能将 DispatcherServlet 映射到“/”，使之变为一个默认的 Servlet，这样，就可以对任意的 URL 进行处理，但是在处理 js/css 等静态文件十分不方便，
+	 * 于是我们约定 *.do：后缀模式匹配。
+	 */
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
 			throws IOException, ServletException {
 		Requester request = new Requester(req);
 		Responser response = new Responser(resp);
 		
-		request.setCharacterEncoding("utf-8"); 
+		// 设置请求编码方式
+		request.setCharacterEncoding(StandardCharsets.UTF_8.toString()); 
 		
 		response.setRequest(request);
 
@@ -88,6 +97,7 @@ public class MvcDispatcher implements Filter {
 			if (method.getParameterTypes().length > 0) {
 				Object[] args = getArgs(request, response, method);
 				model = findModel(args);
+				// 调用反射的 Reflect.executeMethod 方法就可以执行目标方法，并返回一个结果。
 				result = Reflect.executeMethod(controller, method, args);// 通过反射执行控制器方法
 			} else {
 				// 方法没有参数
@@ -118,11 +128,13 @@ public class MvcDispatcher implements Filter {
 	}
 
 	/**
-	 * 执行逻辑完成，现在控制输出（响应）
-	 * @param result
+	 * 一般一个请求希望返回一个页面，这时就需要控制器返回一个模板渲染输出了。
+	 * 中间执行逻辑完成，最后就是控制输出（响应）
+	 * 可以跳转也可以输出模板渲染器（即使是 json 都是 模板渲染器 ） 
+	 * @param result 模板路径是指页面模板（比如 jsp，velocity模板等）的目录文件名
 	 * @param request
 	 * @param response
-	 * @param model
+	 * @param model 所有渲染数据都要放到一个 model 对象中（本质 是 map或者 bean），这样使用者就可以在模板内用  Map 对象的 key/getter 获取到对应的数据。
 	 */
 	private static void resultHandler(Object result, Requester request, Responser response, ModelAndView model) {
 		if (model != null)
@@ -181,6 +193,7 @@ public class MvcDispatcher implements Filter {
 			} else if (clazz.equals(ModelAndView.class)) {
 				args.add(new ModelAndView());
 			} else if (BaseModel.class.isAssignableFrom(clazz)) {
+				// 支持自动获取请求参数并封装到 bean 内
 				// Object bean = Reflect.newInstance(clazz);
 				Map2Pojo<?> m = new Map2Pojo<>(clazz);
 
@@ -210,7 +223,8 @@ public class MvcDispatcher implements Filter {
 	}
 
 	/**
-	 * 根据注解和类型从 request 中取去参数值
+	 * 根据注解和类型从 request 中取去参数值。
+	 * 参数名字与 QueryParam 一致 或者 PathParam
 	 * 
 	 * @param clz
 	 *            参数类型
