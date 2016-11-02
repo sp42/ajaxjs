@@ -166,7 +166,7 @@ public class MvcDispatcher implements Filter {
 	}
 
 	/**
-	 * 
+	 * 对控制器的方法进行分析，看需要哪些参数。将得到的参数签名和请求过来的参数相匹配，再传入到方法中去执行。
 	 * @param request
 	 *            请求对象
 	 * @param response
@@ -177,7 +177,7 @@ public class MvcDispatcher implements Filter {
 	 */
 	private static Object[] getArgs(Requester request, Responser response, Method method) {
 		ArrayList<Object> args = new ArrayList<>();// 参数列表
-		Annotation[][] annotation = method.getParameterAnnotations(); /* 方法所有的注解，length和参数总数一样 */
+		Annotation[][] annotation = method.getParameterAnnotations(); /* 方法所有的注解，length 应该要和参数总数一样 */
 
 		Class<?>[] parmTypes = method.getParameterTypes();
 		for (int i = 0; i < parmTypes.length; i++) {
