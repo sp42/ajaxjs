@@ -63,18 +63,41 @@ public class MvcDispatcher implements Filter {
 	private static final LogHelper LOGGER = LogHelper.getLog(MvcDispatcher.class);
 
 	/**
+	 * 初始化这个过滤器
+	 */
+	@Override
+	public void init(FilterConfig fConfig) throws ServletException {
+		LOGGER.info("AJAXJS MVC 服务启动之中……");
+		
+		/* 读取 web.xml 配置，如果有 controller 这一项就获取包里面的内容，
+		 * 看是否有属于 IController 接口的控制器，
+		 * 有就加入到 AnnotationUtils.controllers 集合中
+		 */
+		Map<String, String> config = ServletPatch.parseInitParams(null, fConfig);
+
+		if (config != null && config.get("controller") != null) {
+			String str = config.get("controller");
+			
+			ClassScaner<IController> scaner = new ClassScaner<>(IController.class);// 定义一个扫描器，专门扫描 IController
+			for (String packageName : str.split(",")) {
+				for(Class<IController> clz : scaner.scan(packageName)){
+					LOGGER.info("找到了控制器：:" + clz.getName());
+					AnnotationUtils.scan(clz);
+				}
+			}
+		} else {
+			LOGGER.warning("web.xml 没有配置 MVC 过滤器或者 配置没有定义 controller");
+		}
+	}
+
+	/**
 	 * 虽然 REST 风格的 URL 一般不含后缀，我们只能将 DispatcherServlet 映射到“/”，使之变为一个默认的 Servlet，这样，就可以对任意的 URL 进行处理，但是在处理 js/css 等静态文件十分不方便，
 	 * 于是我们约定 *.do：后缀模式匹配。
 	 */
 	@Override
-	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
-			throws IOException, ServletException {
+	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
 		Requester request = new Requester(req);
 		Responser response = new Responser(resp);
-		
-		// 设置请求编码方式
-		request.setCharacterEncoding(StandardCharsets.UTF_8.toString()); 
-		
 		response.setRequest(request);
 
 		String uri = request.getRoute(), httpMethod = request.getMethod();
@@ -111,6 +134,82 @@ public class MvcDispatcher implements Filter {
 		}
 
 		chain.doFilter(req, resp);// 不要传 ServletRequest，以免影响其他框架
+	}
+	
+	/**
+	 * 返回要执行的方法
+	 * 
+	 * @param uri
+	 *            去掉项目前缀的 URL 路径
+	 * @param httpMethod
+	 *            HTTP 请求的方法
+	 * @return 控制器方法
+	 */
+	private static Object[] getMethod(String uri, String httpMethod) {
+		Object[] objs = new Object[2];
+		Method method = null;
+
+		/*
+		 * 遍历在 init(FilterConfig fConfig) 时收集的所有控制器
+		 */
+		for (String path : AnnotationUtils.controllers.keySet()) {
+			if (uri.startsWith(path)) { // 匹配对应的控制器
+				LOGGER.info(path + " 控制器命中！！！");
+
+				ActionAndView controllerInfo = AnnotationUtils.controllers.get(path);
+				objs[0] = controllerInfo.controller; // 返回 controller
+
+				String subUri = uri.replace(path, "");
+
+				boolean isSub = false; // 如果执行了 sub 就不用执行类 path 本身的
+
+				for (String subPath : controllerInfo.subPath.keySet()) {
+					UriInfo ui = new UriInfo(subUri, subPath);
+
+					if (subUri.equals("/{id}") || ui.isInfo() || ui.isNotInfo()) {
+						method = getMethod(controllerInfo.subPath.get(subPath), httpMethod);
+						LOGGER.info(subPath + "子路径命中！！！");
+						isSub = true;
+						break;
+					}
+				}
+
+				if (!isSub) {
+					// 类本身
+					method = getMethod(controllerInfo, httpMethod);
+				}
+
+				break;
+			}
+		}
+
+		objs[1] = method;// 返回 方法对象
+
+		return objs;
+	}
+
+	/**
+	 * 根据 httpMethod 请求方法返回控制器类身上的方法。
+	 * 
+	 * @param controllerInfo
+	 *            控制器类信息
+	 * @param httpMethod
+	 *            HTTP 请求的方法
+	 * @return 控制器方法
+	 */
+	private static Method getMethod(ActionAndView controllerInfo, String httpMethod) {
+		switch (httpMethod) {
+			case "GET":
+				return controllerInfo.GET_method;
+			case "POST":
+				return controllerInfo.POST_method;
+			case "PUT":
+				return controllerInfo.PUT_method;
+			case "DELETE":
+				return controllerInfo.DELETE_method;
+		}
+
+		return null;
 	}
 
 	/**
@@ -179,23 +278,22 @@ public class MvcDispatcher implements Filter {
 		ArrayList<Object> args = new ArrayList<>();// 参数列表
 		Annotation[][] annotation = method.getParameterAnnotations(); /* 方法所有的注解，length 应该要和参数总数一样 */
 
-		Class<?>[] parmTypes = method.getParameterTypes();
+		Class<?>[] parmTypes = method.getParameterTypes();// 反射得到参数列表的各个类型，遍历之
+		
 		for (int i = 0; i < parmTypes.length; i++) {
 			Class<?> clazz = parmTypes[i];
-			if (clazz.equals(HttpServletRequest.class)) {
+			
+			// 适配各种类型的参数，或者注解
+			if (clazz.equals(HttpServletRequest.class) || clazz.equals(Requester.class)) {// 常见的 请求/响应 对象，需要的话传入之
 				args.add(request);
-			} else if (clazz.equals(Requester.class)) {
-				args.add(request);
-			} else if (clazz.equals(HttpServletResponse.class)) {
-				args.add(response);
-			} else if (clazz.equals(Responser.class)) {
+			} else if (clazz.equals(HttpServletResponse.class) || clazz.equals(Responser.class)) {
 				args.add(response);
 			} else if (clazz.equals(ModelAndView.class)) {
-				args.add(new ModelAndView());
+				args.add(new ModelAndView()); // 新建 ModeView 对象
 			} else if (BaseModel.class.isAssignableFrom(clazz)) {
 				// 支持自动获取请求参数并封装到 bean 内
 				// Object bean = Reflect.newInstance(clazz);
-				Map2Pojo<?> m = new Map2Pojo<>(clazz);
+//				Map2Pojo<?> m = new Map2Pojo<>(clazz); // 这里怎么 不用 ?？
 
 				Map<String, String> map;
 				if(request.getMethod().toUpperCase().equals("PUT")) {
@@ -209,11 +307,10 @@ public class MvcDispatcher implements Filter {
 //					}
 				}
 				
-
 				Map<String, Object> _map = MapHelper.asObject(map, true);
-				Object bean = m.map2pojo(_map);
+				Object bean = new Map2Pojo<>(clazz).map2pojo(_map);
 				args.add(bean); // 实体类参数
-			} else {
+			} else { // 适配注解
 				Annotation[] annotations = annotation[i];
 				getArgValue(clazz, annotations, request, args, method);
 			}
@@ -241,12 +338,17 @@ public class MvcDispatcher implements Filter {
 		if (annotations.length > 0) {
 			boolean isGot = false; // 是否有 QueryParam 注解写好了
 			for (Annotation a : annotations) {
-				if (a instanceof QueryParam) { // 找到匹配的参数
+				if (a instanceof QueryParam) { // 找到匹配的参数，这是说控制器上的方法是期望得到一个 url query string 参数的
 					isGot = true;
 
+					/*
+					 * 根据注解的名字，获取 QueryParam 参数实际值，此时是 String 类型，要转为到控制器方法期望的类型。
+					 */
 					String argValue = request.getParameter(((QueryParam) a).value());
 
-					// 支持 String、int/Integer、boolean/Boolean
+					/*
+					 * 开始转换为控制器方法上的类型，支持 String、int/Integer、boolean/Boolean
+					 */
 					if (clz == String.class) {
 						args.add(argValue);
 					} else if (clz == int.class || clz == Integer.class) {
@@ -262,12 +364,14 @@ public class MvcDispatcher implements Filter {
 						args.add(new Object());// 也不要空的参数，不然反射那里执行不了
 						LOGGER.warning("不支持类型");
 					}
+					
 					break; // 只需要执行一次，参见调用的那个方法就知道了
 				} else if (a instanceof PathParam) { // URL 上面的参数
 					Path path = method.getAnnotation(Path.class);
 					if (path != null) {
 						String paramName = ((PathParam) a).value();
 						String value = getValueFromPath(request.getRequestURI(), path.value(), paramName);
+						
 						if (clz == String.class) {
 							args.add(value);
 						} else if (clz == int.class || clz == Integer.class) {
@@ -316,108 +420,8 @@ public class MvcDispatcher implements Filter {
 		return result;
 	}
 
-	/**
-	 * 返回要执行的方法
-	 * 
-	 * @param uri
-	 *            去掉项目前缀的 URL 路径
-	 * @param httpMethod
-	 *            HTTP 请求的方法
-	 * @return 控制器方法
-	 */
-	private static Object[] getMethod(String uri, String httpMethod) {
-		Object[] objs = new Object[2];
-		Method method = null;
-
-		System.out.println("HTTP::" + httpMethod);
-		for (String path : AnnotationUtils.controllers.keySet()) {
-			if (uri.startsWith(path)) { // 匹配对应的控制器
-				LOGGER.info(path + " 控制器命中！！！");
-
-				ActionAndView controllerInfo = AnnotationUtils.controllers.get(path);
-				objs[0] = controllerInfo.controller; // 返回 controller
-
-				String subUri = uri.replace(path, "");
-
-				boolean isSub = false; // 如果执行了 sub 就不用执行类 path 本身的
-
-				for (String subPath : controllerInfo.subPath.keySet()) {
-					UriInfo ui = new UriInfo(subUri, subPath);
-
-					if (subUri.equals("/{id}") || ui.isInfo() || ui.isNotInfo()) {
-						method = getMethod(controllerInfo.subPath.get(subPath), httpMethod);
-						LOGGER.info(subPath + "子路径命中！！！");
-						isSub = true;
-						break;
-					}
-				}
-
-				if (!isSub) {
-					// 类本身
-					method = getMethod(controllerInfo, httpMethod);
-				}
-
-				break;
-			}
-		}
-
-		objs[1] = method;// 返回 方法对象
-
-		return objs;
-	}
-
-	/**
-	 * 根据 httpMethod 请求方法返回控制器类身上的方法。
-	 * 
-	 * @param controllerInfo
-	 *            控制器类信息
-	 * @param httpMethod
-	 *            HTTP 请求的方法
-	 * @return 控制器方法
-	 */
-	private static Method getMethod(ActionAndView controllerInfo, String httpMethod) {
-		switch (httpMethod) {
-		case "GET":
-			return controllerInfo.GET_method;
-		case "POST":
-			return controllerInfo.POST_method;
-		case "PUT":
-			return controllerInfo.PUT_method;
-		case "DELETE":
-			return controllerInfo.DELETE_method;
-		}
-
-		return null;
-	}
-
-	/**
-	 * 获取配置信息
-	 */
 	@Override
-	public void init(FilterConfig fConfig) throws ServletException {
-		LOGGER.info("Ajaxjs MVC 服务启动之中……");
-		
-		/* 获取web.xml 配置 */
-		Map<String, String> config = ServletPatch.parseInitParams(null, fConfig);
-
-		if (config != null && config.get("controller") != null) {
-			String str = config.get("controller");
-			
-			ClassScaner<IController> scaner = new ClassScaner<>(IController.class);
-			for (String packageName : str.split(",")) {
-				for(Class<IController> clz : scaner.scan(packageName)){
-					LOGGER.info("创建控制器：:" + clz.getName());
-					AnnotationUtils.scan(clz);
-				}
-			}
-		} else {
-			LOGGER.warning("web.xml 没有配置 MVC 过滤器或者 配置没有定义 controller");
-		}
-
-	}
-
-	@Override
-	public void destroy() {
+	public void destroy() { // 暂时不需要这个逻辑
 	}
 
 	static class UriInfo {

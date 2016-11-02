@@ -63,6 +63,7 @@ public class Responser extends HttpServletResponseWrapper {
 	 */
 	public Responser(HttpServletResponse response) {
 		super(response);
+		setCharacterEncoding(StandardCharsets.UTF_8.toString());
 	}
 
 	/**

@@ -16,6 +16,8 @@
 
 package com.ajaxjs.web;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +42,13 @@ public class Requester extends HttpServletRequestWrapper {
 	 */
 	public Requester(HttpServletRequest request) {
 		super(request);
+		
+		// 设置请求编码方式
+		try {
+			setCharacterEncoding(StandardCharsets.UTF_8.toString());
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} 
 	}
 	
 	/**
