@@ -18,7 +18,6 @@ package com.ajaxjs.mvc.controller;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -51,10 +50,10 @@ import com.ajaxjs.web.Responser;
 import com.ajaxjs.web.ServletPatch;
 
 /**
- * 采用jave ee 版的 eclipse开发，项目工程是一个dynamic web project，采用了servlet3的一些特性，jdk要求1.7及以上
- * MVC 框架的核心是一个 Dispatcher，用于接收所有的 HTTP 请求，并根据 URL 选择合适的Action对其进行处理。
+ * 采用 Jave EE 版的 eclipse 开发，项目工程是一个 Dynamic web project，采用了 Servlet 3 的一些特性，JDK 要求 v1.7 及以上
+ * MVC 框架的核心是一个 Dispatcher（分发器），用于接收所有的 HTTP 请求，并根据 URL 选择合适的 控制器 Controller 对其进行处理。
  * 这是一个 RESTful 风格的 MVC 框架，功能简单，但是 MVC 的核心功能基本具备了，很适合想了解 MVC 的学习者。 
- * 这是一个纯粹的mvc框架，是在 Servlet之上做了浅层包装而做出来的，它做的事情很简单：接收请求->封装参数->将请求交给开发者这编写的逻辑处理->返回处理结果。
+ * 这是一个纯粹的mvc框架，是在 Servlet 之上做了浅层包装而做出来的，它做的事情很简单：接收请求->封装参数->将请求交给开发者这编写的逻辑处理->返回处理结果。
  * 该类是一个前置控制器，用于接收所有的请求，并作出合适的转发。
  * @author frank
  *
@@ -69,7 +68,7 @@ public class MvcDispatcher implements Filter {
 	public void init(FilterConfig fConfig) throws ServletException {
 		LOGGER.info("AJAXJS MVC 服务启动之中……");
 		
-		/* 读取 web.xml 配置，如果有 controller 这一项就获取包里面的内容，
+		/* 读取 web.xml 配置，如果有 controller 那一项就获取指定包里面的内容，
 		 * 看是否有属于 IController 接口的控制器，
 		 * 有就加入到 AnnotationUtils.controllers 集合中
 		 */
@@ -91,7 +90,8 @@ public class MvcDispatcher implements Filter {
 	}
 
 	/**
-	 * 虽然 REST 风格的 URL 一般不含后缀，我们只能将 DispatcherServlet 映射到“/”，使之变为一个默认的 Servlet，这样，就可以对任意的 URL 进行处理，但是在处理 js/css 等静态文件十分不方便，
+	 * 虽然 REST 风格的 URL 一般不含后缀，我们只能将 DispatcherServlet 映射到“/”，使之变为一个默认的 Servlet，
+	 * 这样，就可以对任意的 URL 进行处理，但是在处理 js/css 等静态文件十分不方便，
 	 * 于是我们约定 *.do：后缀模式匹配。
 	 */
 	@Override
