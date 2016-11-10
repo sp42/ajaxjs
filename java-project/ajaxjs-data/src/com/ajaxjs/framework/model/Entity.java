@@ -38,7 +38,26 @@ public class Entity extends BaseModel {
 	
 	@FieldDescription(doc="标签，用逗号（,）分割") 
 	private String[] tags;
-	
+	@FieldDescription(doc="图片") 
+	private String img;
+	@FieldDescription(doc="简介描述") 
+	private String description;
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getImg() {
+		return img;
+	}
+
+	public void setImg(String img) {
+		this.img = img;
+	}
+
 	/**
 	 * @return {@link #status}
 	 */

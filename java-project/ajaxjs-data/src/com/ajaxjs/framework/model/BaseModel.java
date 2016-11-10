@@ -37,6 +37,14 @@ public class BaseModel {
 	@FieldDescription(doc="唯一 uuid")  
 	private String uid;
 	
+	public String getCover() {
+		return cover;
+	}
+
+	public void setCover(String cover) {
+		this.cover = cover;
+	}
+
 	@FieldDescription(doc="实体名称或标题")  
 	@NotNull(message="名称不能为空")
 	@Size(min = 1, max = 255, message="长度应该介于1和255之间")
@@ -51,7 +59,8 @@ public class BaseModel {
 	
 	@FieldDescription(doc="修改日期")  
 	private Date updateDate;
-	
+	@FieldDescription(doc="图片地址")
+	private String cover;
 	private IService<? extends BaseModel> service;
 
 	public String getName() {
