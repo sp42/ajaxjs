@@ -153,8 +153,7 @@ public class Reflect {
 		return clazz != null ? newInstance(clazz, args) : null;
 	}
 
-	// -------------------------------------- 方法
-	// ----------------------------------
+	// -------------------------------------- 方法 ----------------------------------
 
 	/**
 	 * 根据类和参数列表获取方法对象，支持重载的方法
@@ -204,7 +203,8 @@ public class Reflect {
 		try {
 			return method.invoke(instance, args);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			System.err.println("method.getName():" + method.getName());
+			System.err.println("反射异常！！！Reflect.executeMethod Exception。method.getName():" + method.getName());
+			e.printStackTrace();
 			LOGGER.warning(e);
 			return null;
 		}
@@ -223,7 +223,8 @@ public class Reflect {
 		try {
 			return method.invoke(instance);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			System.err.println(method.getName());
+			System.err.println("反射异常！！！Reflect.executeMethod Exception:" + method.getName());
+			e.printStackTrace();
 			LOGGER.warning(e);
 			return null;
 		}
