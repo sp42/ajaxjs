@@ -45,7 +45,7 @@ public class ConfigListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent e) {
 		System.out.println("ConfigListener 配置启动");
 		ServletContext cxt = e.getServletContext();
-// eclipse 不能删除
+//		eclipse 不能删除
 //		initLoggerFileHandler(cxt);
 
 		String _isEnableJSON_Config = cxt.getInitParameter("isEnableJSON_Config");
@@ -109,6 +109,7 @@ public class ConfigListener implements ServletContextListener {
 	/**
 	 * 把日志文件保存到 WEB-INF/ 下面
 	 */
+	@SuppressWarnings("unused")
 	private static void initLoggerFileHandler(ServletContext cxt) {
 		String loggerFile = cxt.getRealPath("/") + "META-INF" + File.separator + "logger" + File.separator + "log.txt";
 		LogHelper.addHanlder(LogHelper.fileHandlerFactory(loggerFile));

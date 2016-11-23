@@ -56,7 +56,7 @@ public class UploadRequest {
 	private HttpServletRequest request;
 	
 	/**
-	 * 允许上传的文件类型，如果为空数组则不限制上传类型。
+	 * 允许上传的文件类型，如果为空数组则不限制上传类型。格式如 {".jpg", ".png", ...}
 	 */
 	private String[] extFilenames;
 
