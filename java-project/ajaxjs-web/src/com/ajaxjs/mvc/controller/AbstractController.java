@@ -132,7 +132,7 @@ public abstract class AbstractController<T extends BaseModel> implements CrudCon
 	// ----------------写操作-------------------
 	@Override
 	public String create(/*@Valid*/ T entity, ModelAndView model) {
-		LOGGER.info("创建记录" + entity.getName());
+		LOGGER.info("创建记录，名称为：" + entity.getName());
 				
 //			if (result.hasErrors()) {
 //				List<ObjectError> errors = result.getAllErrors();

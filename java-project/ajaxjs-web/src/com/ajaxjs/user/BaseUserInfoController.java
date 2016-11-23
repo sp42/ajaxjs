@@ -2,6 +2,7 @@ package com.ajaxjs.user;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 
 import com.ajaxjs.mvc.controller.IController;
@@ -11,6 +12,7 @@ public abstract class BaseUserInfoController implements IController {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseUserInfoController.class);
 	
 	public static final String perfix = "/WEB-INF/jsp/";
+	
 //	private Service service = new Service();
 	
 	/**

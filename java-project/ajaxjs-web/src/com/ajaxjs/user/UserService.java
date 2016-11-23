@@ -38,7 +38,6 @@ import com.ajaxjs.framework.dao.MyBatis;
 import com.ajaxjs.framework.exception.DaoException;
 import com.ajaxjs.framework.exception.ServiceException;
 import com.ajaxjs.framework.service.BaseCrudService;
-import com.ajaxjs.user.auth.ShiroDbRealm;
 import com.ajaxjs.util.LogHelper;
 
 public class UserService extends BaseCrudService<User, UserDao> {
@@ -107,5 +106,15 @@ public class UserService extends BaseCrudService<User, UserDao> {
 		}
 
 		return user;
+	}
+	
+	@Override
+	public int create(User user) throws ServiceException {
+		if (user.getName() == null) { // 如果没有用户名
+			if (user.getPhone() != null) { // 则使用 user_{phone} 作为用户名
+				user.setName("user_" + user.getPhone());
+			}
+		}
+		return super.create(user);
 	}
 }
