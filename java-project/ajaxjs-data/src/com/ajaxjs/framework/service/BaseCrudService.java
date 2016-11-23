@@ -37,7 +37,7 @@ import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.Util;
 
 /**
- * 基础业务类，围绕数据库的增删改查。
+ * 围绕数据库的增删改查而设的基础业务类。
  * 
  * @author frank
  *
@@ -83,46 +83,13 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 	}
 	
 	@Override
-	public PageResult<T> getPageRows(int start, int limit, Query query) throws ServiceException {
-		PageResult<T> result = null;
-
-		try {
-			if (start < 0 || limit < 0)
-				throw new IllegalArgumentException("分页参数非法");
-		} catch (Throwable e) {
-			LOGGER.warning(e);
-			throw new BusinessException(e.getMessage());
-		}
-
-		result = new PageResult<>();
-		result.setStart(start);
-		result.setPageSize(limit);
-		
-		try (SqlSession session = MyBatis.loadSession(mapperClz);){
-			Mapper dao = session.getMapper(mapperClz);
-			
-			if (query == null) 
-				query = new Query(){}; // 空，因为 MyBatis22 传 null 报错：result.setRows(dao.page(start, limit, getTableName(), query));
-			
-			if(getHidden_db_field_mapping().size() > 0) // 字段映射
-				query.setDb_field_mapping(getHidden_db_field_mapping());
-			
-			// 先查询总数
-			result.setTotalCount(dao.pageCount(getSQL_TableName(), query));
-
-			if (result.getTotalCount() > 0) { // 然后执行分页
-				result.page();
-				result.setRows(dao.page(start, limit, getSQL_TableName(), query));
-			} else {
-//				result.setRows(null);
+	public PageResult<T> getPageRows(int start, int limit, Query query) throws ServiceException {	
+		return getPageRows(start, limit, query, new DAO_callback<T, Mapper>() {
+			@Override
+			public List<T> doIt(Mapper dao, int start, int limit, String sql_TableName, Query query) {
+				return dao.page(start, limit, getSQL_TableName(), query);
 			}
-		} catch(Throwable e) {
-			e.printStackTrace();
-			LOGGER.warning(e);
-			throw new DaoException(e.getMessage());
-		} 
-	
-		return result;
+		});
 	}
 	
 	public PageResult<T> getPageRows(int start, int limit, Query query, DAO_callback<T, Mapper> callback) throws ServiceException {

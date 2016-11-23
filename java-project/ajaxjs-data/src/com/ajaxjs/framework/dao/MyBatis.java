@@ -29,6 +29,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 
+
 import com.ajaxjs.framework.dao.DAO;
 import com.ajaxjs.framework.exception.DaoException;
 import com.ajaxjs.framework.model.BaseModel;
@@ -61,6 +62,13 @@ public class MyBatis {
 			Environment environment = new Environment("development", new JdbcTransactionFactory(), ds);
 			configuration = new Configuration(environment);
 			sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);
+			
+			// 打印数据库连接路径，以便了解
+			try {
+				System.out.println(environment.getDataSource().getConnection());
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		} else {
 			configuration = null;
 			sqlSessionFactory = null;
@@ -72,6 +80,7 @@ public class MyBatis {
 		// 加载通用的映射器
 		if (!configuration.hasMapper(SqlProvider.class))
 			configuration.addMapper(SqlProvider.class);
+		System.out.println("数据库初始化成功！" );
 	}
 	
 	/**
