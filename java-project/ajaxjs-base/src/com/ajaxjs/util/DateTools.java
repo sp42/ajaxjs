@@ -18,8 +18,8 @@ package com.ajaxjs.util;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,7 +48,7 @@ public class DateTools {
 	}
 
 	/**
-	 * 对当前时间进行格式化
+	 * 返回当前时间，并对当前时间进行格式化
 	 * 
 	 * @param format
 	 *            期望的格式
@@ -104,23 +104,25 @@ public class DateTools {
 	public static String formatDate(Date date, String format) {
 		if (date == null || format == null)
 			return null;
-		SimpleDateFormat formater;
-		if (!formaters.containsValue(format)) {
-			formaters.put(format, new SimpleDateFormat(format));
-		}
-		formater = formaters.get(format);
 
-		return formater.format(date);
+		return SimpleDateFormatFactory(format).format(date);
 	}
 
 	/**
 	 * SimpleDateFormat caches
 	 */
-	private final static Map<String, SimpleDateFormat> formaters = new HashMap<>();
-
-	@Deprecated
-	public static String shortDate_YYYY_MM_DD(String dateStr) {
-		return dateStr.split(" ")[0];
+	private final static Map<String, SimpleDateFormat> formaters = new ConcurrentHashMap<>();
+	
+	/**
+	 * 返回 SimpleDateFormat 的工厂函数
+	 * @param format
+	 * @return
+	 */
+	private static SimpleDateFormat SimpleDateFormatFactory(String format) {
+		if (!formaters.containsValue(format)) {
+			formaters.put(format, new SimpleDateFormat(format));
+		}
+		return formaters.get(format);
 	}
 
 	/**
@@ -128,39 +130,42 @@ public class DateTools {
 	 * 
 	 * @param date
 	 *            字符串类型的日期
-	 * @return Date 类型的日期
+	 * @return Date 日期
 	 */
 	public static Date string2date(String date) {
 		try {
-			return new SimpleDateFormat(commonDateFormat).parse(date);
+			return SimpleDateFormatFactory(commonDateFormat).parse(date);
 		} catch (ParseException e) {
 			try {
-				return new SimpleDateFormat("yyyy-MM-dd").parse(date);
+				return SimpleDateFormatFactory("yyyy-MM-dd").parse(date);
 			} catch (ParseException e1) {
 				System.err.println("输入日期不合法，请重新输入日期字符串格式类型，或考虑其他方法。");
 				e1.printStackTrace();
 				return null;
 			}
 		}
-	}
-
-	private final static String format = "((19|20)[0-9]{2})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01]) "
-			+ "([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]";
-	private final static Pattern pattern = Pattern.compile(format);
+	} 
 	
-	private final static String format2 = "((19|20)[0-9]{2})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])";
-	private final static Pattern pattern2 = Pattern.compile(format2);
+	private final static Pattern pattern = Pattern.compile("((19|20)[0-9]{2})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01]) "
+			+ "([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]");
 
+	private final static Pattern pattern2 = Pattern.compile("((19|20)[0-9]{2})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])");
+
+	/**
+	 * 支持任意对象转换为日期类型
+	 * @param obj 任意对象
+	 * @return 日期类型对象，null 表示为转换失败
+	 */
 	public static Date Objet2Date(Object obj) {
 		Date date = null;
 		if (obj == null)
 			return null;
+		
 		if (obj instanceof Date)
 			return (Date) obj;
 		else if (obj instanceof Number) {
 			if (obj instanceof Integer) {
-				// 10 位长int，后面补充三个零为 13位long时间戳
-				long times = Long.parseLong(obj + "000");
+				long times = Long.parseLong(obj + "000"); // 10 位长 int，后面补充三个零为 13位 long 时间戳
 				date = new Date(times);
 			} else {
 				date = new Date((long) obj);
@@ -170,15 +175,15 @@ public class DateTools {
 			if (matcher.matches()) {
 				date = string2date(obj.toString());
 			} else {
-				// 可能是这种格式 2016-08-18
-				if (pattern2.matcher(obj.toString()).matches()) {
+				if (pattern2.matcher(obj.toString()).matches()) {// 可能是这种格式 2016-08-18
 					date = string2date(obj.toString());
 				} else
 					System.err.println("非法字符串日期" + obj);
 			}
 		} else {
-			System.err.println("不能识别类型，不能转为日期" + obj);
+			System.err.println("不能识别类型，不能转为日期。传入参数为：" + obj);
 		}
+		
 		return date;
 	}
 }
