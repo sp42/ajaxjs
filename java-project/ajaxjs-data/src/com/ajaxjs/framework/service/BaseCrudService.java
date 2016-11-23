@@ -73,7 +73,34 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 			LOGGER.warning(e);
 			throw new DaoException(e.getMessage());
 		}
-
+		return entry;
+	}
+	
+	/**
+	 * 获取 DAO 对象，要记得关闭！
+	 */
+//	public Mapper getDao() {
+//		Mapper mapper = null;
+//		try(SqlSession session = MyBatis.loadSession(mapperClz);){
+//			mapper = session.getMapper(mapperClz);
+//		} catch (Throwable e) {
+//			LOGGER.warning(e);
+//			throw new DaoException(e.getMessage());
+//		}
+//		return mapper;
+//	}
+	
+	public T getOne(DAO_callback<T, Mapper> callback) throws ServiceException {
+		T entry = null;
+		
+		try (SqlSession session = MyBatis.loadSession(mapperClz);) {
+			Mapper _mapper = session.getMapper(mapperClz);
+			
+			entry = callback.getOne(_mapper);
+		} catch (Throwable e) {
+			LOGGER.warning(e);
+			throw new DaoException(e.getMessage());
+		}
 		return entry;
 	}
 
@@ -86,8 +113,13 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 	public PageResult<T> getPageRows(int start, int limit, Query query) throws ServiceException {	
 		return getPageRows(start, limit, query, new DAO_callback<T, Mapper>() {
 			@Override
-			public List<T> doIt(Mapper dao, int start, int limit, String sql_TableName, Query query) {
+			public List<T> getList(Mapper dao, int start, int limit, String sql_TableName, Query query) {
 				return dao.page(start, limit, getSQL_TableName(), query);
+			}
+
+			@Override
+			public T getOne(Mapper dao) {
+				return null;
 			}
 		});
 	}
@@ -122,7 +154,7 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 				if (result.getTotalCount() > 0) { // 然后执行分页
 					result.page();
 					
-					result.setRows(callback.doIt(dao, start, limit, getSQL_TableName(), query));
+					result.setRows(callback.getList(dao, start, limit, getSQL_TableName(), query));
 				} else {
 //				result.setRows(null);
 				}

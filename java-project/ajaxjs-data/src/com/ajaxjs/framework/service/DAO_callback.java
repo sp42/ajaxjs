@@ -40,5 +40,7 @@ public interface DAO_callback<T extends BaseModel, Mapper extends DAO<T>> {
 	 * @param query
 	 * @return
 	 */
-	public List<T> doIt(Mapper dao, int start, int limit, String sql_TableName, Query query);
+	public List<T> getList(Mapper dao, int start, int limit, String sql_TableName, Query query);
+	
+	public T getOne(Mapper dao);
 }

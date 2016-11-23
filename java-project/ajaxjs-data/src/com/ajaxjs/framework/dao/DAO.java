@@ -60,12 +60,6 @@ public interface DAO<T> {
 	 * 用于注解的 SQL，写在这里比较方便维护
 	 */
 	public static final String selectByUUID = "SELECT * FROM ${tablename} WHERE uid = ${uid}";
-
-	/**
-	 * ？？？
-	 * @return POJO[]
-	 */
-	T[] selectList();
 	
 	/**
 	 * 查询符合条件的记录总数。这个方法先于 page() 执行。如果返回 0 则无需执行 page()

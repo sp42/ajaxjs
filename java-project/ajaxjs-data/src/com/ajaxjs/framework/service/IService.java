@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.framework.exception.ServiceException;
+import com.ajaxjs.framework.model.BaseModel;
 import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.framework.model.PageResult;
 import com.ajaxjs.framework.model.Query;
@@ -30,7 +31,7 @@ import com.ajaxjs.framework.model.Query;
  *
  * @param <T> Bean 对象
  */
-public interface IService<T> {
+public interface IService<T extends BaseModel> {
 	/**
 	 * 获取单个实体
 	 * 
@@ -54,6 +55,8 @@ public interface IService<T> {
 	 * @throws ServiceException
 	 */
 	public PageResult<T> getPageRows(int start, int limit, Query query) throws ServiceException;
+	
+//	public PageResult<T> getPageRows(int start, int limit, Query query, DAO_callback<T, DAO<T>> callback) throws ServiceException;
 
 	/**
 	 * 根据 query 查询条件来查询记录，不分页。如果 query 为 null 则表示查询所有记录，与 getAll() 作用相同。

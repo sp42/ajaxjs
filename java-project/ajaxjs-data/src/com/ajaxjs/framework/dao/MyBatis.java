@@ -74,8 +74,8 @@ public class MyBatis {
 			sqlSessionFactory = null;
 		}
 		// 如果要观察 MyBatis 动态生成的 SQL 语句，请打开控制台的输出。
-		// org.apache.ibatis.logging.LogFactory.useStdOutLogging();
-		// org.apache.ibatis.logging.LogFactory.useJdkLogging();
+		 org.apache.ibatis.logging.LogFactory.useStdOutLogging();
+		 org.apache.ibatis.logging.LogFactory.useJdkLogging();
 
 		// 加载通用的映射器
 		if (!configuration.hasMapper(SqlProvider.class))
