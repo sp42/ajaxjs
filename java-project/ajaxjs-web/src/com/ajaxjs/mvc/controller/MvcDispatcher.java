@@ -67,7 +67,7 @@ public class MvcDispatcher implements Filter {
 	@Override
 	public void init(FilterConfig fConfig) throws ServletException {
 		LOGGER.info("AJAXJS MVC 服务启动之中……");
-		
+
 		/* 读取 web.xml 配置，如果有 controller 那一项就获取指定包里面的内容，
 		 * 看是否有属于 IController 接口的控制器，
 		 * 有就加入到 AnnotationUtils.controllers 集合中
@@ -76,10 +76,10 @@ public class MvcDispatcher implements Filter {
 
 		if (config != null && config.get("controller") != null) {
 			String str = config.get("controller");
-			
+
 			ClassScaner<IController> scaner = new ClassScaner<>(IController.class);// 定义一个扫描器，专门扫描 IController
 			for (String packageName : str.split(",")) {
-				for(Class<IController> clz : scaner.scan(packageName)){
+				for (Class<IController> clz : scaner.scan(packageName)) {
 					LOGGER.info("找到了控制器：:" + clz.getName());
 					AnnotationUtils.scan(clz);
 				}

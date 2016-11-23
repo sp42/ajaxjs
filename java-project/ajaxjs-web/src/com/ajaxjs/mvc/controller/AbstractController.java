@@ -31,8 +31,8 @@ public abstract class AbstractController<T extends BaseModel> implements CrudCon
 				// 其他丰富的查询参数
 				pageResult = getService().getPageRows(start, limit, Query.getQueryFactory(request));
 			} else {
-				pageResult = getService().getPageRows(start, limit, null);
 			}
+			pageResult = getService().getPageRows(start, limit, null);
 
 			model.put("PageResult", pageResult);
 		} catch (ServiceException e) {
@@ -40,7 +40,7 @@ public abstract class AbstractController<T extends BaseModel> implements CrudCon
 			LOGGER.warning(e);
 		}
 		
-		prepareData(null, model);
+		prepareData(request, model);
 		
 		return getService().getTableName();
 	}
@@ -55,6 +55,8 @@ public abstract class AbstractController<T extends BaseModel> implements CrudCon
 
 	@Override
 	public String getById(long id, ModelAndView model) {
+		HttpServletRequest request = RequestHelper.getHttpServletRequest();
+		
 		IService<T> service = getService();
 		
 		try {
@@ -72,7 +74,7 @@ public abstract class AbstractController<T extends BaseModel> implements CrudCon
 //			model.put("DaoException", e);
 //		}
 		
-		prepareData(null, model);
+		prepareData(request, model);
 		
 		return getService().getTableName();
 	}
@@ -103,8 +105,6 @@ public abstract class AbstractController<T extends BaseModel> implements CrudCon
 	 * @return JSP 路径
 	 */
 	public String updateUI(long id, ModelAndView model) {
-		LOGGER.info("后台管理-修改:{0}", id);
-		
 		getById(id, model);
 		model.put("isCreate", false);
 		prepareData(null, model);
@@ -132,8 +132,8 @@ public abstract class AbstractController<T extends BaseModel> implements CrudCon
 	// ----------------写操作-------------------
 	@Override
 	public String create(/*@Valid*/ T entity, ModelAndView model) {
-		LOGGER.info("创建记录，名称为：" + entity.getName());
-				
+		LOGGER.info("控制器-创建记录-" + entity.getName());
+		
 //			if (result.hasErrors()) {
 //				List<ObjectError> errors = result.getAllErrors();
 //			

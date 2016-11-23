@@ -38,11 +38,16 @@ import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.Reflect;
 import com.ajaxjs.util.StringUtil;
 
+/**
+ * 扫描注解的工具类
+ * @author frank
+ *
+ */
 public class AnnotationUtils {
 	private static final LogHelper LOGGER = LogHelper.getLog(AnnotationUtils.class);
 
 	/**
-	 * 
+	 * 收集所有的控制器于此
 	 */
 	public static Map<String, ActionAndView> controllers = new HashMap<>();
 
@@ -51,53 +56,58 @@ public class AnnotationUtils {
 	 * @param clz
 	 */
 	public static void scan(Class<? extends IController> clz) {
-		Controller controller = clz.getAnnotation(Controller.class);
-
-		if (controller != null) {
-			ActionAndView cInfo = new ActionAndView();
-			cInfo.controller = Reflect.newInstance(clz);
-
-			for (Method method : clz.getMethods()) {
-				Path subPath = method.getAnnotation(Path.class);
-
-				if (subPath != null) {
-					String subPathValue = subPath.value();
-					ActionAndView subPath_Info;
-
-					// 有子路径
-					if (cInfo.subPath.containsKey(subPathValue)) { // 已经有这个
-																	// subPath
-						subPath_Info = cInfo.subPath.get(subPathValue);
-						methodSend(method, subPath_Info);
-					} else {
-						subPath_Info = new ActionAndView();
-						methodSend(method, subPath_Info);
-
-						cInfo.subPath.put(subPathValue, subPath_Info);
-					}
+		if (clz.getAnnotation(Controller.class) == null) {// 获取注解对象
+			LOGGER.warning("此非控制器！要我处理干甚！？This is NOT a Controller!");
+			return;
+		} 
+		
+		// 总路径
+		Path path = clz.getAnnotation(Path.class);
+		if (path == null) {
+			LOGGER.warning("不存在任何 Path 信息！No Path info!");
+			return;
+		} 
+		
+		if(controllers.containsKey(path.value())) {
+			LOGGER.warning("重复的 URL Mapping: {0}，请检查代码的 控制器 {1} 是否重复？", path.value(), clz.getName());
+			return;
+		} 
+		
+		// 开始解析控制器……
+		ActionAndView cInfo = new ActionAndView();
+		cInfo.controller = Reflect.newInstance(clz);// 保存的是 控制器 实例。
+		
+		for (Method method : clz.getMethods()) {
+			Path subPath = method.getAnnotation(Path.class); // 看看这个控制器方法有木有 URL 路径的信息，若有，要处理
+			if (subPath != null) { 
+				String subPathValue = subPath.value();
+				ActionAndView subPath_Info;
+				
+				// 有子路径
+				if (cInfo.subPath.containsKey(subPathValue)) { // 已经有这个 subPath，那么就是增加其他 HTTP 方法的意思（GET/POST……）
+					subPath_Info = cInfo.subPath.get(subPathValue);
+					methodSend(method, subPath_Info);
 				} else {
-					// 类本身……
-					methodSend(method, cInfo);
-				}
-			}
-
-			// 总路径
-			Path path = clz.getAnnotation(Path.class);
-			if (path != null) {
-				if(controllers.containsKey(path.value())) {
-					LOGGER.warning("重复的 URL Mapping: {0}，请检查代码的 控制器 {1} 是否重复？", path.value(), clz.getName());
-				} else {
-					controllers.put(path.value(), cInfo); /* save the controller instance, path as key */
-					LOGGER.info(path.value() + " 登记路径成功！");
+					subPath_Info = new ActionAndView();// 如果没有子路径则创建之
+					methodSend(method, subPath_Info);
+					
+					cInfo.subPath.put(subPathValue, subPath_Info);// 保存这个子路径 ActionAndView
 				}
 			} else {
-				LOGGER.warning("No Path info!");
+				// 没有 Path 信息，就是属于类本身的方法（一般最多只有四个方法 GET/POST/PUT/DELETE）……
+				methodSend(method, cInfo);
 			}
-		} else {
-			LOGGER.warning("This is NOT a Controller!");
 		}
+		
+		controllers.put(path.value(), cInfo); /* 解析完毕，保存 ActionAndView （已经包含控制器了）到 hash。 save the controller instance, path as key */
+		LOGGER.info(path.value() + " 登记路径成功！");
 	}
 
+	/**
+	 * HTTP 方法对号入座，什么方法就进入到什么属性中保存起来。
+	 * @param method
+	 * @param cInfo
+	 */
 	private static void methodSend(Method method, ActionAndView cInfo) {
 		if (method.getAnnotation(GET.class) != null) {
 			cInfo.GET_method = method;
@@ -108,48 +118,52 @@ public class AnnotationUtils {
 		} else if (method.getAnnotation(DELETE.class) != null) {
 			cInfo.DELETE_method = method;
 		}
-
 	}
 	
-
-
 	/**
 	 * 扫描某个包下面类
 	 * @param packageName
+	 * @param targetClz
 	 * @return
 	 */
 	public static <T> List<Class<T>> scanController(String packageName, Class<T> targetClz) {
-		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		Enumeration<URL> dirs = null;
 		List<Class<T>> clz = new ArrayList<>();
-		String packageDirName = packageName.replace('.', '/').trim();// 将包名转换为文件路径
 
+		Enumeration<URL> dirs = null;
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		String packageDirName = packageName.replace('.', '/').trim();// 将包名转换为文件路径
 		try {
 			dirs = classLoader.getResources(packageDirName);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
+		
 		if (dirs == null)
 			return null;
 
 		while (dirs.hasMoreElements()) {
 			URL url = dirs.nextElement();
 			if ("file".equals(url.getProtocol())) {
-				// 获取包的物理路径
-				String filePath = StringUtil.urlDecode(url.getFile()).trim();
-				// 以文件的方式扫描整个包下的文件 并添加到集合中
-				findAndAddClassesInPackageByFile(packageName, filePath, clz, targetClz);
+				String filePath = StringUtil.urlDecode(url.getFile()).trim();// 获取包的物理路径
+				findAndAddClassesInPackageByFile(packageName, filePath, clz, targetClz);// 以文件的方式扫描整个包下的文件 并添加到集合中
 			}
 		}
 
 		return clz;
 	}
 
+	/**
+	 * 
+	 * @param packageName
+	 * @param filePath
+	 * @param clz
+	 * @param targetClz
+	 */
 	@SuppressWarnings("unchecked")
 	private static <T> void findAndAddClassesInPackageByFile(String packageName, String filePath, List<Class<T>> clz, Class<T> targetClz) {
 		File dir = new File(filePath); // 获取此包的目录 建立一个File
 		if (!dir.exists() || !dir.isDirectory()) { // 如果不存在或者 也不是目录就直接返回
-			System.err.println("用户定义包名 " + packageName + " 下没有任何文件");
+			LOGGER.warning("用户定义包名 {0} 下没有任何文件", packageName);
 			return;
 		}
 
@@ -180,6 +194,11 @@ public class AnnotationUtils {
 		}
 	}
 
+	/**
+	 * 判断传入的类是否一个控制器，是的话返回 true，否则为 false。
+	 * @param clazz 类
+	 * @return
+	 */
 	private static boolean isController(Class<?> clazz) {
 		for (Class<?> clz : clazz.getInterfaces()) {
 			if (clz == IController.class)
@@ -187,5 +206,4 @@ public class AnnotationUtils {
 		}
 		return false;
 	}
-
 }
