@@ -18,11 +18,15 @@ package com.ajaxjs;
 import java.io.File;
 
 /**
- * 通用的常量
+ * 常量
  * 
  * @author frank
  */
 public interface Constant {
+	/**
+	 * 空字符串常量
+	 */
+	public static final String emptyString = "";
 	public static final String ConsoleDiver = System.getProperty("line.separator") + "---------------------------------";
 	public static final String printObject_or_status = "--------> ";
 	public static final String json_Err_KeyName = "errMsg";
@@ -33,9 +37,4 @@ public interface Constant {
 	public static final String outputKeyName = "output";
 	public static final String lineFeet = "\r\n";
 	public final static char newline = '\n';
-
-	/**
-	 * 空字符串常量
-	 */
-	public static final String emptyString = "";
 }

@@ -10,7 +10,6 @@ import com.ajaxjs.net.http.ConnectException;
 import com.ajaxjs.net.http.Get;
 import com.ajaxjs.net.http.Request;
 import com.ajaxjs.net.http.RequestClient;
-import com.ajaxjs.util.FileUtil;
 
 public class TestGet {
 //	@Test

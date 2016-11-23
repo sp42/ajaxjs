@@ -1,15 +1,19 @@
-package com.ajaxjs.jdbc;
+package test.com.ajaxjs.jdbc;
 
 import java.sql.*;
 
 import javax.sql.rowset.JdbcRowSet;
 import javax.sql.rowset.RowSetProvider;
 
-public class Jdbc7 {
-// https://docs.oracle.com/javase/tutorial/jdbc/basics/cachedrowset.html
+/**
+ * 	// https://docs.oracle.com/javase/tutorial/jdbc/basics/cachedrowset.html
 	// https://db.apache.org/derby/docs/10.9/ref/rrefjdbc4_1summary.htmlWR9QU-EV77Y-T8Q6W-PX7W2-4ZM25
-	
 	//http://download.oracle.com/otn-pub/jcp/jdbc-4_1-mrel-spec/jdbc4.1-fr-spec.pdf?AuthParam=1465096926_08a5ed33264923a8a52d98cd8df37692
+ * @author frank
+ *
+ */
+public class Jdbc7 {
+
 	public static void create() {
 
 		try (JdbcRowSet jdbcRs = RowSetProvider.newFactory().createJdbcRowSet();) {

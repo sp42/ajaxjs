@@ -37,13 +37,37 @@ public abstract class Result<T> {
 	 */
 	public boolean isNotNull;
 
-	public String json; // 返回给前端的 JSON 字符串
-	public String sqlStatement; // 执行过查询的那个 SQL 语句。可用于追溯
-	public Map<String, Object> result; // 已转换为 Map 的结果，如果复数则是 null
-	public Map<String, Object>[] results;// 已转换为 Map 结果集合，如果单数则是 null
-	public Date queryTime; // 查询耗时
-	public int total; // 总记录数
+	/**
+	 * 返回给前端的 JSON 字符串
+	 */
+	public String json;
+	
+	/**
+	 * 执行过查询的那个 SQL 语句。如果有，可用于追溯
+	 */
+	public String sqlStatement;
+	
+	/**
+	 * 已转换为 Map 的结果，如果复数则是 null
+	 */
+	public Map<String, Object> result;
+	
+	/**
+	 * 已转换为 Map 结果集合，如果单数则是 null
+	 */
+	public Map<String, Object>[] results;
+	
+	/**
+	 * 查询耗时
+	 */
+	public Date queryTime;
+	
+	/**
+	 * 总记录数
+	 */
+	public int total;
 
 	public T info;
+	
 	public T[] infoList;
 }
