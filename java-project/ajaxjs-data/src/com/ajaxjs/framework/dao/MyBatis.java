@@ -29,7 +29,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 
-
+import com.ajaxjs.Constant;
 import com.ajaxjs.framework.dao.DAO;
 import com.ajaxjs.framework.exception.DaoException;
 import com.ajaxjs.framework.model.BaseModel;
@@ -57,32 +57,46 @@ public class MyBatis {
 	 */
 	public static String db_context_path = "jdbc/mysql_test";
 
+	/**
+	 * 初始化 MyBatis 数据链接服务
+	 * @param ds
+	 */
 	public static void init(final DataSource ds) {
 		if (ds != null) {
 			Environment environment = new Environment("development", new JdbcTransactionFactory(), ds);
 			configuration = new Configuration(environment);
 			sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);
-			
+
 			// 打印数据库连接路径，以便了解
+			Connection conn = null;
+			
 			try {
-				System.out.println(environment.getDataSource().getConnection());
+				conn = environment.getDataSource().getConnection();
+				System.out.println("数据库连接字符串：" + conn + Constant.ConsoleDiver);
 			} catch (SQLException e) {
 				e.printStackTrace();
+			} finally {
+				if (conn != null)
+					try {
+						conn.close();
+					} catch (SQLException e) {}
 			}
 		} else {
 			configuration = null;
 			sqlSessionFactory = null;
 		}
+
 		// 如果要观察 MyBatis 动态生成的 SQL 语句，请打开控制台的输出。
-		 org.apache.ibatis.logging.LogFactory.useStdOutLogging();
-		 org.apache.ibatis.logging.LogFactory.useJdkLogging();
+		// org.apache.ibatis.logging.LogFactory.useStdOutLogging();
+		// org.apache.ibatis.logging.LogFactory.useJdkLogging();
 
 		// 加载通用的映射器
 		if (!configuration.hasMapper(SqlProvider.class))
 			configuration.addMapper(SqlProvider.class);
-		System.out.println("数据库初始化成功！" );
+		
+		System.out.println("数据库初始化成功！" + Constant.ConsoleDiver);
 	}
-	
+
 	/**
 	 * 启动 MyBatis 数据源
 	 */
