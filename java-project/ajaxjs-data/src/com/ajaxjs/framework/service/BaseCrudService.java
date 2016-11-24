@@ -48,11 +48,30 @@ import com.ajaxjs.util.Util;
  */
 public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>> implements IService<T> {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseCrudService.class);
+	/**
+	 * 映射器
+	 */
 	private Class<Mapper> mapperClz; 	// 映射器
+	
+	/**
+	 * UI 显示的文字
+	 */
 	private String uiName; 				// UI 显示的文字
-	private String tableName; 			// 实体表名
-	private String mappingTableName; 	// 数据库里面真实的表名，可不设置（这时候读取 tableName 的）
-	private ModelAndView model; 	// Extra data field container
+	
+	/**
+	 * 实体表名
+	 */
+	private String tableName; 			
+	
+	/**
+	 * 数据库里面真实的表名，可不设置（这时候读取 tableName 的）
+	 */
+	private String mappingTableName; 	// 
+	
+	/**
+	 * Extra data field container
+	 */
+	private ModelAndView model; 	// 
 	
 	@Override
 	public T getById(long id) throws ServiceException {
@@ -89,6 +108,22 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 //		}
 //		return mapper;
 //	}
+	
+	public static class Session<Mapper> {
+		public Mapper mapper;
+		public SqlSession session;
+	}
+	
+	/**
+	 * 获取 DAO 对象，要记得关闭 SqlSession！
+	 */
+	public Session<Mapper> getSession() {
+		Session<Mapper> s = new Session<>();
+		s.session = MyBatis.loadSession(mapperClz);
+		s.mapper = s.session.getMapper(mapperClz);
+		
+		return s;
+	}
 	
 	public T getOne(DAO_callback<T, Mapper> callback) throws ServiceException {
 		T entry = null;

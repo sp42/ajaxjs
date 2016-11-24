@@ -52,7 +52,7 @@ public interface SqlProvider {
 	 *            唯一序号
 	 * @return 若成功返回大于零
 	 */
-	@Delete("Delete FROM ${from} WHERE uid = ${uuid}")
+	@Delete("Delete FROM ${from} WHERE uid = #{uuid}")
 	public int deleteByUUID(@Param("from") String from, @Param("uuid") String uuid);
 
 	/**
@@ -75,7 +75,7 @@ public interface SqlProvider {
 	 *            唯一序号
 	 * @return 若成功返回大于零
 	 */
-	@Update("UPDATE SET ${from} isDelete = 1 WHERE uuid = ${uuid}")
+	@Update("UPDATE SET ${from} isDelete = 1 WHERE uuid = #{uuid}")
 	public int markDeleteByUUID(@Param("from") String from, @Param("uuid") String uuid);
 	
 	/**
