@@ -1,3 +1,4 @@
+<%@tag pageEncoding="UTF-8" description="走马灯"%>
 	<input id="startBtn" type="button" value="开始滚动" />
 	<input id="stopBtn" type="button" value="停止滚动">
 	<div id="content">这是一段滚动的文字</div>
