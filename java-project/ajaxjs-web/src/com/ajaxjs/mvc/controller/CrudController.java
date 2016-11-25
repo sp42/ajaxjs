@@ -15,6 +15,8 @@
  */
 package com.ajaxjs.mvc.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.ajaxjs.framework.model.ModelAndView;
 
 /**
@@ -26,9 +28,29 @@ import com.ajaxjs.framework.model.ModelAndView;
  */
 public interface CrudController<T> extends IController {
 	/**
-	 * 默认的模板路径
+	 * 全局 json 模板路径 之前缀
 	 */
-	public static final String perfix = "/common_jsp/json/";
+	public static final String common_jsp_perfix = "/common_jsp/json/";
+	
+	public static final String json_not_ok_simple = "json::{\"isOk\": false}";
+	
+	public static final String json_not_ok = "json::{\"isOk\": false, \"msg\" : \"%s\"}";
+	
+	public static final String json_ok = "json::{\"isOk\": true, \"msg\" : \"%s\"}";
+	
+	/**
+	 * json 路径常量（实体）
+	 */
+	public static final String showInfo = common_jsp_perfix + "showInfo.jsp";
+	/**
+	 * json 路径常量（分页列表）
+	 */
+	public static final String pagedList = common_jsp_perfix + "pagedList.jsp";
+
+	/**
+	 * 实体 jsp 模版路径之前缀
+	 */
+	public static final String jsp_perfix = "/WEB-INF/jsp/entry/";
 	
 	/**
 	 * 分页查询
@@ -105,4 +127,14 @@ public interface CrudController<T> extends IController {
 	 * @return JSP 路径，返回 JSON 格式的
 	 */
 	public String delete(long id, ModelAndView ModelAndView);
+	
+	/**
+	 * 模版方法，用于装备其他数据，如分类这些外联的表。 不使用 abstract 修饰，因为这将强制各个子类都要实现，麻烦。
+	 * 
+	 * @param reqeust
+	 *            请求对象
+	 * @param model
+	 *            模型
+	 */
+	public void prepareData(HttpServletRequest reqeust, ModelAndView model);
 }

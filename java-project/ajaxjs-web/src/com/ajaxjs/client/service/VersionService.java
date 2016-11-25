@@ -9,6 +9,11 @@ import com.ajaxjs.framework.model.Query;
 import com.ajaxjs.framework.service.BaseCrudService;
 import com.ajaxjs.framework.service.DAO_callback;
 
+/**
+ * 版本更新
+ * @author frank
+ *
+ */
 public class VersionService extends BaseCrudService<Version, VersionDAO> {
 	public VersionService() {
 		setMapper(VersionDAO.class);
@@ -16,6 +21,11 @@ public class VersionService extends BaseCrudService<Version, VersionDAO> {
 		setUiName("版本更新");
 	}
 
+	/**
+	 * 获取最新的那一条更新信息
+	 * @return
+	 * @throws ServiceException
+	 */
 	public Version getNew() throws ServiceException {
 		return getOne(new DAO_callback<Version, VersionDAO>() {
 			@Override

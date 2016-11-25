@@ -17,14 +17,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.junit.*;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 
 import com.ajaxjs.mvc.controller.MvcDispatcher;
 import com.ajaxjs.web.test.MockHelper;
 import com.ajaxjs.web.test.StubServletOutputStream;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.verify;
 
 public class TestController {
 	@Mock

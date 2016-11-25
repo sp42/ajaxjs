@@ -11,12 +11,13 @@ import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.framework.model.News;
-import com.ajaxjs.framework.service.NewsService;
-import com.ajaxjs.mvc.controller.AbstractCrudController;
+import com.ajaxjs.mvc.controller.AbstractController;
+
+import test.com.ajaxjs.framework.NewsService;
 
 @Controller
 @Path("/news")
-public class NewsController extends AbstractCrudController<News> {
+public class NewsController extends AbstractController<News> {
 	public NewsController(){
 		setService(new NewsService());
 	}

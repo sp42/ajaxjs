@@ -37,16 +37,6 @@ public abstract class ReadOnlyController<T extends BaseModel> extends AbstractCo
 	 */
 	private boolean JSON_output;
 	
-	/**
-	 * json 路径常量（实体）
-	 */
-	public static final String showInfo = "/common_jsp/json/showInfo.jsp";
-	
-	/**
-	 * json 路径常量（分页列表）
-	 */
-	public static final String pagedList = "/common_jsp/json/pagedList.jsp";
-	
 	@GET
 	@Path("/list")
 	@Override
@@ -55,7 +45,12 @@ public abstract class ReadOnlyController<T extends BaseModel> extends AbstractCo
 			super.list(start, limit, model);
 			return pagedList;
 		}else 
-			return AdminController.perfix + super.list(start, limit, model) + "/frontEnd_list";
+			return jsp_perfix + super.list(start, limit, model) + "/frontEnd_list";
+	}
+	
+	@GET
+	public String redirect() {
+		return "redirect:show_video/list";
 	}
 
 	@GET
@@ -66,7 +61,7 @@ public abstract class ReadOnlyController<T extends BaseModel> extends AbstractCo
 			super.getById(id, model);
 			return showInfo;
 		} else
-			return AdminController.perfix + super.getById(id, model) + "/frontEnd_info";
+			return jsp_perfix + super.getById(id, model) + "/frontEnd_info";
 	}
 
 	public boolean isJSON_output() {

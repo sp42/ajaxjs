@@ -36,12 +36,20 @@ public interface UserDao extends DAO<User> {
 	@Override
 	int create(User user);
 	
-	@Update("UPDATE SET user loginDate = ${loginDate}, ip = ${ip} WHERE id = ${id}")
-	int updateLoginInfo(long id, Date loginDate, String ip);
+	@Update("UPDATE user SET lastLoginDate = #{lastLoginDate}, ip = #{ip} WHERE id = ${id}")
+	int updateLoginInfo(@Param("id")long id, @Param("lastLoginDate")Date lastLoginDate, @Param("ip")String ip);
 	
 	@Select("SELECT * FROM user WHERE name = '${userName}'")
 	User findByUserName(@Param("userName") String userName);
 	
-	@Select("SELECT * FROM user WHERE name = '${userName}' AND password = '${password}'")
+	/**
+	 * 根据手机号码查找用户
+	 * @param phone
+	 * @return
+	 */
+	@Select("SELECT * FROM user WHERE phone = #{phone} LIMIT 1")
+	User findByPhone(@Param("phone") String phone);
+	
+	@Select("SELECT * FROM user WHERE name = #{userName} AND password = #{password}")
 	User findByUserNameAndPassword(@Param("userName") String userName, @Param("password") String password);
 }

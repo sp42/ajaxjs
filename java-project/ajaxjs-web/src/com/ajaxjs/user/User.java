@@ -15,6 +15,8 @@
  */
 package com.ajaxjs.user;
 
+import javax.validation.constraints.NotNull;
+
 import com.ajaxjs.framework.model.BaseModel;
 
 /**
@@ -23,7 +25,10 @@ import com.ajaxjs.framework.model.BaseModel;
  *
  */
 public class User extends BaseModel {
+	@NotNull(message="密码不能为空")
 	private String password;
+	
+	@NotNull(message="手机不能为空")
 	private String phone;
 
 	public String getPassword() {

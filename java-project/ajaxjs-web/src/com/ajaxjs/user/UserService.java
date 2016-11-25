@@ -57,10 +57,10 @@ public class UserService extends BaseCrudService<User, UserDao> {
 	 * @throws ServiceException
 	 */
 	public void afterLogin(User user, String ip) throws ServiceException {
-		int effectedRows = 0;
 		if (user == null || user.getId() == 0)
 			throw new ServiceException("非法用户！");
 
+		int effectedRows = 0;
 		try {
 			try (SqlSession session = MyBatis.sqlSessionFactory.openSession();) {
 				UserDao dao = session.getMapper(UserDao.class);
@@ -91,6 +91,14 @@ public class UserService extends BaseCrudService<User, UserDao> {
 
 		return user;
 	}
+	
+	public User findByPhone(String phone) throws ServiceException {
+		BaseCrudService.Session<UserDao> session = getSession();
+		User user = session.mapper.findByPhone(phone);
+		session.session.close();
+
+		return user;
+	}
 
 	public User findByUserNameAndPassword(String userName, String password) throws ServiceException {
 		User user = null;
@@ -110,11 +118,20 @@ public class UserService extends BaseCrudService<User, UserDao> {
 	
 	@Override
 	public int create(User user) throws ServiceException {
+		System.out.println("ssssssssssss");
 		if (user.getName() == null) { // 如果没有用户名
 			if (user.getPhone() != null) { // 则使用 user_{phone} 作为用户名
 				user.setName("user_" + user.getPhone());
 			}
 		}
 		return super.create(user);
+	}
+
+	public static boolean isRightUser(User _user_in_db, User request_user) throws ServiceException {
+		if (_user_in_db == null)
+			throw new ServiceException("用户不存在");
+		if (!_user_in_db.getPassword().equals(request_user.getPassword()))
+			throw new ServiceException("密码错误");
+		return true;
 	}
 }

@@ -251,7 +251,9 @@ public class MvcDispatcher implements Filter {
 					} catch (IOException e) {
 						LOGGER.warning(e);
 					}
-				} else { // JSP
+				} else if (str.startsWith("json::")) {
+					response.outputJSON(str.replace("json::", ""));
+				}  else { // JSP
 //					if(!str.startsWith("/WEB-INF/jsp/"))// 自动补充前缀
 //						str = "/WEB-INF/jsp/" + str;
 					if(!str.endsWith(".jsp"))			// 自动补充 .jsp 扩展名

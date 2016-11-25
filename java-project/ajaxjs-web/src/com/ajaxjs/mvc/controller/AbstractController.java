@@ -1,6 +1,25 @@
+/**
+ * Copyright 2015 Frank Cheung
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.ajaxjs.mvc.controller;
 
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import javax.ws.rs.PathParam;
 
 import com.ajaxjs.framework.exception.ServiceException;
@@ -8,9 +27,16 @@ import com.ajaxjs.framework.model.BaseModel;
 import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.framework.model.PageResult;
 import com.ajaxjs.framework.model.Query;
+import com.ajaxjs.framework.service.DocumentRenderer;
 import com.ajaxjs.framework.service.IService;
 import com.ajaxjs.util.LogHelper;
 
+/**
+ * 抽象的增删改查控制器
+ * @author frank
+ *
+ * @param <T>
+ */
 public abstract class AbstractController<T extends BaseModel> implements CrudController<T> {
 	private static final LogHelper LOGGER = LogHelper.getLog(AbstractController.class);
 
@@ -29,10 +55,10 @@ public abstract class AbstractController<T extends BaseModel> implements CrudCon
 		try {
 			if(Query.isAnyMatch(request)) {
 				// 其他丰富的查询参数
-				pageResult = getService().getPageRows(start, limit, Query.getQueryFactory(request));
+				pageResult = service.getPageRows(start, limit, Query.getQueryFactory(request));
 			} else {
+				pageResult = service.getPageRows(start, limit, null);
 			}
-			pageResult = getService().getPageRows(start, limit, null);
 
 			model.put("PageResult", pageResult);
 		} catch (ServiceException e) {
@@ -42,7 +68,7 @@ public abstract class AbstractController<T extends BaseModel> implements CrudCon
 		
 		prepareData(request, model);
 		
-		return getService().getTableName();
+		return service.getTableName();
 	}
 	
 	@Override
@@ -54,11 +80,7 @@ public abstract class AbstractController<T extends BaseModel> implements CrudCon
 	}
 
 	@Override
-	public String getById(long id, ModelAndView model) {
-		HttpServletRequest request = RequestHelper.getHttpServletRequest();
-		
-		IService<T> service = getService();
-		
+	public String getById(long id, ModelAndView model) {		
 		try {
 			BaseModel bean = service.getById(id);
 			model.put("info", bean);
@@ -74,16 +96,16 @@ public abstract class AbstractController<T extends BaseModel> implements CrudCon
 //			model.put("DaoException", e);
 //		}
 		
-		prepareData(request, model);
+		prepareData(RequestHelper.getHttpServletRequest(), model);
 		
-		return getService().getTableName();
+		return service.getTableName();
 	}
 	
 	/**
 	 * 后台管理-新建
 	 * 
 	 * @param model
-	 *            SpringMVC 模型
+	 *            Model 模型
 	 * @return JSP 路径
 	 */
 	public String createUI(ModelAndView model) {
@@ -92,7 +114,7 @@ public abstract class AbstractController<T extends BaseModel> implements CrudCon
 		model.put("isCreate", true); // 因为新建/编辑为同一套 jsp模版，所以表识为 创建，以便区分开来。
 		prepareData(null, model);
 		
-		return getService().getTableName();
+		return service.getTableName();
 	}
 	
 	/**
@@ -109,72 +131,77 @@ public abstract class AbstractController<T extends BaseModel> implements CrudCon
 		model.put("isCreate", false);
 		prepareData(null, model);
 		
-		return getService().getTableName();
+		return service.getTableName();
 	}
 	
-	/**
-	 * 模版方法，用于装备其他数据，如分类这些外联的表。 不使用 abstract 修饰，因为这将强制各个子类都要实现，麻烦。
-	 * 
-	 * @param reqeust
-	 *            请求对象
-	 * @param model
-	 *            模型
-	 */
+	@Override
 	public void prepareData(HttpServletRequest reqeust, ModelAndView model) {
 		// 每次 servlet 都会执行的。记录时间
 		model.put("requestTimeRecorder", System.currentTimeMillis());
 
 		// 设置实体 id 和 现实名称 。
-		model.put("uiName", getService().getUiName());
-		model.put("tableName", getService().getTableName());
+		model.put("uiName", service.getUiName());
+		model.put("tableName", service.getTableName());
 	}
 	
 	// ----------------写操作-------------------
 	@Override
-	public String create(/*@Valid*/ T entity, ModelAndView model) {
+	public String create(/* @Valid */ T entity, ModelAndView model) {
 		LOGGER.info("控制器-创建记录-" + entity.getName());
-		
-//			if (result.hasErrors()) {
-//				List<ObjectError> errors = result.getAllErrors();
-//			
-//				String str = "";
-//				for(ObjectError err : errors) {
-//					str += err.getCodes()[0] + err.getObjectName() + "\\n";
-//					LOGGER.info(err.getCode() + ":" + err.getObjectName() + err.getDefaultMessage());
-//				}
-//				
-//				model.put("errMsg", str);
-//			}else{
-		
-		entity.setService(getService());
-		
-		try {
-			getService().create(entity);
-			model.put("newlyId", entity.getId());
-		} catch (ServiceException e) {
-			model.put("errMsg", e.toString());
+
+//		if (result.hasErrors()) {
+//		List<ObjectError> errors = result.getAllErrors();
+//	
+//		String str = "";
+//		for(ObjectError err : errors) {
+//			str += err.getCodes()[0] + err.getObjectName() + "\\n";
+//			LOGGER.info(err.getCode() + ":" + err.getObjectName() + err.getDefaultMessage());
+//		}
+//		
+//		model.put("errMsg", str);
+//	}
+
+		Validator v = ModelAndView.getValidator();
+		Set<ConstraintViolation<T>> results = v.validate(entity);
+
+		if (!results.isEmpty()) {
+			String str = "";
+			for (ConstraintViolation<T> result : results) {
+				str += result.getPropertyPath() + result.getMessage() + "\\n";
+				LOGGER.info(result.getPropertyPath() + ":" + result.getMessage());
+			}
+
+			model.put("errMsg", str);
+		} else {
+			entity.setService(service);
+
+			try {
+				service.create(entity);
+				model.put("newlyId", entity.getId());
+			} catch (ServiceException e) {
+				model.put("errMsg", e.toString());
+			}
+
 		}
-		
-//			}
-		
-		return perfix + "cud.jsp";
+
+		return common_jsp_perfix + "cud.jsp";
 	}
 
 	@Override
 	public String update(@PathParam("id") long id, T entity, ModelAndView model) {
 		LOGGER.info("修改 name:{0}，数据库将执行 UPDATE 操作", entity.getName());
 
-		entity.setService(getService());
+		entity.setService(service);
 		entity.setId(id);
 		model.put("isUpdate", true);
 
 		try {
-			getService().update(entity);
+			service.update(entity);
 		} catch (ServiceException e) {
 			model.put("errMsg", e.getMessage());
 		}
 
-		return perfix + "cud.jsp";
+		return common_jsp_perfix + "cud.jsp";
 	}
 
 	@Override
@@ -182,14 +209,35 @@ public abstract class AbstractController<T extends BaseModel> implements CrudCon
 		LOGGER.info("删除 id:{0}，数据库将执行 DELETE 操作", id);
 
 		try {
-			if (!getService().deleteByID(id)) {
+			if (!service.deleteByID(id)) {
 				throw new ServiceException("删除失败！");
 			}
 		} catch (ServiceException e) {
 			model.put("ServiceException", e);
 		}
 
-		return perfix + "delete.jsp";
+		return common_jsp_perfix + "delete.jsp";
+	}
+	
+	/**
+	 * 输出文档 GET /document
+	 * 
+	 * @param model
+	 *            Model 模型
+	 * @param entity
+	 *            POJO
+	 * @return
+	 */
+	public String getDocument(ModelAndView model, T entity) {
+		String[] strs = DocumentRenderer.getEntityInfo(entity.getClass());
+		model.put("entityInfo", strs[0]);
+		if (strs[1] != null) { // 更多关于该实体的文档
+			model.put("moreDocument", strs[1]);
+		}
+
+		model.put("meta", DocumentRenderer.getDocument(entity.getClass(), service.getSQL_TableName()));
+
+		return "common/entity/showDocument";
 	}
 	
 	public IService<T> getService() {
