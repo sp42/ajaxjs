@@ -11,7 +11,6 @@ import org.junit.*;
 
 import com.ajaxjs.framework.model.Entity;
 import com.ajaxjs.framework.model.ModelAndView;
-import com.ajaxjs.framework.model.News;
 import com.ajaxjs.framework.model.PageResult;
 
 public class TestModel {

@@ -30,7 +30,6 @@
 package test.com.ajaxjs.framework;
 
 import com.ajaxjs.framework.exception.ServiceException;
-import com.ajaxjs.framework.model.News;
 import com.ajaxjs.framework.service.BaseCrudService;
 
 public class NewsService extends BaseCrudService<News, NewsDAO> {

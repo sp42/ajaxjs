@@ -26,7 +26,6 @@ import org.apache.ibatis.annotations.UpdateProvider;
 
 import com.ajaxjs.framework.dao.DAO;
 import com.ajaxjs.framework.dao.DynamicSqlProvider;
-import com.ajaxjs.framework.model.News;
 import com.ajaxjs.framework.model.Query;
 
 public interface NewsDAO extends DAO<News> {

@@ -8,7 +8,6 @@ import org.sqlite.SQLiteJDBCLoader;
 
 import com.ajaxjs.framework.dao.MyBatis;
 import com.ajaxjs.framework.exception.ServiceException;
-import com.ajaxjs.framework.model.News;
 import com.ajaxjs.framework.model.PageResult;
 
 public class TestService {
