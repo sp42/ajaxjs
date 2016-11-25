@@ -1,4 +1,4 @@
-<%@tag pageEncoding="UTF-8" description="输出头部文件" body-content="scriptless" import="java.util.regex.Pattern"%>
+<%@tag pageEncoding="UTF-8" description="输出头部文件" body-content="scriptless" import="com.ajaxjs.app.Init, java.util.regex.Pattern"%>
 <%
 	/**
 	 * 浏览器 UA 检测
@@ -230,7 +230,7 @@
 	
 	<%-- 定义网页搜索引擎索引方式，robotterms 是一组使用英文逗号「,」分割的值，通常有如下几种取值：none，noindex，nofollow，all，index和follow --%>
 	<meta name="robots" content="index,follow" />
-	<% request.setAttribute("isDebug", com.ajaxjs.app.Init.isDebug); %>
+	<% request.setAttribute("isDebug", Init.isDebug); %>
 	<link rel="stylesheet" type="text/css" href="${_config.LessUrlProcessor.getCssUrl(pageContext.request, lessFile, isDebug)}" />
     <script src="${pageContext.request.contextPath}/asset/bigfoot/js/dom.js"></script>
 
