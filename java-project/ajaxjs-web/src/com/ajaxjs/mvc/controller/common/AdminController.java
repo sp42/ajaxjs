@@ -7,20 +7,19 @@ import javax.ws.rs.PathParam;
 import com.ajaxjs.framework.model.BaseModel;
 import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.mvc.controller.AbstractController;
-import com.ajaxjs.mvc.controller.CrudController;
 
 public abstract class AdminController<T extends BaseModel> extends AbstractController<T> {
 	@GET
 	@Override
 	public String createUI(ModelAndView model) {
-		return CrudController.jsp_perfix + super.createUI(model) + "/adminInfo.jsp";
+		return jsp_perfix + super.createUI(model) + "/adminInfo.jsp";
 	}
 	
 	@GET
 	@Path("/{id}")
 	@Override
 	public String updateUI(@PathParam("id") long id, ModelAndView model) {
-		return CrudController.jsp_perfix + super.updateUI(id, model) + "/adminInfo.jsp";
+		return jsp_perfix + super.updateUI(id, model) + "/adminInfo.jsp";
 	}
 	
 //	@POST

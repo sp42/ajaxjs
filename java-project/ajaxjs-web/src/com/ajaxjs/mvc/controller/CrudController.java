@@ -37,6 +37,11 @@ public interface CrudController<T> extends IController {
 	public static final String json_not_ok = "json::{\"isOk\": false, \"msg\" : \"%s\"}";
 	
 	public static final String json_ok = "json::{\"isOk\": true, \"msg\" : \"%s\"}";
+
+	/**
+	 * json 路径常量（实体创建、修改）
+	 */
+	public static final String cud = common_jsp_perfix + "cud.jsp";
 	
 	/**
 	 * json 路径常量（实体）

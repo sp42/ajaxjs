@@ -10,9 +10,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.framework.model.ModelAndView;
-import com.ajaxjs.framework.model.News;
 import com.ajaxjs.mvc.controller.AbstractController;
 
+import test.com.ajaxjs.framework.News;
 import test.com.ajaxjs.framework.NewsService;
 
 @Controller

@@ -20,7 +20,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
-import javax.ws.rs.PathParam;
 
 import com.ajaxjs.framework.exception.ServiceException;
 import com.ajaxjs.framework.model.BaseModel;
@@ -184,11 +183,11 @@ public abstract class AbstractController<T extends BaseModel> implements CrudCon
 
 		}
 
-		return common_jsp_perfix + "cud.jsp";
+		return cud;
 	}
 
 	@Override
-	public String update(@PathParam("id") long id, T entity, ModelAndView model) {
+	public String update(long id, T entity, ModelAndView model) {
 		LOGGER.info("修改 name:{0}，数据库将执行 UPDATE 操作", entity.getName());
 
 		entity.setService(service);
@@ -201,11 +200,11 @@ public abstract class AbstractController<T extends BaseModel> implements CrudCon
 			model.put("errMsg", e.getMessage());
 		}
 
-		return common_jsp_perfix + "cud.jsp";
+		return cud;
 	}
 
 	@Override
-	public String delete(@PathParam("id") long id, ModelAndView model) {
+	public String delete(long id, ModelAndView model) {
 		LOGGER.info("删除 id:{0}，数据库将执行 DELETE 操作", id);
 
 		try {
