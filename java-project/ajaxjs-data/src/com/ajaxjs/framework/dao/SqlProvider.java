@@ -24,13 +24,13 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 /**
- * 静态的 SQL，定义于此。动态生成的 SQL，请参见 SQLProvider.java
- * Data Manipulation
+ * 静态的 SQL，定义于此。动态生成的 SQL，请参见 SQLProvider.java Data Manipulation
+ * 
  * @author frank
  *
  */
 public interface SqlProvider {
- 
+
 	/**
 	 * 根据 id 删除一条记录
 	 * 
@@ -77,16 +77,17 @@ public interface SqlProvider {
 	 */
 	@Update("UPDATE SET ${from} isDelete = 1 WHERE uuid = #{uuid}")
 	public int markDeleteByUUID(@Param("from") String from, @Param("uuid") String uuid);
-	
+
 	/**
 	 * 表中是否存在某条记录。原本可不用 COUNT，但 Mybatis 希望返回单行记录。
+	 * 
 	 * @param from
 	 *            可以是表名，也可以是 表名+ 复杂的查询语句
 	 * @return true 表示为有这记录
 	 */
 	@Select("SELECT COUNT(*) AS count FROM ${from}")
 	public boolean isExist(@Param("from") String from);
-	
+
 	/**
 	 * 选择满足条件的最后一条记录
 	 * 
@@ -99,10 +100,7 @@ public interface SqlProvider {
 
 	// UNION 时，SQLite 居然不能直接使用括号，所以必须得 SELECT * FROM
 	// 可以用 Union 合并 两次查询为一次
-	@Select(
-		"SELECT * FROM (SELECT id, name FROM ${from} WHERE id > ${id} LIMIT 1) " +
-		"UNION ALL " +
-		"SELECT * FROM (SELECT id, name FROM ${from} WHERE id < ${id} ORDER BY id DESC LIMIT 1)"
-	)
+	@Select("SELECT * FROM (SELECT id, name FROM ${from} WHERE id > ${id} LIMIT 1) " + "UNION ALL "
+			+ "SELECT * FROM (SELECT id, name FROM ${from} WHERE id < ${id} ORDER BY id DESC LIMIT 1)")
 	public List<Map<String, String>> getNeighbor(@Param("from") String form, @Param("id") long id);
 }

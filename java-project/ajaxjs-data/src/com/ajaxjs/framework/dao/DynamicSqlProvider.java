@@ -28,8 +28,9 @@ import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 
 /**
- * 动态的 SQL，定义于此。静态的 SQL，请参见 SQLProvider.java。
- * MyBatis SQL 拼凑类十分好用，详细用法参见官方文档：http://www.mybatis.org/mybatis-3/dynamic-sql.html
+ * 动态的 SQL，定义于此。静态的 SQL，请参见 SQLProvider.java。 MyBatis SQL
+ * 拼凑类十分好用，详细用法参见官方文档：http://www.mybatis.org/mybatis-3/dynamic-sql.html
+ * 
  * @author frank
  *
  */
@@ -53,9 +54,9 @@ public class DynamicSqlProvider {
 				}
 			}
 		}.toString();
-		
+
 		LOGGER.info("pageCount-------------->" + sql);
-		
+
 		return sql;
 	}
 
@@ -69,54 +70,54 @@ public class DynamicSqlProvider {
 	public String page(final Map<String, Object> parames) {
 		final int start = (int) parames.get("start"), limit = (int) parames.get("limit");
 		final String tablename = parames.get("tablename").toString();
- 
+
 		String sql = new SQL() {
 			{
 				SELECT(getFileds(parames));
 				FROM(tablename);
-				
+
 				if (parames.containsKey("query")) {
 					Query query = (Query) parames.get("query");
 					addWhere(this, query);
-					
+
 					if (query.getOrder() != null) {
 						Order order = query.getOrder();
 						for (String key : order.keySet()) {
-							if(!StringUtil.isEmptyString(order.get(key)))
+							if (!StringUtil.isEmptyString(order.get(key)))
 								ORDER_BY(key + " " + order.get(key));
 						}
 					}
 				}
-				
-				if (!parames.containsKey("query") || (parames.containsKey("query") && ((Query) parames.get("query")).getOrder() == null)) {
+
+				if (!parames.containsKey("query")
+						|| (parames.containsKey("query") && ((Query) parames.get("query")).getOrder() == null)) {
 					ORDER_BY("id DESC"); // 默认排序
 				}
 			}
 
-
 		}.toString() + " LIMIT " + start + ", " + limit;
-		
+
 		LOGGER.info("page sql-------------->" + sql);
-		
+
 		return sql;
 	}
-	
+
 	private String getFileds(Map<String, Object> parames) {
 		String addStr = "*";
-		
-		if (parames.containsKey("query") ) {
+
+		if (parames.containsKey("query")) {
 			Query query = (Query) parames.get("query");
-			if(query.getDb_field_mapping() != null && query.getDb_field_mapping().size() > 0) {
-				String [] pairs = new String[query.getDb_field_mapping().size()];
-				
+			if (query.getDb_field_mapping() != null && query.getDb_field_mapping().size() > 0) {
+				String[] pairs = new String[query.getDb_field_mapping().size()];
+
 				int i = 0;
 				for (String key : query.getDb_field_mapping().keySet())
 					pairs[i++] = query.getDb_field_mapping().get(key) + " AS " + key;
-				
+
 				addStr += " ," + StringUtil.stringJoin(pairs, ",");
 			}
 		}
-		
+
 		return addStr;
 	}
 
@@ -133,10 +134,10 @@ public class DynamicSqlProvider {
 		addFieldValues(sql, model, model.getClass().getMethods(), false);
 
 		LOGGER.info("create sql-------------->" + sql);
-		
+
 		return sql.toString();
 	}
-	
+
 	/**
 	 * 修改
 	 * 
@@ -146,9 +147,9 @@ public class DynamicSqlProvider {
 	 */
 	public String update(final BaseModel model) {
 		final Method[] methods = model.getClass().getMethods();
-		
+
 		LOGGER.info("更新记录{0}！", model.getName());
-		
+
 		// 反射获取字段
 		String sql = new SQL() {
 			{
@@ -157,23 +158,21 @@ public class DynamicSqlProvider {
 				WHERE("id = #{id}");
 			}
 		}.toString();
-		
+
 		LOGGER.info("update sql-------------->" + sql);
 
 		return sql;
 	}
-	
+
 	public static String createTable(String tableName) {
 		String sql = "CREATE TABLE `%s` (`id` INTEGER PRIMARY KEY  NOT NULL  DEFAULT (null),`"
-				+ "`name` VARCHAR(255), `uid` VARCHAR(36)"
-				+ "`createDate` DATETIME,`updateDate` DATETIME,"
-				+ "`content` TEXT, `intro` TEXT,"
-				+ "`catalog` INTEGER, `cover` VARCHAR(255),"
+				+ "`name` VARCHAR(255), `uid` VARCHAR(36)" + "`createDate` DATETIME,`updateDate` DATETIME,"
+				+ "`content` TEXT, `intro` TEXT," + "`catalog` INTEGER, `cover` VARCHAR(255),"
 				+ "`isOnline` BOOL DEFAULT (null)";
-		
+
 		return String.format(sql, tableName);
 	}
-	
+
 	/**
 	 * 
 	 * @param sql
@@ -186,11 +185,11 @@ public class DynamicSqlProvider {
 	 *            true=Update/false=Create
 	 */
 	private void addFieldValues(SQL sql, BaseModel model, Method[] methods, boolean isSet) {
-		for (Method method : methods) {	// 反射获取字段
+		for (Method method : methods) { // 反射获取字段
 			String methodName = method.getName();
-			
+
 			Map<String, String> fieldMap = model.getService().getHidden_db_field_mapping();
-			
+
 			if (isOk_field(methodName)) {
 				try {
 					if (method.invoke(model) != null) {
@@ -201,8 +200,8 @@ public class DynamicSqlProvider {
 							pojoName = methodName;
 							methodName = fieldMap.get(methodName);
 						}
-						
-						if(isSet)
+
+						if (isSet)
 							sql.SET(methodName + "= #{" + pojoName + "}");
 						else
 							sql.VALUES(methodName, "#{" + pojoName + "}");
@@ -222,10 +221,10 @@ public class DynamicSqlProvider {
 	 * @return
 	 */
 	private String getTableName(BaseModel model) {
-		return model.getService().getMappingTableName() == null ? 
-			   model.getService().getTableName() : model.getService().getMappingTableName();
-	} 
-	
+		return model.getService().getMappingTableName() == null ? model.getService().getTableName()
+				: model.getService().getMappingTableName();
+	}
+
 	/**
 	 * 添加 WHERE 子语句
 	 * 
@@ -238,13 +237,13 @@ public class DynamicSqlProvider {
 		Map<String, String> map;
 		if (query.getFilter() != null) {
 			Filter filter = query.getFilter();
-			
-			map = (Map<String, String>)filter;
-			
+
+			map = (Map<String, String>) filter;
+
 			for (String key : map.keySet()) {
-				if(!StringUtil.isEmptyString(map.get(key))){
-					
-					if(filter.isCustomOpeartor()) {
+				if (!StringUtil.isEmptyString(map.get(key))) {
+
+					if (filter.isCustomOpeartor()) {
 						sql.WHERE(key + map.get(key));
 					} else {
 						sql.WHERE(key + " = " + map.get(key));
@@ -255,19 +254,19 @@ public class DynamicSqlProvider {
 		if (query.getSearch() != null) {
 			map = query.getSearch();
 			for (String key : map.keySet()) {
-				if(!StringUtil.isEmptyString(map.get(key)))
+				if (!StringUtil.isEmptyString(map.get(key)))
 					sql.WHERE(key + " LIKE '%" + map.get(key) + "%'");
 			}
 		}
 		if (query.getMatch() != null) {
 			map = query.getMatch();
 			for (String key : map.keySet()) {
-				if(!StringUtil.isEmptyString(map.get(key)))
+				if (!StringUtil.isEmptyString(map.get(key)))
 					sql.WHERE(key + " LIKE '" + map.get(key) + "'");
 			}
 		}
 	}
-	
+
 	/**
 	 * 不是 pojo 所有的字段都要，这里判断
 	 * 
@@ -276,7 +275,8 @@ public class DynamicSqlProvider {
 	 * @return
 	 */
 	private static boolean isOk_field(String methodName) {
-		return (methodName.startsWith("get") || methodName.startsWith("is")) && !"getId".equals(methodName) && !"getClass".equals(methodName) && !"getService".equals(methodName);
+		return (methodName.startsWith("get") || methodName.startsWith("is")) && !"getId".equals(methodName)
+				&& !"getClass".equals(methodName) && !"getService".equals(methodName);
 	}
 
 	/**
@@ -295,6 +295,7 @@ public class DynamicSqlProvider {
 	/**
 	 * 通过子查询获得图片列表 图片表是根据实体 uid 获得其所有的图片，形成列表返回 这里返回的 SQL Concat 结果后的字符串，用 , 分隔开
 	 * UI 层需要 split 字符串
+	 * 
 	 * @deprecated
 	 * @param tablename
 	 * @return

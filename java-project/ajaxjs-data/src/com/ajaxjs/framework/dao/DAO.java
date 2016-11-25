@@ -39,7 +39,7 @@ public interface DAO<T> {
 	 * @return POJO
 	 */
 	public T selectById(long id, String tablename);
-	
+
 	/**
 	 * 用于注解的 SQL，写在这里比较方便维护
 	 */
@@ -55,12 +55,12 @@ public interface DAO<T> {
 	 * @return POJO
 	 */
 	T selectByUUID(String uuid, String tablename);
-	
+
 	/**
 	 * 用于注解的 SQL，写在这里比较方便维护
 	 */
 	public static final String selectByUUID = "SELECT * FROM ${tablename} WHERE uid = #{uid}";
-	
+
 	/**
 	 * 查询符合条件的记录总数。这个方法先于 page() 执行。如果返回 0 则无需执行 page()
 	 * 
@@ -71,7 +71,7 @@ public interface DAO<T> {
 	 * @return 所有的记录一共有多少？
 	 */
 	public int pageCount(String tablename, Query query);
-	
+
 	/**
 	 * 支持分页的查询。执行这个方法之前应先查询符合条件的记录总数，即 pageCount()。
 	 * 
@@ -86,7 +86,7 @@ public interface DAO<T> {
 	 * @return 分页结果
 	 */
 	public List<T> page(int start, int limit, String tablename, Query query);
-	
+
 	/**
 	 * 新建记录
 	 * 
@@ -95,7 +95,7 @@ public interface DAO<T> {
 	 * @return 新建记录之 id
 	 */
 	public int create(T bean);
-	
+
 	/**
 	 * 修改记录
 	 * 

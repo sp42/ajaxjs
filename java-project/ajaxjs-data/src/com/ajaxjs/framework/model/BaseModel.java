@@ -46,7 +46,7 @@ public class BaseModel {
 	}
 
 	@FieldDescription(doc="实体名称或标题")  
-	@NotNull(message="名称不能为空")
+//	@NotNull(message="名称不能为空")
 	@Size(min = 1, max = 255, message="长度应该介于1和255之间")
 	private String name;
 	

@@ -10,7 +10,6 @@ import com.ajaxjs.framework.dao.MyBatis;
 import com.ajaxjs.framework.exception.ServiceException;
 import com.ajaxjs.framework.model.News;
 import com.ajaxjs.framework.model.PageResult;
-import com.ajaxjs.framework.service.NewsService;
 
 public class TestService {
 	SQLiteDataSource dataSource;

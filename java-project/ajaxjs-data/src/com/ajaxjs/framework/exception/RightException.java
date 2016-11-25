@@ -17,6 +17,7 @@ package com.ajaxjs.framework.exception;
 
 /**
  * 权限异常
+ * 
  * @author frank
  *
  */

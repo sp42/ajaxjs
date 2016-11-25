@@ -17,6 +17,7 @@ package com.ajaxjs.framework.exception;
 
 /**
  * 服务层基类异常
+ * 
  * @author frank
  *
  */
@@ -25,7 +26,9 @@ public class ServiceException extends Exception {
 
 	/**
 	 * 创建一个服务层基类异常对象。
-	 * @param message 错误信息提示
+	 * 
+	 * @param message
+	 *            错误信息提示
 	 */
 	public ServiceException(String message) {
 		super(message);

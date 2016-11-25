@@ -59,6 +59,7 @@ public class MyBatis {
 
 	/**
 	 * 初始化 MyBatis 数据链接服务
+	 * 
 	 * @param ds
 	 */
 	public static void init(final DataSource ds) {
@@ -69,7 +70,7 @@ public class MyBatis {
 
 			// 打印数据库连接路径，以便了解
 			Connection conn = null;
-			
+
 			try {
 				conn = environment.getDataSource().getConnection();
 				System.out.println("数据库连接字符串：" + conn + Constant.ConsoleDiver);
@@ -79,7 +80,8 @@ public class MyBatis {
 				if (conn != null)
 					try {
 						conn.close();
-					} catch (SQLException e) {}
+					} catch (SQLException e) {
+					}
 			}
 		} else {
 			configuration = null;
@@ -93,7 +95,7 @@ public class MyBatis {
 		// 加载通用的映射器
 		if (!configuration.hasMapper(SqlProvider.class))
 			configuration.addMapper(SqlProvider.class);
-		
+
 		System.out.println("数据库初始化成功！" + Constant.ConsoleDiver);
 	}
 

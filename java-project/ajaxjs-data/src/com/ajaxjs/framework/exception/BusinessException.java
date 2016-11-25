@@ -17,6 +17,7 @@ package com.ajaxjs.framework.exception;
 
 /**
  * 业务逻辑异常
+ * 
  * @author frank
  *
  */

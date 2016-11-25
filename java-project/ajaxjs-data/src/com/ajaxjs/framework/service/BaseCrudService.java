@@ -51,12 +51,11 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 	/**
 	 * 映射器
 	 */
-	private Class<Mapper> mapperClz; 	// 映射器
-	
+	private Class<Mapper> mapperClz; 	
 	/**
 	 * UI 显示的文字
 	 */
-	private String uiName; 				// UI 显示的文字
+	private String uiName; 				
 	
 	/**
 	 * 实体表名
@@ -66,12 +65,12 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 	/**
 	 * 数据库里面真实的表名，可不设置（这时候读取 tableName 的）
 	 */
-	private String mappingTableName; 	// 
+	private String mappingTableName; 	
 	
 	/**
 	 * Extra data field container
 	 */
-	private ModelAndView model; 	// 
+	private ModelAndView model; 
 	
 	@Override
 	public T getById(long id) throws ServiceException {
@@ -96,19 +95,8 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 	}
 	
 	/**
-	 * 获取 DAO 对象，要记得关闭！
+	 * 包装下面对象的类
 	 */
-//	public Mapper getDao() {
-//		Mapper mapper = null;
-//		try(SqlSession session = MyBatis.loadSession(mapperClz);){
-//			mapper = session.getMapper(mapperClz);
-//		} catch (Throwable e) {
-//			LOGGER.warning(e);
-//			throw new DaoException(e.getMessage());
-//		}
-//		return mapper;
-//	}
-	
 	public static class Session<Mapper> {
 		public Mapper mapper;
 		public SqlSession session;
@@ -125,6 +113,12 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 		return s;
 	}
 	
+	/**
+	 * 
+	 * @param callback
+	 * @return
+	 * @throws ServiceException
+	 */
 	public T getOne(DAO_callback<T, Mapper> callback) throws ServiceException {
 		T entry = null;
 		
