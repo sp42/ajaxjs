@@ -269,10 +269,7 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 		try {
 			if (entry.getId() == 0) {
 				throw new IllegalArgumentException("没有参数 id！");
-			}
-			if (StringUtil.isEmptyString(entry.getName())) {
-				throw new IllegalArgumentException("不能为空标题");
-			}
+			} 
 
 			entry.setUpdateDate(new Date());// 记录修改時間
 		} catch (Throwable e) {
