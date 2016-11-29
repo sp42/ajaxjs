@@ -18,6 +18,7 @@ package com.ajaxjs.mvc.controller;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -45,6 +46,7 @@ import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.MapHelper;
 import com.ajaxjs.util.Reflect;
 import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.web.Output;
 import com.ajaxjs.web.Requester;
 import com.ajaxjs.web.Responser;
 import com.ajaxjs.web.ServletPatch;
@@ -97,8 +99,7 @@ public class MvcDispatcher implements Filter {
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
 		Requester request = new Requester(req);
-		Responser response = new Responser(resp);
-		response.setRequest(request);
+		HttpServletResponse response = (HttpServletResponse)resp;
 
 		String uri = request.getRoute(), httpMethod = request.getMethod();
 
@@ -248,32 +249,33 @@ public class MvcDispatcher implements Filter {
 	 * @param response
 	 * @param model 所有渲染数据都要放到一个 model 对象中（本质 是 map或者 bean），这样使用者就可以在模板内用  Map 对象的 key/getter 获取到对应的数据。
 	 */
-	private static void resultHandler(Object result, Requester request, Responser response, ModelAndView model) {
+	private static void resultHandler(Object result, Requester request, HttpServletResponse response, ModelAndView model) {
 		if (model != null)
 			model.saveToReuqest(request);
 
 		if (result != null) {
 			if (result instanceof String) {
 				String str = (String) result, html = "html::";
-
+				Output o = new Output(response);
+				
 				if (str.startsWith(html)) {
-					response.outputSimpleHTML(str.replace(html, ""));
+					o.setSimpleHTML(true).setOutput(str.replace(html, "")).go();
 				} else if (str.startsWith("redirect::")) {
-					try {
-						response.sendRedirect(str.replace("redirect::", ""));
-					} catch (IOException e) {
-						LOGGER.warning(e);
-					}
+					o.setRedirect(str.replace("redirect::", "")).go();
+					
 				} else if (str.startsWith("json::")) {
-					response.outputJSON(str.replace("json::", ""));
+					String jsonpToken = request.getParameter("callback"); // 由参数决定是否使用 jsonp
+					if (StringUtil.isEmptyString(jsonpToken)) {
+						o.setJson(true).setOutput(str.replace("json::", "")).go();
+					} else {
+						o.setJsonpToken(jsonpToken).setOutput(str.replace("json::", "")).go();
+					}
 				}  else { // JSP
-//					if(!str.startsWith("/WEB-INF/jsp/"))// 自动补充前缀
-//						str = "/WEB-INF/jsp/" + str;
 					if(!str.endsWith(".jsp"))			// 自动补充 .jsp 扩展名
 						str += ".jsp";
 					
 					LOGGER.info("执行逻辑完成，现在控制输出（响应 JSP）" + result);
-					response.sendRequestDispatcher(str);
+					o.setTemplate(str).go(request);
 				}
 			}
 		}
@@ -289,7 +291,7 @@ public class MvcDispatcher implements Filter {
 	 *            控制器方法对象
 	 * @return 参数列表
 	 */
-	private static Object[] getArgs(Requester request, Responser response, Method method) {
+	private static Object[] getArgs(Requester request, HttpServletResponse response, Method method) {
 		ArrayList<Object> args = new ArrayList<>();// 参数列表
 		Annotation[][] annotation = method.getParameterAnnotations(); /* 方法所有的注解，length 应该要和参数总数一样 */
 
@@ -301,7 +303,7 @@ public class MvcDispatcher implements Filter {
 			// 适配各种类型的参数，或者注解
 			if (clazz.equals(HttpServletRequest.class) || clazz.equals(Requester.class)) {// 常见的 请求/响应 对象，需要的话传入之
 				args.add(request);
-			} else if (clazz.equals(HttpServletResponse.class) || clazz.equals(Responser.class)) {
+			} else if (clazz.equals(HttpServletResponse.class)) {
 				args.add(response);
 			} else if (clazz.equals(ModelAndView.class)) {
 				args.add(new ModelAndView()); // 新建 ModeView 对象

@@ -21,7 +21,6 @@ import com.ajaxjs.user.auth.captcha.IncorrectCaptchaException;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.web.Captcha;
 import com.ajaxjs.web.Requester;
-import com.ajaxjs.web.Responser;
 
 public abstract class BaseUserAccessController implements IController {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseUserAccessController.class);
@@ -86,10 +85,9 @@ public abstract class BaseUserAccessController implements IController {
 		}
 
 		// 输出 JSON
-		Responser rsp = new Responser(response);
-		boolean isOk = error == null;
+		
 		String msg = error == null ? "登录成功！" : error + "具体原因：" + (exObj != null ? exObj.getMessage() : "N/A");
-		rsp.outputAction(isOk, msg);
+		
 	}
 
 	/**

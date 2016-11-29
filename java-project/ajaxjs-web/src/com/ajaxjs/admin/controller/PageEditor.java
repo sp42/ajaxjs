@@ -92,10 +92,6 @@ public class PageEditor implements IController {
 		}
 
 		requester.setActionMsg("修改成功");
-		Responser rsp = new Responser(response);
-		rsp.setRequest(request);
-
-		rsp.outputAction();
 	}
 
 	/**

@@ -68,14 +68,14 @@ public class Requester extends HttpServletRequestWrapper {
 	 *            键
 	 * @return 参数值
 	 */
-	public String getForceParameter(String key){
+	public String getForceParameter(String key) {
 		String value = super.getParameter(key);
 
 		if (value == null)
 			throw new NullPointerException("你未传入参数：" + key);
 		if (StringUtil.isEmptyString(value))
 			throw new IllegalArgumentException(String.format("你有传入 %s 参数，但是该参数为空字符串！", key));
-		
+
 		return value;
 	}
 
