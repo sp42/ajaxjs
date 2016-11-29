@@ -18,7 +18,6 @@ package com.ajaxjs.mvc.controller;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -48,7 +47,6 @@ import com.ajaxjs.util.Reflect;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.web.Output;
 import com.ajaxjs.web.Requester;
-import com.ajaxjs.web.Responser;
 import com.ajaxjs.web.ServletPatch;
 
 /**
