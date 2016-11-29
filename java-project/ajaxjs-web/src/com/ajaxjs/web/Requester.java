@@ -18,8 +18,6 @@ package com.ajaxjs.web;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -60,24 +58,6 @@ public class Requester extends HttpServletRequestWrapper {
 	public Requester(ServletRequest request) {
 		this((HttpServletRequest)request);
 	}
-	
-	/**
-	 * 获取请求参数的内容。 防止空参数处理
-	 * 
-	 * @param key
-	 *            键
-	 * @return 参数值
-	 */
-	public String getForceParameter(String key) {
-		String value = super.getParameter(key);
-
-		if (value == null)
-			throw new NullPointerException("你未传入参数：" + key);
-		if (StringUtil.isEmptyString(value))
-			throw new IllegalArgumentException(String.format("你有传入 %s 参数，但是该参数为空字符串！", key));
-
-		return value;
-	}
 
 	/**
 	 * 获取原请求的 uri，而非模版所在的 uri
@@ -93,17 +73,6 @@ public class Requester extends HttpServletRequestWrapper {
 		} else {
 			return super.getRequestURI();// 直接 jsp 的
 		}
-	}
-	
-	/**
-	 * 是否有某个参数？
-	 * 
-	 * @param key
-	 *            健
-	 * @return true 表示有这个参数并且带值得
-	 */
-	public boolean hasValue(String key) {
-		return !StringUtil.isEmptyString(getParameter(key));
 	}
 	
 	/**
@@ -180,66 +149,6 @@ public class Requester extends HttpServletRequestWrapper {
 		return url;
 	}
 	
-	private List<String> logger = new ArrayList<>();
-	
-	private List<Exception> errLogger = new ArrayList<>();
-	
-	/**
-	 * 保存日志
-	 * 
-	 * @param msg
-	 *            日志信息
-	 */
-	public void pushLog(String msg) {
-		logger.add(msg);
-	}
-
-	/**
-	 * 保存异常
-	 * 
-	 * @param msg
-	 *            异常信息，并转变为异常对象
-	 */
-	public void pushErr(String msg) {
-		errLogger.add(new Exception(msg));
-	}
-
-	/**
-	 * 保存异常
-	 * 
-	 * @param e
-	 *            异常
-	 */
-	public void pushErr(Exception e) {
-		errLogger.add(e);
-	}
-
-	/**
-	 * 是否有异常内容
-	 * 
-	 * @return true 表示为有异常内存
-	 */
-	public boolean hasError() {
-		return errLogger.size() > 0;
-	}
-	
-	/**
-	 * 合并异常信息输出
-	 * 
-	 * @return 异常信息
-	 */
-	public String getError() {
-		if (hasError()) {
-			StringBuilder sb = new StringBuilder();
-
-			for (Exception err : errLogger)
-				sb.append(err.getMessage());
-
-			return sb.toString();
-		} else
-			return null;
-	}
-	
 	/**
 	 * 获取请求的 IP 地址
 
@@ -259,15 +168,5 @@ public class Requester extends HttpServletRequestWrapper {
 			s = getRemoteAddr(); // REMOTE_ADDR
 
 		return s;
-	}
-	
-	/**
-	 * 设置信息
-	 * 
-	 * @param msg
-	 *            信息
-	 */
-	public void setActionMsg(String msg) {
-		setAttribute("msg", msg);
 	}
 }
