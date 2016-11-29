@@ -123,10 +123,14 @@ public class UserInfoController extends ReadOnlyController<User> {
 			if (user == null) {
 				return String.format(json_not_ok, "用户 id：" + id + "不存在！");
 			}
-
-			user.setAvatar(ur.getUploaded_save_fileName());
-			user.setService(service);
-			if (service.update(user)) {
+			
+			// 不想 UPDATE SQL 除 avatar 字段之外的
+			User _user = new User();
+			_user.setId(user.getId());
+			_user.setAvatar(ur.getUploaded_save_fileName());
+			_user.setService(service);
+			
+			if (service.update(_user)) {
 				String perfix = req.getBasePath(); // 拼凑 url 前缀
 				
 				return String.format(upload_avatar_ok, id, "修改头像成功！", perfix + upload_avatar_folder + ur.getUploaded_save_fileName());
