@@ -44,9 +44,15 @@ public class UploadRequest {
 	private boolean isNewName;
 	
 	/**
-	 * 成功上传之后的文件名。如果 isNewName = false，则是原上传的名字
+	 * 成功上传之后的文件名，不包括目录的磁盘文件路径。如果 isNewName = false，则是原上传的名字
 	 */
 	private String uploaded_save_fileName;
+	
+	/**
+	 * 成功上传之后的完整文件名，包括目录的磁盘文件路径。如果 isNewName = false，则是原上传的名字
+	 */
+	private String uploaded_save_filePath;
+	
 	
 	/**
 	 * 相同文件名是否覆盖？true=允许覆盖
@@ -119,15 +125,15 @@ public class UploadRequest {
 	/**
 	 * @return the uploaded_save_fileName
 	 */
-	public String getUploaded_save_fileName() {
-		return uploaded_save_fileName;
+	public String getUploaded_save_filePath() {
+		return uploaded_save_filePath;
 	}
 
 	/**
 	 * @param uploaded_save_fileName the uploaded_save_fileName to set
 	 */
-	public void setUploaded_save_fileName(String uploaded_save_fileName) {
-		this.uploaded_save_fileName = uploaded_save_fileName;
+	public void setUploaded_save_filePath(String uploaded_save_fileName) {
+		this.uploaded_save_filePath = uploaded_save_fileName;
 	}
 
 	/**
@@ -164,5 +170,13 @@ public class UploadRequest {
 
 	public void setExtFilenames(String[] extFilenames) {
 		this.extFilenames = extFilenames;
+	}
+
+	public String getUploaded_save_fileName() {
+		return uploaded_save_fileName;
+	}
+
+	public void setUploaded_save_fileName(String uploaded_save_fileName) {
+		this.uploaded_save_fileName = uploaded_save_fileName;
 	}	
 }
