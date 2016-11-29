@@ -25,11 +25,18 @@ import com.ajaxjs.framework.model.BaseModel;
  *
  */
 public class User extends BaseModel {
+	private int sex;
+	
 	@NotNull(message="密码不能为空")
 	private String password;
 	
 	@NotNull(message="手机不能为空")
 	private String phone;
+	
+	/**
+	 * 用户头像
+	 */
+	private String avatar;
 
 	public String getPassword() {
 		return password;
@@ -45,5 +52,21 @@ public class User extends BaseModel {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	public int getSex() {
+		return sex;
+	}
+
+	public void setSex(int sex) {
+		this.sex = sex;
+	}
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
 	}
 }

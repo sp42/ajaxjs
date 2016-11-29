@@ -104,10 +104,8 @@ public class UserService extends BaseCrudService<User, UserDao> {
 		User user = null;
 
 		try (SqlSession session = MyBatis.loadSession(UserDao.class);) {
-
 			UserDao userDao = session.getMapper(UserDao.class);
 			user = userDao.findByUserNameAndPassword(userName, password);
-
 		} catch (Throwable e) {
 			LOGGER.warning(e);
 			throw new DaoException(e.getMessage());
@@ -118,7 +116,6 @@ public class UserService extends BaseCrudService<User, UserDao> {
 	
 	@Override
 	public int create(User user) throws ServiceException {
-		System.out.println("ssssssssssss");
 		if (user.getName() == null) { // 如果没有用户名
 			if (user.getPhone() != null) { // 则使用 user_{phone} 作为用户名
 				user.setName("user_" + user.getPhone());

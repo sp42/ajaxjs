@@ -22,6 +22,7 @@ import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.UpdateProvider;
 
 import com.ajaxjs.framework.dao.DAO;
 import com.ajaxjs.framework.dao.DynamicSqlProvider;
@@ -36,10 +37,19 @@ public interface UserDao extends DAO<User> {
 	@Override
 	int create(User user);
 	
+	@UpdateProvider(type = DynamicSqlProvider.class, method = "update")
+	@Override
+	int update(User user);
+	
 	@Update("UPDATE user SET lastLoginDate = #{lastLoginDate}, ip = #{ip} WHERE id = ${id}")
 	int updateLoginInfo(@Param("id")long id, @Param("lastLoginDate")Date lastLoginDate, @Param("ip")String ip);
 	
-	@Select("SELECT * FROM user WHERE name = '${userName}'")
+	/**
+	 * 根据用户名码查找用户
+	 * @param userName
+	 * @return
+	 */
+	@Select("SELECT * FROM user WHERE name = #{userName}")
 	User findByUserName(@Param("userName") String userName);
 	
 	/**
