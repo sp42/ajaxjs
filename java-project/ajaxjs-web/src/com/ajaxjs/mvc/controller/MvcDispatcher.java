@@ -438,38 +438,4 @@ public class MvcDispatcher implements Filter {
 	@Override
 	public void destroy() { // 暂时不需要这个逻辑
 	}
-
-	@Deprecated
-	static class UriInfo {
-		private String subUri;
-		private String subPath;
-		private String info_id;
-
-		public UriInfo(String subUri, String subPath) {
-			this.subUri = subUri;
-			this.subPath = subPath;
-			/* like foo/123 means info */
-			String reg = "(?!/" + subPath.replaceAll("(\\{|\\})", "") + "/)(\\d+)";
-			
-			info_id = StringUtil.regMatch(reg, subUri);
-		}
-
-		/**
-		 * 是否详情的
-		 * 
-		 * @return
-		 */
-		public boolean isInfo() {
-			return info_id != null && subPath.contains("{id}");
-		}
-
-		/**
-		 * 是否非详情的
-		 * 
-		 * @return
-		 */
-		public boolean isNotInfo() {
-			return info_id == null && subUri.startsWith(subPath);
-		}
-	}
 }
