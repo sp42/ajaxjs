@@ -1,4 +1,4 @@
-package com.ajaxjs.mvc.controller.common;
+package com.ajaxjs.mvc.controller;
 
 /**
  * Copyright 2015 Frank Cheung
@@ -22,7 +22,6 @@ import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.framework.model.BaseModel;
 import com.ajaxjs.framework.model.ModelAndView;
-import com.ajaxjs.mvc.controller.AbstractController;
 
 /**
  * 只读输出，有 /{id} 和 /list 两个路由，

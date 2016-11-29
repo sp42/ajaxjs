@@ -1,4 +1,4 @@
-package com.ajaxjs.mvc.controller.common;
+package com.ajaxjs.mvc.controller;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -6,7 +6,6 @@ import javax.ws.rs.PathParam;
 
 import com.ajaxjs.framework.model.BaseModel;
 import com.ajaxjs.framework.model.ModelAndView;
-import com.ajaxjs.mvc.controller.AbstractController;
 
 public abstract class AdminController<T extends BaseModel> extends AbstractController<T> {
 	@GET
@@ -30,4 +29,11 @@ public abstract class AdminController<T extends BaseModel> extends AbstractContr
 //	@Path("/{id}")
 //	@Override
 //	public abstract String update(@PathParam("id") long id, T entry, ModelAndView model);
+	
+//	@DELETE
+//	@Path("/{id}")
+//	@Override
+//	public String delete(@PathParam("id") long id, ModelAndView model) {
+//		return super.delete(id, model);
+//	}
 }

@@ -32,6 +32,7 @@ import com.ajaxjs.util.LogHelper;
 
 /**
  * 抽象的增删改查控制器
+ * 不能复用 create/update 方法，这是因为 T 泛型不能正确识别 Bean 类型的缘故
  * @author frank
  *
  * @param <T>

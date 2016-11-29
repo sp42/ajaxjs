@@ -160,22 +160,35 @@ public class MvcDispatcher implements Filter {
 				objs[0] = controllerInfo.controller; // 返回 controller
 
 				String subUri = uri.replace(path, "");
+				
+				boolean isSub = false; // 如果执行了 sub 就不用执行类 path 本身的。这里做一个标识
 
-				boolean isSub = false; // 如果执行了 sub 就不用执行类 path 本身的
-
+//				System.out.println("subUri:" + subUri);
+//				System.out.println("subUri::" + subUri.replaceAll("\\d+", "{id}"));
+				
 				for (String subPath : controllerInfo.subPath.keySet()) {
-					UriInfo ui = new UriInfo(subUri, subPath);
-
-					if (subUri.equals("/{id}") || ui.isInfo() || ui.isNotInfo()) {
+//					System.out.println(subPath);
+					
+					// 注解变成 正则 去匹配 subUri
+					if(subPath.equals(subUri)) { // 相同的业务，如  xx/login
+						LOGGER.info(subPath + "子路径命中，相同的业务！！！");
 						method = getMethod(controllerInfo.subPath.get(subPath), httpMethod);
-						LOGGER.info(subPath + "子路径命中！！！");
 						isSub = true;
 						break;
-					}
+					}else if (StringUtil.regMatch(subPath.replace("{id}", "\\d+$"), subUri) != null) { // 单个实体，如  xx/1
+						LOGGER.info(subPath + "子路径命中，单个实体！！！");
+						method = getMethod(controllerInfo.subPath.get("/{id}"), httpMethod);
+						isSub = true;
+						break;
+					} else if(subUri.replaceAll("\\d+", "{id}").equals(subPath)) { // 单个实体下的业务，如  xx/1/avatar，反过来匹配
+						LOGGER.info(subPath + "子路径命中，单个实体下的业务！！！");
+						isSub = true;
+						method = getMethod(controllerInfo.subPath.get(subPath), httpMethod);
+						break;
+					} 
 				}
 
-				if (!isSub) {
-					// 类本身
+				if (!isSub) {// 类本身
 					method = getMethod(controllerInfo, httpMethod);
 				}
 
@@ -426,6 +439,7 @@ public class MvcDispatcher implements Filter {
 	public void destroy() { // 暂时不需要这个逻辑
 	}
 
+	@Deprecated
 	static class UriInfo {
 		private String subUri;
 		private String subPath;
@@ -436,6 +450,7 @@ public class MvcDispatcher implements Filter {
 			this.subPath = subPath;
 			/* like foo/123 means info */
 			String reg = "(?!/" + subPath.replaceAll("(\\{|\\})", "") + "/)(\\d+)";
+			
 			info_id = StringUtil.regMatch(reg, subUri);
 		}
 
