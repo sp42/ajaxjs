@@ -9,7 +9,7 @@ import com.ajaxjs.client.model.Version;
 import com.ajaxjs.client.service.VersionService;
 import com.ajaxjs.framework.exception.ServiceException;
 import com.ajaxjs.framework.model.ModelAndView;
-import com.ajaxjs.mvc.controller.common.ReadOnlyController;
+import com.ajaxjs.mvc.controller.ReadOnlyController;
 import com.ajaxjs.web.Requester;
 
 @Controller
