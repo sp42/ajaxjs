@@ -20,8 +20,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -37,17 +35,14 @@ import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.mvc.AnnotationUtils;
 import com.ajaxjs.framework.model.BaseModel;
-import com.ajaxjs.framework.model.Map2Pojo;
 import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.mvc.ActionAndView;
 import com.ajaxjs.util.ClassScaner;
 import com.ajaxjs.util.LogHelper;
-import com.ajaxjs.util.MapHelper;
 import com.ajaxjs.util.Reflect;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.web.Output;
 import com.ajaxjs.web.Requester;
-import com.ajaxjs.web.ServletPatch;
 
 /**
  * 采用 Jave EE 版的 eclipse 开发，项目工程是一个 Dynamic web project，采用了 Servlet 3 的一些特性，JDK 要求 v1.7 及以上
@@ -72,7 +67,7 @@ public class MvcDispatcher implements Filter {
 		 * 看是否有属于 IController 接口的控制器，
 		 * 有就加入到 AnnotationUtils.controllers 集合中
 		 */
-		Map<String, String> config = ServletPatch.parseInitParams(null, fConfig);
+		Map<String, String> config = MvcRequest.parseInitParams(null, fConfig);
 
 		if (config != null && config.get("controller") != null) {
 			String str = config.get("controller");
@@ -96,7 +91,7 @@ public class MvcDispatcher implements Filter {
 	 */
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
-		Requester request = new Requester(req);
+		MvcRequest request = new MvcRequest(req);
 		HttpServletResponse response = (HttpServletResponse)resp;
 
 		String uri = request.getRoute(), httpMethod = request.getMethod();
@@ -247,7 +242,7 @@ public class MvcDispatcher implements Filter {
 	 * @param response
 	 * @param model 所有渲染数据都要放到一个 model 对象中（本质 是 map或者 bean），这样使用者就可以在模板内用  Map 对象的 key/getter 获取到对应的数据。
 	 */
-	private static void resultHandler(Object result, Requester request, HttpServletResponse response, ModelAndView model) {
+	private static void resultHandler(Object result, MvcRequest request, HttpServletResponse response, ModelAndView model) {
 		if (model != null)
 			model.saveToReuqest(request);
 
@@ -262,7 +257,9 @@ public class MvcDispatcher implements Filter {
 					o.setRedirect(str.replace("redirect::", "")).go();
 					
 				} else if (str.startsWith("json::")) {
-					String jsonpToken = request.getParameter("callback"); // 由参数决定是否使用 jsonp
+					String jsonpToken = request.getParameter(MvcRequest.callback_param); // 由参数决定是否使用 jsonp
+					System.out.println("callback:" + jsonpToken);
+					
 					if (StringUtil.isEmptyString(jsonpToken)) {
 						o.setJson(true).setOutput(str.replace("json::", "")).go();
 					} else {
@@ -289,7 +286,7 @@ public class MvcDispatcher implements Filter {
 	 *            控制器方法对象
 	 * @return 参数列表
 	 */
-	private static Object[] getArgs(Requester request, HttpServletResponse response, Method method) {
+	private static Object[] getArgs(MvcRequest request, HttpServletResponse response, Method method) {
 		ArrayList<Object> args = new ArrayList<>();// 参数列表
 		Annotation[][] annotation = method.getParameterAnnotations(); /* 方法所有的注解，length 应该要和参数总数一样 */
 
@@ -299,32 +296,14 @@ public class MvcDispatcher implements Filter {
 			Class<?> clazz = parmTypes[i];
 			
 			// 适配各种类型的参数，或者注解
-			if (clazz.equals(HttpServletRequest.class) || clazz.equals(Requester.class)) {// 常见的 请求/响应 对象，需要的话传入之
+			if (clazz.equals(HttpServletRequest.class) || clazz.equals(Requester.class) || clazz.equals(MvcRequest.class)) {// 常见的 请求/响应 对象，需要的话传入之
 				args.add(request);
 			} else if (clazz.equals(HttpServletResponse.class)) {
 				args.add(response);
 			} else if (clazz.equals(ModelAndView.class)) {
 				args.add(new ModelAndView()); // 新建 ModeView 对象
-			} else if (BaseModel.class.isAssignableFrom(clazz)) {
-				// 支持自动获取请求参数并封装到 bean 内
-				// Object bean = Reflect.newInstance(clazz);
-//				Map2Pojo<?> m = new Map2Pojo<>(clazz); // 这里怎么 不用 ?？
-
-				Map<String, String> map;
-				if(request.getMethod().toUpperCase().equals("PUT")) {
-					map = ServletPatch.getPutRequest(request); // Servlet 没有 PUT 获取表单，要自己处理
-					// 已经中文转码，不用担心乱码
-				} else {
-					map = MapHelper.toMap(request.getParameterMap());
-					// 以防中文乱码
-//					for (String s : map.keySet()) {
-//						map.put(s, StringUtil.urlChinese(map.get(s)));
-//					}
-				}
-				
-				Map<String, Object> _map = MapHelper.asObject(map, true);
-				Object bean = new Map2Pojo<>(clazz).map2pojo(_map);
-				args.add(bean); // 实体类参数
+			} else if (BaseModel.class.isAssignableFrom(clazz)) {		
+				args.add(request.getBean(clazz)); // 实体类参数
 			} else { // 适配注解
 				Annotation[] annotations = annotation[i];
 				getArgValue(clazz, annotations, request, args, method);
@@ -348,10 +327,10 @@ public class MvcDispatcher implements Filter {
 	 *            参数列表
 	 * @param method
 	 */
-	private static void getArgValue(Class<?> clz, Annotation[] annotations, Requester request, ArrayList<Object> args,
-			Method method) {
+	private static void getArgValue(Class<?> clz, Annotation[] annotations, MvcRequest request, ArrayList<Object> args, Method method) {
 		if (annotations.length > 0) {
 			boolean isGot = false; // 是否有 QueryParam 注解写好了
+			
 			for (Annotation a : annotations) {
 				if (a instanceof QueryParam) { // 找到匹配的参数，这是说控制器上的方法是期望得到一个 url query string 参数的
 					isGot = true;
@@ -384,8 +363,7 @@ public class MvcDispatcher implements Filter {
 				} else if (a instanceof PathParam) { // URL 上面的参数
 					Path path = method.getAnnotation(Path.class);
 					if (path != null) {
-						String paramName = ((PathParam) a).value();
-						String value = getValueFromPath(request.getRequestURI(), path.value(), paramName);
+						String paramName = ((PathParam) a).value(), value = request.getValueFromPath(path.value(), paramName);
 						
 						if (clz == String.class) {
 							args.add(value);
@@ -400,6 +378,7 @@ public class MvcDispatcher implements Filter {
 					break;
 				}
 			}
+			
 			// 还是没有适合注解呢？
 			if (!isGot) {
 				// "是否有 QueryParam 注解写好了??"
@@ -409,33 +388,7 @@ public class MvcDispatcher implements Filter {
 			args.add("nothing to add args"); // 不知道传什么，就空字符串吧
 		}
 	}
-	
-	static String matchList(String regexp, String str) {
-		Matcher m = Pattern.compile(regexp).matcher(str);
-
-		return m.find() ? m.group(m.groupCount()) : null;
-	}
-
-	/**
-	 * 取去 url 上的值
-	 * 
-	 * @param requestURI
-	 * @param value
-	 * @param paramName
-	 * @return
-	 */
-	private static String getValueFromPath(String requestURI, String value, String paramName) {
-		String regExp = "(" + value.replace("{" + paramName + "}", ")(\\d+)");/* 获取正则 暂时写死 数字 TODO */
-//		System.out.println(regExp);
-		String result = matchList(regExp, requestURI);
-//		System.out.println(result);
-		
-		if (result == null)
-			throw new IllegalArgumentException("在 " + requestURI + "不能获取 " + paramName + "参数");
-		return result;
-	}
 
 	@Override
-	public void destroy() { // 暂时不需要这个逻辑
-	}
+	public void destroy() {} // 暂时不需要这个逻辑
 }

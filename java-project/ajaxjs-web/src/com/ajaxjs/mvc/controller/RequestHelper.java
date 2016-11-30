@@ -38,7 +38,7 @@ public class RequestHelper {
 	public static HttpServletRequest getHttpServletRequest() {
 		HttpServletRequest req = threadLocalRequest.get();
 		if (req == null)
-			throw new RuntimeException("request is not initialized");
+			throw new RuntimeException("请求对象未初始化");
 
 		return req;
 	}
@@ -50,7 +50,7 @@ public class RequestHelper {
 	public static HttpServletResponse getHttpServletResponse() {
 		HttpServletResponse resp = threadLocalResponse.get();
 		if (resp == null)
-			throw new RuntimeException("response is not initialized");
+			throw new RuntimeException("响应对象未初始化");
 
 		return resp;
 	}
@@ -59,4 +59,5 @@ public class RequestHelper {
 		threadLocalRequest.set(null);
 		threadLocalResponse.set(null);
 	}
+
 }
