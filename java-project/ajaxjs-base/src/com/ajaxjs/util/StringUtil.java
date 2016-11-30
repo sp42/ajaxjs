@@ -464,4 +464,23 @@ public class StringUtil {
 		}
 		return fullByte;
 	}
+
+	/**
+	 * 请求获取中文。只要过滤器设置了 utf-8 那么这里就不用重复转码了
+	 * 
+	 * @param value
+	 *            参数
+	 * @return 中文
+	 */
+	public static String toChinese(String value) {
+		byte[] bytes = null;
+	
+		try {
+			bytes = value.getBytes("ISO8859_1");
+		} catch (UnsupportedEncodingException e) {
+			return null;
+		}
+	
+		return bytes != null ? byte2String(bytes) : null;
+	}
 }
