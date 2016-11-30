@@ -8,7 +8,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
 import com.ajaxjs.Constant;
-import com.ajaxjs.client.model.Version;
 import com.ajaxjs.framework.exception.ServiceException;
 import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.mvc.controller.ReadOnlyController;
@@ -65,6 +64,34 @@ public class UserInfoController extends ReadOnlyController<User> {
 			return json_not_ok_simple;
 		} catch (ServiceException e) {
 			return String.format(json_not_ok, e.getMessage());
+		}
+
+	}
+	
+	/**
+	 * 临时的
+	 * @param user
+	 * @return
+	 */
+	@POST
+	@Path("/modiflyPasswordByPhone")
+	public String modiflyPasswordByPhone(User user) {
+		UserService service = (UserService) getService();
+		try {
+			User _user = service.findByPhone(user.getPhone());
+			if (_user != null) {
+				user.setId(_user.getId());
+				user.setPhone(null);
+				user.setService(service);
+				if (service.update(user)) {
+					return String.format(json_ok, "修改密码成功！");
+				}
+			}
+
+			return json_not_ok_simple;
+		} catch (ServiceException e) {
+			e.printStackTrace();
+			return String.format(json_not_ok, e);
 		}
 
 	}
@@ -139,4 +166,5 @@ public class UserInfoController extends ReadOnlyController<User> {
 			return String.format(json_not_ok, e.getMessage());
 		}
 	}
+
 }

@@ -41,12 +41,9 @@ public class Requester extends HttpServletRequestWrapper {
 	public Requester(HttpServletRequest request) {
 		super(request);
 		
-		// 设置请求编码方式
 		try {
-			setCharacterEncoding(StandardCharsets.UTF_8.toString());
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} 
+			setCharacterEncoding(StandardCharsets.UTF_8.toString());// 为防止中文乱码，统一设置 UTF-8，设置请求编码方式
+		} catch (UnsupportedEncodingException e) {} 
 	}
 	
 	/**
@@ -64,31 +61,20 @@ public class Requester extends HttpServletRequestWrapper {
 	 */
 	@Override
 	public String getRequestURI() {
-		if (getAttribute("javax.servlet.forward.request_uri") != null) {
-			String uri = (String) getAttribute("javax.servlet.forward.request_uri");
-			if (StringUtil.isEmptyString(uri)) {
-				uri = super.getRequestURI(); // 直接 jsp 的
-			}
-			return uri;
+		Object obj = getAttribute("javax.servlet.forward.request_uri");
+
+		if (obj != null && !StringUtil.isEmptyString((String) obj)) {
+			return (String) obj;
 		} else {
 			return super.getRequestURI();// 直接 jsp 的
 		}
 	}
 	
 	/**
-	 * 获取资源 URI，忽略项目前缀和最后的文件名（如 index.jsp） 分析 URL 目标资源（最原始的版本）
+	 * 
 	 * @return
 	 */
-	public String getRoute() {
-		String route = getRequestURI().replace(getContextPath(), "");
-		
-		return route.replaceFirst("/\\w+\\.\\w+$", ""); // 删除 index.jsp
-	}
-
-	/**
-	 * @deprecated
-	 * @return
-	 */
+	@Deprecated
 	public String getLastRoute() {
 		String route = getRequestURI().replace(getContextPath(), "");
 		String [] arr = route.split("/");
@@ -104,11 +90,11 @@ public class Requester extends HttpServletRequestWrapper {
 	 * @return 绝对地址
 	 */
 	public String Mappath(String relativePath) {
-		String absoluteAddress = getServletContext().getRealPath(relativePath); // 绝对地址
+		String absolute = getServletContext().getRealPath(relativePath); // 绝对地址
 		
-		if (absoluteAddress != null)
-			absoluteAddress = absoluteAddress.replace('\\', '/');
-		return absoluteAddress;
+		if (absolute != null)
+			absolute = absolute.replace('\\', '/');
+		return absolute;
 	}
 	
 	/**
@@ -169,4 +155,5 @@ public class Requester extends HttpServletRequestWrapper {
 
 		return s;
 	}
+
 }

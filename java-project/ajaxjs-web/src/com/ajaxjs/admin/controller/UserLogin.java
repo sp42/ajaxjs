@@ -11,7 +11,7 @@ import javax.ws.rs.QueryParam;
 import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.web.Captcha;
-import com.ajaxjs.web.Responser;
+import com.ajaxjs.web.Stream;
 
 @Controller
 @Path("/admin/member")
@@ -28,7 +28,7 @@ public class UserLogin implements IController {
 	@Path("/login")
 	public void doLogin(@QueryParam("captchaImgCode") String captcha,
 			@QueryParam("name") String name,
-			@QueryParam("password") String password, HttpServletRequest request, Responser response) {
+			@QueryParam("password") String password, HttpServletRequest request, Stream response) {
 		// 临时的
 		if(!"admin".equals(name) || !"admin".equals(password)) {
 			response.outputJSON("{\"isOk\":false, \"msg\": \"用户名或密码错误！\"}");

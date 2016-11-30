@@ -14,7 +14,7 @@ import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.web.Requester;
-import com.ajaxjs.web.Responser;
+import com.ajaxjs.web.Stream;
 
 @Controller
 @Path("/admin/PageEditor")
@@ -50,7 +50,7 @@ public class PageEditor implements IController {
 	 * @return
 	 */
 	@GET
-	public String doGet(Requester request, Responser response) {
+	public String doGet(Requester request, Stream response) {
 		if (request.getRequestURI().contains("getImgList")) {
 			String folder = request.Mappath(request.getParameter("folder"));
 			response.outputJSON(PageEditorService.getImgList(folder));

@@ -71,6 +71,7 @@ public class Output extends HttpServletResponseWrapper {
 			redirect(getRedirect());
 			return;
 		}
+		
 
 		if (getOutput_Map() != null) { // Map 的话转变为 json 输出
 			setJson(true).setOutput(JsonHelper.stringify(getOutput_Map()));
@@ -105,6 +106,7 @@ public class Output extends HttpServletResponseWrapper {
 	public void output(String output) {
 		PrintWriter writer = null;
 		setCharacterEncoding(StandardCharsets.UTF_8.toString());
+		setContentType(getContent_Type());
 
 		try {
 			writer = getWriter();

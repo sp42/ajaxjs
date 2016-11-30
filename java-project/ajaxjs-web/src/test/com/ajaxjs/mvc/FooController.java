@@ -15,13 +15,13 @@ import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.web.Requester;
-import com.ajaxjs.web.Responser;
+import com.ajaxjs.web.Stream;
 
 @Controller
 @Path("/hello")
 public class FooController implements IController {
 	@GET
-	public String a(Requester request, Responser response) throws IOException {
+	public String a(Requester request, Stream response) throws IOException {
 		// if(request.getRequestURI().contains(".doc")) {
 		// String[] strs = DocumentRenderer.getEntityInfo(Video.class);
 		// request.setAttribute("entityInfo", strs[0]);
@@ -56,13 +56,13 @@ public class FooController implements IController {
 
 	@GET
 	@Path("person")
-	public void a2(Responser response) throws IOException {
+	public void a2(Stream response) throws IOException {
 		response.getWriter().print("just person");
 	}
 	
 	@GET
 	@Path("person/{id}")
-	public void a2_2(@QueryParam("name") String name, @QueryParam("word") String word, @PathParam("id") int count, Responser response)
+	public void a2_2(@QueryParam("name") String name, @QueryParam("word") String word, @PathParam("id") int count, Stream response)
 			throws IOException {
 		response.getWriter().print(name + " " + word + "_" + count);
 	}

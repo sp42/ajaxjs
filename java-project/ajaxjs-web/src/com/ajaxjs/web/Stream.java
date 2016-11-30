@@ -19,6 +19,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -50,14 +51,14 @@ import com.ajaxjs.util.Img;
  * 建立一个响应包装器
  * @author Frank Chueng
  */
-public class Responser extends HttpServletResponseWrapper {
+public class Stream extends HttpServletResponseWrapper {
 	/**
 	 * 创建一个 Responser 对象
 	 * 
 	 * @param response
 	 *            原生 response 对象
 	 */
-	public Responser(HttpServletResponse response) {
+	public Stream(HttpServletResponse response) {
 		super(response);
 	}
 
@@ -67,7 +68,7 @@ public class Responser extends HttpServletResponseWrapper {
 	 * @param resp
 	 *            原生 ServletResponse 对象
 	 */
-	public Responser(ServletResponse resp) {
+	public Stream(ServletResponse resp) {
 		this((HttpServletResponse) resp);
 	}
 
@@ -94,21 +95,6 @@ public class Responser extends HttpServletResponseWrapper {
 		setDateHeader("Expires", 0);
 	}
 
-	/**
-	 * 跳转的异常页面
-	 * 
-	 * @param ex
-	 *            异常对象
-	 */
-	public void gotoErrorPage(HttpServletRequest request, Exception ex) {
-		// request.setAttribute("javax.servlet.jsp.jspException", ex); // 不能传这个
-		// jspException 否则不能跳转
-		request.setAttribute("javax.servlet.error.exception_type", ex);
-		request.setAttribute("javax.servlet.error.message", ex.getMessage());
-		
-		new Output(this).setRedirect("/public/error.jsp").go(request);
-	}
-	
 	/**
 	 * web文件下载功能实现
 	 * @param url
@@ -219,11 +205,13 @@ public class Responser extends HttpServletResponseWrapper {
 
 		final ByteArrayOutputStream byteos = new ByteArrayOutputStream();
 		final ServletOutputStream stream = new ServletOutputStream() {
+			@Override
 			// 只是处理字节流，而PrintWriter则是处理字符流,和
 			public void write(byte[] data, int offset, int length) {
 				byteos.write(data, offset, length);
 			}
-
+			
+			@Override
 			public void write(int b) throws IOException {
 				byteos.write(b);
 			}
@@ -260,6 +248,18 @@ public class Responser extends HttpServletResponseWrapper {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * 返回某个文件夹里面的所有文件
+	 * 
+	 * @param folderName
+	 *            文件夹名称
+	 * @return
+	 */
+	public static String[] getImgs(String folderName) {
+		File file = new File(folderName);
+		return file.isDirectory() ? file.list() : null;
 	}
 	
 	/**

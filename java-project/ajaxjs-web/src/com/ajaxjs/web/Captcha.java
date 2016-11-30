@@ -164,7 +164,7 @@ public class Captcha {
 	 */
 	public static void init(HttpServletResponse response, HttpSession session) {
 		Captcha img = new Captcha();
-		Responser rh = response instanceof Responser ? (Responser) response : new Responser(response);
+		Stream rh = response instanceof Stream ? (Stream) response : new Stream(response);
 
 		rh.noCache(); // 不用缓存
 		rh.loadImage(img.get());
