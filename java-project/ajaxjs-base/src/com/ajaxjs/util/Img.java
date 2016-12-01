@@ -143,6 +143,7 @@ public class Img {
 	 * @param format
 	 *            图片类型
 	 */
+	@Deprecated
 	public static boolean saveImgfile(String filePathName, BufferedImage image, String format) {
 		try (FileOutputStream outImgStream = new FileOutputStream(filePathName);) {
 			return ImageIO.write(image, format, outImgStream);
@@ -162,6 +163,7 @@ public class Img {
 	 * @param format
 	 *            图片格式
 	 */
+	@Deprecated
 	public static boolean saveImgfile(File imgPath, BufferedImage image, String format) {
 		try {
 			return ImageIO.write(image, format, imgPath);

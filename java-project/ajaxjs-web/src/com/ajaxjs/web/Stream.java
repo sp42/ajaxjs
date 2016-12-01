@@ -250,17 +250,6 @@ public class Stream extends HttpServletResponseWrapper {
 		}
 	}
 	
-	/**
-	 * 返回某个文件夹里面的所有文件
-	 * 
-	 * @param folderName
-	 *            文件夹名称
-	 * @return
-	 */
-	public static String[] getImgs(String folderName) {
-		File file = new File(folderName);
-		return file.isDirectory() ? file.list() : null;
-	}
 	
 	/**
 	 * 图片服务器

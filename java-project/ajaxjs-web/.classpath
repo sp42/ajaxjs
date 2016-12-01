@@ -15,5 +15,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/shiro"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ajaxjs-data-mybatis-libs"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ajaxjs-data-validation-libs"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/mockito"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

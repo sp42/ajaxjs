@@ -96,6 +96,7 @@ public class FileUtil {
 	 *            文件内容，文本
 	 * @throws IOException
 	 */
+	@Deprecated
 	public static void save2file(String filepath, String content) throws IOException {
 		try (OutputStream out = new FileOutputStream(filepath);
 				// OutputStreramWriter将输出的字符流转化为字节流输出（字符流已带缓冲）
@@ -113,6 +114,7 @@ public class FileUtil {
 	 * @param filename
 	 *            文件名
 	 */
+	@Deprecated
 	public static boolean delete(String filename) {
 		return new File(filename).delete();
 	}

@@ -62,7 +62,7 @@ public class Requester extends HttpServletRequestWrapper {
 	@Override
 	public String getRequestURI() {
 		Object obj = getAttribute("javax.servlet.forward.request_uri");
-
+	
 		if (obj != null && !StringUtil.isEmptyString((String) obj)) {
 			return (String) obj;
 		} else {
@@ -137,22 +137,16 @@ public class Requester extends HttpServletRequestWrapper {
 	
 	/**
 	 * 获取请求的 IP 地址
-
+	
 	 * @return IP 地址
 	 */
 	public String getIP() {
-		String s = getHeader("X-Forwarded-For");
-		if (StringUtil.isEmptyString(s) || "unknown".equalsIgnoreCase(s))
-			s = getHeader("Proxy-Client-IP");
-		if (StringUtil.isEmptyString(s) || "unknown".equalsIgnoreCase(s))
-			s = getHeader("WL-Proxy-Client-IP");
-		if (StringUtil.isEmptyString(s) || "unknown".equalsIgnoreCase(s))
-			s = getHeader("HTTP_CLIENT_IP");
-		if (StringUtil.isEmptyString(s) || "unknown".equalsIgnoreCase(s))
+		String s = getHeader("X-Forwarded-For"), unknown = "unknown";
+		if (StringUtil.isEmptyString(s) || unknown.equalsIgnoreCase(s))
 			s = getHeader("HTTP_X_FORWARDED_FOR");
-		if (StringUtil.isEmptyString(s) || "unknown".equalsIgnoreCase(s))
-			s = getRemoteAddr(); // REMOTE_ADDR
-
+		if (StringUtil.isEmptyString(s) || unknown.equalsIgnoreCase(s))
+			s = getRemoteAddr();
+	
 		return s;
 	}
 
