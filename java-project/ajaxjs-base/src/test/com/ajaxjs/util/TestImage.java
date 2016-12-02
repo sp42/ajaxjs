@@ -25,8 +25,8 @@ public class TestImage {
 	
 	@Test
 	public void 水印文字(){
-		Img.mark("c://temp//XMM.jpg", "c://temp//baitian---.jpg",  
-                "我们并肩坐在冰凉的台阶上，有风吹过，有爱来过。却最终被我们，一起错过。 原来，时间真的像流水，走得悄无声息。很多时光，很多事情，很多人，永远只能存在记忆里。");  
+		Img.mark("c://temp//XMM.jpg", "c://temp//baitian---.jpg",  我们并肩坐在冰凉的台阶上，有风吹过，有爱来过。却最终被我们，一起错过。 原来，时间真的像流水，走得悄无声息。很多时光，很多事情，很多人，永远只能存在记忆里。
+                "");  
 	
 		assertNotNull(true);
 	}
