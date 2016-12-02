@@ -25,28 +25,17 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.PageContext;
 
+import com.ajaxjs.util.ImageChain;
+
 import java.awt.Font;
 
 /**
- * 验证码的简单实现 http://a455360448201209214217.iteye.com/blog/1953785 调用方式： <%@ page
- * language="java" contentType="image/JPEG; charset=UTF-8" pageEncoding="UTF-8"
- * trimDirectiveWhitespaces="true"%> <%@page contentType=
- * "image/JPEG; charset=UTF-8" trimDirectiveWhitespaces="true"%>
- * <%com.ajaxjs.bigfoot.tools.VcodeImg.init(pageContext);%>
+ * 验证码的简单实现
+ * JSP 调用方式：<%com.ajaxjs.bigfoot.tools.VcodeImg.init(pageContext);%>
  * 
- * @author 网上收集
+ * @author 网上收集 
  */
-public class Captcha {
-	/**
-	 * 默认宽度 60
-	 */
-	private int width = 60;
-
-	/**
-	 * 默认高度 20
-	 */
-	private int height = 20;
-
+public class Captcha extends ImageChain {
 	/**
 	 * 验证码
 	 */
@@ -62,19 +51,17 @@ public class Captcha {
 	 * 
 	 * @return 图片对象
 	 */
-	public BufferedImage get() {
-		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);// 在内存中创建图像
-		Graphics g;
-
-		g = image.getGraphics(); // 获取图形上下文 
+	public Captcha get() {
+		BufferedImage image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);// 在内存中创建图像
+		Graphics g = image.getGraphics(); // 获取图形上下文 
 		g.setColor(getRandColor(200, 250)); // 设定背景 
-		g.fillRect(0, 0, width, height);
+		g.fillRect(0, 0, getWidth(), getHeight());
 		g.setFont(new Font("Times New Roman", Font.PLAIN, 18)); // 设定字体 
 		g.setColor(getRandColor(160, 200)); 
 
 		Random random = new Random();// 随机产生干扰线
 		for (int i = 0; i < 155; i++) {
-			int x = random.nextInt(width), y = random.nextInt(height);
+			int x = random.nextInt(getWidth()), y = random.nextInt(getHeight());
 			int xl = random.nextInt(12), yl = random.nextInt(12);
 			g.drawLine(x, y, x + xl, y + yl);
 		}
@@ -87,12 +74,12 @@ public class Captcha {
 			g.drawString(rand, 13 * i + 6, 16);// 调用函数出来的颜色相同，可能是因为种子太接近，所以只能直接生成 
 		}
 
-		// 将认证码存入SESSION
-		// session.setAttribute("rand", sRand);
-		setCode(sRand);
 		g.dispose();// 图象生效     
 
-		return image;
+		setbImg(image);
+		setCode(sRand);
+		
+		return this;
 	}
 	
 	/**
@@ -115,44 +102,6 @@ public class Captcha {
 
 		return new Color(r, g, b);
 	}
-	
-	/**
-	 * 判断用户输入的验证码是否通过
-	 * 
-	 * @param pageContext
-	 *            页面上下文对象
-	 * @return true 表示通过
-	 * @throws Throwable
-	 */
-	public static boolean isPass(PageContext pageContext) throws Throwable {
-		HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
-		return isPass(request, request.getParameter("CaptchaCode"));
-	}
-	
-	public static boolean isPass(HttpServletRequest request, String CaptchaCode) throws Throwable {
-		boolean isCaptchaPass = false;
-		
-		String rand = (String) request.getSession().getAttribute(SESSION_KEY);
-		
-		System.out.println("rand:" + rand);
-		System.out.println("CaptchaCode:" + CaptchaCode);
-		
-		if (rand == null)
-			throw new UnsupportedOperationException("请刷新验证码。");
-		else if (CaptchaCode == null || CaptchaCode.equals("")) {
-			throw new IllegalArgumentException("没提供验证码参数");
-		} else {
-			isCaptchaPass = rand.equals(CaptchaCode);
-			if (!isCaptchaPass)
-				throw new IllegalAccessError("验证码不正确");
-		}
-		
-		if(isCaptchaPass) {
-			request.getSession().removeAttribute(SESSION_KEY);// 通过之后记得要 清除验证码
-		}
-		
-		return isCaptchaPass;
-	}
 
 	/**
 	 * 显示验证码图片并将认证码存入 Session
@@ -163,14 +112,15 @@ public class Captcha {
 	 *            会话对象
 	 */
 	public static void init(HttpServletResponse response, HttpSession session) {
-		Captcha img = new Captcha();
-		Stream rh = response instanceof Stream ? (Stream) response : new Stream(response);
+		Captcha captcha = new Captcha();
+		captcha.setWidth(60).setHeight(20);
+		captcha.get();
+		
+		new Output(response).noCache().setContent_Type("image/jpeg").go(captcha.getbImg());
 
-		rh.noCache(); // 不用缓存
-		rh.loadImage(img.get());
-
-		session.setAttribute(SESSION_KEY, img.getCode()); // 将认证码存入 SESSION 
-		System.out.println("生成验证码:" + img.getCode());
+		session.setAttribute(SESSION_KEY, captcha.getCode()); // 将验证码存入 SESSION 
+		
+		System.out.println("生成验证码:" + captcha.getCode());
 	}
 
 	/**
@@ -182,26 +132,40 @@ public class Captcha {
 	public static void init(PageContext pageContext) {
 		init((HttpServletResponse) pageContext.getResponse(), pageContext.getSession());
 	}
+
+	/**
+	 * 判断用户输入的验证码是否通过
+	 * 
+	 * @param request
+	 * @param CaptchaCode
+	 * @return true 表示通过
+	 * @throws Throwable
+	 */
+	public static boolean isPass(HttpServletRequest request, String CaptchaCode) throws Throwable {
+		boolean isCaptchaPass = false;
+
+		String rand = (String) request.getSession().getAttribute(SESSION_KEY);
+
+		System.out.println("rand:" + rand);
+		System.out.println("CaptchaCode:" + CaptchaCode);
+
+		if (rand == null)
+			throw new UnsupportedOperationException("请刷新验证码。");
+		else if (CaptchaCode == null || CaptchaCode.equals("")) {
+			throw new IllegalArgumentException("没提供验证码参数");
+		} else {
+			isCaptchaPass = rand.equals(CaptchaCode);
+			if (!isCaptchaPass)
+				throw new IllegalAccessError("验证码不正确");
+		}
+
+		if (isCaptchaPass) {
+			request.getSession().removeAttribute(SESSION_KEY);// 通过之后记得要 清除验证码
+		}
+
+		return isCaptchaPass;
+	}
 	
-	/**
-	 * 获取高度
-	 * 
-	 * @return
-	 */
-	public int getHeight() {
-		return height;
-	}
-
-	/**
-	 * 设置高度
-	 * 
-	 * @param height
-	 *            高度
-	 */
-	public void setHeight(int height) {
-		this.height = height;
-	}
-
 	/**
 	 * 获取验证码
 	 * 
@@ -221,22 +185,4 @@ public class Captcha {
 		this.code = code;
 	}
 
-	/**
-	 * 获取宽度
-	 * 
-	 * @return
-	 */
-	public int getWidth() {
-		return width;
-	}
-
-	/**
-	 * 设置宽度
-	 * 
-	 * @param width
-	 *            宽度
-	 */
-	public void setWidth(int width) {
-		this.width = width;
-	}
 }
