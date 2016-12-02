@@ -19,12 +19,27 @@ import java.io.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.ajaxjs.util.FileUtil;
+import com.ajaxjs.util.StringUtil;
+
+
 /**
  * 上传类
  * @author frank
  *
  */
 public class Upload {
+	
+	/**
+	 * 原始的字符串
+	 */
+	private String rawStr;
+	
+	/**
+	 * 保存上传的文件数据（文件二进制数据）
+	 */
+	private byte dateBytes[];
+	
 	/**
 	 * 接受上传
 	 * 
@@ -53,31 +68,24 @@ public class Upload {
 			throw new UploadException("文件大小超过系统限制！");
 		}
 		
-		// 保存上传的文件数据
-		byte dateBytes[] = new byte[formDataLength];
-		int byteRead = 0, totalRead = 0;
-
-		try(DataInputStream in = new DataInputStream(req.getInputStream());){
-			while (totalRead < formDataLength) {
-				byteRead = in.read(dateBytes, totalRead, formDataLength);
-				totalRead += byteRead;
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new UploadException(e.toString());
-		}				
-				
-		// 取得数据分割字符串
-		int lastIndex = contentType.lastIndexOf("="); // 数据分割线开始位置boundary=---------------------------
-		String boundary = contentType.substring(lastIndex + 1, contentType.length());// ---------------------------257261863525035
+		try {
+			dateBytes = FileUtil.stream2byte(req.getInputStream());
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+			
+		rawStr = StringUtil.byte2String(dateBytes);
+		
+		// 取得数据分割字符串，数据分割线开始位置boundary=---------------------------
+		String boundary = contentType.substring(contentType.lastIndexOf("=") + 1, contentType.length());
 
 		// 计算开头数据头占用的长度
-		int startPos = getStartPos(dateBytes);
+		int startPos = getStartPos();
 		// 边界位置
 		int endPos = byteIndexOf(dateBytes, boundary.getBytes(), (dateBytes.length - startPos)) - 4;
 
 		// 创建文件
-		String fileName = uRequest.getUpload_save_folder() + getFileName(dateBytes, uRequest.isNewName());
+		String fileName = uRequest.getUpload_save_folder() + getFileName(uRequest.isNewName());
 		uRequest.setUploaded_save_filePath(fileName);
 		File checkedFile = initFile(uRequest);
 
@@ -107,18 +115,35 @@ public class Upload {
 	 * @return
 	 * @throws UploadException 
 	 */
-	private static int getStartPos(byte[] dateBytes) throws UploadException {
-		int startPos;
+	private int getStartPos() throws UploadException {
+		int start;
+		
 		try{
-			startPos = byteIndexOf(dateBytes, "filename=\"".getBytes(), 0);
-			startPos = byteIndexOf(dateBytes, "\n".getBytes(), startPos) + 1; // 遍历掉3个换行符到数据块
-			startPos = byteIndexOf(dateBytes, "\n".getBytes(), startPos) + 1;
-			startPos = byteIndexOf(dateBytes, "\n".getBytes(), startPos) + 1;
+			start = byteIndexOf(dateBytes, "filename=\"".getBytes(), 0);
+			start = byteIndexOf(dateBytes, "\n".getBytes(), start) + 1; // 遍历掉3个换行符到数据块
+			start = byteIndexOf(dateBytes, "\n".getBytes(), start) + 1;
+			start = byteIndexOf(dateBytes, "\n".getBytes(), start) + 1;
+			
+//			System.out.println(rawStr);
+			
+			int contentLength_index = rawStr.indexOf("Content-Length:");
+			
+			if(contentLength_index != -1) {
+				String contentLength;
+				contentLength = rawStr.substring(contentLength_index);
+				contentLength = contentLength.substring(0, contentLength.indexOf("\n"));
+				System.out.println(contentLength);	
+				
+				start = byteIndexOf(dateBytes, contentLength.getBytes(), start) + contentLength.length();
+				start = byteIndexOf(dateBytes, "\n".getBytes(), start) + 1; // 遍历掉3个换行符到数据块
+				start = byteIndexOf(dateBytes, "\n".getBytes(), start) + 1; 
+			}
+ 
 		}catch (ArrayIndexOutOfBoundsException e) {
 			throw new UploadException("你的表单中没有设置一个 name，不能获取字段");
 		}
 		
-		return startPos;
+		return start;
 	}
 
 	/**
@@ -129,11 +154,12 @@ public class Upload {
 	 * @return
 	 */
 	private static int byteIndexOf(byte[] data, byte[] search, int start) {
-		int index = -1;
-		int len = search.length;
+		int index = -1, len = search.length;
+		
 		for (int i = start, j = 0; i < data.length; i++) {
 			int temp = i;
 			j = 0;
+			
 			while (data[temp] == search[j]) {
 				// System.out.println((j+1)+",值："+data[temp]+","+search[j]);
 				// 计数
@@ -145,6 +171,7 @@ public class Upload {
 				}
 			}
 		}
+		
 		return index;
 	}
 	
@@ -179,26 +206,17 @@ public class Upload {
 	 *            是否自定命名，true = 时间戳文件名
 	 * @return
 	 */
-	private static String getFileName(byte[] dateBytes, boolean isAutoName) {
+	private String getFileName(boolean isAutoName) {
 		String saveFile = null;
 		
 		if(isAutoName){
-			saveFile = "2016" + System.currentTimeMillis();
+			saveFile = "" + System.currentTimeMillis();
 		} else {
-			String data = null;
-			try {
-				data = new String(dateBytes, "UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-				data = "errFileName";
-			}
-			
 			// 取得上传的文件名
-			saveFile = data.substring(data.indexOf("filename=\"") + 10);
+			saveFile = rawStr.substring(rawStr.indexOf("filename=\"") + 10);
 			saveFile = saveFile.substring(0, saveFile.indexOf("\n"));
 			saveFile = saveFile.substring(saveFile.lastIndexOf("\\") + 1, saveFile.indexOf("\""));
 		}
-		
 		return saveFile;
 	}
 }
