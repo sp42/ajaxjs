@@ -148,7 +148,7 @@ public class DynamicSqlProvider {
 	public String update(final BaseModel model) {
 		final Method[] methods = model.getClass().getMethods();
 
-		LOGGER.info("更新记录{0}！", model.getName());
+		LOGGER.info("DAO 更新记录 {0}！", model.getName());
 
 		// 反射获取字段
 		String sql = new SQL() {
