@@ -15,7 +15,11 @@
  */
 package com.ajaxjs.net.http;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -122,6 +126,7 @@ public class Post {
 		request.setUrl(url);
 
 		byte[] data = null;
+		
 		if (text != null && text.size() > 0) {
 			StringBuilder strs = new StringBuilder();
 
@@ -136,7 +141,7 @@ public class Post {
 				// + "\"\r\n\r\n");
 				// strs.append(value);
 			}
-
+System.out.println(strs.toString());
 			data = strs.toString().getBytes();
 		}
 
@@ -149,25 +154,20 @@ public class Post {
 				File file = new File(value);
 				String filename = file.getName(), contentType = FileUtil.getMime(file);
 
-				String str = String.format(DIV, BOUNDARY, name, filename) + "Content-Type:" + contentType + "\r\n\r\n";
-
-				concat(data, str.getBytes());
-				// StringBuilder strBuf = new StringBuilder();
-				// strBuf.append("\r\n").append("--").append(BOUNDARY).append("\r\n");
-				// strBuf.append(
-				// "Content-Disposition: form-data; name=\"" + name + "\";
-				// filename=\"" + filename + "\"\r\n");
-				// strBuf.append("Content-Type:" + contentType + "\r\n\r\n");
+//				String str = String.format(DIV, BOUNDARY, name, filename) + "Content-Type:" + contentType + "\r\n\r\n";
+				StringBuffer strBuf = new StringBuffer();  
+                strBuf.append("\r\n").append("--").append(BOUNDARY).append("\r\n");  
+                strBuf.append("Content-Disposition: form-data; name=\"" + "ddd" + "\"; filename=\"" + filename + "\"\r\n");  
+//                strBuf.append("Content-Type:" + contentType + "\r\n\r\n");  
 				//
 				// out.write(strBuf.toString().getBytes());
 				//
-				// DataInputStream in = new DataInputStream(new
-				// FileInputStream(file));
-				// int bytes = 0;
-				// byte[] bufferOut = new byte[1024];
-				// while ((bytes = in.read(bufferOut)) != -1)
-				// out.write(bufferOut, 0, bytes);
-				// in.close();
+                concat(data, strBuf.toString().getBytes());
+				
+                System.out.println(strBuf.toString());
+                
+                concat(data, getBytes(file));
+                
 			}
 		}
 
@@ -199,5 +199,29 @@ public class Post {
 		System.arraycopy(a, 0, c, 0, a.length);
 		System.arraycopy(b, 0, c, a.length, b.length);
 		return c;
+	}
+	
+	/**
+	 * 获得指定文件的byte数组
+	 */
+	public static byte[] getBytes(File file) {
+		byte[] buffer = null;
+		try {
+			FileInputStream fis = new FileInputStream(file);
+			ByteArrayOutputStream bos = new ByteArrayOutputStream(1000);
+			byte[] b = new byte[1000];
+			int n;
+			while ((n = fis.read(b)) != -1) {
+				bos.write(b, 0, n);
+			}
+			fis.close();
+			bos.close();
+			buffer = bos.toByteArray();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return buffer;
 	}
 }

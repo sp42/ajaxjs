@@ -24,6 +24,14 @@ public class StreamChain {
 	 * 文本内容
 	 */
 	private String content;
+	
+	/**
+	 * 输出流转换到字节数组
+	 * @return
+	 */
+	public StreamChain output2byte() {
+		return this;
+	}
 
 	/**
 	 * 读输入流，将其转换为文本（多行） 字节流转换为字符串
