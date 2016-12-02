@@ -97,43 +97,43 @@ public class Requester extends HttpServletRequestWrapper {
 		return absolute;
 	}
 	
-	/**
-	 * 协议+主机名+端口（如果为 80 端口的话就默认不写 80）
-	 * 
-	 * @return 网站名称
-	 */
-	public String getServerPath() {
-		String prefix = getScheme() + "://" + getServerName();
+/**
+ * 网站域名=协议+主机名+端口（如果为 80 端口的话就默认不写 80）
+ * 
+ * @return 网站域名
+ */
+public String getServerPath() {
+	String prefix = getScheme() + "://" + getServerName();
 
-		int port = getServerPort();
-		if (port != 80)
-			prefix += ":" + port;
+	int port = getServerPort();
+	if (port != 80)
+		prefix += ":" + port;
 
-		return prefix;
-	}
+	return prefix;
+}
 	
-	/**
-	 * 网站名称+项目目录
-	 * 
-	 * @return 比较完整的 url 但不是最完整的，最完整的见下个方法
-	 */
-	public String getBasePath() {
-		return getServerPath() + getContextPath();
-	}
+/**
+ * 网站域名+项目目录
+ * 
+ * @return 比较完整的 url 但不是最完整的，最完整的见下个方法
+ */
+public String getBasePath() {
+	return getServerPath() + getContextPath();
+}
 	
-	/**
-	 * 获取本页 URL，有时可能要对 url redirectUri = java.net.URLEncoder.encode(redirectUri, "utf-8");
-	 * 
-	 * @param isFull
-	 *            是否把 QueryString 参数都带进去？
-	 * @return 本页地址
-	 */
-	public String getCurrentPageUrl(boolean isFull) {
-		String url = getServerPath() + getRequestURI();
-		if (isFull)
-			url += '?' + getQueryString();
-		return url;
-	}
+/**
+ * 获取本页 URL，有时可能要对 url redirectUri = java.net.URLEncoder.encode(redirectUri, "utf-8");
+ * 
+ * @param isFull
+ *            是否把 QueryString 参数都带进去？
+ * @return 本页地址
+ */
+public String getCurrentPageUrl(boolean isFull) {
+	String url = getServerPath() + getRequestURI();
+	if (isFull)
+		url += '?' + getQueryString();
+	return url;
+}
 	
 	/**
 	 * 获取请求的 IP 地址

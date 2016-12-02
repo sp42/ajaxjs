@@ -45,32 +45,12 @@ import com.ajaxjs.net.http.Get;
 import com.ajaxjs.net.http.Request;
 import com.ajaxjs.net.http.RequestClient;
 import com.ajaxjs.util.FileUtil;
-import com.ajaxjs.util.Img;
 
 /**
- * 建立一个响应包装器
  * @author Frank Chueng
  */
-public class Stream extends HttpServletResponseWrapper {
-	/**
-	 * 创建一个 Responser 对象
-	 * 
-	 * @param response
-	 *            原生 response 对象
-	 */
-	public Stream(HttpServletResponse response) {
-		super(response);
-	}
+public class Stream {
 
-	/**
-	 * 创建一个 Responser 对象
-	 * 
-	 * @param resp
-	 *            原生 ServletResponse 对象
-	 */
-	public Stream(ServletResponse resp) {
-		this((HttpServletResponse) resp);
-	}
 
 	/**
 	 * 输出“有符合条件的记录，但分页超过页数”的 JSON
@@ -79,21 +59,7 @@ public class Stream extends HttpServletResponseWrapper {
 	 *            总数
 	 * @return JSON
 	 */
-	 
-	
-	/**
-	 * 返回到前一页并刷新
-	 */
-	public final static String returnJs_refresh = "window.location = document.referrer;";
 
-	/**
-	 * 新的输出，不要缓存
-	 */
-	public void noCache() {
-		setHeader("Pragma", "No-cache");
-		setHeader("Cache-Control", "no-cache");
-		setDateHeader("Expires", 0);
-	}
 
 	/**
 	 * web文件下载功能实现
@@ -163,34 +129,7 @@ public class Stream extends HttpServletResponseWrapper {
 		return true;
 	}
 
-	/**
-	 * 把图片流显示出来
-	 * 
-	 * @param im
-	 *            已渲染的图片对象
-	 */
-	public void loadImage(RenderedImage im) {
-		try {
-			ImageIO.write(im, "JPEG", getOutputStream());
-	
-			/*
-			 * 加上下面代码,运行时才不会出现java.lang.IllegalStateException: getOutputStream() has already been called ..........等异常
-			 * response.getOutputStream().flush();
-			 * response.getOutputStream().close(); 
-			 * response.flushBuffer();
-			 */
-	
-			// JSP内置对象out和response.getWrite()的区别，两者的主要区别：1. 这两个对象的类型是完全不同的……
-			// response.getWriter();
-			// http://blog.sina.com.cn/s/blog_7217e4320101l8gq.html
-			// http://www.2cto.com/kf/201109/103284.html
-	
-			// pageContext.getOut().clear();
-		} catch (IOException e) {
-			e.printStackTrace();
-			// TODO 跳转
-		}
-	}
+
 	
 	/**
 	 * servlet生成

@@ -1,15 +1,35 @@
+/**
+ * Copyright 2015 Frank Cheung
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.ajaxjs.web;
 
+import java.awt.image.RenderedImage;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
+import javax.servlet.jsp.PageContext;
 
 import com.ajaxjs.util.json.JsonHelper;
 
@@ -20,7 +40,6 @@ import com.ajaxjs.util.json.JsonHelper;
  *
  */
 public class Output extends HttpServletResponseWrapper {
-
 	/**
 	 * 最终输出的字符串，可以是特定的内容
 	 */
@@ -72,7 +91,6 @@ public class Output extends HttpServletResponseWrapper {
 			return;
 		}
 		
-
 		if (getOutput_Map() != null) { // Map 的话转变为 json 输出
 			setJson(true).setOutput(JsonHelper.stringify(getOutput_Map()));
 		} else if (getOutput_Obj() != null) {// map or object 二选其一
@@ -91,9 +109,56 @@ public class Output extends HttpServletResponseWrapper {
 		output(getOutput());
 	}
 
+	/**
+	 * MVC 的 View 输出
+	 * @param request
+	 */
 	public void go(HttpServletRequest request) {
 		if (getTemplate() != null) {
 			sendRequestDispatcher(request, getTemplate());
+		}
+	}
+	
+	/**
+	 * 把图片流显示出来
+	 * 
+	 * @param im
+	 *            已渲染的图片对象
+	 */
+	public void go(RenderedImage im) {
+		if(getContent_Type() != null) setContentType(getContent_Type());
+		
+		try {
+			ImageIO.write(im, "JPEG", getOutputStream());
+		} catch (IOException e) {
+			e.printStackTrace(); 
+		}
+	}
+	
+	/**
+	 * JSP 需要加上下面代码,运行时才不会出现 java.lang.IllegalStateException: getOutputStream()
+	 * has already been called ..........等异常
+	 * 
+	 * JSP内置对象out和response.getWrite()的区别
+	 * http://blog.sina.com.cn/s/blog_7217e4320101l8gq.html
+	 * http://www.2cto.com/kf/201109/103284.html
+	 * 
+	 * @param response
+	 */
+	public static void fix(PageContext pageContext) {
+		HttpServletResponse response = (HttpServletResponse) pageContext.getResponse();
+		
+		try {
+			OutputStream out = response.getOutputStream();
+			out.flush();
+			out.close();
+			response.flushBuffer();
+
+			pageContext.getOut().clear();
+			pageContext.pushBody();
+			// out = pageContext.pushBody();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -117,8 +182,35 @@ public class Output extends HttpServletResponseWrapper {
 			writer.print(output);
 	}
 
+	
+	/**
+	 * 返回到前一页并刷新
+	 */
+	public final static String returnJs_refresh = "window.location = document.referrer;";
+
+	/**
+	 * 新的输出，不要缓存
+	 */
+	public Output noCache() {
+		setHeader("Pragma", "No-cache");
+		setHeader("Cache-Control", "no-cache");
+		setDateHeader("Expires", 0);
+		
+		return this;
+	}
+	
 	public Output(HttpServletResponse request) {
 		super(request);
+	}
+	
+	/**
+	 * 创建一个 Responser 对象
+	 * 
+	 * @param resp
+	 *            原生 ServletResponse 对象
+	 */
+	public Output(ServletResponse resp) {
+		this((HttpServletResponse) resp);
 	}
 
 	public String getOutput() {

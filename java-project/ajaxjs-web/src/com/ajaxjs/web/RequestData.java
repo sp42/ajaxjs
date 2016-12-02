@@ -64,7 +64,7 @@ public class RequestData extends MapData {
 	 * @param response
 	 * @param ex 异常对象
 	 */
-	public void gotoErrorPage(HttpServletRequest request, HttpServletResponse response, Exception ex) {
+	public static void gotoErrorPage(HttpServletRequest request, HttpServletResponse response, Exception ex) {
 		/*
 		 * 不能传这个 jspException 否则不能跳转
 		 */
