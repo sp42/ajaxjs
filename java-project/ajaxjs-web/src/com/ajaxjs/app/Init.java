@@ -68,5 +68,8 @@ public class Init {
 		final String OS = System.getProperty("os.name").toLowerCase();
 		isDebug = !(OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0);
 		// isDebug = false;
+		
+		if(isMac)
+			System.out.println("亲，你运行着 Mac！");
 	}
 }

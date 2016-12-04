@@ -20,6 +20,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.ajaxjs.http.Client;
 import com.ajaxjs.json.Json;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
@@ -86,7 +87,7 @@ public abstract class RemoteJsonData implements RemoteData {
 	 * @return 响应内容 Map[]
 	 */
 	public static Map<String, Object>[] getRemoteJSON_Array(String url) {
-		String json = Get.GET(url);
+		String json = Client.GET(url);
 
 		if (!StringUtil.isEmptyString(json)) {
 			return Json.callExpect_MapArray(json);
@@ -104,7 +105,7 @@ public abstract class RemoteJsonData implements RemoteData {
 	 * @return 响应内容 Map
 	 */
 	public static Map<String, Object> getRemoteJSON_Object(String url) {
-		String json = Get.GET(url);
+		String json = Client.GET(url);
 
 		if (!StringUtil.isEmptyString(json)) {
 			// LOGGER.info(json);

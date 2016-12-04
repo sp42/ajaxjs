@@ -16,7 +16,6 @@
 package com.ajaxjs.app;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,6 +34,11 @@ import com.ajaxjs.util.json.JsonHelper;
 import com.ajaxjs.web.PageUtil;
 //import com.egdtv.crawler.service.Common;
 
+/**
+ * 第一次有请求的时候执行
+ * @author xinzhang
+ *
+ */
 public class ConfigListener implements ServletContextListener {
 	/**
 	 * 所有配置保存在这里
@@ -70,6 +74,9 @@ public class ConfigListener implements ServletContextListener {
 		if(cxt.getInitParameter("DATABASE_TYPE") != null) {
 			MyBatis.db_context_path = cxt.getInitParameter("DATABASE_TYPE");
 			
+			if(Init.isMac)
+				MyBatis.db_context_path += "_mac";
+				
 			if(!Init.isDebug) { // 部署时读取的配置
 				MyBatis.db_context_path += "_deploy";
 			}
@@ -107,7 +114,7 @@ public class ConfigListener implements ServletContextListener {
 	public static boolean isJSON_Config_loaded = false;
 	
 	/**
-	 * 把日志文件保存到 WEB-INF/ 下面
+	 * 把日志文件保存到 META-INF/ 下面
 	 */
 	@SuppressWarnings("unused")
 	private static void initLoggerFileHandler(ServletContext cxt) {
@@ -119,14 +126,7 @@ public class ConfigListener implements ServletContextListener {
 	 * 加载配置
 	 */
 	private static void loadJsonConfig() {
-		
-		String code = null;
-		try {
-			code = FileUtil.readText(Init.class.getResourceAsStream("JSON_Tree.js"));
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
+		String code = new FileUtil().setIn(Init.class.getResourceAsStream("JSON_Tree.js")).byteStream2stringStream().close().getContent();
 		
 		try {
 			jsRuntime.eval(JsLib.baseJavaScriptCode);

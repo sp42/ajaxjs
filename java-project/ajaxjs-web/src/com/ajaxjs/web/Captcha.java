@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.PageContext;
 
-import com.ajaxjs.util.ImageChain;
+import com.ajaxjs.util.ImageUtil;
 
 import java.awt.Font;
 
@@ -35,7 +35,7 @@ import java.awt.Font;
  * 
  * @author 网上收集 
  */
-public class Captcha extends ImageChain {
+public class Captcha extends ImageUtil {
 	/**
 	 * 验证码
 	 */

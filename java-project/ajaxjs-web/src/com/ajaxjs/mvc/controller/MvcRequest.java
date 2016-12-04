@@ -44,15 +44,13 @@ public class MvcRequest extends Requester{
 	 */
 	public Map<String, Object> getPutRequestData() {
 		String params = null;
-
+		
 		try {
-			params = FileUtil.readText(getInputStream());
+			params = new FileUtil().setIn(getInputStream()).byteStream2stringStream().close().getContent();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-
-		if (params == null)
 			return null;
+		};
 
 		params = StringUtil.urlDecode(params);
 		return MapHelper.toMap(params.split("&"));
