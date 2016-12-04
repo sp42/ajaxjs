@@ -12,21 +12,7 @@ import com.ajaxjs.net.http.Request;
 import com.ajaxjs.net.http.RequestClient;
 
 public class TestGet {
-//	@Test
-//	public void testSimpleGET() {
-//		String url = "https://baidu.com";
-//		String html = Get.simpleGET(url);
-//		System.out.println(html);
-//		assertNotNull(html);
-//	}
-//
-//	@Test
-//	public void testGet() {
-//		String url = "https://baidu.com";
-//		String html = Get.GET(url);
-//		System.out.println(html);
-//		assertNotNull(html);
-//	}
+ 
 	
 	@Test
 	public void testGZipGet() {

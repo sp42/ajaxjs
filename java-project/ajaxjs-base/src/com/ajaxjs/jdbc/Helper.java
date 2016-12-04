@@ -212,6 +212,7 @@ public class Helper {
 	 */
 	private static Map<String, Object> getResultMap(ResultSet rs) {
 		Map<String, Object> map = new HashMap<>();
+		
 		try {
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int count = rsmd.getColumnCount();

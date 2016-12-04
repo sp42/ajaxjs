@@ -1,6 +1,8 @@
 package com.ajaxjs.util;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -32,9 +34,24 @@ public class StreamChain {
 	public StreamChain output2byte() {
 		return this;
 	}
+	
+	/**
+	 * 输出流写入字节数据
+	 * @return
+	 */
+	public StreamChain outputWriteData() {
+		try {
+			out.write(getData());
+			out.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return this;
+	}
 
 	/**
-	 * 读输入流，将其转换为文本（多行） 字节流转换为字符串
+	 * 读输入的字节流转换到字符流，将其转换为文本（多行）的字节流转换为字符串
 	 * 
 	 * @return StreamChain
 	 */
@@ -42,8 +59,8 @@ public class StreamChain {
 		StringBuilder result = new StringBuilder();
 
 		// InputStreamReader 从一个数据源读取字节，并自动将其转换成 Unicode 字符
-		// OutputStreamWriter 将字符的 Unicode 编码写到字节输出流
-		try (InputStreamReader inReader = new InputStreamReader(in, StandardCharsets.UTF_8); // 字节流转换到字符流
+		// 相对地，OutputStreamWriter 将字符的 Unicode 编码写到字节输出流
+		try (InputStreamReader inReader = new InputStreamReader(in, StandardCharsets.UTF_8);
 				/*
 				 * Decorator，装饰模式，又称为 Wrapper，使它具有了缓冲功能
 				 * BufferedInputStream、BufferedOutputStream
@@ -65,6 +82,92 @@ public class StreamChain {
 		content = result.toString();
 
 		return this;
+	}
+	
+	/**
+	 * 两端速度不匹配，需要协调 理想环境下，速度一样快，那就没必要搞流，直接一坨给弄过去就可以了 流的意思很形象，就是一点一滴的，不是一坨坨大批量的
+	 * 带缓冲的一入一出 出是字节流，所以要缓冲（字符流自带缓冲，所以不需要额外缓冲） 请注意，改方法不会关闭流 close，你需要手动关闭
+	 * 
+	 * @param in
+	 *            输入流
+	 * @param out
+	 *            输出流
+	 * @param isBuffer
+	 *            是否加入缓冲功能
+	 * @return 是否成功
+	 */
+	static final int bufferSize = 1024; // 1K 的数据块
+	
+	public StreamChain write(boolean isBuffer) {
+		InputStream in = getIn();
+		OutputStream out = getOut();
+		int readSize; // 读取到的数据长度
+		byte[] buffer = new byte[bufferSize]; // 通过 byte 作为数据中转，用于存放循环读取的临时数据
+
+		try {
+			if (isBuffer) {
+				try (OutputStream _out = new BufferedOutputStream(out);) {// 加入缓冲功能
+					while ((readSize = in.read(buffer)) != -1) {
+						_out.write(buffer, 0, readSize);
+					}
+				}
+			} else {
+//				readSize = in.read(buffer, 0, bufferSize);
+				
+				while ((readSize = in.read(buffer, 0, bufferSize))!= -1) {
+					out.write(buffer, 0, readSize);
+//					readSize = in.read(buffer, 0, bufferSize);
+				}
+				out.flush();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return this;
+	}
+
+	/**
+	 * InputStream 转换到 byte[].
+	 * 从输入流中获取数据， 转换到 byte[] 也就是 in 转到内存 虽然大家可能都在内存里面了但还不能直接使用，要转换
+	 */
+	public StreamChain inputStream2Byte() throws IOException {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();// 使用内存操作流，读取二进制
+		setOut(out);
+		write(true);
+		
+		setData(out.toByteArray());
+		return this;
+	}
+	
+	/**
+	 * 送入 byte[] 转换为输出流。可指定 byte[] 某一部分数据
+	 * @param off
+	 * @param length
+	 * @return
+	 */
+	public StreamChain stringStream2output(int off, int length) {
+		try (OutputStream out = new BufferedOutputStream(getOut(), bufferSize);) {
+			if (off == 0 && length == 0)
+				out.write(getData());
+			else
+				out.write(getData(), off, length);
+			out.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return this;
+	}
+	
+	/**
+	 * 送入 byte[] 转换为输出流。送入的 byte[] 是全部
+	 * @param off
+	 * @param length
+	 * @return
+	 */
+	public StreamChain stringStream2output() {
+		return stringStream2output(0, 0);
 	}
 
 	public void close() {

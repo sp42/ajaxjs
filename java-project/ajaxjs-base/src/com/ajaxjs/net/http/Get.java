@@ -34,45 +34,7 @@ import com.ajaxjs.util.LogHelper;
  */
 public class Get {
 	private static final LogHelper LOGGER = LogHelper.getLog(Get.class);
-	
-	/**
-	 * 简单 GET 请求（原始 API 版），返回文本。
-	 * 
-	 * @param url
-	 *            请求目标地址
-	 * @return 响应内容（如 HTML，JSON 等）
-	 */
-	public static String simpleGET(String url) {
-		try {
-			return FileUtil.readText(new URL(url).openStream());
-		} catch (IOException e) {
-			LOGGER.warning("请求出错" + url, e);
-			return null;
-		}
-	}
-
-	/**
-	 * 简单 GET 请求，返回文本。
-	 * 
-	 * @param url
-	 *            请求目标地址
-	 * @return 响应内容（如 HTML，JSON 等）
-	 */
-	public static String GET(String url) {
-		Request req = new Request();
-		req.setUrl(url);
-	
-		RequestClient rc = new RequestClient(req);
-		try {
-			rc.connect();
-		} catch (ConnectException e) {
-			LOGGER.warning("请求出错" + url, e);
-			
-			return null;
-		}
-		
-		return req.getFeedback();
-	}
+ 
 
 	/**
 	 * 得到 HTTP 302 的跳转地址

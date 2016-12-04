@@ -55,7 +55,8 @@ public class ImageChain extends FileChain {
 	private Image img;
 
 	/**
-	 * BufferedImage是Image的一个子类，BufferedImage生成的图片在内存里有一个图像缓冲区，利用这个缓冲区我们可以很方便的操作这个图片，通常用来做图片修改操作如大小变换、图片变灰、设置图片透明或不透明等
+	 * BufferedImage是Image的一个子类，BufferedImage生成的图片在内存里有一个图像缓冲区，
+	 * 利用这个缓冲区我们可以很方便的操作这个图片，通常用来做图片修改操作如大小变换、图片变灰、设置图片透明或不透明等
 	 */
 	private BufferedImage bImg;
 
@@ -152,17 +153,19 @@ public class ImageChain extends FileChain {
 	public ImageChain cut(int x, int y, int width, int height) {
 		try {
 			setIn(new FileInputStream(getFile()));
-			ImageInputStream in = ImageIO.createImageInputStream(getIn());
-
-			String fileSuffix = FileUtil.getFileSuffix(getFilePath());
-			Iterator<ImageReader> it = ImageIO.getImageReadersByFormatName(fileSuffix);
-			ImageReader reader = it.next();
-			reader.setInput(in, true);
-
-			ImageReadParam param = reader.getDefaultReadParam();
-			param.setSourceRegion(new Rectangle(x, y, width, height));
-
-			bImg = reader.read(0, param);
+			
+			try(ImageInputStream in = ImageIO.createImageInputStream(getIn());) {
+				
+				String fileSuffix = FileUtil.getFileSuffix(getFilePath());
+				Iterator<ImageReader> it = ImageIO.getImageReadersByFormatName(fileSuffix);
+				ImageReader reader = it.next();
+				reader.setInput(in, true);
+				
+				ImageReadParam param = reader.getDefaultReadParam();
+				param.setSourceRegion(new Rectangle(x, y, width, height));
+				
+				bImg = reader.read(0, param);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
