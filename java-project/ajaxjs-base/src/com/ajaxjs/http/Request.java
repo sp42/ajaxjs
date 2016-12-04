@@ -27,7 +27,7 @@ import com.ajaxjs.util.StreamChain;
  * @author frank
  *
  */
-public abstract class Request extends StreamChain {
+public abstract class Request<T> extends StreamChain<T> {
 	/**
 	 * 请求目标地址
 	 */
@@ -83,7 +83,7 @@ public abstract class Request extends StreamChain {
 	/**
 	 * 如何处理响应信息？
 	 */
-	private Callback callback;
+	private Callback<T> callback;
 	
 	/**
 	 * 请求是否ok，是否确定已经发出去了（不管如何响应）
@@ -99,113 +99,124 @@ public abstract class Request extends StreamChain {
 	 * @author frank
 	 *
 	 */
-	public static interface Callback {
+	public static interface Callback<T> {
 		/**
 		 * 当有数据进入时……
 		 * 
 		 * @param is
 		 *            请求回来的响应流
 		 */
-		Request onDataLoad(InputStream is);
+		Request<T> onDataLoad(InputStream is);
 	}
 	
 	public String getUrl() {
 		return url;
 	}
 
-	public Request setUrl(String url) {
+	@SuppressWarnings("unchecked")
+	public T setUrl(String url) {
 		this.url = url;
-		return this;
+		return (T) this;
 	}
 
 	public String getMethod() {
 		return method;
 	}
 
-	public Request setMethod(String method) {
+	@SuppressWarnings("unchecked")
+	public T setMethod(String method) {
 		this.method = method;
-		return this;
+		return (T) this;
 	}
 
 	public int getTimeout() {
 		return timeout;
 	}
 
-	public Request setTimeout(int timeout) {
+	@SuppressWarnings("unchecked")
+	public T setTimeout(int timeout) {
 		this.timeout = timeout;
-		return this;
+		return (T) this;
 	}
 
 	public String getHost() {
 		return host;
 	}
 
-	public Request setHost(String host) {
+	@SuppressWarnings("unchecked")
+	public T setHost(String host) {
 		this.host = host;
-		return this;
+		return (T) this;
 	}
 
 	public String getUserAgent() {
 		return UserAgent;
 	}
 
-	public Request setUserAgent(String userAgent) {
+	@SuppressWarnings("unchecked")
+	public T setUserAgent(String userAgent) {
 		UserAgent = userAgent;
-		return this;
+		return (T) this;
 	}
 
 	public Map<String, String> getCookies() {
 		return cookies;
 	}
 
-	public Request setCookies(Map<String, String> cookies) {
+	@SuppressWarnings("unchecked")
+	public T setCookies(Map<String, String> cookies) {
 		this.cookies = cookies;
-		return this;
+		return (T) this;
 	}
 
 	public String getEncoding() {
 		return encoding;
 	}
 
-	public Request setEncoding(String encoding) {
+	@SuppressWarnings("unchecked")
+	public T setEncoding(String encoding) {
 		this.encoding = encoding;
-		return this;
+		return (T) this;
 	}
 
 	public String[] getBasicAuthorization() {
 		return basicAuthorization;
 	}
 
-	public Request setBasicAuthorization(String[] basicAuthorization) {
+	@SuppressWarnings("unchecked")
+	public T setBasicAuthorization(String[] basicAuthorization) {
 		this.basicAuthorization = basicAuthorization;
-		return this;
+		return (T) this;
 	}
 
 	public boolean isTextResponse() {
 		return isTextResponse;
 	}
 
-	public Request setTextResponse(boolean isTextResponse) {
+	@SuppressWarnings("unchecked")
+	public T setTextResponse(boolean isTextResponse) {
 		this.isTextResponse = isTextResponse;
-		return this;
+		return (T) this;
 	}
 
-	public Callback getCallback() {
+	public Callback<T> getCallback() {
 		return callback;
 	}
 
-	public Request setCallback(Callback callback) {
+	@SuppressWarnings("unchecked")
+	public T setCallback(Callback<T> callback) {
 		this.callback = callback;
-		return this;
+		return (T) this;
 	}
 
 	public boolean isDone() {
 		return isDone;
 	}
 
-	public Request setDone(boolean isDone) {
+	@SuppressWarnings("unchecked")
+	public T setDone(boolean isDone) {
 		this.isDone = isDone;
-		return this;
+		return (T) this;
 	}
 
 	/**
@@ -218,9 +229,10 @@ public abstract class Request extends StreamChain {
 	/**
 	 * @param headers {@link #headers}
 	 */
-	public Request setHeaders(Map<String, String> headers) {
+	@SuppressWarnings("unchecked")
+	public T setHeaders(Map<String, String> headers) {
 		this.headers = headers;
-		return this;
+		return (T) this;
 	}
 
 	/**
@@ -233,8 +245,9 @@ public abstract class Request extends StreamChain {
 	/**
 	 * @param isEnableGzip {@link #isEnableGzip}
 	 */
-	public Request setEnableGzip(boolean isEnableGzip) {
+	@SuppressWarnings("unchecked")
+	public T setEnableGzip(boolean isEnableGzip) {
 		this.isEnableGzip = isEnableGzip;
-		return this;
+		return (T) this;
 	}
 }

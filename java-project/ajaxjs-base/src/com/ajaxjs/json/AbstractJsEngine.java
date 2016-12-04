@@ -15,7 +15,6 @@
  */
 package com.ajaxjs.json;
 
-import java.io.IOException;
 import java.util.Map;
 
 import javax.script.Invocable;
@@ -69,13 +68,7 @@ public abstract class AbstractJsEngine implements IEngine, ToJavaType, ToJsType 
 
 		for (String path : paths) {
 			LOGGER.info("加载 js: {0} 文件", path);
-
-			try {
-				code = FileUtil.readFileAsText(path);
-			} catch (IOException e) {
-				LOGGER.warning("加载文件 " + path + "的时候，磁盘找不到该文件！", e);
-				return;
-			}
+			code = FileUtil.openAsText(path);
 
 			eval(code);
 		}

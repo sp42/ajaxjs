@@ -3,35 +3,28 @@ package test.com.ajaxjs.util;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.io.IOException;
 import org.junit.Test;
 
 import com.ajaxjs.util.FileUtil;
 //import com.ajaxjs.test.util.timer.task_v2.TaskA;
 
 public class TestFileUtil {
-//	@Test
-//	public void testRead() throws IOException {
-//		String content = text.readFile(Util.getClassFolder_FilePath(TaskA.class, "taskconfig.xml"));
-//		assertNotNull(content);
-//		assertTrue(content.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"));
-//	}
+//	String txtfile = Util.getClassFolder_FilePath(TestFileUtil.class, "taskconfig.xml");
+	
+	String dir = TestFileUtil.class.getResource("/").getPath();
+	String fullpath = dir + File.separator + "bar.txt";
 
 	@Test
-	public void testWrite() throws IOException {
-		String dir = TestFileUtil.class.getResource("/").getPath();
-		String fullpath = dir + File.separator + "bar.txt";
-		System.out.println(fullpath);
-		FileUtil.save2file(fullpath, "bar");
-		// open it
-		// String d = Util.getClassFolder_FilePath(TestFile.class, "bar.txt");
-		// System.out.println(d);
-		String content = FileUtil.readFileAsText(fullpath);
-		assertNotNull(content);
-
-		FileUtil.delete(fullpath);
-	}
-	public static void main(String[] args) {
-		System.out.println("sds");
+	public void testCreateRead() {
+		// create and update
+		new FileUtil().setFilePath(fullpath).setOverwrite(true).setContent("hihi").save().close();
+		// read
+		String result = new FileUtil().setFilePath(fullpath).read().byteStream2stringStream().close().getContent();
+		
+		System.out.println(result);
+		assertTrue(result.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"));
+		
+		// delete
+		new FileUtil().setFilePath(fullpath).delete();
 	}
 }

@@ -60,6 +60,7 @@ public class RequestClient {
 	 */
 	public RequestClient(Request request) {
 		this.request = request;
+		
 		try {
 			url = new URL(request.getUrl());
 			connection = (HttpURLConnection) url.openConnection();

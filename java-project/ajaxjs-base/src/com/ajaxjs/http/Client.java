@@ -9,13 +9,35 @@ import com.ajaxjs.util.StringUtil;
 
 import sun.misc.BASE64Encoder;
 
-public class Client extends Request {
-
+public class Client extends Request<Client> {
 	/**
 	 * 连接对象
 	 */
 	private HttpURLConnection connection;
+	
+	/**
+	 * 配置请求参数
+	 * @param cc
+	 * @return
+	 */
+	public Client customConnection(CustomConnection cc) {
+		cc.callback(connection);
+		return this;
+	}
 
+	/**
+	 * 配置请求参数
+	 */
+	public static interface CustomConnection {
+		public void callback(HttpURLConnection connection);
+	}
+	
+	/**
+	 * 发起请求
+	 * @return
+	 * @throws ConnectException
+	 * @throws IOException
+	 */
 	public Client connect() throws ConnectException, IOException {
 		init();
 		
