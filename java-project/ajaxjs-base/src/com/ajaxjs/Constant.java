@@ -24,17 +24,20 @@ import java.io.File;
  */
 public interface Constant {
 	/**
-	 * 空字符串常量
+	 * 空字符串
 	 */
 	public static final String emptyString = "";
 	public static final String ConsoleDiver = System.getProperty("line.separator") + "---------------------------------";
 	public static final String printObject_or_status = "--------> ";
-	public static final String json_Err_KeyName = "errMsg";
 	public static final String page_css_lessFile = "/asset/less/main.less";
 	public static final String JsSrc_local = "http://%s";
 	public static final String file_pathSeparator = File.separator;
-	public static final String sql_query_zero = "此次查询没有符合条件的任何数据。";
-	public static final String outputKeyName = "output";
 	public static final String lineFeet = "\r\n";
 	public final static char newline = '\n';
+	
+	/**
+	 * 是否苹果系统
+	 */
+	public static final boolean isMac = System.getProperty("os.name").toLowerCase().contains("mac");
+
 }
