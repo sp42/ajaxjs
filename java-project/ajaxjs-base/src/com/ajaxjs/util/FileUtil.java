@@ -1,53 +1,154 @@
+/**
+ * Copyright 2015 Frank Cheung
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.ajaxjs.util;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 
 import javax.activation.MimetypesFileTypeMap;
 
-/**
- * 打开、保存字符流的文件；或者读取字符流，将其转为 String；删除文件；获取文件扩展名；获取文件的 MIMI 类型
- * @author frank
- *
- */
-public class FileUtil {
- 
-	 
+public class FileUtil extends StreamChain<FileUtil> {
+	private String filePath;
 
+	private File file;
+
+	private boolean overwrite;
+
+	public FileUtil read() {
+		try {
+			if (!file.exists())
+				throw new FileNotFoundException(file.getPath() + " 不存在！");
+
+			setIn(new FileInputStream(file));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		return this;
+	}
+	
+	/**
+	 * 打开文件，返回其文本内容
+	 * @param path
+	 * @return
+	 */
+	public static String openAsText(String path) {
+		return new FileUtil().setFilePath(path).read().byteStream2stringStream().close().getContent();
+	}
+
+	/**
+	 * 保存文件
+	 * 
+	 * @param off
+	 * @param len
+	 * @return
+	 */
+	public FileUtil save(int off, int len) {
+		OutputStream out = null;
+
+		try {
+			out = new FileOutputStream(file);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		setOut(out);
+
+		try {
+			out.write(getData(), off, len);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return this;
+	}
 
 	/**
 	 * 写文件不能用 FileWriter，原因是会中文乱码
-	 * 
-	 * @param filepath
-	 *            文件路径
 	 * @param content
 	 *            文件内容，文本
-	 * @throws IOException
+	 * @return
 	 */
-	@Deprecated
-	public static void save2file(String filepath, String content) throws IOException {
-		try (OutputStream out = new FileOutputStream(filepath);
-				// OutputStreramWriter将输出的字符流转化为字节流输出（字符流已带缓冲）
-				OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);) {
-			writer.write(content);
-		} catch (IOException e) {
-			System.err.println("写入文件" + filepath + "失败");
-			throw e;
-		}
-	}
- 
+	public FileUtil save() {
+		OutputStream out = null;
 
+		try {
+			out = new FileOutputStream(file);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		setOut(out);
+
+		// OutputStreramWriter将输出的字符流转化为字节流输出（字符流已带缓冲）
+		try (OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);) {
+			writer.write(getContent());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return this;
+	}
+	
+	/**
+	 * 返回某个文件夹里面的所有文件
+	 * 
+	 * @param folderName
+	 *            文件夹名称
+	 * @return
+	 */
+	public String[] getFiles() {
+		return file.isDirectory() ? file.list() : null;
+	}
+	
+	/**
+	 * 删除文件
+	 * 
+	 * @param filename
+	 *            文件名
+	 */
+	public FileUtil copyTo() {
+		file.delete();
+		return this;
+	}
+
+	/**
+	 * 删除文件
+	 * 
+	 * @param filename
+	 *            文件名
+	 */
+	public FileUtil moveTo() {
+		file.delete();
+		return this;
+	}
+
+	/**
+	 * 删除文件
+	 */
+	public FileUtil delete() {
+		file.delete();
+		return this;
+	}
+	
 	/**
 	 * 输入 /foo/bar/foo.jpg 返回 foo.jpg
 	 * 
@@ -110,4 +211,55 @@ public class FileUtil {
 
 		return File.separator + year + File.separator + mouth + File.separator + day + File.separator;
 	} 
+	
+	/**
+	 * @return the filePath
+	 */
+	public String getFilePath() {
+		return filePath;
+	}
+
+	/**
+	 * @param filePath
+	 *            the filePath to set
+	 */
+	public FileUtil setFilePath(String filePath) {
+		this.filePath = filePath;
+		file = new File(filePath); // 同时设置 File 对象
+
+		return this;
+	}
+
+	/**
+	 * @return the file
+	 */
+	public File getFile() {
+		return file;
+	}
+
+	/**
+	 * @param file
+	 *            the file to set
+	 */
+	public FileUtil setFile(File file) {
+		this.file = file;
+		return this;
+	}
+
+	/**
+	 * @return the overwrite
+	 */
+	public boolean isOverwrite() {
+		return overwrite;
+	}
+
+	/**
+	 * @param overwrite
+	 *            the overwrite to set
+	 */
+	public FileUtil setOverwrite(boolean overwrite) {
+		this.overwrite = overwrite;
+		return this;
+	}
+
 }

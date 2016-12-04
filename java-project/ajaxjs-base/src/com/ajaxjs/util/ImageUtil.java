@@ -38,7 +38,7 @@ import javax.imageio.stream.ImageInputStream;
  * 图片处理工具
  * 
  */
-public class ImageChain extends FileChain {
+public class ImageUtil extends FileUtil {
 	/**
 	 * 图片宽度
 	 */
@@ -70,7 +70,7 @@ public class ImageChain extends FileChain {
 	 * 《使用ImageIO.write存储png格式图片性能较差问题》http://zhang-xzhi-xjtu.iteye.com/blog/
 	 * 1328084
 	 */
-	public ImageChain save() {
+	public ImageUtil save() {
 		try {
 			ImageIO.write(bImg, format, getFile());
 		} catch (IOException e) {
@@ -85,7 +85,7 @@ public class ImageChain extends FileChain {
 	 * 在传输中，图片是不能直接传的，因此需要把图片变为字节数组，然后传输比较方便。
 	 */
 	@Override
-	public ImageChain output2byte() {
+	public ImageUtil output2byte() {
 		ByteArrayOutputStream out = new ByteArrayOutputStream(1024);// 1024 指定缓冲大小
 		setOut(out);
 
@@ -109,7 +109,7 @@ public class ImageChain extends FileChain {
 	 *            宽
 	 * @return 缓冲的图片对象
 	 */
-	public ImageChain resize() {
+	public ImageUtil resize() {
 		bImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		bImg.getGraphics().drawImage(img, 0, 0, width, height, null);
 
@@ -150,7 +150,7 @@ public class ImageChain extends FileChain {
 	 * @param height
 	 *            选择区域的高度
 	 */
-	public ImageChain cut(int x, int y, int width, int height) {
+	public ImageUtil cut(int x, int y, int width, int height) {
 		try {
 			setIn(new FileInputStream(getFile()));
 			
@@ -179,7 +179,7 @@ public class ImageChain extends FileChain {
 	 * @param watermark
 	 *            水印文字
 	 */
-	public ImageChain mark(String watermark) {
+	public ImageUtil mark(String watermark) {
 		// 读取原图片信息
 		int width = img.getWidth(null), height = img.getHeight(null);
 
@@ -226,7 +226,7 @@ public class ImageChain extends FileChain {
 	 * @param watermark
 	 *            水印文件
 	 */
-	public ImageChain mark(File watermark) {
+	public ImageUtil mark(File watermark) {
 		Image watermarkImg;
 
 		try {
@@ -266,7 +266,7 @@ public class ImageChain extends FileChain {
 	 * @param width
 	 *            宽度
 	 */
-	public ImageChain setWidth(int width) {
+	public ImageUtil setWidth(int width) {
 		this.width = width;
 		return this;
 	}
@@ -283,7 +283,7 @@ public class ImageChain extends FileChain {
 	 * @param height
 	 *            高度
 	 */
-	public ImageChain setHeight(int height) {
+	public ImageUtil setHeight(int height) {
 		this.height = height;
 		return this;
 	}
@@ -303,7 +303,7 @@ public class ImageChain extends FileChain {
 	 * @param img
 	 *            图片流
 	 */
-	public ImageChain setImg(Image img) {
+	public ImageUtil setImg(Image img) {
 		this.img = img;
 		return this;
 	}
@@ -319,21 +319,21 @@ public class ImageChain extends FileChain {
 	 * @param bImg
 	 *            the bImg to set
 	 */
-	public ImageChain setbImg(BufferedImage bImg) {
+	public ImageUtil setbImg(BufferedImage bImg) {
 		this.bImg = bImg;
 
 		return this;
 	}
 
 	@Override
-	public ImageChain setFilePath(String filePath) {
+	public ImageUtil setFilePath(String filePath) {
 		super.setFilePath(filePath);
 		setFile(getFile()); // 同时设 File 对象，但有点多余
 		return this;
 	}
 
 	@Override
-	public ImageChain setFile(File file) {
+	public ImageUtil setFile(File file) {
 		super.setFile(file);
 
 		try {

@@ -30,12 +30,7 @@ import java.util.regex.Pattern;
  * @author frank
  *
  */
-public class StringUtil {
-	/**
-	 * 空字符串常量
-	 */
-	public static final String emptyString = "";
-	
+public class StringUtil {	
 	/**
 	 * 是否空字符串
 	 * 
@@ -45,8 +40,8 @@ public class StringUtil {
 	 */
 	public static boolean isEmptyString(String str) {
 		if (str == null || str.isEmpty() || str.length() == 0
-				|| str.trim().isEmpty() || emptyString.equals(str)
-				|| emptyString.equals(str.trim()))
+				|| str.trim().isEmpty() || "".equals(str)
+				|| "".equals(str.trim()))
 			return true;
 
 		return false;
@@ -60,7 +55,7 @@ public class StringUtil {
 	 * @return 字符串本身或者 null
 	 */
 	public static String emptyStringIfNull(String str) {
-		return str == null ? emptyString : str;
+		return str == null ? "" : str;
 	}
 	
 	/**
@@ -73,7 +68,7 @@ public class StringUtil {
 	 * @return 连接后的字符串
 	 */
 	public static String stringJoin(String[] arr, String join) {
-		if(!Util.isNotNull(arr))return null;
+		if(!Util.isNotNull(arr)) return null;
 		
 		StringBuilder sb = new StringBuilder();
 		

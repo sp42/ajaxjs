@@ -1,3 +1,18 @@
+/**
+ * Copyright 2015 Frank Cheung
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.ajaxjs.util;
 
 import java.io.BufferedOutputStream;
@@ -9,7 +24,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
-public class StreamChain {
+/**
+ * 抽象的流链式处理器
+ * @author frank
+ *
+ * @param <T>
+ */
+public abstract class StreamChain<T> {
 	private byte[] data;
 
 	/**
@@ -31,15 +52,17 @@ public class StreamChain {
 	 * 输出流转换到字节数组
 	 * @return
 	 */
-	public StreamChain output2byte() {
-		return this;
+	@SuppressWarnings("unchecked")
+	public T output2byte() {
+		return (T) this;
 	}
 	
 	/**
 	 * 输出流写入字节数据
 	 * @return
 	 */
-	public StreamChain outputWriteData() {
+	@SuppressWarnings("unchecked")
+	public T outputWriteData() {
 		try {
 			out.write(getData());
 			out.flush();
@@ -47,7 +70,7 @@ public class StreamChain {
 			e.printStackTrace();
 			return null;
 		}
-		return this;
+		return (T) this;
 	}
 
 	/**
@@ -55,7 +78,8 @@ public class StreamChain {
 	 * 
 	 * @return StreamChain
 	 */
-	public StreamChain byteStream2stringStream() {
+	@SuppressWarnings("unchecked")
+	public T byteStream2stringStream() {
 		StringBuilder result = new StringBuilder();
 
 		// InputStreamReader 从一个数据源读取字节，并自动将其转换成 Unicode 字符
@@ -81,7 +105,7 @@ public class StreamChain {
 
 		content = result.toString();
 
-		return this;
+		return (T) this;
 	}
 	
 	/**
@@ -98,7 +122,8 @@ public class StreamChain {
 	 */
 	static final int bufferSize = 1024; // 1K 的数据块
 	
-	public StreamChain write(boolean isBuffer) {
+	@SuppressWarnings("unchecked")
+	public T write(boolean isBuffer) {
 		InputStream in = getIn();
 		OutputStream out = getOut();
 		int readSize; // 读取到的数据长度
@@ -124,20 +149,21 @@ public class StreamChain {
 			e.printStackTrace();
 		}
 		
-		return this;
+		return (T) this;
 	}
 
 	/**
 	 * InputStream 转换到 byte[].
 	 * 从输入流中获取数据， 转换到 byte[] 也就是 in 转到内存 虽然大家可能都在内存里面了但还不能直接使用，要转换
 	 */
-	public StreamChain inputStream2Byte() throws IOException {
+	@SuppressWarnings("unchecked")
+	public T inputStream2Byte() throws IOException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();// 使用内存操作流，读取二进制
 		setOut(out);
 		write(true);
 		
 		setData(out.toByteArray());
-		return this;
+		return (T) this;
 	}
 	
 	/**
@@ -146,7 +172,8 @@ public class StreamChain {
 	 * @param length
 	 * @return
 	 */
-	public StreamChain stringStream2output(int off, int length) {
+	@SuppressWarnings("unchecked")
+	public T stringStream2output(int off, int length) {
 		try (OutputStream out = new BufferedOutputStream(getOut(), bufferSize);) {
 			if (off == 0 && length == 0)
 				out.write(getData());
@@ -157,7 +184,7 @@ public class StreamChain {
 			e.printStackTrace();
 		}
 
-		return this;
+		return (T) this;
 	}
 	
 	/**
@@ -166,11 +193,12 @@ public class StreamChain {
 	 * @param length
 	 * @return
 	 */
-	public StreamChain stringStream2output() {
+	public T stringStream2output() {
 		return stringStream2output(0, 0);
 	}
 
-	public void close() {
+	@SuppressWarnings("unchecked")
+	public T close() {
 		try {
 			if (in != null)
 				in.close();
@@ -179,6 +207,8 @@ public class StreamChain {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		return (T) this;
 	}
 
 	/**
@@ -192,9 +222,10 @@ public class StreamChain {
 	 * @param in
 	 *            the in to set
 	 */
-	public StreamChain setIn(InputStream in) {
+	@SuppressWarnings("unchecked")
+	public T setIn(InputStream in) {
 		this.in = in;
-		return this;
+		return (T) this;
 	}
 
 	/**
@@ -208,9 +239,10 @@ public class StreamChain {
 	 * @param out
 	 *            the out to set
 	 */
-	public StreamChain setOut(OutputStream out) {
+	@SuppressWarnings("unchecked")
+	public T setOut(OutputStream out) {
 		this.out = out;
-		return this;
+		return (T)this;
 	}
 
 	/**
@@ -224,8 +256,10 @@ public class StreamChain {
 	 * @param data
 	 *            the data to set
 	 */
-	public void setData(byte[] data) {
+	@SuppressWarnings("unchecked")
+	public T setData(byte[] data) {
 		this.data = data;
+		return (T) this;
 	}
 
 	/**
@@ -239,8 +273,9 @@ public class StreamChain {
 	 * @param content
 	 *            文本内容
 	 */
-	public StreamChain setContent(String content) {
+	@SuppressWarnings("unchecked")
+	public T setContent(String content) {
 		this.content = content;
-		return this;
+		return (T)this;
 	}
 }
