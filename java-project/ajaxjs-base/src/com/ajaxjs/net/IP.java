@@ -15,59 +15,41 @@
  */
 package com.ajaxjs.net;
 
+import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
+
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
+import com.sun.net.httpserver.spi.HttpServerProvider;
+
+import com.ajaxjs.util.StreamUtil;
 
 /**
  * IP 工具类
  */
 public class IP {
 	/**
-	 * 返回本地主机 InetAddress 对象
-	 * 
-	 * @return InetAddress 对象
-	 */
-	private static InetAddress getLocalhost() {
-		try {
-			return InetAddress.getLocalHost();
-		} catch (UnknownHostException e) {
-			System.out.println("返回本地主机失败！");
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	/**
-	 * 获取本机的 IP 地址字符串
-	 * 
-	 * @return 本机 IP
-	 */
-	public static String getLocalHostIP() {
-		return getLocalhost().getHostAddress();
-	}
-
-	/**
-	 * 获取本机主机名
-	 * 
-	 * @return 本机主机名
-	 */
-	public static String getLocalHostName() {
-		return getLocalhost().getHostName();
-	}
-
-	/**
-	 * 用于局域网内的测试机器
+	 * ip 缓存
 	 */
 	private static String localIp = null;
 
 	/**
 	 * 获取本机 IP 地址
-	 * 
+	 * 用于局域网内的测试机器
 	 * @return 本机 IP
 	 */
 	public static String getLocalIp() {
-		if (localIp == null) {
-			localIp = getReal_LAN_IP();
+		if (localIp == null) { // 第一次访问
+			for (String ip : getAllLocalHostIP()) {
+				if (ip.startsWith("192.168.")) { // 以 192.168.x.x 开头的都是局域网内的 IP
+					localIp = ip;
+					break;
+				}
+			}
+
 			if (localIp == null)
 				localIp = "localhost";// 还是 null，那就本机的……没开网卡？
 		}
@@ -81,19 +63,18 @@ public class IP {
 	 * @return 本机所有 IP
 	 */
 	public static String[] getAllLocalHostIP() {
-		String[] ips = null;
-
-		String hostName = getLocalHostName();// 获得主机名
 		InetAddress[] addrs = null;
 
 		try {
+			String hostName = InetAddress.getLocalHost().getHostName();// 获得主机名
 			// 在给定主机名的情况下，根据系统上配置的名称服务返回其 IP 地址所组成的数组。
 			addrs = InetAddress.getAllByName(hostName);
 		} catch (UnknownHostException e) {
-			System.out.println("未知主机：" + hostName);
 			e.printStackTrace();
+			return null;
 		}
 
+		String[] ips = null;
 		if (addrs !=null ) {
 			ips = new String[addrs.length];
 			int i = 0;
@@ -105,21 +86,7 @@ public class IP {
 	}
 
 	/**
-	 * 以 192.168.x.x 开头的都是局域网内的 IP
-	 * 
-	 * @return 局域网内的 IP
-	 */
-	public static String getReal_LAN_IP() {
-		for (String ip : getAllLocalHostIP()) {
-			if (ip.startsWith("192.168."))
-				return ip;
-		}
-
-		return null;
-	}
-
-	/**
-	 * 输入主机名，返回其 IP，相当于 cmd 的 ping
+	 * 输入主机名，返回其 IP，相当于 cmd 的 ping 所得到的域名
 	 * 
 	 * @param hostname
 	 *            例如 www.baidu.com
@@ -137,5 +104,51 @@ public class IP {
 
 		return ia == null ? null : ia.getHostAddress();
 	}
+	
+	/**
+	 * 启动 HTTP 服务，监听来自客户端的请求
+	 * @throws IOException
+	 */
+	public static void httpServer() {
+		HttpServer httpserver;
+		
+		try {
+			// 监听端口8081,能同时接受100个请求
+			httpserver = HttpServerProvider.provider().createHttpServer(new InetSocketAddress(8081), 100);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		httpserver.createContext("/myApp", new MyHttpHandler());
+		httpserver.setExecutor(null);
+		httpserver.start();
+		
+		System.out.println("server started");
+	}
 
+	/**
+	 * Http请求处理类
+	 *  * 自定义的http服务器
+	 *  http://blog.csdn.net/maosijunzi/article/details/41045181
+	 *   http://blog.163.com/web_promise/blog/static/1096316552011224101531794/
+	 * @author frank
+	 */
+	static class MyHttpHandler implements HttpHandler {
+		@Override
+		public void handle(HttpExchange httpExchange) throws IOException {
+			StreamUtil s = new StreamUtil();
+
+			String result = s.setIn(httpExchange.getRequestBody()).byteStream2stringStream().getContent();
+			System.out.println("客户端请求:" + result);
+
+			String responseMsg = "ok"; // 响应信息
+			httpExchange.sendResponseHeaders(200, responseMsg.length()); // 设置响应头属性及响应信息的长度
+
+			s.setOut(httpExchange.getResponseBody()).setData(responseMsg.getBytes()).stringStream2output();
+			s.close();
+
+			httpExchange.close();
+		}
+	}
 }
