@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.net.http;
+package com.ajaxjs.http;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,95 +32,9 @@ import com.ajaxjs.util.LogHelper;
  * @author frank
  *
  */
-public class Get {
-	private static final LogHelper LOGGER = LogHelper.getLog(Get.class);
+public class Download {
+	private static final LogHelper LOGGER = LogHelper.getLog(Download.class);
  
-
-	/**
-	 * 得到 HTTP 302 的跳转地址
-	 * 
-	 * @param url
-	 *            目标地址
-	 * @return 跳转地址
-	 */
-	public static String get302redirect(String url) {
-		String redirectTo = Get.initHEAD_reqeust(url).getConnection().getHeaderField("Location");
-		return redirectTo;
-	}
-
-	/**
-	 * 检测资源是否存在
-	 * 
-	 * @param url
-	 *            目标地址
-	 * @return true 表示 404 不存在
-	 */
-	public static boolean is404(String url) {
-		RequestClient rc = Get.initHEAD_reqeust(url);
-		try {
-			return rc.getConnection().getResponseCode() == 404;
-		} catch (IOException e) {
-			LOGGER.warning(e);
-			return true;
-		}
-	}
-
-	/**
-	 * 得到资源的文件大小
-	 * 
-	 * @param url
-	 *            目标地址
-	 * @return 文件大小
-	 */
-	public static long getFileSize(String url) {
-		RequestClient rc = Get.initHEAD_reqeust(url);
-		String contentLength = rc.getConnection().getHeaderField("content-length");
-		return Long.parseLong(contentLength);
-	}
-	
-	/**
-	 * 获取远程资源的大小 （另外一种写法，可参考之）
-	 * 
-	 * @param url
-	 *            目标地址
-	 * @return 文件大小
-	 */
-	public static long getRemoteSize(String url) {
-		long size = 0;
-
-		try {
-			HttpURLConnection conn = (HttpURLConnection) (new URL(url)).openConnection();
-			size = conn.getContentLength();
-			conn.disconnect();
-		} catch (IOException e) {
-			LOGGER.warning(e);
-		}
-
-		return size;
-	}
-
-	/**
-	 * 创建一个 HEAD 请求
-	 * 
-	 * @param url
-	 *            目标地址
-	 * @return 请求执行对象
-	 */
-	private static RequestClient initHEAD_reqeust(String url) {
-		Request req = new Request();
-		req.setUrl(url);
-		req.setMethod("HEAD");
-		RequestClient rc = new RequestClient(req);
-		rc.getConnection().setInstanceFollowRedirects(false); // 必须设置false，否则会自动redirect到Location的地址
-		
-		try {
-			rc.connect();
-		} catch (ConnectException e) {
-			LOGGER.warning("HEAD 请求出错" + url, e);
-		}
-		
-		return rc;
-	}
 	
 	/**
 	 * 下载任意 web 文件到本地 
@@ -131,29 +45,25 @@ public class Get {
 	 *            保存本地的完整路径
 	 */
 	public static void download2disk(String url, final String filePathName) {
-		Request req = new Request();
-		req.setUrl(url);
-		final RequestClient rc = new RequestClient(req);
-
-		req.setCallback(new Request.Callback() {
-			@Override
-			public void onDataLoad(InputStream is) {
-				try {
-					if ("gzip".equals(rc.getConnection().getHeaderField("Content-Encoding"))) {
-//						System.out.println(FileUtil.readText(new GZIPInputStream(is)));
-//						FileUtil.readText(new GZIPInputStream(is));
-						FileUtil.write(new GZIPInputStream(is), new FileOutputStream(filePathName), true); // 自动处理图片是否经过服务器gzip压缩的问题
-					} else {
-						FileUtil.write(is, new FileOutputStream(filePathName), true);
-					}
-				} catch (IOException e) {
-					LOGGER.warning(e);
-				}
-			}
-		});
-
+		final Client client = new Client(url);
+		
 		try {
-			rc.connect();
+			client.setCallback(new Request.Callback<Client>() {
+				@Override
+				public void onDataLoad(InputStream is) {
+//					try {
+						if ("gzip".equals(client.getConnection().getHeaderField("Content-Encoding"))) {
+//							System.out.println(FileUtil.readText(new GZIPInputStream(is)));
+//							FileUtil.readText(new GZIPInputStream(is));
+//							FileUtil.write(new GZIPInputStream(is), new FileOutputStream(filePathName), true); // 自动处理图片是否经过服务器gzip压缩的问题
+						} else {
+//							FileUtil.write(is, new FileOutputStream(filePathName), true);
+						}
+//					} catch (IOException e) {
+//						LOGGER.warning(e);
+//					}
+				}
+			}).connect();
 		} catch (ConnectException e) {
 			LOGGER.warning(e);
 		}
@@ -215,7 +125,7 @@ public class Get {
 	
 		File file = new File(savePath + fileName);
 		// 获得远程文件大小
-		long remoteFileSize = getRemoteSize(url);
+		long remoteFileSize = Client.getRemoteSize(url);
 		System.out.println("远程文件大小=" + remoteFileSize);
 	
 		int i = 0;

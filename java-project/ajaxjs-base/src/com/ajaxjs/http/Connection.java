@@ -15,9 +15,14 @@
  */
 package com.ajaxjs.http;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.zip.GZIPInputStream;
 
 import com.ajaxjs.util.StringUtil;
@@ -38,17 +43,33 @@ public class Connection<T> extends Request<T> {
 	
 	/**
 	 * 
+	 * @param urlStr
 	 */
-	public Connection() {
+	public Connection(String urlStr) {
+		setUrl(urlStr);
+		
 		URL url = null;
 		
 		try {
 			url = new URL(getUrl());
+		} catch (MalformedURLException e) {
+			System.err.println("初始化连接出错！格式不对！" + getUrl());
+			e.printStackTrace();
+			return;
+		}
+		try {
 			connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestMethod(getMethod());
 		} catch (IOException e) {
 			System.err.println("初始化连接出错！" + getUrl());
 			e.printStackTrace();
+			return;
+		}
+		try {
+			connection.setRequestMethod(getMethod());
+		} catch (ProtocolException e) {
+			System.err.println("初始化连接出错！方法出错 " + getUrl());
+			e.printStackTrace();
+			return;
 		}
 		
 		connection.addRequestProperty("Referer", getUrl() == null ? url.getHost() : getUrl());
@@ -79,36 +100,59 @@ public class Connection<T> extends Request<T> {
 	 * @throws IOException
 	 */
 	@SuppressWarnings("unchecked")
-	public T connect() throws ConnectException, IOException {
+	public T connect() throws ConnectException {
 		init();
 		
 		// 写入数据（POST/PUT ONLY， GET 不需要）
 		if (getData() != null && !getMethod().equalsIgnoreCase("GET")) {
-			setOut(connection.getOutputStream());
+			try {
+				setOut(connection.getOutputStream());
+			} catch (IOException e) {
+				e.printStackTrace();
+				throw new ConnectException("写入 post 数据时失败！");
+			}
 			outputWriteData();// 写入 POST 数据
 		}
 		
 		// 接受响应
-		setIn(connection.getInputStream());
-		
-		// 是否启动 GZip 请求
-		// 有些网站强制加入 Content-Encoding:gzip，而不管之前的是否有 GZip 的请求
-		boolean isGzip = isEnableGzip() || "gzip".equals(connection.getHeaderField("Content-Encoding"));
-		
-		ConnectException err = checkErrCode(isGzip);
-		if(err != null)throw err;
-		
-		if (getCallback() != null) {
-			getCallback().onDataLoad(getIn());
+		try{
+			setIn(connection.getInputStream());
+			
+			// 是否启动 GZip 请求
+			// 有些网站强制加入 Content-Encoding:gzip，而不管之前的是否有 GZip 的请求
+			boolean isGzip = isEnableGzip() || "gzip".equals(connection.getHeaderField("Content-Encoding"));
+			
+			ConnectException err = checkErrCode(isGzip);
+			if(err != null)throw err;
+			
+			if (getCallback() != null) {
+				getCallback().onDataLoad(getIn());
+			}
+			
+			if (isTextResponse()) {
+				if (isGzip)
+					setIn(new GZIPInputStream(getIn()));
+					
+				byteStream2stringStream();
+			}
+			
+		} catch (UnknownHostException e) {
+			throw new ConnectException("未知地址！" + getUrl());
+		} catch (FileNotFoundException e) {
+			throw new ConnectException("404 地址！" + getUrl());
+		} catch (SocketTimeoutException e) {
+			throw new ConnectException("请求地址超时！" + getUrl());
+		} catch (IOException e) {
+			try {
+				System.out.println(connection.getResponseCode());
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			throw new ConnectException("请求地址 IO 异常！" + getUrl());
+		} finally {
+			close();// 自动关闭流
 		}
-		
-		if (isTextResponse()){
-			if(isGzip)
-				setIn(new GZIPInputStream(getIn()));
-			byteStream2stringStream();
-		}
-		
-		close();// 自动关闭流
+
 		
 		return (T) this;
 	}
@@ -160,5 +204,16 @@ public class Connection<T> extends Request<T> {
 			String encoding = new BASE64Encoder().encode((username + ":" + password).getBytes());
 			connection.setRequestProperty("Authorization", "Basic " + encoding);
 		}
+	}
+	
+	public HttpURLConnection getConnection() {
+		return connection;
+	}
+
+	@SuppressWarnings("unchecked")
+	public T setConnection(HttpURLConnection connection) {
+		this.connection = connection;
+
+		return (T) this;
 	}
 }

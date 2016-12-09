@@ -88,10 +88,7 @@ public abstract class Request<T> extends StreamChain<T> {
 	 * 请求是否ok，是否确定已经发出去了（不管如何响应）
 	 */
 	private boolean isDone;
-	
-	/**
-	 * Content 响应的内容，文本的
-	 */
+
 	
 	/**
 	 * 
@@ -105,7 +102,7 @@ public abstract class Request<T> extends StreamChain<T> {
 		 * @param is
 		 *            请求回来的响应流
 		 */
-		Request<T> onDataLoad(InputStream is);
+		public void onDataLoad(InputStream is);
 	}
 	
 	public String getUrl() {

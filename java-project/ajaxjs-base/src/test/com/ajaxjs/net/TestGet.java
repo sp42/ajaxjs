@@ -12,56 +12,7 @@ import com.ajaxjs.net.http.Request;
 import com.ajaxjs.net.http.RequestClient;
 
 public class TestGet {
- 
-	
-	@Test
-	public void testGZipGet() {
-		Request request = new Request();
-		request.setUrl("http://u.3gtv.net");
-		request.setEnableGzip(true);
-		
-		RequestClient rc = new RequestClient(request);
-		try {
-			rc.connect();
-		} catch (ConnectException e) {
-			System.out.println("请求出错" + request.getUrl());
-		}
-		
-		String html = request.getFeedback();
-		System.out.println(html);
-		assertNotNull(html);
-	}
-	// B 站强制 Gzip 返回，無論请求是否带有 GZIP
-	@Test
-	public void testForce_GZipGet() {
-		String url = "http://www.bilibili.com/video/av5178498/";
-		String html = Get.GET(url);
-		System.out.println(html);
-		assertNotNull(html);
-	}
-//
-//	@Test
-//	public void testGet302redirect() {
-//		String url = "http://baidu.com";
-//		String location = Get.get302redirect(url);
-//		System.out.println(location);
-//		assertNotNull(location);
-//	}
-//
-//	@Test
-//	public void testIs404() {
-//		String url = "http://c.csdnimg.cn/jifen/images/xunzhang/xunzhang/bokezhuanjiamiddle.png";
-//		assertTrue(!Get.is404(url));
-//		assertTrue(Get.is404("http://www.qq.com/54543"));
-//	}
-//
-//	@Test
-//	public void testGetFileSize() {
-//		String url = "http://c.csdnimg.cn/jifen/images/xunzhang/xunzhang/bokezhuanjiamiddle.png";
-//		long size = Get.getFileSize(url);
-//		assertEquals(size, 4102L);
-//	}
-	
+
 //	@Test
 	public void testDownload2disk() throws IOException {
 		String url = "http://c.csdnimg.cn/jifen/images/xunzhang/xunzhang/bokezhuanjiamiddle.png";

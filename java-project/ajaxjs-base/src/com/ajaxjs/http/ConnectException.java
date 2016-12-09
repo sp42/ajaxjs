@@ -15,6 +15,7 @@
  */
 package com.ajaxjs.http;
 
+
 /**
  * 请求链接的异常
  * @author frank
