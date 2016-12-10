@@ -1,43 +1,42 @@
 package test.com.ajaxjs.net;
 
 import static org.junit.Assert.*;
+import org.junit.Test;
 
 import java.util.HashMap;
 
-import org.junit.Test;
-
-import com.ajaxjs.net.http.Post;
-import com.ajaxjs.net.http.Request;
+import com.ajaxjs.http.Client;
 
 public class TestPost {
 	@Test
 	public void testPOST() {
-		// TEST FILE <%=com.ajaxjs.util.map.MapHelper.toMap(request.getParameterMap())%>
-String url = "http://localhost:8080/pachong/post.jsp";
-Request request = Post.POST(url, new HashMap<String, Object>() {
-	private static final long serialVersionUID = 1L;
-	{
-			put("foo", "bar");
+		// TEST FILE
+		// <%=com.ajaxjs.util.map.MapHelper.toMap(request.getParameterMap())%>
+		String url = "http://localhost:8080/pachong/post.jsp";
+		String result = Client.POST(url, new HashMap<String, Object>() {
+			private static final long serialVersionUID = 1L;
+			{
+				put("foo", "bar");
+			}
+		});
+		System.out.println("Feedback:" + result);
+		assertNotNull(result);
 	}
-});
-System.out.println("Feedback:" + request.getFeedback());
-assertNotNull(request);
-assertTrue(request.isDone());
-	}
-	
+
 	@Test
 	public void testMultiPOST() {
-		// TEST FILE <%=com.ajaxjs.util.map.MapHelper.toMap(request.getParameterMap())%>
+		// TEST FILE
+		// <%=com.ajaxjs.util.map.MapHelper.toMap(request.getParameterMap())%>
 		String url = "http://localhost:8080/pachong/post.jsp";
-		Request request = Post.MultiPOST(url, new HashMap<String, Object>() {
+		String result = Client.MultiPOST(url, new HashMap<String, Object>() {
 			private static final long serialVersionUID = 1L;
 			{
 				put("foo", "bar");
 			}
 		}, null);
-		System.out.println("Feedback:" + request.getFeedback());
-		assertNotNull(request);
-		assertTrue(request.isDone());
+		
+		System.out.println("Feedback:" + result);
+		assertNotNull(result);
 	}
 
 	// @Test

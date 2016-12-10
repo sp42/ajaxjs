@@ -6,11 +6,6 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import com.ajaxjs.net.http.ConnectException;
-import com.ajaxjs.net.http.Get;
-import com.ajaxjs.net.http.Request;
-import com.ajaxjs.net.http.RequestClient;
-
 public class TestGet {
 
 //	@Test
