@@ -11,7 +11,7 @@ import org.junit.Test;
 import com.ajaxjs.jdbc.Helper;
 
 public class TestHelper {
-	public static String perRecordSql = "SELECT %s, name FROM %s WHERE createDate < %s ORDER BY createDate DESC LIMIT 1";
+	public static String perRecordSql  = "SELECT %s, name FROM %s WHERE createDate < %s ORDER BY createDate DESC LIMIT 1";
 	public static String nextRecordSql = "SELECT %s, name FROM %s WHERE createDate > %s ORDER BY createDate ASC LIMIT 1";
 
 	@Test
