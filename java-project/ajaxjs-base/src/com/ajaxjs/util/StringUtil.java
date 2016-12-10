@@ -25,6 +25,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.ajaxjs.map.MapHelper;
+
 /**
  * 字符串相关的工具类
  * @author frank

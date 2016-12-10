@@ -37,7 +37,7 @@ public class JSON {
 	 * 
 	 * @return js 引擎
 	 */
-	public static ScriptEngine engineFatory() {
+	public static ScriptEngine engineFactory() {
 		return new ScriptEngineManager()
 				.getEngineByName(System.getProperty("java.version").contains("1.8.") ? "nashorn" : "rhino");
 	}
@@ -45,7 +45,7 @@ public class JSON {
 	/**
 	 * JVM 自带的 JS 引擎
 	 */
-	private final static ScriptEngine engine = engineFatory();
+	private final static ScriptEngine engine = engineFactory();
 
 	/**
 	 * 读取 json 里面的 map
@@ -73,12 +73,12 @@ public class JSON {
 	}
 
 	/**
-	 * 转换为 map 或 list
+	 * 转换为 map 或 list，可指定 JS 引擎和 js 命名空间
 	 * 
 	 * @param js
 	 *            JSON 字符串
 	 * @param key
-	 *            JSON Path，可以带有 aa.bb.cc
+	 *            js 命名空间 JSON Path，可以带有 aa.bb.cc
 	 * @param clazz
 	 *            目标类型
 	 * @return 目标对象
@@ -91,11 +91,13 @@ public class JSON {
 //		System.out.println("var obj = " + js);
 		try {
 			jsCode = "var obj = " + js;
-			engine.eval(jsCode);// rhino 不能直接返回 map，如 eval("{a:1}")
-											// -->null，必须加变量，例如 执行 var xx =
-											// {...};
+			/*
+			 * rhino 不能直接返回 map，如 eval("{a:1}")-->null，必须加变量，例如 执行 var xx = {...};
+			 */
+			engine.eval(jsCode);
+			
 			Object obj;
-			if (key == null) {
+			if (key == null) {// 直接返回变量
 				jsCode = "obj;";
 				obj = engine.eval(jsCode);
 			} else {
@@ -107,7 +109,8 @@ public class JSON {
 					obj = engine.eval(jsCode);
 				}
 			}
-			result = (T) obj;
+			result = (T) obj;// 转换目标类型
+			
 		} catch (ScriptException e) {
 			System.err.println("脚本eval()运算发生异常！eval 代码：" + jsCode);
 			e.printStackTrace();
@@ -116,9 +119,24 @@ public class JSON {
 		return result;
 	}
 	
+	/**
+	 * 转换为 map 或 list，可指定 JS 引擎
+	 * @param engine
+	 * @param js
+	 * @param clazz
+	 * @return
+	 */
 	public static <T> T accessMember(ScriptEngine engine, String js, Class<T> clazz) {
 		return accessMember(engine, js, null, clazz);
 	}
+	
+	/**
+	 * 转换为 map 或 list，默认的 JS 引擎
+	 * @param js
+	 * @param key
+	 * @param clazz
+	 * @return
+	 */
 	public static <T> T accessMember(String js, String key, Class<T> clazz) {
 		return accessMember(engine, js, key, clazz);
 	}
@@ -190,6 +208,13 @@ public class JSON {
 
 	}
 	
+	/**
+	 * 执行 js 任意代码
+	 * @param engine
+	 * @param code
+	 * @param clazz
+	 * @return
+	 */
 	public static <T> T eval(ScriptEngine engine, String code, Class<T> clazz) {
 		if (StringUtil.isEmptyString(code))
 			throw new UnsupportedOperationException("JS 代码不能为空！");
@@ -203,7 +228,7 @@ public class JSON {
 			e.printStackTrace();
 		}
 
-		if (obj != null) {
+		if (obj != null && clazz != null) { // 当 clazz ＝ null 表示只是执行，不要求返回结果
 			// return Util.TypeConvert(js.eval(code), clazz); // 为什么要执行多次？
 			T _obj = Util.TypeConvert(obj, clazz);
 			return _obj;

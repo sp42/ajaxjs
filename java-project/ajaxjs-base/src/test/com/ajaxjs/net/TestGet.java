@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import com.ajaxjs.http.Client;
+import com.ajaxjs.net.http.Client;
 
 public class TestGet {
 	String url = "https://www.baidu.com/";

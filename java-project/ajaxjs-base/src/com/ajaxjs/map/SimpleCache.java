@@ -1,4 +1,4 @@
-package com.ajaxjs.util;
+package com.ajaxjs.map;
 
 import java.util.Map;
 import java.util.WeakHashMap;

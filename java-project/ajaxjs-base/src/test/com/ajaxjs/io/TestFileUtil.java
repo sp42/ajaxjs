@@ -1,12 +1,11 @@
-package test.com.ajaxjs.util;
+package test.com.ajaxjs.io;
 
 import static org.junit.Assert.*;
 
 import java.io.File;
 import org.junit.Test;
 
-import com.ajaxjs.util.FileUtil;
-//import com.ajaxjs.test.util.timer.task_v2.TaskA;
+import com.ajaxjs.io.FileUtil;
 
 public class TestFileUtil {
 //	String txtfile = Util.getClassFolder_FilePath(TestFileUtil.class, "taskconfig.xml");

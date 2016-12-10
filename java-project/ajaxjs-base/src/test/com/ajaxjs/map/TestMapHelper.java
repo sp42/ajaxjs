@@ -1,10 +1,9 @@
-package test.com.ajaxjs.util;
+package test.com.ajaxjs.map;
 
+import static com.ajaxjs.map.MapHelper.*;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-
-import static com.ajaxjs.util.MapHelper.*;
 
 public class TestMapHelper {
 	@Test

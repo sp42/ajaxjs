@@ -25,9 +25,8 @@ import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
-import com.ajaxjs.json.Rhino;
+import com.ajaxjs.io.FileUtil;
 import com.ajaxjs.util.DateTools;
-import com.ajaxjs.util.FileUtil;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.Util;
@@ -43,7 +42,7 @@ public class JsonHelper {
 	 * JS 引擎
 	 */
 	private ScriptEngine engine;
-
+	
 	/**
 	 * 
 	 * @param engine JS 引擎
@@ -211,6 +210,8 @@ public class JsonHelper {
 //
 //		return StringUtil.stringJoin(strArr, ",");
 //	}
+	
+	
 	public static String stringify(List<Map<String, Object>> list) {
 		if (null == list)
 			return null;
@@ -269,27 +270,29 @@ public class JsonHelper {
 	public static String obj2jsonVaule(Object value) {
 		if (value == null) {
 			return "null";
-		} else if(value instanceof Double){
-			return JSON.double2int((Double)value) + "";
+		} else if (value instanceof Double) {
+			return JSON.double2int((Double) value) + "";
 		} else if (value instanceof Boolean || value instanceof Number) {
 			return value.toString();
 		} else if (value instanceof Date) {
 			return '\"' + DateTools.formatDate((Date) value, DateTools.commonDateFormat) + '\"';
-		} else if(value instanceof Map){
-			return stringify((Map<String, ?>)value);
-		} else if(value instanceof List){
-			List<?> list = (List<?>)value;
-			if(list.size() == 0){
+		} else if (value instanceof Map) {
+			return stringify((Map<String, ?>) value);
+		} else if (value instanceof List) {
+			List<?> list = (List<?>) value;
+			if (list.size() == 0) {
 				return "[]";
 			} else if (list.get(0) instanceof String) {
-				List<String> strList = (List<String>)list;
+				List<String> strList = (List<String>) list;
 				StringBuilder sb = new StringBuilder();
-				
+
 				for (int i = 0; i < strList.size(); i++) {
-					if (i == (strList.size() - 1))sb.append("\"" + strList.get(i) + "\"");
-					else sb.append("\"" + strList.get(i) + "\"").append(",");
+					if (i == (strList.size() - 1))
+						sb.append("\"" + strList.get(i) + "\"");
+					else
+						sb.append("\"" + strList.get(i) + "\"").append(",");
 				}
-				
+
 				return '[' + sb.toString() + ']';
 			} else if (list.get(0) instanceof Map) {
 				List<String> jsonStrList = new ArrayList<>();
@@ -303,7 +306,7 @@ public class JsonHelper {
 				// 未知类型数组，
 				return "[]";
 			}
-			//return stringify((Map<String, ?>)value);
+			// return stringify((Map<String, ?>)value);
 		} else if (value instanceof Object[]) {
 			Object[] arr = (Object[]) value;
 			String[] strs = new String[arr.length];
@@ -338,7 +341,7 @@ public class JsonHelper {
 										// string/int/boolean
 										// TODO
 		} else {
-			Rhino.LOGGER.info("未知 JS 类型：" + value.getClass().getName());
+			LOGGER.info("未知 JS 类型：" + value.getClass().getName());
 		}
 
 		return value;

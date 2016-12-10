@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.util;
+package com.ajaxjs.io;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,6 +25,9 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 
 import javax.activation.MimetypesFileTypeMap;
+
+import com.ajaxjs.util.DateTools;
+import com.ajaxjs.util.StringUtil;
 
 public class FileUtil extends StreamChain<FileUtil> {
 	private String filePath;

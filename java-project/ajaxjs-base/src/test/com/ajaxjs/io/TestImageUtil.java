@@ -1,4 +1,4 @@
-package test.com.ajaxjs.util;
+package test.com.ajaxjs.io;
 
 import static org.junit.Assert.*;
 
@@ -6,7 +6,7 @@ import java.io.File;
 
 import org.junit.Test;
 
-import com.ajaxjs.util.ImageUtil;
+import com.ajaxjs.io.ImageUtil;
 
 public class TestImageUtil {
 	@Test

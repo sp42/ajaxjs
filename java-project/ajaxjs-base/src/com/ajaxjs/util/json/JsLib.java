@@ -27,7 +27,7 @@ public class JsLib {
 	/**
 	 * // 新建一个 js mapper 专用于 json 转换，以免影响 其他 js runtime
 	 */
-	private static ScriptEngine engine = JSON.engineFatory();
+	private static ScriptEngine engine = JSON.engineFactory();
 
 	/**
 	 * 基础的 JavaScript 工具函数

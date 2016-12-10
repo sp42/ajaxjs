@@ -1,4 +1,4 @@
-package test.com.ajaxjs.json;
+package test.com.ajaxjs.util.json;
 
 import static org.junit.Assert.*;
 import org.junit.*;
@@ -22,7 +22,7 @@ public class TestJsonHelper {
 
 	@Before
 	public void setUp() {
-		jsonHelper = new JsonHelper(JSON.engineFatory());
+		jsonHelper = new JsonHelper(JSON.engineFactory());
 	}
 
 	@Test

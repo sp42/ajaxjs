@@ -1,8 +1,6 @@
-package com.ajaxjs.util;
+package com.ajaxjs.map;
 
 import java.util.Map;
-
-import com.ajaxjs.util.MapHelper;
 
 public class MapData {
 	/**

@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.http;
+package com.ajaxjs.net.http;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-import com.ajaxjs.util.StreamChain;
+import com.ajaxjs.io.StreamChain;
 
 /**
  * 携带请求信息的 Bean

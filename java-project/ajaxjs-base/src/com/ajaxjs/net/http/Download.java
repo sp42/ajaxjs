@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.http;
+package com.ajaxjs.net.http;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,7 +24,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.zip.GZIPInputStream;
 
-import com.ajaxjs.util.FileUtil;
+import com.ajaxjs.io.FileUtil;
 import com.ajaxjs.util.LogHelper;
 
 /**

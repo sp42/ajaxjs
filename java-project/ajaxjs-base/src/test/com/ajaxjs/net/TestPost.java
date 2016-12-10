@@ -3,9 +3,9 @@ package test.com.ajaxjs.net;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-import java.util.HashMap;
+import com.ajaxjs.net.http.Client;
 
-import com.ajaxjs.http.Client;
+import java.util.HashMap;
 
 public class TestPost {
 	@Test
