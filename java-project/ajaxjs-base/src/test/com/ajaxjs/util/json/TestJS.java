@@ -2,59 +2,130 @@ package test.com.ajaxjs.util.json;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.util.Map;
 
 import javax.script.ScriptException;
 
 import org.junit.*;
-
-import com.ajaxjs.json.IEngine;
-import com.ajaxjs.json.Json;
-import com.ajaxjs.json.Rhino;
+ 
+import com.ajaxjs.util.json.JsonHelper;
 
 import sun.org.mozilla.javascript.internal.NativeArray;
 import sun.org.mozilla.javascript.internal.NativeObject;
 
 public class TestJS {
-	IEngine js;
-	Rhino rhino;
+	@BeforeClass
+	public static void init() {
+	}
 
 	@Before
 	public void setUp() {
-		rhino = new Rhino();
-		js = rhino;
 	}
 
 	@Test
-	public void testNativeObject2Hash() {
-		Map<String, Object> map = rhino.eval_return_Map("{'a':0, 'b':1}");
-		assertNotNull(map);
-		assertEquals(map.get("a"), 0);
+	public void testEval() throws ScriptException {
+		js.eval("var foo ='Hello World!';");
+		Object obj;
+		obj = js.eval("foo='Hello World!';");
+		String str = js.eval_return_String("foo;");
 
-		Object obj = "{'a':0, 'b':1};";
+		assertNotNull(obj);
+		assertEquals(str, "Hello World!");
+		js.eval("foo = 111;");
+		assertEquals(js.eval_return_Int("foo;"), 111);
 
-		obj = js.eval("json = " + obj.toString());
-		map = Rhino.NativeObject2Map((NativeObject) obj);
-		assertNotNull(map);
-		assertEquals(map.get("b"), 1);
-
-		map = Json.callExpect_Map("var json = {'a':0, 'b':1};", "json");
-		assertNotNull(map);
-		assertEquals(map.get("b"), 1);
+		js.eval("foo = false;");
+		assertEquals(js.eval_return_Boolean("foo;"), false);
 	}
 
 	@Test
-	public void testNativeArray2Map() throws ScriptException {
-		String arrStr = "[{'a':0, 'b':1}, {'c':2}]";
-		Map<String, Object>[] map = Json.callExpect_MapArray(arrStr);
-		assertNotNull(map[0]);
-		assertEquals(map[0].get("a"), 0);
+	public void testLoad() throws ScriptException, IOException {
+//		Object obj;
+//
+//		js.load("C:/project/bigfoot/java/com/ajaxjs/framework/config.js");
+//		obj = js.eval("bf");
+//		assertNotNull(obj);
+//
+//		js.load(App.class, "JSON_Tree.js");
+//		obj = js.eval("bf");
+//		assertNotNull(obj);
+	}
 
-		Object obj = rhino.eval("json = " + arrStr);
+	@Test
+	public void testPut() throws ScriptException {
+		js.put("a", 6);
+		Object obj = js.eval("a");
 
-		map = Rhino.NativeArray2MapArray((NativeArray) obj);
-		assertNotNull(map[1]);
-		assertEquals(map[1].get("c"), 2);
+		assertNotNull(obj);
+		assertEquals(obj, 6);
+	}
+	
+	@Test
+	public void testGet() throws ScriptException {
+		js.eval("a={b:{c:{d:1}}}");
+		
+		assertNotNull(js.get("a"));
+		assertNotNull(js.get("a", "b", "c", "d"));
+	}
+
+	// @Test
+	// public void testCall() throws ScriptException {
+	// js.eval("function max_num(a, b){return (a > b) ? a : b;}");
+	// Object obj = js.call(null, "max_num", 6, 4);
+	//
+	// assertNotNull(obj);
+	// assertEquals(obj, 6);
+	// }
+	//
+	@Test
+	public void testEval_return_String() throws ScriptException {
+		String str = js.eval_return_String("'Hello';");
+
+		assertNotNull(str);
+		assertEquals(str, "Hello");
+	}
+
+	@Test
+	public void testEval_return_Map() {
+		Map<String, Object> map = js.eval_return_Map("json = {\"foo\" : \"88888\", \"bar\":99999};");
+
+		assertNotNull(map);
+		assertEquals(map.get("foo"), "88888");
+		assertEquals(map.get("bar"), 99999);
+	}
+
+	@Test
+	public void testEval_return_Map_String() {
+		Map<String, Object> map = js.eval_return_Map("json = {\"foo\" : \"88888\"};");
+
+		assertNotNull(map);
+		assertEquals(map.get("foo").toString(), "88888");
+	}
+
+	@Test
+	public void testEval_return_MapArray()  {
+		Map<String, Object>[] map = js.eval_return_MapArray("[{\"foo\" : \"88888\"}, {\"bar\" : \"99999\"}];");
+
+		assertNotNull(map);
+		assertEquals(map.length, 2);
+		assertEquals(map[0].get("foo"), "88888");
+		assertEquals(map[1].get("bar"), "99999");
+	}
+
+	@Test
+	public void testToJavaType() {
+		
+	}
+	
+	@Test
+	public void testFormatter() {
+		String jsonStr = "{\"id\":\"1\",\"name\":\"a1\",\"obj\":{\"id\":11,\"name\":\"a11\",\"array\":[{\"id\":111,\"name\":\"a111\"},{\"id\":112,\"name\":\"a112\"}]}}";
+		String fotmatStr = JsonHelper.format(jsonStr);
+		// fotmatStr = fotmatStr.replaceAll("\n", "<br/>");
+		// fotmatStr = fotmatStr.replaceAll("\t", "    ");
+//		System.out.println(fotmatStr);
+		assertNotNull(fotmatStr);
 	}
 
 }
