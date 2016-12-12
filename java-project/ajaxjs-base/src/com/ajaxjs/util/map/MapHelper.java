@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.map;
+package com.ajaxjs.util.map;
 
 import java.util.HashMap;
 import java.util.Map;

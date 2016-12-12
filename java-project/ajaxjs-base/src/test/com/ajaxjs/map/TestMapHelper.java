@@ -1,6 +1,6 @@
 package test.com.ajaxjs.map;
 
-import static com.ajaxjs.map.MapHelper.*;
+import static com.ajaxjs.util.map.MapHelper.*;
 import static org.junit.Assert.*;
 
 import org.junit.Test;

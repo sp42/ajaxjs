@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 import org.junit.Test;
 
-import com.ajaxjs.io.FileUtil;
+import com.ajaxjs.util.io.FileUtil;
 
 public class TestFileUtil {
 //	String txtfile = Util.getClassFolder_FilePath(TestFileUtil.class, "taskconfig.xml");

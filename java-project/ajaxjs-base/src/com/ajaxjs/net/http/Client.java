@@ -27,9 +27,9 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-import com.ajaxjs.io.FileUtil;
-import com.ajaxjs.io.StreamUtil;
 import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.io.FileUtil;
+import com.ajaxjs.util.io.StreamUtil;
 
 public class Client extends Connection<Client> {
 	public Client(String urlStr) {

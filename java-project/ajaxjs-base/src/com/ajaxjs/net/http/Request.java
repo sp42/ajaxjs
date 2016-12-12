@@ -19,7 +19,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-import com.ajaxjs.io.StreamChain;
+import com.ajaxjs.util.io.StreamChain;
 
 /**
  * 携带请求信息的 Bean

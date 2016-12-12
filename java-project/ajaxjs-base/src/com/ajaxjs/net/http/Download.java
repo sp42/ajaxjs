@@ -24,8 +24,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.zip.GZIPInputStream;
 
-import com.ajaxjs.io.FileUtil;
 import com.ajaxjs.util.LogHelper;
+import com.ajaxjs.util.io.FileUtil;
 
 /**
  * HTTP GET 请求

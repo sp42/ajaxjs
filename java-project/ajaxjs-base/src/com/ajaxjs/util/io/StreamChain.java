@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.io;
+package com.ajaxjs.util.io;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
