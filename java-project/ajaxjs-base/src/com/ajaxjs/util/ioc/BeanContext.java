@@ -93,36 +93,41 @@ public class BeanContext {
 	 */
 	private void createBeansAndScanDependencies(Set<Class<?>> classes) {
 		Iterator<Class<?>> iterator = classes.iterator();
-
 		boolean isFoundResource = false; // 是否找到了 Resource
+		
 		while (iterator.hasNext()) {
 			Class<?> item = iterator.next();
 			
 			Bean annotation = item.getAnnotation(Bean.class); // 查找匹配的注解
 
-			if (annotation != null) {
-				String beanName = annotation.value();
+			if (annotation == null) continue; // 不是 bean 啥都不用做
+			
+			String beanName = annotation.value();
+			
+			// 实例化 bean，并将其保存，BEAN 名称作为键值
+			beans.put(beanName, Reflect.newInstance(item));
+			
+			// 记录依赖关系
+			for (Field field : item.getDeclaredFields()) {
+				Resource resAnnot = field.getAnnotation(Resource.class);
+				if (resAnnot == null) continue; // 没有要注入的字段，跳过
 				
-				// 实例化 bean，并将其保存，BEAN 名称作为键值
-				beans.put(beanName, Reflect.newInstance(item));
+				isFoundResource = true;
 				
-				// 记录依赖关系
-				for (Field field : item.getDeclaredFields()) {
-					Resource fieldAnnotation = field.getAnnotation(Resource.class);
-					
-					if (fieldAnnotation != null) {// 获取依赖的 bean 的名称,如果为  null,则使用字段名称
-						isFoundResource = true;
-						String resourceName = fieldAnnotation.value();
-						
-						if (StringUtil.isEmptyString(resourceName))
-							resourceName = field.getName();
-						dependencies.put(beanName + "." + field.getName(), resourceName);
-					}
-				}
+				/**
+				 * 要查找哪一个 bean？就是说依赖啥对象？以什么为依据？我们说是那个 bean 的 id。首先你可以在 Resource 注解中指定，如果这觉得麻烦，可以不在注解指定，直接指定变量名即可（就算不通过注解指定，都可以利用 反射 获取字段名，作为依赖的凭据，效果一样）
+				 */
+				String dependenciObj_id = resAnnot.value();// 获取依赖的 bean 的名称,如果为 null,则使用字段名称
+				if (StringUtil.isEmptyString(dependenciObj_id))
+					dependenciObj_id = field.getName(); // 此时 bean 的 id 一定要与 fieldName 一致
+				
+				// bean id ＋ 变量名称 ＝ 依赖关系的 key。
+				dependencies.put(beanName + "." + field.getName(), dependenciObj_id);
 			}
+			
 		}
 		
-		if(!isFoundResource) throw new RuntimeException("没有 Resource！");
+		if(!isFoundResource) throw new RuntimeException("没有 Resource！一次注入都没有！！");
 	}
 
 	/**
