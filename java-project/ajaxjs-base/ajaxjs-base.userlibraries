@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<eclipse-userlibraries version="2">
+    <library name="mockito" systemlibrary="false">
+        <archive path="/ajaxjs-base/lib/mockito-all-2.0.2-beta.jar"/>
+    </library>
+</eclipse-userlibraries>
