@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.util.DateTools;
 import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.util.MapHelper;
+import com.ajaxjs.util.map.MapHelper;
 
 /**
  * 页面工具类，在页面调用

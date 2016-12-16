@@ -3,7 +3,7 @@ package test.com.ajaxjs.net;
 import static org.junit.Assert.*;
 import org.junit.*;
 
-import com.ajaxjs.util.MapHelper;
+import com.ajaxjs.util.map.MapHelper;
 import com.ajaxjs.web.Requester;
 import com.ajaxjs.web.test.MockRequest;
 

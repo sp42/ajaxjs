@@ -9,7 +9,8 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ajaxjs.util.MapData;
+import com.ajaxjs.util.map.MapData;
+
 
 /**
  * 请求的数据

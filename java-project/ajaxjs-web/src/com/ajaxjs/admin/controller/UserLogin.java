@@ -31,16 +31,16 @@ public class UserLogin implements IController {
 			@QueryParam("password") String password, HttpServletRequest request, Stream response) {
 		// 临时的
 		if(!"admin".equals(name) || !"admin".equals(password)) {
-			response.outputJSON("{\"isOk\":false, \"msg\": \"用户名或密码错误！\"}");
+//			response.outputJSON("{\"isOk\":false, \"msg\": \"用户名或密码错误！\"}");
 			return;
 		}
 		
 		try {
 			if(Captcha.isPass(request, captcha)){
-				response.outputJSON("{\"isOk\":true, \"msg\": \"登录成功！\"}");
+//				response.outputJSON("{\"isOk\":true, \"msg\": \"登录成功！\"}");
 			}
 		} catch (Throwable e) {
-			response.outputJSON("{\"isOk\":false, \"msg\": \"" + e.getMessage() +"\"}");
+//			response.outputJSON("{\"isOk\":false, \"msg\": \"" + e.getMessage() +"\"}");
 		}
 	}
 	

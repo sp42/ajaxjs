@@ -19,8 +19,8 @@ import java.io.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.ajaxjs.util.FileUtil;
 import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.io.StreamUtil;
 
 
 /**
@@ -69,7 +69,7 @@ public class Upload {
 		}
 		
 		try {
-			dateBytes = FileUtil.stream2byte(req.getInputStream());
+			dateBytes = new StreamUtil().setIn(req.getInputStream()).inputStream2Byte().close().getData();
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}

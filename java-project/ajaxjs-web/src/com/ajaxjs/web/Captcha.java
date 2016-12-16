@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.PageContext;
 
-import com.ajaxjs.util.ImageUtil;
+import com.ajaxjs.util.io.ImageUtil;
 
 import java.awt.Font;
 

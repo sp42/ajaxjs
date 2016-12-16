@@ -26,8 +26,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import com.ajaxjs.framework.dao.MyBatis;
-import com.ajaxjs.util.FileUtil;
 import com.ajaxjs.util.LogHelper;
+import com.ajaxjs.util.io.StreamUtil;
 import com.ajaxjs.util.json.JSON;
 import com.ajaxjs.util.json.JsLib;
 import com.ajaxjs.util.json.JsonHelper;
@@ -109,7 +109,7 @@ public class ConfigListener implements ServletContextListener {
 	/**
 	 * 主 JS runtime，其他 js 包都导进这里来
 	 */
-	public static final ScriptEngine jsRuntime = JSON.engineFatory();// 
+	public static final ScriptEngine jsRuntime = JSON.engineFactory();// 
 	public static boolean isEnableJSON_Config;			// 是否通过 JS 来定义配置文件
 	public static boolean isJSON_Config_loaded = false;
 	
@@ -126,7 +126,7 @@ public class ConfigListener implements ServletContextListener {
 	 * 加载配置
 	 */
 	private static void loadJsonConfig() {
-		String code = new FileUtil().setIn(Init.class.getResourceAsStream("JSON_Tree.js")).byteStream2stringStream().close().getContent();
+		String code = new StreamUtil().setIn(Init.class.getResourceAsStream("JSON_Tree.js")).byteStream2stringStream().close().getContent();
 		
 		try {
 			jsRuntime.eval(JsLib.baseJavaScriptCode);

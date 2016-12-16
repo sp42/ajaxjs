@@ -12,9 +12,9 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletRequest;
 
 import com.ajaxjs.framework.model.Map2Pojo;
-import com.ajaxjs.util.FileUtil;
-import com.ajaxjs.util.MapHelper;
 import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.io.StreamUtil;
+import com.ajaxjs.util.map.MapHelper;
 import com.ajaxjs.web.Requester;
 
 /**
@@ -46,11 +46,14 @@ public class MvcRequest extends Requester{
 		String params = null;
 		
 		try {
-			params = new FileUtil().setIn(getInputStream()).byteStream2stringStream().close().getContent();
+			params = new StreamUtil().setIn(getInputStream()).byteStream2stringStream().close().getContent();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
-		};
+		}
+
+		if (params == null)
+			return null;
 
 		params = StringUtil.urlDecode(params);
 		return MapHelper.toMap(params.split("&"));
