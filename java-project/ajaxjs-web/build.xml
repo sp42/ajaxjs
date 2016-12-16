@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE project>
+<project name="AntTestDemo" default="otherTarget" basedir=".">
+	<property name="jar_url_perfix"  value="http://git.oschina.net/sp42/ajaxjs/raw/master/java-project" />
+	
+	<target name="init" description="创建目录">
+		<mkdir dir="WebContent/WEB-INF/tags" />
+		<mkdir dir="WebContent/WEB-INF/jsp" />
+		<mkdir dir="asset/less" />
+		<mkdir dir="asset/css" />
+		<mkdir dir="asset/images" />
+		<mkdir dir="lib" />
+	</target>
+	
+	<target name="otherTarget" depends="init">
+		<get src="${jar_url_perfix}/ajaxjs-data/lib/ajaxjs-base.jar" dest="lib/ajaxjs-base.jar" />
+	</target>
+</project>
