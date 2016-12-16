@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.json.JsonHelper;
  
 
@@ -77,7 +78,7 @@ public class PageEditorService {
 	 */
 	public static void save_jsp_fileContent(String rawFullFilePath, String newContent) throws IOException {
 		String fullFilePath = getFullPathByRequestUrl(rawFullFilePath); // 真实的磁盘文件路径
-		String jsp_fileContent = FileUtil.readFileAsText(fullFilePath), toDel_fileContent = read_jsp_fileContent(fullFilePath);// 读取旧内容
+		String jsp_fileContent = FileUtil.openAsText(fullFilePath), toDel_fileContent = read_jsp_fileContent(fullFilePath);// 读取旧内容
 
 		if (toDel_fileContent != null) {
 			jsp_fileContent = jsp_fileContent.replace(toDel_fileContent, newContent);

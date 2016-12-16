@@ -53,7 +53,7 @@ public class PageEditor implements IController {
 	public String doGet(Requester request, Stream response) {
 		if (request.getRequestURI().contains("getImgList")) {
 			String folder = request.Mappath(request.getParameter("folder"));
-			response.outputJSON(PageEditorService.getImgList(folder));
+//			response.outputJSON(PageEditorService.getImgList(folder));
 
 			return null;
 		} else {
@@ -91,7 +91,7 @@ public class PageEditor implements IController {
 
 		}
 
-		requester.setActionMsg("修改成功");
+//		requester.setActionMsg("修改成功");
 	}
 
 	/**
