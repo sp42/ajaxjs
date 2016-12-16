@@ -37,7 +37,7 @@ public class NewsService extends BaseCrudService<News, NewsDAO> {
 	/**
 	 * 映射器
 	 */
-	private Class<NewsDAO> mapperClz = NewsDAO.class; 
+//	private Class<NewsDAO> mapperClz = NewsDAO.class; 
 	public NewsService() {
 		setMapper(NewsDAO.class);
 		setTableName("NEWS");

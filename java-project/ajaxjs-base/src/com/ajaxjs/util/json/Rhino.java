@@ -30,12 +30,6 @@ import sun.org.mozilla.javascript.internal.NativeObject;
  *
  */
 public class Rhino extends JSON {
-
-	/**
-	 * JVM 自带的 JS 引擎
-	 */
-	private final static ScriptEngine engine = engineFactory();
-	
 	public Map<String, Object> eval_return_Map(String code, String varName) {
 		eval(engine, code, null); 
 

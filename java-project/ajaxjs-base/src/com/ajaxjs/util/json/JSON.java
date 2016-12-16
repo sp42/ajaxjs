@@ -26,7 +26,7 @@ import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.Util;
 
 /**
- * json 转为 java 对象的工具类
+ * json 转为 java 对象的工具类，利用了 JVM 自带的 JS 引擎
  * 
  * @author frank
  *
@@ -38,14 +38,13 @@ public class JSON {
 	 * @return js 引擎
 	 */
 	public static ScriptEngine engineFactory() {
-		return new ScriptEngineManager()
-				.getEngineByName(System.getProperty("java.version").contains("1.8.") ? "nashorn" : "rhino");
+		return new ScriptEngineManager().getEngineByName(System.getProperty("java.version").contains("1.8.") ? "nashorn" : "rhino");
 	}
 
 	/**
 	 * JVM 自带的 JS 引擎
 	 */
-	private final static ScriptEngine engine = engineFactory();
+	final static ScriptEngine engine = engineFactory();
 
 	/**
 	 * 读取 json 里面的 map
@@ -234,5 +233,25 @@ public class JSON {
 			return _obj;
 		} else
 			return null;
+	}
+	
+	/**
+	 * 执行 js 任意代码
+	 * @param code
+	 * @param clazz
+	 * @return
+	 */
+	public static <T> T eval(String code, Class<T> clazz) {
+		return eval(engine, code, clazz);
+	}
+	
+	/**
+	 * 执行 js 任意代码
+
+	 * @param clazz
+	 * @return
+	 */
+	public static <T> T eval(String code) {
+		return eval(engine, code, null);
 	}
 }

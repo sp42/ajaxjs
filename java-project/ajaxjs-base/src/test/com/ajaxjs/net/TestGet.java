@@ -64,7 +64,7 @@ public class TestGet {
 	
 //	@Test
 	public void testDownload2disk() throws IOException {
-		String url = "http://c.csdnimg.cn/jifen/images/xunzhang/xunzhang/bokezhuanjiamiddle.png";
+//		String url = "http://c.csdnimg.cn/jifen/images/xunzhang/xunzhang/bokezhuanjiamiddle.png";
 //		Get.download2disk(url, "c:/temp/dd.png");
 		
 		

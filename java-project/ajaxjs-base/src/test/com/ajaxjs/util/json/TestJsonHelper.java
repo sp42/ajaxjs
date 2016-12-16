@@ -6,6 +6,7 @@ import org.junit.*;
 import com.ajaxjs.util.json.JSON;
 import com.ajaxjs.util.json.JsonHelper;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +25,46 @@ public class TestJsonHelper {
 	public void setUp() {
 		jsonHelper = new JsonHelper(JSON.engineFactory());
 	}
+	
+	@Test
+	public void testLoad() throws ScriptException, IOException {
+//		Object obj;
+//
+//		js.load("C:/project/bigfoot/java/com/ajaxjs/framework/config.js");
+//		obj = js.eval("bf");
+//		assertNotNull(obj);
+//
+//		js.load(App.class, "JSON_Tree.js");
+//		obj = js.eval("bf");
+//		assertNotNull(obj);
+	}
+
+	@Test
+	public void testPut() throws ScriptException {
+		jsonHelper.put("a", 6);
+		Object obj = jsonHelper.getEngine().eval("a");
+
+		assertNotNull(obj);
+		assertEquals(obj, 6);
+	}
+	
+	@Test
+	public void testGet() throws ScriptException {
+		jsonHelper.getEngine().eval("a={b:{c:{d:1}}}");
+		
+		assertNotNull(jsonHelper.get("a"));
+		assertNotNull(jsonHelper.get("a", "b", "c", "d"));
+	}
+
+	// @Test
+	// public void testCall() throws ScriptException {
+	// js.eval("function max_num(a, b){return (a > b) ? a : b;}");
+	// Object obj = js.call(null, "max_num", 6, 4);
+	//
+	// assertNotNull(obj);
+	// assertEquals(obj, 6);
+	// }
+	//
 
 	@Test
 	public void testStringify_Map() {

@@ -2,85 +2,42 @@ package test.com.ajaxjs.util.json;
 
 import static org.junit.Assert.*;
 
-import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import javax.script.ScriptException;
 
 import org.junit.*;
- 
+
+import com.ajaxjs.util.json.JSON;
 import com.ajaxjs.util.json.JsonHelper;
 
-import sun.org.mozilla.javascript.internal.NativeArray;
-import sun.org.mozilla.javascript.internal.NativeObject;
-
+/**
+ * @TODO
+ * @author frank
+ *
+ */
 public class TestJS {
-	@BeforeClass
-	public static void init() {
-	}
-
-	@Before
-	public void setUp() {
-	}
-
 	@Test
 	public void testEval() throws ScriptException {
-		js.eval("var foo ='Hello World!';");
-		Object obj;
-		obj = js.eval("foo='Hello World!';");
-		String str = js.eval_return_String("foo;");
-
-		assertNotNull(obj);
-		assertEquals(str, "Hello World!");
-		js.eval("foo = 111;");
-		assertEquals(js.eval_return_Int("foo;"), 111);
-
-		js.eval("foo = false;");
-		assertEquals(js.eval_return_Boolean("foo;"), false);
-	}
-
-	@Test
-	public void testLoad() throws ScriptException, IOException {
+		JSON.eval("var foo ='Hello World!';");
 //		Object obj;
-//
-//		js.load("C:/project/bigfoot/java/com/ajaxjs/framework/config.js");
-//		obj = js.eval("bf");
-//		assertNotNull(obj);
-//
-//		js.load(App.class, "JSON_Tree.js");
-//		obj = js.eval("bf");
-//		assertNotNull(obj);
+//		obj = JSON.eval("foo='Hello World!';");
+		String str = JSON.accessMember("var foo ='Hello World!';", "foo;", String.class);
+
+		assertNotNull(str);
+		assertEquals(str, "Hello World!");
+		JSON.eval("foo = 111;");
+		assertEquals(new Integer(111), JSON.eval("foo;", Integer.class));
+
+		JSON.eval("foo = false;");
+		assertEquals(JSON.eval("foo;", Boolean.class), false);
 	}
 
-	@Test
-	public void testPut() throws ScriptException {
-		js.put("a", 6);
-		Object obj = js.eval("a");
 
-		assertNotNull(obj);
-		assertEquals(obj, 6);
-	}
-	
-	@Test
-	public void testGet() throws ScriptException {
-		js.eval("a={b:{c:{d:1}}}");
-		
-		assertNotNull(js.get("a"));
-		assertNotNull(js.get("a", "b", "c", "d"));
-	}
-
-	// @Test
-	// public void testCall() throws ScriptException {
-	// js.eval("function max_num(a, b){return (a > b) ? a : b;}");
-	// Object obj = js.call(null, "max_num", 6, 4);
-	//
-	// assertNotNull(obj);
-	// assertEquals(obj, 6);
-	// }
-	//
 	@Test
 	public void testEval_return_String() throws ScriptException {
-		String str = js.eval_return_String("'Hello';");
+		String str = JSON.eval("'Hello';", String.class);
 
 		assertNotNull(str);
 		assertEquals(str, "Hello");
@@ -88,7 +45,7 @@ public class TestJS {
 
 	@Test
 	public void testEval_return_Map() {
-		Map<String, Object> map = js.eval_return_Map("json = {\"foo\" : \"88888\", \"bar\":99999};");
+		Map<String, Object> map = JSON.getMap("json = {\"foo\" : \"88888\", \"bar\":99999};");
 
 		assertNotNull(map);
 		assertEquals(map.get("foo"), "88888");
@@ -97,7 +54,7 @@ public class TestJS {
 
 	@Test
 	public void testEval_return_Map_String() {
-		Map<String, Object> map = js.eval_return_Map("json = {\"foo\" : \"88888\"};");
+		Map<String, Object> map = JSON.getMap("json = {\"foo\" : \"88888\"};");
 
 		assertNotNull(map);
 		assertEquals(map.get("foo").toString(), "88888");
@@ -105,12 +62,12 @@ public class TestJS {
 
 	@Test
 	public void testEval_return_MapArray()  {
-		Map<String, Object>[] map = js.eval_return_MapArray("[{\"foo\" : \"88888\"}, {\"bar\" : \"99999\"}];");
+		List<Map<String, Object>> map = JSON.getList("[{\"foo\" : \"88888\"}, {\"bar\" : \"99999\"}];");
 
 		assertNotNull(map);
-		assertEquals(map.length, 2);
-		assertEquals(map[0].get("foo"), "88888");
-		assertEquals(map[1].get("bar"), "99999");
+		assertEquals(map.size(), 2);
+		assertEquals(map.get(0).get("foo"), "88888");
+		assertEquals(map.get(1).get("bar"), "99999");
 	}
 
 	@Test

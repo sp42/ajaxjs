@@ -3,4 +3,7 @@
     <library name="mockito" systemlibrary="false">
         <archive path="/ajaxjs-base/lib/mockito-all-2.0.2-beta.jar"/>
     </library>
+    <library name="ajaxjs-base" systemlibrary="false">
+        <archive path="/ajaxjs-base/lib/ajaxjs-base.jar"/>
+    </library>
 </eclipse-userlibraries>

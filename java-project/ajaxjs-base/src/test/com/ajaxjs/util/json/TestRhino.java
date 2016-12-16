@@ -3,34 +3,32 @@ package test.com.ajaxjs.util.json;
 import static org.junit.Assert.*;
 import org.junit.*;
 
-import com.ajaxjs.util.json.JsonHelper;
 import com.ajaxjs.util.json.Rhino;
 
 import sun.org.mozilla.javascript.internal.NativeArray;
 import sun.org.mozilla.javascript.internal.NativeObject;
 
-import java.io.IOException;
+import java.util.List;
 import java.util.Map;
+
 import javax.script.ScriptException;
 
-
 public class TestRhino {
-	
-	
+
 	@Test
 	public void testNativeObject2Hash() {
-		Map<String, Object> map = rhino.eval_return_Map("{'a':0, 'b':1}");
+		Map<String, Object> map = Rhino.getMap("{'a':0, 'b':1}");
 		assertNotNull(map);
 		assertEquals(map.get("a"), 0);
 
 		Object obj = "{'a':0, 'b':1};";
 
-		obj = js.eval("json = " + obj.toString());
+		obj = Rhino.eval("json = " + obj.toString());
 		map = Rhino.NativeObject2Map((NativeObject) obj);
 		assertNotNull(map);
 		assertEquals(map.get("b"), 1);
 
-		map = Json.callExpect_Map("var json = {'a':0, 'b':1};", "json");
+		map = Rhino.getMap("var json = {'a':0, 'b':1};", "json");
 		assertNotNull(map);
 		assertEquals(map.get("b"), 1);
 	}
@@ -38,14 +36,14 @@ public class TestRhino {
 	@Test
 	public void testNativeArray2Map() throws ScriptException {
 		String arrStr = "[{'a':0, 'b':1}, {'c':2}]";
-		Map<String, Object>[] map = Json.callExpect_MapArray(arrStr);
-		assertNotNull(map[0]);
-		assertEquals(map[0].get("a"), 0);
+		List<Map<String, Object>> map = Rhino.getList(arrStr);
+		assertNotNull(map.get(0));
+		assertEquals(map.get(0).get("a"), 0);
 
-		Object obj = rhino.eval("json = " + arrStr);
+		Object obj = Rhino.eval("json = " + arrStr);
 
-		map = Rhino.NativeArray2MapArray((NativeArray) obj);
-		assertNotNull(map[1]);
-		assertEquals(map[1].get("c"), 2);
+		Map<String, Object>[] maps = Rhino.NativeArray2MapArray((NativeArray) obj);
+		assertNotNull(maps[0]);
+		assertEquals(maps[1].get("c"), 2);
 	}
 }
