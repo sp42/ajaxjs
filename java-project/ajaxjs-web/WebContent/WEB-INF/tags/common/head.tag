@@ -174,7 +174,6 @@
 <%@attribute name="title" 		required="false" description="其他标题"%> 
 <%@attribute name="lessFile" 	required="false" description="指定 LESS 样式文件"%> 
 <head>
-<%-- <!doctype html> --%>
 <%-- <html lang="zh-cmn-Hans"> --%>
 		<meta charset="utf-8" />
 	    <meta name="keywords"    content="${_config.site_keywords}" />
