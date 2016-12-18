@@ -1,4 +1,4 @@
-<%@ page pageEncoding="UTF-8" import="java.util.*, com.ajaxjs.util.*, com.ajaxjs.net.http.Get, com.ajaxjs.web.*"%>
+<%@ page pageEncoding="UTF-8" import="java.util.*, com.ajaxjs.util.map.*, com.ajaxjs.net.http.Client, com.ajaxjs.web.*"%>
 <%!
 
 	/**
@@ -51,14 +51,14 @@
 		
 		String url = request.getParameter("url");
 		String params = MapHelper.join(new RequestData(request).ignoreField("url").getParameterMap_String(), "&"); // 不要 url 参数
-		out.println(Get.GET(url + '?' + params));
+		out.println(Client.GET(url + '?' + params));
 		
 	} else if("remoteConsole".equals(action)) { // 手机调试
 		
 		String msg = "";
 		Map<String, String> requestMap = new RequestData(request).getParameterMap_String();
 		if (requestMap.size() > 0) {
-			msg = StringUtil.HashJoin(requestMap, '&');
+			msg = com.ajaxjs.util.StringUtil.HashJoin(requestMap, '&');
 		} else {
 			msg = "没有参数";
 		}
@@ -74,7 +74,7 @@
 		 * http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&ip=123.123.123.12
 		 * 
 		 */
-		String json = Get.GET("http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&ip=" + new Requester(request).getIP());
+		String json = Client.GET("http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&ip=" + new Requester(request).getIP());
 		out.println(json.replace("var remote_ip_info = ", "").replaceAll(";$", ""));
 	} else if ("captchaImg".equals(action)) { // 图片验证码
 		Captcha.init(pageContext);
