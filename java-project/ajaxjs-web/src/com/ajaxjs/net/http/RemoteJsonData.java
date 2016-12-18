@@ -16,14 +16,15 @@
 package com.ajaxjs.net.http;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.ajaxjs.http.Client;
-import com.ajaxjs.json.Json;
+ 
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.json.JSON;
 import com.ajaxjs.web.Requester;
 
 /**
@@ -86,11 +87,13 @@ public abstract class RemoteJsonData implements RemoteData {
 	 *            远程接口地址
 	 * @return 响应内容 Map[]
 	 */
+	@SuppressWarnings("unchecked")
 	public static Map<String, Object>[] getRemoteJSON_Array(String url) {
 		String json = Client.GET(url);
 
 		if (!StringUtil.isEmptyString(json)) {
-			return Json.callExpect_MapArray(json);
+			List<Map<String, Object>> list = JSON.getList(json);
+			return list.toArray(new Map[list.size()]);
 		} else {
 			LOGGER.warning("异常：读取远程接口，不能把返回的 JSON 转换为 Map[]！");
 			return null;
@@ -109,7 +112,7 @@ public abstract class RemoteJsonData implements RemoteData {
 
 		if (!StringUtil.isEmptyString(json)) {
 			// LOGGER.info(json);
-			return Json.callExpect_Map(json);
+			return JSON.getMap(json);
 		} else {
 			LOGGER.warning("异常：读取远程接口，不能把返回的 JSON 转换为 Map！");
 			return null;

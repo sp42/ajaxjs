@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
@@ -33,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import com.ajaxjs.util.json.JSON;
 import com.ajaxjs.util.map.MapHelper;
  
 
@@ -186,11 +188,13 @@ public class MockRequest extends WebBaseInit {
 	}
 
 	public Map<String, Object> shouldbe_json_return(String js_code) {
-		return Json.callExpect_Map(js_code);
+		return JSON.getMap(js_code);
 	}
 
+	@SuppressWarnings("unchecked")
 	public Map<String, Object>[] shouldbe_jsonArray_return(String js_code) {
-		return Json.callExpect_MapArray(js_code);
+		List<Map<String, Object>> list = JSON.getList(js_code);
+		return list.toArray(new Map[list.size()]);
 	}
 
 	public boolean shouldbe_hasRecord(Map<String, Object> json) {

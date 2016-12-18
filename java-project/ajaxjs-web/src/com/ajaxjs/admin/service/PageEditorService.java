@@ -33,7 +33,7 @@ public class PageEditorService {
 	 * @throws IOException
 	 */
 	public static String read_jsp_fileContent(String fullFilePath) throws IOException {
-		String jsp_fileContent = FileUtil.readFileAsText(fullFilePath);
+		String jsp_fileContent = FileUtil.openAsText(fullFilePath);
 
 		int start = jsp_fileContent.indexOf(startToken), end = jsp_fileContent.indexOf(endToken);
 
@@ -82,7 +82,7 @@ public class PageEditorService {
 
 		if (toDel_fileContent != null) {
 			jsp_fileContent = jsp_fileContent.replace(toDel_fileContent, newContent);
-			FileUtil.save2file(fullFilePath, jsp_fileContent); // 保存新内容
+			new FileUtil().setFilePath(fullFilePath).setContent(jsp_fileContent).save(); // 保存新内容
 		} else {
 			throw new IOException("页面文件中没有标记可编辑区域之标识。请参考： startToken/endTpoken");
 		}

@@ -40,17 +40,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
+import com.ajaxjs.net.http.Client;
 import com.ajaxjs.net.http.ConnectException;
-import com.ajaxjs.net.http.Get;
 import com.ajaxjs.net.http.Request;
-import com.ajaxjs.net.http.RequestClient;
-import com.ajaxjs.util.FileUtil;
+import com.ajaxjs.util.io.FileUtil;
+import com.ajaxjs.util.io.ImageUtil;
+import com.ajaxjs.util.io.StreamUtil;
 
 /**
  * @author Frank Chueng
  */
-public class Stream {
-
+public class Stream  extends HttpServletResponseWrapper{
+	public Stream(HttpServletResponse response) {
+		super(response);
+	}
 
 	/**
 	 * 输出“有符合条件的记录，但分页超过页数”的 JSON
@@ -59,7 +62,6 @@ public class Stream {
 	 *            总数
 	 * @return JSON
 	 */
-
 
 	/**
 	 * web文件下载功能实现
@@ -107,11 +109,8 @@ public class Stream {
 				return false;
 			}
 		} else { 
-			try (InputStream is = new FileInputStream(url);){
-				FileUtil.write(is, out, true);// 文件在服务器的磁盘上，读取目标文件，通过 response 将目标文件写到浏览器
-			} catch (IOException e) {
-				e.printStackTrace();
-			} 
+			// 文件在服务器的磁盘上，读取目标文件，通过 response 将目标文件写到浏览器
+			new StreamUtil().setIn(new FileInputStream(url)).setOut(out).write(true).close();
 		}
 
 		try {
@@ -205,7 +204,7 @@ out = pageContext.pushBody();
 	 * @throws IOException
 	 */
 	public void getImg(HttpServletRequest request, String url) throws IOException {
-		long imgSize = Get.getFileSize(url);
+		long imgSize = Client.getFileSize(url);
 		
 		if (imgSize < (1024 * 100)) {
 			sendRedirect(url);// 发送重定向
@@ -220,24 +219,24 @@ out = pageContext.pushBody();
 			){
 				String height = request.getParameter("h"), width = request.getParameter("w");
 				
-				if (height != null && width != null) {
-					BufferedImage bufImg = Img.setResize(ImageIO.read(is), Integer.parseInt(height), Integer.parseInt(width));
-					ImageIO.write(bufImg, imgType, op);
-				} else if (height != null) {
-					Image img = ImageIO.read(is);// 将输入流转换为图片对象
-					int[] size = Img.resize(img, Integer.parseInt(height), 0);
-					
-					BufferedImage bufImg = Img.setResize(img, size[0], size[1]);
-					ImageIO.write(bufImg, imgType, op);
-				} else if (width != null) {
-					Image img = ImageIO.read(is);// 将输入流转换为图片对象
-					int[] size = Img.resize(img, 0, Integer.parseInt(width));
-					
-					BufferedImage bufImg = Img.setResize(img, size[0], size[1]);
-					ImageIO.write(bufImg, imgType, op);
-				} else {
-					FileUtil.write(is, op, true);// 直接写浏览器
-				} 
+//				if (height != null && width != null) {
+//					BufferedImage bufImg = ImageUtil.setResize(ImageIO.read(is), Integer.parseInt(height), Integer.parseInt(width));
+//					ImageIO.write(bufImg, imgType, op);
+//				} else if (height != null) {
+//					Image img = ImageIO.read(is);// 将输入流转换为图片对象
+//					int[] size = Img.resize(img, Integer.parseInt(height), 0);
+//					
+//					BufferedImage bufImg = Img.setResize(img, size[0], size[1]);
+//					ImageIO.write(bufImg, imgType, op);
+//				} else if (width != null) {
+//					Image img = ImageIO.read(is);// 将输入流转换为图片对象
+//					int[] size = Img.resize(img, 0, Integer.parseInt(width));
+//					
+//					BufferedImage bufImg = Img.setResize(img, size[0], size[1]);
+//					ImageIO.write(bufImg, imgType, op);
+//				} else {
+//					FileUtil.write(is, op, true);// 直接写浏览器
+//				} 
 			}  
 		}
 	}
