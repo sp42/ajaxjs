@@ -28,7 +28,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.io.StreamUtil;
 
 public class Client extends Connection<Client> {
@@ -286,16 +285,16 @@ public class Client extends Connection<Client> {
 					continue;
 
 				File file = new File(value);
-				String filename = file.getName(), contentType = FileUtil.getMime(file);
+				String filename = file.getName();
+//				String contentType = FileUtil.getMime(file);
 
 //				String str = String.format(DIV, BOUNDARY, name, filename) + "Content-Type:" + contentType + "\r\n\r\n";
 				StringBuffer strBuf = new StringBuffer();  
                 strBuf.append("\r\n").append("--").append(BOUNDARY).append("\r\n");  
                 strBuf.append("Content-Disposition: form-data; name=\"" + "ddd" + "\"; filename=\"" + filename + "\"\r\n");  
-//                strBuf.append("Content-Type:" + contentType + "\r\n\r\n");  
-				//
-				// out.write(strBuf.toString().getBytes());
-				//
+//              strBuf.append("Content-Type:" + contentType + "\r\n\r\n");  
+//			    out.write(strBuf.toString().getBytes());
+				
                 concat(data, strBuf.toString().getBytes());
 				
                 System.out.println(strBuf.toString());
