@@ -3,10 +3,10 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ajaxjs-data-mybatis-libs"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ajaxjs-data-validation-libs"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/mockito"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/shiro"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ajaxjs-base-mybatis-libs"/>
 	<classpathentry kind="lib" path="lib/javax-servlet.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ajaxjs-base-validation-libs"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/shiro-libs"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/mockito"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
