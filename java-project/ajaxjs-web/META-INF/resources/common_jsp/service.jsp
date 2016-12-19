@@ -35,10 +35,6 @@
 		
 		out.println("没有 action 参数！");
 	
-	} else if ("under_construction_img".equals(action)) {// 网站构建中图片
-	
-		out.println("<img style=\"width:60%;max-width: 400px;margin: 0 auto;margin-top:50px;display: block;\" src=\"\" />");
-	
 	} else if ("htmleditor_iframe".equals(action)) {	 // 网站构建中图片
 		
 		String html = htmleditor_iframe;

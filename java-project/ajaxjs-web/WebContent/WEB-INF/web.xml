@@ -31,14 +31,43 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
-	<!-- Service.jsp -->
-	<servlet>
-	  <servlet-name>common_service</servlet-name>
-	  <jsp-file>/service.jsp</jsp-file>
-	</servlet>
+	<!-- 404 页面不存在错误 -->
+	<error-page>
+		<error-code>404</error-code>
+		<location>/common_jsp/error.jsp</location>
+	</error-page>
+	<!-- // -->
 	
-	<servlet-mapping>
-	  <servlet-name>common_service</servlet-name>
-	  <url-pattern>/common_service/</url-pattern>
+	<!-- 500 服务器内部错误 -->
+	<error-page>
+		<error-code>500</error-code>
+		<location>/common_jsp/error.jsp</location>
+	</error-page>
+	<!-- // -->
+	
+	<!-- JSP 页面编码 -->
+	<jsp-config>
+		<jsp-property-group>
+			<url-pattern>*.jsp</url-pattern>
+			<page-encoding>UTF-8</page-encoding>
+			<trim-directive-whitespaces>true</trim-directive-whitespaces>
+		</jsp-property-group>
+	</jsp-config>
+	<!-- // -->
+    
+	<!--servlet 监听器 start -->
+	<listener>
+		<listener-class>com.ajaxjs.app.ConfigListener</listener-class>
+	</listener>
+	
+	<!--工具类接口，为了不外显 jsp -->
+	<servlet>  
+        <servlet-name>public_service</servlet-name>  
+        <jsp-file>/common_jsp/service.jsp</jsp-file>  
+	</servlet>  
+	
+	<servlet-mapping>  
+	        <servlet-name>public_service</servlet-name>  
+	        <url-pattern>/public_service/*</url-pattern>  
 	</servlet-mapping>
 </web-app>

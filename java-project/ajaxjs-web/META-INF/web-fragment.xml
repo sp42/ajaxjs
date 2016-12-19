@@ -33,4 +33,15 @@
 	<listener>
 		<listener-class>com.ajaxjs.app.ConfigListener</listener-class>
 	</listener>
+	
+	<!--工具类接口，为了不外显 jsp -->
+	<servlet>  
+        <servlet-name>public_service</servlet-name>  
+        <jsp-file>/common_jsp/service.jsp</jsp-file>  
+	</servlet>  
+	
+	<servlet-mapping>  
+	        <servlet-name>public_service</servlet-name>  
+	        <url-pattern>/public_service/*</url-pattern>  
+	</servlet-mapping>
 </web-fragment>
