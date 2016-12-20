@@ -25,7 +25,10 @@ import javax.servlet.http.HttpServletRequest;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.json.JSON;
+import com.ajaxjs.util.json.Rhino;
 import com.ajaxjs.web.Requester;
+
+import sun.org.mozilla.javascript.internal.NativeArray;
 
 /**
  * 请求远程的 JSON 接口基类
@@ -155,7 +158,6 @@ public abstract class RemoteJsonData implements RemoteData {
 		return map;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public ListResult getList(String url, Map<String, String> params) {
 		ListResult result = new ListResult(); // 不要这个对象 null，让 result.results 可以
@@ -163,14 +165,14 @@ public abstract class RemoteJsonData implements RemoteData {
 		Map<String, Object> response = RemoteJsonData.getRemoteJSON_Object(getApiUrl(url, params));
 
 		if (response != null && response.get(getTotalToken()) != null) {
-			result.total = (Integer) response.get(getTotalToken());
+			result.total = JSON.double2int((Double) response.get(getTotalToken()));
 
 			if (result.total <= 0) {
 				LOGGER.warning("存在总数字段，但为 0，查询结果为零，返回 null");
 			} else if (response.get(getResultToken()) == null) {
 				LOGGER.warning("记录记录数：{0}。但没有数据列表返回！！！", result.total);
 			} else {
-				result.results = (Map<String, Object>[]) response.get(getResultToken());
+				result.results = Rhino.NativeArray2MapArray((NativeArray)response.get(getResultToken()));
 			}
 		} else {
 			if (response == null)

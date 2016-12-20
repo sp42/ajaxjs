@@ -21,6 +21,7 @@ import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -87,30 +88,35 @@ public class Stream  extends HttpServletResponseWrapper{
 		}
 		
 		if(url.startsWith("http://")) { // 远程网络资源
-			Request req = new Request();
-			req.setUrl(url);
-			final RequestClient rc = new RequestClient(req);
-			
-			req.setCallback(new Request.Callback() {
-				@Override
-				public void onDataLoad(InputStream is) {
-					try {
-						FileUtil.write(is, out, true);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}// 直接写浏览器
-				}
-			});
-
-			try {
-				rc.connect();
-			} catch (ConnectException e) {
-				System.err.println(e);
-				return false;
-			}
+//			Request req = new Request();
+//			req.setUrl(url);
+//			final RequestClient rc = new RequestClient(req);
+//			
+//			req.setCallback(new Request.Callback() {
+//				@Override
+//				public void onDataLoad(InputStream is) {
+//					try {
+//						FileUtil.write(is, out, true);
+//					} catch (IOException e) {
+//						e.printStackTrace();
+//					}// 直接写浏览器
+//				}
+//			});
+//
+//			try {
+//				rc.connect();
+//			} catch (ConnectException e) {
+//				System.err.println(e);
+//				return false;
+//			}
 		} else { 
 			// 文件在服务器的磁盘上，读取目标文件，通过 response 将目标文件写到浏览器
-			new StreamUtil().setIn(new FileInputStream(url)).setOut(out).write(true).close();
+			try {
+				new StreamUtil().setIn(new FileInputStream(url)).setOut(out).write(true).close();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		try {
