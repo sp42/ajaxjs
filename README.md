@@ -21,7 +21,5 @@ base 与特定 jvm 环境脱离，可运行在 web、swing、android 环境中�
    
     1.  web 主要针对 Web 常见的工序提供了自己的逻辑和实现，例如通过 HttpServletRequestWrapper 扩展了 Request 对象。
     2.  view 视图模块，提供一个简单的、基于 JSP/JSTL 的扩展标签。
-    3.  net，继续提供更多的网络模块，包括文件上传器、JSON API 的 DTO 实现、FTP 简易客户端和邮件发送器 mail（无须依赖 JavaMail）。
+    3.  net 网络模块，包括文件上传器、JSON API 的 DTO 实现、FTP 简易客户端和邮件发送器 mail（无须依赖 JavaMail）。
     4.  secutiy 将来提供安全模块（TODO）
-
-上述提供的 JAR 包里面已经包含源码和文档了，无须额外附加。源码分别在不同的项目之中，项目是标准的Eclipse EE结构，导入即可。
