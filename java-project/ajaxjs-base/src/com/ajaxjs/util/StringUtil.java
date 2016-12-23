@@ -28,10 +28,11 @@ import com.ajaxjs.util.map.MapHelper;
 
 /**
  * 字符串相关的工具类
+ * 
  * @author frank
  *
  */
-public class StringUtil {	
+public class StringUtil {
 	/**
 	 * 是否空字符串
 	 * 
@@ -40,14 +41,13 @@ public class StringUtil {
 	 * @return true 表示为为空字符串，否则不为空
 	 */
 	public static boolean isEmptyString(String str) {
-		if (str == null || str.isEmpty() || str.length() == 0
-				|| str.trim().isEmpty() || "".equals(str)
+		if (str == null || str.isEmpty() || str.length() == 0 || str.trim().isEmpty() || "".equals(str)
 				|| "".equals(str.trim()))
 			return true;
 
 		return false;
 	}
-	
+
 	/**
 	 * 如果字符串为 null 返回空字符串，否则为字符串本身
 	 * 
@@ -58,7 +58,7 @@ public class StringUtil {
 	public static String emptyStringIfNull(String str) {
 		return str == null ? "" : str;
 	}
-	
+
 	/**
 	 * Java String 有 split 却没有 join，这里实现一个
 	 * 
@@ -69,18 +69,21 @@ public class StringUtil {
 	 * @return 连接后的字符串
 	 */
 	public static String stringJoin(String[] arr, String join) {
-		if(!Util.isNotNull(arr)) return null;
-		
+		if (!Util.isNotNull(arr))
+			return null;
+
 		StringBuilder sb = new StringBuilder();
-		
+
 		for (int i = 0; i < arr.length; i++) {
-			if (i == (arr.length - 1))sb.append(arr[i]);
-			else sb.append(arr[i]).append(join);
+			if (i == (arr.length - 1))
+				sb.append(arr[i]);
+			else
+				sb.append(arr[i]).append(join);
 		}
 
 		return new String(sb);
 	}
-	
+
 	/**
 	 * Java String 有 split 却没有 join，这里实现一个
 	 * 
@@ -91,10 +94,11 @@ public class StringUtil {
 	 * @return 连接后的字符串
 	 */
 	public static String stringJoin(List<String> arr, String join) {
-		if(!Util.isNotNull(arr))return null;
+		if (!Util.isNotNull(arr))
+			return null;
 		return stringJoin(arr.toArray(new String[arr.size()]), join);
 	}
-	
+
 	/**
 	 * 也是 join，不过输入的参数不是数组而是 hash
 	 * 
@@ -107,7 +111,7 @@ public class StringUtil {
 	public static String HashJoin(Map<String, String> map, String div) {
 		return MapHelper.join(map, div);
 	}
-	
+
 	/**
 	 * 重载版本
 	 * 
@@ -120,7 +124,7 @@ public class StringUtil {
 	public static String HashJoin(Map<String, String> map, char div) {
 		return MapHelper.join(map, div + "");
 	}
-	
+
 	/**
 	 * 重复字符串 str repeat 次并以 div 分隔
 	 * 
@@ -135,14 +139,15 @@ public class StringUtil {
 	public static String repeatStr(String str, String div, int repeat) {
 		StringBuilder s = new StringBuilder();
 		int i = 0;
-		while(i++ < repeat){
+		while (i++ < repeat) {
 			s.append(str);
-			if(i != repeat) s.append(div);
+			if (i != repeat)
+				s.append(div);
 		}
-		
+
 		return s.toString();
 	}
-	
+
 	/**
 	 * 输入 a，看是否包含另一个字符串 b，忽略大小写。
 	 * 
@@ -155,7 +160,7 @@ public class StringUtil {
 	public static boolean containsIgnoreCase(String a, String b) {
 		return a.toLowerCase().contains(b.toLowerCase());
 	}
-	
+
 	/**
 	 * 将 URL 编码的字符还原，默认 UTF-8 编码
 	 * 
@@ -171,13 +176,14 @@ public class StringUtil {
 			return null;
 		}
 	}
-	
+
 	/**
-	 * 将 URL 编码的字符还原，默认 UTF-8 编码
+	 * 将字符进行 URL 编码，默认 UTF-8 编码
 	 * 
 	 * @param str
-	 *            已 URL 编码的字符串
-	 * @return 正常的 Java 字符串
+	 *            正常的 Java 字符串
+	 * 
+	 * @return 已 URL 编码的字符串
 	 */
 	public static String urlEncode(String str) {
 		try {
@@ -187,7 +193,7 @@ public class StringUtil {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * 字节转为 UTF-8 字符串
 	 * 
@@ -196,9 +202,9 @@ public class StringUtil {
 	 * @return UTF-8 字符串
 	 */
 	public static String byte2String(byte[] bytes) {
-		return new String(bytes, StandardCharsets.UTF_8);		
+		return new String(bytes, StandardCharsets.UTF_8);
 	}
-	
+
 	/**
 	 * 字节转为 UTF-8 字符串
 	 * 
@@ -209,7 +215,7 @@ public class StringUtil {
 	public static String byte2String(String str) {
 		return byte2String(str.getBytes());
 	}
-	
+
 	/**
 	 * url 网址中文乱码处理
 	 * 
@@ -220,7 +226,7 @@ public class StringUtil {
 	public static String urlChinese(String str) {
 		return byte2String(str.getBytes(StandardCharsets.ISO_8859_1));
 	}
-	
+
 	/**
 	 * 使用正则的快捷方式
 	 * 
@@ -257,15 +263,15 @@ public class StringUtil {
 				"<([^>]*)(?:lang|LANG|class|CLASS|style|STYLE|size|SIZE|face|FACE|[ovwxpOVWXP]:\\w+)=(?:'[^']*'|\"\"[^\"\"]*\"\"|[^>]+)([^>]*)>",
 				"<$1$2>");
 		// 删除<STYLE TYPE="text/css"></STYLE>及之间的内容
-	
+
 		int styleBegin = content.indexOf("<STYLE");
 		int styleEnd = content.indexOf("</STYLE>") + 8;
 		String style = content.substring(styleBegin, styleEnd);
 		content = content.replace(style, "");
-	
+
 		return content;
 	}
-	
+
 	/**
 	 * unicode 编码
 	 * 
@@ -276,7 +282,7 @@ public class StringUtil {
 	public static String encodeUnicode(String str) {
 		char[] chars = str.toCharArray();
 		StringBuilder sb = new StringBuilder();
-		
+
 		for (int i = 0; i < chars.length; i++) {
 			String hex = Integer.toHexString(chars[i]);
 			if (hex.length() <= 2) {
@@ -284,7 +290,7 @@ public class StringUtil {
 			}
 			sb.append("\\u" + hex);
 		}
-		
+
 		return sb.toString();
 	}
 
@@ -298,7 +304,7 @@ public class StringUtil {
 	public static String decodeUnicode(String str) {
 		int start = 0, end = 0;
 		StringBuilder buffer = new StringBuilder();
-		
+
 		while (start > -1) {
 			end = str.indexOf("\\u", start + 2);
 			String charStr = "";
@@ -311,10 +317,10 @@ public class StringUtil {
 			buffer.append(new Character(letter).toString());
 			start = end;
 		}
-		
+
 		return buffer.toString();
 	}
-	
+
 	/**
 	 * unicode 解码（版本二）
 	 * 
@@ -326,7 +332,7 @@ public class StringUtil {
 		char aChar;
 		int len = str.length();
 		StringBuilder outBuffer = new StringBuilder(len);
-		
+
 		for (int x = 0; x < len;) {
 			aChar = str.charAt(x++);
 			if (aChar == '\\') {
@@ -337,36 +343,36 @@ public class StringUtil {
 					for (int i = 0; i < 4; i++) {
 						aChar = str.charAt(x++);
 						switch (aChar) {
-							case '0':
-							case '1':
-							case '2':
-							case '3':
-							case '4':
-							case '5':
-							case '6':
-							case '7':
-							case '8':
-							case '9':
-								value = (value << 4) + aChar - '0';
-								break;
-							case 'a':
-							case 'b':
-							case 'c':
-							case 'd':
-							case 'e':
-							case 'f':
-								value = (value << 4) + 10 + aChar - 'a';
-								break;
-							case 'A':
-							case 'B':
-							case 'C':
-							case 'D':
-							case 'E':
-							case 'F':
-								value = (value << 4) + 10 + aChar - 'A';
-								break;
-							default:
-								throw new IllegalArgumentException("Malformed \\uxxxx encoding.");
+						case '0':
+						case '1':
+						case '2':
+						case '3':
+						case '4':
+						case '5':
+						case '6':
+						case '7':
+						case '8':
+						case '9':
+							value = (value << 4) + aChar - '0';
+							break;
+						case 'a':
+						case 'b':
+						case 'c':
+						case 'd':
+						case 'e':
+						case 'f':
+							value = (value << 4) + 10 + aChar - 'a';
+							break;
+						case 'A':
+						case 'B':
+						case 'C':
+						case 'D':
+						case 'E':
+						case 'F':
+							value = (value << 4) + 10 + aChar - 'A';
+							break;
+						default:
+							throw new IllegalArgumentException("Malformed \\uxxxx encoding.");
 						}
 					}
 					outBuffer.append((char) value);
@@ -387,7 +393,7 @@ public class StringUtil {
 		}
 
 		return outBuffer.toString();
-	}   
+	}
 
 	private static int by2int(int b) {
 		return b & 0xff;
@@ -395,6 +401,7 @@ public class StringUtil {
 
 	/**
 	 * 过滤utf8 特殊字符的方式处理如●■★
+	 * 
 	 * @param buf
 	 * @return
 	 */
@@ -423,8 +430,8 @@ public class StringUtil {
 			}
 		}
 		return sb.toString();
-	} 
-	
+	}
+
 	public byte[] gbk2utf8(String chenese) {
 		char c[] = chenese.toCharArray();
 		byte[] fullByte = new byte[3 * c.length];
@@ -470,13 +477,13 @@ public class StringUtil {
 	 */
 	public static String toChinese(String value) {
 		byte[] bytes = null;
-	
+
 		try {
 			bytes = value.getBytes("ISO8859_1");
 		} catch (UnsupportedEncodingException e) {
 			return null;
 		}
-	
+
 		return bytes != null ? byte2String(bytes) : null;
 	}
 }
