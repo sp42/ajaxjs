@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <title>IDE</title>
+    <link rel="stylesheet" type="text/css" href="../common.css">
+    <script src="http://bigfoot.ajaxjs.com/bigfoot/public/run_prettify.js"></script>
+  </head>
+  <body>
+    <p> </p>
+    无论步骤如何精简，如果让新手去手动配置的话，那将必容易望而却步。所以特提供<a href="demo.zip">懒人包下载</a>（其实就是一个标 准的
+    Java Web 项目）。
+    <p class="tips">提示：如果你想把项目名称 demo 改为你覺得有意义的名称，可以修改&nbsp;Eclipse
+      项目配置文件，都是文本的，包括有 /..project&nbsp;&nbsp; 和
+      /.settings/org.eclipse.wst.common.component，将里面的 demo&nbsp;统统替换掉就可以了。</p>
+    <h4>设置 Eclipse</h4>
+    <h5>新建项目</h5>
+    <p><br>
+    </p>
+    <br>
+    <p> 然后在当前项目下执行下面 ant 脚本，创建 Web 项目的默认的目录。</p>
+    <p> </p>
+    <pre class="prettyprint">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/2002/xmlspec/dtd/2.10/xmlspec.dtd"&gt;
+&lt;project basedir="WebContent" name="HelloAnt"&gt;
+	&lt;mkdir dir="bigfoot" description="js folder" /&gt;  
+	&lt;mkdir dir="WEB-INF/src" /&gt;  
+	&lt;mkdir dir="WEB-INF/tags" /&gt;  
+	&lt;mkdir dir="WEB-INF/jsp" /&gt;  
+	&lt;mkdir dir="asset/bigfoot" /&gt;  
+	&lt;mkdir dir="asset/less" /&gt;  
+	&lt;mkdir dir="asset/css" /&gt;  
+	&lt;mkdir dir="asset/images" /&gt;  
+	&lt;mkdir dir="images" /&gt;  
+&lt;/project&gt;</pre>
+    <p><img alt="" src="2.png"></p>
+    <p>这样形成 WebContent 目录如下。</p>
+    <pre>    WebContent/<br>
+    　　┗ asset/                         ----&gt;静态资源<br>
+    　　　　┗ css/                       ----&gt;CSS<br>
+    　　　　┗ images/                    ----&gt;UI 图片、ICON 图标<br>
+    　　　　┗ less/                      ----&gt;less.js 预编译源码<br>
+    　　　　┗ bigfoot/                   ----&gt;H5 框架公共库 <br>
+    　　┗ images/                        ----&gt;图片附件 <br>
+    　　┗ META-INF/                      ----&gt;浏览器不可见的目录，配置保存的目录&nbsp; <br>
+    　　　　┗ logger/                    ----&gt;日志<br>
+    　　┗ WEB-INF/                       ----&gt;浏览器不可见的目录 <br>
+    　　　　┗ src/                       ----&gt;Java 源码目录<br>
+    　　　　┗ lib/                       ----&gt;JAR 包目录<br>
+    　　　　┗ jsp/                       ----&gt;JSP 模板<br>
+    　　　　┗ tags/                      ----&gt;JAR 包目录<br>
+    </pre>
+    <p>关于目录的使用，声明如下。</p>
+    <ul>
+      <li>不主张把整个项目文件夹 svn/git 共享，而是 WebContent 即可。因此需要将源码目录 src 手动设置为 【Build
+        Path】-&gt;【Use as Source Folder】。</li>
+      <li>WEB-INF/lib 下为 JAR 包目录。因为使用 User Library 的缘故，开发期间该目录多半为空。</li>
+      <li>Eclipse 的 link 功能十分强大，AJAXJS 的开发环境中多次使用。如下图关联源码。也可以通过按着 ctrl
+        键鼠标拖拽某一文件夹选择 link 方式。</li>
+    </ul>
+    <p> </p>
+    <h4>User Library</h4>
+    <p>点击 【Windows】--&gt;【Perferences】，选择【Java】的【User
+      Libraries】，然后点击【Import】导入我们提供的配置文件：\jar\my_user_library.userlibraries，这样
+      Eclipse 就有了用户库。</p>
+    <p><img alt="" src="3.png"></p>
+    <p>然后要让项目从 UserLibrary 中引入 JAR 包。右击左边【Project Exploer】项目名称，出现菜单选择【Build
+      Path】--&gt;【Configure Build Path...】,出现如下界面。</p>
+    <p><img src="4.png"></p>
+    <p>点击【Add Library...】，选择 【User Library】--&gt;【Next】，把之前所有库都选上。</p>
+    <table style="width: 100%" border="0">
+      <tbody>
+        <tr>
+          <td><img src="5.png"><br>
+          </td>
+          <td><img alt="" src="6.png"><br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>这还没有完，因为 WebappClassLoader 加载器专门负责加载 webapps 下面各个 web 项目的 WEB-INF
+      下的类库。而我们通过 User LLibrary 引入的 JAR 包自然不会被 WebappClassLoader 加载器加载，所以必然会报
+      ClassNotFoundException 。右击左边【Project
+      Exploer】项目名称，出现菜单选择【Properties】--&gt;【Deployment
+      Assembly】,点击【Add...】，选择【Jav Build Path Entries】。然后多选那些库（提示：可按着 ctrl 键多选）。</p>
+    <img src="7.png"><br>
+    <p>最后完成！你可以看到 JAR 包已经分门别类地引入到项目中。</p>
+    <p><img src="8.png"></p>
+    <p> </p>
+    <h4>关联 Java 代码</h4>
+    <p>右击左边【Project Exploer】项目名称，出现菜单选择【Build Path】--&gt;【Configure Build
+      Path...】,选择第一个【Source】面板，点击【Link Source...】</p>
+    <img alt="a" src="http://img.blog.csdn.net/20141220171010124"><br>
+    <p>接着是前端 ui 库的关联。按着 ctrl 键同时鼠标拖拽 /ui 目录到项目 /asset 下，松开出现下面对话框。</p>
+    <p><img src="10.png"></p>
+    重命名为 bigfoot。<br>
+    <p><img src="11.png"></p>
+    <p> 如法炮制，关联 jsp 模板为 WEB-INF/jsp/common 目录，关联 tag 标签为 WEB-INF/jsp/public 目录。</p>
+  </body>
+</html>
