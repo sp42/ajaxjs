@@ -91,7 +91,7 @@
 				text-stroke:5px rgba(0,0,0, .15);
 				list-style-type: disc;
 				margin-left: 30px;
-				font-size:.9rem;
+				font-size:.8rem;
 				letter-spacing:2px;
 				margin-bottom:6px;
 			}
@@ -151,7 +151,7 @@
       		@media screen and (max-width:480px){
 				/*手机端浏览器所显示的网页CSS*/
 				.body{
-					max-width:320px;
+					max-width:330px;
 				}
 				nav.body {
 					margin-top: 10px;
@@ -220,10 +220,10 @@
       <h1>AJAXJS Web Framework</h1>
       <ul>
         <li style="border-bottom-color:#ffed20;"><a href="#">简 介</a></li>
+        <li style="border-bottom-color:#2096ff;"><a href="http://ajaxjs.mydoc.io/">手 册</a></li>
         <li style="border-bottom-color:#ff8820;"><a href="http://bigfoot.ajaxjs.com/bigfoot/demo/msgbox.jsp">前端演示</a></li>
-        <li style="border-bottom-color:#2096ff;"><a href="http://framework.ajaxjs.com/framework/docs/docs.html">手 册</a></li>
         <li style="border-bottom-color:#c720ff;"><a href="http://blog.csdn.net/zhangxin09">博 客</a></li>
-        <li style="border-bottom-color:#ff0024;"><a href="http://bigfoot.ajaxjs.com/bigfoot/">旧版本</a></li>
+        <li style="border-bottom-color:#ff0024;"><a href="javadoc">文 档</a></li>
       </ul>
     </nav>
     <div class="green">
@@ -231,8 +231,8 @@
         <div class="left">
           <h2 style="margin-top:6%;margin-bottom:2%;">AJAXJS Web Framework</h2>
           <h2 style="margin-bottom:5%;margin-left:35%;">Java 快速开发框架</h2>
-          <p style="color:#fffbac;"> AJAXJS Web 是一款基于 Java 平台原创的 Web 框架，继承了 Java
-            平台的高效、安全、稳定、跨平台等诸多优势， 但却摒弃了传统 SSH 企业级架构所带来的庞大和臃肿，非常适合互联网中小型网站的应用。</p>
+          <p style="color:#fffbac;"> AJAXJS Web 是一款基于 Java 平台的开源 Web 框架，继承了 Java
+            平台的高效、安全、稳定、跨平台等诸多优势， 但却摒弃了传统企业级架构所带来的庞大和臃肿，强调轻量级，非常适合互联网小型网站的快速应用。</p>
           <div style="text-align:center;color:#fffbac;font-weight:normal;letter-spacing:2px;">
             <br>
             <img src="images/index_06.jpg"> <br>
@@ -243,14 +243,10 @@
         <div class="right">
           <div class="points" style="margin-bottom:10px;width:95%;"> <br>
             <ul>
-              <li>一体化全栈式方案，提供完整的前后端解决方案，包括原创的前端库及基于主流选择的服务框架</li>
-              <li>服务端堆栈 Servlet3.0/Spring MVC、HTML5/<a href="http://blog.csdn.net/zhangxin09/article/details/4548609">JSP</a>、
-                <a href="http://blog.csdn.net/zhangxin09/article/details/7899525">JDBC</a>/<a
-
-                  href="http://blog.mybatis.org/">Mybatis</a>、MySQL/Sqlite +
-                Shiro权限、Node.js/Nashorn/Rhino </li>
-              <li>前端采取免 jQuery 依赖的原生 JS+预编译样式 Less.js 方案，并逐步向强类型的、真正组件化的
-                TypeScript/React 推进</li>
+              <li>参照 Spring MVC 风格的 Web 框架，功能简单但是 MVC 的核心功能基本具备了，很适合想了解 MVC 的学习者。尽量多提供源码注释和文档，包括单元测试</li>
+              <li>符合 RESTful 式 API，除了整合了 MyBatis、Shiro 外，基本没依赖其他重型三方库。优先考虑 JDK 原生 API。代码量少目标单一</li>
+              <li>泛型封装 Controller/Service/DAO/Model 提供快速增删改查服务，包含分页，查询条件，整合 Validator 后端验证</li>
+              <li>模块之间各执其责, 相互配合工作也相互独立，完全解藕，可根据需要自行设定选择</li>
             </ul>
             <br>
             <br>
@@ -261,22 +257,18 @@
     <ul class="body cols">
       <li style="border-right-color:#ff8820;">
         <h5><img src="images/icon_source.png">设计原则 Design Principles</h5>
-        <p>快速、高效，轻量级维护，提倡敏捷开发；遵循“够用就好、就地取材”原则，谨慎采用第三方库；提供完备的文档、充足的注释和大量单元测试。
-          AJAXJS 会一直免费、开源。</p>
+        <p>快速、高效，轻量级维护，提倡精益开发；遵循“够用就好、就地取材”原则，谨慎采用第三方库；不仅仅是服务端框架，还整合了前端库。得益于现代浏览器成熟 API 甚至没有用 jQuery</p>
       </li>
       <li style="border-right-color:#2096ff;">
-        <h5><img src="images/icon_inkboard.png"> 基础功能 Foundation</h5>
-        <p>实体快速 CRUD 并装配；前端基于 TypeScript+React 组件，提供 List/Carousel/Grid/Tree/HTMLEditor 等控件；响应式设计兼容 PC/H5App/微信公众号</p>
+        <h5><img src="images/icon_inkboard.png"> 依赖选型 Foundation</h5>
+        <p>表示层：JSP/Servlet/MVC/JSTL/Tag Files/Less.js；数据层：MySQL/SQLite/MyBatis/Shrio/Apache BVal/Tomcat JDBCPool；基础服务：Rhino/JavaUtilLogger</p>
       </li>
       <li style="border-right-color:#c720ff;">
         <h5><img src="images/icon_database.png">下载 &amp; 运行 Download</h5>
         <p>Win/OS X/CentOS，JRE 1.7+/Tomcat 7</p>
         <p><a href="http://git.oschina.net/sp42/ajaxjs">源码 Git/SVN</a> <a href="javadoc">JavaDoc 文档</a> <a href="http://framework.ajaxjs.com/framework/docs/docs.html">手册</a></p>
-        <p>QQ 群：3150067 <a href="http://blog.csdn.net/zhangxin09">作者博客</a> <a
-
-            href="http://bbs.ajaxjs.com">JS 堂</a>论坛</p>
-        <p><a href="http://bigfoot.ajaxjs.com/bigfoot/">旧版本</a> <span style="font-size:.7rem;">（基
-            于 Servlet 和 JSP 原生开发）</span> </p>
+        <p>QQ 群：3150067 <a href="http://blog.csdn.net/zhangxin09">作者博客</a>
+        <p>基于 Apache License Version 2.0 开源协议</p>
       </li>
     </ul>
     <footer>
