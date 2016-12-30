@@ -15,14 +15,13 @@
  */
 package com.ajaxjs.app;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import com.ajaxjs.net.IP;
 import com.ajaxjs.util.StringUtil;
 
 /**
@@ -34,21 +33,6 @@ public class LessUrlProcessor {
 	
 	// 默认 8080 端口
 	private final static String picPath = "http://%s:8080/%s/asset/";
-	
-	/**
-	 * 获取本机 IP
-	 * @return IP 地址
-	 */
-	public static String getLocalIp() {
-		String ip = null;
-		try {
-			ip = InetAddress.getLocalHost().getHostAddress();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-
-		return ip == null ? "localhost" : ip;
-	}
 
 	/**
 	 * 返回样式文件
@@ -61,7 +45,7 @@ public class LessUrlProcessor {
 		String css = null;
 		
 		if (isDebug) {// 设置参数
-			String ip = getLocalIp();
+			String ip = IP.getLocalIp();
 			Map<String, String> params = new HashMap<>();
 			params.put("lessFile", Mappath(cxt, lessPath));
 			params.put("ns", Mappath(cxt, lessPath.replaceAll("\\/[\\w\\.]*$", ""))); // 去掉文件名，保留路径，也就是文件夹名称
@@ -112,7 +96,7 @@ public class LessUrlProcessor {
 			params.put("MainDomain", "");
 			params.put("isdebug", "true");
 			
-			css = "http://" + getLocalIp() + "/lessService/?" + StringUtil.HashJoin(params, '&');
+			css = "http://" + IP.getLocalIp() + "/lessService/?" + StringUtil.HashJoin(params, '&');
 		} else {
 			css = request.getContextPath() + lessPath.replace("/less", "/css").replace(".less", ".css");
 		}
