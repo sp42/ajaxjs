@@ -26,6 +26,7 @@ import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.json.JSON;
 import com.ajaxjs.util.json.Rhino;
+import com.ajaxjs.util.map.MapHelper;
 import com.ajaxjs.web.Requester;
 
 import sun.org.mozilla.javascript.internal.NativeArray;
@@ -96,7 +97,21 @@ public abstract class RemoteJsonData implements RemoteData {
 
 		if (!StringUtil.isEmptyString(json)) {
 			List<Map<String, Object>> list = JSON.getList(json);
-			return list.toArray(new Map[list.size()]);
+			
+			Map<String, Object>[] maps = new HashMap[list.size()];
+			
+			for(int i = 0; i < list.size(); i++) {
+				Map<String, Object> map =  MapHelper.toRealMap(list.get(i));
+				
+				if(map.get("id") != null && map.get("id") instanceof Double) { // id 自动类型转换 double2int
+					map.put("id", JSON.double2int((Double)map.get("id")));
+				}
+				
+				maps[i] = map;
+			}
+			
+			return maps;
+//			return list.toArray(new Map[list.size()]);
 		} else {
 			LOGGER.warning("异常：读取远程接口，不能把返回的 JSON 转换为 Map[]！");
 			return null;
