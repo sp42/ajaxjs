@@ -16,9 +16,21 @@
 package com.ajaxjs.net;
 
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import javax.management.AttributeNotFoundException;
+import javax.management.MBeanServer;
+import javax.management.MalformedObjectNameException;
+import javax.management.ObjectName;
+import javax.management.Query;
 
 import com.ajaxjs.util.io.StreamUtil;
 import com.sun.net.httpserver.HttpExchange;
@@ -149,5 +161,80 @@ public class IP {
 
 			httpExchange.close();
 		}
+	}
+	
+	/**
+	 * 模拟ping ping("192.168.0.113");
+	 * 
+	 * @param ip
+	 */
+	public static boolean ping(String ip) {
+		try {
+			InetAddress address = InetAddress.getByName(ip);
+			return address.isReachable(5000); // 设定超时时间，返回结果表示是否连上
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * 模拟 telnet telnet("192.168.0.201", 8899);
+	 * 
+	 * @param ip
+	 * @param port
+	 */
+	public static void telnet(String ip, int port) {
+		Socket server = null;
+
+		try {
+			server = new Socket();
+			InetSocketAddress address = new InetSocketAddress(ip, port);
+			server.connect(address, 5000);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (server != null)
+				try {
+					server.close();
+				} catch (IOException e) {}
+		}
+	}
+	
+	/**
+	 * linux 没有 localhost 要在host文件中加入 127.0.0.1 localhost 
+	 * @return
+	 * @throws MalformedObjectNameException
+	 * @throws NullPointerException
+	 * @throws UnknownHostException
+	 * @throws AttributeNotFoundException
+	 * @throws InstanceNotFoundException
+	 * @throws MBeanException
+	 * @throws ReflectionException
+	 */
+	public static List<String> getEndPoints() throws Exception {
+		ArrayList<String> endPoints = new ArrayList<>();
+		
+		MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+		Set<ObjectName> objs = mbs.queryNames(new ObjectName("*:type=Connector,*"), Query.match(Query.attr("protocol"), Query.value("HTTP/1.1")));
+		InetAddress[] addresses = InetAddress.getAllByName(InetAddress.getLocalHost().getHostName());
+		
+		for (Iterator<ObjectName> i = objs.iterator(); i.hasNext();) {
+			ObjectName obj = i.next();
+			String  scheme = mbs.getAttribute(obj, "scheme").toString(),
+					port = obj.getKeyProperty("port");
+			
+//			if("80".equals(port))isDebug = false; // 如果发现 tomcata 有提供 80 端口，那么表示是 正式环境
+			for (InetAddress addr : addresses){
+				endPoints.add(scheme + "://" + addr.getHostAddress() + ":" + port);
+			}
+		}
+		
+		return endPoints;
 	}
 }
