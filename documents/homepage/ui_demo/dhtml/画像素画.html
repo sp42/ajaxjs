@@ -1,0 +1,274 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>像素画</title>
+<style>
+* {
+ margin:0;
+ padding:0;
+}
+.wrap {
+ margin:0 auto;
+ width:750px;
+ border:1px solid #000;
+}
+.side {
+ width:750px;
+ height:60px;
+ line-height:60px;
+ border-bottom:1px solid #000;
+}
+#main {
+ width:750px;
+ height:auto;
+ text-align:center;
+}
+#colorBar {
+ margin-left:40px;
+ border:1px solid #000;
+ background-color:#F00;
+}
+#iTable,#tb {
+ border-collapse:collapse;
+ margin-bottom:40px;
+}
+#iTable { border:1px solid #999; }
+#tb td {
+ border:1px solid #000;
+ width:8px; height:8px;
+ overflow:hidden;}
+#iTable td {
+ border:1px solid #999;
+ width:12px; height:12px;
+ overflow:hidden;
+}
+
+#box { margin:42px auto 0; text-align:left; }
+.input1 {
+ padding:5px;
+ width:68px; height:31px;
+ text-align:center;
+}
+#HashInfo {
+ width:60%; height:60px;
+ font-size:12px;
+}
+</style>
+</head>
+
+<body >
+
+
+<div class="wrap">
+ <div class="side">
+     <input type="text" id="colorBar"/>
+        <input type="button" class="input1" value="隐藏边框" id="done" />
+        <input type="button" class="input1" value="重新开始" id="clear" />
+        <input type="button" class="input1" value="放大" id="bigger" />
+        <input type="button" class="input1" value="缩小" id="smaller" />
+        <select onchange="iconTable.numChange(this.value)">
+         <option value="16">16 * 16</option>
+         <option value="22" selected="selected">22 * 22</option>
+         <option value="32">32 * 32</option>
+         <option value="50">50 * 50</option>
+        </select>
+        <input type="button" class="input1" value="颜色信息" id="ColorInfo" />
+    </div>
+ <div id="main"><p style="font-size:12px; text-align:left; width:80%; margin:0 auto;">说明:先点击调色板选取需要的颜色,然后您可点击表格设置颜色,或按CTRL键通过移动鼠标在画板上继续设置颜色.点击"颜色信息"按钮可获取已设置过的颜色值,并可在"还原图案"按钮里进行还原</p>
+     <div id="box">
+         
+        </div>
+        <textarea id="HashInfo"></textarea><br /><input type="button" class="input1" value="还原图案" id="SubmitColor" />
+    </div>
+</div>
+
+ 
+
+
+</body>
+</html>
+<script type="text/javascript">
+function $(x){return document.getElementById(x);}
+function getPagePos(el){
+ var x=y=0;
+ while(el){ x+=el.offsetLeft; y+=el.offsetTop; el=el.offsetParent;}
+ return {x:x,y:y}
+}
+
+var colorPanel = function(){
+ var tb, c, s = "" , cp = "ColorPanel";
+ var colors = "00,33,66,99,cc,ff".split(",");
+ return {
+  el : null,
+  setColor : function(el){
+   var o = $(el);
+   o.onfocus = function(){
+    colorPanel.el = o;
+    if(!tb){
+     tb = document.createElement("div");
+     tb.id = "ColorPanel";
+     for(var x=0; x<6; x++){
+      s += '<tr>';
+      for(var y=0; y<6; y++){
+       for(var z=0; z<6; z++){
+        c = colors[x] + colors[y] + colors[z];
+        s += '<td style="background:#'+ c +'" color="#'+ c +'" ></td>'
+       }
+      }
+      s += '</tr>';
+     }
+     tb.innerHTML = "<table id='tb'>" + s + "</table>";
+     document.body.appendChild(tb);
+     tb.style.position = "absolute";
+     colorPanel.setPos(tb,o);
+     var td = tb.getElementsByTagName("td");
+     for(var i=0;i<td.length;i++){
+      td[i].onclick = function(){
+       colorPanel.hide();
+       iconTable.setColor( this.getAttribute("color") );
+      }
+      td[i].onmouseover = function(){ colorPanel.showColor(this);}
+     }
+    }
+    else{
+     $(cp).style.display = "block";
+     colorPanel.setPos(tb,o);
+    }
+    
+   }
+   
+  },
+  showColor : function(el){
+   colorPanel.el.style.backgroundColor = el.getAttribute("color");
+   $("colorBar").value = el.getAttribute("color");
+  },
+  
+  hide : function(){ $(cp).style.display = "none"; },
+  
+  setPos : function(tb,el){ //设置调色板位置
+   tb.style.left = getPagePos(el).x + "px";
+   tb.style.top  = getPagePos(el).y + el.offsetHeight + 1 + "px";
+  }
+ }
+}()
+
+//画板表格
+var iconTable = {
+ curColor : "#FF0000",//当前颜色值
+ box : $("box"), //画板表格的容器
+ border : "none",
+ l : 22, //格子数 l * l
+ wh_default : 12,//格子初始宽高度,
+ wh : 12, //格子宽高度,
+ MaxWH : 16,
+ MinWH : 4,
+ ColorHash : null,
+ init : function(l){ //利用数组拼接表格字符
+   this.l = l || 22;
+   var l = this.l;
+   var aT = ["<table id='iTable'>"];
+   for(var x=0,t=this.l; x<t; x++){
+    aT.push("<tr>");
+    for(var y=0,y1=this.l; y<y1; y++){
+     aT.push("<td></td>");
+    }
+    aT.push("</tr>");
+   }
+   aT.push("</table>");
+   //将字符写到容器里
+   this.box.innerHTML = aT.join("");
+   this.resetPos();
+   iconTable.border = "none";
+   $("done").value = "隐藏边框";
+   iconTable.wh = iconTable.wh_default ;
+   var td = $("iTable").getElementsByTagName("td");
+   
+   this.ColorHash = new Array(l*l);
+   //遍历第一个表格,并注册事件
+   for(var i=0,l=td.length; i<l; i++){
+    (function(k){
+     td[k].onclick = function(){
+      this.style.backgroundColor = iconTable.curColor;
+      iconTable.ColorHash[k] = iconTable.curColor;
+     }
+     td[k].onmouseover = function(e){
+      var e = e || window.event;
+      if(e.ctrlKey ){
+       this.style.backgroundColor = iconTable.curColor;
+       iconTable.ColorHash[k] = iconTable.curColor;
+      }
+     }
+        })(i);
+    
+   }
+ },
+ //设置当前颜色
+ setColor : function(x){ this.curColor = x; },
+ 
+ removeBorder : function(){
+  var td = $("iTable").getElementsByTagName("td");
+  var b = iconTable.border;
+  for(var i=0,l=td.length; i<l; i++){
+   td[i].style.border = b;
+  }
+  iconTable.border = (iconTable.border == "none")?"1px solid #999": "none";
+  $("done").value = (iconTable.border == "none")?"隐藏边框":"显示边框";
+ },
+ 
+ clear : function(){
+  var td = $("iTable").getElementsByTagName("td");
+  for(var i=0,l=td.length; i<l; i++){
+   td[i].style.backgroundColor = "#fff";
+  }
+ },
+ 
+ resetPos : function(){
+  var w = $("iTable").offsetWidth;
+  var bW = $("main").offsetWidth;
+  var l = (bW-w) / 2;
+  $("box").style.marginLeft = l + "px";
+  
+ },
+ 
+ sizeChange : function(pos){
+  var pos = pos || 1;
+  var td = $("iTable").getElementsByTagName("td");
+  var tmp = this.wh + ( 1 * pos );
+  if( tmp <= this.MaxWH && tmp >= this.MinWH ){ this.wh = tmp; }
+  for(var i=0,l=td.length; i<l; i++){
+   td[i].style.height = td[i].style.width = this.wh + "px";
+  }
+  iconTable.resetPos();
+ },
+ 
+ numChange : function(l){
+  $("iTable").parentNode.removeChild( $("iTable") ); 
+  iconTable.init(l);
+  iconTable.resetPos();
+ },
+ 
+ showHash : function(){
+  $("HashInfo").value = iconTable.ColorHash ;
+ },
+ 
+ submitColor : function(v){
+  var td = $("iTable").getElementsByTagName("td");
+  var arr = iconTable.ColorHash = v.split(",");
+  for(var i=0,l=td.length; i<l; i++){
+   td[i].style.backgroundColor = arr[i];
+  }
+ }
+ 
+}  
+
+iconTable.init();
+colorPanel.setColor("colorBar");
+
+$("done").onclick = function(){ iconTable.removeBorder(); }
+$("clear").onclick = function(){ iconTable.clear(); }
+$("bigger").onclick = function(){ iconTable.sizeChange(1); }
+$("smaller").onclick = function(){ iconTable.sizeChange(-1); }
+$("ColorInfo").onclick = function(){ iconTable.showHash(); }
+$("SubmitColor").onclick = function(){ iconTable.submitColor($("HashInfo").value);}
+</script>

@@ -1,0 +1,68 @@
+<html>  
+<head>  
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+	<title>上下滚动内容</title>  
+</head>  
+<body>  
+	<ul id="scroll">  
+		<li>11111111111</li>  
+		<li>22222222222</li>  
+		<li>33333333333</li>  
+		<li>44444444444</li>  
+		<li>55555555555</li>  
+		<li>66666666666</li>  
+		<li>77777777777</li>  
+		<li>88888888888</li>  
+		<li>99999999999</li>  
+		<li>00000000000</li>  
+	</ul>  
+	  
+	  
+	<ol id="scrollA">  
+		<li>11111111111</li>  
+		<li>22222222222</li>  
+		<li>33333333333</li>  
+		<li>44444444444</li>  
+		<li>55555555555</li>  
+		<li>66666666666</li>  
+		<li>77777777777</li>  
+		<li>88888888888</li>  
+		<li>99999999999</li>  
+		<li>00000000000</li>  
+	</ol>  
+	
+	<script>
+		/**
+		 * @param {Element} el 列表元素
+		 * @param {Number} interval 动画时间间隔
+		 * @param {Boolean} canstop 是否可以鼠标移入时候暂停动画
+		 */
+		function ScrollContent(el, interval, canstop) {
+			interval = interval || 3000;
+			canstop  = canstop  || false;
+
+			function scroll() {
+				var lastEl = el.firstChild;
+				while (lastEl.nodeType != 1)  // 找到最后一个元素
+					lastEl = lastEl.nextSibling;
+				
+				el.appendChild(el.removeChild(lastEl)); // 把最后一个元素放到前头
+			}
+
+			var t = window.setInterval(scroll, interval);
+
+			if (canstop) {
+				el.onmouseover = function() {
+					if (t) window.clearInterval(t);
+				}
+				el.onmouseout = function() {
+					t = window.setInterval(scroll, interval);
+				}
+			}
+		}
+		
+		new ScrollContent(document.getElementById('scroll'), 1000);
+		new ScrollContent(document.getElementById('scrollA'), 500, true);
+	</script>
+</body>  
+</html> 
