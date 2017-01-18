@@ -2,10 +2,10 @@
 <nav>
 	<ul>
 		<li>
-			<a href="../index.htm" title="返回首页">&#8962;</a>
+			<a href="../" title="返回首页">&#8962;</a>
 		</li>
 		<li>
-			<a href="#">DHTML</a>
+			<a href="javascript:;">DHTML</a>
 			<menu>
 				<div>DHTML，即动态 HTML，为常见的页面效果。</div>
 				<ul>
@@ -31,7 +31,7 @@
 			</menu>
 		</li>
 		<li>
-			<a href="#">切换类</a>
+			<a href="javascript:;">切换类</a>
 			<menu>
 				<div>切换类多数为滚动内容的控件</div>
 				<ul>
@@ -51,7 +51,7 @@
 			</menu>
 		</li>
 		<li>
-			<a href="#">列表类</a>
+			<a href="javascript:;">列表类</a>
 			<menu>
 				<div>手机端、PC端适用</div>
 				<ul>
@@ -76,7 +76,7 @@
 				</ul>
 			</menu></li>
 		<li>
-			<a href="#">其他</a>
+			<a href="javascript:;">其他</a>
 			<menu>
 				<div>指日历、HTML 编辑器这类控件</div>
 				<ul>
