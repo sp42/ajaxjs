@@ -15,11 +15,7 @@
  */
 package com.ajaxjs.web;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -31,21 +27,17 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-import javax.imageio.ImageIO;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
 import com.ajaxjs.net.http.Client;
-import com.ajaxjs.net.http.ConnectException;
 import com.ajaxjs.net.http.Request;
 import com.ajaxjs.util.io.FileUtil;
-import com.ajaxjs.util.io.ImageUtil;
 import com.ajaxjs.util.io.StreamUtil;
 
 /**
@@ -88,37 +80,22 @@ public class Stream  extends HttpServletResponseWrapper{
 		}
 		
 		if(url.startsWith("http://")) { // 远程网络资源
-//			Request req = new Request();
-//			req.setUrl(url);
-//			final RequestClient rc = new RequestClient(req);
-//			
-//			req.setCallback(new Request.Callback() {
-//				@Override
-//				public void onDataLoad(InputStream is) {
-//					try {
-//						FileUtil.write(is, out, true);
-//					} catch (IOException e) {
-//						e.printStackTrace();
-//					}// 直接写浏览器
-//				}
-//			});
-//
-//			try {
-//				rc.connect();
-//			} catch (ConnectException e) {
-//				System.err.println(e);
-//				return false;
-//			}
+			new Client(url).setCallback(new Request.Callback<Client>(){
+				@Override
+				public void onDataLoad(InputStream is) {
+					new StreamUtil().setIn(is).setOut(out).write(true);// 直接写浏览器
+				}
+			});
 		} else { 
 			// 文件在服务器的磁盘上，读取目标文件，通过 response 将目标文件写到浏览器
 			try {
-				new StreamUtil().setIn(new FileInputStream(url)).setOut(out).write(true).close();
+				new StreamUtil().setIn(new FileInputStream(url)).setOut(out).write(true);
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-
+		
+		// out 不需要自动关闭，在这里关闭
 		try {
 			// jsp 需要加上下面代码,运行时才不会出现 java.lang.IllegalStateException: getOutputStream() has already been called ..........等异常
 			// out.clear();
@@ -225,24 +202,24 @@ out = pageContext.pushBody();
 			){
 				String height = request.getParameter("h"), width = request.getParameter("w");
 				
-//				if (height != null && width != null) {
+				if (height != null && width != null) {
 //					BufferedImage bufImg = ImageUtil.setResize(ImageIO.read(is), Integer.parseInt(height), Integer.parseInt(width));
 //					ImageIO.write(bufImg, imgType, op);
-//				} else if (height != null) {
+				} else if (height != null) {
 //					Image img = ImageIO.read(is);// 将输入流转换为图片对象
 //					int[] size = Img.resize(img, Integer.parseInt(height), 0);
 //					
 //					BufferedImage bufImg = Img.setResize(img, size[0], size[1]);
 //					ImageIO.write(bufImg, imgType, op);
-//				} else if (width != null) {
+				} else if (width != null) {
 //					Image img = ImageIO.read(is);// 将输入流转换为图片对象
 //					int[] size = Img.resize(img, 0, Integer.parseInt(width));
 //					
 //					BufferedImage bufImg = Img.setResize(img, size[0], size[1]);
 //					ImageIO.write(bufImg, imgType, op);
-//				} else {
+				} else {
 //					FileUtil.write(is, op, true);// 直接写浏览器
-//				} 
+				} 
 			}  
 		}
 	}
