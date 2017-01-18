@@ -28,5 +28,5 @@
 	
 	<img style="width:60%;max-width: 400px;margin: 0 auto;margin-top:50px;display: block;" src="asset/images/under_construction.jpg" />
 	<img src="service.jsp?action=under_construction" />
-</body>
+</body>ß
 </html>
