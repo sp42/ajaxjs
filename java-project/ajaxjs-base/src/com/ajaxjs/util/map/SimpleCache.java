@@ -14,7 +14,7 @@ public final class SimpleCache<K, V> {
 
 	/**
 	 * 
-	 * @param maxCapacity 加载因子，加载因子是一个比例，当HashMap的数据大小>=容量*加载因子时，HashMap会将容量扩容
+	 * @param maxCapacity 加载因子，加载因子是一个比例，当 HashMap 的数据大小>=容量*加载因子时，HashMap 会将容量扩容
 	 */
 	public SimpleCache(int maxCapacity) {
 		this.maxCapacity = maxCapacity;
