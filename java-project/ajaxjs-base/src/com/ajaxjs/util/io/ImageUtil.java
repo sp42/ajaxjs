@@ -15,7 +15,6 @@
  */
 package com.ajaxjs.util.io;
 
-import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Font;
@@ -30,6 +29,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Iterator;
 
 import javax.imageio.ImageIO;
@@ -363,47 +363,29 @@ public class ImageUtil extends FileUtil {
 		this.format = format;
 	}
 	
-    /**
-	 * 打开URL对应的网页并保存为图片
-	 * 程序运行时用户不能有其它操作，否则可能保存错误截屏。 这里假设加载一个网页时间最长为8秒.
-	 * @param svaefile
+	/**
+	 * 打开URL对应的网页并保存为图片。程序运行时用户不能有其它操作，否则可能保存错误截屏。 这里假设加载一个网页时间最长为8秒.
+	 * 
+	 * @param url
+	 *            传入的 url，例如 http://www.csdn.net
+	 * @return
 	 */
-	public static void webscreenCut(String svaefile) {
-		if (!Desktop.isDesktopSupported()) {
-			System.err.println("Desktop is not supported (fatal)");
-			return;
-		}
-
+	public static BufferedImage webscreenCut(String url) {
 		Desktop desktop = Desktop.getDesktop();
-		if (!desktop.isSupported(Desktop.Action.BROWSE)) {
-			System.err.println("Desktop doesn't support the browse action (fatal)");
-			return;
+
+		if (!Desktop.isDesktopSupported() || !desktop.isSupported(Desktop.Action.BROWSE)) {
+			System.err.println("Desktop is not supported (fatal)");
+			return null;
 		}
 
 		try {
-			desktop.browse(URI.create("http://www.csdn.net"));
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
-		
-		try {
+			desktop.browse(URI.create(url));
 			Thread.sleep(8000); // 8 seconds is enough to load the any page.
-		} catch (InterruptedException e) {
+			// Rectangle rectangle = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize() );
+			return new Robot().createScreenCapture(new Rectangle(300, 90, 1000, 720));
+		} catch (Exception e) {
 			e.printStackTrace();
-			return;
-		} 
-		
-		// Rectangle rectangle = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize() );
-		BufferedImage image = null;
-		
-		try {
-			image = new Robot().createScreenCapture(new Rectangle(300, 90, 1000, 720));
-		} catch (AWTException e) {
-			e.printStackTrace();
-			return;
+			return null;
 		}
-		
-//		if(image != null) Image.saveImgfile(svaefile, image, "jpg");
 	}
 }
