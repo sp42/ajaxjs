@@ -186,7 +186,7 @@ public class Helper {
 	 *            回调方法签名如： Object doIt(ResultSet resultset) throws SQLException;
 	 * @return 其实是回调返回的结果，为任意类型，由回调决定
 	 */
-	public Object queryWithCallback(Connection conn, String sql, Callback cb) {
+	public static Object queryWithCallback(Connection conn, String sql, Callback cb) {
 		LOGGER.info("将要查询的 SQL 为:" + formatSql(sql));
 		Object obj = null;
 
