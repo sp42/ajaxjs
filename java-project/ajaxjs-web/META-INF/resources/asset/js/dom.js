@@ -43,7 +43,7 @@ String.prototype.format = (function(){
 			for(var i = 0, j = arguments.length; i < j; i++)
 				str = str.replace(new RegExp('\\{' + i +'\\}', 'g'), arguments[i]);
 		}else{
-			//str = parseJS(str, arguments[0]);
+			str = parseJS(str, arguments[0]);
 			// 传入  obj 参数才可以 exe
 			for(var i in arguments[0])
 				str = str.replace(new RegExp('\\{' + i +'\\}', 'g'), arguments[0][i]); // 大小写敏感
@@ -376,36 +376,41 @@ function Step() {
 			xhr.open(method, url);
 		}else xhr.open(method, url + (params ? '?' + params : ''));
 		
-		xhr.onreadystatechange = function (event, cb, parseContentType){
-			if(this.readyState === 4 && this.status === 200) {				
+		cb.url = url; // 保存 url 以便记录请求路径，可用于调试
+
+		xhr.onreadystatechange = function(event, cb, parseContentType) {
+			if (this.readyState === 4 && this.status === 200) {
 				var data = null;
-				try{
+				try {
 					var responseText = this.responseText.trim();
-					if(!responseText)throw 'Server-side return EMPTY String!';
-					
-					switch(parseContentType){
-						case 'text':
-							data = this.responseText;
-							break;
-						case 'xml':
-							break;
-							data = this.responseXML;
-						case 'json':
-						default:
-							data = JSON.parse(responseText);
-					}
-				}catch(e){
-					alert('ajax error:\n' + e); // 提示用户 异常
+					if (!responseText)
+						throw 'Server-side return EMPTY String!';
+		
+				switch (parseContentType) {
+					case 'text':
+						data = this.responseText;
+						break;
+					case 'xml':
+						break;
+					data = this.responseXML;
+				case 'json':
+				default:
+					data = JSON.parse(responseText);
 				}
-				if(!cb)throw '你未提供回调函数';
+			} catch (e) {
+				alert('Ajax error:\n' + e + '\nThe url is:' + cb.url); // 提示用户 异常
+			}
+			if (!cb)
+				throw '你未提供回调函数';
 				cb(data, this);
 			}
 		}.delegate(null, cb, cfg && cfg.parseContentType);
 		
-		if(method == 'POST' || method == 'PUT'){
+
+		if (method == 'POST' || method == 'PUT') {
 			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			xhr.send(params);
-		}else{
+		} else {
 			xhr.send(null);
 		}
 	}
