@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="ajaxjs-es">
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/ajaxjs-web"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/ajaxjs-ssm"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/ajaxjs-base"/>
+        <wb-resource deploy-path="/" source-path="/WebContent/WEB-INF/lib"/>
+        <property name="java-output-path" value="/ajaxjs-es/build/classes"/>
+        <property name="context-root" value="ajaxjs-es"/>
+    </wb-module>
+</project-modules>
