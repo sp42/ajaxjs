@@ -1,0 +1,117 @@
+{
+    "video": {
+        "properties": {
+            "id": {
+                "type": "integer",
+                "index": "not_analyzed"
+            },
+            "name": {
+                "analyzer": "ik",
+                "type": "string"
+            },
+            "content": {
+            	"analyzer": "ik",
+            	"type": "string"
+            },
+            
+            "createDate": {
+            	"type": "date"
+            },
+            
+            "updateDate": {
+            	"type": "date"
+            },
+            
+            "isOnline": {
+            	"type": "boolean"
+            },
+            "intro": {
+            	"analyzer": "ik",
+            	"type": "string"
+            },
+            
+            "catalog": {
+            	"type": "integer",
+            	"index": "not_analyzed"
+            },
+            
+            "tags": {
+            	"type": "string",
+            	"index": "not_analyzed"
+            },
+            
+            "portalId": {
+            	"type": "integer",
+                "index": "not_analyzed"
+            },
+            
+            "year": {
+            	"type": "integer",
+            	"index": "not_analyzed"
+            },
+            
+            "area": {
+            	"type": "integer",
+            	"index": "not_analyzed"
+            },
+            
+            "language": {
+            	"type": "integer",
+            	"index": "not_analyzed"
+            },
+            
+            "keywords": {
+            	"type": "string",
+            	"index": "not_analyzed"
+            },
+            "sourceUrl": {
+            	"type": "string",
+            	"index": "no"
+            },
+            
+            "ownerUrl": {
+            	"type": "string",
+            	"index": "no"
+            },
+            
+            "duration": {
+            	"type": "integer",
+                "index": "not_analyzed"
+            },
+            
+            "playHit": {
+            	"type": "integer",
+            	"index": "not_analyzed"
+            },
+            
+            "publishDate": {
+            	"type": "date",
+            	"index": "not_analyzed"
+            },
+            
+            "metaData": {
+            	"type": "string",
+            	"analyzer": "ik",
+            	"index": "analyzed"
+            },
+            "misc": {
+            	"type": "string",
+            	"index": "no"
+            },
+            "isLiveSource": {
+            	"type": "boolean",
+            	"index": "no"
+            },
+            "portalId": {
+            	"type": "integer",
+            	"index": "not_analyzed"
+            },
+            "albumId": {
+            	"type": "integer",
+            	"index": "not_analyzed"
+            }
+            
+        }
+    }
+
+}
