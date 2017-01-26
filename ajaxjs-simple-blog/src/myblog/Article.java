@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.ajaxjs.framework.model.PageResult;
 import com.ajaxjs.jdbc.Helper;
 import com.ajaxjs.jdbc.SimplePager;
+import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.Util;
 
@@ -60,14 +61,14 @@ public class Article extends HttpServlet {
 					if (uri.contains("create")) {
 						// 创建
 						request.setAttribute("isCreate", true);
-						request.getRequestDispatcher("/WEB-INF/jsp/admin/edit.jsp").include(request, response);
+						request.getRequestDispatcher("/asset/jsp/admin/edit.jsp").include(request, response);
 					} else if (uri.contains("edit/")) {
 						// 编辑
 						request.setAttribute("isCreate", false);
 						String id = StringUtil.regMatch("\\d+$", uri);
 						Map<String, Object> info = Helper.queryMap(conn, "SELECT * FROM myblog WHERE id = " + id);
 						request.setAttribute("info", info);
-						request.getRequestDispatcher("/WEB-INF/jsp/admin/edit.jsp").include(request, response);
+						request.getRequestDispatcher("/asset/jsp/admin/edit.jsp").include(request, response);
 					} else {
 						String sql = Index.sql;
 						
@@ -97,7 +98,7 @@ public class Article extends HttpServlet {
 						PageResult<Map<String, Object>> pr = sp.getResult();
 
 						request.setAttribute("PageResult", pr);
-						request.getRequestDispatcher("/WEB-INF/jsp/admin/admin_table.jsp").include(request, response);
+						request.getRequestDispatcher("/asset/jsp/admin/admin_table.jsp").include(request, response);
 					}
 				}
 			}
@@ -148,7 +149,8 @@ public class Article extends HttpServlet {
 		action(request, response, new Action() {
 			@Override
 			public void doAction(HttpServletRequest request, HttpServletResponse response, Long id, Connection conn) throws Exception {
-				Map<String, Object> data = Utils.getPutRequestData(request);
+				Map<String, Object> data = new MvcRequest(request).getPutRequestData();
+				
 				try (PreparedStatement ps = conn.prepareStatement(updateSql);) {
 					ps.setString(1, data.get("name").toString());
 					ps.setString(2, data.get("content").toString());
@@ -205,7 +207,7 @@ public class Article extends HttpServlet {
 			e.printStackTrace();
 		}
 
-		request.getRequestDispatcher("/WEB-INF/jsp/admin/json-msg.jsp").include(request, response);
+		request.getRequestDispatcher("/asset/jsp/admin/json-msg.jsp").include(request, response);
 	}
 
 }

@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,8 +25,15 @@ import com.ajaxjs.jdbc.SimplePager;
 @WebServlet(urlPatterns = { "/index", "/detail" })
 public class Index extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	final static boolean isDebug = false;
 
-	public static String db_context_path = "jdbc/sqlite_mac";
+	public static String db_context_path = isDebug ? "jdbc/sqlite_mac" : "jdbc/sqlite_deploy";
+	
+	 @Override
+	 public void init(ServletConfig config) throws ServletException {
+		 config.getServletContext().setAttribute("isDebug", isDebug);
+	 }
 	
 	static String sql = "SELECT myblog.*, catalog.name AS catalogName FROM myblog INNER JOIN catalog ON myblog.catalog = catalog.id WHERE 1 = 1 ORDER BY createDate DESC";
 
@@ -58,7 +66,7 @@ public class Index extends HttpServlet {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		request.getRequestDispatcher("/WEB-INF/jsp/index.jsp").forward(request, response);
+		request.getRequestDispatcher("/asset/jsp/index.jsp").forward(request, response);
 	}
 	
 	/**

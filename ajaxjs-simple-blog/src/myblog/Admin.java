@@ -41,7 +41,7 @@ public class Admin extends HttpServlet {
 			if (action != null) {
 				switch (action) {
 				case "workbench":
-					request.getRequestDispatcher("/WEB-INF/jsp/admin/workbench.jsp").include(request, response);
+					request.getRequestDispatcher("/asset/jsp/admin/workbench.jsp").include(request, response);
 					break;
 				case "logout":
 					response.getWriter().append("已退出！");
@@ -50,7 +50,7 @@ public class Admin extends HttpServlet {
 					response.getWriter().append("无效 action！");
 				}
 			} else {
-				request.getRequestDispatcher("/WEB-INF/jsp/admin/index.jsp").include(request, response);
+				request.getRequestDispatcher("/asset/jsp/admin/index.jsp").include(request, response);
 			}
 		}
 	}
