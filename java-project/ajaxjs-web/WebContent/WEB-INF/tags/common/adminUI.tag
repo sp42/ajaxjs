@@ -1,18 +1,41 @@
-<%@tag pageEncoding="UTF-8" description="编辑器框架"%>
+<%@tag pageEncoding="UTF-8" description="公共的管理界面"%>	
 <%@taglib uri="/ajaxjs" prefix="c"%>
 <%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
-<%@taglib prefix="commonUI"  tagdir="/WEB-INF/tags/common/UI"%>
-
 <%@attribute name="type" type="String" required="true" description="该属性选择类型"%>
-<%@attribute name="hasCatalog" type="Boolean" required="fasle" description="是否需要分类"%>
-<%@attribute name="moreBtn"  required="false" fragment="true"  description="是否需要分类"%>
 
-<c:if test="${type=='main'}">
-	<!DOCTYPE html>
-	<html>
-		<commonTag:head lessFile="/asset/bigfoot/asset/less/pages.less" title="${isCreate ? '新建' : '编辑'}${uiName}" />
-	<body>
-		<commonUI:adminHeader maxWin="false" pageTitle="${isCreate ? '新建' : '编辑'}${uiName}►${not empty info.id ? '#': ''}${info.id}">
+<%-- 头部 --%>
+<c:if test="${type == 'header'}">
+	<%@attribute name="pageTitle" 	fragment="false" required="false" description="页面标题"%> 
+	<%@attribute name="maxWin" 		fragment="false" required="false" type="Boolean" description="是否需要'最大化窗体'"%> 
+		<header>
+			<div>
+				<div class="memberNav">
+					<jsp:doBody />
+					  
+				 	<c:if test="${not empty maxWin && maxWin == true}">
+				 	<a href="javascript:maxWin();" >最大化窗体</a> |
+				 	</c:if>
+				 	
+				 	<a href="#" target="_blank">新窗口打开</a>
+				</div>
+				<span>${pageTitle}</span>
+			</div>
+		</header>
+		<script>
+			function maxWin() {
+				var panel = document.querySelector('.panel');
+				if (panel) {
+					panel.style.width = '95%';
+				}
+			}
+		</script>
+</c:if>
+
+<%-- 编辑器框架 --%>
+<%@attribute name="hasCatalog" type="Boolean" required="fasle" description="是否需要分类"%>
+<%@attribute name="moreBtn"  required="false" fragment="true"  description="是否需要按钮"%>
+<c:if test="${type=='editor'}">
+		<commonTag:adminUI type="head" maxWin="false" pageTitle="${isCreate ? '新建' : '编辑'}${uiName}►${not empty info.id ? '#': ''}${info.id}">
 			<c:choose>
 				<c:when test="${isCreate}">
 				</c:when>
@@ -23,7 +46,7 @@
 			<c:if test="${hasCatalog || empty hasCatalog}">
 				<a href="${isCreate ? '' : '../'}list/do.do?start=0&limit=9">${uiName}列表</a> |  
 			</c:if>
-		</commonUI:adminHeader>
+		</commonTag:adminUI>
 	
 		<form class="form_style_2" action="${isCreate ? 'createAction.do' : id}" method="${isCreate ? 'POST' : 'PUT'}">
 			<jsp:doBody />
@@ -40,12 +63,12 @@
 				<div style="text-align:center;">
 					<jsp:invoke fragment="moreBtn" />
 						<button class="my-btn-3" style="width:15%;">
-							<img src="${pageContext.request.contextPath}/asset/bigfoot/skin/icon/save.gif" /> ${isCreate ? '新建' : '修改'}
+							<img src="${pageContext.request.contextPath}/asset/images/icon/save.gif" /> ${isCreate ? '新建' : '修改'}
 						</button> 
 						<button class="my-btn-3" style="width:10%;" onclick="this.up('form').reset();return false;">复 位</button> 
 					<c:if test="${!isCreate}">
 						<button class="my-btn-3" style="width:10%;" onclick="del();return false;">
-							<img src="${pageContext.request.contextPath}/asset/bigfoot/skin/icon/delete.gif" /> 删 除
+							<img src="${pageContext.request.contextPath}/asset/images/icon/delete.gif" /> 删 除
 						</button> 
 					</c:if>
 				</div> 

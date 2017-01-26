@@ -1,8 +1,8 @@
 <%@tag pageEncoding="UTF-8" description="页面小功能" import="java.util.HashMap"%>
-<%@ taglib uri="/ajaxjs" prefix="c"%>
+<%@taglib uri="/ajaxjs" prefix="c"%>
 <%@attribute name="type" type="String" required="true" description="哪一个模块"%>  
 <%
-	if("search".equals(type)){ // 搜索
+	if("search".equals(type)) { // 搜索
 %>
     <!-- 自定义 Baidu 搜索 -->
     <form id="globalSearch" class="globalSearch" method="GET" action="http://www.baidu.com/baidu" onsubmit="//return g(this);">
@@ -16,7 +16,7 @@
     <!-- // 自定义 Baidu 搜索 -->
  
 <%
-	}else if("share".equals(type)){
+	}else if("share".equals(type)) {
 		String title = "";
 		int serverPort = request.getServerPort();
 		String currentPage_url = request.getScheme() + "://" + request.getServerName();
