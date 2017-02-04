@@ -30,8 +30,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ajaxjs.web.security.in_out_filter.XSS_Filter_Request;
-import com.ajaxjs.web.security.in_out_filter.CLRF_Filter_Response;
+import com.ajaxjs.web.security.wrapper.CLRF_Response;
+import com.ajaxjs.web.security.wrapper.XSS_Request;
 
 /**
  * 读取配置，保存到 JVM 内存中（保存容器为静态 List）
@@ -63,13 +63,13 @@ public class ConfigLoader implements Filter {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 		
-		XSS_Filter_Request security =  new XSS_Filter_Request(httpRequest);
+		XSS_Request security =  new XSS_Request(httpRequest);
 		try {
 		} catch (SecurityException e) {
 			return;
 		}
 		
-		filterChain.doFilter(security, new CLRF_Filter_Response(httpResponse));
+		filterChain.doFilter(security, new CLRF_Response(httpResponse));
 	}
 
 	/**
