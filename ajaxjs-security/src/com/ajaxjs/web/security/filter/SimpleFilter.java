@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.ajaxjs.web.security.SecurityFilter;
 
 /**
- * 
+ * 比较简单的过滤器，只是针对于 Request
  * @author Frank
  *
  */
@@ -49,6 +49,7 @@ public class SimpleFilter implements SecurityFilter {
 	 *            待检查的字符串
 	 * @return true 表示为包含在白名单；false 表示为不包含在白名单
 	 */
+	@Override
 	public boolean isInWhiteList(String str) {
 		return isInList(str, whiteList);
 	}
@@ -62,6 +63,7 @@ public class SimpleFilter implements SecurityFilter {
 	 *            待检查的字符串
 	 * @return true 表示为包含在黑名单；false 表示为不包含在黑名单
 	 */
+	@Override
 	public boolean isInBlackList(String str) {
 		boolean isIn = isInList(str, blackList);
 		if (!isIn) {

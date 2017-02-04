@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 禁止非法 POST 请求。 只允许 post 提交的 url 列表，需要配置 onlyPostUrlList 参数
  * 
- * @author xinzhang
+ * @author Frank
  *
  */
 public class PostFilter extends SimpleFilter {

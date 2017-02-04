@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 利用来路 Referer 请求头阻止"盗链"。true 表示为同域
  * 
- * @author frank
+ * @author Frank
  *
  */
 public class RefererFilter extends SimpleFilter {
