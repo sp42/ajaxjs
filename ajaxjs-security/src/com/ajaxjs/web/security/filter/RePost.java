@@ -38,13 +38,13 @@ public class RePost {
 	 *            键
 	 * @return
 	 */
-	public boolean isRedo(String key) {
-		Object obj = getSession().getAttribute(key);
-		if (obj == null) {
-			return true;
-		} else {
-			getSession().removeAttribute(key);
-			return false;
-		}
-	}
+//	public boolean isRedo(String key) {
+//		Object obj = getSession().getAttribute(key);
+//		if (obj == null) {
+//			return true;
+//		} else {
+//			getSession().removeAttribute(key);
+//			return false;
+//		}
+//	}
 }

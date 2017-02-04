@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.shiro.crypto.AesCipherService;
 
 /**
  * session存储在cookie中
@@ -57,8 +56,8 @@ public class HttpSessionCookitStoreFilter implements Filter {
 			return;
 		}
 
-		AesCipherService aesCipherService = new AesCipherService();
-		aesCipherService.setKeySize(64); // 设置key长度
+//		AesCipherService aesCipherService = new AesCipherService();
+//		aesCipherService.setKeySize(64); // 设置key长度
 
 		for (Cookie cookie : cookies) {// 遍历 cookie
 			if (cookie.getName().equals(sessionCookieName)) {
@@ -73,7 +72,7 @@ public class HttpSessionCookitStoreFilter implements Filter {
 						if (param == null || param.length == 0 || param.length != 2) {
 							continue;
 						}
-						session.setAttribute(param[0], param[1]);
+//						session.setAttribute(param[0], param[1]);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -96,11 +95,11 @@ public class HttpSessionCookitStoreFilter implements Filter {
 			sb.append(name + sep + session.getAttribute(name) + sep2);
 		}
 
-		AesCipherService aesCipherService = new AesCipherService();
-		aesCipherService.setKeySize(64); // 设置key长度
-		String encrypt = aesCipherService.encrypt(sb.toString().getBytes(), key.getBytes()).toHex();
+//		AesCipherService aesCipherService = new AesCipherService();
+//		aesCipherService.setKeySize(64); // 设置key长度
+//		String encrypt = aesCipherService.encrypt(sb.toString().getBytes(), key.getBytes()).toHex();
 		
-		response.addCookie(new Cookie(sessionCookieName, encrypt));
+//		response.addCookie(new Cookie(sessionCookieName, encrypt));
 	}
 	
 	@Override
