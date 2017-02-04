@@ -25,7 +25,7 @@ import com.ajaxjs.web.security.ListControl;
  * @author Frank
  *
  */
-public class RefererFilter extends ListControl {
+public class RefererFilter extends ListControl implements SecurityFilter {
 	/**
 	 * 本站站名，应以 http 开头
 	 */
