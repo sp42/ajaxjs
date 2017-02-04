@@ -11,11 +11,7 @@ web安全框架,主要用servlet filter方式覆盖httpServletRequest和HttpServ
 
 3. 对Header的CLRF进行过滤；
 
-4. 对cookie大小和cookie的白名单进行验证；
-
  
-
-7. CSRF攻击 tokenID防御支持；
 
 8. SESSION通过加密存储到cookie支持；
 
@@ -47,7 +43,8 @@ web安全框架,主要用servlet filter方式覆盖httpServletRequest和HttpServ
 		</init-param>
 		<init-param>
 			<param-name>onlyPostUrlList</param-name>
-			<param-value>/d/sssecurity, /user/aaa/name*</param-value><!-- 支持正则匹配 -->
+			<!-- 支持正则匹配 -->
+			<param-value>/d/sssecurity, /user/aaa/name*</param-value>
 		</init-param>
 		<init-param>
 			<param-name>whitefilePostFixList</param-name>

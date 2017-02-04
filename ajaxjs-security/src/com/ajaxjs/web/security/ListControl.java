@@ -13,21 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.web.security.filter;
+package com.ajaxjs.web.security;
 
 import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.ajaxjs.web.security.SecurityFilter;
-
 /**
  * 比较简单的过滤器，只是针对于 Request
  * @author Frank
  *
  */
-public class SimpleFilter implements SecurityFilter {
+public class ListControl {
 	/**
 	 * 白名单
 	 * 
@@ -49,12 +47,11 @@ public class SimpleFilter implements SecurityFilter {
 	 *            待检查的字符串
 	 * @return true 表示为包含在白名单；false 表示为不包含在白名单
 	 */
-	@Override
 	public boolean isInWhiteList(String str) {
 		return isInList(str, whiteList);
 	}
 
-	private final static String msg = "地址 %s 已禁止 POST 请求！";
+	private final static String msg = "地址 %s 已列入黑名单！";
 
 	/**
 	 * 是否在黑名单列表中。黑名单会专门抛出异常，以便记录。
@@ -63,7 +60,6 @@ public class SimpleFilter implements SecurityFilter {
 	 *            待检查的字符串
 	 * @return true 表示为包含在黑名单；false 表示为不包含在黑名单
 	 */
-	@Override
 	public boolean isInBlackList(String str) {
 		boolean isIn = isInList(str, blackList);
 		if (!isIn) {
@@ -94,10 +90,5 @@ public class SimpleFilter implements SecurityFilter {
 
 	public static boolean isEmptyStr(String str) {
 		return null == str || str.isEmpty();
-	}
-
-	@Override
-	public boolean check(HttpServletRequest request) {
-		return false;
 	}
 }

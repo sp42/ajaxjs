@@ -1,4 +1,18 @@
-package com.ajaxjs.web.security;
+/**
+ * Copyright 2015 Frank Cheung
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */package com.ajaxjs.web.security;
 
 import java.io.IOException;
  
@@ -16,12 +30,15 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ajaxjs.web.security.in_out_filter.XSS_Filter_Request;
+import com.ajaxjs.web.security.in_out_filter.CLRF_Filter_Response;
+
 /**
- * 
- * @author weijian.zhongwj
+ * 读取配置，保存到 JVM 内存中（保存容器为静态 List）
+ * @author Frank
  *
  */
-public class SecurityFilter implements Filter {
+public class ConfigLoader implements Filter {
 	public static final List<Pattern> redirectLocationWhiteList = new ArrayList<>();
 	public static final List<String> whitefilePostFixList = new ArrayList<>();
 	public static final List<String> onlyPostUrlList = new ArrayList<>();
@@ -36,7 +53,6 @@ public class SecurityFilter implements Filter {
 	 */
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		// 初始化过滤器白名单
 		loadParams(filterConfig, "cookieWhiteList", 	 cookieWhiteList);
 		loadParams(filterConfig, "whitefilePostFixList", whitefilePostFixList);
 		loadParams(filterConfig, "onlyPostUrlList", 	 onlyPostUrlList);
@@ -47,15 +63,13 @@ public class SecurityFilter implements Filter {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 		
-		SecurityRequest security =  new SecurityRequest(httpRequest);
+		XSS_Filter_Request security =  new XSS_Filter_Request(httpRequest);
 		try {
-			security.formPostPermitCheck();
-			security.checkCsrfToken();
 		} catch (SecurityException e) {
 			return;
 		}
 		
-		filterChain.doFilter(security, new SecurityResponse(httpResponse));
+		filterChain.doFilter(security, new CLRF_Filter_Response(httpResponse));
 	}
 
 	/**
@@ -66,12 +80,12 @@ public class SecurityFilter implements Filter {
 	 * @param configName
 	 *            指定哪个的配置
 	 * @param list
-	 *            配置值要保存到列表
+	 *            配置值列表
 	 */
-	private void loadParams(FilterConfig filterConfig, String configName, List<String> list) {
+	private static void loadParams(FilterConfig filterConfig, String configName, List<String> list) {
 		String paramList = filterConfig.getInitParameter(configName);
 
-		if (paramList != null) {
+		if (paramList != null) { // 字符转换为 LIST
 			String[] arr = paramList.split(",");
 			list.addAll(Arrays.asList(arr));
 		}

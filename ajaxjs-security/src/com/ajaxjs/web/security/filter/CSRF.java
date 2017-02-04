@@ -21,13 +21,15 @@ import java.security.NoSuchAlgorithmException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.ajaxjs.web.security.ListControl;
+
 /**
  * 对 POST 表单提交进行 CSRF token 验证； 使用 getCsrfTokenId() 然后放入表单还有 session 中，key 名称必须为 csrf_ 开头。
  * 
  * @author Frank
  *
  */
-public class CSRF_Filter extends SimpleFilter {
+public class CSRF extends ListControl implements SecurityFilter {
 	private static final String CSRFTOKEN_PREFIX = "csrf_";
 
 	@Override

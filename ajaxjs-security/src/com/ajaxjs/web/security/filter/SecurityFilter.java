@@ -13,24 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.web.security;
+package com.ajaxjs.web.security.filter;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
- * 安全异常
- * 
- * @author frank
+ * 安全过滤器
+ * @author Frank
  *
  */
-public class SecurityException extends Exception {
-	private static final long serialVersionUID = 1L;
+public interface SecurityFilter {
 
 	/**
-	 * 创建一个安全异常对象。
+	 * 检查是否通过测试
 	 * 
-	 * @param message
-	 *            错误信息提示
+	 * @param request
+	 * @return true 表示为通过；false 不通过
 	 */
-	public SecurityException(String message) {
-		super(message);
-	}
+	public boolean check(HttpServletRequest request);
+	
+	public boolean isInWhiteList(String str);
+	
+	public boolean isInBlackList(String str);
 }

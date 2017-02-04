@@ -20,7 +20,7 @@ package com.ajaxjs.web.security.filter;
  * @author Frank
  *
  */
-public class RePostFilter {
+public class RePost {
 
 	/**
 	 * 一种表单重复提交处理方法 http://blog.csdn.net/5iasp/article/details/4268710 判断是否为重复提交

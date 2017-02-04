@@ -19,15 +19,17 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.ajaxjs.web.security.ListControl;
+
 /**
  * 禁止非法 POST 请求。 只允许 post 提交的 url 列表，需要配置 onlyPostUrlList 参数
  * 
  * @author Frank
  *
  */
-public class PostFilter extends SimpleFilter {
+public class Post extends ListControl implements SecurityFilter{
 
-	public PostFilter(List<String> whiteList, List<String> blackList) {
+	public Post(List<String> whiteList, List<String> blackList) {
 		this.whiteList = whiteList;
 		this.blackList = blackList;
 	}

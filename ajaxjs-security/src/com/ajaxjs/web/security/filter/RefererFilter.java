@@ -17,13 +17,15 @@ package com.ajaxjs.web.security.filter;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.ajaxjs.web.security.ListControl;
+
 /**
  * 利用来路 Referer 请求头阻止"盗链"。true 表示为同域
  * 
  * @author Frank
  *
  */
-public class RefererFilter extends SimpleFilter {
+public class RefererFilter extends ListControl {
 	/**
 	 * 本站站名，应以 http 开头
 	 */

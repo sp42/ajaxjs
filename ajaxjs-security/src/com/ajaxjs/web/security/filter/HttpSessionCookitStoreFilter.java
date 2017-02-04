@@ -24,6 +24,12 @@ import org.apache.shiro.crypto.AesCipherService;
  * 
  */
 public class HttpSessionCookitStoreFilter implements Filter {
+	
+	private static final String sessionCookieName = "tmp_app";
+
+	private static final char sep = (char) 1;
+	private static final char sep2 = (char) 2;
+	
 	public static String key;
 
 	@Override
@@ -53,9 +59,8 @@ public class HttpSessionCookitStoreFilter implements Filter {
 
 		AesCipherService aesCipherService = new AesCipherService();
 		aesCipherService.setKeySize(64); // 设置key长度
-		HttpSession session = request.getSession();
-		
-		for (Cookie cookie : cookies) {
+
+		for (Cookie cookie : cookies) {// 遍历 cookie
 			if (cookie.getName().equals(sessionCookieName)) {
 				try {
 					String value = aesCipherService.encrypt(cookie.getValue().getBytes(), key.getBytes()).toHex();
@@ -78,10 +83,8 @@ public class HttpSessionCookitStoreFilter implements Filter {
 	}
 
 	/**
-	 * 
-	 * @param request
-	 * @param response
-	 * @param key
+	 * 把 session 所有东西保存到 cookies
+	 * @param session
 	 */
 	private static void seriable(HttpServletRequest request, HttpServletResponse response, String key) {
 		StringBuilder sb = new StringBuilder();
@@ -99,11 +102,6 @@ public class HttpSessionCookitStoreFilter implements Filter {
 		
 		response.addCookie(new Cookie(sessionCookieName, encrypt));
 	}
-	
-	private static final String sessionCookieName = "tmp_app";
-
-	private static final char sep = (char) 1;
-	private static final char sep2 = (char) 2;
 	
 	@Override
 	public void destroy() {}
