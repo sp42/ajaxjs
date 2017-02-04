@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.web.security.in_out_filter;
+package com.ajaxjs.web.security.wrapper;
 
 import java.util.List;
 
@@ -29,21 +29,17 @@ import com.ajaxjs.web.security.ListControl;
  * @author Frank
  *
  */
-public class Cookie_Filter_Response extends HttpServletResponseWrapper {
+public class CookieResponse extends HttpServletResponseWrapper {
 	public ListControl delegate = new ListControl();
 
 	private static final int MAX_COOKIE_SIZE = 4 * 1024;
 
 	private int length = 0;
 
-	public Cookie_Filter_Response(HttpServletResponse response, List<String> whiteList) {
+	public CookieResponse(HttpServletResponse response, List<String> whiteList) {
 		super(response);
 		delegate.whiteList = whiteList;
 	}
-
-	// public Cookie_Filter_Response(HttpServletResponse response) {
-	// super(response);
-	// }
 
 	@Override
 	public void addCookie(Cookie cookie) {

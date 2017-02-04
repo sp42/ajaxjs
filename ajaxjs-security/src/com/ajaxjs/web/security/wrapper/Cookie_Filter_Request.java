@@ -22,7 +22,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-import com.ajaxjs.web.security.ListControl;
+import com.ajaxjs.web.security.SimpleFilter;
 
 /**
  * 
@@ -30,7 +30,7 @@ import com.ajaxjs.web.security.ListControl;
  *
  */
 public class Cookie_Filter_Request extends HttpServletRequestWrapper {
-	private ListControl delegate = new ListControl();
+	private SimpleFilter delegate = new SimpleFilter();
 
 	public Cookie_Filter_Request(HttpServletRequest request, List<String> whiteList) {
 		super(request);

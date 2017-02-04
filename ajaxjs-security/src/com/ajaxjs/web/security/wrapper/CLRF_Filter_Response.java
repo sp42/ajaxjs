@@ -25,32 +25,18 @@ import javax.servlet.http.HttpServletResponseWrapper;
  *
  */
 public class CLRF_Filter_Response extends HttpServletResponseWrapper {
+
 	public CLRF_Filter_Response(HttpServletResponse response) {
 		super(response);
 	}
 
 	@Override
 	public void addCookie(Cookie cookie) {
-		// 如果 cookie 名称包含 CLRF 则抛出异常；接着过滤 cookie 内容
-		String name = cookie.getName(), value = cookie.getValue();
-	
-		if (containCLRF(name))
-			throw new SecurityException("Cookie 名称不能包含 CLRF 字符，该 cookie 是 ：" + name);
-
-		// 重新创建 cookie
-		Cookie newCookie = new Cookie(name, filterCLRF(value));// 已经过滤好的 Cookie value
-		newCookie.setComment(cookie.getComment());
-	
-		if (cookie.getDomain() != null)
-			newCookie.setDomain(cookie.getDomain());
-	
-		newCookie.setHttpOnly(cookie.isHttpOnly());
-		newCookie.setMaxAge(cookie.getMaxAge());
-		newCookie.setPath(cookie.getPath());
-		newCookie.setSecure(cookie.getSecure());
-		newCookie.setVersion(cookie.getVersion());
-		
-		super.addCookie(newCookie);
+		try {
+			super.addCookie(checkCookie(cookie));
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -71,6 +57,45 @@ public class CLRF_Filter_Response extends HttpServletResponseWrapper {
 	@Override
 	public void setHeader(String name, String value) {
 		super.setHeader(filterCLRF(name), filterCLRF(value));
+	}
+
+//	@Override
+//	public void sendRedirect(String location) throws IOException {
+//		if (!checkRedirectValid(location)) {
+//			throw new RuntimeException("跳转地址 " + location + " 非法，因为不在白名单中。");
+//		}
+//		super.sendRedirect(location);
+//	}
+
+	
+	/**
+	 * 如果 cookie 名称包含 CLRF 则抛出异常；接着过滤 cookie 内容
+	 * @param inputCookie
+	 * @return
+	 */
+	private static Cookie checkCookie(Cookie inputCookie) {
+		if (inputCookie == null)
+			return null;
+	
+		String name = inputCookie.getName(), value = inputCookie.getValue();
+	
+		if (containCLRF(name))
+			throw new SecurityException("Cookie 名称不能包含 CLRF 字符，该 cookie 是 ：" + name);
+
+		// 重新创建 cookie
+		Cookie newCookie = new Cookie(name, filterCLRF(value));// 已经过滤好的 Cookie value
+		newCookie.setComment(inputCookie.getComment());
+	
+		if (inputCookie.getDomain() != null)
+			newCookie.setDomain(inputCookie.getDomain());
+	
+		newCookie.setHttpOnly(inputCookie.isHttpOnly());
+		newCookie.setMaxAge(inputCookie.getMaxAge());
+		newCookie.setPath(inputCookie.getPath());
+		newCookie.setSecure(inputCookie.getSecure());
+		newCookie.setVersion(inputCookie.getVersion());
+	
+		return newCookie;
 	}
 
 	/**

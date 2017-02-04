@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-import com.ajaxjs.web.security.ListControl;
+import com.ajaxjs.web.security.SimpleFilter;
 
 /**
  * 
@@ -108,7 +108,7 @@ public class XSS_Filter_Request extends HttpServletRequestWrapper {
 	 * @return
 	 */
 	public static String xssFilter(String input, String filterType) {
-		if (ListControl.isEmptyStr(input))
+		if (SimpleFilter.isEmptyStr(input))
 			return input;
 	
 		if (filterType == null || !XssFilterTypeEnum.checkValid(filterType))
@@ -164,7 +164,7 @@ public class XSS_Filter_Request extends HttpServletRequestWrapper {
 		 * @return
 		 */
 		public static boolean checkValid(String type) {
-			if (ListControl.isEmptyStr(type)) 
+			if (SimpleFilter.isEmptyStr(type)) 
 				return false;
 			
 			return ESCAPSE.getValue().equals(type) || NO.getValue().equals(type) || DELETE.getValue().equals(type);
