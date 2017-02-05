@@ -1,7 +1,3 @@
-package com.ajaxjs.web.security.wrapper;
-
-import java.io.IOException;
-import java.util.ArrayList;
 /**
  * Copyright 2015 Frank Cheung
  *
@@ -17,6 +13,10 @@ import java.util.ArrayList;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.ajaxjs.web.security.wrapper;
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -25,36 +25,31 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.Part;
 
-import com.ajaxjs.web.security.ConfigLoader;
 import com.ajaxjs.web.security.ListControl;
 
 /**
  * 文件上传安全过滤。上传文件后缀名符合白名单则允许上传。
+ * 
  * @author Frank
  *
  */
 public class UploadRequest extends HttpServletRequestWrapper {
-	public ListControl delegate = new ListControl();
-	
+	public static ListControl delegate = new ListControl();
+
 	public UploadRequest(HttpServletRequest request) {
 		super(request);
 	}
 
-	/**
-	 * 
-	 */
 	@Override
 	public Collection<Part> getParts() throws IOException, ServletException {
 		Collection<Part> parts = super.getParts();
 
-		if (parts == null || parts.isEmpty() || ConfigLoader.whitefilePostFixList == null
-				|| ConfigLoader.whitefilePostFixList.isEmpty()) {
+		if (delegate.whiteList == null || delegate.whiteList.isEmpty())
 			return parts;
-		}
 
 		List<Part> resParts = new ArrayList<>();
 		for (Part part : parts) {
-			for (String extension : ConfigLoader.whitefilePostFixList) {
+			for (String extension : delegate.whiteList) {
 				if (part.getName().toUpperCase().endsWith(extension))
 					resParts.add(part);
 
@@ -64,23 +59,19 @@ public class UploadRequest extends HttpServletRequestWrapper {
 		return resParts;
 	}
 
-	/**
-	 * 
-	 */
 	@Override
 	public Part getPart(String name) throws IOException, ServletException {
 		Part part = super.getPart(name);
 
-		if (ConfigLoader.whitefilePostFixList.isEmpty()) {
+		if (delegate.whiteList == null || delegate.whiteList.isEmpty())
 			return part;
-		}
 
 		// String value = part.getHeader("content-disposition");
 		// String filename = value.substring(value.lastIndexOf("=") + 2,
 		// value.length() - 1);
 		String filename = part.getName();
 
-		for (String extension : ConfigLoader.whitefilePostFixList) {
+		for (String extension : delegate.whiteList) {
 			if (filename.toUpperCase().endsWith(extension.toUpperCase()))
 				return part;
 		}

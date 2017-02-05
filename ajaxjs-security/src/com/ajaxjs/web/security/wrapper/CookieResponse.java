@@ -15,8 +15,6 @@
  */
 package com.ajaxjs.web.security.wrapper;
 
-import java.util.List;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
@@ -30,15 +28,14 @@ import com.ajaxjs.web.security.ListControl;
  *
  */
 public class CookieResponse extends HttpServletResponseWrapper {
-	public ListControl delegate = new ListControl();
+	public static ListControl delegate = new ListControl();
 
 	private static final int MAX_COOKIE_SIZE = 4 * 1024;
 
 	private int length = 0;
 
-	public CookieResponse(HttpServletResponse response, List<String> whiteList) {
+	public CookieResponse(HttpServletResponse response) {
 		super(response);
-		delegate.whiteList = whiteList;
 	}
 
 	@Override

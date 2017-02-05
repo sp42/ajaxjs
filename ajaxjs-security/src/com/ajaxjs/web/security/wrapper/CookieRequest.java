@@ -31,12 +31,10 @@ import com.ajaxjs.web.security.ListControl;
  *
  */
 public class CookieRequest extends HttpServletRequestWrapper {
-	private ListControl delegate = new ListControl();
+	public static ListControl delegate = new ListControl();
 
-	public CookieRequest(HttpServletRequest request, List<String> whiteList) {
+	public CookieRequest(HttpServletRequest request) {
 		super(request);
-
-		delegate.whiteList = whiteList;
 	}
 
 	@Override
@@ -53,10 +51,23 @@ public class CookieRequest extends HttpServletRequestWrapper {
 			// cookieList.add(cookie);
 			// }
 
-			if (delegate.isInWhiteList(cookie.getName())) 
+			if (delegate.isInWhiteList(cookie.getName())){
 				cookieList.add(cookie);
+				System.out.println("name:" +cookie.getName());
+			}
 		}
 
 		return cookieList.toArray(new Cookie[cookieList.size()]);
+	}
+
+	public String getCookieByName(String name) {
+		Cookie[] cookies = getCookies();
+		for (Cookie cookie : cookies) {
+			System.out.println(cookie.getName());
+			if (name.equals(cookie.getName())) {
+				return cookie.getValue();
+			}
+		}
+		return null;
 	}
 }
