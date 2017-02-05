@@ -15,48 +15,64 @@
 
 	<!-- 防御 -->
 	<filter>
-		<filter-name>HttpSessionCookitStoreFilter</filter-name>
-		<filter-class>com.ajaxjs.web.security.HttpSessionCookitStoreFilter</filter-class>
+		<filter-name>SecurityFilter</filter-name>
+		<filter-class>com.ajaxjs.web.security.ConfigLoader</filter-class>
+		
+		<!-- 是否启动 XSS 过滤 -->
 		<init-param>
-			<param-name>encryKey</param-name>
+			<param-name>enableXSSFilter</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		
+		<!-- 是否启动 CLRF 过滤 -->
+		<init-param>
+			<param-name>enableCLRF_Filter</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		
+		<!-- SESSION 通过加密存储到 cookie -->
+		<init-param>
+			<param-name>encryCookieKey</param-name>
 			<param-value>1234567887654321</param-value>
 		</init-param>
-	</filter>
-	<filter>
-		<filter-name>DefaultBaseSecurityFilter</filter-name>
-		<filter-class>com.ajaxjs.web.security.SecurityFilter</filter-class>
-		<init-param>
-			<param-name>securityFilterList</param-name>
-			<!-- ,com.ajaxjs.web.security.filter.CsrfTokenCkeckFilter -->
-			<param-value>com.ajaxjs.web.security.filter.CookieWhiteListFilter,com.ajaxjs.web.security.filter.FormPostPermitCheckFilter</param-value>
-		</init-param>
+		
+		<!-- Cookies 白名单机制验证和大小验证 -->
 		<init-param>
 			<param-name>cookieWhiteList</param-name>
 			<param-value>id,JESSIONID,name,clrf</param-value>
 		</init-param>
+		
+		<!-- 文件上传后缀白名单 过滤 -->
 		<init-param>
-			<param-name>onlyPostUrlList</param-name>
-			<param-value>/d/sssecurity, /user/aaa/name*</param-value><!-- 支持正则匹配 -->
-		</init-param>
-		<init-param>
-			<param-name>whitefilePostFixList</param-name>
+			<param-name>uploadfileWhiteList</param-name>
 			<param-value>jpg,png,doc,xls</param-value>
 		</init-param>
+	
+		<!-- CSRF 攻击 过滤 -->
 		<init-param>
-			<param-name>encryKey</param-name>
-			<param-value>1234567887654321</param-value>
+			<param-name>CSRF_Filter</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	
+		<!-- POST 白名单／黑名单机制验证（支持正则匹配） -->
+		<init-param>
+			<param-name>postWhiteList</param-name>
+			<param-value>/d/sssecurity, /user/aaa/name*</param-value>
 		</init-param>
 		<init-param>
-			<param-name>redirectWhiteList</param-name>
+			<param-name>postBlackList</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		
+		<!-- 配置 Security 异常发生后跳转 url 参数 -->
+		<init-param>
+			<param-name>redirectUrlt</param-name>
 			<param-value>http://localhost:8080/[0-9A-Za-z]*,http://www.taobao.com/[0-9A-Za-z]*</param-value>
 		</init-param>
 	</filter>
+	
 	<filter-mapping>
-		<filter-name>HttpSessionCookitStoreFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>DefaultBaseSecurityFilter</filter-name>
+		<filter-name>SecurityFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	<!-- // -->
