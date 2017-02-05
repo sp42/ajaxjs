@@ -66,8 +66,8 @@
 		
 		<!-- 配置 Security 异常发生后跳转 url 参数 -->
 		<init-param>
-			<param-name>redirectUrlt</param-name>
-			<param-value>http://localhost:8080/[0-9A-Za-z]*,http://www.taobao.com/[0-9A-Za-z]*</param-value>
+			<param-name>redirectUrl</param-name>
+			<param-value>/showErr.jsp?msg=</param-value>
 		</init-param>
 	</filter>
 	
