@@ -467,7 +467,8 @@ function Step() {
 //		var params = JSON.stringify(json);
 //		params = params.replace(/,/g, '&').replace(/:/g,'=').replace(/\{|}|"/g, '');
 		var params = [];
-		for(var i in json)params.push(i  + '=' + json[i]);
+		for(var i in json)
+			params.push(i  + '=' + json[i]);
 		
 		params = params.join('&');
 		
@@ -1026,26 +1027,31 @@ function openClient(el, downloadUrl){
 		}
 	}
 	
-	function serializeForm(formEl, isStringOutput, isIgnroEmpty /* 是否忽略空字符串的字段 */){
+	function serializeForm(formEl, isStringOutput, isIgnroEmpty /* 是否忽略空字符串的字段 */) {
 		var formData = {};
 		
-		eachChild4form(formEl, function(el){
-			var elType = el.type;
-			if(elType == "text" || elType == "hidden" || elType == "password" || elType == "textarea"){
-				formData[el.name] = getPrimitives(el.value);
-			}else if(elType == "radio" || elType == "checkbox"){
+		eachChild4form(formEl, function(el) {
+			var elType = el.type, key = el.name;
+			
+			if(elType == "text" || elType == "hidden" || elType == "password" || elType == "textarea") {
+				formData[key] = getPrimitives(el.value);
+			}else if(elType == "radio" || elType == "checkbox") {
 				if(el.checked)// 选中才会加入数据
-					formData[el.name] = getPrimitives(el.value);
-			}else if(elType == "select-one" || elType == "select-multiple"){
+					formData[key] = getPrimitives(el.value);
+			}else if(elType == "select-one" || elType == "select-multiple") {
 				for(var opt, optValue, p = 0, q = el.options.length; p < q; p++){
 					opt = el.options[p];
 					if (opt.selected) {
 						optValue = opt.hasAttribute ? opt.hasAttribute('value') : opt.getAttribute('value') !== null
 						optValue = optValue ? opt.value : opt.text;			
 						
-						formData[el.name] = getPrimitives(optValue);
+						formData[key] = getPrimitives(optValue);
 					}
 				}
+			}
+			
+			if(typeof formData[key] == 'string') { // url 编码
+				formData[key] = encodeURIComponent(formData[el.name]);
 			}
 		});
 
