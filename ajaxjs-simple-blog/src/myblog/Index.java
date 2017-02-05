@@ -26,7 +26,7 @@ import com.ajaxjs.jdbc.SimplePager;
 public class Index extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	final static boolean isDebug = false;
+	final static boolean isDebug = true;
 
 	public static String db_context_path = isDebug ? "jdbc/sqlite_mac" : "jdbc/sqlite_deploy";
 	
