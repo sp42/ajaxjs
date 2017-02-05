@@ -24,6 +24,7 @@ import javax.servlet.http.HttpSession;
 import com.ajaxjs.web.security.ListControl;
 
 /**
+ * CSRF 攻击：采用 tokenID 防御支持
  * 对 POST 表单提交进行 CSRF token 验证； 使用 getCsrfTokenId() 然后放入表单还有 session 中，key 名称必须为 csrf_ 开头。
  * 
  * @author Frank

@@ -33,7 +33,7 @@ import sun.misc.BASE64Encoder;
  * @author Frank
  *
  */
-public class EncryCookie {
+public class EncrySessionInCookie {
 	private static final String sessionCookieName = "tmp_app";
 
 	private static final char sep = (char) 1;

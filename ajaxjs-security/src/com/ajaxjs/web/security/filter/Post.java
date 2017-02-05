@@ -15,8 +15,6 @@
  */
 package com.ajaxjs.web.security.filter;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.web.security.ListControl;
@@ -28,12 +26,6 @@ import com.ajaxjs.web.security.ListControl;
  *
  */
 public class Post extends ListControl implements SecurityFilter{
-
-	public Post(List<String> whiteList, List<String> blackList) {
-		this.whiteList = whiteList;
-		this.blackList = blackList;
-	}
-
 	@Override
 	public boolean check(HttpServletRequest request) {
 		if (!"POST".equalsIgnoreCase(request.getMethod())) {
@@ -51,5 +43,4 @@ public class Post extends ListControl implements SecurityFilter{
 		
 		return true; // 没有任何信息则通过
 	}
-
 }
