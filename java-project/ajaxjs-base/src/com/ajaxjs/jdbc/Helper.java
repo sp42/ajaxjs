@@ -231,6 +231,26 @@ public class Helper {
 
 		return map;
 	}
+	
+	/**
+	 * 记录集合转换为 Map
+	 * @param conn
+	 * @param sql
+	 * @return Map 结果
+	 */
+	public static Map<String, Object> queryMap(Connection conn, String sql) {
+		try (Statement statement = conn.createStatement(); ResultSet rs = statement.executeQuery(sql);) {
+			if (rs.isBeforeFirst()) {
+				return getResultMap(rs);
+			} else {
+				System.err.println("查询 SQL：" + sql + " 没有符合的记录！");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
     
 	/**
 	 * 记录集合列表转换为 List
@@ -288,6 +308,20 @@ public class Helper {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	public static String perRecordSql  = "SELECT id, name FROM %s WHERE createDate < datetime('%s') ORDER BY createDate DESC LIMIT 1";
+	public static String nextRecordSql = "SELECT id, name FROM %s WHERE createDate > datetime('%s') ORDER BY createDate ASC LIMIT 1";
+	
+	public static Map<String, Map<String, Object>> getNeighbor(Connection conn, String tablename, String datetime){
+		Map<String, Map<String, Object>> map = new HashMap<>();
+
+		String _perRecordSql = String.format(nextRecordSql, tablename, datetime);
+		map.put("perRecord", queryMap(conn, _perRecordSql));
+		
+		String _nextRecordSql = String.format(perRecordSql, tablename, datetime);
+		map.put("nextRecord", queryMap(conn, _nextRecordSql));
+		
+		return map;
 	}
 	
 	/**

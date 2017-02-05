@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.ajaxjs.jdbc.Helper;
 
+
 public class TestHelper {
 	public static String perRecordSql  = "SELECT %s, name FROM %s WHERE createDate < %s ORDER BY createDate DESC LIMIT 1";
 	public static String nextRecordSql = "SELECT %s, name FROM %s WHERE createDate > %s ORDER BY createDate ASC LIMIT 1";
@@ -22,28 +23,41 @@ public class TestHelper {
 		map.put("perRecord", perRecord);
 		String _perRecordSql = String.format(nextRecordSql, id, tablename, datetime);
 
-		Helper db = new Helper();
-		db.queryWithCallback(conn, _perRecordSql, new Helper.Callback() {
-			@Override
-			public Object doIt(ResultSet resultset) throws SQLException {
-				perRecord.put(id, resultset.getString(id));
-				perRecord.put("name", resultset.getString("name"));
-				return null;
-			}
-		});
+//		new com.ajaxjs.jdbc.Helper.Callback() {
+//
+//			@Override
+//			public Object doIt(ResultSet resultset) throws SQLException {
+//				// TODO Auto-generated method stub
+//				return null;
+//			};
 
-		final Map<String, String> nextRecord = new HashMap<>();
-		map.put("nextRecord", nextRecord);
-		String _nextRecordSql = String.format(perRecordSql, id, tablename, datetime);
-		;
-		db.queryWithCallback(conn, _nextRecordSql, new Helper.Callback() {
-			@Override
-			public Object doIt(ResultSet resultset) throws SQLException {
-				nextRecord.put(id, resultset.getString(id));
-				nextRecord.put("name", resultset.getString("name"));
-				return null;
-			}
-		});
+//		Helper.queryWithCallback(conn, _perRecordSql, new Helper.Callback() {
+//
+//			@Override
+//			public Object doIt(ResultSet resultset) throws SQLException {
+//				// TODO Auto-generated method stub
+//				return null;
+//			}
+////			@Override
+////			public Object doIt(ResultSet resultset) throws SQLException {
+////				perRecord.put(id, resultset.getString(id));
+////				perRecord.put("name", resultset.getString("name"));
+////				return null;
+////			}
+//		});
+//
+//		final Map<String, String> nextRecord = new HashMap<>();
+//		map.put("nextRecord", nextRecord);
+//		String _nextRecordSql = String.format(perRecordSql, id, tablename, datetime);
+//		
+//		Helper.queryWithCallback(conn, _nextRecordSql, new Helper.Callback() {
+//			@Override
+//			public Object doIt(ResultSet resultset) throws SQLException {
+//				nextRecord.put(id, resultset.getString(id));
+//				nextRecord.put("name", resultset.getString("name"));
+//				return null;
+//			}
+//		});
 	}
 
 }

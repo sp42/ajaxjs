@@ -207,19 +207,33 @@ public class MapHelper {
 	 * @return Map 结构
 	 */
 	public static Map<String, Object> toMap(String[] pairs) {
+		return toMap(pairs, false);
+	}
+	
+	/**
+	 * 数据结构的简单转换 String[]-->Map
+	 * 
+	 * @param pairs
+	 *            结对的字符串数组
+	 * @param isDecode
+	 *            是否 url 解码
+	 * @return Map 结构
+	 */
+	public static Map<String, Object> toMap(String[] pairs, boolean isDecode) {
 		if (!Util.isNotNull(pairs))
 			return null;
 		
 		Map<String, Object> map = new HashMap<>();
 		
 		for (String pair : pairs) {
-			if (!pair.contains("="))
+			if (!pair.contains("=")) {
 				throw new IllegalArgumentException("没有 = 不能转化为 map");
+			}
 			
 			String[] column = pair.split("=");
 			
 			if (column.length >= 2)
-				map.put(column[0], toJavaValue(column[1]));
+				map.put(column[0], toJavaValue((isDecode ? StringUtil.urlDecode(column[1]) : column[1])));
 			else
 				map.put(column[0], "");// 没有 等号后面的，那设为空字符串
 		}
