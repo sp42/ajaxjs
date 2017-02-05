@@ -12,7 +12,6 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletRequest;
 
 import com.ajaxjs.framework.model.Map2Pojo;
-import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.io.StreamUtil;
 import com.ajaxjs.util.map.MapHelper;
 import com.ajaxjs.web.Requester;
@@ -54,9 +53,8 @@ public class MvcRequest extends Requester{
 
 		if (params == null)
 			return null;
-
-		params = StringUtil.urlDecode(params);
-		return MapHelper.toMap(params.split("&"));
+		
+		return MapHelper.toMap(params.split("&"), true);
 	}
 	
 	private static String matchList(String regexp, String str) {
