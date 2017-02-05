@@ -1,9 +1,5 @@
 基于 Fliter 的安全框架
 =================================== 
-- XSS过滤（获取用户输入参数和参数值进行XSS过滤，对Header和cookie value值进行XSS过滤（转码Script标签的< > 符号）
-- CSRF 攻击：采用 tokenID 防御支持
-- 
-- 
 
 |作用|对应类名|加载方式| init-param|
 |----|-----|-----|----|
@@ -15,3 +11,5 @@
 |Session 通过加密存储到 cookie     |  com.ajaxjs.web.security.filter.EncrySessionInCookie |filter|encryCookieKey（配置 key）|
 |POST 白名单／黑名单机制验证     |  com.ajaxjs.web.security.filter.Post |filter|postWhiteList/postBlackList（配置白名单/黑名单）|
 |Referer 来路检测     |  com.ajaxjs.web.security.filter.RefererFilter |filter|RefererFilter（配置 key）|
+
+详情参见《Java Web：主动和被动方式检测安全的框架》 http://blog.csdn.net/zhangxin09/article/details/54881190
