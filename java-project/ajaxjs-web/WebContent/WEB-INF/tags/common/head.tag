@@ -61,7 +61,16 @@
 	<meta name="robots" content="index,follow" />
 	<%-- request.setAttribute("isDebug", Init.isDebug); --%>
 	<%-- <link rel="stylesheet" type="text/css" href="${_config.LessUrlProcessor.getCssUrl(pageContext.request, lessFile, isDebug)}" /> --%>
-	<link rel="stylesheet" type="text/css" href="<%=getCssUrl(request, lessFile, true)%>" />
+	
+	<%
+		// 是否处于调试模式
+		boolean isDebug = true;
+	
+		if(request.getServletContext().getAttribute("isDebug") != null) {
+			isDebug = (Boolean)request.getServletContext().getAttribute("isDebug");
+		} 
+	%>
+	<link rel="stylesheet" type="text/css" href="<%=getCssUrl(request, lessFile, isDebug)%>" />
     <script src="${pageContext.request.contextPath}/asset/js/dom.js"></script>
 
     <jsp:doBody />
