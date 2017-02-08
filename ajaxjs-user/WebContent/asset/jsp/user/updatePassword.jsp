@@ -1,8 +1,7 @@
 <%@page pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-	<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/public"%>
-	<%@taglib prefix="commonUI"  tagdir="/WEB-INF/tags/public/UI"%>
+	<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 	<commonTag:head lessFile="/asset/bigfoot/asset/less/user.less" title="登录信息" />
 <body>
 	<commonUI:adminHeader pageTitle="登录信息" />
