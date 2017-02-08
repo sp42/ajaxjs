@@ -6,7 +6,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ajaxjs-base-mybatis-libs"/>
 	<classpathentry kind="lib" path="lib/javax-servlet.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ajaxjs-base-validation-libs"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/shiro-libs"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/mockito"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
