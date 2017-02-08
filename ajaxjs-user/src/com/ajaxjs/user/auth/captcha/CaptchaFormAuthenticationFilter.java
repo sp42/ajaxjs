@@ -1,4 +1,19 @@
-package com.ajaxjs.framework.user.captcha;
+/**
+ * Copyright 2015 Frank Cheung
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.ajaxjs.user.auth.captcha;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -8,6 +23,8 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 
+import com.ajaxjs.user.auth.BaseUserAccessController;
+import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.web.Captcha;
 
@@ -20,7 +37,7 @@ import com.ajaxjs.web.Captcha;
  *
  */
 public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
-	private static final com.ajaxjs.util.LogHelper LOGGER = com.ajaxjs.util.LogHelper.getLog(CaptchaFormAuthenticationFilter.class);
+	private static final LogHelper LOGGER = LogHelper.getLog(CaptchaFormAuthenticationFilter.class);
  
 	private static final String submitedFieldName = "captchaImgCode";
 	
@@ -47,8 +64,8 @@ public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
 		try {
 			token = createToken(request, response);
 		} catch (IllegalArgumentException e) {
-			AuthenticationException ae = new AuthenticationException(e.getMessage());
-			request.setAttribute("exObj", e);
+			AuthenticationException ae = new AuthenticationException(e.getMessage());// 封装一下
+			request.setAttribute(BaseUserAccessController.request_exception_key, e);
 			return onLoginFailure(token, ae, request, response);
 		}
 		
@@ -78,7 +95,7 @@ public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
 //			return onLoginSuccess(token, subject, request, response);
 			return true; // 返回 true 让过滤器继续（而不是调到默认的 welcome），返回的 controller 那里去，因为我要在那裏返回 json ！
 		} catch (AuthenticationException e) {
-			request.setAttribute("exObj", e);
+			request.setAttribute(BaseUserAccessController.request_exception_key, e);
 			return onLoginFailure(token, e, request, response);
 		}
 	}
@@ -93,6 +110,7 @@ public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
 		
 		// 用户输入的验证码
 		String captcha = request.getParameter(submitedFieldName);
+		
 		if(StringUtil.isEmptyString(captcha)) {
 			throw new IllegalArgumentException("缺少参数！" + submitedFieldName);
 		} else {
@@ -112,6 +130,7 @@ public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
 		
 		System.out.println(username);
 		System.out.println(password);
+		
 		return new CaptchaUsernamePasswordToken(username, password.toCharArray(), rememberMe, host, captcha);
 	}
 	
