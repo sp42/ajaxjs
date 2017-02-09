@@ -8,7 +8,7 @@
 	<!-- 404 页面不存在错误 -->
 	<error-page>
 		<error-code>404</error-code>
-		<location>/common_jsp/error.jsp</location>
+		<location>/common_jsp/404.jsp</location>
 	</error-page>
 	<!-- // -->
 	
@@ -29,11 +29,6 @@
 	</jsp-config>
 	<!-- // -->
     
-	<!--servlet 监听器 start -->
-	<listener>
-		<listener-class>com.ajaxjs.app.ConfigListener</listener-class>
-	</listener>
-	
 	<!--工具类接口，为了不外显 jsp -->
 	<servlet>  
         <servlet-name>public_service</servlet-name>  
