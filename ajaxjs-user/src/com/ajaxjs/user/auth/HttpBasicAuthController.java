@@ -1,6 +1,8 @@
 package com.ajaxjs.user.auth;
 
 import java.io.IOException;
+
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +17,18 @@ import sun.misc.BASE64Decoder;
 public class HttpBasicAuthController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	public static final String userid = "admin", pwd = "123123";
+	public static final String userid = "admin";
+	public static String pwd = "123123";
+	
+	@Override
+	public void init(ServletConfig config) throws ServletException   {
+		super.init(config);
+		
+		// 读取配置密码
+		if(config.getInitParameter("adminPassword") != null){
+			pwd = config.getInitParameter("adminPassword");
+		}
+	}
 	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -40,7 +53,7 @@ public class HttpBasicAuthController extends HttpServlet {
 			if (action != null) {
 				switch (action) {
 				case "workbench":
-					request.getRequestDispatcher("/asset/jsp/admin/workbench.jsp").include(request, response);
+					request.getRequestDispatcher("/asset/jsp/user/admin/workbench.jsp").include(request, response);
 					break;
 				case "logout":
 					response.getWriter().append("已退出！");
@@ -49,7 +62,7 @@ public class HttpBasicAuthController extends HttpServlet {
 					response.getWriter().append("无效 action！");
 				}
 			} else {
-				request.getRequestDispatcher("/asset/jsp/admin/index.jsp").include(request, response);
+				request.getRequestDispatcher("/asset/jsp/user/admin/index.jsp").include(request, response);
 			}
 		}
 	}
