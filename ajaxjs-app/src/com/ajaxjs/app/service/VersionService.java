@@ -1,9 +1,9 @@
-package com.ajaxjs.client.service;
+package com.ajaxjs.app.service;
 
 import java.util.List;
 
-import com.ajaxjs.client.dao.VersionDAO;
-import com.ajaxjs.client.model.Version;
+import com.ajaxjs.app.dao.VersionDAO;
+import com.ajaxjs.app.model.Version;
 import com.ajaxjs.framework.exception.ServiceException;
 import com.ajaxjs.framework.model.Query;
 import com.ajaxjs.framework.service.BaseCrudService;

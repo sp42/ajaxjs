@@ -1,4 +1,4 @@
-package com.ajaxjs.client.dao;
+package com.ajaxjs.app.dao;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 
-import com.ajaxjs.client.model.Version;
+import com.ajaxjs.app.model.Version;
 import com.ajaxjs.framework.dao.DAO;
 import com.ajaxjs.framework.dao.DynamicSqlProvider;
 import com.ajaxjs.framework.model.Query;

@@ -1,4 +1,4 @@
-package com.ajaxjs.client.controller;
+package com.ajaxjs.app.controller;
 
 import javax.mvc.annotation.Controller;
 import javax.servlet.http.HttpServletRequest;
@@ -11,8 +11,6 @@ import com.ajaxjs.Constant;
 import com.ajaxjs.framework.exception.ServiceException;
 import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.mvc.controller.ReadOnlyController;
-import com.ajaxjs.user.User;
-import com.ajaxjs.user.UserService;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.web.Requester;
 import com.ajaxjs.web.upload.Upload;

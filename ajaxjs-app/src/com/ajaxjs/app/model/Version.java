@@ -1,4 +1,4 @@
-package com.ajaxjs.client.model;
+package com.ajaxjs.app.model;
 
 import com.ajaxjs.framework.model.BaseModel;
 

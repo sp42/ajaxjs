@@ -1,12 +1,12 @@
-package com.ajaxjs.client.controller;
+package com.ajaxjs.app.controller;
 
 import javax.mvc.annotation.Controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
-import com.ajaxjs.client.model.Version;
-import com.ajaxjs.client.service.VersionService;
+import com.ajaxjs.app.model.Version;
+import com.ajaxjs.app.service.VersionService;
 import com.ajaxjs.framework.exception.ServiceException;
 import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.mvc.controller.ReadOnlyController;
