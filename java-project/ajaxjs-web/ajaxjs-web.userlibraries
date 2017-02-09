@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <eclipse-userlibraries version="2">
     <library name="ajaxjs-web-libs" systemlibrary="false">
-        <archive path="/ajaxjs-web/WebContent/WEB-INF/lib/ajaxjs-web-tag.jar" />
-        <archive path="/ajaxjs-web/WebContent/WEB-INF/lib/javax.ws.rs-api-2.0.rev.A.jar" source="/ajaxjs-web/WebContent/WEB-INF/lib/javax.ws.rs-api-2.0.rev.A-sources.jar" />
-        <archive path="/ajaxjs-web/WebContent/WEB-INF/lib/taglibs-standard-spec-1.2.5.jar" />
-        <archive path="/ajaxjs-web/WebContent/WEB-INF/lib/taglibs-standard-impl-1.2.5.jar" />
+        <!--<archive path="/ajaxjs-web/WebContent/WEB-INF/lib/ajaxjs-web-tag.jar" />-->
+        <archive path="/ajaxjs-web/lib/javax.ws.rs-api-2.0.rev.A.jar" source="/ajaxjs-web/lib/javax.ws.rs-api-2.0.rev.A-sources.jar" />
+        <archive path="/ajaxjs-web/lib/taglibs-standard-spec-1.2.5.jar" />
+        <archive path="/ajaxjs-web/lib/taglibs-standard-impl-1.2.5.jar" />
     </library>
-
+    
+<!--
     <library name="spring" systemlibrary="false">
         <archive path="/ajaxjs-web/jar/spring/aopalliance-1.0.jar"/>
         <archive path="/ajaxjs-web/jar/spring/aspectjweaver-1.6.10.jar"/>
@@ -34,4 +35,5 @@
         <archive path="/ajaxjs-web/workflow/lib/jackson-mapper-asl-1.9.4.jar"/>
         <archive path="/ajaxjs-web/workflow/lib/jackson-core-asl-1.9.4.jar"/>
     </library>
+-->
 </eclipse-userlibraries>
