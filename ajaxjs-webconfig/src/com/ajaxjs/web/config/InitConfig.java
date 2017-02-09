@@ -1,3 +1,18 @@
+/**
+ * Copyright 2015 Frank Cheung
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.ajaxjs.web.config;
 
 import java.io.File;
@@ -8,6 +23,7 @@ import javax.script.ScriptException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 
 import com.ajaxjs.Init;
 import com.ajaxjs.framework.dao.MyBatis;
@@ -17,12 +33,18 @@ import com.ajaxjs.util.json.JSON;
 import com.ajaxjs.util.json.JsLib;
 import com.ajaxjs.util.json.JsonHelper;
 
+/**
+ * 
+ * @author Frank
+ *
+ */
+@WebListener 
 public class InitConfig implements ServletContextListener {
-	
 	/**
 	 * JSON 配置
 	 */
-	private static final JsonConfig allConfig = new JsonConfig();
+	public static final JsonConfig allConfig = new JsonConfig();
+	
 	/**
 	 * 保存配置的 引擎
 	 */
@@ -36,7 +58,7 @@ public class InitConfig implements ServletContextListener {
 		
 		// 加载基础 js
 		String code = new StreamUtil().setIn(InitConfig.class.getResourceAsStream("JSON_Tree.js")).byteStream2stringStream().close().getContent();
-		
+
 		try {
 			jsRuntime.eval(JsLib.baseJavaScriptCode);
 			jsRuntime.eval(code);
@@ -107,9 +129,10 @@ public class InitConfig implements ServletContextListener {
 		allConfig.setJsRuntime(jsRuntime);
 		allConfig.loadJSON(); // 加载配置文件
 		
-		updateConfig();
-		
-		System.out.println(("加载配置信息如下：" + System.getProperty("line.separator") + JsonHelper.format(JsonHelper.stringify(allConfig.getHash())) + Init.ConsoleDiver));
+		if(allConfig.isLoaded()) {
+			updateConfig();
+			System.out.println(("加载配置信息如下：" + System.getProperty("line.separator") + JsonHelper.format(JsonHelper.stringify(allConfig.getHash())) + Init.ConsoleDiver));
+		}
 	}
 	
 	/**
@@ -118,6 +141,10 @@ public class InitConfig implements ServletContextListener {
 	 */
 	@SuppressWarnings("unchecked")
 	public static void updateConfig() {
+		if(!allConfig.isLoaded()) {
+			return; // 没有 site_config.js 文件，退出
+		}
+		
 		Map<String, Object> map = null;
 		
 		try {

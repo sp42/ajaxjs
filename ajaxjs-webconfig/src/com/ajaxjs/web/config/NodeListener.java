@@ -18,6 +18,7 @@ package com.ajaxjs.web.config;
 import javax.script.ScriptException;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
+import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.Init;
@@ -29,6 +30,7 @@ import com.ajaxjs.util.json.JsonHelper;
  * @author frank
  *
  */
+@WebListener 
 public class NodeListener implements ServletRequestListener {	
 	/**
 	 * 是否已经加载 site_stru.js
@@ -38,11 +40,6 @@ public class NodeListener implements ServletRequestListener {
 	@Override
 	public void requestInitialized(ServletRequestEvent e) {
 		HttpServletRequest request = (HttpServletRequest) e.getServletRequest();
-		
-//		if(!ConfigListener.isJSON_Config_loaded) {
-//			System.err.println(" 系统配置未加载，该服务依赖 系统配置");
-//			return;
-//		}
 
 		String uri = request.getRequestURI();
 		if(StringUtil.regMatch("\\.jpg|\\.gif|\\.png|\\.icon|\\.htm|\\.css|\\.js[^p]", uri) != null) {
@@ -50,7 +47,12 @@ public class NodeListener implements ServletRequestListener {
 		}
 		
 		if(!isInited) {
-			System.out.println("初始化 NodeListener");
+			if(!InitConfig.allConfig.isLoaded()) {
+				System.err.println(" 系统配置未加载，该服务依赖 系统配置");
+				return;
+			}
+			
+			System.out.println("初始化 NodeListener，加载网址树状结构中" + Init.ConsoleDiver);
 			new JsonHelper(InitConfig.jsRuntime).load(Init.srcFolder + "site_stru.js"); // 加载 Web 目录文件
 
 			try {
@@ -61,7 +63,7 @@ public class NodeListener implements ServletRequestListener {
 			}
 			
 			isInited = true;
-			System.out.println("---------------------------------" + System.getProperty("line.separator") + "加载 site_stru.js 成功" + Init.ConsoleDiver);
+			System.out.println(Init.ConsoleDiver + System.getProperty("line.separator") + "加载 site_stru.js 成功" + Init.ConsoleDiver);
 		}
 		
 		request.setAttribute("PageNode", new NodeProcessor(request.getContextPath(), uri));
