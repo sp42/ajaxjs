@@ -19,14 +19,6 @@ public class JsonConfig {
 	 */
 	private String jsonPath;
 
-	public Map<String, Object> getHash() {
-		return hash;
-	}
-
-	public void setHash(Map<String, Object> hash) {
-		this.hash = hash;
-	}
-
 	/**
 	 * 是否加载成功
 	 */
@@ -64,6 +56,14 @@ public class JsonConfig {
 
 	public void setJsRuntime(ScriptEngine jsRuntime) {
 		this.jsRuntime = jsRuntime;
+	}
+	
+	public Map<String, Object> getHash() {
+		return hash;
+	}
+
+	public void setHash(Map<String, Object> hash) {
+		this.hash = hash;
 	}
 
 	/**
