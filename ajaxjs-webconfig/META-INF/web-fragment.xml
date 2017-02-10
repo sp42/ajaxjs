@@ -5,10 +5,5 @@
     http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd" version="3.0">
     <name>ajaxjs_web_config_WebFragment</name>
     
-    
-	<!--servlet 监听器 start -->
-	<listener>
-		<listener-class>com.ajaxjs.app.ConfigListener</listener-class>
-	</listener>
 	 
 </web-fragment>

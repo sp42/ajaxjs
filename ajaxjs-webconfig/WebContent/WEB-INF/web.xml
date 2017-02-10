@@ -12,6 +12,7 @@
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
+	
 	<!-- Http Basic Auth 认证登录 Admin UI -->
 	<servlet>
 		<servlet-name>HttpBasicAuth</servlet-name>
