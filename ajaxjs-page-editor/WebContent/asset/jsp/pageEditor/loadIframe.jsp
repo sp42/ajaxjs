@@ -2,7 +2,7 @@
 <%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <!DOCTYPE html>
 <html>	
-	<commonTag:head lessFile="/asset/bigfoot/asset/less/pages.less">
+	<commonTag:head lessFile="/asset/less/admin.less">
 		<style type="text/css">
 			html{
 				height:100%;
@@ -28,7 +28,7 @@
 	</commonTag:head>
 	<body>
 		<button class="my-btn-3" style="line-height: normal;">编辑此页面</button>
-		<iframe src="../../"></iframe>
+		<iframe src="../../../"></iframe>
 		
 		<script>
 			document.querySelector('button').onclick = function() {
@@ -36,7 +36,7 @@
 				// 去掉 dom 返回的前缀
 				url = url.replace(/http:\/\/[^\/]*/, '');
 				url = url.replace('${pageContext.request.contextPath}', '');
-				window.location.assign('../../cms/PageEditor?url=' + url);
+				window.location.assign('../../../pageEditor_admin/edit?url=' + url);
 			}
 		</script>
 	</body>

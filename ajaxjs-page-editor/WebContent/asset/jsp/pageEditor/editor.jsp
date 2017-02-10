@@ -3,7 +3,7 @@
 <%@taglib prefix="commonUI"  tagdir="/WEB-INF/tags/common/UI"%>
 <!DOCTYPE html>
 <html>
-	<commonTag:head lessFile="/asset/bigfoot/asset/less/pages.less" />
+	<commonTag:head lessFile="/asset/less/admin.less" />
     <body class="pageEditor">
     <style>
     	body{
@@ -30,7 +30,7 @@
     	</div>
 	<% 
 		// 是否不允许编辑的？
-		if(request.getAttribute("content") == null){
+		if(request.getAttribute("contentBody") == null) {
 	%>
 		<script>
 			alert("该页面没有任何编辑内容！");
@@ -38,19 +38,20 @@
 		</script>
 	<%}%>
 		<commonUI:htmlEditor name="content" basePath="../">
-			${content}
+			${contentBody}
     	</commonUI:htmlEditor>
     	<script> 
     		// 返回
-    		document.querySelector('.backBtn').onclick = function(e){
+    		document.querySelector('.backBtn').onclick = function(e) {
     			window.history.go(-1);
     		}
+    		
     		// 提交数据
-    		document.querySelector('.saveBtn').onclick = function(e){
-    			XMLHttpRequest.post('${pageContext.request.contextPath}/cms/PageEditor', {
+    		document.querySelector('.saveBtn').onclick = function(e) {
+    			XMLHttpRequest.post('?', {
     				url : '${param.url}',
-    				content : encodeURIComponent(htmlEditor.getValue())
-    			}, function(json){
+    				contentBody : encodeURIComponent(htmlEditor.getValue())
+    			}, function(json) {
     				if(json.isOk)alert('修改页面成功！');else alert(json.msg);
     			});
     		}
