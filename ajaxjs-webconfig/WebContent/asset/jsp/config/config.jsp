@@ -13,7 +13,7 @@
 %>
 <!DOCTYPE html>
 <html>
-	<commonTag:head lessFile="/asset/bigfoot/asset/less/user.less" title="网站配置" />
+	<commonTag:head lessFile="/asset/less/admin.less" title="网站配置" />
 <body>
 	<commonUI:adminHeader pageTitle="网站配置" />
 	<style>
@@ -30,13 +30,13 @@
 			<label>
 				<div class="heightLabel">&nbsp;&nbsp;<span class="required-note">*</span>公司全称</div>
 				<input type="text" placeholder="公司全称" name="bf_Config.clientFullName"
-					value="${global_config.clientFullName}" 
+					value="${all_config.clientFullName}" 
 				 />
 			</label>
 			<label>
 				<div class="heightLabel">&nbsp;&nbsp;公司简称</div>
 				<input type="text" placeholder="公司简称" name="bf_Config.clientShortName"
-				value="${global_config.clientShortName}" />
+				value="${all_config.clientShortName}" />
 			</label>
 						
 			<label>
@@ -46,7 +46,7 @@
 					required
 					data-regexp="Username"
 					data-note="网站全局的标题，在 title 标签中显示"
-					value="${global_config.site_titlePrefix}"
+					value="${all_config.site_titlePrefix}"
 				 />
 			</label>
 			<label>
@@ -58,14 +58,14 @@
 						用于 SEO 关键字优化，以便于搜索引擎机器人查找、分类。多个关键字之间用英文 , 逗号分开
 					</div>
 				</div>
-				<textarea name="bf_Config.site.keywords" rows="10">${global_config.site_keywords}</textarea>
+				<textarea name="bf_Config.site.keywords" rows="10">${all_config.site_keywords}</textarea>
 			</label>
 			<label>
 				<div class="heightLabel">
 					<div>网站描述：</div>
 					<div class="sub">网站的说明文本。通常是一段话介绍网站即可。</div>
 				</div>
-				<textarea name="bf_Config.site.description" rows="10">${global_config.site_description}</textarea>
+				<textarea name="bf_Config.site.description" rows="10">${all_config.site_description}</textarea>
 			</label>
  
 			<div class="labelRow">

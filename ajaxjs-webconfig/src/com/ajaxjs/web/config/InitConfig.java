@@ -34,7 +34,7 @@ import com.ajaxjs.util.json.JsLib;
 import com.ajaxjs.util.json.JsonHelper;
 
 /**
- * 
+ * 配置加载器
  * @author Frank
  *
  */
@@ -69,7 +69,7 @@ public class InitConfig implements ServletContextListener {
 		
 		loadJsonConfig();
 		
-		cxt.setAttribute("_config", allConfig.getHash()); // 所有配置保存在这里
+		cxt.setAttribute("all_config", allConfig.getHash()); // 所有配置保存在这里
 //		cxt.setAttribute("PageUtil", new PageUtil()); // 一些页面实用的函数
 		
 		// 初始化数据库连接
@@ -85,7 +85,6 @@ public class InitConfig implements ServletContextListener {
 			
 			MyBatis.init();
 		}
-		
 		
 //		Common.load();
 		
