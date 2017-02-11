@@ -3,16 +3,16 @@
 
 设计目标：Clean, Simple, Fast, Full-stacks & Lightweight.
 
-[官网](https://framework.ajaxjs.com/framework/) [作者博客](http://blog.csdn.net/zhangxin09/) QQ 群：[3150067](//shang.qq.com/wpa/qunwpa?idkey=dd0b70fa70286dd62b42bfcc60770a24c7933c1ab03a1121136f0a3208840631)
+[官网](https://framework.ajaxjs.com/framework/) [作者博客](http://blog.csdn.net/zhangxin09/) QQ 群：3150067
 
 每一个文件夹乃一单独可运行的项目，各个项目导出 jar 可交叉复用到不同项目。每一项目亦即可运行的例子，提供默认参数。
-项目不限定何种 IDE（不包含任何 IDE 配置文件）。但默认地，src 为 Java 源码目录；WebContent 为 Web 项目根目录；
+项目不限定何种 IDE（不包含任何 IDE 配置文件）。但默认地，src 为 Java 源码目录；WebContent 为 Web 项目根目录；lib 为依赖的 jar 包或本项目编译好的 jar 包。
 
 技术选型
 ------------
 表示层=HTML5/JSP/Servlet/MVC/JSTL/Tag Files/Less.js/Vue.js；
 数据层=MySQL/SQLite/JDBC/MyBatis/Shrio/Apache BVal/Tomcat JDBC-Pool；
-基础=Java 7/Eclipse/Ant/Rhino/JavaUtilLogger
+基础=Java 7/Eclipse/Ant/Rhino/JavaUtilLogger/JUnit/Mockito
 
 环境
 ------------
@@ -32,4 +32,7 @@ Oracle Java 1.7 暂不支持 1.8 或 OpenJDK；Tomcat 7 或以上。
 |ajaxjs-app|提供 app 服务的后台|
 |ajaxjs-page-editor| HTML 页面编辑器|
 |ajaxjs-simple-blog|纯 Servlet+JDBC 博客发布器，免依赖，小清新微型项目|
+|ajaxjs-ftp|FTP 文件上传实现|
 |ajaxjs-elasticsearch|es 的封装|
+|ajaxjs-nashorn|Java 8 Nashorn JS 引擎的剥离|
+|ajaxjs-work|基于 snaker 工作流的整合|
