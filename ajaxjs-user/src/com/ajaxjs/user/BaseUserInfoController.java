@@ -11,12 +11,10 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.subject.Subject;
 
-import com.ajaxjs.framework.exception.ServiceException;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.user.auth.captcha.IncorrectCaptchaException;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.web.Captcha;
-import com.ajaxjs.web.Requester;
 
 public abstract class BaseUserInfoController implements IController {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseUserInfoController.class);

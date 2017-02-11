@@ -1,42 +1,45 @@
 package com.ajaxjs.user.auth;
 
 import java.io.IOException;
-
-import javax.servlet.ServletConfig;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ajaxjs.Init;
 
 import sun.misc.BASE64Decoder;
 
 /**
- * Servlet implementation class Admin
+ * Servlet Filter implementation class Filter
  */
-//@javax.servlet.annotation.WebServlet("/admin")
-public class HttpBasicAuthController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	
-	public static final String userid = "admin";
+
+public class HttpBasicAuthFilter implements javax.servlet.Filter {
+	public static final String userid = "admin"; // 写死只有一个用户 admin
 	public static String pwd = "123123";
 	
-	@Override
-	public void init(ServletConfig config) throws ServletException   {
-		super.init(config);
+	/**
+	 * @see HttpBasicAuthFilter#init(FilterConfig)
+	 */
+	public void init(FilterConfig config) throws ServletException {
+		System.out.println(Init.ConsoleDiver + System.getProperty("line.separator") + "启动 HTTP BasicAuth 后台管理" + Init.ConsoleDiver);
 		
 		// 读取配置密码
 		if(config.getInitParameter("adminPassword") != null){
 			pwd = config.getInitParameter("adminPassword");
 		}
 	}
-	
+
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpBasicAuthFilter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
 	@SuppressWarnings("deprecation")
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
-		response.setCharacterEncoding("utf-8"); 
+	public void doFilter(ServletRequest _request, ServletResponse _response, FilterChain chain) throws IOException, ServletException {
+		HttpServletRequest request = (HttpServletRequest)_request;
+		HttpServletResponse response = (HttpServletResponse)_response;
 		
 		if (!checkAuth(request)) {
 			// 如果认证失败,则要求认证 ，不能输入中文
@@ -47,24 +50,18 @@ public class HttpBasicAuthController extends HttpServlet {
 			response.setStatus(401, "Authentication Required");
 			// 发送要求输入认证信息,则浏览器会弹出输入框
 			response.setHeader("WWW-Authenticate", "Basic realm=" + msg);
-		}else{
-			String action = request.getParameter("action");
-
-			if (action != null) {
-				switch (action) {
-				case "workbench":
-					request.getRequestDispatcher("/asset/jsp/user/admin/workbench.jsp").include(request, response);
-					break;
-				case "logout":
-					response.getWriter().append("已退出！");
-					break;
-				default:
-					response.getWriter().append("无效 action！");
-				}
-			} else {
-				request.getRequestDispatcher("/asset/jsp/user/admin/index.jsp").include(request, response);
-			}
+			response.getWriter().append("请登录系统！");
+		} else {
+			request.setAttribute("userName", userid);
+			chain.doFilter(request, response);
 		}
+	}
+	
+	/**
+	 * @see HttpBasicAuthFilter#destroy()
+	 */
+	@Override
+	public void destroy() {
 	}
 	
 	public static boolean checkAuth(HttpServletRequest request) {
@@ -127,13 +124,4 @@ public class HttpBasicAuthController extends HttpServlet {
 
 		return username.equalsIgnoreCase(idpassArray[0]) && password.equalsIgnoreCase(idpassArray[1]);
 	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
-
 }
