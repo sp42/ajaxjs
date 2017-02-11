@@ -24,7 +24,9 @@ import org.snaker.engine.core.Execution;
 public interface SnakerInterceptor {
 	/**
 	 * 拦截方法，参数为执行对象
-	 * @param execution 执行对象。可从中获取执行的数据
+	 * 
+	 * @param execution
+	 *            执行对象。可从中获取执行的数据
 	 */
 	public void intercept(Execution execution);
 }
