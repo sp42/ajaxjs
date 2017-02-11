@@ -3,7 +3,7 @@
 
 设计目标：Clean, Simple, Fast, Full-stacks & Lightweight.
 
-[官网](https://framework.ajaxjs.com/framework/) [作者博客](http://blog.csdn.net/zhangxin09/) QQ 群：3150067
+[官网](https://framework.ajaxjs.com/framework/) [作者博客](http://blog.csdn.net/zhangxin09/) QQ 群：[3150067](//shang.qq.com/wpa/qunwpa?idkey=dd0b70fa70286dd62b42bfcc60770a24c7933c1ab03a1121136f0a3208840631)
 
 每一个文件夹乃一单独可运行的项目，各个项目导出 jar 可交叉复用到不同项目。每一项目亦即可运行的例子，提供默认参数。
 项目不限定何种 IDE（不包含任何 IDE 配置文件）。但默认地，src 为 Java 源码目录；WebContent 为 Web 项目根目录；
