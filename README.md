@@ -9,11 +9,18 @@
 
 项目不限定何种 IDE（不包含任何 IDE 配置文件）。但默认地，src 为 Java 源码目录；WebContent 为 Web 项目根目录；
 
-技术选型：表示层=JSP/Servlet/MVC/JSTL/Tag Files/Less.js/Vue.js；数据层=MySQL/SQLite/JDBC/MyBatis/Shrio/ApacheBVal/TomcatJDBCPool；基础=Java 7/Eclipse/Ant/Rhino/JavaUtilLogger
+技术选型
+------------
+表示层=JSP/Servlet/MVC/JSTL/Tag Files/Less.js/Vue.js；
+数据层=MySQL/SQLite/JDBC/MyBatis/Shrio/ApacheBVal/TomcatJDBCPool；
+基础=Java 7/Eclipse/Ant/Rhino/JavaUtilLogger
 
-环境：Oracle Java 1.7 暂不支持 1.8；Tomcat 7或以上。
+环境
+------------
+Oracle Java 1.7 暂不支持 1.8；Tomcat 7或以上。
 
-项目一览：
+项目一览
+--------------
 
 |名称|说明|
 |------|----|
