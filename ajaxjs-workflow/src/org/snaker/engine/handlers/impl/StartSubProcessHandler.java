@@ -37,10 +37,12 @@ import org.snaker.engine.model.SubProcessModel;
  */
 public class StartSubProcessHandler implements IHandler {
 	private SubProcessModel model;
+	
 	/**
 	 * 是否以future方式执行启动子流程任务
 	 */
 	private boolean isFutureRunning = false;
+	
 	public StartSubProcessHandler(SubProcessModel model) {
 		this.model = model;
 	}
@@ -53,17 +55,20 @@ public class StartSubProcessHandler implements IHandler {
 	/**
 	 * 子流程执行的处理
 	 */
+	@Override
 	public void handle(Execution execution) {
-		//根据子流程模型名称获取子流程定义对象
+		// 根据子流程模型名称获取子流程定义对象
 		SnakerEngine engine = execution.getEngine();
 		Process process = engine.process().getProcessByVersion(model.getProcessName(), model.getVersion());
 		
 		Execution child = execution.createSubExecution(execution, process, model.getName());
 		Order order = null;
+		
 		if(isFutureRunning) {
-			//创建单个线程执行器来执行启动子流程的任务
+			// 创建单个线程执行器来执行启动子流程的任务
 			ExecutorService es = Executors.newSingleThreadExecutor();
-			//提交执行任务，并返回future
+			
+			// 提交执行任务，并返回 future
 			Future<Order> future = es.submit(new ExecuteTask(execution, process, model.getName()));
 			try {
 				es.shutdown();
@@ -76,12 +81,13 @@ public class StartSubProcessHandler implements IHandler {
 		} else {
 			order  = engine.startInstanceByExecution(child);
 		}
+		
 		AssertHelper.notNull(order, "子流程创建失败");
 		execution.addTasks(engine.query().getActiveTasks(new QueryFilter().setOrderId(order.getId())));
 	}
 
 	/**
-	 * Future模式的任务执行。通过call返回任务结果集
+	 * Future 模式的任务执行。通过 call 返回任务结果集
 	 * @author yuqs
 	 * @since 1.0
 	 */

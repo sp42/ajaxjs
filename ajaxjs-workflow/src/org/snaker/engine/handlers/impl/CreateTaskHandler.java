@@ -47,15 +47,16 @@ public class CreateTaskHandler implements IHandler {
 	}
 	
 	/**
-	 * 根据任务模型、执行对象，创建下一个任务，并添加到execution对象的tasks集合中
+	 * 根据任务模型、执行对象，创建下一个任务，并添加到 execution 对象的 tasks 集合中
 	 */
+	@Override
 	public void handle(Execution execution) {
 		List<Task> tasks = execution.getEngine().task().createTask(model, execution);
 		execution.addTasks(tasks);
-		/**
-		 * 从服务上下文中查找任务拦截器列表，依次对task集合进行拦截处理
-		 */
+		
+		// 从服务上下文中查找任务拦截器列表，依次对 task 集合进行拦截处理
 		List<SnakerInterceptor> interceptors = ServiceContext.getContext().findList(SnakerInterceptor.class);
+		
 		try {
 			for(SnakerInterceptor interceptor : interceptors) {
 				interceptor.intercept(execution);

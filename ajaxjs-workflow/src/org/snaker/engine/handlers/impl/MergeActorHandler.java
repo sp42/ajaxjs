@@ -16,28 +16,33 @@ package org.snaker.engine.handlers.impl;
 
 /**
  * actor all方式的合并处理器
+ * 
  * @author yuqs
  * @since 1.0
  */
 public class MergeActorHandler extends AbstractMergeHandler {
 	/**
-	 * 调用者需要提供actor all的任务名称
+	 * 调用者需要提供 actor all 的任务名称
 	 */
 	private String taskName;
-	
+
 	/**
-	 * 构造函数，由调用者提供taskName
+	 * 构造函数，由调用者提供 taskName
+	 * 
 	 * @param taskName
+	 *            任务名称
 	 */
 	public MergeActorHandler(String taskName) {
 		this.taskName = taskName;
 	}
 
 	/**
-	 * actor all方式，查询参数为：orderId、taskName
+	 * actor all 方式，查询参数为：orderId、taskName
+	 * 
 	 * @see org.snaker.engine.handlers.impl.AbstractMergeHandler#findActiveNodes()
 	 */
+	@Override
 	protected String[] findActiveNodes() {
-		return new String[]{taskName};
+		return new String[] { taskName };
 	}
 }
