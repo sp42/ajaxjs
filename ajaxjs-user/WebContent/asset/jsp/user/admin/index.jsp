@@ -14,27 +14,7 @@
 			<div class="rightTop"></div>
 			<div class="closeBtn" onclick="hideSider(this);"></div>
 			<ul class="leftSidebar">
-                 <li>
-                     <h3>文章管理</h3>
-                     <ul>
-                         <li>
-                             <a target="iframepage" href="Article/">文章列表</a>
-                         </li>
-                         <li>
-                             <a target="iframepage" href="Article/create">新建文章</a>
-                         </li>
-                     </ul>
-                 </li>
-                 <li class="news">
-           
-                     <h3>分类管理</h3>
-                     <ul>
-                         <li>
-                             <a target="iframepage" href="../service/video/edit/list">分类管理</a>
-                         </li>
-                     </ul>
-                 </li>
-
+                 <%@include file="/WEB-INF/jsp/admin-menu.jsp" %>
              </ul>
 		</section>
 		<section class="iframe">

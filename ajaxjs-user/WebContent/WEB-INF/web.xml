@@ -13,20 +13,27 @@
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
 
-	<!-- Http Basic Auth 认证登录 Admin UI -->
-	<servlet>
-		<servlet-name>HttpBasicAuth</servlet-name>
-		<servlet-class>com.ajaxjs.user.auth.HttpBasicAuthController</servlet-class>
 
-		<!-- 登录密码 -->
+	<servlet>
+		<servlet-name>AdminUI</servlet-name>
+		<servlet-class>com.ajaxjs.adminUI.Controller</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AdminUI</servlet-name>
+		<url-pattern>/admin</url-pattern>
+	</servlet-mapping>
+
+	<filter>
+		<filter-name>HttpBasicAuthFilter</filter-name>
+		<filter-class>com.ajaxjs.user.auth.HttpBasicAuthFilter</filter-class>
 		<init-param>
 			<param-name>adminPassword</param-name>
 			<param-value>a123123</param-value>
 		</init-param>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>HttpBasicAuth</servlet-name>
-		<url-pattern>/HttpBasicAuth</url-pattern>
-	</servlet-mapping>
-	
+	</filter>
+	<filter-mapping>
+		<filter-name>HttpBasicAuthFilter</filter-name>
+		<url-pattern>/admin/*</url-pattern>
+	</filter-mapping>
+
 </web-app>
