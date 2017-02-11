@@ -1,9 +1,6 @@
-<%@page pageEncoding="UTF-8"%>
-<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
-<%@taglib prefix="UI"        tagdir="/WEB-INF/tags/common/UI"%>
+<%@page pageEncoding="UTF-8"%> 
 <!DOCTYPE html>
-<html>
-<commonTag:head lessFile="/asset/less/user.less" title="列表" />
+<html> 
 <body>
 	<style>
 html, body, table {
@@ -57,8 +54,7 @@ h1 {
 		<tr>
 			<td align="center" valign="middle">
 
-				<div class="box">
-					 <UI:article />
+				<div class="box"> 
 
 					<a href="javascript:history.go(-1);">返回列表</a>
 					<a href="edit/${info.id}">编辑记录</a>
