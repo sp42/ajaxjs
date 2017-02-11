@@ -30,9 +30,11 @@ import org.snaker.engine.helper.StringHelper;
  * @since 1.4
  */
 public class ManagerService extends AccessService implements IManagerService {
+	@Override
 	public void saveOrUpdate(Surrogate surrogate) {
 		AssertHelper.notNull(surrogate);
 		surrogate.setState(STATE_ACTIVE);
+		
 		if(StringHelper.isEmpty(surrogate.getId())) {
 			surrogate.setId(StringHelper.getPrimaryKey());
 			access().saveSurrogate(surrogate);
@@ -41,41 +43,49 @@ public class ManagerService extends AccessService implements IManagerService {
 		}
 	}
 
+	@Override
 	public void deleteSurrogate(String id) {
 		Surrogate surrogate = getSurrogate(id);
 		AssertHelper.notNull(surrogate);
 		access().deleteSurrogate(surrogate);
 	}
 
+	@Override
 	public Surrogate getSurrogate(String id) {
 		return access().getSurrogate(id);
 	}
 	
+	@Override
 	public List<Surrogate> getSurrogate(QueryFilter filter) {
 		AssertHelper.notNull(filter);
 		return access().getSurrogate(null, filter);
 	}
 
+	@Override
 	public List<Surrogate> getSurrogate(Page<Surrogate> page, QueryFilter filter) {
 		AssertHelper.notNull(filter);
 		return access().getSurrogate(page, filter);
 	}
 	
+	@Override
 	public String getSurrogate(String operator, String processName) {
 		AssertHelper.notEmpty(operator);
-		QueryFilter filter = new QueryFilter().
-				setOperator(operator).
-				setOperateTime(DateHelper.getTime());
-		if(StringHelper.isNotEmpty(processName)) {
+		QueryFilter filter = new QueryFilter().setOperator(operator).setOperateTime(DateHelper.getTime());
+		
+		if(StringHelper.isNotEmpty(processName)) 
 			filter.setName(processName);
-		}
+		
 		List<Surrogate> surrogates = getSurrogate(filter);
-		if(surrogates == null || surrogates.isEmpty()) return operator;
+		
+		if(surrogates == null || surrogates.isEmpty()) 
+			return operator;
+		
 		StringBuffer buffer = new StringBuffer(50);
 		for(Surrogate surrogate : surrogates) {
 			String result = getSurrogate(surrogate.getSurrogate(), processName);
 			buffer.append(result).append(",");
 		}
+		
 		buffer.deleteCharAt(buffer.length() - 1);
 		return buffer.toString();
 	}

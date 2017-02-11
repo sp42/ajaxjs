@@ -7,7 +7,7 @@ import java.util.Map;
 import org.snaker.engine.entity.Task;
 
 /**
- * job实体，用于传递给具体的调度框架
+ * job 实体，用于传递给具体的调度框架
  * 
  * @author yuqs
  * @since 1.4

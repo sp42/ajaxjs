@@ -60,13 +60,14 @@ public class Configuration {
 	 * 事务拦截器抽象类
 	 */
 	private TransactionInterceptor interceptor = null;
+	
 	/**
-	 * 需要事务管理的class类型
+	 * 需要事务管理的 class 类型
 	 */
 	private Map<String, Class<?>> txClass = new HashMap<>();
 
 	/**
-	 * 无参构造方法，创建简单的Context实现类，并调用{@link Configuration#Configuration(Context)}
+	 * 无参构造方法，创建简单的 Context 实现类，并调用{@link Configuration#Configuration(Context)}
 	 */
 	public Configuration() {
 		this(new SimpleContext());
@@ -89,20 +90,20 @@ public class Configuration {
 	 * @throws SnakerException
 	 */
 	public SnakerEngine buildSnakerEngine() throws SnakerException {
-		if (org.snaker.engine.RzUtils.isInfoEnabled) {
+		if (org.snaker.engine.RzUtils.isInfoEnabled)
 			log.info("SnakerEngine start......");
-		}
+		
 		parser();
-		/**
-		 * 由服务上下文返回流程引擎
-		 */
+		
+		// 由服务上下文返回流程引擎
 		SnakerEngine configEngine = ServiceContext.getEngine();
-		if (configEngine == null) {
+		
+		if (configEngine == null) 
 			throw new SnakerException("配置无法发现SnakerEngine的实现类");
-		}
-		if (org.snaker.engine.RzUtils.isInfoEnabled) {
+		
+		if (org.snaker.engine.RzUtils.isInfoEnabled) 
 			log.info("SnakerEngine be found:" + configEngine.getClass());
-		}
+		
 		return configEngine.configure(this);
 	}
 
@@ -111,17 +112,17 @@ public class Configuration {
 	 * 用户自定义配置文件:snaker.xml
 	 */
 	protected void parser() {
-		if (org.snaker.engine.RzUtils.isDebugEnabled) {
+		if (org.snaker.engine.RzUtils.isDebugEnabled)
 			log.info("Service parsing start......");
-		}
 
 		// 默认使用snaker.xml配置自定义的bean
 		String config = ConfigHelper.getProperty("config");
-		if (StringHelper.isEmpty(config)) {
+		if (StringHelper.isEmpty(config)) 
 			config = USER_CONFIG_FILE;
-		}
+		
 		parser(config);
 		parser(BASE_CONFIG_FILE);
+		
 		if (!isCMB()) {
 			parser(EXT_CONFIG_FILE);
 			for (Entry<String, Class<?>> entry : txClass.entrySet()) {
@@ -134,9 +135,8 @@ public class Configuration {
 			}
 		}
 
-		if (org.snaker.engine.RzUtils.isDebugEnabled) {
+		if (org.snaker.engine.RzUtils.isDebugEnabled) 
 			log.info("Service parsing finish......");
-		}
 	}
 
 	/**
@@ -148,15 +148,18 @@ public class Configuration {
 	private void parser(String resource) {
 		// 解析所有配置节点，并实例化class指定的类
 		DocumentBuilder documentBuilder = XmlHelper.createDocumentBuilder();
+		
 		try {
 			if (documentBuilder != null) {
 				InputStream input = StreamHelper.openStream(resource);
 				if (input == null)
 					return;
+				
 				Document doc = documentBuilder.parse(input);
 				Element configElement = doc.getDocumentElement();
 				NodeList nodeList = configElement.getChildNodes();
 				int nodeSize = nodeList.getLength();
+				
 				for (int i = 0; i < nodeSize; i++) {
 					Node node = nodeList.item(i);
 					if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -164,9 +167,10 @@ public class Configuration {
 						String name = element.getAttribute("name");
 						String className = element.getAttribute("class");
 						String proxy = element.getAttribute("proxy");
-						if (StringHelper.isEmpty(name)) {
+						
+						if (StringHelper.isEmpty(name)) 
 							name = className;
-						}
+						
 						if (ServiceContext.exist(name)) {
 							log.warning("Duplicate name is:" + name);
 							continue;
@@ -177,6 +181,7 @@ public class Configuration {
 							ServiceContext.put(name, interceptor);
 							continue;
 						}
+						
 						if (proxy != null && proxy.equalsIgnoreCase("transaction")) {
 							txClass.put(name, clazz);
 						} else {

@@ -29,24 +29,28 @@ import org.w3c.dom.Element;
  */
 public class SubProcessParser extends AbstractNodeParser {
 	/**
-	 * 产生SubProcessModel模型对象
+	 * 产生 SubProcessMode l模型对象
 	 */
+	@Override
 	protected NodeModel newModel() {
 		return new SubProcessModel();
 	}
 	
 	/**
-	 * 解析decisition节点的特有属性expr
+	 * 解析 decisition 节点的特有属性 expr
 	 */
+	@Override
 	protected void parseNode(NodeModel node, Element element) {
 		SubProcessModel model = (SubProcessModel)node;
 		model.setProcessName(element.getAttribute(ATTR_PROCESSNAME));
 		String version = element.getAttribute(ATTR_VERSION);
 		int ver = 0;
-        if(RzUtils.isNumber(version)) {
+       
+		if(RzUtils.isNumber(version)) 
         	ver = Integer.parseInt(version);
-        }
+        
 		model.setVersion(ver);
+		
 		String form = element.getAttribute(ATTR_FORM);
 		if(StringHelper.isNotEmpty(form)) {
 			model.setForm(form);

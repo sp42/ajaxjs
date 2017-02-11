@@ -41,23 +41,29 @@ import org.snaker.engine.parser.ModelParser;
  */
 public class ProcessService extends AccessService implements IProcessService, CacheManagerAware {
 	private static final Logger log = Logger.getLogger(ProcessService.class.getName());
+	
 	private static final String DEFAULT_SEPARATOR = ".";
+	
 	/**
 	 * 流程定义对象cache名称
 	 */
 	private static final String CACHE_ENTITY = "snaker.process.entity";
+	
 	/**
 	 * 流程id、name的cache名称
 	 */
 	private static final String CACHE_NAME = "snaker.process.name";
+	
 	/**
 	 * cache manager
 	 */
 	private CacheManager cacheManager;
+	
 	/**
 	 * 实体cache(key=name,value=entity对象)
 	 */
 	private Cache<String, Process> entityCache;
+	
 	/**
 	 * 名称cache(key=id,value=name对象)
 	 */
@@ -65,10 +71,8 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 
 	public void check(Process process, String idOrName) {
 		AssertHelper.notNull(process, "指定的流程定义[id/name=" + idOrName + "]不存在");
-		if (process.getState() != null && process.getState() == 0) {
-			throw new IllegalArgumentException(
-					"指定的流程定义[id/name=" + idOrName + ",version=" + process.getVersion() + "]为非活动状态");
-		}
+		if (process.getState() != null && process.getState() == 0) 
+			throw new IllegalArgumentException("指定的流程定义[id/name=" + idOrName + ",version=" + process.getVersion() + "]为非活动状态");
 	}
 
 	/**
@@ -103,12 +107,14 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 				entity = entityCache.get(processName);
 			}
 		}
+		
 		if (entity != null) {
 			if (org.snaker.engine.RzUtils.isDebugEnabled) {
 				log.info(String.format("obtain process[id=%s] from cache.", id));
 			}
 			return entity;
 		}
+		
 		entity = access().getProcess(id);
 		if (entity != null) {
 			if (org.snaker.engine.RzUtils.isDebugEnabled) {
@@ -116,6 +122,7 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 			}
 			cache(entity);
 		}
+		
 		return entity;
 	}
 
@@ -131,15 +138,17 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 	 */
 	public Process getProcessByVersion(String name, Integer version) {
 		AssertHelper.notEmpty(name);
-		if (version == null) {
+		
+		if (version == null) 
 			version = access().getLatestProcessVersion(name);
-		}
-		if (version == null) {
+		
+		if (version == null) 
 			version = 0;
-		}
+		
 		Process entity = null;
 		String processName = name + DEFAULT_SEPARATOR + version;
 		Cache<String, Process> entityCache = ensureAvailableEntityCache();
+		
 		if (entityCache != null) {
 			entity = entityCache.get(processName);
 		}
@@ -158,6 +167,7 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 			entity = processs.get(0);
 			cache(entity);
 		}
+		
 		return entity;
 	}
 
@@ -181,6 +191,7 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 	 */
 	public String deploy(InputStream input, String creator) {
 		AssertHelper.notNull(input);
+		
 		try {
 			byte[] bytes = StreamHelper.readBytes(input);
 			ProcessModel model = ModelParser.parse(bytes);
@@ -217,6 +228,7 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 		AssertHelper.notNull(input);
 		Process entity = access().getProcess(id);
 		AssertHelper.notNull(entity);
+		
 		try {
 			byte[] bytes = StreamHelper.readBytes(input);
 			ProcessModel model = ModelParser.parse(bytes);
@@ -224,12 +236,13 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 			entity.setModel(model);
 			entity.setBytes(bytes);
 			access().updateProcess(entity);
+			
 			if (!oldProcessName.equalsIgnoreCase(entity.getName())) {
 				Cache<String, Process> entityCache = ensureAvailableEntityCache();
 				if (entityCache != null) 
 					entityCache.remove(oldProcessName + DEFAULT_SEPARATOR + entity.getVersion());
-				
 			}
+			
 			cache(entity);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -239,7 +252,7 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 	}
 
 	/**
-	 * 根据processId卸载流程
+	 * 根据 processId 卸载流程
 	 */
 	public void undeploy(String id) {
 		Process entity = access().getProcess(id);
@@ -258,6 +271,7 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 		for (HistoryOrder historyOrder : historyOrders) {
 			ServiceContext.getEngine().order().cascadeRemove(historyOrder.getId());
 		}
+		
 		access().deleteProcess(entity);
 		clear(entity);
 	}
@@ -268,6 +282,7 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 	public List<Process> getProcesss(QueryFilter filter) {
 		if (filter == null)
 			filter = new QueryFilter();
+		
 		return access().getProcesss(null, filter);
 	}
 
@@ -288,14 +303,15 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 	private void cache(Process entity) {
 		Cache<String, String> nameCache = ensureAvailableNameCache();
 		Cache<String, Process> entityCache = ensureAvailableEntityCache();
-		if (entity.getModel() == null && entity.getDBContent() != null) {
+		if (entity.getModel() == null && entity.getDBContent() != null) 
 			entity.setModel(ModelParser.parse(entity.getDBContent()));
-		}
+		
 		String processName = entity.getName() + DEFAULT_SEPARATOR + entity.getVersion();
+		
 		if (nameCache != null && entityCache != null) {
-			if (org.snaker.engine.RzUtils.isDebugEnabled) {
+			if (org.snaker.engine.RzUtils.isDebugEnabled)
 				log.info(String.format("cache process id is[%s],name is[%s]", entity.getId(), processName));
-			}
+			
 			entityCache.put(processName, entity);
 			nameCache.put(entity.getId(), processName);
 		} else {
@@ -315,6 +331,7 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 		Cache<String, String> nameCache = ensureAvailableNameCache();
 		Cache<String, Process> entityCache = ensureAvailableEntityCache();
 		String processName = entity.getName() + DEFAULT_SEPARATOR + entity.getVersion();
+		
 		if (nameCache != null && entityCache != null) {
 			nameCache.remove(entity.getId());
 			entityCache.remove(processName);

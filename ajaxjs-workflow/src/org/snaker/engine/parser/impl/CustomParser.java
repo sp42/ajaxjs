@@ -25,6 +25,7 @@ import org.w3c.dom.Element;
  * @since 1.0
  */
 public class CustomParser extends AbstractNodeParser {
+	@Override
 	protected void parseNode(NodeModel node, Element element) {
 		CustomModel custom = (CustomModel)node;
 		custom.setClazz(element.getAttribute(ATTR_CLAZZ));
@@ -33,6 +34,7 @@ public class CustomParser extends AbstractNodeParser {
 		custom.setVar(element.getAttribute(ATTR_VAR));
 	}
 	
+	@Override
 	protected NodeModel newModel() {
 		return new CustomModel();
 	}

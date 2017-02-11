@@ -97,7 +97,7 @@ public class TaskService extends AccessService implements ITaskService {
 	}
 
 	/**
-	 * 更新任务对象的finish_Time、operator、expire_Time、version、variable
+	 * 更新任务对象的 finish_Time、operator、expire_Time、version、variable
 	 * 
 	 * @param task
 	 *            任务对象
@@ -273,14 +273,16 @@ public class TaskService extends AccessService implements ITaskService {
 		HistoryTask hist = access().getHistTask(taskId);
 		AssertHelper.notNull(hist, "指定的历史任务[id=" + taskId + "]不存在");
 		List<Task> tasks;
+		
 		if (hist.isPerformAny()) {
 			tasks = access().getNextActiveTasks(hist.getId());
 		} else {
 			tasks = access().getNextActiveTasks(hist.getOrderId(), hist.getTaskName(), hist.getParentTaskId());
 		}
-		if (tasks == null || tasks.isEmpty()) {
+		
+		if (tasks == null || tasks.isEmpty()) 
 			throw new SnakerException("后续活动任务已完成或不存在，无法撤回.");
-		}
+		
 		for (Task task : tasks) {
 			access().deleteTask(task);
 		}
@@ -290,6 +292,7 @@ public class TaskService extends AccessService implements ITaskService {
 		task.setCreateTime(DateHelper.getTime());
 		access().saveTask(task);
 		assignTask(task.getId(), task.getOperator());
+		
 		return task;
 	}
 
@@ -298,15 +301,15 @@ public class TaskService extends AccessService implements ITaskService {
 	 */
 	public Task rejectTask(ProcessModel model, Task currentTask) {
 		String parentTaskId = currentTask.getParentTaskId();
-		if (StringHelper.isEmpty(parentTaskId) || parentTaskId.equals(START)) {
+		if (StringHelper.isEmpty(parentTaskId) || parentTaskId.equals(START)) 
 			throw new SnakerException("上一步任务ID为空，无法驳回至上一步处理");
-		}
+		
 		NodeModel current = model.getNode(currentTask.getTaskName());
 		HistoryTask history = access().getHistTask(parentTaskId);
 		NodeModel parent = model.getNode(history.getTaskName());
-		if (!NodeModel.canRejected(current, parent)) {
+		
+		if (!NodeModel.canRejected(current, parent)) 
 			throw new SnakerException("无法驳回至上一步处理，请确认上一步骤并非fork、join、suprocess以及会签任务");
-		}
 
 		Task task = history.undoTask();
 		task.setId(StringHelper.getPrimaryKey());
@@ -328,10 +331,12 @@ public class TaskService extends AccessService implements ITaskService {
 	private void assignTask(String taskId, String... actorIds) {
 		if (actorIds == null || actorIds.length == 0)
 			return;
+		
 		for (String actorId : actorIds) {
 			// 修复当actorId为null的bug
 			if (StringHelper.isEmpty(actorId))
 				continue;
+			
 			TaskActor taskActor = new TaskActor();
 			taskActor.setTaskId(taskId);
 			taskActor.setActorId(actorId);

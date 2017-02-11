@@ -322,6 +322,7 @@ public class RzUtils {
                 return true;
             }
         }
+        
         sz--; // don't want to loop to the last char, check it afterwords
               // for type qualifiers
         int i = start;

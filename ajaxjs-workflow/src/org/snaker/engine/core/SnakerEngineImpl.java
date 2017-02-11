@@ -78,10 +78,11 @@ public class SnakerEngineImpl implements SnakerEngine {
 	protected IManagerService managerService;
 	
 	/**
-	 * 根据serviceContext上下文，查找processService、orderService、taskService服务
+	 * 根据 serviceContext 上下文，查找 processService、orderService、taskService 服务
 	 */
 	public SnakerEngine configure(Configuration config) {
 		this.configuration = config;
+		
 		processService = ServiceContext.find(IProcessService.class);
 		queryService = ServiceContext.find(IQueryService.class);
 		orderService = ServiceContext.find(IOrderService.class);
@@ -95,7 +96,7 @@ public class SnakerEngineImpl implements SnakerEngine {
 			DBAccess access = ServiceContext.find(DBAccess.class);
 			AssertHelper.notNull(access);
 			TransactionInterceptor interceptor = ServiceContext.find(TransactionInterceptor.class);
-			//如果初始化配置时提供了访问对象，就对DBAccess进行初始化
+			// 如果初始化配置时提供了访问对象，就对 DBAccess 进行初始化
 			Object accessObject = this.configuration.getAccessDBObject();
 			if(accessObject != null) {
 				if(interceptor != null) {
@@ -106,11 +107,13 @@ public class SnakerEngineImpl implements SnakerEngine {
 			setDBAccess(access);
             access.runScript();
 		}
+		
 		CacheManager cacheManager = ServiceContext.find(CacheManager.class);
 		if(cacheManager == null) {
-			//默认使用内存缓存管理器
+			// 默认使用内存缓存管理器
 			cacheManager = new MemoryCacheManager();
 		}
+		
 		List<CacheManagerAware> cacheServices = ServiceContext.findList(CacheManagerAware.class);
 		for(CacheManagerAware cacheService : cacheServices) {
 			cacheService.setCacheManager(cacheManager);

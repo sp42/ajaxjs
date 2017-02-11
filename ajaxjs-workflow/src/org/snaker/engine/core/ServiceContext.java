@@ -24,7 +24,7 @@ import org.snaker.engine.helper.AssertHelper;
 
 /**
  * 单实例的服务上下文
- * 具体的上下文查找服务交给Context的实现类
+ * 具体的上下文查找服务交给 Context 的实现类
  * @author yuqs
  * @since 1.5
  */
@@ -42,7 +42,7 @@ public abstract class ServiceContext {
 	private static SnakerEngine engine;
 	
 	/**
-	 * 获取Context实现类
+	 * 获取 Context 实现类
 	 * @return
 	 */
 	public static Context getContext() {
@@ -50,7 +50,7 @@ public abstract class ServiceContext {
 	}
 	
 	/**
-	 * 设置Context实现类
+	 * 设置 Context 实现类
 	 * @param context
 	 */
 	public static void setContext(Context context) {
@@ -63,9 +63,9 @@ public abstract class ServiceContext {
 	 */
 	public static SnakerEngine getEngine() {
 		AssertHelper.notNull(context, "未注册服务上下文");
-		if(engine == null) {
+		if(engine == null)
 			engine = context.find(SnakerEngine.class);
-		}
+		
 		return engine;
 	}
 	
@@ -76,9 +76,9 @@ public abstract class ServiceContext {
 	 */
 	public static void put(String name, Object object) {
 		AssertHelper.notNull(context, "未注册服务上下文");
-		if(org.snaker.engine.RzUtils.isInfoEnabled) {
+		if(org.snaker.engine.RzUtils.isInfoEnabled)
 			log.info("put new instance[name=" + name + "][object=" + object + "]");
-		}
+		
 		context.put(name, object);
 	}
 	
@@ -89,9 +89,9 @@ public abstract class ServiceContext {
 	 */
 	public static void put(String name, Class<?> clazz) {
 		AssertHelper.notNull(context, "未注册服务上下文");
-		if(org.snaker.engine.RzUtils.isInfoEnabled) {
+		if(org.snaker.engine.RzUtils.isInfoEnabled) 
 			log.info("put new instance[name=" + name + "][clazz=" + clazz.getName() + "]");
-		}
+		
 		context.put(name, clazz);
 	}
 	
@@ -106,7 +106,7 @@ public abstract class ServiceContext {
 	}
 
 	/**
-	 * 对外部提供的查找对象方法，根据class类型查找
+	 * 对外部提供的查找对象方法，根据 class 类型查找
 	 * @param clazz 服务类型
 	 * @return
 	 */
@@ -116,7 +116,7 @@ public abstract class ServiceContext {
 	}
 	
 	/**
-	 * 对外部提供的查找对象实例列表方法，根据class类型查找集合
+	 * 对外部提供的查找对象实例列表方法，根据 class 类型查找集合
 	 * @param clazz 服务类型
 	 * @return
 	 */
@@ -126,7 +126,7 @@ public abstract class ServiceContext {
 	}
 	
 	/**
-	 * 对外部提供的查找对象方法，根据名称、class类型查找
+	 * 对外部提供的查找对象方法，根据名称、class 类型查找
 	 * @param name 服务名称
 	 * @param clazz 服务类型
 	 * @return

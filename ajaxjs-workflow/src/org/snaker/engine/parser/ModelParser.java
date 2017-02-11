@@ -32,7 +32,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
- * 流程定义xml文件的模型解析器
+ * 流程定义 xml 文件的模型解析器
  * 
  * @author yuqs
  * @since 1.0
@@ -45,6 +45,7 @@ public class ModelParser {
 	 */
 	public static ProcessModel parse(byte[] bytes) {
 		DocumentBuilder documentBuilder = XmlHelper.createDocumentBuilder();
+		
 		if (documentBuilder != null) {
 			Document doc = null;
 			try {
@@ -58,8 +59,10 @@ public class ModelParser {
 				process.setInstanceNoClass(processE.getAttribute(NodeParser.ATTR_INSTANCENOCLASS));
 				NodeList nodeList = processE.getChildNodes();
 				int nodeSize = nodeList.getLength();
+				
 				for (int i = 0; i < nodeSize; i++) {
 					Node node = nodeList.item(i);
+					
 					if (node.getNodeType() == Node.ELEMENT_NODE) {
 						NodeModel model = parseModel(node);
 						process.getNodes().add(model);
@@ -70,6 +73,7 @@ public class ModelParser {
 				for (NodeModel node : process.getNodes()) {
 					for (TransitionModel transition : node.getOutputs()) {
 						String to = transition.getTo();
+						
 						for (NodeModel node2 : process.getNodes()) {
 							if (to.equalsIgnoreCase(node2.getName())) {
 								node2.getInputs().add(transition);
@@ -91,7 +95,7 @@ public class ModelParser {
 	}
 
 	/**
-	 * 对流程定义xml的节点，根据其节点对应的解析器解析节点内容
+	 * 对流程定义 xml 的节点，根据其节点对应的解析器解析节点内容
 	 * 
 	 * @param node
 	 * @return

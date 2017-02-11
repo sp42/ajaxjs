@@ -25,8 +25,9 @@ import org.snaker.engine.parser.AbstractNodeParser;
  */
 public class ForkParser extends AbstractNodeParser {
 	/**
-	 * 产生ForkModel模型对象
+	 * 产生 ForkModel 模型对象
 	 */
+	@Override
 	protected NodeModel newModel() {
 		return new ForkModel();
 	}

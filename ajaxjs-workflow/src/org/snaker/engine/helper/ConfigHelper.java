@@ -41,35 +41,36 @@ public class ConfigHelper {
 	public static Properties getProperties() {
 		if (properties == null) {
 			synchronized (ConfigHelper.class) {
-				if (properties == null) {
+				if (properties == null) 
 					loadProperties(PROPERTIES_FILENAME);
-				}
 			}
 		}
+		
 		return properties;
 	}
 
 	/**
-	 * 根据key获取配置的字符串value值
+	 * 根据 key 获取配置的字符串 value 值
 	 * 
 	 * @param key
 	 * @return
 	 */
 	public static String getProperty(String key) {
-		if (key == null) {
+		if (key == null)
 			return null;
-		}
+
 		return getProperties().getProperty(key);
 	}
 
 	/**
-	 * 根据key获取配置的数字value值
+	 * 根据 key 获取配置的数字 value 值
 	 * 
 	 * @param key
 	 * @return
 	 */
 	public static int getNumerProperty(String key) {
 		String value = getProperties().getProperty(key);
+		
 		if (RzUtils.isNumber(value)) {
 			return Integer.parseInt(value);
 		} else {

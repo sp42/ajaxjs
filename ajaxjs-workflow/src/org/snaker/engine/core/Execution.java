@@ -86,7 +86,7 @@ public class Execution implements Serializable {
 	private List<Task> tasks = new ArrayList<>();
 	
 	/**
-	 * 是否已合并 针对join节点的处理
+	 * 是否已合并 针对 join 节点的处理
 	 */
 	private boolean isMerged = false;
 
@@ -98,9 +98,9 @@ public class Execution implements Serializable {
 	 * @param parentNodeName 父节点名称
 	 */
 	Execution(Execution execution, Process process, String parentNodeName) {
-		if (execution == null || process == null || parentNodeName == null) {
-			throw new SnakerException("构造Execution对象失败，请检查execution、process、parentNodeName是否为空");
-		}
+		if (execution == null || process == null || parentNodeName == null) 
+			throw new SnakerException("构造 Execution 对象失败，请检查 execution、process、parentNodeName 是否为空");
+		
 		this.engine = execution.getEngine();
 		this.process = process;
 		this.args = execution.getArgs();
@@ -117,9 +117,9 @@ public class Execution implements Serializable {
 	 * @param args
 	 */
 	public Execution(SnakerEngine engine, Process process, Order order, Map<String, Object> args) {
-		if (process == null || order == null) {
+		if (process == null || order == null) 
 			throw new SnakerException("构造Execution对象失败，请检查process、order是否为空");
-		}
+		
 		this.engine = engine;
 		this.process = process;
 		this.order = order;
@@ -127,7 +127,7 @@ public class Execution implements Serializable {
 	}
 
 	/**
-	 * 根据当前执行对象execution、子流程定义process、当前节点名称产生子流程的执行对象
+	 * 根据当前执行对象 execution、子流程定义 process、当前节点名称产生子流程的执行对象
 	 * 
 	 * @param execution
 	 * @param process

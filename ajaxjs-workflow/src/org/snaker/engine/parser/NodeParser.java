@@ -65,13 +65,13 @@ public interface NodeParser {
     public static final String ATTR_POSTINTERCEPTORS = "postInterceptors";
 	
 	/**
-	 * 节点dom元素解析方法，由实现类完成解析
+	 * 节点 dom 元素解析方法，由实现类完成解析
 	 * @param element dom元素
 	 */
 	public void parse(Element element);
 	
 	/**
-	 * 解析成功后，提供返回NodeModel模型对象
+	 * 解析成功后，提供返回 NodeModel 模型对象
 	 * @return 节点模型
 	 */
 	public NodeModel getModel();

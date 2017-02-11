@@ -19,7 +19,7 @@ import org.snaker.engine.DBAccess;
 import org.snaker.engine.impl.GeneralCompletion;
 
 /**
- * 作为抽象父类，提供给子类access实现方式
+ * 作为抽象父类，提供给子类 access 实现方式
  * 
  * @author yuqs
  * @since 1.0

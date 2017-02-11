@@ -46,10 +46,12 @@ public class QueryService extends AccessService implements IQueryService {
 		List<TaskActor> actors = access().getTaskActorsByTaskId(taskId);
 		if(actors == null || actors.isEmpty()) return null;
 		String[] actorIds = new String[actors.size()];
+		
 		for(int i = 0; i < actors.size(); i++) {
 			TaskActor ta = actors.get(i);
 			actorIds[i] = ta.getActorId();
 		}
+		
 		return actorIds;
 	}
 	
@@ -57,6 +59,7 @@ public class QueryService extends AccessService implements IQueryService {
 		List<HistoryTaskActor> actors = access().getHistTaskActorsByTaskId(taskId);
 		if(actors == null || actors.isEmpty()) return null;
 		String[] actorIds = new String[actors.size()];
+		
 		for(int i = 0; i < actors.size(); i++) {
 			HistoryTaskActor ta = actors.get(i);
 			actorIds[i] = ta.getActorId();
@@ -104,45 +107,52 @@ public class QueryService extends AccessService implements IQueryService {
 
 	public List<HistoryTask> getHistoryTasks(QueryFilter filter) {
 		AssertHelper.notNull(filter);
+		
 		return access().getHistoryTasks(null, filter);
 	}
 
 	public List<HistoryTask> getHistoryTasks(Page<HistoryTask> page, QueryFilter filter) {
 		AssertHelper.notNull(filter);
+		
 		return access().getHistoryTasks(page, filter);
 	}
 	
 	public List<WorkItem> getWorkItems(Page<WorkItem> page, QueryFilter filter) {
 		AssertHelper.notNull(filter);
+		
 		return access().getWorkItems(page, filter);
 	}
 	
 	public List<HistoryOrder> getCCWorks(Page<HistoryOrder> page, QueryFilter filter) {
 		AssertHelper.notNull(filter);
+		
 		return access().getCCWorks(page, filter);
 	}
 
 	public List<WorkItem> getHistoryWorkItems(Page<WorkItem> page, QueryFilter filter) {
 		AssertHelper.notNull(filter);
+		
 		return access().getHistoryWorkItems(page, filter);
 	}
 
 	public <T> T nativeQueryObject(Class<T> T, String sql, Object... args) {
 		AssertHelper.notEmpty(sql);
 		AssertHelper.notNull(T);
+		
 		return access().queryObject(T, sql, args);
 	}
 
 	public <T> List<T> nativeQueryList(Class<T> T, String sql, Object... args) {
 		AssertHelper.notEmpty(sql);
 		AssertHelper.notNull(T);
+		
 		return access().queryList(T, sql, args);
 	}
 
-	public <T> List<T> nativeQueryList(Page<T> page, Class<T> T, String sql,
-			Object... args) {
+	public <T> List<T> nativeQueryList(Page<T> page, Class<T> T, String sql, Object... args) {
 		AssertHelper.notEmpty(sql);
 		AssertHelper.notNull(T);
+		
 		return access().queryList(page, new QueryFilter(), T, sql, args);
 	}
 }
