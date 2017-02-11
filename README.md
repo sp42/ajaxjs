@@ -1,7 +1,7 @@
 #AJAXJS Web Frameworks
 =================================== 
 
-设计目标：clean, simple, fast, full-stacks.
+设计目标：Clean, Simple, Fast, Full-stacks.
 [官网](http://framework.ajaxjs.com/framework/)
 [作者博客](http://blog.csdn.net/zhangxin09/) 欢迎加入 QQ 群讨论：3150067
 
@@ -12,7 +12,7 @@
 技术选型
 ------------
 表示层=JSP/Servlet/MVC/JSTL/Tag Files/Less.js/Vue.js；
-数据层=MySQL/SQLite/JDBC/MyBatis/Shrio/Apache BVal/Tomcat JDBCPool；
+数据层=MySQL/SQLite/JDBC/MyBatis/Shrio/Apache BVal/Tomcat JDBC-Pool；
 基础=Java 7/Eclipse/Ant/Rhino/JavaUtilLogger
 
 环境
