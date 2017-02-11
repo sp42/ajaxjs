@@ -29,92 +29,107 @@ import org.snaker.engine.model.TaskModel.TaskType;
  * @since 1.0
  */
 public class Task implements Serializable, Cloneable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -189094546633914087L;
+	
 	public static final String KEY_ACTOR = "S-ACTOR";
+	
 	/**
 	 * 主键ID
 	 */
 	private String id;
+	
 	/**
 	 * 版本
 	 */
 	private Integer version = 0;
-    /**
+    
+	/**
      * 流程实例ID
      */
     private String orderId;
+   
     /**
      * 任务名称
      */
 	private String taskName;
+	
 	/**
 	 * 任务显示名称
 	 */
 	private String displayName;
+	
 	/**
 	 * 参与方式（0：普通任务；1：参与者会签任务）
 	 */
 	private Integer performType;
+	
 	/**
 	 * 任务类型（0：主办任务；1：协办任务）
 	 */
     private Integer taskType;
+   
     /**
      * 任务处理者ID
      */
     private String operator;
+   
     /**
      * 任务创建时间
      */
     private String createTime;
+    
     /**
      * 任务完成时间
      */
     private String finishTime;
+   
     /**
      * 期望任务完成时间
      */
     private String expireTime;
+   
     /**
-     * 期望的完成时间date类型
+     * 期望的完成时间 date 类型
      */
     private Date expireDate;
+    
     /**
      * 提醒时间date类型
      */
     private Date remindDate;
+    
     /**
      * 任务关联的表单url
      */
     private String actionUrl;
+   
     /**
      * 任务参与者列表
      */
     private String[] actorIds;
+    
     /**
      * 父任务Id
      */
     private String parentTaskId;
-	/**
+	
+    /**
      * 任务附属变量
      */
     private String variable;
+    
     /**
      * 保持模型对象
      */
     private TaskModel model;
     
     public Task() {
-    	
     }
     
     public Task(String id) {
     	this.id = id;
     }
-    
+  
     public boolean isMajor() {
     	return this.taskType == TaskType.Major.ordinal();
     }
@@ -218,9 +233,9 @@ public class Task implements Serializable, Cloneable {
 	public String[] getActorIds() {
 		if(actorIds == null) {
 			String actorStr = (String)getVariableMap().get(KEY_ACTOR);
-			if(actorStr != null) {
+			
+			if(actorStr != null) 
 				actorIds = actorStr.split(",");
-			}
 		}
 		return actorIds;
 	}

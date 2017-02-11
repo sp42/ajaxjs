@@ -27,11 +27,8 @@ import org.snaker.engine.model.TaskModel.PerformType;
  * @since 1.0
  */
 public class HistoryTask implements Serializable {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 6814632180050362450L;
+	
 	/**
 	 * 主键ID
 	 */

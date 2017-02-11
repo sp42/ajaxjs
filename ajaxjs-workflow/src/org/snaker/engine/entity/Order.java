@@ -26,9 +26,6 @@ import org.snaker.engine.helper.JsonHelper;
  * @since 1.0
  */
 public class Order implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -8335779448165343933L;
 	/**
 	 * 主键ID

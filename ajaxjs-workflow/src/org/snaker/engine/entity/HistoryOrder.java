@@ -28,23 +28,23 @@ import org.snaker.engine.helper.JsonHelper;
  * @since 1.0
  */
 public class HistoryOrder implements Serializable {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5853727929104539328L;
+	
 	/**
 	 * 主键ID
 	 */
 	private String id;
+	
 	/**
 	 * 流程定义ID
 	 */
     private String processId;
+   
     /**
      * 流程实例状态（0：结束；1：活动）
      */
     private Integer orderState;
+    
     /**
      * 流程实例创建者ID
      */

@@ -22,20 +22,19 @@ import java.io.Serializable;
  * @since 1.0
  */
 public class TaskActor implements Serializable {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 2969915022122094614L;
+	
 	/**
 	 * 关联的任务ID
 	 */
     private String taskId;
+   
     /**
      * 关联的参与者ID（参与者可以为用户、部门、角色）
      */
     private String actorId;
-	public String getTaskId() {
+	
+    public String getTaskId() {
 		return taskId;
 	}
 	public void setTaskId(String taskId) {

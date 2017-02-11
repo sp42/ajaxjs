@@ -22,38 +22,43 @@ import java.io.Serializable;
  * @since 1.4
  */
 public class Surrogate implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7359321877096338448L;
+	
 	/**
 	 * 主键ID
 	 */
 	private String id;
+	
 	/**
 	 * 流程name
 	 */
 	private String processName;
+	
 	/**
 	 * 授权人
 	 */
 	private String operator;
+	
 	/**
 	 * 代理人
 	 */
 	private String surrogate;
+	
 	/**
 	 * 操作时间
 	 */
 	private String odate;
+	
 	/**
 	 * 开始时间
 	 */
 	private String sdate;
+	
 	/**
 	 * 结束时间
 	 */
 	private String edate;
+	
 	/**
 	 * 状态
 	 */
