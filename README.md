@@ -12,12 +12,12 @@
 技术选型
 ------------
 表示层=JSP/Servlet/MVC/JSTL/Tag Files/Less.js/Vue.js；
-数据层=MySQL/SQLite/JDBC/MyBatis/Shrio/ApacheBVal/TomcatJDBCPool；
+数据层=MySQL/SQLite/JDBC/MyBatis/Shrio/Apache BVal/Tomcat JDBCPool；
 基础=Java 7/Eclipse/Ant/Rhino/JavaUtilLogger
 
 环境
 ------------
-Oracle Java 1.7 暂不支持 1.8；Tomcat 7或以上。
+Oracle Java 1.7 暂不支持 1.8 或 OpenJDK；Tomcat 7 或以上。
 
 项目一览
 --------------
