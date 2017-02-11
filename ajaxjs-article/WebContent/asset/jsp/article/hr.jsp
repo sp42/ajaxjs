@@ -1,8 +1,6 @@
 <%@page pageEncoding="UTF-8"%>	
 <%@taglib prefix="commonUI" tagdir="/WEB-INF/tags/common/UI"%>
-<%@taglib prefix="adminUI"  tagdir="/WEB-INF/tags/common/admin"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
-<adminUI:edit type="main">
 	<div class="row">
 		<div>
 			<label>
@@ -31,4 +29,3 @@
 			</label>
 		</div>
 	</div>
-</adminUI:edit>
