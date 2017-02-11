@@ -6,3 +6,5 @@
 - jdbc JDBC 数据工具包
 - net 网络通讯包（http 链式风格请求包、mail 基于 telnet 的简易邮件发送器）
 - framework 数据层服务，泛型封装 Service/DAO/Model 提供快速增删改查服务，包含分页，查询条件，整合 Validator 后端验证
+
+如果发现缺少 HttpServletRequest 等的类，请手动把 javax-servlet.jar 加入到 classpath 中。
