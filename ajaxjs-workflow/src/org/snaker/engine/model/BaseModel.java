@@ -27,10 +27,12 @@ import org.snaker.engine.handlers.IHandler;
  */
 public class BaseModel implements Serializable {
 	private static final long serialVersionUID = 3082741431225739241L;
+	
 	/**
 	 * 元素名称
 	 */
 	private String name;
+	
 	/**
 	 * 显示名称
 	 */

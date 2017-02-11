@@ -34,31 +34,39 @@ import org.snaker.engine.helper.StringHelper;
  */
 public abstract class NodeModel extends BaseModel implements Action {
 	private static final long serialVersionUID = -2377317472320109317L;
+	
 	private static final Logger log = Logger.getLogger(NodeModel.class.getName());
+	
 	/**
 	 * 输入变迁集合
 	 */
 	private List<TransitionModel> inputs = new ArrayList<>();
+	
 	/**
 	 * 输出变迁集合
 	 */
 	private List<TransitionModel> outputs = new ArrayList<>();
+	
 	/**
 	 * layout
 	 */
 	private String layout;
+	
 	/**
 	 * 局部前置拦截器
 	 */
 	private String preInterceptors;
+	
 	/**
 	 * 局部后置拦截器
 	 */
 	private String postInterceptors;
+	
 	/**
 	 * 前置局部拦截器实例集合
 	 */
 	private List<SnakerInterceptor> preInterceptorList = new ArrayList<>();
+	
 	/**
 	 * 后置局部拦截器实例集合
 	 */

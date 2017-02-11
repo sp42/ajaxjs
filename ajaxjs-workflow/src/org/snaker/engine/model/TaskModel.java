@@ -26,96 +26,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 任务定义task元素
+ * 任务定义 task 元素
  * @author yuqs
  * @since 1.0
  */
 public class TaskModel extends WorkModel {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1775545243233990922L;
+	
 	/**
 	 * 类型：普通任务
 	 */
 	public static final String PERFORMTYPE_ANY = "ANY";
+	
 	/**
 	 * 类型：参与者fork任务
 	 */
 	public static final String PERFORMTYPE_ALL = "ALL";
+	
 	/**
 	 * 类型：主办任务
 	 */
 	public static final String TASKTYPE_MAJOR = "Major";
+	
 	/**
 	 * 类型：协办任务
 	 */
 	public static final String TASKTYPE_AIDANT = "Aidant";
-	/**
-	 * 参与类型
-	 */
-	public enum PerformType {
-		ANY, ALL;
-	}
-	/**
-	 * 任务类型(Major:主办的,Aidant:协助的,Record:仅仅作为记录的)
-	 */
-	public enum TaskType {
-		Major, Aidant, Record;
-	}
-	/**
-	 * 参与者变量名称
-	 */
-	private String assignee;
-	/**
-	 * 参与方式
-	 * any：任何一个参与者处理完即执行下一步
-	 * all：所有参与者都完成，才可执行下一步
-	 */
-	private String performType = PERFORMTYPE_ANY;
-	/**
-	 * 任务类型
-	 * major：主办任务
-	 * aidant：协办任务
-	 */
-	private String taskType = TASKTYPE_MAJOR;
-	/**
-	 * 期望完成时间
-	 */
-	private String expireTime;
-	/**
-	 * 提醒时间
-	 */
-	private String reminderTime;
-	/**
-	 * 提醒间隔(分钟)
-	 */
-	private String reminderRepeat;
-	/**
-	 * 是否自动执行
-	 */
-	private String autoExecute;
-	/**
-	 * 任务执行后回调类
-	 */
-	private String callback;
-	/**
-	 * 分配参与者处理类型
-	 */
-	private String assignmentHandler;
-	/**
-	 * 任务执行后回调对象
-	 */
-	private JobCallback callbackObject;
-	/**
-	 * 分配参与者处理对象
-	 */
-	private AssignmentHandler assignmentHandlerObject;
-    /**
-     * 字段模型集合
-     */
-    private List<FieldModel> fields = null;
-
+	
+    @Override
 	protected void exec(Execution execution) {
 		if(performType == null || performType.equalsIgnoreCase(PERFORMTYPE_ANY)) {
 			/**
@@ -132,6 +70,83 @@ public class TaskModel extends WorkModel {
 			if(execution.isMerged()) runOutTransition(execution);
 		}
 	}
+	
+	/**
+	 * 参与类型
+	 */
+	public enum PerformType {
+		ANY, ALL;
+	}
+	
+	/**
+	 * 任务类型(Major:主办的,Aidant:协助的,Record:仅仅作为记录的)
+	 */
+	public enum TaskType {
+		Major, Aidant, Record;
+	}
+	
+	/**
+	 * 参与者变量名称
+	 */
+	private String assignee;
+	/**
+	 * 参与方式
+	 * any：任何一个参与者处理完即执行下一步
+	 * all：所有参与者都完成，才可执行下一步
+	 */
+	private String performType = PERFORMTYPE_ANY;
+	
+	/**
+	 * 任务类型
+	 * major：主办任务
+	 * aidant：协办任务
+	 */
+	private String taskType = TASKTYPE_MAJOR;
+	
+	/**
+	 * 期望完成时间
+	 */
+	private String expireTime;
+	
+	/**
+	 * 提醒时间
+	 */
+	private String reminderTime;
+	
+	/**
+	 * 提醒间隔(分钟)
+	 */
+	private String reminderRepeat;
+	
+	/**
+	 * 是否自动执行
+	 */
+	private String autoExecute;
+	
+	/**
+	 * 任务执行后回调类
+	 */
+	private String callback;
+	
+	/**
+	 * 分配参与者处理类型
+	 */
+	private String assignmentHandler;
+	
+	/**
+	 * 任务执行后回调对象
+	 */
+	private JobCallback callbackObject;
+	
+	/**
+	 * 分配参与者处理对象
+	 */
+	private AssignmentHandler assignmentHandlerObject;
+    
+	/**
+     * 字段模型集合
+     */
+    private List<FieldModel> fields = null;
 	
 	public boolean isPerformAny() {
 		return PERFORMTYPE_ANY.equalsIgnoreCase(this.performType);
@@ -248,9 +263,11 @@ public class TaskModel extends WorkModel {
      */
     public List<TaskModel> getNextTaskModels() {
         List<TaskModel> models = new ArrayList<TaskModel>();
+        
         for(TransitionModel tm : this.getOutputs()) {
             addNextModels(models, tm, TaskModel.class);
         }
+        
         return models;
     }
 }

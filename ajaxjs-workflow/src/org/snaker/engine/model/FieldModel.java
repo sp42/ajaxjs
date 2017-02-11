@@ -18,12 +18,12 @@ public class FieldModel extends BaseModel {
 	private String type;
 	
 	/**
-	 * 字段模型对应的属性key/value数据
+	 * 字段模型对应的属性 key/value 数据
 	 */
 	private Map<String, String> attrMap = new HashMap<>();
 
 	/**
-	 * 向属性集合添加key/value数据
+	 * 向属性集合添加 key/value 数据
 	 * 
 	 * @param name
 	 *            属性名称

@@ -31,41 +31,56 @@ import org.snaker.engine.helper.StringHelper;
  */
 public class DecisionModel extends NodeModel {
 	private static final Logger log = Logger.getLogger(DecisionModel.class.getName());
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -806621814645169999L;
+	
 	/**
 	 * 决策选择表达式串（需要表达式引擎解析）
 	 */
 	private String expr;
+	
 	/**
-	 * 决策处理类，对于复杂的分支条件，可通过handleClass来处理
+	 * 决策处理类，对于复杂的分支条件，可通过 handleClass 来处理
 	 */
 	private String handleClass;
+	
 	/**
 	 * 决策处理类实例
 	 */
 	private DecisionHandler decide;
+	
 	/**
 	 * 表达式解析器
 	 */
 	private transient Expression expression;
 	
+	/**
+	 * 执行指定一个执行对象
+	 * 
+	 * @param execution
+	 *            执行对象
+	 */
+	@Override
 	public void exec(Execution execution) {
 		log.info(execution.getOrder().getId() + "->decision execution.getArgs():" + execution.getArgs());
-		if(expression == null) {
+		
+		if(expression == null) 
 			expression = ServiceContext.getContext().find(Expression.class);
-		}
+		
 		log.info("expression is " + expression);
-		if(expression == null) throw new SnakerException("表达式解析器为空，请检查配置.");
+		
+		if(expression == null) 
+			throw new SnakerException("表达式解析器为空，请检查配置.");
+		
 		String next = null;
 		if(StringHelper.isNotEmpty(expr)) {
 			next = expression.eval(String.class, expr, execution.getArgs());
 		} else if(decide != null) {
 			next = decide.decide(execution);
 		}
+		
 		log.info(execution.getOrder().getId() + "->decision expression[expr=" + expr + "] return result:" + next);
+		
 		boolean isfound = false;
 		for(TransitionModel tm : getOutputs()) {
 			if(StringHelper.isEmpty(next)) {
@@ -83,7 +98,9 @@ public class DecisionModel extends NodeModel {
 				}
 			}
 		}
-		if(!isfound) throw new SnakerException(execution.getOrder().getId() + "->decision节点无法确定下一步执行路线");
+		
+		if(!isfound) 
+			throw new SnakerException(execution.getOrder().getId() + "->decision节点无法确定下一步执行路线");
 	}
 	
 	public String getExpr() {
@@ -96,9 +113,11 @@ public class DecisionModel extends NodeModel {
 	public String getHandleClass() {
 		return handleClass;
 	}
-
+	
+	// 重写 setter
 	public void setHandleClass(String handleClass) {
 		this.handleClass = handleClass;
+		
 		if(StringHelper.isNotEmpty(handleClass)) {
 			decide = (DecisionHandler)ClassHelper.newInstance(handleClass);
 		}

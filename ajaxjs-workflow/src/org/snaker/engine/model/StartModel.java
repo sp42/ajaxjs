@@ -25,9 +25,6 @@ import org.snaker.engine.core.Execution;
  * @since 1.0
  */
 public class StartModel extends NodeModel {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -4550530562581330477L;
 
 	/**
@@ -37,6 +34,7 @@ public class StartModel extends NodeModel {
 		return Collections.emptyList();
 	}
 
+	@Override
 	protected void exec(Execution execution) {
 		runOutTransition(execution);
 	}

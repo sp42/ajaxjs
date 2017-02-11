@@ -22,23 +22,24 @@ import org.snaker.engine.core.Execution;
  * @since 1.0
  */
 public class SubProcessModel extends WorkModel {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3923955459202018147L;
+	
 	/**
 	 * 子流程名称
 	 */
 	private String processName;
+	
 	/**
 	 * 子流程版本号
 	 */
 	private Integer version;
+	
 	/**
 	 * 子流程定义引用
 	 */
 	private ProcessModel subProcess;
 
+	@Override
 	protected void exec(Execution execution) {
 		runOutTransition(execution);	
 	}
