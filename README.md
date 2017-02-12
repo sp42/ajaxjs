@@ -35,4 +35,6 @@ Oracle Java 1.7 暂不支持 1.8 或 OpenJDK；Tomcat 7 或以上。
 |ajaxjs-ftp|FTP 文件上传实现|
 |ajaxjs-elasticsearch|es 的封装|
 |ajaxjs-nashorn|Java 8 Nashorn JS 引擎的剥离|
-|ajaxjs-work|基于 snaker 工作流的整合|
+|ajaxjs-workflow|基于 snaker 工作流的整合|
+
+一般做 web 开发的，按照项目重要性依次有 base、web、webconfig，可重点关注这个几个项目；最后集大成的就是 cms 项目。
