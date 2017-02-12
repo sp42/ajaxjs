@@ -15,7 +15,6 @@
  */
 package com.ajaxjs.web.config;
 
-import java.io.File;
 import java.util.Map;
 
 import javax.script.ScriptEngine;
@@ -26,8 +25,6 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import com.ajaxjs.Init;
-import com.ajaxjs.framework.dao.MyBatis;
-import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.io.StreamUtil;
 import com.ajaxjs.util.json.JSON;
 import com.ajaxjs.util.json.JsLib;
@@ -50,74 +47,52 @@ public class InitConfig implements ServletContextListener {
 	 */
 	public static final ScriptEngine jsRuntime = JSON.engineFactory();
 	
-	@Override
-	public void contextInitialized(ServletContextEvent e) {
+	static {
 		System.out.println("Ajaxjs-webconfig 配置启动");
-		
-		ServletContext cxt = e.getServletContext();
-		
 		// 加载基础 js
 		String code = new StreamUtil().setIn(InitConfig.class.getResourceAsStream("JSON_Tree.js")).byteStream2stringStream().close().getContent();
-
+		
 		try {
 			jsRuntime.eval(JsLib.baseJavaScriptCode);
 			jsRuntime.eval(code);
-		} catch (ScriptException se) {
-			se.printStackTrace();
-			return;
+		} catch (ScriptException e) {
+			e.printStackTrace();
 		}
-		
-		loadJsonConfig();
-		
-		cxt.setAttribute("all_config", allConfig.getHash()); // 所有配置保存在这里
-//		cxt.setAttribute("PageUtil", new PageUtil()); // 一些页面实用的函数
-		
-		// 初始化数据库连接
-		if(cxt.getInitParameter("DATABASE_TYPE") != null) {
-			MyBatis.db_context_path = cxt.getInitParameter("DATABASE_TYPE");
-			
-			if(Init.isMac)
-				MyBatis.db_context_path += "_mac";
-				
-			if(!Init.isDebug) { // 部署时读取的配置
-				MyBatis.db_context_path += "_deploy";
-			}
-			
-			MyBatis.init();
-		}
-		
-//		Common.load();
-		
-//		Event event = Reflect.newInstance("com.egdtv.crawler.App", Event.class);
-//		event.onConfigLoaded();
-		
-//		boolean isUsingMySQL = false;// 是否使用 MySql
 
-//		if (ConfigListener.config.containsKey("app_isUsingMySQL"))
-//			isUsingMySQL = (boolean) ConfigListener.config.get("app_isUsingMySQL");
-//
-//		if (isUsingMySQL) {
-//			return Helper.getDataSource("jdbc/mysql_test");
-//		} else {
-//			String str;
-//			if (Init.isDebug)
-//				str = Init.isMac ? "" : "jdbc/sqlite";
-//			else
-//				str = "jdbc/sqlite_deploy";
-		
-//		eclipse 不能删除
-//		initLoggerFileHandler(cxt);
-		
+		loadJsonConfig();
+
 		System.out.println("配置启动完毕" + Init.ConsoleDiver);
 	}
 	
 	/**
-	 * 把日志文件保存到 META-INF/ 下面
+	 * 根据配置名称读取配置值。
+	 * @param configName
+	 * @return
 	 */
-	@SuppressWarnings("unused")
-	private static void initLoggerFileHandler(ServletContext cxt) {
-		String loggerFile = cxt.getRealPath("/") + "META-INF" + File.separator + "logger" + File.separator + "log.txt";
-		LogHelper.addHanlder(LogHelper.fileHandlerFactory(loggerFile));
+	public String getAsString(String configName) {
+		return allConfig.getHash().get(configName).toString();
+	}
+	
+	/**
+	 * 根据配置名称读取配置值。
+	 * @param configName
+	 * @return
+	 */
+	public int getAsInnt(String configName) {
+		return (int)allConfig.getHash().get(configName);
+	}
+	
+	@Override
+	public void contextInitialized(ServletContextEvent e) {
+		ServletContext cxt = e.getServletContext();
+		
+		cxt.setAttribute("all_config", allConfig.getHash()); // 所有配置保存在这里
+//		cxt.setAttribute("PageUtil", new PageUtil()); // 一些页面实用的函数
+		
+//		eclipse 不能删除
+		// 把日志文件保存到 META-INF/ 下面
+//		String loggerFile = cxt.getRealPath("/") + "META-INF" + File.separator + "logger" + File.separator + "log.txt";
+//		LogHelper.addHanlder(LogHelper.fileHandlerFactory(loggerFile));
 	}
 	
 	/**
@@ -164,6 +139,5 @@ public class InitConfig implements ServletContextListener {
 	}
 
 	@Override
-	public void contextDestroyed(ServletContextEvent e) {
-	}
+	public void contextDestroyed(ServletContextEvent e) {}
 }
