@@ -1,5 +1,146 @@
 <%@page pageEncoding="UTF-8" %>
+<style>
+.hide{
+	
+	display: none;
+}
+.htmlEditor {
+	/* 工具条 */
+	/* 颜色选择器 */
+	
+}
 
+.htmlEditor ul.toolbar {
+	border: 1px solid #C5C5C5;
+	border-bottom: 0;
+	background-color: #E8E7E4;
+	width: 100%;
+	height: 30px;
+	margin: 0;
+	box-sizing: border-box;
+	padding: 3px 4px;
+}
+
+.htmlEditor ul.toolbar>li {
+	list-style: none;
+	float: left;
+	cursor: pointer;
+}
+
+.htmlEditor ul.toolbar>li img {
+	border: 1px solid transparent;
+}
+
+.htmlEditor ul.toolbar>li img:hover {
+	border-right-color: #aaa;
+	border-bottom-color: #aaa;
+	border-top-color: #fff;
+	border-left-color: #fff;
+}
+
+.htmlEditor ul.toolbar>li img:active {
+	border-right-color: #f3f8fc;
+	border-bottom-color: #f3f8fc;
+	border-top-color: #ccc;
+	border-left-color: #ccc;
+}
+
+.htmlEditor ul.toolbar>li ul li {
+	padding: 3px;
+	cursor: pointer;
+}
+
+.htmlEditor ul.toolbar>li ul li:hover {
+	background-color: lightgray;
+}
+
+.htmlEditor .editorBody iframe, .htmlEditor .editorBody textarea {
+	border: 1px solid #C5C5C5;
+	border-top-width: 0;
+	box-sizing: border-box;
+	background-color: white;
+	height: 283px;
+	width: 100%;
+}
+
+.htmlEditor .editorBody textarea {
+	resize: none;
+}
+
+.htmlEditor .colorPicker {
+	width: 210px;
+	border: 1px solid #D3D3D3;
+	position: absolute;
+}
+
+.htmlEditor .colorPicker table {
+	border-collapse: collapse;
+}
+
+.htmlEditor .colorPicker .colorhead {
+	height: 23px;
+	line-height: 23px;
+	font-weight: bold;
+	width: 100%;
+}
+
+.htmlEditor .colorPicker .colortitle {
+	margin-left: 6px;
+	font-size: 12px;
+}
+
+.htmlEditor .colorPicker .colorpanel td {
+	border: 1px solid #000;
+	height: 10px;
+	width: 10px;
+	overflow: hidden;
+	font-size: 1px;
+	cursor: pointer;
+}
+
+.dorpdown {
+	position: relative;
+}
+
+.dorpdown:hover .fontfamilyChoser, .dorpdown .fontfamilyChoser:hover,
+	.dorpdown:hover .fontsizeChoser, .dorpdown .fontsizeChoser:hover,
+	.dorpdown:hover .colorPicker, .dorpdown .colorPicker:hover {
+	display: block;
+}
+
+.dorpdown>div {
+	display: none;
+	position: absolute;
+	top: 24px;
+	top: 22px;
+	left: 0;
+	background-color: #f5f5f5;
+	border: 1px solid lightgray;
+	border-top: 0;
+	padding: 5px;
+	width: 230px;
+}
+
+.dorpdown .fontsizeChoser {
+	top: inherit;
+	right: 0;
+}
+
+.fontfamilyChoser a, .fontsizeChoser a {
+	padding-right: 2px;
+	display: block;
+	padding-left: 2px;
+	padding-bottom: 2px;
+	color: #000000;
+	line-height: 16px;
+	padding-top: 2px;
+	text-decoration: none;
+}
+
+.fontfamilyChoser a:hover, .fontsizeChoser a:hover {
+	background: #e5e5e5;
+}
+</style>
 <!-- HTML 编辑器控件 --> 
 <script src="${bigfoot}/js/form/htmlEditor.js"></script>
 <div class="htmlEditor">
