@@ -100,3 +100,38 @@ Web 环境配置
 
 
 ![输入图片说明](http://img.blog.csdn.net/20150621145821155 "在这里输入图片标题")
+
+修改配置
+-------------
+若需要修改配置的话，你需要一个后台。这里我们使用本身的 admin UI 框架（允许后续扩展），试着在 web.xml 加入：
+
+	<!-- Admin UI 界面框架 -->
+	<servlet>
+		<servlet-name>AdminUI</servlet-name>
+		<servlet-class>com.ajaxjs.adminUI.Controller</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AdminUI</servlet-name>
+		<!-- 可指定路径，注意要归属于下面 filter 验证地址 -->
+		<url-pattern>/config_admin</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 指定一种登录验证方式。当前为 HTTP Basic Auth -->
+	<filter>
+		<filter-name>HttpBasicAuthFilter</filter-name>
+		<filter-class>com.ajaxjs.user.auth.HttpBasicAuthFilter</filter-class>
+		<!-- adminPassword 指定登录密码；如不指定，则默认为 123123 -->
+		<init-param>
+			<param-name>adminPassword</param-name>
+			<param-value>a123123</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>HttpBasicAuthFilter</filter-name>
+		<!-- 可指定路径，应使用 * 泛指该目录下所有路径 -->
+		<url-pattern>/config_admin/*</url-pattern>
+	</filter-mapping>
+
+后台路径是 /user_admin。当然验证方式可以不一样，这里是最简单的 HTTP Basic Auth，账号密码是 admin/123123。
+
+当前项目只是为常规性的网站提供诸如 title 标题、简介的配置编辑功能。当然你完全可以扩展更多，但配置文件只有一个 site_config.js（JSON 可以无限扩展），然后在 Admin UI 的 admin-menu.jsp 菜单加入 url 即可，具体是编辑 WebContent/WEB-INF/jsp/admim-menu.jsp 文件。  
