@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 /**
  * 反射工具类
  * 
@@ -301,12 +302,25 @@ public class Reflect {
 				return hostClazz.getDeclaredMethod(method, clazz);
 			} catch (Exception e) {
 				/*
-				 * 这里的异常不能抛出去。 如果这里的异常打印或者往外抛，则就不会执行clazz =
-				 * clazz.getSuperclass(),最后就不会进入到父类中了
+				 * 这里的异常不能抛出去。 如果这里的异常打印或者往外抛，则就不会执行clazz = clazz.getSuperclass(),最后就不会进入到父类中了
 				 */
 			}
 		}
 
+		return null;
+	}
+	
+	public static Method getSuperClassDeclaredMethod(Class<?> hostClazz, String method, Class<?> argClazz) {
+		for (; hostClazz != Object.class; hostClazz = hostClazz.getSuperclass()) {
+			try {
+				return hostClazz.getDeclaredMethod(method, argClazz);
+			} catch (Exception e) {
+				/*
+				 * 这里的异常不能抛出去。 如果这里的异常打印或者往外抛，则就不会执行clazz = clazz.getSuperclass(),最后就不会进入到父类中了
+				 */
+			}
+		}
+		
 		return null;
 	}
 
@@ -346,6 +360,24 @@ public class Reflect {
 		
 		return fields.toArray(clz);
 	}
+	
+	private static final String TYPE_NAME_PREFIX = "class ";
+
+	/**
+	 * 已知接口类型，获取它的 class
+	 * @param type
+	 * @return
+	 */
+	public static Class<?> getClassByInterface(Type type) {
+	    String className = type.toString();
+	    
+	    if (className.startsWith(TYPE_NAME_PREFIX)) 
+	        className = className.substring(TYPE_NAME_PREFIX.length());
+	    
+	    className = className.replace("<T>", "");
+	    
+	    return getClassByName(className);
+	}
 
 	/**
 	 * 循环 object 向上转型（接口）, 获取 hostClazz 对象的 DeclaredMethod
@@ -364,19 +396,23 @@ public class Reflect {
 			Type[] intfs = clazz.getGenericInterfaces();
 
 			if (intfs.length != 0) { // 有接口！
+				
 				try {
 					for (Type intf : intfs) {
-						methodObj = hostClazz.getDeclaredMethod(method, (Class<?>) intf);
+						// 旧方法，现在不行，不知道之前怎么可以的 methodObj = hostClazz.getDeclaredMethod(method, (Class<?>)intf);
+						methodObj = getSuperClassDeclaredMethod(hostClazz, method, getClassByInterface(intf));
+						
 						if (methodObj != null)
 							return methodObj;
 					}
 				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			} else {
 				// 无实现的接口
 			}
 		}
-
+System.out.println("4543543543");
 		return null;
 	}
 
@@ -466,9 +502,11 @@ public class Reflect {
 	public static void setProperty(Object bean, String name, Object value) {
 		if (bean == null)
 			throw new NullPointerException("未发现类");
+		
 		String setMethodName = "set" + firstLetterUpper(name);
 
 		Class<?> clazz = bean.getClass();
+		
 		if (clazz == null)
 			throw new NullPointerException("执行：" + setMethodName + "未发现类");
 		if (value == null)
@@ -480,6 +518,8 @@ public class Reflect {
 		// 如果没找到，那就试试接口的……
 		if (method == null)
 			method = getDeclaredMethodByInterface(clazz, setMethodName, value);
+		
+
 		if (method == null) {
 			throw new NullPointerException(clazz.getName() + "找不到目标方法！" + setMethodName);
 		}

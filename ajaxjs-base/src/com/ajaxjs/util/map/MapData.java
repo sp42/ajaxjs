@@ -64,6 +64,15 @@ public class MapData {
 		parameterMap = MapHelper.asObject(getParameterMap_String(), true);
 		return this;
 	}
+	
+	/**
+	 * String[]-->String
+	 * @return
+	 */
+	public MapData toMap() {
+		parameterMap_String = MapHelper.toMap(getParameterMapRaw());
+		return this;
+	}
 
 	/**
 	 * @return the parameterMapRaw

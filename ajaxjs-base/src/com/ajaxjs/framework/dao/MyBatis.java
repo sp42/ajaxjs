@@ -30,6 +30,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 
 import com.ajaxjs.Constant;
+import com.ajaxjs.Init;
 import com.ajaxjs.framework.dao.DAO;
 import com.ajaxjs.framework.exception.DaoException;
 import com.ajaxjs.framework.model.BaseModel;
@@ -100,9 +101,15 @@ public class MyBatis {
 	}
 
 	/**
-	 * 启动 MyBatis 数据源
+	 * 启动 MyBatis 数据源，初始化数据库连接
 	 */
 	public static void init() {
+		if(Init.isMac)
+			db_context_path += "_mac";
+			
+		if(!Init.isDebug)  // 部署时读取的配置
+			db_context_path += "_deploy";
+		
 		init(getDataSource());
 	}
 

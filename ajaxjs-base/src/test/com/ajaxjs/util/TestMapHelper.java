@@ -1,4 +1,4 @@
-package test.com.ajaxjs.map;
+package test.com.ajaxjs.util;
 
 import static com.ajaxjs.util.map.MapHelper.*;
 import static org.junit.Assert.*;

@@ -77,9 +77,9 @@ public class Scanner {
 		String packageDirName = packageName.replace('.', '/');// 将包名转换为文件路径
 		Enumeration<URL> dirs = null;
 		
-		try{
+		try {
 			dirs = classLoader.getResources(packageDirName);
-		}catch (IOException e){
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
@@ -128,8 +128,8 @@ public class Scanner {
 			}
 		});
 		
-		for(File file : dirFiles){	// 循环所有文件
-			if(file.isDirectory()){	// 如果是目录 则递归继续扫描
+		for(File file : dirFiles) {	// 循环所有文件
+			if(file.isDirectory()) {	// 如果是目录 则递归继续扫描
 				findAndAddClassesInPackageByFile(packageName + "." + file.getName(), file.getAbsolutePath(), recursive, classes);
 			}else{
 				// 如果是java类文件 去掉后面的.class 只留下类名

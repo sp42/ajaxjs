@@ -69,6 +69,17 @@ public class BeanContext {
 	public Object getBean(String name) {
 		return beans.get(name);
 	}
+	public Object getBeanByClass(Class<?> clz) {
+		if(!isIOC_Bean(clz))
+			throw new NullPointerException(clz +" 这不是一个 ioc 的 bean。");
+		String name = clz.getAnnotation(Bean.class).value();
+		
+		return beans.get(name);
+	}
+	
+	public static boolean isIOC_Bean(Class<?> clz) {
+		return clz.getAnnotation(Bean.class) != null;
+	}
 
 	/**
 	 * 初始化各对象及依赖
@@ -124,10 +135,10 @@ public class BeanContext {
 				// bean id ＋ 变量名称 ＝ 依赖关系的 key。
 				dependencies.put(beanName + "." + field.getName(), dependenciObj_id);
 			}
-			
 		}
 		
-		if(!isFoundResource) throw new RuntimeException("没有 Resource！一次注入都没有！！");
+		if(!isFoundResource) 
+			throw new RuntimeException("没有 Resource！一次注入都没有！！");
 	}
 
 	/**
@@ -137,7 +148,7 @@ public class BeanContext {
 		for (String key : dependencies.keySet()) {
 			String value = dependencies.get(key);// 依赖对象的值
 			String[] split = key.split("\\.");// 数组第一个值表示 bean 对象名称,第二个值为字段属性名称
-
+			
 			Reflect.setProperty(beans.get(split[0]), split[1], beans.get(value));
 		}
 	}
