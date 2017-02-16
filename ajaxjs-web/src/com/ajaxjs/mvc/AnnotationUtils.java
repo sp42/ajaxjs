@@ -37,9 +37,11 @@ import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.Reflect;
 import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.ioc.BeanContext;
 
 /**
  * 扫描注解的工具类
+ * 
  * @author frank
  *
  */
@@ -75,7 +77,13 @@ public class AnnotationUtils {
 		
 		// 开始解析控制器……
 		ActionAndView cInfo = new ActionAndView();
-		cInfo.controller = Reflect.newInstance(clz);// 保存的是 控制器 实例。
+
+		// 保存的是 控制器 实例。
+		if(BeanContext.isIOC_Bean(clz)) { // 如果有 ioc，则从容器中查找
+			cInfo.controller = (IController)BeanContext.me().getBeanByClass(clz);
+		} else {
+			cInfo.controller = Reflect.newInstance(clz);
+		}
 		
 		for (Method method : clz.getMethods()) {
 			Path subPath = method.getAnnotation(Path.class); // 看看这个控制器方法有木有 URL 路径的信息，若有，要处理
