@@ -1,0 +1,210 @@
+package com.ajaxjs.js;
+
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+
+import com.ajaxjs.util.LogHelper;
+import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.Util;
+import com.ajaxjs.util.io.FileUtil;
+import com.ajaxjs.util.io.StreamUtil;
+
+/**
+ * JS 引擎的包装器
+ * @author xinzhang
+ *
+ */
+public class JsEngineWrapper {
+	private static final LogHelper LOGGER = LogHelper.getLog(JsEngineWrapper.class);
+
+	public JsEngineWrapper() {
+		this(engineFactory());
+	}
+	
+	/**
+	 * 必须依赖一个原生 engine 对象
+	 * @param engine
+	 */
+	public JsEngineWrapper(ScriptEngine engine) {
+		this.engine = engine;
+	}
+
+	/**
+	 * 委托对象，以便兼容 jdk7/8
+	 */
+	final static JsObjectCovernt jsObjectCovernt;
+	
+	static {
+		boolean isJDK7;
+		
+		try {
+			Class.forName("sun.org.mozilla.javascript.internal.NativeObject");
+			isJDK7 = false;
+		} catch (ClassNotFoundException e) {
+			isJDK7 = true;
+		}
+		
+		jsObjectCovernt = isJDK7 ? new RhinoJsObjectCovernt() : new NashornJsObjectCovernt();
+	}
+	
+	/**
+	 * js 引擎
+	 */
+	private ScriptEngine engine;
+
+	public ScriptEngine getEngine() {
+		return engine;
+	}
+
+	public void setEngine(ScriptEngine engine) {
+		this.engine = engine;
+	}
+
+	/**
+	 * 创建 js 引擎工厂，支持 java 6/7 的 rhino 和 java 8 的 nashorn
+	 * 
+	 * @return js 引擎
+	 */
+	public static ScriptEngine engineFactory() {
+		return new ScriptEngineManager().getEngineByName(System.getProperty("java.version").contains("1.8.") ? "nashorn" : "rhino");
+	}
+
+	/**
+	 * 加载 js 文件，可以链式调用这个方法加载多个 js 文件
+	 * 
+	 * @param path
+	 *            js 文件完整路徑
+	 * @return 当前实例，可以链式调用这个方法加载多个 js 文件
+	 */
+	public JsEngineWrapper load(String path) {
+		LOGGER.info("加载 js: {0} 文件", path);
+		eval(FileUtil.openAsText(path));
+		
+		return this;
+	}
+
+	/**
+	 * 加载某个类下面的 js 文件，可以链式调用这个方法加载多个 js 文件
+	 * 
+	 * @param clazz
+	 *            该类目录下面必须有目标 js 文件
+	 * @param fileName
+	 *            js 文件名
+	 * @return 当前实例，可以链式调用这个方法加载多个 js 文件
+	 */
+	public JsEngineWrapper load(Class<?> clazz, String fileName) {
+		String code = new StreamUtil().setIn(clazz.getResourceAsStream(fileName)).byteStream2stringStream().close().getContent();
+		eval(code);
+		
+		return this;
+	}
+	
+	/**
+	 * 调用脚本的方法
+	 * 
+	 * @param method
+	 *            js 脚本代码
+	 * @param clazz
+	 *            目标类型
+	 * @param binding
+	 *            可以为 null，则表示调用全局方法
+	 * @param args
+	 *            参数列表
+	 * @return JS 运算后的返回值，也可能是 null 没有返回
+	 */
+	public <T> T call(String method, Class<T> clazz, Object binding, Object... args) {
+		Invocable inv = (Invocable) engine; // Invocable 接口是 ScriptEngine可选实现的接口。（多态）
+		Object result = null;
+
+		try {
+			result = binding != null ? inv.invokeMethod(binding, method, args) : inv.invokeFunction(method, args);
+		} catch (NoSuchMethodException e) {
+			LOGGER.warning("脚本引擎没有 {0}() 这个方法", method);
+		} catch (ScriptException e) {
+			LOGGER.warning("向脚本引擎调用脚本方法异常！方法名称:" + method, e);
+		}
+
+		return Util.TypeConvert(result, clazz);
+	}
+
+	/**
+	 * 在 Java 中向脚本引擎 (Script Engine) 传递变量，即脚本语言中可以得到来自 java 的变量。
+	 * 当然，使用 eval() 也可达到同样之效果。另外亦可以直接传递 Java 对象。
+
+	 * @param varName
+	 *            变量名
+	 * @param obj
+	 *            变量值
+	 */
+	public void put(String varName, Object obj) {
+		engine.put(varName, obj);
+	}
+
+	/**
+	 * 获取 js 的对象，如果最后一个不是对象，返回 Object，之前的为 NativeObject
+	 * 
+	 * @param namespace
+	 *            JS MAP 对象的 key
+	 * @return NativeObject 或 Object
+	 */
+	public Object get(String... namespace) {
+		return jsObjectCovernt.get(getEngine(), namespace);
+	}
+	
+	/**
+	 * 执行 js 代码
+	 * 
+	 * @param code
+	 *            任意 js 代码
+	 * @param clazz
+	 *            返回的类型。当 clazz ＝ null 时永远返回 null，表示只是执行，不要求返回结果。可理解为 return void。如果想有返回值，至少有个 clazz = Object.class
+	 * @return 执行结果
+	 */
+	public <T> T eval(String code, Class<T> clazz) {
+		if (StringUtil.isEmptyString(code))
+			throw new UnsupportedOperationException("JS 代码不能为空！");
+		
+		Object obj = null;
+
+		try {
+			obj = engine.eval(code);
+		} catch (ScriptException e) {
+			LOGGER.warning("脚本 eval() 运算发生异常！eval 代码：" + code, e);
+		}
+		
+		if (obj != null && clazz != null) {
+			// return Util.TypeConvert(js.eval(code), clazz); // 为什么要执行多次？
+			T _obj = Util.TypeConvert(obj, clazz);
+			return _obj;
+		} else
+			return null;
+	}
+	
+	/**
+	 * 执行 js 代码，不作类型转换（返回 Object）
+	 * @param code 任意 js 代码
+	 * @return 执行结果，null 可能表示返回 null，又或者可能没有返回（即 void）
+	 */
+	public Object eval(String code) {
+		return eval(code, Object.class);
+	}
+
+	/**
+	 * js number 为 double 类型，在 java 里面使用不方便，将其转换为 int
+	 * 
+	 * @param d
+	 *            js number
+	 * @return int 值
+	 */
+	public static int double2int(Double d) {
+		if (d > Integer.MAX_VALUE) {
+			LOGGER.warning("数值 {}0 太大，不应用这个方法转换到 int", d);
+			return 0;
+		} else {
+			return d.intValue();
+		}
+	}
+	
+}

@@ -13,26 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.util.json;
+package com.ajaxjs.js;
 
-import java.util.List;
-
-import javax.script.ScriptEngine;
-import javax.script.ScriptException;
+import java.util.List; 
 
 import com.ajaxjs.util.StringUtil;
 
-public class JsLib {
-	
-	/**
-	 * // 新建一个 js mapper 专用于 json 转换，以免影响 其他 js runtime
-	 */
-	private static ScriptEngine engine = JSON.engineFactory();
-
+public class Bean2Json {
 	/**
 	 * 基础的 JavaScript 工具函数
 	 */
-	public static final String baseJavaScriptCode;
+	public static String baseJavaScriptCode;
 
 	static {
 		final String[] str = { "if(!String.prototype.format){	", "	String.prototype.format = function () {",
@@ -104,34 +95,34 @@ public class JsLib {
 				 "     * @param   {String} format ",
 				 "     * @return  {String} ",
 				 "    */  ",
-				 "    Date.prototype.format = function (format) {  ",
-				 "        var $1, o = {  ",
-				 "            \"M+\": this.getMonth() + 1,      // 月份，从0开始算  ",
-				 "            \"d+\": this.getDate(),           // 日期  ",
-				 "            \"h+\": this.getHours(),          // 小时  ",
-				 "            \"m+\": this.getMinutes(),        // 分钟  ",
-				 "            \"s+\": this.getSeconds(),        // 秒钟  ",
-				 "                                            // 季度 quarter  ",
-				 "            \"q+\": Math.floor((this.getMonth() + 3) / 3),  ",
-				 "            \"S\": this.getMilliseconds() // 千秒  ",
-				 "        };  ",
-				 "        var key, value;  ",
-				 "      ",
-				 "        if (/(y+)/.test(format)) {  ",
-				 "            $1 = RegExp.$1,   ",
-				 "            format = format.replace($1, String(this.getFullYear()).substr(4 - $1));  ",
-				 "        }  ",
-				 "      ",
-				 "        for (key in o) { // 如果没有指定该参数，则子字符串将延续到 stringvar 的最后。  ",
-				 "            if (new RegExp(\"(\" + key + \")\").test(format)) {  ",
-				 "                $1      = RegExp.$1,  ",
-				 "                value   = String(o[key]),  ",
-				 "                value   = $1.length == 1 ? value : (\"00\" + value).substr(value.length),  ",
-				 "                format  = format.replace($1, value);  ",
-				 "            }  ",
-				 "        }  ",
-				 "        return format;  ",
-				 "    }  "	,
+//				 "    Date.prototype.format = function (format) {  ",
+//				 "        var $1, o = {  ",
+//				 "            \"M+\": this.getMonth() + 1,      // 月份，从0开始算  ",
+//				 "            \"d+\": this.getDate(),           // 日期  ",
+//				 "            \"h+\": this.getHours(),          // 小时  ",
+//				 "            \"m+\": this.getMinutes(),        // 分钟  ",
+//				 "            \"s+\": this.getSeconds(),        // 秒钟  ",
+//				 "                                            // 季度 quarter  ",
+//				 "            \"q+\": Math.floor((this.getMonth() + 3) / 3),  ",
+//				 "            \"S\": this.getMilliseconds() // 千秒  ",
+//				 "        };  ",
+//				 "        var key, value;  ",
+//				 "      ",
+//				 "        if (/(y+)/.test(format)) {  ",
+//				 "            $1 = RegExp.$1,   ",
+//				 "            format = format.replace($1, String(this.getFullYear()).substr(4 - $1));  ",
+//				 "        }  ",
+//				 "      ",
+//				 "        for (key in o) { // 如果没有指定该参数，则子字符串将延续到 stringvar 的最后。  ",
+//				 "            if (new RegExp(\"(\" + key + \")\").test(format)) {  ",
+//				 "                $1      = RegExp.$1,  ",
+//				 "                value   = String(o[key]),  ",
+//				 "                value   = $1.length == 1 ? value : (\"00\" + value).substr(value.length),  ",
+//				 "                format  = format.replace($1, value);  ",
+//				 "            }  ",
+//				 "        }  ",
+//				 "        return format;  ",
+//				 "    }  "	,
 			"/**",
 			 " * Java 类型转换为 js 类型",
 			 " * @param v",
@@ -203,16 +194,11 @@ public class JsLib {
 			 "}; function singlePojo(pojo){return JSON.stringify(pojo2json(pojo));}"
 		};
 		
-		final String jsStr = StringUtil.stringJoin(a, "\n");
-		
-		try {
-			engine.eval(jsStr);
-		} catch (ScriptException e) {
-			System.err.println("插入 java2js 的脚本错误");
-			e.printStackTrace();
-		}
+		baseJavaScriptCode = StringUtil.stringJoin(a, "\n");
 	}
 
+	private static final JsEngineWrapper engine = new JsEngineWrapper(); 
+	
 	/**
 	 * 多个 pojo 转换为 json
 	 * 
@@ -221,8 +207,7 @@ public class JsLib {
 	 * @return json 字符串
 	 */
 	public static String list(List<?> list) {
-		return list == null || list.isEmpty() || list.size() == 0 ? "null"
-				: new JsonHelper(engine).call("test", String.class, null, list);
+		return list == null || list.isEmpty() || list.size() == 0 ? "null" : engine.call("test", String.class, null, list);
 	}
 
 	/**
@@ -233,6 +218,6 @@ public class JsLib {
 	 * @return json 字符串
 	 */
 	public static String singlePojo(Object obj) {
-		return new JsonHelper(engine).call("singlePojo", String.class, null, obj);
+		return engine.call("singlePojo", String.class, null, obj);
 	}
 }

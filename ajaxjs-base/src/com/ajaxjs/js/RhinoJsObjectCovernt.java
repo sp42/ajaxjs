@@ -1,37 +1,70 @@
-/**
- * Copyright 2015 Frank Cheung
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package com.ajaxjs.util.json;
+package com.ajaxjs.js;
 
 import java.lang.reflect.Array;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.script.ScriptEngine;
 
 import sun.org.mozilla.javascript.internal.NativeArray;
 import sun.org.mozilla.javascript.internal.NativeObject;
+import sun.org.mozilla.javascript.internal.Undefined;
 
 /**
- * Only for JDK 6/7,JDK8 里面用不了
- * @author sp42
+ * 用处不大了
+ * @author xinzhang
  *
  */
-public class Rhino extends JSON {
-	public Map<String, Object> eval_return_Map(String code, String varName) {
-		eval(engine, code, null); 
+public class RhinoJsObjectCovernt implements JsObjectCovernt {
+	
+	@Override
+	public Object get(ScriptEngine engine, String... namespace) {
+		NativeObject obj = (NativeObject) engine.get(namespace[0]);
 
-		return NativeObject2Map(eval(engine, varName, NativeObject.class)); // 提取变量
+		for (int i = 1; i < namespace.length; i++) {
+			try {
+				obj = (NativeObject) obj.get(namespace[i]);
+			} catch (ClassCastException e) {
+				// LOGGER.warning(e);
+				return obj.get(namespace[i]);
+			}
+		}
+
+		return obj;
+	}
+	
+	/**
+	 * 
+	 * 不推荐使用该方法
+	 * 
+	 * @param value
+	 *            Js 里面的值
+	 * @return Java 里面的值
+	 */
+	public static Object jsValue2java(Object value) {
+		if (value == null || value instanceof Boolean || value instanceof String || value instanceof Undefined) {
+			// js 为 null，所以 java hash 也为null
+			// nothing but still value;
+		} else if (value instanceof Double) {
+			value = JsEngineWrapper.double2int((Double) value);// js number 转换为 short
+		} else if (value instanceof NativeObject) {
+			value = jsValue2java(value);
+		} else if (value instanceof NativeArray) {
+			value = (List<?>) value; // 这是规则的情况，数组中每个都是对象，而非
+										// string/int/boolean
+										// TODO
+		} else {
+			System.out.println("未知 JS 类型：" + value.getClass().getName());
+		}
+
+		return value;
+	}
+	
+	public Map<String, Object> eval_return_Map(JsEngineWrapper engine, String code, String varName) {
+		engine.eval(code, null); 
+
+		return NativeObject2Map(engine.eval(varName, NativeObject.class)); // 提取变量
 	}
 
 	/**
@@ -41,8 +74,8 @@ public class Rhino extends JSON {
 	 *            JS 代碼
 	 * @return Java 里的 String[]
 	 */
-	public String[] eval_return_StringArray(String code) {
-		NativeArray obj = eval(engine, code, NativeArray.class);
+	public String[] eval_return_StringArray(JsEngineWrapper engine, String code) {
+		NativeArray obj = engine.eval(code, NativeArray.class);
 		return NativeArray2StringArray(obj);
 	}
 
@@ -53,8 +86,8 @@ public class Rhino extends JSON {
 	 *            JS 代碼
 	 * @return Java 里的 Map<String, Object>[]
 	 */
-	public Map<String, Object>[] eval_return_MapArray(String code) {
-		NativeArray arr = eval(engine, code, NativeArray.class);
+	public Map<String, Object>[] eval_return_MapArray(JsEngineWrapper engine, String code) {
+		NativeArray arr = engine.eval(code, NativeArray.class);
 		return NativeArray2MapArray(arr);
 	}
 
@@ -77,7 +110,7 @@ public class Rhino extends JSON {
 		for (Object id : obj.getAllIds()) {// 遍历对象
 			String newId = id.toString();
 			Object value = obj.get(newId, obj);
-			map.put(newId, JsonHelper.jsValue2java(value));
+			map.put(newId, jsValue2java(value));
 		}
 
 		return map;
