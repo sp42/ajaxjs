@@ -18,18 +18,16 @@ package com.ajaxjs.web.config;
 import java.util.Map;
 
 import javax.script.ScriptEngine;
-import javax.script.ScriptException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import com.ajaxjs.Init;
-import com.ajaxjs.util.io.StreamUtil;
-import com.ajaxjs.util.json.JSON;
-import com.ajaxjs.util.json.JsLib;
-import com.ajaxjs.util.json.JsonHelper;
-
+import com.ajaxjs.js.Bean2Json;
+import com.ajaxjs.js.JsEngineWrapper;
+import com.ajaxjs.js.JsonHelper;
+ 
 /**
  * 配置加载器
  * @author Frank
@@ -37,30 +35,24 @@ import com.ajaxjs.util.json.JsonHelper;
  */
 @WebListener 
 public class InitConfig implements ServletContextListener {
+	private static final ScriptEngine jsEngine = JsEngineWrapper.engineFactory();
+
 	/**
 	 * JSON 配置
 	 */
-	public static final JsonConfig allConfig = new JsonConfig();
-	
-	/**
-	 * 保存配置的 引擎
-	 */
-	public static final ScriptEngine jsRuntime = JSON.engineFactory();
+	public static final JsonConfig allConfig = new JsonConfig(jsEngine);
 	
 	static {
 		System.out.println("Ajaxjs-webconfig 配置启动");
-		// 加载基础 js
-		String code = new StreamUtil().setIn(InitConfig.class.getResourceAsStream("JSON_Tree.js")).byteStream2stringStream().close().getContent();
+
+		allConfig.eval(Bean2Json.baseJavaScriptCode);		// 加载基础 js
+		allConfig.load(InitConfig.class, "JSON_Tree.js");
+		allConfig.load(Init.srcFolder + "site_config.js"); 	// 加载配置文件
+		allConfig.setLoaded(true);
 		
-		try {
-			jsRuntime.eval(JsLib.baseJavaScriptCode);
-			jsRuntime.eval(code);
-		} catch (ScriptException e) {
-			e.printStackTrace();
-		}
-
-		loadJsonConfig();
-
+		updateConfig();
+		
+		System.out.println(("加载配置信息如下：" + System.getProperty("line.separator") + JsonHelper.format(JsonHelper.stringifyMap(allConfig.getHash())) + Init.ConsoleDiver));
 		System.out.println("配置启动完毕" + Init.ConsoleDiver);
 	}
 	
@@ -96,36 +88,16 @@ public class InitConfig implements ServletContextListener {
 	}
 	
 	/**
-	 * 加载配置
-	 */
-	private static void loadJsonConfig() {
-		allConfig.setJsonPath(Init.srcFolder + "site_config.js");
-		allConfig.setJsRuntime(jsRuntime);
-		allConfig.loadJSON(); // 加载配置文件
-		
-		if(allConfig.isLoaded()) {
-			updateConfig();
-			System.out.println(("加载配置信息如下：" + System.getProperty("line.separator") + JsonHelper.format(JsonHelper.stringify(allConfig.getHash())) + Init.ConsoleDiver));
-		}
-	}
-	
-	/**
 	 * 保存全局信息，无论 JSON 配置文件里面嵌套多少层，到这里都扁平化每一条配置
 	 * 修改了配置之后，更新。即时出现效果。
 	 */
-	@SuppressWarnings("unchecked")
 	public static void updateConfig() {
 		if(!allConfig.isLoaded()) {
 			return; // 没有 site_config.js 文件，退出
 		}
 		
-		Map<String, Object> map = null;
-		
-		try {
-			map = (Map<String, Object>) jsRuntime.eval("JSON_Tree.util.flat(bf_Config);");
-		} catch (ScriptException e) {
-			e.printStackTrace();
-		}
+		@SuppressWarnings("unchecked")
+		Map<String, Object> map = allConfig.eval("JSON_Tree.util.flat(bf_Config);", Map.class);
 		
 		allConfig.setHash(map);
 		

@@ -15,12 +15,12 @@
  */
 package com.ajaxjs.web.config;
 
-import java.io.File;
 import java.util.Map;
 
 import javax.script.ScriptEngine;
 
-import com.ajaxjs.util.json.JsonHelper;
+import com.ajaxjs.js.JsEngineWrapper;
+
 
 /**
  * 抽象一个单独的 json 配置文件
@@ -28,7 +28,7 @@ import com.ajaxjs.util.json.JsonHelper;
  * @author xinzhang
  *
  */
-public class JsonConfig {
+public class JsonConfig extends JsEngineWrapper {
 	/**
 	 * json 文件路径
 	 */
@@ -40,14 +40,13 @@ public class JsonConfig {
 	private boolean isLoaded;
 
 	/**
-	 * 存在于那个 js 运行时
-	 */
-	private ScriptEngine jsRuntime;
-
-	/**
 	 * 转换为 java 的 map
 	 */
 	private Map<String, Object> hash;
+
+	public JsonConfig(ScriptEngine jsengine) {
+		super(jsengine);
+	}
 
 	public String getJsonPath() {
 		return jsonPath;
@@ -65,14 +64,6 @@ public class JsonConfig {
 		this.isLoaded = isLoaded;
 	}
 
-	public ScriptEngine getJsRuntime() {
-		return jsRuntime;
-	}
-
-	public void setJsRuntime(ScriptEngine jsRuntime) {
-		this.jsRuntime = jsRuntime;
-	}
-	
 	public Map<String, Object> getHash() {
 		return hash;
 	}
@@ -80,20 +71,20 @@ public class JsonConfig {
 	public void setHash(Map<String, Object> hash) {
 		this.hash = hash;
 	}
+	
 
 	/**
-	 * 加载 json 文件到内存
+	 * 写入内存，覆盖
+	 * 
+	 * @param hash
 	 */
-	public void loadJSON() {
-		// 先检测 json 是否存在
-		if (!new File(jsonPath).exists()) {
-			isLoaded = false;
-			return;
+	public void save(Map<String, String> hash) {
+		String jsCode = "";
+
+		for (String key : hash.keySet()) {
+			jsCode = key + " = '" + hash.get(key) + "';"; // 全部保存为 String。TODO 支持其他类型
+
+			eval(jsCode);
 		}
-
-		JsonHelper jh = new JsonHelper(jsRuntime);
-		jh.load(new String[] { jsonPath });
-
-		isLoaded = true;
 	}
 }

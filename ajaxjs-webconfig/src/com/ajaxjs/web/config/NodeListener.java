@@ -15,15 +15,14 @@
  */
 package com.ajaxjs.web.config;
 
-import javax.script.ScriptException;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.Init;
+import com.ajaxjs.js.JsEngineWrapper;
 import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.util.json.JsonHelper;
 
 /**
  * 加入 Node。每次请求都会调用，所以要规避静态资源的
@@ -53,14 +52,9 @@ public class NodeListener implements ServletRequestListener {
 			}
 			
 			System.out.println("初始化 NodeListener，加载网址树状结构中" + Init.ConsoleDiver);
-			new JsonHelper(InitConfig.jsRuntime).load(Init.srcFolder + "site_stru.js"); // 加载 Web 目录文件
-
-			try {
-				InitConfig.jsRuntime.eval("bf.AppStru.init();");
-			} catch (ScriptException e1) {
-				e1.printStackTrace();
-				return;
-			}
+			JsEngineWrapper js = new JsEngineWrapper(InitConfig.allConfig.getEngine());
+			js.load(Init.srcFolder + "site_stru.js"); // 加载 Web 目录文件
+			js.eval("bf.AppStru.init();");
 			
 			isInited = true;
 			System.out.println(Init.ConsoleDiver + System.getProperty("line.separator") + "加载 site_stru.js 成功" + Init.ConsoleDiver);

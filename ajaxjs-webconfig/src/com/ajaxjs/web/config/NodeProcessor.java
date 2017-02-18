@@ -18,8 +18,6 @@ package com.ajaxjs.web.config;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.util.json.JSON;
-
 /**
  * JSONPath
  * 
@@ -75,7 +73,7 @@ public class NodeProcessor {
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> getNavBar() {
 		if (navList == null) {
-			navList = JSON.eval(InitConfig.jsRuntime, "bf.AppStru.getNav();", List.class);
+			navList = InitConfig.allConfig.eval("bf.AppStru.getNav();", List.class);
 		}
 
 		return navList;
@@ -90,8 +88,7 @@ public class NodeProcessor {
 	public Map<String, Object> getPageNode() {
 		if (pageNode == null) {
 			String jsCode = String.format("bf.AppStru.getPageNode('%s', '%s');", getRoute(), contextPath);
-			pageNode = (Map<String, Object>) JSON.eval(InitConfig.jsRuntime, jsCode, Map.class);
-			pageNode = (Map<String, Object>)JSON.eval(InitConfig.jsRuntime, jsCode, Map.class);
+			pageNode = (Map<String, Object>) InitConfig.allConfig.eval(jsCode, Map.class);
 		}
 
 		return pageNode;
@@ -105,7 +102,7 @@ public class NodeProcessor {
 	public String getSiteMap() {
 		if (footerList == null) {
 			String code = String.format("JSON_Tree.util.makeSiteMap(bf.AppStru.data, '%s');", contextPath);
-			footerList = JSON.eval(InitConfig.jsRuntime, code, String.class);
+			footerList = InitConfig.allConfig.eval(code, String.class);
 		}
 
 		return footerList;
@@ -149,7 +146,7 @@ public class NodeProcessor {
 	 */
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> getNode(String nodePath) {
-		return JSON.eval(InitConfig.jsRuntime, String.format("bf.AppStru.getNode('%s');", nodePath), Map.class);
+		return InitConfig.allConfig.eval(String.format("bf.AppStru.getNode('%s');", nodePath), Map.class);
 	}
 
 	/**
