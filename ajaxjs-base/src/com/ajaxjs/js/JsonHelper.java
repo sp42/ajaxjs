@@ -7,18 +7,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.script.ScriptEngine;
+
 import com.ajaxjs.util.DateTools;
-import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 
 /**
- *  json 转为 java 对象的工具类，利用了 JVM 自带的 js 引擎
+ * json 转为 java 对象的工具类，利用了 JVM 自带的 js 引擎
  * @author xinzhang
  *
  */
 public class JsonHelper extends JsEngineWrapper {
-	private static final LogHelper LOGGER = LogHelper.getLog(JsonHelper.class);
-	
 	public JsonHelper() {
 		super();
 	}
@@ -27,6 +26,10 @@ public class JsonHelper extends JsEngineWrapper {
 		this.jsonString = jsonString;
 	}
 	
+	public JsonHelper(ScriptEngine jsengine) {
+		super(jsengine);
+	}
+
 	/**
 	 * json 字符串，通常从接口返回的
 	 */
@@ -174,7 +177,7 @@ public class JsonHelper extends JsEngineWrapper {
 			try {
 				_obj = field.get(obj);
 			} catch (IllegalAccessException e) {
-				LOGGER.warning(e);
+				e.printStackTrace();
 			}
 	
 			arr.add('\"' + key + "\":" + obj2jsonVaule(_obj));
@@ -332,7 +335,8 @@ public class JsonHelper extends JsEngineWrapper {
 		return jsonString;
 	}
 
-	public void setJsonString(String jsonString) {
+	public JsonHelper setJsonString(String jsonString) {
 		this.jsonString = jsonString;
+		return this;
 	}
 }

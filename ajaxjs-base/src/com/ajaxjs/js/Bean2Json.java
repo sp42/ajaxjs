@@ -194,7 +194,7 @@ public class Bean2Json {
 			 "}; function singlePojo(pojo){return JSON.stringify(pojo2json(pojo));}"
 		};
 		
-		baseJavaScriptCode = StringUtil.stringJoin(a, "\n");
+		baseJavaScriptCode += StringUtil.stringJoin(a, "\n");
 	}
 
 	private static final JsEngineWrapper engine = new JsEngineWrapper(); 
