@@ -16,7 +16,6 @@
 package com.ajaxjs.jdbc;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -25,14 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
-import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 
 /**
@@ -41,148 +33,6 @@ import com.ajaxjs.util.StringUtil;
  *
  */
 public class Helper {
-	private static final LogHelper LOGGER = LogHelper.getLog(Helper.class);
-	
-	/**
-	 * 获取数据源
-	 * 数据源提供了一种简单获取数据库连接的方式，并能在内部通过一个池的机制来复用数据库连接，这样就大大减少创建数据库连接的次数，提高了系统性能。 另外
-	 * 使用 datasource，就不需要手动关闭连接，如果使用 connection，就需要自己关闭连接。
-	 * 对于数据源的应用，一般都选择实用开源的数据源或数据库连接池来使用，当前我们这个框架使用了 Tomcat 自带 Pool。
-	 * 
-	 * @param path
-	 *            参阅 META-INF/context.xml
-	 * @return 数据源对象
-	 */
-	public static DataSource getDataSource(String path) {
-		Context context = null; // 环境变量
-		DataSource ds = null;
-
-		try {
-			context = (Context) new InitialContext().lookup("java:/comp/env");
-			ds = (DataSource) context.lookup(path);
-			// 简写方式
-			// javax.sql.DataSource ds = (javax.sql.DataSource)new InitialContext().lookup("java:/comp/env/jdbc/derby");
-		} catch (NamingException e) {
-			LOGGER.warning("读取数据源的配置文件失败，请检查 Tomcat 连接池配置！ path:" + path, e);
-		}
-
-		return ds;
-	}
-	
-	/**
-	 * 连接任意数据库（不使用连接池，而是传统方式） e.g initConn("org.sqlite.JDBC",
-	 * "jdbc:sqlite:c:\\project\\foo\\work\\work.sqlite", null);
-	 * 
-	 * @param driver
-	 *            驱动字符串
-	 * @param jdbcUrl
-	 *            链接字符串
-	 * @param props
-	 *            参数属性
-	 */
-	public static Connection getConnection(String driver, String jdbcUrl, Properties props) {
-		Connection conn = null;
-
-		try {
-			if (props == null)
-				conn = DriverManager.getConnection(jdbcUrl);
-			else
-				conn = DriverManager.getConnection(jdbcUrl, props);
-
-			LOGGER.info("数据库连接成功： " + conn.getMetaData().getURL());
-		} catch (SQLException e) {
-			LOGGER.warning("数据库连接失败！", e);
-
-			try { // jdbc 4的新 写法可不用Class.forName，如果不支持，退回旧写法
-				Class.forName(driver);
-			} catch (ClassNotFoundException e1) {
-				LOGGER.warning("创建数据库连接失败，请检查是否安装对应的 Driver:{0}。", driver);
-			}
-		}
-
-		return conn;
-	}
-
-	/**
-	 * 连接数据库（不使用连接池，而是传统方式，不推薦使用）
-	 * 
-	 * @param jdbcUrl
-	 *            如 jdbc:sqlite:c:\\project\\foo\\work\\work.sqlite
-	 * @return 数据库连接对象
-	 */
-	public static Connection getConnection(String jdbcUrl) {
-		Connection conn = null;
-
-		try {
-			conn = DriverManager.getConnection(jdbcUrl);
-			LOGGER.info("数据库连接成功： " + conn.getMetaData().getURL());
-		} catch (SQLException e) {
-			LOGGER.warning("数据库连接失败！", e);
-		}
-		return conn;
-	}
-	
-	/**
-	 * 通过数据源对象获得数据库连接对象
-	 * 
-	 * @param source
-	 *            数据源对象
-	 * @return 数据库连接对象
-	 */
-	public static Connection getConnection(DataSource source) {
-		try {
-			return source.getConnection();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	/**
-	 * 查询回调
-	 */
-	public static interface Callback {
-		/**
-		 * 执行回调
-		 * 
-		 * @param resultset
-		 *            查询结果集合，如果为 null 表示没有找到记录
-		 * @return 为任意类型，由回调决定
-		 * @throws SQLException
-		 */
-		Object doIt(ResultSet resultset) throws SQLException;
-	}
-	
-	/**
-	 * 执行查询 SQL 语句，得到的结果交给回调处理
-	 * 
-	 * @param conn
-	 *            数据库连接
-	 * @param sql
-	 *            查询的 SQL 语句
-	 * @param cb
-	 *            回调方法签名如： Object doIt(ResultSet resultset) throws SQLException;
-	 * @return 其实是回调返回的结果，为任意类型，由回调决定
-	 */
-	public static Object queryWithCallback(Connection conn, String sql, Callback cb) {
-		LOGGER.info("将要查询的 SQL 为:" + formatSql(sql));
-		Object obj = null;
-
-		// createStatement()不給定參數時，預設是ResultSet.TYPE_FORWARD_ONLY、
-		// ResultSet.CONCUR_READ_ONLY。
-		try (Statement statement = conn.createStatement(); ResultSet rs = statement.executeQuery(sql);) {
-			if (rs.isBeforeFirst() && cb != null) {
-				obj = cb.doIt(rs);
-			} else {
-				LOGGER.warning("查询 SQL：{0} 没有符合的记录！", sql);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return obj;
-	}
-
 	/**
 	 * 记录集合转换为 Map
 	 * 
@@ -269,7 +119,6 @@ public class Helper {
 			if (String.class == classz) {
 				return rs.isBeforeFirst() ? (T) rs.getString(1) : null;
 			} else if (Integer.class == classz) {
-
 				// if (jdbcConnStr.indexOf("MySQL") != -1 || jdbcConnStr.indexOf("mysql") != -1) {
 				//     result = rs.next() ? rs.getInt(1) : null;
 				// } else {// sqlite
@@ -278,15 +127,14 @@ public class Helper {
 				return rs.isBeforeFirst() ? (T) (Integer) rs.getInt(1) : null;
 			} else if (Boolean.class == classz) {
 				return (T) (Boolean) rs.isBeforeFirst();
-			} else {
-				return null;
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return null;
 		}
+		
+		return null;
 	}
+	
 	public static String perRecordSql  = "SELECT id, name FROM %s WHERE createDate < datetime('%s') ORDER BY createDate DESC LIMIT 1";
 	public static String nextRecordSql = "SELECT id, name FROM %s WHERE createDate > datetime('%s') ORDER BY createDate ASC LIMIT 1";
 	

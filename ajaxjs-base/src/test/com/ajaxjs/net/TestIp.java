@@ -14,14 +14,5 @@ public class TestIp {
 		System.out.println(ip);
 		assertTrue(ip.startsWith("192.168"));
 	}
-	
-	@Test 
-	public void testServer(){
-		IP.httpServer();
-		String url = "http://" + IP.getLocalIp() + ":8081/myApp/";
-		System.out.println(url);
-		String result = Client.GET(url);
-		System.out.println(result);
-		assertTrue(result.trim().equals("ok"));
-	}
+	 
 }

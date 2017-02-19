@@ -17,8 +17,6 @@ package com.ajaxjs.net;
 
 import java.io.IOException; 
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.net.UnknownHostException;
 
 /**
@@ -112,20 +110,6 @@ public class IP {
 		}
 		
 		return false;
-	}
-	
-	/**
-	 * 模拟 telnet("192.168.0.201", 8899);
-	 * 
-	 * @param ip
-	 * @param port
-	 */
-	public static void telnet(String ip, int port) {
-		try (Socket server = new Socket();) {
-			server.connect(new InetSocketAddress(ip, port), 5000);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 	
 }

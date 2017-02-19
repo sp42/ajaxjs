@@ -34,7 +34,7 @@ import com.ajaxjs.Init;
 import com.ajaxjs.framework.dao.DAO;
 import com.ajaxjs.framework.exception.DaoException;
 import com.ajaxjs.framework.model.BaseModel;
-import com.ajaxjs.jdbc.Helper;
+import com.ajaxjs.jdbc.JdbcConnection;
 
 /**
  * 初始化数据库服务
@@ -138,7 +138,7 @@ public class MyBatis {
 		if (db_context_path == null)
 			throw new IllegalArgumentException("参数错误，db_context_path 不能为空！");
 
-		return Helper.getDataSource(db_context_path);
+		return JdbcConnection.getDataSource(db_context_path);
 	}
 
 	/**
