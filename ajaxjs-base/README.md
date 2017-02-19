@@ -22,7 +22,9 @@ util
 
 jdbc
 -----------
-jdbc 围绕数据库而设的一些工具类。[详细用法参见文档](http://git.oschina.net/sp42/ajaxjs/tree/master/ajaxjs-base/src/com/ajaxjs/jdbc?dir=1&filepath=ajaxjs-base%2Fsrc%2Fcom%2Fajaxjs%2Fjdbc)。
+jdbc 围绕数据库而设的一些工具类。
+
+[详细用法参见文档](http://git.oschina.net/sp42/ajaxjs/tree/master/ajaxjs-base/src/com/ajaxjs/jdbc?dir=1&filepath=ajaxjs-base%2Fsrc%2Fcom%2Fajaxjs%2Fjdbc)。
 
 net
 -----------
@@ -36,7 +38,9 @@ net
 
 js
 -------------
-JSON 解析包。本着 Json/Js 亲缘的关系，大胆采用 JDK 自带的 JavaScript 引擎实现做一个 JSON 解析器。[详细用法参见文档](http://git.oschina.net/sp42/ajaxjs/tree/master/ajaxjs-base/src/com/ajaxjs/js?dir=1&filepath=ajaxjs-base%2Fsrc%2Fcom%2Fajaxjs%2Fjs)。
+JSON 解析包。本着 Json/Js 亲缘的关系，大胆采用 JDK 自带的 JavaScript 引擎实现做一个 JSON 解析器。
+
+[详细用法参见文档](http://git.oschina.net/sp42/ajaxjs/tree/master/ajaxjs-base/src/com/ajaxjs/js?dir=1&filepath=ajaxjs-base%2Fsrc%2Fcom%2Fajaxjs%2Fjs)。
 
 framework
 -----------

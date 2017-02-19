@@ -1,5 +1,7 @@
 package com.ajaxjs.js;
 
+import java.util.Map;
+
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -10,6 +12,7 @@ import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.Util;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.io.StreamUtil;
+
 
 /**
  * JS 引擎的包装器
@@ -29,24 +32,6 @@ public class JsEngineWrapper {
 	 */
 	public JsEngineWrapper(ScriptEngine engine) {
 		this.engine = engine;
-	}
-
-	/**
-	 * 委托对象，以便兼容 jdk7/8
-	 */
-	final static JsObjectCovernt jsObjectCovernt;
-	
-	static {
-		boolean isJDK7;
-		
-		try {
-			Class.forName("sun.org.mozilla.javascript.internal.NativeObject");
-			isJDK7 = false;
-		} catch (ClassNotFoundException e) {
-			isJDK7 = true;
-		}
-		
-		jsObjectCovernt = isJDK7 ? new RhinoJsObjectCovernt() : new NashornJsObjectCovernt();
 	}
 	
 	/**
@@ -149,8 +134,19 @@ public class JsEngineWrapper {
 	 *            JS MAP 对象的 key
 	 * @return NativeObject 或 Object
 	 */
+	@SuppressWarnings("rawtypes")
 	public Object get(String... namespace) {
-		return jsObjectCovernt.get(getEngine(), namespace);
+		Map obj = (Map) engine.get(namespace[0]);
+
+		for (int i = 1; i < namespace.length; i++) {
+			try {
+				obj = (Map) obj.get(namespace[i]);
+			} catch (ClassCastException e) {
+				return obj.get(namespace[i]);
+			}
+		}
+
+		return obj;
 	}
 	
 	/**
