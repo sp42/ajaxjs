@@ -1,4 +1,4 @@
-package test.com.ajaxjs.io;
+package test.com.ajaxjs.util.io;
 
 import static org.junit.Assert.*;
 

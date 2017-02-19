@@ -1,4 +1,4 @@
-package test.com.ajaxjs.io;
+package test.com.ajaxjs.util.io;
 
 import static org.junit.Assert.*;
 
@@ -8,8 +8,6 @@ import org.junit.Test;
 import com.ajaxjs.util.io.FileUtil;
 
 public class TestFileUtil {
-//	String txtfile = Util.getClassFolder_FilePath(TestFileUtil.class, "taskconfig.xml");
-	
 	String dir = TestFileUtil.class.getResource("/").getPath();
 	String fullpath = dir + File.separator + "bar.txt";
 

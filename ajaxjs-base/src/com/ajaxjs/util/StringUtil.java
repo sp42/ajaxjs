@@ -41,8 +41,7 @@ public class StringUtil {
 	 * @return true 表示为为空字符串，否则不为空
 	 */
 	public static boolean isEmptyString(String str) {
-		if (str == null || str.isEmpty() || str.length() == 0 || str.trim().isEmpty() || "".equals(str)
-				|| "".equals(str.trim()))
+		if (str == null || str.isEmpty() || str.trim().isEmpty() || "".equals(str) || "".equals(str.trim()))
 			return true;
 
 		return false;

@@ -18,7 +18,7 @@ util
 - ioc，一个简易的 ioc 依赖注射实现；
 - map，Map 集合工具类和一个本地缓存类；
 
-[详细用法参见文档](http://git.oschina.net/sp42/ajaxjs/tree/master/ajaxjs-base/src/com/ajaxjs/js?dir=1&filepath=ajaxjs-base%2Fsrc%2Fcom%2Fajaxjs%2Fjs)。
+[详细用法参见文档](http://http://git.oschina.net/sp42/ajaxjs/tree/master/ajaxjs-base/src/com/ajaxjs/util?dir=1&filepath=ajaxjs-base%2Fsrc%2Fcom%2Fajaxjs%2Futil)。
 
 jdbc
 -----------

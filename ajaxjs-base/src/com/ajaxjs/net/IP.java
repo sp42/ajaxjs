@@ -15,28 +15,11 @@
  */
 package com.ajaxjs.net;
 
-import java.io.IOException;
-import java.lang.management.ManagementFactory;
+import java.io.IOException; 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.management.AttributeNotFoundException;
-import javax.management.MBeanServer;
-import javax.management.MalformedObjectNameException;
-import javax.management.ObjectName;
-import javax.management.Query;
-
-import com.ajaxjs.util.io.StreamUtil;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
-import com.sun.net.httpserver.spi.HttpServerProvider;
 
 /**
  * IP 工具类
@@ -86,9 +69,10 @@ public class IP {
 		}
 
 		String[] ips = null;
-		if (addrs !=null ) {
+		if (addrs !=null) {
 			ips = new String[addrs.length];
 			int i = 0;
+			
 			for (InetAddress addr : addrs)
 				ips[i++] = addr.getHostAddress();
 		}
@@ -104,62 +88,12 @@ public class IP {
 	 * @return 主机对应的 IP
 	 */
 	public static String getIpByHostName(String hostname) {
-		InetAddress ia = null;
-
 		try {
-			ia = InetAddress.getByName("www.baidu.com");
+			return InetAddress.getByName(hostname).getHostAddress();
 		} catch (UnknownHostException e) {
 			System.err.println("获取 ip 失败！" + hostname);
 			e.printStackTrace();
-		}
-
-		return ia == null ? null : ia.getHostAddress();
-	}
-	
-	/**
-	 * 启动 HTTP 服务，监听来自客户端的请求
-	 * @throws IOException
-	 */
-	public static void httpServer() {
-		HttpServer httpserver;
-		
-		try {
-			// 监听端口8081,能同时接受100个请求
-			httpserver = HttpServerProvider.provider().createHttpServer(new InetSocketAddress(8081), 100);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
-		
-		httpserver.createContext("/myApp", new MyHttpHandler());
-		httpserver.setExecutor(null);
-		httpserver.start();
-		
-		System.out.println("server started");
-	}
-
-	/**
-	 * Http请求处理类
-	 *  * 自定义的http服务器
-	 *  http://blog.csdn.net/maosijunzi/article/details/41045181
-	 *   http://blog.163.com/web_promise/blog/static/1096316552011224101531794/
-	 * @author frank
-	 */
-	static class MyHttpHandler implements HttpHandler {
-		@Override
-		public void handle(HttpExchange httpExchange) throws IOException {
-			StreamUtil s = new StreamUtil();
-
-			String result = s.setIn(httpExchange.getRequestBody()).byteStream2stringStream().getContent();
-			System.out.println("客户端请求:" + result);
-
-			String responseMsg = "ok"; // 响应信息
-			httpExchange.sendResponseHeaders(200, responseMsg.length()); // 设置响应头属性及响应信息的长度
-
-			s.setOut(httpExchange.getResponseBody()).setData(responseMsg.getBytes()).stringStream2output();
-			s.close();
-
-			httpExchange.close();
+			return null;
 		}
 	}
 	
@@ -170,8 +104,7 @@ public class IP {
 	 */
 	public static boolean ping(String ip) {
 		try {
-			InetAddress address = InetAddress.getByName(ip);
-			return address.isReachable(5000); // 设定超时时间，返回结果表示是否连上
+			return InetAddress.getByName(ip).isReachable(5000); // 设定超时时间，返回结果表示是否连上
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -182,59 +115,17 @@ public class IP {
 	}
 	
 	/**
-	 * 模拟 telnet telnet("192.168.0.201", 8899);
+	 * 模拟 telnet("192.168.0.201", 8899);
 	 * 
 	 * @param ip
 	 * @param port
 	 */
 	public static void telnet(String ip, int port) {
-		Socket server = null;
-
-		try {
-			server = new Socket();
-			InetSocketAddress address = new InetSocketAddress(ip, port);
-			server.connect(address, 5000);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
+		try (Socket server = new Socket();) {
+			server.connect(new InetSocketAddress(ip, port), 5000);
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
-			if (server != null)
-				try {
-					server.close();
-				} catch (IOException e) {}
 		}
 	}
 	
-	/**
-	 * linux 没有 localhost 要在host文件中加入 127.0.0.1 localhost 
-	 * @return
-	 * @throws MalformedObjectNameException
-	 * @throws NullPointerException
-	 * @throws UnknownHostException
-	 * @throws AttributeNotFoundException
-	 * @throws InstanceNotFoundException
-	 * @throws MBeanException
-	 * @throws ReflectionException
-	 */
-	public static List<String> getEndPoints() throws Exception {
-		ArrayList<String> endPoints = new ArrayList<>();
-		
-		MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-		Set<ObjectName> objs = mbs.queryNames(new ObjectName("*:type=Connector,*"), Query.match(Query.attr("protocol"), Query.value("HTTP/1.1")));
-		InetAddress[] addresses = InetAddress.getAllByName(InetAddress.getLocalHost().getHostName());
-		
-		for (Iterator<ObjectName> i = objs.iterator(); i.hasNext();) {
-			ObjectName obj = i.next();
-			String  scheme = mbs.getAttribute(obj, "scheme").toString(),
-					port = obj.getKeyProperty("port");
-			
-//			if("80".equals(port))isDebug = false; // 如果发现 tomcata 有提供 80 端口，那么表示是 正式环境
-			for (InetAddress addr : addresses){
-				endPoints.add(scheme + "://" + addr.getHostAddress() + ":" + port);
-			}
-		}
-		
-		return endPoints;
-	}
 }

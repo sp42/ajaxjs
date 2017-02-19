@@ -1,59 +1,37 @@
 #AJAXJS base-util
+文件增删改
+-----------
+采用链式风格调用；采用 Java 7 autoclose 自动关闭流。
 
-
-IOC 注入
--------
-支持简易的反转控制，参见[《极简版 Java 依赖注射 》](http://blog.csdn.net/zhangxin09/article/details/43161215)。
-
-Controller 中 service 需要被注入：
-
-	import com.ajaxjs.util.ioc.Bean;
-	import com.ajaxjs.util.ioc.Resource;
-	@Controller
-	@Path("/version")
-	@Bean("versionController") 
-	public class VersionController extends ReadOnlyController<Version> {
-		@Resource("versionService") // 指定 service id
-		private VersionService service;
-	 
-	}
+	import com.ajaxjs.util.io.FileUtil;
 	
-Service
-
-	import com.ajaxjs.util.ioc.Bean;
-
-	/**
-	 * 版本更新
-	 * @author frank
-	 *
-	 */
-	@Bean("versionService")
-	public class VersionService extends BaseCrudService<Version, VersionDAO> {
-	 
-	}
-
-测试注入：
-
-	import com.ajaxjs.util.ioc.BeanContext;
-	import com.ajaxjs.util.ioc.Scanner;
-	
-	public class TestIOC {
+	public class TestFileUtil {
+		String dir = TestFileUtil.class.getResource("/").getPath();
+		String fullpath = dir + File.separator + "bar.txt";
 	
 		@Test
-		public void test() {
-			// 指定扫描的包名
-			// 下面 service 被注入到 controller 中
-			Set<Class<?>> classes = new Scanner().scanPackage("com.ajaxjs.app.controller", new Scanner().scanPackage("com.ajaxjs.app.service"));
+		public void testCreateRead() {
+			// create and update
+			new FileUtil().setFilePath(fullpath).setOverwrite(true).setContent("hihi").save().close();
+			// read
+			String result = new FileUtil().setFilePath(fullpath).read().byteStream2stringStream().close().getContent();
 			
-			// 注入
-			BeanContext.me().init(classes);
-	
-			// 按照 bean 名称获取实例
-			VersionController versionController = (VersionController) BeanContext.me().getBean("versionController");
-	
-			// 依赖的 versionService 注入到 versionController
-			System.out.println(versionController.getService());
-			assertNotNull(versionController.getService());
+			System.out.println(result);
+			assertTrue(result.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"));
+			
+			// delete
+			new FileUtil().setFilePath(fullpath).delete();
 		}
 	}
-	
+
+日志服务
+-------------
+AJAXJS 针对 JDK 自带的 logger 稍加扩展，使用例子如下：
+
+ 
+	private static final LogHelper log = LogHelper.getLog(TestLogHelper.class);
+	log.warning("fooo");
+	log.info("bar");
+
+对于 WARNING 级别信息会以磁盘文件方式保存在 /META-INF/logger/log.txt 下。
+如果你习惯其他 log，建议使用 slf4j 或 apache common logging，可参考我写的教程[《使用 slf4j + Java.util.logger》](http://blog.csdn.net/zhangxin09/article/details/50611373)。
