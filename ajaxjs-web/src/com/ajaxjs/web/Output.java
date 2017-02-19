@@ -31,7 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.jsp.PageContext;
 
-import com.ajaxjs.util.json.JsonHelper;
+import com.ajaxjs.js.JsonHelper;
 
 /**
  * 灵活的、链式调用的输出响应内容
@@ -92,7 +92,7 @@ public class Output extends HttpServletResponseWrapper {
 		}
 		
 		if (getOutput_Map() != null) { // Map 的话转变为 json 输出
-			setJson(true).setOutput(JsonHelper.stringify(getOutput_Map()));
+			setJson(true).setOutput(JsonHelper.stringifyMap(getOutput_Map()));
 		} else if (getOutput_Obj() != null) {// map or object 二选其一
 			setJson(true).setOutput(JsonHelper.stringify_object(getOutput_Obj()));
 		}

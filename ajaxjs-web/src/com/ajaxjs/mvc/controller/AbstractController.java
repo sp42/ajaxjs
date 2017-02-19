@@ -26,7 +26,7 @@ import com.ajaxjs.framework.model.BaseModel;
 import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.framework.model.PageResult;
 import com.ajaxjs.framework.model.Query;
-import com.ajaxjs.framework.service.DocumentRenderer;
+//import com.ajaxjs.framework.service.DocumentRenderer;
 import com.ajaxjs.framework.service.IService;
 import com.ajaxjs.util.LogHelper;
 
@@ -228,17 +228,17 @@ public abstract class AbstractController<T extends BaseModel> implements CrudCon
 	 *            POJO
 	 * @return
 	 */
-	public String getDocument(ModelAndView model, T entity) {
-		String[] strs = DocumentRenderer.getEntityInfo(entity.getClass());
-		model.put("entityInfo", strs[0]);
-		if (strs[1] != null) { // 更多关于该实体的文档
-			model.put("moreDocument", strs[1]);
-		}
-
-		model.put("meta", DocumentRenderer.getDocument(entity.getClass(), service.getSQL_TableName()));
-
-		return "common/entity/showDocument";
-	}
+//	public String getDocument(ModelAndView model, T entity) {
+//		String[] strs = DocumentRenderer.getEntityInfo(entity.getClass());
+//		model.put("entityInfo", strs[0]);
+//		if (strs[1] != null) { // 更多关于该实体的文档
+//			model.put("moreDocument", strs[1]);
+//		}
+//
+//		model.put("meta", DocumentRenderer.getDocument(entity.getClass(), service.getSQL_TableName()));
+//
+//		return "common/entity/showDocument";
+//	}
 	
 	public IService<T> getService() {
 		if(service == null) throw new NullPointerException("没有业务层对象！");

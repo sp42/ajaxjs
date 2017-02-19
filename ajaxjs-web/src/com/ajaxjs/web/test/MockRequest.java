@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import com.ajaxjs.util.json.JSON;
+import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.util.map.MapHelper;
  
 
@@ -188,12 +188,12 @@ public class MockRequest extends WebBaseInit {
 	}
 
 	public Map<String, Object> shouldbe_json_return(String js_code) {
-		return JSON.getMap(js_code);
+		return new JsonHelper(js_code).getMap(null);
 	}
 
 	@SuppressWarnings("unchecked")
 	public Map<String, Object>[] shouldbe_jsonArray_return(String js_code) {
-		List<Map<String, Object>> list = JSON.getList(js_code);
+		List<Map<String, Object>> list = new JsonHelper(js_code).getList(null);
 		return list.toArray(new Map[list.size()]);
 	}
 

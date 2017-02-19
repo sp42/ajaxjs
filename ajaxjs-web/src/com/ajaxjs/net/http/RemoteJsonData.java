@@ -19,17 +19,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.script.ScriptEngine;
 import javax.servlet.http.HttpServletRequest;
 
- 
+import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.util.json.JSON;
-import com.ajaxjs.util.json.Rhino;
 import com.ajaxjs.util.map.MapHelper;
 import com.ajaxjs.web.Requester;
-
-import sun.org.mozilla.javascript.internal.NativeArray;
 
 /**
  * 请求远程的 JSON 接口基类
@@ -39,6 +36,8 @@ import sun.org.mozilla.javascript.internal.NativeArray;
  */
 public abstract class RemoteJsonData implements RemoteData {
 	private static final LogHelper LOGGER = LogHelper.getLog(RemoteJsonData.class);
+	
+	private final static ScriptEngine jsEngine = JsonHelper.engineFactory();
 
 	/**
 	 * 读取本地接口，把返回的 JSON 转换为 Map
@@ -96,7 +95,7 @@ public abstract class RemoteJsonData implements RemoteData {
 		String json = Client.GET(url);
 
 		if (!StringUtil.isEmptyString(json)) {
-			List<Map<String, Object>> list = JSON.getList(json);
+			List<Map<String, Object>> list = new JsonHelper(jsEngine).setJsonString(json).getList(null);
 			
 			Map<String, Object>[] maps = new HashMap[list.size()];
 			
@@ -104,7 +103,7 @@ public abstract class RemoteJsonData implements RemoteData {
 				Map<String, Object> map =  MapHelper.toRealMap(list.get(i));
 				
 				if(map.get("id") != null && map.get("id") instanceof Double) { // id 自动类型转换 double2int
-					map.put("id", JSON.double2int((Double)map.get("id")));
+					map.put("id", JsonHelper.double2int((Double)map.get("id")));
 				}
 				
 				maps[i] = map;
@@ -130,7 +129,7 @@ public abstract class RemoteJsonData implements RemoteData {
 
 		if (!StringUtil.isEmptyString(json)) {
 			// LOGGER.info(json);
-			return JSON.getMap(json);
+			return new JsonHelper(jsEngine).setJsonString(json).getMap(null);
 		} else {
 			LOGGER.warning("异常：读取远程接口，不能把返回的 JSON 转换为 Map！");
 			return null;
@@ -180,14 +179,14 @@ public abstract class RemoteJsonData implements RemoteData {
 		Map<String, Object> response = RemoteJsonData.getRemoteJSON_Object(getApiUrl(url, params));
 
 		if (response != null && response.get(getTotalToken()) != null) {
-			result.total = JSON.double2int((Double) response.get(getTotalToken()));
+			result.total = JsonHelper.double2int((Double) response.get(getTotalToken()));
 
 			if (result.total <= 0) {
 				LOGGER.warning("存在总数字段，但为 0，查询结果为零，返回 null");
 			} else if (response.get(getResultToken()) == null) {
 				LOGGER.warning("记录记录数：{0}。但没有数据列表返回！！！", result.total);
 			} else {
-				result.results = Rhino.NativeArray2MapArray((NativeArray)response.get(getResultToken()));
+//				result.results = Rhino.NativeArray2MapArray((NativeArray)response.get(getResultToken()));
 			}
 		} else {
 			if (response == null)
