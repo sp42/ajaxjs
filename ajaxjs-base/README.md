@@ -22,7 +22,7 @@ util
 
 jdbc
 -----------
-jdbc 围绕数据库而设的一些工具类
+jdbc 围绕数据库而设的一些工具类。[详细用法参见文档](http://git.oschina.net/sp42/ajaxjs/tree/master/ajaxjs-base/src/com/ajaxjs/jdbc?dir=1&filepath=ajaxjs-base%2Fsrc%2Fcom%2Fajaxjs%2Fjdbc)。
 
 net
 -----------
@@ -31,6 +31,8 @@ net
 - http 可发送 GET/POST/PUT/DELETE 请求。远没有 Apache HttpClient 完善，但足以满足一般的请求；
 - mail 无须 JavaMail 发送邮件。通过最简单的 telnet 原理发送；
 - ip IP 工具类
+
+[详细用法参见文档](http://git.oschina.net/sp42/ajaxjs/tree/master/ajaxjs-base/src/com/ajaxjs/net?dir=1&filepath=ajaxjs-base%2Fsrc%2Fcom%2Fajaxjs%2Fnet)。
 
 js
 -------------
