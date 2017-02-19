@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import com.ajaxjs.net.IP;
-import com.ajaxjs.net.http.Client;
-
 
 public class TestIp {
 	@Test 
