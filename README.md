@@ -24,9 +24,10 @@ Oracle Java 1.7 暂不支持 1.8 或 OpenJDK；Tomcat 7 或以上。
 项目一览
 --------------
 
+
 |名称|说明|
 |------|----|
-|ajaxjs-base|基础类库，不限定 JVM 环境。|
+|ajaxjs-base|基础类库，不限定 JVM 环境。[详细介绍](http://git.oschina.net/sp42/ajaxjs/tree/master/ajaxjs-base?dir=1&filepath=ajaxjs-base)|
 |ajaxjs-web|Web 的基础类库|
 |ajaxjs-webconfig|基于 JSON 格式的配置系统|
 |ajaxjs-user|提供用户管理系统、积分系统和 Admin 界面框架|
