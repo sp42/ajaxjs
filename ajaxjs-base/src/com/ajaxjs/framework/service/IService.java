@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.framework.exception.ServiceException;
-import com.ajaxjs.framework.model.BaseModel;
 import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.framework.model.PageResult;
 import com.ajaxjs.framework.model.Query;
@@ -31,7 +30,7 @@ import com.ajaxjs.framework.model.Query;
  *
  * @param <T> Bean 对象
  */
-public interface IService<T extends BaseModel> {
+public interface IService<T> {
 	/**
 	 * 获取单个实体
 	 * 

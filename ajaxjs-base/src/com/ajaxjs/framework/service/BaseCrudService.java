@@ -48,6 +48,7 @@ import com.ajaxjs.util.Util;
  */
 public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>> implements IService<T> {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseCrudService.class);
+	
 	/**
 	 * 映射器
 	 */
@@ -80,7 +81,6 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 			if (id < 0)
 				throw new IllegalArgumentException("实体 id 不能小于零");
 		} catch (Throwable e) {
-			LOGGER.warning(e);
 			throw new BusinessException(e.getMessage());
 		}
 
@@ -88,9 +88,9 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 			Mapper _mapper = session.getMapper(mapperClz);
 			entry = _mapper.selectById(id, getSQL_TableName());
 		} catch (Throwable e) {
-			LOGGER.warning(e);
 			throw new DaoException(e.getMessage());
 		}
+		
 		return entry;
 	}
 	
@@ -160,7 +160,6 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 			if (start < 0 || limit < 0)
 				throw new IllegalArgumentException("分页参数非法");
 		} catch (Throwable e) {
-			LOGGER.warning(e);
 			throw new BusinessException(e.getMessage());
 		}
 		
@@ -224,10 +223,9 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 		int effectedRows = 0; // 受影响的行数
 
 		try {
-			if (StringUtil.isEmptyString(entry.getName())) {
+			if (StringUtil.isEmptyString(entry.getName())) 
 				throw new IllegalAccessException("不能为空标题");
-			}
-
+			
 			entry.setUid(Util.getUUID()); // 创建 uuid
 
 			Date now = new Date();// 记录创建時間
