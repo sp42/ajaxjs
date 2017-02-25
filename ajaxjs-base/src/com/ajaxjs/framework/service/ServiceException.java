@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.framework.exception;
+package com.ajaxjs.framework.service;
 
 /**
  * 服务层基类异常

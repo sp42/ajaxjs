@@ -23,11 +23,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 
 import com.ajaxjs.framework.dao.DAO;
-import com.ajaxjs.framework.dao.MyBatis;
 import com.ajaxjs.framework.dao.SqlProvider;
-import com.ajaxjs.framework.exception.BusinessException;
-import com.ajaxjs.framework.exception.DaoException;
-import com.ajaxjs.framework.exception.ServiceException;
 import com.ajaxjs.framework.model.BaseModel;
 import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.framework.model.PageResult;
@@ -53,105 +49,11 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 	 * 映射器
 	 */
 	private Class<Mapper> mapperClz; 	
-	/**
-	 * UI 显示的文字
-	 */
-	private String uiName; 				
-	
-	/**
-	 * 实体表名
-	 */
-	private String tableName; 			
-	
-	/**
-	 * 数据库里面真实的表名，可不设置（这时候读取 tableName 的）
-	 */
-	private String mappingTableName; 	
-	
+	 			
 	/**
 	 * Extra data field container
 	 */
 	private ModelAndView model; 
-	
-	@Override
-	public T getById(long id) throws ServiceException {
-		T entry = null;
-
-		try {
-			if (id < 0)
-				throw new IllegalArgumentException("实体 id 不能小于零");
-		} catch (Throwable e) {
-			throw new BusinessException(e.getMessage());
-		}
-
-		try (SqlSession session = MyBatis.loadSession(mapperClz);) {
-			Mapper _mapper = session.getMapper(mapperClz);
-			entry = _mapper.selectById(id, getSQL_TableName());
-		} catch (Throwable e) {
-			throw new DaoException(e.getMessage());
-		}
-		
-		return entry;
-	}
-	
-	/**
-	 * 包装下面对象的类
-	 */
-	public static class Session<Mapper> {
-		public Mapper mapper;
-		public SqlSession session;
-	}
-	
-	/**
-	 * 获取 DAO 对象，要记得关闭 SqlSession！
-	 */
-	public Session<Mapper> getSession() {
-		Session<Mapper> s = new Session<>();
-		s.session = MyBatis.loadSession(mapperClz);
-		s.mapper = s.session.getMapper(mapperClz);
-		
-		return s;
-	}
-	
-	/**
-	 * 
-	 * @param callback
-	 * @return
-	 * @throws ServiceException
-	 */
-	public T getOne(DAO_callback<T, Mapper> callback) throws ServiceException {
-		T entry = null;
-		
-		try (SqlSession session = MyBatis.loadSession(mapperClz);) {
-			Mapper _mapper = session.getMapper(mapperClz);
-			
-			entry = callback.getOne(_mapper);
-		} catch (Throwable e) {
-			LOGGER.warning(e);
-			throw new DaoException(e.getMessage());
-		}
-		return entry;
-	}
-
-	public T getByUUID(String uuid) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
-	public PageResult<T> getPageRows(int start, int limit, Query query) throws ServiceException {	
-		return getPageRows(start, limit, query, new DAO_callback<T, Mapper>() {
-			@Override
-			public List<T> getList(Mapper dao, int start, int limit, String sql_TableName, Query query) {
-				return dao.page(start, limit, getSQL_TableName(), query);
-			}
-
-			@Override
-			public T getOne(Mapper dao) {
-				return null;
-			}
-		});
-	}
 	
 	public PageResult<T> getPageRows(int start, int limit, Query query, DAO_callback<T, Mapper> callback) throws ServiceException {
 		PageResult<T> result = null;
@@ -160,7 +62,6 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 			if (start < 0 || limit < 0)
 				throw new IllegalArgumentException("分页参数非法");
 		} catch (Throwable e) {
-			throw new BusinessException(e.getMessage());
 		}
 		
 		result = new PageResult<>();
@@ -189,34 +90,11 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 		} catch(Throwable e) {
 			e.printStackTrace();
 			LOGGER.warning(e);
-			throw new DaoException(e.getMessage());
 		} 
 		
 		return result;
 	}
-
-	@Override
-	public List<T> getAll(Query query) {
-		PageResult<T> result;
-		
-		try {
-			result = query == null ? getPageRows(0, 999, null) : getPageRows(0, 999, query);
-		} catch (ServiceException e) {
-			LOGGER.warning(e);
-			return null;
-		}
-		
-		if (result == null || result.getTotalCount() == 0) {
-			return null;
-		} else {
-			return result.getRows();
-		}
-	}
-
-	@Override
-	public List<T> getAll() {
-		return getAll(null);
-	}
+ 
 	
 	@Override
 	public int create(T entry) throws ServiceException {
@@ -235,7 +113,6 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 			entry.setUpdateDate(now);
 		} catch (Throwable e) {
 			LOGGER.warning(e);
-			throw new BusinessException(e.getMessage());
 		}
 		
 		LOGGER.info("插入一条新记录：" + entry.getName());
@@ -254,54 +131,28 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 			}
 		} catch (Throwable e) {
 			LOGGER.warning(e);
-			throw new DaoException(e.getMessage());
 		}
 
 		return effectedRows;
 	}
 
-	@Override
 	public boolean update(T entry) throws ServiceException {
 		int effectedRows = 0; // 受影响的行数
 
-		try {
-			if (entry.getId() == 0) {
-				throw new IllegalArgumentException("没有参数 id！");
-			} 
-
-			entry.setUpdateDate(new Date());// 记录修改時間
-		} catch (Throwable e) {
-			LOGGER.warning(e);
-			throw new BusinessException(e.getMessage());
-		}
-		
 		try(SqlSession session = MyBatis.loadSession(mapperClz);) {
 			effectedRows = session.getMapper(mapperClz).update(entry);
 			session.commit();
 		} catch (Throwable e) {
 			LOGGER.warning(e);
-			throw new DaoException(e.getMessage());
 		}
 
 		return effectedRows > 0;
 	}
+ 
 
-	@Override
-	public boolean delete(T entry)  throws ServiceException {
-		return deleteByID(entry.getId());
-	}
-
-	@Override
 	public boolean deleteByID(long id) throws ServiceException {
 		int effectedRows = 0; // 受影响的行数
-		
-		try {
-			if (id == 0) throw new IllegalArgumentException("没有参数 id！");
-		} catch (Throwable e) {
-			LOGGER.warning(e);
-			throw new BusinessException(e.getMessage());
-		}
-		
+		 
 		SqlProvider p = null;
 		
 		try(SqlSession session = MyBatis.loadSession(null);){
@@ -310,65 +161,18 @@ public abstract class BaseCrudService<T extends BaseModel, Mapper extends DAO<T>
 			session.commit();
 		} catch (Throwable e) {
 			LOGGER.warning(e);
-			throw new DaoException(e.getMessage());
 		}
 
 		return effectedRows > 0;
-	}
-	
-	public void createTable(T entry) throws DaoException {
-	}
-	
-	/**
-	 * 如果有 mappingTableName 则返回；如果没有则返回 tableName。
-	 * 
-	 * @return
-	 */
-	@Override
-	public String getSQL_TableName() {
-		if (getMappingTableName() != null) {
-			return getMappingTableName();
-		} else
-			return getTableName();
-	}
-	
-	public String getTableName() {
-		return tableName;
-	}
-
-	public void setTableName(String tableName) {
-		this.tableName = tableName;
-	}
-
-	public String getUiName() {
-		return uiName;
-	}
-
-	public void setUiName(String uiName) {
-		this.uiName = uiName;
-	}
-
-	public void setMapper(Class<Mapper> mapper) {
-		this.mapperClz = mapper;
-	}
-
-	public String getMappingTableName() {
-		return mappingTableName;
-	}
-
-	public void setMappingTableName(String mappingTableName) {
-		this.mappingTableName = mappingTableName;
 	}
 
 	/**
 	 * MVC 通过 Model 交换数据。没 model 表示不深入获取信息
 	 */
-	@Override
 	public ModelAndView getModel() {
 		return model;
 	}
 
-	@Override
 	public void setModel(ModelAndView model) {
 		this.model = model;
 	}

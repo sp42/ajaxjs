@@ -4,42 +4,32 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.ajaxjs.framework.dao.BaseDao;
-import com.ajaxjs.framework.exception.BusinessException;
-import com.ajaxjs.framework.exception.DaoException;
-import com.ajaxjs.framework.exception.ServiceException;
 import com.ajaxjs.framework.model.PageResult;
 
+/**
+ * 业务基类
+ * @author xinzhang
+ *
+ * @param <T>
+ * @param <ID>
+ */
 public class BaseServiceImpl<T, ID extends Serializable> implements BaseService<T, ID> {
+	/**
+	 * 数据访问对象
+	 */
 	private BaseDao<T, ID> dao;
-	
-	public BaseDao<T, ID> getDao() {
-		return dao;
-	}
 
-	public void setDao(BaseDao<T, ID> dao) {
-		this.dao = dao;
-	}
-
+	/**
+	 * 业务名称
+	 */
 	private String name;
 
 	@Override
 	public T findById(ID id) throws ServiceException { 
-		try {
-			if (id instanceof Number && ((Number) id).intValue() < 0)
-				throw new IllegalArgumentException("实体 id 不能小于零");
-		} catch (Throwable e) {
-			throw new BusinessException(e.getMessage());
-		}
-
-		T entry = null;
+		if (id instanceof Number && ((Number) id).intValue() < 0)
+			throw new IllegalArgumentException("实体 id 不能小于零");
 		
-		try {
-			entry = dao.findById(id);
-		} catch (Throwable e) {
-			throw new DaoException(e.getMessage());
-		}
-		
-		return entry;
+		return dao.findById(id);
 	}
 	
 	@Override
@@ -59,57 +49,55 @@ public class BaseServiceImpl<T, ID extends Serializable> implements BaseService<
 		return pageHelper(start, limit, pageCallback);
 	}
 	
-	 
+	/**
+	 * 分页帮助方法
+	 * @param start
+	 * @param limit
+	 * @param pageCallback
+	 * @return 分页对象
+	 * @throws ServiceException
+	 */
 	public PageResult<T> pageHelper(int start, int limit, PageCallback<T, BaseDao<T, ID>> pageCallback) throws ServiceException {
-		try {
-			if (start < 0 || limit < 0)
-				throw new IllegalArgumentException("分页参数非法");
-		} catch (Throwable e) {
-			throw new BusinessException(e.getMessage());
-		}
-		
+		if (start < 0 || limit < 0)
+			throw new IllegalArgumentException("分页参数非法");
+	
 		PageResult<T> result = new PageResult<>();
 		result.setStart(start);
 		result.setPageSize(limit);
+		result.setTotalCount(pageCallback.getTotal(dao));// 先查询总数
 		
-		try { 
-			result.setTotalCount(pageCallback.getTotal(dao));// 先查询总数
-			
-			if (result.getTotalCount() > 0) { // 然后执行分页
-				result.page();
-				result.setRows(pageCallback.getList(start, limit, dao));
-			}
-		} catch (Throwable e) {
-			e.printStackTrace();
-			throw new DaoException(e.getMessage());
+		if (result.getTotalCount() > 0) { // 然后执行分页
+			result.page();
+			result.setRows(pageCallback.getList(start, limit, dao));
 		}
 		
 		return result;
 	}
 	
+	
 	public List<T> find() throws ServiceException {
-		PageResult<T> entries = find(0, 99999);
-		return entries.getRows();
+		return find(0, 99999).getRows();
 	}
 	
 	@Override
 	public ID create(T bean) throws ServiceException {
-		// TODO Auto-generated method stub
+		int effectedRows = 0; // 受影响的行数
 		return null;
 	}
 
 	@Override
 	public int update(T bean) throws ServiceException {
-		// TODO Auto-generated method stub
-		return 0;
+		int effectedRows = 0; // 受影响的行数
+		dao.delete(id)
+		return effectedRows > 0;
 	}
 
 	@Override
 	public boolean delete(ID id) throws ServiceException {
-		// TODO Auto-generated method stub
-		return false;
+		return dao.delete(id) == 1;// 受影响的行数
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -117,11 +105,12 @@ public class BaseServiceImpl<T, ID extends Serializable> implements BaseService<
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	@Override
-	public int count(BaseDao<T, ID> dao) throws ServiceException {
-		// TODO Auto-generated method stub
-		return 0;
+	
+	public BaseDao<T, ID> getDao() {
+		return dao;
 	}
 
+	public void setDao(BaseDao<T, ID> dao) {
+		this.dao = dao;
+	}
 }

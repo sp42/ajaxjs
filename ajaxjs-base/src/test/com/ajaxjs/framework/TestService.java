@@ -7,8 +7,10 @@ import org.sqlite.SQLiteDataSource;
 import org.sqlite.SQLiteJDBCLoader;
 
 import com.ajaxjs.framework.dao.MyBatis;
-import com.ajaxjs.framework.exception.ServiceException;
 import com.ajaxjs.framework.model.PageResult;
+import com.ajaxjs.framework.service.CacheService;
+import com.ajaxjs.framework.service.IService;
+import com.ajaxjs.framework.service.ServiceException;
 
 public class TestService {
 	SQLiteDataSource dataSource;
@@ -23,21 +25,36 @@ public class TestService {
 		}
 
 		dataSource = new SQLiteDataSource();
-		dataSource.setUrl("jdbc:sqlite:c:\\project\\ajaxjs\\sql\\foo.sqlite");
+		dataSource.setUrl("jdbc:sqlite:" + com.ajaxjs.util.Util.getClassFolder_FilePath(TestService.class, "foo.sqlite"));
 	}
 
-	@Test
+	// @Test
 	public void testQuery() throws ServiceException {
 		MyBatis.init(dataSource);
 		NewsService newsService = new NewsService();
 		System.out.println(newsService.getById(1L).getName());
 		assertNotNull(newsService.getById(1L));
-		
+
 		PageResult<News> result = newsService.getPageRows(2, 2, null);
 		assertTrue(result.getRows().size() == 2);
 	}
 
 	@Test
+	public void testQueryCache() throws ServiceException {
+		MyBatis.init(dataSource);
+
+	 
+			IService<News> newsService = new NewsService();
+			newsService = new CacheService<News>().bind(newsService);
+			//newsService = (NewsService)new CacheService().bind(new NewsService());
+			System.out.println("::::::" + newsService.getPageRows(2, 2, null));
+			//Object obj = new CacheService().bind(new NewsService()).getTableName();
+		 
+		//IService newsService2 =new CacheService().bind(newsService);
+		//PageResult result = newsService2.getPageRows(2, 2, null);
+	}
+
+	//@Test
 	public void testCreate() throws ServiceException {
 		MyBatis.init(dataSource);
 		NewsService newsService = new NewsService();
@@ -48,8 +65,8 @@ public class TestService {
 		System.out.println("新建记录之 id" + newlyId);
 		assertNotNull(newlyId);
 	}
-	
-	@Test
+
+	// @Test
 	public void testUpdate() throws ServiceException {
 		MyBatis.init(dataSource);
 		NewsService newsService = new NewsService();
@@ -60,8 +77,8 @@ public class TestService {
 		boolean isOk = newsService.update(news);
 		assertTrue(isOk);
 	}
-	
-	@Test
+
+	// @Test
 	public void testDelete() throws ServiceException {
 		MyBatis.init(dataSource);
 		NewsService newsService = new NewsService();
@@ -70,7 +87,7 @@ public class TestService {
 		news.setService(newsService);
 		int newlyId = newsService.create(news);
 		System.out.println("newlyId:" + newlyId);
-//		assertTrue(newsService.deleteByID(newlyId));
+		// assertTrue(newsService.deleteByID(newlyId));
 	}
 
 }

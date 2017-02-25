@@ -210,7 +210,7 @@ public class Query {
 	 */
 	public static boolean isAnyMatch(HttpServletRequest request) {
 		return request.getParameter("filterField") != null || request.getParameter("searchField") != null
-				|| request.getParameter("matchField") != null || request.getParameter("orderField") != null;
+			|| request.getParameter("matchField") != null  || request.getParameter("orderField") != null;
 	}
 	
 	public Filter getFilter() {

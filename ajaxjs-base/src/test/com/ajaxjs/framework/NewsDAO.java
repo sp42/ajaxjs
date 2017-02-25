@@ -46,7 +46,7 @@ public interface NewsDAO extends DAO<News> {
 //	 })
 	@SelectProvider(type = DynamicSqlProvider.class, method = "page")
 	@Override
-	List<News> page(@Param("start") int start, @Param("limit") int limit, @Param("tablename") String tablename, @Param("query") Query query);
+	List<News> page(@Param("start") int start, @Param(selectById) int limit, @Param("tablename") String tablename, @Param("query") Query query);
 
 	@InsertProvider(type = DynamicSqlProvider.class, method = "create")
 // @Insert("INSERT INTO news (name, isOnline) VALUES(#{service.tableName}, #{online})")

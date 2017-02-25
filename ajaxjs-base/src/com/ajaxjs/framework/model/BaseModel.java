@@ -15,9 +15,8 @@
  */
 package com.ajaxjs.framework.model;
 
+import java.io.Serializable;
 import java.util.Date;
-
-import com.ajaxjs.framework.service.IService;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -29,7 +28,9 @@ import javax.validation.constraints.Size;
  * @author frank
  *
  */
-public class BaseModel {
+public class BaseModel implements Serializable {
+	private static final long serialVersionUID = -5313880199638314543L;
+
 	@FieldDescription(doc="id 序列")  
 	@NotNull(message="id不能为空")
 	private long id;
@@ -61,7 +62,6 @@ public class BaseModel {
 	private Date updateDate;
 	@FieldDescription(doc="图片地址")
 	private String cover;
-	private IService<? extends BaseModel> service;
 
 	public String getName() {
 		return name;
@@ -109,14 +109,5 @@ public class BaseModel {
 
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
-	}
-
-	public IService<? extends BaseModel> getService() {
-		return service;
-	}
-
-	public void setService(IService<? extends BaseModel> service) {
-		this.service = service;
-	}
-	
+	} 
 }

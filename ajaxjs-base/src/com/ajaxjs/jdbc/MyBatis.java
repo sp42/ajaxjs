@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.dao.impl;
+package com.ajaxjs.jdbc;
 
 import java.sql.Connection;
 import java.sql.SQLException;

@@ -29,10 +29,11 @@
  */
 package test.com.ajaxjs.framework;
 
-import com.ajaxjs.framework.exception.ServiceException;
 import com.ajaxjs.framework.service.BaseCrudService;
+import com.ajaxjs.framework.service.IService;
+import com.ajaxjs.framework.service.ServiceException;
 
-public class NewsService extends BaseCrudService<News, NewsDAO> {
+public class NewsService extends BaseCrudService<News, NewsDAO> implements IService<News>{
 	
 	/**
 	 * 映射器
@@ -40,7 +41,7 @@ public class NewsService extends BaseCrudService<News, NewsDAO> {
 //	private Class<NewsDAO> mapperClz = NewsDAO.class; 
 	public NewsService() {
 		setMapper(NewsDAO.class);
-		setTableName("NEWS");
+		setTableName("news");
 		setUiName("视频");
 //		setReference(News.class);
 	}

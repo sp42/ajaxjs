@@ -1,14 +1,19 @@
 package com.ajaxjs.framework.service;
 
 import java.io.Serializable;
-import java.util.List;
 
-import com.ajaxjs.framework.dao.BaseDao;
-import com.ajaxjs.framework.exception.ServiceException;
 import com.ajaxjs.framework.model.PageResult;
-import com.ajaxjs.framework.model.Query;
 
-public interface BaseService <T, ID extends Serializable> {
+/**
+ * 业务逻辑层
+ * @author xinzhang
+ * 
+ * @param <T>
+ *            实体类型，可以是 POJO 或 Map
+ * @param <ID>
+ *            序号类型，可以是 INTEGER/LONG/String
+ */
+public interface BaseService <T, ID extends Serializable> extends IService {
 	/**
 	 * 查询单个记录。如果找不到则返回 null。
 	 * 
@@ -18,20 +23,13 @@ public interface BaseService <T, ID extends Serializable> {
 	 * @throws ServiceException
 	 */
 	public T findById(ID id) throws ServiceException;
-
+ 
 	/**
-	 * 查询符合条件的记录总数。这个方法先于 pagedFind() 执行。如果返回 0 则无需执行 pagedFind()
-
-	 * @param query
-	 *            特定查询对象，不能为 null，否则 MyBatis 无法通过。如果无特定查询对象，可创建空的 Query 类型。
-	 * @return 所有的记录一共有多少？
-	 * @throws ServiceException
-	 */
-	public int count(BaseDao<T, ID> dao) throws ServiceException;
-
-	/**
-	 * 查询符合条件的记录
-	 * @param query
+	 * 查询多个记录。
+	 * @param start
+	 *            起始行数
+	 * @param limit
+	 *            偏量值
 	 * @return
 	 * @throws ServiceException
 	 */
