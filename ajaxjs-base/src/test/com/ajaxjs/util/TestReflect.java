@@ -1,13 +1,13 @@
 package test.com.ajaxjs.util;
 
+import static com.ajaxjs.util.reflect.Reflect.*;
 import static org.junit.Assert.*;
 import java.util.HashMap;
 import org.junit.Test;
 
-import com.ajaxjs.util.Reflect;
+import com.ajaxjs.util.reflect.Reflect;
 
 import java.util.*;
-import static com.ajaxjs.util.Reflect.*;
 
 public class TestReflect {
 

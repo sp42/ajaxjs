@@ -1,63 +1,54 @@
 package test.com.ajaxjs.jdbc;
 
+import static org.junit.Assert.*;
+
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.ajaxjs.jdbc.Helper;
-
+import com.ajaxjs.jdbc.JdbcConnection;
+import com.ajaxjs.util.Util;
 
 public class TestHelper {
-	public static String perRecordSql  = "SELECT %s, name FROM %s WHERE createDate < %s ORDER BY createDate DESC LIMIT 1";
-	public static String nextRecordSql = "SELECT %s, name FROM %s WHERE createDate > %s ORDER BY createDate ASC LIMIT 1";
+	Connection conn;
+	
+    @Before
+    public void setUp() {
+    	conn = JdbcConnection.getConnection("jdbc:sqlite:" + Util.getClassFolder_FilePath(TestSimpleORM.class, "foo.sqlite"));
+    }
+    
+    @After
+    public void setEnd() throws SQLException {
+    	conn.close();
+    }
 
 	@Test
-	public void testQueryWithCallback(Connection conn, String tablename, final String id, long datetime) {
-		Map<String, Map<String, String>> map = new HashMap<>();
-
-		final Map<String, String> perRecord = new HashMap<>();
-		map.put("perRecord", perRecord);
-		String _perRecordSql = String.format(nextRecordSql, id, tablename, datetime);
-
-//		new com.ajaxjs.jdbc.Helper.Callback() {
-//
-//			@Override
-//			public Object doIt(ResultSet resultset) throws SQLException {
-//				// TODO Auto-generated method stub
-//				return null;
-//			};
-
-//		Helper.queryWithCallback(conn, _perRecordSql, new Helper.Callback() {
-//
-//			@Override
-//			public Object doIt(ResultSet resultset) throws SQLException {
-//				// TODO Auto-generated method stub
-//				return null;
-//			}
-////			@Override
-////			public Object doIt(ResultSet resultset) throws SQLException {
-////				perRecord.put(id, resultset.getString(id));
-////				perRecord.put("name", resultset.getString("name"));
-////				return null;
-////			}
-//		});
-//
-//		final Map<String, String> nextRecord = new HashMap<>();
-//		map.put("nextRecord", nextRecord);
-//		String _nextRecordSql = String.format(perRecordSql, id, tablename, datetime);
-//		
-//		Helper.queryWithCallback(conn, _nextRecordSql, new Helper.Callback() {
-//			@Override
-//			public Object doIt(ResultSet resultset) throws SQLException {
-//				nextRecord.put(id, resultset.getString(id));
-//				nextRecord.put("name", resultset.getString("name"));
-//				return null;
-//			}
-//		});
+	public void testConnection() throws SQLException {
+		assertNotNull(conn);
+	}
+	
+	@Test
+	public void testQuery(){
+		assertNotNull(conn);
+		
+		Map<String, Object> info;
+		info = Helper.query(conn, "SELECT * FROM news WHERE id = 1");
+		// System.out.println(info);
+		assertNotNull(info);
+		
+		info = Helper.query(conn, "SELECT * FROM news WHERE id = ?", 1);
+		System.out.println(info.get("name"));
+		assertNotNull(info.get("name"));
+		
+		List<Map<String, Object>> newss = Helper.queryList(conn, "SELECT * FROM news");
+		assertNotNull(newss.get(0).get("name"));
+		System.out.println(newss.get(0).get("name"));
 	}
 
 }
