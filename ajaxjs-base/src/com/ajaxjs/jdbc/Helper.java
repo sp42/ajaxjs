@@ -16,15 +16,20 @@
 package com.ajaxjs.jdbc;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 
 /**
@@ -33,122 +38,206 @@ import com.ajaxjs.util.StringUtil;
  *
  */
 public class Helper {
+	private static final LogHelper LOGGER = LogHelper.getLog(Helper.class);
+	
 	/**
 	 * 记录集合转换为 Map
 	 * 
 	 * @param rs
 	 *            记录集合
 	 * @return Map 结果
+	 * @throws SQLException 
 	 */
-	private static Map<String, Object> getResultMap(ResultSet rs) {
-		Map<String, Object> map = new HashMap<>();
-		
-		try {
-			ResultSetMetaData rsmd = rs.getMetaData();
-			int count = rsmd.getColumnCount();
+	public static Map<String, Object> getResultMap(ResultSet rs) throws SQLException {
+		Map<String, Object> map = new LinkedHashMap<>(); // LinkedHashMap 是HashMap的一个子类，保存了记录的插入顺序
+		ResultSetMetaData rsmd = rs.getMetaData();
 
-			for (int i = 1; i <= count; i++) {
-				String key = rsmd.getColumnLabel(i);
-				Object value = rs.getObject(i);
-				map.put(key, value);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
+		for (int i = 1; i <= rsmd.getColumnCount(); i++) {// 遍历结果集
+			String key = rsmd.getColumnLabel(i);
+			Object value = rs.getObject(i);
+			
+//				if(value != null)
+//					System.out.println(value.getClass().getName());
+//				else 
+//					System.out.println(key);
+			map.put(key, value);
 		}
-
+	
 		return map;
 	}
 	
 	/**
-	 * 记录集合转换为 Map
-	 * @param conn
-	 * @param sql
-	 * @return Map 结果
-	 */
-	public static Map<String, Object> queryMap(Connection conn, String sql) {
-		try (Statement statement = conn.createStatement(); ResultSet rs = statement.executeQuery(sql);) {
-			if (rs.isBeforeFirst()) {
-				return getResultMap(rs);
-			} else {
-				System.err.println("查询 SQL：" + sql + " 没有符合的记录！");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return null;
-	}
-    
-	/**
-	 * 记录集合列表转换为 List
+	 * 查询单个结果，保存为 Map<String, Object> 结构。如果查询不到任何数据返回 null。
 	 * 
 	 * @param conn
 	 *            数据库连接对象
 	 * @param sql
-	 *            查询的 SQL 语句
-	 * @return List 结果
+	 *            SQL 语句，可以带有 ? 的占位符
+	 * @param params
+	 *            插入到 SQL 中的参数，可单个可多个可不填
+	 * @return Map<String, Object> 结构的结果。如果查询不到任何数据返回 null。
 	 */
-	public static List<Map<String, Object>> queryList(Connection conn, String sql) {
-		List<Map<String, Object>> list = new ArrayList<>();
+	public static Map<String, Object> query(Connection conn, String sql, Object... params) {
+		Map<String, Object> map = null;
 		
-		try (Statement statement = conn.createStatement(); ResultSet rs = statement.executeQuery(sql);) {
-			while (rs.next()) {
-				list.add(getResultMap(rs));
+		try (PreparedStatement ps = conn.prepareStatement(sql);) {
+			for (int i = 0; i < params.length; i++) {
+				ps.setObject(i + 1, params[i]);
 			}
-		}catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return list;
-	}
-	
-
-	/**
-	 * 查询结果作为 String 返回 查询的 SQL 语句，如果查询成功有这笔记录，返回 true，否则返回 false（检查有无记录）
-	 * 
-	 * @param rs
-	 *            结果集
-	 * @param classz
-	 *            期望的类型
-	 * @return 数据库里面的值作为 T 出现
-	 */
-	@SuppressWarnings("unchecked")
-	public <T> T queryAs(ResultSet rs, Class<T> classz) {
-		try {
-			if (String.class == classz) {
-				return rs.isBeforeFirst() ? (T) rs.getString(1) : null;
-			} else if (Integer.class == classz) {
-				// if (jdbcConnStr.indexOf("MySQL") != -1 || jdbcConnStr.indexOf("mysql") != -1) {
-				//     result = rs.next() ? rs.getInt(1) : null;
-				// } else {// sqlite
-				//      result = rs.isBeforeFirst() ? rs.getInt(1) : null;
-				// }
-				return rs.isBeforeFirst() ? (T) (Integer) rs.getInt(1) : null;
-			} else if (Boolean.class == classz) {
-				return (T) (Boolean) rs.isBeforeFirst();
+			
+			printRealSql(sql, params);
+			
+			try (ResultSet rs = ps.executeQuery();) {
+				if (rs.isBeforeFirst()) {
+					map = getResultMap(rs);
+				} else {
+					LOGGER.info("查询 SQL：{0} 没有符合的记录！", sql);
+				}
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
-		
-		return null;
-	}
-	
-	public static String perRecordSql  = "SELECT id, name FROM %s WHERE createDate < datetime('%s') ORDER BY createDate DESC LIMIT 1";
-	public static String nextRecordSql = "SELECT id, name FROM %s WHERE createDate > datetime('%s') ORDER BY createDate ASC LIMIT 1";
-	
-	public static Map<String, Map<String, Object>> getNeighbor(Connection conn, String tablename, String datetime){
-		Map<String, Map<String, Object>> map = new HashMap<>();
-
-		String _perRecordSql = String.format(nextRecordSql, tablename, datetime);
-		map.put("perRecord", queryMap(conn, _perRecordSql));
-		
-		String _nextRecordSql = String.format(perRecordSql, tablename, datetime);
-		map.put("nextRecord", queryMap(conn, _nextRecordSql));
 		
 		return map;
 	}
+	
+	/**
+	 * 查询一组结果，保存为 List<Map<String, Object>> 结构。如果查询不到任何数据返回 null。
+	 * 
+	 * @param conn
+	 *            数据库连接对象
+	 * @param sql
+	 *            SQL 语句，可以带有 ? 的占位符
+	 * @param params
+	 *            插入到 SQL 中的参数，可单个可多个可不填
+	 * @return Map<String, Object> 结构的结果。如果查询不到任何数据返回 null。
+	 */
+	public static List<Map<String, Object>> queryList(Connection conn, String sql, Object... params) {
+		List<Map<String, Object>> list = new ArrayList<>();
+
+		try (PreparedStatement ps = conn.prepareStatement(sql);) {
+			for (int i = 0; i < params.length; i++) {
+				ps.setObject(i + 1, params[i]);
+			}
+			
+			printRealSql(sql, params);
+			
+			try(ResultSet rs = ps.executeQuery();){				
+				while (rs.next()) {
+					list.add(getResultMap(rs));
+				}
+			}
+		} catch (SQLException e) {
+			LOGGER.warning(e);
+		}
+		
+		return list.size() == 0 ? null : list;
+	}
+	
+	/**
+	 * 执行 SQL UPDATE 更新。
+	 * @param conn 数据库连接对象
+	 * @param sql SQL 语句，可以带有 ? 的占位符
+	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
+	 * @return
+	 */
+	public static int update(Connection conn, String sql, Object... params) {
+		int effectRows = 0;
+
+		try (PreparedStatement ps = conn.prepareStatement(sql);) {
+			for (int i = 0; i < params.length; i++) {
+				ps.setObject(i + 1, params[i]);
+			}
+
+			printRealSql(sql, params);
+			effectRows = ps.executeUpdate();
+		} catch (SQLException e) {
+			LOGGER.warning(e);
+		}
+
+		return effectRows;
+	}
+
+	public static Object create(Connection conn, String sql, Object... params) {
+		Object newlyId = null;
+
+		try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
+			for (int i = 0; i < params.length; i++) {
+				ps.setObject(i + 1, params[i]);
+			}
+
+			printRealSql(sql, params);
+			ps.executeUpdate();
+
+			try (ResultSet rs = ps.getGeneratedKeys();) {
+				if (rs.next()) {
+					newlyId = rs.getObject(1);
+				}
+			}
+		} catch (SQLException e) {
+			LOGGER.warning(e);
+		}
+
+		return newlyId;
+	}
+	
+	/**
+	 * 在开发过程，SQL语句有可能写错，如果能把运行时出错的SQL语句直接打印出来，那对排错非常方便，因为其可以直接拷贝到数据库客户端进行调试。
+	 * @param sql
+	 * @param params
+	 * @return
+	 */
+	public static String printRealSql(String sql, Object[] params) {
+		if (!match(sql, params)) {
+			System.out.println(sql);
+			return null;
+		}
+
+		int cols = params.length;
+		Object[] values = new Object[cols];
+		System.arraycopy(params, 0, values, 0, cols);
+
+		for (int i = 0; i < cols; i++) {
+			Object value = values[i];
+			if (value instanceof Date) {
+				values[i] = "'" + value + "'";
+			} else if (value instanceof String) {
+				values[i] = "'" + value + "'";
+			} else if (value instanceof Boolean) {
+				values[i] = (Boolean) value ? 1 : 0;
+			}
+		}
+		String statement = String.format(sql.replaceAll("\\?", "%s"), values);
+		
+		LOGGER.info("The SQL is: " +statement);
+		
+		return statement;
+	}
+	
+	/* ?和参数的实际个数是否匹配 */
+	private static boolean match(String sql, Object[] params) {
+		Matcher m = Pattern.compile("(\\?)").matcher(sql);
+		int count = 0;
+		while (m.find()) {
+			count++;
+		}
+		return count == params.length;
+	}
+	
+//	public static String perRecordSql  = "SELECT id, name FROM %s WHERE createDate < datetime('%s') ORDER BY createDate DESC LIMIT 1";
+//	public static String nextRecordSql = "SELECT id, name FROM %s WHERE createDate > datetime('%s') ORDER BY createDate ASC LIMIT 1";
+//	
+//	public static Map<String, Map<String, Object>> getNeighbor(Connection conn, String tablename, String datetime){
+//		Map<String, Map<String, Object>> map = new HashMap<>();
+//
+//		String _perRecordSql = String.format(nextRecordSql, tablename, datetime);
+//		map.put("perRecord", queryMap(conn, _perRecordSql));
+//		
+//		String _nextRecordSql = String.format(perRecordSql, tablename, datetime);
+//		map.put("nextRecord", queryMap(conn, _nextRecordSql));
+//		
+//		return map;
+//	}
 	
 	/**
 	 * 简单格式化 SQL，当前对 SELECT 语句有效
