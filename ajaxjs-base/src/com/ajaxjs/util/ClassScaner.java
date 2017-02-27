@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+import com.ajaxjs.util.reflect.ReflectNewInstance;
+
 /**
  * 扫描特定类型的类
  * @author frank
@@ -120,7 +122,7 @@ public class ClassScaner<T> {
 				// 如果是java类文件 去掉后面的.class 只留下类名
 				String className = file.getName().substring(0, file.getName().length() - 6);
 				className = (packageName + '.' + className).trim();
-				Class<?> clazz = Reflect.getClassByName(className);
+				Class<?> clazz = ReflectNewInstance.getClassByName(className);
 
 				LOGGER.info("正在检查类：" + className);
 				// 添加到集合中去

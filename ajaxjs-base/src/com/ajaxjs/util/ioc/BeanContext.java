@@ -22,7 +22,8 @@ import java.util.Map;
 import java.util.Set;
 
 import com.ajaxjs.util.Util;
-import com.ajaxjs.util.Reflect;
+import com.ajaxjs.util.reflect.BeanUtil;
+import com.ajaxjs.util.reflect.ReflectNewInstance;
 import com.ajaxjs.util.StringUtil;
 
 /**
@@ -116,7 +117,7 @@ public class BeanContext {
 			String beanName = annotation.value();
 			
 			// 实例化 bean，并将其保存，BEAN 名称作为键值
-			beans.put(beanName, Reflect.newInstance(item));
+			beans.put(beanName, ReflectNewInstance.newInstance(item));
 			
 			// 记录依赖关系
 			for (Field field : item.getDeclaredFields()) {
@@ -149,7 +150,7 @@ public class BeanContext {
 			String value = dependencies.get(key);// 依赖对象的值
 			String[] split = key.split("\\.");// 数组第一个值表示 bean 对象名称,第二个值为字段属性名称
 			
-			Reflect.setProperty(beans.get(split[0]), split[1], beans.get(value));
+			BeanUtil.setProperty(beans.get(split[0]), split[1], beans.get(value));
 		}
 	}
 }

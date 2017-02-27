@@ -19,59 +19,53 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import org.apache.ibatis.jdbc.SQL;
 
 import com.ajaxjs.framework.model.BaseModel;
 import com.ajaxjs.framework.model.Query;
 import com.ajaxjs.framework.model.Query.*;
+import com.ajaxjs.jdbc.sqlbuilder.SqlBuilder;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 
 /**
- * 动态的 SQL，定义于此。静态的 SQL，请参见 SQLProvider.java。 MyBatis SQL
- * 拼凑类十分好用，详细用法参见官方文档：http://www.mybatis.org/mybatis-3/dynamic-sql.html
+ * 动态的 SqlBuilder
  * 
  * @author frank
  *
  */
-public class DynamicSqlProvider {
+public class DynamicSqlProvider extends SqlBuilder {
 	private static final LogHelper LOGGER = LogHelper.getLog(DynamicSqlProvider.class);
 
 	/**
-	 * 返回查询总数的 SQL
+	 * 返回查询总数的 SqlBuilder
 	 * 
 	 * @param parames
 	 *            MyBatis 参数
-	 * @return SQL 语句
+	 * @return SqlBuilder 语句
 	 */
 	public String pageCount(final Map<String, Object> parames) {
-		String sql = new SQL() {
-			{
-				SELECT("COUNT(*)");
-				FROM(parames.get("tablename").toString());
-				if (parames.containsKey("query")) {
-					addWhere(this, (Query) parames.get("query"));
-				}
-			}
-		}.toString();
+		SELECT("COUNT(*)");
+		FROM(parames.get("tablename").toString());
+		if (parames.containsKey("query")) 
+			addWhere(this, (Query) parames.get("query"));
 
-		LOGGER.info("pageCount-------------->" + sql);
+		LOGGER.info("pageCount-------------->" + toString());
 
-		return sql;
+		return toString();
 	}
 
 	/**
-	 * 返回查询列表的 SQL
+	 * 返回查询列表的 SqlBuilder
 	 * 
 	 * @param parames
 	 *            MyBatis 参数
-	 * @return SQL 语句
+	 * @return SqlBuilder 语句
 	 */
 	public String page(final Map<String, Object> parames) {
 		final int start = (int) parames.get("start"), limit = (int) parames.get("limit");
 		final String tablename = parames.get("tablename").toString();
 
-		String sql = new SQL() {
+		String sql = new SqlBuilder() {
 			{
 				SELECT(getFileds(parames));
 				FROM(tablename);
@@ -122,14 +116,14 @@ public class DynamicSqlProvider {
 	}
 
 	/**
-	 * 返回新建的 SQL
+	 * 返回新建的 SqlBuilder
 	 * 
 	 * @param model
 	 *            实体
-	 * @return SQL 语句
+	 * @return SqlBuilder 语句
 	 */
 	public String create(final BaseModel model) {
-		SQL sql = new SQL();
+		SqlBuilder sql = new SqlBuilder();
 		sql.INSERT_INTO(getTableName(model));
 		addFieldValues(sql, model, model.getClass().getMethods(), false);
 
@@ -143,7 +137,7 @@ public class DynamicSqlProvider {
 	 * 
 	 * @param model
 	 *            实体
-	 * @return SQL 语句
+	 * @return SqlBuilder 语句
 	 */
 	public String update(final BaseModel model) {
 		final Method[] methods = model.getClass().getMethods();
@@ -151,7 +145,7 @@ public class DynamicSqlProvider {
 		LOGGER.info("DAO 更新记录 {0}！", model.getName());
 
 		// 反射获取字段
-		String sql = new SQL() {
+		String sql = new SqlBuilder() {
 			{
 				UPDATE(getTableName(model));
 				addFieldValues(this, model, methods, true);
@@ -163,77 +157,17 @@ public class DynamicSqlProvider {
 
 		return sql;
 	}
-
-	public static String createTable(String tableName) {
-		String sql = "CREATE TABLE `%s` (`id` INTEGER PRIMARY KEY  NOT NULL  DEFAULT (null),`"
-				+ "`name` VARCHAR(255), `uid` VARCHAR(36)" + "`createDate` DATETIME,`updateDate` DATETIME,"
-				+ "`content` TEXT, `intro` TEXT," + "`catalog` INTEGER, `cover` VARCHAR(255),"
-				+ "`isOnline` BOOL DEFAULT (null)";
-
-		return String.format(sql, tableName);
-	}
-
-	/**
-	 * 
-	 * @param sql
-	 *            动态 SQL 实例
-	 * @param model
-	 *            实体
-	 * @param methods
-	 *            反射获取字段
-	 * @param isSet
-	 *            true=Update/false=Create
-	 */
-	private void addFieldValues(SQL sql, BaseModel model, Method[] methods, boolean isSet) {
-		for (Method method : methods) { // 反射获取字段
-			String methodName = method.getName();
-
-			Map<String, String> fieldMap = model.getService().getHidden_db_field_mapping();
-
-			if (isOk_field(methodName)) {
-				try {
-					if (method.invoke(model) != null) {
-						methodName = getFieldName(methodName);
-						String pojoName = methodName;
-						// 字段映射
-						if (fieldMap.size() > 0 && fieldMap.containsKey(methodName)) {
-							pojoName = methodName;
-							methodName = fieldMap.get(methodName);
-						}
-
-						if (isSet)
-							sql.SET(methodName + "= #{" + pojoName + "}");
-						else
-							sql.VALUES(methodName, "#{" + pojoName + "}");
-					}
-				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					LOGGER.warning(e);
-				}
-			}
-		}
-	}
-
-	/**
-	 * 如果有 mappingTableName 则返回；如果没有则返回 tableName。
-	 * 
-	 * @param model
-	 *            实体模型
-	 * @return
-	 */
-	private String getTableName(BaseModel model) {
-		return model.getService().getMappingTableName() == null ? model.getService().getTableName()
-				: model.getService().getMappingTableName();
-	}
+ 
 
 	/**
 	 * 添加 WHERE 子语句
 	 * 
 	 * @param sql
-	 *            动态 SQL 实例
+	 *            动态 SqlBuilder 实例
 	 * @param query
 	 *            Query 查询对象
 	 */
-	private static void addWhere(SQL sql, Query query) {
+	private static void addWhere(SqlBuilder sql, Query query) {
 		Map<String, String> map;
 		if (query.getFilter() != null) {
 			Filter filter = query.getFilter();
@@ -278,22 +212,10 @@ public class DynamicSqlProvider {
 		return (methodName.startsWith("get") || methodName.startsWith("is")) && !"getId".equals(methodName)
 				&& !"getClass".equals(methodName) && !"getService".equals(methodName);
 	}
+	
 
 	/**
-	 * 把 getter 的 getXX() 转换为 xX 的字段名
-	 * 
-	 * @param methodName
-	 *            方法名称
-	 * @return
-	 */
-	public static String getFieldName(String methodName) {
-		methodName = methodName.replace("get", "");
-		methodName = Character.toString(methodName.charAt(0)).toLowerCase() + methodName.substring(1);
-		return methodName;
-	}
-
-	/**
-	 * 通过子查询获得图片列表 图片表是根据实体 uid 获得其所有的图片，形成列表返回 这里返回的 SQL Concat 结果后的字符串，用 , 分隔开
+	 * 通过子查询获得图片列表 图片表是根据实体 uid 获得其所有的图片，形成列表返回 这里返回的 SqlBuilder Concat 结果后的字符串，用 , 分隔开
 	 * UI 层需要 split 字符串
 	 * 
 	 * @deprecated

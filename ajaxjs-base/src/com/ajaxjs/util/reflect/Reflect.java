@@ -13,148 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.util;
+package com.ajaxjs.util.reflect;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.ajaxjs.util.LogHelper;
+
 
 /**
- * 反射工具类
+ * 反射工具类（方法）
  * 
  * @author frank
  */
 public class Reflect {
 	private static final LogHelper LOGGER = LogHelper.getLog(Reflect.class);
-
-	/**
-	 * 根据类创建实例
-	 * 
-	 * @param clazz
-	 *            类对象
-	 * @return 对象实例
-	 */
-	public static <T> T newInstance(Class<T> clazz) {
-		try {
-			return clazz.newInstance(); // 实例化 bean
-		} catch (InstantiationException | IllegalAccessException e) {
-			LOGGER.warning(e);
-			return null;
-		}
-	}
-
-	/**
-	 * 根据构造器创建实例
-	 * 
-	 * @param constructor
-	 *            类构造器
-	 * @param args
-	 *            获取指定参数类型的构造函数，这里传入我们想调用的构造函数所需的参数
-	 * @return 对象实例
-	 */
-	public static <T> T newInstance(Constructor<T> constructor, Object... args) {
-		try {
-			return constructor.newInstance(args);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			LOGGER.warning("实例化对象失败：" + constructor.getDeclaringClass(), e);
-			return null;
-		}
-
-	}
-
-	/**
-	 * 获取类的构造器，可以支持重载的构造器（不同参数的构造器）
-	 * 
-	 * @param clazz
-	 *            类对象
-	 * @param classes
-	 *            获取指定参数类型的构造函数，这里传入我们想调用的构造函数所需的参数类型
-	 * @return 类的构造器
-	 */
-	public static <T> Constructor<T> getConstructor(Class<T> clazz, Class<?>... classes) {
-		try {
-			return classes != null ? clazz.getConstructor(classes) : clazz.getConstructor();
-		} catch (NoSuchMethodException e) {
-			LOGGER.warning("找不到这个 {0} 类的构造器。", clazz.getName());
-			return null;
-		} catch (SecurityException e) {
-			LOGGER.warning(e);
-			return null;
-		}
-	}
-
-	/**
-	 * 根据类对象创建实例
-	 * 
-	 * @param clazz
-	 *            类对象
-	 * @param args
-	 *            获取指定参数类型的构造函数，这里传入我们想调用的构造函数所需的参数
-	 * @return 对象实例
-	 */
-	public static <T> T newInstance(Class<T> clazz, Object... args) {
-		T obj = null;
-		Constructor<T> constructor = getConstructor(clazz, args2class(args)); // 获取构造器
-
-		if (constructor != null)
-			obj = newInstance(constructor, args);
-
-		if (obj == null)
-			LOGGER.warning("newInstanceByClassName 对象 {0} 失败：", clazz.getName());
-		return obj;
-	}
-
-	/**
-	 * 根据类名字符串获取类对象
-	 * 
-	 * @param className
-	 *            类全称
-	 * @return 类对象
-	 */
-	public static Class<?> getClassByName(String className) {
-		try {
-			return Class.forName(className);
-		} catch (ClassNotFoundException e) {
-			LOGGER.warning("找不到这个类：{0}。", className);
-			return null;
-		}
-	}
-	
-	/**
-	 * 根据类全称创建实例，并转换到其接口的类型
-	 * @param className 实际类的类型
-	 * @param clazz 接口类型
-	 * @return 对象实例
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T newInstance(String className, Class<T> clazz) {
-		Class<?> clz = getClassByName(className);
-		return clazz != null ? (T)newInstance(clz) : null;
-	}
-
-	/**
-	 * 根据类全称创建实例
-	 * 
-	 * @param className
-	 *            类全称
-	 * @param args
-	 *            根据构造函数，创建指定类型的对象,传入的参数个数需要与上面传入的参数类型个数一致
-	 * @return 对象实例，因为传入的类全称是字符串，无法创建泛型 T，所以统一返回 Object
-	 */
-	public static Object newInstance(String className, Object... args) {
-		Class<?> clazz = getClassByName(className);
-		return clazz != null ? newInstance(clazz, args) : null;
-	}
-
-	// -------------------------------------- 方法 ----------------------------------
 
 	/**
 	 * 根据类和参数列表获取方法对象，支持重载的方法
@@ -182,9 +60,8 @@ public class Reflect {
 
 	private static String printArgs(Class<?>[] args) {
 		String str = "";
-		for(Class<?> clz : args) {
+		for(Class<?> clz : args) 
 			str += clz.getName();
-		}
 		
 		return str.equals("") ? "void" : str;
 	}
@@ -262,26 +139,10 @@ public class Reflect {
 	 */
 	public static Object executeMethod(Object instnace, String method, Object... args) {
 		// 没有方法对象，先找到方法对象。可以支持方法重载，按照参数列表
-		Class<?>[] clazzes = args2class(args);
+		Class<?>[] clazzes = ReflectNewInstance.args2class(args);
 		Method methodObj = getMethod(instnace.getClass(), method, clazzes);
 
 		return methodObj != null ? executeMethod(instnace, methodObj, args) : null;
-	}
-
-	/**
-	 * 把参数转换为类对象列表
-	 * 
-	 * @param args
-	 *            可变参数列表
-	 * @return 类对象列表
-	 */
-	private static Class<?>[] args2class(Object[] args) {
-		// 把参数转换为类对象列表
-		Class<?>[] clazzes = new Class[args.length];
-		for (int i = 0; i < args.length; i++)
-			clazzes[i] = args[i].getClass();
-
-		return clazzes;
 	}
 
 	/**
@@ -376,7 +237,7 @@ public class Reflect {
 	    
 	    className = className.replace("<T>", "");
 	    
-	    return getClassByName(className);
+	    return ReflectNewInstance.getClassByName(className);
 	}
 
 	/**
@@ -412,130 +273,7 @@ public class Reflect {
 				// 无实现的接口
 			}
 		}
-System.out.println("4543543543");
+		
 		return null;
-	}
-
-	// ------------------------------- AOP------------------------------
-
-	/**
-	 * 通过动态代理实现 AOP
-	 * 
-	 * @param obj
-	 *            对象
-	 * @param _interface
-	 *            必须是接口类
-	 * @param cb
-	 *            回调
-	 * @return 指定类型的实例
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T proxy(final Object obj, Class<T> _interface, final ProxyCallback cb) {
-		Object _obj = Proxy.newProxyInstance(Reflect.class.getClassLoader(), new Class[] { _interface },
-				new InvocationHandler() {
-					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-						Object __obj = null;
-
-						String methodName = method.getName();
-
-						if (cb.before(obj, methodName, args) != false) { // 前置调用，可拦截
-							__obj = method.invoke(obj, args);
-							__obj = cb.after(obj, methodName, __obj, args); // 后置调用
-						}
-						// if ("add".equals(method.getName())) {
-						//// throw new UnsupportedOperationException();
-						// }
-
-						return __obj;
-					}
-				});
-
-		return (T) _obj;
-	}
-
-	/**
-	 * AOP 回调
-	 * 
-	 * @author frank
-	 *
-	 */
-	public static interface ProxyCallback {
-		/**
-		 * 前置调用，可拦截
-		 * 
-		 * @param instance
-		 *            实例
-		 * @param methodName
-		 *            方法名称
-		 * @param objects
-		 *            对象列表
-		 * @return 返回 false 不继续
-		 */
-		boolean before(Object instance, String methodName, Object... objects);
-
-		/**
-		 * 后置调用
-		 * 
-		 * @param instance
-		 *            实例
-		 * @param methodName
-		 *            方法名称
-		 * @param returnValue
-		 *            返回值
-		 * @param objects
-		 *            对象列表
-		 * @return 任意对象
-		 */
-		Object after(Object instance, String methodName, Object returnValue, Object... objects);
-	}
-
-	/**
-	 * BEAN SETXXX
-	 * 
-	 * @param bean
-	 *            JAVA Bean 对象，也可以是
-	 * @param name
-	 *            属性名称
-	 * @param value
-	 *            要设置的属性值
-	 */
-	public static void setProperty(Object bean, String name, Object value) {
-		if (bean == null)
-			throw new NullPointerException("未发现类");
-		
-		String setMethodName = "set" + firstLetterUpper(name);
-
-		Class<?> clazz = bean.getClass();
-		
-		if (clazz == null)
-			throw new NullPointerException("执行：" + setMethodName + "未发现类");
-		if (value == null)
-			throw new NullPointerException("执行：" + setMethodName + "未发现参数 value");
-
-		// 要把父类的也包括进来
-		Method method = getDeclaredMethod(clazz, setMethodName, value);
-
-		// 如果没找到，那就试试接口的……
-		if (method == null)
-			method = getDeclaredMethodByInterface(clazz, setMethodName, value);
-		
-
-		if (method == null) {
-			throw new NullPointerException(clazz.getName() + "找不到目标方法！" + setMethodName);
-		}
-
-		executeMethod(bean, method, value);
-	}
-	
-	/**
-	 * 将第一个字母大写
-	 * 
-	 * @param str
-	 *            字符串
-	 * @return 字符串
-	 */
-	public static String firstLetterUpper(String str) {
-//		return str.substring(0, 1).toUpperCase() + str.substring(1); // 另外一种写法
-		return Character.toString(str.charAt(0)).toUpperCase() + str.substring(1);
 	}
 }

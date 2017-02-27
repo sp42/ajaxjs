@@ -88,8 +88,8 @@ public class BaseServiceImpl<T, ID extends Serializable> implements BaseService<
 	@Override
 	public int update(T bean) throws ServiceException {
 		int effectedRows = 0; // 受影响的行数
-		dao.delete(id)
-		return effectedRows > 0;
+		//dao.delete(effectedRows);
+		return effectedRows;
 	}
 
 	@Override

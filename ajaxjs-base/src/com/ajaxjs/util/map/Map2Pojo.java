@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.framework.model;
+package com.ajaxjs.util.map;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -25,19 +25,23 @@ import java.util.Map;
 
 import com.ajaxjs.util.DateTools;
 import com.ajaxjs.util.LogHelper;
-import com.ajaxjs.util.Reflect;
+import com.ajaxjs.util.reflect.BeanUtil;
+import com.ajaxjs.util.reflect.Reflect;
+import com.ajaxjs.util.reflect.ReflectNewInstance;
 
 /**
- * 将 MAP 数据通过反射保存到 POJO 中。
+ * 将 map 数据通过反射保存到 pojo（bean） 中。
+ * 
  * @author frank
  *
  * @param <T>
+ *            实体类型
  */
 public class Map2Pojo<T> {
 	private static final LogHelper LOGGER = LogHelper.getLog(Map2Pojo.class);
 	
 	/**
-	 * 实体类型
+	 * 实体类型类对象
 	 */
 	private Class<T> pojoClz;
 
@@ -49,6 +53,7 @@ public class Map2Pojo<T> {
 	/**
 	 * 
 	 * @param pojoClz
+	 *            实体类型类对象
 	 */
 	public Map2Pojo(Class<T> pojoClz) {
 		this.pojoClz = pojoClz;
@@ -65,7 +70,7 @@ public class Map2Pojo<T> {
 	 *            反射出来的字段信息
 	 */
 	private T map2pojo(Map<String, Object> map, List<Field> fields) {
-		T pojo = Reflect.newInstance(pojoClz);
+		T pojo = ReflectNewInstance.newInstance(pojoClz);
 		if(pojo == null) return null;
 
 		for (Field f : fields) {
@@ -76,13 +81,13 @@ public class Map2Pojo<T> {
 			if (value != null) {
 //				System.out.println(key + ":" + map.get(key).getClass().getName());
 
-				String methodName = "set" + Reflect.firstLetterUpper(key);
+				String methodName = "set" + BeanUtil.firstLetterUpper(key);
 
 				if (t == boolean.class) {
 //					System.out.println("methodName：：：：：" + methodName);
 					// 布尔型
 					methodName = key.replace("is", "");
-					methodName = "set" + Reflect.firstLetterUpper(methodName);
+					methodName = "set" + BeanUtil.firstLetterUpper(methodName);
 //					System.out.println("methodName：：：：：" + "set" + Reflect.firstLetterUpper(methodName));
 					Reflect.executeMethod(pojo, methodName, t, (boolean) value);
 					
@@ -176,7 +181,7 @@ public class Map2Pojo<T> {
 	}
 
 	/**
-	 * 把原始数据 map 转换为实体
+	 * 把原始数据 maps 转换为实体
 	 * 
 	 * @param maps
 	 *            原始数据
@@ -184,10 +189,16 @@ public class Map2Pojo<T> {
 	 */
 	public List<T> map2pojo(List<Map<String, Object>> maps) {
 		List<Field> fields = Reflect.getDeclaredField(pojoClz);
-	
 		return map2pojo(maps, fields);
 	}
 	
+	/**
+	 * 把原始数据 map 转换为实体
+	 * 
+	 * @param map
+	 *            原始数据
+	 * @return 转换后的实体
+	 */
 	public T map2pojo(Map<String, Object> map) {
 		List<Field> fields = Reflect.getDeclaredField(pojoClz);
 		return map2pojo(map, fields);
@@ -217,8 +228,7 @@ public class Map2Pojo<T> {
 	 */
 	public static String getFieldName(String methodName, String action) {
 		methodName = methodName.replace(action, "");
-		methodName = Character.toString(methodName.charAt(0)).toLowerCase() + methodName.substring(1);
-		return methodName;
+		return Character.toString(methodName.charAt(0)).toLowerCase() + methodName.substring(1);
 	}
 
 	/**
@@ -227,25 +237,26 @@ public class Map2Pojo<T> {
 	 * @return
 	 */
 	public static Map<String, Object> setPojoToMapValue(Object obj) {
-		if (obj != null) {
-			Map<String, Object> map = new HashMap<>();
-	
-			for (Method method : obj.getClass().getMethods()) {
-				String methodName = method.getName();
-				if (methodName.startsWith("get")) {
-					Object value = Reflect.executeMethod(obj, method);
-	
-					if (value != null) {
-						map.put(Map2Pojo.getFieldName(methodName, "get"), value);
-					}
-				}
-			}
-	
-			return map;
-		} else {
+		if (obj == null) {
 			LOGGER.warning("Null pointer");
 			return null;
 		}
+		
+		Map<String, Object> map = new HashMap<>();
+
+		for (Method method : obj.getClass().getMethods()) {
+			String methodName = method.getName();
+			
+			if (methodName.startsWith("get")) {
+				Object value = Reflect.executeMethod(obj, method);
+
+				if (value != null) 
+					map.put(getFieldName(methodName, "get"), value);
+			}
+		}
+
+		return map;
+		
 	}
 
 	/**
@@ -256,18 +267,19 @@ public class Map2Pojo<T> {
 	 * @param obj
 	 */
 	public static void setMapValueToPojo_Simple(Map<String, Object> map, Object obj) {
-		if (obj != null && map != null) {
-			for (Method method : obj.getClass().getMethods()) {
-				String methodName = method.getName();
-				if (methodName.startsWith("set")) {
-					methodName = Map2Pojo.getFieldName(methodName, "set");
-					if (map.containsKey(methodName)) {
-						Reflect.executeMethod(obj, method, map.get(methodName));
-					}
+		if (obj != null || map != null) {
+			LOGGER.warning("Null pointer");
+		}
+		
+		for (Method method : obj.getClass().getMethods()) {
+			String methodName = method.getName();
+			
+			if (methodName.startsWith("set")) {
+				methodName = getFieldName(methodName, "set");
+				if (map.containsKey(methodName)) {
+					Reflect.executeMethod(obj, method, map.get(methodName));
 				}
 			}
-		} else {
-			LOGGER.warning("Null pointer");
 		}
 	}
 }

@@ -18,6 +18,7 @@ import java.util.List;
 /**
  * 数据持久层由 DAO 及其实现类组成。
  * 数据访问对象（Data Access Object），提供数据库的增删改查服务。
+ * 必须继承这个接口而不能直接使用这个接口
  * 
  * @author xinzhang
  *
@@ -26,7 +27,7 @@ import java.util.List;
  * @param <ID>
  *            序号类型，可以是 INTEGER/LONG/String
  */
-public interface BaseDao<T, ID extends Serializable> {
+public interface BaseDao<T, ID extends Serializable> extends IDAO {
 	/**
 	 * 查询单个记录。如果找不到则返回 null
 	 * 
