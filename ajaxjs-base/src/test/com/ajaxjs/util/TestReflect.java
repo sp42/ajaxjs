@@ -1,11 +1,12 @@
 package test.com.ajaxjs.util;
 
+import static com.ajaxjs.util.reflect.ReflectNewInstance.*;
 import static com.ajaxjs.util.reflect.Reflect.*;
 import static org.junit.Assert.*;
 import java.util.HashMap;
 import org.junit.Test;
 
-import com.ajaxjs.util.reflect.Reflect;
+import com.ajaxjs.util.aop.Aop;
 
 import java.util.*;
 
@@ -17,7 +18,7 @@ public class TestReflect {
 		map.put("hihi", "Jack");
 
 		@SuppressWarnings("unchecked")
-		Map<String, String> newMap = (Map<String, String>) Reflect.proxy(map, Map.class, new Reflect.ProxyCallback() {
+		Map<String, String> newMap = (Map<String, String>) Aop.proxy(map, Map.class, new Aop.ProxyCallback() {
 			@Override
 			public boolean before(Object instance, String methodName, Object... objects) {
 				boolean isGo_ON = true;
