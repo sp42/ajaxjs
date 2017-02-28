@@ -32,7 +32,8 @@ public class SimpleORM<T> extends Helper {
 	/**
 	 * 记录集合转换为 Map
 	 * 
-	 * @param sql SQL 语句，可以带有 ? 的占位符
+	 * @param sql
+	 *            SQL 语句，可以带有 ? 的占位符
 	 * @return Map 结果
 	 */
 	@SuppressWarnings("unchecked")
