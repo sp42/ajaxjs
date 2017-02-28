@@ -33,10 +33,19 @@ public class SimplePager {
 	 */
 	private Connection conn;
 
+	/**
+	 * 欲分页的 SQL 语句
+	 */
 	private String sql;
 
+	/**
+	 * 默认的每页记录数
+	 */
 	private int pageSize = 5;
 
+	/**
+	 * 分页起始数
+	 */
 	private int start;
 
 	/**
@@ -44,7 +53,9 @@ public class SimplePager {
 	 * @param conn
 	 *            数据库连接对象
 	 * @param sql
+	 *            欲分页的 SQL 语句
 	 * @param start
+	 *            分页起始数
 	 */
 	public SimplePager(Connection conn, String sql, int start) {
 		this.conn = conn;
@@ -57,7 +68,9 @@ public class SimplePager {
 	 * @param conn
 	 *            数据库连接对象
 	 * @param sql
+	 *            欲分页的 SQL 语句
 	 * @param start
+	 *            分页起始数
 	 */
 	public SimplePager(Connection conn, String sql, String start) {
 		this.conn = conn;
