@@ -134,6 +134,22 @@ public class Dep {
 			configuration.addMapper(clz);
 	}
 	
+	
+//	public static String perRecordSql  = "SELECT id, name FROM %s WHERE createDate < datetime('%s') ORDER BY createDate DESC LIMIT 1";
+//	public static String nextRecordSql = "SELECT id, name FROM %s WHERE createDate > datetime('%s') ORDER BY createDate ASC LIMIT 1";
+//	
+//	public static Map<String, Map<String, Object>> getNeighbor(Connection conn, String tablename, String datetime){
+//		Map<String, Map<String, Object>> map = new HashMap<>();
+//
+//		String _perRecordSql = String.format(nextRecordSql, tablename, datetime);
+//		map.put("perRecord", queryMap(conn, _perRecordSql));
+//		
+//		String _nextRecordSql = String.format(perRecordSql, tablename, datetime);
+//		map.put("nextRecord", queryMap(conn, _nextRecordSql));
+//		
+//		return map;
+//	}
+	
 	public static String perRecordSql  = "SELECT %s, name FROM %s WHERE createDate < %s ORDER BY createDate DESC LIMIT 1";
 	public static String nextRecordSql = "SELECT %s, name FROM %s WHERE createDate > %s ORDER BY createDate ASC LIMIT 1";
 

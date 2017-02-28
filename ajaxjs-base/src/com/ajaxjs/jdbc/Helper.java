@@ -15,6 +15,7 @@
  */
 package com.ajaxjs.jdbc;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -49,7 +50,7 @@ public class Helper {
 	 * @throws SQLException 
 	 */
 	public static Map<String, Object> getResultMap(ResultSet rs) throws SQLException {
-		Map<String, Object> map = new LinkedHashMap<>(); // LinkedHashMap 是HashMap的一个子类，保存了记录的插入顺序
+		Map<String, Object> map = new LinkedHashMap<>(); // LinkedHashMap 是 HashMap 的一个子类，保存了记录的插入顺序
 		ResultSetMetaData rsmd = rs.getMetaData();
 
 		for (int i = 1; i <= rsmd.getColumnCount(); i++) {// 遍历结果集
@@ -79,13 +80,11 @@ public class Helper {
 	 */
 	public static Map<String, Object> query(Connection conn, String sql, Object... params) {
 		Map<String, Object> map = null;
+		printRealSql(sql, params);
 		
 		try (PreparedStatement ps = conn.prepareStatement(sql);) {
-			for (int i = 0; i < params.length; i++) {
+			for (int i = 0; i < params.length; i++) 
 				ps.setObject(i + 1, params[i]);
-			}
-			
-			printRealSql(sql, params);
 			
 			try (ResultSet rs = ps.executeQuery();) {
 				if (rs.isBeforeFirst()) {
@@ -114,18 +113,15 @@ public class Helper {
 	 */
 	public static List<Map<String, Object>> queryList(Connection conn, String sql, Object... params) {
 		List<Map<String, Object>> list = new ArrayList<>();
+		printRealSql(sql, params);
 
 		try (PreparedStatement ps = conn.prepareStatement(sql);) {
-			for (int i = 0; i < params.length; i++) {
+			for (int i = 0; i < params.length; i++) 
 				ps.setObject(i + 1, params[i]);
-			}
-			
-			printRealSql(sql, params);
 			
 			try(ResultSet rs = ps.executeQuery();){				
-				while (rs.next()) {
+				while (rs.next()) 
 					list.add(getResultMap(rs));
-				}
 			}
 		} catch (SQLException e) {
 			LOGGER.warning(e);
@@ -135,21 +131,60 @@ public class Helper {
 	}
 	
 	/**
+	 * 新建记录。为兼顾主键类型，返回的类型设为同时兼容 int/long/string 的 Serializable
+	 * 
+	 * @param conn
+	 *            数据库连接对象
+	 * @param sql
+	 *            SQL 语句，可以带有 ? 的占位符
+	 * @param params
+	 *            插入到 SQL 中的参数，可单个可多个可不填
+	 * @return 新增主键
+	 */
+	public static Serializable create(Connection conn, String sql, Object... params) {
+		Object newlyId = null;
+		printRealSql(sql, params);
+
+		try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
+			for (int i = 0; i < params.length; i++)
+				ps.setObject(i + 1, params[i]);
+
+			ps.executeUpdate();
+
+			// 当保存之后会自动获得数据库返回的主键
+			try (ResultSet rs = ps.getGeneratedKeys();) {
+				if (rs.next())
+					newlyId = rs.getObject(1);
+			}
+		} catch (SQLException e) {
+			LOGGER.warning(e);
+		}
+
+		if (!(newlyId instanceof Serializable))
+			throw new RuntimeException("返回 id 类型不是 Serializable");
+
+		return (Serializable) newlyId;
+	}
+	
+	/**
 	 * 执行 SQL UPDATE 更新。
-	 * @param conn 数据库连接对象
-	 * @param sql SQL 语句，可以带有 ? 的占位符
-	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
-	 * @return
+	 * 
+	 * @param conn
+	 *            数据库连接对象
+	 * @param sql
+	 *            SQL 语句，可以带有 ? 的占位符
+	 * @param params
+	 *            插入到 SQL 中的参数，可单个可多个可不填
+	 * @return 成功修改的行数
 	 */
 	public static int update(Connection conn, String sql, Object... params) {
 		int effectRows = 0;
-
+		printRealSql(sql, params);
+		
 		try (PreparedStatement ps = conn.prepareStatement(sql);) {
-			for (int i = 0; i < params.length; i++) {
+			for (int i = 0; i < params.length; i++) 
 				ps.setObject(i + 1, params[i]);
-			}
 
-			printRealSql(sql, params);
 			effectRows = ps.executeUpdate();
 		} catch (SQLException e) {
 			LOGGER.warning(e);
@@ -157,39 +192,19 @@ public class Helper {
 
 		return effectRows;
 	}
-
-	public static Object create(Connection conn, String sql, Object... params) {
-		Object newlyId = null;
-
-		try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
-			for (int i = 0; i < params.length; i++) {
-				ps.setObject(i + 1, params[i]);
-			}
-
-			printRealSql(sql, params);
-			ps.executeUpdate();
-
-			try (ResultSet rs = ps.getGeneratedKeys();) {
-				if (rs.next()) {
-					newlyId = rs.getObject(1);
-				}
-			}
-		} catch (SQLException e) {
-			LOGGER.warning(e);
-		}
-
-		return newlyId;
-	}
 	
 	/**
-	 * 在开发过程，SQL语句有可能写错，如果能把运行时出错的SQL语句直接打印出来，那对排错非常方便，因为其可以直接拷贝到数据库客户端进行调试。
+	 * 在开发过程，SQL语句有可能写错，如果能把运行时出错的 SQL 语句直接打印出来，那对排错非常方便，因为其可以直接拷贝到数据库客户端进行调试。
+	 * 
 	 * @param sql
+	 *            SQL 语句，可以带有 ? 的占位符
 	 * @param params
-	 * @return
+	 *            插入到 SQL 中的参数，可单个可多个可不填
+	 * @return 实际 sql 语句
 	 */
 	public static String printRealSql(String sql, Object[] params) {
 		if (!match(sql, params)) {
-			System.out.println(sql);
+			System.err.println("SQL 语句中的占位符与参数个数不匹配。SQL：" + sql);
 			return null;
 		}
 
@@ -207,14 +222,23 @@ public class Helper {
 				values[i] = (Boolean) value ? 1 : 0;
 			}
 		}
+		
 		String statement = String.format(sql.replaceAll("\\?", "%s"), values);
-		
-		LOGGER.info("The SQL is: " +statement);
-		
+
+		LOGGER.info("The SQL is: " + statement);
+
 		return statement;
 	}
 	
-	/* ?和参数的实际个数是否匹配 */
+	/**
+	 * ? 和参数的实际个数是否匹配
+	 * 
+	 * @param sql
+	 *            SQL 语句，可以带有 ? 的占位符
+	 * @param params
+	 *            插入到 SQL 中的参数，可单个可多个可不填
+	 * @return true 表示为 ? 和参数的实际个数匹配
+	 */
 	private static boolean match(String sql, Object[] params) {
 		Matcher m = Pattern.compile("(\\?)").matcher(sql);
 		int count = 0;
@@ -223,21 +247,6 @@ public class Helper {
 		}
 		return count == params.length;
 	}
-	
-//	public static String perRecordSql  = "SELECT id, name FROM %s WHERE createDate < datetime('%s') ORDER BY createDate DESC LIMIT 1";
-//	public static String nextRecordSql = "SELECT id, name FROM %s WHERE createDate > datetime('%s') ORDER BY createDate ASC LIMIT 1";
-//	
-//	public static Map<String, Map<String, Object>> getNeighbor(Connection conn, String tablename, String datetime){
-//		Map<String, Map<String, Object>> map = new HashMap<>();
-//
-//		String _perRecordSql = String.format(nextRecordSql, tablename, datetime);
-//		map.put("perRecord", queryMap(conn, _perRecordSql));
-//		
-//		String _nextRecordSql = String.format(perRecordSql, tablename, datetime);
-//		map.put("nextRecord", queryMap(conn, _nextRecordSql));
-//		
-//		return map;
-//	}
 	
 	/**
 	 * 简单格式化 SQL，当前对 SELECT 语句有效
@@ -286,6 +295,7 @@ public class Helper {
 	public static String getFields(Map<String, Object> pair, boolean isFieldName_Only) {
 		String[] fields = new String[pair.size()];
 		int i = 0;
+		
 		for (String field : pair.keySet())
 			fields[i++] = isFieldName_Only ? field : field + " = ?";
 	
