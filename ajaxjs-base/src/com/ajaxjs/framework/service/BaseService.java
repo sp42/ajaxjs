@@ -5,7 +5,7 @@ import java.io.Serializable;
 import com.ajaxjs.framework.model.PageResult;
 
 /**
- * 业务逻辑层
+ * 业务逻辑层，围绕数据库的增删改查而设的基础业务类
  * @author xinzhang
  * 
  * @param <T>

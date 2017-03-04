@@ -84,7 +84,7 @@ public interface BaseDao<T, ID extends Serializable> extends IDAO {
 
 	/**
 	 * 批量删除
-	 * 
+	 * TODO
 	 * @param list
 	 *            序号数组Ï
 	 */

@@ -19,25 +19,58 @@ import test.com.ajaxjs.jdbc.TestSimpleORM;
 
 public class TestDao {
 	Connection conn;
+	NewsDao dao;
+
+	@Before
+	public void setUp() {
+		conn = JdbcConnection.getConnection("jdbc:sqlite:" + Util.getClassFolder_FilePath(TestSimpleORM.class, "foo.sqlite"));
+		dao = new DaoHandler<News, NewsDao>().setConn(conn).bind(NewsDao.class);
+	}
+
+	@After
+	public void setEnd() throws SQLException {
+		conn.close();
+	}
 	
-    @Before
-    public void setUp() {
-    	conn = JdbcConnection.getConnection("jdbc:sqlite:" + Util.getClassFolder_FilePath(TestSimpleORM.class, "foo.sqlite"));
-    }
-    
-    @After
-    public void setEnd() throws SQLException {
-    	conn.close();
-    }
-    
 	@Test
-	public void testDao() {
-		NewsDao dao = new DaoHandler<NewsDao>().setConn(conn).bind(NewsDao.class);
-		
-		List<News> newsList;
-		
-		newsList = dao.findList(0, 2);
-		System.out.println(newsList);
+	public void testFindById() {
+		News news = dao.findById(1L);
+		System.out.println("testFindById:" + news.getName());
+		assertNotNull(dao);
+	}
+	
+	@Test
+	public void testCount() {
+		assertNotNull(dao.count());
+	}
+	
+	@Test
+	public void testFindList() {
+		List<News> newsList = dao.findList(0, 5);
+		assertEquals(newsList.size(), 5);
+		assertNotNull(dao);
+	}
+
+	@Test
+	public void testCreate() {
+		News news = new News();
+		news.setName("test 123");
+		Long newlyId = dao.create(news);
+		System.out.println("newlyId:" + newlyId);
+		assertNotNull(newlyId);
+	}
+	
+	@Test
+	public void testUpdate() {
+		List<News> newsList = dao.findList(0, 5);
+		assertEquals(newsList.size(), 5);
+		assertNotNull(dao);
+	}
+	
+	@Test
+	public void testDelete() {
+		List<News> newsList = dao.findList(0, 5);
+		assertEquals(newsList.size(), 5);
 		assertNotNull(dao);
 	}
 }

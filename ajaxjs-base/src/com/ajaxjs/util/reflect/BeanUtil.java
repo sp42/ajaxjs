@@ -67,7 +67,7 @@ public class BeanUtil {
 	}
 
 	/**
-	 * 把 getter 的 getXX() 转换为 xX 的字段名
+	 * 把 getter 的 getXxx() 转换为 xxx 的字段名
 	 * 
 	 * @param methodName
 	 *            方法名称

@@ -10,6 +10,12 @@ import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.map.Map2Pojo;
 import com.ajaxjs.util.reflect.Reflect;
 
+/**
+ * 
+ * @author xinzhang
+ *
+ * @param <T>
+ */
 public class SimpleORM<T> extends Helper {
 	private static final LogHelper LOGGER = LogHelper.getLog(SimpleORM.class);
 	
@@ -69,8 +75,8 @@ public class SimpleORM<T> extends Helper {
 		Object[] values = sql.insert(bean, tableName);
 
 		return create(conn, sql.toString(), values);
-	}
-
+	} 
+	
 	/**
 	 * 修改实体
 	 * 

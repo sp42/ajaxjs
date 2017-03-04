@@ -34,7 +34,8 @@ public class TestSimpleORM {
 	@Test
 	public void testQueryMap() {
 		assertNotNull(conn);
-		
+		Connection conn = JdbcConnection.getConnection("jdbc:sqlite:" + Util.getClassFolder_FilePath(TestSimpleORM.class, "foo.sqlite"));
+		// 返回 map
 		@SuppressWarnings("rawtypes")
 		SimpleORM<Map> simpleORM = new SimpleORM<>(conn, Map.class);
 		
@@ -43,6 +44,7 @@ public class TestSimpleORM {
 		assertNotNull(map);
 		System.out.println(map.get("name"));
 		
+		// 返回 bean
 		@SuppressWarnings("rawtypes")
 		List<Map> list = simpleORM.queryList("SELECT * FROM news");
 		assertNotNull(list);
@@ -67,11 +69,18 @@ public class TestSimpleORM {
 	public void testCreate(){
 		News news = new News();
 		news.setName("标题一");
+		news.setIntro("hihi");
 		
 		SimpleORM<News> simpleORM = new SimpleORM<>(conn, News.class);
-		long newlyId = (long)simpleORM.create(news, "news");
+		int newlyId = (int)simpleORM.create(news, "news");
 		
 		assertNotNull(newlyId);
 		System.out.println(newlyId);
+		
+		news.setName("标题二");
+		news.setId(newlyId); // 修改刚刚生成的记录
+		int effectRows = (int)simpleORM.update(news, "news");
+		assertNotNull(effectRows);
+		System.out.println(effectRows);
 	}
 }

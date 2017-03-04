@@ -13,17 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.framework.dao;
+package com.ajaxjs.jdbc.sqlbuilder;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Map;
 
 
-import com.ajaxjs.framework.model.BaseModel;
 import com.ajaxjs.framework.model.Query;
 import com.ajaxjs.framework.model.Query.*;
-import com.ajaxjs.jdbc.sqlbuilder.SqlBuilder;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 
@@ -114,49 +110,6 @@ public class DynamicSqlProvider extends SqlBuilder {
 
 		return addStr;
 	}
-
-	/**
-	 * 返回新建的 SqlBuilder
-	 * 
-	 * @param model
-	 *            实体
-	 * @return SqlBuilder 语句
-	 */
-	public String create(final BaseModel model) {
-		SqlBuilder sql = new SqlBuilder();
-		sql.INSERT_INTO(getTableName(model));
-		addFieldValues(sql, model, model.getClass().getMethods(), false);
-
-		LOGGER.info("create sql-------------->" + sql);
-
-		return sql.toString();
-	}
-
-	/**
-	 * 修改
-	 * 
-	 * @param model
-	 *            实体
-	 * @return SqlBuilder 语句
-	 */
-	public String update(final BaseModel model) {
-		final Method[] methods = model.getClass().getMethods();
-
-		LOGGER.info("DAO 更新记录 {0}！", model.getName());
-
-		// 反射获取字段
-		String sql = new SqlBuilder() {
-			{
-				UPDATE(getTableName(model));
-				addFieldValues(this, model, methods, true);
-				WHERE("id = #{id}");
-			}
-		}.toString();
-
-		LOGGER.info("update sql-------------->" + sql);
-
-		return sql;
-	}
  
 
 	/**
@@ -200,30 +153,7 @@ public class DynamicSqlProvider extends SqlBuilder {
 			}
 		}
 	}
-
-	/**
-	 * 不是 pojo 所有的字段都要，这里判断
-	 * 
-	 * @param methodName
-	 *            方法名称
-	 * @return
-	 */
-	private static boolean isOk_field(String methodName) {
-		return (methodName.startsWith("get") || methodName.startsWith("is")) && !"getId".equals(methodName)
-				&& !"getClass".equals(methodName) && !"getService".equals(methodName);
-	}
+ 
 	
 
-	/**
-	 * 通过子查询获得图片列表 图片表是根据实体 uid 获得其所有的图片，形成列表返回 这里返回的 SqlBuilder Concat 结果后的字符串，用 , 分隔开
-	 * UI 层需要 split 字符串
-	 * 
-	 * @deprecated
-	 * @param tablename
-	 * @return
-	 */
-	public String getImgList(String tablename) {
-		String subQuerySql = " (SELECT group_concat(fileName) FROM img WHERE img.parentId = %s.uid) AS imgs";
-		return String.format(subQuerySql, tablename);
-	}
 }

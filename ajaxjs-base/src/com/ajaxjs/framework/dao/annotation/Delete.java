@@ -12,5 +12,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Delete {
-  String[] value();
+  String value() default "autoDelete";
+  /**
+   * 表名
+   * @return
+   */
+  String tableName() default "";
 }

@@ -191,7 +191,7 @@ public class Helper {
 	}
 	
 	/**
-	 * 删除一条记录
+	 * 删除一条记录。写死 id 字段
 	 * 
 	 * @param conn
 	 *            数据库连接对象

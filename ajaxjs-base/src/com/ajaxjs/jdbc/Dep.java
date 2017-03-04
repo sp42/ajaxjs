@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import javax.sql.DataSource;
 import javax.sql.rowset.JdbcRowSet;
 import javax.sql.rowset.RowSetProvider;
 
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -20,9 +22,57 @@ import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 
 import com.ajaxjs.Constant;
 import com.ajaxjs.framework.dao.BaseDao;
-import com.ajaxjs.framework.dao.SqlProvider;
+import com.ajaxjs.framework.model.ModelAndView;
 
 public class Dep {
+	
+	/**
+	 * Extra data field container
+	 */
+	private ModelAndView model; 
+
+	/**
+	 * MVC 通过 Model 交换数据。没 model 表示不深入获取信息
+	 */
+	public ModelAndView getModel() {
+		return model;
+	}
+
+	public void setModel(ModelAndView model) {
+		this.model = model;
+	}
+	
+	// 表映射
+	private Map<String, String> hidden_db_field_mapping = new HashMap<>();
+
+	public Map<String, String> getHidden_db_field_mapping() {
+		return hidden_db_field_mapping;
+	}
+
+	public void setHidden_db_field_mapping(Map<String, String> hidden_db_field_mapping) {
+		this.hidden_db_field_mapping = hidden_db_field_mapping;
+	}
+
+	/**
+	 * 通过子查询获得图片列表 图片表是根据实体 uid 获得其所有的图片，形成列表返回 这里返回的 SqlBuilder Concat 结果后的字符串，用 , 分隔开
+	 * UI 层需要 split 字符串
+	 * 
+	 * @deprecated
+	 * @param tablename
+	 * @return
+	 */
+	public String getImgList(String tablename) {
+		String subQuerySql = " (SELECT group_concat(fileName) FROM img WHERE img.parentId = %s.uid) AS imgs";
+		return String.format(subQuerySql, tablename);
+	}
+	
+	// UNION 时，SQLite 居然不能直接使用括号，所以必须得 SELECT * FROM
+	// 可以用 Union 合并 两次查询为一次
+	@Select("SELECT * FROM (SELECT id, name FROM ${from} WHERE id > ${id} LIMIT 1) " + "UNION ALL "
+			+ "SELECT * FROM (SELECT id, name FROM ${from} WHERE id < ${id} ORDER BY id DESC LIMIT 1)")
+	public List<Map<String, String>> getNeighbor(String form, long id){
+		return null;
+	}
 	
 	// https://docs.oracle.com/javase/tutorial/jdbc/basics/cachedrowset.html
 	// https://db.apache.org/derby/docs/10.9/ref/rrefjdbc4_1summary.html
@@ -118,9 +168,6 @@ public class Dep {
 		// org.apache.ibatis.logging.LogFactory.useStdOutLogging();
 		// org.apache.ibatis.logging.LogFactory.useJdkLogging();
 
-		// 加载通用的映射器
-		if (!configuration.hasMapper(SqlProvider.class))
-			configuration.addMapper(SqlProvider.class);
 
 		System.out.println("数据库初始化成功！" + Constant.ConsoleDiver);
 	}

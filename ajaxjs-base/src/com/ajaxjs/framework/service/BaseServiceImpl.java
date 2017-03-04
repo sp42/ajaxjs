@@ -34,7 +34,7 @@ public class BaseServiceImpl<T, ID extends Serializable> implements BaseService<
 	
 	@Override
 	public PageResult<T> find(int start, int limit) throws ServiceException {
-		PageCallback<T, BaseDao<T, ID>> pageCallback = new PageCallback<T, BaseDao<T, ID>>(){
+		PageCallback<T, BaseDao<T, ID>> pageCallback = new PageCallback<T, BaseDao<T, ID>>() {
 			@Override
 			public int getTotal(BaseDao<T, ID> dao) {
 				return dao.count();

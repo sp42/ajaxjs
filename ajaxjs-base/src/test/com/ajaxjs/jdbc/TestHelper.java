@@ -53,7 +53,7 @@ public class TestHelper {
 	}
 
 	@Test
-	public void testCreateUpdate() throws SQLException {
+	public void testCreateUpdateDelete() throws SQLException {
 		Serializable newlyId = Helper.create(conn, "INSERT INTO news (name) VALUES (?)", "test2");
 		System.out.println(newlyId);
 		
@@ -62,7 +62,8 @@ public class TestHelper {
 		
 		int updated;
 		updated = Helper.update(conn, "UPDATE news SET name = ? WHERE id = ?", "Hi", id);
-		updated = Helper.update(conn, "UPDATE news SET name = 'hi' WHERE id = 60");
 		assertEquals(1, updated);
+		
+		assertTrue(Helper.delete(conn, "news", id));
 	}
 }
