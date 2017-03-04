@@ -1,15 +1,14 @@
 package com.ajaxjs.jdbc;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.jdbc.sqlbuilder.SqlBuilder;
+import com.ajaxjs.jdbc.sqlbuilder.CommonSQL;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.map.Map2Pojo;
-import com.ajaxjs.util.reflect.BeanUtil;
+import com.ajaxjs.util.reflect.Reflect;
 
 public class SimpleORM<T> extends Helper {
 	private static final LogHelper LOGGER = LogHelper.getLog(SimpleORM.class);
@@ -17,7 +16,7 @@ public class SimpleORM<T> extends Helper {
 	private Class<T> entryType;
 
 	private Connection conn;
-
+	
 	/**
 	 * 
 	 * @param conn
@@ -47,85 +46,73 @@ public class SimpleORM<T> extends Helper {
 	@SuppressWarnings("unchecked")
 	public List<T> queryList(String sql, Object... params) {
 		List<Map<String, Object>> list = queryList(conn, sql, params);
-		System.out.println(entryType);
-		System.out.println(new Map2Pojo<T>(entryType));
+
 		return entryType == Map.class ? (List<T>) list : new Map2Pojo<T>(entryType).map2pojo(list);
 	}
 	
-	public Object create(T obj, String tableName) {
-		SqlBuilder sql = new SqlBuilder();
-		sql.INSERT_INTO(tableName);
-		addFieldValues(sql, obj, obj.getClass().getMethods(), false, null);
-		System.out.println(sql.toString());
-		return create(conn, sql.toString());
-	}
-	
-	public int update(final T obj, final String tableName) {
-		final Method[] methods = obj.getClass().getMethods();
-		LOGGER.info("DAO 更新记录 {0}！", obj);
-		
-		String sql = new SqlBuilder() {
-			{
-				UPDATE(tableName);
-				addFieldValues(this, obj, methods, true, null);
-				WHERE("id = #{id}");
-			}
-		}.toString();
-		
-		int e = update(conn, sql);
-		
-		return e;
-	}
-	
 	/**
 	 * 
-	 * @param sql
-	 *            动态 SQL 实例
-	 * @param model
-	 *            实体
-	 * @param methods
-	 *            反射获取字段
-	 * @param isSet
-	 *            true=Update/false=Create
+	 * 新建实体
+	 * 
+	 * @param bean
+	 *            Bean 实体
+	 * @param tableName
+	 *            表格名称
+	 * @return 新增主键
 	 */
-	private void addFieldValues(SqlBuilder sql, Object bean, Method[] methods, boolean isSet, Map<String, String> fieldMapping) {
-		for (Method method : methods) { // 反射获取字段
-			String methodName = method.getName();
+	public Serializable create(T bean, String tableName) {
+		try {
+			LOGGER.info("DAO 创建记录 name:{0}！", Reflect.executeMethod(bean, "getName"));
+		} catch (Throwable e) {}
 
-			if (isOk_field(methodName)) {
-				try {
-					if (method.invoke(bean) != null) {
-						methodName = BeanUtil.getFieldName(methodName);
-						String pojoName = methodName;
-						
-						// 字段映射
-						if (fieldMapping != null && fieldMapping.size() > 0 && fieldMapping.containsKey(methodName)) {
-							pojoName = methodName;
-							methodName = fieldMapping.get(methodName);
-						}
+		CommonSQL sql = new CommonSQL();
+		Object[] values = sql.insert(bean, tableName);
 
-						if (isSet)
-							sql.SET(methodName + "= #{" + pojoName + "}");
-						else
-							sql.VALUES(methodName, "#{" + pojoName + "}");
-					}
-				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					LOGGER.warning(e);
-				}
-			}
+		return create(conn, sql.toString(), values);
+	}
+
+	/**
+	 * 修改实体
+	 * 
+	 * @param bean
+	 *            Bean 实体
+	 * @param tableName
+	 *            表格名称
+	 * @return 成功修改的行数
+	 */
+	public int update(T bean, String tableName) {
+		try {
+			LOGGER.info("DAO 更新记录 id:{0}, name:{1}！", Reflect.executeMethod(bean, "getId"), Reflect.executeMethod(bean, "getName"));
+		} catch (Throwable e) {}
+
+		CommonSQL sql = new CommonSQL();
+		Object[] values = sql.update(bean, tableName);
+
+		return update(conn, sql.toString(), values);
+	}
+	
+	
+	/**
+	 * 删除实体
+	 * 
+	 * @param bean
+	 *            Bean 实体
+	 * @param tableName
+	 *            表格名称
+	 * @return 是否删除成功
+	 */
+	public boolean delete(T bean, String tableName) {
+		Serializable id;
+		
+		try {
+			id = (Serializable)Reflect.executeMethod(bean, "getId");
+		} catch (Throwable e) {
+			throw new RuntimeException("获取 bean 实体之 id 失败！");
 		}
-	}
-	
-	/**
-	 * 不是 pojo 所有的字段都要，这里判断
-	 * 
-	 * @param methodName
-	 *            方法名称
-	 * @return
-	 */
-	private static boolean isOk_field(String methodName) {
-		return (methodName.startsWith("get") || methodName.startsWith("is")) && !"getId".equals(methodName)
-				&& !"getClass".equals(methodName) && !"getService".equals(methodName);
+		
+		LOGGER.info("DAO 删除记录 id:{0}", id);
+		
+		return delete(conn, tableName, id);
 	}
 	
 	public Class<T> getEntryType() {

@@ -128,7 +128,7 @@ public class Helper {
 	}
 	
 	/**
-	 * 新建记录。为兼顾主键类型，返回的类型设为同时兼容 int/long/string 的 Serializable
+	 * 新建记录
 	 * 
 	 * @param conn
 	 *            数据库连接对象
@@ -136,7 +136,7 @@ public class Helper {
 	 *            SQL 语句，可以带有 ? 的占位符
 	 * @param params
 	 *            插入到 SQL 中的参数，可单个可多个可不填
-	 * @return 新增主键
+	 * @return 新增主键，为兼顾主键类型，返回的类型设为同时兼容 int/long/string 的 Serializable
 	 */
 	public static Serializable create(Connection conn, String sql, Object... params) {
 		Object newlyId = null;
@@ -191,6 +191,21 @@ public class Helper {
 	}
 	
 	/**
+	 * 删除一条记录
+	 * 
+	 * @param conn
+	 *            数据库连接对象
+	 * @param tableName
+	 *            表格名称
+	 * @param id
+	 *            ID
+	 * @return 是否删除成功
+	 */
+	public static boolean delete(Connection conn, String tableName, Serializable id) {
+		return update(conn, "DELETE FROM " + tableName + " WHERE id = ?", id) == 1;
+	}
+	
+	/**
 	 * 在开发过程，SQL语句有可能写错，如果能把运行时出错的 SQL 语句直接打印出来，那对排错非常方便，因为其可以直接拷贝到数据库客户端进行调试。
 	 * 
 	 * @param sql
@@ -222,7 +237,7 @@ public class Helper {
 		
 		String statement = String.format(sql.replaceAll("\\?", "%s"), values);
 
-		LOGGER.info("The SQL is: " + statement);
+		LOGGER.info("The SQL is------------>\n" + statement);
 
 		return statement;
 	}
