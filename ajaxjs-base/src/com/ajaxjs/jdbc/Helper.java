@@ -80,8 +80,9 @@ public class Helper {
 		printRealSql(sql, params);
 		
 		try (PreparedStatement ps = conn.prepareStatement(sql);) {
-			for (int i = 0; i < params.length; i++) 
-				ps.setObject(i + 1, params[i]);
+			if(params != null)
+				for (int i = 0; i < params.length; i++) 
+					ps.setObject(i + 1, params[i]);
 			
 			try (ResultSet rs = ps.executeQuery();) {
 				if (rs.isBeforeFirst()) {
@@ -96,6 +97,36 @@ public class Helper {
 		
 		return map;
 	}
+	// if (jdbcConnStr.indexOf("MySQL") != -1 || jdbcConnStr.indexOf("mysql") != -1) {
+	//     result = rs.next() ? rs.getInt(1) : null;
+	// } else {// sqlite
+	//      result = rs.isBeforeFirst() ? rs.getInt(1) : null;
+	// }
+	
+	/**
+	 * 有且只有一行记录，并只返回第一列的字段。可指定字段的数据类型
+	 * 
+	 * @param conn
+	 *            数据库连接对象
+	 * @param sql
+	 *            SQL 语句，可以带有 ? 的占位符
+	 * @param clz
+	 *            期望的类型
+	 * @param params
+	 *            插入到 SQL 中的参数，可单个可多个可不填
+	 * @return 数据库里面的值作为 T 出现
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T queryOne(Connection conn, String sql, Class<T> clz, Object... params) {
+		Map<String, Object> map = query(conn, sql, params);
+		
+		if(map != null)
+			for(String key : map.keySet())
+				return (T) map.get(key); // 有且只有一个记录
+	
+		return null;
+	}
+	
 	
 	/**
 	 * 查询一组结果，保存为 List<Map<String, Object>> 结构。如果查询不到任何数据返回 null。
@@ -113,7 +144,8 @@ public class Helper {
 		printRealSql(sql, params);
 
 		try (PreparedStatement ps = conn.prepareStatement(sql);) {
-			for (int i = 0; i < params.length; i++) 
+			if(params != null)
+				for (int i = 0; i < params.length; i++) 
 				ps.setObject(i + 1, params[i]);
 			
 			try(ResultSet rs = ps.executeQuery();){				
@@ -215,8 +247,13 @@ public class Helper {
 	 * @return 实际 sql 语句
 	 */
 	public static String printRealSql(String sql, Object[] params) {
+		if(params == null || params.length == 0) {
+			LOGGER.info("The SQL is------------>\n" + sql);
+			return sql;
+		}
+		
 		if (!match(sql, params)) {
-			System.err.println("SQL 语句中的占位符与参数个数不匹配。SQL：" + sql);
+			LOGGER.info("SQL 语句中的占位符与参数个数不匹配。SQL：" + sql);
 			return null;
 		}
 
@@ -252,11 +289,14 @@ public class Helper {
 	 * @return true 表示为 ? 和参数的实际个数匹配
 	 */
 	private static boolean match(String sql, Object[] params) {
+		if(params == null || params.length == 0) return true; // 没有参数，完整输出
+		
 		Matcher m = Pattern.compile("(\\?)").matcher(sql);
 		int count = 0;
 		while (m.find()) {
 			count++;
 		}
+		
 		return count == params.length;
 	}
 	

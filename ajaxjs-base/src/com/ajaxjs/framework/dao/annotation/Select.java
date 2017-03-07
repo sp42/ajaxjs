@@ -11,4 +11,16 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface Select {
 	String value();
+	
+	/**
+	 * 是否分页
+	 * @return
+	 */
+	boolean isPageList() default false;
+	
+	/**
+	 * 是否需要条件查询
+	 * @return
+	 */
+	boolean isQuerySupport() default false;
 }

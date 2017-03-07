@@ -107,35 +107,7 @@ public class Dep {
 		}
 	}
 	
-	/**
-	 * 查询结果作为 String 返回 查询的 SQL 语句，如果查询成功有这笔记录，返回 true，否则返回 false（检查有无记录）
-	 * 
-	 * @param rs
-	 *            结果集
-	 * @param classz
-	 *            期望的类型
-	 * @return 数据库里面的值作为 T 出现
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T queryAs(ResultSet rs, Class<T> classz) {
-		try {
-			if (String.class == classz) {
-				return rs.isBeforeFirst() ? (T) rs.getString(1) : null;
-			} else if (Integer.class == classz) {
-				// if (jdbcConnStr.indexOf("MySQL") != -1 || jdbcConnStr.indexOf("mysql") != -1) {
-				//     result = rs.next() ? rs.getInt(1) : null;
-				// } else {// sqlite
-				//      result = rs.isBeforeFirst() ? rs.getInt(1) : null;
-				// }
-				return rs.isBeforeFirst() ? (T) (Integer) rs.getInt(1) : null;
-			} else if (Boolean.class == classz) {
-				return (T) (Boolean) rs.isBeforeFirst();
-			}
-		} catch (SQLException e) {
-		}
-		
-		return null;
-	}
+ 
 	
 	/**
 	 * Configuration 需要设为 public 以便加入 mapper

@@ -46,14 +46,10 @@ public interface BaseDao<T, ID extends Serializable> extends IDAO {
 
 	/**
 	 * 支持分页的查询。如果找不到则返回 null。执行这个方法之前应先查询符合条件的记录总数，即 int count()
-	 * 
-	 * @param start
-	 *            起始行数
-	 * @param limit
-	 *            偏量值
+	 * @param parame
 	 * @return 结果集
 	 */
-	public List<T> findList(int start, int limit);
+	public List<T> findList(QueryParam parame);
 
 	/**
 	 * 新建记录

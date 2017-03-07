@@ -71,7 +71,7 @@ public class LogHelper {
 	 *            当前日志记录的那个类
 	 */
 	public LogHelper(Class<?> clazz) {
-		packageName = clazz.getName();
+		packageName = clazz.getName().trim();
 		logger = Logger.getLogger(packageName);
 // 经常会 eclipse 下报错，原因未知
 //		logger.addHandler(fileHandlerFactory(logFilePath));// 初始化保存到磁盤的處理器
@@ -184,7 +184,6 @@ public class LogHelper {
 	 */
 	public void warning(String tpl, Object... params) {
 		logger.logp(Level.WARNING, packageName, getMethodName(), tpl, params);
-
 	}
 
 	/**

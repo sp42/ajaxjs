@@ -156,9 +156,8 @@ public class Query {
 			Query.Filter filter = new Query.Filter();
 			String[] filterField = map.get("filterField"), filterValue = map.get("filterValue");
 
-			for (int i = 0; i < filterField.length; i++) {
+			for (int i = 0; i < filterField.length; i++) 
 				filter.put(filterField[i], filterValue[i]);
-			}
 
 			query.setFilter(filter);
 		}
@@ -168,9 +167,8 @@ public class Query {
 			Query.Search search = new Query.Search();
 			String[] searchField = map.get("searchField"), searchValue = map.get("searchValue");
 
-			for (int i = 0; i < searchField.length; i++) {
+			for (int i = 0; i < searchField.length; i++) 
 				search.put(searchField[i], searchValue[i]);
-			}
 
 			query.setSearch(search);
 		}
@@ -180,9 +178,8 @@ public class Query {
 			Query.Match match = new Query.Match();
 			String[] matchField = map.get("matchField"), matchValue = map.get("matchValue");
 
-			for (int i = 0; i < matchField.length; i++) {
+			for (int i = 0; i < matchField.length; i++) 
 				match.put(matchField[i], matchValue[i]);
-			}
 
 			query.setMatch(match);
 		}
@@ -192,9 +189,9 @@ public class Query {
 			Query.Order order = new Query.Order();
 			String[] orderField = map.get("orderField"), orderValue = map.get("orderValue");
 
-			for (int i = 0; i < orderField.length; i++) {
+			for (int i = 0; i < orderField.length; i++) 
 				order.put(orderField[i], orderValue[i]);
-			}
+			
 			query.setOrder(order);
 		}
 
