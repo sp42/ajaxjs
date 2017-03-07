@@ -9,8 +9,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.ajaxjs.framework.dao.annotation.Delete;
 import com.ajaxjs.framework.dao.annotation.Insert;
 import com.ajaxjs.framework.dao.annotation.Select;
+import com.ajaxjs.framework.dao.annotation.Update;
 import com.ajaxjs.framework.model.PageResult;
 import com.ajaxjs.jdbc.Helper;
 import com.ajaxjs.jdbc.SimpleORM;
@@ -24,21 +26,29 @@ import com.ajaxjs.util.reflect.ReflectGeneric;
  *            结果的类型，可以是 map 或者 bean
  * @param <T>
  */
-public class DaoHandler<K, T extends IDAO> implements InvocationHandler {
+public class DaoHandler<T extends IDAO> implements InvocationHandler {
 	Connection conn;
 
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		Object returnVal = null;
+		Class<?> 
+				returnType = method.getReturnType(), 
+				entryType = getEntryContainerType(method), 
+				entryTypeByArgs = null; 
 		
-		Class<?> entryType = getEntryContainerType(method);
+		if(args != null && args[0] != null) entryTypeByArgs = args[0].getClass();
 		
-		returnVal = select(method, args, entryType);
+		returnVal = select(method, args, returnType, entryType);
 		if(returnVal != null) return returnVal;
 
-		returnVal = insert(method, args);
+		returnVal = insert(method, args, returnType, entryTypeByArgs);
 		if(returnVal != null) return returnVal;
-
+		
+		returnVal = update(method, args, returnType, entryTypeByArgs);
+		if(returnVal != null) return returnVal;
+		
+		returnVal = delete(method, args, returnType, entryTypeByArgs);
 		return returnVal;
 	}
 
@@ -46,7 +56,7 @@ public class DaoHandler<K, T extends IDAO> implements InvocationHandler {
 		return conn;
 	}
 
-	public DaoHandler<K, T> setConn(Connection conn) {
+	public DaoHandler<T> setConn(Connection conn) {
 		this.conn = conn;
 		return this;
 	}
@@ -70,65 +80,66 @@ public class DaoHandler<K, T extends IDAO> implements InvocationHandler {
 		return type;
 	}
 	 
-	private <R> Object select(Method method, Object[] args, Class<R> entryType) {
-		String sql;
-		SimpleORM<R> orm = new SimpleORM<>(conn, entryType);
-		Class<?> returnType = method.getReturnType();
+	private <R, B> Object select(Method method, Object[] args, Class<R> returnType, Class<B> entryType) {
 		Select select = method.getAnnotation(Select.class); // SQL SELECT 注解
+		if (select == null) return null;
 		
-		if (select != null) {
-			sql = select.value();
-			// System.out.println(orm.query(select.value(), args));
+		String sql = select.value();
+		SimpleORM<B> orm = new SimpleORM<>(conn, entryType);
 
-			if (returnType == int.class) {
-				return Helper.queryOne(conn, sql, int.class, args);
-			} else if (returnType == String.class) {
-				return (String) "";
-			} else if (returnType == List.class) {
-				return orm.queryList(sql, args);
-			} else if (returnType == PageResult.class) { // 分页
-				QueryParam queryParam = null;
-				boolean hasQueryParam = false; // 是否有特殊的 QueryParam
-				
-				for (Object o : args) {
-					if (o instanceof QueryParam) {
-						queryParam = (QueryParam) o;
-						hasQueryParam = true;
-						break;
-					}
-				}
+		if (returnType == int.class) {
+			return Helper.queryOne(conn, sql, int.class, args);
+		} else if (returnType == String.class) {
+			return (String) "";
+		} else if (returnType == List.class) {
+			return orm.queryList(sql, args);
+		} else if (returnType == PageResult.class) { // 分页
+			QueryParam queryParam = getQueryParam(args);
+			if (queryParam != null)
+				args = removeItem(args, queryParam); // 删掉数组里的那个特殊的 QueryParam
 
-				if (hasQueryParam)
-					args = removeItem(args, queryParam); // 删掉数组里的那个特殊的 QueryParam
+			if (queryParam.pageParam.length != 2)
+				throw new IllegalArgumentException("没有分页参数！");/* queryParam.pageParam 是必须的 */
+			
+			String countSql = sql.replaceAll("SELECT", "SELECT COUNT(\\*) AS count, ");
+			int total = Helper.queryOne(conn, countSql, int.class, args);
 
-				if (queryParam.pageParam.length != 2) {
-					throw new IllegalArgumentException("没有分页参数！");
-				}
-				int start = queryParam.pageParam[0], limit = queryParam.pageParam[1];
-
-				String countSql = sql.replaceAll("SELECT", "SELECT COUNT(\\*) AS count, ");
-				int total = Helper.queryOne(conn, countSql, int.class, args);
-
-				if (total <= 0) {
-					throw new RuntimeException("没有记录");
-				} else {
-					PageResult<R> result = new PageResult<>();
-					result.setStart(start);
-					result.setPageSize(limit);
-
-					result.setTotalCount(total);// 先查询总数,然后执行分页
-					result.page();
-					result.setRows(orm.queryList(sql + " LIMIT " + result.getStart() + ", " + result.getPageSize(), args));
-
-					return result;
-				}
+			if (total <= 0) {
+				throw new RuntimeException("没有记录");
 			} else {
-				// maybe a bean
-				return orm.query(sql, args);
+				PageResult<B> result = new PageResult<>();
+				result.setStart(queryParam.pageParam[0]);
+				result.setPageSize(queryParam.pageParam[1]);
+
+				result.setTotalCount(total);// 先查询总数,然后执行分页
+				result.page();
+				result.setRows(orm.queryList(sql + " LIMIT " + result.getStart() + ", " + result.getPageSize(), args));
+
+				return result;
+			}
+		} else {
+			// maybe a bean
+			return orm.query(sql, args);
+		}
+	}
+
+	/**
+	 * 看看是否有特殊的 QueryParam
+	 * @param args
+	 * @return
+	 */
+	private QueryParam getQueryParam(Object[] args) {
+		QueryParam queryParam = null;
+		
+		/* 通常 QueryParam 放在最后一个的参数列表，于是我们从最后开始找，这样程序会快点 */
+		for(int i = args.length - 1; i >= 0; i--) {
+			if (args[i] instanceof QueryParam) {
+				queryParam = (QueryParam) args[i];
+				break;
 			}
 		}
 		
-		return null;
+		return queryParam;
 	}
 
 	/**
@@ -147,27 +158,60 @@ public class DaoHandler<K, T extends IDAO> implements InvocationHandler {
 	}
 
 	@SuppressWarnings("unchecked")
-	private Object insert(Method method, Object[] args) {
-		Class<K> returnType = (Class<K>) method.getReturnType();
-		SimpleORM<K> orm = new SimpleORM<>(conn, returnType);
-
+	private <R, B> Object insert(Method method, Object[] args, Class<R> returnType, Class<B> beanType) {
 		Insert insert = method.getAnnotation(Insert.class);
-		if (insert != null) {
-			if (insert.value().equals("autoCreate")) {
-				if (insert.tableName().equals("")) {
-					throw new RuntimeException("如果使用类 autoCreate 那么 tableName 是必填");
-				} else {
-					Serializable id = orm.create((K) args[0], insert.tableName());
-					
-					if(returnType == Long.class && id.getClass() == Integer.class) {
-						return new Long((Integer)id);
-					} else {
-						return id;
-					}
-				}
-			}
-		}
+		if (insert == null) 
+			return null;
 
-		return null;
+		SimpleORM<B> orm = new SimpleORM<>(conn, beanType);
+		Serializable id = null;
+		
+		if(!insert.value().equals("")) { /* 以 sql 方式创建 */
+			id = Helper.create(conn, insert.value(), args);
+		} else if (insert.value().equals("") && insert.tableName() != null && args[0] != null) { /* 以 bean 方式创建 */
+			id = orm.create((B)args[0], insert.tableName());
+		}
+		
+		if(returnType == Long.class && id.getClass() == Integer.class) {
+			return new Long((Integer)id);
+		} else {
+			return id;
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private <R, B> Integer update(Method method, Object[] args, Class<R> returnType, Class<B> beanType) {
+		Update update = method.getAnnotation(Update.class);
+		if (update == null) 
+			return null;
+		
+		SimpleORM<B> orm = new SimpleORM<>(conn, beanType);
+		int effectRows = 0;
+		
+		if(!update.value().equals("")) { /* 以 sql 方式更新 */
+			effectRows = Helper.update(conn, update.value(), args);
+		} else if (update.value().equals("") && update.tableName() != null && args[0] != null) { /* 以 bean 方式更新 */
+			effectRows = orm.update((B)args[0], update.tableName());
+		}
+		
+		return effectRows;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private <R, B> Boolean delete(Method method, Object[] args, Class<R> returnType, Class<B> beanType) {
+		Delete delete = method.getAnnotation(Delete.class);
+		if (delete == null) 
+			return null;
+		
+		SimpleORM<B> orm = new SimpleORM<>(conn, beanType);
+		boolean isOk = false;
+		
+		if(!delete.value().equals("")) { /* 以 sql 方式删除 */
+			isOk = Helper.delete(conn, delete.value(), args);
+		} else if (delete.value().equals("") && delete.tableName() != null && args[0] != null) { /* 以 bean 方式删除 */
+			isOk = orm.delete((B)args[0], delete.tableName());
+		}
+		
+		return isOk;
 	}
 }

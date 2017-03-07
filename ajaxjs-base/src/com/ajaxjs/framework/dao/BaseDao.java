@@ -65,7 +65,7 @@ public interface BaseDao<T, ID extends Serializable> extends IDAO {
 	 * 
 	 * @param bean
 	 *            POJO 对象
-	 * @return 影响的行数
+	 * @return 影响的行数，理应 = 1
 	 */
 	public int update(T bean);
 
@@ -74,9 +74,9 @@ public interface BaseDao<T, ID extends Serializable> extends IDAO {
 	 * 
 	 * @param id
 	 *            实体序号
-	 * @return 影响的行数，理应 = 1
+	 * @return 影响的行数
 	 */
-	public int delete(ID id);
+	public boolean delete(T bean);
 
 	/**
 	 * 批量删除

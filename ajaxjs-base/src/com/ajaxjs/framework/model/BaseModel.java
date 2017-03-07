@@ -33,7 +33,7 @@ public class BaseModel implements Serializable {
 
 	@FieldDescription(doc="id 序列")  
 	@NotNull(message="id不能为空")
-	private long id;
+	private Long id;
 	
 	@FieldDescription(doc="唯一 uuid")  
 	private String uid;
@@ -71,11 +71,11 @@ public class BaseModel implements Serializable {
 		this.name = name;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

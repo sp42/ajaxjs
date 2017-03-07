@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Delete {
-  String value() default "autoDelete";
+  String value() default "";
   /**
    * 表名
    * @return

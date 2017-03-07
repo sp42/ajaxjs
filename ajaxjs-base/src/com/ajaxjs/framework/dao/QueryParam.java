@@ -12,12 +12,14 @@ public class QueryParam {
 	public QueryParam() {
 	}
 
-	public QueryParam(int[] pageParam) {
-		this.pageParam = pageParam;
+	public QueryParam(int start, int limit) {
+		pageParam[0] = start;
+		pageParam[1] = limit;
 	}
 
-	public QueryParam(int[] pageParam, Query query) {
-		this.pageParam = pageParam;
+	public QueryParam(int start, int limit, Query query) {
+		pageParam[0] = start;
+		pageParam[1] = limit;
 		this.query = query;
 	}
 
@@ -28,7 +30,7 @@ public class QueryParam {
 	/**
 	 * 分页之起始行数\偏量值
 	 */
-	public int[] pageParam = new int[2];
+	public final int[] pageParam = new int[2];
 
 	/**
 	 * 排序、过滤、搜索等的参数
