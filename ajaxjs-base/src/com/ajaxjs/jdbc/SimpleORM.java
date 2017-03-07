@@ -1,3 +1,15 @@
+/**
+ * 版权所有 2017 Frank Cheung
+ * 
+ * 根据 2.0 版本 Apache 许可证("许可证")授权；
+ * 根据本许可证，用户可以不使用此文件。
+ * 用户可从下列网址获得许可证副本：
+ * 
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *    
+ * 除非因适用法律需要或书面同意，根据许可证分发的软件是基于"按原样"基础提供，
+ * 无任何明示的或暗示的保证或条件。详见根据许可证许可下，特定语言的管辖权限和限制。
+ */
 package com.ajaxjs.jdbc;
 
 import java.io.Serializable;
@@ -74,7 +86,23 @@ public class SimpleORM<T> extends Helper {
 		CommonSQL sql = new CommonSQL();
 		Object[] values = sql.insert(bean, tableName);
 
-		return create(conn, sql.toString(), values);
+		Serializable newlyId = create(conn, sql.toString(), values);
+		
+		// 保存 id
+		/* 根据 getter 推断 id 类型 */
+		try {
+			Class<?> idClz = bean.getClass().getMethod("getId").getReturnType();
+			
+			if (Long.class == idClz && newlyId instanceof Integer) {
+				Reflect.executeMethod(bean, "setId", new Long((int)newlyId));
+			} else {
+				Reflect.executeMethod(bean, "setId", newlyId); // 直接保存
+			}
+		} catch (Throwable e) {
+			LOGGER.warning(e);
+		}
+		
+		return newlyId;
 	} 
 	
 	/**
@@ -84,7 +112,7 @@ public class SimpleORM<T> extends Helper {
 	 *            Bean 实体
 	 * @param tableName
 	 *            表格名称
-	 * @return 成功修改的行数
+	 * @return 成功修改的行数，一般为 1
 	 */
 	public int update(T bean, String tableName) {
 		try {
