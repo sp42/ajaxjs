@@ -11,10 +11,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.ajaxjs.framework.dao.DaoHandler;
+import com.ajaxjs.framework.dao.QueryParam;
+import com.ajaxjs.framework.model.PageResult;
 import com.ajaxjs.jdbc.JdbcConnection;
 import com.ajaxjs.util.Util;
 
-import test.com.ajaxjs.framework.v2.NewsDao;
 import test.com.ajaxjs.jdbc.TestSimpleORM;
 
 public class TestDao {
@@ -50,6 +51,24 @@ public class TestDao {
 		assertEquals(newsList.size(), 5);
 		assertNotNull(dao);
 	}
+	
+	@Test
+	public void testPageFindList() {
+		PageResult<News> pageResult = new PageResult<>();
+		pageResult.setStart(0);
+		pageResult.setPageSize(10);
+		PageResult<News> newsList = dao.findPagedList(new QueryParam(new int[]{0, 10}));
+		
+		assertEquals(newsList.getRows().size(), 10);
+		assertNotNull(newsList);
+	}
+	
+	@Test
+	public void testTop10() {
+		List<News> newsList = dao.findTop10News();
+		assertEquals(newsList.size(), 10);
+		assertNotNull(dao);
+	}
 
 	@Test
 	public void testCreate() {
@@ -62,9 +81,7 @@ public class TestDao {
 	
 	@Test
 	public void testUpdate() {
-		List<News> newsList = dao.findList(0, 5);
-		assertEquals(newsList.size(), 5);
-		assertNotNull(dao);
+		 
 	}
 	
 	@Test

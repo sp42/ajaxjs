@@ -1,14 +1,14 @@
-package test.com.ajaxjs.framework.v2;
+package test.com.ajaxjs.framework;
 
 import java.util.List;
 
 import com.ajaxjs.framework.dao.BaseDao;
+import com.ajaxjs.framework.dao.QueryParam;
 import com.ajaxjs.framework.dao.annotation.Delete;
 import com.ajaxjs.framework.dao.annotation.Insert;
 import com.ajaxjs.framework.dao.annotation.Select;
 import com.ajaxjs.framework.dao.annotation.Update;
-
-import test.com.ajaxjs.framework.News;
+import com.ajaxjs.framework.model.PageResult;
 
 public interface NewsDao extends BaseDao<News, Long> {
 	final static String tableName = "news";
@@ -21,9 +21,14 @@ public interface NewsDao extends BaseDao<News, Long> {
 	@Override
 	public int count();
 	
-	@Select("SELECT * FROM news LIMIT ?, ?")
-	@Override
+	@Select(value="SELECT * FROM news LIMIT ?, ?")
 	public List<News> findList(int start, int limit);
+	
+	@Select(value="SELECT * FROM news")
+	public PageResult<News> findPagedList(QueryParam parame);
+	
+	@Select("SELECT * FROM news ORDER BY createDate LIMIT 0, 10")
+	public List<News> findTop10News();
 	
 	@Insert(tableName=tableName)
 	@Override
