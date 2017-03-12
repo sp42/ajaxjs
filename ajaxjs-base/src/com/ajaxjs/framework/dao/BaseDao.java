@@ -19,11 +19,11 @@ import java.util.List;
  * 数据持久层由 DAO 及其实现类组成。
  * 数据访问对象（Data Access Object），提供数据库的增删改查服务。
  * 必须继承这个接口而不能直接使用这个接口
- * 
+ * 而且这个接口里面的成功都是参考用，开发者可自行制订自己的成功方法
  * @author xinzhang
  *
  * @param <T>
- *            实体类型，可以是 POJO 或 Map
+ *            实体类型，可以是 POJO 或 Map，这里虽然指定了一种类型，但是可以混合着出现。
  * @param <ID>
  *            序号类型，可以是 INTEGER/LONG/String
  */

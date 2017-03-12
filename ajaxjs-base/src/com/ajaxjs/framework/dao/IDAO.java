@@ -7,5 +7,4 @@ package com.ajaxjs.framework.dao;
  *
  */
 public interface IDAO {
-	String getName();
 }

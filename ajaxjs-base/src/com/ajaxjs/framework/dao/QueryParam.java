@@ -20,6 +20,7 @@ public class QueryParam {
 	public QueryParam(int start, int limit, Query query) {
 		pageParam[0] = start;
 		pageParam[1] = limit;
+		
 		this.query = query;
 	}
 

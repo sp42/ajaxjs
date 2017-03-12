@@ -8,22 +8,25 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import com.ajaxjs.framework.dao.annotation.Delete;
 import com.ajaxjs.framework.dao.annotation.Insert;
 import com.ajaxjs.framework.dao.annotation.Select;
 import com.ajaxjs.framework.dao.annotation.Update;
 import com.ajaxjs.framework.model.PageResult;
+import com.ajaxjs.framework.model.Query;
+import com.ajaxjs.framework.model.Query.Filter;
+import com.ajaxjs.framework.model.Query.Order;
 import com.ajaxjs.jdbc.Helper;
 import com.ajaxjs.jdbc.SimpleORM;
+import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.reflect.ReflectGeneric;
 
 /**
  * 自动实现接口的实例
  * 
  * @author sp42
- * @param <K>
- *            结果的类型，可以是 map 或者 bean
  * @param <T>
  */
 public class DaoHandler<T extends IDAO> implements InvocationHandler {
@@ -93,34 +96,124 @@ public class DaoHandler<T extends IDAO> implements InvocationHandler {
 			return (String) "";
 		} else if (returnType == List.class) {
 			return orm.queryList(sql, args);
-		} else if (returnType == PageResult.class) { // 分页
+		} else if (returnType == List.class || returnType == PageResult.class) { // 分页
 			QueryParam queryParam = getQueryParam(args);
-			if (queryParam != null)
+			if (queryParam != null) {
 				args = removeItem(args, queryParam); // 删掉数组里的那个特殊的 QueryParam
-
-			if (queryParam.pageParam.length != 2)
-				throw new IllegalArgumentException("没有分页参数！");/* queryParam.pageParam 是必须的 */
+				
+				if(queryParam.query != null) {
+					Query query = queryParam.query;
+					sql = orderBy(query, sql);
+					sql = addWhere(query, sql);
+				}
+			}
 			
-			String countSql = sql.replaceAll("SELECT", "SELECT COUNT(\\*) AS count, ");
-			int total = Helper.queryOne(conn, countSql, int.class, args);
-
-			if (total <= 0) {
-				throw new RuntimeException("没有记录");
+			if (returnType == List.class) {
+				return orm.queryList(sql, args);
 			} else {
-				PageResult<B> result = new PageResult<>();
-				result.setStart(queryParam.pageParam[0]);
-				result.setPageSize(queryParam.pageParam[1]);
-
-				result.setTotalCount(total);// 先查询总数,然后执行分页
-				result.page();
-				result.setRows(orm.queryList(sql + " LIMIT " + result.getStart() + ", " + result.getPageSize(), args));
-
-				return result;
+				// 分页
+				if (queryParam.pageParam.length != 2)
+					throw new IllegalArgumentException("没有分页参数！");/* queryParam.pageParam 是必须的 */
+				
+				// 子查询 select count(*) record_ from ( select * from yourtable t where t.column_ = 'value_' )
+				String countSql = sql.replaceAll("SELECT", "SELECT COUNT(\\*) AS count, ");
+				int total = Helper.queryOne(conn, countSql, int.class, args);
+				
+				if (total <= 0) {
+					throw new RuntimeException("没有记录");
+				} else {
+					PageResult<B> result = new PageResult<>();
+					result.setStart(queryParam.pageParam[0]);
+					result.setPageSize(queryParam.pageParam[1]);
+					
+					result.setTotalCount(total);// 先查询总数,然后执行分页
+					result.page();
+					result.setRows(orm.queryList(sql + " LIMIT " + result.getStart() + ", " + result.getPageSize(), args));
+					
+					return result;
+				}
 			}
 		} else {
 			// maybe a bean
 			return orm.query(sql, args);
 		}
+	}
+
+	/**
+	 * 排序
+	 * @param query
+	 * @param sql
+	 * @return
+	 */
+	private String orderBy(Query query, String sql) {
+		if (query.getOrder() != null) {
+			Order order = query.getOrder();
+			
+			List<String> orders = new ArrayList<>();
+			
+			for (String key : order.keySet()) {
+				if (!StringUtil.isEmptyString(order.get(key)))
+					orders.add(key + " " + order.get(key));
+			}
+			
+			String orderBy = StringUtil.stringJoin(orders, ",");
+			
+			if(sql.toUpperCase().contains("ORDER BY ")) {
+				sql = sql.replaceAll("(?i)ORDER BY ", "ORDER BY " + orderBy + ", ");
+			} else {
+				sql += "ORDER BY " + orderBy;
+			}
+		}
+		
+		return sql;
+	}
+	
+	/**
+	 * 添加 WHERE 子语句
+	 * 
+	 * @param sql
+	 *            动态 SqlBuilder 实例
+	 * @param query
+	 *            Query 查询对象
+	 */
+	private static String addWhere(Query query, String sql) {
+		Map<String, String> map;
+		List<String> wheres = new ArrayList<>();
+		
+		if (query.getFilter() != null) {
+			Filter filter = query.getFilter();
+
+			map = (Map<String, String>) filter;
+
+			for (String key : map.keySet()) {
+				if (!StringUtil.isEmptyString(map.get(key))) {
+
+					if (filter.isCustomOpeartor()) {
+						wheres.add(key + map.get(key));
+					} else {
+						wheres.add(key + " = " + map.get(key));
+					}
+				}
+			}
+		}
+		
+		if (query.getSearch() != null) {
+			map = query.getSearch();
+			for (String key : map.keySet()) {
+				if (!StringUtil.isEmptyString(map.get(key)))
+					wheres.add(key + " LIKE '%" + map.get(key) + "%'");
+			}
+		}
+		
+		if (query.getMatch() != null) {
+			map = query.getMatch();
+			for (String key : map.keySet()) {
+				if (!StringUtil.isEmptyString(map.get(key)))
+					wheres.add(key + " LIKE '" + map.get(key) + "'");
+			}
+		}
+		
+		return sql; // TODO
 	}
 
 	/**
