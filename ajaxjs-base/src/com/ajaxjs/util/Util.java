@@ -153,6 +153,7 @@ public class Util {
 	 * @return 资源路径
 	 */
 	public static String getClassFolder_FilePath(Class<?> cls, String fileName) {
+		System.out.println(cls.getResource(fileName));
 		return StringUtil.urlDecode(cls.getResource(fileName).getPath());
 	}
 

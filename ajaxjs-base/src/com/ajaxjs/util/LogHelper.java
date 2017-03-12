@@ -215,9 +215,15 @@ public class LogHelper {
 	 */
 	private String getMethodName() {
 		StackTraceElement frame = null;
+		
 		// get thread by class name
 		for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
-            if (ste.getClassName().equals(packageName)) {
+			String clzName = ste.getClassName();
+			
+			if (ste.isNativeMethod() || clzName.equals(Thread.class.getName()) || clzName.equals(this.getClass().getName()))
+				 continue;  
+	            
+            if (clzName.equals(packageName)) {
             	frame = ste;// 会有两个？
                 break;
             }
