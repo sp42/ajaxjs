@@ -1,3 +1,15 @@
+/**
+ * 版权所有 2017 Frank Cheung
+ * 
+ * 根据 2.0 版本 Apache 许可证("许可证")授权；
+ * 根据本许可证，用户可以不使用此文件。
+ * 用户可从下列网址获得许可证副本：
+ * 
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *    
+ * 除非因适用法律需要或书面同意，根据许可证分发的软件是基于"按原样"基础提供，
+ * 无任何明示的或暗示的保证或条件。详见根据许可证许可下，特定语言的管辖权限和限制。
+ */
 package com.ajaxjs.framework.dao;
 
 import java.io.Serializable;
@@ -24,13 +36,16 @@ import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.reflect.ReflectGeneric;
 
 /**
- * 自动实现接口的实例
+ * 通过 Java 代理自动实现接口的实例
  * 
  * @author sp42
- * @param <T>
+ * @param <T> DAO 对象
  */
 public class DaoHandler<T extends IDAO> implements InvocationHandler {
-	Connection conn;
+	/**
+	 * 数据库连接对象
+	 */
+	private Connection conn;
 
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -55,15 +70,6 @@ public class DaoHandler<T extends IDAO> implements InvocationHandler {
 		return returnVal;
 	}
 
-	public Connection getConn() {
-		return conn;
-	}
-
-	public DaoHandler<T> setConn(Connection conn) {
-		this.conn = conn;
-		return this;
-	}
-
 	@SuppressWarnings("unchecked")
 	public T bind(Class<? extends IDAO> clz) {
 		return (T) Proxy.newProxyInstance(clz.getClassLoader(), new Class[] { clz }, this);
@@ -82,7 +88,15 @@ public class DaoHandler<T extends IDAO> implements InvocationHandler {
 		
 		return type;
 	}
-	 
+	
+	/**
+	 * 查询
+	 * @param method
+	 * @param args
+	 * @param returnType
+	 * @param entryType
+	 * @return
+	 */
 	private <R, B> Object select(Method method, Object[] args, Class<R> returnType, Class<B> entryType) {
 		Select select = method.getAnnotation(Select.class); // SQL SELECT 注解
 		if (select == null) return null;
@@ -307,4 +321,14 @@ public class DaoHandler<T extends IDAO> implements InvocationHandler {
 		
 		return isOk;
 	}
+
+	public Connection getConn() {
+		return conn;
+	}
+
+	public DaoHandler<T> setConn(Connection conn) {
+		this.conn = conn;
+		return this;
+	}
+
 }
