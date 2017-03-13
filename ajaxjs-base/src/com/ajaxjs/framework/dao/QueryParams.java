@@ -20,23 +20,23 @@ import com.ajaxjs.framework.model.Query;
  * @author xinzhang
  *
  */
-public class QueryParam {
-	public QueryParam() {
+public class QueryParams {
+	public QueryParams() {
 	}
 
-	public QueryParam(int start, int limit) {
+	public QueryParams(int start, int limit) {
 		pageParam[0] = start;
 		pageParam[1] = limit;
 	}
 
-	public QueryParam(int start, int limit, Query query) {
+	public QueryParams(int start, int limit, Query query) {
 		pageParam[0] = start;
 		pageParam[1] = limit;
 		
 		this.query = query;
 	}
 
-	public QueryParam(Query query) {
+	public QueryParams(Query query) {
 		this.query = query;
 	}
 

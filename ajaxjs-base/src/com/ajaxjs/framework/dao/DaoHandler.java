@@ -37,11 +37,11 @@ import com.ajaxjs.util.reflect.ReflectGeneric;
 
 /**
  * 通过 Java 代理自动实现接口的实例
- * 
+ * 必须是接口原类型，而不是接口其父类，也就是不支持多态
  * @author sp42
  * @param <T> DAO 对象
  */
-public class DaoHandler<T extends IDAO> implements InvocationHandler {
+public class DaoHandler<T> implements InvocationHandler {
 	/**
 	 * 数据库连接对象
 	 */
@@ -49,6 +49,9 @@ public class DaoHandler<T extends IDAO> implements InvocationHandler {
 
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+		if(method.getName().equals("toString")) // 没有默认的 toString() 这里实现一个
+			return "it's a DAO.";
+		
 		Object returnVal = null;
 		Class<?> 
 				returnType = method.getReturnType(), 
@@ -71,8 +74,9 @@ public class DaoHandler<T extends IDAO> implements InvocationHandler {
 	}
 
 	@SuppressWarnings("unchecked")
-	public T bind(Class<? extends IDAO> clz) {
-		return (T) Proxy.newProxyInstance(clz.getClassLoader(), new Class[] { clz }, this);
+	public T bind(Class<T> clz) { 
+		Object obj = Proxy.newProxyInstance(clz.getClassLoader(), new Class[] { clz }, this);
+		return (T) obj;
 	}
 	
 	/**
@@ -111,7 +115,7 @@ public class DaoHandler<T extends IDAO> implements InvocationHandler {
 		} else if (returnType == List.class) {
 			return orm.queryList(sql, args);
 		} else if (returnType == List.class || returnType == PageResult.class) { // 分页
-			QueryParam queryParam = getQueryParam(args);
+			QueryParams queryParam = getQueryParam(args);
 			if (queryParam != null) {
 				args = removeItem(args, queryParam); // 删掉数组里的那个特殊的 QueryParam
 				
@@ -235,13 +239,13 @@ public class DaoHandler<T extends IDAO> implements InvocationHandler {
 	 * @param args
 	 * @return
 	 */
-	private QueryParam getQueryParam(Object[] args) {
-		QueryParam queryParam = null;
+	private QueryParams getQueryParam(Object[] args) {
+		QueryParams queryParam = null;
 		
 		/* 通常 QueryParam 放在最后一个的参数列表，于是我们从最后开始找，这样程序会快点 */
 		for(int i = args.length - 1; i >= 0; i--) {
-			if (args[i] instanceof QueryParam) {
-				queryParam = (QueryParam) args[i];
+			if (args[i] instanceof QueryParams) {
+				queryParam = (QueryParams) args[i];
 				break;
 			}
 		}

@@ -18,14 +18,12 @@ package com.ajaxjs.framework.model;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
-import com.ajaxjs.util.LogHelper;
+ import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 
 /**
  * 查询时特地需求的容器，可包含特定的对象进行查询，通过 getter/setter 注入。 特定的对象一般为 Map 结果。 最后转化为 SQL 字符串。
- * 
+ * 通常是耦合 HttpServletRequest.getParameterMap() 返回请求数据
  * @author frank
  *
  */
@@ -46,14 +44,14 @@ public class Query {
 	 */
 	private static class Base extends HashMap<String, String> {
 		private static final long serialVersionUID = 1L;
-
+		
+		
 		@Override
 		public String put(String key, String value) {
 			sqlCheck(key);
 			sqlCheck(value);
 
 			value = StringUtil.urlChinese(value);
-
 			return super.put(key, value);
 		}
 	}
@@ -147,11 +145,10 @@ public class Query {
 	 *            请求对象
 	 * @return 查询对象
 	 */
-	public static Query getQueryFactory(HttpServletRequest request) {
-		Map<String, String[]> map = request.getParameterMap();
+	public static Query getQueryFactory(Map<String, String[]> map) {
 		Query query = new Query();
 
-		if (request.getParameter("filterField") != null) {
+		if (map.get("filterField") != null) {
 			// WHERE 查询
 			Query.Filter filter = new Query.Filter();
 			String[] filterField = map.get("filterField"), filterValue = map.get("filterValue");
@@ -162,7 +159,7 @@ public class Query {
 			query.setFilter(filter);
 		}
 
-		if (request.getParameter("searchField") != null) {
+		if (map.get("searchField") != null) {
 			// search 查询（模糊）
 			Query.Search search = new Query.Search();
 			String[] searchField = map.get("searchField"), searchValue = map.get("searchValue");
@@ -171,9 +168,9 @@ public class Query {
 				search.put(searchField[i], searchValue[i]);
 
 			query.setSearch(search);
-		}
+		}               
 
-		if (request.getParameter("matchField") != null) {
+		if (map.get("matchField") != null) {
 			// match 查询（精确）
 			Query.Match match = new Query.Match();
 			String[] matchField = map.get("matchField"), matchValue = map.get("matchValue");
@@ -184,7 +181,7 @@ public class Query {
 			query.setMatch(match);
 		}
 
-		if (request.getParameter("orderField") != null) {
+		if (map.get("orderField") != null) {
 			// order 查询
 			Query.Order order = new Query.Order();
 			String[] orderField = map.get("orderField"), orderValue = map.get("orderValue");
@@ -205,9 +202,9 @@ public class Query {
 	 *            请求对象
 	 * @return true 表示为需要 Query
 	 */
-	public static boolean isAnyMatch(HttpServletRequest request) {
-		return request.getParameter("filterField") != null || request.getParameter("searchField") != null
-			|| request.getParameter("matchField") != null  || request.getParameter("orderField") != null;
+	public static boolean isAnyMatch(Map<String, String[]> map) {
+		return map.get("filterField") != null || map.get("searchField") != null
+			|| map.get("matchField") != null  || map.get("orderField") != null;
 	}
 	
 	public Filter getFilter() {

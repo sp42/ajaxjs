@@ -15,6 +15,8 @@ package com.ajaxjs.framework.dao;
 import java.io.Serializable;
 import java.util.List;
 
+import com.ajaxjs.framework.model.PageResult;
+
 /**
  * 数据持久层由 DAO 及其实现类组成。
  * 数据访问对象（Data Access Object），提供数据库的增删改查服务。
@@ -27,7 +29,7 @@ import java.util.List;
  * @param <ID>
  *            序号类型，可以是 INTEGER/LONG/String
  */
-public interface BaseDao<T, ID extends Serializable> extends IDAO {
+public interface IDao<T, ID extends Serializable> {
 	/**
 	 * 查询单个记录。如果找不到则返回 null
 	 * 
@@ -46,10 +48,17 @@ public interface BaseDao<T, ID extends Serializable> extends IDAO {
 
 	/**
 	 * 支持分页的查询。如果找不到则返回 null。执行这个方法之前应先查询符合条件的记录总数，即 int count()
-	 * @param parame
+	 * @param param
 	 * @return 结果集
 	 */
-	public List<T> findList(QueryParam parame);
+	public List<T> findList(QueryParams parame);
+	
+	/**
+	 * 
+	 * @param param
+	 * @return
+	 */
+	public PageResult<T> findPagedList(QueryParams parame);
 
 	/**
 	 * 新建记录

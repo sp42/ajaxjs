@@ -1,15 +1,16 @@
 package com.ajaxjs.framework.service;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 
-import com.ajaxjs.framework.model.BaseModel;
+import com.ajaxjs.framework.dao.IDao;
 import com.ajaxjs.framework.model.PageResult;
 import com.ajaxjs.util.aop.Aop;
 import com.ajaxjs.util.aop.ReturnBefore;
 import com.ajaxjs.util.map.SimpleCache;
 
 
-public class CacheService<T extends BaseModel> extends Aop<IService> {
+public class CacheService<T, ID extends Serializable, D extends IDao<T, ID>> extends Aop<IService<T, ID, D>> {
 	SimpleCache<Integer, PageResult<T> > cache = new SimpleCache<>(10);
 	
 	@Override
