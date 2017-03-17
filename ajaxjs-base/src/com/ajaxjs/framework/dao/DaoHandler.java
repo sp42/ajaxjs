@@ -52,6 +52,8 @@ public class DaoHandler<T> implements InvocationHandler {
 		if(method.getName().equals("toString")) // 没有默认的 toString() 这里实现一个
 			return "it's a DAO.";
 		
+		if(conn == null) throw new RuntimeException("没有 connection， 干个屁！？");
+		
 		Object returnVal = null;
 		Class<?> 
 				returnType = method.getReturnType(), 

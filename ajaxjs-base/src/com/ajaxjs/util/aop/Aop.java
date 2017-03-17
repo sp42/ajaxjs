@@ -1,7 +1,6 @@
 package com.ajaxjs.util.aop;
 
 import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
@@ -23,7 +22,7 @@ public abstract class Aop<T> implements InvocationHandler {
 	 * @param method
 	 * @param args
 	 */
-	protected abstract Object before(Method method, Object[] args);
+	protected abstract Object before(Method method, Object[] args) throws Throwable;
 
 	protected abstract void after(Method method, Object[] args, Object returnObj);
 
@@ -38,15 +37,9 @@ public abstract class Aop<T> implements InvocationHandler {
 	}
 
 	@Override
-	public Object invoke(Object proxy, Method method, Object[] args)
-			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		
 		Object beforeReturn = before(method, args);
-		
-		if (beforeReturn instanceof StopAop) {
-			System.out.println("中止运行 aop");
-			return null; // 中止运行 aop
-		}
 		
 		if (beforeReturn instanceof ReturnBefore) {
 			System.out.println("beforeReturn");
@@ -55,7 +48,7 @@ public abstract class Aop<T> implements InvocationHandler {
 
 		Object returnObj = method.invoke(proxied, args);
 		after(method, args, returnObj);
-
+		
 		return returnObj;
 	}
 	

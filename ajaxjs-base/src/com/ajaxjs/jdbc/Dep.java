@@ -1,47 +1,22 @@
 package com.ajaxjs.jdbc;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
 import javax.sql.rowset.JdbcRowSet;
 import javax.sql.rowset.RowSetProvider;
 
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.mapping.Environment;
-import org.apache.ibatis.session.Configuration;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 
-import com.ajaxjs.Constant;
-import com.ajaxjs.framework.dao.BaseDao;
-import com.ajaxjs.framework.model.ModelAndView;
+import com.ajaxjs.framework.model.Query;
+import com.ajaxjs.framework.model.Query.Filter;
+import com.ajaxjs.framework.model.Query.Order;
+import com.ajaxjs.jdbc.sqlbuilder.SqlBuilder;
+import com.ajaxjs.util.LogHelper;
+import com.ajaxjs.util.StringUtil;
 
-public class Dep {
-	
-	/**
-	 * Extra data field container
-	 */
-	private ModelAndView model; 
-
-	/**
-	 * MVC 通过 Model 交换数据。没 model 表示不深入获取信息
-	 */
-	public ModelAndView getModel() {
-		return model;
-	}
-
-	public void setModel(ModelAndView model) {
-		this.model = model;
-	}
-	
+public class Dep extends SqlBuilder {
 	// 表映射
 	private Map<String, String> hidden_db_field_mapping = new HashMap<>();
 
@@ -53,110 +28,20 @@ public class Dep {
 		this.hidden_db_field_mapping = hidden_db_field_mapping;
 	}
 
-	/**
-	 * 通过子查询获得图片列表 图片表是根据实体 uid 获得其所有的图片，形成列表返回 这里返回的 SqlBuilder Concat 结果后的字符串，用 , 分隔开
-	 * UI 层需要 split 字符串
-	 * 
-	 * @deprecated
-	 * @param tablename
-	 * @return
-	 */
-	public String getImgList(String tablename) {
-		String subQuerySql = " (SELECT group_concat(fileName) FROM img WHERE img.parentId = %s.uid) AS imgs";
-		return String.format(subQuerySql, tablename);
-	}
-	
-	// UNION 时，SQLite 居然不能直接使用括号，所以必须得 SELECT * FROM
-	// 可以用 Union 合并 两次查询为一次
-	@Select("SELECT * FROM (SELECT id, name FROM ${from} WHERE id > ${id} LIMIT 1) " + "UNION ALL "
-			+ "SELECT * FROM (SELECT id, name FROM ${from} WHERE id < ${id} ORDER BY id DESC LIMIT 1)")
-	public List<Map<String, String>> getNeighbor(String form, long id){
-		return null;
-	}
-	
-	// https://docs.oracle.com/javase/tutorial/jdbc/basics/cachedrowset.html
-	// https://db.apache.org/derby/docs/10.9/ref/rrefjdbc4_1summary.html
-	// http://download.oracle.com/otn-pub/jcp/jdbc-4_1-mrel-spec/jdbc4.1-fr-spec.pdf?AuthParam=1465096926_08a5ed33264923a8a52d98cd8df37692
-	public static void create() {
+// 通过子查询获得图片列表 图片表是根据实体 uid 获得其所有的图片，形成列表返回 这里返回的 SqlBuilder Concat 结果后的字符串，用 , 分隔开 UI 层需要 split 字符串
+// "(SELECT group_concat(fileName) FROM img WHERE img.parentId = %s.uid) AS imgs";
 
-		try (JdbcRowSet jdbcRs = RowSetProvider.newFactory().createJdbcRowSet();) {
+// UNION 时，SQLite 居然不能直接使用括号，所以必须得 SELECT * FROM
+// 可以用 Union 合并 两次查询为一次
+// “SELECT * FROM (SELECT id, name FROM ${from} WHERE id > ${id} LIMIT 1) " + "UNION ALL " + "SELECT * FROM (SELECT id, name FROM ${from} WHERE id < ${id} ORDER BY id DESC LIMIT 1)")
 
-			// 创建一个 JdbcRowSet 对象，配置数据库连接属性
-			jdbcRs.setUrl("jdbc:derby:helloDB;");
-			// jdbcRs.setUsername(username);
-			// jdbcRs.setPassword(password);
-			jdbcRs.setCommand("select name from hellotable");
-
-			jdbcRs.execute();
-			while (jdbcRs.next()) {
-				System.out.println(jdbcRs.getString(1));
-			}
-			// delete the table
-			// s.execute("drop table hellotable");
-			// System.out.println("Dropped table hellotable");
-
-			// rs.close();
-
-			// DriverManager.getConnection("jdbc:derby:;shutdown=true");
-		} catch (SQLException e) {
-			// 通过应用 JDBC 4.0, 您现在不需太多代码即可以获取及遍历异常链在以往的版本中, 您在遍历异常链时，必须手工的调用
-			// getNextException 方法才能得到相同的效果
-			for (Throwable ex : e) {
-				System.err.println("Error encountered: " + ex);
-			}
-		}
-	}
-	
- 
-	
-	/**
-	 * Configuration 需要设为 public 以便加入 mapper
-	 */
-	public static Configuration configuration;
-
-	/**
-	 * 一般用法 sqlSessionFactory.openSession()。注意，返回的 SqlSession 必须关闭
-	 */
-	public static SqlSessionFactory sqlSessionFactory;
-	
-	/**
-	 * 初始化 MyBatis 数据链接服务
-	 * 
-	 * @param ds
-	 */
-	public static void init(DataSource ds) {
-		Environment environment = new Environment("development", new JdbcTransactionFactory(), ds);
-		configuration = new Configuration(environment);
-		sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);
-
-		// 打印数据库连接路径，以便了解
-		try (Connection conn = environment.getDataSource().getConnection();){
-			System.out.println("数据库连接字符串：" + conn + Constant.ConsoleDiver);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} 
-		
-		// 如果要观察 MyBatis 动态生成的 SQL 语句，请打开控制台的输出。
-		// org.apache.ibatis.logging.LogFactory.useStdOutLogging();
-		// org.apache.ibatis.logging.LogFactory.useJdkLogging();
-
-
-		System.out.println("数据库初始化成功！" + Constant.ConsoleDiver);
-	}
-	
-	/**
-	 * 添加一个 Mapper（DAO）
-	 * @param clz
-	 */
-	public static void addDao(Class<? extends BaseDao<?, ?>> clz){
-		if (clz != null && !configuration.hasMapper(clz))
-			configuration.addMapper(clz);
-	}
 	
 	
-//	public static String perRecordSql  = "SELECT id, name FROM %s WHERE createDate < datetime('%s') ORDER BY createDate DESC LIMIT 1";
-//	public static String nextRecordSql = "SELECT id, name FROM %s WHERE createDate > datetime('%s') ORDER BY createDate ASC LIMIT 1";
-//	
+	public static String perRecordSql  = "SELECT %s, name FROM %s WHERE createDate < %s ORDER BY createDate DESC LIMIT 1";
+	public static String nextRecordSql = "SELECT %s, name FROM %s WHERE createDate > %s ORDER BY createDate ASC LIMIT 1";
+	
+	public static String perRecordSql2  = "SELECT id, name FROM %s WHERE createDate < datetime('%s') ORDER BY createDate DESC LIMIT 1";
+	public static String nextRecordSql2 = "SELECT id, name FROM %s WHERE createDate > datetime('%s') ORDER BY createDate ASC LIMIT 1";
 //	public static Map<String, Map<String, Object>> getNeighbor(Connection conn, String tablename, String datetime){
 //		Map<String, Map<String, Object>> map = new HashMap<>();
 //
@@ -168,50 +53,123 @@ public class Dep {
 //		
 //		return map;
 //	}
-	
-	public static String perRecordSql  = "SELECT %s, name FROM %s WHERE createDate < %s ORDER BY createDate DESC LIMIT 1";
-	public static String nextRecordSql = "SELECT %s, name FROM %s WHERE createDate > %s ORDER BY createDate ASC LIMIT 1";
+
 
 	/**
-	 * 记录集合转换为 Map
-	 * @param conn
-	 * @param sql
-	 * @return Map 结果
-	 */
-	public static Map<String, Object> queryMap(Connection conn, String sql) {
-		try (Statement statement = conn.createStatement(); ResultSet rs = statement.executeQuery(sql);) {
-			if (rs.isBeforeFirst()) {
-				return Helper.getResultMap(rs);
-			} else {
-				System.err.println("查询 SQL：" + sql + " 没有符合的记录！");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return null;
-	}
-    
-	/**
-	 * 记录集合列表转换为 List
+	 * 返回查询总数的 SqlBuilder
 	 * 
-	 * @param conn
-	 *            数据库连接对象
-	 * @param sql
-	 *            查询的 SQL 语句
-	 * @return List 结果
+	 * @param parames
+	 *            MyBatis 参数
+	 * @return SqlBuilder 语句
 	 */
-	public static List<Map<String, Object>> queryList(Connection conn, String sql) {
-		List<Map<String, Object>> list = new ArrayList<>();
-		
-		try (Statement statement = conn.createStatement(); ResultSet rs = statement.executeQuery(sql);) {
-			while (rs.next()) {
-				list.add(Helper.getResultMap(rs));
+	public String pageCount(final Map<String, Object> parames) {
+		SELECT("COUNT(*)");
+		FROM(parames.get("tablename").toString());
+		if (parames.containsKey("query")) 
+			addWhere(this, (Query) parames.get("query"));
+
+		return toString();
+	}
+
+	/**
+	 * 返回查询列表的 SqlBuilder
+	 * 
+	 * @param parames
+	 *            MyBatis 参数
+	 * @return SqlBuilder 语句
+	 */
+	public String page(final Map<String, Object> parames) {
+		final int start = (int) parames.get("start"), limit = (int) parames.get("limit");
+		final String tablename = parames.get("tablename").toString();
+
+		String sql = new SqlBuilder() {
+			{
+				SELECT(getFileds(parames));
+				FROM(tablename);
+
+				if (parames.containsKey("query")) {
+					Query query = (Query) parames.get("query");
+					addWhere(this, query);
+
+					if (query.getOrder() != null) {
+						Order order = query.getOrder();
+						for (String key : order.keySet()) {
+							if (!StringUtil.isEmptyString(order.get(key)))
+								ORDER_BY(key + " " + order.get(key));
+						}
+					}
+				}
+
+				if (!parames.containsKey("query")
+						|| (parames.containsKey("query") && ((Query) parames.get("query")).getOrder() == null)) {
+					ORDER_BY("id DESC"); // 默认排序
+				}
 			}
-		}catch (SQLException e) {
-			e.printStackTrace();
+
+		}.toString() + " LIMIT " + start + ", " + limit;
+
+		return sql;
+	}
+
+	private String getFileds(Map<String, Object> parames) {
+		String addStr = "*";
+
+		if (parames.containsKey("query")) {
+			Query query = (Query) parames.get("query");
+			if (query.getDb_field_mapping() != null && query.getDb_field_mapping().size() > 0) {
+				String[] pairs = new String[query.getDb_field_mapping().size()];
+
+				int i = 0;
+				for (String key : query.getDb_field_mapping().keySet())
+					pairs[i++] = query.getDb_field_mapping().get(key) + " AS " + key;
+
+				addStr += " ," + StringUtil.stringJoin(pairs, ",");
+			}
 		}
-		
-		return list;
+
+		return addStr;
+	}
+ 
+
+	/**
+	 * 添加 WHERE 子语句
+	 * 
+	 * @param sql
+	 *            动态 SqlBuilder 实例
+	 * @param query
+	 *            Query 查询对象
+	 */
+	private static void addWhere(SqlBuilder sql, Query query) {
+		Map<String, String> map;
+		if (query.getFilter() != null) {
+			Filter filter = query.getFilter();
+
+			map = (Map<String, String>) filter;
+
+			for (String key : map.keySet()) {
+				if (!StringUtil.isEmptyString(map.get(key))) {
+
+					if (filter.isCustomOpeartor()) {
+						sql.WHERE(key + map.get(key));
+					} else {
+						sql.WHERE(key + " = " + map.get(key));
+					}
+				}
+			}
+		}
+		if (query.getSearch() != null) {
+			map = query.getSearch();
+			for (String key : map.keySet()) {
+				if (!StringUtil.isEmptyString(map.get(key)))
+					sql.WHERE(key + " LIKE '%" + map.get(key) + "%'");
+			}
+		}
+		if (query.getMatch() != null) {
+			map = query.getMatch();
+			for (String key : map.keySet()) {
+				if (!StringUtil.isEmptyString(map.get(key)))
+					sql.WHERE(key + " LIKE '" + map.get(key) + "'");
+			}
+		}
 	}
 }

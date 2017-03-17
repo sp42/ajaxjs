@@ -276,6 +276,8 @@ public class Helper {
 
 		LOGGER.info("The SQL is------------>\n" + statement);
 
+		ConnectionMgr.addSql(statement); // 用来保存日志
+		
 		return statement;
 	}
 	
