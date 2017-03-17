@@ -1,6 +1,8 @@
 package com.ajaxjs.mvc.controller;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,21 +11,40 @@ import java.util.regex.Pattern;
 
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 
-import com.ajaxjs.framework.model.Map2Pojo;
+import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.io.StreamUtil;
+import com.ajaxjs.util.map.Map2Pojo;
 import com.ajaxjs.util.map.MapHelper;
-import com.ajaxjs.web.Requester;
 
 /**
  * 
  * @author frank
  *
  */
-public class MvcRequest extends Requester{
-	public MvcRequest(ServletRequest request) {
+public class MvcRequest extends HttpServletRequestWrapper {
+	public MvcRequest(HttpServletRequest request) {
 		super(request);
+		
+		try {
+			setCharacterEncoding(StandardCharsets.UTF_8.toString());// 为防止中文乱码，统一设置 UTF-8，设置请求编码方式
+		} catch (UnsupportedEncodingException e) {} 
+	}
+
+	/**
+	 * 获取原请求的 uri，而非模版所在的 uri
+	 */
+	@Override
+	public String getRequestURI() {
+		Object obj = getAttribute("javax.servlet.forward.request_uri");
+	
+		if (obj != null && !StringUtil.isEmptyString((String) obj)) {
+			return (String) obj;
+		} else {
+			return getRequestURI();// 直接 jsp 的
+		}
 	}
 	
 	/**
@@ -130,4 +151,16 @@ public class MvcRequest extends Requester{
 	 * 全局的 callback 参数名
 	 */
 	public static final String callback_param = "callback";
+	
+
+	/**
+	 * 保存到 request
+	 * 
+	 * @param request
+	 */
+	public void saveToReuqest(Map<String, Object> map) {
+		for (String key : map.keySet()) {
+			setAttribute(key, map.get(key));
+		}
+	}
 }

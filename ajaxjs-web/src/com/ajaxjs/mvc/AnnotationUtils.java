@@ -35,9 +35,9 @@ import javax.ws.rs.Path;
 
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.util.LogHelper;
-import com.ajaxjs.util.Reflect;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.ioc.BeanContext;
+import com.ajaxjs.util.reflect.ReflectNewInstance;
 
 /**
  * 扫描注解的工具类
@@ -82,7 +82,7 @@ public class AnnotationUtils {
 		if(BeanContext.isIOC_Bean(clz)) { // 如果有 ioc，则从容器中查找
 			cInfo.controller = (IController)BeanContext.me().getBeanByClass(clz);
 		} else {
-			cInfo.controller = Reflect.newInstance(clz);
+			cInfo.controller = ReflectNewInstance.newInstance(clz);
 		}
 		
 		for (Method method : clz.getMethods()) {
@@ -192,7 +192,7 @@ public class AnnotationUtils {
 				String className = file.getName().substring(0, file.getName().length() - 6);
 				className = (packageName + '.' + className).trim();
 
-				Class<?> clazz = Reflect.getClassByName(className);
+				Class<?> clazz = ReflectNewInstance.getClassByName(className);
 
 				boolean isController = isController(clazz);
 				// 添加到集合中去

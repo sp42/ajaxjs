@@ -39,10 +39,9 @@ import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.mvc.ActionAndView;
 import com.ajaxjs.util.ClassScaner;
 import com.ajaxjs.util.LogHelper;
-import com.ajaxjs.util.Reflect;
+import com.ajaxjs.util.reflect.Reflect;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.web.Output;
-import com.ajaxjs.web.Requester;
 
 /**
  * 采用 Jave EE 版的 eclipse 开发，项目工程是一个 Dynamic web project，采用了 Servlet 3 的一些特性，JDK 要求 v1.7 及以上
@@ -91,7 +90,7 @@ public class MvcDispatcher implements Filter {
 	 */
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
-		MvcRequest request = new MvcRequest(req);
+		MvcRequest request = new MvcRequest((HttpServletRequest)req);
 		HttpServletResponse response = (HttpServletResponse)resp;
 
 		String uri = request.getRoute(), httpMethod = request.getMethod();
@@ -244,7 +243,7 @@ public class MvcDispatcher implements Filter {
 	 */
 	private static void resultHandler(Object result, MvcRequest request, HttpServletResponse response, ModelAndView model) {
 		if (model != null)
-			model.saveToReuqest(request);
+			request.saveToReuqest(model);
 
 		if (result != null) {
 			if (result instanceof String) {
@@ -296,7 +295,7 @@ public class MvcDispatcher implements Filter {
 			Class<?> clazz = parmTypes[i];
 			
 			// 适配各种类型的参数，或者注解
-			if (clazz.equals(HttpServletRequest.class) || clazz.equals(Requester.class) || clazz.equals(MvcRequest.class)) {// 常见的 请求/响应 对象，需要的话传入之
+			if (clazz.equals(HttpServletRequest.class) || clazz.equals(MvcRequest.class)) {// 常见的 请求/响应 对象，需要的话传入之
 				args.add(request);
 			} else if (clazz.equals(HttpServletResponse.class)) {
 				args.add(response);

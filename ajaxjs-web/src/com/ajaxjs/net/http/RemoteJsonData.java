@@ -26,7 +26,6 @@ import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.map.MapHelper;
-import com.ajaxjs.web.Requester;
 
 /**
  * 请求远程的 JSON 接口基类
@@ -49,8 +48,7 @@ public abstract class RemoteJsonData implements RemoteData {
 	 * @return Map 列表
 	 */
 	public Map<String, Object>[] getLocalJSON_Array(HttpServletRequest request, String url) {
-		String serviceUrl = new Requester(request).getBasePath() + url;
-		return RemoteJsonData.getRemoteJSON_Array(serviceUrl);
+		return RemoteJsonData.getRemoteJSON_Array(url);
 	}
 
 	/**
@@ -60,7 +58,7 @@ public abstract class RemoteJsonData implements RemoteData {
 	 *            请求对象
 	 */
 	public String getApiBaseUrl(HttpServletRequest request) {
-		return new Requester(request).getBasePath() + "/service";
+		return "/service";
 	}
 
 	/**

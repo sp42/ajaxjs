@@ -141,4 +141,19 @@ public class PageUtil {
 	public static String jsonString_covernt(String str){
 		return str.replace("\r\n", "\\n");
 	}
+	
+	/**
+	 * 输入一个相对地址，补充成为绝对地址 相对地址转换为绝对地址，并转换斜杠
+	 * 
+	 * @param relativePath
+	 *            相对地址
+	 * @return 绝对地址
+	 */
+	public static String Mappath(HttpServletRequest request, String relativePath) {
+		String absolute = request.getServletContext().getRealPath(relativePath); // 绝对地址
+		
+		if (absolute != null)
+			absolute = absolute.replace('\\', '/');
+		return absolute;
+	}
 }
