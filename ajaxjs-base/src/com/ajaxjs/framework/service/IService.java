@@ -20,21 +20,17 @@ import java.io.Serializable;
 import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.framework.model.PageResult;
+import com.ajaxjs.framework.service.annotation.ValidIt;
+import com.ajaxjs.framework.service.annotation.ValidObj;
 
 /**
- * 业务逻辑的一个标识，用于注入
- * 
- * @author Frank
- *
- */
-/**
- * 
+ * 业务层不绑定 DAO 泛型，目的是不强制依赖 DAO
  * @author xinzhang
  *
+ * @param <T>
+ *            实体类型
  * @param <ID>
- *            序号类型，可以是 INTEGER/LONG/String
- * @param <D>
- *            DAO 对象
+ *            ID 类型，可以是 INTEGER/LONG/String
  */
 public interface IService<T, ID extends Serializable> {
 	/**
@@ -44,7 +40,7 @@ public interface IService<T, ID extends Serializable> {
 	 *            序号
 	 * @return POJO
 	 */
-	public T findById(ID id);
+	public T findById(ID id) throws ServiceException;
 
 	/**
 	 * 新建记录
@@ -53,7 +49,8 @@ public interface IService<T, ID extends Serializable> {
 	 *            POJO 对象
 	 * @return 新建记录之序号
 	 */
-	public ID create(T bean);
+	@ValidIt
+	public ID create(@ValidObj T bean) throws ServiceException;
 
 	/**
 	 * 修改记录
@@ -62,38 +59,37 @@ public interface IService<T, ID extends Serializable> {
 	 *            POJO 对象
 	 * @return 影响的行数，理应 = 1
 	 */
-	public int update(T bean);
+	public int update(T bean) throws ServiceException;
 
 	/**
 	 * 单个删除
 	 * 
-	 * @param id
-	 *            实体序号
+	 * @param bean
+	 *            POJO 对象
 	 * @return 影响的行数
 	 */
-	public boolean delete(T bean);
-	
+	public boolean delete(T bean) throws ServiceException;
+
 	/**
 	 * 
-	 * @param param
+	 * @param parame
 	 * @return
+	 * @throws ServiceException
 	 */
-	public PageResult<T> findPagedList(QueryParams parame);
-	
+	public PageResult<T> findPagedList(QueryParams parame) throws ServiceException;
+
 	/**
 	 * 返回业务名称，可用于 UI 显示
 	 * 
 	 * @return 业务名称
 	 */
 	String getName();
-	
+
 	/**
-	 * 模版方法，用于装备其他数据，如分类这些外联的表。 不使用 abstract 修饰，因为这将强制各个子类都要实现，麻烦。
+	 * 模版方法，用于装备其他数据，如分类这些外联的表。
 	 * 
 	 * @param model
 	 *            模型
 	 */
 	public void prepareData(ModelAndView model);
-	
-	
 }

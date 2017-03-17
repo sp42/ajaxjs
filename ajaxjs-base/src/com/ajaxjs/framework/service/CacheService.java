@@ -10,7 +10,7 @@ import com.ajaxjs.util.aop.ReturnBefore;
 import com.ajaxjs.util.map.SimpleCache;
 
 
-public class CacheService<T, ID extends Serializable, D extends IDao<T, ID>> extends Aop<IService<T, ID, D>> {
+public class CacheService<T, ID extends Serializable, D extends IDao<T, ID>> extends Aop<IService<T, ID>> {
 	SimpleCache<Integer, PageResult<T> > cache = new SimpleCache<>(10);
 	
 	@Override
