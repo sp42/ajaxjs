@@ -9,7 +9,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ajaxjs.util.aop.Aop;
-import com.ajaxjs.util.aop.StopAop;
+import com.ajaxjs.util.aop.ReturnBefore;
 
 class TestAopHandler extends Aop<Subject> {
 	@Override
@@ -28,7 +28,7 @@ class TestStopAopHandler extends Aop<Subject> {
 	@Override
 	protected Object before(Method method, Object[] args) {
 		System.out.println("print TestCls.before");
-		return new StopAop();
+		return new ReturnBefore(null);
 	}
 
 	@Override

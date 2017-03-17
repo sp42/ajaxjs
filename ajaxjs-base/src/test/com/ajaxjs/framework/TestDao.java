@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.ajaxjs.framework.dao.DaoHandler;
-import com.ajaxjs.framework.dao.QueryParam;
+import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.model.PageResult;
 import com.ajaxjs.jdbc.JdbcConnection;
 import com.ajaxjs.util.Util;
@@ -25,7 +25,7 @@ public class TestDao {
 	@Before
 	public void setUp() {
 		conn = JdbcConnection.getConnection("jdbc:sqlite:" + Util.getClassFolder_FilePath(TestSimpleORM.class, "foo.sqlite"));
-		dao = new DaoHandler<News, NewsDao>().setConn(conn).bind(NewsDao.class);
+		dao = new DaoHandler<NewsDao>().setConn(conn).bind(NewsDao.class);
 	}
 
 	@After
@@ -57,7 +57,7 @@ public class TestDao {
 		PageResult<News> pageResult = new PageResult<>();
 		pageResult.setStart(0);
 		pageResult.setPageSize(10);
-		PageResult<News> newsList = dao.findPagedList(new QueryParam(new int[]{0, 10}));
+		PageResult<News> newsList = dao.findPagedList(new QueryParams(0, 10));
 		
 		assertEquals(newsList.getRows().size(), 10);
 		assertNotNull(newsList);
@@ -71,12 +71,17 @@ public class TestDao {
 	}
 
 	@Test
-	public void testCreate() {
+	public void testCreateUpdateDelete() {
 		News news = new News();
 		news.setName("test 123");
 		Long newlyId = dao.create(news);
-		System.out.println("newlyId:" + newlyId);
+		System.out.println("newlyId:：：：" + newlyId);
 		assertNotNull(newlyId);
+		
+		news.setName("test 2.");
+		assertEquals(1, dao.update(news));
+		
+		assertTrue(dao.delete(news));
 	}
 	
 	@Test

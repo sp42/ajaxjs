@@ -66,7 +66,7 @@ public class TestSimpleORM {
 	}
   
 	@Test
-	public void testCreate(){
+	public void testCreateUpdateDelete(){
 		News news = new News();
 		news.setName("标题一");
 		news.setIntro("hihi");
@@ -78,9 +78,11 @@ public class TestSimpleORM {
 		System.out.println(newlyId);
 		
 		news.setName("标题二");
-		news.setId(newlyId); // 修改刚刚生成的记录
+		news.setId(new Long(newlyId)); // 修改刚刚生成的记录
 		int effectRows = (int)simpleORM.update(news, "news");
 		assertNotNull(effectRows);
 		System.out.println(effectRows);
+		
+		assertTrue(simpleORM.delete(news, "news"));
 	}
 }
