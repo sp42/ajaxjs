@@ -1,10 +1,7 @@
 package com.ajaxjs.mvc.controller;
 
 import java.io.Serializable;
-import java.util.Set;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -74,14 +71,22 @@ public class WritableController<T, ID extends Serializable> extends ListAndInfoC
 	public String create(/* @Valid */ T entity, ModelAndView model) {
 		LOGGER.info("控制器-创建记录-" + entity);
 
-		model.put("errMsg", str);
-
-		getService().create(entity);
-		// model.put("newlyId", entity.getId());
+		try {
+			getService().create(entity);
+//			model.put("newlyId", entity.getId());
+		} catch (ServiceException e) {
+			model.put(errMsg, e);
+		}
 
 		return cud;
 	}
 
+	/**
+	 * 
+	 * @param entity
+	 * @param model
+	 * @return JSP 路径，应返回 JSON 格式的
+	 */
 	public String update(T entity, ModelAndView model) {
 		LOGGER.info("修改 name:{0}，数据库将执行 UPDATE 操作", entity);
 
@@ -90,8 +95,7 @@ public class WritableController<T, ID extends Serializable> extends ListAndInfoC
 		try {
 			getService().update(entity);
 		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			model.put(errMsg, e);
 		}		
 
 		return cud;

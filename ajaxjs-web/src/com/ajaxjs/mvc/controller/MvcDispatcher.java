@@ -41,16 +41,10 @@ import com.ajaxjs.util.ClassScaner;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.reflect.Reflect;
 import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.web.Output;
 
 /**
- * 采用 Jave EE 版的 eclipse 开发，项目工程是一个 Dynamic web project，采用了 Servlet 3 的一些特性，JDK 要求 v1.7 及以上
- * MVC 框架的核心是一个 Dispatcher（分发器），用于接收所有的 HTTP 请求，并根据 URL 选择合适的 控制器 Controller 对其进行处理。
- * 这是一个 RESTful 风格的 MVC 框架，功能简单，但是 MVC 的核心功能基本具备了，很适合想了解 MVC 的学习者。 
- * 这是一个纯粹的mvc框架，是在 Servlet 之上做了浅层包装而做出来的，它做的事情很简单：接收请求->封装参数->将请求交给开发者这编写的逻辑处理->返回处理结果。
- * 该类是一个前置控制器，用于接收所有的请求，并作出合适的转发。
+ * 分发器
  * @author frank
- *
  */
 public class MvcDispatcher implements Filter {
 	private static final LogHelper LOGGER = LogHelper.getLog(MvcDispatcher.class);
@@ -113,6 +107,7 @@ public class MvcDispatcher implements Filter {
 			if (method.getParameterTypes().length > 0) {
 				Object[] args = getArgs(request, response, method);
 				model = findModel(args);
+				
 				// 调用反射的 Reflect.executeMethod 方法就可以执行目标方法，并返回一个结果。
 				result = Reflect.executeMethod(controller, method, args);// 通过反射执行控制器方法
 			} else {
@@ -133,7 +128,7 @@ public class MvcDispatcher implements Filter {
 	 * 返回要执行的方法
 	 * 
 	 * @param uri
-	 *            去掉项目前缀的 URL 路径
+	 *            用户请求过来的网址，已经去掉项目前缀的 URL 路径
 	 * @param httpMethod
 	 *            HTTP 请求的方法
 	 * @return 控制器方法
@@ -152,25 +147,29 @@ public class MvcDispatcher implements Filter {
 				ActionAndView controllerInfo = AnnotationUtils.controllers.get(path);
 				objs[0] = controllerInfo.controller; // 返回 controller
 
-				String subUri = uri.replace(path, "");
+				String subUri = uri.replaceAll(path + "/?", ""); /* 3-17 uri.replace(path, ""); 改为 uri.replaceAll(path + "/?", "");*/
 				
 				boolean isSub = false; // 如果执行了 sub 就不用执行类 path 本身的。这里做一个标识
 
-//				System.out.println("subUri:" + subUri);
+				System.out.println("subUri:" + subUri);
+				System.out.println("path:" + path);
 //				System.out.println("subUri::" + subUri.replaceAll("\\d+", "{id}"));
 				
 				for (String subPath : controllerInfo.subPath.keySet()) {
-//					System.out.println(subPath);
+					System.out.println("subPath:" + subPath);
 					
 					// 注解变成 正则 去匹配 subUri
 					if(subPath.equals(subUri)) { // 相同的业务，如  xx/login
 						LOGGER.info(subPath + "子路径命中，相同的业务！！！");
+						System.out.println(controllerInfo.subPath);
+						System.out.println("::::" + controllerInfo.subPath.get(subPath));
 						method = getMethod(controllerInfo.subPath.get(subPath), httpMethod);
 						isSub = true;
 						break;
 					}else if (StringUtil.regMatch(subPath.replace("{id}", "\\d+$"), subUri) != null) { // 单个实体，如  xx/1
-						LOGGER.info(subPath + "子路径命中，单个实体！！！");
-						method = getMethod(controllerInfo.subPath.get("/{id}"), httpMethod);
+						LOGGER.info(subPath + " 子路径命中，单个实体！！！");
+						
+						method = getMethod(controllerInfo.subPath.get(subPath + "/{id}"), httpMethod); /* 3-17 增加了 subPath + */
 						isSub = true;
 						break;
 					} else if(subUri.replaceAll("\\d+", "{id}").equals(subPath)) { // 单个实体下的业务，如  xx/1/avatar，反过来匹配
@@ -188,7 +187,7 @@ public class MvcDispatcher implements Filter {
 				break;
 			}
 		}
-
+		
 		objs[1] = method;// 返回 方法对象
 
 		return objs;
@@ -248,7 +247,7 @@ public class MvcDispatcher implements Filter {
 		if (result != null) {
 			if (result instanceof String) {
 				String str = (String) result, html = "html::";
-				Output o = new Output(response);
+				MvcOutput o = new MvcOutput(response);
 				
 				if (str.startsWith(html)) {
 					o.setSimpleHTML(true).setOutput(str.replace(html, "")).go();

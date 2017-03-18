@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.web;
+package com.ajaxjs.mvc.controller;
 
 import java.awt.image.RenderedImage;
 import java.io.IOException;
@@ -39,7 +39,27 @@ import com.ajaxjs.js.JsonHelper;
  * @author frank
  *
  */
-public class Output extends HttpServletResponseWrapper {
+public class MvcOutput extends HttpServletResponseWrapper {
+	/**
+	 * 创建一个 Output 对象
+	 * 
+	 * @param request
+	 *            请求对象
+	 */
+	public MvcOutput(HttpServletResponse request) {
+		super(request);
+	}
+
+	/**
+	 * 创建一个 Output 对象
+	 * 
+	 * @param resp
+	 *            原生 ServletResponse 对象
+	 */
+	public MvcOutput(ServletResponse resp) {
+		this((HttpServletResponse) resp);
+	}
+
 	/**
 	 * 最终输出的字符串，可以是特定的内容
 	 */
@@ -85,12 +105,19 @@ public class Output extends HttpServletResponseWrapper {
 	 */
 	private boolean simpleHTML;
 
+	/**
+	 * 执行输出
+	 */
 	public void go() {
 		if (getRedirect() != null) {
-			redirect(getRedirect());
+			try {
+				sendRedirect(getRedirect()); // 302 重定向
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			return;
 		}
-		
+
 		if (getOutput_Map() != null) { // Map 的话转变为 json 输出
 			setJson(true).setOutput(JsonHelper.stringifyMap(getOutput_Map()));
 		} else if (getOutput_Obj() != null) {// map or object 二选其一
@@ -111,14 +138,23 @@ public class Output extends HttpServletResponseWrapper {
 
 	/**
 	 * MVC 的 View 输出
+	 * 
 	 * @param request
+	 *            请求对象
 	 */
 	public void go(HttpServletRequest request) {
 		if (getTemplate() != null) {
-			sendRequestDispatcher(request, getTemplate());
+			try {
+				RequestDispatcher rd = request.getRequestDispatcher(getTemplate());// JSP 路径
+				
+				if (rd != null)
+					rd.forward(request, this); // 跳转至 view 层
+			} catch (ServletException | IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
-	
+
 	/**
 	 * 把图片流显示出来
 	 * 
@@ -126,15 +162,16 @@ public class Output extends HttpServletResponseWrapper {
 	 *            已渲染的图片对象
 	 */
 	public void go(RenderedImage im) {
-		if(getContent_Type() != null) setContentType(getContent_Type());
-		
+		if (getContent_Type() != null)
+			setContentType(getContent_Type());
+
 		try {
 			ImageIO.write(im, "JPEG", getOutputStream());
 		} catch (IOException e) {
-			e.printStackTrace(); 
+			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * JSP 需要加上下面代码,运行时才不会出现 java.lang.IllegalStateException: getOutputStream()
 	 * has already been called ..........等异常
@@ -147,7 +184,7 @@ public class Output extends HttpServletResponseWrapper {
 	 */
 	public static void fix(PageContext pageContext) {
 		HttpServletResponse response = (HttpServletResponse) pageContext.getResponse();
-		
+
 		try {
 			OutputStream out = response.getOutputStream();
 			out.flush();
@@ -176,48 +213,34 @@ public class Output extends HttpServletResponseWrapper {
 		try {
 			writer = getWriter();
 		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
 		if (writer != null)
 			writer.print(output);
 	}
 
-	
+	/**
+	 * 新的输出，不要缓存
+	 */
+	public MvcOutput noCache() {
+		setHeader("Pragma", "No-cache");
+		setHeader("Cache-Control", "no-cache");
+		setDateHeader("Expires", 0);
+
+		return this;
+	}
+
 	/**
 	 * 返回到前一页并刷新
 	 */
 	public final static String returnJs_refresh = "window.location = document.referrer;";
 
-	/**
-	 * 新的输出，不要缓存
-	 */
-	public Output noCache() {
-		setHeader("Pragma", "No-cache");
-		setHeader("Cache-Control", "no-cache");
-		setDateHeader("Expires", 0);
-		
-		return this;
-	}
-	
-	public Output(HttpServletResponse request) {
-		super(request);
-	}
-	
-	/**
-	 * 创建一个 Responser 对象
-	 * 
-	 * @param resp
-	 *            原生 ServletResponse 对象
-	 */
-	public Output(ServletResponse resp) {
-		this((HttpServletResponse) resp);
-	}
-
 	public String getOutput() {
 		return output;
 	}
 
-	public Output setOutput(String output) {
+	public MvcOutput setOutput(String output) {
 		this.output = output;
 		return this;
 	}
@@ -226,7 +249,7 @@ public class Output extends HttpServletResponseWrapper {
 		return content_Type;
 	}
 
-	public Output setContent_Type(String content_Type) {
+	public MvcOutput setContent_Type(String content_Type) {
 		this.content_Type = content_Type;
 		return this;
 	}
@@ -235,7 +258,7 @@ public class Output extends HttpServletResponseWrapper {
 		return redirect;
 	}
 
-	public Output setRedirect(String redirect) {
+	public MvcOutput setRedirect(String redirect) {
 		this.redirect = redirect;
 		return this;
 	}
@@ -244,40 +267,16 @@ public class Output extends HttpServletResponseWrapper {
 		return template;
 	}
 
-	public Output setTemplate(String template) {
+	public MvcOutput setTemplate(String template) {
 		this.template = template;
 		return this;
-	}
-
-	public void redirect(String url) {
-		try {
-			sendRedirect(url);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * 跳转至 view 层
-	 * 
-	 * @param path
-	 *            JSP 路径
-	 */
-	public void sendRequestDispatcher(HttpServletRequest request, String path) {
-		try {
-			RequestDispatcher rd = request.getRequestDispatcher(path);
-			if (rd != null)
-				rd.forward(request, this);
-		} catch (ServletException | IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public boolean isJson() {
 		return json;
 	}
 
-	public Output setJson(boolean json) {
+	public MvcOutput setJson(boolean json) {
 		this.json = json;
 		return this;
 	}
@@ -286,7 +285,7 @@ public class Output extends HttpServletResponseWrapper {
 		return simpleHTML;
 	}
 
-	public Output setSimpleHTML(boolean simpleHTML) {
+	public MvcOutput setSimpleHTML(boolean simpleHTML) {
 		this.simpleHTML = simpleHTML;
 		return this;
 	}
@@ -295,7 +294,7 @@ public class Output extends HttpServletResponseWrapper {
 		return jsonpToken;
 	}
 
-	public Output setJsonpToken(String jsonpToken) {
+	public MvcOutput setJsonpToken(String jsonpToken) {
 		this.jsonpToken = jsonpToken;
 		return this;
 	}
@@ -304,7 +303,7 @@ public class Output extends HttpServletResponseWrapper {
 		return output_Map;
 	}
 
-	public Output setOutput_Map(Map<String, ?> output_Map) {
+	public MvcOutput setOutput_Map(Map<String, ?> output_Map) {
 		this.output_Map = output_Map;
 		return this;
 	}
@@ -313,7 +312,7 @@ public class Output extends HttpServletResponseWrapper {
 		return output_Obj;
 	}
 
-	public Output setOutput_Obj(Object output_Obj) {
+	public MvcOutput setOutput_Obj(Object output_Obj) {
 		this.output_Obj = output_Obj;
 		return this;
 	}

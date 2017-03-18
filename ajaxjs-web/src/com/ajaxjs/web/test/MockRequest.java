@@ -20,8 +20,8 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -31,36 +31,19 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.util.map.MapHelper;
- 
 
 /**
  * 
  * @author frank
  *
  */
-public class MockRequest extends WebBaseInit {
-	class StubServletOutputStream extends ServletInputStream {
-		public ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-		public void write(int i) throws IOException {
-			baos.write(i);
-		}
-
-		public String getContent() {
-			return baos.toString();
-		}
-
-		@Override
-		public int read() throws IOException {
-			return 0;
-		}
-	}
-
+public class MockRequest {
 	/**
 	 * 模拟表单请求
 	 * 
@@ -71,16 +54,14 @@ public class MockRequest extends WebBaseInit {
 	 * @return
 	 * @throws IOException
 	 */
-	public HttpServletRequest initRequest(HttpServletRequest request, Map<String, String> formBody,
-			boolean isByGetParams) throws IOException {
+	public HttpServletRequest initRequest(HttpServletRequest request, Map<String, String> formBody, boolean isByGetParams) throws IOException {
 		if (isByGetParams) {
-			for (String key : formBody.keySet()) {
+			for (String key : formBody.keySet()) 
 				when(request.getParameter(key)).thenReturn(formBody.get(key));
-			}
 		} else {
 			String form = MapHelper.join(formBody, "&");
-
-			final ByteArrayInputStream is = new ByteArrayInputStream(form.getBytes());
+			final InputStream is = new ByteArrayInputStream(form.getBytes());
+			
 			when(request.getInputStream()).thenReturn(new ServletInputStream() {
 				@Override
 				public int read() throws IOException {

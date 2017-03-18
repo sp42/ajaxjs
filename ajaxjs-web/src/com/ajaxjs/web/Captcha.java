@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.PageContext;
 
+import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.util.io.ImageUtil;
 
 import java.awt.Font;
@@ -116,7 +117,7 @@ public class Captcha extends ImageUtil {
 		captcha.setWidth(60).setHeight(20);
 		captcha.get();
 		
-		new Output(response).noCache().setContent_Type("image/jpeg").go(captcha.getbImg());
+		new MvcOutput(response).noCache().setContent_Type("image/jpeg").go(captcha.getbImg());
 
 		session.setAttribute(SESSION_KEY, captcha.getCode()); // 将验证码存入 SESSION 
 		

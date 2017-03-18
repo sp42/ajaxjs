@@ -43,7 +43,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 		if (obj != null && !StringUtil.isEmptyString((String) obj)) {
 			return (String) obj;
 		} else {
-			return getRequestURI();// 直接 jsp 的
+			return super.getRequestURI();// 直接 jsp 的
 		}
 	}
 	
@@ -151,12 +151,12 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	 * 全局的 callback 参数名
 	 */
 	public static final String callback_param = "callback";
-	
 
 	/**
 	 * 保存到 request
 	 * 
 	 * @param request
+	 *            请求对象
 	 */
 	public void saveToReuqest(Map<String, Object> map) {
 		for (String key : map.keySet()) {

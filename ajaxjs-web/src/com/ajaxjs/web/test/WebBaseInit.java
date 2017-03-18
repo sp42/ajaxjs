@@ -46,7 +46,6 @@ public class WebBaseInit {
 		// Create initial context
 		System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "org.apache.naming.java.javaURLContextFactory");
 		System.setProperty(Context.URL_PKG_PREFIXES, "org.apache.naming");
-		// 需要加入tomcat-juli.jar这个包，tomcat7此包位于tomcat根目录的bin下。
 		InitialContext ic = new InitialContext();
 		ic.createSubcontext("java:");
 		ic.createSubcontext("java:/comp");
@@ -65,12 +64,10 @@ public class WebBaseInit {
 //		ic.bind("java:/comp/env/jdbc/sqlite", dataSource);
 	}
 
-	public static void initDBConnection_Mysql(String MYSQL_DB_URL, String MYSQL_DB_USERNAME, String MYSQL_DB_PASSWORD)
-			throws NamingException {
+	public static void initDBConnection_Mysql(String MYSQL_DB_URL, String MYSQL_DB_USERNAME, String MYSQL_DB_PASSWORD) throws NamingException {
 		// Create initial context
 		System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "org.apache.naming.java.javaURLContextFactory");
 		System.setProperty(Context.URL_PKG_PREFIXES, "org.apache.naming");
-		// 需要加入tomcat-juli.jar这个包，tomcat7此包位于tomcat根目录的bin下。
 		InitialContext ic = new InitialContext();
 		ic.createSubcontext("java:");
 		ic.createSubcontext("java:/comp");

@@ -87,6 +87,7 @@ public class AnnotationUtils {
 		
 		for (Method method : clz.getMethods()) {
 			Path subPath = method.getAnnotation(Path.class); // 看看这个控制器方法有木有 URL 路径的信息，若有，要处理
+			
 			if (subPath != null) { 
 				String subPathValue = subPath.value();
 				ActionAndView subPath_Info;
@@ -98,7 +99,7 @@ public class AnnotationUtils {
 				} else {
 					subPath_Info = new ActionAndView();// 如果没有子路径则创建之
 					methodSend(method, subPath_Info);
-					
+					System.out.println("subPathValue:" + subPathValue);
 					cInfo.subPath.put(subPathValue, subPath_Info);// 保存这个子路径 ActionAndView
 				}
 			} else {
