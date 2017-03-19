@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.BeforeClass;
 
 import com.ajaxjs.mvc.controller.MvcDispatcher;
-import com.ajaxjs.web.mock.MockResponse.StubServletOutputStream;
+import com.ajaxjs.web.test.MockResponse.StubServletOutputStream;
 
 public abstract class BaseTest {
 	static FilterConfig filterConfig;

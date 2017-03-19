@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.junit.*;
 
-import com.ajaxjs.web.mock.MockResponse;
+import com.ajaxjs.web.test.MockResponse;
 
 public class TestSimpleController extends BaseTest {
 	// 单测技巧，每个 url 对应一个 request、一个 response
