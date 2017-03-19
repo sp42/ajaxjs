@@ -127,13 +127,13 @@ public class MvcDispatcher implements Filter {
 	/**
 	 * 返回要执行的方法
 	 * 
-	 * @param uri
+	 * @param userPath
 	 *            用户请求过来的网址，已经去掉项目前缀的 URL 路径
 	 * @param httpMethod
 	 *            HTTP 请求的方法
 	 * @return 控制器方法
 	 */
-	private static Object[] getMethod(String uri, String httpMethod) {
+	private static Object[] getMethod(String userPath, String httpMethod) {
 		Object[] objs = new Object[2];
 		Method method = null;
 
@@ -141,48 +141,76 @@ public class MvcDispatcher implements Filter {
 		 * 遍历在 init(FilterConfig fConfig) 时收集的所有控制器
 		 */
 		for (String path : AnnotationUtils.controllers.keySet()) {
-			if (uri.startsWith(path)) { // 匹配对应的控制器
+			if (userPath.startsWith(path)) { // 匹配对应的控制器
 				LOGGER.info(path + " 控制器命中！！！");
 
 				ActionAndView controllerInfo = AnnotationUtils.controllers.get(path);
 				objs[0] = controllerInfo.controller; // 返回 controller
 
-				String subUri = uri.replaceAll(path + "/?", ""); /* 3-17 uri.replace(path, ""); 改为 uri.replaceAll(path + "/?", "");*/
+				String userSubPath = userPath.replaceAll(path + "/?", ""); /* 3-17 uri.replace(path, ""); 改为 uri.replaceAll(path + "/?", "");*/
+				String key = userSubPath.replaceAll("\\d+$", "{id}");
 				
-				boolean isSub = false; // 如果执行了 sub 就不用执行类 path 本身的。这里做一个标识
-
-				System.out.println("subUri:" + subUri);
-				System.out.println("path:" + path);
-//				System.out.println("subUri::" + subUri.replaceAll("\\d+", "{id}"));
+//				System.out.println("userSubPath:" + userSubPath);
 				
-				for (String subPath : controllerInfo.subPath.keySet()) {
-					System.out.println("subPath:" + subPath);
-					
-					// 注解变成 正则 去匹配 subUri
-					if(subPath.equals(subUri)) { // 相同的业务，如  xx/login
-						LOGGER.info(subPath + "子路径命中，相同的业务！！！");
-						System.out.println(controllerInfo.subPath);
-						System.out.println("::::" + controllerInfo.subPath.get(subPath));
-						method = getMethod(controllerInfo.subPath.get(subPath), httpMethod);
-						isSub = true;
-						break;
-					}else if (StringUtil.regMatch(subPath.replace("{id}", "\\d+$"), subUri) != null) { // 单个实体，如  xx/1
-						LOGGER.info(subPath + " 子路径命中，单个实体！！！");
-						
-						method = getMethod(controllerInfo.subPath.get(subPath + "/{id}"), httpMethod); /* 3-17 增加了 subPath + */
-						isSub = true;
-						break;
-					} else if(subUri.replaceAll("\\d+", "{id}").equals(subPath)) { // 单个实体下的业务，如  xx/1/avatar，反过来匹配
-						LOGGER.info(subPath + "子路径命中，单个实体下的业务！！！");
-						isSub = true;
-						method = getMethod(controllerInfo.subPath.get(subPath), httpMethod);
-						break;
-					} 
+				ActionAndView av = null;
+				if(controllerInfo.subPath.containsKey(userSubPath)) {		// 相同的业务，如  xx/login
+					LOGGER.info(userSubPath + " 子路径命中，相同的业务！！！");
+					av = controllerInfo.subPath.get(userSubPath);
+				} else if(controllerInfo.subPath.containsKey(key)) {		// 单个实体，如  xx/1
+					LOGGER.info(key + " 子路径命中，单个实体！！！");
+					av = controllerInfo.subPath.get(key);
+				} else {
+					av = controllerInfo;// 类本身，不是子路径
 				}
+				
+//				for (String subPath : controllerInfo.subPath.keySet()) {
+//					System.out.println("检测是否有 subPath:" + subPath);
+//					System.out.println(controllerInfo.subPath);
+//					System.out.println("::::" + controllerInfo.subPath.get(subPath));
+//					
+//					System.out.println(subPath.replace("{id}", "\\d+$"));
+//					
+//					
+//					// 注解变成 正则 去匹配 subUri
+//					if(subPath.equals(userSubPath)) { 
+//						LOGGER.info(subPath + "子路径命中，相同的业务！！！");
+//						
+//						av = controllerInfo.subPath.get(subPath);
+//						if(av == null) throw new NullPointerException(subPath + " ActionAndView 对象不存在！");
+//						
+//						method = getMethod(av, httpMethod);
+//						isSub = true;
+//						break;
+//					}else if (StringUtil.regMatch(subPath.replace("{id}", "\\d+$"), userSubPath) != null) { 
+//						LOGGER.info(subPath + " 子路径命中，单个实体！！！");
+//						System.out.println(">>>>>"+StringUtil.regMatch(subPath.replace("{id}", "\\d+$"), userSubPath));
+//						System.out.println("subPath:::::"  +subPath + "/{id}");
+//						System.out.println(controllerInfo.subPath);
+//						
+//						av = controllerInfo.subPath.get(subPath + "/{id}");
+//						if(av == null) throw new NullPointerException(subPath + " ActionAndView 对象不存在！");
+//						
+//						method = getMethod(av, httpMethod); /* 3-17 增加了 subPath + */
+//						isSub = true;
+//						break;
+//					} else if(userSubPath.replaceAll("\\d+", "{id}").equals(subPath)) { // 单个实体下的业务，如  xx/1/avatar，反过来匹配
+//						LOGGER.info(subPath + "子路径命中，单个实体下的业务！！！");
+//
+//						av = controllerInfo.subPath.get(subPath);
+//						if(av == null) throw new NullPointerException(subPath + " ActionAndView 对象不存在！");
+//						System.out.println(av);
+//						
+//						method = getMethod(av, httpMethod);
+//						isSub = true;
+//						break;
+//					} else {
+//						System.out.println(subPath + "不匹配任何已知方法");
+//					}
+//				}
 
-				if (!isSub) {// 类本身
-					method = getMethod(controllerInfo, httpMethod);
-				}
+				if(av == null) 
+					throw new NullPointerException(userSubPath + " ActionAndView 对象不存在！");
+				method = getMethod(av, httpMethod);
 
 				break;
 			}
@@ -203,6 +231,9 @@ public class MvcDispatcher implements Filter {
 	 * @return 控制器方法
 	 */
 	private static Method getMethod(ActionAndView controllerInfo, String httpMethod) {
+		if(controllerInfo == null) 
+			throw new NullPointerException(" ActionAndView 对象不存在！");
+		
 		switch (httpMethod) {
 			case "GET":
 				return controllerInfo.GET_method;
