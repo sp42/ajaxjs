@@ -43,7 +43,7 @@ public class MockResponse {
 		private OutputStream os = new ByteArrayOutputStream();
 
 		/**
-		 * 
+		 *  
 		 */
 		public void write(int i) throws IOException {
 			os.write(i);
