@@ -38,21 +38,18 @@ import org.mockito.ArgumentCaptor;
  *
  */
 public class MockResponse {
-	
+	/**
+	 * 
+	 * @author xinzhang
+	 *
+	 */
 	public static class StubServletOutputStream extends ServletOutputStream {
 		private OutputStream os = new ByteArrayOutputStream();
 
-		/**
-		 *  
-		 */
 		public void write(int i) throws IOException {
 			os.write(i);
 		}
 
-		/**
-		 * 
-		 * @return
-		 */
 		public String getContent() {
 			return os.toString();
 		}

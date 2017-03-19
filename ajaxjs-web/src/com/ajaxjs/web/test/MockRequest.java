@@ -114,6 +114,7 @@ public class MockRequest {
 				// 测试终端的模拟器接收到数据
 				// System.out.println("jojo:"+args[1]);
 				hash.put(args[0].toString(), args[1]);
+				
 				return "called with arguments: " + args;
 			}
 		}).when(request).setAttribute(anyString(), anyString());
@@ -179,13 +180,9 @@ public class MockRequest {
 	}
 
 	public boolean shouldbe_hasRecord(Map<String, Object> json) {
-		boolean hasRecord = false;
-
 		// System.out.println(json.get("total"));
 		int total = (int) json.get("total");
 		System.out.println("获取记录数：" + total);
-		hasRecord = total > 0;
-
-		return hasRecord;
+		return total > 0;
 	}
 }

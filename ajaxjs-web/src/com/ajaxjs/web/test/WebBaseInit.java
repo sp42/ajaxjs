@@ -31,61 +31,64 @@ import javax.servlet.ServletContext;
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 
-//import org.sqlite.SQLiteDataSource;
-//import org.sqlite.SQLiteJDBCLoader;
+import org.sqlite.SQLiteDataSource;
+import org.sqlite.SQLiteJDBCLoader;
 
-// import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 public class WebBaseInit {
-	/**
-	 * 模拟数据库 链接 的配置 需要加入tomcat-juli.jar这个包，tomcat7此包位于tomcat根目录的bin下。
-	 * 
-	 * @throws NamingException
-	 */
-	public static void initDBConnection() throws NamingException {
-		// Create initial context
+	private static InitialContext initIc() {
 		System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "org.apache.naming.java.javaURLContextFactory");
 		System.setProperty(Context.URL_PKG_PREFIXES, "org.apache.naming");
-		InitialContext ic = new InitialContext();
-		ic.createSubcontext("java:");
-		ic.createSubcontext("java:/comp");
-		ic.createSubcontext("java:/comp/env");
-		ic.createSubcontext("java:/comp/env/jdbc");
-		// Construct DataSource
-//		try {
-//			SQLiteJDBCLoader.initialize();
-//		} catch (Exception e1) {
-//			e1.printStackTrace();
-//		}
 
-//		SQLiteDataSource dataSource = new SQLiteDataSource();
-//		dataSource.setUrl("jdbc:sqlite:F:\\project\\bigfoot\\sql\\foo.sqlite");
+		InitialContext ic = null;
 
-//		ic.bind("java:/comp/env/jdbc/sqlite", dataSource);
+		try {
+			ic = new InitialContext();
+			ic.createSubcontext("java:");
+			ic.createSubcontext("java:/comp");
+			ic.createSubcontext("java:/comp/env");
+			ic.createSubcontext("java:/comp/env/jdbc");
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+
+		return ic;
 	}
 
-	public static void initDBConnection_Mysql(String MYSQL_DB_URL, String MYSQL_DB_USERNAME, String MYSQL_DB_PASSWORD) throws NamingException {
-		// Create initial context
-		System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "org.apache.naming.java.javaURLContextFactory");
-		System.setProperty(Context.URL_PKG_PREFIXES, "org.apache.naming");
-		InitialContext ic = new InitialContext();
-		ic.createSubcontext("java:");
-		ic.createSubcontext("java:/comp");
-		ic.createSubcontext("java:/comp/env");
-		ic.createSubcontext("java:/comp/env/jdbc");
+	/**
+	 * 模拟数据库 链接 的配置 需要加入tomcat-juli.jar这个包，tomcat7此包位于tomcat根目录的bin下。
+	 */
+	public static void initDBConnection(String db_filePath) {
 		// Construct DataSource
-//		MysqlDataSource dataSource = null;
+		try {
+			SQLiteJDBCLoader.initialize();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-//		try {
-//			dataSource = new MysqlDataSource();
-//			dataSource.setURL(MYSQL_DB_URL);
-//			dataSource.setUser(MYSQL_DB_USERNAME);
-//			dataSource.setPassword(MYSQL_DB_PASSWORD);
-//		} catch (Exception e1) {
-//			e1.printStackTrace();
-//		}
-//
-//		ic.bind("java:/comp/env/jdbc/mysql_deploy", dataSource);
+		SQLiteDataSource dataSource = new SQLiteDataSource();
+		dataSource.setUrl("jdbc:sqlite:" + db_filePath);
+
+		try {
+			initIc().bind("java:/comp/env/jdbc/sqlite", dataSource);
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void initDBConnection_Mysql(String MYSQL_DB_URL, String MYSQL_DB_USERNAME, String MYSQL_DB_PASSWORD) {
+		// Construct DataSource
+		MysqlDataSource dataSource = new MysqlDataSource();
+		dataSource.setURL(MYSQL_DB_URL);
+		dataSource.setUser(MYSQL_DB_USERNAME);
+		dataSource.setPassword(MYSQL_DB_PASSWORD);
+
+		try {
+			initIc().bind("java:/comp/env/jdbc/mysql_deploy", dataSource);
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public Class<?> getBusinessServletClass() {
@@ -133,7 +136,7 @@ public class WebBaseInit {
 	protected FilterConfig initFilterConfig(ServletContext context) {
 		FilterConfig filterConfig = mock(FilterConfig.class);
 		when(filterConfig.getServletContext()).thenReturn(context);
-		
+
 		// 模拟注解
 		Vector<String> v = new Vector<>();
 		v.addElement("urlPatterns");
