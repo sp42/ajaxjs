@@ -10,14 +10,14 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.framework.model.ModelAndView;
-import com.ajaxjs.mvc.controller.AbstractController;
+import com.ajaxjs.mvc.controller.WritableController;
 
 import test.com.ajaxjs.framework.News;
 import test.com.ajaxjs.framework.NewsService;
 
 @Controller
 @Path("/news")
-public class NewsController extends AbstractController<News> {
+public class NewsController extends WritableController<News, Long> {
 	public NewsController(){
 		setService(new NewsService());
 	}
@@ -32,7 +32,7 @@ public class NewsController extends AbstractController<News> {
 	@GET
 	@Path("/{id}")
 	@Override
-	public String getById(@PathParam("id") long id, ModelAndView model) {
+	public String getById(@PathParam("id") Long id, ModelAndView model) {
 		return super.getById(id, model);
 	}
 	
@@ -45,14 +45,14 @@ public class NewsController extends AbstractController<News> {
 	@PUT
 	@Path("/{id}")
 	@Override
-	public String update(@PathParam("id") long id, News news, ModelAndView model) {
-		return super.update(id, news, model);
+	public String update(News news, ModelAndView model) {
+		return super.update(news, model);
 	}
 	
 	@DELETE
 	@Path("/{id}")
 	@Override
-	public String delete(@PathParam("id") long id, ModelAndView model) {
-		return super.delete(id, model);
+	public String delete(News news, ModelAndView model) {
+		return super.delete(news, model);
 	}
 }

@@ -41,6 +41,7 @@ public abstract class BaseTest {
 		chain = mock(FilterChain.class);
 	}
 
+	// 单测技巧，每个 url 对应一个 request、一个 response
 	HttpServletRequest request;
 	HttpServletResponse response;
 	StringWriter writer;

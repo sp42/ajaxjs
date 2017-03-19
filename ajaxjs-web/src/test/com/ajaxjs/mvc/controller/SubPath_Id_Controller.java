@@ -31,33 +31,33 @@ public class SubPath_Id_Controller implements IController {
 	}
 	
 	@GET
-	@Path("/{id}")
+	@Path("{id}")
 	public String showID(HttpServletRequest request, HttpServletResponse response, @PathParam("id") int id)  {
-		return "html::id: " + id + "," + request.getParameter("name");
+		return "html::showID: " + id + "," + request.getParameter("name");
 	}
 
 	@POST
-	@Path("/{id}")
+	@Path("{id}")
 	public String gotoJSP(@PathParam("id") int id) {
 		return "html::ID:" + id;
 	}
 
 	@PUT
-	@Path("/{id}")
+	@Path("{id}")
 	public void getId(@PathParam("id") int id, HttpServletResponse response) throws IOException {
 		response.getWriter().print("ID:" + id);
 	}
 
 	@DELETE
-	@Path("/{id}")
+	@Path("{id}")
 	public String showJSON(MvcRequest mvcRequest, ModelAndView mv) {
 		mv.put("foo", "bar");
-		return "json::{\"name\":\"Jack\"}";
+		return "json::{\"showJSON\":\"Jack\"}";
 	}
 	
 	@GET
 	@Path("subPath/{id}")
 	public String show_shuPath_ID(HttpServletRequest request, HttpServletResponse response, @PathParam("id") int id)  {
-		return "html::id: " + id + "," + request.getParameter("name");
+		return "html::show_shuPath_ID: " + id + "," + request.getParameter("name");
 	}
 }

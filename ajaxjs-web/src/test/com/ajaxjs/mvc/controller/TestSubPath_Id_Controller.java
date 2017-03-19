@@ -65,7 +65,6 @@ public class TestSubPath_Id_Controller extends BaseTest {
 		request = mock(HttpServletRequest.class);
 		when(request.getContextPath()).thenReturn("/ajaxjs-web");
 		when(request.getRequestURI()).thenReturn("/ajaxjs-web/MyTopPath_And_Sub_And_ID_Path/123");// 配置请求路径
-		when(request.getMethod()).thenReturn("GET");
 		when(request.getParameter("name")).thenReturn("Jack");
 		
 		// 响应对象
@@ -75,10 +74,10 @@ public class TestSubPath_Id_Controller extends BaseTest {
 	
 	@Test
 	public void testIdGet() throws ServletException, IOException {
-
+		when(request.getMethod()).thenReturn("GET");
 		dispatcher.doFilter(request, response, chain);
 		
-		assertEquals("<html><meta charset=\"utf-8\" /><body>id: 123,Jack</body></html>", writer.toString());
+		assertEquals("<html><meta charset=\"utf-8\" /><body>showID: 123,Jack</body></html>", writer.toString());
 	}
 
 	@Test
@@ -104,7 +103,7 @@ public class TestSubPath_Id_Controller extends BaseTest {
 		when(request.getMethod()).thenReturn("DELETE");
 
 		dispatcher.doFilter(request, response, chain);
-		assertEquals("{\"name\":\"Jack\"}", writer.toString());
+		assertEquals("{\"showJSON\":\"Jack\"}", writer.toString());
 	}
 
 	@Test
@@ -126,6 +125,6 @@ public class TestSubPath_Id_Controller extends BaseTest {
 		
 		dispatcher.doFilter(request, response, chain);
 		
-		assertEquals("<html><meta charset=\"utf-8\" /><body>id: 123,Jack</body></html>", writer.toString());
+		assertEquals("<html><meta charset=\"utf-8\" /><body>show_shuPath_ID: 123,Jack</body></html>", writer.toString());
 	}
 }
