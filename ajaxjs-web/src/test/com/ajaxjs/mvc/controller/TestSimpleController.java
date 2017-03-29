@@ -7,23 +7,18 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.junit.*;
 
+import com.ajaxjs.web.test.MockRequest;
 import com.ajaxjs.web.test.MockResponse;
 
 public class TestSimpleController extends BaseTest {
 	// 单测技巧，每个 url 对应一个 request、一个 response
 	@Before
 	public void load() throws ServletException {
-		// 请求对象
-		request = mock(HttpServletRequest.class);
-		when(request.getContextPath()).thenReturn("/ajaxjs-web");
-		when(request.getRequestURI()).thenReturn("/ajaxjs-web/simple");// 配置请求路径
-
-		// 响应对象
+		request = MockRequest.mockRequest("/ajaxjs-web", "/simple");
 		response = mock(HttpServletResponse.class);
 		writer = MockResponse.writerFactory(response);
 	}

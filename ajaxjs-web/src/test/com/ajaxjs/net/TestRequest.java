@@ -4,8 +4,7 @@ import static org.junit.Assert.*;
 import org.junit.*;
 
 import com.ajaxjs.util.map.MapHelper;
-import com.ajaxjs.web.Requester;
-import com.ajaxjs.web.mock.MockRequest;
+import com.ajaxjs.web.test.MockRequest;
 
 import java.io.IOException;
 import java.util.*;
@@ -31,17 +30,15 @@ public class TestRequest extends MockRequest {
 
 		HttpServletRequest request = initRequest("foo");
 		request = initRequest(request, hash, true);
-		Requester requestHelper = new Requester(request);
 
 		assertNotNull(request);
-		assertNotNull(requestHelper);
 
-		assertEquals("bar", requestHelper.getParameter("name"));
+		assertEquals("bar", request.getParameter("name"));
 
 		IllegalArgumentException knownException = null;
 
 		try {
-			requestHelper.getParameter("你好");
+			request.getParameter("你好");
 		} catch (IllegalArgumentException e) {
 			knownException = e;
 		} finally {
@@ -49,9 +46,9 @@ public class TestRequest extends MockRequest {
 			assertNotNull("捕获已知异常", knownException);
 		}
 
-		assertEquals(1001, (int) MapHelper.toJavaValue(requestHelper.getParameter("id")));
-		assertTrue((boolean) MapHelper.toJavaValue(requestHelper.getParameter("isGood")));
+		assertEquals(1001, (int) MapHelper.toJavaValue(request.getParameter("id")));
+		assertTrue((boolean) MapHelper.toJavaValue(request.getParameter("isGood")));
 
-		assertEquals("张三", requestHelper.getParameter("ChineseName"));
+		assertEquals("张三", request.getParameter("ChineseName"));
 	}
 }

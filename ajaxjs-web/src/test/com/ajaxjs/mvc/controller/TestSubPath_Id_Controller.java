@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.junit.*;
 
+import com.ajaxjs.web.test.MockRequest;
 import com.ajaxjs.web.test.MockResponse;
 
 public class TestSubPath_Id_Controller extends BaseTest {
@@ -39,20 +40,12 @@ public class TestSubPath_Id_Controller extends BaseTest {
 	
 	@Test
 	public void testSubPathGet() throws ServletException, IOException {
-		HttpServletRequest request;
-		HttpServletResponse response;
-		StringWriter writer;
-		
-		// 请求对象
-		request = mock(HttpServletRequest.class);
-		when(request.getContextPath()).thenReturn("/ajaxjs-web");
-		when(request.getRequestURI()).thenReturn("/ajaxjs-web/MyTopPath_And_Sub_And_ID_Path/subPath");// 配置请求路径
+		HttpServletRequest request = MockRequest.mockRequest("/ajaxjs-web", "/MyTopPath_And_Sub_And_ID_Path/subPath");
 		when(request.getMethod()).thenReturn("GET");
 		when(request.getParameter("name")).thenReturn("Jack");
 		
-		// 响应对象
-		response = mock(HttpServletResponse.class);
-		writer = MockResponse.writerFactory(response);
+		HttpServletResponse response = mock(HttpServletResponse.class);
+		StringWriter writer = MockResponse.writerFactory(response);
 		
 		dispatcher.doFilter(request, response, chain);
 		
@@ -61,13 +54,9 @@ public class TestSubPath_Id_Controller extends BaseTest {
 	
 	@Before
 	public void load() throws ServletException {
-		// 请求对象
-		request = mock(HttpServletRequest.class);
-		when(request.getContextPath()).thenReturn("/ajaxjs-web");
-		when(request.getRequestURI()).thenReturn("/ajaxjs-web/MyTopPath_And_Sub_And_ID_Path/123");// 配置请求路径
+		request = MockRequest.mockRequest("/ajaxjs-web", "/MyTopPath_And_Sub_And_ID_Path/123");
 		when(request.getParameter("name")).thenReturn("Jack");
 		
-		// 响应对象
 		response = mock(HttpServletResponse.class);
 		writer = MockResponse.writerFactory(response);
 	}
@@ -108,20 +97,12 @@ public class TestSubPath_Id_Controller extends BaseTest {
 
 	@Test
 	public void testSubPathIdGet() throws ServletException, IOException {
-		HttpServletRequest request;
-		HttpServletResponse response;
-		StringWriter writer;
-		
-		// 请求对象
-		request = mock(HttpServletRequest.class);
-		when(request.getContextPath()).thenReturn("/ajaxjs-web");
-		when(request.getRequestURI()).thenReturn("/ajaxjs-web/MyTopPath_And_Sub_And_ID_Path/subPath/123");// 配置请求路径
+		HttpServletRequest request = MockRequest.mockRequest("/ajaxjs-web", "/MyTopPath_And_Sub_And_ID_Path/subPath/123");
 		when(request.getMethod()).thenReturn("GET");
 		when(request.getParameter("name")).thenReturn("Jack");
 		
-		// 响应对象
-		response = mock(HttpServletResponse.class);
-		writer = MockResponse.writerFactory(response);
+		HttpServletResponse response = mock(HttpServletResponse.class);
+		StringWriter writer = MockResponse.writerFactory(response);
 		
 		dispatcher.doFilter(request, response, chain);
 		

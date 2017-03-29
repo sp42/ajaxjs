@@ -7,23 +7,19 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.junit.*;
 
+import com.ajaxjs.web.test.MockRequest;
 import com.ajaxjs.web.test.MockResponse;
 
 public class TestOverrideController extends TestSimpleController {
 	@Before
 	@Override
 	public void load() throws ServletException {
-		// 请求对象
-		request = mock(HttpServletRequest.class);
-		when(request.getContextPath()).thenReturn("/ajaxjs-web");
-		when(request.getRequestURI()).thenReturn("/ajaxjs-web/OverrideTest");// 配置请求路径
+		request = MockRequest.mockRequest("/ajaxjs-web", "/OverrideTest");
 
-		// 响应对象
 		response = mock(HttpServletResponse.class);
 		writer = MockResponse.writerFactory(response);
 	}

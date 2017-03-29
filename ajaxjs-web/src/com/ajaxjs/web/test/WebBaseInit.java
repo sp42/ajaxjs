@@ -30,6 +30,7 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 
 import org.sqlite.SQLiteDataSource;
 import org.sqlite.SQLiteJDBCLoader;
@@ -77,12 +78,11 @@ public class WebBaseInit {
 		}
 	}
 
-	public static void initDBConnection_Mysql(String MYSQL_DB_URL, String MYSQL_DB_USERNAME, String MYSQL_DB_PASSWORD) {
-		// Construct DataSource
+	public static void initDBConnection_Mysql(String url, String user, String password) {
 		MysqlDataSource dataSource = new MysqlDataSource();
-		dataSource.setURL(MYSQL_DB_URL);
-		dataSource.setUser(MYSQL_DB_USERNAME);
-		dataSource.setPassword(MYSQL_DB_PASSWORD);
+		dataSource.setURL(url);
+		dataSource.setUser(user);
+		dataSource.setPassword(password);
 
 		try {
 			initIc().bind("java:/comp/env/jdbc/mysql_deploy", dataSource);
@@ -91,16 +91,12 @@ public class WebBaseInit {
 		}
 	}
 
-	public Class<?> getBusinessServletClass() {
-		return null;
-	}
-
 	/**
 	 * 初始化 Servlet 配置，这里是模拟 注解
-	 * 
+	 * @param cls 控制器类
 	 * @return
 	 */
-	protected ServletConfig initServletConfig() {
+	public static ServletConfig initServletConfig(Class<? extends HttpServlet> cls) {
 		ServletConfig servletConfig = mock(ServletConfig.class);
 		// 模拟注解
 		Vector<String> v = new Vector<String>();
@@ -108,15 +104,8 @@ public class WebBaseInit {
 		// when(servletConfig.getInitParameter("news")).thenReturn("ajaxjs.data.service.News");
 		// v.addElement("img");
 		// when(servletConfig.getInitParameter("img")).thenReturn("ajaxjs.data.service.subObject.Img");
-		// v.addElement("catalog");
-		// when(servletConfig.getInitParameter("catalog")).thenReturn("zjtv.SectionService");
-		// v.addElement("user");
-		// when(servletConfig.getInitParameter("user")).thenReturn("ajaxjs.data.user.UserService");
-		// v.addElement("compere");
-		// when(servletConfig.getInitParameter("compere")).thenReturn("zjtv.CompereService");
 
 		// 通过反射获取注解内容
-		Class<?> cls = getBusinessServletClass();
 
 		if (cls != null) {
 			WebServlet WebServlet_an = cls.getAnnotation(WebServlet.class);
@@ -133,7 +122,7 @@ public class WebBaseInit {
 		return servletConfig;
 	}
 
-	protected FilterConfig initFilterConfig(ServletContext context) {
+	public static FilterConfig initFilterConfig(ServletContext context) {
 		FilterConfig filterConfig = mock(FilterConfig.class);
 		when(filterConfig.getServletContext()).thenReturn(context);
 

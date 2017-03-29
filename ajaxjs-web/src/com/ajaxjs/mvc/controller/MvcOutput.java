@@ -180,7 +180,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	 * http://blog.sina.com.cn/s/blog_7217e4320101l8gq.html
 	 * http://www.2cto.com/kf/201109/103284.html
 	 * 
-	 * @param response
+	 * @param pageContext
 	 */
 	public static void fix(PageContext pageContext) {
 		HttpServletResponse response = (HttpServletResponse) pageContext.getResponse();
@@ -193,7 +193,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 
 			pageContext.getOut().clear();
 			pageContext.pushBody();
-			// out = pageContext.pushBody();
+//			out = pageContext.pushBody();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

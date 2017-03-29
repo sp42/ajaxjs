@@ -22,12 +22,11 @@ import static org.mockito.Mockito.when;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.ServletException;
+
+import javax.servlet.FilterChain;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,6 +43,29 @@ import com.ajaxjs.util.map.MapHelper;
  *
  */
 public class MockRequest {
+	
+	/**
+	 * 模拟一个请求对象
+	 * 
+	 * @param contextPath
+	 *            项目目录
+	 * @param path
+	 *            要模拟的后面的目录
+	 * @return
+	 */
+	public static HttpServletRequest mockRequest(String contextPath, String path) {
+		HttpServletRequest request = mock(HttpServletRequest.class);
+		
+		if(!path.startsWith("/")) {
+			path = "/" + path;
+		}
+		
+		when(request.getPathInfo()).thenReturn(contextPath + path);
+		when(request.getRequestURI()).thenReturn(contextPath + path);
+		when(request.getContextPath()).thenReturn(contextPath);
+		
+		return request;
+	}
 	/**
 	 * 模拟表单请求
 	 * 
@@ -56,12 +78,12 @@ public class MockRequest {
 	 */
 	public HttpServletRequest initRequest(HttpServletRequest request, Map<String, String> formBody, boolean isByGetParams) throws IOException {
 		if (isByGetParams) {
-			for (String key : formBody.keySet()) 
+			for (String key : formBody.keySet())
 				when(request.getParameter(key)).thenReturn(formBody.get(key));
 		} else {
 			String form = MapHelper.join(formBody, "&");
 			final InputStream is = new ByteArrayInputStream(form.getBytes());
-			
+
 			when(request.getInputStream()).thenReturn(new ServletInputStream() {
 				@Override
 				public int read() throws IOException {
@@ -85,7 +107,6 @@ public class MockRequest {
 		when(request.getRequestURI()).thenReturn("/new_test/service/" + entry);
 		when(request.getContextPath()).thenReturn("/new_test");
 
-		// when(request.getSession()).thenReturn("/zjtv");
 		when(request.getMethod()).thenReturn("GET");
 		// 设置参数
 		// when(request.getParameter("a")).thenReturn("aaa");
@@ -104,8 +125,7 @@ public class MockRequest {
 		when(request.getAttribute("errMsg")).thenAnswer(aswser);
 		when(request.getAttribute("output")).thenAnswer(aswser);
 		when(request.getAttribute("msg")).thenAnswer(aswser);
-		// doThrow(new Exception()).when(request).setAttribute(anyString(),
-		// anyString());
+		// doThrow(new Exception()).when(request).setAttribute(anyString(),  anyString());
 
 		doAnswer(new Answer<Object>() {
 			public Object answer(InvocationOnMock invocation) {
@@ -114,7 +134,7 @@ public class MockRequest {
 				// 测试终端的模拟器接收到数据
 				// System.out.println("jojo:"+args[1]);
 				hash.put(args[0].toString(), args[1]);
-				
+
 				return "called with arguments: " + args;
 			}
 		}).when(request).setAttribute(anyString(), anyString());
@@ -122,51 +142,31 @@ public class MockRequest {
 		return request;
 	}
 
-	// 不能返回数组返回一个对象吧
-	public class response_writer {
-		public HttpServletResponse response;
-		public StringWriter writer;
-	}
-
-	public response_writer initResponse() throws IOException {
-		HttpServletResponse response = mock(HttpServletResponse.class);
-		StringWriter writer = new StringWriter();
-
-		when(response.getWriter()).thenReturn(new PrintWriter(writer));
-
-		response_writer r_w = new response_writer();
-		r_w.response = response;
-		r_w.writer = writer;
-
-		return r_w;
-	}
-
 	/**
 	 * 进行请求 在请求之前，你可以设定请求的参数
-	 * 
-	 * @throws IOException
-	 * @throws ServletException
+	 * @param request
+	 * @param response
+	 * @return
 	 */
-	public String doRequest(HttpServletRequest request) throws IOException, ServletException {
-		response_writer r_w = initResponse();
-		//
-		// EntryController news = new EntryController();
-		//
-		// news.init(initServletConfig());
-		//
-		// FilterChain filterChain = mock(FilterChain.class);
-		//// BaseFilter bf = new BaseFilter();
-		//// bf.init(initFilterConfig(news.getServletContext()));
-		//// bf.doFilter(request, r_w.response, filterChain);
-		//
-		// RequestHelper reqHelper = new RequestHelper(request);
-		// ResponseHelper respHelper = new ResponseHelper(r_w.response);
-		//
-		// news.doGet(reqHelper, respHelper);
-		//
-		String output = r_w.writer.toString();
-		System.out.println("接口返回  ：" + output);
-		return output;
+	public static String doRequest(HttpServletRequest request, HttpServletResponse response) {
+		DummyController controller = new DummyController();
+		FilterChain filterChain = mock(FilterChain.class);
+		DummyFilter filter = new DummyFilter();
+
+		try {
+			controller.init(WebBaseInit.initServletConfig(DummyController.class));
+
+			filter.init(WebBaseInit.initFilterConfig(controller.getServletContext()));
+			filter.doFilter(request, response, filterChain);
+
+			controller.doGet(request, response);
+
+			System.out.println("接口返回  ：" + response.getWriter().toString());
+			return response.getWriter().toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public Map<String, Object> shouldbe_json_return(String js_code) {
@@ -180,9 +180,8 @@ public class MockRequest {
 	}
 
 	public boolean shouldbe_hasRecord(Map<String, Object> json) {
-		// System.out.println(json.get("total"));
+		System.out.println("获取记录数：" + json.get("total"));
 		int total = (int) json.get("total");
-		System.out.println("获取记录数：" + total);
 		return total > 0;
 	}
 }

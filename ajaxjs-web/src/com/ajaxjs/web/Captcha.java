@@ -119,9 +119,8 @@ public class Captcha extends ImageUtil {
 		
 		new MvcOutput(response).noCache().setContent_Type("image/jpeg").go(captcha.getbImg());
 
-		session.setAttribute(SESSION_KEY, captcha.getCode()); // 将验证码存入 SESSION 
-		
-		System.out.println("生成验证码:" + captcha.getCode());
+		session.setAttribute(SESSION_KEY, captcha.getCode());
+//		System.out.println("生成验证码:" + captcha.getCode());
 	}
 
 	/**
