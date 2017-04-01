@@ -27,6 +27,19 @@ import java.lang.annotation.RetentionPolicy;
  * 
  * @author frank
  *
+ *		// if(request.getRequestURI().contains(".doc")) {
+		// String[] strs = DocumentRenderer.getEntityInfo(Video.class);
+		// request.setAttribute("entityInfo", strs[0]);
+		//
+		// if(strs[1] != null) { // 更多关于该实体的文档
+		// request.setAttribute("moreDocument", strs[1]);
+		// }
+		//
+		//// request.setAttribute("meta",
+		// DocumentRenderer.getDocument(Video.class,
+		// getService().getSQL_TableName()));
+		// return "/WEB-INF/jsp/common/entity/showDocument.jsp";
+		// }
  */
 @Target(value={TYPE})
 @Retention(RetentionPolicy.RUNTIME)

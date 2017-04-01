@@ -183,7 +183,7 @@ public class LogHelper {
 	 *            信息参数
 	 */
 	public void warning(String tpl, Object... params) {
-		logger.logp(Level.WARNING, packageName, getMethodName(), tpl, params);
+		logger.logp(Level.WARNING, packageName.trim(), getMethodName(), tpl, params);
 	}
 
 	/**
@@ -193,7 +193,7 @@ public class LogHelper {
 	 *            任意异常信息
 	 */
 	public void warning(Throwable ex) {
-		logger.logp(Level.WARNING, packageName, getMethodName(), ex.getMessage(), ex);
+		logger.logp(Level.WARNING, packageName.trim(), getMethodName(), ex.getMessage(), ex);
 	}
 	
 	/**
@@ -205,7 +205,7 @@ public class LogHelper {
 	 *            任意异常信息
 	 */
 	public void warning(String msg, Throwable ex) {
-		logger.logp(Level.WARNING, packageName, getMethodName(), msg, ex);
+		logger.logp(Level.WARNING, packageName.trim(), getMethodName(), msg, ex);
 	}
 
 	/**
@@ -228,6 +228,11 @@ public class LogHelper {
                 break;
             }
         }
+//		
+//		String location = "类名："+frame.getClassName() + "\n函数名：" + frame.getMethodName()  
+//			        + "\n文件名：" + frame.getFileName() + "\n行号："  
+//			        + frame.getLineNumber() + "";  
+//			        System.out.println(location);   
 		
 		if(frame != null) {// 超链接，跳到源码所在行数
 			return String.format(".%s(%s:%s)", frame.getMethodName(), frame.getFileName(), frame.getLineNumber());

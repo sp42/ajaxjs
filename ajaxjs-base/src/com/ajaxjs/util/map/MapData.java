@@ -85,8 +85,9 @@ public class MapData {
 	 * @param parameterMapRaw
 	 *            the parameterMapRaw to set
 	 */
-	public void setParameterMapRaw(Map<String, String[]> parameterMapRaw) {
+	public MapData setParameterMapRaw(Map<String, String[]> parameterMapRaw) {
 		this.parameterMapRaw = parameterMapRaw;
+		return this;
 	}
 
 	/**
@@ -100,8 +101,9 @@ public class MapData {
 	 * @param parameterMap
 	 *            the parameterMap to set
 	 */
-	public void setParameterMap(Map<String, Object> parameterMap) {
+	public MapData setParameterMap(Map<String, Object> parameterMap) {
 		this.parameterMap = parameterMap;
+		return this;
 	}
 
 	/**
@@ -115,7 +117,8 @@ public class MapData {
 	 * @param parameterMap_String
 	 *            the parameterMap_String to set
 	 */
-	public void setParameterMap_String(Map<String, String> parameterMap_String) {
+	public MapData setParameterMap_String(Map<String, String> parameterMap_String) {
 		this.parameterMap_String = parameterMap_String;
+		return this;
 	}
 }

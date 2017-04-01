@@ -4,16 +4,10 @@ package com.ajaxjs.jdbc;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.sql.DataSource;
-import javax.sql.rowset.JdbcRowSet;
-import javax.sql.rowset.RowSetProvider;
-
-
 import com.ajaxjs.framework.model.Query;
 import com.ajaxjs.framework.model.Query.Filter;
 import com.ajaxjs.framework.model.Query.Order;
 import com.ajaxjs.jdbc.sqlbuilder.SqlBuilder;
-import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 
 public class Dep extends SqlBuilder {

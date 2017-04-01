@@ -71,8 +71,9 @@ public class ClassScaner<T> {
 		try {
 			dirs = classLoader.getResources(packageDirName);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
+		
 		if (dirs == null)
 			return null;
 
