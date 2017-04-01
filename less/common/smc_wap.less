@@ -233,6 +233,7 @@ section.tab{
 		white-space: nowrap;
 		.fixTransitionFlash();
 		.transition(200ms left linear);
+		transition: -webkit-transform 400ms linear;
 		&>div{
 			white-space: normal;//reset
 			float:left;
@@ -260,7 +261,7 @@ section.tab{
 	background : url("@{assetFilePath}/typeIcons/tvSer.png") no-repeat;
 	background-size: 100% 100%;
 }
-.icon.video{
+.icon.vod{
 	.iconBeforeText;
 	background : url("@{assetFilePath}/typeIcons/video.png") no-repeat;
 	background-size: 100% 100%;
@@ -275,7 +276,7 @@ section.tab{
 	background : url("@{assetFilePath}/typeIcons/gallery.png") no-repeat;
 	background-size: 100% 100%;
 }
-.icon.ablum{
+.icon.album{
 	.iconBeforeText;
 	background : url("@{assetFilePath}/typeIcons/ablum.png") no-repeat;
 	background-size: 100% 100%;
@@ -285,7 +286,7 @@ section.tab{
 	background : url("@{assetFilePath}/typeIcons/topic.png") no-repeat;
 	background-size: 100% 100%;
 }
-.icon.video.colorful{
+.icon.vod.colorful{
 	.iconBeforeText;
 	background : url("@{assetFilePath}/typeIcons/video_colorful.png") no-repeat;
 	background-size: 100% 100%;
