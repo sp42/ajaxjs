@@ -92,7 +92,8 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	 * @return
 	 */
 	public String getValueFromPath(String value, String paramName) {
-		String requestURI = getRequestURI(), regExp = "(" + value.replace("{" + paramName + "}", ")(\\d+)");/* 获取正则 暂时写死 数字 TODO */
+		/* 如果 context path 上有数字那就bug，所以先去掉 */
+		String requestURI = getRequestURI().replace(getContextPath(), ""), regExp = "(" + value.replace("{" + paramName + "}", ")(\\d+)");/* 获取正则 暂时写死 数字 TODO */
 		String result = matchList(regExp, requestURI);
 
 //		System.out.println(regExp);
