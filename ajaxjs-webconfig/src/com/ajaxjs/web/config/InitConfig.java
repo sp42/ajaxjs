@@ -43,7 +43,7 @@ public class InitConfig implements ServletContextListener {
 	public static final JsonConfig allConfig = new JsonConfig(jsEngine);
 	
 	static {
-		System.out.println("Ajaxjs-webconfig 配置启动");
+		System.out.println("Ajaxjs-webconfig 配置启动" + Init.ConsoleDiver);
 
 		allConfig.eval(Bean2Json.baseJavaScriptCode);		// 加载基础 js
 		allConfig.load(InitConfig.class, "JSON_Tree.js");

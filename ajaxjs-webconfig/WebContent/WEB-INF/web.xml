@@ -12,23 +12,17 @@
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
-	
-	<!-- Admin UI 界面框架 -->
 	<servlet>
 		<servlet-name>AdminUI</servlet-name>
 		<servlet-class>com.ajaxjs.adminUI.Controller</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>AdminUI</servlet-name>
-		<!-- 可指定路径，注意要归属于下面 filter 验证地址 -->
 		<url-pattern>/config_admin</url-pattern>
 	</servlet-mapping>
-
-	<!-- 指定一种登录验证方式。当前为 HTTP Basic Auth -->
 	<filter>
 		<filter-name>HttpBasicAuthFilter</filter-name>
 		<filter-class>com.ajaxjs.user.auth.HttpBasicAuthFilter</filter-class>
-		<!-- adminPassword 指定登录密码；如不指定，则默认为 123123 -->
 		<init-param>
 			<param-name>adminPassword</param-name>
 			<param-value>a123123</param-value>
@@ -36,8 +30,6 @@
 	</filter>
 	<filter-mapping>
 		<filter-name>HttpBasicAuthFilter</filter-name>
-		<!-- 可指定路径，应使用 * 泛指该目录下所有路径 -->
 		<url-pattern>/config_admin/*</url-pattern>
 	</filter-mapping>
-
 </web-app>

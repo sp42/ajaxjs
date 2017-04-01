@@ -24,19 +24,17 @@
 	<div class="panel">
 		<h4>请输入网址配置</h4>
 		<form action="?" method="POST" class="aj">
-			<input type="hidden" name="jsonFile" value="/WEB-INF/src/site_config.js" />
+			<input type="hidden" name="jsonFile" value="site_config.js" />
 			<input type="hidden" name="topVarName" value="bf_Config" />
 
 			<label>
 				<div class="heightLabel">&nbsp;&nbsp;<span class="required-note">*</span>公司全称</div>
-				<input type="text" placeholder="公司全称" name="bf_Config.clientFullName"
-					value="${all_config.clientFullName}" 
+				<input type="text" placeholder="公司全称" name="bf_Config.clientFullName" value="${all_config.clientFullName}" 
 				 />
 			</label>
 			<label>
 				<div class="heightLabel">&nbsp;&nbsp;公司简称</div>
-				<input type="text" placeholder="公司简称" name="bf_Config.clientShortName"
-				value="${all_config.clientShortName}" />
+				<input type="text" placeholder="公司简称" name="bf_Config.clientShortName" value="${all_config.clientShortName}" />
 			</label>
 						
 			<label>
