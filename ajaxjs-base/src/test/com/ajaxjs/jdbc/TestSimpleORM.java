@@ -17,7 +17,6 @@ import com.ajaxjs.util.Util;
 
 import test.com.ajaxjs.framework.News;
 
-
 public class TestSimpleORM {
 	Connection conn;
 	
