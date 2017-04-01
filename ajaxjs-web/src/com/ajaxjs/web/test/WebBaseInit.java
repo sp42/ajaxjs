@@ -35,7 +35,7 @@ import javax.servlet.http.HttpServlet;
 import org.sqlite.SQLiteDataSource;
 import org.sqlite.SQLiteJDBCLoader;
 
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+//import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 public class WebBaseInit {
 	private static InitialContext initIc() {
@@ -58,7 +58,7 @@ public class WebBaseInit {
 	}
 
 	/**
-	 * 模拟数据库 链接 的配置 需要加入tomcat-juli.jar这个包，tomcat7此包位于tomcat根目录的bin下。
+	 * 模拟数据库链接的配置 需要加入 tomcat-juli.jar 这个包，tomcat7 此包位于 tomcat 根目录的 bin 下。
 	 */
 	public static void initDBConnection(String db_filePath) {
 		// Construct DataSource
@@ -78,18 +78,18 @@ public class WebBaseInit {
 		}
 	}
 
-	public static void initDBConnection_Mysql(String url, String user, String password) {
-		MysqlDataSource dataSource = new MysqlDataSource();
-		dataSource.setURL(url);
-		dataSource.setUser(user);
-		dataSource.setPassword(password);
-
-		try {
-			initIc().bind("java:/comp/env/jdbc/mysql_deploy", dataSource);
-		} catch (NamingException e) {
-			e.printStackTrace();
-		}
-	}
+//	public static void initDBConnection_Mysql(String url, String user, String password) {
+//		MysqlDataSource dataSource = new MysqlDataSource();
+//		dataSource.setURL(url);
+//		dataSource.setUser(user);
+//		dataSource.setPassword(password);
+//
+//		try {
+//			initIc().bind("java:/comp/env/jdbc/mysql_deploy", dataSource);
+//		} catch (NamingException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	/**
 	 * 初始化 Servlet 配置，这里是模拟 注解
