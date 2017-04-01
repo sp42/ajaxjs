@@ -36,6 +36,13 @@ public class JsonHelper extends JsEngineWrapper {
 	private String jsonString;
 	
 	/**
+	 * 是否在 list 将里面的 map 所包含的 double 都转为 int？
+	 * 如果设为 false 则性能好很多，但就不方便了，只适合没有数字类型的 json 字段
+	 * 另外，如果要转换类似 [{a:'hello'}, 123, true] 这样不是 map 的 list，也要将本项设为 false
+	 */
+	private boolean isAutoDouble2IntInList = true;
+	
+	/**
 	 * rhino 不能直接返回 map，如 eval("{a:1}")-->null，必须加变量，例如 执行 var xx = {...};
 	 * 
 	 * @param key
@@ -77,21 +84,8 @@ public class JsonHelper extends JsEngineWrapper {
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> getMap(String key) {
 		Map<String, Object> map = (Map<String, Object>)accessJsonMember(key, Map.class);
-		
-		// 转换为真正的 map
-		Map<String, Object> realMap = new HashMap<>();
-		for (String _key : map.keySet()) {
-			// js double -->int
-			Object obj = map.get(_key);
-			
-			if(obj instanceof Double) {
-				realMap.put(_key, double2int((Double)map.get(_key)));
-			} else {
-				realMap.put(_key, map.get(_key));
-			}
-		}
-		
-		return realMap;
+	
+		return double2int4Map(map);
 	}
 	
 	/**
@@ -103,9 +97,51 @@ public class JsonHelper extends JsEngineWrapper {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> getList(String key) {
-		return (List<Map<String, Object>>) accessJsonMember(key, List.class);
+		List<Map<String, Object>> list = (List<Map<String, Object>>) accessJsonMember(key, List.class);
+		
+		if(isAutoDouble2IntInList()) 
+			list = double2int(list);
+		
+		return list; 
 	} 
 
+	/**
+	 * 
+	 * @param list
+	 * @return
+	 */
+	public static List<Map<String, Object>> double2int(List<Map<String, Object>> list) {
+		List<Map<String, Object>> _list = new ArrayList<>();
+
+		for (Map<String, Object> map : list) {
+			_list.add(double2int4Map(map));
+		}
+
+		return _list;
+	}
+
+	/**
+	 * 
+	 * @param map
+	 * @return
+	 */
+	private static Map<String, Object> double2int4Map(Map<String, Object> map) {
+		// 转换为真正的 map
+		Map<String, Object> realMap = new HashMap<>();
+		for (String _key : map.keySet()) {
+			// js double -->int
+			Object obj = map.get(_key);
+
+			if (obj instanceof Double) {
+				realMap.put(_key, JsEngineWrapper.double2int((Double) map.get(_key)));
+			} else {
+				realMap.put(_key, map.get(_key));
+			}
+		}
+
+		return realMap;
+	}
+	
 	/**
 	 * 读取 json 里面的 list，list 里面每一个都是 String
 	 * 
@@ -338,5 +374,13 @@ public class JsonHelper extends JsEngineWrapper {
 	public JsonHelper setJsonString(String jsonString) {
 		this.jsonString = jsonString;
 		return this;
+	}
+
+	public boolean isAutoDouble2IntInList() {
+		return isAutoDouble2IntInList;
+	}
+
+	public void setAutoDouble2IntInList(boolean isAutoDouble2IntInList) {
+		this.isAutoDouble2IntInList = isAutoDouble2IntInList;
 	}
 }

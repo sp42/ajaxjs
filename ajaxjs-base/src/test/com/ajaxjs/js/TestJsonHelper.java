@@ -99,6 +99,7 @@ public class TestJsonHelper {
 
 		// single map
 		engine.setJsonString("[{a:'hello'}, 123, true]");
+		engine.setAutoDouble2IntInList(false);
 		list = engine.getList(null);
 		
 		assertTrue(list.size() > 0);
