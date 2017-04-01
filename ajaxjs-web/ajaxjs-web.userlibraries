@@ -3,8 +3,10 @@
     <library name="ajaxjs-web-libs" systemlibrary="false">
         <!--<archive path="/ajaxjs-web/WebContent/WEB-INF/lib/ajaxjs-web-tag.jar" />-->
         <archive path="/ajaxjs-web/lib/javax.ws.rs-api-2.0.rev.A.jar" source="/ajaxjs-web/lib/javax.ws.rs-api-2.0.rev.A-sources.jar" />
+        <!--
         <archive path="/ajaxjs-web/lib/taglibs-standard-spec-1.2.5.jar" />
         <archive path="/ajaxjs-web/lib/taglibs-standard-impl-1.2.5.jar" />
+        -->
     </library>
     
 <!--
