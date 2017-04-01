@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <eclipse-userlibraries version="2">
-    <library name="mockito" systemlibrary="false">
-        <archive path="/ajaxjs-base/lib/mockito-all-2.0.2-beta.jar"/>
-        <archive path="/ajaxjs-base/lib/tomcat-juli.jar"/>
-    </library>
-    
+    <!-- SQLite 驱动 -->
     <library name="ajaxjs-base-db-driver" systemlibrary="false">
-        <archive path="/ajaxjs-base/lib/mybatis/sqlite-jdbc-3.8.11.2.jar"/>
-        <archive path="/ajaxjs-base/lib/mybatis/mysql-connector-java-5.1.38-bin.jar"/>
+        <archive path="/ajaxjs-base/lib/sqlite-jdbc-3.15.1.jar"/>
     </library>
 
+	<!-- 验证框架 jar 包 -->
     <library name="ajaxjs-base-validation-libs" systemlibrary="false">
         <archive path="/ajaxjs-base/lib/validation/commons-lang3-3.4.jar" 			 source="/ajaxjs-base/lib/validation/commons-lang3-3.4-src.zip"/>
         <archive path="/ajaxjs-base/lib/validation/commons-beanutils-1.9.2.jar" 	 source="/ajaxjs-base/lib/validation/commons-beanutils-1.9.2-sources"/>
