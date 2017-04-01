@@ -2,7 +2,7 @@
 ------------
 框架基础模块包 ajaxjs-base 为纯 Java 项目与特定 jvm 环境脱离,可运行在 web、swing、android 环境中。Ajaxjs-base 包含了相当多的工具类或静态方法，有以下子模块：
 
-- util 工具包（链式风格文件处理包、Map 结构工具类、反射工具包、日志工具类、简易 ioc 依赖注射器、基于 Java Rhino 的 JSON 解析器）；
+- util 工具包（链式风格文件处理包、Map 结构工具类、反射工具包、日志工具类、简易 ioc 依赖注射器）；
 - jdbc JDBC 数据工具包；
 - net 网络通讯包（http 链式风格请求包、mail 基于 telnet 的简易邮件发送器）；
 - framework 数据层服务，泛型封装 Service/DAO/Model 提供快速增删改查服务，包含分页，查询条件，整合 Validator 后端验证。
@@ -18,13 +18,13 @@ util
 - ioc，一个简易的 ioc 依赖注射实现；
 - map，Map 集合工具类和一个本地缓存类；
 
-[详细用法参见文档](http://http://git.oschina.net/sp42/ajaxjs/tree/master/ajaxjs-base/src/com/ajaxjs/util?dir=1&filepath=ajaxjs-base%2Fsrc%2Fcom%2Fajaxjs%2Futil)。
+[>>详细用法参见文档](http://http://git.oschina.net/sp42/ajaxjs/tree/master/ajaxjs-base/src/com/ajaxjs/util?dir=1&filepath=ajaxjs-base%2Fsrc%2Fcom%2Fajaxjs%2Futil)。
 
 jdbc
 -----------
 jdbc 围绕数据库而设的一些工具类。
 
-[详细用法参见文档](http://git.oschina.net/sp42/ajaxjs/tree/master/ajaxjs-base/src/com/ajaxjs/jdbc?dir=1&filepath=ajaxjs-base%2Fsrc%2Fcom%2Fajaxjs%2Fjdbc)。
+[>>详细用法参见文档](http://git.oschina.net/sp42/ajaxjs/tree/master/ajaxjs-base/src/com/ajaxjs/jdbc?dir=1&filepath=ajaxjs-base%2Fsrc%2Fcom%2Fajaxjs%2Fjdbc)。
 
 net
 -----------
@@ -34,19 +34,19 @@ net
 - mail 无须 JavaMail 发送邮件。通过最简单的 telnet 原理发送；
 - ip IP 工具类
 
-[详细用法参见文档](http://git.oschina.net/sp42/ajaxjs/tree/master/ajaxjs-base/src/com/ajaxjs/net?dir=1&filepath=ajaxjs-base%2Fsrc%2Fcom%2Fajaxjs%2Fnet)。
+[>>详细用法参见文档](http://git.oschina.net/sp42/ajaxjs/tree/master/ajaxjs-base/src/com/ajaxjs/net?dir=1&filepath=ajaxjs-base%2Fsrc%2Fcom%2Fajaxjs%2Fnet)。
 
 js
 -------------
-JSON 解析包。本着 Json/Js 亲缘的关系，大胆采用 JDK 自带的 JavaScript 引擎实现做一个 JSON 解析器。
+JSON 解析包。本着 Json/Js 亲缘的关系，大胆采用 JDK 自带的 JavaScript 引擎（基于 JVM Rhino）做一个 JSON 解析器。
 
-[详细用法参见文档](http://git.oschina.net/sp42/ajaxjs/tree/master/ajaxjs-base/src/com/ajaxjs/js?dir=1&filepath=ajaxjs-base%2Fsrc%2Fcom%2Fajaxjs%2Fjs)。
+[>>详细用法参见文档](http://git.oschina.net/sp42/ajaxjs/tree/master/ajaxjs-base/src/com/ajaxjs/js?dir=1&filepath=ajaxjs-base%2Fsrc%2Fcom%2Fajaxjs%2Fjs)。
 
 framework
 -----------
 数据业务层框架，该模块包含以下子模块：
 - dao，Data Access Object 数据访问对象
-- exception，封装特定的异常信息以便确定问题
-- model，数据建模
-- service，服务层
+- model，数据模型
+- service，业务服务层
 
+[>>详细用法参见文档](http://git.oschina.net/sp42/ajaxjs/tree/master/ajaxjs-base/src/com/ajaxjs/framework?dir=1&filepath=ajaxjs-base%2Fsrc%2Fcom%2Fajaxjs%2Fframework)。

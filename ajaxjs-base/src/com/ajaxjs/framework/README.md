@@ -9,9 +9,9 @@
 
 数据库工具除了大家经常使用的 NativeCat，我还推荐 MySQL 官方的 [MySQL Workbench](http://www.mysql.com/products/workbench/)，免费、开源。
 
-ORM：MyBatis
+ORM
 ------------------
-MyBatis 支持 XML、注解和 [SQLBuilder](http://www.mybatis.org/mybatis-3/statement-builders.html) 这三种方式构建 SQL 语句。我比较多采用 SQLBuilder，可在 Java 中动态组织 SQL，便于封装。另外，[DbUtils](http://commons.apache.org/proper/commons-dbutils/) 也蛮不错。
+TODO
 
 数据库连接池
 ------------------

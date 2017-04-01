@@ -38,13 +38,16 @@ public class Init {
 	public static final boolean isMac = System.getProperty("os.name").toLowerCase().contains("mac");
 
 	/**
-	 * 自定义分割线
+	 * 为控制台显示更清晰些，设定一个分割线
 	 */
 	public static final String ConsoleDiver = System.getProperty("line.separator") + "---------------------------------";
+	
+	public static final String lineFeet = "\r\n";
+	public final static char newline = '\n';
 
 	static {
-		System.out.println("---------------------------------" + System.getProperty("line.separator") + "ajaxjs-base 初始化" + ConsoleDiver);
-		System.setProperty("user.timezone", "GMT +08");// 微软云设置时区
+		System.out.println("Starting up....Ajaxjs-base 初始化" + ConsoleDiver);
+//		System.setProperty("user.timezone", "GMT +08");// 微软云设置时区
 
 		if (System.getProperty("java.vm.vendor").indexOf("Oracle") == -1 || System.getProperty("java.vm.vendor").contains("openJDK")) {
 			System.err.println("本框架不支持 OpenJDK!如果你是 Linux 系统，请把自带的 OpenJDK 卸载，改用 Oracle JVM");
@@ -64,7 +67,6 @@ public class Init {
 		 */
 		final String OS = System.getProperty("os.name").toLowerCase();
 		isDebug = !(OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0);
-		// isDebug = false;
 
 		if (isMac)
 			System.out.println("亲，你运行着 Mac！");
