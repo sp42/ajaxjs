@@ -46,13 +46,14 @@
 	} else if("http_proxy".equals(action)) { // http 代理，请谨慎外显，为了不必要的流量和运算
 		
 		String url = request.getParameter("url");
-		String params = MapHelper.join(new RequestData(request).ignoreField("url").getParameterMap_String(), "&"); // 不要 url 参数
+		new MapData().setParameterMapRaw(request.getParameterMap()).ignoreField("url");
+		String params = MapHelper.join(new MapData().setParameterMapRaw(request.getParameterMap()).toMap().ignoreField("url").getParameterMap_String(), "&"); // 不要 url 参数
 		out.println(Client.GET(url + '?' + params));
 		
 	} else if("remoteConsole".equals(action)) { // 手机调试
 		
 		String msg = "";
-		Map<String, String> requestMap = new RequestData(request).getParameterMap_String();
+		Map<String, String> requestMap = new MapData().setParameterMapRaw(request.getParameterMap()).toMap().ignoreField("url").getParameterMap_String();
 		if (requestMap.size() > 0) {
 			msg = com.ajaxjs.util.StringUtil.HashJoin(requestMap, '&');
 		} else {
@@ -70,7 +71,7 @@
 		 * http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&ip=123.123.123.12
 		 * 
 		 */
-		String json = Client.GET("http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&ip=" + new Requester(request).getIP());
+		String json = Client.GET("http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&ip=" + PageUtil.getIp(request));
 		out.println(json.replace("var remote_ip_info = ", "").replaceAll(";$", ""));
 	} else if ("captchaImg".equals(action)) { // 图片验证码
 		Captcha.init(pageContext);

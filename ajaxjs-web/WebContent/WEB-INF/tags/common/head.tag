@@ -1,8 +1,8 @@
-<%@tag pageEncoding="UTF-8" description="输出头部文件" body-content="scriptless" import="java.util.*, java.util.regex.Pattern, java.net.InetAddress"%>
+<%@tag pageEncoding="UTF-8" description="输出头部文件" body-content="scriptless" import="com.ajaxjs.web.UserAgent, com.ajaxjs.web.HtmlHead"%>
 <%@tag trimDirectiveWhitespaces="true"%>
 <%@attribute name="title" 		required="false" description="其他标题"%> 
 <%@attribute name="lessFile" 	required="false" description="指定 LESS 样式文件"%> 
-<%@include file="head_java.jsp"%>
+<%-- <jsp:useBean id="ua" class="com.ajaxjs.web.UserAgent" /> --%>
 <head>
 <%-- <html lang="zh-cmn-Hans"> --%>
 		<meta charset="utf-8" />
@@ -31,7 +31,8 @@
 		</style>
 		
 <%
-	UA ua = new UA(request);
+	UserAgent ua = new UserAgent(request);
+
 	// 是否为移动客户端，响应式输出
 	// 宽度 320px
 	if(ua.isPhone()) {
@@ -70,7 +71,7 @@
 			isDebug = (Boolean)request.getServletContext().getAttribute("isDebug");
 		} 
 	%>
-	<link rel="stylesheet" type="text/css" href="<%=getCssUrl(request, lessFile, isDebug)%>" />
+	<link rel="stylesheet" type="text/css" href="<%=HtmlHead.getCssUrl(request, lessFile, isDebug)%>" />
     <script src="${pageContext.request.contextPath}/asset/js/dom.js"></script>
 
     <jsp:doBody />
