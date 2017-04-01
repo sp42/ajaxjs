@@ -1,5 +1,5 @@
 <%@page contentType="application/json; charset=UTF-8" pageEncoding="UTF-8"%>
-<jsp:useBean id="js" class="com.ajaxjs.util.json.JsLib" />
+<jsp:useBean id="js" class="com.ajaxjs.js.Bean2Json" />
 <%
 	if (request.getParameter(com.ajaxjs.mvc.controller.MvcRequest.callback_param) == null) {
 %>
