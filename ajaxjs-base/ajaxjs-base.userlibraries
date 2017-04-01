@@ -2,10 +2,10 @@
 <eclipse-userlibraries version="2">
     <library name="mockito" systemlibrary="false">
         <archive path="/ajaxjs-base/lib/mockito-all-2.0.2-beta.jar"/>
+        <archive path="/ajaxjs-base/lib/tomcat-juli.jar"/>
     </library>
     
-    <library name="ajaxjs-base-mybatis-libs" systemlibrary="false">
-        <archive path="/ajaxjs-base/lib/mybatis/mybatis-3.3.0.jar" source="/ajaxjs-base/lib/mybatis/mybatis-3-mybatis-3.4.1.zip" />
+    <library name="ajaxjs-base-db-driver" systemlibrary="false">
         <archive path="/ajaxjs-base/lib/mybatis/sqlite-jdbc-3.8.11.2.jar"/>
         <archive path="/ajaxjs-base/lib/mybatis/mysql-connector-java-5.1.38-bin.jar"/>
     </library>
