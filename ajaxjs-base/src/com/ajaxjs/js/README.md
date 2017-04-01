@@ -157,6 +157,8 @@ String/Number/Boolean 类型需要开发者自己传参数调用，而较复杂�
 	assertEquals(list.size(), 2);
 	assertEquals(list.get(0).get("foo"), "88888");
 	assertEquals(list.get(1).get("bar"), "99999");
+
+对于 json 默认的数字类型为 double 的情形，一概转换为 java 的 int——不管 map/list（但 list 可以通过 setAutoDouble2IntInList(false) 关闭转换）。这是大家要注意的，当 int 不能满足的时候。
 	
 既然有 js-->java 的方法那么亦有 java-->json 的方法：stringify(key)、stringifyObj(obj)。
 
