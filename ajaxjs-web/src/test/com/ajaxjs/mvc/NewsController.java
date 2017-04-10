@@ -10,14 +10,14 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.framework.model.ModelAndView;
-import com.ajaxjs.mvc.controller.WritableController;
+import com.ajaxjs.mvc.controller.CommonController;
 
 import test.com.ajaxjs.framework.News;
 import test.com.ajaxjs.framework.NewsService;
 
 @Controller
 @Path("/news")
-public class NewsController extends WritableController<News, Long> {
+public class NewsController extends CommonController<News, Long> {
 	public NewsController(){
 		setService(new NewsService());
 	}
@@ -32,8 +32,8 @@ public class NewsController extends WritableController<News, Long> {
 	@GET
 	@Path("/{id}")
 	@Override
-	public String getById(@PathParam("id") Long id, ModelAndView model) {
-		return super.getById(id, model);
+	public String info(@PathParam("id") Long id, ModelAndView model) {
+		return super.info(id, model);
 	}
 	
 	@POST

@@ -375,7 +375,7 @@ public class MvcDispatcher implements Filter {
 					if (clz == String.class) {
 						args.add(argValue);
 					} else if (clz == int.class || clz == Integer.class) {
-						args.add(Integer.parseInt(argValue));
+						args.add(argValue == null || "".equals(argValue) ? 0 : Integer.parseInt(argValue));
 					} else if (clz == long.class || clz == Long.class) {
 						args.add(Long.parseLong(argValue));
 					} else if (clz == boolean.class || clz == Boolean.class) {
@@ -394,12 +394,20 @@ public class MvcDispatcher implements Filter {
 					if (path != null) {
 						String paramName = ((PathParam) a).value(), value = request.getValueFromPath(path.value(), paramName);
 						
+//						System.out.println("got P1" + paramName);
+//						if(paramName.contains("{"))
+//							throw new RuntimeException("这里的参数不应该有 {xx} 尖括号");
+						
 						if (clz == String.class) {
 							args.add(value);
 						} else if (clz == int.class || clz == Integer.class) {
 							args.add(Integer.parseInt(value));
 						} else if (clz == long.class || clz == Long.class) {
 							args.add(Long.parseLong(value));
+						} else {
+							LOGGER.warning("something wrong!");
+							System.out.println(clz);
+							args.add(value); // unknow type
 						}
 					} else {
 						LOGGER.warning(new NullPointerException("控制器方法居然没有 PathParam 注解？？"));

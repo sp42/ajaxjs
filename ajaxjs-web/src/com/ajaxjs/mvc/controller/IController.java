@@ -43,16 +43,25 @@ public interface IController {
 	/**
 	 * json 路径常量（实体）
 	 */
-	public static final String showInfo = common_jsp_perfix + "showInfo.jsp";
+	public static final String show_json_info = common_jsp_perfix + "showInfo.jsp";
+	
 	/**
 	 * json 路径常量（分页列表）
 	 */
-	public static final String pagedList = common_jsp_perfix + "pagedList.jsp";
+	public static final String paged_json_List = common_jsp_perfix + "pagedList.jsp";
 
 	/**
 	 * 实体 jsp 模版路径之前缀
 	 */
-	public static final String jsp_perfix = "/WEB-INF/jsp/entry/";
+	public static final String jsp_perfix = "/WEB-INF/jsp/";
+	
+	public static final String jsp_list = jsp_perfix + "%s/list";
+	
+	public static final String jsp_adminList = jsp_perfix + "%s/admin-list";
+	
+	public static final String jsp_info = jsp_perfix + "%s/info";
+	
+	public static final String jsp_adminInfo = jsp_perfix + "%s/admin-info";
 	
 	/**
 	 * 保存错误信息的 key

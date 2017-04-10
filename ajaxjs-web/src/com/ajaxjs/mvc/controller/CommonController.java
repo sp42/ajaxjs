@@ -1,0 +1,296 @@
+/**
+ * Copyright 2015 Frank Cheung
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.ajaxjs.mvc.controller;
+
+import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.ajaxjs.framework.dao.QueryParams;
+import com.ajaxjs.framework.model.ModelAndView;
+import com.ajaxjs.framework.model.PageResult;
+import com.ajaxjs.framework.model.Query;
+import com.ajaxjs.framework.service.IService;
+import com.ajaxjs.framework.service.ServiceException;
+import com.ajaxjs.jdbc.ConnectionMgr;
+import com.ajaxjs.jdbc.JdbcConnection;
+import com.ajaxjs.util.LogHelper;
+
+/**
+ * 不能复用 create/update 方法，这是因为 T 泛型不能正确识别 Bean 类型的缘故
+ * 
+ * @author xinzhang
+ *
+ * @param <T>
+ * @param <ID>
+ */
+public abstract class CommonController<T, ID extends Serializable> implements IController {
+	private static final LogHelper LOGGER = LogHelper.getLog(CommonController.class);
+
+	/**
+	 * 对应的业务类
+	 */
+	private IService<T, ID> service;
+
+	/**
+	 * 是否输出 json 格式 Will it output data in JSON format?
+	 */
+	private boolean JSON_output;
+
+	/**
+	 * is in the ADMIN mode?
+	 */
+	private boolean adminUI;
+
+	public void initDb() {
+		try {
+			if(ConnectionMgr.getConnection() == null || ConnectionMgr.getConnection().isClosed()) {
+				Connection conn = JdbcConnection.getConnection(JdbcConnection.getDataSource("jdbc/sqlite"));
+				ConnectionMgr.setConnection(conn);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void closeDb() {
+		try {
+			ConnectionMgr.getConnection().close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 分页查询
+	 * 
+	 * @param start
+	 *            起始行数，默认从零开始
+	 * @param limit
+	 *            偏量值，默认 8 笔记录
+	 * @param model
+	 *            Model 模型
+	 * @return JSP 路径。缺省提供一个默认路径，但不一定要使用它，换别的也可以。
+	 */
+	public String list(int start, int limit, ModelAndView model) {
+		LOGGER.info("获取列表 GET list:{0}/{1}", start, limit);
+
+		HttpServletRequest request = RequestHelper.getHttpServletRequest();
+		PageResult<T> pageResult = null;
+		QueryParams param = new QueryParams(start, limit);
+
+		if (Query.isAnyMatch(request.getParameterMap())) // 其他丰富的查询参数
+			param.query = Query.getQueryFactory(request.getParameterMap());
+
+		initDb();
+		IService<T, ID> service = getService(); // 避免 service 为单例
+
+		try {
+			pageResult = getService().findPagedList(param);
+			model.put("PageResult", pageResult);
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.put(errMsg, e);
+		} finally {
+			closeDb();
+		}
+
+		service.prepareData(model);
+
+		if (isAdminUI())
+			return String.format(jsp_adminList, service.getName());
+		else
+			return isJSON_output() ? paged_json_List : String.format(jsp_list, service.getName());
+	}
+
+	// @GET
+	// public String get() {
+	// return "redirect:list";
+	// }
+
+	/**
+	 * 读取单个记录或者编辑某个记录，保存到 ModelAndView 中（供视图渲染用）。
+	 * 
+	 * @param id
+	 *            ID 序号
+	 * @param model
+	 *            Model 模型
+	 * @return JSP 路径。缺省提供一个默认路径，但不一定要使用它，换别的也可以。
+	 */
+	public String info(ID id, ModelAndView model) {
+		LOGGER.info("读取单个记录或者编辑某个记录：id 是 {0}", id);
+
+		initDb();
+		IService<T, ID> service = getService(); // 避免 service 为单例
+
+		T entry;
+		try {
+			entry = service.findById(id);
+			model.put("info", entry);
+		} catch (ServiceException e) {
+			model.put(errMsg, e);
+		}
+
+		// model.put("neighbor", EntityUtil.getNeighbor(service.getName(),
+		// id));// 相邻记录
+
+		service.prepareData(model);
+
+		if (isAdminUI())
+			return String.format(jsp_adminInfo, service.getName());
+		else
+			return isJSON_output() ? show_json_info : String.format(jsp_info, service.getName());
+	}
+
+	public String list_all(ModelAndView model) {
+		LOGGER.info("----获取全部列表----");
+		return list(0, 999, model);
+	}
+
+	/**
+	 * 保存到 request
+	 * 
+	 * @param request
+	 *            请求对象
+	 */
+	public void saveToReuqest(ModelAndView mv, HttpServletRequest request) {
+		for (String key : mv.keySet())
+			request.setAttribute(key, mv.get(key));
+	}
+
+	/**
+	 * 输出文档 GET /document
+	 * 
+	 * @param model
+	 *            Model 模型
+	 * @param entity
+	 *            POJO
+	 * @return
+	 */
+	// public String getDocument(ModelAndView model, T entity) {
+	// String[] strs = DocumentRenderer.getEntityInfo(entity.getClass());
+	// model.put("entityInfo", strs[0]);
+	// if (strs[1] != null) { // 更多关于该实体的文档
+	// model.put("moreDocument", strs[1]);
+	// }
+	//
+	// model.put("meta", DocumentRenderer.getDocument(entity.getClass(),
+	// service.getSQL_TableName()));
+	//
+	// return "common/entity/showDocument";
+	// }
+
+
+
+	public String createUI(ModelAndView model) {
+		LOGGER.info("新建记录UI");
+
+		initDb();
+		IService<T, ID> service = getService();
+		service.prepareData(model);
+
+		model.put("isCreate", true);/* 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate = true 标识为创建，以便与 update 区分开来。*/
+		return String.format(jsp_adminInfo, service.getName());
+	}
+
+	// @POST
+	// @Override
+	public String create(T entity, ModelAndView model) {
+		LOGGER.info("修改 name:{0}，数据库将执行 INSERT 操作", entity);
+		initDb();
+
+		try {
+			ID newlyId = getService().create(entity);
+			model.put("newlyId", newlyId);
+		} catch (ServiceException e) {
+			model.put(errMsg, e);
+		} finally {
+			closeDb();
+		}
+
+		return cud;
+	}
+
+	// @PUT
+	// @Path("/{id}")
+	/**
+	 * 
+	 * @param entity
+	 * @param model
+	 * @return JSP 路径，应返回 JSON 格式的
+	 */
+	public String update(/* @Valid */T entity, ModelAndView model) {
+		LOGGER.info("修改 name:{0}，数据库将执行 UPDATE 操作", entity);
+		initDb();
+		model.put("isUpdate", true);
+
+		try {
+			getService().update(entity);
+		} catch (ServiceException e) {
+			model.put(errMsg, e);
+		} finally {
+			closeDb();
+		}
+
+		return cud;
+	}
+
+	public String delete(T entry, ModelAndView model) {
+		LOGGER.info("删除 id:{0}，数据库将执行 DELETE 操作", entry);
+		
+		initDb();
+		
+		try {
+			if (!getService().delete(entry)) {
+				throw new ServiceException("删除失败！");
+			}
+		} catch (ServiceException e) {
+			model.put(errMsg, e);
+		} finally {
+			closeDb();
+		}
+
+		return common_jsp_perfix + "delete.jsp";
+	}
+
+	public IService<T, ID> getService() {
+		if (service == null)
+			throw new NullPointerException("没有业务层对象！");
+		return service;
+	}
+
+	public void setService(IService<T, ID> service) {
+		this.service = service;
+	}
+
+	public boolean isJSON_output() {
+		return JSON_output;
+	}
+
+	public void setJSON_output(boolean jSON_output) {
+		JSON_output = jSON_output;
+	}
+
+	public boolean isAdminUI() {
+		return adminUI;
+	}
+
+	public void setAdminUI(boolean adminUI) {
+		this.adminUI = adminUI;
+	}
+}

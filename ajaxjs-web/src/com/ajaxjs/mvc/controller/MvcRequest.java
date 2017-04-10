@@ -92,10 +92,17 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	 * @return
 	 */
 	public String getValueFromPath(String value, String paramName) {
+//		System.out.println("::"+value);
+//		System.out.println(paramName);
+		
 		/* 如果 context path 上有数字那就bug，所以先去掉 */
 		String requestURI = getRequestURI().replace(getContextPath(), ""), regExp = "(" + value.replace("{" + paramName + "}", ")(\\d+)");/* 获取正则 暂时写死 数字 TODO */
+		
+//		System.out.println(requestURI);
+//		System.out.println(regExp);
+		
 		String result = matchList(regExp, requestURI);
-
+//
 //		System.out.println(regExp);
 //		System.out.println(result);
 		
@@ -164,4 +171,24 @@ public class MvcRequest extends HttpServletRequestWrapper {
 			setAttribute(key, map.get(key));
 		}
 	}
+	
+	public static String getIp(HttpServletRequest request) {
+        String ip = request.getHeader("X-Forwarded-For");
+        if(!"unKnown".equalsIgnoreCase(ip)){
+            // 多次反向代理后会有多个ip值，第一个ip才是真实ip
+            int index = ip.indexOf(",");
+            
+            if(index != -1){
+                return ip.substring(0,index);
+            }else{
+                return ip;
+            }
+        }
+        
+        ip = request.getHeader("X-Real-IP");
+        if(!"unKnown".equalsIgnoreCase(ip))
+            return ip;
+        
+        return request.getRemoteAddr();
+    }
 }

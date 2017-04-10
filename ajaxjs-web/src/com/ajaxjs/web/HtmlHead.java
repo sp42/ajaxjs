@@ -194,6 +194,9 @@ public class HtmlHead {
 		public static String getCssUrl(HttpServletRequest request, String lessPath, boolean isDebug) {
 			String css = null;
 			
+			if(lessPath == null)
+				lessPath = "/asset/less/main.less"; // 默认 less 路径
+			
 			if (isDebug) {// 设置参数
 				Map<String, String> params = new HashMap<String, String>();
 				params.put("lessFile", Mappath(request, lessPath));
