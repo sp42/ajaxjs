@@ -24,6 +24,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -276,5 +278,25 @@ public class Util {
 	 */
 	public static boolean isUUID(String uuid) {
 		return StringUtil.regMatch(uuid_regExp, uuid) != null;
+	}
+	
+	/**
+	 * 类似 js 的 setInterval 函数，重复做某些事
+	 * 
+	 * @param task
+	 *            类似 new TimerTask() { @Override public void run() {....}}
+	 * @param period
+	 *            执行周期
+	 */
+	public static void simpleSetInterval(TimerTask task, Integer period) {
+		new Timer().schedule(task, 100, period == null ? 10 * 6000 : period);
+	}
+	
+	/**
+	 * 类似 js 的 setInterval 函数，重复做某些事。每十分钟执行一次
+	 * @param task
+	 */
+	public static void simpleSetInterval(TimerTask task) {
+		simpleSetInterval(task, null);
 	}
 }

@@ -91,11 +91,14 @@ public class Map2Pojo<T> {
 //					System.out.println("methodName：：：：：" + "set" + Reflect.firstLetterUpper(methodName));
 					Reflect.executeMethod(pojo, methodName, t, (boolean) value);
 					
-				} else if (t == int.class) {
+				} else if (t == int.class || t == Integer.class) {
+					if(value.getClass() == String.class) 
+						value = Integer.parseInt(value.toString());
+					
 					// 整形
 					Reflect.executeMethod(pojo, methodName, t, value);
 					
-				} else if (t == int[].class) {
+				} else if (t == int[].class || t == Integer[].class) {
 					// 复数
 					if (value instanceof String) {
 						int[] intArr = strArr2intArr(value);
@@ -123,7 +126,7 @@ public class Map2Pojo<T> {
 						LOGGER.info("what's this!!?" + value.getClass().getName());
 					}
 					
-				} else if (t == long.class) { 
+				} else if (t == long.class || t == Long.class) { 
 					// LONG 型
 					Reflect.executeMethod(pojo, methodName, t, Long.valueOf(value.toString()));
 					

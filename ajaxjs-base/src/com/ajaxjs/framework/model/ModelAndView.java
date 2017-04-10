@@ -16,6 +16,8 @@
 package com.ajaxjs.framework.model;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -35,5 +37,36 @@ public class ModelAndView extends HashMap<String, Object> {
 	 */
 	public static Validator getValidator() {
 		return avf.getValidator();
+	}
+	
+
+	/**
+	 * 把列表转换为 map，以 id 作为键值。 key 本来是 long，为照顾 el 转换为 int
+	 * 
+	 * @param bean
+	 *            实体列表
+	 * @return
+	 */
+	public static Map<Integer, BaseModel> list_bean2map_id_as_key(List<? extends BaseModel> bean) {
+		if (bean == null || bean.size() == 0)
+			return null;
+
+		Map<Integer, BaseModel> map = new HashMap<>();
+
+		for (BaseModel item : bean) {
+			map.put(new Long(item.getId()).intValue(), item);
+		}
+		return map;
+	}
+
+	public static Map<Integer, Object> list2map_id_as_key(List<Map<String, Object>> list) {
+		if (list == null)
+			return null;
+		Map<Integer, Object> map = new HashMap<>();
+
+		for (Map<String, Object> item : list) {
+			map.put(new Long(item.get("id").toString()).intValue(), item);
+		}
+		return map;
 	}
 }

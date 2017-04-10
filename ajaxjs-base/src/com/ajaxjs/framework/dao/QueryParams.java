@@ -24,15 +24,24 @@ public class QueryParams {
 	public QueryParams() {
 	}
 
+	private static int defaultPageSize = 5;
+
 	public QueryParams(int start, int limit) {
+		if (limit == 0)
+			limit = defaultPageSize;
+
 		pageParam[0] = start;
 		pageParam[1] = limit;
+
 	}
 
 	public QueryParams(int start, int limit, Query query) {
+		if (limit == 0)
+			limit = defaultPageSize;
+
 		pageParam[0] = start;
 		pageParam[1] = limit;
-		
+
 		this.query = query;
 	}
 

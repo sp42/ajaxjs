@@ -22,6 +22,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.ajaxjs.framework.dao.annotation.Delete;
 import com.ajaxjs.framework.dao.annotation.Insert;
 import com.ajaxjs.framework.dao.annotation.Select;
@@ -232,8 +234,23 @@ public class DaoHandler<T> implements InvocationHandler {
 					wheres.add(key + " LIKE '" + map.get(key) + "'");
 			}
 		}
-		
-		return sql; // TODO
+		// 增加到原 sql 身上
+		if(wheres.size() > 0 ) {
+			String c = StringUtils.join(wheres, " AND ");
+			
+			//System.out.println("filter:" + key);
+			
+			String regexp= "(?i)1\\s?(=|AND)\\s?1"; // 支持 1=1、1 AND 1
+			if(StringUtil.regMatch(regexp, sql) != null) {
+				sql = sql.replaceAll(regexp, c);
+			}else if(sql.contains("WHERE")) {
+				sql = sql + " AND " + c;
+			} else {
+				sql += " WHERE " + c;
+			}
+		}
+			
+		return sql;
 	}
 
 	/**

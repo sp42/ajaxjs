@@ -156,6 +156,7 @@ public class Query {
 			for (int i = 0; i < filterField.length; i++) 
 				filter.put(filterField[i], filterValue[i]);
 
+			LOGGER.info("found filter:" + filterField.length);
 			query.setFilter(filter);
 		}
 

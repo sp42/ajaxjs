@@ -21,9 +21,14 @@ public abstract class BaseDaoService<T, ID extends Serializable, D extends IDao<
 	private D dao;
 
 	/**
-	 * 业务名称
+	 * 业务名称（英文）
 	 */
 	private String name;
+	
+	/**
+	 * 业务名称（中文）
+	 */
+	private String uiName;
 	
 	/**
 	 * 携带的数据，可用于 UI 显示或者其他数据
@@ -35,6 +40,9 @@ public abstract class BaseDaoService<T, ID extends Serializable, D extends IDao<
 	 * @param clz
 	 */
 	public void initDao(Class<D> clz) {
+		if(ConnectionMgr.getConnection() == null)
+			throw new RuntimeException("请先创建 connection 再创建 service！");
+		
 		D dao = new DaoHandler<D>().setConn(ConnectionMgr.getConnection()).bind(clz);
 		setDao(dao);
 	}
@@ -45,7 +53,7 @@ public abstract class BaseDaoService<T, ID extends Serializable, D extends IDao<
 		model.put("requestTimeRecorder", System.currentTimeMillis());
 
 		// 设置实体 id 和 现实名称 。
-		model.put("uiName", getName());
+		model.put("uiName", getUiName());
 		model.put("tableName", getName());
 	}
 	
@@ -72,5 +80,13 @@ public abstract class BaseDaoService<T, ID extends Serializable, D extends IDao<
 
 	public void setMv(ModelAndView mv) {
 		this.mv = mv;
+	}
+
+	public String getUiName() {
+		return uiName;
+	}
+
+	public void setUiName(String uiName) {
+		this.uiName = uiName;
 	}
 }

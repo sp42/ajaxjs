@@ -3,6 +3,7 @@ package com.ajaxjs.util.reflect;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Map;
 
 /**
  * 关于泛型的反射收集于此
@@ -24,7 +25,10 @@ public class ReflectGeneric {
 			ParameterizedType type = (ParameterizedType) returnType;
 
 			for (Type typeArgument : type.getActualTypeArguments()) {
-				return (Class<?>) typeArgument;
+				if(typeArgument instanceof sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl) {
+					return Map.class; // 写死的
+				} else
+					return (Class<?>) typeArgument;
 			}
 		}
 

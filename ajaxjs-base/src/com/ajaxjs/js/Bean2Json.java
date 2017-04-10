@@ -20,6 +20,8 @@ import java.util.List;
 import com.ajaxjs.util.StringUtil;
 
 public class Bean2Json {
+	private static final JsEngineWrapper engine = new JsEngineWrapper(); 
+	
 	/**
 	 * 基础的 JavaScript 工具函数
 	 */
@@ -195,10 +197,10 @@ public class Bean2Json {
 		};
 		
 		baseJavaScriptCode += StringUtil.stringJoin(a, "\n");
+		
+		engine.eval(baseJavaScriptCode);
 	}
 
-	private static final JsEngineWrapper engine = new JsEngineWrapper(); 
-	
 	/**
 	 * 多个 pojo 转换为 json
 	 * 
