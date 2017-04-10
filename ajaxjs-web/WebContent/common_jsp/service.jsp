@@ -1,4 +1,4 @@
-<%@ page pageEncoding="UTF-8" import="java.util.*, com.ajaxjs.util.map.*, com.ajaxjs.net.http.Client, com.ajaxjs.web.*"%>
+<%@ page pageEncoding="UTF-8" import="java.util.*, com.ajaxjs.util.map.*, com.ajaxjs.net.http.Client, com.ajaxjs.web.*, com.ajaxjs.mvc.controller.MvcRequest"%>
 <%!
 
 	/**
@@ -71,7 +71,7 @@
 		 * http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&ip=123.123.123.12
 		 * 
 		 */
-		String json = Client.GET("http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&ip=" + PageUtil.getIp(request));
+		String json = Client.GET("http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&ip=" + MvcRequest.getIp(request));
 		out.println(json.replace("var remote_ip_info = ", "").replaceAll(";$", ""));
 	} else if ("captchaImg".equals(action)) { // 图片验证码
 		Captcha.init(pageContext);
