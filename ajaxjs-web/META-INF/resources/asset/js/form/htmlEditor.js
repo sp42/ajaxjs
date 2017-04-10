@@ -45,11 +45,21 @@ bf_EditHTML = function(el){
 			this.sourceEditor.removeCls('hide');
 			this.sourceEditor.value = this.iframeBody.innerHTML;
 			this.mode = 'text';
+			grayImg(this.toolbarEl, true);
 		} else {
 			this.iframeEl.removeCls('hide');
 			this.sourceEditor.addCls('hide');
 			this.iframeBody.innerHTML = this.sourceEditor.value;
 			this.mode = 'iframe';
+			grayImg(this.toolbarEl, false);
+		}
+	}
+	// 使图片灰色
+	function grayImg(toolbarEl, isGray){
+		var imgs = toolbarEl.querySelectorAll('img');
+		for(var i = 0, j = imgs.length; i < j; i++) {
+			var img = imgs[i];
+			img.style.filter = isGray ? 'grayscale(100%)' : '';
 		}
 	}
 	
