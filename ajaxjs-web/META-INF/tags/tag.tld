@@ -8,7 +8,6 @@
 	<short-name>utility</short-name>
 	<uri>/ajaxjs</uri>
 	<info> A simple tag library for ajaxjs </info>
-	
 
 	<tag>
 		<name>if</name>
@@ -20,6 +19,7 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
+
 	<tag>
 		<name>choose</name>
 		<tag-class>com.ajaxjs.mvc.view.Choose</tag-class>
@@ -35,35 +35,75 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
+
 	<tag>
 		<name>otherwise</name>
 		<tag-class>com.ajaxjs.mvc.view.OtherWise</tag-class>
 		<body-content>scriptless</body-content>
 	</tag>
-    <tag>
-    
-        <name>foreach</name>
+
+	<tag>
+		<name>foreach</name>
 		<tag-class>com.ajaxjs.mvc.view.Foreach</tag-class>
 		<body-content>scriptless</body-content>
 		<attribute>
-		   <name>var</name>
-		   <required>true</required>
-		   <rtexprvalue>true</rtexprvalue>
+			<name>var</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-		   <name>items</name>
-		   <required>true</required>
-		   <rtexprvalue>true</rtexprvalue>
+			<name>items</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
-    </tag>
-    <tag>
-         <name>loop</name>
-         <tag-class>com.ajaxjs.mvc.view.Loop</tag-class>
-         <body-content>scriptless</body-content>
-         <attribute>
-              <name>cnt</name>
-              <required>true</required>
-              <rtexprvalue>true</rtexprvalue>
-          </attribute>
-     </tag> 
+	</tag>
+
+	<tag>
+		<name>loop</name>
+		<tag-class>com.ajaxjs.mvc.view.Loop</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>cnt</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>dateFormatter</name>
+		<tag-class>com.ajaxjs.mvc.view.DateUtil</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>format</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>格式</description>
+		</attribute>
+		<attribute>
+			<name>date</name>
+			<description>输入日期</description>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+
+	<tag>
+		<name>pageUtil</name>
+		<tag-class>com.ajaxjs.mvc.view.PageTag</tag-class>
+		<description>分页辅助标签</description>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>queryString</name>
+			<description>URL 参数</description>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>totalPage</name>
+			<required>true</required>
+			<description>总页数</description>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
 </taglib>
