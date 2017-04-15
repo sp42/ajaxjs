@@ -244,7 +244,7 @@ public class DaoHandler<T> implements InvocationHandler {
 			if(StringUtil.regMatch(regexp, sql) != null) {
 				sql = sql.replaceAll(regexp, c);
 			}else if(sql.contains("WHERE")) {
-				sql = sql + " AND " + c;
+				sql = sql.replaceAll("WHERE", "WHERE " + c + " AND ");// 写死 AND 并关系，但如果要 OR 呢？
 			} else {
 				sql += " WHERE " + c;
 			}

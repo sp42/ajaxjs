@@ -23,7 +23,7 @@ import com.ajaxjs.util.map.Map2Pojo;
 import com.ajaxjs.util.reflect.Reflect;
 
 /**
- * 
+ * 简易的 ORM
  * @author xinzhang
  *
  * @param <T>
@@ -31,8 +31,14 @@ import com.ajaxjs.util.reflect.Reflect;
 public class SimpleORM<T> extends Helper {
 	private static final LogHelper LOGGER = LogHelper.getLog(SimpleORM.class);
 	
+	/**
+	 * 实体是 bean 还是 map？
+	 */
 	private Class<T> entryType;
 
+	/**
+	 * 数据库连接对象
+	 */
 	private Connection conn;
 	
 	/**
@@ -40,6 +46,7 @@ public class SimpleORM<T> extends Helper {
 	 * @param conn
 	 *            数据库连接对象
 	 * @param entryType
+	 *            实体是 bean 还是 map？
 	 */
 	public SimpleORM(Connection conn, Class<T> entryType) {
 		this.conn = conn;
@@ -47,10 +54,12 @@ public class SimpleORM<T> extends Helper {
 	}
 
 	/**
-	 * 记录集合转换为 Map
+	 * 查询一个结果。记录集合转换为 Map
 	 * 
 	 * @param sql
 	 *            SQL 语句，可以带有 ? 的占位符
+	 * @param params
+	 *            参数列表
 	 * @return Map 结果
 	 */
 	@SuppressWarnings("unchecked")
@@ -61,6 +70,15 @@ public class SimpleORM<T> extends Helper {
 		return entryType == Map.class ? (T) map : new Map2Pojo<T>(entryType).map2pojo(map);
 	}
 
+	/**
+	 * 查询多个结果。记录集合转换为 List<Map>
+	 * 
+	 * @param sql
+	 *            SQL 语句，可以带有 ? 的占位符
+	 * @param params
+	 *            参数列表
+	 * @return List<Map> 结果
+	 */
 	@SuppressWarnings("unchecked")
 	public List<T> queryList(String sql, Object... params) {
 		List<Map<String, Object>> list = queryList(conn, sql, params);

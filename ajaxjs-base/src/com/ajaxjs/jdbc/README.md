@@ -9,4 +9,4 @@ DB helper 只是举行轻量级简单的封装，特性有：
  - autoClose 自动关闭资源；
  - 格式化 SQL 工具函数
 
-详细参见教程：http://blog.csdn.net/zhangxin09/article/details/55805849
+详细参见[教程](http://blog.csdn.net/zhangxin09/article/details/55805849)

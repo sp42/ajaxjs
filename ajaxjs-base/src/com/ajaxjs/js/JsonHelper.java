@@ -106,7 +106,7 @@ public class JsonHelper extends JsEngineWrapper {
 	} 
 
 	/**
-	 * 
+	 * js 的数字类型是 double，如果在 List<Map> 里面的话需要遍历之，取出其中的 double 变为 int
 	 * @param list
 	 * @return
 	 */
@@ -121,13 +121,14 @@ public class JsonHelper extends JsEngineWrapper {
 	}
 
 	/**
-	 * 
+	 * js 的数字类型是 double，如果在 map 里面的话需要遍历之，取出其中的 double 变为 int
 	 * @param map
 	 * @return
 	 */
 	private static Map<String, Object> double2int4Map(Map<String, Object> map) {
 		// 转换为真正的 map
 		Map<String, Object> realMap = new HashMap<>();
+		
 		for (String _key : map.keySet()) {
 			// js double -->int
 			Object obj = map.get(_key);
@@ -319,7 +320,7 @@ public class JsonHelper extends JsEngineWrapper {
 	
 			return '[' + StringUtil.stringJoin(strs, ",") + ']';
 		} else { // String
-			return '\"' + value.toString().replace("\\", "\\\\").replace("\"", "\\\"") + '\"';
+			return '\"' + value.toString().replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r") + '\"';
 		}
 	}
 	

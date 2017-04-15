@@ -104,6 +104,12 @@ public class SimplePager {
 		}
 	}
 
+	/**
+	 * 设置每页大小
+	 * 
+	 * @param pageSize
+	 *            每页大小
+	 */
 	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
 	}

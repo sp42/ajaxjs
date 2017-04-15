@@ -1,17 +1,14 @@
 /**
- * Copyright 2015 Frank Cheung
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
+ * 版权所有 2017 Frank Cheung
+ * 
+ * 根据 2.0 版本 Apache 许可证("许可证")授权；
+ * 根据本许可证，用户可以不使用此文件。
+ * 用户可从下列网址获得许可证副本：
+ * 
  *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *    
+ * 除非因适用法律需要或书面同意，根据许可证分发的软件是基于"按原样"基础提供，
+ * 无任何明示的或暗示的保证或条件。详见根据许可证许可下，特定语言的管辖权限和限制。
  */
 package com.ajaxjs.js;
 
@@ -19,6 +16,11 @@ import java.util.List;
 
 import com.ajaxjs.util.StringUtil;
 
+/**
+ * bean 转换到 Json 用的脚本，在 js 里面做比较方便
+ * @author xinzhang
+ *
+ */
 public class Bean2Json {
 	private static final JsEngineWrapper engine = new JsEngineWrapper(); 
 	
@@ -28,27 +30,40 @@ public class Bean2Json {
 	public static String baseJavaScriptCode;
 
 	static {
-		final String[] str = { "if(!String.prototype.format){	", "	String.prototype.format = function () {",
+		String[] str = { 
+				"if(!String.prototype.format){	", 
+				"	String.prototype.format = function () {",
 				"		var str = this; ",
-				"		if(arguments[0] instanceof java.lang.String || typeof(arguments[0]) == \'string\'|| typeof(arguments[0]) == \'number\'){",
+				"		if(arguments[0] instanceof java.lang.String || typeof(arguments[0]) == \'string\'|| typeof(arguments[0]) == \'number\') {",
 				"			for(var i = 0, j = arguments.length; i < j; i++) {",
 				"				str = str.replace(new RegExp('\\\\{' + i +'\\\\}', 'g'), String(arguments[i]));}",
-				"		}else{   ", "			for(var i in arguments[0]){",
+				"		}else{   ", 
+				"			for(var i in arguments[0]){",
 				"				str = str.replace(new RegExp('\\\\{' + i +'\\\\}', 'g'), String(arguments[0][i])); // 大小写敏感",
-				"		}}", "		", "		return str;", "	};", "}",
-				"// 函数委托 参见 http://blog.csdn.net/zhangxin09/article/details/8508128", "bf = {};",
+				"		}}", 
+				"		",
+				"		return str;",
+				"	};", 
+				"}",
+				"// 函数委托 参见 http://blog.csdn.net/zhangxin09/article/details/8508128", 
+				"bf = {};",
 				"bf.Function_delegate = function () {",
 				"    var self = this, scope = this.scope, args = arguments, aLength = arguments.length, fnToken = \'function\';",
 				"    return function(){",
 				"        var bLength = arguments.length, Length = (aLength > bLength) ? aLength : bLength;",
-				"        // mission one:", "        for (var i = 0; i < Length; i++)",
+				"        // mission one:", 
+				"        for (var i = 0; i < Length; i++)",
 				"            if (arguments[i])args[i] = arguments[i]; // 拷贝参数",
 				"        args.length = Length; // 在 MS jscript下面，arguments作为数字来使用还是有问题，就是length不能自动更新。修正如左:",
-				"        // mission two:", "        for (var i = 0, j = args.length; i < j; i++) {",
+				"        // mission two:", 
+				"        for (var i = 0, j = args.length; i < j; i++) {",
 				"            var _arg = args[i];",
 				"            if (_arg && typeof _arg == fnToken && _arg.late == true)",
-				"                args[i] = _arg.apply(scope || this, args);", "        }",
-				"        return self.apply(scope || this, args);", "    };", "};",
+				"                args[i] = _arg.apply(scope || this, args);", 
+				"        }",
+				"        return self.apply(scope || this, args);",
+				"    };",
+				"};",
 				 "    /** ",
 				 "     * 日期格式化。详见博客文章：http://blog.csdn.net/zhangxin09/archive/2011/01/01/6111294.aspx ",
 				 "     * e.g: new Date().format(\"yyyy-MM-dd hh:mm:ss\") ",
@@ -85,46 +100,10 @@ public class Bean2Json {
 				 "    }  "		
 		
 		};
+		
 		baseJavaScriptCode = StringUtil.stringJoin(str, "\n");
-
-		/**
-		 * bean 转换到 Json 用的脚本，在 js 里面做比较方便
-		 */
-		final String[] a = {
-				 "    /** ",
-				 "     * 日期格式化。详见博客文章：http://blog.csdn.net/zhangxin09/archive/2011/01/01/6111294.aspx ",
-				 "     * e.g: new Date().format(\"yyyy-MM-dd hh:mm:ss\") ",
-				 "     * @param   {String} format ",
-				 "     * @return  {String} ",
-				 "    */  ",
-//				 "    Date.prototype.format = function (format) {  ",
-//				 "        var $1, o = {  ",
-//				 "            \"M+\": this.getMonth() + 1,      // 月份，从0开始算  ",
-//				 "            \"d+\": this.getDate(),           // 日期  ",
-//				 "            \"h+\": this.getHours(),          // 小时  ",
-//				 "            \"m+\": this.getMinutes(),        // 分钟  ",
-//				 "            \"s+\": this.getSeconds(),        // 秒钟  ",
-//				 "                                            // 季度 quarter  ",
-//				 "            \"q+\": Math.floor((this.getMonth() + 3) / 3),  ",
-//				 "            \"S\": this.getMilliseconds() // 千秒  ",
-//				 "        };  ",
-//				 "        var key, value;  ",
-//				 "      ",
-//				 "        if (/(y+)/.test(format)) {  ",
-//				 "            $1 = RegExp.$1,   ",
-//				 "            format = format.replace($1, String(this.getFullYear()).substr(4 - $1));  ",
-//				 "        }  ",
-//				 "      ",
-//				 "        for (key in o) { // 如果没有指定该参数，则子字符串将延续到 stringvar 的最后。  ",
-//				 "            if (new RegExp(\"(\" + key + \")\").test(format)) {  ",
-//				 "                $1      = RegExp.$1,  ",
-//				 "                value   = String(o[key]),  ",
-//				 "                value   = $1.length == 1 ? value : (\"00\" + value).substr(value.length),  ",
-//				 "                format  = format.replace($1, value);  ",
-//				 "            }  ",
-//				 "        }  ",
-//				 "        return format;  ",
-//				 "    }  "	,
+		
+		String[] bean2json = {
 			"/**",
 			 " * Java 类型转换为 js 类型",
 			 " * @param v",
@@ -151,8 +130,15 @@ public class Bean2Json {
 			 "			return Number(v);",
 			 "			break;",
 			 "		default:",
-			 "if(v.getClass().isArray()){if(v[0] == null)return [];if(v[0].getClass() == java.lang.String){",
-			 "var arr =[]; for(var i = 0; i < v.length; i++){arr.push(new String(v[i]));};return arr;}}",
+			 "if(v.getClass().isArray()) {",
+			 "	if(v[0] == null)return [];",
+			 "	if(v[0].getClass() == java.lang.String){",
+			 "		var arr =[]; ", 
+			 "		for(var i = 0; i < v.length; i++){", 
+			 "			arr.push(new String(v[i]));",
+			 "		};",
+			 "		return arr;",
+			 "	}}",
 			 " else if(v[0].getClass() == java.lang.Integer || v[0].getClass() == java.lang.Long){var arr =[]; for(var i = 0; i < v.length; i++){arr.push(new Number(v[i]));};return arr;}",
 			 "else",
 			 "			return String(v);",
@@ -193,10 +179,11 @@ public class Bean2Json {
 			 "		str[i] = pojo2json(pojo);",
 			 "	}",
 			 "	return JSON.stringify(str);",
-			 "}; function singlePojo(pojo){return JSON.stringify(pojo2json(pojo));}"
+			 "}; ",
+			 "function singlePojo(pojo){return JSON.stringify(pojo2json(pojo));}"
 		};
 		
-		baseJavaScriptCode += StringUtil.stringJoin(a, "\n");
+		baseJavaScriptCode += StringUtil.stringJoin(bean2json, "\n");
 		
 		engine.eval(baseJavaScriptCode);
 	}
@@ -221,5 +208,9 @@ public class Bean2Json {
 	 */
 	public static String singlePojo(Object obj) {
 		return engine.call("singlePojo", String.class, null, obj);
+	}
+	
+	public static void main(String[] args) {
+		
 	}
 }

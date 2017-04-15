@@ -97,11 +97,6 @@ public class Helper {
 		
 		return map;
 	}
-	// if (jdbcConnStr.indexOf("MySQL") != -1 || jdbcConnStr.indexOf("mysql") != -1) {
-	//     result = rs.next() ? rs.getInt(1) : null;
-	// } else {// sqlite
-	//      result = rs.isBeforeFirst() ? rs.getInt(1) : null;
-	// }
 	
 	/**
 	 * 有且只有一行记录，并只返回第一列的字段。可指定字段的数据类型
