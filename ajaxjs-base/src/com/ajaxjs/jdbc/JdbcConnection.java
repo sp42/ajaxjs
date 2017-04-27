@@ -57,6 +57,7 @@ public class JdbcConnection {
 	 * @return 数据库连接对象
 	 */
 	public static Connection getConnection(DataSource source) {
+
 		try {
 			return source.getConnection();
 		} catch (SQLException e) {

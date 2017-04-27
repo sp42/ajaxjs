@@ -8,11 +8,7 @@ import com.ajaxjs.jdbc.sqlbuilder.SqlBuilder;
 import com.ajaxjs.util.StringUtil;
 
 public class Dep extends SqlBuilder {
-//	 if (jdbcConnStr.indexOf("MySQL") != -1 || jdbcConnStr.indexOf("mysql") != -1) {
-//    result = rs.next() ? rs.getInt(1) : null;
-//} else {// sqlite
-//     result = rs.isBeforeFirst() ? rs.getInt(1) : null;
-//}
+
 	
 	// 表映射
 	private Map<String, String> hidden_db_field_mapping = new HashMap<>();

@@ -85,7 +85,7 @@ public class Helper {
 					ps.setObject(i + 1, params[i]);
 			
 			try (ResultSet rs = ps.executeQuery();) {
-				if (rs.isBeforeFirst()) {
+				if (isMySql(conn) ? rs.next() : rs.isBeforeFirst()) {
 					map = getResultMap(rs);
 				} else {
 					LOGGER.info("查询 SQL：{0} 没有符合的记录！", sql);
@@ -96,6 +96,21 @@ public class Helper {
 		}
 		
 		return map;
+	}
+	
+	/**
+	 * 是否 mysql 数据库
+	 * @param conn
+	 * @return
+	 */
+	private static boolean isMySql(Connection conn) {
+		String connStr = conn.toString();
+		return connStr.indexOf("MySQL") != -1 || connStr.indexOf("mysql") != -1;
+//		if () {
+//			result = rs.next() ? rs.getInt(1) : null;
+//		} else {// sqlite
+//			result = rs.isBeforeFirst() ? rs.getInt(1) : null;
+//		}
 	}
 	
 	/**
@@ -350,4 +365,6 @@ public class Helper {
 	
 		return StringUtil.stringJoin(fields, ", ");
 	}
+	
+
 }
