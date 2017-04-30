@@ -55,41 +55,7 @@ define(function(require, exports, module) {
 
 		return [prov, birthday, sex];
 	}
-
-	/*------------------------------------
-    -----------------------------------
-   			剩余字数提示
-    -----------------------------------
-   ------------------------------------*/
-   exports.whenpresscheckCharLength = whenpresscheckCharLength;
-   function whenpresscheckCharLength(formEl){
-   	var whenpresscheckCharLength = formEl.$('.whenpresscheckCharLength')(true);
-   	if (whenpresscheckCharLength){
-	    	var _for = whenpresscheckCharLength.getAttribute('for'),
-	    		showRemainCharLength = formEl.$('.' + _for)(true);
-   		var charLimit = whenpresscheckCharLength.hasAttribute('charLimit') ? whenpresscheckCharLength.getAttribute('charLimit') :20; 
-
-   		var inputed = whenpresscheckCharLength.value.length;
-
-   		if(inputed > 0){
-   			showRemainCharLength.innerHTML = String(charLimit - inputed);
-   		}else showRemainCharLength.innerHTML = String(charLimit);
-		
-		    function handler(e){
-				var pressedLength = whenpresscheckCharLength.value.length,
-					left = charLimit - pressedLength;
-				
-				if((left + 1) <= 0){
-					e.preventDefault();
-					shake(whenpresscheckCharLength, 'red');
-				}else showRemainCharLength.innerHTML = String(left);
-				// console.log(charLimit - pressedLength);
-			}
-
-   		whenpresscheckCharLength.onkeyup = handler;
-   		whenpresscheckCharLength.onpaste = handler;
-   	}
-   } 
+ 
 
 
 	function shake(ele, cls, times) {
@@ -151,57 +117,9 @@ define(function(require, exports, module) {
 		}
 		return _json;
 	}
-
-	function setUrl(key, value){
-		var hash = window.location.hash;
-		console.log(value)
-		if(hash.indexOf(key) != -1){
-			var reg = new RegExp(key + '=[\\w-]+');
-			window.location.hash = hash.replace(reg, key + '=' + value);
-		}else{
-			// append
-			if(!hash)
-				window.location.hash = key + '=' + value;
-			else{
-				window.location.hash += '&' + key + '=' + value;
-			}
-		}
-	}
+ 
 	
-	/**
-    * 回到页面顶部（高度比较短的时候貌似不起作用）
-    * @param acceleration 加速度
-    * @param time 时间间隔 (毫秒)
-    **/
-   function goTop(acceleration, time) {
-       acceleration = acceleration || 0.1;
-       time = time || 16;
-
-       var x1 = y1 = x2 = y2 = x3 = y3 = 0;
-
-       if (document.documentElement) 
-           x1 = document.documentElement.scrollLeft || 0, y1 = document.documentElement.scrollTop || 0;
-       
-       if (document.body) 
-           x2 = document.body.scrollLeft || 0, y2 = document.body.scrollTop || 0;
-       
-       x3 = window.scrollX || 0, y3 = window.scrollY || 0;
-
-       // 滚动条到页面顶部的水平距离
-       var x = Math.max(x1, Math.max(x2, x3));
-       // 滚动条到页面顶部的垂直距离
-       var y = Math.max(y1, Math.max(y2, y3));
-
-       // 滚动距离 = 目前距离 / 速度, 因为距离原来越小, 速度是大于 1 的数, 所以滚动距离会越来越小
-       var speed = 1 + acceleration;
-       window.scrollTo(Math.floor(x / speed), Math.floor(y / speed));
-
-       // 如果距离不为零, 继续调用迭代本函数
-       if (x > 0 || y > 0) {
-           var invokeFunction = "goTop(" + acceleration + ", " + time + ")";
-           window.setTimeout(invokeFunction, time);
-       }
-   }
+	 
 	
 
 	

@@ -315,16 +315,15 @@
 })();
 
 ;(function(){
-	
-	   /**
-	    *  登记 resize 事件，以便 resize 容器的时候调整大小。
-	    */
-	// window.onresize = resize.bind(this);
-//	    function resize() {
-//	        console.log('调整大小中……');
-//	        this.containerWidth = this.el.clientWidth;
-//	        render.call(this, this.mover.children);
-//	    }    
+   /**
+    *  登记 resize 事件，以便 resize 容器的时候调整大小。
+    */
+//	window.onresize = resize.bind(this);
+//	function resize() {
+//	    console.log('调整大小中……');
+//	    this.containerWidth = this.el.clientWidth;
+//	    render.call(this, this.mover.children);
+//	}    
 	bf_banner = Object.create(window.bf_tab);
 	bf_banner.isEnableLoop = true;
 	bf_banner.isEnableTouch = true;
