@@ -21,7 +21,8 @@ public class TestHelper {
 
 	@Before
 	public void setUp() throws SQLException {
-		conn = JdbcConnection.getConnection("jdbc:sqlite:" + Util.getClassFolder_FilePath(TestSimpleORM.class, "foo.sqlite"));
+//		conn = JdbcConnection.getConnection("jdbc:sqlite:" + Util.getClassFolder_FilePath(TestSimpleORM.class, "foo.sqlite"));
+		conn = JdbcConnection.getConnection("jdbc:mysql://192.168.61.83:7306/pms?user=root&password=2010@3gtv&useUnicode=true&characterEncoding=utf8");
 		conn.setAutoCommit(true);
 	}
 
@@ -40,19 +41,19 @@ public class TestHelper {
 		assertNotNull(conn);
 
 		Map<String, Object> info;
-		info = Helper.query(conn, "SELECT * FROM news WHERE id = 1");
+		info = Helper.query(conn, "SELECT * FROM BROADCAST_PROGRAM WHERE id = 3529166");
 		assertNotNull(info);
 
-		info = Helper.query(conn, "SELECT * FROM news WHERE id = ?", 1);
+		info = Helper.query(conn, "SELECT * FROM BROADCAST_PROGRAM WHERE id = ?", 3529166);
 		System.out.println(info.get("name"));
 		assertNotNull(info.get("name"));
 
-		List<Map<String, Object>> newss = Helper.queryList(conn, "SELECT * FROM news");
+		List<Map<String, Object>> newss = Helper.queryList(conn, "SELECT * FROM BROADCAST_PROGRAM");
 		assertNotNull(newss.get(0).get("name"));
 		System.out.println(newss.get(0).get("name"));
 	}
 
-	@Test
+//	@Test
 	public void testCreateUpdateDelete() throws SQLException {
 		Serializable newlyId = Helper.create(conn, "INSERT INTO news (name) VALUES (?)", "test2");
 		System.out.println(newlyId);

@@ -40,16 +40,12 @@ public class Dep extends SqlBuilder {
 		return addStr;
 	}
 
-	// 通过子查询获得图片列表 图片表是根据实体 uid 获得其所有的图片，形成列表返回 这里返回的 SqlBuilder Concat
-	// 结果后的字符串，用 , 分隔开 UI 层需要 split 字符串
-	// "(SELECT group_concat(fileName) FROM img WHERE img.parentId = %s.uid) AS
-	// imgs";
+	// 通过子查询获得图片列表 图片表是根据实体 uid 获得其所有的图片，形成列表返回 这里返回的 SqlBuilder Concat 结果后的字符串，用 , 分隔开 UI 层需要 split 字符串
+	// "(SELECT group_concat(fileName) FROM img WHERE img.parentId = %s.uid) AS imgs";
 
-	// UNION 时，SQLite 居然不能直接使用括号，所以必须得 SELECT * FROM
-	// 可以用 Union 合并 两次查询为一次
+	// UNION 时，SQLite 居然不能直接使用括号，所以必须得 SELECT * FROM 可以用 Union 合并 两次查询为一次
 	// “SELECT * FROM (SELECT id, name FROM ${from} WHERE id > ${id} LIMIT 1) "
-	// + "UNION ALL " + "SELECT * FROM (SELECT id, name FROM ${from} WHERE id <
-	// ${id} ORDER BY id DESC LIMIT 1)")
+	// + "UNION ALL " + "SELECT * FROM (SELECT id, name FROM ${from} WHERE id < ${id} ORDER BY id DESC LIMIT 1)")
 
 	public static String perRecordSql = "SELECT %s, name FROM %s WHERE createDate < %s ORDER BY createDate DESC LIMIT 1";
 	public static String nextRecordSql = "SELECT %s, name FROM %s WHERE createDate > %s ORDER BY createDate ASC LIMIT 1";
@@ -57,17 +53,16 @@ public class Dep extends SqlBuilder {
 	public static String perRecordSql2 = "SELECT id, name FROM %s WHERE createDate < datetime('%s') ORDER BY createDate DESC LIMIT 1";
 	public static String nextRecordSql2 = "SELECT id, name FROM %s WHERE createDate > datetime('%s') ORDER BY createDate ASC LIMIT 1";
 
-	// public static Map<String, Map<String, Object>> getNeighbor(Connection
-	// conn, String tablename, String datetime){
-	// Map<String, Map<String, Object>> map = new HashMap<>();
-	//
-	// String _perRecordSql = String.format(nextRecordSql, tablename, datetime);
-	// map.put("perRecord", queryMap(conn, _perRecordSql));
-	//
-	// String _nextRecordSql = String.format(perRecordSql, tablename, datetime);
-	// map.put("nextRecord", queryMap(conn, _nextRecordSql));
-	//
-	// return map;
-	// }
+//	 public static Map<String, Map<String, Object>> getNeighbor(Connection conn, String tablename, String datetime){
+//		 Map<String, Map<String, Object>> map = new HashMap<>();
+//		
+//		 String _perRecordSql = String.format(nextRecordSql, tablename, datetime);
+//		 map.put("perRecord", queryMap(conn, _perRecordSql));
+//		
+//		 String _nextRecordSql = String.format(perRecordSql, tablename, datetime);
+//		 map.put("nextRecord", queryMap(conn, _nextRecordSql));
+//		
+//		 return map;
+//	 }
 
 }
