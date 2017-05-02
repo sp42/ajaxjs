@@ -22,8 +22,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.ajaxjs.framework.dao.annotation.Delete;
 import com.ajaxjs.framework.dao.annotation.Insert;
 import com.ajaxjs.framework.dao.annotation.Select;
@@ -236,7 +234,7 @@ public class DaoHandler<T> implements InvocationHandler {
 		}
 		// 增加到原 sql 身上
 		if(wheres.size() > 0 ) {
-			String c = StringUtils.join(wheres, " AND ");
+			String c = StringUtil.stringJoin(wheres, " AND ");
 			
 			//System.out.println("filter:" + key);
 			
