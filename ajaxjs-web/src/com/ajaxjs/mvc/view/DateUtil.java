@@ -16,11 +16,10 @@ public class DateUtil extends SimpleTagSupport {
 
 	@Override
 	public void doTag() throws JspException, IOException {
-		if (date == null)
+		if (date == null && value == null)
 			return;
 		
 		Date dateValue = DateTools.Objet2Date(value);
-
 		String str = "";
 		
 		if (format == null)

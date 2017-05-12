@@ -18,9 +18,12 @@ package com.ajaxjs.mvc.controller;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.ajaxjs.Init;
 import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.framework.model.PageResult;
@@ -29,6 +32,7 @@ import com.ajaxjs.framework.service.IService;
 import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.jdbc.ConnectionMgr;
 import com.ajaxjs.jdbc.JdbcConnection;
+import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.util.LogHelper;
 
 /**
@@ -57,18 +61,28 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	 */
 	private boolean adminUI;
 
-	public void initDb() {
+	/**
+	 * 初始化数据库连接
+	 */
+	public static void initDb() {
+		
+		String connStr = Init.isDebug ? "jdbc/sqlite" : "jdbc/sqlite_deploy";
+		
 		try {
 			if(ConnectionMgr.getConnection() == null || ConnectionMgr.getConnection().isClosed()) {
-				Connection conn = JdbcConnection.getConnection(JdbcConnection.getDataSource("jdbc/sqlite"));
+				Connection conn = JdbcConnection.getConnection(JdbcConnection.getDataSource(connStr));
 				ConnectionMgr.setConnection(conn);
+				LOGGER.info("启动数据库链接……" + conn);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void closeDb() {
+	/**
+	 * 关闭数据库连接
+	 */
+	public static void closeDb() {
 		try {
 			ConnectionMgr.getConnection().close();
 		} catch (SQLException e) {
@@ -90,18 +104,13 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	public String list(int start, int limit, ModelAndView model) {
 		LOGGER.info("获取列表 GET list:{0}/{1}", start, limit);
 
-		HttpServletRequest request = RequestHelper.getHttpServletRequest();
-		PageResult<T> pageResult = null;
-		QueryParams param = new QueryParams(start, limit);
-
-		if (Query.isAnyMatch(request.getParameterMap())) // 其他丰富的查询参数
-			param.query = Query.getQueryFactory(request.getParameterMap());
-
 		initDb();
+
 		IService<T, ID> service = getService(); // 避免 service 为单例
 
+		PageResult<T> pageResult = null;
 		try {
-			pageResult = getService().findPagedList(param);
+			pageResult = getService().findPagedList(getParam(start, limit));
 			model.put("PageResult", pageResult);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -111,11 +120,27 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 		}
 
 		service.prepareData(model);
+		
+		if(isJSON_output() && pageResult.getRows().get(0) instanceof Map) {// Map 类型的输出
+			@SuppressWarnings("unchecked")
+			List<Map<String, Object>> l = (List<Map<String, Object>>) pageResult.getRows();
+			model.put("MapOutput", JsonHelper.stringifyListMap(l)); 
+		}
 
 		if (isAdminUI())
 			return String.format(jsp_adminList, service.getName());
 		else
 			return isJSON_output() ? paged_json_List : String.format(jsp_list, service.getName());
+	}
+
+	public QueryParams getParam(int start, int limit) {
+		HttpServletRequest request = RequestHelper.getHttpServletRequest();
+		QueryParams param = new QueryParams(start, limit);
+
+		if (Query.isAnyMatch(request.getParameterMap())) // 其他丰富的查询参数
+			param.query = Query.getQueryFactory(request.getParameterMap());
+		
+		return param;
 	}
 
 	// @GET
@@ -216,6 +241,9 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 
 		try {
 			ID newlyId = getService().create(entity);
+			if(newlyId == null) {
+				throw new ServiceException("创建失败！");
+			}
 			model.put("newlyId", newlyId);
 		} catch (ServiceException e) {
 			model.put(errMsg, e);

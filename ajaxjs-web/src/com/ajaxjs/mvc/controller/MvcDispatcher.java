@@ -41,6 +41,7 @@ import com.ajaxjs.util.ClassScaner;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.reflect.Reflect;
 import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.map.MapHelper;
 
 /**
  * 分发器
@@ -162,51 +163,6 @@ public class MvcDispatcher implements Filter {
 				} else {
 					av = controllerInfo;// 类本身，不是子路径
 				}
-				
-//				for (String subPath : controllerInfo.subPath.keySet()) {
-//					System.out.println("检测是否有 subPath:" + subPath);
-//					System.out.println(controllerInfo.subPath);
-//					System.out.println("::::" + controllerInfo.subPath.get(subPath));
-//					
-//					System.out.println(subPath.replace("{id}", "\\d+$"));
-//					
-//					
-//					// 注解变成 正则 去匹配 subUri
-//					if(subPath.equals(userSubPath)) { 
-//						LOGGER.info(subPath + "子路径命中，相同的业务！！！");
-//						
-//						av = controllerInfo.subPath.get(subPath);
-//						if(av == null) throw new NullPointerException(subPath + " ActionAndView 对象不存在！");
-//						
-//						method = getMethod(av, httpMethod);
-//						isSub = true;
-//						break;
-//					}else if (StringUtil.regMatch(subPath.replace("{id}", "\\d+$"), userSubPath) != null) { 
-//						LOGGER.info(subPath + " 子路径命中，单个实体！！！");
-//						System.out.println(">>>>>"+StringUtil.regMatch(subPath.replace("{id}", "\\d+$"), userSubPath));
-//						System.out.println("subPath:::::"  +subPath + "/{id}");
-//						System.out.println(controllerInfo.subPath);
-//						
-//						av = controllerInfo.subPath.get(subPath + "/{id}");
-//						if(av == null) throw new NullPointerException(subPath + " ActionAndView 对象不存在！");
-//						
-//						method = getMethod(av, httpMethod); /* 3-17 增加了 subPath + */
-//						isSub = true;
-//						break;
-//					} else if(userSubPath.replaceAll("\\d+", "{id}").equals(subPath)) { // 单个实体下的业务，如  xx/1/avatar，反过来匹配
-//						LOGGER.info(subPath + "子路径命中，单个实体下的业务！！！");
-//
-//						av = controllerInfo.subPath.get(subPath);
-//						if(av == null) throw new NullPointerException(subPath + " ActionAndView 对象不存在！");
-//						System.out.println(av);
-//						
-//						method = getMethod(av, httpMethod);
-//						isSub = true;
-//						break;
-//					} else {
-//						System.out.println(subPath + "不匹配任何已知方法");
-//					}
-//				}
 
 				if(av == null) 
 					throw new NullPointerException(userSubPath + " ActionAndView 对象不存在！");
@@ -329,6 +285,11 @@ public class MvcDispatcher implements Filter {
 				args.add(request);
 			} else if (clazz.equals(HttpServletResponse.class)) {
 				args.add(response);
+			} else if (clazz.equals(Map.class)) {	// map 参数，将请求参数转为 map
+				Map<String, Object> map = request.getMethod().equals("PUT") 
+						? request.getPutRequestData()
+						: MapHelper.asObject(MapHelper.toMap(request.getParameterMap()), true);
+				args.add(map);
 			} else if (clazz.equals(ModelAndView.class)) {
 				args.add(new ModelAndView()); // 新建 ModeView 对象
 			} else if (BaseModel.class.isAssignableFrom(clazz)) {		

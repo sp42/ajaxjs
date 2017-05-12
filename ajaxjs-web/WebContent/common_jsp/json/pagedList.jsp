@@ -4,5 +4,5 @@
 {
 	"msg" : "${empty ServiceException ? 'ok' : ServiceException}",
 	"total" : ${empty PageResult.totalCount ? 0 : PageResult.totalCount},
-	"result" : ${js.list(PageResult.rows)}
+	"result" : ${empty MapOutput ? js.list(PageResult.rows) : MapOutput}
 }

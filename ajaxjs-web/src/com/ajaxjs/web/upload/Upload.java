@@ -83,6 +83,10 @@ public class Upload {
 		int startPos = getStartPos();
 		// 边界位置
 		int endPos = byteIndexOf(dateBytes, boundary.getBytes(), (dateBytes.length - startPos)) - 4;
+		
+		if(startPos == endPos) {
+			throw new UploadException("上传表单中没有二进制数据，上传文件为空！");
+		}
 
 		// 创建文件
 		String fileName = uRequest.getUpload_save_folder() + getFileName(uRequest.isNewName());

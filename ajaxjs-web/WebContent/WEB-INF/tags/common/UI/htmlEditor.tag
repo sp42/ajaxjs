@@ -3,7 +3,6 @@
 <%@attribute name="basePath" required="false" type="String" description="指定 iframe src 静态资源的路径"%>
 
 <!-- HTML 编辑器控件 --> 
-<script src="${pageContext.request.contextPath}/asset/js/form/htmlEditor.js"></script>
 <div class="htmlEditor">
 	<ul class="toolbar">
 		<li class="dorpdown">
@@ -52,7 +51,7 @@
 			<img title="字体颜色" src="${pageContext.request.contextPath}/asset/images/htmlEditor/16.gif" />
 			<div class="fontColor colorPicker">
 				<script>
-					document.write(bf_EditHTML.createColorPickerHTML());
+					document.write(ajaxjs.HtmlEditor.createColorPickerHTML());
 				</script>
 			</div>
 		</li>
@@ -60,7 +59,7 @@
 			<img title="背景颜色" class="backColor" src="${pageContext.request.contextPath}/asset/images/htmlEditor/17.gif" />
 			<div class="bgColor colorPicker">
 				<script>
-					document.write(bf_EditHTML.createColorPickerHTML());
+					document.write(ajaxjs.HtmlEditor.createColorPickerHTML());
 				</script>
 			</div>
 		</li>
@@ -75,16 +74,13 @@
 		</li>
 	</ul>
 
-	<div class="editorBody">
-<!-- 	<iframe src="about:blank"></iframe> -->
-<!--  	<iframe src="${pageContext.request.contextPath}/util_service/htmleditor_iframe?basePath=${basePath}"></iframe>-->	
-		<iframe src="${pageContext.request.contextPath}/asset/jsp/htmleditor_iframe.jsp?basePath=${basePath}"></iframe>
+	<div class="editorBody">	
+		<iframe src="${pageContext.request.contextPath}/common_jsp/htmleditor_iframe.jsp?basePath=${basePath}"></iframe>
 		<textarea class="hide" name="${name}"><jsp:doBody /></textarea>
 	</div>
 </div>
-
 <script>
-	var htmlEditor = new bf_EditHTML(document.querySelector('.htmlEditor'));
+	var htmlEditor = new ajaxjs.HtmlEditor(document.querySelector('.htmlEditor'));
 	// htmlEditor.setValue('dfdfdf'); 
 </script>
 <!-- // HTML 编辑器控件 -->

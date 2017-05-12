@@ -73,6 +73,8 @@
 	%>
 	<link rel="stylesheet" type="text/css" href="<%=HtmlHead.getCssUrl(request, lessFile, isDebug)%>" />
     <script src="${pageContext.request.contextPath}/asset/js/dom.js"></script>
+    <script src="${pageContext.request.contextPath}/asset/new_js/dom.js"></script>
+    <script src="${pageContext.request.contextPath}/asset/new_js/widget.js"></script>
 
     <jsp:doBody />
 </head>

@@ -13,7 +13,7 @@
 					<jsp:doBody />
 					  
 				 	<c:if test="${not empty maxWin && maxWin == true}">
-				 	<a href="javascript:maxWin();" >最大化窗体</a> |
+				 		<a href="javascript:maxWin();" >最大化窗体</a> |
 				 	</c:if>
 				 	
 				 	<a href="#" target="_blank">新窗口打开</a>
@@ -35,9 +35,10 @@
 <%@attribute name="hasCatalog" type="Boolean" required="fasle" description="是否需要分类"%>
 <%@attribute name="moreBtn"  required="false" fragment="true"  description="是否需要按钮"%>
 <c:if test="${type=='editor'}">
-		<commonTag:adminUI type="head" maxWin="false" pageTitle="${isCreate ? '新建' : '编辑'}${uiName}►${not empty info.id ? '#': ''}${info.id}">
+		<commonTag:adminUI type="header" maxWin="false" pageTitle="${isCreate ? '新建' : '编辑'}${uiName} ${not empty info.id ? '#': ''}${info.id}">
 			<c:choose>
 				<c:when test="${isCreate}">
+				
 				</c:when>
 				<c:otherwise>
 					<a href="../create.do">新建${uiName}</a> | 
@@ -48,7 +49,9 @@
 			</c:if>
 		</commonTag:adminUI>
 	
-		<form class="form_style_2" action="${isCreate ? 'createAction.do' : id}" method="${isCreate ? 'POST' : 'PUT'}">
+		<form class="form_style_2" action="action.do" method="${isCreate ? 'POST' : 'PUT'}">
+			<!-- 传送 id 参数 -->
+			<input type="hidden" name="id" value="${info.id}" />
 			<jsp:doBody />
 		
 		<c:choose>
@@ -79,11 +82,10 @@
 			var formConfig = {
 				isCommonAfterSubmit : true
 			};
+			
 			if(this.htmlEditor) {
 				formConfig.htmlEditor_hook = htmlEditor;
 			}
-			
-			
 		</script>
 	<c:choose>
 		<c:when test="${isCreate}">
@@ -92,7 +94,7 @@
 			form.on('afterSubmit', function(form, json){
 				if(json.isOk){
 					//location.assign(json.newlyId); // 跳转编辑模式
-					location.assign('create.do?' + (still_params ? still_params() : ''));// 提交后回到新建
+					//location.assign('create.do?' + (still_params ? still_params() : ''));// 提交后回到新建
 				}
 			});
 		</script>
@@ -106,6 +108,7 @@
 					XMLHttpRequest.dele('delete.do', {}, function(json) {
 						if(json && json.isOk){
 							alert(json.msg);
+							location.assign('../list/list.do');
 						}
 					});
 			}
@@ -117,8 +120,10 @@
  </c:if>
 
 <c:if test="${type=='adminList_btns'}">
-	<%@attribute name="current" type="Object" required="fasle" description="实体"%>
-	<a href="${current.url}" target="_blank">浏览</a>
-	<a href="${current.id}"><img src="${pageContext.request.contextPath}/asset/bigfoot/skin/icon/update.gif" style="vertical-align: sub;" />编辑</a>
-	<a href="javascript:entity.del('${current.id}', '${current.name}');"><img src="${pageContext.request.contextPath}/asset/bigfoot/skin/icon/delete.gif" style="vertical-align: sub;" />删除</a>
+	<%@attribute name="current"  type="Object" required="fasle" description="实体"%>
+	<%@attribute name="viewLink" type="String" required="fasle" description="浏览外部连接"%>
+	
+	<a href="${viewLink}/${current.id}/info.do" target="_blank">浏览</a>
+	<a href="../${current.id}/edit.do"><img src="${pageContext.request.contextPath}/asset/images/icon/update.gif" style="vertical-align: sub;" />编辑</a>
+	<a href="javascript:entity.del('${current.id}', '${current.name}');"><img src="${pageContext.request.contextPath}/asset/images/icon/delete.gif" style="vertical-align: sub;" />删除</a>
 </c:if>
