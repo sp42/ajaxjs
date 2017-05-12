@@ -107,17 +107,22 @@ public class SimpleORM<T> extends Helper {
 		Serializable newlyId = create(conn, sql.toString(), values);
 		
 		// 保存 id
-		/* 根据 getter 推断 id 类型 */
-		try {
-			Class<?> idClz = bean.getClass().getMethod("getId").getReturnType();
-			
-			if (Long.class == idClz && newlyId instanceof Integer) {
-				Reflect.executeMethod(bean, "setId", new Long((int)newlyId));
-			} else {
-				Reflect.executeMethod(bean, "setId", newlyId); // 直接保存
+		if(bean instanceof Map) {
+			@SuppressWarnings("unchecked")
+			Map<String, Object> map = (Map<String, Object>)bean;
+			map.put("id", newlyId);
+		}else{
+			try {
+				Class<?> idClz = bean.getClass().getMethod("getId").getReturnType();/* 根据 getter 推断 id 类型 */
+				
+				if (Long.class == idClz && newlyId instanceof Integer) {
+					Reflect.executeMethod(bean, "setId", new Long((int)newlyId));
+				} else {
+					Reflect.executeMethod(bean, "setId", newlyId); // 直接保存
+				}
+			} catch (Throwable e) {
+				LOGGER.warning(e);
 			}
-		} catch (Throwable e) {
-			LOGGER.warning(e);
 		}
 		
 		return newlyId;
@@ -156,10 +161,16 @@ public class SimpleORM<T> extends Helper {
 	public boolean delete(T bean, String tableName) {
 		Serializable id;
 		
-		try {
-			id = (Serializable)Reflect.executeMethod(bean, "getId");
-		} catch (Throwable e) {
-			throw new RuntimeException("获取 bean 实体之 id 失败！");
+		if(bean instanceof Map) {
+			@SuppressWarnings("unchecked")
+			Map<String, Object> map = (Map<String, Object>)bean;
+			id = (Serializable)map.get("id");
+		}else{
+			try {
+				id = (Serializable)Reflect.executeMethod(bean, "getId");
+			} catch (Throwable e) {
+				throw new RuntimeException("获取 bean 实体之 id 失败！");
+			}
 		}
 		
 		LOGGER.info("DAO 删除记录 id:{0}", id);

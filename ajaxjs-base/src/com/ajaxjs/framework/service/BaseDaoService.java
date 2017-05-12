@@ -13,16 +13,19 @@
 package com.ajaxjs.framework.service;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import com.ajaxjs.framework.dao.IDao;
 import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.dao.DaoHandler;
+import com.ajaxjs.framework.model.BaseModel;
 import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.jdbc.ConnectionMgr;
 
 /**
  * 业务基类
+ * 
  * @author xinzhang
  *
  * @param <T>
@@ -38,12 +41,12 @@ public abstract class BaseDaoService<T, ID extends Serializable, D extends IDao<
 	 * 业务名称（英文）
 	 */
 	private String name;
-	
+
 	/**
 	 * 业务名称（中文）
 	 */
 	private String uiName;
-	
+
 	/**
 	 * 携带的数据，可用于 UI 显示或者其他数据
 	 */
@@ -51,16 +54,17 @@ public abstract class BaseDaoService<T, ID extends Serializable, D extends IDao<
 
 	/**
 	 * 实例化 DAO。因为是 class 所以不能注入，于是一般在 Service 构造器里面调用该方法
+	 * 
 	 * @param clz
 	 */
 	public void initDao(Class<D> clz) {
-		if(ConnectionMgr.getConnection() == null)
+		if (ConnectionMgr.getConnection() == null)
 			throw new RuntimeException("请先创建 connection 再创建 service！");
-		
+
 		D dao = new DaoHandler<D>().setConn(ConnectionMgr.getConnection()).bind(clz);
 		setDao(dao);
 	}
-	
+
 	@Override
 	public void prepareData(ModelAndView model) {
 		// 每次 servlet 都会执行的。记录时间
@@ -70,16 +74,17 @@ public abstract class BaseDaoService<T, ID extends Serializable, D extends IDao<
 		model.put("uiName", getUiName());
 		model.put("tableName", getName());
 	}
-	
+
 	/**
 	 * 获取全部数据（不分页）
+	 * 
 	 * @return
 	 * @throws ServiceException
 	 */
-	public List<T> getAll() throws ServiceException{
+	public List<T> getAll() throws ServiceException {
 		return findPagedList(new QueryParams(0, 999999)).getRows();
 	}
-	
+
 	@Override
 	public String getName() {
 		return name;
@@ -88,7 +93,7 @@ public abstract class BaseDaoService<T, ID extends Serializable, D extends IDao<
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public D getDao() {
 		return dao;
 	}
@@ -111,5 +116,23 @@ public abstract class BaseDaoService<T, ID extends Serializable, D extends IDao<
 
 	public void setUiName(String uiName) {
 		this.uiName = uiName;
+	}
+
+	public void commonCreate(T bean) {
+		if (bean instanceof BaseModel) {
+			BaseModel model = (BaseModel) bean;
+
+			if (model.getCreateDate() == null)
+				model.setCreateDate(new Date());
+		}
+	}
+
+	public void commonUpdate(T bean) {
+		if (bean instanceof BaseModel) {
+			BaseModel model = (BaseModel) bean;
+
+			if (model.getUpdateDate() == null)
+				model.setUpdateDate(new Date());
+		}
 	}
 }

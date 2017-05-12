@@ -15,28 +15,59 @@ public class CommonSQL extends SqlBuilder {
 	
 	public Object[] insert(Object bean, String tableName) {
 		INSERT_INTO(tableName);
-		List<String> methodNames =  addFieldValues(bean, false, null);
 		List<Object> values = new ArrayList<>();
-		
-		for(String methodName : methodNames) {
-			values.add(Reflect.executeMethod(bean, methodName));
+
+		if(bean instanceof Map) {
+			values = mapToSql(bean, false);
+		} else {
+			List<String> methodNames =  addFieldValues(bean, false, null);
+			
+			for(String methodName : methodNames) {
+				values.add(Reflect.executeMethod(bean, methodName));
+			}
+			
 		}
 
 		return values.toArray();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Object[] update(Object bean, String tableName) {
-		UPDATE(tableName);
-		List<String> methodNames = addFieldValues(bean, true, null);
-		WHERE("id = ?");
-		
+		UPDATE(tableName);		
 		List<Object> values = new ArrayList<>();
-		for(String methodName : methodNames) {
-			values.add(Reflect.executeMethod(bean, methodName));
-		}
-		values.add(Reflect.executeMethod(bean, "getId"));
 		
+		if(bean instanceof Map) {
+			values = mapToSql(bean, true);
+			values.add(((Map<String, Object>)bean).get("id"));// 添加 id 值，在最后
+		} else {
+			List<String> methodNames = addFieldValues(bean, true, null);
+			for(String methodName : methodNames) {
+				values.add(Reflect.executeMethod(bean, methodName));
+			}
+			values.add(Reflect.executeMethod(bean, "getId")); // 添加 id 值，在最后
+		}
+		
+		WHERE("id = ?");
 		return values.toArray();
+	}
+	
+	private List<Object> mapToSql(Object bean, boolean isSet) {
+		List<Object> values = new ArrayList<>();
+		@SuppressWarnings("unchecked")
+		Map<String, Object> map = (Map<String, Object>)bean;
+		
+		for(String field : map.keySet()) {
+			if(field.equals("id"))
+				continue; // 忽略 id 字段
+			if (isSet)
+				SET(field + " = ?");
+			else
+				VALUES(field, "?");
+			
+			values.add(map.get(field));
+		}
+		
+		return values;
 	}
 	
 	/**
@@ -70,7 +101,7 @@ public class CommonSQL extends SqlBuilder {
 					}
 					
 					if (isSet)
-						SET(pojoName + "= ?");
+						SET(pojoName + " = ?");
 					else
 						VALUES(pojoName, "?");
 				}

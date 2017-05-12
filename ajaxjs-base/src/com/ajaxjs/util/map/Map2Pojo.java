@@ -89,12 +89,24 @@ public class Map2Pojo<T> {
 					methodName = key.replace("is", "");
 					methodName = "set" + BeanUtil.firstLetterUpper(methodName);
 //					System.out.println("methodName：：：：：" + "set" + Reflect.firstLetterUpper(methodName));
+					
+					if(value instanceof String) {
+						value = (String)value;
+						if(value.equals("yes") || value.equals("true") || value.equals("1")) {
+							value = true;
+						}
+						
+						if(value.equals("no") || value.equals("false") || value.equals("0")) {
+							value = false;
+						}
+					}
+					
 					Reflect.executeMethod(pojo, methodName, t, (boolean) value);
 					
 				} else if (t == int.class || t == Integer.class) {
 					if(value.getClass() == String.class) 
 						value = Integer.parseInt(value.toString());
-					
+
 					// 整形
 					Reflect.executeMethod(pojo, methodName, t, value);
 					

@@ -263,7 +263,7 @@ public class Helper {
 		}
 		
 		if (!match(sql, params)) {
-			LOGGER.info("SQL 语句中的占位符与参数个数不匹配。SQL：" + sql);
+			LOGGER.info("SQL 语句中的占位符与值参数（个数上）不匹配。SQL：" + sql);
 			return null;
 		}
 

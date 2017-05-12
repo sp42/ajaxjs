@@ -25,7 +25,7 @@ public class Init {
 	/**
 	 * 是否调试模式（开发模式）
 	 */
-	public static boolean isDebug;
+	public final static boolean isDebug;
 
 	/**
 	 * 源码磁盘目录

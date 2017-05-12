@@ -36,10 +36,11 @@ import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.reflect.ReflectGeneric;
 
 /**
- * 通过 Java 代理自动实现接口的实例
- * 必须是接口原类型，而不是接口其父类，也就是不支持多态
+ * 通过 Java 代理自动实现接口的实例 必须是接口原类型，而不是接口其父类，也就是不支持多态
+ * 
  * @author sp42
- * @param <T> DAO 对象
+ * @param <T>
+ *            DAO 对象
  */
 public class DaoHandler<T> implements InvocationHandler {
 	/**
@@ -139,10 +140,11 @@ public class DaoHandler<T> implements InvocationHandler {
 				String countSql = sql.replaceAll("SELECT", "SELECT COUNT(\\*) AS count, ");
 				int total = Helper.queryOne(conn, countSql, int.class, args);
 				
+				PageResult<B> result = new PageResult<>();
 				if (total <= 0) {
-					throw new RuntimeException("没有记录");
+					System.out.println("没有记录");
+					return result; // 返回空的对象
 				} else {
-					PageResult<B> result = new PageResult<>();
 					result.setStart(queryParam.pageParam[0]);
 					result.setPageSize(queryParam.pageParam[1]);
 					
@@ -299,7 +301,6 @@ public class DaoHandler<T> implements InvocationHandler {
 		} else if (insert.value().equals("") && insert.tableName() != null && args[0] != null) { /* 以 bean 方式创建 */
 			id = orm.create((B)args[0], insert.tableName());
 		}
-		
 		if(returnType == Long.class && id.getClass() == Integer.class) {
 			return new Long((Integer)id);
 		} else {
