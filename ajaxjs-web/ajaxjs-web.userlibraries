@@ -3,6 +3,8 @@
     <library name="ajaxjs-web-libs" systemlibrary="false">
         <!--<archive path="/ajaxjs-web/WebContent/WEB-INF/lib/ajaxjs-web-tag.jar" />-->
         <archive path="/ajaxjs-web/lib/javax.ws.rs-api-2.0.rev.A.jar" source="/ajaxjs-web/lib/javax.ws.rs-api-2.0.rev.A-sources.jar" />
+        <archive path="/ajaxjs-base/lib/ajaxjs-base.jar" />
+        <archive path="/ajaxjs-web/lib/ajaxjs-web.jar" />
     </library>
     
     <!-- 模拟对象 -->

@@ -10,3 +10,12 @@ WEB 模块包含以下子模块：
 数据库连接
 因为使用了 Tomcat 数据库连接池，所以依赖于 Tomcat 的 web 环境，于是数据库的配置文件也就不在 properties 文件中，取而代之的是 WebContent/META-INF/context.xml 配置文件。
  
+ 
+包含下面模块
+
+|名称|说明|
+|------|----|
+|ajaxjs-web|Web 的基础类库|
+|ajaxjs-webconfig|基于 JSON 格式的配置系统|
+|ajaxjs-security|安全框架|
+|ajaxjs-page-editor| HTML 页面编辑器|
