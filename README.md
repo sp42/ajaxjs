@@ -29,12 +29,8 @@ Oracle Java 1.7 暂不支持 1.8 或 OpenJDK；Tomcat 7 或以上。
 |------|----|
 |ajaxjs-base|基础类库，不限定 JVM 环境。[详细介绍](http://git.oschina.net/sp42/ajaxjs/tree/master/ajaxjs-base?dir=1&filepath=ajaxjs-base)|
 |ajaxjs-web|Web 的基础类库|
-|ajaxjs-webconfig|基于 JSON 格式的配置系统|
 |ajaxjs-user|提供用户管理系统、积分系统和 Admin 界面框架|
-|ajaxjs-security|安全框架|
-|ajaxjs-article|文章发布系统，包括分类管理器和栏目管理器|
 |ajaxjs-cms|CMS 发布系统，整合了这里的若干子项目而形成一个大项目|
-|ajaxjs-page-editor| HTML 页面编辑器|
 |ajaxjs-simple-blog|纯 Servlet+JDBC 博客发布器，免依赖，小清新微型项目|
 |ajaxjs-ftp|FTP 文件上传实现|
 |ajaxjs-elasticsearch|es 的封装|
