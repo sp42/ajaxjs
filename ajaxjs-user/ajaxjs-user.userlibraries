@@ -5,7 +5,7 @@
         <archive path="/ajaxjs-user/lib/slf4j-jdk14-1.7.17.jar" />
         <archive path="/ajaxjs-user/lib/commons-logging-1.2.jar" 				 source="/ajaxjs-user/lib/commons-logging-1.2-src.zip" />
         <archive path="/ajaxjs-user/lib/commons-collections-3.2.2.jar"		 	 source="/ajaxjs-user/lib/commons-collections-3.2.2-src.zip" />
-        <archive path="/ajaxjs-user/lib/shiro-core-1.3.2.jar"					 source="/ajaxjs-user/lib/shiro-root-1.3.2-source-release.zip" />
-        <archive path="/ajaxjs-user/lib/shiro-web-1.3.2.jar" 					 source="/ajaxjs-user/lib/shiro-root-1.3.2-source-release.zip" />
+        <archive path="/ajaxjs-user/WebContent/WEB-INF/lib/shiro-core-1.3.2.jar"					 source="/ajaxjs-user/lib/shiro-root-1.3.2-source-release.zip" />
+        <archive path="/ajaxjs-user/WebContent/WEB-INF/lib/shiro-web-1.3.2.jar" 					 source="/ajaxjs-user/lib/shiro-root-1.3.2-source-release.zip" />
     </library>
 </eclipse-userlibraries>
