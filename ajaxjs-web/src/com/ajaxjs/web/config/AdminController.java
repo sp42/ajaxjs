@@ -12,6 +12,7 @@ import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.map.MapData;
+import com.ajaxjs.web.HtmlHead;
 
 /**
  * 配置管理后台
@@ -76,8 +77,8 @@ public class AdminController extends HttpServlet {
 
 		if (StringUtil.isEmptyString(jsonFile))
 			throw new NullPointerException("没有 json File 参数！");
-
-		jsonFileFullPath = new Requester(request).Mappath(jsonFile);
+		
+		jsonFileFullPath = HtmlHead.Mappath(request, jsonFile);
 		
 		JsonConfig update = new JsonConfig(InitConfig.allConfig.getEngine());
 		update.setJsonPath(jsonFileFullPath);
