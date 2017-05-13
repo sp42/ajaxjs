@@ -19,7 +19,7 @@
 
 环境
 ------------
-Oracle Java 1.7 暂不支持 1.8 或 OpenJDK；Tomcat 7 或以上。
+因为 Rhino JS 引擎的缘故暂不支持 Java 1.8 或 OpenJDK；仅支持 Oracle Java 1.7。Tomcat 7 或以上。
 
 项目一览
 --------------
@@ -33,11 +33,11 @@ Oracle Java 1.7 暂不支持 1.8 或 OpenJDK；Tomcat 7 或以上。
 |ajaxjs-cms|CMS 发布系统，整合了这里的若干子项目而形成一个大项目|
 |ajaxjs-simple-blog|纯 Servlet+JDBC 博客发布器，免依赖，小清新微型项目|
 |ajaxjs-ftp|FTP 文件上传实现|
-|ajaxjs-elasticsearch|es 的封装|
+|ajaxjs-elasticsearch|对 elasticsearch 的封装|
 |ajaxjs-nashorn|Java 8 Nashorn JS 引擎的剥离|
 |ajaxjs-workflow|基于 snaker 工作流的整合|
 
-一般做 web 开发的，按照项目重要性依次有 base、web、webconfig，可重点关注这个几个项目；最后集大成的就是 cms 项目。
+base+web+user=cms，前期可重点关注等号左面的这几个项目，最后集大成的就是 cms 项目。
 
 项目一览（前端）
 --------------
