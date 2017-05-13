@@ -1,14 +1,13 @@
 <%@page pageEncoding="UTF-8"%>
+<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <!DOCTYPE html>
 <html>
-	<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 	<commonTag:head lessFile="/asset/bigfoot/asset/less/user.less" title="登录信息" />
 <body>
-	<commonUI:adminHeader pageTitle="登录信息" />
+	<commonTag:adminUI type="header" pageTitle="登录信息" />
 	<style>
 		body{
-				background-color: #f4f4f4;
-		
+			background-color: #f4f4f4;
 		}
 		fieldset{
 			background-color: white;
@@ -64,10 +63,7 @@
 		        });
 			</script>
 		</fieldset>
-		
-		<style>
-	
-		</style>
+
 		<fieldset class="openAuth">
 			<legend>第三方认证账号绑定</legend>
 		 	<p>高亮图标表示已绑定账户，灰色未绑定。</p>

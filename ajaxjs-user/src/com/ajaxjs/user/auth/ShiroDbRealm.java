@@ -28,7 +28,7 @@ import org.apache.shiro.realm.AuthenticatingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
 import com.ajaxjs.util.LogHelper;
-import com.ajaxjs.framework.exception.ServiceException;
+import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserService;
 

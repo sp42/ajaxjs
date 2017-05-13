@@ -1,12 +1,12 @@
 <%@page pageEncoding="UTF-8"%>
+<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <%@ taglib uri="/ajaxjs" prefix="c" %>
 <%
 	String action = request.getParameter("action");
 %>
 <html>
 	<head>
-		<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
-		<commonTag:head title="后台" lessFile="/asset/less/user.less" />
+		<commonTag:head title="后台" lessFile="/asset/less/admin.less" />
 		<style>
 			.memberNav{
 				display:none;
@@ -48,7 +48,7 @@
 <%-- 			<c:if test="${User.showCaptchaWhenLoginFailed() == 0 || showCaptchaWhenLoginFailed}"> --%>
 				<!-- 验证码 -->
 				<label class="captchaCode">验证码：
-					<img src="${pageContext.request.contextPath}/service/user/access/captchaImg" onclick="this.src=this.src + '?' + new Date;" />
+					<img src="captchaImg/show.do?1" onclick="this.src=this.src + '?' + new Date;" />
 					<input type="text" name="captchaImgCode" /> 
 				</label>
 <%-- 			</c:if> --%>
@@ -89,7 +89,7 @@
 					<!-- 验证码 -->
 					<label class="captchaCode">
 						Captcha Code：
-						<input type="text" /> <img src="../public/Captcha.jsp" />
+						<img src="captchaImg/show.do?2" onclick="this.src=this.src + '?' + new Date;" />
 					</label>
 					<input type="submit" value="查找密码" />
 				</form>

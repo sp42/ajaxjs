@@ -1,11 +1,10 @@
 <%@page pageEncoding="UTF-8"%>
 <%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
-<%@taglib prefix="commonUI"  tagdir="/WEB-INF/tags/common/UI"%>
 <!DOCTYPE html>
 <html>
 	<commonTag:head lessFile="/asset/bigfoot/asset/less/user.less" title="个人信息" />
 <body>
-	<commonUI:adminHeader pageTitle="个人信息" />
+	<commonTag:adminUI type="header" pageTitle="个人信息" />
 	<style>
 		body {
 			background-color: #f4f4f4;
