@@ -32,21 +32,14 @@ package com.ajaxjs.user;
 
 import java.util.Date;
 
-import org.apache.ibatis.session.SqlSession;
+import com.ajaxjs.framework.dao.QueryParams;
+import com.ajaxjs.framework.model.PageResult;
+import com.ajaxjs.framework.service.BaseDaoService;
+import com.ajaxjs.framework.service.ServiceException;
 
-import com.ajaxjs.framework.dao.MyBatis;
-import com.ajaxjs.framework.exception.DaoException;
-import com.ajaxjs.framework.exception.ServiceException;
-import com.ajaxjs.framework.service.BaseCrudService;
-import com.ajaxjs.util.LogHelper;
-
-public class UserService extends BaseCrudService<User, UserDao> {
-	private static final LogHelper LOGGER = LogHelper.getLog(UserService.class);
-
+public class UserService extends BaseDaoService<User, Long, UserDao> {
 	public UserService() {
-		setMapper(UserDao.class);
-		setTableName("user");
-		setUiName("用户");
+		initDao(UserDao.class);
 	}
 
 	/**
@@ -60,68 +53,22 @@ public class UserService extends BaseCrudService<User, UserDao> {
 		if (user == null || user.getId() == 0)
 			throw new ServiceException("非法用户！");
 
-		int effectedRows = 0;
-		try {
-			try (SqlSession session = MyBatis.sqlSessionFactory.openSession();) {
-				UserDao dao = session.getMapper(UserDao.class);
-				effectedRows = dao.updateLoginInfo(user.getId(), new Date(), ip);
-				session.commit();
-			}
-
-			if (effectedRows <= 0)
-				throw new DaoException("更新会员登录信息出错");
-		} catch (Throwable e) {
-			e.printStackTrace();
-			throw new DaoException(e.getMessage());
-		}
+		int effectedRows = getDao().updateLoginInfo(user.getId(), new Date(), ip);
+	
+		if (effectedRows <= 0)
+				throw new ServiceException("更新会员登录信息出错");
 	}
 
 	public User findByUserName(String userName) throws ServiceException {
-		User user = null;
-
-		try (SqlSession session = MyBatis.loadSession(UserDao.class);) {
-
-			UserDao userDao = session.getMapper(UserDao.class);
-			user = userDao.findByUserName(userName);
-
-		} catch (Throwable e) {
-			LOGGER.warning(e);
-			throw new DaoException(e.getMessage());
-		}
-
-		return user;
+		return getDao().findByUserName(userName);
 	}
 	
 	public User findByPhone(String phone) throws ServiceException {
-		BaseCrudService.Session<UserDao> session = getSession();
-		User user = session.mapper.findByPhone(phone);
-		session.session.close();
-
-		return user;
+		return getDao().findByPhone(phone);
 	}
 
 	public User findByUserNameAndPassword(String userName, String password) throws ServiceException {
-		User user = null;
-
-		try (SqlSession session = MyBatis.loadSession(UserDao.class);) {
-			UserDao userDao = session.getMapper(UserDao.class);
-			user = userDao.findByUserNameAndPassword(userName, password);
-		} catch (Throwable e) {
-			LOGGER.warning(e);
-			throw new DaoException(e.getMessage());
-		}
-
-		return user;
-	}
-	
-	@Override
-	public int create(User user) throws ServiceException {
-		if (user.getName() == null) { // 如果没有用户名
-			if (user.getPhone() != null) { // 则使用 user_{phone} 作为用户名
-				user.setName("user_" + user.getPhone());
-			}
-		}
-		return super.create(user);
+		return getDao().findByUserNameAndPassword(userName, password);
 	}
 
 	public static boolean isRightUser(User _user_in_db, User request_user) throws ServiceException {
@@ -130,5 +77,39 @@ public class UserService extends BaseCrudService<User, UserDao> {
 		if (!_user_in_db.getPassword().equals(request_user.getPassword()))
 			throw new ServiceException("密码错误");
 		return true;
+	}
+
+	@Override
+	public Long create(User user) throws ServiceException {
+		if (user.getName() == null) { // 如果没有用户名
+			if (user.getPhone() != null) { // 则使用 user_{phone} 作为用户名
+				user.setName("user_" + user.getPhone());
+			}
+		}
+		return getDao().create(user);
+	}
+
+	@Override
+	public boolean delete(User user) throws ServiceException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public User findById(Long user) throws com.ajaxjs.framework.service.ServiceException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PageResult<User> findPagedList(QueryParams user) throws com.ajaxjs.framework.service.ServiceException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int update(User user) throws com.ajaxjs.framework.service.ServiceException {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

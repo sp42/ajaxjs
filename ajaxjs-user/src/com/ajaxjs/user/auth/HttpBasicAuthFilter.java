@@ -50,7 +50,8 @@ public class HttpBasicAuthFilter implements javax.servlet.Filter {
 			response.setStatus(401, "Authentication Required");
 			// 发送要求输入认证信息,则浏览器会弹出输入框
 			response.setHeader("WWW-Authenticate", "Basic realm=" + msg);
-			response.getWriter().append("请登录系统！");
+			response.setCharacterEncoding("utf-8");
+			response.getWriter().append("<meta charset=\"utf-8\" />Please login! 请登录系统！");
 		} else {
 			request.setAttribute("userName", userid);
 			chain.doFilter(request, response);

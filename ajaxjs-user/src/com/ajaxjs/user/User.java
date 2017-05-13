@@ -25,6 +25,8 @@ import com.ajaxjs.framework.model.BaseModel;
  *
  */
 public class User extends BaseModel {
+	private static final long serialVersionUID = 1L;
+
 	private int sex;
 	
 	@NotNull(message="密码不能为空")

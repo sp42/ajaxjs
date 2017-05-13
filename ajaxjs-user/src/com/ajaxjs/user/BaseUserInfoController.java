@@ -1,5 +1,6 @@
 package com.ajaxjs.user;
 
+import javax.mvc.annotation.Controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
@@ -16,22 +17,34 @@ import com.ajaxjs.user.auth.captcha.IncorrectCaptchaException;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.web.Captcha;
 
-public abstract class BaseUserInfoController implements IController {
+@Controller
+@Path("/user")
+public class BaseUserInfoController implements IController {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseUserInfoController.class);
 	
-	public static final String perfix = "/WEB-INF/jsp/";
+	public static final String perfix = "/asset/jsp/";
 	
 //	private Service service = new Service();
 	
 	/**
-	 * 登录界面
+	 * 显示修改用户信息界面
+	 * @return
+	 */
+	@GET
+	public String loginUI() {
+		LOGGER.info("profile界面");
+		return perfix + "user/login";
+	}
+	
+	/**
+	 * 显示修改用户信息界面
 	 * @return
 	 */
 	@GET
 	@Path("/profile")
 	public String profileUI() {
 		LOGGER.info("profile界面");
-		return perfix + perfix + "common/user/profile";
+		return perfix + "user/profile";
 	}
 	
 	/**
@@ -42,29 +55,29 @@ public abstract class BaseUserInfoController implements IController {
 	@Path("/profile")
 	public String updateProfile() {
 		LOGGER.info("updateProfile");
-		return perfix + "common/user/login";
+		return perfix + "user/login";
 	}
 	
 	/**
-	 * 登录信息界面
+	 * 显示修改密码界面
 	 * @return
 	 */
 	@GET
 	@Path("/updatePassword")
 	public String updatePasswordUI() {
 		LOGGER.info("登录信息界面");
-		return perfix + "common/user/updatePassword";
+		return perfix + "user/updatePassword";
 	}
 	
 	/**
-	 * 修改登录信息
+	 * 修改密码
 	 * @return
 	 */
 	@POST
 	@Path("/updatePassword")
 	public String updatePassword() {
 		LOGGER.info("修改登录信息");
-		return perfix + "common/user/login";
+		return perfix + "user/login";
 	}
 	
 	/**
@@ -79,6 +92,8 @@ public abstract class BaseUserInfoController implements IController {
 
 		System.out.println(req.getSession().getAttribute(Captcha.SESSION_KEY));
 	}
+	
+	public static String request_exception_key = "";
 
 	@POST
 	@Path("/login")
@@ -114,8 +129,14 @@ public abstract class BaseUserInfoController implements IController {
 //		boolean isOk = error == null;
 //		String msg = error == null ? "登录成功！" : error + "具体原因：" + (exObj != null ? exObj.getMessage() : "N/A");
 //		rsp.outputAction(isOk, msg);
+		
+		
 	}
 
+	/**
+	 * 登出
+	 * @param request
+	 */
 	@GET
 	@Path(value = "/logout")
 	public void logout(HttpServletRequest request) {
