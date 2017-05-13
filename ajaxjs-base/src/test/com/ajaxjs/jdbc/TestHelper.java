@@ -14,7 +14,6 @@ import org.junit.Test;
 
 import com.ajaxjs.jdbc.Helper;
 import com.ajaxjs.jdbc.JdbcConnection;
-import com.ajaxjs.util.Util;
 
 public class TestHelper {
 	Connection conn;
