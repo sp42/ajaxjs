@@ -9,7 +9,7 @@ import com.ajaxjs.framework.model.PageResult;
 import com.ajaxjs.framework.service.BaseDaoService;
 import com.ajaxjs.framework.service.IService;
 
-public class ArticleService extends BaseDaoService<Article, Long, ArticleDao> implements IService<Article, Long>{
+public class ArticleService extends BaseDaoService<Article, Long, ArticleDao> implements IService<Article, Long> {
 	public ArticleService() {
 		initDao(ArticleDao.class);
 	}
@@ -38,6 +38,7 @@ public class ArticleService extends BaseDaoService<Article, Long, ArticleDao> im
 	public PageResult<Article> findPagedList(QueryParams parame) {
 		return getDao().findPagedList(parame);
 	}
+
 	public PageResult<Map<String, Object>> findPagedList2(QueryParams parame) {
 		return getDao().findPagedList2(parame);
 	}
