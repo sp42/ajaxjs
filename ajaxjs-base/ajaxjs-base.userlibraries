@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <eclipse-userlibraries version="2">
-    <!-- SQLite 驱动 -->
-    <library name="ajaxjs-base-db-driver" systemlibrary="false">
+    <library name="ajaxjs-base-db-libs" systemlibrary="false">
+	    <!-- SQLite 驱动 -->
         <archive path="/ajaxjs-base/lib/sqlite-jdbc-3.15.1.jar"/>
-    </library>
-
-	<!-- 验证框架 jar 包 -->
-    <library name="ajaxjs-base-validation-libs" systemlibrary="false">
+		<!-- 验证框架 jar 包 -->
         <archive path="/ajaxjs-base/lib/validation/commons-lang3-3.4.jar" 			 source="/ajaxjs-base/lib/validation/commons-lang3-3.4-src.zip"/>
         <archive path="/ajaxjs-base/lib/validation/commons-beanutils-1.9.2.jar" 	 source="/ajaxjs-base/lib/validation/commons-beanutils-1.9.2-sources"/>
         <archive path="/ajaxjs-base/lib/validation/org.apache.bval.bundle-1.1.1.jar" source="/ajaxjs-base/lib/validation/bval-parent-1.1.1-source-release.zip" />
