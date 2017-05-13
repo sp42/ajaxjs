@@ -138,6 +138,8 @@ select[multiple] {
 // 文件上传
 .upload-btns {
 	position: relative;
+	float:left;
+	margin-left:10px;
 	label{
 		cursor: pointer;
 	}
@@ -153,11 +155,12 @@ select[multiple] {
 		color:gray;	
 		cursor: pointer;
 		font-size:.8rem;
+		padding: 10px;
 		div{
 			font-size:2rem;cursor: pointer;
 		}
 	}
-	.btn_file_molding {
+	input[name=fileInput] {
 		position: absolute;
 		left: 0;
 		top: 0;
