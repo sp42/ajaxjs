@@ -193,14 +193,15 @@ public class HtmlHead {
 	 * 返回样式文件
 	 * 
 	 * @param lessPath
-	 *            LESS 路径
+	 *            LESS 路径，如果 lessPath = null，表示不需要 <link href=...> 样式 
 	 * @return CSS 地址
 	 */
 	public static String getCssUrl(HttpServletRequest request, String lessPath, boolean isDebug) {
 		String css = null;
 		
-		if(lessPath == null)
-			lessPath = "/asset/less/main.less"; // 默认 less 路径
+		if(lessPath == null) return null;
+			//lessPath = "/asset/less/main.less"; // 默认 less 路径
+
 		
 		if (isDebug) {// 设置参数
 			Map<String, String> params = new HashMap<String, String>();

@@ -3,6 +3,7 @@
 <%@attribute name="title" 		required="false" description="其他标题"%> 
 <%@attribute name="lessFile" 	required="false" description="指定 LESS 样式文件"%> 
 <%-- <jsp:useBean id="ua" class="com.ajaxjs.web.UserAgent" /> --%>
+<noscript><div align="center">如要享受本网站之服务请勿禁用浏览器 JavaScript 支持</div></noscript>
 <head>
 <%-- <html lang="zh-cmn-Hans"> --%>
 		<meta charset="utf-8" />
@@ -10,7 +11,6 @@
 	    <meta name="description" content="${_config.site_description}" />
 	    <meta name="author"      content="Frank Chueng, frank@ajaxjs.com" />
     	<title>${_config.site_titlePrefix} ${title}</title>
-		<noscript>如要享受本网站服务，请您不要禁用  JavaScript 支持。</noscript>
 		<%-- pageContext.request.contextPath 作用是取出部署的应用程序名，这样不管如何部署，所用路径都是正确的。 --%>
 		<link rel="icon"		  type="image/x-icon" href="${pageContext.request.contextPath}/asset/images/favicon.ico" />
 		<link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/asset/images/favicon.ico" />
@@ -60,21 +60,23 @@
 	
 	<%-- 定义网页搜索引擎索引方式，robotterms 是一组使用英文逗号「,」分割的值，通常有如下几种取值：none，noindex，nofollow，all，index和follow --%>
 	<meta name="robots" content="index,follow" />
-	<%-- request.setAttribute("isDebug", Init.isDebug); --%>
-	<%-- <link rel="stylesheet" type="text/css" href="${_config.LessUrlProcessor.getCssUrl(pageContext.request, lessFile, isDebug)}" /> --%>
 	
 	<%
-		// 是否处于调试模式
-		boolean isDebug = true;
-	
-		if(request.getServletContext().getAttribute("isDebug") != null) {
-			isDebug = (Boolean)request.getServletContext().getAttribute("isDebug");
-		} 
+		
+		if(lessFile != null) {
+			// 是否处于调试模式
+			boolean isDebug = true;
+		
+			if(request.getServletContext().getAttribute("isDebug") != null) {
+				isDebug = (Boolean)request.getServletContext().getAttribute("isDebug");
+			} 
 	%>
 	<link rel="stylesheet" type="text/css" href="<%=HtmlHead.getCssUrl(request, lessFile, isDebug)%>" />
-    <script src="${pageContext.request.contextPath}/asset/js/dom.js"></script>
-    <script src="${pageContext.request.contextPath}/asset/new_js/dom.js"></script>
-    <script src="${pageContext.request.contextPath}/asset/new_js/widget.js"></script>
+	<%
+		} 
+	%>
+    <script src="${pageContext.request.contextPath}/asset/common/js/dom.js"></script>
+    <script src="${pageContext.request.contextPath}/asset/common/js/widget.js"></script>
 
     <jsp:doBody />
 </head>

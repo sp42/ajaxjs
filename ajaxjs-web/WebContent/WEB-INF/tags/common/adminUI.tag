@@ -1,5 +1,5 @@
 <%@tag pageEncoding="UTF-8" description="公共的管理界面"%>	
-<%@taglib uri="/ajaxjs" prefix="c"%>
+<%@taglib prefix="c" uri="/ajaxjs"%>
 <%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <%@attribute name="type" type="String" required="true" description="该属性选择类型"%>
 
