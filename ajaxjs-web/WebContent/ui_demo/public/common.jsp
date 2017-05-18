@@ -56,12 +56,14 @@
 	
 	<%-- 定义网页搜索引擎索引方式，robotterms 是一组使用英文逗号「,」分割的值，通常有如下几种取值：none，noindex，nofollow，all，index和follow --%>
 	<meta name="robots" content="index,follow" />
-	<%-- <link rel="stylesheet" type="text/css" href="<%=getCssUrl(request, "/ui_demo/public/main.less", true)%>" /> --%>
-	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ui_demo/public/css.css" />
-    <script src="${pageContext.request.contextPath}/bigfoot/asset/js/dom.js"></script>
+	<link rel="stylesheet" type="text/css" href="<%=getCssUrl(request, "/ui_demo/public/main.less", true)%>" />
+<%-- 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ui_demo/public/css.css" /> --%>
+    <script src="${pageContext.request.contextPath}/asset/common/js/dom.js"></script>
+    <script src="${pageContext.request.contextPath}/asset/common/js/widget.js"></script>
+    <script src="${pageContext.request.contextPath}/asset/common/js/list.js"></script>
+    <script src="${pageContext.request.contextPath}/asset/common/js/libs/run_prettify.js"></script>  
 
 	<%
 		request.setAttribute("bigfoot", request.getContextPath() + "/bigfoot/asset");
 	%>
     <title>AJAXJS UI-${title}</title>
-    <script src="${bigfoot}/js/libs/run_prettify.js"></script>  
