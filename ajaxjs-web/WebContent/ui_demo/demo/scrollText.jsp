@@ -26,25 +26,18 @@
 			</ul>
 		</div>
 		</div>
-		<script src="${bigfoot}/js/widget/marquee.js"></script>
 		<script>
 			// 无缝上下滚动
-			var scroller = Object.create(bf_marquee);
+			var scroller = Object.create(ajaxjs.MarqueeText);
 			scroller.init(document.querySelector(".idScroller"));
-			scroller.PauseStep = 3000; // 停留时间
-			scroller.PauseHeight = 25; // 单行高度，必须与 CSS 中的 li.height 相等
-			scroller.Scroll();
+			scroller.pauseStep = 3000; // 停留时间
+			scroller.pauseHeight = 25; // 单行高度，必须与 CSS 中的 li.height 相等
+			scroller.scroll();
 		</script>
 		<!-- // 公告 -->
 
  
     	<br />
-	<div class="p">
-		<h3>依赖 js：</h3>
-		<ul>
-			<li>/js/dhtml/marquee.js</li>
-		</ul>
-	</div>
 	<div class="p">
 		<h3>注意事项：</h3>
 		<ul>
@@ -99,7 +92,6 @@
 			color:#666;
 		}
 	}
-}
-    	</pre>
+}</pre>
     </body>
 </html>

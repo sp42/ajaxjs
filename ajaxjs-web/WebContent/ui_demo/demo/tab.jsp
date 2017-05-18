@@ -5,8 +5,6 @@
 	<%@include file="../public/common.jsp" %>
     <body>
 		<%@include file="../public/nav.jsp" %>
-    	<script src="${bigfoot}/js/libs/touch.js"></script>
-    	<script src="${bigfoot}/js/widget/tab.js"></script>
     	<br />
 
     	<div class="p">

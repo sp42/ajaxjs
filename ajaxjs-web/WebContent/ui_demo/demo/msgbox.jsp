@@ -5,17 +5,50 @@
 	<%@include file="../public/common.jsp" %>
     <body>
 		<%@include file="../public/nav.jsp" %>
+		<script>
+		
+		function showWarningDlg(innerText) {
+			new ajaxjs.Popup({
+				innerText : '<div class="leftIcon warning">!</div>' + innerText,
+				title : '警告',
+				hideYES_NO : true
+			}).show();
+		}
+		function showSuccessDlg(innerText) {
+			// ✓ &#10003; &#x2713; ✔&#10004;&#x2714;
+			new ajaxjs.Popup({
+				innerText : '<div class="leftIcon success">✔</div>' + innerText,
+				title : '完成',
+				closeAsConfirm : true,
+				hideYES_NO : true
+			}).show();
+		}
+		function showQueryDlg(innerText) {
+			// ✓ &#10003; &#x2713; ✔&#10004;&#x2714;
+			new ajaxjs.Popup({
+				innerText : '<div class="leftIcon query">?</div>' + innerText,
+				title : '询问',
+				hideClose : true,
+				yesHandler : function() {
+					alert('yes');
+				},
+				noHandler : function() {
+					alert('no');
+				}
+			}).show();
+		}
+		</script>
     	<div class="p">
 	    	<h3>对话框制作要点</h3>
-	    	<p> 熟练的话，五分钟即可完成全部编码！<button onclick="showDlg();">点击演示</button></p>
+	    	<p> 熟练的话，五分钟即可完成全部编码！<button onclick="(new ajaxjs.Popup()).show();">点击演示</button></p>
 	    	 <ul>
 	    	 	<li>全屏幕的遮罩 Mask（fixed 定位，100%宽，高度用 js 获取页面内容高度然后赋值，设置透明背景然后注意 z-index）</li>
-	    	 	<li>如果不需要 Mask，不加入 &lt;div class=&quot;msgbox_mask&quot;&gt;&lt;/div&gt;  元素即可</li>
+	    	 	<li>如果不需要 Mask，不加入 &lt;div class=&quot;msgbox_mask&quot;&gt;&lt;/div&gt; 元素即可</li>
 	    	 	
-	    	 	<li>窗体居中（fixed 定位，js 计算页面内容高度、宽度减半然后再减去窗体之高度、宽度一半，即为top、left）</li>
+	    	 	<li>窗体居中（fixed 定位，js 计算页面内容高度、宽度减半然后再减去窗体之高度、宽度一半，即为 top、left）</li>
 	    	 	<li>窗体不会随着页面滚动而定位位置，而是根据浏览器视口（viewport）来定位，因而采用  fixed 定位，计算 top、left 读取 windows.innerWidth/innerHeight</li>
-	    	 	<li>关闭窗体很简单，要连同 Mask 一起关闭（关闭动作是多个的，JS中使用了 [].forEach.call 遍历的技巧）</li>
-	    	 	<li>fadeIn 效果为纯 CSS3做的，可能一些低版本的浏览器就没有动画效果了</li>
+	    	 	<li>关闭窗体很简单，要连同 Mask 一起关闭（关闭动作是多个的，js 中使用了 [].forEach.call 遍历的技巧）</li>
+	    	 	<li>fadeIn 效果为纯 CSS3 做的，可能一些低版本的浏览器就没有动画效果了</li>
 	    	 	<li>可以方便地自定义按钮</li>
 	    	 	<li>键盘 ESC 键关闭窗体</li>
 	    	 </ul>
@@ -43,14 +76,10 @@
 			<div class="msgbox_mask"></div>
     	</textarea>
     	
-    	<script src="${bigfoot}/js/libs/dd.js"></script>
-    	<script src="${bigfoot}/js/widget/dialog.js"></script>
-    	
 		<div class="p">
 			<h3>依赖 js：</h3>
 			<ul>
 				<li>/js/libs/dd.js 如果需要拖放的话</li>
-				<li>/js/widget/dialog.js</li>
 			</ul>
 		</div> 
 		
@@ -79,30 +108,38 @@
 		</div>
 		
 		<pre class="prettyprint">
-var msgbox = document.querySelector('.msgbox');
-// 计算居中
-document.querySelector('.msgbox_mask').style.height = document.body.scrollHeight + 'px';
-msgbox.style.left = (window.innerWidth / 2 - msgbox.clientWidth / 2) + 'px';
-msgbox.style.top = (window.innerHeight / 2 - msgbox.clientHeight / 2) + 'px';
-
-// 平均分按钮宽度
-var btn = msgbox.querySelector('.btn'), btns = msgbox.querySelectorAll('.btn>div');
-var j = btns.length, width = (btn.clientWidth / j - 12) + 'px'; // 要减去间隙
-
-for(var i = 0; i < j; i ++) {
-	btns[i].style.marginRight = '10px'; // 添加间隙
-	btns[i].style.width = width;
+function showWarningDlg(innerText) {
+	new ajaxjs.Popup({
+		innerText : &#x27;&lt;div class=&quot;leftIcon warning&quot;&gt;!&lt;/div&gt;&#x27; + innerText,
+		title : &#x27;警告&#x27;,
+		hideYES_NO : true
+	}).show();
 }
-// 登记关闭事件
-[].forEach.call(msgbox.querySelectorAll('.closeAction'), function(closeBtn){
-	closeBtn.onclick = function(){
-		var msgbox = document.querySelector('.msgbox');
-		msgbox.parentNode.removeChild(msgbox);
-		var msgbox_mask = document.querySelector('.msgbox_mask');
-		if(msgbox_mask)
-			msgbox_mask.parentNode.removeChild(msgbox_mask);
-	}
-});
+
+function showSuccessDlg(innerText) {
+	// ✓ &amp;#10003; &amp;#x2713; ✔&amp;#10004;&amp;#x2714;
+	new ajaxjs.Popup({
+		innerText : &#x27;&lt;div class=&quot;leftIcon success&quot;&gt;✔&lt;/div&gt;&#x27; + innerText,
+		title : &#x27;完成&#x27;,
+		closeAsConfirm : true,
+		hideYES_NO : true
+	}).show();
+}
+
+function showQueryDlg(innerText) {
+	// ✓ &amp;#10003; &amp;#x2713; ✔&amp;#10004;&amp;#x2714;
+	new ajaxjs.Popup({
+		innerText : &#x27;&lt;div class=&quot;leftIcon query&quot;&gt;?&lt;/div&gt;&#x27; + innerText,
+		title : &#x27;询问&#x27;,
+		hideClose : true,
+		yesHandler : function() {
+			alert(&#x27;yes&#x27;);
+		},
+		noHandler : function() {
+			alert(&#x27;no&#x27;);
+		}
+	}).show();
+}
 		</pre>		
 		<div class="p">
 			<h3>样式如下：</h3>

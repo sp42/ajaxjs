@@ -67,20 +67,13 @@
 			</div>
     	</div>
 	
-<script src="${bigfoot}/js/widget/tab.js"></script>
 <script>
-	new SimpleTab(document.querySelector('.tab2')).jump(0);
-	new SimpleTab(document.querySelector('.tab3')).jump(0);
+	new ajaxjs.SimpleTab(document.querySelector('.tab2')).jump(0);
+	new ajaxjs.SimpleTab(document.querySelector('.tab3')).jump(0);
 </script>
     	<br />
 
 	<div style="clear:both;"></div>
-	<div class="p">
-		<h3>依赖 js：</h3>
-		<ul>
-			<li>/js/widget/tab.js</li>
-		</ul>
-	</div>
 	<div class="p">
 		<h3>注意事项：</h3>
 		<ul>
