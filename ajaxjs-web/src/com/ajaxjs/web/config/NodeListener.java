@@ -17,7 +17,7 @@ package com.ajaxjs.web.config;
 
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
-import javax.servlet.annotation.WebListener;
+// import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.Init;
@@ -29,7 +29,7 @@ import com.ajaxjs.util.StringUtil;
  * @author frank
  *
  */
-@WebListener 
+// @WebListener 
 public class NodeListener implements ServletRequestListener {	
 	/**
 	 * 是否已经加载 site_stru.js

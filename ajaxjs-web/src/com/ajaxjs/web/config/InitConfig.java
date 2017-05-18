@@ -21,7 +21,7 @@ import javax.script.ScriptEngine;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
+// import javax.servlet.annotation.WebListener;
 
 import com.ajaxjs.Init;
 import com.ajaxjs.js.Bean2Json;
@@ -34,7 +34,7 @@ import com.ajaxjs.js.JsonHelper;
  * @author Frank
  *
  */
-@WebListener
+// @WebListener
 public class InitConfig implements ServletContextListener {
 	private static final ScriptEngine jsEngine = JsEngineWrapper.engineFactory();
 

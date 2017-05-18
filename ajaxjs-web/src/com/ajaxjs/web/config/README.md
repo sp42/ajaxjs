@@ -40,6 +40,17 @@ JSON 文件 site_config.js 必须位于 classpath 下，必须定义一个名为
 	  "clientShortName":"炜爵爷"
     }
     
+web.xml 配置如下：
+
+	<!-- 通用的网站配置系统 -->
+	<listener>  
+	   <listener-class>com.ajaxjs.web.config.NodeListener</listener-class>  
+	</listener>  
+	<listener>  
+	   <listener-class>com.ajaxjs.web.config.InitConfig</listener-class>  
+	</listener>  
+	<!-- // 通用的网站配置系统 -->
+
 这时，我们可以调用下面 API：
 
 - 调用 InitConfig.getAsString(configName) 是根据配置名称读取配置值（String 类型）

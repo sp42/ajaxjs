@@ -73,8 +73,7 @@ public class UserAgent {
 	 * @return true 表示为旧 IE 浏览器
 	 */
 	public boolean is_old_IE() {
-		return isIE() && (ua.contains("msie 5.5") || ua.contains("msie 6.0") || ua.contains("msie 7.0")
-				|| ua.contains("msie 8.0"));
+		return isIE() && (ua.contains("msie 5.5") || ua.contains("msie 6.0") || ua.contains("msie 7.0") || ua.contains("msie 8.0"));
 	}
 
 	/**
