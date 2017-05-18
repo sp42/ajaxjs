@@ -101,21 +101,21 @@
 					if(this.currentIndex == p){
 						continue;
 					}else if(i == p){// 要显示的
-						this.children[p].removeCls('hide');
+						this.children[p].classList.remove('hide');
 					}else{	
-						this.children[p].addCls('hide');
+						this.children[p].classList.add('hide');
 					}
 				}
 		
 				var cssText = i > this.currentIndex
-					? 'translate3d({0}, 0px, 0px)'.format('-50%')
-					: 'translate3d({0}, 0px, 0px)'.format('0%');
+					? 'translate3d({0}, 0px, 0px)'.replace('{0}', '-50%')
+					: 'translate3d({0}, 0px, 0px)'.replace('{0}', '0%');
 					this.mover.style.webkitTransition = '-webkit-transform 400ms linear';
 				this.mover.style.webkitTransform = cssText;
 	 			
 			}else{
 				var leftValue =  this.isUsePx ? ('-' + (i * this.stepWidth) + 'px') : ('-' + (1 / this.len * 100  * i).toFixed(2) + '%');
-				this.mover.style[isWebkit ? 'webkitTransform' : 'transform'] = 'translate3d({0}, 0px, 0px)'.format(leftValue);
+				this.mover.style[isWebkit ? 'webkitTransform' : 'transform'] = 'translate3d({0}, 0px, 0px)'.replace('{0}', leftValue);
 			}
 			
 			this.currentIndex = i;
@@ -192,10 +192,10 @@
 		var index;
 		for(var i = 0, j = arr.length; i < j; i++){
 			if(li == arr[i]){
-				arr[i].addCls('active');
+				arr[i].classList.add('active');
 				index = i;
 			}else{
-				arr[i].removeCls('active');
+				arr[i].classList.remove('active');
 			}
 		}
 
@@ -260,9 +260,9 @@
 			// pressedStatable
 			if (ol) ol.eachChild('li', function(li, i){
 				if(index == i){
-					li.addCls('active');
+					li.classList.add('active');
 				}else{
-					li.removeCls('active');
+					li.classList.remove('active');
 				}
 			});
 		}
@@ -386,7 +386,7 @@
 		}else if(!tpl){
 			tpl = '<li>\
 				<a href="javascript:play({id}, {contentType}, {feeFlag}, _g_feeCode_RawString);" >\
-				<img data-src="{horizontalPic}?w={0}" onload="this.addCls(\'tran\')" />\
+				<img data-src="{horizontalPic}?w={0}" onload="this.classList.add(\'tran\')" />\
 				<h3>{name}</h3>\
 				</a>\
 				<div class="black_mask"></div>\
@@ -535,7 +535,7 @@
 //			}
 //			function showImg(){
 //				this.el.src = this.src;
-//				//this.el.addCls('tran');// ios 不能这里处理动画，改而在 onload 事件中
+//				//this.el.classList.add('tran');// ios 不能这里处理动画，改而在 onload 事件中
 //			}
 		}, function(){
 			autoHeight();
@@ -601,8 +601,8 @@ bf_scrollViewer_list = function(
 		// tab hightlight
 		tabHeader.eachChild('li', function(li){
 			//debugger;
-			if(li.className.indexOf(activeId) != -1)li.addCls('selected');
-			else li.removeCls('selected');
+			if(li.className.indexOf(activeId) != -1)li.classList.add('selected');
+			else li.classList.remove('selected');
 		});
 		//alert(i);
 		
@@ -675,7 +675,7 @@ bf_scrollViewer_list = function(
 		(cfg.extendHTML || '')+ // 额外的 HTML
 	'</div>';
 	
-	tpl = tpl.format(location.getUrlParam('style') ||  cfg.style || 'col1');
+	tpl = tpl.replace('{0}', location.getUrlParam('style') ||  cfg.style || 'col1');
 	_tab.el.querySelector('div').innerHTML = new Array(data.sectionsIds.length + 1).join(tpl);
 	_tab.init();
 	

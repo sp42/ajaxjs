@@ -77,7 +77,7 @@ ajaxjs.Popup = function(cfg) {
 
         cfg.onShow && cfg.onShow();
         
-        //initDD();
+        initDD(msgbox);
     }
 
      // close popup
@@ -95,30 +95,28 @@ ajaxjs.Popup = function(cfg) {
         cfg.afterClose && cfg.afterClose();
     }
 
-    function initDD() {
+    function initDD(msgbox) {
         document.onselectstart = function(e) {
-                return false;
-          }
-            // 代码就把Dialog的left和top设为了鼠标当前位置，可是用户在拖动的时候不会刻意去点Dialog的左上角，这样就跳了，soga！改进一下
-            // http://www.cnblogs.com/dolphinX/p/3290520.html
-            // http://www.cnblogs.com/dolphinX/p/3293455.html
+            return false;
+        }
+        
+        // 代码就把Dialog的left和top设为了鼠标当前位置，可是用户在拖动的时候不会刻意去点Dialog的左上角，这样就跳了，soga！改进一下
+        // http://www.cnblogs.com/dolphinX/p/3290520.html
+        // http://www.cnblogs.com/dolphinX/p/3293455.html
         msgbox.onmousedown = function(e) {
             if (e.target.tagName != 'H1')
                 return;
             e.preventDefault();
 
-            var dd = Object.create(bf_touch), dialogStyled = msgbox.style;
+            var dd = Object.create(ajaxjs.dd), dialogStyled = msgbox.style;
 
-            // box 左端 到 鼠标 x 坐标之间的距离，
-            // 应由 onmousedown 那一刻，记录 距离，
-            // 不要放在 onMoving 里，不然会 一跳 一跳
+            // box 左端 到 鼠标 x 坐标之间的距离，应由 onmousedown 那一刻，记录 距离，不要放在 onMoving 里，不然会 一跳 一跳
             // another way
-            var boxLeft = msgbox.getBoundingClientRect().left,
-                diff = e.screenX - boxLeft;
+            var boxLeft = msgbox.getBoundingClientRect().left, diff = e.screenX - boxLeft;
 
             dd.onMoving = function(e, data) {
                 dialogStyled.left = (e.screenX - diff) + 'px';
-                // dialogStyled.left = (data.x - dialog.clientWidth / 2) + 'px';
+                //dialogStyled.left = (data.x - dialog.clientWidth / 2) + 'px';
                 dialogStyled.top = data.y + 'px';
             }
 
@@ -127,8 +125,174 @@ ajaxjs.Popup = function(cfg) {
             dd.init();
         }
     }
-
 }
+
+
+//--------------------------------------------------------
+// 拖放/触控 Drag&Drop
+// 例子 http://i.ifeng.com/ent/ylch/news?ch=ifengweb_2014&aid=91654101&mid=5e7Mzq&vt=5
+//-------------------------------------------------------- 
+;(function() {
+	// 是否可以支持 触控 事件
+	var canTouch = ("createTouch" in document) || ('ontouchstart' in window),
+		beforDragEvent = canTouch ? "ontouchstart" : "onmousedown", 
+		onDragingEvent = canTouch ? "ontouchmove"  : "onmousemove",
+		afterDragEvent = canTouch ? "ontouchend"   : "onmouseup";
+	
+	ajaxjs.dd = {
+		init : function(){
+			if(!this.el)alert('el 元素未准备好！');
+			
+			this.el[beforDragEvent] = initMove.bind(this);
+
+			// if(window.navigator.isAndroid_4){
+			// 	this.touchendTimerId;
+			// }
+		}
+	};
+
+	ajaxjs.dd.getAngle = getAngle;
+	ajaxjs.dd.getDirectionFromAngle = getDirectionFromAngle;
+	
+	/**
+	 * 初始化 touch 事件，清空上次记录（direction、distance），并记录第一击的事件信息。
+	 * 绑定 move、end 事件。
+	 * @param  {EventObject} e [description]
+	 * @return {[type]}   [description]
+	 */
+	function initMove(e) {
+		e = e || window.event; // if that is W3C Event Object, take the first one.
+		// 上次移动的参数
+		this.lastData = {
+			direction : null,
+			distance  : null,
+			/*
+			 * clientX和clientY表示的位置是相对浏览器窗口的，而不是对文档的，
+			 * 因此当你在滚动页面之后仍然在窗口中的同一位置上单击时，所得到的坐标的值是相同的。
+			 */
+			x 		  : canTouch ? e.touches.item(0).pageX : e.clientX,
+			y         : canTouch ? e.touches.item(0).pageY : e.clientY
+		};
+
+		// 每次拖动都会分别登记一次 onmousemove 事件和 onmouseup 事件。
+		// 拖动完，又会自动撤销上述事件的。
+		// 登记到 onmousedown 事件中，不撤销，而 onmousemove / onmouseup 则会撤销
+		this.el[onDragingEvent] = moving.bind(this);	// 拖动时都会触发该事件
+		this.el[afterDragEvent] = afterMove.bind(this); // 松开按键时，要撤销 onmousemove 和 onmouseup 事件。
+
+		this.onBeforeMove && this.onBeforeMove(e);
+
+		// 这里控制是否控制上报事件，
+		// return false; // android 这里允许 事件上报的话很慢
+	}
+
+	/**
+	 * 记录 touch 信息，信息包括坐标、角度、方向、距离。
+	 * 把这些信息记录在 this.lastData 对象中。
+	 * @param  {EventObject} e [description]
+	 * @return {Array}   [description]
+	 */
+	function moving(e) {
+		e = e || window.event;
+		var lastData = this.lastData;
+
+		// 当前坐标 注意相反的
+		var coordinate = {
+			x : canTouch ? e.touches.item(0).pageX : e.clientX, 
+			y : canTouch ? e.touches.item(0).pageY : e.clientY
+		};
+
+		var lastXY = { x : lastData.x, y : lastData.y };
+
+		// 角度:number
+		var angle = getAngle(coordinate, lastXY);
+		// 方向:string
+		var direction = getDirectionFromAngle(angle);
+		// 距离:number
+		var disX = Math.abs(coordinate.x - lastData.x), disY = Math.abs(coordinate.y - lastData.y);
+
+		var args = [e, direction, coordinate.x, lastData.x, disX, coordinate.y, disY]; // 供 after(fn) 调用的参数列表
+
+		// fixTouchEndNotFire.apply(this, args);
+		this.onMoving && this.onMoving(e, coordinate);
+		// 记录参数，放在最后
+		this.lastData.direction = direction;
+		this.lastData.disX = disX, lastData.disY = disY;
+		this.lastData.x = coordinate.x, this.lastData.y = coordinate.y;
+		
+		return args;
+	}
+
+	/**
+	 * 获取 move 事件最后一次的信息，送入到用户提供的事件处理器中。
+	 * @param  {EventObject} e [description]
+	 * @return {Array}   [description]
+	 */
+	function afterMove(e) {
+		e = e || window.event;
+		// 当前坐标就是上次的坐标、最后一次的坐标。
+		this.onAfterMove && this.onAfterMove(e, this.lastData);
+		this.el[onDragingEvent] = this.el[afterDragEvent] = null; // 撤销 moving、moveend 事件
+		this.el[beforDragEvent] = null;
+		
+		if(this.cancelStartEvent) {
+		}
+	}
+
+    /**
+     * 计算两点之间的角度。
+     * calculate the angle between two points
+     * @param  {Object}  pos1 { x: int, y: int }
+     * @param  {Object}  pos2 { x: int, y: int }
+     * @return {Number}
+     */
+	function getAngle(pos1, pos2) {
+        return Math.atan2(pos2.y - pos1.y, pos2.x - pos1.x) * 180 / Math.PI;
+    }
+
+    /**
+     * 根据角度计算出方向。
+     * angle to direction define
+     * @param  {float}    angle
+     * @return {string}   direction
+     */
+	function getDirectionFromAngle(angle) {
+        var directions = {
+            down: angle >= 45 && angle < 135, //90
+            left: angle >= 135 || angle <= -135, //180
+            up: angle < -45 && angle > -135, //270
+            right: angle >= -45 && angle <= 45 //0
+        };
+        
+        var direction, key;
+        
+        for(key in directions) {
+            if(directions[key] === true) {
+                direction = key;
+                break;
+            }
+        }
+        
+        return direction;
+    }
+
+	/*
+		@bug touchend 事件丢失，或者到 touchmove 事件之后就终止掉。这是一个非常严重的bug。
+		使用touch事件时，在 android 4.0 上面的浏览器手指在a元素上做滑动操作，然后手指离开，
+		结果不会触发 touchend事件，同样的操作在 android 2.x / ios上会触发 touchend。
+		解决办法：
+		1、e.preventDefault(); 
+		2、兼容的解决办法是在 touchmove 时判断手势趋势大于预设值时（大于预设值证明有 move的动作趋势），停止默认的操作e.preventDefault()
+		https://issuetracker.google.com/issues/36910235
+		https://github.com/TNT-RoX/android-swipe-shim/blob/master/_ezswipe.js
+	 */
+    function fixTouchEndNotFire(e, direction, disX, disY) {
+    	if(window.navigator.isAndroid_4) {
+			e.preventDefault();
+		} 	
+    }
+})();
+
 
 // 优化 
 ajaxjs.throttle = {
@@ -152,7 +316,7 @@ ajaxjs.throttle = {
 					for(var i = 0, j = self.handler.length; i < j; i++){
 						var obj = self.handler[i];
 
-						if(typeof obj == 'function'){
+						if(typeof obj == 'function') {
 							obj();
 						}else if(typeof obj.fn == 'function' && !obj.executeOnce){
 							obj.fn.call(obj);
@@ -257,16 +421,16 @@ UserEvent2.onEl_in_viewport.actions = [];
 
                 if (btn == _btn) {
                     if (btn.className.indexOf('pressed') != -1) {
-                        btn.removeCls('pressed'); // 再次点击，隐藏！
+                        btn.classList.remove('pressed'); // 再次点击，隐藏！
                         if (ul)
                             ul.style.height = '0px';
                     } else {
                         if (ul)
                             ul.style.height = ul.scrollHeight + 'px';
-                        btn.addCls('pressed');
+                        btn.classList.add('pressed');
                     }
                 } else {
-                    btn.removeCls('pressed');
+                    btn.classList.remove('pressed');
                     if (ul)
                         ul.style.height = '0px';
                 }
@@ -283,9 +447,9 @@ UserEvent2.onEl_in_viewport.actions = [];
             li = el.parentNode;
             li.parentNode.eachChild('li', function(_el) {
                 if (_el == li)
-                    _el.addCls('selected');
+                    _el.classList.add('selected');
                 else
-                    _el.removeCls('selected');
+                    _el.classList.remove('selected');
             });
         }
     };
@@ -344,14 +508,14 @@ ajaxjs.HtmlEditor = function(el){
 	
 	this.setMode = function () {
 		if (this.mode == 'iframe') {
-			this.iframeEl.addCls('hide');
-			this.sourceEditor.removeCls('hide');
+			this.iframeEl.classList.add('hide');
+			this.sourceEditor.classList.remove('hide');
 			this.sourceEditor.value = this.iframeBody.innerHTML;
 			this.mode = 'text';
 			grayImg(this.toolbarEl, true);
 		} else {
-			this.iframeEl.removeCls('hide');
-			this.sourceEditor.addCls('hide');
+			this.iframeEl.classList.remove('hide');
+			this.sourceEditor.classList.add('hide');
 			this.iframeBody.innerHTML = this.sourceEditor.value;
 			this.mode = 'iframe';
 			grayImg(this.toolbarEl, false);
@@ -691,8 +855,8 @@ ajaxjs.Upload_perview = function(perviewImg, uploadInput, maxSize) {
 			btn = buttons[i], showTab = tabs[i];
 			// debugger;
 			if (nextIndex == i && btn.className.indexOf(onPressed_ClassName) == -1) { // 找到目标项
-				btn.addCls(onPressed_ClassName);
-				showTab.addCls(onPressed_ClassName);
+				btn.classList.add(onPressed_ClassName);
+				showTab.classList.add(onPressed_ClassName);
 				this.currentIndex = i; // 保存当前游标
 
 				if (this.afterSwitch && typeof this.afterSwitch == 'function')
@@ -701,14 +865,14 @@ ajaxjs.Upload_perview = function(perviewImg, uploadInput, maxSize) {
 				// 是否已经渲染
 				var isRendered_marked = ~showTab.className.indexOf('rendered');
 				if (!isRendered_marked)
-					showTab.addCls('rendered');
+					showTab.classList.add('rendered');
 				if (!isRendered_marked && this.afterRender && typeof this.afterRender == 'function')
 					this.afterRender(i, btn, showTab);
 			} else if (btn == el && btn.className.indexOf(onPressed_ClassName) != -1) {
 				// 已在当前项
 			} else if (btn.className.indexOf(onPressed_ClassName) != -1) {
-				btn.removeCls(onPressed_ClassName);
-				showTab.removeCls(onPressed_ClassName);
+				btn.classList.remove(onPressed_ClassName);
+				showTab.classList.remove(onPressed_ClassName);
 			}
 		}
 	}
