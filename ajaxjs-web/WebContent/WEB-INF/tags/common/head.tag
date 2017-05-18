@@ -3,7 +3,6 @@
 <%@attribute name="title" 		required="false" description="其他标题"%> 
 <%@attribute name="lessFile" 	required="false" description="指定 LESS 样式文件"%> 
 <%-- <jsp:useBean id="ua" class="com.ajaxjs.web.UserAgent" /> --%>
-<noscript><div align="center">如要享受本网站之服务请勿禁用浏览器 JavaScript 支持</div></noscript>
 <head>
 <%-- <html lang="zh-cmn-Hans"> --%>
 		<meta charset="utf-8" />
@@ -80,3 +79,4 @@
 
     <jsp:doBody />
 </head>
+<noscript><div align="center">如要享受本网站之服务请勿禁用浏览器 JavaScript 支持</div></noscript>
