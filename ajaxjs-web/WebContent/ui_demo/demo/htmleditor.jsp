@@ -7,20 +7,14 @@
 		<%@include file="../public/nav.jsp" %>
 		<br />
 		<div class="p">
-	    	<h3>简易选项卡 Tab</h3>
+	    	<h3>HTML 在线编辑器</h3>
     	</div>
     	<div class="p">
     	 <ul>
-    	 	<li>设有水平（常见）和垂直 Tab</li>
-    	 	<li>切换原理为控制元素的 display:block/none;，原理比较简单</li>
-    	 	<li>使用 display:block/none; 附带的好处是高度自适应</li>
-    	 	<li>要将 Tab 边框样式无缝结合，需要 CSS 的一定技巧性</li>
-    	 	<li>提供 beforeSwitch、afterSwitch、afterRender(i, btn, showTab)（只是在第一次触发）事件</li>
+    	 	<li>依赖 iframe 指向空白的页面 <a href="htmleditor_blankpage.jsp">htmleditor_blankpage.jsp</a></li>
     	 </ul>
     	</div>
-		<div class="p">
-	    	<h3>垂直 Tab</h3>
-    	</div>
+	
     	<div class="center" style="padding:5px;">
     	
 			<!-- HTML 编辑器控件 --> 
@@ -116,13 +110,6 @@
 
 	<div style="clear:both;"></div>
 	<div class="p">
-		<h3>注意事项：</h3>
-		<ul>
-			<li>垂直 Tab 的内容区域应该设置 min-height；或者固定高度</li>
-			<li>创建实例后需要调用 jump(0); 加载第一个 tab 的内容，当前还不宜省去这一步</li>
-		</ul>
-	</div>
-	<div class="p">
 		<h3>代码如下：</h3>
 	</div>
  
@@ -151,5 +138,6 @@
 	new SimpleTab(document.querySelector(&#x27;.tab2&#x27;));
 &lt;/script&gt;
 	   </pre>
+	    <%@include file="../public/footer.jsp" %>
     </body>
 </html>

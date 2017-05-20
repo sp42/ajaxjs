@@ -88,7 +88,7 @@ Element.prototype.qs = function(cssSelector) {
  *            函数，可选
  * @returns 返回子元素集合
  */
-Element.prototype.every_child = function(cssSelector, fn) {
+Element.prototype.every_child = Element.prototype.eachChild = function(cssSelector, fn) {
 	var children = this.querySelectorAll(cssSelector);
 	
 	if(children && fn)
@@ -287,7 +287,6 @@ ajaxjs.xhr = {
 	 * @param cfg 该次请求的配置
 	 */
 	jsonp : function(url, params, cb, cfg) {
-		console.log(params)
 	    var globalMethod_Token = 'globalMethod_' + parseInt(Math.random() * (200000 - 10000 + 1) + 10000);
 
 	    if (!window.$$_jsonp) window.$$_jsonp = {};
@@ -323,7 +322,12 @@ ajaxjs.tppl = function(tpl, data) {
             v.push(d[i]);
         }
         
-        return (new Function(k, fn.$)).apply(d, v);
+        try{
+        	
+        	return (new Function(k, fn.$)).apply(d, v);
+        }catch(e) {
+        	console.log(e);
+        }
     }
 
     if(!fn.$) {
@@ -346,3 +350,92 @@ ajaxjs.tppl = function(tpl, data) {
     }
     return data ? fn(data) : fn;
 }
+
+
+/*
+ * --------------------------------------------------------
+ * 观察者模式
+ * --------------------------------------------------------
+ */
+ajaxjs.UserEvent = function () {  
+    var events = {};  
+      
+    this.addEvents = function(){  
+        for(var i = 0, j = arguments.length; i < j; i++){  
+            events[arguments[i].toLowerCase()] = [];  
+        }  
+    }  
+      
+    /** 
+      * 添加一个事件侦听器。 
+      * @param  {String}   name 
+      * @param  {Function} fn 
+      * @return {this} 
+      */  
+    this.addListener = this.on = function(name, eventHandler) {  
+        var eventQueen = events[name.toLowerCase()];  
+        if(!eventQueen) throw '没有该事件！请使用addEvent()增加事件';  
+  
+        eventQueen.push(eventHandler);            
+        return this;  
+    }
+      
+    /** 
+      * 触发事件。 
+      * @param {String} name 
+      * @param {Array}  args 
+      * @return {Boolean} 
+      */  
+    this.fireEvent = function(name) {  
+        var eventQueen = events[name.toLowerCase()]; // listeners  
+        if(!eventQueen)throw 'No such event:' + name;
+        var args = eventQueen.length && Array.prototype.slice.call(arguments, 1);   
+                      
+        var result;  
+        var output = [];  
+          
+        for (var i = 0, j = eventQueen.length; i < j; i++) {  
+            result = eventQueen[i].apply(this, args);  
+              
+            if(result === false){  
+            	return false;
+            }else{  
+                output.push(result);  
+            }  
+        }  
+      
+        return output;  
+    }  
+      
+    /** 
+      * 移除事件侦听器。须传入原来的函数句柄。 
+      * @param {String}   name 
+      * @param {Function} fn 
+      * @return {this} 
+      */  
+    this.removeListener = function(name, fn) {  
+        if (events[name])
+            Array_Remove(events[name], fn);  
+         
+        return this;  
+    }  
+
+    /** 
+     * 删掉某个元素。 
+     * @param   {Array} arr 
+     * @param   {Mixed} el 
+     * @return  {Mixed} 
+     */  
+    function Array_Remove(arr, el){  
+    	var index = -1;  
+    	for(var i = 0, j = arr.length; i < j; i++){  
+    		if(arr[i] == el){  
+    			index = i;  
+    			break;  
+    		}  
+    	}  
+    	arr.splice(index, 1);  
+    	return el;  
+    }  
+} 
+

@@ -8,13 +8,14 @@
     	<br />
 
     	<div class="p">
-    	 Tab 控件, 支持以下特性：
+    	 <h3>Tab 控件</h3>
     	 <ul>
     	 	<li>CSS3 动画加速</li>
     	 	<li>自动适应宽度（使用百分比单位）</li>
     	 	<li>可强制绝对单位（使用像素单位）</li>
     	 	<li>自动计算 tab 内容高度</li>
     	 	<li>TODO：SimpleTab 有 afterRender（只是在第一次触发）事件，但这个 tab 却没有</li>
+    	 	<li>该控件须引用 list.js</li>
     	 </ul>
     	</div>
     	<br />
@@ -50,25 +51,14 @@
     	</div>
 
     	<script>
-			var tab = Object.create(bf_tab);
+			var tab = Object.create(ajaxjs.Tab);
 			tab.el = document.querySelector('.tab');
 			tab.init();
 			tab.initFirstTab(); // 点击第一个 tab，否则不会高亮 tab 1 按钮和自动计算高度
     	</script>
     	<br />
-	<div class="p">
-		<h3>依赖 js：</h3>
-		<ul>
-			<li>/js/widget/tab.js</li>
-			<li>/js/libs/touch.js 如果需要触控的话</li>
-		</ul>
-	</div>
-	<div class="p">
-		<h3>注意事项：</h3>
-		<ul>
-			<li> </li>
-		</ul>
-	</div>
+ 
+
 	<div class="p">
 		<h3>代码如下：</h3>
 	</div>
@@ -102,5 +92,6 @@
 	tab.initFirstTab(); // 点击第一个 tab，否则不会高亮 tab 1 按钮和自动计算高度
 &lt;/script&gt;
 	   </pre>
+	   <%@include file="../public/footer.jsp" %>
     </body>
 </html>

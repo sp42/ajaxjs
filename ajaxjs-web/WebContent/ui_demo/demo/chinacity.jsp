@@ -77,9 +77,7 @@
 				</tr>
 			</table>
 		</div>
-		
-	 	<script src="${bigfoot}/js/widget/mixed/city_data.js"></script>
-	 	<script src="${bigfoot}/js/widget/mixed/ChinaCity.js"></script>
+		<script src="${pageContext.request.contextPath}/asset/common/js/component/ChinaCity.js"></script>
 	 	<script>
 		 	var panel = Object.create(ChinaCity),
 		 		table = document.querySelector('.cityChooser table');
@@ -152,9 +150,8 @@
 				letter-spacing: 2px;
 			}
         </style>
-        <script src="${bigfoot}/js/widget/tab.js"></script>
         <script>
-        	var tab = new SimpleTab(document.querySelector('.tab2'));
+        	var tab = new ajaxjs.SimpleTab(document.querySelector('.tab2'));
         	
     	 	var panel = Object.create(ChinaCity),
 	 			table = document.querySelector('.cityChoser .content');
@@ -169,20 +166,13 @@
     	 </script>
 		 
 		<br />
-		
-		<div class="p">
-			<h3>依赖 js：</h3>
-			<ul>
-				<li>/js/widget/list.js</li>
-			</ul>
-		</div>
+	 
  
 		<div class="p">
 			<h3>代码如下：</h3>
 		</div>
 		<pre class="prettyprint">
 &lt;ul class=&quot;simpleList&quot;&gt; 加载中…… &lt;/ul&gt;
-&lt;script src=&quot;${bigfoot}/js/widget/list.js&quot;&gt;&lt;/script&gt;
 &lt;script&gt;
 bf_list(&#x27;http://u1.3gtv.net:2080/pms-service/common/search_related&#x27;, document.querySelector(&#x27;ul.simpleList&#x27;), {
 		objectId : &#x27;223946&#x27;,

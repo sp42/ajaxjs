@@ -13,25 +13,19 @@
 	    	 	<li></li>
 	    	 </ul>
     	</div>
-    	
-	    <div class="p">
-			<h3>注意事项：</h3>
-			<ul>
-				<li></li>
-			</ul>
-		</div>
+ 
 		
 		<textarea class="itemTpl hide">
 			<li>
-				<a href="{href}">
+				<a href="#">
 					<div class="imgHolder noImg">
-						<img data-src="<%= request.getParameter("style") != null  && request.getParameter("style").equals("col3")?"{verticalPic}":"{horizontalPic}"%>?w={0}"
-						 height="{height}" 
-						 onload="this.addCls('tran')" />
-						<div class="icon {icon}"></div>
+						<img data-src="<%= request.getParameter("style") != null  && request.getParameter("style").equals("col3")?"[:=verticalPic:]":"[:=horizontalPic:]"%>?w={0}"
+						 height="" 
+						  />
+						<div class="icon"></div>
 					</div>
-					<h4>{name}</h4>
-					<p>{createTime}</p>
+					<h4>[:=name:]</h4>
+					<p>[:=createTime:]</p>
 				</a>
 			</li>
 		</textarea> 
@@ -41,10 +35,9 @@
 	 	<ul class="simpleList1"></ul>
 	 	<button class="nextPageBtn1 center" style="display:block;margin-top:10px;">下一页</button>
 	 	
-	 	<script src="${bigfoot}/js/widget/list.js"></script>
 	
 	 	<script>
-	bf_list(
+	 ajaxjs.List(
 		'http://u1.3gtv.net:2080/pms-service/section/content_list', 
 		document.querySelector('ul.simpleList1'), 
 		{
@@ -76,10 +69,9 @@
  	<button class="nextPageBtn2 center" style="display:block;margin-top:10px;">下一页</button>
  	
  	
- 	<script src="${bigfoot}/js/widget/list.js"></script>
  	
  	<script>
-bf_list(
+ajaxjs.List(
 	'http://u1.3gtv.net:2080/pms-service/section/content_list', 
 	document.querySelector('ul.simpleList2'), 
 	{
@@ -93,7 +85,7 @@ bf_list(
  		loadMoreBtn:'.nextPageBtn2',
 		isNoAutoHeight : true,
 		tpl : '<li>\
-				<a href="{url}?id={id}">{name}<div class="createTime">{createTime}</div></a>\
+				<a href="#">[:=name:]<div class="createTime">[:=createTime:]</div></a>\
 			</li>',
 		renderer : function rendererItem(data){
 			data.createTime = data.createTime.substring(0, 10);
@@ -103,12 +95,7 @@ bf_list(
 );
     	</script>
 		
-		<div class="p">
-			<h3>依赖 js：</h3>
-			<ul>
-				<li>/js/widget/list.js</li>
-			</ul>
-		</div>
+
  
 		<div class="p">
 			<h3>代码如下：</h3>

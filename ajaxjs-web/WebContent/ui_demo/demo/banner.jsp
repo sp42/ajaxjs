@@ -5,16 +5,16 @@
 	<%@include file="../public/common.jsp" %>
     <body>
 		<%@include file="../public/nav.jsp" %>
-    	<script src="${bigfoot}/js/libs/touch.js"></script>
-    	<script src="${bigfoot}/js/widget/tab.js"></script>
     	<br />
 
     	<div class="p">
-    	 Banner 控件, 支持以下特性：
+    	<h3>Banner 控件</h3> 
     	 <ul>
     	 	<li>继承自 Tab 控件</li>
     	 	<li>可支持手势切换、点击小圆点可以切换</li>
     	 	<li>提供服务端版（基于 JSP 标签），使用更方便</li>
+    	 	<li>可自定义 indicator 样式</li>
+    	 	<li>该控件须引用 list.js</li>
     	 </ul>
     	</div>
     	<br />
@@ -54,24 +54,18 @@
 		</section>
 
 		<script>
-			var banner = Object.create(bf_banner);
+			var banner = Object.create(ajaxjs.Banner);
 			banner.el = document.querySelector('.banner');
 			banner.init();
 			banner.loop();
 			banner.initIndicator();
 		</script>
     	<br />
-	<div class="p">
-		<h3>依赖 js：</h3>
-		<ul>
-			<li>/js/widget/tab.js</li>
-			<li>/js/libs/touch.js 如果需要触控的话</li>
-		</ul>
-	</div>
+
 	<div class="p">
 		<h3>注意事项：</h3>
 		<ul>
-			<li>可自定义 indicator 样式</li>
+			<li></li>
 		</ul>
 	</div>
 	<div class="p">
@@ -168,5 +162,7 @@
 	}
 }
 	    </pre>
+	    
+	    <%@include file="../public/footer.jsp" %>
     </body>
 </html>

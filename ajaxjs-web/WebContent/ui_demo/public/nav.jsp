@@ -45,7 +45,7 @@
 						<a href="banner.jsp">广告轮播图 Banner</a>
 					</li>
 					<li>
-						<a href="lightbox.jsp">Lightbox</a>
+						<a href="lightbox.jsp">Lightbox 图片浏览</a>
 					</li>
 				</ul>
 			</menu>
@@ -64,14 +64,9 @@
 					<li>
 						<a href="list.jsp">图文列表</a>
 					</li>
-					<li>
-						<a href="gallery.jsp">相册列表</a>
-					</li>
+				
 					<li>
 						<a href="listTab.jsp">Tab 混合 List</a>
-					</li>
-					<li>
-						<a href="lightbox.jsp">服务端分页</a>
 					</li>
 				</ul>
 			</menu></li>
@@ -88,9 +83,6 @@
 					</li>
 					<li>
 						<a href="chinacity.jsp">省市区三级选择器</a>
-					</li>
-					<li>
-						<a href="imgUploader.jsp">图片浏览器和上传器</a>
 					</li>
 				</ul>
 			</menu>

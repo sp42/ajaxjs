@@ -61,13 +61,11 @@
 				</div>
 			</div>
     	</div>
-	
-<script src="${bigfoot}/js/widget/tab.js"></script>
-<script src="${bigfoot}/js/widget/list.js"></script>
+ 
 <script>
-	var tab_group_1 = new SimpleTab(document.querySelector('.tab_group_1'));
+	var tab_group_1 = new ajaxjs.SimpleTab(document.querySelector('.tab_group_1'));
 	tab_group_1.afterRender = function(i, btn, tab){
-		bf_list('http://u1.3gtv.net:2080/pms-service/section/content_list', tab.querySelector('ul'), {
+		ajaxjs.List('http://u1.3gtv.net:2080/pms-service/section/content_list', tab.querySelector('ul'), {
 				id : btn.className.match(/\d+/)[0],
 				portalId : 45,
 				start:0,
@@ -76,7 +74,7 @@
 			{
 				isNoAutoHeight : true,
 				tpl : '<li>\
-						<a href="{url}?id={id}">{name}<div class="createTime" style="float:right;">{createTime}</div></a>\
+					<a href="#">[:=name:]<div class="createTime" style="float:right;">[:=createTime:]</div></a>\
 					</li>',
 				renderer : function rendererItem(data){
 					data.createTime = data.createTime.substring(0, 10);
@@ -87,14 +85,14 @@
 	}
 	tab_group_1.jump(0);
 	
-	var tab_group_2 =  new SimpleTab(document.querySelector('.tab_group_2'));
-	tab_group_2.afterRender = function(i, btn, tab){
+	var tab_group_2 =  new ajaxjs.SimpleTab(document.querySelector('.tab_group_2'));
+	tab_group_2.afterRender = function(i, btn, tab) {
 		var id = btn.className.match(/\d+/)[0];
 		var ul = tab.querySelector('ul');
-		switch(Number(id)){
+		switch(Number(id)) {
 			case 2266:
-				ul.addCls('simpleList1');
-				bf_list('http://u1.3gtv.net:2080/pms-service/section/content_list', ul, {
+				ul.classList.add('simpleList1');
+				ajaxjs.List('http://u1.3gtv.net:2080/pms-service/section/content_list', ul, {
 					id : id,
 					portalId : 45,
 					start:0,
@@ -103,7 +101,7 @@
 				{
 					isNoAutoHeight : true,
 					tpl : '<li>\
-							<a href="{url}?id={id}">{name}<div class="createTime" style="float:right;">{createTime}</div></a>\
+							<a href="#">[:=name:]<div class="createTime">[:=createTime:]</div></a>\
 						</li>',
 					renderer : function rendererItem(data){
 						data.createTime = data.createTime.substring(0, 10);
@@ -112,8 +110,8 @@
 				});
 			break;
 			case 2267:
-				ul.addCls('simpleList2');
-				bf_list('http://u1.3gtv.net:2080/pms-service/section/content_list', ul, {
+				ul.classList.add('simpleList2');
+				ajaxjs.List('http://u1.3gtv.net:2080/pms-service/section/content_list', ul, {
 					id : id,
 					portalId : 45,
 					start:0,
@@ -124,7 +122,7 @@
 					tpl : '<li>\
 						<div class="box">\
 							<div class="imgHolder">\
-								<img data-src="{horizontalPic}?w=150" onload="this.addCls(\'tran\')" />\
+								<img data-src="[:=horizontalPic:]?w=150" />\
 							</div>\
 						</div>\
 					</li>',
@@ -135,8 +133,8 @@
 				});
 			break;
 			case 2268:
-				ul.addCls('simpleList3');
-				bf_list('http://u1.3gtv.net:2080/pms-service/section/content_list', ul, {
+				ul.classList.add('simpleList3');
+				ajaxjs.List('http://u1.3gtv.net:2080/pms-service/section/content_list', ul, {
 					id : id,
 					portalId : 45,
 					start:0
@@ -149,7 +147,7 @@
 					tpl : '<li>\
 						<div class="box">\
 							<div class="imgHolder">\
-								<img data-src="{horizontalPic}?w=150" onload="this.addCls(\'tran\')" />\
+								<img data-src="[:=horizontalPic:]?w=150" />\
 							</div>\
 						</div>\
 					</li>',
@@ -166,12 +164,7 @@
     	<br />
 
 	<div style="clear:both;"></div>
-	<div class="p">
-		<h3>依赖 js：</h3>
-		<ul>
-			<li>/js/widget/tab.js</li>
-		</ul>
-	</div>
+ 
 	<div class="p">
 		<h3>注意事项：</h3>
 		<ul>
@@ -207,5 +200,6 @@
 	new SimpleTab(document.querySelector(&#x27;.tab2&#x27;));
 &lt;/script&gt;
 	   </pre>
+	    <%@include file="../public/footer.jsp" %>
     </body>
 </html>

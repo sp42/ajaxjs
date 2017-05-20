@@ -5,7 +5,7 @@
 	// 要使用 px 推荐指定 stepWidth
 	// banner，要使用 px
 	// 如果要跟手移动，要使用 px
-	window.bf_tab = {
+	ajaxjs.Tab = {
 		init : function(){
 			// get mover 
 			this.mover = this.el.querySelector(this.moverTagName || 'div');// 有可能是 ul 而不是 div
@@ -35,7 +35,7 @@
 
 			// 登记 resize 事件，以便 resize 容器的时候调整大小。
 			// 使用 isUsePx = true 的好处是不用登记 resize 事件
-			this.isUsePx && UserEvent.onWinResizeFree(onResize.bind(this));
+			this.isUsePx && ajaxjs.throttle.init(onResize.bind(this));
 			
 			// tab button
 			// 登记按钮事件
@@ -238,7 +238,7 @@
 	}
 })();
 
-;(function(){
+
    /**
     *  登记 resize 事件，以便 resize 容器的时候调整大小。
     */
@@ -248,17 +248,17 @@
 //	    this.containerWidth = this.el.clientWidth;
 //	    render.call(this, this.mover.children);
 //	}    
-	bf_banner = Object.create(window.bf_tab);
-	bf_banner.isEnableLoop = true;
-	bf_banner.isEnableTouch = true;
-	bf_banner.isUsePx = true; //  banner，要使用 px
-//	bf_banner.stepWidth = window .innerWidth; // 默认 100% 视口
-	bf_banner.isGetCurrentHeight = false;
-	bf_banner.initIndicator = function(){
+	ajaxjs.Banner = Object.create(ajaxjs.Tab);
+	ajaxjs.Banner.isEnableLoop = true;
+	ajaxjs.Banner.isEnableTouch = true;
+	ajaxjs.Banner.isUsePx = true; //  banner，要使用 px
+//	ajaxjs.Banner.stepWidth = window .innerWidth; // 默认 100% 视口
+	ajaxjs.Banner.isGetCurrentHeight = false;
+	ajaxjs.Banner.initIndicator = function(){
 		var ol = this.el.querySelector('ol');
-		bf_banner.onItemSwitch = function(index){
+		ajaxjs.Banner.onItemSwitch = function(index){
 			// pressedStatable
-			if (ol) ol.eachChild('li', function(li, i){
+			if (ol) ol.eachChild('li', function(li, i) {
 				if(index == i){
 					li.classList.add('active');
 				}else{
@@ -278,7 +278,7 @@
 			});
 		}
 	}
-})();
+
 
 
 function Step() {
@@ -415,7 +415,7 @@ function Step() {
 		 * 请求完毕之后的回调函数。可以先行对改函数进行配置
 		 * @param {JSON} json 服务端返回 JSON
 		 */
-		var cb = (function (json, xhr, dataKey, tplEl, tpl, renderer) {
+		var cb = (function (json, xhr, dataKey, tplEl, tpl, renderer) { 	
 			// 数据为 array 还有数据行数
 			var data;
 			if(dataKey.indexOf('.') != -1) {
@@ -492,7 +492,7 @@ function Step() {
 	 * @param args 请求参数
 	 * @param config 配置
 	 */
-	bf_list = function (url, el, args, config) {
+	ajaxjs.List = function (url, el, args, config) {
 		if(!url)throw '未指定 url 参数！服务端地址是神马？';
 	    if(!el) throw '未指定 ui 控件元素，通常这是一个 ul，里面有item 也就是 <li>...</li> 元素';
 	    
@@ -596,7 +596,7 @@ function Step() {
 				for ( var i in this.baseParam) 
 					args[i] = this.baseParam[i];
 				
-			bf_list(url, el, args, config);
+			ajaxjs.List(url, el, args, config);
 		}
 		return config;
 	}
@@ -618,6 +618,7 @@ function Step() {
 		var imgs = [];
 		// 获取图片列表
 		tplEl.eachChild('img[data-src^="http://"]', function(img, index) {
+			img.onload = function(){ this.classList.add('tran') };
 			imgs.push({
 				index : index,  // 序号
 				el : img,		// img DOM 元素
@@ -663,8 +664,8 @@ function Step() {
 //			}
 		}, function() {
 			autoHeight();
-			if(config.isNotAutoHeight){
-			}else{
+			if(config.isNotAutoHeight) {
+			} else {
 				//UserEvent.onWinResizeFree(autoHeight);
 			}
 		});
@@ -694,6 +695,7 @@ function Step() {
 	}
 })();
 
+
 /*
  * --------------------------------------------------------
  * 复合 tab & list
@@ -702,7 +704,7 @@ function Step() {
 bf_scrollViewer_list = function(url, scrollViewer_el, tab_el, loadingIndicatorTpl, itemTpl, renderItem, requestParams,cfg) {
 	cfg = cfg || {};
 	
-	var _tab = Object.create(bf_tab);
+	var _tab = Object.create(ajaxjs.Tab);
 	_tab.el = tab_el;
 //	_tab.isEnableTouch = true;
 	
@@ -712,7 +714,7 @@ bf_scrollViewer_list = function(url, scrollViewer_el, tab_el, loadingIndicatorTp
 		sectionsIds : [] // 有什么栏目 id 放在这里
 	};
 	
-	var _event = new UserEvent();// 没有 Object.watch() ，只能用事件代替
+	var _event = new ajaxjs.UserEvent();// 没有 Object.watch() ，只能用事件代替
 	_event.addEvents('update');
 	
 	_event.on('update', function(activeId){ // activeId = 选中 id
@@ -746,7 +748,7 @@ bf_scrollViewer_list = function(url, scrollViewer_el, tab_el, loadingIndicatorTp
 					var ul = el.querySelector('ul');
 					ul.innerHTML = loadingIndicatorTpl; // 显示 加载中……
 					
-					bf_list(url, ul, _requestParams,
+					ajaxjs.List(url, ul, _requestParams,
 						{
 							isNoAutoHeight : listStyle == 'col2' || listStyle == 'col3' ? false : true, // 海报 col3 需要等高
 							tpl : itemTpl,
@@ -855,3 +857,139 @@ bf_scrollViewer_list = function(url, scrollViewer_el, tab_el, loadingIndicatorTp
 	
 	return _event;
 }
+
+
+/*
+ * --------------------------------------------------------
+ * 图片浏览器
+ * --------------------------------------------------------
+ */
+;(function() {
+	ajaxjs.Tab.Lightbox = Object.create(ajaxjs.Tab);
+	ajaxjs.Tab.Lightbox.moverTagName = 'ul';
+	ajaxjs.Tab.Lightbox.isEnableLoop = false;
+	ajaxjs.Tab.Lightbox.isEnableTouch = true;
+	ajaxjs.Tab.Lightbox.isUsePx = false; 
+	ajaxjs.Tab.Lightbox.isGetCurrentHeight = false;
+	ajaxjs.Tab.Lightbox.isDirectShow = true;
+	ajaxjs.Tab.Lightbox.showing = false;
+	// override
+	ajaxjs.Tab.Lightbox.go = function(i) {
+		var el = this.el;
+		
+		// 直接跳到那一幀并伴随有渐显示效果
+		
+		if(this.isDirectShow && !this.showing)el.style.display = 'none';
+		this.isDirectShow && !this.showing && setTimeout(function() {
+        	//bf_Fx.fadeIn(el);
+           el.style.display = 'block';
+           ajaxjs.Tab.Lightbox.showing = true;
+        }, 500);
+        
+		// location.setUrl_hash('picIndex', i);
+		ajaxjs.Tab.go.call(this, i, true);
+	}
+	// override
+	ajaxjs.Tab.Lightbox.init = function() {
+		ajaxjs.Tab.init.apply(this, arguments);
+		document.addEventListener('touchmove', noScroll);	// 不允许屏幕滚动
+		this.el.onclick = this.close.bind(this);			// 点击关闭退出
+		parent.document.onkeydown = onEnterAndEsc.bind(this);
+		
+		XBack.listen(this.close.bind(this));
+	}
+	
+	ajaxjs.Tab.Lightbox.close = function() {
+		this.showing = false;
+		this.el.parentNode.removeChild(this.el);
+		document.removeEventListener('touchmove', noScroll);
+	}
+	
+	function noScroll(e) {
+    	e.preventDefault();
+    }
+	
+	// 键盘事件
+	function onEnterAndEsc(e) {
+       e = e || event;
+       var keycode = e.which || e.keyCode;
+       
+       switch(keycode){  
+	       	case 13: //enter   
+			break;
+			case 37:   
+			case 3:   
+			case 271: //left 
+				this.goPrevious(); 
+			break;   
+			case 39:   
+			case 4:   
+			case 272: //right
+				this.goNext(); 
+			break;  
+			case 339: //exit   
+			case 340: //back    
+			case 27:
+				this.close(); 
+	   } 
+	}
+	
+	// 从网页监听Android设备的返回键
+	
+//	window.addEventListener('popstate', function(){
+//		alert(99)
+//	});
+	
+	/**
+	* 使用 HTML5 的 History 新 API pushState 来曲线监听 Android 设备的返回按钮
+	* http://www.alloyteam.com/2013/02/cong-wang-ye-jian-ting-android-she-bei-di-fan-hui-jian/
+	* @author azrael
+	* @date 2013/02/04
+	* @version 1.0
+	* @example
+	* XBack.listen(function(){
+	alert('oh! you press the back button');
+	});
+	*/
+	;!function(pkg, undefined){
+		var STATE = 'x-back';
+		var element;
+		var onPopState = function(event){
+			event.state === STATE && fire();
+		}
+		var record = function(state){
+			history.pushState(state, null, location.href);
+		}
+		var fire = function(){
+			var event = document.createEvent('Events');
+			event.initEvent(STATE, false, false);
+			element.dispatchEvent(event);
+		}
+		var listen = function(listener){
+			element.addEventListener(STATE, listener, false);
+		}
+		!function(){
+			element = document.createElement('span');
+			window.addEventListener('popstate', onPopState);
+			this.listen = listen;
+			record(STATE);
+		}.call(window[pkg] = window[pkg] || {});
+	}('XBack');
+	
+/*	  parent.document.onmousewheel = function(e){
+          if(e.wheelDelta == -120){
+              if((++wheelDelta) > 4){
+                  // console.log('next'); // 加大 wheelDelta 值 就不会跳帧
+                  this.goNext();
+                  wheelDelta = 0;
+              }
+          }
+          if(e.wheelDelta == 120){
+              if((++wheelDelta) > 4){
+                  this.goPrevious();
+                  wheelDelta = 0;
+              }
+          }
+      }.bind(this);*/
+	
+})();
