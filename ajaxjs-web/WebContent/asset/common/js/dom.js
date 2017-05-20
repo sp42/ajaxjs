@@ -102,7 +102,7 @@ Element.prototype.every_child = function(cssSelector, fn) {
 /**
  * 删除自己
  */
-Element.prototype.die = function(){
+Element.prototype.die = function() {
 	this.parentNode.removeChild(this);
 }
 
@@ -286,7 +286,8 @@ ajaxjs.xhr = {
 	 * @param cb 回调函数
 	 * @param cfg 该次请求的配置
 	 */
-	jsonp : function(url, cb, params, cfg) {
+	jsonp : function(url, params, cb, cfg) {
+		console.log(params)
 	    var globalMethod_Token = 'globalMethod_' + parseInt(Math.random() * (200000 - 10000 + 1) + 10000);
 
 	    if (!window.$$_jsonp) window.$$_jsonp = {};

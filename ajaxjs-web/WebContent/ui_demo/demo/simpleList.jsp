@@ -31,7 +31,6 @@ bf_list = function (url, el, args, cfg);</pre>
 	    <h3>例子</h3>
 	</div>
  	<ul class="simpleList"> 加载中…… </ul>
- 	<script src="${bigfoot}/js/widget/list.js"></script>
  	<script>
 bf_list('http://u1.3gtv.net:2080/pms-service/common/search_related', document.querySelector('ul.simpleList'), {
 		objectId : '223946',

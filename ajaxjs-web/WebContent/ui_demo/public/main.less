@@ -141,20 +141,7 @@ ul.imgList {
 	}
 }
 
-.prettyprint {
-	max-width: 700px;
-	width: 95%;
-	margin: 10px auto;
-	height: 300px;
-	background-color: #f7f7f9;
-	border: 1px solid #d1d1e8;
-	border-radius: 3px;
-	outline: 0;
-	resize: none;
-	font-size: .8rem;
-	overflow: auto;
-	font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
-}
+
 
 // �޷����¹���
 .idScroller {
@@ -424,159 +411,70 @@ ul.imgList {
 	.column_2 ();
 }
 
-pre .str , code .str {
-	color: #fec243;
-}
-
-pre .kwd , code .kwd {
-	color: #8470FF;
-}
-
-pre .com , code .com {
-	color: #32cd32;
-	font-style: italic;
-}
-
-pre .typ , code .typ {
-	color: #6ecbcc;
-}
-
-pre .lit , code .lit {
-	color: #d06;
-}
-
-pre .pun , code .pun {
-	color: #8B8970;
-}
-
-pre .pln , code .pln {
-	color: #f0f0f0;
-}
-
-pre .tag , code .tag {
-	color: #9c9cff;
-}
-
-pre .htm , code .htm {
-	color: #dda0dd;
-}
-
-pre .xsl , code .xsl {
-	color: #d0a0d0;
-}
-
-pre .atn , code .atn {
-	color: #46eeee;
-	font-weight: normal;
-}
-
-pre .atv , code .atv {
-	color: #EEB4B4;
-}
-
-pre .dec , code .dec {
-	color: #3387CC;
-}
-
-a {
-	text-decoration: none;
-}
-
-pre.prettyprint , code.prettyprint {
-	font-family: 'Courier New';
-	background-color: #0f0f0f;
-	-moz-border-radius: 8px;
-	-webkit-border-radius: 8px;
-	-o-border-radius: 8px;
-	-ms-border-radius: 8px;
-	-khtml-border-radius: 8px;
-	border-radius: 8px;
-}
-
-pre.prettyprint {
+ .prettyprint {
+	max-width: 700px;
 	width: 95%;
-	margin: 1em auto;
-	padding: 1em;
-	white-space: pre-wrap;
+	margin: 10px auto;
+	height: 300px;
+	border-left: 3px solid #d1d1e8;
+	//border-radius: 3px;
+	outline: 0;
+	resize: none;
+	font-size: .8rem;
+	overflow: auto;
+	font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+}
+ 
+.pln { color: #000 }  /* plain text */
+
+@media screen {
+  .str { color: #080 }  /* string content */
+  .kwd { color: #008 }  /* a keyword */
+  .com { color: #800 }  /* a comment */
+  .typ { color: #606 }  /* a type name */
+  .lit { color: #066 }  /* a literal value */
+  /* punctuation, lisp open bracket, lisp close bracket */
+  .pun, .opn, .clo { color: #660 }
+  .tag { color: #008 }  /* a markup tag name */
+  .atn { color: #606 }  /* a markup attribute name */
+  .atv { color: #080 }  /* a markup attribute value */
+  .dec, .var { color: #606 }  /* a declaration; a variable name */
+  .fun { color: red }  /* a function name */
 }
 
-pre.prettyprint a , code.prettyprint a {
-	text-decoration: none;
+/* Use higher contrast and text-weight for printable form. */
+@media print, projection {
+  .str { color: #060 }
+  .kwd { color: #006; font-weight: bold }
+  .com { color: #600; font-style: italic }
+  .typ { color: #404; font-weight: bold }
+  .lit { color: #044 }
+  .pun, .opn, .clo { color: #440 }
+  .tag { color: #006; font-weight: bold }
+  .atn { color: #404 }
+  .atv { color: #060 }
 }
 
-ol.linenums {
-	margin-top: 0;
-	margin-bottom: 0;
-	color: #8B8970;
-}
+/* Put a border around prettyprinted code snippets. */
+pre.prettyprint { padding: 2px; padding-left:10px; }
 
-li.L0 , li.L1 , li.L2 , li.L3 , li.L5 , li.L6 , li.L7 , li.L8 {
-	list-style-type: none
-}
+/* Specify class=linenums on a pre to get line numbering */
+ol.linenums { margin-top: 0; margin-bottom: 0 } /* IE indents via margin-left */
+li.L0,
+li.L1,
+li.L2,
+li.L3,
+li.L5,
+li.L6,
+li.L7,
+li.L8 { list-style-type: none }
+/* Alternate shading for lines */
+li.L1,
+li.L3,
+li.L5,
+li.L7,
+li.L9 { background: #eee }
 
-li.L1 , li.L3 , li.L5 , li.L7 , li.L9 {
-}
-
-@media print {
-	pre.prettyprint , code.prettyprint {
-		background-color: #fff;
-	}
-
-	pre .str , code .str {
-		color: #088;
-	}
-
-	pre .kwd , code .kwd {
-		color: #006;
-		font-weight: bold;
-	}
-
-	pre .com , code .com {
-		font-style: italic;
-	}
-
-	pre .typ , code .typ {
-		color: #404;
-		font-weight: bold;
-	}
-
-	pre .lit , code .lit {
-		color: #044;
-	}
-
-	pre .pun , code .pun {
-		color: #440;
-	}
-
-	pre .pln , code .pln {
-		color: #000;
-	}
-
-	pre .tag , code .tag {
-		color: #b66ff7;
-		font-weight: bold;
-	}
-
-	pre .htm , code .htm {
-		color: #606;
-		font-weight: bold;
-	}
-
-	pre .xsl , code .xsl {
-		color: #606;
-		font-weight: bold;
-	}
-
-	pre .atn , code .atn {
-		color: #c71585;
-		font-weight: normal;
-	}
-
-	pre .atv , code .atv {
-		color: #088;
-		font-weight: normal;
-	}
-}
 
 	.leftSidebar {
 		.acMenu ();

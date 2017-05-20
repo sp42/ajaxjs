@@ -207,7 +207,7 @@ public class HtmlHead {
 			Map<String, String> params = new HashMap<String, String>();
 			params.put("lessFile", Mappath(request, lessPath));
 			params.put("ns", Mappath(request, lessPath.replaceAll("\\/[\\w\\.]*$", ""))); // 去掉文件名，保留路径，也就是文件夹名称
-			params.put("picPath", getBasePath(request) + "/asset/images");// 返回 CSS 背景图所用的图片
+			params.put("picPath", getBasePath(request) + "/asset");// 返回 CSS 背景图所用的图片
 			params.put("MainDomain", "");
 			params.put("isdebug", "true");
 			

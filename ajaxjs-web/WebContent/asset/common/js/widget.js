@@ -461,7 +461,7 @@ UserEvent2.onEl_in_viewport.actions = [];
  * HTML Editor
  * --------------------------------------------------------
  */
-ajaxjs.HtmlEditor = function(el){
+ajaxjs.HtmlEditor = function(el) {
 	this.iframeEl 	  = el.querySelector('iframe');
 	this.sourceEditor = el.querySelector('textarea');
 	this.iframeWin 	  = this.iframeEl.contentWindow;
@@ -471,6 +471,7 @@ ajaxjs.HtmlEditor = function(el){
 	this.toolbarEl.onclick = function(e) {
 		var el = e.target, clsName = el.className;
 		
+		clsName = clsName.split(' ').shift();
 		switch(clsName) {
 			case 'createLink':
 				this.format("createLink", prompt("请输入 URL 地址"));
@@ -482,7 +483,7 @@ ajaxjs.HtmlEditor = function(el){
 				this.setMode();
 			break;
 			default:
-				this.format(el.className);
+				this.format(clsName);
 		}
 	}.bind(this);
 	

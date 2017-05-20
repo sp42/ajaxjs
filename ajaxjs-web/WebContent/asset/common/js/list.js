@@ -280,6 +280,128 @@
 	}
 })();
 
+
+function Step() {
+    var steps = Array.prototype.slice.call(arguments),
+        pending, counter, results, lock;
+
+    // Define the main callback that's given as `this` to the steps.
+    function next() {
+      counter = pending = 0;
+
+      // Check if there are no steps left
+      if (steps.length === 0) {
+        // Throw uncaught errors
+        if (arguments[0]) {
+          throw arguments[0];
+        }
+        return;
+      }
+
+      // Get the next step to execute
+      var fn = steps.shift();
+      results = [];
+
+      // Run the step in a try..catch block so exceptions don't get out of hand.
+      try {
+        lock = true;
+        var result = fn.apply(next, arguments);
+      } catch (e) {
+        // Pass any exceptions on through the next callback
+        next(e);
+      }
+
+      if (counter > 0 && pending == 0) {
+        // If parallel() was called, and all parallel branches executed
+        // synchronously, go on to the next step immediately.
+        next.apply(null, results);
+      } else if (result !== undefined) {
+        // If a synchronous return is used, pass it to the callback
+        next(undefined, result);
+      }
+      lock = false;
+    }
+
+    // Add a special callback generator `this.parallel()` that groups stuff.
+    next.parallel = function () {
+      var index = 1 + counter++;
+      pending++;
+
+      return function () {
+        pending--;
+        // Compress the error from any result to the first argument
+        if (arguments[0]) {
+          results[0] = arguments[0];
+        }
+        // Send the other results as arguments
+        results[index] = arguments[1];
+        if (!lock && pending === 0) {
+          // When all parallel branches done, call the callback
+          next.apply(null, results);
+        }
+      };
+    };
+
+    // Generates a callback generator for grouped results
+    next.group = function () {
+      var localCallback = next.parallel();
+      var counter = 0;
+      var pending = 0;
+      var result = [];
+      var error = undefined;
+
+      function check() {
+        if (pending === 0) {
+          // When group is done, call the callback
+          localCallback(error, result);
+        }
+      }
+      process.nextTick(check); // Ensures that check is called at least once
+
+      // Generates a callback for the group
+      return function () {
+        var index = counter++;
+        pending++;
+        return function () {
+          pending--;
+          // Compress the error from any result to the first argument
+          if (arguments[0]) {
+            error = arguments[0];
+          }
+          // Send the other results as arguments
+          result[index] = arguments[1];
+          if (!lock) { check(); }
+        };
+      };
+    };
+
+    // Start the engine an pass nothing to the first step.
+    next();
+  }
+
+  // Tack on leading and tailing steps for input and output and return
+  // the whole thing as a function.  Basically turns step calls into function
+  // factories.
+  Step.fn = function StepFn() {
+    var steps = Array.prototype.slice.call(arguments);
+    return function () {
+      var args = Array.prototype.slice.call(arguments);
+
+      // Insert a first step that primes the data stream
+      var toRun = [function () {
+        this.apply(null, args);
+      }].concat(steps);
+
+      // If the last arg is a function add it as a last step
+      if (typeof args[args.length-1] === 'function') {
+        toRun.push(args.pop());
+      }
+
+
+      Step.apply(null, toRun);
+    }
+  }
+
 ;(function(){
 //	function binding(url, args, dataKey, el, tpl, renderer, isJSONP, afterLoad_Fn, isAppend_DOM){
 	function binding(url, args, el, tpl, config) {
@@ -292,7 +414,6 @@
 		/**
 		 * 请求完毕之后的回调函数。可以先行对改函数进行配置
 		 * @param {JSON} json 服务端返回 JSON
-		 * 
 		 */
 		var cb = (function (json, xhr, dataKey, tplEl, tpl, renderer) {
 			// 数据为 array 还有数据行数
@@ -317,7 +438,7 @@
 					var _data = renderer ? renderer(data[i]) : data[i]; // 很细的颗粒度控制记录
 					
 					if(_data === false) continue; // 返回 false 则跳过该记录，不会被渲染
-					var li = tpl.format(_data);
+					var li = ajaxjs.tppl(tpl, _data);
 					
 					if (isAppend_DOM) { // 分页是累加的
 						// 利用 div 添加到 tplEl
@@ -344,12 +465,12 @@
 
 		// 发起请求
 		if (typeof isJSONP == 'undefined' || isJSONP == true) {
-			XMLHttpRequest.jsonp(url, args, cb);
+			ajaxjs.xhr.jsonp(url, args, cb);
 		} else
-			XMLHttpRequest.get(url, args, cb);
+			ajaxjs.xhr.get(url, args, cb);
 	}
 	
-	function getCellRequestWidth(){
+	function getCellRequestWidth() {
 		window.devicePixelRatio = window.devicePixelRatio || 1;
 		
 		var screenWidth = window.innerWidth; // 获取视口宽度  
@@ -360,6 +481,7 @@
 		var reqeustWidth = cellWidth * window.devicePixelRatio;
 		reqeustWidth = Math.floor(reqeustWidth);
 		var MaxWidth = 500;// 宽度上限
+		
 		return reqeustWidth;
 	}
 	
@@ -370,7 +492,7 @@
 	 * @param args 请求参数
 	 * @param config 配置
 	 */
-	bf_list = function (url, el, args, config){
+	bf_list = function (url, el, args, config) {
 		if(!url)throw '未指定 url 参数！服务端地址是神马？';
 	    if(!el) throw '未指定 ui 控件元素，通常这是一个 ul，里面有item 也就是 <li>...</li> 元素';
 	    
@@ -378,12 +500,12 @@
 	    config.lastQueryLength = null;
 		
 		var tpl = config.tpl; // just tpl string
-		if (typeof tpl == 'string' && tpl[0] == '.'){
-			tpl = document.querySelector(tpl); // pass CSS Selector
+		if (typeof tpl == 'string' && tpl[0] == '.') {
+			tpl = document.querySelector(tpl); // passed CSS Selector
 			tpl = tpl.value;
 		}else if(tpl && tpl.value) {
-			tpl = tpl.value // pass element object
-		}else if(!tpl){
+			tpl = tpl.value // passed textarea element object
+		}else if(!tpl) {
 			tpl = '<li>\
 				<a href="javascript:play({id}, {contentType}, {feeFlag}, _g_feeCode_RawString);" >\
 				<img data-src="{horizontalPic}?w={0}" onload="this.classList.add(\'tran\')" />\
@@ -392,16 +514,15 @@
 				<div class="black_mask"></div>\
 			</li>'; 
 		}
-		tpl = tpl.format(getCellRequestWidth());
+		
+		tpl = tpl.replace('{0}', getCellRequestWidth());
 		
 		var _args = {};
-		if(window['_g_baseParams']){	
+		if(window['_g_baseParams']) 
 			for(var i in _g_baseParams)_args[i] = _g_baseParams[i];
-		}
 		
-		if(args){ // 需要分页
+		if(args)  // 需要分页
 			for(var i in args)_args[i] = args[i];
-		}
 		
 		if(config.pager) {
 			var pageSize = config.pageSize || 10, // 每页显示多少笔记录，默认十笔
@@ -409,15 +530,16 @@
 			_args.limit = _args.pageSize =pageSize; // limit 和 pageSize 两种方式都传
 			
 			var loadMoreBtn = typeof config.loadMoreBtn == 'string' ? document.querySelector(config.loadMoreBtn) : config.loadMoreBtn;
+			
 			// 这里不要用  addEventListener(),否则会形成一个堆栈，
-			if (loadMoreBtn){
+			if (loadMoreBtn) {
 				loadMoreBtn.onclick = (function(e) {
 					e.preventDefault();
 					if(pageNo < 1)pageNo = 1;// 不能向前
 					pageNo++;
 					
 					var start = (pageNo - 1) * pageSize; 
-					if(config.lastQueryLength != null && start >= config.lastQueryLength){
+					if(config.lastQueryLength != null && start >= config.lastQueryLength) {
 						// 不能超出更多
 						//loadMoreBtn.removeEventListener('click', arguments.callee);
 						//loadMoreBtn.innerHTML = '最后一页';
@@ -435,8 +557,9 @@
 					binding(url, _args, el, tpl, config);
 				});
 			}
+			
 			var perBtn = typeof config.perBtn == 'string' ? document.querySelector(config.perBtn) : config.perBtn;
-			if (perBtn){
+			if (perBtn) {
 				perBtn.onclick = (function(e) {
 					e.preventDefault();
 					pageNo--;
@@ -466,26 +589,24 @@
 		config.afterLoad_Fn = cb;
 		
 		binding(url, _args, el, tpl, config);
+		
 		// 每次请求都附带的参数
-		config.adjustArgs = function(){
-			if (this.baseParam) {
-				for ( var i in this.baseParam) {
+		config.adjustArgs = function() {
+			if (this.baseParam) 
+				for ( var i in this.baseParam) 
 					args[i] = this.baseParam[i];
-				}
-			}
+				
 			bf_list(url, el, args, config);
 		}
 		return config;
 	}
 	
-	function imageHandler(data, tplEl, config){
+	function imageHandler(data, tplEl, config) {
 		// 分页
-		if(config.pageSize){
-			var loadMoreBtn = typeof config.loadMoreBtn == 'string' ? 
-					document.querySelector(config.loadMoreBtn)
-					: config.loadMoreBtn;
-			if(loadMoreBtn) {	
-				if(config.lastQueryLength != null && (config.lastQueryLength <= config.pageSize && loadMoreBtn)){ // 足够容纳，无须分页
+		if(config.pageSize) {
+			var loadMoreBtn = typeof config.loadMoreBtn == 'string' ? document.querySelector(config.loadMoreBtn) : config.loadMoreBtn;
+			if (loadMoreBtn) {	
+				if(config.lastQueryLength != null && (config.lastQueryLength <= config.pageSize && loadMoreBtn)) { // 足够容纳，无须分页
 					// 不能超出更多
 					loadMoreBtn.innerHTML = '最后一页';
 				}else{
@@ -493,24 +614,26 @@
 				}
 			}
 		}
+		
 		var imgs = [];
 		// 获取图片列表
-		tplEl.eachChild('img[data-src^="http://"]', function(img, index){
+		tplEl.eachChild('img[data-src^="http://"]', function(img, index) {
 			imgs.push({
 				index : index,  // 序号
 				el : img,		// img DOM 元素
 				src : img.getAttribute('data-src') // 图片地址
 			});
 		});
-		Step(function(){
-			for(var i = 0 , j = imgs.length; i < j; i++){
-				if(imgs[i].src){
+		
+		Step(function() {
+			for(var i = 0 , j = imgs.length; i < j; i++) {
+				if(imgs[i].src) {
 					var img = new Image();
 					img.onload  = this.parallel();	
 					img.src = imgs[i].src;// 加载图片
 				}
 			}
-		}, function(){
+		}, function() {
 			// all images are local
 			// 逐次显示
 //			for(var i = 0, j = imgs.length; i < j; i++){
@@ -519,13 +642,14 @@
 			
 			var i = 0;
 			var nextStep = this;
-			var id = setInterval(function(){
+			var id = setInterval(function() {
 				var imgObj = imgs[i++];
 				imgObj.el.src = imgObj.src;
-				if(i == imgs.length){
+				
+				if(i == imgs.length) {
 					clearInterval(id);
 					// 同步高度
-					if(config && config.isNoAutoHeight){
+					if(config && config.isNoAutoHeight) {
 					}else nextStep();
 				}
 			}, 300);
@@ -537,7 +661,7 @@
 //				this.el.src = this.src;
 //				//this.el.classList.add('tran');// ios 不能这里处理动画，改而在 onload 事件中
 //			}
-		}, function(){
+		}, function() {
 			autoHeight();
 			if(config.isNotAutoHeight){
 			}else{
@@ -565,15 +689,17 @@
 	/**
 	 * 固定图片高度
 	 */
-	function fixImgHeigtBy(){
+	function fixImgHeigtBy() {
 		window.innerWidth * 0.3 / 1.333
 	}
 })();
 
-bf_scrollViewer_list = function(
-	url, scrollViewer_el, tab_el, loadingIndicatorTpl, itemTpl, renderItem, requestParams,
-	cfg
-){
+/*
+ * --------------------------------------------------------
+ * 复合 tab & list
+ * --------------------------------------------------------
+ */
+bf_scrollViewer_list = function(url, scrollViewer_el, tab_el, loadingIndicatorTpl, itemTpl, renderItem, requestParams,cfg) {
 	cfg = cfg || {};
 	
 	var _tab = Object.create(bf_tab);
@@ -644,14 +770,14 @@ bf_scrollViewer_list = function(
 		}
 		
 		// set hash
-		if(cfg.isNoHash){
+		if(cfg.isNoHash) {
 		}else {
 			location.setUrl_hash('id', activeId);
 		} 
 	});
 	
 	// 先获取所有 section id
-	tabHeader.eachChild('li', function(li){
+	tabHeader.eachChild('li', function(li) {
 		var id;
 		id = li.className && li.className.match(/id_(\w+)/).pop();
 //		if(cfg.isTextId) { // id 不是 数字，是 text
@@ -667,6 +793,7 @@ bf_scrollViewer_list = function(
 			
 		}
 	});
+	
 	var isPager = cfg.pager !=  undefined ? cfg.pager : true;
 	// create tab item
 	var tpl = '<div>\
@@ -679,44 +806,45 @@ bf_scrollViewer_list = function(
 	_tab.el.querySelector('div').innerHTML = new Array(data.sectionsIds.length + 1).join(tpl);
 	_tab.init();
 	
-		var load_id;
-		if (location.hash.indexOf('id=') != -1) {// 有 hash id 读取
-			
-			load_id = location.hash.match(/id=(\w+)/).pop();
-			
-			if (!data.sectionsIds[0]) {
-				data.sectionsIds[0] = {
-						id : load_id,
-						loaded : false
-				};
-				_tab.el.querySelector('div').innerHTML = tpl;
-				_tab.init();
-			}
-			
-			_event.fireEvent('update', load_id);
-		} else {
-			// 默认 选中第一 tab
-			if (data.sectionsIds.length) {
-				load_id = data.sectionsIds[0].id;
-			} else {
-				// 没有子栏目，读取父栏目
-				load_id = location.search.match(/id=(\w+)/).pop();
-				data.sectionsIds[0] = {
-						id : load_id,
-						loaded : false
-				};
-				_tab.el.querySelector('div').innerHTML = tpl;
-				_tab.init();
-			}
-			_event.fireEvent('update', load_id);
+	var load_id;
+	if (location.hash.indexOf('id=') != -1) {// 有 hash id 读取
+		
+		load_id = location.hash.match(/id=(\w+)/).pop();
+		
+		if (!data.sectionsIds[0]) {
+			data.sectionsIds[0] = {
+					id : load_id,
+					loaded : false
+			};
+			_tab.el.querySelector('div').innerHTML = tpl;
+			_tab.init();
 		}
+		
+		_event.fireEvent('update', load_id);
+	} else {
+		// 默认 选中第一 tab
+		if (data.sectionsIds.length) {
+			load_id = data.sectionsIds[0].id;
+		} else {
+			// 没有子栏目，读取父栏目
+			load_id = location.search.match(/id=(\w+)/).pop();
+			data.sectionsIds[0] = {
+					id : load_id,
+					loaded : false
+			};
+			_tab.el.querySelector('div').innerHTML = tpl;
+			_tab.init();
+		}
+		_event.fireEvent('update', load_id);
+	}
 	
-
+	// 点击导航事件选中用户指定 tab
 	tabHeader.onclick = function(e) {
 		var el = e.target;
 		if (el.tagName != 'LI')
 			el = el.parentNode;
-		tabHeader.eachChild('li', function(li, i) {
+		
+		tabHeader.eachChild('li', function(li, i) { 
 			if (el == li) {
 				var id = li.className.match(/id_(\w+)/).pop();
 				_event.fireEvent('update', id);
