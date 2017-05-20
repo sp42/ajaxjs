@@ -79,7 +79,7 @@
 						<a href="htmleditor.jsp">HTML在线编辑器</a>
 					</li>
 					<li>
-						<a href="tab.jsp">日历控件</a>
+						<a href="calendar.jsp">日历控件</a>
 					</li>
 					<li>
 						<a href="chinacity.jsp">省市区三级选择器</a>

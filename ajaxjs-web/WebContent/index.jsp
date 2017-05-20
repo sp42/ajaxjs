@@ -241,13 +241,11 @@
 				<div class="points" style="margin-bottom: 10px; width: 95%;">
 					<br>
 					<ul>
+						<li>标配 IOC/AOP/MVC/ORM/DAO/RESTful</li>
 						<li>参照 Spring MVC 风格的 Web 框架，功能简单但是 MVC 的核心功能基本具备了，很适合想了解 MVC
 							的学习者。尽量多提供源码注释和文档，包括单元测试</li>
-						<li>符合 RESTful 式 API，除了整合了 MyBatis、Shiro 外，基本没依赖其他重型三方库。优先考虑
-							JDK 原生 API。代码量少目标单一</li>
-						<li>泛型封装 Controller/Service/DAO/Model 提供快速增删改查服务，包含分页，查询条件，整合
-							Validator 后端验证</li>
-						<li>模块之间各执其责, 相互配合工作也相互独立，完全解藕，可根据需要自行设定选择</li>
+						<li>快速 CRUD 开发，基于 Controller/Service/DAO/Model 进行泛型封装，类似 MyBatis 注解 的 SQL 服务，支持 Java Bean 或更简单的 Map，自动分页，查询条件和验证。</li>
+						<li>全栈，不仅仅是服务端框架，还整合了前端库。得益于现代浏览器成熟 API 甚至没有用 jQuery</li>
 					</ul>
 					<br> <br>
 				</div>
@@ -259,8 +257,7 @@
 			<h5>
 				<img src="images/icon_source.png">设计原则 Design Principles
 			</h5>
-			<p>快速、高效，轻量级维护，提倡精益开发；遵循“够用就好、就地取材”原则，谨慎采用第三方库；不仅仅是服务端框架，还整合了前端库。得益于现代浏览器成熟
-				API 甚至没有用 jQuery</p>
+			<p>快速、高效，轻量级维护，提倡精益开发；遵循“够用就好、就地取材”原则，优先考虑 JDK 原生 API，基本没依赖其他重型三方库。简单易学易用。Clean, Simple, Fast & Lightweight.</p>
 		</li>
 		<li style="border-right-color: #2096ff;">
 			<h5>

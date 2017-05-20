@@ -10,7 +10,7 @@
 		<%@include file="public/nav.jsp" %>
 		<h1 class="p">欢迎使用 AJAXJS Framework 的 UI 库！</h1>
 		<p class="p">
-		A lightweight JS UI library! 它是原生 JS（es v3）、原创（95%），主要有以下 js:</p>
+		A lightweight JS UI library! 它是原生 JS（es v3）、原创（95%）。CSS 通过 Less.js 书写。主要有以下 js:</p>
 		<ul class="p">
 			<li>dom.js 基础库。大小=包含源码 13kb</li>
 			<li>widget.js 组件库，依赖 dom.js，大小=包含源码 40kb</li>

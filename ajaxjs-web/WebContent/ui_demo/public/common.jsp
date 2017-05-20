@@ -63,7 +63,5 @@
     <script src="${pageContext.request.contextPath}/asset/common/js/list.js"></script>
     <script src="${pageContext.request.contextPath}/asset/common/js/libs/run_prettify.js"></script>  
 
-	<%
-		request.setAttribute("bigfoot", request.getContextPath() + "/bigfoot/asset");
-	%>
+	
     <title>AJAXJS UI-${title}</title>
