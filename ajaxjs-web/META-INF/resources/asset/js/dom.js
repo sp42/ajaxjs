@@ -693,9 +693,13 @@ location.getUrlParam = function (name, url) {
     return null; //返回参数值
 }
 
-// 导入 js 文件，有缓存和回调功能
-location.loadScript = function(src, fn){
-	if(!location.loadScript.loaded[src]){
+/**
+ * 导入 js 文件，有缓存和回调功能
+ * @param {String} src js 地址
+ * @param {Function} fn 回调函数
+ */
+location.loadScript = function(src, fn) {
+	if(!location.loadScript.loaded[src]) {
 		var script = document.createElement('script');
 		script.src = src;
 		script.onload = fn;

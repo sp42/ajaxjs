@@ -360,10 +360,9 @@ ajaxjs.tppl = function(tpl, data) {
 ajaxjs.UserEvent = function () {  
     var events = {};  
       
-    this.addEvents = function(){  
-        for(var i = 0, j = arguments.length; i < j; i++){  
+    this.addEvents = function() {  
+        for(var i = 0, j = arguments.length; i < j; i++) 
             events[arguments[i].toLowerCase()] = [];  
-        }  
     }  
       
     /** 
@@ -397,7 +396,7 @@ ajaxjs.UserEvent = function () {
         for (var i = 0, j = eventQueen.length; i < j; i++) {  
             result = eventQueen[i].apply(this, args);  
               
-            if(result === false){  
+            if(result === false) {  
             	return false;
             }else{  
                 output.push(result);  
@@ -426,16 +425,38 @@ ajaxjs.UserEvent = function () {
      * @param   {Mixed} el 
      * @return  {Mixed} 
      */  
-    function Array_Remove(arr, el){  
-    	var index = -1;  
-    	for(var i = 0, j = arr.length; i < j; i++){  
-    		if(arr[i] == el){  
+    function Array_Remove(arr, el) {  
+    	var index = -1; 
+
+    	for(var i = 0, j = arr.length; i < j; i++) {  
+    		if(arr[i] == el) {  
     			index = i;  
     			break;  
     		}  
     	}  
+    	
     	arr.splice(index, 1);  
     	return el;  
     }  
 } 
 
+
+/**
+ * 导入 js 文件，有缓存和回调功能
+ * @param {String} src js 地址
+ * @param {Function} fn 回调函数
+ */
+ajaxjs.loadScript = function(src, fn) {
+	if(!ajaxjs.loadScript.loaded[src]) {
+		var script = document.createElement('script');
+		script.src = src;
+		script.onload = fn;
+		document.body.appendChild(script);
+		
+		ajaxjs.loadScript.loaded[src] = true;
+	}else{
+		fn();
+	}
+}
+
+ajaxjs.loadScript.loaded = {};

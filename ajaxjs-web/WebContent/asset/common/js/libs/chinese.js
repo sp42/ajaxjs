@@ -24,7 +24,7 @@
 	 * 转换对象，使用递归，逐层剥到文本
 	 * @param {HTMLElement} obj 从document.body开始，
 	 */
-	function translate(el, coverntFn){
+	function translate(el, coverntFn) {
 		el = el.childNodes;
 		var node;
 		for (var i = 0, j = el.length; i < j; i++) {
@@ -46,6 +46,8 @@
 		}
 	}
 	
+	window.translate = translate;
+	
 	function translateText(text, isBig5) {
 		var str = [], _char, charIndex, result;
 
@@ -59,7 +61,7 @@
 
 		return str.join('');
 	}
-	var traditionalized = translateText.delegate(null, true), simplized = translateText.delegate(null, false);
+	window.traditionalized = translateText.delegate(null, true), window.simplized = translateText.delegate(null, false);
 	
 	var cookieName = 'ChineseType';
 	

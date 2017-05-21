@@ -287,16 +287,7 @@
 			Sp42</div>
 	</footer>
 	<!-- CNZZ 统计 -->
-	<div class="hide">
-		<script type="text/javascript">
-			var cnzz_protocol = (("https:" == document.location.protocol) ? " https://"
-					: " http://");
-			document
-					.write(unescape("%3Cspan id='cnzz_stat_icon_1256910326'%3E%3C/span%3E%3Cscript src='"
-							+ cnzz_protocol
-							+ "s95.cnzz.com/z_stat.php%3Fid%3D1256910326' type='text/javascript'%3E%3C/script%3E"));
-		</script>
-	</div>
+		<script src="https://s11.cnzz.com/z_stat.php?id=1261173351&web_id=1261173351"></script>
 	<!-- // CNZZ 统计 -->
 </body>
 </html>

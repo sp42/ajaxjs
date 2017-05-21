@@ -6,7 +6,7 @@
 %>
     <!-- 自定义 Baidu 搜索 -->
     <form id="globalSearch" class="globalSearch" method="GET" action="http://www.baidu.com/baidu" onsubmit="//return g(this);">
-        <input type="text" name="word" placeholder="请输入关键字" />
+        <input type="text" name="word" placeholder="请输入搜索之关键字" />
         <input name="tn" value="bds" type="hidden" />
         <input name="cl" value="3" type="hidden" />
         <input name="ct" value="2097152" type="hidden" />
@@ -25,8 +25,8 @@
 		}
 		currentPage_url += request.getRequestURI() + "?" + request.getQueryString();
 	%>
-		<div class="share" style="margin-top:10px;margin-right:5px;">
-		分享到：
+		<div class="share" style="margin-top:10px;margin-right:5px;font-size: .8rem;">
+		分享到 &nbsp;&nbsp;
 			<a title="转发至QQ空间" id="s_qq"
 				href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=<%=currentPage_url%>"
 				target="_blank"><img
@@ -142,14 +142,14 @@
 		}
 	</script>
 <%
-	}else if("function".equals(type)){
+	}else if("function".equals(type)) {
 %>
 		<a href="javascript:printContent();"><span style="font-size:1.1rem;">&#12958;</span>打 印</a>
 		<a href="javascript:printContent();"><span style="font-size:1.5rem;">&#9993;</span>发送邮件</a>
 		<a href="javascript:printContent();"><span style="font-size:1.2rem;">★ </span>收 藏</a>
 <!-- 	&#8984;	❂ -->
 <%
-	}else if("toggleBtn".equals(type)){
+	}else if("toggleBtn".equals(type)) {
 %>
 		<div class="closeBtn"></div>
 		<script type="text/javascript">
@@ -185,5 +185,7 @@
 		<jsp:doBody />
 
 <%
-	} 
+	} else {
+		throw new RuntimeException("不支持类型：" + type);
+	}
 %>

@@ -6,5 +6,7 @@
 		粤 ICP 证 020598 号 
 	</div>
 	
-	<script src="https://s11.cnzz.com/z_stat.php?id=1261173351&web_id=1261173351" language="JavaScript"></script>
+	<!-- CNZZ 统计 -->
+		<script src="https://s11.cnzz.com/z_stat.php?id=1261173351&web_id=1261173351"></script>
+	<!-- // CNZZ 统计 -->
 </footer>

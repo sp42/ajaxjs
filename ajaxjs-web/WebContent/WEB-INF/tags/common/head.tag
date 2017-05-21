@@ -16,7 +16,7 @@
 	    
 	    <style type="text/css">
 			body,dl,dt,dd,ul,li,pre,form,fieldset,input,p,blockquote,th,td,h1,h2,h3,h4,h5{margin:0;padding:0;}
-			img{border:0;vertical-align:top}ul li{list-style-type:none}.hide{display:none}
+			img{border:0;/* vertical-align:top */}ul li{list-style-type:none}.hide{display:none}
 			body{
 				-webkit-font-smoothing:antialiased;
 				font-family:"Microsoft YaHei","ff-tisa-web-pro-1","ff-tisa-web-pro-2","Lucida Grande","Hiragino Sans GB","Hiragino Sans GB W3",Arial;
