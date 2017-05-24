@@ -53,7 +53,7 @@
 	} else if("remoteConsole".equals(action)) { // 手机调试
 		
 		String msg = "";
-		Map<String, String> requestMap = new MapData().setParameterMapRaw(request.getParameterMap()).toMap().ignoreField("url").getParameterMap_String();
+		Map<String, String> requestMap = new MapData().setParameterMapRaw(request.getParameterMap()).toMap().ignoreField("url").ignoreField("action").getParameterMap_String();
 		if (requestMap.size() > 0) {
 			msg = com.ajaxjs.util.StringUtil.HashJoin(requestMap, '&');
 		} else {

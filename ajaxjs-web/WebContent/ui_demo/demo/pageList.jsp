@@ -39,12 +39,14 @@
  	
  	<script>
 ajaxjs.List(
-	'http://u1.3gtv.net:2080/pms-service/section/content_list', 
+	'../../public_service', 
 	document.querySelector('ul.simpleList1'), 
 	{
 		id : 2268,
 		portalId : 45,
-		start:0
+		start:0,
+		action:'http_proxy',
+		url : 'http://u1.3gtv.net:2080/pms-service/section/content_list'
 	},
 	{
  		pager : true,
@@ -75,12 +77,14 @@ ajaxjs.List(
  	<script>
  	
 ajaxjs.List(
-	'http://u1.3gtv.net:2080/pms-service/section/content_list', 
+	'../../public_service', 
 	document.querySelector('ul.simpleList2'), 
 	{
 		id : 2268,
 		portalId : 45,
-		start:0
+		start:0,
+		action:'http_proxy',
+		url : 'http://u1.3gtv.net:2080/pms-service/section/content_list'
 	},
 	{
  		pager : true,

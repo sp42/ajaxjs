@@ -32,11 +32,13 @@ ajaxjs.List = function (url, el, args, cfg);</pre>
 	</div>
  	<ul class="simpleList"> 加载中…… </ul>
  	<script>
-ajaxjs.List('http://u1.3gtv.net:2080/pms-service/common/search_related', document.querySelector('ul.simpleList'), {
+ajaxjs.List('../../public_service', document.querySelector('ul.simpleList'), {
 		objectId : '223946',
 		objectType : 1,
 		start : 0,
-		limit : 10
+		limit : 10,
+		action:'http_proxy',
+		url : 'http://u1.3gtv.net:2080/pms-service/common/search_related'
 	},
 	{
 		isNoAutoHeight : true,

@@ -65,11 +65,13 @@
 <script>
 	var tab_group_1 = new ajaxjs.SimpleTab(document.querySelector('.tab_group_1'));
 	tab_group_1.afterRender = function(i, btn, tab){
-		ajaxjs.List('http://u1.3gtv.net:2080/pms-service/section/content_list', tab.querySelector('ul'), {
+		ajaxjs.List('../../public_service', tab.querySelector('ul'), {
 				id : btn.className.match(/\d+/)[0],
 				portalId : 45,
 				start:0,
-				limit:4
+				limit:4,
+				action:'http_proxy',
+				url : 'http://u1.3gtv.net:2080/pms-service/section/content_list'
 			},
 			{
 				isNoAutoHeight : true,
@@ -92,11 +94,13 @@
 		switch(Number(id)) {
 			case 2266:
 				ul.classList.add('simpleList1');
-				ajaxjs.List('http://u1.3gtv.net:2080/pms-service/section/content_list', ul, {
+				ajaxjs.List('../../public_service', ul, {
 					id : id,
 					portalId : 45,
 					start:0,
-					limit:4
+					limit:4,
+					action:'http_proxy',
+					url : 'http://u1.3gtv.net:2080/pms-service/section/content_list'
 				},
 				{
 					isNoAutoHeight : true,
@@ -111,11 +115,13 @@
 			break;
 			case 2267:
 				ul.classList.add('simpleList2');
-				ajaxjs.List('http://u1.3gtv.net:2080/pms-service/section/content_list', ul, {
+				ajaxjs.List('../../public_service', ul, {
 					id : id,
 					portalId : 45,
 					start:0,
-					limit:4
+					limit:4,
+					action:'http_proxy',
+					url : 'http://u1.3gtv.net:2080/pms-service/section/content_list'
 				},
 				{
 					isNoAutoHeight : true,
@@ -134,10 +140,12 @@
 			break;
 			case 2268:
 				ul.classList.add('simpleList3');
-				ajaxjs.List('http://u1.3gtv.net:2080/pms-service/section/content_list', ul, {
+				ajaxjs.List('../../public_service', ul, {
 					id : id,
 					portalId : 45,
-					start:0
+					start:0,
+					action:'http_proxy',
+					url : 'http://u1.3gtv.net:2080/pms-service/section/content_list'
 				},
 				{
 					isNoAutoHeight : true,
