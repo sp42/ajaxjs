@@ -45,11 +45,16 @@ public class MapData {
 	 * @return
 	 */
 	public MapData ignoreField(String ignoreField) {
-		if (parameterMapRaw.containsKey(ignoreField))
-			parameterMapRaw.remove(ignoreField);
-		if (parameterMap.containsKey(ignoreField))
+		try{
+			if (parameterMapRaw.containsKey(ignoreField))
+				parameterMapRaw.remove(ignoreField);
+		}catch(IllegalStateException e) {
+			// 忽略 request.getParameterMap() 原生不能删除的
+		}
+		
+		if (parameterMap != null && parameterMap.containsKey(ignoreField))
 			parameterMap.remove(ignoreField);
-		if (parameterMap_String.containsKey(ignoreField))
+		if (parameterMap_String != null && parameterMap_String.containsKey(ignoreField))
 			parameterMap_String.remove(ignoreField);
 
 		return this;

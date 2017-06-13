@@ -15,13 +15,12 @@
  */
 package com.ajaxjs.util;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Filter;
-import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
+
+import com.ajaxjs.util.logger.FileHandler;
 
 /**
  * 自定义日志工具类，封装了 Java 自带的日志类 java.util.logging.Logger。
@@ -32,10 +31,6 @@ public class LogHelper {
 	private String className;				// 所在的类名
 	private Logger logger;					// 包装这个 logger
 
-//	private static String logFilePath = "%t/log%g.log"; // 日志文件，在系统环境变量 temp 目录下 logX.log，其中 X 会自增。
-	private static Map<String, LogHelper> cache = new HashMap<>();// 缓存
-	
-	
 	/**
 	 * 过滤器，是否要日志服务
 	 */
@@ -56,7 +51,7 @@ public class LogHelper {
 		className = clazz.getName().trim();
 		logger = Logger.getLogger(className);
 // 经常会 eclipse 下报错，原因未知
-//		logger.addHandler(fileHandlerFactory(logFilePath));// 初始化保存到磁盤的處理器
+		logger.addHandler(new FileHandler("/Users/xinzhang/", "s", "d"));// 初始化保存到磁盤的處理器
 		logger.setFilter(filter);
 	}
 	
@@ -68,29 +63,25 @@ public class LogHelper {
 	 * @return 日志管理器
 	 */
 	public static LogHelper getLog(Class<?> clazz) {
-		String key = clazz == null ? "root" : clazz.getName().trim();
-
-		if (cache.containsKey(key)) {// 从缓存中查找，
-			return cache.get(key);
-		} else {
-			LogHelper logger = new LogHelper(clazz); // 如果没有，则新建一个并保存到缓存中
-			cache.put(key, logger);
-			
-			return logger;
-		}
-	}
-		
-	/**
-	 * 为后续的 logger 加入 handler
-	 * 
-	 * @param handler
-	 *            接口为 handler 的处理器
-	 */
-	public static void addHanlder(Handler handler) {
-		for (String key : cache.keySet())  // 每个都加上
-			cache.get(key).getLogger().addHandler(handler);
+		return new LogHelper(clazz); // 如果没有，则新建一个并保存到缓存中
 	}
 
+	public void logMsg(Level level, String msg) {
+		logger.logp(level, className, getMethodName(), msg);
+	}
+	
+	public void logMsg(Level level, String msgTpl, Object... params) {
+		logger.logp(level, className, getMethodName(), msgTpl, params);
+	}
+	
+	public void config(String msg) {
+		logMsg(Level.CONFIG, msg);
+	}
+	
+	public void config(String msgTpl, Object... params) {
+		logMsg(Level.CONFIG, msgTpl, params);
+	}
+	
 	/**
 	 * 打印一个日志
 	 * 
@@ -98,20 +89,19 @@ public class LogHelper {
 	 *            日志信息
 	 */
 	public void info(String msg) {
-		logger.logp(Level.INFO, className, getMethodName(), msg);
+		logMsg(Level.INFO, msg);
 	}
-
+	
 	/**
 	 * 打印一个日志
 	 * 
-	 * @param tpl
+	 * @param msgTpl
 	 *            信息语句之模板
 	 * @param params
 	 *            信息参数
 	 */
-	public void info(String tpl, Object... params) {
-		logger.logp(Level.INFO, className, getMethodName(), tpl, params);
-
+	public void info(String msgTpl, Object... params) {
+		logMsg(Level.INFO, msgTpl, params);
 	}
 
 	/**
@@ -121,29 +111,19 @@ public class LogHelper {
 	 *            警告信息
 	 */
 	public void warning(String msg) {
-		logger.logp(Level.WARNING, className, getMethodName(), msg);
+		logMsg(Level.WARNING, msg);
 	}
 
 	/**
 	 * 打印一个日志（警告级别）
 	 * 
-	 * @param tpl
+	 * @param msgTpl
 	 *            信息语句之模板
 	 * @param params
 	 *            信息参数
 	 */
-	public void warning(String tpl, Object... params) {
-		logger.logp(Level.WARNING, className, getMethodName(), tpl, params);
-	}
-
-	/**
-	 * 打印一个日志（警告级别）
-	 * 
-	 * @param ex
-	 *            任意异常信息
-	 */
-	public void warning(Throwable ex) {
-		logger.logp(Level.WARNING, className, getMethodName(), ex.getMessage(), ex);
+	public void warning(String msgTpl, Object... params) {
+		logMsg(Level.WARNING, msgTpl, params);
 	}
 	
 	/**
@@ -159,12 +139,22 @@ public class LogHelper {
 	}
 	
 	public void warning(Throwable ex, String msg, Object... params) {
-		for(int i = 0; i < params.length; i++) { // jre 没有这个方法的重载，写一个吧
+		for(int i = 0; i < params.length; i++)  // jre 没有这个方法的重载，写一个吧
 			msg = msg.replace("{" + i +"}", params[i].toString());
-		}
-		logger.logp(Level.WARNING, className, getMethodName(), msg, ex);
+		
+		warning(ex, msg);
 	}
 
+	/**
+	 * 打印一个日志（警告级别）
+	 * 
+	 * @param ex
+	 *            任意异常信息
+	 */
+	public void warning(Throwable ex) {
+		warning(ex, ex.getMessage());
+	}
+	
 	/**
 	 * 获取所在的方法，调用时候
 	 * 
