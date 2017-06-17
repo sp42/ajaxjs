@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 import org.junit.Test;
 
@@ -20,16 +21,30 @@ public class TestStringUtil {
 	}
 	
 	@Test
+	public void testStringJoin() {
+		assertEquals(stringJoin(new String[]{"a", "b", "c"}, ","), "a,b,c");
+		assertEquals(stringJoin(new ArrayList<String>(){
+
+			private static final long serialVersionUID = 1L;
+			{
+				add("a");
+				add("b");
+				add("c");
+			}
+		}, ","), "a,b,c");
+	}
+	
+	@Test
 	public void testUnicodeHex() {
 		String str = "中国";
 		System.out.println(encodeUnicode(str));
 		assertTrue(str.equals(decodeUnicode(encodeUnicode(str))));
 	}
 	
-	@Test
 	public void testUTF8mb4() {
 		System.out.println("test string=" + "😄walmart öbama 👽💔");
 		String url = "jdbc:mysql://localhost:3306/foo?useUnicode=true&characterEncoding=UTF-8";
+		
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			Connection c = DriverManager.getConnection(url, "root", "123123");

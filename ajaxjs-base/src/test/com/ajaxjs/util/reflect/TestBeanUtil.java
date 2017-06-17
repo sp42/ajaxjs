@@ -34,5 +34,6 @@ public class TestBeanUtil {
 		assertNotNull(user);
 		assertEquals(user.getChildren()[0], "Tom");
 		assertEquals(user.getLuckyNumbers()[1], 8);
+		assertEquals(user.isSex(), true);
 	}
 }

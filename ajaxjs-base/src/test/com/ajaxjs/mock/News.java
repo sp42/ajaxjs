@@ -1,4 +1,4 @@
-package test.com.ajaxjs.framework;
+package test.com.ajaxjs.mock;
 
 import com.ajaxjs.framework.model.Entity;
 

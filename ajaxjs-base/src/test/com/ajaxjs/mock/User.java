@@ -55,10 +55,29 @@ public class User {
 		this.luckyNumbers = luckyNumbers;
 	}
 
+	public boolean isSex() {
+		return sex;
+	}
+
+	public void setSex(boolean sex) {
+		this.sex = sex;
+	}
+
+	public boolean isGood() {
+		return good;
+	}
+
+	public void setGood(boolean good) {
+		this.good = good;
+	}
+
 	private Date birthday;
 	
 	private String[] children;
 	
 	private int[] luckyNumbers;
 	
+	private boolean sex;
+	
+	private boolean good;
 }

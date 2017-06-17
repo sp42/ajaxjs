@@ -13,6 +13,8 @@ import com.ajaxjs.framework.model.Entity;
 import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.framework.model.PageResult;
 
+import test.com.ajaxjs.mock.News;
+
 public class TestModel {
 	@Test
 	public void testEntity() {

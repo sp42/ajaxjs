@@ -15,7 +15,7 @@ import com.ajaxjs.jdbc.JdbcConnection;
 import com.ajaxjs.jdbc.SimpleORM;
 import com.ajaxjs.util.ClassScaner;
 
-import test.com.ajaxjs.framework.News;
+import test.com.ajaxjs.mock.News;
 
 public class TestSimpleORM {
 	Connection conn;
