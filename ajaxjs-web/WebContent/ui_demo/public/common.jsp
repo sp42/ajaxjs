@@ -3,8 +3,8 @@
 <head>
 <%-- <html lang="zh-cmn-Hans"> --%>
 		<meta charset="utf-8" />
-	    <meta name="keywords"    content="${_config.site_keywords}" />
-	    <meta name="description" content="${_config.site_description}" />
+	    <meta name="keywords"    content="ajaxjs java js javascript web ui framework html5 ioc aop orm restful" />
+	    <meta name="description" content="AJAXJS Web 是一款基于 Java 平台的开源 Web 框架，继承了 Java 平台的高效、安全、稳定、跨平台等诸多优势， 但却摒弃了传统企业级架构所带来的庞大和臃肿，强调轻量级，非常适合互联网小型网站的快速应用。" />
 	    <meta name="author"      content="Frank Chueng, frank@ajaxjs.com" />
     	<title>${_config.site_titlePrefix} ${title}</title>
 		<noscript>如要享受本网站服务，请您不要禁用  JavaScript 支持。</noscript>
@@ -56,7 +56,7 @@
 	
 	<%-- 定义网页搜索引擎索引方式，robotterms 是一组使用英文逗号「,」分割的值，通常有如下几种取值：none，noindex，nofollow，all，index和follow --%>
 	<meta name="robots" content="index,follow" />
-	<link rel="stylesheet" type="text/css" href="<%=getCssUrl(request, "/ui_demo/public/main.less", true)%>" />
+	<link rel="stylesheet" type="text/css" href="<%=getCssUrl(request, "/ui_demo/public/main.less", false)%>" />
 <%-- 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ui_demo/public/css.css" /> --%>
     <script src="${pageContext.request.contextPath}/asset/common/js/dom.js"></script>
     <script src="${pageContext.request.contextPath}/asset/common/js/widget.js"></script>

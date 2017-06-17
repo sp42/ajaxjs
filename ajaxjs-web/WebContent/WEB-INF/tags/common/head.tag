@@ -64,7 +64,7 @@
 		
 		if(lessFile != null) {
 			// 是否处于调试模式
-			boolean isDebug = true;
+			boolean isDebug = false;
 		
 			if(request.getServletContext().getAttribute("isDebug") != null) {
 				isDebug = (Boolean)request.getServletContext().getAttribute("isDebug");

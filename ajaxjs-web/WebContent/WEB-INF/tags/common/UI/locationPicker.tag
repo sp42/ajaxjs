@@ -1,6 +1,4 @@
-<%@tag	pageEncoding="UTF-8" 
-		description="日历控件"
-%>
+<%@tag	pageEncoding="UTF-8" description="省市地控件"%>
 <!-- 出发地控件 -->
 <textarea class="fromLocationTpl hide">
     <span class="cityChoserByInput">

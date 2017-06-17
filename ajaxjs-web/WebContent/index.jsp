@@ -1,6 +1,9 @@
 <%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <html>
 	<commonTag:head title="Welcome to Ajaxjs Web Framework's Homepage">
+	    <meta name="keywords"    content="ajaxjs java js javascript web ui framework html5 ioc aop orm restful" />
+	    <meta name="description" content="AJAXJS Web 是一款基于 Java 平台的开源 Web 框架，继承了 Java 平台的高效、安全、稳定、跨平台等诸多优势， 但却摒弃了传统企业级架构所带来的庞大和臃肿，强调轻量级，非常适合互联网小型网站的快速应用。" />
+	   
 		<style>
 			a {
 				color: inherit; /* 继承颜色 */
@@ -199,8 +202,6 @@
 				}
 			}
 		</style>
-		<meta name="keywords" content="ajaxjs">
-		<meta name="description" content="">
 	</commonTag:head>
 
 <!-- 	<img style="width:60%;max-width: 400px;margin: 0 auto;margin-top:50px;display: block;" src="asset/images/under_construction.jpg" /> -->
