@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.Value;
 import com.ajaxjs.util.map.MapHelper;
 
 /**
@@ -101,7 +102,7 @@ public abstract class RemoteJsonData implements RemoteData {
 				Map<String, Object> map =  MapHelper.toRealMap(list.get(i));
 				
 				if(map.get("id") != null && map.get("id") instanceof Double) { // id 自动类型转换 double2int
-					map.put("id", JsonHelper.double2int((Double)map.get("id")));
+					map.put("id", Value.double2int((Double)map.get("id")));
 				}
 				
 				maps[i] = map;
@@ -177,7 +178,7 @@ public abstract class RemoteJsonData implements RemoteData {
 		Map<String, Object> response = RemoteJsonData.getRemoteJSON_Object(getApiUrl(url, params));
 
 		if (response != null && response.get(getTotalToken()) != null) {
-			result.total = JsonHelper.double2int((Double) response.get(getTotalToken()));
+			result.total = Value.double2int((Double) response.get(getTotalToken()));
 
 			if (result.total <= 0) {
 				LOGGER.warning("存在总数字段，但为 0，查询结果为零，返回 null");

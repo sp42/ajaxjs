@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.web.HtmlHead;
 
 /**
  * 
@@ -41,7 +42,7 @@ public class PageEditorController extends HttpServlet {
 		}
 		
 		String path = request.getParameter("url");
-		path = Mappath(path);
+		path = HtmlHead.Mappath(request, path);
 		path = PageEditorService.getFullPathByRequestUrl(path);
 		
 		request.setAttribute("contentBody", PageEditorService.read_jsp_fileContent(path));
@@ -61,7 +62,7 @@ public class PageEditorController extends HttpServlet {
 				throw new NullPointerException("缺少必填参数 contentBody！");
 			}
 			
-			String contentBody = StringUtil.toChinese(request.getParameter("contentBody")), path = Mappath(request.getParameter("url"));
+			String contentBody = StringUtil.urlChinese(request.getParameter("contentBody")), path = HtmlHead.Mappath(request, request.getParameter("url"));
 			
 			PageEditorService.save_jsp_fileContent(path, contentBody);
 			
@@ -75,20 +76,5 @@ public class PageEditorController extends HttpServlet {
 		String uri = request.getRequestURI().replaceAll("admin/\\w+", "index");
 		uri = uri.replace(request.getContextPath(), "");
 		return uri;
-	}
-	
-	/**
-	 * 输入一个相对地址，补充成为绝对地址 相对地址转换为绝对地址，并转换斜杠
-	 * 
-	 * @param relativePath
-	 *            相对地址
-	 * @return 绝对地址
-	 */
-	public String Mappath(String relativePath) {
-		String absoluteAddress = getServletContext().getRealPath(relativePath); // 绝对地址
-		
-		if (absoluteAddress != null)
-			absoluteAddress = absoluteAddress.replace('\\', '/');
-		return absoluteAddress;
 	}
 }

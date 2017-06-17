@@ -3,7 +3,7 @@ package test.com.ajaxjs.net;
 import static org.junit.Assert.*;
 import org.junit.*;
 
-import com.ajaxjs.util.map.MapHelper;
+import com.ajaxjs.util.Value;
 import com.ajaxjs.web.test.MockRequest;
 
 import java.io.IOException;
@@ -46,8 +46,8 @@ public class TestRequest extends MockRequest {
 			assertNotNull("捕获已知异常", knownException);
 		}
 
-		assertEquals(1001, (int) MapHelper.toJavaValue(request.getParameter("id")));
-		assertTrue((boolean) MapHelper.toJavaValue(request.getParameter("isGood")));
+		assertEquals(1001, (int) Value.toJavaValue(request.getParameter("id")));
+		assertTrue((boolean) Value.toJavaValue(request.getParameter("isGood")));
 
 		assertEquals("张三", request.getParameter("ChineseName"));
 	}

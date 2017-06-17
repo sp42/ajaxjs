@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.jsp.PageContext;
 
 import com.ajaxjs.js.JsonHelper;
+import com.ajaxjs.util.LogHelper;
 
 /**
  * 灵活的、链式调用的输出响应内容
@@ -40,6 +41,8 @@ import com.ajaxjs.js.JsonHelper;
  *
  */
 public class MvcOutput extends HttpServletResponseWrapper {
+	private static final LogHelper LOGGER = LogHelper.getLog(MvcDispatcher.class);
+	
 	/**
 	 * 创建一个 Output 对象
 	 * 
@@ -113,7 +116,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 			try {
 				sendRedirect(getRedirect()); // 302 重定向
 			} catch (IOException e) {
-				e.printStackTrace();
+				LOGGER.warning(e);
 			}
 			return;
 		}
@@ -150,7 +153,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 				if (rd != null)
 					rd.forward(request, this); // 跳转至 view 层
 			} catch (ServletException | IOException e) {
-				e.printStackTrace();
+				LOGGER.warning(e);
 			}
 		}
 	}
@@ -168,7 +171,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 		try {
 			ImageIO.write(im, "JPEG", getOutputStream());
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 	}
 
@@ -195,7 +198,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 			pageContext.pushBody();
 //			out = pageContext.pushBody();
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 	}
 
@@ -213,7 +216,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 		try {
 			writer = getWriter();
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 
 		if (writer != null)

@@ -20,7 +20,7 @@ import java.util.*;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import java.net.InetAddress;
+import com.ajaxjs.net.IP;
 
 /**
  * 该类对应 tagfile：head.tag
@@ -28,60 +28,6 @@ import java.net.InetAddress;
  *
  */
 public class HtmlHead {
-	/**
-	 * ip 缓存
-	 */
-	private static String localIp = null;
-
-	/**
-	 * 获取本机 IP 地址
-	 * 用于局域网内的测试机器
-	 * @return 本机 IP
-	 */
-	public static String getLocalIp() {
-		if (localIp == null) { // 第一次访问
-			for (String ip : getAllLocalHostIP()) {
-				if (ip.startsWith("192.168.")) { // 以 192.168.x.x 开头的都是局域网内的 IP
-					localIp = ip;
-					break;
-				}
-			}
-
-			if (localIp == null)
-				localIp = "localhost";// 还是 null，那就本机的……没开网卡？
-		}
-
-		return localIp;
-	}
-
-	/**
-	 * 获得本地所有的 IP 地址
-	 * 
-	 * @return 本机所有 IP
-	 */
-	public static String[] getAllLocalHostIP() {
-		InetAddress[] addrs = null;
-
-		try {
-			String hostName = InetAddress.getLocalHost().getHostName();// 获得主机名
-			// 在给定主机名的情况下，根据系统上配置的名称服务返回其 IP 地址所组成的数组。
-			addrs = InetAddress.getAllByName(hostName);
-		} catch (Throwable e) {
-			e.printStackTrace();
-			return null;
-		}
-
-		String[] ips = null;
-		if (addrs !=null ) {
-			ips = new String[addrs.length];
-			int i = 0;
-			for (InetAddress addr : addrs)
-				ips[i++] = addr.getHostAddress();
-		}
-
-		return ips;
-	}
-	
 	// 默认 8080 端口
 	private final static String picPath = "http://%s:8080/%s/asset/";
 
@@ -96,7 +42,7 @@ public class HtmlHead {
 		String css = null;
 		
 		if (isDebug) {// 设置参数
-			String ip = getLocalIp();
+			String ip = IP.getLocalIp();
 			Map<String, String> params = new HashMap<String, String>();
 			params.put("lessFile", Mappath(cxt, lessPath)); // LESS 预编译文件完整的磁盘路径
 			params.put("ns", Mappath(cxt, lessPath.replaceAll("\\/[\\w\\.]*$", ""))); // 去掉文件名，保留路径，也就是文件夹名称
@@ -211,7 +157,7 @@ public class HtmlHead {
 			params.put("MainDomain", "");
 			params.put("isdebug", "true");
 			
-			css = "http://" + getLocalIp() + "/lessService/?" + join(params);
+			css = "http://" + IP.getLocalIp() + "/lessService/?" + join(params);
 		} else {
 			css = request.getContextPath() + lessPath.replace("/less", "/css").replace(".less", ".css");
 		}

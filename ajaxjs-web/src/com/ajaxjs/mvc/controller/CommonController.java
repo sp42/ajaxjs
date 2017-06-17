@@ -65,17 +65,16 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	 * 初始化数据库连接
 	 */
 	public static void initDb() {
-		
 		String connStr = Init.isDebug ? "jdbc/sqlite" : "jdbc/sqlite_deploy";
 		
 		try {
 			if(ConnectionMgr.getConnection() == null || ConnectionMgr.getConnection().isClosed()) {
 				Connection conn = JdbcConnection.getConnection(JdbcConnection.getDataSource(connStr));
 				ConnectionMgr.setConnection(conn);
-				LOGGER.info("启动数据库链接……" + conn);
+				LOGGER.config("启动数据库链接……" + conn);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 	}
 
@@ -86,7 +85,7 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 		try {
 			ConnectionMgr.getConnection().close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 	}
 
@@ -113,7 +112,7 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 			pageResult = getService().findPagedList(getParam(start, limit));
 			model.put("PageResult", pageResult);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 			model.put(errMsg, e);
 		} finally {
 			closeDb();

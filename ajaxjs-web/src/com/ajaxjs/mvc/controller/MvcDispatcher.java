@@ -95,7 +95,7 @@ public class MvcDispatcher implements Filter {
 
 		if (method == null) {
 			@SuppressWarnings("unused")
-			String msg = httpMethod + uri + " 控制器没有这个方法！";// Let go
+			String msg = httpMethod + uri + " 控制器没有这个方法！";// Let it go
 		} else {
 			IController controller = (IController) obj[0];
 			Object result;
@@ -117,12 +117,12 @@ public class MvcDispatcher implements Filter {
 			}
 
 			resultHandler(result, request, response, model);
-			
 			RequestHelper.clean();
-			return;
+			
+			return; // 终止当前 servlet 请求
 		}
 
-		chain.doFilter(req, resp);// 不要传 ServletRequest，以免影响其他框架
+		chain.doFilter(req, resp);// 不要传 MvcRequest，以免入侵其他框架
 	}
 	
 	/**
