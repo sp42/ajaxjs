@@ -133,6 +133,20 @@ public class ClassScaner<T> {
 			}
 		}
 	}
+	
+
+	/**
+	 * 获取当前类所在的目录下的一个资源
+	 * 
+	 * @param cls
+	 *            类
+	 * @param fileName
+	 *            资源文件名
+	 * @return 资源路径
+	 */
+	public static String getClassFolder_FilePath(Class<?> cls, String fileName) {
+		return StringUtil.urlDecode(cls.getResource(fileName).getPath());
+	}
 
 	public Class<T> getTargetClz() {
 		return targetClz;

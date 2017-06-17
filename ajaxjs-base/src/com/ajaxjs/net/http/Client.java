@@ -27,10 +27,13 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
+import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.io.StreamUtil;
 
 public class Client extends Connection<Client> {
+	private static final LogHelper LOGGER = LogHelper.getLog(Client.class);
+	
 	public Client(String urlStr) {
 		super(urlStr);
 	}
@@ -50,7 +53,7 @@ public class Client extends Connection<Client> {
 			client.byteStream2stringStream().close();
 			
 			return client.getContent();
-		} catch (IOException e) {
+		} catch (IOException e) {// 简单调用，不作异常处理
 			return null;
 		}
 	}
@@ -66,7 +69,7 @@ public class Client extends Connection<Client> {
 		try {
 			return new Client(url).connect().getContent();
 		} catch (ConnectException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 			return null;
 		} 
 	 
@@ -76,7 +79,7 @@ public class Client extends Connection<Client> {
 		try {
 			return new Client(url).setEnableGzip(true).connect().getContent();
 		} catch (ConnectException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 			return null;
 		} 
 	}
@@ -107,13 +110,13 @@ public class Client extends Connection<Client> {
 		try {
 			return initHead(url).connect().getConnection().getResponseCode() == 404;
 		} catch (ConnectException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 
 			if (e.getMessage().indexOf("404") != -1) // 已知异常为 404
 				return true;
 			return false;
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 			return false;
 		}
 	}
@@ -129,7 +132,7 @@ public class Client extends Connection<Client> {
 		try {
 			return initHead(url).connect().getConnection().getHeaderField("Location");
 		} catch (ConnectException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 			return "";
 		}
 	}
@@ -147,7 +150,7 @@ public class Client extends Connection<Client> {
 		try {
 			contentLength = initHead(url).connect().getConnection().getHeaderField("content-length");
 		} catch (ConnectException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 			return 0;
 		}
 		
@@ -169,7 +172,7 @@ public class Client extends Connection<Client> {
 			size = conn.getContentLength();
 			conn.disconnect();
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 
 		return size;
@@ -206,7 +209,7 @@ public class Client extends Connection<Client> {
 		try {
 			client.connect();
 		} catch (ConnectException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 			return null;
 		}
 
@@ -229,7 +232,7 @@ public class Client extends Connection<Client> {
 			for (String key : map.keySet())
 				pairs[i++] = key + "=" + URLEncoder.encode(map.get(key).toString(), StandardCharsets.UTF_8.toString());
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 
 		return StringUtil.stringJoin(pairs, "&");
@@ -316,7 +319,7 @@ public class Client extends Connection<Client> {
 		try {
 			client.connect();
 		} catch (ConnectException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 
 		client.setDone(true);
@@ -351,9 +354,9 @@ public class Client extends Connection<Client> {
 			bos.close();
 			buffer = bos.toByteArray();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 		return buffer;
 	}

@@ -34,11 +34,15 @@ import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
+import com.ajaxjs.util.LogHelper;
+
 /**
  * 图片处理工具
  * 
  */
 public class ImageUtil extends FileUtil {
+	private static final LogHelper LOGGER = LogHelper.getLog(ImageUtil.class);
+	
 	/**
 	 * 图片宽度
 	 */
@@ -74,7 +78,7 @@ public class ImageUtil extends FileUtil {
 		try {
 			ImageIO.write(bImg, format, getFile());
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 
 		return this;
@@ -92,7 +96,7 @@ public class ImageUtil extends FileUtil {
 		try {
 			ImageIO.write(bImg, format, out);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 
 		setData(out.toByteArray());
@@ -167,7 +171,7 @@ public class ImageUtil extends FileUtil {
 				bImg = reader.read(0, param);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 
 		return this;
@@ -232,7 +236,7 @@ public class ImageUtil extends FileUtil {
 		try {
 			watermarkImg = ImageIO.read(watermark);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 			return null;
 		}
 
@@ -339,7 +343,7 @@ public class ImageUtil extends FileUtil {
 		try {
 			img = ImageIO.read(file);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 			return null;
 		}
 		return this;

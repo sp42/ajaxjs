@@ -13,7 +13,7 @@ import org.junit.Test;
 
 import com.ajaxjs.jdbc.JdbcConnection;
 import com.ajaxjs.jdbc.SimpleORM;
-import com.ajaxjs.util.Util;
+import com.ajaxjs.util.ClassScaner;
 
 import test.com.ajaxjs.framework.News;
 
@@ -22,7 +22,7 @@ public class TestSimpleORM {
 	
     @Before
     public void setUp() {
-    	conn = JdbcConnection.getConnection("jdbc:sqlite:" + Util.getClassFolder_FilePath(TestSimpleORM.class, "foo.sqlite"));
+    	conn = JdbcConnection.getConnection("jdbc:sqlite:" + ClassScaner.getClassFolder_FilePath(TestSimpleORM.class, "foo.sqlite"));
     }
     
     @After
@@ -33,7 +33,7 @@ public class TestSimpleORM {
 	@Test
 	public void testQueryMap() {
 		assertNotNull(conn);
-		Connection conn = JdbcConnection.getConnection("jdbc:sqlite:" + Util.getClassFolder_FilePath(TestSimpleORM.class, "foo.sqlite"));
+		Connection conn = JdbcConnection.getConnection("jdbc:sqlite:" + ClassScaner.getClassFolder_FilePath(TestSimpleORM.class, "foo.sqlite"));
 		// 返回 map
 		@SuppressWarnings("rawtypes")
 		SimpleORM<Map> simpleORM = new SimpleORM<>(conn, Map.class);

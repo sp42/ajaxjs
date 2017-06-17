@@ -33,6 +33,8 @@ package com.ajaxjs.util.logger;
  * limitations under the License.
  */
 
+// this is form Tomcat
+// another http://ymfans.iteye.com/blog/240944 http://www.tuicool.com/articles/vy6Zrye
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -235,7 +237,7 @@ public class FileHandler extends Handler {
 		if (directory == null)
 			directory = getProperty(className + ".directory", "logs");
 		if (prefix == null)
-			prefix = getProperty(className + ".prefix", "juli.");
+			prefix = getProperty(className + ".prefix", "ajaxjs.");
 		if (suffix == null)
 			suffix = getProperty(className + ".suffix", ".log");
 		String sBufferSize = getProperty(className + ".bufferSize", String.valueOf(bufferSize));
@@ -280,10 +282,8 @@ public class FileHandler extends Handler {
 			setFormatter(new SimpleFormatter());
 		}
 
-		// setFormatter(myFormatter);
 		// Set error manager
 		setErrorManager(new ErrorManager());
-
 	}
 
 	private String getProperty(String name, String defaultValue) {

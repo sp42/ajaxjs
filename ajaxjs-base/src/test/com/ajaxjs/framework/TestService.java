@@ -10,6 +10,7 @@ import org.sqlite.SQLiteJDBCLoader;
 
 import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.jdbc.ConnectionMgr;
+import com.ajaxjs.util.ClassScaner;
 
 import test.com.ajaxjs.jdbc.TestSimpleORM;
 
@@ -26,7 +27,7 @@ public class TestService {
 		}
 
 		dataSource = new SQLiteDataSource();
-		dataSource.setUrl("jdbc:sqlite:" + com.ajaxjs.util.Util.getClassFolder_FilePath(TestSimpleORM.class, "foo.sqlite"));
+		dataSource.setUrl("jdbc:sqlite:" + ClassScaner.getClassFolder_FilePath(TestSimpleORM.class, "foo.sqlite"));
 	
 		ConnectionMgr.setConnection(dataSource.getConnection());
 	}

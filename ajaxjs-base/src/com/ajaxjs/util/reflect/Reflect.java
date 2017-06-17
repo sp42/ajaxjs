@@ -36,7 +36,7 @@ public class Reflect {
 
 	/**
 	 * 根据类和参数列表获取方法对象，支持重载的方法
-	 * 获取的是类的所有共有方法，这就包括自身的所有public方法，和从基类继承的、从接口实现的所有public方法
+	 * 获取的是类的所有共有方法，这就包括自身的所有 public 方法，和从基类继承的、从接口实现的所有public方法
 	 * 
 	 * @param clazz
 	 *            类对象
@@ -81,12 +81,11 @@ public class Reflect {
 		try {
 			return method.invoke(instance, args);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			System.err.println("反射异常！！！Reflect.executeMethod Exception。method.getName():" + method.getName());
-			e.printStackTrace();
-			LOGGER.warning(e);
+			LOGGER.warning(e, "反射异常！！！Reflect.executeMethod Exception。method.getName():" + method.getName());
 			return null;
 		}
 	}
+	
 	/**
 	 * 调用方法，方法没有参数的
 	 * 
@@ -101,9 +100,7 @@ public class Reflect {
 		try {
 			return method.invoke(instance);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			System.err.println("反射异常！！！Reflect.executeMethod Exception:" + method.getName());
-			e.printStackTrace();
-			LOGGER.warning(e);
+			LOGGER.warning(e, "反射异常！！！Reflect.executeMethod Exception:" + method.getName());
 			return null;
 		}
 	}
@@ -217,6 +214,7 @@ public class Reflect {
 			Class<?>[] currentInterfaces = clazz.getInterfaces();
 			fields.addAll(Arrays.asList(currentInterfaces));
 		}
+		
 		Class<?>[] clz = new Class[fields.size()];
 		
 		return fields.toArray(clz);
@@ -267,7 +265,7 @@ public class Reflect {
 							return methodObj;
 					}
 				} catch (Exception e) {
-					e.printStackTrace();
+					LOGGER.warning(e);
 				}
 			} else {
 				// 无实现的接口

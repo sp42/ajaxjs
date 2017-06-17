@@ -2,15 +2,14 @@ package com.ajaxjs.js;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.script.ScriptEngine;
 
-import com.ajaxjs.util.DateTools;
 import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.Value;
 
 /**
  * json 转为 java 对象的工具类，利用了 JVM 自带的 js 引擎
@@ -134,7 +133,7 @@ public class JsonHelper extends JsEngineWrapper {
 			Object obj = map.get(_key);
 
 			if (obj instanceof Double) {
-				realMap.put(_key, JsEngineWrapper.double2int((Double) map.get(_key)));
+				realMap.put(_key, Value.double2int((Double) map.get(_key)));
 			} else {
 				realMap.put(_key, map.get(_key));
 			}
@@ -217,7 +216,7 @@ public class JsonHelper extends JsEngineWrapper {
 				e.printStackTrace();
 			}
 	
-			arr.add('\"' + key + "\":" + obj2jsonVaule(_obj));
+			arr.add('\"' + key + "\":" + Value.obj2jsonVaule(_obj));
 		}
 	
 		return '{' + StringUtil.stringJoin(arr, ",") + '}';
@@ -236,7 +235,7 @@ public class JsonHelper extends JsEngineWrapper {
 
 		List<String> arr = new ArrayList<>();
 		for (String key : map.keySet())
-			arr.add('\"' + key + "\":" + obj2jsonVaule(map.get(key)));
+			arr.add('\"' + key + "\":" + Value.obj2jsonVaule(map.get(key)));
 	
 		return '{' + StringUtil.stringJoin(arr, ",") + '}';
 	}
@@ -260,70 +259,6 @@ public class JsonHelper extends JsEngineWrapper {
 		return "[" + StringUtil.stringJoin(str, ",") + "]";
 	}
 
-	/**
-	 * 输出符合 JSON 要求的值
-	 * 
-	 * @param value
-	 *            任意一个 Java 值
-	 * @return JSON 形式的值
-	 */
-	@SuppressWarnings("unchecked")
-	public static String obj2jsonVaule(Object value) {
-		if (value == null) {
-			return "null";
-		} else if (value instanceof Double) {
-			return double2int((Double) value) + "";
-		} else if (value instanceof Boolean || value instanceof Number) {
-			return value.toString();
-		} else if (value instanceof Date) {
-			return '\"' + DateTools.formatDate((Date) value, DateTools.commonDateFormat) + '\"';
-		} else if (value instanceof Map) {
-			return stringifyMap((Map<String, ?>) value);
-		} else if (value instanceof List) {
-			List<?> list = (List<?>) value;
-			
-			if (list.size() == 0) {
-				return "[]";
-			} else if (list.get(0) instanceof String) {
-				List<String> strList = (List<String>) list;
-				StringBuilder sb = new StringBuilder();
-	
-				for (int i = 0; i < strList.size(); i++) {
-					if (i == (strList.size() - 1))
-						sb.append("\"" + strList.get(i) + "\"");
-					else
-						sb.append("\"" + strList.get(i) + "\"").append(",");
-				}
-	
-				return '[' + sb.toString() + ']';
-			} else if (list.get(0) instanceof Map) {
-				List<String> jsonStrList = new ArrayList<>();
-				List<Map<String, ?>> maps = (List<Map<String, ?>>) list;
-				for (Map<String, ?> map : maps) {
-					jsonStrList.add(stringifyMap(map));
-				}
-				
-				return obj2jsonVaule(jsonStrList);
-			} else {
-				// 未知类型数组，
-				return "[]";
-			}
-			
-			// return stringify((Map<String, ?>)value);
-		} else if (value instanceof Object[]) {
-			Object[] arr = (Object[]) value;
-			String[] strs = new String[arr.length];
-			int i = 0;
-			
-			for (Object _value : arr)
-				strs[i++] = obj2jsonVaule(_value); // 递归调用
-	
-			return '[' + StringUtil.stringJoin(strs, ",") + ']';
-		} else { // String
-			return '\"' + value.toString().replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r") + '\"';
-		}
-	}
-	
 	/**
 	 * 格式化 JSON，使其美观输出到控制或其他地方 请注意 对于json中原有\n \t 的情况未做过多考虑 得到格式化json数据 退格用\t
 	 * 换行用\r TODO 用原生实现

@@ -25,6 +25,7 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.zip.GZIPInputStream;
 
+import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 
 import sun.misc.BASE64Encoder;
@@ -36,6 +37,8 @@ import sun.misc.BASE64Encoder;
  * @param <T>
  */
 public class Connection<T> extends Request<T> {
+	private static final LogHelper LOGGER = LogHelper.getLog(Connection.class);
+	
 	/**
 	 * 连接对象
 	 */
@@ -53,22 +56,21 @@ public class Connection<T> extends Request<T> {
 		try {
 			url = new URL(getUrl());
 		} catch (MalformedURLException e) {
-			System.err.println("初始化连接出错！格式不对！" + getUrl());
-			e.printStackTrace();
+			LOGGER.warning(e, "初始化连接出错！URL {0} 格式不对！", getUrl());
 			return;
 		}
+		
 		try {
 			connection = (HttpURLConnection) url.openConnection();
 		} catch (IOException e) {
-			System.err.println("初始化连接出错！" + getUrl());
-			e.printStackTrace();
+			LOGGER.warning(e, "初始化连接出错！URL {0}。", getUrl());
 			return;
 		}
+		
 		try {
 			connection.setRequestMethod(getMethod());
 		} catch (ProtocolException e) {
-			System.err.println("初始化连接出错！方法出错 " + getUrl());
-			e.printStackTrace();
+			LOGGER.warning(e, "初始化连接出错！方法出错，URL {0}。", getUrl());
 			return;
 		}
 		
@@ -108,7 +110,6 @@ public class Connection<T> extends Request<T> {
 			try {
 				setOut(connection.getOutputStream());
 			} catch (IOException e) {
-				e.printStackTrace();
 				throw new ConnectException("写入 post 数据时失败！");
 			}
 			outputWriteData();// 写入 POST 数据

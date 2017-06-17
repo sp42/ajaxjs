@@ -14,7 +14,7 @@ import com.ajaxjs.framework.dao.DaoHandler;
 import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.model.PageResult;
 import com.ajaxjs.jdbc.JdbcConnection;
-import com.ajaxjs.util.Util;
+import com.ajaxjs.util.ClassScaner;
 
 import test.com.ajaxjs.jdbc.TestSimpleORM;
 
@@ -24,7 +24,7 @@ public class TestDao {
 
 	@Before
 	public void setUp() {
-		conn = JdbcConnection.getConnection("jdbc:sqlite:" + Util.getClassFolder_FilePath(TestSimpleORM.class, "foo.sqlite"));
+		conn = JdbcConnection.getConnection("jdbc:sqlite:" + ClassScaner.getClassFolder_FilePath(TestSimpleORM.class, "foo.sqlite"));
 		dao = new DaoHandler<NewsDao>().setConn(conn).bind(NewsDao.class);
 	}
 

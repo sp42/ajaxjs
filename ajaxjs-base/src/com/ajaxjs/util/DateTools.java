@@ -158,10 +158,10 @@ public class DateTools {
 	 */
 	public static Date Objet2Date(Object obj) {
 		Date date = null;
+		
 		if (obj == null)
 			return null;
-		
-		if (obj instanceof Date)
+		else if (obj instanceof Date)
 			return (Date) obj;
 		else if (obj instanceof Number) {
 			if (obj instanceof Integer) {
@@ -180,6 +180,9 @@ public class DateTools {
 				} else
 					System.err.println("非法字符串日期" + obj);
 			}
+		} else if (obj instanceof java.sql.Timestamp) {
+			long time = ((java.sql.Timestamp) obj).getTime();
+			date = new Date(time);
 		} else {
 			System.err.println("不能识别类型，不能转为日期。传入参数为：" + obj);
 		}

@@ -14,7 +14,8 @@ public final class SimpleCache<K, V> {
 
 	/**
 	 * 
-	 * @param maxCapacity 加载因子，加载因子是一个比例，当 HashMap 的数据大小>=容量*加载因子时，HashMap 会将容量扩容
+	 * @param maxCapacity
+	 *            加载因子，加载因子是一个比例，当 HashMap 的数据大小>=容量*加载因子时，HashMap 会将容量扩容
 	 */
 	public SimpleCache(int maxCapacity) {
 		this.maxCapacity = maxCapacity;
@@ -24,40 +25,51 @@ public final class SimpleCache<K, V> {
 
 	/**
 	 * 获取缓存中数据
-	 * @param k 键
+	 * 
+	 * @param k
+	 *            键
 	 * @return 值
 	 */
 	public V get(K k) {
 		V v = eden.get(k);
+		
 		if (v == null) {
 			lock.lock();
+			
 			try {
 				v = longterm.get(k);
 			} finally {
 				lock.unlock();
 			}
-			if (v != null) {
+			
+			if (v != null) 
 				eden.put(k, v);
-			}
 		}
+		
 		return v;
 	}
 
 	/**
 	 * 保存缓存数据
-	 * @param k 键
-	 * @param v 值
+	 * 
+	 * @param k
+	 *            键
+	 * @param v
+	 *            值
 	 */
 	public void put(K k, V v) {
 		if (eden.size() >= maxCapacity) {
 			lock.lock();
+			
 			try {
 				longterm.putAll(eden);
 			} finally {
 				lock.unlock();
 			}
+			
 			eden.clear();
 		}
+		
 		eden.put(k, v);
 	}
 }

@@ -28,6 +28,19 @@ import com.ajaxjs.util.logger.FileHandler;
  *
  */
 public class LogHelper {
+	/**
+	 * 创建一个日志类
+	 * 
+	 * @param clazz
+	 *            当前日志记录的那个类
+	 */
+	public LogHelper(Class<?> clazz) {
+		className = clazz.getName().trim();
+		logger = Logger.getLogger(className);
+		logger.addHandler(new FileHandler("/Users/xinzhang/", null, ".log"));// 初始化保存到磁盤的處理器
+		logger.setFilter(filter);
+	}
+	
 	private String className;				// 所在的类名
 	private Logger logger;					// 包装这个 logger
 
@@ -40,20 +53,6 @@ public class LogHelper {
 			return (record.getMessage() == null || record.getMessage().contains("no log")) ? false : true;
 		}
 	};
-
-	/**
-	 * 创建一个日志类
-	 * 
-	 * @param clazz
-	 *            当前日志记录的那个类
-	 */
-	public LogHelper(Class<?> clazz) {
-		className = clazz.getName().trim();
-		logger = Logger.getLogger(className);
-// 经常会 eclipse 下报错，原因未知
-		logger.addHandler(new FileHandler("/Users/xinzhang/", "s", "d"));// 初始化保存到磁盤的處理器
-		logger.setFilter(filter);
-	}
 	
 	/**
 	 * 获取自定义的 logger。这是外界调用本类最主要的方法。例如：
@@ -182,15 +181,6 @@ public class LogHelper {
 			return null;
 		}
 	}
-
-	/**
-	 * 获取原生的 logger
-	 * 
-	 * @return 原生的 logger
-	 */
-	public Logger getLogger() {
-		return logger;
-	}
 	
 	/**
 	 * 控制台支持字符串 format
@@ -199,6 +189,7 @@ public class LogHelper {
 	 *            插入的内容
 	 */
 	public static void sysConsole(String msg) {
+		// System.out.printf("%s.%s(%s:%s)%n", s.getClassName(), s.getMethodName(), s.getFileName(), s.getLineNumber());
 		System.console().format("%S", msg); // or System.out.printf("%s.%s(%s:%s)%n", ..., ...);
 	}
 

@@ -27,9 +27,12 @@ import java.nio.charset.StandardCharsets;
 import javax.activation.MimetypesFileTypeMap;
 
 import com.ajaxjs.util.DateTools;
+import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 
 public class FileUtil extends StreamChain<FileUtil> {
+	private static final LogHelper LOGGER = LogHelper.getLog(FileUtil.class);
+	
 	private String filePath;
 
 	private File file;
@@ -43,7 +46,7 @@ public class FileUtil extends StreamChain<FileUtil> {
 
 			setIn(new FileInputStream(file));
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 		return this;
 	}
@@ -70,7 +73,7 @@ public class FileUtil extends StreamChain<FileUtil> {
 		try {
 			out = new FileOutputStream(file);
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 
 		setOut(out);
@@ -78,7 +81,7 @@ public class FileUtil extends StreamChain<FileUtil> {
 		try {
 			out.write(getData(), off, len);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 
 		return this;
@@ -96,7 +99,7 @@ public class FileUtil extends StreamChain<FileUtil> {
 		try {
 			out = new FileOutputStream(file);
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 
 		setOut(out);
@@ -105,7 +108,7 @@ public class FileUtil extends StreamChain<FileUtil> {
 		try (OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);) {
 			writer.write(getContent());
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 
 		return this;

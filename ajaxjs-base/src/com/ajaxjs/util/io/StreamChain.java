@@ -24,6 +24,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
+import com.ajaxjs.util.LogHelper;
+
 /**
  * 抽象的流链式处理器
  * @author frank
@@ -31,8 +33,8 @@ import java.nio.charset.StandardCharsets;
  * @param <T>
  */
 public abstract class StreamChain<T> {
-	private byte[] data;
-
+	private static final LogHelper LOGGER = LogHelper.getLog(StreamChain.class);
+	
 	/**
 	 * 输入流
 	 */
@@ -42,6 +44,11 @@ public abstract class StreamChain<T> {
 	 * 输出流
 	 */
 	private OutputStream out;
+	
+	/**
+	 * 字节数组
+	 */
+	private byte[] data;
 
 	/**
 	 * 文本内容
@@ -67,7 +74,7 @@ public abstract class StreamChain<T> {
 			out.write(getData());
 			out.flush();
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 			return null;
 		}
 		return (T) this;
@@ -100,7 +107,7 @@ public abstract class StreamChain<T> {
 			}
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 
 		content = result.toString();
@@ -146,7 +153,7 @@ public abstract class StreamChain<T> {
 				out.flush();
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 		
 		return (T) this;
@@ -181,7 +188,7 @@ public abstract class StreamChain<T> {
 				out.write(getData(), off, length);
 			out.flush();
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 
 		return (T) this;
@@ -205,7 +212,7 @@ public abstract class StreamChain<T> {
 			if (out != null)
 				out.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 		
 		return (T) this;

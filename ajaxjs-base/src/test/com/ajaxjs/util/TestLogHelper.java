@@ -2,8 +2,6 @@ package test.com.ajaxjs.util;
 
 import static org.junit.Assert.*;
 
-import java.util.logging.FileHandler;
-
 import org.junit.Test;
 
 import com.ajaxjs.util.LogHelper;
@@ -13,11 +11,14 @@ public class TestLogHelper {
 	public void testLog() {
 		LogHelper log = new LogHelper(TestLogHelper.class);
 		assertNotNull(log);
-		log.warning("fooo");
+		
 		log.info("bar");
+		log.warning("fooo");
+		log.warning("脚本引擎 {0} 没有 {1}() 这个方法", "js", "foo");
+		log.warning(new Exception("致命错误！"), "脚本引擎 {0} 没有 {1}() 这个方法", "js", "foo");
 	}
 
-	private static final LogHelper log = LogHelper.getLog(TestLogHelper.class);
+	private static final LogHelper log = LogHelper.getLog(TestMapHelper.class);
 
 	@Test
 	public void testGetLog() {
@@ -44,11 +45,5 @@ public class TestLogHelper {
 	public static void getCurrentCodeLine() {
 		StackTraceElement s = Thread.currentThread().getStackTrace()[1];
 		System.out.printf("%s.%s(%s:%s)%n", s.getClassName(), s.getMethodName(), s.getFileName(), s.getLineNumber());
-	}
-
-	@Test
-	public void testFileHandlerFactory() {
-		FileHandler handler = LogHelper.fileHandlerFactory("c://temp//rz.txt");
-		assertNotNull(handler);
 	}
 }

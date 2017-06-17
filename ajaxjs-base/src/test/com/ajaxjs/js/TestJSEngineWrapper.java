@@ -7,6 +7,7 @@ import javax.script.ScriptException;
 import org.junit.*;
 
 import com.ajaxjs.js.JsEngineWrapper;
+import com.ajaxjs.util.Value;
 
 /**
  * @TODO
@@ -79,7 +80,7 @@ public class TestJSEngineWrapper {
 		assertEquals(new Double(111), engine.eval("bar;", Double.class));// js Number 于 Java 为 Double
 
 		engine.eval("bar = 222;");
-		assertEquals(222, JsEngineWrapper.double2int(engine.eval("bar;", Double.class)));
+		assertEquals(222, Value.double2int(engine.eval("bar;", Double.class)));
 
 		engine.eval("bar = false;");
 		assertEquals(engine.eval("bar;", Boolean.class), false);

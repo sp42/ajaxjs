@@ -15,16 +15,25 @@
  */
 package com.ajaxjs.util;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.xml.bind.DatatypeConverter;
+
 import com.ajaxjs.util.map.MapHelper;
+
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 
 /**
  * 字符串相关的工具类
@@ -41,21 +50,7 @@ public class StringUtil {
 	 * @return true 表示为为空字符串，否则不为空
 	 */
 	public static boolean isEmptyString(String str) {
-		if (str == null || str.isEmpty() || str.trim().isEmpty() || "".equals(str) || "".equals(str.trim()))
-			return true;
-
-		return false;
-	}
-
-	/**
-	 * 如果字符串为 null 返回空字符串，否则为字符串本身
-	 * 
-	 * @param str
-	 *            要判断的字符串
-	 * @return 字符串本身或者 null
-	 */
-	public static String emptyStringIfNull(String str) {
-		return str == null ? "" : str;
+		return str == null || str.isEmpty() || str.trim().isEmpty();
 	}
 
 	/**
@@ -138,6 +133,7 @@ public class StringUtil {
 	public static String repeatStr(String str, String div, int repeat) {
 		StringBuilder s = new StringBuilder();
 		int i = 0;
+		
 		while (i++ < repeat) {
 			s.append(str);
 			if (i != repeat)
@@ -171,7 +167,6 @@ public class StringUtil {
 		try {
 			return URLDecoder.decode(str, StandardCharsets.UTF_8.toString());
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
 			return null;
 		}
 	}
@@ -188,7 +183,6 @@ public class StringUtil {
 		try {
 			return URLEncoder.encode(str, StandardCharsets.UTF_8.toString());
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
 			return null;
 		}
 	}
@@ -216,7 +210,8 @@ public class StringUtil {
 	}
 
 	/**
-	 * url 网址中文乱码处理
+	 * url 网址中文乱码处理。
+	 * 如果 Tomcat 过滤器设置了 utf-8 那么这里就不用重复转码了
 	 * 
 	 * @param str
 	 *            通常是 url Query String 参数
@@ -225,7 +220,7 @@ public class StringUtil {
 	public static String urlChinese(String str) {
 		return byte2String(str.getBytes(StandardCharsets.ISO_8859_1));
 	}
-
+	
 	/**
 	 * 使用正则的快捷方式
 	 * 
@@ -240,6 +235,126 @@ public class StringUtil {
 		return m.find() ? m.group() : null;
 	}
 
+	/**
+	 * BASE64 编码
+	 * 
+	 * @param str
+	 *            待编码的字符串
+	 * @return 已编码的字符串
+	 */
+	public static String base64Encode(String str) {
+		return new BASE64Encoder().encode(str.getBytes());
+	}
+
+	/**
+	 * BASE64 解码 这里需要强制捕获异常。
+	 * 中文乱码：http://s.yanghao.org/program/viewdetail.php?i=54806
+	 * 
+	 * @param str
+	 *            已解码的字符串
+	 * @return 已解码的字符串
+	 */
+	public static String base64Decode(String str) {
+		BASE64Decoder decoder = new BASE64Decoder();
+		byte[] bytes = null;
+
+		try {
+			bytes = decoder.decodeBuffer(str);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		return StringUtil.byte2String(bytes);
+	}
+	
+	/**
+	 * 获取 字符串 md5 哈希值
+	 * @param str
+	 *            输入的字符串
+	 * @return MD5 摘要，返回32位大写的字符串
+	 */
+	public static String md5(String str) {
+		byte[] b = str.getBytes(StandardCharsets.UTF_8);
+		
+		try {
+			b = MessageDigest.getInstance("MD5").digest(b);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		return DatatypeConverter.printHexBinary(b);
+	}
+	
+	private static final String text = "0123456789abcdefghijklmnopqrstuvwxyz";  
+    
+	/**
+	 * 生成随机密码。可以控制生成的密码长度， 密码由数字和字母组成。
+	 * 
+	 * @param length
+	 *            字符串长度
+	 * @return 随机密码
+	 */
+	public synchronized static String passwordGenerator(int length) {
+		StringBuffer sb = new StringBuffer();
+		Random random = new Random();
+
+		for (int i = 0; i < length; i++)
+			sb.append(text.charAt(random.nextInt(text.length())));
+
+		return sb.toString();
+	}
+    
+    /**
+	 * 看最后一个是不是 uuid
+	 * 
+	 * @return
+	 */
+//	public static boolean isUUID(String url) {
+//		String js = "'%s'.match(/\\w{8}(?:-\\w{4}){3}-\\w{12}/) != null;";
+//		js = String.format(js, url);
+//		boolean isUUID = App.jsRuntime.eval_return_Boolean(js);
+//		return isUUID;
+//	}
+	
+	/**
+	 * 获取一个唯一的主键 id 的代码
+	 * 
+	 * @return UUID
+	 */
+	public static String getUUID() {
+		return java.util.UUID.randomUUID().toString();
+	}
+
+	/**
+	 * 去掉“-”符号
+	 * 
+	 * @param uuid
+	 *            UUID 字符串
+	 * @return 字符串
+	 */
+	public static String remove(String uuid) {
+		return uuid.substring(0, 8) + uuid.substring(9, 13) + uuid.substring(14, 18) + uuid.substring(19, 23)
+				+ uuid.substring(24);
+	}
+
+	/**
+	 * 是否 uuid 的正则表达式
+	 */
+	private static final String uuid_regExp = "[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}";
+
+	/**
+	 * 判断输入的字符串是否包含 uuid 特征。
+	 * 
+	 * @param uuid
+	 *            输入的字符串
+	 * @return true 为 UUID
+	 */
+	public static boolean isUUID(String uuid) {
+		return StringUtil.regMatch(uuid_regExp, uuid) != null;
+	}
+	
 	/**
 	 * word转换html时，会留下很多格式，有些格式并不是我们所需要的， 然而这些格式比真正的文章内容还要多，严重影响页面的加载速度，
 	 * 因此就需要找个一个好的解决方案把这些多余的格式个去掉。
@@ -284,9 +399,9 @@ public class StringUtil {
 
 		for (int i = 0; i < chars.length; i++) {
 			String hex = Integer.toHexString(chars[i]);
-			if (hex.length() <= 2) {
+			if (hex.length() <= 2)
 				hex = "00" + hex;
-			}
+			
 			sb.append("\\u" + hex);
 		}
 
@@ -307,11 +422,13 @@ public class StringUtil {
 		while (start > -1) {
 			end = str.indexOf("\\u", start + 2);
 			String charStr = "";
+			
 			if (end == -1) {
 				charStr = str.substring(start + 2, str.length());
 			} else {
 				charStr = str.substring(start + 2, end);
 			}
+			
 			char letter = (char) Integer.parseInt(charStr, 16); // 16进制parse整形字符串。
 			buffer.append(new Character(letter).toString());
 			start = end;
@@ -334,11 +451,14 @@ public class StringUtil {
 
 		for (int x = 0; x < len;) {
 			aChar = str.charAt(x++);
+			
 			if (aChar == '\\') {
 				aChar = str.charAt(x++);
+				
 				if (aChar == 'u') {
 					// Read the xxxx
 					int value = 0;
+					
 					for (int i = 0; i < 4; i++) {
 						aChar = str.charAt(x++);
 						switch (aChar) {
@@ -374,6 +494,7 @@ public class StringUtil {
 							throw new IllegalArgumentException("Malformed \\uxxxx encoding.");
 						}
 					}
+					
 					outBuffer.append((char) value);
 				} else {
 					if (aChar == 't')
@@ -407,6 +528,7 @@ public class StringUtil {
 	public static String UTF82GB2312(byte buf[]) {
 		int len = buf.length;
 		StringBuffer sb = new StringBuffer(len / 2);
+		
 		for (int i = 0; i < len; i++) {
 			if (by2int(buf[i]) <= 0x7F) {
 				sb.append((char) buf[i]);
@@ -415,12 +537,14 @@ public class StringUtil {
 				bl = by2int(bh << 6 | bl);
 				bh = by2int(bh >> 2);
 				int c = bh << 8 | bl;
+				
 				sb.append((char) c);
 			} else if (by2int(buf[i]) <= 0xEF && by2int(buf[i]) >= 0xE0) {
 				int bh = by2int(buf[i] & 0x0F), bl = by2int(buf[++i] & 0x3F), bll = by2int(buf[++i] & 0x3F);
 				bh = by2int(bh << 4 | bl >> 2);
 				bl = by2int(bl << 6 | bll);
 				int c = bh << 8 | bl;
+				
 				// 空格转换为半角
 				if (c == 58865)
 					c = 32;
@@ -434,15 +558,16 @@ public class StringUtil {
 	public byte[] gbk2utf8(String chenese) {
 		char c[] = chenese.toCharArray();
 		byte[] fullByte = new byte[3 * c.length];
+		
 		for (int i = 0; i < c.length; i++) {
 			int m = (int) c[i];
 			String word = Integer.toBinaryString(m);
-
 			StringBuffer sb = new StringBuffer();
 			int len = 16 - word.length();
-			for (int j = 0; j < len; j++) {
+			
+			for (int j = 0; j < len; j++) 
 				sb.append("0");
-			}
+			
 			sb.append(word);
 			sb.insert(0, "1110");
 			sb.insert(8, "10");
@@ -456,33 +581,15 @@ public class StringUtil {
 			byte b1 = Integer.valueOf(s2, 2).byteValue();
 			byte b2 = Integer.valueOf(s3, 2).byteValue();
 			byte[] bf = new byte[3];
+			
 			bf[0] = b0;
 			fullByte[i * 3] = bf[0];
 			bf[1] = b1;
 			fullByte[i * 3 + 1] = bf[1];
 			bf[2] = b2;
 			fullByte[i * 3 + 2] = bf[2];
-
 		}
+		
 		return fullByte;
-	}
-
-	/**
-	 * 请求获取中文。只要过滤器设置了 utf-8 那么这里就不用重复转码了
-	 * 
-	 * @param value
-	 *            参数
-	 * @return 中文
-	 */
-	public static String toChinese(String value) {
-		byte[] bytes = null;
-
-		try {
-			bytes = value.getBytes("ISO8859_1");
-		} catch (UnsupportedEncodingException e) {
-			return null;
-		}
-
-		return bytes != null ? byte2String(bytes) : null;
 	}
 }

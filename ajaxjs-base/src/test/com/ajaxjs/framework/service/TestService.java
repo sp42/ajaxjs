@@ -12,6 +12,7 @@ import com.ajaxjs.framework.service.IService;
 import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.framework.service.ValidationService;
 import com.ajaxjs.jdbc.ConnectionMgr;
+import com.ajaxjs.util.ClassScaner;
 
 import test.com.ajaxjs.framework.News;
 import test.com.ajaxjs.framework.NewsDao;
@@ -32,7 +33,7 @@ public class TestService {
 		}
 
 		dataSource = new SQLiteDataSource();
-		dataSource.setUrl("jdbc:sqlite:" + com.ajaxjs.util.Util.getClassFolder_FilePath(TestSimpleORM.class, "foo.sqlite"));
+		dataSource.setUrl("jdbc:sqlite:" + ClassScaner.getClassFolder_FilePath(TestSimpleORM.class, "foo.sqlite"));
 	
 		ConnectionMgr.setConnection(dataSource.getConnection());
 	}

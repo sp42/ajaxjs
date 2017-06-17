@@ -1,3 +1,18 @@
+/**
+ * Copyright 2015 Frank Cheung
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.ajaxjs.util.reflect;
 
 import java.lang.reflect.Constructor;
@@ -5,11 +20,16 @@ import java.lang.reflect.InvocationTargetException;
 
 import com.ajaxjs.util.LogHelper;
 
+/**
+ * 新建实例
+ * @author xinzhang
+ *
+ */
 public class ReflectNewInstance {
 	private static final LogHelper LOGGER = LogHelper.getLog(ReflectNewInstance.class);
 
 	/**
-	 * 根据类创建实例
+	 * 根据类创建实例，无构造器参数创建。
 	 * 
 	 * @param clazz
 	 *            类对象
@@ -17,7 +37,7 @@ public class ReflectNewInstance {
 	 */
 	public static <T> T newInstance(Class<T> clazz) {
 		try {
-			return clazz.newInstance(); // 实例化 bean
+			return clazz.newInstance(); // 实例化
 		} catch (InstantiationException | IllegalAccessException e) {
 			LOGGER.warning(e);
 			return null;
@@ -37,7 +57,7 @@ public class ReflectNewInstance {
 		try {
 			return constructor.newInstance(args);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			LOGGER.warning("实例化对象失败：" + constructor.getDeclaringClass(), e);
+			LOGGER.warning(e, "实例化对象失败：" + constructor.getDeclaringClass());
 			return null;
 		}
 
@@ -56,7 +76,7 @@ public class ReflectNewInstance {
 		try {
 			return classes != null ? clazz.getConstructor(classes) : clazz.getConstructor();
 		} catch (NoSuchMethodException e) {
-			LOGGER.warning("找不到这个 {0} 类的构造器。", clazz.getName());
+			LOGGER.warning(e, "找不到这个 {0} 类的构造器。", clazz.getName());
 			return null;
 		} catch (SecurityException e) {
 			LOGGER.warning(e);
@@ -96,7 +116,7 @@ public class ReflectNewInstance {
 		try {
 			return Class.forName(className);
 		} catch (ClassNotFoundException e) {
-			LOGGER.warning("找不到这个类：{0}。", className);
+			LOGGER.warning(e, "找不到这个类：{0}。", className);
 			return null;
 		}
 	}
@@ -110,7 +130,7 @@ public class ReflectNewInstance {
 	@SuppressWarnings("unchecked")
 	public static <T> T newInstance(String className, Class<T> clazz) {
 		Class<?> clz = getClassByName(className);
-		return clazz != null ? (T)newInstance(clz) : null;
+		return clazz != null ? (T) newInstance(clz) : null;
 	}
 
 	/**

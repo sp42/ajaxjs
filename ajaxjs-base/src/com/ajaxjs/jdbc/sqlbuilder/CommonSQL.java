@@ -93,7 +93,7 @@ public class CommonSQL extends SqlBuilder {
 			try {
 				if (method.invoke(bean) != null) { // 有值的才进行操作
 					fieldNames.add(methodName);// 保存字段顺序		
-					String pojoName = BeanUtil.getFieldName(methodName);
+					String pojoName = BeanUtil.getFieldName(methodName, "get");
 					
 					// 字段映射
 					if (fieldMapping != null && fieldMapping.size() > 0 && fieldMapping.containsKey(pojoName)) {

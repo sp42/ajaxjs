@@ -21,7 +21,7 @@ import javax.script.ScriptException;
 
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.util.Util;
+import com.ajaxjs.util.Value;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.io.StreamUtil;
 
@@ -124,7 +124,7 @@ public class JsEngineWrapper {
 			LOGGER.warning("向脚本引擎调用脚本方法异常！方法名称:" + method, e);
 		}
 
-		return Util.TypeConvert(result, clazz);
+		return Value.TypeConvert(result, clazz);
 	}
 
 	/**
@@ -185,7 +185,7 @@ public class JsEngineWrapper {
 		
 		if (obj != null && clazz != null) {
 			// return Util.TypeConvert(js.eval(code), clazz); // 为什么要执行多次？
-			T _obj = Util.TypeConvert(obj, clazz);
+			T _obj = Value.TypeConvert(obj, clazz);
 			return _obj;
 		} else
 			return null;
@@ -200,22 +200,6 @@ public class JsEngineWrapper {
 	 */
 	public Object eval(String code) {
 		return eval(code, Object.class);
-	}
-
-	/**
-	 * js number 为 double 类型，在 java 里面使用不方便，将其转换为 int
-	 * 
-	 * @param d
-	 *            js number
-	 * @return int 值
-	 */
-	public static int double2int(Double d) {
-		if (d > Integer.MAX_VALUE) {
-			LOGGER.warning("数值 {}0 太大，不应用这个方法转换到 int", d);
-			return 0;
-		} else {
-			return d.intValue();
-		}
 	}
 	
 }

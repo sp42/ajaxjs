@@ -48,4 +48,11 @@ public class TestStringUtil {
 			e.printStackTrace();
 		}
 	}
+	
+	@Test
+	public void testMisc(){
+		assertEquals(base64Decode(base64Encode("foo")), "foo");
+		assertEquals(md5("123123"), "4297F44B13955235245B2497399D7A93");
+		System.out.println(passwordGenerator(8));
+	}
 }

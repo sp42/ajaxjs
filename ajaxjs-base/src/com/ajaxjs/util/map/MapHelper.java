@@ -20,6 +20,7 @@ import java.util.Map;
 
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.Util;
+import com.ajaxjs.util.Value;
 
 /**
  * 自定义 Map 类，加入更多实用的功能
@@ -27,38 +28,6 @@ import com.ajaxjs.util.Util;
  * @author Frank Cheung
  */
 public class MapHelper {
-	/**
-	 * 从字符串还原真实值， 空字符串"" 会被视为 null 获取参数，并自动从字符串转换为 Java 类型，如 "true"-->
-	 * true,"123"--> 123,"null"-->null
-	 * 
-	 * @param value
-	 *            字符串的值
-	 * @return Java 里面的值
-	 */
-	public static Object toJavaValue(String value) {
-		if (value == null)
-			return null;
-
-		value = value.trim();
-
-		if ("".equals(value) || "null".equals(value))
-			return null;
-
-		if ("true".equalsIgnoreCase(value))
-			return true;
-		if ("false".equalsIgnoreCase(value))
-			return false;
-
-		try {
-			int int_value = Integer.parseInt(value);
-			if ((int_value + "").equals(value)) // 判断为整形
-				return int_value;
-			return value;
-		} catch (NumberFormatException e) {// 不能转换为数字
-			return value;
-		}
-	}
-
 	/**
 	 * 也是 join，不过输入的参数不是数组而是 hash。
 	 * 
@@ -116,7 +85,7 @@ public class MapHelper {
 			Object obj = map.get(key);
 			boolean toCast = isCastRealValue && obj != null && obj instanceof String;
 			
-			as.put(key, toCast ? toJavaValue(obj.toString()) : obj);
+			as.put(key, toCast ? Value.toJavaValue(obj.toString()) : obj);
 		}
 
 		return as;
@@ -146,7 +115,7 @@ public class MapHelper {
 		Map<String, String> as = new HashMap<>();
 
 		for (String key : map.keySet())
-			as.put(key, Util.to_String(map.get(key), true));
+			as.put(key, Value.to_String(map.get(key), true));
 
 		return as;
 	}
@@ -169,6 +138,7 @@ public class MapHelper {
 			
 			_map.put(key, value);
 		}
+		
 		return _map;
 	}
 
@@ -192,7 +162,7 @@ public class MapHelper {
 
 		int i = 0;
 		for (String column : columns) {
-			map.put(column, toJavaValue(values[i]));
+			map.put(column, Value.toJavaValue(values[i]));
 			i++;
 		}
 
@@ -233,7 +203,7 @@ public class MapHelper {
 			String[] column = pair.split("=");
 			
 			if (column.length >= 2)
-				map.put(column[0], toJavaValue((isDecode ? StringUtil.urlDecode(column[1]) : column[1])));
+				map.put(column[0], Value.toJavaValue((isDecode ? StringUtil.urlDecode(column[1]) : column[1])));
 			else
 				map.put(column[0], "");// 没有 等号后面的，那设为空字符串
 		}
@@ -258,11 +228,12 @@ public class MapHelper {
 			return obj == null ? false : (boolean) obj;
 		}
 	}
-	
+
 	/**
-	 * 有些 Map 只能读不能写，现在为真正的 Hashmap
+	 * 有些对象实现了 Map 接口但只能读不能写，现在为真正的 Hashmap
 	 * 
-	 * @param map 符合 Map 接口的伪 Map
+	 * @param map
+	 *            符合 Map 接口的伪 Map
 	 * @return 真正的 Hashmap
 	 */
 	public static Map<String, Object> toRealMap(Map<String, ?> map) {
