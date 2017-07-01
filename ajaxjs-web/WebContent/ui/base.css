@@ -1,0 +1,94 @@
+body {
+	background-color: white;
+	padding: 2% 3%;
+	font-family: "Lantinghei SC", "Open Sans", Arial, "Hiragino Sans GB",
+		"Microsoft YaHei", "微软雅黑", "STHeiti", "WenQuanYi Micro Hei", SimSun,
+		sans-serif;
+}
+
+.ajaxjs-hr {
+	margin: 1% 0;
+	border: 0;
+	border-bottom: 1px solid #eee;
+	width: 100%;
+}
+
+h4 {
+	padding-bottom: 0;
+	margin-bottom: 0;
+	letter-spacing: 2px;
+}
+
+p {
+	margin-top: 0;
+	padding-top: 0;
+	color: gray;
+}
+
+.date {
+	float: right;
+}
+
+.box {
+	border: 1px solid lightgray;
+	padding: 1% 2%;
+}
+
+/* 文字段落 */
+.ajaxjs-text-p {
+	color: #333;
+	line-height: 160%;
+	text-indent: 2em;
+	margin: 15px 5px;
+	font-size: 1rem;
+	letter-spacing: 1px;
+	text-align: justify;
+}
+
+/* 文字引用 */
+.ajaxjs-text-quotation {
+	color: gray;
+}
+
+.ajaxjs-text-quotation:before {
+	content: '‟';
+	font-size: 3rem;
+}
+
+.ajaxjs-text-quotation:after {
+	content: '”';
+	font-size: 3rem;
+	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	//
+	必须加上字体才有那个样子
+}
+
+.ajaxjs-fullScreenMask {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 9999998;
+	background-color: rgba(0, 0, 0, .5);
+}
+
+/* 实现CSS 文本溢出省略号 */
+.noWarp li {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+button {
+	padding: .35rem 1.5rem;
+	font-size: .8rem;
+	border-radius: .3rem;
+	color: #fff;
+	background-color: #0275d8;
+	border-color: #0275d8;
+	outline:none;
+	        border:none;
+        outline: none;
+        cursor: pointer;
+}
