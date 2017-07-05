@@ -20,13 +20,7 @@
 					</li>
 					<li>
 						<a href="expander.jsp">内容折叠器</a>
-					</li>
-					<li>
-						<a href="scrollText.jsp">无缝上下滚动文字</a>
-					</li>
-					<li>
-						<a href="misc.jsp">杂项</a>
-					</li>
+					</li> 
 				</ul>
 			</menu>
 		</li>
@@ -73,13 +67,10 @@
 		<li>
 			<a href="javascript:;">其他</a>
 			<menu>
-				<div>指日历、HTML 编辑器这类控件</div>
+				<div>其他未分类的控件</div>
 				<ul>
 					<li>
 						<a href="htmleditor.jsp">HTML在线编辑器</a>
-					</li>
-					<li>
-						<a href="calendar.jsp">日历控件</a>
 					</li>
 					<li>
 						<a href="chinacity.jsp">省市区三级选择器</a>
