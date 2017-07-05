@@ -43,7 +43,7 @@
 			
 			this.onTabHeaderPress = onTabHeaderPress;
 
-			if(this.tabHeader)this.tabHeader.onclick = onTabHeaderPress.bind(this);
+			if(this.tabHeader && !this.disableTabHeaderJump)this.tabHeader.onclick = onTabHeaderPress.bind(this);
 			
 			if(this.isEnableTouch && typeof window.bf_touch != 'undefined'){
 				var self = this;
@@ -147,6 +147,7 @@
         isMagic : false,
 		isUsePx:false,
 		autoHeight : false,
+		disableTabHeaderJump : false, // 是否禁止通过 tab 候选栏来跳转。一般 wizzard 向导式的时候不能跳转
 		isGetCurrentHeight:true,// 自动当前项最高，忽略其他高度，这个用在 tab很好，比 autoHeight 的好，可视作 autoHeight 2.-
 		autoHeight_fn : autoHeight,
 		
@@ -164,8 +165,16 @@
 		 * 点击第一个 tab，否则不会高亮 tab 1 按钮和自动计算高度
 		 */
 		initFirstTab : function(){
+			this.goTab(0);
+		}
+
+		/**
+		 * 跳到指定的那个 tab
+		 * @param {Number} index tab 索引，从 0 开始
+		 */
+		,goTab : function(index){
 			this.onTabHeaderPress({
-				target : this.el.querySelector('header ul li')
+				target : this.el.querySelectorAll('header ul li')[index]
 			});
 		}
 	};

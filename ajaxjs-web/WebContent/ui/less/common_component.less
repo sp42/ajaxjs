@@ -1,0 +1,589 @@
+@import 'common_style.less';
+
+@bodyWidth : 980px;
+@baseColor: #ff4400;
+@baseColorHover: #f52b00;
+@baseLightColor: #fff1e2;
+@baseGray: #222;
+@baseBg: #e7e7e7;
+
+.ajaxjs-msgbox() {
+    .fadeIn(.8s);
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, .3);
+    position: fixed;
+    z-index: 99999999;
+    margin: auto;
+    .inner {
+        margin: 5px;
+        margin-top: 3%;
+        padding: 10px;
+        overflow: hidden;
+    }
+    .topCloseBtn {
+        position: absolute;
+        text-align: center;
+        top: 5px;
+        right: 0;
+        width: 30px;
+        line-height: 16px;
+        height: 30px;
+        color: #b5b5b5;
+        font-size: 25px;
+        cursor: pointer;
+    }
+}
+
+.loadMoreBtn {
+    width: 95%;
+    max-width: 500px;
+    // .my-btn-2;
+}
+
+// 折叠菜单 Accordion Menu
+.acMenu {
+    &>li h3 {
+        cursor: pointer;
+    }
+    .pressed {
+        &>ul {
+            // height: auto;
+            // height:100px; // 如果要使用动画效果，不能使用 auto，必须精确指定 px 高度。
+        }
+        & h3 {
+            // @overable
+            color: black;
+        }
+    }
+    &>li>ul {
+        .transition(height .5s cubic-bezier(0, 1, 0.5, 1));
+        overflow: hidden;
+    }
+    ul {
+        height: 0;
+    }
+}
+
+
+/*==================================================================
+	翻页的公共样式
+==================================================================*/
+ 
+
+// 对话框
+.baseDialog(@width: 400px, @height: auto) {
+    @zindex: 999;
+    .box {
+        width: @width;
+        height: @height;
+        background-color: #EBEBEB;
+        border: 1px solid #D3D3D3;
+        position: fixed;
+        z-index: @zindex + 1;
+        padding: 5px;
+        padding-top: 0; //.boxshadow;
+        // 标题
+        &>h1 {
+            font-size: 10.5pt;
+            text-align: center;
+            line-height: normal;
+            font-weight: normal;
+            margin: 0;
+            padding: 5px;
+            letter-spacing: 2px;
+            cursor: move;
+        }
+        button {
+            cursor: pointer;
+        }
+        button.rightTopIcon {
+            position: absolute;
+            right: 2px;
+            top: 2px;
+            padding: 0 3px;
+            background: 0;
+            border: 0;
+            &:hover {
+                color: black;
+            }
+        }
+        .innerPanel {
+            // height: 90%;
+            border: 1px solid #DADADA;
+            padding: 5px;
+            box-sizing: border-box; // margin-top: 30px;
+            background-color: #f5f5f5;
+            position: relative;
+            .loadingIndicator>img {
+                position: absolute;
+                top: 50%;
+            }
+        } // 标准按钮
+        .stdBtn {
+            border: 1px solid lightgray;
+            background-color: #f5f5f5;
+            padding: 0 3px;
+            font-size: 9pt;
+            color: gray;
+            &:hover {
+                color: black;
+                border-color: gray;
+                background-color: draken(#f5f5f5, 10%);
+            }
+        }
+        .bottomBtns {
+            text-align: center;
+            padding: 5px;
+            button {
+                .stdBtn;
+                padding: 2px 15px;
+            }
+        }
+    }
+    .mask {
+        .fullScreen_Mask;
+        z-index: @zindex;
+    }
+    .middleBtn {
+        margin: 10px auto;
+        display: block;
+        position: static!important;
+        padding: 3px 15px!important; // border:0!important;
+        .btn;
+    }
+}
+
+// 多选项卡（多标签页）
+.base_tab {
+    &>ul {
+        &>li {
+            background-color: @baseBg;
+            -moz-box-sizing: border-box;
+            /*  边框不计算在宽度内 */
+            box-sizing: border-box;
+            cursor: pointer;
+            position: relative;
+            list-style: none;
+            text-align: center;
+            height: 35px;
+            margin: 3px 0;
+            padding: 8px;
+            border: 1px solid transparent;
+            &.selected {
+                background-color: white;
+                border-color: @baseColor;
+                z-index: 999999;
+            }
+            &:hover {
+                color: @baseColor;
+            }
+        }
+    }
+    &>div {
+        position: relative;
+        border: 1px solid @baseColor;
+        -moz-box-sizing: border-box;
+        /*  边框不计算在宽度内 */
+        box-sizing: border-box;
+        z-index: 1;
+        &>div {
+            display: none;
+            padding: 10px;
+            font-size: .9rem;
+            text-align: justify;
+            &.selected {
+                display: block;
+            }
+        }
+    }
+}
+
+// 水平 Tab
+.tab2 {
+    .base_tab;
+    &>ul {
+        .giveHeight;
+        &>li {
+            display: block;
+            float: left;
+            margin-bottom: 0;
+            margin-right: 1px; // tab 候选栏之间的间隙
+            border-bottom: 0;
+        }
+    }
+    &>div {
+        margin-top: -1px; // 融合
+    }
+}
+
+// 垂直 Tab
+.tab3 {
+    .base_tab;
+    &>ul {
+        width: 25%;
+        float: left;
+        &>li {
+            margin-top: 0;
+            border-right: 0;
+        }
+    }
+    &>div {
+        // width:79.5%; for ie
+        width: 75%;
+        float: left;
+        margin-left: -1px;
+        min-height: 149px; // 由实际情形决定
+    }
+}
+
+
+
+// 滑动条
+.slider {
+    position: relative;
+    width: 85%;
+    height: 5px;
+    border: 1px solid gray;
+    margin: 15px auto;
+    cursor: pointer;
+    button.withAnimated {
+        .transition(left 300ms ease);
+    }
+    button {
+        position: absolute;
+        height: 16px;
+        width: 16px;
+        background-color: gray;
+        bottom: -110%;
+    }
+}
+
+.scrollTab {
+    overflow: hidden; //position:relative; 
+    header ul {
+        overflow: hidden;
+        li {
+            float: left;
+            text-align: center;
+            cursor: pointer;
+        }
+    }
+    &>div {
+        // mover
+        white-space: nowrap; //position:absolute;
+        .fixTransitionFlash;
+        .leftFx;
+        transition: transform 400ms linear;
+        &>div {
+            white-space: normal; //reset
+            float: left;
+            min-height: 10px; // 必须有高度，否则作0x0 块处理
+        }
+    }
+}
+
+// 广告滚动条组件
+.banner {
+    .scrollTab;
+    position: relative;
+    min-height: 140px;
+    overflow: hidden;
+    max-height: 280px; // 防止加载中扯高容器
+    &>div>div img {
+        width: 100%;
+    }
+    ol {
+        background: rgba(0, 0, 0, .3);
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        height: 18px;
+        line-height: 25px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        text-align: right;
+        li {
+            list-style-type: none;
+            height: 5px;
+            width: 5px;
+            display: inline-block;
+            margin: 6px 3px;
+            color: white;
+            text-indent: 99em;
+            background: rgba(255, 255, 255, .5);
+            cursor: pointer;
+            &:last-child {
+                //				margin-right: 20px;
+            }
+            &.active {
+                background: white;
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 330px) {
+    /*当屏幕尺寸小于600px时，应用下面的CSS样式*/
+    .banner {
+        max-height: 180px; // 防止加载中扯高容器
+    }
+}
+
+@media screen and (min-width: 480px) {
+    /*当屏幕尺寸小于600px时，应用下面的CSS样式*/
+    .banner {
+        max-height: 280px; // 防止加载中扯高容器
+    }
+}
+
+// 下拉菜单
+// 父节点，通常是 li
+.downdrop_menu_parentNode() {
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden; // 解决 width 有值时溢出
+    &:hover {
+        overflow: inherit;
+    }
+    .show() {
+        height: 13rem;
+        z-index: 9999999;
+        //		.boxshadow(0 2px 5px #333);
+    }
+    &:hover menu {
+        .show();
+    }
+    menu {
+        // menu 是要显示面板之标签
+        margin: 0;
+        z-index: 99999;
+        box-sizing: border-box;
+        overflow: hidden;
+        position: absolute;
+        .heightFx;
+        height: 0;
+        &:hover {
+            .show();
+        }
+    }
+}
+
+
+// 箭头 父容器必须 position: relative;
+.aj-arrow {
+    position: absolute;
+    &:after, &:before {
+        position: absolute;
+        border: 5px solid transparent;
+        content: ' ';
+        height: 0;
+        width: 0;
+    }
+    
+    &.toTop {
+        top: -1px;
+        &:after {
+            border-bottom-color: #fffce9;/* 内容颜色 */
+            bottom: -1px;
+        }
+        &:before {
+            border-bottom-color: #ffcc9e;/* 边框颜色 */
+            bottom: 0;
+        }
+    }
+    
+    &.toBottom {
+        bottom: -8px;
+        &:after {
+            border-top-color: #fffce9;/* 内容颜色 */
+            bottom: -1px;
+        }
+        &:before {
+            border-top-color: #ffcc9e;/* 边框颜色 */
+            bottom: -2px;
+        }
+    }
+    
+    &.toLeft {
+        left: -9px;
+        &:after {
+            top: 5px;
+            border-right-color: #fffce9;
+            
+        }
+        &:before {
+            border-right-color: #ffcc9e;/* 边框颜色 */
+            top: 5px;
+            left: -2px;
+        }
+    }
+}
+
+.tipsNote {
+    line-height: 20px;
+    color: #ff865d;
+    border: solid 1px #ffcc9e;
+    background-color: #fffce9;
+    padding: 8px 12px;
+    width: 70%;
+    // left: 30%;
+    border-radius: 3px;
+    margin-top: 10px;
+    font-size: .8rem;
+    box-sizing: border-box;
+    position: relative;
+    text-align: left;
+}
+
+.single_tips, .tipsNote2 {
+    position: fixed;
+    background-color: #f5faff;
+    border: 1px solid #0066cc;
+    font-size: .9rem;
+    border-radius: 3px;
+    color: #0066cc;
+    padding: 7px 12px 8px 12px;
+    margin-left: 10px;
+    .aj-arrow:after {
+        border-right-color: #f5faff; // 背景颜色
+    }
+    .aj-arrow:before {
+        border-right-color: #0066cc; // 边框颜色
+    }
+}
+
+
+.ajaxjs-form {
+    width: 600px;
+    dl{
+        dd, dt{
+            float: left;
+            margin-bottom: 2%;
+        }
+
+        dt{
+            width: 30%;
+            span{
+                // 星号，为必填项
+                color:red;
+            }
+        }
+        dd{
+            width: 70%;
+            .tips, .state{
+                display: none;	
+                margin-left: 10px;
+                border: 1px solid gray;
+                padding: 3px 3px;
+                position: relative;
+                strong{
+                        
+                    border-style:solid; height:0;line-height: 0; width:0; font-size:0;
+                    position: absolute;
+                    border-width: 5px;
+                    &.arrow_1{
+                        left:-11px;
+                        top:7px;
+                        border-color:white gray white white;
+                    }
+                    &.arrow_2{
+                        left: -9px;
+                        top: 7px;
+                        border-color: transparent white transparent transparent;
+                    }
+                }
+
+            }
+    
+            .state{
+                color: red;
+                font-weight: bold;
+            }
+
+            .errHighlight{
+                border-color:red!important;
+                color:red;
+            }
+        }
+
+    }
+    
+	input[type=text] , input[type=password] , textarea {
+		.ajaxjs-inputField();
+        width:100%;
+		&:focus {
+			border-color: #21a9ff ! important;
+		}
+	}
+
+	input[type=submit] , input[type=file] {
+		.ajaxjs-btn();
+        cursor: pointer;
+	}
+	
+	input[type="checkbox"], input[type="radio"] {
+		vertical-align: middle; // 不然会错位！
+	}
+	
+	select{
+		.ajaxjs-select;
+	}
+	
+	
+}
+
+
+
+
+// 表单验证
+.errMsg_Box, .tipsMsg_Box{
+	min-width:120px;
+	padding: 5px;
+	position: absolute;
+	border: 1px solid gray;
+	font-size: 9pt;
+	text-align: center;
+	padding-left: 25px;
+	transition:opacity .8s ease-in-out;
+	-webkit-transition:opacity .8s ease-in-out;
+	z-index: 999999999;
+	//.boxshadow;
+	background-color: white!important;
+	.arrow{
+		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAKCAYAAAC5Sw6hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAE+SURBVHjaYmhoaOh48uTJ7/9kgJ8/f/598+bNb6AZGwACiImBgaHx+PHjNxjIAL9//2bavHnzCSAzAiCAQAZ9v3r1qtncuXMv/PjxgySD9uzZ8+Xhw4fhQOYPgABigop9B3oveO/evb/+/v1LlCGnT59muHDhQhiQ+QzEBwggJiS5e0AJpW3btn0gZMiRI0cYDhw4YANkboeJAQQQskEMf/78eXru3DmPEydO4DTk9u3bDED5zG/fvh1FFgcIICYsak8ePXq08s6dOxgS7969A7lk69evX2ejywEEELODgwOGhl+/fp0AhhmjpKSkPT8/P1js8+fPDGvXrj309OnTQCD3J7oegABiwuGDP+/fv6/fsmXLhi9fvoAFgOynQMM9gMyv2DQABBAjMDHhC1dOIJ4ExDpAHAyLIWwAIMAA4jLAycAw+j8AAAAASUVORK5CYII=);
+		background-repeat: no-repeat;
+		width:18px;
+		height: 10px;
+		position: absolute;
+		left: 15px;
+		bottom: -10px;
+	}
+	&.msgIcon{
+		background-position: 6px 5px;
+	}
+	&.disallowIcon{
+		background-position: 6px 5px;
+		
+	}
+}
+.disallowStateIcon{
+	display: none;
+}
+.errState {
+	position: relative;
+	input{
+		border:red 1px solid!important;
+	}
+	.disallowStateIcon{
+		background-repeat: no-repeat;
+		width:18px;
+		height: 18px;
+		position: absolute;
+		display: block;
+		z-index: 9999999;
+		top:5px;
+		right:16px;
+	}
+}
+
+ 

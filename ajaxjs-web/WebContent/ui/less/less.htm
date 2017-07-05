@@ -3,109 +3,201 @@
 <head>
     <meta charset="utf-8" />
     <title>CSS Layout</title>
-    <link rel="stylesheet" type="text/css" href="../base.css" />
+	<link rel="stylesheet/less" type="text/css" href="../less/common_component.less" />
+	<script src="../less.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../base.css" />
     <style>
-        .date {
-            float: right;
-        }
     </style>
 </head>
 
 <body>
 
-    <h4>单行浮动</h4>
-    <hr class="ajaxjs-hr" />
-    <p>浮动元素要写在前面。</p>
-    <div class="box" style="width:600px;">
-        <div class="date">2017-7-1</div>
-        Title
-    </div>
-
-    <h4>相对／绝对布局</h4>
-    <hr class="ajaxjs-hr" />
-    <p>外面为 position: relative；里面构建坐标系，position: absolute。</p>
-    <div class="box" style="position: relative;width:250px; height:150px;">
-        <div class="box" style="position: absolute;background-color:yellow; width:50px; height:50px; top:20px; left:30px;">Hi</div>
-    </div>
-
-    <h4>左右居中</h4>
-    <hr class="ajaxjs-hr" />
-    <p>块元素设置 margin: 0 auto；文字、图片设置 text-align:center;</p>
+  <a name="link"></a>
+  <h4>超链接</h4>
+  <hr class="ajaxjs-hr" />
+  <a href="#">点击我</a>
 
 
-    <h4>垂直居中</h4>
-    <hr class="ajaxjs-hr" />
-    <p>单行文字与块元素垂直居中，设置块元素 line-height 与 height 一致即可。</p>
-    <p>单行文字混合图片，图片设置 vertical-align: middle</p>
-    <div class="box">
-        “茶道”为日本传统美学之精髓，<img style="vertical-align: middle" height="50" src="https://img14.360buyimg.com/n1/jfs/t1141/330/5781534/168980/39b1c792/54dac84bNd9a99b9b.jpg"
-        />作者文笔清雅隽永，蕴藏文人气息，带领读者一窥日本古典美学的世界。
-    </div>
-    <br />
-    <p>使用 display: table-cell; 单元格居中 </p>
-    <div class="box" style="
-display: table-cell;
-vertical-align: middle;
-overflow: hidden;
-height: 100px;width:300px;">留言内容：</div>
+  <a name="table"></a>
+  <br /><br />
+  <h4>细线表格 Table</h4>
+  <hr class="ajaxjs-hr" />
+  
+ 
+  <table border="0" width="95%">
+      <tr>
+          <td width="48%" valign="top">
+              <p class="usingClass">快速制作 1px 表格边框，为需要设置的 table 元素 class 即可。 class="ajaxjs-borderTable"</p> <br />
+  <table class="ajaxjs-borderTable" width="90%">
+      <tr>
+          <th>姓名</th>
+          <td>Bill Gates</td>
+      </tr>
+      <tr>
+          <th rowspan="2">电话</th>
+          <td>555 77 854</td>
+      </tr>
+      <tr>
+          <td>555 77 855</td>
+      </tr>
+  </table>
+          </td>
+          <td width="4%"></td>
+          <td width="48%">
+  <p class="usingClass">class="ajaxjs-niceTable"</p><br />
+
+
+ <table border="0" class="ajaxjs-niceTable" width="100%">
+  <thead>
+    <tr>
+      <th>Month</th>
+      <th>Savings</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>January</td>
+      <td>$100</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>$80</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td>Sum</td>
+      <td>$180</td>
+    </tr>
+  </tfoot>
+</table>
+                </td>
+            </tr>
+        </table>
 
 
 
-	<h4>垂直文本</h4>
-    <hr class="ajaxjs-hr" />
-	<div class="box" style="width: 22px;height: 100px;text-align: center;">
-		aa<div style="transform: rotate(90deg);">500</div>
-	</div>
-	
-	<h4>移动端页面宽度</h4>
-    <hr class="ajaxjs-hr" />	
-    &lt;meta name="viewport" content="width=320,user-scalable=0,initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0" /&gt;
+           
+        <a name="button"></a>
+        <br /><br />
+        <h4>按钮 Button</h4>
+        <hr class="ajaxjs-hr" />
+        <button class="ajaxjs-btn">按钮</button>  class="ajaxjs-btn"
+        <br />
+        <button class="ajaxjs-btn-1">按钮</button>  class="ajaxjs-btn-1"
+        <br />
+        <button class="ajaxjs-btn-1 ajaxjs-disable">按钮（禁止状态）</button>  class="ajaxjs-btn-1  ajaxjs-disable"
 
-	<h4>手机区域内滚动</h4>
-	<hr class="ajaxjs-hr" />	
-	<p>
-		区域内局部滚动:控制元素在移动设备上是否使用滚动回弹效果。
-		看上去和原生app的效率都有得一拼，要实现这个效果很简单，原理是：-webkit-overflow-scrolling : touch;
-	</p>
-	<p>
-		自定义滚动条样式（只对 webkit 有效）：因为大量使用 -webkit-overflow-scrolling: touch; 区域内局部滚动，所以在 pc 上应该要让滚动条变细，不然会遮住内容。手机端上冇此问题 
-	</p>
-	<table><tr>
-	<td>
+        <a name="input"></a>
+        <br /><br />
+        <h4>输入框 Input Field</h4>
+        <hr class="ajaxjs-hr" /> 
+        <input class="ajaxjs-inputField" type="text" value="文本输入框" />  class="ajaxjs-inputField"
+        <br />
+        <br />
+        <input class="ajaxjs-inputField ajaxjs-disable" type="text" value="文本输入框（禁止状态）" />  class="ajaxjs-inputField ajaxjs-disable"
+       
+        <br />
+        <br />
+        <h4>文本框 Textarea</h4>
+        <hr class="ajaxjs-hr" /> 
+    	<textarea class="ajaxjs-inputField" 
+            rows="15" cols="20" style="resize:none;padding-top:5px;height:100px;width:50%;" name="intro">“北上广深同比涨幅高达20%，26个主要城市涨幅超10%，69个城市房价上涨……”2013年全国房价涨声一片，这与年初各地制定的房价控制目标相差甚远。 经济学者马光远[微博]表示，房价调控目标是政府对于百姓的“承诺”，没有完成目标而“爽约”，蒙混过关只会丧失公信力。</textarea>
+        <br /><br />
 
-		<div class="box" style="width:200px;height:200px;overflow-y: auto;-webkit-overflow-scrolling: touch;overflow: hidden;">
-		 昨晚闲暇时翻看了下之前加的一些QQ群准备整理下，突然发现之前加的几个seo讨论群已经不知不觉间被遗忘了。与前几年seo行业的火热相比，现在的seo行业已经显得有些落寞了。身边不少做seo的朋友都已经转行做其他的了，本人也已经转行php1年多了，只是业余时间优化下自己的一个工作室网站了。seo从业者的减少已经看出很多企业已经放弃自然优化了，有的选择了更快捷的付费推广，也有的直接退出互联网专门做线下去了。搜seo招聘，岗位也是少的几乎没有了。是seo这个行业真的没有效果了吗?
-		</div>	
-		
-		<style>
-			/* 自定义滚动条样式（只对 webkit 有效） 这是全局的，要针对某一元素可以 div::-webkit-scrollbar */
-			::-webkit-scrollbar {
-			    width : 7px; /* 对垂直流动条有效 */
-			    height: 5px; /* 对水平流动条有效 */
-			}
-			
-			::-webkit-scrollbar-thumb {
-			    background-color: lightgray;
-			    //border: 1px solid gray;
-			    border-radius:3px;
-			}
-			
-			::-webkit-scrollbar-thumb:window-inactive {
-			    background-color: rgba(0, 0, 0, 0);
-			}
-		</style>
-	
-	</td>
-	<td width="50"></td>
-	<td valign="top">
-		<p>如果结构如下 div.areaScroll > ul > li，则不能 float:left，必须 float: none;display: inline-block;</p>
-	
-		<div class="box" style="width:200px;height:20px;
-			overflow-x: auto;white-space: nowrap; auto;-webkit-overflow-scrolling: touch;overflow: hidden;">
-		</div>	
-	
-	</td>
-	</tr></table>
+        <a name="ddl"></a>
+        <h4>下拉列表 DropdownList</h4>
+        <hr class="ajaxjs-hr" /> 
+        <select name="catalog" class="ajaxjs-select">
+            <option value="1">公司新闻</option>
+            <option value="2" selected="selected">行业动态</option>
+            <option value="3">媒体报道</option>
+        </select>
+        class="ajaxjs-select"
+
+        <br />
+        <br />
+        <select class="ajaxjs-select" multiple>
+            <option>多项选择</option>
+            <option>1</option>
+            <option>2</option>
+        </select> class="ajaxjs-select[multiple]"
+
+        <br /><br />
+        <br /><br />
+        <h4>提示文字</h4>
+        <hr class="ajaxjs-hr" /> 
+        <p class="usingClass">不需要 JS；提示 div 需指定宽度和 position: relative。</p>
+        <br /><br /> 
+        <div style="position: relative; height:100px;">
+            <p><i>北上广深同比涨幅高达20%，26个主要城市涨幅超10%，69个城市房价上涨……</i></p>
+            <div class="tipsNote" style="width:300px;">
+                <div class="aj-arrow toTop"></div>
+                <span>用户名等于账号名；不能与现有的账号名相同；注册后不能修改；</span>
+            </div>
+        </div>
+        
+        <br /><br />  
+        <h4>提示文字（不同方向）</h4>
+        <hr class="ajaxjs-hr" /> 
+            <p class="usingClass">上下方向（toBottom、toTop）不需要 JS；提示 div 需指定宽度和 position: relative。</p>
+            <br /><br />  
+            <div style="position: relative; height:150px;">
+                <div class="tipsNote tipsNote-3" style="width:300px;">
+                    <div class="aj-arrow toBottom"></div>
+                    <span>用户名等于账号名；不能与现有的账号名相同；注册后不能修改；</span>
+                </div>
+                <p class="foo"><i>北上广深同比涨幅高达20%，26个主要城市涨幅超10%，69个城市房价上涨……</i></p>
+                <div class="tipsNote tipsNote-2" style="width:450px;">
+                    <div class="aj-arrow toTop"></div>
+                    <span>用户名等于账号名；不能与现有的账号名相同；注册后不能修改；</span>
+                </div>
+                <div class="tipsNote tipsNote-1" style="width:380px;">
+                    <div class="aj-arrow toLeft"></div>
+                    <span>用户名等于账号名；不能与现有的账号名相同；注册后不能修改；</span>
+                </div>
+            </div>
+            <style>
+                /* 重写修改边框颜色 */
+                .tipsNote-3 {
+                    background-color: #f5faff;
+                    border-color: green;
+                    color: green;
+                }
+            
+                .tipsNote-3 .aj-arrow:after {
+                    border-top-color: #f5faff;/* 内容颜色 */
+                }
+            
+                .tipsNote-3 .aj-arrow:before {
+                    border-top-color: green;/* 边框颜色 */
+                }
+                
+                .tipsNote-2 {
+                    background-color: #f5faff;
+                    border-color: #0066cc;
+                    color: #0066cc;
+                }
+            
+                .tipsNote-2 .aj-arrow:after {
+                    border-bottom-color: #f5faff;/* 内容颜色 */
+                }
+            
+                .tipsNote-2 .aj-arrow:before {
+                    border-bottom-color: #0066cc;/* 边框颜色 */
+                }
+            </style>
+            <script>
+                var tipsNoteStyle = document.querySelector('.tipsNote-1').style;
+                with(document.querySelector('.foo i')) {
+                    tipsNoteStyle.left = offsetLeft + offsetWidth + 20 + 'px';
+                    tipsNoteStyle.top  = (-(offsetTop  + offsetHeight)) + 'px';
+                }
+            </script>
+            
+        <br /><br />
+
+        
 </body>
 
 </html>

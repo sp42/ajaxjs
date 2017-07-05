@@ -85,7 +85,7 @@ menu {
 <body>
 	<div class="leftSide">
 		<h3>
-			AJAXJS Framework<br> 前端实用集锦
+			AJAXJS Framework<br> UI 实用集锦
 		</h3>
 		<h5>2017.6.20 更新</h5>
 		<menu>
@@ -97,25 +97,26 @@ menu {
 						</li>
 						<li><a href="css/css-layout.htm" target="iframeTarget">CSS
 								布局</a></li>
-						<li><a href="css/list-layout.htm" target="iframeTarget">列表布局</a>
-						</li>
+						<li><a href="css/list-layout.htm" target="iframeTarget">列表布局</a></li>
+						<li><a href="css/css-moblie.htm" target="iframeTarget">移动端样式</a></li>
 					</ol>
 				</li>
 				<li>
 					<h4>LESS 封装</h4>
 					<ol>
-						<li><a href="ui.php#table" target="iframeTarget">表格</a></li>
-						<li><a href="ui.php#button" target="iframeTarget">按钮</a></li>
-						<li><a href="ui.php#input" target="iframeTarget">输入框</a></li>
-						<li><a href="ui.php#ddl" target="iframeTarget">下拉列表</a></li>
-						<li><a href="ui.php#upload" target="iframeTarget">文件上传</a></li>
+						<li><a href="less/less.htm#table" target="iframeTarget">表格</a></li>
+						<li><a href="less/less.htm#button" target="iframeTarget">按钮</a></li>
+						<li><a href="less/less.htm#input" target="iframeTarget">输入框</a></li>
+						<li><a href="less/less.htm#ddl" target="iframeTarget">下拉列表</a></li>
+						<li><a href="less/less.htm#upload" target="iframeTarget">文件上传</a></li>
 					</ol>
 				</li>
 				<li>
 					<h4>复杂控件</h4>
 					<ol>
-						<li><a href="complex/form-v.htm" target="iframeTarget">表单验证 </a></li>
-						<li><a href="complex/form-v.htm" target="iframeTarget">WebView 交互 </a></li>
+						<li><a href="complex/form.htm" target="iframeTarget">表单布局及控件</a></li>
+						<li><a href="complex/topic.htm" target="iframeTarget">WebView 交互 </a></li>
+						<li><a href="../ui_demo/index.jsp" target="iframeTarget">原创控件</a></li>
 					</ol>
 				</li>
 				<li>
@@ -135,9 +136,36 @@ menu {
 				</li>
 			</ol>
 		</menu>
+		
+		<style>
+			.mask{
+				width:5%;
+				height:100%;
+				background-image: -moz-linear-gradient(left, rgba(255, 255, 255, 0), #e6e6e6);
+				background-image: -webkit-linear-gradient(left, rgba(255, 255, 255, 0), #e6e6e6);
+				background-image: linear-gradient(left, rgba(255, 255, 255, 0), #e6e6e6);
+				position: absolute;
+				right:0;
+				top:0;
+			}
+		</style>
+		<div style="height:30px;width:82%;margin:0 5%;overflow:hidden;line-height: 30px;white-space: nowrap; font-size:.9rem;color:gray;position: relative;">
+			<div class="mask"></div>
+			<div class="m" style="width:100%;overflow:hidden;">
+				提示：本例代码一般可以通过“鼠标右键查看源码”的方式了解源码。
+			</div>
+			<script>
+				window.setInterval(function(){ // 跑马灯
+					var m = document.querySelector('.m');
+					var queen = m.innerHTML.split('');
+					queen.push(queen.shift());
+					m.innerHTML = queen.join('');
+				}, 500);
+			</script>
+		</div>
 	</div>
 	<div class="rightSide">
-		<iframe name="iframeTarget" src="ui.php"></iframe>
+		<iframe name="iframeTarget" src="../ui_demo/index.jsp"></iframe>
 	</div>
 
 

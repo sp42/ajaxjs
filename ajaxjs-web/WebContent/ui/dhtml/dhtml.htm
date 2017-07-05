@@ -7,9 +7,9 @@
 <body>
 	<h4>跑马灯 Marquee</h4>
 	<hr class="ajaxjs-hr" />
-	<table border="0">
+	<table border="0" width="60%">
 		<tr>
-			<td width="33%"><input id="startBtn" type="button" value="开始滚动" />
+			<td><input id="startBtn" type="button" value="开始滚动" />
 				<input id="stopBtn" type="button" value="停止滚动">
 				<div id="content">这是一段滚动的文字</div> <script>
 					var Util = {
@@ -52,8 +52,8 @@
 					}
 				</script></td>
 			<td width="20"></td>
-			<td width="33%">
-
+			<td>
+				
 				<div class="content1">这是一段滚动的文字11111111</div>
 				<div class="content2">这是一段滚动的文字22222222</div> <script>
 					/**
@@ -89,21 +89,72 @@
 				</script>
 
 			</td>
-			<td width="20"></td>
-			<td width="33%">
+		</tr>
+		<tr>
+			<td>
+			
+<p>PauseHeight 必须与 CSS 中的 li.height 相等</p>
+<style>
+	/* 无缝上下滚动 */
+	.idScroller {
+		overflow:hidden;
+		height:25px;
+		padding-left:15px;
+	}
+	
+	.idScroller	li{
+		height:25px; /* 单行高度 */
+		line-height:25px;
+		white-space: nowrap;
+	
+	}
+	
+	.idScroller	li a{
+		font-size:1rem;
+		color:#666;
+	}
+</style>
+			
+<div class="idScroller">
+ <div>
+	<ul>
+		<li><a href="vod/?id=223397">
+				<div class="icon colorful video"></div> 抗战胜利70周年纪念大会流程
+		</a></li>
+		<li><a href="vod/?id=223389">
+				<div class="icon colorful video"></div> 公积金购二套房首付最低2成
+		</a></li>
+		<li><a href="vod/?id=223269">
+				<div class="icon colorful video"></div> 我国首款喷气式客机将商运
+		</a></li>
+	</ul>
+ </div>
+</div>
 
-
-
-
-
+<script src="MarqueeText.js"></script>
+<script>
+	// 无缝上下滚动
+	var scroller = Object.create(ajaxjs_MarqueeText);
+	scroller.init(document.querySelector(".idScroller"));
+	scroller.PauseStep = 3000; // 停留时间
+	scroller.PauseHeight = 25; // 单行高度，必须与 CSS 中的 li.height 相等
+	scroller.scroll();
+</script>
+			
+				
+			</td>
+			<td></td>
+			<td>
+			
+			
 				<ol id="scrollA">
 					<li>11111111111</li>
 					<li>22222222222</li>
 					<li>33333333333</li>
 					<li>44444444444</li>
 					<li>55555555555</li>
-
-				</ol> <script>
+				</ol> 
+				<script>
 					/**
 					 * @param {Element} el 列表元素
 					 * @param {Number} interval 动画时间间隔
@@ -137,10 +188,10 @@
 
 					new ScrollContent(document.getElementById('scrollA'), 500,
 							true);
-				</script>
-
+				</script>			
+			
 			</td>
-
+			
 		</tr>
 	</table>
 
@@ -212,5 +263,9 @@
 					|| (y % 100 == 0 && y % 400 == 0);
 		}
 	</script>
+	
+	<h4>回到顶部</h4>
+	<hr class="ajaxjs-hr" />
+	TODO
 </body>
 </html>

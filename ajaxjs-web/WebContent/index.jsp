@@ -1,3 +1,4 @@
+<%@page pageEncoding="UTF-8"%>
 <%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <html>
 	<commonTag:head title="Welcome to Ajaxjs Web Framework's Homepage">
@@ -116,6 +117,7 @@
 				font-size: .9rem;
 				letter-spacing: 0px;
 				color: #333;
+				text-align: justify;
 			}
 			
 			h5 {
@@ -136,6 +138,7 @@
 			
 			h5 img {
 				height: 30px;
+				vertical-align: middle;
 			}
 			
 			@media screen and (max-width:480px) {
@@ -225,16 +228,16 @@
 			<div class="left">
 				<h2 style="margin-top: 6%; margin-bottom: 2%;">AJAXJS Web
 					Framework</h2>
-				<h2 style="margin-bottom: 5%; margin-left: 35%;">Java 快速开发框架</h2>
-				<p style="color: #fffbac;">AJAXJS Web 是一款基于 Java 平台的开源 Web
-					框架，继承了 Java 平台的高效、安全、稳定、跨平台等诸多优势，
-					但却摒弃了传统企业级架构所带来的庞大和臃肿，强调轻量级，非常适合互联网小型网站的快速应用。</p>
+				<h2 style="margin-bottom: 5%; margin-left: 35%;">全栈快速开发框架</h2>
+				<p style="color: #fffbac;">AJAXJS Web 是一款全栈平台的开源 Web
+					框架，不仅是服务端框架，还整合了前端库。它使用 HTML5+Java 方案，继承了 Java 平台的高效、安全、稳定、跨平台等诸多优势，
+					但却摒弃了传统企业级架构所带来的庞大和臃肿，强调轻量级，非常适合互联网的快速应用。</p>
 				<div
 					style="text-align: center; color: #fffbac; font-weight: normal; letter-spacing: 2px;">
 					<br> <img src="images/index_06.jpg"> <br>
-					<h3>Open Source 开放源代码</h3>
+					<h3>Apache License v2 开源协议</h3>
 					<h4>
-						<a href="http://git.oschina.net/sp42/ajaxjs">Git/SVN Checkout</a>
+						<a href="http://git.oschina.net/sp42/ajaxjs">开源中国 Git/SVN Checkout</a>
 					</h4>
 				</div>
 			</div>
@@ -242,11 +245,10 @@
 				<div class="points" style="margin-bottom: 10px; width: 95%;">
 					<br>
 					<ul>
-						<li>标配 IOC/AOP/MVC/ORM/DAO/RESTful</li>
+						<li>设计原则：Clean, Simple, Fast & Lightweight.框架特色：全栈、原生、全面、实用。</li>
+						<li>遵循“够用就好、就地取材、适合教学”思想，优先考虑 JDK 原生 API，基本没依赖其他重型三方库。简单易学易用。得益于现代浏览器，前端没有使用 jQuery 基础库，而是原生 API 的调用，更高效快速。</li>
 						<li>参照 Spring MVC 风格的 Web 框架，功能简单但是 MVC 的核心功能基本具备了，很适合想了解 MVC
-							的学习者。尽量多提供源码注释和文档，包括单元测试</li>
-						<li>快速 CRUD 开发，基于 Controller/Service/DAO/Model 进行泛型封装，类似 MyBatis 注解 的 SQL 服务，支持 Java Bean 或更简单的 Map，自动分页，查询条件和验证。</li>
-						<li>全栈，不仅仅是服务端框架，还整合了前端库。得益于现代浏览器成熟 API 甚至没有用 jQuery</li>
+							的学习者。尽量多提供源码注释和文档，包括单元测试。</li> 
 					</ul>
 					<br> <br>
 				</div>
@@ -256,39 +258,44 @@
 	<ul class="body cols">
 		<li style="border-right-color: #ff8820;">
 			<h5>
-				<img src="images/icon_source.png">设计原则 Design Principles
+				<img src="images/icon_inkboard.png"> 前端简介
 			</h5>
-			<p>快速、高效，轻量级维护，提倡精益开发；遵循“够用就好、就地取材”原则，优先考虑 JDK 原生 API，基本没依赖其他重型三方库。简单易学易用。Clean, Simple, Fast & Lightweight.</p>
+			<p>收集多年的各种 HTML／CSS 最佳实践，提供实用控件如弹窗、Banner、Tab、列表等等，包括移动端主流控件。
+			复杂 CSS 采用 LESS.js 可复用封装。JS 基于 ES 3.1 书写。有自己的 dom.js 基础库，大小 13kb。
+				<a href="ui">HTML/CSS 演示</a> <a href="ui_demo">JS 控件</a>
+			</p>
 		</li>
 		<li style="border-right-color: #2096ff;">
 			<h5>
-				<img src="images/icon_inkboard.png"> 依赖选型 Foundation
+				<img src="images/icon_source.png"> 后端简介
 			</h5>
-			<p>表示层：JSP/Servlet/MVC/JSTL/Tag
-				Files/Less.js；数据层：MySQL/SQLite/MyBatis/Shrio/Apache BVal/Tomcat
-				JDBCPool；基础服务：Rhino/JavaUtilLogger</p>
+			<p>标配有 IOC/AOP/MVC/ORM/RESTful，泛型 Controller/Service/DAO/Model 分层，类似 SpringMVC 的控制器，类似 MyBatis 注解的 SQL 服务，支持 Java Bean 或更简单的 Map，自动分页，查询条件和后端验证。<a
+					href="javadoc">JavaDoc</a></p>
 		</li>
 		<li style="border-right-color: #c720ff;">
 			<h5>
-				<img src="images/icon_database.png">下载 &amp; 运行 Download
+				<img src="images/icon_database.png">下载 &amp; 运行
 			</h5>
-			<p>Win/OS X/CentOS，JRE 1.7+/Tomcat 7</p>
+			<p>Win/Mac/Linux/JRE1.7+/Tomcat7+/IE8+</p>
 			<p>
 				<a href="http://git.oschina.net/sp42/ajaxjs">源码 Git/SVN</a> <a
 					href="javadoc">JavaDoc 文档</a> <a
 					href="http://framework.ajaxjs.com/framework/docs/docs.html">手册</a>
 			</p>
 			<p>
-				QQ 群：3150067 <a href="http://blog.csdn.net/zhangxin09">作者博客</a>
-			<p>基于 Apache License Version 2.0 开源协议</p>
+				QQ 群：3150067 <a href="mailto:support@ajaxjs.com">联系邮箱</a> <a href="http://blog.csdn.net/zhangxin09">作者博客</a>
+				<p>免费使用、修改，引用请保留头注释</p>
+			<p>基于 Apache License Version--2.0 开源协议</p>
 		</li>
 	</ul>
 	<footer>
-		<div class="body">粤 ICP 证 09002462 号 | Copyright © 1999-2016,
+		<div class="body">粤 ICP 证 09002462 号 | Copyright © 1999-2017,
 			Sp42</div>
 	</footer>
 	<!-- CNZZ 统计 -->
+	<div style="display:none";>
 		<script src="https://s11.cnzz.com/z_stat.php?id=1261173351&web_id=1261173351"></script>
+	</div>
 	<!-- // CNZZ 统计 -->
 </body>
 </html>

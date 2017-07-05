@@ -1,10 +1,18 @@
-body {
-	background-color: white;
-	padding: 2% 3%;
-	font-family: "Lantinghei SC", "Open Sans", Arial, "Hiragino Sans GB",
-		"Microsoft YaHei", "微软雅黑", "STHeiti", "WenQuanYi Micro Hei", SimSun,
-		sans-serif;
-}
+    html, body{height:100%;}
+    body,dl,dt,dd,ul,li,pre,form,fieldset,input,p,blockquote,th,td,h1,h2,h3,h4,h5{margin:0;padding:0;}
+    h1,h2,h3,h4,h5{font-weight: normal;}
+    img{border:0;}ul li{list-style-type:none}.hide{display:none}
+    body{
+        -webkit-font-smoothing:antialiased;
+        font-family: "Lantinghei SC", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif;
+    }
+    *{	// For moblie Sarfari
+        -webkit-tap-highlight-color: transparent; 
+        -webkit-touch-callout: none; 		
+    }
+    body {
+		padding: 2% 3%;
+	}
 
 .ajaxjs-hr {
 	margin: 1% 0;
@@ -15,12 +23,14 @@ body {
 
 h4 {
 	padding-bottom: 0;
-	margin-bottom: 0;
+	margin-top: 3%;
 	letter-spacing: 2px;
+	font-weight: 600;
+	clear:left;
 }
 
 p {
-	margin-top: 0;
+	padding: 1% 0;
 	padding-top: 0;
 	color: gray;
 }
