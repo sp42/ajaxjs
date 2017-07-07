@@ -21,12 +21,12 @@ import javax.script.ScriptEngine;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-// import javax.servlet.annotation.WebListener;
 
 import com.ajaxjs.Init;
-import com.ajaxjs.js.Bean2Json;
 import com.ajaxjs.js.JsEngineWrapper;
 import com.ajaxjs.js.JsonHelper;
+import com.ajaxjs.util.LogHelper;
+import com.ajaxjs.util.StringUtil;
 
 /**
  * 配置加载器
@@ -34,8 +34,10 @@ import com.ajaxjs.js.JsonHelper;
  * @author Frank
  *
  */
-// @WebListener
+// @javax.servlet.annotation.WebListener
 public class InitConfig implements ServletContextListener {
+	private static final LogHelper LOGGER = LogHelper.getLog(InitConfig.class);
+	
 	private static final ScriptEngine jsEngine = JsEngineWrapper.engineFactory();
 
 	/**
@@ -43,24 +45,25 @@ public class InitConfig implements ServletContextListener {
 	 */
 	public static final JsonConfig allConfig = new JsonConfig(jsEngine);
 
-	static {
-		System.out.println("Ajaxjs-webconfig 配置启动" + Init.ConsoleDiver);
-
+	private void init(){
+//		LOGGER.info("AJAXJS-webconfig 启动配置中……请稍后");
+		
 		try {
-			allConfig.eval(Bean2Json.baseJavaScriptCode); // 加载基础 js
+			allConfig.load(JsonHelper.class, "base.js"); // 加载基础 js
 			allConfig.load(InitConfig.class, "JSON_Tree.js");
 			allConfig.load(Init.srcFolder + "site_config.js"); // 加载配置文件
 			allConfig.setLoaded(true);
-
+			
 			updateConfig();
-
-			System.out.println(("加载配置信息如下：" + System.getProperty("line.separator")
-					+ JsonHelper.format(JsonHelper.stringifyMap(allConfig.getHash())) + Init.ConsoleDiver));
-			System.out.println("配置启动完毕" + Init.ConsoleDiver);
+			
+			String configJson = JsonHelper.format(JsonHelper.stringifyMap(allConfig.getHash()));
+			LOGGER.info("加载配置信息如下：{0}配置加载完毕！", configJson + System.getProperty("line.separator"));
+			
 		} catch (Throwable e) {
-			System.err.println("配置启动失败");
+			LOGGER.warning(e, "配置启动失败");
 		}
 	}
+	
 
 	/**
 	 * 根据配置名称读取配置值。
@@ -85,15 +88,38 @@ public class InitConfig implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent e) {
 		ServletContext cxt = e.getServletContext();
+		tomcatVersionDetect(cxt.getServerInfo());
+		init();
 
 		cxt.setAttribute("all_config", allConfig.getHash()); // 所有配置保存在这里
-		// cxt.setAttribute("PageUtil", new PageUtil()); // 一些页面实用的函数
+	}
 
-		// eclipse 不能删除
-		// 把日志文件保存到 META-INF/ 下面
-		// String loggerFile = cxt.getRealPath("/") + "META-INF" +
-		// File.separator + "logger" + File.separator + "log.txt";
-		// LogHelper.addHanlder(LogHelper.fileHandlerFactory(loggerFile));
+	/**
+	 * 检测是否 tomcat 以及版本
+	 * 
+	 * @param serverInfo
+	 *            返回如 Tomcat/7
+	 */
+	private static void tomcatVersionDetect(String serverInfo) {
+		String result = StringUtil.regMatch("(?<=Tomcat/)(\\d)", serverInfo);
+		
+		if (result != null) {
+			try {
+				if (Integer.parseInt(result) < 7) {
+					throw new UnsupportedOperationException("不支持低于 Tomcat 7 以下的版本！");
+				}
+
+			} catch (Throwable e) {
+				if (e instanceof UnsupportedOperationException) {
+					throw e;
+				}
+				
+				// 忽略其他异常，如正则的
+				LOGGER.warning(e);
+			}
+		} else {
+			// 不是 tomcat
+		}
 	}
 
 	/**

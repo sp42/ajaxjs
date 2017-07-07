@@ -163,8 +163,8 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	/**
 	 * 保存到 request
 	 * 
-	 * @param request
-	 *            请求对象
+	 * @param map
+	 *            请求参数
 	 */
 	public void saveToReuqest(Map<String, Object> map) {
 		for (String key : map.keySet()) {

@@ -71,7 +71,7 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 			if(ConnectionMgr.getConnection() == null || ConnectionMgr.getConnection().isClosed()) {
 				Connection conn = JdbcConnection.getConnection(JdbcConnection.getDataSource(connStr));
 				ConnectionMgr.setConnection(conn);
-				LOGGER.config("启动数据库链接……" + conn);
+				LOGGER.info("启动数据库链接……" + conn);
 			}
 		} catch (SQLException e) {
 			LOGGER.warning(e);
@@ -120,7 +120,10 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 
 		service.prepareData(model);
 		
-		if(isJSON_output() && pageResult.getRows().get(0) instanceof Map) {// Map 类型的输出
+		if(pageResult == null) 
+			throw new NullPointerException("返回 null，请检查 service.findPagedList 是否给出实现");
+
+		if(isJSON_output() && pageResult.getRows() != null && pageResult.getRows().get(0) instanceof Map) {// Map 类型的输出
 			@SuppressWarnings("unchecked")
 			List<Map<String, Object>> l = (List<Map<String, Object>>) pageResult.getRows();
 			model.put("MapOutput", JsonHelper.stringifyListMap(l)); 
@@ -197,7 +200,7 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 			request.setAttribute(key, mv.get(key));
 	}
 
-	/**
+	/*
 	 * 输出文档 GET /document
 	 * 
 	 * @param model

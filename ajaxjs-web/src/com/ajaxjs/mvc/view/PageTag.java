@@ -1,3 +1,18 @@
+/**
+ * Copyright 2015 Frank Cheung
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.ajaxjs.mvc.view;
 
 import java.io.IOException;
@@ -37,15 +52,15 @@ public class PageTag extends SimpleTagSupport {
 	 * @return 特定的 url 参数
 	 */
 	public static String getParams_without(String withoutParam, String queryString) {
-		if (queryString == null) {
+		if (queryString == null)
 			return null;
-		} else {
-			queryString = queryString.replaceAll("&?" + withoutParam + "=[^&]*", "");// 删除其中一个参数
+		
+		queryString = queryString.replaceAll("&?" + withoutParam + "=[^&]*", "");// 删除其中一个参数
 
-			if (StringUtil.isEmptyString(queryString))
-				return null;
-			return queryString.startsWith("&") ? queryString : "&" + queryString; // 补充关联的符号
-		}
+		if (StringUtil.isEmptyString(queryString))
+			return null;
+		return queryString.startsWith("&") ? queryString : "&" + queryString; // 补充关联的符号
+		
 	}
 
 	/**
@@ -56,7 +71,7 @@ public class PageTag extends SimpleTagSupport {
 	 * @param queryString
 	 *            通常由 request.getQueryString() 或
 	 *            ${pageContext.request.queryString} 返回的 url 参数
-	 * @return
+	 * @return 已处理过的 Map
 	 */
 	public static Map<String, Object> getParams_without_asMap(String withoutParam, String queryString) {
 		queryString = getParams_without(withoutParam, queryString);

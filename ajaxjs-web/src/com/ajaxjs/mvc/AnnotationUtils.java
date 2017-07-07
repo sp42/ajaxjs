@@ -99,8 +99,9 @@ public class AnnotationUtils {
 				} else {
 					subPath_Info = new ActionAndView();// 如果没有子路径则创建之
 					methodSend(method, subPath_Info);
-					System.out.println("subPathValue:" + subPathValue);
 					cInfo.subPath.put(subPathValue, subPath_Info);// 保存这个子路径 ActionAndView
+
+					LOGGER.info("子路径信息：{0}/{1}", path.value(), subPathValue);
 				}
 			} else {
 				// 没有 Path 信息，就是属于类本身的方法（一般最多只有四个方法 GET/POST/PUT/DELETE）……
@@ -109,7 +110,7 @@ public class AnnotationUtils {
 		}
 		
 		controllers.put(path.value(), cInfo); /* 解析完毕，保存 ActionAndView （已经包含控制器了）到 hash。 save the controller instance, path as key */
-		LOGGER.info(path.value() + " 登记路径成功！");
+		LOGGER.info("控制器 {0} 所有路径（包括子路径）注册成功！", path.value());
 	}
 
 	/**

@@ -67,9 +67,10 @@ public class MvcDispatcher implements Filter {
 			String str = config.get("controller");
 
 			ClassScaner<IController> scaner = new ClassScaner<>(IController.class);// 定义一个扫描器，专门扫描 IController
-			for (String packageName : str.split(",")) {
+			
+			for (String packageName : StringUtil.split(str)) {
 				for (Class<IController> clz : scaner.scan(packageName)) {
-					LOGGER.info("找到了控制器：:" + clz.getName());
+					LOGGER.info("正在初始化控制器：{0}", clz.getName());
 					AnnotationUtils.scan(clz);
 				}
 			}
@@ -208,7 +209,8 @@ public class MvcDispatcher implements Filter {
 	 * 查找是 ModelAndView 类型的参数，返回之
 	 * 
 	 * @param args
-	 * @return
+	 *            参数列表
+	 * @return ModelAndView
 	 */
 	private static ModelAndView findModel(Object[] args) {
 		for (Object obj : args) {

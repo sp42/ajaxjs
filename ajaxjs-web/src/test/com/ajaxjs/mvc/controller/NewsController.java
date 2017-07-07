@@ -1,4 +1,4 @@
-package test.com.ajaxjs.mvc;
+package test.com.ajaxjs.mvc.controller;
 
 import javax.mvc.annotation.Controller;
 import javax.ws.rs.DELETE;
@@ -12,14 +12,22 @@ import javax.ws.rs.QueryParam;
 import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.mvc.controller.CommonController;
 
-import test.com.ajaxjs.framework.News;
+
 import test.com.ajaxjs.framework.NewsService;
+import test.com.ajaxjs.mock.News;
 
 @Controller
 @Path("/news")
 public class NewsController extends CommonController<News, Long> {
 	public NewsController(){
-		setService(new NewsService());
+		
+		setJSON_output(true);
+//		setService(new NewsService());
+	}
+
+	@Override
+	public NewsService getService() {
+		return new NewsService();
 	}
 	
 	@GET
