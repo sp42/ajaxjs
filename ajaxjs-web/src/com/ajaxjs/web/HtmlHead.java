@@ -21,6 +21,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.net.IP;
+import com.ajaxjs.util.StringUtil;
 
 /**
  * 该类对应 tagfile：head.tag
@@ -50,40 +51,14 @@ public class HtmlHead {
 			params.put("MainDomain", "");
 			params.put("isdebug", "true");
 
-			css = "http://" + ip + "/lessService/?" + join(params);
+			css = "http://" + ip + "/lessService/?" + StringUtil.HashJoin(params, "=");
 		} else {
 			css = cxt.getContextPath() + lessPath.replace("/less", "/css").replace(".less", ".css");
 		}
 		
 		return css;
 	}
-	
-	/**
-	 * 也是 join，不过输入的参数不是数组而是 hash。
-	 * 
-	 * @param map
-	 *            输入的 map
-	 * @return 连续的字符串
-	 */
-	public static String join(Map<String, String> map) {
-		String[] pairs = new String[map.size()];
-		String div = "&";
 
-		int i = 0;
-		for (String key : map.keySet())
-			pairs[i++] = key + "=" + map.get(key);
-
-		/*
-		 * 另外一种算法 // for (String key : pair.keySet()) cookieStr += key + "=" +
-		 * pair.get(key) + ";"; // cookieStr = cookieStr.substring(0,
-		 * cookieStr.length() - 1); // 删掉最后一个分号 // 另外一种算法 int i = 0; for(String
-		 * key : hash.keySet()){ ... if(++i != size)buff.append(","); } //
-		 * 另外一种算法，删除最后一个 , if (buff.length() > 1)buff =
-		 * buff.deleteCharAt(buff.length() - 1); // 另外一种算法，删除最后一个 , ... if(i !=
-		 * arr.length - 1)str += ",";
-		 */
-		return stringJoin(pairs, div);
-	}
 	
 	/**
 	 * Java String 有 split 却没有 join，这里实现一个
@@ -157,7 +132,7 @@ public class HtmlHead {
 			params.put("MainDomain", "");
 			params.put("isdebug", "true");
 			
-			css = "http://" + IP.getLocalIp() + "/lessService/?" + join(params);
+			css = "http://" + IP.getLocalIp() + "/lessService/?" + StringUtil.HashJoin(params, "=");
 		} else {
 			css = request.getContextPath() + lessPath.replace("/less", "/css").replace(".less", ".css");
 		}
