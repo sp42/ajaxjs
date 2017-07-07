@@ -17,7 +17,7 @@
 	
     	<div class="center" style="padding:5px;">
     	
-			<!-- HTML 编辑器控件 --> 
+<!-- HTML 编辑器控件 --> 
 <div class="htmlEditor">
 	<ul class="toolbar">
 		<li class="dorpdown">

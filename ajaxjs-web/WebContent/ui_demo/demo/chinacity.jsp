@@ -40,10 +40,7 @@
    
     	<div class="p">
 	    	<h3>省市区三级选择器</h3>
-	    	<p>注意当前只提供 PC 版，手机版的话尚待优化。</p>
-	    	 <ul>
-	    	 	<li>三级联动机制</li>
-	    	 </ul>
+	    	<p>实质是一种三级联动机制。注意当前只提供 PC 版，手机版的话尚待优化。</p>
     	</div>
 	    <div class="p">
 		    <h3>例子</h3>
@@ -168,31 +165,6 @@
 		<br />
 	 
  
-		<div class="p">
-			<h3>代码如下：</h3>
-		</div>
-		<pre class="prettyprint">
-&lt;ul class=&quot;simpleList&quot;&gt; 加载中…… &lt;/ul&gt;
-&lt;script&gt;
-bf_list(&#x27;http://u1.3gtv.net:2080/pms-service/common/search_related&#x27;, document.querySelector(&#x27;ul.simpleList&#x27;), {
-		objectId : &#x27;223946&#x27;,
-		objectType : 1,
-		start : 0,
-		limit : 10
-	},
-	{
-		isNoAutoHeight : true,
-		tpl : &#x27;&lt;li&gt;\
-				&lt;a href=&quot;{url}?id={id}&quot;&gt;{name}&lt;div class=&quot;createTime&quot;&gt;{createTime}&lt;/div&gt;&lt;/a&gt;\
-			&lt;/li&gt;&#x27;,
-		renderer : function rendererItem(data){
-			data.createTime = data.createTime.substring(0, 10);
-			return data;
-		}
-	}
-);
-&lt;/script&gt;
-		</pre>	
 		
 	    <%@include file="../public/footer.jsp" %>
     </body>
