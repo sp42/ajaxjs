@@ -28,7 +28,6 @@ import java.util.zip.GZIPInputStream;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 
-import sun.misc.BASE64Encoder;
 
 /**
  * 
@@ -47,6 +46,7 @@ public class Connection<T> extends Request<T> {
 	/**
 	 * 
 	 * @param urlStr
+	 *            URL 地址
 	 */
 	public Connection(String urlStr) {
 		setUrl(urlStr);
@@ -79,8 +79,10 @@ public class Connection<T> extends Request<T> {
 	
 	/**
 	 * 配置请求参数
+	 * 
 	 * @param cc
-	 * @return
+	 *            配置请求参数
+	 * @return 返回该对象，供链式调用
 	 */
 	@SuppressWarnings("unchecked")
 	public T customConnection(CustomConnection cc) {
@@ -97,7 +99,7 @@ public class Connection<T> extends Request<T> {
 	
 	/**
 	 * 发起请求 send()
-	 * @return
+	 * @return 返回该对象，供链式调用
 	 * @throws ConnectException
 	 * @throws IOException
 	 */
@@ -161,7 +163,7 @@ public class Connection<T> extends Request<T> {
 	/**
 	 * 检查响应内容
 	 * @param isGzip
-	 * @return
+	 * @return 连接异常
 	 * @throws IOException
 	 */
 	private ConnectException checkErrCode(boolean isGzip) throws IOException {
@@ -202,7 +204,7 @@ public class Connection<T> extends Request<T> {
 
 		if (getBasicAuthorization() != null) { // HTTP 用户认证
 			String username = getBasicAuthorization()[0], password = getBasicAuthorization()[1];
-			String encoding = new BASE64Encoder().encode((username + ":" + password).getBytes());
+			String encoding = StringUtil.base64Encode(username + ":" + password);
 			connection.setRequestProperty("Authorization", "Basic " + encoding);
 		}
 	}

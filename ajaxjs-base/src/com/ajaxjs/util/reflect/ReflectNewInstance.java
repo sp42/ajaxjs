@@ -29,109 +29,59 @@ public class ReflectNewInstance {
 	private static final LogHelper LOGGER = LogHelper.getLog(ReflectNewInstance.class);
 
 	/**
-	 * 根据类创建实例，无构造器参数创建。
+	 * 根据类创建实例，可传入构造器参数。
 	 * 
 	 * @param clazz
 	 *            类对象
+	 * @param args
+	 *            获取指定参数类型的构造函数，这里传入我们想调用的构造函数所需的参数。可以不传。
 	 * @return 对象实例
 	 */
-	public static <T> T newInstance(Class<T> clazz) {
-		try {
-			return clazz.newInstance(); // 实例化
-		} catch (InstantiationException | IllegalAccessException e) {
-			LOGGER.warning(e);
-			return null;
+	public static <T> T newInstance(Class<T> clazz, Object... args) {
+		if(args.length == 0) {
+			try {
+				return clazz.newInstance();
+			} catch (InstantiationException | IllegalAccessException e) {
+				LOGGER.warning(e);
+			}
 		}
+		
+		Constructor<T> constructor = getConstructor(clazz, args2class(args)); // 获取构造器
+		return newInstance(constructor, args);
 	}
-
+	
 	/**
 	 * 根据构造器创建实例
 	 * 
 	 * @param constructor
 	 *            类构造器
 	 * @param args
-	 *            获取指定参数类型的构造函数，这里传入我们想调用的构造函数所需的参数
+	 *            获取指定参数类型的构造函数，这里传入我们想调用的构造函数所需的参数。可以不传。
 	 * @return 对象实例
 	 */
 	public static <T> T newInstance(Constructor<T> constructor, Object... args) {
 		try {
-			return constructor.newInstance(args);
+			return constructor.newInstance(args); // 实例化
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			LOGGER.warning(e, "实例化对象失败：" + constructor.getDeclaringClass());
-			return null;
-		}
-
-	}
-
-	/**
-	 * 获取类的构造器，可以支持重载的构造器（不同参数的构造器）
-	 * 
-	 * @param clazz
-	 *            类对象
-	 * @param classes
-	 *            获取指定参数类型的构造函数，这里传入我们想调用的构造函数所需的参数类型
-	 * @return 类的构造器
-	 */
-	public static <T> Constructor<T> getConstructor(Class<T> clazz, Class<?>... classes) {
-		try {
-			return classes != null ? clazz.getConstructor(classes) : clazz.getConstructor();
-		} catch (NoSuchMethodException e) {
-			LOGGER.warning(e, "找不到这个 {0} 类的构造器。", clazz.getName());
-			return null;
-		} catch (SecurityException e) {
-			LOGGER.warning(e);
-			return null;
-		}
-	}
-
-	/**
-	 * 根据类对象创建实例
-	 * 
-	 * @param clazz
-	 *            类对象
-	 * @param args
-	 *            获取指定参数类型的构造函数，这里传入我们想调用的构造函数所需的参数
-	 * @return 对象实例
-	 */
-	public static <T> T newInstance(Class<T> clazz, Object... args) {
-		T obj = null;
-		Constructor<T> constructor = getConstructor(clazz, args2class(args)); // 获取构造器
-
-		if (constructor != null)
-			obj = newInstance(constructor, args);
-
-		if (obj == null)
-			LOGGER.warning("newInstanceByClassName 对象 {0} 失败：", clazz.getName());
-		return obj;
-	}
-
-	/**
-	 * 根据类名字符串获取类对象
-	 * 
-	 * @param className
-	 *            类全称
-	 * @return 类对象
-	 */
-	public static Class<?> getClassByName(String className) {
-		try {
-			return Class.forName(className);
-		} catch (ClassNotFoundException e) {
-			LOGGER.warning(e, "找不到这个类：{0}。", className);
 			return null;
 		}
 	}
 	
 	/**
 	 * 根据类全称创建实例，并转换到其接口的类型
-	 * @param className 实际类的类型
-	 * @param clazz 接口类型
+	 * 
+	 * @param className
+	 *            实际类的类型
+	 * @param clazz
+	 *            接口类型
 	 * @return 对象实例
 	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T newInstance(String className, Class<T> clazz) {
-		Class<?> clz = getClassByName(className);
-		return clazz != null ? (T) newInstance(clz) : null;
-	}
+//	@SuppressWarnings("unchecked")
+//	public static <T> T newInstance(String className, Class<T> clazz) {
+//		Class<?> clz = getClassByName(className);
+//		return clazz != null ? (T) newInstance(clz) : null;
+//	}
 
 	/**
 	 * 根据类全称创建实例
@@ -147,6 +97,43 @@ public class ReflectNewInstance {
 		return clazz != null ? newInstance(clazz, args) : null;
 	}
 	
+	/**
+	 * 获取类的构造器，可以支持重载的构造器（不同参数的构造器）
+	 * 
+	 * @param clazz
+	 *            类对象
+	 * @param argClasses
+	 *            获取指定参数类型的构造函数，这里传入我们想调用的构造函数所需的参数类型
+	 * @return 类的构造器
+	 */
+	public static <T> Constructor<T> getConstructor(Class<T> clazz, Class<?>... argClasses) {
+		try {
+			return argClasses != null ? clazz.getConstructor(argClasses) : clazz.getConstructor();
+		} catch (NoSuchMethodException e) {
+			LOGGER.warning(e, "找不到这个 {0} 类的构造器。", clazz.getName());
+		} catch (SecurityException e) {
+			LOGGER.warning(e);
+		}
+		
+		return null;
+	}
+
+	/**
+	 * 根据类名字符串获取类对象
+	 * 
+	 * @param className
+	 *            类全称
+	 * @return 类对象
+	 */
+	public static Class<?> getClassByName(String className) {
+		try {
+			return Class.forName(className);
+		} catch (ClassNotFoundException e) {
+			LOGGER.warning(e, "找不到这个类：{0}。", className);
+		}
+
+		return null;
+	}
 
 	/**
 	 * 把参数转换为类对象列表

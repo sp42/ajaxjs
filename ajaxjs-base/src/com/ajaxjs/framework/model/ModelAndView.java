@@ -33,7 +33,7 @@ public class ModelAndView extends HashMap<String, Object> {
 
 	/**
 	 * BVal 与 JSR 接口结合，返回 ValidatorFactory 工厂
-	 * @return
+	 * @return 验证器
 	 */
 	public static Validator getValidator() {
 		return avf.getValidator();
@@ -45,7 +45,7 @@ public class ModelAndView extends HashMap<String, Object> {
 	 * 
 	 * @param bean
 	 *            实体列表
-	 * @return
+	 * @return 以 id 作为键值的 map
 	 */
 	public static Map<Integer, BaseModel> list_bean2map_id_as_key(List<? extends BaseModel> bean) {
 		if (bean == null || bean.size() == 0)

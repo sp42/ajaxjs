@@ -35,9 +35,38 @@ public class TestStringUtil {
 	}
 	
 	@Test
+	public void testRepeatStr() {
+		assertEquals(repeatStr("Hi", ",", 3), "Hi,Hi,Hi");
+	}	
+	
+	@Test
+	public void testContainsIgnoreCase() {
+		assertTrue(containsIgnoreCase("abc", "A"));
+	}	
+	@Test
+	public void testRegMatch() {
+		assertEquals(regMatch("^a", "abc"), "a");
+		assertEquals(regMatch("^a", "abc", 0), "a");
+		assertEquals(regMatch("^a(b)", "abc", 1), "b");
+	}	
+	
+	static String str = "中国";
+	
+	@Test
+	public void testUrlDecode() {
+		assertEquals(urlDecode(urlEncode(str)), str);
+	}
+	
+	@Test
+	public void testMisc(){
+		assertEquals(base64Decode(base64Encode(str)), str);
+		assertEquals(md5("123123"), "4297F44B13955235245B2497399D7A93");
+		System.out.println(passwordGenerator(8));
+		assertTrue(isUUID(getUUID()));
+	}
+	
+	@Test
 	public void testUnicodeHex() {
-		String str = "中国";
-		System.out.println(encodeUnicode(str));
 		assertTrue(str.equals(decodeUnicode(encodeUnicode(str))));
 	}
 	
@@ -63,11 +92,5 @@ public class TestStringUtil {
 			e.printStackTrace();
 		}
 	}
-	
-	@Test
-	public void testMisc(){
-		assertEquals(base64Decode(base64Encode("foo")), "foo");
-		assertEquals(md5("123123"), "4297F44B13955235245B2497399D7A93");
-		System.out.println(passwordGenerator(8));
-	}
+
 }

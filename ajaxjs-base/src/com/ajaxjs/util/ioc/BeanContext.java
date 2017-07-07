@@ -21,9 +21,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import com.ajaxjs.util.Util;
 import com.ajaxjs.util.reflect.BeanUtil;
 import com.ajaxjs.util.reflect.ReflectNewInstance;
+import com.ajaxjs.util.CollectionUtil;
 import com.ajaxjs.util.StringUtil;
 
 /**
@@ -89,7 +89,7 @@ public class BeanContext {
 	 *            扫描到的类集合
 	 */
 	public void init(Set<Class<?>> classes) {
-		if (isInitialized || !Util.isNotNull(classes))
+		if (isInitialized || !CollectionUtil.isNotNull(classes))
 			return;
 
 		createBeansAndScanDependencies(classes);// 创建 bean,扫描依赖关系

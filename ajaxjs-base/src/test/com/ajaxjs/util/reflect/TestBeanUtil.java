@@ -29,11 +29,19 @@ public class TestBeanUtil {
 		User user = BeanUtil.map2Bean(userWithoutChild, User.class);// 直接转
 		assertNotNull(user);
 		assertEquals(user.getName(), "Jack");
-		
+
 		user = BeanUtil.map2Bean(MapMock.user, User.class, true);
 		assertNotNull(user);
 		assertEquals(user.getChildren()[0], "Tom");
 		assertEquals(user.getLuckyNumbers()[1], 8);
 		assertEquals(user.isSex(), true);
+	}
+
+	@Test
+	public void testBean2Map() {
+		User user = BeanUtil.map2Bean(MapMock.user, User.class, true);
+		Map<String, Object> map = BeanUtil.bean2Map(user);
+		assertNotNull(map);
+		assertEquals(map.get("name"), "Jack");
 	}
 }

@@ -21,6 +21,7 @@ import com.ajaxjs.util.StringUtil;
  * @author xinzhang
  *
  */
+@Deprecated
 public class Bean2Json {
 	private static final JsEngineWrapper engine = new JsEngineWrapper(); 
 	
@@ -211,6 +212,6 @@ public class Bean2Json {
 	}
 	
 	public static void main(String[] args) {
-		
+		System.out.println(baseJavaScriptCode);
 	}
 }

@@ -119,9 +119,9 @@ public class JsEngineWrapper {
 		try {
 			result = binding != null ? inv.invokeMethod(binding, method, args) : inv.invokeFunction(method, args);
 		} catch (NoSuchMethodException e) {
-			LOGGER.warning("脚本引擎没有 {0}() 这个方法", method);
+			LOGGER.warning(e, "脚本引擎没有 {0}() 这个方法", method);
 		} catch (ScriptException e) {
-			LOGGER.warning("向脚本引擎调用脚本方法异常！方法名称:" + method, e);
+			LOGGER.warning(e, "向脚本引擎调用脚本方法异常！方法名称:" + method);
 		}
 
 		return Value.TypeConvert(result, clazz);
@@ -180,7 +180,7 @@ public class JsEngineWrapper {
 		try {
 			obj = engine.eval(code);
 		} catch (ScriptException e) {
-			LOGGER.warning("脚本 eval() 运算发生异常！eval 代码：" + code, e);
+			LOGGER.warning(e, "脚本 eval() 运算发生异常！eval 代码：" + code);
 		}
 		
 		if (obj != null && clazz != null) {

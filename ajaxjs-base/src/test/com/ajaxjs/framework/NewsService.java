@@ -7,8 +7,9 @@ import com.ajaxjs.framework.service.IService;
 
 import test.com.ajaxjs.mock.News;
 
-public class NewsService extends BaseDaoService<News, Long, NewsDao > implements IService<News, Long>{
+public class NewsService extends BaseDaoService<News, Long, NewsDao > implements IService<News, Long> {
 	public NewsService() {
+		setName("news");
 		initDao(NewsDao.class);
 	}
 
@@ -43,7 +44,7 @@ public class NewsService extends BaseDaoService<News, Long, NewsDao > implements
 
 	@Override
 	public PageResult<News> findPagedList(QueryParams parame) {
-		// TODO Auto-generated method stub
-		return null;
+		System.out.println("dfdfds");
+		return getDao().findPagedList(parame);
 	}
 }

@@ -52,6 +52,16 @@ public class StringUtil {
 	public static boolean isEmptyString(String str) {
 		return str == null || str.isEmpty() || str.trim().isEmpty();
 	}
+	
+	/**
+	 * 将一个字符串分隔为字符串数组，分隔符 可以是空格、,、|、; 作为分隔符。
+	 * 常在读取配置的时候使用。
+	 * @param str
+	 * @return
+	 */
+	public static String[] split(String str) {
+		return str.split(" |,|\\||;");
+	}
 
 	/**
 	 * Java String 有 split 却没有 join，这里实现一个
@@ -63,7 +73,7 @@ public class StringUtil {
 	 * @return 连接后的字符串
 	 */
 	public static String stringJoin(String[] arr, String join) {
-		if (!Util.isNotNull(arr))
+		if (!CollectionUtil.isNotNull(arr))
 			return null;
 
 		StringBuilder sb = new StringBuilder();
@@ -77,6 +87,10 @@ public class StringUtil {
 
 		return new String(sb);
 	}
+	
+	public static String stringJoin(String[] arr) {
+		return stringJoin(arr, ", ");
+	}
 
 	/**
 	 * Java String 有 split 却没有 join，这里实现一个
@@ -88,7 +102,7 @@ public class StringUtil {
 	 * @return 连接后的字符串
 	 */
 	public static String stringJoin(List<String> arr, String join) {
-		if (!Util.isNotNull(arr))
+		if (!CollectionUtil.isNotNull(arr))
 			return null;
 		return stringJoin(arr.toArray(new String[arr.size()]), join);
 	}
@@ -120,7 +134,7 @@ public class StringUtil {
 	}
 
 	/**
-	 * 重复字符串 str repeat 次并以 div 分隔
+	 * 重复字符串 repeat 次并以 div 分隔
 	 * 
 	 * @param str
 	 *            要重复的字符串
@@ -156,6 +170,36 @@ public class StringUtil {
 		return a.toLowerCase().contains(b.toLowerCase());
 	}
 
+	
+	/**
+	 * 使用正则的快捷方式
+	 * 
+	 * @param regexp
+	 *            正则
+	 * @param str
+	 *            测试的字符串
+	 * @return 匹配结果，只有匹配第一个
+	 */
+	public static String regMatch(String regexp, String str) {
+		return regMatch(regexp, str, 0);
+	}
+	
+	/**
+	 * 使用正则的快捷方式。可指定分组
+	 * 
+	 * @param regexp
+	 *            正则
+	 * @param str
+	 *            测试的字符串
+	 * @param groupIndex
+	 *            分组 id
+	 * @return
+	 */
+	public static String regMatch(String regexp, String str, int groupIndex) {
+		Matcher m = Pattern.compile(regexp).matcher(str);
+		return m.find() ? m.group(groupIndex) : null;
+	}
+	
 	/**
 	 * 将 URL 编码的字符还原，默认 UTF-8 编码
 	 * 
@@ -220,20 +264,6 @@ public class StringUtil {
 	public static String urlChinese(String str) {
 		return byte2String(str.getBytes(StandardCharsets.ISO_8859_1));
 	}
-	
-	/**
-	 * 使用正则的快捷方式
-	 * 
-	 * @param regexp
-	 *            正则
-	 * @param str
-	 *            测试的字符串
-	 * @return 匹配结果，只有匹配第一个
-	 */
-	public static String regMatch(String regexp, String str) {
-		Matcher m = Pattern.compile(regexp).matcher(str);
-		return m.find() ? m.group() : null;
-	}
 
 	/**
 	 * BASE64 编码
@@ -265,7 +295,7 @@ public class StringUtil {
 			return null;
 		}
 
-		return StringUtil.byte2String(bytes);
+		return byte2String(bytes);
 	}
 	
 	/**
@@ -306,18 +336,6 @@ public class StringUtil {
 		return sb.toString();
 	}
     
-    /**
-	 * 看最后一个是不是 uuid
-	 * 
-	 * @return
-	 */
-//	public static boolean isUUID(String url) {
-//		String js = "'%s'.match(/\\w{8}(?:-\\w{4}){3}-\\w{12}/) != null;";
-//		js = String.format(js, url);
-//		boolean isUUID = App.jsRuntime.eval_return_Boolean(js);
-//		return isUUID;
-//	}
-	
 	/**
 	 * 获取一个唯一的主键 id 的代码
 	 * 
@@ -335,8 +353,7 @@ public class StringUtil {
 	 * @return 字符串
 	 */
 	public static String remove(String uuid) {
-		return uuid.substring(0, 8) + uuid.substring(9, 13) + uuid.substring(14, 18) + uuid.substring(19, 23)
-				+ uuid.substring(24);
+		return uuid.substring(0, 8) + uuid.substring(9, 13) + uuid.substring(14, 18) + uuid.substring(19, 23) + uuid.substring(24);
 	}
 
 	/**
@@ -352,7 +369,7 @@ public class StringUtil {
 	 * @return true 为 UUID
 	 */
 	public static boolean isUUID(String uuid) {
-		return StringUtil.regMatch(uuid_regExp, uuid) != null;
+		return regMatch(uuid_regExp, uuid) != null;
 	}
 	
 	/**
@@ -378,8 +395,7 @@ public class StringUtil {
 				"<$1$2>");
 		// 删除<STYLE TYPE="text/css"></STYLE>及之间的内容
 
-		int styleBegin = content.indexOf("<STYLE");
-		int styleEnd = content.indexOf("</STYLE>") + 8;
+		int styleBegin = content.indexOf("<STYLE"), styleEnd = content.indexOf("</STYLE>") + 8;
 		String style = content.substring(styleBegin, styleEnd);
 		content = content.replace(style, "");
 
@@ -525,7 +541,7 @@ public class StringUtil {
 	 * @param buf
 	 * @return
 	 */
-	public static String UTF82GB2312(byte buf[]) {
+	public static String utf82gb2312(byte buf[]) {
 		int len = buf.length;
 		StringBuffer sb = new StringBuffer(len / 2);
 		
@@ -554,9 +570,14 @@ public class StringUtil {
 		}
 		return sb.toString();
 	}
-
-	public byte[] gbk2utf8(String chenese) {
-		char c[] = chenese.toCharArray();
+	
+	/**
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public byte[] gbk2utf8(String str) {
+		char c[] = str.toCharArray();
 		byte[] fullByte = new byte[3 * c.length];
 		
 		for (int i = 0; i < c.length; i++) {

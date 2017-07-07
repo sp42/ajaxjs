@@ -130,22 +130,26 @@ public class BeanUtil extends Reflect {
 	 *            原始数据
 	 * @param clz
 	 *            实体 bean 的类
+	 * @param isTransform
+	 *            是否尝试转换值
 	 * @return 实体 bean 对象
 	 */
 	public static <T> T map2Bean(Map<String, Object> map, Class<T> clz, boolean isTransform) {
 		T bean = ReflectNewInstance.newInstance(clz);
+		Object value = null;String key = null; // 放在 try 外面方便调试
 		
 		try {
 			BeanInfo beanInfo = Introspector.getBeanInfo(clz);
 	
 			for (PropertyDescriptor property : beanInfo.getPropertyDescriptors()) {
-				String key = property.getName();
+				key = property.getName();
 	
 				if (map.containsKey(key)) {
-					Object value = map.get(key);
-					
-					Class<?> t = property.getPropertyType(); // Bean 值的类型，这是期望传入的类型，也就 setter 参数的类型
-					if(isTransform && t != value.getClass())  // 类型相同，直接传入；类型不相同，开始转换
+					value = map.get(key);
+					Class<?> t = property.getPropertyType();  // Bean 值的类型，这是期望传入的类型，也就 setter 参数的类型
+
+					// null 是不会传入 bean 的
+					if(isTransform && value != null && t != value.getClass())  // 类型相同，直接传入；类型不相同，开始转换
 						value = Value.objectCast(value, t);
 					
 					Method setter = property.getWriteMethod();// 得到对应的 setter 方法
@@ -158,10 +162,18 @@ public class BeanUtil extends Reflect {
 		
 		return bean;
 	}
-	
+
+	/**
+	 * map 转实体
+	 * 
+	 * @param map
+	 *            原始数据
+	 * @param clz
+	 *            实体 bean 的类
+	 * @return 实体 bean 对象
+	 */
 	public static <T> T map2Bean(Map<String, Object> map, Class<T> clz) {
 		return map2Bean(map, clz, false);
 	}
-
 
 }

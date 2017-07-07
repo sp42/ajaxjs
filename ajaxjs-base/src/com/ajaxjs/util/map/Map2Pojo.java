@@ -35,6 +35,8 @@ import com.ajaxjs.util.reflect.ReflectNewInstance;
  * @param <T>
  *            实体类型
  */
+
+@Deprecated
 public class Map2Pojo<T> extends BeanUtil {
 	private static final LogHelper LOGGER = LogHelper.getLog(Map2Pojo.class);
 	

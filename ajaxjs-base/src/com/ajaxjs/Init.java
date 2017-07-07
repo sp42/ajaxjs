@@ -46,7 +46,6 @@ public class Init {
 	public final static char newline = '\n';
 
 	static {
-		System.out.println("Starting up....Ajaxjs-base 初始化" + ConsoleDiver);
 //		System.setProperty("user.timezone", "GMT +08");// 微软云设置时区
 
 		if (System.getProperty("java.vm.vendor").indexOf("Oracle") == -1 || System.getProperty("java.vm.vendor").contains("openJDK")) {
@@ -68,7 +67,9 @@ public class Init {
 		final String OS = System.getProperty("os.name").toLowerCase();
 		isDebug = !(OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0);
 
-		if (isMac)
-			System.out.println("亲，你运行着 Mac！" + ConsoleDiver);
+		System.out.println("---------------------------------" + 
+		System.getProperty("line.separator") + "AJAXJS-Base 启动完毕，当前是" + (isDebug ? "调试" : "生产环境") +  "模式" + ConsoleDiver);
+//		if (isMac)
+//			System.out.println("亲，你运行着 Mac！" + ConsoleDiver);
 	}
 }

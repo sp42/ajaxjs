@@ -33,38 +33,6 @@ import com.ajaxjs.util.LogHelper;
  */
 public class Reflect {
 	private static final LogHelper LOGGER = LogHelper.getLog(Reflect.class);
-
-	/**
-	 * 根据类和参数列表获取方法对象，支持重载的方法
-	 * 获取的是类的所有共有方法，这就包括自身的所有 public 方法，和从基类继承的、从接口实现的所有public方法
-	 * 
-	 * @param clazz
-	 *            类对象
-	 * @param method
-	 *            方法名称
-	 * @param args
-	 *            对应重载方法的参数列表
-	 * @return 匹配的方法对象，null 表示找不到
-	 */
-	public static Method getMethod(Class<?> clazz, String method, Class<?>... args) {
-		try {
-			return clazz.getMethod(method, args);
-		} catch (NoSuchMethodException e) {
-			LOGGER.warning("类找不到这个方法 {0}.{1}({2})。", clazz.getName(), method, printArgs(args));
-		} catch (SecurityException e) {
-			LOGGER.warning(e);
-		}
-
-		return null;
-	}
-
-	private static String printArgs(Class<?>[] args) {
-		String str = "";
-		for(Class<?> clz : args) 
-			str += clz.getName();
-		
-		return str.equals("") ? "void" : str;
-	}
 	
 	/**
 	 * 调用方法
@@ -79,9 +47,9 @@ public class Reflect {
 	 */
 	public static Object executeMethod(Object instance, Method method, Object... args) {
 		try {
-			return method.invoke(instance, args);
+			return args.length == 0 ? method.invoke(instance) : method.invoke(instance, args);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			LOGGER.warning(e, "反射异常！！！Reflect.executeMethod Exception。method.getName():" + method.getName());
+			LOGGER.warning(e, "反射执行方法异常！！！类：{0} 方法：{1}", instance.getClass().getName(), method.getName());
 			return null;
 		}
 	}
@@ -94,33 +62,30 @@ public class Reflect {
 	 * @param method
 	 *            方法对象
 
-	 * @return 执行结果
+	 * @return 执行结果s
 	 */
 	public static Object executeMethod(Object instance, Method method) {
-		try {
-			return method.invoke(instance);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			LOGGER.warning(e, "反射异常！！！Reflect.executeMethod Exception:" + method.getName());
-			return null;
-		}
+		return executeMethod(instance, method, new Object[]{});
 	}
 	
 	/**
-	 * 调用方法。 注意获取方法对象，原始类型和包装类型不能混用，否则得不到正确的方法，例如 Integer 不能与 int 混用。 这里提供一个
-	 * argType 的参数，指明参数类型为何。
+	 * 调用方法。
+	 * 注意获取方法对象，原始类型和包装类型不能混用，否则得不到正确的方法，
+	 * 例如 Integer 不能与 int 混用。
+	 * 这里提供一个 argType 的参数，指明参数类型为何。
 	 * 
 	 * @param instnace
-	 *            对象实例，bean
+	 *            对象实例
 	 * @param methodName
 	 *            方法名称
 	 * @param argType
 	 *            参数类型
-	 * @param value
+	 * @param argValue
 	 *            参数值
 	 */
-	public static void executeMethod(Object instnace, String methodName, Class<?> argType, Object value) {
-		Method m = Reflect.getMethod(instnace.getClass(), methodName, argType);
-		Reflect.executeMethod(instnace, m, value);
+	public static void executeMethod(Object instnace, String methodName, Class<?> argType, Object argValue) {
+		Method m = getMethod(instnace.getClass(), methodName, argType);
+		executeMethod(instnace, m, argValue);
 	}
 
 	/**
@@ -141,10 +106,38 @@ public class Reflect {
 
 		return methodObj != null ? executeMethod(instnace, methodObj, args) : null;
 	}
+	
+	/**
+	 * 根据类、方法的字符串和参数列表获取方法对象，支持重载的方法
+	 * 获取的是类的所有共有方法，这就包括自身的所有 public 方法，和从基类继承的、从接口实现的所有 public 方法
+	 * 
+	 * @param clazz
+	 *            类对象
+	 * @param method
+	 *            方法名称
+	 * @param args
+	 *            对应重载方法的参数列表
+	 * @return 匹配的方法对象，null 表示找不到
+	 */
+	public static Method getMethod(Class<?> clazz, String method, Class<?>... args) {
+		try {
+			return clazz.getMethod(method, args);
+		} catch (NoSuchMethodException e) {
+			String str = "";
+			for(Class<?> clz : args) 
+				str += clz.getName();
+			
+			LOGGER.warning("类找不到这个方法 {0}.{1}({2})。", clazz.getName(), method, str.equals("") ? "void" : str);
+		} catch (SecurityException e) {
+			LOGGER.warning(e);
+		}
+
+		return null;
+	}
 
 	/**
 	 * 用 getMethod 代替更好？ 循环 object 向上转型, 获取 hostClazz 对象的 DeclaredMethod
-	 * getDeclaredMethod()获取的是类自身声明的所有方法，包含public、protected和private方法。
+	 * getDeclaredMethod() 获取的是类自身声明的所有方法，包含 public、protected 和 private 方法。
 	 * 
 	 * @param hostClazz
 	 *            主类
@@ -158,7 +151,7 @@ public class Reflect {
 		for (Class<?> clazz = arg.getClass(); clazz != Object.class; clazz = clazz.getSuperclass()) {
 			try {
 				return hostClazz.getDeclaredMethod(method, clazz);
-			} catch (Exception e) {
+			} catch (NoSuchMethodException | SecurityException e) {
 				/*
 				 * 这里的异常不能抛出去。 如果这里的异常打印或者往外抛，则就不会执行clazz = clazz.getSuperclass(),最后就不会进入到父类中了
 				 */
@@ -172,10 +165,7 @@ public class Reflect {
 		for (; hostClazz != Object.class; hostClazz = hostClazz.getSuperclass()) {
 			try {
 				return hostClazz.getDeclaredMethod(method, argClazz);
-			} catch (Exception e) {
-				/*
-				 * 这里的异常不能抛出去。 如果这里的异常打印或者往外抛，则就不会执行clazz = clazz.getSuperclass(),最后就不会进入到父类中了
-				 */
+			} catch (NoSuchMethodException | SecurityException e) {
 			}
 		}
 		
@@ -255,7 +245,6 @@ public class Reflect {
 			Type[] intfs = clazz.getGenericInterfaces();
 
 			if (intfs.length != 0) { // 有接口！
-				
 				try {
 					for (Type intf : intfs) {
 						// 旧方法，现在不行，不知道之前怎么可以的 methodObj = hostClazz.getDeclaredMethod(method, (Class<?>)intf);

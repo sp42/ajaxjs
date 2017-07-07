@@ -3,6 +3,8 @@ package test.com.ajaxjs.util.aop;
 import static org.junit.Assert.*;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -38,6 +40,31 @@ class TestStopAopHandler extends Aop<Subject> {
 }
 
 public class TestAop {
+	@Test
+	public void testProxy() {
+		java.util.Map<String, String> map = new HashMap<String, String>();
+		map.put("hihi", "Jack");
+
+		@SuppressWarnings("unchecked")
+		Map<String, String> newMap = (Map<String, String>) Aop.proxy(map, Map.class, new Aop.ProxyCallback() {
+			@Override
+			public boolean before(Object instance, String methodName, Object... objects) {
+				boolean isGo_ON = true;
+				System.out.println(methodName);
+				return isGo_ON;
+			}
+
+			@Override
+			public Object after(Object instance, String methodName, Object returnValue, Object... objects) {
+				return returnValue;
+			}
+		});
+
+		String value = newMap.get("hihi");
+		System.out.println(value);
+		assertNotNull(value);
+	}
+	
 	Subject subject, stopSubject;
 
 	@BeforeClass

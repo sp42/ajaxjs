@@ -61,15 +61,12 @@ public class ClassScaner<T> {
 	 * @return 类集合
 	 */
 	public List<Class<T>> scan(String packageName) {
-		LOGGER.info("扫描包名：" + packageName);
-		
-		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		Enumeration<URL> dirs = null;
 		classes = new ArrayList<>();// 新的一个容器
 		String packageDirName = packageName.replace('.', '/').trim();// 将包名转换为文件路径
-
+		Enumeration<URL> dirs = null;
+		
 		try {
-			dirs = classLoader.getResources(packageDirName);
+			dirs = Thread.currentThread().getContextClassLoader().getResources(packageDirName);
 		} catch (IOException e) {
 			LOGGER.warning(e);
 		}
@@ -104,7 +101,8 @@ public class ClassScaner<T> {
 			LOGGER.warning("用户定义包名{0}下没有任何文件", packageName);
 			return;
 		}
-		LOGGER.info("正在dirFiles类：" + packageName);
+		
+		LOGGER.info("正在扫描包：{0}，该包下面的类正准备被扫描。", packageName);
 
 		// 如果存在 就获取包下的所有文件 包括目录
 		File[] dirFiles = dir.listFiles(new FileFilter() {
@@ -115,26 +113,23 @@ public class ClassScaner<T> {
 			}
 		});
 		
-
 		for (File file : dirFiles) { // 循环所有文件
 			if (file.isDirectory()) { // 如果是目录 则递归继续扫描
 				findAndAddClassesInPackageByFile(packageName + "." + file.getName(), file.getAbsolutePath());
 			} else {
-				// 如果是java类文件 去掉后面的.class 只留下类名
+				// 如果是 java 类文件 去掉后面的.class 只留下类名
 				String className = file.getName().substring(0, file.getName().length() - 6);
 				className = (packageName + '.' + className).trim();
 				Class<?> clazz = ReflectNewInstance.getClassByName(className);
 
-				LOGGER.info("正在检查类：" + className);
+				LOGGER.info("正在检查类：{0}, 如果该类是 {1} 的实例，那么将被收集起来。", className, targetClz.toString());
 				// 添加到集合中去
-				if (clazz != null && targetClz.isAssignableFrom(clazz)) {
+				if (clazz != null && targetClz.isAssignableFrom(clazz)) 
 					classes.add((Class<T>) clazz);
-				}
 			}
 		}
 	}
 	
-
 	/**
 	 * 获取当前类所在的目录下的一个资源
 	 * 

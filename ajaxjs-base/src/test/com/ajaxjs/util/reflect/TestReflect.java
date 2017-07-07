@@ -3,40 +3,10 @@ package test.com.ajaxjs.util.reflect;
 import static com.ajaxjs.util.reflect.ReflectNewInstance.*;
 import static com.ajaxjs.util.reflect.Reflect.*;
 import static org.junit.Assert.*;
-import java.util.HashMap;
 import org.junit.Test;
 
-import com.ajaxjs.util.aop.Aop;
-
-import java.util.*;
-
 public class TestReflect {
-
-	@Test
-	public void testProxy() {
-		java.util.Map<String, String> map = new HashMap<String, String>();
-		map.put("hihi", "Jack");
-
-		@SuppressWarnings("unchecked")
-		Map<String, String> newMap = (Map<String, String>) Aop.proxy(map, Map.class, new Aop.ProxyCallback() {
-			@Override
-			public boolean before(Object instance, String methodName, Object... objects) {
-				boolean isGo_ON = true;
-				System.out.println(methodName);
-				return isGo_ON;
-			}
-
-			@Override
-			public Object after(Object instance, String methodName, Object returnValue, Object... objects) {
-				return returnValue;
-			}
-		});
-
-		String value = newMap.get("hihi");
-		System.out.println(value);
-		assertNotNull(value);
-	}
-
+	public TestReflect(){}
 	public static class Foo {
 		public Foo() {
 		}
@@ -63,11 +33,12 @@ public class TestReflect {
 
 	@Test
 	public void testNewInstance() {
-		assertNotNull(newInstance(TestReflect.class));
-//		assertNotNull(newInstance("com.ajaxjs.test.util.TestReflect")); TODO
+		assertNotNull(newInstance(Foo.class));
+		assertNotNull(newInstance(Foo.class, "a", "b"));
 		assertNotNull(newInstance(getConstructor(Foo.class)));
 		assertNotNull(newInstance(getConstructor(Foo.class, String.class, String.class), "a", "b"));
-//		assertNotNull(getClassByName("com.ajaxjs.test.util.TestReflect"));
+		assertNotNull(newInstance("test.com.ajaxjs.util.reflect.TestReflect")); 
+		assertNotNull(getClassByName("test.com.ajaxjs.util.reflect.TestReflect"));
 	}
 
 	@Test

@@ -81,8 +81,8 @@ public interface IDao<T, ID extends Serializable> {
 	/**
 	 * 单个删除
 	 * 
-	 * @param id
-	 *            实体序号
+	 * @param bean
+	 *            POJO 对象
 	 * @return 影响的行数
 	 */
 	public boolean delete(T bean);

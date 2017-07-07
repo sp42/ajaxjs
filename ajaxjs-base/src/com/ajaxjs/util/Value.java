@@ -64,7 +64,7 @@ public class Value {
 	
 		value = value.trim();
 	
-		if ("".equals(value) || "null".equals(value))
+		if ("null".equals(value))
 			return null;
 	
 		if ("true".equalsIgnoreCase(value))
@@ -72,25 +72,47 @@ public class Value {
 		if ("false".equalsIgnoreCase(value))
 			return false;
 	
-		try {
-			int int_value = Integer.parseInt(value);
-			if ((int_value + "").equals(value)) // 判断为整形
-				return int_value;
-			return value;
-		} catch (NumberFormatException e) {// 不能转换为数字
-			return value;
-		}
+		// try 比较耗资源，先检查一下
+		if(value.charAt(0) >= '0' && value.charAt(0) <= '9')
+			try {
+				int int_value = Integer.parseInt(value);
+				if ((int_value + "").equals(value)) // 判断为整形
+					return int_value;
+			} catch (NumberFormatException e) {// 不能转换为数字
+		
+			}
+		
+		return value;
 	}
 
+	public static boolean toBoolean(Object value) {
+		if(value.equals(true) || value.equals(1))
+			return true;
+		
+		if(value instanceof String) {
+			String _value = (String)value;
+			if(_value.equalsIgnoreCase("yes") || _value.equalsIgnoreCase("true") || _value.equals("1") || _value.equalsIgnoreCase("on")) 
+				return true;
+			
+			if(_value.equalsIgnoreCase("no") || _value.equalsIgnoreCase("false") || _value.equals("0")|| _value.equalsIgnoreCase("off")) 
+				return false;
+		}
+		
+		return false;
+	}
+	
+	@SuppressWarnings("unchecked")
 	public static Object objectCast(Object value, Class<?> t) {
-		if (t == int.class || t == Integer.class) { // 整形
+		if (t == boolean.class || t == Boolean.class) {// 布尔型
+			value = toBoolean(value);
+		} else if (t == int.class || t == Integer.class) { // 整形
 			value = Integer.parseInt(value.toString());
 		} else if (t == int[].class || t == Integer[].class) {
 			// 复数
 			if (value instanceof String) {
-				value = strArr2intArr(value);
-			} else {
-//				LOGGER.info("what's this!!? " + value);
+				value = CollectionUtil.strArr2intArr((String) value, diver + "");
+			} else if(value instanceof List) {
+				value = CollectionUtil.integerList2arr((List<Integer>)value);
 			}
 			
 		} else if (t == long.class || t == Long.class) { 
@@ -101,11 +123,7 @@ public class Value {
 		} else if (t == String[].class) {
 			// 复数
 			if (value instanceof ArrayList) {
-				@SuppressWarnings("unchecked")
-				ArrayList<String> list = (ArrayList<String>) value;
-				String[] arr = new String[list.size()];
-				
-				value = list.toArray(arr);
+				value = CollectionUtil.stringList2arr((ArrayList<String>) value);
 			} else if (value instanceof String) {
 				String str = (String) value;
 				value = str.split(diver + "");
@@ -122,25 +140,8 @@ public class Value {
 	/**
 	 * 用于数组的分隔符
 	 */
-	private static char diver = ',';
+	static char diver = ',';
 	
-	/**
-	 * '["1", "2", ...]' --> [1, 2, ...]
-	 * @param value 
-	 * @return
-	 */
-	private static int[] strArr2intArr(Object value) {
-		String str = (String) value;
-		// 当它们每一个都是数字的字符串形式
-		String[] strArr = str.split(diver + "");
-		int[] intArr = new int[strArr.length];
-		
-		for (int i = 0; i < strArr.length; i++) 
-			intArr[i] = Integer.parseInt(strArr[i].trim());
-		
-		return intArr;
-	}
-
 	/**
 	 * 输出符合 JSON 要求的值
 	 * 
@@ -180,9 +181,9 @@ public class Value {
 			} else if (list.get(0) instanceof Map) {
 				List<String> jsonStrList = new ArrayList<>();
 				List<Map<String, ?>> maps = (List<Map<String, ?>>) list;
-				for (Map<String, ?> map : maps) {
+				
+				for (Map<String, ?> map : maps) 
 					jsonStrList.add(JsonHelper.stringifyMap(map));
-				}
 				
 				return obj2jsonVaule(jsonStrList);
 			} else {
@@ -191,6 +192,9 @@ public class Value {
 			}
 			
 			// return stringify((Map<String, ?>)value);
+		} else if (value.getClass() == int[].class) {
+			String[] strs = CollectionUtil.int_arr2string_arr( (int[]) value);
+			return '[' + StringUtil.stringJoin(strs) + ']';
 		} else if (value instanceof Object[]) {
 			Object[] arr = (Object[]) value;
 			String[] strs = new String[arr.length];
@@ -199,7 +203,7 @@ public class Value {
 			for (Object _value : arr)
 				strs[i++] = obj2jsonVaule(_value); // 递归调用
 	
-			return '[' + StringUtil.stringJoin(strs, ",") + ']';
+			return '[' + StringUtil.stringJoin(strs) + ']';
 		} else { // String
 			return '\"' + value.toString().replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r") + '\"';
 		}

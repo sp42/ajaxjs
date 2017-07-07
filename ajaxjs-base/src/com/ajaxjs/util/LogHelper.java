@@ -73,13 +73,13 @@ public class LogHelper {
 		logger.logp(level, className, getMethodName(), msgTpl, params);
 	}
 	
-	public void config(String msg) {
-		logMsg(Level.CONFIG, msg);
-	}
-	
-	public void config(String msgTpl, Object... params) {
-		logMsg(Level.CONFIG, msgTpl, params);
-	}
+//	public void config(String msg) {
+//		logMsg(Level.CONFIG, msg);
+//	}
+//	
+//	public void config(String msgTpl, Object... params) {
+//		logMsg(Level.CONFIG, msgTpl, params);
+//	}
 	
 	/**
 	 * 打印一个日志
@@ -190,7 +190,7 @@ public class LogHelper {
 	 */
 	public static void sysConsole(String msg) {
 		// System.out.printf("%s.%s(%s:%s)%n", s.getClassName(), s.getMethodName(), s.getFileName(), s.getLineNumber());
-		System.console().format("%S", msg); // or System.out.printf("%s.%s(%s:%s)%n", ..., ...);
+		System.console().format("%S", msg); 
 	}
 
 }

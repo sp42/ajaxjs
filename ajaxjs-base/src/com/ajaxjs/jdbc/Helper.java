@@ -100,8 +100,10 @@ public class Helper {
 	
 	/**
 	 * 是否 mysql 数据库
+	 * 
 	 * @param conn
-	 * @return
+	 *            数据库连接对象
+	 * @return true 表示为 Mysql 数据库
 	 */
 	private static boolean isMySql(Connection conn) {
 		String connStr = conn.toString();

@@ -119,9 +119,9 @@ public class DateTools {
 	 * @return
 	 */
 	private static SimpleDateFormat SimpleDateFormatFactory(String format) {
-		if (!formaters.containsValue(format)) {
+		if (!formaters.containsValue(format)) 
 			formaters.put(format, new SimpleDateFormat(format));
-		}
+		
 		return formaters.get(format);
 	}
 

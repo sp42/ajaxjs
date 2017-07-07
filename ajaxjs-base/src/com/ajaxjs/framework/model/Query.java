@@ -66,7 +66,7 @@ public class Query {
 		/**
 		 * 返回是否允许自定义操作符，而不是默认的 =
 		 * 
-		 * @return
+		 * @return 是否允许自定义操作符
 		 */
 		public boolean isCustomOpeartor() {
 			return isCustomOpeartor;
@@ -138,8 +138,8 @@ public class Query {
 	/**
 	 * WHERE 条件查询，当前仅限于 WHERE = AND 的和 LIKE 的
 	 * 
-	 * @param request
-	 *            请求对象
+	 * @param map
+	 *            请求参数
 	 * @return 查询对象
 	 */
 	public static Query getQueryFactory(Map<String, String[]> map) {
@@ -196,8 +196,8 @@ public class Query {
 	/**
 	 * 请求参数中是否需要 Query 的
 	 * 
-	 * @param request
-	 *            请求对象
+	 * @param map
+	 *            请求参数
 	 * @return true 表示为需要 Query
 	 */
 	public static boolean isAnyMatch(Map<String, String[]> map) {

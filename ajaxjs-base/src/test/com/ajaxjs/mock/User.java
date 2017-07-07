@@ -2,12 +2,17 @@ package test.com.ajaxjs.mock;
 
 import java.util.Date;
 
-public class User {
+import com.ajaxjs.framework.model.Entity;
+
+public class User extends Entity{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private long id;
-	private String name;
 	private int age;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -15,13 +20,7 @@ public class User {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
+ 
 
 	public int getAge() {
 		return age;

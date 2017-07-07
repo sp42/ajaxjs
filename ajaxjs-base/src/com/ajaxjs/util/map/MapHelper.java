@@ -18,8 +18,8 @@ package com.ajaxjs.util.map;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.ajaxjs.util.CollectionUtil;
 import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.util.Util;
 import com.ajaxjs.util.Value;
 
 /**
@@ -152,7 +152,7 @@ public class MapHelper {
 	 * @return Map 结构
 	 */
 	public static Map<String, Object> toMap(String[] columns, String[] values) {
-		if (Util.isNotNull(columns)) 
+		if (CollectionUtil.isNotNull(columns)) 
 			return null;
 		
 		if (columns.length != values.length)
@@ -190,7 +190,7 @@ public class MapHelper {
 	 * @return Map 结构
 	 */
 	public static Map<String, Object> toMap(String[] pairs, boolean isDecode) {
-		if (!Util.isNotNull(pairs))
+		if (!CollectionUtil.isNotNull(pairs))
 			return null;
 		
 		Map<String, Object> map = new HashMap<>();

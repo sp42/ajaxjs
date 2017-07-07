@@ -16,8 +16,6 @@
 
 package com.ajaxjs.util;
 
-import java.util.Collection;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -28,39 +26,6 @@ import java.util.TimerTask;
  *
  */
 public class Util {
-	/**
-	 * 判断数组是否有意义
-	 * 
-	 * @param arr
-	 *            输入的数组
-	 * @return true 表示为素组不是为空，是有内容的，false 表示为数组为空数组，length = 0
-	 */
-	public static boolean isNotNull(Object[] arr) {
-		return arr != null && arr.length > 0;
-	}
-	
-	/**
-	 * 判断 collection 是否有意义
-	 * 
-	 * @param collection
-	 *            Map输入的集合
-	 * @return true 表示为集合不是为空，是有内容的，false 表示为空集合
-	 */
-	public static boolean isNotNull(Collection<?> collection) {
-		return collection != null && !collection.isEmpty();
-	}
-
-	/**
-	 * 判断 map 是否有意义
-	 * 
-	 * @param map
-	 *            输入的
-	 * @return true 表示为 map 不是为空，是有内容的，false 表示为空 map
-	 */
-	public static boolean isNotNull(Map<?, ?> map) {
-		return map != null && !map.isEmpty();
-	}
-	
 	/**
 	 * 类似 js 的 setInterval 函数，重复做某些事
 	 * 

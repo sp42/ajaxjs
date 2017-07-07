@@ -7,32 +7,34 @@ import java.util.HashMap;
 
 import org.junit.Test;
 
+import com.ajaxjs.util.CollectionUtil;
+
 import static com.ajaxjs.util.Util.*;
 
 public class TestUtil {
 	@Test
 	public void testIsNotNull() {
 		// Array
-		assertTrue(isNotNull(new Object[] { 1, 2 }));
-		assertTrue(isNotNull(new String[] { "1" }));
-		assertTrue(!isNotNull(new Object[] {}));
+		assertTrue(CollectionUtil.isNotNull(new Object[] { 1, 2 }));
+		assertTrue(CollectionUtil.isNotNull(new String[] { "1" }));
+		assertTrue(!CollectionUtil.isNotNull(new Object[] {}));
 
 		Object[] arr = null;
 		String[] strs = null;
-		assertTrue(!isNotNull(arr));
-		assertTrue(!isNotNull(strs));
+		assertTrue(!CollectionUtil.isNotNull(arr));
+		assertTrue(!CollectionUtil.isNotNull(strs));
 
 		// List
-		assertTrue(isNotNull(new ArrayList<Object>() {
+		assertTrue(CollectionUtil.isNotNull(new ArrayList<Object>() {
 			private static final long serialVersionUID = 1L;
 			{
 				add(1);
 			}
 		}));
 
-		assertTrue(!isNotNull(new ArrayList<String>()));
+		assertTrue(!CollectionUtil.isNotNull(new ArrayList<String>()));
 
-		assertTrue(isNotNull(new ArrayList<Object>() {
+		assertTrue(CollectionUtil.isNotNull(new ArrayList<Object>() {
 			private static final long serialVersionUID = 1L;
 			{
 				add(null);
@@ -40,13 +42,13 @@ public class TestUtil {
 		}));
 
 		// Map
-		assertTrue(isNotNull(new HashMap<String, Object>() {
+		assertTrue(CollectionUtil.isNotNull(new HashMap<String, Object>() {
 			private static final long serialVersionUID = 1L;
 			{
 				put("foo", null);
 			}
 		}));
-		assertTrue(!isNotNull(new HashMap<String, Object>()));
+		assertTrue(!CollectionUtil.isNotNull(new HashMap<String, Object>()));
 	}
 
 //	@Test

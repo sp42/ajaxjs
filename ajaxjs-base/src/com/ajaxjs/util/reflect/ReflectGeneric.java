@@ -20,6 +20,8 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Map;
 
+import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
+
 /**
  * 关于泛型的反射收集于此
  * @author sp42
@@ -40,7 +42,7 @@ public class ReflectGeneric {
 			ParameterizedType type = (ParameterizedType) returnType;
 
 			for (Type typeArgument : type.getActualTypeArguments()) {
-				if(typeArgument instanceof sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl) {
+				if(typeArgument instanceof ParameterizedTypeImpl) {
 					return Map.class; // 写死的
 				} else
 					return (Class<?>) typeArgument;
