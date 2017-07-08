@@ -1,4 +1,4 @@
-package test.com.ajaxjs.mvc;
+package test.com.ajaxjs.mvc.controller;
 
 import javax.mvc.annotation.Controller;
 import javax.ws.rs.DELETE;

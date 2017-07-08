@@ -25,8 +25,8 @@ import com.ajaxjs.util.StringUtil;
 
 /**
  * 该类对应 tagfile：head.tag
- * @author xinzhang
- *
+ * @author Frank Cheung frank@ajaxjs.com
+ * @version 2017年7月8日 下午11:13:21
  */
 public class HtmlHead {
 	// 默认 8080 端口

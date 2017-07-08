@@ -70,7 +70,7 @@ public class AdminController extends HttpServlet {
 	 * 
 	 * @param request
 	 * @param hash
-	 * @return
+	 * @return JSON 配置
 	 */
 	private JsonConfig load(HttpServletRequest request, Map<String, String> hash) {
 		String jsonFile = hash.get("jsonFile"), jsonFileFullPath;
