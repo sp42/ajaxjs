@@ -15,6 +15,9 @@
  */
 package com.ajaxjs;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * 初始化，检测是否可以运行
  * 
@@ -72,4 +75,5 @@ public class Init {
 //		if (isMac)
 //			System.out.println("亲，你运行着 Mac！" + ConsoleDiver);
 	}
+
 }

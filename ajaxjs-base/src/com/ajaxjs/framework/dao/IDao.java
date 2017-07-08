@@ -18,11 +18,10 @@ import java.util.List;
 import com.ajaxjs.framework.model.PageResult;
 
 /**
- * 数据持久层由 DAO 及其实现类组成。
- * 数据访问对象（Data Access Object），提供数据库的增删改查服务。
- * 必须继承这个接口而不能直接使用这个接口
- * 而且这个接口里面的成功都是参考用，开发者可自行制订自己的成功方法
- * @author xinzhang
+ * 数据持久层由 DAO 及其实现类组成。 数据访问对象（Data Access Object），提供数据库的增删改查服务。
+ * 必须继承这个接口而不能直接使用这个接口 而且这个接口里面的方法都是参考用，开发者可自行制订自己的业务方法。
+ * 
+ * @author Frank Cheung frank@ajaxjs.com
  *
  * @param <T>
  *            实体类型，可以是 POJO 或 Map，这里虽然指定了一种类型，但是可以混合着出现。
@@ -47,16 +46,20 @@ public interface IDao<T, ID extends Serializable> {
 	public int count();
 
 	/**
-	 * 支持分页的查询。如果找不到则返回 null。执行这个方法之前应先查询符合条件的记录总数，即 int count()
+	 * 列表查询，如果找不到则返回 null。
+	 * 
 	 * @param param
+	 *            DAO 专用的查询参数对象
 	 * @return 结果集
 	 */
 	public List<T> findList(QueryParams parame);
-	
+
 	/**
+	 * 支持分页的查询，如果找不到则返回 null。执行这个方法前应先查询符合条件的记录总数，即 int count()
 	 * 
 	 * @param param
-	 * @return
+	 *            DAO 专用的查询参数对象
+	 * @return 分页结果集
 	 */
 	public PageResult<T> findPagedList(QueryParams parame);
 
@@ -88,10 +91,10 @@ public interface IDao<T, ID extends Serializable> {
 	public boolean delete(T bean);
 
 	/**
-	 * 批量删除
-	 * TODO
+	 * 批量删除 TODO
+	 * 
 	 * @param list
-	 *            序号数组Ï
+	 *            序号数组
 	 */
 	void batchDelete(ID[] list);
 }

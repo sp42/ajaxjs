@@ -76,6 +76,13 @@ public class DaoHandler<T> implements InvocationHandler {
 		return returnVal;
 	}
 
+	/**
+	 * 绑定 DAO 的类
+	 * 
+	 * @param clz
+	 *            DAO 类引用
+	 * @return Handler 本身
+	 */
 	@SuppressWarnings("unchecked")
 	public T bind(Class<T> clz) { 
 		Object obj = Proxy.newProxyInstance(clz.getClassLoader(), new Class[] { clz }, this);

@@ -19,7 +19,7 @@ import java.util.Map;
 import com.ajaxjs.util.StringUtil;
 
 /**
- * 查询时特地需求的容器，可包含特定的对象进行查询，通过 getter/setter 注入。 特定的对象一般为 Map 结果。 最后转化为 SQL 字符串。
+ * 查询时特地需求的容器，可包含特定的对象进行查询，通过 getter/setter 注入。 特定的对象一般为 Map 结果。最后转化为 SQL 字符串。
  * 通常是耦合 HttpServletRequest.getParameterMap() 返回请求数据
  * @author frank
  *
@@ -35,13 +35,9 @@ public class Query {
 
 	/**
 	 * 内部基类
-	 * 
-	 * @author frank
-	 *
 	 */
 	private static class Base extends HashMap<String, String> {
 		private static final long serialVersionUID = 1L;
-		
 		
 		@Override
 		public String put(String key, String value) {
@@ -55,8 +51,6 @@ public class Query {
 
 	/**
 	 * 用于指定查询条件的过滤器
-	 * 
-	 * @author frank
 	 */
 	public static class Filter extends Base {
 		private static final long serialVersionUID = 1L;
@@ -93,8 +87,6 @@ public class Query {
 
 	/**
 	 * 用于指定搜索的内部类（精确匹配）
-	 * 
-	 * @author frank
 	 */
 	public static class Match extends Base {
 		private static final long serialVersionUID = 1L;
@@ -102,8 +94,6 @@ public class Query {
 
 	/**
 	 * 用于指定排序的内部类
-	 * 
-	 * @author frank
 	 */
 	public static class Order extends Base {
 		private static final long serialVersionUID = 1L;

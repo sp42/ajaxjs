@@ -151,42 +151,45 @@ public class DateTools {
 
 	private final static Pattern pattern2 = Pattern.compile("((19|20)[0-9]{2})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])");
 
-	/**
-	 * 支持任意对象转换为日期类型
-	 * @param obj 任意对象
-	 * @return 日期类型对象，null 表示为转换失败
-	 */
-	public static Date Objet2Date(Object obj) {
-		Date date = null;
-		
-		if (obj == null)
-			return null;
-		else if (obj instanceof Date)
-			return (Date) obj;
-		else if (obj instanceof Number) {
-			if (obj instanceof Integer) {
-				long times = Long.parseLong(obj + "000"); // 10 位长 int，后面补充三个零为 13位 long 时间戳
-				date = new Date(times);
-			} else {
-				date = new Date((long) obj);
-			}
-		} else if (obj instanceof String) {
-			Matcher matcher = pattern.matcher(obj.toString());
-			if (matcher.matches()) {
-				date = string2date(obj.toString());
-			} else {
-				if (pattern2.matcher(obj.toString()).matches()) {// 可能是这种格式 2016-08-18
-					date = string2date(obj.toString());
-				} else
-					System.err.println("非法字符串日期" + obj);
-			}
-		} else if (obj instanceof java.sql.Timestamp) {
-			long time = ((java.sql.Timestamp) obj).getTime();
-			date = new Date(time);
-		} else {
-			System.err.println("不能识别类型，不能转为日期。传入参数为：" + obj);
-		}
-		
-		return date;
+    /**
+     * 支持任意对象转换为日期类型
+     * 
+     * @param obj
+     *            任意对象
+     * @return 日期类型对象，null 表示为转换失败
+     */
+    public static Date Objet2Date(Object obj) {
+	Date date = null;
+
+	if (obj == null)
+	    return null;
+	else if (obj instanceof Date)
+	    return (Date) obj;
+	else if (obj instanceof Number) {
+	    if (obj instanceof Integer) {
+		long times = Long.parseLong(obj + "000"); /* 10 位长 int，后面补充三个零为13位 long 时间戳 */
+		date = new Date(times);
+	    } else {
+		date = new Date((long) obj);
+	    }
+	} else if (obj instanceof String) {
+	    Matcher matcher = pattern.matcher(obj.toString());
+	    if (matcher.matches()) {
+		date = string2date(obj.toString());
+	    } else {
+		if (pattern2.matcher(obj.toString()).matches()) {// 可能是这种格式
+								 // 2016-08-18
+		    date = string2date(obj.toString());
+		} else
+		    System.err.println("非法字符串日期" + obj);
+	    }
+	} else if (obj instanceof java.sql.Timestamp) {
+	    long time = ((java.sql.Timestamp) obj).getTime();
+	    date = new Date(time);
+	} else {
+	    System.err.println("不能识别类型，不能转为日期。传入参数为：" + obj);
 	}
+
+	return date;
+    }
 }

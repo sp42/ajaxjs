@@ -21,10 +21,13 @@ import com.ajaxjs.framework.model.Query;
  *
  */
 public class QueryParams {
+	/**
+	 * 默认每页显示记录数
+	 */
+	private static int defaultPageSize = 5;
+	
 	public QueryParams() {
 	}
-
-	private static int defaultPageSize = 5;
 
 	public QueryParams(int start, int limit) {
 		if (limit == 0)
@@ -32,7 +35,6 @@ public class QueryParams {
 
 		pageParam[0] = start;
 		pageParam[1] = limit;
-
 	}
 
 	public QueryParams(int start, int limit, Query query) {
