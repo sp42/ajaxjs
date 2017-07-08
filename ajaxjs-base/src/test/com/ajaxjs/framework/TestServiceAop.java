@@ -1,4 +1,4 @@
-package test.com.ajaxjs.framework.service;
+package test.com.ajaxjs.framework;
 
 import java.sql.SQLException;
 
@@ -14,12 +14,10 @@ import com.ajaxjs.framework.service.ValidationService;
 import com.ajaxjs.jdbc.ConnectionMgr;
 import com.ajaxjs.util.ClassScaner;
 
-import test.com.ajaxjs.framework.NewsDao;
-import test.com.ajaxjs.framework.NewsService;
 import test.com.ajaxjs.jdbc.TestSimpleORM;
 import test.com.ajaxjs.mock.News;
 
-public class TestService {
+public class TestServiceAop {
 	
 	SQLiteDataSource dataSource;
 
