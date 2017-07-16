@@ -18,8 +18,6 @@ package com.ajaxjs.web.security;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * 比较简单的过滤器，只是针对于 Request
  * @author Frank
