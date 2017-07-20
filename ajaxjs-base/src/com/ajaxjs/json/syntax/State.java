@@ -2,6 +2,10 @@ package com.ajaxjs.json.syntax;
 
 import java.lang.reflect.Method;
 
+/**
+ * 状态
+ * @author Frank Cheung frank@ajaxjs.com
+ */
 public class State {
 	public State(int index, String description, String expectDescription) {
 		this.id = index;

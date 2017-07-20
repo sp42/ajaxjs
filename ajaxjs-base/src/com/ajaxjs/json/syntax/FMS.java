@@ -7,6 +7,9 @@ import com.ajaxjs.json.JsonParseException;
 import com.ajaxjs.json.lexer.Lexer;
 import com.ajaxjs.json.lexer.Token;
 
+/**
+ * 语法解析的状态机
+ */
 public class FMS implements States {
 	/**
 	 * 词法分析器实例
@@ -58,16 +61,16 @@ public class FMS implements States {
 				throw lex.generateUnexpectedException("当前状态【" + oldStatus.getDescription() + "】,期待【" + (oldStatus.getExpectDescription() == null ? "结束" : oldStatus.getExpectDescription()) + "】;却返回" + tk.toLocalString());
 			
 			Method m = TKOL[tk.getType()];
+			
 			try {				
-				if (m != null){ // 输入 Token 操作 有点像 js 的 call/apply
+				if (m != null) // 输入 Token 操作 有点像 js 的 call/apply
 					status = (State) m.invoke(opt, oldStatus, status, tk);
-				}
 				
 				m = status.getHandler();
 				
-				if (m != null){ // 目标状态操作
+				if (m != null) // 目标状态操作
 					status =  (State) m.invoke(opt, oldStatus, status, tk);
-				}
+				
 			} catch (IllegalArgumentException e) {
 				throw lex.generateUnexpectedException("【反射调用】传入非法参数", e);
 			} catch (IllegalAccessException e) {

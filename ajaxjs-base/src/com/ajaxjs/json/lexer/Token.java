@@ -1,7 +1,6 @@
 package com.ajaxjs.json.lexer;
 
 import com.ajaxjs.json.JSONParser;
-import com.ajaxjs.json.JsonParseException;
 
 /**
  * 
