@@ -1,11 +1,9 @@
 package com.ajaxjs.json.lexer;
 
 import com.ajaxjs.json.JSONParser;
+import com.ajaxjs.json.JsonParseException;
 
 /**
- * ����token
- * 
- * @author huaying1988.com
  * 
  */
 public class Token {
@@ -47,7 +45,7 @@ public class Token {
 	private String value;
 	
 	/**
-	 * Java 的值，由 value 读取而来。 
+	 * Java 的值，由 value 转换而来。 
 	 */
 	private Object javaValue;
 	
@@ -72,44 +70,38 @@ public class Token {
 	public static final Token BGN 	= new Token(11, "BGN",	"开始");
 	public static final Token EOF 	= new Token(12, "EOF", 	"结束");
 	
-	public Object getRealValue(){
-		Object curValue = null;
-
+	public Object toJavaValue() {
 		if(this == Token.TRUE || this == Token.FALSE || this == Token.NIL)
 			return getJavaValue();
+//		else if(this instanceof StringToken) {
+//			return JSONParser.unescape(value);
+//		} else if(this instanceof NumberToken) {
+//			return value.indexOf('.') != -1 ? Double.parseDouble(value) :  Integer.parseInt(value);
+//		} else 
+//			throw new JsonParseException("获取 Java 值失败！");
 		
-		switch(getType()){
-
-		case 1:
-			if(value.indexOf('.')>=0){
-				curValue = Double.parseDouble(value);
-			}else{
-				curValue = Integer.parseInt(value);
-			}
-			break;
-		case 0:
-			curValue = JSONParser.unescape(value);
-			break;
+		Object curValue = null;
+		switch (getType()) {
+			case 1:
+				curValue = value.indexOf('.') != -1 ? Double.parseDouble(value) : Integer.parseInt(value);
+				break;
+			case 0:
+				curValue = JSONParser.unescape(value);
+				break;
 		}
 		return curValue;
 	}
 
 	@Override
 	public String toString() {
-		int type = getType();
-		String value = getValue();
-		
 		if (type > 1) {
 			return "[" + getTypeName() + "]";
 		} else {
-			return "[" + getTypeName() + ":::" + value + "]";
+			return "[" + getTypeName() + ":" + value + "]";
 		}
 	}
 
-	public String toLocalString() {		
-		int type = getType();
-		String value = getValue();
-		
+	public String toLocalString() {
 		if (type > 1) {
 			return "“" + getTypeNameChinese() + "”";
 		} else {

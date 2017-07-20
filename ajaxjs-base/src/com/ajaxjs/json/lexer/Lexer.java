@@ -5,6 +5,9 @@ import java.util.Stack;
 import com.ajaxjs.json.JsonParseException;
 import com.ajaxjs.json.JSONParser;
 
+/**
+ * 词法分析器
+ */
 public class Lexer {
 	/**
 	 * 当前行号
@@ -47,9 +50,6 @@ public class Lexer {
 	 *            要解析的字符串
 	 */
 	public Lexer(String str) {
-		if (str == null)
-			throw new NullPointerException("词法解析构造函数不能传递null");
-		
 		this.str = str;
 		this.len = str.length();
 		this.startLine = 0;
@@ -75,27 +75,29 @@ public class Lexer {
 			throw generateUnexpectedException("未预期的结束，字符串未结束");
 	}
 
-
-
-
+	/**
+	 * 解析符号
+	 * @param c
+	 * @return
+	 */
 	public Token parseSymbol(char c) {
 		switch (c) {
-		case '[':
-			return Token.ARRS;
-		case ']':
-			return Token.ARRE;
-		case '{':
-			return Token.OBJS;
-		case '}':
-			return Token.OBJE;
-		case ',':
-			return Token.SPLIT;
-		case ':':
-			return Token.DESC;
+			case '[':
+				return Token.ARRS;
+			case ']':
+				return Token.ARRE;
+			case '{':
+				return Token.OBJS;
+			case '}':
+				return Token.OBJE;
+			case ',':
+				return Token.SPLIT;
+			case ':':
+				return Token.DESC;
 		}
+		
 		return null;
 	}
-
 
 	public JsonParseException generateUnexpectedException(String str) {
 		return new JsonParseException(cur, startLine, startCol, str);
@@ -118,25 +120,28 @@ public class Lexer {
 			lineNum = 1;
 			return Token.BGN;
 		}
+		
 		char c;
 		while ((c = nextChar()) != 0) {
 			startLine = lineNum;
 			startCol = getColNum();
+			
 			if (c == '"' || c == '\'') {
-				return new Token(0, "STR", "字符串", null ,getStrValue(c));
+				return new StringToken(getStrValue(c));
 			} else if (JSONParser.isLetterUnderline(c)) {
 				return getDefToken();
 			} else if (JSONParser.isNum(c) || c == '-') {
-				return new Token(1, "NUM", "数字", null, getNumValue());
+				return new NumberToken(getNumValue());
 			} else if (JSONParser.isSpace(c)) {
 				continue;
 			} else {
 				return parseSymbol(c);
 			}
 		}
-		if (c == 0) {
+		
+		if (c == 0) 
 			return Token.EOF;
-		}
+		
 		return null;
 	}
 
@@ -148,6 +153,7 @@ public class Lexer {
 	private String getStrValue(char s) {
 		int start = cur;
 		char c;
+		
 		while ((c = nextChar()) != 0) {
 			if (c == '\\') {// 跳过斜杠以及后面的字符
 				c = nextChar();
@@ -160,28 +166,35 @@ public class Lexer {
 		return null;
 	}
 
+	/**
+	 * 获取数字的值
+	 * @return
+	 */
 	private String getNumValue() {
 		int start = cur;
 		char c;
+		
 		while ((c = nextChar()) != 0) {
-			if (!JSONParser.isDecimal(c)) {
+			if (!JSONParser.isDecimal(c)) 
 				return str.substring(start, revertChar());
-			}
 		}
+		
 		checkEnd();
 		return null;
 	}
 	
 	/**
-	 * 用来处理true、false、null的
+	 * 用来处理 true、false、null 的值
 	 * @return
 	 */
 	private Token getDefToken() {
 		int start = cur;
 		char c;
+		
 		while ((c = nextChar()) != 0) {
 			if (!JSONParser.isNumLetterUnderline(c)) {
 				String value = str.substring(start, revertChar());
+				
 				if ("true".equals(value)) {
 					return Token.TRUE;
 				} else if ("false".equals(value)) {
@@ -193,6 +206,7 @@ public class Lexer {
 				}
 			}
 		}
+		
 		checkEnd();
 		return null;
 	}

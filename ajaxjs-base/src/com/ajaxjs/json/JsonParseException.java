@@ -39,6 +39,10 @@ public class JsonParseException extends RuntimeException {
 		super(cause);
 	}
 
+	public JsonParseException(String string) {
+		super(string);
+	}
+
 	public String getMessage() {
 		return "[char:" + charNum + ",line:" + lineNum + ",column:" + colNum + "]" + desc + (cause == null ? "" : cause.toString());
 	}

@@ -10,55 +10,61 @@ import java.util.Stack;
 import com.ajaxjs.json.lexer.Lexer;
 import com.ajaxjs.json.lexer.Token;
 
- 
-
 /**
- * 该类负责实际操作
- * 
- * @author huaying1988.com
+ * 该类负责栈的实际操作
  * 
  */
 public class Operator {
 	private Lexer lex;
 
 	/**
-	 * 保存当前值的变量……这两个变量赋值来赋值去的
+	 * 保存当前值的变量
 	 */
 	private Object curObj;
 	
 	/**
-	 * 
+	 * 当前对象的值
 	 */
 	private Object curValue;
 
 	/**
 	 * 状态栈
 	 */
-	private Stack<Integer> statusStack = new Stack<Integer>();
+	private Stack<State> statusStack = new Stack<>();
 	
 	/**
 	 * 值栈
 	 */
-	private Stack<Object> keyStack = new Stack<Object>();
+	private Stack<Object> keyStack = new Stack<>();
 	
 	/**
-	 * 
+	 * MAP | LIST
 	 */
-	private Stack<Object> objStack = new Stack<Object>();
+	private Stack<Object> objStack = new Stack<>();
 
+	/**
+	 * 创建一个栈管理器
+	 * 
+	 * @param lex
+	 *            词法分析器
+	 */
 	public Operator(Lexer lex) {
 		this.lex = lex;
 	}
 
 	/**
+	 * 遇到对象，将其保存
 	 * 
 	 * @param from
+	 *            当前状态 id
 	 * @param to
+	 *            下一个状态 id
 	 * @param input
-	 * @return
+	 *            输入 Token
+	 * @return 下一个状态 id
 	 */
-	public int objs(Integer from, Integer to, Token input) {
-		if (from != StateMachine.BGN) 
+	public State objs(State from, State to, Token input) {
+		if (from != FMS.BGN) 
 			statusStack.push(from);
 		
 		curObj = new HashMap<Object, Object>();
@@ -67,8 +73,19 @@ public class Operator {
 		return to;
 	}
 
-	public int arrs(Integer from, Integer to, Token input) {
-		if (from != StateMachine.BGN) 
+	/**
+	 * 遇到数组，将其保存
+	 * 
+	 * @param from
+	 *            当前状态 id
+	 * @param to
+	 *            下一个状态 id
+	 * @param input
+	 *            输入 Token
+	 * @return 下一个状态 id
+	 */
+	public State arrs(State from, State to, Token input) {
+		if (from != FMS.BGN) 
 			statusStack.push(from);
 		
 		curObj = new ArrayList<Object>();
@@ -79,13 +96,17 @@ public class Operator {
 
 	/**
 	 * 在状态栈里拿出一个状态来进行运算后，返回一个新的状态作为状态机的新状态
+	 * 
 	 * @param from
+	 *            当前状态 id
 	 * @param to
+	 *            下一个状态 id
 	 * @param input
-	 * @return
+	 *            输入 Token
+	 * @return 下一个状态 id
 	 */
 	@SuppressWarnings("unchecked")
-	public int val(Integer from, Integer to, Token input) {
+	public State val(State from, State to, Token input) {
 		if(input == Token.ARRE || input == Token.OBJE) {
 			curObj = objStack.pop();
 			curValue = curObj;			
@@ -94,62 +115,91 @@ public class Operator {
 		}
 
 		if (statusStack.isEmpty()) {
-			return StateMachine.EOF;
+			return FMS.EOF;
 		} else {
-			Integer s = statusStack.pop();
+			State s = statusStack.pop();
 			
-			if (s == StateMachine.ARRBV) {
+			if (s == FMS.ARRBV) {
 				curObj = objStack.peek();
 				((List<Object>) curObj).add(curValue);
-				s = StateMachine.ARRAV;
-			} else if (s == StateMachine.OBJBV) {
+				s = FMS.ARRAV;
+			} else if (s == FMS.OBJBV) {
 				curObj = objStack.peek();
 				((Map<Object, Object>) curObj).put(keyStack.pop(), curValue);
-				s = StateMachine.OBJAV;
+				s = FMS.OBJAV;
 			}
 			
 			return s;
 		}
 	}
 
-	private Object getRealValue(Token input) {
-		try {
-			return input.getRealValue();
-		} catch (RuntimeException e) {
-			lex.generateUnexpectedException("字符串转换错误", e);
-			return null;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public int arrav(Integer from, Integer to, Token input) {
-		curValue = getRealValue(input);
-		((List<Object>) curObj).add(curValue);
-
-		return to;
-	}
-
-	public int objak(Integer from, Integer to, Token input) {
+	/**
+	 * 对象的 key 入栈
+	 * @param from
+	 *            当前状态 id
+	 * @param to
+	 *            下一个状态 id
+	 * @param input
+	 *            输入 Token
+	 * @return 下一个状态 id
+	 */
+	public State objak(State from, State to, Token input) {
 		keyStack.push(getRealValue(input));
 		
 		return to;
 	}
-
+	
+	/**
+	 * 保存数组的元素
+	 * @param from
+	 *            当前状态 id
+	 * @param to
+	 *            下一个状态 id
+	 * @param input
+	 *            输入 Token
+	 * @return 下一个状态 id
+	 */
 	@SuppressWarnings("unchecked")
-	public int objav(Integer from, Integer to, Token input) {
+	public State arrav(State from, State to, Token input) {
+		curValue = getRealValue(input);
+		((List<Object>) curObj).add(curValue);
+		
+		return to;
+	}
+	
+	/**
+	 * 保存对象元素的 key 和 value
+	 * @param from
+	 *            当前状态 id
+	 * @param to
+	 *            下一个状态 id
+	 * @param input
+	 *            输入 Token
+	 * @return 下一个状态 id
+	 */
+	@SuppressWarnings("unchecked")
+	public State objav(State from, State to, Token input) {
 		curValue = getRealValue(input);
 		((Map<Object, Object>) curObj).put(keyStack.pop(), curValue);
 		
 		return to;
 	}
 	
-	// 操作的相关的静态常量
-	public static final Method VAL 		= getMethod("val");
-	public static final Method ARRAV 	= getMethod("arrav");
-	public static final Method OBJAK 	= getMethod("objak");
-	public static final Method OBJAV 	= getMethod("objav");
-	public static final Method ARRS 	= getMethod("arrs");
-	public static final Method OBJS 	= getMethod("objs");
+	/**
+	 * 获取 Token 的值（Java 的值）
+	 * 
+	 * @param input
+	 *            输入 Token
+	 * @return Token 的值
+	 */
+	private Object getRealValue(Token input) {
+		try {
+			return input.toJavaValue();
+		} catch (RuntimeException e) {
+			lex.generateUnexpectedException("字符串转换错误", e);
+			return null;
+		}
+	}
 
 	/**
 	 * 调用 Operator 身上的方法
@@ -158,19 +208,27 @@ public class Operator {
 	 *            方法名称
 	 * @return 方法对象
 	 */
-	private static Method getMethod(String methodName) {
+	static Method getMethod(String methodName) {
 		try {
-			return Operator.class.getMethod(methodName, new Class[] { Integer.class, Integer.class, Token.class });
+			return Operator.class.getMethod(methodName, new Class[] { State.class, State.class, Token.class });
 		} catch (SecurityException | NoSuchMethodException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 	
+	/**
+	 * 获取当前对象
+	 * @return
+	 */
 	public Object getCurObj() {
 		return curObj;
 	}
 
+	/**
+	 * 获取当前字符值
+	 * @return
+	 */
 	public Object getCurValue() {
 		return curValue;
 	}
