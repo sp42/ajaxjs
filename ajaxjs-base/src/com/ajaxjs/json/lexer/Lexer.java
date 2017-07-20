@@ -12,22 +12,22 @@ public class Lexer {
 	/**
 	 * 当前行号
 	 */
-	private int lineNum = 0;
+	private int lineNum;
 	
 	/**
 	 * 用于记录每一行的起始位置
 	 */
-	private Stack<Integer> colMarks = new Stack<Integer>();
+	private Stack<Integer> colMarks = new Stack<>();
 
 	/**
 	 * 用于报错的行游标
 	 */
-	private int startLine = 0;
+	private int startLine;
 
 	/**
 	 * 用于报错的列游标
 	 */
-	private int startCol = 0;
+	private int startCol;
 	
 	/**
 	 * 当前字符游标
@@ -36,12 +36,12 @@ public class Lexer {
 	/**
 	 * 保存当前要解析的字符串
 	 */
-	private String str = null;
+	private String str;
 	
 	/**
 	 * 保存当前要解析的字符串的长度
 	 */
-	private int len = 0;
+	private int len;
 
 	/**
 	 * JsonLex构造函数
@@ -94,9 +94,9 @@ public class Lexer {
 				return Token.SPLIT;
 			case ':':
 				return Token.DESC;
+			default:
+				return null;
 		}
-		
-		return null;
 	}
 
 	public JsonParseException generateUnexpectedException(String str) {
@@ -185,7 +185,7 @@ public class Lexer {
 	
 	/**
 	 * 用来处理 true、false、null 的值
-	 * @return
+	 * @return true、false、null 的 Token
 	 */
 	private Token getDefToken() {
 		int start = cur;

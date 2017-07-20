@@ -1,3 +1,18 @@
+/**
+ * Copyright Frank Cheung <frank@ajaxjs.com>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.ajaxjs.json.syntax;
 
 import java.lang.reflect.InvocationTargetException;
@@ -9,6 +24,7 @@ import com.ajaxjs.json.lexer.Token;
 
 /**
  * 语法解析的状态机
+ * Thanks to blog.csdn.net/yimengqiannian/article/details/53701275
  */
 public class FMS implements States {
 	/**
@@ -27,8 +43,10 @@ public class FMS implements States {
 	private State status;
 	
 	/**
+	 * 创建一个状态机
 	 * 
-	 * @param jsonStr JSON 字符串
+	 * @param jsonStr
+	 *            JSON 字符串
 	 */
 	public FMS(String jsonStr) {
 		if (jsonStr == null)
