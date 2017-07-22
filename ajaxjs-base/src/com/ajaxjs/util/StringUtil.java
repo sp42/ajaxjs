@@ -53,13 +53,13 @@ public class StringUtil {
 	}
 	
 	/**
-	 * 将一个字符串分隔为字符串数组，分隔符 可以是空格、,、|、; 作为分隔符。
+	 * 将一个字符串分隔为字符串数组，分隔符 可以是,、|、; 作为分隔符。
 	 * 常在读取配置的时候使用。
 	 * @param str
 	 * @return
 	 */
 	public static String[] split(String str) {
-		return str.split(" |,|\\||;");
+		return str.split(",|\\||;");
 	}
 
 	/**

@@ -41,8 +41,15 @@ public class LogHelper {
 		logger.setFilter(filter);
 	}
 	
-	private String className;				// 所在的类名
-	private Logger logger;					// 包装这个 logger
+	/**
+	 * 所在的类名
+	 */
+	private String className;
+	
+	/**
+	 * 包装这个 logger
+	 */
+	private Logger logger;
 
 	/**
 	 * 过滤器，是否要日志服务
@@ -72,14 +79,6 @@ public class LogHelper {
 	public void logMsg(Level level, String msgTpl, Object... params) {
 		logger.logp(level, className, getMethodName(), msgTpl, params);
 	}
-	
-//	public void config(String msg) {
-//		logMsg(Level.CONFIG, msg);
-//	}
-//	
-//	public void config(String msgTpl, Object... params) {
-//		logMsg(Level.CONFIG, msgTpl, params);
-//	}
 	
 	/**
 	 * 打印一个日志
