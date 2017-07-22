@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import com.ajaxjs.net.IP;
 
+
 public class TestIp {
 	@Test 
 	public void testLanIp(){
