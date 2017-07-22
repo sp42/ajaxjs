@@ -33,9 +33,14 @@ import com.ajaxjs.util.io.StreamUtil;
 
 public class Client extends Connection<Client> {
 	private static final LogHelper LOGGER = LogHelper.getLog(Client.class);
-	
-	public Client(String urlStr) {
-		super(urlStr);
+
+	/**
+	 * 
+	 * @param url
+	 *            请求目标地址
+	 */
+	public Client(String url) {
+		super(url);
 	}
 
 	/**
@@ -47,11 +52,11 @@ public class Client extends Connection<Client> {
 	 */
 	public static String simpleGET(String url) {
 		StreamUtil client = new StreamUtil();
-		
+
 		try {
 			client.setIn(new URL(url).openStream());
 			client.byteStream2stringStream().close();
-			
+
 			return client.getContent();
 		} catch (IOException e) {// 简单调用，不作异常处理
 			return null;
@@ -71,34 +76,46 @@ public class Client extends Connection<Client> {
 		} catch (ConnectException e) {
 			LOGGER.warning(e);
 			return null;
-		} 
-	 
+		}
 	}
-	
+
+	/**
+	 * 简单 GET 请求（带 GZip 处理），返回文本。
+	 * 
+	 * @param url
+	 *            请求目标地址
+	 * @return 响应内容（如 HTML，JSON 等）
+	 */
 	public static String GET_Gzip(String url) {
 		try {
 			return new Client(url).setEnableGzip(true).connect().getContent();
 		} catch (ConnectException e) {
 			LOGGER.warning(e);
 			return null;
-		} 
+		}
 	}
-	
+
+	/**
+	 * HEAD 请求之前的准备
+	 * 
+	 * @param url
+	 *            请求目标地址
+	 * @return 本类实例
+	 */
 	private static Client initHead(String url) {
 		Client client = new Client(url);
-		
+
 		// 不需要转化响应文本，节省资源
-		// 必须设置false，否则会自动redirect到Location的地址
 		client.setMethod("HEAD").setTextResponse(false).customConnection(new CustomConnection() {
 			@Override
 			public void callback(HttpURLConnection connection) {
-				connection.setInstanceFollowRedirects(false); // 必须设置false，否则会自动redirect到Location的地址
+				connection.setInstanceFollowRedirects(false); // 必须设置 false，否则会自动 redirect 到 Location 的地址
 			}
 		});
-		
+
 		return client;
 	}
-	
+
 	/**
 	 * 检测资源是否存在
 	 * 
@@ -120,7 +137,7 @@ public class Client extends Connection<Client> {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * 得到 HTTP 302 的跳转地址
 	 * 
@@ -136,7 +153,7 @@ public class Client extends Connection<Client> {
 			return "";
 		}
 	}
-	
+
 	/**
 	 * 得到资源的文件大小
 	 * 
@@ -146,19 +163,19 @@ public class Client extends Connection<Client> {
 	 */
 	public static long getFileSize(String url) {
 		String contentLength = null;
-		
+
 		try {
 			contentLength = initHead(url).connect().getConnection().getHeaderField("content-length");
 		} catch (ConnectException e) {
 			LOGGER.warning(e);
 			return 0;
 		}
-		
+
 		return Long.parseLong(contentLength);
 	}
-	
+
 	/**
-	 * 获取远程资源的大小 （另外一种写法，可参考之）
+	 * 获取远程资源的大小 （另外一种写法，可作为参考之）
 	 * 
 	 * @param url
 	 *            目标地址
@@ -177,7 +194,7 @@ public class Client extends Connection<Client> {
 
 		return size;
 	}
-	
+
 	/**
 	 * POST 请求
 	 * 
@@ -194,15 +211,16 @@ public class Client extends Connection<Client> {
 			return null;
 		}
 	}
-	
+
 	public static String POST(String url, String params) {
 		return POST(url, params.getBytes());
 	}
-	
+
 	public static String POST(String url, byte[] b) {
 		Client client = new Client(url);
 		client.setMethod("POST").setData(b);
-		client.getConnection().setDoOutput(true); // for conn.getOutputStream().write(someBytes);
+		client.getConnection().setDoOutput(true); // for
+													// conn.getOutputStream().write(someBytes);
 		client.getConnection().setDoInput(true);
 		client.getConnection().setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
@@ -261,7 +279,7 @@ public class Client extends Connection<Client> {
 	 */
 	public static String MultiPOST(String url, Map<String, Object> text, Map<String, String> fileMap) {
 		byte[] data = null;
-		
+
 		if (text != null && text.size() > 0) {
 			StringBuilder strs = new StringBuilder();
 
@@ -276,7 +294,7 @@ public class Client extends Connection<Client> {
 				// + "\"\r\n\r\n");
 				// strs.append(value);
 			}
-			
+
 			System.out.println(strs.toString());
 			data = strs.toString().getBytes();
 		}
@@ -289,21 +307,23 @@ public class Client extends Connection<Client> {
 
 				File file = new File(value);
 				String filename = file.getName();
-//				String contentType = FileUtil.getMime(file);
+				// String contentType = FileUtil.getMime(file);
 
-//				String str = String.format(DIV, BOUNDARY, name, filename) + "Content-Type:" + contentType + "\r\n\r\n";
-				StringBuffer strBuf = new StringBuffer();  
-                strBuf.append("\r\n").append("--").append(BOUNDARY).append("\r\n");  
-                strBuf.append("Content-Disposition: form-data; name=\"" + "ddd" + "\"; filename=\"" + filename + "\"\r\n");  
-//              strBuf.append("Content-Type:" + contentType + "\r\n\r\n");  
-//			    out.write(strBuf.toString().getBytes());
-				
-                concat(data, strBuf.toString().getBytes());
-				
-                System.out.println(strBuf.toString());
-                
-                concat(data, getBytes(file));
-                
+				// String str = String.format(DIV, BOUNDARY, name, filename) +
+				// "Content-Type:" + contentType + "\r\n\r\n";
+				StringBuffer strBuf = new StringBuffer();
+				strBuf.append("\r\n").append("--").append(BOUNDARY).append("\r\n");
+				strBuf.append(
+						"Content-Disposition: form-data; name=\"" + "ddd" + "\"; filename=\"" + filename + "\"\r\n");
+				// strBuf.append("Content-Type:" + contentType + "\r\n\r\n");
+				// out.write(strBuf.toString().getBytes());
+
+				concat(data, strBuf.toString().getBytes());
+
+				System.out.println(strBuf.toString());
+
+				concat(data, getBytes(file));
+
 			}
 		}
 
@@ -312,7 +332,8 @@ public class Client extends Connection<Client> {
 
 		Client client = new Client(url);
 		client.setData(data);
-		client.getConnection().setDoOutput(true); // for conn.getOutputStream().write(someBytes);
+		client.getConnection().setDoOutput(true); // for
+													// conn.getOutputStream().write(someBytes);
 		client.getConnection().setDoInput(true);
 		client.getConnection().setRequestProperty("Content-type", "multipart/form-data; boundary=" + BOUNDARY);
 
@@ -323,7 +344,7 @@ public class Client extends Connection<Client> {
 		}
 
 		client.setDone(true);
-		
+
 		return client.getContent();
 
 		// try (OutputStream out = new
@@ -336,7 +357,7 @@ public class Client extends Connection<Client> {
 		System.arraycopy(b, 0, c, a.length, b.length);
 		return c;
 	}
-	
+
 	/**
 	 * 获得指定文件的byte数组
 	 */

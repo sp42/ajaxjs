@@ -89,11 +89,11 @@ public abstract class Request<T> extends StreamChain<T> {
 	 */
 	private boolean isDone;
 
-	
 	/**
 	 * 
-	 * @author frank
-	 *
+	 * @author Frank Cheung frank@ajaxjs.com
+	 * @version 2017年7月17日 上午10:37:48 
+	 * @param <T>
 	 */
 	public static interface Callback<T> {
 		/**

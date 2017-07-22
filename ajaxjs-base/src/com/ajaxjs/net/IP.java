@@ -63,10 +63,10 @@ public class IP {
 			addrs = InetAddress.getAllByName(hostName);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
-			return null;
 		}
 
 		String[] ips = null;
+		
 		if (addrs !=null) {
 			ips = new String[addrs.length];
 			int i = 0;
@@ -79,11 +79,11 @@ public class IP {
 	}
 
 	/**
-	 * 输入主机名，返回其 IP，相当于 cmd 的 ping 所得到的域名
+	 * 输入主机名，返回其 ip，相当于 cmd 的 ping 所得到的域名
 	 * 
 	 * @param hostname
 	 *            例如 www.baidu.com
-	 * @return 主机对应的 IP
+	 * @return 主机对应的 ip
 	 */
 	public static String getIpByHostName(String hostname) {
 		try {
@@ -91,8 +91,9 @@ public class IP {
 		} catch (UnknownHostException e) {
 			System.err.println("获取 ip 失败！" + hostname);
 			e.printStackTrace();
-			return null;
 		}
+		
+		return null;
 	}
 	
 	/**
@@ -103,12 +104,10 @@ public class IP {
 	public static boolean ping(String ip) {
 		try {
 			return InetAddress.getByName(ip).isReachable(5000); // 设定超时时间，返回结果表示是否连上
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-		
+		} 
+
 		return false;
 	}
 	
