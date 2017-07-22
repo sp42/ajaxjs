@@ -78,8 +78,6 @@ public class Query {
 
 	/**
 	 * 用于指定搜索的内部类
-	 * 
-	 * @author frank
 	 */
 	public static class Search extends Base {
 		private static final long serialVersionUID = 1L;
