@@ -1,11 +1,9 @@
-package test.com.ajaxjs.framework;
+package test.com.ajaxjs.mock;
 
 import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.model.PageResult;
 import com.ajaxjs.framework.service.BaseDaoService;
 import com.ajaxjs.framework.service.IService;
-
-import test.com.ajaxjs.mock.News;
 
 public class NewsService extends BaseDaoService<News, Long, NewsDao > implements IService<News, Long> {
 	public NewsService() {

@@ -1,4 +1,4 @@
-package test.com.ajaxjs.framework;
+package test.com.ajaxjs.mock;
 
 import java.util.List;
 
@@ -9,8 +9,6 @@ import com.ajaxjs.framework.dao.annotation.Insert;
 import com.ajaxjs.framework.dao.annotation.Select;
 import com.ajaxjs.framework.dao.annotation.Update;
 import com.ajaxjs.framework.model.PageResult;
-
-import test.com.ajaxjs.mock.News;
 
 public interface NewsDao extends IDao<News, Long> {
 	final static String tableName = "news";

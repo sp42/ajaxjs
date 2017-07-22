@@ -13,6 +13,7 @@ import com.ajaxjs.jdbc.ConnectionMgr;
 import com.ajaxjs.util.ClassScaner;
 
 import test.com.ajaxjs.jdbc.TestSimpleORM;
+import test.com.ajaxjs.mock.NewsService;
 
 public class TestService {
 	SQLiteDataSource dataSource;

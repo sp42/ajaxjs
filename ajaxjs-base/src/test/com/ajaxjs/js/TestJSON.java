@@ -116,7 +116,7 @@ public class TestJSON {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testJson2Map() {
-		Object obj = JsonParser.json2Map2("{x1:true, x2:2000, x3:\"hello world\",a:{b:{c:{d:{e:[1,2,3,4,5,6]}}}}}");
+		Object obj = JsonParser.json2Map2("{x1:true, x2:2000, x3:\"1:hello world\",a:{b:{c:{d:{e:[1,\"j\",3,4,5,6]}}}}}");
 		assertTrue(obj instanceof Map);
 		Map<String, Object> map = (Map<String, Object>)obj;
 		System.out.println(map.get("a"));

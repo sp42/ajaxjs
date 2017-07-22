@@ -57,19 +57,6 @@ public class TestStringUtil {
 		assertEquals(urlDecode(urlEncode(str)), str);
 	}
 	
-	@Test
-	public void testMisc(){
-		assertEquals(base64Decode(base64Encode(str)), str);
-		assertEquals(md5("123123"), "4297F44B13955235245B2497399D7A93");
-		System.out.println(passwordGenerator(8));
-		assertTrue(isUUID(getUUID()));
-	}
-	
-	@Test
-	public void testUnicodeHex() {
-		assertTrue(str.equals(decodeUnicode(encodeUnicode(str))));
-	}
-	
 	public void testUTF8mb4() {
 		System.out.println("test string=" + "😄walmart öbama 👽💔");
 		String url = "jdbc:mysql://localhost:3306/foo?useUnicode=true&characterEncoding=UTF-8";
@@ -93,4 +80,9 @@ public class TestStringUtil {
 		}
 	}
 
+	@Test
+	public void testMisc(){
+		assertEquals(base64Decode(base64Encode(str)), str);
+		assertEquals(md5("123123"), "4297F44B13955235245B2497399D7A93");
+	}
 }

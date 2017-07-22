@@ -16,6 +16,8 @@ import com.ajaxjs.util.ClassScaner;
 
 import test.com.ajaxjs.jdbc.TestSimpleORM;
 import test.com.ajaxjs.mock.News;
+import test.com.ajaxjs.mock.NewsDao;
+import test.com.ajaxjs.mock.NewsService;
 
 public class TestServiceAop {
 	

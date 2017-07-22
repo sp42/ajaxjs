@@ -18,6 +18,7 @@ import com.ajaxjs.util.ClassScaner;
 
 import test.com.ajaxjs.jdbc.TestSimpleORM;
 import test.com.ajaxjs.mock.News;
+import test.com.ajaxjs.mock.NewsDao;
 
 public class TestDao {
 	Connection conn;

@@ -9,9 +9,7 @@ import org.junit.Test;
 
 import com.ajaxjs.util.CollectionUtil;
 
-import static com.ajaxjs.util.Util.*;
-
-public class TestUtil {
+public class TestCollection {
 	@Test
 	public void testIsNotNull() {
 		// Array
