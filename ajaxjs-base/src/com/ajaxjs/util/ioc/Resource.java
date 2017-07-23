@@ -21,7 +21,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author malongbo 2014/12/29
+ * 表示可注入的资源
+ * 
+ * @author Frank Cheung frank@ajaxjs.com
  */
 @Target({ FIELD })
 @Retention(RetentionPolicy.RUNTIME)

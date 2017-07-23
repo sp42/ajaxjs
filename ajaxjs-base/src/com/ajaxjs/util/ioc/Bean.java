@@ -21,7 +21,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author malongbo 2014/12/29
+ * 表示可在 IOC 里面管理的对象
+ * 
+ * @author Frank Cheung frank@ajaxjs.com
  */
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
