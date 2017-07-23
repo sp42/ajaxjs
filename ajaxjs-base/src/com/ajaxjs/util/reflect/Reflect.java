@@ -25,7 +25,6 @@ import java.util.List;
 
 import com.ajaxjs.util.LogHelper;
 
-
 /**
  * 反射工具类（方法）
  * 
@@ -49,7 +48,9 @@ public class Reflect {
 		try {
 			return args.length == 0 ? method.invoke(instance) : method.invoke(instance, args);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			LOGGER.warning(e, "反射执行方法异常！！！类：{0} 方法：{1}", instance.getClass().getName(), method.getName());
+			// 这里的异常对象不要传到日志中，而是真正的异常
+			LOGGER.warning(e.getCause(), "反射执行方法异常！所在类：{0} 方法：{1}", instance.getClass().getName(), method.getName());
+			
 			return null;
 		}
 	}
@@ -214,8 +215,10 @@ public class Reflect {
 
 	/**
 	 * 已知接口类型，获取它的 class
+	 * 
 	 * @param type
-	 * @return
+	 *            接口类型
+	 * @return 接口的类对象
 	 */
 	public static Class<?> getClassByInterface(Type type) {
 	    String className = type.toString();
@@ -223,8 +226,8 @@ public class Reflect {
 	    if (className.startsWith(TYPE_NAME_PREFIX)) 
 	        className = className.substring(TYPE_NAME_PREFIX.length());
 	    
-	    className = className.replace("<T>", "");
-	    
+	    className = className.replaceAll("<.*>$", ""); // 不要泛型的字符
+
 	    return ReflectNewInstance.getClassByName(className);
 	}
 

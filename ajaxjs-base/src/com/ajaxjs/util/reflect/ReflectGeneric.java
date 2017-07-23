@@ -24,8 +24,8 @@ import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 /**
  * 关于泛型的反射收集于此
- * @author sp42
- *
+ * 
+ * @author Frank Cheung frank@ajaxjs.com
  */
 public class ReflectGeneric {
 	/**
@@ -42,7 +42,7 @@ public class ReflectGeneric {
 			ParameterizedType type = (ParameterizedType) returnType;
 
 			for (Type typeArgument : type.getActualTypeArguments()) {
-				if(typeArgument instanceof ParameterizedTypeImpl) {
+				if (typeArgument instanceof ParameterizedTypeImpl) {
 					return Map.class; // 写死的
 				} else
 					return (Class<?>) typeArgument;

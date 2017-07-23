@@ -28,8 +28,7 @@ import com.ajaxjs.util.Value;
 
 /**
  * Bean 工具集
- * @author sp42
- *
+ * @author Frank Cheung frank@ajaxjs.com
  */
 public class BeanUtil extends Reflect {
 	
@@ -100,7 +99,7 @@ public class BeanUtil extends Reflect {
 	 * @return
 	 */
 	public static <T> Map<String, Object> bean2Map(T bean) {
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		
 		try {
 			BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass());

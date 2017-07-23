@@ -21,9 +21,9 @@ import java.lang.reflect.InvocationTargetException;
 import com.ajaxjs.util.LogHelper;
 
 /**
- * 新建实例
- * @author xinzhang
- *
+ * 创建新实例的工具方法
+ * 
+ * @author Frank Cheung frank@ajaxjs.com
  */
 public class ReflectNewInstance {
 	private static final LogHelper LOGGER = LogHelper.getLog(ReflectNewInstance.class);
@@ -38,18 +38,18 @@ public class ReflectNewInstance {
 	 * @return 对象实例
 	 */
 	public static <T> T newInstance(Class<T> clazz, Object... args) {
-		if(args.length == 0) {
+		if (args.length == 0) {
 			try {
 				return clazz.newInstance();
 			} catch (InstantiationException | IllegalAccessException e) {
 				LOGGER.warning(e);
 			}
 		}
-		
+
 		Constructor<T> constructor = getConstructor(clazz, args2class(args)); // 获取构造器
 		return newInstance(constructor, args);
 	}
-	
+
 	/**
 	 * 根据构造器创建实例
 	 * 
@@ -62,12 +62,13 @@ public class ReflectNewInstance {
 	public static <T> T newInstance(Constructor<T> constructor, Object... args) {
 		try {
 			return constructor.newInstance(args); // 实例化
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
 			LOGGER.warning(e, "实例化对象失败：" + constructor.getDeclaringClass());
 			return null;
 		}
 	}
-	
+
 	/**
 	 * 根据类全称创建实例，并转换到其接口的类型
 	 * 
@@ -77,11 +78,11 @@ public class ReflectNewInstance {
 	 *            接口类型
 	 * @return 对象实例
 	 */
-//	@SuppressWarnings("unchecked")
-//	public static <T> T newInstance(String className, Class<T> clazz) {
-//		Class<?> clz = getClassByName(className);
-//		return clazz != null ? (T) newInstance(clz) : null;
-//	}
+	// @SuppressWarnings("unchecked")
+	// public static <T> T newInstance(String className, Class<T> clazz) {
+	// Class<?> clz = getClassByName(className);
+	// return clazz != null ? (T) newInstance(clz) : null;
+	// }
 
 	/**
 	 * 根据类全称创建实例
@@ -96,7 +97,7 @@ public class ReflectNewInstance {
 		Class<?> clazz = getClassByName(className);
 		return clazz != null ? newInstance(clazz, args) : null;
 	}
-	
+
 	/**
 	 * 获取类的构造器，可以支持重载的构造器（不同参数的构造器）
 	 * 
@@ -114,7 +115,7 @@ public class ReflectNewInstance {
 		} catch (SecurityException e) {
 			LOGGER.warning(e);
 		}
-		
+
 		return null;
 	}
 
@@ -144,7 +145,7 @@ public class ReflectNewInstance {
 	 */
 	public static Class<?>[] args2class(Object[] args) {
 		Class<?>[] clazzes = new Class[args.length];
-		
+
 		for (int i = 0; i < args.length; i++)
 			clazzes[i] = args[i].getClass();
 
