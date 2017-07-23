@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Frank Cheung
+ * Copyright Frank Cheung frank@ajaxjs.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,15 +33,16 @@ import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.jdbc.ConnectionMgr;
 import com.ajaxjs.jdbc.JdbcConnection;
 import com.ajaxjs.js.JsonHelper;
-import com.ajaxjs.util.LogHelper;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
- * 不能复用 create/update 方法，这是因为 T 泛型不能正确识别 Bean 类型的缘故
+ * 封装常见的控制器方法。注意：不能复用 create/update 方法，这是因为 T 泛型不能正确识别 Bean 类型的缘故
  * 
- * @author xinzhang
- *
+ * @author Frank Cheung frank@ajaxjs.com
  * @param <T>
+ *            实体类
  * @param <ID>
+ *            实体 ID 字段类型
  */
 public abstract class CommonController<T, ID extends Serializable> implements IController {
 	private static final LogHelper LOGGER = LogHelper.getLog(CommonController.class);

@@ -38,14 +38,14 @@ import com.ajaxjs.framework.model.BaseModel;
 import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.mvc.ActionAndView;
 import com.ajaxjs.util.ClassScaner;
-import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.reflect.Reflect;
 import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.util.map.MapHelper;
+import com.ajaxjs.util.collection.MapHelper;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
- * 分发器
- * @author frank
+ * MVC 分发器
+ * @author Frank Cheung frank@ajaxjs.com
  */
 public class MvcDispatcher implements Filter {
 	private static final LogHelper LOGGER = LogHelper.getLog(MvcDispatcher.class);

@@ -21,7 +21,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.net.IP;
-import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.collection.MapHelper;
 
 /**
  * 该类对应 tagfile：head.tag
@@ -51,7 +51,7 @@ public class HtmlHead {
 			params.put("MainDomain", "");
 			params.put("isdebug", "true");
 
-			css = "http://" + ip + ":83/lessService/?" + StringUtil.HashJoin(params, "&");
+			css = "http://" + ip + ":83/lessService/?" + MapHelper.join(params);
 		} else {
 			css = cxt.getContextPath() + lessPath.replace("/less", "/css").replace(".less", ".css");
 		}
@@ -81,7 +81,7 @@ public class HtmlHead {
 			params.put("MainDomain", "");
 			params.put("isdebug", "true");
 			
-			css = "http://" + IP.getLocalIp() + ":83/lessService/?" + StringUtil.HashJoin(params, "&");
+			css = "http://" + IP.getLocalIp() + ":83/lessService/?" + MapHelper.join(params, "&");
 		} else {
 			css = request.getContextPath() + lessPath.replace("/less", "/css").replace(".less", ".css");
 		}

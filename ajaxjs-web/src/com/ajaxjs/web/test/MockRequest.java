@@ -35,7 +35,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import com.ajaxjs.js.JsonHelper;
-import com.ajaxjs.util.map.MapHelper;
+import com.ajaxjs.util.collection.MapHelper;
 
 /**
  * 

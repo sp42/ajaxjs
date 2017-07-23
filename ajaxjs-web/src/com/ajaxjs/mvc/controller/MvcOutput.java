@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.jsp.PageContext;
 
 import com.ajaxjs.js.JsonHelper;
-import com.ajaxjs.util.LogHelper;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 灵活的、链式调用的输出响应内容
@@ -124,7 +124,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 		if (getOutput_Map() != null) { // Map 的话转变为 json 输出
 			setJson(true).setOutput(JsonHelper.stringifyMap(getOutput_Map()));
 		} else if (getOutput_Obj() != null) {// map or object 二选其一
-			setJson(true).setOutput(JsonHelper.stringify_object(getOutput_Obj()));
+//			setJson(true).setOutput(JsonHelper.stringify_object(getOutput_Obj()));
 		}
 
 		if (isJson()) {

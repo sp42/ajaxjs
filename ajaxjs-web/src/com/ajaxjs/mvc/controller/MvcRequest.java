@@ -15,9 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.collection.Map2Pojo;
+import com.ajaxjs.util.collection.MapHelper;
 import com.ajaxjs.util.io.StreamUtil;
-import com.ajaxjs.util.map.Map2Pojo;
-import com.ajaxjs.util.map.MapHelper;
 
 /**
  * 

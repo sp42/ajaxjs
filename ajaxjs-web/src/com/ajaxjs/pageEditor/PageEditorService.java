@@ -20,12 +20,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ajaxjs.js.JsonHelper;
-import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.io.FileUtil;
+import com.ajaxjs.util.logger.LogHelper;
  
-
+/**
+ * 
+ * @author Frank Cheung frank@ajaxjs.com
+ */
 public class PageEditorService {
 	private static final LogHelper LOGGER = LogHelper.getLog(PageEditorService.class);
 	
@@ -126,16 +128,16 @@ public class PageEditorService {
 						|| strFileName.contains(".gif")
 						|| strFileName.contains(".png")) {
 
-					String el = JsonHelper.stringify_object(new Object() {
-						@SuppressWarnings("unused")
-						public Boolean isOk = true;
-						@SuppressWarnings("unused")
-						public String fileName = strFileName;
-						@SuppressWarnings("unused")
-						public String id = strFileName;
-					});
+//					String el = JsonHelper.stringify_object(new Object() {
+//						@SuppressWarnings("unused")
+//						public Boolean isOk = true;
+//						@SuppressWarnings("unused")
+//						public String fileName = strFileName;
+//						@SuppressWarnings("unused")
+//						public String id = strFileName;
+//					});
 
-					json.add(el);
+//					json.add(el);
 				}
 			}
 		}
