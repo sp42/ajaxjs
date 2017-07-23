@@ -13,8 +13,8 @@ import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.mvc.controller.CommonController;
 
 
-import test.com.ajaxjs.framework.NewsService;
 import test.com.ajaxjs.mock.News;
+import test.com.ajaxjs.mock.NewsService;
 
 @Controller
 @Path("/news")

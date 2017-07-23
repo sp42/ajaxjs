@@ -14,7 +14,7 @@ public class TestRequest extends MockRequest {
 	@BeforeClass
 	public static void init() {
 	}
-
+	// http://ip.taobao.com/service/getIpInfo.php?ip=63.223.108.42
 	@Before
 	public void setUp() {
 	}

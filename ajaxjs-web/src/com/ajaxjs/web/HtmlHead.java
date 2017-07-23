@@ -41,45 +41,52 @@ public class HtmlHead {
 	 */
 	public static String getCssUrl(ServletContext cxt, String lessPath, boolean isDebug) {
 		String css = null;
-		
+
 		if (isDebug) {// 设置参数
 			String ip = IP.getLocalIp();
-			Map<String, String> params = new HashMap<String, String>();
+			Map<String, String> params = new HashMap<>();
 			params.put("lessFile", Mappath(cxt, lessPath)); // LESS 预编译文件完整的磁盘路径
 			params.put("ns", Mappath(cxt, lessPath.replaceAll("\\/[\\w\\.]*$", ""))); // 去掉文件名，保留路径，也就是文件夹名称
 			params.put("picPath", String.format(picPath, ip, cxt.getContextPath()));// 返回 CSS 背景图所用的图片
 			params.put("MainDomain", "");
 			params.put("isdebug", "true");
 
-			css = "http://" + ip + "/lessService/?" + StringUtil.HashJoin(params, "=");
+			css = "http://" + ip + ":83/lessService/?" + StringUtil.HashJoin(params, "&");
 		} else {
 			css = cxt.getContextPath() + lessPath.replace("/less", "/css").replace(".less", ".css");
 		}
 		
 		return css;
 	}
-
 	
 	/**
-	 * Java String 有 split 却没有 join，这里实现一个
+	 * 返回样式文件
 	 * 
-	 * @param arr
-	 *            输入的字符串数组
-	 * @param join
-	 *            分隔符
-	 * @return 连接后的字符串
+	 * @param lessPath
+	 *            LESS 路径，如果 lessPath = null，表示不需要 <link href=...> 样式 
+	 * @return CSS 地址
 	 */
-	public static String stringJoin(String[] arr, String join) {
-		StringBuilder sb = new StringBuilder();
+	public static String getCssUrl(HttpServletRequest request, String lessPath, boolean isDebug) {
+		String css = null;
+		
+		if(lessPath == null) return null;
+			//lessPath = "/asset/less/main.less"; // 默认 less 路径
 
-		for (int i = 0; i < arr.length; i++) {
-			if (i == (arr.length - 1))
-				sb.append(arr[i]);
-			else
-				sb.append(arr[i]).append(join);
+		
+		if (isDebug) {// 设置参数
+			Map<String, String> params = new HashMap<String, String>();
+			params.put("lessFile", Mappath(request, lessPath));
+			params.put("ns", Mappath(request, lessPath.replaceAll("\\/[\\w\\.]*$", ""))); // 去掉文件名，保留路径，也就是文件夹名称
+			params.put("picPath", getBasePath(request) + "/asset");// 返回 CSS 背景图所用的图片
+			params.put("MainDomain", "");
+			params.put("isdebug", "true");
+			
+			css = "http://" + IP.getLocalIp() + ":83/lessService/?" + StringUtil.HashJoin(params, "&");
+		} else {
+			css = request.getContextPath() + lessPath.replace("/less", "/css").replace(".less", ".css");
 		}
-
-		return new String(sb);
+		
+		return css;
 	}
 	
 	/**
@@ -108,36 +115,6 @@ public class HtmlHead {
 	 */
 	public static String Mappath(HttpServletRequest request, String relativePath) {
 		return Mappath(request.getServletContext(), relativePath);
-	}
-	
-	/**
-	 * 返回样式文件
-	 * 
-	 * @param lessPath
-	 *            LESS 路径，如果 lessPath = null，表示不需要 <link href=...> 样式 
-	 * @return CSS 地址
-	 */
-	public static String getCssUrl(HttpServletRequest request, String lessPath, boolean isDebug) {
-		String css = null;
-		
-		if(lessPath == null) return null;
-			//lessPath = "/asset/less/main.less"; // 默认 less 路径
-
-		
-		if (isDebug) {// 设置参数
-			Map<String, String> params = new HashMap<String, String>();
-			params.put("lessFile", Mappath(request, lessPath));
-			params.put("ns", Mappath(request, lessPath.replaceAll("\\/[\\w\\.]*$", ""))); // 去掉文件名，保留路径，也就是文件夹名称
-			params.put("picPath", getBasePath(request) + "/asset");// 返回 CSS 背景图所用的图片
-			params.put("MainDomain", "");
-			params.put("isdebug", "true");
-			
-			css = "http://" + IP.getLocalIp() + "/lessService/?" + StringUtil.HashJoin(params, "=");
-		} else {
-			css = request.getContextPath() + lessPath.replace("/less", "/css").replace(".less", ".css");
-		}
-		
-		return css;
 	}
 
 	/**
