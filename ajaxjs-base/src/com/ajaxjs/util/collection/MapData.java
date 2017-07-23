@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.util.map;
+package com.ajaxjs.util.collection;
 
 import java.util.Map;
 
 /**
  * 链式调用处理 map 数据
+ * 
  * @author Frank Cheung frank@ajaxjs.com
  *
  */
@@ -45,13 +46,13 @@ public class MapData {
 	 * @return
 	 */
 	public MapData ignoreField(String ignoreField) {
-		try{
+		try {
 			if (parameterMapRaw.containsKey(ignoreField))
 				parameterMapRaw.remove(ignoreField);
-		}catch(IllegalStateException e) {
+		} catch (IllegalStateException e) {
 			// 忽略 request.getParameterMap() 原生不能删除的
 		}
-		
+
 		if (parameterMap != null && parameterMap.containsKey(ignoreField))
 			parameterMap.remove(ignoreField);
 		if (parameterMap_String != null && parameterMap_String.containsKey(ignoreField))
@@ -69,9 +70,10 @@ public class MapData {
 		parameterMap = MapHelper.asObject(getParameterMap_String(), true);
 		return this;
 	}
-	
+
 	/**
 	 * String[]-->String
+	 * 
 	 * @return
 	 */
 	public MapData toMap() {

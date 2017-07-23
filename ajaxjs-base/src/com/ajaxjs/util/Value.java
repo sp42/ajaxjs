@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.js.JsonHelper;
+import com.ajaxjs.util.collection.CollectionUtil;
 
 /**
  * 处理值的一些相关函数

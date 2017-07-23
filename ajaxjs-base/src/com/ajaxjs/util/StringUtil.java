@@ -28,6 +28,8 @@ import java.util.regex.Pattern;
 
 import javax.xml.bind.DatatypeConverter;
 
+import com.ajaxjs.util.collection.CollectionUtil;
+
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 

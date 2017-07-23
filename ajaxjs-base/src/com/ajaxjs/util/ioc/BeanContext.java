@@ -23,8 +23,8 @@ import java.util.Set;
 
 import com.ajaxjs.util.reflect.BeanUtil;
 import com.ajaxjs.util.reflect.ReflectNewInstance;
-import com.ajaxjs.util.CollectionUtil;
 import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.collection.CollectionUtil;
 
 /**
  * IOC 管理器，单例

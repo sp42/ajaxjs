@@ -26,8 +26,8 @@ import java.net.UnknownHostException;
 import java.util.zip.GZIPInputStream;
 
 import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.collection.MapHelper;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.map.MapHelper;
 
 /**
  * 

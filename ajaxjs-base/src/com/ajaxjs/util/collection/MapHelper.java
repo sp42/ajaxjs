@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.util.map;
+package com.ajaxjs.util.collection;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.ajaxjs.util.CollectionUtil;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.Value;
 
