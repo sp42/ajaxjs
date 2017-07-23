@@ -17,10 +17,10 @@ public class TestFileUtil {
 		new FileUtil().setFilePath(fullpath).setOverwrite(true).setContent("hihi").save().close();
 		// read
 		String result = new FileUtil().setFilePath(fullpath).read().byteStream2stringStream().close().getContent();
-		
+
 		System.out.println(result);
 		assertTrue(result.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"));
-		
+
 		// delete
 		new FileUtil().setFilePath(fullpath).delete();
 	}

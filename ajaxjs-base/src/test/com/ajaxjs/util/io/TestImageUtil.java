@@ -1,11 +1,7 @@
 package test.com.ajaxjs.util.io;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
-
 import org.junit.Test;
-
 import com.ajaxjs.util.io.ImageUtil;
 
 public class TestImageUtil {
@@ -27,12 +23,6 @@ public class TestImageUtil {
 	@Test
 	public void 水印图片() {
 		new ImageUtil().setFilePath("c://temp//XMM.jpg").mark(new File("c://temp//watermark.jpg")).save();
-
 	}
 
-	@Test
-	public void 截屏() {
-		// Image.webscreenCut("c://temp//webscreenCut.jpg");
-		assertNotNull(true);
-	}
 }
