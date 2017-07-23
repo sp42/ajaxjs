@@ -67,7 +67,7 @@ public class MvcDispatcher implements Filter {
 			String str = config.get("controller");
 
 			ClassScaner<IController> scaner = new ClassScaner<>(IController.class);// 定义一个扫描器，专门扫描 IController
-			
+	 
 			for (String packageName : StringUtil.split(str)) {
 				for (Class<IController> clz : scaner.scan(packageName)) {
 					LOGGER.info("正在初始化控制器：{0}", clz.getName());
@@ -221,13 +221,18 @@ public class MvcDispatcher implements Filter {
 	}
 
 	/**
-	 * 一般一个请求希望返回一个页面，这时就需要控制器返回一个模板渲染输出了。
-	 * 中间执行逻辑完成，最后就是控制输出（响应）
-	 * 可以跳转也可以输出模板渲染器（即使是 json 都是 模板渲染器 ） 
-	 * @param result 模板路径是指页面模板（比如 jsp，velocity模板等）的目录文件名
+	 * 一般一个请求希望返回一个页面，这时就需要控制器返回一个模板渲染输出了。 中间执行逻辑完成，最后就是控制输出（响应）
+	 * 可以跳转也可以输出模板渲染器（即使是 json 都是 模板渲染器 ）
+	 * 
+	 * @param result
+	 *            模板路径是指页面模板（比如 jsp，velocity模板等）的目录文件名
 	 * @param request
+	 *            请求对象
 	 * @param response
-	 * @param model 所有渲染数据都要放到一个 model 对象中（本质 是 map或者 bean），这样使用者就可以在模板内用  Map 对象的 key/getter 获取到对应的数据。
+	 *            响应对象
+	 * @param model
+	 *            所有渲染数据都要放到一个 model 对象中（本质 是 map或者 bean），这样使用者就可以在模板内用 Map 对象的
+	 *            key/getter 获取到对应的数据。
 	 */
 	private static void resultHandler(Object result, MvcRequest request, HttpServletResponse response, ModelAndView model) {
 		if (model != null)
@@ -245,7 +250,6 @@ public class MvcDispatcher implements Filter {
 					
 				} else if (str.startsWith("json::")) {
 					String jsonpToken = request.getParameter(MvcRequest.callback_param); // 由参数决定是否使用 jsonp
-					System.out.println("callback:" + jsonpToken);
 					
 					if (StringUtil.isEmptyString(jsonpToken)) {
 						o.setJson(true).setOutput(str.replace("json::", "")).go();
@@ -291,7 +295,11 @@ public class MvcDispatcher implements Filter {
 				Map<String, Object> map = request.getMethod().equals("PUT") 
 						? request.getPutRequestData()
 						: MapHelper.asObject(MapHelper.toMap(request.getParameterMap()), true);
+
 				args.add(map);
+				
+				if(map.size() == 0)
+					LOGGER.info("没有任何请求数据，但控制器方法期望至少一个参数来构成 map。");
 			} else if (clazz.equals(ModelAndView.class)) {
 				args.add(new ModelAndView()); // 新建 ModeView 对象
 			} else if (BaseModel.class.isAssignableFrom(clazz)) {		

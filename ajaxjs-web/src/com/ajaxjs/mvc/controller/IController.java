@@ -29,6 +29,12 @@ public interface IController {
 	 */
 	public static final String common_jsp_perfix = "/common_jsp/json/";
 	
+
+	/**
+	 * json 模版
+	 */
+	public final static String jsonMsg = "json::{\"isOk\":%s,\"msg\":\"%s\"}";
+	
 	public static final String json_not_ok_simple = "json::{\"isOk\": false}";
 	
 	public static final String json_not_ok = "json::{\"isOk\": false, \"msg\" : \"%s\"}";

@@ -31,22 +31,34 @@ public class RequestHelper {
 	private static ThreadLocal<HttpServletRequest> threadLocalRequest = new ThreadLocal<>();
 	private static ThreadLocal<HttpServletResponse> threadLocalResponse = new ThreadLocal<>();
 
-	public static void setHttpServletRequest(HttpServletRequest req) {
-		threadLocalRequest.set(req);
+	/**
+	 * 保存一个 request 对象
+	 * @param request request 对象
+	 */	
+	public static void setHttpServletRequest(HttpServletRequest request) {
+		threadLocalRequest.set(request);
 	}
 
 	public static HttpServletRequest getHttpServletRequest() {
-		HttpServletRequest req = threadLocalRequest.get();
-		if (req == null)
+		HttpServletRequest request = threadLocalRequest.get();
+		if (request == null)
 			throw new RuntimeException("请求对象未初始化");
 
-		return req;
+		return request;
 	}
 
-	public static void setHttpServletResponse(HttpServletResponse resp) {
-		threadLocalResponse.set(resp);
+	/**
+	 * 保存一个 response 对象
+	 * @param response response 对象
+	 */
+	public static void setHttpServletResponse(HttpServletResponse response) {
+		threadLocalResponse.set(response);
 	}
 
+	/**
+	 * 获取上下文中 response 对象
+	 * @return response 对象
+	 */
 	public static HttpServletResponse getHttpServletResponse() {
 		HttpServletResponse resp = threadLocalResponse.get();
 		if (resp == null)
@@ -55,6 +67,9 @@ public class RequestHelper {
 		return resp;
 	}
 
+	/**
+	 * 清空 request 和 response
+	 */
 	public static void clean() {
 		threadLocalRequest.set(null);
 		threadLocalResponse.set(null);

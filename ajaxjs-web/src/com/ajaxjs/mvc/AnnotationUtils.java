@@ -41,9 +41,7 @@ import com.ajaxjs.util.reflect.ReflectNewInstance;
 
 /**
  * 扫描注解的工具类
- * 
- * @author frank
- *
+ * @author Frank Cheung frank@ajaxjs.com
  */
 public class AnnotationUtils {
 	private static final LogHelper LOGGER = LogHelper.getLog(AnnotationUtils.class);
@@ -55,11 +53,13 @@ public class AnnotationUtils {
 
 	/**
 	 * 从指定的包里面扫描 IController 的功能（扫描路径在 web.xml 里配）
+	 * 
 	 * @param clz
+	 *            待被检测的类
 	 */
 	public static void scan(Class<? extends IController> clz) {
 		if (clz.getAnnotation(Controller.class) == null) {// 获取注解对象
-			LOGGER.warning("此非控制器！要我处理干甚！？This is NOT a Controller!");
+			LOGGER.warning("此非控制器！要我处理干甚！？This is NOT a Controller! 类：" + clz.getName());
 			return;
 		} 
 		
@@ -115,8 +115,11 @@ public class AnnotationUtils {
 
 	/**
 	 * HTTP 方法对号入座，什么方法就进入到什么属性中保存起来。
+	 * 
 	 * @param method
+	 *            控制器方法
 	 * @param cInfo
+	 *            ActionAndView
 	 */
 	private static void methodSend(Method method, ActionAndView cInfo) {
 		if (method.getAnnotation(GET.class) != null) {
@@ -132,9 +135,12 @@ public class AnnotationUtils {
 	
 	/**
 	 * 扫描某个包下面类
+	 * 
 	 * @param packageName
+	 *            包名称
 	 * @param targetClz
-	 * @return
+	 *            目标类
+	 * @return 符合条件的类
 	 */
 	public static <T> List<Class<T>> scanController(String packageName, Class<T> targetClz) {
 		List<Class<T>> clz = new ArrayList<>();
@@ -142,6 +148,7 @@ public class AnnotationUtils {
 		Enumeration<URL> dirs = null;
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		String packageDirName = packageName.replace('.', '/').trim();// 将包名转换为文件路径
+		
 		try {
 			dirs = classLoader.getResources(packageDirName);
 		} catch (IOException e) {
@@ -165,9 +172,13 @@ public class AnnotationUtils {
 	/**
 	 * 
 	 * @param packageName
+	 *            包名称
 	 * @param filePath
+	 *            文件路径
 	 * @param clz
+	 *            类
 	 * @param targetClz
+	 *            目标类
 	 */
 	@SuppressWarnings("unchecked")
 	private static <T> void findAndAddClassesInPackageByFile(String packageName, String filePath, List<Class<T>> clz, Class<T> targetClz) {
@@ -206,14 +217,17 @@ public class AnnotationUtils {
 
 	/**
 	 * 判断传入的类是否一个控制器，是的话返回 true，否则为 false。
-	 * @param clazz 类
-	 * @return
+	 * 
+	 * @param clazz
+	 *            类
+	 * @return 是否 IController 类
 	 */
 	private static boolean isController(Class<?> clazz) {
 		for (Class<?> clz : clazz.getInterfaces()) {
 			if (clz == IController.class)
 				return true;
 		}
+		
 		return false;
 	}
 }

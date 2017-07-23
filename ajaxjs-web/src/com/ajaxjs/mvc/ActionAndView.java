@@ -23,8 +23,7 @@ import com.ajaxjs.mvc.controller.IController;
 
 /**
  * 控制器的缓存
- * @author frank
- *
+ * @author Frank Cheung frank@ajaxjs.com
  */
 public class ActionAndView {
 	public IController controller;

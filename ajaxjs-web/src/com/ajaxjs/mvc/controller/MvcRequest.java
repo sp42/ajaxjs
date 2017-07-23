@@ -172,23 +172,28 @@ public class MvcRequest extends HttpServletRequestWrapper {
 		}
 	}
 	
+	/**
+	 * 获取请求 ip
+	 * @param request
+	 * @return 客户端 ip
+	 */
 	public static String getIp(HttpServletRequest request) {
-        String ip = request.getHeader("X-Forwarded-For");
-        if(!"unKnown".equalsIgnoreCase(ip)){
-            // 多次反向代理后会有多个ip值，第一个ip才是真实ip
-            int index = ip.indexOf(",");
-            
-            if(index != -1){
-                return ip.substring(0,index);
-            }else{
-                return ip;
-            }
-        }
-        
-        ip = request.getHeader("X-Real-IP");
-        if(!"unKnown".equalsIgnoreCase(ip))
-            return ip;
-        
-        return request.getRemoteAddr();
-    }
+		String ip = request.getHeader("X-Forwarded-For");
+		
+		if (!"unKnown".equalsIgnoreCase(ip)) {
+			// 多次反向代理后会有多个 ip 值，第一个 ip 才是真实 ip
+			int index = ip.indexOf(",");
+
+			if (index != -1) 
+				ip = ip.substring(0, index);
+		}
+
+		ip = request.getHeader("X-Real-IP");
+		if (!"unKnown".equalsIgnoreCase(ip))
+			return ip;
+		
+		ip = request.getRemoteAddr();
+
+		return ip;
+	}
 }

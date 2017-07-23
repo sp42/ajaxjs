@@ -298,6 +298,23 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 		return common_jsp_perfix + "delete.jsp";
 	}
 
+	/**
+	 * 返回信息到客户端（JSON 格式）
+	 * 
+	 * @param isOk
+	 *            操作是否成功
+	 * @param msg
+	 *            信息
+	 * @return
+	 */
+	public static String showJsonMsg(boolean isOk, String msg) {
+		return String.format(jsonMsg, isOk, msg);
+	}
+
+	public static String show405() {
+		return showJsonMsg(false, "405， Request method not supported 禁止操作");
+	}
+	
 	public IService<T, ID> getService() {
 		if (service == null)
 			throw new NullPointerException("没有业务层对象！");
