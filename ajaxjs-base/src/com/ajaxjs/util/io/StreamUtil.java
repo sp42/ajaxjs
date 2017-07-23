@@ -18,9 +18,7 @@ package com.ajaxjs.util.io;
 /**
  * 因为泛型的缘故，不好直接使用 Stream，故特提供该类
  * 
- * @author xinzhang
- *
+ * @author Frank Cheung frank@ajaxjs.com
  */
 public class StreamUtil extends StreamChain<StreamUtil> {
-
 }

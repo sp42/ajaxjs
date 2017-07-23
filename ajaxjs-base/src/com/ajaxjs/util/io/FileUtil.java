@@ -30,6 +30,12 @@ import com.ajaxjs.util.DateTools;
 import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 
+/**
+ * 文件工具类。
+ * 可返回本实例供链式调用
+ * 
+ * @author Frank Cheung frank@ajaxjs.com
+ */
 public class FileUtil extends StreamChain<FileUtil> {
 	private static final LogHelper LOGGER = LogHelper.getLog(FileUtil.class);
 	
@@ -39,6 +45,10 @@ public class FileUtil extends StreamChain<FileUtil> {
 
 	private boolean overwrite;
 
+	/**
+	 * 读取文件内容
+	 * @return
+	 */
 	public FileUtil read() {
 		try {
 			if (!file.exists())
@@ -65,7 +75,7 @@ public class FileUtil extends StreamChain<FileUtil> {
 	 * 
 	 * @param off
 	 * @param len
-	 * @return
+	 * @return 返回本实例供链式调用
 	 */
 	public FileUtil save(int off, int len) {
 		OutputStream out = null;
@@ -91,7 +101,7 @@ public class FileUtil extends StreamChain<FileUtil> {
 	 * 写文件不能用 FileWriter，原因是会中文乱码
 	 * @param content
 	 *            文件内容，文本
-	 * @return
+	 * @return 返回本实例供链式调用
 	 */
 	public FileUtil save() {
 		OutputStream out = null;
@@ -124,12 +134,10 @@ public class FileUtil extends StreamChain<FileUtil> {
 	public String[] getFiles() {
 		return file.isDirectory() ? file.list() : null;
 	}
-	
+		
 	/**
-	 * 删除文件
-	 * 
-	 * @param filename
-	 *            文件名
+	 * 复制文件
+	 * @return 返回本实例供链式调用
 	 */
 	public FileUtil copyTo() {
 		file.delete();
@@ -137,10 +145,8 @@ public class FileUtil extends StreamChain<FileUtil> {
 	}
 
 	/**
-	 * 删除文件
-	 * 
-	 * @param filename
-	 *            文件名
+	 * 移动文件
+	 * @return 返回本实例供链式调用
 	 */
 	public FileUtil moveTo() {
 		file.delete();
@@ -149,6 +155,7 @@ public class FileUtil extends StreamChain<FileUtil> {
 
 	/**
 	 * 删除文件
+	 * @return 返回本实例供链式调用
 	 */
 	public FileUtil delete() {
 		file.delete();

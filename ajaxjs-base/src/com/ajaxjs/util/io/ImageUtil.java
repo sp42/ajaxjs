@@ -39,6 +39,7 @@ import com.ajaxjs.util.LogHelper;
 /**
  * 图片处理工具
  * 
+ * @author Frank Cheung frank@ajaxjs.com
  */
 public class ImageUtil extends FileUtil {
 	private static final LogHelper LOGGER = LogHelper.getLog(ImageUtil.class);
@@ -71,8 +72,7 @@ public class ImageUtil extends FileUtil {
 
 	/**
 	 * 保存图片 TODO 其实可以考虑使用 bufferedWrite(InputStream is, OutputStream out) 保存的
-	 * 《使用ImageIO.write存储png格式图片性能较差问题》http://zhang-xzhi-xjtu.iteye.com/blog/
-	 * 1328084
+	 * 《使用ImageIO.write存储png格式图片性能较差问题》http://zhang-xzhi-xjtu.iteye.com/blog/1328084
 	 */
 	public ImageUtil save() {
 		try {

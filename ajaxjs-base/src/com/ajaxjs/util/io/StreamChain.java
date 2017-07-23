@@ -28,13 +28,14 @@ import com.ajaxjs.util.LogHelper;
 
 /**
  * 抽象的流链式处理器
- * @author frank
- *
+ * 
+ * @author Frank Cheung frank@ajaxjs.com
  * @param <T>
+ *            该泛型是子类，以便实现链式调用
  */
 public abstract class StreamChain<T> {
 	private static final LogHelper LOGGER = LogHelper.getLog(StreamChain.class);
-	
+
 	/**
 	 * 输入流
 	 */
@@ -44,7 +45,7 @@ public abstract class StreamChain<T> {
 	 * 输出流
 	 */
 	private OutputStream out;
-	
+
 	/**
 	 * 字节数组
 	 */
@@ -54,19 +55,21 @@ public abstract class StreamChain<T> {
 	 * 文本内容
 	 */
 	private String content;
-	
+
 	/**
 	 * 输出流转换到字节数组
-	 * @return
+	 * 
+	 * @return 返回本实例供链式调用
 	 */
 	@SuppressWarnings("unchecked")
 	public T output2byte() {
 		return (T) this;
 	}
-	
+
 	/**
 	 * 输出流写入字节数据
-	 * @return
+	 * 
+	 * @return 返回本实例供链式调用
 	 */
 	@SuppressWarnings("unchecked")
 	public T outputWriteData() {
@@ -77,13 +80,14 @@ public abstract class StreamChain<T> {
 			LOGGER.warning(e);
 			return null;
 		}
+
 		return (T) this;
 	}
 
 	/**
 	 * 读输入的字节流转换到字符流，将其转换为文本（多行）的字节流转换为字符串
 	 * 
-	 * @return StreamChain
+	 * @return 返回本实例供链式调用
 	 */
 	@SuppressWarnings("unchecked")
 	public T byteStream2stringStream() {
@@ -114,7 +118,7 @@ public abstract class StreamChain<T> {
 
 		return (T) this;
 	}
-	
+
 	/**
 	 * 两端速度不匹配，需要协调 理想环境下，速度一样快，那就没必要搞流，直接一坨给弄过去就可以了 流的意思很形象，就是一点一滴的，不是一坨坨大批量的
 	 * 带缓冲的一入一出 出是字节流，所以要缓冲（字符流自带缓冲，所以不需要额外缓冲） 请注意，改方法不会关闭流 close，你需要手动关闭
@@ -128,7 +132,7 @@ public abstract class StreamChain<T> {
 	 * @return 是否成功
 	 */
 	static final int bufferSize = 1024; // 1K 的数据块
-	
+
 	@SuppressWarnings("unchecked")
 	public T write(boolean isBuffer) {
 		InputStream in = getIn();
@@ -144,40 +148,44 @@ public abstract class StreamChain<T> {
 					}
 				}
 			} else {
-//				readSize = in.read(buffer, 0, bufferSize);
-				
-				while ((readSize = in.read(buffer, 0, bufferSize))!= -1) {
+				// readSize = in.read(buffer, 0, bufferSize);
+
+				while ((readSize = in.read(buffer, 0, bufferSize)) != -1) {
 					out.write(buffer, 0, readSize);
-//					readSize = in.read(buffer, 0, bufferSize);
+					// readSize = in.read(buffer, 0, bufferSize);
 				}
 				out.flush();
 			}
 		} catch (IOException e) {
 			LOGGER.warning(e);
 		}
-		
+
 		return (T) this;
 	}
 
 	/**
-	 * InputStream 转换到 byte[].
-	 * 从输入流中获取数据， 转换到 byte[] 也就是 in 转到内存 虽然大家可能都在内存里面了但还不能直接使用，要转换
+	 * InputStream 转换到 byte[]. 从输入流中获取数据， 转换到 byte[] 也就是 in
+	 * 转到内存。虽然大家可能都在内存里面了但还不能直接使用，要转换
+	 * 
+	 * @return 返回本实例供链式调用
+	 * @throws IOException
 	 */
 	@SuppressWarnings("unchecked")
 	public T inputStream2Byte() throws IOException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();// 使用内存操作流，读取二进制
 		setOut(out);
 		write(true);
-		
+
 		setData(out.toByteArray());
 		return (T) this;
 	}
-	
+
 	/**
 	 * 送入 byte[] 转换为输出流。可指定 byte[] 某一部分数据
+	 * 
 	 * @param off
 	 * @param length
-	 * @return
+	 * @return 返回本实例供链式调用
 	 */
 	@SuppressWarnings("unchecked")
 	public T stringStream2output(int off, int length) {
@@ -193,17 +201,23 @@ public abstract class StreamChain<T> {
 
 		return (T) this;
 	}
-	
+
 	/**
 	 * 送入 byte[] 转换为输出流。送入的 byte[] 是全部
+	 * 
 	 * @param off
 	 * @param length
-	 * @return
+	 * @return 返回本实例供链式调用
 	 */
 	public T stringStream2output() {
 		return stringStream2output(0, 0);
 	}
 
+	/**
+	 * 关闭流，包含 in 和 out。
+	 * 
+	 * @return 返回本实例供链式调用
+	 */
 	@SuppressWarnings("unchecked")
 	public T close() {
 		try {
@@ -214,20 +228,25 @@ public abstract class StreamChain<T> {
 		} catch (IOException e) {
 			LOGGER.warning(e);
 		}
-		
+
 		return (T) this;
 	}
 
 	/**
-	 * @return the in
+	 * 获取输入流
+	 * 
+	 * @return 输入流
 	 */
 	public InputStream getIn() {
 		return in;
 	}
 
 	/**
+	 * 设置输入流
+	 * 
 	 * @param in
-	 *            the in to set
+	 *            输入流
+	 * @return 返回本实例供链式调用
 	 */
 	@SuppressWarnings("unchecked")
 	public T setIn(InputStream in) {
@@ -236,32 +255,42 @@ public abstract class StreamChain<T> {
 	}
 
 	/**
-	 * @return the out
+	 * 获取输出流
+	 * 
+	 * @return 输出流
 	 */
 	public OutputStream getOut() {
 		return out;
 	}
 
 	/**
+	 * 保存输出流
+	 * 
 	 * @param out
-	 *            the out to set
+	 *            输出流
+	 * @return 返回本实例供链式调用
 	 */
 	@SuppressWarnings("unchecked")
 	public T setOut(OutputStream out) {
 		this.out = out;
-		return (T)this;
+		return (T) this;
 	}
 
 	/**
-	 * @return the data
+	 * 获取文件字节数据
+	 * 
+	 * @return 文件字节数据
 	 */
 	public byte[] getData() {
 		return data;
 	}
 
 	/**
+	 * 设置文件字节数据
+	 * 
 	 * @param data
-	 *            the data to set
+	 *            文件字节数据
+	 * @return 返回本实例供链式调用
 	 */
 	@SuppressWarnings("unchecked")
 	public T setData(byte[] data) {
@@ -270,6 +299,8 @@ public abstract class StreamChain<T> {
 	}
 
 	/**
+	 * 获取文本内容
+	 * 
 	 * @return 文本内容
 	 */
 	public String getContent() {
@@ -277,12 +308,15 @@ public abstract class StreamChain<T> {
 	}
 
 	/**
+	 * 设置文本内容
+	 * 
 	 * @param content
 	 *            文本内容
+	 * @return 返回本实例供链式调用
 	 */
 	@SuppressWarnings("unchecked")
 	public T setContent(String content) {
 		this.content = content;
-		return (T)this;
+		return (T) this;
 	}
 }
