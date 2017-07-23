@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.ajaxjs.util.LogHelper;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 反射工具类（方法）

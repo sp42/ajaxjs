@@ -20,8 +20,8 @@ import java.util.Map;
 
 import com.ajaxjs.framework.model.Query;
 import com.ajaxjs.framework.model.Query.*;
-import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 动态的 SqlBuilder

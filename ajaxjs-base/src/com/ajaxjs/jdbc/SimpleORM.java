@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.jdbc.sqlbuilder.CommonSQL;
-import com.ajaxjs.util.LogHelper;
+import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.Map2Pojo;
 import com.ajaxjs.util.reflect.Reflect;
 

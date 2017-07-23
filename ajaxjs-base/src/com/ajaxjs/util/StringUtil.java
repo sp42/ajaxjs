@@ -23,13 +23,10 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.xml.bind.DatatypeConverter;
-
-import com.ajaxjs.util.map.MapHelper;
 
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
@@ -107,32 +104,6 @@ public class StringUtil {
 	}
 
 	/**
-	 * 也是 join，不过输入的参数不是数组而是 hash
-	 * 
-	 * @param map
-	 *            输入的 map
-	 * @param div
-	 *            分隔符
-	 * @return 连接后的字符串
-	 */
-	public static String HashJoin(Map<String, String> map, String div) {
-		return MapHelper.join(map, div);
-	}
-
-	/**
-	 * 重载版本
-	 * 
-	 * @param map
-	 *            输入的 map
-	 * @param div
-	 *            分隔符
-	 * @return 连接后的字符串
-	 */
-	public static String HashJoin(Map<String, String> map, char div) {
-		return MapHelper.join(map, div + "");
-	}
-
-	/**
 	 * 重复字符串 repeat 次并以 div 分隔
 	 * 
 	 * @param str
@@ -157,7 +128,7 @@ public class StringUtil {
 	}
 
 	/**
-	 * 输入 a，看是否包含另一个字符串 b，忽略大小写。
+	 * 输入 a，看 a 里面是否包含另一个字符串 b，忽略大小写。
 	 * 
 	 * @param a
 	 *            输入字符串 a
@@ -168,7 +139,6 @@ public class StringUtil {
 	public static boolean containsIgnoreCase(String a, String b) {
 		return a.toLowerCase().contains(b.toLowerCase());
 	}
-
 	
 	/**
 	 * 使用正则的快捷方式
@@ -314,41 +284,5 @@ public class StringUtil {
 		}
 
 		return DatatypeConverter.printHexBinary(b);
-	}
-	
-	/**
-	 * 获取一个唯一的主键 id 的代码
-	 * 
-	 * @return UUID
-	 */
-	public static String getUUID() {
-		return java.util.UUID.randomUUID().toString();
-	}
-
-	/**
-	 * 去掉“-”符号
-	 * 
-	 * @param uuid
-	 *            UUID 字符串
-	 * @return 字符串
-	 */
-	public static String remove(String uuid) {
-		return uuid.substring(0, 8) + uuid.substring(9, 13) + uuid.substring(14, 18) + uuid.substring(19, 23) + uuid.substring(24);
-	}
-
-	/**
-	 * 是否 uuid 的正则表达式
-	 */
-	private static final String uuid_regExp = "[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}";
-
-	/**
-	 * 判断输入的字符串是否包含 uuid 特征。
-	 * 
-	 * @param uuid
-	 *            输入的字符串
-	 * @return true 为 UUID
-	 */
-	public static boolean isUUID(String uuid) {
-		return regMatch(uuid_regExp, uuid) != null;
 	}
 }

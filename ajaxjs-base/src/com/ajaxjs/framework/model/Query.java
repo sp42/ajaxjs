@@ -15,8 +15,8 @@ package com.ajaxjs.framework.model;
 import java.util.HashMap;
 import java.util.Map;
 
- import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 查询时特地需求的容器，可包含特定的对象进行查询，通过 getter/setter 注入。 特定的对象一般为 Map 结果。最后转化为 SQL 字符串。

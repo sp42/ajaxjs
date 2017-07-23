@@ -19,7 +19,7 @@ import java.util.Map;
 
 /**
  * 链式调用处理 map 数据
- * @author sp42
+ * @author Frank Cheung frank@ajaxjs.com
  *
  */
 public class MapData {

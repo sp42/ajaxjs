@@ -23,8 +23,8 @@ import java.util.Enumeration;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 扫描器，参考了 Spring 实现

@@ -25,7 +25,7 @@ import com.ajaxjs.util.Value;
 /**
  * 自定义 Map 类，加入更多实用的功能
  * 
- * @author Frank Cheung
+ * @author Frank Cheung frank@ajaxjs.com
  */
 public class MapHelper {
 	/**

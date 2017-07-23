@@ -27,9 +27,9 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.io.StreamUtil;
+import com.ajaxjs.util.logger.LogHelper;
 
 public class Client extends Connection<Client> {
 	private static final LogHelper LOGGER = LogHelper.getLog(Client.class);

@@ -25,13 +25,13 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.zip.GZIPInputStream;
 
-import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
-
+import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.map.MapHelper;
 
 /**
  * 
- * @author frank
+ * @author Frank Cheung frank@ajaxjs.com
  *
  * @param <T>
  */
@@ -195,7 +195,7 @@ public class Connection<T> extends Request<T> {
 		// connection.setReadTimeout(30000);
 
 		if (getCookies() != null) {
-			String cookieStr = StringUtil.HashJoin(getCookies(), ";");
+			String cookieStr = MapHelper.join(getCookies(), ";");
 			connection.setRequestProperty("Cookie", cookieStr);
 		}
 		

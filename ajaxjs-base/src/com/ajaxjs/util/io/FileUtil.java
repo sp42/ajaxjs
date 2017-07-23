@@ -27,8 +27,8 @@ import java.nio.charset.StandardCharsets;
 import javax.activation.MimetypesFileTypeMap;
 
 import com.ajaxjs.util.DateTools;
-import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 文件工具类。

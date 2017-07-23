@@ -18,7 +18,7 @@ package com.ajaxjs.util.reflect;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import com.ajaxjs.util.LogHelper;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 创建新实例的工具方法

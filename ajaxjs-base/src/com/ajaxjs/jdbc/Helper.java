@@ -27,8 +27,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 数据库工具类，跟具体业务无关
