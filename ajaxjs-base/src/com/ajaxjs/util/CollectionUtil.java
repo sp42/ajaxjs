@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Frank Cheung
+ * Copyright Frank Cheung frank@ajaxjs.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,37 @@ import java.util.Map;
 
 /**
  * 集合工具类
- * @author xinzhang
+ * 
+ * @author Frank Cheung frank@ajaxjs.com
  *
  */
 public class CollectionUtil {
+	/**
+	 * 当它们每一个都是数字的字符串形式，转换为整形的数组 '["1", "2", ...]' --> [1, 2, ...]
+	 * 
+	 * @param value
+	 *            输入字符串
+	 * @param diver
+	 *            分隔符
+	 * @return 整形数组
+	 */
+	public static int[] strArr2intArr(String value, String diver) {
+		String[] strArr = value.split(diver);
+		int[] intArr = new int[strArr.length];
+
+		for (int i = 0; i < strArr.length; i++)
+			intArr[i] = Integer.parseInt(strArr[i].trim());
+
+		return intArr;
+	}
+
+	/**
+	 * 整形数组转换为字符数组 [1, 2, ...] --> '["1", "2", ...]'
+	 * 
+	 * @param arr
+	 *            输入的整形数组
+	 * @return 字符数组
+	 */
 	public static String[] int_arr2string_arr(int[] arr) {
 		String[] strs = new String[arr.length];
 
@@ -34,14 +61,33 @@ public class CollectionUtil {
 		return strs;
 	}
 
+	/**
+	 * List<String> 转换为字符串数组／数组效的话率更高一些
+	 * 
+	 * @param list
+	 *            字符串列表
+	 * @return 字符串数组
+	 */
 	public static String[] stringList2arr(List<String> list) {
 		return list.toArray(new String[list.size()]);
 	}
 
+	/**
+	 * List<Integer> 转换为数组。数组的话效率更高一些
+	 * 
+	 * @param list
+	 *            整形列表
+	 * @return 整形数组
+	 */
 	public static Integer[] integerList2integer_arr(List<Integer> list) {
 		return list.toArray(new Integer[list.size()]);
 	}
 
+	/**
+	 * 
+	 * @param list
+	 * @return
+	 */
 	public static int[] integerList2arr(List<Integer> list) {
 		int[] arr = new int[list.size()];
 
@@ -82,24 +128,6 @@ public class CollectionUtil {
 	 */
 	public static boolean isNotNull(Map<?, ?> map) {
 		return map != null && !map.isEmpty();
-	}
-
-	
-	/** 
-	 * 当它们每一个都是数字的字符串形式，转换为数组
-	 * '["1", "2", ...]' --> [1, 2, ...]
-	 * @param value
-	 * @param diver
-	 * @return
-	 */
-	public static int[] strArr2intArr(String value, String diver) {
-		String[] strArr = value.split(diver);
-		int[] intArr = new int[strArr.length];
-		
-		for (int i = 0; i < strArr.length; i++) 
-			intArr[i] = Integer.parseInt(strArr[i].trim());
-		
-		return intArr;
 	}
 
 }

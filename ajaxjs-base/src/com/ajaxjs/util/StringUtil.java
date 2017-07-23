@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Frank Cheung
+ * Copyright Frank Cheung frank@ajaxjs.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ import sun.misc.BASE64Encoder;
 /**
  * 字符串相关的工具类
  * 
- * @author frank
+ * @author Frank Cheung frank@ajaxjs.com
  *
  */
 public class StringUtil {

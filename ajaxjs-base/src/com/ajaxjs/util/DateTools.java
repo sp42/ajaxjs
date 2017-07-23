@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
  * 日期工具类 <% request.setAttribute("fn", new Util()); %>
  * ${fn.shortDate_YYYY_MM_DD(current.createDate)}
  * 
- * @author frank
+ * @author Frank Cheung frank@ajaxjs.com
  *
  */
 public class DateTools {
@@ -112,16 +112,18 @@ public class DateTools {
 	 * SimpleDateFormat caches
 	 */
 	private final static Map<String, SimpleDateFormat> formaters = new ConcurrentHashMap<>();
-	
+
 	/**
 	 * 返回 SimpleDateFormat 的工厂函数
+	 * 
 	 * @param format
-	 * @return
+	 *            日期格式
+	 * @return 格式日期的对象
 	 */
 	private static SimpleDateFormat SimpleDateFormatFactory(String format) {
-		if (!formaters.containsValue(format)) 
+		if (!formaters.containsValue(format))
 			formaters.put(format, new SimpleDateFormat(format));
-		
+
 		return formaters.get(format);
 	}
 
@@ -144,52 +146,52 @@ public class DateTools {
 				return null;
 			}
 		}
-	} 
-	
+	}
+
 	private final static Pattern pattern = Pattern.compile("((19|20)[0-9]{2})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01]) "
-			+ "([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]");
+					+ "([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]");
 
 	private final static Pattern pattern2 = Pattern.compile("((19|20)[0-9]{2})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])");
 
-    /**
-     * 支持任意对象转换为日期类型
-     * 
-     * @param obj
-     *            任意对象
-     * @return 日期类型对象，null 表示为转换失败
-     */
-    public static Date Objet2Date(Object obj) {
-	Date date = null;
+	/**
+	 * 支持任意对象转换为日期类型
+	 * 
+	 * @param obj
+	 *            任意对象
+	 * @return 日期类型对象，null 表示为转换失败
+	 */
+	public static Date Objet2Date(Object obj) {
+		Date date = null;
 
-	if (obj == null)
-	    return null;
-	else if (obj instanceof Date)
-	    return (Date) obj;
-	else if (obj instanceof Number) {
-	    if (obj instanceof Integer) {
-		long times = Long.parseLong(obj + "000"); /* 10 位长 int，后面补充三个零为13位 long 时间戳 */
-		date = new Date(times);
-	    } else {
-		date = new Date((long) obj);
-	    }
-	} else if (obj instanceof String) {
-	    Matcher matcher = pattern.matcher(obj.toString());
-	    if (matcher.matches()) {
-		date = string2date(obj.toString());
-	    } else {
-		if (pattern2.matcher(obj.toString()).matches()) {// 可能是这种格式
-								 // 2016-08-18
-		    date = string2date(obj.toString());
-		} else
-		    System.err.println("非法字符串日期" + obj);
-	    }
-	} else if (obj instanceof java.sql.Timestamp) {
-	    long time = ((java.sql.Timestamp) obj).getTime();
-	    date = new Date(time);
-	} else {
-	    System.err.println("不能识别类型，不能转为日期。传入参数为：" + obj);
+		if (obj == null)
+			return null;
+		else if (obj instanceof Date)
+			return (Date) obj;
+		else if (obj instanceof Number) {
+			if (obj instanceof Integer) {
+				long times = Long.parseLong(obj + "000"); /* 10 位长 int，后面补充三个零为13位 long 时间戳 */
+				date = new Date(times);
+			} else {
+				date = new Date((long) obj);
+			}
+		} else if (obj instanceof String) {
+			Matcher matcher = pattern.matcher(obj.toString());
+			if (matcher.matches()) {
+				date = string2date(obj.toString());
+			} else {
+				if (pattern2.matcher(obj.toString()).matches()) {// 可能是这种格式
+					// 2016-08-18
+					date = string2date(obj.toString());
+				} else
+					System.err.println("非法字符串日期" + obj);
+			}
+		} else if (obj instanceof java.sql.Timestamp) {
+			long time = ((java.sql.Timestamp) obj).getTime();
+			date = new Date(time);
+		} else {
+			System.err.println("不能识别类型，不能转为日期。传入参数为：" + obj);
+		}
+
+		return date;
 	}
-
-	return date;
-    }
 }
