@@ -333,6 +333,7 @@ public class ImageUtil extends FileUtil {
 	public ImageUtil setFilePath(String filePath) {
 		super.setFilePath(filePath);
 		setFile(getFile()); // 同时设 File 对象，但有点多余
+		
 		return this;
 	}
 
@@ -346,6 +347,7 @@ public class ImageUtil extends FileUtil {
 			LOGGER.warning(e);
 			return null;
 		}
+		
 		return this;
 	}
 
