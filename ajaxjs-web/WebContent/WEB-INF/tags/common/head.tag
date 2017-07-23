@@ -64,11 +64,11 @@
 		
 		if(lessFile != null) {
 			// 是否处于调试模式
-			boolean isDebug = false;
+			boolean isDebug = true;
 		
 			if(request.getServletContext().getAttribute("isDebug") != null) {
 				isDebug = (Boolean)request.getServletContext().getAttribute("isDebug");
-			} 
+			}
 	%>
 	<link rel="stylesheet" type="text/css" href="<%=HtmlHead.getCssUrl(request, lessFile, isDebug)%>" />
 	<%

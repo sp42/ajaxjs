@@ -62,8 +62,7 @@
 			}
 			
 			p {
-				line-height: 180%;
-				letter-spacing: 2px;
+				line-height: 180%; 
 			}
 			
 			.points li {
@@ -116,8 +115,7 @@
 			.cols li p {
 				font-size: .9rem;
 				letter-spacing: 0px;
-				color: #333;
-				text-align: justify;
+				color: #333; 
 			}
 			
 			h5 {
@@ -210,44 +208,31 @@
 <!-- 	<img style="width:60%;max-width: 400px;margin: 0 auto;margin-top:50px;display: block;" src="asset/images/under_construction.jpg" /> -->
 <%-- 	<%=new com.ajaxjs.web.config.InitConfig()%> --%>
 <body>
-<script>
-	;(function(){
-		var s = (navigator.userLanguage || navigator.language).toLowerCase();
-		if(s == 'zh-cn' || s == 'zh-tw') {
-			
-		} else {
-			location.assign('index-en.jsp');
-		}	
-	})();
-</script>
 	<nav class="body">
 		<h1>AJAXJS Web Framework</h1>
 		<ul>
-			<li style="border-bottom-color: #ffed20;"><a href="#">简 介</a></li>
+			<li style="border-bottom-color: #ffed20;"><a href="#">Home</a></li>
 			<li style="border-bottom-color: #2096ff;"><a
-				href="http://ajaxjs.mydoc.io/">手 册</a></li>
-			<li style="border-bottom-color: #ff8820;"><a href="ui">前端演示</a></li>
+				href="http://ajaxjs.mydoc.io/">Manual</a></li>
+			<li style="border-bottom-color: #ff8820;"><a href="ui">UI</a></li>
 			<li style="border-bottom-color: #c720ff;"><a
-				href="http://blog.csdn.net/zhangxin09">博 客</a></li>
-			<li style="border-bottom-color: #ff0024;"><a href="javadoc">文
-					档</a></li>
+				href="http://blog.csdn.net/zhangxin09">Blog</a></li>
+			<li style="border-bottom-color: #ff0024;"><a href="javadoc">Document</a></li>
 		</ul>
 	</nav>
 	<div class="green">
 		<div class="body">
 			<div class="left">
-				<h2 style="margin-top: 6%; margin-bottom: 2%;">AJAXJS Web
-					Framework</h2>
-				<h2 style="margin-bottom: 5%; margin-left: 35%;">全栈快速开发框架</h2>
-				<p style="color: #fffbac;">AJAXJS Web 是一款全栈平台的开源 Web
-					框架，不仅是服务端框架，还整合了前端库。它使用 HTML5+Java 方案，继承了 Java 平台的高效、安全、稳定、跨平台等诸多优势，
-					但却摒弃了传统企业级架构所带来的庞大和臃肿，强调轻量级，非常适合互联网的快速应用。</p>
+				<h2 style="margin-top: 6%; margin-bottom: 2%;">A Full Stack Web
+					Framework</h2> 
+				<p style="color: #fffbac;">AJAXJS Web aims to full-stack, not only the server-side framework, but also integrates the front-end library. It’s written in HTML5 + Java,
+				 a successor to the JVM platform, efficient, secure, stable, cross-platform and many other advantages, but it abandoned the traditional enterprise architecture brought about by the large and bloated, emphasizing the lightweight, and fast, very suitable for the Internet fast application.</p>
 				<div
 					style="text-align: center; color: #fffbac; font-weight: normal; letter-spacing: 2px;">
 					<br> <img src="images/index_06.jpg"> <br>
-					<h3>Apache License v2 开源协议</h3>
+					<h3>Apache License v2 OpenSource</h3>
 					<h4>
-						<a href="http://git.oschina.net/sp42/ajaxjs">开源中国 Git/SVN Checkout</a>
+						<a href="http://git.oschina.net/sp42/ajaxjs">Git/SVN@OSC Checkout</a>
 					</h4>
 				</div>
 			</div>
@@ -255,12 +240,11 @@
 				<div class="points" style="margin-bottom: 10px; width: 95%;">
 					<br>
 					<ul>
-						<li>设计原则：Clean, Simple, Fast & Lightweight.框架特色：全栈、原生、全面、实用。</li>
-						<li>遵循“够用就好、就地取材、适合教学”思想，优先考虑 JDK 原生 API，基本没依赖其他重型三方库。简单易学易用。得益于现代浏览器，前端没有使用 jQuery 基础库，而是原生 API 的调用，更高效快速。</li>
-						<li>参照 Spring MVC 风格的 Web 框架，功能简单但是 MVC 的核心功能基本具备了，很适合想了解 MVC
-							的学习者。尽量多提供源码注释和文档，包括单元测试。</li> 
+						<li>Design principles: Clean, Simple, Fast & Lightweight. Features: full stack, native, comprehensive, practical.</li>
+						<li>Follow the "enough to use, suitable for teaching" thought, give priority to native API, basically don't rely on other 3rd-party library. Thanks to modern browser, the front end doesn't use jQuery, but the native API calls, more efficient and fast.</li>
+						<li>With the style of SpringMVC, the code is simple but the core functions of MVC are basically available, it's suitable for those who want to understand MVC. Providing code comment, unit test and documentation as much as possible.</li> 
 					</ul>
-					<br> <br>
+					<br> <br> 
 				</div>
 			</div>
 		</div>
@@ -268,33 +252,37 @@
 	<ul class="body cols">
 		<li style="border-right-color: #ff8820;">
 			<h5>
-				<img src="images/icon_inkboard.png"> 前端简介
+				<img src="images/icon_inkboard.png"> About FrontEnd
 			</h5>
-			<p>收集多年的各种 HTML／CSS 最佳实践，提供实用控件如弹窗、Banner、Tab、列表等等，包括移动端主流控件。
-			复杂 CSS 采用 LESS.js 可复用封装。JS 基于 ES 3.1 书写。有自己的 dom.js 基础库，大小13kb <a href="ui">»HTML/CSS 演示</a> <a href="ui_demo">»JS组件</a>
+			<p>
+			
+			Collecting many years of various HTML/CSS best practices, 
+			providing practical controls such as Pop-up, Banner, Tab, List, etc., including responsive css for mobile. 
+			Complex CSS with LESS.js reusable package. JS based on ES v3.1. Have its own dom.js base library, 13kb <a href="ui">»HTML/CSS Demo</a> <a href="ui_demo">»JS Widgets</a>
 			</p>
 		</li>
 		<li style="border-right-color: #2096ff;">
 			<h5>
-				<img src="images/icon_source.png"> 后端简介
+				<img src="images/icon_source.png"> About BackEnd
 			</h5>
-			<p>标配有 IOC/AOP/MVC/ORM/RESTful，泛型 Controller/Service/DAO/Model 分层，类似 SpringMVC 的控制器，类似 MyBatis 注解的 SQL 服务，支持 Java Bean 或更简单的 Map，自动分页，查询条件和后端验证。<a
+			<p>Using IOC/AOP/MVC/ORM/RESTful,
+Generic Controller/Service/DAO/Model, SpringMVC-like Controller, MyBatis-like annotation SQL service, supports Java Bean or Map as entity, auto-paging, auto-query and validtion<a
 					href="javadoc">»JavaDoc</a></p>
 		</li>
 		<li style="border-right-color: #c720ff;">
 			<h5>
-				<img src="images/icon_database.png">下载 &amp; 运行
+				<img src="images/icon_database.png">Download &amp; Run
 			</h5>
 			<p>Win/Mac/Linux/JRE1.7+/Tomcat7+/IE8+</p>
 			<p>
-				<a href="http://git.oschina.net/sp42/ajaxjs">源码 Git/SVN</a> <a
-					href="javadoc">JavaDoc 文档</a> <a
-					href="http://framework.ajaxjs.com/framework/docs/docs.html">手册</a>
+				<a href="http://git.oschina.net/sp42/ajaxjs">Source on Git/SVN</a> <a
+					href="javadoc">JavaDoc</a> <a
+					href="http://framework.ajaxjs.com/framework/docs/docs.html">Manual</a>
 			</p>
 			<p>
-				QQ 群：3150067 <a href="mailto:support@ajaxjs.com">联系邮箱</a> <a href="http://blog.csdn.net/zhangxin09">作者博客</a>
-				<p>免费使用、修改，引用请保留头注释</p>
-			<p>基于 Apache License Version--2.0 开源协议</p>
+				QQ Group：3150067 <a href="mailto:support@ajaxjs.com">Email</a> <a href="http://blog.csdn.net/zhangxin09">Author's blog</a>
+				<p>Free to use, modify.</p>
+			<p> Apache License Version--2.0</p>
 		</li>
 	</ul>
 	<footer>
