@@ -4,21 +4,21 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.ajaxjs.util.LogHelper;
+import com.ajaxjs.util.logger.LogHelper;
 
 public class TestLogHelper {
 	@Test
 	public void testLog() {
 		LogHelper log = new LogHelper(TestLogHelper.class);
 		assertNotNull(log);
-		
+
 		log.info("bar");
 		log.warning("fooo");
 		log.warning("脚本引擎 {0} 没有 {1}() 这个方法", "js", "foo");
 		log.warning(new Exception("致命错误！"), "脚本引擎 {0} 没有 {1}() 这个方法", "js", "foo");
 	}
 
-	private static final LogHelper log = LogHelper.getLog(TestMapHelper.class);
+	private static final LogHelper log = LogHelper.getLog(TestLogHelper.class);
 
 	@Test
 	public void testGetLog() {
@@ -30,7 +30,7 @@ public class TestLogHelper {
 	@Test
 	public void testCatchEx() {
 		LogHelper log = LogHelper.getLog(TestLogHelper.class);
-		
+
 		try {
 			throw new Throwable("h");
 		} catch (Throwable e) {

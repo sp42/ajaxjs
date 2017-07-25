@@ -1,4 +1,4 @@
-package test.com.ajaxjs.util;
+package test.com.ajaxjs.util.collection;
 
 import static org.junit.Assert.*;
 
@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 import org.junit.Test;
 
-import com.ajaxjs.util.CollectionUtil;
+import com.ajaxjs.util.collection.CollectionUtil;
 
 public class TestCollection {
 	@Test
@@ -46,23 +46,7 @@ public class TestCollection {
 				put("foo", null);
 			}
 		}));
+		
 		assertTrue(!CollectionUtil.isNotNull(new HashMap<String, Object>()));
 	}
-
-//	@Test
-//	public void testTypeConvert(){
-//		assertTrue(12 == TypeConvert(12, Integer.class));
-//		assertTrue(TypeConvert(true, Boolean.class));
-//		assertTrue(toBoolean(true));
-//		assertTrue(toInt(88) == 88);
-//		Date now = new Date();
-//		assertEquals(toDate(now), now);
-//		assertEquals(to_String("foo"), "foo");
-//		assertEquals(to_String("foo", true), "foo");
-//		assertEquals(to_String("foo", false), "foo");
-//		
-//		assertTrue(isUUID(getUUID()));
-//	}
-	
-
 }
