@@ -120,8 +120,7 @@ public class Scanner {
 
 		for (File file : dirFiles) { // 循环所有文件
 			if (file.isDirectory()) { // 如果是目录 则递归继续扫描
-				findAndAddClassesInPackageByFile(packageName + "." + file.getName(), file.getAbsolutePath(), recursive,
-						classes);
+				findAndAddClassesInPackageByFile(packageName + "." + file.getName(), file.getAbsolutePath(), recursive, classes);
 			} else {
 				// 如果是java类文件 去掉后面的.class 只留下类名
 				String className = file.getName().substring(0, file.getName().length() - 6);

@@ -45,33 +45,6 @@ public class Value {
 	}
 
 	/**
-	 * 强类型转换为字符串型
-	 * 
-	 * @param obj
-	 *            输入的对象
-	 * @param isUserToString
-	 *            是否使用 toString() 转换
-	 * @return 字符串型
-	 */
-	public static String to_String(Object obj, boolean isUserToString) {
-		if (obj != null) {
-			return isUserToString ? obj.toString() : TypeConvert(obj, String.class);
-		} else
-			return null;
-	}
-
-	/**
-	 * 强类型转换为字符串型（使用强类型转换而不是 toString()）
-	 * 
-	 * @param obj
-	 *            任意对象
-	 * @return 字符串型
-	 */
-	public static String to_String(Object obj) {
-		return to_String(obj, false);
-	}
-
-	/**
 	 * 从字符串还原真实值， 空字符串"" 会被视为 null 获取参数，并自动从字符串转换为 Java 类型，如 "true"-->
 	 * true,"123"--> 123,"null"-->null
 	 * 
@@ -106,9 +79,12 @@ public class Value {
 	}
 
 	/**
+	 * true/1、       字符串 true／1/yes/on       被视为 true 返回； 
+	 * false／0/null、字符串 false／0/no/off/null 被视为 false 返回；
 	 * 
 	 * @param value
-	 * @return
+	 *            输入值
+	 * @return true/false
 	 */
 	public static boolean toBoolean(Object value) {
 		if (value.equals(true) || value.equals(1))
@@ -121,7 +97,7 @@ public class Value {
 				return true;
 
 			if (_value.equalsIgnoreCase("no") || _value.equalsIgnoreCase("false") || _value.equals("0")
-					|| _value.equalsIgnoreCase("off"))
+					|| _value.equalsIgnoreCase("off") || _value.equalsIgnoreCase("null"))
 				return false;
 		}
 
@@ -129,10 +105,13 @@ public class Value {
 	}
 
 	/**
+	 * 根据送入的类型作适当转换
 	 * 
 	 * @param value
+	 *            送入的值
 	 * @param t
-	 * @return
+	 *            期待的类型
+	 * @return 已经转换类型的值
 	 */
 	@SuppressWarnings("unchecked")
 	public static Object objectCast(Object value, Class<?> t) {

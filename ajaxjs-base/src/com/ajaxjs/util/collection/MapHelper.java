@@ -76,7 +76,8 @@ public class MapHelper {
 	 * @return Map<String, Object> 结构
 	 */
 	public static Map<String, Object> asObject(Map<String, ?> map, boolean isCastRealValue) {
-		if(map == null) return null;
+		if(map == null) 
+			return null;
 		
 		Map<String, Object> as = new HashMap<>();
 
@@ -109,12 +110,13 @@ public class MapHelper {
 	 * @return Map<String, String> 结构
 	 */
 	public static Map<String, String> asString(Map<String, ?> map) {
-		if(map == null) return null;
+		if(map == null) 
+			return null;
 		
 		Map<String, String> as = new HashMap<>();
 
 		for (String key : map.keySet())
-			as.put(key, Value.to_String(map.get(key), true));
+			as.put(key, map.get(key) == null ? null : map.get(key).toString());
 
 		return as;
 	}
@@ -127,7 +129,8 @@ public class MapHelper {
 	 * @return 以 , 分割的单个字符串
 	 */
 	public static Map<String, String> toMap(Map<String, String[]> map) {
-		if(map == null) return null;
+		if(map == null) 
+			return null;
 		
 		Map<String, String> _map = new HashMap<>();
 		
@@ -195,9 +198,8 @@ public class MapHelper {
 		Map<String, Object> map = new HashMap<>();
 		
 		for (String pair : pairs) {
-			if (!pair.contains("=")) {
+			if (!pair.contains("=")) 
 				throw new IllegalArgumentException("没有 = 不能转化为 map");
-			}
 			
 			String[] column = pair.split("=");
 			
@@ -240,9 +242,8 @@ public class MapHelper {
 			return null;
 		
 		Map<String, Object> _map = new HashMap<>();
-		for (String key : map.keySet()) {
+		for (String key : map.keySet()) 
 			_map.put(key, map.get(key));
-		}
 
 		return _map;
 	}

@@ -18,6 +18,7 @@ package com.ajaxjs.util.ioc;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,12 +32,7 @@ import com.ajaxjs.util.collection.CollectionUtil;
  * 
  * @author Frank Cheung frank@ajaxjs.com
  */
-public class BeanContext {
-	/**
-	 * 单例对象
-	 */
-	private static BeanContext me = new BeanContext();
-
+public class ContextMgr {
 	/**
 	 * 是否已初始化
 	 */
@@ -53,11 +49,16 @@ public class BeanContext {
 	private Map<String, String> dependencies = new HashMap<>();
 
 	/**
+	 * 单例对象
+	 */
+	private static ContextMgr me = new ContextMgr();
+
+	/**
 	 * 获取实体对象
 	 * 
 	 * @return BeanContext 实例
 	 */
-	public static BeanContext me() {
+	public static ContextMgr me() {
 		return me;
 	}
 
@@ -73,21 +74,28 @@ public class BeanContext {
 	}
 
 	/**
+	 * 按照类查找实例
 	 * 
 	 * @param clz
-	 * @return
+	 *            类对象
+	 * @return 该类的实例，如果没有返回 null
 	 */
-	public Object getBeanByClass(Class<?> clz) {
+	@SuppressWarnings("unchecked")
+	public <T> T getBeanByClass(Class<T> clz) {
 		if (!isIOC_Bean(clz))
-			throw new NullPointerException(clz + " 这不是一个 ioc 的 bean。");
-		String name = clz.getAnnotation(Bean.class).value();
+			throw new IllegalArgumentException(clz + " 这不是一个 ioc 的 bean。");
 
-		return beans.get(name);
+		String name = clz.getAnnotation(Bean.class).value();
+		Object obj = beans.get(name);
+
+		return obj == null ? null : (T) obj;
 	}
 
 	/**
 	 * 检查那个类是否有 Bean 注解
-	 * @param clz 类
+	 * 
+	 * @param clz
+	 *            类
 	 * @return true 表示为 Bean
 	 */
 	public static boolean isIOC_Bean(Class<?> clz) {
@@ -100,7 +108,7 @@ public class BeanContext {
 	 * @param classes
 	 *            扫描到的类集合
 	 */
-	public void init(Set<Class<?>> classes) {
+	public void init(List<Class<?>> classes) {
 		if (isInitialized || !CollectionUtil.isNotNull(classes)) {
 			System.out.println("IOC 传入的类为空！请检查包名是否正确");
 			return;
@@ -117,13 +125,10 @@ public class BeanContext {
 	 * @param classes
 	 *            类集合
 	 */
-	private void createBeansAndScanDependencies(Set<Class<?>> classes) {
-		Iterator<Class<?>> iterator = classes.iterator();
+	private void createBeansAndScanDependencies(List<Class<?>> classes) {
 		boolean isFoundResource = false; // 是否找到了 Resource
 
-		while (iterator.hasNext()) {
-			Class<?> item = iterator.next();
-
+		for (Class<?> item : classes) {
 			Bean annotation = item.getAnnotation(Bean.class); // 查找匹配的注解
 
 			if (annotation == null)
