@@ -21,7 +21,7 @@ package com.ajaxjs;
  * @author frank
  *
  */
-public class Init {
+public class Version {
 	/**
 	 * 是否调试模式（开发模式）
 	 */
@@ -30,7 +30,7 @@ public class Init {
 	/**
 	 * 源码磁盘目录
 	 */
-	public static final String srcFolder = Init.class.getClassLoader().getResource("").getPath();
+	public static final String srcFolder = Version.class.getClassLoader().getResource("").getPath();
 
 	/**
 	 * 是否苹果系统
