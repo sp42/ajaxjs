@@ -1,15 +1,33 @@
-package com.ajaxjs.js;
+/**
+ * Copyright Frank Cheung frank@ajaxjs.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.ajaxjs.js.engine;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 
 import javax.script.ScriptEngine;
 
 import com.ajaxjs.util.Value;
 
+/**
+ * 
+ * @author Frank Cheung frank@ajaxjs.com
+ */
 public class JSON extends JsEngineWrapper {
 	public JSON() {
 		super();
@@ -90,18 +108,18 @@ public class JSON extends JsEngineWrapper {
 	private static Map<String, Object> deep(Map<String, Object> map) {
 		// 转换为真正的 map
 		Map<String, Object> realMap = new HashMap<>();
-		
+
 		for (String _key : map.keySet()) {
 			// js double -->int
 			Object obj = map.get(_key);
 
 			if (obj instanceof Double) {
 				realMap.put(_key, Value.double2int((Double) map.get(_key)));
-			} else if(obj instanceof List) {
-				List<?> list = (List<?>)obj;
- 				List<Object> _list = new ArrayList<>();
-				
- 				if(list.get(0) !=null){
+			} else if (obj instanceof List) {
+				List<?> list = (List<?>) obj;
+				List<Object> _list = new ArrayList<>();
+
+				if (list.get(0) != null) {
 					if (list.get(0) instanceof Map) {
 						for (Map<String, Object> _map : (List<Map<String, Object>>) obj)
 							_list.add(deep(_map));
@@ -109,11 +127,11 @@ public class JSON extends JsEngineWrapper {
 						for (Double d : (List<Double>) obj)
 							_list.add(Value.double2int(d));
 					}
-				}else {
-//					
+				} else {
+					//
 				}
- 				
- 				realMap.put(_key, _list);
+
+				realMap.put(_key, _list);
 			} else {
 				realMap.put(_key, map.get(_key));
 			}
@@ -213,109 +231,5 @@ public class JSON extends JsEngineWrapper {
 		this.deep = deep;
 		
 		return this;
-	}
-	
-	/**
-	 * 就算是{'a:a{dsa}':"{fdasf[dd]}"} 这样的也可以处理
-	 * 当然{a:{b:{c:{d:{e:[1,2,3,4,5,6]}}}}}更可以处理
-	 * 
-	 * @param jsonstring
-	 *            合法格式的json字符串
-	 * @return 有可能map有可能是list
-	 */
-	public static Object json2Map2(String jsonstring) {
-		Stack<Map<String, Object>> maps = new Stack<>(); // 用来表示多层的json对象
-		Stack<List<Object>> lists = new Stack<>(); // 用来表示多层的list对象
-		Stack<Boolean> isList = new Stack<>();// 判断是不是list
-		Stack<String> keys = new Stack<>(); // 用来表示多层的key
-
-		boolean hasyinhao = false; // 是否有引号
-		String keytmp = null;
-		Object valuetmp = null;
-		StringBuilder builder = new StringBuilder();
-		char[] cs = jsonstring.toCharArray();
-
-		for (int i = 0; i < cs.length; i++) {
-
-			if (hasyinhao) {
-				if (cs[i] != '\"' && cs[i] != '\'')
-					builder.append(cs[i]);
-				else
-					hasyinhao = false;
-
-				continue;
-			}
-			
-			switch (cs[i]) {
-			case '{': // 如果是{map进栈
-
-				maps.push(new HashMap<String, Object>());
-				isList.push(false);
-				continue;
-			case '\'':
-			case '\"':
-				hasyinhao = true;
-				continue;
-			case ':':// 如果是：表示这是一个属性建，key进栈
-
-				keys.push(builder.toString());
-				builder = new StringBuilder();
-				continue;
-			case '[':
-
-				isList.push(true);
-				lists.push(new ArrayList<Object>());
-				continue;
-			case ',':
-				// 这是一个分割，因为可能是简单地 string 的键值对，也有可能是 string=map 的键值对，因此 valuetmp 使用 object 类型；
-				// 如果valuetmp是null 应该是第一次，如果value不是空有可能是string，那是上一个键值对，需要重新赋值
-				// 还有可能是map对象，如果是map对象就不需要了
-
-				boolean listis = isList.peek();
-
-				if (builder.length() > 0)
-					valuetmp = builder.toString();
-				
-				builder = new StringBuilder();
-				if (!listis) {
-					keytmp = keys.pop();
-					maps.peek().put(keytmp, valuetmp);
-				} else
-					lists.peek().add(valuetmp);
-
-				continue;
-			case ']':
-
-				isList.pop();
-
-				if (builder.length() > 0)
-					valuetmp = builder.toString();
-				
-				builder = new StringBuilder();
-				lists.peek().add(valuetmp);
-				valuetmp = lists.pop();
-				continue;
-			case '}':
-
-				isList.pop();
-				// 这里做的和，做的差不多，只是需要把valuetmp=maps.pop();把map弹出栈
-				keytmp = keys.pop();
-
-				if (builder.length() > 0)
-					valuetmp = builder.toString();
-
-				builder = new StringBuilder();
-				maps.peek().put(keytmp, valuetmp);
-				valuetmp = maps.pop();
-				continue;
-			default:
-				builder.append(cs[i]);
-				continue;
-			}
-
-		}
-		
-		return valuetmp;
-	}
-  
+	}  
 }

@@ -1,34 +1,58 @@
+/**
+ * Copyright Frank Cheung frank@ajaxjs.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.ajaxjs.js;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.script.ScriptEngine;
-
+import com.ajaxjs.js.engine.JSON;
+import com.ajaxjs.js.json.syntax.FMS;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.Value;
 import com.ajaxjs.util.reflect.BeanUtil;
 
 /**
  * json 转为 java 对象的工具类，利用了 JVM 自带的 js 引擎
+ * 
  * @author xinzhang
  *
  */
-public class JsonHelper extends JSON {
-	public JsonHelper(){
-		
+public class JsonHelper {
+	/**
+	 * 解析 JSON 为 Map 或 List
+	 * 
+	 * @param str
+	 *            JSON 字符串
+	 * @return Map 或 List
+	 */
+	public static Object parse(String str) {
+		return new FMS(str).parse();
 	}
 	
-	public JsonHelper(String jsonString){
-		super(jsonString);
+	@SuppressWarnings("unchecked")
+	public static Map<String, Object> parseMap(String str) {
+		return (Map<String, Object>)parse(str);
 	}
 	
-	public JsonHelper(ScriptEngine jsengine){
-		super(jsengine);
+	@SuppressWarnings("unchecked")
+	public static List<Map<String, Object>> parseList(String str) {
+		return (List<Map<String, Object>>)parse(str);
 	}
-	
+
 	/**
 	 * 输入一个 Map，将其转换为 JSON Str
 	 * 
@@ -43,10 +67,10 @@ public class JsonHelper extends JSON {
 		List<String> arr = new ArrayList<>();
 		for (String key : map.keySet())
 			arr.add('\"' + key + "\":" + Value.obj2jsonVaule(map.get(key)));
-	
+
 		return '{' + StringUtil.stringJoin(arr, ",") + '}';
 	}
-	
+
 	/**
 	 * 输入一个 List<Map<String, Object>>，将其转换为 JSON Str
 	 * 
@@ -57,15 +81,15 @@ public class JsonHelper extends JSON {
 	public static String stringifyListMap(List<Map<String, Object>> list) {
 		if (null == list)
 			return null;
-		
+
 		String[] str = new String[list.size()];
-		
-		for (int i = 0; i < list.size(); i ++)
+
+		for (int i = 0; i < list.size(); i++)
 			str[i] = stringifyMap(list.get(i));
-		
+
 		return "[" + StringUtil.stringJoin(str, ",") + "]";
 	}
-	
+
 	/**
 	 * 
 	 * @param bean
@@ -74,78 +98,10 @@ public class JsonHelper extends JSON {
 	public static String bean2json(Object bean) {
 		return stringifyMap(BeanUtil.bean2Map(bean));
 	}
-	
+
 	public static <T> T json2bean(String json, Class<T> clz) {
 		Map<String, Object> map = new JSON(json).setDeep(true).getMap(null);
 		return BeanUtil.map2Bean(map, clz, true);
-	}
-	
-	/**
-	 * 借助 js 序列化对象为 json
-	 * 明明有 jsonString 为何还要 stringify？
-	 * 
-	 * @return JSON 字符串
-	 */
-	@Deprecated
-	public String stringify() {
-		return eval("JSON.stringify(" + getJsonString() + ");", String.class);
-	}
-	
-	/**
-	 * 借助 js 序列化对象为 json
-	 * 
-	 * @param key
-	 *            js 表达式
-	 * @return JSON 字符串
-	 */
-	public String stringify(String key) {
-		return eval("JSON.stringify(" + key + ");", String.class);
-	}
-
-	/**
-	 * 借助 js 序列化对象为 json
-	 * stringify() 不能传对象，故使用这方法
-	 * @param obj
-	 *            NativeArray | NativeObject 均可
-	 * @return JSON 字符串
-	 */
-	public String stringifyObj(Object obj) {
-		return call("stringify", String.class, eval("JSON"), obj);
-	}
-
-	/**
-	 * 将 Simple Object 对象转换成 JSON 格式的字符串:JAVA-->JS
-	 * 
-	 * @param obj
-	 *            输入数据
-	 * @return JSON 字符串
-	 */
-	public static String stringify_object(Object obj) {
-		if (obj == null)
-			return null;
-		// 检查是否可以交由 JS 转换的类型
-		// if(obj instanceof NativeArray || obj instanceof NativeObject)return
-		// navtiveStringify(obj);
-	
-		List<String> arr = new ArrayList<>();
-		for (Field field : obj.getClass().getDeclaredFields()) {
-			field.setAccessible(true);
-	
-			String key = field.getName();
-			if (key.indexOf("this$") != -1)
-				continue;
-	
-			Object _obj = null;
-			try {
-				_obj = field.get(obj);
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-	
-			arr.add('\"' + key + "\":" + Value.obj2jsonVaule(_obj));
-		}
-	
-		return '{' + StringUtil.stringJoin(arr, ",") + '}';
 	}
 
 	/**
@@ -159,12 +115,12 @@ public class JsonHelper extends JSON {
 	public static String format(String json) {
 		int level = 0;
 		StringBuilder str = new StringBuilder();
-	
+
 		for (int i = 0; i < json.length(); i++) {
 			char c = json.charAt(i);
 			if (level > 0 && '\n' == str.charAt(str.length() - 1))
 				str.append(StringUtil.repeatStr("\t", "", level));
-	
+
 			switch (c) {
 			case '{':
 			case '[':
@@ -173,7 +129,8 @@ public class JsonHelper extends JSON {
 				break;
 			case ',':
 				if (json.charAt(i + 1) == '"')
-					str.append(c + "\n"); // 后面必定是跟着 key 的双引号，但 其实 json 可以 key 不带双引号的
+					str.append(c + "\n"); // 后面必定是跟着 key 的双引号，但 其实 json 可以 key
+											// 不带双引号的
 				break;
 			case '}':
 			case ']':
@@ -187,7 +144,7 @@ public class JsonHelper extends JSON {
 				break;
 			}
 		}
-	
+
 		return str.toString();
 	}
 

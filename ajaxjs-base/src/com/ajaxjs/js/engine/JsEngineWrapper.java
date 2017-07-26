@@ -10,7 +10,7 @@
  * 除非因适用法律需要或书面同意，根据许可证分发的软件是基于"按原样"基础提供，
  * 无任何明示的或暗示的保证或条件。详见根据许可证许可下，特定语言的管辖权限和限制。
  */
-package com.ajaxjs.js;
+package com.ajaxjs.js.engine;
 
 import java.util.Map;
 
@@ -19,11 +19,11 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-import com.ajaxjs.util.LogHelper;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.Value;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.io.StreamUtil;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * JS 引擎的包装器
@@ -144,7 +144,7 @@ public class JsEngineWrapper {
 	 * 获取 js 的对象，如果最后一个不是对象，返回 Object，之前的为 NativeObject
 	 * 
 	 * @param namespace
-	 *            JS MAP 对象的 key
+	 *            JS 对象的 key
 	 * @return NativeObject 或 Object
 	 */
 	@SuppressWarnings("rawtypes")
@@ -200,6 +200,5 @@ public class JsEngineWrapper {
 	 */
 	public Object eval(String code) {
 		return eval(code, Object.class);
-	}
-	
+	}	
 }
