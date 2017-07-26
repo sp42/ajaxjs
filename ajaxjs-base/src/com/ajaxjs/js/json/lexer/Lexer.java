@@ -17,8 +17,8 @@ package com.ajaxjs.js.json.lexer;
 
 import java.util.Stack;
 
-import com.ajaxjs.js.json.JsonParseException;
 import com.ajaxjs.js.json.JSONParser;
+import com.ajaxjs.js.json.JsonParseException;
 
 /**
  * 词法分析器

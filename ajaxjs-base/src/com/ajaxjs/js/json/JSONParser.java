@@ -1,21 +1,12 @@
 package com.ajaxjs.js.json;
 
-import com.ajaxjs.js.json.syntax.FMS;
+ 
 
 /**
  * 主要的方法入口 parse()。 还有其他的一些工具方法。
  */
 public class JSONParser {
-	/**
-	 * 解析 JSON 为 Map 或 List
-	 * 
-	 * @param str
-	 *            JSON 字符串
-	 * @return Map 或 List
-	 */
-	public static Object parse(String str) {
-		return new FMS(str).parse();
-	}
+
 
 	/**
 	 * 是否空格字符
