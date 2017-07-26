@@ -4,17 +4,17 @@ import static org.junit.Assert.*;
 import org.junit.*;
 
 import com.ajaxjs.js.JsonHelper;
-import com.ajaxjs.js.JsonParser;
+import com.ajaxjs.js.engine.JSON;
 
 import java.util.List;
 import java.util.Map;
 
 public class TestJSON {
-	JsonHelper engine;
+	JSON engine;
 
 	@Before
 	public void setUp() {
-		engine = new JsonHelper();
+		engine = new JSON();
 	}
 	
 	@Test
