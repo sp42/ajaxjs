@@ -23,8 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 /**
- * 日期工具类 <% request.setAttribute("fn", new Util()); %>
- * ${fn.shortDate_YYYY_MM_DD(current.createDate)}
+ * 日期工具类 
  * 
  * @author Frank Cheung frank@ajaxjs.com
  *

@@ -71,7 +71,7 @@ public class StringUtil {
 	 * @return 连接后的字符串
 	 */
 	public static String stringJoin(String[] arr, String join) {
-		if (!CollectionUtil.isNotNull(arr))
+		if (CollectionUtil.isNull(arr))
 			return null;
 
 		StringBuilder sb = new StringBuilder();
@@ -100,7 +100,7 @@ public class StringUtil {
 	 * @return 连接后的字符串
 	 */
 	public static String stringJoin(List<String> arr, String join) {
-		if (!CollectionUtil.isNotNull(arr))
+		if (CollectionUtil.isNull(arr))
 			return null;
 		return stringJoin(arr.toArray(new String[arr.size()]), join);
 	}

@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.util.DateTools;
+import com.ajaxjs.util.Value;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.BeanUtil;
 import com.ajaxjs.util.reflect.Reflect;
@@ -93,18 +94,7 @@ public class Map2Pojo<T> extends BeanUtil {
 					// System.out.println("methodName：：：：：" + "set" +
 					// Reflect.firstLetterUpper(methodName));
 
-					if (value instanceof String) {
-						value = (String) value;
-						if (value.equals("yes") || value.equals("true") || value.equals("1")) {
-							value = true;
-						}
-
-						if (value.equals("no") || value.equals("false") || value.equals("0")) {
-							value = false;
-						}
-					}
-
-					executeMethod(pojo, methodName, t, (boolean) value);
+					executeMethod(pojo, methodName, t, Value.toBoolean(value));
 
 				} else if (t == int.class || t == Integer.class) {
 					if (value.getClass() == String.class)

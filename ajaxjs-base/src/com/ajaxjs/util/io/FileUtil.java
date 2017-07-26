@@ -47,7 +47,7 @@ public class FileUtil extends StreamChain<FileUtil> {
 
 	/**
 	 * 读取文件内容
-	 * @return
+	 * @return 返回本实例供链式调用
 	 */
 	public FileUtil read() {
 		try {
@@ -63,8 +63,10 @@ public class FileUtil extends StreamChain<FileUtil> {
 	
 	/**
 	 * 打开文件，返回其文本内容
+	 * 
 	 * @param path
-	 * @return
+	 *            文件磁盘路径
+	 * @return 文件内容
 	 */
 	public static String openAsText(String path) {
 		return new FileUtil().setFilePath(path).read().byteStream2stringStream().close().getContent();

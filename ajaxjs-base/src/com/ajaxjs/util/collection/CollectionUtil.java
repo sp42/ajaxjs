@@ -27,7 +27,40 @@ import java.util.Map;
  */
 public class CollectionUtil {
 	/**
-	 * 当它们每一个都是数字的字符串形式，转换为整形的数组 '["1", "2", ...]' --> [1, 2, ...]
+	 * 判断数组是否有意义
+	 * 
+	 * @param arr
+	 *            输入的数组
+	 * @return true 表示为素组不是为空，是有内容的，false 表示为数组为空数组，length = 0
+	 */
+	public static boolean isNull(Object[] arr) {
+		return arr == null || arr.length == 0;
+	}
+
+	/**
+	 * 判断 collection 是否有意义
+	 * 
+	 * @param collection
+	 *            Map输入的集合
+	 * @return true 表示为集合不是为空，是有内容的，false 表示为空集合
+	 */
+	public static boolean isNull(Collection<?> collection) {
+		return collection == null || collection.isEmpty();
+	}
+
+	/**
+	 * 判断 map 是否有意义
+	 * 
+	 * @param map
+	 *            输入的
+	 * @return true 表示为 map 不是为空，是有内容的，false 表示为空 map
+	 */
+	public static boolean isNull(Map<?, ?> map) {
+		return map == null || map.isEmpty();
+	}
+	
+	/**
+	 * 当它们每一个都是数字的字符串形式，转换为整形的数组 "1,2,3, ..." --> [1, 2, ...]
 	 * 
 	 * @param value
 	 *            输入字符串
@@ -46,7 +79,7 @@ public class CollectionUtil {
 	}
 
 	/**
-	 * 整形数组转换为字符数组 [1, 2, ...] --> '["1", "2", ...]'
+	 * 整形数组转换为字符数组 [1, 2, ...] --> "1,2,3, ..."
 	 * 
 	 * @param arr
 	 *            输入的整形数组
@@ -73,7 +106,7 @@ public class CollectionUtil {
 	}
 
 	/**
-	 * List<Integer> 转换为数组。数组的话效率更高一些
+	 * List<Integer> 转换为数组（对象类型）。数组的话效率更高一些
 	 * 
 	 * @param list
 	 *            整形列表
@@ -84,9 +117,10 @@ public class CollectionUtil {
 	}
 
 	/**
-	 * 
+	 * List<Integer> 转换为数组。数组的话效率更高一些
 	 * @param list
-	 * @return
+	 *            整形列表
+	 * @return 整形数组
 	 */
 	public static int[] integerList2arr(List<Integer> list) {
 		int[] arr = new int[list.size()];
@@ -95,39 +129,6 @@ public class CollectionUtil {
 			arr[i] = list.get(i);
 
 		return arr;
-	}
-
-	/**
-	 * 判断数组是否有意义
-	 * 
-	 * @param arr
-	 *            输入的数组
-	 * @return true 表示为素组不是为空，是有内容的，false 表示为数组为空数组，length = 0
-	 */
-	public static boolean isNotNull(Object[] arr) {
-		return arr != null && arr.length > 0;
-	}
-
-	/**
-	 * 判断 collection 是否有意义
-	 * 
-	 * @param collection
-	 *            Map输入的集合
-	 * @return true 表示为集合不是为空，是有内容的，false 表示为空集合
-	 */
-	public static boolean isNotNull(Collection<?> collection) {
-		return collection != null && !collection.isEmpty();
-	}
-
-	/**
-	 * 判断 map 是否有意义
-	 * 
-	 * @param map
-	 *            输入的
-	 * @return true 表示为 map 不是为空，是有内容的，false 表示为空 map
-	 */
-	public static boolean isNotNull(Map<?, ?> map) {
-		return map != null && !map.isEmpty();
 	}
 
 }

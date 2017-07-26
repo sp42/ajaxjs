@@ -17,10 +17,8 @@ package com.ajaxjs.util.ioc;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.ajaxjs.util.reflect.BeanUtil;
 import com.ajaxjs.util.reflect.ReflectNewInstance;
@@ -109,7 +107,7 @@ public class ContextMgr {
 	 *            扫描到的类集合
 	 */
 	public void init(List<Class<?>> classes) {
-		if (isInitialized || !CollectionUtil.isNotNull(classes)) {
+		if (isInitialized || CollectionUtil.isNull(classes)) {
 			System.out.println("IOC 传入的类为空！请检查包名是否正确");
 			return;
 		}

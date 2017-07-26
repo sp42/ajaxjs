@@ -22,11 +22,122 @@ import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.Value;
 
 /**
- * 自定义 Map 类，加入更多实用的功能
+ * 链式调用处理 map 数据
  * 
  * @author Frank Cheung frank@ajaxjs.com
  */
 public class MapHelper {
+	/**
+	 * Servlet 返回的数据
+	 */
+	private Map<String, String[]> parameterMapRaw;
+
+	/**
+	 * Map 数据<String, Object>
+	 */
+	private Map<String, Object> parameterMap;
+
+	/**
+	 * Map 数据<String, String>
+	 */
+	private Map<String, String> parameterMap_String;
+
+	/**
+	 * 剔除不要的字段
+	 * 
+	 * @param ignoreField
+	 *            不要的字段
+	 * @return 返回本实例供链式调用
+	 */
+	public MapHelper ignoreField(String ignoreField) {
+		try {
+			if (parameterMapRaw.containsKey(ignoreField))
+				parameterMapRaw.remove(ignoreField);
+		} catch (IllegalStateException e) {
+			// 忽略 request.getParameterMap() 原生不能删除的
+		}
+
+		if (parameterMap != null && parameterMap.containsKey(ignoreField))
+			parameterMap.remove(ignoreField);
+		if (parameterMap_String != null && parameterMap_String.containsKey(ignoreField))
+			parameterMap_String.remove(ignoreField);
+
+		return this;
+	}
+
+	/**
+	 * String 变为真实的 Java 数据 toDataAsObject().parameterMap();
+	 * 
+	 * @return 返回本实例供链式调用
+	 */
+	public MapHelper toDataAsObject() {
+		parameterMap = asObject(getParameterMap_String(), true);
+		return this;
+	}
+
+	/**
+	 * String[]-->String
+	 * 
+	 * @return 返回本实例供链式调用
+	 */
+	public MapHelper toMap() {
+		parameterMap_String = toMap(getParameterMapRaw());
+		return this;
+	}
+
+	/**
+	 * @return the parameterMapRaw
+	 */
+	public Map<String, String[]> getParameterMapRaw() {
+		return parameterMapRaw;
+	}
+
+	/**
+	 * 
+	 * @param parameterMapRaw
+	 * @return 返回本实例供链式调用
+	 */
+	public MapHelper setParameterMapRaw(Map<String, String[]> parameterMapRaw) {
+		this.parameterMapRaw = parameterMapRaw;
+		return this;
+	}
+
+	/**
+	 * @return the parameterMap
+	 */
+	public Map<String, Object> getParameterMap() {
+		return parameterMap;
+	}
+
+	/**
+	 * 
+	 * @param parameterMap
+	 * @return 返回本实例供链式调用
+	 */
+	public MapHelper setParameterMap(Map<String, Object> parameterMap) {
+		this.parameterMap = parameterMap;
+		return this;
+	}
+
+	/**
+	 * @return the parameterMap_String
+	 */
+	public Map<String, String> getParameterMap_String() {
+		return parameterMap_String;
+	}
+
+	/**
+	 * 
+	 * @param parameterMap_String
+	 * @return 返回本实例供链式调用
+	 */
+	public MapHelper setParameterMap_String(Map<String, String> parameterMap_String) {
+		this.parameterMap_String = parameterMap_String;
+		return this;
+	}
+	
+	//////////////// 静态方法 //////////////// 
+	
 	/**
 	 * 也是 join，不过输入的参数不是数组而是 hash。
 	 * 
@@ -42,16 +153,7 @@ public class MapHelper {
 		int i = 0;
 		for (String key : map.keySet())
 			pairs[i++] = key + "=" + map.get(key);
-
-		/*
-		 * 另外一种算法 // for (String key : pair.keySet()) cookieStr += key + "=" +
-		 * pair.get(key) + ";"; // cookieStr = cookieStr.substring(0,
-		 * cookieStr.length() - 1); // 删掉最后一个分号 // 另外一种算法 int i = 0; for(String
-		 * key : hash.keySet()){ ... if(++i != size)buff.append(","); } //
-		 * 另外一种算法，删除最后一个 , if (buff.length() > 1)buff =
-		 * buff.deleteCharAt(buff.length() - 1); // 另外一种算法，删除最后一个 , ... if(i !=
-		 * arr.length - 1)str += ",";
-		 */
+		
 		return StringUtil.stringJoin(pairs, div);
 	}
 
@@ -65,10 +167,29 @@ public class MapHelper {
 	public static String join(Map<String, String> map) {
 		return join(map, "&");
 	}
+	
+	/**
+	 * Map 的泛型类型转换，从 Map<String, ?> 转换为 Map<String, String>
+	 * 
+	 * @param map
+	 *            Map<String, ?> 结构
+	 * @return Map<String, String> 结构
+	 */
+	public static Map<String, String> asString(Map<String, ?> map) {
+		if(map == null) 
+			return null;
+		
+		Map<String, String> as = new HashMap<>();
+
+		for (String key : map.keySet())
+			as.put(key, map.get(key) == null ? null : map.get(key).toString());
+
+		return as;
+	}
 
 	/**
 	 * Map 的泛型类型转换，转换为 Map<String, Object>。 可选择类型转换真实值，如
-	 * "2"-->2，"true",-->true，"null"-->null。要求 String 类型才可以 CastRealValue
+	 * "2"-->2，"true",-->true，"null"-->null。要求 String 类型才可以 CastRealValue TODO 这个是否需要要求这样？
 	 * 
 	 * @param map
 	 * @param isCastRealValue
@@ -100,25 +221,6 @@ public class MapHelper {
 	 */
 	public static Map<String, Object> asObject(Map<String, ?> map) {
 		return asObject(map, false);
-	}
-
-	/**
-	 * Map 的泛型类型转换，从 Map<String, ?> 转换为 Map<String, String>
-	 * 
-	 * @param map
-	 *            Map<String, ?> 结构
-	 * @return Map<String, String> 结构
-	 */
-	public static Map<String, String> asString(Map<String, ?> map) {
-		if(map == null) 
-			return null;
-		
-		Map<String, String> as = new HashMap<>();
-
-		for (String key : map.keySet())
-			as.put(key, map.get(key) == null ? null : map.get(key).toString());
-
-		return as;
 	}
 	
 	/**
@@ -154,7 +256,7 @@ public class MapHelper {
 	 * @return Map 结构
 	 */
 	public static Map<String, Object> toMap(String[] columns, String[] values) {
-		if (CollectionUtil.isNotNull(columns)) 
+		if (CollectionUtil.isNull(columns)) 
 			return null;
 		
 		if (columns.length != values.length)
@@ -163,10 +265,8 @@ public class MapHelper {
 		Map<String, Object> map = new HashMap<>();
 
 		int i = 0;
-		for (String column : columns) {
-			map.put(column, Value.toJavaValue(values[i]));
-			i++;
-		}
+		for (String column : columns) 
+			map.put(column, Value.toJavaValue(values[i++]));
 
 		return map;
 	}
@@ -192,7 +292,7 @@ public class MapHelper {
 	 * @return Map 结构
 	 */
 	public static Map<String, Object> toMap(String[] pairs, boolean isDecode) {
-		if (!CollectionUtil.isNotNull(pairs))
+		if (CollectionUtil.isNull(pairs))
 			return null;
 		
 		Map<String, Object> map = new HashMap<>();
@@ -210,24 +310,6 @@ public class MapHelper {
 		}
 		
 		return map;
-	}
-
-	/**
-	 * 免去强类型转换的麻烦
-	 * 
-	 * @param map
-	 *            Map<String, ?> map
-	 * @param key
-	 *            键
-	 * @return 布尔型
-	 */
-	public static boolean getBoolean(Map<String, ?> map, String key) {
-		if (map == null)
-			return false;
-		else {
-			Object obj = map.get(key);
-			return obj == null ? false : (boolean) obj;
-		}
 	}
 
 	/**

@@ -101,7 +101,7 @@ public class BeanContext {
 	 *            扫描到的类集合
 	 */
 	public void init(Set<Class<?>> classes) {
-		if (isInitialized || !CollectionUtil.isNotNull(classes)) {
+		if (isInitialized || CollectionUtil.isNull(classes)) {
 			System.out.println("IOC 传入的类为空！请检查包名是否正确");
 			return;
 		}
