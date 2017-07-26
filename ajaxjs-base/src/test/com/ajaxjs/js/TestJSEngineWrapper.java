@@ -6,7 +6,7 @@ import javax.script.ScriptException;
 
 import org.junit.*;
 
-import com.ajaxjs.js.JsEngineWrapper;
+import com.ajaxjs.js.engine.JsEngineWrapper;
 import com.ajaxjs.util.Value;
 
 /**
