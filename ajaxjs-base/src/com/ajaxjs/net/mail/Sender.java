@@ -27,18 +27,21 @@ import java.util.regex.Pattern;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 
 /**
- * 参考 http://fuyanqing03.iteye.com/blog/796860
- * http://www.quepublishing.com/articles/article.aspx?p=26672&seqNum=4
- * http://blog.csdn.net/jia20003/article/details/7358991
- * http://blog.csdn.net/jia20003/article/details/7380142
- * JavaMail邮件发送-能发送附件和带背景音乐的邮件的小系统 http://cuisuqiang.iteye.com/blog/1750866
+ * 通过 Telnet 命令实现发送邮件
  * 
  * @author frank
  *
  */
+
+/**
+ * 简易邮件发送器
+ * 
+ * @author Frank Cheung frank@ajaxjs.com
+ */
 public class Sender extends Socket {
 	/**
 	 * 发送一封邮件
+	 * 
 	 * @param bean
 	 *            邮件实体
 	 * @throws IOException
@@ -50,15 +53,29 @@ public class Sender extends Socket {
 	}
 
 	/**
+	 * 换行符常量
+	 */
+	public static final String lineFeet = "\r\n";
+
+	/**
 	 * 邮件信息
 	 */
 	private Mail bean;
 
+	/**
+	 * 成功标识
+	 */
 	private static final int ok_250_Code = 250;
 
-	private BufferedReader in; // 接受指令用的缓冲区
+	/**
+	 * 接受指令用的缓冲区
+	 */
+	private BufferedReader in;
 
-	private DataOutputStream os; // 发送指令用的流
+	/**
+	 * 发送指令用的流
+	 */
+	private DataOutputStream os;
 
 	/**
 	 * 发送邮件
@@ -219,6 +236,4 @@ public class Sender extends Socket {
 
 		return _code == code;
 	}
-	
-	public static final String lineFeet = "\r\n";
 }

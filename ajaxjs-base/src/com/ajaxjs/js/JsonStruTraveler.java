@@ -110,6 +110,39 @@ public class JsonStruTraveler {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
+	public void travle(Map<String, Object> map) {
+		for (String key : map.keySet()) {
+			Object obj = map.get(key);
+
+			if (obj != null && obj instanceof Map) {
+				Map<String, Object> _map = (Map<String, Object>) obj;
+				System.out.println(_map.get("name"));
+				if (_map.get(children) != null && _map.get(children) instanceof List) {
+					List<Map<String, Object>> list = (List<Map<String, Object>>) _map.get(children);
+					
+					for (Map<String, Object> __map : list)
+						travle(__map);
+				}
+			}
+		}
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public void travleList(List<Map<String, Object>> list, String superPath, int level) {
+		for (Map<String, Object> map :list) {
+			if (map != null) {
+				String currerntPath = superPath + "/" + map.get(id).toString();
+				map.put("fullPath", currerntPath);
+				map.put("level", level);
+				
+				if (map.get(children) != null && map.get(children) instanceof List) 
+					travleList((List<Map<String, Object>>) map.get(children), currerntPath, level + 1);
+			}
+		}
+	}
+
 	/**
 	 * @return the id
 	 */

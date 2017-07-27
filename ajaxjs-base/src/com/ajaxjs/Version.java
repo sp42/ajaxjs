@@ -15,6 +15,8 @@
  */
 package com.ajaxjs;
 
+import com.ajaxjs.util.StringUtil;
+
 /**
  * 初始化，检测是否可以运行
  * 
@@ -42,9 +44,6 @@ public class Version {
 	 */
 	public static final String ConsoleDiver = System.getProperty("line.separator") + "---------------------------------";
 	
-	public static final String lineFeet = "\r\n";
-	public final static char newline = '\n';
-
 	static {
 //		System.setProperty("user.timezone", "GMT +08");// 微软云设置时区
 
@@ -69,8 +68,30 @@ public class Version {
 
 		System.out.println("---------------------------------" + 
 		System.getProperty("line.separator") + "AJAXJS-Base 启动完毕，当前是" + (isDebug ? "调试" : "生产环境") +  "模式" + ConsoleDiver);
-//		if (isMac)
-//			System.out.println("亲，你运行着 Mac！" + ConsoleDiver);
+	}
+	
+	/**
+	 * 检测是否 tomcat 以及版本
+	 * 
+	 * @param serverInfo
+	 *            返回如 Tomcat/7
+	 */
+	public static void tomcatVersionDetect(String serverInfo) {
+		String result = StringUtil.regMatch("(?<=Tomcat/)(\\d)", serverInfo);
+		
+		if (result != null) {
+			try {
+				if (Integer.parseInt(result) < 7)
+					throw new UnsupportedOperationException("不支持低于 Tomcat 7 以下的版本！");
+			} catch (Throwable e) {
+				if (e instanceof UnsupportedOperationException) 
+					throw e;
+				// 忽略其他异常，如正则的
+				e.printStackTrace();
+			}
+		} else {
+			// 不是 tomcat
+		}
 	}
 
 }

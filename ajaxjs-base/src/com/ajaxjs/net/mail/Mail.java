@@ -16,10 +16,9 @@
 package com.ajaxjs.net.mail;
 
 /**
- * A bean class for email
+ * 邮件模型
  * 
- * @author frank
- *
+ * @author Frank Cheung frank@ajaxjs.com
  */
 public class Mail {
 	private String mailServer;
@@ -44,6 +43,7 @@ public class Mail {
 	public String getMailServer() {
 		if (mailServer == null)
 			throw new IllegalArgumentException("没有指定 MailServer！");
+		
 		return mailServer;
 	}
 
@@ -54,6 +54,7 @@ public class Mail {
 	public String getFrom() {
 		if (from == null)
 			throw new IllegalArgumentException("没有指定发件人！");
+		
 		return from;
 	}
 
@@ -64,6 +65,7 @@ public class Mail {
 	public String getTo() {
 		if (to == null)
 			throw new IllegalArgumentException("没有指定收件人！");
+		
 		return to;
 	}
 

@@ -27,7 +27,7 @@ import java.util.Map;
  */
 public class CollectionUtil {
 	/**
-	 * 判断数组是否有意义
+	 * 判断数组是否为空
 	 * 
 	 * @param arr
 	 *            输入的数组
@@ -38,7 +38,7 @@ public class CollectionUtil {
 	}
 
 	/**
-	 * 判断 collection 是否有意义
+	 * 判断 collection 是否为空
 	 * 
 	 * @param collection
 	 *            Map输入的集合
