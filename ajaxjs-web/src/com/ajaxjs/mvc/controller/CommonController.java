@@ -23,7 +23,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.ajaxjs.Init;
+import com.ajaxjs.Version;
 import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.framework.model.PageResult;
@@ -66,7 +66,7 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	 * 初始化数据库连接
 	 */
 	public static void initDb() {
-		String connStr = Init.isDebug ? "jdbc/sqlite" : "jdbc/sqlite_deploy";
+		String connStr = Version.isDebug ? "jdbc/sqlite" : "jdbc/sqlite_deploy";
 		
 		try {
 			if(ConnectionMgr.getConnection() == null || ConnectionMgr.getConnection().isClosed()) {

@@ -30,39 +30,39 @@ import com.ajaxjs.util.DateTools;
  * @version 2017年7月8日 下午10:58:17
  */
 public class DateUtil extends SimpleTagSupport {
-    /**
-     * 输入的值，可以是任意类型，要经过转换。
-     */
-    private Object value;
-    
-    /**
-     * 格式化模版，如果为 null，则默认为 采用格式 YYYY-MM-dd HH:MM
-     */
-    private String format;
+	/**
+	 * 输入的值，可以是任意类型，要经过转换。
+	 */
+	private Object value;
 
-    @Override
-    public void doTag() throws JspException, IOException {
-	if (value == null)
-	    return;
+	/**
+	 * 格式化模版，如果为 null，则默认为 采用格式 YYYY-MM-dd HH:MM
+	 */
+	private String format;
 
-	Date date = DateTools.Objet2Date(value);
-	if(date == null) 
-	    return;
-	
-	String format = this.format == null ? DateTools.formatDateShorter(date) : DateTools.formatDate(date, this.format);
-	getJspContext().getOut().write(format);
-    }
+	@Override
+	public void doTag() throws JspException, IOException {
+		if (value == null)
+			return;
 
-    public void setValue(Object value) {
-	this.value = value;
-    }
+		Date date = DateTools.Objet2Date(value);
+		if (date == null)
+			return;
 
-    public String getFormat() {
-	return format;
-    }
+		String format = this.format == null ? DateTools.formatDateShorter(date) : DateTools.formatDate(date, this.format);
+		getJspContext().getOut().write(format);
+	}
 
-    public void setFormat(String format) {
-	this.format = format;
-    }
+	public void setValue(Object value) {
+		this.value = value;
+	}
+
+	public String getFormat() {
+		return format;
+	}
+
+	public void setFormat(String format) {
+		this.format = format;
+	}
 
 }

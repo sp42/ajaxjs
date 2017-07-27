@@ -12,7 +12,8 @@
 		name : "菜单一",
 		id : 'menu-1',
 		'children' : [{
-			'id' : 'menu-2'
+			'id' : 'menu-2',
+			'name' : 'XXX'
 		}]
 	} ]
 }, {

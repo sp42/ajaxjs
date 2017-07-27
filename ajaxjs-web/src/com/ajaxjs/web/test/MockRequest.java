@@ -170,12 +170,12 @@ public class MockRequest {
 	}
 
 	public Map<String, Object> shouldbe_json_return(String js_code) {
-		return new JsonHelper(js_code).getMap(null);
+		return JsonHelper.parseMap(js_code);
 	}
 
 	@SuppressWarnings("unchecked")
 	public Map<String, Object>[] shouldbe_jsonArray_return(String js_code) {
-		List<Map<String, Object>> list = new JsonHelper(js_code).getList(null);
+		List<Map<String, Object>> list = JsonHelper.parseList(js_code);
 		return list.toArray(new Map[list.size()]);
 	}
 

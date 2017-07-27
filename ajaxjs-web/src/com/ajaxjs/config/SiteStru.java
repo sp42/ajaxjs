@@ -15,15 +15,15 @@
  */
 package com.ajaxjs.config;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
- * 配置 Model
  * 
  * @author Frank Cheung frank@ajaxjs.com
  */
-public class Config extends HashMap<String, Object> {
-	private static final long serialVersionUID = 1L;
+public class SiteStru extends ArrayList<Map<String, Object>> {
+	private static final long serialVersionUID = 1737463552429455684L;
 
 	/**
 	 * json 文件路径
@@ -41,47 +41,39 @@ public class Config extends HashMap<String, Object> {
 	private boolean isLoaded;
 
 	/**
-	 * @return the jsonPath
+	 * 当前节点
 	 */
+	private Map<String, Object> currentNode;
+
+	public Map<String, Object> getCurrentNode() {
+		return currentNode;
+	}
+
+	public void setCurrentNode(Map<String, Object> currentNode) {
+		this.currentNode = currentNode;
+	}
+
 	public String getJsonPath() {
 		return jsonPath;
 	}
 
-	/**
-	 * @param jsonPath
-	 *            the jsonPath to set
-	 */
 	public void setJsonPath(String jsonPath) {
 		this.jsonPath = jsonPath;
 	}
 
-	/**
-	 * @return the isLoaded
-	 */
-	public boolean isLoaded() {
-		return isLoaded;
-	}
-
-	/**
-	 * @param isLoaded
-	 *            the isLoaded to set
-	 */
-	public void setLoaded(boolean isLoaded) {
-		this.isLoaded = isLoaded;
-	}
-
-	/**
-	 * @return the jsonStr
-	 */
 	public String getJsonStr() {
 		return jsonStr;
 	}
 
-	/**
-	 * @param jsonStr
-	 *            the jsonStr to set
-	 */
 	public void setJsonStr(String jsonStr) {
 		this.jsonStr = jsonStr;
+	}
+
+	public boolean isLoaded() {
+		return isLoaded;
+	}
+
+	public void setLoaded(boolean isLoaded) {
+		this.isLoaded = isLoaded;
 	}
 }

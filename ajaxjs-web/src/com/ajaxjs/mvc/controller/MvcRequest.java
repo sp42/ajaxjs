@@ -102,12 +102,10 @@ public class MvcRequest extends HttpServletRequestWrapper {
 //		System.out.println(regExp);
 		
 		String result = matchList(regExp, requestURI);
-//
-//		System.out.println(regExp);
-//		System.out.println(result);
 		
 		if (result == null)
 			throw new IllegalArgumentException("在 " + requestURI + "不能获取 " + paramName + "参数");
+		
 		return result;
 	}
 

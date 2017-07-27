@@ -31,69 +31,70 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
  * @version 2017年7月8日 下午11:10:04
  */
 public class Foreach extends SimpleTagSupport {
-    /**
-     * 变量名称
-     */
-    private String var;
+	/**
+	 * 变量名称
+	 */
+	private String var;
 
-    /**
-     * 抽象为 Colletion。
-     */
-    private Collection<Object> collection;
+	/**
+	 * 抽象为 Colletion。
+	 */
+	private Collection<Object> collection;
 
-    /**
-     * 判别集合，支持 Collection、Map、Array
-     * 
-     * @param items
-     *            输入的集合
-     */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void setItems(Object items) { // int[]
-	if (items == null)
-	    return;
+	/**
+	 * 判别集合，支持 Collection、Map、Array
+	 * 
+	 * @param items
+	 *            输入的集合
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void setItems(Object items) { // int[]
+		if (items == null)
+			return;
 
-	if (items instanceof Collection)
-	    collection = (Collection<Object>) items;
+		if (items instanceof Collection)
+			collection = (Collection<Object>) items;
 
-	if (items instanceof Map)
-	    collection = ((Map) items).entrySet(); // set
+		if (items instanceof Map)
+			collection = ((Map) items).entrySet(); // set
 
-	if (items.getClass().isArray()) {
-	    collection = new ArrayList<Object>();
-	    int length = Array.getLength(items);
-	    for (int i = 0; i < length; i++) {
-		Object value = Array.get(items, i);
-		collection.add(value);
-	    }
-	}
-    }
-
-    /**
-     * 保存变量
-     * 
-     * @param var
-     *            变量
-     */
-    public void setVar(String var) {
-	this.var = var;
-    }
-
-    @Override
-    public void doTag() throws JspException, IOException {
-	if (collection == null || collection.iterator() == null)
-	    return;
-
-	Iterator<Object> it = collection.iterator();
-	JspContext context = getJspContext();
-	int i = 0;
-
-	while (it.hasNext()) {
-	    Object value = it.next();
-	    context.setAttribute(var, value); // 每遍历出数据后写出
-	    context.setAttribute("currentIndex", i++); // 每遍历出数据后写出:当前循环次数
-	    getJspBody().invoke(null);
+		if (items.getClass().isArray()) {
+			collection = new ArrayList<Object>();
+			int length = Array.getLength(items);
+			
+			for (int i = 0; i < length; i++) {
+				Object value = Array.get(items, i);
+				collection.add(value);
+			}
+		}
 	}
 
-	context.setAttribute("totalCount", i); // 写出循环总次数
-    }
+	/**
+	 * 保存变量
+	 * 
+	 * @param var
+	 *            变量
+	 */
+	public void setVar(String var) {
+		this.var = var;
+	}
+
+	@Override
+	public void doTag() throws JspException, IOException {
+		if (collection == null || collection.iterator() == null)
+			return;
+
+		Iterator<Object> it = collection.iterator();
+		JspContext context = getJspContext();
+		int i = 0;
+
+		while (it.hasNext()) {
+			Object value = it.next();
+			context.setAttribute(var, value); // 每遍历出数据后写出
+			context.setAttribute("currentIndex", i++); // 每遍历出数据后写出:当前循环次数
+			getJspBody().invoke(null);
+		}
+
+		context.setAttribute("totalCount", i); // 写出循环总次数
+	}
 }
