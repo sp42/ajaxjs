@@ -205,6 +205,39 @@ public class JSON extends JsEngineWrapper {
 
 		return realMap;
 	}
+	
+
+	/**
+	 * 借助 js 序列化对象为 json 明明有 jsonString 为何还要 stringify？
+	 * 
+	 * @return JSON 字符串
+	 */
+	@Deprecated
+	public String stringify() {
+		return eval("JSON.stringify(" + getJsonString() + ");", String.class);
+	}
+
+	/**
+	 * 借助 js 序列化对象为 json
+	 * 
+	 * @param key
+	 *            js 表达式
+	 * @return JSON 字符串
+	 */
+	public String stringify(String key) {
+		return eval("JSON.stringify(" + key + ");", String.class);
+	}
+
+	/**
+	 * 借助 js 序列化对象为 json stringify() 不能传对象，故使用这方法
+	 * 
+	 * @param obj
+	 *            NativeArray | NativeObject 均可
+	 * @return JSON 字符串
+	 */
+	public String stringifyObj(Object obj) {
+		return call("stringify", String.class, eval("JSON"), obj);
+	}
 
 	public String getJsonString() {
 		return jsonString;

@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.js.json.syntax;
+package com.ajaxjs.js.jsonparser.syntax;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import com.ajaxjs.js.json.JsonParseException;
-import com.ajaxjs.js.json.lexer.Lexer;
-import com.ajaxjs.js.json.lexer.Token;
-import com.ajaxjs.js.json.lexer.Tokens;
+import com.ajaxjs.js.jsonparser.JsonParseException;
+import com.ajaxjs.js.jsonparser.lexer.Lexer;
+import com.ajaxjs.js.jsonparser.lexer.Token;
+import com.ajaxjs.js.jsonparser.lexer.Tokens;
 
 /**
  * 语法解析的状态机

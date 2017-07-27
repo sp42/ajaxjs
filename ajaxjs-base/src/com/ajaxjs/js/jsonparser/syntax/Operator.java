@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.js.json.syntax;
+package com.ajaxjs.js.jsonparser.syntax;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -22,9 +22,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import com.ajaxjs.js.json.lexer.Lexer;
-import com.ajaxjs.js.json.lexer.Token;
-import com.ajaxjs.js.json.lexer.Tokens;
+import com.ajaxjs.js.jsonparser.lexer.Lexer;
+import com.ajaxjs.js.jsonparser.lexer.Token;
+import com.ajaxjs.js.jsonparser.lexer.Tokens;
 
 /**
  * 该类负责栈的实际操作

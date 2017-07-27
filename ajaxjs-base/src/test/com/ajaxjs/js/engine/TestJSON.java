@@ -1,9 +1,8 @@
-package test.com.ajaxjs.js;
+package test.com.ajaxjs.js.engine;
 
 import static org.junit.Assert.*;
 import org.junit.*;
 
-import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.js.engine.JSON;
 
 import java.util.List;
@@ -113,19 +112,12 @@ public class TestJSON {
 		assertEquals(list.get(0).get("d"), "Nice!!!");
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
-	public void testJson2Map() {
-		Object obj = JsonParser.json2Map2("{x1:true, x2:2000, x3:\"1:hello world\",a:{b:{c:{d:{e:[1,\"j\",3,4,5,6]}}}}}");
-		assertTrue(obj instanceof Map);
-		Map<String, Object> map = (Map<String, Object>)obj;
-		System.out.println(map.get("a"));
-		assertTrue(map.get("a") instanceof Map);
-		assertEquals(map.get("x1"), true);
-		assertEquals(map.get("x2"), 2000);
-		System.out.println(map.get("x3"));
-		System.out.println(map.get("x1").getClass());
-		assertNotNull(obj);
+	public void testStringify() {
+		engine.eval("var foo = {a:'hello', b: 'world!', c: [{ d: 'Nice!!!'}]};");
+		
+		assertEquals(engine.stringify("foo"), "{\"a\":\"hello\",\"b\":\"world!\",\"c\":[{\"d\":\"Nice!!!\"}]}");
+		assertEquals(engine.stringifyObj(engine.eval("foo;")), "{\"a\":\"hello\",\"b\":\"world!\",\"c\":[{\"d\":\"Nice!!!\"}]}");
 	}
 
 }

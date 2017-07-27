@@ -35,14 +35,6 @@ public class TestJsonHelper {
 	}
 	
 	@Test
-	public void testStringify() {
-		engine.eval("var foo = {a:'hello', b: 'world!', c: [{ d: 'Nice!!!'}]};");
-		
-		assertEquals(engine.stringify("foo"), "{\"a\":\"hello\",\"b\":\"world!\",\"c\":[{\"d\":\"Nice!!!\"}]}");
-		assertEquals(engine.stringifyObj(engine.eval("foo;")), "{\"a\":\"hello\",\"b\":\"world!\",\"c\":[{\"d\":\"Nice!!!\"}]}");
-	}
-
-	@Test
 	public void testStringify_Map() {
 		Map<String, Object> map = new HashMap<>();
 		map.put("foo", "11");

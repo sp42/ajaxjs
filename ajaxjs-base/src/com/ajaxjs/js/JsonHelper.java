@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.js.engine.JSON;
-import com.ajaxjs.js.json.syntax.FMS;
+import com.ajaxjs.js.jsonparser.syntax.FMS;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.Value;
 import com.ajaxjs.util.reflect.BeanUtil;
