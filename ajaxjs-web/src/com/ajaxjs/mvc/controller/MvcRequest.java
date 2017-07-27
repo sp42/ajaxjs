@@ -15,9 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.util.collection.Map2Pojo;
 import com.ajaxjs.util.collection.MapHelper;
 import com.ajaxjs.util.io.StreamUtil;
+import com.ajaxjs.util.reflect.BeanUtil;
 
 /**
  * 
@@ -111,8 +111,8 @@ public class MvcRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * 支持自动获取请求参数并封装到 bean 内
-	 * @param clazz
-	 * @return
+	 * @param clazz Bean 的类引用
+	 * @return Java Bean
 	 */
 	public Object getBean(Class<?> clazz) {
 		// Object bean = Reflect.newInstance(clazz);
@@ -126,7 +126,8 @@ public class MvcRequest extends HttpServletRequestWrapper {
 			map = MapHelper.asObject(MapHelper.toMap(getParameterMap()), true);
 		}
 
-		return new Map2Pojo<>(clazz).map2pojo(map);
+//		return new Map2Pojo<>(clazz).map2pojo(map);
+		return BeanUtil.map2Bean(map, clazz);
 	}
 	
 	/**
