@@ -73,6 +73,7 @@ public class JSONParser {
 	}
 
 	/**
+	 * 这是一个更加的 json 解析方法
 	 * 就算是{'a:a{dsa}':"{fdasf[dd]}"} 这样的也可以处理
 	 * 当然{a:{b:{c:{d:{e:[1,2,3,4,5,6]}}}}}更可以处理
 	 * 

@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.js.engine.JSON;
 import com.ajaxjs.js.jsonparser.syntax.FMS;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.Value;
@@ -121,7 +120,7 @@ public class JsonHelper {
 	 * @return
 	 */
 	public static <T> T json2bean(String json, Class<T> clz) {
-		Map<String, Object> map = new JSON(json).setDeep(true).getMap(null);
+		Map<String, Object> map = parseMap(json);
 		return BeanUtil.map2Bean(map, clz, true);
 	}
 	

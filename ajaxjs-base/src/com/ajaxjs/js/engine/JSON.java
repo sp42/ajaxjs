@@ -23,11 +23,13 @@ import java.util.Map;
 import javax.script.ScriptEngine;
 
 import com.ajaxjs.util.Value;
+import com.ajaxjs.util.reflect.BeanUtil;
 
 /**
  * 
  * @author Frank Cheung frank@ajaxjs.com
  */
+@Deprecated
 public class JSON extends JsEngineWrapper {
 	public JSON() {
 		super();
@@ -206,6 +208,16 @@ public class JSON extends JsEngineWrapper {
 		return realMap;
 	}
 	
+	/**
+	 * 
+	 * @param json
+	 * @param clz
+	 * @return
+	 */
+	public static <T> T json2bean(String json, Class<T> clz) {
+		Map<String, Object> map = new JSON(json).setDeep(true).getMap(null);
+		return BeanUtil.map2Bean(map, clz, true);
+	}
 
 	/**
 	 * 借助 js 序列化对象为 json 明明有 jsonString 为何还要 stringify？
