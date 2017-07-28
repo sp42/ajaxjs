@@ -1,10 +1,11 @@
 <%@page pageEncoding="UTF-8" isErrorPage="true" import="java.io.*"%>
-<%!/**
-		 * 收集错误信息 输出到网页
-		 * 
-		 * @param request
-		 *            请求对象
-		 */
+<%!
+	/**
+	 * 收集错误信息 输出到网页
+	 * 
+	 * @param request
+	 *            请求对象
+	 */
 	public static OutputStream getError(HttpServletRequest request, Throwable ex) {
 		OutputStream os = new ByteArrayOutputStream();// 创建一个空的字节流，保存错误信息
 		PrintStream ps = new PrintStream(os);

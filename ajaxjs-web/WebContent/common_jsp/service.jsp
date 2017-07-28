@@ -1,6 +1,5 @@
-<%@ page pageEncoding="UTF-8" import="java.util.*, com.ajaxjs.util.map.*, com.ajaxjs.net.http.Client, com.ajaxjs.web.*, com.ajaxjs.mvc.controller.MvcRequest"%>
+<%@ page pageEncoding="UTF-8" import="java.util.*, com.ajaxjs.net.http.Client, com.ajaxjs.web.Captcha, com.ajaxjs.mvc.controller.MvcRequest, com.ajaxjs.util.collection.MapHelper"%>
 <%!
-
 	/**
 	 * html 编辑器使用的 iframe
 	 */
@@ -25,7 +24,6 @@
 	"	</head>"+
 	"	<body></body>"+
 	"</html>";
-	
 %>
 
 <%
@@ -38,24 +36,25 @@
 	} else if ("htmleditor_iframe".equals(action)) {	 // 网站构建中图片
 		
 		String html = htmleditor_iframe;
-		if(request.getParameter("basePath") != null) {
+		if(request.getParameter("basePath") != null) 
 			html = htmleditor_iframe.replace("${param.basePath}", request.getParameter("basePath"));
-		}
+		
 		out.println(html);
 		
-	} else if("http_proxy".equals(action)) { // http 代理，请谨慎外显，为了不必要的流量和运算
+	} else if("http_proxy".equals(action)) { // http 代理，请谨慎外显，为了不带来不必要的流量和运算
 		
 		String url = request.getParameter("url");
-		new MapData().setParameterMapRaw(request.getParameterMap()).ignoreField("url");
-		String params = MapHelper.join(new MapData().setParameterMapRaw(request.getParameterMap()).toMap().ignoreField("url").getParameterMap_String(), "&"); // 不要 url 参数
+		new MapHelper().setParameterMapRaw(request.getParameterMap()).ignoreField("url");
+		String params = MapHelper.join(new MapHelper().setParameterMapRaw(request.getParameterMap()).toMap().ignoreField("url").getParameterMap_String(), "&"); // 不要 url 参数
 		out.println(Client.GET(url + '?' + params));
 		
 	} else if("remoteConsole".equals(action)) { // 手机调试
 		
 		String msg = "";
-		Map<String, String> requestMap = new MapData().setParameterMapRaw(request.getParameterMap()).toMap().ignoreField("url").ignoreField("action").getParameterMap_String();
+		Map<String, String> requestMap = new MapHelper().setParameterMapRaw(request.getParameterMap()).toMap().ignoreField("url").ignoreField("action").getParameterMap_String();
+		
 		if (requestMap.size() > 0) {
-			msg = com.ajaxjs.util.StringUtil.HashJoin(requestMap, '&');
+			msg = com.ajaxjs.util.collection.MapHelper.join(requestMap);
 		} else {
 			msg = "没有参数";
 		}
@@ -69,19 +68,21 @@
 		/*
 		 * https://www.ipip.net/
 		 * http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&ip=123.123.123.12
-		 * 
 		 */
 		String json = Client.GET("http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&ip=" + MvcRequest.getIp(request));
+	
 		out.println(json.replace("var remote_ip_info = ", "").replaceAll(";$", ""));
-	} else if ("captchaImg".equals(action)) { // 图片验证码
+	} else if ("captchaImg".equals(action)) { 
+		// 图片验证码
 		Captcha.init(pageContext);
+		
 	}  else {
+		
 		out.println("nothing2do");
+		
 	}
 //	else if (request.getRequestURI().contains("weather")) {
 //		getWeather();
-//	} else if (request.getRequestURI().contains("sendMail")) {
-//		sendMail(request, response);
 //	} 
 
 	// 如果没有指定城市，则默认依据 ip 地址来得到城市
@@ -92,8 +93,7 @@
 //			response.outputJSON(Weather.getWeather(city));
 //		} else {
 //			String jsCode = getIp_JSON();
-//			Map<String, Object> json = Mapper.callExpect_Map(jsCode, "remote_ip_info"); // ip
-//																						// 来源城市
+//			Map<String, Object> json = Mapper.callExpect_Map(jsCode, "remote_ip_info"); // ip 来源城市
 //
 //			if (json != null && json.get("city") != null) {
 //				String city = json.get("city").toString();

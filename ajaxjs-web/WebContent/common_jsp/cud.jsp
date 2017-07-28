@@ -19,6 +19,5 @@
 	"msg" : "创建成功",
 	"newlyId" : ${newlyId}
 } 
-
     </c:otherwise>
 </c:choose>
