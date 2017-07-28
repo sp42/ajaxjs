@@ -24,11 +24,11 @@
 		<thead>
 			<tr>
 				<th>#</th>
+				<th>产 品</th>
+				<th>渠 道</th>
 				<th class="name">${uiName}名称</th>
+				<th>版本号</th>
 				<th>创建时间</th>
-				<th>修改时间</th>
-				<th>分 类</th>
-				<th>是否上线</th>
 				<th class="control">控 制</th>
 			</tr>
 		</thead>
@@ -81,16 +81,17 @@
 		<c:foreach var="current" items="${PageResult.rows}">
 			<tr> 
 				<td>${current.id}</td>
-				<td title="${current.intro}">${current.name}</td>
-	
+				<td>${current.portalName}</td>
+				<td>${current.channelName}</td>	
+				<td>${current.name}</td>
+				<td>${current.version}</td>
 				<td><c:dateFormatter date="${current.createDate}" format="yyyy-MM-dd" /></td>
-				<td><c:dateFormatter date="${current.updateDate}" format="yyyy-MM-dd" /></td>
-				<td>${catalogsMap[current.catalog]['name']}</td>
 				<td>
-<%-- 				${current.status == 1 ? '已上线(<a href="javascript:entity.setStatus(' + current.id + ', 0);void(0);">下线</a>)' : '已下线'}${current.catalog} --%>
-				</td>
-				<td>
-					<commonTag:adminUI type="adminList_btns" current="${current}"  viewLink="../../../${tableName}" />
+				
+	<a href="${current.downloadUrl}" target="_blank">下载</a>
+	<a href="../${current.id}/edit.do"><img src="${pageContext.request.contextPath}/asset/images/icon/update.gif" style="vertical-align: sub;" />编辑</a>
+	<a href="javascript:entity.del('${current.id}', '${current.name}');"><img src="${pageContext.request.contextPath}/asset/images/icon/delete.gif" style="vertical-align: sub;" />删除</a>
+	
 				</td>
 			</tr>
 		</c:foreach>
