@@ -39,7 +39,6 @@ public class JsonHelper {
 	 */
 	public static Object parse(String str) {
 		Object obj = new FMS(str).parse();
-		System.out.println(obj);
 		return obj;
 	}
 
