@@ -147,6 +147,8 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	 */
 	public void go(HttpServletRequest request) {
 		if (getTemplate() != null) {
+			request.setAttribute("jsp_path", getTemplate()); // 保存路径以便调试
+			
 			try {
 				RequestDispatcher rd = request.getRequestDispatcher(getTemplate());// JSP 路径
 				
