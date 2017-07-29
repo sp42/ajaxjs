@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.app_manager.model;
+package com.ajaxjs.cms.app.model;
 
 import com.ajaxjs.framework.model.BaseModel;
 

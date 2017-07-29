@@ -1,6 +1,6 @@
-package com.ajaxjs.cms.app_manager.dao;
+package com.ajaxjs.cms.app.dao;
 
-import com.ajaxjs.cms.app_manager.model.Version;
+import com.ajaxjs.cms.app.model.Version;
 import com.ajaxjs.framework.dao.IDao;
 import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.dao.annotation.Delete;

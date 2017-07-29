@@ -1,7 +1,7 @@
-package com.ajaxjs.cms.app_manager.service;
+package com.ajaxjs.cms.app.service;
 
-import com.ajaxjs.cms.app_manager.dao.VersionDao;
-import com.ajaxjs.cms.app_manager.model.Version;
+import com.ajaxjs.cms.app.dao.VersionDao;
+import com.ajaxjs.cms.app.model.Version;
 import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.model.PageResult;
 import com.ajaxjs.framework.service.BaseDaoService;

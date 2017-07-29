@@ -35,7 +35,7 @@ public class ArticleController extends CommonController<Article, Long> {
 	@GET
 	@Override
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
-		CatalogController.initCatalog(Common.newsCatalog_Id, model, true);
+		// CatalogController.initCatalog(Common.newsCatalog_Id, model, true);
 		initDb();
 
 		ArticleService service = getService(); // 避免 service 为单例

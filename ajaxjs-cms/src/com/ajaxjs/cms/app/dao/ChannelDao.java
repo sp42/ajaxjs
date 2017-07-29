@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.app_manager.dao;
+package com.ajaxjs.cms.app.dao;
 
 import java.util.Map;
 
@@ -10,6 +10,10 @@ import com.ajaxjs.framework.dao.annotation.Select;
 import com.ajaxjs.framework.dao.annotation.Update;
 import com.ajaxjs.framework.model.PageResult;
 
+/**
+ * 
+ * @author Frank Cheung frank@ajaxjs.com
+ */
 public interface ChannelDao extends IDao<Map<String, Object>, Long> {
 	final static String tableName = "channel";
 	

@@ -1,8 +1,8 @@
-package com.ajaxjs.cms.app_manager.service;
+package com.ajaxjs.cms.app.service;
 
 import java.util.Map;
 
-import com.ajaxjs.cms.app_manager.dao.ChannelDao;
+import com.ajaxjs.cms.app.dao.ChannelDao;
 import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.model.PageResult;
 import com.ajaxjs.framework.service.BaseDaoService;

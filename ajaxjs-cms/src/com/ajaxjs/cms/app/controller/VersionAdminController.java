@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.app_manager.controller;
+package com.ajaxjs.cms.app.controller;
 
 import javax.mvc.annotation.Controller;
 import javax.ws.rs.DELETE;
