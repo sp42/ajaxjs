@@ -3,7 +3,7 @@
 	<h3>内容</h3>
 	<ul>
 		<li><a target="iframepage"
-			href="admin/static/list/list.do?limit=10">静态页面</a></li>
+			href="admin/page_editor/show.do">静态页面</a></li>
 	</ul>
 </li>
 <li>
