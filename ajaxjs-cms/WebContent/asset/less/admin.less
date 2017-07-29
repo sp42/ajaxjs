@@ -1,0 +1,151 @@
+@import 'common_component.less';
+
+@header-height: 5%;
+@mainColor: #EBEBEB;
+@hightColor: #417BB5;
+
+body.admin-shell {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	a {
+		text-decoration: none;
+		color: #939da8;
+	}
+
+	.memberNav {
+		display: none;
+	}
+
+	header {
+		width: 100%;
+		height: @header-height;
+		border-top: 1px solid white;
+		border-bottom: 1px solid gray;
+		.gradient(top, #78B1ED , @hightColor);
+		display: table;
+		h1 , menu {
+			display: table-cell;
+			vertical-align: middle;
+			color: white;
+		}
+	
+		h1 {
+			text-shadow: 0px 1px 0px black;
+			font-weight: normal;
+			font-size: 1.1rem;
+			text-indent: 2em;
+			letter-spacing: 3px;
+		}
+	
+		menu {
+			margin: 0;
+			font-size: .9rem;
+			padding-right: 2%;
+			text-align: right;
+			a {
+				color: white;
+			}
+		}
+	}
+}
+
+
+@sidebarWidth: 15%;
+.side {
+	.widthFx;
+	width: @sidebarWidth;
+	height: 100-@header-height;
+	float: left;
+	position: relative;
+	.gradient(left, #FAFAFA , @mainColor);
+	.rightTop_title {
+		overflow: hidden;
+		width: 80%;
+		height: 30px;
+		line-height: 30px;
+		background-color: #FAFAFA;
+		float: right;
+	}
+
+	.rightTop {
+		overflow: hidden;
+		clear: right;
+		width: 100%;
+		height: 30px;
+		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARMAAAAcCAYAAABCiFvZAAAD6UlEQVR4nO3ZW1LqQBSFYec/KhEEBUFEROQOAoLcoiARX9Z5CpUTA+l07yZYtR7+KXxZu3Px8/ODYLvdDrvdDt/f3/tc14Xruthut9hut/j6+tq32Wyw2WywXq/x+fm57+PjA47jwHEcrFYrrFYrLJdLLBYLLBYLzOdzzOdzzGYzzGYzvL+/YzqdYjKZYDKZ4O3tDePxGOPxGKPRCMPhEMPhEK+vrxgMBhgMBuj3++j1euh2u+h2u+h0Omi322i322i1Wmg2m2g0Gmg0Gnh5eUG9Xke9Xsfz8zNqtRpqtRqenp5QrVZRrVbx+PiISqWCSqWCh4cHlMtllMtl3N/fo1QqoVQqoVgsolgs4u7uDoVCAYVCAfl8Hvl8Hre3t7i5udmXy+WQy+WQzWZxfX29L5PJIJPJIJ1OI51O4+rqal8qlUIqlcLl5SVjf6YLPx5h+UEJy0MmmIeOHx8PnWDr9fq//CAFcfIXhMrfcrn8lYeYPz9mftSCTafT0PzweXkAhjUajQ7mQamTh6tu/X7fqF6vp533ITCp0+kY532ETGu1WuI1m03reR9d3axhEgTFv2TiwHIIlyAowcKAOYSMt5CCBZFRwcbDJSw/OGFFYRMFkUm6iElgZgqZKWaSqEnBZgs6mwhGYqICShQqruv+wkQXFj8uh5ZKXFjC1ooEMFGrJlgUNlEQmaSLmARmppBJLDMp1KRgswWdTQSVMFEFRfXs0YEl6hwKwqIKjeM4oWvl2GkUho4OMjrgRJ1buplAZoqZKWQSy0wKNSnYbEFnE0FlTOKAEgZL8A1FFZdjyKi8s6hgE7Vgjp1IYegcWzbH1o4qPDYwShIzU8gklpkUalKw2YLOJoKxMDkFLHHAibNijqWybKLWThREug/EqsUFTPV8Uy1pCE2XmRRqUrAlkSmi2phIv6noYKN7LsV9m1EpLj5x3nZ0cYqTCWSmmJlCZoqZ9LqTgM0WdDYRFMFEBZY4mOj+IdIp7oqJC4/u0ombCURJY2S6qs4JJFsnpw2gpMESx+QQMFKYSL7D6KyYY+smzpIxhUcSoqQxMl1F5wSSJEqnfhMzxegkmESdQjYwMX2PsflGI3FWSUKUNEamq+icQJJEyTZQ0mCdBSa6SUEjdS5JrJskIEoaI9NVdE4gSaJkGyhpsIgJMSEmxISYnOLt5a+AlOSJlfR7zzmBJImSbaCkwSImxISYEBNiQkyICTEhJsSEmBATYkJMiAkxISbEhJgQE2JCTIgJMSEmxISYEBNiQkyICTEhJsSEmBATYkJMiAkxISbEhJgQE2JCTIgJMSEmxISYEBNiQkyICTEhJsSEmPx1TP4BmpLvcn0FwB4AAAAASUVORK5CYII=") no-repeat right top;
+	}
+
+	.closeBtn {
+		position: absolute;
+		right: 0;
+		top: 0;
+		width: 5px;
+		height: 100%;
+		background: #ECECEC url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAAKCAYAAACe5Y9JAAAAGElEQVQImWPYtGnT/02bNv1ngDMwAVlqAHuWJP30elz+AAAAAElFTkSuQmCC") no-repeat scroll 2px 50%;
+		border-left: 1px solid #D1D1D1;
+		border-right: 1px solid #D1D1D1;
+		cursor: pointer;
+	}
+
+	.leftSidebar {
+		.acMenu ();
+		overflow: hidden;
+		& > li {
+			border-top: 1px solid white;
+			border-bottom: 1px solid lightgray;
+			&.pressed {
+				border-top: 0;
+				border-bottom: 1px solid lightgray;
+				h3 {
+					.gradient(right, transparent , darken(@mainColor, 10));
+				}
+			}
+
+			ul {
+				li {
+					list-style-type: disc;
+					padding-left: 10%;
+					a {
+						width: 100%;
+						display: block;
+					}
+
+					&.selected {
+						background-color: lighten(@hightColor, 33);
+						a {
+							color: black;
+						}
+					}
+				}
+			}
+
+			h3 , li {
+				padding: 5px 0 5px 15px;
+				letter-spacing: 2px;
+				line-height: 20px;
+				color: #939da8;
+				font-size: 12px;
+				&:hover , a:hover {
+					color: black;
+				}
+			}
+		}
+	}
+}
+
+.iframe {
+	.widthFx;
+	width: 100-@sidebarWidth;
+	height: 100-@header-height;
+	margin-right: -999px;
+	overflow: hidden;
+	iframe {
+		width: 100%;
+		border: 0;
+		height: 100%;
+	}
+}
+
