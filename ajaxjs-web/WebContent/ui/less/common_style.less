@@ -1,50 +1,5 @@
 // AJAJXS LESS 样式库 基础库，该文件应该通过 @import 'common_style'; 被引入。
 
-// 复位
-.reset{
-    html, body{height:100%;}
-    body,dl,dt,dd,ul,li,pre,form,fieldset,input,p,blockquote,th,td,h1,h2,h3,h4,h5{margin:0;padding:0;}
-    h1,h2,h3,h4,h5{font-weight: normal;}
-    img{border:0;}ul li{list-style-type:none}.hide{display:none}
-    body{
-        -webkit-font-smoothing:antialiased;
-        font-family: "Lantinghei SC", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif;
-    }
-    *{	// For moblie Sarfari
-        -webkit-tap-highlight-color: transparent; 
-        -webkit-touch-callout: none; 		
-    }
- 
-    a{
-        text-decoration:none;
-        color:#999;
-//		color:inherit;
-        transition : color 400ms ease-in-out;
-        &:hover{
-            color:black;
-            text-decoration:underline;
-        }
-    }
- 
-    button {
-        border:none;
-        outline: none;
-        cursor: pointer;
-        letter-spacing: 2px;
-        text-align: center;
-        -webkit-user-select: none; // 不可选择文本
-        -moz-user-select: none;
-        user-select: none;
-    }
-    select, input[type=text], input[type=password], textarea {
-		outline:none;
-        -moz-appearance:none;// for mac
-	}
-}
- 
- 
-.reset();
-
 /*
 -------------------------
 常见样式类
@@ -57,8 +12,6 @@
     width: 100%;
     height: 100%;
 }
-
-
 
 // 水平线
 .ajaxjs-hr(@width: 100%) {
