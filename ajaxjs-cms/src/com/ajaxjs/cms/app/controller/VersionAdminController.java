@@ -9,9 +9,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
-import com.ajaxjs.cms.app_manager.model.Version;
-import com.ajaxjs.cms.app_manager.service.ChannelService;
-import com.ajaxjs.cms.app_manager.service.VersionService;
+import com.ajaxjs.cms.app.model.Version;
+import com.ajaxjs.cms.app.service.ChannelService;
+import com.ajaxjs.cms.app.service.VersionService;
 import com.ajaxjs.cms.service.PortalService;
 import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.framework.service.ServiceException;
@@ -29,7 +29,7 @@ public class VersionAdminController extends CommonController<Version, Long> {
 	public VersionAdminController() {
 		setAdminUI(true);
 	}
-	
+
 	@Override
 	public VersionService getService() {
 		return new VersionService();
@@ -41,20 +41,20 @@ public class VersionAdminController extends CommonController<Version, Long> {
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
 		return super.list(start, limit, model);
 	}
-	
-	private static void prepareData(ModelAndView model){		
+
+	private static void prepareData(ModelAndView model) {
 		initDb();
-		
+
 		try {
-			model.put("portals",  new PortalService().getAll());
+			model.put("portals", new PortalService().getAll());
 			model.put("channels", new ChannelService().getAll());
 		} catch (ServiceException e) {
 			e.printStackTrace();
-		} finally{
+		} finally {
 			closeDb();
 		}
 	}
-	
+
 	/**
 	 * 新建
 	 */
