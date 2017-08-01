@@ -27,6 +27,7 @@ import com.ajaxjs.util.reflect.BeanUtil;
 
 /**
  * 序列化/反序列化 JSON
+ * 
  * @author Frank Cheung frank@ajaxjs.com
  */
 public class JsonHelper {
@@ -75,7 +76,7 @@ public class JsonHelper {
 	 */
 	public static String stringifyMap(Map<String, ?> map) {
 		if (map == null)
-				return null;
+			return null;
 
 		List<String> arr = new ArrayList<>();
 		for (String key : map.keySet())
@@ -106,10 +107,23 @@ public class JsonHelper {
 	/**
 	 * 
 	 * @param bean
+	 *            BEAN 对象
 	 * @return
 	 */
 	public static String bean2json(Object bean) {
 		return stringifyMap(BeanUtil.bean2Map(bean));
+	}
+
+	public static String beans2json(List<Object> beans) {
+		StringBuilder sb = new StringBuilder();
+		for (Object bean : beans) {
+			
+			System.out.println(bean.getClass());
+			System.out.println(BeanUtil.bean2Map(bean));
+			
+			sb.append(stringifyMap(BeanUtil.bean2Map(bean)));
+		}
+		return sb.toString();
 	}
 
 	/**
@@ -122,7 +136,7 @@ public class JsonHelper {
 		Map<String, Object> map = parseMap(json);
 		return BeanUtil.map2Bean(map, clz, true);
 	}
-	
+
 	/**
 	 * 将 Simple Object 对象转换成 JSON 格式的字符串:JAVA-->JS
 	 * 
@@ -160,7 +174,7 @@ public class JsonHelper {
 
 	/**
 	 * 格式化 JSON，使其美观输出到控制或其他地方 请注意 对于json中原有\n \t 的情况未做过多考虑 得到格式化json数据 退格用\t
-	 * 换行用\r 
+	 * 换行用\r
 	 * 
 	 * @param json
 	 *            原 JSON 字符串
@@ -176,26 +190,26 @@ public class JsonHelper {
 				str.append(StringUtil.repeatStr("\t", "", level));
 
 			switch (c) {
-				case '{':
-				case '[':
-					str.append(c + "\n");
-					level++;
-					break;
-				case ',':
-					if (json.charAt(i + 1) == '"')
-						str.append(c + "\n"); // 后面必定是跟着 key 的双引号，但 其实 json 可以 key
-												// 不带双引号的
-					break;
-				case '}':
-				case ']':
-					str.append("\n");
-					level--;
-					str.append(StringUtil.repeatStr("\t", "", level));
-					str.append(c);
-					break;
-				default:
-					str.append(c);
-					break;
+			case '{':
+			case '[':
+				str.append(c + "\n");
+				level++;
+				break;
+			case ',':
+				if (json.charAt(i + 1) == '"')
+					str.append(c + "\n"); // 后面必定是跟着 key 的双引号，但 其实 json 可以 key
+										// 不带双引号的
+				break;
+			case '}':
+			case ']':
+				str.append("\n");
+				level--;
+				str.append(StringUtil.repeatStr("\t", "", level));
+				str.append(c);
+				break;
+			default:
+				str.append(c);
+				break;
 			}
 		}
 

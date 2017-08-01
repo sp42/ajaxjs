@@ -95,9 +95,13 @@ public class Token {
 			return getJavaValue();
 		else if(this instanceof StringToken) 
 			return StringToken.unescape(value);
-		else if(this instanceof NumberToken) 
-			return value.indexOf('.') != -1 ? Double.parseDouble(value) :  Integer.parseInt(value);
-		else 
+		else if(this instanceof NumberToken) {
+			//System.out.println("vv:" +( (false) ? Double.parseDouble(value) :  Integer.parseInt(value)));
+			if (value.indexOf('.') != -1)
+				return Double.parseDouble(value);
+			else
+				return Integer.parseInt(value);
+		}else 
 			throw new JsonParseException("获取 Java 值失败！");
 	}
 	

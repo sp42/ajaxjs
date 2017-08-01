@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.js;
+package com.ajaxjs.util.collection;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
 /**
- * JSON 结构的遍历者
- * 注意输入必须为 list 而不能是 map
+ * JSON 结构的遍历者 注意输入必须为 list 而不能是 map
  * 
  * @author Frank Cheung frank@ajaxjs.com
  */
@@ -121,27 +122,107 @@ public class JsonStruTraveler {
 				System.out.println(_map.get("name"));
 				if (_map.get(children) != null && _map.get(children) instanceof List) {
 					List<Map<String, Object>> list = (List<Map<String, Object>>) _map.get(children);
-					
+
 					for (Map<String, Object> __map : list)
 						travle(__map);
 				}
 			}
 		}
 	}
-	
-	
+
 	@SuppressWarnings("unchecked")
-	public void travleList(List<Map<String, Object>> list, String superPath, int level) {
-		for (Map<String, Object> map :list) {
+	public void travleList(List<Map<String, Object>> list, Map<String, Object> superNode, int level) {
+		for (Map<String, Object> map : list) {
 			if (map != null) {
-				String currerntPath = superPath + "/" + map.get(id).toString();
+				String currerntPath = (superNode != null ? superNode.get("fullPath").toString() : "") + "/"
+						+ map.get(id).toString();
 				map.put("fullPath", currerntPath);
 				map.put("level", level);
-				
-				if (map.get(children) != null && map.get(children) instanceof List) 
-					travleList((List<Map<String, Object>>) map.get(children), currerntPath, level + 1);
+
+				// 记录父级信息
+				List<String> supers = new ArrayList<>();
+				map.put("supers", supers);
+
+				if (superNode != null) {
+					supers.addAll((List<String>) superNode.get("supers"));
+					supers.add(superNode.get("fullPath") + ":" + superNode.get("name")); // 仅记录 id 和 name
+				}
+
+				if (map.get(children) != null && map.get(children) instanceof List)
+					travleList((List<Map<String, Object>>) map.get(children), map, level + 1);
 			}
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static void travelMapList(Map<String, Object> map, TravelMapList_Iterator iterator) {
+		for (String key : map.keySet()) {
+			Object obj = map.get(key);
+			if (iterator != null)
+				iterator.handler(key, obj);
+
+			if (obj != null) {
+				if (obj instanceof Map) {
+					if (iterator != null)
+						iterator.newKey(key);
+					travelMapList((Map<String, Object>) obj, iterator);
+					if (iterator != null)
+						iterator.exitKey(key);
+				} else if (obj instanceof List) {
+					List<Object> list = (List<Object>) obj;
+
+					for (Object item : list) {
+						if (item != null && item instanceof Map)
+							travelMapList((Map<String, Object>) item, iterator);
+					}
+				}
+			}
+		}
+	}
+
+	public static Map<String, Object> flatMap(Map<String, Object> map) {
+		final Stack<String> stack = new Stack<>();
+		final Map<String, Object> _map = new HashMap<>();
+		
+		travelMapList(map, new TravelMapList_Iterator() {
+			@Override
+			public void handler(String key, Object obj) {
+				if(obj == null || obj instanceof String || obj instanceof Number || obj instanceof Boolean) {
+					StringBuilder sb = new StringBuilder();
+					for (String s : stack) {
+						sb.append(s + ".");
+					}
+					_map.put(sb + key, obj);
+//					System.out.println(sb + key + ":" + obj);
+				}
+			}
+
+			@Override
+			public void newKey(String key) {
+				stack.add(key);
+			}
+
+			@Override
+			public void exitKey(String key) {
+				stack.pop();
+			}
+		});
+		
+		return _map;
+	}
+
+	public static interface TravelMapList_Iterator {
+		/**
+		 * 当得到了 Map 的 key 和 value 时调用
+		 * 
+		 * @param key
+		 * @param obj
+		 */
+		public void handler(String key, Object obj);
+
+		public void exitKey(String key);
+
+		public void newKey(String key);
 	}
 
 	/**

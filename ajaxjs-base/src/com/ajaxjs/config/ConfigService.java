@@ -15,13 +15,16 @@
  */
 package com.ajaxjs.config;
 
+import java.util.Map;
+
 import com.ajaxjs.Version;
 import com.ajaxjs.js.JsonHelper;
+import com.ajaxjs.util.Value;
+import com.ajaxjs.util.collection.JsonStruTraveler;
 import com.ajaxjs.util.io.FileUtil;
 
 /**
- * 以 JSON 为存储格式的配置系统，在 JVM 中以 Map/List 结构保存
- * 该类是单例。
+ * 以 JSON 为存储格式的配置系统，在 JVM 中以 Map/List 结构保存 该类是单例。
  * 
  * @author Frank Cheung frank@ajaxjs.com
  */
@@ -30,6 +33,10 @@ public class ConfigService {
 	 * 所有的配置保存在这个 congfig 中
 	 */
 	public static Config config;
+	/**
+	 * 所有的配置保存在这个 congfig 中（扁平化处理过的）
+	 */
+	public static Map<String, Object> flatConfig;
 
 	/**
 	 * 配置 json 文件的路径
@@ -45,6 +52,8 @@ public class ConfigService {
 		config.setJsonStr(FileUtil.openAsText(jsonPath));
 		config.putAll(JsonHelper.parseMap(config.getJsonStr()));
 		config.setLoaded(true);
+
+		flatConfig = JsonStruTraveler.flatMap(config);
 	}
 
 	/**
@@ -56,6 +65,40 @@ public class ConfigService {
 
 		// 保存文件
 		new FileUtil().setFilePath(config.getJsonPath()).setContent(jsonStr).save();
+	}
+
+	/**
+	 * 读取配置并转换其为 布尔 类型。仅对扁平化后的配置有效，所以参数必须是扁平化的 aaa.bbb.ccc 格式。
+	 * 
+	 * @param key
+	 *            配置键值
+	 * @return 配置内容
+	 */
+	public static boolean getValueAsBool(String key) {
+		return Value.TypeConvert(flatConfig.get(key), boolean.class);
+	}
+	
+	
+	/**
+	 * 读取配置并转换其为 int 类型。仅对扁平化后的配置有效，所以参数必须是扁平化的 aaa.bbb.ccc 格式。
+	 * 
+	 * @param key
+	 *            配置键值
+	 * @return 配置内容
+	 */
+	public static int getValueAsInt(String key) {
+		return Value.TypeConvert(flatConfig.get(key), int.class);
+	}
+
+	/**
+	 * 读取配置并转换其为字符串类型。仅对扁平化后的配置有效，所以参数必须是扁平化的 aaa.bbb.ccc 格式。
+	 * 
+	 * @param key
+	 *            配置键值
+	 * @return 配置内容
+	 */
+	public static String getValueAsString(String key) {
+		return Value.TypeConvert(flatConfig.get(key), String.class);
 	}
 
 }
