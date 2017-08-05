@@ -5,36 +5,57 @@
 			<a href="../" title="返回首页">&#8962;</a>
 		</li>
 		<li>
-			<a href="javascript:;">DHTML</a>
+			<a href="javascript:;">CSS</a>
 			<menu>
-				<div>DHTML，即动态 HTML，为常见的页面效果。</div>
+				<div>CSS 很重要，我们先讨论 CSS</div>
 				<ul>
 					<li>
-						<a href="msgbox.jsp">基本对话框</a>
+						<a href="${pageContext.request.contextPath}/ui_demo/base/intro.jsp">概述 &amp;文字排版</a>
 					</li>
 					<li>
-						<a href="menu.jsp">纯 CSS 导航菜单</a>
+						<a href="${pageContext.request.contextPath}/ui_demo/base/layout.jsp">常见布局</a>
 					</li>
 					<li>
-						<a href="accordion.jsp">折叠菜单</a>
+						<a href="${pageContext.request.contextPath}/ui_demo/base/list.jsp">列表布局</a>
 					</li>
 					<li>
-						<a href="expander.jsp">内容折叠器</a>
-					</li> 
+						<a href="${pageContext.request.contextPath}/ui_demo/base/page.jsp">页面制作</a>
+					</li>
+					<li>
+						<a href="${pageContext.request.contextPath}/ui_demo/base/form.jsp">表单元素</a>
+					</li>
+					<li>
+						<a href="${pageContext.request.contextPath}/ui_demo/base/menu.jsp">纯 CSS 导航菜单</a>
+					</li>
+
 				</ul>
 			</menu>
 		</li>
 		<li>
-			<a href="javascript:;">切换类</a>
+			<a href="javascript:;">JavaScript</a>
 			<menu>
-				<div>切换类多数为滚动内容的控件</div>
+				<div>控件</div>
 				<ul>
 					<li>
-						<a href="simpleTab.jsp">简易选项卡 Tab</a>
+						<a href="${pageContext.request.contextPath}/ui_demo/js/dialog.jsp">Dialog</a>
 					</li>
 					<li>
-						<a href="tab.jsp">CSS3 滚动 Tab</a>
+						<a href="${pageContext.request.contextPath}/ui_demo/js/collapsable.jsp">Collapsable</a>
 					</li>
+					<li>
+						<a href="${pageContext.request.contextPath}/ui_demo/js/tab.jsp">Tab</a>
+					</li>
+					<li>
+						<a href="${pageContext.request.contextPath}/ui_demo/js/carousel.jsp">Tab</a>
+					</li>
+					<li>
+						<a href="${pageContext.request.contextPath}/ui_demo/js/list.jsp">List Control</a>
+					</li>
+					<li>
+						<a href="${pageContext.request.contextPath}/ui_demo/js/form.jsp">Form</a>
+					</li> 
+				 
+					 
 					<li>
 						<a href="banner.jsp">广告轮播图 Banner</a>
 					</li>
@@ -45,7 +66,7 @@
 			</menu>
 		</li>
 		<li>
-			<a href="javascript:;">列表类</a>
+			<a href="javascript:;">控件</a>
 			<menu>
 				<div>手机端、PC端适用</div>
 				<ul>

@@ -1,9 +1,10 @@
-@import 'common/libs.less';
-@import 'common/component.less';
-@import 'common/canvas.less';
-@import 'UI/list.less';
-@import 'UI/lightbox.less';
-@import 'UI/htmlEditor.less';
+@import 'common_component.less';
+//@import 'common/libs.less';
+//@import 'common/component.less';
+//@import 'common/canvas.less';
+//@import 'UI/list.less';
+//@import 'UI/lightbox.less';
+//@import 'UI/htmlEditor.less';
 @maxWidth: 750px;
 
 .centerLimitWidth {
@@ -14,11 +15,45 @@
 .center {
 	.centerLimitWidth;
 }
-
-button {
-	.my-btn-2;
+.ajaxjs-hr{
+	.centerLimitWidth;
+	
 }
 
+h4{
+	.centerLimitWidth;
+	font-weight:bold;	
+	padding-left:10px;
+	box-sizing: border-box;
+	font-size:1.2em;
+	margin-top:20px;
+	margin-bottom:5px;
+	letter-spacing:2px;
+	color:#333;
+}
+
+ul.list li {
+	list-style-type:disc;
+	list-style-position: inside;
+	margin-left: 10px;
+}
+.box {
+	border: 1px solid lightgray;
+	padding: 1% 2%;
+}
+
+body > p{
+	color: #333;
+	line-height: 160%;
+	font-size: 1rem;
+	letter-spacing: 0px;
+	text-align: justify;
+	word-break: break-all;
+	max-width: @maxWidth;
+	padding: 10px;
+	box-sizing: border-box;
+	margin: 0 auto;
+}
 nav {
 	width: 100%;
 	color: #555;
@@ -75,7 +110,7 @@ footer {
 ul.imgList {
 	max-width: 500px;
 	margin: 10px auto;
-	.column_3 ();
+//	.column_3 ();
 }
 
 .tab_style_1 {
@@ -122,10 +157,6 @@ ul.imgList {
 }
 
 .p {
-	max-width: @maxWidth;
-	padding: 10px;
-	box-sizing: border-box;
-	margin: 0 auto;
 	p {
 		margin: 10px 0;
 		font-size: .9rem;
@@ -365,15 +396,15 @@ ul.imgList {
 
 // 专题
 .simpleList1 {
-	.column_1 ();
+//	.column_1 ();
 }
 
 .simpleList2 {
-	.column_2 ();
+//	.column_2 ();
 }
 
 .simpleList3 {
-	.column_3 ();
+//	.column_3 ();
 }
 
 // 区域滚动
@@ -381,7 +412,7 @@ ul.imgList {
 	.centerLimitWidth;
 	width: 300px;
 	height: 150px;
-	.areaScroll (v);
+//	.areaScroll (v);
 	::-webkit-scrollbar {
 		width: 7px;
 		height: 5px;
@@ -401,21 +432,20 @@ ul.imgList {
 	}
 }
 
-.col_List_1 {
-	.center ();
-	.column_1 ();
-}
-
-.col_List_2 {
-	.center ();
-	.column_2 ();
-}
+//.col_List_1 {
+//	.center ();
+//	.column_1 ();
+//}
+//
+//.col_List_2 {
+//	.center ();
+//	.column_2 ();
+//}
 
  .prettyprint {
 	max-width: 700px;
 	width: 95%;
-	margin: 10px auto;
-	height: 300px;
+	margin: 10px auto; 
 	border-left: 3px solid #d1d1e8;
 	//border-radius: 3px;
 	outline: 0;

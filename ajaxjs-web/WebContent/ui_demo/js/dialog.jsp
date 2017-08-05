@@ -1,27 +1,32 @@
 <%@page pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-	<%request.setAttribute("title", "基本对话框（弹出层）"); %>
-	<%@include file="../public/common.jsp" %>
-    <body>
-		<%@include file="../public/nav.jsp" %>
-		<script>
-		
+<%
+	request.setAttribute("title", "基本对话框（弹出层）");
+%>
+<%@include file="../public/common.jsp"%>
+<body>
+	<%@include file="../public/nav.jsp"%>
+	<script>
 		function showWarningDlg(innerText) {
-			new ajaxjs.Popup({
-				innerText : '<div class="leftIcon warning">!</div>' + innerText,
-				title : '警告',
-				hideYES_NO : true
-			}).show();
+			new ajaxjs.Popup(
+					{
+						innerText : '<div class="leftIcon warning">!</div>'
+								+ innerText,
+						title : '警告',
+						hideYES_NO : true
+					}).show();
 		}
 		function showSuccessDlg(innerText) {
 			// ✓ &#10003; &#x2713; ✔&#10004;&#x2714;
-			new ajaxjs.Popup({
-				innerText : '<div class="leftIcon success">✔</div>' + innerText,
-				title : '完成',
-				closeAsConfirm : true,
-				hideYES_NO : true
-			}).show();
+			new ajaxjs.Popup(
+					{
+						innerText : '<div class="leftIcon success">✔</div>'
+								+ innerText,
+						title : '完成',
+						closeAsConfirm : true,
+						hideYES_NO : true
+					}).show();
 		}
 		function showQueryDlg(innerText) {
 			// ✓ &#10003; &#x2713; ✔&#10004;&#x2714;
@@ -37,56 +42,54 @@
 				}
 			}).show();
 		}
-		</script>
-    	<div class="p">
-	    	<h3>对话框制作要点</h3>
-	    	<p> 熟练的话，五分钟即可完成全部编码！<button onclick="(new ajaxjs.Popup()).show();">点击演示</button></p>
-	    	 <ul>
-	    	 	<li>全屏幕的遮罩 Mask（fixed 定位，100%宽，高度用 js 获取页面内容高度然后赋值，设置透明背景然后注意 z-index）</li>
-	    	 	<li>如果不需要 Mask，不加入 &lt;div class=&quot;msgbox_mask&quot;&gt;&lt;/div&gt; 元素即可</li>
-	    	 	
-	    	 	<li>窗体居中（fixed 定位，js 计算页面内容高度、宽度减半然后再减去窗体之高度、宽度一半，即为 top、left）</li>
-	    	 	<li>窗体不会随着页面滚动而定位位置，而是根据浏览器视口（viewport）来定位，因而采用  fixed 定位，计算 top、left 读取 windows.innerWidth/innerHeight</li>
-	    	 	<li>关闭窗体很简单，要连同 Mask 一起关闭（关闭动作是多个的，js 中使用了 [].forEach.call 遍历的技巧）</li>
-	    	 	<li>fadeIn 效果为纯 CSS3 做的，可能一些低版本的浏览器就没有动画效果了</li>
-	    	 	<li>可以方便地自定义按钮</li>
-	    	 	<li>键盘 ESC 键关闭窗体</li>
-	    	 </ul>
-	    	 
-	    	 <p>更多例子：</p>
-	    	 <button onclick="showWarningDlg('警告');">警告对话框</button>
-	    	 <button onclick="showSuccessDlg('成功或接受');">成功或接受对话框</button>
-	    	 <button onclick="showQueryDlg('成功或接受');">询问对话框</button>
-    	</div>
-    	<textarea class="hide msgboxTpl">
-			<div class="msgbox">
-				<h1>title</h1>
-				<div class="topCloseBtn closeAction">×</div>
-				<div class="inner">
-				  人们普遍认为，随着浦东新区和苏州工业园在上世纪90年代的崛起，长三角已超越珠三角成为中国经济增长的第一级，但是本文通过大量的数据分析与调研认为：
-				  近几年来，珠三角悄然实现了弯道超车，无论是自主创新能力、民间创富能力，还是可持续发展能力，都比长三角的表现更优。
-				  为什么?长三角不是国家钦定的老大哥吗，无论是政策优势、人才优势，还是地缘优势，都比之珠三角更优。珠三角反超的秘密是什么?
-				</div>
-				<div class="btn">
-			 		<div class="yesAction">是</div>
-			 		<div class="noAction">否</div>
-			 		<div class="closeAction">关闭</div>
-				</div>
+	</script>
+	<h4>对话框</h4>
+	<hr class="ajaxjs-hr" />
+	<p>制作对话框很简单，要点如下。</p>
+	<ul class="centerLimitWidth list">
+		<li>全屏幕的遮罩 Mask（fixed 定位，100%宽，高度用 js 获取页面内容高度然后赋值，设置透明背景然后注意
+			z-index）</li>
+		<li>如果不需要 Mask，不加入 &lt;div
+			class=&quot;msgbox_mask&quot;&gt;&lt;/div&gt; 元素即可</li>
+
+		<li>窗体居中（fixed 定位，js 计算页面内容高度、宽度减半然后再减去窗体之高度、宽度一半，即为 top、left）</li>
+		<li>窗体不会随着页面滚动而定位位置，而是根据浏览器视口（viewport）来定位，因而采用 fixed 定位，计算
+			top、left 读取 windows.innerWidth/innerHeight</li>
+		<li>关闭窗体很简单，要连同 Mask 一起关闭（关闭动作是多个的，js 中使用了 [].forEach.call 遍历的技巧）</li>
+		<li>fadeIn 效果为纯 CSS3 做的，可能一些低版本的浏览器就没有动画效果了</li>
+		<li>可以方便地自定义按钮</li>
+		<li>键盘 ESC 键关闭窗体</li>
+		<li>如果需要拖放的话 dd.js</li>
+	</ul>
+
+	<p>更多例子：</p>
+	<div class="centerLimitWidth">
+		<button class="ajaxjs-btn" onclick="(new ajaxjs.Popup()).show();">点击演示</button>
+		<button class="ajaxjs-btn" onclick="showWarningDlg('警告');">警告对话框</button>
+		<button class="ajaxjs-btn" onclick="showSuccessDlg('成功或接受');">成功或接受对话框</button>
+		<button class="ajaxjs-btn" onclick="showQueryDlg('成功或接受');">询问对话框</button>
+	</div>
+	<textarea class="hide msgboxTpl">
+		<div class="msgbox">
+			<h1>title</h1>
+			<div class="topCloseBtn closeAction">×</div>
+			<div class="inner">
+			  人们普遍认为，随着浦东新区和苏州工业园在上世纪90年代的崛起，长三角已超越珠三角成为中国经济增长的第一级，但是本文通过大量的数据分析与调研认为：
+			  近几年来，珠三角悄然实现了弯道超车，无论是自主创新能力、民间创富能力，还是可持续发展能力，都比长三角的表现更优。
+			  为什么?长三角不是国家钦定的老大哥吗，无论是政策优势、人才优势，还是地缘优势，都比之珠三角更优。珠三角反超的秘密是什么?
 			</div>
-			<div class="msgbox_mask"></div>
-    	</textarea>
-    	
-		<div class="p">
-			<h3>依赖 js：</h3>
-			<ul>
-				<li>/js/libs/dd.js 如果需要拖放的话</li>
-			</ul>
-		</div> 
-		
-		<div class="p">
-			<h3>代码如下：</h3>
+			<div class="btn">
+		 		<div class="yesAction">是</div>
+		 		<div class="noAction">否</div>
+		 		<div class="closeAction">关闭</div>
+			</div>
 		</div>
-		<pre class="prettyprint">
+		<div class="msgbox_mask"></div>
+   	</textarea>
+
+	<p>HTML 代码如下：</p>
+
+	<pre class="prettyprint">
 &lt;div class=&quot;msgbox&quot;&gt;
 	&lt;h1&gt;title&lt;/h1&gt;
 	&lt;div class=&quot;topCloseBtn closeAction&quot;&gt;×&lt;/div&gt;
@@ -102,12 +105,10 @@
 	&lt;/div&gt;
 &lt;/div&gt;
 &lt;div class=&quot;msgbox_mask&quot;&gt;&lt;/div&gt;
-		</pre>	
-		<div class="p">
-			<h3>核心 JS：</h3>
-		</div>
-		
-		<pre class="prettyprint">
+		</pre>
+	<p>核心 JS：</p>
+
+	<pre class="prettyprint">
 function showWarningDlg(innerText) {
 	new ajaxjs.Popup({
 		innerText : &#x27;&lt;div class=&quot;leftIcon warning&quot;&gt;!&lt;/div&gt;&#x27; + innerText,
@@ -140,11 +141,11 @@ function showQueryDlg(innerText) {
 		}
 	}).show();
 }
-		</pre>		
-		<div class="p">
-			<h3>样式如下：</h3>
-		</div>
-		<pre class="prettyprint">
+		</pre>
+	<div class="p">
+		<h3>样式如下：</h3>
+	</div>
+	<pre class="prettyprint">
 .msgbox_style_1(){
 	background-color:#ebebeb;
 	border:1px solid #d3d3d3;
@@ -263,6 +264,6 @@ function showQueryDlg(innerText) {
 	
 }
 	    </pre>
-	    <%@include file="../public/footer.jsp" %>
-    </body>
+	<%@include file="../public/footer.jsp"%>
+</body>
 </html>

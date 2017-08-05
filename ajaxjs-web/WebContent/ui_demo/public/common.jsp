@@ -11,21 +11,6 @@
 		<%-- pageContext.request.contextPath 作用是取出部署的应用程序名，这样不管如何部署，所用路径都是正确的。 --%>
 		<link rel="icon"		  type="image/x-icon" href="${pageContext.request.contextPath}/asset/images/favicon.ico" />
 		<link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/asset/images/favicon.ico" />
-	    
-	    <style type="text/css">
-			body,dl,dt,dd,ul,li,pre,form,fieldset,input,p,blockquote,th,td,h1,h2,h3,h4,h5{margin:0;padding:0;}
-			img{border:0;vertical-align:top}ul li{list-style-type:none}.hide{display:none}
-			body{
-				-webkit-font-smoothing:antialiased;
-				font-family:"Microsoft YaHei","ff-tisa-web-pro-1","ff-tisa-web-pro-2","Lucida Grande","Hiragino Sans GB","Hiragino Sans GB W3",Arial;
-			}
-			*{	
-				<%-- 很多Android 浏览器的 a 链接有边框，这里取消它  --%>
-				-webkit-tap-highlight-color: rgba(0, 0, 0, 0); 
-				<%-- 在IOS浏览器里面，假如用户长按a标签，都会出现默认的弹出菜单事件  --%>  
-				-webkit-touch-callout: none;    			
-			}
-		</style>
 		
 <%
 	UA ua = new UA(request);
@@ -56,7 +41,8 @@
 	
 	<%-- 定义网页搜索引擎索引方式，robotterms 是一组使用英文逗号「,」分割的值，通常有如下几种取值：none，noindex，nofollow，all，index和follow --%>
 	<meta name="robots" content="index,follow" />
-	<link rel="stylesheet" type="text/css" href="<%=getCssUrl(request, "/ui_demo/public/main.less", false)%>" />
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/asset/common/css/base.css" />
+	<link rel="stylesheet" type="text/css" href="<%=getCssUrl(request, "/ui_demo/public/main.less", true)%>" />
 <%-- 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ui_demo/public/css.css" /> --%>
     <script src="${pageContext.request.contextPath}/asset/common/js/dom.js"></script>
     <script src="${pageContext.request.contextPath}/asset/common/js/widget.js"></script>
