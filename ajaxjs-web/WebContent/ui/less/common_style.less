@@ -14,12 +14,11 @@
 }
 
 // 水平线
-.ajaxjs-hr(@width: 100%) {
+.ajaxjs-hr {
     margin: 1% 0;
     border: 0;
     border-top: 1px solid #eee;
     border-bottom: 1px solid #fff;
-    width: @width
 }
 
 // 快速制作1px 表格边框，为需要设置的table元素加上border的class即可
@@ -98,15 +97,7 @@
     }
 }
 
-.ajaxjs-fullScreenMask() {
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 9999998;
-    background-color: rgba(0, 0, 0, .5);
-}
+
 
 
 /*
@@ -178,7 +169,7 @@
     .transition(opacity @time ease-in);
 }
 
-//旋转角度
+// 旋转角度
 .rotate(@ro: 30deg) {
     .transform(rotate(@ro));
 }
