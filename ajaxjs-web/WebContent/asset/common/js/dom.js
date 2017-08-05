@@ -190,7 +190,6 @@ ajaxjs.params = {
 	    var fn = function(str, reg) {  
 	        if(str) {  
 	            var data = {}; 
-
 	            str.replace(reg, function( $0, $1, $2, $3 ){ data[$1] = $3; });
 
 	            return data;  
@@ -307,6 +306,29 @@ ajaxjs.xhr.get	= ajaxjs.xhr.request.delegate(null, null, null, null, 'GET');
 ajaxjs.xhr.post = ajaxjs.xhr.request.delegate(null, null, null, null, 'POST');
 ajaxjs.xhr.put 	= ajaxjs.xhr.request.delegate(null, null, null, null, 'PUT');
 ajaxjs.xhr.dele	= ajaxjs.xhr.request.delegate(null, null, null, null, 'DELETE');
+
+
+/*
+ * --------------------------------------------------------
+ * 表单
+ * --------------------------------------------------------
+ */
+ajaxjs.form = function(formEl, cfg) {
+	this.cfg = cfg || {};
+	this.formEl = formEl;
+	if (!this.formEl) throw '未设置表单元素！';
+	if (!this.formEl.action) throw '未设置接口地址！';
+
+	// this.formEl.method always GET, so this.formEl.getAttribute('method') instead
+	var method = this.formEl.getAttribute('method').toLowerCase();
+	if (method == 'post')
+		this.PUT = false;
+	if (method == 'put')
+		this.PUT = true;
+	
+	this.formEl.addEventListener('submit', fireSubmitEvent.bind(this));
+	
+}
 
 
 /*
@@ -460,3 +482,205 @@ ajaxjs.loadScript = function(src, fn) {
 }
 
 ajaxjs.loadScript.loaded = {};
+
+
+//******----------------------------******
+//表单
+//******----------------------------******
+;
+(function() {
+
+	/**
+	 * new bf_form(document.querySelector('form.addUser')).on('afterSubmit',
+	 * bf_form.commonAfterSubmit);
+	 * 
+	 * @param formEl
+	 * @returns {bf_form}
+	 */
+	bf_form = function(formEl, cfg) {
+		this.cfg = cfg || {};
+		this.formEl = formEl;
+		if (!this.formEl)
+			throw '未设置表单元素！';
+		if (!this.formEl.action)
+			throw '未设置接口地址！';
+
+		// this.formEl.method always GET, so this.formEl.getAttribute('method')
+		// instead
+		var method = this.formEl.getAttribute('method').toLowerCase();
+		if (method == 'post')
+			this.PUT = false;
+		if (method == 'put')
+			this.PUT = true;
+
+		UserEvent.call(this);
+
+		this.addEvents('beforeSubmit', 'submit', 'afterSubmit');
+		this.formEl.addEventListener('submit', fireSubmitEvent.bind(this));
+		this.on('submit', onSubmit.bind(this));
+
+		this.submit = function() {
+			var formEl = this.formEl;
+			if (formEl.fireEvent) { // ie
+				formEl.fireEvent('onsubmit');
+				formEl.submit();
+			} else if (document.createEvent) {
+				var ev = document.createEvent('HTMLEvents');
+				ev.initEvent('submit', false, true);
+				formEl.dispatchEvent(ev);
+			} else
+				throw '触发提交事件失败，什么浏览器？？';
+		}
+
+		if (cfg && cfg.isCommonAfterSubmit)
+			this.on('afterSubmit', bf_form.commonAfterSubmit);
+		// autoInit.initCalendar(this.formEl);
+		// autoInit.initImgPerview(this.formEl);
+		// autoInit.whenpresscheckCharLength(this.formEl);
+	}
+
+	function fireSubmitEvent(e) {
+		e.preventDefault();
+		if (this.fireEvent('beforeSubmit', this.formEl, e) !== false) {
+			this.fireEvent('submit', this.formEl, e);
+		}
+	}
+
+	function onSubmit() {
+		this.formData = serializeForm(this.formEl); // 保存表单数据引用
+
+		// htmlEditor 没有标识自己不存在，@todo
+		if (this.cfg.htmlEditor_hook)
+			this.formData[this.cfg.htmlEditor_hook.fieldName || 'content'] = encodeURIComponent(this.cfg.htmlEditor_hook.getValue());
+		if (this.PUT) {
+			XMLHttpRequest.put(this.formEl.action, this.formData, fireAfterSubmitEvent.bind(this));
+		} else {
+			XMLHttpRequest.post(this.formEl.action, this.formData, fireAfterSubmitEvent.bind(this));
+		}
+	}
+
+	function serializeForm(formEl, isStringOutput, isIgnroEmpty /* 是否忽略空字符串的字段 */) {
+		var formData = {};
+
+		eachChild4form(
+				formEl,
+				function(el) {
+					var elType = el.type, key = el.name;
+
+					if (elType == "text" || elType == "hidden"
+							|| elType == "password" || elType == "textarea") {
+						formData[key] = getPrimitives(el.value);
+					} else if (elType == "radio" || elType == "checkbox") {
+						if (el.checked)// 选中才会加入数据
+							formData[key] = getPrimitives(el.value);
+					} else if (elType == "select-one"
+							|| elType == "select-multiple") {
+						for (var opt, optValue, p = 0, q = el.options.length; p < q; p++) {
+							opt = el.options[p];
+							if (opt.selected) {
+								optValue = opt.hasAttribute ? opt
+										.hasAttribute('value') : opt
+										.getAttribute('value') !== null
+								optValue = optValue ? opt.value : opt.text;
+
+								formData[key] = getPrimitives(optValue);
+							}
+						}
+					}
+
+					if (typeof formData[key] == 'string') { // url 编码
+						formData[key] = encodeURIComponent(formData[el.name]);
+					}
+				});
+
+		if (isIgnroEmpty) {
+			for ( var i in formData) {
+				if (formData[i] === "")
+					delete formData[i];
+			}
+		}
+
+		return isStringOutput ? utils.json2url(formData) : formData;
+	}
+
+	var url_regexp = /(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/;
+	/**
+	 * 输入参数，还原它的primitive值。有点类似 eval() 的作用，却不使用 eval()。
+	 * 
+	 * @param {Mixed}
+	 *            v
+	 * @return {Mixed}
+	 */
+	function getPrimitives(v) {
+		if (v) {
+			if (v == 'true')
+				return true;
+			if (v == 'false')
+				return false;
+			if (v.toString() == (new Date(v)).toString())
+				return new Date(v); // v is a date but in Stirng Type
+			if (v == String(Number(v)))
+				return Number(v);
+		}
+
+		// 检查 url 编码
+		if (url_regexp.test(v)) {
+			v = encodeURIComponent(v);
+		}
+		return v;
+	}
+
+	// 判断form的内容是否有改变
+	function isFormChanged(formEl) {
+		var i = 0;
+		eachChild4form(formEl, function(el) {
+			switch (el.type) {
+			case "text":
+			case "hidden":
+			case "password":
+			case "textarea":
+				if (el.defaultValue != el.value)
+					return true;
+				break;
+			case "radio":
+			case "checkbox":
+				if (el.defaultChecked != el.checked)
+					return true;
+				break;
+			case "select-one":
+				i = 1;
+			case "select-multiple":
+				opts = el.options;
+				for (; i < opts.length; i++)
+					if (opts[i].defaultSelected != opts[i].selected)
+						return true;
+				break;
+			}
+		});
+
+		return false;
+	}
+
+	// 遍历表单
+	function eachChild4form(formEl, fn) {
+		// 豁免：没有 name 属性的不要；禁止了的不要；特定的字段不要
+		// !el.checked // 未选择的要来干嘛？?
+		var ignore = /file|undefined|reset|button|submit/i;
+
+		for (var el, i = 0, j = formEl.elements.length; i < j; i++) {
+			el = formEl.elements[i];
+			if (!el.name || el.disabled || ignore.test(el.type))
+				continue;
+			fn(el, i);
+		}
+	}
+
+	function fireAfterSubmitEvent(json) {
+		this.fireEvent('afterSubmit', this.formEl, json);
+	}
+
+	// 最简单的表单应答
+	bf_form.commonAfterSubmit = function(f, j) {
+		alert(!j.isOk ? '操作失败，原因：\n' + j.msg : j.msg);
+	}
+})();
