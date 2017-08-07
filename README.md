@@ -17,10 +17,10 @@
 |名称|说明|
 |------|----|
 |ajaxjs-base|基础类库，纯 Java 项目，[详细介绍](http://git.oschina.net/sp42/ajaxjs/tree/master/ajaxjs-base?dir=1&filepath=ajaxjs-base)。|
-|ajaxjs-web|Web 的 MVC 库，[详细介绍](http://git.oschina.net/sp42/ajaxjs/tree/master/ajaxjs-web)。|
-|ajaxjs-user|用户相关的系统.|
-|ajaxjs-cms|CMS 发布系统，整合了上述的项目而形成一个大项目.|
-|ajaxjs-workflow|基于 [snaker 工作流](http://git.oschina.net/yuqs)的整合.|
+|ajaxjs-web|Web 的 MVC 框架，[详细介绍](http://git.oschina.net/sp42/ajaxjs/tree/master/ajaxjs-web)。|
+|ajaxjs-user|用户相关的系统。|
+|ajaxjs-cms|CMS 发布系统，整合了上述的项目而形成一个综合项目。|
+|ajaxjs-workflow|基于 [snaker 工作流](http://git.oschina.net/yuqs)的整合。|
 
 
  
