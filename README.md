@@ -3,10 +3,10 @@
 
 全栈 Web 框架，设计目标：Clean, Simple, Fast, Full-stacks & Lightweight. 包含 Java 后端和 HTML/CSS/JS 前端库。 
 
-[详见官网 https://framework.ajaxjs.com](https://framework.ajaxjs.com/framework/)  
-[作者博客](http://blog.csdn.net/zhangxin09/) 
-QQ 群：3150067 
-联系邮箱：support@ajaxjs.com
+- [详见官网 https://framework.ajaxjs.com](https://framework.ajaxjs.com/framework/)  
+- [作者博客](http://blog.csdn.net/zhangxin09/) 
+- QQ 群：3150067
+- 联系邮箱：support@ajaxjs.com
 
 
 重要说明：这是一个包含多个项目的源码空间！但可以通过附加上目录名检出指定的项目。
