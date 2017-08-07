@@ -24,8 +24,8 @@
 |ajaxjs-base|基础类库，纯 Java 项目，[详细介绍](http://git.oschina.net/sp42/ajaxjs/tree/master/ajaxjs-base?dir=1&filepath=ajaxjs-base)。|
 |ajaxjs-web|Web 的 MVC 框架，[详细介绍](http://git.oschina.net/sp42/ajaxjs/tree/master/ajaxjs-web)。|
 |ajaxjs-user|用户相关的系统。|
-|ajaxjs-cms|CMS 发布系统，整合了上述的项目而形成一个综合项目。|
-|ajaxjs-workflow|基于 [snaker 工作流](http://git.oschina.net/yuqs)的整合。|
+|ajaxjs-cms|CMS 发布系统，基于上述的项目而形成一个综合项目。|
+|ajaxjs-workflow|整合 [snaker 工作流](http://git.oschina.net/yuqs)。|
 
 
  
