@@ -1,6 +1,6 @@
 #AJAXJS Base
 ------------
-框架基础模块包 ajaxjs-base 为纯 Java 项目与特定 jvm 环境脱离，可运行在 web、swing、android 环境中。Ajaxjs-base 包含了相当多的工具类或静态方法，有以下子模块：
+框架基础模块包 ajaxjs-base 为纯 Java 项目与特定 jvm 环境脱离，可运行在 web、swing、android 环境中。base 包含了相当多的工具类或静态方法，有以下子模块：
 
 util
 -----------
