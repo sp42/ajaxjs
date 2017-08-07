@@ -1,7 +1,7 @@
 #欢迎来到 AJAXJS Web Frameworks！
 ------------
 
-全栈 Web 框架，设计目标：Clean, Simple, Fast, Full-stacks & Lightweight. 包含 Java 后端和 HTML/CSS/JS 前端库。 
+全栈 Web 框架，包含 Java 后端框架和 HTML/CSS/JS 前端库。设计目标：Clean, Simple, Fast, Full-stacks & Lightweight. 
 
 - [详见官网 https://framework.ajaxjs.com](https://framework.ajaxjs.com/framework/)  
 - [作者博客](http://blog.csdn.net/zhangxin09/) 
