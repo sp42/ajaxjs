@@ -2,6 +2,7 @@
 ------------
 
 全栈 Web 框架，包含 Java 后端框架和 HTML/CSS/JS 前端库。设计目标：Clean, Simple, Fast, Full-stacks & Lightweight.
+
 A fullstack Java web project. It's clean, simple, fast and extensible. Not only backend code writen in Java, but also frontend code in native JavaScript. 
 
 - [详见官网 https://framework.ajaxjs.com](https://framework.ajaxjs.com/framework/)  
