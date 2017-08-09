@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.util.collection.JsonStruTraveler;
 
 public class TestConfig {
 	@Before
@@ -17,6 +18,9 @@ public class TestConfig {
 	@Test
 	public void testConfig() {
 		assertNotNull(ConfigService.config);
+		
+		new JsonStruTraveler().travel(ConfigService.config);
+		//System.out.println(ConfigService.config);
 		
 		assertEquals(true, ConfigService.getValueAsBool("isDebug"));
 		assertEquals("大华", ConfigService.getValueAsString("clientShortName"));

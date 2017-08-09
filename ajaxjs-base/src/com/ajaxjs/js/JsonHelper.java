@@ -183,37 +183,35 @@ public class JsonHelper {
 	public static String format(String json) {
 		int level = 0;
 		StringBuilder str = new StringBuilder();
-
+	
 		for (int i = 0; i < json.length(); i++) {
 			char c = json.charAt(i);
 			if (level > 0 && '\n' == str.charAt(str.length() - 1))
 				str.append(StringUtil.repeatStr("\t", "", level));
-
+	
 			switch (c) {
-			case '{':
-			case '[':
-				str.append(c + "\n");
-				level++;
-				break;
-			case ',':
-				if (json.charAt(i + 1) == '"')
-					str.append(c + "\n"); // 后面必定是跟着 key 的双引号，但 其实 json 可以 key
-										// 不带双引号的
-				break;
-			case '}':
-			case ']':
-				str.append("\n");
-				level--;
-				str.append(StringUtil.repeatStr("\t", "", level));
-				str.append(c);
-				break;
-			default:
-				str.append(c);
-				break;
+				case '{':
+				case '[':
+					str.append(c + "\n");
+					level++;
+					break;
+				case ',':
+					if (json.charAt(i + 1) == '"')
+						str.append(c + "\n"); // 后面必定是跟着 key 的双引号，但 其实 json 可以 key 不带双引号的
+					break;
+				case '}':
+				case ']':
+					str.append("\n");
+					level--;
+					str.append(StringUtil.repeatStr("\t", "", level));
+					str.append(c);
+					break;
+				default:
+					str.append(c);
+					break;
 			}
 		}
-
+	
 		return str.toString();
 	}
-
 }
