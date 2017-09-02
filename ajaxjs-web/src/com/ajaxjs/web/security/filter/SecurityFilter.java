@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * 安全过滤器
+ * 
  * @author Frank
  *
  */
@@ -31,8 +32,8 @@ public interface SecurityFilter {
 	 * @return true 表示为通过；false 不通过
 	 */
 	public boolean check(HttpServletRequest request);
-	
+
 	public boolean isInWhiteList(String str);
-	
+
 	public boolean isInBlackList(String str);
 }

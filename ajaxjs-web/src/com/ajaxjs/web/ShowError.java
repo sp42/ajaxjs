@@ -29,8 +29,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspWriter;
 
 /**
+ * 
  * 异常处理类，既可以在 Servlet 中使用，也可以在 Jsp 中使用。
+ * 该类已经在 JSP 中使用，故这里 Deprecated
+ * @author Frank Cheung frank@ajaxjs.com
  */
+@Deprecated
 public class ShowError {
 	/**
 	 * 收集错误信息 输出到网页

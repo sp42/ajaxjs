@@ -60,9 +60,9 @@ public class ListControl {
 	 */
 	public boolean isInBlackList(String str) {
 		boolean isIn = isInList(str, blackList);
-		if (!isIn) {
+		if (!isIn) 
 			throw new SecurityException(String.format(msg, str));
-		}
+		
 		return isIn;
 	}
 
@@ -78,9 +78,8 @@ public class ListControl {
 			return false;
 
 		for (String pattern : list) {
-			if (Pattern.matches(pattern, str)) {
+			if (Pattern.matches(pattern, str)) 
 				return true;
-			}
 		}
 
 		return false;

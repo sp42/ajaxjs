@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
+ * 网站的结构配置
  * 
  * @author Frank Cheung frank@ajaxjs.com
  */

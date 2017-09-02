@@ -238,8 +238,7 @@ public class MvcDispatcher implements Filter {
 		if (model != null)
 			request.saveToReuqest(model);
 
-		if (result != null) {
-			if (result instanceof String) {
+		if (result != null && result instanceof String) {
 				String str = (String) result, html = "html::";
 				MvcOutput o = new MvcOutput(response);
 				
@@ -264,7 +263,7 @@ public class MvcDispatcher implements Filter {
 					o.setTemplate(str).go(request);
 				}
 			}
-		}
+		
 	}
 
 	/**

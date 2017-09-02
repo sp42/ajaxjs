@@ -300,20 +300,11 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	}
 
 	/**
-	 * 返回信息到客户端（JSON 格式）
-	 * 
-	 * @param isOk
-	 *            操作是否成功
-	 * @param msg
-	 *            信息
-	 * @return
+	 * 显示 HTTP 405 禁止操作
+	 * @return HTTP 405 禁止操作 的 JSON
 	 */
-	public static String showJsonMsg(boolean isOk, String msg) {
-		return String.format(jsonMsg, isOk, msg);
-	}
-
 	public static String show405() {
-		return showJsonMsg(false, "405， Request method not supported 禁止操作");
+		return String.format(json_not_ok, "405， Request method not supported 禁止操作");
 	}
 	
 	public IService<T, ID> getService() {

@@ -98,8 +98,9 @@ public class MockRequest {
 	/**
 	 * 初始化请求对象
 	 * 
-	 * @return
-	 * @throws IOException
+	 * @param entry
+	 *            url 目录
+	 * @return 请求对象
 	 */
 	public HttpServletRequest initRequest(String entry) {
 		HttpServletRequest request = mock(HttpServletRequest.class);

@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.Map;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.JspFragment;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 /**
@@ -61,7 +62,7 @@ public class Foreach extends SimpleTagSupport {
 		if (items.getClass().isArray()) {
 			collection = new ArrayList<Object>();
 			int length = Array.getLength(items);
-			
+
 			for (int i = 0; i < length; i++) {
 				Object value = Array.get(items, i);
 				collection.add(value);
@@ -81,9 +82,8 @@ public class Foreach extends SimpleTagSupport {
 
 	@Override
 	public void doTag() throws JspException, IOException {
-		if (collection == null || collection.iterator() == null)
+		if (collection == null || collection.iterator() == null || collection.isEmpty())
 			return;
-
 		Iterator<Object> it = collection.iterator();
 		JspContext context = getJspContext();
 		int i = 0;
@@ -92,7 +92,9 @@ public class Foreach extends SimpleTagSupport {
 			Object value = it.next();
 			context.setAttribute(var, value); // 每遍历出数据后写出
 			context.setAttribute("currentIndex", i++); // 每遍历出数据后写出:当前循环次数
-			getJspBody().invoke(null);
+			JspFragment f = getJspBody();
+			if (f != null)
+				f.invoke(null);
 		}
 
 		context.setAttribute("totalCount", i); // 写出循环总次数

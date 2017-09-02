@@ -22,15 +22,17 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.Version;
 import com.ajaxjs.js.JsonHelper;
-import com.ajaxjs.js.JsonStruTraveler;
+import com.ajaxjs.util.collection.JsonStruTraveler;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 网站结构的配置
+ * 
  * @author Frank Cheung frank@ajaxjs.com
  */
 @javax.servlet.annotation.WebListener
@@ -60,22 +62,27 @@ public class SiteStruService implements ServletContextListener {
 		ServletContext cxt = e.getServletContext();
 		Version.tomcatVersionDetect(cxt.getServerInfo());
 
-		if (ConfigService.config.isLoaded())
-			cxt.setAttribute("all_config", ConfigService.config); // 所有配置保存在这里
+		if (new File(ConfigService.jsonPath).exists()) {
+			ConfigService.load();
+
+			if (ConfigService.config.isLoaded()) {
+				cxt.setAttribute("all_config", ConfigService.config); // 所有配置保存在这里
+
+				String configJson = JsonHelper.format(JsonHelper.stringifyMap(ConfigService.config));
+				LOGGER.info("加载项目配置成功！配置信息如下：\n" + configJson);
+			} else
+				LOGGER.warning("加载配置失败！");
+		} else
+			LOGGER.info("没有项目配置文件");
 
 		if (new File(jsonPath).exists()) {
 			load();
+			t.travelList(stru);
+
+			cxt.setAttribute("SITE_STRU", this); // 所有网站结构保存在这里
 			LOGGER.info("加载网站的结构文件成功");
 		} else
 			LOGGER.info("没有网站的结构文件");
-	}
-	
-	public static void main(String[] args) {
-		load();
-		t.travleList(stru, "", 0);
-		
-		System.out.println(stru);
-		System.out.println(getSiteMap(stru));
 	}
 
 	/**
@@ -83,7 +90,7 @@ public class SiteStruService implements ServletContextListener {
 	 * 
 	 * @return 导航数据
 	 */
-	public static List<Map<String, Object>> getNavBar() {
+	public List<Map<String, Object>> getNavBar() {
 		return stru;
 	}
 
@@ -102,44 +109,118 @@ public class SiteStruService implements ServletContextListener {
 	public static Map<String, Object> getPageNode(String uri, String contextPath) {
 		// 获取资源 URI，忽略项目前缀和最后的文件名（如 index.jsp） 分析 URL 目标资源
 		String path = uri.replace(contextPath, "").replaceFirst("/\\w+\\.\\w+$", "");
-		Map<String, Object> map = t.find(path, stru);
 		
-		return map;
+		if(stru != null && stru.isLoaded()) {
+			Map<String, Object> map = t.findByPath(path, stru);
+			return map;
+		} else 
+			return null;
 	}
 
-	private final static String 
-		table = "<table class=\"siteMap\"><tr><td>%s</td></tr></table>", 
-		a = "<a href=\"%s\" class=\"indentBlock_%s\"><span class=\"dot\">·</span>%s</a>\n ",
-		newCol = "\n\t</td>\n\t<td>\n\t\t";
-	
+	/**
+	 * 
+	 * @param request
+	 *            请求对象
+	 * @return 当前页面节点
+	 */
+	public static Map<String, Object> getPageNode(HttpServletRequest request) {
+		return getPageNode(request.getRequestURI(), request.getContextPath());
+	}
+
+	/**
+	 * 用于 current 的对比 <li
+	 * ${pageContext.request.contextPath.concat('/').concat(menu.fullPath).
+	 * concat('/') == pageContext.request.requestURI ? ' class=selected' : ''}>
+	 * IDE 语法报错，其实正确的 于是，为了不报错 <li ${PageNode.isCurrentNode(menu) ? '
+	 * class=selected' : ''}>
+	 * 
+	 * @param node
+	 *            节点
+	 * @return true 表示为是当前节点
+	 */
+	public boolean isCurrentNode(Map<String, ?> node, HttpServletRequest request) {
+		if (node == null || node.get("fullPath") == null)
+			return false;
+
+		String uri = request.getRequestURI(), contextPath = request.getContextPath();
+		String fullPath = node.get("fullPath").toString(), ui = contextPath.concat("/").concat(fullPath).concat("/");
+
+		return uri.equals(ui) || uri.indexOf(fullPath) != -1;
+	}
+
+	/**
+	 * 生成二级菜单所需的数据
+	 * 
+	 * @param request
+	 *            请求对象
+	 * @return 二级菜单列表
+	 */
+	@SuppressWarnings({ "unchecked" })
+	public List<Map<String, Object>> getMenu(HttpServletRequest request) {
+		String path = getPath(request);
+
+		path = path.substring(1, path.length());
+		String second = path.split("/")[0];
+		Map<String, Object> map = t.findByPath(second, stru);
+
+		return map != null && map.get("children") != null ? (List<Map<String, Object>>) map.get("children") : null;
+	}
+
+	/**
+	 * 获取资源 URI，忽略项目前缀和最后的文件名（如 index.jsp） 分析 URL 目标资源
+	 * 
+	 * @param request
+	 *            请求对象
+	 * @return
+	 */
+	private static String getPath(HttpServletRequest request) {
+		return request.getRequestURI().replace(request.getContextPath(), "").replaceFirst("/\\w+\\.\\w+$", "");
+	}
+
+	private final static String table = "<table class=\"siteMap\"><tr><td>%s</td></tr></table>",
+			a = "<a href=\"%s\" class=\"indentBlock_%s\"><span class=\"dot\">·</span>%s</a>\n ",
+			newCol = "\n\t</td>\n\t<td>\n\t\t";
+
 	/**
 	 * 获取页脚的网站地图
 	 * 
 	 * @return 页脚的网站地图
 	 */
+	public String getSiteMap() {
+		return getSiteMap(stru);
+	}
+
+	/**
+	 * 获取页脚的网站地图
+	 * 
+	 * @param list
+	 *            可指定数据
+	 * @return 页脚的网站地图
+	 */
 	public static String getSiteMap(List<Map<String, Object>> list) {
 		StringBuilder sb = new StringBuilder();
 		getSiteMap(list, sb);
-		
+
 		return String.format(table, sb.toString());
 	}
-	
+
 	/**
 	 * 该函数递归使用，故须独立成一个函数
+	 * 
 	 * @param list
 	 * @param sb
 	 */
 	@SuppressWarnings("unchecked")
 	private static void getSiteMap(List<Map<String, Object>> list, StringBuilder sb) {
-		for (Map<String, Object> map :list) {
-			if (map != null) {
-				sb.append(String.format(a, map.get("fullPath").toString(), map.get("level").toString(), map.get("name").toString()));
-				
-				if(0 == (int)map.get("level")) // 新的一列
+		for (Map<String, Object> map : list) {
+			if (map != null) {	
+				if (0 == (int) map.get("level")) // 新的一列
 					sb.append(newCol);
-				
-				if (map.get("children") != null && map.get("children") instanceof List) 
-					getSiteMap((List<Map<String, Object>>) map.get("children"),  sb);
+
+				sb.append(String.format(a, map.get("fullPath").toString(), map.get("level").toString(), map.get("name").toString()));
+
+				if (map.get("children") != null && map.get("children") instanceof List)
+					getSiteMap((List<Map<String, Object>>) map.get("children"), sb);
 			}
 		}
 	}

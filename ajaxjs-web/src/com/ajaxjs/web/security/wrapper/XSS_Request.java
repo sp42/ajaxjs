@@ -96,7 +96,7 @@ public class XSS_Request extends HttpServletRequestWrapper {
 
 	private static String xssType = "<script[^>]*?>.*?</script>";
 
-	private static Pattern xssPattern = Pattern.compile(xssType);
+	private static Pattern xssPattern = Pattern.compile("<script[^>]*?>.*?</script>");
 
 	/**
 	 * XSS 过滤器
@@ -134,7 +134,7 @@ public class XSS_Request extends HttpServletRequestWrapper {
 	 *
 	 */
 	public static enum XssFilterTypeEnum {
-		ESCAPSE("escapse"), NO("no"), DELETE("delete");
+		ESCAPSE("escapse"),  DELETE("delete");
 		
 		/**
 		 * 过滤器类型的值
@@ -167,7 +167,7 @@ public class XSS_Request extends HttpServletRequestWrapper {
 			if (ListControl.isEmptyStr(type)) 
 				return false;
 			
-			return ESCAPSE.getValue().equals(type) || NO.getValue().equals(type) || DELETE.getValue().equals(type);
+			return ESCAPSE.getValue().equals(type)  || DELETE.getValue().equals(type);
 		}
 	}
 }
