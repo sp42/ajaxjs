@@ -18,8 +18,9 @@ public class TestConfig {
 	@Test
 	public void testConfig() {
 		assertNotNull(ConfigService.config);
+
 		
-		new JsonStruTraveler().travel(ConfigService.config);
+		JsonStruTraveler.flatMap(ConfigService.config);
 		//System.out.println(ConfigService.config);
 		
 		assertEquals(true, ConfigService.getValueAsBool("isDebug"));

@@ -29,4 +29,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Resource {
 	String value() default "";
+
+	/**
+	 * 是否创建新实例
+	 * 
+	 * @return
+	 */
+	boolean isNewInstance() default false;
 }

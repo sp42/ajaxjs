@@ -5,7 +5,7 @@ import com.ajaxjs.util.ioc.Resource;
 
 @Bean("hi")
 public class Hi {
-    @Resource
+    @Resource(isNewInstance=true)
     private Person person;
 
     /**

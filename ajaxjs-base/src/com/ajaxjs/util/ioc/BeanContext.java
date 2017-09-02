@@ -46,6 +46,11 @@ public class BeanContext {
 	 * 存放 bean
 	 */
 	private Map<String, Object> beans = new HashMap<>();
+	
+	/**
+	 * 存放 bean  类
+	 */
+	private Map<String, Class<?>> beansClz = new HashMap<>();
 
 	/**
 	 * 记录依赖关系
@@ -131,8 +136,11 @@ public class BeanContext {
 
 			String beanName = annotation.value();
 
-			// 实例化 bean，并将其保存，BEAN 名称作为键值
-			beans.put(beanName, ReflectNewInstance.newInstance(item));
+			if(ReflectNewInstance.hasArgsCon(item)) {
+				beansClz.put(beanName, item);
+			} else
+				// 实例化 bean，并将其保存，BEAN 名称作为键值
+				beans.put(beanName, ReflectNewInstance.newInstance(item));
 
 			// 记录依赖关系
 			for (Field field : item.getDeclaredFields()) {
@@ -147,11 +155,9 @@ public class BeanContext {
 				 * 注解中指定，如果这觉得麻烦，可以不在注解指定，直接指定变量名即可（就算不通过注解指定，都可以利用 反射
 				 * 获取字段名，作为依赖的凭据，效果一样）
 				 */
-				String dependenciObj_id = resAnnot.value();// 获取依赖的 bean 的名称,如果为
-															// null,则使用字段名称
+				String dependenciObj_id = resAnnot.value();// 获取依赖的 bean 的名称,如果为 null,则使用字段名称
 				if (StringUtil.isEmptyString(dependenciObj_id))
-					dependenciObj_id = field.getName(); // 此时 bean 的 id 一定要与
-														// fieldName 一致
+					dependenciObj_id = field.getName(); // 此时 bean 的 id 一定要与 fieldName 一致
 
 				// bean id ＋ 变量名称 ＝ 依赖关系的 key。
 				dependencies.put(beanName + "." + field.getName(), dependenciObj_id);

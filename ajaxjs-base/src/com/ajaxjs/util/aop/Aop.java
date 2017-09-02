@@ -35,16 +35,23 @@ public abstract class Aop<T> implements InvocationHandler {
 
 	/**
 	 * 前置调用
+	 * 
 	 * @param method
+	 *            方法对象
 	 * @param args
+	 *            参数列表
 	 */
 	protected abstract Object before(Method method, Object[] args) throws Throwable;
 
 	/**
 	 * 后置调用
+	 * 
 	 * @param method
+	 *            方法对象
 	 * @param args
+	 *            参数列表
 	 * @param returnObj
+	 *            返回结果
 	 */
 	protected abstract void after(Method method, Object[] args, Object returnObj);
 
@@ -60,7 +67,8 @@ public abstract class Aop<T> implements InvocationHandler {
 
 		this.proxied = proxied;
 
-		Object obj = Proxy.newProxyInstance(proxied.getClass().getClassLoader(), proxied.getClass().getInterfaces(), this);
+		Object obj = Proxy.newProxyInstance(proxied.getClass().getClassLoader(), proxied.getClass().getInterfaces(),
+				this);
 		return (T) obj;
 	}
 
@@ -69,28 +77,31 @@ public abstract class Aop<T> implements InvocationHandler {
 	 */
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-
 		Object beforeReturn = before(method, args);
 
-		if (beforeReturn instanceof ReturnBefore) {
-			System.out.println("beforeReturn");
+		if (beforeReturn instanceof ReturnBefore)
 			return ((ReturnBefore) beforeReturn).getReturnValue(); // 中止运行 aop
-		}
 
-		Object returnObj = method.invoke(proxied, args);
+		Object returnObj = method.invoke(proxied, (beforeReturn != null && beforeReturn instanceof ReturnAsArg) ? ((ReturnAsArg)beforeReturn).getArgs(): args);
 		after(method, args, returnObj);
 
 		return returnObj;
 	}
 
+	/**
+	 * 链式
+	 * @param obj
+	 * @param proxyHandlers
+	 * @return
+	 */
 	@SafeVarargs
 	public static <K> K chain(K obj, Aop<K>... proxyHandlers) {
-		for (Aop<K> proxyHandler : proxyHandlers) {
+		for (Aop<K> proxyHandler : proxyHandlers) 
 			obj = proxyHandler.bind(obj);
-		}
+		
 		return obj;
 	}
-	
+
 	public T getProxied() {
 		return proxied;
 	}
@@ -102,7 +113,7 @@ public abstract class Aop<T> implements InvocationHandler {
 	// ------------------------------- 简单版 ------------------------------
 
 	/**
-	 * 通过动态代理实现 AOP
+	 * 通过动态代理实现 AOP（简单版）
 	 * 
 	 * @param obj
 	 *            对象
@@ -135,7 +146,7 @@ public abstract class Aop<T> implements InvocationHandler {
 
 		return (T) _obj;
 	}
-	
+
 	/**
 	 * AOP 回调
 	 * 

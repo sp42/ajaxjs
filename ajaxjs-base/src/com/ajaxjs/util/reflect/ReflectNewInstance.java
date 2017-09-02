@@ -61,6 +61,7 @@ public class ReflectNewInstance {
 	 */
 	public static <T> T newInstance(Constructor<T> constructor, Object... args) {
 		try {
+
 			return constructor.newInstance(args); // 实例化
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
@@ -69,6 +70,21 @@ public class ReflectNewInstance {
 		}
 	}
 
+	/**
+	 * 传入的类是否有带参数的构造器
+	 * 
+	 * @param clazz 类对象
+	 * @return
+	 */
+	public static boolean hasArgsCon(Class<?> clazz) {
+		Constructor<?>[] constructors = clazz.getConstructors();
+		for (Constructor<?> constructor : constructors) {
+			if (constructor.getParameterTypes().length != 0)
+				return true;
+		}
+
+		return false;
+	}
 	/**
 	 * 根据类全称创建实例，并转换到其接口的类型
 	 * 

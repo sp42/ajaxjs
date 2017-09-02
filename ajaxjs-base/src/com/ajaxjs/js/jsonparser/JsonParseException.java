@@ -23,6 +23,13 @@ package com.ajaxjs.js.jsonparser;
 public class JsonParseException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 	
+	/**
+	 * 
+	 * @param charNum
+	 * @param lineNum
+	 * @param colNum
+	 * @param message
+	 */
 	public JsonParseException(int charNum, int lineNum, int colNum, String message) {
 		this.charNum = charNum;
 		this.colNum = colNum;
@@ -30,6 +37,14 @@ public class JsonParseException extends RuntimeException {
 		this.desc = message;
 	}
 
+	/**
+	 * 
+	 * @param charNum
+	 * @param lineNum
+	 * @param colNum
+	 * @param message
+	 * @param cause
+	 */
 	public JsonParseException(int charNum, int lineNum, int colNum, String message, Throwable cause) {
 		this(charNum, lineNum, colNum, message);
 		this.cause = cause;

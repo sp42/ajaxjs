@@ -74,7 +74,7 @@ public class Version {
 	 * 检测是否 tomcat 以及版本
 	 * 
 	 * @param serverInfo
-	 *            返回如 Tomcat/7
+	 *            字符串如 Tomcat/7
 	 */
 	public static void tomcatVersionDetect(String serverInfo) {
 		String result = StringUtil.regMatch("(?<=Tomcat/)(\\d)", serverInfo);
