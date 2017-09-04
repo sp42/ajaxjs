@@ -16,10 +16,9 @@ AJAXJS 的设计原则：首先是尽量减少引入新的概念和新的第三�
 
 |名称|说明|
 |------|----|
-|ajaxjs-base|基础类库，纯 Java 项目，[详细介绍](http://git.oschina.net/sp42/ajaxjs/tree/master/ajaxjs-base?dir=1&filepath=ajaxjs-base)。|
-|ajaxjs-web|Web 的 MVC 框架，[详细介绍](http://git.oschina.net/sp42/ajaxjs/tree/master/ajaxjs-web)。|
-|ajaxjs-user|用户相关的系统。|
-|ajaxjs-cms|CMS 发布系统，基于上述的项目而形成一个综合项目。|
+|ajaxjs-base|基础类库，纯 Java 项目，[跳转项目主页](http://git.oschina.net/sp42/ajaxjs-base)。|
+|ajaxjs-web|本项目，Web 的 MVC 框架，见下面详细介绍。|
+|ajaxjs-cms|CMS 发布系统，简易发布系统。|
 
 
 各个项目导出 jar 可交叉复用到不同项目。项目不限定何种 IDE（不包含任何 IDE 配置文件）。但默认地，src 为 Java 源码目录；WebContent 为 Web 项目根目录；lib 为依赖的 jar 包或本项目编译好的 jar 包。
@@ -27,10 +26,10 @@ AJAXJS 的设计原则：首先是尽量减少引入新的概念和新的第三�
 联系方式
 ----------
 
-- [详见官网 https://framework.ajaxjs.com](https://framework.ajaxjs.com/framework/)  
-- [CSDN 博客](http://blog.csdn.net/zhangxin09/) 
-- QQ 群：[3150067](//shang.qq.com/wpa/qunwpa?idkey=99415d164e2c776567c9370cc5b0bde26f4e2e7c5068978a24d1fe7c976ace93)
-- 联系邮箱：support@ajaxjs.com
+- 官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/framework/)  
+- 博客 [http://blog.csdn.net/zhangxin09](http://blog.csdn.net/zhangxin09/) 
+- Q群 [3150067](//shang.qq.com/wpa/qunwpa?idkey=99415d164e2c776567c9370cc5b0bde26f4e2e7c5068978a24d1fe7c976ace93)
+- 邮箱 support@ajaxjs.com
 
 
  
