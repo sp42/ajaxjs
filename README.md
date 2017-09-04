@@ -18,7 +18,7 @@ AJAXJS 的设计原则：首先是尽量减少引入新的概念和新的第三�
 |------|----|
 |ajaxjs-base|基础类库，纯 Java 项目，[跳转项目主页](http://git.oschina.net/sp42/ajaxjs-base)。|
 |ajaxjs-web|本项目，Web 的 MVC 框架，见下面详细介绍。|
-|ajaxjs-cms|CMS 发布系统，简易发布系统。|
+|ajaxjs-cms|CMS 网站内容发布系统，基于上述 base + web 而成的项目。[跳转项目主页](http://git.oschina.net/sp42/ajaxjs-cms)。|
 
 
 各个项目导出 jar 可交叉复用到不同项目。项目不限定何种 IDE（不包含任何 IDE 配置文件）。但默认地，src 为 Java 源码目录；WebContent 为 Web 项目根目录；lib 为依赖的 jar 包或本项目编译好的 jar 包。
