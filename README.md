@@ -5,7 +5,7 @@
 
 A fullstack Java web project. It's clean, simple, fast and extensible. Not only backend code writen in Java, but also frontend code in native JavaScript. 
 
-AJAXJS 的设计原则：首先是尽量减少引入新的概念和新的第三方框架或库，而仅仅是在 Java 类库的核心概念之上进行梳理和进一步简化，个人认为一个第三方 jar 包就是一门新的 DSL 语言，DSL 语言不管大小，对心智来说都是一个额外的负担。如果没有足够的理由，没有必要去使用新的 DSL；其次，在写法上极其平常，顶多是引入链式写法（或所谓的流式接口），同时在 api 命名上，尽量准确精炼而且是众人所熟知的，不标新立异；最后就是代码量少，大部分每个类总共几十行，学习和理解的曲线低。[详见官网 https://framework.ajaxjs.com](https://framework.ajaxjs.com/framework/) 介绍。 
+AJAXJS 的设计原则：首先是尽量减少引入新的概念和新的第三方框架或库，而仅仅是在 Java 类库的核心概念之上进行梳理和进一步简化，个人认为一个第三方 jar 包就是一门新的 DSL 语言，DSL 语言不管大小，对心智来说都是一个额外的负担。如果没有足够的理由，没有必要去使用新的 DSL；其次，在写法上极其平常，顶多是引入链式写法（或所谓的流式接口），同时在 api 命名上，尽量准确精炼而且是众人所熟知的，不标新立异；最后就是代码量少，大部分每个类总共几十行，学习和理解的曲线低。详见官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/framework/) 介绍。 
 
 
 
@@ -34,6 +34,10 @@ AJAXJS WEB 包含以下模块：
 - 数据库连接：因为使用了 Tomcat 数据库连接池，所以依赖于 Tomcat 的 web 环境，于是数据库的配置文件也就不在 properties 文件中，取而代之的是 WebContent/META-INF/context.xml 配置文件。
 - 各个项目导出 jar 可交叉复用到不同项目。项目不限定何种 IDE（不包含任何 IDE 配置文件）。但默认地，src 为 Java 源码目录；WebContent 为 Web 项目根目录；lib 为依赖的 jar 包或本项目编译好的 jar 包。
 - 详见手册帮助 [http://ajaxjs.mydoc.io/?t=148968](http://ajaxjs.mydoc.io/?t=148968)
+
+前端框架
+-----------
+前端就要看 DEMO：[https://framework.ajaxjs.com/framework/ui_demo/](https://framework.ajaxjs.com/framework/ui_demo/)，然后右击鼠标查看源码或 F12 即可：）
 
 联系方式
 ----------
