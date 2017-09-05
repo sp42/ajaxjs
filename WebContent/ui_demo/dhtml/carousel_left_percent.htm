@@ -1,0 +1,76 @@
+<meta charset="UTF-8">
+<title>left_percent</title>
+
+<div class="carousel">
+	<div>
+		<div>
+			<a href="topic/?id=283">
+				<img src="http://imgu.3gtv.net:9090/_file/section/20150919114717260.jpg">
+			</a>
+		</div>
+		<div>
+			<a href="live/?id=3">
+				<img src="http://imgu.3gtv.net:9090/_file/section/20150918214948448.png">
+			</a>
+		</div>
+		<div>
+			<a href="topic/?id=346">
+				<img src="http://imgu.3gtv.net:9090/_file/section/20150910171423733.png">
+			</a>
+		</div>
+		<div>
+			<a href="topic/?id=345">
+				<img src="http://imgu.3gtv.net:9090/_file/section/20150909172539065.jpg">
+			</a>
+		</div>
+		 
+	</div>
+</div>
+
+<style>
+	.carousel{
+		height:250px;
+		 
+		overflow:hidden;
+		position: relative;
+	}
+	
+	.carousel > div{
+		left:0;
+		position:absolute;
+		white-space: nowrap;
+		transition: 200ms left linear;
+		-moz-transition: 200ms left linear;
+		-o-transition: 200ms left linear;
+		-ie-transition: 200ms left linear;
+		-webkit-transition: 200ms left linear;
+	}
+	
+	.carousel > div > div{
+		float: left;
+	}
+	.carousel > div > div img {
+		width: 100%;
+	}
+</style>
+
+<script>
+function Carousel(el) {
+	var containerWidth = el.clientWidth, 
+		mover = el.querySelector('div'),
+		items = mover.children, len = items.length;
+	
+    // 设置 mover 和 item 宽度。初始化时候运行。
+    for (var i = 0; i < len; i++) {
+        items[i].style.width = (1 / len * 100).toFixed(5) + '%'; // 设置item 宽度
+    }
+    mover.style.width = len + '00%'; // 总宽度，也是容器中最宽的宽度。赋予给 mover。
+    var count = 0;
+    setInterval(function(){
+    	if(++count == len)count = 0;
+    	mover.style.left = '-' + (100  * count).toFixed(2) + '%';
+    }, 2000);
+}
+	
+new Carousel(document.querySelector('.carousel'));
+</script>

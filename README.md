@@ -20,6 +20,26 @@ AJAXJS 的设计原则：首先是尽量减少引入新的概念和新的第三�
 |ajaxjs-web|本项目，Web 的 MVC 框架，见下面详细介绍。|
 |ajaxjs-cms|CMS 网站内容发布系统，基于上述 base + web 而成的项目，[跳转项目主页](http://git.oschina.net/sp42/ajaxjs-cms)。|
 
+WEB 模块包含以下子模块：
+
+1.  web 主要针对 Http 与 Servlet 工具类，例如通过 HttpServletRequestWrapper 扩展了 Request 对象。
+2.  view 视图模块，提供一个简单的、基于 JSP/JSTL 的扩展标签。
+3.  net 网络模块，包括文件上传器、JSON API 的 DTO 实现、FTP 简易客户端和邮件发送器 mail（无须依赖 JavaMail）。
+
+数据库连接
+因为使用了 Tomcat 数据库连接池，所以依赖于 Tomcat 的 web 环境，于是数据库的配置文件也就不在 properties 文件中，取而代之的是 WebContent/META-INF/context.xml 配置文件。
+ 
+ 
+包含下面模块
+
+|名称|说明|
+|------|----|
+|ajaxjs-web|Web 的基础类库|
+|ajaxjs-webconfig|基于 JSON 格式的配置系统|
+|ajaxjs-security|安全框架|
+|ajaxjs-page-editor| HTML 页面编辑器|
+
+
 
 各个项目导出 jar 可交叉复用到不同项目。项目不限定何种 IDE（不包含任何 IDE 配置文件）。但默认地，src 为 Java 源码目录；WebContent 为 Web 项目根目录；lib 为依赖的 jar 包或本项目编译好的 jar 包。
 

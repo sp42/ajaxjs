@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="content-type" />
+	<meta name="viewport" content="width=320,user-scalable=0,initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0" />
+	<title>专题新版标签</title>
+  	<style>
+  		body,dl,dt,dd,ul,li,pre,form,fieldset,input,p,blockquote,th,td,h1,h2,h3,h4,h5{margin:0;padding:0;}
+		img{border:0;vertical-align:top}.hide{display:none}
+		body{
+			font-size:100%;
+			-webkit-font-smoothing:antialiased;
+			font-family:"Microsoft YaHei","ff-tisa-web-pro-1","ff-tisa-web-pro-2","Lucida Grande","Hiragino Sans GB","Hiragino Sans GB W3",Arial;
+		}
+		*{	
+			-webkit-tap-highlight-color: rgba(0, 0, 0, 0); 
+			-webkit-touch-callout: none;    			
+		}
+		a {
+			color:gray;
+		}
+		a:hover{
+			color:black;
+		}
+		h2, h3, p{
+			margin:15px 0;
+		}
+		h2, h3, p,ol li ul li{
+			margin-left:10px;
+		}
+    
+		h3{
+			clear:both;
+			padding-top:20px;
+		}
+		
+		.longBtn{
+			display:block;
+			clear:both;
+			margin-top:15px!important;
+			width:95%;
+		}
+      
+      .tab2{
+        width:95%;
+      }
+      .tab2 li{
+/*       	list-style-position: inside; */
+		list-style-type: none;
+      }
+      body{
+      	padding-top:60px;
+      }
+      header{
+      	width:100%;
+      	background-color:rgba(239, 239, 239, 0.6);
+      	border-bottom:2px solid gray;
+      	position: fixed;
+      	top:0;
+      	left:0;
+      	height:50px;
+      	z-index:9999;
+      }
+      header h1{
+      	line-height:50px;
+      	font-size:130%;
+      }
+      header menu{
+		position: absolute;
+		width: 15%;
+		top: 50px;
+		right: 0;
+		background-color:#f4f4f4; 
+		border: 2px solid gray;
+		border-top: 0;
+		border-right: 0;
+		margin: 0;
+		padding: 1% 2%;
+      }
+      header menu ol{
+      	margin: 0;
+      }
+      header menu ol li{
+      }
+      header menu ol ul li a{ 
+      	font-size:80%;
+      }
+      
+	 // code pretty
+	.pln{color:#000}@media screen{.str{color:#080}.kwd{color:#008}.com{color:#800}.typ{color:#606}.lit{color:#066}.pun,.opn,.clo{color:#660}.tag{color:#008}.atn{color:#606}.atv{color:#080}.dec,.var{color:#606}.fun{color:red}}@media print,projection{.str{color:#060}.kwd{color:#006;font-weight:bold}.com{color:#600;font-style:italic}.typ{color:#404;font-weight:bold}.lit{color:#044}.pun,.opn,.clo{color:#440}.tag{color:#006;font-weight:bold}.atn{color:#404}.atv{color:#060}}pre.prettyprint{padding:2px;border:1px solid #888}ol.linenums{margin-top:0;margin-bottom:0}li.L0,li.L1,li.L2,li.L3,li.L5,li.L6,li.L7,li.L8{list-style-type:none}li.L1,li.L3,li.L5,li.L7,li.L9{background:#eee}
+	.prettyprint{
+	     	margin-left:30px!important;
+	}
+	
+	</style>
+ 
+</head>
+  <body>
+	  <header>
+	    <h1 style="text-align: center;">专题通用标签（第二版）</h1>
+	    <menu>
+			目 录：
+			<ol>
+				<li>
+					<a href="#intro">概述</a>
+				</li>
+				<li>
+					<a href="#list">列表组件</a>
+					<ul>
+						<li>
+							<a href="#list_col_0">纯文字列表</a>
+						</li>
+						<li>
+							<a href="#list_col_1">单列图文例子,分页并指定读取分页数</a>
+						</li>
+						<li>
+							<a href="#list_col_2">双列图文例子，分页，覆盖方式</a>
+						</li>
+						<li>
+							<a href="#list_col_3">三列图文例子，分页，追加方式</a>
+						</li>
+					</ul>
+				</li>
+				<li><a href="#tab">Tab 组件</a></li>
+				<li><a href="#gallery">相册</a></li>
+				<li><a href="#combo">多种组合的样式</a></li>
+			</ol>
+		</menu>
+	  </header>
+    <a name="intro"></a>
+ 
+    <h2>概述</h2>
+    <p>为针对现有模板组件的不足，特作出第二版的改进。</p>
+    <p>任意一页面，都必须插入以下代码。</p>
+    <pre class="prettyprint">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;!--请不要修改此处文件 Start--&gt;
+		&lt;meta content=&quot;text/html; charset=utf-8&quot; http-equiv=&quot;content-type&quot; /&gt;
+		&lt;meta name=&quot;viewport&quot; content=&quot;width=320,user-scalable=0,initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0&quot; /&gt;
+
+		&lt;!-- 样式文件 --&gt;
+		&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;../common/v2/common.css&quot; /&gt;
+		
+		&lt;script src=&quot;../common/v2/bigfoot/js/lang.js&quot;&gt;&lt;/script&gt;
+		&lt;script src=&quot;../common/v2/bigfoot/js/dom.js&quot;&gt;&lt;/script&gt;
+		&lt;script src=&quot;../common/v2/bigfoot/js/widget/list.js&quot;&gt;&lt;/script&gt;
+		&lt;script src=&quot;../common/v2/bigfoot/js/widget/tab.js&quot;&gt;&lt;/script&gt;
+		&lt;!--// 请不要修改此处文件 End--&gt;
+		
+		&lt;!-- 设置页面标题 --&gt;
+		&lt;title&gt;“东方之星”翻沉事故&lt;/title&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;div class=&quot;body&quot;&gt;
+			&lt;!--这里放置专题的内容--&gt;
+		&lt;/div&gt;
+	&lt;/body&gt;
+	&lt;!--请不要修改此处文件 Start--&gt;
+	&lt;script src=&quot;../common/v2/bigfoot/js/topic.js&quot;&gt;&lt;/script&gt;
+	&lt;!--// 请不要修改此处文件 End--&gt;
+&lt;/html&gt;
+    </pre>
+    
+    <a name="list"></a>
+    <h2>列表组件</h2>
+    <p>代码：&lt;ul class="list col_0" sid="2268" pagesize="10"&gt;&lt;/ul&gt;</p>
+    <p>属性析义：</p>
+    <ol>
+      <li>class 中的前半段 list 必须保留，中间以空格分隔，后半段为列表类型，必填，有如下值：<br>
+        <ul>
+          <li>col_0 : 纯文字列表</li>
+          <li>col_1 : 单列图文列表</li>
+          <li>col_2 : 双列图文列表</li>
+          <li>col_3 : 三列图文列表</li>
+        </ul>
+      </li>
+      <li> sid 栏目id，数字，必填</li>
+      <li>pagesize 读取记录笔数，数字，不填默认 5 笔</li>
+      <li>pager 是否需要分页，<br>
+        <ul>
+          <li>true，分页</li>
+          <li>false，不分页（默认）</li>
+        </ul>
+      </li>
+      <li>is_append分页新增的内容是“覆盖”还是“追加”<br>
+        <ul>
+          <li>true，覆盖</li>
+          <li>false，追加（默认），适合手机端方式</li>
+        </ul>
+      </li>
+    </ol>
+    
+    
+    <a name="list_col_0"></a>
+ 
+    <h3>纯文字列表例子</h3>
+    <p>代码：</p>
+    <pre class="prettyprint" style="height:26px;">&lt;ul class="list col_0" sid="2268"&gt;&lt;/ul&gt; </pre>
+    <ul class="list col_0" sid="2268"></ul>
+    
+    <a name="list_col_1"></a>
+
+    <h3>单列图文例子,分页并指定读取分页数</h3>
+    <p>代码：</p>
+    <pre class="prettyprint" style="height:26px;">&lt;ul class="list col_1" sid="2268" pagesize="3" pager="true"&gt;&lt;/ul&gt;</pre>
+    <ul class="list col_1" sid="2268" pagesize="3" pager="true"> </ul>
+    
+    
+    <a name="list_col_2"></a>
+    <h3>双列图文例子，分页，覆盖方式</h3>
+    <p>代码：</p>
+    <pre class="prettyprint" style="height:26px;">&lt;ul class="list col_2" sid="2268" pager="true"&gt;&lt;/ul&gt;</pre>
+    <ul class="list col_2" sid="2268" pager="true" pagesize="4"> </ul>
+    
+    <a name="list_col_3"></a>
+    <h3>三列图文例子，分页，追加方式</h3>
+    <p>代码：</p>
+    <pre class="prettyprint" style="height:36px;">&lt;ul class="list col_2" sid="2268" pager="true" is_append="true"&gt;&lt;/ul&gt;</pre>
+    <ul class="list col_3" sid="2268" pager="true" is_append="true" pagesize="6"> </ul>   
+    
+    <!-- tab -->
+    <a name="tab"></a>
+    <h2>Tab 组件</h2>
+    <p>Tab 组件为多标签页组件，可承载丰富的内容，却不占额外的面积。一个完整的 Tab 可设定的有 Tab 标题和 Tab 内容区域。设定的内容可以是任意 HTML，也可以内嵌列表组件或相册。</p>
+	<p>代码：</p>
+    <pre class="prettyprint">&lt;!-- Tab 组件 --&gt;<br>&lt;div class="staticTab tab2 center"&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;ul&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;li&gt;公司简介&lt;/li&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;li&gt;资质证照&lt;/li&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;li&gt;荣誉证书&lt;/li&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/ul&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;div class="content"&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;div&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 自古以来，……<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/div&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;div&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 之所以如此，端在于中国传统中存在着发达的契约。……<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/div&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;div&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 笔者出于个人兴趣，在关注这些已经整理出版的、卷帙浩繁的契约文献的同时，也游走各地，……<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/div&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/div&gt;<br>&nbsp;&nbsp;&nbsp; &lt;/div&gt;</pre>
+    
+    <p>设定内容之析义，如下图所示，标题与内容一一对应。</p>
+    <img src="1.jpg" style="max-width:100%;">
+    <p>在 tab 里面嵌入列表方法，直接放置上述的 ul 标签即可，那些属性的配置一样，<b>注意 ul 标签要添加属性 autoload="false"，否则图片尺寸将会错乱！</b></p>
+    <div class="staticTab tab2 center">
+      <ul>
+        <li>公司简介</li>
+        <li>资质证照</li>
+        <li>荣誉证书</li>
+      </ul>
+      <div class="content">
+        <div>
+          自古以来，中华民族就善于运用契约进行交往。从杨国桢在《明清土地契约文书研究》一书中期待“中国契约学”研究以来，传统契约的论著、编著就不绝如缕。张传玺的煌煌三大册《中国历代契约粹编》，把中国的契约史追索到尚无无文字记载的时代;而他的《契约史买地券研究》，更系统地梳理了中国古代契约的源流关系和分类形式，从中可见，在周代就存在“万民约”与“邦国约”的分野。契约无论在官方，还是在民间，都获得过广泛的关注。至于王旭的《契纸千年——中国传统契约的形式与演变》，则把笔触落脚到近千年来我国丰富多样的契约之流变研究上。最近十年来，有关传统契约研究的论著可谓空前繁荣!
+        </div>
+        <div>
+        	<ul class="list col_2" sid="2268" pager="true" pagesize="4" autoload="false"></ul>
+        </div>
+        <div>
+        	<ul class="list col_3" sid="2268" pager="true" is_append="true" pagesize="6" autoload="false"></ul>  
+        </div>
+      </div>
+    </div>
+    
+    <h3>纯文字 Tab + List 组件（不推荐使用）</h3>
+  	
+	<div class="tab_group_1 tab2 center">
+		<ul>
+			<li class="id_2266">热点新闻</li>
+			<li class="id_2267">全国新闻</li>
+			<li class="id_2268">本地新闻</li>
+		</ul>
+		<div class="content">
+			<div>
+				<ul>加载中……</ul>
+			</div>
+			<div>
+				<ul>加载中……</ul>
+			</div>
+			<div>
+				<ul>加载中……</ul>
+			</div>
+		</div>
+	</div>
+	
+	    
+    <!-- 相册 -->
+    <a name="gallery"></a>
+    <h2>相册</h2>
+    <ul class="list gallery" sid="4896" pagesize="2" pager="true" is_append="true"></ul>
+	<p>代码：</p>
+    <pre class="prettyprint" style="height:36px;max-width:800px;"> &lt;ul class=&quot;list gallery&quot; sid=&quot;4896&quot; pagesize=&quot;2&quot; pager=&quot;true&quot; is_append=&quot;true&quot;&gt;&lt;/ul&gt;</pre>
+	<br />
+	<br />
+	
+    <script src="http://192.168.1.141:8080/jsp_demo/bigfoot/js/topic.js"></script>
+    <script>
+    	// 由 tab header 创建 list 用的 <ul>
+		var tab_group_1 = new SimpleTab(document.querySelector('.tab_group_1'));
+		tab_group_1.afterRender = function(i, btn, tab){
+			bf_list('http://u1.3gtv.net:2080/pms-service/section/content_list', tab.querySelector('ul'), {
+					id : btn.className.match(/\d+/)[0], 
+					portalId : 45,
+					start:0,
+					limit:4
+				},
+				{
+					isNoAutoHeight : true,
+					tpl : '<li>\
+							<a href="{url}?id={id}">{name}<div class="createTime" style="float:right;">{createTime}</div></a>\
+						</li>',
+					renderer : function rendererItem(data){
+						data.createTime = data.createTime.substring(0, 10);
+						return data;
+					}
+				}
+			);
+		}
+		tab_group_1.jump(0);
+    </script>
+
+
+</body></html>

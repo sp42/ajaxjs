@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>AJAXJS Framework CSS 样式集锦</title>
+	<link rel="shortcut icon" href="../asset/images/favicon.ico" type="image/x-icon" />
+
+	<style>
+		html, body {
+			height: 100%;
+			padding: 0;
+			margin: 0;
+			-webkit-font-smoothing: antialiased;
+			font-family: "Microsoft YaHei", "ff-tisa-web-pro-1", "ff-tisa-web-pro-2", "Lucida Grande", "Hiragino Sans GB", "Hiragino Sans GB W3", Arial;
+		}
+		
+		.leftSide {
+			float: left;
+			width: 18%;
+			height: 100%;
+			border-right: 1px solid lightgray;
+			box-sizing: border-box;
+			background-color: #e6e6e6;
+			overflow: auto;
+		}
+		
+		.rightSide {
+			float: right;
+			width: 82%;
+			height: 100%;
+		}
+		
+		h3 {
+			text-align: center;
+		}
+		
+		h4 {
+			letter-spacing: 2px;
+			margin: 4% 0;
+			font-size: .95rem;
+		}
+		
+		h5 {
+			text-align: center;
+			color: gray;
+			font-weight: normal;
+			margin-top: 0;
+		}
+		
+		iframe {
+			width: 100%;
+			height: 99.2%;
+			border: 0;
+		}
+		
+		ol.level_1 {
+			list-style-type: cjk-ideographic;
+		}
+		
+		ol.level_1 li {
+			
+		}
+		
+		ol.level_1 li li {
+			margin-bottom: 2%;
+			font-size: .9rem;
+		}
+		
+		ol ol {
+			padding-left: 5%;
+		}
+		
+		a {
+			color: black;
+			text-decoration: none;
+		}
+		
+		menu {
+			padding-left: 20px;
+		}
+	</style>
+</head>
+<body>
+	<div class="leftSide">
+		<h3>
+			AJAXJS Framework<br> UI 实用集锦
+		</h3>
+		<h5>2017.6.20 更新</h5>
+		<menu>
+			<ol class="level_1">
+				<li>
+					<h4>基础</h4>
+					<ol>
+						<li><a href="base/intro.htm" target="iframeTarget">概述</a>
+						<li><a href="css/css-common.htm" target="iframeTarget">一般元素</a>
+						</li>
+						<li><a href="css/css-layout.htm" target="iframeTarget">CSS
+								布局</a></li>
+						<li><a href="css/list-layout.htm" target="iframeTarget">列表布局</a></li>
+						<li><a href="css/css-moblie.htm" target="iframeTarget">移动端样式</a></li>
+					</ol>
+				</li>
+				<li>
+					<h4>LESS 封装</h4>
+					<ol>
+						<li><a href="less/less.htm#table" target="iframeTarget">表格</a></li>
+						<li><a href="less/less.htm#button" target="iframeTarget">按钮</a></li>
+						<li><a href="less/less.htm#input" target="iframeTarget">输入框</a></li>
+						<li><a href="less/less.htm#ddl" target="iframeTarget">下拉列表</a></li>
+						<li><a href="less/less.htm#tipsNote" target="iframeTarget">提示文字</a></li>
+					</ol>
+				</li>
+				<li>
+					<h4>复杂控件</h4>
+					<ol>
+						<li><a href="complex/form.htm" target="iframeTarget">表单布局及控件</a></li>
+						<li><a href="complex/topic.htm" target="iframeTarget">WebView 交互 </a></li>
+						<li><a href="../ui_demo/index.jsp" target="iframeTarget">原创控件</a></li>
+					</ol>
+				</li>
+				<li>
+					<h4>DHTML</h4>
+					<ol>
+						<li><a href="dhtml/dhtml.htm" target="iframeTarget">DHTML
+						</a></li>
+					</ol>
+				</li>
+				<li>
+					<h4>其他</h4>
+					<ol>
+						<li><a href="misc/md5_base64.htm" target="iframeTarget">Base64/MD5/正体</a></li>
+						<li><a href="misc/Tetris.htm" target="iframeTarget">俄罗斯方块</a></li>
+						<li><a href="misc/paint.htm" target="iframeTarget">画像素画</a></li>
+					</ol>
+				</li>
+			</ol>
+		</menu>
+		
+		<style>
+			.mask{
+				width:5%;
+				height:100%;
+				background-image: -moz-linear-gradient(left, rgba(255, 255, 255, 0), #e6e6e6);
+				background-image: -webkit-linear-gradient(left, rgba(255, 255, 255, 0), #e6e6e6);
+				background-image: linear-gradient(left, rgba(255, 255, 255, 0), #e6e6e6);
+				position: absolute;
+				right:0;
+				top:0;
+			}
+		</style>
+		<div style="height:30px;width:82%;margin:0 5%;overflow:hidden;line-height: 30px;white-space: nowrap; font-size:.9rem;color:gray;position: relative;">
+			<div class="mask"></div>
+			<div class="m" style="width:100%;overflow:hidden;">
+				提示：本例代码一般可以通过“鼠标右键查看源码”的方式了解源码。
+			</div>
+			<script>
+				window.setInterval(function(){ // 跑马灯
+					var m = document.querySelector('.m');
+					var queen = m.innerHTML.split('');
+					queen.push(queen.shift());
+					m.innerHTML = queen.join('');
+				}, 500);
+			</script>
+		</div>
+	</div>
+	<div class="rightSide">
+		<iframe name="iframeTarget" src="../ui_demo/index.jsp"></iframe>
+	</div>
+
+	<!-- CNZZ 统计 -->
+	<div style="display:none";>
+		<script src="https://s11.cnzz.com/z_stat.php?id=1261173351&web_id=1261173351"></script>
+	</div>
+	<!-- // CNZZ 统计 -->
+</body>
+</html>
