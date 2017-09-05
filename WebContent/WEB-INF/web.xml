@@ -12,52 +12,30 @@
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
-
-	<!-- Admin UI 界面框架 -->
-	<servlet>
-		<servlet-name>AdminUI</servlet-name>
-		<servlet-class>com.ajaxjs.adminUI.Controller</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>AdminUI</servlet-name>
-		<!-- 可指定路径，注意要归属于下面 filter 验证地址 -->
-		<url-pattern>/admin</url-pattern>
-	</servlet-mapping>
-
-	<!-- 指定一种登录验证方式。当前为 HTTP Basic Auth -->
-	<filter>
-		<filter-name>HttpBasicAuthFilter</filter-name>
-		<filter-class>com.ajaxjs.user.auth.HttpBasicAuthFilter</filter-class>
-		<!-- adminPassword 指定登录密码；如不指定，则默认为 123123 -->
-		<init-param>
-			<param-name>adminPassword</param-name>
-			<param-value>a123123a</param-value>
-		</init-param>
-	</filter>
-	<filter-mapping>
-		<filter-name>HttpBasicAuthFilter</filter-name>
-		<!-- 可指定路径，应使用 * 泛指该目录下所有路径 -->
-		<url-pattern>/admin/*</url-pattern>
-	</filter-mapping>
 	
+ 	<!-- 404 页面不存在错误 -->
+	<error-page>
+		<error-code>404</error-code>
+		<location>/jsp/common_jsp/404.jsp</location>
+	</error-page>
+	<!-- // -->
 	
-	<!-- 通用的网站配置系统 -->
-	<listener>  
-	   <listener-class>com.ajaxjs.web.config.NodeListener</listener-class>  
-	</listener>  
-	<listener>  
-	   <listener-class>com.ajaxjs.web.config.InitConfig</listener-class>  
-	</listener>  
-	<!-- // 通用的网站配置系统 -->
-
-	<!-- 页面编辑器后台 -->
-	<servlet>
-		<servlet-name>PageEditor</servlet-name>
-		<servlet-class>com.ajaxjs.pageEditor.PageEditorController</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>PageEditor</servlet-name>
-		<url-pattern>/pageEditor_admin/edit</url-pattern>
+	<!-- 500 服务器内部错误 -->
+	<error-page>
+		<error-code>500</error-code>
+		<location>/jsp/common_jsp/error.jsp</location>
+	</error-page>
+	<!-- // -->
+ 
+ 	<!--工具类接口，为了不外显 jsp -->
+	<servlet>  
+        <servlet-name>public_service</servlet-name>  
+        <jsp-file>/jsp/common_jsp/service.jsp</jsp-file>  
+	</servlet>  
+	
+	<servlet-mapping>  
+	        <servlet-name>public_service</servlet-name>  
+	        <url-pattern>/public_service/*</url-pattern>  
 	</servlet-mapping>
 
 	<filter>

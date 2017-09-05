@@ -1,77 +1,66 @@
 <%@page pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-	<%request.setAttribute("title", "Banner"); %>
-	<%@include file="../public/common.jsp" %>
-    <body>
-		<%@include file="../public/nav.jsp" %>
-    	<br />
+<%
+	request.setAttribute("title", "跑马灯");
+%>
+<%@include file="../public/common.jsp"%>
+<body>
+	<%@include file="../public/nav.jsp"%>
 
-    	<div class="p">
-    	<h3>Banner 控件</h3> 
-    	 <ul>
-    	 	<li>继承自 Tab 控件</li>
-    	 	<li>可支持手势切换、点击小圆点可以切换</li>
-    	 	<li>提供服务端版（基于 JSP 标签），使用更方便</li>
-    	 	<li>可自定义 indicator 样式</li>
-    	 	<li>该控件须引用 list.js</li>
-    	 </ul>
-    	</div>
-    	<br />
-    	
-		<section class="banner">
+	<h4>Banner 控件</h4>
+	<hr class="ajaxjs-hr" />
+	<p>Banner</p>
+	<ul class="list center">
+		<li>继承自 Tab 控件</li>
+		<li>可支持手势切换、点击小圆点可以切换</li>
+		<li>可自定义 indicator 样式</li>
+		<li>该控件须引用 list.js</li>
+	</ul>
+
+	<section class="banner center">
+		<div>
 			<div>
-				<div>
-					<a href="topic/?id=283">
-						<img src="http://imgu.3gtv.net:9090/_file/section/20150906113629683.jpg">
-					</a>
-				</div>
-			
-				<div>
-					<a href="topic/?id=341">
-						<img src="http://imgu.3gtv.net:9090/_file/section/20150828090747132.jpg">
-					</a>
-				</div>
-			
-				<div>
-					<a href="live/?id=3">
-						<img src="http://imgu.3gtv.net:9090/_file/section/20150906125934797.png">
-					</a>
-				</div>
-			
-				<div>
-					<a href="album/?id=4805">
-						<img src="http://imgu.3gtv.net:9090/_file/section/20150826162352938.jpg">
-					</a>
-				</div>
+				<a href="topic/?id=283"> <img
+					src="http://imgu.3gtv.net:9090/_file/section/20150906113629683.jpg">
+				</a>
 			</div>
-		    <ol class="indicator"> 
-				<li>0</li>
-				<li>1</li>
-				<li>2</li>
-				<li>3</li>
-		    </ol>
-		</section>
 
-		<script>
-			var banner = Object.create(ajaxjs.Banner);
-			banner.el = document.querySelector('.banner');
-			banner.init();
-			banner.loop();
-			banner.initIndicator();
-		</script>
-    	<br />
+			<div>
+				<a href="topic/?id=341"> <img
+					src="http://imgu.3gtv.net:9090/_file/section/20150828090747132.jpg">
+				</a>
+			</div>
 
-	<div class="p">
-		<h3>注意事项：</h3>
-		<ul>
-			<li></li>
-		</ul>
-	</div>
-	<div class="p">
-		<h3>代码如下：</h3>
-	</div>
- 
+			<div>
+				<a href="live/?id=3"> <img
+					src="http://imgu.3gtv.net:9090/_file/section/20150906125934797.png">
+				</a>
+			</div>
+
+			<div>
+				<a href="album/?id=4805"> <img
+					src="http://imgu.3gtv.net:9090/_file/section/20150826162352938.jpg">
+				</a>
+			</div>
+		</div>
+		<ol class="indicator">
+			<li>0</li>
+			<li>1</li>
+			<li>2</li>
+			<li>3</li>
+		</ol>
+	</section>
+
+	<script>
+		var banner = Object.create(ajaxjs.Banner);
+		banner.el = document.querySelector('.banner');
+		banner.init();
+		banner.loop();
+		banner.initIndicator();
+	</script>
+
+	<p>代码如下：</p>
 	<pre class="prettyprint">
 &lt;section class=&quot;banner&quot;&gt;
 	&lt;div&gt;
@@ -115,10 +104,8 @@
 	banner.initIndicator();
 &lt;/script&gt;
 	   </pre>
-<div class="p">
-			<h3>样式如下：</h3>
-		</div>
-		<pre class="prettyprint">
+	<p>样式如下：</p>
+	<pre class="prettyprint">
 .banner{
 	.tab;
 	position:relative;
@@ -162,114 +149,120 @@
 	}
 }
 	    </pre>
-	    	 	<div class="imgList_1">
-	    	<ul class="imgList"></ul>
-	    	<center>
-		    	<button class="loadMoreBtn">加载更多</button>
-	    	</center>
-	 	</div>
-    	
-    	<br /> <br />
-    	
-    	<div class="imgList_2">
-	    	<ul class="imgList"></ul>
-	    	<center>
-		    	<button class="loadMoreBtn">加载更多</button>
-	    	</center>
-    	</div>
+	    
+	<h4>Lightbox</h4>
+	<hr class="ajaxjs-hr" />
+	<p>TODO</p>
+	    
+	<div class="imgList_1">
+		<ul class="imgList"></ul>
+		<center>
+			<button class="loadMoreBtn">加载更多</button>
+		</center>
+	</div>
 
-    	<script>function call_lightbox(galleryId, imgList_el){
-    		var baseUrl = "http://u1.3gtv.net:2080/pms-service";
-    		var imgList_holder = document.querySelector('.' + imgList_el),
-    			imgList = imgList_holder.querySelector('.imgList');
-    		
-    		// http://u1.3gtv.net:2080/pms-service/gallery/gallery_pic_list?galleryId=4804&portalId=5&start=0&limit=5&callBack=$$_jsonp.globalMethod_191585
-    		ajaxjs.List(baseUrl + '/gallery/gallery_pic_list', 
-    				imgList, 
-    				{
-    					portalId:  5,
-    					galleryId: galleryId,
-    					start:0,
-    					limit:5
-    				},
-    				{
-    					loadMoreBtn : imgList_holder.querySelector('.loadMoreBtn'),
-    					isNoAutoHeight : false, // 海报 col3 需要等高
-    					tpl : document.querySelector('.indexTab_ranking_tpl').value,
-    					pager : true, // 是否需要分页
-    					pageSize : 6 // 海报 col3 读9条
-    					
-    				}
-    			);
-    		
-    		var lightboxTpl =  
-    			'<div class="lightbox_Container">\
+	<br />
+	<br />
+
+	<div class="imgList_2">
+		<ul class="imgList"></ul>
+		<center>
+			<button class="loadMoreBtn">加载更多</button>
+		</center>
+	</div>
+
+	<script>
+		function call_lightbox(galleryId, imgList_el) {
+			var baseUrl = "http://u1.3gtv.net:2080/pms-service";
+			var imgList_holder = document.querySelector('.' + imgList_el), imgList = imgList_holder
+					.querySelector('.imgList');
+
+			// http://u1.3gtv.net:2080/pms-service/gallery/gallery_pic_list?galleryId=4804&portalId=5&start=0&limit=5&callBack=$$_jsonp.globalMethod_191585
+			ajaxjs.List(baseUrl + '/gallery/gallery_pic_list', imgList, {
+				portalId : 5,
+				galleryId : galleryId,
+				start : 0,
+				limit : 5
+			}, {
+				loadMoreBtn : imgList_holder.querySelector('.loadMoreBtn'),
+				isNoAutoHeight : false, // 海报 col3 需要等高
+				tpl : document.querySelector('.indexTab_ranking_tpl').value,
+				pager : true, // 是否需要分页
+				pageSize : 6
+			// 海报 col3 读9条
+
+			});
+
+			var lightboxTpl = '<div class="lightbox_Container">\
     			    <ul></ul>\
     			</div>';
-    		var galleryTitle = '', galleryId = 9;
-    		
-    		function initImgs(el, frag){
-    			var ul = frag.querySelector('ul');
-    			
-    			// collect imgs
-    			el.up('ul').eachChild('img', function(img, i, j){
-    				var li = document.createElement('li');
-//    					var img = img.cloneNode();
-//    					img.src = img.src.replace('?w=250', '');
-//    					li.appendChild(img.cloneNode());
-    				var newlyImg = document.createElement('img');
-    				newlyImg.src = img.src.replace(/\?w=\d+/, '');
-    				li.appendChild(newlyImg);
-    				var title = document.createElement('h2');
-    				title.innerHTML = '图集 » ' + galleryTitle;
-    				li.appendChild(title);
-    				
-    				var picNo = document.createElement('div');
-    				picNo.className = 'picNo';
-    				picNo.innerHTML = (i + 1) + "/" + j.length;
-    				li.appendChild(picNo);
-    				ul.appendChild(li);
-    			});
-    			
-    			return ul;
-    		}
-    		
-    		// 获取 选中的 图片在 DOM 中的  index
-    		function getIndex_In_Dom(imgEl){
-    			// 这里跟 dom 结构有关系
-    			var li = imgEl.parentNode.parentNode.parentNode, children = imgEl.up('ul').children;
-    			
-    			for(var index = 0, j = children.length; index < j; index++){
-    				if(li == children[index])break;
-    			}
-    			
-    			return index;
-    		}
-    			
-    		imgList.onclick = function(e){
-    			var el = e.target;
-    			if(el.tagName != 'IMG')return;
-    			
-    			var frag = document.createElement('div');
-    			frag.innerHTML = lightboxTpl;
+			var galleryTitle = '', galleryId = 9;
 
-    			var ul = initImgs(el, frag);
-    			var carouselEl = frag.querySelector('div');
-    			document.body.appendChild(carouselEl);
-    			
-    			var carouselEl = document.querySelector('.lightbox_Container');
-    			var obj = Object.create(ajaxjs.Tab.Lightbox);
-    			//obj.isDirectShow = false;
-    			obj.el = carouselEl;
-    		    
-    			var index = getIndex_In_Dom(el);
-    			obj.init();
-    			obj.go(index);
-    		}
-    	}
-    	</script>
-    	
-    	<textarea style="display:none;" class="indexTab_ranking_tpl">
+			function initImgs(el, frag) {
+				var ul = frag.querySelector('ul');
+
+				// collect imgs
+				el.up('ul').eachChild('img', function(img, i, j) {
+					var li = document.createElement('li');
+					//    					var img = img.cloneNode();
+					//    					img.src = img.src.replace('?w=250', '');
+					//    					li.appendChild(img.cloneNode());
+					var newlyImg = document.createElement('img');
+					newlyImg.src = img.src.replace(/\?w=\d+/, '');
+					li.appendChild(newlyImg);
+					var title = document.createElement('h2');
+					title.innerHTML = '图集 » ' + galleryTitle;
+					li.appendChild(title);
+
+					var picNo = document.createElement('div');
+					picNo.className = 'picNo';
+					picNo.innerHTML = (i + 1) + "/" + j.length;
+					li.appendChild(picNo);
+					ul.appendChild(li);
+				});
+
+				return ul;
+			}
+
+			// 获取 选中的 图片在 DOM 中的  index
+			function getIndex_In_Dom(imgEl) {
+				// 这里跟 dom 结构有关系
+				var li = imgEl.parentNode.parentNode.parentNode, children = imgEl
+						.up('ul').children;
+
+				for (var index = 0, j = children.length; index < j; index++) {
+					if (li == children[index])
+						break;
+				}
+
+				return index;
+			}
+
+			imgList.onclick = function(e) {
+				var el = e.target;
+				if (el.tagName != 'IMG')
+					return;
+
+				var frag = document.createElement('div');
+				frag.innerHTML = lightboxTpl;
+
+				var ul = initImgs(el, frag);
+				var carouselEl = frag.querySelector('div');
+				document.body.appendChild(carouselEl);
+
+				var carouselEl = document.querySelector('.lightbox_Container');
+				var obj = Object.create(ajaxjs.Tab.Lightbox);
+				//obj.isDirectShow = false;
+				obj.el = carouselEl;
+
+				var index = getIndex_In_Dom(el);
+				obj.init();
+				obj.go(index);
+			}
+		}
+	</script>
+
+	<textarea style="display: none;" class="indexTab_ranking_tpl">
 			<li>
 				<div class="box">
 					<div class="imgHolder">
@@ -278,10 +271,10 @@
 				</div>
 			</li>
 		</textarea>
-    	<script>
-    	call_lightbox(4804, 'imgList_1');
-    	call_lightbox(4805, 'imgList_2');
-    	</script>
-	    <%@include file="../public/footer.jsp" %>
-    </body>
+	<script>
+		call_lightbox(4804, 'imgList_1');
+		call_lightbox(4805, 'imgList_2');
+	</script>
+	<%@include file="../public/footer.jsp"%>
+</body>
 </html>

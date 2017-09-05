@@ -137,7 +137,7 @@ ul.tab li.active {
 	<hr class="ajaxjs-hr" />
 	<p>简单设置底边颜色不同即可。注意这里要使用 js 类：new
 		FocusHandler(document.querySelector('.tab'));</p>
-	<ul class="tab">
+	<ul class="tab" style="width:80%;">
 		<li class="active">验证</li>
 		<li>核对</li>
 		<li>支付</li>
@@ -173,9 +173,9 @@ ul.tab2 li.active {
 </style>
 
 
-	<ul class="tab2">
+	<ul class="center tab2" style="width:96%;">
 		<li class="active">公开课</li>
-		<li>直播课程</li>
+		<li>直播课</li>
 	</ul>
 
 	<script>

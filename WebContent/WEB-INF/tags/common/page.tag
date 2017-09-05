@@ -6,8 +6,8 @@
 <c:if test="${type == 'navMenu'}">
 	<ul>
 		<li><a href="${pageContext.request.contextPath}/">首页</a></li>
-	<c:foreach items="${PageNode.navBar}" var="menu">
-		<li ${PageNode.isCurrentNode(menu) ? ' class="selected"' : ''}>
+	<c:foreach items="${SITE_STRU.navBar}" var="menu">
+		<li ${SITE_STRU.isCurrentNode(menu, pageContext.request) ? ' class="selected"' : ''}>
 			<a href="${pageContext.request.contextPath}/${menu.id}/">${menu.name}</a>
 		</li>
 	</c:foreach>
@@ -49,30 +49,37 @@
 <%-- 二级菜单 --%>
 <c:if test="${type == 'secondLevelMenu'}">
 	<ul>
-	<c:foreach items="${PageNode.pageNode.menu}" var="menu">
-		<li ${PageNode.isCurrentNode(menu) ? ' class="selected"' : ''}>
+	<c:foreach items="${SITE_STRU.getMenu(pageContext.request)}" var="menu">
+		<li ${SITE_STRU.isCurrentNode(menu, pageContext.request) ? ' class="selected"' : ''}>
+			<a href="${pageContext.request.contextPath}${menu.fullPath}/">${menu.name}</a>
+		</li>
+	</c:foreach>
+	</ul>
+</c:if>
+
+<%-- 次级菜单 --%>
+<c:if test="${type == 'submenu'}">
+	<ul>
+	<c:foreach items="${PAGE.node.children}" var="menu">
+		<li ${SITE_STRU.isCurrentNode(menu, pageContext.request) ? ' class="selected"' : ''}>
 			<a href="${pageContext.request.contextPath}/${menu.fullPath}/">${menu.name}</a>
 		</li>
 	</c:foreach>
 	</ul>
 </c:if>
 
-<%-- 定位 --%>
-<c:if test="${type == 'anchor'}">
+<%-- 定位，当没有 PAGE.node 时完全不显示该控件 --%>
+<c:if test="${type == 'anchor' && PAGE.node != null}">
 <nav class="anchor">
 	您在位置 ：
 	<a href="${pageContext.request.contextPath == '' ? '' : pageContext.request.contextPath}/">首页 </a>
+	
 	<%-- MVC模式下，url 路径还是按照 JSP 的而不是 Servlet 的，我们希望统一的路径是按照 Servlet 的，故所以这里 Servlet 优先 --%>
-	<c:choose>
-		<c:when test="${not empty PageNodeByServlet}">
-		  » ${PageNodeByServlet.pageNode.anchorLink}
-		</c:when>
-		<c:otherwise>
-			<c:if test="${not empty PageNode.pageNode.anchorLink}">
-			 » ${PageNode.pageNode.anchorLink}
-			</c:if>
-		</c:otherwise>
-	</c:choose>
+	
+	<c:foreach items="${PAGE.node.supers}" var="_super">
+		»<a href="${pageContext.request.contextPath}${_super.split(':')[0]}">${_super.split(':')[1]}</a>
+	</c:foreach>
+	»<a href="${pageContext.request.contextPath}/${PAGE.node.fullPath}">${PAGE.node.name}</a>
 	
 	<%-- 如果有分类的话，先显示分类 （适合列表的情形）--%>
 	<c:if test="${not empty catalog}">

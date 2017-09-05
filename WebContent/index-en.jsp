@@ -71,7 +71,7 @@
 				text-stroke: 5px rgba(0, 0, 0, .15);
 				list-style-type: disc;
 				margin-left: 30px;
-				font-size: .8rem;
+				font-size: .75rem;
 				letter-spacing: 2px;
 				margin-bottom: 6px;
 			}
@@ -214,7 +214,7 @@
 			<li style="border-bottom-color: #ffed20;"><a href="#">Home</a></li>
 			<li style="border-bottom-color: #2096ff;"><a
 				href="http://ajaxjs.mydoc.io/">Manual</a></li>
-			<li style="border-bottom-color: #ff8820;"><a href="ui">UI</a></li>
+			<li style="border-bottom-color: #ff8820;"><a href="ui_demo">UI</a></li>
 			<li style="border-bottom-color: #c720ff;"><a
 				href="http://blog.csdn.net/zhangxin09">Blog</a></li>
 			<li style="border-bottom-color: #ff0024;"><a href="javadoc">Document</a></li>
@@ -237,7 +237,7 @@
 				</div>
 			</div>
 			<div class="right">
-				<div class="points" style="margin-bottom: 10px; width: 95%;">
+				<div class="points" style="margin-bottom: 10px; width: 98%;">
 					<br>
 					<ul>
 						<li>Design principles: Clean, Simple, Fast & Lightweight. Features: full stack, native, comprehensive, practical.</li>
@@ -256,9 +256,9 @@
 			</h5>
 			<p>
 			
-			Collecting many years of various HTML/CSS best practices, 
-			providing practical controls such as Pop-up, Banner, Tab, List, etc., including responsive css for mobile. 
-			Complex CSS with LESS.js reusable package. JS based on ES v3.1. Have its own dom.js base library, 13kb <a href="ui">»HTML/CSS Demo</a> <a href="ui_demo">»JS Widgets</a>
+			Collecting many years of various HTML/DHTML/CSS best practices, 
+			providing many widgets, including responsive CSS/LESS.js for mobile. 
+			  Small size, 13kb for all base and widgets <a href="ui_demo">»HTML/CSS/JS Demo</a>  
 			</p>
 		</li>
 		<li style="border-right-color: #2096ff;">

@@ -41,7 +41,52 @@
 	
 	<%-- 定义网页搜索引擎索引方式，robotterms 是一组使用英文逗号「,」分割的值，通常有如下几种取值：none，noindex，nofollow，all，index和follow --%>
 	<meta name="robots" content="index,follow" />
-	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/asset/common/css/base.css" />
+
+	<style type="text/css">
+		/* AJAXJS Base CSS */
+		body,dl,dt,dd,ul,li,pre,form,fieldset,input,p,blockquote,th,td,h1,h2,h3,h4,h5{margin:0;padding:0;}
+		h1,h2,h3,h4,h5{font-weight: normal;}img{border:0;}ul li{list-style-type:none}.hide{display:none}
+		body{
+			-webkit-font-smoothing:antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			font-family: "Lantinghei SC", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif;
+		}
+		
+		a{
+			text-decoration:none;
+			color:#999;
+			transition : color 400ms ease-in-out;
+		}
+		
+		a:hover{
+			color:black;
+			text-decoration:underline;
+		}
+		
+		button {
+			border:none;
+			outline: none;
+			cursor: pointer;
+			letter-spacing: 2px;
+			text-align: center;
+			-webkit-user-select: none; /* 不可选择文本 */
+			-moz-user-select: none;
+			user-select: none;
+		}
+		select, input[type=text], input[type=password], textarea {
+			outline:none;
+			-moz-appearance:none;/* for mac */
+		}
+		
+		/* 手机端浏览器所显示的网页 CSS */
+		@media screen and (max-width:480px) {
+			* {
+				-webkit-tap-highlight-color: transparent; /* 很多 Android 浏览器的 a 链接有边框，这里取消它  */
+				-webkit-touch-callout: none; /* 在 iOS 浏览器里面，假如用户长按 a 标签，都会出现默认的弹出菜单事件 */
+				/* -webkit-user-select:none; */ /* !!! */
+			}
+		}	
+	</style>
 	<link rel="stylesheet" type="text/css" href="<%=getCssUrl(request, "/ui_demo/public/main.less", true)%>" />
 <%-- 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ui_demo/public/css.css" /> --%>
     <script src="${pageContext.request.contextPath}/asset/common/js/dom.js"></script>

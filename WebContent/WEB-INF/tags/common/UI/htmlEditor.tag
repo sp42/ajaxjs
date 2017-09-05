@@ -4,9 +4,9 @@
 
 <!-- HTML 编辑器控件 --> 
 <div class="htmlEditor">
-	<ul class="toolbar">
+<ul class="toolbar">
 		<li class="dorpdown">
-			<img title="字体" src="${pageContext.request.contextPath}/asset/images/htmlEditor/4.gif" />
+			<span  title="字体" class="bg-4"></span>
 			<div class="fontfamilyChoser">
 				<a href="javascript:;" style="font-family: '宋体'">宋体</a>
 				<a href="javascript:;" style="font-family: '黑体'">黑体</a>
@@ -25,7 +25,8 @@
 			</div>
 		</li>		
 		<li class="dorpdown">
-			<img title="字号" src="${pageContext.request.contextPath}/asset/images/htmlEditor/5.gif" />
+		<span  title="字号" class="bg-5" ></span>
+			
 			<div class="fontsizeChoser">
 				<a href="javascript:;" style="font-size: xx-small; line-height: 120%">极小</a>
 				<a href="javascript:;" style="font-size: x-small;  line-height: 120%">特小</a>
@@ -37,18 +38,19 @@
 			</div>
 		</li>		
 	
-		<li title="加粗"><img class="bold" src="${pageContext.request.contextPath}/asset/images/htmlEditor/6.gif" /></li>		
-		<li><img title="斜体"   class="italic" src="${pageContext.request.contextPath}/asset/images/htmlEditor/7.gif" /></li>		
-		<li><img title="下划线"  class="underline" src="${pageContext.request.contextPath}/asset/images/htmlEditor/8.gif" /></li>
-		<li><img title="左对齐"  class="justifyleft" src="${pageContext.request.contextPath}/asset/images/htmlEditor/9.gif" /></li>
-		<li><img title="中间对齐" class="justifycenter" src="${pageContext.request.contextPath}/asset/images/htmlEditor/10.gif" /></li>
-		<li><img title="右对齐"  class="justifyright" src="${pageContext.request.contextPath}/asset/images/htmlEditor/11.gif" /></li>
-		<li><img title="数字编号" class="insertorderedlist" src="${pageContext.request.contextPath}/asset/images/htmlEditor/12.gif" /></li>
-		<li><img title="项目编号" class="insertunorderedlist" src="${pageContext.request.contextPath}/asset/images/htmlEditor/13.gif" /></li>
-		<li><img title="增加缩进" class="outdent" src="${pageContext.request.contextPath}/asset/images/htmlEditor/14.gif" /></li>
-		<li><img title="减少缩进" class="indent" src="${pageContext.request.contextPath}/asset/images/htmlEditor/15.gif" /></li>
+		<li><span title="加粗"    class="bold bg-6"></span></li>		
+		<li><span title="斜体"    class="italic bg-7"></span></li>		
+		<li><span title="下划线"   class="underline bg-8"></span></li>
+		<li><span title="左对齐"   class="justifyleft bg-9"></span></li>
+		<li><span title="中间对齐" class="justifycenter bg-10"></span></li>
+		<li><span title="右对齐"   class="justifyright bg-11"></span></li>
+		<li><span title="数字编号" class="insertorderedlist bg-12"></span></li>
+		<li><span title="项目编号" class="insertunorderedlist bg-13"></span></li>
+		<li><span title="增加缩进" class="outdent bg-14"></span></li>
+		<li><span title="减少缩进" class="indent bg-15"></span></li>
+
 		<li class="dorpdown">
-			<img title="字体颜色" src="${pageContext.request.contextPath}/asset/images/htmlEditor/16.gif" />
+			<span title="字体颜色"  class="bg-16"></span>
 			<div class="fontColor colorPicker">
 				<script>
 					document.write(ajaxjs.HtmlEditor.createColorPickerHTML());
@@ -56,7 +58,7 @@
 			</div>
 		</li>
 		<li class="dorpdown">
-			<img title="背景颜色" class="backColor" src="${pageContext.request.contextPath}/asset/images/htmlEditor/17.gif" />
+			<span title="背景颜色" class="backColor bg-17" ></span>
 			<div class="bgColor colorPicker">
 				<script>
 					document.write(ajaxjs.HtmlEditor.createColorPickerHTML());
@@ -64,13 +66,13 @@
 			</div>
 		</li>
 		<li>
-			<img title="增加链接" class="createLink" src="${pageContext.request.contextPath}/asset/images/htmlEditor/18.gif" />
+			<span title="增加链接" class="createLink bg-18" ></span>
 		</li>
 		<li>
-			<img title="增加图片" class="insertImage" src="${pageContext.request.contextPath}/asset/images/htmlEditor/19.gif" />
+			<span title="增加图片" class="insertImage bg-19" ></span>
 		</li>
 		<li>
-			<span class="switchMode">HTML</span>
+			<span class="switchMode noBg">HTML</span>
 		</li>
 	</ul>
 

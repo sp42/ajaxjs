@@ -1,6 +1,5 @@
 ;(function(){
 	var isWebkit = navigator.userAgent.toLowerCase().indexOf('webkit') != -1;
-	
 	// 推荐使用 百分比，px 的话要考虑滚动条，比较麻烦
 	// 要使用 px 推荐指定 stepWidth
 	// banner，要使用 px
@@ -474,9 +473,9 @@ function Step() {
 
 		// 发起请求
 		if (typeof isJSONP == 'undefined' || isJSONP == true) {
-			ajaxjs.xhr.jsonp(url, cb, args);
+			ajaxjs.xhr.jsonp(url, args, cb);
 		} else
-			ajaxjs.xhr.get(url, cb, args);
+			ajaxjs.xhr.get(url, args, cb);
 	}
 	
 	function getCellRequestWidth() {

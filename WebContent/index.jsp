@@ -226,7 +226,7 @@
 			<li style="border-bottom-color: #ffed20;"><a href="#">简 介</a></li>
 			<li style="border-bottom-color: #2096ff;"><a
 				href="http://ajaxjs.mydoc.io/">手 册</a></li>
-			<li style="border-bottom-color: #ff8820;"><a href="ui">前端演示</a></li>
+			<li style="border-bottom-color: #ff8820;"><a href="ui_demo">前端演示</a></li>
 			<li style="border-bottom-color: #c720ff;"><a
 				href="http://blog.csdn.net/zhangxin09">博 客</a></li>
 			<li style="border-bottom-color: #ff0024;"><a href="javadoc">文
@@ -270,8 +270,8 @@
 			<h5>
 				<img src="images/icon_inkboard.png"> 前端简介
 			</h5>
-			<p>收集多年的各种 HTML／CSS 最佳实践，提供实用控件如弹窗、Banner、Tab、列表等等，包括移动端主流控件。
-			复杂 CSS 采用 LESS.js 可复用封装。JS 基于 ES 3.1 书写。有自己的 dom.js 基础库，大小13kb <a href="ui">»HTML/CSS 演示</a> <a href="ui_demo">»JS组件</a>
+			<p>轻量级 UI 组件库，涵盖了目前互联网上各类常见的组件（包括移动端），经实践项目积累沉淀而成。
+			代码量上力求精简，没有依赖其他库，原生开发。复杂 CSS 采用 LESS.js 可复用封装。<a href="ui_demo">»HTML/CSS/JS 演示</a>
 			</p>
 		</li>
 		<li style="border-right-color: #2096ff;">

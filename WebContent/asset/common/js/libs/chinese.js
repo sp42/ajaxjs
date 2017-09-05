@@ -69,7 +69,7 @@
 	window.toChinese = function(el) {
 		el.addCls('selected');
 		document.querySelector(".simpleChinese").removeCls('selected');
-		translate(document.body, traditionalized)
+		translate(document.body, traditionalized);
 		Cookie.set(cookieName, true);
 	}
 	// 转换为简体中文

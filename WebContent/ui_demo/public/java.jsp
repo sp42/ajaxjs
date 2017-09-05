@@ -235,33 +235,7 @@
 	// 默认 8080 端口
 	private final static String picPath = "http://%s:8080/%s/asset/";
 
-	/**
-	 * 返回样式文件
-	 * 
-	 * @param lessPath
-	 *            LESS 路径
-	 * @return CSS 地址
-	 */
-	public static String getCssUrl(ServletContext cxt, String lessPath, boolean isDebug) {
-		String css = null;
-		
-		if (isDebug) {// 设置参数
-			String ip = getLocalIp();
-			Map<String, String> params = new HashMap<String, String>();
-			params.put("lessFile", Mappath(cxt, lessPath));
-			params.put("ns", Mappath(cxt, lessPath.replaceAll("\\/[\\w\\.]*$", ""))); // 去掉文件名，保留路径，也就是文件夹名称
-			params.put("picPath", String.format(picPath, ip, cxt.getContextPath()));// 返回 CSS 背景图所用的图片
-			params.put("MainDomain", "");
-			params.put("isdebug", "true");
 
-			css = "http://" + ip + ":83/lessService/?" + join(params);
-		} else {
-			css = cxt.getContextPath() + lessPath.replace("/less", "/css").replace(".less", ".css");
-		}
-		
-		return css;
-	}
-	
 	/**
 	 * 也是 join，不过输入的参数不是数组而是 hash。
 	 * 
@@ -348,7 +322,7 @@
 			
 			css = "http://" + getLocalIp() + ":83/lessService/?" + join(params);
 		} else {
-			css = request.getContextPath() + lessPath.replace("/less", "/css").replace(".less", ".css");
+			css = request.getContextPath() + lessPath.replace("/less", "/css").replace(".less", ".css").trim();
 		}
 		return css;
 	}

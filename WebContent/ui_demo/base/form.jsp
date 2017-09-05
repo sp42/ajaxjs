@@ -60,6 +60,11 @@
 		</select>
 	</div>
 
+	<h4>滑动杆 Slider</h4>
+	<hr class="ajaxjs-hr" />
+	<p>TODO</p>
+	
+	
 	<h4>自定义文件上传按钮</h4>
 	<hr class="ajaxjs-hr" />
 	<p>通过 label 标签 for 属性关联具体的 input[type=file] 触发本地 file
