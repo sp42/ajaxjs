@@ -43,5 +43,38 @@ AJAXJS WEB 包含以下模块：
 - Q群 [3150067](//shang.qq.com/wpa/qunwpa?idkey=99415d164e2c776567c9370cc5b0bde26f4e2e7c5068978a24d1fe7c976ace93)
 - 邮箱 support@ajaxjs.com
 
+版权声明 LICENSE
+==========
 
+
+
+	/**
+	 * 版权所有  Frank Cheung frank@ajaxjs.com
+	 * 
+	 * 根据 2.0 版本 Apache 许可证("许可证")授权；
+	 * 根据本许可证，用户可以不使用此文件。
+	 * 用户可从下列网址获得许可证副本：
+	 * 
+	 *    http://www.apache.org/licenses/LICENSE-2.0
+	 *    
+	 * 除非因适用法律需要或书面同意，根据许可证分发的软件是基于"按原样"基础提供，
+	 * 无任何明示的或暗示的保证或条件。详见根据许可证许可下，特定语言的管辖权限和限制。
+	 */
+	
+	
+	/**
+	 * Copyright Frank Cheung frank@ajaxjs.com
+	 *
+	 * Licensed under the Apache License, Version 2.0 (the "License");
+	 * you may not use this file except in compliance with the License.
+	 * You may obtain a copy of the License at
+	 *
+	 *    http://www.apache.org/licenses/LICENSE-2.0
+	 *
+	 * Unless required by applicable law or agreed to in writing, software
+	 * distributed under the License is distributed on an "AS IS" BASIS,
+	 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	 * See the License for the specific language governing permissions and
+	 * limitations under the License.
+	 */
  
