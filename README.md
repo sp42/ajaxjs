@@ -20,28 +20,20 @@ AJAXJS 的设计原则：首先是尽量减少引入新的概念和新的第三�
 |ajaxjs-web|本项目，Web 的 MVC 框架+小型 UI 库，依赖 base JAR 包。见下面详细介绍。|
 |ajaxjs-cms|CMS 网站内容发布系统，依赖上述 base + web 的 JAR 包。[跳转项目主页](http://git.oschina.net/sp42/ajaxjs-cms)。|
 
-WEB 模块包含以下子模块：
+AJAXJS WEB 包含以下模块：
 
-1.  web 主要针对 Http 与 Servlet 工具类，例如通过 HttpServletRequestWrapper 扩展了 Request 对象。
-2.  view 视图模块，提供一个简单的、基于 JSP/JSTL 的扩展标签。
-3.  net 网络模块，包括文件上传器、JSON API 的 DTO 实现、FTP 简易客户端和邮件发送器 mail（无须依赖 JavaMail）。
+- 通过 Servlet 3.0 的 web-fragment 提供了静态资源打包，包括 UI 库的各种控件、自定义标签库、404/500 页等；
+- web Http 与 Servlet 工具类，例如通过 HttpServletRequestWrapper 扩展了 Request 对象，还有一个文件上传组件和验证码组件、Mock 模拟对象；
+- mvc 模块，类似 SpringMVC 基于注解的控制器的写法，注解基于 JSR 标准方案。当前支持 JSP 视图；
+- view 视图模块，提供一个简单的、基于 JSP/JSTL 的扩展标签；
+- security 网站防御系统，抵御 XSS、CSRF 等攻击；
+- config 基于 JSON 格式的配置系统。
 
-数据库连接
-因为使用了 Tomcat 数据库连接池，所以依赖于 Tomcat 的 web 环境，于是数据库的配置文件也就不在 properties 文件中，取而代之的是 WebContent/META-INF/context.xml 配置文件。
- 
- 
-包含下面模块
-
-|名称|说明|
-|------|----|
-|ajaxjs-web|Web 的基础类库|
-|ajaxjs-webconfig|基于 JSON 格式的配置系统|
-|ajaxjs-security|安全框架|
-|ajaxjs-page-editor| HTML 页面编辑器|
-
-
-
-各个项目导出 jar 可交叉复用到不同项目。项目不限定何种 IDE（不包含任何 IDE 配置文件）。但默认地，src 为 Java 源码目录；WebContent 为 Web 项目根目录；lib 为依赖的 jar 包或本项目编译好的 jar 包。
+环境配置说明
+-------------
+- 数据库连接：因为使用了 Tomcat 数据库连接池，所以依赖于 Tomcat 的 web 环境，于是数据库的配置文件也就不在 properties 文件中，取而代之的是 WebContent/META-INF/context.xml 配置文件。
+- 各个项目导出 jar 可交叉复用到不同项目。项目不限定何种 IDE（不包含任何 IDE 配置文件）。但默认地，src 为 Java 源码目录；WebContent 为 Web 项目根目录；lib 为依赖的 jar 包或本项目编译好的 jar 包。
+- 详见手册帮助 [http://ajaxjs.mydoc.io/?t=148968](http://ajaxjs.mydoc.io/?t=148968)
 
 联系方式
 ----------
