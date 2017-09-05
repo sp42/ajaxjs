@@ -213,7 +213,9 @@
 <script>
 	;(function(){
 		var s = (navigator.userLanguage || navigator.language).toLowerCase();
-		if(s == 'zh-cn' || s == 'zh-tw') {
+		var isForce = ${(not empty param.isForce) ? 'true' : 'false'};
+	
+		if(isForce || s == 'zh-cn' || s == 'zh-tw') {
 			
 		} else {
 			location.assign('index-en.jsp');
@@ -242,9 +244,8 @@
 				<p style="color: #fffbac;">AJAXJS Web 是一款全栈平台的开源 Web
 					框架，不仅是服务端框架，还整合了前端库。它使用 HTML5+Java 方案，继承了 Java 平台的高效、安全、稳定、跨平台等诸多优势，
 					但却摒弃了传统企业级架构所带来的庞大和臃肿，强调轻量级，非常适合互联网的快速应用。</p>
-				<div
-					style="text-align: center; color: #fffbac; font-weight: normal; letter-spacing: 2px;">
-					<br> <img src="images/index_06.jpg"> <br>
+				<div style="text-align: center; color: #fffbac; font-weight: normal; letter-spacing: 2px;">
+					<img src="images/index_06.jpg"> <br>
 					<h3>Apache License v2 开源协议</h3>
 					<h4>
 						<a href="http://git.oschina.net/sp42/ajaxjs">开源中国 Git/SVN Checkout</a>
@@ -270,22 +271,22 @@
 			<h5>
 				<img src="images/icon_inkboard.png"> 前端简介
 			</h5>
-			<p>轻量级 UI 组件库，涵盖了目前互联网上各类常见的组件（包括移动端），经实践项目积累沉淀而成。
-			代码量上力求精简，没有依赖其他库，原生开发。复杂 CSS 采用 LESS.js 可复用封装。<a href="ui_demo">»HTML/CSS/JS 演示</a>
+			<p>轻量级 UI 组件库，涵盖了目前互联网上各类常见的组件，经实践项目积累沉淀而成；移动端提供高性能的列表控件，高仿真原生效果；
+			极简风格，没有依赖其他库，原生开发。复杂 CSS 采用 LESS.js 可复用封装。<a href="ui_demo">»浏览 HTML/CSS/JS 演示</a>
 			</p>
 		</li>
 		<li style="border-right-color: #2096ff;">
 			<h5>
 				<img src="images/icon_source.png"> 后端简介
 			</h5>
-			<p>标配有 IOC/AOP/MVC/ORM/RESTful，泛型 Controller/Service/DAO/Model 分层，类似 SpringMVC 的控制器，类似 MyBatis 注解的 SQL 服务，支持 Java Bean 或更简单的 Map，自动分页，查询条件和后端验证。<a
+			<p>标配有 IOC/AOP/MVC/ORM/RESTful，泛型 Controller/Service/DAO/Model 分层，类似 SpringMVC 的控制器，类似 MyBatis 注解的 SQL 服务，返回数据支持 Java Bean 或更简单的 Map，自动分页，查询条件和后端验证。<a
 					href="javadoc">»JavaDoc</a></p>
 		</li>
 		<li style="border-right-color: #c720ff;">
 			<h5>
 				<img src="images/icon_database.png">下载 &amp; 运行
 			</h5>
-			<p>Win/Mac/Linux/JRE1.7+/Tomcat7+/IE8+</p>
+			<p>运行系统：Win/Mac/Linux；要求：JRE1.7+/Tomcat7+，浏览器支持 IE8+</p>
 			<p>
 				<a href="http://git.oschina.net/sp42/ajaxjs">源码 Git/SVN</a> <a
 					href="javadoc">JavaDoc 文档</a> <a

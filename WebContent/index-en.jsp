@@ -227,9 +227,8 @@
 					Framework</h2> 
 				<p style="color: #fffbac;">AJAXJS Web aims to full-stack, not only the server-side framework, but also integrates the front-end library. It’s written in HTML5 + Java,
 				 a successor to the JVM platform, efficient, secure, stable, cross-platform and many other advantages, but it abandoned the traditional enterprise architecture brought about by the large and bloated, emphasizing the lightweight, and fast, very suitable for the Internet fast application.</p>
-				<div
-					style="text-align: center; color: #fffbac; font-weight: normal; letter-spacing: 2px;">
-					<br> <img src="images/index_06.jpg"> <br>
+				<div style="text-align: center; color: #fffbac; font-weight: normal; letter-spacing: 2px;">
+					<img src="images/index_06.jpg"> <br>
 					<h3>Apache License v2 OpenSource</h3>
 					<h4>
 						<a href="http://git.oschina.net/sp42/ajaxjs">Git/SVN@OSC Checkout</a>

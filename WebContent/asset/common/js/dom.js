@@ -487,8 +487,7 @@ ajaxjs.loadScript.loaded = {};
 //******----------------------------******
 //表单
 //******----------------------------******
-;
-(function() {
+;(function() {
 
 	/**
 	 * new bf_form(document.querySelector('form.addUser')).on('afterSubmit',
