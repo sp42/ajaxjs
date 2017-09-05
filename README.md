@@ -20,6 +20,8 @@ AJAXJS 的设计原则：首先是尽量减少引入新的概念和新的第三�
 |ajaxjs-web|本项目，Web 的 MVC 框架+小型 UI 库，依赖 base JAR 包。见下面详细介绍。|
 |ajaxjs-cms|CMS 网站内容发布系统，依赖上述 base + web 的 JAR 包。[跳转项目主页](http://git.oschina.net/sp42/ajaxjs-cms)。|
 
+AJAXJS WEB
+-----------
 AJAXJS WEB 包含以下模块：
 
 - 通过 Servlet 3.0 的 web-fragment 提供了静态资源打包，包括 UI 库的各种控件、自定义标签库、404/500 页等；
