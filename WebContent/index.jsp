@@ -295,7 +295,7 @@
 			<p>
 				QQ 群：3150067 <a href="mailto:support@ajaxjs.com">联系邮箱</a> <a href="http://blog.csdn.net/zhangxin09">作者博客</a>
 				<p>免费使用、修改，引用请保留头注释</p>
-			<p>基于 Apache License Version--2.0 开源协议</p>
+			<p>基于 Apache License Ver2.0 开源协议</p>
 		</li>
 	</ul>
 	<footer>
