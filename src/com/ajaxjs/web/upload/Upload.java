@@ -19,7 +19,7 @@ import java.io.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.io.StreamUtil;
 
 
@@ -74,7 +74,7 @@ public class Upload {
 			e1.printStackTrace();
 		}
 			
-		rawStr = StringUtil.byte2String(dateBytes);
+		rawStr = Encode.byte2String(dateBytes);
 		
 		// 取得数据分割字符串，数据分割线开始位置boundary=---------------------------
 		String boundary = contentType.substring(contentType.lastIndexOf("=") + 1, contentType.length());

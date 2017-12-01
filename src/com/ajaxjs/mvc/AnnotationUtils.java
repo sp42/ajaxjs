@@ -34,7 +34,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 
 import com.ajaxjs.mvc.controller.IController;
-import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.ioc.BeanContext;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.ReflectNewInstance;
@@ -161,7 +161,7 @@ public class AnnotationUtils {
 		while (dirs.hasMoreElements()) {
 			URL url = dirs.nextElement();
 			if ("file".equals(url.getProtocol())) {
-				String filePath = StringUtil.urlDecode(url.getFile()).trim();// 获取包的物理路径
+				String filePath = Encode.urlDecode(url.getFile()).trim();// 获取包的物理路径
 				findAndAddClassesInPackageByFile(packageName, filePath, clz, targetClz);// 以文件的方式扫描整个包下的文件 并添加到集合中
 			}
 		}
