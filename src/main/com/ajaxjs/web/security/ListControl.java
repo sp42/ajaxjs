@@ -26,15 +26,11 @@ import java.util.regex.Pattern;
 public class ListControl {
 	/**
 	 * 白名单
-	 * 
-	 * @return
 	 */
 	public List<String> whiteList;
 
 	/**
 	 * 黑名单
-	 * 
-	 * @return
 	 */
 	public List<String> blackList;
 

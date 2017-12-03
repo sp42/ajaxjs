@@ -109,8 +109,10 @@ public class MockResponse {
 
 	/**
 	 * 获取 MVC 跳转模版的那个路径
+	 * 
 	 * @param request
-	 * @return
+	 *            请求对象
+	 * @return 模版路径
 	 */
 	public static String getRequestDispatcheResult(HttpServletRequest request) {
 		ArgumentCaptor<String> dispatcherArgument = ArgumentCaptor.forClass(String.class);

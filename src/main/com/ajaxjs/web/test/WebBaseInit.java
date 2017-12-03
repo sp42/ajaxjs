@@ -36,7 +36,7 @@ public class WebBaseInit {
 	 * 
 	 * @param cls
 	 *            控制器类
-	 * @return
+	 * @return  Servlet 配置
 	 */
 	public static ServletConfig initServletConfig(Class<? extends HttpServlet> cls) {
 		ServletConfig servletConfig = mock(ServletConfig.class);

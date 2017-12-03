@@ -71,8 +71,9 @@ public class EncrySessionInCookie {
 
 	/**
 	 * 把 session 所有东西保存到 cookies
-	 * 
-	 * @param session
+	 * @param request
+	 * @param response
+	 * @param key
 	 */
 	public static void seriable(HttpServletRequest request, HttpServletResponse response, String key) {
 		StringBuilder sb = new StringBuilder();

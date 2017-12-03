@@ -98,12 +98,14 @@ public class SiteStruService implements ServletContextListener {
 	 * JSON 查找器
 	 */
 	private static final JsonStruTraveler t = new JsonStruTraveler();
-
+	
 	/**
 	 * 获取当前页面节点，并带有丰富的节点信息
 	 * 
-	 * @param path
-	 *            例如 "menu/menu-1"
+	 * @param uri
+	 *            请求地址，例如 "menu/menu-1"
+	 * @param contextPath
+	 *            项目名称
 	 * @return 当前页面节点
 	 */
 	public static Map<String, Object> getPageNode(String uri, String contextPath) {
