@@ -18,7 +18,7 @@ import com.ajaxjs.mvc.controller.MvcRequest;
 
 /**
  * 整合所有控制器的测试
- * @author xinzhang
+ * @author Frank Cheung
  *
  */
 @Controller

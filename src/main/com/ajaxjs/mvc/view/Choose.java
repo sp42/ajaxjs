@@ -22,7 +22,7 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 /**
  * 选择标签之父类标签
  * 
- * @author frank
+ * @author Frank Cheung
  *
  */
 public class Choose extends SimpleTagSupport {

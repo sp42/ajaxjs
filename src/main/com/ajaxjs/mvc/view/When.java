@@ -22,7 +22,7 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 /**
  * 选择标签之 if 标签
  * 
- * @author frank
+ * @author Frank Cheung
  *
  */
 public class When extends SimpleTagSupport {

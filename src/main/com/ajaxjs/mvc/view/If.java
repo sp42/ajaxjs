@@ -22,7 +22,7 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 /**
  * 判断 if 逻辑
  * 
- * @author frank
+ * @author Frank Cheung
  *
  */
 public class If extends SimpleTagSupport {

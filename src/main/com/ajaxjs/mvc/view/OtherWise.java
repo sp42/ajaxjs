@@ -22,7 +22,7 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 /**
  * 选择标签之 else 标签
  * 
- * @author frank
+ * @author Frank Cheung
  *
  */
 public class OtherWise extends SimpleTagSupport {

@@ -25,7 +25,7 @@ import com.ajaxjs.util.io.StreamUtil;
 
 /**
  * 上传类
- * @author frank
+ * @author Frank Cheung
  *
  */
 public class Upload {

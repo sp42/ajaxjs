@@ -67,9 +67,9 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	 */
 	public static void initDb() {
 		String connStr = Version.isDebug ? "jdbc/sqlite" : "jdbc/sqlite_deploy";
-		
+
 		try {
-			if(ConnectionMgr.getConnection() == null || ConnectionMgr.getConnection().isClosed()) {
+			if (ConnectionMgr.getConnection() == null || ConnectionMgr.getConnection().isClosed()) {
 				Connection conn = JdbcConnection.getConnection(JdbcConnection.getDataSource(connStr));
 				ConnectionMgr.setConnection(conn);
 				LOGGER.info("启动数据库链接……" + conn);
@@ -120,14 +120,15 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 		}
 
 		service.prepareData(model);
-		
-		if(pageResult == null) 
+
+		if (pageResult == null)
 			throw new NullPointerException("返回 null，请检查 service.findPagedList 是否给出实现");
 
-		if(isJSON_output() && pageResult.getRows() != null && pageResult.getRows().get(0) instanceof Map) {// Map 类型的输出
+		if (isJSON_output() && pageResult.getRows() != null && pageResult.getRows().get(0) instanceof Map) {// Map
+																											// 类型的输出
 			@SuppressWarnings("unchecked")
 			List<Map<String, Object>> l = (List<Map<String, Object>>) pageResult.getRows();
-			model.put("MapOutput", JsonHelper.stringifyListMap(l)); 
+			model.put("MapOutput", JsonHelper.stringifyListMap(l));
 		}
 
 		if (isAdminUI())
@@ -137,12 +138,12 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	}
 
 	public QueryParams getParam(int start, int limit) {
-		HttpServletRequest request = RequestHelper.getHttpServletRequest();
+		HttpServletRequest request = MvcRequest.getHttpServletRequest();
 		QueryParams param = new QueryParams(start, limit);
 
 		if (Query.isAnyMatch(request.getParameterMap())) // 其他丰富的查询参数
 			param.query = Query.getQueryFactory(request.getParameterMap());
-		
+
 		return param;
 	}
 
@@ -204,10 +205,10 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	/*
 	 * 输出文档 GET /document
 	 * 
-	 * @param model
-	 *            Model 模型
-	 * @param entity
-	 *            POJO
+	 * @param model Model 模型
+	 * 
+	 * @param entity POJO
+	 * 
 	 * @return
 	 */
 	// public String getDocument(ModelAndView model, T entity) {
@@ -223,8 +224,6 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	// return "common/entity/showDocument";
 	// }
 
-
-
 	public String createUI(ModelAndView model) {
 		LOGGER.info("新建记录UI");
 
@@ -232,7 +231,10 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 		IService<T, ID> service = getService();
 		service.prepareData(model);
 
-		model.put("isCreate", true);/* 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate = true 标识为创建，以便与 update 区分开来。*/
+		model.put("isCreate", true);/*
+									 * 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate =
+									 * true 标识为创建，以便与 update 区分开来。
+									 */
 		return String.format(jsp_adminInfo, service.getName());
 	}
 
@@ -244,7 +246,7 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 
 		try {
 			ID newlyId = getService().create(entity);
-			if(newlyId == null) {
+			if (newlyId == null) {
 				throw new ServiceException("创建失败！");
 			}
 			model.put("newlyId", newlyId);
@@ -283,9 +285,9 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 
 	public String delete(T entry, ModelAndView model) {
 		LOGGER.info("删除 id:{0}，数据库将执行 DELETE 操作", entry);
-		
+
 		initDb();
-		
+
 		try {
 			if (!getService().delete(entry)) {
 				throw new ServiceException("删除失败！");
@@ -301,12 +303,13 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 
 	/**
 	 * 显示 HTTP 405 禁止操作
+	 * 
 	 * @return HTTP 405 禁止操作 的 JSON
 	 */
 	public static String show405() {
 		return String.format(json_not_ok, "405， Request method not supported 禁止操作");
 	}
-	
+
 	public IService<T, ID> getService() {
 		if (service == null)
 			throw new NullPointerException("没有业务层对象！");

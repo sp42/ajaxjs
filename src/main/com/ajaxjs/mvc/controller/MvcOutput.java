@@ -37,7 +37,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 灵活的、链式调用的输出响应内容
  * 
- * @author frank
+ * @author Frank Cheung
  *
  */
 public class MvcOutput extends HttpServletResponseWrapper {

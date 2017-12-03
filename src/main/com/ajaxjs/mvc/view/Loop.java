@@ -23,7 +23,7 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 /**
  * 迭代标签
  * 
- * @author frank
+ * @author Frank Cheung
  *
  */
 public class Loop extends SimpleTagSupport {

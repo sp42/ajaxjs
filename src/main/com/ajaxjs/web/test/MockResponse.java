@@ -34,7 +34,7 @@ import org.mockito.ArgumentCaptor;
 /**
  * 包装一个 Response 输出流
  * 
- * @author frank
+ * @author Frank Cheung
  *
  */
 public class MockResponse {

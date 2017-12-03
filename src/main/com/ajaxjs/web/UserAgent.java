@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 浏览器 UA 检测
  * 
- * @author frank
+ * @author Frank Cheung
  *
  */
 public class UserAgent {

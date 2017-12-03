@@ -17,7 +17,7 @@ package com.ajaxjs.web.upload;
 
 /**
  * 自定义异常信息
- * @author frank
+ * @author Frank Cheung
  *
  */
 public class UploadException extends Exception {

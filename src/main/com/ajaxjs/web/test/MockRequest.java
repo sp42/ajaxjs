@@ -1,5 +1,4 @@
 /**
- * Copyright 2015 Frank Cheung
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +38,7 @@ import com.ajaxjs.util.collection.MapHelper;
 
 /**
  * 
- * @author frank
+ * @author Frank Cheung
  */
 public class MockRequest {
 	/**

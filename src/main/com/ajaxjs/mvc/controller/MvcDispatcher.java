@@ -103,8 +103,8 @@ public class MvcDispatcher implements Filter {
 
 			ModelAndView model = null;
 			
-			RequestHelper.setHttpServletRequest(request);
-			RequestHelper.setHttpServletResponse(response);
+			MvcRequest.setHttpServletRequest(request);
+			MvcRequest.setHttpServletResponse(response);
 			
 			if (method.getParameterTypes().length > 0) {
 				Object[] args = getArgs(request, response, method);
@@ -118,7 +118,7 @@ public class MvcDispatcher implements Filter {
 			}
 
 			resultHandler(result, request, response, model);
-			RequestHelper.clean();
+			MvcRequest.clean();
 			
 			return; // 终止当前 servlet 请求
 		}

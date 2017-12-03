@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * 上传请求的 bean，包含所有有关请求的信息
- * @author frank
+ * @author Frank Cheung
  *
  */
 public class UploadRequest {
