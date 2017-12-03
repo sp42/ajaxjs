@@ -8,14 +8,12 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletResponse;  
 
 import com.ajaxjs.security.referer.PostFilter;
 import com.ajaxjs.security.referer.RefererFilter;
 import com.ajaxjs.security.xss.XssChecker;
 import com.ajaxjs.security.xss.XssReqeust;
 import com.ajaxjs.util.aop.Aop;
-import com.ajaxjs.web.security.wrapper.XSS_Response;
 
 public class SecurityFilter implements Filter {
 	@Override
