@@ -164,8 +164,8 @@ public class ConfigLoader implements Filter {
 	/**
 	 * 字符转换为 LIST
 	 * 
-	 * @param str
-	 * @return
+	 * @param str JSON 字符串
+	 * @return LIST
 	 */
 	private static List<String> loadParams(String str) {
 		String[] arr = str.split(URL_SPLIT_PATTERN);

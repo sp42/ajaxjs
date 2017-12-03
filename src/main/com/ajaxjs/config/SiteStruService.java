@@ -173,7 +173,7 @@ public class SiteStruService implements ServletContextListener {
 	 * 
 	 * @param request
 	 *            请求对象
-	 * @return
+	 * @return 资源 URI
 	 */
 	private static String getPath(HttpServletRequest request) {
 		return request.getRequestURI().replace(request.getContextPath(), "").replaceFirst("/\\w+\\.\\w+$", "");

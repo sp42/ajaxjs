@@ -75,7 +75,7 @@ public class HttpBasicAuthFilter implements javax.servlet.Filter {
 	 * 是否空字符串
 	 * 
 	 * @param str
-	 * @return
+	 * @return 是否空字符串
 	 */
 	public static boolean isEmptyString(String str) {
 		return str == null || str.trim().isEmpty();
@@ -85,7 +85,7 @@ public class HttpBasicAuthFilter implements javax.servlet.Filter {
 	 * 是否不合法的数组
 	 * 
 	 * @param arr
-	 * @return
+	 * @return 是否不合法的数组
 	 */
 	public static boolean isBadArray(String[] arr) {
 		return arr == null || arr.length != 2;

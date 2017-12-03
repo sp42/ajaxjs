@@ -208,7 +208,7 @@ public class Upload {
 	 *            文件二进制数据
 	 * @param isAutoName
 	 *            是否自定命名，true = 时间戳文件名
-	 * @return
+	 * @return POST Body 中的文件名
 	 */
 	private String getFileName(boolean isAutoName) {
 		String saveFile = null;

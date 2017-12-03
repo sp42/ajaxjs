@@ -48,7 +48,7 @@ public class MockRequest {
 	 *            项目目录
 	 * @param path
 	 *            要模拟的后面的目录
-	 * @return
+	 * @return 请求对象
 	 */
 	public static HttpServletRequest mockRequest(String contextPath, String path) {
 		HttpServletRequest request = mock(HttpServletRequest.class);
@@ -68,10 +68,12 @@ public class MockRequest {
 	 * 模拟表单请求
 	 * 
 	 * @param request
+	 *            请求对象
 	 * @param formBody
+	 *            表单数据
 	 * @param isByGetParams
 	 *            是否通过 request.getParameter 返回值，而不是走表单流的方式
-	 * @return
+	 * @return 表单请求
 	 * @throws IOException
 	 */
 	public HttpServletRequest initRequest(HttpServletRequest request, Map<String, String> formBody,
@@ -147,8 +149,10 @@ public class MockRequest {
 	 * 进行请求 在请求之前，你可以设定请求的参数
 	 * 
 	 * @param request
+	 *            请求对象
 	 * @param response
-	 * @return
+	 *            响应对象
+	 * @return 响应对象 writer 字符串
 	 */
 	public static String doRequest(HttpServletRequest request, HttpServletResponse response) {
 		DummyController controller = new DummyController();

@@ -92,8 +92,10 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	 * 取去 url 上的值
 	 * 
 	 * @param value
+	 *            值
 	 * @param paramName
-	 * @return
+	 *            参数名称
+	 * @return 值
 	 */
 	public String getValueFromPath(String value, String paramName) {
 		/* 如果 context path 上有数字那就bug，所以先去掉 */
@@ -225,7 +227,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * 获取请求对象
-	 * @return
+	 * @return 请求对象
 	 */
 	public static HttpServletRequest getHttpServletRequest() {
 		HttpServletRequest request = threadLocalRequest.get();
