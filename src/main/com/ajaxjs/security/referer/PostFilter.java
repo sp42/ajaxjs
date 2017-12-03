@@ -32,6 +32,7 @@ public class PostFilter extends Aop<Filter> {
 		
 		String uri = request.getRequestURI();
 		
+		System.out.println(uri);
 //		if(!isInWhiteList(uri) && !isInBlackList(uri)){
 //			return true;
 //		}
