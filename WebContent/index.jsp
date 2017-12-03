@@ -256,7 +256,7 @@
 				<div class="points" style="margin-bottom: 10px; width: 95%;">
 					<br>
 					<ul>
-						<li>设计原则：Clean, Simple, Fast & Lightweight.框架特色：全栈、原生、全面、实用。</li>
+						<li>设计风格：简约，设计原则：Clean, Simple, Fast & Lightweight.框架特色：全栈、原生、全面、实用。</li>
 						<li>遵循“够用就好、就地取材、适合教学”思想，优先考虑 JDK 原生 API，基本没依赖其他重型三方库。简单易学易用。得益于现代浏览器，前端没有使用 jQuery 基础库，而是原生 API 的调用，更高效快速。</li>
 						<li>参照 Spring MVC 风格的 Web 框架，功能简单但是 MVC 的核心功能基本具备了，很适合想了解 MVC
 							的学习者。尽量多提供源码注释和文档，包括单元测试。</li> 

@@ -1,4 +1,4 @@
-<%@ page pageEncoding="UTF-8" import="java.util.*, com.ajaxjs.net.http.Client, com.ajaxjs.web.Captcha, com.ajaxjs.mvc.controller.MvcRequest, com.ajaxjs.util.collection.MapHelper"%>
+<%@ page pageEncoding="UTF-8" import="java.util.*, com.ajaxjs.net.http.Client, com.ajaxjs.mvc.controller.MvcRequest, com.ajaxjs.util.collection.MapHelper"%>
 <%!
 	/**
 	 * html 编辑器使用的 iframe
@@ -72,10 +72,6 @@
 		String json = Client.GET("http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&ip=" + MvcRequest.getIp(request));
 	
 		out.println(json.replace("var remote_ip_info = ", "").replaceAll(";$", ""));
-	} else if ("captchaImg".equals(action)) { 
-		// 图片验证码
-		Captcha.init(pageContext);
-		
 	}  else {
 		
 		out.println("nothing2do");
