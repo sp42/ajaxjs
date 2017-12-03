@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.junit.*;
 
-import com.ajaxjs.framework.model.Query;
+import com.ajaxjs.framework.dao.Query;
 import com.ajaxjs.jdbc.sqlbuilder.DynamicSqlProvider;
 
 public class TestQuery {
