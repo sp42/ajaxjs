@@ -25,7 +25,7 @@ public class SimpleAdminController extends HttpServlet {
 		if (action != null) {
 			switch (action) {
 			case "workbench":
-				request.getRequestDispatcher("/WEB-INF/jsp/user/admin/workbench.jsp").include(request, response);
+				request.getRequestDispatcher("/asset/common/jsp/simple_admin/workbench.jsp").include(request, response);
 				break;
 			case "logout":
 				response.getWriter().append("已退出！");
@@ -34,7 +34,7 @@ public class SimpleAdminController extends HttpServlet {
 				response.getWriter().append("无效 action！");
 			}
 		} else {
-			request.getRequestDispatcher("/WEB-INF/jsp/user/admin/index.jsp").include(request, response);
+			request.getRequestDispatcher("/asset/common/jsp/simple_admin/index.jsp").include(request, response);
 		}
 	}
 
