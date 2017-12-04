@@ -17,14 +17,14 @@ import sun.misc.BASE64Decoder;
  * Servlet Filter implementation class Filter
  */
 
-public class HttpBasicAuthFilter implements javax.servlet.Filter {
-	private static final LogHelper LOGGER = LogHelper.getLog(HttpBasicAuthFilter.class);
+public class SimpleAdminAuthFilter implements javax.servlet.Filter {
+	private static final LogHelper LOGGER = LogHelper.getLog(SimpleAdminAuthFilter.class);
 	
 	public static final String userid = "admin"; // 写死只有一个用户 admin
 	public static String pwd = "123123";
 	
 	/**
-	 * @see HttpBasicAuthFilter#init(FilterConfig)
+	 * @see SimpleAdminAuthFilter#init(FilterConfig)
 	 */
 	public void init(FilterConfig config) throws ServletException {
 		LOGGER.info("启动 HTTP BasicAuth 后台管理" );
@@ -36,7 +36,7 @@ public class HttpBasicAuthFilter implements javax.servlet.Filter {
 	}
 
 	/**
-	 * @see HttpBasicAuthFilter#doFilter(ServletRequest, ServletResponse, FilterChain)
+	 * @see SimpleAdminAuthFilter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
 	@SuppressWarnings("deprecation")
 	public void doFilter(ServletRequest _request, ServletResponse _response, FilterChain chain) throws IOException, ServletException {
@@ -61,7 +61,7 @@ public class HttpBasicAuthFilter implements javax.servlet.Filter {
 	}
 	
 	/**
-	 * @see HttpBasicAuthFilter#destroy()
+	 * @see SimpleAdminAuthFilter#destroy()
 	 */
 	@Override
 	public void destroy() {

@@ -87,8 +87,8 @@
     <script src="${pageContext.request.contextPath}/asset/common/js/dom.js"></script>
     <script src="${pageContext.request.contextPath}/asset/common/js/widget.js"></script>
 	<%-- pageContext.request.contextPath 作用是取出部署的应用程序名，这样不管如何部署，所用路径都是正确的。 --%>
-	<link rel="icon"		  type="image/x-icon" href="${pageContext.request.contextPath}/asset/images/favicon.ico" />
-	<link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/asset/images/favicon.ico" />
+	<link rel="icon"		  type="image/x-icon" href="${pageContext.request.contextPath}/asset/favicon.ico" />
+	<link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/asset/favicon.ico" />
     <jsp:doBody />
 </head>
 <noscript><div align="center">如要享受本网站之服务请勿禁用浏览器 JavaScript 支持</div></noscript>

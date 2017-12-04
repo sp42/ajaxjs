@@ -54,21 +54,21 @@
 	</filter-mapping>
 	
 	
-		<!-- Admin UI 界面框架 -->
-<!-- 	<servlet> -->
-<!-- 		<servlet-name>AdminUI</servlet-name> -->
-<!-- 		<servlet-class>com.ajaxjs.web.SimpleAdminController</servlet-class> -->
-<!-- 	</servlet> -->
-<!-- 	<servlet-mapping> -->
-<!-- 		<servlet-name>AdminUI</servlet-name> -->
+	<!-- Admin UI 界面框架 -->
+	<servlet>
+		<servlet-name>AdminUI</servlet-name>
+		<servlet-class>com.ajaxjs.web.SimpleAdminController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AdminUI</servlet-name>
 		<!-- 可指定路径，注意要归属于下面 filter 验证地址 -->
-<!-- 		<url-pattern>/admin</url-pattern> -->
-<!-- 	</servlet-mapping> -->
+		<url-pattern>/admin</url-pattern>
+ 	</servlet-mapping> 
 
 	<!-- 指定一种登录验证方式。当前为 HTTP Basic Auth -->
 	<filter>
 		<filter-name>HttpBasicAuthFilter</filter-name>
-		<filter-class>com.ajaxjs.web.HttpBasicAuthFilter</filter-class>
+		<filter-class>com.ajaxjs.web.SimpleAdminAuthFilter</filter-class>
 		<!-- adminPassword 指定登录密码；如不指定，则默认为 123123 -->
 		<init-param>
 			<param-name>adminPassword</param-name>

@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class Admin
  */
-//@javax.servlet.annotation.WebServlet("/admin")
 public class SimpleAdminController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
