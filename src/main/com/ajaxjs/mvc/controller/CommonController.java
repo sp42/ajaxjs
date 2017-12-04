@@ -147,11 +147,6 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 		return param;
 	}
 
-	// @GET
-	// public String get() {
-	// return "redirect:list";
-	// }
-
 	/**
 	 * 读取单个记录或者编辑某个记录，保存到 ModelAndView 中（供视图渲染用）。
 	 * 

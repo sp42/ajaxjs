@@ -84,6 +84,7 @@ public class Foreach extends SimpleTagSupport {
 	public void doTag() throws JspException, IOException {
 		if (collection == null || collection.iterator() == null || collection.isEmpty())
 			return;
+		
 		Iterator<Object> it = collection.iterator();
 		JspContext context = getJspContext();
 		int i = 0;

@@ -26,15 +26,18 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
  *
  */
 public class Choose extends SimpleTagSupport {
-	private boolean isExcute;
+	/**
+	 * 保存是否执行的状态
+	 */
+	private boolean isExecute;
 
 	/**
 	 * 用于保存 if 判断是否为 true
 	 * 
 	 * @return true 表示执行 when 标签内容，否则执行 otherwise 标签内容
 	 */
-	public boolean isExcute() {
-		return isExcute;
+	public boolean isExecute() {
+		return isExecute;
 	}
 
 	/**
@@ -43,8 +46,8 @@ public class Choose extends SimpleTagSupport {
 	 * @param isExcute
 	 *            true 表示执行 when 标签内容，否则执行 otherwise 标签内容
 	 */
-	public void setExcute(boolean isExcute) {
-		this.isExcute = isExcute;
+	public void setExecute(boolean isExcute) {
+		this.isExecute = isExcute;
 	}
 
 	@Override

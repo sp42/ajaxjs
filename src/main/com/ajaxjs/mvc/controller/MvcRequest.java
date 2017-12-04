@@ -74,7 +74,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	/**
 	 * 获取资源 URI，忽略项目前缀和最后的文件名（如 index.jsp） 分析 URL 目标资源（最原始的版本）
 	 * 
-	 * @return
+	 * @return 请求路径
 	 */
 	public String getRoute() {
 		String route = getRequestURI().replace(getContextPath(), "");
@@ -158,19 +158,19 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	 * @return 指定的 Servlet 或 Filter 配置对象
 	 */
 	public static Map<String, String> parseInitParams(ServletConfig servletCfg, FilterConfig filterCfg) {
-		Map<String, String> initParamsMap = new HashMap<>();
+		Map<String, String> map = new HashMap<>();
 
 		Enumeration<String> initParams = servletCfg == null ? filterCfg.getInitParameterNames()
 				: servletCfg.getInitParameterNames();
 
 		while (initParams.hasMoreElements()) { // Enumeration 转换为 MAP
-			String initParamName = initParams.nextElement(), initParamValue = servletCfg == null
-					? filterCfg.getInitParameter(initParamName) : servletCfg.getInitParameter(initParamName);
+			String paramName = initParams.nextElement(), paramValue = servletCfg == null
+					? filterCfg.getInitParameter(paramName) : servletCfg.getInitParameter(paramName);
 
-			initParamsMap.put(initParamName, initParamValue);
+			map.put(paramName, paramValue);
 		}
 
-		return initParamsMap;
+		return map;
 	}
 
 	/**
@@ -185,9 +185,8 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	 *            请求参数
 	 */
 	public void saveToReuqest(Map<String, Object> map) {
-		for (String key : map.keySet()) {
+		for (String key : map.keySet())
 			setAttribute(key, map.get(key));
-		}
 	}
 
 	/**

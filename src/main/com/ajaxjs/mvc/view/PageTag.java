@@ -31,8 +31,7 @@ import com.ajaxjs.util.collection.MapHelper;
 /**
  * 分页标签
  * 
- * @author Frank Cheung frank@ajaxjs.com
- * @version 2017年7月8日 下午11:19:05
+ * @author Frank Cheung
  */
 public class PageTag extends SimpleTagSupport {
 	private String queryString;

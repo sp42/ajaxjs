@@ -26,6 +26,9 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
  *
  */
 public class When extends SimpleTagSupport {
+	/**
+	 * 保存是否执行的状态
+	 */
 	private boolean test;
 
 	/**
@@ -41,9 +44,9 @@ public class When extends SimpleTagSupport {
 	@Override
 	public void doTag() throws JspException, IOException {
 		Choose parent = (Choose) getParent(); // 获得父类标签对象
-		if (test && !parent.isExcute()) { // 判断父类为 false 那么自身为 true 才输出
+		if (test && !parent.isExecute()) { // 判断父类为 false 那么自身为 true 才输出
 			getJspBody().invoke(null);
-			parent.setExcute(true); // 把父类设置为true
+			parent.setExecute(true); // 把父类设置为true
 		}
 	}
 }

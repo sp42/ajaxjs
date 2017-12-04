@@ -27,6 +27,9 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
  *
  */
 public class Loop extends SimpleTagSupport {
+	/**
+	 * 保存迭代次数
+	 */
 	private int cnt;
 
 	/**
@@ -42,7 +45,7 @@ public class Loop extends SimpleTagSupport {
 	@Override
 	public void doTag() throws JspException, IOException {
 		JspFragment body = getJspBody();
-		
+
 		for (int i = 0; i < cnt; i++) {
 			getJspContext().setAttribute("loopcnt", i + 1); // 当前循环次数
 			body.invoke(null);

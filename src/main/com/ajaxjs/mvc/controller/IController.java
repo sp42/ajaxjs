@@ -35,17 +35,17 @@ public interface IController {
 	/**
 	 * 全局 json 模板路径 之前缀
 	 */
-	public static final String jsp_perfix = "/jsp/";
+	public static final String jsp_perfix = "/asset/jsp/";
 	
 	/**
 	 * 常见 jsp 页面
 	 */
-	public static final String common_jsp_perfix = jsp_perfix + "common_jsp/";
+	public static final String common_jsp_perfix = jsp_perfix + "common/jsp/";
 	
 	/**
 	 * json 路径常量（实体创建、修改）
 	 */
-	public static final String cud = common_jsp_perfix + "cud.jsp";
+	public static final String cud = common_jsp_perfix + "json-cud.jsp";
 	
 	/**
 	 * json 路径常量（实体）
