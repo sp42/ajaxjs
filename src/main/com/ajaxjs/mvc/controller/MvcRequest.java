@@ -1,3 +1,18 @@
+/**
+ * Copyright 2015 Frank Cheung
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.ajaxjs.mvc.controller;
 
 import java.io.IOException;
@@ -21,17 +36,23 @@ import com.ajaxjs.util.io.StreamUtil;
 import com.ajaxjs.util.reflect.BeanUtil;
 
 /**
+ * 通过 HttpServletRequestWrapper （装饰模式的应用）增强 HttpServletRequest的功能。
  * 
  * @author Frank Cheung
  *
  */
 public class MvcRequest extends HttpServletRequestWrapper {
+	/**
+	 * 创建一个 MVC 请求对象。构造方法会自动加入 UTF-8 编码。
+	 * 
+	 * @param request
+	 *            原始请求对象
+	 */
 	public MvcRequest(HttpServletRequest request) {
 		super(request);
 
 		try {
-			setCharacterEncoding(StandardCharsets.UTF_8.toString());// 为防止中文乱码，统一设置
-																	// UTF-8，设置请求编码方式
+			setCharacterEncoding(StandardCharsets.UTF_8.toString());// 为防止中文乱码，统一设置 UTF-8，设置请求编码方式
 		} catch (UnsupportedEncodingException e) {
 		}
 	}
@@ -81,13 +102,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 
 		return MapHelper.toMap(params.split("&"), true);
 	}
-
-	private static String matchList(String regexp, String str) {
-		Matcher m = Pattern.compile(regexp).matcher(str);
-
-		return m.find() ? m.group(m.groupCount()) : null;
-	}
-
+	
 	/**
 	 * 取去 url 上的值
 	 * 
@@ -100,13 +115,13 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	public String getValueFromPath(String value, String paramName) {
 		/* 如果 context path 上有数字那就bug，所以先去掉 */
 		String requestURI = getRequestURI().replace(getContextPath(), ""),
-				regExp = "(" + value.replace("{" + paramName + "}",
-						")(\\d+)");/* 获取正则 暂时写死 数字 TODO */
+				regExp = "(" + value.replace("{" + paramName + "}", ")(\\d+)");/* 获取正则 暂时写死 数字 TODO */
 
 		// System.out.println(requestURI);
 		// System.out.println(regExp);
 
-		String result = matchList(regExp, requestURI);
+		Matcher m = Pattern.compile(regExp).matcher(requestURI);
+		String result = m.find() ? m.group(m.groupCount()) : null;
 
 		if (result == null)
 			throw new IllegalArgumentException("在 " + requestURI + "不能获取 " + paramName + "参数");
@@ -121,10 +136,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	 *            Bean 的类引用
 	 * @return Java Bean
 	 */
-	public Object getBean(Class<?> clazz) {
-		// Object bean = Reflect.newInstance(clazz);
-		// Map2Pojo<?> m = new Map2Pojo<>(clazz); // 这里怎么 不用 ?？
-
+	public  <T> T getBean(Class<T> clazz) {
 		Map<String, Object> map;
 
 		if (getMethod().toUpperCase().equals("PUT")) {
@@ -133,7 +145,6 @@ public class MvcRequest extends HttpServletRequestWrapper {
 			map = MapHelper.asObject(MapHelper.toMap(getParameterMap()), true);
 		}
 
-		// return new Map2Pojo<>(clazz).map2pojo(map);
 		return BeanUtil.map2Bean(map, clazz);
 	}
 
@@ -227,6 +238,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * 获取请求对象
+	 * 
 	 * @return 请求对象
 	 */
 	public static HttpServletRequest getHttpServletRequest() {
