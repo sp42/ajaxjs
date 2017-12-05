@@ -17,15 +17,18 @@ package com.ajaxjs.web.upload;
 
 /**
  * 自定义异常信息
+ * 
  * @author Frank Cheung
  *
  */
 public class UploadException extends Exception {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 8659328554315142875L;
 
 	/**
 	 * 创建一个上传异常
-	 * @param msg 异常信息
+	 * 
+	 * @param msg
+	 *            异常信息
 	 */
 	public UploadException(String msg) {
 		super(msg);

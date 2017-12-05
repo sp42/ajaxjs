@@ -73,7 +73,8 @@ public class UserAgent {
 	 * @return true 表示为旧 IE 浏览器
 	 */
 	public boolean is_old_IE() {
-		return isIE() && (ua.contains("msie 5.5") || ua.contains("msie 6.0") || ua.contains("msie 7.0") || ua.contains("msie 8.0"));
+		return isIE() && (ua.contains("msie 5.5") || ua.contains("msie 6.0") || ua.contains("msie 7.0")
+				|| ua.contains("msie 8.0"));
 	}
 
 	/**
@@ -102,7 +103,7 @@ public class UserAgent {
 	public boolean isAndroid() {
 		return ua.contains("android");
 	}
-	
+
 	/**
 	 * 是否为安卓 7.x
 	 * 
@@ -112,7 +113,7 @@ public class UserAgent {
 		boolean is7 = Pattern.compile("Android\\s7", Pattern.CASE_INSENSITIVE).matcher(ua).find();
 		return isAndroid() && is7;
 	}
-	
+
 	/**
 	 * 是否为安卓 56.x
 	 * 

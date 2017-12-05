@@ -35,8 +35,17 @@ public class HtmlHead {
 
 	HttpServletRequest request;
 
-	Map<String, Object> node;
+	/**
+	 * 页面节点
+	 */
+	private Map<String, Object> node;
 
+	/**
+	 * 创建一个头控制器
+	 * 
+	 * @param request
+	 *            请求对象
+	 */
 	public void init(HttpServletRequest request) {
 		this.request = request;
 		setUa(new UserAgent(request));
@@ -49,12 +58,19 @@ public class HtmlHead {
 		return node;
 	}
 
+	/**
+	 * 返回样式文件
+	 * 
+	 * @param lessPath
+	 *            LESS 路径，如果 lessPath = null，表示不需要 <link href=...> 样式
+	 * @return CSS 地址
+	 */
 	public String getCssUrl(String lessPath) {
 		boolean isDebug;
-		if(ConfigService.config != null && ConfigService.config.get("isDebug") != null)
-		 isDebug = ConfigService.config.get("isDebug") == null ? false : (boolean) ConfigService.config.get("isDebug");
+		if (ConfigService.config != null && ConfigService.config.get("isDebug") != null)
+			isDebug = ConfigService.config.get("isDebug") == null ? false : (boolean) ConfigService.config.get("isDebug");
 		else
-		 isDebug = true;
+			isDebug = true;
 		return getCssUrl(lessPath, isDebug);
 	}
 

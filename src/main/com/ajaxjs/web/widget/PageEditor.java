@@ -142,9 +142,11 @@ public class PageEditor implements IController {
 	}
 	
 	/**
-	 *  获取指定目录内的图片 目录有 folder 参数指定
-	 * @param folder 
-	 * @return
+	 * 获取指定目录内的图片 目录有 folder 参数指定
+	 * 
+	 * @param folder
+	 *            包含图片的目录
+	 * @return 图片列表（JSON 格式）
 	 */
 	public static String getImgList(String folder) {
 		File dir = new File(folder);
@@ -178,15 +180,15 @@ public class PageEditor implements IController {
 			}
 		}
 
-		return String.format(jsonTpl, StringUtil.stringJoin(json, ","), json.size());
+		return String.format("{\"result\" : [%s], \"total\" : %s}", StringUtil.stringJoin(json, ","), json.size());
 	}
 
-	private static final String jsonTpl = "{\"result\" : [%s], \"total\" : %s}";
-
 	/**
+	 * 删除文件（小心！）
 	 * 
-	 * @param file rh.Mappath(rh.get("file")
-	 * @return
+	 * @param file
+	 *            rh.Mappath(rh.get("file")
+	 * @return 是否删除成功
 	 */
 	public static boolean delFile(String file) {
 		return new File(file).delete();
