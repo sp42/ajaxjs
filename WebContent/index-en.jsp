@@ -40,7 +40,7 @@
 			
 			.green .body {
 				overflow: hidden;
-				background: url(images/index_03.jpg) no-repeat 76% 0;
+				background: url(resources/index_03.jpg) no-repeat 76% 0;
 			}
 			
 			.green .left {
@@ -205,7 +205,7 @@
 		</style>
 	</commonTag:head>
 
-<!-- 	<img style="width:60%;max-width: 400px;margin: 0 auto;margin-top:50px;display: block;" src="asset/images/under_construction.jpg" /> -->
+<!-- 	<img style="width:60%;max-width: 400px;margin: 0 auto;margin-top:50px;display: block;" src="asset/resources/under_construction.jpg" /> -->
 <%-- 	<%=new com.ajaxjs.web.config.InitConfig()%> --%>
 <body>
 	<nav class="body">
@@ -228,7 +228,7 @@
 				<p style="color: #fffbac;">AJAXJS Web aims to full-stack, not only the server-side framework, but also integrates the front-end library. It’s written in HTML5 + Java,
 				 a successor to the JVM platform, efficient, secure, stable, cross-platform and many other advantages, but it abandoned the traditional enterprise architecture brought about by the large and bloated, emphasizing the lightweight, and fast, very suitable for the Internet fast application.</p>
 				<div style="text-align: center; color: #fffbac; font-weight: normal; letter-spacing: 2px;">
-					<img src="images/index_06.jpg"> <br>
+					<img src="resources/index_06.jpg"> <br>
 					<h3>Apache License v2 OpenSource</h3>
 					<h4>
 						<a href="http://git.oschina.net/sp42/ajaxjs">Git/SVN@OSC Checkout</a>
@@ -251,7 +251,7 @@
 	<ul class="body cols">
 		<li style="border-right-color: #ff8820;">
 			<h5>
-				<img src="images/icon_inkboard.png"> About FrontEnd
+				<img src="resources/icon_inkboard.png"> About FrontEnd
 			</h5>
 			<p>
 			
@@ -262,7 +262,7 @@
 		</li>
 		<li style="border-right-color: #2096ff;">
 			<h5>
-				<img src="images/icon_source.png"> About BackEnd
+				<img src="resources/icon_source.png"> About BackEnd
 			</h5>
 			<p>Using IOC/AOP/MVC/ORM/RESTful,
 Generic Controller/Service/DAO/Model, SpringMVC-like Controller, MyBatis-like annotation SQL service, supports Java Bean or Map as entity, auto-paging, auto-query and validtion<a
@@ -270,7 +270,7 @@ Generic Controller/Service/DAO/Model, SpringMVC-like Controller, MyBatis-like an
 		</li>
 		<li style="border-right-color: #c720ff;">
 			<h5>
-				<img src="images/icon_database.png">Download &amp; Run
+				<img src="resources/icon_database.png">Download &amp; Run
 			</h5>
 			<p>Win/Mac/Linux/JRE1.7+/Tomcat7+/IE8+</p>
 			<p>
