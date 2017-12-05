@@ -239,7 +239,7 @@
 				<div class="points" style="margin-bottom: 10px; width: 98%;">
 					<br>
 					<ul>
-						<li>Design principles: Clean, Simple, Fast & Lightweight. Features: full stack, native, comprehensive, practical.</li>
+						<li>Design principles: Clean, Simple, Fast &amp; Lightweight. Features: full stack, native, comprehensive, practical.</li>
 						<li>Follow the "enough to use, suitable for teaching" thought, give priority to native API, basically don't rely on other 3rd-party library. Thanks to modern browser, the front end doesn't use jQuery, but the native API calls, more efficient and fast.</li>
 						<li>With the style of SpringMVC, the code is simple but the core functions of MVC are basically available, it's suitable for those who want to understand MVC. Providing code comment, unit test and documentation as much as possible.</li> 
 					</ul>

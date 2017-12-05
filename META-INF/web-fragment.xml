@@ -5,19 +5,30 @@
     http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd" version="3.0">
     <name>ajaxjs_WebFragment1</name>
     
-	<!-- 404 页面不存在错误 -->
+ 	<!-- 404 页面不存在错误 -->
 	<error-page>
 		<error-code>404</error-code>
-		<location>/jsp/common_jsp/404.jsp</location>
+		<location>/asset/common/jsp/404.jsp</location>
 	</error-page>
 	<!-- // -->
 	
 	<!-- 500 服务器内部错误 -->
 	<error-page>
 		<error-code>500</error-code>
-		<location>/jsp/common_jsp/error.jsp</location>
+		<location>/asset/common/jsp/error.jsp</location>
 	</error-page>
 	<!-- // -->
+ 
+ 	<!--工具类接口，为了不外显 jsp -->
+	<servlet>  
+        <servlet-name>public_service</servlet-name>  
+        <jsp-file>/asset/common/jsp/service.jsp</jsp-file>  
+	</servlet>  
+	
+	<servlet-mapping>  
+	        <servlet-name>public_service</servlet-name>  
+	        <url-pattern>/public_service/*</url-pattern>  
+	</servlet-mapping>
 	
 	<!-- JSP 页面编码 -->
 	<jsp-config>
@@ -28,15 +39,4 @@
 		</jsp-property-group>
 	</jsp-config>
 	<!-- // -->
-    
-	<!--工具类接口，为了不外显 jsp -->
-	<servlet>  
-        <servlet-name>public_service</servlet-name>  
-        <jsp-file>/jsp/common_jsp/service.jsp</jsp-file>  
-	</servlet>  
-	
-	<servlet-mapping>  
-	        <servlet-name>public_service</servlet-name>  
-	        <url-pattern>/public_service/*</url-pattern>  
-	</servlet-mapping>
 </web-fragment>

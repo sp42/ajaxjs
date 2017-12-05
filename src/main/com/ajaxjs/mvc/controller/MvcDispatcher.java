@@ -377,7 +377,6 @@ public class MvcDispatcher implements Filter {
 							args.add(Long.parseLong(value));
 						} else {
 							LOGGER.warning("something wrong!");
-							System.out.println(clz);
 							args.add(value); // unknow type
 						}
 					} else {

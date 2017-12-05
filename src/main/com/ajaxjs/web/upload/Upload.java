@@ -124,15 +124,12 @@ public class Upload {
 			start = byteIndexOf(dateBytes, "\n".getBytes(), start) + 1;
 			start = byteIndexOf(dateBytes, "\n".getBytes(), start) + 1;
 
-			//			System.out.println(rawStr);
-
 			int contentLength_index = rawStr.indexOf("Content-Length:");
 
 			if (contentLength_index != -1) {
 				String contentLength;
 				contentLength = rawStr.substring(contentLength_index);
 				contentLength = contentLength.substring(0, contentLength.indexOf("\n"));
-				System.out.println(contentLength);
 
 				start = byteIndexOf(dateBytes, contentLength.getBytes(), start) + contentLength.length();
 				start = byteIndexOf(dateBytes, "\n".getBytes(), start) + 1; // 遍历掉3个换行符到数据块
