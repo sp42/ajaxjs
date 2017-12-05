@@ -21,7 +21,7 @@ import com.ajaxjs.web.HtmlHead;
 @Path("/admin/page_editor")
 public class PageEditor implements IController {
 	private static final LogHelper LOGGER = LogHelper.getLog(PageEditor.class);
-	
+
 	@GET
 	public String show() {
 		return IController.jsp_perfix + "/pageEditor/loadIframe.jsp";
@@ -66,7 +66,7 @@ public class PageEditor implements IController {
 			return String.format(json_not_ok, e.toString());
 		}
 	}
-	
+
 	/**
 	 * 可编辑标识开始
 	 */
@@ -76,7 +76,7 @@ public class PageEditor implements IController {
 	 * 可编辑标识结束
 	 */
 	private final static String endToken = "<!-- Editable AREA|END -->";
-	
+
 	/**
 	 * 根据 页面中可编辑区域之标识，取出来。
 	 * 
@@ -87,7 +87,7 @@ public class PageEditor implements IController {
 	 */
 	public static String read_jsp_fileContent(String fullFilePath) throws IOException {
 		String jsp_fileContent = FileUtil.openAsText(fullFilePath);
-		
+
 		int start = jsp_fileContent.indexOf(startToken), end = jsp_fileContent.indexOf(endToken);
 
 		try {
@@ -102,7 +102,7 @@ public class PageEditor implements IController {
 
 		return jsp_fileContent;
 	}
-	
+
 	/**
 	 * 请求附带文件参数，将其转换真实的磁盘文件路径
 	 * 
@@ -119,7 +119,7 @@ public class PageEditor implements IController {
 
 		return rawFullFilePath;
 	}
-	
+
 	/**
 	 * 保存要修改的页面
 	 * 
@@ -131,7 +131,8 @@ public class PageEditor implements IController {
 	 */
 	public static void save_jsp_fileContent(String rawFullFilePath, String newContent) throws IOException {
 		String fullFilePath = getFullPathByRequestUrl(rawFullFilePath); // 真实的磁盘文件路径
-		String jsp_fileContent = FileUtil.openAsText(fullFilePath), toDel_fileContent = read_jsp_fileContent(fullFilePath);// 读取旧内容
+		String jsp_fileContent = FileUtil.openAsText(fullFilePath),
+				toDel_fileContent = read_jsp_fileContent(fullFilePath);// 读取旧内容
 
 		if (toDel_fileContent != null) {
 			jsp_fileContent = jsp_fileContent.replace(toDel_fileContent, newContent);
@@ -140,11 +141,13 @@ public class PageEditor implements IController {
 			throw new IOException("页面文件中没有标记可编辑区域之标识。请参考： startToken/endTpoken");
 		}
 	}
-	
+
 	/**
-	 *  获取指定目录内的图片 目录有 folder 参数指定
-	 * @param folder 
-	 * @return
+	 * 获取指定目录内的图片 目录有 folder 参数指定
+	 * 
+	 * @param folder
+	 *            包含图片的目录
+	 * @return 图片文件名列表
 	 */
 	public static String getImgList(String folder) {
 		File dir = new File(folder);
@@ -160,20 +163,18 @@ public class PageEditor implements IController {
 				continue;
 			} else {
 				final String strFileName = files[i].getName();
-				if (strFileName.contains(".jpg")
-						|| strFileName.contains(".gif")
-						|| strFileName.contains(".png")) {
+				if (strFileName.contains(".jpg") || strFileName.contains(".gif") || strFileName.contains(".png")) {
 
-//					String el = JsonHelper.stringify_object(new Object() {
-//						@SuppressWarnings("unused")
-//						public Boolean isOk = true;
-//						@SuppressWarnings("unused")
-//						public String fileName = strFileName;
-//						@SuppressWarnings("unused")
-//						public String id = strFileName;
-//					});
+					//					String el = JsonHelper.stringify_object(new Object() {
+					//						@SuppressWarnings("unused")
+					//						public Boolean isOk = true;
+					//						@SuppressWarnings("unused")
+					//						public String fileName = strFileName;
+					//						@SuppressWarnings("unused")
+					//						public String id = strFileName;
+					//					});
 
-//					json.add(el);
+					//					json.add(el);
 				}
 			}
 		}
@@ -184,9 +185,11 @@ public class PageEditor implements IController {
 	private static final String jsonTpl = "{\"result\" : [%s], \"total\" : %s}";
 
 	/**
+	 * 删除文件（小心！）
 	 * 
-	 * @param file rh.Mappath(rh.get("file")
-	 * @return
+	 * @param file
+	 *            rh.Mappath(rh.get("file")
+	 * @return 是否删除成功
 	 */
 	public static boolean delFile(String file) {
 		return new File(file).delete();
@@ -213,15 +216,14 @@ public class PageEditor implements IController {
 
 		return json;
 	}
-	
 
 	public void write() {
-//
-//		if (request.hasRoute("save")) {
-//			save_jsp_fileContent();
-//			response.outputAction();
-//		} else if (request.hasRoute("upload")) {
-//			response.outputJSON(uploadFile());
-//		}
+		//
+		//		if (request.hasRoute("save")) {
+		//			save_jsp_fileContent();
+		//			response.outputAction();
+		//		} else if (request.hasRoute("upload")) {
+		//			response.outputJSON(uploadFile());
+		//		}
 	}
 }
