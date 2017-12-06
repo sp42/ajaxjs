@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServletRequestWrapper;
 
 import com.ajaxjs.security.ListControl;
 
-
 /**
  * 输入输出 Cookie 白名单验证过滤。
  * 
@@ -52,9 +51,9 @@ public class CookieRequest extends HttpServletRequestWrapper {
 			// cookieList.add(cookie);
 			// }
 
-			if (delegate.isInWhiteList(cookie.getName())){
+			if (delegate.isInWhiteList(cookie.getName())) {
 				cookieList.add(cookie);
-				System.out.println("name:" +cookie.getName());
+				System.out.println("name:" + cookie.getName());
 			}
 		}
 

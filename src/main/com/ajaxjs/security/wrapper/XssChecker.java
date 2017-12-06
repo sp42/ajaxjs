@@ -23,8 +23,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ajaxjs.security.SecurityInit;
+import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.aop.Aop;
 import com.ajaxjs.util.aop.ReturnAsArg;
+import com.ajaxjs.util.collection.CollectionUtil;
 
 public class XssChecker extends Aop<SecurityInit> {
 	@Override
@@ -76,7 +78,7 @@ public class XssChecker extends Aop<SecurityInit> {
 	 * @return
 	 */
 	public static String clean(String input, String filterType) {
-		if (isEmptyString(input))
+		if (StringUtil.isEmptyString(input))
 			return input;
 
 		if (filterType.equals(type_ESCAPSE)) {
@@ -97,7 +99,7 @@ public class XssChecker extends Aop<SecurityInit> {
 	 * @return
 	 */
 	public static String[] clean(String[] value) {
-		if (isNull(value))
+		if (CollectionUtil.isNull(value))
 			return null;
 
 		String[] cleaned = new String[value.length];
@@ -106,27 +108,5 @@ public class XssChecker extends Aop<SecurityInit> {
 			cleaned[i] = clean(value[i]);
 
 		return cleaned;
-	}
-
-	/**
-	 * 是否空字符串
-	 * 
-	 * @param str
-	 *            要判断的字符串
-	 * @return true 表示为为空字符串，否则不为空
-	 */
-	public static boolean isEmptyString(String str) {
-		return str == null || str.isEmpty() || str.trim().isEmpty();
-	}
-
-	/**
-	 * 判断数组是否为空
-	 * 
-	 * @param arr
-	 *            输入的数组
-	 * @return true 表示为素组不是为空，是有内容的，false 表示为数组为空数组，length = 0
-	 */
-	public static boolean isNull(Object[] arr) {
-		return arr == null || arr.length == 0;
 	}
 }
