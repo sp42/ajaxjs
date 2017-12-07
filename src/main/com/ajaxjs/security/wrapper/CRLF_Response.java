@@ -24,8 +24,8 @@ import javax.servlet.http.HttpServletResponseWrapper;
  * @author Frank
  *
  */
-public class CLRF_Response extends HttpServletResponseWrapper {
-	public CLRF_Response(HttpServletResponse response) {
+public class CRLF_Response extends HttpServletResponseWrapper {
+	public CRLF_Response(HttpServletResponse response) {
 		super(response);
 	}
 

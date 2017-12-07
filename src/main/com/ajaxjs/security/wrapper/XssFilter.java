@@ -13,19 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.security.wrapper;
+package com.ajaxjs.security;
 
 import java.io.IOException;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 
 public class XssFilter implements Filter {
 	@Override
@@ -34,13 +28,5 @@ public class XssFilter implements Filter {
 		chain.doFilter(new XssReqeust((HttpServletRequest) arg0), new XssResponse((HttpServletResponse) arg1));
 	}
 
-	@Override
-	public void init(FilterConfig arg0) throws ServletException {
-
-	}
-
-	@Override
-	public void destroy() {
-
-	}
+	……
 }
