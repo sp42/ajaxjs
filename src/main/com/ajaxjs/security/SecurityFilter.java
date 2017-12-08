@@ -26,6 +26,7 @@ import javax.servlet.ServletResponse;
 
 import com.ajaxjs.security.filter.PostFilter;
 import com.ajaxjs.security.filter.RefererFilter;
+import com.ajaxjs.security.wrapper.CookieChecker;
 import com.ajaxjs.security.wrapper.XssChecker;
 import com.ajaxjs.security.wrapper.XssReqeust;
 import com.ajaxjs.util.aop.Aop;
@@ -36,7 +37,7 @@ public class SecurityFilter implements Filter {
 	}
 
 	static Filter simpleChecker = Aop.chain(new SecurityMgr(), new RefererFilter(), new PostFilter());
-	static SecurityInit init = Aop.chain(new SecurityMgr(), new XssChecker());
+	static SecurityInit init = Aop.chain(new SecurityMgr(), new XssChecker(), new CookieChecker());
 
 	@Override
 	public void doFilter(ServletRequest arg0, ServletResponse arg1, FilterChain chain)
@@ -50,7 +51,8 @@ public class SecurityFilter implements Filter {
 		}
 		System.out.println(init.initRequest(arg0) instanceof XssReqeust);
 		chain.doFilter(init.initRequest(arg0), init.initResponse(arg1));
-
+		XssReqeust request = (XssReqeust)init.initRequest(arg0);
+		System.out.println(request.getParameter("foo"));
 	}
 
 	@Override

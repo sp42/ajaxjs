@@ -24,11 +24,13 @@ public class TestFilter {
 		when(request.getHeader("referer")).thenReturn("www.qq.com");
 		when(request.getServerName()).thenReturn("www.qq.com");
 		when(request.getMethod()).thenReturn("POST");
+		when(request.getParameter("foo")).thenReturn("bar");
 		
 //		assertEquals(request.getHeader("referer"), request.getServerName());
 		
 		try {
 			new SecurityFilter().doFilter(request, response, chain);
+			
 		} catch (IOException | ServletException e) {
 			e.printStackTrace();
 		}

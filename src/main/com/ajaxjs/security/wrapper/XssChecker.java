@@ -33,6 +33,7 @@ public class XssChecker extends Aop<SecurityInit> {
 	protected Object before(Method method, Object[] args) throws Throwable {
 		if (method.getName().equals("initRequest")) {
 			HttpServletRequest request = (HttpServletRequest) args[0];
+			
 			return new ReturnAsArg(new XssReqeust(request));
 		}
 
