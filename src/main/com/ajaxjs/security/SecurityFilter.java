@@ -35,9 +35,9 @@ public class SecurityFilter implements Filter {
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
 	}
-
-	static Filter simpleChecker = Aop.chain(new SecurityMgr(), new RefererFilter(), new PostFilter());
-	static SecurityInit init = Aop.chain(new SecurityMgr(), new XssChecker(), new CookieChecker());
+	static SecurityMgr securityMgr = new SecurityMgr();
+	static Filter simpleChecker = Aop.chain(securityMgr, new RefererFilter(), new PostFilter());
+	static SecurityInit init = Aop.chain(securityMgr, new XssChecker(), new CookieChecker());
 
 	@Override
 	public void doFilter(ServletRequest arg0, ServletResponse arg1, FilterChain chain)

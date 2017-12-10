@@ -132,7 +132,7 @@ li {
 		<h3>A Full Stack Web Framework</h3>
 
 		<p>AJAXJS Web aims to full-stack, not only the server-side
-			framework, but also integrates the front-end library. Itâs written
+			framework, but also integrates the front-end library. It's written
 			in HTML5 + Java, a successor to the JVM platform, efficient, secure,
 			stable, cross-platform and many other advantages, but it abandoned
 			the traditional enterprise architecture brought about by the large
