@@ -1,4 +1,4 @@
-package com.ajaxjs.web;
+package com.ajaxjs.web.simple_admin;
 
 import java.io.IOException;
 
@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class Admin
  */
-public class SimpleAdminController extends HttpServlet {
+public class AdminMgrController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	/**
