@@ -31,6 +31,30 @@ Function.prototype.delegate = function () {
     };
 };
 
+/**
+ * 设置一个后置函数。
+ * 
+ * @param {Function}
+ *            composeFn
+ * @param {Boolean}
+ *            isForceCall 是否强行执行 call 方法。设置为 true 在数组作为单独对象的时候有用。
+ * @return {Function}
+ */  
+Function.prototype.after = function (composeFn, isForceCall, scope) {  
+    var self = this;  
+  
+    return function () {  
+        var result = self.apply(scope || this, arguments);  
+  
+        if (isForceCall) {  
+            return composeFn.call(this, result);  
+        }  
+  
+        return result && (typeof result.pop != 'undefined') && (typeof result.pop != 'unknown')  
+             ? composeFn.apply(this, result)  
+             : composeFn.call(this, result);  
+    };  
+} 
 
 /*
  * --------------------------------------------------------
@@ -62,7 +86,6 @@ ajaxjs.ua = (function () {
 		isFirefox : /firefox/.test(ua)
 	};
 })();
-
 
 /*
  * --------------------------------------------------------
@@ -206,7 +229,7 @@ ajaxjs.params = {
 
 /*
  * --------------------------------------------------------
- * 封装 XHR，支持 GET/POST/PUT/DELETE/JSONP
+ * 封装 XHR，支持 GET/POST/PUT/DELETE/JSONP/FormData
  * --------------------------------------------------------
  */
 ajaxjs.xhr = {
@@ -298,6 +321,36 @@ ajaxjs.xhr = {
 	var scriptTag = document.createElement('script');
 	    scriptTag.src = this.json2url(params, url);
 	    document.getElementsByTagName('head')[0].appendChild(scriptTag);
+	},
+	
+
+	form : function(form, cb, cfg) {
+		if (!window.FormData) {
+			var msg = 'The version of your browser is too old, please upgrade it.';
+			throw msg;
+		}
+		if(!form.action)throw 'Please fill the url in ACTION attribute.';
+		
+		if (typeof form == 'string')
+			form = document.querySelector(form);
+
+		// form.method always GET, so form.getAttribute('method') instead
+		var method = form.getAttribute('method').toLowerCase();
+		if(!mehtod)method = 'post';
+		
+
+		var formData = new FormData(form), xhr = new XMLHttpRequest();
+		if(cfg.appendData) { // 附加的数据
+			for(var i in cfg.appendData)
+				formData.append(i, cfg.appendData[i]);
+		}
+
+		if(cfg.beforeSubmit && cfg.beforeSubmit(form, formData) !== false) {
+			xhr.open(mehtod, form.action);
+			xhr.onreadystatechange = this.callback.delegate(null, cb, cfg && cfg.parseContentType);
+			xhr.send(formData);
+		} 
+			
 	}
 };
 
@@ -306,30 +359,6 @@ ajaxjs.xhr.get	= ajaxjs.xhr.request.delegate(null, null, null, null, 'GET');
 ajaxjs.xhr.post = ajaxjs.xhr.request.delegate(null, null, null, null, 'POST');
 ajaxjs.xhr.put 	= ajaxjs.xhr.request.delegate(null, null, null, null, 'PUT');
 ajaxjs.xhr.dele	= ajaxjs.xhr.request.delegate(null, null, null, null, 'DELETE');
-
-
-/*
- * --------------------------------------------------------
- * 表单
- * --------------------------------------------------------
- */
-ajaxjs.form = function(formEl, cfg) {
-	this.cfg = cfg || {};
-	this.formEl = formEl;
-	if (!this.formEl) throw '未设置表单元素！';
-	if (!this.formEl.action) throw '未设置接口地址！';
-
-	// this.formEl.method always GET, so this.formEl.getAttribute('method') instead
-	var method = this.formEl.getAttribute('method').toLowerCase();
-	if (method == 'post')
-		this.PUT = false;
-	if (method == 'put')
-		this.PUT = true;
-	
-	this.formEl.addEventListener('submit', fireSubmitEvent.bind(this));
-	
-}
-
 
 /*
  * --------------------------------------------------------
@@ -504,8 +533,7 @@ ajaxjs.loadScript.loaded = {};
 		if (!this.formEl.action)
 			throw '未设置接口地址！';
 
-		// this.formEl.method always GET, so this.formEl.getAttribute('method')
-		// instead
+		// this.formEl.method always GET, so this.formEl.getAttribute('method') instead
 		var method = this.formEl.getAttribute('method').toLowerCase();
 		if (method == 'post')
 			this.PUT = false;

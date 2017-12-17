@@ -35,7 +35,7 @@ public interface IController {
 	/**
 	 * 全局 json 模板路径 之前缀
 	 */
-	public static final String jsp_perfix = "/asset/jsp/";
+	public static final String jsp_perfix = "/asset/";
 	
 	/**
 	 * 常见 jsp 页面

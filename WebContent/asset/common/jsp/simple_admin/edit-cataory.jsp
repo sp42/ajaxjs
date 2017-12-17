@@ -175,9 +175,7 @@
 					
 					selectEl.appendChild(temp);
 				}
-				
 			});
-			
 		}
 		render(1, -1);
 	</script>

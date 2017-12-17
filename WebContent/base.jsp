@@ -11,8 +11,51 @@
 <meta name="keywords" content="ajaxjs base java ioc aop orm " />
 <meta name="description"
 	content="AJAXJS-Base 基础模块包，为纯 Java 项目与特定 jvm 环境脱离，面向 Web 开发，但可运行在 web、swing、android 环境中。" />
+<meta name="viewport"
+	content="width=320, user-scalable=0, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
 
 <style>
+/* AJAXJS Base CSS */
+body, dl, dt, dd, ul, li, pre, form, fieldset, input, p, blockquote, th,
+	td, h1, h2, h3, h4, h5 {
+	margin: 0;
+	padding: 0;
+}
+
+h1, h2, h3, h4, h5 {
+	font-weight: normal;
+}
+
+img {
+	border: 0;
+}
+
+ul li {
+	list-style-type: none
+}
+
+.hide {
+	display: none
+}
+
+body {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-family: "Lantinghei SC", "Open Sans", Arial, "Hiragino Sans GB",
+		"Microsoft YaHei", "微软雅黑", "STHeiti", "WenQuanYi Micro Hei", SimSun,
+		sans-serif;
+}
+
+a {
+	color: #999;
+	transition: color 400ms ease-in-out;
+}
+
+a:hover {
+	color: lightgray;
+	text-decoration: underline;
+}
+
 .top {
 	width: 100%;
 	background-color: white;
@@ -38,7 +81,7 @@
 fieldset {
 	width: 1000px;
 	position: relative;
-	height: 500px;
+	height: 550px;
 	border: 1px solid rgba(255, 255, 255, .5);
 	border-radius: 5px;
 	text-align: left;
@@ -52,12 +95,11 @@ legend {
 
 fieldset div.box {
 	position: absolute;
-	top: 3%;
 	right: -10%;
 	/* 	background-color: rgba(255, 255, 255, .1); */
 	background-image: linear-gradient(90deg, rgba(255, 255, 255, .1) 0,
 		rgba(89, 195, 232, .9) 100%);
-	height: 92%;
+	height: 460px;
 	width: 95%;
 	color: white;
 	padding: 3% 10% 4% 4%;
@@ -78,7 +120,7 @@ h1 {
 
 .links {
 	position: absolute;
-	bottom: -10%;
+	bottom: -8%;
 	left: 20%;
 	color: white;
 	opacity: .5;
@@ -93,10 +135,58 @@ a {
 ul.section {
 	position: absolute;
 	right: -9%;
-	top: 68%;
+	top: 65%;
 	text-align: left;
 	list-style-type: none;
 	letter-spacing: 2px;
+}
+
+p {
+	letter-spacing: 1px;
+	clear: left;
+	margin: 2% 0;
+}
+
+.box ul {
+	margin-bottom: 20px;
+	overflow: hidden;
+}
+
+.box li {
+	padding-left: 0;
+	margin-left: 30px;
+	float: left;
+	list-style-type: disc;
+}
+
+@media screen and (max-width:480px) {
+	fieldset {
+		border: 0;
+		width: 100%;
+		height: auto;
+	}
+	legend {
+		display: none;
+	}
+	fieldset div.box {
+		height: auto;
+		position: static;
+		margin: 0 auto;
+		padding: 3%;
+	}
+	p {
+		text-align: justify;
+		line-height: 130%;
+	}
+	ul.section {
+		display: none;
+	}
+	.links {
+		position: static;
+		margin: 5% auto;
+		margin-bottom: 5%;
+		text-align: center;
+	}
 }
 </style>
 </head>
@@ -113,7 +203,7 @@ ul.section {
 					<legend>
 						AJAXJS-Base, <span>a pure Java library</span>
 					</legend>
-
+					<br />
 					<div class="box">
 
 						<%
@@ -126,7 +216,7 @@ ul.section {
 							Framework Base 基础库
 						</h1>
 						<p>这是一个平淡无奇的库，相信不会为绝大多数大神们带来一点惊喜——只是自己业余累积的一些代码库（“轮子”），希望可以通过简单的手段做一件事（没啥三方依赖），不过可能就是考虑的情况不是很足，方法不是最主流的，性能也不是最优的。</p>
-						<p>基础模块包 ajaxjs-base 为纯 Java 项目与特定 jvm 环境脱离，面向 Web 开发，但可运行在
+						<p>基础模块包 ajaxjs-base 为纯 Java 项目与特定 jvm 环境脱离，面向 Web 开发，但应该可运行在
 							web、swing、android 环境中。base 包含了相当多的工具类或静态方法，有以下子模块：</p>
 
 						<ul>
@@ -143,10 +233,10 @@ ul.section {
 								target="_blank"
 								href="//shang.qq.com/wpa/qunwpa?idkey=3877893a4ed3a5f0be01e809e7ac120e346102bd550deb6692239bb42de38e22">QQ
 								群：315006</a> | <a href="mailto:support@ajaxjs.com">联系邮箱</a>
-						<p>基于 Apache License Ver2.0 开源协议，免费使用、修改，引用请保留头注释</p>
+						<p>基于 Apache License Ver2.0 开源协议，免费使用、修改，引用请保留头注释。</p>
 						<p>
-							关联项目： <a href="https://framework.ajaxjs.com">AJAXJS-Web</a> | <a
-								href="">AJAXJS-CMS</a>
+							关联项目： <a href="index.jsp">AJAXJS-Web</a> | <a
+								href="https://gitee.com/sp42/ajaxjs-cms">AJAXJS-CMS</a>
 						</p>
 
 						<%
@@ -163,7 +253,8 @@ ul.section {
 							<li>collection，集合工具类，map 的工具方法，还有 map/list 的遍历器</li>
 							<li>io，处理流 Stream 的包，使用了链式调用的风格。有文件、流工具类和简易图片处理器；</li>
 							<li>reflect，反射工具包，进行反射操作封装；</li>
-							<li>ioc，一个简易的 ioc 依赖注射实现；/aop，一个简易的 aop 实现；</li>
+							<li>ioc，一个简易的 ioc 依赖注射实现；</li>
+							<li>aop，一个简易的 aop 实现；</li>
 						</ul>
 						<p>
 							<a href="http://ajaxjs.mydoc.io/?t=207309">&gt;&gt;详细用法参见手册</a>。
@@ -239,6 +330,8 @@ ul.section {
 								href="#%E7%89%88%E6%9D%83%E5%A3%B0%E6%98%8E-license"></a>版权声明
 							LICENSE
 						</h1>
+
+						<br /> <br />
 						<pre style="overflow: hidden;">/**
  * 版权所有  Frank Cheung frank@ajaxjs.com
  * 

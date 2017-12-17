@@ -45,7 +45,7 @@
 		<init-param>
 			<description>指定搜索的包名，多个可以用 逗号 分开</description>
 			<param-name>controller</param-name>
-			<param-value>test.com.ajaxjs.mvc.controller</param-value>
+			<param-value>test.com.ajaxjs.mvc.controller, com.ajaxjs.web.simple_admin</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>
@@ -57,7 +57,7 @@
 	<!-- Admin UI 界面框架 -->
 	<servlet>
 		<servlet-name>AdminUI</servlet-name>
-		<servlet-class>com.ajaxjs.web.SimpleAdminController</servlet-class>
+		<servlet-class>com.ajaxjs.web.simple_admin.AdminMgrController</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>AdminUI</servlet-name>
@@ -68,7 +68,7 @@
 	<!-- 指定一种登录验证方式。当前为 HTTP Basic Auth -->
 	<filter>
 		<filter-name>HttpBasicAuthFilter</filter-name>
-		<filter-class>com.ajaxjs.web.SimpleAdminAuthFilter</filter-class>
+		<filter-class>com.ajaxjs.web.simple_admin.AuthFilter</filter-class>
 		<!-- adminPassword 指定登录密码；如不指定，则默认为 123123 -->
 		<init-param>
 			<param-name>adminPassword</param-name>

@@ -161,8 +161,8 @@ li {
 		</ul>
 
 		<p>
-			AJAXJS Web is built on <a href="https://gitee.com/sp42/ajaxjs-base">AJAXJS
-				Base</a>, a pure Java library. Yet another high-level <a href="">AJAXJS
+			AJAXJS Web is built on <a href="base.jsp">AJAXJS
+				Base</a>, a pure Java library. Yet another high-level <a href="https://gitee.com/sp42/ajaxjs-cms">AJAXJS
 				CMS</a> is built on AJAXJS Web.
 		</p>
 		<h3>Demos</h3>
@@ -229,7 +229,11 @@ p, li {
 			<li>复杂 CSS 采用 LESS.js 可复用封装。</li>
 			<li>尽量多提供源码注释和文档，包括单元测试。</li>
 		</ul>
-
+		<p>
+			AJAXJS Web 建基于纯 Java 库 <a href="base.jsp">AJAXJS
+				Base</a>。 还有 <a href="https://gitee.com/sp42/ajaxjs-cms">AJAXJS
+				CMS</a> 是建基于 AJAXJS Web 的。
+		</p>
 		<h3>演示</h3>
 		<a href="ui_demo">HTML/CSS/JS</a> | <a href="ui_demo">简易后台</a>
 

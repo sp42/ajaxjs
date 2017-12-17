@@ -1,0 +1,33 @@
+@import 'common_component.less';
+body {
+	background: url("@{assetFilePath}/images/bg.gif");
+}
+
+html , body , table {
+	height: 100%;
+	width: 100%;
+}
+
+h1 {
+	text-align: center;
+	padding-bottom: 3%;
+}
+
+.middleWhite {
+	background-color: white;
+	padding: 2% 0;
+	border-top: 1px solid lightgray;
+	border-bottom: 1px solid lightgray;
+}
+
+.ajaxjs-form {
+	.centerBody (400px);
+	input {
+		.ajaxjs-inputField ();
+	}
+
+	input[type=submit] {
+		.ajaxjs-btn-1 ();
+	}
+}
+
