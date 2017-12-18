@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.mvc.controller;
+package com.ajaxjs.web;
 
 import java.io.Serializable;
 import java.sql.Connection;
@@ -33,6 +33,8 @@ import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.jdbc.ConnectionMgr;
 import com.ajaxjs.jdbc.JdbcConnection;
 import com.ajaxjs.js.JsonHelper;
+import com.ajaxjs.mvc.controller.IController;
+import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -155,7 +157,7 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	 *            Model 模型
 	 * @return JSP 路径。缺省提供一个默认路径，但不一定要使用它，换别的也可以。
 	 */
-	public String info(ID id, ModelAndView model) {
+	public void info(ID id, ModelAndView model) {
 		LOGGER.info("读取单个记录或者编辑某个记录：id 是 {0}", id);
 
 		initDb();
@@ -174,10 +176,10 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 
 		service.prepareData(model);
 
-		if (isAdminUI())
-			return String.format(jsp_adminInfo, service.getName());
-		else
-			return isJSON_output() ? show_json_info : String.format(jsp_info, service.getName());
+//		if (isAdminUI())
+//			return String.format(jsp_adminInfo, service.getName());
+//		else
+//			return isJSON_output() ? show_json_info : String.format(jsp_info, service.getName());
 	}
 
 	public String list_all(ModelAndView model) {
@@ -294,6 +296,10 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 
 		return common_jsp_perfix + "delete.jsp";
 	}
+	
+	//	public String delete(ID id, ModelAndView model) {
+	//		
+	//	}
 
 	/**
 	 * 显示 HTTP 405 禁止操作

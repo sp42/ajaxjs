@@ -1,5 +1,7 @@
 package com.ajaxjs.web.simple_admin;
 
+import java.util.Map;
+
 import javax.mvc.annotation.Controller;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -11,64 +13,64 @@ import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.jdbc.ConnectionMgr;
-import com.ajaxjs.mvc.controller.CommonController;
 import com.ajaxjs.util.mock.MockDataSource;
 import com.ajaxjs.util.mock.News;
 import com.ajaxjs.util.mock.NewsService;
 import com.ajaxjs.util.mock.NewsServiceImpl;
+import com.ajaxjs.web.CommonController;
+import com.ajaxjs.web.CommonEntryAdminController;
 
 @Controller
 @Path("/admin/news")
-public class NewsAdminController extends CommonController<News, Long> {
-	public NewsAdminController() {
-		setJSON_output(true);
-	}
+public class NewsAdminController extends CommonController<Map<String, Object>, Long> implements CommonEntryAdminController<Map<String, Object>> {
+	//	@Override
+	//	public NewsService getService() {
+	//		ConnectionMgr.setConnection(MockDataSource.getTestConnection());
+	//		return new NewsServiceImpl();
+	//	}
 
-	@Override
-	public NewsService getService() {
-		ConnectionMgr.setConnection(MockDataSource.getTestConnection());
-		return new NewsServiceImpl();
-	}
+	//		return common_jsp_perfix + "simple_admin/edit-single-entry";
 
 	@GET
 	@Path("list")
 	@Override
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
-		String _return = super.list(start, limit, model);
-		return _return;
-	}
-	@GET
-	public String ui(ModelAndView model) {
-		getService().prepareData(model);
-		list_all(model);
-		return common_jsp_perfix + "simple_admin/edit-single-entry";
+		return super.list(start, limit, model);
 	}
 
-
 	@GET
-	@Path("/{id}")
 	@Override
-	public String info(@PathParam("id") Long id, ModelAndView model) {
-		return super.info(id, model);
+	public String createUI(ModelAndView model) {
+		getService().prepareData(model);
+		// list_all(model);
+		return String.format(jsp_adminInfo, getService().getName());
+	}
+
+	@GET
+	@Path("{id}")
+	@Override
+	public String editUI(@PathParam("id") Long id, ModelAndView model) {
+		info(id, model);
+		return String.format(jsp_adminInfo, getService().getName());
 	}
 
 	@POST
 	@Override
-	public String create(News news, ModelAndView model) {
-		return super.create(news, model);
+	public String create(Map<String, Object> entity, ModelAndView model) {
+		return super.create(entity, model);
 	}
 
 	@PUT
-	@Path("/{id}")
+	@Path("{id}")
 	@Override
-	public String update(News news, ModelAndView model) {
-		return super.update(news, model);
+	public String update(Map<String, Object> entity, ModelAndView model) {
+		return super.update(entity, model);
 	}
 
 	@DELETE
-	@Path("/{id}")
+	@Path("{id}")
 	@Override
-	public String delete(News news, ModelAndView model) {
-		return super.delete(news, model);
+	public String delete(Long id, ModelAndView model) {
+		return super.delete(id, model);
 	}
 }

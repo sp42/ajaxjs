@@ -213,13 +213,12 @@ public class PageEditor implements IController {
 		return json;
 	}
 
-	public void write() {
-		//
-		//		if (request.hasRoute("save")) {
-		//			save_jsp_fileContent();
-		//			response.outputAction();
-		//		} else if (request.hasRoute("upload")) {
-		//			response.outputJSON(uploadFile());
-		//		}
-	}
+//	public void write() {
+//		if (request.hasRoute("save")) {
+//			save_jsp_fileContent();
+//			response.outputAction();
+//		} else if (request.hasRoute("upload")) {
+//			response.outputJSON(uploadFile());
+//		}
+//	}
 }
