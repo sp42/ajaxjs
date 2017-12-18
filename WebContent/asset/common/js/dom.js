@@ -170,7 +170,6 @@ Element.prototype.insertAfter = function (newElement) {
     	parent.insertBefore(newElement, targetElement.nextSibling);
 }
 
-
 /*
  * --------------------------------------------------------
  * Element Class Utils
@@ -350,7 +349,6 @@ ajaxjs.xhr = {
 			xhr.onreadystatechange = this.callback.delegate(null, cb, cfg && cfg.parseContentType);
 			xhr.send(formData);
 		} 
-			
 	}
 };
 
