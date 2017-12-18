@@ -186,6 +186,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	 * http://www.2cto.com/kf/201109/103284.html
 	 * 
 	 * @param pageContext
+	 *            页面上下文
 	 */
 	public static void fix(PageContext pageContext) {
 		HttpServletResponse response = (HttpServletResponse) pageContext.getResponse();
@@ -227,6 +228,8 @@ public class MvcOutput extends HttpServletResponseWrapper {
 
 	/**
 	 * 新的输出，不要缓存
+	 * 
+	 * @return 当前对象
 	 */
 	public MvcOutput noCache() {
 		setHeader("Pragma", "No-cache");
