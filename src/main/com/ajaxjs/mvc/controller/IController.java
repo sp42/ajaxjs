@@ -45,17 +45,17 @@ public interface IController {
 	/**
 	 * json 路径常量（实体创建、修改）
 	 */
-	public static final String cud = common_jsp_perfix + "json-cud.jsp";
+	public static final String cud = common_jsp_perfix + "json/json-cud.jsp";
 	
 	/**
 	 * json 路径常量（实体）
 	 */
-	public static final String show_json_info = common_jsp_perfix + "showInfo.jsp";
+	public static final String show_json_info = common_jsp_perfix + "json/showInfo.jsp";
 	
 	/**
 	 * json 路径常量（分页列表）
 	 */
-	public static final String paged_json_List = common_jsp_perfix + "json-pagedList.jsp";
+	public static final String paged_json_List = common_jsp_perfix + "json/json-pagedList.jsp";
 
 	/**
 	 * 实体 jsp 模版路径之前缀

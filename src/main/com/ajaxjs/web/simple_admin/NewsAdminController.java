@@ -31,19 +31,19 @@ public class NewsAdminController extends CommonController<News, Long> {
 	}
 
 	@GET
+	@Path("list")
+	@Override
+	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
+		String _return = super.list(start, limit, model);
+		return _return;
+	}
+	@GET
 	public String ui(ModelAndView model) {
 		getService().prepareData(model);
 		list_all(model);
 		return common_jsp_perfix + "simple_admin/edit-single-entry";
 	}
 
-	@GET
-	@Path("/list")
-	@Override
-	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
-		String _return = super.list(start, limit, model);
-		return _return;
-	}
 
 	@GET
 	@Path("/{id}")

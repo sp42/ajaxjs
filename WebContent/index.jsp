@@ -210,6 +210,7 @@ p, li {
 	</section>
 
 	<section class="main-content">
+	<!-- Editable AREA|START -->
 		<h3>一个全栈的 Web 框架</h3>
 
 		<p>AJAXJS Web 是一款全栈的开源 Web 框架，不仅是服务端框架，还整合了前端库。它使用 HTML5+Java
@@ -258,7 +259,7 @@ p, li {
 			</span>
 
 		</footer>
-
+<!-- Editable AREA|END -->
 	</section>
 
 	<%

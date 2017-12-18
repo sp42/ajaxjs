@@ -18,7 +18,7 @@ public class Config implements IController {
 	}
 
 	@POST
-	public String sava(HttpServletRequest request) {
+	public String save(HttpServletRequest request) {
 		try {
 			if (request.getParameter("url") == null)
 				throw new NullPointerException("缺少必填参数 url！");
@@ -26,8 +26,7 @@ public class Config implements IController {
 			if (request.getParameter("contentBody") == null)
 				throw new NullPointerException("缺少必填参数 contentBody！");
 
-			String contentBody = request.getParameter("contentBody"),
-					path = HtmlHead.Mappath(request, request.getParameter("url"));
+			String contentBody = request.getParameter("contentBody"), path = HtmlHead.Mappath(request, request.getParameter("url"));
 
 			PageEditor.save_jsp_fileContent(path, contentBody);
 

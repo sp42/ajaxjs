@@ -77,7 +77,7 @@
 	</ul>
 
 	<div class="editorBody">	
-		<iframe src="${pageContext.request.contextPath}/common_jsp/htmleditor_iframe.jsp?basePath=${basePath}"></iframe>
+		<iframe src="${pageContext.request.contextPath}<%=com.ajaxjs.mvc.controller.IController.common_jsp_perfix %>htmleditor_iframe.jsp?basePath=${basePath}"></iframe>
 		<textarea class="hide" name="${name}"><jsp:doBody /></textarea>
 	</div>
 </div>
