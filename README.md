@@ -41,6 +41,14 @@ AJAXJS WEB 包含以下模块：
 -----------
 前端就要看 DEMO：[https://framework.ajaxjs.com/framework/ui_demo/](https://framework.ajaxjs.com/framework/ui_demo/)，然后右击鼠标查看源码或 F12 即可：）
 
+
+config
+---------
+
+小巧、灵活、通用、基于 JSON 的配置系统，完全可以代替 properties 文件实现配置模块。
+
+[>>详细用法参见文档](http://ajaxjs.mydoc.io/?t=208700)。
+
 联系方式
 ----------
 

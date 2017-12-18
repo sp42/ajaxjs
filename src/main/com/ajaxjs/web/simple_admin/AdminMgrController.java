@@ -12,16 +12,17 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class AdminMgrController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		response.setCharacterEncoding("utf-8"); 
-			
+		response.setCharacterEncoding("utf-8");
+
 		String action = request.getParameter("action");
-	
+
 		if (action != null) {
 			switch (action) {
 			case "workbench":
@@ -38,9 +39,9 @@ public class AdminMgrController extends HttpServlet {
 		}
 	}
 
-
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);

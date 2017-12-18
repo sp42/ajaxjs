@@ -36,7 +36,7 @@ public class NewsAdminController extends CommonController<News, Long> {
 		list_all(model);
 		return common_jsp_perfix + "simple_admin/edit-single-entry";
 	}
-	
+
 	@GET
 	@Path("/list")
 	@Override
