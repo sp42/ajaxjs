@@ -1,5 +1,5 @@
 /**
- * Copyright Frank Cheung frank@ajaxjs.com
+ * Copyright Sp42 frank@ajaxjs.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * 网站的结构配置
  * 
- * @author Frank Cheung frank@ajaxjs.com
+ * @author Sp42 frank@ajaxjs.com
  */
 public class SiteStru extends ArrayList<Map<String, Object>> {
 	private static final long serialVersionUID = 1737463552429455684L;

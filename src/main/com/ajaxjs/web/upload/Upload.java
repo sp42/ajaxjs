@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Frank Cheung
+ * Copyright 2015 Sp42 frank@ajaxjs.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import com.ajaxjs.util.io.StreamUtil;
 /**
  * 上传类
  * 
- * @author Frank Cheung
+ * @author Sp42 frank@ajaxjs.com
  *
  */
 public class Upload {

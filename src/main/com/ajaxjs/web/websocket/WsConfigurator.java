@@ -8,7 +8,7 @@ import javax.websocket.server.ServerEndpointConfig;
 /**
  * 通过配置来获取httpsession
  * 
- * @author Frank Cheung
+ * @author Sp42 frank@ajaxjs.com
  *
  */
 public class WsConfigurator extends ServerEndpointConfig.Configurator {

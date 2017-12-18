@@ -38,7 +38,7 @@ import com.ajaxjs.util.collection.MapHelper;
 
 /**
  * 
- * @author Frank Cheung
+ * @author Sp42 frank@ajaxjs.com
  */
 public class MockRequest {
 	/**

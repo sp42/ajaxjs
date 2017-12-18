@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Frank Cheung
+ * Copyright 2015 Sp42 frank@ajaxjs.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 /**
  * 
- * @author Frank Cheung frank@ajaxjs.com
+ * @author Sp42 frank@ajaxjs.com
  * @version 2017年7月8日 下午11:10:04
  */
 public class Foreach extends SimpleTagSupport {

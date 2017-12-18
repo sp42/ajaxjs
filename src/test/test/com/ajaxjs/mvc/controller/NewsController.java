@@ -13,8 +13,7 @@ import com.ajaxjs.framework.model.ModelAndView;
 import com.ajaxjs.mvc.controller.CommonController;
 import com.ajaxjs.util.mock.News;
 import com.ajaxjs.util.mock.NewsService;
-
-
+import com.ajaxjs.util.mock.NewsServiceImpl;
 
 @Controller
 @Path("/news")
@@ -27,7 +26,7 @@ public class NewsController extends CommonController<News, Long> {
 
 	@Override
 	public NewsService getService() {
-		return new NewsService();
+		return new NewsServiceImpl();
 	}
 	
 	@GET

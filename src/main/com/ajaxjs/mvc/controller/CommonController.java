@@ -1,5 +1,5 @@
 /**
- * Copyright Frank Cheung frank@ajaxjs.com
+ * Copyright Sp42 frank@ajaxjs.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 封装常见的控制器方法。注意：不能复用 create/update 方法，这是因为 T 泛型不能正确识别 Bean 类型的缘故
  * 
- * @author Frank Cheung frank@ajaxjs.com
+ * @author Sp42 frank@ajaxjs.com
  * @param <T>
  *            实体类
  * @param <ID>

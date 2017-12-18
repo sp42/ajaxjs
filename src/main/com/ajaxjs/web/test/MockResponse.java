@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Frank Cheung
+ * Copyright 2015 Sp42 frank@ajaxjs.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import org.mockito.ArgumentCaptor;
 /**
  * 包装一个 Response 输出流
  * 
- * @author Frank Cheung
+ * @author Sp42 frank@ajaxjs.com
  *
  */
 public class MockResponse {

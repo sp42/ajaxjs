@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Frank Cheung
+ * Copyright 2015 Sp42 frank@ajaxjs.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 灵活的、链式调用的输出响应内容
  * 
- * @author Frank Cheung
+ * @author Sp42 frank@ajaxjs.com
  *
  */
 public class MvcOutput extends HttpServletResponseWrapper {

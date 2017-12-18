@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Frank Cheung
+ * Copyright 2015 Sp42 frank@ajaxjs.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 /**
  * 判断 if 逻辑
  * 
- * @author Frank Cheung
+ * @author Sp42 frank@ajaxjs.com
  *
  */
 public class If extends SimpleTagSupport {

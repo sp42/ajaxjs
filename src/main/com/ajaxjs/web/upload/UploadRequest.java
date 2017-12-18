@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Frank Cheung
+ * Copyright 2015 Sp42 frank@ajaxjs.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * 上传请求的 bean，包含所有有关请求的信息
- * @author Frank Cheung
+ * @author Sp42 frank@ajaxjs.com
  *
  */
 public class UploadRequest {

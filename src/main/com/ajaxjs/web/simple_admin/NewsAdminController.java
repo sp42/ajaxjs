@@ -15,6 +15,7 @@ import com.ajaxjs.mvc.controller.CommonController;
 import com.ajaxjs.util.mock.MockDataSource;
 import com.ajaxjs.util.mock.News;
 import com.ajaxjs.util.mock.NewsService;
+import com.ajaxjs.util.mock.NewsServiceImpl;
 
 @Controller
 @Path("/admin/news")
@@ -26,7 +27,7 @@ public class NewsAdminController extends CommonController<News, Long> {
 	@Override
 	public NewsService getService() {
 		ConnectionMgr.setConnection(MockDataSource.getTestConnection());
-		return new NewsService();
+		return new NewsServiceImpl();
 	}
 
 	@GET

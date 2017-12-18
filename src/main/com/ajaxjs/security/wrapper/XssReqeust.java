@@ -4,7 +4,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 /**
- * Copyright 2015 Frank Cheung
+ * Copyright 2015 Sp42 frank@ajaxjs.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 /**
  * 获取用户输入参数和参数值进行 XSS 过滤，对 Header 和 cookie value 值进行 XSS 过滤（转码 Script 标签的< > 符号
  * 
- * @author Frank Cheung
+ * @author Sp42 frank@ajaxjs.com
  */
 public class XssReqeust extends HttpServletRequestWrapper {
 

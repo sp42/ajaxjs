@@ -1,5 +1,5 @@
 /**
- * Copyright Frank Cheung
+ * Copyright Sp42 frank@ajaxjs.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import com.ajaxjs.util.DateTools;
 /**
  * 格式化日期的标签
  * 
- * @author Frank Cheung frank@ajaxjs.com
+ * @author Sp42 frank@ajaxjs.com
  * @version 2017年7月8日 下午10:58:17
  */
 public class DateUtil extends SimpleTagSupport {

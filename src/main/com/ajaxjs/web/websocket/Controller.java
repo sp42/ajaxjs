@@ -11,7 +11,7 @@ import javax.websocket.server.ServerEndpoint;
 
 /**
  * 
- * @author Frank Cheung
+ * @author Sp42 frank@ajaxjs.com
  *
  */
 @ServerEndpoint(value = "/webSocket", configurator = WsConfigurator.class)
