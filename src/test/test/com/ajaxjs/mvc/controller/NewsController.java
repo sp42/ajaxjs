@@ -9,7 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
-import com.ajaxjs.framework.model.ModelAndView;
+import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.util.mock.News;
 import com.ajaxjs.util.mock.NewsService;
 import com.ajaxjs.util.mock.NewsServiceImpl;
@@ -18,11 +18,6 @@ import com.ajaxjs.web.CommonController;
 @Controller
 @Path("/news")
 public class NewsController extends CommonController<News, Long> {
-	public NewsController(){
-		
-		setJSON_output(true);
-//		setService(new NewsService());
-	}
 
 	@Override
 	public NewsService getService() {
@@ -30,17 +25,16 @@ public class NewsController extends CommonController<News, Long> {
 	}
 	
 	@GET
-	@Override
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
-		String _return = super.list(start, limit, model);
-		return _return;
+		pageList(start, limit, model);
+		return "";
 	}
 	
 	@GET
 	@Path("/{id}")
-	@Override
-	public String info(@PathParam("id") Long id, ModelAndView model) {
-		return super.info(id, model);
+	public String getInfo(@PathParam("id") Long id, ModelAndView model) {
+		super.info(id, model);
+		return "";
 	}
 	
 	@POST

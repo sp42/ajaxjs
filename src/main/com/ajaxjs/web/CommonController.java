@@ -24,15 +24,13 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.Version;
-import com.ajaxjs.framework.dao.Query;
 import com.ajaxjs.framework.dao.QueryParams;
-import com.ajaxjs.framework.model.ModelAndView;
-import com.ajaxjs.framework.model.PageResult;
 import com.ajaxjs.framework.service.IService;
 import com.ajaxjs.framework.service.ServiceException;
-import com.ajaxjs.jdbc.ConnectionMgr;
 import com.ajaxjs.jdbc.JdbcConnection;
+import com.ajaxjs.jdbc.PageResult;
 import com.ajaxjs.js.JsonHelper;
+import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.util.logger.LogHelper;
@@ -42,9 +40,9 @@ import com.ajaxjs.util.logger.LogHelper;
  * 
  * @author Sp42 frank@ajaxjs.com
  * @param <T>
- *            实体类
+ *            实体类型，可以是 Bean（POJO） 或 Map
  * @param <ID>
- *            实体 ID 字段类型
+ *            ID 类型，可以是 INTEGER/LONG/String
  */
 public abstract class CommonController<T, ID extends Serializable> implements IController {
 	private static final LogHelper LOGGER = LogHelper.getLog(CommonController.class);
@@ -55,25 +53,16 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	private IService<T, ID> service;
 
 	/**
-	 * 是否输出 json 格式 Will it output data in JSON format?
-	 */
-	private boolean JSON_output;
-
-	/**
-	 * is in the ADMIN mode?
-	 */
-	private boolean adminUI;
-
-	/**
 	 * 初始化数据库连接
 	 */
-	public static void initDb() {
-		String connStr = Version.isDebug ? "jdbc/sqlite" : "jdbc/sqlite_deploy";
+	public static void initDb(String connStr) {
+		if(connStr == null)
+			connStr = Version.isDebug ? "jdbc/sqlite" : "jdbc/sqlite_deploy";
 
 		try {
-			if (ConnectionMgr.getConnection() == null || ConnectionMgr.getConnection().isClosed()) {
+			if (JdbcConnection.getConnection() == null || JdbcConnection.getConnection().isClosed()) {
 				Connection conn = JdbcConnection.getConnection(JdbcConnection.getDataSource(connStr));
-				ConnectionMgr.setConnection(conn);
+				JdbcConnection.setConnection(conn);
 				LOGGER.info("启动数据库链接……" + conn);
 			}
 		} catch (SQLException e) {
@@ -86,7 +75,7 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	 */
 	public static void closeDb() {
 		try {
-			ConnectionMgr.getConnection().close();
+			JdbcConnection.getConnection().close();
 		} catch (SQLException e) {
 			LOGGER.warning(e);
 		}
@@ -103,16 +92,14 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	 *            Model 模型
 	 * @return JSP 路径。缺省提供一个默认路径，但不一定要使用它，换别的也可以。
 	 */
-	public String list(int start, int limit, ModelAndView model) {
+	public PageResult<T> pageList(int start, int limit, ModelAndView model) {
 		LOGGER.info("获取列表 GET list:{0}/{1}", start, limit);
-
-		initDb();
 
 		IService<T, ID> service = getService(); // 避免 service 为单例
 
 		PageResult<T> pageResult = null;
 		try {
-			pageResult = getService().findPagedList(getParam(start, limit));
+			pageResult = service.findPagedList(getParam(start, limit));
 			model.put("PageResult", pageResult);
 		} catch (Exception e) {
 			LOGGER.warning(e);
@@ -121,31 +108,54 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 			closeDb();
 		}
 
-		service.prepareData(model);
+		prepareData(model);
 
 		if (pageResult == null)
-			throw new NullPointerException("返回 null，请检查 service.findPagedList 是否给出实现");
-
-		if (isJSON_output() && pageResult.getRows() != null && pageResult.getRows().get(0) instanceof Map) {// Map  类型的输出
-			@SuppressWarnings("unchecked")
-			List<Map<String, Object>> l = (List<Map<String, Object>>) pageResult.getRows();
-			model.put("MapOutput", JsonHelper.stringifyListMap(l));
-		}
-
-		if (isAdminUI())
-			return String.format(jsp_adminList, service.getName());
-		else
-			return isJSON_output() ? paged_json_List : String.format(jsp_list, service.getName());
+			throw new NullPointerException("返回 null，请检查 service.findPagedList() 是否给出实现");
+		
+		return pageResult;
+		//		
+		//		String.format(jsp_list, service.getName());
 	}
 
-	public QueryParams getParam(int start, int limit) {
-		HttpServletRequest request = MvcRequest.getHttpServletRequest();
-		QueryParams param = new QueryParams(start, limit);
+	@SuppressWarnings("unchecked")
+	public String outputPagedJsonList(PageResult<T> pageResult, ModelAndView model) {
+		if (pageResult.getRows() != null) {
+			String jsonStr;
 
-		if (Query.isAnyMatch(request.getParameterMap())) // 其他丰富的查询参数
-			param.query = Query.getQueryFactory(request.getParameterMap());
+			if (pageResult.getRows().get(0) instanceof Map) { // Map 类型的输出
+				List<Map<String, Object>> list = (List<Map<String, Object>>) pageResult.getRows();
+				jsonStr = JsonHelper.stringifyListMap(list);
+			} else { // Bean
+				jsonStr = JsonHelper.beans2json((List<Object>) pageResult.getRows());
+			}
+
+			model.put("MapOutput", jsonStr);
+		}
+
+		return paged_json_List;
+	}
+
+	public static QueryParams getParam(int start, int limit) {
+		HttpServletRequest request = MvcRequest.getHttpServletRequest();
+		QueryParams param = new QueryParams(start, limit, request.getParameterMap());
 
 		return param;
+	}
+
+	/**
+	 * 可覆盖的模版方法，用于装备其他数据，如分类这些外联的表。
+	 * 
+	 * @param model
+	 *            模型
+	 */
+	public void prepareData(ModelAndView model) {
+		// 每次 servlet 都会执行的。记录时间
+		model.put("requestTimeRecorder", System.currentTimeMillis());
+
+		// 设置实体 id 和 现实名称 。
+		model.put("uiName", service.getName());
+		model.put("tableName", service.getTableName());
 	}
 
 	/**
@@ -160,7 +170,6 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	public void info(ID id, ModelAndView model) {
 		LOGGER.info("读取单个记录或者编辑某个记录：id 是 {0}", id);
 
-		initDb();
 		IService<T, ID> service = getService(); // 避免 service 为单例
 
 		T entry;
@@ -174,17 +183,18 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 		// model.put("neighbor", EntityUtil.getNeighbor(service.getName(),
 		// id));// 相邻记录
 
-		service.prepareData(model);
+		prepareData(model);
 
-//		if (isAdminUI())
-//			return String.format(jsp_adminInfo, service.getName());
-//		else
-//			return isJSON_output() ? show_json_info : String.format(jsp_info, service.getName());
+		// if (isAdminUI())
+		// return String.format(jsp_adminInfo, service.getName());
+		// else
+		// return isJSON_output() ? show_json_info : String.format(jsp_info,
+		// service.getName());
 	}
 
-	public String list_all(ModelAndView model) {
+	public void list_all(ModelAndView model) {
 		LOGGER.info("----获取全部列表----");
-		return list(0, 999, model);
+		pageList(0, 999, model);
 	}
 
 	/**
@@ -223,9 +233,8 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	public String createUI(ModelAndView model) {
 		LOGGER.info("新建记录UI");
 
-		initDb();
 		IService<T, ID> service = getService();
-		service.prepareData(model);
+		prepareData(model);
 
 		model.put("isCreate", true);/*
 									 * 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate =
@@ -238,7 +247,6 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	// @Override
 	public String create(T entity, ModelAndView model) {
 		LOGGER.info("修改 name:{0}，数据库将执行 INSERT 操作", entity);
-		initDb();
 
 		try {
 			ID newlyId = getService().create(entity);
@@ -265,7 +273,6 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	 */
 	public String update(/* @Valid */T entity, ModelAndView model) {
 		LOGGER.info("修改 name:{0}，数据库将执行 UPDATE 操作", entity);
-		initDb();
 		model.put("isUpdate", true);
 
 		try {
@@ -282,8 +289,6 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	public String delete(T entry, ModelAndView model) {
 		LOGGER.info("删除 id:{0}，数据库将执行 DELETE 操作", entry);
 
-		initDb();
-
 		try {
 			if (!getService().delete(entry)) {
 				throw new ServiceException("删除失败！");
@@ -296,10 +301,21 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 
 		return common_jsp_perfix + "delete.jsp";
 	}
-	
-	//	public String delete(ID id, ModelAndView model) {
-	//		
-	//	}
+
+	@SuppressWarnings("unchecked")
+	public String delete(ID id, ModelAndView model) {
+		T obj = null;
+		if (obj instanceof Map) {
+			Map<String, Object> map = new java.util.HashMap<>();
+			map.put("id", id);
+			obj = (T) map;
+		} else {
+			throw new RuntimeException(
+					"因为范型的缘故，不能实例化 bean 对象。应该在子类实例化 bean，再调用本类的 delete(T entry, ModelAndView model) ");
+		}
+
+		return delete(obj, model);
+	}
 
 	/**
 	 * 显示 HTTP 405 禁止操作
@@ -320,19 +336,4 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 		this.service = service;
 	}
 
-	public boolean isJSON_output() {
-		return JSON_output;
-	}
-
-	public void setJSON_output(boolean jSON_output) {
-		JSON_output = jSON_output;
-	}
-
-	public boolean isAdminUI() {
-		return adminUI;
-	}
-
-	public void setAdminUI(boolean adminUI) {
-		this.adminUI = adminUI;
-	}
 }

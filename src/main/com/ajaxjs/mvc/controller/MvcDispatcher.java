@@ -34,8 +34,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.mvc.AnnotationUtils;
-import com.ajaxjs.framework.model.BaseModel;
-import com.ajaxjs.framework.model.ModelAndView;
+import com.ajaxjs.mvc.ModelAndView;
+import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.mvc.ActionAndView;
 import com.ajaxjs.util.ClassScaner;
 import com.ajaxjs.util.reflect.Reflect;
