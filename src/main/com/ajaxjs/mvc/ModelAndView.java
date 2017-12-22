@@ -19,17 +19,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-
-import org.apache.bval.jsr.ApacheValidationProvider;
-
 import com.ajaxjs.framework.BaseModel;
+import com.ajaxjs.util.collection.CollectionUtil;
 
 /**
- * 数据实体转换到页面层的对象
- * 携带的数据，可用于 UI 显示或者其他数据
+ * 数据实体转换到页面层的对象。携带的数据，可用于 UI 显示或者其他数据
+ * 
  * @author Sp42 frank@ajaxjs.com
  *
  */
@@ -44,7 +39,7 @@ public class ModelAndView extends HashMap<String, Object> {
 	 * @return 以 id 作为键值的 map
 	 */
 	public static Map<Integer, BaseModel> list_bean2map_id_as_key(List<? extends BaseModel> bean) {
-		if (bean == null || bean.size() == 0)
+		if (CollectionUtil.isNull(bean))
 			return null;
 
 		Map<Integer, BaseModel> map = new HashMap<>();
@@ -63,7 +58,7 @@ public class ModelAndView extends HashMap<String, Object> {
 	 * @return 以 id 作为键值的 map
 	 */
 	public static Map<Integer, Object> list2map_id_as_key(List<Map<String, Object>> list) {
-		if (list == null)
+		if (CollectionUtil.isNull(list))
 			return null;
 
 		Map<Integer, Object> map = new HashMap<>();
