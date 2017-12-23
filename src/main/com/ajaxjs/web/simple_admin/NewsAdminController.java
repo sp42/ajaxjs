@@ -1,7 +1,6 @@
 package com.ajaxjs.web.simple_admin;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.mvc.annotation.Controller;
 import javax.servlet.http.HttpServletRequest;
@@ -15,22 +14,16 @@ import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.framework.dao.DaoHandler;
 import com.ajaxjs.framework.dao.QueryParams;
-import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.util.mock.NewsService;
-import com.ajaxjs.util.mock.NewsServiceImpl;
 import com.ajaxjs.web.CommonController;
 import com.ajaxjs.web.CommonEntryAdminController;
 
 @Controller
 @Path("/admin/news")
-public class NewsAdminController extends CommonController<Map<String, Object>, Long> implements CommonEntryAdminController<Map<String, Object>> {
-	//	@Override
-	//	public NewsService getService() {
-	//		ConnectionMgr.setConnection(MockDataSource.getTestConnection());
-	//		return new NewsServiceImpl();
-	//	}
-
+public class NewsAdminController extends CommonController<Catalog, Long> implements CommonEntryAdminController<Catalog> {
+	public NewsAdminController() {
+		setService(service);
+	}
 	//		return common_jsp_perfix + "simple_admin/edit-single-entry";
 
 	private NewsService service = new NewsServiceImpl();
@@ -61,14 +54,14 @@ public class NewsAdminController extends CommonController<Map<String, Object>, L
 
 	@POST
 	@Override
-	public String create(Map<String, Object> entity, ModelAndView model) {
+	public String create(Catalog entity, ModelAndView model) {
 		return super.create(entity, model);
 	}
 
 	@PUT
 	@Path("{id}")
 	@Override
-	public String update(Map<String, Object> entity, ModelAndView model) {
+	public String update(Catalog entity, ModelAndView model) {
 		return super.update(entity, model);
 	}
 
@@ -88,13 +81,11 @@ public class NewsAdminController extends CommonController<Map<String, Object>, L
 	@GET
 	@Path("catalog/list")
 	public String getNewsCatalog(ModelAndView model, HttpServletRequest request) {
-		initDb("jdbc/mysql");
-		ICatalogDao dao = new DaoHandler<ICatalogDao>().bind(ICatalogDao.class);
-		List<Map<String, Object>> result = dao.findAll(new QueryParams(request.getParameterMap()));
+		initDb();
+		prepareData(model);
+		CatalogDao dao = new DaoHandler<CatalogDao>().bind(CatalogDao.class);
+		List<Catalog> result = dao.findAll(new QueryParams(request.getParameterMap()));
 
-		if (result.size() > 0)
-			return "json::{\"result\":" + JsonHelper.stringifyListMap(result) + "}";
-		else
-			return "json::{}";
+		return outputListBeanAsJson(result);
 	}
 }

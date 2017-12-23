@@ -1,7 +1,6 @@
 package com.ajaxjs.web.simple_admin;
 
 import java.util.List;
-import java.util.Map;
 
 import com.ajaxjs.framework.dao.IDao;
 import com.ajaxjs.framework.dao.QueryParams;
@@ -10,25 +9,25 @@ import com.ajaxjs.framework.dao.annotation.Insert;
 import com.ajaxjs.framework.dao.annotation.Select;
 import com.ajaxjs.framework.dao.annotation.Update;
 
-public interface ICatalogDao extends IDao<Map<String, Object>, Long> {
-	final static String tableName = "category";
+public interface CatalogDao extends IDao<Catalog, Long> {
+	final static String tableName = "catalog";
 
 	@Select("SELECT * FROM " + tableName + " WHERE id = ?")
 	@Override
-	public Map<String, Object> findById(Long id);
+	public Catalog findById(Long id);
 
 	@Select(value = "SELECT * FROM " + tableName)
-	public List<Map<String, Object>> findAll(QueryParams param);
+	public List<Catalog> findAll(QueryParams param);
 	
 	@Insert(tableName = tableName)
 	@Override
-	public Long create(Map<String, Object> map);
+	public Long create(Catalog map);
 
 	@Update(tableName = tableName)
 	@Override
-	public int update(Map<String, Object> map);
+	public int update(Catalog map);
 
 	@Delete(tableName = tableName)
 	@Override
-	public boolean delete(Map<String, Object> map);
+	public boolean delete(Catalog map);
 }
