@@ -1,0 +1,46 @@
+<%@tag import="com.ajaxjs.web.Constant"%>
+<%@tag pageEncoding="UTF-8" description="Page HTML"%>
+<%@taglib prefix="commonTags" tagdir="/WEB-INF/tags/common"%>
+<%@taglib uri="/ajaxjs" prefix="c"%>
+<%@attribute name="type" type="String" required="true"
+	description="指定哪种 HTML 片断"%>
+<%@attribute name="classList" type="String" required="false"
+	description="样式类"%>
+
+<%-- 有缩略图的 --%>
+<c:if test="${type == 'list-simple'}">
+	<ul class="${classList}">
+		<c:foreach var="current" items="${PageResult.rows}">
+			<li><a href="${current.id}">
+					<h4>${current.name}</h4>
+			</a></li>
+		</c:foreach>
+	</ul>
+</c:if>
+
+<%-- 有缩略图的 --%>
+<c:if test="${type == 'list-thumb'}">
+	<ul class="${classList}">
+		<c:foreach var="current" items="${PageResult.rows}">
+			<li>
+				<div class="thumb">
+
+					<img
+						src="http://localhost:8080/ajaxjs-web/asset/common/images/360logo.gif" />
+
+				</div>
+				<div class="text">
+					<a href="${current.id}/info.do">
+						<h4>${current.name}</h4>
+					</a>
+					<p>${current.intro}
+						<a href="${current.id}/info.do">阅读更多……</a>
+					</p>
+					<div class="small">作者：Admin|日期：${current.createDate}|阅读次数：10
+					</div>
+				</div>
+
+			</li>
+		</c:foreach>
+	</ul>
+</c:if>

@@ -1,0 +1,121 @@
+@import 'common_component.less';
+@import 'UI/htmlEditor.less';
+.centerWidth {
+	margin: 0 auto;
+	max-width: 1200px;
+}
+
+body {
+	background-color: #f4f7fa;
+}
+
+.top {
+	background-color: white;
+	border-bottom: 1px solid #ddd;
+	header {
+		.centerWidth;
+		& > div {
+		}
+
+		.right {
+			float: right;
+			.globalSearch {
+				margin-top: 6%;
+				input[type=text] {
+					.ajaxjs-inputField;
+				}
+
+				.searchBtn {
+					background: url("@{assetFilePath}/common/images/search.png") no-repeat;
+					width: 32px;
+					height: 32px;
+					cursor: pointer;
+					float: right;
+					margin-left: 4px;
+				}
+			}
+		}
+
+		nav {
+			float: right;
+			width: 60%;
+			clear: right;
+			ul {
+				li {
+					float: left;
+					margin: 2% 4%;
+					&.selected a {
+						color: black;
+					}
+				}
+			}
+		}
+	}
+}
+
+// news 
+.newsList {
+	.body {
+		overflow: hidden;
+		.left {
+			float: left;
+			border-right: 1px solid lightgray;
+			min-height: 500px;
+			width: 28%;
+		}
+
+		.right {
+			float: left;
+			width: 60%;
+			padding-left: 2%;
+			.list {
+				li {
+					overflow: hidden;
+					margin-bottom: 5%;
+					.thumb {
+						float: left;
+						margin-right: 3%;
+						width: 18%;
+						padding-top: 3%;
+					}
+
+					.text {
+						width: 78%;
+						float: left;
+						h4 {
+							font-size: 1.1rem;
+							letter-spacing:3px;
+							margin-bottom: 1%;
+							font-weight:bold;
+						}
+
+						p {
+							color: gray;
+							letter-spacing:1px;
+							    text-align: justify;
+						}
+						
+						.small{
+							text-align:right;
+							font-size:.8rem;
+							color:lightgray;
+							margin-top:1%;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+.bottom {
+	border-top: 1px solid #ddd;
+}
+
+footer {
+	.centerWidth;
+	text-align: center;
+	color: gray;
+	font-size: .8rem;
+}
+

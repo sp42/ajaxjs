@@ -45,7 +45,7 @@
 		<init-param>
 			<description>指定搜索的包名，多个可以用 逗号 分开</description>
 			<param-name>controller</param-name>
-			<param-value>test.com.ajaxjs.mvc.controller, com.ajaxjs.web.simple_admin, com.ajaxjs.web.widget</param-value>
+			<param-value>com.ajaxjs.web.simple_admin, com.ajaxjs.web.widget</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>

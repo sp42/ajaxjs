@@ -11,7 +11,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
-import com.ajaxjs.framework.dao.DaoHandler;
 import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
@@ -45,8 +44,14 @@ public class CatalogController extends CommonController<Catalog, Long> implement
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
 		initDb();
 		prepareData(model);
-		QueryParams param = new QueryParams(MvcRequest.getHttpServletRequest().getParameterMap());
-		List<Catalog> result = service.findAll(param);
+		List<Catalog> result = null;
+		
+		try {
+			QueryParams param = new QueryParams(MvcRequest.getHttpServletRequest().getParameterMap());
+			result = service.findAll(param);
+		} finally {
+			closeDb();
+		}
 
 		return outputListBeanAsJson(result);
 	}
@@ -59,7 +64,6 @@ public class CatalogController extends CommonController<Catalog, Long> implement
 	@POST
 	@Override
 	public String create(Catalog entity, ModelAndView model) {
-		initDb();
 		prepareData(model);
 		return super.create(entity, model);
 	}
@@ -68,7 +72,6 @@ public class CatalogController extends CommonController<Catalog, Long> implement
 	@Path("{id}")
 	@Override
 	public String update(Catalog entity, ModelAndView model) {
-		initDb();
 		prepareData(model);
 		return super.update(entity, model);
 	}
@@ -77,7 +80,6 @@ public class CatalogController extends CommonController<Catalog, Long> implement
 	@Path("{id}")
 	@Override
 	public String delete(@PathParam("id") Long id, ModelAndView model) {
-		initDb();
 		Catalog catalog = new Catalog();
 		catalog.setId(id);
 

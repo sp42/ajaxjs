@@ -1,3 +1,4 @@
+<%@tag import="com.ajaxjs.web.Constant"%>
 <%@tag pageEncoding="UTF-8" description="HTML 编辑器控件"%>
 <%@attribute name="name"     required="false" type="String" description="表单 name，字段名"%>
 <%@attribute name="basePath" required="false" type="String" description="指定 iframe src 静态资源的路径"%>
@@ -77,7 +78,7 @@
 	</ul>
 
 	<div class="editorBody">	
-		<iframe src="${pageContext.request.contextPath}<%=com.ajaxjs.mvc.controller.IController.common_jsp_perfix %>htmleditor_iframe.jsp?basePath=${basePath}"></iframe>
+		<iframe src="${pageContext.request.contextPath}<%=Constant.common_jsp_perfix %>htmleditor_iframe.jsp?basePath=${basePath}"></iframe>
 		<textarea class="hide" name="${name}"><jsp:doBody /></textarea>
 	</div>
 </div>

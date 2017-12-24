@@ -67,15 +67,15 @@
 	
 	// 转换为正体中文（繁体中文）
 	window.toChinese = function(el) {
-		el.addCls('selected');
-		document.querySelector(".simpleChinese").removeCls('selected');
+		el.classList.add('selected');
+		document.querySelector(".simpleChinese").classList.remove('selected');
 		translate(document.body, traditionalized);
 		Cookie.set(cookieName, true);
 	}
 	// 转换为简体中文
 	window.toSimpleChinese = function(el) {
-		el.addCls('selected');
-		document.querySelector(".Chinese").removeCls('selected');
+		el.classList.add('selected');
+		document.querySelector(".Chinese").classList.remove('selected');
 		translate(document.body, simplized);
 		Cookie.set(cookieName, false);
 	}

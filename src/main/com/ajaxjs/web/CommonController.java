@@ -24,6 +24,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.Version;
+import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.service.IService;
 import com.ajaxjs.framework.service.ServiceException;
@@ -33,10 +34,11 @@ import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
+import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
- * 封装常见的控制器方法。注意：不能复用 create/update 方法，这是因为 T 泛型不能正确识别 Bean 类型的缘故
+ * 封装常见的控制器方法。注意：不能复用 create/update 方法，这是因为 T 泛型不能正确识别 Bean 类型的缘故 需要有 Service 层
  * 
  * @author Sp42 frank@ajaxjs.com
  * @param <T>
@@ -44,7 +46,7 @@ import com.ajaxjs.util.logger.LogHelper;
  * @param <ID>
  *            ID 类型，可以是 INTEGER/LONG/String
  */
-public abstract class CommonController<T, ID extends Serializable> implements IController {
+public abstract class CommonController<T, ID extends Serializable> implements IController, Constant {
 	private static final LogHelper LOGGER = LogHelper.getLog(CommonController.class);
 
 	/**
@@ -56,7 +58,7 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	 * 初始化数据库连接
 	 */
 	public static void initDb(String connStr) {
-		if(connStr == null)
+		if (connStr == null)
 			connStr = Version.isDebug ? "jdbc/sqlite" : "jdbc/sqlite_deploy";
 
 		try {
@@ -70,15 +72,21 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 		}
 	}
 
+	public static void initDb() {
+		initDb(null);
+	}
+
 	/**
 	 * 关闭数据库连接
 	 */
 	public static void closeDb() {
+		Connection conn = JdbcConnection.getConnection();
 		try {
-			JdbcConnection.getConnection().close();
+			if(conn != null && !conn.isClosed())conn.close();
 		} catch (SQLException e) {
 			LOGGER.warning(e);
 		}
+		JdbcConnection.clean();
 	}
 
 	/**
@@ -94,6 +102,7 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	 */
 	public PageResult<T> pageList(int start, int limit, ModelAndView model) {
 		LOGGER.info("获取列表 GET list:{0}/{1}", start, limit);
+		initDb();
 
 		IService<T, ID> service = getService(); // 避免 service 为单例
 
@@ -110,12 +119,10 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 
 		prepareData(model);
 
-		if (pageResult == null)
-			throw new NullPointerException("返回 null，请检查 service.findPagedList() 是否给出实现");
-		
+		if (model.get(errMsg) != null)
+			LOGGER.warning("严重异常，请检查 service.findPagedList() 是否给出实现");
+
 		return pageResult;
-		//		
-		//		String.format(jsp_list, service.getName());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -153,9 +160,11 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 		// 每次 servlet 都会执行的。记录时间
 		model.put("requestTimeRecorder", System.currentTimeMillis());
 
-		// 设置实体 id 和 现实名称 。
-		model.put("uiName", service.getName());
-		model.put("tableName", service.getTableName());
+		if (service != null) {
+			// 设置实体 id 和 现实名称 。
+			model.put("uiName", service.getName());
+			model.put("tableName", service.getTableName());
+		}
 	}
 
 	/**
@@ -167,8 +176,9 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	 *            Model 模型
 	 * @return JSP 路径。缺省提供一个默认路径，但不一定要使用它，换别的也可以。
 	 */
-	public void info(ID id, ModelAndView model) {
+	public String info(ID id, ModelAndView model) {
 		LOGGER.info("读取单个记录或者编辑某个记录：id 是 {0}", id);
+		initDb();
 
 		IService<T, ID> service = getService(); // 避免 service 为单例
 
@@ -184,12 +194,8 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 		// id));// 相邻记录
 
 		prepareData(model);
-
-		// if (isAdminUI())
-		// return String.format(jsp_adminInfo, service.getName());
-		// else
-		// return isJSON_output() ? show_json_info : String.format(jsp_info,
-		// service.getName());
+		
+		return String.format(jsp_info, service.getTableName());
 	}
 
 	public void list_all(ModelAndView model) {
@@ -203,7 +209,7 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	 * @param request
 	 *            请求对象
 	 */
-	public void saveToReuqest(ModelAndView mv, HttpServletRequest request) {
+	public static void saveToReuqest(ModelAndView mv, HttpServletRequest request) {
 		for (String key : mv.keySet())
 			request.setAttribute(key, mv.get(key));
 	}
@@ -243,11 +249,10 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 		return String.format(jsp_adminInfo, service.getName());
 	}
 
-	// @POST
-	// @Override
 	public String create(T entity, ModelAndView model) {
 		LOGGER.info("修改 name:{0}，数据库将执行 INSERT 操作", entity);
 
+		initDb();
 		try {
 			ID newlyId = getService().create(entity);
 			if (newlyId == null) {
@@ -263,18 +268,12 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 		return cud;
 	}
 
-	// @PUT
-	// @Path("/{id}")
-	/**
-	 * 
-	 * @param entity
-	 * @param model
-	 * @return JSP 路径，应返回 JSON 格式的
-	 */
+
 	public String update(/* @Valid */T entity, ModelAndView model) {
 		LOGGER.info("修改 name:{0}，数据库将执行 UPDATE 操作", entity);
 		model.put("isUpdate", true);
-
+		initDb();
+		
 		try {
 			getService().update(entity);
 		} catch (ServiceException e) {
@@ -288,7 +287,8 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 
 	public String delete(T entry, ModelAndView model) {
 		LOGGER.info("删除 id:{0}，数据库将执行 DELETE 操作", entry);
-
+		initDb();
+		
 		try {
 			if (!getService().delete(entry)) {
 				throw new ServiceException("删除失败！");
@@ -299,7 +299,7 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 			closeDb();
 		}
 
-		return common_jsp_perfix + "delete.jsp";
+		return cud;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -310,11 +310,29 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 			map.put("id", id);
 			obj = (T) map;
 		} else {
-			throw new RuntimeException(
-					"因为范型的缘故，不能实例化 bean 对象。应该在子类实例化 bean，再调用本类的 delete(T entry, ModelAndView model) ");
+			throw new RuntimeException("因为范型的缘故，不能实例化 bean 对象。应该在子类实例化 bean，再调用本类的 delete(T entry, ModelAndView model) ");
 		}
 
 		return delete(obj, model);
+	}
+
+	public static String outputListMapAsJson(List<Map<String, Object>> result) {
+		if (result != null && result.size() > 0)
+			return "json::{\"result\":" + JsonHelper.stringifyListMap(result) + "}";
+		else
+			return "json::{\"result\": null}";
+	}
+
+	public static String outputListBeanAsJson(List<? extends BaseModel> result) {
+		if (result != null && result.size() > 0) {
+			String[] str = new String[result.size()];
+
+			for (int i = 0; i < result.size(); i++)
+				str[i] = JsonHelper.bean2json((Object) result.get(i));
+
+			return "json::{\"result\":[" + StringUtil.stringJoin(str, ",") + "]}";
+		} else
+			return "json::{\"result\": null}";
 	}
 
 	/**

@@ -1,3 +1,4 @@
+<%@tag import="com.ajaxjs.web.Constant"%>
 <%@tag pageEncoding="UTF-8" description="Page HTML"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
 <%@attribute name="type" type="String" required="true" description="指定哪种 HTML 片断"%>
@@ -18,20 +19,18 @@
 <c:if test="${type == 'navMenu2'}">
 <%@taglib prefix="commonTags" tagdir="/WEB-INF/tags/common"%>
 <header>
-	<div>
-		<div class="right">
-			<commonTags:widget type="search" />
-		</div>
-		<h1>
-			<a href="${pageContext.request.contextPath}/">
-				<img src="${pageContext.request.contextPath}/asset/images/logo.png" style="height: 40px;" />
-				${_config.clientFullName}
-			</a>
-		</h1>
+	<div class="right">
+		<commonTags:widget type="search" />
 	</div>
 	<nav>
 		<commonTags:page type="navMenu" />
 	</nav>
+	<h1>
+		<a href="${pageContext.request.contextPath}/">
+			<img src="${pageContext.request.contextPath}/asset/images/logo.png" style="height: 80px;" />
+			${_config.clientFullName}
+		</a>
+	</h1>
 </header>
 </c:if>
 
@@ -106,19 +105,19 @@
 		<div>
 			<jsp:doBody />
 			<a href="#">
-				<img src="${pageContext.request.contextPath}/asset/bigfoot/asset/images/gs.png" />
+				<img src="${pageContext.request.contextPath}/<%=Constant.commonImage %>gs.png" />
 			</a> 
 			<a href="#">
-				<img src="${pageContext.request.contextPath}/asset/bigfoot/asset/images/kexin.png" hspace="20" width="90" style="margin-top:15px;" />
+				<img src="${pageContext.request.contextPath}/<%=Constant.commonImage %>kexin.png" hspace="20" width="90" style="margin-top:15px;" />
 			</a> 
 			<a href="#">
-				<img src="${pageContext.request.contextPath}/asset/bigfoot/asset/images/360logo.gif" width="90" style="margin-top:15px;" />
+				<img src="${pageContext.request.contextPath}/<%=Constant.commonImage %>360logo.gif" width="90" style="margin-top:15px;" />
 			</a>
 			<br />
 			<a href="javascript:;" onclick="toSimpleChinese(this);" class="simpleChinese selected">简体中文</a>
 			/
 			<a href="javascript:;" class="Chinese" onclick="toChinese(this);">正体中文</a>
-			<script src="${pageContext.request.contextPath}/asset/bigfoot/js/libs/chinese.js"></script>
+			<script src="${pageContext.request.contextPath}/<%=Constant.commonFolder %>js/libs/chinese.js"></script>
 			<br />
 			${empty _config.site_icp ? '粤ICP备15007080号-2' :  _config.site_icp}
 			Powered by <a target="_blank" href="http://framework.ajaxjs.com">AJAXJS</a>
@@ -191,7 +190,7 @@
 </c:if>
 
 <%-- 分页 --%>
-<%@attribute name="pageInfo" type="com.ajaxjs.framework.model.PageResult" required="false" description="分页对象"%>
+<%@attribute name="pageInfo" type="com.ajaxjs.jdbc.PageResult" required="false" description="分页对象"%>
 <c:if test="${type == 'page'}">
 	<section class="pageInfo">
 	<c:choose>

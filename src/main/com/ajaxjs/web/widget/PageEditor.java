@@ -15,11 +15,12 @@ import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.web.Constant;
 import com.ajaxjs.web.HtmlHead;
 
 @Controller
 @Path("/admin/page_editor")
-public class PageEditor implements IController {
+public class PageEditor implements IController, Constant {
 	private static final LogHelper LOGGER = LogHelper.getLog(PageEditor.class);
 
 	@GET
