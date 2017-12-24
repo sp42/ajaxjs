@@ -78,7 +78,7 @@
 	<c:foreach items="${PAGE.node.supers}" var="_super">
 		»<a href="${pageContext.request.contextPath}${_super.split(':')[0]}">${_super.split(':')[1]}</a>
 	</c:foreach>
-	»<a href="${pageContext.request.contextPath}/${PAGE.node.fullPath}">${PAGE.node.name}</a>
+	»<a href="${pageContext.request.contextPath}${PAGE.node.fullPath}">${PAGE.node.name}</a>
 	
 	<%-- 如果有分类的话，先显示分类 （适合列表的情形）--%>
 	<c:if test="${not empty catalog}">
@@ -105,13 +105,13 @@
 		<div>
 			<jsp:doBody />
 			<a href="#">
-				<img src="${pageContext.request.contextPath}/<%=Constant.commonImage %>gs.png" />
+				<img src="${pageContext.request.contextPath}/<%=Constant.commonImage%>gs.png" height="40" />
 			</a> 
 			<a href="#">
-				<img src="${pageContext.request.contextPath}/<%=Constant.commonImage %>kexin.png" hspace="20" width="90" style="margin-top:15px;" />
+				<img src="${pageContext.request.contextPath}/<%=Constant.commonImage%>kexin.png" hspace="20" width="90" style="margin-top:15px;" />
 			</a> 
 			<a href="#">
-				<img src="${pageContext.request.contextPath}/<%=Constant.commonImage %>360logo.gif" width="90" style="margin-top:15px;" />
+				<img src="${pageContext.request.contextPath}/<%=Constant.commonImage%>360logo.gif" width="90" style="margin-top:15px;" />
 			</a>
 			<br />
 			<a href="javascript:;" onclick="toSimpleChinese(this);" class="simpleChinese selected">简体中文</a>
@@ -191,6 +191,7 @@
 
 <%-- 分页 --%>
 <%@attribute name="pageInfo" type="com.ajaxjs.jdbc.PageResult" required="false" description="分页对象"%>
+<jsp:useBean id="PageUtil" class="com.ajaxjs.mvc.view.PageTag" />
 <c:if test="${type == 'page'}">
 	<section class="pageInfo">
 	<c:choose>
@@ -204,6 +205,7 @@
 		<c:if test="${pageInfo.start + pageInfo.pageSize < pageInfo.totalCount}"> 
 			<a href="?start=${pageInfo.start + pageInfo.pageSize}${PageUtil.getParams_without('start', pageContext.request.queryString)}">下一页</a>
 		</c:if>
+		
 		<div class="info" style="vertical-align: bottom;">
 		 	页数：${pageInfo.currentPage}/${pageInfo.totalPage} 记录数：${pageInfo.start}/${pageInfo.totalCount} 
 		 	<form style="display:inline-block;vertical-align: bottom;" method="GET">
@@ -227,7 +229,7 @@
 		 	</c:if>
 		</div>
 		
-		<script type="text/javascript">
+		<script>
 			/**
 			 * 分页，跳到第几页，下拉控件传入指定的页码。
 			 */

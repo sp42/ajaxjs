@@ -1,6 +1,6 @@
 <%@tag import="com.ajaxjs.web.Constant"%>
 <%@tag pageEncoding="UTF-8" description="Page HTML"%>
-<%@taglib prefix="commonTags" tagdir="/WEB-INF/tags/common"%>
+<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
 <%@attribute name="type" type="String" required="true"
 	description="指定哪种 HTML 片断"%>
@@ -20,6 +20,9 @@
 
 <%-- 有缩略图的 --%>
 <c:if test="${type == 'list-thumb'}">
+	<%-- 如果有异常则显示之 --%>
+	${(not empty errMsg.cause ) ? (errMsg.cause.message) : ''}
+	
 	<ul class="${classList}">
 		<c:foreach var="current" items="${PageResult.rows}">
 			<li>
@@ -43,4 +46,6 @@
 			</li>
 		</c:foreach>
 	</ul>
+	
+	<commonTag:page type="page" pageInfo="${PageResult}"/>
 </c:if>

@@ -12,7 +12,7 @@
 		}
 	]
 }, {
-	'name' : "美食天地",
+	'name' : "产品中心",
 	'id' : 'product',
 	'children' : [ 
 		{

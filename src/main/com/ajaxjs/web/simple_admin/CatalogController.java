@@ -47,8 +47,7 @@ public class CatalogController extends CommonController<Catalog, Long> implement
 		List<Catalog> result = null;
 		
 		try {
-			QueryParams param = new QueryParams(MvcRequest.getHttpServletRequest().getParameterMap());
-			result = service.findAll(param);
+			result = service.findAll(QueryParams.factory());
 		} finally {
 			closeDb();
 		}

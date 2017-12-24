@@ -49,7 +49,7 @@
 		
 		a{
 			text-decoration:none;
-			color:#999;
+			color:#666;
 			transition : color 400ms ease-in-out;
 		}
 		

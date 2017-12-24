@@ -16,24 +16,21 @@
     <!-- // 自定义 Baidu 搜索 -->
  
 <%
-	}else if("share".equals(type)) {
-		String title = "";
-		int serverPort = request.getServerPort();
-		String currentPage_url = request.getScheme() + "://" + request.getServerName();
-		if(serverPort != 80){
-			currentPage_url += ":" + serverPort;
-		}
-		currentPage_url += request.getRequestURI() + "?" + request.getQueryString();
-	%>
+ 	}else if("share".equals(type)) {
+ 		String title = "";
+ 		int serverPort = request.getServerPort();
+ 		String currentPage_url = request.getScheme() + "://" + request.getServerName();
+ 		if (serverPort != 80) {
+ 			currentPage_url += ":" + serverPort;
+ 		}
+ 		currentPage_url += request.getRequestURI() + "?" + request.getQueryString();
+ %>
 		<div class="share" style="margin-top:10px;margin-right:5px;font-size: .8rem;">
 		分享到 &nbsp;&nbsp;
 			<a title="转发至QQ空间" id="s_qq"
 				href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=<%=currentPage_url%>"
 				target="_blank"><img
 				src="http://static.youku.com/v1.0.0691/v/img/ico_Qzone.gif" /></a>
-			<a title="转发至人人网" id="s_renren"
-				href="http://share.renren.com/share/buttonshare.do?link=<%=currentPage_url%>&title=<%=title%>" target="_blank"><img
-				src="http://static.youku.com/v1.0.0691/v/img/ico_renren.gif" /></a>
 			<a title="转发至新浪微博" id="s_sina"
 				href="http://v.t.sina.com.cn/share/share.php?appkey=2684493555&url=<%=currentPage_url%>&title=<%=title%>&Uid=&source=&sourceUrl="
 				target="_blank"><img
@@ -126,14 +123,15 @@
 			var p = document.querySelectorAll('article p');
 			if (!p || !p.length)throw '未发现目标段落！';
 			
-			for (var i = 0, j = p.length; i < j; i++)p[i].style.fontSize = fontSize;
+			for (var i = 0, j = p.length; i < j; i++)
+				p[i].style.fontSize = fontSize;
 		}
 	
 		/**
 		 * 发送邮件
 		 * @TODO base64 encode
 		 */
-		function sendMail_onClick(e) {
+		function sendMail_onClick() {
 			location.href = 'mailto:xxx@tagzine.com?subject=\u63A8\u8350\u65B0\u95FB: '
 					+ document.title
 					+ '&body=\u6211\u5411\u4F60\u63A8\u8350\u8FD9\u6761\u6587\u7AE0\uFF0C\u5E0C\u671B\u4F60\u559C\u6B22\uFF01\u6587\u7AE0\u6807\u9898\uFF1A'
@@ -144,9 +142,9 @@
 <%
 	}else if("function".equals(type)) {
 %>
-		<a href="javascript:printContent();"><span style="font-size:1.1rem;">&#12958;</span>打 印</a>
-		<a href="javascript:printContent();"><span style="font-size:1.5rem;">&#9993;</span>发送邮件</a>
-		<a href="javascript:printContent();"><span style="font-size:1.2rem;">★ </span>收 藏</a>
+		<a href="javascript:printContent();"><span style="font-size:1rem;">&#12958;</span>打 印</a>
+		<a href="javascript:sendMail_onClick();"><span style="font-size:1rem;">&#9993;</span>发送邮件</a>
+		<a href="javascript:;"><span style="font-size:1.2rem;">★ </span>收 藏</a>
 <!-- 	&#8984;	❂ -->
 <%
 	}else if("toggleBtn".equals(type)) {

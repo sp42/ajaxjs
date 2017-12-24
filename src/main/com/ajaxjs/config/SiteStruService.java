@@ -110,7 +110,7 @@ public class SiteStruService implements ServletContextListener {
 	 */
 	public static Map<String, Object> getPageNode(String uri, String contextPath) {
 		// 获取资源 URI，忽略项目前缀和最后的文件名（如 index.jsp） 分析 URL 目标资源
-		String path = uri.replace(contextPath, "").replaceFirst("/\\w+\\.\\w+$", "");
+		String path = uri.replace(contextPath, "").replaceAll("\\d+/\\w+\\.do", "").replaceFirst("/\\w+\\.\\w+$", "");
 		
 		if(stru != null && stru.isLoaded()) {
 			Map<String, Object> map = t.findByPath(path, stru);
