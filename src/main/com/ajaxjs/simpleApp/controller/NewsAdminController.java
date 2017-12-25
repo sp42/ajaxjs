@@ -1,4 +1,4 @@
-package com.ajaxjs.web.simple_admin;
+package com.ajaxjs.simpleApp.controller;
 
 import java.util.List;
 import java.util.Map;
@@ -16,6 +16,8 @@ import javax.ws.rs.QueryParam;
 import com.ajaxjs.framework.dao.DaoHandler;
 import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.mvc.ModelAndView;
+import com.ajaxjs.simpleApp.service.NewsService;
+import com.ajaxjs.simpleApp.service.NewsServiceImpl;
 import com.ajaxjs.web.CommonController;
 import com.ajaxjs.web.CommonEntryAdminController;
 

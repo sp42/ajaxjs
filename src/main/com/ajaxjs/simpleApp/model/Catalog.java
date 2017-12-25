@@ -1,4 +1,4 @@
-package com.ajaxjs.web.simple_admin;
+package com.ajaxjs.simpleApp.model;
 
 import com.ajaxjs.framework.BaseModel;
 

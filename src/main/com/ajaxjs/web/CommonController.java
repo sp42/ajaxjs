@@ -73,7 +73,7 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	}
 
 	public static void initDb() {
-		initDb(null);
+		initDb("jdbc/sqlite_mac");
 	}
 
 	/**
@@ -112,6 +112,7 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 			model.put("PageResult", pageResult);
 		} catch (Exception e) {
 			LOGGER.warning(e);
+			System.out.println(e);
 			model.put(errMsg, e);
 		} finally {
 			closeDb();

@@ -1,4 +1,4 @@
-package com.ajaxjs.web.simple_admin;
+package com.ajaxjs.simpleApp.controller;
 
 import java.util.List;
 
@@ -11,14 +11,16 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
-import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
+import com.ajaxjs.simpleApp.model.Catalog;
+import com.ajaxjs.simpleApp.service.CatalogService;
+import com.ajaxjs.simpleApp.service.CatalogServiceImpl;
 import com.ajaxjs.web.CommonController;
 import com.ajaxjs.web.CommonEntryAdminController;
 
 /**
- * 没有使用 Service
+ *
  * 
  * @author admin
  *
@@ -47,7 +49,7 @@ public class CatalogController extends CommonController<Catalog, Long> implement
 		List<Catalog> result = null;
 		
 		try {
-			result = service.findAll(QueryParams.factory());
+			result = service.findAll(MvcRequest.factory());
 		} finally {
 			closeDb();
 		}

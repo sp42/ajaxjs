@@ -1,13 +1,15 @@
-package com.ajaxjs.web.simple_admin;
+package com.ajaxjs.simpleApp.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.framework.dao.DaoHandler;
 import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.jdbc.PageResult;
+import com.ajaxjs.simpleApp.dao.NewsDao;
 
-public class NewsServiceImpl implements NewsService {
+public class HrServiceImpl implements NewsService {
 	NewsDao dao = new DaoHandler<NewsDao>().bind(NewsDao.class);
 
 	@Override
@@ -42,12 +44,17 @@ public class NewsServiceImpl implements NewsService {
 
 	@Override
 	public String getName() {
-		return "新闻";
+		return "招聘";
 	}
 
 	@Override
 	public String getTableName() {
-		return "news";
+		return "hr";
+	}
+
+	@Override
+	public List<Map<String, Object>> getTop5() {
+		return dao.getTop5();
 	}
 
 }

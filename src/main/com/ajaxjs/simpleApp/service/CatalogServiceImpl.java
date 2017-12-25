@@ -1,4 +1,4 @@
-package com.ajaxjs.web.simple_admin;
+package com.ajaxjs.simpleApp.service;
 
 import java.util.List;
 
@@ -6,6 +6,8 @@ import com.ajaxjs.framework.dao.DaoHandler;
 import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.jdbc.PageResult;
+import com.ajaxjs.simpleApp.dao.CatalogDao;
+import com.ajaxjs.simpleApp.model.Catalog;
 
 public class CatalogServiceImpl implements CatalogService {
 	CatalogDao dao = new DaoHandler<CatalogDao>().bind(CatalogDao.class);

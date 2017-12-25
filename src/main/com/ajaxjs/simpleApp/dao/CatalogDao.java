@@ -1,4 +1,4 @@
-package com.ajaxjs.web.simple_admin;
+package com.ajaxjs.simpleApp.dao;
 
 import java.util.List;
 
@@ -8,9 +8,10 @@ import com.ajaxjs.framework.dao.annotation.Delete;
 import com.ajaxjs.framework.dao.annotation.Insert;
 import com.ajaxjs.framework.dao.annotation.Select;
 import com.ajaxjs.framework.dao.annotation.Update;
+import com.ajaxjs.simpleApp.model.Catalog;
 
 public interface CatalogDao extends IDao<Catalog, Long> {
-	final static String tableName = "catalog";
+	final static String tableName = "category";
 
 	@Select("SELECT * FROM " + tableName + " WHERE id = ?")
 	@Override
