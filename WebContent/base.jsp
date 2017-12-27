@@ -228,7 +228,7 @@ p {
 						<p>运行系统：Win/Mac/Linux；要求：JRE1.7+/Tomcat7+</p>
 						<p>
 							<a href="https://gitee.com/sp42/ajaxjs-base">Git/SVN 源码</a> | <a
-								href="">JavaDoc</a> | <a href="http://ajaxjs.mydoc.io/">手册</a> |
+								href="https://framework.ajaxjs.com/framework/ajaxjs-base-doc/">JavaDoc</a> | <a href="http://ajaxjs.mydoc.io/">手册</a> |
 							<a href="http://blog.csdn.net/zhangxin09">博客</a> | <a
 								target="_blank"
 								href="//shang.qq.com/wpa/qunwpa?idkey=3877893a4ed3a5f0be01e809e7ac120e346102bd550deb6692239bb42de38e22">QQ
