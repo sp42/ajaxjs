@@ -71,6 +71,11 @@ h2 {
 			li {
 				padding: 5% 0;
 				border-bottom: 1px solid lightgray;
+				letter-spacing:2px;
+				&.selected a {
+					color: black;
+					font-size: 1.1rem;
+				}
 			}
 		}
 	}
@@ -132,13 +137,49 @@ h2.title {
 	}
 }
 
+.hrList {
+	.right {
+		.box {
+			border: 1px solid lightgray;
+			margin-bottom:2%;
+			
+			header {
+				background-color: lightgray;
+				padding: 1%;
+				h4{
+					font-size:1.2rem;
+					letter-spacing:2px;
+				}
+				h5{
+					float:right;
+				}
+			}
+
+			&>div {
+				padding: 1%;
+			}
+		}
+		
+	}
+}
+
+.productList{
+	.body .right{
+		ul{
+			.ajaxjs-ul-list(4);
+			li{
+				height: 300px;
+			}
+		}
+	}
+}
+
 .pageInfo {
 	text-align: center;
 	margin: 3%;
 }
 
-
-article{
+article {
 	h3 {
 		font-size: 1.5rem;
 		letter-spacing: 2px;
@@ -148,11 +189,11 @@ article{
 	h4 {
 		text-align: right;
 	}
-	
+
 	p {
 		.ajaxjs-text-p;
 	}
-} 
+}
 
 .bottom {
 	border-top: 1px solid #ddd;
@@ -163,5 +204,15 @@ footer {
 	text-align: center;
 	color: gray;
 	font-size: .8rem;
+}
+
+.home {
+	fieldset {
+		border: 1px solid lightgray;
+		width: 830px;
+		box-sizing: border-box;
+		padding: 2%;
+		margin-bottom: 3%;
+	}
 }
 
