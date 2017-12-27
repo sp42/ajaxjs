@@ -1,10 +1,8 @@
 package com.ajaxjs.simpleApp.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.mvc.annotation.Controller;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -13,8 +11,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
-import com.ajaxjs.framework.dao.DaoHandler;
-import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.simpleApp.service.NewsService;
 import com.ajaxjs.simpleApp.service.NewsServiceImpl;

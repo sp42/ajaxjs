@@ -7,10 +7,10 @@ import com.ajaxjs.framework.dao.DaoHandler;
 import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.jdbc.PageResult;
-import com.ajaxjs.simpleApp.dao.NewsDao;
+import com.ajaxjs.simpleApp.dao.ProductDao;
 
-public class ProductServiceImpl implements NewsService {
-	NewsDao dao = new DaoHandler<NewsDao>().bind(NewsDao.class);
+public class ProductServiceImpl implements ProductService {
+	ProductDao dao = new DaoHandler<ProductDao>().bind(ProductDao.class);
 
 	@Override
 	public Map<String, Object> findById(Long id) throws ServiceException {

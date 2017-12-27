@@ -10,6 +10,8 @@ import com.ajaxjs.framework.dao.annotation.Insert;
 import com.ajaxjs.framework.dao.annotation.Select;
 import com.ajaxjs.framework.dao.annotation.Update;
 import com.ajaxjs.jdbc.PageResult;
+import com.ajaxjs.simpleApp.model.Catalog;
+import  com.ajaxjs.simpleApp.Constant;
 
 public interface HrDao extends IDao<Map<String, Object>, Long> {
 	final static String tableName = "job";
@@ -39,4 +41,7 @@ public interface HrDao extends IDao<Map<String, Object>, Long> {
 
 	@Select("SELECT * FROM " + tableName + " LIMIT 0, 5")
 	public List<Map<String, Object>> getTop5();
+	
+	@Select("SELECT * FROM " + CatalogDao.tableName + " WHERE parentId = " + Constant.HrCatalogId)
+	public List<Catalog> getHrCatalog();
 }

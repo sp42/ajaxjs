@@ -12,8 +12,8 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.simpleApp.service.CatalogService;
 import com.ajaxjs.simpleApp.service.CatalogServiceImpl;
-import com.ajaxjs.simpleApp.service.NewsService;
-import com.ajaxjs.simpleApp.service.NewsServiceImpl;
+import com.ajaxjs.simpleApp.service.ProductService;
+import com.ajaxjs.simpleApp.service.ProductServiceImpl;
 import com.ajaxjs.web.CommonController;
 import com.ajaxjs.web.CommonEntryReadOnlyController;
 
@@ -26,7 +26,7 @@ public class ProductController extends CommonController<Map<String, Object>, Lon
 		setService(service);
 	}
 
-	private NewsService service = new NewsServiceImpl();
+	private ProductService service = new ProductServiceImpl();
 
 	@GET
 	@Override

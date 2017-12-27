@@ -12,8 +12,8 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.simpleApp.service.CatalogService;
 import com.ajaxjs.simpleApp.service.CatalogServiceImpl;
-import com.ajaxjs.simpleApp.service.NewsService;
-import com.ajaxjs.simpleApp.service.NewsServiceImpl;
+import com.ajaxjs.simpleApp.service.HrService;
+import com.ajaxjs.simpleApp.service.HrServiceImpl;
 import com.ajaxjs.web.CommonController;
 import com.ajaxjs.web.CommonEntryReadOnlyController;
 
@@ -26,13 +26,13 @@ public class HrController extends CommonController<Map<String, Object>, Long> im
 		setService(service);
 	}
 
-	private NewsService service = new NewsServiceImpl();
+	private HrService service = new HrServiceImpl();
 
 	@GET
 	@Override
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
 		initDb();
-		model.put("catalogMenu", catalogService.findAll(MvcRequest.factory()));
+		model.put("catalogMenu", service.getHrCatalog());
 		super.pageList(start, limit, model);
 		return String.format(jsp_list, service.getTableName());
 	}

@@ -1,20 +1,16 @@
 package com.ajaxjs.simpleApp.controller;
 
-import java.util.Map;
 
 import javax.mvc.annotation.Controller;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
-import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.simpleApp.service.NewsService;
 import com.ajaxjs.simpleApp.service.NewsServiceImpl;
 import com.ajaxjs.web.CommonController;
-import com.ajaxjs.web.CommonEntryReadOnlyController;
+import com.ajaxjs.web.Constant;
 
 @Controller
 @Path("/home")
@@ -30,8 +26,6 @@ public class HomeController implements IController {
 		}finally{
 			CommonController.closeDb();
 		}
-		return "";
-		//model.put("catalogMenu", service.getTop5());
-		//return String.format(jsp_list, service.getTableName());
+		return Constant.jsp_perfix + "home";
 	}
 }

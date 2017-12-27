@@ -11,7 +11,7 @@ import com.ajaxjs.framework.dao.annotation.Update;
 import com.ajaxjs.simpleApp.model.Catalog;
 
 public interface CatalogDao extends IDao<Catalog, Long> {
-	final static String tableName = "category";
+	final static String tableName = "catalog";
 
 	@Select("SELECT * FROM " + tableName + " WHERE id = ?")
 	@Override

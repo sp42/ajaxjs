@@ -3,14 +3,17 @@ package com.ajaxjs.simpleApp.service;
 import java.util.List;
 import java.util.Map;
 
+import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.dao.DaoHandler;
 import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.jdbc.PageResult;
-import com.ajaxjs.simpleApp.dao.NewsDao;
+import com.ajaxjs.mvc.ModelAndView;
+import com.ajaxjs.simpleApp.dao.HrDao;
+import com.ajaxjs.simpleApp.model.Catalog;
 
-public class HrServiceImpl implements NewsService {
-	NewsDao dao = new DaoHandler<NewsDao>().bind(NewsDao.class);
+public class HrServiceImpl implements HrService {
+	HrDao dao = new DaoHandler<HrDao>().bind(HrDao.class);
 
 	@Override
 	public Map<String, Object> findById(Long id) throws ServiceException {
@@ -34,7 +37,14 @@ public class HrServiceImpl implements NewsService {
 
 	@Override
 	public PageResult<Map<String, Object>> findPagedList(QueryParams params) throws ServiceException {
-		return dao.findPagedList(params);
+		PageResult<Map<String, Object>> result = dao.findPagedList(params);
+
+		Map<Integer, BaseModel> catalogMap = ModelAndView.list_bean2map_id_as_key(getHrCatalog());
+		for (Map<String, Object> map : result.getRows()) {
+			BaseModel catalogBean = catalogMap.get((int) map.get("catalog"));
+			map.put("catalogName", catalogBean.getName());
+		}
+		return result;
 	}
 
 	@Override
@@ -55,6 +65,15 @@ public class HrServiceImpl implements NewsService {
 	@Override
 	public List<Map<String, Object>> getTop5() {
 		return dao.getTop5();
+	}
+
+	private List<Catalog> catalog;
+
+	@Override
+	public List<Catalog> getHrCatalog() {
+		if (catalog == null)
+			catalog = dao.getHrCatalog();
+		return catalog;
 	}
 
 }

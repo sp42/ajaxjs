@@ -9,9 +9,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.simpleApp.service.CatalogService;
-import com.ajaxjs.simpleApp.service.CatalogServiceImpl;
 import com.ajaxjs.simpleApp.service.NewsService;
 import com.ajaxjs.simpleApp.service.NewsServiceImpl;
 import com.ajaxjs.web.CommonController;
@@ -19,9 +16,8 @@ import com.ajaxjs.web.CommonEntryReadOnlyController;
 
 @Controller
 @Path("/news")
-public class NewsController extends CommonController<Map<String, Object>, Long> implements CommonEntryReadOnlyController {
-	CatalogService catalogService = new CatalogServiceImpl();
-	
+public class NewsController extends CommonController<Map<String, Object>, Long>
+		implements CommonEntryReadOnlyController {
 	public NewsController() {
 		setService(service);
 	}
@@ -32,7 +28,7 @@ public class NewsController extends CommonController<Map<String, Object>, Long> 
 	@Override
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
 		initDb();
-		model.put("catalogMenu", catalogService.findAll(MvcRequest.factory()));
+		model.put("catalogMenu", service.getNewsCatalog());
 		super.pageList(start, limit, model);
 		return String.format(jsp_list, service.getTableName());
 	}
@@ -42,7 +38,7 @@ public class NewsController extends CommonController<Map<String, Object>, Long> 
 	@Path("{id}")
 	public String info(@PathParam("id") Long id, ModelAndView model) {
 		initDb();
-		model.put("catalogMenu", catalogService.findAll(MvcRequest.factory()));
+		model.put("catalogMenu", service.getNewsCatalog());
 		return super.info(id, model);
 	}
 

@@ -111,8 +111,8 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 			pageResult = service.findPagedList(getParam(start, limit));
 			model.put("PageResult", pageResult);
 		} catch (Exception e) {
+			e.printStackTrace();
 			LOGGER.warning(e);
-			System.out.println(e);
 			model.put(errMsg, e);
 		} finally {
 			closeDb();

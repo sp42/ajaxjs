@@ -8,6 +8,7 @@ import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.jdbc.PageResult;
 import com.ajaxjs.simpleApp.dao.NewsDao;
+import com.ajaxjs.simpleApp.model.Catalog;
 
 public class NewsServiceImpl implements NewsService {
 	NewsDao dao = new DaoHandler<NewsDao>().bind(NewsDao.class);
@@ -55,6 +56,15 @@ public class NewsServiceImpl implements NewsService {
 	@Override
 	public List<Map<String, Object>> getTop5() {
 		return dao.getTop5();
+	}
+
+	private List<Catalog> catalog;
+
+	@Override
+	public List<Catalog> getNewsCatalog() {
+		if (catalog == null)
+			catalog = dao.getHrCatalog();
+		return catalog;
 	}
 
 }
