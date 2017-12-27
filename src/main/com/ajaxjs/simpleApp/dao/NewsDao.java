@@ -16,11 +16,14 @@ import com.ajaxjs.simpleApp.model.Catalog;
 public interface NewsDao extends IDao<Map<String, Object>, Long> {
 	final static String tableName = "news";
 
-	@Select(value = "SELECT * FROM " + tableName)
+	@Select(value = "SELECT * FROM " + tableName + " WHERE status = 1")
 	@Override
 	public PageResult<Map<String, Object>> findPagedList(QueryParams param);
 	
-	@Select("SELECT * FROM " + tableName + " WHERE id = ?")
+	@Select(value = "SELECT * FROM " + tableName)
+	public PageResult<Map<String, Object>> findAdminPagedList(QueryParams param);
+	
+	@Select("SELECT * FROM " + tableName + " WHERE status = 1 AND id = ?")
 	@Override
 	public Map<String, Object> findById(Long id);
 

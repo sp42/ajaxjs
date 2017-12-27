@@ -2,8 +2,8 @@
 <li>
 	<h3>新闻管理</h3>
 	<ul>
-		<li><a target="iframepage"
-			href="admin/news/list/show.do?limit=10">新闻列表</a></li>
+		<li><a target="iframepage" href="admin/news/list/show.do?limit=10">新闻列表</a></li>
+		<li><a target="iframepage" href="admin/news/create.do">新建新闻</a></li>
 		<li><a target="iframepage" href="admin/news/catalog/show.do">新闻分类</a></li>
 		<li><a target="iframepage" href="admin/channel/mgr.do">edit-single-entry</a></li>
 	</ul>

@@ -30,16 +30,16 @@ public class NewsAdminController extends CommonController<Map<String, Object>, L
 	@Path("list")
 	@Override
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
-		pageList(start, limit, model);
-		return String.format(jsp_adminList, service.getName());
+		initDb();
+		model.put("catalogMenu", service.getNewsCatalog());
+		super.pageList(start, limit, model);
+		return String.format(jsp_adminList, service.getTableName());
 	}
 
 	@GET
 	@Override
 	public String createUI(ModelAndView model) {
-		prepareData(model);
-		// list_all(model);
-		return String.format(jsp_adminInfo, getService().getName());
+		return super.createUI(model);
 	}
 
 	@GET
@@ -47,7 +47,7 @@ public class NewsAdminController extends CommonController<Map<String, Object>, L
 	@Override
 	public String editUI(@PathParam("id") Long id, ModelAndView model) {
 		info(id, model);
-		return String.format(jsp_adminInfo, getService().getName());
+		return String.format(jsp_adminInfo, getService().getTableName());
 	}
 
 	@POST
@@ -76,14 +76,22 @@ public class NewsAdminController extends CommonController<Map<String, Object>, L
 		return common_jsp_perfix + "simple_admin/edit-cataory";
 	}
 
-//	@GET
-//	@Path("catalog/list")
-//	public String getNewsCatalog(ModelAndView model, HttpServletRequest request) {
-//		initDb();
-//		prepareData(model);
-//		CatalogDao dao = new DaoHandler<CatalogDao>().bind(CatalogDao.class);
-//		List<Map<String, Object>> result = dao.findAll(new QueryParams(request.getParameterMap()));
-//
-//		return outputListBeanAsJson(result);
-//	}
+	@Override
+	public void prepareData(ModelAndView model) {
+		super.prepareData(model);
+		initDb();
+		model.put("catalogMenu", service.getNewsCatalog());
+		
+	}
+
+	//	@GET
+	//	@Path("catalog/list")
+	//	public String getNewsCatalog(ModelAndView model, HttpServletRequest request) {
+	//		initDb();
+	//		prepareData(model);
+	//		CatalogDao dao = new DaoHandler<CatalogDao>().bind(CatalogDao.class);
+	//		List<Map<String, Object>> result = dao.findAll(new QueryParams(request.getParameterMap()));
+	//
+	//		return outputListBeanAsJson(result);
+	//	}
 }

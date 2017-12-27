@@ -1,9 +1,12 @@
 @import 'common_component.less';
+@import 'common_style.less';
 @import 'UI/htmlEditor.less';
-
 @header-height: 5%;
 @mainColor: #EBEBEB;
 @hightColor: #417BB5;
+body {
+	font-size: 14px;
+}
 
 body.admin-shell {
 	width: 100%;
@@ -25,14 +28,14 @@ body.admin-shell {
 		height: @header-height;
 		border-top: 1px solid white;
 		border-bottom: 1px solid gray;
-		.gradient(top, #78B1ED , @hightColor);
+		.gradient (top , #78B1ED , @hightColor);
 		display: table;
 		h1 , menu {
 			display: table-cell;
 			vertical-align: middle;
 			color: white;
 		}
-	
+
 		h1 {
 			text-shadow: 0px 1px 0px black;
 			font-weight: normal;
@@ -40,7 +43,7 @@ body.admin-shell {
 			text-indent: 2em;
 			letter-spacing: 3px;
 		}
-	
+
 		menu {
 			margin: 0;
 			font-size: .9rem;
@@ -53,7 +56,6 @@ body.admin-shell {
 	}
 }
 
-
 @sidebarWidth: 15%;
 .side {
 	.widthFx;
@@ -61,7 +63,7 @@ body.admin-shell {
 	height: 100-@header-height;
 	float: left;
 	position: relative;
-	.gradient(left, #FAFAFA , @mainColor);
+	.gradient (left , #FAFAFA , @mainColor);
 	.rightTop_title {
 		overflow: hidden;
 		width: 80%;
@@ -101,7 +103,7 @@ body.admin-shell {
 				border-top: 0;
 				border-bottom: 1px solid lightgray;
 				h3 {
-					.gradient(right, transparent , darken(@mainColor, 10));
+					.gradient (right , transparent , darken(@mainColor, 10));
 				}
 			}
 
@@ -147,6 +149,62 @@ body.admin-shell {
 		width: 100%;
 		border: 0;
 		height: 100%;
+	}
+}
+
+header.top {
+	padding: 2%;
+	h4 {
+	}
+
+	.right {
+		float: right;
+	}
+}
+
+.filterPanel {
+	width: 90%;
+	margin: 0 auto;
+	padding: 1%;
+	text-align: right;
+	form {
+		display: inline;
+	}
+}
+
+.pager {
+	text-align: center;
+	padding: 2%;
+}
+
+.admin-entry-form {
+	form {
+		margin: 0 2%;
+		border: 1px solid #e3e3e3;
+		overflow: hidden;
+		& > div {
+			padding: 1% 2%;
+			border-bottom: 1px solid #e3e3e3;
+		}
+
+		& > div:nth-child(even) {
+			border-top: 1px solid white;
+			background: #f5f5f5;
+		}
+
+		div.label {
+			float: left;
+		}
+
+		textarea {
+			width: 90%;
+			min-height: 90px;
+		}
+
+		.htmlEditor {
+			width: 90%;
+			margin: 0 auto;
+		}
 	}
 }
 

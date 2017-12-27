@@ -42,7 +42,11 @@ public class HrServiceImpl implements HrService {
 		Map<Integer, BaseModel> catalogMap = ModelAndView.list_bean2map_id_as_key(getHrCatalog());
 		for (Map<String, Object> map : result.getRows()) {
 			BaseModel catalogBean = catalogMap.get((int) map.get("catalog"));
-			map.put("catalogName", catalogBean.getName());
+			if (catalogBean == null) {
+				System.out.println("找不到对应的分类，实体分类id 为：" + map.get("catalog"));
+			} else {
+				map.put("catalogName", catalogBean.getName());
+			}
 		}
 		return result;
 	}

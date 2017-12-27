@@ -1,26 +1,21 @@
-<%@page pageEncoding="UTF-8"%>	
+<%@page pageEncoding="UTF-8" import="com.ajaxjs.web.Constant"%>
 <%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
-<%@taglib prefix="commonUI"  tagdir="/WEB-INF/tags/common/UI"%>
+<%@taglib prefix="adminUI" tagdir="/WEB-INF/tags/common/admin"%>
 <%@taglib prefix="c" uri="/ajaxjs"%>
-<!DOCTYPE html>
-<html>
-	<commonTag:head lessFile="/asset/less/admin.less" title="${uiName}列表" />
-<body class="editUI-list">
-	<commonTag:adminUI type="header" pageTitle="${uiName}列表">
-		<a href="../create.do">新建${uiName}</a> | 
-	</commonTag:adminUI>
-	<h2>${uiName}列表</h2>
-	<br />
-	<table class="niceTable" align="center" width="90%">
-		<colgroup>  
-            <col />     
-            <col />     
-            <col />     
-            <col />     
-            <col />     
-            <col />     
-            <col style="text-align:center;" align="center" />     
-     	</colgroup> 
+<%
+	request.setAttribute("commonIcon", Constant.commonIcon);
+%>
+<adminUI:list>
+	<table class="ajaxjs-niceTable" align="center" width="90%">
+		<colgroup>
+			<col />
+			<col />
+			<col />
+			<col />
+			<col />
+			<col />
+			<col style="text-align: center;" align="center" />
+		</colgroup>
 		<thead>
 			<tr>
 				<th>#</th>
@@ -34,93 +29,32 @@
 		</thead>
 		<tfoot>
 			<tr>
-				<td colspan="8">
-					<div class="filter">
-						<label>
-					<form action="?" method="GET">
-						<input type="hidden" name="searchField" value="content" />
-						<input type="text" name="searchValue" placeholder="请输入正文之关键字" style="float: inherit;" />
-						<button style="margin-top:0;" class="my-btn">搜索</button>
-					</form>
-						</label>
-						
-						<label>分类：
-							<script>
-								function onCatalogSelected(el){
-									var catalogId = el.selectedOptions[0].value;
-									if(catalogId == '全部分类')
-										location.assign(location.origin + location.pathname); // todo
-									else
-										location.assign('?filterField=catalog&filterValue=' + catalogId);
-								}
-							</script>
-							<select onchange="onCatalogSelected(this);" class="select_1" style="width:100px;">
-								<option>全部分类</option>
-					<c:foreach items="${catalogs}" var="current">
-						<c:choose>
-							<c:when test="${param.filterValue == current.id}">
-								<option value="${current.id}" selected>${current.name}</option>
-							</c:when>
-							<c:otherwise>
-								<option value="${current.id}">${current.name}</option>
-							</c:otherwise>
-						</c:choose>
-					</c:foreach>
-							</select>
-						</label>
-					</div>
-					<div class="pager">
-					<c:if test="${not empty PageResult}">
-						<commonTag:page type="page" pageInfo="${PageResult}" />
-					</c:if>
-					</div>
-				</td>
+				<td colspan="8"></td>
 			</tr>
 		</tfoot>
-	 	<tbody>
-		<c:foreach var="current" items="${PageResult.rows}">
-			<tr> 
-				<td>${current.id}</td>
-				<td title="${current.intro}">${current.name}</td>
-	
-				<td><c:dateFormatter date="${current.createDate}" format="yyyy-MM-dd" /></td>
-				<td><c:dateFormatter date="${current.updateDate}" format="yyyy-MM-dd" /></td>
-				<td>${catalogsMap[current.catalog]['name']}</td>
-				<td>
-<%-- 				${current.status == 1 ? '已上线(<a href="javascript:entity.setStatus(' + current.id + ', 0);void(0);">下线</a>)' : '已下线'}${current.catalog} --%>
-				</td>
-				<td>
-					<commonTag:adminUI type="adminList_btns" current="${current}"  viewLink="../../../${tableName}" />
-				</td>
-			</tr>
-		</c:foreach>
- 
-	 	</tbody>
+		<tbody>
+			<c:foreach var="current" items="${PageResult.rows}">
+				<tr>
+					<td>${current.id}</td>
+					<td title="${current.intro}">${current.name}</td>
+
+					<td>
+						<c:dateFormatter value="${current.createDate}" format="yyyy-MM-dd" />
+					</td>
+					<td>
+						 <c:dateFormatter value="${current.updateDate}" format="yyyy-MM-dd" /> 
+					</td>
+					<td>${catalogsMap[current.catalog]['name']}</td>
+					<td>
+						<%-- 				${current.status == 1 ? '已上线(<a href="javascript:entity.setStatus(' + current.id + ', 0);void(0);">下线</a>)' : '已下线'}${current.catalog} --%>
+					</td>
+					<td>
+						<a href="../../../${tableName}/${current.id}/info.do" target="_blank">浏览</a>
+						<a href="../${current.id}/edit.do"><img src="${pageContext.request.contextPath}/${commonIcon}update.gif" style="vertical-align: sub;" />编辑</a>
+						<a href="javascript:entity.del('${current.id}', '${current.name}');"><img src="${pageContext.request.contextPath}/${commonIcon}delete.gif" style="vertical-align: sub;" />删除</a>
+					</td>
+				</tr>
+			</c:foreach>
+		</tbody>
 	</table>
-	
-	<script>
-		entity = {
-			del : function(id, title){
-				if(confirm('请确定删除记录：\n' + title + ' ？')){
-					xhr.dele('../' + id + '/delete.do', {}, function(json){
-						if(json.isOk){
-							alert('删除成功！');
-							location.reload();
-						}
-					});
-				}
-			},
-			setStatus : function(id, status) {
-				xhr.post('../setStatus/' + id + '/action.do', {
-					status : status
-				}, function(json){
-					if(json.isOk){
-						
-					}
-				});
-			}
-		
-		};
-	</script>
-</body>
-</html>
+</adminUI:list>

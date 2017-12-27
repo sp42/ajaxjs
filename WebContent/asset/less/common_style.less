@@ -310,6 +310,7 @@
 // -webkit-text-stroke: 1px rgba(255,255,255,0.5);
 .ajaxjs-btn,
 .ajaxjs-btn-1 {
+	height: 26px;
     font-size: .9rem;
     line-height:10px; // for input[submit]
     padding: .4em 2.3em;
@@ -325,6 +326,9 @@
     background-repeat: repeat-x;
     transition: background-image 0.5s linear 1s;
     .gradient(top, rgba(255, 255, 255, 1) 0%, rgba(239, 239, 239, 1) 60%, rgba(225, 223, 226, 1) 100%);
+    img{
+    	vertical-align: middle;
+    }
     &:hover {
         color: black;
         border-color: lighten(black, 65%);
@@ -350,7 +354,7 @@
 }
 
 .ajaxjs-inputField {
-    height: 28px;
+    height: 26px;
     padding: 0px 4px;
     box-shadow: 1px 2px 3px lighten(#999, 30) inset;
     border-radius: 3px;
@@ -368,8 +372,7 @@
 }
 
 .ajaxjs-select {
-    min-width: 200px;
-    min-height: 28px;
+    height: 26px;
     padding: 1px 4px;
     box-shadow: 1px 2px 3px #e5e5e5 inset;
     border-radius: 2px;

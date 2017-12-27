@@ -192,7 +192,7 @@
 <%-- 分页 --%>
 <%@attribute name="pageInfo" type="com.ajaxjs.jdbc.PageResult" required="false" description="分页对象"%>
 <jsp:useBean id="PageUtil" class="com.ajaxjs.mvc.view.PageTag" />
-<c:if test="${type == 'page'}">
+<c:if test="${type == 'page' && not empty pageInfo}">
 	<section class="pageInfo">
 	<c:choose>
 	<c:when test="${pageInfo.totalCount > 0}">
@@ -211,7 +211,7 @@
 		 	<form style="display:inline-block;vertical-align: bottom;" method="GET">
 			 	每页记录数：
 			 	<input size="4" title="输入一个数字确定每页记录数" type="text" name="limit" value="${empty param.limit ? pageInfo.pageSize : param.limit}" 
-			 	style="text-align:center;width:40px;height:22px;float: none;" />
+			 	style="text-align:center;width:40px;height:22px;float: none;" class="ajaxjs-inputField" />
 				<!-- 其他参数 -->
 				<c:foreach items="${PageUtil.getParams_without_asMap('limit', pageContext.request.queryString)}" var="current">
 					<input type="hidden" name="${current.key}" value="${current.value}" />
@@ -220,7 +220,7 @@
 		 	<%--分页数过多影响 HTML 加载，这里判断下 --%>
 		 	<c:if test="${pageInfo.totalPage < 1000}">
 		 	跳转：
-		 	<select onchange="jumpPage(this);" style="text-align:center;width:40px;height:22px;" class="select_1">
+		 	<select onchange="jumpPage(this);" style="text-align:center;width:40px;height:22px;" class="ajaxjs-select">
 			 	<c:foreach items="${PageUtil.jumpPage(pageInfo.totalPage)}" var="i">
 			 		<option value="${currentIndex * pageInfo.pageSize}" 
 			 		${(currentIndex + 1)==pageInfo.currentPage ? ' selected' : ''}>${currentIndex + 1}</option>

@@ -18,6 +18,7 @@ package com.ajaxjs.web;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -56,10 +57,11 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 
 	/**
 	 * 初始化数据库连接
+	 * 
+	 * @param connStr
 	 */
 	public static void initDb(String connStr) {
-		if (connStr == null)
-			connStr = Version.isDebug ? "jdbc/sqlite" : "jdbc/sqlite_deploy";
+		connStr = Version.isDebug ? "jdbc/sqlite" : "jdbc/sqlite_deploy";
 
 		try {
 			if (JdbcConnection.getConnection() == null || JdbcConnection.getConnection().isClosed()) {
@@ -72,8 +74,12 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 		}
 	}
 
+	/**
+	 * 初始化数据库连接
+	 */
 	public static void initDb() {
-		initDb("jdbc/sqlite_mac");
+		//		connStr = Version.isDebug ? "jdbc/sqlite" : "jdbc/sqlite_deploy";
+		initDb(Version.isMac ? "jdbc/sqlite_mac" : "jdbc/sqlite");
 	}
 
 	/**
@@ -81,11 +87,14 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	 */
 	public static void closeDb() {
 		Connection conn = JdbcConnection.getConnection();
+
 		try {
-			if(conn != null && !conn.isClosed())conn.close();
+			if (conn != null && !conn.isClosed())
+				conn.close();
 		} catch (SQLException e) {
 			LOGGER.warning(e);
 		}
+
 		JdbcConnection.clean();
 	}
 
@@ -103,6 +112,7 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	public PageResult<T> pageList(int start, int limit, ModelAndView model) {
 		LOGGER.info("获取列表 GET list:{0}/{1}", start, limit);
 		initDb();
+		prepareData(model);
 
 		IService<T, ID> service = getService(); // 避免 service 为单例
 
@@ -117,8 +127,6 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 		} finally {
 			closeDb();
 		}
-
-		prepareData(model);
 
 		if (model.get(errMsg) != null)
 			LOGGER.warning("严重异常，请检查 service.findPagedList() 是否给出实现");
@@ -180,6 +188,7 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	public String info(ID id, ModelAndView model) {
 		LOGGER.info("读取单个记录或者编辑某个记录：id 是 {0}", id);
 		initDb();
+		prepareData(model);
 
 		IService<T, ID> service = getService(); // 避免 service 为单例
 
@@ -191,14 +200,15 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 			model.put(errMsg, e);
 		}
 
-		// model.put("neighbor", EntityUtil.getNeighbor(service.getName(),
-		// id));// 相邻记录
-
-		prepareData(model);
-		
 		return String.format(jsp_info, service.getTableName());
 	}
 
+	/**
+	 * 获取全部列表数据
+	 * 
+	 * @param model
+	 *            Model 模型
+	 */
 	public void list_all(ModelAndView model) {
 		LOGGER.info("----获取全部列表----");
 		pageList(0, 999, model);
@@ -237,6 +247,12 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	// return "common/entity/showDocument";
 	// }
 
+	/**
+	 * 
+	 * @param model
+	 *            页面 Model 模型
+	 * @return
+	 */
 	public String createUI(ModelAndView model) {
 		LOGGER.info("新建记录UI");
 
@@ -247,9 +263,16 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 									 * 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate =
 									 * true 标识为创建，以便与 update 区分开来。
 									 */
-		return String.format(jsp_adminInfo, service.getName());
+		return String.format(jsp_adminInfo, service.getTableName());
 	}
 
+	/**
+	 * 
+	 * @param entity
+	 * @param model
+	 *            页面 Model 模型
+	 * @return
+	 */
 	public String create(T entity, ModelAndView model) {
 		LOGGER.info("修改 name:{0}，数据库将执行 INSERT 操作", entity);
 
@@ -269,12 +292,18 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 		return cud;
 	}
 
-
+	/**
+	 * 
+	 * @param entity
+	 * @param model
+	 *            页面 Model 模型
+	 * @return
+	 */
 	public String update(/* @Valid */T entity, ModelAndView model) {
 		LOGGER.info("修改 name:{0}，数据库将执行 UPDATE 操作", entity);
 		model.put("isUpdate", true);
 		initDb();
-		
+
 		try {
 			getService().update(entity);
 		} catch (ServiceException e) {
@@ -286,14 +315,20 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 		return cud;
 	}
 
+	/**
+	 * 
+	 * @param entry
+	 * @param model
+	 *            页面 Model 模型
+	 * @return
+	 */
 	public String delete(T entry, ModelAndView model) {
 		LOGGER.info("删除 id:{0}，数据库将执行 DELETE 操作", entry);
 		initDb();
-		
+
 		try {
-			if (!getService().delete(entry)) {
+			if (!getService().delete(entry))
 				throw new ServiceException("删除失败！");
-			}
 		} catch (ServiceException e) {
 			model.put(errMsg, e);
 		} finally {
@@ -303,11 +338,18 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 		return cud;
 	}
 
+	/**
+	 * 
+	 * @param id
+	 * @param model
+	 *            页面 Model 模型
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public String delete(ID id, ModelAndView model) {
 		T obj = null;
 		if (obj instanceof Map) {
-			Map<String, Object> map = new java.util.HashMap<>();
+			Map<String, Object> map = new HashMap<>();
 			map.put("id", id);
 			obj = (T) map;
 		} else {
@@ -317,6 +359,11 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 		return delete(obj, model);
 	}
 
+	/**
+	 * 
+	 * @param result
+	 * @return JSON 结果
+	 */
 	public static String outputListMapAsJson(List<Map<String, Object>> result) {
 		if (result != null && result.size() > 0)
 			return "json::{\"result\":" + JsonHelper.stringifyListMap(result) + "}";
@@ -324,6 +371,12 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 			return "json::{\"result\": null}";
 	}
 
+	/**
+	 * 
+	 * @param result
+	 *            BaseMolde 集合
+	 * @return JSON 结果
+	 */
 	public static String outputListBeanAsJson(List<? extends BaseModel> result) {
 		if (result != null && result.size() > 0) {
 			String[] str = new String[result.size()];
@@ -354,5 +407,4 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	public void setService(IService<T, ID> service) {
 		this.service = service;
 	}
-
 }
