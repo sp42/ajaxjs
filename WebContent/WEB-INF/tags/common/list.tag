@@ -6,12 +6,15 @@
 	description="指定哪种 HTML 片断"%>
 <%@attribute name="classList" type="String" required="false"
 	description="样式类"%>
-
-<%-- 有缩略图的 --%>
+<%@attribute name="urlPerfix" type="String" required="false"
+	description="URL地址前缀"%>
+<%@attribute name="list" type="java.util.List"  required="false"
+	description="列表内容"%>
+<%-- 单行 --%>
 <c:if test="${type == 'list-simple'}">
 	<ul class="${classList}">
-		<c:foreach var="current" items="${PageResult.rows}">
-			<li><a href="${current.id}">
+		<c:foreach var="current" items="${list}">
+			<li><a href="${urlPerfix}${current.id}/info.do">
 					<h4>${current.name}</h4>
 			</a></li>
 		</c:foreach>
@@ -21,6 +24,7 @@
 <%-- 有缩略图的 --%>
 <c:if test="${type == 'list-thumb'}">
 	<%-- 如果有异常则显示之 --%>
+	${(not empty errMsg ) ? (errMsg.message) : ''}
 	${(not empty errMsg.cause ) ? (errMsg.cause.message) : ''}
 	
 	<ul class="${classList}">

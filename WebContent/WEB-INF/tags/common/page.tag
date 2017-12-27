@@ -145,11 +145,11 @@
 <%@attribute name="listPath" type="String" required="false" description="返回上一层，列表目录。既要适合在列表用，又要适合在详情页用"%>
 	<ul>
 		<li>
-			<a href="?">全部分类</a>
+			全部分类
 		</li>
 	<c:foreach items="${catalogMenu}" var="catalog">
-		<li ${param.catalogId == catalog.id ? 'class="selected"' : ''}>
-			<a href="${empty listPath ? '' : '../'.concat(listPath)}?catalogId=${catalog.id}">
+		<li ${param.filterValue == catalog.id ? 'class="selected"' : ''}>
+			<a href="${empty listPath ? '' : '../'.concat(listPath)}?filterField=catalog&filterValue=${catalog.id}">
 				${catalog.name}
 			</a>
 		</li>
