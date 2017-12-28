@@ -61,8 +61,6 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	 * @param connStr
 	 */
 	public static void initDb(String connStr) {
-		connStr = Version.isDebug ? "jdbc/sqlite" : "jdbc/sqlite_deploy";
-
 		try {
 			if (JdbcConnection.getConnection() == null || JdbcConnection.getConnection().isClosed()) {
 				Connection conn = JdbcConnection.getConnection(JdbcConnection.getDataSource(connStr));
