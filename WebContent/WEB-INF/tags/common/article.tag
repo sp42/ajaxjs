@@ -1,22 +1,9 @@
 <%@tag pageEncoding="UTF-8" description="页面小功能" import="java.util.HashMap"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
-<%@attribute name="type" type="String" required="true" description="哪一个模块"%>  
+<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
+<%@attribute name="type" type="String" required="false" description="哪一个模块"%>  
 <%
-	if("search".equals(type)) { // 搜索
-%>
-    <!-- 自定义 Baidu 搜索 -->
-    <form id="globalSearch" class="globalSearch" method="GET" action="http://www.baidu.com/baidu" onsubmit="//return g(this);">
-        <input type="text" name="word" placeholder="请输入搜索之关键字" />
-        <input name="tn" value="bds" type="hidden" />
-        <input name="cl" value="3" type="hidden" />
-        <input name="ct" value="2097152" type="hidden" />
-        <input name="si" value="gz88.cc" type="hidden" />
-    <div class="searchBtn" onclick="document.getElementById('globalSearch').submit();"></div>
-    </form>
-    <!-- // 自定义 Baidu 搜索 -->
- 
-<%
- 	}else if("share".equals(type)) {
+ 	if("share".equals(type)) {
  		String title = "";
  		int serverPort = request.getServerPort();
  		String currentPage_url = request.getScheme() + "://" + request.getServerName();
@@ -150,8 +137,7 @@
 	}else if("toggleBtn".equals(type)) {
 %>
 		<div class="closeBtn"></div>
-		<script type="text/javascript">
-		
+		<script>
 			/**
 			 * 初始化展开闭合器
 			 * @return {[type]} [description]
@@ -184,6 +170,22 @@
 
 <%
 	} else {
-		throw new RuntimeException("不支持类型：" + type);
+%>
+
+	<article> 
+		<h3>${info.name}</h3>
+		<h4>${info.createDate}</h4>
+		${info.content}
+	</article> 
+	
+	<div style="padding: 20px 0;" align="right">
+		<!-- 分享功能 -->
+		<commonTag:article type="share" />
+		<!-- 调整页面字号 -->
+		<commonTag:article type="adjustFontSize" />
+		<!-- 页面功能 -->
+		<commonTag:article type="function" />
+	</div>
+<%
 	}
 %>

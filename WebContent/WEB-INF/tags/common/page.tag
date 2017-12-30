@@ -20,7 +20,7 @@
 <%@taglib prefix="commonTags" tagdir="/WEB-INF/tags/common"%>
 <header>
 	<div class="right">
-		<commonTags:widget type="search" />
+		<commonTags:page type="search" />
 	</div>
 	<nav>
 		<commonTags:page type="navMenu" />
@@ -153,4 +153,17 @@
 			<a href="?id=${neighbor.nextRecord.id}">下则记录：${neighbor.nextRecord.name}</a>
 		</div>
 	</c:if>
+</c:if>
+
+ <c:if test="${type == 'search'}">
+    <!-- 自定义 Baidu 搜索 -->
+    <form id="globalSearch" class="globalSearch" method="GET" action="http://www.baidu.com/baidu" onsubmit="//return g(this);">
+        <input type="text" name="word" placeholder="请输入搜索之关键字" />
+        <input name="tn" value="bds" type="hidden" />
+        <input name="cl" value="3" type="hidden" />
+        <input name="ct" value="2097152" type="hidden" />
+        <input name="si" value="gz88.cc" type="hidden" />
+    <div class="searchBtn" onclick="document.getElementById('globalSearch').submit();"></div>
+    </form>
+    <!-- // 自定义 Baidu 搜索 -->
 </c:if>

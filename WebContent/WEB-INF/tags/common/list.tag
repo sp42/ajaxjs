@@ -47,7 +47,7 @@
 		</c:foreach>
 	</ul>
 	
-	<commonTag:page type="page" pageInfo="${PageResult}"/>
+	<commonTag:pager pageInfo="${PageResult}"/>
 </c:if>
 
 <%-- 读取数据库的菜单 --%>
