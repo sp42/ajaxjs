@@ -9,5 +9,5 @@ import com.ajaxjs.simpleApp.model.Catalog;
 public interface NewsService extends IService<Map<String, Object>, Long> {
 
 	List<Map<String, Object>> getTop5();
-	public List<Catalog> getNewsCatalog();
+	public List<Catalog> getCatalog();
 }

@@ -6,9 +6,13 @@ import java.util.Map;
 import com.ajaxjs.framework.dao.DaoHandler;
 import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.service.ServiceException;
+import com.ajaxjs.framework.service.aop.CacheService;
+import com.ajaxjs.framework.service.aop.CommonService;
 import com.ajaxjs.jdbc.PageResult;
 import com.ajaxjs.simpleApp.dao.ProductDao;
+import com.ajaxjs.util.ioc.Bean;
 
+@Bean(value = "ProductService", aop = { CommonService.class, CacheService.class })
 public class ProductServiceImpl implements ProductService {
 	ProductDao dao = new DaoHandler<ProductDao>().bind(ProductDao.class);
 

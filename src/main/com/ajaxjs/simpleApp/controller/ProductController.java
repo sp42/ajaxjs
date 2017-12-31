@@ -12,6 +12,7 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.simpleApp.service.CatalogService;
 import com.ajaxjs.simpleApp.service.CatalogServiceImpl;
+import com.ajaxjs.simpleApp.service.HrService;
 import com.ajaxjs.simpleApp.service.ProductService;
 import com.ajaxjs.util.ioc.Bean;
 import com.ajaxjs.util.ioc.Resource;
@@ -22,14 +23,19 @@ import com.ajaxjs.web.CommonEntryReadOnlyController;
 @Path("/product")
 @Bean("ProductController")
 public class ProductController extends CommonController<Map<String, Object>, Long, ProductService> implements CommonEntryReadOnlyController {
-	CatalogService catalogService = new CatalogServiceImpl();
-
-	public ProductController() {
-		setService(service);
-	}
-	
 	@Resource("ProductService")
 	private ProductService service;
+
+	@Resource("CatalogService")
+	private CatalogService catalogService;
+
+	public CatalogService getCatalogService() {
+		return catalogService;
+	}
+
+	public void setCatalogService(CatalogService catalogService) {
+		this.catalogService = catalogService;
+	}
 
 	@GET
 	@Override

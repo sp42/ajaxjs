@@ -26,11 +26,11 @@
 		</article>
 		<div style="padding: 20px 0;" align="right">
 			<!-- 分享功能 -->
-			<commonTag:widget type="share" />
+			<commonTag:article type="share" />
 			<!-- 调整页面字号 -->
-			<commonTag:widget type="adjustFontSize" />
+			<commonTag:article type="adjustFontSize" />
 			<!-- 页面功能 -->
-			<commonTag:widget type="function" />
+			<commonTag:article type="function" />
 		</div>
 	</jsp:attribute>
 </tags:content>

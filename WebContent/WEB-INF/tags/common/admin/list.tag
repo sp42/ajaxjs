@@ -23,7 +23,7 @@
 		分类： 
 		<select onchange="onCatalogSelected(this);" class="ajaxjs-select" style="width: 100px;">
 			<option>全部分类</option>
-			<c:foreach items="${catalogs}" var="current">
+			<c:foreach items="${catalogMenu}" var="current">
 				<c:choose>
 					<c:when test="${param.filterValue == current.id}">
 						<option value="${current.id}" selected>${current.name}</option>
@@ -40,7 +40,7 @@
 				if (catalogId == '全部分类')
 					location.assign(location.origin + location.pathname); // todo
 				else
-					location.assign('?filterField=catalog&filterValue=' + catalogId);
+					location.assign('?filterField=catalog&filterValue=' + encodeURIComponent(catalogId));
 			}
 		</script> 
 	</div>
@@ -48,7 +48,7 @@
 	<jsp:doBody />
 
 	<div class="pager">
-		<commonTag:page type="page" pageInfo="${PageResult}" />
+		<commonTag:pager pageInfo="${PageResult}" />
 	</div>
 	
 	<script>

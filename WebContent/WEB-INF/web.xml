@@ -43,6 +43,11 @@
 		<filter-name>MVC_GlobalFilter</filter-name>
 		<filter-class>com.ajaxjs.mvc.controller.MvcDispatcher</filter-class>
 		<init-param>
+			<description>依赖注射</description>
+			<param-name>doIoc</param-name>
+			<param-value>com.ajaxjs.simpleApp</param-value>
+		</init-param>
+		<init-param>
 			<description>指定搜索的包名，多个可以用 逗号 分开</description>
 			<param-name>controller</param-name>
 			<param-value>com.ajaxjs.simpleApp, com.ajaxjs.web.simple_admin, com.ajaxjs.web.widget</param-value>

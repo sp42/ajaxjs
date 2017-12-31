@@ -46,5 +46,5 @@ public interface NewsDao extends IDao<Map<String, Object>, Long> {
 	public List<Map<String, Object>> getTop5();
 	
 	@Select("SELECT * FROM " + CatalogDao.tableName + " WHERE parentId = " + Constant.NewsCatalogId)
-	public List<Catalog> getHrCatalog();
+	public List<Catalog> getCatalog();
 }

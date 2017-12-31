@@ -1,6 +1,5 @@
 package com.ajaxjs.simpleApp.controller;
 
-
 import java.util.Map;
 
 import javax.mvc.annotation.Controller;
@@ -14,12 +13,14 @@ import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.simpleApp.service.NewsService;
+import com.ajaxjs.util.ioc.Bean;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.web.CommonController;
 import com.ajaxjs.web.CommonEntryAdminController;
 
 @Controller
 @Path("/admin/news")
+@Bean("NewsAdminController")
 public class NewsAdminController extends CommonController<Map<String, Object>, Long, NewsService> implements CommonEntryAdminController<Map<String, Object>> {
 	@Resource("NewsService")
 	private NewsService service;
@@ -29,9 +30,9 @@ public class NewsAdminController extends CommonController<Map<String, Object>, L
 	@Override
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
 		initDb();
-		model.put("catalogMenu", service.getNewsCatalog());
+		model.put("catalogMenu", getService().getCatalog());
 		super.pageList(start, limit, model);
-		return String.format(jsp_adminList, service.getTableName());
+		return String.format(jsp_adminList, getService().getTableName());
 	}
 
 	@GET
@@ -78,8 +79,8 @@ public class NewsAdminController extends CommonController<Map<String, Object>, L
 	public void prepareData(ModelAndView model) {
 		super.prepareData(model);
 		initDb();
-		model.put("catalogMenu", service.getNewsCatalog());
-		
+		model.put("catalogMenu", getService().getCatalog());
+
 	}
 
 	//	@GET

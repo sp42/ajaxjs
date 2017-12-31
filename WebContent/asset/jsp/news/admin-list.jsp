@@ -44,7 +44,7 @@
 					<td>
 						 <c:dateFormatter value="${current.updateDate}" format="yyyy-MM-dd" /> 
 					</td>
-					<td>${catalogsMap[current.catalog]['name']}</td>
+					<td>${current.catalogName}</td>
 					<td>
 						<%-- 				${current.status == 1 ? '已上线(<a href="javascript:entity.setStatus(' + current.id + ', 0);void(0);">下线</a>)' : '已下线'}${current.catalog} --%>
 					</td>

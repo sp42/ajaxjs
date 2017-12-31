@@ -6,10 +6,14 @@ import java.util.Map;
 import com.ajaxjs.framework.dao.DaoHandler;
 import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.service.ServiceException;
+import com.ajaxjs.framework.service.aop.CacheService;
+import com.ajaxjs.framework.service.aop.CommonService;
 import com.ajaxjs.jdbc.PageResult;
 import com.ajaxjs.simpleApp.dao.NewsDao;
 import com.ajaxjs.simpleApp.model.Catalog;
+import com.ajaxjs.util.ioc.Bean;
 
+@Bean(value = "NewsService", aop = { CommonService.class, CacheService.class })
 public class NewsServiceImpl implements NewsService {
 	NewsDao dao = new DaoHandler<NewsDao>().bind(NewsDao.class);
 
@@ -61,9 +65,9 @@ public class NewsServiceImpl implements NewsService {
 	private List<Catalog> catalog;
 
 	@Override
-	public List<Catalog> getNewsCatalog() {
+	public List<Catalog> getCatalog() {
 		if (catalog == null)
-			catalog = dao.getHrCatalog();
+			catalog = dao.getCatalog();
 		return catalog;
 	}
 

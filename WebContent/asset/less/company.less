@@ -71,7 +71,7 @@ h2 {
 			li {
 				padding: 5% 0;
 				border-bottom: 1px solid lightgray;
-				letter-spacing:2px;
+				letter-spacing: 2px;
 				&.selected a {
 					color: black;
 					font-size: 1.1rem;
@@ -141,33 +141,32 @@ h2.title {
 	.right {
 		.box {
 			border: 1px solid lightgray;
-			margin-bottom:2%;
-			
+			margin-bottom: 2%;
 			header {
 				background-color: lightgray;
 				padding: 1%;
-				h4{
-					font-size:1.2rem;
-					letter-spacing:2px;
+				h4 {
+					font-size: 1.2rem;
+					letter-spacing: 2px;
 				}
-				h5{
-					float:right;
+
+				h5 {
+					float: right;
 				}
 			}
 
-			&>div {
+			& > div {
 				padding: 1%;
 			}
 		}
-		
 	}
 }
 
-.productList{
-	.body .right{
-		ul{
-			.ajaxjs-ul-list(4);
-			li{
+.productList {
+	.body .right {
+		ul {
+			.ajaxjs-ul-list (4);
+			li {
 				height: 300px;
 			}
 		}
@@ -213,6 +212,42 @@ footer {
 		box-sizing: border-box;
 		padding: 2%;
 		margin-bottom: 3%;
+	}
+}
+
+// 联系我们
+.contact {
+	#map {
+		height: 320px;
+		width: 100%;
+		margin-bottom: 5%;
+	}
+
+	fieldset {
+		legend {
+			margin-left: 10%;
+			font-size: 1.1rem;
+			letter-spacing: 5px;
+		}
+
+		margin: 3% 0;
+		border: 0;
+		border-top: 1px solid lightgray;
+	}
+
+	form.feedback {
+		.ajaxjs-form;
+		dl dt {
+			width: 10%;
+		}
+
+		input {
+			.ajaxjs-inputField;
+		}
+
+		button {
+			.ajaxjs-btn;
+		}
 	}
 }
 

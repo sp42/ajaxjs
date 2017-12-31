@@ -39,7 +39,7 @@
 					<p>${current.intro}
 						<a href="${current.id}/info.do">阅读更多……</a>
 					</p>
-					<div class="small">作者：Admin|日期：${current.createDate}|阅读次数：10
+					<div class="small">作者：Admin|分类：${current.catalogName} |日期：${current.createDate}|阅读次数：10
 					</div>
 				</div>
 

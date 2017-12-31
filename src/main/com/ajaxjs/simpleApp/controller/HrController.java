@@ -9,8 +9,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.simpleApp.service.CatalogService;
 import com.ajaxjs.simpleApp.service.HrService;
 import com.ajaxjs.util.ioc.Bean;
 import com.ajaxjs.util.ioc.Resource;
@@ -21,20 +19,8 @@ import com.ajaxjs.web.CommonEntryReadOnlyController;
 @Path("/hr")
 @Bean("HrController")
 public class HrController extends CommonController<Map<String, Object>, Long, HrService> implements CommonEntryReadOnlyController {
-
 	@Resource("HrService")
 	private HrService service;
-
-	@Resource("CatalogService")
-	private CatalogService catalogService;
-
-	public CatalogService getCatalogService() {
-		return catalogService;
-	}
-
-	public void setCatalogService(CatalogService catalogService) {
-		this.catalogService = catalogService;
-	}
 
 	@GET
 	@Override
@@ -49,8 +35,6 @@ public class HrController extends CommonController<Map<String, Object>, Long, Hr
 	@Override
 	@Path("{id}")
 	public String info(@PathParam("id") Long id, ModelAndView model) {
-		initDb();
-		model.put("catalogMenu", catalogService.findAll(MvcRequest.factory()));
-		return super.info(id, model);
+		return show405();
 	}
 }

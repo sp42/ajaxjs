@@ -119,7 +119,6 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 			pageResult = service.findPagedList(getParam(start, limit));
 			model.put("PageResult", pageResult);
 		} catch (Exception e) {
-			e.printStackTrace();
 			LOGGER.warning(e);
 			model.put(errMsg, e);
 		} finally {

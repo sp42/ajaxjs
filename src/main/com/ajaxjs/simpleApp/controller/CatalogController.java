@@ -30,10 +30,6 @@ import com.ajaxjs.web.CommonEntryAdminController;
 public class CatalogController extends CommonController<Catalog, Long, CatalogService> implements CommonEntryAdminController<Catalog> {
 	CatalogService service = new CatalogServiceImpl();
 
-	public CatalogController() {
-		setService(service);
-	}
-
 	@GET
 	@Override
 	public String createUI(ModelAndView model) {

@@ -7,9 +7,9 @@
  		String title = "";
  		int serverPort = request.getServerPort();
  		String currentPage_url = request.getScheme() + "://" + request.getServerName();
- 		if (serverPort != 80) {
+ 		if (serverPort != 80) 
  			currentPage_url += ":" + serverPort;
- 		}
+ 		
  		currentPage_url += request.getRequestURI() + "?" + request.getQueryString();
  %>
 		<div class="share" style="margin-top:10px;margin-right:5px;font-size: .8rem;">
@@ -166,8 +166,6 @@
 			}
 	
 		</script>
-		<jsp:doBody />
-
 <%
 	} else {
 %>
@@ -177,6 +175,17 @@
 		<h4>${info.createDate}</h4>
 		${info.content}
 	</article> 
+	<%-- 相邻的两笔记录 --%>
+	<c:if test="${not empty neighbor_pervInfo}">
+		<div>
+			<a href="../${neighbor_pervInfo.id}/info.do">上则记录：${neighbor_pervInfo.name}</a>
+		</div>
+	</c:if>
+	<c:if test="${not empty neighbor_nextInfo}">
+		<div>
+			<a href="../${neighbor_nextInfo.id}/info.do">下则记录：${neighbor_nextInfo.name}</a>
+		</div>
+	</c:if>
 	
 	<div style="padding: 20px 0;" align="right">
 		<!-- 分享功能 -->
@@ -186,6 +195,8 @@
 		<!-- 页面功能 -->
 		<commonTag:article type="function" />
 	</div>
+	
+
 <%
 	}
 %>

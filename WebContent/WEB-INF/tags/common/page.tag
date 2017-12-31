@@ -141,21 +141,7 @@
 <%}%>
 
 
-<%-- 相邻的两笔记录 --%>
-<c:if test="${type == 'neighborRecord'}">
-	<c:if test="${not empty neighbor.perRecord.id}">
-		<div>
-			<a href="?id=${neighbor.perRecord.id}">上则记录：${neighbor.perRecord.name}</a>
-		</div>
-	</c:if>
-	<c:if test="${not empty neighbor.nextRecord.id}">
-		<div>
-			<a href="?id=${neighbor.nextRecord.id}">下则记录：${neighbor.nextRecord.name}</a>
-		</div>
-	</c:if>
-</c:if>
-
- <c:if test="${type == 'search'}">
+<c:if test="${type == 'search'}">
     <!-- 自定义 Baidu 搜索 -->
     <form id="globalSearch" class="globalSearch" method="GET" action="http://www.baidu.com/baidu" onsubmit="//return g(this);">
         <input type="text" name="word" placeholder="请输入搜索之关键字" />

@@ -4,7 +4,7 @@
 <%@taglib uri="/ajaxjs" prefix="c"%>
 <tags:content banner="../images/news.jpg" bodyClass="hrList">
 	<jsp:attribute name="left">
-		<commonTag:page type="catalogMenu" />
+		<commonTag:list type="catalogMenu" />
 	</jsp:attribute>
 	<jsp:attribute name="body">
 		<ul class="${classList}">
@@ -23,6 +23,6 @@
 		</c:foreach>
 	</ul>
 	
-	<commonTag:page type="page" pageInfo="${PageResult}"/>
+	<commonTag:pager pageInfo="${PageResult}"/>
 	</jsp:attribute>
 </tags:content>
