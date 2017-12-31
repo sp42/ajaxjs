@@ -17,7 +17,7 @@ import com.ajaxjs.web.CommonController;
 
 @Controller
 @Path("/news")
-public class NewsController extends CommonController<News, Long> {
+public class NewsController extends CommonController<News, Long, NewsService> {
 
 	@Override
 	public NewsService getService() {

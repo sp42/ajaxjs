@@ -1,5 +1,6 @@
 package com.ajaxjs.simpleApp.controller;
 
+
 import java.util.Map;
 
 import javax.mvc.annotation.Controller;
@@ -13,18 +14,15 @@ import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.simpleApp.service.NewsService;
-import com.ajaxjs.simpleApp.service.NewsServiceImpl;
+import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.web.CommonController;
 import com.ajaxjs.web.CommonEntryAdminController;
 
 @Controller
 @Path("/admin/news")
-public class NewsAdminController extends CommonController<Map<String, Object>, Long> implements CommonEntryAdminController<Map<String, Object>> {
-	public NewsAdminController() {
-		setService(service);
-	}
-
-	private NewsService service = new NewsServiceImpl();
+public class NewsAdminController extends CommonController<Map<String, Object>, Long, NewsService> implements CommonEntryAdminController<Map<String, Object>> {
+	@Resource("NewsService")
+	private NewsService service;
 
 	@GET
 	@Path("list")

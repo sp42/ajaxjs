@@ -1,5 +1,6 @@
 package com.ajaxjs.simpleApp.controller;
 
+
 import java.util.Map;
 
 import javax.mvc.annotation.Controller;
@@ -10,19 +11,15 @@ import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.simpleApp.service.NewsService;
-import com.ajaxjs.simpleApp.service.NewsServiceImpl;
 import com.ajaxjs.web.CommonController;
 import com.ajaxjs.web.CommonEntryReadOnlyController;
 
 @Controller
 @Path("/news")
-public class NewsController extends CommonController<Map<String, Object>, Long>
-		implements CommonEntryReadOnlyController {
-	public NewsController() {
-		setService(service);
-	}
+public class NewsController extends CommonController<Map<String, Object>, Long, NewsService> implements CommonEntryReadOnlyController {
 
-	private NewsService service = new NewsServiceImpl();
+
+	private NewsService service;
 
 	@GET
 	@Override

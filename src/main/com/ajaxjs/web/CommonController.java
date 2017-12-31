@@ -47,13 +47,13 @@ import com.ajaxjs.util.logger.LogHelper;
  * @param <ID>
  *            ID 类型，可以是 INTEGER/LONG/String
  */
-public abstract class CommonController<T, ID extends Serializable> implements IController, Constant {
+public abstract class CommonController<T, ID extends Serializable, S extends IService<T, ID>> implements IController, Constant {
 	private static final LogHelper LOGGER = LogHelper.getLog(CommonController.class);
 
 	/**
 	 * 对应的业务类
 	 */
-	private IService<T, ID> service;
+	private S service;
 
 	/**
 	 * 初始化数据库连接
@@ -396,13 +396,15 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 		return String.format(json_not_ok, "405， Request method not supported 禁止操作");
 	}
 
-	public IService<T, ID> getService() {
+	public S getService() {
 		if (service == null)
 			throw new NullPointerException("没有业务层对象！");
 		return service;
 	}
 
-	public void setService(IService<T, ID> service) {
+	public void setService(S service) {
+		if (service == null)
+			LOGGER.warning("当前没有 service 对象传入！！！");
 		this.service = service;
 	}
 }

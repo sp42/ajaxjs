@@ -38,13 +38,16 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.mvc.ActionAndView;
 import com.ajaxjs.util.ClassScaner;
-import com.ajaxjs.util.reflect.Reflect;
+import com.ajaxjs.util.reflect.ExecuteMethod;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.collection.MapHelper;
+import com.ajaxjs.util.ioc.BeanContext;
+import com.ajaxjs.util.ioc.Scanner;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * MVC 分发器
+ * 
  * @author Sp42 frank@ajaxjs.com
  */
 public class MvcDispatcher implements Filter {
@@ -57,17 +60,18 @@ public class MvcDispatcher implements Filter {
 	public void init(FilterConfig fConfig) throws ServletException {
 		LOGGER.info("AJAXJS MVC 服务启动之中……");
 
-		/* 读取 web.xml 配置，如果有 controller 那一项就获取指定包里面的内容，
-		 * 看是否有属于 IController 接口的控制器，
-		 * 有就加入到 AnnotationUtils.controllers 集合中
-		 */
+		// 读取 web.xml 配置，如果有 controller 那一项就获取指定包里面的内容，看是否有属于 IController 接口的控制器，有就加入到 AnnotationUtils.controllers 集合中
 		Map<String, String> config = MvcRequest.parseInitParams(null, fConfig);
+
+		if (config != null && config.get("doIoc") != null) {
+			BeanContext.me().init(new Scanner().scanPackage(config.get("doIoc")));
+		}
 
 		if (config != null && config.get("controller") != null) {
 			String str = config.get("controller");
 
 			ClassScaner<IController> scaner = new ClassScaner<>(IController.class);// 定义一个扫描器，专门扫描 IController
-	 
+
 			for (String packageName : StringUtil.split(str)) {
 				for (Class<IController> clz : scaner.scan(packageName)) {
 					LOGGER.info("正在初始化控制器：{0}", clz.getName());
@@ -81,13 +85,12 @@ public class MvcDispatcher implements Filter {
 
 	/**
 	 * 虽然 REST 风格的 URL 一般不含后缀，我们只能将 DispatcherServlet 映射到“/”，使之变为一个默认的 Servlet，
-	 * 这样，就可以对任意的 URL 进行处理，但是在处理 js/css 等静态文件十分不方便，
-	 * 于是我们约定 *.do：后缀模式匹配。
+	 * 这样，就可以对任意的 URL 进行处理，但是在处理 js/css 等静态文件十分不方便， 于是我们约定 *.do：后缀模式匹配。
 	 */
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
-		MvcRequest request = new MvcRequest((HttpServletRequest)req);
-		HttpServletResponse response = (HttpServletResponse)resp;
+		MvcRequest request = new MvcRequest((HttpServletRequest) req);
+		HttpServletResponse response = (HttpServletResponse) resp;
 
 		String uri = request.getRoute(), httpMethod = request.getMethod();
 
@@ -102,30 +105,30 @@ public class MvcDispatcher implements Filter {
 			Object result;
 
 			ModelAndView model = null;
-			
+
 			MvcRequest.setHttpServletRequest(request);
 			MvcRequest.setHttpServletResponse(response);
-			
+
 			if (method.getParameterTypes().length > 0) {
 				Object[] args = getArgs(request, response, method);
 				model = findModel(args);
-				
+
 				// 调用反射的 Reflect.executeMethod 方法就可以执行目标方法，并返回一个结果。
-				result = Reflect.executeMethod(controller, method, args);// 通过反射执行控制器方法
+				result = ExecuteMethod.executeMethod(controller, method, args);// 通过反射执行控制器方法
 			} else {
 				// 方法没有参数
-				result = Reflect.executeMethod(controller, method);
+				result = ExecuteMethod.executeMethod(controller, method);
 			}
 
 			resultHandler(result, request, response, model);
 			MvcRequest.clean();
-			
+
 			return; // 终止当前 servlet 请求
 		}
 
 		chain.doFilter(req, resp);// 不要传 MvcRequest，以免入侵其他框架
 	}
-	
+
 	/**
 	 * 返回要执行的方法
 	 * 
@@ -149,31 +152,50 @@ public class MvcDispatcher implements Filter {
 				ActionAndView controllerInfo = AnnotationUtils.controllers.get(path);
 				objs[0] = controllerInfo.controller; // 返回 controller
 
-				String userSubPath = userPath.replaceAll(path + "/?", ""); /* 3-17 uri.replace(path, ""); 改为 uri.replaceAll(path + "/?", "");*/
+				String userSubPath = userPath.replaceAll(path + "/?", ""); /*
+																			 * 3-
+																			 * 17
+																			 * uri
+																			 * .
+																			 * replace
+																			 * (
+																			 * path,
+																			 * ""
+																			 * )
+																			 * ;
+																			 * 改为
+																			 * uri
+																			 * .
+																			 * replaceAll
+																			 * (
+																			 * path
+																			 * +
+																			 * "/?",
+																			 * ""
+																			 * )
+																			 * ;
+																			 */
 				String key = userSubPath.replaceAll("\\d+$", "{id}");
-				
-//				System.out.println("userSubPath:" + userSubPath);
-//				System.out.println("controllerInfo.subPath:" + controllerInfo.subPath);
-				
+
 				ActionAndView av = null;
-				if(controllerInfo.subPath.containsKey(userSubPath)) {		// 相同的业务，如  xx/login
+				if (controllerInfo.subPath.containsKey(userSubPath)) { // 相同的业务，如  xx/login
 					LOGGER.info(userSubPath + " 子路径命中，相同的业务！！！");
 					av = controllerInfo.subPath.get(userSubPath);
-				} else if(controllerInfo.subPath.containsKey(key)) {		// 单个实体，如  xx/1
+				} else if (controllerInfo.subPath.containsKey(key)) { // 单个实体，如  xx/1
 					LOGGER.info(key + " 子路径命中，单个实体！！！");
 					av = controllerInfo.subPath.get(key);
 				} else {
 					av = controllerInfo;// 类本身，不是子路径
 				}
 
-				if(av == null) 
+				if (av == null)
 					throw new NullPointerException(userSubPath + " ActionAndView 对象不存在！");
 				method = getMethod(av, httpMethod);
 
 				break;
 			}
 		}
-		
+
 		objs[1] = method;// 返回 方法对象
 
 		return objs;
@@ -189,18 +211,18 @@ public class MvcDispatcher implements Filter {
 	 * @return 控制器方法
 	 */
 	private static Method getMethod(ActionAndView controllerInfo, String httpMethod) {
-		if(controllerInfo == null) 
+		if (controllerInfo == null)
 			throw new NullPointerException(" ActionAndView 对象不存在！");
-		
+
 		switch (httpMethod) {
-			case "GET":
-				return controllerInfo.GET_method;
-			case "POST":
-				return controllerInfo.POST_method;
-			case "PUT":
-				return controllerInfo.PUT_method;
-			case "DELETE":
-				return controllerInfo.DELETE_method;
+		case "GET":
+			return controllerInfo.GET_method;
+		case "POST":
+			return controllerInfo.POST_method;
+		case "PUT":
+			return controllerInfo.PUT_method;
+		case "DELETE":
+			return controllerInfo.DELETE_method;
 		}
 
 		return null;
@@ -240,35 +262,36 @@ public class MvcDispatcher implements Filter {
 			request.saveToReuqest(model);
 
 		if (result != null && result instanceof String) {
-				String str = (String) result, html = "html::";
-				MvcOutput o = new MvcOutput(response);
-				
-				if (str.startsWith(html)) {
-					o.setSimpleHTML(true).setOutput(str.replace(html, "")).go();
-				} else if (str.startsWith("redirect::")) {
-					o.setRedirect(str.replace("redirect::", "")).go();
-					
-				} else if (str.startsWith("json::")) {
-					String jsonpToken = request.getParameter(MvcRequest.callback_param); // 由参数决定是否使用 jsonp
-					
-					if (StringUtil.isEmptyString(jsonpToken)) {
-						o.setJson(true).setOutput(str.replace("json::", "")).go();
-					} else {
-						o.setJsonpToken(jsonpToken).setOutput(str.replace("json::", "")).go();
-					}
-				}  else { // JSP
-					if(!str.endsWith(".jsp"))			// 自动补充 .jsp 扩展名
-						str += ".jsp";
-					
-					LOGGER.info("执行逻辑完成，现在控制输出（响应 JSP）" + result);
-					o.setTemplate(str).go(request);
+			String str = (String) result, html = "html::";
+			MvcOutput o = new MvcOutput(response);
+
+			if (str.startsWith(html)) {
+				o.setSimpleHTML(true).setOutput(str.replace(html, "")).go();
+			} else if (str.startsWith("redirect::")) {
+				o.setRedirect(str.replace("redirect::", "")).go();
+
+			} else if (str.startsWith("json::")) {
+				String jsonpToken = request.getParameter(MvcRequest.callback_param); // 由参数决定是否使用 jsonp
+
+				if (StringUtil.isEmptyString(jsonpToken)) {
+					o.setJson(true).setOutput(str.replace("json::", "")).go();
+				} else {
+					o.setJsonpToken(jsonpToken).setOutput(str.replace("json::", "")).go();
 				}
+			} else { // JSP
+				if (!str.endsWith(".jsp")) // 自动补充 .jsp 扩展名
+					str += ".jsp";
+
+				LOGGER.info("执行逻辑完成，现在控制输出（响应 JSP）" + result);
+				o.setTemplate(str).go(request);
 			}
-		
+		}
+
 	}
 
 	/**
 	 * 对控制器的方法进行分析，看需要哪些参数。将得到的参数签名和请求过来的参数相匹配，再传入到方法中去执行。
+	 * 
 	 * @param request
 	 *            请求对象
 	 * @param response
@@ -279,30 +302,33 @@ public class MvcDispatcher implements Filter {
 	 */
 	private static Object[] getArgs(MvcRequest request, HttpServletResponse response, Method method) {
 		ArrayList<Object> args = new ArrayList<>();// 参数列表
-		Annotation[][] annotation = method.getParameterAnnotations(); /* 方法所有的注解，length 应该要和参数总数一样 */
+		Annotation[][] annotation = method.getParameterAnnotations(); /*
+																		 * 方法所有的注解
+																		 * ，
+																		 * length
+																		 * 应该要和参数总数一样
+																		 */
 
 		Class<?>[] parmTypes = method.getParameterTypes();// 反射得到参数列表的各个类型，遍历之
-		
+
 		for (int i = 0; i < parmTypes.length; i++) {
 			Class<?> clazz = parmTypes[i];
-			
+
 			// 适配各种类型的参数，或者注解
 			if (clazz.equals(HttpServletRequest.class) || clazz.equals(MvcRequest.class)) {// 常见的 请求/响应 对象，需要的话传入之
 				args.add(request);
 			} else if (clazz.equals(HttpServletResponse.class)) {
 				args.add(response);
-			} else if (clazz.equals(Map.class)) {	// map 参数，将请求参数转为 map
-				Map<String, Object> map = request.getMethod().equals("PUT") 
-						? request.getPutRequestData()
-						: MapHelper.asObject(MapHelper.toMap(request.getParameterMap()), true);
+			} else if (clazz.equals(Map.class)) { // map 参数，将请求参数转为 map
+				Map<String, Object> map = request.getMethod().equals("PUT") ? request.getPutRequestData() : MapHelper.asObject(MapHelper.toMap(request.getParameterMap()), true);
 
 				args.add(map);
-				
-				if(map.size() == 0)
+
+				if (map.size() == 0)
 					LOGGER.info("没有任何请求数据，但控制器方法期望至少一个参数来构成 map。");
 			} else if (clazz.equals(ModelAndView.class)) {
 				args.add(new ModelAndView()); // 新建 ModeView 对象
-			} else if (BaseModel.class.isAssignableFrom(clazz)) {		
+			} else if (BaseModel.class.isAssignableFrom(clazz)) {
 				args.add(request.getBean(clazz)); // 实体类参数
 			} else { // 适配注解
 				Annotation[] annotations = annotation[i];
@@ -314,8 +340,7 @@ public class MvcDispatcher implements Filter {
 	}
 
 	/**
-	 * 根据注解和类型从 request 中取去参数值。
-	 * 参数名字与 QueryParam 一致 或者 PathParam
+	 * 根据注解和类型从 request 中取去参数值。 参数名字与 QueryParam 一致 或者 PathParam
 	 * 
 	 * @param clz
 	 *            参数类型
@@ -330,7 +355,7 @@ public class MvcDispatcher implements Filter {
 	private static void getArgValue(Class<?> clz, Annotation[] annotations, MvcRequest request, ArrayList<Object> args, Method method) {
 		if (annotations.length > 0) {
 			boolean isGot = false; // 是否有 QueryParam 注解写好了
-			
+
 			for (Annotation a : annotations) {
 				if (a instanceof QueryParam) { // 找到匹配的参数，这是说控制器上的方法是期望得到一个 url query string 参数的
 					isGot = true;
@@ -358,17 +383,16 @@ public class MvcDispatcher implements Filter {
 						args.add(new Object());// 也不要空的参数，不然反射那里执行不了
 						LOGGER.warning("不支持类型");
 					}
-					
+
 					break; // 只需要执行一次，参见调用的那个方法就知道了
 				} else if (a instanceof PathParam) { // URL 上面的参数
 					Path path = method.getAnnotation(Path.class);
 					if (path != null) {
 						String paramName = ((PathParam) a).value(), value = request.getValueFromPath(path.value(), paramName);
-						
-//						System.out.println("got P1" + paramName);
-//						if(paramName.contains("{"))
-//							throw new RuntimeException("这里的参数不应该有 {xx} 尖括号");
-						
+
+						//						if(paramName.contains("{"))
+						//							throw new RuntimeException("这里的参数不应该有 {xx} 尖括号");
+
 						if (clz == String.class) {
 							args.add(value);
 						} else if (clz == int.class || clz == Integer.class) {
@@ -385,7 +409,7 @@ public class MvcDispatcher implements Filter {
 					break;
 				}
 			}
-			
+
 			// 还是没有适合注解呢？
 			if (!isGot) {
 				// "是否有 QueryParam 注解写好了??"
@@ -397,5 +421,6 @@ public class MvcDispatcher implements Filter {
 	}
 
 	@Override
-	public void destroy() {} // 暂时不需要这个逻辑
+	public void destroy() {
+	} // 暂时不需要这个逻辑
 }

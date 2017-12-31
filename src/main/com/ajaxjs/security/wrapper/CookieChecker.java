@@ -12,10 +12,10 @@ import com.ajaxjs.util.aop.ReturnAsArg;
 public class CookieChecker extends Aop<SecurityInit> {
 
 	@Override
-	protected Object before(Method method, Object[] args) throws Throwable {
+	protected Object before(SecurityInit target, Method method, String methodName, Object[] args) throws Throwable {
 		if (method.getName().equals("initRequest")) {
 			HttpServletRequest request = (HttpServletRequest) args[0];
-			
+
 			return new ReturnAsArg(new CookieRequest(request));
 		}
 
@@ -27,9 +27,9 @@ public class CookieChecker extends Aop<SecurityInit> {
 	}
 
 	@Override
-	protected void after(Method method, Object[] args, Object returnObj) {
+	protected void after(SecurityInit target, Method method, String methodName, Object[] args, Object returnObj) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

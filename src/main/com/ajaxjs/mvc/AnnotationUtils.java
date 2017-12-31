@@ -37,7 +37,7 @@ import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.ioc.BeanContext;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.reflect.ReflectNewInstance;
+import com.ajaxjs.util.reflect.NewInstance;
 
 /**
  * 扫描注解的工具类
@@ -78,11 +78,15 @@ public class AnnotationUtils {
 		// 开始解析控制器……
 		ActionAndView cInfo = new ActionAndView();
 
-		// 保存的是 控制器 实例。
+		
 		if(BeanContext.isIOC_Bean(clz)) { // 如果有 ioc，则从容器中查找
-			cInfo.controller = (IController)BeanContext.me().getBeanByClass(clz);
+			IController con =BeanContext.me().getBeanByClass(clz);
+			if(con ==null) {
+				LOGGER.warning("在 IOC 资源中找不到该类{0}的实例，请检查是否已经 IOC 扫描？", clz.getName());
+			}
+			cInfo.controller = con;
 		} else {
-			cInfo.controller = ReflectNewInstance.newInstance(clz);
+			cInfo.controller = NewInstance.newInstance(clz);// 保存的是 控制器 实例。
 		}
 		
 		for (Method method : clz.getMethods()) {
@@ -205,7 +209,7 @@ public class AnnotationUtils {
 				String className = file.getName().substring(0, file.getName().length() - 6);
 				className = (packageName + '.' + className).trim();
 
-				Class<?> clazz = ReflectNewInstance.getClassByName(className);
+				Class<?> clazz = NewInstance.getClassByName(className);
 
 				boolean isController = isController(clazz);
 				// 添加到集合中去

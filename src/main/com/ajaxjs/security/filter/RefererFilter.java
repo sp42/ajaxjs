@@ -11,9 +11,9 @@ import com.ajaxjs.util.aop.Aop;
 public class RefererFilter extends Aop<Filter> {
 
 	@Override
-	protected Object before(Method method, Object[] args) throws Throwable {
+	protected Object before(Filter target, Method method, String methodName, Object[] args) throws Throwable {
 		if (method.getName().equals("doFilter")) {
-			
+
 			System.out.println("sdfsds111");
 			HttpServletRequest request = (HttpServletRequest) args[0];
 			if (!checkIt(request))
@@ -24,7 +24,7 @@ public class RefererFilter extends Aop<Filter> {
 	}
 
 	@Override
-	protected void after(Method method, Object[] args, Object returnObj) {
+	protected void after(Filter target, Method method, String methodName, Object[] args, Object returnObj) {
 	}
 
 	public static boolean checkIt(HttpServletRequest request) {

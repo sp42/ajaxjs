@@ -162,7 +162,6 @@ public class Upload {
 			j = 0;
 
 			while (data[temp] == search[j]) {
-				// System.out.println((j+1)+",值："+data[temp]+","+search[j]);
 				// 计数
 				j++;
 				temp++;

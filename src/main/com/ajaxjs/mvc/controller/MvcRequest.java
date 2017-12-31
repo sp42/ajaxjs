@@ -118,9 +118,6 @@ public class MvcRequest extends HttpServletRequestWrapper {
 		String requestURI = getRequestURI().replace(getContextPath(), ""),
 				regExp = "(" + value.replace("{" + paramName + "}", ")(\\d+)");/* 获取正则 暂时写死 数字 TODO */
 
-		// System.out.println(requestURI);
-		// System.out.println(regExp);
-
 		Matcher m = Pattern.compile(regExp).matcher(requestURI);
 		String result = m.find() ? m.group(m.groupCount()) : null;
 

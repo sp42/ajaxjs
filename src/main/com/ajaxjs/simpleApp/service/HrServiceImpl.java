@@ -3,15 +3,17 @@ package com.ajaxjs.simpleApp.service;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.dao.DaoHandler;
 import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.service.ServiceException;
+import com.ajaxjs.framework.service.aop.CacheService;
+import com.ajaxjs.framework.service.aop.CommonService;
 import com.ajaxjs.jdbc.PageResult;
-import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.simpleApp.dao.HrDao;
 import com.ajaxjs.simpleApp.model.Catalog;
+import com.ajaxjs.util.ioc.Bean;
 
+@Bean(value = "HrService", aop = { CommonService.class, CacheService.class })
 public class HrServiceImpl implements HrService {
 	HrDao dao = new DaoHandler<HrDao>().bind(HrDao.class);
 
@@ -38,16 +40,7 @@ public class HrServiceImpl implements HrService {
 	@Override
 	public PageResult<Map<String, Object>> findPagedList(QueryParams params) throws ServiceException {
 		PageResult<Map<String, Object>> result = dao.findPagedList(params);
-
-		Map<Integer, BaseModel> catalogMap = ModelAndView.list_bean2map_id_as_key(getHrCatalog());
-		for (Map<String, Object> map : result.getRows()) {
-			BaseModel catalogBean = catalogMap.get((int) map.get("catalog"));
-			if (catalogBean == null) {
-				System.out.println("找不到对应的分类，实体分类id 为：" + map.get("catalog"));
-			} else {
-				map.put("catalogName", catalogBean.getName());
-			}
-		}
+		
 		return result;
 	}
 
@@ -74,9 +67,10 @@ public class HrServiceImpl implements HrService {
 	private List<Catalog> catalog;
 
 	@Override
-	public List<Catalog> getHrCatalog() {
-		if (catalog == null)
+	public List<Catalog> getCatalog() {
+		if (catalog == null) {
 			catalog = dao.getHrCatalog();
+		}
 		return catalog;
 	}
 

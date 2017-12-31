@@ -30,7 +30,7 @@ import com.ajaxjs.util.collection.CollectionUtil;
 
 public class XssChecker extends Aop<SecurityInit> {
 	@Override
-	protected Object before(Method method, Object[] args) throws Throwable {
+	protected Object before(SecurityInit target, Method method, String methodName, Object[] args) throws Throwable {
 		if (method.getName().equals("initRequest")) {
 			HttpServletRequest request = (HttpServletRequest) args[0];
 			
@@ -46,7 +46,7 @@ public class XssChecker extends Aop<SecurityInit> {
 	}
 
 	@Override
-	protected void after(Method method, Object[] args, Object returnObj) {
+	protected void after(SecurityInit target, Method method, String methodName, Object[] args, Object returnObj)  {
 
 	}
 

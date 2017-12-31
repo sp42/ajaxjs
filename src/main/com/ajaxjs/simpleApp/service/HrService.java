@@ -10,6 +10,6 @@ public interface HrService extends IService<Map<String, Object>, Long> {
 
 	List<Map<String, Object>> getTop5();
 	
-	public List<Catalog> getHrCatalog();
+	public List<Catalog> getCatalog();
 
 }

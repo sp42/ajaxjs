@@ -9,9 +9,28 @@ import com.ajaxjs.util.aop.Aop;
 
 public class PostFilter extends Aop<Filter> {
 
+	public static boolean checkIt(HttpServletRequest request) {
+		if (!"POST".equalsIgnoreCase(request.getMethod())) {
+			return true;
+		}
+
+		String uri = request.getRequestURI();
+
+		System.out.println(uri);
+		//		if(!isInWhiteList(uri) && !isInBlackList(uri)){
+		//			return true;
+		//		}
+		//		if(isInWhiteList(uri))
+		//			return true;
+		//		if(isInBlackList(uri))
+		//			return false;	
+
+		return true; // 没有任何信息则通过
+	}
+
 	@Override
-	protected Object before(Method method, Object[] args) throws Throwable {
-		if (method.getName().equals("doFilter")) {
+	protected Object before(Filter target, Method method, String methodName, Object[] args) throws Throwable {
+		if (methodName.equals("doFilter")) {
 			HttpServletRequest request = (HttpServletRequest) args[0];
 			System.out.println("sdfsds2222");
 			if (!checkIt(request))
@@ -22,25 +41,8 @@ public class PostFilter extends Aop<Filter> {
 	}
 
 	@Override
-	protected void after(Method method, Object[] args, Object returnObj) {
-	}
+	protected void after(Filter target, Method method, String methodName, Object[] args, Object returnObj) {
+		// TODO Auto-generated method stub
 
-	public static boolean checkIt(HttpServletRequest request) {
-		if (!"POST".equalsIgnoreCase(request.getMethod())) {
-			return true;
-		}
-		
-		String uri = request.getRequestURI();
-		
-		System.out.println(uri);
-//		if(!isInWhiteList(uri) && !isInBlackList(uri)){
-//			return true;
-//		}
-//		if(isInWhiteList(uri))
-//			return true;
-//		if(isInBlackList(uri))
-//			return false;	
-		
-		return true; // 没有任何信息则通过
 	}
 }

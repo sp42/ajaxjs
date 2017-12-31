@@ -27,7 +27,7 @@ import com.ajaxjs.web.CommonEntryAdminController;
  */
 @Controller
 @Path("/admin/catalog")
-public class CatalogController extends CommonController<Catalog, Long> implements CommonEntryAdminController<Catalog> {
+public class CatalogController extends CommonController<Catalog, Long, CatalogService> implements CommonEntryAdminController<Catalog> {
 	CatalogService service = new CatalogServiceImpl();
 
 	public CatalogController() {

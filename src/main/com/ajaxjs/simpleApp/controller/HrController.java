@@ -11,30 +11,38 @@ import javax.ws.rs.QueryParam;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.simpleApp.service.CatalogService;
-import com.ajaxjs.simpleApp.service.CatalogServiceImpl;
 import com.ajaxjs.simpleApp.service.HrService;
-import com.ajaxjs.simpleApp.service.HrServiceImpl;
+import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.web.CommonController;
 import com.ajaxjs.web.CommonEntryReadOnlyController;
 
 @Controller
 @Path("/hr")
-public class HrController extends CommonController<Map<String, Object>, Long> implements CommonEntryReadOnlyController {
-	CatalogService catalogService = new CatalogServiceImpl();
-	
-	public HrController() {
-		setService(service);
+@Bean("HrController")
+public class HrController extends CommonController<Map<String, Object>, Long, HrService> implements CommonEntryReadOnlyController {
+
+	@Resource("HrService")
+	private HrService service;
+
+	@Resource("CatalogService")
+	private CatalogService catalogService;
+
+	public CatalogService getCatalogService() {
+		return catalogService;
 	}
 
-	private HrService service = new HrServiceImpl();
+	public void setCatalogService(CatalogService catalogService) {
+		this.catalogService = catalogService;
+	}
 
 	@GET
 	@Override
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
 		initDb();
-		model.put("catalogMenu", service.getHrCatalog());
+		model.put("catalogMenu", getService().getCatalog());
 		super.pageList(start, limit, model);
-		return String.format(jsp_list, service.getTableName());
+		return String.format(jsp_list, getService().getTableName());
 	}
 
 	@GET
@@ -45,5 +53,4 @@ public class HrController extends CommonController<Map<String, Object>, Long> im
 		model.put("catalogMenu", catalogService.findAll(MvcRequest.factory()));
 		return super.info(id, model);
 	}
-
 }

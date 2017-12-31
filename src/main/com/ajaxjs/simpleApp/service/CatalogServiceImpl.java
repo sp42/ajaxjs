@@ -8,7 +8,9 @@ import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.jdbc.PageResult;
 import com.ajaxjs.simpleApp.dao.CatalogDao;
 import com.ajaxjs.simpleApp.model.Catalog;
+import com.ajaxjs.util.ioc.Bean;
 
+@Bean(value = "CatalogService")
 public class CatalogServiceImpl implements CatalogService {
 	CatalogDao dao = new DaoHandler<CatalogDao>().bind(CatalogDao.class);
 
