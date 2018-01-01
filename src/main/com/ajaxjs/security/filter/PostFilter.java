@@ -16,7 +16,6 @@ public class PostFilter extends Aop<Filter> {
 
 		String uri = request.getRequestURI();
 
-		System.out.println(uri);
 		//		if(!isInWhiteList(uri) && !isInBlackList(uri)){
 		//			return true;
 		//		}
@@ -32,7 +31,6 @@ public class PostFilter extends Aop<Filter> {
 	protected Object before(Filter target, Method method, String methodName, Object[] args) throws Throwable {
 		if (methodName.equals("doFilter")) {
 			HttpServletRequest request = (HttpServletRequest) args[0];
-			System.out.println("sdfsds2222");
 			if (!checkIt(request))
 				throw new SecurityException("禁止 POST");
 		}

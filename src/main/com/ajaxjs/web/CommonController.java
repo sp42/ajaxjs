@@ -16,6 +16,8 @@
 package com.ajaxjs.web;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.UndeclaredThrowableException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -118,9 +120,8 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 		try {
 			pageResult = service.findPagedList(getParam(start, limit));
 			model.put("PageResult", pageResult);
-		} catch (Exception e) {
-			LOGGER.warning(e);
-			model.put(errMsg, e);
+		} catch (Throwable e) {
+			model.put(errMsg, getUnderLayerErr(e));
 		} finally {
 			closeDb();
 		}
@@ -131,11 +132,27 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 		return pageResult;
 	}
 
+	/**
+	 * AOP 的缘故，不能直接捕获原来的异常，要不断 e.getCause()....
+	 * 
+	 * @param e
+	 * @return
+	 */
+	private static Throwable getUnderLayerErr(Throwable e) {
+		while (e.getClass().equals(InvocationTargetException.class) || e.getClass().equals(UndeclaredThrowableException.class)) {
+			e = e.getCause();
+		}
+		return e;
+	}
+
 	@SuppressWarnings("unchecked")
 	public String outputPagedJsonList(PageResult<T> pageResult, ModelAndView model) {
-		if (pageResult.getRows() != null) {
+		if (model.get(errMsg) != null) {
+			return paged_json_error;
+		} else if (pageResult != null && pageResult.getRows() != null) {
 			String jsonStr;
 
+			System.out.println(pageResult.getRows().get(0) instanceof Map);
 			if (pageResult.getRows().get(0) instanceof Map) { // Map 类型的输出
 				List<Map<String, Object>> list = (List<Map<String, Object>>) pageResult.getRows();
 				jsonStr = JsonHelper.stringifyListMap(list);
@@ -327,15 +344,17 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 			if (!getService().delete(entry))
 				throw new ServiceException("删除失败！");
 		} catch (ServiceException e) {
-			model.put(errMsg, e);
+			return String.format(json_not_ok, "删除失败，原因：" + e);
 		} finally {
 			closeDb();
 		}
 
-		return cud;
+		return String.format(json_ok, "删除成功");
 	}
 
 	/**
+	 * 因为范型的缘故，不能实例化 bean 对象。应该在子类实例化 bean，再调用本类的 delete(T entry, ModelAndView
+	 * model)
 	 * 
 	 * @param id
 	 * @param model
@@ -344,16 +363,10 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	 */
 	@SuppressWarnings("unchecked")
 	public String delete(ID id, ModelAndView model) {
-		T obj = null;
-		if (obj instanceof Map) {
-			Map<String, Object> map = new HashMap<>();
-			map.put("id", id);
-			obj = (T) map;
-		} else {
-			throw new RuntimeException("因为范型的缘故，不能实例化 bean 对象。应该在子类实例化 bean，再调用本类的 delete(T entry, ModelAndView model) ");
-		}
+		Map<String, Object> map = new HashMap<>();
+		map.put("id", id);
 
-		return delete(obj, model);
+		return delete((T) map, model);
 	}
 
 	/**

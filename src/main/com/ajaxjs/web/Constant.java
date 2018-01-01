@@ -59,6 +59,10 @@ public interface Constant {
 	 * json 路径常量（分页列表）
 	 */
 	public static final String paged_json_List = common_jsp_perfix + "json/json-pagedList.jsp";
+	/**
+	 * json 路径常量（错误信息）
+	 */
+	public static final String paged_json_error = common_jsp_perfix + "json/json-err.jsp";
 
 	/**
 	 * 实体 jsp 模版路径之前缀

@@ -1,6 +1,7 @@
 package com.ajaxjs.simpleApp.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.ajaxjs.framework.dao.IDao;
 import com.ajaxjs.framework.dao.QueryParams;
@@ -9,31 +10,33 @@ import com.ajaxjs.framework.dao.annotation.Insert;
 import com.ajaxjs.framework.dao.annotation.Select;
 import com.ajaxjs.framework.dao.annotation.Update;
 import com.ajaxjs.jdbc.PageResult;
-import com.ajaxjs.simpleApp.model.Catalog;
 
-public interface CatalogDao extends IDao<Catalog, Long> {
+public interface DataDictDao extends IDao<Map<String, Object>, Integer> {
 	final static String tableName = "data_dict";
 
-	@Select("SELECT * FROM " + tableName + " WHERE id = ?")
+	@Select(value = "SELECT * FROM " + tableName)
 	@Override
-	public Catalog findById(Long id);
+	public PageResult<Map<String, Object>> findPagedList(QueryParams param);
 	
 	@Select(value = "SELECT * FROM " + tableName)
+	public PageResult<Map<String, Object>> findAdminPagedList(QueryParams param);
+	
+	@Select("SELECT * FROM " + tableName + " WHERE status = 1 AND id = ?")
 	@Override
-	public PageResult<Catalog> findPagedList(QueryParams param);
+	public Map<String, Object> findById(Integer id);
 
 	@Select(value = "SELECT * FROM " + tableName)
-	public List<Catalog> findAll(QueryParams param);
+	public List<Map<String, Object>> findAll(QueryParams param);
 	
 	@Insert(tableName = tableName)
 	@Override
-	public Long create(Catalog map);
+	public Integer create(Map<String, Object> map);
 
 	@Update(tableName = tableName)
 	@Override
-	public int update(Catalog map);
+	public int update(Map<String, Object> map);
 
 	@Delete(tableName = tableName)
 	@Override
-	public boolean delete(Catalog map);
+	public boolean delete(Map<String, Object> map);
 }

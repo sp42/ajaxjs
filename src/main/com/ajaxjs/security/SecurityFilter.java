@@ -45,14 +45,10 @@ public class SecurityFilter implements Filter {
 		try {
 			simpleChecker.doFilter(arg0, arg1, chain);
 		} catch (SecurityException e) {
-			System.out.println(":::::" + e);
-
 			return; // 中止链式调用
 		}
-		System.out.println(init.initRequest(arg0) instanceof XssReqeust);
 		chain.doFilter(init.initRequest(arg0), init.initResponse(arg1));
 		XssReqeust request = (XssReqeust)init.initRequest(arg0);
-		System.out.println(request.getParameter("foo"));
 	}
 
 	@Override

@@ -16,7 +16,7 @@ import com.ajaxjs.framework.dao.QueryParams;
 public class TestQuery {
 	@Test
 	public void testQuery() {
-//		HttpServletRequest request = mock(HttpServletRequest.class);
+		HttpServletRequest request = mock(HttpServletRequest.class);
 //		assertFalse(Query.isAnyMatch(request.getParameterMap()));
 //
 //		when(request.getParameter("filterField")).thenReturn("name");

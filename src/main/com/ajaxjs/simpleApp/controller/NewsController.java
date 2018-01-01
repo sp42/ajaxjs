@@ -8,8 +8,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
-import com.ajaxjs.framework.service.plugin.Neighbor;
 import com.ajaxjs.mvc.ModelAndView;
+import com.ajaxjs.simpleApp.plugin.Neighbor;
 import com.ajaxjs.simpleApp.service.NewsService;
 import com.ajaxjs.util.ioc.Bean;
 import com.ajaxjs.util.ioc.Resource;

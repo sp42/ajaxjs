@@ -38,7 +38,6 @@ public class CookieRequest extends HttpServletRequestWrapper {
 	}
 	@Override
 	public String getParameter(String key) {
-		System.out.println("999999999999999999");
 		return super.getParameter(key);
 	}
 
@@ -58,7 +57,6 @@ public class CookieRequest extends HttpServletRequestWrapper {
 
 			if (delegate.isInWhiteList(cookie.getName())) {
 				cookieList.add(cookie);
-				System.out.println("name:" + cookie.getName());
 			}
 		}
 
@@ -68,7 +66,6 @@ public class CookieRequest extends HttpServletRequestWrapper {
 	public String getCookieByName(String name) {
 		Cookie[] cookies = getCookies();
 		for (Cookie cookie : cookies) {
-			System.out.println(cookie.getName());
 			if (name.equals(cookie.getName())) {
 				return cookie.getValue();
 			}

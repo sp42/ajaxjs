@@ -135,7 +135,6 @@ public class MockRequest {
 				Object[] args = invocation.getArguments();
 				// Object mock = invocation.getMock();
 				// 测试终端的模拟器接收到数据
-				// System.out.println("jojo:"+args[1]);
 				hash.put(args[0].toString(), args[1]);
 
 				return "called with arguments: " + args;
@@ -167,7 +166,6 @@ public class MockRequest {
 
 			controller.doGet(request, response);
 
-			System.out.println("接口返回  ：" + response.getWriter().toString());
 			return response.getWriter().toString();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -186,7 +184,6 @@ public class MockRequest {
 	}
 
 	public boolean shouldbe_hasRecord(Map<String, Object> json) {
-		System.out.println("获取记录数：" + json.get("total"));
 		int total = (int) json.get("total");
 		return total > 0;
 	}

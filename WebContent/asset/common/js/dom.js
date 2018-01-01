@@ -348,10 +348,10 @@ ajaxjs.xhr = {
 			e.preventDefault();// 禁止 form 默认提交
 			var form = e.target;
 			var json = {};
-			
 			var formData = new FormData(form);
 			formData.forEach(function(value, key){
-				json[key] = value;
+				if(cfg && cfg.ignoreField != key) // 忽略的字段
+					json[key] = value;
 			});
 			
 			if (cfg && cfg.beforeSubmit && cfg.beforeSubmit(form, json) === false) 

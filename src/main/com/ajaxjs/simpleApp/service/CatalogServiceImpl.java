@@ -36,12 +36,12 @@ public class CatalogServiceImpl implements CatalogService {
 
 	@Override
 	public PageResult<Catalog> findPagedList(QueryParams params) throws ServiceException {
-		return null;
+		return dao.findPagedList(params);
 	}
 
 	@Override
 	public PageResult<Catalog> findPagedList(int start, int limit) throws ServiceException {
-		return null;
+		return dao.findPagedList(new QueryParams(start, limit));
 	}
 
 	@Override

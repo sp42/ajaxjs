@@ -15,6 +15,8 @@
  */
 package com.ajaxjs.web;
 
+import java.io.Serializable;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -34,7 +36,7 @@ import com.ajaxjs.mvc.controller.IController;
  * @param <E>
  *            记录实体，可以是 Bean 或 Map
  */
-public interface CommonEntryAdminController<E> extends IController {
+public interface CommonEntryAdminController<E, ID extends Serializable> extends IController {
 	/**
 	 * 读取记录列表
 	 * 
@@ -69,7 +71,7 @@ public interface CommonEntryAdminController<E> extends IController {
 	 */
 	@GET
 	@Path("{id}")
-	public String editUI(@PathParam("id") Long id, ModelAndView model);
+	public String editUI(@PathParam("id") ID id, ModelAndView model);
 
 	/**
 	 * 新建动作
@@ -107,5 +109,5 @@ public interface CommonEntryAdminController<E> extends IController {
 	 */
 	@DELETE
 	@Path("{id}")
-	public String delete(@PathParam("id") Long id, ModelAndView model);
+	public String delete(@PathParam("id") ID id, ModelAndView model);
 }

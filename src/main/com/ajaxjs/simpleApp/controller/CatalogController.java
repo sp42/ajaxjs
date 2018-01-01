@@ -1,6 +1,7 @@
 package com.ajaxjs.simpleApp.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.mvc.annotation.Controller;
 import javax.ws.rs.DELETE;
@@ -11,11 +12,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
+import com.ajaxjs.jdbc.PageResult;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.simpleApp.model.Catalog;
 import com.ajaxjs.simpleApp.service.CatalogService;
 import com.ajaxjs.simpleApp.service.CatalogServiceImpl;
+import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.web.CommonController;
 import com.ajaxjs.web.CommonEntryAdminController;
 
@@ -27,30 +31,24 @@ import com.ajaxjs.web.CommonEntryAdminController;
  */
 @Controller
 @Path("/admin/catalog")
-public class CatalogController extends CommonController<Catalog, Long, CatalogService> implements CommonEntryAdminController<Catalog> {
-	CatalogService service = new CatalogServiceImpl();
+@Bean("CatalogController")
+public class CatalogController extends CommonController<Catalog, Long, CatalogService> implements CommonEntryAdminController<Catalog, Long> {
+	@Resource("CatalogService")
+	private CatalogService service;
 
 	@GET
 	@Override
 	public String createUI(ModelAndView model) {
-		return common_jsp_perfix + "simple_admin/edit-cataory";
+		return common_jsp_perfix + "simple_admin/edit-catalog";
 	}
 
 	@GET
 	@Path("list")
 	@Override
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
-		initDb();
-		prepareData(model);
-		List<Catalog> result = null;
-		
-		try {
-			result = service.findAll(MvcRequest.factory());
-		} finally {
-			closeDb();
-		}
-
-		return outputListBeanAsJson(result);
+		PageResult<Catalog> p = super.pageList(start, limit, model);
+		System.out.println(p);
+		return outputPagedJsonList(p, model);
 	}
 
 	@Override

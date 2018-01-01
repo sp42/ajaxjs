@@ -31,3 +31,10 @@
 		<li><a target="iframepage" href="../cms/misc/Company">公司信息</a></li>
 	</ul>
 </li>
+<li>
+	<h3>全局数据</h3>
+	<ul>
+		<li><a target="iframepage" href="admin/catalog/show.do">分类管理</a></li>
+		<li><a target="iframepage" href="admin/DataDict/show.do">数据字典</a></li>
+	</ul>
+</li>

@@ -14,7 +14,6 @@ public class RefererFilter extends Aop<Filter> {
 	protected Object before(Filter target, Method method, String methodName, Object[] args) throws Throwable {
 		if (method.getName().equals("doFilter")) {
 
-			System.out.println("sdfsds111");
 			HttpServletRequest request = (HttpServletRequest) args[0];
 			if (!checkIt(request))
 				throw new SecurityException("来路不对");

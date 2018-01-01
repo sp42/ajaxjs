@@ -64,7 +64,6 @@ public class TestController {
 		writer = MockResponse.writerFactory(response);
 		
 		dispatcher.doFilter(request, response, chain);
-		System.out.println(writer.toString());
 //		assertEquals(writer.toString(), "hihi");
 		
 		// GET Info

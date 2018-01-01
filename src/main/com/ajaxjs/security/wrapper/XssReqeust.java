@@ -37,7 +37,6 @@ public class XssReqeust extends HttpServletRequestWrapper {
 	@Override
 	public String getParameter(String key) {
 		key = XssChecker.clean(key, XssChecker.type_DELETE);
-		System.out.println("dfdfdf:::::::" + key);
 		return XssChecker.clean(super.getParameter(key));
 	}
 
