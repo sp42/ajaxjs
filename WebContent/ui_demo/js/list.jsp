@@ -8,7 +8,7 @@
 <body>
 	<%@include file="../public/nav.jsp"%>
 	<h4>简单异步列表</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>简单异步列表，可访问 JSON/JSONP 数据源，并提供大量配置选项。</p>
 	<ul class="list center">
 		<li>默认 JSONP 获取远程或本地数据，JSONP 可跨域，也可以支持 XHR。由 cfg.isJSONP 决定。</li>
@@ -58,7 +58,7 @@ ajaxjs.List = function (url, el, args, cfg);</pre>
 
 
 	<h4>分页列表</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>分页列表是在前者“简易列表”上提供分页功能。</p>
 	<ul class="center list">
 		<li>采用 MySQL 偏移分页的机制：start/limit</li>
@@ -145,7 +145,6 @@ ajaxjs.List = function (url, el, args, cfg);</pre>
 
 
 	<h4>图文列表</h4>
-	<hr class="ajaxjs-hr" />
 	<p>图文列表，更多是在样式上的控制，以及围绕图片如何处理和优化的 JS。</p>
 
 	<textarea class="itemTpl hide">

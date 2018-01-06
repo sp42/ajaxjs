@@ -8,7 +8,7 @@
 <body>
 	<%@include file="../public/nav.jsp"%>
 	<h4>MD5</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>
 		字符串的“abc”的 MD5 结果应该是 <span class="result1">900150983cd24fb0d6963f7d28e17f72</span>
 		<button  class="ajaxjs-btn" onclick="test();">Test</button>
@@ -48,7 +48,7 @@
 
 
 	<h4>Base64</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>
 		字符串的“abc”的 base64 编码应该是 <span class="result1_1">YWJj</span> (UTF-8)
 		<button class="ajaxjs-btn" onclick="test2();">Test</button>
@@ -72,7 +72,7 @@
 
 
 	<h4>一键繁体</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<script>
 		/*
 		 * --------------------------------------------------------
@@ -108,9 +108,9 @@
 	<script src="${pageContext.request.contextPath}/asset/common/js/libs/chinese.js"></script>
 	<div class="center">
 		<button class="ajaxjs-btn"
-			onclick="translate(document.body, traditionalized);">切换到正体中文</button>
+			onclick="window.translate(document.body, traditionalized);">切换到正体中文</button>
 		<button class="ajaxjs-btn"
-			onclick="translate(document.body, simplized);">切换到简体</button>
+			onclick="window.translate(document.body, simplized);">切换到简体</button>
 	</div>
 
 

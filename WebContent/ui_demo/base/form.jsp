@@ -9,6 +9,7 @@
 	<%@include file="../public/nav.jsp"%>
 	<h4>按钮 Button</h4>
 	<hr class="ajaxjs-hr" />
+	
 	<p>class="ajaxjs-btn" 或 class="ajaxjs-btn-1"，class="ajaxjs-btn-1
 		ajaxjs-disable"</p>
 	<div class="centerLimitWidth">

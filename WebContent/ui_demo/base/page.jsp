@@ -8,7 +8,7 @@
 <body>
 	<%@include file="../public/nav.jsp"%>
 	<h4>细线表格 Table</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>快速制作 1px 表格边框，为需要设置的 table 元素 class 即可。 class="ajaxjs-borderTable"</p>
 	<div class="centerLimitWidth">
 		<table class="ajaxjs-borderTable"  width="80%" align="center">
@@ -54,7 +54,7 @@
 	</div>
 	
 <h4>提示文字</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p class="usingClass">上下方向（toBottom、toTop）不需要 JS；提示 div 需指定宽度和 position: relative。</p>
 	<div style="position: relative; height: 150px; line-height: 150px;">
 
@@ -139,7 +139,7 @@
 	</script>	
 	
 	<h4>分页</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<div class="centerLimitWidth" style="width: 98%;">
 		<div class="pager">
 			<section class="pageInfo">
@@ -171,7 +171,7 @@
 	</div>
 
 	<h4>网站所在位置</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<div class="centerLimitWidth">
 		<nav class="anchor">
 			您在位置 ：<a href="#">首页 </a> » <a href="/grand/aboutus/">走进公司</a> » <a
@@ -180,12 +180,11 @@
 	</div>
 
 	<h4>网站版权</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p class="centerLimitWidth">Copyright © 2014-2016 版权所有 All Rights
 		Reserved 粤ICP备10007080号-1</p>
 
 	<h4>分隔样式</h4>
-	<hr class="ajaxjs-hr" />
 	<p>利用 &lt;fieldset&gt; 制作如下样式。</p>
 	<div class="centerLimitWidth" style="width: 98%; padding-left: 1%;">
 		<fieldset

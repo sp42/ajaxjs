@@ -8,7 +8,7 @@
 <body>
 	<%@include file="../public/nav.jsp"%>
 	<h4>Tab 控件</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<ul class="centerLimitWidth list">
 		<li>CSS3 动画加速</li>
 		<li>自动适应宽度（使用百分比单位）</li>
@@ -90,7 +90,7 @@
 	   </pre>
 
 	<h4>简易选项卡 Tab</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>设有水平（常见）和垂直 Tab</p>
 	<ul class="center list">
 		<li>切换原理为控制元素的 display:block/none;，原理比较简单</li>
@@ -121,7 +121,6 @@
 		</div>
 	</div>
 	<h4>垂直 Tab</h4>
-	<hr class="ajaxjs-hr" />
 	<p>垂直 Tab 的内容区域应该设置 min-height；或者固定高。</p>
 
 	<div class="center tab3" style="padding: 5px;">

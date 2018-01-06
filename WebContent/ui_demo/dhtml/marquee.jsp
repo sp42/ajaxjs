@@ -8,9 +8,8 @@
 <body>
 	<%@include file="../public/nav.jsp"%>
 	<h4>跑马灯 Marquee</h4>
-	<p>最简单的跑马灯</p>
-	<hr class="ajaxjs-hr" />
-	<br />
+	<p>最简单的跑马灯</p> 
+	
 	<div class="m center" style="width:100%;overflow:hidden;font-size:.8rem;">
 		提示：本例代码一般可以通过“鼠标右键查看源码”的方式了解源码。
 	</div>
@@ -25,8 +24,7 @@
 	
 	<br />
 	<p>最简单的跑马灯</p>
-	<hr class="ajaxjs-hr" />
-	<br />
+	
 	<div class="center" style="padding-left: 10Px;font-size:.8rem;">
 		<div class="content1">这是一段滚动的文字11111111</div>
 		<div class="content2">这是一段滚动的文字22222222</div>
@@ -64,8 +62,7 @@
 	</script>
 
 	<p>可以停止的</p>
-	<hr class="ajaxjs-hr" />
-	<br />
+	
 	<div class="center" style="padding-left: 10Px;font-size:.8rem;">
 		<input id="startBtn" type="button" value="开始滚动" /> <input
 			id="stopBtn" type="button" value="停止滚动" />
@@ -112,7 +109,7 @@
 	</script>
 
 	<h4>上下字幕</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>鼠标移入时候可暂停动画</p>
 	<ol class="center" id="scrollA">
 		<li>11111111111</li>
@@ -158,7 +155,7 @@
 	</script>
 
 	<h4>无缝上下滚动</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>PauseHeight 必须与 CSS 中的 li.height 相等</p>
 	<style>
 /* 无缝上下滚动 */
@@ -213,7 +210,7 @@
 
 
 	<h4>联动 Select 下拉</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>年历</p>
 	<div class="center">
 		<select id="year">
@@ -282,7 +279,7 @@
 	</script>
 
 	<h4>回到顶部</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>TODO</p>
 	<%@include file="../public/footer.jsp"%>
 </body>

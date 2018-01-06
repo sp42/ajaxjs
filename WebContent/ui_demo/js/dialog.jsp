@@ -44,7 +44,7 @@
 		}
 	</script>
 	<h4>对话框</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>制作对话框很简单，要点如下。</p>
 	<ul class="centerLimitWidth list">
 		<li>全屏幕的遮罩 Mask（fixed 定位，100%宽，高度用 js 获取页面内容高度然后赋值，设置透明背景然后注意

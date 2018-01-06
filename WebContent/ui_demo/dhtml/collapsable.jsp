@@ -9,7 +9,7 @@
 	<%@include file="../public/nav.jsp"%>
 
 	<h4>折叠菜单 expander</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>常用于展开正文详情。提供过渡效果的图层，如果不需要把 div class="mask" 去掉即可。注意加入容器的 padding 会导致关闭时高度异常。</p>
 
 	<div class="min p centerLimitWidth" style="width:65%;">
@@ -77,7 +77,7 @@
 
 
 	<h4>Accordion Menu 折叠菜单</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>折叠菜单的特点是同一时间只展开一个区域，其他区域则处于闭合状态。</p>
  
 	<ul class="centerLimitWidth leftSidebar" style="width:80%;">

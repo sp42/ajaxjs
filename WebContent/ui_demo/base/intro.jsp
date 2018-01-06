@@ -7,11 +7,7 @@
 <%@include file="../public/common.jsp"%>
 <body>
 	<%@include file="../public/nav.jsp"%>
-
-	<p>欢迎浏览来到 AJAXJS 库介绍页面！如果你决定使用这个库，本人能打包票这是一个非常明智的选择！</p>
-
 	<h4>CSS RESET</h4>
-	<hr class="ajaxjs-hr" />
 	<p>CSS 重设就是由于各种浏览器解释 CSS 样式的初始值有所不同，导致在没有定义某个 CSS
 		属性时，不同的浏览器会按照自己的默认值来为没有定义的样式赋值，所以我们要先定义好一些 CSS 样式，来让所有浏览器都按照同样的规则解释
 		CSS，这样就能避免发生这种问题。</p>
@@ -56,17 +52,9 @@ select, input[type=text], input[type=password], textarea {
 	-moz-appearance:none;/* for mac */
 }
 	</pre>
-
-	<h4>base.css</h4>
-	<hr class="ajaxjs-hr" />
-	<p>
-		该<a
-			href="https://git.oschina.net/sp42/ajaxjs/blob/master/ajaxjs-web/WebContent/asset/common/css/base.css">样式文件</a>包含了一般需要的
-		CSS。但对于复杂组件的 CSS，我们希望可以：1、清晰的呈现结构；2、可复用样式代码。于是我们引入 CSS 预处理器：LESS.js。
-	</p>
 	
 	<h4>LESS.js</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>LESS.js 非常好用！推荐给大家！我们几乎所有样式都不是直接书写 CSS，而是采用
 		LESS.js。当然简单的样式就没必要使用 LESS。</p>
 	<p>当前笔者封装了两个 LESS 库</p>
@@ -81,15 +69,8 @@ select, input[type=text], input[type=password], textarea {
 	<pre class="prettyprint">&lt;link rel=&quot;stylesheet/less&quot; type=&quot;text/css&quot; href=&quot;../less/common_component.less&quot; /&gt;
 &lt;script src=&quot;../less.min.js&quot;&gt;&lt;/script&gt;
 </pre>
-
-	<p>
-		虽然 LESS 封装的不直接依赖 <a
-			href="https://git.oschina.net/sp42/ajaxjs/blob/master/ajaxjs-web/WebContent/asset/common/css/base.css">base.css</a>，但建议还是把
-		<a
-			href="https://git.oschina.net/sp42/ajaxjs/blob/master/ajaxjs-web/WebContent/asset/common/css/base.css">base.css</a>
-		加上。
+ 
 	<h4>文章段落</h4>
-	<hr class="ajaxjs-hr" />
 	<p>class="ajaxjs-text-p" 文章段落 例子如下</p>
 	<p>“北上广深同比涨幅高达20%，26个主要城市涨幅超10%，69个城市房价上涨……”2013年全国房价涨声一片，这与年初各地制定的房价控制目标相差甚远。经济学者马光远[微博]表示，房价调控目标是政府对于百姓的“承诺”，没有完成目标而“爽约”，蒙混过关只会丧失公信力。</p>
 
@@ -98,7 +79,7 @@ select, input[type=text], input[type=password], textarea {
 		北上广深同比涨幅高达20%，26个主要城市涨幅超10%，69个城市房价上涨……”2013年全国房价涨声一片，这与年初各地制定的房价控制目标相差甚远。经济学者马光远[微博]表示，房价调控目标是政府对于百姓的“承诺”，没有完成目标而“爽约”，蒙混过关只会丧失公信力。</p>
 	
 	<h4>标题过长省略号</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>需要设置文本宽度。</p>
 	<style>
 .noWarp li {
@@ -121,7 +102,7 @@ select, input[type=text], input[type=password], textarea {
 	</div>
 
 	<h4>常见字符</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>&amp; &lt; &gt; &quot; » → ⇒ ⇄ ↑ ↩ ⤢ ↱ ↷ ↻ ► ☛ © ® ™ • · » § ×</p>
 
 	<%@include file="../public/footer.jsp"%>

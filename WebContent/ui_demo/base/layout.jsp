@@ -9,7 +9,7 @@
 	<%@include file="../public/nav.jsp"%>
 
 	<h4>单行浮动</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>浮动元素要写在前面。</p>
 	<div class="box centerLimitWidth" style="width: 310px;text-align:center;">
 		<div style="float:left;">&lt;</div>
@@ -18,7 +18,7 @@
 	</div>
 
 	<h4>相对/绝对布局</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>外面为 position: relative；里面构建坐标系，position: absolute。</p>
 	<div class="box centerLimitWidth"
 		style="position: relative; width: 300px; height: 150px;">
@@ -29,12 +29,12 @@
 	</div>
 
 	<h4>左右居中</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>块元素设置 margin: 0 auto；文字、图片设置 text-align:center;</p>
 
 
 	<h4>垂直居中</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>单行文字与块元素垂直居中，设置块元素 line-height 与 height 一致即可。</p>
 	<p>单行文字混合图片，图片设置 vertical-align: middle</p>
 	<div class="box centerLimitWidth" style="width: 300px;">
@@ -53,7 +53,7 @@
 
 
 	<h4>垂直文本</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<div class="box centerLimitWidth"
 		style="margin-top:10px;width: 22px; height: 100px; text-align: center;">
 		aa
@@ -61,7 +61,7 @@
 	</div>
 
 	<h4>全屏幕背景</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>一般该 div 放在 document.body下一层，且 body 有高度 100%。</p>
 	<p>
 		<button class="ajaxjs-btn"
@@ -72,12 +72,12 @@
 		onclick="document.querySelector('.fullScreenMask').classList.toggle('hide');"></div>
 
 	<h4>移动端页面宽度</h4>
-    <hr class="ajaxjs-hr" />
+    
     <p>	
     &lt;meta name="viewport" content="width=320,user-scalable=0,initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0" /&gt;</p>
 
 	<h4>手机区域内滚动</h4>
-	<hr class="ajaxjs-hr" />	
+		
 	<p>
 		使用样式 -webkit-overflow-scrolling : touch;，iOS 有滚动回弹效果。
 	</p>
@@ -134,7 +134,6 @@ ul.tab li.active {
 </style>
 
 	<h4>高亮 item 效果</h4>
-	<hr class="ajaxjs-hr" />
 	<p>简单设置底边颜色不同即可。注意这里要使用 js 类：new
 		FocusHandler(document.querySelector('.tab'));</p>
 	<ul class="tab" style="width:80%;">
