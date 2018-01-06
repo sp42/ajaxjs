@@ -16,15 +16,11 @@
 						<a href="${pageContext.request.contextPath}/ui_demo/base/layout.jsp">常见布局 Common Layout</a>
 					</li>
 					<li>
-						<a href="${pageContext.request.contextPath}/ui_demo/base/list.jsp">列表布局</a>
-					</li>
-					<li>
 						<a href="${pageContext.request.contextPath}/ui_demo/base/page.jsp">页面制作 Page UI</a>
 					</li>
 					<li>
-						<a href="${pageContext.request.contextPath}/ui_demo/base/form.jsp">表单元素 Form Element</a>
+						<a href="${pageContext.request.contextPath}/ui_demo/base/list.jsp">列表布局</a>
 					</li>
-
 				</ul>
 			</menu>
 		</li>
@@ -52,7 +48,7 @@
 			</menu>
 		</li>
 		<li>
-			<a href="javascript:;">JavaScript</a>
+			<a href="javascript:;">Widget</a>
 			<menu>
 				<div>Widget，比较重的 JS 控件</div>
 				<ul>
@@ -80,7 +76,10 @@
 				<div>表单 控件</div>
 				<ul>
 					<li>
-						<a href="${pageContext.request.contextPath}/ui_demo/form/form.jsp">Form 表单</a>
+						<a href="${pageContext.request.contextPath}/ui_demo/form/element.jsp">Form Element 表单元素</a>
+					</li>
+					<li>
+						<a href="${pageContext.request.contextPath}/ui_demo/form/form.jsp">Form 表单验证</a>
 					</li>
 					<li>
 						<a href="${pageContext.request.contextPath}/ui_demo/form/htmlEditor.jsp">HTML Editor</a>

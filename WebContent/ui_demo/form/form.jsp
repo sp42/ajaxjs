@@ -9,7 +9,7 @@
 	<%@include file="../public/nav.jsp"%>
 	<h4>表单布局</h4>
 
-	<hr class="ajaxjs-hr" />
+	
 	<script>
 		if (!this.FormData) {
 			FormData = function() {
@@ -259,7 +259,6 @@
 	<div style="clear: both;"></div>
 
 	<h4>日历选择控件</h4>
-	<hr class="ajaxjs-hr" />
 	<!-- 日历控件 -->
 	<div class="CalendarHolder">
 		<input class="aj-input" placeholder="" name="valid" type="text"

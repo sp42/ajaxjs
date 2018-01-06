@@ -95,7 +95,7 @@
     <script src="${pageContext.request.contextPath}/asset/common/js/dom.js"></script>
     <script src="${pageContext.request.contextPath}/asset/common/js/widget.js"></script>
     <script src="${pageContext.request.contextPath}/asset/common/js/list.js"></script>
-    <script src="${pageContext.request.contextPath}/ui_demo/public/run_prettify.js"></script>  
+    <script src="${pageContext.request.contextPath}/asset/common/js/libs/run_prettify.js"></script>  
 
 	
     <title>AJAXJS UI-${title}</title>

@@ -9,7 +9,7 @@
 	<%@include file="../public/nav.jsp"%>
 
 	<h4>Banner 控件</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>Banner</p>
 	<ul class="list center">
 		<li>继承自 Tab 控件</li>
@@ -151,7 +151,6 @@
 	    </pre>
 	    
 	<h4>Lightbox</h4>
-	<hr class="ajaxjs-hr" />
 	<p>TODO</p>
 	    
 	<div class="imgList_1">

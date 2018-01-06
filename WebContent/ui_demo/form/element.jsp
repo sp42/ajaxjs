@@ -8,7 +8,7 @@
 <body>
 	<%@include file="../public/nav.jsp"%>
 	<h4>按钮 Button</h4>
-	<hr class="ajaxjs-hr" />
+	
 	
 	<p>class="ajaxjs-btn" 或 class="ajaxjs-btn-1"，class="ajaxjs-btn-1
 		ajaxjs-disable"</p>
@@ -23,7 +23,7 @@
 
 
 	<h4>输入框 Input Field</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>class="ajaxjs-inputField"、class="ajaxjs-inputField
 		ajaxjs-disable"</p>
 	<div class="centerLimitWidth" style="padding-left: 2%;">
@@ -34,7 +34,7 @@
 	</div>
 
 	<h4>文本框 Textarea</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>class="ajaxjs-select"</p>
 	<div class="centerLimitWidth" style="padding-left: 2%;">
 		<textarea class="ajaxjs-inputField" rows="15" cols="20"
@@ -43,7 +43,7 @@
 	</div>
 
 	<h4>下拉列表 DropdownList</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>class="ajaxjs-select"</p>
 	<div class="centerLimitWidth" style="padding-left: 2%;">
 		<select name="catalog" class="ajaxjs-select">
@@ -62,12 +62,12 @@
 	</div>
 
 	<h4>滑动杆 Slider</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>TODO</p>
 	
 	
 	<h4>自定义文件上传按钮</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<p>通过 label 标签 for 属性关联具体的 input[type=file] 触发本地 file
 		picker。input[type=file] 本身隐藏。</p>
 	<div class="centerLimitWidth" style="width: 100px;">

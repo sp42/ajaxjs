@@ -8,7 +8,7 @@
 <body>
 	<%@include file="../public/nav.jsp"%>
 	<h4>滑动杆控件</h4>
-	<hr class="ajaxjs-hr" />
+	
 	<section class="center">
 		<div class="slider">
 			<button>A</button>
@@ -19,7 +19,7 @@
 	</section>
 
 	<h4>Tag 选择器</h4>
-	<hr class="ajaxjs-hr" />
+	
 
 	<section class="center"> 关键字：<input value="${info.keywords}"
 		name="keywords" type="text" class="my-inputField" size="40" />
