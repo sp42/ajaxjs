@@ -8,9 +8,26 @@
 <body>
 	<%@include file="../public/nav.jsp"%>
 	<h4>跑马灯 Marquee</h4>
-	<hr class="ajaxjs-hr" />
 	<p>最简单的跑马灯</p>
-	<div class="center" style="padding-left: 10Px;">
+	<hr class="ajaxjs-hr" />
+	<br />
+	<div class="m center" style="width:100%;overflow:hidden;font-size:.8rem;">
+		提示：本例代码一般可以通过“鼠标右键查看源码”的方式了解源码。
+	</div>
+	<script>
+		window.setInterval(function(){ // 跑马灯
+			var m = document.querySelector('.m');
+			var queen = m.innerHTML.split('');
+			queen.push(queen.shift());
+			m.innerHTML = queen.join('');
+		}, 500);
+	</script>
+	
+	<br />
+	<p>最简单的跑马灯</p>
+	<hr class="ajaxjs-hr" />
+	<br />
+	<div class="center" style="padding-left: 10Px;font-size:.8rem;">
 		<div class="content1">这是一段滚动的文字11111111</div>
 		<div class="content2">这是一段滚动的文字22222222</div>
 	</div>
@@ -47,7 +64,9 @@
 	</script>
 
 	<p>可以停止的</p>
-	<div class="center" style="padding-left: 10Px;">
+	<hr class="ajaxjs-hr" />
+	<br />
+	<div class="center" style="padding-left: 10Px;font-size:.8rem;">
 		<input id="startBtn" type="button" value="开始滚动" /> <input
 			id="stopBtn" type="button" value="停止滚动" />
 		<div id="content">这是一段滚动的文字</div>

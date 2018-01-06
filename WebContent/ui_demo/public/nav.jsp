@@ -80,24 +80,17 @@
 				<div>表单 控件</div>
 				<ul>
 					<li>
-						<a href="${pageContext.request.contextPath}/ui_demo/js/dialog.jsp">Dialog 对话框</a>
+						<a href="${pageContext.request.contextPath}/ui_demo/form/form.jsp">Form 表单</a>
 					</li>
 					<li>
-						<a href="${pageContext.request.contextPath}/ui_demo/js/tab.jsp">HTMLEditor</a>
+						<a href="${pageContext.request.contextPath}/ui_demo/form/htmlEditor.jsp">HTML Editor</a>
 					</li>
 					<li>
-						<a href="${pageContext.request.contextPath}/ui_demo/js/carousel.jsp">Carousel 跑马灯</a>
+						<a href="${pageContext.request.contextPath}/ui_demo/form/slider.jsp">Slider 滑动杆</a>
 					</li>
 					<li>
-						<a href="${pageContext.request.contextPath}/ui_demo/js/list.jsp">List Control 列表控件</a>
+						<a href="${pageContext.request.contextPath}/ui_demo/form/calendar.jsp">Calendar 日历控件</a>
 					</li>
-					<li>
-						<a href="${pageContext.request.contextPath}/ui_demo/js/list_tab.jsp">List+Tab 复合控件</a>
-					</li>
-					<li>
-						<a href="${pageContext.request.contextPath}/ui_demo/js/form.jsp">Form 表单控件</a>
-					</li> 
-				  
 				</ul>
 			</menu>
 		</li>

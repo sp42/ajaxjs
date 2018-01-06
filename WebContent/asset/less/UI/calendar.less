@@ -1,5 +1,5 @@
 // 日历选择器
-.Calendar {
+.calendar {
 	font-family: Verdana;
 	font-size: .8rem;
 	background-color: white;
@@ -7,7 +7,7 @@
 	border-radius: 5px;
 	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 	text-align: center;
-	width: 200px;
+	width: 320px;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	user-select: none;
@@ -17,22 +17,39 @@
 		color: #1e5494;
 	}
 
+	.selectYearMonth{
+		float:right;
+		width:100px;
+		div{
+			display:inline-block;
+		}
+	}
+	.showCurrentYearMonth{
+		text-align:left;
+		color:lightgray;
+		font-size:1.6rem;
+		padding:5% 0;
+	}
 	table {
 		width: 100%;
 		border: 0;
 		border-spacing: 0;
 		border-collapse: collapse;
 		thead {
-			color: #acacac;
+			tr{
+				color: #acacac;
+				border-bottom: 1px solid lightgray;
+				margin-bottom:15px;
+			}
 		}
-
-		tbody td {
+		td {
 			font-size: .8rem;
-			padding: 1px;
+			padding: .4rem;
 			letter-spacing: 1px;
 			border-radius: 3px;
 			&.day {
 				cursor: pointer;
+				transition: background-color 190ms ease-in-out;
 			}
 
 			&.onToday {
@@ -75,7 +92,6 @@
 		left: 15px;
 		bottom: 5px;
 		input[type=button] {
-			.my-btn;
 			font-size: .8rem;
 			padding: 2px 4px;
 			margin: 1px;

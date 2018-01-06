@@ -44,11 +44,6 @@
 				<tbody></tbody>
 			</table>
 		</div>
-
-
-		<div class="slider">
-			<button>A</button>
-		</div>
 		<script src="${pageContext.request.contextPath}/asset/common/js/component/calendar.js"></script>
 	</section>
 	<%@include file="../public/footer.jsp"%>
