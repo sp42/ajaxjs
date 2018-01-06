@@ -284,5 +284,6 @@
 	<h4>回到顶部</h4>
 	<hr class="ajaxjs-hr" />
 	<p>TODO</p>
+	<%@include file="../public/footer.jsp"%>
 </body>
 </html>
