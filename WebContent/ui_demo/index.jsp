@@ -10,7 +10,7 @@
 </head>
 <body>
 	<%@include file="public/nav.jsp"%>
-	<h4>欢迎使用 AJAXJS Framework 的 UI 库！</h4>
+	<h4>欢迎使用 AJAXJS UI 库！</h4>
 	<p>原生的 JavaScript，请点击上面导航中的菜单进行浏览：）如果你决定使用这个库，本人能打包票这是一个非常明智的选择！</p>
 
 	<br />

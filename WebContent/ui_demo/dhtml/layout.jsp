@@ -28,38 +28,6 @@
 			absolute</div>
 	</div>
 
-	<h4>左右居中</h4>
-	
-	<p>块元素设置 margin: 0 auto；文字、图片设置 text-align:center;</p>
-
-
-	<h4>垂直居中</h4>
-	
-	<p>单行文字与块元素垂直居中，设置块元素 line-height 与 height 一致即可。</p>
-	<p>单行文字混合图片，图片设置 vertical-align: middle</p>
-	<div class="box centerLimitWidth" style="width: 300px;">
-		“茶道”为日本传统美学之精髓，<img style="vertical-align: middle" height="50"
-			src="../../asset/common/images/book.jpg" />
-		作者文笔清雅隽永，蕴藏文人气息，带领读者一窥日本古典美学的世界。
-	</div>
-	<br />
-	<p>使用 display: table-cell; 单元格居中</p>
-	<div class="box centerLimitWidth" style="width:300px;">
-		<div style="display: table-cell; vertical-align: middle; overflow: hidden; height: 100px; width: 300px;">
-	留言内容：Your Feedback
-		</div>
-	</div>
-
-
-
-	<h4>垂直文本</h4>
-	
-	<div class="box centerLimitWidth"
-		style="margin-top:10px;width: 22px; height: 100px; text-align: center;">
-		aa
-		<div style="transform: rotate(90deg);">500</div>
-	</div>
-
 	<h4>全屏幕背景</h4>
 	
 	<p>一般该 div 放在 document.body下一层，且 body 有高度 100%。</p>
@@ -206,7 +174,148 @@ ul.tab2 li.active {
 		new FocusHandler(document.querySelector('.tab2'));
 	</script>
 	<br />
-	<br />
+
+<h4>细线表格 Table</h4>
+	
+	<p>快速制作 1px 表格边框，为需要设置的 table 元素 class 即可。 class="ajaxjs-borderTable"</p>
+	<div class="centerLimitWidth">
+		<table class="ajaxjs-borderTable"  width="80%" align="center">
+			<tr>
+				<th>姓名</th>
+				<td>Bill Gates</td>
+			</tr>
+			<tr>
+				<th rowspan="2">电话</th>
+				<td>555 77 854</td>
+			</tr>
+			<tr>
+				<td>555 77 855</td>
+			</tr>
+		</table>
+	</div>
+	<p>class="ajaxjs-niceTable"</p>
+	<div class="centerLimitWidth">
+		<table class="ajaxjs-niceTable" width="80%" align="center">
+			<thead>
+				<tr>
+					<th>Month</th>
+					<th>Savings</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>January</td>
+					<td>$100</td>
+				</tr>
+				<tr>
+					<td>February</td>
+					<td>$80</td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td>Sum</td>
+					<td>$180</td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+	
+<h4>提示文字</h4>
+	
+	<p class="usingClass">上下方向（toBottom、toTop）不需要 JS；提示 div 需指定宽度和 position: relative。</p>
+	<div style="position: relative; height: 150px; line-height: 150px;">
+
+		<div class="tipsNote tipsNote-3" style="width: 300px;">
+			<div class="aj-arrow toBottom"></div>
+			<span>用户名等于账号名；不能与现有的账号名相同；注册后不能修改；</span>
+		</div>
+
+		<p class="foo" style="width: 600px; margin-left: 20%;">
+			<i>北上广深同比涨幅高达20%，26个主要城市涨幅超10%，69个城市房价上涨……</i>
+		</p>
+
+		<div class="tipsNote tipsNote-2" style="width: 450px;">
+			<div class="aj-arrow toTop"></div>
+			<span>用户名等于账号名；不能与现有的账号名相同；注册后不能修改；</span>
+		</div>
+		<div class="tipsNote tipsNote-1" style="width: 380px;">
+			<div class="aj-arrow toLeft"></div>
+			<span>用户名等于账号名；不能与现有的账号名相同；注册后不能修改；</span>
+		</div>
+		<div class="tipsNote tipsNote-0" style="width: 300px;">
+			<div class="aj-arrow toRight"></div>
+			<span>用户名等于账号名；不能与现有的账号名相同；注册后不能修改；</span>
+		</div>
+	</div>
+	<style>
+.tipsNote {
+	position: absolute;
+}
+/* 重写修改边框颜色 */
+.tipsNote-3 {
+	background-color: #f5faff;
+	border-color: green;
+	color: green;
+	left: 30%;
+	top: -10%;
+}
+
+.tipsNote-3 .aj-arrow:after {
+	border-top-color: #f5faff; /* 内容颜色 */
+}
+
+.tipsNote-3 .aj-arrow:before {
+	border-top-color: green; /* 边框颜色 */
+}
+
+.tipsNote-2 {
+	background-color: #f5faff;
+	border-color: #0066cc;
+	color: #0066cc;
+	left: 30%;
+	bottom: 10%;
+}
+
+.tipsNote-2 .aj-arrow:after {
+	border-bottom-color: #f5faff; /* 内容颜色 */
+}
+
+.tipsNote-2 .aj-arrow:before {
+	border-bottom-color: #0066cc; /* 边框颜色 */
+}
+
+.tipsNote-1 {
+	top: 30%;
+}
+
+.tipsNote-0 {
+	top: 30%;
+	left: -20px;
+}
+</style>
+	<script>
+		var tipsNoteStyle = document.querySelector('.tipsNote-1').style;
+		setTimeout(function() {
+
+			with (document.querySelector('.foo i')) {
+				//alert(offsetLeft + offsetWidth)
+				tipsNoteStyle.left = offsetLeft + offsetWidth + 20 + 'px';
+				//tipsNoteStyle.top  = (-(offsetTop  + offsetHeight) ) + 'px';
+			}
+		}, 500);
+	</script>	
+
+	<h4>分隔样式</h4>
+	<p>利用 &lt;fieldset&gt; 制作如下样式。</p>
+	<div class="centerLimitWidth" style="width: 98%; padding-left: 1%;">
+		<fieldset
+			style="border-bottom: 0; border-left: 0; border-right: 0; border-top: 1px solid lightgray; width: 90%;">
+			<legend align="center" style="text-align: center;">
+				<img src="../../asset/common/images/gs.png" />
+			</legend>
+		</fieldset>
+	</div>
 
 	<%@include file="../public/footer.jsp"%>
 </body>

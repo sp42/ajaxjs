@@ -100,6 +100,30 @@ select, input[type=text], input[type=password], textarea {
 		【大众点评与美团网合并
 		王兴张涛担任联席CEO】大众点评网与美团网今天联合发布声明，宣布达成战略合作，双方已共同成立一家新公司。新公司将实施Co-CEO制度，美团CEO王兴和大众点评CEO张涛将同时担任联席CEO和联席董事长，重大决策将在联席CEO和董事会层面完成。
 	</div>
+	
+	<h4>左右居中</h4>
+	<p>块元素设置 margin: 0 auto；文字、图片设置 text-align:center;</p>
+	<p>单行文字与块元素垂直居中，设置块元素 line-height 与 height 一致即可。</p>
+	<p>单行文字混合图片，图片设置 vertical-align: middle</p>
+	<div class="box centerLimitWidth" style="width: 300px;">
+		“茶道”为日本传统美学之精髓，<img style="vertical-align: middle" height="50"
+			src="../../asset/common/images/book.jpg" />
+		作者文笔清雅隽永，蕴藏文人气息，带领读者一窥日本古典美学的世界。
+	</div>
+	<br />
+	<p>使用 display: table-cell; 单元格居中</p>
+	<div class="box centerLimitWidth" style="width:300px;">
+		<div style="display: table-cell; vertical-align: middle; overflow: hidden; height: 100px; width: 300px;">
+	留言内容：Your Feedback
+		</div>
+	</div>
+
+	<h4>垂直文本</h4>
+	<div class="box centerLimitWidth"
+		style="margin-top:10px;width: 22px; height: 100px; text-align: center;">
+		aa
+		<div style="transform: rotate(90deg);">500</div>
+	</div>
 
 	<h4>常见字符</h4>
 	

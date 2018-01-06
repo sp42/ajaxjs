@@ -8,15 +8,16 @@
 <body>
 	<%@include file="../public/nav.jsp"%>
 	<h4>MD5</h4>
-	
+
 	<p>
 		字符串的“abc”的 MD5 结果应该是 <span class="result1">900150983cd24fb0d6963f7d28e17f72</span>
-		<button  class="ajaxjs-btn" onclick="test();">Test</button>
+		<button class="ajaxjs-btn" onclick="test();">Test</button>
 	</p>
 	<div class="center result2"></div>
 	<div class="center result"></div>
 
-	<script src="${pageContext.request.contextPath}/asset/common/js/libs/md5.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/asset/common/js/libs/md5.min.js"></script>
 	<script>
 		String.prototype.format = function() {
 			var str = this;
@@ -48,7 +49,7 @@
 
 
 	<h4>Base64</h4>
-	
+
 	<p>
 		字符串的“abc”的 base64 编码应该是 <span class="result1_1">YWJj</span> (UTF-8)
 		<button class="ajaxjs-btn" onclick="test2();">Test</button>
@@ -56,7 +57,8 @@
 	<div class="center result2_1"></div>
 	<div class="center result_1"></div>
 
-	<script src="${pageContext.request.contextPath}/asset/common/js/libs/base64.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/asset/common/js/libs/base64.js"></script>
 	<script>
 		function test2() {
 			document.querySelector('.result2_1').innerHTML = 'base("abc")结果：<span class="base64Result">{0}</span>'
@@ -72,7 +74,7 @@
 
 
 	<h4>一键繁体</h4>
-	
+
 	<script>
 		/*
 		 * --------------------------------------------------------
@@ -105,7 +107,8 @@
 			};
 		};
 	</script>
-	<script src="${pageContext.request.contextPath}/asset/common/js/libs/chinese.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/asset/common/js/libs/chinese.js"></script>
 	<div class="center">
 		<button class="ajaxjs-btn"
 			onclick="window.translate(document.body, traditionalized);">切换到正体中文</button>
@@ -113,6 +116,14 @@
 			onclick="window.translate(document.body, simplized);">切换到简体</button>
 	</div>
 
+	<h4>其他控件</h4>
+	<ul class="center">
+		<li><a href="${pageContext.request.contextPath}/ui_demo/dhtml/chinacity.jsp">省市区选择器 CityChooser</a></li>
+		<li><a href="${pageContext.request.contextPath}/ui_demo/dhtml/topic.htm">客户端交互</a></li>
+		<li><a href="${pageContext.request.contextPath}/ui_demo/misc/chatroom.htm">WebSocket 聊天室</a></li>
+		<li><a href="${pageContext.request.contextPath}/ui_demo/misc/paint.htm">像素画</a></li>
+		<li><a href="${pageContext.request.contextPath}/ui_demo/misc/Tetris.htm">俄罗斯方块</a></li>
+	</ul>
 
 
 	<%@include file="../public/footer.jsp"%>

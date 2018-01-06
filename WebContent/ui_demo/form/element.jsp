@@ -46,7 +46,7 @@
 	
 	<p>class="ajaxjs-select"</p>
 	<div class="centerLimitWidth" style="padding-left: 2%;">
-		<select name="catalog" class="ajaxjs-select">
+		<select name="catalog" class="ajaxjs-select" style="width:250px;">
 			<option value="1">公司新闻</option>
 			<option value="2" selected="selected">行业动态</option>
 			<option value="3">媒体报道</option>
@@ -54,7 +54,7 @@
 	</div>
 	<p>class="ajaxjs-select[multiple]"</p>
 	<div class="centerLimitWidth" style="padding-left: 2%;">
-	<select class="ajaxjs-select" multiple>
+	<select class="ajaxjs-select" multiple style="width:250px;height:100px;">
 			<option>多项选择</option>
 			<option>1</option>
 			<option>2</option>
