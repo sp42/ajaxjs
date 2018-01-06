@@ -44,7 +44,6 @@
 		}
 	</script>
 	<h4>对话框</h4>
-	
 	<p>制作对话框很简单，要点如下。</p>
 	<ul class="centerLimitWidth list">
 		<li>全屏幕的遮罩 Mask（fixed 定位，100%宽，高度用 js 获取页面内容高度然后赋值，设置透明背景然后注意
@@ -142,9 +141,7 @@ function showQueryDlg(innerText) {
 	}).show();
 }
 		</pre>
-	<div class="p">
-		<h3>样式如下：</h3>
-	</div>
+	<p>样式如下：</p>
 	<pre class="prettyprint">
 .msgbox_style_1(){
 	background-color:#ebebeb;

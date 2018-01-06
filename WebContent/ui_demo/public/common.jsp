@@ -87,10 +87,10 @@
 			}
 		}	
 	</style>
-	<%
+<%
 	final String OS = System.getProperty("os.name").toLowerCase();
 	boolean isDebug = !(OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0);
-	%>
+%>
 	<link rel="stylesheet" type="text/css" href="<%=getCssUrl(request, "/ui_demo/public/main.less", isDebug)%>" />
     <script src="${pageContext.request.contextPath}/asset/common/js/dom.js"></script>
     <script src="${pageContext.request.contextPath}/asset/common/js/widget.js"></script>

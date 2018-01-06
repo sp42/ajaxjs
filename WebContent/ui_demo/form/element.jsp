@@ -60,26 +60,6 @@
 			<option>2</option>
 		</select>
 	</div>
-
-	<h4>滑动杆 Slider</h4>
-	
-	<p>TODO</p>
-	
-	
-	<h4>自定义文件上传按钮</h4>
-	
-	<p>通过 label 标签 for 属性关联具体的 input[type=file] 触发本地 file
-		picker。input[type=file] 本身隐藏。</p>
-	<div class="centerLimitWidth" style="width: 100px;">
-		<input id="input_file_molding" type="file" class="hide"
-			name="uploadfile" /> <label for="input_file_molding">
-			<div
-				style="border: 1px solid lightgray; border-radius: 3px; text-align: center; color: gray; cursor: pointer; font-size: .8rem; padding: 10px;">
-				<div style="font-size: 2rem;">✚</div>
-				点击选择图片
-			</div>
-		</label>
-	</div>
 	<%@include file="../public/footer.jsp"%>
 </body>
 </html>

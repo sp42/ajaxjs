@@ -19,7 +19,7 @@
 						<a href="${pageContext.request.contextPath}/ui_demo/base/page.jsp">页面制作 Page UI</a>
 					</li>
 					<li>
-						<a href="${pageContext.request.contextPath}/ui_demo/base/list.jsp">列表布局</a>
+						<a href="${pageContext.request.contextPath}/ui_demo/base/list.jsp">Grid 列表布局</a>
 					</li>
 				</ul>
 			</menu>
@@ -40,6 +40,9 @@
 					</li>
 				  	<li>
 						<a href="${pageContext.request.contextPath}/ui_demo/dhtml/chinacity.jsp">省市区选择器 CityChooser</a>
+					</li>
+				  	<li>
+						<a href="${pageContext.request.contextPath}/ui_demo/dhtml/topic.htm">客户端交互</a>
 					</li>
 				  	<li>
 						<a href="${pageContext.request.contextPath}/ui_demo/dhtml/md5.jsp">其他 Misc</a>
@@ -85,7 +88,7 @@
 						<a href="${pageContext.request.contextPath}/ui_demo/form/htmlEditor.jsp">HTML Editor</a>
 					</li>
 					<li>
-						<a href="${pageContext.request.contextPath}/ui_demo/form/slider.jsp">Slider 滑动杆</a>
+						<a href="${pageContext.request.contextPath}/ui_demo/form/element2.jsp">Adv.Element 高级表单元素</a>
 					</li>
 					<li>
 						<a href="${pageContext.request.contextPath}/ui_demo/form/calendar.jsp">Calendar 日历控件</a>
