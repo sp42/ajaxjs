@@ -59,10 +59,13 @@
 						<a href="${pageContext.request.contextPath}/ui_demo/js/dialog.jsp">Dialog 对话框</a>
 					</li>
 					<li>
-						<a href="${pageContext.request.contextPath}/ui_demo/js/tab.jsp">Tab</a>
+						<a href="${pageContext.request.contextPath}/ui_demo/js/banner.jsp">Banner 广告轮播</a>
 					</li>
 					<li>
-						<a href="${pageContext.request.contextPath}/ui_demo/js/carousel.jsp">Carousel 跑马灯</a>
+						<a href="${pageContext.request.contextPath}/ui_demo/js/lightbox.jsp">LightBox 图片轮播</a>
+					</li>
+					<li>
+						<a href="${pageContext.request.contextPath}/ui_demo/js/tab.jsp">Tab</a>
 					</li>
 					<li>
 						<a href="${pageContext.request.contextPath}/ui_demo/js/list.jsp">List Control 列表控件</a>
@@ -82,13 +85,13 @@
 						<a href="${pageContext.request.contextPath}/ui_demo/form/element.jsp">Form Element 表单元素</a>
 					</li>
 					<li>
+						<a href="${pageContext.request.contextPath}/ui_demo/form/element2.jsp">Adv.Element 高级表单元素</a>
+					</li>
+					<li>
 						<a href="${pageContext.request.contextPath}/ui_demo/form/form.jsp">Form 表单验证</a>
 					</li>
 					<li>
 						<a href="${pageContext.request.contextPath}/ui_demo/form/htmlEditor.jsp">HTML Editor</a>
-					</li>
-					<li>
-						<a href="${pageContext.request.contextPath}/ui_demo/form/element2.jsp">Adv.Element 高级表单元素</a>
 					</li>
 					<li>
 						<a href="${pageContext.request.contextPath}/ui_demo/form/calendar.jsp">Calendar 日历控件</a>

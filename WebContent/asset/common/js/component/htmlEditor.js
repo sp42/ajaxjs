@@ -3,7 +3,7 @@
  * HTML Editor HTML 在线编辑器
  * --------------------------------------------------------
  */
-ajaxjs.HtmlEditor = function(el) {
+ajaxjs_HtmlEditor = function(el) {
 	this.iframeEl 	  = el.querySelector('iframe');
 	this.sourceEditor = el.querySelector('textarea');
 	this.iframeWin 	  = this.iframeEl.contentWindow;
@@ -112,7 +112,7 @@ ajaxjs.HtmlEditor = function(el) {
  * 创建颜色拾取器
  * @returns {String}
  */
-ajaxjs.HtmlEditor.createColorPickerHTML = function() {
+ajaxjs_HtmlEditor.createColorPickerHTML = function() {
 	// 定义变量
 	var cl = ['00', '33', '66', '99', 'CC', 'FF'], a, b, c, d, e, f, i, j, k, T;
 	// 创建head
@@ -129,7 +129,6 @@ ajaxjs.HtmlEditor.createColorPickerHTML = function() {
 				f = j == 5 && i < 3 ? ';border-bottom:none' : '';
 				d = '#' + a + b + c;
 				T = document.all ? '&nbsp;' : '';
-				/* 切记设置unselectable='on' */
 				h += '<td unselectable="on" style="background-color: ' + d + e + f + '" title="' + d + '">' + T + '</td>'; 
 			}
 			h += '</tr>';
@@ -137,6 +136,7 @@ ajaxjs.HtmlEditor.createColorPickerHTML = function() {
 		h += '</table></td>';
 		if (cl[i] == '66') h += '</tr><tr>';
 	}
+	
 	h += '</tr></table></div>';
 	
 	return h;

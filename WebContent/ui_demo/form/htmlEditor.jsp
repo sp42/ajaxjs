@@ -13,6 +13,8 @@
 	</p>
 	<section class="center">
 		<!-- HTML 编辑器控件 -->
+		<script src="${pageContext.request.contextPath}/asset/common/js/component/htmlEditor.js"></script>
+		
 		<div class="htmlEditor">
 			<ul class="toolbar">
 				<li class="dorpdown"><span title="字体" class="bg-4"></span>
@@ -62,15 +64,13 @@
 				<li class="dorpdown"><span title="字体颜色" class="bg-16"></span>
 					<div class="fontColor colorPicker">
 						<script>
-							document.write(ajaxjs.HtmlEditor
-									.createColorPickerHTML());
+							document.write(ajaxjs_HtmlEditor.createColorPickerHTML());
 						</script>
 					</div></li>
 				<li class="dorpdown"><span title="背景颜色" class="backColor bg-17"></span>
 					<div class="bgColor colorPicker">
 						<script>
-							document.write(ajaxjs.HtmlEditor
-									.createColorPickerHTML());
+							document.write(ajaxjs_HtmlEditor.createColorPickerHTML());
 						</script>
 					</div></li>
 				<li><span title="增加链接" class="createLink bg-18"></span></li>
@@ -83,9 +83,10 @@
 				<textarea class="hide" name="${name}"></textarea>
 			</div>
 		</div>
+		
+		
 		<script>
-			var htmlEditor = new ajaxjs.HtmlEditor(document
-					.querySelector('.htmlEditor'));
+			var htmlEditor = new ajaxjs_HtmlEditor(document.querySelector('.htmlEditor'));
 			htmlEditor.setValue('Hello world');
 		</script>
 		<!-- // HTML 编辑器控件 -->
@@ -93,30 +94,9 @@
 	</section>
 	<p>代码如下：</p>
 	<pre class="prettyprint">
-&lt;div class=&quot;tab2&quot;&gt;
-	&lt;ul&gt;
-		&lt;li class=&quot;selected&quot;&gt;公司简介&lt;/li&gt;
-		&lt;li&gt;资质证照&lt;/li&gt;
-		&lt;li&gt;荣誉证书&lt;/li&gt;
-	&lt;/ul&gt;
-	&lt;div class=&quot;content&quot;&gt;
-		&lt;div&gt;
-			自古以来，……
-		&lt;/div&gt;
-		&lt;div&gt;
-			之所以如此，……
-		&lt;/div&gt;
-		&lt;div&gt;
-			笔者出于个人兴趣，……
-		&lt;/div&gt;
-	&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;script src=&quot;${bigfoot}/js/widget/tab.js&quot;&gt;&lt;/script&gt;
-&lt;script&gt;
-	new SimpleTab(document.querySelector(&#x27;.tab2&#x27;));
-&lt;/script&gt;
-	   </pre>
+// 须引入 component/htmlEditor.js
+var htmlEditor = new ajaxjs_HtmlEditor(document.querySelector('.htmlEditor'));
+htmlEditor.setValue('Hello world');</pre>
 	<%@include file="../public/footer.jsp"%>
 </body>
 </html>
