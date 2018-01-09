@@ -10,13 +10,13 @@
 <!-- 				<div>动态 HTML，页面上的小脚本收集于此</div> -->
 				<ul>
 					<li>
-						<a href="${pageContext.request.contextPath}/ui_demo/dhtml/intro.jsp">Intro. &amp; Text概述&amp;文字排版</a>
+						<a href="${pageContext.request.contextPath}/ui_demo/dhtml/intro.jsp">Intro. &amp; Text 概述&amp;文字排版</a>
 					</li>
 					<li>
 						<a href="${pageContext.request.contextPath}/ui_demo/dhtml/layout.jsp">Common Layout 常见布局</a>
 					</li>
 					<li>
-						<a href="${pageContext.request.contextPath}/ui_demo/dhtml/menu.jsp">纯 CSS Menu 导航菜单</a>
+						<a href="${pageContext.request.contextPath}/ui_demo/dhtml/menu.jsp">CSS Menu 纯  CSS 菜单</a>
 					</li>
 					<li>
 						<a href="${pageContext.request.contextPath}/ui_demo/dhtml/collapsable.jsp">Collapsable 可折叠</a>
@@ -45,7 +45,7 @@
 						<a href="${pageContext.request.contextPath}/ui_demo/js/lightbox.jsp">LightBox 图片轮播</a>
 					</li>
 					<li>
-						<a href="${pageContext.request.contextPath}/ui_demo/js/tab.jsp">Tab</a>
+						<a href="${pageContext.request.contextPath}/ui_demo/js/tab.jsp">Tab 多标签页</a>
 					</li>
 					<li>
 						<a href="${pageContext.request.contextPath}/ui_demo/js/list.jsp">List Control 列表控件</a>
@@ -65,16 +65,10 @@
 						<a href="${pageContext.request.contextPath}/ui_demo/form/element.jsp">Form Element 表单元素</a>
 					</li>
 					<li>
-						<a href="${pageContext.request.contextPath}/ui_demo/form/element2.jsp">Adv.Element 高级表单元素</a>
-					</li>
-					<li>
 						<a href="${pageContext.request.contextPath}/ui_demo/form/form.jsp">Form 表单验证</a>
 					</li>
 					<li>
-						<a href="${pageContext.request.contextPath}/ui_demo/form/htmlEditor.jsp">HTML Editor</a>
-					</li>
-					<li>
-						<a href="${pageContext.request.contextPath}/ui_demo/form/calendar.jsp">Calendar 日历控件</a>
+						<a href="${pageContext.request.contextPath}/ui_demo/form/control.jsp">Control 表单大型控件</a>
 					</li>
 				</ul>
 			</menu>

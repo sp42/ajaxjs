@@ -59,7 +59,7 @@ public class ConfigService {
 	/**
 	 * 保存 JSON 配置
 	 */
-	public void save() {
+	public static void save() {
 		String jsonStr = JsonHelper.stringifyMap(config);
 		config.setJsonStr(jsonStr);
 

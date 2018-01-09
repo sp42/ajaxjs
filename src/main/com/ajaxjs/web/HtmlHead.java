@@ -51,10 +51,10 @@ public class HtmlHead {
 
 	public String getCssUrl(String lessPath) {
 		boolean isDebug;
-		if(ConfigService.config != null && ConfigService.config.get("isDebug") != null)
-		 isDebug = ConfigService.config.get("isDebug") == null ? false : (boolean) ConfigService.config.get("isDebug");
+		if (ConfigService.config != null && ConfigService.config.get("isDebug") != null)
+			isDebug = ConfigService.config.get("isDebug") == null ? false : (boolean) ConfigService.config.get("isDebug");
 		else
-		 isDebug = true;
+			isDebug = true;
 		return getCssUrl(lessPath, isDebug);
 	}
 

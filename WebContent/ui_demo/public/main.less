@@ -1,12 +1,7 @@
 @import 'common_component.less';
-//@import 'common/libs.less';
-//@import 'common/component.less';
-//@import 'common/canvas.less';
-//@import 'UI/list.less';
 @import 'UI/calendar.less';
 @import 'UI/htmlEditor.less';
 @maxWidth: 750px;
-
 .centerLimitWidth {
 	max-width: @maxWidth;
 	margin: 0 auto;
@@ -16,30 +11,30 @@
 	.centerLimitWidth;
 }
 
-h4{
+h4 {
 	.centerLimitWidth;
-	font-weight:bold;	
-	padding:2% 0 1% 10px;
+	font-weight: bold;
+	padding: 2% 0 1% 10px;
 	box-sizing: border-box;
-	font-size:1.2em;
-	margin-bottom:5px;
-	letter-spacing:2px;
-	color:#333;
-	
-	border-bottom:1px solid lightgray;
+	font-size: 1.2em;
+	margin-bottom: 5px;
+	letter-spacing: 2px;
+	color: #333;
+	border-bottom: 1px solid lightgray;
 }
 
 ul.list li {
-	list-style-type:disc;
+	list-style-type: disc;
 	list-style-position: inside;
 	margin-left: 10px;
 }
+
 .box {
 	border: 1px solid lightgray;
 	padding: 1% 2%;
 }
 
-body > p{
+body > p {
 	color: #333;
 	line-height: 160%;
 	font-size: 1rem;
@@ -51,6 +46,7 @@ body > p{
 	box-sizing: border-box;
 	margin: 0 auto;
 }
+
 nav {
 	width: 100%;
 	color: #555;
@@ -168,8 +164,6 @@ ul.imgList {
 		color: lighten(black, 30%);
 	}
 }
-
-
 
 // �޷����¹���
 .idScroller {
@@ -409,7 +403,6 @@ ul.imgList {
 	.centerLimitWidth;
 	width: 300px;
 	height: 150px;
-//	.areaScroll (v);
 	::-webkit-scrollbar {
 		width: 7px;
 		height: 5px;
@@ -439,113 +432,191 @@ ul.imgList {
 	.column_2 ();
 }
 
- .prettyprint {
+.prettyprint {
 	max-width: 700px;
 	width: 95%;
-	margin: 10px auto; 
+	margin: 10px auto;
 	border-left: 3px solid #d1d1e8;
-	//border-radius: 3px;
 	outline: 0;
 	resize: none;
 	font-size: .8rem;
 	overflow: auto;
 	font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
 }
- 
-.pln { color: #000 }  /* plain text */
+
+.pln {
+	color: #000
+}
 
 @media screen {
-  .str { color: #080 }  /* string content */
-  .kwd { color: #008 }  /* a keyword */
-  .com { color: #800 }  /* a comment */
-  .typ { color: #606 }  /* a type name */
-  .lit { color: #066 }  /* a literal value */
-  /* punctuation, lisp open bracket, lisp close bracket */
-  .pun, .opn, .clo { color: #660 }
-  .tag { color: #008 }  /* a markup tag name */
-  .atn { color: #606 }  /* a markup attribute name */
-  .atv { color: #080 }  /* a markup attribute value */
-  .dec, .var { color: #606 }  /* a declaration; a variable name */
-  .fun { color: red }  /* a function name */
+	.str {
+		color: #080
+	}
+
+	.kwd {
+		color: #008
+	}
+
+	.com {
+		color: #800
+	}
+
+	.typ {
+		color: #606
+	}
+
+	.lit {
+		color: #066
+	}
+
+	.pun , .opn , .clo {
+		color: #660
+	}
+
+	.tag {
+		color: #008
+	}
+
+	.atn {
+		color: #606
+	}
+
+	.atv {
+		color: #080
+	}
+
+	.dec , .var {
+		color: #606
+	}
+
+	.fun {
+		color: red
+	}
 }
 
-/* Use higher contrast and text-weight for printable form. */
-@media print, projection {
-  .str { color: #060 }
-  .kwd { color: #006; font-weight: bold }
-  .com { color: #600; font-style: italic }
-  .typ { color: #404; font-weight: bold }
-  .lit { color: #044 }
-  .pun, .opn, .clo { color: #440 }
-  .tag { color: #006; font-weight: bold }
-  .atn { color: #404 }
-  .atv { color: #060 }
+@media print , projection {
+	.str {
+		color: #060
+	}
+
+	.kwd {
+		color: #006;
+		font-weight: bold
+	}
+
+	.com {
+		color: #600;
+		font-style: italic
+	}
+
+	.typ {
+		color: #404;
+		font-weight: bold
+	}
+
+	.lit {
+		color: #044
+	}
+
+	.pun , .opn , .clo {
+		color: #440
+	}
+
+	.tag {
+		color: #006;
+		font-weight: bold
+	}
+
+	.atn {
+		color: #404
+	}
+
+	.atv {
+		color: #060
+	}
 }
 
-/* Put a border around prettyprinted code snippets. */
-pre.prettyprint { padding: 2px; padding-left:10px; }
+pre.prettyprint {
+	padding: 2px;
+	padding-left: 10px;
+}
 
-/* Specify class=linenums on a pre to get line numbering */
-ol.linenums { margin-top: 0; margin-bottom: 0 } /* IE indents via margin-left */
-li.L0,
-li.L1,
-li.L2,
-li.L3,
-li.L5,
-li.L6,
-li.L7,
-li.L8 { list-style-type: none }
-/* Alternate shading for lines */
-li.L1,
-li.L3,
-li.L5,
-li.L7,
-li.L9 { background: #eee }
+ol.linenums {
+	margin-top: 0;
+	margin-bottom: 0
+}
 
+li.L0 , li.L1 , li.L2 , li.L3 , li.L5 , li.L6 , li.L7 , li.L8 {
+	list-style-type: none
+}
 
-	.leftSidebar {
-		.acMenu ();
-		width: 20%;
-		margin: 3% auto;
-		overflow: hidden;
-		& > li {
-			border-top: 1px solid white;
+li.L1 , li.L3 , li.L5 , li.L7 , li.L9 {
+	background: #eee
+}
+
+.leftSidebar {
+	.acMenu ();
+	width: 20%;
+	margin: 3% auto;
+	overflow: hidden;
+	& > li {
+		border-top: 1px solid white;
+		border-bottom: 1px solid lightgray;
+		&.pressed {
+			border-top: 0;
 			border-bottom: 1px solid lightgray;
-			&.pressed {
-				border-top: 0;
-				border-bottom: 1px solid lightgray;
-				h3 {
-					// .hozGradient_3 (transparent , darken(@mainColor, 10));
-				}
+			h3 {
 			}
+		}
 
-			ul {
-				li {
-					list-style-type: disc;
-					padding-left: 10%;
+		ul {
+			li {
+				list-style-type: disc;
+				padding-left: 10%;
+				a {
+					width: 100%;
+					display: block;
+				}
+
+				&.selected {
 					a {
-						width: 100%;
-						display: block;
+						color: black;
 					}
-
-					&.selected {
-						// background-color: lighten(@hightColor, 33);
-						a {
-							color: black;
-						}
-					}
-				}
-			}
-
-			h3 , li {
-				padding: 5px 0 5px 15px;
-				letter-spacing: 2px;
-				line-height: 20px;
-				color: #939da8;
-				font-size: 12px;
-				&:hover , a:hover {
-					color: black;
 				}
 			}
 		}
+
+		h3 , li {
+			padding: 5px 0 5px 15px;
+			letter-spacing: 2px;
+			line-height: 20px;
+			color: #939da8;
+			font-size: 12px;
+			&:hover , a:hover {
+				color: black;
+			}
+		}
 	}
+}
+
+.form-1 {
+	.ajaxjs-form;
+	padding:2%;
+	dl {
+		dt {
+			width: 20%;
+		}
+	}
+
+	input , textarea {
+		.ajaxjs-inputField;
+	}
+
+	input[type=submit] , button {
+		.ajaxjs-btn;
+	}
+	select{
+		width:150px;
+	}
+}
+

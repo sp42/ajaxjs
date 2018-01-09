@@ -9,7 +9,6 @@
 	<%@include file="../public/nav.jsp"%>
 	<h4>表单布局</h4>
 
-	
 	<script>
 		if (!this.FormData) {
 			FormData = function() {
@@ -142,7 +141,7 @@
 	</script>
 
 
-	<form action="?" method="POST" class="form-1 ajaxjs-form center">
+	<form action="?" method="POST" class="form-1 center">
 		<dl>
 			<label>
 				<dt>
