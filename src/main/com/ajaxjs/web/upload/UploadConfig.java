@@ -1,5 +1,11 @@
 package com.ajaxjs.web.upload;
 
+/**
+ * 配置接口
+ * 
+ * @author Sp42 frank@ajaxjs.com
+ *
+ */
 public interface UploadConfig {
 	/**
 	 * 单次文件上传最大字节
@@ -38,6 +44,7 @@ public interface UploadConfig {
 
 	/**
 	 * 是否按照表单里的名字，还是改名？在这里决定
+	 * 
 	 * @param meta
 	 * @return
 	 */

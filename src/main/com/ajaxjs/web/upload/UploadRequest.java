@@ -3,6 +3,7 @@ package com.ajaxjs.web.upload;
 import java.io.File;
 import java.io.IOException;
 
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
@@ -11,11 +12,25 @@ import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.io.StreamUtil;
 
-public class Upload_Request extends HttpServletRequestWrapper {
-	public Upload_Request(HttpServletRequest request) {
+/**
+ * 
+ * @author Sp42 frank@ajaxjs.com
+ *
+ */
+public class UploadRequest extends HttpServletRequestWrapper {
+	/**
+	 * 创建一个上传请求对象
+	 * 
+	 * @param request
+	 *            请求对象
+	 */
+	public UploadRequest(HttpServletRequest request) {
 		super(request);
 	}
 
+	/**
+	 * 配置对象
+	 */
 	private UploadConfig config = new UploadConfigImpl();
 
 	/**
@@ -47,32 +62,47 @@ public class Upload_Request extends HttpServletRequestWrapper {
 	/**
 	 * 取得数据分割字符串，数据分割线开始位置boundary=---------------------------
 	 * 
-	 * @return
+	 * @return 分割符
 	 */
 	private byte[] getBoundary() {
 		String boundary = StringUtil.regMatch("boundary=((?:-|\\w)+)$", getContentType(), 1);
 		return boundary.getBytes();
 	}
 
-	public boolean upload() throws IOException {
+	/**
+	 * 执行上传
+	 * 
+	 * @return 上传结果
+	 * @throws IOException
+	 */
+	public UploadResult upload() throws IOException {
 		check();
+		ServletInputStream in = null;
 
 		try {
-			dataBytes = new StreamUtil().setIn(getInputStream()).inputStream2Byte().close().getData();
+			in = getInputStream();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
+		dataBytes = new StreamUtil().setIn(in).inputStream2Byte().close().getData();
 		dataStr = Encode.byte2String(dataBytes);
 		//		System.out.println(dataStr);
 
 		MetaData meta = new MetaData();
 		meta.parseMeta(dataStr);
-		
+
 		int offset = MetaData.get(dataBytes), length = getLength(offset);
-		return save(offset, length, meta).isOk;
+		return save(offset, length, meta);
 	}
 
+	/**
+	 * 获取上传文件的长度
+	 * 
+	 * @param start
+	 *            开始位置
+	 * @return 文件长度
+	 */
 	private int getLength(int start) {
 		int endPos = Encode.byteIndexOf(dataBytes, getBoundary(), start) - 4;
 		if (start == endPos)
@@ -90,16 +120,10 @@ public class Upload_Request extends HttpServletRequestWrapper {
 	 * @throws UploadException
 	 */
 	public int getStartPos() {
-		int start;
+		int start = 0;
+		int contentLength_index = dataStr.indexOf("Content-Length:");
 
 		try {
-			start = Encode.byteIndexOf(dataBytes, "filename=\"".getBytes(), 0);
-			start = Encode.byteIndexOf(dataBytes, "\n".getBytes(), start) + 1; // 遍历掉3个换行符到数据块
-			start = Encode.byteIndexOf(dataBytes, "\n".getBytes(), start) + 1;
-			start = Encode.byteIndexOf(dataBytes, "\n".getBytes(), start) + 1;
-
-			int contentLength_index = dataStr.indexOf("Content-Length:");
-
 			if (contentLength_index != -1) { // 如果有 Content-Length 字段
 				String contentLength = dataStr.substring(contentLength_index);
 				contentLength = contentLength.substring(0, contentLength.indexOf("\n"));
@@ -107,7 +131,6 @@ public class Upload_Request extends HttpServletRequestWrapper {
 				start = Encode.byteIndexOf(dataBytes, "\n".getBytes(), start) + 1;
 				start = Encode.byteIndexOf(dataBytes, "\n".getBytes(), start) + 1;
 			}
-
 		} catch (ArrayIndexOutOfBoundsException e) {
 			throw new IllegalArgumentException("你的表单中没有设置一个 name，不能获取字段");
 		}
@@ -115,7 +138,15 @@ public class Upload_Request extends HttpServletRequestWrapper {
 		return start;
 	}
 
-	public UploadResult save(int offset, int length, MetaData meta) {
+	/**
+	 * 保存文件
+	 * 
+	 * @param offset
+	 * @param length
+	 * @param meta
+	 * @return
+	 */
+	private UploadResult save(int offset, int length, MetaData meta) {
 		String fullPath = config.getSaveFolder() + config.getFileName(meta);
 		File file = null;
 		UploadResult result = new UploadResult();
