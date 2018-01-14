@@ -1,8 +1,10 @@
 package com.ajaxjs.simpleApp.controller;
 
+import java.io.IOException;
 import java.util.Map;
 
 import javax.mvc.annotation.Controller;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -17,6 +19,9 @@ import com.ajaxjs.util.ioc.Bean;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.web.CommonController;
 import com.ajaxjs.web.CommonEntryAdminController;
+import com.ajaxjs.web.upload.UploadConfigByConfigFile;
+import com.ajaxjs.web.upload.UploadRequest;
+import com.ajaxjs.web.upload.UploadResult;
 
 @Controller
 @Path("/admin/news")
@@ -81,6 +86,18 @@ public class NewsAdminController extends CommonController<Map<String, Object>, L
 		initDb();
 		model.put("catalogMenu", getService().getCatalog());
 
+	}
+
+	@POST
+	@Path("imgUpload")
+	public String imgUpload(HttpServletRequest request) throws IOException {
+		UploadRequest u = new UploadRequest(request);
+		u.setConfig(new UploadConfigByConfigFile());
+		UploadResult result = u.upload();
+		if (result.isOk)
+			return String.format(json_ok, result.fileName + "上传成功！");
+		else
+			return String.format(json_not_ok, result.fileName + "上传失败！");
 	}
 
 	//	@GET

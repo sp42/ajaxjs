@@ -27,8 +27,9 @@
 	<ul>
 		<li><a target="iframepage" href="admin/page_editor/show.do">页面维护</a></li>
 		<li><a target="iframepage" href="../cms/misc/gallery">相 册</a></li>
-		<li><a target="iframepage" href="admin/config/show.do">系统配置</a></li>
-		<li><a target="iframepage" href="../cms/misc/Company">公司信息</a></li>
+		<li><a target="iframepage" href="admin/config/siteStru/show.do">网站结构</a></li>
+		<li><a target="iframepage" href="admin/config/site/show.do">网站信息</a></li>
+		<li><a target="iframepage" href="admin/config/show.do">所有配置</a></li>
 	</ul>
 </li>
 <li>

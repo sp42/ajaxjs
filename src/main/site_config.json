@@ -18,5 +18,12 @@
 	"data" : {
 		"newsCatalog_Id" : 6,
 		"jobCatalog_Id" :7
+	},
+	"uploadFile" : {
+		"MaxTotalFileSize" : 1024000, 
+		"MaxSingleFileSize" : 1024000, 
+		"isFileOverwrite" : true, 
+		"SaveFolder" : "C://temp//", 
 	}
+	
 }

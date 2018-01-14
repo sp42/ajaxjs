@@ -291,9 +291,22 @@
 			</div>
 		</div>
 	</div>
+	<pre class="prettyprint">
+// 无刷新表单提交
+ajaxjs.xhr.form('form'); // 第一个参数是元素；默认回调
+ajaxjs.xhr.form('form', function(json){alert(json.msg);});//第二个参数是回调，回调参数为 json
+ajaxjs.xhr.form('form', null, { //第三个参数是配置项对象
+	beforeSubmit :  fun(form, json){}, // 提交之前的事件
+	ignoreField : 'bar' // 忽略表单中的字段
+});
+	</pre>
+	
 	<script src="calendar.js"></script>
 
 	<script>
+	
+		
+		
 		var calendar = Object.create(ajaxjs_calendar);
 		calendar.el = document.querySelector('.Calendar.id_01');
 		calendar.onSelect = function(date) {

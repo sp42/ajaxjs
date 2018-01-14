@@ -1,7 +1,5 @@
 package com.ajaxjs.simpleApp.controller;
 
-import java.util.List;
-import java.util.Map;
 
 import javax.mvc.annotation.Controller;
 import javax.ws.rs.DELETE;
@@ -14,10 +12,8 @@ import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.jdbc.PageResult;
 import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.simpleApp.model.Catalog;
 import com.ajaxjs.simpleApp.service.CatalogService;
-import com.ajaxjs.simpleApp.service.CatalogServiceImpl;
 import com.ajaxjs.util.ioc.Bean;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.web.CommonController;

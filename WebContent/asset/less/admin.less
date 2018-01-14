@@ -8,6 +8,12 @@ body {
 	font-size: 14px;
 }
 
+h3 {
+	font-size: 1.2rem;
+	letter-spacing: 3px;
+	padding: 2%;
+}
+
 body.admin-shell {
 	width: 100%;
 	height: 100%;
@@ -207,4 +213,81 @@ header.top {
 		}
 	}
 }
+
+.configForm {
+	.ajaxjs-form;
+	dl dt {
+		width: 10%;
+	}
+
+	dt , dd {
+		margin: 1% 0 ! important;
+	}
+
+	input , textarea {
+		.ajaxjs-inputField;
+	}
+
+	button {
+		.ajaxjs-btn;
+	}
+
+	.sub {
+		color: gray;
+		transition: color linear 300ms;
+	}
+
+	dl:hover .sub {
+		color: black;
+	}
+}
+
+.tree {
+	width: 500px;
+	//margin:0 auto;
+	margin-left:15px;
+	position:relative;
+	li {
+		overflow: hidden;
+		//margin-top: 2px;
+		background-color: white;
+		box-sizing: border-box;
+		padding-left: 10px;
+		min-height: 38px;
+		line-height: 38px;
+		border-top: 1px solid white;
+		border-bottom: 1px solid lightgray;
+		&:last-child {
+			border-bottom: 0;
+		}
+
+		&:nth-child(odd) {
+			background-color: #f3f3f3;
+		}
+	}
+
+	.parentNode {
+		cursor: pointer;
+	}
+
+	.subTree {
+		overflow: hidden;
+		transition: height linear 100ms;
+	}
+
+	.valueHolder {
+		width: 150px;
+		float: right;
+		padding-right:5%;
+	}
+}
+
+.tooltip{
+	position:absolute;
+	width:260px;
+//	height:50px;	
+	right:-270px;
+	transition: top linear 100ms;
+}
+
 

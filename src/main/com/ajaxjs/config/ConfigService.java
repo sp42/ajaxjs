@@ -18,10 +18,13 @@ package com.ajaxjs.config;
 import java.util.Map;
 
 import com.ajaxjs.Version;
+import com.ajaxjs.js.JsEngineWrapper;
 import com.ajaxjs.js.JsonHelper;
+import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.Value;
 import com.ajaxjs.util.collection.JsonStruTraveler;
 import com.ajaxjs.util.io.FileUtil;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 以 JSON 为存储格式的配置系统，在 JVM 中以 Map/List 结构保存 该类是单例。
@@ -29,6 +32,8 @@ import com.ajaxjs.util.io.FileUtil;
  * @author Sp42 frank@ajaxjs.com
  */
 public class ConfigService {
+	private static final LogHelper LOGGER = LogHelper.getLog(SiteStruService.class);
+
 	/**
 	 * 所有的配置保存在这个 congfig 中
 	 */
@@ -39,14 +44,44 @@ public class ConfigService {
 	public static Map<String, Object> flatConfig;
 
 	/**
+	 * 获取配置
+	 * 
+	 * @return 所有的配置
+	 */
+	public Config getConfig() {
+		return config;
+	}
+
+	/**
+	 * 获取扁平化配置
+	 * 
+	 * @return 扁平化配置
+	 */
+	public Map<String, Object> getFlatConfig() {
+		return flatConfig;
+	}
+
+	/**
 	 * 配置 json 文件的路径
 	 */
 	public static String jsonPath = Version.srcFolder + "site_config.json";
 
 	/**
-	 * 加载 JSON 配置
+	 * 加载 JSON 配置（默认路径）
 	 */
 	public static void load() {
+		load(jsonPath);
+	}
+
+	/**
+	 * 加载 JSON 配置
+	 * 
+	 * @param jsonPath
+	 *            JSON 配置文件所在路径
+	 */
+	public static void load(String jsonPath) {
+		ConfigService.jsonPath = jsonPath; // 覆盖本地的
+
 		config = new Config();
 		config.setJsonPath(jsonPath);
 		config.setJsonStr(FileUtil.openAsText(jsonPath));
@@ -77,8 +112,7 @@ public class ConfigService {
 	public static boolean getValueAsBool(String key) {
 		return Value.TypeConvert(flatConfig.get(key), boolean.class);
 	}
-	
-	
+
 	/**
 	 * 读取配置并转换其为 int 类型。仅对扁平化后的配置有效，所以参数必须是扁平化的 aaa.bbb.ccc 格式。
 	 * 
@@ -99,6 +133,69 @@ public class ConfigService {
 	 */
 	public static String getValueAsString(String key) {
 		return Value.TypeConvert(flatConfig.get(key), String.class);
+	}
+
+	/**
+	 * 
+	 * @param namespace
+	 * @return
+	 */
+	public static String transform(String namespace) {
+		String[] arr = namespace.split("\\.");
+
+		if (arr.length < 1)
+			return null;
+		String[] arr2 = new String[arr.length];
+
+		for (int i = 0; i < arr.length; i++) {
+			
+			arr2[i] = "[\"" + arr[i] + "\"]";
+		}
+
+		return StringUtil.stringJoin(arr2, "");
+	}
+
+	/**
+	 * load the json config file to the JS Runtime, and let the new values put
+	 * into it, finally save this new json file
+	 * 
+	 * @param map
+	 *            A map that contains all new config
+	 */
+	public static void loadJSON_in_JS(Map<String, Object> map) {
+		JsEngineWrapper js = new JsEngineWrapper();
+		js.eval("allConfig = " + FileUtil.openAsText(ConfigService.jsonPath));
+
+		for (String key : map.keySet()) {
+			String jsKey = transform(key);
+			String jsCode = "";
+
+			if (map.get(key) == null) {
+				jsCode = String.format("allConfig%s = null;", jsKey);
+			} else {
+				// 获取原来的类型，再作适当的类型转换
+				String type = js.eval("typeof allConfig" + jsKey, String.class);
+
+				switch (type) {
+				case "string":
+					jsCode = String.format("allConfig%s = '%s';", jsKey, map.get(key));
+					break;
+				case "number":
+				case "boolean":
+					jsCode = String.format("allConfig%s = %s;", jsKey, map.get(key));
+					break;
+				case "object":
+					jsCode = String.format("allConfig%s = '%s';", jsKey, map.get(key));
+				default:
+					LOGGER.info("未处理 js 类型： " + type);
+				}
+			}
+
+			js.eval(jsCode);
+		}
+
+		String json = js.eval("JSON.stringify(allConfig);", String.class);
+		FileUtil.save(ConfigService.jsonPath, json);
 	}
 
 }

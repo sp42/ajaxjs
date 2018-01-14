@@ -1,4 +1,4 @@
-<%@page pageEncoding="UTF-8"%>
+<%@page pageEncoding="UTF-8" import="com.ajaxjs.web.upload.*"%>
 <!DOCTYPE html>
 <html>
 <%
@@ -161,8 +161,26 @@ label {
 		</label>
 	</div>
 	<h4>图片上传预览</h4>
-	
-	<input type="file" name="uploadfile" /> 
+<%
+if(request.getMethod().equals("POST")) {
+	//UploadRequest r = new UploadRequest();
+	//r.setRequest(request);
+	//new Upload().upload(r);
+	//if(r.isOk()) {
+UploadRequest r = new UploadRequest(request);
+if(r.upload().isOk){
+%>
+upload ok
+<% 
+	}
+}
+%>
+	<div class="center">
+		<form action="../../admin/news/imgUpload/do.do" method="POST" enctype="multipart/form-data">
+			<input type="file"	 name="uploadfile" /> 
+			<input type="submit" value="upload" /> 
+		</form>
+	</div>
 	<script src="${pageContext.request.contextPath}/asset/common/js/component/upload.js"></script>
 	<%@include file="../public/footer.jsp"%>
 </body>

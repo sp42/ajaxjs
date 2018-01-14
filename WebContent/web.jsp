@@ -8,7 +8,6 @@
 	href="/framework/asset/images/favicon.ico" />
 <link rel="shortcut icon" type="image/x-icon"
 	href="/framework/asset/images/favicon.ico" />
-
 <meta name="keywords"
 	content="ajaxjs java js javascript web ui framework html5 ioc aop orm restful" />
 <meta name="description"
