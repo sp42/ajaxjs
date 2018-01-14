@@ -240,16 +240,19 @@ header.top {
 	dl:hover .sub {
 		color: black;
 	}
+
+	p {
+		padding: 2%;
+		padding-top:0;
+	}
 }
 
 .tree {
-	width: 500px;
-	//margin:0 auto;
-	margin-left:15px;
-	position:relative;
+	width: 700px;
+	margin-left: 15px;
+	position: relative;
 	li {
 		overflow: hidden;
-		//margin-top: 2px;
 		background-color: white;
 		box-sizing: border-box;
 		padding-left: 10px;
@@ -276,18 +279,23 @@ header.top {
 	}
 
 	.valueHolder {
-		width: 150px;
+		width: 280px;
 		float: right;
-		padding-right:5%;
+		padding-right: 5%;
+	}
+
+	.tipsNote {
+		position: absolute;
+		width: 260px;
+		right: -270px;
+		transition: top linear 100ms;
+		b {
+			letter-spacing: 2px;
+		}
+	}
+
+	textarea {
+		min-height: 60px;
 	}
 }
-
-.tooltip{
-	position:absolute;
-	width:260px;
-//	height:50px;	
-	right:-270px;
-	transition: top linear 100ms;
-}
-
 

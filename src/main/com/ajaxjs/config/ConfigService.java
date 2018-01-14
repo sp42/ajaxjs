@@ -67,6 +67,11 @@ public class ConfigService {
 	public static String jsonPath = Version.srcFolder + "site_config.json";
 
 	/**
+	 * 配置 json 说明文件的路径
+	 */
+	public static String jsonSchemePath = Version.srcFolder + "site_config_scheme.json";
+
+	/**
 	 * 加载 JSON 配置（默认路径）
 	 */
 	public static void load() {
@@ -148,7 +153,7 @@ public class ConfigService {
 		String[] arr2 = new String[arr.length];
 
 		for (int i = 0; i < arr.length; i++) {
-			
+
 			arr2[i] = "[\"" + arr[i] + "\"]";
 		}
 

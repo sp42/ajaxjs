@@ -2,49 +2,20 @@
 <%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <!DOCTYPE html>
 <html>
-<commonTag:head lessFile="/asset/less/admin.less" title="网站配置" />
+<commonTag:head lessFile="/asset/less/admin.less" title="全部配置" />
 <body class="configForm admin-entry-form">
 	<h3>全部配置</h3>
+	<p>请点击有+号菜单项以展开下一级的内容。</p>
 	<div class="tree">
-		<div class="tooltip tipsNote hide">
+		<div class="tipsNote hide">
 			<div class="aj-arrow toLeft"></div>
-			<span>用户名等于账号名；不能与现有的账号名相同；注册后不能修改；</span> fdsfdfd
+			<span></span>
 		</div>
 	</div>
 	<script>
-		var a = {
-			"site" : {
-				"titlePrefix" : "大华官网",
-				"keywords" : "大华•川式料理",
-				"description" : "大华•川式料理饮食有限公司于2015年成立，本公司目标致力打造中国新派川菜系列。炜爵爷川菜料理系列的精髓在于清、鲜、醇、浓、香、烫、酥、嫩，擅用麻辣。在服务出品环节上，团队以ISO9000为蓝本建立标准化餐饮体系，务求以崭新的姿态面向社会各界人仕，提供更优质的服务以及出品。炜爵爷宗旨：麻辣鲜香椒，美味有诀窍，靓油用一次，精品煮御赐。 ",
-				"footCopyright" : "版权所有"
-			},
-			"dfd" : {
-				"dfd" : 'fdsf',
-				"id" : 888,
-				"dfdff" : {
-					"dd" : 'fd'
-				}
-			},
-			"clientFullName" : "大华•川式料理",
-			"clientShortName" : "大华",
-			"isDebug" : true,
-			"data" : {
-				"newsCatalog_Id" : 6,
-				"jobCatalog_Id" : 7
-			},
-			"uploadFile" : {
-				"MaxTotalFileSize" : {
-					name : '',
-					type : 'number',
-					ui : 'input_text'
-				},
-				"MaxSingleFileSize" : 1024000,
-				"isFileOverwrite" : true,
-				"SaveFolder" : "C://temp//",
-			}
-		};
+		var configJson = ${configJson};
 
+		var jsonScheme = ${jsonSchemePath};
 		var tree = document.querySelector('.tree');
 
 		function isMap(v) {
@@ -76,8 +47,25 @@
 					//debugger;
 					it(el, fn, li);
 				} else {
-					li.innerHTML = '<div class="valueHolder"><input type="text" value="' + el + '" data-note="ddddddddd" /></div>'
-							+ i;
+					var namespaces = getParentStack(stack); // 另外设一个 stack？
+					if (namespaces)
+						namespaces += '.' + i;
+					else 
+						namespaces = i;
+					
+					var scheme = eval('jsonScheme.' + namespaces);
+					var tip = makeTip(scheme);
+					
+					var html;
+					switch(scheme.ui) {
+						case 'textarea':
+							html = '<div class="valueHolder"><textarea></textarea></div>';
+							break;
+						case 'input_text':
+						default:
+							html = '<div class="valueHolder"><input name="' + namespaces +'" type="text" value="' + el + '" data-note="' + tip +'" /></div>';	
+					}
+					li.innerHTML = html + i;
 					fn(i, el);
 				}
 				ul.appendChild(li);
@@ -85,6 +73,37 @@
 			stack.pop();
 
 			parentEl.appendChild(ul);
+		}
+		
+		// 获取完整的父节点路径
+		function getParentStack(stack) {
+			var names = [];
+			var last;
+			for (var i = stack.length; i > 0; i--) {
+				last = stack[i];
+				if(last){
+					var map = stack[i - 1];
+					for(var j in map) {
+						if(map[j] == last) {
+							names.push(j);
+						}
+					}					
+				}
+				
+			}
+			
+			return names.reverse().join('.');
+		}
+		
+		// 根据元数据生成说明
+		function makeTip(scheme) {
+			if(!scheme || !scheme.name) 
+				return '';
+			
+			var html = scheme.name.bold(); 
+			html += '<br />' + scheme.tip;
+			
+			return html;
 		}
 
 		function toggle(e) {
@@ -103,9 +122,7 @@
 			}
 		}
 		
-		it(a, function(item, v) {
-			console.log(item + ':' + stack.length);
-		}, tree);
+		it(configJson, function(item, v) { }, tree);
 		
 		// 遍历每个函数
 		function getList(formEl, fn) {

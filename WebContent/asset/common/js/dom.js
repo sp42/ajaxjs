@@ -541,3 +541,14 @@ ajaxjs.loadScript = function(src, fn) {
 }
 
 ajaxjs.loadScript.loaded = {};
+
+ajaxjs.validatorReg = {
+		require : /.+/,
+		username : /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/,
+		email : /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+		url : /^http:\/\/[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/,
+		integer : /^[-\+]?\d+$/,
+		double : /^[-\+]?\d+(\.\d+)?$/,
+		english : /^[A-Za-z]+$/,
+		chinese : /^[\u0391-\uFFE5]+$/
+	}

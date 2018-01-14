@@ -1,0 +1,52 @@
+{
+	"site" : {
+		"titlePrefix" : {
+			name : '网站标题前缀',
+			tip : '放在 head title 标签中',
+			type: 'string',
+			ui: 'input_text'
+		},
+		"keywords" : {
+			name : '搜索关键字',
+			tip : '用于 SEO 关键字优化，以便于搜索引擎机器人查找、分类。多个关键字之间用英文 , 逗号分开',
+			type: 'string',
+			ui: 'input_text'
+		},
+		"description" :{
+			name : '网站描述',
+			tip : '网站的说明文本。通常是一段话介绍网站即可。',
+			type: 'string',
+			ui: 'textarea'
+		},
+		"footCopyright":{
+			name : '网站标题前缀',
+			tip : '放在 head title 标签中',
+			type: 'string',
+			ui: 'input_text'
+		} 
+	},
+	"dfd":{
+		"dfd":'fdsf',
+		"id": 888,
+		"dfdff":{
+			"dd":'fd'
+		}
+	},
+	"clientFullName":"大华•川式料理",
+	"clientShortName":"大华",
+	"isDebug": true,
+	"data" : {
+		"newsCatalog_Id" : 6,
+		"jobCatalog_Id" :7
+	},
+	"uploadFile" : {
+		"MaxTotalFileSize" : {
+			name : '',
+			type: 'number',
+			ui: 'input_text'
+		}, 
+		"MaxSingleFileSize" : 1024000, 
+		"isFileOverwrite" : true, 
+		"SaveFolder" : "C://temp//", 
+	}
+}
