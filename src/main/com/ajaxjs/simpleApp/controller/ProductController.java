@@ -11,8 +11,6 @@ import javax.ws.rs.QueryParam;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.simpleApp.service.CatalogService;
-import com.ajaxjs.simpleApp.service.CatalogServiceImpl;
-import com.ajaxjs.simpleApp.service.HrService;
 import com.ajaxjs.simpleApp.service.ProductService;
 import com.ajaxjs.util.ioc.Bean;
 import com.ajaxjs.util.ioc.Resource;

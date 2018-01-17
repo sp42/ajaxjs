@@ -103,7 +103,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 
 		return MapHelper.toMap(params.split("&"), true);
 	}
-	
+
 	/**
 	 * 取去 url 上的值
 	 * 
@@ -116,7 +116,8 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	public String getValueFromPath(String value, String paramName) {
 		/* 如果 context path 上有数字那就bug，所以先去掉 */
 		String requestURI = getRequestURI().replace(getContextPath(), ""),
-				regExp = "(" + value.replace("{" + paramName + "}", ")(\\d+)");/* 获取正则 暂时写死 数字 TODO */
+				regExp = "(" + value.replace("{" + paramName + "}",
+						")(\\d+)");/* 获取正则 暂时写死 数字 TODO */
 
 		Matcher m = Pattern.compile(regExp).matcher(requestURI);
 		String result = m.find() ? m.group(m.groupCount()) : null;
@@ -134,7 +135,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	 *            Bean 的类引用
 	 * @return Java Bean
 	 */
-	public  <T> T getBean(Class<T> clazz) {
+	public <T> T getBean(Class<T> clazz) {
 		Map<String, Object> map;
 
 		if (getMethod().toUpperCase().equals("PUT")) {
@@ -206,22 +207,27 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	 * @return 客户端 ip
 	 */
 	public static String getIp(HttpServletRequest request) {
-		String ip = request.getHeader("X-Forwarded-For");
+		String ip = request.getHeader("x-forwarded-for");
+		if (!"unknown".equalsIgnoreCase(ip) && ip != null && ip.length() != 0) {
 
-		if (!"unKnown".equalsIgnoreCase(ip)) {
-			// 多次反向代理后会有多个 ip 值，第一个 ip 才是真实 ip
 			int index = ip.indexOf(",");
-
-			if (index != -1)
+			if (index != -1) {
 				ip = ip.substring(0, index);
-		}
-
-		ip = request.getHeader("X-Real-IP");
-		if (!"unKnown".equalsIgnoreCase(ip))
+			}
 			return ip;
-
-		ip = request.getRemoteAddr();
-
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("Proxy-Client-IP");
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("WL-Proxy-Client-IP");
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("X-Real-Ip");
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getRemoteAddr();
+		}
 		return ip;
 	}
 
