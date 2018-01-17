@@ -215,16 +215,18 @@ p {
 								href="#ajaxjs-framework-base-%E5%9F%BA%E7%A1%80%E5%BA%93"></a>AJAXJS
 							Framework Base 基础库
 						</h1>
-						<p>这是一个平淡无奇的库，相信不会为绝大多数大神们带来一点惊喜——只是自己业余累积的一些代码库（“轮子”），希望可以通过简单的手段做一件事（没啥三方依赖），不过可能就是考虑的情况不是很足，方法不是最主流的，性能也不是最优的。</p>
-						<p>基础模块包 ajaxjs-base 为纯 Java 项目与特定 jvm 环境脱离，面向 Web 开发，但应该可运行在
-							web、swing、android 环境中。base 包含了相当多的工具类或静态方法，有以下子模块：</p>
+						<p>这是一个平淡无奇的库，相信不会为绝大多数大神们带来一点惊喜——只是自己业余累积的一些代码库（“轮子”），希望可以通过简单的手段做一件事（没啥三方依赖），不过可能就是考虑的情况不是很足，方法不是最主流的，性能也不是最优的。
+						base 为纯 Java 项目与特定 jvm 环境脱离，面向 Web 开发，但应可运行在
+							web、swing、android 环境中。base 包含了相当多的工具类或静态方法，详见右边菜单栏。Maven:	</p>
+						 
+	
+<pre>&lt;dependency&gt;
+  &lt;groupId&gt;com.ajaxjs&lt;/groupId&gt;
+  &lt;artifactId&gt;ajaxjs-base&lt;/artifactId&gt;
+  &lt;version&gt;1.0.3&lt;/version&gt;
+&lt;/dependency&gt;</pre>
 
-						<ul>
-							<li><a href="?show=utils">Utils</a></li>
-							<li><a href="?show=jdbc">JDBC</a></li>
-							<li><a href="?show=js">JS/JSON</a></li>
-							<li><a href="?show=net">Net</a></li>
-						</ul>
+						 
 						<p>运行系统：Win/Mac/Linux；要求：JRE1.7+/Tomcat7+</p>
 						<p>
 							<a href="https://gitee.com/sp42/ajaxjs-base">Git/SVN 源码</a> | <a
