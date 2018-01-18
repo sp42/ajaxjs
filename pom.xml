@@ -15,10 +15,12 @@
 	<issueManagement>
 		<url>https://gitee.com/sp42/ajaxjs/issues</url>
 	</issueManagement>
+
 	<organization>
 		<name>AJAXJS</name>
 		<url>https://framework.ajaxjs.com</url>
 	</organization>
+
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
@@ -40,7 +42,6 @@
 		<developerConnection>scm:git:git@gitee.com:sp42/ajaxjs.git</developerConnection>
 		<url>https://gitee.com/sp42/ajaxjs</url>
 	</scm>
-
 
 	<distributionManagement>
 		<snapshotRepository>
@@ -67,6 +68,7 @@
 					<include>**/*.*</include>
 				</includes>
 			</resource>
+
 			<resource>
 				<directory>WebContent/asset</directory>
 				<targetPath>META-INF/resources/asset</targetPath>
@@ -74,7 +76,6 @@
 					<include>**/*.*</include>
 				</includes>
 			</resource>
-
 		</resources>
 
 		<testResources>
@@ -86,7 +87,6 @@
 			</testResource>
 		</testResources>
 
-
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -96,6 +96,7 @@
 					<target>1.7</target>
 				</configuration>
 			</plugin>
+
 			<plugin>
 				<groupId>org.sonatype.plugins</groupId>
 				<artifactId>nexus-staging-maven-plugin</artifactId>
@@ -107,6 +108,7 @@
 					<autoReleaseAfterClose>true</autoReleaseAfterClose>
 				</configuration>
 			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
@@ -121,6 +123,7 @@
 					</execution>
 				</executions>
 			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -134,7 +137,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -152,9 +154,7 @@
 		</plugins>
 	</build>
 
-
 	<dependencies>
-
 		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -162,7 +162,6 @@
 			<version>3.0.1</version>
 			<scope>provided</scope>
 		</dependency>
-
 
 		<!-- https://mvnrepository.com/artifact/javax.servlet.jsp/javax.servlet.jsp-api -->
 		<dependency>
@@ -178,12 +177,6 @@
 			<version>1.1</version>
 			<scope>provided</scope>
 		</dependency>
-
-		<!-- <dependency> -->
-		<!-- <groupId>javax</groupId> -->
-		<!-- <artifactId>javaee-api</artifactId> -->
-		<!-- <version>7.0</version> -->
-		<!-- </dependency> -->
 
 		<!-- https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api -->
 		<dependency>
@@ -214,5 +207,4 @@
 		</dependency>
 
 	</dependencies>
-
 </project>

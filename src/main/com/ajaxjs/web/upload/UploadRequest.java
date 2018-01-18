@@ -28,6 +28,7 @@ import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.io.StreamUtil;
 
 /**
+ * 文件上传
  * 
  * @author Sp42 frank@ajaxjs.com
  *
@@ -119,7 +120,7 @@ public class UploadRequest extends HttpServletRequestWrapper {
 	 * @return 文件长度
 	 */
 	private int getLength(int start) {
-		int endPos = Encode.byteIndexOf(dataBytes, getBoundary(), start) - 4;
+		int endPos = StreamUtil.byteIndexOf(dataBytes, getBoundary(), start) - 4;
 		if (start == endPos)
 			throw new IllegalArgumentException("上传表单中没有二进制数据，上传文件为空！");
 
@@ -142,9 +143,9 @@ public class UploadRequest extends HttpServletRequestWrapper {
 			if (contentLength_index != -1) { // 如果有 Content-Length 字段
 				String contentLength = dataStr.substring(contentLength_index);
 				contentLength = contentLength.substring(0, contentLength.indexOf("\n"));
-				start = Encode.byteIndexOf(dataBytes, contentLength.getBytes(), start) + contentLength.length();
-				start = Encode.byteIndexOf(dataBytes, "\n".getBytes(), start) + 1;
-				start = Encode.byteIndexOf(dataBytes, "\n".getBytes(), start) + 1;
+				start = StreamUtil.byteIndexOf(dataBytes, contentLength.getBytes(), start) + contentLength.length();
+				start = StreamUtil.byteIndexOf(dataBytes, "\n".getBytes(), start) + 1;
+				start = StreamUtil.byteIndexOf(dataBytes, "\n".getBytes(), start) + 1;
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
 			throw new IllegalArgumentException("你的表单中没有设置一个 name，不能获取字段");
