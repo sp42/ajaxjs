@@ -5,13 +5,20 @@
 
 	<groupId>com.ajaxjs</groupId>
 	<artifactId>ajaxjs-web</artifactId>
-	<version>0.0.1</version>
+	<version>1.0.3</version>
 	<packaging>jar</packaging>
 
 	<name>AJAXJS-Web</name>
-	<description>A demo for deployment to the Central Repository via OSSRH</description>
-	<url>http://github.com/simpligility/ossrh-demo</url>
-
+	<description>AJAXJS Web aims to full-stack, not only the server-side framework, but also integrates the front-end library. It's written in HTML5 + Java, a successor to the JVM platform, efficient, secure, stable, cross-platform and many other advantages, but it abandoned the traditional enterprise architecture brought about by the large and bloated, emphasizing the lightweight, and fast, very suitable for the Internet fast application.</description>
+	<url>https://framework.ajaxjs.com/framework/</url>
+	<inceptionYear>2015</inceptionYear>
+	<issueManagement>
+		<url>https://gitee.com/sp42/ajaxjs/issues</url>
+	</issueManagement>
+	<organization>
+		<name>AJAXJS</name>
+		<url>https://framework.ajaxjs.com</url>
+	</organization>
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
@@ -34,12 +41,14 @@
 		<url>https://gitee.com/sp42/ajaxjs</url>
 	</scm>
 
+
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
+
 	<build>
 		<sourceDirectory>src/main</sourceDirectory>
 		<testSourceDirectory>src/test</testSourceDirectory>
@@ -50,7 +59,24 @@
 					<exclude>**/*.java</exclude>
 				</excludes>
 			</resource>
+
+			<resource>
+				<directory>META-INF</directory>
+				<targetPath>META-INF</targetPath>
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>WebContent/asset</directory>
+				<targetPath>META-INF/resources/asset</targetPath>
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+			</resource>
+
 		</resources>
+
 		<testResources>
 			<testResource>
 				<directory>src/test</directory>
@@ -59,6 +85,8 @@
 				</excludes>
 			</testResource>
 		</testResources>
+
+
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -106,6 +134,8 @@
 					</execution>
 				</executions>
 			</plugin>
+
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
@@ -125,6 +155,36 @@
 
 	<dependencies>
 
+		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+
+		<!-- https://mvnrepository.com/artifact/javax.servlet.jsp/javax.servlet.jsp-api -->
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>javax.servlet.jsp-api</artifactId>
+			<version>2.2.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.websocket</groupId>
+			<artifactId>javax.websocket-api</artifactId>
+			<version>1.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- <dependency> -->
+		<!-- <groupId>javax</groupId> -->
+		<!-- <artifactId>javaee-api</artifactId> -->
+		<!-- <version>7.0</version> -->
+		<!-- </dependency> -->
+
 		<!-- https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api -->
 		<dependency>
 			<groupId>javax.ws.rs</groupId>
@@ -135,8 +195,24 @@
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-base</artifactId>
-			<version>0.0.2</version>
+			<version>1.0.4</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>2.0.2-beta</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
+
 </project>

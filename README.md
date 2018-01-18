@@ -7,9 +7,14 @@ A fullstack Java web project. It's clean, simple, fast and extensible. Not only 
 
 AJAXJS 的设计原则：首先是尽量减少引入新的概念和新的第三方框架或库，而仅仅是在 Java 类库的核心概念之上进行梳理和进一步简化，个人认为一个第三方 jar 包就是一门新的 DSL 语言，DSL 语言不管大小，对心智来说都是一个额外的负担。如果没有足够的理由，没有必要去使用新的 DSL；其次，在写法上极其平常，顶多是引入链式写法（或所谓的流式接口），同时在 api 命名上，尽量准确精炼而且是众人所熟知的，不标新立异；最后就是代码量少，大部分每个类总共几十行，学习和理解的曲线低。详见官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/framework/) 介绍。 
 
-
-
-
+Maven 依赖
+```
+<dependency>
+    <groupId>com.ajaxjs</groupId>
+    <artifactId>ajaxjs-web</artifactId>
+    <version>1.0.2</version>
+</dependency>
+```
 
 相关项目一览
 --------------
