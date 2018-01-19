@@ -369,7 +369,7 @@ p {
 		</tr>
 	</table>
 	<!-- CNZZ 统计 -->
-	<div style="display: none";>
+	<div style="display: none;">
 		<script
 			src="https://s11.cnzz.com/z_stat.php?id=1261173351&web_id=1261173351"></script>
 	</div>

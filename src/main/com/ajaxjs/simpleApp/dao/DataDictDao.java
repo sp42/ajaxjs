@@ -12,7 +12,7 @@ import com.ajaxjs.framework.dao.annotation.Update;
 import com.ajaxjs.jdbc.PageResult;
 
 public interface DataDictDao extends IDao<Map<String, Object>, Integer> {
-	final static String tableName = "data_dict";
+	final static String tableName = "general_data_dict";
 
 	@Select(value = "SELECT * FROM " + tableName)
 	@Override

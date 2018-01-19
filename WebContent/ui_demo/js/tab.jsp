@@ -143,7 +143,6 @@
 			<div>本文将刊于《原生态民族文化学刊》2015年第3期。</div>
 		</div>
 	</div>
-	</div>
 
 	<script>
 		new ajaxjs.SimpleTab(document.querySelector('.tab2')).jump(0);

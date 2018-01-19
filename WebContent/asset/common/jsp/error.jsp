@@ -1,6 +1,5 @@
 <%@page pageEncoding="UTF-8" isErrorPage="true" import="java.io.*"%>
-<%!
-	/**
+<%!/**
 	 * 收集错误信息 输出到网页
 	 * 
 	 * @param request
@@ -55,33 +54,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=320,user-scalable=0,initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0" />
-	<title>错误页面
-		code：${requestScope['javax.servlet.error.status_code']}</title>
-	<style>
-	td {
-		font-size: 9pt;
-		padding: 6px;
-	}
-	
-	ul {
-		padding-left: 30px;
-	}
-	
-	hr {
-		width: 98%;
-	}
-	
-	textarea {
-			width: 90%;
-			min-height: 600px;
-			outline:none;
-			border:1px solid gray;
-			padding:1%;
-			margin:1%;
-		}
-	</style>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=320,user-scalable=0,initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0" />
+<title>错误页面
+	code：${requestScope['javax.servlet.error.status_code']}</title>
+<style>
+td {
+	font-size: 9pt;
+	padding: 6px;
+}
+
+ul {
+	padding-left: 30px;
+}
+
+hr {
+	width: 98%;
+}
+
+textarea {
+	width: 90%;
+	min-height: 600px;
+	outline: none;
+	border: 1px solid gray;
+	padding: 1%;
+	margin: 1%;
+}
+</style>
 </head>
 <body leftMargin="0" topMargin="0">
 	<table cellSpacing="0" cellPadding="0" border="0" width="100%">
@@ -126,11 +126,9 @@
 	<table borderColor="#111111" cellPadding="12" border="0">
 		<tr>
 			<td width="50%">
-				<CENTER>
-					<P>
-						<b>通常引起中断服务的原因</b>
-					</P>
-				</CENTER>
+				<P>
+					<b>通常引起中断服务的原因</b>
+				</P>
 				<P>在维护服务器的过程中，我们偶尔会人为地中止一个或多个服务节点的服务，其目的是使服务节点更为有效地服务，或提升其安全性。常见的原因包括：</P>
 				<ul>
 					<li><b>应用新的安全补丁 <br />
@@ -144,9 +142,11 @@
 				</ul>
 			</td>
 			<td width="100%">
-				<table borderColor="#111111" cellPadding="12" bgColor="#ffffcc" border="1">
+				<table borderColor="#111111" cellPadding="12" bgColor="#ffffcc"
+					border="1">
 					<tr>
-						<td><font color="#000080"> <b>即将进行的工作<FONT face="Wingdings">&#216;</FONT></b>
+						<td><font color="#000080"> <b>即将进行的工作<FONT
+									face="Wingdings">&#216;</FONT></b>
 						</font>
 							<P>
 								<b>将本服务升级为更新版本的系统</b>
@@ -160,11 +160,14 @@
 	</table>
 	<hr />
 	<div align="center">
-			<a href="${pageContext.request.contextPath}">回首页</a> | <a href="javascript:history.go(-1);">上一页</a>
+		<a href="${pageContext.request.contextPath}">回首页</a> | <a
+			href="javascript:history.go(-1);">上一页</a>
 	</div>
 	&nbsp;&nbsp;&nbsp;异常信息：
-	<textarea><%
-	 out.print(getError(request, exception));
-%></textarea>
+	<textarea>
+		<%
+			out.print(getError(request, exception));
+		%>
+	</textarea>
 </body>
 </html>

@@ -46,7 +46,7 @@
 
 	    // 需要把链接配置属性  target="iframepage"
 	    ;(function () {
-	    	// 获取 #target=XXX 参数
+	    	// 获取 # target=abc 参数
 	    	function getTarget() {
 	    		var target = window.location.hash.match(/target=([^$]+)/);
 	    		return target && target.pop();

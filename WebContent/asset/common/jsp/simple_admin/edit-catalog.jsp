@@ -83,7 +83,6 @@ form{
 		</div>
 		
 	</div>
-	</div>
 	<script>
 		var stack = [document.querySelector('select[data-level="1"]')];
 		
