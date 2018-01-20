@@ -8,7 +8,6 @@ import javax.servlet.Filter;
 import com.ajaxjs.util.aop.Aop;
 
 public class PostFilter extends Aop<Filter> {
-
 	public static boolean checkIt(HttpServletRequest request) {
 		if (!"POST".equalsIgnoreCase(request.getMethod())) {
 			return true;
