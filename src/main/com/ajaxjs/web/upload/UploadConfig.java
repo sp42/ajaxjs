@@ -39,7 +39,7 @@ public interface UploadConfig {
 	/**
 	 * 允许上传的文件类型，如果为空数组则不限制上传类型。格式如 {".jpg", ".png", ...}
 	 * 
-	 * @return
+	 * @return 允许上传的文件类型
 	 */
 	public String[] getAllowExtFilenames();
 
@@ -53,7 +53,7 @@ public interface UploadConfig {
 	/**
 	 * 保存文件的目录
 	 * 
-	 * @return
+	 * @return 保存文件的目录
 	 */
 	public String getSaveFolder();
 
@@ -61,7 +61,8 @@ public interface UploadConfig {
 	 * 是否按照表单里的名字，还是改名？在这里决定
 	 * 
 	 * @param meta
-	 * @return
+	 *            元数据
+	 * @return 文件名
 	 */
 	public String getFileName(MetaData meta);
 }

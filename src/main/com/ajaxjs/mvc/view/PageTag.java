@@ -95,7 +95,7 @@ public class PageTag extends SimpleTagSupport {
 	 * @deprecated
 	 * @param request
 	 * @param params
-	 * @return
+	 * @return URL 地址
 	 */
 	public static String appendParams(HttpServletRequest request, Map<String, String> params) {
 		Map<String, String[]> map = request.getParameterMap();

@@ -160,7 +160,7 @@ public class UploadRequest extends HttpServletRequestWrapper {
 	 * @param offset
 	 * @param length
 	 * @param meta
-	 * @return
+	 * @return 上传结果
 	 */
 	private UploadResult save(int offset, int length, MetaData meta) {
 		String fullPath = config.getSaveFolder() + config.getFileName(meta);
