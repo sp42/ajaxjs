@@ -24,6 +24,12 @@
 		"MaxSingleFileSize" : 1024000, 
 		"isFileOverwrite" : true, 
 		"SaveFolder" : "C://temp//", 
+	},
+	"testServer" : {
+		"mysql" : {
+			"url": "jdbc:mysql://localhost:3306/ng_zmy",
+			"password":"root",
+			"user":"root"
+		}
 	}
-	
 }

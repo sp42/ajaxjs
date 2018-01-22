@@ -239,28 +239,6 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 			request.setAttribute(key, mv.get(key));
 	}
 
-	/*
-	 * 输出文档 GET /document
-	 * 
-	 * @param model Model 模型
-	 * 
-	 * @param entity POJO
-	 * 
-	 * @return
-	 */
-	// public String getDocument(ModelAndView model, T entity) {
-	// String[] strs = DocumentRenderer.getEntityInfo(entity.getClass());
-	// model.put("entityInfo", strs[0]);
-	// if (strs[1] != null) { // 更多关于该实体的文档
-	// model.put("moreDocument", strs[1]);
-	// }
-	//
-	// model.put("meta", DocumentRenderer.getDocument(entity.getClass(),
-	// service.getSQL_TableName()));
-	//
-	// return "common/entity/showDocument";
-	// }
-
 	/**
 	 * 
 	 * @param model
