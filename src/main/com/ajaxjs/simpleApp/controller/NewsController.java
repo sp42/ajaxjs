@@ -11,8 +11,8 @@ import javax.ws.rs.QueryParam;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.simpleApp.plugin.Neighbor;
 import com.ajaxjs.simpleApp.service.NewsService;
-import com.ajaxjs.util.ioc.Bean;
-import com.ajaxjs.util.ioc.Resource;
+import com.ajaxjs.ioc.Bean;
+import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.web.CommonController;
 import com.ajaxjs.web.CommonEntryReadOnlyController;
 

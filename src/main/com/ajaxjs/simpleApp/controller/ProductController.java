@@ -12,8 +12,8 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.simpleApp.service.CatalogService;
 import com.ajaxjs.simpleApp.service.ProductService;
-import com.ajaxjs.util.ioc.Bean;
-import com.ajaxjs.util.ioc.Resource;
+import com.ajaxjs.ioc.Bean;
+import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.web.CommonController;
 import com.ajaxjs.web.CommonEntryReadOnlyController;
 

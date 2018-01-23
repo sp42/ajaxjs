@@ -35,7 +35,7 @@ import javax.ws.rs.Path;
 
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.util.Encode;
-import com.ajaxjs.util.ioc.BeanContext;
+import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.NewInstance;
 

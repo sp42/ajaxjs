@@ -11,7 +11,7 @@ import com.ajaxjs.framework.service.aop.CommonService;
 import com.ajaxjs.jdbc.PageResult;
 import com.ajaxjs.simpleApp.dao.NewsDao;
 import com.ajaxjs.simpleApp.model.Catalog;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.ioc.Bean;
 
 @Bean(value = "NewsService", aop = { CommonService.class, CacheService.class })
 public class NewsServiceImpl implements NewsService {

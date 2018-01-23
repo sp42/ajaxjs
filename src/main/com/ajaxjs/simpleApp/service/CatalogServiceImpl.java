@@ -8,7 +8,7 @@ import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.jdbc.PageResult;
 import com.ajaxjs.simpleApp.dao.CatalogDao;
 import com.ajaxjs.simpleApp.model.Catalog;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.ioc.Bean;
 
 @Bean(value = "CatalogService")
 public class CatalogServiceImpl implements CatalogService {

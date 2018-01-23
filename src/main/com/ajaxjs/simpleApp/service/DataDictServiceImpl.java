@@ -7,7 +7,7 @@ import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.jdbc.PageResult;
 import com.ajaxjs.simpleApp.dao.DataDictDao;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.ioc.Bean;
 
 @Bean(value = "DataDictService")
 public class DataDictServiceImpl implements DataDictService {

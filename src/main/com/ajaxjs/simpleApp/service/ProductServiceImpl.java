@@ -10,7 +10,7 @@ import com.ajaxjs.framework.service.aop.CacheService;
 import com.ajaxjs.framework.service.aop.CommonService;
 import com.ajaxjs.jdbc.PageResult;
 import com.ajaxjs.simpleApp.dao.ProductDao;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.ioc.Bean;
 
 @Bean(value = "ProductService", aop = { CommonService.class, CacheService.class })
 public class ProductServiceImpl implements ProductService {

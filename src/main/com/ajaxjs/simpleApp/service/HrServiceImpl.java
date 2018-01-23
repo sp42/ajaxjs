@@ -11,7 +11,7 @@ import com.ajaxjs.framework.service.aop.CommonService;
 import com.ajaxjs.jdbc.PageResult;
 import com.ajaxjs.simpleApp.dao.HrDao;
 import com.ajaxjs.simpleApp.model.Catalog;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.ioc.Bean;
 
 @Bean(value = "HrService", aop = { CommonService.class, CacheService.class })
 public class HrServiceImpl implements HrService {

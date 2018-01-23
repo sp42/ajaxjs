@@ -41,8 +41,8 @@ import com.ajaxjs.util.ClassScaner;
 import com.ajaxjs.util.reflect.ExecuteMethod;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.collection.MapHelper;
-import com.ajaxjs.util.ioc.BeanContext;
-import com.ajaxjs.util.ioc.Scanner;
+import com.ajaxjs.ioc.BeanContext;
+import com.ajaxjs.ioc.Scanner;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
