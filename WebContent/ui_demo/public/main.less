@@ -620,4 +620,53 @@ li.L1 , li.L3 , li.L5 , li.L7 , li.L9 {
 		width:150px;
 	}
 }
+@keyframes topMsg-fade-in {
+    0% {
+        opacity: 0;
+    }
+    30% {
+        opacity: .2;
+    }
+    80% {
+        opacity: .4;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@keyframes topMsg-fade-out {
+    0% {
+    }
+    30% {
+        opacity: .2;
+    }
+    80% {
+        opacity: .4;
+    }
+    100% {
+        opacity: 0;
+    }
+}
 
+.topMsg{
+	position:fixed;
+	width:300px;
+	height:80px;
+	right: 30px;
+	padding:10px;
+	border-radius:5px;
+	color: #0066cc;
+	box-sizing: border-box;
+	background-color: #f5faff;
+	border:1px solid #0066cc;
+	top: -100px;
+	transition: top ease-in 550ms;
+	animation-fill-mode: forwards;
+	&.fadeIn{
+		top: 100px;
+		animation: topMsg-fade-in ease-in 550ms;
+	}
+	&.fadeOut{
+		animation: topMsg-fade-out ease-in 550ms;
+	}
+}

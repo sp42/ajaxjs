@@ -70,6 +70,9 @@
 					<li>
 						<a href="${pageContext.request.contextPath}/ui_demo/form/control.jsp">Control 表单大型控件</a>
 					</li>
+					<li>
+						<a href="${pageContext.request.contextPath}/ui_demo/form/msg.jsp">消息提示</a>
+					</li>
 				</ul>
 			</menu>
 		</li>
