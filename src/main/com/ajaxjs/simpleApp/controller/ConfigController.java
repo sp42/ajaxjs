@@ -12,3 +12,5 @@ import com.ajaxjs.config.BaseConfigController;
 public class ConfigController extends BaseConfigController {
 
 }
+
+

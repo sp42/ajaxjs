@@ -61,21 +61,21 @@
 				</excludes>
 			</resource>
 
-			<resource>
-				<directory>META-INF</directory>
-				<targetPath>META-INF</targetPath>
-				<includes>
-					<include>**/*.*</include>
-				</includes>
-			</resource>
+<!-- 			<resource> -->
+<!-- 				<directory>META-INF</directory> -->
+<!-- 				<targetPath>META-INF</targetPath> -->
+<!-- 				<includes> -->
+<!-- 					<include>**/*.*</include> -->
+<!-- 				</includes> -->
+<!-- 			</resource> -->
 
-			<resource>
-				<directory>WebContent/asset</directory>
-				<targetPath>META-INF/resources/asset</targetPath>
-				<includes>
-					<include>**/*.*</include>
-				</includes>
-			</resource>
+<!-- 			<resource> -->
+<!-- 				<directory>WebContent/asset</directory> -->
+<!-- 				<targetPath>META-INF/resources/asset</targetPath> -->
+<!-- 				<includes> -->
+<!-- 					<include>**/*.*</include> -->
+<!-- 				</includes> -->
+<!-- 			</resource> -->
 		</resources>
 
 		<testResources>
