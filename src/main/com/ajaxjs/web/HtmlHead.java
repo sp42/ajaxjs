@@ -55,6 +55,8 @@ public class HtmlHead {
 			isDebug = ConfigService.config.get("isDebug") == null ? false : (boolean) ConfigService.config.get("isDebug");
 		else
 			isDebug = true;
+		
+		isDebug = true;
 		return getCssUrl(lessPath, isDebug);
 	}
 

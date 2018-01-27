@@ -1,6 +1,8 @@
 package com.ajaxjs.simpleApp.service;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 import com.ajaxjs.framework.dao.DaoHandler;
 import com.ajaxjs.framework.dao.QueryParams;
@@ -20,11 +22,19 @@ public class DataDictServiceImpl implements DataDictService {
 
 	@Override
 	public Integer create(Map<String, Object> bean) throws ServiceException {
+		bean.put("uuid", UUID.randomUUID().toString());
+		Date now = new Date();
+
+		bean.put("createDate", now);
+		bean.put("updateDate", now);
 		return dao.create(bean);
 	}
 
 	@Override
 	public int update(Map<String, Object> bean) throws ServiceException {
+		Date now = new Date();
+
+		bean.put("updateDate", now);
 		return dao.update(bean);
 	}
 
