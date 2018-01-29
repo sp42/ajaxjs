@@ -9,7 +9,7 @@
 	<%@include file="../public/nav.jsp"%>
 	<h4>消息提示框</h4>
 	<p>
-		该控件的效果是从页面右上方徐徐显示出一个消息框，如下图所示。然后暂时停留若干时间，完毕后自动收缩。 <a href="http://blog.csdn.net/zhangxin09/article/details/79156982">教程</a>
+		该控件的效果是从页面右上方徐徐显示出一个消息框，然后暂时停留若干时间，完毕后自动收缩。 <a href="http://blog.csdn.net/zhangxin09/article/details/79156982">教程</a>
 	</p>
 	<section class="center">
 	
