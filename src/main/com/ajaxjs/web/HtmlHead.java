@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.config.SiteStruService;
-import com.ajaxjs.net.IP;
 import com.ajaxjs.util.collection.MapHelper;
 
 /**
@@ -56,7 +55,6 @@ public class HtmlHead {
 		else
 			isDebug = true;
 		
-		isDebug = true;
 		return getCssUrl(lessPath, isDebug);
 	}
 

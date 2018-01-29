@@ -6,6 +6,7 @@
 <body class="configForm admin-entry-form">
 	<h3>网站结构</h3>
 	<div class="tree">
+	
 		<div class="tooltip tipsNote hide">
 			<div class="aj-arrow toLeft"></div>
 			<span>用户名等于账号名；不能与现有的账号名相同；注册后不能修改；</span> fdsfdfd
@@ -86,14 +87,14 @@
 				if (el.children) {
 					var div = document.createElement('div'); // parentNode
 					div.className = 'parentNode';
-					div.innerHTML = '+' + el.name;
+					div.innerHTML = '+' + '<div class="valueHolder"><input type="text" value="' + el.name + '" data-note="ddddddddd" /></div>'
+					+ el.id + ' <img class="icon" src="${commonAsset}images/icon/add.gif" /> \
+					<img class="icon" src="${commonAsset}images/icon/delete.gif" /> <span class="up">▲</span> <span class="down">▼</span>';
 					div.onclick = toggle;
 					li.appendChild(div);
 					//debugger;
-					
-					//for(var p = 0, q = el.children.length; p < q; p++) {
-						it(el.children, fn, li);
-					//}
+				
+					it(el.children, fn, li);
 				} else {
 					li.innerHTML = '<div class="valueHolder"><input type="text" value="' + el.name + '" data-note="ddddddddd" /></div>' + el.id;
 					fn(i, el);
@@ -106,7 +107,19 @@
 		}
 
 		function toggle(e) {
-			var div = e.target;
+			var el = e.target, div = e.currentTarget;
+			if(el.tagName == 'SPAN') {
+				if(el.className.indexOf('up') != -1 && div.parentNode.previousElementSibling)
+					swapElements(div.parentNode.previousElementSibling, div.parentNode);
+				if(el.className.indexOf('down') != -1 && div.parentNode.nextElementSibling)
+					swapElements(div.parentNode.nextElementSibling, div.parentNode);
+				return;
+			}
+			
+			if(e.target.tagName == 'IMG' && e.target.className.indexOf('icon') != -1) {
+				swapElements(div.parentNode, div.parentNode.nextElementSibling);
+				return;
+			}
 			var ul = div.parentNode.querySelector('ul');
 
 			if (ul.style.height == '0px') {
@@ -125,6 +138,24 @@
 			console.log(item + ':' + stack.length);
 		}, tree);
 		
+
+		function swapElements(a, b) {
+			if (a == b)
+				return;
+			//记录父元素
+			var bp = b.parentNode, ap = a.parentNode;
+			//记录下一个同级元素
+			var an = a.nextElementSibling, bn = b.nextElementSibling;
+			//如果参照物是邻近元素则直接调整位置
+			if (an == b)
+				return bp.insertBefore(b, a);
+			if (bn == a)
+				return ap.insertBefore(a, b);
+			if (a.contains(b)) //如果a包含了b
+				return ap.insertBefore(b, a), bp.insertBefore(a, bn);
+			else
+				return bp.insertBefore(a, b), ap.insertBefore(b, an);
+		}
 	</script>
 </body>
 </html>
