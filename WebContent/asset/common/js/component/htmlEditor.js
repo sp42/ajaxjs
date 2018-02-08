@@ -40,6 +40,10 @@ ajaxjs_HtmlEditor = function(el) {
 			this.iframeDoc.execCommand(type, false, para);
 //		this.iframeWin.focus();
 	}
+	this.insertEl = function (html) {
+		this.iframeDoc.body.innerHTML = html;
+
+	}
 	
 	this.setValue = function(v) {
 		var self2 = this;

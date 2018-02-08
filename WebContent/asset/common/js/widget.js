@@ -370,7 +370,7 @@ ajaxjs.Popup = function(cfg) {
 	 * 跳到指定的 tab，仿佛好象点击那样
 	 * @param {int} index
 	 */
-	ajaxjs.SimpleTab.prototype.jump = function(index){
+	ajaxjs.SimpleTab.prototype.jump = function(index) {
 		var btn = this.buttons[index];
 		onTabChooserPressHandler.call(this, {
 			target : btn,

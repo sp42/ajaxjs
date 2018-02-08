@@ -54,7 +54,7 @@
 			<span title="字体颜色"  class="bg-16"></span>
 			<div class="fontColor colorPicker">
 				<script>
-					document.write(ajaxjs.HtmlEditor.createColorPickerHTML());
+					document.write(ajaxjs_HtmlEditor.createColorPickerHTML());
 				</script>
 			</div>
 		</li>
@@ -62,7 +62,7 @@
 			<span title="背景颜色" class="backColor bg-17" ></span>
 			<div class="bgColor colorPicker">
 				<script>
-					document.write(ajaxjs.HtmlEditor.createColorPickerHTML());
+					document.write(ajaxjs_HtmlEditor.createColorPickerHTML());
 				</script>
 			</div>
 		</li>
