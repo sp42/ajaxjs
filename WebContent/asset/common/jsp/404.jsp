@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=320,user-scalable=0,initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0" />
-	<title>404 Not found</title>
+	<title>404 找不到页面  Not found</title>
 	<style>
 		td {
 			font-size: 9pt;
