@@ -18,17 +18,6 @@
 		<location>/asset/common/jsp/error.jsp</location>
 	</error-page>
 	<!-- // -->
- 
- 	<!--工具类接口，为了不外显 jsp -->
-	<servlet>  
-        <servlet-name>public_service</servlet-name>  
-        <jsp-file>/asset/common/jsp/service.jsp</jsp-file>  
-	</servlet>  
-	
-	<servlet-mapping>  
-	        <servlet-name>public_service</servlet-name>  
-	        <url-pattern>/public_service/*</url-pattern>  
-	</servlet-mapping>
 	
 	<!-- JSP 页面编码 -->
 	<jsp-config>

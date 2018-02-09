@@ -80,12 +80,6 @@
 			<description>格式</description>
 		</attribute>
 		<attribute>
-			<name>date</name>
-			<description>输入日期</description>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
 			<name>value</name>
 			<description>输入日期</description>
 			<required>false</required>
