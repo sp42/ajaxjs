@@ -6,10 +6,17 @@
 	<meta name="viewport" content="width=320,user-scalable=0,initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0" />
 	<title>404 找不到页面  Not found</title>
 	<style>
-		td {
-			font-size: 9pt;
-			padding: 6px;
-		}
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        td {
+            font-size: 9pt;
+            padding: 6px;
+            color: white;
+            font-size: 1.3rem;
+        }
 		
 		p {
 			padding-left: 30px;
@@ -27,19 +34,17 @@
 			padding: 1%;
 			margin: 1%;
 		}
+		
+		table{
+			border-collapse:collapse
+		}
 	</style>
 </head>
 <body leftMargin="0" topMargin="0">
-	<table cellSpacing="0" cellPadding="0" border="0" width="100%">
+	<table>
 		<tr>
 			<td bgColor="#ff6600" rowSpan="2">
-				<table cellPadding="12">
-					<tr>
-						<td width="100%"><B> <FONT color="#ffffff" size="4">找不到你请求-HTTP
-									StatusCode:404</FONT>
-						</B></td>
-					</tr>
-				</table>
+				找不到请求哦~HTTP 404
 			</td>
 			<td width="32" bgColor="#ff6600" height="32"></td>
 			<td width="32" bgColor="#ff9933" height="32"></td>

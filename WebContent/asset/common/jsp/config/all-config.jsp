@@ -2,7 +2,7 @@
 <%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <!DOCTYPE html>
 <html>
-<commonTag:head lessFile="/asset/less/admin.less" title="全部配置" />
+	<commonTag:head lessFile="/asset/less/admin.less" title="全部配置" />
 <body class="configForm admin-entry-form">
 	<h3>全部配置</h3>
 	<p>请点击有+号菜单项以展开下一级的内容。</p>
