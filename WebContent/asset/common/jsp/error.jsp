@@ -1,10 +1,11 @@
 <%@page pageEncoding="UTF-8" isErrorPage="true" import="java.io.*"%>
-<%!/**
-		 * 收集错误信息 输出到网页
-		 * 
-		 * @param request
-		 *            请求对象
-		 */
+<%!
+	/**
+	 * 收集错误信息 输出到网页
+	 * 
+	 * @param request
+	 *            请求对象
+	 */
 	public static OutputStream getError(HttpServletRequest request, Throwable ex) {
 		OutputStream os = new ByteArrayOutputStream();// 创建一个空的字节流，保存错误信息
 		PrintStream ps = new PrintStream(os);
@@ -145,8 +146,7 @@ textarea {
 				<table borderColor="#111111" cellPadding="12" bgColor="#ffffcc"
 					border="1">
 					<tr>
-						<td><font color="#000080"> <b>即将进行的工作<FONT
-									face="Wingdings">&#216;</FONT></b>
+						<td><font color="#000080"> <b>即将进行的工作<FONT face="Wingdings">&#216;</FONT></b>
 						</font>
 							<P>
 								<b>将本服务升级为更新版本的系统</b>

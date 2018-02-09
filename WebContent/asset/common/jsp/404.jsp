@@ -75,6 +75,5 @@
 	<div align="center">
 		<a href="${pageContext.request.contextPath}">回首页</a> | <a href="javascript:history.go(-1);">上一页</a>
 	</div>
-
 </body>
 </html>
