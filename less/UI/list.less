@@ -1,0 +1,155 @@
+/*
+	列表用样式
+*/
+
+// 图文单列
+.column_1(){
+    /*
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+  	
+  	flex-flow: row wrap;
+  	
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    */
+	li{
+		/*
+	 	-webkit-box-flex: 1 1 33%;
+	    -webkit-flex: 1 1 33%;
+	    -ms-flex: 1 1 33%;
+	    flex: 1 1 33%;*/
+	    
+	    clear: both;// 如不设置该项，li 渲染有可能会不换行
+		border-bottom: 1px solid lightgray; // 默认分割线
+		padding: 2% 0; // 适当的间距
+		margin: 0 2%;
+		overflow: hidden; // 清除浮动
+		list-style-type:none;
+		a{
+			display:block; // 可以使触控区域变大
+			text-decoration:none;
+			color: #2badea;
+		}
+	}
+	.imgHolder{ // 图片居左显示
+		float:left; // 使用浮动居左
+		width:30%; // 宽度
+	}
+
+	h4{ // 标题样式
+		margin:0;
+//		margin-bottom:5px;
+		font-size: 1.05rem;
+		line-height: 120%;
+		white-space: normal; // 允许换行
+		letter-spacing: 2px;
+		&:hover{
+			//color:@mainColor; // 高亮颜色
+		}
+	}
+	h4, p{
+		margin-left:32%; // 按照前面图片宽度适当加 2% 30% + 2%
+		font-weight:normal;// 取消默认加粗
+	}
+	p{
+		font-size: .9rem;
+		color:gray;
+		margin-bottom: 0;
+	}
+	.date{
+		text-align:right;
+		color:gray;
+	}
+}
+
+// 双列、三列两者公共基类，不能直接使用，应要被 mixin
+.column_2_3_base(){
+	clear:both;
+	overflow: hidden;
+	margin-top:5px;
+	li{
+		float:left;
+		
+		a{
+			text-decoration:none;
+		}
+		
+		.box{
+		}
+		h4{ // 图片标题文字
+			font-weight:normal;
+			font-size:1rem;
+			padding:5px 0;
+			letter-spacing:2px;
+			color:#2badea;
+		}
+	}
+}
+
+.column_2{
+	.column_2_3_base();
+	li{
+		width:48%;
+	 	&:nth-of-type(odd){ // 用 css 完成 实在不行，可以用js计算完成
+	 		margin-left:1.3%; 
+	 		margin-right:1.3%; 
+	 	} 
+	 	&:nth-of-type(even){ 
+	 		margin-right:1.4%; 
+	 	} 
+	}
+}
+
+.column_3(){
+	.column_2_3_base();
+	padding-left:1%;
+	li{
+		width:33.3%;
+		.box{
+			width:98%;
+		}
+	}
+}
+
+ 
+// 图片容器
+.imgHolder{
+	position: relative;
+	overflow: hidden;
+	min-height: 70px; // 最小高度，不限最大高度，由图片决定
+	// 背景图
+	background: no-repeat center top url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALMAAAB2CAYAAACDMaL0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA1xpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDM0MiwgMjAxMC8wMS8xMC0xODowNjo0MyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo5RkM5NjQxRDQxQUNFNDExOTcwMkU4MjNEOTc3MDU5RiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo4QTc3NDNFQkFDNDIxMUU0QTEzMkQyOUQzOTFFQkMzRCIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo4QTc3NDNFQUFDNDIxMUU0QTEzMkQyOUQzOTFFQkMzRCIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6OUZDOTY0MUQ0MUFDRTQxMTk3MDJFODIzRDk3NzA1OUYiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6OUZDOTY0MUQ0MUFDRTQxMTk3MDJFODIzRDk3NzA1OUYiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz77Tka5AAADFElEQVR42uzd0W3aUBiAUVNFlTqBO4VRn/scT1FvQaaAKWCK0hX6FKZghb44Rr2uLGqCL+AY7HMkqyitSHC+XP5riDoryzIZs91ulzAJ5SfngJGYiZnREDNiBjGDmEHMiBnEDGIGMYOYETOIGcQMYkbMIGYQM4gZxIyYQcwgZhAzYgYxg5hBzPDP0wQeYzmR7+Wf6vhdHd+tzDy6z9Xxzco8HZvq2I/sMaXVUYTbX8Q8DasQ8+vIHlcWfkAXNoDTsR9hyMlIH5OYETPjeNYRs1OAmEHM0I8np+BuHK4Xz8PtrdNhZX5UeXUsq+NndfwIt3Onxcr8iCvyIeD6Vbyi8XErtJX54Vbl4sTfFU6PlTlWFv58HfBzt4Xs+rGYo9XheGlYzA9tEebTe2RlNjNHbb6yls3XR/qV/H0337GNDaCYY1flonH7eYCvYRtW4GbQqzDyGHuMGZ3n5PTE1YWPXhFfGnP7vhE0Yu50BeG5Zayogxri6X0jR2PGpaty8c4cfYtX3/LEb3+IuecrA3mH0K+ZnbPG/J0mXvgwZvQ8XpxbMesIY5766xU9O7r/1UBzuJhHbB05huxDoF2u9ebv/JAsGlct+n7WMWbQatFxREg7rvbGDTEPqstmMO0Q8iKMH5lTKuYhV+dzm8E84r68R1nMgyvOrMwx+gg69S0Sc9cV9dSIEBvmMtzPreOzARRzVNBt4WZJ/Asjyws3g0YUMd/UrYJKIzeD9fXrwiZSzLewPArpmqgOq/k84t9n4fOvQ9hWaTHfdDM4D4H1vdLnJ36o7vmXCgbhN03iV+f67ZrXhrQO93WwPTOSLFu+jnrjZ/MXzMpy3P9Lwm63u/cH+JL8/+b841k55hlgZsxgyNW+nqOzDqsyxoy71nwT1NcwdvRxPVrMfPhMnlwwXojZKbjbsQMzM2IGMYOYQcwgZsQMYgYxg5gRMzy+0b+fGTGDmEHMIGYQM2IGMYOYQcyIGcQMYgYxg5gRM4gZxAxiRswgZhAziBnEjJhBzCBmEDNiBjGDmEHMIGbEDGIGMYOYmaY3AQYAXojZOq5J9RcAAAAASUVORK5CYII=');
+	background-size: 110% 80%;
+	img{
+		width:100%;
+//		.imgOpacityShow;
+//		.fixTransitionFlash;
+		opacity:0;
+		&.tran{
+			opacity:1;
+		}
+	}
+	.icon{
+		position:absolute;
+		opacity: .7;
+		bottom:6px;
+		right:2px;
+		border-radius: 4px;
+		margin-right:3px;
+		margin-left:1px;
+		width:32px;
+		height:32px;
+	}
+}
+
+// 加载图片失败时
+.noImg {
+	//background: no-repeat center url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAD8AAAA6CAYAAAAHkoFsAAAAGXRFW…GW4HJd154/wLO3AA/wAA/wAA/wAA/wAA/wAA/wCuuHAAMAaNQ5XJEBFDQAAAAASUVORK5CYII=);
+}
