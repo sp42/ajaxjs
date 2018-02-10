@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.config.SiteStruService;
+import com.ajaxjs.simpleApp.Constant;
 import com.ajaxjs.util.collection.MapHelper;
 
 /**
@@ -42,6 +43,10 @@ public class HtmlHead {
 
 		// 设置页面 node
 		node = SiteStruService.getPageNode(request.getRequestURI(), request.getContextPath());
+		
+		request.setAttribute("commonAsset", request.getContextPath() + "/" + Constant.commonFolder); // 静态资源目录
+		request.setAttribute("commonImage", request.getContextPath() + "/" + Constant.commonImage);
+		request.setAttribute("commonAssetIcon", request.getContextPath() + "/" + Constant.commonIcon);
 	}
 
 	public Map<String, Object> getNode() {
