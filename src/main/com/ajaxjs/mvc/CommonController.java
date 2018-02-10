@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.web;
+package com.ajaxjs.mvc;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
@@ -34,7 +34,6 @@ import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.jdbc.JdbcConnection;
 import com.ajaxjs.jdbc.PageResult;
 import com.ajaxjs.js.JsonHelper;
-import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.util.StringUtil;

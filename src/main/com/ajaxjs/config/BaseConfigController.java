@@ -8,10 +8,10 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
+import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.util.io.FileUtil;
-import com.ajaxjs.web.Constant;
 
 @Controller
 public abstract class BaseConfigController implements IController {

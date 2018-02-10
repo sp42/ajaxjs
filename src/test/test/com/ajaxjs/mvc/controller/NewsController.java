@@ -9,11 +9,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
+import com.ajaxjs.mvc.CommonController;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.framework.mock.News;
 import com.ajaxjs.framework.mock.NewsService;
 import com.ajaxjs.framework.mock.NewsServiceImpl;
-import com.ajaxjs.web.CommonController;
 
 @Controller
 @Path("/news")
