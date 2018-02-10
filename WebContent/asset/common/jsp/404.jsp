@@ -12,7 +12,6 @@
         }
         
         td {
-            font-size: 9pt;
             padding: 6px;
             color: white;
             font-size: 1.3rem;
