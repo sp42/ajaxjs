@@ -148,33 +148,12 @@ public class MvcDispatcher implements Filter {
 		for (String path : AnnotationUtils.controllers.keySet()) {
 			if (userPath.startsWith(path)) { // 匹配对应的控制器
 				LOGGER.info(path + " 控制器命中！！！");
-
-				ActionAndView controllerInfo = AnnotationUtils.controllers.get(path);
+				
+				// 遇到 aa/bb、aa 的情形 优先 aa/bb
+				ActionAndView controllerInfo = AnnotationUtils.controllers.containsKey(userPath) ? AnnotationUtils.controllers.get(userPath) : AnnotationUtils.controllers.get(path);
 				objs[0] = controllerInfo.controller; // 返回 controller
 
-				String userSubPath = userPath.replaceAll(path + "/?", ""); /*
-																			 * 3-
-																			 * 17
-																			 * uri
-																			 * .
-																			 * replace
-																			 * (
-																			 * path,
-																			 * ""
-																			 * )
-																			 * ;
-																			 * 改为
-																			 * uri
-																			 * .
-																			 * replaceAll
-																			 * (
-																			 * path
-																			 * +
-																			 * "/?",
-																			 * ""
-																			 * )
-																			 * ;
-																			 */
+				String userSubPath = userPath.replaceAll(path + "/?", "");  
 				String key = userSubPath.replaceAll("\\d+$", "{id}");
 
 				ActionAndView av = null;
