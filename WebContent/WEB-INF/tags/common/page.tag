@@ -1,4 +1,4 @@
-<%@tag import="com.ajaxjs.web.Constant"%>
+<%@tag import="com.ajaxjs.mvc.Constant"%>
 <%@tag pageEncoding="UTF-8" description="Page HTML"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
 <%@attribute name="type" type="String" required="true" description="指定哪种 HTML 片断"%>

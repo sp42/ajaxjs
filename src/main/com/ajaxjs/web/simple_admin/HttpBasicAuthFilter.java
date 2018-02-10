@@ -1,3 +1,18 @@
+/**
+ * Copyright 2015 Sp42 frank@ajaxjs.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.ajaxjs.web.simple_admin;
 
 import java.io.IOException;
@@ -9,40 +24,40 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ajaxjs.util.Encode;
+import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
-import sun.misc.BASE64Decoder;
-
 /**
- * Servlet Filter implementation class Filter
+ * HTTP Basic 登录
+ * 
+ * @author Sp42 frank@ajaxjs.com
  */
+public class HttpBasicAuthFilter implements javax.servlet.Filter {
+	private static final LogHelper LOGGER = LogHelper.getLog(HttpBasicAuthFilter.class);
 
-public class AuthFilter implements javax.servlet.Filter {
-	private static final LogHelper LOGGER = LogHelper.getLog(AuthFilter.class);
-	
 	public static final String userid = "admin"; // 写死只有一个用户 admin
 	public static String pwd = "123123";
-	
+
 	/**
-	 * @see AuthFilter#init(FilterConfig)
+	 * @see HttpBasicAuthFilter#init(FilterConfig)
 	 */
 	public void init(FilterConfig config) throws ServletException {
-		LOGGER.info("启动 HTTP BasicAuth 后台管理" );
-		
+		LOGGER.info("启动 HTTP BasicAuth 后台管理");
+
 		// 读取配置密码
-		if(config.getInitParameter("adminPassword") != null){
+		if (config.getInitParameter("adminPassword") != null)
 			pwd = config.getInitParameter("adminPassword");
-		}
 	}
 
 	/**
-	 * @see AuthFilter#doFilter(ServletRequest, ServletResponse, FilterChain)
+	 * @see HttpBasicAuthFilter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
 	@SuppressWarnings("deprecation")
 	public void doFilter(ServletRequest _request, ServletResponse _response, FilterChain chain) throws IOException, ServletException {
-		HttpServletRequest request = (HttpServletRequest)_request;
-		HttpServletResponse response = (HttpServletResponse)_response;
-		
+		HttpServletRequest request = (HttpServletRequest) _request;
+		HttpServletResponse response = (HttpServletResponse) _response;
+
 		if (!checkAuth(request)) {
 			// 如果认证失败,则要求认证 ，不能输入中文
 			String msg = "\"Please input your account\"";
@@ -54,31 +69,28 @@ public class AuthFilter implements javax.servlet.Filter {
 			response.setHeader("WWW-Authenticate", "Basic realm=" + msg);
 			response.setCharacterEncoding("utf-8");
 			response.getWriter().append("<meta charset=\"utf-8\" />Please login! 请登录系统！");
+			LOGGER.info("HTTP BasicAuth 登录失败！");
 		} else {
 			request.setAttribute("userName", userid);
 			chain.doFilter(request, response);
 		}
 	}
-	
+
 	/**
-	 * @see AuthFilter#destroy()
+	 * @see HttpBasicAuthFilter#destroy()
 	 */
 	@Override
 	public void destroy() {
 	}
-	
+
+	/**
+	 * 检查是否合法登录
+	 * 
+	 * @param request
+	 * @return
+	 */
 	public static boolean checkAuth(HttpServletRequest request) {
 		return checkAuth(request.getHeader("Authorization"), userid, pwd);
-	}
-	
-	/**
-	 * 是否空字符串
-	 * 
-	 * @param str
-	 * @return 是否空字符串
-	 */
-	public static boolean isEmptyString(String str) {
-		return str == null || str.trim().isEmpty();
 	}
 
 	/**
@@ -90,8 +102,9 @@ public class AuthFilter implements javax.servlet.Filter {
 	public static boolean isBadArray(String[] arr) {
 		return arr == null || arr.length != 2;
 	}
-	
+
 	/**
+	 * 检查是否合法登录
 	 * 
 	 * @param authorization
 	 *            认证后每次HTTP请求都会附带上 Authorization 头信息
@@ -102,23 +115,15 @@ public class AuthFilter implements javax.servlet.Filter {
 	 * @return true = 认证成功/ false = 需要认证
 	 */
 	public static boolean checkAuth(String authorization, String username, String password) {
-		if (isEmptyString(authorization))
+		if (StringUtil.isEmptyString(authorization))
 			return false;
 
 		String[] basicArray = authorization.split("\\s+");
 		if (isBadArray(basicArray))
 			return false;
 
-		String idpass = null;
-		try {
-			byte[] buf = new BASE64Decoder().decodeBuffer(basicArray[1]);
-			idpass = new String(buf, "UTF-8");
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-
-		if (isEmptyString(idpass))
+		String idpass = Encode.base64Decode(basicArray[1]);
+		if (StringUtil.isEmptyString(idpass))
 			return false;
 
 		String[] idpassArray = idpass.split(":");

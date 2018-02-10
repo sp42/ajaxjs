@@ -1,4 +1,4 @@
-<%@tag import="com.ajaxjs.web.Constant"%>
+<%@tag import="com.ajaxjs.mvc.Constant"%>
 <%@tag pageEncoding="UTF-8" description="Page HTML"%>
 <%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>

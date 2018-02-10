@@ -1,4 +1,4 @@
-<%@tag pageEncoding="UTF-8" import="com.ajaxjs.web.Constant" description="编辑器框架"%>
+<%@tag pageEncoding="UTF-8" import="com.ajaxjs.mvc.Constant" description="编辑器框架"%>
 <%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <%@taglib prefix="commonUI" tagdir="/WEB-INF/tags/common/UI"%>
 <%@taglib prefix="c" uri="/ajaxjs"%>

@@ -1,4 +1,4 @@
-<%@page import="com.ajaxjs.web.Constant"%>
+<%@page import="com.ajaxjs.mvc.Constant"%>
 <%@page pageEncoding="UTF-8"%>
 <!-- ${uiName}页面 -->
 <%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>

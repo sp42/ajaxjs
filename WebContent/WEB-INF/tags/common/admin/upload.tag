@@ -1,4 +1,4 @@
-<%@tag pageEncoding="UTF-8" import="com.ajaxjs.web.Constant" description="上传组件"%>
+<%@tag pageEncoding="UTF-8" import="com.ajaxjs.mvc.Constant" description="上传组件"%>
 	<textarea class="hide msgboxTpl">	
 					<div class="msgbox imgUpload">
 						<h1>title</h1>
