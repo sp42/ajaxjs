@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.mvc;
+package com.ajaxjs.simpleApp;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
@@ -34,21 +34,26 @@ import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.jdbc.JdbcConnection;
 import com.ajaxjs.jdbc.PageResult;
 import com.ajaxjs.js.JsonHelper;
+import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
+ * 
  * 封装常见的控制器方法。注意：不能复用 create/update 方法，这是因为 T 泛型不能正确识别 Bean 类型的缘故 需要有 Service 层
  * 
  * @author Sp42 frank@ajaxjs.com
+ *
  * @param <T>
  *            实体类型，可以是 Bean（POJO） 或 Map
  * @param <ID>
  *            ID 类型，可以是 INTEGER/LONG/String
+ * @param <S>
  */
-public abstract class CommonController<T, ID extends Serializable, S extends IService<T, ID>> implements IController, Constant {
+public abstract class CommonController<T, ID extends Serializable, S extends IService<T, ID>>
+		implements IController, Constant {
 	private static final LogHelper LOGGER = LogHelper.getLog(CommonController.class);
 
 	/**
@@ -77,7 +82,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	 * 初始化数据库连接
 	 */
 	public static void initDb() {
-		//		connStr = Version.isDebug ? "jdbc/sqlite" : "jdbc/sqlite_deploy";
+		// connStr = Version.isDebug ? "jdbc/sqlite" : "jdbc/sqlite_deploy";
 		initDb(Version.isMac ? "jdbc/sqlite_mac" : "jdbc/sqlite");
 	}
 
@@ -138,7 +143,8 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	 * @return
 	 */
 	private static Throwable getUnderLayerErr(Throwable e) {
-		while (e.getClass().equals(InvocationTargetException.class) || e.getClass().equals(UndeclaredThrowableException.class)) {
+		while (e.getClass().equals(InvocationTargetException.class)
+				|| e.getClass().equals(UndeclaredThrowableException.class)) {
 			e = e.getCause();
 		}
 		return e;
@@ -251,8 +257,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 		prepareData(model);
 
 		model.put("isCreate", true);/*
-									 * 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate =
-									 * true 标识为创建，以便与 update 区分开来。
+									 * 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate = true 标识为创建，以便与 update 区分开来。
 									 */
 		return String.format(jsp_adminInfo, service.getTableName());
 	}

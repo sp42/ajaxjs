@@ -146,7 +146,7 @@ public class AnnotationUtils {
 	 *            目标类
 	 * @return 符合条件的类
 	 */
-	public static <T> List<Class<T>> scanController(String packageName, Class<T> targetClz) {
+	private static <T> List<Class<T>> scanController(String packageName, Class<T> targetClz) {
 		List<Class<T>> clz = new ArrayList<>();
 
 		Enumeration<URL> dirs = null;

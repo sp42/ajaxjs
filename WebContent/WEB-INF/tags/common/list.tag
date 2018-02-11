@@ -1,4 +1,4 @@
-<%@tag import="com.ajaxjs.mvc.Constant"%>
+<%@tag import="com.ajaxjs.simpleApp.Constant"%>
 <%@tag pageEncoding="UTF-8" description="Page HTML"%>
 <%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
@@ -27,10 +27,7 @@
 		<c:foreach var="current" items="${PageResult.rows}">
 			<li>
 				<div class="thumb">
-
-					<img
-						src="http://localhost:8080/ajaxjs-web/asset/common/images/360logo.gif" />
-
+					<img src="http://localhost:8080/ajaxjs-web/asset/common/images/360logo.gif" />
 				</div>
 				<div class="text">
 					<a href="${current.id}/info.do">

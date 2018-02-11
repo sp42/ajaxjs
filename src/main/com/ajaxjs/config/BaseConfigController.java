@@ -8,9 +8,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
-import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
+import com.ajaxjs.simpleApp.Constant;
 import com.ajaxjs.util.io.FileUtil;
 
 @Controller

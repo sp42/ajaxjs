@@ -97,28 +97,5 @@
 			<artifactId>ajaxjs-data</artifactId>
 			<version>1.0.1</version>
 		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
-
-
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- <dependency> -->
-		<!-- <groupId>de.odysseus.juel</groupId> -->
-		<!-- <artifactId>juel-impl</artifactId> -->
-		<!-- <version>2.2.7</version> -->
-		<!-- </dependency> -->
-
-		<!-- <dependency> -->
-		<!-- <groupId>org.fluttercode.datafactory</groupId> -->
-		<!-- <artifactId>datafactory</artifactId> -->
-		<!-- <version>0.8</version> -->
-		<!-- <type>jar</type> -->
-		<!-- </dependency> -->
 	</dependencies>
 </project>

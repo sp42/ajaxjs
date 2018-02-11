@@ -1,4 +1,3 @@
-<%@tag import="com.ajaxjs.mvc.Constant"%>
 <%@tag pageEncoding="UTF-8" description="Page HTML"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
 <%@attribute name="type" type="String" required="true" description="指定哪种 HTML 片断"%>
@@ -105,19 +104,19 @@
 		<div>
 			<jsp:doBody />
 			<a href="#">
-				<img src="${pageContext.request.contextPath}/<%=Constant.commonImage%>gs.png" height="40" />
+				<img src="${commonImage}gs.png" height="40" />
 			</a> 
 			<a href="#">
-				<img src="${pageContext.request.contextPath}/<%=Constant.commonImage%>kexin.png" hspace="20" width="90" style="margin-top:15px;" />
+				<img src="${commonImage}kexin.png" hspace="20" width="90" style="margin-top:15px;" />
 			</a> 
 			<a href="#">
-				<img src="${pageContext.request.contextPath}/<%=Constant.commonImage%>360logo.gif" width="90" style="margin-top:15px;" />
+				<img src="${commonImage}360logo.gif" width="90" style="margin-top:15px;" />
 			</a>
 			<br />
 			<a href="javascript:;" onclick="toSimpleChinese(this);" class="simpleChinese selected">简体中文</a>
 			/
 			<a href="javascript:;" class="Chinese" onclick="toChinese(this);">正体中文</a>
-			<script src="${pageContext.request.contextPath}/<%=Constant.commonFolder %>js/libs/chinese.js"></script>
+			<script src="${commonAsset}js/libs/chinese.js"></script>
 			<br />
 			${empty _config.site_icp ? '粤ICP备15007080号-2' :  _config.site_icp}
 			Powered by <a target="_blank" href="http://framework.ajaxjs.com">AJAXJS</a>

@@ -3,8 +3,6 @@
 <%@attribute name="lessFile" 	required="false" description="指定 LESS 样式文件"%> 
 <jsp:useBean id="PAGE" class="com.ajaxjs.web.HtmlHead" scope="request" /> 
 <%
-	request.setAttribute("commonAsset", request.getContextPath() + "/asset/common/"); // 静态资源目录
-	request.setAttribute("commonAssetIcon", request.getAttribute("commonAsset").toString() + "images/icon/");
 	PAGE.init(request);
 %>
 <head>
