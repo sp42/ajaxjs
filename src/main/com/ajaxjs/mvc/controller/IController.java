@@ -22,5 +22,4 @@ package com.ajaxjs.mvc.controller;
  * @author Sp42 frank@ajaxjs.com
  */
 public interface IController {
-
 }

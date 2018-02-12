@@ -15,27 +15,24 @@
  */
 package com.ajaxjs.web;
 
-import java.io.IOException; 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import com.ajaxjs.util.collection.MapHelper;
 
 /**
  * IP 工具类
+ * 
+ * @author Sp42 frank@ajaxjs.com
  */
 public class IP {
 	/**
 	 * ip 缓存，保存起来方便下次使用
 	 */
 	private static String localIp = null;
- 
+
 	/**
-	 * 获取本机 IP 地址
-	 * 用于局域网内的测试机器
+	 * 获取本机 IP 地址 用于局域网内的测试机器
+	 * 
 	 * @return 本机 IP
 	 */
 	public static String getLocalIp() {
@@ -71,11 +68,11 @@ public class IP {
 		}
 
 		String[] ips = null;
-		
-		if (addrs !=null) {
+
+		if (addrs != null) {
 			ips = new String[addrs.length];
 			int i = 0;
-			
+
 			for (InetAddress addr : addrs)
 				ips[i++] = addr.getHostAddress();
 		}
@@ -97,10 +94,10 @@ public class IP {
 			System.err.println("获取 ip 失败！" + hostname);
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * 模拟ping ping("192.168.0.113");
 	 * 
@@ -112,40 +109,9 @@ public class IP {
 			return InetAddress.getByName(ip).isReachable(5000); // 设定超时时间，返回结果表示是否连上
 		} catch (IOException e) {
 			e.printStackTrace();
-		} 
-
-		return false;
-	}
-	
-	// 手机调试
-	public static String remoteConsole(HttpServletRequest request) {
-
-		String msg = "";
-		Map<String, String> requestMap = new MapHelper().setParameterMapRaw(request.getParameterMap()).toMap()
-				.ignoreField("url").ignoreField("action").getParameterMap_String();
-
-		if (requestMap.size() > 0) {
-			msg = com.ajaxjs.util.collection.MapHelper.join(requestMap);
-		} else {
-			msg = "没有参数";
 		}
 
-		System.out.println("手机调试参数：" + msg);
-		// 可能是 jsonp
-		return String.format("(function(){console.log('%s');})();", msg);
-	}
-
-	/**
-	 * http 代理，请谨慎外显，为了不带来不必要的流量和运算
-	 * 
-	 * @return
-	 */
-	public static String httpProxy(HttpServletRequest request) {
-		String url = request.getParameter("url");
-		new MapHelper().setParameterMapRaw(request.getParameterMap()).ignoreField("url");
-		String params = MapHelper.join(new MapHelper().setParameterMapRaw(request.getParameterMap()).toMap()
-				.ignoreField("url").getParameterMap_String(), "&"); // 不要 url 参数
-		return url + '?' + params;
+		return false;
 	}
 
 	/*

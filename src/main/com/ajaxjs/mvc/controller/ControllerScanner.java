@@ -1,3 +1,18 @@
+/**
+ * Copyright 2015 Sp42 frank@ajaxjs.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.ajaxjs.mvc.controller;
 
 import java.lang.reflect.Method;
@@ -14,28 +29,43 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 
+import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.NewInstance;
 
+/**
+ * Scanner controllers at Servlet starting up
+ * 
+ * @author Sp42 frank@ajaxjs.com
+ */
 public class ControllerScanner {
 	private static final LogHelper LOGGER = LogHelper.getLog(ControllerScanner.class);
 
+	/**
+	 * URL Mapping tree.
+	 */
 	public static Map<String, Action> urlMappingTree = new HashMap<>();
 
+	/**
+	 * Parsing a Contonller class.
+	 * 
+	 * @param clz
+	 *            a Contonller class
+	 */
 	public static void add(Class<? extends IController> clz) {
-		testClass(clz);
+		if (!testClass(clz))
+			return;
 
 		// the path in class always starts from top 1
 		String topPath = clz.getAnnotation(Path.class).value();
 		topPath = topPath.replaceAll("^/", ""); // remove the first / so that the array would be right length
-		Action action = null;
-
 		LOGGER.info("This controller \"{0}\" is being parsing", topPath);
 
+		Action action = null;
 		if (topPath.contains("/")) {
 			action = findKey(urlMappingTree, split2Queue(topPath), "");
 		} else {
-			if(urlMappingTree.containsKey(topPath)) {
+			if (urlMappingTree.containsKey(topPath)) {
 				// already there is 
 				action = urlMappingTree.get(topPath);
 			} else {
@@ -43,12 +73,22 @@ public class ControllerScanner {
 				urlMappingTree.put(topPath, action);
 			}
 		}
-		
-		//if(action.controller == null)
+
+		if (BeanContext.isIOC_Bean(clz)) { // 如果有 ioc，则从容器中查找
+			IController con = BeanContext.me().getBeanByClass(clz);
+			if (con == null)
+				LOGGER.warning("在 IOC 资源中找不到该类{0}的实例，请检查是否已经 IOC 扫描？", clz.getName());
+
+			action.controller = con;
+		} else {
+			//if(action.controller == null)
 			action.controller = NewInstance.newInstance(clz);// 保存的是 控制器 实例。
-		
+		}
+
 		// parse class methods or find out sub-path
 		parseSubPath(clz, action);
+
+		LOGGER.info("The controller \"{0}\" was parsed and registered", topPath); // 控制器 {0} 所有路径（包括子路径）注册成功！
 	}
 
 	public static Action find(String path) {
@@ -68,7 +108,7 @@ public class ControllerScanner {
 	}
 
 	/**
-	 * Check out all methods which has Path annotation, then add the urlMapping
+	 * Check out all methods which has Path annotation, then add the urlMapping.
 	 * 
 	 * @param clz
 	 * @param action
@@ -89,7 +129,7 @@ public class ControllerScanner {
 				methodSend(method, subAction);
 			} else {
 				// this method is for class url
-				methodSend(method, action);
+				methodSend(method, action); // 没有 Path 信息，就是属于类本身的方法（一般最多只有四个方法 GET/POST/PUT/DELETE）
 			}
 		}
 	}
@@ -100,7 +140,7 @@ public class ControllerScanner {
 	 * @param method
 	 *            控制器方法
 	 * @param action
-	 *            ActionAndView
+	 *            Action
 	 */
 	private static void methodSend(Method method, Action action) {
 		if (method.getAnnotation(GET.class) != null) {
@@ -108,21 +148,29 @@ public class ControllerScanner {
 				action.getMethod = method;
 		} else if (method.getAnnotation(POST.class) != null) {
 			if (testIfEmpty(action.postMethod, action.path, "POST"))
-			action.postMethod = method;
+				action.postMethod = method;
 		} else if (method.getAnnotation(PUT.class) != null) {
 			if (testIfEmpty(action.putMethod, action.path, "PUT"))
-			action.putMethod = method;
+				action.putMethod = method;
 		} else if (method.getAnnotation(DELETE.class) != null) {
 			if (testIfEmpty(action.deleteMethod, action.path, "DELETE"))
-			action.deleteMethod = method;
+				action.deleteMethod = method;
 		}
 	}
 
+	/**
+	 * Test if it's repeated adding.
+	 * 
+	 * @param method
+	 * @param path
+	 * @param httpMethod
+	 * @return true if the Action is empty, allow to add a new method object
+	 */
 	private static boolean testIfEmpty(Method method, String path, String httpMethod) {
 		if (method == null)
 			return true;
 		else {
-			LOGGER.info("控制器上的 {0} 的 {1} 方法业已登记，不接受重复登记！", path, method);
+			LOGGER.info("控制器上的 {0} 的 {1} 方法业已登记，不接受重复登记！", path, httpMethod);
 			return false;
 		}
 	}
@@ -180,17 +228,43 @@ public class ControllerScanner {
 		return null;
 	}
 
-	public static void testClass(Class<? extends IController> clz) {
+	/**
+	 * Test a class if it can be parsed.
+	 * 
+	 * @param clz
+	 *            Should be a IController instance.
+	 * @return true if it's ok.
+	 */
+	public static boolean testClass(Class<? extends IController> clz) {
 		if (clz.getAnnotation(Controller.class) == null) {// 获取注解对象
 			LOGGER.warning("此非控制器！要我处理干甚！？This is NOT a Controller! 类：" + clz.getName());
-			return;
+			return false;
 		}
 
 		// 总路径
 		Path path = clz.getAnnotation(Path.class);
 		if (path == null) {
 			LOGGER.warning("不存在任何 Path 信息！No Path info!");
-			return;
+			return false;
 		}
+
+		return true;
+	}
+
+	/**
+	 * 判断传入的类是否一个控制器，是的话返回 true，否则为 false。
+	 * 
+	 * @param clazz
+	 *            类
+	 * @return 是否 IController 类
+	 */
+	@Deprecated
+	public static boolean isController(Class<?> clazz) {
+		for (Class<?> clz : clazz.getInterfaces()) {
+			if (clz == IController.class)
+				return true;
+		}
+
+		return false;
 	}
 }

@@ -11,14 +11,14 @@ import javax.ws.rs.Path;
 
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.web.HtmlHead;
+import com.ajaxjs.web.WebUtil;
 
 @Controller
 @Path("/admin/gallery")
 public class BaseGallery implements IController {
 	@GET
 	public String gallery(HttpServletRequest request) {
-		String folder = HtmlHead.Mappath(request, "/images");
+		String folder = WebUtil.Mappath(request, "/images");
 
 		File[] files = new File(folder).listFiles();
 		if (files == null)

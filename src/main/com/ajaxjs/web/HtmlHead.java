@@ -17,7 +17,6 @@ package com.ajaxjs.web;
 
 import java.util.*;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.config.ConfigService;
@@ -54,12 +53,7 @@ public class HtmlHead {
 	}
 
 	public String getCssUrl(String lessPath) {
-		boolean isDebug;
-		if (ConfigService.config != null && ConfigService.config.get("isDebug") != null)
-			isDebug = ConfigService.config.get("isDebug") == null ? false : (boolean) ConfigService.config.get("isDebug");
-		else
-			isDebug = true;
-
+		boolean isDebug = ConfigService.getValueAsBool("isDebug");
 		return getCssUrl(lessPath, isDebug);
 	}
 
@@ -76,9 +70,9 @@ public class HtmlHead {
 
 		if (isDebug) {// 设置参数
 			Map<String, String> params = new HashMap<>();
-			params.put("lessFile", Mappath(request, lessPath));
-			params.put("ns", Mappath(request, lessPath.replaceAll("\\/[\\w\\.]*$", ""))); // 去掉文件名，保留路径，也就是文件夹名称
-			params.put("picPath", getBasePath(request) + "/asset");// 返回 CSS 背景图所用的图片
+			params.put("lessFile", WebUtil.Mappath(request, lessPath));
+			params.put("ns", WebUtil.Mappath(request, lessPath.replaceAll("\\/[\\w\\.]*$", ""))); // 去掉文件名，保留路径，也就是文件夹名称
+			params.put("picPath", WebUtil.getBasePath(request) + "/asset");// 返回 CSS 背景图所用的图片
 			params.put("MainDomain", "");
 			params.put("isdebug", "true");
 
@@ -86,49 +80,6 @@ public class HtmlHead {
 		} else {
 			return request.getContextPath() + lessPath.replace("/less", "/css").replace(".less", ".css");
 		}
-	}
-
-	/**
-	 * 获取磁盘真實地址。
-	 * 
-	 * @param cxt
-	 *            Web 上下文
-	 * @param relativePath
-	 *            相对地址
-	 * @return 绝对地址
-	 */
-	public static String Mappath(ServletContext cxt, String relativePath) {
-		String absoluteAddress = cxt.getRealPath(relativePath); // 绝对地址
-
-		if (absoluteAddress != null)
-			absoluteAddress = absoluteAddress.replace('\\', '/');
-		return absoluteAddress;
-	}
-
-	/**
-	 * 输入一个相对地址，补充成为绝对地址 相对地址转换为绝对地址，并转换斜杠
-	 * 
-	 * @param relativePath
-	 *            相对地址
-	 * @return 绝对地址
-	 */
-	public static String Mappath(HttpServletRequest request, String relativePath) {
-		return Mappath(request.getServletContext(), relativePath);
-	}
-
-	/**
-	 * 协议+主机名+端口（如果为 80 端口的话就默认不写 80）
-	 * 
-	 * @return 网站名称
-	 */
-	public static String getBasePath(HttpServletRequest request) {
-		String prefix = request.getScheme() + "://" + request.getServerName();
-
-		int port = request.getServerPort();
-		if (port != 80)
-			prefix += ":" + port;
-
-		return prefix + request.getContextPath();
 	}
 
 	/**

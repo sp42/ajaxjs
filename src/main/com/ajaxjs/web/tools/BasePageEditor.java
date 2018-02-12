@@ -16,7 +16,7 @@ import com.ajaxjs.simpleApp.Constant;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.web.HtmlHead;
+import com.ajaxjs.web.WebUtil;
 
 @Controller
 public abstract class BasePageEditor implements IController, Constant {
@@ -36,7 +36,7 @@ public abstract class BasePageEditor implements IController, Constant {
 		String path = request.getParameter("url");
 
 		try {
-			path = getFullPathByRequestUrl(HtmlHead.Mappath(request, path));
+			path = getFullPathByRequestUrl(WebUtil.Mappath(request, path));
 			request.setAttribute("contentBody", read_jsp_fileContent(path));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -54,7 +54,7 @@ public abstract class BasePageEditor implements IController, Constant {
 			if (request.getParameter("contentBody") == null)
 				throw new NullPointerException("缺少必填参数 contentBody！");
 
-			String contentBody = request.getParameter("contentBody"), path = HtmlHead.Mappath(request, request.getParameter("url"));
+			String contentBody = request.getParameter("contentBody"), path = WebUtil.Mappath(request, request.getParameter("url"));
 
 			save_jsp_fileContent(path, contentBody);
 

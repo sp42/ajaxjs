@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
@@ -59,6 +60,14 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
+	 * 
+	 * @param request
+	 */
+	public MvcRequest(ServletRequest request) {
+		this((HttpServletRequest)request);
+	}
+
+	/**
 	 * 获取原请求的 uri，而非模版所在的 uri
 	 */
 	@Override
@@ -79,7 +88,6 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	 */
 	public String getRoute() {
 		String route = getRequestURI().replace(getContextPath(), "");
-
 		return route.replaceFirst("/\\w+\\.\\w+$", ""); // 删除 index.jsp
 	}
 
@@ -89,19 +97,13 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	 * @return 参数、值集合
 	 */
 	public Map<String, Object> getPutRequestData() {
-		String params = null;
-
 		try {
-			params = new StreamUtil().setIn(getInputStream()).byteStream2stringStream().close().getContent();
+			String params = new StreamUtil().setIn(getInputStream()).byteStream2stringStream().close().getContent();
+			return MapHelper.toMap(params.split("&"), true);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
-
-		if (params == null)
-			return null;
-
-		return MapHelper.toMap(params.split("&"), true);
 	}
 
 	/**
@@ -115,9 +117,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	 */
 	public String getValueFromPath(String value, String paramName) {
 		/* 如果 context path 上有数字那就bug，所以先去掉 */
-		String requestURI = getRequestURI().replace(getContextPath(), ""),
-				regExp = "(" + value.replace("{" + paramName + "}",
-						")(\\d+)");/* 获取正则 暂时写死 数字 TODO */
+		String requestURI = getRequestURI().replace(getContextPath(), ""), regExp = "(" + value.replace("{" + paramName + "}", ")(\\d+)");/* 获取正则 暂时写死 数字 TODO */
 
 		Matcher m = Pattern.compile(regExp).matcher(requestURI);
 		String result = m.find() ? m.group(m.groupCount()) : null;
@@ -161,14 +161,18 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	public static Map<String, String> parseInitParams(ServletConfig servletCfg, FilterConfig filterCfg) {
 		Map<String, String> map = new HashMap<>();
 
-		Enumeration<String> initParams = servletCfg == null ? filterCfg.getInitParameterNames()
-				: servletCfg.getInitParameterNames();
+		Enumeration<String> initParams = servletCfg == null ? filterCfg.getInitParameterNames() : servletCfg.getInitParameterNames();
 
-		while (initParams.hasMoreElements()) { // Enumeration 转换为 MAP
-			String paramName = initParams.nextElement(), paramValue = servletCfg == null
-					? filterCfg.getInitParameter(paramName) : servletCfg.getInitParameter(paramName);
+		while (initParams.hasMoreElements()) {
+			String key = initParams.nextElement();
+			
+			String value;
+			if(servletCfg == null)
+				value = filterCfg.getInitParameter(key); 
+			else 
+				value =servletCfg.getInitParameter(key);
 
-			map.put(paramName, paramValue);
+			map.put(key, value);
 		}
 
 		return map;
@@ -199,41 +203,9 @@ public class MvcRequest extends HttpServletRequestWrapper {
 		return new QueryParams(getHttpServletRequest().getParameterMap());
 	}
 
-	/**
-	 * 获取请求 ip
-	 * 
-	 * @param request
-	 *            请求对象
-	 * @return 客户端 ip
-	 */
-	public static String getIp(HttpServletRequest request) {
-		String ip = request.getHeader("x-forwarded-for");
-		if (!"unknown".equalsIgnoreCase(ip) && ip != null && ip.length() != 0) {
-
-			int index = ip.indexOf(",");
-			if (index != -1) {
-				ip = ip.substring(0, index);
-			}
-			return ip;
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("Proxy-Client-IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("WL-Proxy-Client-IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("X-Real-Ip");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getRemoteAddr();
-		}
-		return ip;
-	}
-
 	/*
-	 * 为获取请求的上下文，能够在控制器中拿到最常用的对象，例如 HttpServletRequest 和 HttpServletResponse
-	 * 等的对象（甚至 Web App 的启动上下文（ 在web.xml 中配置的参数） ），因此还需要设计一个 RequestHelper 类，通过
+	 * 为获取请求的上下文，能够在控制器中拿到最常用的对象，例如 HttpServletRequest 和 HttpServletResponse 等的对象（甚至
+	 * Web App 的启动上下文（ 在web.xml 中配置的参数） ），因此还需要设计一个 RequestHelper 类，通过
 	 * ThreadLocal让控制器能轻易地访问到这些对象。 一个容器，向这个容器存储的对象，在当前线程范围内都可以取得出来，向 ThreadLocal
 	 * 里面存东西就是向它里面的Map存东西的，然后 ThreadLocal 把这个 Map 挂到当前的线程底下，这样 Map 就只属于这个线程了
 	 */
