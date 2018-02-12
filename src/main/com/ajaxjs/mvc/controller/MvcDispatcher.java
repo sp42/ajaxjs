@@ -265,7 +265,6 @@ public class MvcDispatcher implements Filter {
 				o.setTemplate(str).go(request);
 			}
 		}
-
 	}
 
 	/**

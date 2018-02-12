@@ -32,6 +32,8 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.jsp.PageContext;
 
 import com.ajaxjs.js.JsonHelper;
+import com.ajaxjs.mvc.ModelAndView;
+import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -156,6 +158,51 @@ public class MvcOutput extends HttpServletResponseWrapper {
 					rd.forward(request, this); // 跳转至 view 层
 			} catch (ServletException | IOException e) {
 				LOGGER.warning(e);
+			}
+		}
+	}
+	
+	/**
+	 * 一般一个请求希望返回一个页面，这时就需要控制器返回一个模板渲染输出了。 中间执行逻辑完成，最后就是控制输出（响应）
+	 * 可以跳转也可以输出模板渲染器（即使是 json 都是 模板渲染器 ）
+	 * 
+	 * @param result
+	 *            模板路径是指页面模板（比如 jsp，velocity模板等）的目录文件名
+	 * @param request
+	 *            请求对象
+	 * @param response
+	 *            响应对象
+	 * @param model
+	 *            所有渲染数据都要放到一个 model 对象中（本质 是 map或者 bean），这样使用者就可以在模板内用 Map 对象的
+	 *            key/getter 获取到对应的数据。
+	 */
+	public void resultHandler(Object result, MvcRequest request, ModelAndView model) {
+		if (model != null)
+			request.saveToReuqest(model);
+
+		if (result != null && result instanceof String) {
+			String str = (String) result, html = "html::";
+
+
+			if (str.startsWith(html)) {
+				setSimpleHTML(true).setOutput(str.replace(html, "")).go();
+			} else if (str.startsWith("redirect::")) {
+				setRedirect(str.replace("redirect::", "")).go();
+
+			} else if (str.startsWith("json::")) {
+				String jsonpToken = request.getParameter(MvcRequest.callback_param); // 由参数决定是否使用 jsonp
+
+				if (StringUtil.isEmptyString(jsonpToken)) {
+					setJson(true).setOutput(str.replace("json::", "")).go();
+				} else {
+					setJsonpToken(jsonpToken).setOutput(str.replace("json::", "")).go();
+				}
+			} else { // JSP
+				if (!str.endsWith(".jsp")) // 自动补充 .jsp 扩展名
+					str += ".jsp";
+
+				LOGGER.info("执行逻辑完成，现在控制输出（响应 JSP）" + result);
+				setTemplate(str).go(request);
 			}
 		}
 	}
