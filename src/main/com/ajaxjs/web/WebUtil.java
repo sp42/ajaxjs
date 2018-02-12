@@ -15,6 +15,9 @@
  */
 package com.ajaxjs.web;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -59,8 +62,10 @@ public class WebUtil {
 	}
 
 	/**
-	 * 协议+主机名+端口（如果为 80 端口的话就默认不写 80）
+	 * 返回协议+主机名+端口（如果为 80 端口的话就默认不写 80）
 	 * 
+	 * @param request
+	 *            请求对象
 	 * @return 网站名称
 	 */
 	public static String getBasePath(HttpServletRequest request) {
@@ -82,40 +87,40 @@ public class WebUtil {
 	 */
 	public static String getIp(HttpServletRequest request) {
 		String ip = request.getHeader("x-forwarded-for");
-		
+
 		if (!"unknown".equalsIgnoreCase(ip) && ip != null && ip.length() != 0) {
 			int index = ip.indexOf(",");
 			if (index != -1)
 				ip = ip.substring(0, index);
-			
+
 			return ip;
 		}
-		
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) 
+
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))
 			ip = request.getHeader("Proxy-Client-IP");
-		
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) 
+
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))
 			ip = request.getHeader("WL-Proxy-Client-IP");
-		
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) 
+
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))
 			ip = request.getHeader("X-Real-Ip");
-		
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) 
+
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))
 			ip = request.getRemoteAddr();
-		
+
 		return ip;
 	}
-	
+
 	/**
 	 * 手机调试
+	 * 
 	 * @param request
+	 *            请求对象
 	 * @return
 	 */
 	public static String remoteConsole(HttpServletRequest request) {
-
 		String msg = "";
-		Map<String, String> requestMap = new MapHelper().setParameterMapRaw(request.getParameterMap()).toMap()
-				.ignoreField("url").ignoreField("action").getParameterMap_String();
+		Map<String, String> requestMap = new MapHelper().setParameterMapRaw(request.getParameterMap()).toMap().ignoreField("url").ignoreField("action").getParameterMap_String();
 
 		if (requestMap.size() > 0) {
 			msg = com.ajaxjs.util.collection.MapHelper.join(requestMap);
@@ -123,21 +128,91 @@ public class WebUtil {
 			msg = "没有参数";
 		}
 
-		System.out.println("手机调试参数：" + msg);
 		// 可能是 jsonp
 		return String.format("(function(){console.log('%s');})();", msg);
 	}
-	
+
 	/**
 	 * http 代理，请谨慎外显，为了不带来不必要的流量和运算
+	 * 
 	 * @param request
+	 *            请求对象
 	 * @return
 	 */
 	public static String httpProxy(HttpServletRequest request) {
 		String url = request.getParameter("url");
 		new MapHelper().setParameterMapRaw(request.getParameterMap()).ignoreField("url");
-		String params = MapHelper.join(new MapHelper().setParameterMapRaw(request.getParameterMap()).toMap()
-				.ignoreField("url").getParameterMap_String(), "&"); // 不要 url 参数
+		String params = MapHelper.join(new MapHelper().setParameterMapRaw(request.getParameterMap()).toMap().ignoreField("url").getParameterMap_String(), "&"); // 不要 url 参数
 		return url + '?' + params;
 	}
+	
+	/**
+	 * 获得本地所有的 IP 地址
+	 * 
+	 * @return 本机所有 IP
+	 */
+	public static String[] getAllLocalHostIP() {
+		InetAddress[] addrs = null;
+
+		try {
+			String hostName = InetAddress.getLocalHost().getHostName();// 获得主机名
+			// 在给定主机名的情况下，根据系统上配置的名称服务返回其 IP 地址所组成的数组。
+			addrs = InetAddress.getAllByName(hostName);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+
+		String[] ips = null;
+
+		if (addrs != null) {
+			ips = new String[addrs.length];
+			int i = 0;
+
+			for (InetAddress addr : addrs)
+				ips[i++] = addr.getHostAddress();
+		}
+
+		return ips;
+	}
+
+	/**
+	 * 输入主机名，返回其 ip，相当于 cmd 的 ping 所得到的域名
+	 * 
+	 * @param hostname
+	 *            例如 www.baidu.com
+	 * @return 主机对应的 ip
+	 */
+	public static String getIpByHostName(String hostname) {
+		try {
+			return InetAddress.getByName(hostname).getHostAddress();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	/**
+	 * 模拟ping ping("192.168.0.113");
+	 * 
+	 * @param ip
+	 *            IP 地址
+	 */
+	public static boolean ping(String ip) {
+		try {
+			return InetAddress.getByName(ip).isReachable(5000); // 设定超时时间，返回结果表示是否连上
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+
+	/*
+	 * 根据请求 ip 显示所在区域 https://www.ipip.net/
+	 * http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&ip=123.123.
+	 * 123.12
+	 */
+	//String json = Client.GET("http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&ip=" + MvcRequest.getIp(request));
+	//out.println(json.replace("var remote_ip_info = ", "").replaceAll(";$", ""));
 }

@@ -132,7 +132,7 @@ public abstract class BasePageEditor implements IController, Constant {
 
 		if (toDel_fileContent != null) {
 			jsp_fileContent = jsp_fileContent.replace(toDel_fileContent, newContent);
-			new FileUtil().setFilePath(fullFilePath).setContent(jsp_fileContent).save(); // 保存新内容
+			new FileUtil().setFilePath(fullFilePath).setContent(jsp_fileContent).save().close(); // 保存新内容
 		} else {
 			throw new IOException("页面文件中没有标记可编辑区域之标识。请参考： startToken/endTpoken");
 		}
