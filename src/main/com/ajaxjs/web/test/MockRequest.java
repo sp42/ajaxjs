@@ -37,6 +37,7 @@ import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.util.collection.MapHelper;
 
 /**
+ * Create a mock request object.
  * 
  * @author Sp42 frank@ajaxjs.com
  */
@@ -53,9 +54,8 @@ public class MockRequest {
 	public static HttpServletRequest mockRequest(String contextPath, String path) {
 		HttpServletRequest request = mock(HttpServletRequest.class);
 
-		if (!path.startsWith("/")) {
+		if (!path.startsWith("/"))
 			path = "/" + path;
-		}
 
 		when(request.getPathInfo()).thenReturn(contextPath + path);
 		when(request.getRequestURI()).thenReturn(contextPath + path);
@@ -76,8 +76,7 @@ public class MockRequest {
 	 * @return 表单请求
 	 * @throws IOException
 	 */
-	public HttpServletRequest initRequest(HttpServletRequest request, Map<String, String> formBody,
-			boolean isByGetParams) throws IOException {
+	public HttpServletRequest initRequest(HttpServletRequest request, Map<String, String> formBody, boolean isByGetParams) throws IOException {
 		if (isByGetParams) {
 			for (String key : formBody.keySet())
 				when(request.getParameter(key)).thenReturn(formBody.get(key));

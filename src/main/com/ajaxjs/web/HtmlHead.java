@@ -43,7 +43,7 @@ public class HtmlHead {
 
 		// 设置页面 node
 		node = SiteStruService.getPageNode(request.getRequestURI(), request.getContextPath());
-		
+
 		request.setAttribute("commonAsset", request.getContextPath() + "/" + Constant.commonFolder); // 静态资源目录
 		request.setAttribute("commonImage", request.getContextPath() + "/" + Constant.commonImage);
 		request.setAttribute("commonAssetIcon", request.getContextPath() + "/" + Constant.commonIcon);
@@ -56,8 +56,7 @@ public class HtmlHead {
 	public String getCssUrl(String lessPath) {
 		boolean isDebug;
 		if (ConfigService.config != null && ConfigService.config.get("isDebug") != null)
-			isDebug = ConfigService.config.get("isDebug") == null ? false
-					: (boolean) ConfigService.config.get("isDebug");
+			isDebug = ConfigService.config.get("isDebug") == null ? false : (boolean) ConfigService.config.get("isDebug");
 		else
 			isDebug = true;
 

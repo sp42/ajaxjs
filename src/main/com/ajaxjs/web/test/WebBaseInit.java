@@ -19,7 +19,6 @@ package com.ajaxjs.web.test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.Enumeration;
 import java.util.Vector;
 
 import javax.servlet.FilterConfig;
@@ -29,7 +28,11 @@ import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 
-
+/**
+ * 
+ * @author Sp42 frank@ajaxjs.com
+ *
+ */
 public class WebBaseInit {
 	/**
 	 * 初始化 Servlet 配置，这里是模拟 注解
@@ -40,8 +43,9 @@ public class WebBaseInit {
 	 */
 	public static ServletConfig initServletConfig(Class<? extends HttpServlet> cls) {
 		ServletConfig servletConfig = mock(ServletConfig.class);
+		
 		// 模拟注解
-		Vector<String> v = new Vector<String>();
+		Vector<String> v = new Vector<>();
 		// v.addElement("news");
 		// when(servletConfig.getInitParameter("news")).thenReturn("ajaxjs.data.service.News");
 		// v.addElement("img");
@@ -58,23 +62,24 @@ public class WebBaseInit {
 			}
 		}
 
-		Enumeration<String> e = v.elements();
-		when(servletConfig.getInitParameterNames()).thenReturn(e);
+		when(servletConfig.getInitParameterNames()).thenReturn(v.elements());
 
 		return servletConfig;
 	}
 
+	/**
+	 * 
+	 * @param context
+	 * @return
+	 */
 	public static FilterConfig initFilterConfig(ServletContext context) {
 		FilterConfig filterConfig = mock(FilterConfig.class);
-		when(filterConfig.getServletContext()).thenReturn(context);
-
 		// 模拟注解
 		Vector<String> v = new Vector<>();
 		v.addElement("urlPatterns");
+		when(filterConfig.getInitParameterNames()).thenReturn(v.elements());
 		when(filterConfig.getInitParameter("urlPatterns")).thenReturn("/service/*");
-
-		Enumeration<String> e = v.elements();
-		when(filterConfig.getInitParameterNames()).thenReturn(e);
+		when(filterConfig.getServletContext()).thenReturn(context);
 
 		return filterConfig;
 	}

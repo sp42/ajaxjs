@@ -138,7 +138,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	public <T> T getBean(Class<T> clazz) {
 		Map<String, Object> map;
 
-		if (getMethod().toUpperCase().equals("PUT")) {
+		if (getMethod() != null && getMethod().toUpperCase().equals("PUT")) {
 			map = getPutRequestData(); // Servlet 没有 PUT 获取表单，要自己处理
 		} else {
 			map = MapHelper.asObject(MapHelper.toMap(getParameterMap()), true);

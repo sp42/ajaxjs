@@ -38,9 +38,15 @@ import org.mockito.ArgumentCaptor;
  *
  */
 public class MockResponse {
+	/**
+	 * 
+	 * @author Sp42 frank@ajaxjs.com
+	 *
+	 */
 	public static class StubServletOutputStream extends ServletOutputStream {
 		private OutputStream os = new ByteArrayOutputStream();
 
+		@Override
 		public void write(int i) throws IOException {
 			os.write(i);
 		}
@@ -49,7 +55,7 @@ public class MockResponse {
 			return os.toString();
 		}
 	}
-	
+
 	@Deprecated
 	class StubServletOutputStream22 extends ServletInputStream {
 		public ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -67,7 +73,7 @@ public class MockResponse {
 			return 0;
 		}
 	}
-	
+
 	/**
 	 * Writer:形象的比喻：当我们调用 response.getWriter()
 	 * 这个对象同时获得了网页的画笔，这时你就可以通过这个画笔在网页上画任何你想要显示的东西。Writer 就是向页面输出信息，负责让客户端显示内容
@@ -78,16 +84,17 @@ public class MockResponse {
 	 */
 	public static StringWriter writerFactory(HttpServletResponse response) {
 		StringWriter writer = new StringWriter();
-
+		PrintWriter printWriter = new PrintWriter(writer);
+		
 		try {
-			when(response.getWriter()).thenReturn(new PrintWriter(writer));
+			when(response.getWriter()).thenReturn(printWriter);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		return writer;
 	}
-	
+
 	/**
 	 * 除了字符串使用 StringWriter，Response 输出的还可以是流
 	 * 
@@ -117,8 +124,7 @@ public class MockResponse {
 	public static String getRequestDispatcheResult(HttpServletRequest request) {
 		ArgumentCaptor<String> dispatcherArgument = ArgumentCaptor.forClass(String.class);
 		verify(request).getRequestDispatcher(dispatcherArgument.capture());
-		
+
 		return dispatcherArgument.getValue();
 	}
-
 }

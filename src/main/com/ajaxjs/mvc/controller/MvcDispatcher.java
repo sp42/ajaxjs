@@ -280,16 +280,11 @@ public class MvcDispatcher implements Filter {
 	 * @return 参数列表
 	 */
 	private static Object[] getArgs(MvcRequest request, HttpServletResponse response, Method method) {
-		ArrayList<Object> args = new ArrayList<>();// 参数列表
-		Annotation[][] annotation = method.getParameterAnnotations(); /*
-																		 * 方法所有的注解
-																		 * ，
-																		 * length
-																		 * 应该要和参数总数一样
-																		 */
-
+		Annotation[][] annotation = method.getParameterAnnotations(); // 方法所有的注解，length 应该要和参数总数一样
 		Class<?>[] parmTypes = method.getParameterTypes();// 反射得到参数列表的各个类型，遍历之
 
+		ArrayList<Object> args = new ArrayList<>();// 参数列表
+		
 		for (int i = 0; i < parmTypes.length; i++) {
 			Class<?> clazz = parmTypes[i];
 
@@ -307,8 +302,8 @@ public class MvcDispatcher implements Filter {
 					LOGGER.info("没有任何请求数据，但控制器方法期望至少一个参数来构成 map。");
 			} else if (clazz.equals(ModelAndView.class)) {
 				args.add(new ModelAndView()); // 新建 ModeView 对象
-			} else if (BaseModel.class.isAssignableFrom(clazz)) {
-				args.add(request.getBean(clazz)); // 实体类参数
+			} else if (BaseModel.class.isAssignableFrom(clazz)) {// 实体类参数
+				args.add(request.getBean(clazz)); 
 			} else { // 适配注解
 				Annotation[] annotations = annotation[i];
 				getArgValue(clazz, annotations, request, args, method);
