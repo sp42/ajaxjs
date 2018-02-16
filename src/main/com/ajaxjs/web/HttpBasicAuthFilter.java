@@ -16,6 +16,8 @@
 package com.ajaxjs.web;
 
 import java.io.IOException;
+
+import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
@@ -29,56 +31,53 @@ import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
- * HTTP Basic 登录
+ * 简单的 HTTP Basic 登录
  * 
  * @author Sp42 frank@ajaxjs.com
  */
-public class HttpBasicAuthFilter implements javax.servlet.Filter {
+public class HttpBasicAuthFilter implements Filter {
 	private static final LogHelper LOGGER = LogHelper.getLog(HttpBasicAuthFilter.class);
 
-	public static final String userid = "admin"; // 写死只有一个用户 admin
-	public static String pwd = "123123";
+	/**
+	 * 登录名，写死只有一个用户 admin
+	 */
+	private static final String userid = "admin";
 
 	/**
-	 * @see HttpBasicAuthFilter#init(FilterConfig)
+	 * 登录密码
 	 */
+	private static String pwd = "123123";
+
+	@Override
 	public void init(FilterConfig config) throws ServletException {
 		LOGGER.info("启动 HTTP BasicAuth 后台管理");
-
-		// 读取配置密码
+		
 		if (config.getInitParameter("adminPassword") != null)
-			pwd = config.getInitParameter("adminPassword");
+			pwd = config.getInitParameter("adminPassword");// 读取 web.xml 配置里的密码
 	}
 
-	/**
-	 * @see HttpBasicAuthFilter#doFilter(ServletRequest, ServletResponse, FilterChain)
-	 */
+	@Override
 	@SuppressWarnings("deprecation")
 	public void doFilter(ServletRequest _request, ServletResponse _response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) _request;
 		HttpServletResponse response = (HttpServletResponse) _response;
 
 		if (!checkAuth(request)) {
-			// 如果认证失败,则要求认证 ，不能输入中文
-			String msg = "\"Please input your account\"";
+			String msg = "\"Please input your account\""; // 如果认证失败,则要求认证 ，不能输入中文
 
-			// 发送状态码 401, 不能使用 sendError，坑
 			response.setCharacterEncoding("utf-8");
-			response.setStatus(401, "Authentication Required");
-			// 发送要求输入认证信息,则浏览器会弹出输入框
-			response.setHeader("WWW-Authenticate", "Basic realm=" + msg);
+			response.setStatus(401, "Authentication Required");// 发送状态码 401, 不能使用 sendError，坑
+			response.setHeader("WWW-Authenticate", "Basic realm=" + msg);// 发送要求输入认证信息,则浏览器会弹出输入框
 			response.setCharacterEncoding("utf-8");
 			response.getWriter().append("<meta charset=\"utf-8\" />Please login! 请登录系统！");
+
 			LOGGER.info("HTTP BasicAuth 登录失败！");
 		} else {
-			request.setAttribute("userName", userid);
+//			request.setAttribute("userName", userid);
 			chain.doFilter(request, response);
 		}
 	}
-
-	/**
-	 * @see HttpBasicAuthFilter#destroy()
-	 */
+ 
 	@Override
 	public void destroy() {
 	}
@@ -89,7 +88,7 @@ public class HttpBasicAuthFilter implements javax.servlet.Filter {
 	 * @param request
 	 * @return
 	 */
-	public static boolean checkAuth(HttpServletRequest request) {
+	private static boolean checkAuth(HttpServletRequest request) {
 		return checkAuth(request.getHeader("Authorization"), userid, pwd);
 	}
 
@@ -99,7 +98,7 @@ public class HttpBasicAuthFilter implements javax.servlet.Filter {
 	 * @param arr
 	 * @return 是否不合法的数组
 	 */
-	public static boolean isBadArray(String[] arr) {
+	private static boolean isBadArray(String[] arr) {
 		return arr == null || arr.length != 2;
 	}
 
@@ -114,7 +113,7 @@ public class HttpBasicAuthFilter implements javax.servlet.Filter {
 	 *            密码
 	 * @return true = 认证成功/ false = 需要认证
 	 */
-	public static boolean checkAuth(String authorization, String username, String password) {
+	private static boolean checkAuth(String authorization, String username, String password) {
 		if (StringUtil.isEmptyString(authorization))
 			return false;
 

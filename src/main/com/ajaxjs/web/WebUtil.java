@@ -32,7 +32,6 @@ import com.ajaxjs.util.collection.MapHelper;
  *
  */
 public class WebUtil {
-
 	/**
 	 * 获取磁盘真實地址。
 	 * 
@@ -43,11 +42,11 @@ public class WebUtil {
 	 * @return 绝对地址
 	 */
 	public static String Mappath(ServletContext cxt, String relativePath) {
-		String absoluteAddress = cxt.getRealPath(relativePath); // 绝对地址
+		String absolute = cxt.getRealPath(relativePath);
 
-		if (absoluteAddress != null)
-			absoluteAddress = absoluteAddress.replace('\\', '/');
-		return absoluteAddress;
+		if (absolute != null)
+			absolute = absolute.replace('\\', '/');
+		return absolute;
 	}
 
 	/**
@@ -75,7 +74,7 @@ public class WebUtil {
 		if (port != 80)
 			prefix += ":" + port;
 
-		return prefix + request.getContextPath();
+		return prefix + "/" + request.getContextPath();
 	}
 
 	/**
@@ -142,6 +141,7 @@ public class WebUtil {
 	public static String httpProxy(HttpServletRequest request) {
 		String url = request.getParameter("url");
 		new MapHelper().setParameterMapRaw(request.getParameterMap()).ignoreField("url");
+		// TODO
 		String params = MapHelper.join(new MapHelper().setParameterMapRaw(request.getParameterMap()).toMap().ignoreField("url").getParameterMap_String(), "&"); // 不要 url 参数
 		return url + '?' + params;
 	}
@@ -162,16 +162,10 @@ public class WebUtil {
 			e.printStackTrace();
 		}
 
-		String[] ips = null;
-
-		if (addrs != null) {
-			ips = new String[addrs.length];
-			int i = 0;
-
-			for (InetAddress addr : addrs)
-				ips[i++] = addr.getHostAddress();
-		}
-
+		String[] ips = new String[addrs.length];
+		for (int i = 0; i < addrs.length; i++)
+			ips[i] = addrs[i].getHostAddress();
+		
 		return ips;
 	}
 
@@ -187,9 +181,8 @@ public class WebUtil {
 			return InetAddress.getByName(hostname).getHostAddress();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
+			return null;
 		}
-
-		return null;
 	}
 
 	/**
@@ -203,9 +196,8 @@ public class WebUtil {
 			return InetAddress.getByName(ip).isReachable(5000); // 设定超时时间，返回结果表示是否连上
 		} catch (IOException e) {
 			e.printStackTrace();
+			return false;
 		}
-
-		return false;
 	}
 
 	/*

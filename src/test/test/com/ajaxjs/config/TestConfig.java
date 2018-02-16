@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.ajaxjs.config.ConfigService;
-import com.ajaxjs.util.collection.JsonStruTraveler;
+import com.ajaxjs.js.JsonStruTraveler;
 
 public class TestConfig {
 	@Before

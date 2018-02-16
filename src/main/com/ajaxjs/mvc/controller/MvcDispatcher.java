@@ -15,11 +15,14 @@
  */
 package com.ajaxjs.mvc.controller;
 
+import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -27,20 +30,17 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.framework.BaseModel;
-import com.ajaxjs.util.ClassScaner;
 import com.ajaxjs.util.reflect.ExecuteMethod;
+import com.ajaxjs.util.reflect.NewInstance;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.collection.MapHelper;
+import com.ajaxjs.util.io.resource.Scan;
+import com.ajaxjs.util.io.resource.ScanClass;
+import com.ajaxjs.util.io.resource.Scanner;
 import com.ajaxjs.ioc.BeanContext;
-import com.ajaxjs.ioc.Scanner;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -50,6 +50,31 @@ import com.ajaxjs.util.logger.LogHelper;
  */
 public class MvcDispatcher implements Filter {
 	private static final LogHelper LOGGER = LogHelper.getLog(MvcDispatcher.class);
+
+	public static class IControllerScanner extends ScanClass {
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		@Override
+		public void onFileAdding(Set target, File resourceFile, String packageJavaName) {
+			String className = getClassName(resourceFile, packageJavaName);
+			Class<?> clazz = NewInstance.getClassByName(className);
+			
+			LOGGER.info("正在检查类：{0}, 如果该类是 IController 的实例，那么将被收集起来。", className);
+			if (IController.class.isAssignableFrom(clazz)) {
+				target.add(clazz);// 添加到集合中去
+			}
+		}
+
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		@Override
+		public void onJarAdding(Set target, String resourcePath) {
+			Class<?> clazz = NewInstance.getClassByName(resourcePath);
+			
+			LOGGER.info("正在检查类：{0}, 如果该类是 IController 的实例，那么将被收集起来。", resourcePath);
+			if (IController.class.isAssignableFrom(clazz)) {
+				target.add(clazz);// 添加到集合中去
+			}
+		}
+	}
 
 	/**
 	 * 初始化这个过滤器
@@ -61,16 +86,19 @@ public class MvcDispatcher implements Filter {
 		// 读取 web.xml 配置，如果有 controller 那一项就获取指定包里面的内容，看是否有属于 IController 接口的控制器，有就加入到 AnnotationUtils.controllers 集合中
 		Map<String, String> config = MvcRequest.parseInitParams(null, fConfig);
 
-		if (config != null && config.get("doIoc") != null)
-			BeanContext.me().init(new Scanner().scanPackage(config.get("doIoc")));
+		//		if (config != null && config.get("doIoc") != null)
+		//			BeanContext.me().init(new Scanner(new IControllerScanner()).scan(config.get("doIoc")));
 
 		if (config != null && config.get("controller") != null) {
 			String str = config.get("controller");
 
-			ClassScaner<IController> scaner = new ClassScaner<>(IController.class);// 定义一个扫描器，专门扫描 IController
+			Scanner scaner = new Scanner(new IControllerScanner());// 定义一个扫描器，专门扫描 IController
 
 			for (String packageName : StringUtil.split(str)) {
-				for (Class<IController> clz : scaner.scan(packageName))
+				@SuppressWarnings("unchecked")
+				Set<Class<IController>> IControllers = (Set<Class<IController>>) scaner.scan(packageName);
+
+				for (Class<IController> clz : IControllers)
 					ControllerScanner.add(clz);
 			}
 		} else {
@@ -89,37 +117,37 @@ public class MvcDispatcher implements Filter {
 
 		String uri = request.getRoute(), httpMethod = request.getMethod();
 
-		Object[] obj = getMethod(uri, httpMethod); // 返回两个对象
-		Method method = (Method) obj[1];// 要执行的方法
-
-		if (method != null) {
-			IController controller = (IController) obj[0];
-			Object result;
-
-			ModelAndView model = null;
-
-			MvcRequest.setHttpServletRequest(request);
-			MvcRequest.setHttpServletResponse(response);
-
-			if (method.getParameterTypes().length > 0) {
-				Object[] args = RequestParam.getArgs(request, response, method);
-				model = findModel(args);
-
-				// 调用反射的 Reflect.executeMethod 方法就可以执行目标方法，并返回一个结果。
-				result = ExecuteMethod.executeMethod(controller, method, args);// 通过反射执行控制器方法
-			} else {
-				// 方法没有参数
-				result = ExecuteMethod.executeMethod(controller, method);
-			}
-
-			response.resultHandler(result, request, model);
-			MvcRequest.clean();
-
-			return; // 终止当前 servlet 请求
-		}
-		//		else {
-		//			LOGGER.info(httpMethod + uri + " 控制器没有这个方法！"); // Let it go, may be html/js/css/jpg..
+		//		Object[] obj = getMethod(uri, httpMethod); // 返回两个对象
+		//		Method method = (Method) obj[1];// 要执行的方法
+		//
+		//		if (method != null) {
+		//			IController controller = (IController) obj[0];
+		//			Object result;
+		//
+		//			ModelAndView model = null;
+		//
+		//			MvcRequest.setHttpServletRequest(request);
+		//			MvcRequest.setHttpServletResponse(response);
+		//
+		//			if (method.getParameterTypes().length > 0) {
+		//				Object[] args = RequestParam.getArgs(request, response, method);
+		//				model = findModel(args);
+		//
+		//				// 调用反射的 Reflect.executeMethod 方法就可以执行目标方法，并返回一个结果。
+		//				result = ExecuteMethod.executeMethod(controller, method, args);// 通过反射执行控制器方法
+		//			} else {
+		//				// 方法没有参数
+		//				result = ExecuteMethod.executeMethod(controller, method);
+		//			}
+		//
+		//			response.resultHandler(result, request, model);
+		//			MvcRequest.clean();
+		//
+		//			return; // 终止当前 servlet 请求
 		//		}
+		//		//		else {
+		//		//			LOGGER.info(httpMethod + uri + " 控制器没有这个方法！"); // Let it go, may be html/js/css/jpg..
+		//		//		}
 
 		chain.doFilter(req, resp);// 不要传 MvcRequest，以免入侵其他框架
 	}

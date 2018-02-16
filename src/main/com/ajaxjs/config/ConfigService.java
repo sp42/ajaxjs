@@ -20,9 +20,9 @@ import java.util.Map;
 import com.ajaxjs.Version;
 import com.ajaxjs.js.JsEngineWrapper;
 import com.ajaxjs.js.JsonHelper;
+import com.ajaxjs.js.JsonStruTraveler;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.Value;
-import com.ajaxjs.util.collection.JsonStruTraveler;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.logger.LogHelper;
 

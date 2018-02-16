@@ -26,7 +26,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.Version;
 import com.ajaxjs.js.JsonHelper;
-import com.ajaxjs.util.collection.JsonStruTraveler;
+import com.ajaxjs.js.JsonStruTraveler;
+import com.ajaxjs.simpleApp.Constant;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -83,6 +84,10 @@ public class SiteStruService implements ServletContextListener {
 			LOGGER.info("加载网站的结构文件成功");
 		} else
 			LOGGER.info("没有网站的结构文件");
+		
+		cxt.setAttribute("commonAsset", cxt.getContextPath() + "/" + Constant.commonFolder); // 静态资源目录
+		cxt.setAttribute("commonImage", cxt.getContextPath() + "/" + Constant.commonImage);
+		cxt.setAttribute("commonAssetIcon", cxt.getContextPath() + "/" + Constant.commonIcon);
 	}
 
 	/**
