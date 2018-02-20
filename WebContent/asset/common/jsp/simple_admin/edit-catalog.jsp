@@ -1,4 +1,3 @@
-<%@page import="com.ajaxjs.mvc.Constant"%>
 <%@page pageEncoding="UTF-8"%>
 <!-- ${uiName}页面 -->
 <%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
@@ -47,7 +46,7 @@ form{
 						<input type="text" name="name" class="ajaxjs-inputField" /> <input type="hidden"
 							name="parentId" value="-1" />
 						<button class="ajaxjs-btn">
-							<img src="${pageContext.request.contextPath}/<%=Constant.commonIcon%>add.gif" /> 新建分类
+							<img src="${commonAssetIcon}add.gif" /> 新建分类
 						</button>
 
 					</form>
@@ -60,7 +59,7 @@ form{
 						<input type="text" name="name" class="ajaxjs-inputField" /> <input type="hidden"
 							name="parentId" />  <input type="hidden" name="level" /> 
 						<button class="ajaxjs-btn">
-							<img src="${pageContext.request.contextPath}/<%=Constant.commonIcon%>add.gif" /> 新建分类
+							<img src="${commonAssetIcon}add.gif" /> 新建分类
 						</button>
 					</form>
 
@@ -73,10 +72,10 @@ form{
 							<input type="hidden" class="noPassServerParentId" />
 
 							<button class="ajaxjs-btn">
-								<img src="${pageContext.request.contextPath}/<%=Constant.commonIcon%>update.gif" /> 更新名称
+								<img src="${commonAssetIcon}update.gif" /> 更新名称
 							</button>
 							<button class="ajaxjs-btn" onclick="sendDelete(this);return false;">
-								<img src="${pageContext.request.contextPath}/<%=Constant.commonIcon%>delete.gif" /> 删除分类
+								<img src="${commonAssetIcon}delete.gif" /> 删除分类
 							</button>
 						</label>
 					</form>

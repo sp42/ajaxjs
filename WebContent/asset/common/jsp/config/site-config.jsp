@@ -1,4 +1,4 @@
-<%@page pageEncoding="UTF-8" import="com.ajaxjs.mvc.Constant"%>
+<%@page pageEncoding="UTF-8"%>
 <%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <!DOCTYPE html>
 <html>
@@ -74,7 +74,7 @@
 
 		<section style="text-align: center;padding:2% 0;">
 			<button class="ajaxjs-btn">
-				<img src="${pageContext.request.contextPath}/<%=Constant.commonIcon%>save.gif" /> 修改
+				<img src="${commonAssetIcon}save.gif" /> 修改
 			</button>
 			<button class="ajaxjs-btn"
 				onclick="this.up('form').reset();return false;">复 位</button>
