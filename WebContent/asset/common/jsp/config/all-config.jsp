@@ -2,167 +2,101 @@
 <%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <!DOCTYPE html>
 <html>
-	<commonTag:head lessFile="/asset/less/admin.less" title="全部配置" />
+<commonTag:head lessFile="/asset/less/admin.less" title="全部配置" />
 <body class="configForm admin-entry-form">
-	<h3>全部配置</h3>
+	<h3 class="title">全部配置</h3>
 	<p>请点击有+号菜单项以展开下一级的内容。</p>
-	<div class="tree">
-		<div class="tipsNote hide">
-			<div class="aj-arrow toLeft"></div>
-			<span></span>
+	<button onclick="save();return false;" class="ajaxjs-btn" style="margin-left: 30px;">保存</button>
+	<form>
+		<div class="tree">
+			<div class="tipsNote hide">
+				<div class="aj-arrow toLeft"></div>
+				<span></span>
+			</div>
 		</div>
-	</div>
+	</form>
+	
+	<!-- HTML 编辑器控件 -->
+		<script src="${pageContext.request.contextPath}/asset/common/js/component/htmlEditor.js"></script>
+		<textarea class="hide tpl">
+			<div class="htmlEditor">
+			<ul class="toolbar">
+				<li class="dorpdown"><span title="字体" class="bg-4"></span>
+					<div class="fontfamilyChoser">
+						<a href="javascript:;" style="font-family: '宋体'">宋体</a> <a
+							href="javascript:;" style="font-family: '黑体'">黑体</a> <a
+							href="javascript:;" style="font-family: '楷体'">楷体</a> <a
+							href="javascript:;" style="font-family: '隶书'">隶书</a> <a
+							href="javascript:;" style="font-family: '幼圆'">幼圆</a> <a
+							href="javascript:;" style="font-family: 'Microsoft YaHei'">Microsoft
+							YaHei</a> <a href="javascript:;" style="font-family: Arial">Arial</a>
+						<a href="javascript:;" style="font-family: 'Arial Narrow'">Arial
+							Narrow</a> <a href="javascript:;" style="font-family: 'Arial Black'">Arial
+							Black</a> <a href="javascript:;" style="font-family: 'Comic Sans MS'">Comic
+							Sans MS</a> <a href="javascript:;" style="font-family: Courier">Courier</a>
+						<a href="javascript:;" style="font-family: System">System</a> <a
+							href="javascript:;" style="font-family: 'Times New Roman'">Times
+							New Roman</a> <a href="javascript:;" style="font-family: Verdana">Verdana</a>
+					</div></li>
+				<li class="dorpdown"><span title="字号" class="bg-5"></span>
+
+					<div class="fontsizeChoser">
+						<a href="javascript:;"
+							style="font-size: xx-small; line-height: 120%">极小</a> <a
+							href="javascript:;" style="font-size: x-small; line-height: 120%">特小</a>
+						<a href="javascript:;" style="font-size: small; line-height: 120%">小</a>
+						<a href="javascript:;"
+							style="font-size: medium; line-height: 120%">中</a> <a
+							href="javascript:;" style="font-size: large; line-height: 120%">大</a>
+						<a href="javascript:;"
+							style="font-size: x-large; line-height: 120%">特大</a> <a
+							href="javascript:;"
+							style="font-size: xx-large; line-height: 140%">极大</a>
+					</div></li>
+
+				<li><span title="加粗" class="bold bg-6"></span></li>
+				<li><span title="斜体" class="italic bg-7"></span></li>
+				<li><span title="下划线" class="underline bg-8"></span></li>
+				<li><span title="左对齐" class="justifyleft bg-9"></span></li>
+				<li><span title="中间对齐" class="justifycenter bg-10"></span></li>
+				<li><span title="右对齐" class="justifyright bg-11"></span></li>
+				<li><span title="数字编号" class="insertorderedlist bg-12"></span></li>
+				<li><span title="项目编号" class="insertunorderedlist bg-13"></span></li>
+			
+
+				<li class="dorpdown"><span title="字体颜色" class="bg-16"></span>
+					<div class="fontColor colorPicker">
+						<script>
+							document.write(ajaxjs_HtmlEditor.createColorPickerHTML());
+						</script>
+					</div></li>
+				<li class="dorpdown"><span title="背景颜色" class="backColor bg-17"></span>
+					<div class="bgColor colorPicker">
+						<script>
+							document.write(ajaxjs_HtmlEditor.createColorPickerHTML());
+						</script>
+					</div></li>
+				<li><span title="增加链接" class="createLink bg-18"></span></li>
+				<li><span title="增加图片" class="insertImage bg-19"></span></li>
+				<li><span class="switchMode noBg">H</span></li>
+			</ul>
+
+			<div class="editorBody">
+				<iframe src="../../public_service?action=htmleditor_iframe"></iframe>
+				&lt;textarea class="hide htmlEditorTextarea" name=""&gt;&lt;/textarea&gt;
+			</div>
+		</div>
+</textarea>
+
 	<script>
 		var configJson = ${configJson};
-
 		var jsonScheme = ${jsonSchemePath};
-		var tree = document.querySelector('.tree');
-
-		function isMap(v) {
-			return typeof v == 'object' && v != null;
-		}
-
-		var stack = [];
-		function it(json, fn, parentEl) {
-			stack.push(json);
-			var ul = document.createElement('ul');
-			ul.style.paddingLeft = (stack.length * 10) + "px";
-
-			// 折叠
-			if (stack.length != 1) {
-				ul.className = 'subTree';
-				ul.style.height = '0';
-			}
-
-			for ( var i in json) {
-				var el = json[i];
-
-				var li = document.createElement('li');
-				if (isMap(el)) {
-					var div = document.createElement('div'); // parentNode
-					div.className = 'parentNode';
-					div.innerHTML = '+' + i;
-					div.onclick = toggle;
-					li.appendChild(div);
-					//debugger;
-					it(el, fn, li);
-				} else {
-					var namespaces = getParentStack(stack); // 另外设一个 stack？
-					if (namespaces)
-						namespaces += '.' + i;
-					else 
-						namespaces = i;
-					
-					var scheme = eval('jsonScheme.' + namespaces);
-					var tip = makeTip(scheme);
-					
-					var html;
-					switch(scheme.ui) {
-						case 'textarea':
-							html = '<div class="valueHolder"><textarea></textarea></div>';
-							break;
-						case 'input_text':
-						default:
-							html = '<div class="valueHolder"><input name="' + namespaces +'" type="text" value="' + el + '" data-note="' + tip +'" /></div>';	
-					}
-					li.innerHTML = html + i;
-					fn(i, el);
-				}
-				ul.appendChild(li);
-			}
-			stack.pop();
-
-			parentEl.appendChild(ul);
-		}
-		
-		// 获取完整的父节点路径
-		function getParentStack(stack) {
-			var names = [];
-			var last;
-			for (var i = stack.length; i > 0; i--) {
-				last = stack[i];
-				if(last){
-					var map = stack[i - 1];
-					for(var j in map) {
-						if(map[j] == last) {
-							names.push(j);
-						}
-					}					
-				}
-				
-			}
-			
-			return names.reverse().join('.');
-		}
-		
-		// 根据元数据生成说明
-		function makeTip(scheme) {
-			if(!scheme || !scheme.name) 
-				return '';
-			
-			var html = scheme.name.bold(); 
-			html += '<br />' + scheme.tip;
-			
-			return html;
-		}
-
-		function toggle(e) {
-			var div = e.target;
-			var ul = div.parentNode.querySelector('ul');
-
-			if (ul.style.height == '0px') {
-				div.innerHTML = div.innerHTML.replace('+', '-');
-				ul.style.height = ul.scrollHeight + 'px';
-				setTimeout(function() {
-					ul.style.height = 'auto'; // a ticky
-				}, 500);
-			} else {
-				div.innerHTML = div.innerHTML.replace('-', '+');
-				ul.style.height = '0px';
-			}
-		}
-		
-		it(configJson, function(item, v) { }, tree);
-		
-		// 遍历每个函数
-		function getList(formEl, fn) {
-			var list = [];
-			function add(el) {
-				list.push(el);
-			}
-			var forEach = [].forEach;
-			forEach.call(formEl.querySelectorAll('input[type=text]'), add);
-			forEach.call(formEl.querySelectorAll('input[type=password]'), add);
-			forEach.call(formEl.querySelectorAll('textarea'), add);
-
-			list.forEach(fn);
-		}
-		
-		var isIn = false;
-		function everyInput(input) {
-			input.onfocus = function (e) {
-				var el = e.currentTarget;
-				isIn = true;
-				var tipsNote = el.getAttribute('data-note');
-				if (tipsNote) {
-					var tipsNoteEl = document.querySelector('.tipsNote');
-					tipsNoteEl.querySelector('span').innerHTML = tipsNote;
-					//tipsNoteEl.style.left = el.offsetLeft + el.offsetWidth + 30 + 'px';
-					tipsNoteEl.style.top = (el.offsetTop - 10) + 'px';
-					tipsNoteEl.classList.remove('hide');
-						
-				}
-			}
-			input.onblur  = function (e) {
-				setTimeout(function(){
-					if(!isIn)
-						document.querySelector('.tipsNote').classList.add('hide');
-				}, 5000);
-				isIn = false;
-			}
-		}
-		
-		getList(tree, everyInput);
 	</script>
+	<script src="${commonAsset}jsp/config/allConfig-renderer.js"></script>
+	<script src="${commonAsset}jsp/config/allConfig.js"></script>
+	
+<br />
+<br />
+<br />
 </body>
 </html>

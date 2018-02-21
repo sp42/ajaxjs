@@ -104,11 +104,9 @@
 		</tr>
 	</table>
 	<p>&nbsp;&nbsp;&nbsp;非常抱歉，服务器运行出错！异常信息：</p>
-	<textarea>
-		<%
+	<textarea><%
 			out.print(getError(request, exception));
-		%>
-	</textarea>
+		%></textarea>
 	<div align="center">
 		<a href="${pageContext.request.contextPath}">回首页</a> | <a
 			href="javascript:history.go(-1);">上一页</a>
