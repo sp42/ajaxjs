@@ -8,12 +8,6 @@ body {
 	font-size: 14px;
 }
 
-h3 {
-	font-size: 1.2rem;
-	letter-spacing: 3px;
-	padding: 2%;
-}
-
 body.admin-shell {
 	width: 100%;
 	height: 100%;
@@ -41,6 +35,7 @@ body.admin-shell {
 			vertical-align: middle;
 			color: white;
 		}
+
 
 		h1 {
 			text-shadow: 0px 1px 0px black;
@@ -243,16 +238,12 @@ header.top {
 
 	p {
 		padding: 2%;
-		padding-top:0;
-	}
-	img.icon{
-		vertical-align: middle;
+		padding-top: 0;
 	}
 }
 
 .tree {
-	width: 700px;
-	margin-left: 15px;
+	width: 900px;
 	position: relative;
 	li {
 		overflow: hidden;
@@ -282,7 +273,7 @@ header.top {
 	}
 
 	.valueHolder {
-		width: 280px;
+		width: 480px;
 		float: right;
 		padding-right: 5%;
 	}
@@ -290,15 +281,103 @@ header.top {
 	.tipsNote {
 		position: absolute;
 		width: 260px;
-		right: -270px;
+		right: -250px;
 		transition: top linear 100ms;
 		b {
 			letter-spacing: 2px;
 		}
 	}
 
-	textarea {
+	select{
+		width: 100%;
+	}
+	.valueHolder>textarea {
+		width: 100%!important;
+	    margin: 2% 0;
 		min-height: 60px;
+	}
+	
+	.htmlEditor{
+		width:100%!important;
+		margin-top:10px!important;
+		
+		ul.toolbar{
+//			border-top:0;
+		}
+		li{
+			overflow: inherit;
+			background-color: inherit;
+		    box-sizing: border-box;
+		    padding-left: inherit; 
+		    min-height: inherit; 
+		    line-height: 20px;
+		    border-top: 0; 
+		    border-bottom: inherit; 
+		}
+		textarea{
+			margin-bottom: 14px;
+		}
 	}
 }
 
+h3.title {
+    text-align: center;
+    padding: 2%;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+}
+
+
+
+// 首先定义关键帧动画，一个显示、一个隐藏的
+@keyframes topMsg-fade-in {
+    0% {
+        opacity: 0;
+    }
+    30% {
+        opacity: .2;
+    }
+    80% {
+        opacity: .4;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@keyframes topMsg-fade-out {
+    0% {
+    }
+    30% {
+        opacity: .2;
+    }
+    80% {
+        opacity: .4;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+// 元素样式，采用绝对布局
+.topMsg{
+    position:fixed;
+    width:300px;
+    height:80px;
+    right: 30px;
+    padding:10px;
+    border-radius:5px;
+    color: #0066cc;
+    box-sizing: border-box;
+    background-color: #f5faff;
+    border:1px solid #0066cc;
+    top: -100px;
+    transition: top ease-in 550ms;
+    animation-fill-mode: forwards;
+    &.fadeIn{
+        top: 100px;
+        animation: topMsg-fade-in ease-in 550ms;
+    }
+    &.fadeOut{
+        animation: topMsg-fade-out ease-out 550ms;
+    }
+}

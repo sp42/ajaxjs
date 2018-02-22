@@ -26,7 +26,6 @@ import java.util.regex.Pattern;
 
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
@@ -60,14 +59,6 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * 
-	 * @param request
-	 */
-	public MvcRequest(ServletRequest request) {
-		this((HttpServletRequest)request);
-	}
-
-	/**
 	 * 获取原请求的 uri，而非模版所在的 uri
 	 */
 	@Override
@@ -89,6 +80,10 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	public String getRoute() {
 		String route = getRequestURI().replace(getContextPath(), "");
 		return route.replaceFirst("/\\w+\\.\\w+$", ""); // 删除 index.jsp
+	}
+	
+	public String getFolder() {
+		return getRequestURI().replace(getContextPath(), "").replaceFirst("^/", "").replaceFirst("/\\w+\\.\\w+$", ""); // 删除 index.jsp;
 	}
 
 	/**

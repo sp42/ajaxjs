@@ -52,8 +52,7 @@ import com.ajaxjs.util.logger.LogHelper;
  *            ID 类型，可以是 INTEGER/LONG/String
  * @param <S>
  */
-public abstract class CommonController<T, ID extends Serializable, S extends IService<T, ID>>
-		implements IController, Constant {
+public abstract class CommonController<T, ID extends Serializable, S extends IService<T, ID>> implements IController, Constant {
 	private static final LogHelper LOGGER = LogHelper.getLog(CommonController.class);
 
 	/**

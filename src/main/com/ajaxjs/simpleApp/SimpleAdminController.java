@@ -16,7 +16,7 @@ import com.ajaxjs.mvc.controller.IController;
 @Path("/ajaxjsweb-admin")
 public class SimpleAdminController implements IController, Constant {
 	@GET
-	@Path("workbench")
+	@Path("/workbench")
 	public String workbench() {
 		return common_jsp_perfix + "simple_admin/workbench";
 	}

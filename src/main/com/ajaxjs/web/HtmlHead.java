@@ -72,7 +72,7 @@ public class HtmlHead {
 	 * @return
 	 */
 	public String getCssUrl(String lessPath) {
-		boolean isDebug = true; //ConfigService.getValueAsBool("isDebug");
+		boolean isDebug = ConfigService.getValueAsBool("isDebug");
 		return getCssUrl(lessPath, isDebug);
 	}
 

@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Sp42 frank@ajaxjs.com
+ * Copyright 2015 sp42 frank@ajaxjs.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,11 @@
 package com.ajaxjs.mvc.controller;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -30,17 +28,15 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.util.reflect.ExecuteMethod;
 import com.ajaxjs.util.reflect.NewInstance;
 import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.util.collection.MapHelper;
-import com.ajaxjs.util.io.resource.Scan;
 import com.ajaxjs.util.io.resource.ScanClass;
 import com.ajaxjs.util.io.resource.Scanner;
-import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -51,13 +47,19 @@ import com.ajaxjs.util.logger.LogHelper;
 public class MvcDispatcher implements Filter {
 	private static final LogHelper LOGGER = LogHelper.getLog(MvcDispatcher.class);
 
+	/**
+	 * Inner class for collecting IController
+	 * 
+	 * @author sp42 frank@ajaxjs.com
+	 *
+	 */
 	public static class IControllerScanner extends ScanClass {
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		@Override
 		public void onFileAdding(Set target, File resourceFile, String packageJavaName) {
 			String className = getClassName(resourceFile, packageJavaName);
 			Class<?> clazz = NewInstance.getClassByName(className);
-			
+
 			LOGGER.info("正在检查类：{0}, 如果该类是 IController 的实例，那么将被收集起来。", className);
 			if (IController.class.isAssignableFrom(clazz)) {
 				target.add(clazz);// 添加到集合中去
@@ -68,7 +70,7 @@ public class MvcDispatcher implements Filter {
 		@Override
 		public void onJarAdding(Set target, String resourcePath) {
 			Class<?> clazz = NewInstance.getClassByName(resourcePath);
-			
+
 			LOGGER.info("正在检查类：{0}, 如果该类是 IController 的实例，那么将被收集起来。", resourcePath);
 			if (IController.class.isAssignableFrom(clazz)) {
 				target.add(clazz);// 添加到集合中去
@@ -112,44 +114,69 @@ public class MvcDispatcher implements Filter {
 	 */
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
-		MvcRequest request = new MvcRequest(req);
-		MvcOutput response = new MvcOutput(resp);
+		HttpServletRequest _request = (HttpServletRequest) req;
+		HttpServletResponse _response= (HttpServletResponse) resp;
+		
+		if (isStaticAsset(_request.getRequestURI())) { // 静态资源
+			chain.doFilter(req, resp);
+			return;
+		}
 
-		String uri = request.getRoute(), httpMethod = request.getMethod();
+		MvcRequest request = new MvcRequest(_request);
+		MvcOutput response = new MvcOutput(_response);
 
-		//		Object[] obj = getMethod(uri, httpMethod); // 返回两个对象
-		//		Method method = (Method) obj[1];// 要执行的方法
-		//
-		//		if (method != null) {
-		//			IController controller = (IController) obj[0];
-		//			Object result;
-		//
-		//			ModelAndView model = null;
-		//
-		//			MvcRequest.setHttpServletRequest(request);
-		//			MvcRequest.setHttpServletResponse(response);
-		//
-		//			if (method.getParameterTypes().length > 0) {
-		//				Object[] args = RequestParam.getArgs(request, response, method);
-		//				model = findModel(args);
-		//
-		//				// 调用反射的 Reflect.executeMethod 方法就可以执行目标方法，并返回一个结果。
-		//				result = ExecuteMethod.executeMethod(controller, method, args);// 通过反射执行控制器方法
-		//			} else {
-		//				// 方法没有参数
-		//				result = ExecuteMethod.executeMethod(controller, method);
-		//			}
-		//
-		//			response.resultHandler(result, request, model);
-		//			MvcRequest.clean();
-		//
-		//			return; // 终止当前 servlet 请求
-		//		}
-		//		//		else {
-		//		//			LOGGER.info(httpMethod + uri + " 控制器没有这个方法！"); // Let it go, may be html/js/css/jpg..
-		//		//		}
+		String uri = request.getFolder(), httpMethod = request.getMethod();
+		Action action = ControllerScanner.find(uri);
+		Method method = getMethod(action, httpMethod);// 要执行的方法
+		IController controller = action.controller;
+
+		//		System.out.println(uri);
+		//		System.out.println(action);
+		//		System.out.println(method);
+
+		if (method != null && controller != null) {
+			dispatch(request, response, controller, method);
+			return; // 终止当前 servlet 请求
+		} else {
+			// Let it go, may be html/js/css/jpg..
+			LOGGER.info("{0} {1} 控制器没有这个方法！", httpMethod, request.getRequestURI());
+		}
 
 		chain.doFilter(req, resp);// 不要传 MvcRequest，以免入侵其他框架
+	}
+	
+	private static void dispatch(MvcRequest request, MvcOutput response, IController controller, Method method) {
+		MvcRequest.setHttpServletRequest(request);
+		MvcRequest.setHttpServletResponse(response);
+
+		Object result;
+		ModelAndView model = null;
+		
+		if (method.getParameterTypes().length > 0) {
+			Object[] args = RequestParam.getArgs(request, response, method);
+			model = findModel(args);
+			
+			// 通过反射执行控制器方法:调用反射的 Reflect.executeMethod 方法就可以执行目标方法，并返回一个结果。
+			result = ExecuteMethod.executeMethod(controller, method, args);// 
+		} else {
+			// 方法没有参数
+			result = ExecuteMethod.executeMethod(controller, method);
+		}
+		
+		response.resultHandler(result, request, model);
+		MvcRequest.clean();
+	}
+
+	private static final Pattern p = Pattern.compile("\\.jpg|\\.png|\\.gif|\\.js|\\.css|\\.ico|\\.jpeg|\\.htm|\\.swf|\\.txt|\\.mp4|\\.flv");
+
+	/**
+	 * Check the url if there is static asset.
+	 * 
+	 * @param requestURI
+	 * @return
+	 */
+	public static boolean isStaticAsset(String requestURI) {
+		return p.matcher(requestURI).find();
 	}
 
 	/**
@@ -163,7 +190,7 @@ public class MvcDispatcher implements Filter {
 	 */
 	private static Method getMethod(Action action, String httpMethod) {
 		if (action == null)
-			throw new NullPointerException(" Action 对象不存在！");
+			throw new NullPointerException("Action 对象不存在！");
 
 		switch (httpMethod.toUpperCase()) {
 		case "GET":

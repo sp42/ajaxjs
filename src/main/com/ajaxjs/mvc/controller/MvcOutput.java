@@ -25,7 +25,6 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
@@ -53,16 +52,6 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	 */
 	public MvcOutput(HttpServletResponse request) {
 		super(request);
-	}
-
-	/**
-	 * 创建一个 Output 对象
-	 * 
-	 * @param resp
-	 *            原生 ServletResponse 对象
-	 */
-	public MvcOutput(ServletResponse resp) {
-		this((HttpServletResponse) resp);
 	}
 
 	/**

@@ -91,6 +91,11 @@ public class ControllerScanner {
 		LOGGER.info("The controller \"{0}\" was parsed and registered", topPath); // 控制器 {0} 所有路径（包括子路径）注册成功！
 	}
 
+	/**
+	 * 
+	 * @param path
+	 * @return
+	 */
 	public static Action find(String path) {
 		Queue<String> queue = split2Queue(path);
 		return findKey(urlMappingTree, queue, "");
