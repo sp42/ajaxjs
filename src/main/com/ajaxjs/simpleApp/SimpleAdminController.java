@@ -13,7 +13,7 @@ import com.ajaxjs.mvc.controller.IController;
  *
  */
 @Controller
-@Path("/ajaxjsweb-admin")
+@Path("/admin")
 public class SimpleAdminController implements IController, Constant {
 	@GET
 	@Path("/workbench")

@@ -77,7 +77,7 @@ public class ControllerScanner {
 		if (BeanContext.isIOC_Bean(clz)) { // 如果有 ioc，则从容器中查找
 			IController con = BeanContext.me().getBeanByClass(clz);
 			if (con == null)
-				LOGGER.warning("在 IOC 资源中找不到该类{0}的实例，请检查是否已经 IOC 扫描？", clz.getName());
+				LOGGER.warning("在 IOC 资源库中找不到该类 {0} 的实例，请检查该类是否已经加入了 IOC 扫描？", clz.getName());
 
 			action.controller = con;
 		} else {
@@ -129,7 +129,7 @@ public class ControllerScanner {
 				if (action.children == null)
 					action.children = new HashMap<>();
 
-				Action subAction = findKey(action.children, split2Queue(subPathValue), action.path + ".");
+				Action subAction = findKey(action.children, split2Queue(subPathValue), action.path + "/");
 				subAction.controller = action.controller; // the same controller cause the same class over there
 				methodSend(method, subAction);
 			} else {
@@ -175,7 +175,7 @@ public class ControllerScanner {
 		if (method == null)
 			return true;
 		else {
-			LOGGER.info("控制器上的 {0} 的 {1} 方法业已登记，不接受重复登记！", path, httpMethod);
+			LOGGER.warning("控制器上的 {0} 的 {1} 方法业已登记，不接受重复登记！", path, httpMethod);
 			return false;
 		}
 	}
@@ -194,7 +194,7 @@ public class ControllerScanner {
 	private static Action findKey(Map<String, Action> urlMappingTree, Queue<String> queue, String path) {
 		while (!queue.isEmpty()) {
 			String key = queue.poll(); // remove the first item in the queue and return it
-			path += key + ".";
+			path += key + "/";
 
 			Action action;
 			if (urlMappingTree.containsKey(key)) {
@@ -242,7 +242,7 @@ public class ControllerScanner {
 	 */
 	public static boolean testClass(Class<? extends IController> clz) {
 		if (clz.getAnnotation(Controller.class) == null) {// 获取注解对象
-			LOGGER.warning("此非控制器！要我处理干甚！？This is NOT a Controller! 类：" + clz.getName());
+//			LOGGER.warning("此非控制器！要我处理干甚！？This is NOT a Controller! 类：" + clz.getName());
 			return false;
 		}
 

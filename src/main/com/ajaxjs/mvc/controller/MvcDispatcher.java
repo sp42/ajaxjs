@@ -31,6 +31,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.util.reflect.ExecuteMethod;
 import com.ajaxjs.util.reflect.NewInstance;
@@ -60,7 +61,7 @@ public class MvcDispatcher implements Filter {
 			String className = getClassName(resourceFile, packageJavaName);
 			Class<?> clazz = NewInstance.getClassByName(className);
 
-			LOGGER.info("正在检查类：{0}, 如果该类是 IController 的实例，那么将被收集起来。", className);
+//			LOGGER.info("正在检查类：{0}, 如果该类是 IController 的实例，那么将被收集起来。", className);
 			if (IController.class.isAssignableFrom(clazz)) {
 				target.add(clazz);// 添加到集合中去
 			}
@@ -71,7 +72,7 @@ public class MvcDispatcher implements Filter {
 		public void onJarAdding(Set target, String resourcePath) {
 			Class<?> clazz = NewInstance.getClassByName(resourcePath);
 
-			LOGGER.info("正在检查类：{0}, 如果该类是 IController 的实例，那么将被收集起来。", resourcePath);
+//			LOGGER.info("正在检查类：{0}, 如果该类是 IController 的实例，那么将被收集起来。", resourcePath);
 			if (IController.class.isAssignableFrom(clazz)) {
 				target.add(clazz);// 添加到集合中去
 			}
@@ -88,18 +89,33 @@ public class MvcDispatcher implements Filter {
 		// 读取 web.xml 配置，如果有 controller 那一项就获取指定包里面的内容，看是否有属于 IController 接口的控制器，有就加入到 AnnotationUtils.controllers 集合中
 		Map<String, String> config = MvcRequest.parseInitParams(null, fConfig);
 
-		//		if (config != null && config.get("doIoc") != null)
-		//			BeanContext.me().init(new Scanner(new IControllerScanner()).scan(config.get("doIoc")));
+		doIoc(config);
+		scannController(config);
+	}
 
+	private static void doIoc(Map<String, String> config) {
+		if (config == null)
+			return;
+
+		Object _doIoc = config.get("doIoc");
+		if (_doIoc != null) {
+			String doIoc = (String) _doIoc;
+			for (String packageName : StringUtil.split(doIoc))
+				BeanContext.me().init(packageName);
+		}
+	}
+	
+	private static void scannController(Map<String, String> config) {
 		if (config != null && config.get("controller") != null) {
 			String str = config.get("controller");
-
-			Scanner scaner = new Scanner(new IControllerScanner());// 定义一个扫描器，专门扫描 IController
-
+			
+			IControllerScanner cS = new IControllerScanner(); // 定义一个扫描器，专门扫描 IController
+			
 			for (String packageName : StringUtil.split(str)) {
+				Scanner scaner = new Scanner(cS);
 				@SuppressWarnings("unchecked")
 				Set<Class<IController>> IControllers = (Set<Class<IController>>) scaner.scan(packageName);
-
+				
 				for (Class<IController> clz : IControllers)
 					ControllerScanner.add(clz);
 			}
@@ -115,8 +131,8 @@ public class MvcDispatcher implements Filter {
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest _request = (HttpServletRequest) req;
-		HttpServletResponse _response= (HttpServletResponse) resp;
-		
+		HttpServletResponse _response = (HttpServletResponse) resp;
+
 		if (isStaticAsset(_request.getRequestURI())) { // 静态资源
 			chain.doFilter(req, resp);
 			return;
@@ -144,25 +160,25 @@ public class MvcDispatcher implements Filter {
 
 		chain.doFilter(req, resp);// 不要传 MvcRequest，以免入侵其他框架
 	}
-	
+
 	private static void dispatch(MvcRequest request, MvcOutput response, IController controller, Method method) {
 		MvcRequest.setHttpServletRequest(request);
 		MvcRequest.setHttpServletResponse(response);
 
 		Object result;
 		ModelAndView model = null;
-		
+
 		if (method.getParameterTypes().length > 0) {
 			Object[] args = RequestParam.getArgs(request, response, method);
 			model = findModel(args);
-			
+
 			// 通过反射执行控制器方法:调用反射的 Reflect.executeMethod 方法就可以执行目标方法，并返回一个结果。
 			result = ExecuteMethod.executeMethod(controller, method, args);// 
 		} else {
 			// 方法没有参数
 			result = ExecuteMethod.executeMethod(controller, method);
 		}
-		
+
 		response.resultHandler(result, request, model);
 		MvcRequest.clean();
 	}
