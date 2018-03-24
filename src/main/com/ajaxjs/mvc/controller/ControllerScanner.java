@@ -75,11 +75,9 @@ public class ControllerScanner {
 		}
 
 		if (BeanContext.isIOC_Bean(clz)) { // 如果有 ioc，则从容器中查找
-			IController con = BeanContext.me().getBeanByClass(clz);
-			if (con == null)
+			action.controller = BeanContext.me().getBeanByClass(clz);
+			if (action.controller == null)
 				LOGGER.warning("在 IOC 资源库中找不到该类 {0} 的实例，请检查该类是否已经加入了 IOC 扫描？", clz.getName());
-
-			action.controller = con;
 		} else {
 			//if(action.controller == null)
 			action.controller = NewInstance.newInstance(clz);// 保存的是 控制器 实例。
@@ -249,7 +247,7 @@ public class ControllerScanner {
 		// 总路径
 		Path path = clz.getAnnotation(Path.class);
 		if (path == null) {
-			LOGGER.warning("不存在任何 Path 信息！No Path info!");
+			LOGGER.warning("{0} 不存在任何 Path 信息！No Path info!", clz.toString());
 			return false;
 		}
 

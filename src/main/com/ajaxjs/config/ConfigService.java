@@ -115,7 +115,7 @@ public class ConfigService {
 	 * @return 配置内容
 	 */
 	public static boolean getValueAsBool(String key) {
-		return Value.TypeConvert(flatConfig.get(key), boolean.class);
+		return true; // Value.TypeConvert(flatConfig.get(key), boolean.class);
 	}
 
 	/**

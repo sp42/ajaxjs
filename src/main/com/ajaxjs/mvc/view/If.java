@@ -33,7 +33,9 @@ public class If extends SimpleTagSupport {
 
 	/**
 	 * 用于保存 if 判断是否为 true
-	 * @param test true 表示执行 when 标签内容，否则执行 otherwise 标签内容
+	 * 
+	 * @param test
+	 *            true 表示执行 when 标签内容，否则执行 otherwise 标签内容
 	 */
 	public void setTest(boolean test) {
 		this.test = test;

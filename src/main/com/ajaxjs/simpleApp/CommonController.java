@@ -51,6 +51,7 @@ import com.ajaxjs.util.logger.LogHelper;
  * @param <ID>
  *            ID 类型，可以是 INTEGER/LONG/String
  * @param <S>
+ *            业务类型
  */
 public abstract class CommonController<T, ID extends Serializable, S extends IService<T, ID>> implements IController, Constant {
 	private static final LogHelper LOGGER = LogHelper.getLog(CommonController.class);
@@ -142,8 +143,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	 * @return
 	 */
 	private static Throwable getUnderLayerErr(Throwable e) {
-		while (e.getClass().equals(InvocationTargetException.class)
-				|| e.getClass().equals(UndeclaredThrowableException.class)) {
+		while (e.getClass().equals(InvocationTargetException.class) || e.getClass().equals(UndeclaredThrowableException.class)) {
 			e = e.getCause();
 		}
 		return e;
@@ -156,7 +156,6 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 		} else if (pageResult != null && pageResult.getRows() != null) {
 			String jsonStr;
 
-			System.out.println(pageResult.getRows().get(0) instanceof Map);
 			if (pageResult.getRows().get(0) instanceof Map) { // Map 类型的输出
 				List<Map<String, Object>> list = (List<Map<String, Object>>) pageResult.getRows();
 				jsonStr = JsonHelper.stringifyListMap(list);

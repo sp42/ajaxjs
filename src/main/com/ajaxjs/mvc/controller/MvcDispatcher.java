@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.Filter;
@@ -142,20 +143,23 @@ public class MvcDispatcher implements Filter {
 		MvcOutput response = new MvcOutput(_response);
 
 		String uri = request.getFolder(), httpMethod = request.getMethod();
+
+		Matcher match = id.matcher(uri);
+		if(match.find()) {
+			uri = match.replaceAll("/{id}/");
+		}
+		
+		
 		Action action = ControllerScanner.find(uri);
 		Method method = getMethod(action, httpMethod);// 要执行的方法
 		IController controller = action.controller;
-
-		//		System.out.println(uri);
-		//		System.out.println(action);
-		//		System.out.println(method);
-
+		
 		if (method != null && controller != null) {
 			dispatch(request, response, controller, method);
 			return; // 终止当前 servlet 请求
 		} else {
-			// Let it go, may be html/js/css/jpg..
-			LOGGER.info("{0} {1} 控制器没有这个方法！", httpMethod, request.getRequestURI());
+			// Let it go, may be jsp/html/js/css/jpg..
+			// LOGGER.info("{0} {1} 控制器没有这个方法！", httpMethod, request.getRequestURI());
 		}
 
 		chain.doFilter(req, resp);// 不要传 MvcRequest，以免入侵其他框架
@@ -183,6 +187,8 @@ public class MvcDispatcher implements Filter {
 		MvcRequest.clean();
 	}
 
+	private static final Pattern id = Pattern.compile("/\\d+/");
+	
 	private static final Pattern p = Pattern.compile("\\.jpg|\\.png|\\.gif|\\.js|\\.css|\\.ico|\\.jpeg|\\.htm|\\.swf|\\.txt|\\.mp4|\\.flv");
 
 	/**
