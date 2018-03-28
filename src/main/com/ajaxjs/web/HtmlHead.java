@@ -20,7 +20,8 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.Version;
+//import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.config.SiteStruService;
 import com.ajaxjs.util.collection.MapHelper;
 
@@ -72,8 +73,8 @@ public class HtmlHead {
 	 * @return
 	 */
 	public String getCssUrl(String lessPath) {
-		boolean isDebug = ConfigService.getValueAsBool("isDebug");
-		return getCssUrl(lessPath, isDebug);
+		//boolean isDebug = ConfigService.getValueAsBool("isDebug");
+		return getCssUrl(lessPath, Version.isDebug);
 	}
 
 	/**
