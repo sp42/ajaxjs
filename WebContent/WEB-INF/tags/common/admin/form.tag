@@ -34,13 +34,13 @@
 			<div style="text-align: center;">
 				<jsp:invoke fragment="moreBtn" />
 				<button class="ajaxjs-btn">
-					<img src="${pageContext.request.contextPath}/<%=Constant.commonIcon%>save.gif" />
+					<img src="${pageContext.request.contextPath}/save.gif" />
 					${isCreate ? '新建' : '修改'}
 				</button>
 				<button class="ajaxjs-btn" onclick="this.up('form').reset();return false;">复 位</button>
 			<%if(request.getAttribute("isCreate") == null) {%>
 				<button class="ajaxjs-btn" onclick="del();return false;">
-					<img src="${pageContext.request.contextPath}/<%=Constant.commonIcon%>delete.gif" /> 删 除
+					<img src="${pageContext.request.contextPath}/delete.gif" /> 删 除
 				</button>
 			<%} %>
 			</div>

@@ -57,9 +57,9 @@ public class TestRequestParam {
 			return "getInfo2";
 		}
 
-		@PathParam("{id}")
+		@Path("/{id}")
 		@PUT
-		public String getInfo4(String id) {
+		public String getInfo4(@PathParam("id") String id) {
 			return "getInfo2";
 		}
 	}
@@ -94,7 +94,7 @@ public class TestRequestParam {
 	
 	@Test
 	public void testGetArgsValue() {
-		HttpServletRequest request = MockRequest.mockRequest("/ajaxjs-web", "/foo/12888");
+		HttpServletRequest request = MockRequest.mockRequest("/ajaxjs-web", "/foo/12888/");
 		HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
 		
 		when(request.getParameter("name")).thenReturn("foo");
@@ -108,7 +108,7 @@ public class TestRequestParam {
 		args = RequestParam.getArgs(new MvcRequest(request), response, ControllerScanner.urlMappingTree.get("foo").children.get("bar").postMethod);
 		assertEquals("bar", args[0]);
 		
-		args = RequestParam.getArgs(new MvcRequest(request), response, ControllerScanner.urlMappingTree.get("foo").putMethod);
+		args = RequestParam.getArgs(new MvcRequest(request), response, ControllerScanner.urlMappingTree.get("foo").children.get("{id}").putMethod);
 		assertEquals("12888", args[0]);
 	}
 

@@ -18,7 +18,7 @@
              </ul>
 		</section>
 		<section class="iframe">
-			<iframe src="workbench/show.do" name="iframepage"></iframe>
+			<iframe src="admin/workbench/" name="iframepage"></iframe>
 		</section>
 	    <script>
 	 	// 判断当前页面是否在iframe中 

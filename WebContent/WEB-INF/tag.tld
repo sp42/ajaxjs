@@ -25,13 +25,14 @@
 		<tag-class>com.ajaxjs.mvc.view.Choose</tag-class>
 		<body-content>scriptless</body-content>
 	</tag>
+	
 	<tag>
 		<name>when</name>
 		<tag-class>com.ajaxjs.mvc.view.When</tag-class>
 		<body-content>scriptless</body-content>
 		<attribute>
 			<name>test</name>
-			<required>false</required>
+			<required>true</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
@@ -81,9 +82,9 @@
 		</attribute>
 		<attribute>
 			<name>value</name>
-			<description>输入日期</description>
-			<required>false</required>
+			<required>true</required>
 			<rtexprvalue>true</rtexprvalue>
+			<description>输入日期</description>
 		</attribute>
 	</tag>
 

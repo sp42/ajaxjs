@@ -5,37 +5,46 @@
 <%@taglib prefix="c" uri="/ajaxjs"%>
 <!DOCTYPE html>
 <html>
-<commonTag:head lessFile="/asset/less/admin.less" title="${uiName}管理" />
-<body>
-	<%-- 	<UI:adminHeader pageTitle="${uiName}管理" /> --%>
+<commonTag:head lessFile="/asset/less/admin.less" title="${uiName}管理">
 	<style>
-select {
-	height: 300px;
-	width: 200px;
-	outline: none;
-	margin: 10px;
-	border: 1px solid gray;
-	border-radius: 5px;
-}
-
-.label {
-	display: inline-block;
-	width: 150px;
-	text-align: right;
-}
-
-.holder {
-	margin: 3%;
-	text-align: center;
-}
-
-form {
-	padding: 1% 2%;
-}
-</style>
+		select {
+			height: 300px;
+			width: 200px;
+			outline: none;
+			margin: 10px;
+			border: 1px solid gray;
+			border-radius: 5px;
+		}
+		
+		.label {
+			display: inline-block;
+			width:250px;
+			text-align: right;
+		}
+		
+		.holder {
+			margin: 3%;
+			text-align: center;
+		}
+		h3{
+			text-align: center;
+		}
+		form {
+			padding: 1% 2%;
+		}
+	</style>
+</commonTag:head>
+<body>
+	<header class="top">
+		<div class="right">
+			<a href="#" target="_blank">新窗口打开</a>
+		</div>
+		<h3>${uiName}管理</h3>
+	</header>
+		
 	<div class="panel">
 		<div class="holder" style="width:70%;margin:0 auto;overflow:hidden;">
-			分类管理:你可以在这里添加、修改、删除分类。 <br /> <br /> 
+			${uiName}管理:你可以在这里添加、修改、删除${uiName}。 <br /> <br /> 
 			<select multiple="multiple" style="float:left;width:35%;"></select>
 			<form style="width:50%;float:right;margin: 0; background-color: #e3e3e3;" class="modifly_Name" action="." method="put">
 				<label style="width: 300px;">
@@ -48,29 +57,29 @@ form {
 					<img src="${commonAssetIcon}update.gif" /> 更新名称
 				</button>
 				<button class="ajaxjs-btn" onclick="sendDelete(this);return false;">
-					<img src="${commonAssetIcon}delete.gif" /> 删除分类
+					<img src="${commonAssetIcon}delete.gif" /> 删除${uiName}
 				</button>
 			</form>
 		</div>
 
-		<div style="margin: 0 auto; width: 960px; border: 1px solid #e3e3e3;">
+		<div style="margin: 0 auto; width: 69%; border: 1px solid #e3e3e3;">
 			<form style="margin: 0; background-color: #e3e3e3" class="createTopNode" action="create.do" method="post">
-				<div class="label">新增顶级分类：</div>
+				<div class="label">新增顶级${uiName}：</div>
 				<input type="text" name="name" class="ajaxjs-inputField" /> 
 				<input type="hidden" name="parentId" value="-1" />
 				<button class="ajaxjs-btn">
-					<img src="${commonAssetIcon}add.gif" /> 新建分类
+					<img src="${commonAssetIcon}add.gif" /> 新建${uiName}
 				</button>
 			</form>
 
 			<form style="margin: 0; background-color: #f1f1f1;" class="createUnderNode" action="create.do" method="post">
-				<div class="label">
-					<span id="addNewText"></span>下添加分类：
+				<div class="label" >
+					<span id="addNewText"></span>下添加${uiName}：
 				</div>
 				<input type="text" name="name" class="ajaxjs-inputField" /> 
 				<input type="hidden" name="parentId" />
 				<button class="ajaxjs-btn">
-					<img src="${commonAssetIcon}add.gif" /> 新建分类
+					<img src="${commonAssetIcon}add.gif" /> 新建${uiName}
 				</button>
 			</form>
 		</div>
@@ -78,7 +87,7 @@ form {
 	</div>
 
 	<script>
-		// 新增顶级分类
+		// 新增顶级${uiName}
 		ajaxjs.xhr.form(".createTopNode", function(json) {
 			if (json.isOk) {
 				alert('创建成功！');
@@ -89,7 +98,7 @@ form {
 			}
 		});
 
-		// 在分类下添加子分类
+		// 在${uiName}下添加子${uiName}
 		ajaxjs.xhr.form(".createUnderNode", 
 			function(json) {
 				if (json.isOk) {
@@ -101,7 +110,7 @@ form {
 				}
 		});
 
-		// 修改该分类名称
+		// 修改该${uiName}名称
 		ajaxjs.xhr.form(".modifly_Name", function(json) {
 			if (json.isOk) {
 				alert(json.msg);
@@ -117,7 +126,7 @@ form {
 			var modiflyName = document.querySelector('.modiflyName').value;
 			var formEl = btn.up('form');
 
-			if (window.confirm('确定删除该分类{0}？'.replace('{0}', modiflyName))) {
+			if (window.confirm('确定删除该${uiName}{0}？'.replace('{0}', modiflyName))) {
 				ajaxjs.xhr.dele(formEl.action,
 					function callback(json) {
 						if (json.isOk) {

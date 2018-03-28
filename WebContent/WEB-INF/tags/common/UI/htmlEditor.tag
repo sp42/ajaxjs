@@ -78,12 +78,13 @@
 	</ul>
 
 	<div class="editorBody">	
-		<iframe src="${pageContext.request.contextPath}<%=Constant.common_jsp_perfix %>htmleditor_iframe.jsp?basePath=${basePath}"></iframe>
+		<iframe src="${commonAsset}jsp/htmleditor_iframe.jsp?basePath=${basePath}"></iframe>
 		<textarea class="hide" name="${name}"><jsp:doBody /></textarea>
 	</div>
 </div>
+<script src="${commonAsset}js/component/htmlEditor.js"></script>
 <script>
-	var htmlEditor = new ajaxjs.HtmlEditor(document.querySelector('.htmlEditor'));
+	var htmlEditor = new ajaxjs_HtmlEditor(document.querySelector('.htmlEditor'));
 	// htmlEditor.setValue('dfdfdf'); 
 </script>
 <!-- // HTML 编辑器控件 -->

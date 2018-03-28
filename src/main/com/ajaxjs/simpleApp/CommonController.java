@@ -83,7 +83,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	 */
 	public static void initDb() {
 		// connStr = Version.isDebug ? "jdbc/sqlite" : "jdbc/sqlite_deploy";
-		initDb(Version.isMac ? "jdbc/sqlite_mac" : "jdbc/sqlite");
+		initDb(Version.isMac ? "jdbc/sqlite_mac" : "jdbc/mysql");
 	}
 
 	/**
@@ -286,16 +286,17 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 		return cud;
 	}
 
-	/**
-	 * 
-	 * @param entity
-	 * @param model
-	 *            页面 Model 模型
-	 * @return
-	 */
-	public String update(/* @Valid */T entity, ModelAndView model) {
+	@SuppressWarnings("unchecked")
+	public String update(ID id, /* @Valid */T entity, ModelAndView model) {
 		LOGGER.info("修改 name:{0}，数据库将执行 UPDATE 操作", entity);
 		model.put("isUpdate", true);
+		
+		if(entity instanceof Map) {
+			((Map<String, Object>)entity).put("id", id);
+		} else {
+			((BaseModel)entity).setId((long)id);;
+		}
+		
 		initDb();
 
 		try {

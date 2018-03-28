@@ -178,12 +178,12 @@
 	<%-- 相邻的两笔记录 --%>
 	<c:if test="${not empty neighbor_pervInfo}">
 		<div>
-			<a href="../${neighbor_pervInfo.id}/info.do">上则记录：${neighbor_pervInfo.name}</a>
+			<a href="../${neighbor_pervInfo.id}/">上则记录：${neighbor_pervInfo.name}</a>
 		</div>
 	</c:if>
 	<c:if test="${not empty neighbor_nextInfo}">
 		<div>
-			<a href="../${neighbor_nextInfo.id}/info.do">下则记录：${neighbor_nextInfo.name}</a>
+			<a href="../${neighbor_nextInfo.id}/">下则记录：${neighbor_nextInfo.name}</a>
 		</div>
 	</c:if>
 	

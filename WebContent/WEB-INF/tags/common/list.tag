@@ -10,7 +10,7 @@
 <c:if test="${type == 'list-simple'}">
 	<ul class="${classList}">
 		<c:foreach var="current" items="${list}">
-			<li><a href="${urlPerfix}${current.id}/info.do">
+			<li><a href="${urlPerfix}${current.id}/">
 					<h4>${current.name}</h4>
 			</a></li>
 		</c:foreach>
@@ -30,13 +30,13 @@
 					<img src="http://localhost:8080/ajaxjs-web/asset/common/images/360logo.gif" />
 				</div>
 				<div class="text">
-					<a href="${current.id}/info.do">
+					<a href="${current.id}/">
 						<h4>${current.name}</h4>
 					</a>
 					<p>${current.intro}
 						<a href="${current.id}/info.do">阅读更多……</a>
 					</p>
-					<div class="small">作者：Admin|分类：${current.catalogName} |日期：${current.createDate}|阅读次数：10
+					<div class="small">作者：Admin | 分类：${current.catalogName} | 日期：${current.createDate}|阅读次数：10
 					</div>
 				</div>
 

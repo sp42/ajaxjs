@@ -46,8 +46,8 @@ public class NewsController extends CommonController<News, Long, NewsService> {
 	@PUT
 	@Path("/{id}")
 	@Override
-	public String update(News news, ModelAndView model) {
-		return super.update(news, model);
+	public String update(@PathParam("id")Long id, News news, ModelAndView model) {
+		return super.update(id, news, model);
 	}
 	
 	@DELETE

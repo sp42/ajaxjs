@@ -5,33 +5,43 @@
 <%@taglib prefix="c" uri="/ajaxjs"%>
 <!DOCTYPE html>
 <html>
-<commonTag:head lessFile="/asset/less/admin.less" title="${uiName}管理" />
-<body>
-	<%-- 	<UI:adminHeader pageTitle="${uiName}管理" /> --%>
-	<style>
-select {
-	height: 300px;
-	width: 200px;
-	outline: none;
-	margin: 10px;
-	border: 1px solid gray;
-border-radius: 5px;
-}
-
-.label {
-	display: inline-block;
-	width: 250px;
-	text-align: right;
-}
-.holder{
-	margin:3%;
-	text-align: center;
-}
-form{
-	padding:1% 2%;
-}
+<commonTag:head lessFile="/asset/less/admin.less" title="${uiName}管理">
+<style>
+	select {
+		height: 300px;
+		width: 200px;
+		outline: none;
+		margin: 10px;
+		border: 1px solid gray;
+	border-radius: 5px;
+	}
+	
+	.label {
+		display: inline-block;
+		width: 250px;
+		text-align: right;
+	}
+	.holder{
+		margin:3%;
+		text-align: center;
+	}
+	h3{
+		text-align: center;	
+	}
+	form{
+		padding:1% 2%;
+	}
 </style>
+</commonTag:head>
+<body>
+
 	<div class="panel">
+		<header class="top">
+			<div class="right">
+				<a href="#" target="_blank">新窗口打开</a>
+			</div>
+			<h3>${uiName}管理</h3>
+		</header>	
 		<div class="holder">
 			分类管理:你可以在这里添加、修改、删除分类。
 			 <br /> 
@@ -182,7 +192,7 @@ form{
 		}
 
 		function render(level, id) {
-			ajaxjs.xhr.get('list/list.do', function(json) {
+			ajaxjs.xhr.get('list/', function(json) {
 				if(json && json.errorMsg) {
 					//alert(json.errorMsg);
 					// return;

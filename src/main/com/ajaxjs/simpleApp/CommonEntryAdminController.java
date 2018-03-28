@@ -88,6 +88,8 @@ public interface CommonEntryAdminController<E, ID extends Serializable> extends 
 	/**
 	 * 修改动作
 	 * 
+	 * @param id
+	 *            ID 序号
 	 * @param entity
 	 *            记录实体，可以是 Bean 或 Map
 	 * @param model
@@ -96,7 +98,7 @@ public interface CommonEntryAdminController<E, ID extends Serializable> extends 
 	 */
 	@PUT
 	@Path("{id}")
-	public String update(E entity, ModelAndView model);
+	public String update(ID id, E entity, ModelAndView model);
 
 	/**
 	 * 删除一记录，注意是传入 id 参数

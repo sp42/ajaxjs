@@ -174,11 +174,11 @@
 				</script>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<button class="my-btn-2" onclick="Upload_Panel.show();return false;">
-					<img src="${pageContext.request.contextPath}/<%=Constant.commonIcon%>add.gif" />上传正文图片
+					<img src="${pageContext.request.contextPath}/add.gif" />上传正文图片
 				</button>
 				
 				<button class="my-btn-2" onclick="Upload_Cover_Panel.show();return false;">
-					<img src="${pageContext.request.contextPath}/<%=Constant.commonIcon%>add.gif" />上传封面图片
+					<img src="${pageContext.request.contextPath}/add.gif" />上传封面图片
 				</button>
  
 	
