@@ -27,7 +27,7 @@
 		</style>
 	</commonTag:head>
 	<body>
-		<button class="my-btn-3" style="line-height: normal;">编辑此页面</button>
+		<button class="ajaxjs-btn">编辑此页面</button>
 		<iframe src="../../"></iframe>
 		
 		<script>

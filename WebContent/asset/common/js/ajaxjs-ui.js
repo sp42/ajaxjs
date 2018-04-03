@@ -4,29 +4,98 @@
  * @param el
  *            元素
  */
-ajaxjs.modal = function(e, el) {
-	el = el || '.modal';
+ajaxjs.modal = function(e,  cfg) {
+	var el = cfg && cfg.el || '.modal';
+	var element = document.querySelector(el);
+	
+	if(!element) {
+		var div = document.createElement('div');
+		div.className = 'modal hide';
+		var h =  cfg.text;
+		if(cfg.isShowCloseBtn)
+			h += '<a href="#" oncclick="ajaxjs.modal()">关 闭</a>'
+		div.innerHTML = '<div style="text-align:center;">' + h + '</div>';
+		div.onclick = ajaxjs.modal;
+		document.body.appendChild(div);
+		element = div;
+	}
 	
 	if (e) {
 		var p = e.target.parentNode; // check if in the box
 		if (p && p.className.indexOf(el) == -1)
-			document.querySelector(el).classList.toggle('hide');
+			element.classList.toggle('hide');
 	} else {
-		document.querySelector(el).classList.toggle('hide');
+		element.classList.toggle('hide');
 	}
 }
 
 ajaxjs.msg = function (text, showTime) {
 	var el = document.querySelector('.topMsg');
+	if(!el){
+		var div = document.createElement('div');
+		div.className = 'topMsg';
+		document.body.appendChild(div);
+		el = div;
+	}
+	
 	if (text)
 		el.innerHTML = text;
-	el.classList.remove('fadeOut');
-	el.classList.add('fadeIn');
-
+	
+	setTimeout(function() {
+		el.classList.remove('fadeOut');
+		el.classList.add('fadeIn');
+	}, 0);
+	
 	setTimeout(function() {
 		el.classList.remove('fadeIn');
 		el.classList.add('fadeOut');
 	}, showTime || 3000)
+}
+
+/**
+ * 表单验证
+ */
+ajaxjs.formValid = function FormValid(formEl) {
+	var items = formEl.querySelectorAll('input[type=text]');
+
+	for(var i = 0 , j = items.length; i < j; i++) {
+		var el = items[i];
+		el.oninvalid = this.onInvalid;
+	}
+}
+
+ajaxjs.formValid.prototype.onInvalid = function (e) {
+	e.preventDefault();
+	var el = e.target;
+	el.style.borderColor = 'red';
+	
+	// 新增错误提示的容器
+	var msg = el.parentNode.querySelector('.errMsg');
+	if(!msg) {
+		msg = document.createElement('div');
+		msg.className = 'errMsg';
+		
+		var b = el.getBoundingClientRect();
+		msg.style.left = b.left + 'px';
+		msg.style.top = (b.top + 25) + 'px';
+		
+		el.insertAfter(msg);
+	}
+	
+	var m;
+	if(el.validity.patternMismatch)
+		m = '该内容格式不正确';
+	if(el.validity.valueMissing)
+		m = '该内容不可为空';
+	//debugger;
+	
+	msg.innerHTML = m;
+	
+	setTimeout(function() {
+		//msg.die();
+	}, 2000);
+	
+	//el.setCustomValidity(undefined);
 }
 
 /*

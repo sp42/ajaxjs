@@ -88,6 +88,7 @@ public class SiteStruService implements ServletContextListener {
 		cxt.setAttribute("commonAsset", cxt.getContextPath() + "/" + Constant.commonFolder); // 静态资源目录
 		cxt.setAttribute("commonImage", cxt.getContextPath() + "/" + Constant.commonImage);
 		cxt.setAttribute("commonAssetIcon", cxt.getContextPath() + "/" + Constant.commonIcon);
+		cxt.setAttribute("commonJsp", cxt.getContextPath() + "/" + Constant.jsp_perfix);
 	}
 
 	/**

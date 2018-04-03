@@ -7,9 +7,9 @@
 <!DOCTYPE html>
 <html>
 <commonTag:head lessFile="/asset/less/admin.less" title="${uiName}列表" />
-<body class="">
+<body class="list-ui">
 	<header class="top">
-		<div class="right">
+		<div>
 		<c:if test="${empty isNoCreateBtn || !isNoCreateBtn}">
 			<a href="../">新建${uiName}</a> | 
 	    </c:if>

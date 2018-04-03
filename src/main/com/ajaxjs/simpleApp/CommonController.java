@@ -142,7 +142,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	 * @param e
 	 * @return
 	 */
-	private static Throwable getUnderLayerErr(Throwable e) {
+	public static Throwable getUnderLayerErr(Throwable e) {
 		while (e.getClass().equals(InvocationTargetException.class) || e.getClass().equals(UndeclaredThrowableException.class)) {
 			e = e.getCause();
 		}
@@ -312,6 +312,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 
 	/**
 	 * 
+	 * 因为范型的缘故，不能实例化 bean 对象。应该在子类实例化 bean，再调用本类的 delete(T entry, ModelAndView model)
 	 * @param entry
 	 * @param model
 	 *            页面 Model 模型
@@ -331,11 +332,10 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 		}
 
 		return String.format(json_ok, "删除成功");
-	}
+	};
 
 	/**
-	 * 因为范型的缘故，不能实例化 bean 对象。应该在子类实例化 bean，再调用本类的 delete(T entry, ModelAndView
-	 * model)
+	 * 
 	 * 
 	 * @param id
 	 * @param model

@@ -56,8 +56,9 @@
 	</style>
 	<link rel="stylesheet" type="text/css" href="${PAGE.getCssUrl(lessFile)}" />
 
-    <script src="${commonAsset}js/dom.js"></script>
-    <script src="${commonAsset}js/widget.js"></script>
+    <script src="${commonAsset}js/ajaxjs-base.js"></script>
+    <script src="${commonAsset}js/ajaxjs-list.js"></script>
+    <script src="${commonAsset}js/ajaxjs-ui.js"></script>
 	<link rel="icon"		  type="image/x-icon" href="${pageContext.request.contextPath}/asset/images/favicon.ico" />
 	<link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/asset/images/favicon.ico" />
     <jsp:doBody />

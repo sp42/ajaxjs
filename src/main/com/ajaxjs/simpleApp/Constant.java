@@ -24,7 +24,7 @@ public interface Constant {
 	public static final String commonFolder = "asset/common/";
 	public static final String commonImage = commonFolder + "images/";
 	public static final String commonIcon = commonImage + "icon/";
- 
+
 	/**
 	 * 操作成功，返回 msg 信息
 	 */
