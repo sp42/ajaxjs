@@ -253,10 +253,9 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 
 		IService<T, ID> service = getService();
 		prepareData(model);
-
-		model.put("isCreate", true);/*
-									 * 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate = true 标识为创建，以便与 update 区分开来。
-									 */
+		model.put("actionName", "新建");
+		model.put("isCreate", true);//因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate = true 标识为创建，以便与 update 区分开来。
+									 
 		return String.format(jsp_adminInfo, service.getTableName());
 	}
 

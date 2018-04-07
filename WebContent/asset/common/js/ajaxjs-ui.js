@@ -56,6 +56,7 @@ ajaxjs.msg = function (text, showTime) {
  * 表单验证
  */
 ajaxjs.formValid = function FormValid(formEl) {
+	formEl = typeof formEl == 'string' ? document.querySelector(formEl) : formEl;
 	var items = formEl.querySelectorAll('input[type=text]');
 
 	for(var i = 0 , j = items.length; i < j; i++) {
@@ -77,7 +78,7 @@ ajaxjs.formValid.prototype.onInvalid = function (e) {
 		
 		var b = el.getBoundingClientRect();
 		msg.style.left = b.left + 'px';
-		msg.style.top = (b.top + 25) + 'px';
+		msg.style.top = (b.top + 28) + 'px';
 		
 		el.insertAfter(msg);
 	}
@@ -92,8 +93,9 @@ ajaxjs.formValid.prototype.onInvalid = function (e) {
 	msg.innerHTML = m;
 	
 	setTimeout(function() {
-		//msg.die();
-	}, 2000);
+		msg.die();
+		el.style.borderColor = '#abadb3';
+	}, 3000);
 	
 	//el.setCustomValidity(undefined);
 }
