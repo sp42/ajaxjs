@@ -1,11 +1,8 @@
 <%@tag pageEncoding="UTF-8" import="com.ajaxjs.simpleApp.Constant" description="上传组件"%>
-	<textarea class="hide msgboxTpl">	
-					<div class="msgbox imgUpload">
-						<h1>title</h1>
-						<div class="topCloseBtn closeAction">×</div>
-						<div class="inner">
+	<div class="hide uploadBox modal">	
+
 <!-- Tab -->
-<div class="tab3">
+<div class="simpleTab_hoz">
 	<ul>
 		<li>上传本地图片</li>
 		<li>图片库</li>
@@ -46,20 +43,13 @@
 </div>
 <!-- //Tab -->
 			
-						</div>
-						<div class="btn">
-					 		<div class="closeAction">关闭</div>
-						</div>
-					</div>
-					<div class="msgbox_mask"></div>
-				</textarea>		
+				</div>		
 				
 				
-				<script type="text/javascript" src="${pageContext.request.contextPath}/asset/js/libs/dd.js"></script>
-				<script type="text/javascript" src="${pageContext.request.contextPath}/asset/js/widget/tab.js"></script>
+<%-- 				<script type="text/javascript" src="${pageContext.request.contextPath}/asset/js/widget/tab.js"></script> --%>
 				
-				<script type="text/javascript" src="http://118.193.132.50:8080/framework/dom.js"></script>
-				<script type="text/javascript" src="http://118.193.132.50:8080/framework/widget.js"></script>
+<!-- 				<script type="text/javascript" src="http://118.193.132.50:8080/framework/dom.js"></script> -->
+<!-- 				<script type="text/javascript" src="http://118.193.132.50:8080/framework/widget.js"></script> -->
 				<script>
 					// 上传后成功的提示
 					function iframe_callback(e, obj) { 
@@ -90,36 +80,36 @@
 					
 					// 正文
 					Upload_Panel = {
-						htmlEditor : htmlEditor,
+						//htmlEditor : htmlEditor,
 						show : function() {
-							new ajaxjs.Popup({
-								title : '正文图片',
-								onShow : this.initTab
-							}).show();
+							ajaxjs.modal(null, {el : '.uploadBox'});
+							this.initTab();
 						},
 						
 						// 上次上传的图片
 						lastUploadedImg :  null,
 						
 						initTab : function() {
-							var tab = new SimpleTab(document.querySelector('.tab3'));
+							var tab = new ajaxjs.SimpleTab(document.querySelector('.simpleTab_hoz'));
 							tab.afterRender = function(index, btn, showTab) { 
 								switch(index) {
-								case 0:
-									new ajaxjs.Upload_perview(qs('.upload_img_perview'), qs('input[name=fileInput]'));
-	
-									qs('iframe[name=upframe]').onload = iframe_callback.delegate(null, Upload_Panel);
-									
-									// 插入到 html 编辑器
-									qs('button.insertAfterUplaod').onclick = function(e) {
-										e.preventDefault();
+									case 0:
+										//new ajaxjs.Upload_perview(qs('.upload_img_perview'), qs('input[name=fileInput]'));
+		
+										//qs('iframe[name=upframe]').onload = iframe_callback.delegate(null, Upload_Panel);
 										
-										var filename = '../images/' + Upload_Panel.lastUploadedImg.split('/').pop();
-										Upload_Panel.htmlEditor.format("insertImage", filename);
-									}
-								break;
-								case 1:
-									getAllPic (showTab);
+										// 插入到 html 编辑器
+										/*
+										qs('button.insertAfterUplaod').onclick = function(e) {
+											e.preventDefault();
+											
+											var filename = '../images/' + Upload_Panel.lastUploadedImg.split('/').pop();
+											Upload_Panel.htmlEditor.format("insertImage", filename);
+										}
+										*/
+									break;
+									case 1:
+										getAllPic (showTab);
 								}
 							}
 							tab.jump(0);
@@ -132,7 +122,7 @@
 					
 					// 封面
 					Upload_Cover_Panel = {
-						htmlEditor : htmlEditor,
+						// htmlEditor : htmlEditor,
 						show : function() {
 							new ajaxjs.Popup({
 								title : '封面图片',
@@ -173,12 +163,12 @@
 					};
 				</script>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<button class="my-btn-2" onclick="Upload_Panel.show();return false;">
-					<img src="${pageContext.request.contextPath}/add.gif" />上传正文图片
+				<button class="ajaxjs-btn" onclick="Upload_Panel.show();return false;">
+					<img src="${commonAssetIcon}add.gif" />上传正文图片
 				</button>
 				
-				<button class="my-btn-2" onclick="Upload_Cover_Panel.show();return false;">
-					<img src="${pageContext.request.contextPath}/add.gif" />上传封面图片
+				<button class="ajaxjs-btn" onclick="Upload_Cover_Panel.show();return false;">
+					<img src="${commonAssetIcon}add.gif" />上传封面图片
 				</button>
  
 	

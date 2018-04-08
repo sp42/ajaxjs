@@ -11,7 +11,7 @@ ajaxjs.modal = function(e,  cfg) {
 	if(!element) {
 		var div = document.createElement('div');
 		div.className = 'modal hide';
-		var h =  cfg.text;
+		var h =  cfg.text || '';
 		if(cfg.isShowCloseBtn)
 			h += '<a href="#" oncclick="ajaxjs.modal()">关 闭</a>'
 		div.innerHTML = '<div style="text-align:center;">' + h + '</div>';
@@ -20,11 +20,15 @@ ajaxjs.modal = function(e,  cfg) {
 		element = div;
 	}
 	
+
+	//element.setAttribute('onclick', "ajaxjs.modal(arguments[0], {el:'." + el + "'});");
+	
 	if (e) {
-		var p = e.target.parentNode; // check if in the box
-		if (p && p.className.indexOf(el) == -1)
+		var p = e.target; // check if in the box
+		if (p && p.className.indexOf(el.replace('.', '')) != -1)
 			element.classList.toggle('hide');
 	} else {
+		element.onclick = ajaxjs.modal.delegate(null, cfg); 
 		element.classList.toggle('hide');
 	}
 }
