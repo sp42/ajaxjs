@@ -25,7 +25,7 @@ ajaxjs_Upload_perview = function(perviewImg, uploadInput, maxSize) {
 
 			var file = filepacker.files[0], fileSize = file.size; // 文件的大小，单位为字节B
 
-			maxSize = maxSize || 600;
+			var maxSize = 600;
 
 			if (fileSize > maxSize * 1024) {
 				alert("提示信息\n上传图片过大，请将图片压缩到 " + maxSize + "kb 以下");
