@@ -17,6 +17,12 @@ import com.ajaxjs.util.Value;
 import com.ajaxjs.util.collection.MapHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
+/**
+ * 处理请求参数
+ * 
+ * @author sp42 frank@ajaxjs.com
+ *
+ */
 public class RequestParam {
 	private static final LogHelper LOGGER = LogHelper.getLog(RequestParam.class);
 	
