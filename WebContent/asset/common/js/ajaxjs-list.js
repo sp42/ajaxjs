@@ -5,7 +5,7 @@
 	// banner，要使用 px
 	// 如果要跟手移动，要使用 px
 	ajaxjs.Tab = {
-		init : function(){
+		init : function() {
 			// get mover 
 			this.mover = this.el.querySelector(this.moverTagName || 'div');// 有可能是 ul 而不是 div
 			this.len = this.mover.children.length;
@@ -15,7 +15,7 @@
 				this.stepWidth = this.mover.parentNode.clientWidth; // 获取容器宽度作为 item 宽度
 			
 			var len = this.children.length, stepWidth = this.stepWidth, children = this.children;
-			if(this.isMagic){
+			if(this.isMagic) {
 				this.mover.style.width = this.isUsePx ? (stepWidth * 2) +'px' : '200%';
 			}else{
 				this.mover.style.width = this.isUsePx ? (stepWidth * len) +'px' : len + '00%';
@@ -24,12 +24,11 @@
 			// 分配  tab 宽度
 			this.tabWidth = this.isUsePx ? stepWidth + 'px' : (1 / len * 100).toFixed(5) + '%';
 			
-			for(var  i = 0, j = children.length; i < j; i++){
-				if(this.isMagic){
+			for(var  i = 0, j = children.length; i < j; i++) {
+				if(this.isMagic) 
 					children[i].style.width = '50%';
-				}else{
+				else
 					children[i].style.width = this.tabWidth;
-				}
 			}
 
 			// 登记 resize 事件，以便 resize 容器的时候调整大小。
@@ -44,11 +43,11 @@
 
 			if(this.tabHeader && !this.disableTabHeaderJump)this.tabHeader.onclick = onTabHeaderPress.bind(this);
 			
-			if(this.isEnableTouch && typeof window.bf_touch != 'undefined'){
+			if(this.isEnableTouch && typeof window.bf_touch != 'undefined') {
 				var self = this;
 				var touch = Object.create(bf_touch);
 				touch.el = this.el;
-				touch.onBeforeMove = function(){
+				touch.onBeforeMove = function() {
 					if(this.loopTimer)
 						window.clearInterval(this.loopTimer);
 				}.bind(this);
@@ -83,8 +82,8 @@
 		go : true ? function(i){
 			// 控制高度 解决高度问题
 			if(this.isGetCurrentHeight) {
-				for(var p = 0, q = this.children.length; p < q; p++){
-					if(i == p){
+				for(var p = 0, q = this.children.length; p < q; p++) {
+					if(i == p) {
 						this.children[p].style.height = 'initial';	
 					}else{
 						this.children[p].style.height = '1px';					
@@ -94,14 +93,14 @@
 		
 			if(this.isMagic){
 				// clear before
-				for(var p = 0, q = this.children.length; p < q; p++){
+				for(var p = 0, q = this.children.length; p < q; p++) {
 					// 当前的
 //					debugger;
-					if(this.currentIndex == p){
+					if(this.currentIndex == p) {
 						continue;
-					}else if(i == p){// 要显示的
+					}else if(i == p) {// 要显示的
 						this.children[p].classList.remove('hide');
-					}else{	
+					}else {	
 						this.children[p].classList.add('hide');
 					}
 				}
@@ -152,7 +151,7 @@
 		
         // 当前在第几帧数
         currentIndex : 0,
-        loop: function(){
+        loop: function() {
         	if(this.isEnableLoop)this.loopTimer = window.setInterval(this.goNext.bind(this), this.autoLoop);
         },
         autoLoop : 4000,
@@ -163,7 +162,7 @@
 		/**
 		 * 点击第一个 tab，否则不会高亮 tab 1 按钮和自动计算高度
 		 */
-		initFirstTab : function(){
+		initFirstTab : function() {
 			this.goTab(0);
 		}
 
@@ -171,25 +170,24 @@
 		 * 跳到指定的那个 tab
 		 * @param {Number} index tab 索引，从 0 开始
 		 */
-		,goTab : function(index){
+		,goTab : function(index) {
 			this.onTabHeaderPress({
 				target : this.el.querySelectorAll('header ul li')[index]
 			});
 		}
 	};
 	
-	function onResize(){
+	function onResize() {
 		var children 	= this.mover.children, len = children.length;
 		this.stepWidth  = this.mover.parentNode.clientWidth; // 获取容器宽度作为 item 宽度
 		var stepWidth   = this.stepWidth + 'px';
 		this.mover.style.width = this.isUsePx ? (this.stepWidth * len) +'px' : this.len + '00%';
 		
-		for(var i = 0; i < len; i++){
+		for(var i = 0; i < len; i++) 
 			children[i].style.width = stepWidth;
-		}
 	}
 
-	 function onTabHeaderPress(e){
+	 function onTabHeaderPress(e) {
 		var target = e.target,
 		li = target.tagName == 'LI' ? target : target.up('li');
 	
@@ -198,13 +196,12 @@
 		// 获取 index
 		var arr = this.tabHeader.querySelector('ul').children;
 		var index;
-		for(var i = 0, j = arr.length; i < j; i++){
-			if(li == arr[i]){
+		for(var i = 0, j = arr.length; i < j; i++) {
+			if(li == arr[i]) {
 				arr[i].classList.add('active');
 				index = i;
-			}else{
+			} else
 				arr[i].classList.remove('active');
-			}
 		}
 
 //		// todo 结合 库
@@ -223,11 +220,11 @@
 	}
 	 
 	 function autoHeight(nextItem) {
-		 if(this.autoHeight){
+		 if(this.autoHeight) {
 			 var tabHeaderHeight = 0;
-			 if(this.tabHeader){
+			 if(this.tabHeader) 
 				 tabHeaderHeight = this.tabHeader.scrollHeight;
-			 }
+			 
 			 this.el.style.height = (nextItem.scrollHeight + tabHeaderHeight + 50) + 'px'; 
 		 }
 	 }
@@ -248,44 +245,43 @@
 
 
    /**
-    *  登记 resize 事件，以便 resize 容器的时候调整大小。
-    */
+*  登记 resize 事件，以便 resize 容器的时候调整大小。
+*/
 //	window.onresize = resize.bind(this);
 //	function resize() {
 //	    console.log('调整大小中……');
 //	    this.containerWidth = this.el.clientWidth;
 //	    render.call(this, this.mover.children);
 //	}    
-	ajaxjs.Banner = Object.create(ajaxjs.Tab);
-	ajaxjs.Banner.isEnableLoop = true;
-	ajaxjs.Banner.isEnableTouch = true;
-	ajaxjs.Banner.isUsePx = true; //  banner，要使用 px
+ajaxjs.Banner = Object.create(ajaxjs.Tab);
+ajaxjs.Banner.isEnableLoop = true;
+ajaxjs.Banner.isEnableTouch = true;
+ajaxjs.Banner.isUsePx = true; //  banner，要使用 px
 //	ajaxjs.Banner.stepWidth = window .innerWidth; // 默认 100% 视口
-	ajaxjs.Banner.isGetCurrentHeight = false;
-	ajaxjs.Banner.initIndicator = function(){
-		var ol = this.el.querySelector('ol');
-		ajaxjs.Banner.onItemSwitch = function(index){
-			// pressedStatable
-			if (ol) ol.eachChild('li', function(li, i) {
-				if(index == i){
-					li.classList.add('active');
-				}else{
-					li.classList.remove('active');
-				}
-			});
-		}
-		var self = this;
-		ol.onclick =  function(e){
-			var el = e.target;
-			if(el.tagName != 'LI')return;
-			if (ol) ol.eachChild('li', function(li, i){
-				if(el == li){
-					self.go(i);
-					return;
-				}
-			});
-		}
+ajaxjs.Banner.isGetCurrentHeight = false;
+ajaxjs.Banner.initIndicator = function() {
+	var ol = this.el.querySelector('ol');
+	ajaxjs.Banner.onItemSwitch = function(index) {
+		// pressedStatable
+		if (ol) ol.eachChild('li', function(li, i) {
+			if(index == i) 
+				li.classList.add('active');
+			else
+				li.classList.remove('active');
+		});
 	}
+	var self = this;
+	ol.onclick =  function(e) {
+		var el = e.target;
+		if(el.tagName != 'LI')return;
+		if (ol) ol.eachChild('li', function(li, i) {
+			if(el == li) {
+				self.go(i);
+				return;
+			}
+		});
+	}
+}
 
 
 
@@ -709,7 +705,7 @@ function Step() {
  * 复合 tab & list
  * --------------------------------------------------------
  */
-bf_scrollViewer_list = function(url, scrollViewer_el, tab_el, loadingIndicatorTpl, itemTpl, renderItem, requestParams,cfg) {
+ajaxjs.scrollViewer_list = function(url, scrollViewer_el, tab_el, loadingIndicatorTpl, itemTpl, renderItem, requestParams,cfg) {
 	cfg = cfg || {};
 	
 	var _tab = Object.create(ajaxjs.Tab);
@@ -725,17 +721,17 @@ bf_scrollViewer_list = function(url, scrollViewer_el, tab_el, loadingIndicatorTp
 	var _event = new ajaxjs.UserEvent();// 没有 Object.watch() ，只能用事件代替
 	_event.addEvents('update');
 	
-	_event.on('update', function(activeId){ // activeId = 选中 id
+	_event.on('update', function(activeId) { // activeId = 选中 id
 		data.activeId = activeId;
 		
 		var _requestParams = {}; // 请求参数，附加上 id
-		if(requestParams){
+		if(requestParams)
 			for(var i in requestParams)_requestParams[i] = requestParams[i];
-		}
+		
 		_requestParams[cfg.id_fieldName || 'id'] = activeId;
 		
 		// tab hightlight
-		tabHeader.eachChild('li', function(li){
+		tabHeader.eachChild('li', function(li) {
 			//debugger;
 			if(li.className.indexOf(activeId) != -1)li.classList.add('selected');
 			else li.classList.remove('selected');
@@ -744,13 +740,14 @@ bf_scrollViewer_list = function(url, scrollViewer_el, tab_el, loadingIndicatorTp
 		
 		// render list
 		var listStyle = location.getUrlParam('style'); // ui 风格
-		for(var i = 0, j = data.sectionsIds.length; i < j; i++){
-			if(data.sectionsIds[i].id == activeId){
+		for(var i = 0, j = data.sectionsIds.length; i < j; i++) {
+			if(data.sectionsIds[i].id == activeId) {
 				// ui
 				_tab.go(i);
 				
-				if(data.sectionsIds[i].loaded){// 已加载
-				}else{
+				if(data.sectionsIds[i].loaded) {
+					// 已加载
+				} else {
 					var tab = tab_el.querySelector('div');
 					var el = tab.children[i];
 					var ul = el.querySelector('ul');
@@ -770,20 +767,18 @@ bf_scrollViewer_list = function(url, scrollViewer_el, tab_el, loadingIndicatorTp
 							dataKey : cfg.dataKey
 						}
 					);
+					
 					data.sectionsIds[i].loaded = true;
 				}
 				
 				//location.href += '#id=' + activeId; // url
-				
 				break;
 			}
 		}
 		
 		// set hash
 		if(cfg.isNoHash) {
-		}else {
-			location.setUrl_hash('id', activeId);
-		} 
+		} else location.setUrl_hash('id', activeId);
 	});
 	
 	// 先获取所有 section id
@@ -823,8 +818,8 @@ bf_scrollViewer_list = function(url, scrollViewer_el, tab_el, loadingIndicatorTp
 		
 		if (!data.sectionsIds[0]) {
 			data.sectionsIds[0] = {
-					id : load_id,
-					loaded : false
+				id : load_id,
+				loaded : false
 			};
 			_tab.el.querySelector('div').innerHTML = tpl;
 			_tab.init();
