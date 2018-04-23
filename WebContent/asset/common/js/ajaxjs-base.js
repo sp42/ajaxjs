@@ -12,16 +12,14 @@ Function.prototype.delegate = function() {
     var self = this, scope = this.scope, args = arguments, aLength = arguments.length, fnToken = 'function';
 
     return function() {
-        var bLength = arguments.length, Length = (aLength > bLength) ? aLength
-                : bLength;
+        var bLength = arguments.length, Length = (aLength > bLength) ? aLength  : bLength;
 
         // mission one:
         for (var i = 0; i < Length; i++)
             if (arguments[i])
                 args[i] = arguments[i]; // 拷贝参数
 
-        args.length = Length; // 在 MS
-                                // jscript下面，arguments作为数字来使用还是有问题，就是length不能自动更新。修正如左:
+        args.length = Length; // 在 MSjscript下面，arguments作为数字来使用还是有问题，就是length不能自动更新。修正如左:
 
         // mission two:
         for (var i = 0, j = args.length; i < j; i++) {

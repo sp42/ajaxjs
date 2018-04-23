@@ -255,13 +255,15 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 		prepareData(model);
 		model.put("actionName", "新建");
 		model.put("isCreate", true);//因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate = true 标识为创建，以便与 update 区分开来。
-									 
+
 		return String.format(jsp_adminInfo, service.getTableName());
 	}
 
 	/**
+	 * 创建实体
 	 * 
 	 * @param entity
+	 *            实体
 	 * @param model
 	 *            页面 Model 模型
 	 * @return
@@ -289,13 +291,14 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	public String update(ID id, /* @Valid */T entity, ModelAndView model) {
 		LOGGER.info("修改 name:{0}，数据库将执行 UPDATE 操作", entity);
 		model.put("isUpdate", true);
-		
-		if(entity instanceof Map) {
-			((Map<String, Object>)entity).put("id", id);
+
+		if (entity instanceof Map) {
+			((Map<String, Object>) entity).put("id", id);
 		} else {
-			((BaseModel)entity).setId((long)id);;
+			((BaseModel) entity).setId((long) id);
+			;
 		}
-		
+
 		initDb();
 
 		try {
@@ -311,7 +314,9 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 
 	/**
 	 * 
-	 * 因为范型的缘故，不能实例化 bean 对象。应该在子类实例化 bean，再调用本类的 delete(T entry, ModelAndView model)
+	 * 因为范型的缘故，不能实例化 bean 对象。应该在子类实例化 bean，再调用本类的 delete(T entry, ModelAndView
+	 * model)
+	 * 
 	 * @param entry
 	 * @param model
 	 *            页面 Model 模型

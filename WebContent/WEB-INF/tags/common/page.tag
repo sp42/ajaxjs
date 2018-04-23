@@ -21,8 +21,12 @@
 	<div class="right">
 		<commonTags:page type="search" />
 	</div>
+	<div class="right" style="margin: 1.5% 2% 0 0;">
+		<a href="${pageContext.request.contextPath}/user/login.jsp">会员登录</a>
+	</div>
 	<nav>
 		<commonTags:page type="navMenu" />
+		
 	</nav>
 	<h1>
 		<a href="${pageContext.request.contextPath}/">

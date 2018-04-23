@@ -33,6 +33,22 @@ ajaxjs.modal = function(e,  cfg) {
 	}
 }
 
+ajaxjs.alert = function(text, cfg) {
+	var div = document.createElement('div');
+	div.className = 'modal';
+	
+	if(cfg && cfg.isShowCloseBtn)
+		text += '<a href="#" oncclick="ajaxjs.modal()">关 闭</a>'
+	div.innerHTML = '<div style="text-align:center;">' + text + '</div>';
+	div.onclick = function(e) {
+		var p = e.target; // check if in the box
+		if (p && p.className.indexOf('modal') != -1) {
+			p.die();
+		}
+	};
+	document.body.appendChild(div);
+}
+
 ajaxjs.msg = function (text, showTime) {
 	var el = document.querySelector('.topMsg');
 	if(!el){
@@ -59,13 +75,14 @@ ajaxjs.msg = function (text, showTime) {
 /**
  * 表单验证
  */
-ajaxjs.formValid = function FormValid(formEl) {
+ajaxjs.formValid = function FormValid(formEl, cfg) {
+	this.cfg = cfg;
 	formEl = typeof formEl == 'string' ? document.querySelector(formEl) : formEl;
-	var items = formEl.querySelectorAll('input[type=text]');
+	var items = formEl.querySelectorAll('input[type=text], input[type=password], input[type=number]');
 
 	for(var i = 0 , j = items.length; i < j; i++) {
 		var el = items[i];
-		el.oninvalid = this.onInvalid;
+		el.oninvalid = this.onInvalid.bind(this);
 	}
 }
 
@@ -81,8 +98,17 @@ ajaxjs.formValid.prototype.onInvalid = function (e) {
 		msg.className = 'errMsg';
 		
 		var b = el.getBoundingClientRect();
-		msg.style.left = b.left + 'px';
-		msg.style.top = (b.top + 28) + 'px';
+		if(this.cfg && this.cfg.alignRight) { // 右对齐
+			msg.style.top = (b.top + 5) + 'px';
+			var moveLeft = 0;
+			if(el.dataset.erruileft)
+				moveLeft = Number(el.dataset.erruileft);
+			msg.style.left = (b.left + el.clientWidth + moveLeft + 10) +  'px';
+		} else {
+			msg.style.left = b.left + 'px';
+			msg.style.top = (b.top + 28) + 'px';
+			
+		}
 		
 		el.insertAfter(msg);
 	}

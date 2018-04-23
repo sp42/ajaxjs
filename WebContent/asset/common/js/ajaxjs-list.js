@@ -229,7 +229,7 @@
 		 }
 	 }
 	 
-	function goSide(e, data){
+	function goSide(e, data) {
 		// data.disX 
 	    if (data.direction == 'right') {
 	        // right2left
@@ -282,7 +282,6 @@ ajaxjs.Banner.initIndicator = function() {
 		});
 	}
 }
-
 
 
 function Step() {
@@ -382,7 +381,6 @@ function Step() {
     // Start the engine an pass nothing to the first step.
     next();
   }
-
   // Tack on leading and tailing steps for input and output and return
   // the whole thing as a function.  Basically turns step calls into function
   // factories.
