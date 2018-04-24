@@ -34,9 +34,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mvc.ModelAndView;
+import com.ajaxjs.mvc.filter.FilterAction;
+import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.util.reflect.ExecuteMethod;
 import com.ajaxjs.util.reflect.NewInstance;
 import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.collection.CollectionUtil;
 import com.ajaxjs.util.io.resource.ScanClass;
 import com.ajaxjs.util.io.resource.Scanner;
 import com.ajaxjs.util.logger.LogHelper;
@@ -149,7 +152,6 @@ public class MvcDispatcher implements Filter {
 			uri = match.replaceAll("/{id}/");
 		}
 		
-		
 		Action action = ControllerScanner.find(uri);
 		Method method = getMethod(action, httpMethod);// 要执行的方法
 		IController controller = action.controller;
@@ -169,22 +171,69 @@ public class MvcDispatcher implements Filter {
 		MvcRequest.setHttpServletRequest(request);
 		MvcRequest.setHttpServletResponse(response);
 
-		Object result;
+		FilterAction[] filterActions = getFilterActions(method);
+
+		boolean isDoFilter = !CollectionUtil.isNull(filterActions), isSkip = false; // 是否中止控制器方法调用，由拦截器决定
+		Throwable filterEx = null;
+		
+		if (isDoFilter) {
+			try {
+				for (FilterAction filterAction : filterActions) {
+					isSkip = !filterAction.before(request, response, controller); // 相当于 AOP 前置
+				}
+			} catch(Throwable e) {
+				isSkip = true;
+				filterEx = e;
+			}
+		}
+		
+		Object result = null;
 		ModelAndView model = null;
 
-		if (method.getParameterTypes().length > 0) {
-			Object[] args = RequestParam.getArgs(request, response, method);
-			model = findModel(args);
+		if (!isSkip) {
+			if (method.getParameterTypes().length > 0) {
+				Object[] args = RequestParam.getArgs(request, response, method);
+				model = findModel(args);
 
-			// 通过反射执行控制器方法:调用反射的 Reflect.executeMethod 方法就可以执行目标方法，并返回一个结果。
-			result = ExecuteMethod.executeMethod(controller, method, args);// 
-		} else {
-			// 方法没有参数
-			result = ExecuteMethod.executeMethod(controller, method);
+				// 通过反射执行控制器方法:调用反射的 Reflect.executeMethod 方法就可以执行目标方法，并返回一个结果。
+				result = ExecuteMethod.executeMethod(controller, method, args);
+			} else {
+				// 方法没有参数
+				result = ExecuteMethod.executeMethod(controller, method);
+			}
 		}
 
-		response.resultHandler(result, request, model);
+		if (isDoFilter)
+			for (FilterAction filterAction : filterActions)
+				filterAction.after(request, response, controller, isSkip, filterEx); // 后置调用
+		
+		if (!isSkip) {
+			response.resultHandler(result, request, model);
+		}
+
 		MvcRequest.clean();
+	}
+	
+	/**
+	 * 初始化拦截器
+	 * TODO 改为 IOC 更节省资源
+	 * @param method
+	 * @return
+	 */
+	private static FilterAction[] getFilterActions(Method method) {
+		FilterAction[] filterActions = null; // 拦截器 
+		
+		if (method.getAnnotation(MvcFilter.class) != null) {
+			Class<? extends FilterAction>[] clzs = method.getAnnotation(MvcFilter.class).before();
+			filterActions = new FilterAction[clzs.length];
+
+			int i = 0;
+			for (Class<? extends FilterAction> clz : clzs) {
+				filterActions[i++] = NewInstance.newInstance(clz);
+			}
+		}
+		
+		return filterActions;
 	}
 
 	private static final Pattern id = Pattern.compile("/\\d+/");

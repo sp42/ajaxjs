@@ -14,6 +14,7 @@
  */
 package com.ajaxjs.web.test;
 
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -29,7 +30,9 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -185,5 +188,34 @@ public class MockRequest {
 	public boolean shouldbe_hasRecord(Map<String, Object> json) {
 		int total = (int) json.get("total");
 		return total > 0;
+	}
+
+	/**
+	 * 模拟 HttpSession
+	 * 
+	 * @param request
+	 * @param map
+	 */
+	public static void mockSession(HttpServletRequest request, final Map<String, Object> map) {
+		HttpSession session = mock(HttpSession.class);
+		when(request.getSession()).thenReturn(session);
+
+		when(session.getAttribute(anyString())).thenAnswer(new Answer<Object>() {
+			@Override
+			public Object answer(InvocationOnMock aInvocation) throws Throwable {
+				String key = (String) aInvocation.getArguments()[0];
+				return map.get(key);
+			}
+		});
+
+		Mockito.doAnswer(new Answer<Object>() {
+			@Override
+			public Object answer(InvocationOnMock aInvocation) throws Throwable {
+				String key = (String) aInvocation.getArguments()[0];
+				Object value = aInvocation.getArguments()[1];
+				map.put(key, value);
+				return null;
+			}
+		}).when(session).setAttribute(anyString(), anyObject());
 	}
 }
