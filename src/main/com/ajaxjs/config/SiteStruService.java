@@ -155,22 +155,40 @@ public class SiteStruService implements ServletContextListener {
 
 		return uri.equals(ui) || uri.indexOf(fullPath) != -1;
 	}
-
+	
 	/**
-	 * 生成二级菜单所需的数据
+	 * 生成二级节点
 	 * 
 	 * @param request
 	 *            请求对象
-	 * @return 二级菜单列表
+	 * @return 二级节点菜单
+	 */
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> getSecondLevelNode(HttpServletRequest request) {
+		if (request.getAttribute("secondLevel_Node") == null) {
+			String path = getPath(request);
+	
+			path = path.substring(1, path.length());
+			String second = path.split("/")[0];
+			Map<String, Object> map = t.findByPath(second, stru);
+			request.setAttribute("secondLevel_Node", map); // 保存二级栏目节点之数据
+			
+			return map;
+		} else {
+			return (Map<String, Object>) request.getAttribute("secondLevel_Node");
+		}
+	}
+
+	/**
+	 * 生成二级节点菜单所需的数据
+	 * 
+	 * @param request
+	 *            请求对象
+	 * @return 二级节点菜单列表
 	 */
 	@SuppressWarnings({ "unchecked" })
 	public List<Map<String, Object>> getMenu(HttpServletRequest request) {
-		String path = getPath(request);
-
-		path = path.substring(1, path.length());
-		String second = path.split("/")[0];
-		Map<String, Object> map = t.findByPath(second, stru);
-
+		Map<String, Object> map = getSecondLevelNode(request);
 		return map != null && map.get("children") != null ? (List<Map<String, Object>>) map.get("children") : null;
 	}
 
@@ -185,17 +203,22 @@ public class SiteStruService implements ServletContextListener {
 		return request.getRequestURI().replace(request.getContextPath(), "").replaceFirst("/\\w+\\.\\w+$", "");
 	}
 
-	private final static String table = "<table class=\"siteMap\"><tr><td>%s</td></tr></table>",
-			a = "<a href=\"%s\" class=\"indentBlock_%s\"><span class=\"dot\">·</span>%s</a>\n ",
+	private static String table = "<table class=\"siteMap\"><tr><td>%s</td></tr></table>",
+			a = "<a href=\"%s/\" class=\"indentBlock_%s\"><span class=\"dot\">·</span>%s</a>\n ",
 			newCol = "\n\t</td>\n\t<td>\n\t\t";
 
+	private String siteMapCache;
 	/**
 	 * 获取页脚的网站地图
 	 * 
 	 * @return 页脚的网站地图
 	 */
-	public String getSiteMap() {
-		return getSiteMap(stru);
+	public String getSiteMap(HttpServletRequest request) {
+		if(siteMapCache == null) {
+			siteMapCache = getSiteMap(stru, request.getContextPath());
+		}
+		
+		return siteMapCache ;
 	}
 
 	/**
@@ -203,11 +226,12 @@ public class SiteStruService implements ServletContextListener {
 	 * 
 	 * @param list
 	 *            可指定数据
+	 * @param contextPath 
 	 * @return 页脚的网站地图
 	 */
-	public static String getSiteMap(List<Map<String, Object>> list) {
+	public static String getSiteMap(List<Map<String, Object>> list, String contextPath) {
 		StringBuilder sb = new StringBuilder();
-		getSiteMap(list, sb);
+		getSiteMap(list, sb, contextPath);
 
 		return String.format(table, sb.toString());
 	}
@@ -217,18 +241,19 @@ public class SiteStruService implements ServletContextListener {
 	 * 
 	 * @param list
 	 * @param sb
+	 * @param contextPath 
 	 */
 	@SuppressWarnings("unchecked")
-	private static void getSiteMap(List<Map<String, Object>> list, StringBuilder sb) {
+	private static void getSiteMap(List<Map<String, Object>> list, StringBuilder sb, String contextPath) {
 		for (Map<String, Object> map : list) {
 			if (map != null) {	
 				if (0 == (int) map.get("level")) // 新的一列
 					sb.append(newCol);
 
-				sb.append(String.format(a, map.get("fullPath").toString(), map.get("level").toString(), map.get("name").toString()));
+				sb.append(String.format(a, contextPath + map.get("fullPath").toString(), map.get("level").toString(), map.get("name").toString()));
 
 				if (map.get("children") != null && map.get("children") instanceof List)
-					getSiteMap((List<Map<String, Object>>) map.get("children"), sb);
+					getSiteMap((List<Map<String, Object>>) map.get("children"), sb, contextPath);
 			}
 		}
 	}

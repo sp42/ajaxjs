@@ -18,10 +18,16 @@ import org.junit.BeforeClass;
 import com.ajaxjs.mvc.controller.MvcDispatcher;
 import com.ajaxjs.web.test.MockResponse.StubServletOutputStream;
 
+/**
+ * 方便测试的基础类
+ * 
+ * @author sp42 frank@ajaxjs.com
+ *
+ */
 public abstract class BaseTest {
-	static FilterConfig filterConfig;
-	static MvcDispatcher dispatcher;
-	static FilterChain chain;
+	public static FilterConfig filterConfig;
+	public static MvcDispatcher dispatcher;
+	public static FilterChain chain;
 
 	@BeforeClass
 	public static void init() throws ServletException {
@@ -34,7 +40,7 @@ public abstract class BaseTest {
 
 		Enumeration<String> e = v.elements();
 		when(filterConfig.getInitParameterNames()).thenReturn(e);
-		
+
 		dispatcher = new MvcDispatcher();
 		dispatcher.init(filterConfig);
 
@@ -42,8 +48,8 @@ public abstract class BaseTest {
 	}
 
 	// 单测技巧，每个 url 对应一个 request、一个 response
-	HttpServletRequest request;
-	HttpServletResponse response;
-	StringWriter writer;
-	StubServletOutputStream os;
+	public HttpServletRequest request;
+	public HttpServletResponse response;
+	public StringWriter writer;
+	public StubServletOutputStream os;
 }

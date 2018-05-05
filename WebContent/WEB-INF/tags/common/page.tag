@@ -30,7 +30,7 @@
 	</nav>
 	<h1>
 		<a href="${pageContext.request.contextPath}/">
-			<img src="${pageContext.request.contextPath}/asset/images/logo.png" style="height: 80px;" />
+			<img src="${pageContext.request.contextPath}/asset/images/logo.png" class="logoPic" />
 			${_config.clientFullName}
 		</a>
 	</h1>
@@ -100,7 +100,7 @@
 		<div class="sitemap">
 			<div>
 				<div class="btn" onclick="document.querySelector('.sitemap').toggleCls('open');"></div>
-				${PageNode.siteMap}
+				${SITE_STRU.getSiteMap(pageContext.request)}
 			</div>
 		</div>
 
