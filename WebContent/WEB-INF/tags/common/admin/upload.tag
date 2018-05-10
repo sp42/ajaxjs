@@ -1,7 +1,7 @@
 <%@tag pageEncoding="UTF-8" description="上传组件"%>
-<div class="hide uploadBox modal">
+<textarea class="hide uploadBoxTpl">
 	<!-- Tab -->
-	<div class="simpleTab_hoz">
+	<div class="simpleTab_hoz uploadBox" style="width:700px;">
 		<h4>{title}</h4>	
 		<ul>
 			<li>上传本地图片</li>
@@ -9,12 +9,12 @@
 		</ul>
 		<div class="content">
 			<div>
-				<img style="float:left;margin-bottom:20px;" class="upload_img_perview" src="${commonImage}imgBg.png" />
+				<img style="float:left;margin-bottom:20px;max-width:180px;max-height:160px;" class="upload_img_perview" src="${commonImage}imgBg.png" />
 				
 				<div class="upload-btns">
-					<form action="../uploadImg/do.do" method="post" enctype="multipart/form-data" target="upframe">
+					<form action="imgUpload/?owenerId=21321323" method="post" enctype="multipart/form-data" target="upframe">
 						<!-- 隐藏的 input 上传控件 -->
-						<input name="fileInput" id="input_file_molding" type="file"  class="hide" />
+						<input name="fileInput" id="input_file_molding" type="file" class="hide" />
 						<!-- 隐藏的 iframe，为了无刷新上传，对应 form 的 target -->
 						<iframe name="upframe" class="hide"></iframe>
 						
@@ -42,7 +42,7 @@
 		</div>
 	</div>
 	<!-- //Tab -->
-</div>		
+</textarea>		
 
 <script>
 	// 上传后成功的提示
@@ -76,7 +76,7 @@
 	Upload_Panel = {
 		//htmlEditor : htmlEditor,
 		show : function() {
-			ajaxjs.modal(null, {el : '.uploadBox'});
+			ajaxjs.layer('.uploadBoxTpl');
 			this.initTab();
 		},
 		
@@ -155,9 +155,7 @@
 		}
 	};
 </script>
-<button class="ajaxjs-btn" onclick="Upload_Panel.show();return false;">
-	<img src="${commonAssetIcon}add.gif" />上传正文图片
-</button>
+
 
 <button class="ajaxjs-btn" onclick="Upload_Cover_Panel.show();return false;">
 	<img src="${commonAssetIcon}add.gif" />上传封面图片

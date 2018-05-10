@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.DataSource;
 
 import com.ajaxjs.Version;
 import com.ajaxjs.framework.BaseModel;
@@ -69,7 +70,9 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	public static void initDb(String connStr) {
 		try {
 			if (JdbcConnection.getConnection() == null || JdbcConnection.getConnection().isClosed()) {
-				Connection conn = JdbcConnection.getConnection(JdbcConnection.getDataSource(connStr));
+				DataSource ds = JdbcConnection.getDataSource(connStr);
+			
+				Connection conn = JdbcConnection.getConnection(ds);
 				JdbcConnection.setConnection(conn);
 				LOGGER.info("启动数据库链接……" + conn);
 			}
@@ -83,7 +86,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	 */
 	public static void initDb() {
 		// connStr = Version.isDebug ? "jdbc/sqlite" : "jdbc/sqlite_deploy";
-		initDb(Version.isMac ? "jdbc/sqlite_mac" : "jdbc/mysql");
+		initDb("jdbc/mysql");
 	}
 
 	/**
@@ -119,8 +122,8 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 		prepareData(model);
 
 		IService<T, ID> service = getService(); // 避免 service 为单例
-
 		PageResult<T> pageResult = null;
+		
 		try {
 			pageResult = service.findPagedList(getParam(start, limit));
 			model.put("PageResult", pageResult);

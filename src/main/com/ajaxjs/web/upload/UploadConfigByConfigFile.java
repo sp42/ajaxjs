@@ -15,6 +15,8 @@
  */
 package com.ajaxjs.web.upload;
 
+import java.io.File;
+
 import com.ajaxjs.config.ConfigService;
 
 /**
@@ -25,6 +27,8 @@ import com.ajaxjs.config.ConfigService;
  */
 public class UploadConfigByConfigFile implements UploadConfig {
 	private String configNode;
+	// 适合 web 的绝对路径
+	private String absolutePath;
 
 	/**
 	 * 检查是否有对应的配置 默认是 "uploadFile"
@@ -67,7 +71,9 @@ public class UploadConfigByConfigFile implements UploadConfig {
 
 	@Override
 	public String getSaveFolder() {
-		return ConfigService.getValueAsString(configNode + ".SaveFolder");
+		return ConfigService.getValueAsBool(configNode + ".isUsingRelativePath") ? 
+				
+				getAbsolutePath() + File.separator: ConfigService.getValueAsString(configNode + ".SaveFolder");
 	}
 
 	@Override
@@ -81,6 +87,14 @@ public class UploadConfigByConfigFile implements UploadConfig {
 
 	public void setConfigNode(String configNode) {
 		this.configNode = configNode;
+	}
+
+	public String getAbsolutePath() {
+		return absolutePath;
+	}
+
+	public void setAbsolutePath(String absolutePath) {
+		this.absolutePath = absolutePath;
 	}
 
 }

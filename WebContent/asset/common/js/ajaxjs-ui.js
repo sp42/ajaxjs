@@ -45,8 +45,14 @@ ajaxjs.alert = function(text, cfg) {
 		if (p && p.className.indexOf('modal') != -1) {
 			p.die();
 		}
-	};
+	}
+	
 	document.body.appendChild(div);
+}
+
+ajaxjs.layer = function(el, cfg) {
+	el = typeof(el) == 'string' ? document.querySelector(el) : el;
+	ajaxjs.alert(el.value, cfg);
 }
 
 ajaxjs.msg = function (text, showTime) {

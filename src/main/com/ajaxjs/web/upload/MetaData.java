@@ -43,14 +43,19 @@ public class MetaData {
 	 */
 	public int contentLength;
 
+	/**
+	 * 解析 HTTP 报文，得出 文件名 和文件类型
+	 * 
+	 * @param dataStr
+	 *            HTTP 报文字符串
+	 */
 	public void parseMeta(String dataStr) {
 		name = StringUtil.regMatch("name=\"(\\w+)\"", dataStr, 1);
 		if (name == null)
 			throw new IllegalArgumentException("你的表单中没有设置一个 name，不能获取字段");
 
-		filename = StringUtil.regMatch("filename=\"([\\w.]+)\"", dataStr, 1);
+		filename = StringUtil.regMatch("filename=\"([^\"]*)\"", dataStr, 1);
 		contentType = StringUtil.regMatch("Content-Type:\\s?([\\w/]+)", dataStr, 1);
-		System.out.println(contentType);
 	}
 
 	private final static byte[] b = "\n".getBytes();

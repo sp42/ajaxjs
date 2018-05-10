@@ -171,6 +171,7 @@ public class UploadRequest extends HttpServletRequestWrapper {
 			file = FileUtil.createFile(fullPath, config.isFileOverwrite());
 			// 写入文件
 			new FileUtil().setData(dataBytes).setFile(file).save(offset, length).close();
+			result.fullPath = fullPath;
 			result.fileName = file.getName();
 			result.isOk = true;
 		} catch (IOException e) {

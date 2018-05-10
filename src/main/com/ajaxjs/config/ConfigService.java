@@ -126,7 +126,14 @@ public class ConfigService {
 	 * @return 配置内容
 	 */
 	public static int getValueAsInt(String key) {
-		return Value.TypeConvert(flatConfig.get(key), int.class);
+		// js number 在 java 里面为 double 转换一下
+		Object number = flatConfig.get(key);
+		
+		if(number instanceof Double) {
+			number = Value.double2int((Double)number);
+		}
+		
+		return Value.TypeConvert(number, int.class);
 	}
 
 	/**

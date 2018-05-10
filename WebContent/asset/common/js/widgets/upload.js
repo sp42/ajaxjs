@@ -41,13 +41,13 @@ ajaxjs_Upload_perview = function(perviewImg, uploadInput, maxSize) {
 
 	var MAXWIDTH = 300, MAXHEIGHT = 150;
 
-	perviewImg.onload = function(e) {
-		var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, perviewImg.offsetWidth, perviewImg.offsetHeight);
-		perviewImg.width = rect.width;
-		perviewImg.height = rect.height;
-		// img.style.marginLeft = rect.left+'px';
-		// img.style.marginTop = rect.top+'px';
-	}
+//	perviewImg.onload = function(e) {
+//		var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, perviewImg.offsetWidth, perviewImg.offsetHeight);
+//		perviewImg.width = rect.width;
+//		perviewImg.height = rect.height;
+//		// img.style.marginLeft = rect.left+'px';
+//		// img.style.marginTop = rect.top+'px';
+//	}
 
 	/**
 	 * 扩展名的检测，看看是否为图片
