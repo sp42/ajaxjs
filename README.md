@@ -44,7 +44,7 @@ AJAXJS WEB 包含以下模块：
 
 前端框架
 -----------
-前端就要看 DEMO：[https://framework.ajaxjs.com/framework/ui_demo/](https://framework.ajaxjs.com/framework/ui_demo/)，然后右击鼠标查看源码或 F12 即可：）
+前端就要看 DEMO：[https://framework.ajaxjs.com/ui_demo/](https://framework.ajaxjs.com/ui_demo/)，然后右击鼠标查看源码或 F12 即可：）
 
 
 config
@@ -57,7 +57,7 @@ config
 联系方式
 ----------
 
-- 官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/framework/)  
+- 官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/)  
 - 博客 [http://blog.csdn.net/zhangxin09](http://blog.csdn.net/zhangxin09/) 
 - Q群 [3150067](//shang.qq.com/wpa/qunwpa?idkey=99415d164e2c776567c9370cc5b0bde26f4e2e7c5068978a24d1fe7c976ace93)
 - 邮箱 support@ajaxjs.com
