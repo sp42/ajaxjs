@@ -151,8 +151,8 @@
         <input name="tn" value="bds" type="hidden" />
         <input name="cl" value="3" type="hidden" />
         <input name="ct" value="2097152" type="hidden" />
-        <input name="si" value="gz88.cc" type="hidden" />
-    <div class="searchBtn" onclick="document.getElementById('globalSearch').submit();"></div>
+        <input name="si" value="ajaxjs.com" type="hidden" />
+    	<div class="searchBtn" onclick="document.getElementById('globalSearch').submit();"></div>
     </form>
     <!-- // 自定义 Baidu 搜索 -->
 </c:if>
