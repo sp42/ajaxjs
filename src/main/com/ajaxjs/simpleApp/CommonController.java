@@ -27,7 +27,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 
-import com.ajaxjs.Version;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.service.IService;
