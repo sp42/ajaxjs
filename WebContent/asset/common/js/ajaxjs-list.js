@@ -12,23 +12,23 @@
 			this.children = this.mover.children;
 	
 			if(!this.stepWidth)
-				this.stepWidth = this.mover.parentNode.clientWidth; // 获取容器宽度作为 item 宽度
+				this.stepWidth = this.mover.parentNode.clientWidth || window.innerWidth; // 获取容器宽度作为 item 宽度
 			
 			var len = this.children.length, stepWidth = this.stepWidth, children = this.children;
 			if(this.isMagic) {
 				this.mover.style.width = this.isUsePx ? (stepWidth * 2) +'px' : '200%';
 			}else{
 				this.mover.style.width = this.isUsePx ? (stepWidth * len) +'px' : len + '00%';
-			}
+			} 
 			
 			// 分配  tab 宽度
-			this.tabWidth = this.isUsePx ? stepWidth + 'px' : (1 / len * 100).toFixed(5) + '%';
+			this.tabWidth = this.isUsePx ? this.stepWidth + 'px' : (1 / len * 100).toFixed(5) + '%';
 			
 			for(var  i = 0, j = children.length; i < j; i++) {
 				if(this.isMagic) 
 					children[i].style.width = '50%';
 				else
-					children[i].style.width = this.tabWidth;
+					children[i].style.width = this.tabWidth + '!important';
 			}
 
 			// 登记 resize 事件，以便 resize 容器的时候调整大小。
@@ -440,7 +440,7 @@ function Step() {
 					var _data = renderer ? renderer(data[i]) : data[i]; // 很细的颗粒度控制记录
 					
 					if(_data === false) continue; // 返回 false 则跳过该记录，不会被渲染
-					var li = ajaxjs.tppl(tpl, _data);
+					var li = tppl(tpl, _data);
 					
 					if (isAppend_DOM) { // 分页是累加的
 						// 利用 div 添加到 tplEl
@@ -466,10 +466,10 @@ function Step() {
 		}).delegate(null, null, dataKey, el, tpl, renderer);
 
 		// 发起请求
-		if (typeof isJSONP == 'undefined' || isJSONP == true) {
+		if (isJSONP == true) {
 			ajaxjs.xhr.jsonp(url, args, cb);
 		} else
-			ajaxjs.xhr.get(url, args, cb);
+			ajaxjs.xhr.get(url, cb, args);
 	}
 	
 	function getCellRequestWidth() {

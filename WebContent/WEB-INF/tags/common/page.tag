@@ -151,7 +151,7 @@
         <input name="tn" value="bds" type="hidden" />
         <input name="cl" value="3" type="hidden" />
         <input name="ct" value="2097152" type="hidden" />
-        <input name="si" value="ajaxjs.com" type="hidden" />
+        <input name="si" value="${all_config.site.domainName}" type="hidden" />
     	<div class="searchBtn" onclick="document.getElementById('globalSearch').submit();"></div>
     </form>
     <!-- // 自定义 Baidu 搜索 -->
