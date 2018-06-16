@@ -1,0 +1,103 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<!-- Maven 继承 -->
+	<parent>
+		<groupId>com.ajaxjs</groupId>
+		<artifactId>ajaxjs-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	
+	<artifactId>ajaxjs-web</artifactId>
+	<packaging>jar</packaging>
+
+	<version>1.0.6</version>
+	<name>AJAXJS-Web</name>
+	<description>AJAXJS Web aims to full-stack, not only the server-side framework, but also integrates the front-end library. It's written in HTML5 + Java, a successor to the JVM platform, efficient, secure, stable, cross-platform and many other advantages, but it abandoned the traditional enterprise architecture brought about by the large and bloated, emphasizing the lightweight, and fast, very suitable for the Internet fast application.</description>
+	<inceptionYear>2015</inceptionYear>
+	<url>https://framework.ajaxjs.com/framework/</url>
+	<scm>
+		<connection>scm:git:git@gitee.com:sp42/ajaxjs.git</connection>
+		<developerConnection>scm:git:git@gitee.com:sp42/ajaxjs.git</developerConnection>
+		<url>https://gitee.com/sp42/ajaxjs</url>
+	</scm>
+
+	<issueManagement>
+		<url>https://gitee.com/sp42/ajaxjs/issues</url>
+	</issueManagement>
+
+	<build>
+<!-- 		<resources> -->
+<!-- 			<resource> -->
+<!-- 				<directory>src/main</directory> -->
+<!-- 				<excludes> -->
+<!-- 					<exclude>**/*.java</exclude> -->
+<!-- 					<exclude>**/*.json</exclude> -->
+<!-- 				</excludes> -->
+<!-- 			</resource> -->
+
+<!-- 			<resource> -->
+<!-- 				<directory>META-INF</directory> -->
+<!-- 				<targetPath>META-INF</targetPath> -->
+<!-- 				<includes> -->
+<!-- 					<include>**/*.*</include> -->
+<!-- 				</includes> -->
+<!-- 			</resource> -->
+
+<!-- 			<resource> -->
+<!-- 				<directory>WebContent/asset</directory> -->
+<!-- 				<targetPath>META-INF/resources/asset</targetPath> -->
+<!-- 				<includes> -->
+<!-- 					<include>**/*.*</include> -->
+<!-- 				</includes> -->
+<!-- 			</resource> -->
+<!-- 		</resources> -->
+		<plugins>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<version>2.6</version>
+					<webXml>WebContent\WEB-INF\web.xml</webXml>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/javax.servlet.jsp/javax.servlet.jsp-api -->
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>javax.servlet.jsp-api</artifactId>
+			<version>2.2.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.websocket</groupId>
+			<artifactId>javax.websocket-api</artifactId>
+			<version>1.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api -->
+		<dependency>
+			<groupId>javax.ws.rs</groupId>
+			<artifactId>javax.ws.rs-api</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ajaxjs</groupId>
+			<artifactId>ajaxjs-data</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+	</dependencies>
+</project>
