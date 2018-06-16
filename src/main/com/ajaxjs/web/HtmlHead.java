@@ -69,6 +69,7 @@ public class HtmlHead {
 
 	/**
 	 * 
+	 * @deprecated
 	 * @param lessPath
 	 * @return
 	 */
@@ -80,6 +81,7 @@ public class HtmlHead {
 	/**
 	 * 返回样式文件
 	 * 
+	 * @deprecated
 	 * @param lessPath
 	 *            LESS 路径，如果 lessPath = null，表示不需要 <link href=...> 样式
 	 * @return CSS 地址
@@ -97,10 +99,10 @@ public class HtmlHead {
 			params.put("isdebug", "true");
 
 			return "http://" + getLocalIp() + ":83/lessService/?" + MapHelper.join(params, "&");
-		} else 
+		} else
 			return request.getContextPath() + lessPath.replace("/less", "/css").replace(".less", ".css");
 	}
-	
+
 	/**
 	 * ip 缓存，保存起来方便下次使用
 	 */
@@ -126,7 +128,20 @@ public class HtmlHead {
 
 		return localIp;
 	}
+
+	/**
+	 * 是否老版本浏览器
+	 * 
+	 * @return
+	 */
+	public boolean isOldIE() {
+		return getUa().isIE() && getUa().is_old_IE();
+	}
 	
+	public boolean isDebug() {
+		return Version.isDebug;
+	}
+
 	/**
 	 * 浏览器 UA 检测
 	 * 
@@ -202,7 +217,7 @@ public class HtmlHead {
 		public boolean isAndroid() {
 			return ua.contains("android");
 		}
-		
+
 		/**
 		 * 是否为安卓 7.x
 		 * 
@@ -212,7 +227,7 @@ public class HtmlHead {
 			boolean is7 = Pattern.compile("Android\\s7", Pattern.CASE_INSENSITIVE).matcher(ua).find();
 			return isAndroid() && is7;
 		}
-		
+
 		/**
 		 * 是否为安卓 56.x
 		 * 
