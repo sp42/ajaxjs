@@ -10,30 +10,27 @@
     <meta name="keywords"    content="${all_config.site.keywords}" />
     <meta name="description" content="${all_config.site.description}" />
     <meta name="author"      content="Frank Chueng, frank@ajaxjs.com" />
-	<%-- 360 优先使用 Google Chrome Frame 和最新版本 IE --%>
-	<meta name="renderer"	 content="webkit" />
-	<meta http-equiv="X-UA-Compatible" content="edge,chrome=1" />
+	<meta name="renderer"	 content="webkit" /> <%-- 360 优先使用 Google Chrome Frame 和最新版本 IE --%>
 	<meta name="robots" 	 content="index,follow" />
-	<title>${all_config.site.titlePrefix}&#10;${PAGE.node.name}&#10;${title}</title>
+	<meta http-equiv="X-UA-Compatible" content="edge,chrome=1" />
 <%
 	// 是否为移动客户端，响应式输出宽度 320px
 	if(PAGE.getUa().isPhone()) {
-		// iOS 7.1的Safari为meta标签新增minimal-ui属性，在网页加载时隐藏地址栏与导航栏。<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui" />
 %>   
 		<meta name="viewport" content="width=320, user-scalable=0, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
 		<meta name="format-detection" content="telephone=no" />
-		<%-- 通过百度手机打开网页时，百度可能会对你的网页进行转码，脱下你的衣服，往你的身上贴狗皮膏药的广告 --%>
-		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" /><%-- 通过百度手机打开网页时，百度可能会对你的网页进行转码，脱下你的衣服，往你的身上贴狗皮膏药的广告 --%>
 <%	}
 	
 	// 兼容旧版 ie
-	if(PAGE.getUa().isIE() && PAGE.getUa().is_old_IE()) {
+	if(PAGE.isOldIE()) {
 		response.setHeader("X-UA-Compatible","IE=EmulateIE8");
 %>
 		<meta http-equiv="X-UA-Compatible" content="edge" />
 <%
 	}
 %>
+	<title>${all_config.site.titlePrefix}&#10;${PAGE.node.name}&#10;${title}</title>
 	<style type="text/css">
 		/* AJAXJS Base CSS */
 		body,dl,dt,dd,ul,li,pre,form,fieldset,input,p,blockquote,th,td,h1,h2,h3,h4,h5{margin:0;padding:0;}
@@ -54,8 +51,13 @@
 			}
 		}	
 	</style>
-	<link rel="stylesheet" type="text/css" href="${PAGE.getCssUrl(lessFile)}" />
-
+<%-- 	<link rel="stylesheet" type="text/css" href="${PAGE.getCssUrl(lessFile)}" /> --%>
+<% if(PAGE.isDebug()) { %>
+	<link rel="stylesheet/less" type="text/css" href="${pageContext.request.contextPath}${empty lessFile ? '/asset/less/main.less' : lessFile}" />
+	<script src="${pageContext.request.contextPath}/asset/common/js/libs/less.min.js"></script>
+<%}else { %>
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/asset/css/main.css" />
+<%} %>
     <script src="${commonAsset}js/ajaxjs-base.js"></script>
     <script src="${commonAsset}js/ajaxjs-list.js"></script>
     <script src="${commonAsset}js/ajaxjs-ui.js"></script>
