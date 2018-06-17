@@ -7,36 +7,6 @@
 @baseBg: #e7e7e7;
  
 
-.loadMoreBtn {
-	width: 95%;
-	max-width: 500px;
-}
-
-// 折叠菜单 Accordion Menu
-.acMenu {
-	& > li h3 {
-		cursor: pointer;
-	}
-
-	.pressed {
-		& > ul {
-		}
-
-		& h3 {
-			color: black;
-		}
-	}
-
-	& > li > ul {
-		.transition (height .5s cubic-bezier(0, 1, 0.5, 1));
-		overflow: hidden;
-	}
-
-	ul {
-		height: 0;
-	}
-}
-
 // 多选项卡（多标签页）
 .base_tab {
 	& > ul {

@@ -54,6 +54,15 @@
 <%-- 	<link rel="stylesheet" type="text/css" href="${PAGE.getCssUrl(lessFile)}" /> --%>
 <% if(PAGE.isDebug()) { %>
 	<link rel="stylesheet/less" type="text/css" href="${pageContext.request.contextPath}${empty lessFile ? '/asset/less/main.less' : lessFile}" />
+		
+	<script>
+	  less = {
+	    env: "development",
+	    globalVars: {
+	      assetFilePath: '"<%=request.getContextPath()%>/asset"'   
+	    }
+	  };
+	</script>
 	<script src="${pageContext.request.contextPath}/asset/common/js/libs/less.min.js"></script>
 <%}else { %>
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/asset/css/main.css" />
