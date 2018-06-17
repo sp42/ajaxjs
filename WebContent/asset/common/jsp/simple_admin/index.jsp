@@ -1,7 +1,7 @@
 <%@page pageEncoding="UTF-8"%>
 <%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <html>
-	<commonTag:head lessFile="/asset/less/admin.less" title="管理" />
+	<commonTag:head lessFile="/asset/common/less/admin.less" title="管理" />
 	<body class="admin-shell">
 		<header>
 			<h1>我的控制面板</h1>

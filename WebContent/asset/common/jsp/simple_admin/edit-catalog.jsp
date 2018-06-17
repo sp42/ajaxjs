@@ -5,7 +5,7 @@
 <%@taglib prefix="c" uri="/ajaxjs"%>
 <!DOCTYPE html>
 <html>
-<commonTag:head lessFile="/asset/less/admin.less" title="${uiName}管理">
+<commonTag:head lessFile="/asset/common/less/admin.less" title="${uiName}管理">
 <style>
 	select {
 		height: 300px;

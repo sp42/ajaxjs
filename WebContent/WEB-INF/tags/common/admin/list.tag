@@ -6,7 +6,7 @@
 <%@attribute required="false" type="Boolean" name="isNoCreateBtn" description="是否不新建按钮"%>
 <!DOCTYPE html>
 <html>
-<commonTag:head lessFile="/asset/less/admin.less" title="${uiName}列表" />
+<commonTag:head lessFile="/asset/common/less/admin.less" title="${uiName}列表" />
 <body class="list-ui">
 	<header class="top">
 		<div>

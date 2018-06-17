@@ -5,7 +5,7 @@
 <%@taglib uri="/ajaxjs" prefix="c"%>
 <!DOCTYPE html>
 <html>
-<commonTag:head lessFile="/asset/less/admin.less" title="${uiName}管理" />
+<commonTag:head lessFile="/asset/common/less/admin.less" title="${uiName}管理" />
 <body>
 	<div class="panel">
 		<h4>${uiName}管理</h4>

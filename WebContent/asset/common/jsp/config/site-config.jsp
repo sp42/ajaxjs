@@ -2,7 +2,7 @@
 <%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <!DOCTYPE html>
 <html>
-	<commonTag:head lessFile="/asset/less/admin.less" title="网站配置" />
+	<commonTag:head lessFile="/asset/common/less/admin.less" title="网站配置" />
 <body class="configForm admin-entry-form">
 	<h3>网站配置</h3>
 	<form method="POST" action="action.do">

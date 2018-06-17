@@ -2,7 +2,7 @@
 <%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <!DOCTYPE html>
 <html>	
-	<commonTag:head lessFile="/asset/less/admin.less">
+	<commonTag:head lessFile="/asset/common/less/admin.less">
 		<style type="text/css">
 			html{
 				height:100%;

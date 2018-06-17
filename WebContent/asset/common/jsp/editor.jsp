@@ -3,7 +3,7 @@
 <%@taglib prefix="commonUI"  tagdir="/WEB-INF/tags/common/UI"%>
 <!DOCTYPE html>
 <html>
-	<commonTag:head lessFile="/asset/less/admin.less">
+	<commonTag:head lessFile="/asset/common/less/admin.less">
 	    <style>
 	    	body{
 	    		padding:2%;
