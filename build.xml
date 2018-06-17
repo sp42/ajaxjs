@@ -2,7 +2,7 @@
 <!DOCTYPE project>
 <project name="InitProject" default="download_tagfiles" basedir="WebContent">
 	<!-- https://gitee.com/sp42_admin/ajaxjs/raw/master/lib/ajaxjs-web-tagfiles.jar -->
-	<property name="jar_url_perfix" value="http://gitee.com/sp42_admin/ajaxjs/raw/master" />
+	<property name="jar_url_perfix" value="https://gitee.com/sp42_admin/ajaxjs/raw/master" />
 	
 	<!-- 初始化任务 -->
 	<target name="init" description="创建目录">
