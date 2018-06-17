@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE project>
 <project name="InitProject" default="download_tagfiles" basedir="WebContent">
-	<property name="jar_url_perfix" value="http://git.oschina.net/sp42/ajaxjs/raw/master" />
+	<!-- https://gitee.com/sp42_admin/ajaxjs/raw/master/lib/ajaxjs-web-tagfiles.jar -->
+	<property name="jar_url_perfix" value="http://gitee.com/sp42_admin/ajaxjs/raw/master" />
 	
 	<!-- 初始化任务 -->
 	<target name="init" description="创建目录">
@@ -14,7 +15,7 @@
 
 	<!-- 下载 Tag Files -->
 	<target name="download_tagfiles" depends="init">
-		<get src="${jar_url_perfix}/ajaxjs-web/lib/ajaxjs-web-tagfiles.jar" dest="WEB-INF/tags/." description="下载 tag files 压缩包（tagfiles 不能打包为资源文件，故手动复制）" />
+		<get src="${jar_url_perfix}/lib/ajaxjs-web-tagfiles.jar" dest="WEB-INF/tags/." description="下载 tag files 压缩包（tagfiles 不能打包为资源文件，故手动复制）" />
 		<unzip src="WEB-INF/tags/ajaxjs-web-tagfiles.jar" dest="../" description="解压缩" />
 		<delete file="WEB-INF/tags/ajaxjs-web-tagfiles.jar" />
 	</target>
