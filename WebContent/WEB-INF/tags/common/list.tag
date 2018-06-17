@@ -1,5 +1,4 @@
-<%@tag import="com.ajaxjs.simpleApp.Constant"%>
-<%@tag pageEncoding="UTF-8" description="Page HTML"%>
+<%@tag pageEncoding="UTF-8" description="Page HTML" description="展现数据实体列表用"  import="com.ajaxjs.simpleApp.Constant"%>
 <%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
 <%@attribute name="type" type="String" required="true" description="指定哪种 HTML 片断"%>

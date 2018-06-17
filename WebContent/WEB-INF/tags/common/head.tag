@@ -1,4 +1,4 @@
-<%@tag pageEncoding="UTF-8" description="输出头部文件" body-content="scriptless" trimDirectiveWhitespaces="true"%>
+<%@tag pageEncoding="UTF-8" description="输出 HTML 头部 head 元素的标签" body-content="scriptless" trimDirectiveWhitespaces="true"%>
 <%@attribute name="title" 		required="false" description="其他标题"%> 
 <%@attribute name="lessFile" 	required="false" description="指定 LESS 样式文件"%> 
 <jsp:useBean id="PAGE" class="com.ajaxjs.web.HtmlHead" scope="request" /> 

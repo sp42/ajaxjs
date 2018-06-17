@@ -1,5 +1,4 @@
-<%@tag import="com.ajaxjs.simpleApp.Constant"%>
-<%@tag pageEncoding="UTF-8" description="HTML 编辑器控件"%>
+<%@tag pageEncoding="UTF-8" description="HTML 编辑器控件" import="com.ajaxjs.simpleApp.Constant"%>
 <%@attribute name="name"     required="false" type="String" description="表单 name，字段名"%>
 <%@attribute name="basePath" required="false" type="String" description="指定 iframe src 静态资源的路径"%>
 
