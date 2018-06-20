@@ -18,7 +18,7 @@ Maven 依赖
 
 检出源码到本地后，注意设置源码目录（set Source Folder）为 src/main，而非一般的 src/java/main，测试目录也是 src/test 敬请注意。
 
-推荐使用约定目录，包括静态注意、模板和数据库配置等等，还有 tag files 标签下载，一键设置请执行 ANT 脚本：build.xml。
+推荐使用约定目录，包括静态注意、模板和数据库配置等等，还有 tag files 标签下载，一键设置请执行 ANT 脚本：[build.xml](https://gitee.com/sp42_admin/ajaxjs/blob/master/build.xml)。
 
 相关项目一览
 --------------
