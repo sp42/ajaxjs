@@ -27,6 +27,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 
+import com.ajaxjs.Version;
+import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.service.IService;
@@ -70,7 +72,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 		try {
 			if (JdbcConnection.getConnection() == null || JdbcConnection.getConnection().isClosed()) {
 				DataSource ds = JdbcConnection.getDataSource(connStr);
-			
+
 				Connection conn = JdbcConnection.getConnection(ds);
 				JdbcConnection.setConnection(conn);
 				LOGGER.info("启动数据库链接……" + conn);
@@ -84,8 +86,13 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	 * 初始化数据库连接
 	 */
 	public static void initDb() {
-		// connStr = Version.isDebug ? "jdbc/sqlite" : "jdbc/sqlite_deploy";
-		initDb("jdbc/mysql");
+		String config = ConfigService.getValueAsString("data.database_node");
+		if (config == null)
+			config = "jdbc/mysql"; // 如果没有 默认 mysql
+		if (!Version.isDebug)
+			config += "_deploy"; // 约定生产环境后面加上 _deploy
+
+		initDb(config);
 	}
 
 	/**
@@ -122,7 +129,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 
 		IService<T, ID> service = getService(); // 避免 service 为单例
 		PageResult<T> pageResult = null;
-		
+
 		try {
 			pageResult = service.findPagedList(getParam(start, limit));
 			model.put("PageResult", pageResult);
@@ -151,6 +158,13 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 		return e;
 	}
 
+	/**
+	 * 将分页列表转化为 JSON 输出
+	 * 
+	 * @param pageResult
+	 * @param model
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public String outputPagedJsonList(PageResult<T> pageResult, ModelAndView model) {
 		if (model.get(errMsg) != null) {
