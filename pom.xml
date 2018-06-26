@@ -5,7 +5,7 @@
 
 	<groupId>com.ajaxjs</groupId>
 	<artifactId>ajaxjs-web</artifactId>
-	<version>1.0.7</version>
+	<version>1.0.8</version>
 	<packaging>jar</packaging>
 
 	<name>AJAXJS-Web</name>
@@ -194,7 +194,7 @@
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-data</artifactId>
-			<version>1.0.3</version>
+			<version>1.0.4</version>
 		</dependency>
 
 		<dependency>
