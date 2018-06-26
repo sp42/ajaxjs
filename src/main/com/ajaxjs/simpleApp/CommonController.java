@@ -144,6 +144,26 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 
 		return pageResult;
 	}
+	
+	public PageResult<T> getList(int start, int limit, ModelAndView model) {
+		LOGGER.info("获取列表 GET list:{0}/{1} getList", start, limit);
+		prepareData(model);
+		
+		IService<T, ID> service = getService(); // 避免 service 为单例
+		PageResult<T> pageResult = null;
+		
+		try {
+			pageResult = service.findPagedList(getParam(start, limit));
+			model.put("PageResult", pageResult);
+		} catch (Throwable e) {
+			model.put(errMsg, getUnderLayerErr(e));
+		} 
+		
+		if (model.get(errMsg) != null)
+			LOGGER.warning("严重异常，请检查 service.findPagedList() 是否给出实现");
+		
+		return pageResult;
+	}
 
 	/**
 	 * AOP 的缘故，不能直接捕获原来的异常，要不断 e.getCause()....
