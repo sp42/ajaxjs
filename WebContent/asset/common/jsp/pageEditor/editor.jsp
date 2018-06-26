@@ -14,15 +14,6 @@
 			<h3 class="head">页面编辑器</h3>
 		</nav>
 	
-		<%-- 		<jsp:useBean id="HtmlEditor" class="com.ajaxjs.framework.mvc.model.HtmlEditor">  --%>
-		<%-- 		   <jsp:setProperty name="HtmlEditor" property="name"  value="pageContent"/> --%>
-		<%-- 		   <jsp:setProperty name="HtmlEditor" property="iframePath" value=" "/> --%>
-		<%-- 		   <jsp:setProperty name="HtmlEditor" property="simple"  value="true"/> --%>
-		<%-- 		   <jsp:setProperty name="HtmlEditor" property="basePath"  value="${basePath}"/> --%>
-		<%-- 		</jsp:useBean> --%>
-		<%--     	<%@taglib prefix="commonUI" tagdir="/WEB-INF/tags/common/UI"%> --%>
-		<%--     	<commonUI:htmlEditor model="<%=HtmlEditor%>" /> --%>
-	
 		<div class="btns">
 			<button class="ajaxjs-btn-1 backBtn">返回</button>
 			<button class="ajaxjs-btn-1 saveBtn">保存</button>
@@ -39,10 +30,12 @@
 		<%
 			}
 		%>
-		<commonUI:htmlEditor name="content" basePath="../">
-				${contentBody}
-	    	</commonUI:htmlEditor>
+		<script src="${commonAsset}js/widgets/htmlEditor.js"></script>
+		<commonUI:htmlEditor name="content" basePath="../">${contentBody}</commonUI:htmlEditor>
 		<script>
+		
+			var htmlEditor = new ajaxjs_HtmlEditor(document.querySelector('.htmlEditor'));
+		
 			// 返回
 			document.querySelector('.backBtn').onclick = function(e) {
 				window.history.go(-1);
