@@ -15,9 +15,9 @@
 		</nav>
 	
 		<div class="btns">
-			<button class="ajaxjs-btn-1 backBtn">返回</button>
-			<button class="ajaxjs-btn-1 saveBtn">保存</button>
-			<button class="ajaxjs-btn-1 perviewBtn">预览</button>
+			<button class="ajaxjs-btn backBtn">返回</button>
+			<button class="ajaxjs-btn saveBtn">保存</button>
+			<button class="ajaxjs-btn perviewBtn">预览</button>
 		</div>
 		<%
 			// 是否不允许编辑的？

@@ -28,6 +28,11 @@ import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.web.WebUtil;
 
+/**
+ * 
+ * @author sp42 frank@ajaxjs.com
+ *
+ */
 @Controller
 @Path("/admin/gallery")
 public class BaseGallery implements IController {

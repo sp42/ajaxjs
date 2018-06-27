@@ -2,7 +2,7 @@
 <%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <!DOCTYPE html>
 <html>	
-	<commonTag:head lessFile="/asset/common/less/admin.less">
+	<commonTag:head lessFile="/asset/common/less/admin.less" title="浏览页面以选择编辑">
 		<style type="text/css">
 			html{
 				height:100%;
@@ -28,7 +28,7 @@
 	</commonTag:head>
 	<body>
 		<button class="ajaxjs-btn">编辑此页面</button>
-		<iframe src="../../"></iframe>
+		<iframe src="${empty param.url ? '../../' :  param.url}"></iframe>
 		
 		<script>
 			document.querySelector('button').onclick = function() {
@@ -36,7 +36,7 @@
 				// 去掉 dom 返回的前缀
 				url = url.replace(/http:\/\/[^\/]*/, '');
 				url = url.replace('${pageContext.request.contextPath}', '');
-				window.location.assign('loadPage/edit.do?url=' + url);
+				window.location.assign('loadPage/?url=' + url);
 			}
 		</script>
 	</body>

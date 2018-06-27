@@ -33,41 +33,68 @@ import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.WebUtil;
 
+/**
+ * 页面编辑器
+ * 
+ * @author sp42 frank@ajaxjs.com
+ *
+ */
 @Controller
 public abstract class BasePageEditor implements IController, Constant {
 	private static final LogHelper LOGGER = LogHelper.getLog(BasePageEditor.class);
 
+	/**
+	 * 浏览页面，加载一个含有 iframe 元素的页面。 对该页面你可以传入 url 参数指定 root 地址，否则就是 ../../，即 ${empty
+	 * param.url ? '../../' : param.url}
+	 * 
+	 * @return iframe 元素的页面模版地址
+	 */
 	@GET
 	public String show() {
 		return common_jsp_perfix + "pageEditor/loadIframe.jsp";
 	}
 
+	/**
+	 * 编辑页面，加载一个含有 HTMLEditor 编辑的页面
+	 * 
+	 * @param request
+	 *            请求对象
+	 * @return 含有 HTMLEditor 编辑页面地址
+	 */
 	@GET
 	@Path("loadPage")
 	public String loadPage(HttpServletRequest request) {
 		if (request.getParameter("url") == null)
-			throw new NullPointerException("缺少必填参数 url！");
+			throw new IllegalArgumentException("缺少必填参数 url！");
 
 		String path = request.getParameter("url");
 
 		try {
 			path = getFullPathByRequestUrl(WebUtil.Mappath(request, path));
-			request.setAttribute("contentBody", read_jsp_fileContent(path));
+			String contentBody = read_jsp_fileContent(path);
+			request.setAttribute("contentBody", contentBody);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 
 		return common_jsp_perfix + "pageEditor/editor.jsp";
 	}
 
+	/**
+	 * 保存编辑后的内容
+	 * 
+	 * @param request
+	 *            请求对象，必填 url 和 contentBody 两个参数
+	 * @return JSON 结果
+	 */
 	@POST
 	public String save(HttpServletRequest request) {
 		try {
 			if (request.getParameter("url") == null)
-				throw new NullPointerException("缺少必填参数 url！");
+				throw new IllegalArgumentException("缺少必填参数 url！");
 
 			if (request.getParameter("contentBody") == null)
-				throw new NullPointerException("缺少必填参数 contentBody！");
+				throw new IllegalArgumentException("缺少必填参数 contentBody！");
 
 			String contentBody = request.getParameter("contentBody"), path = WebUtil.Mappath(request, request.getParameter("url"));
 
@@ -75,6 +102,7 @@ public abstract class BasePageEditor implements IController, Constant {
 
 			return String.format(json_ok, "修改页面成功！");
 		} catch (Throwable e) {
+			LOGGER.warning(e);
 			return String.format(json_not_ok, e.toString());
 		}
 	}
@@ -154,7 +182,7 @@ public abstract class BasePageEditor implements IController, Constant {
 	}
 
 	/**
-	 * 获取指定目录内的图片 目录有 folder 参数指定
+	 * 获取指定目录内的图片 目录有 folder 参数指定 TODO
 	 * 
 	 * @param folder
 	 *            包含图片的目录
@@ -228,12 +256,12 @@ public abstract class BasePageEditor implements IController, Constant {
 		return json;
 	}
 
-//	public void write() {
-//		if (request.hasRoute("save")) {
-//			save_jsp_fileContent();
-//			response.outputAction();
-//		} else if (request.hasRoute("upload")) {
-//			response.outputJSON(uploadFile());
-//		}
-//	}
+	//	public void write() {
+	//		if (request.hasRoute("save")) {
+	//			save_jsp_fileContent();
+	//			response.outputAction();
+	//		} else if (request.hasRoute("upload")) {
+	//			response.outputJSON(uploadFile());
+	//		}
+	//	}
 }
