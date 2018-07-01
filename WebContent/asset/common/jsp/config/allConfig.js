@@ -93,6 +93,9 @@ function it(json, fn, parentEl) {
 
 			var html = '<div class="valueHolder">';
 			
+			if(scheme){ // 没有说明，忽略
+			}
+			
 			switch (scheme.ui) {
 				case 'textarea':
 					html += '<textarea name="'+namespaces+'">' + el + '</textarea>';
@@ -120,7 +123,7 @@ function it(json, fn, parentEl) {
 
 			if (scheme.ui == 'htmlEditor')
 				initHtmlEditor(li, el, namespaces);
-
+			
 			fn(i, el);
 		}
 

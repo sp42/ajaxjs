@@ -35,8 +35,14 @@
 			option:['true=是', 'false=否', 'null=自动']
 	},
 	"data" : {
-		"newsCatalog_Id" : 6,
-		"jobCatalog_Id" :7
+		"newsCatalog_Id" :  {
+			"name" : "新闻分类父 id",
+			"type": "number"
+		},
+		"jobCatalog_Id" : {
+			"name" : "招聘分类父 id",
+			"type": "number"
+		}
 	},
 	"uploadFile" : {
 		"MaxTotalFileSize" : {

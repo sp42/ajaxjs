@@ -45,7 +45,7 @@ import com.ajaxjs.util.io.resource.Scanner;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
- * MVC 分发器
+ * MVC 分发器，控制器核心类
  * 
  * @author Sp42 frank@ajaxjs.com
  */
@@ -65,7 +65,7 @@ public class MvcDispatcher implements Filter {
 			String className = getClassName(resourceFile, packageJavaName);
 			Class<?> clazz = NewInstance.getClassByName(className);
 
-//			LOGGER.info("正在检查类：{0}, 如果该类是 IController 的实例，那么将被收集起来。", className);
+			//			LOGGER.info("正在检查类：{0}, 如果该类是 IController 的实例，那么将被收集起来。", className);
 			if (IController.class.isAssignableFrom(clazz)) {
 				target.add(clazz);// 添加到集合中去
 			}
@@ -76,7 +76,7 @@ public class MvcDispatcher implements Filter {
 		public void onJarAdding(Set target, String resourcePath) {
 			Class<?> clazz = NewInstance.getClassByName(resourcePath);
 
-//			LOGGER.info("正在检查类：{0}, 如果该类是 IController 的实例，那么将被收集起来。", resourcePath);
+			//			LOGGER.info("正在检查类：{0}, 如果该类是 IController 的实例，那么将被收集起来。", resourcePath);
 			if (IController.class.isAssignableFrom(clazz)) {
 				target.add(clazz);// 添加到集合中去
 			}
@@ -85,6 +85,9 @@ public class MvcDispatcher implements Filter {
 
 	/**
 	 * 初始化这个过滤器
+	 * 
+	 * @param fConfig
+	 *            过滤器配置
 	 */
 	@Override
 	public void init(FilterConfig fConfig) throws ServletException {
@@ -97,6 +100,11 @@ public class MvcDispatcher implements Filter {
 		scannController(config);
 	}
 
+	/**
+	 * 
+	 * @param config
+	 *            配置
+	 */
 	private static void doIoc(Map<String, String> config) {
 		if (config == null)
 			return;
@@ -108,18 +116,24 @@ public class MvcDispatcher implements Filter {
 				BeanContext.me().init(packageName);
 		}
 	}
-	
+
+	/**
+	 * 扫描控制器
+	 * 
+	 * @param config
+	 *            配置
+	 */
 	private static void scannController(Map<String, String> config) {
 		if (config != null && config.get("controller") != null) {
 			String str = config.get("controller");
-			
+
 			IControllerScanner cS = new IControllerScanner(); // 定义一个扫描器，专门扫描 IController
-			
+
 			for (String packageName : StringUtil.split(str)) {
 				Scanner scaner = new Scanner(cS);
 				@SuppressWarnings("unchecked")
 				Set<Class<IController>> IControllers = (Set<Class<IController>>) scaner.scan(packageName);
-				
+
 				for (Class<IController> clz : IControllers)
 					ControllerScanner.add(clz);
 			}
@@ -148,14 +162,14 @@ public class MvcDispatcher implements Filter {
 		String uri = request.getFolder(), httpMethod = request.getMethod();
 
 		Matcher match = id.matcher(uri);
-		if(match.find()) {
+		if (match.find()) {
 			uri = match.replaceAll("/{id}/");
 		}
-		
+
 		Action action = ControllerScanner.find(uri);
 		Method method = getMethod(action, httpMethod);// 要执行的方法
 		IController controller = action.controller;
-		
+
 		if (method != null && controller != null) {
 			dispatch(request, response, controller, method);
 			return; // 终止当前 servlet 请求
@@ -167,6 +181,14 @@ public class MvcDispatcher implements Filter {
 		chain.doFilter(req, resp);// 不要传 MvcRequest，以免入侵其他框架
 	}
 
+	/**
+	 * 分发
+	 * 
+	 * @param request
+	 * @param response
+	 * @param controller
+	 * @param method
+	 */
 	private static void dispatch(MvcRequest request, MvcOutput response, IController controller, Method method) {
 		MvcRequest.setHttpServletRequest(request);
 		MvcRequest.setHttpServletResponse(response);
@@ -175,18 +197,18 @@ public class MvcDispatcher implements Filter {
 
 		boolean isDoFilter = !CollectionUtil.isNull(filterActions), isSkip = false; // 是否中止控制器方法调用，由拦截器决定
 		Throwable filterEx = null;
-		
+
 		if (isDoFilter) {
 			try {
 				for (FilterAction filterAction : filterActions) {
 					isSkip = !filterAction.before(request, response, controller); // 相当于 AOP 前置
 				}
-			} catch(Throwable e) {
+			} catch (Throwable e) {
 				isSkip = true;
 				filterEx = e;
 			}
 		}
-		
+
 		Object result = null;
 		ModelAndView model = null;
 
@@ -206,23 +228,23 @@ public class MvcDispatcher implements Filter {
 		if (isDoFilter)
 			for (FilterAction filterAction : filterActions)
 				filterAction.after(request, response, controller, isSkip, filterEx); // 后置调用
-		
+
 		if (!isSkip) {
 			response.resultHandler(result, request, model);
 		}
 
 		MvcRequest.clean();
 	}
-	
+
 	/**
-	 * 初始化拦截器
-	 * TODO 改为 IOC 更节省资源
+	 * 初始化拦截器 TODO 改为 IOC 更节省资源
+	 * 
 	 * @param method
 	 * @return
 	 */
 	private static FilterAction[] getFilterActions(Method method) {
 		FilterAction[] filterActions = null; // 拦截器 
-		
+
 		if (method.getAnnotation(MvcFilter.class) != null) {
 			Class<? extends FilterAction>[] clzs = method.getAnnotation(MvcFilter.class).before();
 			filterActions = new FilterAction[clzs.length];
@@ -232,12 +254,12 @@ public class MvcDispatcher implements Filter {
 				filterActions[i++] = NewInstance.newInstance(clz);
 			}
 		}
-		
+
 		return filterActions;
 	}
 
 	private static final Pattern id = Pattern.compile("/\\d+/");
-	
+
 	private static final Pattern p = Pattern.compile("\\.jpg|\\.png|\\.gif|\\.js|\\.css|\\.ico|\\.jpeg|\\.htm|\\.swf|\\.txt|\\.mp4|\\.flv");
 
 	/**

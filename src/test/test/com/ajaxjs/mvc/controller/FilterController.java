@@ -8,6 +8,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 
 import com.ajaxjs.mvc.controller.IController;
+import com.ajaxjs.mvc.filter.AesFilter;
 import com.ajaxjs.mvc.filter.CaptchaFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 
@@ -25,6 +26,13 @@ public class FilterController implements IController {
 	@Path("captcha")
 	@MvcFilter(before = CaptchaFilter.class)
 	public String captcha() {
+		return "html::Hello World!";
+	}
+	
+	@GET
+	@Path("api")
+	@MvcFilter(before = AesFilter.class)
+	public String aes() {
 		return "html::Hello World!";
 	}
 
