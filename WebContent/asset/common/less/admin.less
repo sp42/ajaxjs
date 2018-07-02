@@ -159,6 +159,7 @@ body.admin-shell {
 
 header.top {
 	padding: 2%;
+	padding-bottom: 1.5%;
 	h4 {
 	}
 
@@ -190,6 +191,7 @@ header.top {
 	width: 90%;
 	margin: 0 auto;
 	padding: 1%;
+	padding-top: 0;
 	text-align: right;
 	form {
 		display: inline;
@@ -283,13 +285,16 @@ header.top {
 	position: relative;
 	li {
 		overflow: hidden;
-		background-color: white;
+		background-color: #e3e3e3;
 		box-sizing: border-box;
 		padding-left: 10px;
 		min-height: 38px;
 		line-height: 38px;
 		border-top: 1px solid white;
 		border-bottom: 1px solid lightgray;
+		&:first-child {
+			border-top: 0;
+		}
 		&:last-child {
 			border-bottom: 0;
 		}

@@ -65,7 +65,7 @@
 	</script>
 	<script src="${pageContext.request.contextPath}/asset/common/js/libs/less.min.js"></script>
 <%}else { %>
-	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/asset/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/asset/css/${empty lessFile ? 'main' : lessFile.replaceAll("(?:.*/)(\\w+).less", "$1")}.css" />
 <%} %>
     <script src="${commonAsset}js/ajaxjs-base.js"></script>
     <script src="${commonAsset}js/ajaxjs-list.js"></script>

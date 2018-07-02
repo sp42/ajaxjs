@@ -4,7 +4,20 @@
 <html>
 	<commonTag:head lessFile="/asset/common/less/admin.less" title="网站配置" />
 <body class="configForm admin-entry-form">
-	<h3>网站配置</h3>
+	<header class="top">
+		<div>
+			<a href="#" target="_blank">
+				<img width="12" src="data:image/gif;base64,R0lGODlhEAAQAIABAAAAAP///yH5BAEAAAEALAAAAAAQABAAAAImjG+gq+je3gOBWURrlvVEuWlcKE4T2Xkql6zshkLuOIO1mVj6VgAAOw==" />
+				新窗口打开
+			</a>
+		</div>
+		
+		<fieldset>
+			<legend>
+				网站配置
+			</legend>
+		</fieldset>
+	</header>
 	<form method="POST" action="action.do">
 		<div class="row">
 			<dl>

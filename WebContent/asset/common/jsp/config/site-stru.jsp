@@ -4,9 +4,21 @@
 <html>
 	<commonTag:head lessFile="/asset/common/less/admin.less" title="网站结构" />
 <body class="configForm admin-entry-form">
-	<h3>网站结构</h3>
-	<div class="tree">
-	
+	<header class="top">
+		<div>
+			<a href="#" target="_blank">
+				<img width="12" src="data:image/gif;base64,R0lGODlhEAAQAIABAAAAAP///yH5BAEAAAEALAAAAAAQABAAAAImjG+gq+je3gOBWURrlvVEuWlcKE4T2Xkql6zshkLuOIO1mVj6VgAAOw==" />
+				新窗口打开
+			</a>
+		</div>
+		
+		<fieldset>
+			<legend>
+				网站结构
+			</legend>
+		</fieldset>
+	</header>
+	<div class="tree" style="margin:0 auto;">
 		<div class="tooltip tipsNote hide">
 			<div class="aj-arrow toLeft"></div>
 			<span>用户名等于账号名；不能与现有的账号名相同；注册后不能修改；</span> fdsfdfd

@@ -16,12 +16,12 @@
 			<legend>
 				全局配置：<span>请点击有+号菜单项以展开下一级的内容</span>
 			</legend>
-		</fieldset>
+		</fieldset> 
 	</header>
 	
 	
-	<button onclick="save();return false;" class="ajaxjs-btn" style="margin-left: 30px;">保存</button>
 	<form>
+		<button onclick="save();return false;" class="ajaxjs-btn" style="margin-left: 30px;">保存</button>
 		<div class="tree">
 			<div class="tipsNote hide">
 				<div class="aj-arrow toLeft"></div>
@@ -96,7 +96,7 @@
 		</ul>
 
 		<div class="editorBody">
-			<iframe src="../../public_service?action=htmleditor_iframe"></iframe>
+			<iframe src="about:blank"></iframe>
 			&lt;textarea class="hide htmlEditorTextarea" name=""&gt;&lt;/textarea&gt;
 		</div>
 	</div>

@@ -115,7 +115,14 @@ public class ConfigService {
 	 * @return 配置内容
 	 */
 	public static boolean getValueAsBool(String key) {
-		return true; // Value.TypeConvert(flatConfig.get(key), boolean.class);
+		Object v = flatConfig.get(key);
+		
+		if (v == null) {
+			LOGGER.warning("没发现配置 " + key);
+			return false;
+		}
+		
+		return Value.TypeConvert(flatConfig.get(key), boolean.class);
 	}
 
 	/**
@@ -128,11 +135,15 @@ public class ConfigService {
 	public static int getValueAsInt(String key) {
 		// js number 在 java 里面为 double 转换一下
 		Object number = flatConfig.get(key);
-		
-		if(number instanceof Double) {
-			number = Value.double2int((Double)number);
+
+		if (number == null) {
+			LOGGER.warning("没发现配置 " + key);
+			return 0;
 		}
-		
+
+		if (number instanceof Double)
+			number = Value.double2int((Double) number);
+
 		return Value.TypeConvert(number, int.class);
 	}
 
@@ -144,7 +155,14 @@ public class ConfigService {
 	 * @return 配置内容
 	 */
 	public static String getValueAsString(String key) {
-		return Value.TypeConvert(flatConfig.get(key), String.class);
+		Object v = flatConfig.get(key);
+		
+		if (v == null) {
+			LOGGER.warning("没发现配置 " + key);
+			return null;
+		}
+		
+		return Value.TypeConvert(v, String.class);
 	}
 
 	/**
@@ -168,8 +186,8 @@ public class ConfigService {
 	}
 
 	/**
-	 * load the json config file to the JS Runtime, and let the new values put
-	 * into it, finally save this new json file
+	 * load the json config file to the JS Runtime, and let the new values put into
+	 * it, finally save this new json file
 	 * 
 	 * @param map
 	 *            A map that contains all new config

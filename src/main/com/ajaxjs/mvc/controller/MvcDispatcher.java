@@ -317,4 +317,8 @@ public class MvcDispatcher implements Filter {
 	@Override
 	public void destroy() {
 	}
+	
+	public static void main(String[] args) {
+		System.out.println("/dsds/sdsd/admin.less".replaceAll("(?:.*/)(\\w+).less", "$1"));
+	}
 }
