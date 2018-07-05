@@ -31,19 +31,24 @@ import com.ajaxjs.mvc.controller.MvcOutput;
  *
  */
 @Controller
-public class BaseCaptchaController implements IController {
+public abstract class BaseCaptchaController implements IController {
 	/**
 	 * SESSION 的键值
 	 */
 	public static final String SESSION_KEY = "CaptchaSession";
 
+	/**
+	 * 表单中指定的字段名称
+	 */
 	public static final String submitedFieldName = "captchaImgCode";
 
 	/**
 	 * 生成验证码图片
 	 * 
 	 * @param req
+	 *            请求对象
 	 * @param response
+	 *            响应对象
 	 */
 	@GET
 	public void captchaImg(HttpServletRequest req, HttpServletResponse response) {
