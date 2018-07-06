@@ -64,7 +64,7 @@ public class CaptchaFilter implements FilterAction {
 	@Override
 	public void after(MvcRequest request, MvcOutput response, IController controller, boolean isSkip, Throwable filterEx) {
 		if(isSkip || filterEx != null) {
-			response.resultHandler("json::" + String.format(Constant.json_not_ok, filterEx.getMessage()), request, null);
+			response.resultHandler(String.format(Constant.json_not_ok, filterEx.getMessage()), request, null);
 		}
 	}
 }

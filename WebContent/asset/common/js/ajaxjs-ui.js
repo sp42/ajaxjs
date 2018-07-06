@@ -79,7 +79,7 @@ ajaxjs.msg = function (text, showTime) {
 }
 
 /**
- * 表单验证
+ * 基于 HTML5 增强的表单验证
  */
 ajaxjs.formValid = function FormValid(formEl, cfg) {
 	this.cfg = cfg;
