@@ -3,12 +3,12 @@
 	"id" : "about",
 	"children" : [ 
 		{
-			name : "公司历程",
-			id : "history"
+			"name" : "公司历程",
+			"id" : "history"
 		},
 		{
-			name : "企业文化",
-			id : "cluture"
+			"name" : "企业文化",
+			"id" : "cluture"
 		}
 	]
 }, {
@@ -16,8 +16,8 @@
 	"id" : "product",
 	"children" : [ 
 		{
-			name : "最新美食",
-			id : "new",
+			"name" : "最新美食",
+			"id" : "new",
 			"children" : [
 				{
 					"id" : "yuecai",
@@ -30,8 +30,8 @@
 			]
 		},
 		{
-			name : "热门菜谱",
-			id : "hot"
+			"name" : "热门菜谱",
+			"id" : "hot"
 		}
 	]
 }, 

@@ -16,7 +16,7 @@
 		"MaxTotalFileSize" : 1024000, 
 		"MaxSingleFileSize" : 1024000, 
 		"isFileOverwrite" : true, 
-		"SaveFolder" : "C://temp//", 
+		"SaveFolder" : "C://temp//"
 	},
 	"testServer" : {
 		"mysql" : {
@@ -29,7 +29,7 @@
 	"user": {
 		"login" : {
 			"loginType" : 7,
-			"passWordLoginType" : 3,
+			"passWordLoginType" : 3
 		},
 		"resetPassword" : {
 			"mailBody" : "<p>hihihi</p>"
