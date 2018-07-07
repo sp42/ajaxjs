@@ -42,6 +42,13 @@
 		"jobCatalog_Id" : {
 			"name" : "招聘分类父 id",
 			"type": "number"
+		},
+		"database_node" :  {
+			"name" : "调试模式",
+			"tip" : "是否打开调试模式 true=调试中，false=生产环境，null=自动识别",
+			"type": "string",
+			"ui": "radio",
+			"option":["true=是", "false=否", "null=自动"]
 		}
 	},
 	"uploadFile" : {
@@ -56,7 +63,16 @@
 			"name" : "保存目录",
 			"tip"  : "上传图片的保存目录",
 			"ui": "select",
-			"option":["//temp//=本地测试 for Mac：//temp//", "C://temp//=本地测试 for Win：C://temp//", "//dczx//=正式服务器 //sds//"]
+			"option":["//temp//=本地测试 for Mac：//temp//","C://temp//=本地测试 for Win：C://temp//", "//dczx//=正式服务器 //sds//"]
+		}, 
+		"isUsingRelativePath" : {
+			"name" : "是否使用相对路径",
+			"tip"  : "如果是则 SaveFolder 项无效，使用 relativePath 得到的绝对路径来保存",
+			"ui": "radio"
+		},
+		"relativePath" : {
+			"name" : "相对目录",
+			"tip"  : "外界访问图片的目录"
 		}
 	},
 	"user": {
