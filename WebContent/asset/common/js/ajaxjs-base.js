@@ -377,6 +377,19 @@ ajaxjs.xhr.post = ajaxjs.xhr.request.delegate(null, null, null, null, 'POST');
 ajaxjs.xhr.put = ajaxjs.xhr.request.delegate(null, null, null, null, 'PUT');
 ajaxjs.xhr.dele = ajaxjs.xhr.request.delegate(null, null, null, null, 'DELETE');
 
+// 默认的回调，有专属的字段并呼叫专属的控件
+ajaxjs.xhr.defaultCallBack = function(json) {
+	if(json) {
+		if(json.isOk) {
+			ajaxjs.alert(json.msg || '操作成功！');
+		} else {
+			ajaxjs.alert(json.msg || '执行失败！原因未知！');
+		}
+	} else {
+		console.log('ServerSide Error!');
+	}
+}
+
 //--------------------------------------------------------
 //拖放/触控 Drag&Drop
 //例子 http://i.ifeng.com/ent/ylch/news?ch=ifengweb_2014&aid=91654101&mid=5e7Mzq&vt=5

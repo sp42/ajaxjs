@@ -35,6 +35,7 @@ import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.FilterAction;
 import com.ajaxjs.mvc.filter.MvcFilter;
+import com.ajaxjs.simpleApp.Constant;
 import com.ajaxjs.util.reflect.ExecuteMethod;
 import com.ajaxjs.util.reflect.NewInstance;
 import com.ajaxjs.util.StringUtil;
@@ -156,19 +157,23 @@ public class MvcDispatcher implements Filter {
 		MvcRequest.setHttpServletRequest(request);
 		MvcRequest.setHttpServletResponse(response);
 
+		Throwable err = null; // 收集错误信息
+
 		FilterAction[] filterActions = getFilterActions(method);
 
 		boolean isDoFilter = !CollectionUtil.isNull(filterActions), isSkip = false; // 是否中止控制器方法调用，由拦截器决定
-		Throwable filterEx = null;
 
 		if (isDoFilter) {
-			try {
-				for (FilterAction filterAction : filterActions) {
+			for (FilterAction filterAction : filterActions) {
+				try {
 					isSkip = !filterAction.before(request, response, controller); // 相当于 AOP 前置
+				} catch (Throwable e) {
+					isSkip = true;
+					err = e;
 				}
-			} catch (Throwable e) {
-				isSkip = true;
-				filterEx = e;
+
+				if (isSkip)
+					break;
 			}
 		}
 
@@ -176,22 +181,29 @@ public class MvcDispatcher implements Filter {
 		ModelAndView model = null;
 
 		if (!isSkip) {
-			if (method.getParameterTypes().length > 0) {
-				Object[] args = RequestParam.getArgs(request, response, method);
-				model = findModel(args);
+			try {
+				if (method.getParameterTypes().length > 0) {
+					Object[] args = RequestParam.getArgs(request, response, method);
+					model = findModel(args);
 
-				// 通过反射执行控制器方法:调用反射的 Reflect.executeMethod 方法就可以执行目标方法，并返回一个结果。
-				result = ExecuteMethod.executeMethod(controller, method, args);
-			} else {
-				result = ExecuteMethod.executeMethod(controller, method);// 方法没有参数
+					// 通过反射执行控制器方法:调用反射的 Reflect.executeMethod 方法就可以执行目标方法，并返回一个结果。
+					result = ExecuteMethod.executeMethod_Throwable(controller, method, args);
+				} else {
+					result = ExecuteMethod.executeMethod_Throwable(controller, method);// 方法没有参数
+				}
+			} catch (Throwable e) {
+				err = e;
 			}
 		}
 
 		if (isDoFilter)
 			for (FilterAction filterAction : filterActions)
-				filterAction.after(request, response, controller, isSkip, filterEx); // 后置调用
+				filterAction.after(request, response, controller, isSkip); // 后置调用
 
-		if (!isSkip) {
+		if (err != null) { // 有未处理的异常
+			// 默认返回 json
+			response.resultHandler(String.format(Constant.json_not_ok, err.getMessage()), request, model);
+		} else if (!isSkip) {
 			response.resultHandler(result, request, model);
 		}
 
@@ -222,7 +234,7 @@ public class MvcDispatcher implements Filter {
 
 	private static final Pattern id = Pattern.compile("/\\d+/");
 
-	private static final Pattern p = Pattern.compile("\\.jpg|\\.png|\\.gif|\\.js|\\.css|\\.ico|\\.jpeg|\\.htm|\\.swf|\\.txt|\\.mp4|\\.flv");
+	private static final Pattern p = Pattern.compile("\\.jpg|\\.png|\\.gif|\\.js|\\.css|\\.less|\\.ico|\\.jpeg|\\.htm|\\.swf|\\.txt|\\.mp4|\\.flv");
 
 	/**
 	 * Check the url if there is static asset.
@@ -265,7 +277,8 @@ public class MvcDispatcher implements Filter {
 	 * 根据 httpMethod 请求方法返回控制器
 	 * 
 	 * @param action
-	 * @param httpMethod HTTP 请求的方法
+	 * @param httpMethod
+	 *            HTTP 请求的方法
 	 * @return 控制器
 	 */
 	private static IController getController(Action action, String httpMethod) {
@@ -295,7 +308,7 @@ public class MvcDispatcher implements Filter {
 			if (obj instanceof ModelAndView)
 				return (ModelAndView) obj;
 		}
-		
+
 		return null;
 	}
 

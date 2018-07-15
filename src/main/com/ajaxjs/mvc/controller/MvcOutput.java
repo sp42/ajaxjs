@@ -43,7 +43,7 @@ import com.ajaxjs.util.logger.LogHelper;
  */
 public class MvcOutput extends HttpServletResponseWrapper {
 	private static final LogHelper LOGGER = LogHelper.getLog(MvcDispatcher.class);
-	
+
 	/**
 	 * 创建一个 Output 对象
 	 * 
@@ -115,7 +115,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 		if (getOutput_Map() != null) { // Map 的话转变为 json 输出
 			setJson(true).setOutput(JsonHelper.stringifyMap(getOutput_Map()));
 		} else if (getOutput_Obj() != null) {// map or object 二选其一
-//			setJson(true).setOutput(JsonHelper.stringify_object(getOutput_Obj()));
+			//			setJson(true).setOutput(JsonHelper.stringify_object(getOutput_Obj()));
 		}
 
 		if (isJson()) {
@@ -139,10 +139,10 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	public void go(HttpServletRequest request) {
 		if (getTemplate() != null) {
 			request.setAttribute("jsp_path", getTemplate()); // 保存路径以便调试
-			
+
 			try {
 				RequestDispatcher rd = request.getRequestDispatcher(getTemplate());// JSP 路径
-				
+
 				if (rd != null)
 					rd.forward(request, this); // 跳转至 view 层
 			} catch (ServletException | IOException e) {
@@ -150,10 +150,10 @@ public class MvcOutput extends HttpServletResponseWrapper {
 			}
 		}
 	}
-	
+
 	/**
-	 * 一般一个请求希望返回一个页面，这时就需要控制器返回一个模板渲染输出了。 中间执行逻辑完成，最后就是控制输出（响应）
-	 * 可以跳转也可以输出模板渲染器（即使是 json 都是 模板渲染器 ）
+	 * 一般一个请求希望返回一个页面，这时就需要控制器返回一个模板渲染输出了。 中间执行逻辑完成，最后就是控制输出（响应） 可以跳转也可以输出模板渲染器（即使是
+	 * json 都是 模板渲染器 ）
 	 * 
 	 * @param result
 	 *            模板路径是指页面模板（比如 jsp，velocity模板等）的目录文件名
@@ -171,7 +171,6 @@ public class MvcOutput extends HttpServletResponseWrapper {
 
 		if (result != null && result instanceof String) {
 			String str = (String) result, html = "html::";
-
 
 			if (str.startsWith(html)) {
 				setSimpleHTML(true).setOutput(str.replace(html, "")).go();
@@ -214,8 +213,8 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * JSP 需要加上下面代码,运行时才不会出现 java.lang.IllegalStateException: getOutputStream()
-	 * has already been called ..........等异常
+	 * JSP 需要加上下面代码,运行时才不会出现 java.lang.IllegalStateException: getOutputStream() has
+	 * already been called ..........等异常
 	 * 
 	 * JSP内置对象out和response.getWrite()的区别
 	 * http://blog.sina.com.cn/s/blog_7217e4320101l8gq.html
@@ -235,7 +234,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 
 			pageContext.getOut().clear();
 			pageContext.pushBody();
-//			out = pageContext.pushBody();
+			//			out = pageContext.pushBody();
 		} catch (IOException e) {
 			LOGGER.warning(e);
 		}

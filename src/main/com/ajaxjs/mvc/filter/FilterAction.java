@@ -51,5 +51,6 @@ public interface FilterAction {
 	 * @param isSkip
 	 *            是否已经中止控制器方法的执行，也就是 before() 返回的值
 	 */
-	public void after(MvcRequest request, MvcOutput response, IController controller, boolean isSkip, Throwable filterEx);
+	public void after(MvcRequest request, MvcOutput response, IController controller, boolean isSkip);
+
 }

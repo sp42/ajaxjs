@@ -18,7 +18,6 @@ package com.ajaxjs.mvc.filter;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.simpleApp.Constant;
 
 /**
  * 图形验证码的拦截器
@@ -33,16 +32,16 @@ public class CaptchaFilter implements FilterAction {
 	public static final String SESSION_KEY = "rand";
 
 	public static final String submitedFieldName = "captchaCode";
-	
+
 	@Override
 	public boolean before(MvcRequest request, MvcOutput response, IController controller) {
 		String captchaCode = request.getParameter(submitedFieldName);
-		
+
 		String rand = (String) request.getSession().getAttribute(SESSION_KEY);
 
 		System.out.println("rand:" + rand);
 		System.out.println("CaptchaCode:" + captchaCode);
-		
+
 		boolean isCaptchaPass = false;
 
 		if (rand == null)
@@ -55,16 +54,13 @@ public class CaptchaFilter implements FilterAction {
 				throw new IllegalAccessError("验证码不正确");
 		}
 
-		if (isCaptchaPass) 
+		if (isCaptchaPass)
 			request.getSession().removeAttribute(SESSION_KEY);// 通过之后记得要 清除验证码
-		
+
 		return isCaptchaPass;
 	}
 
 	@Override
-	public void after(MvcRequest request, MvcOutput response, IController controller, boolean isSkip, Throwable filterEx) {
-		if(isSkip || filterEx != null) {
-			response.resultHandler(String.format(Constant.json_not_ok, filterEx.getMessage()), request, null);
-		}
+	public void after(MvcRequest request, MvcOutput response, IController controller, boolean isSkip) {
 	}
 }

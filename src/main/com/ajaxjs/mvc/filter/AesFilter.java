@@ -75,7 +75,7 @@ public class AesFilter implements FilterAction {
 	final int d = 15 * 60000; // 15分钟
 
 	@Override
-	public void after(MvcRequest request, MvcOutput response, IController controller, boolean isSkip, Throwable filterEx) {
+	public void after(MvcRequest request, MvcOutput response, IController controller, boolean isSkip) {
 		if (request.getAttribute("errMsg") != null) {
 			response.resultHandler("redirect::" + Constant.paged_json_error, request, null);
 		}

@@ -14,7 +14,7 @@ public class Filter implements FilterAction {
 	}
 
 	@Override
-	public void after(MvcRequest request, MvcOutput response, IController controller, boolean isSkip, Throwable filterEx) {
+	public void after(MvcRequest request, MvcOutput response, IController controller, boolean isSkip) {
 		System.out.println("after");
 		
 	}
