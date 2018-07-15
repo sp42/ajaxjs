@@ -31,8 +31,9 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MvcFilter {
 	/**
+	 * MVC 的拦截器，可以多个，用 {} 表示数组
 	 * 
-	 * @return
+	 * @return MVC 的拦截器
 	 */
-	Class<? extends FilterAction>[] before();
+	Class<? extends FilterAction>[] filters();
 }

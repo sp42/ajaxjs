@@ -38,12 +38,13 @@ ajaxjs.alert = function(text, cfg) {
 	div.className = 'modal';
 	
 	if(cfg && cfg.isShowCloseBtn)
-		text += '<a href="#" oncclick="ajaxjs.modal()">关 闭</a>'
+		text += '<a href="#" onclick="ajaxjs.modal()">关 闭</a>'
 	div.innerHTML = '<div style="text-align:center;">' + text + '</div>';
 	div.onclick = function(e) {
 		var p = e.target; // check if in the box
 		if (p && p.className.indexOf('modal') != -1) {
 			p.die();
+			cfg && cfg.afterClose && cfg.afterClose();
 		}
 	}
 	

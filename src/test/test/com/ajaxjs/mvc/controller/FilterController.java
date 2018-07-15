@@ -17,21 +17,21 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 @Path("/filter")
 public class FilterController implements IController {
 	@GET
-	@MvcFilter(before = Filter.class)
+	@MvcFilter(filters = Filter.class)
 	public String showHTML() {
 		return "html::Hello World!";
 	}
 	
 	@GET
 	@Path("captcha")
-	@MvcFilter(before = CaptchaFilter.class)
+	@MvcFilter(filters = CaptchaFilter.class)
 	public String captcha() {
 		return "html::Hello World!";
 	}
 	
 	@GET
 	@Path("api")
-	@MvcFilter(before = AesFilter.class)
+	@MvcFilter(filters = AesFilter.class)
 	public String aes() {
 		return "html::Hello World!";
 	}

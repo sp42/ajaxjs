@@ -70,6 +70,7 @@ public class ControllerScanner {
 				action = urlMappingTree.get(topPath);
 			} else {
 				action = new Action();
+				action.path = topPath; // 需要吗？
 				urlMappingTree.put(topPath, action);
 			}
 		}
@@ -87,7 +88,7 @@ public class ControllerScanner {
 		parseSubPath(clz, action);
 
 		// 会打印控制器的总路径信息，不会不会打印各个方法的路径，太细了，日志也会相应地多
-		LOGGER.info("控制器已登记成功！The controller \"{0}\" (\"\\{1}\") was parsed and registered", clz.toString().replaceAll("class\\s", ""), topPath); // 控制器 {0} 所有路径（包括子路径）注册成功！
+		LOGGER.info("控制器已登记成功！The controller \"{0}\" (\"/{1}\") was parsed and registered", clz.toString().replaceAll("class\\s", ""), topPath); // 控制器 {0} 所有路径（包括子路径）注册成功！
 	}
 
 	/**
@@ -115,16 +116,18 @@ public class ControllerScanner {
 	 * Check out all methods which has Path annotation, then add the urlMapping.
 	 * 
 	 * @param clz
+	 *            控制器类
 	 * @param action
+	 *            父亲动作
 	 */
 	private static void parseSubPath(Class<? extends IController> clz, Action action) {
 		for (Method method : clz.getMethods()) {
 			Path subPath = method.getAnnotation(Path.class); // 看看这个控制器方法有木有 URL 路径的信息，若有，要处理
-			
+
 			if (subPath != null) {
 				String subPathValue = subPath.value();
-				subPathValue = subPathValue.replaceAll("^/", "");
-
+				subPathValue = subPathValue.replaceAll("^/", ""); // 一律不要前面的 /
+				 
 				// add sub action starts from parent Node, not the top node
 				if (action.children == null)
 					action.children = new HashMap<>();
@@ -149,17 +152,26 @@ public class ControllerScanner {
 	 */
 	private static void methodSend(Method method, Action action) {
 		if (method.getAnnotation(GET.class) != null) {
-			if (testIfEmpty(action.getMethod, action.path, "GET"))
+			if (testIfEmpty(action.getMethod, action.path, "GET")) {
 				action.getMethod = method;
+				action.getMethodController = action.controller;
+			}
 		} else if (method.getAnnotation(POST.class) != null) {
-			if (testIfEmpty(action.postMethod, action.path, "POST"))
+			if (testIfEmpty(action.postMethod, action.path, "POST")) {
 				action.postMethod = method;
+				action.postMethodController = action.controller;
+			}
 		} else if (method.getAnnotation(PUT.class) != null) {
-			if (testIfEmpty(action.putMethod, action.path, "PUT"))
+			if (testIfEmpty(action.putMethod, action.path, "PUT")) {
 				action.putMethod = method;
+				action.putMethodController = action.controller;
+			}
 		} else if (method.getAnnotation(DELETE.class) != null) {
-			if (testIfEmpty(action.deleteMethod, action.path, "DELETE"))
+			if (testIfEmpty(action.deleteMethod, action.path, "DELETE")) {
 				action.deleteMethod = method;
+				//				if (controller != null)
+				action.deleteMethodController = action.controller;
+			}
 		}
 	}
 
@@ -242,7 +254,7 @@ public class ControllerScanner {
 	 */
 	public static boolean testClass(Class<? extends IController> clz) {
 		if (clz.getAnnotation(Controller.class) == null) {// 获取注解对象
-//			LOGGER.warning("此非控制器！要我处理干甚！？This is NOT a Controller! 类：" + clz.getName());
+			//			LOGGER.warning("此非控制器！要我处理干甚！？This is NOT a Controller! 类：" + clz.getName());
 			return false;
 		}
 

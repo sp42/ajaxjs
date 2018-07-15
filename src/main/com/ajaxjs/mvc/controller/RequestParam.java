@@ -40,7 +40,7 @@ import com.ajaxjs.util.logger.LogHelper;
  */
 public class RequestParam {
 	private static final LogHelper LOGGER = LogHelper.getLog(RequestParam.class);
-	
+
 	/**
 	 * 对控制器的方法进行分析，看需要哪些参数。将得到的参数签名和请求过来的参数相匹配，再传入到方法中去执行。
 	 * 
@@ -72,7 +72,7 @@ public class RequestParam {
 				} else {
 					map = MapHelper.asObject(MapHelper.toMap(request.getParameterMap()), true);
 				}
-				
+
 				args.add(map);
 
 				if (map.size() == 0)
@@ -80,7 +80,7 @@ public class RequestParam {
 			} else if (clazz.equals(ModelAndView.class)) {
 				args.add(new ModelAndView()); // 新建 ModeView 对象
 			} else if (BaseModel.class.isAssignableFrom(clazz)) {// 实体类参数
-				args.add(request.getBean(clazz)); 
+				args.add(request.getBean(clazz));
 			} else { // 适配注解
 				Annotation[] annotations = annotation[i];
 				getArgValue(clazz, annotations, request, args, method);
@@ -89,7 +89,7 @@ public class RequestParam {
 
 		return args.toArray();
 	}
-	
+
 	/**
 	 * 根据注解和类型从 request 中取去参数值。 参数名字与 QueryParam 一致 或者 PathParam
 	 * 
@@ -102,12 +102,14 @@ public class RequestParam {
 	 * @param args
 	 *            参数列表
 	 * @param method
+	 *            控制器方法对象
 	 */
 	private static void getArgValue(Class<?> clz, Annotation[] annotations, MvcRequest request, ArrayList<Object> args, Method method) {
 		if (annotations.length > 0) {
 			boolean isGot = false; // 是否有 QueryParam 注解写好了
 
 			for (Annotation a : annotations) {
+				System.out.println(a);
 				if (a instanceof QueryParam) { // 找到匹配的参数，这是说控制器上的方法是期望得到一个 url query string 参数的
 					isGot = true;
 
@@ -138,8 +140,8 @@ public class RequestParam {
 					if (path != null) {
 						String paramName = ((PathParam) a).value(), value = request.getValueFromPath(path.value(), paramName);
 
-//						if(paramName.contains("{"))
-//							throw new RuntimeException("这里的参数不应该有 {xx} 尖括号");
+						//						if(paramName.contains("{"))
+						//							throw new RuntimeException("这里的参数不应该有 {xx} 尖括号");
 
 						if (clz == String.class) {
 							args.add(value);
@@ -154,7 +156,7 @@ public class RequestParam {
 					} else {
 						LOGGER.warning(new NullPointerException("控制器方法居然没有 PathParam 注解？？"));
 					}
-					
+
 					break;
 				}
 			}

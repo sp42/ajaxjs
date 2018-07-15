@@ -15,7 +15,6 @@
  */
 package com.ajaxjs.mvc.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -40,7 +39,6 @@ import com.ajaxjs.util.reflect.ExecuteMethod;
 import com.ajaxjs.util.reflect.NewInstance;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.collection.CollectionUtil;
-import com.ajaxjs.util.io.resource.ScanClass;
 import com.ajaxjs.util.io.resource.Scanner;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -53,41 +51,10 @@ public class MvcDispatcher implements Filter {
 	private static final LogHelper LOGGER = LogHelper.getLog(MvcDispatcher.class);
 
 	/**
-	 * Inner class for collecting IController
-	 * 
-	 * @author sp42 frank@ajaxjs.com
-	 *
-	 */
-	public static class IControllerScanner extends ScanClass {
-		@SuppressWarnings({ "rawtypes", "unchecked" })
-		@Override
-		public void onFileAdding(Set target, File resourceFile, String packageJavaName) {
-			String className = getClassName(resourceFile, packageJavaName);
-			Class<?> clazz = NewInstance.getClassByName(className);
-
-			//			LOGGER.info("正在检查类：{0}, 如果该类是 IController 的实例，那么将被收集起来。", className);
-			if (IController.class.isAssignableFrom(clazz)) {
-				target.add(clazz);// 添加到集合中去
-			}
-		}
-
-		@SuppressWarnings({ "rawtypes", "unchecked" })
-		@Override
-		public void onJarAdding(Set target, String resourcePath) {
-			Class<?> clazz = NewInstance.getClassByName(resourcePath);
-
-			//			LOGGER.info("正在检查类：{0}, 如果该类是 IController 的实例，那么将被收集起来。", resourcePath);
-			if (IController.class.isAssignableFrom(clazz)) {
-				target.add(clazz);// 添加到集合中去
-			}
-		}
-	}
-
-	/**
 	 * 初始化这个过滤器
 	 * 
 	 * @param fConfig
-	 *            过滤器配置
+	 *            过滤器配置，web.xml 中定义
 	 */
 	@Override
 	public void init(FilterConfig fConfig) throws ServletException {
@@ -101,17 +68,14 @@ public class MvcDispatcher implements Filter {
 	}
 
 	/**
+	 * 依赖注射扫描
 	 * 
 	 * @param config
-	 *            配置
+	 *            web.xml 中的配置，已经转为 Map
 	 */
 	private static void doIoc(Map<String, String> config) {
-		if (config == null)
-			return;
-
-		Object _doIoc = config.get("doIoc");
-		if (_doIoc != null) {
-			String doIoc = (String) _doIoc;
+		if (config != null && config.get("doIoc") != null) {
+			String doIoc = config.get("doIoc");
 			for (String packageName : StringUtil.split(doIoc))
 				BeanContext.me().init(packageName);
 		}
@@ -121,16 +85,16 @@ public class MvcDispatcher implements Filter {
 	 * 扫描控制器
 	 * 
 	 * @param config
-	 *            配置
+	 *            web.xml 中的配置，已经转为 Map
 	 */
 	private static void scannController(Map<String, String> config) {
 		if (config != null && config.get("controller") != null) {
 			String str = config.get("controller");
 
-			IControllerScanner cS = new IControllerScanner(); // 定义一个扫描器，专门扫描 IController
+			IControllerScanner scanner = new IControllerScanner(); // 定义一个扫描器，专门扫描 IController
 
 			for (String packageName : StringUtil.split(str)) {
-				Scanner scaner = new Scanner(cS);
+				Scanner scaner = new Scanner(scanner);
 				@SuppressWarnings("unchecked")
 				Set<Class<IController>> IControllers = (Set<Class<IController>>) scaner.scan(packageName);
 
@@ -143,8 +107,8 @@ public class MvcDispatcher implements Filter {
 	}
 
 	/**
-	 * 虽然 REST 风格的 URL 一般不含后缀，我们只能将 DispatcherServlet 映射到“/”，使之变为一个默认的 Servlet，
-	 * 这样，就可以对任意的 URL 进行处理，但是在处理 js/css 等静态文件十分不方便， 于是我们约定 *.do：后缀模式匹配。
+	 * 虽然 REST 风格的 URL 一般不含后缀，我们只能将 DispatcherServlet 映射到“/”，使之变为一个默认的 Servlet， 在处理
+	 * js/css 等静态文件有后缀，这样的话我们需要区分对待。
 	 */
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
@@ -168,14 +132,13 @@ public class MvcDispatcher implements Filter {
 
 		Action action = ControllerScanner.find(uri);
 		Method method = getMethod(action, httpMethod);// 要执行的方法
-		IController controller = action.controller;
+		IController controller = getController(action, httpMethod);
 
 		if (method != null && controller != null) {
 			dispatch(request, response, controller, method);
 			return; // 终止当前 servlet 请求
 		} else {
-			// Let it go, may be jsp/html/js/css/jpg..
-			// LOGGER.info("{0} {1} 控制器没有这个方法！", httpMethod, request.getRequestURI());
+			LOGGER.info("{0} {1} 控制器没有这个方法！", httpMethod, request.getRequestURI());
 		}
 
 		chain.doFilter(req, resp);// 不要传 MvcRequest，以免入侵其他框架
@@ -220,8 +183,7 @@ public class MvcDispatcher implements Filter {
 				// 通过反射执行控制器方法:调用反射的 Reflect.executeMethod 方法就可以执行目标方法，并返回一个结果。
 				result = ExecuteMethod.executeMethod(controller, method, args);
 			} else {
-				// 方法没有参数
-				result = ExecuteMethod.executeMethod(controller, method);
+				result = ExecuteMethod.executeMethod(controller, method);// 方法没有参数
 			}
 		}
 
@@ -246,7 +208,7 @@ public class MvcDispatcher implements Filter {
 		FilterAction[] filterActions = null; // 拦截器 
 
 		if (method.getAnnotation(MvcFilter.class) != null) {
-			Class<? extends FilterAction>[] clzs = method.getAnnotation(MvcFilter.class).before();
+			Class<? extends FilterAction>[] clzs = method.getAnnotation(MvcFilter.class).filters();
 			filterActions = new FilterAction[clzs.length];
 
 			int i = 0;
@@ -300,6 +262,28 @@ public class MvcDispatcher implements Filter {
 	}
 
 	/**
+	 * 根据 httpMethod 请求方法返回控制器
+	 * 
+	 * @param action
+	 * @param httpMethod HTTP 请求的方法
+	 * @return 控制器
+	 */
+	private static IController getController(Action action, String httpMethod) {
+		switch (httpMethod.toUpperCase()) {
+		case "GET":
+			return action.getMethodController;
+		case "POST":
+			return action.postMethodController;
+		case "PUT":
+			return action.putMethodController;
+		case "DELETE":
+			return action.deleteMethodController;
+		default:
+			return action.controller;
+		}
+	}
+
+	/**
 	 * 查找是 ModelAndView 类型的参数，返回之
 	 * 
 	 * @param args
@@ -311,14 +295,11 @@ public class MvcDispatcher implements Filter {
 			if (obj instanceof ModelAndView)
 				return (ModelAndView) obj;
 		}
+		
 		return null;
 	}
 
 	@Override
 	public void destroy() {
-	}
-	
-	public static void main(String[] args) {
-		System.out.println("/dsds/sdsd/admin.less".replaceAll("(?:.*/)(\\w+).less", "$1"));
 	}
 }
