@@ -194,7 +194,7 @@
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-data</artifactId>
-			<version>1.0.4</version>
+			<version>1.0.5</version>
 		</dependency>
 
 		<dependency>
