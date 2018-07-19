@@ -189,7 +189,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 				if (!str.endsWith(".jsp")) // 自动补充 .jsp 扩展名
 					str += ".jsp";
 
-				LOGGER.info("执行逻辑完成，现在控制输出（响应 JSP）" + result);
+				LOGGER.info("执行逻辑完成，现在控制输出（响应页面模版）" + result);
 				setTemplate(str).go(request);
 			}
 		}

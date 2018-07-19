@@ -68,7 +68,7 @@ function initHtmlEditor(li, value, namespaces) {
 		htmlEditor.setValue(value);
 		htmlEditor.sourceEditor.name = namespaces;
 		htmlEditor.sourceEditor.value = value;
-	});
+	}, 0);
 }
 
 function renderSelect(scheme, namespaces, tip, value) {

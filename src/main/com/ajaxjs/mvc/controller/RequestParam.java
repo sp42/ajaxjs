@@ -109,7 +109,6 @@ public class RequestParam {
 			boolean isGot = false; // 是否有 QueryParam 注解写好了
 
 			for (Annotation a : annotations) {
-				System.out.println(a);
 				if (a instanceof QueryParam) { // 找到匹配的参数，这是说控制器上的方法是期望得到一个 url query string 参数的
 					isGot = true;
 

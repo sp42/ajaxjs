@@ -1,130 +1,164 @@
 {
-	"site" : {
-		"titlePrefix" : {
-			"name" : "网站标题前缀",
-			"tip" : "放在 head title 标签中",
+	"site": {
+		"titlePrefix": {
+			"name": "网站标题前缀",
+			"tip": "放在 head title 标签中",
 			"type": "string",
 			"ui": "input_text"
 		},
-		"keywords" : {
-			"name" : "搜索关键字",
-			"tip" : "用于 SEO 关键字优化，以便于搜索引擎机器人查找、分类。多个关键字之间用英文 , 逗号分开",
+		"keywords": {
+			"name": "搜索关键字",
+			"tip": "用于 SEO 关键字优化，以便于搜索引擎机器人查找、分类。多个关键字之间用英文 , 逗号分开",
 			"type": "string",
 			"ui": "input_text"
 		},
-		"description" :{
-			"name" : "网站描述",
-			"tip" : "网站的说明文本。通常是一段话介绍网站即可。",
+		"description": {
+			"name": "网站描述",
+			"tip": "网站的说明文本。通常是一段话介绍网站即可。",
 			"type": "string",
 			"ui": "textarea"
 		},
-		"footCopyright":{
-			"name" : "网站标题前缀",
-			"tip" : "放在 head title 标签中",
+		"footCopyright": {
+			"name": "网站标题前缀",
+			"tip": "放在 head title 标签中",
 			"type": "string",
 			"ui": "htmlEditor"
-		} 
-	},
-	"clientFullname":"大华•川式料理",
-	"clientShortname":"大华",
-	"isDebug": {
-			"name" : "调试模式",
-			"tip" : "是否打开调试模式 true=调试中，false=生产环境，null=自动识别",
-			"type": "boolean",
-			"ui": "radio",
-			"option":["true=是", "false=否", "null=自动"]
-	},
-	"data" : {
-		"newsCatalog_Id" :  {
-			"name" : "新闻分类父 id",
-			"type": "number"
-		},
-		"jobCatalog_Id" : {
-			"name" : "招聘分类父 id",
-			"type": "number"
-		},
-		"database_node" :  {
-			"name" : "调试模式",
-			"tip" : "是否打开调试模式 true=调试中，false=生产环境，null=自动识别",
-			"type": "string",
-			"ui": "radio",
-			"option":["true=是", "false=否", "null=自动"]
 		}
 	},
-	"uploadFile" : {
-		"MaxTotalFileSize" : {
-			"name" : "",
+	"clientFullname": {
+		"name": "网站标题前缀",
+		"tip": "放在 head title 标签中"
+	},
+	"clientShortname": {
+		"name": "网站标题前缀",
+		"tip": "放在 head title 标签中"
+	},
+	"isDebug": {
+		"name": "调试模式",
+		"tip": "是否打开调试模式 true=调试中，false=生产环境，null=自动识别",
+		"type": "boolean",
+		"ui": "radio",
+		"option": [
+			"true=是",
+			"false=否",
+			"null=自动"
+		]
+	},
+	"data": {
+		"newsCatalog_Id": {
+			"name": "新闻分类父 id",
+			"type": "number"
+		},
+		"jobCatalog_Id": {
+			"name": "招聘分类父 id",
+			"type": "number"
+		},
+		"database_node": {
+			"name": "调试模式",
+			"tip": "是否打开调试模式 true=调试中，false=生产环境，null=自动识别",
+			"type": "string",
+			"ui": "radio",
+			"option": [
+				"true=是",
+				"false=否",
+				"null=自动"
+			]
+		}
+	},
+	"uploadFile": {
+		"MaxTotalFileSize": {
+			"name": "",
 			"type": "number",
 			"ui": "input_text"
-		}, 
-		"MaxSingleFileSize" : 1024000, 
-		"isFileOverwrite" : true, 
-		"SaveFolder" : {
-			"name" : "保存目录",
-			"tip"  : "上传图片的保存目录",
+		},
+		"MaxSingleFileSize": 1024000,
+		"isFileOverwrite": true,
+		"SaveFolder": {
+			"name": "保存目录",
+			"tip": "上传图片的保存目录",
 			"ui": "select",
-			"option":["//temp//=本地测试 for Mac：//temp//","C://temp//=本地测试 for Win：C://temp//", "//dczx//=正式服务器 //sds//"]
-		}, 
-		"isUsingRelativePath" : {
-			"name" : "是否使用相对路径",
-			"tip"  : "如果是则 SaveFolder 项无效，使用 relativePath 得到的绝对路径来保存",
+			"option": [
+				"//temp//=本地测试 for Mac：//temp//",
+				"C://temp//=本地测试 for Win：C://temp//",
+				"//dczx//=正式服务器 //sds//"
+			]
+		},
+		"isUsingRelativePath": {
+			"name": "是否使用相对路径",
+			"tip": "如果是则 SaveFolder 项无效，使用 relativePath 得到的绝对路径来保存",
 			"ui": "radio"
 		},
-		"relativePath" : {
-			"name" : "相对目录",
-			"tip"  : "外界访问图片的目录"
+		"relativePath": {
+			"name": "相对目录",
+			"tip": "外界访问图片的目录"
 		}
 	},
 	"user": {
-	
-		"login" :{
-		"logintype" : {
-				"name" : "开放登录类型",
-				"tip"  : "开放登录类型",
+		"login": {
+			"logintype": {
+				"name": "开放登录类型",
+				"tip": "开放登录类型",
 				"ui": "checkbox",
-				"option":["1=口令", "2=三方", "4=Token"]
-		},
-		"passWordLogintype" : {
-				"name" : "用户id类型",
-				"tip"  : "口令登录下，支持何种用户id？",
+				"option": [
+					"1=口令",
+					"2=三方",
+					"4=Token"
+				]
+			},
+			"passWordLogintype": {
+				"name": "用户id类型",
+				"tip": "口令登录下，支持何种用户id？",
 				"ui": "checkbox",
-				"option":["1=用户名", "2=邮件", "4=手机"]
+				"option": [
+					"1=用户名",
+					"2=邮件",
+					"4=手机"
+				]
 			}
 		},
 		"avatar": {
-			"maxWidth":{
-				"name" : "头像最大宽度"
+			"maxWidth": {
+				"name": "头像最大宽度"
 			},
-			"maxHeight":{
-				"name" : "头像最大高度"
+			"maxHeight": {
+				"name": "头像最大高度"
 			},
-			"maxSize" : {
-				"name" : "头像文件最大大小",
-				"tip"  : "单位：字节"
+			"maxSize": {
+				"name": "头像文件最大大小",
+				"tip": "单位：字节"
 			}
 		},
-		"resetPassword" : {
-			"mailBody" : {
-				"name" : "邮件正文模版",
-				"tip"  : "找回邮件的邮件",
+		"resetPassword": {
+			"mailBody": {
+				"name": "邮件正文模版",
+				"tip": "找回邮件的邮件",
 				"ui": "htmlEditor"
-					
 			}
 		}
 	},
-	"mailServer" : {
-		"server" : {
-			"name" : "SMTP 服务器地址",
-			"tip" : "发送邮件的 SMTP 服务器"
+	"mailServer": {
+		"server": {
+			"name": "SMTP 服务器地址",
+			"tip": "发送邮件的 SMTP 服务器"
 		},
 		"user": {
-			"name" : "用户名",
-			"tip" : "发送邮件的用户名"
+			"name": "用户名",
+			"tip": "发送邮件的用户名"
 		},
-		"password":{
-			"name" : "密码",
-			"tip" : "发送邮件的密码"
+		"password": {
+			"name": "密码",
+			"tip": "发送邮件的密码"
 		}
-	} 
-	
+	},
+	"Symmetric": {
+		"AES_Key": {
+			"name": "AES 密钥",
+			"tip": "请注意保管，不能外泄"
+		},
+		"apiTimeout": {
+			"name": "API 请求超时",
+			"type": "number",
+			"tip": "超时视为非法请求，单位毫秒"
+		}
+	}
 }

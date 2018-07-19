@@ -25,6 +25,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
+import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 
@@ -37,6 +38,7 @@ import com.ajaxjs.mvc.controller.IController;
  *            记录实体，可以是 Bean 或 Map
  */
 public interface CommonEntryAdminController<E, ID extends Serializable> extends IController {
+
 	/**
 	 * 读取记录列表
 	 * 
@@ -48,7 +50,7 @@ public interface CommonEntryAdminController<E, ID extends Serializable> extends 
 	 */
 	@GET
 	@Path("list")
-	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model);
+	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) throws ServiceException;
 
 	/**
 	 * 新建界面
@@ -58,7 +60,7 @@ public interface CommonEntryAdminController<E, ID extends Serializable> extends 
 	 * @return 新建界面模板路径
 	 */
 	@GET
-	public String createUI(ModelAndView model);
+	public String createUI(ModelAndView model) throws ServiceException;
 
 	/**
 	 * 编辑界面
@@ -71,7 +73,7 @@ public interface CommonEntryAdminController<E, ID extends Serializable> extends 
 	 */
 	@GET
 	@Path("{id}")
-	public String editUI(@PathParam("id") ID id, ModelAndView model);
+	public String editUI(@PathParam("id") ID id, ModelAndView model) throws ServiceException;
 
 	/**
 	 * 新建动作
@@ -83,7 +85,7 @@ public interface CommonEntryAdminController<E, ID extends Serializable> extends 
 	 * @return 创建后消息反馈之 JSON
 	 */
 	@POST
-	public String create(E entity, ModelAndView model);
+	public String create(E entity, ModelAndView model) throws ServiceException;
 
 	/**
 	 * 修改动作
@@ -98,7 +100,7 @@ public interface CommonEntryAdminController<E, ID extends Serializable> extends 
 	 */
 	@PUT
 	@Path("{id}")
-	public String update(ID id, E entity, ModelAndView model);
+	public String update(ID id, E entity, ModelAndView model) throws ServiceException;
 
 	/**
 	 * 删除一记录，注意是传入 id 参数
@@ -111,5 +113,5 @@ public interface CommonEntryAdminController<E, ID extends Serializable> extends 
 	 */
 	@DELETE
 	@Path("{id}")
-	public String delete(@PathParam("id") ID id, ModelAndView model);
+	public String delete(@PathParam("id") ID id, ModelAndView model) throws ServiceException;
 }

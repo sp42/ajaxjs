@@ -2,7 +2,8 @@
 <%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <%@taglib prefix="commonUI" tagdir="/WEB-INF/tags/common/UI"%>
 <%@taglib prefix="c" uri="/ajaxjs"%>
-<%@attribute required="false" type="Boolean" name="isNoCatalog"   description="是否不需要分类"%>
+<%@attribute required="false" type="Boolean" name="isSimpleSection"   description="是否需要简易栏目"%>
+<%@attribute required="false" type="Boolean" name="isCatalog"   description="是否需要分类"%>
 <%@attribute required="false" type="Boolean" name="isNoCreateBtn" description="是否不新建按钮"%>
 <!DOCTYPE html>
 <html>
@@ -31,7 +32,7 @@
 			<input type="text" name="searchValue" placeholder="请输入正文之关键字" style="float: inherit;" class="ajaxjs-inputField" />
 			<button style="margin-top: 0;" class="ajaxjs-btn">搜索</button>
 		</form>
-	<c:if test="${empty isNoCatalog || !isNoCatalog}">
+	<c:if test="${not empty isCatalog || isCatalog}">
 		分类： 
 		<select onchange="onCatalogSelected(this);" class="ajaxjs-select" style="width: 100px;">
 			<option>全部分类</option>
@@ -53,6 +54,28 @@
 					location.assign(location.origin + location.pathname); // todo
 				else
 					location.assign('?filterField=catalog&filterValue=' + encodeURIComponent(catalogId));
+			}
+		</script> 
+	</c:if>
+	<c:if test="${not empty isSimpleSection && isSimpleSection}">
+		栏目： 
+		<select onchange="onSimpleSectionSelected(this);" class="ajaxjs-select" style="width: 200px;">
+		</select>
+		<jsp:useBean id="json" class="com.ajaxjs.js.JsonHelper"></jsp:useBean>
+		<script>
+			var catalogArr = ${json.beans2json(catalogMenu)};
+			
+			var selectUI = new ajaxjs.tree.selectUI();
+			
+			var select = document.querySelector('select');
+			selectUI.renderer(catalogArr, select, ${param.catalogId});
+			
+			function onSimpleSectionSelected(el) {
+				var catalogId = el.selectedOptions[0].value;
+				if (catalogId == '全部分类')
+					location.assign(location.origin + location.pathname); // todo
+				else
+					location.assign('?catalogId=' + catalogId);
 			}
 		</script> 
 	</c:if>

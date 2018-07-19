@@ -22,18 +22,22 @@ package com.ajaxjs.web.upload;
  *
  */
 public class UploadResult {
+
 	/**
 	 * 上传成功之文件名
 	 */
 	public String fileName;
+
 	/**
 	 * 上传成功之文件完整路径
 	 */
 	public String fullPath;
+
 	/**
 	 * 是否上传成功
 	 */
 	public boolean isOk;
+
 	/**
 	 * 若不成功，是什么异常信息
 	 */

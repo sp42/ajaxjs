@@ -31,7 +31,6 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ajaxjs.framework.dao.QueryParams;
-import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.collection.MapHelper;
 import com.ajaxjs.util.io.StreamUtil;
@@ -260,10 +259,5 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	public static void clean() {
 		threadLocalRequest.set(null);
 		threadLocalResponse.set(null);
-	}
-	
-	public static void main(String[] args) {
-		System.out.println(Encode.urlDecode("你好"));
-		
 	}
 }

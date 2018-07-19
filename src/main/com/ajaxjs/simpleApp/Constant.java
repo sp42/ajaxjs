@@ -34,6 +34,12 @@ public interface Constant {
 	 * 操作失败，返回 msg 信息
 	 */
 	public static final String json_not_ok = "json::{\"isOk\": false, \"msg\" : \"%s\"}";
+	
+
+	/**
+	 * 显示 HTTP 405 禁止操作
+	 */
+	public static final String show405 = String.format(json_not_ok, "405， Request method not supported 禁止操作");
 
 	/**
 	 * 全局 json 模板路径 之前缀

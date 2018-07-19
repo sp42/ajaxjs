@@ -218,4 +218,15 @@ public class MockRequest {
 			}
 		}).when(session).setAttribute(anyString(), anyObject());
 	}
+	
+	public static final Map<String, Object> hash = new HashMap<>();
+	
+	public static Answer<String> aswser = new Answer<String>() {
+		public String answer(InvocationOnMock invocation) {
+			Object[] args = invocation.getArguments();
+			Object obj = hash.get(args[0].toString());
+
+			return obj == null ? null : obj.toString();
+		}
+	};
 }

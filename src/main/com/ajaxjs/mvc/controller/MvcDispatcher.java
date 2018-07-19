@@ -30,6 +30,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Produces;
 
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mvc.ModelAndView;
@@ -38,6 +39,7 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.simpleApp.Constant;
 import com.ajaxjs.util.reflect.ExecuteMethod;
 import com.ajaxjs.util.reflect.NewInstance;
+import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.collection.CollectionUtil;
 import com.ajaxjs.util.io.resource.Scanner;
@@ -115,6 +117,8 @@ public class MvcDispatcher implements Filter {
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest _request = (HttpServletRequest) req;
 		HttpServletResponse _response = (HttpServletResponse) resp;
+
+		_request.setAttribute("requestTimeRecorder", System.currentTimeMillis()); // 每次 servlet 都会执行的。记录时间
 
 		if (isStaticAsset(_request.getRequestURI())) { // 静态资源
 			chain.doFilter(req, resp);
@@ -196,18 +200,35 @@ public class MvcDispatcher implements Filter {
 			}
 		}
 
-		if (isDoFilter)
-			for (FilterAction filterAction : filterActions)
-				filterAction.after(request, response, controller, isSkip); // 后置调用
+		if (isDoFilter) {
+			try {
+				for (FilterAction filterAction : filterActions)
+					filterAction.after(request, response, controller, isSkip); // 后置调用
+			} catch (Throwable e) {
+				err = e;
+			}
+		}
 
 		if (err != null) { // 有未处理的异常
-			// 默认返回 json
-			response.resultHandler(String.format(Constant.json_not_ok, err.getMessage()), request, model);
+			handleErr(err, method, request, response, model);
 		} else if (!isSkip) {
 			response.resultHandler(result, request, model);
 		}
 
 		MvcRequest.clean();
+	}
+
+	private static void handleErr(Throwable err, Method method, MvcRequest request, MvcOutput response, ModelAndView model) {
+		ExecuteMethod.getUnderLayerErr(err).printStackTrace(); // 打印异常
+
+		String errMsg = ExecuteMethod.getUnderLayerErrMsg(err);
+		Produces a = method.getAnnotation(Produces.class);
+
+		if (a != null && "json".equals(a.value()[0])) {// 返回 json
+			response.resultHandler(String.format(Constant.json_not_ok, errMsg), request, model);
+		} else {
+			response.resultHandler(String.format("redirect::%s/asset/common/jsp/msg.jsp?msg=%s", request.getContextPath(), Encode.urlEncode((errMsg))), request, model);
+		}
 	}
 
 	/**

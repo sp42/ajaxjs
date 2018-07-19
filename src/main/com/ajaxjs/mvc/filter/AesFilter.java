@@ -68,7 +68,6 @@ public class AesFilter implements FilterAction {
 		if (errMsg != null)
 			request.setAttribute("errMsg", errMsg);
 
-		System.out.println(request.getAttribute("errMsg"));
 		return false;
 	}
 

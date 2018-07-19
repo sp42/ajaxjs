@@ -48,7 +48,9 @@ ajaxjs_HtmlEditor = function(el) {
 	this.setValue = function(v) {
 		var self2 = this;
 		setTimeout(function() {
-			self2.iframeBody.innerHTML = v; 
+			
+			self2.iframeWin.document.body.innerHTML = v;
+//			self2.iframeBody.innerHTML = v; 
 		}, 500);
 	}
 	
@@ -100,13 +102,11 @@ ajaxjs_HtmlEditor = function(el) {
 		
 		this.format('fontsize', i);
 	}.bind(this));
-	
 	// 这个方法只能写在 onload 事件 不写 onload 里还不执行
 	this.iframeWin.onload = function() {
 		this.iframeDoc 	= this.iframeWin.document;
 		this.iframeDoc.designMode = 'on';
 		this.iframeBody = this.iframeDoc.body;
-
 		// 有内容
 		this.sourceEditor.value && this.setValue(this.sourceEditor.value);
 	}.bind(this);

@@ -28,6 +28,7 @@ public class MetaData {
 	 * 表单字段名
 	 */
 	public String name;
+	
 	/**
 	 * 文件名
 	 */

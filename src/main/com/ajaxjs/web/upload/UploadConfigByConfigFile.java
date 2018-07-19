@@ -27,6 +27,7 @@ import com.ajaxjs.config.ConfigService;
  */
 public class UploadConfigByConfigFile implements UploadConfig {
 	private String configNode;
+	
 	// 适合 web 的绝对路径
 	private String absolutePath;
 

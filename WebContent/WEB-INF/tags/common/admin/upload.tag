@@ -157,7 +157,7 @@
 </script>
 
 
-<button class="ajaxjs-btn" onclick="Upload_Cover_Panel.show();return false;">
+<button class="ajaxjs-btn" onclick="${isCreate ? 'ajaxjs.msg(\'上传图片依赖实体 id，请先保存新建内容，然后再上传图片。\')' : 'Upload_Cover_Panel.show()'};return false;">
 	<img src="${commonAssetIcon}add.gif" />上传封面图片
 </button>
  

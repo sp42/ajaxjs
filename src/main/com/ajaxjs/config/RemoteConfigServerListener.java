@@ -7,13 +7,12 @@ import java.rmi.registry.LocateRegistry;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
 
 /**
  * Application Lifecycle Listener implementation class Server
  *
  */
-@WebListener
+//@javax.servlet.annotation.WebListener
 public class RemoteConfigServerListener implements ServletContextListener {
 
 	/**

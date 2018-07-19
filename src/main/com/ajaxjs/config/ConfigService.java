@@ -146,6 +146,28 @@ public class ConfigService {
 
 		return Value.TypeConvert(number, int.class);
 	}
+	
+	/**
+	 * 读取配置并转换其为 long 类型。仅对扁平化后的配置有效，所以参数必须是扁平化的 aaa.bbb.ccc 格式。
+	 * 
+	 * @param key
+	 *            配置键值
+	 * @return 配置内容
+	 */
+	public static long getValueAsLong(String key) {
+		// js number 在 java 里面为 double 转换一下
+		Object number = flatConfig.get(key);
+		
+		if (number == null) {
+			LOGGER.warning("没发现配置 " + key);
+			return 0L;
+		}
+		
+		if (number instanceof Double)
+			number = Value.double2long((Double) number);
+		
+		return Value.TypeConvert(number, long.class);
+	}
 
 	/**
 	 * 读取配置并转换其为字符串类型。仅对扁平化后的配置有效，所以参数必须是扁平化的 aaa.bbb.ccc 格式。
