@@ -80,9 +80,4 @@ public interface Constant {
 	public static final String jsp_info = jsp_perfix + "%s/info";
 
 	public static final String jsp_adminInfo = jsp_perfix + "%s/admin-info";
-
-	/**
-	 * 保存错误信息的 key
-	 */
-	public static final String errMsg = "errMsg";
 }

@@ -225,9 +225,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	 */
 	@SuppressWarnings("unchecked")
 	public String outputPagedJsonList(PageResult<T> pageResult, ModelAndView model) {
-		if (model.get(errMsg) != null) {
-			return paged_json_error;
-		} else if (pageResult != null && pageResult.getRows() != null) {
+		if (pageResult != null && pageResult.getRows() != null) {
 			String jsonStr;
 
 			if (pageResult.getRows().get(0) instanceof Map) { // Map 类型的输出

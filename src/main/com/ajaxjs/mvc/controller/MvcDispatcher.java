@@ -18,7 +18,6 @@ package com.ajaxjs.mvc.controller;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,7 +41,6 @@ import com.ajaxjs.util.reflect.NewInstance;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.collection.CollectionUtil;
-import com.ajaxjs.util.io.resource.Scanner;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -67,7 +65,7 @@ public class MvcDispatcher implements Filter {
 		Map<String, String> config = MvcRequest.parseInitParams(null, fConfig);
 
 		doIoc(config);
-		scannController(config);
+		IControllerScanner.scannController(config);
 	}
 
 	/**
@@ -81,31 +79,6 @@ public class MvcDispatcher implements Filter {
 			String doIoc = config.get("doIoc");
 			for (String packageName : StringUtil.split(doIoc))
 				BeanContext.me().init(packageName);
-		}
-	}
-
-	/**
-	 * 扫描控制器
-	 * 
-	 * @param config
-	 *            web.xml 中的配置，已经转为 Map
-	 */
-	private static void scannController(Map<String, String> config) {
-		if (config != null && config.get("controller") != null) {
-			String str = config.get("controller");
-
-			IControllerScanner scanner = new IControllerScanner(); // 定义一个扫描器，专门扫描 IController
-
-			for (String packageName : StringUtil.split(str)) {
-				Scanner scaner = new Scanner(scanner);
-				@SuppressWarnings("unchecked")
-				Set<Class<IController>> IControllers = (Set<Class<IController>>) scaner.scan(packageName);
-
-				for (Class<IController> clz : IControllers)
-					ControllerScanner.add(clz);
-			}
-		} else {
-			LOGGER.info("web.xml 没有配置 MVC 过滤器或者 配置没有定义 controller");
 		}
 	}
 
@@ -162,57 +135,47 @@ public class MvcDispatcher implements Filter {
 		MvcRequest.setHttpServletResponse(response);
 
 		Throwable err = null; // 收集错误信息
-
-		FilterAction[] filterActions = getFilterActions(method);
-
-		boolean isDoFilter = !CollectionUtil.isNull(filterActions), isSkip = false; // 是否中止控制器方法调用，由拦截器决定
-
-		if (isDoFilter) {
-			for (FilterAction filterAction : filterActions) {
-				try {
-					isSkip = !filterAction.before(request, response, controller); // 相当于 AOP 前置
-				} catch (Throwable e) {
-					isSkip = true;
-					err = e;
-				}
-
-				if (isSkip)
-					break;
-			}
-		}
-
 		Object result = null;
 		ModelAndView model = null;
 
-		if (!isSkip) {
-			try {
+		FilterAction[] filterActions = getFilterActions(method);
+		boolean isDoFilter = !CollectionUtil.isNull(filterActions), isSkip = false; // 是否中止控制器方法调用，由拦截器决定
+
+		try {
+			if (isDoFilter) {
+				for (FilterAction filterAction : filterActions) {
+					isSkip = !filterAction.before(request, response, controller); // 相当于 AOP 前置
+					if (isSkip)
+						break;
+				}
+			}
+			
+			if (!isSkip) {
 				if (method.getParameterTypes().length > 0) {
 					Object[] args = RequestParam.getArgs(request, response, method);
 					model = findModel(args);
-
+					
 					// 通过反射执行控制器方法:调用反射的 Reflect.executeMethod 方法就可以执行目标方法，并返回一个结果。
 					result = ExecuteMethod.executeMethod_Throwable(controller, method, args);
 				} else {
 					result = ExecuteMethod.executeMethod_Throwable(controller, method);// 方法没有参数
 				}
-			} catch (Throwable e) {
-				err = e;
 			}
-		}
-
-		if (isDoFilter) {
-			try {
+			
+			if (isDoFilter) {
 				for (FilterAction filterAction : filterActions)
 					filterAction.after(request, response, controller, isSkip); // 后置调用
-			} catch (Throwable e) {
-				err = e;
 			}
+		} catch (Throwable e) {
+			err = e;
 		}
 
 		if (err != null) { // 有未处理的异常
 			handleErr(err, method, request, response, model);
 		} else if (!isSkip) {
 			response.resultHandler(result, request, model);
+		} else {
+			LOGGER.warning("一般情况下不应执行到这一步。Should not be executed in this step.");
 		}
 
 		MvcRequest.clean();
