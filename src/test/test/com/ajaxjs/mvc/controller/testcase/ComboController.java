@@ -1,4 +1,4 @@
-package test.com.ajaxjs.mvc.controller;
+package test.com.ajaxjs.mvc.controller.testcase;
 
 import java.io.IOException;
 
