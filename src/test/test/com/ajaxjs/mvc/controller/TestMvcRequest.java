@@ -10,7 +10,7 @@ import org.junit.Test;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.web.test.MockRequest;
 
-public class TestMvcController {
+public class TestMvcRequest {
 	@Test
 	public void testGetBasePath() {
 		HttpServletRequest request = MockRequest.mockRequest("foo", "bar");
