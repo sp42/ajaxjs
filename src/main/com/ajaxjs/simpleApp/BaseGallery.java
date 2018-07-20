@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.web.tools;
+package com.ajaxjs.simpleApp;
 
 import java.io.File;
 import java.util.ArrayList;

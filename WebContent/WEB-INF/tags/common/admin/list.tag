@@ -32,7 +32,7 @@
 			<input type="text" name="searchValue" placeholder="请输入正文之关键字" style="float: inherit;" class="ajaxjs-inputField" />
 			<button style="margin-top: 0;" class="ajaxjs-btn">搜索</button>
 		</form>
-	<c:if test="${not empty isCatalog || isCatalog}">
+	<c:if test="${not empty isCatalog && isCatalog}">
 		分类： 
 		<select onchange="onCatalogSelected(this);" class="ajaxjs-select" style="width: 100px;">
 			<option>全部分类</option>

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.web.tools;
+package com.ajaxjs.simpleApp;
 
 import javax.mvc.annotation.Controller;
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +24,7 @@ import javax.ws.rs.GET;
 
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcOutput;
+import com.ajaxjs.web.Captcha;
 
 /**
  * 

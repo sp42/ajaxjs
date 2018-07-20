@@ -12,7 +12,7 @@
 				<img style="float:left;margin-bottom:20px;max-width:180px;max-height:160px;" class="upload_img_perview" src="${commonImage}imgBg.png" />
 				
 				<div class="upload-btns">
-					<form action="imgUpload/?owenerId=21321323" method="post" enctype="multipart/form-data" target="upframe">
+					<form action="../${info.uid}/imgUpload/" method="POST" enctype="multipart/form-data" target="upframe">
 						<!-- 隐藏的 input 上传控件 -->
 						<input name="fileInput" id="input_file_molding" type="file" class="hide" />
 						<!-- 隐藏的 iframe，为了无刷新上传，对应 form 的 target -->
@@ -53,7 +53,7 @@
 			json = JSON.parse(json);
 			
 			if(json.isOk) {
-				alert('上传成功！');
+				ajaxjs.msg('上传成功！');
 				obj.lastUploadedImg = json.url;
 			}
 		} else {
@@ -74,7 +74,7 @@
 	
 	// 正文
 	Upload_Panel = {
-		//htmlEditor : htmlEditor,
+		htmlEditor : htmlEditor,
 		show : function() {
 			ajaxjs.layer('.uploadBoxTpl');
 			this.initTab();
@@ -97,7 +97,7 @@
 						showTab.querySelector('button.insertAfterUplaod').onclick = function(e) {
 							e.preventDefault();
 							
-							var filename = '../images/' + Upload_Panel.lastUploadedImg.split('/').pop();
+							var filename = '${ctx}' + Upload_Panel.lastUploadedImg;
 							Upload_Panel.htmlEditor.format("insertImage", filename);
 						}
 					break;

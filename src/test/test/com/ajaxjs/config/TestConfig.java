@@ -30,7 +30,7 @@ public class TestConfig {
 	@Test
 	public void testTransform() {
 		assertEquals("[\"clientShortName\"][\"bar\"][\"xx\"]", ConfigService.transform("clientShortName.bar.xx"));
-	} 
+	}
 
 	@Test
 	public void testLoadJSON_in_JS() {
@@ -39,7 +39,5 @@ public class TestConfig {
 		map.put("site.keywords", 1000);
 		map.put("uploadFile.MaxTotalFileSize", 2);
 		ConfigService.loadJSON_in_JS(map);
-
-		//		System.out.println(ConfigService.flatConfig);
 	}
 }

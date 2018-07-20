@@ -6,12 +6,12 @@
 @import 'widget/form.less';
 @import 'widget/htmlEditor.less';
 @import 'widget/calendar.less';
-
-
 @header-height: 5%;
 @mainColor: #EBEBEB;
 @hightColor: #417BB5;
-
+body {
+	font-size: .95rem;
+}
 
 body.admin-shell {
 	width: 100%;
@@ -163,12 +163,12 @@ header.top {
 	h4 {
 	}
 
-	&>div {
-    	text-align: right;
-    	padding: 0 3%;
+	& > div {
+		text-align: right;
+		padding: 0 3%;
 	}
-	
-	fieldset{
+
+	fieldset {
 		border-bottom: 0;
 		border-left: 0;
 		border-right: 0;
@@ -176,12 +176,11 @@ header.top {
 		width: 94%;
 		margin: 0 auto;
 		letter-spacing: 5px;
-		
 		legend {
 			margin-left: 1em;
-			font-size:1.2rem;
-			span{
-				font-size:.8rem;
+			font-size: 1.2rem;
+			span {
+				font-size: .8rem;
 			}
 		}
 	}
@@ -204,18 +203,15 @@ header.top {
 }
 
 .admin-entry-form {
-	&>form {
+	& > form {
 		margin: 0 5%;
 		border: 1px solid #e3e3e3;
 		overflow: hidden;
 		& > div {
 			padding: 1% 2%;
 			border-bottom: 1px solid #e3e3e3;
-//			display: flex;
-//    		justify-content: space-around;
-
-			&:last-child{
-				border-bottom:0;
+			&:last-child {
+				border-bottom: 0;
 			}
 		}
 
@@ -226,12 +222,11 @@ header.top {
 
 		div.label {
 			display: inline-block;
-    		min-width: 70px;
-    		text-align: center;
+			min-width: 70px;
+			text-align: center;
 		}
 
 		textarea {
-			//width: 90%;
 			min-height: 90px;
 		}
 
@@ -241,11 +236,11 @@ header.top {
 			display: inline-block;
 		}
 	}
-	.buttons{
+
+	.buttons {
 		text-align: center;
 	}
 }
-
 
 .configForm {
 	.ajaxjs-form;
@@ -257,7 +252,7 @@ header.top {
 		margin: 1% 0 ! important;
 	}
 
-	input[type=text], textarea {
+	input[type=text] , textarea {
 		.ajaxjs-inputField;
 	}
 
@@ -295,6 +290,7 @@ header.top {
 		&:first-child {
 			border-top: 0;
 		}
+
 		&:last-child {
 			border-bottom: 0;
 		}
@@ -329,33 +325,34 @@ header.top {
 		}
 	}
 
-	select{
+	select {
 		width: 100%;
 	}
-	.valueHolder>textarea {
-		width: 100%!important;
-	    margin: 2% 0;
+
+	.valueHolder > textarea {
+		width: 100% ! important;
+		margin: 2% 0;
 		min-height: 60px;
 	}
-	
-	.htmlEditor{
-		width:100%!important;
-		margin-top:10px!important;
-		
-		ul.toolbar{
-//			border-top:0;
+
+	.htmlEditor {
+		width: 100% ! important;
+		margin-top: 10px ! important;
+		ul.toolbar {
 		}
-		li{
+
+		li {
 			overflow: inherit;
 			background-color: inherit;
-		    box-sizing: border-box;
-		    padding-left: inherit; 
-		    min-height: inherit; 
-		    line-height: 20px;
-		    border-top: 0; 
-		    border-bottom: inherit; 
+			box-sizing: border-box;
+			padding-left: inherit;
+			min-height: inherit;
+			line-height: 20px;
+			border-top: 0;
+			border-bottom: inherit;
 		}
-		textarea{
+
+		textarea {
 			margin-bottom: 14px;
 		}
 	}
@@ -364,24 +361,24 @@ header.top {
 // 列表页
 .list-ui {
 	.ajaxjs-niceTable {
-		width:92%;
-		margin:0 auto;
+		width: 92%;
+		margin: 0 auto;
 	}
 }
 
-.pid {	
+.pid {
 	form {
 		padding: 1% 2%;
 		margin: 0;
 		background-color: #f5f5f5;
 		text-align: center;
 	}
-	
+
 	.panel {
 		width: 90%;
 		margin: 0 auto;
 	}
-	
+
 	table {
 		margin: 0 auto;
 		width: 100%;
@@ -391,25 +388,29 @@ header.top {
 				text-align: center;
 			}
 		}
-		
+
 		td {
 			text-align: left;
 		}
+
 		td.id {
 			text-align: center;
 		}
+
 		td.createDate {
 			text-align: center;
 			width: 180px;
 		}
+
 		td.action {
 			text-align: center;
 			width: 240px;
 		}
-		
+
 		td.name {
 			width: 280px;
 		}
+
 		td.content {
 			width: 390px;
 		}
@@ -422,7 +423,7 @@ header.top {
 		width: 50%;
 		height: 30%;
 	}
-	
+
 	label[for="input_file_molding"] {
 		& > div {
 			border: 1px solid lightgray;
@@ -434,16 +435,15 @@ header.top {
 			padding: 10px;
 			width: 100px;
 			height: 70px;
-			&>div{
+			& > div {
 				font-size: 2rem;
 			}
 		}
-	
 	}
+
 	.upload-btns {
 		float: right;
 		width: 60%;
 	}
 }
-
 

@@ -30,7 +30,7 @@ ajaxjs_HtmlEditor = function(el) {
 	}.bind(this);
 	
 	this.format = function (type, para) {
-//		this.iframeWin.focus();
+		this.iframeWin.focus();
 		if (!para) {
 			if (document.all) 
 				this.iframeDoc.execCommand(type);
@@ -38,7 +38,7 @@ ajaxjs_HtmlEditor = function(el) {
 				this.iframeDoc.execCommand(type, false, false);
 		} else 
 			this.iframeDoc.execCommand(type, false, para);
-//		this.iframeWin.focus();
+		this.iframeWin.focus();
 	}
 	this.insertEl = function (html) {
 		this.iframeDoc.body.innerHTML = html;

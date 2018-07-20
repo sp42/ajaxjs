@@ -17,8 +17,6 @@ package com.ajaxjs.simpleApp;
 
 import javax.ws.rs.Path;
 
-import com.ajaxjs.web.tools.BaseCaptchaController;
-
 /**
  * 提供验证码服务
  * 

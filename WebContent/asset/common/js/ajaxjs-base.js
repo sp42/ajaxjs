@@ -336,7 +336,7 @@ ajaxjs.xhr = {
             var msg = 'The version of your browser is too old, please upgrade it.';
             throw msg;
         }
-        cb = cb || function(json){alert(json.msg);}
+        cb = cb || function(json){ajaxjs.alert(json.msg);}
         cfg = cfg || {};
 
         if (typeof form == 'string')

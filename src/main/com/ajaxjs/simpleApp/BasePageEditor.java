@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.web.tools;
+package com.ajaxjs.simpleApp;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +28,6 @@ import javax.ws.rs.Produces;
 
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.simpleApp.Constant;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.logger.LogHelper;
