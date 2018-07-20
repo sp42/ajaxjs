@@ -1,4 +1,4 @@
-package test.com.ajaxjs.mvc.controller;
+package test.com.ajaxjs.mvc.filter;
 
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcOutput;
