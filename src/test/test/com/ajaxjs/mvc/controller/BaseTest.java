@@ -1,4 +1,4 @@
-package test.com.ajaxjs.mvc;
+package test.com.ajaxjs.mvc.controller;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

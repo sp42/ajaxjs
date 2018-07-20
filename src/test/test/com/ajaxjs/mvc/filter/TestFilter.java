@@ -19,7 +19,7 @@ import com.ajaxjs.mvc.filter.CaptchaFilter;
 import com.ajaxjs.web.test.MockRequest;
 import com.ajaxjs.web.test.MockResponse;
 
-import test.com.ajaxjs.mvc.BaseTest;
+import test.com.ajaxjs.mvc.controller.BaseTest;
 
 public class TestFilter extends BaseTest {
 
