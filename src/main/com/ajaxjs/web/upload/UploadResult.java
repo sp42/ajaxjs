@@ -22,7 +22,6 @@ package com.ajaxjs.web.upload;
  *
  */
 public class UploadResult {
-
 	/**
 	 * 上传成功之文件名
 	 */

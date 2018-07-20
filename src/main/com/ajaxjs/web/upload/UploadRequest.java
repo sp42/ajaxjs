@@ -103,7 +103,6 @@ public class UploadRequest extends HttpServletRequestWrapper {
 
 		dataBytes = new StreamUtil().setIn(in).inputStream2Byte().close().getData();
 		dataStr = Encode.byte2String(dataBytes);
-		//		System.out.println(dataStr);
 
 		MetaData meta = new MetaData();
 		meta.parseMeta(dataStr);
@@ -124,8 +123,7 @@ public class UploadRequest extends HttpServletRequestWrapper {
 		if (start == endPos)
 			throw new IllegalArgumentException("上传表单中没有二进制数据，上传文件为空！");
 
-		int length = endPos - start;
-		return length;
+		return endPos - start;
 	}
 
 	/**

@@ -1,4 +1,4 @@
-package com.ajaxjs.config;
+package com.ajaxjs.simpleApp;
 
 import java.util.Map;
 
@@ -7,10 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 
+import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
-import com.ajaxjs.simpleApp.Constant;
 import com.ajaxjs.util.io.FileUtil;
 
 @Controller
@@ -24,6 +25,7 @@ public abstract class BaseConfigController implements IController {
 	}
 	
 	@POST
+	@Produces("json")
 	public String saveAllconfig(Map<String, Object> map, HttpServletRequest request) {
 		ConfigService.loadJSON_in_JS(map);
 		ConfigService.load(); // 刷新配置
@@ -31,7 +33,7 @@ public abstract class BaseConfigController implements IController {
 		if (request.getServletContext().getAttribute("all_config") != null)
 			request.getServletContext().setAttribute("all_config", ConfigService.config);
 		
-		return String.format(Constant.json_ok, "修改配置成功！");
+		return CommonController.jsonOk("修改配置成功！");
 	}
 	
 	@GET
@@ -48,6 +50,7 @@ public abstract class BaseConfigController implements IController {
 
 	@POST
 	@Path("site")
+	@Produces("json")
 	public String saveSite(Map<String, Object> map, HttpServletRequest request) {
 		return saveAllconfig(map, request);
 	}

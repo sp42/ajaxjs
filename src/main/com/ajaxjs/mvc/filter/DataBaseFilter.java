@@ -38,5 +38,4 @@ public class DataBaseFilter implements FilterAction {
 	public void after(MvcRequest request, MvcOutput response, IController controller, boolean isSkip) {
 		JdbcConnection.closeDb();
 	}
-
 }

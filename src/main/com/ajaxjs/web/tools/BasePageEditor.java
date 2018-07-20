@@ -24,6 +24,7 @@ import javax.mvc.annotation.Controller;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
@@ -87,6 +88,7 @@ public abstract class BasePageEditor implements IController, Constant {
 	 * @return JSON 结果
 	 */
 	@POST
+	@Produces("json")
 	public String save(MvcRequest request) {
 		try {
 			if (request.getParameter("url") == null)

@@ -71,6 +71,23 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	}
 
 	/**
+	 * 编辑记录 UI
+	 * 
+	 * @param model
+	 *            页面 Model 模型
+	 * @return 编辑记录 UI JSP 模版路径
+	 */
+	public String editUI(ModelAndView model) {
+		LOGGER.info("编辑记录 UI");
+
+		prepareData(model);
+		model.put("actionName", "编辑");
+		model.put("isCreate", false); // 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate = true 标识为创建，以便与 update 区分开来。
+
+		return String.format(jsp_adminInfo, getService().getTableName());
+	}
+
+	/**
 	 * 创建实体
 	 * 
 	 * @param entity
@@ -97,7 +114,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	 * 修改实体
 	 * 
 	 * @param id
-	 *            实体 id
+	 *            实体 ID
 	 * @param entity
 	 *            实体
 	 * @param model
@@ -125,8 +142,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 
 	/**
 	 * 
-	 * 因为范型的缘故，不能实例化 bean 对象。应该在子类实例化 bean，再调用本类的 delete(T entry, ModelAndView
-	 * model)
+	 * 因为范型的缘故，不能实例化 bean 对象。应该在子类实例化 bean，再调用本类的 delete()
 	 * 
 	 * @param entity
 	 *            实体
@@ -140,7 +156,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 		if (!getService().delete(entity))
 			throw new ServiceException("删除失败！");
 
-		return String.format(json_ok, "删除成功");
+		return jsonOk("删除成功");
 	}
 
 	/**
@@ -260,6 +276,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	 */
 	public static void initDb() {
 		String config = ConfigService.getValueAsString("data.database_node");
+
 		if (config == null)
 			config = "jdbc/mysql"; // 如果没有 默认 mysql
 
@@ -325,6 +342,26 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 			return "json::{\"result\":[" + StringUtil.stringJoin(str, ",") + "]}";
 		} else
 			return "json::{\"result\": null}";
+	}
+
+	/**
+	 * 输出 JSON OK
+	 * 
+	 * @param msg
+	 * @return
+	 */
+	public static String jsonOk(String msg) {
+		return String.format(Constant.json_ok, msg);
+	}
+
+	/**
+	 * 输出 JSON No OK
+	 * 
+	 * @param msg
+	 * @return
+	 */
+	public static String jsonNoOk(String msg) {
+		return String.format(Constant.json_not_ok, msg);
 	}
 
 	/**

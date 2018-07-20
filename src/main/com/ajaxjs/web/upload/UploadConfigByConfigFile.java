@@ -18,6 +18,7 @@ package com.ajaxjs.web.upload;
 import java.io.File;
 
 import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.mvc.controller.MvcRequest;
 
 /**
  * 读取配置文件的配置
@@ -27,15 +28,13 @@ import com.ajaxjs.config.ConfigService;
  */
 public class UploadConfigByConfigFile implements UploadConfig {
 	private String configNode;
-	
-	// 适合 web 的绝对路径
-	private String absolutePath;
 
 	/**
-	 * 检查是否有对应的配置 默认是 "uploadFile"
+	 * 检查是否有对应的配置 默认是 "uploadFile"，可以指定该项来提供不同的上传规则
 	 */
 	public UploadConfigByConfigFile() {
 		this("uploadFile");
+
 	}
 
 	/**
@@ -70,11 +69,29 @@ public class UploadConfigByConfigFile implements UploadConfig {
 		return ConfigService.getValueAsBool(configNode + ".isFileOverwrite");
 	}
 
+	private String saveFolder;
+
 	@Override
 	public String getSaveFolder() {
-		return ConfigService.getValueAsBool(configNode + ".isUsingRelativePath") ? 
-				
-				getAbsolutePath() + File.separator: ConfigService.getValueAsString(configNode + ".SaveFolder");
+		return saveFolder;
+	}
+
+	public void setSaveFolder(String saveFolder) {
+		this.saveFolder = saveFolder;
+	}
+
+	/**
+	 * 
+	 * @param request
+	 */
+	public void setSaveFolder(MvcRequest request) {
+		String relativePath = ConfigService.getValueAsString(configNode + ".saveFolder.relativePath");
+
+		if (ConfigService.getValueAsBool(configNode + ".saveFolder.isUsingRelativePath")) {
+			setSaveFolder(request.mappath(relativePath) + File.separator );
+		} else {
+			setSaveFolder(ConfigService.getValueAsString(configNode + ".saveFolder.absolutePath"));
+		}
 	}
 
 	@Override
@@ -88,14 +105,6 @@ public class UploadConfigByConfigFile implements UploadConfig {
 
 	public void setConfigNode(String configNode) {
 		this.configNode = configNode;
-	}
-
-	public String getAbsolutePath() {
-		return absolutePath;
-	}
-
-	public void setAbsolutePath(String absolutePath) {
-		this.absolutePath = absolutePath;
 	}
 
 }

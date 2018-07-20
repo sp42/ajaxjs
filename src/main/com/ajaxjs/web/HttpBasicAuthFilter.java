@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Sp42 frank@ajaxjs.com
+ * Copyright Sp42 frank@ajaxjs.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ public class HttpBasicAuthFilter implements Filter {
 	@Override
 	public void init(FilterConfig config) throws ServletException {
 		LOGGER.info("启动 HTTP BasicAuth 后台管理");
-		
+
 		if (config.getInitParameter("adminPassword") != null)
 			pwd = config.getInitParameter("adminPassword");// 读取 web.xml 配置里的密码
 	}
@@ -73,11 +73,11 @@ public class HttpBasicAuthFilter implements Filter {
 
 			LOGGER.info("HTTP BasicAuth 登录失败！");
 		} else {
-//			request.setAttribute("userName", userid);
+			//			request.setAttribute("userName", userid);
 			chain.doFilter(request, response);
 		}
 	}
- 
+
 	@Override
 	public void destroy() {
 	}
@@ -86,7 +86,8 @@ public class HttpBasicAuthFilter implements Filter {
 	 * 检查是否合法登录
 	 * 
 	 * @param request
-	 * @return
+	 *            请求对象
+	 * @return 是否合法登录
 	 */
 	private static boolean checkAuth(HttpServletRequest request) {
 		return checkAuth(request.getHeader("Authorization"), userid, pwd);

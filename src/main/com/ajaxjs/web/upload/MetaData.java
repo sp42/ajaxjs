@@ -61,6 +61,11 @@ public class MetaData {
 
 	private final static byte[] b = "\n".getBytes();
 
+	/**
+	 * 
+	 * @param dataBytes
+	 * @return
+	 */
 	public static int get(byte[] dataBytes) {
 		int skip = 0;
 

@@ -30,15 +30,16 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 
 /**
- * 常见的控制器，后端用
+ * 常见的控制器
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  *
  * @param <E>
  *            记录实体，可以是 Bean 或 Map
+ * @param <ID>ID
+ *            类型，可以是 INTEGER/LONG/String
  */
 public interface CommonEntryAdminController<E, ID extends Serializable> extends IController {
-
 	/**
 	 * 读取记录列表
 	 * 

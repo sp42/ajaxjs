@@ -45,6 +45,7 @@ public class AesFilter implements FilterAction {
 	public boolean before(MvcRequest request, MvcOutput response, IController controller) {
 		String errMsg = null;
 		String p = request.getParameter(requestQueryStringParamterName);
+		
 		if (StringUtil.isEmptyString(p)) {
 			errMsg = "缺少参数 " + requestQueryStringParamterName;
 			LOGGER.info(errMsg);
