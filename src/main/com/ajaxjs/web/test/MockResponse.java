@@ -15,6 +15,7 @@
  */
 package com.ajaxjs.web.test;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -23,9 +24,16 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Vector;
 
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.annotation.WebInitParam;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -85,7 +93,7 @@ public class MockResponse {
 	public static StringWriter writerFactory(HttpServletResponse response) {
 		StringWriter writer = new StringWriter();
 		PrintWriter printWriter = new PrintWriter(writer);
-		
+
 		try {
 			when(response.getWriter()).thenReturn(printWriter);
 		} catch (IOException e) {
@@ -126,5 +134,55 @@ public class MockResponse {
 		verify(request).getRequestDispatcher(dispatcherArgument.capture());
 
 		return dispatcherArgument.getValue();
+	}
+	
+	/**
+	 * 初始化 Servlet 配置，这里是模拟 注解
+	 * 
+	 * @param cls
+	 *            控制器类
+	 * @return  Servlet 配置
+	 */
+	public static ServletConfig initServletConfig(Class<? extends HttpServlet> cls) {
+		ServletConfig servletConfig = mock(ServletConfig.class);
+		
+		// 模拟注解
+		Vector<String> v = new Vector<>();
+		// v.addElement("news");
+		// when(servletConfig.getInitParameter("news")).thenReturn("ajaxjs.data.service.News");
+		// v.addElement("img");
+		// when(servletConfig.getInitParameter("img")).thenReturn("ajaxjs.data.service.subObject.Img");
+
+		// 通过反射获取注解内容
+
+		if (cls != null) {
+			WebServlet WebServlet_an = cls.getAnnotation(WebServlet.class);
+
+			for (WebInitParam p : WebServlet_an.initParams()) {
+				v.addElement(p.name());
+				when(servletConfig.getInitParameter(p.name())).thenReturn(p.value());
+			}
+		}
+
+		when(servletConfig.getInitParameterNames()).thenReturn(v.elements());
+
+		return servletConfig;
+	}
+
+	/**
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public static FilterConfig initFilterConfig(ServletContext context) {
+		FilterConfig filterConfig = mock(FilterConfig.class);
+		// 模拟注解
+		Vector<String> v = new Vector<>();
+		v.addElement("urlPatterns");
+		when(filterConfig.getInitParameterNames()).thenReturn(v.elements());
+		when(filterConfig.getInitParameter("urlPatterns")).thenReturn("/service/*");
+		when(filterConfig.getServletContext()).thenReturn(context);
+
+		return filterConfig;
 	}
 }

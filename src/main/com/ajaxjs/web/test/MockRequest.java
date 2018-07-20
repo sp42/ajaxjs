@@ -161,9 +161,9 @@ public class MockRequest {
 		DummyFilter filter = new DummyFilter();
 
 		try {
-			controller.init(WebBaseInit.initServletConfig(DummyController.class));
+			controller.init(MockResponse.initServletConfig(DummyController.class));
 
-			filter.init(WebBaseInit.initFilterConfig(controller.getServletContext()));
+			filter.init(MockResponse.initFilterConfig(controller.getServletContext()));
 			filter.doFilter(request, response, filterChain);
 
 			controller.doGet(request, response);

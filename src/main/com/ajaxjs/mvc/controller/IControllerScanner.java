@@ -36,7 +36,6 @@ public class IControllerScanner extends ScanClass {
 			target.add(clazz);// 添加到集合中去
 		}
 	}
-	
 
 	/**
 	 * 扫描控制器

@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * A action = controller + methods
  * 
- * @author admin
+ * @author Sp42 frank@ajaxjs.com
  *
  */
 public class Action {

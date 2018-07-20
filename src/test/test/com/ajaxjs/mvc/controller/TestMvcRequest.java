@@ -12,6 +12,13 @@ import com.ajaxjs.web.test.MockRequest;
 
 public class TestMvcRequest {
 	@Test
+	public void testGetIp() {
+		HttpServletRequest request = MockRequest.mockRequest("foo", "bar");
+		when(request.getRemoteAddr()).thenReturn("10.0.0.1");
+		assertEquals("10.0.0.1", new MvcRequest(request).getIp());
+	}
+
+	@Test
 	public void testGetBasePath() {
 		HttpServletRequest request = MockRequest.mockRequest("foo", "bar");
 		when(request.getScheme()).thenReturn("https");

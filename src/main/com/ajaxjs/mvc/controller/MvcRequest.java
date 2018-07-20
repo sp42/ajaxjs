@@ -28,6 +28,7 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ajaxjs.framework.dao.QueryParams;
@@ -35,7 +36,6 @@ import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.collection.MapHelper;
 import com.ajaxjs.util.io.StreamUtil;
 import com.ajaxjs.util.reflect.BeanUtil;
-import com.ajaxjs.web.RequestHelper;
 
 /**
  * 通过 HttpServletRequestWrapper （装饰模式的应用）增强 HttpServletRequest的功能。
@@ -43,7 +43,7 @@ import com.ajaxjs.web.RequestHelper;
  * @author Sp42 frank@ajaxjs.com
  *
  */
-public class MvcRequest extends RequestHelper {
+public class MvcRequest extends HttpServletRequestWrapper {
 	/**
 	 * 创建一个 MVC 请求对象。构造方法会自动加入 UTF-8 编码。
 	 * 
@@ -212,7 +212,7 @@ public class MvcRequest extends RequestHelper {
 	 * 保存一个 request 对象
 	 * 
 	 * @param request
-	 *            request 对象
+	 *            请求对象
 	 */
 	public static void setHttpServletRequest(HttpServletRequest request) {
 		threadLocalRequest.set(request);
@@ -248,7 +248,7 @@ public class MvcRequest extends RequestHelper {
 	 * 保存一个 response 对象
 	 * 
 	 * @param response
-	 *            response 对象
+	 *            响应对象
 	 */
 	public static void setHttpServletResponse(HttpServletResponse response) {
 		threadLocalResponse.set(response);
@@ -257,7 +257,7 @@ public class MvcRequest extends RequestHelper {
 	/**
 	 * 获取上下文中 response 对象
 	 * 
-	 * @return response 对象
+	 * @return response 响应对象
 	 */
 	public static HttpServletResponse getHttpServletResponse() {
 		HttpServletResponse resp = threadLocalResponse.get();
@@ -274,7 +274,7 @@ public class MvcRequest extends RequestHelper {
 		threadLocalRequest.set(null);
 		threadLocalResponse.set(null);
 	}
-	
+
 	/**
 	 * 获取磁盘真實地址。
 	 * 
