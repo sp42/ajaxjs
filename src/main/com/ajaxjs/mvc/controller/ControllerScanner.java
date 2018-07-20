@@ -60,7 +60,7 @@ public class ControllerScanner {
 		// the path in class always starts from top 1
 		String topPath = clz.getAnnotation(Path.class).value();
 		topPath = topPath.replaceAll("^/", ""); // remove the first / so that the array would be right length
-		LOGGER.info("控制器正在解析，This controller \"{0}\" is being parsing", topPath);
+//		LOGGER.info("控制器正在解析，This controller \"{0}\" is being parsing", topPath);
 
 		Action action = null;
 		if (topPath.contains("/")) {

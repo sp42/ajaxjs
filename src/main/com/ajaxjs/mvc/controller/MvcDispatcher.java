@@ -50,6 +50,18 @@ import com.ajaxjs.util.logger.LogHelper;
  */
 public class MvcDispatcher implements Filter {
 	private static final LogHelper LOGGER = LogHelper.getLog(MvcDispatcher.class);
+	
+	private static final String t =
+			"     ___       _       ___  __    __      _   _____        _          __  _____   _____  \n"+
+			"     /   |     | |     /   | \\ \\  / /     | | /  ___/      | |        / / | ____| |  _  \\ \n"+
+			"    / /| |     | |    / /| |  \\ \\/ /      | | | |___       | |  __   / /  | |__   | |_| |  \n"+
+			"   / / | |  _  | |   / / | |   }  {    _  | | \\___  \\      | | /  | / /   |  __|  |  _  {  \n"+
+			"  / /  | | | |_| |  / /  | |  / /\\ \\  | |_| |  ___| |      | |/   |/ /    | |___  | |_| |  \n"+
+			" /_/   |_| \\_____/ /_/   |_| /_/  \\_\\ \\_____/ /_____/      |___/|___/     |_____| |_____/ \n";
+	
+	{
+		LOGGER.infoYellow("\n" +t);
+	}
 
 	/**
 	 * 初始化这个过滤器
@@ -59,8 +71,6 @@ public class MvcDispatcher implements Filter {
 	 */
 	@Override
 	public void init(FilterConfig fConfig) throws ServletException {
-		LOGGER.info("AJAXJS MVC 服务启动之中……");
-
 		// 读取 web.xml 配置，如果有 controller 那一项就获取指定包里面的内容，看是否有属于 IController 接口的控制器，有就加入到 AnnotationUtils.controllers 集合中
 		Map<String, String> config = MvcRequest.parseInitParams(null, fConfig);
 
@@ -116,7 +126,7 @@ public class MvcDispatcher implements Filter {
 			dispatch(request, response, controller, method);
 			return; // 终止当前 servlet 请求
 		} else {
-			LOGGER.info("{0} {1} 控制器没有这个方法！", httpMethod, request.getRequestURI());
+//			LOGGER.info("{0} {1} 控制器没有这个方法！", httpMethod, request.getRequestURI());
 		}
 
 		chain.doFilter(req, resp);// 不要传 MvcRequest，以免入侵其他框架
@@ -162,12 +172,13 @@ public class MvcDispatcher implements Filter {
 				}
 			}
 			
+		} catch (Throwable e) {
+			err = e;
+		} finally {
 			if (isDoFilter) {
 				for (FilterAction filterAction : filterActions)
 					filterAction.after(request, response, controller, isSkip); // 后置调用
 			}
-		} catch (Throwable e) {
-			err = e;
 		}
 
 		if (err != null) { // 有未处理的异常

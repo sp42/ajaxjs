@@ -69,8 +69,8 @@ public class SiteStruService implements ServletContextListener {
 			if (ConfigService.config.isLoaded()) {
 				cxt.setAttribute("all_config", ConfigService.config); // 所有配置保存在这里
 
-				String configJson = JsonHelper.format(JsonHelper.stringifyMap(ConfigService.config));
-				LOGGER.info("加载项目配置成功！配置信息如下：\n" + configJson);
+//				String configJson = JsonHelper.format(JsonHelper.stringifyMap(ConfigService.config));
+				LOGGER.infoGreen("加载 " + ConfigService.getValueAsString("clientFullName") + " 项目配置成功！All config loaded.");
 			} else
 				LOGGER.warning("加载配置失败！");
 		} else
@@ -81,7 +81,7 @@ public class SiteStruService implements ServletContextListener {
 			t.travelList(stru);
 
 			cxt.setAttribute("SITE_STRU", this); // 所有网站结构保存在这里
-			LOGGER.info("加载网站的结构文件成功");
+			LOGGER.infoGreen("加载网站的结构文件成功 Site Structure Config Loaded.");
 		} else
 			LOGGER.info("没有网站的结构文件");
 		

@@ -20,13 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.mvc.annotation.Controller;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
 import com.ajaxjs.mvc.controller.IController;
+import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.web.WebUtil;
 
 /**
  * 
@@ -37,8 +36,8 @@ import com.ajaxjs.web.WebUtil;
 @Path("/admin/gallery")
 public class BaseGallery implements IController {
 	@GET
-	public String gallery(HttpServletRequest request) {
-		String folder = WebUtil.Mappath(request, "/images");
+	public String gallery(MvcRequest request) {
+		String folder = request.mappath("/images");
 
 		File[] files = new File(folder).listFiles();
 		if (files == null)

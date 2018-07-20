@@ -20,108 +20,17 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.util.collection.MapHelper;
 
 /**
- * Provides many usful util funcitons.
+ * Provides many util funcitons.
  * 
  * @author Sp42 frank@ajaxjs.com
  *
  */
 public class WebUtil {
-	static {
-		String t =
-				"     ___       _       ___  __    __      _   _____        _          __  _____   _____  \n"+
-				"     /   |     | |     /   | \\ \\  / /     | | /  ___/      | |        / / | ____| |  _  \\ \n"+
-				"    / /| |     | |    / /| |  \\ \\/ /      | | | |___       | |  __   / /  | |__   | |_| |  \n"+
-				"   / / | |  _  | |   / / | |   }  {    _  | | \\___  \\      | | /  | / /   |  __|  |  _  {  \n"+
-				"  / /  | | | |_| |  / /  | |  / /\\ \\  | |_| |  ___| |      | |/   |/ /    | |___  | |_| |  \n"+
-				" /_/   |_| \\_____/ /_/   |_| /_/  \\_\\ \\_____/ /_____/      |___/|___/     |_____| |_____/ \n";
-		
-		System.out.println(t);
-		
-	}
-	/**
-	 * 获取磁盘真實地址。
-	 * 
-	 * @param cxt
-	 *            Web 上下文
-	 * @param relativePath
-	 *            相对地址
-	 * @return 绝对地址
-	 */
-	public static String Mappath(ServletContext cxt, String relativePath) {
-		String absolute = cxt.getRealPath(relativePath);
-
-		if (absolute != null)
-			absolute = absolute.replace('\\', '/');
-		return absolute;
-	}
-
-	/**
-	 * 输入一个相对地址，补充成为绝对地址 相对地址转换为绝对地址，并转换斜杠
-	 * 
-	 * @param relativePath
-	 *            相对地址
-	 * @return 绝对地址
-	 */
-	public static String Mappath(HttpServletRequest request, String relativePath) {
-		return Mappath(request.getServletContext(), relativePath);
-	}
-
-	/**
-	 * 返回协议+主机名+端口（如果为 80 端口的话就默认不写 80）
-	 * 
-	 * @param request
-	 *            请求对象
-	 * @return 网站名称
-	 */
-	public static String getBasePath(HttpServletRequest request) {
-		String prefix = request.getScheme() + "://" + request.getServerName();
-
-		int port = request.getServerPort();
-		if (port != 80)
-			prefix += ":" + port;
-
-		return prefix + "/" + request.getContextPath();
-	}
-
-	/**
-	 * 获取请求 ip
-	 * 
-	 * @param request
-	 *            请求对象
-	 * @return 客户端 ip
-	 */
-	public static String getIp(HttpServletRequest request) {
-		String ip = request.getHeader("x-forwarded-for");
-
-		if (!"unknown".equalsIgnoreCase(ip) && ip != null && ip.length() != 0) {
-			int index = ip.indexOf(",");
-			if (index != -1)
-				ip = ip.substring(0, index);
-
-			return ip;
-		}
-
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))
-			ip = request.getHeader("Proxy-Client-IP");
-
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))
-			ip = request.getHeader("WL-Proxy-Client-IP");
-
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))
-			ip = request.getHeader("X-Real-Ip");
-
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))
-			ip = request.getRemoteAddr();
-
-		return ip;
-	}
-
 	/**
 	 * 手机调试
 	 * 
@@ -153,11 +62,36 @@ public class WebUtil {
 	public static String httpProxy(HttpServletRequest request) {
 		String url = request.getParameter("url");
 		new MapHelper().setParameterMapRaw(request.getParameterMap()).ignoreField("url");
-		// TODO
 		String params = MapHelper.join(new MapHelper().setParameterMapRaw(request.getParameterMap()).toMap().ignoreField("url").getParameterMap_String(), "&"); // 不要 url 参数
 		return url + '?' + params;
 	}
 	
+	/**
+	 * ip 缓存，保存起来方便下次使用
+	 */
+	private static String localIp = null;
+
+	/**
+	 * 获取本机 IP 地址 用于局域网内的测试机器
+	 * 
+	 * @return 本机 IP
+	 */
+	public static String getLocalIp() {
+		if (localIp == null) { // 第一次访问
+			for (String ip : getAllLocalHostIP()) {
+				if (ip.startsWith("192.168.") || ip.startsWith("10.0.")) { // 以 192.168.x.x 开头的都是局域网内的 IP
+					localIp = ip;
+					break;
+				}
+			}
+
+			if (localIp == null)
+				localIp = "localhost";// 还是 null，那就本机的……没开网卡？
+		}
+
+		return localIp;
+	}
+
 	/**
 	 * 获得本地所有的 IP 地址
 	 * 
@@ -177,7 +111,7 @@ public class WebUtil {
 		String[] ips = new String[addrs.length];
 		for (int i = 0; i < addrs.length; i++)
 			ips[i] = addrs[i].getHostAddress();
-		
+
 		return ips;
 	}
 

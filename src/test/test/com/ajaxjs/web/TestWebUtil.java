@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Test;
 
+import com.ajaxjs.web.RequestHelper;
 import com.ajaxjs.web.WebUtil;
 import com.ajaxjs.web.test.MockRequest;
 
@@ -18,14 +19,14 @@ public class TestWebUtil {
 		when(request.getServerName()).thenReturn("www.ibm.com");
 		when(request.getServerPort()).thenReturn(8081);
 
-		assertEquals("https://www.ibm.com:8081/foo", WebUtil.getBasePath(request));
+		assertEquals("https://www.ibm.com:8081/foo", new RequestHelper(request).getBasePath());
 	}
 
 	@Test
 	public void testGetIp() {
 		HttpServletRequest request = MockRequest.mockRequest("foo", "bar");
 		when(request.getRemoteAddr()).thenReturn("10.0.0.1");
-		assertEquals("10.0.0.1", WebUtil.getIp(request));
+		assertEquals("10.0.0.1", new RequestHelper(request).getIp());
 	}
 	
 	@Test

@@ -22,7 +22,9 @@ package com.ajaxjs.simpleApp;
  */
 public interface Constant {
 	public static final String commonFolder = "asset/common/";
+	
 	public static final String commonImage = commonFolder + "images/";
+	
 	public static final String commonIcon = commonImage + "icon/";
 
 	/**
@@ -34,7 +36,6 @@ public interface Constant {
 	 * 操作失败，返回 msg 信息
 	 */
 	public static final String json_not_ok = "json::{\"isOk\": false, \"msg\" : \"%s\"}";
-	
 
 	/**
 	 * 显示 HTTP 405 禁止操作

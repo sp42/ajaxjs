@@ -1,9 +1,10 @@
-<%@tag pageEncoding="UTF-8" description="输出 HTML 头部 head 元素的标签" body-content="scriptless" trimDirectiveWhitespaces="true"%>
+<%@tag pageEncoding="UTF-8" description="输出 HTML 头部 head 元素的标签" body-content="scriptless" trimDirectiveWhitespaces="true" import="com.ajaxjs.Version, com.ajaxjs.web.UserAgent"%>
 <%@attribute name="title" 		required="false" description="其他标题"%> 
 <%@attribute name="lessFile" 	required="false" description="指定 LESS 样式文件"%> 
 <jsp:useBean id="PAGE" class="com.ajaxjs.web.HtmlHead" scope="request" /> 
 <%
 	PAGE.init(request);
+	UserAgent ua = new UserAgent(request);
 %>
 <head>
 	<meta charset="utf-8" />
@@ -14,16 +15,14 @@
 	<meta name="robots" 	 content="index,follow" />
 	<meta http-equiv="X-UA-Compatible" content="edge,chrome=1" />
 <%
-	// 是否为移动客户端，响应式输出宽度 320px
-	if(PAGE.getUa().isPhone()) {
+	if(ua.isPhone()) { // 是否为移动客户端，响应式输出宽度 320px
 %>   
 		<meta name="viewport" content="width=320, user-scalable=0, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
 		<meta name="format-detection" content="telephone=no" />
 		<meta http-equiv="Cache-Control" content="no-siteapp" /><%-- 通过百度手机打开网页时，百度可能会对你的网页进行转码，脱下你的衣服，往你的身上贴狗皮膏药的广告 --%>
 <%	}
 	
-	// 兼容旧版 ie
-	if(PAGE.isOldIE()) {
+	if(ua.isOldIE()) {// 兼容旧版 ie
 		response.setHeader("X-UA-Compatible","IE=EmulateIE8");
 %>
 		<meta http-equiv="X-UA-Compatible" content="edge" />
@@ -50,9 +49,8 @@
 				/* -webkit-user-select:none; */ /* !!! */
 			}
 		}	
-	</style>
-<%-- 	<link rel="stylesheet" type="text/css" href="${PAGE.getCssUrl(lessFile)}" /> --%>
-<% if(PAGE.isDebug()) { %>
+	</style> 
+<% if(Version.isDebug) { %>
 	<link rel="stylesheet/less" type="text/css" href="${pageContext.request.contextPath}${empty lessFile ? '/asset/less/main.less' : lessFile}" />
 		
 	<script>

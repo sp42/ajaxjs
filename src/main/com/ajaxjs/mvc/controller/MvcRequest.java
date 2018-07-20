@@ -27,7 +27,6 @@ import java.util.regex.Pattern;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ajaxjs.framework.dao.QueryParams;
@@ -35,6 +34,7 @@ import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.collection.MapHelper;
 import com.ajaxjs.util.io.StreamUtil;
 import com.ajaxjs.util.reflect.BeanUtil;
+import com.ajaxjs.web.RequestHelper;
 
 /**
  * 通过 HttpServletRequestWrapper （装饰模式的应用）增强 HttpServletRequest的功能。
@@ -42,7 +42,7 @@ import com.ajaxjs.util.reflect.BeanUtil;
  * @author Sp42 frank@ajaxjs.com
  *
  */
-public class MvcRequest extends HttpServletRequestWrapper {
+public class MvcRequest extends RequestHelper {
 	/**
 	 * 创建一个 MVC 请求对象。构造方法会自动加入 UTF-8 编码。
 	 * 
@@ -81,7 +81,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 		String route = getRequestURI().replace(getContextPath(), "");
 		return route.replaceFirst("/\\w+\\.\\w+$", ""); // 删除 index.jsp
 	}
-	
+
 	public String getFolder() {
 		return getRequestURI().replace(getContextPath(), "").replaceFirst("^/", "").replaceFirst("/\\w+\\.\\w+$", ""); // 删除 index.jsp;
 	}
@@ -160,12 +160,12 @@ public class MvcRequest extends HttpServletRequestWrapper {
 
 		while (initParams.hasMoreElements()) {
 			String key = initParams.nextElement();
-			
+
 			String value;
-			if(servletCfg == null)
-				value = filterCfg.getInitParameter(key); 
-			else 
-				value =servletCfg.getInitParameter(key);
+			if (servletCfg == null)
+				value = filterCfg.getInitParameter(key);
+			else
+				value = servletCfg.getInitParameter(key);
 
 			map.put(key, value);
 		}
@@ -228,6 +228,19 @@ public class MvcRequest extends HttpServletRequestWrapper {
 			throw new RuntimeException("请求对象未初始化");
 
 		return request;
+	}
+
+	/**
+	 * 获取请求对象
+	 * 
+	 * @return 请求对象
+	 */
+	public static MvcRequest getMvcRequest() {
+		HttpServletRequest request = getHttpServletRequest();
+		if (!(request instanceof MvcRequest))
+			throw new RuntimeException("非法 MvcRequest 类型");
+
+		return (MvcRequest) request;
 	}
 
 	/**

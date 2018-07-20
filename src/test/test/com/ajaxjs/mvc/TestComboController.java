@@ -35,7 +35,6 @@ public class TestComboController extends BaseTest {
 
 	@Test
 	public void testPost() throws ServletException, IOException {
-		// POST TODO 302 重定向不能用 writer 获取结果
 		when(request.getMethod()).thenReturn("POST");
 
 		dispatcher.doFilter(request, response, chain);
@@ -43,7 +42,6 @@ public class TestComboController extends BaseTest {
 
 	@Test
 	public void testPut() throws ServletException, IOException {
-		// PUT TODO
 		when(request.getMethod()).thenReturn("PUT");
 		os = MockResponse.streamFactory(response);
 

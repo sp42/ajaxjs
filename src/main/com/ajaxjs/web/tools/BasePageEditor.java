@@ -21,17 +21,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.mvc.annotation.Controller;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
 import com.ajaxjs.mvc.controller.IController;
+import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.simpleApp.Constant;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.web.WebUtil;
 
 /**
  * 页面编辑器
@@ -63,14 +62,14 @@ public abstract class BasePageEditor implements IController, Constant {
 	 */
 	@GET
 	@Path("loadPage")
-	public String loadPage(HttpServletRequest request) {
+	public String loadPage(MvcRequest request) {
 		if (request.getParameter("url") == null)
 			throw new IllegalArgumentException("缺少必填参数 url！");
 
 		String path = request.getParameter("url");
 
 		try {
-			path = getFullPathByRequestUrl(WebUtil.Mappath(request, path));
+			path = getFullPathByRequestUrl(request.mappath(path));
 			String contentBody = read_jsp_fileContent(path);
 			request.setAttribute("contentBody", contentBody);
 		} catch (Exception e) {
@@ -88,7 +87,7 @@ public abstract class BasePageEditor implements IController, Constant {
 	 * @return JSON 结果
 	 */
 	@POST
-	public String save(HttpServletRequest request) {
+	public String save(MvcRequest request) {
 		try {
 			if (request.getParameter("url") == null)
 				throw new IllegalArgumentException("缺少必填参数 url！");
@@ -96,7 +95,7 @@ public abstract class BasePageEditor implements IController, Constant {
 			if (request.getParameter("contentBody") == null)
 				throw new IllegalArgumentException("缺少必填参数 contentBody！");
 
-			String contentBody = request.getParameter("contentBody"), path = WebUtil.Mappath(request, request.getParameter("url"));
+			String contentBody = request.getParameter("contentBody"), path = request.mappath(request.getParameter("url"));
 
 			save_jsp_fileContent(path, contentBody);
 
