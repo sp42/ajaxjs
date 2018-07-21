@@ -6,14 +6,14 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import com.ajaxjs.mvc.controller.ControllerScanner;
 import com.ajaxjs.mvc.controller.IController;
-import com.ajaxjs.mvc.controller.IControllerScanner;
 import com.ajaxjs.util.io.resource.Scanner;
 
 public class TestMvcDispatcher {
 	@Test
 	public void testScan() {
-		Scanner scaner = new Scanner(new IControllerScanner());// 定义一个扫描器，专门扫描 IController
+		Scanner scaner = new Scanner(new ControllerScanner.IControllerScanner());// 定义一个扫描器，专门扫描 IController
 		@SuppressWarnings("unchecked")
 		Set<Class<IController>> controllers = (Set<Class<IController>>) scaner.scan("test.com.ajaxjs.mvc");
 		assertTrue(controllers.size() > 0);

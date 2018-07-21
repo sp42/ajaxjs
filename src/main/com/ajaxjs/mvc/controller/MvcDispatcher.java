@@ -75,7 +75,7 @@ public class MvcDispatcher implements Filter {
 		Map<String, String> config = MvcRequest.parseInitParams(null, fConfig);
 
 		doIoc(config);
-		IControllerScanner.scannController(config);
+		ControllerScanner.scannController(config);
 	}
 
 	/**
