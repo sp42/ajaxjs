@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.web.test;
+package com.ajaxjs.web;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -40,7 +40,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.mockito.ArgumentCaptor;
 
 /**
- * 包装一个 Response 输出流
+ * 为方便单元测试，包装一个 Response 输出流
  * 
  * @author Sp42 frank@ajaxjs.com
  *

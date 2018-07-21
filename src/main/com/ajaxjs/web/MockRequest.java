@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.web.test;
+package com.ajaxjs.web;
 
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
@@ -26,8 +26,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.Filter;
 import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -40,7 +46,7 @@ import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.util.collection.MapHelper;
 
 /**
- * Create a mock request object.
+ * 为方便单元测试，模拟请求对象。 Create a mock request object.
  * 
  * @author Sp42 frank@ajaxjs.com
  */
@@ -145,6 +151,28 @@ public class MockRequest {
 
 		return request;
 	}
+	
+	public static class DummyController extends HttpServlet {
+		private static final long serialVersionUID = 1L;
+	 
+		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+			response.getWriter().append("Served at: ").append(request.getContextPath());
+		}
+ 
+		protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+			doGet(request, response);
+		}
+	}
+	
+	public static class DummyFilter implements Filter {
+		public void destroy() {}
+		
+		public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+			chain.doFilter(request, response);
+		}
+		
+		public void init(FilterConfig fConfig) throws ServletException {}
+	}
 
 	/**
 	 * 进行请求 在请求之前，你可以设定请求的参数
@@ -218,9 +246,9 @@ public class MockRequest {
 			}
 		}).when(session).setAttribute(anyString(), anyObject());
 	}
-	
+
 	public static final Map<String, Object> hash = new HashMap<>();
-	
+
 	public static Answer<String> aswser = new Answer<String>() {
 		public String answer(InvocationOnMock invocation) {
 			Object[] args = invocation.getArguments();
