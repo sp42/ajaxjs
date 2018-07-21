@@ -39,6 +39,7 @@ AJAXJS WEB 包含以下模块：
 - view 视图模块，提供一个简单的、基于 JSP/JSTL 的扩展标签；
 - security 网站防御系统，抵御 XSS、CSRF 等攻击；
 - config 基于 JSON 格式的配置系统。
+- mail 无须 JavaMail 发送邮件。原理是通过最简单的 telnet 发送；
 
 环境配置说明
 -------------
