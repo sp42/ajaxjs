@@ -7,7 +7,6 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.mvc.annotation.Controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
@@ -32,7 +31,6 @@ import com.ajaxjs.web.test.MockResponse;
 
 public class TestRequestParam {
 	
-	@Controller
 	@Path("/foo")
 	public static class c1 implements IController {
 		@GET

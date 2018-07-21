@@ -16,21 +16,21 @@
 package com.ajaxjs.mvc.controller;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 
-import javax.mvc.annotation.Controller;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 
+import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.BeanContext;
-import com.ajaxjs.ioc.IocTools;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.NewInstance;
 
@@ -60,7 +60,7 @@ public class ControllerScanner {
 		// the path in class always starts from top 1
 		String topPath = clz.getAnnotation(Path.class).value();
 		topPath = topPath.replaceAll("^/", ""); // remove the first / so that the array would be right length
-//		LOGGER.info("控制器正在解析，This controller \"{0}\" is being parsing", topPath);
+		//		LOGGER.info("控制器正在解析，This controller \"{0}\" is being parsing", topPath);
 
 		Action action = null;
 		if (topPath.contains("/")) {
@@ -76,7 +76,7 @@ public class ControllerScanner {
 			}
 		}
 
-		if (IocTools.isIOC_Bean(clz)) { // 如果有 ioc，则从容器中查找
+		if (clz.getAnnotation(Bean.class) != null) { // 如果有 ioc，则从容器中查找
 			action.controller = BeanContext.me().getBeanByClass(clz);
 			if (action.controller == null)
 				LOGGER.warning("在 IOC 资源库中找不到该类 {0} 的实例，请检查该类是否已经加入了 IOC 扫描？  The IOC library not found that Controller, plz check if it added to the IOC scan.", clz.getName());
@@ -128,7 +128,7 @@ public class ControllerScanner {
 			if (subPath != null) {
 				String subPathValue = subPath.value();
 				subPathValue = subPathValue.replaceAll("^/", ""); // 一律不要前面的 /
-				 
+
 				// add sub action starts from parent Node, not the top node
 				if (action.children == null)
 					action.children = new HashMap<>();
@@ -254,13 +254,10 @@ public class ControllerScanner {
 	 * @return true if it's ok.
 	 */
 	public static boolean testClass(Class<? extends IController> clz) {
-		if (clz.getAnnotation(Controller.class) == null) {// 获取注解对象
-			//			LOGGER.warning("此非控制器！要我处理干甚！？This is NOT a Controller! 类：" + clz.getName());
+		if (Modifier.isAbstract(clz.getModifiers())) // 忽略抽象类
 			return false;
-		}
 
-		// 总路径
-		Path path = clz.getAnnotation(Path.class);
+		Path path = clz.getAnnotation(Path.class); // 总路径
 		if (path == null) {
 			LOGGER.warning("{0} 不存在任何 Path 信息！No Path info!", clz.toString());
 			return false;

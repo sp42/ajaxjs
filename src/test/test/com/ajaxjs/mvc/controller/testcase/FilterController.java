@@ -1,6 +1,5 @@
 package test.com.ajaxjs.mvc.controller.testcase;
 
-import javax.mvc.annotation.Controller;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -15,7 +14,6 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 import test.com.ajaxjs.mvc.filter.Filter;
 
 // 测试基本的 HTTP 四个方法已经自定义流程控制
-@Controller
 @Path("/filter")
 public class FilterController implements IController {
 	@GET

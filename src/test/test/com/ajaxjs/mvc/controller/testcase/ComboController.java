@@ -2,7 +2,6 @@ package test.com.ajaxjs.mvc.controller.testcase;
 
 import java.io.IOException;
 
-import javax.mvc.annotation.Controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.DELETE;
@@ -21,7 +20,6 @@ import com.ajaxjs.mvc.controller.MvcRequest;
  * @author Sp42 frank@ajaxjs.com
  *
  */
-@Controller
 @Path("/combo")
 public class ComboController implements IController {
 	@GET

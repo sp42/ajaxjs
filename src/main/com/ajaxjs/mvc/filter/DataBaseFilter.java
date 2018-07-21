@@ -15,11 +15,12 @@
  */
 package com.ajaxjs.mvc.filter;
 
+import com.ajaxjs.Version;
+import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.jdbc.JdbcConnection;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.simpleApp.CommonController;
 
 /**
  * 数据库连接、关闭连接
@@ -30,12 +31,28 @@ import com.ajaxjs.simpleApp.CommonController;
 public class DataBaseFilter implements FilterAction {
 	@Override
 	public boolean before(MvcRequest request, MvcOutput response, IController controller) {
-		CommonController.initDb();
+		initDb();
+		
 		return true;
 	}
 
 	@Override
 	public void after(MvcRequest request, MvcOutput response, IController controller, boolean isSkip) {
 		JdbcConnection.closeDb();
+	}
+
+	/**
+	 * 初始化数据库连接
+	 */
+	public static void initDb() {
+		String config = ConfigService.getValueAsString("data.database_node");
+
+		if (config == null)
+			config = "jdbc/mysql"; // 如果没有 默认 mysql
+
+		if (!Version.isDebug)
+			config += "_deploy"; // 约定生产环境后面加上 _deploy
+
+		JdbcConnection.initDbByJNDI(config);
 	}
 }

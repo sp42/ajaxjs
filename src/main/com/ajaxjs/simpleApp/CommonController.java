@@ -22,13 +22,10 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.ajaxjs.Version;
-import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.service.IService;
 import com.ajaxjs.framework.service.ServiceException;
-import com.ajaxjs.jdbc.JdbcConnection;
 import com.ajaxjs.jdbc.PageResult;
 import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.mvc.ModelAndView;
@@ -208,7 +205,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	 * @return JSP 路径。缺省提供一个默认路径，但不一定要使用它，换别的也可以。
 	 * @throws ServiceException
 	 */
-	public PageResult<T> pageList(int start, int limit, ModelAndView model) throws ServiceException {
+	public String list(int start, int limit, ModelAndView model) throws ServiceException {
 		LOGGER.info("获取分页列表 GET list:{0}/{1}", start, limit);
 
 		prepareData(model);
@@ -216,31 +213,27 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 		PageResult<T> pageResult = getService().findPagedList(getParam(start, limit));
 		model.put("PageResult", pageResult);
 
-		return pageResult;
-	}
-
-	/**
-	 * 获取全部列表数据
-	 * 
-	 * @param model
-	 *            Model 模型
-	 * @throws ServiceException
-	 */
-	public void list_all(ModelAndView model) throws ServiceException {
-		LOGGER.info("----获取全部列表----");
-		pageList(0, 999, model);
+		return null;
 	}
 
 	/**
 	 * 将分页列表转化为 JSON 输出
 	 * 
-	 * @param pageResult
+	 * @param start
+	 * @param limit
 	 * @param model
-	 *            Model 模型
 	 * @return
+	 * @throws ServiceException
 	 */
 	@SuppressWarnings("unchecked")
-	public String outputPagedJsonList(PageResult<T> pageResult, ModelAndView model) {
+	public String listJson(int start, int limit, ModelAndView model) throws ServiceException {
+		LOGGER.info("获取分页列表 GET list:{0}/{1}", start, limit);
+
+		prepareData(model);
+
+		PageResult<T> pageResult = getService().findPagedList(getParam(start, limit));
+		model.put("PageResult", pageResult);
+
 		if (pageResult != null && pageResult.getRows() != null) {
 			String jsonStr;
 
@@ -258,6 +251,18 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	}
 
 	/**
+	 * 获取全部列表数据
+	 * 
+	 * @param model
+	 *            Model 模型
+	 * @throws ServiceException
+	 */
+	public void list_all(ModelAndView model) throws ServiceException {
+		LOGGER.info("----获取全部列表----");
+		list(0, 999, model);
+	}
+
+	/**
 	 * 可覆盖的模版方法，用于装备其他数据，如分类这些外联的表。
 	 * 
 	 * @param model
@@ -269,21 +274,6 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 			model.put("uiName", service.getName());
 			model.put("tableName", service.getTableName());
 		}
-	}
-
-	/**
-	 * 初始化数据库连接
-	 */
-	public static void initDb() {
-		String config = ConfigService.getValueAsString("data.database_node");
-
-		if (config == null)
-			config = "jdbc/mysql"; // 如果没有 默认 mysql
-
-		if (!Version.isDebug)
-			config += "_deploy"; // 约定生产环境后面加上 _deploy
-
-		JdbcConnection.initDbByJNDI(config);
 	}
 
 	/**
@@ -390,12 +380,5 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 		if (service == null)
 			LOGGER.warning("当前没有 service 对象传入！！！");
 		this.service = service;
-	}
-
-	/**
-	 * Shorthand
-	 */
-	public static void closeDb() {
-		JdbcConnection.closeDb();
 	}
 }

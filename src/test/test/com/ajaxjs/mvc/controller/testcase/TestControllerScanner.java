@@ -2,7 +2,6 @@ package test.com.ajaxjs.mvc.controller.testcase;
 
 import static org.junit.Assert.*;
 
-import javax.mvc.annotation.Controller;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -17,23 +16,19 @@ import com.ajaxjs.util.reflect.ExecuteMethod;
 public class TestControllerScanner {
 	ControllerScanner scanner = new ControllerScanner();
 
-	@Controller
 	@Path("/foo")
 	public static class c1 implements IController {
 	}
 
-	@Controller
 	@Path("/foo/bar/zxzx")
 	public static class c2 implements IController {
 	}
 
-	@Controller
 	@Path("/foo/bar2")
 	public static class c3 implements IController {
 
 	}
 
-	@Controller
 	@Path("/foo/bar2")
 	public static class c4 implements IController {
 		@Path("/id")
@@ -42,7 +37,6 @@ public class TestControllerScanner {
 		}
 	}
 	
-	@Controller
 	@Path("/foo/bar3")
 	public static class c5 implements IController {
 		@Path("/id/info")
@@ -81,7 +75,6 @@ public class TestControllerScanner {
 		assertNotNull(ControllerScanner.urlMappingTree.get("foo").children.get("bar").children.get("zxzx"));
 	}
 	
-	@Controller
 	@Path("/foo")
 	public static class c6 implements IController {
 		@GET
@@ -119,7 +112,6 @@ public class TestControllerScanner {
 		assertEquals("foo.bar.info", ControllerScanner.find("foo/bar/info").path);
 	}
 	
-	@Controller
 	@Path("/foo")
 	public static class c7 implements IController {
 		@GET

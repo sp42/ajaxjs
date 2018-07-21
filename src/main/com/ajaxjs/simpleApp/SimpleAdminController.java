@@ -1,6 +1,5 @@
 package com.ajaxjs.simpleApp;
 
-import javax.mvc.annotation.Controller;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
@@ -12,7 +11,6 @@ import com.ajaxjs.mvc.controller.IController;
  * @author admin
  *
  */
-@Controller
 @Path("/admin")
 public class SimpleAdminController implements IController, Constant {
 	@GET

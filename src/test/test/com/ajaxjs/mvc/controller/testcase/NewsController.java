@@ -1,6 +1,5 @@
 package test.com.ajaxjs.mvc.controller.testcase;
 
-import javax.mvc.annotation.Controller;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -16,7 +15,6 @@ import com.ajaxjs.framework.mock.NewsService;
 import com.ajaxjs.framework.mock.NewsServiceImpl;
 import com.ajaxjs.framework.service.ServiceException;
 
-@Controller
 @Path("/news")
 public class NewsController extends CommonController<News, Long, NewsService> {
 
@@ -27,7 +25,7 @@ public class NewsController extends CommonController<News, Long, NewsService> {
 	
 	@GET
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) throws ServiceException {
-		pageList(start, limit, model);
+		super.list(start, limit, model);
 		return "";
 	}
 	

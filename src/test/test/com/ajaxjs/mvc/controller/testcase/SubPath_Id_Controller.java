@@ -2,7 +2,6 @@ package test.com.ajaxjs.mvc.controller.testcase;
 
 import java.io.IOException;
 
-import javax.mvc.annotation.Controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.DELETE;
@@ -16,7 +15,6 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
 
-@Controller
 @Path("/MyTopPath_And_Sub_And_ID_Path")
 public class SubPath_Id_Controller implements IController {
 	@GET
