@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.junit.*;
 
-import com.ajaxjs.web.MockResponse;
+import com.ajaxjs.web.MockWeb;
 
 public class TestSubPathController extends BaseTest {
 	@Test
@@ -30,7 +30,7 @@ public class TestSubPathController extends BaseTest {
 
 		// 响应对象
 		response = mock(HttpServletResponse.class);
-		writer = MockResponse.writerFactory(response);
+		writer = MockWeb.writerFactory(response);
 		
 		dispatcher.doFilter(request, response, chain);
 		
@@ -46,7 +46,7 @@ public class TestSubPathController extends BaseTest {
 
 		// 响应对象
 		response = mock(HttpServletResponse.class);
-		writer = MockResponse.writerFactory(response);
+		writer = MockWeb.writerFactory(response);
 	}
 	
 	@Test

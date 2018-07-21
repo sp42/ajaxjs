@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.BeforeClass;
 
 import com.ajaxjs.mvc.controller.MvcDispatcher;
-import com.ajaxjs.web.MockResponse.StubServletOutputStream;
+import com.ajaxjs.web.MockWeb.StubServletOutputStream;
 
 /**
  * 方便测试的基础类

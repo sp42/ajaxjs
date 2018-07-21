@@ -1,3 +1,18 @@
+/**
+ * Copyright Sp42 frank@ajaxjs.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.ajaxjs.web;
 
 import java.io.File;
@@ -12,9 +27,13 @@ import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.io.StreamUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.web.upload.MetaData;
-import com.ajaxjs.web.upload.UploadResult;
 
+/**
+ * 文件上传
+ * 
+ * @author Sp42 frank@ajaxjs.com
+ *
+ */
 public class UploadFile extends HttpServletRequestWrapper {
 	private static final LogHelper LOGGER = LogHelper.getLog(UploadFile.class);
 
@@ -36,7 +55,7 @@ public class UploadFile extends HttpServletRequestWrapper {
 	public UploadFile(HttpServletRequest request, UploadFileInfo uploadFileInfo) {
 		super(request);
 		setUploadFileInfo(uploadFileInfo);
-	} 
+	}
 
 	private UploadFileInfo uploadFileInfo;
 
@@ -82,7 +101,7 @@ public class UploadFile extends HttpServletRequestWrapper {
 	 * @return 上传结果
 	 * @throws IOException
 	 */
-	public UploadResult upload() throws IOException {
+	public UploadFileInfo upload() throws IOException {
 		check();
 		ServletInputStream in = null;
 
@@ -97,7 +116,7 @@ public class UploadFile extends HttpServletRequestWrapper {
 
 		parseMeta(dataStr);
 
-		int offset = MetaData.get(dataBytes), length = getLength(offset);
+		int offset = get(dataBytes), length = getLength(offset);
 		return save(offset, length);
 	}
 
@@ -138,25 +157,22 @@ public class UploadFile extends HttpServletRequestWrapper {
 	 * @param length
 	 * @return 上传结果
 	 */
-	private UploadResult save(int offset, int length) {
-		String fullPath = uploadFileInfo.saveFolder + uploadFileInfo.saveFileName;
-		File file = null;
-		UploadResult result = new UploadResult();
+	private UploadFileInfo save(int offset, int length) {
+		uploadFileInfo.fullPath = uploadFileInfo.saveFolder + uploadFileInfo.saveFileName;
 
 		try {
-			file = FileUtil.createFile(fullPath, uploadFileInfo.isFileOverwrite);
+			File file = FileUtil.createFile(uploadFileInfo.fullPath, uploadFileInfo.isFileOverwrite);
 			// 写入文件
 			new FileUtil().setData(dataBytes).setFile(file).save(offset, length).close();
-			result.fullPath = fullPath;
-			result.fileName = file.getName();
-			result.isOk = true;
+			uploadFileInfo.isOk = true;
 		} catch (IOException e) {
-			result.errMsg = e.getMessage();
+			uploadFileInfo.isOk = false;
+			uploadFileInfo.errMsg = e.getMessage();
 			LOGGER.warning(e);
 		}
 
-		return result;
-	} 
+		return uploadFileInfo;
+	}
 
 	public UploadFileInfo getUploadFileInfo() {
 		return uploadFileInfo;
@@ -164,5 +180,33 @@ public class UploadFile extends HttpServletRequestWrapper {
 
 	public void setUploadFileInfo(UploadFileInfo uploadFileInfo) {
 		this.uploadFileInfo = uploadFileInfo;
+	}
+
+	private final static byte[] b = "\n".getBytes();
+
+	/**
+	 * 
+	 * @param dataBytes
+	 * @return
+	 */
+	public static int get(byte[] dataBytes) {
+		int skip = 0;
+
+		for (int i = 0; i < dataBytes.length; i++) {
+			int temp = i, j = 0;
+			while (dataBytes[temp] == b[j]) {
+				temp++;
+				j++;
+				if (j == b.length) {
+					skip++;
+					if (skip == 3)
+						return i + 3;// why plus 3?
+
+					break;
+				}
+			}
+		}
+
+		return 0;
 	}
 }

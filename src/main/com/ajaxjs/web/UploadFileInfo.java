@@ -7,7 +7,7 @@ public class UploadFileInfo {
 	public String name;
 
 	/**
-	 * 文件名
+	 * 原始文件名
 	 */
 	public String filename;
 
@@ -53,4 +53,19 @@ public class UploadFileInfo {
 	 * 
 	 */
 	public String saveFileName;
+
+	/**
+	 * 上传成功之文件完整路径
+	 */
+	public String fullPath;
+
+	/**
+	 * 是否上传成功
+	 */
+	public boolean isOk;
+
+	/**
+	 * 若不成功，是什么异常信息
+	 */
+	public String errMsg;
 }

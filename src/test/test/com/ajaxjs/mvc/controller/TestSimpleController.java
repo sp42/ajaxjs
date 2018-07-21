@@ -11,16 +11,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.junit.*;
 
-import com.ajaxjs.web.MockRequest;
-import com.ajaxjs.web.MockResponse;
+import com.ajaxjs.web.MockWeb;
+import com.ajaxjs.web.MockWeb;
 
 public class TestSimpleController extends BaseTest {
 	// 单测技巧，每个 url 对应一个 request、一个 response
 	@Before
 	public void load() throws ServletException {
-		request = MockRequest.mockRequest("/ajaxjs-web", "/simple");
+		request = MockWeb.mockRequest("/ajaxjs-web", "/simple");
 		response = mock(HttpServletResponse.class);
-		writer = MockResponse.writerFactory(response);
+		writer = MockWeb.writerFactory(response);
 	}
 
 	@Test
@@ -38,14 +38,14 @@ public class TestSimpleController extends BaseTest {
 
 		dispatcher.doFilter(request, response, chain);
 		
-		assertEquals("/index.jsp", MockResponse.getRequestDispatcheResult(request));
+		assertEquals("/index.jsp", MockWeb.getRequestDispatcheResult(request));
 	}
 
 	@Test
 	public void testPut() throws ServletException, IOException {
 		// POST TODO 302 重定向不能用 writer 获取结果
 		when(request.getMethod()).thenReturn("PUT");
-		os = MockResponse.streamFactory(response);
+		os = MockWeb.streamFactory(response);
 
 		dispatcher.doFilter(request, response, chain);
 		

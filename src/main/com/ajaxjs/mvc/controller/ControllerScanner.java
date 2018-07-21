@@ -265,21 +265,4 @@ public class ControllerScanner {
 
 		return true;
 	}
-
-	/**
-	 * 判断传入的类是否一个控制器，是的话返回 true，否则为 false。
-	 * 
-	 * @param clazz
-	 *            类
-	 * @return 是否 IController 类
-	 */
-	@Deprecated
-	public static boolean isController(Class<?> clazz) {
-		for (Class<?> clz : clazz.getInterfaces()) {
-			if (clz == IController.class)
-				return true;
-		}
-
-		return false;
-	}
 }

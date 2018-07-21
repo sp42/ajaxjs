@@ -18,26 +18,38 @@ import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebInitParam;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -50,7 +62,7 @@ import com.ajaxjs.util.collection.MapHelper;
  * 
  * @author Sp42 frank@ajaxjs.com
  */
-public class MockRequest {
+public class MockWeb {
 	/**
 	 * 模拟一个请求对象
 	 * 
@@ -151,27 +163,29 @@ public class MockRequest {
 
 		return request;
 	}
-	
+
 	public static class DummyController extends HttpServlet {
 		private static final long serialVersionUID = 1L;
-	 
+
 		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			response.getWriter().append("Served at: ").append(request.getContextPath());
 		}
- 
+
 		protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			doGet(request, response);
 		}
 	}
-	
+
 	public static class DummyFilter implements Filter {
-		public void destroy() {}
-		
+		public void destroy() {
+		}
+
 		public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 			chain.doFilter(request, response);
 		}
-		
-		public void init(FilterConfig fConfig) throws ServletException {}
+
+		public void init(FilterConfig fConfig) throws ServletException {
+		}
 	}
 
 	/**
@@ -189,9 +203,9 @@ public class MockRequest {
 		DummyFilter filter = new DummyFilter();
 
 		try {
-			controller.init(MockResponse.initServletConfig(DummyController.class));
+			controller.init(initServletConfig(DummyController.class));
 
-			filter.init(MockResponse.initFilterConfig(controller.getServletContext()));
+			filter.init(initFilterConfig(controller.getServletContext()));
 			filter.doFilter(request, response, filterChain);
 
 			controller.doGet(request, response);
@@ -257,4 +271,135 @@ public class MockRequest {
 			return obj == null ? null : obj.toString();
 		}
 	};
+
+	public static class StubServletOutputStream extends ServletOutputStream {
+		private OutputStream os = new ByteArrayOutputStream();
+
+		@Override
+		public void write(int i) throws IOException {
+			os.write(i);
+		}
+
+		public String getContent() {
+			return os.toString();
+		}
+	}
+
+	@Deprecated
+	class StubServletOutputStream22 extends ServletInputStream {
+		public ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+		public void write(int i) throws IOException {
+			os.write(i);
+		}
+
+		public String getContent() {
+			return os.toString();
+		}
+
+		@Override
+		public int read() throws IOException {
+			return 0;
+		}
+	}
+
+	/**
+	 * Writer:形象的比喻：当我们调用 response.getWriter()
+	 * 这个对象同时获得了网页的画笔，这时你就可以通过这个画笔在网页上画任何你想要显示的东西。Writer 就是向页面输出信息，负责让客户端显示内容
+	 * 
+	 * @param response
+	 *            响应对象
+	 * @return writer 以便获取输出信息
+	 */
+	public static StringWriter writerFactory(HttpServletResponse response) {
+		StringWriter writer = new StringWriter();
+		PrintWriter printWriter = new PrintWriter(writer);
+
+		try {
+			when(response.getWriter()).thenReturn(printWriter);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return writer;
+	}
+
+	/**
+	 * 除了字符串使用 StringWriter，Response 输出的还可以是流
+	 * 
+	 * @param response
+	 *            响应对象
+	 * @return 流对象以便获取信息
+	 */
+	public static StubServletOutputStream streamFactory(HttpServletResponse response) {
+		StubServletOutputStream os = new StubServletOutputStream();
+
+		try {
+			when(response.getOutputStream()).thenReturn(os);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return os;
+	}
+
+	/**
+	 * 获取 MVC 跳转模版的那个路径
+	 * 
+	 * @param request
+	 *            请求对象
+	 * @return 模版路径
+	 */
+	public static String getRequestDispatcheResult(HttpServletRequest request) {
+		ArgumentCaptor<String> dispatcherArgument = ArgumentCaptor.forClass(String.class);
+		verify(request).getRequestDispatcher(dispatcherArgument.capture());
+
+		return dispatcherArgument.getValue();
+	}
+
+	/**
+	 * 初始化 Servlet 配置，这里是模拟 注解
+	 * 
+	 * @param cls
+	 *            控制器类
+	 * @return Servlet 配置
+	 */
+	public static ServletConfig initServletConfig(Class<? extends HttpServlet> cls) {
+		ServletConfig servletConfig = mock(ServletConfig.class);
+
+		// 模拟注解
+		Vector<String> v = new Vector<>();
+
+		// 通过反射获取注解内容
+
+		if (cls != null) {
+			WebServlet WebServlet_an = cls.getAnnotation(WebServlet.class);
+
+			for (WebInitParam p : WebServlet_an.initParams()) {
+				v.addElement(p.name());
+				when(servletConfig.getInitParameter(p.name())).thenReturn(p.value());
+			}
+		}
+
+		when(servletConfig.getInitParameterNames()).thenReturn(v.elements());
+
+		return servletConfig;
+	}
+
+	/**
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public static FilterConfig initFilterConfig(ServletContext context) {
+		FilterConfig filterConfig = mock(FilterConfig.class);
+		// 模拟注解
+		Vector<String> v = new Vector<>();
+		v.addElement("urlPatterns");
+		when(filterConfig.getInitParameterNames()).thenReturn(v.elements());
+		when(filterConfig.getInitParameter("urlPatterns")).thenReturn("/service/*");
+		when(filterConfig.getServletContext()).thenReturn(context);
+
+		return filterConfig;
+	}
 }

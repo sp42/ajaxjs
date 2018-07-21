@@ -20,7 +20,7 @@ import org.junit.*;
 import org.mockito.Mock;
 
 import com.ajaxjs.mvc.controller.MvcDispatcher;
-import com.ajaxjs.web.MockResponse;
+import com.ajaxjs.web.MockWeb;
 
 import static org.mockito.Matchers.anyString;
 
@@ -61,7 +61,7 @@ public class TestController {
 
 		// GET List
 		when(request.getMethod()).thenReturn("GET");
-		writer = MockResponse.writerFactory(response);
+		writer = MockWeb.writerFactory(response);
 		
 		dispatcher.doFilter(request, response, chain);
 		assertEquals(writer.toString(), "hihi");
@@ -71,6 +71,6 @@ public class TestController {
 		dispatcher.doFilter(request, response, chain);
 		
 		
-        assertEquals("home.jsp", MockResponse.getRequestDispatcheResult(request));
+        assertEquals("home.jsp", MockWeb.getRequestDispatcheResult(request));
 	}
 }

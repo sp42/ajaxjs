@@ -25,9 +25,7 @@ import com.ajaxjs.mvc.controller.ControllerScanner;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.controller.RequestParam;
-import com.ajaxjs.web.MockRequest;
-import com.ajaxjs.web.MockResponse;
-
+import com.ajaxjs.web.MockWeb;
 
 public class TestRequestParam {
 	
@@ -69,13 +67,13 @@ public class TestRequestParam {
 	public void testGetArgs() {
 		ControllerScanner.add(c1.class);
 		
-		HttpServletRequest request = MockRequest.mockRequest("/ajaxjs-web", "/combo/person");
+		HttpServletRequest request = MockWeb.mockRequest("/ajaxjs-web", "/combo/person");
 		
 		map.put("foo", new String[] {"bar"});
 		when(request.getParameterMap()).thenReturn(map);
 
 		HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
-		StringWriter writer = MockResponse.writerFactory(response);
+		StringWriter writer = MockWeb.writerFactory(response);
 		
 		Object[] args = RequestParam.getArgs(new MvcRequest(request), response, ControllerScanner.urlMappingTree.get("foo").getMethod);
 //		System.out.println(args.length);
@@ -92,7 +90,7 @@ public class TestRequestParam {
 	
 	@Test
 	public void testGetArgsValue() {
-		HttpServletRequest request = MockRequest.mockRequest("/ajaxjs-web", "/foo/12888/");
+		HttpServletRequest request = MockWeb.mockRequest("/ajaxjs-web", "/foo/12888/");
 		HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
 		
 		when(request.getParameter("name")).thenReturn("foo");

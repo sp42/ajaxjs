@@ -4,13 +4,13 @@ import static org.junit.Assert.*;
 import org.junit.*;
 
 import com.ajaxjs.util.Value;
-import com.ajaxjs.web.MockRequest;
+import com.ajaxjs.web.MockWeb;
 
 import java.io.IOException;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 
-public class TestRequest extends MockRequest {
+public class TestRequest extends MockWeb {
 	@BeforeClass
 	public static void init() {
 	}
