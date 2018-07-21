@@ -6,7 +6,7 @@
 
 	<groupId>com.ajaxjs</groupId>
 	<artifactId>ajaxjs-web</artifactId>
-	<version>1.0.9</version>
+	<version>1.1.0</version>
 	<packaging>jar</packaging>
 
 	<name>AJAXJS-Web</name>
@@ -110,7 +110,7 @@
 			<plugin>
 				<groupId>org.sonatype.plugins</groupId>
 				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.7</version>
+				<version>1.6.8</version>
 				<extensions>true</extensions>
 				<configuration>
 					<serverId>ossrh</serverId>
@@ -164,15 +164,7 @@
 		</plugins>
 	</build>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-resources-plugin</artifactId>
-			<version>3.1.0</version>
-			<scope>provided</scope>
-		</dependency>
-		
-		
+	<dependencies> 
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>

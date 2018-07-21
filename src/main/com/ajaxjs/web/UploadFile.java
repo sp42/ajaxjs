@@ -131,8 +131,10 @@ public class UploadFile extends HttpServletRequestWrapper {
 		if (uploadFileInfo.name == null)
 			throw new IllegalArgumentException("你的表单中没有设置一个 name，不能获取字段");
 
-		uploadFileInfo.filename = StringUtil.regMatch("filename=\"([^\"]*)\"", dataStr, 1);
+		uploadFileInfo.oldFilename = StringUtil.regMatch("filename=\"([^\"]*)\"", dataStr, 1);
 		uploadFileInfo.contentType = StringUtil.regMatch("Content-Type:\\s?([\\w/]+)", dataStr, 1);
+		
+		// TODO 文件扩展名判断
 	}
 
 	/**
@@ -158,6 +160,14 @@ public class UploadFile extends HttpServletRequestWrapper {
 	 * @return 上传结果
 	 */
 	private UploadFileInfo save(int offset, int length) {
+		if (uploadFileInfo.saveFileName == null) {
+			uploadFileInfo.saveFileName = uploadFileInfo.oldFilename; // 如不指定 saveFileName 则默认上传的
+		} else {
+			String[] arr = uploadFileInfo.oldFilename.split("\\."); // 获取文件扩展名
+			String ext = arr[arr.length - 1];
+			uploadFileInfo.saveFileName += "." + ext;
+		}
+
 		uploadFileInfo.fullPath = uploadFileInfo.saveFolder + uploadFileInfo.saveFileName;
 
 		try {

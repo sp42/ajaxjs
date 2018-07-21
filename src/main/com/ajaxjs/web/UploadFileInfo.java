@@ -9,7 +9,7 @@ public class UploadFileInfo {
 	/**
 	 * 原始文件名
 	 */
-	public String filename;
+	public String oldFilename;
 
 	/**
 	 * 文件类型
@@ -26,17 +26,17 @@ public class UploadFileInfo {
 	/**
 	 * 单次文件上传最大字节
 	 */
-	public int maxTotalFileSize;
+	public int maxTotalFileSize = 1024 * 5000;
 
 	/**
 	 * 单个文件上传最大字节
 	 */
-	public int maxSingleFileSize;
+	public int maxSingleFileSize = 1024 * 1000; // 默认 1 MB;
 
 	/**
 	 * 允许上传的文件类型，如果为空数组则不限制上传类型。格式如 {".jpg", ".png", ...}
 	 */
-	public String[] allowExtFilenames;
+	public String[] allowExtFilenames = new String[] { ".jpg", ".png", ".gif" };
 
 	/**
 	 * 相同文件名是否覆盖？true=允许覆盖
@@ -46,10 +46,10 @@ public class UploadFileInfo {
 	/**
 	 * 保存文件的目录
 	 */
-	public String saveFolder;
+	public String saveFolder = "c:\\temp\\";
 
 	/**
-	 * 是否按照表单里的名字，还是改名？在这里决定
+	 * 是否按照表单里的名字，还是改名？请在外部决定
 	 * 
 	 */
 	public String saveFileName;
