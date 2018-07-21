@@ -12,7 +12,7 @@ Maven 依赖
 <dependency>
     <groupId>com.ajaxjs</groupId>
     <artifactId>ajaxjs-web</artifactId>
-    <version>1.0.7</version>
+    <version>1.0.9</version>
 </dependency>
 ```
 

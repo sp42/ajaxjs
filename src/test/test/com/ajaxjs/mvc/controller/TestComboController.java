@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.*;
 
 import com.ajaxjs.web.MockWeb;
-import com.ajaxjs.web.MockWeb;
 
 public class TestComboController extends BaseTest {
 	@Before
