@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.junit.*;
 
-import com.ajaxjs.web.test.MockRequest;
-import com.ajaxjs.web.test.MockResponse;
+import com.ajaxjs.web.MockRequest;
+import com.ajaxjs.web.MockResponse;
 
 public class TestOverrideController extends TestSimpleController {
 	@Before

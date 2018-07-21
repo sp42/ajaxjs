@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.junit.*;
 
-import com.ajaxjs.web.test.MockRequest;
-import com.ajaxjs.web.test.MockResponse;
+import com.ajaxjs.web.MockRequest;
+import com.ajaxjs.web.MockResponse;
 
 public class TestSimpleController extends BaseTest {
 	// 单测技巧，每个 url 对应一个 request、一个 response

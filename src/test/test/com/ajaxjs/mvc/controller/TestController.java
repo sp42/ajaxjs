@@ -20,7 +20,7 @@ import org.junit.*;
 import org.mockito.Mock;
 
 import com.ajaxjs.mvc.controller.MvcDispatcher;
-import com.ajaxjs.web.test.MockResponse;
+import com.ajaxjs.web.MockResponse;
 
 import static org.mockito.Matchers.anyString;
 

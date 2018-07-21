@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 import org.junit.*;
 
 import com.ajaxjs.util.Value;
-import com.ajaxjs.web.test.MockRequest;
+import com.ajaxjs.web.MockRequest;
 
 import java.io.IOException;
 import java.util.*;

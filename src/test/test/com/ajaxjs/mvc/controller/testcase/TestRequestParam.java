@@ -25,8 +25,8 @@ import com.ajaxjs.mvc.controller.ControllerScanner;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.controller.RequestParam;
-import com.ajaxjs.web.test.MockRequest;
-import com.ajaxjs.web.test.MockResponse;
+import com.ajaxjs.web.MockRequest;
+import com.ajaxjs.web.MockResponse;
 
 
 public class TestRequestParam {

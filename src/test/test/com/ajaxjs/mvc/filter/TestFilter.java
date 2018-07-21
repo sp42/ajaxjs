@@ -16,8 +16,8 @@ import org.junit.Test;
 
 import com.ajaxjs.mvc.filter.AesFilter;
 import com.ajaxjs.mvc.filter.CaptchaFilter;
-import com.ajaxjs.web.test.MockRequest;
-import com.ajaxjs.web.test.MockResponse;
+import com.ajaxjs.web.MockRequest;
+import com.ajaxjs.web.MockResponse;
 
 import test.com.ajaxjs.mvc.controller.BaseTest;
 
