@@ -322,7 +322,7 @@ public class ControllerScanner {
 					ControllerScanner.add(clz);
 			}
 		} else {
-			System.out.println("web.xml 没有配置 MVC 过滤器或者 配置没有定义 controller");
+			System.err.println("web.xml 没有配置 MVC 过滤器或者 配置没有定义 controller");
 		}
 	}
 }

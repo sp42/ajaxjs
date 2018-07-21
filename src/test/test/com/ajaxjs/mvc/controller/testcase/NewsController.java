@@ -10,9 +10,11 @@ import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.simpleApp.CommonController;
-import com.ajaxjs.framework.mock.News;
-import com.ajaxjs.framework.mock.NewsService;
-import com.ajaxjs.framework.mock.NewsServiceImpl;
+
+import test.com.ajaxjs.framework.testcase.News;
+import test.com.ajaxjs.framework.testcase.NewsService;
+import test.com.ajaxjs.framework.testcase.NewsServiceImpl;
+
 import com.ajaxjs.framework.service.ServiceException;
 
 @Path("/news")

@@ -137,7 +137,7 @@ public class TestControllerScanner {
 	public void testTestIfEmpty() {
 		ControllerScanner.add(c6.class);
 		
-		System.out.println(ControllerScanner.urlMappingTree.get("foo").controller);
+		assertNotNull(ControllerScanner.urlMappingTree.get("foo").controller);
 		assertEquals("get", ExecuteMethod.executeMethod(ControllerScanner.urlMappingTree.get("foo").controller, ControllerScanner.urlMappingTree.get("foo").getMethod));
 
 		assertEquals("foo.bar.info", ControllerScanner.find("foo/bar/info").path);

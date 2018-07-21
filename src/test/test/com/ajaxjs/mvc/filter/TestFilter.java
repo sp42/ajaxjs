@@ -60,7 +60,6 @@ public class TestFilter extends BaseTest {
 		when(request.getParameter("token")).thenReturn(AesFilter.getTimeStampToken(AesFilter.aesKey));
 
 		dispatcher.doFilter(request, response, chain);
-		System.out.println(writer.toString());
 		assertNotNull(writer.toString());
 	}
 }

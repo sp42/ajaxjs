@@ -17,6 +17,5 @@ public class TestMvcDispatcher {
 		@SuppressWarnings("unchecked")
 		Set<Class<IController>> controllers = (Set<Class<IController>>) scaner.scan("test.com.ajaxjs.mvc");
 		assertTrue(controllers.size() > 0);
-		System.out.println(controllers.size());
 	}
 }

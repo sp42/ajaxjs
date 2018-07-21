@@ -19,13 +19,14 @@ import javax.ws.rs.QueryParam;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.ajaxjs.framework.mock.News;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.ControllerScanner;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.controller.RequestParam;
 import com.ajaxjs.web.MockWeb;
+
+import test.com.ajaxjs.framework.testcase.News;
 
 public class TestRequestParam {
 	
@@ -76,8 +77,7 @@ public class TestRequestParam {
 		StringWriter writer = MockWeb.writerFactory(response);
 		
 		Object[] args = RequestParam.getArgs(new MvcRequest(request), response, ControllerScanner.urlMappingTree.get("foo").getMethod);
-//		System.out.println(args.length);
-		System.out.println(writer.toString());
+		assertNotNull(writer.toString());
 		
 		assertTrue(args[0] instanceof Map);
 		assertTrue(args[1] instanceof HttpServletRequest);

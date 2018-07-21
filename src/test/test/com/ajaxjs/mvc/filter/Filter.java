@@ -9,13 +9,12 @@ public class Filter implements FilterAction {
 
 	@Override
 	public boolean before(MvcRequest request, MvcOutput response, IController controller) {
-		System.out.println("before");
+
 		return true;
 	}
 
 	@Override
 	public void after(MvcRequest request, MvcOutput response, IController controller, boolean isSkip) {
-		System.out.println("after");
 		
 	}
 

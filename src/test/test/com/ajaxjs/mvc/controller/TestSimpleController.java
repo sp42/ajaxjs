@@ -48,8 +48,8 @@ public class TestSimpleController extends BaseTest {
 
 		dispatcher.doFilter(request, response, chain);
 		
-		System.out.println("servletOutputStream.getContent：" + os.getContent());
-		System.out.println(writer.toString());
+		assertNotNull("servletOutputStream.getContent：" + os.getContent());
+		assertNotNull(writer.toString());
 	}
 
 	@Test
