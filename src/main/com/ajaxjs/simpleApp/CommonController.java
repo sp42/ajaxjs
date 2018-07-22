@@ -47,7 +47,8 @@ import com.ajaxjs.util.logger.LogHelper;
  * @param <S>
  *            业务类型
  */
-public abstract class CommonController<T, ID extends Serializable, S extends IService<T, ID>> implements IController, Constant {
+public abstract class CommonController<T, ID extends Serializable, S extends IService<T, ID>>
+		implements IController, Constant {
 	private static final LogHelper LOGGER = LogHelper.getLog(CommonController.class);
 
 	/**
@@ -62,7 +63,8 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 
 		prepareData(model);
 		model.put("actionName", "新建");
-		model.put("isCreate", true); // 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate = true 标识为创建，以便与 update 区分开来。
+		model.put("isCreate", true); // 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate
+										// = true 标识为创建，以便与 update 区分开来。
 
 		return String.format(jsp_adminInfo, getService().getTableName());
 	}
@@ -79,7 +81,8 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 
 		prepareData(model);
 		model.put("actionName", "编辑");
-		model.put("isCreate", false); // 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate = true 标识为创建，以便与 update 区分开来。
+		model.put("isCreate", false); // 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate
+										// = true 标识为创建，以便与 update 区分开来。
 
 		return String.format(jsp_adminInfo, getService().getTableName());
 	}
@@ -225,7 +228,6 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	 * @return
 	 * @throws ServiceException
 	 */
-	@SuppressWarnings("unchecked")
 	public String listJson(int start, int limit, ModelAndView model) throws ServiceException {
 		LOGGER.info("获取分页列表 GET list:{0}/{1}", start, limit);
 
@@ -234,6 +236,11 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 		PageResult<T> pageResult = getService().findPagedList(getParam(start, limit));
 		model.put("PageResult", pageResult);
 
+		return outputJson(pageResult, model);
+	}
+
+	@SuppressWarnings("unchecked")
+	public String outputJson(PageResult<T> pageResult, ModelAndView model) {
 		if (pageResult != null && pageResult.getRows() != null) {
 			String jsonStr;
 
