@@ -447,3 +447,46 @@ header.top {
 	}
 }
 
+// 图片列表
+.articlePics, .avater {
+	margin: 1% 5%;
+	overflow: hidden;
+	li {
+		position: relative;
+		max-width: 300px;
+		max-height: 160px;
+		float: left;
+		margin-right: 20px;
+		img {
+			max-width: 300px;
+			max-height: 160px;
+		}
+
+		.menu {
+			height: 0;
+			width: 100%;
+			transition: height 500ms;
+			overflow: hidden;
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			background-color: rgba(0, 0, 0, .2);
+			padding: 0 2px;
+			box-sizing: border-box;
+			color: black;
+			line-height: 25px;
+			cursor: pointer;
+			text-align: center;
+			letter-spacing: 2px;
+			font-size: .8rem;
+			span:hover {
+				color: red;
+			}
+		}
+
+		&:hover .menu {
+			height: 25px;
+		}
+	}
+}
+

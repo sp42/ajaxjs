@@ -1,3 +1,16 @@
+// 查找元素
+aj = function(cssSelector, fn){
+	if(fn) {
+		var arr = document.querySelectorAll(cssSelector);
+		if(arr) {
+			for(var i = 0, j = arr.length; i< j; i++) {
+				fn(arr[i], i, j, arr);
+			}
+		}
+	} else {
+		return document.querySelector(cssSelector);
+	}
+}
 /**
  * @param e
  *            事件对象

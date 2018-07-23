@@ -1,5 +1,11 @@
 package com.ajaxjs.web;
 
+/**
+ * 上传配置信息
+ * 
+ * @author sp42 frank@ajaxjs.com
+ *
+ */
 public class UploadFileInfo {
 	/**
 	 * 表单字段名
