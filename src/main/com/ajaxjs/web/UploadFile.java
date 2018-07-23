@@ -133,8 +133,27 @@ public class UploadFile extends HttpServletRequestWrapper {
 
 		uploadFileInfo.oldFilename = StringUtil.regMatch("filename=\"([^\"]*)\"", dataStr, 1);
 		uploadFileInfo.contentType = StringUtil.regMatch("Content-Type:\\s?([\\w/]+)", dataStr, 1);
+
+		//文件扩展名判断
 		
-		// TODO 文件扩展名判断
+		String[] arr = uploadFileInfo.oldFilename.split("\\."); // 获取文件扩展名
+		String ext = arr[arr.length - 1];
+
+		if (UploadFileInfo.allowExtFilenames == null || UploadFileInfo.allowExtFilenames.length == 0) {
+	 
+		} else {
+			boolean isFound = false;
+			for(String _ext : UploadFileInfo.allowExtFilenames) {
+				if(_ext.equals(ext)) {
+					isFound = true;
+					break;
+				}
+				
+			}
+			if(!isFound)
+				throw new IllegalArgumentException("上传类型不匹配");
+		}
+
 	}
 
 	/**
@@ -161,7 +180,9 @@ public class UploadFile extends HttpServletRequestWrapper {
 	 */
 	private UploadFileInfo save(int offset, int length) {
 		if (uploadFileInfo.saveFileName == null) {
-			uploadFileInfo.saveFileName = uploadFileInfo.oldFilename; // 如不指定 saveFileName 则默认上传的
+			uploadFileInfo.saveFileName = uploadFileInfo.oldFilename; // 如不指定
+																		// saveFileName
+																		// 则默认上传的
 		} else {
 			String[] arr = uploadFileInfo.oldFilename.split("\\."); // 获取文件扩展名
 			String ext = arr[arr.length - 1];
