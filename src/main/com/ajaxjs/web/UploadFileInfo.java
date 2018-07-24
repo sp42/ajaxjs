@@ -16,6 +16,11 @@ public class UploadFileInfo {
 	 * 原始文件名
 	 */
 	public String oldFilename;
+	
+	/**
+	 * 文件扩展名
+	 */
+	public String extName;
 
 	/**
 	 * 文件类型
@@ -40,7 +45,7 @@ public class UploadFileInfo {
 	/**
 	 * 允许上传的文件类型，如果为空数组则不限制上传类型。格式如 {".jpg", ".png", ...}
 	 */
-	public String[] allowExtFilenames = new String[] { ".jpg", ".png", ".gif" };
+	public String[] allowExtFilenames = new String[] { "jpeg", "jpg", "png", "gif" };
 
 	/**
 	 * 相同文件名是否覆盖？true=允许覆盖
