@@ -15,6 +15,8 @@
  */
 package com.ajaxjs.simpleApp;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +24,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.service.IService;
@@ -31,8 +34,11 @@ import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
+import com.ajaxjs.util.SnowflakeIdWorker;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.web.UploadFile;
+import com.ajaxjs.web.UploadFileInfo;
 
 /**
  * 
@@ -47,8 +53,7 @@ import com.ajaxjs.util.logger.LogHelper;
  * @param <S>
  *            业务类型
  */
-public abstract class CommonController<T, ID extends Serializable, S extends IService<T, ID>>
-		implements IController, Constant {
+public abstract class CommonController<T, ID extends Serializable, S extends IService<T, ID>> implements IController, Constant {
 	private static final LogHelper LOGGER = LogHelper.getLog(CommonController.class);
 
 	/**
@@ -359,6 +364,31 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	 */
 	public static String jsonNoOk(String msg) {
 		return String.format(Constant.json_not_ok, msg);
+	}
+
+	/**
+	 * 执行文件上传，读取默认配置的上传规则
+	 * 
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	public static UploadFileInfo uploadByConfig(MvcRequest request) throws IOException {
+		UploadFileInfo info = new UploadFileInfo();
+		info.isFileOverwrite = ConfigService.getValueAsBool("uploadFile.isFileOverwrite");
+		info.saveFolder = ConfigService.getValueAsBool("uploadFile.saveFolder.isUsingRelativePath")
+				? request.mappath(ConfigService.getValueAsString("uploadFile.saveFolder.relativePath")) + File.separator
+				: ConfigService.getValueAsString("uploadFile.saveFolder.absolutePath");
+
+		if (ConfigService.getValueAsBool("uploadFile.isAutoNewFileName")) {
+			info.saveFileName = new SnowflakeIdWorker(0, 0).nextId() + "";
+		}
+
+		new UploadFile(request, info).upload();
+
+		info.visitPath = ConfigService.getValueAsString("uploadFile.saveFolder.relativePath") + "/" + info.saveFileName;
+
+		return info;
 	}
 
 	/**

@@ -336,7 +336,8 @@ ajaxjs.xhr = {
             var msg = 'The version of your browser is too old, please upgrade it.';
             throw msg;
         }
-        cb = cb || function(json){ajaxjs.alert(json.msg);}
+        
+        cb = cb || ajaxjs.xhr.defaultCallBack;
         cfg = cfg || {};
 
         if (typeof form == 'string')
@@ -386,7 +387,7 @@ ajaxjs.xhr.defaultCallBack = function(json) {
 			ajaxjs.alert(json.msg || '执行失败！原因未知！');
 		}
 	} else {
-		console.log('ServerSide Error!');
+		ajaxjs.alert('ServerSide Error!');
 	}
 }
 
