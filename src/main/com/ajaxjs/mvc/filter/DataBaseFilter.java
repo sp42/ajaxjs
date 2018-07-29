@@ -29,6 +29,7 @@ import com.ajaxjs.mvc.controller.MvcRequest;
  *
  */
 public class DataBaseFilter implements FilterAction {
+	
 	@Override
 	public boolean before(MvcRequest request, MvcOutput response, IController controller) {
 		initDb();
@@ -38,7 +39,7 @@ public class DataBaseFilter implements FilterAction {
 
 	@Override
 	public void after(MvcRequest request, MvcOutput response, IController controller, boolean isSkip) {
-		JdbcConnection.closeDb();
+		JdbcConnection.closeDb(); // 关闭数据库连接
 	}
 
 	/**
