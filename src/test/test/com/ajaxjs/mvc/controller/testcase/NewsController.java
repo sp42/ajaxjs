@@ -11,10 +11,6 @@ import javax.ws.rs.QueryParam;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.simpleApp.CommonController;
 
-import test.com.ajaxjs.framework.testcase.News;
-import test.com.ajaxjs.framework.testcase.NewsService;
-import test.com.ajaxjs.framework.testcase.NewsServiceImpl;
-
 import com.ajaxjs.framework.service.ServiceException;
 
 @Path("/news")

@@ -70,7 +70,7 @@ public class SiteStruService implements ServletContextListener {
 				cxt.setAttribute("all_config", ConfigService.config); // 所有配置保存在这里
 
 //				String configJson = JsonHelper.format(JsonHelper.stringifyMap(ConfigService.config));
-				LOGGER.infoGreen("加载 " + ConfigService.getValueAsString("clientFullName") + " 项目配置成功！All config loaded.");
+				LOGGER.infoGreen("加载 " + ConfigService.getValueAsString("clientFullName") + " " +cxt.getContextPath() + " 项目配置成功！All config loaded.");
 			} else
 				LOGGER.warning("加载配置失败！");
 		} else

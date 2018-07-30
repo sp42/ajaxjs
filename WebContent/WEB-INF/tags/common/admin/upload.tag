@@ -12,7 +12,7 @@
 				<img style="float:left;margin-bottom:20px;max-width:180px;max-height:160px;" class="upload_img_perview" src="${commonImage}imgBg.png" />
 				
 				<div class="upload-btns">
-					<form action="../${info.uid}/imgUpload/" method="POST" enctype="multipart/form-data" target="upframe">
+					<form action="${ctx}/admin/attachmentPicture/upload/${info.uid}/" method="POST" enctype="multipart/form-data" target="upframe">
 						<!-- 隐藏的 input 上传控件 -->
 						<input name="fileInput" id="input_file_molding" type="file" class="hide" />
 						<!-- 隐藏的 iframe，为了无刷新上传，对应 form 的 target -->
@@ -54,8 +54,8 @@
 			
 			if(json.isOk) {
 				ajaxjs.msg('上传成功！');
-				obj.lastUploadedImg = json.url;
-				loadPic();
+				obj.lastUploadedImg = json.imgUrl;
+				loadPic_AJAX();
 			}
 		} else {
 			

@@ -115,13 +115,16 @@ public class ConfigService {
 	 * @return 配置内容
 	 */
 	public static boolean getValueAsBool(String key) {
+		if (flatConfig == null || !config.isLoaded())
+			return false;
+
 		Object v = flatConfig.get(key);
-		
+
 		if (v == null) {
 			LOGGER.warning("没发现配置 " + key);
 			return false;
 		}
-		
+
 		return Value.TypeConvert(flatConfig.get(key), boolean.class);
 	}
 
@@ -133,6 +136,9 @@ public class ConfigService {
 	 * @return 配置内容
 	 */
 	public static int getValueAsInt(String key) {
+		if (flatConfig == null || !config.isLoaded())
+			return 0;
+		
 		// js number 在 java 里面为 double 转换一下
 		Object number = flatConfig.get(key);
 
@@ -146,7 +152,7 @@ public class ConfigService {
 
 		return Value.TypeConvert(number, int.class);
 	}
-	
+
 	/**
 	 * 读取配置并转换其为 long 类型。仅对扁平化后的配置有效，所以参数必须是扁平化的 aaa.bbb.ccc 格式。
 	 * 
@@ -155,17 +161,20 @@ public class ConfigService {
 	 * @return 配置内容
 	 */
 	public static long getValueAsLong(String key) {
+		if (flatConfig == null || !config.isLoaded())
+			return 0L;
+		
 		// js number 在 java 里面为 double 转换一下
 		Object number = flatConfig.get(key);
-		
+
 		if (number == null) {
 			LOGGER.warning("没发现配置 " + key);
 			return 0L;
 		}
-		
+
 		if (number instanceof Double)
 			number = Value.double2long((Double) number);
-		
+
 		return Value.TypeConvert(number, long.class);
 	}
 
@@ -177,13 +186,16 @@ public class ConfigService {
 	 * @return 配置内容
 	 */
 	public static String getValueAsString(String key) {
-		Object v = flatConfig.get(key);
+		if (flatConfig == null || !config.isLoaded())
+			return null;
 		
+		Object v = flatConfig.get(key);
+
 		if (v == null) {
 			LOGGER.warning("没发现配置 " + key);
 			return null;
 		}
-		
+
 		return Value.TypeConvert(v, String.class);
 	}
 

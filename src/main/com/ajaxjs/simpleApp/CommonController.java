@@ -386,7 +386,8 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 
 		new UploadFile(request, info).upload();
 
-		info.visitPath = ConfigService.getValueAsString("uploadFile.saveFolder.relativePath") + "/" + info.saveFileName;
+		info.path = ConfigService.getValueAsString("uploadFile.saveFolder.relativePath") + "/" + info.saveFileName;
+		info.visitPath = request.getContextPath() + info.path;
 
 		return info;
 	}

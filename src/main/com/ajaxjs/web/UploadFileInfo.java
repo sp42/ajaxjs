@@ -62,7 +62,12 @@ public class UploadFileInfo {
 	 * 
 	 */
 	public String saveFileName;
-
+	
+	/**
+	 * 上传成功之文件之目录+文件名（从 web 根目录开始起）
+	 */
+	public String path;
+	
 	/**
 	 * 上传成功之文件完整的磁盘路径
 	 */

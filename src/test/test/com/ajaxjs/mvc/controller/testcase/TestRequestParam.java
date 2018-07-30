@@ -26,8 +26,6 @@ import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.controller.RequestParam;
 import com.ajaxjs.web.MockWeb;
 
-import test.com.ajaxjs.framework.testcase.News;
-
 public class TestRequestParam {
 	
 	@Path("/foo")
