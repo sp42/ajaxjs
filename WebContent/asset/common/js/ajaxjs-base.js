@@ -355,11 +355,21 @@ ajaxjs.xhr = {
             e.preventDefault();// 禁止 form 默认提交
             var form = e.target;
             var json = {};
-            var formData = new FormData(form);
-            formData.forEach(function(value, key) {
-                if(cfg && cfg.ignoreField != key) // 忽略的字段
-                    json[key] = encodeURIComponent(value);
-            });
+            var formData = new FormData(form); 
+            
+            for (var pair of formData.entries()) {
+                if(cfg && cfg.ignoreField != pair[0]) // 忽略的字段
+                    json[pair[0]] = encodeURIComponent(pair[1]);
+                alert(pair[0])
+            }
+            alert(9)
+//            formData.forEach(function(value, key) {
+//            	
+//            	alert(value)
+//            	alert(key)
+//                if(cfg && cfg.ignoreField != key) // 忽略的字段
+//                    json[key] = encodeURIComponent(value);
+//            });
 
             if (cfg && cfg.beforeSubmit && cfg.beforeSubmit(form, json) === false) 
                 return;
