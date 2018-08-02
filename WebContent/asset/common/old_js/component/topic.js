@@ -254,7 +254,7 @@ function initImgs(el, frag){
 	var ul = frag.querySelector('ul');
 	
 	// collect imgs
-	el.up('ul').eachChild('img', function(img, i, j){
+	el.up('ul').$('img', function(img, i, j){
 		var li = document.createElement('li');
 //			var img = img.cloneNode();
 //			img.src = img.src.replace('?w=250', '');

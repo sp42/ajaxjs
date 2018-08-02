@@ -263,7 +263,7 @@ ajaxjs.Banner.initIndicator = function() {
 	var ol = this.el.querySelector('ol');
 	ajaxjs.Banner.onItemSwitch = function(index) {
 		// pressedStatable
-		if (ol) ol.eachChild('li', function(li, i) {
+		if (ol) ol.$('li', function(li, i) {
 			if(index == i) 
 				li.classList.add('active');
 			else
@@ -274,7 +274,7 @@ ajaxjs.Banner.initIndicator = function() {
 	ol.onclick =  function(e) {
 		var el = e.target;
 		if(el.tagName != 'LI')return;
-		if (ol) ol.eachChild('li', function(li, i) {
+		if (ol) ol.$('li', function(li, i) {
 			if(el == li) {
 				self.go(i);
 				return;
@@ -619,7 +619,7 @@ function Step() {
 		
 		var imgs = [];
 		// 获取图片列表
-		tplEl.eachChild('img[data-src^="http://"]', function(img, index) {
+		tplEl.$('img[data-src^="http://"]', function(img, index) {
 			img.onload = function(){ this.classList.add('tran') };
 			imgs.push({
 				index : index,  // 序号
@@ -729,7 +729,7 @@ ajaxjs.scrollViewer_list = function(url, scrollViewer_el, tab_el, loadingIndicat
 		_requestParams[cfg.id_fieldName || 'id'] = activeId;
 		
 		// tab hightlight
-		tabHeader.eachChild('li', function(li) {
+		tabHeader.$('li', function(li) {
 			//debugger;
 			if(li.className.indexOf(activeId) != -1)li.classList.add('selected');
 			else li.classList.remove('selected');
@@ -780,7 +780,7 @@ ajaxjs.scrollViewer_list = function(url, scrollViewer_el, tab_el, loadingIndicat
 	});
 	
 	// 先获取所有 section id
-	tabHeader.eachChild('li', function(li) {
+	tabHeader.$('li', function(li) {
 		var id;
 		id = li.className && li.className.match(/id_(\w+)/).pop();
 //		if(cfg.isTextId) { // id 不是 数字，是 text
@@ -847,7 +847,7 @@ ajaxjs.scrollViewer_list = function(url, scrollViewer_el, tab_el, loadingIndicat
 		if (el.tagName != 'LI')
 			el = el.parentNode;
 		
-		tabHeader.eachChild('li', function(li, i) { 
+		tabHeader.$('li', function(li, i) { 
 			if (el == li) {
 				var id = li.className.match(/id_(\w+)/).pop();
 				_event.fireEvent('update', id);

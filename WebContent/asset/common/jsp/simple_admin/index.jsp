@@ -73,7 +73,7 @@
 	        }
 
 	        // 点击菜单时保存按钮
-	    	document.body.eachChild('a[target=' + iframepageName + ']', function(a) {
+	    	aj('a[target=' + iframepageName + ']', function(a) {
 	            a.onclick = add_Hash;
 	        });
 	        
