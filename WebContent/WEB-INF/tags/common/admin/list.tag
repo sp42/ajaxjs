@@ -91,7 +91,7 @@
 		entity = {
 			del : function(id, title) {
 				if (confirm('请确定删除记录：\n' + title + ' ？')) {
-					xhr.dele('../' + id + '/', {}, function(json) {
+					ajaxjs.xhr.dele('../' + id + '/', function(json) {
 						if (json.isOk) {
 							alert('删除成功！');
 							location.reload();
@@ -100,12 +100,12 @@
 				}
 			},
 			setStatus : function(id, status) {
-				xhr.post('../setStatus/' + id + '/', {
-					status : status
-				}, function(json) {
+				ajaxjs.xhr.post('../setStatus/' + id + '/', function(json) {
 					if (json.isOk) {
 	
 					}
+				}, {
+					status : status
 				});
 			}
 	
