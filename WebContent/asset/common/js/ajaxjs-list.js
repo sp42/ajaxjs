@@ -620,6 +620,7 @@ function Step() {
 		var imgs = [];
 		// 获取图片列表
 		tplEl.$('img[data-src^="http://"]', function(img, index) {
+			
 			img.onload = function(){ this.classList.add('tran') };
 			imgs.push({
 				index : index,  // 序号

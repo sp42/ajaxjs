@@ -11,7 +11,7 @@
 					href="?start=${pageInfo.start - pageInfo.pageSize}${PageUtil.getParams_without('start', pageContext.request.queryString)}">上一页</a>
 			</c:if>
 			<c:if
-				test="${(pageInfo.start > 0 )&& (pageInfo.start + pageInfo.pageSize < pageInfo.totalCount)}">
+				test="${(pageInfo.start > 0 ) && (pageInfo.start + pageInfo.pageSize < pageInfo.totalCount)}">
 				<a href="#" style="text-decoration: none;">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>
 			</c:if>
 			<c:if
@@ -31,23 +31,16 @@
 						style="text-align: center; width: 40px; height: 22px; float: none;"
 						class="ajaxjs-inputField" />
 					<!-- 其他参数 -->
-					<c:foreach
-						items="${PageUtil.getParams_without_asMap('limit', pageContext.request.queryString)}"
-						var="current">
-						<input type="hidden" name="${current.key}"
-							value="${current.value}" />
+					<c:foreach items="${PageUtil.getParams_without_asMap('limit', pageContext.request.queryString)}" var="current">
+						<input type="hidden" name="${current.key}" value="${current.value}" />
 					</c:foreach>
 				</form>
 				<%--分页数过多影响 HTML 加载，这里判断下 --%>
 				<c:if test="${pageInfo.totalPage < 1000}">
 				 	跳转：
-				 	<select onchange="jumpPage(this);"
-						style="text-align: center; width: 40px; height: 22px;"
-						class="ajaxjs-select">
-						<c:foreach items="${PageUtil.jumpPage(pageInfo.totalPage)}"
-							var="i">
-							<option value="${currentIndex * pageInfo.pageSize}"
-								${(currentIndex + 1)==pageInfo.currentPage ? ' selected' : ''}>${currentIndex + 1}</option>
+				 	<select onchange="jumpPage(this);" style="text-align: center; width: 40px; height: 22px;" class="ajaxjs-select">
+						<c:foreach items="${PageUtil.jumpPage(pageInfo.totalPage)}" var="i">
+							<option value="${currentIndex * pageInfo.pageSize}" ${(currentIndex + 1)==pageInfo.currentPage ? ' selected' : ''}>${currentIndex + 1}</option>
 						</c:foreach>
 					</select>
 				</c:if>

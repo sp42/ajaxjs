@@ -59,6 +59,10 @@
 		</snapshotRepository>
 	</distributionManagement>
 
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
 	<build>
 		<sourceDirectory>src/main</sourceDirectory>
 		<testSourceDirectory>src/test</testSourceDirectory>
@@ -164,7 +168,7 @@
 		</plugins>
 	</build>
 
-	<dependencies> 
+	<dependencies>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>

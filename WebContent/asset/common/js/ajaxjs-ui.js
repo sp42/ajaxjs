@@ -304,6 +304,12 @@ ajaxjs.formValid.prototype.onInvalid = function (e) {
 		
 		// 生成树
 		makeTree : function (jsonArray) {
+			if(ajaxjs.ua.isWebkit) {
+				for (var i = 0; i < jsonArray.length; i++) {
+					jsonArray[i].oldIndex = i;
+				}
+			}
+			
 			jsonArray.sort(sortByPid);// 父id 必须在子id之前，不然下面 findParent() 找不到后面的父节点，故先排序
 			
 			for (var i = 0, j = jsonArray.length; i < j; i++) {
@@ -311,7 +317,7 @@ ajaxjs.formValid.prototype.onInvalid = function (e) {
 
 				var parentNode = findParent(this.tree, n.pid);
 				if (parentNode == null) { // 没有父节点，那就表示这是根节点，保存之
-					this.tree[n.id] = 	{ // id 是key，value 新建一对象
+					this.tree[n.id] = { // id 是key，value 新建一对象
 						name : n.name,
 						pid : n.pid
 					};				
@@ -334,7 +340,7 @@ ajaxjs.formValid.prototype.onInvalid = function (e) {
 			this.stack.push(map);
 			
 			for (var i in map) {
-				map[i].level = this.stack.length;
+				map[i].level = this.stack.length;// 层数，也表示缩进多少个字符
 				cb(map[i], i);
 				
 				var c = map[i].children;
@@ -367,9 +373,13 @@ ajaxjs.formValid.prototype.onInvalid = function (e) {
 		return null;
 	}
 	
-	// Chrome sucks
-	function sortByPid(a, b) {
-		return[a.pid, a.pid] > [b.pid, b.pid] ? 1:-1;;
+	
+	var sortByPid = ajaxjs.ua.isWebkit ? function (a, b) {
+		// Chrome谷歌浏览器中js代码Array.sort排序的bug乱序解决办法 
+		// https://www.cnblogs.com/yzeng/p/3949182.html?utm_source=tuicool&utm_medium=referral
+		return b.v - a.v || b.oldIndex - a.oldIndex;// Chrome sucks
+	} : function (a, b) {
+		return a.pid > b.pid;
 	}
 	
 	ajaxjs.tree.selectUI = function() {
@@ -380,6 +390,7 @@ ajaxjs.formValid.prototype.onInvalid = function (e) {
 		 * 渲染 DOM
 		 */
 		this.renderer = function (json, select, selectedId) {
+			
 			selectUI.makeTree(json);
 			
 			// 生成 option

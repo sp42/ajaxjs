@@ -53,10 +53,9 @@ public class ControllerScanner {
 	public static Map<String, Action> urlMappingTree = new HashMap<>();
 
 	/**
-	 * Parsing a Contonller class.
+	 * Parsing a Controller class.
 	 * 
-	 * @param clz
-	 *            a Contonller class
+	 * @param clz a Controller class
 	 */
 	public static void add(Class<? extends IController> clz) {
 		if (!testClass(clz))
@@ -65,14 +64,14 @@ public class ControllerScanner {
 		// the path in class always starts from top 1
 		String topPath = clz.getAnnotation(Path.class).value();
 		topPath = topPath.replaceAll("^/", ""); // remove the first / so that the array would be right length
-		//		LOGGER.info("控制器正在解析，This controller \"{0}\" is being parsing", topPath);
+		// LOGGER.info("控制器正在解析，This controller \"{0}\" is being parsing", topPath);
 
 		Action action = null;
 		if (topPath.contains("/")) {
 			action = findKey(urlMappingTree, split2Queue(topPath), "");
 		} else {
 			if (urlMappingTree.containsKey(topPath)) {
-				// already there is 
+				// already there is
 				action = urlMappingTree.get(topPath);
 			} else {
 				action = new Action();
@@ -84,9 +83,11 @@ public class ControllerScanner {
 		if (clz.getAnnotation(Bean.class) != null) { // 如果有 ioc，则从容器中查找
 			action.controller = BeanContext.me().getBeanByClass(clz);
 			if (action.controller == null)
-				LOGGER.warning("在 IOC 资源库中找不到该类 {0} 的实例，请检查该类是否已经加入了 IOC 扫描？  The IOC library not found that Controller, plz check if it added to the IOC scan.", clz.getName());
+				LOGGER.warning(
+						"在 IOC 资源库中找不到该类 {0} 的实例，请检查该类是否已经加入了 IOC 扫描？  The IOC library not found that Controller, plz check if it added to the IOC scan.",
+						clz.getName());
 		} else {
-			//if(action.controller == null)
+			// if(action.controller == null)
 			action.controller = NewInstance.newInstance(clz);// 保存的是 控制器 实例。
 		}
 
@@ -94,7 +95,8 @@ public class ControllerScanner {
 		parseSubPath(clz, action);
 
 		// 会打印控制器的总路径信息，不会不会打印各个方法的路径，太细了，日志也会相应地多
-		LOGGER.info("控制器已登记成功！The controller \"{0}\" (\"/{1}\") was parsed and registered", clz.toString().replaceAll("class\\s", ""), topPath); // 控制器 {0} 所有路径（包括子路径）注册成功！
+		LOGGER.info("控制器已登记成功！The controller \"{0}\" (\"/{1}\") was parsed and registered",
+				clz.toString().replaceAll("class\\s", ""), topPath); // 控制器 {0} 所有路径（包括子路径）注册成功！
 	}
 
 	/**
@@ -121,10 +123,8 @@ public class ControllerScanner {
 	/**
 	 * Check out all methods which has Path annotation, then add the urlMapping.
 	 * 
-	 * @param clz
-	 *            控制器类
-	 * @param action
-	 *            父亲动作
+	 * @param clz    控制器类
+	 * @param action 父亲动作
 	 */
 	private static void parseSubPath(Class<? extends IController> clz, Action action) {
 		for (Method method : clz.getMethods()) {
@@ -151,10 +151,8 @@ public class ControllerScanner {
 	/**
 	 * HTTP 方法对号入座，什么方法就进入到什么属性中保存起来。
 	 * 
-	 * @param method
-	 *            控制器方法
-	 * @param action
-	 *            Action
+	 * @param method 控制器方法
+	 * @param action Action
 	 */
 	private static void methodSend(Method method, Action action) {
 		if (method.getAnnotation(GET.class) != null) {
@@ -175,7 +173,7 @@ public class ControllerScanner {
 		} else if (method.getAnnotation(DELETE.class) != null) {
 			if (testIfEmpty(action.deleteMethod, action.path, "DELETE")) {
 				action.deleteMethod = method;
-				//				if (controller != null)
+				// if (controller != null)
 				action.deleteMethodController = action.controller;
 			}
 		}
@@ -200,13 +198,11 @@ public class ControllerScanner {
 
 	/**
 	 * 
-	 * @param urlMappingTree
-	 *            A Tree contains all urlMappings
-	 * @param queue
-	 *            The queue of URL
-	 * @param path
-	 *            for remembering what findKey has travelled, here we don't use url,
-	 *            because we want self-adding to match the url, if there is correct
+	 * @param urlMappingTree A Tree contains all urlMappings
+	 * @param queue          The queue of URL
+	 * @param path           for remembering what findKey has travelled, here we
+	 *                       don't use url, because we want self-adding to match the
+	 *                       url, if there is correct
 	 * @return the Action that looking for, null if not found
 	 */
 	private static Action findKey(Map<String, Action> urlMappingTree, Queue<String> queue, String path) {
@@ -254,8 +250,7 @@ public class ControllerScanner {
 	/**
 	 * Test a class if it can be parsed.
 	 * 
-	 * @param clz
-	 *            Should be a IController instance.
+	 * @param clz Should be a IController instance.
 	 * @return true if it's ok.
 	 */
 	public static boolean testClass(Class<? extends IController> clz) {
@@ -293,7 +288,6 @@ public class ControllerScanner {
 		@Override
 		public void onJarAdding(Set target, String resourcePath) {
 			Class<?> clazz = NewInstance.getClassByName(resourcePath);
-
 			if (IController.class.isAssignableFrom(clazz)) {
 				target.add(clazz);// 添加到集合中去
 			}
@@ -304,8 +298,7 @@ public class ControllerScanner {
 	/**
 	 * 扫描控制器
 	 * 
-	 * @param config
-	 *            web.xml 中的配置，已经转为 Map
+	 * @param config web.xml 中的配置，已经转为 Map
 	 */
 	protected static void scannController(Map<String, String> config) {
 		if (config != null && config.get("controller") != null) {

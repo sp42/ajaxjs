@@ -116,6 +116,25 @@ tppl = function(tpl, data){
     return data ? fn(data) : fn;
 }
 
+// shorthand
+Element.prototype.$ = function(cssSelector, fn) {
+	if(typeof fn == 'function') {
+		var children = this.querySelectorAll(cssSelector);
+		
+		if (children && fn)
+			Array.prototype.forEach.call(children, fn);
+		return children;
+	}else {
+		return this.querySelector.apply(this, arguments);
+	}
+	
+}
+
+//查找元素
+aj = function(cssSelector, fn) {
+	return Element.prototype.$.apply(document, arguments);
+}
+
 /**
  * 删除自己
  */
@@ -163,26 +182,6 @@ Element.prototype.insertAfter = function(newElement) {
         parent.insertBefore(newElement);
     else
         parent.insertBefore(newElement, targetElement.nextSibling);
-}
-
-/**
- * 遍历每个子元素
- * 
- * @param cssSelector
- *            CSS 选择符
- * @param fn
- *            函数，可选
- * @returns 返回子元素集合
- */
-Element.prototype.every_child = Element.prototype.eachChild = function(cssSelector, fn) {
-	var children = this.querySelectorAll(cssSelector);
-
-	if (children && fn)
-		Array.prototype.forEach.call(children, fn);
-	// for(var i = 0, j = children.length; i < j; i++)
-	// fn(children[i], children, i, j);
-
-	return children;
 }
 
 /*
@@ -233,6 +232,12 @@ ajaxjs.params = {
 		};
 	}
 };
+
+if(!window.URLSearchParams) { // polyfill
+	URLSearchParams = function() {
+		
+	}
+}
 
 /*
  * -------------------------------------------------------- 
@@ -354,22 +359,7 @@ ajaxjs.xhr = {
         form.addEventListener('submit', function(e, cb, cfg) {
             e.preventDefault();// 禁止 form 默认提交
             var form = e.target;
-            var json = {};
-            var formData = new FormData(form); 
-            
-            for (var pair of formData.entries()) {
-                if(cfg && cfg.ignoreField != pair[0]) // 忽略的字段
-                    json[pair[0]] = encodeURIComponent(pair[1]);
-                alert(pair[0])
-            }
-            alert(9)
-//            formData.forEach(function(value, key) {
-//            	
-//            	alert(value)
-//            	alert(key)
-//                if(cfg && cfg.ignoreField != key) // 忽略的字段
-//                    json[key] = encodeURIComponent(value);
-//            });
+            var json = ajaxjs.xhr.serializeForm(form, cfg);
 
             if (cfg && cfg.beforeSubmit && cfg.beforeSubmit(form, json) === false) 
                 return;
@@ -387,6 +377,55 @@ ajaxjs.xhr.get = ajaxjs.xhr.request.delegate(null, null, null, null, 'GET');
 ajaxjs.xhr.post = ajaxjs.xhr.request.delegate(null, null, null, null, 'POST');
 ajaxjs.xhr.put = ajaxjs.xhr.request.delegate(null, null, null, null, 'PUT');
 ajaxjs.xhr.dele = ajaxjs.xhr.request.delegate(null, null, null, null, 'DELETE');
+
+
+/**
+ * 表单序列化，兼容旧浏览器和 H5 FormData，返回 JSON
+ * @param {Element} form
+ * @param {Object} cfg
+ */
+ajaxjs.xhr.serializeForm = function(form, cfg) {
+	var json = {};
+	
+    if (window.FormData && FormData.prototype.forEach) { // 奇葩魅族浏览器，有 FormData 却只有 append 一个方法
+        var formData = new FormData(form); 
+        formData.forEach(function(value, name) {
+            if(cfg && cfg.ignoreField != name) // 忽略的字段
+                json[name] = encodeURIComponent(value);
+        });
+        
+    } else {
+    	for (var i = 0, len = form.elements.length; i < len; i++) {
+    		var formElement = form.elements[i], name = formElement.name, value = formElement.value;
+    		
+    		if (formElement.name === '' || formElement.disabled || (cfg && cfg.ignoreField != name))
+    			continue;
+    		
+    		switch (formElement.nodeName.toLowerCase()) {
+    		case 'input':
+    			switch (formElement.type) {
+    			case 'text':
+    			case 'hidden':
+    			case 'password':
+    				json[name] = encodeURIComponent(value);
+    				break;
+    			case 'checkbox':
+    			case 'radio':
+    				if (formElement.checked) 
+    					json[name] = encodeURIComponent(value);
+    				break;
+    			}
+    			break;
+    		case 'textarea':
+    		case 'select':
+    			json[name] = encodeURIComponent(value);
+    			break;
+    		}
+    	}
+    }
+	
+	return json;
+}
 
 // 默认的回调，有专属的字段并呼叫专属的控件
 ajaxjs.xhr.defaultCallBack = function(json) {
