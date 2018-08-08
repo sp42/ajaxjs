@@ -1,38 +1,3 @@
-/**
- * @param e
- *            事件对象
- * @param el
- *            元素
- */
-ajaxjs.modal = function(e,  cfg) {
-	var el = cfg && cfg.el || '.modal';
-	var element = document.querySelector(el);
-	
-	if(!element) {
-		var div = document.createElement('div');
-		div.className = 'modal hide';
-		var h =  cfg.text || '';
-		if(cfg.isShowCloseBtn)
-			h += '<a href="#" oncclick="ajaxjs.modal()">关 闭</a>'
-		div.innerHTML = '<div style="text-align:center;">' + h + '</div>';
-		div.onclick = ajaxjs.modal;
-		document.body.appendChild(div);
-		element = div;
-	}
-	
-
-	//element.setAttribute('onclick', "ajaxjs.modal(arguments[0], {el:'." + el + "'});");
-	
-	if (e) {
-		var p = e.target; // check if in the box
-		if (p && p.className.indexOf(el.replace('.', '')) != -1)
-			element.classList.toggle('hide');
-	} else {
-		element.onclick = ajaxjs.modal.delegate(null, cfg); 
-		element.classList.toggle('hide');
-	}
-}
-
 ajaxjs.alert = function(text, cfg) {
 	var div = document.createElement('div');
 	div.className = 'modal';
@@ -272,8 +237,6 @@ ajaxjs.formValid.prototype.onInvalid = function (e) {
         }
     };
 })();
-
-
 
 // Tree-like option control
 ;(function() {

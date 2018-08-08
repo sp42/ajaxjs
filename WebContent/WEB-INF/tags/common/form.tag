@@ -8,8 +8,7 @@
 	<table>
 		<tr>
 			<td>
-				<input type="text" name=""
-					value="" style="width: 80%; float: left;" placeholder="输入右侧验证码" data-regexp="integer" required />
+				<input type="text" name="" value="" style="width: 80%; float: left;" placeholder="输入右侧验证码" data-regexp="integer" required />
 			
 			</td>
 			<td style="vertical-align: top;">
