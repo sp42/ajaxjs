@@ -13,9 +13,11 @@
 			<div class="rightTop_title">Welcome</div>
 			<div class="rightTop"></div>
 			<div class="closeBtn" onclick="hideSider(this);"></div>
-			<ul class="leftSidebar">
-                 <%@include file="/asset/jsp/admin/admin-menu.jsp" %>
-             </ul>
+			<span class="aj-accordion-menu">
+				<aj-accordion-menu>
+			    	<%@include file="/asset/jsp/admin/admin-menu.jsp" %>
+			    </aj-accordion-menu>
+			</span>
 		</section>
 		<section class="iframe">
 			<iframe src="admin/workbench/" name="iframepage"></iframe>
@@ -28,21 +30,21 @@
 	 	
 	    // 收缩菜单
 	    function hideSider(el) {
-	    	if(hideSider.isHidden){
-	    		document.querySelector('.side').style.width   = '20%';
-	    		document.querySelector('.iframe').style.width = '80%';
+	    	if(hideSider.isHidden) {
+	    		aj('.side').style.width   = '20%';
+	    		aj('.iframe').style.width = '80%';
 	    		hideSider.isHidden = false;
 	    		el.style.right = '0'; 
-	    	}else{
-	    		document.querySelector('.side').style.width   = '0';
-	    		document.querySelector('.iframe').style.width = '100%';
+	    	}else {
+	    		aj('.side').style.width   = '0';
+	    		aj('.iframe').style.width = '100%';
 	    		hideSider.isHidden = true;
 	    		el.style.right = '-'+ el.clientWidth +'px';
 	    	}				
 	    }
 
 	    // 初始化菜单
-	    new ajaxjs.AccordionMenu(document.querySelector('.leftSidebar'));
+	    new Vue({el: '.aj-accordion-menu'});
 
 	    // 需要把链接配置属性  target="iframepage"
 	    ;(function () {
@@ -62,10 +64,11 @@
 	    			ul.up('li').classList.add('pressed');
 	    		}
 	    	}
+	    	
 	    	var prefix = location.origin + "", iframepageName = 'iframepage';
 	    	
 	        var target = getTarget();
-	        var iframeEl = document.querySelector('iframe[name=' + iframepageName + ']');
+	        var iframeEl = aj('iframe[name=' + iframepageName + ']');
 	        
 	        if(target) {
 	        	iframeEl.src = target; // 跳转 iframe
