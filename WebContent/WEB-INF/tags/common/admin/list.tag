@@ -68,7 +68,7 @@
 			var selectUI = new ajaxjs.tree.selectUI();
 			
 			var select = document.querySelector('select');
-			selectUI.renderer(catalogArr, select, ${param.catalogId});
+			selectUI.renderer(catalogArr, select, ${empty param.catalogId ? 'null' : param.catalogId}, {makeAllOption : true});
 			
 			function onSimpleSectionSelected(el) {
 				var catalogId = el.selectedOptions[0].value;

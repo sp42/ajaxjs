@@ -4,9 +4,9 @@
 
 <!-- HTML 编辑器控件 --> 
 <div class="htmlEditor">
-<ul class="toolbar">
+	<ul class="toolbar">
 		<li class="dorpdown">
-			<span  title="字体" class="bg-4"></span>
+			<span title="字体" class="bg-4"></span>
 			<div class="fontfamilyChoser">
 				<a href="javascript:;" style="font-family: '宋体'">宋体</a>
 				<a href="javascript:;" style="font-family: '黑体'">黑体</a>
@@ -25,7 +25,7 @@
 			</div>
 		</li>		
 		<li class="dorpdown">
-		<span  title="字号" class="bg-5" ></span>
+		<span title="字号" class="bg-5" ></span>
 			
 			<div class="fontsizeChoser">
 				<a href="javascript:;" style="font-size: xx-small; line-height: 120%">极小</a>
@@ -50,7 +50,7 @@
 		<li><span title="减少缩进" class="indent bg-15"></span></li>
 
 		<li class="dorpdown">
-			<span title="字体颜色"  class="bg-16"></span>
+			<span title="字体颜色" class="bg-16"></span>
 			<div class="fontColor colorPicker">
 				<script>
 					document.write(ajaxjs_HtmlEditor.createColorPickerHTML());

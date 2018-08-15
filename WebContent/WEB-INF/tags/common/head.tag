@@ -50,8 +50,10 @@
 			}
 		}	
 	</style> 
+	<script>JSP_VALUE_commonAssetIcon = '${commonAssetIcon}';</script>
 <% if(Version.isDebug) { %>
-	<link rel="stylesheet/less" type="text/css" href="${pageContext.request.contextPath}${empty lessFile ? '/asset/less/main.less' : lessFile}" />
+<%-- 	<link rel="stylesheet/less" type="text/css" href="${pageContext.request.contextPath}${empty lessFile ? '/asset/less/main.less' : lessFile}" /> --%>
+	<link rel="stylesheet/less" type="text/css" href="${ctx}/ajaxjs-ui/less/all.less" />
 		
 	<script>
 	  less = {
@@ -65,9 +67,9 @@
 <%}else { %>
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/asset/css/${empty lessFile ? 'main' : lessFile.replaceAll("(?:.*/)(\\w+).less", "$1")}.css" />
 <%} %>
-    <script src="${commonAsset}js/ajaxjs-base.js"></script>
-    <script src="${commonAsset}js/ajaxjs-list.js"></script>
-    <script src="${commonAsset}js/ajaxjs-ui.js"></script>
+    <script src="${commonAsset}js/libs/vue.js"></script>
+    <script src="${ctx}/ajaxjs-ui/js/ajaxjs-base.js"></script>
+    <script src="${ctx}/js"></script>
 	<link rel="icon"		  type="image/x-icon" href="${pageContext.request.contextPath}/asset/images/favicon.ico" />
 	<link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/asset/images/favicon.ico" />
     <jsp:doBody />
