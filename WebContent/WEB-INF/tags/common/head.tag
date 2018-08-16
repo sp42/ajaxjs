@@ -52,8 +52,8 @@
 	</style> 
 	<script>JSP_VALUE_commonAssetIcon = '${commonAssetIcon}';</script>
 <% if(Version.isDebug) { %>
-<%-- 	<link rel="stylesheet/less" type="text/css" href="${pageContext.request.contextPath}${empty lessFile ? '/asset/less/main.less' : lessFile}" /> --%>
 	<link rel="stylesheet/less" type="text/css" href="${ctx}/ajaxjs-ui/less/all.less" />
+	<link rel="stylesheet/less" type="text/css" href="${pageContext.request.contextPath}${empty lessFile ? '/asset/less/main.less' : lessFile}" />
 		
 	<script>
 	  less = {
@@ -67,8 +67,20 @@
 <%}else { %>
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/asset/css/${empty lessFile ? 'main' : lessFile.replaceAll("(?:.*/)(\\w+).less", "$1")}.css" />
 <%} %>
+	
     <script src="${commonAsset}js/libs/vue.js"></script>
     <script src="${ctx}/ajaxjs-ui/js/ajaxjs-base.js"></script>
+   	<script>
+   		aj.Vue = {};
+   		aj.Vue.install = function(Vue) {
+   			Vue.prototype.ajResources = {
+	   			ctx : '${ctx}',
+	   			libraryUse : '${ctx}/ajaxjs-ui/resources' // 庫使用的資源
+   			};
+   		}
+   		
+   		Vue.use(aj.Vue);
+   	</script>
     <script src="${ctx}/js"></script>
 	<link rel="icon"		  type="image/x-icon" href="${pageContext.request.contextPath}/asset/images/favicon.ico" />
 	<link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/asset/images/favicon.ico" />

@@ -1,96 +1,79 @@
-<%@tag pageEncoding="UTF-8" description="Page HTML" description="展现数据实体列表用"  import="com.ajaxjs.simpleApp.Constant"%>
+<%@tag pageEncoding="UTF-8" description="展现数据实体列表用"  import="com.ajaxjs.simpleApp.Constant"%>
 <%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
 <%@attribute name="type" type="String" required="true" description="指定哪种 HTML 片断"%>
-<%@attribute name="classList" type="String" required="false" description="样式类"%>
-<%@attribute name="urlPerfix" type="String" required="false" description="URL地址前缀"%>
-<%@attribute name="list" type="java.util.List"  required="false" description="列表内容"%>
-<%-- 单行 --%>
-<c:if test="${type == 'list-simple'}">
-	<ul class="${classList}">
-		<c:foreach var="current" items="${list}">
-			<li><a href="${urlPerfix}${current.id}/">
-					<h4>${current.name}</h4>
-			</a></li>
-		</c:foreach>
-	</ul>
-</c:if>
-
-<%-- 有缩略图的 --%>
-<c:if test="${type == 'list-thumb'}">
-	<%-- 如果有异常则显示之 --%>
-	${(not empty errMsg ) ? (errMsg.message) : ''}
-	${(not empty errMsg.cause ) ? (errMsg.cause.message) : ''}
-	
-	<ul class="${classList}">
-		<c:foreach var="current" items="${PageResult.rows}">
-			<li>
-				<div class="thumb">
-					<img src="http://localhost:8080/ajaxjs-web/asset/common/images/360logo.gif" />
-				</div>
-				<div class="text">
-					<a href="${current.id}/">
-						<h4>${current.name}</h4>
-					</a>
-					<p>${current.intro}
-						<a href="${current.id}/info.do">阅读更多……</a>
-					</p>
-					<div class="small">作者：Admin | 分类：${current.catalogName} | 日期：${current.createDate}|阅读次数：10
-					</div>
-				</div>
-
-			</li>
-		</c:foreach>
-	</ul>
-	
-	<commonTag:pager pageInfo="${PageResult}"/>
-</c:if>
-
-<%-- 读取数据库的菜单 --%>
-<c:if test="${type == 'catalogMenu' && not empty catalogMenu}">
-<%@attribute name="listPath" type="String" required="false" description="返回上一层，列表目录。既要适合在列表用，又要适合在详情页用"%>
-	<ul>
-		<li>
-			全部分类
-		</li>
-	<c:foreach items="${catalogMenu}" var="catalog">
-		<li ${param.filterValue == catalog.id ? 'class="selected"' : ''}>
-			<a href="${empty listPath ? '' : '../'.concat(listPath)}?filterField=catalog&filterValue=${catalog.id}">
-				${catalog.name}
-			</a>
-		</li>
-	</c:foreach>
-	</ul>
-</c:if>
 
 
 
-<%-- 分类 约定：catalogs 为 List<Map<String, Object>> 结构；url 参数 catalogId 有匹配则选中 item 或者 catalogId 变量 --%>
-<%@attribute name="isNotJump" type="Boolean" required="false" description="选择后是否调转？"%>
-<c:if test="${type == 'catalog_dropdownlist'}">
-	<span class="catalog_dropdownlist"> 
-		分类： 
-		<script>
-			function onCatalogSelected(el) {
-				var catalogId = el.selectedOptions[0].value;
-				if (catalogId == '全部分类')
-					location.assign(location.origin + location.pathname); // todo
-				else
-					location.assign('?catalogId=' + catalogId);
-			}
-		</script> 
-		<select onchange="${isNotJump ? '' : 'onCatalogSelected(this);'}" class="select_1" name="catalog">
-				<option>全部分类</option>
-				<c:foreach items="${catalogs}" var="current">
-					<c:choose>
-						<c:when test="${param.catalogId == current.id || info.catalog == current.id || catalogId == current.id }">
-							<option value="${current.id}" selected>${current.name}</option>
-						</c:when>
-						<c:otherwise>
-							<option value="${current.id}">${current.name}</option>
-						</c:otherwise>
-					</c:choose>
-				</c:foreach>
-		</select>
-	</span>
+<c:if test="${type == 'pager'}">
+<%@attribute name="pageInfo" type="com.ajaxjs.jdbc.PageResult" required="false" description="分页对象"%>
+<jsp:useBean id="PageUtil" class="com.ajaxjs.mvc.view.PageTag" />
+
+<section class="pageInfo">
+	<c:choose>
+		<c:when test="${pageInfo.totalCount > 0}">
+			<c:if test="${pageInfo.start > 0}">
+				<a href="?start=${pageInfo.start - pageInfo.pageSize}${PageUtil.getParams_without('start', pageContext.request.queryString)}">上一页</a>
+			</c:if>
+			<c:if
+				test="${(pageInfo.start > 0 ) && (pageInfo.start + pageInfo.pageSize < pageInfo.totalCount)}">
+				<a href="#" style="text-decoration: none;">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>
+			</c:if>
+			<c:if
+				test="${pageInfo.start + pageInfo.pageSize < pageInfo.totalCount}">
+				<a href="?start=${pageInfo.start + pageInfo.pageSize}${PageUtil.getParams_without('start', pageContext.request.queryString)}">下一页</a>
+			</c:if>
+
+			<div class="info" style="vertical-align: bottom;">
+				页数：${pageInfo.currentPage}/${pageInfo.totalPage}
+				记录数：${pageInfo.start}/${pageInfo.totalCount}
+				<form style="display: inline-block; vertical-align: bottom;"
+					method="GET">
+					每页记录数： <input size="4" title="输入一个数字确定每页记录数" type="text"
+						name="limit"
+						value="${empty param.limit ? pageInfo.pageSize : param.limit}"
+						style="text-align: center; width: 40px; height: 22px; float: none;"
+						class="ajaxjs-inputField" />
+					<!-- 其他参数 -->
+					<c:foreach items="${PageUtil.getParams_without_asMap('limit', pageContext.request.queryString)}" var="current">
+						<input type="hidden" name="${current.key}" value="${current.value}" />
+					</c:foreach>
+				</form>
+				<%--分页数过多影响 HTML 加载，这里判断下 --%>
+				<c:if test="${pageInfo.totalPage < 1000}">
+				 	跳转：
+				 	<select onchange="jumpPage(this);" style="text-align: center; width: 40px; height: 22px;" class="ajaxjs-select">
+						<c:foreach items="${PageUtil.jumpPage(pageInfo.totalPage)}" var="i">
+							<option value="${currentIndex * pageInfo.pageSize}" ${(currentIndex + 1)==pageInfo.currentPage ? ' selected' : ''}>${currentIndex + 1}</option>
+						</c:foreach>
+					</select>
+				</c:if>
+			</div>
+
+			<script>
+				/**
+				 * 分页，跳到第几页，下拉控件传入指定的页码。
+				 */
+				function jumpPage(selectEl) {
+					var start = selectEl.options[selectEl.selectedIndex].value;
+					var go2 = location.search;
+
+					if (go2.indexOf('start=') != -1) {
+						go2 = go2.replace(/start=\d+/, 'start=' + start);
+					} else {
+						go2 += go2.indexOf('?') != -1 ? ('&start=' + start)
+								: ('?start=' + start);
+					}
+
+					location.assign(go2);
+				}
+			</script>
+
+		</c:when>
+		<c:otherwise>
+		没有数据！
+</c:otherwise>
+	</c:choose>
+</section>
+
 </c:if>

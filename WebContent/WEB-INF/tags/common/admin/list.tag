@@ -84,7 +84,7 @@
 	<jsp:doBody />
 
 	<div class="pager">
-		<commonTag:pager pageInfo="${PageResult}" />
+		<commonTag:list type="pager" pageInfo="${PageResult}" />
 	</div>
 	
 	<script>
@@ -113,3 +113,45 @@
 	</script>
 </body>
 </html>
+
+<%-- 页脚 --%>
+
+<footer>
+	<div class="sitemap">
+		<div>
+			<div class="btn" onclick="document.querySelector('.sitemap').toggleCls('open');"></div>
+			${SITE_STRU.getSiteMap(pageContext.request)}
+		</div>
+	</div>
+
+	<div class="copyright">
+		<div>
+			<jsp:doBody />
+			<a href="#"><img src="${commonImage}gs.png" height="40" /></a> 
+			<a href="#"><img src="${commonImage}kexin.png" hspace="20" width="90" style="margin-top:15px;" /></a> 
+			<a href="#"><img src="${commonImage}360logo.gif" width="90" style="margin-top:15px;" /></a>
+			<br />
+			<span>
+				<a href="javascript:;" onclick="toSimpleChinese(this);" class="simpleChinese selected">简体中文</a>
+				/<a href="javascript:;" class="Chinese" onclick="toChinese(this);">正体中文</a>
+			</span>
+			<script src="${commonAsset}js/libs/chinese.js"></script>
+			<br />
+			${empty _config.site_icp ? '粤ICP备15007080号-2' :  _config.site_icp}
+			Powered by <a target="_blank" href="http://framework.ajaxjs.com">AJAXJS</a>
+			<br />
+			<%
+			
+			if(request.getAttribute("requestTimeRecorder") != null ) {
+				Long requestTimeRecorder = (Long)request.getAttribute("requestTimeRecorder");
+				requestTimeRecorder = System.currentTimeMillis() - requestTimeRecorder;
+				float _requestTimeRecorder = (float)requestTimeRecorder;
+				_requestTimeRecorder = _requestTimeRecorder / 1000;
+				// float seconds = (endTime - startTime) / 1000F;
+				request.setAttribute("requestTimeRecorder", _requestTimeRecorder); 
+			}
+			%>
+	 		©Copyright <%=java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)%> 版权所有， ${_config.clientFullName} ${empty requestTimeRecorder ? '' : '请求完成耗时：'.concat(requestTimeRecorder).concat('秒') }
+		</div>
+	</div>
+</footer>
