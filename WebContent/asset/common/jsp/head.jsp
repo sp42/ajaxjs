@@ -48,8 +48,8 @@
 	</style> 
 	<script>JSP_VALUE_commonAssetIcon = '${commonAssetIcon}';</script>
 <% if(com.ajaxjs.Version.isDebug) { %>
-	<link rel="stylesheet/less" type="text/css" href="${ctx}/ajaxjs-ui/less/all.less" />
-	<link rel="stylesheet/less" type="text/css" href="${pageContext.request.contextPath}${empty lessFile ? '/asset/less/main.less' : lessFile}" />
+	<link rel="stylesheet/less" type="text/css" href="${ctx}/asset/ajaxjs-ui/less/all.less" />
+	<link rel="stylesheet/less" type="text/css" href="${ctx}${empty lessFile ? '/asset/less/main.less' : lessFile}" />
 		
 	<script>
 	  less = {
@@ -59,9 +59,9 @@
 	    }
 	  };
 	</script>
-	<script src="${pageContext.request.contextPath}/asset/common/js/libs/less.min.js"></script>
+	<script src="${ctx}/asset/ajaxjs-ui/js/libs/less.min.js"></script>
 <%}else { %>
-	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/asset/css/${empty lessFile ? 'main' : lessFile.replaceAll("(?:.*/)(\\w+).less", "$1")}.css" />
+	<link rel="stylesheet" type="text/css" href="${ctx}/asset/css/${empty lessFile ? 'main' : lessFile.replaceAll("(?:.*/)(\\w+).less", "$1")}.css" />
 <%} %>
 	
     <script src="${commonAsset}js/libs/vue.js"></script>
@@ -78,6 +78,6 @@
    		Vue.use(aj.Vue);
    	</script>
     <script src="${ctx}/js"></script>
-	<link rel="icon"		  type="image/x-icon" href="${pageContext.request.contextPath}/asset/images/favicon.ico" />
-	<link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/asset/images/favicon.ico" />
+	<link rel="icon"		  type="image/x-icon" href="${ctx}/asset/images/favicon.ico" />
+	<link rel="shortcut icon" type="image/x-icon" href="${ctx}/asset/images/favicon.ico" />
 	<noscript><div align="center">如要享受本网站之服务请勿禁用浏览器 JavaScript 支持</div></noscript>
