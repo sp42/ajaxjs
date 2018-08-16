@@ -185,6 +185,8 @@ public class MvcOutput extends HttpServletResponseWrapper {
 				} else {
 					setJsonpToken(jsonpToken).setOutput(str.replace("json::", "")).go();
 				}
+			} else if (str.startsWith("js::")) {
+				setContent_Type("application/javascript").setOutput(str.replace("js::", "")).go();
 			} else { // JSP
 				if (!str.endsWith(".jsp")) // 自动补充 .jsp 扩展名
 					str += ".jsp";

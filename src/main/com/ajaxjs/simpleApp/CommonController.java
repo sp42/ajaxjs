@@ -37,6 +37,7 @@ import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.util.SnowflakeIdWorker;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.reflect.BeanUtil;
 import com.ajaxjs.web.UploadFile;
 import com.ajaxjs.web.UploadFileInfo;
 
@@ -176,6 +177,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	 */
 	@SuppressWarnings("unchecked")
 	public String delete(ID id, ModelAndView model) throws ServiceException {
+		LOGGER.info("删除 id:{0}，数据库将执行 DELETE 操作", id);
 		Map<String, Object> map = new HashMap<>();
 		map.put("id", id);
 
@@ -253,7 +255,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 				List<Map<String, Object>> list = (List<Map<String, Object>>) pageResult.getRows();
 				jsonStr = JsonHelper.stringifyListMap(list);
 			} else { // Bean
-				jsonStr = JsonHelper.beans2json((List<Object>) pageResult.getRows());
+				jsonStr = BeanUtil.listToJson((List<Object>) pageResult.getRows());
 			}
 
 			model.put("MapOutput", jsonStr);

@@ -125,7 +125,7 @@ public class RequestParam {
 					} else if (clz == int.class || clz == Integer.class) {
 						args.add(argValue == null || "".equals(argValue) ? 0 : Integer.parseInt(argValue));
 					} else if (clz == long.class || clz == Long.class) {
-						args.add(Long.parseLong(argValue));
+						args.add(argValue == null || "".equals(argValue) ? 0L :(Long.parseLong(argValue)));
 					} else if (clz == boolean.class || clz == Boolean.class) {
 						args.add(Value.toBoolean(argValue));
 					} else {
