@@ -56,8 +56,7 @@
 	
 			// 提交数据
 			document.querySelector('.perviewBtn').onclick = function(e) {
-				window.open('${pageContext.request.contextPath}${param.url}',
-						'_blank');
+				window.open('${pageContext.request.contextPath}${param.url}', '_blank');
 			}
 		</script>
 	</body>
