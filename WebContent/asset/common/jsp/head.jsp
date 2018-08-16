@@ -1,8 +1,7 @@
-<%@page pageEncoding="UTF-8" import="com.ajaxjs.Version, com.ajaxjs.web.UserAgent"%>
 <jsp:useBean id="PAGE" class="com.ajaxjs.web.HtmlHead" scope="request" /> 
 <%
 	PAGE.init(request);
-	UserAgent ua = new UserAgent(request);
+	com.ajaxjs.web.UserAgent ua = new com.ajaxjs.web.UserAgent(request);
 %>
 <head>
 	<meta charset="utf-8" />
@@ -49,7 +48,7 @@
 		}	
 	</style> 
 	<script>JSP_VALUE_commonAssetIcon = '${commonAssetIcon}';</script>
-<% if(Version.isDebug) { %>
+<% if(com.ajaxjs.Version.isDebug) { %>
 	<link rel="stylesheet/less" type="text/css" href="${ctx}/ajaxjs-ui/less/all.less" />
 	<link rel="stylesheet/less" type="text/css" href="${pageContext.request.contextPath}${empty lessFile ? '/asset/less/main.less' : lessFile}" />
 		
