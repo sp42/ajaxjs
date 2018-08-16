@@ -19,16 +19,12 @@ import java.io.File;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.jsp.PageContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
 import com.ajaxjs.js.JavaScriptCompressor;
 import com.ajaxjs.mvc.controller.IController;
-import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.util.io.FileUtil;
-import com.ajaxjs.web.Captcha;
 
 /**
  *  JS all in one
