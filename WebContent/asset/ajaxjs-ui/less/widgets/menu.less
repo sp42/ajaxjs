@@ -1,0 +1,184 @@
+// 折叠菜单 Accordion Menu
+.acMenu {
+	& > li h3 {
+		cursor: pointer;
+	}
+
+	.pressed {
+		& > ul {
+		}
+
+		& h3 {
+			color: black;
+		}
+	}
+
+	& > li > ul {
+		.transition (height .5s cubic-bezier(0, 1, 0.5, 1));
+		overflow: hidden;
+	}
+
+	ul {
+		height: 0;
+	}
+}
+
+.leftSidebar {
+	.acMenu ();
+	overflow: hidden;
+	& > li {
+		border-top: 1px solid white;
+		border-bottom: 1px solid lightgray;
+		&.pressed {
+			border-top: 0;
+			border-bottom: 1px solid lightgray;
+			h3 {
+			}
+		}
+
+		ul {
+			li {
+				list-style-type: disc;
+				padding-left: 10%;
+				a {
+					width: 100%;
+					display: block;
+				}
+
+				&.selected {
+					a {
+						color: black;
+					}
+				}
+			}
+		}
+
+		h3 , li {
+			padding: 5px 0 5px 15px;
+			letter-spacing: 2px;
+			line-height: 20px;
+			color: #939da8;
+			font-size: 12px;
+			&:hover , a:hover {
+				color: black;
+			}
+		}
+	}
+}
+
+// 下拉菜单
+// 父节点，通常是 li
+.downdrop_menu_parentNode () {
+	box-sizing: border-box;
+	position: relative;
+	overflow: hidden;
+	&:hover {
+		overflow: inherit;
+	}
+
+	.show () {
+		height: 13rem;
+		z-index: 9999999;
+	}
+
+	&:hover menu {
+		.show ();
+	}
+
+	menu {
+		margin: 0;
+		z-index: 99999;
+		box-sizing: border-box;
+		overflow: hidden;
+		position: absolute;
+		.heightFx;
+		height: 0;
+		&:hover {
+			.show ();
+		}
+	}
+}
+
+.menu {
+	margin: 0 auto;
+	& > li {
+		float: left;
+		padding: 0 2%;
+		.downdrop_menu_parentNode ();
+		menu {
+			line-height: 25px;
+			padding: 0 5px;
+			width: 200px;
+			background-color: #eee;
+			div {
+				font-size: .8rem;
+				color: gray;
+				line-height: 15px;
+				margin: 10px 0;
+			}
+		}
+	}
+}
+
+// display:none/block 版
+.menu2 {
+	margin: 0 auto;
+	& > li {
+		float: left;
+		padding: 0 2%;
+		box-sizing: border-box;
+		position: relative;
+		&:hover menu {
+			display: block;
+		}
+
+		menu {
+			line-height: 25px;
+			display: none;
+			z-index: 99999999;
+			padding: 0 5px;
+			box-sizing: border-box;
+			width: 200px;
+			background-color: #eee;
+			overflow: hidden;
+			margin: 0;
+			position: absolute;
+			div {
+				font-size: .8rem;
+				color: gray;
+				line-height: 15px;
+				margin: 10px 0;
+			}
+
+			&:hover {
+				display: block;
+			}
+		}
+	}
+}
+
+.aj-expander {
+	.contentPanel {
+		overflow:hidden;
+		position: relative;
+		clear: both;
+		transition: height 200ms ease 0s;
+	}
+	.openBtn {
+		background: url("@{assetFilePath}/common/images/openBtn.png");
+	}
+
+	.closeBtn {
+		background: url("@{assetFilePath}/common/images/closeBtn.png");
+	}
+
+	.closeBtn , .openBtn {
+		width: 45px;
+		height: 32px;
+		position: absolute;
+		cursor: pointer;
+		top: 0px;
+		right: 0px;
+	}
+}
+

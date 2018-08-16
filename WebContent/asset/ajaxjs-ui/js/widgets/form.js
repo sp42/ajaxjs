@@ -1,0 +1,456 @@
+/**
+ * 表單控件
+ */
+
+// 日期选择器
+Vue.component('aj-form-calendar', {
+	data: function() {
+		return {
+			year : 2017,
+			month : 2,
+			day : 1
+		};
+	},
+	props : {
+/*		imgSrc : {
+			type: String, // 生成图片验证码地址
+			required: true,
+		},
+		
+		fieldName : {	// 提交的字段名
+			type: String,
+			required: false,
+			default : 'captcha'
+		}*/
+	},
+	template : 
+		'<div>\
+			<div class="selectYearMonth">\
+				<a href="#" @click="" class="preYear">&lt;</a> \
+				<select>\
+					<option value="1">一月</option><option value="2">二月</option><option value="3">三月</option><option value="4">四月</option>\
+					<option value="5">五月</option><option value="6">六月</option><option value="7">七月</option><option value="8">八月</option>\
+					<option value="9">九月</option><option value="10">十月</option><option value="11">十一月</option><option value="12">十二月</option>\
+				</select>\
+				<a href="#" class="nextYear">&gt;</a>\
+			</div>\
+			<div class="showCurrentYearMonth">\
+				<span class="showYear">{{year}}</span>/<span class="showMonth">{{month}}</span>\
+			</div>\
+			<table>\
+				<thead>\
+					<tr><td>日</td><td>一</td><td>二</td><td>三</td><td>四</td><td>五</td><td>六</td></tr>\
+				</thead>\
+				<tbody @click="pickDay($event);"></tbody>\
+			</table>\
+		</div>',
+		
+	    // 2012-07-08
+	    // firefox中解析 new Date('2012/12-23') 不兼容，提示invalid date 无效的日期
+		// Chrome下可以直接将其格式化成日期格式，且时分秒默认为零
+//	    var arr = date.split('-'), now = new Date(arr[0], arr[1] - 1, arr[2], " ", " ", " ");
+	mounted : function () {
+		aj.apply(this, this.getDate('now'));
+		this.render();
+		
+/*		document.querySelector(".preYear").onclick  = function(){
+			render.call(getDate('preYear'), document.querySelector(".calendar"));
+		};
+		document.querySelector(".nextYear").onclick = function(){
+			render.call(getDate('nextYear'), document.querySelector(".calendar"));
+		};*/
+	},
+
+	methods : {
+		// 画日历
+		render : function () {
+			var el = this.$el;
+			var arr = this.getDateArr();// 用来保存日期列表
+			this.days = [];// 清空原来的日期对象列表
+
+			var frag = document.createDocumentFragment();// 插入日期
+
+			while (arr.length) {
+				var row = document.createElement("tr"); // 每个星期插入一个 tr
+
+				for (var i = 1; i <= 7; i++) { // 每个星期有7天
+					var cell = document.createElement("td");
+					if (arr.length) {
+						var d = arr.shift();
+						if (d) {
+							cell.innerHTML = d;
+							
+							cell.className = 'day day_' + this.year + '-' + this.month + '-' + d;
+							cell.title = this.year + '-' + this.month + '-' + d;
+							
+							this.days[d] = cell;
+							var on = new Date(this.year, this.month - 1, d);
+
+							// 判断是否今日
+							if (this.isSameDay(on, this.date)) {
+								cell.classList.add('onToday');
+								this.onToday && this.onToday(cell);
+							}
+							
+							// 判断是否选择日期
+							this.selectDay && this.onSelectDay && this.isSameDay(on, this.selectDay) && this.onSelectDay(cell);
+						}
+					}
+					
+					row.appendChild(cell);
+				}
+				
+				frag.appendChild(row);
+			}
+
+			// 先清空内容再插入(ie的table不能用innerHTML)
+//			while (el.hasChildNodes())
+//				el.removeChild(el.firstChild);
+
+			var tbody = el.$("table tbody");
+			tbody.innerHTML = '';
+			tbody.appendChild(frag);
+
+			
+//			el.querySelector(".idCalendarPre").onclick = this.PreMonth.bind(this);
+//			el.querySelector(".idCalendarNext").onclick = this.NextMonth.bind(this);
+
+//			el.querySelector(".preYear").onclick = this.PreYear.bind(this);
+//			el.querySelector(".nextYear").onclick = this.NextYear.bind(this);
+//			el.querySelector(".idCalendarNow").onclick = this.NowMonth.bind(this);
+			
+			this.onFinish && this.onFinish();
+		},
+		
+		getDate: function (dateType) {
+			var now = new Date(), date, nowYear = now.getFullYear(), nowMonth = now.getMonth() + 1;
+			
+			switch (dateType) {
+				case 'now':// 当前月
+					date = now;
+					break;
+				case 'preMonth':// 上一月
+					date = new Date(nowYear, nowMonth - 2, 1);
+					break;
+				case 'nextMonth':// 下一月
+					date = new Date(nowYear, nowMonth, 1);
+					break;
+				case 'preYear':// 上一年
+					date = new Date(nowYear - 1, nowMonth - 1, 1);
+					break;
+				case 'nextYear':// 下一年	
+					date = new Date(nowYear + 1, nowMonth - 1, 1);
+					break;
+			}
+			
+			return {
+				date : date,
+				year : date.getFullYear(),
+				month : date.getMonth() + 1,
+			};
+		},
+	
+		getDateArr: function () {
+			var arr = [];
+			// 用当月第一天在一周中的日期值作为 当月离第一天的天数
+			for (var i = 1, firstDay = new Date(this.year, this.month - 1, 1).getDay(); i <= firstDay; i++)
+				arr.push(0);
+
+			// 用当月最后一天在一个月中的日期值作为当月的天数
+			for (var i = 1, monthDay = new Date(this.year, this.month, 0).getDate(); i <= monthDay; i++)
+				arr.push(i);
+
+			return arr;
+		},
+		
+		pickDay : function(e) {
+			var el = e.target, date = el.title;
+			this.$emit('pick-date', date);
+			return date;
+		},
+
+		/**
+		 * 判断是否同一日
+		 */
+		isSameDay: function (d1, d2) {
+			return (d1.getFullYear() == d2.getFullYear() && d1.getMonth() == d2.getMonth() && d1.getDate() == d2.getDate());
+		}
+	}
+});
+
+// 帶有 input 輸入框的
+Vue.component('aj-form-calendar-input', {
+	data : function(){
+		return {
+			date : this.fieldValue
+		}
+	},
+	props : {
+		fieldName : { // 表单 name，字段名
+			type: String,
+			required: true
+		},
+		fieldValue : {
+			type: String,// 表单值，可选的
+			required: false
+		}
+	},
+	template : 
+		'<div>\
+			<div class="icon"><div class="menu"></div></div>\
+			<input placeholder="请输入日期" :name="fieldName" :value="date" type="text" />\
+			<div class="aj-form-calendar">\
+				<aj-form-calendar @pick-date="recEvent"></aj-form-calendar>\
+			</div>\
+		</div>',
+	methods : {
+		recEvent: function(date){
+			this.date = date;
+		}
+	}
+});
+
+// HTML 在綫編輯器
+Vue.component('aj-form-html-editor', {
+	template : '',
+	props : {
+		fieldName : { // 表单 name，字段名
+			type: String,
+			required: true
+		},
+		content : { // 内容
+			type: String,
+			required: false
+		},
+		basePath : { // iframe 的 <base href="${param.basePath}/" />路徑
+			type: String,
+			required: false,
+			default : ''
+		}
+	},
+	beforeCreate : function() {
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", this.ajResources.libraryUse + '/htmleditor-tag.htm', false);// 同步方式请求 
+		xhr.send(null);
+		this.$options.template = xhr.responseText;
+	},
+	mounted : function() {
+		var el = this.$el;
+		this.iframeEl 	  = el.$('iframe');
+		this.sourceEditor = el.$('textarea');
+		this.iframeWin 	  = this.iframeEl.contentWindow;
+		this.mode         = 'iframe'; // 当前可视化编辑 iframe|textarea
+		
+		this.toolbarEl = el.$('.toolbar');
+		
+		// 这个方法只能写在 onload 事件 不写 onload 里还不执行
+		this.iframeWin.onload = function() {
+			this.iframeDoc 	= this.iframeWin.document;
+			this.iframeDoc.designMode = 'on';
+			this.iframeBody = this.iframeDoc.body;
+			// 有内容
+			this.sourceEditor.value && this.setValue(this.sourceEditor.value);
+		}.bind(this);
+	},
+	
+	methods: {
+		onToolBarClk : function(e) {
+			var el = e.target, clsName = el.className;
+			
+			clsName = clsName.split(' ').shift();
+			switch(clsName) {
+			case 'createLink':
+				this.format("createLink", prompt("请输入 URL 地址"));
+				break;
+			case 'insertImage':
+				this.format("insertImage", prompt("请输入图片地址", "http://"));
+				break;
+			case 'switchMode':
+				this.setMode();
+				break;
+			default:
+				this.format(clsName);
+			}
+		},
+		
+		format : function (type, para) {
+			this.iframeWin.focus();
+			
+			if (!para) {
+				if (document.all) 
+					this.iframeDoc.execCommand(type);
+				else 
+					this.iframeDoc.execCommand(type, false, false);
+			} else 
+				this.iframeDoc.execCommand(type, false, para);
+			
+			this.iframeWin.focus();
+		},
+		
+		insertEl : function (html) {// 重複？
+			this.iframeDoc.body.innerHTML = html;
+		},
+		
+		// 設置 HTML 
+		setValue : function(v) {
+			var self = this;
+			setTimeout(function() {
+				self.iframeWin.document.body.innerHTML = v;
+//				self.iframeBody.innerHTML = v; 
+			}, 500);
+		},
+		
+		// 獲取 HTML
+		getValue : function() {
+			return this.iframeBody.innerHTML;
+		},
+		
+		// 切換 HTML 編輯 or 可視化編輯
+		setMode : function () {
+			if (this.mode == 'iframe') {
+				this.iframeEl.classList.add('hide');
+				this.sourceEditor.classList.remove('hide');
+				this.sourceEditor.value = this.iframeBody.innerHTML;
+				this.mode = 'text';
+				this.grayImg(true);
+			} else {
+				this.iframeEl.classList.remove('hide');
+				this.sourceEditor.classList.add('hide');
+				this.iframeBody.innerHTML = this.sourceEditor.value;
+				this.mode = 'iframe';
+				this.grayImg(false);
+			}
+		},
+		
+		// 使图片灰色
+		grayImg: function (isGray) {
+			this.toolbarEl.$('span', function(item) {
+				if(item.className.indexOf('switchMode') != -1) {
+					item.style.color = isGray ? 'red' : '';
+				} else {
+					item.style.filter = isGray ? 'grayscale(100%)' : '';
+				}
+			});
+		},
+		
+		onFontfamilyChoserClk : function(e) {
+			var el = e.target; 
+			
+			this.format('fontname', el.innerHTML);
+			// 如何解决点击之后马上隐藏面板？由于 js（单击事件） 没有控制 CSS 的 :hover 伪类的方法，故所以必须使用以下技巧：
+			var menuPanel = el.parentNode;
+			menuPanel.style.display = 'none';
+
+			setTimeout(function() {
+				menuPanel.style.display = '';
+			}, 300);
+		},
+		
+		onFontsizeChoserClk : function(e) {	
+			var el = e.target;
+			for(var els = e.currentTarget.children, i = 0, j = els.length; i < j; i++)
+				if(el == els[i]) break;
+			
+			this.format('fontsize', i);
+		},
+		
+		onFontColorPicker: function(e) {
+			var color = e.target.title;
+			this.format('foreColor', color);
+		},
+		
+		onFontBgColorPicker: function(e) {
+			var color = e.target.title;
+			this.format('backColor', color);
+		},
+		
+		createColorPickerHTML : function() {
+			// 定义变量
+			var cl = ['00', '33', '66', '99', 'CC', 'FF'], a, b, c, d, e, f, i, j, k, T;
+			// 创建head
+			var h = '<div class="colorhead"><span class="colortitle">颜色选择</span></div>\
+						<div class="colorbody"><table cellspacing="0" cellpadding="0"><tr>';// 创建body [6 x 6的色盘]
+			
+			for (var i = 0; i < 6; ++i) {
+				h += '<td><table class="colorpanel" cellspacing="0" cellpadding="0">';
+				for (var j = 0, a = cl[i]; j < 6; ++j) {
+					h += '<tr>';
+					for (var k = 0, c = cl[j]; k < 6; ++k) {
+						b = cl[k];
+						e = k == 5 && i != 2 && i != 5 ? ';border-right:none;' : '';
+						f = j == 5 && i < 3 ? ';border-bottom:none' : '';
+						d = '#' + a + b + c;
+						T = document.all ? '&nbsp;' : '';
+						h += '<td unselectable="on" style="background-color: ' + d + e + f + '" title="' + d + '">' + T + '</td>'; 
+					}
+					h += '</tr>';
+				}
+				h += '</table></td>';
+				if (cl[i] == '66') h += '</tr><tr>';
+			}
+			
+			h += '</tr></table></div>';
+			
+			return h;
+		}
+	}
+});
+
+
+/**
+ * 基于 HTML5 增强的表单验证
+ */
+ajaxjs.formValid = function FormValid(formEl, cfg) {
+	this.cfg = cfg;
+	formEl = typeof formEl == 'string' ? document.querySelector(formEl) : formEl;
+	var items = formEl.querySelectorAll('input[type=text], input[type=password], input[type=number]');
+
+	for(var i = 0 , j = items.length; i < j; i++) {
+		var el = items[i];
+		el.oninvalid = this.onInvalid.bind(this);
+	}
+}
+
+ajaxjs.formValid.prototype.onInvalid = function (e) {
+	e.preventDefault();
+	var el = e.target;
+	el.style.borderColor = 'red';
+	
+	// 新增错误提示的容器
+	var msg = el.parentNode.querySelector('.errMsg');
+	if(!msg) {
+		msg = document.createElement('div');
+		msg.className = 'errMsg';
+		
+		var b = el.getBoundingClientRect();
+		if(this.cfg && this.cfg.alignRight) { // 右对齐
+			msg.style.top = (b.top + 5) + 'px';
+			var moveLeft = 0;
+			if(el.dataset.erruileft)
+				moveLeft = Number(el.dataset.erruileft);
+			msg.style.left = (b.left + el.clientWidth + moveLeft + 10) +  'px';
+		} else {
+			msg.style.left = b.left + 'px';
+			msg.style.top = (b.top + 28) + 'px';
+			
+		}
+		
+		el.insertAfter(msg);
+	}
+	
+	var m;
+	if(el.validity.patternMismatch)
+		m = '该内容格式不正确';
+	if(el.validity.valueMissing)
+		m = '该内容不可为空';
+	//debugger;
+	
+	msg.innerHTML = m;
+	
+	setTimeout(function() {
+		msg.die();
+		el.style.borderColor = '#abadb3';
+	}, 3000);
+	
+	//el.setCustomValidity(undefined);
+}

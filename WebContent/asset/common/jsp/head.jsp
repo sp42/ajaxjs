@@ -3,7 +3,6 @@
 	PAGE.init(request);
 	com.ajaxjs.web.UserAgent ua = new com.ajaxjs.web.UserAgent(request);
 %>
-<head>
 	<meta charset="utf-8" />
     <meta name="keywords"    content="${all_config.site.keywords}" />
     <meta name="description" content="${all_config.site.description}" />
@@ -81,5 +80,4 @@
     <script src="${ctx}/js"></script>
 	<link rel="icon"		  type="image/x-icon" href="${pageContext.request.contextPath}/asset/images/favicon.ico" />
 	<link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/asset/images/favicon.ico" />
-</head>
-<noscript><div align="center">如要享受本网站之服务请勿禁用浏览器 JavaScript 支持</div></noscript>
+	<noscript><div align="center">如要享受本网站之服务请勿禁用浏览器 JavaScript 支持</div></noscript>

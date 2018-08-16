@@ -1,7 +1,12 @@
 <%@page pageEncoding="UTF-8"%>
-<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
+<!DOCTYPE html>
 <html>
-	<commonTag:head lessFile="/asset/common/less/admin.less" title="管理" />
+	<head>
+		<jsp:include page="/asset/common/jsp/head.jsp">
+			<jsp:param name="lessFile" value="/asset/common/less/admin.less" />
+			<jsp:param name="title" value="${uiName}管理" />
+		</jsp:include>
+	</head>
 	<body class="admin-shell">
 		<header>
 			<h1>我的控制面板</h1>

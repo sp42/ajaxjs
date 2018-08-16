@@ -1,15 +1,17 @@
 <%@ page pageEncoding="UTF-8"%>
-<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
-<%@taglib prefix="commonUI" tagdir="/WEB-INF/tags/common/UI"%>
 <!DOCTYPE html>
 <html>
-	<commonTag:head lessFile="/asset/common/less/admin.less" />
-	<body class="pageEditor">
+	<head>
+		<jsp:include page="/asset/common/jsp/head.jsp">
+			<jsp:param name="lessFile" value="/asset/common/less/admin.less" />
+		</jsp:include>
 		<style>
 			body {
 				padding: 2%;
 			}
 		</style>
+	</head>
+	<body class="pageEditor">
 		<nav>
 			<h3 class="head">页面编辑器</h3>
 		</nav>

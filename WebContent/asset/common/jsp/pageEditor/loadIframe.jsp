@@ -1,8 +1,11 @@
 <%@ page pageEncoding="UTF-8"%>	
-<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <!DOCTYPE html>
 <html>	
-	<commonTag:head lessFile="/asset/common/less/admin.less" title="浏览页面以选择编辑">
+	<head>
+		<jsp:include page="/asset/common/jsp/head.jsp">
+			<jsp:param name="lessFile" value="/asset/common/less/admin.less" />
+			<jsp:param name="title" value="浏览页面以选择编辑" />
+		</jsp:include>
 		<style type="text/css">
 			html{
 				height:100%;
@@ -25,7 +28,7 @@
 				padding:5px 20px;
 			}
 		</style>
-	</commonTag:head>
+	</head>
 	<body>
 		<button class="ajaxjs-btn">编辑此页面</button>
 		<iframe src="${empty param.url ? '../../' :  param.url}"></iframe>

@@ -1,11 +1,14 @@
 <%@page pageEncoding="UTF-8"%>
 <!-- 简单的 crud 页面 -->
-<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
-<%@taglib prefix="UI" tagdir="/WEB-INF/tags/common/UI"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
 <!DOCTYPE html>
 <html>
-<commonTag:head lessFile="/asset/common/less/admin.less" title="${uiName}管理" />
+	<head>
+		<jsp:include page="/asset/common/jsp/head.jsp">
+			<jsp:param name="lessFile" value="/asset/common/less/admin.less" />
+			<jsp:param name="title" value="${uiName}管理" />
+		</jsp:include>
+	</head>
 <body>
 	<div class="panel">
 		<h4>${uiName}管理</h4>

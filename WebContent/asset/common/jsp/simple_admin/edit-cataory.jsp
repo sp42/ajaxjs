@@ -1,39 +1,40 @@
 <%@page pageEncoding="UTF-8"%>
-<!-- ${uiName}页面 -->
-<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
-<%@taglib prefix="UI" tagdir="/WEB-INF/tags/common/UI"%>
 <%@taglib prefix="c" uri="/ajaxjs"%>
 <!DOCTYPE html>
 <html>
-<commonTag:head lessFile="/asset/common/less/admin.less" title="${uiName}管理">
-	<style>
-		select {
-			height: 300px;
-			width: 200px;
-			outline: none;
-			margin: 10px;
-			border: 1px solid gray;
-			border-radius: 5px;
-		}
-		
-		.label {
-			display: inline-block;
-			width:250px;
-			text-align: right;
-		}
-		
-		.holder {
-			margin: 3%;
-			text-align: center;
-		}
-		h3{
-			text-align: center;
-		}
-		form {
-			padding: 1% 2%;
-		}
-	</style>
-</commonTag:head>
+	<head>
+		<jsp:include page="/asset/common/jsp/head.jsp">
+			<jsp:param name="lessFile" value="/asset/common/less/admin.less" />
+			<jsp:param name="title" value="${uiName}管理" />
+		</jsp:include>
+		<style>
+			select {
+				height: 300px;
+				width: 200px;
+				outline: none;
+				margin: 10px;
+				border: 1px solid gray;
+				border-radius: 5px;
+			}
+			
+			.label {
+				display: inline-block;
+				width:250px;
+				text-align: right;
+			}
+			
+			.holder {
+				margin: 3%;
+				text-align: center;
+			}
+			h3{
+				text-align: center;
+			}
+			form {
+				padding: 1% 2%;
+			}
+		</style>
+	</head>
 <body>
 	<header class="top">
 		<div class="right">
