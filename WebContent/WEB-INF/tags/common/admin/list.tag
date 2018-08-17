@@ -1,6 +1,5 @@
 <%@tag pageEncoding="UTF-8" description="管理界面-列表界面"%>
 <%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
-<%@taglib prefix="commonUI" tagdir="/WEB-INF/tags/common/UI"%>
 <%@taglib prefix="c" uri="/ajaxjs"%>
 <%@attribute required="false" type="Boolean" name="isSimpleSection"   description="是否需要简易栏目"%>
 <%@attribute required="false" type="Boolean" name="isCatalog"   description="是否需要分类"%>

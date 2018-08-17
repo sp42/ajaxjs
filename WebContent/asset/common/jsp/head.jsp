@@ -46,32 +46,27 @@
 			}
 		}	
 	</style> 
-	<script>JSP_VALUE_commonAssetIcon = '${commonAssetIcon}';</script>
+	
 <% if(com.ajaxjs.Version.isDebug) { %>
-	<link rel="stylesheet/less" type="text/css" href="${ctx}/asset/ajaxjs-ui/less/all.less" />
-	<link rel="stylesheet/less" type="text/css" href="${ctx}${empty lessFile ? '/asset/less/main.less' : lessFile}" />
-		
-	<script>
-	  less = {
-	    env: "development",
-	    globalVars: {
-	      assetFilePath: '"<%=request.getContextPath()%>/asset"'   
-	    }
-	  };
-	</script>
-	<script src="${ctx}/asset/ajaxjs-ui/js/libs/less.min.js"></script>
+	<link rel="stylesheet/less" data-global-vars='{"assetFilePath": "\"${ctx}/asset\"" }' type="text/css" href="${ctx}${empty lessFile ? '/asset/less/main.less' : lessFile}" />
+
+	<script src="${ajaxjsui}/js/libs/less.min.js"></script>
+    <script src="${ajaxjsui}/js/libs/vue.js"></script>
+    <script src="${ajaxjsui}/js/ajaxjs-base.js"></script>
+    
 <%}else { %>
 	<link rel="stylesheet" type="text/css" href="${ctx}/asset/css/${empty lessFile ? 'main' : lessFile.replaceAll("(?:.*/)(\\w+).less", "$1")}.css" />
+
+    <script src="${ajaxjsui}/js/libs/vue.min.js"></script>
+    <script src="${ajaxjsui}/js/ajaxjs-base.min.js"></script>
 <%} %>
 	
-    <script src="${commonAsset}js/libs/vue.js"></script>
-    <script src="${ctx}/ajaxjs-ui/js/ajaxjs-base.js"></script>
    	<script>
    		aj.Vue = {};
    		aj.Vue.install = function(Vue) {
    			Vue.prototype.ajResources = {
 	   			ctx : '${ctx}',
-	   			libraryUse : '${ctx}/ajaxjs-ui/resources' // 庫使用的資源
+	   			libraryUse : '${ajaxjsui}/resources' // 庫使用的資源
    			};
    		}
    		

@@ -38,7 +38,7 @@ public class JsController implements IController {
 	@GET
 	public String get(HttpServletRequest req, HttpServletResponse response) {
 		StringBuilder sb = new StringBuilder();
-		File folder = new File("C:\\project\\wyzx-pc\\WebContent\\ajaxjs-ui\\js\\widgets");
+		File folder = new File("C:\\project\\ajaxjs-web\\WebContent\\asset\\ajaxjs-ui\\js\\widgets");
 		
 		boolean isCompress = "true".equals(req.getParameter("compress"));
 		for (File file : folder.listFiles()) {

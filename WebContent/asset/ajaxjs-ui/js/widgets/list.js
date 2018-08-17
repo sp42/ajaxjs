@@ -43,7 +43,9 @@ Vue.component('aj-page-list', {
 		ajaxjs.xhr.get(this.$props.apiUrl, function(json) {
 			aj.apply(this, json);
 			this.count();
-		}.bind(this));
+		}.bind(this), {
+			limit : this.pageSize
+		});
 	},
 	methods : {
 		count: function () {

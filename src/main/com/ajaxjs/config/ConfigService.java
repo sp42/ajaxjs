@@ -35,11 +35,11 @@ public class ConfigService {
 	private static final LogHelper LOGGER = LogHelper.getLog(SiteStruService.class);
 
 	/**
-	 * 所有的配置保存在这个 congfig 中
+	 * 所有的配置保存在这个 config 中
 	 */
 	public static Config config;
 	/**
-	 * 所有的配置保存在这个 congfig 中（扁平化处理过的）
+	 * 所有的配置保存在这个 config 中（扁平化处理过的）
 	 */
 	public static Map<String, Object> flatConfig;
 

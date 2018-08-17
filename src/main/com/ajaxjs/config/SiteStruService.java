@@ -84,12 +84,11 @@ public class SiteStruService implements ServletContextListener {
 			LOGGER.infoGreen("加载网站的结构文件成功 Site Structure Config Loaded.");
 		} else
 			LOGGER.info("没有网站的结构文件");
-		
-		cxt.setAttribute("ctx", cxt.getContextPath());
-		cxt.setAttribute("commonAsset", cxt.getContextPath() + "/" + Constant.commonFolder); // 静态资源目录
-		cxt.setAttribute("commonImage", cxt.getContextPath() + "/" + Constant.commonImage);
-		cxt.setAttribute("commonAssetIcon", cxt.getContextPath() + "/" + Constant.commonIcon);
-		cxt.setAttribute("commonJsp", cxt.getContextPath() + "/" + Constant.jsp_perfix);
+		System.out.println(cxt.getContextPath() + "/" + Constant.ajajx_ui);
+		cxt.setAttribute("ctx", 			cxt.getContextPath());
+		cxt.setAttribute("ajaxjsui", 		cxt.getContextPath() + "/" + Constant.ajajx_ui);
+		cxt.setAttribute("commonAsset", 	cxt.getContextPath() + "/" + Constant.commonAsset); // 静态资源目录
+		cxt.setAttribute("commonJsp", 		cxt.getContextPath() + "/" + Constant.jsp_perfix);
 	}
 
 	/**

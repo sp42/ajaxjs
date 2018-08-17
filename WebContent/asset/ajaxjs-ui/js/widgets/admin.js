@@ -28,10 +28,10 @@ Vue.component('ajaxjs-admin-info-btns', {
 	},
 	template : 
 		'<div>\
-			<button class="ajaxjs-btn"><img src="' + JSP_VALUE_commonAssetIcon + 'save.gif" /> {{isCreate ? "新建":"编辑"}}</button>\
+			<button class="ajaxjs-btn"><img src="' + '' + 'save.gif" /> {{isCreate ? "新建":"编辑"}}</button>\
 			<button v-if="!isCreate" class="ajaxjs-btn" onclick="this.up(\'form\').reset();return false;">复 位</button>\
 			<button v-if="!isCreate" class="ajaxjs-btn" v-on:click.prevent="del()">\
-				<img src="' + JSP_VALUE_commonAssetIcon + 'delete.gif" /> 删 除\
+				<img src="' + '' + 'delete.gif" /> 删 除\
 			</button><slot></slot>\
 		</div>',
 	methods : {

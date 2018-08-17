@@ -72,7 +72,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 		model.put("isCreate", true); // 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate
 										// = true 标识为创建，以便与 update 区分开来。
 
-		return String.format(jsp_adminInfo, getService().getTableName());
+		return getService().getTableName();
 	}
 
 	/**
@@ -90,7 +90,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 		model.put("isCreate", false); // 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate
 										// = true 标识为创建，以便与 update 区分开来。
 
-		return String.format(jsp_adminInfo, getService().getTableName());
+		return getService().getTableName();
 	}
 
 	/**
@@ -200,7 +200,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 		prepareData(model);
 		model.put("info", getService().findById(id));
 
-		return String.format(jsp_info, service.getTableName());
+		return service.getTableName();
 	}
 
 	/**
