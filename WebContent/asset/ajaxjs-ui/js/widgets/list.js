@@ -6,24 +6,32 @@
 Vue.component('aj-page-list', {
 	data : function() {
 		return {
-			pageSize : 10,
+			pageSize : this.initPageSize,
 			total : 0,
 			totalPage :0,
 			pageStart: 0,
 			currentPage : 0,
-			result : []
+			result : [],
+			baseParam: {}
 		};
 	},
 	props : {
 		apiUrl : {		// JSON 接口地址
 			type : String,
 			required : true
+		},
+		initPageSize : {
+			type : Number,
+			required : false,
+			default : 5
 		}
 	},
 	template : 
-		'<div class="center">\
+		'<div class="aj-page-list">\
 			<ul><li v-for="(item, index) in result">\
+				<slot v-bind="item">\
 				<a href="#" @click="show(item.id, index, $event)" :id="item.id">{{item.name}}</a>\
+				</slot>\
 			</li></ul>\
 			<footer>\
 				<a v-if="pageStart > 0" href="#" @click="previousPage()">上一页</a> \
@@ -32,9 +40,9 @@ Vue.component('aj-page-list', {
 				<div class="info">\
 					<input type="hidden" name="start" :value="pageStart" />\
 					页数：{{currentPage}}/{{totalPage}} 记录数：{{pageStart}}/{{total}}\
-					每页记录数： <input size="4" title="输入一个数字确定每页记录数" type="text" :value="pageSize" @change="onPageSizeChange($event)" />\
-					跳转： <select onchange="jumpPage(this);" style="text-align: center; width: 40px; height: 22px;" class="ajaxjs-select">\
-						<option value="5" selected>2</option>\
+					每页记录数： <input size="2" title="输入一个数字确定每页记录数" type="text" :value="pageSize" @change="onPageSizeChange($event)" />\
+					跳转： <select @change="jumpPageBySelect($event);">\
+						<option :value="n" v-for="n in totalPage">{{n}}</option>\
 					</select>\
 				</div>\
 			</footer>\
@@ -47,6 +55,11 @@ Vue.component('aj-page-list', {
 			limit : this.pageSize
 		});
 	},
+	
+	created : function(){
+		Vue.BUS.$on('base-param-change', this.onBaseParamChange.bind(this));
+	},
+	
 	methods : {
 		count: function () {
 			var totalPage = this.total / this.pageSize, yushu = this.total % this.pageSize;
@@ -71,25 +84,27 @@ Vue.component('aj-page-list', {
 			this.ajaxGet();
 		},
 		ajaxGet : function () {
-			var self = this;
-			ajaxjs.xhr.get(this.$props.apiUrl, function(json) {
-				self.result = json.result;
-			}, {
+			var params = {};
+			
+			aj.apply(params, {
 				start : this.pageStart, limit : this.pageSize
 			});
+			
+			this.baseParam && aj.apply(params, this.baseParam);
+			
+			ajaxjs.xhr.get(this.$props.apiUrl, function(json) {
+				aj.apply(this, json);
+				this.count();
+			}.bind(this), params);
 		},
 		// 分页，跳到第几页，下拉控件传入指定的页码
-		jumpPageBySelect : function (selectEl) {
-			var start = selectEl.options[selectEl.selectedIndex].value;
-			var go2 = location.search;
-
-			if (go2.indexOf('start=') != -1) {
-				go2 = go2.replace(/start=\d+/, 'start=' + start);
-			} else {
-				go2 += go2.indexOf('?') != -1 ? ('&start=' + start) : ('?start=' + start);
-			}
-
-			location.assign(go2);
+		jumpPageBySelect : function (e) {
+			var selectEl = e.target;
+			this.currentPage = selectEl.options[selectEl.selectedIndex].value;
+		},
+		onBaseParamChange : function(params) {
+			aj.apply(this.baseParam, params);
+			this.ajaxGet();
 		}
 	}
 });
