@@ -16,23 +16,26 @@ Maven 依赖
 </dependency>
 ```
 
+
+
 检出源码到本地后，请注意以下两点：
 - 设置源码目录（set Source Folder）为 src/main，而非一般的 src/java/main，测试目录也是 src/test 敬请注意。
-- 推荐使用约定目录，包括静态注意、模板和数据库配置等等，还有 tag files 标签下载，一键设置请执行 ANT 脚本：[build.xml](https://gitee.com/sp42_admin/ajaxjs/blob/master/build.xml)。
+- 推荐使用约定目录，包括静态注意、模板和数据库配置等等。
 
 相关项目一览
 --------------
 
 |名称|说明|
 |------|----|
-|ajaxjs-base|基础类库，纯 Java 项目。[跳转项目主页](http://git.oschina.net/sp42/ajaxjs-base)。|
+|ajaxjs-base|基础类库，纯 Java 项目。[跳转项目主页](http://git.oschina.net/sp42_admin/ajaxjs-base)。|
 |ajaxjs-web|本项目，Web 的 MVC 框架+小型 UI 库，依赖 base JAR 包。见下面详细介绍。|
-|ajaxjs-cms|CMS 网站内容发布系统，依赖上述 base + web 的 JAR 包。[跳转项目主页](http://git.oschina.net/sp42/ajaxjs-cms)。|
+
 
 AJAXJS WEB
 -----------
 AJAXJS WEB 包含以下模块：
 
+- 参照 Spring MVC，实现了 URL-METHOD 映射、参数自动化注入（支持 Query/Path 参数，Form2Bean/Map）、RESTFUL 风格支持（基于 JSR 注解）、返回结果解析（原生JSON/HTML/JSP返回）、异常统一结构化规范支持、拦截器支持等等
 - 通过 Servlet 3.0 的 web-fragment 提供了静态资源打包，包括 UI 库的各种控件、自定义标签库、404/500 页等；
 - web Http 与 Servlet 工具类，例如通过 HttpServletRequestWrapper 扩展了 Request 对象，还有一个文件上传组件和验证码组件、Mock 模拟对象；
 - mvc 模块，类似 SpringMVC 基于注解的控制器的写法，注解基于 JSR 标准方案。当前支持 JSP 视图；
