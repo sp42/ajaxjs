@@ -103,12 +103,9 @@ Vue.component('aj-adjust-font-size', {
 		},
 
 		setFontSize : function (fontSize) {
-			var p = aj(this.$props.articleTarget);
-			
-			if (!p || !p.length)throw '未发现目标段落！';
-			
-			for (var i = 0, j = p.length; i < j; i++)
-				p[i].style.fontSize = fontSize;
+			aj(this.$props.articleTarget, function(p){
+				p.style.fontSize = fontSize;
+			});
 		}
 	}
 });
