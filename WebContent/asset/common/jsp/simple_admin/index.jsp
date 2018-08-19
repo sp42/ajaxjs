@@ -1,15 +1,15 @@
 <%@page pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html style="height: 100%;">
 	<head>
-		<jsp:include page="/asset/common/jsp/head.jsp">
-			<jsp:param name="lessFile" value="/asset/common/less/admin.less" />
+		<jsp:include page="/asset/common/jsp/head.jsp"  flush="true">
+			<jsp:param name="lessFile" value="/asset/ajaxjs-ui/less/admin.less" />
 			<jsp:param name="title" value="${uiName}管理" />
 		</jsp:include>
 	</head>
 	<body class="admin-shell">
 		<header>
-			<h1>我的控制面板</h1>
+			<h1>我的控制面板55</h1>
 			<menu>
 				${userName} 已登录 | <a href="${pageContext.request.contextPath}/" target="_blank">首页</a> | <a href="?action=logout">退出</a> 
 			</menu>

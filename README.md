@@ -35,10 +35,9 @@ AJAXJS WEB
 -----------
 AJAXJS WEB 包含以下模块：
 
-- 参照 Spring MVC，实现了 URL-METHOD 映射、参数自动化注入（支持 Query/Path 参数，Form2Bean/Map）、RESTFUL 风格支持（基于 JSR 注解）、返回结果解析（原生JSON/HTML/JSP返回）、异常统一结构化规范支持、拦截器支持等等
+- mvc 模块，类似 SpringMVC 基于注解的控制器的写法，实现了 URL-METHOD 映射、参数自动化注入（支持 Query/Path 参数，Form2Bean/Map）、RESTFUL 风格支持（基于 JSR 注解）、返回结果解析（原生JSON/HTML/JSP返回）、异常统一结构化规范支持、拦截器支持等等。当前支持 JSP 视图。
 - 通过 Servlet 3.0 的 web-fragment 提供了静态资源打包，包括 UI 库的各种控件、自定义标签库、404/500 页等；
 - web Http 与 Servlet 工具类，例如通过 HttpServletRequestWrapper 扩展了 Request 对象，还有一个文件上传组件和验证码组件、Mock 模拟对象；
-- mvc 模块，类似 SpringMVC 基于注解的控制器的写法，注解基于 JSR 标准方案。当前支持 JSP 视图；
 - view 视图模块，提供一个简单的、基于 JSP/JSTL 的扩展标签；
 - security 网站防御系统，抵御 XSS、CSRF 等攻击；
 - config 基于 JSON 格式的配置系统。

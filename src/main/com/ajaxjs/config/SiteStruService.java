@@ -70,7 +70,8 @@ public class SiteStruService implements ServletContextListener {
 				cxt.setAttribute("all_config", ConfigService.config); // 所有配置保存在这里
 
 //				String configJson = JsonHelper.format(JsonHelper.stringifyMap(ConfigService.config));
-				LOGGER.infoGreen("加载 " + ConfigService.getValueAsString("clientFullName") + " " +cxt.getContextPath() + " 项目配置成功！All config loaded.");
+				LOGGER.infoGreen("加载 " + ConfigService.getValueAsString("clientFullName") + " " + cxt.getContextPath()
+						+ " 项目配置成功！All config loaded.");
 			} else
 				LOGGER.warning("加载配置失败！");
 		} else
@@ -84,11 +85,13 @@ public class SiteStruService implements ServletContextListener {
 			LOGGER.infoGreen("加载网站的结构文件成功 Site Structure Config Loaded.");
 		} else
 			LOGGER.info("没有网站的结构文件");
+		
 		System.out.println(cxt.getContextPath() + "/" + Constant.ajajx_ui);
-		cxt.setAttribute("ctx", 			cxt.getContextPath());
-		cxt.setAttribute("ajaxjsui", 		cxt.getContextPath() + "/" + Constant.ajajx_ui);
-		cxt.setAttribute("commonAsset", 	cxt.getContextPath() + "/" + Constant.commonAsset); // 静态资源目录
-		cxt.setAttribute("commonJsp", 		cxt.getContextPath() + "/" + Constant.jsp_perfix);
+		
+		cxt.setAttribute("ctx", cxt.getContextPath());
+		cxt.setAttribute("ajaxjsui", cxt.getContextPath() + "/" + Constant.ajajx_ui);
+		cxt.setAttribute("commonAsset", cxt.getContextPath() + "/" + Constant.commonAsset); // 静态资源目录
+		cxt.setAttribute("commonJsp", cxt.getContextPath() + "/" + Constant.jsp_perfix);
 	}
 
 	/**
@@ -104,31 +107,29 @@ public class SiteStruService implements ServletContextListener {
 	 * JSON 查找器
 	 */
 	private static final JsonStruTraveler t = new JsonStruTraveler();
-	
+
 	/**
 	 * 获取当前页面节点，并带有丰富的节点信息
 	 * 
-	 * @param uri
-	 *            请求地址，例如 "menu/menu-1"
-	 * @param contextPath
-	 *            项目名称
+	 * @param uri         请求地址，例如 "menu/menu-1"
+	 * @param contextPath 项目名称
 	 * @return 当前页面节点
 	 */
 	public static Map<String, Object> getPageNode(String uri, String contextPath) {
 		// 获取资源 URI，忽略项目前缀和最后的文件名（如 index.jsp） 分析 URL 目标资源
 		String path = uri.replace(contextPath, "").replaceAll("\\d+/\\w+\\.do", "").replaceFirst("/\\w+\\.\\w+$", "");
-		
-		if(stru != null && stru.isLoaded()) {
+
+		if (stru != null && stru.isLoaded()) {
 			Map<String, Object> map = t.findByPath(path, stru);
 			return map;
-		} else 
+		} else
 			return null;
 	}
 
 	/**
+	 * 获取当前页面节点，并带有丰富的节点信息
 	 * 
-	 * @param request
-	 *            请求对象
+	 * @param request 请求对象
 	 * @return 当前页面节点
 	 */
 	public static Map<String, Object> getPageNode(HttpServletRequest request) {
@@ -138,12 +139,11 @@ public class SiteStruService implements ServletContextListener {
 	/**
 	 * 用于 current 的对比 <li
 	 * ${pageContext.request.contextPath.concat('/').concat(menu.fullPath).
-	 * concat('/') == pageContext.request.requestURI ? ' class=selected' : ''}>
-	 * IDE 语法报错，其实正确的 于是，为了不报错 <li ${PageNode.isCurrentNode(menu) ? '
-	 * class=selected' : ''}>
+	 * concat('/') == pageContext.request.requestURI ? ' class=selected' : ''}> IDE
+	 * 语法报错，其实正确的 于是，为了不报错 <li ${PageNode.isCurrentNode(menu) ? ' class=selected' :
+	 * ''}>
 	 * 
-	 * @param node
-	 *            节点
+	 * @param node 节点
 	 * @return true 表示为是当前节点
 	 */
 	public boolean isCurrentNode(Map<String, ?> node, HttpServletRequest request) {
@@ -155,24 +155,23 @@ public class SiteStruService implements ServletContextListener {
 
 		return uri.equals(ui) || uri.indexOf(fullPath) != -1;
 	}
-	
+
 	/**
 	 * 生成二级节点
 	 * 
-	 * @param request
-	 *            请求对象
+	 * @param request 请求对象
 	 * @return 二级节点菜单
 	 */
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> getSecondLevelNode(HttpServletRequest request) {
 		if (request.getAttribute("secondLevel_Node") == null) {
 			String path = getPath(request);
-	
+
 			path = path.substring(1, path.length());
 			String second = path.split("/")[0];
 			Map<String, Object> map = t.findByPath(second, stru);
 			request.setAttribute("secondLevel_Node", map); // 保存二级栏目节点之数据
-			
+
 			return map;
 		} else {
 			return (Map<String, Object>) request.getAttribute("secondLevel_Node");
@@ -182,8 +181,7 @@ public class SiteStruService implements ServletContextListener {
 	/**
 	 * 生成二级节点菜单所需的数据
 	 * 
-	 * @param request
-	 *            请求对象
+	 * @param request 请求对象
 	 * @return 二级节点菜单列表
 	 */
 	@SuppressWarnings({ "unchecked" })
@@ -195,8 +193,7 @@ public class SiteStruService implements ServletContextListener {
 	/**
 	 * 获取资源 URI，忽略项目前缀和最后的文件名（如 index.jsp） 分析 URL 目标资源
 	 * 
-	 * @param request
-	 *            请求对象
+	 * @param request 请求对象
 	 * @return 资源 URI
 	 */
 	private static String getPath(HttpServletRequest request) {
@@ -208,25 +205,25 @@ public class SiteStruService implements ServletContextListener {
 			newCol = "\n\t</td>\n\t<td>\n\t\t";
 
 	private String siteMapCache;
+
 	/**
 	 * 获取页脚的网站地图
 	 * 
 	 * @return 页脚的网站地图
 	 */
 	public String getSiteMap(HttpServletRequest request) {
-		if(siteMapCache == null) {
+		if (siteMapCache == null) {
 			siteMapCache = getSiteMap(stru, request.getContextPath());
 		}
-		
-		return siteMapCache ;
+
+		return siteMapCache;
 	}
 
 	/**
 	 * 获取页脚的网站地图
 	 * 
-	 * @param list
-	 *            可指定数据
-	 * @param contextPath 
+	 * @param list        可指定数据
+	 * @param contextPath
 	 * @return 页脚的网站地图
 	 */
 	public static String getSiteMap(List<Map<String, Object>> list, String contextPath) {
@@ -241,16 +238,17 @@ public class SiteStruService implements ServletContextListener {
 	 * 
 	 * @param list
 	 * @param sb
-	 * @param contextPath 
+	 * @param contextPath
 	 */
 	@SuppressWarnings("unchecked")
 	private static void getSiteMap(List<Map<String, Object>> list, StringBuilder sb, String contextPath) {
 		for (Map<String, Object> map : list) {
-			if (map != null) {	
+			if (map != null) {
 				if (0 == (int) map.get("level")) // 新的一列
 					sb.append(newCol);
 
-				sb.append(String.format(a, contextPath + map.get("fullPath").toString(), map.get("level").toString(), map.get("name").toString()));
+				sb.append(String.format(a, contextPath + map.get("fullPath").toString(), map.get("level").toString(),
+						map.get("name").toString()));
 
 				if (map.get("children") != null && map.get("children") instanceof List)
 					getSiteMap((List<Map<String, Object>>) map.get("children"), sb, contextPath);

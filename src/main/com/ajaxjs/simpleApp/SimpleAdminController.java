@@ -7,8 +7,6 @@ import com.ajaxjs.mvc.controller.IController;
 
 /**
  * for demo, simple use
- * 
- * @author admin
  *
  */
 @Path("/admin")
@@ -16,11 +14,11 @@ public class SimpleAdminController implements IController, Constant {
 	@GET
 	@Path("/workbench")
 	public String workbench() {
-		return commonJsp + "simple_admin/workbench";
+		return commonJsp + "/simple_admin/workbench";
 	}
 	
 	@GET
 	public String admin() {
-		return commonJsp + "simple_admin/index";
+		return commonJsp + "/simple_admin/index";
 	}
 }

@@ -3,7 +3,7 @@
 <html>	
 	<head>
 		<jsp:include page="/asset/common/jsp/head.jsp">
-			<jsp:param name="lessFile" value="/asset/common/less/admin.less" />
+			<jsp:param name="lessFile" value="/asset/ajaxjs-ui/less/admin.less" />
 			<jsp:param name="title" value="浏览页面以选择编辑" />
 		</jsp:include>
 		<style type="text/css">

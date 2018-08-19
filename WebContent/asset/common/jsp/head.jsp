@@ -1,6 +1,5 @@
-<jsp:useBean id="PAGE" class="com.ajaxjs.web.HtmlHead" scope="request" /> 
 <%
-	PAGE.init(request);
+	request.setAttribute("PAGE_Node", com.ajaxjs.config.SiteStruService.getPageNode(request));
 	com.ajaxjs.web.UserAgent ua = new com.ajaxjs.web.UserAgent(request);
 %>
 	<meta charset="utf-8" />
@@ -25,7 +24,7 @@
 <%
 	}
 %>
-	<title>${all_config.site.titlePrefix}&#10;${PAGE.node.name}&#10;${title}</title>
+	<title>${all_config.site.titlePrefix}&#10;${PAGE_Node.name}&#10;${param.title}</title>
 	<style type="text/css">
 		/* AJAXJS Base CSS */
 		body,dl,dt,dd,ul,li,pre,form,fieldset,input,p,blockquote,th,td,h1,h2,h3,h4,h5{margin:0;padding:0;}
@@ -48,14 +47,14 @@
 	</style> 
 	
 <% if(com.ajaxjs.Version.isDebug) { %>
-	<link rel="stylesheet/less" data-global-vars='{"assetFilePath": "\"${ctx}/asset\"" }' type="text/css" href="${ctx}${empty lessFile ? '/asset/less/main.less' : lessFile}" />
+	<link rel="stylesheet/less" data-global-vars='{"assetFilePath": "\"${ctx}/asset\"" }' type="text/css" href="${ctx}${empty param.lessFile ? '/asset/less/main.less' : param.lessFile}" />
 
 	<script src="${ajaxjsui}/js/libs/less.min.js"></script>
     <script src="${ajaxjsui}/js/libs/vue.js"></script>
     <script src="${ajaxjsui}/js/ajaxjs-base.js"></script>
     
 <%}else { %>
-	<link rel="stylesheet" type="text/css" href="${ctx}/asset/css/${empty lessFile ? 'main' : lessFile.replaceAll("(?:.*/)(\\w+).less", "$1")}.css" />
+	<link rel="stylesheet" type="text/css" href="${ctx}/asset/css/${empty param.lessFile ? 'main' : param.lessFile.replaceAll("(?:.*/)(\\w+).less", "$1")}.css" />
 
     <script src="${ajaxjsui}/js/libs/vue.min.js"></script>
     <script src="${ajaxjsui}/js/ajaxjs-base.min.js"></script>
@@ -68,6 +67,8 @@
 	   			ctx : '${ctx}',
 	   			libraryUse : '${ajaxjsui}/resources' // 庫使用的資源
    			};
+   			
+   			Vue.prototype.BUS = new Vue();
    		}
    		
    		Vue.use(aj.Vue);

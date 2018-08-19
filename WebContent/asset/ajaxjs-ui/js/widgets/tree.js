@@ -111,7 +111,7 @@
 		 */
 		this.renderer = function (json, select, selectedId, cfg) {
 			
-			selectUI.makeTree(json);
+			this.makeTree(json);
 			
 			if(cfg) {
 				if(cfg.makeAllOption) {

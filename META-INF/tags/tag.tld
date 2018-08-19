@@ -106,4 +106,15 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
+	<tag>
+		<name>siteStru</name>
+		<tag-class>com.ajaxjs.mvc.view.SiteStruTag</tag-class>
+		<description>网站页面结构标签</description>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>type</name>
+			<required>true</required>
+			<description>标签类型</description>
+		</attribute>
+	</tag>
 </taglib>
