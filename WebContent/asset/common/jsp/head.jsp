@@ -52,6 +52,14 @@
 	<script src="${ajaxjsui}/js/libs/less.min.js"></script>
     <script src="${ajaxjsui}/js/libs/vue.js"></script>
     <script src="${ajaxjsui}/js/ajaxjs-base.js"></script>
+    <script src="${ajaxjsui}/js/widgets/admin.js"></script>
+    <script src="${ajaxjsui}/js/widgets/form.js"></script>
+    <script src="${ajaxjsui}/js/widgets/list.js"></script>
+    <script src="${ajaxjsui}/js/widgets/menu.js"></script>
+    <script src="${ajaxjsui}/js/widgets/msg.js"></script>
+    <script src="${ajaxjsui}/js/widgets/page.js"></script>
+    <script src="${ajaxjsui}/js/widgets/tree.js"></script>
+    <script src="${ajaxjsui}/js/widgets/upload.js"></script>
     
 <%}else { %>
 	<link rel="stylesheet" type="text/css" href="${ctx}/asset/css/${empty param.lessFile ? 'main' : param.lessFile.replaceAll("(?:.*/)(\\w+).less", "$1")}.css" />
@@ -73,7 +81,6 @@
    		
    		Vue.use(aj.Vue);
    	</script>
-    <script src="${ctx}/js"></script>
 	<link rel="icon"		  type="image/x-icon" href="${ctx}/asset/images/favicon.ico" />
 	<link rel="shortcut icon" type="image/x-icon" href="${ctx}/asset/images/favicon.ico" />
 	<noscript><div align="center">如要享受本网站之服务请勿禁用浏览器 JavaScript 支持</div></noscript>
