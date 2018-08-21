@@ -1,6 +1,6 @@
 
 
-var tree = document.querySelector('.tree');
+var tree = aj('.tree');
 
 function isMap(v) {
 	return typeof v == 'object' && v != null;
@@ -58,7 +58,7 @@ function it(json, fn, parentEl) {
 					html += '<textarea name="'+namespaces+'">' + el + '</textarea>';
 					break;
 				case 'htmlEditor':
-					html += document.querySelector('.tpl').value;
+//					html += document.querySelector('.tpl').value;
 					break;
 				case 'checkbox':
 					html += renderCheckbox(scheme, namespaces, tip, el);
@@ -78,8 +78,8 @@ function it(json, fn, parentEl) {
 			html += ('</div>'+ (scheme.name || '') + ' ' + i);
 			li.innerHTML = html;
 
-			if (scheme.ui == 'htmlEditor')
-				initHtmlEditor(li, el, namespaces);
+//			if (scheme.ui == 'htmlEditor')
+//				initHtmlEditor(li, el, namespaces);
 			
 			fn(i, el);
 		}
@@ -142,7 +142,7 @@ function makeTip(scheme) {
 
 function toggle(e) {
 	var div = e.target;
-	var ul = div.parentNode.querySelector('ul');
+	var ul = div.parentNode.$('ul');
 
 	if (ul.style.height == '0px') {
 		div.innerHTML = div.innerHTML.replace('+', '-');

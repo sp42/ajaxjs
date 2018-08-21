@@ -1,24 +1,20 @@
 <%@page pageEncoding="UTF-8"%>
-<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <!DOCTYPE html>
 <html>
-<commonTag:head lessFile="/asset/ajaxjs-ui/less/admin.less" title="全局配置" />
+	<head>
+		<jsp:include page="/asset/common/jsp/head.jsp">
+			<jsp:param name="lessFile" value="/asset/ajaxjs-ui/less/admin.less" />
+			<jsp:param name="title" value="全局配置" />
+		</jsp:include>
+	</head>
 <body class="configForm admin-entry-form">
-	<header class="top">
-		<div>
-			<a href="#" target="_blank">
-				<img width="12" src="data:image/gif;base64,R0lGODlhEAAQAIABAAAAAP///yH5BAEAAAEALAAAAAAQABAAAAImjG+gq+je3gOBWURrlvVEuWlcKE4T2Xkql6zshkLuOIO1mVj6VgAAOw==" />
-				新窗口打开
-			</a>
-		</div>
-		
-		<fieldset>
-			<legend>
-				全局配置：<span>请点击有+号菜单项以展开下一级的内容</span>
-			</legend>
-		</fieldset> 
-	</header>
+
 	
+	
+			<ajaxjs-admin-header>
+				<template slot="title">全局配置：<span>请点击有+号菜单项以展开下一级的内容</span></template>
+			
+			</ajaxjs-admin-header>
 	
 	<form>
 		<button onclick="save();return false;" class="ajaxjs-btn" style="margin-left: 30px;">保存</button>
@@ -63,9 +59,7 @@
 						style="font-size: medium; line-height: 120%">中</a> <a
 						href="javascript:;" style="font-size: large; line-height: 120%">大</a>
 					<a href="javascript:;"
-						style="font-size: x-large; line-height: 120%">特大</a> <a
-						href="javascript:;"
-						style="font-size: xx-large; line-height: 140%">极大</a>
+						style="font-size: x-large; line-height: 120%">特大</a> <a href="javascript:;" style="font-size: xx-large; line-height: 140%">极大</a>
 				</div></li>
 
 			<li><span title="加粗" class="bold bg-6"></span></li>

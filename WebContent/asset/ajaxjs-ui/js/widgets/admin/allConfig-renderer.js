@@ -56,13 +56,7 @@ function renderCheckbox(scheme, namespaces, tip, value) {
 
 // 初始化 HTML 编辑器
 function initHtmlEditor(li, value, namespaces) {
-	var colorPickerHTML = ajaxjs_HtmlEditor.createColorPickerHTML();
-	var colorPicker = li.querySelector('.fontColor.colorPicker');
-	colorPicker.innerHTML = colorPickerHTML;
-	var colorPicker = li.querySelector('.bgColor.colorPicker');
-	colorPicker.innerHTML = colorPickerHTML;
-
-	setTimeout(function() {
+ 	setTimeout(function() {
 		var htmlEditor = new ajaxjs_HtmlEditor(li.querySelector('.htmlEditor'));
 	
 		htmlEditor.setValue(value);
