@@ -104,6 +104,8 @@ Vue.component('aj-page-list', {
 		},
 		onBaseParamChange : function(params) {
 			aj.apply(this.baseParam, params);
+			
+			this.pageStart = 0; // 每次 baseParam 被改变，都是从第一笔开始
 			this.ajaxGet();
 		}
 	}

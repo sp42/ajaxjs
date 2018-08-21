@@ -32,32 +32,34 @@
 		<%
 			}
 		%>
-		<script src="${commonAsset}js/widgets/htmlEditor.js"></script>
-		<commonUI:htmlEditor name="content" basePath="../">${contentBody}</commonUI:htmlEditor>
+		<div class="edit">
+			<aj-form-html-editor field-name="content" base-path="../" ref="htmleditor">
+				<textarea class="hide" name="content">${contentBody}</textarea>
+			</aj-form-html-editor>
+		</div>
 		<script>
-		
-			var htmlEditor = new ajaxjs_HtmlEditor(document.querySelector('.htmlEditor'));
-		
+			App = new Vue({el:'.edit'});
+			
 			// 返回
-			document.querySelector('.backBtn').onclick = function(e) {
+			aj('.backBtn').onclick = function(e) {
 				window.history.go(-1);
 			}
 	
 			// 提交数据
-			document.querySelector('.saveBtn').onclick = function(e) {
-				ajaxjs.xhr.post('../save.do', function(json) {
+			aj('.saveBtn').onclick = function(e) {
+				aj.xhr.post('../save.do', function(json) {
 					if (json.isOk)
-						alert('修改页面成功！');
+						aj.msg.show('修改页面成功！');
 					else
-						alert(json.msg);
+						aj.msg.show(json.msg);
 				}, {
 					url : '${param.url}',
-					contentBody : encodeURIComponent(htmlEditor.getValue())
+					contentBody : encodeURIComponent(App.$refs.htmleditor.getValue())
 				});
 			}
 	
 			// 提交数据
-			document.querySelector('.perviewBtn').onclick = function(e) {
+			aj('.perviewBtn').onclick = function(e) {
 				window.open('${pageContext.request.contextPath}${param.url}', '_blank');
 			}
 		</script>

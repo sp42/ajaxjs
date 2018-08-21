@@ -9,7 +9,7 @@
 	</head>
 	<body class="admin-shell">
 		<header>
-			<h1>我的控制面板55</h1>
+			<h1>我的控制面板</h1>
 			<menu>
 				${userName} 已登录 | <a href="${pageContext.request.contextPath}/" target="_blank">首页</a> | <a href="?action=logout">退出</a> 
 			</menu>
