@@ -40,7 +40,7 @@ public class SiteStruTag extends SimpleTagSupport {
 				}
 			}
 
-			output = String.format(li, !hasSelected ? " class=\"selected\"" : "", ctx, "", "首页") + sb.toString();
+			output = String.format(li, !hasSelected ? " class=\"selected\"" : "", ctx, "首页") + sb.toString();
 		} else if ("secondLevelMenu".equals(type)) { // 二级菜单
 			
 			if(sitestru.getMenu(request) != null) {

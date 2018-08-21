@@ -1,4 +1,4 @@
-<div class="htmlEditor">
+<div class="aj-form-html-editor htmlEditor">
 	<ul class="toolbar" @click="onToolBarClk($event)">
 		<li class="dorpdown">
 			<span title="字体" class="bg-4"></span>
@@ -67,6 +67,6 @@
 
 	<div class="editorBody">	
 		<iframe :src="ajResources.libraryUse + '/htmleditor_iframe.jsp?basePath=' + basePath"></iframe>
-		<textarea class="hide" name="${name}">{{content}}<slot></slot></textarea>
+		<slot></slot>
 	</div>
 </div>

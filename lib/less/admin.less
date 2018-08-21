@@ -1,8 +1,11 @@
 @import 'common_style.less';
-@import 'widgets/menu.less';
-@import 'widgets/upload.less';
-@import 'widgets/msg.less';
-@import 'widgets/html-editor.less';
+@import 'msgbox.less';
+@import 'tab.less';
+@import 'menu.less';
+@import 'carousel.less';
+@import 'widget/form.less';
+@import 'widget/htmlEditor.less';
+@import 'widget/calendar.less';
 @header-height: 5%;
 @mainColor: #EBEBEB;
 @hightColor: #417BB5;
@@ -154,7 +157,7 @@ body.admin-shell {
 	}
 }
 
-header.ajaxjs-admin-header {
+header.top {
 	padding: 2%;
 	padding-bottom: 1.5%;
 	h4 {
@@ -183,7 +186,7 @@ header.ajaxjs-admin-header {
 	}
 }
 
-.aj-admin-filter-panel {
+.filterPanel {
 	width: 90%;
 	margin: 0 auto;
 	padding: 1%;
@@ -421,11 +424,31 @@ header.ajaxjs-admin-header {
 		height: 30%;
 	}
 
+	label[for="input_file_molding"] {
+		& > div {
+			border: 1px solid lightgray;
+			border-radius: 3px;
+			text-align: center;
+			color: gray;
+			cursor: pointer;
+			font-size: .8rem;
+			padding: 10px;
+			width: 100px;
+			height: 70px;
+			& > div {
+				font-size: 2rem;
+			}
+		}
+	}
+
 	.upload-btns {
 		float: right;
 		width: 60%;
 	}
 }
+
+
+
 
 // 图片列表
 .articlePics , .avater {
@@ -469,13 +492,6 @@ header.ajaxjs-admin-header {
 		&:hover .menu {
 			height: 25px;
 		}
-	}
-}
-
-.ajaxjs-admin-info-btns {
-	text-align: center;
-	button{
-		.ajaxjs-btn;
 	}
 }
 

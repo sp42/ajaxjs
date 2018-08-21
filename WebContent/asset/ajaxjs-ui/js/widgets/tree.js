@@ -145,3 +145,46 @@
 	
 	ajaxjs.tree.selectUI.prototype = ajaxjs.tree.prototype;
 })();
+
+// 下拉分类选择器，异步请求远端获取分类数据
+Vue.component('aj-tree-catelog-select', {
+	props : {
+		catelogId : { 			// 请求远端的分类 id，必填
+			type: Number,
+			required: true
+		},
+		selectedCatelogId : {	// 已选中的分类 id
+			type: Number,
+			required: false
+		},
+		fieldName : { // 表单 name，字段名
+			type: String,
+			required: false
+		},
+		isAutoJump : Boolean // 是否自动跳转 catalogId
+	},
+	template : '<select :name="fieldName" @change="onSelected($event);" class="aj-tree-catelog-select ajaxjs-select" style="width: 200px;"></select>',
+		
+	mounted : function() {
+		aj.xhr.get(this.ajResources.ctx + "/admin/catelog/getListAndSubByParentId", this.load.bind(this), {parentId : this.catelogId});
+	},
+	
+	methods : {
+		load : function(json) {
+			var catalogArr = json.result;
+			var selectUI = new ajaxjs.tree.selectUI();
+			
+			var select = aj('select');
+			selectUI.renderer(catalogArr, select, this.selectedCatelogId, {makeAllOption : false});
+		},
+		
+		onSelected : function(e) {
+			if(this.isAutoJump) {
+				var el = e.target, catalogId = el.selectedOptions[0].value;
+				location.assign('?catalogId=' + catalogId);
+			} else {
+				this.BUS.$emit('aj-tree-catelog-select-change', e, this);
+			}
+		}
+	}
+});

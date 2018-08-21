@@ -204,13 +204,14 @@ Vue.component('aj-form-calendar-input', {
 			</div>\
 		</div>',
 	methods : {
-		recEvent: function(date){
+		recEvent: function(date) {
 			this.date = date;
 		}
 	}
 });
 
-// HTML 在綫編輯器
+//HTML 在綫編輯器
+//注意：必须提供一个 <slot> 包含有 <textarea class="hide" name="content">${info.content}</textarea>
 Vue.component('aj-form-html-editor', {
 	template : '',
 	props : {
@@ -260,10 +261,17 @@ Vue.component('aj-form-html-editor', {
 			clsName = clsName.split(' ').shift();
 			switch(clsName) {
 			case 'createLink':
-				this.format("createLink", prompt("请输入 URL 地址"));
+				var result = prompt("请输入 URL 地址");
+				if(result)
+					this.format("createLink", result);
 				break;
 			case 'insertImage':
-				this.format("insertImage", prompt("请输入图片地址", "http://"));
+				var self = this;
+				App.$refs.uploadLayer.show(function(imgUrl) {
+					if(imgUrl)
+						self.format("insertImage", imgUrl);
+				});
+				
 				break;
 			case 'switchMode':
 				this.setMode();
@@ -369,7 +377,7 @@ Vue.component('aj-form-html-editor', {
 			var cl = ['00', '33', '66', '99', 'CC', 'FF'], a, b, c, d, e, f, i, j, k, T;
 			// 创建head
 			var h = '<div class="colorhead"><span class="colortitle">颜色选择</span></div>\
-						<div class="colorbody"><table cellspacing="0" cellpadding="0"><tr>';// 创建body [6 x 6的色盘]
+						<div class="colorbody"><table cellspaci="0" cellpadding="0"><tr>';// 创建body [6 x 6的色盘]
 			
 			for (var i = 0; i < 6; ++i) {
 				h += '<td><table class="colorpanel" cellspacing="0" cellpadding="0">';

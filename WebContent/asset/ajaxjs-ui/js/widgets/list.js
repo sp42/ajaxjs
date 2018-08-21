@@ -57,7 +57,7 @@ Vue.component('aj-page-list', {
 	},
 	
 	created : function(){
-		Vue.BUS.$on('base-param-change', this.onBaseParamChange.bind(this));
+		this.BUS.$on('base-param-change', this.onBaseParamChange.bind(this));
 	},
 	
 	methods : {

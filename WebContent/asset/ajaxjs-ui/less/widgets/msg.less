@@ -19,15 +19,82 @@
 	position: fixed;
 	z-index: 99999999;
 	& > div {
-		//width: 300px;
-		//height: 300px;
 		border-radius: 10px;
 		background-color: white;
 		padding: 2%;
-		text-align:center;
+		text-align: center;
+		& > div > button {
+			background-color: initial;
+			border: 1px solid gray;
+			border-radius: 6px;
+			margin-top: 20px;
+			padding: 2px 15px;
+		}
 	}
 
 	width: 100%;
 	height: 100%;
 	background-color: rgba(0, 0, 0, .5);
+}
+
+// 首先定义关键帧动画，一个显示、一个隐藏的
+@keyframes topMsg-fade-in {
+	0% {
+		opacity: 0;
+	}
+
+	30% {
+		opacity: .2;
+	}
+
+	80% {
+		opacity: .4;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes topMsg-fade-out {
+	0% {
+	}
+
+	30% {
+		opacity: .2;
+	}
+
+	80% {
+		opacity: .4;
+	}
+
+	100% {
+		opacity: 0;
+	}
+}
+
+// 元素样式，采用绝对布局
+.topMsg {
+	position: fixed;
+	width: 300px;
+	height: 80px;
+	right: 30px;
+	padding: 10px;
+	border-radius: 5px;
+	color: #0066cc;
+	box-sizing: border-box;
+	background-color: #f5faff;
+	border: 1px solid #0066cc;
+	z-index: 999999999;
+	top: -100px;
+	transition: top ease-in 550ms;
+	animation-fill-mode: forwards;
+	&.fadeIn {
+		top: 50px;
+		animation: topMsg-fade-in ease-in 550ms;
+	}
+
+	&.fadeOut {
+		animation: topMsg-fade-out ease-out 550ms;
+	}
 }

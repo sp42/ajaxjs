@@ -1,9 +1,9 @@
 // 后台头部导航
 Vue.component('ajaxjs-admin-header', {
 	props : {
-		isCreate : Boolean,
-		uiName : String,
-		infoId : {
+		isCreate : Boolean,	// true=新建/fasle=编辑
+		uiName : String,	// 实体名称
+		infoId : {			// 实体 id
 	      type: Number,
 	      required: false
 	    }
@@ -26,11 +26,11 @@ Vue.component('ajaxjs-admin-info-btns', {
 		isCreate : Boolean // true=新建/fasle=编辑
 	},
 	template : 
-		'<div>\
-			<button class="ajaxjs-btn"><img src="' + '' + 'save.gif" /> {{isCreate ? "新建":"编辑"}}</button>\
-			<button v-if="!isCreate" class="ajaxjs-btn" onclick="this.up(\'form\').reset();return false;">复 位</button>\
-			<button v-if="!isCreate" class="ajaxjs-btn" v-on:click.prevent="del()">\
-				<img src="' + '' + 'delete.gif" /> 删 除\
+		'<div class="ajaxjs-admin-info-btns">\
+			<button><img :src="ajResources.commonAsset + \'/icon/save.gif\'" /> {{isCreate ? "新建":"编辑"}}</button>\
+			<button v-if="!isCreate" onclick="this.up(\'form\').reset();return false;">复 位</button>\
+			<button v-if="!isCreate" v-on:click.prevent="del()">\
+				<img :src="ajResources.commonAsset + \'/icon/delete.gif\'" /> 删 除\
 			</button><slot></slot>\
 		</div>',
 	methods : {
@@ -46,15 +46,20 @@ Vue.component('ajaxjs-admin-info-btns', {
 	}
 });
 
+// 搜索、分类下拉
 Vue.component('aj-admin-filter-panel', {
 	props : {
-		catelogId :{
-			type:Number,
-			required:true
+		label : {
+			type : String,
+			required : false
 		},
-		selectedCatelogId :{
-			type:Number,
-			required:false
+		catelogId :{		//
+			type: Number,
+			required: true
+		},
+		selectedCatelogId :{ // 已选中的分类 id
+			type: Number,
+			required: false
 		}
 	},
 	template: 
@@ -64,29 +69,8 @@ Vue.component('aj-admin-filter-panel', {
 				<input type="text" name="searchValue" placeholder="请输入正文之关键字" style="float: inherit;" class="ajaxjs-inputField" />\
 				<button style="margin-top: 0;" class="ajaxjs-btn">搜索</button>\
 			</form>\
-			栏目： <select @change="onSelected($event);" class="ajaxjs-select" style="width: 200px;"></select></div>',
-	
-	mounted : function() {
-		aj.xhr.get(this.ajResources.ctx + "/admin/catelog/getListAndSubByParentId", this.load.bind(this), 
-				{parentId : this.catelogId});
-	},
-	methods: {
-		load : function(json) {
-			var catalogArr = json.result;
-			var selectUI = new ajaxjs.tree.selectUI();
-			
-			var select = aj('select');
-			selectUI.renderer(catalogArr, select, this.selectedCatelogId, {makeAllOption : false});
-		},
-		
-		onSelected : function (e) {
-			var el = e.target, catalogId = el.selectedOptions[0].value;
-			if (catalogId == '全部分类')
-				location.assign(location.origin + location.pathname); // todo
-			else
-				location.assign('?catalogId=' + catalogId);
-		}
-	}
+			{{label||\'分类\'}}：<aj-tree-catelog-select :is-auto-jump="true" :catelog-id="catelogId" :selected-catelog-id="selectedCatelogId"></aj-tree-catelog-select>\
+		</div>'
 });
 
 aj.admin = {
