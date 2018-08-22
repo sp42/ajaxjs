@@ -49,8 +49,7 @@ public class PageEditor implements IController, Constant {
 	 */
 	@GET
 	public String show() {
-		return "/test/test";
-//		return commonJsp + "/pageEditor/loadIframe.jsp";
+		return commonJsp + "/pageEditor/loadIframe.jsp";
 	}
 
 	/**
