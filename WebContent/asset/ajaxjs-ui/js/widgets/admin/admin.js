@@ -28,7 +28,7 @@ Vue.component('ajaxjs-admin-info-btns', {
 	template : 
 		'<div class="ajaxjs-admin-info-btns">\
 			<button><img :src="ajResources.commonAsset + \'/icon/save.gif\'" /> {{isCreate ? "新建":"编辑"}}</button>\
-			<button v-if="!isCreate" onclick="this.up(\'form\').reset();return false;">复 位</button>\
+			<button onclick="this.up(\'form\').reset();return false;">复 位</button>\
 			<button v-if="!isCreate" v-on:click.prevent="del()">\
 				<img :src="ajResources.commonAsset + \'/icon/delete.gif\'" /> 删 除\
 			</button><slot></slot>\

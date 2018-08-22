@@ -256,7 +256,7 @@ Vue.component('aj-popup-upload', {
 		},
 		imgName : {
 			type: String,
-			required: true
+			required: false
 		},
 		imgId : {
 	      type: Number,

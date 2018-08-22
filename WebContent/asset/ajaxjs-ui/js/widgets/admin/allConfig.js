@@ -50,7 +50,8 @@ function it(json, fn, parentEl) {
 
 			var html = '<div class="valueHolder">';
 			
-			if(scheme){ // 没有说明，忽略
+			if(!scheme){ // 没有说明，忽略
+				continue;
 			}
 			
 			switch (scheme.ui) {
@@ -113,6 +114,7 @@ function isChecked(value, itemValue) {
 function getParentStack(stack) {
 	var names = [];
 	var last;
+	
 	for (var i = stack.length; i > 0; i--) {
 		last = stack[i];
 		if (last) {

@@ -47,21 +47,18 @@ import com.ajaxjs.web.UploadFileInfo;
  * 
  * @author Sp42 frank@ajaxjs.com
  *
- * @param <T>
- *            实体类型，可以是 Bean（POJO） 或 Map
- * @param <ID>
- *            ID 类型，可以是 INTEGER/LONG/String
- * @param <S>
- *            业务类型
+ * @param <T> 实体类型，可以是 Bean（POJO） 或 Map
+ * @param <ID> ID 类型，可以是 INTEGER/LONG/String
+ * @param <S> 业务类型
  */
-public abstract class CommonController<T, ID extends Serializable, S extends IService<T, ID>> implements IController, Constant {
+public abstract class CommonController<T, ID extends Serializable, S extends IService<T, ID>>
+		implements IController, Constant {
 	private static final LogHelper LOGGER = LogHelper.getLog(CommonController.class);
 
 	/**
 	 * 新建记录 UI
 	 * 
-	 * @param model
-	 *            页面 Model 模型
+	 * @param model 页面 Model 模型
 	 * @return 新建记录 UI JSP 模版路径
 	 */
 	public String createUI(ModelAndView model) {
@@ -78,8 +75,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	/**
 	 * 编辑记录 UI
 	 * 
-	 * @param model
-	 *            页面 Model 模型
+	 * @param model 页面 Model 模型
 	 * @return 编辑记录 UI JSP 模版路径
 	 */
 	public String editUI(ModelAndView model) {
@@ -96,10 +92,8 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	/**
 	 * 创建实体
 	 * 
-	 * @param entity
-	 *            实体
-	 * @param model
-	 *            页面 Model 模型
+	 * @param entity 实体
+	 * @param model  页面 Model 模型
 	 * @return JSON 响应
 	 * @throws ServiceException
 	 */
@@ -119,12 +113,9 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	/**
 	 * 修改实体
 	 * 
-	 * @param id
-	 *            实体 ID
-	 * @param entity
-	 *            实体
-	 * @param model
-	 *            页面 Model 模型
+	 * @param id     实体 ID
+	 * @param entity 实体
+	 * @param model  页面 Model 模型
 	 * @return JSON 响应
 	 * @throws ServiceException
 	 */
@@ -150,10 +141,8 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	 * 
 	 * 因为范型的缘故，不能实例化 bean 对象。应该在子类实例化 bean，再调用本类的 delete()
 	 * 
-	 * @param entity
-	 *            实体
-	 * @param model
-	 *            页面 Model 模型
+	 * @param entity 实体
+	 * @param model  页面 Model 模型
 	 * @return JSON 响应
 	 */
 	public String delete(T entity, ModelAndView model) throws ServiceException {
@@ -168,10 +157,8 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	/**
 	 * 根据 id 删除实体
 	 * 
-	 * @param id
-	 *            实体 id
-	 * @param model
-	 *            页面 Model 模型
+	 * @param id    实体 id
+	 * @param model 页面 Model 模型
 	 * @return JSON 响应
 	 * @throws ServiceException
 	 */
@@ -187,10 +174,8 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	/**
 	 * 读取单个记录或者编辑某个记录，保存到 ModelAndView 中（供视图渲染用）。
 	 * 
-	 * @param id
-	 *            ID 序号
-	 * @param model
-	 *            Model 模型
+	 * @param id    ID 序号
+	 * @param model Model 模型
 	 * @return JSP 路径。缺省提供一个默认路径，但不一定要使用它，换别的也可以。
 	 * @throws ServiceException
 	 */
@@ -206,12 +191,9 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	/**
 	 * 分页查询
 	 * 
-	 * @param start
-	 *            起始行数，默认从零开始
-	 * @param limit
-	 *            偏量值，默认 8 笔记录
-	 * @param model
-	 *            Model 模型
+	 * @param start 起始行数，默认从零开始
+	 * @param limit 偏量值，默认 8 笔记录
+	 * @param model Model 模型
 	 * @return JSP 路径。缺省提供一个默认路径，但不一定要使用它，换别的也可以。
 	 * @throws ServiceException
 	 */
@@ -267,8 +249,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	/**
 	 * 获取全部列表数据
 	 * 
-	 * @param model
-	 *            Model 模型
+	 * @param model Model 模型
 	 * @throws ServiceException
 	 */
 	public void list_all(ModelAndView model) throws ServiceException {
@@ -279,8 +260,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	/**
 	 * 可覆盖的模版方法，用于装备其他数据，如分类这些外联的表。
 	 * 
-	 * @param model
-	 *            模型
+	 * @param model 模型
 	 */
 	public void prepareData(ModelAndView model) {
 		if (service != null) {
@@ -307,8 +287,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	/**
 	 * 保存到 request
 	 * 
-	 * @param request
-	 *            请求对象
+	 * @param request 请求对象
 	 */
 	public static void saveToReuqest(ModelAndView mv, HttpServletRequest request) {
 		for (String key : mv.keySet())
@@ -318,8 +297,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	/**
 	 * 把 Map 集合转换为 JSON 数组
 	 * 
-	 * @param result
-	 *            Map 集合
+	 * @param result Map 集合
 	 * @return JSON 结果
 	 */
 	public static String outputListMapAsJson(List<Map<String, Object>> result) {
@@ -332,8 +310,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	/**
 	 * 把 Bean 集合转换为 JSON 数组
 	 * 
-	 * @param result
-	 *            BaseMolde 集合
+	 * @param result BaseMolde 集合
 	 * @return JSON 结果
 	 */
 	public static String outputListBeanAsJson(List<? extends BaseModel> result) {
@@ -413,8 +390,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	/**
 	 * 设置业务对象，通常由 IOC 反射调用
 	 * 
-	 * @param service
-	 *            业务对象
+	 * @param service 业务对象
 	 */
 	public void setService(S service) {
 		if (service == null)
