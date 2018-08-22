@@ -1,5 +1,4 @@
 <%@page pageEncoding="UTF-8"%>
-<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <%@ taglib uri="/ajaxjs" prefix="c" %>
 <%
 	String action = request.getParameter("action");
