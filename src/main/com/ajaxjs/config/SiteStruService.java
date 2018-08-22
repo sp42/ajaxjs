@@ -67,7 +67,7 @@ public class SiteStruService implements ServletContextListener {
 			ConfigService.load();
 
 			if (ConfigService.config.isLoaded()) {
-				cxt.setAttribute("all_config", ConfigService.config); // 所有配置保存在这里
+				cxt.setAttribute("aj_allConfig", ConfigService.config); // 所有配置保存在这里
 
 //				String configJson = JsonHelper.format(JsonHelper.stringifyMap(ConfigService.config));
 				LOGGER.infoGreen("加载 " + ConfigService.getValueAsString("clientFullName") + " " + cxt.getContextPath()
@@ -85,8 +85,6 @@ public class SiteStruService implements ServletContextListener {
 			LOGGER.infoGreen("加载网站的结构文件成功 Site Structure Config Loaded.");
 		} else
 			LOGGER.info("没有网站的结构文件");
-		
-		System.out.println(cxt.getContextPath() + "/" + Constant.ajajx_ui);
 		
 		cxt.setAttribute("ctx", cxt.getContextPath());
 		cxt.setAttribute("ajaxjsui", cxt.getContextPath() + "/" + Constant.ajajx_ui);

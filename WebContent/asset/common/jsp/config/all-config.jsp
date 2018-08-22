@@ -22,6 +22,9 @@
 				<span></span>
 			</div>
 		</div>
+		<br />
+		<br />
+		<p>小白用户请谨慎修改配置参数！</p>
 	</form>
 	
 	
@@ -33,8 +36,5 @@
 	
 	<script src="${ajaxjsui}/js/widgets/admin/allConfig-renderer.js"></script>
 	<script src="${ajaxjsui}/js/widgets/admin/allConfig.js"></script>
-<br />
-<br />
-<br />
 </body>
 </html>

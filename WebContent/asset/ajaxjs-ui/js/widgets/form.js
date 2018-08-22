@@ -12,27 +12,18 @@ Vue.component('aj-form-calendar', {
 		};
 	},
 	props : {
-/*		imgSrc : {
-			type: String, // 生成图片验证码地址
-			required: true,
-		},
-		
-		fieldName : {	// 提交的字段名
-			type: String,
-			required: false,
-			default : 'captcha'
-		}*/
+
 	},
 	template : 
-		'<div>\
+		'<div class="aj-form-calendar">\
 			<div class="selectYearMonth">\
-				<a href="#" @click="" class="preYear">&lt;</a> \
+				<a href="#" @click="setYear(\'preYear\')" class="preYear">&lt;</a> \
 				<select>\
 					<option value="1">一月</option><option value="2">二月</option><option value="3">三月</option><option value="4">四月</option>\
 					<option value="5">五月</option><option value="6">六月</option><option value="7">七月</option><option value="8">八月</option>\
 					<option value="9">九月</option><option value="10">十月</option><option value="11">十一月</option><option value="12">十二月</option>\
 				</select>\
-				<a href="#" class="nextYear">&gt;</a>\
+				<a href="#" @click="setYear(\'nextYear\')" class="nextYear">&gt;</a>\
 			</div>\
 			<div class="showCurrentYearMonth">\
 				<span class="showYear">{{year}}</span>/<span class="showMonth">{{month}}</span>\
@@ -52,13 +43,6 @@ Vue.component('aj-form-calendar', {
 	mounted : function () {
 		aj.apply(this, this.getDate('now'));
 		this.render();
-		
-/*		document.querySelector(".preYear").onclick  = function(){
-			render.call(getDate('preYear'), document.querySelector(".calendar"));
-		};
-		document.querySelector(".nextYear").onclick = function(){
-			render.call(getDate('nextYear'), document.querySelector(".calendar"));
-		};*/
 	},
 
 	methods : {
@@ -115,13 +99,17 @@ Vue.component('aj-form-calendar', {
 //			el.querySelector(".idCalendarPre").onclick = this.PreMonth.bind(this);
 //			el.querySelector(".idCalendarNext").onclick = this.NextMonth.bind(this);
 
-//			el.querySelector(".preYear").onclick = this.PreYear.bind(this);
-//			el.querySelector(".nextYear").onclick = this.NextYear.bind(this);
+
 //			el.querySelector(".idCalendarNow").onclick = this.NowMonth.bind(this);
 			
 			this.onFinish && this.onFinish();
 		},
-		
+		setYear : function(type) {
+			this.year = this.getDate(type).year;
+		},
+		nextYear : function() {
+			
+		},
 		getDate: function (dateType) {
 			var now = new Date(), date, nowYear = now.getFullYear(), nowMonth = now.getMonth() + 1;
 			
@@ -196,12 +184,10 @@ Vue.component('aj-form-calendar-input', {
 		}
 	},
 	template : 
-		'<div>\
+		'<div class="aj-form-calendar-input">\
 			<div class="icon"><div class="menu"></div></div>\
 			<input placeholder="请输入日期" :name="fieldName" :value="date" type="text" />\
-			<div class="aj-form-calendar">\
-				<aj-form-calendar @pick-date="recEvent"></aj-form-calendar>\
-			</div>\
+			<aj-form-calendar @pick-date="recEvent"></aj-form-calendar>\
 		</div>',
 	methods : {
 		recEvent: function(date) {
@@ -266,11 +252,15 @@ Vue.component('aj-form-html-editor', {
 					this.format("createLink", result);
 				break;
 			case 'insertImage':
-				var self = this;
-				App.$refs.uploadLayer.show(function(imgUrl) {
-					if(imgUrl)
-						self.format("insertImage", imgUrl);
-				});
+				if(window.isCreate)
+					aj.alert.show('请保存记录后再上传图片。');
+				else {
+					var self = this;
+					App.$refs.uploadLayer.show(function(imgUrl) {
+						if(imgUrl)
+							self.format("insertImage", imgUrl);
+					});
+				}
 				
 				break;
 			case 'switchMode':
@@ -309,8 +299,28 @@ Vue.component('aj-form-html-editor', {
 		},
 		
 		// 獲取 HTML
-		getValue : function() {
-			return this.iframeBody.innerHTML;
+		getValue : function(cfg) {
+			var result = this.iframeBody.innerHTML;
+			
+			if(cfg && cfg.cleanWord)
+				result = this.cleanPaste(result);
+			
+			if(cfg && cfg.encode)
+				result = encodeURIComponent(result);
+			
+			return result;
+		},
+		
+		// MSWordHtmlCleaners.js https://gist.github.com/ronanguilloux/2915995
+		cleanPaste : function(html) {
+		    // Remove additional MS Word content
+		    html = html.replace(/<(\/)*(\\?xml:|meta|link|span|font|del|ins|st1:|[ovwxp]:)((.|\s)*?)>/gi, ''); // Unwanted tags
+		    html = html.replace(/(class|style|type|start)=("(.*?)"|(\w*))/gi, ''); // Unwanted sttributes
+		    html = html.replace(/<style(.*?)style>/gi, '');   // Style tags
+		    html = html.replace(/<script(.*?)script>/gi, ''); // Script tags
+		    html = html.replace(/<!--(.*?)-->/gi, '');        // HTML comments
+		    
+		    return html;
 		},
 		
 		// 切換 HTML 編輯 or 可視化編輯

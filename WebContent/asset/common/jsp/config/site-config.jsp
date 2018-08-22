@@ -28,7 +28,7 @@
 					<dd>
 						<input type="text" placeholder="公司全称"
 							name="clientFullName" data-note2="请输入你公司的全称"
-							value="${all_config.clientFullName}" />
+							value="${aj_allConfig.clientFullName}" />
 					</dd>
 				</label>
 			</dl>
@@ -40,7 +40,7 @@
 					<dd>
 						<input type="text" placeholder="公司简称"
 							name="clientShortName" data-note2="请输入你公司的简称"
-							value="${all_config.clientShortName}" />
+							value="${aj_allConfig.clientShortName}" />
 					</dd>
 				</label>
 			</dl>
@@ -55,7 +55,7 @@
 						<input type="text" placeholder="用户名"
 							name="site.titlePrefix" required data-regexp="Username"
 							data-note="网站全局的标题，在 title 标签中显示"
-							value="${all_config.site.titlePrefix}" />
+							value="${aj_allConfig.site.titlePrefix}" />
 					</dd>
 				</label>
 			</dl>
@@ -66,7 +66,7 @@
 					<dt>搜索关键字</dt>
 					<dd>
 						<textarea name="site.keywords" rows="10" cols="50"
-							class="textarea" data-note2="用于 SEO 关键字优化，以便于搜索引擎机器人查找、分类。<br />多个关键字之间用英文 , 逗号分开">${all_config.site.keywords}</textarea>
+							class="textarea" data-note2="用于 SEO 关键字优化，以便于搜索引擎机器人查找、分类。<br />多个关键字之间用英文 , 逗号分开">${aj_allConfig.site.keywords}</textarea>
 						<div class="sub">用于 SEO 关键字优化，以便于搜索引擎机器人查找、分类。多个关键字之间用英文 , 逗号分开</div>
 					</dd>
 				</label>
@@ -78,7 +78,7 @@
 				<label>
 					<dt>网站描述</dt>
 					<dd>
-						<textarea name="site.description" rows="10">${all_config.site.description}</textarea>
+						<textarea name="site.description" rows="10">${aj_allConfig.site.description}</textarea>
 						<div class="sub">网站的说明文本。通常是一段话介绍网站即可。</div>
 					</dd>
 				</label>

@@ -3,8 +3,8 @@
 	com.ajaxjs.web.UserAgent ua = new com.ajaxjs.web.UserAgent(request);
 %>
 	<meta charset="utf-8" />
-    <meta name="keywords"    content="${all_config.site.keywords}" />
-    <meta name="description" content="${all_config.site.description}" />
+    <meta name="keywords"    content="${aj_allConfig.site.keywords}" />
+    <meta name="description" content="${aj_allConfig.site.description}" />
     <meta name="author"      content="Frank Chueng, frank@ajaxjs.com" />
 	<meta name="renderer"	 content="webkit" /> <%-- 360 优先使用 Google Chrome Frame 和最新版本 IE --%>
 	<meta name="robots" 	 content="index,follow" />
@@ -24,7 +24,7 @@
 <%
 	}
 %>
-	<title>${all_config.site.titlePrefix}&#10;${PAGE_Node.name}&#10;${param.title}</title>
+	<title>${aj_allConfig.site.titlePrefix}&#10;${PAGE_Node.name}&#10;${param.title}</title>
 	<style type="text/css">
 		/* AJAXJS Base CSS */
 		body,dl,dt,dd,ul,li,pre,form,fieldset,input,p,blockquote,th,td,h1,h2,h3,h4,h5{margin:0;padding:0;}

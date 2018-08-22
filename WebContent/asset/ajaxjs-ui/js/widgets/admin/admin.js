@@ -35,11 +35,11 @@ Vue.component('ajaxjs-admin-info-btns', {
 		</div>',
 	methods : {
 		del : function () {
-			if (confirm('确定删除 \n${info.name}？'))
-				ajaxjs.xhr.dele('delete.do', function(json) {
+			if (confirm('确定删除？'))
+				ajaxjs.xhr.dele('.', function(json) {
 					if (json && json.isOk) {
 						alert(json.msg);
-						location.assign('../list/list.do');
+						location.assign('../list/');
 					}
 				});
 		}

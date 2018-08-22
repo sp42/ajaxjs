@@ -41,8 +41,7 @@ public class ConfigController implements IController {
 		model.put("configJson", FileUtil.openAsText(ConfigService.jsonPath));
 		model.put("jsonSchemePath", FileUtil.openAsText(ConfigService.jsonSchemePath));
 
-		return "/test/test";
-//		return Constant.commonJsp + "/config/all-config";
+		return Constant.commonJsp + "/config/all-config";
 	}
 
 	@POST
@@ -51,8 +50,8 @@ public class ConfigController implements IController {
 		ConfigService.loadJSON_in_JS(map);
 		ConfigService.load(); // 刷新配置
 
-		if (request.getServletContext().getAttribute("all_config") != null)
-			request.getServletContext().setAttribute("all_config", ConfigService.config);
+		if (request.getServletContext().getAttribute("aj_allConfig") != null)
+			request.getServletContext().setAttribute("aj_allConfig", ConfigService.config);
 
 		return CommonController.jsonOk("修改配置成功！");
 	}

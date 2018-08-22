@@ -59,7 +59,7 @@
 						aj.msg.show(json.msg);
 				}, {
 					url : '${param.url}',
-					contentBody : encodeURIComponent(App.$refs.htmleditor.getValue())
+					contentBody : App.$refs.htmleditor.getValue({cleanWord : eval('${aj_allConfig.article.cleanWordTag}'), encode : true})
 				});
 			}
 	

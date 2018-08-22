@@ -27,7 +27,7 @@ import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.util.io.FileUtil;
 
 /**
- *  JS all in one
+ * JS all in one
  * 
  * @author sp42 frank@ajaxjs.com
  *
@@ -37,18 +37,42 @@ public class JsController implements IController {
 
 	@GET
 	public String get(HttpServletRequest req, HttpServletResponse response) {
+		return "js::" + action(ajaxjs + "\\js\\widgets", "true".equals(req.getParameter("compress")));
+	}
+
+	public static String action(String _folder, boolean isCompress) {
 		StringBuilder sb = new StringBuilder();
-		File folder = new File("C:\\project\\ajaxjs-web\\WebContent\\asset\\ajaxjs-ui\\js\\widgets");
-		
-		boolean isCompress = "true".equals(req.getParameter("compress"));
+		File folder = new File(_folder);
+
 		for (File file : folder.listFiles()) {
-			if(file.isFile()) {
+			if (file.isFile()) {
 				String jsCode = new FileUtil().setFile(file).read().byteStream2stringStream().close().getContent();
 				sb.append(isCompress ? JavaScriptCompressor.compress(jsCode) : jsCode);
 			}
 		}
-		
-		return "js::" + sb.toString();
+
+		return sb.toString();
 	}
 
+	static String getOne(File file) {
+		String jsCode = new FileUtil().setFile(file).read().byteStream2stringStream().close().getContent();
+		return JavaScriptCompressor.compress(jsCode);
+	}
+
+	static String getOne(String file) {
+		return getOne(new File(file));
+	}
+
+	static String ajaxjs = "C:\\project\\ajaxjs-web\\WebContent\\asset\\ajaxjs-ui";
+
+	public static void main(String[] args) {
+		String target = ajaxjs + "\\output\\all.js";
+		String js = getOne(ajaxjs + "\\js\\ajaxjs-base.js");
+
+		js += action(ajaxjs + "\\js\\widgets", true);
+		js += getOne(ajaxjs + "\\js\\widgets\\admin\\admin.js");
+
+		new FileUtil().setFilePath(target).setOverwrite(true).setContent(js).save().close();
+
+	}
 }

@@ -33,7 +33,7 @@
 	<br />
 	
 	<div class="aj-baidu-search">
-		<aj-baidu-search site-domain-name="${all_config.site.domainName}"></aj-baidu-search>
+		<aj-baidu-search site-domain-name="${aj_allConfig.site.domainName}"></aj-baidu-search>
 	</div>
 	
 	<br />
