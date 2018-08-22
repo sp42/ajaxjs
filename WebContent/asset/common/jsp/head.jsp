@@ -65,7 +65,7 @@
 	<link rel="stylesheet" type="text/css" href="${ctx}/asset/css/${empty param.lessFile ? 'main' : param.lessFile.replaceAll("(?:.*/)(\\w+).less", "$1")}.css" />
 
     <script src="${ajaxjsui}/js/libs/vue.min.js"></script>
-    <script src="${ajaxjsui}/js/ajaxjs-base.min.js"></script>
+    <script src="${ajaxjsui}/output/all.js"></script>
 <%} %>
 	
    	<script>
