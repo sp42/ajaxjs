@@ -1,27 +1,28 @@
 <%@page pageEncoding="UTF-8"%>
-<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <!DOCTYPE html>
 <html>
-	<commonTag:head lessFile="/asset/ajaxjs-ui/less/admin.less" title="网站结构" />
+	<head>
+		<jsp:include page="/asset/common/jsp/head.jsp">
+			<jsp:param name="lessFile" value="/asset/ajaxjs-ui/less/admin.less" />
+			<jsp:param name="title" value="网站结构" />
+		</jsp:include>
+	</head>
+	
 <body class="configForm admin-entry-form">
-	<header class="top">
-		<div>
-			<a href="#" target="_blank">
-				<img width="12" src="data:image/gif;base64,R0lGODlhEAAQAIABAAAAAP///yH5BAEAAAEALAAAAAAQABAAAAImjG+gq+je3gOBWURrlvVEuWlcKE4T2Xkql6zshkLuOIO1mVj6VgAAOw==" />
-				新窗口打开
-			</a>
-		</div>
-		
-		<fieldset>
-			<legend>
-				网站结构
-			</legend>
-		</fieldset>
-	</header>
+	<div>
+		<!-- 后台头部导航 -->
+		<ajaxjs-admin-header>
+			<template slot="title">网站结构</template>
+		</ajaxjs-admin-header>
+	</div>
+	<script>
+		new Vue({el:' body > div'});
+	</script>
+
 	<div class="tree" style="margin:0 auto;">
 		<div class="tooltip tipsNote hide">
 			<div class="aj-arrow toLeft"></div>
-			<span>用户名等于账号名；不能与现有的账号名相同；注册后不能修改；</span> fdsfdfd
+			<span>用户名等于账号名；不能与现有的账号名相同；注册后不能修改；</span>
 		</div>
 	</div>
 	<script>
@@ -100,8 +101,8 @@
 					var div = document.createElement('div'); // parentNode
 					div.className = 'parentNode';
 					div.innerHTML = '+' + '<div class="valueHolder"><input type="text" value="' + el.name + '" data-note="ddddddddd" /></div>'
-					+ el.id + ' <img class="icon" src="${commonAssetIcon}add.gif" /> \
-					<img class="icon" src="${commonAssetIcon}delete.gif" /> <span class="up">▲</span> <span class="down">▼</span>';
+					+ el.id + ' <img class="icon" src="${commonAsset}/icon/add.gif" /> \
+					<img class="icon" src="${commonAsset}/icon/delete.gif" /> <span class="up">▲</span> <span class="down">▼</span>';
 					div.onclick = toggle;
 					li.appendChild(div);
 					//debugger;

@@ -1,24 +1,24 @@
 <%@page pageEncoding="UTF-8"%>
-<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <!DOCTYPE html>
 <html>
-	<commonTag:head lessFile="/asset/ajaxjs-ui/less/admin.less" title="网站配置" />
+	<head>
+		<jsp:include page="/asset/common/jsp/head.jsp">
+			<jsp:param name="lessFile" value="/asset/ajaxjs-ui/less/admin.less" />
+			<jsp:param name="title" value="网站结构" />
+		</jsp:include>
+	</head>
 <body class="configForm admin-entry-form">
-	<header class="top">
-		<div>
-			<a href="#" target="_blank">
-				<img width="12" src="data:image/gif;base64,R0lGODlhEAAQAIABAAAAAP///yH5BAEAAAEALAAAAAAQABAAAAImjG+gq+je3gOBWURrlvVEuWlcKE4T2Xkql6zshkLuOIO1mVj6VgAAOw==" />
-				新窗口打开
-			</a>
-		</div>
-		
-		<fieldset>
-			<legend>
-				网站配置
-			</legend>
-		</fieldset>
-	</header>
-	<form method="POST" action="action.do">
+	<div>
+		<!-- 后台头部导航 -->
+		<ajaxjs-admin-header>
+			<template slot="title">网站信息</template>
+		</ajaxjs-admin-header>
+	</div>
+	<script>
+		new Vue({el:' body > div'});
+	</script>
+	
+	<form method="POST" action=".">
 		<div class="row">
 			<dl>
 				<label>
@@ -26,9 +26,7 @@
 						公司全称<span class="required-note">*</span>
 					</dt>
 					<dd>
-						<input type="text" placeholder="公司全称"
-							name="clientFullName" data-note2="请输入你公司的全称"
-							value="${aj_allConfig.clientFullName}" />
+						<input type="text" placeholder="公司全称" name="clientFullName" data-note2="请输入你公司的全称" value="${aj_allConfig.clientFullName}" />
 					</dd>
 				</label>
 			</dl>
@@ -38,9 +36,7 @@
 				<label>
 					<dt>公司简称</dt>
 					<dd>
-						<input type="text" placeholder="公司简称"
-							name="clientShortName" data-note2="请输入你公司的简称"
-							value="${aj_allConfig.clientShortName}" />
+						<input type="text" placeholder="公司简称" name="clientShortName" data-note2="请输入你公司的简称" value="${aj_allConfig.clientShortName}" />
 					</dd>
 				</label>
 			</dl>
@@ -52,9 +48,7 @@
 						网站标题前缀<span class="required-note">*</span>
 					</dt> 
 					<dd>
-						<input type="text" placeholder="用户名"
-							name="site.titlePrefix" required data-regexp="Username"
-							data-note="网站全局的标题，在 title 标签中显示"
+						<input type="text" placeholder="用户名" name="site.titlePrefix" required data-regexp="Username" data-note="网站全局的标题，在 title 标签中显示"
 							value="${aj_allConfig.site.titlePrefix}" />
 					</dd>
 				</label>
@@ -87,11 +81,9 @@
 
 		<section style="text-align: center;padding:2% 0;">
 			<button class="ajaxjs-btn">
-				<img src="${commonAssetIcon}save.gif" /> 修改
+				<img src="${commonAsset}/icon/save.gif" /> 修改
 			</button>
-			<button class="ajaxjs-btn"
-				onclick="this.up('form').reset();return false;">复 位</button>
-
+			<button class="ajaxjs-btn" onclick="this.up('form').reset();return false;">复 位</button>
 		</section>
 	</form>
 	<script>

@@ -547,12 +547,12 @@ ajaxjs.xhr.serializeForm = function(form, cfg) {
 ajaxjs.xhr.defaultCallBack = function(json) {
 	if (json) {
 		if (json.isOk) {
-			ajaxjs.alert(json.msg || '操作成功！');
+			ajaxjs.alert.show(json.msg || '操作成功！');
 		} else {
-			ajaxjs.alert(json.msg || '执行失败！原因未知！');
+			ajaxjs.alert.show(json.msg || '执行失败！原因未知！');
 		}
 	} else {
-		ajaxjs.alert('ServerSide Error!');
+		ajaxjs.alert.show('ServerSide Error!');
 	}
 }
 
