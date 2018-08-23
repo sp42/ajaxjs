@@ -129,6 +129,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 		if (entity instanceof Map) {
 			((Map<String, Object>) entity).put("id", id);
 		} else {
+			System.out.println(id);
 			((BaseModel) entity).setId((Long) id);
 		}
 

@@ -579,13 +579,13 @@ ajaxjs.throttle = {
 				window.removeEventListener(eventType, arguments.callee); // 开始的触发事件的时候就只执行一次，之后的就让
 				// setTimeout
 				// 来接管，从而避免了多次调用
-
+				var args = arguments;
 				window.setTimeout(function() {
-					for (var i = 0, j = self.handler.length; i < j; i++) {
-						var obj = self.handler[i];
+					for (var i = 0, j = ajaxjs.throttle.handler.length; i < j; i++) {
+						var obj = ajaxjs.throttle.handler[i];
 
 						if (typeof obj == 'function') {
-							obj();
+							obj.apply(this, args);
 						} else if (typeof obj.fn == 'function' && !obj.executeOnce) {
 							obj.fn.call(obj);
 							// obj.done = true;

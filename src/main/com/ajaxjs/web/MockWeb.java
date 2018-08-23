@@ -66,10 +66,8 @@ public class MockWeb {
 	/**
 	 * 模拟一个请求对象
 	 * 
-	 * @param contextPath
-	 *            项目目录
-	 * @param path
-	 *            要模拟的后面的目录
+	 * @param contextPath 项目目录
+	 * @param path        要模拟的后面的目录
 	 * @return 请求对象
 	 */
 	public static HttpServletRequest mockRequest(String contextPath, String path) {
@@ -88,16 +86,14 @@ public class MockWeb {
 	/**
 	 * 模拟表单请求
 	 * 
-	 * @param request
-	 *            请求对象
-	 * @param formBody
-	 *            表单数据
-	 * @param isByGetParams
-	 *            是否通过 request.getParameter 返回值，而不是走表单流的方式
+	 * @param request       请求对象
+	 * @param formBody      表单数据
+	 * @param isByGetParams 是否通过 request.getParameter 返回值，而不是走表单流的方式
 	 * @return 表单请求
 	 * @throws IOException
 	 */
-	public HttpServletRequest initRequest(HttpServletRequest request, Map<String, String> formBody, boolean isByGetParams) throws IOException {
+	public HttpServletRequest initRequest(HttpServletRequest request, Map<String, String> formBody,
+			boolean isByGetParams) throws IOException {
 		if (isByGetParams) {
 			for (String key : formBody.keySet())
 				when(request.getParameter(key)).thenReturn(formBody.get(key));
@@ -119,8 +115,7 @@ public class MockWeb {
 	/**
 	 * 初始化请求对象
 	 * 
-	 * @param entry
-	 *            url 目录
+	 * @param entry url 目录
 	 * @return 请求对象
 	 */
 	public HttpServletRequest initRequest(String entry) {
@@ -167,11 +162,13 @@ public class MockWeb {
 	public static class DummyController extends HttpServlet {
 		private static final long serialVersionUID = 1L;
 
-		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		protected void doGet(HttpServletRequest request, HttpServletResponse response)
+				throws ServletException, IOException {
 			response.getWriter().append("Served at: ").append(request.getContextPath());
 		}
 
-		protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		protected void doPost(HttpServletRequest request, HttpServletResponse response)
+				throws ServletException, IOException {
 			doGet(request, response);
 		}
 	}
@@ -180,7 +177,8 @@ public class MockWeb {
 		public void destroy() {
 		}
 
-		public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+		public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+				throws IOException, ServletException {
 			chain.doFilter(request, response);
 		}
 
@@ -191,10 +189,8 @@ public class MockWeb {
 	/**
 	 * 进行请求 在请求之前，你可以设定请求的参数
 	 * 
-	 * @param request
-	 *            请求对象
-	 * @param response
-	 *            响应对象
+	 * @param request  请求对象
+	 * @param response 响应对象
 	 * @return 响应对象 writer 字符串
 	 */
 	public static String doRequest(HttpServletRequest request, HttpServletResponse response) {
@@ -307,8 +303,7 @@ public class MockWeb {
 	 * Writer:形象的比喻：当我们调用 response.getWriter()
 	 * 这个对象同时获得了网页的画笔，这时你就可以通过这个画笔在网页上画任何你想要显示的东西。Writer 就是向页面输出信息，负责让客户端显示内容
 	 * 
-	 * @param response
-	 *            响应对象
+	 * @param response 响应对象
 	 * @return writer 以便获取输出信息
 	 */
 	public static StringWriter writerFactory(HttpServletResponse response) {
@@ -327,8 +322,7 @@ public class MockWeb {
 	/**
 	 * 除了字符串使用 StringWriter，Response 输出的还可以是流
 	 * 
-	 * @param response
-	 *            响应对象
+	 * @param response 响应对象
 	 * @return 流对象以便获取信息
 	 */
 	public static StubServletOutputStream streamFactory(HttpServletResponse response) {
@@ -346,8 +340,7 @@ public class MockWeb {
 	/**
 	 * 获取 MVC 跳转模版的那个路径
 	 * 
-	 * @param request
-	 *            请求对象
+	 * @param request 请求对象
 	 * @return 模版路径
 	 */
 	public static String getRequestDispatcheResult(HttpServletRequest request) {
@@ -360,8 +353,7 @@ public class MockWeb {
 	/**
 	 * 初始化 Servlet 配置，这里是模拟 注解
 	 * 
-	 * @param cls
-	 *            控制器类
+	 * @param cls 控制器类
 	 * @return Servlet 配置
 	 */
 	public static ServletConfig initServletConfig(Class<? extends HttpServlet> cls) {

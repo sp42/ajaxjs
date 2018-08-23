@@ -222,7 +222,7 @@ Vue.component('ajaxjs-fileupload-iframe', {
 					
 					if(this.uploadOk_callback && typeof this.uploadOk_callback == 'function') {
 						var imgUrl = json.imgUrl;
-						this.uploadOk_callback(imgUrl);
+						this.uploadOk_callback(imgUrl, json);
 					}
 				}
 			}
