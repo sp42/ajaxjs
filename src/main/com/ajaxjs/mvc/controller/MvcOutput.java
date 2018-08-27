@@ -169,30 +169,37 @@ public class MvcOutput extends HttpServletResponseWrapper {
 		if (model != null)
 			request.saveToReuqest(model);
 
-		if (result != null && result instanceof String) {
-			String str = (String) result, html = "html::";
+		if (result == null) {
+			LOGGER.info("控制器方法返回 null");
+		} else {
+			if(result instanceof String) {
+				String str = (String) result, html = "html::";
 
-			if (str.startsWith(html)) {
-				setSimpleHTML(true).setOutput(str.replace(html, "")).go();
-			} else if (str.startsWith("redirect::")) {
-				setRedirect(str.replace("redirect::", "")).go();
+				if (str.startsWith(html)) {
+					setSimpleHTML(true).setOutput(str.replace(html, "")).go();
+				} else if (str.startsWith("redirect::")) {
+					setRedirect(str.replace("redirect::", "")).go();
 
-			} else if (str.startsWith("json::")) {
-				String jsonpToken = request.getParameter(MvcRequest.callback_param); // 由参数决定是否使用 jsonp
+				} else if (str.startsWith("json::")) {
+					String jsonpToken = request.getParameter(MvcRequest.callback_param); // 由参数决定是否使用 jsonp
 
-				if (StringUtil.isEmptyString(jsonpToken)) {
-					setJson(true).setOutput(str.replace("json::", "")).go();
-				} else {
-					setJsonpToken(jsonpToken).setOutput(str.replace("json::", "")).go();
+					if (StringUtil.isEmptyString(jsonpToken)) {
+						setJson(true).setOutput(str.replace("json::", "")).go();
+					} else {
+						setJsonpToken(jsonpToken).setOutput(str.replace("json::", "")).go();
+					}
+				} else if (str.startsWith("js::")) {
+					setContent_Type("application/javascript").setOutput(str.replace("js::", "")).go();
+				} else { // JSP
+					if (!str.endsWith(".jsp")) // 自动补充 .jsp 扩展名
+						str += ".jsp";
+
+					LOGGER.info("执行逻辑完成，现在控制输出（响应页面模版）" + result);
+					setTemplate(str).go(request);
 				}
-			} else if (str.startsWith("js::")) {
-				setContent_Type("application/javascript").setOutput(str.replace("js::", "")).go();
-			} else { // JSP
-				if (!str.endsWith(".jsp")) // 自动补充 .jsp 扩展名
-					str += ".jsp";
-
-				LOGGER.info("执行逻辑完成，现在控制输出（响应页面模版）" + result);
-				setTemplate(str).go(request);
+			} else if(result instanceof JSONReuslt) {
+				JSONReuslt _result = (JSONReuslt)result; 
+				setJson(true).setOutput(_result.getJsonStr()).go();
 			}
 		}
 	}

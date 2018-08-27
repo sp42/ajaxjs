@@ -331,12 +331,12 @@ return json;
 ajaxjs.xhr.defaultCallBack = function(json) {
 if (json) {
 if (json.isOk) {
-ajaxjs.alert(json.msg || '操作成功！');
+ajaxjs.alert.show(json.msg || '操作成功！');
 } else {
-ajaxjs.alert(json.msg || '执行失败！原因未知！');
+ajaxjs.alert.show(json.msg || '执行失败！原因未知！');
 }
 } else {
-ajaxjs.alert('ServerSide Error!');
+ajaxjs.alert.show('ServerSide Error!');
 }
 }
 ajaxjs.throttle = {
@@ -351,11 +351,12 @@ this.event[eventType] = true;
 var me = arguments.callee;
 window.addEventListener(eventType, function() {
 window.removeEventListener(eventType, arguments.callee); 
+var args = arguments;
 window.setTimeout(function() {
-for (var i = 0, j = self.handler.length; i < j; i++) {
-var obj = self.handler[i];
+for (var i = 0, j = ajaxjs.throttle.handler.length; i < j; i++) {
+var obj = ajaxjs.throttle.handler[i];
 if (typeof obj == 'function') {
-obj();
+obj.apply(this, args);
 } else if (typeof obj.fn == 'function' && !obj.executeOnce) {
 obj.fn.call(obj);
 }
@@ -400,15 +401,15 @@ day : 1
 props : {
 },
 template : 
-'<div>\
+'<div class="aj-form-calendar">\
 <div class="selectYearMonth">\
-<a href="#" @click="" class="preYear">&lt;</a> \
+<a href="#" @click="setYear(\'preYear\')" class="preYear">&lt;</a> \
 <select>\
 <option value="1">一月</option><option value="2">二月</option><option value="3">三月</option><option value="4">四月</option>\
 <option value="5">五月</option><option value="6">六月</option><option value="7">七月</option><option value="8">八月</option>\
 <option value="9">九月</option><option value="10">十月</option><option value="11">十一月</option><option value="12">十二月</option>\
 </select>\
-<a href="#" class="nextYear">&gt;</a>\
+<a href="#" @click="setYear(\'nextYear\')" class="nextYear">&gt;</a>\
 </div>\
 <div class="showCurrentYearMonth">\
 <span class="showYear">{{year}}</span>/<span class="showMonth">{{month}}</span>\
@@ -457,6 +458,11 @@ var tbody = el.$("table tbody");
 tbody.innerHTML = '';
 tbody.appendChild(frag);
 this.onFinish && this.onFinish();
+},
+setYear : function(type) {
+this.year = this.getDate(type).year;
+},
+nextYear : function() {
 },
 getDate: function (dateType) {
 var now = new Date(), date, nowYear = now.getFullYear(), nowMonth = now.getMonth() + 1;
@@ -518,12 +524,10 @@ required: false
 }
 },
 template : 
-'<div>\
+'<div class="aj-form-calendar-input">\
 <div class="icon"><div class="menu"></div></div>\
 <input placeholder="请输入日期" :name="fieldName" :value="date" type="text" />\
-<div class="aj-form-calendar">\
 <aj-form-calendar @pick-date="recEvent"></aj-form-calendar>\
-</div>\
 </div>',
 methods : {
 recEvent: function(date) {
@@ -616,8 +620,21 @@ setTimeout(function() {
 self.iframeWin.document.body.innerHTML = v;
 }, 500);
 },
-getValue : function() {
-return this.iframeBody.innerHTML;
+getValue : function(cfg) {
+var result = this.iframeBody.innerHTML;
+if(cfg && cfg.cleanWord)
+result = this.cleanPaste(result);
+if(cfg && cfg.encode)
+result = encodeURIComponent(result);
+return result;
+},
+cleanPaste : function(html) {
+html = html.replace(/<(\/)*(\\?xml:|meta|link|span|font|del|ins|st1:|[ovwxp]:)((.|\s)*?)>/gi, ''); 
+html = html.replace(/(class|style|type|start)=("(.*?)"|(\w*))/gi, ''); 
+html = html.replace(/<style(.*?)style>/gi, ''); 
+html = html.replace(/<script(.*?)script>/gi, ''); 
+html = html.replace(/<!--(.*?)-->/gi, ''); 
+return html;
 },
 setMode : function () {
 if (this.mode == 'iframe') {
@@ -1055,7 +1072,7 @@ img.src = img.src.replace(/\?\d+$/, '') + '?' + new Date().valueOf();
 });
 Vue.component('aj-page-share', {
 template : 
-'<div>\
+'<div class="aj-page-share">\
 分享到 &nbsp;&nbsp;\
 <a title="转发至QQ空间" :href="\'http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=\' + url" target="_blank">\
 <img src="http://static.youku.com/v1.0.0691/v/img/ico_Qzone.gif" /></a>\
@@ -1084,7 +1101,7 @@ default : 'article p'
 }
 },
 template : 
-'<div @click="onClk($event);">\
+'<div class="aj-adjust-font-size" @click="onClk($event);">\
 <span>字体大小</span>\
 <ul>\
 <li><label><input type="radio" name="fontSize" /> 小</label></li>\
@@ -1121,7 +1138,7 @@ default : 'article'
 }
 },
 template : 
-'<div>\
+'<div class="aj-misc-function">\
 <a href="javascript:printContent();"><span style="font-size:1rem;">&#12958;</span>打 印</a>\
 <a href="javascript:sendMail_onClick();"><span style="font-size:1rem;">&#9993;</span>发送邮件</a>\
 <a href="javascript:;"><span style="font-size:1.2rem;">★ </span>收 藏</a>\
@@ -1165,7 +1182,7 @@ required: false
 }
 },
 template : 
-'<div>\
+'<div class="aj-article-body">\
 <article>\
 <h3>{{title}}</h3>\
 <h4>{{createDate}}</h4>\
@@ -1182,14 +1199,14 @@ template :
 Vue.component('aj-baidu-search', {
 props : ['siteDomainName'],
 template : 
-'<form method="GET" action="http://www.baidu.com/baidu" onsubmit="//return g(this);">\
+'<div class="aj-baidu-search"><form method="GET" action="http://www.baidu.com/baidu" onsubmit="//return g(this);">\
 <input type="text" name="word" placeholder="请输入搜索之关键字" />\
 <input name="tn" value="bds" type="hidden" />\
 <input name="cl" value="3" type="hidden" />\
 <input name="ct" value="2097152" type="hidden" />\
 <input name="si" :value="getSiteDomainName" type="hidden" />\
 <div class="searchBtn" onclick="this.parentNode.submit();"></div>\
-</form>',
+</form></div>',
 computed : {
 getSiteDomainName : function() {
 return this.$props.siteDomainName || location.host || document.domain;
@@ -1539,7 +1556,7 @@ if(json.isOk) {
 aj.msg.show('上传成功！');
 if(this.uploadOk_callback && typeof this.uploadOk_callback == 'function') {
 var imgUrl = json.imgUrl;
-this.uploadOk_callback(imgUrl);
+this.uploadOk_callback(imgUrl, json);
 }
 }
 }
@@ -1627,11 +1644,11 @@ template :
 </div>',
 methods : {
 del : function () {
-if (confirm('确定删除 \n${info.name}？'))
-ajaxjs.xhr.dele('delete.do', function(json) {
+if (confirm('确定删除？'))
+ajaxjs.xhr.dele('.', function(json) {
 if (json && json.isOk) {
 alert(json.msg);
-location.assign('../list/list.do');
+location.assign('../list/');
 }
 });
 }

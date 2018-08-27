@@ -15,6 +15,8 @@
  */
 package test.com.ajaxjs.mvc.controller.testcase;
 
+import java.math.BigDecimal;
+
 import com.ajaxjs.framework.BaseModel;
 
 /**
@@ -25,4 +27,14 @@ import com.ajaxjs.framework.BaseModel;
  */
 public class News extends BaseModel {
 	private static final long serialVersionUID = 9134895000164862118L;
+	
+	private BigDecimal price;
+
+	public BigDecimal getPrice() {
+		return price;
+	}
+
+	public void setPrice(BigDecimal price) {
+		this.price = price;
+	}
 }

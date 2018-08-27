@@ -15,39 +15,10 @@ Vue.component('aj-page-fullscreen-loading-indicator', {
 	}
 });
 
-// 图片验证码
-Vue.component('aj-page-captcha', {
-	props : {
-		imgSrc : {
-			type: String, // 生成图片验证码地址
-			required: true,
-		},
-		
-		fieldName : {	// 提交的字段名
-			type: String,
-			required: false,
-			default : 'captcha'
-		}
-	},
-	template : 
-		'<table><tr>\
-			<td><input type="text" :name="fieldName" placeholder="输入右侧验证码" data-regexp="integer" required /></td>\
-			<td style="vertical-align: top;">\
-				<img :src="imgSrc" @click="onClk($event);" title="点击刷新图片" />\
-			</td>\
-		</tr></table>',
-	methods : {
-		onClk : function(e) {
-			var img = e.target;
-			img.src = img.src.replace(/\?\d+$/, '') + '?' + new Date().valueOf();
-		}
-	}
-});
-
 // 分享
 Vue.component('aj-page-share', {
 	template : 
-		'<div>\
+		'<div class="aj-page-share">\
 			分享到 &nbsp;&nbsp;\
 			<a title="转发至QQ空间" :href="\'http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=\' + url" target="_blank">\
 				<img src="http://static.youku.com/v1.0.0691/v/img/ico_Qzone.gif" /></a>\
@@ -78,7 +49,7 @@ Vue.component('aj-adjust-font-size', {
 		}
 	},
 	template : 
-		'<div @click="onClk($event);">\
+		'<div class="aj-adjust-font-size" @click="onClk($event);">\
 			<span>字体大小</span>\
 			<ul>\
 				<li><label><input type="radio" name="fontSize" /> 小</label></li>\
@@ -120,7 +91,7 @@ Vue.component('aj-misc-function', {
 		}
 	},
 	template : 
-		'<div>\
+		'<div class="aj-misc-function">\
 			<a href="javascript:printContent();"><span style="font-size:1rem;">&#12958;</span>打 印</a>\
 			<a href="javascript:sendMail_onClick();"><span style="font-size:1rem;">&#9993;</span>发送邮件</a>\
 			<a href="javascript:;"><span style="font-size:1.2rem;">★ </span>收 藏</a>\
@@ -169,7 +140,7 @@ Vue.component('aj-article-body', {
 		}
 	},
 	template : 	
-		'<div>\
+		'<div class="aj-article-body">\
 			<article>\
 				<h3>{{title}}</h3>\
 				<h4>{{createDate}}</h4>\
@@ -188,14 +159,14 @@ Vue.component('aj-article-body', {
 Vue.component('aj-baidu-search', {
 	props : ['siteDomainName'],
 	template : 
-		'<form method="GET" action="http://www.baidu.com/baidu" onsubmit="//return g(this);">\
+		'<div class="aj-baidu-search"><form method="GET" action="http://www.baidu.com/baidu" onsubmit="//return g(this);">\
 		     <input type="text" name="word" placeholder="请输入搜索之关键字" />\
 		     <input name="tn" value="bds" type="hidden" />\
 		     <input name="cl" value="3" type="hidden" />\
 		     <input name="ct" value="2097152" type="hidden" />\
 		     <input name="si" :value="getSiteDomainName" type="hidden" />\
 		 	<div class="searchBtn" onclick="this.parentNode.submit();"></div>\
-		 </form>',
+		 </form></div>',
 	computed : {
 		getSiteDomainName : function() {
 			return this.$props.siteDomainName || location.host || document.domain;

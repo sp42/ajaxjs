@@ -82,6 +82,8 @@ public class JsController implements IController {
 	@POST
 	public String doCSS(@QueryParam("type") String type, @QueryParam("css") String css, MvcRequest request) {
 		String fullpath = request.mappath("/asset/css/" + type + ".css");
+		System.out.println(request.getParameter("type"));
+		System.out.println(fullpath);
 		FileUtil.save(fullpath, css);
 		return "json::{\"isOk\":true}";
 	}

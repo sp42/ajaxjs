@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import java.io.StringWriter;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,6 +65,7 @@ public class TestRequestParam {
 		HttpServletRequest request = MockWeb.mockRequest("/ajaxjs-web", "/combo/person");
 
 		map.put("foo", new String[] {"bar"});
+		map.put("price", new String[] {"2000.65"});
 		when(request.getParameterMap()).thenReturn(map);
 
 		HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
@@ -79,6 +81,9 @@ public class TestRequestParam {
 		args = RequestParam.getArgs(new MvcRequest(request), response, ControllerScanner.urlMappingTree.get("foo").postMethod);
 		assertTrue(args[0] instanceof ModelAndView);
 		assertTrue(args[1] instanceof News);
+		
+		News news = (News) args[1];
+		System.out.println(news.getPrice());
 	}
 
 	@Test

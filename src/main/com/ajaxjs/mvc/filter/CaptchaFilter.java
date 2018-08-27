@@ -18,6 +18,7 @@ package com.ajaxjs.mvc.filter;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
+import com.ajaxjs.simpleApp.CaptchaController;
 
 /**
  * 图形验证码的拦截器
@@ -26,35 +27,30 @@ import com.ajaxjs.mvc.controller.MvcRequest;
  *
  */
 public class CaptchaFilter implements FilterAction {
-	/**
-	 * SESSION 的键值
-	 */
-	public static final String SESSION_KEY = "rand";
-
-	public static final String submitedFieldName = "captchaCode";
 
 	@Override
 	public boolean before(MvcRequest request, MvcOutput response, IController controller) {
-		String captchaCode = request.getParameter(submitedFieldName);
+		String captchaCode = request.getParameter(CaptchaController.submitedFieldName);
 
-		String rand = (String) request.getSession().getAttribute(SESSION_KEY);
+		String rand = (String) request.getSession().getAttribute(CaptchaController.SESSION_KEY);
 
-		boolean isCaptchaPass = false;
+		Throwable e = null;
 
 		if (rand == null)
-			throw new UnsupportedOperationException("请刷新验证码。");
+			e = new UnsupportedOperationException("请刷新验证码。");
 		else if (captchaCode == null || captchaCode.equals("")) {
-			throw new IllegalArgumentException("没提供验证码参数");
+			e = new IllegalArgumentException("没提供验证码参数");
 		} else {
-			isCaptchaPass = rand.equalsIgnoreCase(captchaCode); // 判断用户输入的验证码是否通过
-			if (!isCaptchaPass)
-				throw new IllegalAccessError("验证码不正确");
+			if (!rand.equalsIgnoreCase(captchaCode))// 判断用户输入的验证码是否通过
+				e = new IllegalAccessError("验证码不正确");
 		}
 
-		if (isCaptchaPass)
-			request.getSession().removeAttribute(SESSION_KEY);// 通过之后记得要 清除验证码
-
-		return isCaptchaPass;
+		if (e == null)
+			request.getSession().removeAttribute(CaptchaController.SESSION_KEY);// 通过之后记得要 清除验证码
+		else
+			request.setAttribute("CaptchaException", e);
+		
+		return true;// 为了处理输出结果，这里一律返回 true ，但是控制器一定要捕获这抛出的异常
 	}
 
 	@Override

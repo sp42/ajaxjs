@@ -16,6 +16,7 @@ import org.junit.Test;
 
 import com.ajaxjs.mvc.filter.AesFilter;
 import com.ajaxjs.mvc.filter.CaptchaFilter;
+import com.ajaxjs.simpleApp.CaptchaController;
 import com.ajaxjs.web.MockWeb;
 
 import test.com.ajaxjs.mvc.controller.BaseTest;
@@ -42,11 +43,11 @@ public class TestFilter extends BaseTest {
 		request = MockWeb.mockRequest("/ajaxjs-web", "/filter/captcha");
 
 		Map<String, Object> map = new HashMap<>();
-		map.put(CaptchaFilter.SESSION_KEY, "123123");
+		map.put(CaptchaController.SESSION_KEY, "123123");
 		MockWeb.mockSession(request, map);
 
 		when(request.getMethod()).thenReturn("GET");
-		when(request.getParameter(CaptchaFilter.submitedFieldName)).thenReturn("12313");
+		when(request.getParameter(CaptchaController.submitedFieldName)).thenReturn("12313");
 		dispatcher.doFilter(request, response, chain);
 
 		assertEquals("{\"isOk\": false, \"msg\" : \"验证码不正确\"}", writer.toString());

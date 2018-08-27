@@ -63,30 +63,30 @@
     
     
     <% if(request.getParameter("css")  != null) { %> 
-		<script src="${ctx}/test/test.js">
-			setTimeout(function() {/* 压缩 css 并保存 */
-				function compress(code) {  
-				    code = code.replace(/\n/ig, '');            // 去掉换行  
-				    code = code.replace(/(\s){2,}/ig, '$1');    // 多空间（两个以上） 变 一个空格  
-				    code = code.replace(/\t/ig, '');            // 去掉tab  
-				    code = code.replace(/\n\}/ig, '\}');        // 换行+} 变 不换行  
-				    code = code.replace(/\n\{\s*/ig, '\{');     // {+换行 变 不换行  
-				    code = code.replace(/(\S)\s*\}/ig, '$1\}'); // 去掉 内容 与 } 之间的空格  
-				    code = code.replace(/(\S)\s*\{/ig, '$1\{'); // 去掉 内容 与 { 之间的空格  
-				    code = code.replace(/\{\s*(\S)/ig, '\{$1'); // 去掉 { 与 内容之间空格  
-				    return code;  
-				}  
-				
-				var cssCode = compress(aj('style[id]').innerHTML);
-				aj.xhr.post("/${ctx}/js", function(json) {
-					if(json.isOk)
-						alert('压缩css完成！')
-				}, {
-					type : '${param.css}',
-					css:encodeURIComponent(cssCode)
-				});
-				
-			}, 1000);
+		<script>
+		setTimeout(function() {
+			function compress(code) {  
+			    code = code.replace(/\n/ig, '');            // 去掉换行  
+			    code = code.replace(/(\s){2,}/ig, '$1');    // 多空间（两个以上） 变 一个空格  
+			    code = code.replace(/\t/ig, '');            // 去掉tab  
+			    code = code.replace(/\n\}/ig, '\}');        // 换行+} 变 不换行  
+			    code = code.replace(/\n\{\s*/ig, '\{');     // {+换行 变 不换行  
+			    code = code.replace(/(\S)\s*\}/ig, '$1\}'); // 去掉 内容 与 } 之间的空格  
+			    code = code.replace(/(\S)\s*\{/ig, '$1\{'); // 去掉 内容 与 { 之间的空格  
+			    code = code.replace(/\{\s*(\S)/ig, '\{$1'); // 去掉 { 与 内容之间空格  
+			    return code;  
+			}  
+			
+			var cssCode = compress(aj('style[id]').innerHTML);
+			aj.xhr.post("${ctx}/js", function(json) {
+				if(json.isOk)
+					alert('压缩css完成！');
+			}, {
+				type : '${param.css}',
+				css: encodeURIComponent(cssCode)
+			});
+			
+		}, 1000);
 		</script> 
 	<%}%>
 <%}else { %>

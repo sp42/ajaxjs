@@ -2,6 +2,37 @@
  * 表單控件
  */
 
+
+// 图片验证码
+Vue.component('aj-page-captcha', {
+	props : {
+		imgSrc : {
+			type: String, // 生成图片验证码地址
+			required: false,
+		},
+		
+		fieldName : {	// 提交的字段名
+			type: String,
+			required: false,
+			default : 'captcha'
+		}
+	},
+	template : 
+		'<table class="aj-page-captcha"><tr>\
+			<td><input type="text" :name="fieldName" placeholder="输入右侧验证码" data-regexp="integer" required /></td>\
+			<td style="vertical-align: top;">\
+				<img :src="imgSrc || ajResources.ctx + \'/Captcha/\'" @click="onClk($event);" title="点击刷新图片" />\
+			</td>\
+		</tr></table>',
+	methods : {
+		onClk : function(e) {
+			var img = e.target;
+			img.src = img.src.replace(/\?\d+$/, '') + '?' + new Date().valueOf();
+		}
+	}
+});
+
+
 // 日期选择器
 Vue.component('aj-form-calendar', {
 	data: function() {
