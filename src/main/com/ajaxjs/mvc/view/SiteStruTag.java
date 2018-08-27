@@ -26,7 +26,7 @@ public class SiteStruTag extends SimpleTagSupport {
 		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 		String ctx = request.getContextPath();
 		StringBuilder sb = new StringBuilder();
-		String output = null;
+		String output = "";
 
 		if ("nav-bar".equals(type)) {
 			boolean hasSelected = false;
