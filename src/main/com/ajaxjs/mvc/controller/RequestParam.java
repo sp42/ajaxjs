@@ -17,7 +17,6 @@ package com.ajaxjs.mvc.controller;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -56,8 +55,6 @@ public class RequestParam {
 	public static Object[] getArgs(MvcRequest request, HttpServletResponse response, Method method) {
 		Annotation[][] annotation = method.getParameterAnnotations(); // 方法所有的注解，length 应该要和参数总数一样
 		Class<?>[] parmTypes = method.getParameterTypes();// 反射得到参数列表的各个类型，遍历之
-
-		Type[] types = method.getGenericParameterTypes();
 
 		ArrayList<Object> args = new ArrayList<>();// 参数列表
 		for (int i = 0; i < parmTypes.length; i++) {

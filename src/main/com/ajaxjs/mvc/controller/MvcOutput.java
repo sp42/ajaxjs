@@ -32,6 +32,7 @@ import javax.servlet.jsp.PageContext;
 
 import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.mvc.ModelAndView;
+import com.ajaxjs.mvc.controller.output.JsonReuslt;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -197,8 +198,8 @@ public class MvcOutput extends HttpServletResponseWrapper {
 					LOGGER.info("执行逻辑完成，现在控制输出（响应页面模版）" + result);
 					setTemplate(str).go(request);
 				}
-			} else if(result instanceof JSONReuslt) {
-				JSONReuslt _result = (JSONReuslt)result; 
+			} else if(result instanceof JsonReuslt) {
+				JsonReuslt _result = (JsonReuslt)result; 
 				setJson(true).setOutput(_result.getJsonStr()).go();
 			}
 		}

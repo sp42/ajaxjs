@@ -15,12 +15,25 @@
  */
 package com.ajaxjs.mvc.filter;
 
+import com.ajaxjs.mvc.controller.IController;
+import com.ajaxjs.mvc.controller.MvcOutput;
+import com.ajaxjs.mvc.controller.MvcRequest;
+
 /**
  * 需要用户密码输入正确之后才能下一步的拦截器
  * 
  * @author sp42 frank@ajaxjs.com
  *
  */
-public abstract class UserSMSFilter implements FilterAction {
+public class UserSMSFilter implements FilterAction {
+	@Override
+	public boolean before(MvcRequest request, MvcOutput response, IController controller) {
+	
+		return true;
+	}
 
+	@Override
+	public void after(MvcRequest request, MvcOutput response, IController controller, boolean isSkip) {
+
+	}
 }

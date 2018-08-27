@@ -1,11 +1,11 @@
-package com.ajaxjs.mvc.controller;
+package com.ajaxjs.mvc.controller.output;
 
 /**
  * 
  * @author Frank Cheung
  *
  */
-public class JSONReuslt {
+public abstract class BaseResult {
 	/**
 	 * 表示操作成功
 	 */
@@ -26,7 +26,7 @@ public class JSONReuslt {
 	 */
 	public static final String json_not_ok = "{\"isOk\": false, \"msg\" : \"%s\"}";
 
-	private String jsonStr;
+	private String outputStr;
 
 	private boolean isOk;
 
@@ -35,21 +35,21 @@ public class JSONReuslt {
 	 * @param jsonStr 要显示的信息
 	 * @param isOk 是否操作成功
 	 */
-	public JSONReuslt(String jsonStr, boolean isOk) {
+	public BaseResult(String outputStr, boolean isOk) {
 		this.setOk(isOk);
-		this.setJsonStr(String.format(isOk ? json_ok : json_not_ok, jsonStr));
+		this.setOutputStr(String.format(isOk ? json_ok : json_not_ok, outputStr));
 	}
 
-	public JSONReuslt(String jsonStr) {
-		this.setJsonStr(jsonStr);
+	public BaseResult(String outputStr) {
+		this.setOutputStr(outputStr);
 	}
 
-	public String getJsonStr() {
-		return jsonStr;
+	public String getOutputStr() {
+		return outputStr;
 	}
 
-	public void setJsonStr(String jsonStr) {
-		this.jsonStr = jsonStr;
+	public void setOutputStr(String outputStr) {
+		this.outputStr = outputStr;
 	}
 
 	public boolean isOk() {

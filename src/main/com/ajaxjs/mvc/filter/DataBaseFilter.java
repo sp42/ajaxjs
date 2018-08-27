@@ -15,10 +15,11 @@
  */
 package com.ajaxjs.mvc.filter;
 
+import java.lang.reflect.Method;
+
 import com.ajaxjs.Version;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.jdbc.JdbcConnection;
-import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 
@@ -31,14 +32,14 @@ import com.ajaxjs.mvc.controller.MvcRequest;
 public class DataBaseFilter implements FilterAction {
 	
 	@Override
-	public boolean before(MvcRequest request, MvcOutput response, IController controller) {
+	public boolean before(MvcRequest request, MvcOutput response, Method method) {
 		initDb();
 		
 		return true;
 	}
 
 	@Override
-	public void after(MvcRequest request, MvcOutput response, IController controller, boolean isSkip) {
+	public void after(MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
 		JdbcConnection.closeDb(); // 关闭数据库连接
 	}
 

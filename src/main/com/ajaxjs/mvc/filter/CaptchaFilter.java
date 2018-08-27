@@ -15,7 +15,8 @@
  */
 package com.ajaxjs.mvc.filter;
 
-import com.ajaxjs.mvc.controller.IController;
+import java.lang.reflect.Method;
+
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.simpleApp.CaptchaController;
@@ -29,7 +30,7 @@ import com.ajaxjs.simpleApp.CaptchaController;
 public class CaptchaFilter implements FilterAction {
 
 	@Override
-	public boolean before(MvcRequest request, MvcOutput response, IController controller) {
+	public boolean before(MvcRequest request, MvcOutput response, Method method) {
 		String captchaCode = request.getParameter(CaptchaController.submitedFieldName);
 
 		String rand = (String) request.getSession().getAttribute(CaptchaController.SESSION_KEY);
@@ -54,6 +55,6 @@ public class CaptchaFilter implements FilterAction {
 	}
 
 	@Override
-	public void after(MvcRequest request, MvcOutput response, IController controller, boolean isSkip) {
+	public void after(MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
 	}
 }
