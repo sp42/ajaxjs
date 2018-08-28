@@ -1,11 +1,13 @@
 欢迎来到 AJAXJS Web Framework！
 =============
+特点：全栈 、原生、轻量级。前端提供了常见的 UI 组件，后端支持 IOC/AOP/ORM/MVC/REST 等特性，提供 Map/POJO 的 CRUD 服务，基于 DAO/Service/Controller 分层。
 
-全栈 Web 框架，包含 Java 后端框架和 HTML/CSS/JS 前端库。设计目标：Clean, Simple, Fast, Full-stacks & Lightweight.
+- 前端：Vue.js（MVVM+组件化） + LESS.js
+- 后端：Java + Tomcat + MySQL/SQLite
 
-A fullstack Java web project. It's clean, simple, fast and extensible. Not only backend code writen in Java, but also frontend code in native JavaScript. 
+代码精炼简洁，很少第三方的库或包。功能不是很多，但应该较为实用的那些，也可以在此基础上进行扩展。虽是“轮子”，但代码都自己理过一遍，务求清晰易懂易修改。注释、单测等齐备。
 
-AJAXJS 的设计原则：首先是尽量减少引入新的概念和新的第三方框架或库，而仅仅是在 Java 类库的核心概念之上进行梳理和进一步简化，个人认为一个第三方 jar 包就是一门新的 DSL 语言，DSL 语言不管大小，对心智来说都是一个额外的负担。如果没有足够的理由，没有必要去使用新的 DSL；其次，在写法上极其平常，顶多是引入链式写法（或所谓的流式接口），同时在 api 命名上，尽量准确精炼而且是众人所熟知的，不标新立异；最后就是代码量少，大部分每个类总共几十行，学习和理解的曲线低。详见官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/) 介绍。 
+详见官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/) 介绍。 
 
 Maven 依赖
 ```
@@ -22,13 +24,9 @@ Maven 依赖
 - 设置源码目录（set Source Folder）为 src/main，而非一般的 src/java/main，测试目录也是 src/test 敬请注意。
 - 推荐使用约定目录，包括静态注意、模板和数据库配置等等。
 
-相关项目一览
+项目依赖
 --------------
-
-|名称|说明|
-|------|----|
-|ajaxjs-base|基础类库，纯 Java 项目。[跳转项目主页](http://git.oschina.net/sp42_admin/ajaxjs-base)。|
-|ajaxjs-web|本项目，Web 的 MVC 框架+小型 UI 库，依赖 base JAR 包。见下面详细介绍。|
+- ajaxjs-base 基础类库，纯 Java 项目。[跳转项目主页](http://git.oschina.net/sp42_admin/ajaxjs-base)
 
 
 AJAXJS WEB
@@ -60,6 +58,11 @@ config
 小巧、灵活、通用、基于 JSON 的配置系统，完全可以代替 properties 文件实现配置模块。
 
 [>>详细用法参见文档](http://ajaxjs.mydoc.io/?t=208700)。
+
+
+开发生涯中一点的个人感悟
+----
+框架设计中，有什么值得考虑或者取舍的呢？首先是尽量减少引入新的概念和新的第三方框架或库，而仅仅是在 Java 类库的核心概念之上进行梳理和进一步简化，个人认为一个第三方 jar 包就是一门新的 DSL 语言，DSL 语言不管大小，对心智来说都是一个额外的负担。如果没有足够的理由，没有必要去使用新的 DSL；其次，在写法上极其平常，顶多是引入链式写法（或所谓的流式接口），同时在 api 命名上，尽量准确精炼而且是众人所熟知的，不标新立异；最后就是代码量少，大部分每个类总共几十行，学习和理解的曲线低。
 
 联系方式
 ----------
