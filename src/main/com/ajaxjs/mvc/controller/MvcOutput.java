@@ -48,8 +48,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	/**
 	 * 创建一个 Output 对象
 	 * 
-	 * @param request
-	 *            请求对象
+	 * @param request 请求对象
 	 */
 	public MvcOutput(HttpServletResponse request) {
 		super(request);
@@ -116,7 +115,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 		if (getOutput_Map() != null) { // Map 的话转变为 json 输出
 			setJson(true).setOutput(JsonHelper.stringifyMap(getOutput_Map()));
 		} else if (getOutput_Obj() != null) {// map or object 二选其一
-			//			setJson(true).setOutput(JsonHelper.stringify_object(getOutput_Obj()));
+			// setJson(true).setOutput(JsonHelper.stringify_object(getOutput_Obj()));
 		}
 
 		if (isJson()) {
@@ -134,8 +133,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	/**
 	 * MVC 的 View 输出
 	 * 
-	 * @param request
-	 *            请求对象
+	 * @param request 请求对象
 	 */
 	public void go(HttpServletRequest request) {
 		if (getTemplate() != null) {
@@ -156,15 +154,11 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	 * 一般一个请求希望返回一个页面，这时就需要控制器返回一个模板渲染输出了。 中间执行逻辑完成，最后就是控制输出（响应） 可以跳转也可以输出模板渲染器（即使是
 	 * json 都是 模板渲染器 ）
 	 * 
-	 * @param result
-	 *            模板路径是指页面模板（比如 jsp，velocity模板等）的目录文件名
-	 * @param request
-	 *            请求对象
-	 * @param response
-	 *            响应对象
-	 * @param model
-	 *            所有渲染数据都要放到一个 model 对象中（本质 是 map或者 bean），这样使用者就可以在模板内用 Map 对象的
-	 *            key/getter 获取到对应的数据。
+	 * @param result 模板路径是指页面模板（比如 jsp，velocity模板等）的目录文件名
+	 * @param request 请求对象
+	 * @param response 响应对象
+	 * @param model 所有渲染数据都要放到一个 model 对象中（本质 是 map或者 bean），这样使用者就可以在模板内用 Map 对象的
+	 * key/getter 获取到对应的数据。
 	 */
 	public void resultHandler(Object result, MvcRequest request, ModelAndView model) {
 		if (model != null)
@@ -173,7 +167,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 		if (result == null) {
 			LOGGER.info("控制器方法返回 null");
 		} else {
-			if(result instanceof String) {
+			if (result instanceof String) {
 				String str = (String) result, html = "html::";
 
 				if (str.startsWith(html)) {
@@ -192,24 +186,23 @@ public class MvcOutput extends HttpServletResponseWrapper {
 				} else if (str.startsWith("js::")) {
 					setContent_Type("application/javascript").setOutput(str.replace("js::", "")).go();
 				} else { // JSP
-					if (!str.endsWith(".jsp")) // 自动补充 .jsp 扩展名
+					if (!str.contains(".jsp") && !str.endsWith(".jsp")) // 自动补充 .jsp 扩展名
 						str += ".jsp";
 
 					LOGGER.info("执行逻辑完成，现在控制输出（响应页面模版）" + result);
 					setTemplate(str).go(request);
 				}
-			} else if(result instanceof JsonReuslt) {
-				JsonReuslt _result = (JsonReuslt)result; 
-				setJson(true).setOutput(_result.getJsonStr()).go();
-			}
+			} else if (result instanceof JsonReuslt) {
+				JsonReuslt _result = (JsonReuslt) result;
+				setJson(true).setOutput(_result.getOutputStr()).go();
+			} 
 		}
 	}
 
 	/**
 	 * 把图片流显示出来
 	 * 
-	 * @param im
-	 *            已渲染的图片对象
+	 * @param im 已渲染的图片对象
 	 */
 	public void go(RenderedImage im) {
 		if (getContent_Type() != null)
@@ -230,8 +223,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	 * http://blog.sina.com.cn/s/blog_7217e4320101l8gq.html
 	 * http://www.2cto.com/kf/201109/103284.html
 	 * 
-	 * @param pageContext
-	 *            页面上下文
+	 * @param pageContext 页面上下文
 	 */
 	public static void fix(PageContext pageContext) {
 		HttpServletResponse response = (HttpServletResponse) pageContext.getResponse();
@@ -244,7 +236,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 
 			pageContext.getOut().clear();
 			pageContext.pushBody();
-			//			out = pageContext.pushBody();
+			// out = pageContext.pushBody();
 		} catch (IOException e) {
 			LOGGER.warning(e);
 		}
@@ -253,8 +245,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	/**
 	 * 输出任何 字符串 内容（默认设置 UTF-8 编码）
 	 * 
-	 * @param output
-	 *            要输出的内容
+	 * @param output 要输出的内容
 	 */
 	public void output(String output) {
 		PrintWriter writer = null;

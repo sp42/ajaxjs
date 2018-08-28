@@ -201,7 +201,7 @@ public class MvcDispatcher implements Filter {
 		if (a != null && "json".equals(a.value()[0])) {// 返回 json
 			response.resultHandler(String.format(Constant.json_not_ok, errMsg), request, model);
 		} else {
-			response.resultHandler(String.format("redirect::%s/asset/common/jsp/msg.jsp?msg=%s", request.getContextPath(), Encode.urlEncode((errMsg))), request, model);
+			response.resultHandler(String.format("redirect::%s/showMsg?msg=%s", request.getContextPath(), Encode.urlEncode((errMsg))), request, model);
 		}
 	}
 

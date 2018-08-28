@@ -27,31 +27,20 @@ import com.ajaxjs.simpleApp.CaptchaController;
  * @author sp42 frank@ajaxjs.com
  *
  */
-public class CaptchaFilter implements FilterAction {
+public class CaptchaFilter extends SessionValueFilter {
 
 	@Override
 	public boolean before(MvcRequest request, MvcOutput response, Method method) {
-		String captchaCode = request.getParameter(CaptchaController.submitedFieldName);
+		String captchaCode = getClientSideArgs(request, CaptchaController.submitedFieldName), 
+			sessionValue = getServerSideValue(request, CaptchaController.SESSION_KEY);
 
-		String rand = (String) request.getSession().getAttribute(CaptchaController.SESSION_KEY);
-
-		Throwable e = null;
-
-		if (rand == null)
-			e = new UnsupportedOperationException("请刷新验证码。");
-		else if (captchaCode == null || captchaCode.equals("")) {
-			e = new IllegalArgumentException("没提供验证码参数");
-		} else {
-			if (!rand.equalsIgnoreCase(captchaCode))// 判断用户输入的验证码是否通过
-				e = new IllegalAccessError("验证码不正确");
-		}
-
-		if (e == null)
+		// 判断用户输入的验证码是否通过
+		if (captchaCode.equalsIgnoreCase(sessionValue)) {
 			request.getSession().removeAttribute(CaptchaController.SESSION_KEY);// 通过之后记得要 清除验证码
-		else
-			request.setAttribute("CaptchaException", e);
-		
-		return true;// 为了处理输出结果，这里一律返回 true ，但是控制器一定要捕获这抛出的异常
+			return true;
+		} else {
+			throw new IllegalAccessError("验证码不正确");
+		}
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package test.com.ajaxjs.mvc.filter;
 
-import com.ajaxjs.mvc.controller.IController;
+import java.lang.reflect.Method;
+
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.FilterAction;
@@ -8,13 +9,13 @@ import com.ajaxjs.mvc.filter.FilterAction;
 public class Filter implements FilterAction {
 
 	@Override
-	public boolean before(MvcRequest request, MvcOutput response, IController controller) {
+	public boolean before(MvcRequest request, MvcOutput response, Method method) {
 
 		return true;
 	}
 
 	@Override
-	public void after(MvcRequest request, MvcOutput response, IController controller, boolean isSkip) {
+	public void after(MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
 		
 	}
 

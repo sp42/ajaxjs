@@ -15,25 +15,35 @@
  */
 package com.ajaxjs.mvc.filter;
 
-import com.ajaxjs.mvc.controller.IController;
+import java.lang.reflect.Method;
+
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 
 /**
- * 需要用户密码输入正确之后才能下一步的拦截器
+ * 简易的短信驗證碼存儲，存儲在 Session 中
  * 
  * @author sp42 frank@ajaxjs.com
  *
  */
-public class UserSMSFilter implements FilterAction {
-	@Override
-	public boolean before(MvcRequest request, MvcOutput response, IController controller) {
+public class SimpleSMSFilter extends SessionValueFilter {
+	public static final String SMS_KEY_NAME = "randomSmsCode";
 	
-		return true;
+	@Override
+	public boolean before(MvcRequest request, MvcOutput response, Method method) {
+		String client = getClientSideArgs(request,  SMS_KEY_NAME), 
+			   server = getServerSideValue(request, SMS_KEY_NAME);
+
+		if (client.equals(server)) {
+			request.getSession().removeAttribute(SMS_KEY_NAME);
+			return true;
+		} else {
+			throw new IllegalAccessError("手机验证码不通过");
+		}
 	}
 
 	@Override
-	public void after(MvcRequest request, MvcOutput response, IController controller, boolean isSkip) {
+	public void after(MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
 
 	}
 }

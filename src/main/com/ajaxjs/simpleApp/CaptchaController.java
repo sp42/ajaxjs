@@ -47,10 +47,8 @@ public class CaptchaController implements IController {
 	/**
 	 * 生成验证码图片
 	 * 
-	 * @param req
-	 *            请求对象
-	 * @param response
-	 *            响应对象
+	 * @param req 请求对象
+	 * @param response 响应对象
 	 */
 	@GET
 	public void captchaImg(HttpServletRequest req, HttpServletResponse response) {
@@ -60,10 +58,8 @@ public class CaptchaController implements IController {
 	/**
 	 * 显示验证码图片并将认证码存入 Session
 	 * 
-	 * @param response
-	 *            响应对象
-	 * @param session
-	 *            会话对象
+	 * @param response 响应对象
+	 * @param session 会话对象
 	 */
 	public static void init(HttpServletResponse response, HttpSession session) {
 		Captcha captcha = new Captcha();
@@ -79,8 +75,7 @@ public class CaptchaController implements IController {
 	 * 显示验证码图片并将认证码存入 Session（For JSP） JSP 调用方式：
 	 * <%com.ajaxjs.bigfoot.tools.VcodeImg.init(pageContext);%>
 	 * 
-	 * @param pageContext
-	 *            页面上下文对象
+	 * @param pageContext 页面上下文对象
 	 */
 	public static void init(PageContext pageContext) {
 		init((HttpServletResponse) pageContext.getResponse(), pageContext.getSession());
