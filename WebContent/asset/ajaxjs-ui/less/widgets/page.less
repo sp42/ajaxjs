@@ -64,4 +64,90 @@
 	}
 }
 
+// 多选项卡（多标签页）
+@tab-base-color: #1e6bb8;
+@tab-border-color: #1e6bb8;
+@tab-background-color: #e7e7e7;
 
+.aj-simple-tab-base {
+	& > ul {
+		& > li {
+			background-color: @tab-background-color;
+			-moz-box-sizing: border-box;
+			box-sizing: border-box;
+			cursor: pointer;
+			position: relative;
+			list-style: none;
+			text-align: center;
+			height: 35px;
+			margin: 3px 0;
+			padding: 8px;
+			border: 1px solid transparent;
+			&.selected {
+				background-color: white;
+				border-color: @tab-base-color;
+				z-index: 999999;
+			}
+
+			&:hover {
+				color: @tab-base-color;
+			}
+		}
+	}
+
+	& > div {
+		position: relative;
+		border: 1px solid @tab-base-color;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+		z-index: 1;
+		& > div {
+			display: none;
+			padding: 10px;
+			font-size: .9rem;
+			text-align: justify;
+			&.selected {
+				display: block;
+			}
+		}
+	}
+}
+
+// 水平 Tab
+.aj-simple-tab-horizontal {
+	.aj-simple-tab-base;
+	& > ul {
+		.giveHeight;
+		& > li {
+			display: block;
+			float: left;
+			margin-bottom: 0;
+			margin-right: 1px;
+			border-bottom: 0;
+		}
+	}
+
+	& > div {
+		margin-top: -1px;
+	}
+}
+
+// 垂直 Tab
+.aj-simple-tab-vertical {
+	.aj-simple-tab-base;
+	& > ul {
+		width: 25%;
+		float: left;
+		& > li {
+			margin-top: 0;
+			border-right: 0;
+		}
+	}
+
+	& > div {
+		width: 75%;
+		float: left;
+		margin-left: -1px;
+		min-height: 149px;
+	}
+}

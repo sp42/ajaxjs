@@ -58,7 +58,7 @@
 		</tr>
 	</table>
 	<p>
-		<%=com.ajaxjs.util.Encode.urlChinese(request.getParameter("msg"))%>
+		<%=(request.getParameter("msg"))%>
 	</p>
 	<hr />
 	<div align="center">

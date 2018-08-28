@@ -20,7 +20,6 @@ Element.prototype.$ = function(cssSelector, fn) {
 	} else {
 		return this.querySelector.apply(this, arguments);
 	}
-
 }
 
 /**
@@ -33,10 +32,8 @@ Element.prototype.die = function() {
 /**
  * 查找父元素，支持 标签名称 或 样式名称，任选其一而不能同时传。
  * 
- * @param tagName
- *            标签名称
- * @param className
- *            样式名称
+ * @param tagName 标签名称
+ * @param className 样式名称
  * @returns 父级元素，如果没有找到返回 null
  */
 Element.prototype.up = function(tagName, className) {
@@ -60,8 +57,7 @@ Element.prototype.up = function(tagName, className) {
 /**
  * 在当前元素后面追加 newElement
  * 
- * @param newElement
- *            新的元素
+ * @param newElement 新的元素
  */
 Element.prototype.insertAfter = function(newElement) {
 	var targetElement = this, parent = targetElement.parentNode;
@@ -106,29 +102,6 @@ Function.prototype.delegate = function() {
 
 		return self.apply(scope || this, args);
 	};
-};
-
-/**
- * 设置一个后置函数。
- * 
- * @param {Function}
- *            composeFn
- * @param {Boolean}
- *            isForceCall 是否强行执行 call 方法。设置为 true 在数组作为单独对象的时候有用。
- * @return {Function}
- */
-Function.prototype.after = function(composeFn, isForceCall, scope) {
-	var self = this;
-
-	return function() {
-		var result = self.apply(scope || this, arguments);
-
-		if (isForceCall) {
-			return composeFn.call(this, result);
-		}
-
-		return result && (typeof result.pop != 'undefined') && (typeof result.pop != 'unknown') ? composeFn.apply(this, result) : composeFn.call(this, result);
-	};
 }
 
 /*
@@ -149,164 +122,7 @@ ajaxjs.ua = (function() {
 	};
 })();
 
-/**
- * tppl.js 极致性能的 JS 模板引擎 Github：https://github.com/jojoin/tppl
- * 
- * @param tpl
- *            {String} 模板字符串
- * @param data
- *            {Object} 模板数据（不传或为null时返回渲染方法）
- * 
- * @return {String} 渲染结果
- * @return {Function} 渲染方法
- * 
- */
-function tppl(tpl, data) {
-	var fn = function(d) {
-		var i, k = [], v = [];
-		for (i in d) {
-			k.push(i);
-			v.push(d[i]);
-		}
-		;
-		return (new Function(k, fn.$)).apply(d, v);
-	};
-	if (!fn.$) {
-		var tpls = tpl.split('[:');
-		fn.$ = "var $=''";
-		for (var t = 0; t < tpls.length; t++) {
-			var p = tpls[t].split(':]');
-			if (t != 0) {
-				fn.$ += '=' == p[0].charAt(0) ? "+(" + p[0].substr(1) + ")" : ";" + p[0].replace(/\r\n/g, '') + "$=$"
-			}
-			// 支持 <pre> 和 [::] 包裹的 js 代码
-			fn.$ += "+'" + p[p.length - 1].replace(/\'/g, "\\'").replace(/\r\n/g, '\\n').replace(/\n/g, '\\n').replace(/\r/g, '\\n') + "'";
-		}
-		fn.$ += ";return $;";
-		// log(fn.$);
-	}
-	return data ? fn(data) : fn;
-}
-
-// https://github.com/creationix/step
-function Step() {
-	var steps = Array.prototype.slice.call(arguments), pending, counter, results, lock;
-
-	// Define the main callback that's given as `this` to the steps.
-	function next() {
-		counter = pending = 0;
-
-		// Check if there are no steps left
-		if (steps.length === 0) {
-			// Throw uncaught errors
-			if (arguments[0])
-				throw arguments[0];
-			
-			return;
-		}
-
-		// Get the next step to execute
-		var fn = steps.shift();
-		results = [];
-
-		// Run the step in a try..catch block so exceptions don't get out of
-		// hand.
-		try {
-			lock = true;
-			var result = fn.apply(next, arguments);
-		} catch (e) {
-			// Pass any exceptions on through the next callback
-			next(e);
-		}
-
-		if (counter > 0 && pending == 0) {
-			// If parallel() was called, and all parallel branches executed
-			// synchronously, go on to the next step immediately.
-			next.apply(null, results);
-		} else if (result !== undefined) {
-			// If a synchronous return is used, pass it to the callback
-			next(undefined, result);
-		}
-		
-		lock = false;
-	}
-
-	// Add a special callback generator `this.parallel()` that groups stuff.
-	next.parallel = function() {
-		var index = 1 + counter++;
-		pending++;
-
-		return function() {
-			pending--;
-			
-			if (arguments[0]) // Compress the error from any result to the first argument
-				results[0] = arguments[0];
-			
-			results[index] = arguments[1];// Send the other results as arguments
-			if (!lock && pending === 0) 
-				next.apply(null, results);// When all parallel branches done, call the callback
-			
-		};
-	};
-
-	// Generates a callback generator for grouped results
-	next.group = function() {
-		var localCallback = next.parallel();
-		var counter = 0;
-		var pending = 0;
-		var result = [];
-		var error = undefined;
-
-		function check() {
-			if (pending === 0) 
-				localCallback(error, result);// When group is done, call the callback
-		}
-		process.nextTick(check); // Ensures that check is called at least once
-
-		// Generates a callback for the group
-		return function() {
-			var index = counter++;
-			pending++;
-			
-			return function() {
-				pending--;
-				
-				if (arguments[0]) // Compress the error from any result to the first argument
-					error = arguments[0];
-				
-				result[index] = arguments[1];// Send the other results as arguments
-				if (!lock) 
-					check();
-			};
-		};
-	};
-
-	
-	next();// Start the engine an pass nothing to the first step.
-}
-
-// Tack on leading and tailing steps for input and output and return the whole
-// thing as a function. Basically turns step calls into function factories.
-Step.fn = function StepFn() {
-	var steps = Array.prototype.slice.call(arguments);
-	return function() {
-		var args = Array.prototype.slice.call(arguments);
-		
-		var toRun = [ function() {// Insert a first step that primes the data stream
-			this.apply(null, args);
-		} ].concat(steps);
-		
-		if (typeof args[args.length - 1] === 'function') // If the last arg is a function add it as a last step
-			toRun.push(args.pop());
-
-		Step.apply(null, toRun);
-	}
-}
-
-/*
- * -------------------------------------------------------- 获取浏览器 url 参数
- * --------------------------------------------------------
- */
+// 获取浏览器 url 参数
 ajaxjs.params = {
 	/**
 	 * 
@@ -352,12 +168,12 @@ ajaxjs.params = {
 
 if (!window.URLSearchParams) { // polyfill
 	URLSearchParams = function() {
-
 	}
 }
 
 /*
- * -------------------------------------------------------- 封装 XHR，支持
+ * -------------------------------------------------------- 
+ * 封装 XHR，支持
  * GET/POST/PUT/DELETE/JSONP/FormData
  * http://blog.csdn.net/zhangxin09/article/details/78879244
  * --------------------------------------------------------
