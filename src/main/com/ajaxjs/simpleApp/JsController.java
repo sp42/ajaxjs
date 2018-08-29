@@ -44,6 +44,12 @@ public class JsController implements IController {
 		return "js::" + action(ajaxjs + "\\js\\widgets", "true".equals(req.getParameter("compress")));
 	}
 
+	/**
+	 * 
+	 * @param _folder
+	 * @param isCompress
+	 * @return
+	 */
 	public static String action(String _folder, boolean isCompress) {
 		StringBuilder sb = new StringBuilder();
 		File folder = new File(_folder);
@@ -67,7 +73,6 @@ public class JsController implements IController {
 		return getOne(new File(file));
 	}
 
-
 	public static void main(String[] args) {
 		String target = ajaxjs + "\\output\\all.js";
 		String js = getOne(ajaxjs + "\\js\\ajaxjs-base.js");
@@ -79,12 +84,25 @@ public class JsController implements IController {
 
 	}
 
+	/**
+	 * 压缩 CSS 并将其保存到一个地方
+	 * 
+	 * @param type main|admin
+	 * @param css CSS 代碼
+	 * @param request 請求對象
+	 * @return 是否操作成功的结果
+	 */
 	@POST
 	public String doCSS(@QueryParam("type") String type, @QueryParam("css") String css, MvcRequest request) {
-		String fullpath = request.mappath("/asset/css/" + type + ".css");
-		System.out.println(request.getParameter("type"));
-		System.out.println(fullpath);
-		FileUtil.save(fullpath, css);
-		return "json::{\"isOk\":true}";
+		try {
+			String fullpath = request.mappath("/asset/css/" + type + ".css");
+			FileUtil.save(fullpath, css);
+
+			return "json::{\"isOk\":true}";
+		} catch (Throwable e) {
+			e.printStackTrace();
+			return "json::{\"isOk\":false}";
+		}
+
 	}
 }

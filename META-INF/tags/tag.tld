@@ -106,6 +106,7 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
+	
 	<tag>
 		<name>siteStru</name>
 		<tag-class>com.ajaxjs.mvc.view.SiteStruTag</tag-class>
@@ -116,5 +117,20 @@
 			<required>true</required>
 			<description>标签类型</description>
 		</attribute>
+	</tag>
+	
+	<tag>
+		<name>logined</name>
+		<tag-class>com.ajaxjs.mvc.view.UserLogined</tag-class>
+		<description>會員已经登录时</description>
+		<body-content>scriptless</body-content>
+	</tag>
+	
+	<tag>
+		<name>notLogined</name>
+		<tag-class>com.ajaxjs.mvc.view.UserNotLogined</tag-class>
+		<description>會員没有登录时</description>
+		<body-content>scriptless</body-content>
+
 	</tag>
 </taglib>

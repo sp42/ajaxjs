@@ -22,8 +22,8 @@ public class SiteStruTag extends SimpleTagSupport {
 	public void doTag() throws JspException, IOException {
 		JspContext context = getJspContext();
 		PageContext pageContext = (PageContext) context;
-		SiteStruService sitestru = (SiteStruService) pageContext.getServletContext().getAttribute("SITE_STRU");
 		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
+		SiteStruService sitestru = (SiteStruService) pageContext.getServletContext().getAttribute("SITE_STRU");
 		String ctx = request.getContextPath();
 		StringBuilder sb = new StringBuilder();
 		String output = "";

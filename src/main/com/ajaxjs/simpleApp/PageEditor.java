@@ -55,8 +55,7 @@ public class PageEditor implements IController, Constant {
 	/**
 	 * 编辑页面，加载一个含有 HTMLEditor 编辑的页面
 	 * 
-	 * @param request
-	 *            请求对象
+	 * @param request 请求对象
 	 * @return 含有 HTMLEditor 编辑页面地址
 	 */
 	@GET
@@ -81,8 +80,7 @@ public class PageEditor implements IController, Constant {
 	/**
 	 * 保存编辑后的内容
 	 * 
-	 * @param request
-	 *            请求对象，必填 url 和 contentBody 两个参数
+	 * @param request 请求对象，必填 url 和 contentBody 两个参数
 	 * @return JSON 结果
 	 */
 	@POST
@@ -119,8 +117,7 @@ public class PageEditor implements IController, Constant {
 	/**
 	 * 根据 页面中可编辑区域之标识，取出来。
 	 * 
-	 * @param fullFilePath
-	 *            完整的 jsp 文件路径
+	 * @param fullFilePath 完整的 jsp 文件路径
 	 * @return 可编辑内容
 	 * @throws IOException
 	 */
@@ -145,8 +142,7 @@ public class PageEditor implements IController, Constant {
 	/**
 	 * 请求附带文件参数，将其转换真实的磁盘文件路径
 	 * 
-	 * @param rawFullFilePath
-	 *            URL 提交过来的磁盘文件路径，可能未包含文件名或加了很多 url 参数
+	 * @param rawFullFilePath URL 提交过来的磁盘文件路径，可能未包含文件名或加了很多 url 参数
 	 * @return 完整的磁盘文件路径
 	 */
 	public static String getFullPathByRequestUrl(String rawFullFilePath) {
@@ -162,10 +158,8 @@ public class PageEditor implements IController, Constant {
 	/**
 	 * 保存要修改的页面
 	 * 
-	 * @param rawFullFilePath
-	 *            真实的磁盘文件路径
-	 * @param newContent
-	 *            新提交的内容
+	 * @param rawFullFilePath 真实的磁盘文件路径
+	 * @param newContent 新提交的内容
 	 * @throws IOException
 	 */
 	public static void save_jsp_fileContent(String rawFullFilePath, String newContent) throws IOException {
@@ -183,8 +177,7 @@ public class PageEditor implements IController, Constant {
 	/**
 	 * 获取指定目录内的图片 目录有 folder 参数指定 TODO
 	 * 
-	 * @param folder
-	 *            包含图片的目录
+	 * @param folder 包含图片的目录
 	 * @return 图片文件名列表
 	 */
 	public static String getImgList(String folder) {
@@ -203,16 +196,16 @@ public class PageEditor implements IController, Constant {
 				final String strFileName = files[i].getName();
 				if (strFileName.contains(".jpg") || strFileName.contains(".gif") || strFileName.contains(".png")) {
 
-					//					String el = JsonHelper.stringify_object(new Object() {
-					//						@SuppressWarnings("unused")
-					//						public Boolean isOk = true;
-					//						@SuppressWarnings("unused")
-					//						public String fileName = strFileName;
-					//						@SuppressWarnings("unused")
-					//						public String id = strFileName;
-					//					});
+					// String el = JsonHelper.stringify_object(new Object() {
+					// @SuppressWarnings("unused")
+					// public Boolean isOk = true;
+					// @SuppressWarnings("unused")
+					// public String fileName = strFileName;
+					// @SuppressWarnings("unused")
+					// public String id = strFileName;
+					// });
 
-					//					json.add(el);
+					// json.add(el);
 				}
 			}
 		}
@@ -221,46 +214,4 @@ public class PageEditor implements IController, Constant {
 	}
 
 	private static final String jsonTpl = "{\"result\" : [%s], \"total\" : %s}";
-
-	/**
-	 * 删除文件（小心！）
-	 * 
-	 * @param file
-	 *            rh.Mappath(rh.get("file")
-	 * @return 是否删除成功
-	 */
-	public static boolean delFile(String file) {
-		return new File(file).delete();
-	}
-
-	public String uploadFile() {
-		String json = null;
-
-		// Img uploader = new Img(request);
-		// uploader.setSaveFolder(request.getParameter("folder").replace("/",
-		// "\\"));
-		// String[] arr = uploader.upload().split("\\\\");
-		//
-		// final String fileName = arr[arr.length - 1];
-		//
-		// json = Mapper.stringify(new Object() {
-		// @SuppressWarnings("unused")
-		// public Boolean isOk = true;
-		// @SuppressWarnings("unused")
-		// public String filename = fileName;
-		// @SuppressWarnings("unused")
-		// public String id = fileName;
-		// });
-
-		return json;
-	}
-
-	//	public void write() {
-	//		if (request.hasRoute("save")) {
-	//			save_jsp_fileContent();
-	//			response.outputAction();
-	//		} else if (request.hasRoute("upload")) {
-	//			response.outputJSON(uploadFile());
-	//		}
-	//	}
 }
