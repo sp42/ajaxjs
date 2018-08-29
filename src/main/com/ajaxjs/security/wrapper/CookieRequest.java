@@ -36,6 +36,7 @@ public class CookieRequest extends HttpServletRequestWrapper {
 	public CookieRequest(HttpServletRequest request) {
 		super(request);
 	}
+	
 	@Override
 	public String getParameter(String key) {
 		return super.getParameter(key);
