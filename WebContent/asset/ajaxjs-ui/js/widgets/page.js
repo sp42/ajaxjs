@@ -204,12 +204,13 @@ Vue.component('aj-simple-tab', {
 			</div>\
 		</div>',
 	props: {
-		isVertical : Boolean // 是否垂直方向的布局，默认 false
+		isVertical : Boolean, // 是否垂直方向的布局，默认 false,
+		initItems : Array
 	},
 	data : function() {
 		return {
 			selected : 0,
-			items : [
+			items : this.initItems || [
 				{name : '杜甫：望岳', content : '岱宗夫如何，齊魯青未了。<br>\
 											    造化鐘神秀，陰陽割昏曉。<br>\
 											    蕩胸生層云，決眥入歸鳥，<br>\

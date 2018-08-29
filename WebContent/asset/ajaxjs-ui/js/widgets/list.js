@@ -30,7 +30,7 @@ Vue.component('aj-page-list', {
 		'<div class="aj-page-list">\
 			<ul><li v-for="(item, index) in result">\
 				<slot v-bind="item">\
-				<a href="#" @click="show(item.id, index, $event)" :id="item.id">{{item.name}}</a>\
+					<a href="#" @click="show(item.id, index, $event)" :id="item.id">{{item.name}}</a>\
 				</slot>\
 			</li></ul>\
 			<footer>\
