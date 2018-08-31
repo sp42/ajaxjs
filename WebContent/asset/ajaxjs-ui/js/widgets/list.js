@@ -1,25 +1,53 @@
+aj._list = {
+	props : {
+		apiUrl : {		// JSON 接口地址
+			type : String,
+			required : true
+		}
+	},
+	
+	data : function() {
+		return {
+			result : [],		// 展示的数据
+			baseParam: {}		// 每次请求都附带的参数
+		};
+	}
+};
+
+// 简单列表
+Vue.component('aj-simple-list', {
+	mixins: [aj._list],
+	
+	template : '<ul class="aj-simple-list"><li v-for="(item, index) in result">\
+				<slot v-bind="item">\
+					<a href="#" @click="show(item.id, index, $event)" :id="item.id">{{item.name}}</a>\
+				</slot>\
+			</li></ul>',
+	mounted : function() {
+		ajaxjs.xhr.get(this.apiUrl, function(json) {
+			aj.apply(this, json);
+		}.bind(this), this.baseParam);
+	}
+});
+
 /**
  * 列表控件
  */
 
 // 分页
 Vue.component('aj-page-list', {
+	mixins: [aj._list],
+	
 	data : function() {
 		return {
 			pageSize : this.initPageSize,
 			total : 0,
 			totalPage :0,
 			pageStart: 0,
-			currentPage : 0,
-			result : [],
-			baseParam: {}
+			currentPage : 0
 		};
 	},
 	props : {
-		apiUrl : {		// JSON 接口地址
-			type : String,
-			required : true
-		},
 		initPageSize : {
 			type : Number,
 			required : false,
@@ -56,7 +84,7 @@ Vue.component('aj-page-list', {
 		});
 	},
 	
-	created : function(){
+	created : function() {
 		this.BUS.$on('base-param-change', this.onBaseParamChange.bind(this));
 	},
 	
@@ -102,6 +130,7 @@ Vue.component('aj-page-list', {
 			var selectEl = e.target;
 			this.currentPage = selectEl.options[selectEl.selectedIndex].value;
 		},
+		
 		onBaseParamChange : function(params) {
 			aj.apply(this.baseParam, params);
 			

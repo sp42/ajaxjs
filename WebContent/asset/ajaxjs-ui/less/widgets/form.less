@@ -119,10 +119,11 @@
 // 日历 悬浮出现
 .aj-form-calendar-input {
 	position: relative;
-	width:150px;
+	width: 150px;
 	display: inline-block;
 	input[type=text] {
-		width:100%;
+		max-width: 100% ! important;
+		width: 100% ! important;
 		height: 22px;
 	}
 
@@ -133,7 +134,7 @@
 		right: 5px;
 		top: 5px;
 		opacity: .6;
-		    cursor: pointer;
+		cursor: pointer;
 		.menu {
 			color: #000;
 			position: absolute;
@@ -168,6 +169,11 @@
 		z-index: 999999999;
 		display: none;
 		position: absolute;
+		
+		&.positionFixed {// 若父元素 overflow:hidden，则 position: absolute 不能完整显示，故 fixed
+			position: fixed;
+		}
+
 		right: -3px;
 		top: 25px;
 	}
@@ -213,7 +219,7 @@
 			list-style: none;
 			float: left;
 			cursor: pointer;
-			&>span {
+			& > span {
 				border: 1px solid transparent;
 				min-width: 25px;
 				height: 20px;
@@ -243,12 +249,11 @@
 			}
 
 			.bg-4 {
-
 				background-position: -10px -10px;
 			}
 
 			.bg-5 {
-				background-position:-55px -10px;
+				background-position: -55px -10px;
 			}
 
 			.bg-6 {
@@ -256,19 +261,19 @@
 			}
 
 			.bg-7 {
-				background-position:  -50px -90px;
+				background-position: -50px -90px;
 			}
 
 			.bg-8 {
-				background-position:  -90px -90px;
+				background-position: -90px -90px;
 			}
 
 			.bg-9 {
-				background-position:   -141px -10px;
+				background-position: -141px -10px;
 			}
 
 			.bg-10 {
-				background-position:  -141px -50px;
+				background-position: -141px -50px;
 			}
 
 			.bg-11 {
@@ -276,39 +281,39 @@
 			}
 
 			.bg-12 {
-				background-position:  -10px -130px;
+				background-position: -10px -130px;
 			}
 
 			.bg-13 {
-				background-position:  -50px -130px;
+				background-position: -50px -130px;
 			}
 
 			.bg-14 {
-				background-position:  -90px -130px;
+				background-position: -90px -130px;
 			}
 
 			.bg-15 {
-				background-position:  -130px -130px;
+				background-position: -130px -130px;
 			}
 
 			.bg-16 {
-				background-position:  -54px -50px;
+				background-position: -54px -50px;
 			}
 
 			.bg-17 {
-				background-position:  -10px -50px;
+				background-position: -10px -50px;
 			}
 
 			.bg-18 {
-				background-position:  -100px -10px;
+				background-position: -100px -10px;
 			}
 
 			.bg-19 {
-				background-position:  -100px -50px;
+				background-position: -100px -50px;
 			}
-			
-			.noBg{
-				background-image:none;
+
+			.noBg {
+				background-image: none;
 			}
 		}
 	}
@@ -404,6 +409,4 @@
 		}
 	}
 }
-
-
 

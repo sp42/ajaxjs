@@ -174,6 +174,10 @@ public class MvcDispatcher implements Filter {
 			
 		} catch (Throwable e) {
 			err = e;
+			
+			if(e instanceof IllegalArgumentException && e.getMessage().contains("object is not an instance of declaring class")) {
+				LOGGER.warning("异常可能的原因：@Bean注解的名称重复，请检查 IOC 中的是否重名");
+			}
 		} finally {
 			if (isDoFilter) {
 				for (FilterAction filterAction : filterActions)

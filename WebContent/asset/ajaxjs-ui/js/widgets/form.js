@@ -197,7 +197,7 @@ Vue.component('aj-form-calendar', {
 	}
 });
 
-// 帶有 input 輸入框的
+//帶有 input 輸入框的
 Vue.component('aj-form-calendar-input', {
 	data : function(){
 		return {
@@ -212,17 +212,35 @@ Vue.component('aj-form-calendar-input', {
 		fieldValue : {
 			type: String,// 表单值，可选的
 			required: false
-		}
+		},
+		
+		positionFixed : Boolean // 是否采用固定定位
 	},
+	
 	template : 
-		'<div class="aj-form-calendar-input">\
-			<div class="icon"><div class="menu"></div></div>\
+		'<div class="aj-form-calendar-input" @mouseover="onMouseOver($event)">\
+			<div class="icon" ><div class="menu"></div></div>\
 			<input placeholder="请输入日期" :name="fieldName" :value="date" type="text" />\
 			<aj-form-calendar @pick-date="recEvent"></aj-form-calendar>\
 		</div>',
+	mounted : function() {
+		if(this.positionFixed) {
+			this.$el.$('.aj-form-calendar').classList.add('positionFixed');
+		}
+	},
 	methods : {
 		recEvent: function(date) {
 			this.date = date;
+		},
+		
+		onMouseOver : function(e) {
+			if(this.positionFixed) {
+				var el = e.currentTarget;
+				var b = el.getBoundingClientRect();
+				var c = this.$el.$('.aj-form-calendar');
+					c.style.top  = (b.top + el.clientHeight - 0) + 'px';
+					c.style.left = ((b.left - 0) + 0) +  'px';
+			}
 		}
 	}
 });

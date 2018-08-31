@@ -289,6 +289,3 @@ Vue.component('aj-popup-upload', {
 		}
 	}
 });
-
-
-
