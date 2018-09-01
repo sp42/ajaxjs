@@ -1,5 +1,5 @@
 // 折叠菜单 Accordion Menu
-.acMenu {
+.aj-accordion {
 	& > li h3 {
 		cursor: pointer;
 	}
@@ -23,9 +23,10 @@
 	}
 }
 
-.leftSidebar {
-	.acMenu ();
+.aj-accordion-menu {
+	.aj-accordion();
 	overflow: hidden;
+	
 	& > li {
 		border-top: 1px solid white;
 		border-bottom: 1px solid lightgray;
@@ -68,7 +69,7 @@
 
 // 下拉菜单
 // 父节点，通常是 li
-.downdrop_menu_parentNode () {
+.aj-css-menu-parentNode () {
 	box-sizing: border-box;
 	position: relative;
 	overflow: hidden;
@@ -94,17 +95,17 @@
 		.heightFx;
 		height: 0;
 		&:hover {
-			.show ();
+			.show;
 		}
 	}
 }
 
-.menu {
+.aj-css-menu {
 	margin: 0 auto;
 	& > li {
 		float: left;
 		padding: 0 2%;
-		.downdrop_menu_parentNode ();
+		.aj-css-menu-parentNode;
 		menu {
 			line-height: 25px;
 			padding: 0 5px;
@@ -121,7 +122,7 @@
 }
 
 // display:none/block 版
-.menu2 {
+.aj-css-menu-2 {
 	margin: 0 auto;
 	& > li {
 		float: left;
@@ -158,11 +159,17 @@
 }
 
 .aj-expander {
-	.contentPanel {
-		overflow:hidden;
-		position: relative;
-		clear: both;
-		transition: height 200ms ease 0s;
+	overflow:hidden;
+	position: relative;
+	clear: both;
+	transition: height 200ms ease 0s;
+	.mask-layer {
+	    position: absolute;
+	    bottom: 0;
+	    left: 0;
+	    height: 23px;
+	    width: 100%;
+	    background: -webkit-gradient(linear, center top, center bottom, from(transparent), to(white));
 	}
 	.openBtn {
 		background: url("@{assetFilePath}/common/images/openBtn.png");

@@ -1,6 +1,6 @@
 // 折叠菜单
 Vue.component('aj-accordion-menu', {
-	template : '<ul class="leftSidebar" @click="onClk($event);"><slot></slot></ul>',
+	template : '<ul class="aj-accordion-menu" @click="onClk($event);"><slot></slot></ul>',
 	methods : {
 		onClk : function (e) {
 			this.children = this.$el.children;
@@ -72,7 +72,7 @@ Vue.component('aj-expander', {
 	},
 	
 	template : 
-		'<div class="contentPanel" :style="\'height:\' + (expended ? openHeight : closeHeight) + \'px;\'">\
+		'<div class="aj-expander" :style="\'height:\' + (expended ? openHeight : closeHeight) + \'px;\'">\
 			<div :class="expended ? \'closeBtn\' : \'openBtn\'" @click="expended = !expended;"></div>\
 			<slot></slot>\
 		</div>'

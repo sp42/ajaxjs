@@ -24,8 +24,7 @@ aj._carousel = {
 			default : false 
 		}, 
 		
-		isGetCurrentHeight : {// 自动当前项最高，忽略其他高度，这个用在 tab很好，比 autoHeight
-								// 的好，可视作autoHeight 2.-
+		isGetCurrentHeight : {// 自动当前项最高，忽略其他高度，这个用在 tab很好，比 autoHeight 的好，可视作autoHeight 2.-
 			type : Boolean,
 			default : true 
 		},
@@ -51,12 +50,12 @@ aj._carousel = {
 			else
 				mover.style.width = this.isUsePx ? (stepWidth * len) +'px' : len + '00%';
 			
-			var tabWidth = this.isUsePx ? stepWidth + 'px' : (1 / len * 100).toFixed(5) + '%';// 分配
-																								// tab
-																								// 宽度
+			var tabWidth = this.isUsePx ? stepWidth + 'px' : (1 / len * 100).toFixed(5) + '%';// 分配  tab 宽度
 			
 			for(var  i = 0; i < len; i++) 
 				children[i].style.width = this.isMagic ? '50%' : tabWidth;
+			
+			this.doHeight(this.selected);
 		}.bind(this), 500);
 		
 		// 登记 resize 事件，以便 resize 容器的时候调整大小。
@@ -66,9 +65,7 @@ aj._carousel = {
 	
 	methods : {
 		setItemWidth : function() {
-			this.stepWidth = this.stepWidth || this.mover.parentNode.clientWidth || window.innerWidth; // 获取容器宽度作为
-																										// item
-																										// 宽度
+			this.stepWidth = this.stepWidth || this.mover.parentNode.clientWidth || window.innerWidth; // 获取容器宽度作为 item 宽度
 			return this.stepWidth;
 		},
 		
@@ -85,17 +82,8 @@ aj._carousel = {
 		 */
 		go : function(i) {
 			var mover = this.mover, children = mover.children, len = children.length;
-
-			// 控制高度 解决高度问题
-			if(this.isGetCurrentHeight) {
-				for(var p = 0; p < len; p++) {
-					if(i == p) {
-						children[p].style.height = 'initial';	
-					}else{
-						children[p].style.height = '1px';					
-					}
-				}
-			}
+			
+			this.doHeight(i);
 		
 			if(this.isMagic) {
 				// clear before
@@ -163,6 +151,20 @@ aj._carousel = {
 				this.children[i].style.width = stepWidth + 'px';
 		},
 		
+		// 控制高度 解决高度问题
+		doHeight: function(i) {
+			if(this.isGetCurrentHeight) {
+				var mover = this.mover, children = mover.children, len = children.length;
+				for(var p = 0; p < len; p++) {
+					if(i == p) {
+						children[p].style.height = 'initial';	
+					}else{
+						children[p].style.height = '1px';					
+					}
+				}
+			}
+		},
+		
 		doAutoHeight : function (nextItem) {
 			 if(this.autoHeight) {
 				 var tabHeaderHeight = 0;
@@ -199,7 +201,7 @@ aj._carousel = {
 Vue.component('aj-carousel', {
 	mixins: [aj._carousel],
 	template : 
-		'<div class="aj-carousel">\
+		'<div class="aj-carousel aj-carousel-tab">\
 			<header><ul>\
 				<li v-for="(item, index) in items" :class="{\'active\': index === selected}" @click="changeTab(index);">{{item.name}}</li>\
 			</ul></header>\

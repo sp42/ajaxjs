@@ -229,3 +229,31 @@ Vue.component('aj-simple-tab', {
 		}
 	}
 });
+
+// 回到顶部
+Vue.component('aj-back-top', {
+	template : 
+		'<a href="###" @click="go">回到顶部</a>',
+	methods : {
+		go : function() {
+//			 var b = 0;//作为标志位，判断滚动事件的触发原因，是定时器触发还是其它人为操作
+//			 UserEvent2.onWinResizeFree(function(e) {
+//				 if (b != 1) clearInterval(timer);
+//				 b = 2;
+//			 }, 'scroll');	
+			this.$timerId && window.clearInterval(this.$timerId);
+			var top = speed = 0;
+
+			this.$timerId = window.setInterval(function() {
+				top = document.documentElement.scrollTop || document.body.scrollTop;
+				speed = Math.floor((0 - top) / 8);
+
+				if (top === 0)
+					clearInterval(this.$timerId);
+				else
+					document.documentElement.scrollTop = document.body.scrollTop = top + speed;
+//				b = 1;
+			}.bind(this), 30);
+		}
+	}
+});

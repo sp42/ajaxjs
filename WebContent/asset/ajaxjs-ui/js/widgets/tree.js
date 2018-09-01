@@ -25,7 +25,7 @@
 		
 		// 生成树
 		makeTree : function (jsonArray) {
-			if(ajaxjs.ua.isWebkit) {
+			if(this.isWebkit) {
 				for (var i = 0; i < jsonArray.length; i++) {
 					jsonArray[i].oldIndex = i;
 				}
@@ -94,7 +94,7 @@
 		return null;
 	}
 	
-	var sortByPid = ajaxjs.ua.isWebkit ? function (a, b) {
+	var sortByPid = this.isWebkit ? function (a, b) {
 		// Chrome谷歌浏览器中js代码Array.sort排序的bug乱序解决办法 
 		// https://www.cnblogs.com/yzeng/p/3949182.html?utm_source=tuicool&utm_medium=referral
 //		return [a.a, a.b] > [b.a, b.b] ? 1:-1;

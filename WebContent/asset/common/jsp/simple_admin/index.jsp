@@ -18,7 +18,7 @@
 			<div class="rightTop_title">Welcome</div>
 			<div class="rightTop"></div>
 			<div class="closeBtn" onclick="hideSider(this);"></div>
-			<span class="aj-accordion-menu">
+			<span class="menu">
 				<aj-accordion-menu>
 			    	<%@include file="/asset/jsp/admin/admin-menu.jsp" %>
 			    </aj-accordion-menu>
@@ -49,7 +49,7 @@
 	    }
 
 	    // 初始化菜单
-	    new Vue({el: '.aj-accordion-menu'});
+	    new Vue({el: '.menu'});
 
 	    // 需要把链接配置属性  target="iframepage"
 	    ;(function () {

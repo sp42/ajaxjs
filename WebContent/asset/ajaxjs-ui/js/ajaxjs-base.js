@@ -104,24 +104,6 @@ Function.prototype.delegate = function() {
 	};
 }
 
-/*
- * -------------------------------------------------------- 
- * User Agent 浏览器检测
- * --------------------------------------------------------
- */
-ajaxjs.ua = (function() {
-	var ua = navigator.userAgent.toLowerCase();
-	if (/msie 8/.test(ua) || /msie 9/.test(ua))
-		alert('ie 版本太低（要求 ie >= 10）或者你处于 360 的兼容模式下，请切换到极速模式 Not support this browser!');
-
-	return {
-		isWebkit : /webkit/.test(ua),
-		isIOS : /ios/.test(ua),
-		isAndroid : /android/.test(ua),
-		isFirefox : /firefox/.test(ua)
-	};
-})();
-
 // 获取浏览器 url 参数
 ajaxjs.params = {
 	/**
@@ -449,31 +431,6 @@ ajaxjs.throttle.onEl_in_viewport = function(el, fn) {
 
 ajaxjs.throttle.onEl_in_viewport.actions = [];
 
-// ;(function(){
-// // 回到顶部
-// var timer = null;
-// var b = 0;//作为标志位，判断滚动事件的触发原因，是定时器触发还是其它人为操作
-// UserEvent2.onWinResizeFree(function(e) {
-// if (b != 1) clearInterval(timer);
-// b = 2;
-// }, 'scroll');
-//	
-// window.goTop = function () {
-// clearInterval(timer);
-// var iCur = speed = 0;
-//		
-// timer = setInterval(function() {
-// iCur = document.documentElement.scrollTop || document.body.scrollTop;
-// speed = Math.floor((0 - iCur) / 8);
-//			
-// if (iCur === 0)
-// clearInterval(timer);
-// else
-// document.documentElement.scrollTop = document.body.scrollTop = iCur + speed;
-// b = 1;
-// }, 30);
-// }
-// })();
 
 // https://github.com/jojoin/tppl/blob/gh-pages/tppl.js
 tppl = function(tpl, data){

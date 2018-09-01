@@ -16,8 +16,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		},
 		template : 
 			'<div class="modal hide" @click="close($event);">\
-				<div>\
-					{{showText}}\
+				<div><div v-html="showText"></div>\
 					<div>\
 						<button v-show="showOk"  @click="onBtnClk($event)" class="ok">确定</button>\
 						<button v-show="showYes" @click="onBtnClk($event)" class="yes">是</button>\
@@ -106,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		data : {
 			showText : '' // 显示的内容
 		},
-		template : '<div class="topMsg">{{showText}}</div>',
+		template : '<div class="topMsg" v-html="showText"></div>',
 		methods : {
 			show : function(text, cfg) {
 				this.showText = text;
