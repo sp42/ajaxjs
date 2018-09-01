@@ -2,6 +2,146 @@
 	列表用样式
 */
 
+.lightbox{
+	width:100%;height:100%;
+	top: 0;
+	left: 0;
+	position: fixed;
+	background-color: rgba(0,0,0,.5);
+	@zindex : 999999;
+	z-index:@zindex;
+	transition: opacity 500ms ease;
+	.public(){
+		cursor: pointer;
+		position: absolute;
+		z-index: @zindex + 2;
+		opacity: .5;
+		&:hover{
+			opacity: 1;
+		}
+		
+	}
+	.closeAction{
+		width:32px;
+		height:32px;
+		right: 0;
+		top: 0;
+		.public;
+		//.lightBox_closeBtn;
+	}
+	.nextItemAction{
+		width:100px;
+		height:100px;
+		right: 5px;
+		top: 45%;
+		.public;
+		//.lightBox_right;
+	}
+	.pervItemAction{
+		width:100px;
+		height:100px;
+		left: 5px;
+		top: 45%;
+		.public;
+		//.lightBox_left;
+	}
+	&>ul{
+		height: 100%;
+		z-index: @zindex + 1;
+	}
+	&>ul>li{
+		height: 100%;
+		position: relative;
+		&>img{
+			position:absolute;
+			top:0;
+			bottom:0;
+			left:0;
+			right:0;
+			margin:auto;
+			max-width: 95%;
+			max-height: 90%;
+			//.boxshadow(3px, 3px, 3px, rgba(0, 0, 0, .4));
+		}
+	}
+}
+.lightbox_Container{
+	.CarouselContainer;
+	.lightbox;
+}
+
+
+// 全屏幕的跑马灯图片展示器
+.fullScreenCarousel{
+	.x_carouselContainer;
+	width:100%;
+	top: 0;
+	left: 0;
+	position: fixed;
+	.x_carouselMover{
+		.x_carouselItem{
+			display: table-cell; 				// 为实现居中，采用 单元格布局
+			text-align: center;					// 水平居中
+			position: relative;
+			
+			img {
+				max-width: 95%;
+				max-height: 90%;
+				vertical-align: middle;			// 垂直居中
+			}
+			header{
+				position: absolute;
+				top: 0;
+				right:  0;
+				color:white;
+				height: 20px;
+				line-height: 20px;
+				width:100%;
+				text-align: left;
+				text-indent: .5em;
+				padding-bottom: 0px;
+				padding-right: 3px;
+				padding-top: 3px;
+				border-top: 1px solid #111;
+				background: -webkit-gradient(linear, center top, center bottom, from(rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 0)));
+
+				div{
+					float: right;
+					span{
+						//color:@baseColor;
+					}
+				}
+			}
+
+			footer {
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				text-align: left;	
+				color:white;
+				
+				line-height: 20px;
+				width:100%;
+				
+				font-size: .9em;
+				border-top: 1px solid black;
+				background-color: rgba(0,0,0,.5);
+				div{
+					border-top: 1px solid #333;
+					padding: 4px;
+					padding-bottom: 0;
+					padding-right: 2px;
+				}
+				a{
+					float: right;
+					//color:@baseColor;
+				}
+			}
+
+		}				
+	}
+}
+
 // 图文单列
 .column_1(){
     /*
