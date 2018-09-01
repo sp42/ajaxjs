@@ -14,8 +14,8 @@
 <body>
 	<section class="page-header">
 		<h1>AJAXJS UI</h1>
-		<h2 class="project-tagline">LESS, Widgets &amp;
-			Java Tags</h2>
+		<h2 class="project-tagline">Vue.js, Less.js &amp;
+			Clean Code</h2>
 	</section>
 
 	<section class="main-content">
@@ -92,15 +92,15 @@
 			<%@include file="include/css.jsp" %>
 	<%} else { %>	
 			<h4>Welcome!</h4>
-			<p>&nbsp;&nbsp;&nbsp;&nbsp;AJAXJS Framework 旨在打造一个极简风格的、全栈的、简单明了的  Web 框架——此 UI 库正是该框架的前端组件库部分。AJAXJS UI = vue.js + less.js + 原生组件
-			关于后台框架更多信息，可访问 <a href="https://framework.ajaxjs.com">AJAXJS Framework</a> 主页。</p>
+			<p>&nbsp;&nbsp;&nbsp;&nbsp;AJAXJS Framework 旨在打造一个极简风格的、全栈的、简单明了的  Web 框架——此 UI 库正是该框架的前端组件库部分。AJAXJS UI = vue.js + less.js + 原生组件。
+			而关于后台框架更多信息，可访问 <a href="https://framework.ajaxjs.com">AJAXJS Framework</a> 主页。</p>
 
-			<p>用法简介如下：</p>
+			<p>特点简介：</p>
 			<ul class="list">
-				<li>定义一空白 LESS 文件，导入所需的包。然后在这 LESS 文件定义或覆盖样式。</li>
-				<li>引入 js <a href="ajaxjs-base.js">ajaxjs-base.js</a> 和<a href="ajaxjs-ui.js"> ajaxjs-ui.js</a>，某些大型组件还要额外 js，参见各详细页面的介绍。</li>
-				<li>页面复制相关组件的 HTML，然后修改。</li>
-				<li>不直接提供代码在文档上了，大家可以 F12 看代码或者右键查看源代码。</li>
+				<li>鼓励绑定式语法，声明式编程， UI 还是推荐多使用标签，这点和 Vue.js 不谋而合。</li>
+				<li>组件化封装，灵活使用 mixins，避免冗余逻辑</li>
+				<li>没有复杂的配置，避免陷入前端复杂的工具深渊，仅仅通过 &lt;script src="vue.js"&gt; 使用</li>
+				<li>代码简洁清爽，思路清晰，逻辑简单</li>
 			</ul>
 			<p>支持浏览 IE10+/Android4+/iOS6+。</p>
 			<p><a href="https://gitee.com/sp42/ajaxjs">Git/SVN 源码</a> | <a href="http://blog.csdn.net/zhangxin09">作者博客</a> | QQ 群：<a href="https://shang.qq.com/wpa/qunwpa?idkey=3877893a4ed3a5f0be01e809e7ac120e346102bd550deb6692239bb42de38e22">3150067</a> </p>
