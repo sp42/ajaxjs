@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			showNo : false
 		},
 		template : 
-			'<div class="modal hide" @click="close($event);">\
+			'<div class="aj-modal hide" @click="close($event);">\
 				<div><div v-html="showText"></div>\
 					<div>\
 						<button v-show="showOk"  @click="onBtnClk($event)" class="ok">确定</button>\
@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		data : {
 			showText : '' // 显示的内容
 		},
-		template : '<div class="topMsg" v-html="showText"></div>',
+		template : '<div class="aj-topMsg" v-html="showText"></div>',
 		methods : {
 			show : function(text, cfg) {
 				this.showText = text;
@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // 浮層組件，通常要復用這個組件
 Vue.component('aj-layer', {
-	template : '<div class="modal hide" @click="close($event);"><div><slot></slot></div></div>',
+	template : '<div class="aj-modal hide" @click="close($event);"><div><slot></slot></div></div>',
 	methods : {
 		show : function(cfg) {
 			this.$el.classList.remove('hide');
