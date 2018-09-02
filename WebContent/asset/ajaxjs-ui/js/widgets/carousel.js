@@ -243,7 +243,7 @@ Vue.component('aj-banner', {
 		
 		showTitle : { 		// 是否显示下方的标题
 			type: Boolean,
-			default : true
+			default : false
 		},
 		
 		showDot : {			// 是否显示一点点，一般显示了标题就不显示点
