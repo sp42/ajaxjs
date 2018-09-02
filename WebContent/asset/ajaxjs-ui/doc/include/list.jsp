@@ -32,7 +32,7 @@
 	
 	
 	<h4>分页列表</h4>
-	<p>垂直 Tab 的内容区域应该设置 min-height；或者固定高。</p>
+	<p>支持 start/limt 的分页</p>
 	
 		<p>属性说明：</p>
 	<table class="ajaxjs-borderTable">

@@ -78,7 +78,7 @@ public class JsController implements IController {
 		String js = getOne(ajaxjs + "\\js\\ajaxjs-base.js");
 
 		js += action(ajaxjs + "\\js\\widgets", true);
-		js += getOne(ajaxjs + "\\js\\widgets\\admin\\admin.js");
+//		js += getOne(ajaxjs + "\\js\\widgets\\admin\\admin.js");
 
 		new FileUtil().setFilePath(target).setOverwrite(true).setContent(js).save().close();
 

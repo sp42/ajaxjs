@@ -55,6 +55,13 @@ aj._carousel = {
 			for(var  i = 0; i < len; i++) 
 				children[i].style.width = this.isMagic ? '50%' : tabWidth;
 			
+			// 如果有头部候选栏，也要设置
+			var headerUl = this.$el.$('header ul');
+			
+			if(headerUl)
+				for(var  i = 0; i < len; i++) 
+					headerUl.children[i].style.width = tabWidth;
+			
 			this.doHeight(this.selected);
 		}.bind(this), 500);
 		

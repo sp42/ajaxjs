@@ -55,125 +55,6 @@ args[i] = _arg.apply(scope || this, args);
 }
 return self.apply(scope || this, args);
 };
-};
-Function.prototype.after = function(composeFn, isForceCall, scope) {
-var self = this;
-return function() {
-var result = self.apply(scope || this, arguments);
-if (isForceCall) {
-return composeFn.call(this, result);
-}
-return result && (typeof result.pop != 'undefined') && (typeof result.pop != 'unknown') ? composeFn.apply(this, result) : composeFn.call(this, result);
-};
-}
-ajaxjs.ua = (function() {
-var ua = navigator.userAgent.toLowerCase();
-if (/msie 8/.test(ua) || /msie 9/.test(ua))
-alert('ie 版本太低（要求 ie >= 10）或者你处于 360 的兼容模式下，请切换到极速模式 Not support this browser!');
-return {
-isWebkit : /webkit/.test(ua),
-isIOS : /ios/.test(ua),
-isAndroid : /android/.test(ua),
-isFirefox : /firefox/.test(ua)
-};
-})();
-function tppl(tpl, data) {
-var fn = function(d) {
-var i, k = [], v = [];
-for (i in d) {
-k.push(i);
-v.push(d[i]);
-}
-;
-return (new Function(k, fn.$)).apply(d, v);
-};
-if (!fn.$) {
-var tpls = tpl.split('[:');
-fn.$ = "var $=''";
-for (var t = 0; t < tpls.length; t++) {
-var p = tpls[t].split(':]');
-if (t != 0) {
-fn.$ += '=' == p[0].charAt(0) ? "+(" + p[0].substr(1) + ")" : ";" + p[0].replace(/\r\n/g, '') + "$=$"
-}
-fn.$ += "+'" + p[p.length - 1].replace(/\'/g, "\\'").replace(/\r\n/g, '\\n').replace(/\n/g, '\\n').replace(/\r/g, '\\n') + "'";
-}
-fn.$ += ";return $;";
-}
-return data ? fn(data) : fn;
-}
-function Step() {
-var steps = Array.prototype.slice.call(arguments), pending, counter, results, lock;
-function next() {
-counter = pending = 0;
-if (steps.length === 0) {
-if (arguments[0])
-throw arguments[0];
-return;
-}
-var fn = steps.shift();
-results = [];
-try {
-lock = true;
-var result = fn.apply(next, arguments);
-} catch (e) {
-next(e);
-}
-if (counter > 0 && pending == 0) {
-next.apply(null, results);
-} else if (result !== undefined) {
-next(undefined, result);
-}
-lock = false;
-}
-next.parallel = function() {
-var index = 1 + counter++;
-pending++;
-return function() {
-pending--;
-if (arguments[0]) 
-results[0] = arguments[0];
-results[index] = arguments[1];
-if (!lock && pending === 0) 
-next.apply(null, results);
-};
-};
-next.group = function() {
-var localCallback = next.parallel();
-var counter = 0;
-var pending = 0;
-var result = [];
-var error = undefined;
-function check() {
-if (pending === 0) 
-localCallback(error, result);
-}
-process.nextTick(check); 
-return function() {
-var index = counter++;
-pending++;
-return function() {
-pending--;
-if (arguments[0]) 
-error = arguments[0];
-result[index] = arguments[1];
-if (!lock) 
-check();
-};
-};
-};
-next();
-}
-Step.fn = function StepFn() {
-var steps = Array.prototype.slice.call(arguments);
-return function() {
-var args = Array.prototype.slice.call(arguments);
-var toRun = [ function() {
-this.apply(null, args);
-} ].concat(steps);
-if (typeof args[args.length - 1] === 'function') 
-toRun.push(args.pop());
-Step.apply(null, toRun);
-}
 }
 ajaxjs.params = {
 json2url : function(json, appendUrl) {
@@ -389,7 +270,277 @@ fn();
 }, 1500);
 }
 ajaxjs.throttle.onEl_in_viewport.actions = [];
+tppl = function(tpl, data){
+var fn = function(d) {
+var i, k = [], v = [];
+for (i in d) {
+k.push(i);
+v.push(d[i]);
+};
+return (new Function(k, fn.$)).apply(d, v);
+};
+if(!fn.$){
+var tpls = tpl.split('[:');
+fn.$ = "var $=''";
+for(var t = 0;t < tpls.length;t++){
+var p = tpls[t].split(':]');
+if(t!=0){
+fn.$ += '='==p[0].charAt(0)
+? "+("+p[0].substr(1)+")"
+: ";"+p[0].replace(/\r\n/g, '')+"$=$"
+}
+fn.$ += "+'"+p[p.length-1].replace(/\'/g,"\\'").replace(/\r\n/g, '\\n').replace(/\n/g, '\\n').replace(/\r/g, '\\n')+"'";
+}
+fn.$ += ";return $;";
+}
+return data ? fn(data) : fn;
+}
+aj._carousel = {
+props : {
+isMagic : {	
+type : Boolean,
+default : false 
+},
+isUsePx : {
+type : Boolean,
+default : false 
+},
+autoHeight : {
+type : Boolean,
+default : false 
+},
+disableTabHeaderJump : {
+type : Boolean,
+default : false 
+}, 
+isGetCurrentHeight : {
+type : Boolean,
+default : true 
+},
+initItems : Array 
+},
+data : function() {
+return {
+selected : 0
+};
+},
+mounted: function() {
+this.mover = this.$el.$('div'); 
+var mover = this.mover, children = mover.children, len = children.length;
+setTimeout(function() {
+var stepWidth = this.setItemWidth();
+if(this.isMagic) 
+mover.style.width = this.isUsePx ? (stepWidth * 2) +'px' : '200%';
+else
+mover.style.width = this.isUsePx ? (stepWidth * len) +'px' : len + '00%';
+var tabWidth = this.isUsePx ? stepWidth + 'px' : (1 / len * 100).toFixed(5) + '%';
+for(var i = 0; i < len; i++) 
+children[i].style.width = this.isMagic ? '50%' : tabWidth;
+this.doHeight(this.selected);
+}.bind(this), 500);
+},
+methods : {
+setItemWidth : function() {
+this.stepWidth = this.stepWidth || this.mover.parentNode.clientWidth || window.innerWidth; 
+return this.stepWidth;
+},
+changeTab : function(index) {
+this.selected = index;
+this.go(index);
+},
+go : function(i) {
+var mover = this.mover, children = mover.children, len = children.length;
+this.doHeight(i);
+if(this.isMagic) {
+for(var p = 0; p < len; p++) {
+if(this.selected == p) {
+continue;
+}else if(i == p) {
+children[p].classList.remove('hide');
+}else {	
+children[p].classList.add('hide');
+}
+}
+var cssText = i > this.selected
+? 'translate3d({0}, 0px, 0px)'.replace('{0}', '-50%')
+: 'translate3d({0}, 0px, 0px)'.replace('{0}', '0%');
+mover.style.webkitTransition = '-webkit-transform 400ms linear';
+mover.style.webkitTransform = cssText;
+}else{
+var isWebkit = navigator.userAgent.toLowerCase().indexOf('webkit') != -1;
+var leftValue = this.isUsePx ? ('-' + (i * this.stepWidth) + 'px') : ('-' + (1 / len * 100 * i).toFixed(2) + '%');
+mover.style[this.isWebkit ? 'webkitTransform' : 'transform'] = 'translate3d({0}, 0px, 0px)'.replace('{0}', leftValue);
+}
+this.selected = i;
+this.$emit('carousel-item-switch', this, i, children[i]);
+},
+goPrevious : function() {
+var len = this.mover.children.length;
+this.selected--;
+if (this.selected < 0)
+this.selected = len - 1;
+this.go(this.selected); 
+},
+goNext : function() {
+var len = this.mover.children.length;
+this.selected++;
+if (this.selected == len)
+this.selected = 0; 
+this.go(this.selected);
+},
+onResize : function () {
+var stepWidth = this.mover.parentNode.clientWidth; 
+this.mover.style.width = this.isUsePx ? (stepWidth * this.len) +'px' : this.len + '00%';
+for(var i = 0; i < this.len; i++) 
+this.children[i].style.width = stepWidth + 'px';
+},
+doHeight: function(i) {
+if(this.isGetCurrentHeight) {
+var mover = this.mover, children = mover.children, len = children.length;
+for(var p = 0; p < len; p++) {
+if(i == p) {
+children[p].style.height = 'initial';	
+}else{
+children[p].style.height = '1px';	
+}
+}
+}
+},
+doAutoHeight : function (nextItem) {
+if(this.autoHeight) {
+var tabHeaderHeight = 0;
+if(this.tabHeader) 
+tabHeaderHeight = this.tabHeader.scrollHeight;
+this.el.style.height = (nextItem.scrollHeight + tabHeaderHeight + 50) + 'px'; 
+}
+},
+autoChangeTab: function(e) {
+var el = e.currentTarget;
+var children = el.parentNode.children;
+for(var i = 0, j = children.length; i < j; i++) {
+if(el == children[i]) {
+break;
+}
+}
+var holder = el.up(null, 'aj-carousel');
+var contentChild = holder.$('.content').children;
+children[this.selected].classList.remove('active');
+contentChild[this.selected].classList.remove('active');
+this.selected = i;
+children[i].classList.add('active');
+contentChild[i].classList.add('active');
+this.go(i);
+}
+}
+};
+Vue.component('aj-carousel', {
+mixins: [aj._carousel],
+template : 
+'<div class="aj-carousel aj-carousel-tab">\
+<header><ul>\
+<li v-for="(item, index) in items" :class="{\'active\': index === selected}" @click="changeTab(index);">{{item.name}}</li>\
+</ul></header>\
+<div>\
+<div v-for="(item, index) in items" :class="{\'active\': index === selected}" v-html="item.content"></div>\
+</div>\
+</div>',
+data : function() {
+return {
+items : this.initItems || [
+{name : '杜甫：望岳', content : '岱宗夫如何，齊魯青未了。<br>\
+造化鐘神秀，陰陽割昏曉。<br>\
+蕩胸生層云，決眥入歸鳥，<br>\
+會當凌絕頂，一覽眾山小。'
+},
+{name : '资质证照', content : '之所以如此，端在于中国传统中存在着发达的契约。予谓不信，可看看早年由福建师范大学内部印行的两册本《明清福建经济契约文书选集》，中国社会科学出版社出版的《自贡盐业契约档案选集》，花山文艺出版社出版的共二十册的《徽州千年契约文书》;再看看近些年由安徽师范大学出版社出版的十卷本的《千年徽州契约文书集萃》，广西师范大学出版社出版的四辑共四十册《徽州文书》、三辑共三十册的《清水江文书》，民族出版社出版的多卷本《贵州清水江流域明清契约文书》，凤凰出版社出版的《敦煌契约文书辑校》，天津古籍出版社出版的《清代宁波契约文书辑校》，浙江大学出版社出版的《清代浙东契约文书辑选》……不难发现，中国传统契约文书的整理出版，完全可称为如雨后春笋般在迅速成长!'},
+{name : '资质证照', content : '笔者出于个人兴趣，在关注这些已经整理出版的、卷帙浩繁的契约文献的同时，也游走各地，或亲自搜集各类契约文书，或到一些地方档案馆查看其业已编辑成册、内部印行的传统契约文书，如在台湾宜兰、高雄，山东青岛、威海，贵州锦屏、从江等地档案机构或民间都见到过相关契约文献。记忆尤深的一次，是我和几位学生共游山东浮来山。在一处值班室里，居然发现有人以清代契约文本粘糊墙壁!足见只要我们稍加留意，在这个文明发展历经数千年的国度，不时可以发现一些令人称心的古代契约文献。'}
+]
+};
+}
+});
+Vue.component('aj-banner', {
+mixins: [aj._carousel],
+props : {
+isUsePx : {
+default: true
+},
+isGetCurrentHeight : {
+default: false
+},
+autoLoop : {
+type : Number,
+default : 4000 
+},
+showTitle : { 
+type: Boolean,
+default : false
+},
+showDot : {	
+type : Boolean,
+default : true
+}
+},
+template : 
+'<div class="aj-carousel aj-banner">\
+<header><ul v-show="showTitle">\
+<li v-for="(item, index) in items" :class="{\'hide\': index !== selected}">{{item.name}}</li>\
+</ul><ol v-show="showDot">\
+<li v-for="n in items.length" :class="{\'active\': (n - 1) === selected}" @click="changeTab(n - 1);"></li></ol></header>\
+<div>\
+<div v-for="(item, index) in items" :class="{\'active\': index === selected}" v-html="getContent(item.content, item.href)"></div>\
+</div>\
+</div>',
+data : function() {
+return {
+items : this.initItems || [
+{name : '杜甫：望岳', content : '<img src="../images/20150826162352938.jpg" />', href : 'http://qq.com'},
+{name : '资质证照', content : '<img src="../images/20150906125934797.jpg" />', href : 'javascript:alert(9);'},
+{name : '资质证照', content : '<img src="../images/20150906113629683.jpg" />', href: '#'}
+]
+}; 
+},
+mounted: function() {
+this.loop();
+},
+methods:{
+loop : function() {
+this.loopTimer = window.setInterval(this.goNext.bind(this), this.autoLoop);
+},
+getContent : function(content, href) {
+if(!href)
+return content;
+else
+return '<a href="' + href + '">' + content + '</a>';
+}
+}
+});
 
+Vue.component('aj-page-captcha', {
+props : {
+imgSrc : {
+type: String, 
+required: false,
+},
+fieldName : {	
+type: String,
+required: false,
+default : 'captcha'
+}
+},
+template : 
+'<table class="aj-page-captcha"><tr>\
+<td><input type="text" :name="fieldName" placeholder="输入右侧验证码" data-regexp="integer" required /></td>\
+<td style="vertical-align: top;">\
+<img :src="imgSrc || ajResources.ctx + \'/Captcha/\'" @click="onClk($event);" title="点击刷新图片" />\
+</td>\
+</tr></table>',
+methods : {
+onClk : function(e) {
+var img = e.target;
+img.src = img.src.replace(/\?\d+$/, '') + '?' + new Date().valueOf();
+}
+}
+});
 Vue.component('aj-form-calendar', {
 data: function() {
 return {
@@ -521,17 +672,32 @@ required: true
 fieldValue : {
 type: String,
 required: false
-}
+},
+positionFixed : Boolean 
 },
 template : 
-'<div class="aj-form-calendar-input">\
-<div class="icon"><div class="menu"></div></div>\
+'<div class="aj-form-calendar-input" @mouseover="onMouseOver($event)">\
+<div class="icon" ><div class="menu"></div></div>\
 <input placeholder="请输入日期" :name="fieldName" :value="date" type="text" />\
 <aj-form-calendar @pick-date="recEvent"></aj-form-calendar>\
 </div>',
+mounted : function() {
+if(this.positionFixed) {
+this.$el.$('.aj-form-calendar').classList.add('positionFixed');
+}
+},
 methods : {
 recEvent: function(date) {
 this.date = date;
+},
+onMouseOver : function(e) {
+if(this.positionFixed) {
+var el = e.currentTarget;
+var b = el.getBoundingClientRect();
+var c = this.$el.$('.aj-form-calendar');
+c.style.top = (b.top + el.clientHeight - 0) + 'px';
+c.style.left = ((b.left - 0) + 0) + 'px';
+}
 }
 }
 });
@@ -709,65 +875,45 @@ return h;
 }
 }
 });
-ajaxjs.formValid = function FormValid(formEl, cfg) {
-this.cfg = cfg;
-formEl = typeof formEl == 'string' ? document.querySelector(formEl) : formEl;
-var items = formEl.querySelectorAll('input[type=text], input[type=password], input[type=number]');
-for(var i = 0 , j = items.length; i < j; i++) {
-var el = items[i];
-el.oninvalid = this.onInvalid.bind(this);
+aj._list = {
+props : {
+apiUrl : {	
+type : String,
+required : true
 }
+},
+data : function() {
+return {
+result : [],	
+baseParam: {}	
+};
 }
-ajaxjs.formValid.prototype.onInvalid = function (e) {
-e.preventDefault();
-var el = e.target;
-el.style.borderColor = 'red';
-var msg = el.parentNode.querySelector('.errMsg');
-if(!msg) {
-msg = document.createElement('div');
-msg.className = 'errMsg';
-var b = el.getBoundingClientRect();
-if(this.cfg && this.cfg.alignRight) { 
-msg.style.top = (b.top + 5) + 'px';
-var moveLeft = 0;
-if(el.dataset.erruileft)
-moveLeft = Number(el.dataset.erruileft);
-msg.style.left = (b.left + el.clientWidth + moveLeft + 10) + 'px';
-} else {
-msg.style.left = b.left + 'px';
-msg.style.top = (b.top + 28) + 'px';
+};
+Vue.component('aj-simple-list', {
+mixins: [aj._list],
+template : '<ul class="aj-simple-list"><li v-for="(item, index) in result">\
+<slot v-bind="item">\
+<a href="#" @click="show(item.id, index, $event)" :id="item.id">{{item.name}}</a>\
+</slot>\
+</li></ul>',
+mounted : function() {
+ajaxjs.xhr.get(this.apiUrl, function(json) {
+aj.apply(this, json);
+}.bind(this), this.baseParam);
 }
-el.insertAfter(msg);
-}
-var m;
-if(el.validity.patternMismatch)
-m = '该内容格式不正确';
-if(el.validity.valueMissing)
-m = '该内容不可为空';
-msg.innerHTML = m;
-setTimeout(function() {
-msg.die();
-el.style.borderColor = '#abadb3';
-}, 3000);
-}
-
+});
 Vue.component('aj-page-list', {
+mixins: [aj._list],
 data : function() {
 return {
 pageSize : this.initPageSize,
 total : 0,
 totalPage :0,
 pageStart: 0,
-currentPage : 0,
-result : [],
-baseParam: {}
+currentPage : 0
 };
 },
 props : {
-apiUrl : {	
-type : String,
-required : true
-},
 initPageSize : {
 type : Number,
 required : false,
@@ -803,7 +949,7 @@ this.count();
 limit : this.pageSize
 });
 },
-created : function(){
+created : function() {
 this.BUS.$on('base-param-change', this.onBaseParamChange.bind(this));
 },
 methods : {
@@ -849,9 +995,114 @@ this.ajaxGet();
 }
 }
 });
+var ScrollSpy = function(cfg) {
+var isScrollInElement = !!(cfg && cfg.scrollInElement);
+var handleScroll = function () {
+var currentViewPosition;
+if(isScrollInElement) {
+currentViewPosition = cfg.scrollInElement.scrollTop + window.innerHeight;
+}else {
+currentViewPosition = document.documentElement.scrollTop ? document.documentElement.scrollTop: document.body.scrollTop;
+}
+for (var i in elements) {
+var element = elements[i], 
+el = element.domElement,
+elementPosition = getPositionOfElement(el);
+console.log(currentViewPosition + ':' + elementPosition)
+var usableViewPosition = currentViewPosition;
+if (element.isInViewPort == false) 
+usableViewPosition -= el.clientHeight;
+if (usableViewPosition < elementPosition) {
+this.onScrollSpyOutOfSight && this.onScrollSpyOutOfSight(el);
+element.isInViewPort = false;
+} else if (element.isInViewPort == false) {
+this.onScrollSpyBackInSight && this.onScrollSpyBackInSight(el);
+element.isInViewPort = true;
+}
+}
+}.bind(this);
+if (document.addEventListener) {
+(cfg && cfg.scrollInElement || document).addEventListener("touchmove", handleScroll, false);
+(cfg && cfg.scrollInElement || document).addEventListener("scroll", handleScroll, false);
+} else if (window.attachEvent) {
+window.attachEvent("onscroll", handleScroll);
+}
+var elements = {};
+this.spyOn = function(domElement) {
+var element = {};
+element['domElement'] = domElement;
+element['isInViewPort'] = true;
+elements[domElement.id] = element;
+}
+if(cfg && cfg.spyOn) 
+this.spyOn(cfg.spyOn);
+function getPositionOfElement(domElement) {
+var pos = 0;
+while (domElement != null) {
+pos += domElement.offsetTop;
+domElement = domElement.offsetParent;
+}
+return pos;
+}
+}
+aj._simple_marquee_text = {
+props : {
+interval : {
+type : Number, 
+default : 500
+},
+canstop :{
+type : Boolean, 
+default : true
+}
+},
+mounted : function() {
+if (this.canstop) {
+this.$el.onmouseover = this.clearTimer.bind(this);
+this.$el.onmouseout = this.start.bind(this);
+}
+},
+methods : {
+start : function() {
+this.$timerId = window.setInterval(this.scroll, this.interval);
+},
+clearTimer : function() {
+this.$timerId && window.clearInterval(this.$timerId);
+}
+}
+};
+Vue.component('aj-super-simple-marquee-text', {
+mixins : [aj._simple_marquee_text],
+template : '<div><slot>这是一段滚动的文字；这是一段滚动的文字；这是一段滚动的文字</slot></div>',
+mounted : function() {
+this.$arr = this.$el.innerHTML.split("");
+this.start();
+},
+methods : {
+scroll : function () {
+this.$arr.push(this.$arr.shift());
+this.$el.innerHTML = this.$arr.join("");
+}
+}
+});
+Vue.component('aj-simple-marquee-text', {
+mixins : [aj._simple_marquee_text],
+template : '<ol><li>11111111111</li><li>22222222222</li><li>33333333333</li><li>44444444444</li><li>55555555555</li></ol>',
+mounted : function() {
+this.start();
+},
+methods : {
+scroll : function () {
+var lastEl = this.$el.firstChild;
+while (lastEl.nodeType != 1)
+lastEl = lastEl.nextSibling;
+this.$el.appendChild(this.$el.removeChild(lastEl)); 
+}
+}
+});
 
 Vue.component('aj-accordion-menu', {
-template : '<ul class="leftSidebar" @click="onClk($event);"><slot></slot></ul>',
+template : '<ul class="aj-accordion-menu" @click="onClk($event);"><slot></slot></ul>',
 methods : {
 onClk : function (e) {
 this.children = this.$el.children;
@@ -913,7 +1164,7 @@ default : 50
 }
 },
 template : 
-'<div class="contentPanel" :style="\'height:\' + (expended ? openHeight : closeHeight) + \'px;\'">\
+'<div class="aj-expander" :style="\'height:\' + (expended ? openHeight : closeHeight) + \'px;\'">\
 <div :class="expended ? \'closeBtn\' : \'openBtn\'" @click="expended = !expended;"></div>\
 <slot></slot>\
 </div>'
@@ -931,9 +1182,8 @@ showYes : false,
 showNo : false
 },
 template : 
-'<div class="modal hide" @click="close($event);">\
-<div>\
-{{showText}}\
+'<div class="aj-modal hide" @click="close($event);">\
+<div><div v-html="showText"></div>\
 <div>\
 <button v-show="showOk" @click="onBtnClk($event)" class="ok">确定</button>\
 <button v-show="showYes" @click="onBtnClk($event)" class="yes">是</button>\
@@ -1002,7 +1252,7 @@ el : '.msgHolder',
 data : {
 showText : '' 
 },
-template : '<div class="topMsg">{{showText}}</div>',
+template : '<div class="aj-topMsg" v-html="showText"></div>',
 methods : {
 show : function(text, cfg) {
 this.showText = text;
@@ -1021,7 +1271,7 @@ cfg && cfg.afterClose && cfg.afterClose(div, this);
 });
 });
 Vue.component('aj-layer', {
-template : '<div class="modal hide" @click="close($event);"><div><slot></slot></div></div>',
+template : '<div class="aj-modal hide" @click="close($event);"><div><slot></slot></div></div>',
 methods : {
 show : function(cfg) {
 this.$el.classList.remove('hide');
@@ -1041,32 +1291,6 @@ document.onreadystatechange = function () {
 if(document.readyState === "complete") {
 aj(".aj-fullscreen-loading").classList.add('fadeOut');
 }
-}
-}
-});
-Vue.component('aj-page-captcha', {
-props : {
-imgSrc : {
-type: String, 
-required: true,
-},
-fieldName : {	
-type: String,
-required: false,
-default : 'captcha'
-}
-},
-template : 
-'<table><tr>\
-<td><input type="text" :name="fieldName" placeholder="输入右侧验证码" data-regexp="integer" required /></td>\
-<td style="vertical-align: top;">\
-<img :src="imgSrc" @click="onClk($event);" title="点击刷新图片" />\
-</td>\
-</tr></table>',
-methods : {
-onClk : function(e) {
-var img = e.target;
-img.src = img.src.replace(/\?\d+$/, '') + '?' + new Date().valueOf();
 }
 }
 });
@@ -1229,6 +1453,58 @@ created: function() {
 document.body.appendChild(document.createElement('script')).src = this.$props.jsurl;
 }
 });
+Vue.component('aj-simple-tab', {
+template : 
+'<div :class="isVertical ? \'aj-simple-tab-vertical\' : \'aj-simple-tab-horizontal\' ">\
+<ul>\
+<li v-for="(item, index) in items" :class="{\'selected\': index === selected}" @click="changeTab(index);">{{item.name}}</li>\
+</ul>\
+<div class="content">\
+<div v-for="(item, index) in items" :class="{\'selected\': index === selected}" v-html="item.content"></div>\
+</div>\
+</div>',
+props: {
+isVertical : Boolean, 
+initItems : Array
+},
+data : function() {
+return {
+selected : 0,
+items : this.initItems || [
+{name : '杜甫：望岳', content : '岱宗夫如何，齊魯青未了。<br>\
+造化鐘神秀，陰陽割昏曉。<br>\
+蕩胸生層云，決眥入歸鳥，<br>\
+會當凌絕頂，一覽眾山小。'
+},
+{name : '资质证照', content : '之所以如此，端在于中国传统中存在着发达的契约。予谓不信，可看看早年由福建师范大学内部印行的两册本《明清福建经济契约文书选集》，中国社会科学出版社出版的《自贡盐业契约档案选集》，花山文艺出版社出版的共二十册的《徽州千年契约文书》;再看看近些年由安徽师范大学出版社出版的十卷本的《千年徽州契约文书集萃》，广西师范大学出版社出版的四辑共四十册《徽州文书》、三辑共三十册的《清水江文书》，民族出版社出版的多卷本《贵州清水江流域明清契约文书》，凤凰出版社出版的《敦煌契约文书辑校》，天津古籍出版社出版的《清代宁波契约文书辑校》，浙江大学出版社出版的《清代浙东契约文书辑选》……不难发现，中国传统契约文书的整理出版，完全可称为如雨后春笋般在迅速成长!'},
+{name : '资质证照', content : '笔者出于个人兴趣，在关注这些已经整理出版的、卷帙浩繁的契约文献的同时，也游走各地，或亲自搜集各类契约文书，或到一些地方档案馆查看其业已编辑成册、内部印行的传统契约文书，如在台湾宜兰、高雄，山东青岛、威海，贵州锦屏、从江等地档案机构或民间都见到过相关契约文献。记忆尤深的一次，是我和几位学生共游山东浮来山。在一处值班室里，居然发现有人以清代契约文本粘糊墙壁!足见只要我们稍加留意，在这个文明发展历经数千年的国度，不时可以发现一些令人称心的古代契约文献。'}
+]
+};
+},
+methods : {
+changeTab : function(index) {
+this.selected = index;
+}
+}
+});
+Vue.component('aj-back-top', {
+template : 
+'<a href="###" @click="go">回到顶部</a>',
+methods : {
+go : function() {
+this.$timerId && window.clearInterval(this.$timerId);
+var top = speed = 0;
+this.$timerId = window.setInterval(function() {
+top = document.documentElement.scrollTop || document.body.scrollTop;
+speed = Math.floor((0 - top) / 8);
+if (top === 0)
+clearInterval(this.$timerId);
+else
+document.documentElement.scrollTop = document.body.scrollTop = top + speed;
+}.bind(this), 30);
+}
+}
+});
 
 ;(function() {
 ajaxjs.tree = function() {
@@ -1240,12 +1516,11 @@ this.stack = [];
 this.tree = {};
 },
 makeTree : function (jsonArray) {
-if(ajaxjs.ua.isWebkit) {
+if(this.isWebkit) {
 for (var i = 0; i < jsonArray.length; i++) {
 jsonArray[i].oldIndex = i;
 }
 }
-jsonArray.sort(sortByPid);
 for (var i = 0, j = jsonArray.length; i < j; i++) {
 var n = jsonArray[i];
 var parentNode = findParent(this.tree, n.pid);
@@ -1295,8 +1570,8 @@ return result;
 }
 return null;
 }
-var sortByPid = ajaxjs.ua.isWebkit ? function (a, b) {
-return [a.a, a.b] > [b.a, b.b] ? 1:-1;
+var sortByPid = this.isWebkit ? function (a, b) {
+return b.v - a.v || b.oldIndex - a.oldIndex; 
 } : function (a, b) {
 return a.pid > b.pid;
 }
@@ -1609,93 +1884,3 @@ this.$children[0].show();
 }
 }
 });
-
-Vue.component('ajaxjs-admin-header', {
-props : {
-isCreate : Boolean,	
-uiName : String,	
-infoId : {	
-type: Number,
-required: false
-}
-},
-template : 
-'<header class="ajaxjs-admin-header">\
-<div>\
-<slot name="btns"></slot>\
-<a href="#" target="_blank"><img width="12" src="data:image/gif;base64,R0lGODlhEAAQAIABAAAAAP///yH5BAEAAAEALAAAAAAQABAAAAImjG+gq+je3gOBWURrlvVEuWlcKE4T2Xkql6zshkLuOIO1mVj6VgAAOw==" /> 新窗口打开</a>\
-</div>\
-<fieldset>\
-<legend><slot name="title">{{isCreate ? "新建":"编辑"}}{{uiName}} ：<span v-if="infoId">No.{{infoId}}</span></slot></legend>\
-</fieldset>\
-</header>'
-})
-Vue.component('ajaxjs-admin-info-btns', {
-props : {
-isCreate : Boolean 
-},
-template : 
-'<div class="ajaxjs-admin-info-btns">\
-<button><img :src="ajResources.commonAsset + \'/icon/save.gif\'" /> {{isCreate ? "新建":"编辑"}}</button>\
-<button onclick="this.up(\'form\').reset();return false;">复 位</button>\
-<button v-if="!isCreate" v-on:click.prevent="del()">\
-<img :src="ajResources.commonAsset + \'/icon/delete.gif\'" /> 删 除\
-</button><slot></slot>\
-</div>',
-methods : {
-del : function () {
-if (confirm('确定删除？'))
-ajaxjs.xhr.dele('.', function(json) {
-if (json && json.isOk) {
-alert(json.msg);
-location.assign('../list/');
-}
-});
-}
-}
-});
-Vue.component('aj-admin-filter-panel', {
-props : {
-label : {
-type : String,
-required : false
-},
-catelogId :{	
-type: Number,
-required: true
-},
-selectedCatelogId :{ 
-type: Number,
-required: false
-}
-},
-template: 
-'<div class="aj-admin-filter-panel">\
-<form action="?" method="GET">\
-<input type="hidden" name="searchField" value="content" />\
-<input type="text" name="searchValue" placeholder="请输入正文之关键字" style="float: inherit;" class="ajaxjs-inputField" />\
-<button style="margin-top: 0;" class="ajaxjs-btn">搜索</button>\
-</form>\
-{{label||\'分类\'}}：<aj-tree-catelog-select :is-auto-jump="true" :catelog-id="catelogId" :selected-catelog-id="selectedCatelogId"></aj-tree-catelog-select>\
-</div>'
-});
-aj.admin = {
-del : function(id, title) {
-if (confirm('请确定删除记录：\n' + title + ' ？')) {
-ajaxjs.xhr.dele('../' + id + '/', function(json) {
-if (json.isOk) {
-alert('删除成功！');
-location.reload();
-}
-});
-}
-},
-setStatus : function(id, status) {
-ajaxjs.xhr.post('../setStatus/' + id + '/', function(json) {
-if (json.isOk) {
-}
-}, {
-status : status
-});
-}
-};

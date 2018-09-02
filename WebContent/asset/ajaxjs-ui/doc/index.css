@@ -21,7 +21,7 @@ a {
 }
 
 a:visited {
-    color: inherit;
+    color: gray!important;
 }
 
 h1 {
