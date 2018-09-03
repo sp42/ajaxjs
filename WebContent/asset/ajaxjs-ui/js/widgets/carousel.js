@@ -39,7 +39,8 @@ aj._carousel = {
 	},
 	
 	mounted: function() {
-		this.mover = this.$el.$('div'); 
+		
+		this.mover = this.$el.$('div.content'); 
 		var mover = this.mover, children = mover.children, len = children.length;
 		
 		setTimeout(function() {
@@ -51,6 +52,8 @@ aj._carousel = {
 				mover.style.width = this.isUsePx ? (stepWidth * len) +'px' : len + '00%';
 			
 			var tabWidth = this.isUsePx ? stepWidth + 'px' : (1 / len * 100).toFixed(5) + '%';// 分配  tab 宽度
+			this.tabWidth = tabWidth;
+			
 			
 			for(var  i = 0; i < len; i++) 
 				children[i].style.width = this.isMagic ? '50%' : tabWidth;
@@ -63,7 +66,7 @@ aj._carousel = {
 					headerUl.children[i].style.width = tabWidth;
 			
 			this.doHeight(this.selected);
-		}.bind(this), 500);
+		}.bind(this), 400);
 		
 		// 登记 resize 事件，以便 resize 容器的时候调整大小。
 		// 使用 isUsePx = true 的好处是不用登记 resize 事件
@@ -121,9 +124,8 @@ aj._carousel = {
 // mover.style.left = this.isUsePx ? ('-' + (i * this.stepWidth) + 'px') : ('-'+ i + '00%');
 			}
 			
-			this.selected = i;
-			
 			this.$emit('carousel-item-switch', this, i, children[i]);
+			this.selected = i;
 		},
 		
 	    // 跳到前一帧。
@@ -264,7 +266,7 @@ Vue.component('aj-banner', {
 				<li v-for="(item, index) in items" :class="{\'hide\': index !== selected}">{{item.name}}</li>\
 			</ul><ol v-show="showDot">\
 					<li v-for="n in items.length" :class="{\'active\': (n - 1) === selected}" @click="changeTab(n - 1);"></li></ol></header>\
-			<div>\
+			<div class="content">\
 				<div v-for="(item, index) in items" :class="{\'active\': index === selected}" v-html="getContent(item.content, item.href)"></div>\
 			</div>\
 		</div>',

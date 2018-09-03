@@ -22,32 +22,6 @@
 	}
 }
 
-.aj-carousel-tab_style_1 {
-	border: 1px solid gray;
-	header li {
-		border-bottom: 1px solid gray;
-		&.active {
-			border-bottom: 0;
-		}
-	}
-}
-
-.aj-carousel-tab_style_2 {
-	& > div > div {
-		background-color: #E7E7E7;
-	}
-
-	header li {
-		border-top: 3px solid transparent;
-		&.active {
-			border-color: #0084C9 #9A9A9A #9A9A9A;
-			border-top-color: #0084C9;
-			color: #0084C9;
-			background-color: #E7E7E7;
-		}
-	}
-}
-
 .aj-carousel {
 	.aj-carousel-base;
 	header li {
@@ -56,7 +30,7 @@
 
 	margin: 0 auto;
 	width: 100%;
-	max-width: 500px;
+	max-width: 700px;
 	& > div > div {
 		overflow: hidden;
 		padding: 10px;
@@ -64,14 +38,25 @@
 	}
 
 	&.aj-carousel-tab {
-		//.aj-carousel-tab_style_2;
+		& > div > div {
+			background-color: #E7E7E7;
+		}
+	
+		header li {
+			border-top: 3px solid transparent;
+			&.active {
+				border-color: #0084C9 #9A9A9A #9A9A9A;
+				border-top-color: #0084C9;
+				color: #0084C9;
+				background-color: #E7E7E7;
+			}
+		}
 	}
 
 	&.aj-banner {
 		position: relative;
 		overflow: hidden;
 		min-height: 140px;
-		max-height: 260px;
 		& > div > div {
 			padding: 0;
 			img {
@@ -135,6 +120,6 @@
 
 @media screen and (min-width: 480px) {
 	.aj-banner {
-		max-height: 280px;
+//		max-height: 280px;
 	}
 }

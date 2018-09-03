@@ -107,8 +107,9 @@
 <!-- 			<img src="head.jpg" width="350" style="margin: 0 auto;display: block;" /> -->
 			<p>Apache License Version--2.0. 免费使用、修改，引用请保留头注释。</p>
 			
-			<p>推荐项目：极致性能的 JS 模板引擎 <a href="https://github.com/jojoin/tppl" target="_blank">TPPL</a>；
-			简易异步流程控制器 <a href="https://github.com/creationix/step" target="_blank">Step.js</a>；早期大神 <a href="http://cloudgamer.cnblogs.com/" target="_blank">cloudgamer</a></p>
+			<p>推荐项目：极致性能的 JS 模板引擎 <a href="https://github.com/jojoin/tppl" target="_blank">TPPL</a> | 
+			简易异步流程控制器 <a href="https://github.com/creationix/step" target="_blank">Step.js</a>| 早期大神 <a href="http://cloudgamer.cnblogs.com/" target="_blank">cloudgamer</a> |  
+			<a href="http://bluegriffon.org/" target="_blank">BlueGriffon HTML Editor</a> </p>
 
 			
 	<%} %>	

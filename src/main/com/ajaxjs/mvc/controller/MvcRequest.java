@@ -58,6 +58,22 @@ public class MvcRequest extends HttpServletRequestWrapper {
 		} catch (UnsupportedEncodingException e) {
 		}
 	}
+	
+	/**
+	 * 获取必填的参数
+	 * @param name 參數名称
+	 * @return 参数值
+	 */
+	public String getRequiredParameter(String name) {
+		if(name == null)
+			throw new NullPointerException("缺少参数名称");
+		
+		String value = getParameter(name);
+		if (StringUtil.isEmptyString(value)) 
+			throw new IllegalArgumentException("缺少密码参数！");
+		
+		return value;
+	}
 
 	/**
 	 * 获取原请求的 uri，而非模版所在的 uri
