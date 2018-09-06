@@ -1,6 +1,7 @@
 package test.com.ajaxjs.mvc.filter;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -15,7 +16,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.ajaxjs.mvc.filter.AesFilter;
-import com.ajaxjs.mvc.filter.CaptchaFilter;
 import com.ajaxjs.simpleApp.CaptchaController;
 import com.ajaxjs.web.MockWeb;
 
