@@ -203,7 +203,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 
 		prepareData(model);
 
-		PageResult<T> pageResult = getService().findPagedList(getParam(start, limit));
+		PageResult<T> pageResult = getService().findPagedList(start, limit);
 		model.put("PageResult", pageResult);
 
 		return null;
@@ -223,7 +223,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 
 		prepareData(model);
 
-		PageResult<T> pageResult = getService().findPagedList(getParam(start, limit));
+		PageResult<T> pageResult = getService().findPagedList(start, limit);
 		model.put("PageResult", pageResult);
 
 		return outputJson(pageResult, model);
@@ -272,17 +272,12 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	}
 
 	/**
-	 * 获取分页的起始、limit 参数
 	 * 
-	 * @param start
-	 * @param limit
 	 * @return
 	 */
-	public static QueryParams getParam(int start, int limit) {
+	public static QueryParams getParam() {
 		HttpServletRequest request = MvcRequest.getHttpServletRequest();
-		QueryParams param = new QueryParams(start, limit, request.getParameterMap());
-
-		return param;
+		return new QueryParams(request.getParameterMap());
 	}
 
 	/**

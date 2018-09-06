@@ -38,15 +38,11 @@ public interface NewsDao extends IDao<News, Long> {
 	@Override
 	public News findById(Long id);
 
-	@Select("SELECT COUNT(*) AS Total FROM " + tableName)
-	@Override
-	public int count();
-
 	@Select(value = "SELECT * FROM news LIMIT ?, ?")
 	public List<News> findList(int start, int limit);
 
 	@Select(value = "SELECT * FROM news")
-	public PageResult<News> findPagedList(QueryParams params);
+	public PageResult<News> findPagedList(QueryParams params, int start, int limit);
 
 	@Select("SELECT * FROM news ORDER BY createDate LIMIT 0, 10")
 	public List<News> findTop10News();

@@ -70,13 +70,13 @@ public class NewsServiceImpl implements NewsService {
 	}
 
 	@Override
-	public PageResult<News> findPagedList(QueryParams params) {
-		return dao.findPagedList(params);
+	public PageResult<News> findPagedList(QueryParams params, int start, int limit) {
+		return dao.findPagedList(params, start, limit);
 	}
 
 	@Override
 	public PageResult<News> findPagedList(int start, int limit) throws ServiceException {
-		return findPagedList(new QueryParams(start, limit));
+		return findPagedList(start, limit);
 	}
 
 }
