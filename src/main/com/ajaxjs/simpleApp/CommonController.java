@@ -231,14 +231,14 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 
 	@SuppressWarnings("unchecked")
 	public String outputJson(PageResult<T> pageResult, ModelAndView model) {
-		if (pageResult != null && pageResult.getRows() != null) {
+		if (pageResult != null && pageResult != null) {
 			String jsonStr;
 
-			if (pageResult.getRows().get(0) instanceof Map) { // Map 类型的输出
-				List<Map<String, Object>> list = (List<Map<String, Object>>) pageResult.getRows();
+			if (pageResult.get(0) instanceof Map) { // Map 类型的输出
+				List<Map<String, Object>> list = (List<Map<String, Object>>) pageResult;
 				jsonStr = JsonHelper.stringifyListMap(list);
 			} else { // Bean
-				jsonStr = BeanUtil.listToJson((List<Object>) pageResult.getRows());
+				jsonStr = BeanUtil.listToJson((List<Object>) pageResult);
 			}
 
 			model.put("MapOutput", jsonStr);
