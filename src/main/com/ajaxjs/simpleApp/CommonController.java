@@ -51,8 +51,7 @@ import com.ajaxjs.web.UploadFileInfo;
  * @param <ID> ID 类型，可以是 INTEGER/LONG/String
  * @param <S> 业务类型
  */
-public abstract class CommonController<T, ID extends Serializable, S extends IService<T, ID>>
-		implements IController, Constant {
+public abstract class CommonController<T, ID extends Serializable, S extends IService<T, ID>> implements IController, Constant {
 	private static final LogHelper LOGGER = LogHelper.getLog(CommonController.class);
 
 	/**
@@ -93,7 +92,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	 * 创建实体
 	 * 
 	 * @param entity 实体
-	 * @param model  页面 Model 模型
+	 * @param model 页面 Model 模型
 	 * @return JSON 响应
 	 * @throws ServiceException
 	 */
@@ -113,9 +112,9 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	/**
 	 * 修改实体
 	 * 
-	 * @param id     实体 ID
+	 * @param id 实体 ID
 	 * @param entity 实体
-	 * @param model  页面 Model 模型
+	 * @param model 页面 Model 模型
 	 * @return JSON 响应
 	 * @throws ServiceException
 	 */
@@ -143,7 +142,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	 * 因为范型的缘故，不能实例化 bean 对象。应该在子类实例化 bean，再调用本类的 delete()
 	 * 
 	 * @param entity 实体
-	 * @param model  页面 Model 模型
+	 * @param model 页面 Model 模型
 	 * @return JSON 响应
 	 */
 	public String delete(T entity, ModelAndView model) throws ServiceException {
@@ -158,7 +157,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	/**
 	 * 根据 id 删除实体
 	 * 
-	 * @param id    实体 id
+	 * @param id 实体 id
 	 * @param model 页面 Model 模型
 	 * @return JSON 响应
 	 * @throws ServiceException
@@ -175,7 +174,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	/**
 	 * 读取单个记录或者编辑某个记录，保存到 ModelAndView 中（供视图渲染用）。
 	 * 
-	 * @param id    ID 序号
+	 * @param id ID 序号
 	 * @param model Model 模型
 	 * @return JSP 路径。缺省提供一个默认路径，但不一定要使用它，换别的也可以。
 	 * @throws ServiceException
@@ -231,8 +230,8 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 
 	@SuppressWarnings("unchecked")
 	public String outputJson(PageResult<T> pageResult, ModelAndView model) {
-		if (pageResult != null && pageResult != null) {
-			String jsonStr;
+		String jsonStr = "[]"; // empty array
+		if (pageResult != null && pageResult.size() > 0) {
 
 			if (pageResult.get(0) instanceof Map) { // Map 类型的输出
 				List<Map<String, Object>> list = (List<Map<String, Object>>) pageResult;
@@ -240,10 +239,9 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 			} else { // Bean
 				jsonStr = BeanUtil.listToJson((List<Object>) pageResult);
 			}
-
-			model.put("MapOutput", jsonStr);
 		}
 
+		model.put("MapOutput", jsonStr);
 		return paged_json_List;
 	}
 
@@ -351,8 +349,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	public static UploadFileInfo uploadByConfig(MvcRequest request) throws IOException {
 		UploadFileInfo info = new UploadFileInfo();
 		info.isFileOverwrite = ConfigService.getValueAsBool("uploadFile.isFileOverwrite");
-		info.saveFolder = ConfigService.getValueAsBool("uploadFile.saveFolder.isUsingRelativePath")
-				? request.mappath(ConfigService.getValueAsString("uploadFile.saveFolder.relativePath")) + File.separator
+		info.saveFolder = ConfigService.getValueAsBool("uploadFile.saveFolder.isUsingRelativePath") ? request.mappath(ConfigService.getValueAsString("uploadFile.saveFolder.relativePath")) + File.separator
 				: ConfigService.getValueAsString("uploadFile.saveFolder.absolutePath");
 
 		if (ConfigService.getValueAsBool("uploadFile.isAutoNewFileName")) {

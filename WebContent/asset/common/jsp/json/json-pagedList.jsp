@@ -3,6 +3,6 @@
 {
 	"isOk" : true,
 	"msg" : "实体列表",
-	"total" :  ${empty PageResult.totalCount || PageResult.zero ? 0 	: PageResult.totalCount},
-	"result" : ${empty PageResult.totalCount || PageResult.zero ? '[]' 	: MapOutput}
+	"total" :  ${empty PageResult.getTotalCount() || PageResult.isZero() ?  0 	: PageResult.getTotalCount()},
+	"result" : ${empty PageResult.getTotalCount() || PageResult.isZero() ? '[]': MapOutput}
 }

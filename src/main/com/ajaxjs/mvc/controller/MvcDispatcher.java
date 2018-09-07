@@ -89,6 +89,8 @@ public class MvcDispatcher implements Filter {
 			String doIoc = config.get("doIoc");
 			for (String packageName : StringUtil.split(doIoc))
 				BeanContext.me().init(packageName);
+			
+			BeanContext.me().injectBeans();
 		}
 	}
 
