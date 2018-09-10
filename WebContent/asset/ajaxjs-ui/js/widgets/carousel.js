@@ -73,6 +73,24 @@ aj._carousel = {
 		// this.isUsePx && ajaxjs.throttle.init(this.onResize.bind(this));
 	},
 	
+	watch:{
+		'selected' : function(index, oldIndex) {
+			if(this.$isStop) // 停止，不切换，在做向导式时有用
+				return;
+			
+			var children = this.$el.$('header ul').children;
+			var contentChild = this.$el.$('.content').children;
+			 
+			children[oldIndex].classList.remove('active');
+			contentChild[oldIndex].classList.remove('active');
+	
+			children[index].classList.add('active');
+			contentChild[index].classList.add('active');
+			 
+			this.go(index);
+		}
+	},
+	
 	methods : {
 		setItemWidth : function() {
 			this.stepWidth = this.stepWidth || this.mover.parentNode.clientWidth || window.innerWidth; // 获取容器宽度作为 item 宽度
@@ -91,6 +109,10 @@ aj._carousel = {
 		 *            i
 		 */
 		go : function(i) {
+			this.$emit('before-carousel-item-switch', this, i);
+			if(this.$isStop) // 停止，不切换，在做向导式时有用
+				return;
+			
 			var mover = this.mover, children = mover.children, len = children.length;
 			
 			this.doHeight(i);
@@ -125,11 +147,13 @@ aj._carousel = {
 			}
 			
 			this.$emit('carousel-item-switch', this, i, children[i]);
-			this.selected = i;
 		},
 		
 	    // 跳到前一帧。
 		 goPrevious : function() {
+			if(this.$isStop) // 停止，不切换，在做向导式时有用
+				return;
+				
 			 var len = this.mover.children.length;
 			 
 	        this.selected--;
@@ -142,6 +166,9 @@ aj._carousel = {
 		 * 跳到下一帧。
 		 */
 	    goNext : function() {
+			if(this.$isStop) // 停止，不切换，在做向导式时有用
+				return;
+			
 	    	var len = this.mover.children.length;
 	    	
 	        this.selected++;
@@ -185,6 +212,9 @@ aj._carousel = {
 		 },
 		 
 		 autoChangeTab: function(e) {
+			if(this.$isStop) // 停止，不切换，在做向导式时有用
+				return;
+				
 			 var el = e.currentTarget;
 			 var children = el.parentNode.children;
 			 for(var i = 0, j = children.length; i < j; i++) {
@@ -193,17 +223,9 @@ aj._carousel = {
 				 }
 			 }
 
-			 var holder = el.up(null, 'aj-carousel');
-			 var contentChild = holder.$('.content').children;
-			 
-			 children[this.selected].classList.remove('active');
-			 contentChild[this.selected].classList.remove('active');
 			 this.selected = i;
-			 children[i].classList.add('active');
-			 contentChild[i].classList.add('active');
-			 
-			 this.go(i);
 		 }
+			
 	}
 };
 
