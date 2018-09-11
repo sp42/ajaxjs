@@ -52,6 +52,14 @@ Vue.component('aj-page-list', {
 			type : Number,
 			required : false,
 			default : 5
+		},
+		isShowFooter : {
+			type : Boolean,
+			default : true
+		},
+		autoLoadWhenReachedBottom : {	// 到底部是否自动加载下一页，通常在 移动端使用，这个应该是元素的 CSS Selector
+			type : String,
+			default : ''
 		}
 	},
 	template : 
@@ -61,7 +69,7 @@ Vue.component('aj-page-list', {
 					<a href="#" @click="show(item.id, index, $event)" :id="item.id">{{item.name}}</a>\
 				</slot>\
 			</li></ul>\
-			<footer>\
+			<footer v-show="isShowFooter">\
 				<a v-if="pageStart > 0" href="#" @click="previousPage()">上一页</a> \
 				<a v-if="(pageStart > 0 ) && (pageStart + pageSize < total)" style="text-decoration: none;">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>\
 				<a v-if="pageStart + pageSize < total" href="#" @click="nextPage()">下一页</a>\
@@ -73,15 +81,29 @@ Vue.component('aj-page-list', {
 						<option :value="n" v-for="n in totalPage">{{n}}</option>\
 					</select>\
 				</div>\
-			</footer>\
+			</footer><div v-show="!!autoLoadWhenReachedBottom" class="buttom"></div>\
 		</div>',
 	mounted : function() {
 		ajaxjs.xhr.get(this.$props.apiUrl, function(json) {
-			aj.apply(this, json);
+			this.total = json.total;
+			this.result = this.result.concat(json.result);
+
+			//aj.apply(this, json);
 			this.count();
 		}.bind(this), {
 			limit : this.pageSize
 		});
+		
+		if(!!this.autoLoadWhenReachedBottom) {
+			var scrollSpy = new aj.scrollSpy({
+				scrollInElement : aj(this.autoLoadWhenReachedBottom),
+				spyOn : this.$el.$('.buttom')
+			});
+			
+			scrollSpy.onScrollSpyBackInSight = function (e) {
+				this.nextPage();
+			}.bind(this);
+		}
 	},
 	
 	created : function() {
@@ -121,7 +143,8 @@ Vue.component('aj-page-list', {
 			this.baseParam && aj.apply(params, this.baseParam);
 			
 			ajaxjs.xhr.get(this.$props.apiUrl, function(json) {
-				aj.apply(this, json);
+				this.total = json.total;
+				this.result = this.result.concat(json.result);
 				this.count();
 			}.bind(this), params);
 		},
@@ -141,9 +164,12 @@ Vue.component('aj-page-list', {
 });
 
 /**
- * @param {Elment} 如果是在区域内滚动的话，则要传入滚动面板的元素，移动端会适用
+ * Thx to ScrollSpy
+ * 
+ * @param {Elment}
+ *            如果是在区域内滚动的话，则要传入滚动面板的元素，移动端会适用
  */
-var ScrollSpy = function(cfg) {
+aj.scrollSpy = function(cfg) {
    
     var isScrollInElement = !!(cfg && cfg.scrollInElement);
     
@@ -160,8 +186,6 @@ var ScrollSpy = function(cfg) {
             var element = elements[i], 
             	el = element.domElement,
             	elementPosition = getPositionOfElement(el);
-
-            console.log(currentViewPosition + ':' + elementPosition)
             
             var usableViewPosition = currentViewPosition;
 

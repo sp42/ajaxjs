@@ -7,12 +7,12 @@ package com.ajaxjs.mvc.controller.output;
  */
 public class JsonReuslt {
 	/**
-	 * 操作成功，返回 msg 信息
+	 * 操作成功，返回 msg 信息，使用 String.format(json_not_ok, "foo", "bar");
 	 */
 	public static final String json_ok = "{\"isOk\": true, \"msg\" : \"%s\"}";
 
 	/**
-	 * 操作失败，返回 msg 信息
+	 * 操作失败，返回 msg 信息，使用 String.format(json_not_ok, "foo", "bar");
 	 */
 	public static final String json_not_ok = "{\"isOk\": false, \"msg\" : \"%s\"}";
 

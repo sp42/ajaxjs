@@ -258,7 +258,7 @@ public class ControllerScanner {
 			return false;
 
 		Path path = clz.getAnnotation(Path.class); // 总路径
-		if (path == null) {
+		if (path == null && !Modifier.isAbstract(clz.getModifiers())) {
 			LOGGER.warning("{0} 不存在任何 Path 信息！No Path info!", clz.toString());
 			return false;
 		}

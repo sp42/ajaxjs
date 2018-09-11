@@ -77,7 +77,7 @@ public class AesFilter implements FilterAction {
 	@Override
 	public void after(MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
 		if (request.getAttribute("errMsg") != null) {
-			response.resultHandler("redirect::" + Constant.paged_json_error, request, null);
+			response.resultHandler("redirect::" + Constant.paged_json_error, request, null, method);
 		}
 	}
 

@@ -190,7 +190,7 @@ public class MvcDispatcher implements Filter {
 		if (err != null) { // 有未处理的异常
 			handleErr(err, method, request, response, model);
 		} else if (!isSkip) {
-			response.resultHandler(result, request, model);
+			response.resultHandler(result, request, model, method);
 		} else {
 			LOGGER.warning("一般情况下不应执行到这一步。Should not be executed in this step.");
 		}
@@ -205,9 +205,9 @@ public class MvcDispatcher implements Filter {
 		Produces a = method.getAnnotation(Produces.class);
 
 		if (a != null && "json".equals(a.value()[0])) {// 返回 json
-			response.resultHandler(String.format(Constant.json_not_ok, errMsg), request, model);
+			response.resultHandler(String.format(Constant.json_not_ok, errMsg), request, model, method);
 		} else {
-			response.resultHandler(String.format("redirect::%s/showMsg?msg=%s", request.getContextPath(), Encode.urlEncode((errMsg))), request, model);
+			response.resultHandler(String.format("redirect::%s/showMsg?msg=%s", request.getContextPath(), Encode.urlEncode((errMsg))), request, model, method);
 		}
 	}
 

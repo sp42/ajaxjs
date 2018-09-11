@@ -19,6 +19,7 @@ import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
@@ -159,13 +160,14 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	 * @param response 响应对象
 	 * @param model 所有渲染数据都要放到一个 model 对象中（本质 是 map或者 bean），这样使用者就可以在模板内用 Map 对象的
 	 * key/getter 获取到对应的数据。
+	 * @param method 
 	 */
-	public void resultHandler(Object result, MvcRequest request, ModelAndView model) {
+	public void resultHandler(Object result, MvcRequest request, ModelAndView model, Method method) {
 		if (model != null)
 			request.saveToReuqest(model);
 
 		if (result == null) {
-			LOGGER.info("控制器方法返回 null");
+			LOGGER.info("控制器方法 {0} 返回 null", method);
 		} else {
 			if (result instanceof String) {
 				String str = (String) result, html = "html::";

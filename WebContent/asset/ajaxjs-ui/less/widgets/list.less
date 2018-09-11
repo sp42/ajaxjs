@@ -1,5 +1,52 @@
 @import '../common_style.less';
 .aj-page-list {
+	li {
+		clear: both;
+		overflow: hidden;
+		background-color: white;
+		padding-right: 1%;
+		
+		.ajaxjs-imgHolder {
+			width: 29%;
+			float: left;
+			margin: 2%; 
+			margin-right:3%;
+			
+			img {
+				opacity: 0;
+				transition: opacity 300ms ease-in;
+				&.tran {
+					opacity: 1;
+				}
+			}
+		}
+
+		.item {
+			border-bottom: 1px solid lightgray;
+			overflow: hidden;
+			padding: 3% 0;
+			h1 {
+				font-size: 1rem;
+				min-height: 3.1rem; // 三倍字体的高度
+				line-height: 140%;
+			}
+
+			h2 {
+				font-size: .9rem;
+				color: gray;
+				font-weight: normal;
+			}
+		}
+
+		.createTime {
+			font-size: .8rem;
+			text-align: right;
+			color: gray;
+//			margin-top: 1%;
+			margin-right: 2%;
+		}
+	}
+
 	footer {
 		text-align: center;
 		font-size: .95rem;
@@ -12,10 +59,10 @@
 		}
 
 		.info {
-			margin-top:1%;
+			margin-top: 1%;
 			margin-bottom: 3%;
 			font-size: .9rem;
-			color:gray;
+			color: gray;
 		}
 	}
 
@@ -64,3 +111,4 @@
 		}
 	}
 }
+

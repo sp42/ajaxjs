@@ -77,3 +77,37 @@ Vue.component('aj-expander', {
 			<slot></slot>\
 		</div>'
 });
+
+Vue.component('aj-menu-moblie-scroll', {
+	props : {
+		items : {
+			type : Array,
+			default : function() {
+				return [{name : 'foo'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}];
+			}
+		}
+	},
+	data : function() {
+		return {
+			selected : 0
+		}
+	},
+	template : 
+		'<div class="aj-hoz-scroll"><div><ul>\
+			<li @click="fireEvent($event, index);" v-for="item, index in items" :class="{\'selected\': index === selected}">{{item.name}}</li>\
+			</ul><div class="indicator"></div></div></div>',
+	mounted : function() {
+		var self = this;
+		setTimeout(function() {
+			self.$el.$('.indicator').style.width = self.$el.$('li').clientWidth + 'px';
+		}, 500);
+	},
+	methods: {
+		fireEvent : function(e, index) {
+			var el = e.target;
+			this.$el.$('.indicator').style.marginLeft = el.offsetLeft + 'px';
+			this.$emit('on-aj-menu-moblie-scroll-click', e, index, this.selected);
+			this.selected = index;
+		}
+	}
+});
