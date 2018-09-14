@@ -221,6 +221,13 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>io.swagger.core.v3</groupId>
+			<artifactId>swagger-jaxrs2</artifactId>
+			<scope>compile</scope>
+			<version>2.0.4</version>
+		</dependency>
+
 		<!-- <dependency> -->
 		<!-- <groupId>de.odysseus.juel</groupId> -->
 		<!-- <artifactId>juel-impl</artifactId> -->

@@ -65,3 +65,69 @@ Vue.component('aj-simple-marquee-text', {
 		}
 	}
 });
+
+Vue.component('aj-simple-marquee', {
+	props : {
+		interval : {
+			default : 20
+		},
+		pauseInterval : { // 暂停间隔时间
+			type : Number,
+			default : 2000
+		},
+		itemHeight : { // 每一项的高度
+			type : Number,
+			required : 20,
+		},
+	},
+	
+	template : 
+		'<div class="aj-simple-marquee" style="width: 100%; overflow: hidden;">\
+			<div class="items"><slot></slot>\
+			</div>\
+			<div class="clone"></div>\
+		</div>',
+		
+	mixins : [aj._simple_marquee_text],
+	
+	mounted : function() {
+		var el = this.$el, children = el.$('.items').children, itemHeight = this.itemHeight;
+		
+		el.style.height = itemHeight + "px";
+		
+		var allHeight = 0;
+		for(var i = 0, j = children.length; i < j; i++) { // 设置每行高度
+			var item = children[i];
+			item.style.display = 'block';
+			item.style.height = itemHeight + "px";
+			
+			allHeight += itemHeight;
+		}
+		
+		el.$('.clone').style.height = allHeight + 'px';// 相同高度
+		
+		// 复制第一个元素
+		var clone = children[0].cloneNode(true);
+		el.$('.clone').appendChild(clone);
+		
+		setTimeout(this.start.bind(this), 2000);
+	},
+	
+	methods : {
+		scroll :function () {
+			var el = this.$el, top = el.scrollTop, height = el.$('.items').clientHeight;
+
+			if (top <= height) {
+				el.scrollTop ++;
+				
+				if(top != 0 && (top % this.itemHeight) === 0) {
+					this.clearTimer();
+					setTimeout(this.start.bind(this), this.pauseInterval);
+				}
+				
+			} else {// 第一个恰好滑完
+				el.scrollTop -= height; //返回至开头处
+			}
+		}
+	}
+});

@@ -126,10 +126,14 @@ Vue.component('aj-article-body', {
 			type: String,
 			required: true
 		},
-		createDate : String,
-		content : { // 正文，还可以通过 slot 添加额外内容
+		initCreateDate : String,
+		initContent : { // 正文，还可以通过 slot 添加额外内容
 			type: String,
-			required: true
+			required: false
+		},
+		isShowTools : { // 是否显示扩展工具栏
+			type: Boolean,
+			required: false
 		},
 		neighbor : { // 相邻的两笔记录
 			type: Object,
@@ -139,19 +143,25 @@ Vue.component('aj-article-body', {
 			required: false
 		}
 	},
+	data: function(){
+		return {
+			content : this.initContent,
+			createDate : this.initCreateDate
+		};
+	},
 	template : 	
 		'<div class="aj-article-body">\
 			<article>\
 				<h3>{{title}}</h3>\
 				<h4>{{createDate}}</h4>\
-				{{content}}\
+				<section v-html="content"></section>\
 				<slot></slot>\
 			</article>\
-			<div>\
+			<div v-if="isShowTools">\
 				<a :href="neighbor.pervInfo.url" v-if="neighbor.pervInfo">上则记录：{{neighbor.pervInfo.name}}</a>\
 				<a :href="neighbor.nextInfo.url" v-if="neighbor.nextInfo">下则记录：{{neighbor.nextInfo.name}}</a>\
 			</div>\
-			<aj-misc-function></aj-misc-function><aj-adjust-font-size></aj-adjust-font-size><aj-page-share></aj-page-share>\
+			<aj-misc-function v-if="isShowTools"></aj-misc-function><aj-adjust-font-size v-if="isShowTools"></aj-adjust-font-size><aj-page-share v-if="isShowTools"></aj-page-share>\
 		</div>'
 });
 

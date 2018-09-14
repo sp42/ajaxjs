@@ -289,6 +289,19 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	}
 
 	/**
+	 * 把 Map 转换为 JSON 数组
+	 * 
+	 * @param result Map
+	 * @return JSON 结果
+	 */
+	public static String outputMapAsJson(Map<String, Object> result) {
+		if (result != null)
+			return "json::{\"result\":" + JsonHelper.stringifyMap(result) + "}";
+		else
+			return "json::{\"result\": null}";
+	}
+	
+	/**
 	 * 把 Map 集合转换为 JSON 数组
 	 * 
 	 * @param result Map 集合
