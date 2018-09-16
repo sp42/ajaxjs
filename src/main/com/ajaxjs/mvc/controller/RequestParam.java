@@ -22,6 +22,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
@@ -109,13 +110,20 @@ public class RequestParam {
 			boolean isGot = false; // 是否有 QueryParam 注解写好了
 
 			for (Annotation a : annotations) {
-				if (a instanceof QueryParam) { // 找到匹配的参数，这是说控制器上的方法是期望得到一个 url query string 参数的
+				if (a instanceof QueryParam || a instanceof FormParam) { // 找到匹配的参数，这是说控制器上的方法是期望得到一个 url query string 参数的
 					isGot = true;
-
+					
+					String key = null;
+					if (a instanceof QueryParam) {
+						key = ((QueryParam) a).value();
+					} else {
+						key = ((FormParam) a).value();
+					}
+					
 					/*
 					 * 根据注解的名字，获取 QueryParam 参数实际值，此时是 String 类型，要转为到控制器方法期望的类型。
 					 */
-					String argValue = request.getParameter(((QueryParam) a).value());
+					String argValue = request.getParameter(key);
 
 					/*
 					 * 开始转换为控制器方法上的类型，支持 String、int/Integer、boolean/Boolean

@@ -31,7 +31,6 @@ public class ApiDocController extends HttpServlet {
 		super.init(config);
 		String ctxId = getContextIdFromServletConfig(config);
 		
-		System.out.println("::::::::::"+ctxId);
 		try {
 			new ServletOpenApiContextBuilder<>().servletConfig(config).ctxId(ctxId).buildContext(true);
 		} catch (OpenApiConfigurationException e) {

@@ -26,6 +26,11 @@ import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.web.Captcha;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 /**
  * 提供验证码服务
  * 
@@ -50,8 +55,15 @@ public class CaptchaController implements IController {
 	 * @param req 请求对象
 	 * @param response 响应对象
 	 */
+	@Operation(
+			summary = "生成验证码图片", tags = { "Common Service"}, 
+			description = "访问这个路径即可生成验证码图片，注意应加上时间戳以避免缓存。", 
+			responses = {
+				@ApiResponse(description = "验证码图片", content = @Content(mediaType = "image/bmp"))
+			}
+		)
 	@GET
-	public void captchaImg(HttpServletRequest req, HttpServletResponse response) {
+	public void captchaImg(@Parameter(hidden=true) HttpServletRequest req, @Parameter(hidden=true) HttpServletResponse response) {
 		init(response, req.getSession());
 	}
 

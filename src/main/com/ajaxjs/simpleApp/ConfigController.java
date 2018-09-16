@@ -22,11 +22,17 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.util.io.FileUtil;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 /**
  * 编辑配置的控制器
@@ -43,10 +49,21 @@ public class ConfigController implements IController {
 
 		return Constant.commonJsp + "/config/all-config";
 	}
-
+	
+	@Operation(
+		summary = "保存配置", tags = {"SystemConfig",  "Admin Service ONLY"}, 
+		description = "保存配置并且刷新配置", 
+		responses = {
+			@ApiResponse(description = "操作是否成功", content = @Content(mediaType = "application/json"))
+		}
+	)
 	@POST
-	@Produces("json")
-	public String saveAllconfig(Map<String, Object> map, HttpServletRequest request) {
+	@Produces(MediaType.APPLICATION_JSON)
+	public String saveAllconfig(
+		@Parameter(
+			 description = "配置的 JSON 字符串",  required = true
+		)
+		Map<String, Object> map, @Parameter(hidden=true) HttpServletRequest request) {
 		ConfigService.loadJSON_in_JS(map);
 		ConfigService.load(); // 刷新配置
 
@@ -68,10 +85,17 @@ public class ConfigController implements IController {
 		return Constant.commonJsp + "/config/site-config";
 	}
 
+	@Operation(
+		summary = "保存网站结构", tags = {"SystemConfig",  "Admin Service ONLY"}, 
+		description = "保存网站结构", 
+		responses = {
+			@ApiResponse(description = "操作是否成功", content = @Content(mediaType = "application/json"))
+		}
+	)
 	@POST
 	@Path("site")
-	@Produces("json")
-	public String saveSite(Map<String, Object> map, HttpServletRequest request) {
+	@Produces(MediaType.APPLICATION_JSON)
+	public String saveSite(Map<String, Object> map, @Parameter(hidden=true) HttpServletRequest request) {
 		return saveAllconfig(map, request);
 	}
 }

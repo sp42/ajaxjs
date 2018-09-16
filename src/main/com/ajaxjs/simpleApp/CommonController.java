@@ -208,6 +208,10 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 		return null;
 	}
 
+	public static <E> void pageList(PageResult<E> pageResult, ModelAndView model) {
+		model.put("PageResult", pageResult);
+	}
+
 	/**
 	 * 将分页列表转化为 JSON 输出
 	 * 
@@ -300,7 +304,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 		else
 			return "json::{\"result\": null}";
 	}
-	
+
 	/**
 	 * 把 Map 集合转换为 JSON 数组
 	 * 

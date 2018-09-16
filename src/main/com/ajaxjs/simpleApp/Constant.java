@@ -22,6 +22,11 @@ package com.ajaxjs.simpleApp;
  */
 public interface Constant {
 	/**
+	 * MV 用的 key
+	 */
+	public static final String PageResult = "PageResult";
+	
+	/**
 	 * 前端庫的位置
 	 */
 	public static final String ajajx_ui = "asset/ajaxjs-ui";

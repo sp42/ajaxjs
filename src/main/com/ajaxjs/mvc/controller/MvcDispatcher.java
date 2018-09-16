@@ -30,18 +30,19 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.FilterAction;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.simpleApp.Constant;
-import com.ajaxjs.util.reflect.ExecuteMethod;
-import com.ajaxjs.util.reflect.NewInstance;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.collection.CollectionUtil;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.reflect.ExecuteMethod;
+import com.ajaxjs.util.reflect.NewInstance;
 
 /**
  * MVC 分发器，控制器核心类
@@ -117,7 +118,7 @@ public class MvcDispatcher implements Filter {
 
 		Matcher match = id.matcher(uri);
 		if (match.find()) {
-			uri = match.replaceAll("/{id}/");
+			uri = match.replaceAll("/{id}");
 		}
 
 		Action action = ControllerScanner.find(uri);
@@ -204,7 +205,7 @@ public class MvcDispatcher implements Filter {
 		String errMsg = ExecuteMethod.getUnderLayerErrMsg(err);
 		Produces a = method.getAnnotation(Produces.class);
 
-		if (a != null && "json".equals(a.value()[0])) {// 返回 json
+		if (a != null && MediaType.APPLICATION_JSON.equals(a.value()[0])) {// 返回 json
 			response.resultHandler(String.format(Constant.json_not_ok, errMsg), request, model, method);
 		} else {
 			response.resultHandler(String.format("redirect::%s/showMsg?msg=%s", request.getContextPath(), Encode.urlEncode((errMsg))), request, model, method);
@@ -233,7 +234,7 @@ public class MvcDispatcher implements Filter {
 		return filterActions;
 	}
 
-	private static final Pattern id = Pattern.compile("/\\d+/");
+	private static final Pattern id = Pattern.compile("/\\d+");
 
 	private static final Pattern p = Pattern.compile("\\.jpg|\\.png|\\.gif|\\.js|\\.css|\\.less|\\.ico|\\.jpeg|\\.htm|\\.swf|\\.txt|\\.mp4|\\.flv");
 
