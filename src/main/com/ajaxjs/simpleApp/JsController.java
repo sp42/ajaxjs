@@ -80,6 +80,7 @@ public class JsController implements IController {
 		js += action(ajaxjs + "\\js\\widgets", true);
 //		js += getOne(ajaxjs + "\\js\\widgets\\admin\\admin.js");
 
+		System.out.println(target);
 		new FileUtil().setFilePath(target).setOverwrite(true).setContent(js).save().close();
 
 	}

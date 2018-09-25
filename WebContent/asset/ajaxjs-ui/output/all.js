@@ -325,7 +325,7 @@ selected : 0
 };
 },
 mounted: function() {
-this.mover = this.$el.$('div'); 
+this.mover = this.$el.$('div.content'); 
 var mover = this.mover, children = mover.children, len = children.length;
 setTimeout(function() {
 var stepWidth = this.setItemWidth();
@@ -334,10 +334,28 @@ mover.style.width = this.isUsePx ? (stepWidth * 2) +'px' : '200%';
 else
 mover.style.width = this.isUsePx ? (stepWidth * len) +'px' : len + '00%';
 var tabWidth = this.isUsePx ? stepWidth + 'px' : (1 / len * 100).toFixed(5) + '%';
+this.tabWidth = tabWidth;
 for(var i = 0; i < len; i++) 
 children[i].style.width = this.isMagic ? '50%' : tabWidth;
+var headerUl = this.$el.$('header ul');
+if(headerUl)
+for(var i = 0; i < len; i++) 
+headerUl.children[i].style.width = tabWidth;
 this.doHeight(this.selected);
-}.bind(this), 500);
+}.bind(this), 400);
+},
+watch:{
+'selected' : function(index, oldIndex) {
+if(this.$isStop) 
+return;
+var children = this.$el.$('header ul').children;
+var contentChild = this.$el.$('.content').children;
+children[oldIndex].classList.remove('active');
+contentChild[oldIndex].classList.remove('active');
+children[index].classList.add('active');
+contentChild[index].classList.add('active');
+this.go(index);
+}
 },
 methods : {
 setItemWidth : function() {
@@ -349,6 +367,9 @@ this.selected = index;
 this.go(index);
 },
 go : function(i) {
+this.$emit('before-carousel-item-switch', this, i);
+if(this.$isStop) 
+return;
 var mover = this.mover, children = mover.children, len = children.length;
 this.doHeight(i);
 if(this.isMagic) {
@@ -371,10 +392,11 @@ var isWebkit = navigator.userAgent.toLowerCase().indexOf('webkit') != -1;
 var leftValue = this.isUsePx ? ('-' + (i * this.stepWidth) + 'px') : ('-' + (1 / len * 100 * i).toFixed(2) + '%');
 mover.style[this.isWebkit ? 'webkitTransform' : 'transform'] = 'translate3d({0}, 0px, 0px)'.replace('{0}', leftValue);
 }
-this.selected = i;
 this.$emit('carousel-item-switch', this, i, children[i]);
 },
 goPrevious : function() {
+if(this.$isStop) 
+return;
 var len = this.mover.children.length;
 this.selected--;
 if (this.selected < 0)
@@ -382,6 +404,8 @@ this.selected = len - 1;
 this.go(this.selected); 
 },
 goNext : function() {
+if(this.$isStop) 
+return;
 var len = this.mover.children.length;
 this.selected++;
 if (this.selected == len)
@@ -415,6 +439,8 @@ this.el.style.height = (nextItem.scrollHeight + tabHeaderHeight + 50) + 'px';
 }
 },
 autoChangeTab: function(e) {
+if(this.$isStop) 
+return;
 var el = e.currentTarget;
 var children = el.parentNode.children;
 for(var i = 0, j = children.length; i < j; i++) {
@@ -422,14 +448,7 @@ if(el == children[i]) {
 break;
 }
 }
-var holder = el.up(null, 'aj-carousel');
-var contentChild = holder.$('.content').children;
-children[this.selected].classList.remove('active');
-contentChild[this.selected].classList.remove('active');
 this.selected = i;
-children[i].classList.add('active');
-contentChild[i].classList.add('active');
-this.go(i);
 }
 }
 };
@@ -486,7 +505,7 @@ template :
 <li v-for="(item, index) in items" :class="{\'hide\': index !== selected}">{{item.name}}</li>\
 </ul><ol v-show="showDot">\
 <li v-for="n in items.length" :class="{\'active\': (n - 1) === selected}" @click="changeTab(n - 1);"></li></ol></header>\
-<div>\
+<div class="content">\
 <div v-for="(item, index) in items" :class="{\'active\': index === selected}" v-html="getContent(item.content, item.href)"></div>\
 </div>\
 </div>',
@@ -918,6 +937,14 @@ initPageSize : {
 type : Number,
 required : false,
 default : 5
+},
+isShowFooter : {
+type : Boolean,
+default : true
+},
+autoLoadWhenReachedBottom : {	
+type : String,
+default : ''
 }
 },
 template : 
@@ -927,7 +954,7 @@ template :
 <a href="#" @click="show(item.id, index, $event)" :id="item.id">{{item.name}}</a>\
 </slot>\
 </li></ul>\
-<footer>\
+<footer v-show="isShowFooter">\
 <a v-if="pageStart > 0" href="#" @click="previousPage()">上一页</a> \
 <a v-if="(pageStart > 0 ) && (pageStart + pageSize < total)" style="text-decoration: none;">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>\
 <a v-if="pageStart + pageSize < total" href="#" @click="nextPage()">下一页</a>\
@@ -939,15 +966,25 @@ template :
 <option :value="n" v-for="n in totalPage">{{n}}</option>\
 </select>\
 </div>\
-</footer>\
+</footer><div v-show="!!autoLoadWhenReachedBottom" class="buttom"></div>\
 </div>',
 mounted : function() {
 ajaxjs.xhr.get(this.$props.apiUrl, function(json) {
-aj.apply(this, json);
+this.total = json.total;
+this.result = this.result.concat(json.result);
 this.count();
 }.bind(this), {
 limit : this.pageSize
 });
+if(!!this.autoLoadWhenReachedBottom) {
+var scrollSpy = new aj.scrollSpy({
+scrollInElement : aj(this.autoLoadWhenReachedBottom),
+spyOn : this.$el.$('.buttom')
+});
+scrollSpy.onScrollSpyBackInSight = function (e) {
+this.nextPage();
+}.bind(this);
+}
 },
 created : function() {
 this.BUS.$on('base-param-change', this.onBaseParamChange.bind(this));
@@ -980,7 +1017,8 @@ start : this.pageStart, limit : this.pageSize
 });
 this.baseParam && aj.apply(params, this.baseParam);
 ajaxjs.xhr.get(this.$props.apiUrl, function(json) {
-aj.apply(this, json);
+this.total = json.total;
+this.result = this.result.concat(json.result);
 this.count();
 }.bind(this), params);
 },
@@ -995,7 +1033,7 @@ this.ajaxGet();
 }
 }
 });
-var ScrollSpy = function(cfg) {
+aj.scrollSpy = function(cfg) {
 var isScrollInElement = !!(cfg && cfg.scrollInElement);
 var handleScroll = function () {
 var currentViewPosition;
@@ -1008,7 +1046,6 @@ for (var i in elements) {
 var element = elements[i], 
 el = element.domElement,
 elementPosition = getPositionOfElement(el);
-console.log(currentViewPosition + ':' + elementPosition)
 var usableViewPosition = currentViewPosition;
 if (element.isInViewPort == false) 
 usableViewPosition -= el.clientHeight;
@@ -1100,6 +1137,57 @@ this.$el.appendChild(this.$el.removeChild(lastEl));
 }
 }
 });
+Vue.component('aj-simple-marquee', {
+props : {
+interval : {
+default : 20
+},
+pauseInterval : { 
+type : Number,
+default : 2000
+},
+itemHeight : { 
+type : Number,
+required : 20,
+},
+},
+template : 
+'<div class="aj-simple-marquee" style="width: 100%; overflow: hidden;">\
+<div class="items"><slot></slot>\
+</div>\
+<div class="clone"></div>\
+</div>',
+mixins : [aj._simple_marquee_text],
+mounted : function() {
+var el = this.$el, children = el.$('.items').children, itemHeight = this.itemHeight;
+el.style.height = itemHeight + "px";
+var allHeight = 0;
+for(var i = 0, j = children.length; i < j; i++) { 
+var item = children[i];
+item.style.display = 'block';
+item.style.height = itemHeight + "px";
+allHeight += itemHeight;
+}
+el.$('.clone').style.height = allHeight + 'px';
+var clone = children[0].cloneNode(true);
+el.$('.clone').appendChild(clone);
+setTimeout(this.start.bind(this), 2000);
+},
+methods : {
+scroll :function () {
+var el = this.$el, top = el.scrollTop, height = el.$('.items').clientHeight;
+if (top <= height) {
+el.scrollTop ++;
+if(top != 0 && (top % this.itemHeight) === 0) {
+this.clearTimer();
+setTimeout(this.start.bind(this), this.pauseInterval);
+}
+} else {
+el.scrollTop -= height; 
+}
+}
+}
+});
 
 Vue.component('aj-accordion-menu', {
 template : '<ul class="aj-accordion-menu" @click="onClk($event);"><slot></slot></ul>',
@@ -1168,6 +1256,40 @@ template :
 <div :class="expended ? \'closeBtn\' : \'openBtn\'" @click="expended = !expended;"></div>\
 <slot></slot>\
 </div>'
+});
+Vue.component('aj-menu-moblie-scroll', {
+props : {
+initItems : {
+type : Array,
+default : function() {
+return [{name : 'foo'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}];
+}
+}
+},
+data : function() {
+return {
+selected : 0,
+items : this.initItems
+}
+},
+template : 
+'<div class="aj-hoz-scroll"><div><ul>\
+<li @click="fireEvent($event, index);" v-for="item, index in items" :class="{\'selected\': index === selected}">{{item.name}}</li>\
+</ul><div class="indicator"></div></div></div>',
+mounted : function() {
+var self = this;
+setTimeout(function() {
+self.$el.$('.indicator').style.width = self.$el.$('li').clientWidth + 'px';
+}, 500);
+},
+methods: {
+fireEvent : function(e, index) {
+var el = e.target;
+this.$el.$('.indicator').style.marginLeft = el.offsetLeft + 'px';
+this.$emit('on-aj-menu-moblie-scroll-click', e, index, this.selected);
+this.selected = index;
+}
+}
 });
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -1392,10 +1514,14 @@ title : {
 type: String,
 required: true
 },
-createDate : String,
-content : { 
+initCreateDate : String,
+initContent : { 
 type: String,
-required: true
+required: false
+},
+isShowTools : { 
+type: Boolean,
+required: false
 },
 neighbor : { 
 type: Object,
@@ -1405,19 +1531,25 @@ return {};
 required: false
 }
 },
+data: function(){
+return {
+content : this.initContent,
+createDate : this.initCreateDate
+};
+},
 template : 
 '<div class="aj-article-body">\
 <article>\
 <h3>{{title}}</h3>\
 <h4>{{createDate}}</h4>\
-{{content}}\
+<section v-html="content"></section>\
 <slot></slot>\
 </article>\
-<div>\
+<div v-if="isShowTools">\
 <a :href="neighbor.pervInfo.url" v-if="neighbor.pervInfo">上则记录：{{neighbor.pervInfo.name}}</a>\
 <a :href="neighbor.nextInfo.url" v-if="neighbor.nextInfo">下则记录：{{neighbor.nextInfo.name}}</a>\
 </div>\
-<aj-misc-function></aj-misc-function><aj-adjust-font-size></aj-adjust-font-size><aj-page-share></aj-page-share>\
+<aj-misc-function v-if="isShowTools"></aj-misc-function><aj-adjust-font-size v-if="isShowTools"></aj-adjust-font-size><aj-page-share v-if="isShowTools"></aj-page-share>\
 </div>'
 });
 Vue.component('aj-baidu-search', {

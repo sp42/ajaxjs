@@ -3,6 +3,11 @@ aj._list = {
 		apiUrl : {		// JSON 接口地址
 			type : String,
 			required : true
+		},
+		
+		hrefStr : {
+			type : String,
+			required : false
 		}
 	},
 	
@@ -20,7 +25,7 @@ Vue.component('aj-simple-list', {
 	
 	template : '<ul class="aj-simple-list"><li v-for="(item, index) in result">\
 				<slot v-bind="item">\
-					<a href="#" @click="show(item.id, index, $event)" :id="item.id">{{item.name}}</a>\
+					<a :href="(hrefStr || \'\').replace(\'{id}\', item.id)" @click="show(item.id, index, $event)" :id="item.id">{{item.name}}</a>\
 				</slot>\
 			</li></ul>',
 	mounted : function() {
@@ -60,6 +65,10 @@ Vue.component('aj-page-list', {
 		autoLoadWhenReachedBottom : {	// 到底部是否自动加载下一页，通常在 移动端使用，这个应该是元素的 CSS Selector
 			type : String,
 			default : ''
+		},
+		isDataAppend : {
+			type : Boolean, 	// 数据分页是否追加模式，默认不追加 = false。 App 一般采用追加模式
+			default : false
 		}
 	},
 	template : 
@@ -84,13 +93,7 @@ Vue.component('aj-page-list', {
 			</footer><div v-show="!!autoLoadWhenReachedBottom" class="buttom"></div>\
 		</div>',
 	mounted : function() {
-		ajaxjs.xhr.get(this.$props.apiUrl, function(json) {
-			this.total = json.total;
-			this.result = this.result.concat(json.result);
-
-			//aj.apply(this, json);
-			this.count();
-		}.bind(this), {
+		ajaxjs.xhr.get(this.$props.apiUrl, this.doAjaxGet, {
 			limit : this.pageSize
 		});
 		
@@ -133,20 +136,20 @@ Vue.component('aj-page-list', {
 			this.count();
 			this.ajaxGet();
 		},
+		
+		doAjaxGet : function(json) {
+			this.total = json.total;
+			this.result = this.isDataAppend ? this.result.concat(json.result) : json.result;
+			this.count();
+		}, 
 		ajaxGet : function () {
 			var params = {};
 			
-			aj.apply(params, {
-				start : this.pageStart, limit : this.pageSize
-			});
+			aj.apply(params, { start : this.pageStart, limit : this.pageSize });
 			
 			this.baseParam && aj.apply(params, this.baseParam);
 			
-			ajaxjs.xhr.get(this.$props.apiUrl, function(json) {
-				this.total = json.total;
-				this.result = this.result.concat(json.result);
-				this.count();
-			}.bind(this), params);
+			ajaxjs.xhr.get(this.$props.apiUrl, this.doAjaxGet, params);
 		},
 		// 分页，跳到第几页，下拉控件传入指定的页码
 		jumpPageBySelect : function (e) {
@@ -158,6 +161,11 @@ Vue.component('aj-page-list', {
 			aj.apply(this.baseParam, params);
 			
 			this.pageStart = 0; // 每次 baseParam 被改变，都是从第一笔开始
+			this.ajaxGet();
+		}
+	},
+	watch: {
+		'baseParam' : function(index, oldIndex) {
 			this.ajaxGet();
 		}
 	}

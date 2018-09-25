@@ -80,7 +80,7 @@ Vue.component('aj-expander', {
 
 Vue.component('aj-menu-moblie-scroll', {
 	props : {
-		items : {
+		initItems : {
 			type : Array,
 			default : function() {
 				return [{name : 'foo'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}];
@@ -89,7 +89,8 @@ Vue.component('aj-menu-moblie-scroll', {
 	},
 	data : function() {
 		return {
-			selected : 0
+			selected : 0,
+			items : this.initItems
 		}
 	},
 	template : 
