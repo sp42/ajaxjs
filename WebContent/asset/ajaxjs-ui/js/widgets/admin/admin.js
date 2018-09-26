@@ -55,11 +55,15 @@ Vue.component('aj-admin-filter-panel', {
 		},
 		catelogId :{		//
 			type: Number,
-			required: true
+			required: false
 		},
 		selectedCatelogId :{ // 已选中的分类 id
 			type: Number,
 			required: false
+		},
+		noCatelog :{
+			type : Boolean, // 是否不需要 分类下拉
+			default : false
 		}
 	},
 	template: 
@@ -69,7 +73,7 @@ Vue.component('aj-admin-filter-panel', {
 				<input type="text" name="searchValue" placeholder="请输入正文之关键字" style="float: inherit;" class="ajaxjs-inputField" />\
 				<button style="margin-top: 0;" class="ajaxjs-btn">搜索</button>\
 			</form>\
-			{{label||\'分类\'}}：<aj-tree-catelog-select :is-auto-jump="true" :catelog-id="catelogId" :selected-catelog-id="selectedCatelogId"></aj-tree-catelog-select>\
+			<span v-if="!noCatelog">{{label||\'分类\'}}：<aj-tree-catelog-select :is-auto-jump="true" :catelog-id="catelogId" :selected-catelog-id="selectedCatelogId"></aj-tree-catelog-select></span>\
 		</div>'
 });
 

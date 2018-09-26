@@ -320,7 +320,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * 返回协议+主机名+端口（如果为 80 端口的话就默认不写 80）
+	 * 返回协议+主机名+端口+项目前缀（如果为 80 端口的话就默认不写 80）
 	 * 
 	 * @return 网站名称
 	 */

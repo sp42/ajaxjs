@@ -1,6 +1,4 @@
-<%@ page contentType="application/json; charset=UTF-8"
-	pageEncoding="UTF-8" import="com.ajaxjs.mvc.view.PageTag"
-	trimDirectiveWhitespaces="true"%>
+<%@ page contentType="application/json; charset=UTF-8" pageEncoding="UTF-8" import="com.ajaxjs.mvc.view.PageTag" trimDirectiveWhitespaces="true" isErrorPage="true"%>
 <%@taglib prefix="c" uri="/ajaxjs"%><%
 	request.setAttribute("PageUtil", new PageTag());
 %><c:choose>

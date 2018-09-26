@@ -70,6 +70,11 @@ public interface Constant {
 	 * 操作成功，返回 msg 信息
 	 */
 	public static final String json_ok = "json::{\"isOk\": true, \"msg\" : \"%s\"}";
+	
+	/**
+	 * 操作成功，返回 msg 信息，可扩展字段的
+	 */
+	public static final String json_ok_extension = "json::{\"isOk\": true, \"msg\" : \"%s\", %s}";
 
 	/**
 	 * 操作失败，返回 msg 信息

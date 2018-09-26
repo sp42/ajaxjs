@@ -204,7 +204,15 @@ ajaxjs.xhr = {
 					break;
 				case 'json':
 				default:
-					data = JSON.parse(responseText);
+					try{
+						data = JSON.parse(responseText);						
+					} catch(e) {
+						try{
+							data = eval("TEMP_VAR = " + responseText);  // for {ok: true}
+						} catch(e) {
+							throw e;
+						}
+					}
 				}
 			} catch (e) {
 				alert('AJAX 错误:\n' + e + '\nThe url is:' + cb.url); // 提示用户 异常

@@ -15,24 +15,59 @@ Vue.component('ajaxjs-file-upload', {
 	props : {
 		fieldName : {
 			type: String,
-			required: true
+			required: false
 		},
+		
 		filedId : {
 	      type: Number,
 	      required: false
 	    },
+	    
+	    limitSize : Number,
+	    
+	    limitFileType: String
 	},
 	template : 
-		'<div class="ajaxjs-img-upload-perview">\
+		'<div class="ajaxjs-file-upload">\
 			<div class="pseudoFilePicker">\
-				<input type="hidden" :name="fieldName" :value="newlyId || filedId" />\
-				<label for="input_file_molding"><div><div>+</div>点击选择图片</div></label>\
+				<input type="hidden" v-if="fieldName" :name="fieldName" :value="newlyId || filedId" />\
+				<label for="input_file_molding"><div><div>+</div>点击选择文件</div></label>\
 			</div>\
 			<div v-if="!isFileSize || !isExtName">{{errMsg}}</div>\
 			<div v-if="isFileSize && isExtName">\
-				<button onclick="aj(\'form[target=upframe]\').submit();return false;">上传</button>\
+				<button @click.prevent="doUpload($event);">上传</button>\
 			</div>\
-		</div>'
+		</div>',
+	methods : {
+		onUploadInputChange : function(e) {
+			var fileInput = e.target;
+			var ext = fileInput.value.split('.').pop(); // 扩展名
+			var size = fileInput.files[0].size;
+			
+			if(this.limitSize)
+				this.isFileSize = size < this.limitSize;
+			else
+				this.isFileSize = true;
+			
+			if(this.limitFileType)
+				this.isExtName = new RegExp(this.limitFileType, 'i').test(ext);
+			else
+				this.isExtName = true;
+		},
+		doUpload : function(e) {
+			// 先周围找下 form，没有的话找全局的
+			var form = this.$parent.$refs.uploadIframe && this.$parent.$refs.uploadIframe.$el;
+			if(!form) {
+				//form = aj('form[target=upframe]');
+				form = this.$parent.$el.$('form');
+			}
+			
+			form && form.submit();
+			
+			e.preventDefault();
+			return false;
+		}
+	}
 });
 
 //图片选择器、预览和校验
@@ -167,7 +202,6 @@ Vue.component('ajaxjs-img-upload-perview', {
 				cfg.errMsg = "亲，改了扩展名我还能认得你不是图片哦";
 			},
 			doUpload : function(e) {
-
 				// 先周围找下 form，没有的话找全局的
 				var form = this.$parent.$refs.uploadIframe && this.$parent.$refs.uploadIframe.$el;
 				if(!form) {
@@ -202,11 +236,14 @@ Vue.component('ajaxjs-fileupload-iframe', {
 	    	type : String,
 	    	required : false,
 	    	default : 'input_file_molding'
+	    },
+	    accpectFileType : { // 可以上传类型
+	    	type : String
 	    }
 	},
 	template : // 隐藏的 input 上传控件为了无刷新上传，对应 form 的 target 
 		'<form :action="uploadUrl" method="POST" enctype="multipart/form-data" :target="\'upframe_\' + radomId">\
-			<input name="fileInput" :id="labelId" type="file" multiple="multiple" class="hide" @change="fireUploadFileSelected($event)" />\
+			<input name="fileInput" :id="labelId" type="file" multiple="multiple" class="hide" @change="fireUploadFileSelected($event)" :accept="accpectFileType" />\
 			<iframe :name="\'upframe_\' + radomId" class="hide" @load="iframe_callback($event);"></iframe>\
 		</form>',
 	methods : {
@@ -221,7 +258,7 @@ Vue.component('ajaxjs-fileupload-iframe', {
 					aj.msg.show('上传成功！');
 					
 					if(this.uploadOk_callback && typeof this.uploadOk_callback == 'function') {
-						var imgUrl = json.imgUrl;
+						var imgUrl = json.imgUrl || json.visitPath;
 						this.uploadOk_callback(imgUrl, json);
 					}
 				}

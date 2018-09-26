@@ -232,23 +232,6 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 		return outputJson(pageResult, model);
 	}
 
-	@SuppressWarnings("unchecked")
-	public String outputJson(PageResult<T> pageResult, ModelAndView model) {
-		String jsonStr = "[]"; // empty array
-		if (pageResult != null && pageResult.size() > 0) {
-
-			if (pageResult.get(0) instanceof Map) { // Map 类型的输出
-				List<Map<String, Object>> list = (List<Map<String, Object>>) pageResult;
-				jsonStr = JsonHelper.stringifyListMap(list);
-			} else { // Bean
-				jsonStr = BeanUtil.listToJson((List<Object>) pageResult);
-			}
-		}
-
-		model.put("MapOutput", jsonStr);
-		return paged_json_List;
-	}
-
 	/**
 	 * 获取全部列表数据
 	 * 
@@ -293,6 +276,19 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	}
 
 	/**
+	 * 把 Bean 转换为 JSON
+	 * 
+	 * @param BaseModel bean
+	 * @return JSON 结果
+	 */
+	public static String outputBeanAsJson(BaseModel bean) {
+		if (bean != null)
+			return "json::{\"result\":" + JsonHelper.bean2json(bean) + "}";
+		else
+			return "json::{\"result\": null}";
+	}
+
+	/**
 	 * 把 Map 转换为 JSON 数组
 	 * 
 	 * @param result Map
@@ -334,6 +330,24 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 			return "json::{\"result\":[" + StringUtil.stringJoin(str, ",") + "]}";
 		} else
 			return "json::{\"result\": null}";
+	}
+
+	@SuppressWarnings("unchecked")
+	public String outputJson(PageResult<T> pageResult, ModelAndView model) {
+		String jsonStr = "[]"; // empty array
+		if (pageResult != null && pageResult.size() > 0) {
+
+			if (pageResult.get(0) instanceof Map) { // Map 类型的输出
+				List<Map<String, Object>> list = (List<Map<String, Object>>) pageResult;
+				jsonStr = JsonHelper.stringifyListMap(list);
+			} else { // Bean
+				jsonStr = BeanUtil.listToJson((List<Object>) pageResult);
+			}
+		}
+
+		model.put("MapOutput", jsonStr);
+
+		return paged_json_List;
 	}
 
 	/**
