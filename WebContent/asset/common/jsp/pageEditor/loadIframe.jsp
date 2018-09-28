@@ -42,8 +42,7 @@
 			methods : {
 				onchange : function(e) {
 					var el = e.target;
-					this.url = el.contentWindow.location.pathname;
-					console.log(this.url);
+					this.url = location.origin + el.contentWindow.location.pathname;
 				},
 				clk : function() {
 					var url = aj('iframe').contentDocument.location.href;

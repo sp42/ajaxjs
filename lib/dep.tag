@@ -118,7 +118,7 @@
 			json = JSON.parse(json);
 			
 			if(json.isOk) {
-				ajaxjs.msg('上传成功！');
+				aj.alert.show('上传成功！');
 				obj.lastUploadedImg = json.imgUrl;
 				loadPic_AJAX();
 			}

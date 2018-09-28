@@ -245,10 +245,10 @@ function save() {
 	if (Object.keys(data).length) {
 		ajaxjs.xhr.post('?', function(json) {
 			if (json && json.isOk)
-				ajaxjs.msg('修改配置成功！');
+				aj.alert.show('修改配置成功！');
 		}, data);
 	} else{
-		ajaxjs.msg('没任何修改');
+		aj.alert.show('没任何修改');
 	}
 }
 
