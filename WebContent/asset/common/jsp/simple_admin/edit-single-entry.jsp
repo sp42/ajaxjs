@@ -17,7 +17,7 @@
 				<td>请选择${uiName}：<br /> <br /> <select name="catalog"
 					onchange="applyData(this);" multiple="multiple"
 					style="height: 300px; width: 200px;">
-						<c:foreach items="${PageResult.rows}" var="current">
+						<c:foreach items="${PageResult}" var="current">
 							<option value="${current.id}">${current.name}</option>
 						</c:foreach>
 				</select>

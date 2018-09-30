@@ -326,3 +326,33 @@ Vue.component('aj-popup-upload', {
 		}
 	}
 });
+
+
+Vue.component('aj-xhr-upload', {
+	data : function() {
+		return {
+			isFileSize : false,			// 文件大小检查
+			isExtName : false,			// 文件扩展名检查
+			errMsg : null,				// 错误信息
+			newlyId : null				// 成功上传之后的文件 id
+		};
+	},
+	props : {
+		fieldName : String, // input name 字段名
+	    
+	    limitSize : Number,
+	    
+	    limitFileType: String
+	},
+	template : 
+		'<div class="ajaxjs-file-upload">\
+			<div class="pseudoFilePicker">\
+				<label for="input_file_molding"><div><div>+</div>点击选择文件</div></label>\
+			</div>\
+			<input type="file" :name="fieldName" />\
+			<div v-if="!isFileSize || !isExtName">{{errMsg}}</div>\
+			<div v-if="isFileSize && isExtName">\
+				<button @click.prevent="doUpload($event);">上传</button>\
+			</div>\
+		</div>',
+});

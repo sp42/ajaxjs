@@ -52,7 +52,7 @@
 	<script src="${ajaxjsui}/js/libs/less.min.js"></script>
     <script src="${ajaxjsui}/js/libs/vue.js"></script>
     <script src="${ajaxjsui}/js/ajaxjs-base.js"></script>
-    <script src="${ajaxjsui}/js/widgets/admin/admin.js"></script>
+    <script src="${ajaxjsui}/js/widgets/admin.js"></script>
     <script src="${ajaxjsui}/js/widgets/form.js"></script>
     <script src="${ajaxjsui}/js/widgets/list.js"></script>
     <script src="${ajaxjsui}/js/widgets/menu.js"></script>

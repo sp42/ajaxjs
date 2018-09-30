@@ -122,7 +122,15 @@ data = this.responseXML;
 break;
 case 'json':
 default:
-data = JSON.parse(responseText);
+try{
+data = JSON.parse(responseText);	
+} catch(e) {
+try{
+data = eval("TEMP_VAR = " + responseText); 
+} catch(e) {
+throw e;
+}
+}
 }
 } catch (e) {
 alert('AJAX 错误:\n' + e + '\nThe url is:' + cb.url); 
@@ -295,6 +303,100 @@ fn.$ += ";return $;";
 }
 return data ? fn(data) : fn;
 }
+
+Vue.component('ajaxjs-admin-header', {
+props : {
+isCreate : Boolean,	
+uiName : String,	
+infoId : {	
+type: Number,
+required: false
+}
+},
+template : 
+'<header class="ajaxjs-admin-header">\
+<div>\
+<slot name="btns"></slot>\
+<a href="#" target="_blank"><img width="12" src="data:image/gif;base64,R0lGODlhEAAQAIABAAAAAP///yH5BAEAAAEALAAAAAAQABAAAAImjG+gq+je3gOBWURrlvVEuWlcKE4T2Xkql6zshkLuOIO1mVj6VgAAOw==" /> 新窗口打开</a>\
+</div>\
+<fieldset>\
+<legend><slot name="title">{{isCreate ? "新建":"编辑"}}{{uiName}} ：<span v-if="infoId">No.{{infoId}}</span></slot></legend>\
+</fieldset>\
+</header>'
+})
+Vue.component('ajaxjs-admin-info-btns', {
+props : {
+isCreate : Boolean 
+},
+template : 
+'<div class="ajaxjs-admin-info-btns">\
+<button><img :src="ajResources.commonAsset + \'/icon/save.gif\'" /> {{isCreate ? "新建":"编辑"}}</button>\
+<button onclick="this.up(\'form\').reset();return false;">复 位</button>\
+<button v-if="!isCreate" v-on:click.prevent="del()">\
+<img :src="ajResources.commonAsset + \'/icon/delete.gif\'" /> 删 除\
+</button><slot></slot>\
+</div>',
+methods : {
+del : function () {
+if (confirm('确定删除？'))
+ajaxjs.xhr.dele('.', function(json) {
+if (json && json.isOk) {
+alert(json.msg);
+location.assign('../list/');
+}
+});
+}
+}
+});
+Vue.component('aj-admin-filter-panel', {
+props : {
+label : {
+type : String,
+required : false
+},
+catelogId :{	
+type: Number,
+required: false
+},
+selectedCatelogId :{ 
+type: Number,
+required: false
+},
+noCatelog :{
+type : Boolean, 
+default : false
+}
+},
+template: 
+'<div class="aj-admin-filter-panel">\
+<form action="?" method="GET">\
+<input type="hidden" name="searchField" value="content" />\
+<input type="text" name="searchValue" placeholder="请输入正文之关键字" style="float: inherit;" class="ajaxjs-inputField" />\
+<button style="margin-top: 0;" class="ajaxjs-btn">搜索</button>\
+</form>\
+<span v-if="!noCatelog">{{label||\'分类\'}}：<aj-tree-catelog-select :is-auto-jump="true" :catelog-id="catelogId" :selected-catelog-id="selectedCatelogId"></aj-tree-catelog-select></span>\
+</div>'
+});
+aj.admin = {
+del : function(id, title) {
+if (confirm('请确定删除记录：\n' + title + ' ？')) {
+ajaxjs.xhr.dele('../' + id + '/', function(json) {
+if (json.isOk) {
+alert('删除成功！');
+location.reload();
+}
+});
+}
+},
+setStatus : function(id, status) {
+ajaxjs.xhr.post('../setStatus/' + id + '/', function(json) {
+if (json.isOk) {
+}
+}, {
+status : status
+});
+}
+};
 aj._carousel = {
 props : {
 isMagic : {	
@@ -899,6 +1001,10 @@ props : {
 apiUrl : {	
 type : String,
 required : true
+},
+hrefStr : {
+type : String,
+required : false
 }
 },
 data : function() {
@@ -912,7 +1018,7 @@ Vue.component('aj-simple-list', {
 mixins: [aj._list],
 template : '<ul class="aj-simple-list"><li v-for="(item, index) in result">\
 <slot v-bind="item">\
-<a href="#" @click="show(item.id, index, $event)" :id="item.id">{{item.name}}</a>\
+<a :href="(hrefStr || \'\').replace(\'{id}\', item.id)" @click="show(item.id, index, $event)" :id="item.id">{{item.name}}</a>\
 </slot>\
 </li></ul>',
 mounted : function() {
@@ -945,6 +1051,10 @@ default : true
 autoLoadWhenReachedBottom : {	
 type : String,
 default : ''
+},
+isDataAppend : {
+type : Boolean, 
+default : false
 }
 },
 template : 
@@ -969,11 +1079,7 @@ template :
 </footer><div v-show="!!autoLoadWhenReachedBottom" class="buttom"></div>\
 </div>',
 mounted : function() {
-ajaxjs.xhr.get(this.$props.apiUrl, function(json) {
-this.total = json.total;
-this.result = this.result.concat(json.result);
-this.count();
-}.bind(this), {
+ajaxjs.xhr.get(this.$props.apiUrl, this.doAjaxGet, {
 limit : this.pageSize
 });
 if(!!this.autoLoadWhenReachedBottom) {
@@ -1010,17 +1116,16 @@ this.pageSize = Number(e.target.value);
 this.count();
 this.ajaxGet();
 },
+doAjaxGet : function(json) {
+this.total = json.total;
+this.result = this.isDataAppend ? this.result.concat(json.result) : json.result;
+this.count();
+}, 
 ajaxGet : function () {
 var params = {};
-aj.apply(params, {
-start : this.pageStart, limit : this.pageSize
-});
+aj.apply(params, { start : this.pageStart, limit : this.pageSize });
 this.baseParam && aj.apply(params, this.baseParam);
-ajaxjs.xhr.get(this.$props.apiUrl, function(json) {
-this.total = json.total;
-this.result = this.result.concat(json.result);
-this.count();
-}.bind(this), params);
+ajaxjs.xhr.get(this.$props.apiUrl, this.doAjaxGet, params);
 },
 jumpPageBySelect : function (e) {
 var selectEl = e.target;
@@ -1029,6 +1134,11 @@ this.currentPage = selectEl.options[selectEl.selectedIndex].value;
 onBaseParamChange : function(params) {
 aj.apply(this.baseParam, params);
 this.pageStart = 0; 
+this.ajaxGet();
+}
+},
+watch: {
+'baseParam' : function(index, oldIndex) {
 this.ajaxGet();
 }
 }
@@ -1784,24 +1894,50 @@ newlyId : null
 props : {
 fieldName : {
 type: String,
-required: true
+required: false
 },
 filedId : {
 type: Number,
 required: false
 },
+limitSize : Number,
+limitFileType: String
 },
 template : 
-'<div class="ajaxjs-img-upload-perview">\
+'<div class="ajaxjs-file-upload">\
 <div class="pseudoFilePicker">\
-<input type="hidden" :name="fieldName" :value="newlyId || filedId" />\
-<label for="input_file_molding"><div><div>+</div>点击选择图片</div></label>\
+<input type="hidden" v-if="fieldName" :name="fieldName" :value="newlyId || filedId" />\
+<label for="input_file_molding"><div><div>+</div>点击选择文件</div></label>\
 </div>\
 <div v-if="!isFileSize || !isExtName">{{errMsg}}</div>\
 <div v-if="isFileSize && isExtName">\
-<button onclick="aj(\'form[target=upframe]\').submit();return false;">上传</button>\
+<button @click.prevent="doUpload($event);">上传</button>\
 </div>\
-</div>'
+</div>',
+methods : {
+onUploadInputChange : function(e) {
+var fileInput = e.target;
+var ext = fileInput.value.split('.').pop(); 
+var size = fileInput.files[0].size;
+if(this.limitSize)
+this.isFileSize = size < this.limitSize;
+else
+this.isFileSize = true;
+if(this.limitFileType)
+this.isExtName = new RegExp(this.limitFileType, 'i').test(ext);
+else
+this.isExtName = true;
+},
+doUpload : function(e) {
+var form = this.$parent.$refs.uploadIframe && this.$parent.$refs.uploadIframe.$el;
+if(!form) {
+form = this.$parent.$el.$('form');
+}
+form && form.submit();
+e.preventDefault();
+return false;
+}
+}
 });
 Vue.component('ajaxjs-img-upload-perview', {
 data : function() {
@@ -1947,11 +2083,14 @@ labelId : {
 type : String,
 required : false,
 default : 'input_file_molding'
+},
+accpectFileType : { 
+type : String
 }
 },
 template : 
 '<form :action="uploadUrl" method="POST" enctype="multipart/form-data" :target="\'upframe_\' + radomId">\
-<input name="fileInput" :id="labelId" type="file" multiple="multiple" class="hide" @change="fireUploadFileSelected($event)" />\
+<input name="fileInput" :id="labelId" type="file" multiple="multiple" class="hide" @change="fireUploadFileSelected($event)" :accept="accpectFileType" />\
 <iframe :name="\'upframe_\' + radomId" class="hide" @load="iframe_callback($event);"></iframe>\
 </form>',
 methods : {
@@ -1962,7 +2101,7 @@ json = JSON.parse(json);
 if(json.isOk) {
 aj.msg.show('上传成功！');
 if(this.uploadOk_callback && typeof this.uploadOk_callback == 'function') {
-var imgUrl = json.imgUrl;
+var imgUrl = json.imgUrl || json.visitPath;
 this.uploadOk_callback(imgUrl, json);
 }
 }
@@ -2015,4 +2154,30 @@ this.$refs.uploadIframe.uploadOk_callback = callback;
 this.$children[0].show();
 }
 }
+});
+Vue.component('aj-xhr-upload', {
+data : function() {
+return {
+isFileSize : false,	
+isExtName : false,	
+errMsg : null,	
+newlyId : null	
+};
+},
+props : {
+fieldName : String, 
+limitSize : Number,
+limitFileType: String
+},
+template : 
+'<div class="ajaxjs-file-upload">\
+<div class="pseudoFilePicker">\
+<label for="input_file_molding"><div><div>+</div>点击选择文件</div></label>\
+</div>\
+<input type="file" :name="fieldName" />\
+<div v-if="!isFileSize || !isExtName">{{errMsg}}</div>\
+<div v-if="isFileSize && isExtName">\
+<button @click.prevent="doUpload($event);">上传</button>\
+</div>\
+</div>',
 });
