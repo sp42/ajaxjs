@@ -45,6 +45,11 @@ public interface Constant {
 	 * 全局 json 模板路径 之前缀
 	 */
 	public static final String jsp_perfix = "/asset/jsp";
+	
+	/**
+	 * 全局 json 模板路径 之 WEB-INF前缀
+	 */
+	public static final String jsp_perfix_webinf = "/WEB-INF/jsp";
 
 	/**
 	 * json 路径常量（实体创建、修改）
@@ -86,3 +91,4 @@ public interface Constant {
 	 */
 	public static final String show405 = String.format(json_not_ok, "405， Request method not supported 禁止操作");
 }
+
