@@ -4,7 +4,7 @@
 document.addEventListener("DOMContentLoaded", function() {
 	document.body.appendChild(document.createElement('div')).className = 'alertHolder';
 	
-	//全屏幕弹窗，居中显示文字。
+	// 全屏幕弹窗，居中显示文字。
 	aj.alert = new Vue({
 		el : '.alertHolder',
 		data : {

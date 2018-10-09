@@ -173,9 +173,7 @@ Vue.component('aj-tree-catelog-select', {
 		load : function(json) {
 			var catalogArr = json.result;
 			var selectUI = new ajaxjs.tree.selectUI();
-			
-			var select = aj('select');
-			selectUI.renderer(catalogArr, select, this.selectedCatelogId, {makeAllOption : false});
+			selectUI.renderer(catalogArr, this.$el, this.selectedCatelogId, {makeAllOption : false});
 		},
 		
 		onSelected : function(e) {
