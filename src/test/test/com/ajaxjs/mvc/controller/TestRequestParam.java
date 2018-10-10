@@ -1,4 +1,4 @@
-package test.com.ajaxjs.mvc.controller.testcase;
+package test.com.ajaxjs.mvc.controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -27,6 +28,8 @@ import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.controller.RequestParam;
 import com.ajaxjs.web.MockWeb;
+
+import test.com.ajaxjs.mvc.controller.testcase.News;
 
 //import test.com.ajaxjs.framework.testcase.News;
 
@@ -46,7 +49,7 @@ public class TestRequestParam {
 
 		@Path("/bar")
 		@GET
-		public String getInfo2(@QueryParam("name") String name, @QueryParam("sex") String sex) {
+		public String getInfo2(@NotNull @QueryParam("name") String name, @QueryParam("sex") String sex) {
 			return "getInfo2";
 		}
 

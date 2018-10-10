@@ -83,9 +83,7 @@ public class ControllerScanner {
 		if (clz.getAnnotation(Bean.class) != null) { // 如果有 ioc，则从容器中查找
 			action.controller = BeanContext.me().getBeanByClass(clz);
 			if (action.controller == null)
-				LOGGER.warning(
-						"在 IOC 资源库中找不到该类 {0} 的实例，请检查该类是否已经加入了 IOC 扫描？  The IOC library not found that Controller, plz check if it added to the IOC scan.",
-						clz.getName());
+				LOGGER.warning("在 IOC 资源库中找不到该类 {0} 的实例，请检查该类是否已经加入了 IOC 扫描？  The IOC library not found that Controller, plz check if it added to the IOC scan.", clz.getName());
 		} else {
 			// if(action.controller == null)
 			action.controller = NewInstance.newInstance(clz);// 保存的是 控制器 实例。
@@ -95,8 +93,7 @@ public class ControllerScanner {
 		parseSubPath(clz, action);
 
 		// 会打印控制器的总路径信息，不会不会打印各个方法的路径，太细了，日志也会相应地多
-		LOGGER.info("控制器已登记成功！The controller \"{0}\" (\"/{1}\") was parsed and registered",
-				clz.toString().replaceAll("class\\s", ""), topPath); // 控制器 {0} 所有路径（包括子路径）注册成功！
+		LOGGER.info("控制器已登记成功！The controller \"{0}\" (\"/{1}\") was parsed and registered", clz.toString().replaceAll("class\\s", ""), topPath); // 控制器 {0} 所有路径（包括子路径）注册成功！
 	}
 
 	/**

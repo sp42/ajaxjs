@@ -9,6 +9,12 @@ import javax.servlet.http.HttpSession;
  *
  */
 public abstract class SessionValueFilter implements FilterAction {
+	/**
+	 * 
+	 * @param request
+	 * @param paramName
+	 * @return
+	 */
 	public String getClientSideArgs(HttpServletRequest request, String paramName) {
 		if (request.getParameter(paramName) == null)
 			throw new NullPointerException("客户端没有提供参数： " + paramName);
@@ -16,6 +22,12 @@ public abstract class SessionValueFilter implements FilterAction {
 		return request.getParameter(paramName);
 	}
 
+	/**
+	 * 
+	 * @param request
+	 * @param sessionKey
+	 * @return
+	 */
 	public String getServerSideValue(HttpServletRequest request, String sessionKey) {
 		HttpSession session = request.getSession();
 		Object value = session.getAttribute(sessionKey);

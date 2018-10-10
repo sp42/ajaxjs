@@ -18,6 +18,8 @@ package com.ajaxjs.config;
 import java.util.Map;
 
 import com.ajaxjs.Version;
+import com.ajaxjs.framework.dao.MockDataSource;
+import com.ajaxjs.jdbc.JdbcConnection;
 import com.ajaxjs.js.JsEngineWrapper;
 import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.js.JsonStruTraveler;
@@ -81,8 +83,7 @@ public class ConfigService {
 	/**
 	 * 加载 JSON 配置
 	 * 
-	 * @param jsonPath
-	 *            JSON 配置文件所在路径
+	 * @param jsonPath JSON 配置文件所在路径
 	 */
 	public static void load(String jsonPath) {
 		ConfigService.jsonPath = jsonPath; // 覆盖本地的
@@ -110,8 +111,7 @@ public class ConfigService {
 	/**
 	 * 读取配置并转换其为 布尔 类型。仅对扁平化后的配置有效，所以参数必须是扁平化的 aaa.bbb.ccc 格式。
 	 * 
-	 * @param key
-	 *            配置键值
+	 * @param key 配置键值
 	 * @return 配置内容
 	 */
 	public static boolean getValueAsBool(String key) {
@@ -131,14 +131,13 @@ public class ConfigService {
 	/**
 	 * 读取配置并转换其为 int 类型。仅对扁平化后的配置有效，所以参数必须是扁平化的 aaa.bbb.ccc 格式。
 	 * 
-	 * @param key
-	 *            配置键值
+	 * @param key 配置键值
 	 * @return 配置内容
 	 */
 	public static int getValueAsInt(String key) {
 		if (flatConfig == null || !config.isLoaded())
 			return 0;
-		
+
 		// js number 在 java 里面为 double 转换一下
 		Object number = flatConfig.get(key);
 
@@ -156,14 +155,13 @@ public class ConfigService {
 	/**
 	 * 读取配置并转换其为 long 类型。仅对扁平化后的配置有效，所以参数必须是扁平化的 aaa.bbb.ccc 格式。
 	 * 
-	 * @param key
-	 *            配置键值
+	 * @param key 配置键值
 	 * @return 配置内容
 	 */
 	public static long getValueAsLong(String key) {
 		if (flatConfig == null || !config.isLoaded())
 			return 0L;
-		
+
 		// js number 在 java 里面为 double 转换一下
 		Object number = flatConfig.get(key);
 
@@ -181,14 +179,13 @@ public class ConfigService {
 	/**
 	 * 读取配置并转换其为字符串类型。仅对扁平化后的配置有效，所以参数必须是扁平化的 aaa.bbb.ccc 格式。
 	 * 
-	 * @param key
-	 *            配置键值
+	 * @param key 配置键值
 	 * @return 配置内容
 	 */
 	public static String getValueAsString(String key) {
 		if (flatConfig == null || !config.isLoaded())
 			return null;
-		
+
 		Object v = flatConfig.get(key);
 
 		if (v == null) {
@@ -223,8 +220,7 @@ public class ConfigService {
 	 * load the json config file to the JS Runtime, and let the new values put into
 	 * it, finally save this new json file
 	 * 
-	 * @param map
-	 *            A map that contains all new config
+	 * @param map A map that contains all new config
 	 */
 	public static void loadJSON_in_JS(Map<String, Object> map) {
 		JsEngineWrapper js = new JsEngineWrapper();
@@ -262,4 +258,15 @@ public class ConfigService {
 		FileUtil.save(ConfigService.jsonPath, json);
 	}
 
+	/**
+	 * 单测专用的初始化数据库连接方法
+	 * 
+	 * @param configFile JSON 配置文件
+	 */
+	public static void initTestConnection(String configFile) {
+		ConfigService.load(configFile);
+		JdbcConnection.setConnection(MockDataSource.getTestMySqlConnection(ConfigService.getValueAsString("testServer.mysql.url"), ConfigService.getValueAsString("testServer.mysql.user"),
+				ConfigService.getValueAsString("testServer.mysql.password")));
+
+	}
 }

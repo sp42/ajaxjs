@@ -35,7 +35,7 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.util.SnowflakeIdWorker;
-import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.collection.MappingHelper;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.BeanUtil;
 import com.ajaxjs.web.UploadFile;
@@ -51,7 +51,7 @@ import com.ajaxjs.web.UploadFileInfo;
  * @param <ID> ID 类型，可以是 INTEGER/LONG/String
  * @param <S> 业务类型
  */
-public abstract class CommonController<T, ID extends Serializable, S extends IService<T, ID>> implements IController, Constant {
+public abstract class CommonController<T, ID extends Serializable, S extends IService<T, ID>> extends MappingHelper implements IController, Constant {
 	private static final LogHelper LOGGER = LogHelper.getLog(CommonController.class);
 
 	/**
@@ -275,62 +275,6 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 			request.setAttribute(key, mv.get(key));
 	}
 
-	/**
-	 * 把 Bean 转换为 JSON
-	 * 
-	 * @param BaseModel bean
-	 * @return JSON 结果
-	 */
-	public static String outputBeanAsJson(BaseModel bean) {
-		if (bean != null)
-			return "json::{\"result\":" + JsonHelper.bean2json(bean) + "}";
-		else
-			return "json::{\"result\": null}";
-	}
-
-	/**
-	 * 把 Map 转换为 JSON 数组
-	 * 
-	 * @param result Map
-	 * @return JSON 结果
-	 */
-	public static String outputMapAsJson(Map<String, Object> result) {
-		if (result != null)
-			return "json::{\"result\":" + JsonHelper.stringifyMap(result) + "}";
-		else
-			return "json::{\"result\": null}";
-	}
-
-	/**
-	 * 把 Map 集合转换为 JSON 数组
-	 * 
-	 * @param result Map 集合
-	 * @return JSON 结果
-	 */
-	public static String outputListMapAsJson(List<Map<String, Object>> result) {
-		if (result != null && result.size() > 0)
-			return "json::{\"result\":" + JsonHelper.stringifyListMap(result) + "}";
-		else
-			return "json::{\"result\": null}";
-	}
-
-	/**
-	 * 把 Bean 集合转换为 JSON 数组
-	 * 
-	 * @param result BaseMolde 集合
-	 * @return JSON 结果
-	 */
-	public static String outputListBeanAsJson(List<? extends BaseModel> result) {
-		if (result != null && result.size() > 0) {
-			String[] str = new String[result.size()];
-
-			for (int i = 0; i < result.size(); i++)
-				str[i] = JsonHelper.bean2json((Object) result.get(i));
-
-			return "json::{\"result\":[" + StringUtil.stringJoin(str, ",") + "]}";
-		} else
-			return "json::{\"result\": null}";
-	}
 
 	@SuppressWarnings("unchecked")
 	public String outputJson(PageResult<T> pageResult, ModelAndView model) {
@@ -349,27 +293,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 
 		return paged_json_List;
 	}
-
-	/**
-	 * 输出 JSON OK
-	 * 
-	 * @param msg
-	 * @return
-	 */
-	public static String jsonOk(String msg) {
-		return String.format(Constant.json_ok, msg);
-	}
-
-	/**
-	 * 输出 JSON No OK
-	 * 
-	 * @param msg
-	 * @return
-	 */
-	public static String jsonNoOk(String msg) {
-		return String.format(Constant.json_not_ok, msg);
-	}
-
+	
 	/**
 	 * 执行文件上传，读取默认配置的上传规则
 	 * 
@@ -421,4 +345,5 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 			LOGGER.warning("当前没有 service 对象传入！！！");
 		this.service = service;
 	}
+	
 }

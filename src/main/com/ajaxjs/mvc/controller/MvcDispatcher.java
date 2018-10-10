@@ -36,10 +36,10 @@ import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.FilterAction;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.simpleApp.Constant;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.collection.CollectionUtil;
+import com.ajaxjs.util.collection.MappingHelper;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.ExecuteMethod;
 import com.ajaxjs.util.reflect.NewInstance;
@@ -206,7 +206,7 @@ public class MvcDispatcher implements Filter {
 		Produces a = method.getAnnotation(Produces.class);
 
 		if (a != null && MediaType.APPLICATION_JSON.equals(a.value()[0])) {// 返回 json
-			response.resultHandler(String.format(Constant.json_not_ok, errMsg), request, model, method);
+			response.resultHandler(String.format(MappingHelper.json_not_ok, errMsg), request, model, method);
 		} else {
 			response.resultHandler(String.format("redirect::%s/showMsg?msg=%s", request.getContextPath(), Encode.urlEncode((errMsg))), request, model, method);
 		}

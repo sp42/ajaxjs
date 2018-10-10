@@ -110,6 +110,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 			} catch (IOException e) {
 				LOGGER.warning(e);
 			}
+			
 			return;
 		}
 

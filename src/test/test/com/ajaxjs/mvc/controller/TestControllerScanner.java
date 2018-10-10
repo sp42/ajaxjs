@@ -1,4 +1,4 @@
-package test.com.ajaxjs.mvc.controller.testcase;
+package test.com.ajaxjs.mvc.controller;
 
 import static org.junit.Assert.*;
 
@@ -60,8 +60,7 @@ public class TestControllerScanner {
 		assertNotNull(ControllerScanner.urlMappingTree.get("foo").children.get("bar"));
 
 		assertEquals("foo.bar", ControllerScanner.urlMappingTree.get("foo").children.get("bar").path);
-		assertEquals("foo.bar.zxzx",
-				ControllerScanner.urlMappingTree.get("foo").children.get("bar").children.get("zxzx").path);
+		assertEquals("foo.bar.zxzx", ControllerScanner.urlMappingTree.get("foo").children.get("bar").children.get("zxzx").path);
 
 		ControllerScanner.add(c3.class);
 		assertEquals("foo.bar2", ControllerScanner.urlMappingTree.get("foo").children.get("bar2").path);

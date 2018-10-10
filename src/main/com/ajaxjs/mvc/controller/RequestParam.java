@@ -22,6 +22,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -107,59 +108,22 @@ public class RequestParam {
 	 */
 	private static void getArgValue(Class<?> clz, Annotation[] annotations, MvcRequest request, ArrayList<Object> args, Method method) {
 		if (annotations.length > 0) {
-			boolean isGot = false; // 是否有 QueryParam 注解写好了
-
+			boolean required = false; // 是否必填字段
+			
 			for (Annotation a : annotations) {
+				if(a instanceof NotNull)
+					required = true;
+				
 				if (a instanceof QueryParam || a instanceof FormParam) { // 找到匹配的参数，这是说控制器上的方法是期望得到一个 url query string 参数的
-					isGot = true;
-					
-					String key = null;
-					if (a instanceof QueryParam) {
-						key = ((QueryParam) a).value();
-					} else {
-						key = ((FormParam) a).value();
-					}
-					
-					/*
-					 * 根据注解的名字，获取 QueryParam 参数实际值，此时是 String 类型，要转为到控制器方法期望的类型。
-					 */
-					String argValue = request.getParameter(key);
-
-					/*
-					 * 开始转换为控制器方法上的类型，支持 String、int/Integer、boolean/Boolean
-					 */
-					if (clz == String.class) {
-						args.add(argValue);
-					} else if (clz == int.class || clz == Integer.class) {
-						args.add(argValue == null || "".equals(argValue) ? 0 : Integer.parseInt(argValue));
-					} else if (clz == long.class || clz == Long.class) {
-						args.add(argValue == null || "".equals(argValue) ? 0L :(Long.parseLong(argValue)));
-					} else if (clz == boolean.class || clz == Boolean.class) {
-						args.add(Value.toBoolean(argValue));
-					} else {
-						args.add(new Object());// 也不要空的参数，不然反射那里执行不了
-						LOGGER.warning("不支持类型");
-					}
+					getArgValue(clz, args, getArgValue(a, request, required)); // 根据注解的名字，获取 QueryParam 参数实际值，此时是 String 类型，要转为到控制器方法期望的类型。
 
 					break; // 只需要执行一次，参见调用的那个方法就知道了
 				} else if (a instanceof PathParam) { // URL 上面的参数
 					Path path = method.getAnnotation(Path.class);
 					if (path != null) {
 						String paramName = ((PathParam) a).value(), value = request.getValueFromPath(path.value(), paramName);
-
-						//						if(paramName.contains("{"))
-						//							throw new RuntimeException("这里的参数不应该有 {xx} 尖括号");
-
-						if (clz == String.class) {
-							args.add(value);
-						} else if (clz == int.class || clz == Integer.class) {
-							args.add(Integer.parseInt(value));
-						} else if (clz == long.class || clz == Long.class) {
-							args.add(Long.parseLong(value));
-						} else {
-							LOGGER.warning("something wrong!");
-							args.add(value); // unknow type
-						}
+						
+						getArgValue2(clz, args, value);
 					} else {
 						LOGGER.warning(new NullPointerException("控制器方法居然没有 PathParam 注解？？"));
 					}
@@ -167,14 +131,72 @@ public class RequestParam {
 					break;
 				}
 			}
-
-			// 还是没有适合注解呢？
-			if (!isGot) {
-				// "是否有 QueryParam 注解写好了??"
-				// 当然也可能是 PathParam
-			}
 		} else {
 			args.add("nothing to add args"); // 不知道传什么，就空字符串吧
 		}
+	}
+	
+	/**
+	 * 
+	 * @param a
+	 * @param request
+	 * @param required
+	 * @return
+	 */
+	private static String getArgValue(Annotation a, HttpServletRequest request, boolean required) {
+		String key = null, value;
+		if (a instanceof QueryParam) {
+			key = ((QueryParam) a).value();
+		} else {
+			key = ((FormParam) a).value();
+		}
+		
+		value = request.getParameter(key);
+		
+		if(required && value == null)
+			throw new NullPointerException("客户端缺少提交的参数 " + key);
+		
+		return value;
+	}
+	
+	/**
+	 * 开始转换为控制器方法上的类型，支持 String、int/Integer、boolean/Boolean
+	 * 
+	 * @param clz
+	 * @param args
+	 * @param value
+	 */
+	private static void getArgValue(Class<?> clz, ArrayList<Object> args, String value) {
+		if (clz == String.class) {
+			args.add(value);
+		} else if (clz == int.class     || clz == Integer.class) {
+			args.add(value == null   || "".equals(value) ? 0 : Integer.parseInt(value));
+		} else if (clz == long.class    || clz == Long.class) {
+			args.add(value == null   || "".equals(value) ? 0L :(Long.parseLong(value)));
+		} else if (clz == boolean.class || clz == Boolean.class) {
+			args.add(Value.toBoolean(value));
+		} else {
+			args.add(new Object());// 也不要空的参数，不然反射那里执行不了
+			LOGGER.warning("不支持类型");
+		}
+	}
+	
+	/**
+	 * 
+	 * @param clz
+	 * @param args
+	 * @param value
+	 */
+	private static void getArgValue2(Class<?> clz, ArrayList<Object> args, String value) {
+		if (clz == String.class) {
+			args.add(value);
+		} else if (clz == int.class  || clz == Integer.class) {
+			args.add(Integer.parseInt(value));
+		} else if (clz == long.class || clz == Long.class) {
+			args.add(Long.parseLong(value));
+		} else {
+			LOGGER.warning("something wrong!");
+			args.add(value); // unknow type
+		}		
 	}
 }

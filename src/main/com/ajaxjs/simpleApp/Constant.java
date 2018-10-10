@@ -15,6 +15,8 @@
  */
 package com.ajaxjs.simpleApp;
 
+import com.ajaxjs.util.collection.MappingHelper;
+
 /**
  * 
  * @author Sp42 frank@ajaxjs.com
@@ -72,23 +74,8 @@ public interface Constant {
 	public static final String paged_json_error = commonJsp + "/json/json-err.jsp";
 
 	/**
-	 * 操作成功，返回 msg 信息
-	 */
-	public static final String json_ok = "json::{\"isOk\": true, \"msg\" : \"%s\"}";
-	
-	/**
-	 * 操作成功，返回 msg 信息，可扩展字段的
-	 */
-	public static final String json_ok_extension = "json::{\"isOk\": true, \"msg\" : \"%s\", %s}";
-
-	/**
-	 * 操作失败，返回 msg 信息
-	 */
-	public static final String json_not_ok = "json::{\"isOk\": false, \"msg\" : \"%s\"}";
-
-	/**
 	 * 显示 HTTP 405 禁止操作
 	 */
-	public static final String show405 = String.format(json_not_ok, "405， Request method not supported 禁止操作");
+	public static final String show405 = String.format(MappingHelper.json_not_ok, "405， Request method not supported 禁止操作");
 }
 

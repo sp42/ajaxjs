@@ -20,15 +20,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.collection.MappingHelper;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -65,14 +68,10 @@ public class PageEditor implements IController, Constant {
 	 */
 	@GET
 	@Path("loadPage")
-	public String loadPage(MvcRequest request) {
-		if (request.getParameter("url") == null)
-			throw new IllegalArgumentException("缺少必填参数 url！");
-
-		String path = request.getParameter("url");
+	public String loadPage(@NotNull @QueryParam("url") String url, MvcRequest request) {
+		String path = getFullPathByRequestUrl(request.mappath(url));
 
 		try {
-			path = getFullPathByRequestUrl(request.mappath(path));
 			String contentBody = read_jsp_fileContent(path);
 			request.setAttribute("contentBody", contentBody);
 		} catch (Exception e) {
@@ -110,10 +109,10 @@ public class PageEditor implements IController, Constant {
 
 			save_jsp_fileContent(path, contentBody);
 
-			return String.format(json_ok, "修改页面成功！");
+			return MappingHelper.jsonOk("修改页面成功！");
 		} catch (Throwable e) {
 			LOGGER.warning(e);
-			return String.format(json_not_ok, e.toString());
+			return MappingHelper.jsonNoOk(e.toString());
 		}
 	}
 
