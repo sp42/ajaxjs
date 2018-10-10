@@ -30,6 +30,10 @@ import com.ajaxjs.mvc.controller.MvcRequest;
  *
  */
 public class DataBaseFilter implements FilterAction {
+	/**
+	 * 为方便单测，设一个开关
+	 */
+	public static boolean isAutoClose = true;
 	
 	@Override
 	public boolean before(MvcRequest request, MvcOutput response, Method method) {
@@ -40,7 +44,8 @@ public class DataBaseFilter implements FilterAction {
 
 	@Override
 	public void after(MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
-		JdbcConnection.closeDb(); // 关闭数据库连接
+		if(isAutoClose)
+			JdbcConnection.closeDb(); // 关闭数据库连接
 	}
 
 	/**

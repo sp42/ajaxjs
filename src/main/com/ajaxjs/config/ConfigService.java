@@ -23,6 +23,7 @@ import com.ajaxjs.jdbc.JdbcConnection;
 import com.ajaxjs.js.JsEngineWrapper;
 import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.js.JsonStruTraveler;
+import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.Value;
 import com.ajaxjs.util.io.FileUtil;
@@ -267,6 +268,8 @@ public class ConfigService {
 		ConfigService.load(configFile);
 		JdbcConnection.setConnection(MockDataSource.getTestMySqlConnection(ConfigService.getValueAsString("testServer.mysql.url"), ConfigService.getValueAsString("testServer.mysql.user"),
 				ConfigService.getValueAsString("testServer.mysql.password")));
+		
+		DataBaseFilter.isAutoClose = false;
 
 	}
 }

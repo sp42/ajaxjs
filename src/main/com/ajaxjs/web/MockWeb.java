@@ -20,6 +20,12 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -49,11 +55,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
 import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.util.collection.MapHelper;
 
@@ -67,7 +68,7 @@ public class MockWeb {
 	 * 模拟一个请求对象
 	 * 
 	 * @param contextPath 项目目录
-	 * @param path        要模拟的后面的目录
+	 * @param path 要模拟的后面的目录
 	 * @return 请求对象
 	 */
 	public static HttpServletRequest mockRequest(String contextPath, String path) {
@@ -86,8 +87,8 @@ public class MockWeb {
 	/**
 	 * 模拟表单请求
 	 * 
-	 * @param request       请求对象
-	 * @param formBody      表单数据
+	 * @param request 请求对象
+	 * @param formBody 表单数据
 	 * @param isByGetParams 是否通过 request.getParameter 返回值，而不是走表单流的方式
 	 * @return 表单请求
 	 * @throws IOException
@@ -161,13 +162,11 @@ public class MockWeb {
 	public static class DummyController extends HttpServlet {
 		private static final long serialVersionUID = 1L;
 
-		protected void doGet(HttpServletRequest request, HttpServletResponse response)
-				throws ServletException, IOException {
+		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			response.getWriter().append("Served at: ").append(request.getContextPath());
 		}
 
-		protected void doPost(HttpServletRequest request, HttpServletResponse response)
-				throws ServletException, IOException {
+		protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			doGet(request, response);
 		}
 	}
@@ -176,8 +175,7 @@ public class MockWeb {
 		public void destroy() {
 		}
 
-		public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-				throws IOException, ServletException {
+		public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 			chain.doFilter(request, response);
 		}
 
@@ -188,7 +186,7 @@ public class MockWeb {
 	/**
 	 * 进行请求 在请求之前，你可以设定请求的参数
 	 * 
-	 * @param request  请求对象
+	 * @param request 请求对象
 	 * @param response 响应对象
 	 * @return 响应对象 writer 字符串
 	 */
