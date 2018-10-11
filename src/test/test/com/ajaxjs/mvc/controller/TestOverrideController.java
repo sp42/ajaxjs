@@ -11,16 +11,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.junit.*;
 
-import com.ajaxjs.web.MockWeb;
+import com.ajaxjs.web.mock.MockRequest;
+import com.ajaxjs.web.mock.MockResponse;
 
 public class TestOverrideController extends TestSimpleController {
 	@Before
 	@Override
 	public void load() throws ServletException {
-		request = MockWeb.mockRequest("/ajaxjs-web", "/OverrideTest");
+		request = MockRequest.mockRequest("/ajaxjs-web", "/OverrideTest");
 
 		response = mock(HttpServletResponse.class);
-		writer = MockWeb.writerFactory(response);
+		writer = MockResponse.writerFactory(response);
 	}
 
 	@Test

@@ -13,7 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.junit.*;
 
-import com.ajaxjs.web.MockWeb;
+import com.ajaxjs.web.mock.MockRequest;
+import com.ajaxjs.web.mock.MockResponse;
 
 public class TestSubPath_Id_Controller extends BaseTest {
 	@Test
@@ -30,7 +31,7 @@ public class TestSubPath_Id_Controller extends BaseTest {
 
 		// 响应对象
 		response = mock(HttpServletResponse.class);
-		writer = MockWeb.writerFactory(response);
+		writer = MockResponse.writerFactory(response);
 		
 		dispatcher.doFilter(request, response, chain);
 		
@@ -39,12 +40,12 @@ public class TestSubPath_Id_Controller extends BaseTest {
 	
 	@Test
 	public void testSubPathGet() throws ServletException, IOException {
-		HttpServletRequest request = MockWeb.mockRequest("/ajaxjs-web", "/MyTopPath_And_Sub_And_ID_Path/subPath");
+		HttpServletRequest request = MockRequest.mockRequest("/ajaxjs-web", "/MyTopPath_And_Sub_And_ID_Path/subPath");
 		when(request.getMethod()).thenReturn("GET");
 		when(request.getParameter("name")).thenReturn("Jack");
 		
 		HttpServletResponse response = mock(HttpServletResponse.class);
-		StringWriter writer = MockWeb.writerFactory(response);
+		StringWriter writer = MockResponse.writerFactory(response);
 		
 		dispatcher.doFilter(request, response, chain);
 		
@@ -53,11 +54,11 @@ public class TestSubPath_Id_Controller extends BaseTest {
 	
 	@Before
 	public void load() throws ServletException {
-		request = MockWeb.mockRequest("/ajaxjs-web", "/MyTopPath_And_Sub_And_ID_Path/123");
+		request = MockRequest.mockRequest("/ajaxjs-web", "/MyTopPath_And_Sub_And_ID_Path/123");
 		when(request.getParameter("name")).thenReturn("Jack");
 		
 		response = mock(HttpServletResponse.class);
-		writer = MockWeb.writerFactory(response);
+		writer = MockResponse.writerFactory(response);
 	}
 	
 	@Test
@@ -96,12 +97,12 @@ public class TestSubPath_Id_Controller extends BaseTest {
 
 	@Test
 	public void testSubPathIdGet() throws ServletException, IOException {
-		HttpServletRequest request = MockWeb.mockRequest("/ajaxjs-web", "/MyTopPath_And_Sub_And_ID_Path/subPath/123");
+		HttpServletRequest request = MockRequest.mockRequest("/ajaxjs-web", "/MyTopPath_And_Sub_And_ID_Path/subPath/123");
 		when(request.getMethod()).thenReturn("GET");
 		when(request.getParameter("name")).thenReturn("Jack");
 		
 		HttpServletResponse response = mock(HttpServletResponse.class);
-		StringWriter writer = MockWeb.writerFactory(response);
+		StringWriter writer = MockResponse.writerFactory(response);
 		
 		dispatcher.doFilter(request, response, chain);
 		

@@ -70,7 +70,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 		
 		String value = getParameter(name);
 		if (StringUtil.isEmptyString(value)) 
-			throw new IllegalArgumentException("缺少密码参数！");
+			throw new IllegalArgumentException("缺少参数！");
 		
 		return value;
 	}

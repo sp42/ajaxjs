@@ -13,14 +13,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.junit.*;
 
-import com.ajaxjs.web.MockWeb;
+import com.ajaxjs.web.mock.MockRequest;
+import com.ajaxjs.web.mock.MockResponse;
 
 public class TestComboController extends BaseTest {
 	@Before
 	public void init2() throws ServletException {
-		request = MockWeb.mockRequest("/ajaxjs-web", "/combo");
+		request = MockRequest.mockRequest("/ajaxjs-web", "/combo");
 		response = mock(HttpServletResponse.class);
-		writer = MockWeb.writerFactory(response);
+		writer = MockResponse.writerFactory(response);
 	}
 
 	@Test
@@ -42,7 +43,7 @@ public class TestComboController extends BaseTest {
 	@Test
 	public void testPut() throws ServletException, IOException {
 		when(request.getMethod()).thenReturn("PUT");
-		os = MockWeb.streamFactory(response);
+		os = MockResponse.streamFactory(response);
 
 		// dispatcher.doFilter(request, response, chain);
 		assertNotNull("servletOutputStream.getContent：" + os.getContent());
@@ -60,12 +61,12 @@ public class TestComboController extends BaseTest {
 	
 	@Test
 	public void testGet_MVC_goto_jsp() throws ServletException, IOException {
-		HttpServletRequest request = MockWeb.mockRequest("/ajaxjs-web", "/combo/mvc");
+		HttpServletRequest request = MockRequest.mockRequest("/ajaxjs-web", "/combo/mvc");
 		when(request.getMethod()).thenReturn("GET");
 		
 		dispatcher.doFilter(request, response, chain);
 		
-		assertEquals("index.jsp", MockWeb.getRequestDispatcheResult(request));
+		assertEquals("index.jsp", MockResponse.getRequestDispatcheResult(request));
 	}
 	
 	HttpServletRequest request2;
@@ -74,11 +75,11 @@ public class TestComboController extends BaseTest {
 	
 	@Before
 	public void init3() throws ServletException {
-		request2 = MockWeb.mockRequest("/ajaxjs-web", "/combo/person");
+		request2 = MockRequest.mockRequest("/ajaxjs-web", "/combo/person");
 		
 		// 响应对象
 		response2 = mock(HttpServletResponse.class);
-		writer2 = MockWeb.writerFactory(response2);
+		writer2 = MockResponse.writerFactory(response2);
 	}
 	
 	@Test
@@ -102,11 +103,11 @@ public class TestComboController extends BaseTest {
 		
 	@Test
 	public void testGet_Person_ID() throws ServletException, IOException {
-		HttpServletRequest request =  MockWeb.mockRequest("/ajaxjs-web", "/combo/person/88");
+		HttpServletRequest request =  MockRequest.mockRequest("/ajaxjs-web", "/combo/person/88");
 		
 		// 响应对象
 		HttpServletResponse response = mock(HttpServletResponse.class);
-		StringWriter writer = MockWeb.writerFactory(response);
+		StringWriter writer = MockResponse.writerFactory(response);
 		
 		when(request.getMethod()).thenReturn("GET");
 		when(request.getParameter("name")).thenReturn("Jack");

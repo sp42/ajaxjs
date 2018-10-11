@@ -17,7 +17,8 @@ import org.junit.Test;
 
 import com.ajaxjs.mvc.filter.AesFilter;
 import com.ajaxjs.simpleApp.CaptchaController;
-import com.ajaxjs.web.MockWeb;
+import com.ajaxjs.web.mock.MockRequest;
+import com.ajaxjs.web.mock.MockResponse;
 
 import test.com.ajaxjs.mvc.controller.BaseTest;
 
@@ -26,9 +27,9 @@ public class TestFilter extends BaseTest {
 	// 单测技巧，每个 url 对应一个 request、一个 response
 	@Before
 	public void load() throws ServletException {
-		request = MockWeb.mockRequest("/ajaxjs-web", "/filter");
+		request = MockRequest.mockRequest("/ajaxjs-web", "/filter");
 		response = mock(HttpServletResponse.class);
-		writer = MockWeb.writerFactory(response);
+		writer = MockResponse.writerFactory(response);
 	}
 
 	@Test
@@ -40,11 +41,11 @@ public class TestFilter extends BaseTest {
 
 	@Test
 	public void testCaptchaFilter() throws IOException, ServletException {
-		request = MockWeb.mockRequest("/ajaxjs-web", "/filter/captcha");
+		request = MockRequest.mockRequest("/ajaxjs-web", "/filter/captcha");
 
 		Map<String, Object> map = new HashMap<>();
 		map.put(CaptchaController.SESSION_KEY, "123123");
-		MockWeb.mockSession(request, map);
+		MockRequest.mockSession(request, map);
 
 		when(request.getMethod()).thenReturn("GET");
 		when(request.getParameter(CaptchaController.submitedFieldName)).thenReturn("12313");
@@ -56,7 +57,7 @@ public class TestFilter extends BaseTest {
 
 	@Test
 	public void testAesFilter()throws IOException, ServletException {
-		request = MockWeb.mockRequest("/ajaxjs-web", "/filter/api");
+		request = MockRequest.mockRequest("/ajaxjs-web", "/filter/api");
 		when(request.getMethod()).thenReturn("GET");
 		when(request.getParameter("token")).thenReturn(AesFilter.getTimeStampToken(AesFilter.aesKey));
 

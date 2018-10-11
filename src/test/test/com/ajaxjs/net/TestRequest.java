@@ -4,13 +4,14 @@ import static org.junit.Assert.*;
 import org.junit.*;
 
 import com.ajaxjs.util.Value;
-import com.ajaxjs.web.MockWeb;
+import com.ajaxjs.web.mock.MockRequest;
+import com.ajaxjs.web.mock.MockFilter;
 
 import java.io.IOException;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 
-public class TestRequest extends MockWeb {
+public class TestRequest extends MockFilter {
 	@BeforeClass
 	public static void init() {
 	}
@@ -21,15 +22,15 @@ public class TestRequest extends MockWeb {
 
 	@Test
 	public void testRequestHelper() throws IOException {
-		Map<String, String> hash = new HashMap<String, String>();
+		Map<String, String> hash = new HashMap<>();
 		hash.put("name", "bar");
 		hash.put("id", "1001");
 		hash.put("isGood", "true");
 
 		hash.put("ChineseName", new String("张三".getBytes(), "ISO8859_1"));
 
-		HttpServletRequest request = initRequest("foo");
-		request = initRequest(request, hash, true);
+		HttpServletRequest request = MockRequest.mockRequest("", "");
+		request = MockRequest.mockFormRequest(request, hash, true);
 
 		assertNotNull(request);
 

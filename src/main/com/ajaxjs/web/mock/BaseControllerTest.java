@@ -1,4 +1,4 @@
-package com.ajaxjs.web;
+package com.ajaxjs.web.mock;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ajaxjs.mvc.controller.MvcDispatcher;
-import com.ajaxjs.web.MockWeb.StubServletOutputStream;
 
 /**
  * 方便测试的基础类
@@ -26,6 +25,12 @@ public abstract class BaseControllerTest {
 	public static FilterConfig filterConfig;
 	public static MvcDispatcher dispatcher;
 	public static FilterChain chain;
+
+	// 单测技巧，每个 url 对应一个 request、一个 response
+	public HttpServletRequest request;
+	public HttpServletResponse response;
+	public StringWriter writer;
+	public MockResponse.StubServletOutputStream os;
 
 	/**
 	 * 控制器的包名
@@ -49,10 +54,4 @@ public abstract class BaseControllerTest {
 
 		chain = mock(FilterChain.class);
 	}
-
-	// 单测技巧，每个 url 对应一个 request、一个 response
-	public HttpServletRequest request;
-	public HttpServletResponse response;
-	public StringWriter writer;
-	public StubServletOutputStream os;
 }

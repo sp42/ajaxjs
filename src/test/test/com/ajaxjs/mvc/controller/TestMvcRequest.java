@@ -8,19 +8,19 @@ import javax.servlet.http.HttpServletRequest;
 import org.junit.Test;
 
 import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.web.MockWeb;
+import com.ajaxjs.web.mock.MockRequest;
 
 public class TestMvcRequest {
 	@Test
 	public void testGetIp() {
-		HttpServletRequest request = MockWeb.mockRequest("foo", "bar");
+		HttpServletRequest request = MockRequest.mockRequest("foo", "bar");
 		when(request.getRemoteAddr()).thenReturn("10.0.0.1");
 		assertEquals("10.0.0.1", new MvcRequest(request).getIp());
 	}
 
 	@Test
 	public void testGetBasePath() {
-		HttpServletRequest request = MockWeb.mockRequest("foo", "bar");
+		HttpServletRequest request = MockRequest.mockRequest("foo", "bar");
 		when(request.getScheme()).thenReturn("https");
 		when(request.getServerName()).thenReturn("www.ibm.com");
 		when(request.getServerPort()).thenReturn(8081);

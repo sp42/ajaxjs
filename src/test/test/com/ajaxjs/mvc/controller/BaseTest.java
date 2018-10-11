@@ -16,7 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.BeforeClass;
 
 import com.ajaxjs.mvc.controller.MvcDispatcher;
-import com.ajaxjs.web.MockWeb.StubServletOutputStream;
+import com.ajaxjs.web.mock.MockResponse;
+import com.ajaxjs.web.mock.MockResponse.StubServletOutputStream;
 
 /**
  * 方便测试的基础类
@@ -51,5 +52,5 @@ public abstract class BaseTest {
 	public HttpServletRequest request;
 	public HttpServletResponse response;
 	public StringWriter writer;
-	public StubServletOutputStream os;
+	public MockResponse.StubServletOutputStream os;
 }
