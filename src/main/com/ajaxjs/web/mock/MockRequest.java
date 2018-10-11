@@ -39,7 +39,7 @@ public class MockRequest extends HttpServletRequestWrapper {
 		super(request);
 	}
 
-	BaseControllerTest testInstance;
+	public BaseControllerTest testInstance;
 
 	public HttpServletRequest old;
 
@@ -119,7 +119,7 @@ public class MockRequest extends HttpServletRequestWrapper {
 	}
 	
 	/**
-	 * 返回控制器输出的响应文本
+	 * 返回控制器输出的响应 JSON Map
 	 * @return
 	 */
 	public Map<String, Object> getStringResultJson() {

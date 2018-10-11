@@ -104,6 +104,29 @@ Function.prototype.delegate = function() {
 	};
 }
 
+/**
+ * 设置一个后置函数。
+ * 
+ * @param {Function}
+ *            composeFn
+ * @param {Boolean}
+ *            isForceCall 是否强行执行 call 方法。设置为 true 在数组作为单独对象的时候有用。
+ * @return {Function}
+ */
+Function.prototype.after = function(composeFn, isForceCall, scope) {
+    var self = this;
+
+    return function() {
+        var result = self.apply(scope || this, arguments);
+
+        if (isForceCall) {
+            return composeFn.call(this, result);
+        }
+
+        return result && (typeof result.pop != 'undefined')&& (typeof result.pop != 'unknown') ? composeFn.apply(this, result) : composeFn.call(this, result);
+    };
+}
+
 // 获取浏览器 url 参数
 ajaxjs.params = {
 	/**

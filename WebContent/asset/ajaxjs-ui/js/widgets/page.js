@@ -267,3 +267,48 @@ Vue.component('aj-back-top', {
 		}
 	}
 });
+
+
+// 进度条
+Vue.component('aj-process-line', {
+	template :
+		'<div class="aj-process-line">\
+			<div class="process-line">\
+				<div v-for="(item, index) in items" :class="{current : index == current, done : index < current}">\
+					<span>{{index + 1}}</span><p>{{item}}</p>\
+				</div>\
+			</div>\
+		</div>',
+	props : {
+		items : {
+			type: Array,
+			default : function() { 
+				return ['Step 1', 'Step 2', 'Step 3']; 
+			}
+		}
+	},
+	data : function() {
+		return {
+			current : 0
+		}
+	},
+	methods: {
+		go : function(i) {
+			this.current = i;
+		},
+		perv: function() {
+			var perv = this.current - 1;
+			if (perv < 0)
+				perv = this.items.length - 1;
+			
+		    this.go(perv); 
+		},
+		next: function() {
+	    	var next = this.current + 1;
+	        if (this.items.length == next)
+	        	next = 0; // 循环
+	        	
+	        this.go(next);
+		}
+	}
+});
