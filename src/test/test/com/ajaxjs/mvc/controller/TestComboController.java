@@ -1,6 +1,7 @@
 package test.com.ajaxjs.mvc.controller;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -11,7 +12,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.ajaxjs.web.mock.MockRequest;
 import com.ajaxjs.web.mock.MockResponse;
@@ -46,7 +48,7 @@ public class TestComboController extends BaseTest {
 		os = MockResponse.streamFactory(response);
 
 		// dispatcher.doFilter(request, response, chain);
-		assertNotNull("servletOutputStream.getContent：" + os.getContent());
+		assertNotNull("servletOutputStream.getContent：" + os.toString());
 		assertNotNull(writer.toString());
 	}
 

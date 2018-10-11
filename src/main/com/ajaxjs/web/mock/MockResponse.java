@@ -9,7 +9,6 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import javax.servlet.ServletInputStream;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,67 +16,34 @@ import javax.servlet.http.HttpServletResponse;
 import org.mockito.ArgumentCaptor;
 
 public class MockResponse {
-
-	public static class StubServletOutputStream extends ServletOutputStream {
-		private OutputStream os = new ByteArrayOutputStream();
-	
-		@Override
-		public void write(int i) throws IOException {
-			os.write(i);
-		}
-	
-		public String getContent() {
-			return os.toString();
-		}
-	}
-	
-	@Deprecated
-	class StubServletOutputStream22 extends ServletInputStream {
-		public ByteArrayOutputStream os = new ByteArrayOutputStream();
-
-		public void write(int i) throws IOException {
-			os.write(i);
-		}
-
-		public String getContent() {
-			return os.toString();
-		}
-
-		@Override
-		public int read() throws IOException {
-			return 0;
-		}
-	}
-
-	/**
-	 * 获取 MVC 跳转模版的那个路径
-	 * 
-	 * @param request 请求对象
-	 * @return 模版路径
-	 */
-	public static String getRequestDispatcheResult(HttpServletRequest request) {
-		ArgumentCaptor<String> dispatcherArgument = ArgumentCaptor.forClass(String.class);
-		verify(request).getRequestDispatcher(dispatcherArgument.capture());
-	
-		return dispatcherArgument.getValue();
-	}
-
 	/**
 	 * 除了字符串使用 StringWriter，Response 输出的还可以是流
 	 * 
 	 * @param response 响应对象
 	 * @return 流对象以便获取信息
 	 */
-	public static MockResponse.StubServletOutputStream streamFactory(HttpServletResponse response) {
-		MockResponse.StubServletOutputStream os = new MockResponse.StubServletOutputStream();
-	
+	public static ServletOutputStream streamFactory(HttpServletResponse response) {
+		ServletOutputStream out = new ServletOutputStream() {
+			private OutputStream os = new ByteArrayOutputStream();
+
+			@Override
+			public void write(int i) throws IOException {
+				os.write(i);
+			}
+
+			@Override
+			public String toString() {
+				return os.toString();
+			}
+		};
+
 		try {
-			when(response.getOutputStream()).thenReturn(os);
+			when(response.getOutputStream()).thenReturn(out);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	
-		return os;
+
+		return out;
 	}
 
 	/**
@@ -89,15 +55,26 @@ public class MockResponse {
 	 */
 	public static StringWriter writerFactory(HttpServletResponse response) {
 		StringWriter writer = new StringWriter();
-		PrintWriter printWriter = new PrintWriter(writer);
-	
+
 		try {
-			when(response.getWriter()).thenReturn(printWriter);
+			when(response.getWriter()).thenReturn(new PrintWriter(writer));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	
+
 		return writer;
 	}
 
+	/**
+	 * 获取 MVC 跳转模版的那个路径
+	 * 
+	 * @param request 请求对象
+	 * @return 模版路径
+	 */
+	public static String getRequestDispatcheResult(HttpServletRequest request) {
+		ArgumentCaptor<String> dispatcherArgument = ArgumentCaptor.forClass(String.class);
+		verify(request).getRequestDispatcher(dispatcherArgument.capture());
+
+		return dispatcherArgument.getValue();
+	}
 }
