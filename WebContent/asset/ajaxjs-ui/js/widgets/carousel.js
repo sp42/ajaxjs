@@ -81,13 +81,15 @@ aj._carousel = {
 			var children = this.$el.$('header ul').children;
 			var contentChild = this.$el.$('.content').children;
 			 
-			children[oldIndex].classList.remove('active');
-			contentChild[oldIndex].classList.remove('active');
-	
-			children[index].classList.add('active');
-			contentChild[index].classList.add('active');
-			 
-			this.go(index);
+			if(children && contentChild && children[oldIndex] && contentChild[oldIndex]) {
+				children[oldIndex].classList.remove('active');
+				contentChild[oldIndex].classList.remove('active');
+		
+				children[index].classList.add('active');
+				contentChild[index].classList.add('active');
+				 
+				this.go(index);
+			}
 		}
 	},
 	
