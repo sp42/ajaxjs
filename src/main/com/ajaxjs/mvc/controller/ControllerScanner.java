@@ -102,8 +102,8 @@ public class ControllerScanner {
 	 * @return
 	 */
 	public static Action find(String path) {
-		Queue<String> queue = split2Queue(path);
-		return findKey(urlMappingTree, queue, "");
+		Queue<String> queue = split2Queue2(path);
+		return onlyFindKey(urlMappingTree, queue, "");
 	}
 
 	/**
@@ -112,8 +112,19 @@ public class ControllerScanner {
 	 * @param path
 	 * @return
 	 */
+	private static Queue<String> split2Queue2(String path) {
+		String[] arr = path.split("/");
+		
+		if(arr.length == 1) {
+			arr = new String[] {"", arr[0]}; // for the case of the root 
+		}
+		
+		return new LinkedList<>(Arrays.asList(arr));
+	}
+	
 	private static Queue<String> split2Queue(String path) {
 		String[] arr = path.split("/");
+
 		return new LinkedList<>(Arrays.asList(arr));
 	}
 
@@ -193,6 +204,37 @@ public class ControllerScanner {
 		}
 	}
 
+	/**
+	 * Only find, not set
+	 * @param urlMappingTree
+	 * @param queue
+	 * @param path
+	 * @return
+	 */
+	private static Action onlyFindKey(Map<String, Action> urlMappingTree, Queue<String> queue, String path) {
+		while (!queue.isEmpty()) {
+			String key = queue.poll(); // remove the first item in the queue and return it
+			path += key + "/";
+
+			Action action;
+			if (urlMappingTree.containsKey(key)) {
+				action = urlMappingTree.get(key);
+				
+				if (queue.isEmpty()) {
+					return action;// found it!
+				} else if (action.children != null) { // remains sub path to find out
+					Action action2 = onlyFindKey(action.children, queue, path);
+					if (action2 != null)
+						return action2;
+				} else {
+					LOGGER.warning("happened if sth wrong.");
+				}
+			}
+		}
+		
+		return null;
+	}
+	
 	/**
 	 * 
 	 * @param urlMappingTree A Tree contains all urlMappings

@@ -116,20 +116,26 @@ public class MvcDispatcher implements Filter {
 
 		String uri = request.getFolder(), httpMethod = request.getMethod();
 
+		System.out.println(">>>>>>>" + uri);
 		Matcher match = id.matcher(uri);
 		if (match.find()) {
 			uri = match.replaceAll("/{id}");
 		}
 
 		Action action = ControllerScanner.find(uri);
-		Method method = getMethod(action, httpMethod);// 要执行的方法
-		IController controller = getController(action, httpMethod);
-
-		if (method != null && controller != null) {
-			dispatch(request, response, controller, method);
-			return; // 终止当前 servlet 请求
-		} else {
+		
+		if(action != null) {
+			Method method = getMethod(action, httpMethod);// 要执行的方法
+			IController controller = getController(action, httpMethod);
+			System.out.println(">>>>>>>" + action);
+			System.out.println(">>>>>>>" + method);
+			
+			if (method != null && controller != null) {
+				dispatch(request, response, controller, method);
+				return; // 终止当前 servlet 请求
+			} else {
 //			LOGGER.info("{0} {1} 控制器没有这个方法！", httpMethod, request.getRequestURI());
+			}
 		}
 
 		chain.doFilter(req, resp);// 不要传 MvcRequest，以免入侵其他框架

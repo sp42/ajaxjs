@@ -64,7 +64,7 @@ public class TestController {
 		writer = MockResponse.writerFactory(response);
 		
 		dispatcher.doFilter(request, response, chain);
-		assertEquals(writer.toString(), "hihi");
+		assertEquals("hihi", writer.toString());
 		
 		// GET Info
 		when(request.getRequestURI()).thenReturn("/ajaxjs-web/news/12");// 配置请求路径
