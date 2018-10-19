@@ -25,13 +25,7 @@
 		
 		// 生成树
 		makeTree : function (jsonArray) {
-			if(this.isWebkit) {
-				for (var i = 0; i < jsonArray.length; i++) {
-					jsonArray[i].oldIndex = i;
-				}
-			}
-			
-			//jsonArray.sort(sortByPid);// 父id 必须在子id之前，不然下面 findParent() 找不到后面的父节点，故先排序
+			// 父id 必须在子id之前，不然下面 findParent() 找不到后面的父节点，故先排序
 			
 			for (var i = 0, j = jsonArray.length; i < j; i++) {
 				var n = jsonArray[i];
@@ -93,16 +87,7 @@
 
 		return null;
 	}
-	
-	var sortByPid = this.isWebkit ? function (a, b) {
-		// Chrome谷歌浏览器中js代码Array.sort排序的bug乱序解决办法 
-		// https://www.cnblogs.com/yzeng/p/3949182.html?utm_source=tuicool&utm_medium=referral
-//		return [a.a, a.b] > [b.a, b.b] ? 1:-1;
-		return b.v - a.v || b.oldIndex - a.oldIndex; // Chrome sucks
-	} : function (a, b) {
-		return a.pid > b.pid;
-	}
-	
+
 	ajaxjs.tree.selectUI = function() {
 		ajaxjs.tree.call(this);
 		

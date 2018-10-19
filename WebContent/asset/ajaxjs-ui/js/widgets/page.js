@@ -312,3 +312,33 @@ Vue.component('aj-process-line', {
 		}
 	}
 });
+
+// 悬浮显示大图。工厂方法
+aj.imageEnlarger = function() {
+	var vue = new Vue({
+		el : document.body.appendChild(document.createElement('div')),
+		template: 
+			'<div class="aj-image-large-view">\
+				<div style="position: fixed;max-width:400px;transition: top ease-in 200ms, left ease-in 200ms;">\
+				<img :src="imgUrl" style="width: 100%;" />\
+			</div></div>',
+		data : {
+			imgUrl: null
+		},
+		mounted: function(){// 不能用 onmousemove 直接绑定事件
+			document.addEventListener('mousemove', this.move.bind(this), false);
+		},
+		methods: {
+			move: function(e) {
+				if(this.imgUrl) {
+					var el = this.$el.$('div');
+					el.style.top = (e.pageY + 20)+ 'px';
+					el.style.left = (e.pageX - el.clientWidth) + 'px';
+				}
+			}
+		}
+	});
+	
+	aj.imageEnlarger.singleInstance = vue; // 单例
+	return vue;
+}

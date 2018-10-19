@@ -492,3 +492,155 @@ table.listTable {
 	text-align: center;
 }
 
+
+body {
+	opacity: 0; 
+	transition: opacity 0.3s;
+}
+
+body.active {
+	opacity: 1;
+}
+
+.aj-dhtml-border {
+	width: 300px;
+	height: 300px;
+	transition: border 5s;
+	position: relative;
+	margin: 3%;
+	
+	&:before, &:after  {
+		content: "";
+		position: absolute;
+		bottom: -1px;
+		left: -1px;
+		right: -1px;
+		top: -1px;
+		transition: all 1s;
+	}
+	
+	&:before {
+		transform: scale(1, 0);
+		border-left: 1px solid red;
+		border-right: 1px solid red;
+	}
+	
+	&:after {
+		transform: scale(0, 1);
+		border-top: 1px solid red;
+		border-bottom: 1px solid red;
+	}
+	
+	&:hover {
+		&:before,&:after {
+			transform: scale(1);
+			transition: all 1s;
+		}
+	}
+}
+
+.aj-tree {
+	font-size: .9rem;
+	margin-left: 5px;
+	.item {
+	  cursor: pointer;
+	}
+	.bold {
+	  font-weight: bold;
+	}
+	ul {
+	  line-height: 1.5em;
+	  margin-left: 1.5rem;
+	  border-left:1px dotted lightgray;
+	} 
+	.node>span{
+		font-weight:normal;
+		color:lightgray;
+	}
+	.bold:before{
+		content: 'o';
+		margin: -5px;
+		color:lightgray;
+	}
+
+	.show {
+	    animation: hideIndex 0.3s;
+	    -moz-animation: hideIndex  0.3s; /* Firefox */
+	    -webkit-animation: hideIndex  0.3s; /* Safari and Chrome */
+	    -o-animation: hideIndex  0.3s; /* Opera */
+	}
+	
+	@keyframes hideIndex {
+	    0%{ 
+	    	opacity: 0; 
+	    	transform:translate3d(0, -10px,0);
+	    }
+	    100%{
+	  	  opacity: 1;  
+	  	  transform:translate3d(0, 0px,0);
+	    }
+	}
+}
+
+
+table.aj-grid {
+	th {
+		cursor: pointer;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+		min-width: 120px;
+		padding: 10px 20px;
+	}
+	td {
+		min-width: 120px;
+		padding: 10px 20px;
+	}
+	th.active {
+		color: #fff;
+		.arrow {
+			opacity: 1;
+		}
+	}
+	
+	.arrow {
+		display: inline-block;
+		vertical-align: middle;
+		width: 0;
+		height: 0;
+		margin-left: 5px;
+		opacity: 0.66;
+		&.asc {
+			border-left: 4px solid transparent;
+			border-right: 4px solid transparent;
+			border-bottom: 4px solid #fff;
+		}
+		&.dsc {
+			border-left: 4px solid transparent;
+			border-right: 4px solid transparent;
+			border-top: 4px solid #fff;
+		}
+	}
+}
+
+.treeGrid {
+	overflow: hidden;
+	width:95%;
+	margin:0 auto;
+	.left{
+		float:left;
+		width:22%;
+	}
+	
+	.right {
+		float:right;
+		width:77%;
+		.inline-search {
+			float: left;
+		}
+		table{
+			width:99%;
+		}
+	}
+}

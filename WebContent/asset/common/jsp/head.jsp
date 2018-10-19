@@ -110,6 +110,10 @@
    		}
    		
    		Vue.use(aj.Vue);
+   		
+   		window.addEventListener('load', function() {
+			document.body.classList.add('active');
+		});
    	</script>
 	<link rel="icon"		  type="image/x-icon" href="${ctx}/asset/images/favicon.ico" />
 	<link rel="shortcut icon" type="image/x-icon" href="${ctx}/asset/images/favicon.ico" />

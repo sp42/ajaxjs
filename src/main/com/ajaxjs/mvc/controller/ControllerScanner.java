@@ -102,8 +102,14 @@ public class ControllerScanner {
 	 * @return
 	 */
 	public static Action find(String path) {
-		Queue<String> queue = split2Queue2(path);
-		return onlyFindKey(urlMappingTree, queue, "");
+		Queue<String> queue = split2Queue(path);
+		Action action = onlyFindKey(urlMappingTree, queue, "");
+		if(action == null) { // for the controller which is set Path("/"), root controller
+			queue = split2Queue2(path);
+			action = onlyFindKey(urlMappingTree, queue, "");
+		}
+		
+		return action;
 	}
 
 	/**
