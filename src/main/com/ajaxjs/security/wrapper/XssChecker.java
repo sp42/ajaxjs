@@ -18,8 +18,8 @@ package com.ajaxjs.security.wrapper;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.ajaxjs.util.CollectionUtil;
 import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.util.collection.CollectionUtil;
 
 public class XssChecker {
 

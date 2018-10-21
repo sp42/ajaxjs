@@ -33,13 +33,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.ioc.BeanContext;
+import com.ajaxjs.keyvalue.MappingHelper;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.FilterAction;
 import com.ajaxjs.mvc.filter.MvcFilter;
+import com.ajaxjs.util.CollectionUtil;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.util.collection.CollectionUtil;
-import com.ajaxjs.util.collection.MappingHelper;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.ExecuteMethod;
 import com.ajaxjs.util.reflect.NewInstance;
@@ -89,9 +89,9 @@ public class MvcDispatcher implements Filter {
 		if (config != null && config.get("doIoc") != null) {
 			String doIoc = config.get("doIoc");
 			for (String packageName : StringUtil.split(doIoc))
-				BeanContext.me().init(packageName);
+				BeanContext.init(packageName);
 			
-			BeanContext.me().injectBeans();
+			BeanContext.injectBeans();
 		}
 	}
 

@@ -28,10 +28,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.ajaxjs.keyvalue.MappingHelper;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.util.collection.MappingHelper;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -87,14 +87,8 @@ public class PageEditor implements IController, Constant {
 	 * @param request 请求对象，必填 url 和 contentBody 两个参数
 	 * @return JSON 结果
 	 */
-	
-	@Operation(
-		summary = "保存编辑页面后的内容", tags = { "Admin Service ONLY"}, 
-		description = "保存编辑页面后的内容", 
-		responses = {
-			@ApiResponse(description = "操作是否成功", content = @Content(mediaType = "application/json"))
-		}
-	)
+
+	@Operation(summary = "保存编辑页面后的内容", tags = { "Admin Service ONLY" }, description = "保存编辑页面后的内容", responses = { @ApiResponse(description = "操作是否成功", content = @Content(mediaType = "application/json")) })
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	public String save(MvcRequest request) {

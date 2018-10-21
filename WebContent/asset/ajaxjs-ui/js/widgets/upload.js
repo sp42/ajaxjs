@@ -333,26 +333,132 @@ Vue.component('aj-xhr-upload', {
 		return {
 			isFileSize : false,			// 文件大小检查
 			isExtName : false,			// 文件扩展名检查
+			isImgSize : false, 			// 图片分辨率大小检查
 			errMsg : null,				// 错误信息
-			newlyId : null				// 成功上传之后的文件 id
+			newlyId : null,				// 成功上传之后的文件 id
+			radomId : Math.round(Math.random() * 1000),		// 不重复的 id
+			uploadOk_callback: ajaxjs.xhr.defaultCallBack,				// 回调函数
+	    	imgBase64Str : null			// 图片的 base64 形式，用于预览
 		};
 	},
 	props : {
-		fieldName : String, // input name 字段名
-	    
+		action : {
+			type : String, // 上传路径
+			required: true
+		}, 		
+		fieldName : String, 	// input name 字段名
 	    limitSize : Number,
-	    
-	    limitFileType: String
+	    limitFileType: String,
+	    accpectFileType: String,// 可以上传类型
+	    isImgUpload : Boolean, 	// 是否图片上传
+	    imgPlace : String,		// 图片占位符，用户没有选定图片时候使用的图片
+	    imgMaxWidth : {type : Number, default : 1920},
+	    imgMaxHeight: {type : Number, default : 1680}
 	},
 	template : 
-		'<div class="ajaxjs-file-upload">\
-			<div class="pseudoFilePicker">\
-				<label for="input_file_molding"><div><div>+</div>点击选择文件</div></label>\
+		'<div class="aj-xhr-upload">\
+			<div v-if="isImgUpload">\
+				<img class="upload_img_perview" :src="(isFileSize && isExtName && imgBase64Str) ? imgBase64Str : imgPlace" />\
 			</div>\
-			<input type="file" :name="fieldName" />\
+			<div class="pseudoFilePicker">\
+				<label :for="\'uploadInput_\' + radomId"><div><div>+</div>点击选择{{isImgUpload ? \'图片\': \'文件\'}}</div></label>\
+			</div>\
+			<input type="file" :name="fieldName" class="hide" :id="\'uploadInput_\' + radomId" @change="onUploadInputChange($event)" :accept="isImgUpload ? \'image/*\' : accpectFileType" />\
 			<div v-if="!isFileSize || !isExtName">{{errMsg}}</div>\
 			<div v-if="isFileSize && isExtName">\
-				<button @click.prevent="doUpload($event);">上传</button>\
+				<button @click.prevent="doUpload();" style="min-width:110px;">上传</button>\
 			</div>\
 		</div>',
+	methods : {
+		onUploadInputChange : function(e) {
+			var fileInput = e.target;
+			var ext = fileInput.value.split('.').pop(); // 扩展名
+			
+			if(!fileInput.files || !fileInput.files[0]) return;
+			
+			this.$fileObj = fileInput.files[0]; // 保留引用
+			
+			var size = fileInput.files[0].size;
+			
+			if(this.limitSize) {
+				this.isFileSize = size < this.limitSize;
+				this.errMsg = "要上传的文件容量过大，请压缩到 " + this.limitSize + "kb 以下";
+			} else
+				this.isFileSize = true;
+			
+			if(this.limitFileType) {
+				this.isExtName = new RegExp(this.limitFileType, 'i').test(ext);
+				this.errMsg = '根据文件后缀名判断，此文件不能上传';				
+			} else
+				this.isExtName = true;
+			
+		
+			this.readBase64(fileInput.files[0]);
+			
+			if(self.isImgUpload) {
+				var imgEl = new Image();
+				imgEl.onload = function() {
+					if (imgEl.width > self.imgMaxWidth || imgEl.height > self.imgMaxHeight) {
+						cfg.isImgSize = false;
+						self.errMsg = '图片大小尺寸不符合要求哦，请重新图片吧~';
+					} else {
+						cfg.isImgSize = true;
+					}
+				}
+				
+			}
+		},
+
+		readBase64 : function(file) {
+			var reader = new FileReader(), self = this;
+			
+			reader.onload = function(e) {
+				var imgBase64Str = e.target.result;
+				self.imgBase64Str = imgBase64Str;
+				
+				if(self.isImgUpload) {
+					var imgEl = new Image();
+					imgEl.onload = function() {
+						if (imgEl.width > self.maxWidth || imgEl.height > self.maxHeight) {
+							self.isImgSize = false;
+							self.errMsg = '图片大小尺寸不符合要求哦，请重新图片吧~';
+						} else {
+							self.isImgSize = true;
+						}
+					}
+					
+					imgEl.src = imgBase64Str;
+					
+					
+					// 文件头判别，看看是否为图片
+					var imgHeader = {
+						"jpeg" : "/9j/4",
+						"gif" : "R0lGOD",
+						"png" : "iVBORw"
+					};
+					
+					for ( var i in imgHeader) {
+						if (~imgBase64Str.indexOf(imgHeader[i])) {
+							self.isExtName = true;
+							return;
+						}
+					}
+					
+					self.errMsg = "亲，改了扩展名我还能认得你不是图片哦";
+				}
+			}
+			
+			reader.readAsDataURL(file);
+		},
+		
+		doUpload : function() {
+			var fd = new FormData();
+			fd.append("file", this.$fileObj);
+		
+			var xhr = new XMLHttpRequest();
+	        xhr.onreadystatechange = ajaxjs.xhr.callback.delegate(null, this.uploadOk_callback, 'json');
+	        xhr.open("POST", this.action, true);
+	        xhr.send(fd);
+		},
+	}
 });

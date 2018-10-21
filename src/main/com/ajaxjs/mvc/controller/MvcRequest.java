@@ -32,10 +32,10 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ajaxjs.framework.dao.QueryParams;
+import com.ajaxjs.keyvalue.BeanUtil;
+import com.ajaxjs.keyvalue.MapHelper;
 import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.util.collection.MapHelper;
 import com.ajaxjs.util.io.StreamUtil;
-import com.ajaxjs.util.reflect.BeanUtil;
 
 /**
  * 通过 HttpServletRequestWrapper （装饰模式的应用）增强 HttpServletRequest的功能。

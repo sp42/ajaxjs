@@ -15,7 +15,6 @@
  */
 package com.ajaxjs.mvc.controller;
 
-import java.io.File;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
@@ -34,8 +33,6 @@ import javax.ws.rs.Path;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.util.io.resource.ScanClass;
-import com.ajaxjs.util.io.resource.Scanner;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.NewInstance;
 
@@ -81,7 +78,7 @@ public class ControllerScanner {
 		}
 
 		if (clz.getAnnotation(Bean.class) != null) { // 如果有 ioc，则从容器中查找
-			action.controller = BeanContext.me().getBeanByClass(clz);
+			action.controller = BeanContext.getBeanByClass(clz);
 			if (action.controller == null)
 				LOGGER.warning("在 IOC 资源库中找不到该类 {0} 的实例，请检查该类是否已经加入了 IOC 扫描？  The IOC library not found that Controller, plz check if it added to the IOC scan.", clz.getName());
 		} else {
@@ -104,11 +101,11 @@ public class ControllerScanner {
 	public static Action find(String path) {
 		Queue<String> queue = split2Queue(path);
 		Action action = onlyFindKey(urlMappingTree, queue, "");
-		if(action == null) { // for the controller which is set Path("/"), root controller
+		if (action == null) { // for the controller which is set Path("/"), root controller
 			queue = split2Queue2(path);
 			action = onlyFindKey(urlMappingTree, queue, "");
 		}
-		
+
 		return action;
 	}
 
@@ -120,14 +117,14 @@ public class ControllerScanner {
 	 */
 	private static Queue<String> split2Queue2(String path) {
 		String[] arr = path.split("/");
-		
-		if(arr.length == 1) {
-			arr = new String[] {"", arr[0]}; // for the case of the root 
+
+		if (arr.length == 1) {
+			arr = new String[] { "", arr[0] }; // for the case of the root
 		}
-		
+
 		return new LinkedList<>(Arrays.asList(arr));
 	}
-	
+
 	private static Queue<String> split2Queue(String path) {
 		String[] arr = path.split("/");
 
@@ -137,7 +134,7 @@ public class ControllerScanner {
 	/**
 	 * Check out all methods which has Path annotation, then add the urlMapping.
 	 * 
-	 * @param clz    控制器类
+	 * @param clz 控制器类
 	 * @param action 父亲动作
 	 */
 	private static void parseSubPath(Class<? extends IController> clz, Action action) {
@@ -212,6 +209,7 @@ public class ControllerScanner {
 
 	/**
 	 * Only find, not set
+	 * 
 	 * @param urlMappingTree
 	 * @param queue
 	 * @param path
@@ -225,7 +223,7 @@ public class ControllerScanner {
 			Action action;
 			if (urlMappingTree.containsKey(key)) {
 				action = urlMappingTree.get(key);
-				
+
 				if (queue.isEmpty()) {
 					return action;// found it!
 				} else if (action.children != null) { // remains sub path to find out
@@ -237,17 +235,16 @@ public class ControllerScanner {
 				}
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * 
 	 * @param urlMappingTree A Tree contains all urlMappings
-	 * @param queue          The queue of URL
-	 * @param path           for remembering what findKey has travelled, here we
-	 *                       don't use url, because we want self-adding to match the
-	 *                       url, if there is correct
+	 * @param queue The queue of URL
+	 * @param path for remembering what findKey has travelled, here we don't use
+	 * url, because we want self-adding to match the url, if there is correct
 	 * @return the Action that looking for, null if not found
 	 */
 	private static Action findKey(Map<String, Action> urlMappingTree, Queue<String> queue, String path) {
@@ -312,35 +309,6 @@ public class ControllerScanner {
 	}
 
 	/**
-	 * Inner class for collecting IController
-	 * 
-	 * @author sp42 frank@ajaxjs.com
-	 *
-	 */
-	public static class IControllerScanner extends ScanClass {
-		@SuppressWarnings({ "rawtypes", "unchecked" })
-		@Override
-		public void onFileAdding(Set target, File resourceFile, String packageJavaName) {
-			String className = getClassName(resourceFile, packageJavaName);
-			Class<?> clazz = NewInstance.getClassByName(className);
-
-			if (IController.class.isAssignableFrom(clazz)) {
-				target.add(clazz);// 添加到集合中去
-			}
-		}
-
-		@SuppressWarnings({ "rawtypes", "unchecked" })
-		@Override
-		public void onJarAdding(Set target, String resourcePath) {
-			Class<?> clazz = NewInstance.getClassByName(resourcePath);
-			if (IController.class.isAssignableFrom(clazz)) {
-				target.add(clazz);// 添加到集合中去
-			}
-		}
-
-	}
-
-	/**
 	 * 扫描控制器
 	 * 
 	 * @param config web.xml 中的配置，已经转为 Map
@@ -352,15 +320,13 @@ public class ControllerScanner {
 			IControllerScanner scanner = new IControllerScanner(); // 定义一个扫描器，专门扫描 IController
 
 			for (String packageName : StringUtil.split(str)) {
-				Scanner scaner = new Scanner(scanner);
-				@SuppressWarnings("unchecked")
-				Set<Class<IController>> IControllers = (Set<Class<IController>>) scaner.scan(packageName);
+				Set<Class<IController>> IControllers = scanner.scan(packageName);
 
 				for (Class<IController> clz : IControllers)
-					ControllerScanner.add(clz);
+					add(clz);
 			}
 		} else {
-			System.err.println("web.xml 没有配置 MVC 过滤器或者 配置没有定义 controller");
+			LOGGER.info("web.xml 没有配置 MVC 过滤器或者 配置没有定义 controller");
 		}
 	}
 }

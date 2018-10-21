@@ -23,9 +23,9 @@ import com.ajaxjs.jdbc.JdbcConnection;
 import com.ajaxjs.js.JsEngineWrapper;
 import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.js.JsonStruTraveler;
+import com.ajaxjs.keyvalue.MappingValue;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.util.Value;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -126,7 +126,7 @@ public class ConfigService {
 			return false;
 		}
 
-		return Value.TypeConvert(flatConfig.get(key), boolean.class);
+		return MappingValue.TypeConvert(flatConfig.get(key), boolean.class);
 	}
 
 	/**
@@ -148,9 +148,9 @@ public class ConfigService {
 		}
 
 		if (number instanceof Double)
-			number = Value.double2int((Double) number);
+			number = MappingValue.double2int((Double) number);
 
-		return Value.TypeConvert(number, int.class);
+		return MappingValue.TypeConvert(number, int.class);
 	}
 
 	/**
@@ -172,9 +172,9 @@ public class ConfigService {
 		}
 
 		if (number instanceof Double)
-			number = Value.double2long((Double) number);
+			number = MappingValue.double2long((Double) number);
 
-		return Value.TypeConvert(number, long.class);
+		return MappingValue.TypeConvert(number, long.class);
 	}
 
 	/**
@@ -194,7 +194,7 @@ public class ConfigService {
 			return null;
 		}
 
-		return Value.TypeConvert(v, String.class);
+		return MappingValue.TypeConvert(v, String.class);
 	}
 
 	/**

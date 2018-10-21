@@ -29,9 +29,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.framework.BaseModel;
+import com.ajaxjs.keyvalue.MapHelper;
+import com.ajaxjs.keyvalue.MappingValue;
 import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.util.Value;
-import com.ajaxjs.util.collection.MapHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -174,7 +174,7 @@ public class RequestParam {
 		} else if (clz == long.class    || clz == Long.class) {
 			args.add(value == null   || "".equals(value) ? 0L :(Long.parseLong(value)));
 		} else if (clz == boolean.class || clz == Boolean.class) {
-			args.add(Value.toBoolean(value));
+			args.add(MappingValue.toBoolean(value));
 		} else {
 			args.add(new Object());// 也不要空的参数，不然反射那里执行不了
 			LOGGER.warning("不支持类型");

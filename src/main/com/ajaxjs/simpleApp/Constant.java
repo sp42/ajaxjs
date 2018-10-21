@@ -15,7 +15,7 @@
  */
 package com.ajaxjs.simpleApp;
 
-import com.ajaxjs.util.collection.MappingHelper;
+import com.ajaxjs.keyvalue.MappingHelper;
 
 /**
  * 

@@ -30,14 +30,14 @@ import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.service.IService;
 import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.jdbc.PageResult;
+import com.ajaxjs.jdbc.SnowflakeIdWorker;
 import com.ajaxjs.js.JsonHelper;
+import com.ajaxjs.keyvalue.BeanUtil;
+import com.ajaxjs.keyvalue.MappingHelper;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.util.SnowflakeIdWorker;
-import com.ajaxjs.util.collection.MappingHelper;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.reflect.BeanUtil;
 import com.ajaxjs.web.UploadFile;
 import com.ajaxjs.web.UploadFileInfo;
 

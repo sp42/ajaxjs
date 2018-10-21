@@ -1,15 +1,22 @@
 package test.com.ajaxjs.net;
 
-import static org.junit.Assert.*;
-import org.junit.*;
-
-import com.ajaxjs.util.Value;
-import com.ajaxjs.web.mock.MockRequest;
-import com.ajaxjs.web.mock.MockFilter;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
+
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import com.ajaxjs.keyvalue.MappingValue;
+import com.ajaxjs.web.mock.MockFilter;
+import com.ajaxjs.web.mock.MockRequest;
 
 public class TestRequest extends MockFilter {
 	@BeforeClass
@@ -47,8 +54,8 @@ public class TestRequest extends MockFilter {
 			assertNotNull("捕获已知异常", knownException);
 		}
 
-		assertEquals(1001, (int) Value.toJavaValue(request.getParameter("id")));
-		assertTrue((boolean) Value.toJavaValue(request.getParameter("isGood")));
+		assertEquals(1001, (int) MappingValue.toJavaValue(request.getParameter("id")));
+		assertTrue((boolean) MappingValue.toJavaValue(request.getParameter("isGood")));
 
 		assertEquals("张三", request.getParameter("ChineseName"));
 	}

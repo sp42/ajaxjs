@@ -25,8 +25,8 @@ import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
+import com.ajaxjs.keyvalue.MapHelper;
 import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.util.collection.MapHelper;
 
 /**
  * 分页标签

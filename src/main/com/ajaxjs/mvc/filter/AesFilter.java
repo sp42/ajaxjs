@@ -18,11 +18,11 @@ package com.ajaxjs.mvc.filter;
 import java.lang.reflect.Method;
 import java.util.Date;
 
+import com.ajaxjs.cryptography.SymmetricCipher;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.simpleApp.Constant;
 import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.util.cryptography.SymmetricCipher;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**

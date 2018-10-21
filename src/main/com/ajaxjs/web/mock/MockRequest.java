@@ -24,8 +24,8 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import com.ajaxjs.js.JsonHelper;
+import com.ajaxjs.keyvalue.MapHelper;
 import com.ajaxjs.mvc.controller.MvcDispatcher;
-import com.ajaxjs.util.collection.MapHelper;
 
 /**
  * 为方便单元测试，模拟请求对象

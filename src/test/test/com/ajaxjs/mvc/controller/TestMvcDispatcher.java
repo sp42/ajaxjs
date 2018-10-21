@@ -1,21 +1,19 @@
 package test.com.ajaxjs.mvc.controller;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Set;
 
 import org.junit.Test;
 
-import com.ajaxjs.mvc.controller.ControllerScanner;
 import com.ajaxjs.mvc.controller.IController;
-import com.ajaxjs.util.io.resource.Scanner;
+import com.ajaxjs.mvc.controller.IControllerScanner;
 
 public class TestMvcDispatcher {
 	@Test
 	public void testScan() {
-		Scanner scaner = new Scanner(new ControllerScanner.IControllerScanner());// 定义一个扫描器，专门扫描 IController
-		@SuppressWarnings("unchecked")
-		Set<Class<IController>> controllers = (Set<Class<IController>>) scaner.scan("test.com.ajaxjs.mvc");
+		IControllerScanner scanner = new IControllerScanner();
+		Set<Class<IController>> controllers = scanner.scan("test.com.ajaxjs.mvc");
 		assertTrue(controllers.size() > 0);
 	}
 }
