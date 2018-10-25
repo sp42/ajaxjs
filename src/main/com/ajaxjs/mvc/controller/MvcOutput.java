@@ -31,7 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.jsp.PageContext;
 
-import com.ajaxjs.js.JsonHelper;
+import com.ajaxjs.keyvalue.MappingJson;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.output.JsonReuslt;
 import com.ajaxjs.util.StringUtil;
@@ -115,7 +115,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 		}
 
 		if (getOutput_Map() != null) { // Map 的话转变为 json 输出
-			setJson(true).setOutput(JsonHelper.stringifyMap(getOutput_Map()));
+			setJson(true).setOutput(MappingJson.stringifyMap(getOutput_Map()));
 		} else if (getOutput_Obj() != null) {// map or object 二选其一
 			// setJson(true).setOutput(JsonHelper.stringify_object(getOutput_Obj()));
 		}

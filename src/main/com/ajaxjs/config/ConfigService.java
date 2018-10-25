@@ -19,14 +19,15 @@ import java.util.Map;
 
 import com.ajaxjs.Version;
 import com.ajaxjs.framework.dao.MockDataSource;
+import com.ajaxjs.io.FileUtil;
 import com.ajaxjs.jdbc.JdbcConnection;
 import com.ajaxjs.js.JsEngineWrapper;
 import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.js.JsonStruTraveler;
+import com.ajaxjs.keyvalue.MappingJson;
 import com.ajaxjs.keyvalue.MappingValue;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -102,7 +103,7 @@ public class ConfigService {
 	 * 保存 JSON 配置
 	 */
 	public static void save() {
-		String jsonStr = JsonHelper.stringifyMap(config);
+		String jsonStr = MappingJson.stringifyMap(config);
 		config.setJsonStr(jsonStr);
 
 		// 保存文件
@@ -147,9 +148,6 @@ public class ConfigService {
 			return 0;
 		}
 
-		if (number instanceof Double)
-			number = MappingValue.double2int((Double) number);
-
 		return MappingValue.TypeConvert(number, int.class);
 	}
 
@@ -170,9 +168,6 @@ public class ConfigService {
 			LOGGER.warning("没发现配置 " + key);
 			return 0L;
 		}
-
-		if (number instanceof Double)
-			number = MappingValue.double2long((Double) number);
 
 		return MappingValue.TypeConvert(number, long.class);
 	}

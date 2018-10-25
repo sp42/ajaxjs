@@ -16,13 +16,12 @@
 package com.ajaxjs.web;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-import java.awt.Font;
-
-import com.ajaxjs.util.io.ImageUtil;
+import com.ajaxjs.io.image.ImageUtil;
 
 /**
  * 验证码的简单实现

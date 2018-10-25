@@ -101,6 +101,7 @@ public class ControllerScanner {
 	public static Action find(String path) {
 		Queue<String> queue = split2Queue(path);
 		Action action = onlyFindKey(urlMappingTree, queue, "");
+		
 		if (action == null) { // for the controller which is set Path("/"), root controller
 			queue = split2Queue2(path);
 			action = onlyFindKey(urlMappingTree, queue, "");
@@ -317,9 +318,10 @@ public class ControllerScanner {
 		if (config != null && config.get("controller") != null) {
 			String str = config.get("controller");
 
-			IControllerScanner scanner = new IControllerScanner(); // 定义一个扫描器，专门扫描 IController
-
+			IControllerScanner scanner;// 定义一个扫描器，专门扫描 IController
+			
 			for (String packageName : StringUtil.split(str)) {
+				scanner = new IControllerScanner(); 
 				Set<Class<IController>> IControllers = scanner.scan(packageName);
 
 				for (Class<IController> clz : IControllers)

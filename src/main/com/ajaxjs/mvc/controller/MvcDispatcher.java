@@ -41,7 +41,7 @@ import com.ajaxjs.util.CollectionUtil;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.reflect.ExecuteMethod;
+import com.ajaxjs.util.reflect.GetMethod;
 import com.ajaxjs.util.reflect.NewInstance;
 
 /**
@@ -175,9 +175,9 @@ public class MvcDispatcher implements Filter {
 					model = findModel(args);
 					
 					// 通过反射执行控制器方法:调用反射的 Reflect.executeMethod 方法就可以执行目标方法，并返回一个结果。
-					result = ExecuteMethod.executeMethod_Throwable(controller, method, args);
+					result = GetMethod.executeMethod_Throwable(controller, method, args);
 				} else {
-					result = ExecuteMethod.executeMethod_Throwable(controller, method);// 方法没有参数
+					result = GetMethod.executeMethod_Throwable(controller, method);// 方法没有参数
 				}
 			}
 			
@@ -206,9 +206,9 @@ public class MvcDispatcher implements Filter {
 	}
 
 	private static void handleErr(Throwable err, Method method, MvcRequest request, MvcOutput response, ModelAndView model) {
-		ExecuteMethod.getUnderLayerErr(err).printStackTrace(); // 打印异常
+		GetMethod.getUnderLayerErr(err).printStackTrace(); // 打印异常
 
-		String errMsg = ExecuteMethod.getUnderLayerErrMsg(err);
+		String errMsg = GetMethod.getUnderLayerErrMsg(err);
 		Produces a = method.getAnnotation(Produces.class);
 
 		if (a != null && MediaType.APPLICATION_JSON.equals(a.value()[0])) {// 返回 json

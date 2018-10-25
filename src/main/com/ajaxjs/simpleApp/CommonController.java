@@ -31,9 +31,9 @@ import com.ajaxjs.framework.service.IService;
 import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.jdbc.PageResult;
 import com.ajaxjs.jdbc.SnowflakeIdWorker;
-import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.keyvalue.BeanUtil;
 import com.ajaxjs.keyvalue.MappingHelper;
+import com.ajaxjs.keyvalue.MappingJson;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
@@ -283,7 +283,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 
 			if (pageResult.get(0) instanceof Map) { // Map 类型的输出
 				List<Map<String, Object>> list = (List<Map<String, Object>>) pageResult;
-				jsonStr = JsonHelper.stringifyListMap(list);
+				jsonStr = MappingJson.stringifyListMap(list);
 			} else { // Bean
 				jsonStr = BeanUtil.listToJson((List<Object>) pageResult);
 			}

@@ -1,5 +1,5 @@
 /**
- * Copyright Sp42 frank@ajaxjs.com
+	 * Copyright Sp42 frank@ajaxjs.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,10 +24,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
-import com.ajaxjs.js.JavaScriptCompressor;
+import com.ajaxjs.io.FileUtil;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.util.io.FileUtil;
 
 /**
  * JS all in one
