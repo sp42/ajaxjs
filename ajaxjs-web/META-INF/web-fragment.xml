@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-fragment xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+    http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd"
+	version="3.0">
+	<name>ajaxjs_WebFragment1</name>
+
+	<!-- 404 页面不存在错误 -->
+	<error-page>
+		<error-code>404</error-code>
+		<location>/asset/common/jsp/404.jsp</location>
+	</error-page>
+	<!-- // -->
+
+	<!-- 500 服务器内部错误 -->
+	<error-page>
+		<error-code>500</error-code>
+		<location>/asset/common/jsp/error.jsp</location>
+	</error-page>
+	<!-- // -->
+
+	<!-- JSP 页面编码 -->
+	<jsp-config>
+		<jsp-property-group>
+			<url-pattern>*.jsp</url-pattern>
+			<page-encoding>UTF-8</page-encoding>
+			<trim-directive-whitespaces>true</trim-directive-whitespaces>
+		</jsp-property-group>
+	</jsp-config>
+	<!-- // -->
+
+	<!-- 显示信息用-->
+	<servlet>
+		<servlet-name>showMsg</servlet-name>
+		<jsp-file>/asset/common/jsp/msg.jsp</jsp-file>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>showMsg</servlet-name>
+		<url-pattern>/showMsg</url-pattern>
+	</servlet-mapping>
+	<!-- // -->
+</web-fragment>
