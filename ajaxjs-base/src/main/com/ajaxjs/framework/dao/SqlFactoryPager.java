@@ -4,7 +4,7 @@ import java.sql.Connection;
 
 import com.ajaxjs.framework.dao.annotation.Select;
 import com.ajaxjs.jdbc.Helper;
-import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.CommonUtil;
 
 /**
  * 分页控制器
@@ -49,7 +49,7 @@ public class SqlFactoryPager implements SqlFactory {
 	private static String getCountTotalSql(Connection conn, Select select, String sql) {
 		String countSql;
 
-		if (StringUtil.isEmptyString(select.countSql())) {
+		if (CommonUtil.isEmptyString(select.countSql())) {
 			// 另外一种统计方式，但较慢 子查询
 			// 这是默认的实现，你可以通过增加 sqlCount 注解给出特定的 统计行数 之 SQL
 			countSql = "SELECT COUNT(*) AS count FROM (" + sql + ") AS t;";

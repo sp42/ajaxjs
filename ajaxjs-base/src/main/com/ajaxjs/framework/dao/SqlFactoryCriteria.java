@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.ajaxjs.util.CollectionUtil;
+import com.ajaxjs.util.CommonUtil;
 
 /**
  * 
@@ -35,7 +35,7 @@ public class SqlFactoryCriteria implements SqlFactory {
 	 * @return 查询参数对象，null 表示没有查询参数对象
 	 */
 	public static QueryParams getQueryParam(Object[] args) {
-		if (CollectionUtil.isNull(args))
+		if (CommonUtil.isNull(args))
 			return null;
 
 		/* 通常 QueryParam 放在最后一个的参数列表，于是我们从最后开始找，这样程序会快点 */

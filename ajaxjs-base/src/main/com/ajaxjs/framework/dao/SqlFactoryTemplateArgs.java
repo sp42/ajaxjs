@@ -4,7 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import com.ajaxjs.framework.dao.annotation.Param;
-import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.CommonUtil;
 
 /**
  * 
@@ -15,7 +15,7 @@ public class SqlFactoryTemplateArgs implements SqlFactory {
 	@Override
 	public SqlAndArgs toSql(SqlAndArgs s) {
 		Object sqlTplArg = null; // SQL 替换模版的参数
-		String regexp = "#\\{(\\w+)\\}", first = StringUtil.regMatch(regexp, s.sql, 1); // 当期仅支持一个替换
+		String regexp = "#\\{(\\w+)\\}", first = CommonUtil.regMatch(regexp, s.sql, 1); // 当期仅支持一个替换
 
 		if (first != null) {
 			sqlTplArg = getArgValue(s.method, s.args);

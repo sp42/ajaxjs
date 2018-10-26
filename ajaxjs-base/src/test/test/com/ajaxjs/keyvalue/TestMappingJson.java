@@ -42,13 +42,13 @@ public class TestMappingJson {
 		String jsonStr = stringifySimpleObject(obj);
 		// 输出 {"foo":"11","bar":"2222"}
 		assertNotNull(jsonStr);
-		assertEquals("{\"NULL\":null,\"str\":null,\"isOk\":false,\"n0\":0,\"n1\":111,\"n2\":222,\"msg\":\"Hello world\",\"arr\":[1, \"2\", null]}", jsonStr);
+		assertEquals("{\"NULL\":null,\"str\":null,\"isOk\":false,\"n0\":0,\"n1\":111,\"n2\":222,\"msg\":\"Hello world\",\"arr\":[1,\"2\",null]}", jsonStr);
 	}
 	
 	@Test
 	public void testObj2jsonVaule() {
 		assertEquals("null", 	obj2jsonVaule(null));
-		assertEquals("1", 		obj2jsonVaule(1D));
+		assertEquals("1.0", 	obj2jsonVaule(1D));
 		assertEquals("true", 	obj2jsonVaule(true));
 		assertEquals("1", 		obj2jsonVaule(1));
 		assertEquals("1", 		obj2jsonVaule(1L));
@@ -59,14 +59,14 @@ public class TestMappingJson {
 		list.add(2);
 		list.add(3);
 		assertEquals("[1, 2, 3]", 		obj2jsonVaule(list));
-		assertEquals("[1, 2, 3]", 		obj2jsonVaule(new int[] { 1, 2, 3 }));
+		assertEquals("[1,2,3]", 		obj2jsonVaule(new int[] { 1, 2, 3 }));
 		
 		List<String> list2 = new ArrayList<>();
 		list2.add("1");
 		list2.add("2");
 		list2.add("3");
 		assertEquals("[\"1\", \"2\", \"3\"]", 		obj2jsonVaule(list2));
-		assertEquals("[\"1\", \"2\", \"3\"]", 		obj2jsonVaule(new String[] { "1", "2", "3" }));
+		assertEquals("[\"1\",\"2\",\"3\"]", 		obj2jsonVaule(new String[] { "1", "2", "3" }));
 		
 		Map<String, Object> map = new HashMap<>();
 		assertEquals("{}", 		obj2jsonVaule(map));

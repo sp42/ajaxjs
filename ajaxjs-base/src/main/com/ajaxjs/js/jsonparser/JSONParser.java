@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Stack;
 
 import com.ajaxjs.keyvalue.MappingValue;
-import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.CommonUtil;
 
 /**
  * 主要的方法入口 parse()。 还有其他的一些工具方法
@@ -99,7 +99,7 @@ public class JSONParser {
 	 * @return 有可能 map 有可能是 list
 	 */
 	public static Object json2Map2(String jsonStr) {
-		if (StringUtil.isEmptyString(jsonStr))
+		if (CommonUtil.isEmptyString(jsonStr))
 			return null;
 
 		Stack<Map<String, Object>> maps = new Stack<>(); // 用来保存所有父级对象

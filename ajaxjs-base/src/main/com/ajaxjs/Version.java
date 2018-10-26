@@ -15,7 +15,7 @@
  */
 package com.ajaxjs;
 
-import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -26,7 +26,7 @@ import com.ajaxjs.util.logger.LogHelper;
  */
 public class Version {
 	private static final LogHelper LOGGER = LogHelper.getLog(Version.class);
-
+	
 	/**
 	 * 是否调试模式（开发模式）
 	 */
@@ -78,7 +78,7 @@ public class Version {
 	 *            字符串如 Tomcat/7
 	 */
 	public static void tomcatVersionDetect(String serverInfo) {
-		String result = StringUtil.regMatch("(?<=Tomcat/)(\\d)", serverInfo);
+		String result = CommonUtil.regMatch("(?<=Tomcat/)(\\d)", serverInfo);
 
 		if (result != null) {
 			try {

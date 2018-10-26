@@ -20,7 +20,7 @@ public class TestMapHelper {
 	
 	@Test
 	public void testJoin() {
-		assertEquals("zx=hi&foo=null&bar=500", join(asString(map)));
+		assertEquals("bar=500&foo=null&zx=hi", join(asString(map)));
 	}
 	
 	@Test

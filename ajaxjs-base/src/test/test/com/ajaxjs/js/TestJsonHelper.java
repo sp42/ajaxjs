@@ -1,5 +1,7 @@
 package test.com.ajaxjs.js;
 
+import static com.ajaxjs.js.JsonHelper.format;
+import static com.ajaxjs.js.JsonHelper.parseMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -9,9 +11,6 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.ajaxjs.js.JsonHelper;
-import com.ajaxjs.util.StringUtil;
-
-import static com.ajaxjs.js.JsonHelper.*;
 
 public class TestJsonHelper {
 	static String[] _map = {"{",
@@ -37,7 +36,7 @@ public class TestJsonHelper {
 			 "	}",
 			 "}"};
 			
-	public static Map<String, Object> map = parseMap(StringUtil.stringJoin(_map, ""));
+	public static Map<String, Object> map = parseMap(String.join("", _map));
 
 	@Test
 	public void testParseMap() {
@@ -84,7 +83,7 @@ public class TestJsonHelper {
 			 "		]",
 			 "	}]"};
 			
-	public static List<Map<String, Object>> list = JsonHelper.parseList(StringUtil.stringJoin(_list, ""));
+	public static List<Map<String, Object>> list = JsonHelper.parseList(String.join("", _list));
 	
 	@Test
 	public void testParseList() {

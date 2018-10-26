@@ -1,9 +1,12 @@
 package test.com.ajaxjs.util;
 
-import static org.junit.Assert.*;
-import static com.ajaxjs.util.StringUtil.*;
-
-import java.util.ArrayList;
+import static com.ajaxjs.util.CommonUtil.containsIgnoreCase;
+import static com.ajaxjs.util.CommonUtil.isEmptyString;
+import static com.ajaxjs.util.CommonUtil.regMatch;
+import static com.ajaxjs.util.CommonUtil.repeatStr;
+import static com.ajaxjs.util.CommonUtil.split;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -23,20 +26,6 @@ public class TestStringUtil {
 		assertEquals(5, split("a|b|c|d|e").length);
 		assertEquals(5, split("a;b;c;d;e").length);
 	}
-	
-	@Test
-	public void testStringJoin() {
-		assertEquals("a, b", stringJoin(new String[] {"a", "b"}));
-		assertEquals("a,b,c", stringJoin(new String[] { "a", "b", "c" }, ","));
-		assertEquals("a,b,c", stringJoin(new ArrayList<String>() {
-			private static final long serialVersionUID = 1L;
-			{
-				add("a");
-				add("b");
-				add("c");
-			}
-		}, ","));
-	}
 
 	@Test
 	public void testRepeatStr() {
@@ -54,6 +43,5 @@ public class TestStringUtil {
 		assertEquals(regMatch("^a", "abc", 0), "a");// 可指定分组
 		assertEquals(regMatch("^a(b)", "abc", 1), "b");
 	}
-
 
 }

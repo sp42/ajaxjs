@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.js.jsonparser.syntax.FMS;
-import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.CommonUtil;
 
 /**
  * 序列化/反序列化 JSON
@@ -72,7 +72,7 @@ public class JsonHelper {
 		for (int i = 0; i < json.length(); i++) {
 			char c = json.charAt(i);
 			if (level > 0 && '\n' == str.charAt(str.length() - 1))
-				str.append(StringUtil.repeatStr("\t", "", level));
+				str.append(CommonUtil.repeatStr("\t", "", level));
 
 			switch (c) {
 			case '{':
@@ -88,7 +88,7 @@ public class JsonHelper {
 			case ']':
 				str.append("\n");
 				level--;
-				str.append(StringUtil.repeatStr("\t", "", level));
+				str.append(CommonUtil.repeatStr("\t", "", level));
 				str.append(c);
 				break;
 			default:

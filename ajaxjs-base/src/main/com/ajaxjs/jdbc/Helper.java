@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -322,7 +321,7 @@ public class Helper {
 			arr[i] = arr[i] + inSql;
 		}
 
-		return StringUtil.stringJoin(arr, " ").trim();
+		return String.join(" ", arr).trim();
 
 //		int cols = params.length;
 //		Object[] values = new Object[cols];
@@ -380,7 +379,7 @@ public class Helper {
 		for (int i = 0; i < placeHolders.length; i++)
 			placeHolders[i] = "?";
 
-		return StringUtil.stringJoin(placeHolders, ",");
+		return String.join(",", placeHolders);
 	}
 
 	/**
@@ -397,6 +396,6 @@ public class Helper {
 		for (String field : pair.keySet())
 			fields[i++] = isFieldName_Only ? field : field + " = ?";
 
-		return StringUtil.stringJoin(fields, ", ");
+		return String.join(", ", fields);
 	}
 }

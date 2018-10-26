@@ -27,8 +27,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.ajaxjs.keyvalue.BeanUtil;
-import com.ajaxjs.util.CollectionUtil;
-import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.io.resource.ScanClass;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.NewInstance;
@@ -100,7 +99,7 @@ public class BeanContext {
 		if (isInitialized)
 			LOGGER.warning("IOC 已经初始化。IOC System is already initialized.");
 
-		if (CollectionUtil.isNull(classes)) {
+		if (CommonUtil.isNull(classes)) {
 			LOGGER.warning("IOC 传入的类为空！请检查包名是否正确。 Non classes passed.");
 			return;
 		}
@@ -115,7 +114,7 @@ public class BeanContext {
 			// LOGGER.info("IOC 扫描：" + item);
 			String beanName = getBeanId(annotation, item);
 			
-			if(StringUtil.isEmptyString(beanName)) {
+			if(CommonUtil.isEmptyString(beanName)) {
 				beanName = getBeanId(namedAnno, item);
 			}
 
@@ -139,7 +138,7 @@ public class BeanContext {
 					 */
 					String dependenciObj_id = res == null  ? field.getAnnotation(Named.class).value() : res.value();// 获取依赖的 bean 的名称,如果为 null, 则使用字段名称
 					
-					if (StringUtil.isEmptyString(dependenciObj_id))
+					if (CommonUtil.isEmptyString(dependenciObj_id))
 						dependenciObj_id = field.getName(); // 此时 bean 的 id 一定要与 fieldName 一致
 					
 					// bean id ＋ 变量名称 ＝ 依赖关系的 key。
@@ -151,7 +150,7 @@ public class BeanContext {
 	}
 
 	private static String getBeanId(Named namedAnno, Class<?> clz) {
-		if (namedAnno == null || StringUtil.isEmptyString(namedAnno.value())) {
+		if (namedAnno == null || CommonUtil.isEmptyString(namedAnno.value())) {
 			return clz.getSimpleName().toLowerCase();
 		} else
 			return namedAnno.value();
@@ -166,7 +165,7 @@ public class BeanContext {
 	private static String getBeanId(Bean annotation, Class<?> clz) {
 		if (annotation == null)
 			return null;
-		else if(StringUtil.isEmptyString(annotation.value())) {
+		else if(CommonUtil.isEmptyString(annotation.value())) {
 			return clz.getSimpleName();
 		} else
 			return annotation.value();
@@ -197,7 +196,7 @@ public class BeanContext {
 	private static Object getBeanInstance(Class<?> item, Bean annotation) {
 		Object beanInstance = NewInstance.newInstance(item);
 
-		if (annotation != null && !CollectionUtil.isNull(annotation.aop())) {
+		if (annotation != null && !CommonUtil.isNull(annotation.aop())) {
 //			LOGGER.info("需要 AOP 处理，类：" + item);
 
 			for (Class<? extends Aop> clz : annotation.aop())

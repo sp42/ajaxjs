@@ -18,9 +18,8 @@ package com.ajaxjs.keyvalue;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.ajaxjs.util.CollectionUtil;
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
-import com.ajaxjs.util.StringUtil;
 
 /**
  * 链式调用处理 map 数据
@@ -155,7 +154,7 @@ public class MapHelper {
 		for (String key : map.keySet())
 			pairs[i++] = key + "=" + map.get(key);
 		
-		return StringUtil.stringJoin(pairs, div);
+		return String.join(div, pairs);
 	}
 
 	/**
@@ -239,7 +238,7 @@ public class MapHelper {
 		
 		for (String key : map.keySet()) {
 			String[] values = map.get(key);
-			String value = values.length == 1 ?  values[0] : StringUtil.stringJoin(values, ",");
+			String value = values.length == 1 ?  values[0] : String.join(",", values);
 			
 			_map.put(key, value);
 		}
@@ -257,7 +256,7 @@ public class MapHelper {
 	 * @return Map 结构
 	 */
 	public static Map<String, Object> toMap(String[] columns, String[] values) {
-		if (CollectionUtil.isNull(columns)) 
+		if (CommonUtil.isNull(columns)) 
 			return null;
 		
 		if (columns.length != values.length)
@@ -293,7 +292,7 @@ public class MapHelper {
 	 * @return Map 结构
 	 */
 	public static Map<String, Object> toMap(String[] pairs, boolean isDecode) {
-		if (CollectionUtil.isNull(pairs))
+		if (CommonUtil.isNull(pairs))
 			return null;
 		
 		Map<String, Object> map = new HashMap<>();

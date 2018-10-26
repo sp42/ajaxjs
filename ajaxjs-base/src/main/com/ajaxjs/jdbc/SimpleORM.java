@@ -20,7 +20,7 @@ import java.util.Map;
 
 import com.ajaxjs.jdbc.sqlbuilder.CommonSQL;
 import com.ajaxjs.keyvalue.BeanUtil;
-import com.ajaxjs.util.CollectionUtil;
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.GetMethod;
 
@@ -90,7 +90,7 @@ public class SimpleORM<T> extends Helper {
 	public List<T> queryList(String sql, Object... params) {
 		List<Map<String, Object>> list = queryList(conn, sql, params);
 
-		if (CollectionUtil.isNull(list))
+		if (CommonUtil.isNull(list))
 			return null;
 
 		if (entryType == Map.class) {

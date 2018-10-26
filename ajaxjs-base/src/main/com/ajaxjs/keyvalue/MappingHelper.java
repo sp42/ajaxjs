@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.js.JsonHelper;
-import com.ajaxjs.util.StringUtil;
 
 /**
  * 为 key-value 结构的数据提供数据转换的中间件
@@ -175,7 +174,7 @@ public class MappingHelper {
 			for (int i = 0; i < result.size(); i++)
 				str[i] = BeanUtil.beanToJson((Object) result.get(i));
 
-			return "json::{\"result\":[" + StringUtil.stringJoin(str, ",") + "]}";
+			return "json::{\"result\":[" + String.join(",", str) + "]}";
 		} else
 			return "json::{\"result\": null}";
 	}

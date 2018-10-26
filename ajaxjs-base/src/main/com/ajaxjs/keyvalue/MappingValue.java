@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.ajaxjs.util.CollectionUtil;
 import com.ajaxjs.util.DateTools;
 
 /**
@@ -116,9 +115,9 @@ public class MappingValue {
 		} else if (t == int[].class || t == Integer[].class) {
 			// 复数
 			if (value instanceof String) {
-				value = CollectionUtil.strArr2intArr((String) value, diver + "");
+				value = MappingJson.strArr2intArr((String) value, diver + "");
 			} else if (value instanceof List) {
-				value = CollectionUtil.integerList2arr((List<Integer>) value);
+				value = MappingJson.integerList2arr((List<Integer>) value);
 			}
 
 		} else if (t == long.class || t == Long.class) {
@@ -129,7 +128,7 @@ public class MappingValue {
 		} else if (t == String[].class) {
 			// 复数
 			if (value instanceof ArrayList) {
-				value = CollectionUtil.stringList2arr((ArrayList<String>) value);
+				value = MappingJson.stringList2arr((ArrayList<String>) value);
 			} else if (value instanceof String) {
 				String str = (String) value;
 				value = str.split(diver + "");

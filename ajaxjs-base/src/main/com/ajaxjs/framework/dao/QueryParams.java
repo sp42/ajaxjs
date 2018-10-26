@@ -18,7 +18,7 @@ import java.util.Map;
 
 import com.ajaxjs.keyvalue.MapHelper;
 import com.ajaxjs.util.Encode;
-import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.CommonUtil;
 
 /**
  * DAO 用的查询参数，可以是 分页 的查询参数，也可以是排序、过滤、搜索等的参数 * 查询时特地需求的容器，可包含特定的对象进行查询，通过
@@ -136,10 +136,10 @@ public class QueryParams {
 
 		// 增加到原 sql 身上
 		if (wheres.size() > 0) {
-			String c = StringUtil.stringJoin(wheres, " AND ");
+			String c = String.join(" AND ", wheres);
 			String regexp = "(?i)1\\s?(=|AND)\\s?1"; // 支持 1=1、1 AND 1
 
-			if (StringUtil.regMatch(regexp, sql) != null) {
+			if (CommonUtil.regMatch(regexp, sql) != null) {
 				sql = sql.replaceAll(regexp, c);
 			} else if (sql.contains("WHERE")) {
 				sql = sql.replaceAll("WHERE", "WHERE " + c + " AND ");// 写死 AND 并关系，但如果要 OR 呢？
@@ -165,7 +165,7 @@ public class QueryParams {
 				orders.add(key + " " + order.get(key));
 			}
 
-			String orderBy = StringUtil.stringJoin(orders, ",");
+			String orderBy = String.join(",", orders);
 
 			if (sql.toUpperCase().contains("ORDER BY ")) {
 				sql = sql.replaceAll("(?i)ORDER BY ", "ORDER BY " + orderBy + ", ");

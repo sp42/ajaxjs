@@ -20,7 +20,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import com.ajaxjs.keyvalue.MappingValue;
-import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.io.StreamUtil;
 import com.ajaxjs.util.logger.LogHelper;
@@ -161,7 +161,7 @@ public class JsEngineWrapper {
 	 * @return 执行结果
 	 */
 	public <T> T eval(String code, Class<T> clazz) {
-		if (StringUtil.isEmptyString(code))
+		if (CommonUtil.isEmptyString(code))
 			throw new UnsupportedOperationException("JS 代码不能为空！");
 
 		Object obj = null;

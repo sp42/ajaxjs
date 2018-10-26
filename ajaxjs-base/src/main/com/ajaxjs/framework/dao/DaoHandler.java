@@ -30,8 +30,7 @@ import com.ajaxjs.jdbc.Helper;
 import com.ajaxjs.jdbc.JdbcConnection;
 import com.ajaxjs.jdbc.PageResult;
 import com.ajaxjs.jdbc.SimpleORM;
-import com.ajaxjs.util.CollectionUtil;
-import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.NewInstance;
 
@@ -231,7 +230,7 @@ public class DaoHandler<T> implements InvocationHandler {
 	private SqlAndArgs doSqlFactory(Select select, SqlAndArgs s) {
 		Class<? extends SqlFactory>[] fs = select.sqlFactory();
 
-		if (!CollectionUtil.isNull(fs)) {
+		if (!CommonUtil.isNull(fs)) {
 			for (Class<? extends SqlFactory> f : fs) {
 				SqlFactory instance = NewInstance.newInstance(f);
 				s = instance.toSql(s);
@@ -259,7 +258,7 @@ public class DaoHandler<T> implements InvocationHandler {
 	 * @return true = 是 SQLite 数据库
 	 */
 	public static boolean isSqlite(String sqliteValue, Connection conn) {
-		return !StringUtil.isEmptyString(sqliteValue) && conn.toString().contains("sqlite");
+		return !CommonUtil.isEmptyString(sqliteValue) && conn.toString().contains("sqlite");
 	}
 
 	/**
@@ -325,7 +324,7 @@ public class DaoHandler<T> implements InvocationHandler {
 
 		String sql = isSqlite(delete.sqliteValue(), conn) ? delete.sqliteValue() : delete.value();
 
-		if (!StringUtil.isEmptyString(sql)) { /* 以 sql 方式删除 */
+		if (!CommonUtil.isEmptyString(sql)) { /* 以 sql 方式删除 */
 			isOk = Helper.delete(conn, sql, args);
 		} else if (delete.value().equals("") && delete.tableName() != null && args[0] != null) { // 以 bean 方式删除
 			isOk = new SimpleORM<>(conn, beanType).delete((B) args[0], delete.tableName());
