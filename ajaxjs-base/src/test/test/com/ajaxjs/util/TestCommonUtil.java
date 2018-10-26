@@ -10,7 +10,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class TestStringUtil {
+public class TestCommonUtil {
 	@Test
 	public void testIsEmptyString() {
 		assertTrue(isEmptyString(""));

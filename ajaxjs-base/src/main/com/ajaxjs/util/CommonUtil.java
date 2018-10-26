@@ -30,8 +30,7 @@ public class CommonUtil {
 	/**
 	 * 是否空字符串
 	 * 
-	 * @param str
-	 *            要判断的字符串
+	 * @param str 要判断的字符串
 	 * @return true 表示为为空字符串，否则不为空
 	 */
 	public static boolean isEmptyString(String str) {
@@ -41,8 +40,7 @@ public class CommonUtil {
 	/**
 	 * 将一个字符串分隔为字符串数组，分隔符 可以是,、/、-、\（注意转义）、|、; 作为分隔符。 常在读取配置的时候使用。
 	 * 
-	 * @param str
-	 *            输入的字符串
+	 * @param str 输入的字符串
 	 * @return 分隔后的数组
 	 */
 	public static String[] split(String str) {
@@ -52,12 +50,9 @@ public class CommonUtil {
 	/**
 	 * 重复字符串 repeat 次并以 div 分隔
 	 * 
-	 * @param str
-	 *            要重复的字符串
-	 * @param div
-	 *            字符串之间的分隔符
-	 * @param repeat
-	 *            重复次数
+	 * @param str 要重复的字符串
+	 * @param div 字符串之间的分隔符
+	 * @param repeat 重复次数
 	 * @return 结果
 	 */
 	public static String repeatStr(String str, String div, int repeat) {
@@ -76,10 +71,8 @@ public class CommonUtil {
 	/**
 	 * 输入 a，看 a 里面是否包含另一个字符串 b，忽略大小写。
 	 * 
-	 * @param a
-	 *            输入字符串 a
-	 * @param b
-	 *            另一个字符串 b
+	 * @param a 输入字符串 a
+	 * @param b 另一个字符串 b
 	 * @return true 表示包含
 	 */
 	public static boolean containsIgnoreCase(String a, String b) {
@@ -89,10 +82,8 @@ public class CommonUtil {
 	/**
 	 * 使用正则的快捷方式
 	 * 
-	 * @param regexp
-	 *            正则
-	 * @param str
-	 *            测试的字符串
+	 * @param regexp 正则
+	 * @param str 测试的字符串
 	 * @return 匹配结果，只有匹配第一个
 	 */
 	public static String regMatch(String regexp, String str) {
@@ -102,12 +93,9 @@ public class CommonUtil {
 	/**
 	 * 使用正则的快捷方式。可指定分组
 	 * 
-	 * @param regexp
-	 *            正则
-	 * @param str
-	 *            测试的字符串
-	 * @param groupIndex
-	 *            分组 id
+	 * @param regexp 正则
+	 * @param str 测试的字符串
+	 * @param groupIndex 分组 id
 	 * @return 匹配结果
 	 */
 	public static String regMatch(String regexp, String str, int groupIndex) {

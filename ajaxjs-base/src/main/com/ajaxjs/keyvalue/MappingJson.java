@@ -103,7 +103,7 @@ public class MappingJson {
 			return '\"' + DateTools.formatDate((Date) value, DateTools.commonDateFormat) + '\"';
 		} else if (value instanceof Map) {
 			Map<String, ?> map = (Map<String, ?>) value;
-			return map.size() == 0 ? "{}" : MappingJson.stringifyMap(map);
+			return map.size() == 0 ? "{}" : stringifyMap(map);
 		} else if (value instanceof List) {
 			List<?> list = (List<?>) value;
 	
@@ -136,7 +136,7 @@ public class MappingJson {
 				StringBuilder sb = new StringBuilder();
 	
 				for (int i = 0; i < maps.size(); i++) {
-					sb.append(MappingJson.stringifyMap(maps.get(i)));
+					sb.append(stringifyMap(maps.get(i)));
 					if (i != (maps.size() - 1))
 						sb.append(", ");
 				}
@@ -165,24 +165,6 @@ public class MappingJson {
 			return '\"' + value.toString().replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r") + '\"';
 		}
 	}
-	
-
-	/**
-	 * 当它们每一个都是数字的字符串形式，转换为整形的数组 "1,2,3, ..." -- [1, 2, ...]
-	 * 
-	 * @param value 输入字符串
-	 * @param diver 分隔符
-	 * @return 整形数组
-	 */
-	public static int[] strArr2intArr(String value, String diver) {
-		String[] strArr = value.split(diver);
-		int[] intArr = new int[strArr.length];
-
-		for (int i = 0; i < strArr.length; i++)
-			intArr[i] = Integer.parseInt(strArr[i].trim());
-
-		return intArr;
-	}
 
 	/**
 	 * 整形数组转换为字符数组 [1, 2, ...] --"1,2,3, ..."
@@ -190,47 +172,12 @@ public class MappingJson {
 	 * @param arr 输入的整形数组
 	 * @return 字符数组
 	 */
-	public static String[] int_arr2string_arr(int[] arr) {
+	private static String[] int_arr2string_arr(int[] arr) {
 		String[] strs = new String[arr.length];
 
 		for (int i = 0; i < arr.length; i++)
 			strs[i] = arr[i] + "";
 
 		return strs;
-	}
-
-	/**
-	 * List&lt;String&gt; 转换为字符串数组／数组效的话率更高一些
-	 * 
-	 * @param list 字符串列表
-	 * @return 字符串数组
-	 */
-	public static String[] stringList2arr(List<String> list) {
-		return list.toArray(new String[list.size()]);
-	}
-
-	/**
-	 * List&lt;Integer &gt; 转换为数组（对象类型）。数组的话效率更高一些
-	 * 
-	 * @param list 整形列表
-	 * @return 整形数组
-	 */
-	public static Integer[] integerList2integer_arr(List<Integer> list) {
-		return list.toArray(new Integer[list.size()]);
-	}
-	
-	/**
-	 * Integer[] 不能直接转 int[]
-	 * 
-	 * @param list 整形列表
-	 * @return 整形数组
-	 */
-	public static int[] integerList2arr(List<Integer> list) {
-		int[] arr = new int[list.size()];
-
-		for (int i = 0; i < list.size(); i++)
-			arr[i] = list.get(i);
-
-		return arr;
 	}
 }

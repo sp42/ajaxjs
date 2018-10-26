@@ -161,14 +161,10 @@ public class ImageUtil extends FileUtil {
 	/**
 	 * 图片裁切
 	 * 
-	 * @param x
-	 *            选择区域左上角的x坐标
-	 * @param y
-	 *            选择区域左上角的y坐标
-	 * @param width
-	 *            选择区域的宽度
-	 * @param height
-	 *            选择区域的高度
+	 * @param x 选择区域左上角的x坐标
+	 * @param y 选择区域左上角的y坐标
+	 * @param width 选择区域的宽度
+	 * @param height 选择区域的高度
 	 */
 	public ImageUtil cut(int x, int y, int width, int height) {
 		try {
@@ -191,13 +187,12 @@ public class ImageUtil extends FileUtil {
 		}
 
 		return this;
-	} 
+	}
 
 	/**
 	 * 为图片添加水印文字
 	 * 
-	 * @param watermark
-	 *            水印文字
+	 * @param watermark 水印文字
 	 */
 	public ImageUtil mark(String watermark) {
 		// 读取原图片信息
@@ -243,8 +238,7 @@ public class ImageUtil extends FileUtil {
 	/**
 	 * 为图片添加水印图片
 	 * 
-	 * @param watermark
-	 *            水印文件
+	 * @param watermark 水印文件
 	 */
 	public ImageUtil mark(File watermark) {
 		Image watermarkImg;
@@ -283,8 +277,7 @@ public class ImageUtil extends FileUtil {
 	}
 
 	/**
-	 * @param width
-	 *            宽度
+	 * @param width 宽度
 	 */
 	public ImageUtil setWidth(int width) {
 		this.width = width;
@@ -301,8 +294,7 @@ public class ImageUtil extends FileUtil {
 	}
 
 	/**
-	 * @param height
-	 *            高度
+	 * @param height 高度
 	 */
 	public ImageUtil setHeight(int height) {
 		this.height = height;
@@ -321,8 +313,7 @@ public class ImageUtil extends FileUtil {
 	/**
 	 * 设置图片流
 	 * 
-	 * @param img
-	 *            图片流
+	 * @param img 图片流
 	 */
 	public ImageUtil setImg(Image img) {
 		this.img = img;
@@ -337,8 +328,7 @@ public class ImageUtil extends FileUtil {
 	}
 
 	/**
-	 * @param bImg
-	 *            the bImg to set
+	 * @param bImg the bImg to set
 	 */
 	public ImageUtil setbImg(BufferedImage bImg) {
 		this.bImg = bImg;
@@ -382,8 +372,7 @@ public class ImageUtil extends FileUtil {
 	}
 
 	/**
-	 * @param format
-	 *            the format to set
+	 * @param format the format to set
 	 */
 	public void setFormat(String format) {
 		this.format = format;

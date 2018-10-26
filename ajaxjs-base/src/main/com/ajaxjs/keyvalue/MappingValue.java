@@ -115,9 +115,9 @@ public class MappingValue {
 		} else if (t == int[].class || t == Integer[].class) {
 			// 复数
 			if (value instanceof String) {
-				value = MappingJson.strArr2intArr((String) value, diver + "");
+				value = stringArr2intArr((String) value, diver + "");
 			} else if (value instanceof List) {
-				value = MappingJson.integerList2arr((List<Integer>) value);
+				value = integerList2arr((List<Integer>) value);
 			}
 
 		} else if (t == long.class || t == Long.class) {
@@ -128,7 +128,7 @@ public class MappingValue {
 		} else if (t == String[].class) {
 			// 复数
 			if (value instanceof ArrayList) {
-				value = MappingJson.stringList2arr((ArrayList<String>) value);
+				value = stringList2arr((ArrayList<String>) value);
 			} else if (value instanceof String) {
 				String str = (String) value;
 				value = str.split(diver + "");
@@ -141,10 +141,10 @@ public class MappingValue {
 		} else if (t == BigDecimal.class) {
 			if (value instanceof Integer) {
 				value = new BigDecimal((Integer) value);
-			} else if(value instanceof String) {
+			} else if (value instanceof String) {
 				BigDecimal b = new BigDecimal((String) value);
 				b.setScale(2, BigDecimal.ROUND_DOWN);
-				
+
 				value = b;
 			}
 		}
@@ -156,4 +156,46 @@ public class MappingValue {
 	 * 用于数组的分隔符
 	 */
 	static char diver = ',';
+
+	/**
+	 * Integer[] 不能直接转 int[]
+	 * 
+	 * @param list 整形列表
+	 * @return 整形数组
+	 */
+	private static int[] integerList2arr(List<Integer> list) {
+		int[] arr = new int[list.size()];
+
+		for (int i = 0; i < list.size(); i++)
+			arr[i] = list.get(i);
+
+		return arr;
+	}
+	
+	/**
+	 * 当它们每一个都是数字的字符串形式，转换为整形的数组 "1,2,3, ..." -- [1, 2, ...]
+	 * 
+	 * @param value 输入字符串
+	 * @param diver 分隔符
+	 * @return 整形数组
+	 */
+	private static int[] stringArr2intArr(String value, String diver) {
+		String[] strArr = value.split(diver);
+		int[] intArr = new int[strArr.length];
+
+		for (int i = 0; i < strArr.length; i++)
+			intArr[i] = Integer.parseInt(strArr[i].trim());
+
+		return intArr;
+	}
+	
+	/**
+	 * List&lt;String&gt; 转换为字符串数组／数组效的话率更高一些
+	 * 
+	 * @param list 字符串列表
+	 * @return 字符串数组
+	 */
+	private static String[] stringList2arr(List<String> list) {
+		return list.toArray(new String[list.size()]);
+	}
 }

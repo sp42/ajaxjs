@@ -15,18 +15,15 @@
  */
 package com.ajaxjs.util;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 import javax.xml.bind.DatatypeConverter;
-
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 /**
  * 字符串的编码、解密 支持 MD5、SHA-1 和 SHA-2（SHA256）摘要算法
@@ -101,7 +98,7 @@ public class Encode {
 	 * @return 已编码的字符串
 	 */
 	public static String base64Encode(byte[] bytes) {
-		return new BASE64Encoder().encode(bytes);
+		return Base64.getEncoder().encodeToString(bytes);
 	}
 
 	/**
@@ -111,7 +108,7 @@ public class Encode {
 	 * @return 已编码的字符串
 	 */
 	public static String base64Encode(String str) {
-		return base64Encode(str.getBytes());
+		return base64Encode(str.getBytes(StandardCharsets.UTF_8));
 	}
 
 	/**
@@ -121,14 +118,7 @@ public class Encode {
 	 * @return 已解码的 Byte
 	 */
 	public static byte[] base64DecodeAsByte(String str) {
-		BASE64Decoder decoder = new BASE64Decoder();
-
-		try {
-			return decoder.decodeBuffer(str);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
+		return Base64.getDecoder().decode(str);
 	}
 
 	/**
@@ -219,8 +209,8 @@ public class Encode {
 	/**
 	 * 将 byte 转为 16 进制
 	 * 
-	 * @param bytes
-	 * @return
+	 * @param bytes 字节数组
+	 * @return Hex
 	 */
 	static String byte2Hex(byte[] bytes) {
 		StringBuffer stringBuffer = new StringBuffer();
