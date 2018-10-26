@@ -20,7 +20,7 @@
 			<div class="closeBtn" onclick="hideSider(this);"></div>
 			<span class="menu">
 				<aj-accordion-menu>
-			    	<%@include file="/asset/jsp/admin/admin-menu.jsp" %>
+			    	<%@include file="/WEB-INF/jsp/admin/admin-menu.jsp" %>
 			    </aj-accordion-menu>
 			</span>
 		</section>

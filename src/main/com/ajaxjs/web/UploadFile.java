@@ -22,10 +22,10 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-import com.ajaxjs.io.FileUtil;
-import com.ajaxjs.io.StreamUtil;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.io.FileUtil;
+import com.ajaxjs.util.io.StreamUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**

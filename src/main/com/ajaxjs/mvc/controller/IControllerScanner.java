@@ -3,7 +3,7 @@ package com.ajaxjs.mvc.controller;
 import java.io.File;
 import java.util.Set;
 
-import com.ajaxjs.io.resource.ScanClass;
+import com.ajaxjs.util.io.resource.ScanClass;
 import com.ajaxjs.util.reflect.NewInstance;
 
 public class IControllerScanner extends ScanClass<IController> {

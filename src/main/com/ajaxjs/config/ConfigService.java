@@ -19,7 +19,6 @@ import java.util.Map;
 
 import com.ajaxjs.Version;
 import com.ajaxjs.framework.dao.MockDataSource;
-import com.ajaxjs.io.FileUtil;
 import com.ajaxjs.jdbc.JdbcConnection;
 import com.ajaxjs.js.JsEngineWrapper;
 import com.ajaxjs.js.JsonHelper;
@@ -28,6 +27,7 @@ import com.ajaxjs.keyvalue.MappingJson;
 import com.ajaxjs.keyvalue.MappingValue;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**

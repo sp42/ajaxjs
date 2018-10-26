@@ -24,9 +24,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
-import com.ajaxjs.io.FileUtil;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
+import com.ajaxjs.util.io.FileUtil;
 
 /**
  * JS all in one
