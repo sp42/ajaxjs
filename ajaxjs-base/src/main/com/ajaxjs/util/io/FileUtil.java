@@ -31,7 +31,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import com.ajaxjs.util.DateTools;
-import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -318,7 +317,7 @@ public class FileUtil extends StreamChain<FileUtil> {
 	public static void mkDir(String fullPath) {
 		String arr[] = fullPath.split("\\/|\\\\");
 		arr[arr.length - 1] = "";// 取消文件名，让最后一个元素为空字符串
-		String folder = StringUtil.stringJoin(arr, File.separator);
+		String folder = String.join(File.separator, arr);
 
 		File f = new File(folder); // 先检查目录是否存在，若不存在建立
 		if (!f.exists())

@@ -15,7 +15,8 @@
  */
 package com.ajaxjs.util;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,7 +26,7 @@ import java.util.regex.Pattern;
  * @author Sp42 frank@ajaxjs.com
  *
  */
-public class StringUtil {
+public class CommonUtil {
 	/**
 	 * 是否空字符串
 	 * 
@@ -46,57 +47,6 @@ public class StringUtil {
 	 */
 	public static String[] split(String str) {
 		return str.split(",|/|-|\\\\|\\||;");
-	}
-
-	/**
-	 * Java String 有 split 却没有 join，这里实现一个
-	 * 
-	 * @param arr
-	 *            输入的字符串数组
-	 * @param join
-	 *            分隔符
-	 * @return 连接后的字符串
-	 */
-	public static String stringJoin(String[] arr, String join) {
-		if (CollectionUtil.isNull(arr))
-			return null;
-
-		StringBuilder sb = new StringBuilder();
-
-		for (int i = 0; i < arr.length; i++) {
-			if (i == (arr.length - 1))
-				sb.append(arr[i]);
-			else
-				sb.append(arr[i]).append(join);
-		}
-
-		return new String(sb);
-	}
-
-	/**
-	 * Java String 有 split 却没有 join，这里实现一个。默认用 , 分隔
-	 * 
-	 * @param arr
-	 *            输入的字符串数组
-	 * @return 连接后的字符串
-	 */
-	public static String stringJoin(String[] arr) {
-		return stringJoin(arr, ", ");
-	}
-
-	/**
-	 * Java String 有 split 却没有 join，这里实现一个
-	 * 
-	 * @param arr
-	 *            输入的字符串列表
-	 * @param join
-	 *            分隔符
-	 * @return 连接后的字符串
-	 */
-	public static String stringJoin(List<String> arr, String join) {
-		if (CollectionUtil.isNull(arr))
-			return null;
-		return stringJoin(arr.toArray(new String[arr.size()]), join);
 	}
 
 	/**
@@ -163,6 +113,36 @@ public class StringUtil {
 	public static String regMatch(String regexp, String str, int groupIndex) {
 		Matcher m = Pattern.compile(regexp).matcher(str);
 		return m.find() ? m.group(groupIndex) : null;
+	}
+
+	/**
+	 * 判断数组是否为空
+	 * 
+	 * @param arr 输入的数组
+	 * @return true 表示为素组不是为空，是有内容的，false 表示为数组为空数组，length = 0
+	 */
+	public static boolean isNull(Object[] arr) {
+		return arr == null || arr.length == 0;
+	}
+
+	/**
+	 * 判断 collection 是否为空
+	 * 
+	 * @param collection Map输入的集合
+	 * @return true 表示为集合不是为空，是有内容的，false 表示为空集合
+	 */
+	public static boolean isNull(Collection<?> collection) {
+		return collection == null || collection.isEmpty();
+	}
+
+	/**
+	 * 判断 map 是否有意义
+	 * 
+	 * @param map 输入的
+	 * @return true 表示为 map 不是为空，是有内容的，false 表示为空 map
+	 */
+	public static boolean isNull(Map<?, ?> map) {
+		return map == null || map.isEmpty();
 	}
 
 }

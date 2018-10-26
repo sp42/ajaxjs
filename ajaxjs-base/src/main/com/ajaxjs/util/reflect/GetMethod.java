@@ -20,7 +20,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.lang.reflect.UndeclaredThrowableException;
 
-import com.ajaxjs.util.CollectionUtil;
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -45,7 +45,7 @@ public class GetMethod {
 		Class<?> cls = obj instanceof Class ? (Class<?>) obj : obj.getClass();
 
 		try {
-			return CollectionUtil.isNull(args) ? cls.getMethod(methodName) : cls.getMethod(methodName, args);
+			return CommonUtil.isNull(args) ? cls.getMethod(methodName) : cls.getMethod(methodName, args);
 		} catch (NoSuchMethodException | SecurityException e) {
 			String str = "";
 			for (Class<?> clz : args)
@@ -67,7 +67,7 @@ public class GetMethod {
 	 * @return 匹配的方法对象，null 表示找不到
 	 */
 	public static Method getMethod(Object obj, String methodName, Object... args) {
-		if (!CollectionUtil.isNull(args)) {
+		if (!CommonUtil.isNull(args)) {
 			return getMethod(obj, methodName, NewInstance.args2class(args));
 		} else
 			return getMethod(obj, methodName);
