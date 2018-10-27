@@ -19,7 +19,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.Set;
 
-import com.ajaxjs.util.reflect.NewInstance;
+import com.ajaxjs.util.ReflectUtil;
 
 /**
  * Speical for Java Class Scanning
@@ -46,14 +46,14 @@ public class ScanClass<T> extends AbstractScanner<Class<T>> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onFileAdding(Set<Class<T>> target, File resourceFile, String packageJavaName) {
-		Class<T> clazz = (Class<T>) NewInstance.getClassByName(getClassName(resourceFile, packageJavaName));
+		Class<T> clazz = (Class<T>) ReflectUtil.getClassByName(getClassName(resourceFile, packageJavaName));
 		target.add(clazz);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onJarAdding(Set<Class<T>> target, String resourcePath) {
-		Class<T> clazz = (Class<T>) NewInstance.getClassByName(resourcePath);
+		Class<T> clazz = (Class<T>) ReflectUtil.getClassByName(resourcePath);
 		target.add(clazz);
 	}
 

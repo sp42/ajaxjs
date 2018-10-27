@@ -30,7 +30,7 @@ import java.nio.file.Paths;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import com.ajaxjs.util.DateTools;
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -217,7 +217,7 @@ public class FileUtil extends StreamChain<FileUtil> {
 	 * @return 如 /2008/10/15/ 格式的字符串
 	 */
 	public static String getDirNameByDate() {
-		String datatime = DateTools.now("yyyy-MM-dd");
+		String datatime = CommonUtil.now("yyyy-MM-dd");
 		String year = datatime.substring(0, 4), mouth = datatime.substring(5, 7), day = datatime.substring(8, 10);
 
 		return File.separator + year + File.separator + mouth + File.separator + day + File.separator;

@@ -1,38 +1,183 @@
-/**
- * Copyright 2015 Sp42 frank@ajaxjs.com
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package com.ajaxjs.util.reflect;
+package com.ajaxjs.util;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.lang.reflect.UndeclaredThrowableException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
-/**
- * 获取方法 getMethod： 获取的是类的所有共有方法，这就包括自身的所有 public 方法，和从基类继承的、从接口实现的所有 public 方法
- * 另外有如何执行的方法
- * 
- * @author Sp42 frank@ajaxjs.com
- *
- */
-public class GetMethod {
-	private static final LogHelper LOGGER = LogHelper.getLog(GetMethod.class);
+public class ReflectUtil {
+	private static final LogHelper LOGGER = LogHelper.getLog(ReflectUtil.class);
 
+	/**
+	 * 根据类创建实例，可传入构造器参数。
+	 * 
+	 * @param clazz 类对象
+	 * @param args 获取指定参数类型的构造函数，这里传入我们想调用的构造函数所需的参数。可以不传。
+	 * @return 对象实例
+	 */
+	public static <T> T newInstance(Class<T> clazz, Object... args) {
+		if (args == null || args.length == 0) {
+			try {
+				return clazz.newInstance();
+			} catch (InstantiationException | IllegalAccessException e) {
+				LOGGER.warning(e);
+			}
+		}
+
+		Constructor<T> constructor = getConstructor(clazz, ReflectUtil.args2class(args)); // 获取构造器
+		return newInstance(constructor, args);
+	}
+
+	/**
+	 * 根据构造器创建实例
+	 * 
+	 * @param constructor 类构造器
+	 * @param args 获取指定参数类型的构造函数，这里传入我们想调用的构造函数所需的参数。可以不传。
+	 * @return 对象实例
+	 */
+	public static <T> T newInstance(Constructor<T> constructor, Object... args) {
+		try {
+			return constructor.newInstance(args); // 实例化
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			LOGGER.warning(e, "实例化对象失败：" + constructor.getDeclaringClass());
+			return null;
+		}
+	}
+
+	/**
+	 * 传入的类是否有带参数的构造器
+	 * 
+	 * @param clazz 类对象
+	 * @return true 表示为有带参数
+	 */
+	public static boolean hasArgsCon(Class<?> clazz) {
+		Constructor<?>[] constructors = clazz.getConstructors();
+		for (Constructor<?> constructor : constructors) {
+			if (constructor.getParameterTypes().length != 0)
+				return true;
+		}
+
+		return false;
+	}
+	/**
+	 * 根据类全称创建实例，并转换到其接口的类型
+	 * 
+	 * @param className 实际类的类型
+	 * @param clazz 接口类型
+	 * @return 对象实例
+	 */
+	// @SuppressWarnings("unchecked")
+	// public static <T> T newInstance(String className, Class<T> clazz) {
+	// Class<?> clz = getClassByName(className);
+	// return clazz != null ? (T) newInstance(clz) : null;
+	// }
+
+	/**
+	 * 根据类全称创建实例
+	 * 
+	 * @param className 类全称
+	 * @param args 根据构造函数，创建指定类型的对象,传入的参数个数需要与上面传入的参数类型个数一致
+	 * @return 对象实例，因为传入的类全称是字符串，无法创建泛型 T，所以统一返回 Object
+	 */
+	public static Object newInstance(String className, Object... args) {
+		Class<?> clazz = getClassByName(className);
+		return clazz != null ? newInstance(clazz, args) : null;
+	}
+
+	/**
+	 * 获取类的构造器，可以支持重载的构造器（不同参数的构造器）
+	 * 
+	 * @param clazz 类对象
+	 * @param argClasses 指定构造函数的参数类型，这里传入我们想调用的构造函数所需的参数类型
+	 * @return 类的构造器
+	 */
+	public static <T> Constructor<T> getConstructor(Class<T> clazz, Class<?>... argClasses) {
+		try {
+			return argClasses != null ? clazz.getConstructor(argClasses) : clazz.getConstructor();
+		} catch (NoSuchMethodException e) {
+			LOGGER.warning(e, "找不到这个 {0} 类的构造器。", clazz.getName());
+		} catch (SecurityException e) {
+			LOGGER.warning(e);
+		}
+
+		return null;
+	}
+
+	/**
+	 * 根据类名字符串获取类对象
+	 * 
+	 * @param className 类全称
+	 * @return 类对象
+	 */
+	public static Class<?> getClassByName(String className) {
+		try {
+			return Class.forName(className);
+		} catch (ClassNotFoundException e) {
+			LOGGER.warning(e, "找不到这个类：{0}。", className);
+		}
+
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> Class<T> getClassByName(String className, Class<T> clz) {
+		Class<?> c = getClassByName(className);
+		return c == null ? null : (Class<T>) getClassByName(className);
+	}
+
+	/**
+	 * 把参数转换为类对象列表
+	 * 
+	 * @param args 可变参数列表
+	 * @return 类对象列表
+	 */
+	public static Class<?>[] args2class(Object[] args) {
+		Class<?>[] clazzes = new Class[args.length];
+	
+		for (int i = 0; i < args.length; i++)
+			clazzes[i] = args[i].getClass();
+	
+		return clazzes;
+	}
+
+	/**
+	 * 已知接口类型，获取它的 class
+	 * 
+	 * @param type 接口类型
+	 * @return 接口的类对象
+	 */
+	public static Class<?> getClassByInterface(Type type) {
+		String className = type.toString();
+		className = className.replaceAll("<.*>$", "").replaceAll("(class|interface)\\s", ""); // 不要泛型的字符
+	
+		return getClassByName(className);
+	}
+
+	/**
+	 * 获取某个类的所有接口
+	 * 
+	 * @param clazz 目标类
+	 * @return 类的所有接口
+	 */
+	public static Class<?>[] getDeclaredInterface(Class<?> clazz) {
+		List<Class<?>> fields = new ArrayList<>();
+	
+		for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
+			Class<?>[] currentInterfaces = clazz.getInterfaces();
+			fields.addAll(Arrays.asList(currentInterfaces));
+		}
+	
+		return fields.toArray(new Class[fields.size()]);
+	}
+	
+	/////////////// Methods ///////////////////////
+	
 	/**
 	 * 根据类、方法的字符串和参数列表获取方法对象，支持重载的方法
 	 * 
@@ -68,7 +213,7 @@ public class GetMethod {
 	 */
 	public static Method getMethod(Object obj, String methodName, Object... args) {
 		if (!CommonUtil.isNull(args)) {
-			return getMethod(obj, methodName, NewInstance.args2class(args));
+			return getMethod(obj, methodName, ReflectUtil.args2class(args));
 		} else
 			return getMethod(obj, methodName);
 	}
@@ -115,7 +260,7 @@ public class GetMethod {
 						// (Class<?>)intf);
 						// methodObj = cls.getMethod(methodName,
 						// ReflectNewInstance.getClassByInterface(intf));
-						methodObj = getSuperClassDeclaredMethod(cls, methodName, NewInstance.getClassByInterface(intf));
+						methodObj = getSuperClassDeclaredMethod(cls, methodName, ReflectUtil.getClassByInterface(intf));
 
 						if (methodObj != null)
 							return methodObj;
@@ -247,7 +392,7 @@ public class GetMethod {
 	 */
 	public static Object executeMethod(Object instnace, String method, Object... args) {
 		// 没有方法对象，先找到方法对象。可以支持方法重载，按照参数列表
-		Class<?>[] clazzes = NewInstance.args2class(args);
+		Class<?>[] clazzes = ReflectUtil.args2class(args);
 		Method methodObj = getMethod(instnace.getClass(), method, clazzes);
 
 		return methodObj != null ? executeMethod(instnace, methodObj, args) : null;
@@ -270,4 +415,5 @@ public class GetMethod {
 
 		return null;
 	}
+
 }
