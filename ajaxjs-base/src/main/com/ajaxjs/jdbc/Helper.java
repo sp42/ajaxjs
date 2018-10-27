@@ -162,7 +162,7 @@ public class Helper {
 	 * 
 	 * @param rs 记录集合
 	 * @return Map 结果
-	 * @throws SQLException
+	 * @throws SQLException 转换时的 SQL 异常
 	 */
 	public static Map<String, Object> getResultMap(ResultSet rs) throws SQLException {
 		Map<String, Object> map = new LinkedHashMap<>(); // LinkedHashMap 是 HashMap 的一个子类，保存了记录的插入顺序

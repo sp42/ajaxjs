@@ -23,7 +23,7 @@ import java.util.ArrayList;
  */
 public class PageResult<T> extends ArrayList<T> {
 	private static final long serialVersionUID = 543109149479031294L;
-	
+
 	private int totalCount; // 总记录数
 	private int start; // 从第几笔记录开始
 	private int pageSize; // 每页大小

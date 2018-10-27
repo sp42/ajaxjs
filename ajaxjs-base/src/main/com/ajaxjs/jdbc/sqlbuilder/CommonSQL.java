@@ -30,6 +30,12 @@ import com.ajaxjs.util.ReflectUtil;
 public class CommonSQL extends SqlBuilder {
 	private static final LogHelper LOGGER = LogHelper.getLog(CommonSQL.class);
 
+	/**
+	 * 
+	 * @param bean
+	 * @param tableName
+	 * @return
+	 */
 	public Object[] insert(Object bean, String tableName) {
 		INSERT_INTO(tableName);
 		List<Object> values = new ArrayList<>();
@@ -56,9 +62,9 @@ public class CommonSQL extends SqlBuilder {
 			values.add(((Map<String, Object>) bean).get("id"));// 添加 id 值，在最后
 		} else {
 			List<String> methodNames = addFieldValues(bean, true, null);
-			for (String methodName : methodNames) {
+			for (String methodName : methodNames)
 				values.add(ReflectUtil.executeMethod(bean, methodName));
-			}
+
 			values.add(ReflectUtil.executeMethod(bean, "getId")); // 添加 id 值，在最后
 		}
 
@@ -96,7 +102,7 @@ public class CommonSQL extends SqlBuilder {
 
 			try {
 				if (method.invoke(bean) != null) { // 有值的才进行操作
-					fieldNames.add(methodName);// 保存字段顺序		
+					fieldNames.add(methodName);// 保存字段顺序
 					String pojoName = BeanUtil.getFieldName(methodName, "get");
 
 					// 字段映射
@@ -120,8 +126,7 @@ public class CommonSQL extends SqlBuilder {
 	/**
 	 * 不是 pojo 所有的字段都要，这里判断
 	 * 
-	 * @param methodName
-	 *            方法名称
+	 * @param methodName 方法名称
 	 * @return 是否需要的字段
 	 */
 	private static boolean isOk_field(String methodName) {

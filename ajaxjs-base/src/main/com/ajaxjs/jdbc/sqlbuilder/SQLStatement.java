@@ -12,12 +12,12 @@ import java.util.List;
  * @author Adam Gent
  */
 public class SQLStatement {
-
 	public enum StatementType {
 		DELETE, INSERT, SELECT, UPDATE
 	}
 
 	StatementType statementType;
+
 	List<String> sets = new ArrayList<>();
 	List<String> select = new ArrayList<>();
 	List<String> tables = new ArrayList<>();
@@ -33,6 +33,7 @@ public class SQLStatement {
 	List<String> lastList = new ArrayList<>();
 	List<String> columns = new ArrayList<>();
 	List<String> values = new ArrayList<>();
+
 	boolean distinct;
 
 	public SQLStatement() {

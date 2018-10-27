@@ -29,8 +29,7 @@ import com.ajaxjs.util.ReflectUtil;
  * 
  * @author Sp42 frank@ajaxjs.com
  *
- * @param <T>
- *            实体类型，可以是 POJO 或 Map
+ * @param <T> 实体类型，可以是 POJO 或 Map
  */
 public class SimpleORM<T> extends Helper {
 	private static final LogHelper LOGGER = LogHelper.getLog(SimpleORM.class);
@@ -47,10 +46,8 @@ public class SimpleORM<T> extends Helper {
 
 	/**
 	 * 
-	 * @param conn
-	 *            数据库连接对象
-	 * @param entryType
-	 *            实体是 bean 还是 map？
+	 * @param conn 数据库连接对象
+	 * @param entryType 实体是 bean 还是 map？
 	 */
 	public SimpleORM(Connection conn, Class<T> entryType) {
 		this.conn = conn;
@@ -60,17 +57,15 @@ public class SimpleORM<T> extends Helper {
 	/**
 	 * 查询一个结果。记录集合转换为 Map
 	 * 
-	 * @param sql
-	 *            SQL 语句，可以带有 ? 的占位符
-	 * @param params
-	 *            参数列表
+	 * @param sql SQL 语句，可以带有 ? 的占位符
+	 * @param params 参数列表
 	 * @return Map 结果
 	 */
 	@SuppressWarnings("unchecked")
 	public T query(String sql, Object... params) {
 		Map<String, Object> map = query(conn, sql, params);
-		
-		if(map ==  null)
+
+		if (map == null)
 			return null;
 
 		// 如是 map 直接返回即可
@@ -80,10 +75,8 @@ public class SimpleORM<T> extends Helper {
 	/**
 	 * 查询多个结果。记录集合转换为 List
 	 * 
-	 * @param sql
-	 *            SQL 语句，可以带有 ? 的占位符
-	 * @param params
-	 *            参数列表
+	 * @param sql SQL 语句，可以带有 ? 的占位符
+	 * @param params 参数列表
 	 * @return List 结果
 	 */
 	@SuppressWarnings("unchecked")
@@ -97,7 +90,7 @@ public class SimpleORM<T> extends Helper {
 			return (List<T>) list;
 		} else {
 			List<T> beanList = new ArrayList<>();
-			
+
 			for (Map<String, Object> map : list)
 				beanList.add(BeanUtil.map2Bean(map, entryType, true));
 
@@ -109,17 +102,15 @@ public class SimpleORM<T> extends Helper {
 	 * 
 	 * 新建实体
 	 * 
-	 * @param bean
-	 *            Bean 实体
-	 * @param tableName
-	 *            表格名称
+	 * @param bean Bean 实体
+	 * @param tableName 表格名称
 	 * @return 新增主键
 	 */
 	@SuppressWarnings("rawtypes")
 	public Serializable create(T bean, String tableName) {
 		try {
-			if(bean instanceof Map) 
-				LOGGER.info("DAO 创建记录 name:{0}！", ((Map)bean).get("name"));
+			if (bean instanceof Map)
+				LOGGER.info("DAO 创建记录 name:{0}！", ((Map) bean).get("name"));
 			else
 				LOGGER.info("DAO 创建记录 name:{0}！", ReflectUtil.executeMethod(bean, "getName"));
 		} catch (Throwable e) {
@@ -155,10 +146,8 @@ public class SimpleORM<T> extends Helper {
 	/**
 	 * 修改实体
 	 * 
-	 * @param bean
-	 *            Bean 实体
-	 * @param tableName
-	 *            表格名称
+	 * @param bean Bean 实体
+	 * @param tableName 表格名称
 	 * @return 成功修改的行数，一般为 1
 	 */
 	public int update(T bean, String tableName) {
@@ -176,10 +165,8 @@ public class SimpleORM<T> extends Helper {
 	/**
 	 * 删除实体
 	 * 
-	 * @param bean
-	 *            Bean 实体
-	 * @param tableName
-	 *            表格名称
+	 * @param bean Bean 实体
+	 * @param tableName 表格名称
 	 * @return 是否删除成功
 	 */
 	public boolean delete(T bean, String tableName) {
