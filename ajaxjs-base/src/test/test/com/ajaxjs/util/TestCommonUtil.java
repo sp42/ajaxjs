@@ -1,14 +1,15 @@
 package test.com.ajaxjs.util;
 
-import static com.ajaxjs.util.CommonUtil.containsIgnoreCase;
-import static com.ajaxjs.util.CommonUtil.isEmptyString;
-import static com.ajaxjs.util.CommonUtil.regMatch;
-import static com.ajaxjs.util.CommonUtil.repeatStr;
-import static com.ajaxjs.util.CommonUtil.split;
+import static com.ajaxjs.util.CommonUtil.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Date;
+
 import org.junit.Test;
+
+import com.ajaxjs.util.CommonUtil;
 
 public class TestCommonUtil {
 	@Test
@@ -44,4 +45,21 @@ public class TestCommonUtil {
 		assertEquals(regMatch("^a(b)", "abc", 1), "b");
 	}
 
+	@Test
+	public void testNow() {
+		assertNotNull(now()); // 返回当前时间的 YYYY-MM-dd HH:MM:ss 字符串类型
+		assertNotNull(now(commonDateFormat)); // 返回当前时间，并对当前时间进行格式化
+	}
+
+	@Test
+	public void testFormat() {
+		Date date = CommonUtil.Objet2Date("2017-07-25 11:16:09");
+		
+		assertEquals("Tue Jul 25 11:16:09 GMT+08:00 2017", date.toString());
+		assertEquals("2017-07-25 11:16", CommonUtil.formatDateShorter(date));
+
+		assertEquals(date.getTime(), CommonUtil.Objet2Date(date).getTime());
+		assertEquals(date.getTime(), CommonUtil.Objet2Date(date.getTime()).getTime());
+		assertEquals(date.getTime(), CommonUtil.Objet2Date("2017-07-25 11:16:09").getTime()); // 转换字符串类型的日期到 Date 类型
+	}
 }
