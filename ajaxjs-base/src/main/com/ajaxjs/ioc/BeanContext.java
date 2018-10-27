@@ -28,9 +28,9 @@ import javax.inject.Named;
 
 import com.ajaxjs.keyvalue.BeanUtil;
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.io.resource.ScanClass;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.reflect.NewInstance;
 
 /**
  * IOC 管理器，单例
@@ -118,7 +118,7 @@ public class BeanContext {
 				beanName = getBeanId(namedAnno, item);
 			}
 
-			if (NewInstance.hasArgsCon(item)) {
+			if (ReflectUtil.hasArgsCon(item)) {
 				beansClz.put(beanName, item);
 			} else {
 				beans.put(beanName, getBeanInstance(item, annotation));// 实例化 bean，并将其保存，BEAN 名称作为键值
@@ -194,13 +194,13 @@ public class BeanContext {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static Object getBeanInstance(Class<?> item, Bean annotation) {
-		Object beanInstance = NewInstance.newInstance(item);
+		Object beanInstance = ReflectUtil.newInstance(item);
 
 		if (annotation != null && !CommonUtil.isNull(annotation.aop())) {
 //			LOGGER.info("需要 AOP 处理，类：" + item);
 
 			for (Class<? extends Aop> clz : annotation.aop())
-				beanInstance = NewInstance.newInstance(clz).bind(beanInstance);
+				beanInstance = ReflectUtil.newInstance(clz).bind(beanInstance);
 		}
 
 		return beanInstance;

@@ -31,8 +31,8 @@ import com.ajaxjs.jdbc.JdbcConnection;
 import com.ajaxjs.jdbc.PageResult;
 import com.ajaxjs.jdbc.SimpleORM;
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.reflect.NewInstance;
 
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
@@ -232,7 +232,7 @@ public class DaoHandler<T> implements InvocationHandler {
 
 		if (!CommonUtil.isNull(fs)) {
 			for (Class<? extends SqlFactory> f : fs) {
-				SqlFactory instance = NewInstance.newInstance(f);
+				SqlFactory instance = ReflectUtil.newInstance(f);
 				s = instance.toSql(s);
 			}
 		}

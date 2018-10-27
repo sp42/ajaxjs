@@ -26,8 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.js.JsonHelper;
-import com.ajaxjs.util.reflect.GetMethod;
-import com.ajaxjs.util.reflect.NewInstance;
+import com.ajaxjs.util.ReflectUtil;
 
 /**
  * 
@@ -37,7 +36,7 @@ import com.ajaxjs.util.reflect.NewInstance;
  * 
  * @author Sp42 frank@ajaxjs.com
  */
-public class BeanUtil extends GetMethod {
+public class BeanUtil extends ReflectUtil {
 	/**
 	 * BEAN SETXXX
 	 * 
@@ -137,7 +136,7 @@ public class BeanUtil extends GetMethod {
 	 * @return 实体 bean 对象
 	 */
 	public static <T> T map2Bean(Map<String, Object> map, Class<T> clz, boolean isTransform) {
-		T bean = NewInstance.newInstance(clz);
+		T bean = newInstance(clz);
 		Object value = null;
 		String key = null; // 放在 try 外面方便调试
 

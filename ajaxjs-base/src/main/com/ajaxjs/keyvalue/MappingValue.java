@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.ajaxjs.util.DateTools;
+import com.ajaxjs.util.CommonUtil;
 
 /**
  * 处理值的一些相关函数
@@ -137,7 +137,7 @@ public class MappingValue {
 				// value.getClass().getName());
 			}
 		} else if (t == Date.class) {
-			value = DateTools.Objet2Date(value);
+			value = CommonUtil.Objet2Date(value);
 		} else if (t == BigDecimal.class) {
 			if (value instanceof Integer) {
 				value = new BigDecimal((Integer) value);

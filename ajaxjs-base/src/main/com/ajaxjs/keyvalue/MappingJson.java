@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.framework.BaseModel;
-import com.ajaxjs.util.DateTools;
+import com.ajaxjs.util.CommonUtil;
 
 /**
  * 转换 JSON
@@ -100,7 +100,7 @@ public class MappingJson {
 		} else if (value instanceof Boolean || value instanceof Number) {
 			return value.toString();
 		} else if (value instanceof Date) {
-			return '\"' + DateTools.formatDate((Date) value, DateTools.commonDateFormat) + '\"';
+			return '\"' + CommonUtil.SimpleDateFormatFactory(CommonUtil.commonDateFormat).format((Date) value) + '\"';
 		} else if (value instanceof Map) {
 			Map<String, ?> map = (Map<String, ?>) value;
 			return map.size() == 0 ? "{}" : stringifyMap(map);
