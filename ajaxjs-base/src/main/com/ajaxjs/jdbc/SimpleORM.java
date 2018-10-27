@@ -22,7 +22,7 @@ import com.ajaxjs.jdbc.sqlbuilder.CommonSQL;
 import com.ajaxjs.keyvalue.BeanUtil;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.reflect.GetMethod;
+import com.ajaxjs.util.ReflectUtil;
 
 /**
  * 简易的 ORM 与 Helper 相比，1、该类没有静态方法暴露；2、支持 Bean 但也保留支持 Map。
@@ -121,7 +121,7 @@ public class SimpleORM<T> extends Helper {
 			if(bean instanceof Map) 
 				LOGGER.info("DAO 创建记录 name:{0}！", ((Map)bean).get("name"));
 			else
-				LOGGER.info("DAO 创建记录 name:{0}！", GetMethod.executeMethod(bean, "getName"));
+				LOGGER.info("DAO 创建记录 name:{0}！", ReflectUtil.executeMethod(bean, "getName"));
 		} catch (Throwable e) {
 		}
 
@@ -140,9 +140,9 @@ public class SimpleORM<T> extends Helper {
 				Class<?> idClz = bean.getClass().getMethod("getId").getReturnType();// 根据 getter 推断 id 类型
 
 				if (Long.class == idClz && newlyId instanceof Integer) {
-					GetMethod.executeMethod(bean, "setId", new Long((int) newlyId));
+					ReflectUtil.executeMethod(bean, "setId", new Long((int) newlyId));
 				} else {
-					GetMethod.executeMethod(bean, "setId", newlyId); // 直接保存
+					ReflectUtil.executeMethod(bean, "setId", newlyId); // 直接保存
 				}
 			} catch (Throwable e) {
 				LOGGER.warning(e);
@@ -163,7 +163,7 @@ public class SimpleORM<T> extends Helper {
 	 */
 	public int update(T bean, String tableName) {
 		try {
-			LOGGER.info("DAO 更新记录 id:{0}, name:{1}！", GetMethod.executeMethod(bean, "getId"), GetMethod.executeMethod(bean, "getName"));
+			LOGGER.info("DAO 更新记录 id:{0}, name:{1}！", ReflectUtil.executeMethod(bean, "getId"), ReflectUtil.executeMethod(bean, "getName"));
 		} catch (Throwable e) {
 		}
 
@@ -191,7 +191,7 @@ public class SimpleORM<T> extends Helper {
 			id = (Serializable) map.get("id");
 		} else {
 			try {
-				id = (Serializable) GetMethod.executeMethod(bean, "getId");
+				id = (Serializable) ReflectUtil.executeMethod(bean, "getId");
 			} catch (Throwable e) {
 				throw new RuntimeException("获取 bean 实体之 id 失败！");
 			}

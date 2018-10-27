@@ -20,7 +20,7 @@ import java.util.Map;
 
 import com.ajaxjs.keyvalue.BeanUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.reflect.GetMethod;
+import com.ajaxjs.util.ReflectUtil;
 
 /**
  * 
@@ -40,7 +40,7 @@ public class CommonSQL extends SqlBuilder {
 			List<String> methodNames = addFieldValues(bean, false, null);
 
 			for (String methodName : methodNames)
-				values.add(GetMethod.executeMethod(bean, methodName));
+				values.add(ReflectUtil.executeMethod(bean, methodName));
 		}
 
 		return values.toArray();
@@ -57,9 +57,9 @@ public class CommonSQL extends SqlBuilder {
 		} else {
 			List<String> methodNames = addFieldValues(bean, true, null);
 			for (String methodName : methodNames) {
-				values.add(GetMethod.executeMethod(bean, methodName));
+				values.add(ReflectUtil.executeMethod(bean, methodName));
 			}
-			values.add(GetMethod.executeMethod(bean, "getId")); // 添加 id 值，在最后
+			values.add(ReflectUtil.executeMethod(bean, "getId")); // 添加 id 值，在最后
 		}
 
 		WHERE("id = ?");
