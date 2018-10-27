@@ -26,7 +26,6 @@ import com.ajaxjs.js.JsonStruTraveler;
 import com.ajaxjs.keyvalue.MappingJson;
 import com.ajaxjs.keyvalue.MappingValue;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
-import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -209,7 +208,7 @@ public class ConfigService {
 			arr2[i] = "[\"" + arr[i] + "\"]";
 		}
 
-		return StringUtil.stringJoin(arr2, "");
+		return String.join("", arr2);
 	}
 
 	/**

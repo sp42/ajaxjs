@@ -37,12 +37,10 @@ import com.ajaxjs.keyvalue.MappingHelper;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.FilterAction;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.util.CollectionUtil;
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
-import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.reflect.GetMethod;
-import com.ajaxjs.util.reflect.NewInstance;
 
 /**
  * MVC 分发器，控制器核心类
@@ -88,7 +86,7 @@ public class MvcDispatcher implements Filter {
 	private static void doIoc(Map<String, String> config) {
 		if (config != null && config.get("doIoc") != null) {
 			String doIoc = config.get("doIoc");
-			for (String packageName : StringUtil.split(doIoc))
+			for (String packageName : CommonUtil.split(doIoc))
 				BeanContext.init(packageName);
 			
 			BeanContext.injectBeans();
@@ -158,7 +156,7 @@ public class MvcDispatcher implements Filter {
 		ModelAndView model = null;
 
 		FilterAction[] filterActions = getFilterActions(method);
-		boolean isDoFilter = !CollectionUtil.isNull(filterActions), isSkip = false; // 是否中止控制器方法调用，由拦截器决定
+		boolean isDoFilter = !CommonUtil.isNull(filterActions), isSkip = false; // 是否中止控制器方法调用，由拦截器决定
 
 		try {
 			if (isDoFilter) {
@@ -175,9 +173,9 @@ public class MvcDispatcher implements Filter {
 					model = findModel(args);
 					
 					// 通过反射执行控制器方法:调用反射的 Reflect.executeMethod 方法就可以执行目标方法，并返回一个结果。
-					result = GetMethod.executeMethod_Throwable(controller, method, args);
+					result = ReflectUtil.executeMethod_Throwable(controller, method, args);
 				} else {
-					result = GetMethod.executeMethod_Throwable(controller, method);// 方法没有参数
+					result = ReflectUtil.executeMethod_Throwable(controller, method);// 方法没有参数
 				}
 			}
 			
@@ -206,9 +204,9 @@ public class MvcDispatcher implements Filter {
 	}
 
 	private static void handleErr(Throwable err, Method method, MvcRequest request, MvcOutput response, ModelAndView model) {
-		GetMethod.getUnderLayerErr(err).printStackTrace(); // 打印异常
+		ReflectUtil.getUnderLayerErr(err).printStackTrace(); // 打印异常
 
-		String errMsg = GetMethod.getUnderLayerErrMsg(err);
+		String errMsg = ReflectUtil.getUnderLayerErrMsg(err);
 		Produces a = method.getAnnotation(Produces.class);
 
 		if (a != null && MediaType.APPLICATION_JSON.equals(a.value()[0])) {// 返回 json
@@ -233,7 +231,7 @@ public class MvcDispatcher implements Filter {
 
 			int i = 0;
 			for (Class<? extends FilterAction> clz : clzs) {
-				filterActions[i++] = NewInstance.newInstance(clz);
+				filterActions[i++] = ReflectUtil.newInstance(clz);
 			}
 		}
 

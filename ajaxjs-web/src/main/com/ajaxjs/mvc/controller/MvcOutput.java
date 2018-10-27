@@ -34,7 +34,7 @@ import javax.servlet.jsp.PageContext;
 import com.ajaxjs.keyvalue.MappingJson;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.output.JsonReuslt;
-import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -181,7 +181,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 				} else if (str.startsWith("json::")) {
 					String jsonpToken = request.getParameter(MvcRequest.callback_param); // 由参数决定是否使用 jsonp
 
-					if (StringUtil.isEmptyString(jsonpToken)) {
+					if (CommonUtil.isEmptyString(jsonpToken)) {
 						setJson(true).setOutput(str.replace("json::", "")).go();
 					} else {
 						setJsonpToken(jsonpToken).setOutput(str.replace("json::", "")).go();

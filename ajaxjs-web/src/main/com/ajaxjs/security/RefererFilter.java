@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.FilterAction;
-import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.CommonUtil;
 
 /**
  * Referer 来路检测
@@ -18,7 +18,7 @@ public class RefererFilter implements FilterAction {
 	public boolean before(MvcRequest request, MvcOutput response, Method method) {
 		String referer = request.getHeader("referer");
 
-		if (StringUtil.isEmptyString(referer))
+		if (CommonUtil.isEmptyString(referer))
 			throw new SecurityException("请求没有 referer 字段不通过");
 
 		return referer.startsWith(request.getServerName());

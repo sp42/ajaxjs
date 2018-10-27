@@ -18,8 +18,7 @@ package com.ajaxjs.security.wrapper;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.ajaxjs.util.CollectionUtil;
-import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.CommonUtil;
 
 public class XssChecker {
 
@@ -49,7 +48,7 @@ public class XssChecker {
 	 * @return
 	 */
 	public static String clean(String input, String filterType) {
-		if (StringUtil.isEmptyString(input))
+		if (CommonUtil.isEmptyString(input))
 			return input;
 
 		if (filterType.equals(type_ESCAPSE)) {
@@ -70,7 +69,7 @@ public class XssChecker {
 	 * @return
 	 */
 	public static String[] clean(String[] value) {
-		if (CollectionUtil.isNull(value))
+		if (CommonUtil.isNull(value))
 			return null;
 
 		String[] cleaned = new String[value.length];

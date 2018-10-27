@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ajaxjs.util.Encode;
-import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -115,7 +115,7 @@ public class HttpBasicAuthFilter implements Filter {
 	 * @return true = 认证成功/ false = 需要认证
 	 */
 	private static boolean checkAuth(String authorization, String username, String password) {
-		if (StringUtil.isEmptyString(authorization))
+		if (CommonUtil.isEmptyString(authorization))
 			return false;
 
 		String[] basicArray = authorization.split("\\s+");
@@ -123,7 +123,7 @@ public class HttpBasicAuthFilter implements Filter {
 			return false;
 
 		String idpass = Encode.base64Decode(basicArray[1]);
-		if (StringUtil.isEmptyString(idpass))
+		if (CommonUtil.isEmptyString(idpass))
 			return false;
 
 		String[] idpassArray = idpass.split(":");

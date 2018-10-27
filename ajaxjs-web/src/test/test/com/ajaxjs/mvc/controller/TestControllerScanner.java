@@ -11,7 +11,7 @@ import org.junit.Test;
 import com.ajaxjs.mvc.controller.Action;
 import com.ajaxjs.mvc.controller.ControllerScanner;
 import com.ajaxjs.mvc.controller.IController;
-import com.ajaxjs.util.reflect.GetMethod;
+import com.ajaxjs.util.ReflectUtil;
 
 public class TestControllerScanner {
 	ControllerScanner scanner = new ControllerScanner();
@@ -98,9 +98,9 @@ public class TestControllerScanner {
 		assertNotNull(ControllerScanner.urlMappingTree.get("foo").getMethod);
 		assertNotNull(ControllerScanner.urlMappingTree.get("foo").children.get("bar").children.get("info").getMethod);
 		
-		assertEquals("get", GetMethod.executeMethod(ControllerScanner.urlMappingTree.get("foo").controller, ControllerScanner.urlMappingTree.get("foo").getMethod));
+		assertEquals("get", ReflectUtil.executeMethod(ControllerScanner.urlMappingTree.get("foo").controller, ControllerScanner.urlMappingTree.get("foo").getMethod));
 		assertEquals("getInfo2", 
-			GetMethod.executeMethod(
+			ReflectUtil.executeMethod(
 					ControllerScanner.urlMappingTree.get("foo").children.get("bar").children.get("info").controller, 
 					ControllerScanner.urlMappingTree.get("foo").children.get("bar").children.get("info").getMethod));
 	}
@@ -137,13 +137,13 @@ public class TestControllerScanner {
 		ControllerScanner.add(c6.class);
 		
 		assertNotNull(ControllerScanner.urlMappingTree.get("foo").controller);
-		assertEquals("get", GetMethod.executeMethod(ControllerScanner.urlMappingTree.get("foo").controller, ControllerScanner.urlMappingTree.get("foo").getMethod));
+		assertEquals("get", ReflectUtil.executeMethod(ControllerScanner.urlMappingTree.get("foo").controller, ControllerScanner.urlMappingTree.get("foo").getMethod));
 
 		assertEquals("foo.bar.info", ControllerScanner.find("foo/bar/info").path);
 		
 		ControllerScanner.add(c7.class);
 		Action action = ControllerScanner.find("foo/bar/info");
-		assertEquals("getInfo2", GetMethod.executeMethod(action.controller, action.postMethod));
+		assertEquals("getInfo2", ReflectUtil.executeMethod(action.controller, action.postMethod));
 		
 	}
 }

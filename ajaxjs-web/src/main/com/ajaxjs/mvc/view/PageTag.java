@@ -26,7 +26,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 import com.ajaxjs.keyvalue.MapHelper;
-import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.CommonUtil;
 
 /**
  * 分页标签
@@ -50,8 +50,8 @@ public class PageTag extends SimpleTagSupport {
 	 * 对某段 URL 参数剔除其中的一个。
 	 * 
 	 * @param withoutParam 不需要的那个参数
-	 * @param queryString  通常由 request.getQueryString() 或
-	 *                     ${pageContext.request.queryString} 返回的 url 参数
+	 * @param queryString 通常由 request.getQueryString() 或
+	 * ${pageContext.request.queryString} 返回的 url 参数
 	 * @return 特定的 url 参数
 	 */
 	public static String getParams_without(String withoutParam, String queryString) {
@@ -60,7 +60,7 @@ public class PageTag extends SimpleTagSupport {
 
 		queryString = queryString.replaceAll("&?" + withoutParam + "=[^&]*", "");// 删除其中一个参数
 
-		if (StringUtil.isEmptyString(queryString))
+		if (CommonUtil.isEmptyString(queryString))
 			return null;
 
 		return queryString.startsWith("&") ? queryString : "&" + queryString; // 补充关联的符号
@@ -71,14 +71,14 @@ public class PageTag extends SimpleTagSupport {
 	 * 对某段 URL 参数剔除其中的一个。但是返回 map。
 	 * 
 	 * @param withoutParam 不需要的那个参数
-	 * @param queryString  通常由 request.getQueryString() 或
-	 *                     ${pageContext.request.queryString} 返回的 url 参数
+	 * @param queryString 通常由 request.getQueryString() 或
+	 * ${pageContext.request.queryString} 返回的 url 参数
 	 * @return 已处理过的 Map
 	 */
 	public static Map<String, Object> getParams_without_asMap(String withoutParam, String queryString) {
 		queryString = getParams_without(withoutParam, queryString);
 
-		if (StringUtil.isEmptyString(queryString))
+		if (CommonUtil.isEmptyString(queryString))
 			return null;
 
 		// if(queryString.startsWith("&"))
@@ -116,15 +116,15 @@ public class PageTag extends SimpleTagSupport {
 			if (name.equals("start")) {
 				continue;
 			} else if (values.length == 1) {
-				aa = StringUtil.stringJoin(values, name + "=");
+				aa = String.join(name + "=", values);
 			} else {
-				aa = name + "=" + StringUtil.stringJoin(values, "&" + name + "=");
+				aa = name + "=" + String.join("&" + name + "=", values);
 			}
 
 			list.add(aa);
 		}
 
-		String s = StringUtil.stringJoin(list, "&");
+		String s = String.join("&", list);
 		return s;
 
 		// Service service = new Service();
@@ -142,7 +142,7 @@ public class PageTag extends SimpleTagSupport {
 	}
 
 	public static String arrayJoin(String[] arr) {
-		return StringUtil.stringJoin(arr, ",");
+		return String.join(",", arr);
 	}
 
 	public static String jsonString_covernt(String str) {

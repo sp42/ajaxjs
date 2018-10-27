@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.keyvalue.BeanUtil;
 import com.ajaxjs.keyvalue.MapHelper;
-import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.io.StreamUtil;
 
 /**
@@ -69,7 +69,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 			throw new NullPointerException("缺少参数名称");
 		
 		String value = getParameter(name);
-		if (StringUtil.isEmptyString(value)) 
+		if (CommonUtil.isEmptyString(value)) 
 			throw new IllegalArgumentException("缺少参数！");
 		
 		return value;
@@ -82,7 +82,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	public String getRequestURI() {
 		Object obj = getAttribute("javax.servlet.forward.request_uri");
 
-		if (obj != null && !StringUtil.isEmptyString((String) obj)) {
+		if (obj != null && !CommonUtil.isEmptyString((String) obj)) {
 			return (String) obj;
 		} else {
 			return super.getRequestURI();// 直接 jsp 的

@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import com.ajaxjs.util.Encode;
-import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.io.StreamUtil;
 import com.ajaxjs.util.logger.LogHelper;
@@ -92,7 +92,7 @@ public class UploadFile extends HttpServletRequestWrapper {
 	 */
 	private byte[] getBoundary() {
 		System.out.println(getContentType());
-		String boundary = StringUtil.regMatch("boundary=((?:-|\\w)+)$", getContentType(), 1);
+		String boundary = CommonUtil.regMatch("boundary=((?:-|\\w)+)$", getContentType(), 1);
 		System.out.println(boundary);
 		return boundary.getBytes();
 	}
@@ -129,12 +129,12 @@ public class UploadFile extends HttpServletRequestWrapper {
 	 *            HTTP 报文字符串
 	 */
 	public void parseMeta(String dataStr) {
-		uploadFileInfo.name = StringUtil.regMatch("name=\"(\\w+)\"", dataStr, 1);
+		uploadFileInfo.name = CommonUtil.regMatch("name=\"(\\w+)\"", dataStr, 1);
 		if (uploadFileInfo.name == null)
 			throw new IllegalArgumentException("你的表单中没有设置一个 name，不能获取字段");
 
-		uploadFileInfo.oldFilename = StringUtil.regMatch("filename=\"([^\"]*)\"", dataStr, 1);
-		uploadFileInfo.contentType = StringUtil.regMatch("Content-Type:\\s?([\\w/]+)", dataStr, 1);
+		uploadFileInfo.oldFilename = CommonUtil.regMatch("filename=\"([^\"]*)\"", dataStr, 1);
+		uploadFileInfo.contentType = CommonUtil.regMatch("Content-Type:\\s?([\\w/]+)", dataStr, 1);
 
 		//文件扩展名判断
 		String[] arr = uploadFileInfo.oldFilename.split("\\."); // 获取文件扩展名

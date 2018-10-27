@@ -21,7 +21,7 @@ import java.util.Date;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-import com.ajaxjs.util.DateTools;
+import com.ajaxjs.util.CommonUtil;
 
 /**
  * 格式化日期的标签
@@ -45,11 +45,11 @@ public class DateUtil extends SimpleTagSupport {
 		if (value == null)
 			return;
 
-		Date date = DateTools.Objet2Date(value);
+		Date date = CommonUtil.Objet2Date(value);
 		if (date == null)
 			return;
 
-		String format = this.format == null ? DateTools.formatDateShorter(date) : DateTools.formatDate(date, this.format);
+		String format = this.format == null ? CommonUtil.formatDateShorter(date) : CommonUtil.SimpleDateFormatFactory(this.format).format(date);
 		getJspContext().getOut().write(format);
 	}
 

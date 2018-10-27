@@ -31,7 +31,6 @@ import javax.ws.rs.core.MediaType;
 import com.ajaxjs.keyvalue.MappingHelper;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -216,7 +215,7 @@ public class PageEditor implements IController, Constant {
 			}
 		}
 
-		return String.format(jsonTpl, StringUtil.stringJoin(json, ","), json.size());
+		return String.format(jsonTpl, String.join(",", json), json.size());
 	}
 
 	private static final String jsonTpl = "{\"result\" : [%s], \"total\" : %s}";

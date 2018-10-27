@@ -22,7 +22,7 @@ import com.ajaxjs.util.cryptography.SymmetricCipher;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.simpleApp.Constant;
-import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -46,7 +46,7 @@ public class AesFilter implements FilterAction {
 		String errMsg = null;
 		String p = request.getParameter(requestQueryStringParamterName);
 		
-		if (StringUtil.isEmptyString(p)) {
+		if (CommonUtil.isEmptyString(p)) {
 			errMsg = "缺少参数 " + requestQueryStringParamterName;
 			LOGGER.info(errMsg);
 			request.setAttribute("errMsg", errMsg);

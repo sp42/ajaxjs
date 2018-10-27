@@ -32,9 +32,9 @@ import javax.ws.rs.Path;
 
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.BeanContext;
-import com.ajaxjs.util.StringUtil;
+import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.reflect.NewInstance;
 
 /**
  * Scanner controllers at Servlet starting up
@@ -83,7 +83,7 @@ public class ControllerScanner {
 				LOGGER.warning("在 IOC 资源库中找不到该类 {0} 的实例，请检查该类是否已经加入了 IOC 扫描？  The IOC library not found that Controller, plz check if it added to the IOC scan.", clz.getName());
 		} else {
 			// if(action.controller == null)
-			action.controller = NewInstance.newInstance(clz);// 保存的是 控制器 实例。
+			action.controller = ReflectUtil.newInstance(clz);// 保存的是 控制器 实例。
 		}
 
 		// parse class methods or find out sub-path
@@ -320,7 +320,7 @@ public class ControllerScanner {
 
 			IControllerScanner scanner;// 定义一个扫描器，专门扫描 IController
 			
-			for (String packageName : StringUtil.split(str)) {
+			for (String packageName : CommonUtil.split(str)) {
 				scanner = new IControllerScanner(); 
 				Set<Class<IController>> IControllers = scanner.scan(packageName);
 
