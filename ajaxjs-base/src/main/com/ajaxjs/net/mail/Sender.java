@@ -24,7 +24,7 @@ import java.net.UnknownHostException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import com.ajaxjs.util.Encode;
 
 /**
  * 通过 Telnet 命令实现简易邮件发送器
@@ -199,7 +199,7 @@ public class Sender extends Socket {
 	 * @return 已编码的字符串
 	 */
 	public static String toBase64(String str) {
-		return new String(Base64.encode(str.getBytes()));
+		return Encode.base64Encode(str);
 	}
 
 	/**

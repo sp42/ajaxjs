@@ -68,8 +68,7 @@ public class FileUtil extends StreamChain<FileUtil> {
 	/**
 	 * 打开文件，返回其文本内容
 	 * 
-	 * @param path
-	 *            文件磁盘路径
+	 * @param path 文件磁盘路径
 	 * @return 文件内容
 	 */
 	public static String openAsText(String path) {
@@ -172,8 +171,7 @@ public class FileUtil extends StreamChain<FileUtil> {
 	/**
 	 * 输入 /foo/bar/foo.jpg 返回 foo.jpg
 	 * 
-	 * @param str
-	 *            输入的字符串
+	 * @param str 输入的字符串
 	 * @return 文件名
 	 */
 	public static String getFileName(String str) {
@@ -185,8 +183,7 @@ public class FileUtil extends StreamChain<FileUtil> {
 	/**
 	 * 獲取文件名的擴展名
 	 * 
-	 * @param filename
-	 *            文件名
+	 * @param filename 文件名
 	 * @return 擴展名
 	 */
 	public static String getFileSuffix(String filename) {
@@ -196,8 +193,7 @@ public class FileUtil extends StreamChain<FileUtil> {
 	/**
 	 * 获取文件名的 MIME 类型。检测手段不会真正打开文件进行检查而是单纯文件名的字符串判断。
 	 * 
-	 * @param filename
-	 *            文件名
+	 * @param filename 文件名
 	 * @return MIME 类型
 	 */
 	public static String getMime(String filename) {
@@ -231,8 +227,7 @@ public class FileUtil extends StreamChain<FileUtil> {
 	}
 
 	/**
-	 * @param filePath
-	 *            the filePath to set
+	 * @param filePath the filePath to set
 	 */
 	public FileUtil setFilePath(String filePath) {
 		this.filePath = filePath;
@@ -249,8 +244,7 @@ public class FileUtil extends StreamChain<FileUtil> {
 	}
 
 	/**
-	 * @param file
-	 *            the file to set
+	 * @param file the file to set
 	 */
 	public FileUtil setFile(File file) {
 		this.file = file;
@@ -265,8 +259,7 @@ public class FileUtil extends StreamChain<FileUtil> {
 	}
 
 	/**
-	 * @param overwrite
-	 *            the overwrite to set
+	 * @param overwrite the overwrite to set
 	 */
 	public FileUtil setOverwrite(boolean overwrite) {
 		this.overwrite = overwrite;
@@ -276,10 +269,8 @@ public class FileUtil extends StreamChain<FileUtil> {
 	/**
 	 * Shorthand for saving text file
 	 * 
-	 * @param fullPath
-	 *            Full path of the file
-	 * @param text
-	 *            The content of file, in text.
+	 * @param fullPath Full path of the file
+	 * @param text The content of file, in text.
 	 */
 	public static void save(String fullPath, String text) {
 		LOGGER.info("正在保存文件{0}， 保存内容：\n{1}", fullPath, text);
@@ -289,16 +280,14 @@ public class FileUtil extends StreamChain<FileUtil> {
 	/**
 	 * 创建文件，注意这是一个空的文件。如果没有指定目录则创建；检测是否可以覆盖文件
 	 * 
-	 * @param fullPath
-	 *            文件完整路径，最后一个元素是文件名
-	 * @param isOverwrite
-	 *            是否覆盖文件
+	 * @param fullPath 文件完整路径，最后一个元素是文件名
+	 * @param isOverwrite 是否覆盖文件
 	 * @return 文件对象
 	 * @throws IOException
 	 */
 	public static File createFile(String fullPath, boolean isOverwrite) throws IOException {
 		LOGGER.info("正在新建文件 {0}", fullPath);
-		
+
 		mkDir(fullPath);
 
 		File file = new File(fullPath);
@@ -311,8 +300,7 @@ public class FileUtil extends StreamChain<FileUtil> {
 	/**
 	 * 如果没有输出目录则先创建
 	 * 
-	 * @param fullPath
-	 *            完整路径，最后一个元素为文件名
+	 * @param fullPath 完整路径，最后一个元素为文件名
 	 */
 	public static void mkDir(String fullPath) {
 		String arr[] = fullPath.split("\\/|\\\\");
@@ -323,7 +311,7 @@ public class FileUtil extends StreamChain<FileUtil> {
 		if (!f.exists())
 			f.mkdirs();
 	}
-	
+
 	/**
 	 * 写入流到输出
 	 * 

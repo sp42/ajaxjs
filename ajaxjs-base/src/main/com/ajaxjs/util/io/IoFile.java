@@ -1,5 +1,7 @@
 package com.ajaxjs.util.io;
 
+import java.io.IOException;
+
 import com.ajaxjs.Component;
 
 public interface IoFile extends Component {
@@ -8,8 +10,11 @@ public interface IoFile extends Component {
 	 * 
 	 * @param path 文件磁盘路径
 	 * @return 文件内容
+	 * @throws IOException 
 	 */
-	public String open(String path);
+	public String read(String path) throws IOException;
+	
+	public boolean save(String fullpath, String content) throws IOException;
 
 	/**
 	 * 删除文件或目录
