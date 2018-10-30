@@ -27,8 +27,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
@@ -39,7 +37,7 @@ import com.ajaxjs.util.logger.LogHelper;
  * @author Sp42 frank@ajaxjs.com
  */
 public class FileUtil extends StreamChain<FileUtil> {
-	private static final LogHelper LOGGER = LogHelper.getLog(FileUtil.class);
+	static final LogHelper LOGGER = LogHelper.getLog(FileUtil.class);
 
 	private String filePath;
 
@@ -334,59 +332,5 @@ public class FileUtil extends StreamChain<FileUtil> {
 		}
 	}
 
-	private static final int BUFFER_SIZE = 2 * 1024;
-
-	/**
-	 * 压缩文件
-	 * 
-	 * @param dir 要压缩的本地目录
-	 * @param save 保存的文件名，例如 c:\\temp\\foo.zip
-	 * @return 如果压缩成功返回 true
-	 */
-	public static boolean toZip(String dir, String save) {
-		long start = System.currentTimeMillis();
-		File sourceFile = new File(dir);
-
-		try (OutputStream saveOut = new FileOutputStream(new File(save)); ZipOutputStream zos = new ZipOutputStream(saveOut);) {
-			compress(sourceFile, zos, sourceFile.getName());
-
-			LOGGER.info("压缩完成，耗时：" + (System.currentTimeMillis() - start) + " ms");
-			return true;
-		} catch (IOException e) {
-			LOGGER.warning(e);
-			return false;
-		}
-	}
-
-	/**
-	 * 压缩文件
-	 * 
-	 * @param sourceFile 目录或文件
-	 * @param zos 压缩流
-	 * @param name 压缩后的名称
-	 * @throws IOException
-	 */
-	private static void compress(File sourceFile, ZipOutputStream zos, String name) throws IOException {
-		if (sourceFile.isFile()) {
-			zos.putNextEntry(new ZipEntry(name));
-
-			try (InputStream in = new FileInputStream(sourceFile);) {
-				write(in, zos, BUFFER_SIZE);
-			}
-
-			zos.closeEntry();
-		} else {
-			File[] listFiles = sourceFile.listFiles();
-
-			if (listFiles == null || listFiles.length == 0) {
-				// 空文件夹的处理 没有文件，不需要文件的copy
-				zos.putNextEntry(new ZipEntry(name + "/"));
-				zos.closeEntry();
-			} else {
-				for (File file : listFiles) {
-					compress(file, zos, name + "\\" + file.getName());
-				}
-			}
-		}
-	}
+	static final int BUFFER_SIZE = 2 * 1024;
 }

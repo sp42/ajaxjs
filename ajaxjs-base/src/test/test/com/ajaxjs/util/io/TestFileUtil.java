@@ -11,6 +11,7 @@ import java.util.Calendar;
 import org.junit.Test;
 
 import com.ajaxjs.util.io.FileUtil;
+import com.ajaxjs.util.io.ZipHelper;
 
 import static com.ajaxjs.util.io.FileUtil.*;
 
@@ -65,6 +66,6 @@ public class TestFileUtil {
 	
 	@Test
 	public void testZip() {
-		toZip("C:\\temp\\ajaxjs-security", "C:\\temp\\dd.zip");
+		ZipHelper.toZip("C:\\temp\\ajaxjs-security", "C:\\temp\\dd.zip");
 	}
 }

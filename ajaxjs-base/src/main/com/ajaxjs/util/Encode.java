@@ -164,6 +164,7 @@ public class Encode {
 			return null;
 
 		MessageDigest md = null;
+		
 		try {
 			md = MessageDigest.getInstance("SHA1");
 		} catch (NoSuchAlgorithmException e) {

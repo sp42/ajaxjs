@@ -5,15 +5,56 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.DirectoryStream;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.function.Predicate;
 
 public class IoFileImpl {
-	public String read(String fullpath) throws IOException {
+	/**
+	 * 打开文件，返回其文本内容
+	 * 
+	 * @param fullpath 文件磁盘路径
+	 * @return 文件内容
+	 * @throws IOException IO 异常
+	 */
+	public static String read(String fullpath) throws IOException {
 		return read(fullpath, StandardCharsets.UTF_8);
 	}
 
+	/**
+	 * 打开文件，返回其文本内容，可指定编码
+	 * 
+	 * @param fullpath 文件磁盘路径
+	 * @param encode 文件编码
+	 * @return 文件内容
+	 * @throws IOException IO 异常
+	 */
+	public static String read(String fullpath, Charset encode) throws IOException {
+		Path path = Paths.get(fullpath);
+
+		if (Files.isDirectory(path))
+			throw new IOException("参数 fullpath：" + fullpath + " 不能是目录，请指定文件");
+
+		if (!Files.exists(path))
+			throw new IOException(fullpath + "　不存在");
+
+		return new String(Files.readAllBytes(path), encode);
+	}
+
+	/**
+	 * 
+	 * @param fullpath
+	 * @param content
+	 * @return 是否操作成功
+	 * @throws IOException
+	 */
 	public static boolean save(String fullpath, String content) throws IOException {
 		Path path = Paths.get(fullpath);
 
@@ -28,31 +69,42 @@ public class IoFileImpl {
 		return true;
 	}
 
-	public boolean delete(String target) {
-		// TODO Auto-generated method stub
-		return false;
+	/**
+	 * 删除文件或目录
+	 * 
+	 * @param fullpath 源文件
+	 * @return 是否操作成功
+	 * @throws IOException IO 异常
+	 */
+	public static boolean delete(String fullpath) throws IOException {
+		Files.delete(Paths.get(fullpath));
+		return true;
 	}
 
-	public boolean copy(String target, String dest) {
-		// TODO Auto-generated method stub
-		return false;
+	/**
+	 * 复制文件
+	 * 
+	 * @param target 源文件
+	 * @param dest 目的文件/目录，如果最后一个为目录，则不改名，如果最后一个为文件名，则改名
+	 * @return 是否操作成功
+	 * @throws IOException IO 异常
+	 */
+	public static boolean copy(String target, String dest) throws IOException {
+		Files.copy(Paths.get(target), Paths.get(dest));
+		return true;
 	}
 
-	public boolean move(String target, String dest) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public String read(String fullpath, Charset encode) throws IOException {
-		Path path = Paths.get(fullpath);
-
-		if (Files.isDirectory(path))
-			throw new IOException("参数 fullpath：" + fullpath + " 不能是目录，请指定文件");
-
-		if (!Files.exists(path))
-			throw new IOException(fullpath + "　不存在");
-
-		return new String(Files.readAllBytes(path), encode);
+	/**
+	 * 移动文件
+	 * 
+	 * @param target 源文件
+	 * @param dest 目的文件/目录，如果最后一个为目录，则不改名，如果最后一个为文件名，则改名
+	 * @return 是否操作成功
+	 * @throws IOException IO 异常
+	 */
+	public static boolean move(String target, String dest) throws IOException {
+		Files.copy(Paths.get(target), Paths.get(dest));
+		return true;
 	}
 
 	/**
@@ -76,8 +128,73 @@ public class IoFileImpl {
 		}
 	}
 
-	public static void main(String[] args) {
+	// Charset.forName("GBK");
+
+	/**
+	 * 遍历整个文件目录，递归的
+	 * 
+	 * @param _dir 指定的目录
+	 * @param method 搜索函数
+	 * @return 搜索结果
+	 * @throws IOException
+	 */
+	public static List<Path> walkFileTree(String _dir, Predicate<Path> method) throws IOException {
+		List<Path> result = new LinkedList<>();
+
+		Path dir = Paths.get(_dir);
+		if (!Files.isDirectory(dir))
+			throw new IOException("参数 ：" + _dir + " 不是目录，请指定目录");
+
+		Files.walkFileTree(dir, new SimpleFileVisitor<Path>() {
+			@Override
+			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+				if (method.test(file))
+					result.add(file);
+
+				return FileVisitResult.CONTINUE;
+			}
+		});
+
+		return result;
+	}
+
+	/**
+	 * 遍历整个目录，非递归的
+	 * 
+	 * @param _dir 指定的目录
+	 * @param method 搜索函数
+	 * @return 搜索结果
+	 * @throws IOException
+	 */
+	public static List<Path> walkFile(String _dir, Predicate<Path> method) throws IOException {
+		List<Path> result = new LinkedList<>();
+
+		Path dir = Paths.get(_dir);
+		if (!Files.isDirectory(dir))
+			throw new IOException("参数 ：" + _dir + " 不是目录，请指定目录");
+
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
+			for (Path e : stream) {
+				if (method.test(e))
+					result.add(e);
+			}
+		}
+
+		return result;
+	}
+
+	static boolean get(Path p) {
+//		System.out.println(p);
+		return true;
+	}
+
+	public static void main(String[] args) throws IOException {
+
+		walkFileTree("C:\\sp42\\sp42_share\\book\\", IoFileImpl::get);
 		FunctionInterfaceTest f = p -> p + "ddf";
+
+//		walk("C:\\sp42\\sp42_share\\book\\");
+
 		System.out.println(f.getInfo("dsadsa"));
 
 		FunctionInterfaceTest f2 = IoFileImpl::foo;

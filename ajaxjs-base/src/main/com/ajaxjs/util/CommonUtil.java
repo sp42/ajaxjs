@@ -25,7 +25,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 字符串相关的工具类
+ * 工具类
  * 
  * @author Sp42 frank@ajaxjs.com
  *
@@ -185,7 +185,7 @@ public class CommonUtil {
 
 	private final static String dateReg = "((19|20)[0-9]{2})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])";
 
-	private final static Pattern pattern = Pattern.compile(dateReg + " ([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]");
+	private final static Pattern pattern  = Pattern.compile(dateReg + " ([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]");
 
 	private final static Pattern pattern2 = Pattern.compile(dateReg); // 可能是这种格式 2016-08-18
 

@@ -148,13 +148,12 @@ public class BeanUtil extends ReflectUtil {
 
 				if (map.containsKey(key)) {
 					value = map.get(key);
-
-					System.out.println(value);
-					Class<?> t = property.getPropertyType(); // Bean 值的类型，这是期望传入的类型，也就 setter 参数的类型
-
 					// null 是不会传入 bean 的
 					if (value == null)
 						continue;
+
+					Class<?> t = property.getPropertyType(); // Bean 值的类型，这是期望传入的类型，也就 setter 参数的类型
+
 					if (isTransform && value != null && t != value.getClass()) { // 类型相同，直接传入；类型不相同，开始转换
 						value = MappingValue.objectCast(value, t);
 					}
