@@ -24,7 +24,7 @@ public class DataSourceTestCase {
 	}
 
 	public static Connection getTestSqliteConnection() {
-		return JdbcConnection.getConnection(MockDataSource.getSqliteDataSource(testUsed_sqlite));
+		return JdbcConnection.getConnection(MockDataSource.getSqliteDataSource("jdbc:sqlite:" + testUsed_sqlite));
 	}
 
 }

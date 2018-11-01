@@ -52,6 +52,13 @@ public class CommonSQL extends SqlBuilder {
 		return values.toArray();
 	}
 
+	/**
+	 * 生成 UPDATE sql 语句并返回 SQL 参数
+	 * 
+	 * @param bean
+	 * @param tableName
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public Object[] update(Object bean, String tableName) {
 		UPDATE(tableName);

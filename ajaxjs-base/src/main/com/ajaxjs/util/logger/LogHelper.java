@@ -208,18 +208,18 @@ public class LogHelper {
 	 * 打印一个日志（警告级别） ，支持 {0}、{1}...的占位符e.g: log.warning("脚本引擎 {0} 没有 {1}() 这个方法",
 	 * "js", "foo");
 	 * 
-	 * @param ex
+	 * @param e
 	 *            任意异常信息
 	 * @param msg
 	 *            警告信息
 	 * @param params
 	 *            信息参数
 	 */
-	public void warning(Throwable ex, String msg, Object... params) {
+	public void warning(Throwable e, String msg, Object... params) {
 		for (int i = 0; i < params.length; i++) // jre 没有这个方法的重载，写一个吧
 			msg = msg.replace("{" + i + "}", params[i].toString());
 
-		warning(ex, msg);
+		warning(e, msg);
 	}
 
 	/**
@@ -228,8 +228,8 @@ public class LogHelper {
 	 * @param ex
 	 *            任意异常信息
 	 */
-	public void warning(Throwable ex) {
-		warning(ex, ex.getMessage());
+	public void warning(Throwable e) {
+		warning(e, e.getMessage());
 	}
 
 	/**

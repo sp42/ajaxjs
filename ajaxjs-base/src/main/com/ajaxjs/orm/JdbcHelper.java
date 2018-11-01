@@ -1,6 +1,8 @@
 package com.ajaxjs.orm;
 
+import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
+import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
@@ -12,15 +14,17 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.function.BiFunction;
 
 import com.ajaxjs.jdbc.JdbcConnection;
+import com.ajaxjs.jdbc.sqlbuilder.SqlBuilder;
+import com.ajaxjs.orm.JdbcHelperLambda.ExecutePs;
+import com.ajaxjs.orm.JdbcHelperLambda.HasZeoResult;
+import com.ajaxjs.orm.JdbcHelperLambda.ResultSetProcessor;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -34,24 +38,24 @@ public class JdbcHelper {
 
 	/**
 	 * 
-	 * @param connection
-	 * @param sql
-	 * @param hasZeoResult
+	 * @param conn 数据库连接对象 数据库连接对象
+	 * @param sql SQL 语句，可以带有 ? 的占位符
+	 * @param hasZeoResult SQL 查询是否有数据返回，没有返回 true
 	 * @param processor
-	 * @param params
+	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
 	 * @return
 	 */
-	public static <T> T baseSelect(Connection connection, String sql, HasZeoResult hasZeoResult, ResultSetProcessor<T> processor, Object... params) {
-		LOGGER.infoYellow("The SQL is---->" + printRealSql(sql, params));
+	public static <T> T select(Connection conn, String sql, HasZeoResult hasZeoResult, ResultSetProcessor<T> processor, Object... params) {
+		LOGGER.infoYellow("The SQL is---->" + JdbcUtil.printRealSql(sql, params));
 
-		try (PreparedStatement ps = connection.prepareStatement(sql)) {
+		try (PreparedStatement ps = conn.prepareStatement(sql)) {
 			int i = 0;
 			for (Object param : params)
 				ps.setObject(++i, param);
 
 			try (ResultSet rs = ps.executeQuery()) {
 				if (hasZeoResult != null) {
-					if (!hasZeoResult.test(connection, rs, sql)) {
+					if (!hasZeoResult.test(conn, rs, sql)) {
 						return null;
 					}
 				}
@@ -68,17 +72,25 @@ public class JdbcHelper {
 	/**
 	 * 查询单个结果，保存为 Map&lt;String, Object&gt; 结构。如果查询不到任何数据返回 null。
 	 * 
-	 * @param connection 数据库连接对象
+	 * @param conn 数据库连接对象ection 数据库连接对象
 	 * @param sql SQL 语句，可以带有 ? 的占位符
 	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
 	 * @return Map&lt;String, Object&gt; 结构的结果。如果查询不到任何数据返回 null。
 	 */
-	public static Map<String, Object> queryAsMap(Connection connection, String sql, Object... params) {
-		return baseSelect(connection, sql, JdbcHelper::hasZeoResult, JdbcHelper::getResultMap, params);
+	public static Map<String, Object> queryAsMap(Connection conn, String sql, Object... params) {
+		return select(conn, sql, JdbcHelper::hasZeoResult, JdbcHelper::getResultMap, params);
 	}
 
+	/**
+	 * 
+	 * @param beanClz
+	 * @param connection
+	 * @param sql
+	 * @param params
+	 * @return
+	 */
 	public static <T> T queryAsBean(Class<T> beanClz, Connection connection, String sql, Object... params) {
-		return baseSelect(connection, sql, JdbcHelper::hasZeoResult, getResultBean(beanClz), params);
+		return select(connection, sql, JdbcHelper::hasZeoResult, getResultBean(beanClz), params);
 	}
 
 	/**
@@ -123,7 +135,6 @@ public class JdbcHelper {
 					PropertyDescriptor propDesc = new PropertyDescriptor(key, beanClz);
 					Method method = propDesc.getWriteMethod();
 					method.invoke(bean, value);
-					// System.out.println("set userName:" + bean.getUserName());
 				} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 					e.printStackTrace();
 				}
@@ -163,13 +174,13 @@ public class JdbcHelper {
 	/**
 	 * 查询一组结果，保存为 List<Map<String, Object>> 结构。如果查询不到任何数据返回 null。
 	 * 
-	 * @param conn 数据库连接对象
+	 * @param conn 数据库连接对象 数据库连接对象
 	 * @param sql SQL 语句，可以带有 ? 的占位符
 	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
 	 * @return Map<String, Object> 结构的结果。如果查询不到任何数据返回 null。
 	 */
 	public static List<Map<String, Object>> queryAsMapList(Connection conn, String sql, Object... params) {
-		return baseSelect(conn, sql, null, (ResultSet rs) -> {
+		return select(conn, sql, null, (ResultSet rs) -> {
 			List<Map<String, Object>> list = new ArrayList<>();
 
 			while (rs.next())
@@ -182,13 +193,13 @@ public class JdbcHelper {
 	/**
 	 * 查询一组结果，保存为 List<Map<String, Object>> 结构。如果查询不到任何数据返回 null。
 	 * 
-	 * @param conn 数据库连接对象
+	 * @param conn 数据库连接对象 数据库连接对象
 	 * @param sql SQL 语句，可以带有 ? 的占位符
 	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
 	 * @return Map<String, Object> 结构的结果。如果查询不到任何数据返回 null。
 	 */
 	public static <T> List<T> queryAsBeanList(Class<T> beanClz, Connection conn, String sql, Object... params) {
-		return baseSelect(conn, sql, null, (ResultSet rs) -> {
+		return select(conn, sql, null, (ResultSet rs) -> {
 			List<T> list = new ArrayList<>();
 
 			while (rs.next())
@@ -198,13 +209,8 @@ public class JdbcHelper {
 		}, params);
 	}
 
-	@FunctionalInterface
-	public static interface HasZeoResult {
-		public boolean test(Connection connection, ResultSet rs, String sql) throws SQLException;
-	}
-
-	static boolean hasZeoResult(Connection connection, ResultSet rs, String sql) throws SQLException {
-		if (isMySql(connection) ? rs.next() : rs.isBeforeFirst()) {
+	static boolean hasZeoResult(Connection conn, ResultSet rs, String sql) throws SQLException {
+		if (isMySql(conn) ? rs.next() : rs.isBeforeFirst()) {
 			return true;
 		} else {
 			LOGGER.info("查询 SQL：{0} 没有符合的记录！", sql);
@@ -245,22 +251,21 @@ public class JdbcHelper {
 		return null;
 	}
 
-	@FunctionalInterface
-	public static interface InitPs {
-		public PreparedStatement init(Connection conn, String sql) throws SQLException;
-	}
-
-	@FunctionalInterface
-	public static interface ExecutePs<T> {
-		public T execute(PreparedStatement ps) throws SQLException;
-	}
-
-	static <T> T initAndExe(InitPs p, ExecutePs<T> exe, Connection conn, String sql, Object... params) {
-		String _sql = printRealSql(sql, params);
+	/**
+	 * 
+	 * @param initPs 初始化一个 PreparedStatement 并返回
+	 * @param exe
+	 * @param conn 数据库连接对象
+	 * @param sql SQL 语句，可以带有 ? 的占位符
+	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
+	 * @return
+	 */
+	static <T> T initAndExe(BiFunction<Connection, String, PreparedStatement> initPs, ExecutePs<T> exe, Connection conn, String sql, Object... params) {
+		String _sql = JdbcUtil.printRealSql(sql, params);
 		JdbcConnection.addSql(_sql); // 用来保存日志
 		LOGGER.infoYellow("The SQL is---->" + _sql);
 
-		try (PreparedStatement ps = p.init(conn, sql);) {
+		try (PreparedStatement ps = initPs.apply(conn, sql);) {
 			for (int i = 0; i < params.length; i++)
 				ps.setObject(i + 1, params[i]);
 
@@ -280,7 +285,14 @@ public class JdbcHelper {
 	 * @return 新增主键，为兼顾主键类型，返回的类型设为同时兼容 int/long/string 的 Serializable
 	 */
 	public static Serializable create(Connection conn, String sql, Object... params) {
-		Object newlyId = initAndExe((_conn, _sql) -> conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS), ps -> {
+		Object newlyId = initAndExe((_conn, _sql) -> {
+			try {
+				return conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			} catch (SQLException e) {
+				LOGGER.warning(e);
+				return null;
+			}
+		}, ps -> {
 			ps.executeUpdate();
 
 			// 当保存之后会自动获得数据库返回的主键
@@ -310,11 +322,121 @@ public class JdbcHelper {
 	 * @throws SQLException
 	 */
 	public static int update(Connection conn, String sql, Object... params) {
-		return initAndExe((_conn, _sql) -> conn.prepareStatement(sql), ps -> ps.executeUpdate(), conn, sql, params);
+		return initAndExe((_conn, _sql) -> {
+			try {
+				return conn.prepareStatement(sql);
+			} catch (SQLException e) {
+				LOGGER.warning(e);
+				return null;
+			}
+		}, ps -> ps.executeUpdate(), conn, sql, params);
 	}
 
 	/**
-	 * 删除一条记录。写死 id 字段
+	 * 生成 INSERT_INTO/UPDATE sql 语句并返回 SQL 参数
+	 * 
+	 * @param sqlBuilder
+	 * @param map
+	 * @param tableName
+	 * @param isInsert
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	static Object[] write(SqlBuilder sqlBuilder, Object bean, String tableName, boolean isInsert) {
+		if (isInsert) {
+			sqlBuilder.INSERT_INTO(tableName);
+		} else {
+			sqlBuilder.UPDATE(tableName);// for update
+		}
+
+		List<Object> values = new ArrayList<>();
+
+		boolean isMap = bean instanceof Map;
+		Map<String, Object> map = null;
+
+		if (isMap) {
+			map = (Map<String, Object>) bean;
+
+			for (String field : map.keySet()) {
+				if (field.equals("id"))
+					continue; // 忽略 id 字段
+
+				if (isInsert)
+					sqlBuilder.VALUES(field, "?");
+				else
+					sqlBuilder.SET(field + " = ?");// for update
+
+				values.add(map.get(field));
+			}
+		} else {
+			Map<String, BeanMethod> infoMap = getBeanInfo(bean);
+
+			for (String fieldName : infoMap.keySet()) {
+				BeanMethod info = infoMap.get(fieldName);
+				Object value = ReflectUtil.executeMethod(bean, info.getGetter());
+
+				if (value != null) {// 有值的才进行操作
+					if (isInsert)
+						sqlBuilder.VALUES(fieldName, "?");
+					else
+						sqlBuilder.SET(fieldName + " = ?");
+
+					values.add(value);
+				}
+			}
+		}
+
+		if (!isInsert) { // for update
+			if (isMap)// 添加 id 值，在最后
+				values.add(map.get("id"));
+			else
+				values.add(ReflectUtil.executeMethod(bean, "getId"));
+			sqlBuilder.WHERE("id = ?");
+		}
+
+		return values.toArray();
+	}
+
+	public static Serializable createMap(Connection conn, Map<String, Object> map, String tableName) {
+		LOGGER.info("DAO 创建记录 name:{0}！", map.get("name"));
+
+		SqlBuilder sql = new SqlBuilder();
+		Object[] values = write(sql, map, tableName, true);
+
+		Serializable newlyId = create(conn, sql.toString(), values);
+		map.put("id", newlyId); // id 一开始是没有的，保存之后才有，现在增加到实体
+
+		return newlyId;
+	}
+
+	/**
+	 * 修改实体
+	 * 
+	 * @param conn 数据库连接对象
+	 * @param bean Bean 实体
+	 * @param tableName 表格名称
+	 * @return 成功修改的行数，一般为 1
+	 */
+	public static int updateMap(Connection conn, Map<String, Object> map, String tableName) {
+		LOGGER.info("更新记录 id:{0}, name:{1}！", map.get("id"), map.get("name"));
+
+		SqlBuilder sql = new SqlBuilder();
+		Object[] values = write(sql, map, tableName, false);
+
+		return update(conn, sql.toString(), values);
+	}
+
+	public static boolean delete(Connection conn, Object bean, String tableName) {
+		if (bean instanceof Map) {
+			@SuppressWarnings("unchecked")
+			Map<String, Object> map = (Map<String, Object>) bean;
+			return deleteById(conn, tableName, (Serializable) map.get("id"));
+		} else
+			return deleteById(conn, tableName, (Serializable) ReflectUtil.executeMethod(bean, "getId"));
+	}
+
+	/**
+	 * 删除一条记录。注意，此方法写死 id 字段
 	 * 
 	 * @param conn 数据库连接对象
 	 * @param tableName 表格名称
@@ -325,96 +447,104 @@ public class JdbcHelper {
 		return update(conn, "DELETE FROM " + tableName + " WHERE id = ?", id) == 1;
 	}
 
-	/**
-	 * 是否关闭日志打印以便提高性能
-	 */
-	public static boolean isClosePrintRealSql = false;
+	public static class BeanMethod {
+		private String fieldName;
+		private Method getter;
+		private Method setter;
 
-	/**
-	 * 在开发过程，SQL语句有可能写错，如果能把运行时出错的 SQL 语句直接打印出来，那对排错非常方便，因为其可以直接拷贝到数据库客户端进行调试。
-	 * 
-	 * @param sql SQL 语句，可以带有 ? 的占位符
-	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
-	 * @return 实际 sql 语句
-	 */
-	public static String printRealSql(String sql, Object[] params) {
-		if (isClosePrintRealSql)
-			return null;
-
-		if (params == null || params.length == 0) // 完整的 SQL 无须填充
-			return sql;
-
-		if (!match(sql, params)) {
-			LOGGER.info("SQL 语句中的占位符与值参数（个数上）不匹配。SQL：{0}，\nparams:{1}", sql, Arrays.toString(params));
+		public String getFieldName() {
+			return fieldName;
 		}
 
-		if (sql.endsWith("?"))
-			sql += " ";
+		public void setFieldName(String fieldName) {
+			this.fieldName = fieldName;
+		}
 
-		String[] arr = sql.split("\\?");
+		public Method getGetter() {
+			return getter;
+		}
 
-		for (int i = 0; i < arr.length - 1; i++) {
-			Object value = params[i];
+		public void setGetter(Method getter) {
+			this.getter = getter;
+		}
 
-			String inSql;
-			if (value instanceof Date) {
-				inSql = "'" + value + "'";
-			} else if (value instanceof String) {
-				inSql = "'" + value + "'";
-			} else if (value instanceof Boolean) {
-				inSql = (Boolean) value ? "1" : "0";
-			} else {
-				// number
-				inSql = value.toString();
+		public Method getSetter() {
+			return setter;
+		}
+
+		public void setSetter(Method setter) {
+			this.setter = setter;
+		}
+	}
+
+	public static Map<String, BeanMethod> getBeanInfo(Object bean) {
+		Map<String, BeanMethod> map = new HashMap<>();
+		Class<?> beanClz = bean.getClass();
+
+		try {
+			BeanInfo beanInfo = Introspector.getBeanInfo(beanClz);
+
+			for (PropertyDescriptor property : beanInfo.getPropertyDescriptors()) {
+				String filedName = property.getName();
+				if ("class".equals(filedName))
+					continue;
+
+				BeanMethod m = new BeanMethod();
+				m.setFieldName(filedName);
+				m.setGetter(property.getReadMethod());
+				m.setSetter(property.getWriteMethod());
+				map.put(filedName, m);
 			}
-
-			arr[i] = arr[i] + inSql;
+		} catch (IntrospectionException e) {
+			e.printStackTrace();
 		}
 
-		return String.join(" ", arr).trim();
+		return map;
+	}
+	
+	public static Serializable createBean(Connection conn, Object bean, String tableName) {
+		try {
+			LOGGER.info("创建记录 name:{0}！", ReflectUtil.executeMethod(bean, "getName"));
+		} catch (Throwable e) {
+		}
 
-//		int cols = params.length;
-//		Object[] values = new Object[cols];
-//		System.arraycopy(params, 0, values, 0, cols);
+		SqlBuilder sql = new SqlBuilder();
+		Object[] values = write(sql, bean, tableName, true);
+
+		Serializable newlyId = create(conn, sql.toString(), values);
+
+		try {
+			Class<?> idClz = bean.getClass().getMethod("getId").getReturnType();// 根据 getter 推断 id 类型
+
+			if (Long.class == idClz && newlyId instanceof Integer) {
+				ReflectUtil.executeMethod(bean, "setId", new Long((int) newlyId));
+			} else {
+				ReflectUtil.executeMethod(bean, "setId", newlyId); // 直接保存
+			}
+		} catch (Throwable e) {
+			LOGGER.warning(e);
+		}
+
+		return newlyId;
 	}
 
 	/**
-	 * ? 和参数的实际个数是否匹配
+	 * 修改实体
 	 * 
-	 * @param sql SQL 语句，可以带有 ? 的占位符
-	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
-	 * @return true 表示为 ? 和参数的实际个数匹配
+	 * @param conn 数据库连接对象
+	 * @param bean Bean 实体
+	 * @param tableName 表格名称
+	 * @return 成功修改的行数，一般为 1
 	 */
-	private static boolean match(String sql, Object[] params) {
-		if (params == null || params.length == 0)
-			return true; // 没有参数，完整输出
+	public static int updateBean(Connection conn, Object bean, String tableName) {
+		try {
+			LOGGER.info("更新记录 id:{0}, name:{1}！", ReflectUtil.executeMethod(bean, "getId"), ReflectUtil.executeMethod(bean, "getName"));
+		} catch (Throwable e) {
+		}
 
-		Matcher m = Pattern.compile("(\\?)").matcher(sql);
-		int count = 0;
-		while (m.find())
-			count++;
+		SqlBuilder sql = new SqlBuilder();
+		Object[] values = write(sql, bean, tableName, false);
 
-		return count == params.length;
-	}
-
-	/**
-	 * 简单格式化 SQL，当前对 SELECT 语句有效
-	 * 
-	 * @param sql SELECT 语句
-	 * @return 美化后的 SQL
-	 */
-	public static String formatSql(String sql) {
-		String separator = System.getProperty("line.separator");
-		sql = '\t' + sql;
-		sql = sql.replaceAll("(?i)SELECT\\s+", "SELECT "); // 统一大写
-		sql = sql.replaceAll("\\s+(?i)FROM", separator + "\tFROM");
-		sql = sql.replaceAll("\\s+(?i)WHERE", separator + "\tWHERE");
-		sql = sql.replaceAll("\\s+(?i)GROUP BY", separator + "\tGROUP BY");
-		sql = sql.replaceAll("\\s+(?i)ORDER BY", separator + "\tORDER BY");
-		sql = sql.replaceAll("\\s+(?i)LIMIT", separator + "\tLIMIT");
-		sql = sql.replaceAll("\\s+(?i)DESC", " DESC");
-		sql = sql.replaceAll("\\s+(?i)ASC", " ASC");
-
-		return sql;
+		return update(conn, sql.toString(), values);
 	}
 }
