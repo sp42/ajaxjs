@@ -10,7 +10,7 @@
  * 除非因适用法律需要或书面同意，根据许可证分发的软件是基于"按原样"基础提供，
  * 无任何明示的或暗示的保证或条件。详见根据许可证许可下，特定语言的管辖权限和限制。
  */
-package com.ajaxjs.framework.dao;
+package com.ajaxjs.orm.dao;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
@@ -21,7 +21,12 @@ import java.lang.reflect.Type;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
+import com.ajaxjs.framework.dao.SqlAndArgs;
+import com.ajaxjs.framework.dao.SqlFactory;
+import com.ajaxjs.framework.dao.SqlFactoryCriteria;
+import com.ajaxjs.framework.dao.SqlFactoryPager;
 import com.ajaxjs.framework.dao.annotation.Delete;
 import com.ajaxjs.framework.dao.annotation.Insert;
 import com.ajaxjs.framework.dao.annotation.Select;
@@ -30,11 +35,14 @@ import com.ajaxjs.jdbc.Helper;
 import com.ajaxjs.jdbc.JdbcConnection;
 import com.ajaxjs.jdbc.PageResult;
 import com.ajaxjs.jdbc.SimpleORM;
+import com.ajaxjs.orm.JdbcHelper;
+import com.ajaxjs.orm.dao.annotation.SelectFromMethod;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
+import test.com.ajaxjs.framework.testcase.NewsDao;
 
 /**
  * Data Access Object 负责对数据库的增删改查工作最后的工作。 框架中一般无须写出实现，提供接口即可。 通过 Java
@@ -43,7 +51,7 @@ import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
  * @author Sp42 frank@ajaxjs.com
  * @param <T> DAO 实际类型引用
  */
-public class DaoHandler<T> implements InvocationHandler {
+public class DaoHandler<T> extends JdbcHelper implements InvocationHandler {
 	private static final LogHelper LOGGER = LogHelper.getLog(DaoHandler.class);
 
 	/**
@@ -51,17 +59,6 @@ public class DaoHandler<T> implements InvocationHandler {
 	 * JdbcConnection.setConnection(conn).
 	 */
 	private Connection conn;
- 
-	/**
-	 * 设置数据库连接对象
-	 * 
-	 * @param conn 数据库连接对象
-	 * @return DAO
-	 */
-	public DaoHandler<T> setConn(Connection conn) {
-		this.conn = conn;
-		return this;
-	}
 
 	/**
 	 * 执行时的调用。不管执行哪个方法都会调用该方法。
@@ -73,7 +70,7 @@ public class DaoHandler<T> implements InvocationHandler {
 		if (method.getName().equals("toString")) // 没有默认的 toString() 这里实现一个
 			return "This is a AJAXJS DAO.";
 
-		setConn(JdbcConnection.getConnection()); // 从线程中获数据库连接对象
+		conn = JdbcConnection.getConnection(); // 从线程中获数据库连接对象
 
 		if (conn == null)
 			throw new DaoException("没有 connection， 请先建立数据库连接对象。"); // 再检查
@@ -85,19 +82,26 @@ public class DaoHandler<T> implements InvocationHandler {
 			return select(method.getAnnotation(Select.class), args, returnType, entryType, method);
 		}
 
+		if (method.getAnnotation(SelectFromMethod.class) != null) {
+			String methodName = method.getAnnotation(SelectFromMethod.class).value();
+			Method m = ReflectUtil.getMethod(this.getClass(), methodName);
+			String sql = ReflectUtil.executeMethod(m).toString();
+			System.out.println(sql);
+		}
+
 		if (args != null && args[0] != null)
-			entryType = args[0].getClass();// 实体类型由参数决定
+			entryType = args[0].getClass();// 实体类型由参数决定，因为 写入方法通常后面跟着的就是实体
 		else
 			throw new DaoException("DAO 接口方法:" + method + " 签名缺少实体参数！");
 
 		if (method.getAnnotation(Insert.class) != null)
-			return insert(method.getAnnotation(Insert.class), args, returnType, entryType);
+			return insert(method.getAnnotation(Insert.class), args, returnType);
 
 		if (method.getAnnotation(Update.class) != null)
-			return update(method.getAnnotation(Update.class), args, entryType);
+			return update(method.getAnnotation(Update.class), args);
 
 		if (method.getAnnotation(Delete.class) != null)
-			return delete(method.getAnnotation(Delete.class), args, entryType);
+			return delete(method.getAnnotation(Delete.class), args);
 
 		throw new DaoException("没有任何 DAO CRUD 的注解。你继承 IDAO 接口的子接口中，可能没有覆盖 IDAO 的方法" + method);
 	}
@@ -125,13 +129,14 @@ public class DaoHandler<T> implements InvocationHandler {
 		Class<?> type = method.getReturnType();
 
 		// 获取 List<String> 泛型里的 String，而不是 List 类型
-		if (type == List.class || type == PageResult.class) {
+		if (type == List.class) {
 			Type returnType = method.getGenericReturnType();
 
 			if (returnType instanceof ParameterizedType) {
 				ParameterizedType _type = (ParameterizedType) returnType;
 
 				for (Type typeArgument : _type.getActualTypeArguments()) {
+					System.out.println(typeArgument);
 					if (typeArgument instanceof ParameterizedTypeImpl) {
 						return Map.class; // 写死的
 					} else
@@ -263,13 +268,16 @@ public class DaoHandler<T> implements InvocationHandler {
 	 * @return 自增 id
 	 */
 	@SuppressWarnings("unchecked")
-	private <R, B> Serializable insert(Insert insert, Object[] args, Class<R> returnType, Class<B> beanType) {
+	private <R> Serializable insert(Insert insert, Object[] args, Class<R> returnType) {
 		Serializable id = null; // INSERT 返回新建的 id
 
 		if (!insert.value().equals("")) { /* 以 sql 方式创建 */
-			id = Helper.create(conn, insert.value(), args);
+			id = create(conn, insert.value(), args);
 		} else if (insert.value().equals("") && insert.tableName() != null && args[0] != null) {// 以 bean 方式创建
-			id = new SimpleORM<>(conn, beanType).create((B) args[0], insert.tableName());
+			if (args[0] instanceof Map)
+				id = createMap(conn, (Map<String, Object>) args[0], insert.tableName());
+			else
+				id = createBean(conn, args[0], insert.tableName());
 		}
 
 		if (returnType == Integer.class && id.getClass() == Long.class) {
@@ -290,13 +298,16 @@ public class DaoHandler<T> implements InvocationHandler {
 	 * @return 影响的行数
 	 */
 	@SuppressWarnings("unchecked")
-	private <B> Integer update(Update update, Object[] args, Class<B> beanType) {
+	private Integer update(Update update, Object[] args) {
 		int effectRows = 0;
 
 		if (!update.value().equals("")) { /* 以 sql 方式更新 */
-			effectRows = Helper.update(conn, update.value(), args);
-		} else if (update.value().equals("") && update.tableName() != null && args[0] != null) { // 以 bean 方式删除
-			effectRows = new SimpleORM<>(conn, beanType).update((B) args[0], update.tableName());
+			effectRows = update(conn, update.value(), args);
+		} else if (test(update::value, update::tableName, args[0])) { // 以 bean 方式删除
+			if (args[0] instanceof Map)
+				effectRows = updateMap(conn, (Map<String, Object>) args[0], update.tableName());
+			else
+				effectRows = updateBean(conn, args[0], update.tableName());
 		}
 
 		return effectRows;
@@ -307,21 +318,20 @@ public class DaoHandler<T> implements InvocationHandler {
 	 * 
 	 * @param delete 包含 SQL 的注解
 	 * @param args SQL 参数
-	 * @param beanType 实体类型的类引用，通常是 map 或 bean
 	 * @return 是否删除成功
 	 */
-	@SuppressWarnings("unchecked")
-	private <B> Boolean delete(Delete delete, Object[] args, Class<B> beanType) {
-		boolean isOk = false;
-
+	private Boolean delete(Delete delete, Object[] args) {
 		String sql = isSqlite(delete.sqliteValue(), conn) ? delete.sqliteValue() : delete.value();
 
 		if (!CommonUtil.isEmptyString(sql)) { /* 以 sql 方式删除 */
-			isOk = Helper.delete(conn, sql, args);
-		} else if (delete.value().equals("") && delete.tableName() != null && args[0] != null) { // 以 bean 方式删除
-			isOk = new SimpleORM<>(conn, beanType).delete((B) args[0], delete.tableName());
-		}
+			return update(conn, sql, args) >= 1;
+		} else if (test(delete::value, delete::tableName, args[0])) { // 以 bean 方式删除
+			return delete(conn, args[0], delete.tableName());
+		} else
+			return false;
+	}
 
-		return isOk;
+	private static boolean test(Supplier<String> crud, Supplier<String> getTableName, Object entryContainer) {
+		return crud.get().equals("") && getTableName.get() != null && entryContainer != null;
 	}
 }

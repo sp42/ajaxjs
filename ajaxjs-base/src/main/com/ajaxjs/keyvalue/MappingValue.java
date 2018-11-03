@@ -108,7 +108,9 @@ public class MappingValue {
 	 */
 	@SuppressWarnings("unchecked")
 	public static Object objectCast(Object value, Class<?> t) {
-		if (t == boolean.class || t == Boolean.class) {// 布尔型
+		if(value == null)
+			return null;
+		else if (t == boolean.class || t == Boolean.class) {// 布尔型
 			value = toBoolean(value);
 		} else if (t == int.class || t == Integer.class) { // 整形
 			value = Integer.parseInt(value.toString());

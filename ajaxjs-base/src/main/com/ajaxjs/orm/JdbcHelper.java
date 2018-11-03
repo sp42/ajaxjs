@@ -5,7 +5,6 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,7 +20,8 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 import com.ajaxjs.jdbc.JdbcConnection;
-import com.ajaxjs.jdbc.sqlbuilder.SqlBuilder;
+import com.ajaxjs.orm.thirdparty.SqlBuilder;
+import com.ajaxjs.keyvalue.MappingValue;
 import com.ajaxjs.orm.JdbcHelperLambda.ExecutePs;
 import com.ajaxjs.orm.JdbcHelperLambda.HasZeoResult;
 import com.ajaxjs.orm.JdbcHelperLambda.ResultSetProcessor;
@@ -132,43 +132,26 @@ public class JdbcHelper {
 				Object value = rs.getObject(i);
 
 				try {
-					PropertyDescriptor propDesc = new PropertyDescriptor(key, beanClz);
-					Method method = propDesc.getWriteMethod();
-					method.invoke(bean, value);
-				} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					e.printStackTrace();
+					PropertyDescriptor property = new PropertyDescriptor(key, beanClz);
+					Method method = property.getWriteMethod();
+
+					try {
+						value = MappingValue.objectCast(value, property.getPropertyType());
+					} catch (NumberFormatException e) {
+						LOGGER.warning(e, "保存数据到 bean 的 {0} 字段时，转换失败，输入值：{1}，输入类型 ：{2}， 期待类型：{3}", key, value, value.getClass(), property.getPropertyType());
+						continue; // 转换失败，继续下一个字段
+					}
+
+					ReflectUtil.executeMethod(bean, method, value);
+				} catch (IntrospectionException | IllegalArgumentException e) {
+					if (e instanceof IntrospectionException) // 数据库返回这个字段，但是 bean 没有对应的方法
+						continue;
+					LOGGER.warning(e);
 				}
 			}
 
 			return bean;
 		};
-	}
-
-	public static <T> T rs2bean(Class<T> beanClz, ResultSet rs) {
-		T bean = ReflectUtil.newInstance(beanClz);
-
-		try {
-			ResultSetMetaData rsmd = rs.getMetaData();
-
-			for (int i = 1; i <= rsmd.getColumnCount(); i++) {// 遍历结果集
-				String key = rsmd.getColumnLabel(i);
-				Object value = rs.getObject(i);
-
-				try {
-					PropertyDescriptor propDesc = new PropertyDescriptor(key, beanClz);
-					Method method = propDesc.getWriteMethod();
-					method.invoke(bean, value);
-					// System.out.println("set userName:" + bean.getUserName());
-				} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					e.printStackTrace();
-				}
-			}
-		} catch (SQLException e) {
-			LOGGER.warning(e);
-		}
-
-		return bean;
-
 	}
 
 	/**
@@ -203,7 +186,7 @@ public class JdbcHelper {
 			List<T> list = new ArrayList<>();
 
 			while (rs.next())
-				list.add(rs2bean(beanClz, rs));
+				list.add(getResultBean(beanClz).process(rs));
 
 			return list.size() > 0 ? list : null; // 找不到记录返回 null，不返回空的 list
 		}, params);
@@ -373,7 +356,7 @@ public class JdbcHelper {
 
 			for (String fieldName : infoMap.keySet()) {
 				BeanMethod info = infoMap.get(fieldName);
-				Object value = ReflectUtil.executeMethod(bean, info.getGetter());
+				Object value = valueHander(bean, info);
 
 				if (value != null) {// 有值的才进行操作
 					if (isInsert)
@@ -395,6 +378,25 @@ public class JdbcHelper {
 		}
 
 		return values.toArray();
+	}
+
+	/**
+	 * 
+	 * @param bean
+	 * @param info
+	 * @return
+	 */
+	private static Object valueHander(Object bean, BeanMethod info) {
+		Object value = ReflectUtil.executeMethod(bean, info.getGetter());
+		Class<?> t = info.getType();
+
+//		if(value != null)
+//			System.out.println(value.getClass());
+		if (value != null && t != value.getClass()) { // 类型相同，直接传入；类型不相同，开始转换
+			System.out.println(t);
+			return MappingValue.objectCast(value, t);
+		} else
+			return value;
 	}
 
 	public static Serializable createMap(Connection conn, Map<String, Object> map, String tableName) {
@@ -451,6 +453,7 @@ public class JdbcHelper {
 		private String fieldName;
 		private Method getter;
 		private Method setter;
+		private Class<?> type;
 
 		public String getFieldName() {
 			return fieldName;
@@ -475,6 +478,14 @@ public class JdbcHelper {
 		public void setSetter(Method setter) {
 			this.setter = setter;
 		}
+
+		public Class<?> getType() {
+			return type;
+		}
+
+		public void setType(Class<?> type) {
+			this.type = type;
+		}
 	}
 
 	public static Map<String, BeanMethod> getBeanInfo(Object bean) {
@@ -493,6 +504,7 @@ public class JdbcHelper {
 				m.setFieldName(filedName);
 				m.setGetter(property.getReadMethod());
 				m.setSetter(property.getWriteMethod());
+				m.setType(property.getPropertyType()); // Bean 值的类型，这是期望传入的类型，也就 setter 参数的类型
 				map.put(filedName, m);
 			}
 		} catch (IntrospectionException e) {
@@ -501,7 +513,7 @@ public class JdbcHelper {
 
 		return map;
 	}
-	
+
 	public static Serializable createBean(Connection conn, Object bean, String tableName) {
 		try {
 			LOGGER.info("创建记录 name:{0}！", ReflectUtil.executeMethod(bean, "getName"));

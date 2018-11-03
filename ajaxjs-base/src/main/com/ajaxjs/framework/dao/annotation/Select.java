@@ -17,6 +17,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.function.Supplier;
 
 import com.ajaxjs.framework.dao.SqlFactory;
 
@@ -57,6 +58,7 @@ public @interface Select {
 	 * @return 转为 Sqlite 的统计总行数的 SQL
 	 */
 	String sqliteCountSql() default "";
+
 
 	/**
 	 * 是否分页

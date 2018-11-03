@@ -1,17 +1,6 @@
 package test.com.ajaxjs.orm;
 
-import static com.ajaxjs.orm.JdbcHelper.create;
-import static com.ajaxjs.orm.JdbcHelper.createBean;
-import static com.ajaxjs.orm.JdbcHelper.createMap;
-import static com.ajaxjs.orm.JdbcHelper.delete;
-import static com.ajaxjs.orm.JdbcHelper.deleteById;
-import static com.ajaxjs.orm.JdbcHelper.getBeanInfo;
-import static com.ajaxjs.orm.JdbcHelper.queryAsMap;
-import static com.ajaxjs.orm.JdbcHelper.queryAsMapList;
-import static com.ajaxjs.orm.JdbcHelper.queryOne;
-import static com.ajaxjs.orm.JdbcHelper.update;
-import static com.ajaxjs.orm.JdbcHelper.updateBean;
-import static com.ajaxjs.orm.JdbcHelper.updateMap;
+import static com.ajaxjs.orm.JdbcHelper.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -108,11 +97,16 @@ public class TestJdbcHelper {
 
 	@Test
 	public void testQueryAsBean() {
-//		News info;
-//		info = queryAsBean(News.class, conn, "SELECT * FROM news WHERE id = 1");
-//		assertNotNull(info);
-//		
-//		System.out.println(info);
+		News info;
+		info = queryAsBean(News.class, conn, "SELECT * FROM news WHERE id = 1");
+		assertNotNull(info);
+		assertNotNull(info.getName());
+	}
+	
+	@Test
+	public void testQueryAsBeanList() {
+		List<News> news = queryAsBeanList(News.class, conn, "SELECT * FROM news");
+		assertNotNull(news.get(0).getName());
 	}
 
 	@Test
@@ -122,7 +116,7 @@ public class TestJdbcHelper {
 
 		assertNotNull(map);
 		assertNotNull(map.get("name"));
-		
+
 		System.out.println(map.get("name").getGetter());
 	}
 

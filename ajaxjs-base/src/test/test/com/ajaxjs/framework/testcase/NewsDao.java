@@ -17,13 +17,14 @@ package test.com.ajaxjs.framework.testcase;
 
 import java.util.List;
 
-import com.ajaxjs.framework.dao.IDao;
 import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.dao.annotation.Delete;
 import com.ajaxjs.framework.dao.annotation.Insert;
 import com.ajaxjs.framework.dao.annotation.Select;
 import com.ajaxjs.framework.dao.annotation.Update;
 import com.ajaxjs.jdbc.PageResult;
+import com.ajaxjs.orm.dao.IDao;
+import com.ajaxjs.orm.dao.annotation.SelectFromMethod;
 
 /**
  * Data Acccess Object for testing.
@@ -41,11 +42,18 @@ public interface NewsDao extends IDao<News, Long> {
 	@Select("SELECT COUNT(*) AS Total FROM " + tableName)
 	public int count();
 
-	@Select(value = "SELECT * FROM news LIMIT ?, ?")
+	@SelectFromMethod("getInstance")
+	public int count2();
+
+	public static String getInstance() {
+		return "SELECT * FROM news";
+	}
+
+	@Select("SELECT * FROM news LIMIT ?, ?")
 	public List<News> findList(int start, int limit);
 
 	@Select(value = "SELECT * FROM news")
-	public PageResult<News> findPagedList(QueryParams params, int start, int limit);
+	public PageResult<News> findPagedList(int start, int limit);
 
 	@Select("SELECT * FROM news ORDER BY createDate LIMIT 0, 10")
 	public List<News> findTop10News();

@@ -1,9 +1,10 @@
-package test.com.ajaxjs.framework.dao;
+package test.com.ajaxjs.orm.dao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -11,9 +12,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.framework.dao.DaoHandler;
 import com.ajaxjs.jdbc.JdbcConnection;
 import com.ajaxjs.jdbc.PageResult;
+import com.ajaxjs.orm.dao.DaoHandler;
+import com.ajaxjs.util.ReflectUtil;
 
 import test.com.ajaxjs.framework.testcase.DataSourceTestCase;
 import test.com.ajaxjs.framework.testcase.News;
@@ -71,6 +73,16 @@ public class TestDao {
 
 	@Test
 	public void testCreateUpdateDelete() {
+		
+		Method[] ms = NewsDao.class.getMethods();
+		for(Method m : ms) {
+			if(m.toString().contains("getInstance")) {
+				
+				System.out.println(ReflectUtil.executeMethod(m));
+				ReflectUtil.executeMethod(new Object(), m);
+			}
+				
+		}
 		News news = new News();
 		news.setName("test 123");
 		Long newlyId = dao.create(news);

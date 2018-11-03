@@ -3,6 +3,7 @@ package com.ajaxjs.util;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.util.ArrayList;
@@ -139,10 +140,10 @@ public class ReflectUtil {
 	 */
 	public static Class<?>[] args2class(Object[] args) {
 		Class<?>[] clazzes = new Class[args.length];
-	
+
 		for (int i = 0; i < args.length; i++)
 			clazzes[i] = args[i].getClass();
-	
+
 		return clazzes;
 	}
 
@@ -155,7 +156,7 @@ public class ReflectUtil {
 	public static Class<?> getClassByInterface(Type type) {
 		String className = type.toString();
 		className = className.replaceAll("<.*>$", "").replaceAll("(class|interface)\\s", ""); // 不要泛型的字符
-	
+
 		return getClassByName(className);
 	}
 
@@ -167,17 +168,17 @@ public class ReflectUtil {
 	 */
 	public static Class<?>[] getDeclaredInterface(Class<?> clazz) {
 		List<Class<?>> fields = new ArrayList<>();
-	
+
 		for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
 			Class<?>[] currentInterfaces = clazz.getInterfaces();
 			fields.addAll(Arrays.asList(currentInterfaces));
 		}
-	
+
 		return fields.toArray(new Class[fields.size()]);
 	}
-	
+
 	/////////////// Methods ///////////////////////
-	
+
 	/**
 	 * 根据类、方法的字符串和参数列表获取方法对象，支持重载的方法
 	 * 
@@ -324,6 +325,9 @@ public class ReflectUtil {
 	 * @throws Throwable
 	 */
 	public static Object executeMethod_Throwable(Object instance, Method method, Object... args) throws Throwable {
+		if (instance == null || method == null)
+			return null;
+
 		try {
 			return args == null || args.length == 0 ? method.invoke(instance) : method.invoke(instance, args);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
@@ -412,6 +416,25 @@ public class ReflectUtil {
 		Method m = getMethod(instnace, methodName, argType);
 		if (m != null)
 			return executeMethod(instnace, m, argValue);
+
+		return null;
+	}
+
+	/**
+	 * 执行静态方法
+	 * 
+	 * @param method
+	 * @param args
+	 * @return
+	 */
+	public static Object executeMethod(Method method, Object... args) {
+		if (Modifier.isStatic(method.getModifiers())) {
+			try {
+				return executeMethod_Throwable(new Object(), method, args);
+			} catch (Throwable e) {
+				LOGGER.warning(e);
+			}
+		}
 
 		return null;
 	}
