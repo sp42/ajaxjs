@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import org.junit.*;
 
 import com.ajaxjs.framework.service.ServiceException;
-import com.ajaxjs.jdbc.JdbcConnection;
 import com.ajaxjs.jdbc.PageResult;
+import com.ajaxjs.orm.JdbcConnection;
 
 import test.com.ajaxjs.framework.testcase.DataSourceTestCase;
 import test.com.ajaxjs.framework.testcase.News;

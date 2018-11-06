@@ -155,36 +155,10 @@
 	<!-- Common End -->
 
 	<dependencies>
-
 		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
 			<version>1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.30</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
-		<dependency>
-			<groupId>org.xerial</groupId>
-			<artifactId>sqlite-jdbc</artifactId>
-			<version>3.15.1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>1.1.0.Final</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.bval</groupId>
-			<artifactId>org.apache.bval.bundle</artifactId>
-			<version>1.1.2</version>
 		</dependency>
 
 		<dependency>
@@ -193,12 +167,12 @@
 			<version>7.0.37</version>
 			<scope>test</scope>
 		</dependency>
-		
-		<dependency>
-            <groupId>org.javassist</groupId>
-            <artifactId>javassist</artifactId>
-            <version>3.22.0-GA</version>
-        </dependency>
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.javassist</groupId> -->
+<!-- 			<artifactId>javassist</artifactId> -->
+<!-- 			<version>3.22.0-GA</version> -->
+<!-- 		</dependency> -->
 
 		<!-- 模拟对象 -->
 		<dependency>

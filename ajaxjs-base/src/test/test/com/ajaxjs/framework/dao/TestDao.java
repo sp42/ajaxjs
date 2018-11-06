@@ -12,8 +12,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.ajaxjs.framework.dao.DaoHandler;
-import com.ajaxjs.jdbc.JdbcConnection;
 import com.ajaxjs.jdbc.PageResult;
+import com.ajaxjs.orm.JdbcConnection;
 
 import test.com.ajaxjs.framework.testcase.DataSourceTestCase;
 import test.com.ajaxjs.framework.testcase.News;

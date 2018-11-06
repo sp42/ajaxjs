@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.ioc.BeanContext;
-import com.ajaxjs.jdbc.JdbcConnection;
+import com.ajaxjs.orm.JdbcConnection;
 
 import test.com.ajaxjs.framework.testcase.DataSourceTestCase;
 import test.com.ajaxjs.framework.testcase.FakeController;

@@ -13,7 +13,7 @@ import com.ajaxjs.framework.service.aop.CacheService;
 import com.ajaxjs.framework.service.aop.CommonTestService;
 import com.ajaxjs.framework.service.aop.ValidationService;
 import com.ajaxjs.ioc.Aop;
-import com.ajaxjs.jdbc.JdbcConnection;
+import com.ajaxjs.orm.JdbcConnection;
 
 import test.com.ajaxjs.framework.testcase.DataSourceTestCase;
 import test.com.ajaxjs.framework.testcase.News;
