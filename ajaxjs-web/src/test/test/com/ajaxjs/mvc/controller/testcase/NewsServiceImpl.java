@@ -15,13 +15,13 @@
  */
 package test.com.ajaxjs.mvc.controller.testcase;
 
-import com.ajaxjs.framework.dao.DaoHandler;
-import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.framework.service.aop.CacheService;
 import com.ajaxjs.framework.service.aop.CommonTestService;
-import com.ajaxjs.jdbc.PageResult;
 import com.ajaxjs.ioc.Bean;
+import com.ajaxjs.orm.dao.DaoHandler;
+import com.ajaxjs.orm.dao.PageResult;
+import com.ajaxjs.orm.dao.QueryParams;
 
 /**
  * 

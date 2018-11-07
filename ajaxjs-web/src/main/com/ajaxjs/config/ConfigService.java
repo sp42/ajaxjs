@@ -18,14 +18,13 @@ package com.ajaxjs.config;
 import java.util.Map;
 
 import com.ajaxjs.Version;
-import com.ajaxjs.framework.dao.MockDataSource;
-import com.ajaxjs.jdbc.JdbcConnection;
 import com.ajaxjs.js.JsEngineWrapper;
 import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.js.JsonStruTraveler;
 import com.ajaxjs.keyvalue.MappingJson;
 import com.ajaxjs.keyvalue.MappingValue;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
+import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -260,7 +259,7 @@ public class ConfigService {
 	 */
 	public static void initTestConnection(String configFile) {
 		ConfigService.load(configFile);
-		JdbcConnection.setConnection(MockDataSource.getTestMySqlConnection(ConfigService.getValueAsString("testServer.mysql.url"), ConfigService.getValueAsString("testServer.mysql.user"),
+		JdbcConnection.setConnection(JdbcConnection.getTestMySqlConnection(ConfigService.getValueAsString("testServer.mysql.url"), ConfigService.getValueAsString("testServer.mysql.user"),
 				ConfigService.getValueAsString("testServer.mysql.password")));
 		
 		DataBaseFilter.isAutoClose = false;

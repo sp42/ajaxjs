@@ -19,9 +19,9 @@ import java.lang.reflect.Method;
 
 import com.ajaxjs.Version;
 import com.ajaxjs.config.ConfigService;
-import com.ajaxjs.jdbc.JdbcConnection;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
+import com.ajaxjs.orm.JdbcConnection;
 
 /**
  * 数据库连接、关闭连接

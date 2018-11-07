@@ -31,9 +31,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ajaxjs.framework.dao.QueryParams;
 import com.ajaxjs.keyvalue.BeanUtil;
 import com.ajaxjs.keyvalue.MapHelper;
+import com.ajaxjs.orm.dao.QueryParams;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.io.StreamUtil;
 

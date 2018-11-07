@@ -1,6 +1,6 @@
 package test.com.ajaxjs.mvc.controller;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -9,9 +9,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.junit.*;
+import org.junit.Test;
 
-import com.ajaxjs.framework.dao.QueryParams;
+import com.ajaxjs.orm.dao.QueryParams;
 
 public class TestQuery {
 	@Test

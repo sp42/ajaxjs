@@ -17,13 +17,13 @@ package test.com.ajaxjs.mvc.controller.testcase;
 
 import java.util.List;
 
-import com.ajaxjs.framework.dao.IDao;
-import com.ajaxjs.framework.dao.QueryParams;
-import com.ajaxjs.framework.dao.annotation.Delete;
-import com.ajaxjs.framework.dao.annotation.Insert;
-import com.ajaxjs.framework.dao.annotation.Select;
-import com.ajaxjs.framework.dao.annotation.Update;
-import com.ajaxjs.jdbc.PageResult;
+import com.ajaxjs.orm.annotation.Delete;
+import com.ajaxjs.orm.annotation.Insert;
+import com.ajaxjs.orm.annotation.Select;
+import com.ajaxjs.orm.annotation.Update;
+import com.ajaxjs.orm.dao.IDao;
+import com.ajaxjs.orm.dao.PageResult;
+import com.ajaxjs.orm.dao.QueryParams;
 
 /**
  * Data Acccess Object for testing.
