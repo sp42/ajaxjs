@@ -1,4 +1,4 @@
-package test.com.ajaxjs.net.http;
+package com.ajaxjs.net.http;
 
 import static org.junit.Assert.*;
 import org.junit.Test;

@@ -1,4 +1,4 @@
-package test.com.ajaxjs.net.mail;
+package com.ajaxjs.net.mail;
 
 import static org.junit.Assert.assertTrue;
 
