@@ -3,7 +3,6 @@ package com.ajaxjs.keyvalue;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.js.JsonHelper;
 
 /**
@@ -16,9 +15,7 @@ public class MappingHelper {
 
 	private Map<String, Object> map;
 
-	private BaseModel bean;
-
-	private Object obj;
+	private Object bean;
 
 	private String json;
 
@@ -28,7 +25,7 @@ public class MappingHelper {
 		this.map = map;
 	}
 
-	public MappingHelper(BaseModel bean) {
+	public MappingHelper(Object bean) {
 		this.bean = bean;
 	}
 
@@ -55,7 +52,7 @@ public class MappingHelper {
 	 * @return 当前实例以便链式调用
 	 */
 	public MappingHelper setObject(Object obj) {
-		this.obj = obj;
+		this.bean = obj;
 		return this;
 	}
 
@@ -69,8 +66,8 @@ public class MappingHelper {
 			json = MappingJson.stringifyMap(map);
 		} else if (bean != null) {
 			json = BeanUtil.beanToJson(bean);
-		} else if (obj != null) {
-			json = MappingJson.stringifySimpleObject(obj);
+		} else if (bean != null) {
+			json = MappingJson.stringifySimpleObject(bean);
 		}
 
 		if (json != null && addJsonPerfix)
@@ -128,7 +125,7 @@ public class MappingHelper {
 	 * @param bean bean
 	 * @return JSON 结果
 	 */
-	public static String outputBeanAsJson(BaseModel bean) {
+	public static String outputBeanAsJson(Object bean) {
 		if (bean != null)
 			return "json::{\"result\":" + BeanUtil.beanToJson(bean) + "}";
 		else
@@ -167,12 +164,12 @@ public class MappingHelper {
 	 * @param result BaseMolde 集合
 	 * @return JSON 结果
 	 */
-	public static String outputListBeanAsJson(List<? extends BaseModel> result) {
+	public static String outputListBeanAsJson(List<Object> result) {
 		if (result != null && result.size() > 0) {
 			String[] str = new String[result.size()];
 
 			for (int i = 0; i < result.size(); i++)
-				str[i] = BeanUtil.beanToJson((Object) result.get(i));
+				str[i] = BeanUtil.beanToJson(result.get(i));
 
 			return "json::{\"result\":[" + String.join(",", str) + "]}";
 		} else
@@ -187,20 +184,20 @@ public class MappingHelper {
 		this.map = map;
 	}
 
-	public BaseModel getBean() {
+	public Object getBean() {
 		return bean;
 	}
 
-	public void setBean(BaseModel bean) {
+	public void setBean(Object bean) {
 		this.bean = bean;
 	}
 
 	public Object getObj() {
-		return obj;
+		return bean;
 	}
 
 	public void setObj(Object obj) {
-		this.obj = obj;
+		this.bean = obj;
 	}
 
 	public String getJson() {

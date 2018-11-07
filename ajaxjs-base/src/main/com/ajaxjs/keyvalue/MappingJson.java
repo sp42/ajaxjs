@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.util.CommonUtil;
 
 /**
@@ -26,28 +25,27 @@ public class MappingJson {
 	public static String stringifySimpleObject(Object obj) {
 		if (obj == null)
 			return null;
-	
+
 		List<String> arr = new ArrayList<>();
 		for (Field field : obj.getClass().getDeclaredFields()) {
 			field.setAccessible(true);
-	
+
 			String key = field.getName();
 			if (key.indexOf("this$") != -1)
 				continue;
-	
+
 			Object _obj = null;
 			try {
 				_obj = field.get(obj);
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			}
-	
+
 			arr.add('\"' + key + "\":" + obj2jsonVaule(_obj));
 		}
-	
+
 		return '{' + String.join(",", arr) + '}';
 	}
-	
 
 	/**
 	 * 输入一个 Map，将其转换为 JSON Str
@@ -58,11 +56,11 @@ public class MappingJson {
 	public static String stringifyMap(Map<String, ?> map) {
 		if (map == null)
 			return null;
-	
+
 		List<String> arr = new ArrayList<>();
 		for (String key : map.keySet())
 			arr.add('\"' + key + "\":" + obj2jsonVaule(map.get(key)));
-	
+
 		return '{' + String.join(",", arr) + '}';
 	}
 
@@ -75,12 +73,12 @@ public class MappingJson {
 	public static String stringifyListMap(List<Map<String, Object>> list) {
 		if (null == list)
 			return null;
-	
+
 		String[] str = new String[list.size()];
-	
+
 		for (int i = 0; i < list.size(); i++)
 			str[i] = stringifyMap(list.get(i));
-	
+
 		return "[" + String.join(",", str) + "]";
 	}
 
@@ -92,7 +90,7 @@ public class MappingJson {
 	 */
 	@SuppressWarnings("unchecked")
 	public static String obj2jsonVaule(Object value) {
-		
+
 		if (value == null) {
 			return "null";
 		} else if (value instanceof Double) {
@@ -106,35 +104,35 @@ public class MappingJson {
 			return map.size() == 0 ? "{}" : stringifyMap(map);
 		} else if (value instanceof List) {
 			List<?> list = (List<?>) value;
-	
+
 			if (list.size() == 0) {
 				return "[]";
 			} else if (list.get(0) instanceof Integer) {
 				List<Integer> intList = (List<Integer>) list;
 				StringBuilder sb = new StringBuilder();
-	
+
 				for (int i = 0; i < intList.size(); i++) {
 					sb.append(intList.get(i));
 					if (i != (intList.size() - 1))
 						sb.append(", ");
 				}
-	
+
 				return '[' + sb.toString() + ']';
 			} else if (list.get(0) instanceof String) {
 				List<String> strList = (List<String>) list;
 				StringBuilder sb = new StringBuilder();
-	
+
 				for (int i = 0; i < strList.size(); i++) {
 					sb.append("\"" + strList.get(i) + "\"");
 					if (i != (strList.size() - 1))
 						sb.append(", ");
 				}
-	
+
 				return '[' + sb.toString() + ']';
 			} else if (list.get(0) instanceof Map) {
 				List<Map<String, ?>> maps = (List<Map<String, ?>>) list;
 				StringBuilder sb = new StringBuilder();
-	
+
 				for (int i = 0; i < maps.size(); i++) {
 					sb.append(stringifyMap(maps.get(i)));
 					if (i != (maps.size() - 1))
@@ -145,7 +143,7 @@ public class MappingJson {
 				// 未知类型数组，
 				return "[]";
 			}
-	
+
 			// return stringify((Map<String, ?>)value);
 		} else if (value.getClass() == int[].class) {
 			String[] strs = int_arr2string_arr((int[]) value);
@@ -154,12 +152,12 @@ public class MappingJson {
 			Object[] arr = (Object[]) value;
 			String[] strs = new String[arr.length];
 			int i = 0;
-	
+
 			for (Object _value : arr)
 				strs[i++] = obj2jsonVaule(_value); // 递归调用
-	
+
 			return '[' + String.join(",", strs) + ']';
-		} else if (value instanceof BaseModel) {
+		} else if (value.getClass().getName().contains("BaseModel")) {
 			return BeanUtil.beanToJson(value);
 		} else { // String
 			return '\"' + value.toString().replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r") + '\"';
