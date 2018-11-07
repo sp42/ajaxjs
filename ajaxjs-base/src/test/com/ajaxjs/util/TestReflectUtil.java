@@ -48,8 +48,8 @@ public class TestReflectUtil {
 		assertNotNull(newInstance(Foo.class, "a", "b"));
 		assertNotNull(newInstance(getConstructor(Foo.class)));
 		assertNotNull(newInstance(getConstructor(Foo.class, String.class, String.class), "a", "b"));
-		assertNotNull(newInstance("com.ajaxjs.util.reflect.TestNewInstance"));
-		assertNotNull(getClassByName("com.ajaxjs.util.reflect.TestNewInstance"));
+		assertNotNull(newInstance("com.ajaxjs.util.TestReflectUtil"));
+		assertNotNull(getClassByName("com.ajaxjs.util.TestReflectUtil"));
 		
 		Class<?>[] cs = ReflectUtil.getDeclaredInterface(ArrayList.class);
 		assertNotNull(cs.length);

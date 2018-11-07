@@ -44,7 +44,7 @@ public class TestStruTravler {
 	@Test
 	public void testFlatMap() {
 		Map<String, Object> f_map = JsonStruTraveler.flatMap(TestJsonHelper.map);
-		assertEquals(new Double(7), f_map.get("data.jobCatalog_Id"));
+		assertEquals(7, f_map.get("data.jobCatalog_Id"));
 
 		JsonStruTraveler.travelMapList(f_map, new TravelMapList_Iterator() {
 			@Override
