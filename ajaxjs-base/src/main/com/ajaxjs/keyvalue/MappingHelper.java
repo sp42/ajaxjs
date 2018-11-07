@@ -164,7 +164,7 @@ public class MappingHelper {
 	 * @param result BaseMolde 集合
 	 * @return JSON 结果
 	 */
-	public static String outputListBeanAsJson(List<Object> result) {
+	public static String outputListBeanAsJson(List<?> result) {
 		if (result != null && result.size() > 0) {
 			String[] str = new String[result.size()];
 
