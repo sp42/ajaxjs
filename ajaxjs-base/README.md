@@ -23,6 +23,7 @@ Maven 依赖：
 - io，处理流 Stream 的包，使用了链式调用的风格。有文件、流工具类和简易图片处理器。[详细教程](http://blog.csdn.net/zhangxin09/article/details/46592177#t15)；
 - reflect，反射工具包，进行反射操作封装。[详细教程](http://blog.csdn.net/zhangxin09/article/details/78941797)；
 - cryptography，加密解密工具包。[详细教程](http://blog.csdn.net/zhangxin09/article/details/78684764)
+- mail 无须 JavaMail 发送邮件。原理是通过最简单的 telnet 发送
 
 
 单元测试覆盖率
