@@ -1,4 +1,4 @@
-package test.com.ajaxjs.web;
+package com.ajaxjs.web;
 
 import org.junit.Test;
 

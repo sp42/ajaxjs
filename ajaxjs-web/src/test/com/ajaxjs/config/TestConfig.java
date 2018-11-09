@@ -1,4 +1,4 @@
-package test.com.ajaxjs.config;
+package com.ajaxjs.config;
 
 import static org.junit.Assert.*;
 

@@ -1,4 +1,4 @@
-package test.com.ajaxjs.mvc.filter;
+package com.ajaxjs.mvc.filter;
 
 import java.lang.reflect.Method;
 

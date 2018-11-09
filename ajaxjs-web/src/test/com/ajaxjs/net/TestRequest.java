@@ -1,4 +1,4 @@
-package test.com.ajaxjs.net;
+package com.ajaxjs.net;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

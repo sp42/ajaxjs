@@ -1,4 +1,4 @@
-package test.com.ajaxjs.mvc.filter;
+package com.ajaxjs.mvc.filter;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -20,7 +20,7 @@ import com.ajaxjs.simpleApp.CaptchaController;
 import com.ajaxjs.web.mock.MockRequest;
 import com.ajaxjs.web.mock.MockResponse;
 
-import test.com.ajaxjs.mvc.controller.BaseTest;
+import com.ajaxjs.mvc.controller.BaseTest;
 
 public class TestFilter extends BaseTest {
 
