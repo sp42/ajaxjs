@@ -1,27 +1,3 @@
-欢迎来到 AJAXJS Web Framework！
-=============
-特点：全栈 、原生、轻量级。前端提供了常见的 UI 组件，后端支持 IOC/AOP/ORM/MVC/REST 等特性，提供 Map/POJO 的 CRUD 服务，基于 DAO/Service/Controller 分层。
-
-- 前端：Vue.js（MVVM+组件化） + LESS.js
-- 后端：Java + Tomcat + MySQL/SQLite
-
-代码精炼简洁，很少第三方的库或包依赖。功能不算很多，但应该较为实用的那些，也可以在此基础上进行扩展。虽是“轮子”，但代码都自己理过一遍，务求清晰易懂易修改。注释、单测等齐备。
-
-详见官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/) 介绍。 
-
-
-
-
-
-检出源码到本地后，请注意以下两点：
-- 设置源码目录（set Source Folder）为 src/main，而非一般的 src/java/main，测试目录也是 src/test 敬请注意。
-- 推荐使用约定目录，包括静态注意、模板和数据库配置等等。
-
-项目依赖
---------------
-- ajaxjs-base 基础类库，纯 Java 项目。[跳转项目主页](http://git.oschina.net/sp42_admin/ajaxjs-base)
-
-
 AJAXJS WEB
 =============
 AJAXJS WEB 包含以下模块：
@@ -31,7 +7,7 @@ AJAXJS WEB 包含以下模块：
 - web Http 与 Servlet 工具类，例如通过 HttpServletRequestWrapper 扩展了 Request 对象，还有一个文件上传组件和验证码组件、Mock 模拟对象；
 - view 视图模块，提供一个简单的、基于 JSP/JSTL 的扩展标签；
 - security 网站防御系统，抵御 XSS、CSRF 等攻击；
-- config 基于 JSON 格式的配置系统。
+- config 小巧、灵活、通用、基于 JSON 的配置系统，完全可以代替 properties 文件实现配置模块。
 
 Maven 坐标
 -----------
@@ -43,6 +19,13 @@ Maven 坐标
     <version>1.1.1</version>
 </dependency>
 ```
+
+依赖库说明
+-------------
+|项目|作用|
+|---|---|
+|Tomcat JDBCPool|Tomcat 自带的数据库连接池|
+|Swagger|生成接口文档|
 
 环境配置说明
 -------------
@@ -58,6 +41,6 @@ Maven 坐标
 config
 ---------
 
-小巧、灵活、通用、基于 JSON 的配置系统，完全可以代替 properties 文件实现配置模块。
+。
 
 [>>详细用法参见文档](http://ajaxjs.mydoc.io/?t=208700)。
