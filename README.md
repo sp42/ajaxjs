@@ -11,16 +11,18 @@
 
 ### 各项目一览
 
-|项目名称|简介|
-|------|-----|
-|ajaxjs-base|基础库，包含大量工具函数和实用方法|
-|ajaxjs-data|数据层，类似 DBUtils 的 JDBC 封装，更小巧和简单。提供基于 动态代理的 DAO 接口实现|
-|ajaxjs-web|MVC 框架，类似 Spring MVC 的实现|
-|ajaxjs-web-js|独立的前端框架，基于 vue.js 2.x|
+|项目名称|简介|依赖库|发布的打包方式|
+|------|-----|----|------|
+|ajaxjs-base|基础库，包含大量工具函数和实用方法，[点击进入项目 readme](ajaxjs-base)|无|jar|
+|ajaxjs-data|数据层，类似 DBUtils 的 JDBC 封装，更小巧和简单。提供基于 动态代理的 DAO 接口实现，[点击进入项目 readme](ajaxjs-base)|ajaxjs-base|jar|
+|ajaxjs-web|MVC 框架，类似 Spring MVC 的实现，[点击进入项目 readme](ajaxjs-base)|ajaxjs-base|jar|
+|ajaxjs-web-js|独立的前端框架，基于 vue.js 2.x，[点击进入项目 readme](ajaxjs-base)|vue.js|jar|
+|ajaxjs-cms|整个各个子项目的网站发布系统，[点击进入项目 readme](ajaxjs-base)|ajaxjs-base/ajaxjs-data/ajaxjs-web|jar|
+|ajaxjs-demo|演示样例，方便学习或者快速手脚架，[点击进入项目 readme](ajaxjs-base)|ajaxjs-data/ajaxjs-web|war|
 
 除了前端 js 项目外，依赖关系由上至下排列。
 
-当前在一个 repository 中存放多个项目。如果您想单独检出某个项目，建议使用 SVN 然后指定目录检出。
+为方便管理，当前在一个 repository 中存放多个项目，且同时支持 Git/SVN 存取。如果您想单独检出某个项目，建议使用 SVN 然后指定目录检出。
 
 Maven 依赖
 ```
@@ -82,7 +84,7 @@ config
 
 - 官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/)  
 - 博客 [http://blog.csdn.net/zhangxin09](http://blog.csdn.net/zhangxin09/) 
-- Q群 [3150067](//shang.qq.com/wpa/qunwpa?idkey=99415d164e2c776567c9370cc5b0bde26f4e2e7c5068978a24d1fe7c976ace93)
+- QQ 群 [3150067](//shang.qq.com/wpa/qunwpa?idkey=99415d164e2c776567c9370cc5b0bde26f4e2e7c5068978a24d1fe7c976ace93)
 - 邮箱 support@ajaxjs.com
 
 版权声明 LICENSE
