@@ -6,19 +6,19 @@
 	<artifactId>ajaxjs-base</artifactId>
 	<name>AJAXJS-Base</name>
 	<description>A pure Java library that provides many tools, utils, and functions.</description>
-	<url>https://framework.ajaxjs.com/framework/base.jsp</url>
+	<url>https://framework.ajaxjs.co</url>
 
 	<version>1.1.6</version>
 
 	<scm>
-		<url>https://gitee.com/sp42/ajaxjs-base</url>
-		<connection>scm:git:git@gitee.com:sp42/ajaxjs-base.git</connection>
-		<developerConnection>scm:git:git@gitee.com:sp42/ajaxjs-base.git</developerConnection>
+		<url>https://gitee.com/sp42_admin/ajaxjs/tree/master/ajaxjs-base</url>
+		<connection>scm:git:git@gitee.com:sp42_admin/ajaxjs.git</connection>
+		<developerConnection>scm:git:git@gitee.com:sp42_admin/ajaxjs.git</developerConnection>
 		<tag></tag>
 	</scm>
 
 	<issueManagement>
-		<url>https://gitee.com/sp42/ajaxjs-base/issues</url>
+		<url>https://gitee.com/sp42_admin/ajaxjs/issues</url>
 	</issueManagement>
 
 	<!-- Common Start -->
@@ -56,35 +56,35 @@
 
 	<build>
 		<!-- 指定源码所在的目录 -->
-		<sourceDirectory>src/main</sourceDirectory>
+<!-- 		<sourceDirectory>src/main</sourceDirectory> -->
 		<!-- 指定单元测试代码所在的目录 -->
-		<testSourceDirectory>src/test</testSourceDirectory>
+<!-- 		<testSourceDirectory>src/test</testSourceDirectory> -->
 
 		<!-- 这两个目录中的文件也会分别被复制到 target/classes 和 target/test-classes 目录中。 -->
-		<resources>
-			<resource>
-				<directory>src/main</directory>
-				<excludes>
-					<exclude>**/*.java</exclude> <!-- 排除 Java 文件 -->
-				</excludes>
-			</resource>
-		</resources>
-		<testResources>
-			<testResource>
-				<directory>src/test</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</testResource>
-		</testResources>
+<!-- 		<resources> -->
+<!-- 			<resource> -->
+<!-- 				<directory>src/main</directory> -->
+<!-- 				<excludes> -->
+<!-- 					<exclude>**/*.java</exclude> 排除 Java 文件 -->
+<!-- 				</excludes> -->
+<!-- 			</resource> -->
+<!-- 		</resources> -->
+<!-- 		<testResources> -->
+<!-- 			<testResource> -->
+<!-- 				<directory>src/test</directory> -->
+<!-- 				<excludes> -->
+<!-- 					<exclude>**/*.java</exclude> -->
+<!-- 				</excludes> -->
+<!-- 			</testResource> -->
+<!-- 		</testResources> -->
 
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.3</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 
