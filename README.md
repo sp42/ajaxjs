@@ -11,7 +11,7 @@
 
 ### 各项目一览
 
-|项目名称|简介|依赖库|发布的打包方式|
+|项目名称|简介|依赖库|打包方式|
 |------|-----|----|------|
 |ajaxjs-base|基础库，包含大量工具函数和实用方法，[浏览项目 readme](ajaxjs-base)|无|jar|
 |ajaxjs-data|数据层，类似 DBUtils 的 JDBC 封装，更小巧和简单，[浏览项目 readme](ajaxjs-data)|ajaxjs-base|jar|
