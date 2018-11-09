@@ -21,22 +21,21 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseModel;
-import com.ajaxjs.framework.service.IService;
-import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.keyvalue.BeanUtil;
 import com.ajaxjs.keyvalue.MappingHelper;
 import com.ajaxjs.keyvalue.MappingJson;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
-import com.ajaxjs.orm.thirdparty.SnowflakeIdWorker;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.UploadFile;
 import com.ajaxjs.web.UploadFileInfo;
@@ -49,9 +48,8 @@ import com.ajaxjs.web.UploadFileInfo;
  *
  * @param <T> 实体类型，可以是 Bean（POJO） 或 Map
  * @param <ID> ID 类型，可以是 INTEGER/LONG/String
- * @param <S> 业务类型
  */
-public abstract class CommonController<T, ID extends Serializable, S extends IService<T, ID>> extends MappingHelper implements IController, Constant {
+public abstract class CommonController<T, ID extends Serializable> implements IController, Constant {
 	private static final LogHelper LOGGER = LogHelper.getLog(CommonController.class);
 
 	/**
@@ -68,7 +66,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 		model.put("isCreate", true); // 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate
 										// = true 标识为创建，以便与 update 区分开来。
 
-		return getService().getTableName();
+		return tableName;
 	}
 
 	/**
@@ -82,28 +80,26 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 
 		prepareData(model);
 		model.put("actionName", "编辑");
-		model.put("isCreate", false); // 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate
-										// = true 标识为创建，以便与 update 区分开来。
+		model.put("isCreate", false); // 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate = true 标识为创建，以便与 update 区分开来。
 
-		return getService().getTableName();
+		return tableName;
 	}
 
 	/**
 	 * 创建实体
 	 * 
 	 * @param entity 实体
-	 * @param model 页面 Model 模型
+	 * @param model  页面 Model 模型
 	 * @return JSON 响应
-	 * @throws ServiceException
 	 */
-	public String create(T entity, ModelAndView model) throws ServiceException {
+	public String create(T entity, ModelAndView model, Function<T, ID> createAction) {
 		LOGGER.info("创建 name:{0}，数据库将执行 INSERT 操作", entity);
 
 		prepareData(model);
 
-		ID newlyId = getService().create(entity);
+		ID newlyId = createAction.apply(entity);
 		if (newlyId == null)
-			throw new ServiceException("创建失败！");
+			throw new Error("创建失败！");
 
 		model.put("newlyId", newlyId);
 		return cud;
@@ -112,14 +108,13 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	/**
 	 * 修改实体
 	 * 
-	 * @param id 实体 ID
+	 * @param id     实体 ID
 	 * @param entity 实体
-	 * @param model 页面 Model 模型
+	 * @param model  页面 Model 模型
 	 * @return JSON 响应
-	 * @throws ServiceException
 	 */
 	@SuppressWarnings("unchecked")
-	public String update(ID id, /* @Valid */T entity, ModelAndView model) throws ServiceException {
+	public String update(ID id, /* @Valid */T entity, ModelAndView model, Consumer<T> updateAction) {
 		LOGGER.info("修改 name:{0}，数据库将执行 UPDATE 操作", entity);
 
 		prepareData(model);
@@ -132,7 +127,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 			((BaseModel) entity).setId((Long) id);
 		}
 
-		getService().update(entity);
+		updateAction.accept(entity);
 
 		return cud;
 	}
@@ -142,50 +137,52 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	 * 因为范型的缘故，不能实例化 bean 对象。应该在子类实例化 bean，再调用本类的 delete()
 	 * 
 	 * @param entity 实体
-	 * @param model 页面 Model 模型
+	 * @param model  页面 Model 模型
 	 * @return JSON 响应
 	 */
-	public String delete(T entity, ModelAndView model) throws ServiceException {
+	public String delete(T entity, ModelAndView model, Predicate<T> deleteAction) {
 		LOGGER.info("删除 id:{0}，数据库将执行 DELETE 操作", entity);
 
-		if (!getService().delete(entity))
-			throw new ServiceException("删除失败！");
+		if (!deleteAction.test(entity))
+			throw new Error("删除失败！");
 
-		return jsonOk("删除成功");
+		return MappingHelper.jsonOk("删除成功");
 	}
 
 	/**
 	 * 根据 id 删除实体
 	 * 
-	 * @param id 实体 id
+	 * @param id    实体 id
 	 * @param model 页面 Model 模型
 	 * @return JSON 响应
 	 * @throws ServiceException
 	 */
 	@SuppressWarnings("unchecked")
-	public String delete(ID id, ModelAndView model) throws ServiceException {
-		LOGGER.info("删除 id:{0}，数据库将执行 DELETE 操作", id);
-		Map<String, Object> map = new HashMap<>();
-		map.put("id", id);
+	public String delete(ID id, T entity, ModelAndView model, Predicate<T> deleteAction) {
+		if (entity instanceof Map) {
+			((Map<String, Object>) entity).put("id", id);
+		} else {
+			System.out.println(id);
+			((BaseModel) entity).setId((Long) id);
+		}
 
-		return delete((T) map, model);
+		return delete(entity, model, deleteAction);
 	}
 
 	/**
 	 * 读取单个记录或者编辑某个记录，保存到 ModelAndView 中（供视图渲染用）。
 	 * 
-	 * @param id ID 序号
+	 * @param id    ID 序号
 	 * @param model Model 模型
 	 * @return JSP 路径。缺省提供一个默认路径，但不一定要使用它，换别的也可以。
-	 * @throws ServiceException
 	 */
-	public String info(ID id, ModelAndView model) throws ServiceException {
+	public String info(ID id, ModelAndView model, Function<ID, T> getInfoAction) {
 		LOGGER.info("读取单个记录或者编辑某个记录：id 是 {0}", id);
 
 		prepareData(model);
-		model.put("info", getService().findById(id));
+		model.put("info", getInfoAction.apply(id));
 
-		return service.getTableName();
+		return tableName;
 	}
 
 	/**
@@ -195,21 +192,17 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	 * @param limit 偏量值，默认 8 笔记录
 	 * @param model Model 模型
 	 * @return JSP 路径。缺省提供一个默认路径，但不一定要使用它，换别的也可以。
-	 * @throws ServiceException
 	 */
-	public String list(int start, int limit, ModelAndView model) throws ServiceException {
+	public List<T> list(int start, int limit, ModelAndView model, BiFunction<Integer, Integer, List<T>> findPagedList) {
 		LOGGER.info("获取分页列表 GET list:{0}/{1}", start, limit);
 
 		prepareData(model);
 
-		PageResult<T> pageResult = getService().findPagedList(start, limit);
+		List<T> pageResult = findPagedList.apply(start, limit);
+
 		model.put("PageResult", pageResult);
 
-		return null;
-	}
-
-	public static <E> void pageList(PageResult<E> pageResult, ModelAndView model) {
-		model.put("PageResult", pageResult);
+		return pageResult;
 	}
 
 	/**
@@ -219,17 +212,9 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	 * @param limit
 	 * @param model
 	 * @return
-	 * @throws ServiceException
 	 */
-	public String listJson(int start, int limit, ModelAndView model) throws ServiceException {
-		LOGGER.info("获取分页列表 GET list:{0}/{1}", start, limit);
-
-		prepareData(model);
-
-		PageResult<T> pageResult = getService().findPagedList(start, limit);
-		model.put("PageResult", pageResult);
-
-		return outputJson(pageResult, model);
+	public String listJson(int start, int limit, ModelAndView model, BiFunction<Integer, Integer, List<T>> findPagedList) {
+		return outputJson(list(start, limit, model, findPagedList), model);
 	}
 
 	/**
@@ -238,9 +223,9 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	 * @param model Model 模型
 	 * @throws ServiceException
 	 */
-	public void list_all(ModelAndView model) throws ServiceException {
+	public void listAll(ModelAndView model, BiFunction<Integer, Integer, List<T>> findPagedList) {
 		LOGGER.info("----获取全部列表----");
-		list(0, 999, model);
+		list(0, 999, model, findPagedList);
 	}
 
 	/**
@@ -249,21 +234,28 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	 * @param model 模型
 	 */
 	public void prepareData(ModelAndView model) {
-		if (service != null) {
-			// 设置实体 id 和 现实名称 。
-			model.put("uiName", service.getName());
-			model.put("tableName", service.getTableName());
-		}
+		// 设置实体 id 和 现实名称 。
+		model.put("uiName", uiName);
+		model.put("tableName", tableName);
 	}
+
+	/**
+	 * 实体 id
+	 */
+	private String tableName;
+	/**
+	 * 实体显示的 UI 名称
+	 */
+	private String uiName;
 
 	/**
 	 * 
 	 * @return
 	 */
-	public static QueryParams getParam() {
-		HttpServletRequest request = MvcRequest.getHttpServletRequest();
-		return new QueryParams(request.getParameterMap());
-	}
+//	public static QueryParams getParam() {
+//		HttpServletRequest request = MvcRequest.getHttpServletRequest();
+//		return new QueryParams(request.getParameterMap());
+//	}
 
 	/**
 	 * 保存到 request
@@ -275,9 +267,8 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 			request.setAttribute(key, mv.get(key));
 	}
 
-
 	@SuppressWarnings("unchecked")
-	public String outputJson(PageResult<T> pageResult, ModelAndView model) {
+	public String outputJson(List<T> pageResult, ModelAndView model) {
 		String jsonStr = "[]"; // empty array
 		if (pageResult != null && pageResult.size() > 0) {
 
@@ -293,7 +284,7 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 
 		return paged_json_List;
 	}
-	
+
 	/**
 	 * 执行文件上传，读取默认配置的上传规则
 	 * 
@@ -304,7 +295,8 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 	public static UploadFileInfo uploadByConfig(MvcRequest request) throws IOException {
 		UploadFileInfo info = new UploadFileInfo();
 		info.isFileOverwrite = ConfigService.getValueAsBool("uploadFile.isFileOverwrite");
-		info.saveFolder = ConfigService.getValueAsBool("uploadFile.saveFolder.isUsingRelativePath") ? request.mappath(ConfigService.getValueAsString("uploadFile.saveFolder.relativePath")) + File.separator
+		info.saveFolder = ConfigService.getValueAsBool("uploadFile.saveFolder.isUsingRelativePath")
+				? request.mappath(ConfigService.getValueAsString("uploadFile.saveFolder.relativePath")) + File.separator
 				: ConfigService.getValueAsString("uploadFile.saveFolder.absolutePath");
 
 		if (ConfigService.getValueAsBool("uploadFile.isAutoNewFileName")) {
@@ -319,31 +311,19 @@ public abstract class CommonController<T, ID extends Serializable, S extends ISe
 		return info;
 	}
 
-	/**
-	 * 对应的业务类
-	 */
-	private S service;
-
-	/**
-	 * 获取业务对象
-	 * 
-	 * @return 业务对象
-	 */
-	public S getService() {
-		if (service == null)
-			throw new NullPointerException("没有业务层对象！");
-		return service;
+	public String getTableName() {
+		return tableName;
 	}
 
-	/**
-	 * 设置业务对象，通常由 IOC 反射调用
-	 * 
-	 * @param service 业务对象
-	 */
-	public void setService(S service) {
-		if (service == null)
-			LOGGER.warning("当前没有 service 对象传入！！！");
-		this.service = service;
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
 	}
-	
+
+	public String getUiName() {
+		return uiName;
+	}
+
+	public void setUiName(String uiName) {
+		this.uiName = uiName;
+	}
 }

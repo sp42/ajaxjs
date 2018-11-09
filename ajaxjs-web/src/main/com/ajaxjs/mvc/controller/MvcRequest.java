@@ -33,7 +33,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ajaxjs.keyvalue.BeanUtil;
 import com.ajaxjs.keyvalue.MapHelper;
-import com.ajaxjs.orm.dao.QueryParams;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.io.StreamUtil;
 
@@ -204,15 +203,6 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	public void saveToReuqest(Map<String, Object> map) {
 		for (String key : map.keySet())
 			setAttribute(key, map.get(key));
-	}
-
-	/**
-	 * 创建该实例的工厂方法
-	 * 
-	 * @return QueryParams
-	 */
-	public static QueryParams factory() {
-		return new QueryParams(getHttpServletRequest().getParameterMap());
 	}
 
 	/*

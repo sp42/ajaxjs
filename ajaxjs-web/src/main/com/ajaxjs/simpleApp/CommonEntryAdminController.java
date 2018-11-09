@@ -25,7 +25,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
-import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 
@@ -34,10 +33,8 @@ import com.ajaxjs.mvc.controller.IController;
  * 
  * @author sp42 frank@ajaxjs.com
  *
- * @param <E>
- *            记录实体，可以是 Bean 或 Map
- * @param <ID>ID
- *            类型，可以是 INTEGER/LONG/String
+ * @param <E> 记录实体，可以是 Bean 或 Map
+ * @param <ID>ID 类型，可以是 INTEGER/LONG/String
  */
 public interface CommonEntryAdminController<E, ID extends Serializable> extends IController {
 	/**
@@ -45,74 +42,63 @@ public interface CommonEntryAdminController<E, ID extends Serializable> extends 
 	 * 
 	 * @param start
 	 * @param limit
-	 * @param model
-	 *            数据实体转换到页面层的对象
+	 * @param model 数据实体转换到页面层的对象
 	 * @return 列表模板路径 或 JSON 列表路径
 	 */
 	@GET
 	@Path("list")
-	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) throws ServiceException;
+	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model);
 
 	/**
 	 * 新建界面
 	 * 
-	 * @param model
-	 *            数据实体转换到页面层的对象
+	 * @param model 数据实体转换到页面层的对象
 	 * @return 新建界面模板路径
 	 */
 	@GET
-	public String createUI(ModelAndView model) throws ServiceException;
+	public String createUI(ModelAndView model);
 
 	/**
 	 * 编辑界面
 	 * 
-	 * @param id
-	 *            ID 序号
-	 * @param model
-	 *            数据实体转换到页面层的对象
+	 * @param id    ID 序号
+	 * @param model 数据实体转换到页面层的对象
 	 * @return 编辑界面模板路径
 	 */
 	@GET
 	@Path("{id}")
-	public String editUI(@PathParam("id") ID id, ModelAndView model) throws ServiceException;
+	public String editUI(@PathParam("id") ID id, ModelAndView model);
 
 	/**
 	 * 新建动作
 	 * 
-	 * @param entity
-	 *            记录实体，可以是 Bean 或 Map
-	 * @param model
-	 *            数据实体转换到页面层的对象
+	 * @param entity 记录实体，可以是 Bean 或 Map
+	 * @param model  数据实体转换到页面层的对象
 	 * @return 创建后消息反馈之 JSON
 	 */
 	@POST
-	public String create(E entity, ModelAndView model) throws ServiceException;
+	public String create(E entity, ModelAndView model);
 
 	/**
 	 * 修改动作
 	 * 
-	 * @param id
-	 *            ID 序号
-	 * @param entity
-	 *            记录实体，可以是 Bean 或 Map
-	 * @param model
-	 *            数据实体转换到页面层的对象
+	 * @param id     ID 序号
+	 * @param entity 记录实体，可以是 Bean 或 Map
+	 * @param model  数据实体转换到页面层的对象
 	 * @return 创建后消息反馈之 JSON
 	 */
 	@PUT
 	@Path("{id}")
-	public String update(ID id, E entity, ModelAndView model) throws ServiceException;
+	public String update(ID id, E entity, ModelAndView model);
 
 	/**
 	 * 删除一记录，注意是传入 id 参数
 	 * 
-	 * @param id
-	 *            ID 序号
-	 * @param model
-	 *            数据实体转换到页面层的对象
+	 * @param id    ID 序号
+	 * @param model 数据实体转换到页面层的对象
 	 * @return 创建后消息反馈之 JSON
 	 */
 	@DELETE
 	@Path("{id}")
-	public String delete(@PathParam("id") ID id, ModelAndView model) throws ServiceException;
+	public String delete(@PathParam("id") ID id, ModelAndView model);
 }

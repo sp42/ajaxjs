@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -34,6 +35,15 @@ public class MockResponse {
 			@Override
 			public String toString() {
 				return os.toString();
+			}
+
+			@Override
+			public boolean isReady() {
+				return false;
+			}
+
+			@Override
+			public void setWriteListener(WriteListener arg0) {
 			}
 		};
 

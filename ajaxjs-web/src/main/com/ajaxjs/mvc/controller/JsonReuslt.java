@@ -1,4 +1,4 @@
-package com.ajaxjs.mvc.controller.output;
+package com.ajaxjs.mvc.controller;
 
 /**
  * 

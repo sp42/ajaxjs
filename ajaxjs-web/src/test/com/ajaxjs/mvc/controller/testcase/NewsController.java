@@ -34,21 +34,18 @@ public class NewsController extends CommonController<News, Long, NewsService> {
 	}
 
 	@POST
-	@Override
 	public String create(News news, ModelAndView model) throws ServiceException {
 		return super.create(news, model);
 	}
 
 	@PUT
 	@Path("/{id}")
-	@Override
 	public String update(@PathParam("id")Long id, News news, ModelAndView model) throws ServiceException {
 		return super.update(id, news, model);
 	}
 
 	@DELETE
 	@Path("/{id}")
-	@Override
 	public String delete(News news, ModelAndView model) throws ServiceException {
 		return super.delete(news, model);
 	}

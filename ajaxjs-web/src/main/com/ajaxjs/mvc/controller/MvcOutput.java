@@ -33,7 +33,6 @@ import javax.servlet.jsp.PageContext;
 
 import com.ajaxjs.keyvalue.MappingJson;
 import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.mvc.controller.output.JsonReuslt;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 

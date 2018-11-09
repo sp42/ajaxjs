@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.FilterChain;
+import javax.servlet.ReadListener;
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -239,6 +240,20 @@ public class MockRequest extends HttpServletRequestWrapper {
 				@Override
 				public int read() throws IOException {
 					return is.read();
+				}
+
+				@Override
+				public boolean isFinished() {
+					return false;
+				}
+
+				@Override
+				public boolean isReady() {
+					return false;
+				}
+
+				@Override
+				public void setReadListener(ReadListener arg0) {
 				}
 			});
 		}
