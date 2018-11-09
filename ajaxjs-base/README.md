@@ -21,7 +21,6 @@ Maven 坐标：
 </dependency>
 ```
 
-**修改源码注意：设置源码目录（set Source Folder）为 src/main，而非一般的 src/java/main，测试目录也是 src/test 这样才能让类加入 classpath，敬请注意。**
 
 
 
