@@ -1,6 +1,6 @@
-欢迎来到 AJAXJS Web Framework！
+欢迎来到 AJAXJS: A full-stack Web Framework for Java！
 =============
-特点：全栈 、原生、轻量级。前端提供了常见的 UI 组件，后端支持 IOC/AOP/ORM/MVC/REST 等特性，提供 Map/POJO 的 CRUD 服务，基于 DAO/Service/Controller 分层。
+特点：全栈 、轻量级、函数式和响应式编程。前端提供了常见的 UI 组件，后端支持 IOC/AOP/ORM/MVC/REST 等特性，提供 Map/POJO 的 CRUD 服务，基于 DAO/Service/Controller 分层。
 
 - 前端：Vue.js（MVVM+组件化） + LESS.js
 - 后端：Java + Tomcat + MySQL/SQLite
