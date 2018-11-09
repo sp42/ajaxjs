@@ -7,9 +7,7 @@
 - 前端：Vue.js（MVVM+组件化） + LESS.js
 - 后端：Java 1.8 + Tomcat 8 + MySQL/SQLite
 
-代码精炼简洁，很少第三方的库或包依赖。功能不算很多，但应该较为实用的那些，也可以在此基础上进行扩展。虽是“轮子”，但代码都自己理过一遍，务求清晰易懂易修改。注释、单测等齐备。
-
-详见官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/) 介绍。 
+代码精炼简洁，很少第三方的库或包依赖。功能不算很多，但应该较为实用的那些，也可以在此基础上进行扩展。虽是“轮子”，但代码都自己理过一遍，务求清晰易懂易修改。注释、单测等齐备。详见官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/) 介绍。 
 
 ### 各项目一览
 
@@ -21,6 +19,8 @@
 |ajaxjs-web-js|独立的前端框架，基于 vue.js 2.x|
 
 除了前端 js 项目外，依赖关系由上至下排列。
+
+当前在一个 repository 中存放多个项目。如果您想单独检出某个项目，建议使用 SVN 然后指定目录检出。
 
 Maven 依赖
 ```
