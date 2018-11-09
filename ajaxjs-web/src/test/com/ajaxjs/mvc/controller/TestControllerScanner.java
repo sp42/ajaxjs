@@ -1,4 +1,4 @@
-package test.com.ajaxjs.mvc.controller;
+package com.ajaxjs.mvc.controller;
 
 import static org.junit.Assert.*;
 

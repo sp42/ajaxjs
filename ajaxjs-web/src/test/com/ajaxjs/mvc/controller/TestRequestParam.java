@@ -1,4 +1,4 @@
-package test.com.ajaxjs.mvc.controller;
+package com.ajaxjs.mvc.controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -30,9 +30,9 @@ import com.ajaxjs.mvc.controller.RequestParam;
 import com.ajaxjs.web.mock.MockRequest;
 import com.ajaxjs.web.mock.MockResponse;
 
-import test.com.ajaxjs.mvc.controller.testcase.News;
+import com.ajaxjs.mvc.controller.testcase.News;
 
-//import test.com.ajaxjs.framework.testcase.News;
+//import com.ajaxjs.framework.testcase.News;
 
 public class TestRequestParam {
 

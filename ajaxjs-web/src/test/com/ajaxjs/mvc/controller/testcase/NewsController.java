@@ -1,4 +1,4 @@
-package test.com.ajaxjs.mvc.controller.testcase;
+package com.ajaxjs.mvc.controller.testcase;
 
 import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.mvc.ModelAndView;
@@ -6,11 +6,11 @@ import com.ajaxjs.simpleApp.CommonController;
 
 import javax.ws.rs.*;
 
-//import test.com.ajaxjs.framework.testcase.NewsServiceImpl;
+//import com.ajaxjs.framework.testcase.NewsServiceImpl;
 
-//import test.com.ajaxjs.framework.testcase.NewsService;
+//import com.ajaxjs.framework.testcase.NewsService;
 
-//import test.com.ajaxjs.framework.testcase.News;
+//import com.ajaxjs.framework.testcase.News;
 
 @Path("/news")
 public class NewsController extends CommonController<News, Long, NewsService> {

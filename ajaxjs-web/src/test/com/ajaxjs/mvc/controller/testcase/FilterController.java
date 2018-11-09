@@ -1,4 +1,4 @@
-package test.com.ajaxjs.mvc.controller.testcase;
+package com.ajaxjs.mvc.controller.testcase;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -11,7 +11,7 @@ import com.ajaxjs.mvc.filter.AesFilter;
 import com.ajaxjs.mvc.filter.CaptchaFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 
-import test.com.ajaxjs.mvc.filter.Filter;
+import com.ajaxjs.mvc.filter.Filter;
 
 // 测试基本的 HTTP 四个方法已经自定义流程控制
 @Path("/filter")

@@ -1,4 +1,4 @@
-package test.com.ajaxjs.mvc.controller;
+package com.ajaxjs.mvc.controller;
 
 import javax.servlet.ServletException;
 
@@ -15,6 +15,6 @@ import com.ajaxjs.web.mock.BaseControllerTest;
 public abstract class BaseTest extends BaseControllerTest {
 	@BeforeClass
 	public static void init() throws ServletException {
-		init("test.com.ajaxjs.mvc.controller");
+		init("com.ajaxjs.mvc.controller");
 	}
 }

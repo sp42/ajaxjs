@@ -1,4 +1,4 @@
-package test.com.ajaxjs.mvc.controller;
+package com.ajaxjs.mvc.controller;
 
 import static org.junit.Assert.assertTrue;
 
@@ -13,7 +13,7 @@ public class TestMvcDispatcher {
 	@Test
 	public void testScan() {
 		IControllerScanner scanner = new IControllerScanner();
-		Set<Class<IController>> controllers = scanner.scan("test.com.ajaxjs.mvc");
+		Set<Class<IController>> controllers = scanner.scan("com.ajaxjs.mvc");
 		assertTrue(controllers.size() > 0);
 	}
 }
