@@ -2,15 +2,25 @@
 =============
 ### 特点：全栈 、轻量级、函数式和响应式编程。
 
-
-前端提供了常见的 UI 组件，后端支持 IOC/AOP/ORM/MVC/REST 等特性，提供 Map/POJO 的 CRUD 服务，基于 DAO/Service/Controller 分层。
+前端提供了常见的 UI 组件，后端提供 IOC/AOP/ORM/MVC/REST 等特性，支持 Map/POJO 的 CRUD 服务，基于 DAO/Service/Controller 分层。
 
 - 前端：Vue.js（MVVM+组件化） + LESS.js
-- 后端：Java + Tomcat + MySQL/SQLite
+- 后端：Java 1.8 + Tomcat 8 + MySQL/SQLite
 
 代码精炼简洁，很少第三方的库或包依赖。功能不算很多，但应该较为实用的那些，也可以在此基础上进行扩展。虽是“轮子”，但代码都自己理过一遍，务求清晰易懂易修改。注释、单测等齐备。
 
 详见官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/) 介绍。 
+
+### 各项目一览
+
+|项目名称|简介|
+|------|-----|
+|ajaxjs-base|基础库，包含大量工具函数和实用方法|
+|ajaxjs-data|数据层，类似 DBUtils 的 JDBC 封装，更小巧和简单。提供基于 动态代理的 DAO 接口实现|
+|ajaxjs-web|MVC 框架，类似 Spring MVC 的实现|
+|ajaxjs-web-js|独立的前端框架，基于 vue.js 2.x|
+
+除了前端 js 项目外，依赖关系由上至下排列。
 
 Maven 依赖
 ```
