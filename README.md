@@ -18,7 +18,7 @@
 |ajaxjs-web|MVC 框架，类似 Spring MVC 的实现，[浏览项目 readme](ajaxjs-web)|ajaxjs-base|jar|
 |ajaxjs-web-js|独立的前端框架，基于 vue.js 2.x，[浏览项目 readme](ajaxjs-web-js)|vue.js|jar|
 |ajaxjs-cms|整个各个子项目的网站发布系统，[浏览项目 readme](ajaxjs-cms)|ajaxjs-data/ajaxjs-web|jar|
-|ajaxjs-demo|一个简单的网站，包含前后台，作为演示样例，方便学习或者快速手脚架，[浏览项目 readme](ajaxjs-demo)|ajaxjs-cms|war|
+|ajaxjs-demo|一个包含前后台的网站，方便学习或作为快速手脚架，[浏览项目 readme](ajaxjs-demo)|ajaxjs-cms|war|
 
 除了前端 js 项目外，依赖关系由上至下排列。
 
