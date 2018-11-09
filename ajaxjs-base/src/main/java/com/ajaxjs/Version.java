@@ -26,7 +26,7 @@ import com.ajaxjs.util.logger.LogHelper;
  */
 public class Version {
 	private static final LogHelper LOGGER = LogHelper.getLog(Version.class);
-	
+
 	/**
 	 * 是否调试模式（开发模式）
 	 */
@@ -41,23 +41,24 @@ public class Version {
 	 * 是否苹果操作系统
 	 */
 	public static final boolean isMac = System.getProperty("os.name").toLowerCase().contains("mac");
-	
+
 	/**
 	 * 是否视窗操作系统
 	 */
 	public static final boolean isWindows = System.getProperty("os.name").toLowerCase().contains("window");
 
 	static {
-		//		System.setProperty("user.timezone", "GMT +08");// 微软云设置时区
-		if (System.getProperty("java.vm.vendor").indexOf("Oracle") == -1 || System.getProperty("java.vm.vendor").contains("openJDK")) {
+		// System.setProperty("user.timezone", "GMT +08");// 微软云设置时区
+		if (System.getProperty("java.vm.vendor").indexOf("Oracle") == -1
+				|| System.getProperty("java.vm.vendor").contains("openJDK")) {
 			LOGGER.warning("本框架不支持 OpenJDK!如果你是 Linux 系统，请把自带的 OpenJDK 卸载，改用 Oracle JVM");
 			System.exit(1);
 		}
 
 		// 版本检测
-		if (System.getProperty("java.version").contains("1.7.") || System.getProperty("java.version").contains("1.8.")) {
+		if (System.getProperty("java.version").contains("1.8.")) {
 		} else {
-			LOGGER.warning("请升级你的 JRE/JDK版本 >= 1.7");
+			LOGGER.warning("请升级你的 JRE/JDK版本 >= 1.8");
 			System.exit(1);
 		}
 
@@ -74,8 +75,7 @@ public class Version {
 	/**
 	 * 检测是否 tomcat 以及版本
 	 * 
-	 * @param serverInfo
-	 *            字符串如 Tomcat/7
+	 * @param serverInfo 字符串如 Tomcat/7
 	 */
 	public static void tomcatVersionDetect(String serverInfo) {
 		String result = CommonUtil.regMatch("(?<=Tomcat/)(\\d)", serverInfo);
@@ -87,7 +87,7 @@ public class Version {
 			} catch (Throwable e) {
 				if (e instanceof UnsupportedOperationException)
 					throw e;
-				
+
 				LOGGER.warning(e);// 忽略其他异常，如正则的
 			}
 		} else {

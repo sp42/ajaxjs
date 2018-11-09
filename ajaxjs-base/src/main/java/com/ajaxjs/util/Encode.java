@@ -25,6 +25,8 @@ import java.util.Base64;
 
 import javax.xml.bind.DatatypeConverter;
 
+import com.ajaxjs.util.logger.LogHelper;
+
 /**
  * 字符串的编码、解密 支持 MD5、SHA-1 和 SHA-2（SHA256）摘要算法
  * 
@@ -32,6 +34,8 @@ import javax.xml.bind.DatatypeConverter;
  *
  */
 public class Encode {
+	private static final LogHelper LOGGER = LogHelper.getLog(Encode.class);
+	
 	/**
 	 * 字节转编码为 字符串（ UTF-8 编码）
 	 * 
@@ -62,6 +66,7 @@ public class Encode {
 		try {
 			return URLDecoder.decode(str, StandardCharsets.UTF_8.toString());
 		} catch (UnsupportedEncodingException e) {
+			LOGGER.warning(e);
 			return null;
 		}
 	}
@@ -77,6 +82,7 @@ public class Encode {
 		try {
 			return URLEncoder.encode(str, StandardCharsets.UTF_8.toString());
 		} catch (UnsupportedEncodingException e) {
+			LOGGER.warning(e);
 			return null;
 		}
 	}
@@ -144,7 +150,7 @@ public class Encode {
 		try {
 			b = MessageDigest.getInstance("MD5").digest(b);
 		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 			return null;
 		}
 
@@ -164,7 +170,7 @@ public class Encode {
 			return null;
 
 		MessageDigest md = null;
-		
+
 		try {
 			md = MessageDigest.getInstance("SHA1");
 		} catch (NoSuchAlgorithmException e) {
@@ -194,7 +200,7 @@ public class Encode {
 	 * @param str 输入的字符串
 	 * @return 字符串的 SHA2 哈希值
 	 */
-	public static String getSHA256StrJava(String str) {
+	public static String getSHA256(String str) {
 		MessageDigest md;
 
 		try {
@@ -202,7 +208,7 @@ public class Encode {
 			md.update(str.getBytes(StandardCharsets.UTF_8));
 			return byte2Hex(md.digest());
 		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 			return null;
 		}
 	}
@@ -213,7 +219,7 @@ public class Encode {
 	 * @param bytes 字节数组
 	 * @return Hex
 	 */
-	static String byte2Hex(byte[] bytes) {
+	public static String byte2Hex(byte[] bytes) {
 		StringBuffer stringBuffer = new StringBuffer();
 		String temp = null;
 
@@ -228,5 +234,4 @@ public class Encode {
 
 		return stringBuffer.toString();
 	}
-
 }

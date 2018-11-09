@@ -1,15 +1,27 @@
 package com.ajaxjs.util;
 
-import static com.ajaxjs.util.CommonUtil.*;
+import static com.ajaxjs.util.CommonUtil.Objet2Date;
+import static com.ajaxjs.util.CommonUtil.commonDateFormat;
+import static com.ajaxjs.util.CommonUtil.containsIgnoreCase;
+import static com.ajaxjs.util.CommonUtil.formatDate;
+import static com.ajaxjs.util.CommonUtil.formatDateShorter;
+import static com.ajaxjs.util.CommonUtil.isEmptyString;
+import static com.ajaxjs.util.CommonUtil.isNull;
+import static com.ajaxjs.util.CommonUtil.now;
+import static com.ajaxjs.util.CommonUtil.regMatch;
+import static com.ajaxjs.util.CommonUtil.repeatStr;
+import static com.ajaxjs.util.CommonUtil.split;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 import org.junit.Test;
-
-import com.ajaxjs.util.CommonUtil;
 
 public class TestCommonUtil {
 	@Test
@@ -52,14 +64,30 @@ public class TestCommonUtil {
 	}
 
 	@Test
-	public void testFormat() {
-		Date date = CommonUtil.Objet2Date("2017-07-25 11:16:09");
-		
-		assertEquals("Tue Jul 25 11:16:09 GMT+08:00 2017", date.toString());
-		assertEquals("2017-07-25 11:16", CommonUtil.formatDateShorter(date));
+	public void testCollection() {
+		assertTrue(isNull(new Object[] {}));
+		assertFalse(isNull(new Object[] { null }));
+		assertTrue(isNull(new HashMap<String, String>() {
+			private static final long serialVersionUID = 1L;
+		}));
+		assertTrue(isNull(new ArrayList<String>() {
+			private static final long serialVersionUID = 1L;
+		}));
 
-		assertEquals(date.getTime(), CommonUtil.Objet2Date(date).getTime());
-		assertEquals(date.getTime(), CommonUtil.Objet2Date(date.getTime()).getTime());
-		assertEquals(date.getTime(), CommonUtil.Objet2Date("2017-07-25 11:16:09").getTime()); // 转换字符串类型的日期到 Date 类型
+		List<Object> list = null;
+		assertTrue(isNull(list));
+	}
+
+	@Test
+	public void testFormat() {
+		Date date = Objet2Date("2017-07-25 11:16:09");
+
+		assertEquals("Tue Jul 25 11:16:09 GMT+08:00 2017", date.toString());
+		assertEquals("2017-07-25 11:16:09", formatDate(date));
+		assertEquals("2017-07-25 11:16", formatDateShorter(date));
+
+		assertEquals(date.getTime(), Objet2Date(date).getTime());
+		assertEquals(date.getTime(), Objet2Date(date.getTime()).getTime());
+		assertEquals(date.getTime(), Objet2Date("2017-07-25 11:16:09").getTime()); // 转换字符串类型的日期到 Date 类型
 	}
 }

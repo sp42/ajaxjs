@@ -144,16 +144,7 @@ public class CommonUtil {
 	public static final String commonDateFormat_shorter = "yyyy-MM-dd HH:mm";
 	public static final String commonDateFormat_shortest = "yyyy-MM-dd";
 
-	/**
-	 * 对输入的时间进行格式化，采用格式 YYYY-MM-dd HH:MM
-	 * 
-	 * @param date 输入的时间
-	 * @return 转换到 YYYY-MM-dd HH:MM 格式的时间
-	 */
-	public static String formatDateShorter(Date date) {
-		return SimpleDateFormatFactory(commonDateFormat_shorter).format(date);
-	}
-
+	
 	/**
 	 * 对输入的时间进行格式化，采用格式 yyyy-MM-dd HH:mm:ss
 	 * 
@@ -162,6 +153,16 @@ public class CommonUtil {
 	 */
 	public static String formatDate(Date date) {
 		return SimpleDateFormatFactory(commonDateFormat).format(date);
+	}
+
+	/**
+	 * 对输入的时间进行格式化，采用格式 YYYY-MM-dd HH:MM
+	 * 
+	 * @param date 输入的时间
+	 * @return 转换到 YYYY-MM-dd HH:MM 格式的时间
+	 */
+	public static String formatDateShorter(Date date) {
+		return SimpleDateFormatFactory(commonDateFormat_shorter).format(date);
 	}
 
 	/**
