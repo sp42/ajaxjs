@@ -14,8 +14,9 @@ import com.ajaxjs.util.io.resource.ScanClass;
 public class TestResource {
 	@Test
 	public void testScanClass() {
-		Set<Class<Object>> classes = ScanClass.scanClass("com.ajaxjs.io");
-		assertEquals(5, classes.size());
+		Set<Class<Object>> classes = ScanClass.scanClass("com.ajaxjs.util.io.resource");
+		
+		assertEquals(6, classes.size());
 	}
 
 	/**
@@ -48,9 +49,10 @@ public class TestResource {
 
 	@Test
 	public void testScanAnything() {
-		Set<Object> anything = new ScanAnything().scan("com.ajaxjs.io");
+		Set<Object> anything = new ScanAnything().scan("com.ajaxjs.util.io");
+		
 		// 有内部类
-		assertEquals(7, anything.size());
+		assertEquals(19, anything.size());
 
 	}
 }
