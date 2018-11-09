@@ -2,7 +2,7 @@
 =============
 ### 特点：全栈 、轻量级、函数式和响应式编程。
 
-前端提供了常见的 UI 组件，后端提供 IOC/AOP/ORM/MVC/REST 等特性，支持 Map/POJO 的 CRUD 服务，基于 DAO/Service/Controller 分层。
+本框架早期是前端的，故名曰 ajax-js，后打算定位为全栈框架（基于 Java）。前端提供了常见的 UI 组件，后端提供 IOC/AOP/ORM/MVC/REST 等特性，支持 Map/POJO 的 CRUD 服务，基于 DAO/Service/Controller 分层。
 
 - 前端：Vue.js（MVVM+组件化） + LESS.js
 - 后端：Java 1.8 + Tomcat 8 + MySQL/SQLite
