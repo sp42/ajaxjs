@@ -9,14 +9,7 @@
 
 详见官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/) 介绍。 
 
-Maven 依赖
-```
-<dependency>
-    <groupId>com.ajaxjs</groupId>
-    <artifactId>ajaxjs-web</artifactId>
-    <version>1.1.1</version>
-</dependency>
-```
+
 
 
 
@@ -30,7 +23,7 @@ Maven 依赖
 
 
 AJAXJS WEB
------------
+=============
 AJAXJS WEB 包含以下模块：
 
 - mvc 模块，类似 SpringMVC 基于注解的控制器的写法，实现了 URL-METHOD 映射、参数自动化注入（支持 Query/Path 参数，Form2Bean/Map）、RESTFUL 风格支持（基于 JSR 注解）、返回结果解析（原生JSON/HTML/JSP返回）、异常统一结构化规范支持、拦截器支持等等。当前支持 JSP 视图。
@@ -39,7 +32,17 @@ AJAXJS WEB 包含以下模块：
 - view 视图模块，提供一个简单的、基于 JSP/JSTL 的扩展标签；
 - security 网站防御系统，抵御 XSS、CSRF 等攻击；
 - config 基于 JSON 格式的配置系统。
-- mail 无须 JavaMail 发送邮件。原理是通过最简单的 telnet 发送；
+
+Maven 坐标
+-----------
+
+```
+<dependency>
+    <groupId>com.ajaxjs</groupId>
+    <artifactId>ajaxjs-web</artifactId>
+    <version>1.1.1</version>
+</dependency>
+```
 
 环境配置说明
 -------------
@@ -58,21 +61,3 @@ config
 小巧、灵活、通用、基于 JSON 的配置系统，完全可以代替 properties 文件实现配置模块。
 
 [>>详细用法参见文档](http://ajaxjs.mydoc.io/?t=208700)。
-
-
-开发生涯中一点的个人感悟
-----
-框架设计中，有什么值得考虑或者取舍的呢？首先是尽量减少引入新的概念和新的第三方框架或库，而仅仅是在 Java 类库的核心概念之上进行梳理和进一步简化，个人认为一个第三方 jar 包就是一门新的 DSL 语言，DSL 语言不管大小，对心智来说都是一个额外的负担。如果没有足够的理由，没有必要去使用新的 DSL；其次，在写法上极其平常，顶多是引入链式写法（或所谓的流式接口），同时在 api 命名上，尽量准确精炼而且是众人所熟知的，不标新立异；最后就是代码量少，大部分每个类总共几十行，学习和理解的曲线低。
-
-联系方式
-----------
-
-- 官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/)  
-- 博客 [http://blog.csdn.net/zhangxin09](http://blog.csdn.net/zhangxin09/) 
-- Q群 [3150067](//shang.qq.com/wpa/qunwpa?idkey=99415d164e2c776567c9370cc5b0bde26f4e2e7c5068978a24d1fe7c976ace93)
-- 邮箱 support@ajaxjs.com
-
-版权声明 LICENSE
-==========
-作者版权所有，开源许可：Apache License, Version 2.0
- 
