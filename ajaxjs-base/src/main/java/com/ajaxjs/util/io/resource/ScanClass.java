@@ -91,7 +91,7 @@ public class ScanClass<T> extends AbstractScanner<Class<T>> {
 	/**
 	 * Java 类文件 去掉后面的 .class 只留下类名
 	 * 
-	 * @param file Java 类文件
+	 * @param file            Java 类文件
 	 * @param packageJavaName 包名称
 	 * @return 类名
 	 */

@@ -160,7 +160,8 @@ public class MappingJson {
 		} else if (value.getClass().getName().contains("BaseModel")) {
 			return BeanUtil.beanToJson(value);
 		} else { // String
-			return '\"' + value.toString().replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r") + '\"';
+			return '\"' + value.toString().replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n")
+					.replace("\r", "\\r") + '\"';
 		}
 	}
 

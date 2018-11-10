@@ -121,8 +121,8 @@ public abstract class StreamChain<T> {
 	 * 两端速度不匹配，需要协调 理想环境下，速度一样快，那就没必要搞流，直接一坨给弄过去就可以了 流的意思很形象，就是一点一滴的，不是一坨坨大批量的
 	 * 带缓冲的一入一出 出是字节流，所以要缓冲（字符流自带缓冲，所以不需要额外缓冲） 请注意，改方法不会关闭流 close，你需要手动关闭
 	 * 
-	 * @param in 输入流
-	 * @param out 输出流
+	 * @param in       输入流
+	 * @param out      输出流
 	 * @param isBuffer 是否加入缓冲功能
 	 * @return 是否成功
 	 */
@@ -178,7 +178,7 @@ public abstract class StreamChain<T> {
 	/**
 	 * 送入 byte[] 转换为输出流。可指定 byte[] 某一部分数据
 	 * 
-	 * @param off 偏移
+	 * @param off    偏移
 	 * @param length 长度
 	 * @return 返回本实例供链式调用
 	 */

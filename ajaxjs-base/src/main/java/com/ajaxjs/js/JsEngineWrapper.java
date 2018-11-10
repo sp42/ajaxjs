@@ -85,7 +85,7 @@ public class JsEngineWrapper {
 	/**
 	 * 加载某个类下面的 js 文件，可以链式调用这个方法加载多个 js 文件
 	 * 
-	 * @param clazz 该类目录下面必须有目标 js 文件
+	 * @param clazz    该类目录下面必须有目标 js 文件
 	 * @param fileName js 文件名
 	 * @return 当前实例，可以链式调用这个方法加载多个 js 文件
 	 */
@@ -99,10 +99,10 @@ public class JsEngineWrapper {
 	/**
 	 * 调用脚本的方法
 	 * 
-	 * @param method js 脚本代码
-	 * @param clazz 目标类型
+	 * @param method  js 脚本代码
+	 * @param clazz   目标类型
 	 * @param binding 可以为 null，则表示调用全局方法
-	 * @param args 参数列表
+	 * @param args    参数列表
 	 * @return JS 运算后的返回值，也可能是 null 没有返回
 	 */
 	public <T> T call(String method, Class<T> clazz, Object binding, Object... args) {
@@ -125,7 +125,7 @@ public class JsEngineWrapper {
 	 * 也可达到同样之效果。另外亦可以直接传递 Java 对象。
 	 * 
 	 * @param varName 变量名
-	 * @param obj 变量值
+	 * @param obj     变量值
 	 */
 	public void put(String varName, Object obj) {
 		engine.put(varName, obj);
@@ -155,9 +155,9 @@ public class JsEngineWrapper {
 	/**
 	 * 执行 js 代码
 	 * 
-	 * @param code 任意 js 代码
+	 * @param code  任意 js 代码
 	 * @param clazz 返回的类型。当 clazz ＝ null 时永远返回 null，表示只是执行，不要求返回结果。可理解为 return
-	 * void。如果想有返回值，至少有个 clazz = Object.class
+	 *              void。如果想有返回值，至少有个 clazz = Object.class
 	 * @return 执行结果
 	 */
 	public <T> T eval(String code, Class<T> clazz) {

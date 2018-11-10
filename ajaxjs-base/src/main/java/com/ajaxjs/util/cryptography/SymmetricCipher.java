@@ -43,7 +43,7 @@ public class SymmetricCipher {
 	 * 创建一个 SymmetricCipher
 	 * 
 	 * @param ALGORITHM 加密算法，可以 DES | AES
-	 * @param keySize DES = 56 | AES = 128
+	 * @param keySize   DES = 56 | AES = 128
 	 */
 	public SymmetricCipher(String ALGORITHM, int keySize) {
 		this.ALGORITHM = ALGORITHM;
@@ -86,8 +86,8 @@ public class SymmetricCipher {
 	/**
 	 * 
 	 * @param isENCRYPT_MODE true加密/false=解密
-	 * @param key 密钥
-	 * @param bytes 加密/解密的内容
+	 * @param key            密钥
+	 * @param bytes          加密/解密的内容
 	 * @return 结果
 	 */
 	private String doCipher(boolean isENCRYPT_MODE, String key, byte[] bytes) {

@@ -32,7 +32,7 @@ public class MappingValue {
 	/**
 	 * 强类型转换，有 null 检测
 	 * 
-	 * @param obj 输入的对象
+	 * @param obj   输入的对象
 	 * @param clazz 目标类型
 	 * @return T型结果
 	 */
@@ -89,10 +89,12 @@ public class MappingValue {
 
 		if (value instanceof String) {
 			String _value = (String) value;
-			if (_value.equalsIgnoreCase("yes") || _value.equalsIgnoreCase("true") || _value.equals("1") || _value.equalsIgnoreCase("on"))
+			if (_value.equalsIgnoreCase("yes") || _value.equalsIgnoreCase("true") || _value.equals("1")
+					|| _value.equalsIgnoreCase("on"))
 				return true;
 
-			if (_value.equalsIgnoreCase("no") || _value.equalsIgnoreCase("false") || _value.equals("0") || _value.equalsIgnoreCase("off") || _value.equalsIgnoreCase("null"))
+			if (_value.equalsIgnoreCase("no") || _value.equalsIgnoreCase("false") || _value.equals("0")
+					|| _value.equalsIgnoreCase("off") || _value.equalsIgnoreCase("null"))
 				return false;
 		}
 
@@ -103,12 +105,12 @@ public class MappingValue {
 	 * 根据送入的类型作适当转换
 	 * 
 	 * @param value 送入的值
-	 * @param t 期待的类型
+	 * @param t     期待的类型
 	 * @return 已经转换类型的值
 	 */
 	@SuppressWarnings("unchecked")
 	public static Object objectCast(Object value, Class<?> t) {
-		if(value == null)
+		if (value == null)
 			return null;
 		else if (t == boolean.class || t == Boolean.class) {// 布尔型
 			value = toBoolean(value);
@@ -173,7 +175,7 @@ public class MappingValue {
 
 		return arr;
 	}
-	
+
 	/**
 	 * 当它们每一个都是数字的字符串形式，转换为整形的数组 "1,2,3, ..." -- [1, 2, ...]
 	 * 
@@ -190,7 +192,7 @@ public class MappingValue {
 
 		return intArr;
 	}
-	
+
 	/**
 	 * List&lt;String&gt; 转换为字符串数组／数组效的话率更高一些
 	 * 

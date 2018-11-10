@@ -26,8 +26,7 @@ import com.ajaxjs.util.io.StreamChain;
  * 
  * @author Sp42 frank@ajaxjs.com
  *
- * @param <T>
- *            因为泛型的缘故，不好直接使用 Stream，故特提供该泛型
+ * @param <T> 因为泛型的缘故，不好直接使用 Stream，故特提供该泛型
  */
 public abstract class Request<T> extends StreamChain<T> {
 	/**
@@ -96,15 +95,13 @@ public abstract class Request<T> extends StreamChain<T> {
 	 * 当有响应数据进入时的回调函数
 	 * 
 	 * @author Sp42 frank@ajaxjs.com
-	 * @param <T>
-	 *            当前对象
+	 * @param <T> 当前对象
 	 */
 	public static interface Callback<T> {
 		/**
 		 * 当有数据进入时……
 		 * 
-		 * @param is
-		 *            请求回来的响应流
+		 * @param is 请求回来的响应流
 		 */
 		public void onDataLoad(InputStream is);
 	}
@@ -227,8 +224,7 @@ public abstract class Request<T> extends StreamChain<T> {
 	}
 
 	/**
-	 * @param headers
-	 *            {@link #headers}
+	 * @param headers {@link #headers}
 	 */
 	@SuppressWarnings("unchecked")
 	public T setHeaders(Map<String, String> headers) {
@@ -244,8 +240,7 @@ public abstract class Request<T> extends StreamChain<T> {
 	}
 
 	/**
-	 * @param isEnableGzip
-	 *            {@link #isEnableGzip}
+	 * @param isEnableGzip {@link #isEnableGzip}
 	 */
 	@SuppressWarnings("unchecked")
 	public T setEnableGzip(boolean isEnableGzip) {

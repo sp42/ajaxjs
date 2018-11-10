@@ -29,8 +29,7 @@ public class ReturnBefore {
 	/**
 	 * 创建一个返回值
 	 * 
-	 * @param returnValue
-	 *            返回值
+	 * @param returnValue 返回值
 	 */
 	public ReturnBefore(Object returnValue) {
 		this.returnValue = returnValue;

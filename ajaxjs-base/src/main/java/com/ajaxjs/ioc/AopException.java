@@ -26,10 +26,8 @@ public class AopException extends Exception {
 	/**
 	 * 创建一个 AOP 专用异常信息
 	 * 
-	 * @param msg
-	 *            异常信息
-	 * @param type
-	 *            是前置还是后置？ before|after
+	 * @param msg  异常信息
+	 * @param type 是前置还是后置？ before|after
 	 */
 	public AopException(String msg, String type) {
 		super(msg);

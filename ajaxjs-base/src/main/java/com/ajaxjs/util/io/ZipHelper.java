@@ -32,7 +32,7 @@ public class ZipHelper {
 	/**
 	 * 解压缩文件
 	 * 
-	 * @param zipFile ZIP 包
+	 * @param zipFile        ZIP 包
 	 * @param destinationDir 目的目录
 	 * @return 是否操作成功
 	 */
@@ -65,7 +65,7 @@ public class ZipHelper {
 	/**
 	 * 
 	 * @param destinationDir 目的目录
-	 * @param zipEntry ZIP 包里面的条目
+	 * @param zipEntry       ZIP 包里面的条目
 	 * @return
 	 * @throws IOException IO 异常
 	 */
@@ -85,8 +85,8 @@ public class ZipHelper {
 	 * 压缩文件
 	 * 
 	 * @param sourceFile 目录或文件
-	 * @param zos 压缩流
-	 * @param name 压缩后的名称
+	 * @param zos        压缩流
+	 * @param name       压缩后的名称
 	 * @throws IOException
 	 */
 	static void compress(File sourceFile, ZipOutputStream zos, String name) throws IOException {
@@ -116,7 +116,7 @@ public class ZipHelper {
 	/**
 	 * 压缩文件
 	 * 
-	 * @param dir 要压缩的本地目录
+	 * @param dir  要压缩的本地目录
 	 * @param save 保存的文件名，例如 c:\\temp\\foo.zip
 	 * @return 如果压缩成功返回 true
 	 */
@@ -124,7 +124,8 @@ public class ZipHelper {
 		long start = System.currentTimeMillis();
 		File sourceFile = new File(dir);
 
-		try (OutputStream saveOut = new FileOutputStream(new File(save)); ZipOutputStream zos = new ZipOutputStream(saveOut);) {
+		try (OutputStream saveOut = new FileOutputStream(new File(save));
+				ZipOutputStream zos = new ZipOutputStream(saveOut);) {
 			compress(sourceFile, zos, sourceFile.getName());
 
 			LOGGER.info("压缩完成，耗时：" + (System.currentTimeMillis() - start) + " ms");

@@ -53,8 +53,8 @@ public abstract class AbstractScanner<T> {
 	/**
 	 * Fire this function when resource found in file system.
 	 * 
-	 * @param target The target collection
-	 * @param resourceFile The full path of resource
+	 * @param target          The target collection
+	 * @param resourceFile    The full path of resource
 	 * @param packageJavaName The name of package in Java
 	 */
 	abstract public void onFileAdding(Set<T> target, File resourceFile, String packageJavaName);
@@ -62,7 +62,7 @@ public abstract class AbstractScanner<T> {
 	/**
 	 * Fire this function when resource found in JAR file.
 	 * 
-	 * @param target The target collection
+	 * @param target       The target collection
 	 * @param resourcePath The full path of resource
 	 */
 	abstract public void onJarAdding(Set<T> target, String resourcePath);
@@ -121,7 +121,7 @@ public abstract class AbstractScanner<T> {
 	 * 以文件的方式扫描整个包下的文件 并添加到集合中
 	 * 
 	 * @param packageName 包名
-	 * @param filePath 包的物理路径
+	 * @param filePath    包的物理路径
 	 */
 	private void findInFile(String filePath, String packageJavaName) {
 		File dir = new File(filePath);
@@ -177,7 +177,8 @@ public abstract class AbstractScanner<T> {
 					packageJavaName = name.substring(0, idx).replace('/', '.'); // 如果以"/"结尾 是一个包，获取包名 把"/"替换成"."
 
 					if (name.endsWith(".class") && !entry.isDirectory()) {
-						String className = name.substring(packageJavaName.length() + 1, name.length() - 6);// 去掉后面的".class" 获取真正的类名
+						String className = name.substring(packageJavaName.length() + 1, name.length() - 6);// 去掉后面的".class"
+																											// 获取真正的类名
 						onJarAdding(result, packageJavaName + '.' + className);
 					}
 				}
@@ -189,7 +190,7 @@ public abstract class AbstractScanner<T> {
 	 * 获取当前类所在的目录下的一个资源 Returns the filepath under this clazz. u can warp this path
 	 * by new File.
 	 * 
-	 * @param cls 类
+	 * @param cls              类
 	 * @param resourceFileName 资源文件名
 	 * @return 资源路径
 	 */

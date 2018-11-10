@@ -54,8 +54,8 @@ public class CommonUtil {
 	/**
 	 * 重复字符串 repeat 次并以 div 分隔
 	 * 
-	 * @param str 要重复的字符串
-	 * @param div 字符串之间的分隔符
+	 * @param str    要重复的字符串
+	 * @param div    字符串之间的分隔符
 	 * @param repeat 重复次数
 	 * @return 结果
 	 */
@@ -87,7 +87,7 @@ public class CommonUtil {
 	 * 使用正则的快捷方式
 	 * 
 	 * @param regexp 正则
-	 * @param str 测试的字符串
+	 * @param str    测试的字符串
 	 * @return 匹配结果，只有匹配第一个
 	 */
 	public static String regMatch(String regexp, String str) {
@@ -97,8 +97,8 @@ public class CommonUtil {
 	/**
 	 * 使用正则的快捷方式。可指定分组
 	 * 
-	 * @param regexp 正则
-	 * @param str 测试的字符串
+	 * @param regexp     正则
+	 * @param str        测试的字符串
 	 * @param groupIndex 分组 id
 	 * @return 匹配结果
 	 */
@@ -144,7 +144,6 @@ public class CommonUtil {
 	public static final String commonDateFormat_shorter = "yyyy-MM-dd HH:mm";
 	public static final String commonDateFormat_shortest = "yyyy-MM-dd";
 
-	
 	/**
 	 * 对输入的时间进行格式化，采用格式 yyyy-MM-dd HH:mm:ss
 	 * 
@@ -186,7 +185,7 @@ public class CommonUtil {
 
 	private final static String dateReg = "((19|20)[0-9]{2})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])";
 
-	private final static Pattern pattern  = Pattern.compile(dateReg + " ([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]");
+	private final static Pattern pattern = Pattern.compile(dateReg + " ([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]");
 
 	private final static Pattern pattern2 = Pattern.compile(dateReg); // 可能是这种格式 2016-08-18
 

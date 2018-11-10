@@ -34,11 +34,11 @@ public abstract class Aop<T> implements InvocationHandler {
 	/**
 	 * 前置调用
 	 * 
-	 * @param target 本体对象
+	 * @param target     本体对象
 	 * 
-	 * @param method 方法对象
+	 * @param method     方法对象
 	 * @param methodName 方法名称
-	 * @param args 参数列表
+	 * @param args       参数列表
 	 * @return 返回任意对象
 	 */
 	public abstract Object before(T target, Method method, String methodName, Object[] args) throws Throwable;
@@ -46,10 +46,10 @@ public abstract class Aop<T> implements InvocationHandler {
 	/**
 	 * 后置调用
 	 * 
-	 * @param target 本体对象
+	 * @param target    本体对象
 	 * 
-	 * @param method 方法对象
-	 * @param args 参数列表
+	 * @param method    方法对象
+	 * @param args      参数列表
 	 * @param returnObj 返回结果
 	 * @return 返回任意对象
 	 */
@@ -68,7 +68,8 @@ public abstract class Aop<T> implements InvocationHandler {
 
 		this.target = target;
 
-		Object obj = Proxy.newProxyInstance(target.getClass().getClassLoader(), target.getClass().getInterfaces(), this);
+		Object obj = Proxy.newProxyInstance(target.getClass().getClassLoader(), target.getClass().getInterfaces(),
+				this);
 		return (T) obj;
 	}
 
@@ -95,7 +96,7 @@ public abstract class Aop<T> implements InvocationHandler {
 	/**
 	 * 绑定多个代理
 	 * 
-	 * @param target 目标对象
+	 * @param target        目标对象
 	 * @param proxyHandlers 代理处理器
 	 * @return AOP 链包装过的目标对象
 	 */

@@ -25,12 +25,13 @@ public class MailException extends Exception {
 
 	/**
 	 * 创建 mail 异常类
-	 * @param msg 异常信息
+	 * 
+	 * @param msg     异常信息
 	 * @param errCode 出错代码
 	 */
 	public MailException(String msg, int errCode) {
 		super(msg);
-		this.errCode = errCode; 
+		this.errCode = errCode;
 	}
 
 	/**

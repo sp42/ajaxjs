@@ -10,7 +10,9 @@ import java.util.Random;
  *
  */
 public class TestHelper {
-	private final static String[] nouns = { "男孩", "女孩", "小狗", "城镇", "小汽车" }, articles = { "这个", "有一个", "一个", "一些", "任何" }, verbs = { "驾驶", "冲", "跑", "走", "越" }, prepositions = { "向", "来", "过", "下", "上" };
+	private final static String[] nouns = { "男孩", "女孩", "小狗", "城镇", "小汽车" },
+			articles = { "这个", "有一个", "一个", "一些", "任何" }, verbs = { "驾驶", "冲", "跑", "走", "越" },
+			prepositions = { "向", "来", "过", "下", "上" };
 
 	/**
 	 * 隨機生成句子
@@ -27,7 +29,8 @@ public class TestHelper {
 		int rNoun2nd = (int) (Math.random() * 5);
 		int rArticle2nd = (int) (Math.random() * 5);
 
-		return articles[rArticle1st] + nouns[rNoun1st] + verbs[rVerb] + prepositions[rPrepostion] + articles[rArticle2nd] + nouns[rNoun2nd] + "。";
+		return articles[rArticle1st] + nouns[rNoun1st] + verbs[rVerb] + prepositions[rPrepostion]
+				+ articles[rArticle2nd] + nouns[rNoun2nd] + "。";
 	}
 
 	/**
@@ -135,7 +138,8 @@ public class TestHelper {
 		return getEmail(2, 4);
 	}
 
-	private static String[] telFirst = "134,135,136,137,138,139,150,151,152,157,158,159,130,131,132,155,156,133,153".split(",");
+	private static String[] telFirst = "134,135,136,137,138,139,150,151,152,157,158,159,130,131,132,155,156,133,153"
+			.split(",");
 
 	/**
 	 * 生成手机号码
@@ -151,7 +155,8 @@ public class TestHelper {
 		return first + second + thrid;
 	}
 
-	private static String[] englishNames = new String[] { "Johannet", "Jellyan", "Julian", "Joan", "Katheryn", "Mike", "Jack", "Katheron", "Catherine", "Kusteris", "Luce", "Mabell" };
+	private static String[] englishNames = new String[] { "Johannet", "Jellyan", "Julian", "Joan", "Katheryn", "Mike",
+			"Jack", "Katheron", "Catherine", "Kusteris", "Luce", "Mabell" };
 
 	/**
 	 * 生成用户名

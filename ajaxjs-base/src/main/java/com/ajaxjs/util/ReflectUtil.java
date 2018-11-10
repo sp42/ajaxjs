@@ -19,7 +19,7 @@ public class ReflectUtil {
 	 * 根据类创建实例，可传入构造器参数。
 	 * 
 	 * @param clazz 类对象
-	 * @param args 获取指定参数类型的构造函数，这里传入我们想调用的构造函数所需的参数。可以不传。
+	 * @param args  获取指定参数类型的构造函数，这里传入我们想调用的构造函数所需的参数。可以不传。
 	 * @return 对象实例
 	 */
 	public static <T> T newInstance(Class<T> clazz, Object... args) {
@@ -39,13 +39,14 @@ public class ReflectUtil {
 	 * 根据构造器创建实例
 	 * 
 	 * @param constructor 类构造器
-	 * @param args 获取指定参数类型的构造函数，这里传入我们想调用的构造函数所需的参数。可以不传。
+	 * @param args        获取指定参数类型的构造函数，这里传入我们想调用的构造函数所需的参数。可以不传。
 	 * @return 对象实例
 	 */
 	public static <T> T newInstance(Constructor<T> constructor, Object... args) {
 		try {
 			return constructor.newInstance(args); // 实例化
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
 			LOGGER.warning(e, "实例化对象失败：" + constructor.getDeclaringClass());
 			return null;
 		}
@@ -70,7 +71,7 @@ public class ReflectUtil {
 	 * 根据类全称创建实例，并转换到其接口的类型
 	 * 
 	 * @param className 实际类的类型
-	 * @param clazz 接口类型
+	 * @param clazz     接口类型
 	 * @return 对象实例
 	 */
 	// @SuppressWarnings("unchecked")
@@ -83,7 +84,7 @@ public class ReflectUtil {
 	 * 根据类全称创建实例
 	 * 
 	 * @param className 类全称
-	 * @param args 根据构造函数，创建指定类型的对象,传入的参数个数需要与上面传入的参数类型个数一致
+	 * @param args      根据构造函数，创建指定类型的对象,传入的参数个数需要与上面传入的参数类型个数一致
 	 * @return 对象实例，因为传入的类全称是字符串，无法创建泛型 T，所以统一返回 Object
 	 */
 	public static Object newInstance(String className, Object... args) {
@@ -94,7 +95,7 @@ public class ReflectUtil {
 	/**
 	 * 获取类的构造器，可以支持重载的构造器（不同参数的构造器）
 	 * 
-	 * @param clazz 类对象
+	 * @param clazz      类对象
 	 * @param argClasses 指定构造函数的参数类型，这里传入我们想调用的构造函数所需的参数类型
 	 * @return 类的构造器
 	 */
@@ -182,9 +183,9 @@ public class ReflectUtil {
 	/**
 	 * 根据类、方法的字符串和参数列表获取方法对象，支持重载的方法
 	 * 
-	 * @param obj 可以是实例对象，也可以是类对象
+	 * @param obj        可以是实例对象，也可以是类对象
 	 * @param methodName 方法名称
-	 * @param args 明确的参数类型列表
+	 * @param args       明确的参数类型列表
 	 * @return 匹配的方法对象，null 表示找不到
 	 */
 	public static Method getMethod(Object obj, String methodName, Class<?>... args) {
@@ -207,9 +208,9 @@ public class ReflectUtil {
 	 * 根据方法名称和参数列表查找方法。注意参数对象类型由于没有向上转型会造成不匹配而找不到方法，这时应使用上一个方法或
 	 * getMethodByUpCastingSearch()
 	 * 
-	 * @param obj 实例对象
+	 * @param obj        实例对象
 	 * @param methodName 方法名称
-	 * @param args 对应重载方法的参数列表
+	 * @param args       对应重载方法的参数列表
 	 * @return 匹配的方法对象，null 表示找不到
 	 */
 	public static Method getMethod(Object obj, String methodName, Object... args) {
@@ -222,9 +223,9 @@ public class ReflectUtil {
 	/**
 	 * 根据方法名称和参数列表查找方法。自动循环参数类型向上转型。仅支持一个参数。
 	 * 
-	 * @param cls 实例对象的类对象
+	 * @param cls        实例对象的类对象
 	 * @param methodName 方法名称
-	 * @param arg 参数对象，可能是子类或接口，所以要在这里找到对应的方法，当前只支持单个参数；且不能传 Class，必须为对象
+	 * @param arg        参数对象，可能是子类或接口，所以要在这里找到对应的方法，当前只支持单个参数；且不能传 Class，必须为对象
 	 * @return 匹配的方法对象，null 表示找不到
 	 */
 	public static Method getMethodByUpCastingSearch(Class<?> cls, String methodName, Object arg) {
@@ -243,9 +244,9 @@ public class ReflectUtil {
 	/**
 	 * 循环 object 向上转型（接口）
 	 * 
-	 * @param cls 主类
+	 * @param cls        主类
 	 * @param methodName 方法名称
-	 * @param arg 参数对象，可能是子类或接口，所以要在这里找到对应的方法，当前只支持单个参数
+	 * @param arg        参数对象，可能是子类或接口，所以要在这里找到对应的方法，当前只支持单个参数
 	 * @return 方法对象
 	 */
 	public static Method getDeclaredMethodByInterface(Class<?> cls, String methodName, Object arg) {
@@ -280,9 +281,9 @@ public class ReflectUtil {
 	/**
 	 * 查找对象父类身上指定的方法
 	 * 
-	 * @param cls 主类
+	 * @param cls        主类
 	 * @param methodName 方法名称
-	 * @param argClazz 参数类引用
+	 * @param argClazz   参数类引用
 	 * @return 匹配的方法对象，null 表示找不到
 	 */
 	public static Method getSuperClassDeclaredMethod(Class<?> cls, String methodName, Class<?> argClazz) {
@@ -299,7 +300,7 @@ public class ReflectUtil {
 	/**
 	 * 查找对象父类身上指定的方法（注意该方法不需要校验参数类型是否匹配，故有可能不是目标方法，而造成异常，请谨慎使用）
 	 * 
-	 * @param cls 主类
+	 * @param cls        主类
 	 * @param methodName 方法名称
 	 * @return 匹配的方法对象，null 表示找不到
 	 */
@@ -319,8 +320,8 @@ public class ReflectUtil {
 	 * 调用方法
 	 * 
 	 * @param instance 对象实例，bean
-	 * @param method 方法对象
-	 * @param args 参数列表
+	 * @param method   方法对象
+	 * @param args     参数列表
 	 * @return 执行结果
 	 * @throws Throwable
 	 */
@@ -351,7 +352,8 @@ public class ReflectUtil {
 	 * @return 实际异常对象
 	 */
 	public static Throwable getUnderLayerErr(Throwable e) {
-		while (e.getClass().equals(InvocationTargetException.class) || e.getClass().equals(UndeclaredThrowableException.class)) {
+		while (e.getClass().equals(InvocationTargetException.class)
+				|| e.getClass().equals(UndeclaredThrowableException.class)) {
 			e = e.getCause();
 		}
 
@@ -374,8 +376,8 @@ public class ReflectUtil {
 	 * 调用方法，该方法不会抛出异常
 	 * 
 	 * @param instance 对象实例，bean
-	 * @param method 方法对象
-	 * @param args 参数列表
+	 * @param method   方法对象
+	 * @param args     参数列表
 	 * @return 执行结果
 	 */
 	public static Object executeMethod(Object instance, Method method, Object... args) {
@@ -390,8 +392,8 @@ public class ReflectUtil {
 	 * 调用方法
 	 * 
 	 * @param instnace 对象实例，bean
-	 * @param method 方法对象名称
-	 * @param args 参数列表
+	 * @param method   方法对象名称
+	 * @param args     参数列表
 	 * @return 执行结果
 	 */
 	public static Object executeMethod(Object instnace, String method, Object... args) {
@@ -406,10 +408,10 @@ public class ReflectUtil {
 	 * 调用方法。 注意获取方法对象，原始类型和包装类型不能混用，否则得不到正确的方法， 例如 Integer 不能与 int 混用。 这里提供一个
 	 * argType 的参数，指明参数类型为何。
 	 * 
-	 * @param instnace 对象实例
+	 * @param instnace   对象实例
 	 * @param methodName 方法名称
-	 * @param argType 参数类型
-	 * @param argValue 参数值
+	 * @param argType    参数类型
+	 * @param argValue   参数值
 	 * @return 执行结果
 	 */
 	public static Object executeMethod(Object instnace, String methodName, Class<?> argType, Object argValue) {

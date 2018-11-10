@@ -28,9 +28,9 @@ public class StreamUtil extends StreamChain<StreamUtil> {
 	/**
 	 * 在字节数组里查找某个字节数组，找到返回&lt;=0，未找到返回-1
 	 * 
-	 * @param data 被搜索的内容
+	 * @param data   被搜索的内容
 	 * @param search 要搜索内容
-	 * @param start 搜索起始位置
+	 * @param start  搜索起始位置
 	 * @return 目标位置，找不到返回-1
 	 */
 	public static int byteIndexOf(byte[] data, byte[] search, int start) {
@@ -52,7 +52,7 @@ public class StreamUtil extends StreamChain<StreamUtil> {
 	/**
 	 * 在字节数组里查找某个字节数组，找到返回&lt;=0，未找到返回-1
 	 * 
-	 * @param data 被搜索的内容
+	 * @param data   被搜索的内容
 	 * @param search 要搜索内容
 	 * @return 目标位置，找不到返回-1
 	 */

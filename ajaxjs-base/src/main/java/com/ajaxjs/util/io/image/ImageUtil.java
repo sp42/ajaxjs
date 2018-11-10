@@ -161,9 +161,9 @@ public class ImageUtil extends FileUtil {
 	/**
 	 * 图片裁切
 	 * 
-	 * @param x 选择区域左上角的x坐标
-	 * @param y 选择区域左上角的y坐标
-	 * @param width 选择区域的宽度
+	 * @param x      选择区域左上角的x坐标
+	 * @param y      选择区域左上角的y坐标
+	 * @param width  选择区域的宽度
 	 * @param height 选择区域的高度
 	 */
 	public ImageUtil cut(int x, int y, int width, int height) {
@@ -250,7 +250,8 @@ public class ImageUtil extends FileUtil {
 			return null;
 		}
 
-		int width = img.getWidth(null), height = img.getHeight(null), w_width = watermarkImg.getWidth(null), w_height = watermarkImg.getHeight(null);
+		int width = img.getWidth(null), height = img.getHeight(null), w_width = watermarkImg.getWidth(null),
+				w_height = watermarkImg.getHeight(null);
 
 		bImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		Graphics g = bImg.createGraphics();

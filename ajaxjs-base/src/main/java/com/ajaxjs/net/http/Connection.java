@@ -34,8 +34,7 @@ import com.ajaxjs.util.logger.LogHelper;
  * 
  * @author Sp42 frank@ajaxjs.com
  *
- * @param <T>
- *            因为泛型的缘故，不好直接使用 Stream，故特提供该泛型
+ * @param <T> 因为泛型的缘故，不好直接使用 Stream，故特提供该泛型
  */
 public class Connection<T> extends Request<T> {
 	private static final LogHelper LOGGER = LogHelper.getLog(Connection.class);
@@ -48,8 +47,7 @@ public class Connection<T> extends Request<T> {
 	/**
 	 * 创建一个远程连接对象
 	 * 
-	 * @param urlStr
-	 *            URL 地址
+	 * @param urlStr URL 地址
 	 */
 	public Connection(String urlStr) {
 		setUrl(urlStr);
@@ -83,8 +81,7 @@ public class Connection<T> extends Request<T> {
 	/**
 	 * 配置请求参数
 	 * 
-	 * @param cc
-	 *            配置请求参数
+	 * @param cc 配置请求参数
 	 * @return 返回该对象，供链式调用
 	 */
 	@SuppressWarnings("unchecked")
@@ -103,8 +100,7 @@ public class Connection<T> extends Request<T> {
 		/**
 		 * 回调函数
 		 * 
-		 * @param connection
-		 *            HttpURLConnection 连接
+		 * @param connection HttpURLConnection 连接
 		 */
 		public void callback(HttpURLConnection connection);
 	}
@@ -234,8 +230,7 @@ public class Connection<T> extends Request<T> {
 	/**
 	 * 设置连接对象
 	 * 
-	 * @param connection
-	 *            连接对象
+	 * @param connection 连接对象
 	 * @return 返回该对象，供链式调用
 	 */
 	@SuppressWarnings("unchecked")

@@ -38,7 +38,7 @@ public class Sender extends Socket {
 	 * 发送一封邮件
 	 * 
 	 * @param bean 邮件实体
-	 * @throws IOException IO异常
+	 * @throws IOException          IO异常
 	 * @throws UnknownHostException 未知主机异常
 	 */
 	public Sender(Mail bean) throws UnknownHostException, IOException {
@@ -78,7 +78,8 @@ public class Sender extends Socket {
 	 * @throws MailException 邮件异常
 	 */
 	public boolean sendMail() throws MailException {
-		try (BufferedReader in = new BufferedReader(new InputStreamReader(getInputStream())); DataOutputStream os = new DataOutputStream(getOutputStream());) {
+		try (BufferedReader in = new BufferedReader(new InputStreamReader(getInputStream()));
+				DataOutputStream os = new DataOutputStream(getOutputStream());) {
 			this.in = in;
 			this.os = os;
 
@@ -155,7 +156,8 @@ public class Sender extends Socket {
 		sb.append("Subject:=?UTF-8?B?" + toBase64(bean.getSubject()) + "?=" + lineFeet);
 		sb.append("Date:2016/10/27 17:30" + lineFeet);
 		// sb.append("MIME-Version: 1.0" + lineFeet);
-		sb.append((bean.isHTML_body() ? "Content-Type:text/html;charset=\"utf-8\"" : "Content-Type:text/plain;charset=\"utf-8\"") + lineFeet);
+		sb.append((bean.isHTML_body() ? "Content-Type:text/html;charset=\"utf-8\""
+				: "Content-Type:text/plain;charset=\"utf-8\"") + lineFeet);
 		sb.append("Content-Transfer-Encoding: base64" + lineFeet);
 		sb.append(lineFeet);
 		sb.append(toBase64(bean.getContent()));
@@ -168,7 +170,7 @@ public class Sender extends Socket {
 	 * 发送smtp指令 并返回服务器响应信息
 	 * 
 	 * @param string 指令
-	 * @param from 指令参数
+	 * @param from   指令参数
 	 * @return 服务器响应信息
 	 */
 	private String sendCommand(String string, String from) {
@@ -205,7 +207,7 @@ public class Sender extends Socket {
 	/**
 	 * 输入期望 code，然后查找字符串中的数字，看是否与之匹配。匹配则返回 true。
 	 * 
-	 * @param str 输入的字符串，应该要包含数字
+	 * @param str  输入的字符串，应该要包含数字
 	 * @param code 期望值
 	 * @return 是否与之匹配
 	 */
@@ -220,5 +222,20 @@ public class Sender extends Socket {
 		}
 
 		return _code == code;
+	}
+
+	/**
+	 * 发送邮件
+	 * 
+	 * @param mail 服务器信息和邮件信息
+	 * @return true 表示为发送成功，否则为失败
+	 */
+	public static boolean send(Mail mail) {
+		try (Sender sender = new Sender(mail)) {
+			return sender.sendMail();
+		} catch (IOException | MailException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

@@ -35,7 +35,7 @@ import com.ajaxjs.util.logger.LogHelper;
  */
 public class Encode {
 	private static final LogHelper LOGGER = LogHelper.getLog(Encode.class);
-	
+
 	/**
 	 * 字节转编码为 字符串（ UTF-8 编码）
 	 * 

@@ -117,10 +117,8 @@ public class RSA {
 	/**
 	 * 加密，三步走。
 	 * 
-	 * @param key
-	 *            密钥
-	 * @param plainText
-	 *            加密的内容
+	 * @param key       密钥
+	 * @param plainText 加密的内容
 	 * @return 结果
 	 */
 	public static byte[] RSAEncode(PublicKey key, byte[] plainText) {
@@ -128,7 +126,8 @@ public class RSA {
 			Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
 			cipher.init(Cipher.ENCRYPT_MODE, key);
 			return cipher.doFinal(plainText);
-		} catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException| BadPaddingException e) {
+		} catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException
+				| BadPaddingException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -137,10 +136,8 @@ public class RSA {
 	/**
 	 * 解密，三步走。
 	 * 
-	 * @param key
-	 *            密钥
-	 * @param encodedText
-	 *            解密的内容
+	 * @param key         密钥
+	 * @param encodedText 解密的内容
 	 * @return 解密结果
 	 */
 	public static String RSADecode(PrivateKey key, byte[] encodedText) {
@@ -148,7 +145,8 @@ public class RSA {
 			Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
 			cipher.init(Cipher.DECRYPT_MODE, key);
 			return new String(cipher.doFinal(encodedText));
-		} catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException| BadPaddingException e) {
+		} catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException
+				| BadPaddingException e) {
 			e.printStackTrace();
 			return null;
 		}

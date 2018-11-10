@@ -32,14 +32,13 @@ public class LogHelper {
 	/**
 	 * 创建一个日志类
 	 * 
-	 * @param clazz
-	 *            当前日志记录的那个类
+	 * @param clazz 当前日志记录的那个类
 	 */
 	public LogHelper(Class<?> clazz) {
 		className = clazz.getName().trim();
 		logger = Logger.getLogger(className);
 
-		if(!Version.isDebug) {
+		if (!Version.isDebug) {
 //			if(fileHandler == null) {
 //				fileHandler = new FileHandler(Version.srcFolder, null, ".log");
 //			}
@@ -49,10 +48,10 @@ public class LogHelper {
 
 		logger.setFilter(filter);
 	}
-	
+
 	@SuppressWarnings("unused")
 	private static FileHandler fileHandler;
-	
+
 	private static final int NORMAL = 0;
 	private static final int BRIGHT = 1;
 //	private static final int FOREGROUND_BLACK = 30;
@@ -76,7 +75,6 @@ public class LogHelper {
 //	private static final String ERROR_COLOUR = PREFIX + NORMAL + SEPARATOR + FOREGROUND_RED + SUFFIX;
 	private static final String DEBUG_COLOUR = PREFIX + NORMAL + SEPARATOR + FOREGROUND_CYAN + SUFFIX;
 //	private static final String TRACE_COLOUR = PREFIX + NORMAL + SEPARATOR + FOREGROUND_BLUE + SUFFIX;
-	
 
 	/**
 	 * 所在的类名
@@ -102,8 +100,7 @@ public class LogHelper {
 	 * 获取自定义的 logger。这是外界调用本类最主要的方法。例如： private static final LogHelper LOGGER =
 	 * LogHelper.getLog(SqlProvider.class);
 	 * 
-	 * @param clazz
-	 *            被日志记录的类
+	 * @param clazz 被日志记录的类
 	 * @return 日志管理器
 	 */
 	public static LogHelper getLog(Class<?> clazz) {
@@ -113,10 +110,8 @@ public class LogHelper {
 	/**
 	 * 打印日志，支持 {0}、{1}...的占位符
 	 * 
-	 * @param level
-	 *            日志级别
-	 * @param msg
-	 *            日志信息
+	 * @param level 日志级别
+	 * @param msg   日志信息
 	 */
 	public void logMsg(Level level, String msg) {
 		logger.logp(level, className, getMethodName(), msg);
@@ -125,12 +120,9 @@ public class LogHelper {
 	/**
 	 * 打印日志，支持 {0}、{1}...的占位符
 	 * 
-	 * @param level
-	 *            日志级别
-	 * @param msgTpl
-	 *            日志信息模版
-	 * @param params
-	 *            日志信息参数
+	 * @param level  日志级别
+	 * @param msgTpl 日志信息模版
+	 * @param params 日志信息参数
 	 */
 	public void logMsg(Level level, String msgTpl, Object... params) {
 		logger.logp(level, className, getMethodName(), msgTpl, params);
@@ -139,8 +131,7 @@ public class LogHelper {
 	/**
 	 * 打印一个日志
 	 * 
-	 * @param msg
-	 *            日志信息
+	 * @param msg 日志信息
 	 */
 	public void info(String msg) {
 		logMsg(Level.INFO, DEBUG_COLOUR + msg + COLOUR_END);
@@ -149,23 +140,21 @@ public class LogHelper {
 	/**
 	 * 打印一个日志，支持 {0}、{1}...的占位符
 	 * 
-	 * @param msgTpl
-	 *            信息语句之模板
-	 * @param params
-	 *            信息参数
+	 * @param msgTpl 信息语句之模板
+	 * @param params 信息参数
 	 */
 	public void info(String msgTpl, Object... params) {
 		logMsg(Level.INFO, DEBUG_COLOUR + msgTpl + COLOUR_END, params);
 	}
-	
+
 	public void infoGreen(String msg) {
 		info(INFO_COLOUR + msg + COLOUR_END);
 	}
-	
+
 	public void infoYellow(String msg) {
 		info(WARN_COLOUR + msg + COLOUR_END);
 	}
-	
+
 	public void infoCYAN(String msg) {
 		info(DEBUG_COLOUR + msg + COLOUR_END);
 	}
@@ -173,8 +162,7 @@ public class LogHelper {
 	/**
 	 * 打印一个日志（警告级别）
 	 * 
-	 * @param msg
-	 *            警告信息
+	 * @param msg 警告信息
 	 */
 	public void warning(String msg) {
 		logMsg(Level.WARNING, FATAL_COLOUR + msg + COLOUR_END);
@@ -183,10 +171,8 @@ public class LogHelper {
 	/**
 	 * 打印一个日志（警告级别），支持 {0}、{1}...的占位符
 	 * 
-	 * @param msgTpl
-	 *            信息语句之模板
-	 * @param params
-	 *            信息参数
+	 * @param msgTpl 信息语句之模板
+	 * @param params 信息参数
 	 */
 	public void warning(String msgTpl, Object... params) {
 		logMsg(Level.WARNING, FATAL_COLOUR + msgTpl + COLOUR_END, params);
@@ -195,10 +181,8 @@ public class LogHelper {
 	/**
 	 * 打印一个日志（警告级别）
 	 * 
-	 * @param msg
-	 *            警告信息
-	 * @param ex
-	 *            任意异常信息
+	 * @param msg 警告信息
+	 * @param ex  任意异常信息
 	 */
 	public void warning(Throwable ex, String msg) {
 		logger.logp(Level.WARNING, className, getMethodName(), FATAL_COLOUR + msg + COLOUR_END, ex);
@@ -208,12 +192,9 @@ public class LogHelper {
 	 * 打印一个日志（警告级别） ，支持 {0}、{1}...的占位符e.g: log.warning("脚本引擎 {0} 没有 {1}() 这个方法",
 	 * "js", "foo");
 	 * 
-	 * @param e
-	 *            任意异常信息
-	 * @param msg
-	 *            警告信息
-	 * @param params
-	 *            信息参数
+	 * @param e      任意异常信息
+	 * @param msg    警告信息
+	 * @param params 信息参数
 	 */
 	public void warning(Throwable e, String msg, Object... params) {
 		for (int i = 0; i < params.length; i++) // jre 没有这个方法的重载，写一个吧
@@ -225,8 +206,7 @@ public class LogHelper {
 	/**
 	 * 打印一个日志（警告级别）
 	 * 
-	 * @param ex
-	 *            任意异常信息
+	 * @param ex 任意异常信息
 	 */
 	public void warning(Throwable e) {
 		warning(e, e.getMessage());

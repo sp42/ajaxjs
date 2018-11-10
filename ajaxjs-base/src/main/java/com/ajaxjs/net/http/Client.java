@@ -39,8 +39,7 @@ public class Client extends Connection<Client> {
 	/**
 	 * 创建一个远程请求器
 	 * 
-	 * @param url
-	 *            请求目标地址
+	 * @param url 请求目标地址
 	 */
 	public Client(String url) {
 		super(url);
@@ -49,8 +48,7 @@ public class Client extends Connection<Client> {
 	/**
 	 * 简单 GET 请求（原始 API 版），返回文本。
 	 * 
-	 * @param url
-	 *            请求目标地址
+	 * @param url 请求目标地址
 	 * @return 响应内容（如 HTML，JSON 等）
 	 */
 	public static String simpleGET(String url) {
@@ -69,8 +67,7 @@ public class Client extends Connection<Client> {
 	/**
 	 * 简单 GET 请求，返回文本。
 	 * 
-	 * @param url
-	 *            请求目标地址
+	 * @param url 请求目标地址
 	 * @return 响应内容（如 HTML，JSON 等）
 	 */
 	public static String GET(String url) {
@@ -85,8 +82,7 @@ public class Client extends Connection<Client> {
 	/**
 	 * 简单 GET 请求（带 GZip 处理），返回文本。
 	 * 
-	 * @param url
-	 *            请求目标地址
+	 * @param url 请求目标地址
 	 * @return 响应内容（如 HTML，JSON 等）
 	 */
 	public static String GET_Gzip(String url) {
@@ -101,8 +97,7 @@ public class Client extends Connection<Client> {
 	/**
 	 * HEAD 请求之前的准备
 	 * 
-	 * @param url
-	 *            请求目标地址
+	 * @param url 请求目标地址
 	 * @return 本类实例
 	 */
 	private static Client initHead(String url) {
@@ -122,8 +117,7 @@ public class Client extends Connection<Client> {
 	/**
 	 * 检测资源是否存在
 	 * 
-	 * @param url
-	 *            目标地址
+	 * @param url 目标地址
 	 * @return true 表示 404 不存在
 	 */
 	public static boolean is404(String url) {
@@ -144,8 +138,7 @@ public class Client extends Connection<Client> {
 	/**
 	 * 得到 HTTP 302 的跳转地址
 	 * 
-	 * @param url
-	 *            目标地址
+	 * @param url 目标地址
 	 * @return 跳转地址
 	 */
 	public static String get302redirect(String url) {
@@ -160,8 +153,7 @@ public class Client extends Connection<Client> {
 	/**
 	 * 得到资源的文件大小
 	 * 
-	 * @param url
-	 *            目标地址
+	 * @param url 目标地址
 	 * @return 文件大小
 	 */
 	public static long getFileSize(String url) {
@@ -180,8 +172,7 @@ public class Client extends Connection<Client> {
 	/**
 	 * 获取远程资源的大小 （另外一种写法，可作为参考之）
 	 * 
-	 * @param url
-	 *            目标地址
+	 * @param url 目标地址
 	 * @return 文件大小
 	 */
 	public static long getRemoteSize(String url) {
@@ -201,10 +192,8 @@ public class Client extends Connection<Client> {
 	/**
 	 * POST 请求
 	 * 
-	 * @param url
-	 *            请求目标地址
-	 * @param data
-	 *            表单数据 KeyValue的请求数据，注意要进行 ? & 编码，使用 URLEncoder.encode()
+	 * @param url  请求目标地址
+	 * @param data 表单数据 KeyValue的请求数据，注意要进行 ? & 编码，使用 URLEncoder.encode()
 	 * @return 携带请求信息的 Bean
 	 */
 	public static String POST(String url, Map<String, Object> data) {
@@ -218,10 +207,8 @@ public class Client extends Connection<Client> {
 	/**
 	 * POST 请求
 	 * 
-	 * @param url
-	 *            请求目标地址
-	 * @param params
-	 *            字符串类型的请求数据
+	 * @param url    请求目标地址
+	 * @param params 字符串类型的请求数据
 	 * @return 请求之后的响应的内容
 	 */
 	public static String POST(String url, String params) {
@@ -231,10 +218,8 @@ public class Client extends Connection<Client> {
 	/**
 	 * POST 请求
 	 * 
-	 * @param url
-	 *            请求目标地址
-	 * @param b
-	 *            字节格式的请求数据
+	 * @param url 请求目标地址
+	 * @param b   字节格式的请求数据
 	 * @return 请求之后的响应的内容
 	 */
 	public static String POST(String url, byte[] b) {
@@ -258,8 +243,7 @@ public class Client extends Connection<Client> {
 	/**
 	 * Map 转换为 String
 	 * 
-	 * @param map
-	 *            Map
+	 * @param map Map
 	 * @return String
 	 */
 	public static String join(Map<String, Object> map) {
@@ -289,12 +273,9 @@ public class Client extends Connection<Client> {
 	/**
 	 * 模拟多段上传 TODO
 	 * 
-	 * @param url
-	 *            请求目标地址
-	 * @param text
-	 *            文本数据
-	 * @param fileMap
-	 *            二进制（文件）数据
+	 * @param url     请求目标地址
+	 * @param text    文本数据
+	 * @param fileMap 二进制（文件）数据
 	 * @return 携带请求信息的 Bean
 	 */
 	public static String multiPOST(String url, Map<String, Object> text, Map<String, String> fileMap) {
@@ -308,10 +289,10 @@ public class Client extends Connection<Client> {
 
 				strs.append(String.format(DIV, BOUNDARY, name, value));
 
-				//				 strs.append("\r\n").append("--").append(BOUNDARY).append("\r\n");
-				//				 strs.append("Content-Disposition: form-data; name=\"" + name
-				//				 + "\"\r\n\r\n");
-				//				 strs.append(value);
+				// strs.append("\r\n").append("--").append(BOUNDARY).append("\r\n");
+				// strs.append("Content-Disposition: form-data; name=\"" + name
+				// + "\"\r\n\r\n");
+				// strs.append(value);
 			}
 
 			data = strs.toString().getBytes();
@@ -324,12 +305,14 @@ public class Client extends Connection<Client> {
 				File file = new File(value);
 				String filename = file.getName();
 
-				//				String contentType = FileUtil.getMime(file);
-				//				String str = String.format(DIV, BOUNDARY, name, filename) + "Content-Type:" + contentType + "\r\n\r\n";
+				// String contentType = FileUtil.getMime(file);
+				// String str = String.format(DIV, BOUNDARY, name, filename) + "Content-Type:" +
+				// contentType + "\r\n\r\n";
 
 				StringBuffer strBuf = new StringBuffer();
 				strBuf.append("\r\n").append("--").append(BOUNDARY).append("\r\n");
-				strBuf.append("Content-Disposition: form-data; name=\"" + "ddd" + "\"; filename=\"" + filename + "\"\r\n");
+				strBuf.append(
+						"Content-Disposition: form-data; name=\"" + "ddd" + "\"; filename=\"" + filename + "\"\r\n");
 				// strBuf.append("Content-Type:" + contentType + "\r\n\r\n");
 				// out.write(strBuf.toString().getBytes());
 

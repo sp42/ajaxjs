@@ -15,9 +15,9 @@
  */
 package com.ajaxjs.net.http;
 
-
 /**
  * 请求链接的异常
+ * 
  * @author Sp42 frank@ajaxjs.com
  *
  */
@@ -27,8 +27,7 @@ public class ConnectException extends Exception {
 	/**
 	 * 创建一个请求异常
 	 * 
-	 * @param msg
-	 *            错误信息
+	 * @param msg 错误信息
 	 */
 	public ConnectException(String msg) {
 		super(msg);
@@ -41,6 +40,7 @@ public class ConnectException extends Exception {
 
 	/**
 	 * 获取具体的服务端返回的出错信息
+	 * 
 	 * @return 出错信息
 	 */
 	public String getFeedback() {
@@ -50,8 +50,7 @@ public class ConnectException extends Exception {
 	/**
 	 * 设置服务端返回的出错信息
 	 * 
-	 * @param feedback
-	 *            出错信息
+	 * @param feedback 出错信息
 	 */
 	public void setFeedback(String feedback) {
 		this.feedback = feedback;

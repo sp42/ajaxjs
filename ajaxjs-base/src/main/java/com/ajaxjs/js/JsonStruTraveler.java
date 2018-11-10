@@ -43,7 +43,7 @@ public class JsonStruTraveler {
 	/**
 	 * 根据路径查找节点
 	 * 
-	 * @param str Key 列表字符
+	 * @param str  Key 列表字符
 	 * @param list 列表
 	 * @return Map
 	 */
@@ -63,7 +63,7 @@ public class JsonStruTraveler {
 	 * 真正的查找函数
 	 * 
 	 * @param queue 队列
-	 * @param list 列表
+	 * @param list  列表
 	 * @return Map
 	 */
 	@SuppressWarnings("unchecked")
@@ -91,7 +91,7 @@ public class JsonStruTraveler {
 	 * 在 Map List 中查找符合 key 的 map
 	 * 
 	 * @param list map 列表
-	 * @param str 目标 key
+	 * @param str  目标 key
 	 * @return Map
 	 */
 	private Map<String, Object> findMap(List<Map<String, Object>> list, String str) {
@@ -115,15 +115,16 @@ public class JsonStruTraveler {
 	/**
 	 * 内部递归用的函数
 	 * 
-	 * @param list 输入的树，必须为 List
+	 * @param list      输入的树，必须为 List
 	 * @param superNode 父级节点，一开始可以为 null
-	 * @param level 层数，一开始可以为 0
+	 * @param level     层数，一开始可以为 0
 	 */
 	@SuppressWarnings("unchecked")
 	private void travelList(List<Map<String, Object>> list, Map<String, Object> superNode, int level) {
 		for (Map<String, Object> map : list) {
 			if (map != null) {
-				String currerntPath = (superNode != null ? superNode.get("fullPath").toString() : "") + "/" + map.get(id).toString();
+				String currerntPath = (superNode != null ? superNode.get("fullPath").toString() : "") + "/"
+						+ map.get(id).toString();
 				map.put("fullPath", currerntPath);
 				map.put("level", level);
 
@@ -145,7 +146,7 @@ public class JsonStruTraveler {
 	/**
 	 * 遍历 MapList，允许 TravelMapList_Iterator 控制
 	 * 
-	 * @param map 输入 Map
+	 * @param map      输入 Map
 	 * @param iterator 回调
 	 */
 	@SuppressWarnings("unchecked")

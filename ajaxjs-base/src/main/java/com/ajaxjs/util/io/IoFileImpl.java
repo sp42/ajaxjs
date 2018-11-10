@@ -32,7 +32,7 @@ public class IoFileImpl {
 	 * 打开文件，返回其文本内容，可指定编码
 	 * 
 	 * @param fullpath 文件磁盘路径
-	 * @param encode 文件编码
+	 * @param encode   文件编码
 	 * @return 文件内容
 	 * @throws IOException IO 异常
 	 */
@@ -85,7 +85,7 @@ public class IoFileImpl {
 	 * 复制文件
 	 * 
 	 * @param target 源文件
-	 * @param dest 目的文件/目录，如果最后一个为目录，则不改名，如果最后一个为文件名，则改名
+	 * @param dest   目的文件/目录，如果最后一个为目录，则不改名，如果最后一个为文件名，则改名
 	 * @return 是否操作成功
 	 * @throws IOException IO 异常
 	 */
@@ -98,7 +98,7 @@ public class IoFileImpl {
 	 * 移动文件
 	 * 
 	 * @param target 源文件
-	 * @param dest 目的文件/目录，如果最后一个为目录，则不改名，如果最后一个为文件名，则改名
+	 * @param dest   目的文件/目录，如果最后一个为目录，则不改名，如果最后一个为文件名，则改名
 	 * @return 是否操作成功
 	 * @throws IOException IO 异常
 	 */
@@ -133,7 +133,7 @@ public class IoFileImpl {
 	/**
 	 * 遍历整个文件目录，递归的
 	 * 
-	 * @param _dir 指定的目录
+	 * @param _dir   指定的目录
 	 * @param method 搜索函数
 	 * @return 搜索结果
 	 * @throws IOException
@@ -161,7 +161,7 @@ public class IoFileImpl {
 	/**
 	 * 遍历整个目录，非递归的
 	 * 
-	 * @param _dir 指定的目录
+	 * @param _dir   指定的目录
 	 * @param method 搜索函数
 	 * @return 搜索结果
 	 * @throws IOException

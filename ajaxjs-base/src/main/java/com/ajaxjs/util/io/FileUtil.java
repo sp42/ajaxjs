@@ -268,7 +268,7 @@ public class FileUtil extends StreamChain<FileUtil> {
 	 * Shorthand for saving text file
 	 * 
 	 * @param fullPath Full path of the file
-	 * @param text The content of file, in text.
+	 * @param text     The content of file, in text.
 	 */
 	public static void save(String fullPath, String text) {
 		LOGGER.info("正在保存文件{0}， 保存内容：\n{1}", fullPath, text);
@@ -278,7 +278,7 @@ public class FileUtil extends StreamChain<FileUtil> {
 	/**
 	 * 创建文件，注意这是一个空的文件。如果没有指定目录则创建；检测是否可以覆盖文件
 	 * 
-	 * @param fullPath 文件完整路径，最后一个元素是文件名
+	 * @param fullPath    文件完整路径，最后一个元素是文件名
 	 * @param isOverwrite 是否覆盖文件
 	 * @return 文件对象
 	 * @throws IOException
@@ -313,8 +313,8 @@ public class FileUtil extends StreamChain<FileUtil> {
 	/**
 	 * 写入流到输出
 	 * 
-	 * @param in 输入流
-	 * @param out 输出流
+	 * @param in         输入流
+	 * @param out        输出流
 	 * @param bufferSize 缓冲区大小
 	 */
 	public static void write(InputStream in, OutputStream out, int bufferSize) {
