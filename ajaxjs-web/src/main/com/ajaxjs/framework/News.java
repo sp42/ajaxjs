@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.mvc.controller.testcase;
+package com.ajaxjs.framework;
 
 import java.math.BigDecimal;
 
 import com.ajaxjs.framework.BaseModel;
 
 /**
- * A bean for testing.
+ * A Dummy bean for testing.
  * 
  * @author sp42 frank@ajaxjs.com
  *
