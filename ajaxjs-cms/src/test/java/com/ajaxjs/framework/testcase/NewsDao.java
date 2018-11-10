@@ -21,10 +21,10 @@ import com.ajaxjs.framework.News;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
+import com.ajaxjs.orm.annotation.SelectFromMethod;
 import com.ajaxjs.orm.annotation.Update;
 import com.ajaxjs.orm.dao.IDao;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 
 /**
  * Data Acccess Object for testing.
@@ -39,11 +39,21 @@ public interface NewsDao extends IDao<News, Long> {
 	@Override
 	public News findById(Long id);
 
-	@Select(value = "SELECT * FROM news LIMIT ?, ?")
+	@Select("SELECT COUNT(*) AS Total FROM " + tableName)
+	public int count();
+
+	@SelectFromMethod("getInstance")
+	public int count2();
+
+	public static String getInstance() {
+		return "SELECT * FROM news";
+	}
+
+	@Select("SELECT * FROM news LIMIT ?, ?")
 	public List<News> findList(int start, int limit);
 
 	@Select(value = "SELECT * FROM news")
-	public PageResult<News> findPagedList(QueryParams params, int start, int limit);
+	public PageResult<News> findPagedList(int start, int limit);
 
 	@Select("SELECT * FROM news ORDER BY createDate LIMIT 0, 10")
 	public List<News> findTop10News();
