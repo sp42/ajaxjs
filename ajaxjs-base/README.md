@@ -19,7 +19,7 @@ Maven 坐标：
 <dependency>
   <groupId>com.ajaxjs</groupId>
   <artifactId>ajaxjs-base</artifactId>
-  <version>1.1.5</version>
+  <version>1.1.6</version>
 </dependency>
 ```
 
