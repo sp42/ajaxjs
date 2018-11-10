@@ -1,4 +1,4 @@
-package com.ajaxjs.mock;
+package com.ajaxjs.keyvalue;
 
 /**
  * 用户的测试用例

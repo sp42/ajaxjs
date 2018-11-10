@@ -10,7 +10,6 @@ import java.util.Map;
 import org.junit.Test;
 
 import static com.ajaxjs.keyvalue.BeanUtil.*;
-import com.ajaxjs.mock.TestCaseUserBean;
 
 public class TestBeanUtil {
 	public static Map<String, Object> userWithoutChild = new HashMap<String, Object>() {
