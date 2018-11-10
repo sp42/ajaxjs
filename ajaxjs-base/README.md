@@ -34,7 +34,7 @@ Maven 坐标：
 
 鸣谢
 ==========
-本人水平有限，于是引用了Tomcat 的日志源码： FileHandler 类。
+本人水平有限，日志组件引用了 Tomcat 的 FileHandler 源码。
 
 
 版权声明 LICENSE
