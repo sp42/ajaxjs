@@ -9,14 +9,20 @@ import java.sql.SQLException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import com.ajaxjs.orm.testcase.DataSourceTestCase;
+
+import com.ajaxjs.util.io.resource.ScanClass;
 
 public class TestJdbcConnection {
 	Connection conn;
 
+	/**
+	 * 测试用数据库（SQLite）
+	 */
+	public static final String testUsed_sqlite = ScanClass.getResourcesByFileName("foo.sqlite");
+
 	@Before
 	public void setUp() throws SQLException {
-		conn = DataSourceTestCase.getTestSqliteConnection();
+		conn = getSqliteConnection(testUsed_sqlite);
 	}
 
 	@After
@@ -27,20 +33,12 @@ public class TestJdbcConnection {
 	@Test
 	public void testGetConnection() throws SQLException {
 		assertNotNull(conn);
-
-		Connection conn2 = getConnection("jdbc:sqlite:C:\\sp42\\project\\ajaxjs-data\\src\\main\\com\\ajaxjs\\framework\\mock\\foo.sqlite");
-		assertNotNull(conn2);
-		conn2.close();
 	}
 
 	@Test
 	public void testGetDataSource() throws SQLException {
-		initSqliteDBConnection(DataSourceTestCase.testUsed_sqlite);
+		initSqliteDBConnection(testUsed_sqlite);
 		assertNotNull(getDataSource("jdbc/sqlite"));
-	}
-
-	@Test
-	public void testConnectionFromDataSource() throws SQLException {
 		Connection conn = getDataSource("jdbc/sqlite").getConnection();
 		assertNotNull(conn);
 		conn.close();

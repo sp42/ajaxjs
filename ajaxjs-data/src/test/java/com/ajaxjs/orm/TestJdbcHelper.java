@@ -30,16 +30,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.ajaxjs.mock.News;
 import com.ajaxjs.orm.JdbcHelper.BeanMethod;
-import com.ajaxjs.orm.testcase.DataSourceTestCase;
-import com.ajaxjs.orm.testcase.News;
 
 public class TestJdbcHelper {
 	Connection conn;
 
 	@Before
 	public void setUp() throws SQLException {
-		conn = DataSourceTestCase.getTestSqliteConnection();
+		conn = JdbcConnection.getSqliteConnection(TestJdbcConnection.testUsed_sqlite);
 		conn.setAutoCommit(true);
 	}
 

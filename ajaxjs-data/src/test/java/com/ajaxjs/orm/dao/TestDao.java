@@ -11,17 +11,16 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.ajaxjs.mock.News;
 import com.ajaxjs.orm.JdbcConnection;
-import com.ajaxjs.orm.testcase.DataSourceTestCase;
-import com.ajaxjs.orm.testcase.News;
-import com.ajaxjs.orm.testcase.NewsDao;
+import com.ajaxjs.orm.TestJdbcConnection;
 
 public class TestDao {
 	NewsDao dao;
 
 	@Before
 	public void setUp() {
-		JdbcConnection.setConnection(DataSourceTestCase.getTestSqliteConnection());
+		JdbcConnection.setConnection(JdbcConnection.getSqliteConnection(TestJdbcConnection.testUsed_sqlite));
 		dao = new DaoHandler<NewsDao>().bind(NewsDao.class);
 	}
 

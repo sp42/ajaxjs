@@ -11,13 +11,14 @@
 	<version>1.0.6</version>
 
 	<scm>
-		<url>https://gitee.com/sp42/ajaxjs-data</url>
-		<connection>scm:git:git@gitee.com:sp42/ajaxjs-data.git</connection>
-		<developerConnection>scm:git:git@gitee.com:sp42/ajaxjs-data.git</developerConnection>
+		<url>https://gitee.com/sp42_admin/ajaxjs/tree/master/ajaxjs-base</url>
+		<connection>scm:git:git@gitee.com:sp42_admin/ajaxjs.git</connection>
+		<developerConnection>scm:git:git@gitee.com:sp42_admin/ajaxjs.git</developerConnection>
+		<tag></tag>
 	</scm>
 
 	<issueManagement>
-		<url>https://gitee.com/sp42/ajaxjs-data/issues</url>
+		<url>https://gitee.com/sp42_admin/ajaxjs/issues</url>
 	</issueManagement>
 
 	<!-- Common Start -->
@@ -64,6 +65,70 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+
+			<!-- 发布到中央库 -->
+			<plugin>
+
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.8</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
+
+			<!-- 加密签名 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.5</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- 生成 java 源码 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- 生成 javadoc 文档 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+
+						<configuration> <!-- add this to disable checking -->
+							<additionalparam>-Xdoclint:none</additionalparam>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -82,17 +147,6 @@
 			<version>3.15.1</version>
 		</dependency>
 
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>1.1.0.Final</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.bval</groupId>
-			<artifactId>org.apache.bval.bundle</artifactId>
-			<version>1.1.2</version>
-		</dependency>
 
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
@@ -100,18 +154,26 @@
 			<version>1.1.6</version>
 		</dependency>
 
-		<!-- 模拟对象 -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.mockito</groupId> -->
-<!-- 			<artifactId>mockito-all</artifactId> -->
-<!-- 			<version>2.0.2-beta</version> -->
-<!-- 			<scope>provided</scope> -->
-<!-- 		</dependency> -->
+		<!-- Tomcat JNDI 数据源 -->
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-catalina</artifactId>
+			<version>7.0.37</version>
+			<scope>test</scope>
+		</dependency>
 
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.github.jsqlparser</groupId> -->
-<!-- 			<artifactId>jsqlparser</artifactId> -->
-<!-- 			<version>1.2</version> -->
-<!-- 		</dependency> -->
+		<!-- 模拟对象 -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.mockito</groupId> -->
+		<!-- <artifactId>mockito-all</artifactId> -->
+		<!-- <version>2.0.2-beta</version> -->
+		<!-- <scope>provided</scope> -->
+		<!-- </dependency> -->
+
+		<!-- <dependency> -->
+		<!-- <groupId>com.github.jsqlparser</groupId> -->
+		<!-- <artifactId>jsqlparser</artifactId> -->
+		<!-- <version>1.2</version> -->
+		<!-- </dependency> -->
 	</dependencies>
 </project>

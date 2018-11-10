@@ -242,10 +242,15 @@ public class JdbcConnection {
 	 * @return 数据源对象
 	 */
 	public static DataSource getSqliteDataSource(String url) {
+		String perfix = "jdbc:sqlite:";
+		if (!url.startsWith(perfix)) {
+			url = perfix + url;
+		}
+		
 		try {
 			SQLiteJDBCLoader.initialize();
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 
 		SQLiteDataSource dataSource = new SQLiteDataSource();
@@ -276,10 +281,10 @@ public class JdbcConnection {
 	/**
 	 * 根据 JDBC Url 创建 SQLite 数据库连接对象
 	 *
-	 * @param url 以 jdbc:sqlite: 开头
+	 * @param url 以 jdbc:sqlite: 开头，如果没有自动加上
 	 * @return 数据库连接对象
 	 */
-	public static Connection getTestSqliteConnection(String url) {
+	public static Connection getSqliteConnection(String url) {
 		return getConnection(getSqliteDataSource(url));
 	}
 
@@ -291,7 +296,7 @@ public class JdbcConnection {
 	 * @param password 密码
 	 * @return 数据库连接对象
 	 */
-	public static Connection getTestMySqlConnection(String url, String user, String password) {
+	public static Connection getMySqlConnection(String url, String user, String password) {
 		return getConnection(getMySqlDataSource(url, user, password));
 	}
 
@@ -314,7 +319,7 @@ public class JdbcConnection {
 			ic.createSubcontext("java:/comp/env/jdbc");
 			return ic;
 		} catch (NamingException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 			return null;
 		}
 	}
@@ -325,10 +330,12 @@ public class JdbcConnection {
 	 * @param url 以 jdbc:sqlite: 开头
 	 */
 	public static void initSqliteDBConnection(String url) {
+		DataSource ds = getSqliteDataSource(url);
+				
 		try {
-			initIc().bind("java:/comp/env/jdbc/sqlite", getSqliteDataSource(url));
+			initIc().bind("java:/comp/env/jdbc/sqlite", ds);
 		} catch (NamingException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 	}
 
@@ -343,7 +350,7 @@ public class JdbcConnection {
 		try {
 			initIc().bind("java:/comp/env/jdbc/mysql", getMySqlDataSource(url, user, password));
 		} catch (NamingException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 	}
 }
