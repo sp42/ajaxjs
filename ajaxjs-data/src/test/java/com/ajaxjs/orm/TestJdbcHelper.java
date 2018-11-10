@@ -30,8 +30,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.mock.News;
 import com.ajaxjs.orm.JdbcHelper.BeanMethod;
+import com.ajaxjs.orm.dao.News;
 
 public class TestJdbcHelper {
 	Connection conn;

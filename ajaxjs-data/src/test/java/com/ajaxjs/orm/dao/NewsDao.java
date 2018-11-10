@@ -17,14 +17,11 @@ package com.ajaxjs.orm.dao;
 
 import java.util.List;
 
-import com.ajaxjs.mock.News;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.SelectFromMethod;
 import com.ajaxjs.orm.annotation.Update;
-import com.ajaxjs.orm.dao.IDao;
-import com.ajaxjs.orm.dao.PageResult;
 
 /**
  * Data Acccess Object for testing.

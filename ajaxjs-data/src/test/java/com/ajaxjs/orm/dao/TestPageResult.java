@@ -5,8 +5,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.ajaxjs.mock.News;
-
 public class TestPageResult {
 	@Test
 	public void testPageResult() {

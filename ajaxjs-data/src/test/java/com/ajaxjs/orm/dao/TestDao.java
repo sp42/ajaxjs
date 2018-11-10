@@ -11,7 +11,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.mock.News;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.TestJdbcConnection;
 
