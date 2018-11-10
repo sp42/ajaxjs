@@ -15,8 +15,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.junit.Test;
-
 /**
  * Servlet implementation class JsController
  */
@@ -85,7 +83,6 @@ public class JsController extends HttpServlet {
 		}
 	}
 
-	@Test
 	public void test() throws IOException {
 		String content = read("c://temp//newfile.txt");
 		System.out.println(content);
