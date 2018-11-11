@@ -38,7 +38,7 @@ public class TestJdbcHelper {
 
 	@Before
 	public void setUp() throws SQLException {
-		conn = JdbcConnection.getSqliteConnection(TestJdbcConnection.testUsed_sqlite);
+		conn = JdbcConnection.getTestSqliteConnection();
 		conn.setAutoCommit(true);
 	}
 

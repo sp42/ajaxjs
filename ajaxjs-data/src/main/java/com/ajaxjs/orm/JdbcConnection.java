@@ -27,6 +27,7 @@ import javax.sql.DataSource;
 import org.sqlite.SQLiteDataSource;
 import org.sqlite.SQLiteJDBCLoader;
 
+import com.ajaxjs.util.io.resource.ScanClass;
 import com.ajaxjs.util.logger.LogHelper;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
@@ -286,6 +287,20 @@ public class JdbcConnection {
 	 */
 	public static Connection getSqliteConnection(String url) {
 		return getConnection(getSqliteDataSource(url));
+	}
+	
+	/**
+	 * 测试用数据库（SQLite）
+	 */
+	public static final String testUsed_sqlite = ScanClass.getResourcesByFileName("foo.sqlite");
+	
+	/**
+	 * 创建 SQLite 数据库连接对象（测试用）
+	 *
+	 * @return 数据库连接对象
+	 */
+	public static Connection getTestSqliteConnection() {
+		return getSqliteConnection(testUsed_sqlite);
 	}
 
 	/**

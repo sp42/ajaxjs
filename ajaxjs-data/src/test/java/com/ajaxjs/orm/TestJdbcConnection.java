@@ -1,6 +1,13 @@
 package com.ajaxjs.orm;
 
-import static com.ajaxjs.orm.JdbcConnection.*;
+import static com.ajaxjs.orm.JdbcConnection.addSql;
+import static com.ajaxjs.orm.JdbcConnection.clean;
+import static com.ajaxjs.orm.JdbcConnection.getConnection;
+import static com.ajaxjs.orm.JdbcConnection.getDataSource;
+import static com.ajaxjs.orm.JdbcConnection.getTestSqliteConnection;
+import static com.ajaxjs.orm.JdbcConnection.initSqliteDBConnection;
+import static com.ajaxjs.orm.JdbcConnection.setConnection;
+import static com.ajaxjs.orm.JdbcConnection.testUsed_sqlite;
 import static org.junit.Assert.assertNotNull;
 
 import java.sql.Connection;
@@ -10,19 +17,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.util.io.resource.ScanClass;
-
 public class TestJdbcConnection {
 	Connection conn;
 
-	/**
-	 * 测试用数据库（SQLite）
-	 */
-	public static final String testUsed_sqlite = ScanClass.getResourcesByFileName("foo.sqlite");
 
 	@Before
 	public void setUp() throws SQLException {
-		conn = getSqliteConnection(testUsed_sqlite);
+		conn = getTestSqliteConnection();
 	}
 
 	@After

@@ -161,23 +161,29 @@ public class DaoHandler<T> extends JdbcHelper implements InvocationHandler {
 		args = s.args;
 		sql = s.sql;
 
+		Object result = null;
+		
 		if (returnType == int.class) {
-			return queryOne(conn, sql, int.class, args);
+			result = queryOne(conn, sql, int.class, args);
 		} else if (returnType == Integer[].class) {
-			return queryArray(conn, sql, Integer.class, args); // 不支持int[]
+			result = queryArray(conn, sql, Integer.class, args); // 不支持int[]
 		} else if (returnType == String.class) {
-			return queryOne(conn, sql, String.class, args);
+			result = queryOne(conn, sql, String.class, args);
 		} else if (returnType == List.class) {
-			return queryAsBeanList(entryType, conn, sql, args);
+			result = queryAsBeanList(entryType, conn, sql, args);
 		} else if (returnType == PageResult.class) {// 分页
 //				queryParam.order = new HashMap<>(); // 默认按照 id 排序
 //				queryParam.order.put("id", "DESC");
 //				sql = queryParam.orderToSql(sql);
-			return PageResult.doPage(conn, entryType, select, sql, method, args);
+			result = PageResult.doPage(conn, entryType, select, sql, method, args);
 		} else {
-			// TODO
-			return null;
+			// bean
+			result = queryAsBean(returnType, conn, sql, args);
 		}
+		
+		System.out.println(returnType);
+		
+		return result;
 	}
 
 	/**
