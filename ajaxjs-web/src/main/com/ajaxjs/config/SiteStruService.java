@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.ajaxjs.Version;
 import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.js.JsonStruTraveler;
-import com.ajaxjs.simpleApp.Constant;
+import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.logger.LogHelper;
 

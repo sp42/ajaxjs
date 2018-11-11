@@ -36,15 +36,6 @@ public class MockResponse {
 			public String toString() {
 				return os.toString();
 			}
-
-			@Override
-			public boolean isReady() {
-				return false;
-			}
-
-			@Override
-			public void setWriteListener(WriteListener arg0) {
-			}
 		};
 
 		try {

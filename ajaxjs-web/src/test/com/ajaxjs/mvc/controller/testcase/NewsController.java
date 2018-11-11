@@ -1,11 +1,16 @@
 package com.ajaxjs.mvc.controller.testcase;
 
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
+
 import com.ajaxjs.framework.News;
-import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.simpleApp.CommonController;
-
-import javax.ws.rs.*;
 
 @Path("/news")
 public class NewsController extends CommonController<News, Long> {
@@ -18,25 +23,25 @@ public class NewsController extends CommonController<News, Long> {
 
 	@GET
 	@Path("/{id}")
-	public String getInfo(@PathParam("id") Long id, ModelAndView model) throws ServiceException {
+	public String getInfo(@PathParam("id") Long id, ModelAndView model)  {
 
 		return "";
 	}
 
 	@POST
-	public String create(News news, ModelAndView model) throws ServiceException {
+	public String create(News news, ModelAndView model)  {
 		return "";
 	}
 
 	@PUT
 	@Path("/{id}")
-	public String update(@PathParam("id") Long id, News news, ModelAndView model) throws ServiceException {
+	public String update(@PathParam("id") Long id, News news, ModelAndView model)  {
 		return "";
 	}
 
 	@DELETE
 	@Path("/{id}")
-	public String delete(News news, ModelAndView model) throws ServiceException {
+	public String delete(News news, ModelAndView model)  {
 		return "";
 	}
 }

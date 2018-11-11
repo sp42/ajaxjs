@@ -1,33 +1,17 @@
-/**
- * Copyright sp42 frank@ajaxjs.com
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.ajaxjs.framework;
 
 import java.math.BigDecimal;
 
-import com.ajaxjs.framework.BaseModel;
-
 /**
- * A Dummy bean for testing.
+ * 测试用
  * 
- * @author sp42 frank@ajaxjs.com
+ * @author Frank Cheung
  *
  */
 public class News extends BaseModel {
-	private static final long serialVersionUID = 9134895000164862118L;
-	
+
+	private static final long serialVersionUID = 438665753522656855L;
+
 	private BigDecimal price;
 
 	public BigDecimal getPrice() {
@@ -37,4 +21,5 @@ public class News extends BaseModel {
 	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
+
 }

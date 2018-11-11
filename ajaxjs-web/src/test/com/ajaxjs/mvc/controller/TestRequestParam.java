@@ -22,15 +22,10 @@ import javax.ws.rs.QueryParam;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.ajaxjs.framework.News;
 import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.mvc.controller.ControllerScanner;
-import com.ajaxjs.mvc.controller.IController;
-import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.mvc.controller.RequestParam;
 import com.ajaxjs.web.mock.MockRequest;
 import com.ajaxjs.web.mock.MockResponse;
-
-import com.ajaxjs.mvc.controller.testcase.News;
 
 //import com.ajaxjs.framework.testcase.News;
 

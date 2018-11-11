@@ -23,8 +23,6 @@ import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.js.JsonStruTraveler;
 import com.ajaxjs.keyvalue.MappingJson;
 import com.ajaxjs.keyvalue.MappingValue;
-import com.ajaxjs.mvc.filter.DataBaseFilter;
-import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -252,17 +250,4 @@ public class ConfigService {
 		FileUtil.save(ConfigService.jsonPath, json);
 	}
 
-	/**
-	 * 单测专用的初始化数据库连接方法
-	 * 
-	 * @param configFile JSON 配置文件
-	 */
-	public static void initTestConnection(String configFile) {
-		ConfigService.load(configFile);
-		JdbcConnection.setConnection(JdbcConnection.getTestMySqlConnection(ConfigService.getValueAsString("testServer.mysql.url"), ConfigService.getValueAsString("testServer.mysql.user"),
-				ConfigService.getValueAsString("testServer.mysql.password")));
-		
-		DataBaseFilter.isAutoClose = false;
-
-	}
 }
