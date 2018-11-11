@@ -9,20 +9,19 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.ajaxjs.framework.News;
 import com.ajaxjs.framework.service.aop.CacheService;
 import com.ajaxjs.framework.service.aop.CommonTestService;
 import com.ajaxjs.framework.service.aop.ValidationService;
 import com.ajaxjs.framework.testcase.NewsService;
 import com.ajaxjs.framework.testcase.NewsServiceImpl;
 import com.ajaxjs.ioc.Aop;
-import com.ajaxjs.mock.News;
-import com.ajaxjs.orm.DataSourceTestCase;
 import com.ajaxjs.orm.JdbcConnection;
 
 public class TestServiceAop {
 	@Before
 	public void init() throws SQLException {
-		JdbcConnection.setConnection(DataSourceTestCase.getDataSource().getConnection());
+		JdbcConnection.setConnection(JdbcConnection.getTestSqliteConnection());
 	}
 
 	@After

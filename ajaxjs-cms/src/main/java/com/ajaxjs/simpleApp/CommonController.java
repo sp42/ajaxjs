@@ -33,6 +33,7 @@ import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.keyvalue.BeanUtil;
 import com.ajaxjs.keyvalue.MappingHelper;
 import com.ajaxjs.keyvalue.MappingJson;
+import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;

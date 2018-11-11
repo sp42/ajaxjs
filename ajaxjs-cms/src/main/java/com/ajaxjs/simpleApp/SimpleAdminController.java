@@ -3,6 +3,7 @@ package com.ajaxjs.simpleApp;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
+import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.controller.IController;
 
 /**

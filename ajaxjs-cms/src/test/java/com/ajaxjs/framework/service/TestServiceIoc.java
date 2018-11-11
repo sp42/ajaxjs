@@ -12,14 +12,12 @@ import org.junit.Test;
 import com.ajaxjs.framework.testcase.FakeController;
 import com.ajaxjs.framework.testcase.NewsService;
 import com.ajaxjs.ioc.BeanContext;
-import com.ajaxjs.mvc.controller.testcase.FilterController;
-import com.ajaxjs.orm.DataSourceTestCase;
 import com.ajaxjs.orm.JdbcConnection;
 
 public class TestServiceIoc {
 	@Before
 	public void init() throws SQLException {
-		JdbcConnection.setConnection(DataSourceTestCase.getDataSource().getConnection());
+		JdbcConnection.setConnection(JdbcConnection.getTestSqliteConnection());
 	}
 
 	@After
@@ -35,7 +33,7 @@ public class TestServiceIoc {
 
 		assertNotNull(newsService);
 		assertEquals("新闻", newsService.getName());
-		FilterController controller = (FakeController) BeanContext.getBean("Controller");
+		FakeController controller = (FakeController) BeanContext.getBean("Controller");
 
 		assertNotNull(controller.getService());
 	}

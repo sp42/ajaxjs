@@ -26,6 +26,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.keyvalue.MappingHelper;
+import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.util.io.FileUtil;

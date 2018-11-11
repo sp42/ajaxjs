@@ -18,7 +18,7 @@ import com.ajaxjs.orm.dao.PageResult;
 public class TestService {
 	@Before
 	public void init() throws SQLException {
-		JdbcConnection.setConnection(JdbcConnection.getSqliteConnection());
+		JdbcConnection.setConnection(JdbcConnection.getTestSqliteConnection());
 	}
 
 	@After
