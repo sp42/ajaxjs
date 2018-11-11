@@ -7,7 +7,7 @@
 - 前端：[Vue.js](https://cn.vuejs.org/)（MVVM+组件化） + [LESS.js](http://lesscss.org/)
 - 后端：Java 1.8 + Tomcat 8 + [Reactor 3](https://projectreactor.io/) + MySQL/SQLite
 
-代码精炼简洁，很少第三方的库或包依赖。功能不算很多，但应该较为实用的那些，也可以在此基础上进行扩展。虽是“轮子”但代码都自己理过一遍，务求清晰易懂易修改。文档、注释、单测等齐备。详见官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/) 介绍。 
+代码精炼简洁，很少第三方的库或包依赖。功能不算很多，但应该较为实用的那些，而且是尽量靠拢 Java 8 新特性来封装。虽是“轮子”但代码都自己理过一遍，务求清晰易懂易修改。文档、注释、单测等齐备。详见官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/) 介绍。 
 
 ### 各项目一览
 
@@ -18,9 +18,8 @@
 |ajaxjs-web|MVC 框架，类似 Spring MVC 的实现，[浏览项目 readme](ajaxjs-web)|ajaxjs-base|jar|
 |ajaxjs-web-js|独立的前端框架，基于 vue.js 2.x，[浏览项目 readme](ajaxjs-web-js)|vue.js|jar|
 |ajaxjs-cms|整个各个子项目的网站发布系统，[浏览项目 readme](ajaxjs-cms)|ajaxjs-data/ajaxjs-web|jar|
-|ajaxjs-demo|一个包含前后台的网站，方便学习或作为快速手脚架，[浏览项目 readme](ajaxjs-demo)|ajaxjs-cms|war|
+|ajaxjs-demo|一个包含前后台的网站，可方便学习或作为快速手脚架，[浏览项目 readme](ajaxjs-demo)|ajaxjs-cms|war|
 
-除了前端 js 项目外，依赖关系由上至下排列。
 
 为方便管理，当前在一个 repository 中存放多个项目，且同时支持 Git/SVN 存取。如果您想单独检出某个项目，建议使用 SVN 然后指定目录检出。
 
