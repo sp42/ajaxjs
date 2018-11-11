@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.ajaxjs.orm.JdbcConnection;
-import com.ajaxjs.orm.TestJdbcConnection;
 
 public class TestDao {
 	NewsDao dao;
