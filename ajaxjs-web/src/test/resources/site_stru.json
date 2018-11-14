@@ -1,0 +1,45 @@
+[
+	{
+		"name": "客户专区",
+		"id": "client"
+	},
+	{
+		"name": "信贷经理",
+		"id": "manager"
+	},
+	{
+		"name": "最新资讯",
+		"id": "news"
+	},
+	{
+		"name": "关于我们",
+		"id": "about",
+		"children": [
+			{
+				"name": "关于“无忧在线”",
+				"id": "intro"
+			},{
+				"name": "帮助中心",
+				"id": "help"
+			},{
+				"name": "人才招聘",
+				"id": "hr"
+			},{
+				"name": "隐私政策",
+				"id": "privacy"
+			},{
+				"name": "网站服务条款",
+				"id": "service"
+			}
+		]
+	},
+	{
+		"name": "会员专区",
+		"id": "user"
+	},
+	{
+		"name": "下载 App",
+		"id": "app"
+	}
+	
+]
