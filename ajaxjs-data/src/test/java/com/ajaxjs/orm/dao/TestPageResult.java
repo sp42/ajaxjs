@@ -12,7 +12,7 @@ public class TestPageResult {
 		news.setName("Test");
 
 		PageResult<News> result = new PageResult<>();
-//		result.addAll(new News[] { news });
+		result.add(news);
 		assertNotNull(result);
 
 		assertTrue(result.size() == 1);
