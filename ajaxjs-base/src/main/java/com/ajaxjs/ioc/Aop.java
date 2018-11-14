@@ -18,6 +18,7 @@ package com.ajaxjs.ioc;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Objects;
 
 /**
  * AOP 抽象类
@@ -63,8 +64,7 @@ public abstract class Aop<T> implements InvocationHandler {
 	 */
 	@SuppressWarnings("unchecked")
 	public T bind(T target) {
-		if (target == null)
-			throw new NullPointerException("proxy 对象不能为空！");
+		Objects.toString(target, "proxy 对象不能为空！");
 
 		this.target = target;
 

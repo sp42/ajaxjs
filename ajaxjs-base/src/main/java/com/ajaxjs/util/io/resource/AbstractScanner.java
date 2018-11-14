@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -107,8 +108,7 @@ public abstract class AbstractScanner<T> {
 	private static Enumeration<URL> getResources(String packageDirName) {
 		try {
 			Enumeration<URL> url = Thread.currentThread().getContextClassLoader().getResources(packageDirName);
-			if (url == null)
-				throw new NullPointerException(packageDirName + "没有这个 Java 目录。");
+			Objects.requireNonNull(url, packageDirName + "没有这个 Java 目录。");
 
 			return url;
 		} catch (IOException e) {

@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.util.ReflectUtil;
@@ -46,12 +47,9 @@ public class BeanUtil extends ReflectUtil {
 	 */
 	public static void setProperty(Object bean, String name, Object value) {
 		String setMethodName = "set" + firstLetterUpper(name);
-
-		if (bean == null)
-			throw new NullPointerException(bean + "执行：" + setMethodName + " 未发现类");
-		if (value == null) {
-			throw new NullPointerException(bean + "执行：" + setMethodName + " 未发现参数 value");
-		}
+		
+		Objects.requireNonNull(bean, bean + "执行：" + setMethodName + " 未发现类");
+		Objects.requireNonNull(value, bean + "执行：" + setMethodName + " 未发现参数 value");
 
 		Class<?> clazz = bean.getClass();
 
@@ -68,8 +66,7 @@ public class BeanUtil extends ReflectUtil {
 		}
 
 		// 最终还是找不到
-		if (method == null)
-			throw new NullPointerException(clazz.getName() + " 找不到目标方法！" + setMethodName);
+		Objects.requireNonNull(method, clazz.getName() + " 找不到目标方法！" + setMethodName);
 
 		executeMethod(bean, method, value);
 	}

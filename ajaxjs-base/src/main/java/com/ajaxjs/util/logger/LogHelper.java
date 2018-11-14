@@ -48,6 +48,14 @@ public class LogHelper {
 
 		logger.setFilter(filter);
 	}
+	
+	/**
+	 * 简单打印信息，用于代替 System.out.println()
+	 * @param msg
+	 */
+	public static void log(String msg) {
+		Logger.getGlobal().info(msg);
+	}
 
 	@SuppressWarnings("unused")
 	private static FileHandler fileHandler;

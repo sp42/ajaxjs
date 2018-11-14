@@ -1,6 +1,6 @@
 # AJAXJS Framework Base 基础库
 
-AJAXJS Base，是一个小型的、快速可用的工具库。为纯 Java 项目。有以下子模块：
+AJAXJS Base 是一个小型的、快速可用的工具库，基本没有依赖其他第三方组件，为纯 Java 项目。有以下子模块：
 
 - ioc/aop，一个简易的 ioc 依赖注射实现。[原理](http://blog.csdn.net/zhangxin09/article/details/43161215) 还有一个基于 Java 动态代理的 aop 实现
 - js/jsonparser，小型 JSON 解析器，实现 JSON 与 Map/List 互换，是了解 JSON 解析的好例子。[>>详细用法参见文档](http://ajaxjs.mydoc.io/?t=208700)。
