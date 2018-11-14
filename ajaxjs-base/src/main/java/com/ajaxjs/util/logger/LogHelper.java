@@ -15,6 +15,7 @@
  */
 package com.ajaxjs.util.logger;
 
+import java.util.Arrays;
 import java.util.logging.Filter;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
@@ -53,9 +54,18 @@ public class LogHelper {
 	 * 简单打印信息，用于代替 System.out.println()
 	 * @param msg
 	 */
-	public static void log(String msg) {
+	public static void p(String msg) {
 		Logger.getGlobal().info(msg);
 	}
+	/**
+	 * 简单打印信息，用于代替 System.out.println()
+	 * @param msg
+	 */
+	public static void p(Object[] arr) {
+		Logger.getGlobal().info(Arrays.toString(arr));
+	}
+	
+	
 
 	@SuppressWarnings("unused")
 	private static FileHandler fileHandler;
