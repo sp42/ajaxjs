@@ -7,7 +7,7 @@
 - 前端：[Vue.js](https://cn.vuejs.org/)（MVVM+组件化） + [LESS.js](http://lesscss.org/)
 - 后端：Java 1.8 + Tomcat 8 + [Reactor 3](https://projectreactor.io/) + MySQL/SQLite + Swagger V3 接口文档服务
 
-AJAXJS 很少第三方的库或包依赖。功能不算很多，但应该较为实用的那些。尽管“轮子”但代码都自己理过一遍，务求清晰精炼易懂易修改。文档、注释、单测等齐备。详见官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/) 介绍。 
+AJAXJS 很少第三方的库或包依赖。功能不算很多，但应该较为实用的那些。尽管“轮子”但代码都自己理过一遍，务求清晰精炼易懂易修改，避免晦涩的地方。文档、注释、单测等齐备。详见官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/) 介绍。 
 
 ### 各项目一览
 
@@ -15,7 +15,7 @@ AJAXJS 很少第三方的库或包依赖。功能不算很多，但应该较为�
 |------|-----|----|------|
 |ajaxjs-base|基础库，包含大量工具函数和实用方法，[浏览项目 readme](ajaxjs-base)|无|jar|
 |ajaxjs-data|数据层，类似 DBUtils 的 JDBC 封装，更小巧和简单，[浏览项目 readme](ajaxjs-data)|ajaxjs-base|jar|
-|ajaxjs-web|MVC 框架，类似 Spring MVC 的实现，[浏览项目 readme](ajaxjs-web)|ajaxjs-base|jar|
+|ajaxjs-web|MVC 框架，类似 Spring MVC 的精简实现，[浏览项目 readme](ajaxjs-web)|ajaxjs-base|jar|
 |ajaxjs-web-js|独立的前端框架，基于 vue.js 2.x，[浏览项目 readme](ajaxjs-web-js)|vue.js|jar|
 |ajaxjs-cms|整个各个子项目的网站发布系统，[浏览项目 readme](ajaxjs-cms)|ajaxjs-data/ajaxjs-web|jar|
 |ajaxjs-demo|一个包含前后台的网站，可方便学习或作为快速手脚架，[浏览项目 readme](ajaxjs-demo)|ajaxjs-cms|war|
