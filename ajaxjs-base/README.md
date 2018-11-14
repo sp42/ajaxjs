@@ -13,6 +13,10 @@ AJAXJS Base 是一个小型的、快速可用的工具库，基本没有依赖�
 - net/http，发送 HTTP 的客户端
 - keyvalue，键对值转换的助手类
 
+要求 Java 1.8+
+
+Jar 直接下载：[130kb](https://search.maven.org/remotecontent?filepath=com/ajaxjs/ajaxjs-data/1.0.6/ajaxjs-data-1.0.6.jar)
+
 Maven 坐标：
 
 ```
