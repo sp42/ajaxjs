@@ -15,7 +15,7 @@ AJAXJS Base 是一个小型的、快速可用的工具库，基本没有依赖�
 
 要求 Java 1.8+
 
-Jar 直接下载：[130kb](https://search.maven.org/remotecontent?filepath=com/ajaxjs/ajaxjs-data/1.0.6/ajaxjs-data-1.0.6.jar)
+Jar 直接下载：[130kb](https://search.maven.org/remotecontent?filepath=com/ajaxjs/ajaxjs-base/1.1.6/ajaxjs-base-1.1.6.jar)
 
 Maven 坐标：
 
