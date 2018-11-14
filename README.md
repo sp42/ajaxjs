@@ -7,7 +7,7 @@
 - 前端：[Vue.js](https://cn.vuejs.org/)（MVVM+组件化） + [LESS.js](http://lesscss.org/)
 - 后端：Java 1.8 + Tomcat 8 + [Reactor 3](https://projectreactor.io/) + MySQL/SQLite + Swagger V3 接口文档服务
 
-代码精炼简洁，很少第三方的库或包依赖。功能不算很多，但应该较为实用的那些。尽管“轮子”但代码都自己理过一遍，务求清晰易懂易修改。文档、注释、单测等齐备。详见官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/) 介绍。 
+AJAXJS 很少第三方的库或包依赖。功能不算很多，但应该较为实用的那些。尽管“轮子”但代码都自己理过一遍，务求清晰精炼易懂易修改。文档、注释、单测等齐备。详见官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/) 介绍。 
 
 ### 各项目一览
 
