@@ -1,6 +1,6 @@
 AJAXJS-Data 简介
 ===========
-AJAJX-Data 类似于 DBUtils 的数据库工具程序，但更为简单和轻量级，核心的类只有两个：JdbcHelper（不超过 600 行）和 DaoHandler（不超过 250 行）。
+AJAJX-Data 类似于 DBUtils 的数据库工具程序，但更为简单和干净，核心的类只有两个：JdbcHelper（不超过 600 行）和 DaoHandler（不超过 250 行）。
 
 AJAXJS-Data 主要实现了以下功能：
 
