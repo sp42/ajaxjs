@@ -85,7 +85,7 @@ public class SiteStruService implements ServletContextListener {
 			LOGGER.infoGreen("加载网站的结构文件成功 Site Structure Config Loaded.");
 		} else
 			LOGGER.info("没有网站的结构文件");
-		
+
 		cxt.setAttribute("ctx", cxt.getContextPath());
 		cxt.setAttribute("ajaxjsui", cxt.getContextPath() + "/" + Constant.ajajx_ui);
 		cxt.setAttribute("commonAsset", cxt.getContextPath() + "/" + Constant.commonAsset); // 静态资源目录
@@ -210,9 +210,8 @@ public class SiteStruService implements ServletContextListener {
 	 * @return 页脚的网站地图
 	 */
 	public String getSiteMap(HttpServletRequest request) {
-		if (siteMapCache == null) {
+		if (siteMapCache == null) 
 			siteMapCache = getSiteMap(stru, request.getContextPath());
-		}
 
 		return siteMapCache;
 	}
@@ -256,6 +255,5 @@ public class SiteStruService implements ServletContextListener {
 
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
-
 	}
 }

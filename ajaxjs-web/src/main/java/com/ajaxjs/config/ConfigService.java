@@ -38,28 +38,11 @@ public class ConfigService {
 	 * 所有的配置保存在这个 config 中
 	 */
 	public static Config config;
+
 	/**
 	 * 所有的配置保存在这个 config 中（扁平化处理过的）
 	 */
 	public static Map<String, Object> flatConfig;
-
-	/**
-	 * 获取配置
-	 * 
-	 * @return 所有的配置
-	 */
-	public Config getConfig() {
-		return config;
-	}
-
-	/**
-	 * 获取扁平化配置
-	 * 
-	 * @return 扁平化配置
-	 */
-	public Map<String, Object> getFlatConfig() {
-		return flatConfig;
-	}
 
 	/**
 	 * 配置 json 文件的路径
@@ -102,8 +85,21 @@ public class ConfigService {
 		String jsonStr = MappingJson.stringifyMap(config);
 		config.setJsonStr(jsonStr);
 
-		// 保存文件
-		new FileUtil().setFilePath(config.getJsonPath()).setContent(jsonStr).save();
+		new FileUtil().setFilePath(config.getJsonPath()).setContent(jsonStr).save();// 保存文件
+	}
+
+	private static <T> T get(String key, T isNullValue, Class<T> vType) {
+		if (flatConfig == null || !config.isLoaded())
+			return isNullValue;
+
+		Object v = flatConfig.get(key);
+
+		if (v == null) {
+			LOGGER.warning("没发现配置 " + key);
+			return isNullValue;
+		}
+
+		return MappingValue.TypeConvert(v, vType);
 	}
 
 	/**
@@ -113,17 +109,7 @@ public class ConfigService {
 	 * @return 配置内容
 	 */
 	public static boolean getValueAsBool(String key) {
-		if (flatConfig == null || !config.isLoaded())
-			return false;
-
-		Object v = flatConfig.get(key);
-
-		if (v == null) {
-			LOGGER.warning("没发现配置 " + key);
-			return false;
-		}
-
-		return MappingValue.TypeConvert(flatConfig.get(key), boolean.class);
+		return get(key, false, boolean.class);
 	}
 
 	/**
@@ -133,18 +119,7 @@ public class ConfigService {
 	 * @return 配置内容
 	 */
 	public static int getValueAsInt(String key) {
-		if (flatConfig == null || !config.isLoaded())
-			return 0;
-
-		// js number 在 java 里面为 double 转换一下
-		Object number = flatConfig.get(key);
-
-		if (number == null) {
-			LOGGER.warning("没发现配置 " + key);
-			return 0;
-		}
-
-		return MappingValue.TypeConvert(number, int.class);
+		return get(key, 0, int.class);
 	}
 
 	/**
@@ -154,18 +129,7 @@ public class ConfigService {
 	 * @return 配置内容
 	 */
 	public static long getValueAsLong(String key) {
-		if (flatConfig == null || !config.isLoaded())
-			return 0L;
-
-		// js number 在 java 里面为 double 转换一下
-		Object number = flatConfig.get(key);
-
-		if (number == null) {
-			LOGGER.warning("没发现配置 " + key);
-			return 0L;
-		}
-
-		return MappingValue.TypeConvert(number, long.class);
+		return get(key, 0L, long.class);
 	}
 
 	/**
@@ -175,17 +139,7 @@ public class ConfigService {
 	 * @return 配置内容
 	 */
 	public static String getValueAsString(String key) {
-		if (flatConfig == null || !config.isLoaded())
-			return null;
-
-		Object v = flatConfig.get(key);
-
-		if (v == null) {
-			LOGGER.warning("没发现配置 " + key);
-			return null;
-		}
-
-		return MappingValue.TypeConvert(v, String.class);
+		return get(key, null, String.class);
 	}
 
 	/**
@@ -198,12 +152,11 @@ public class ConfigService {
 
 		if (arr.length < 1)
 			return null;
+
 		String[] arr2 = new String[arr.length];
 
-		for (int i = 0; i < arr.length; i++) {
-
+		for (int i = 0; i < arr.length; i++)
 			arr2[i] = "[\"" + arr[i] + "\"]";
-		}
 
 		return String.join("", arr2);
 	}

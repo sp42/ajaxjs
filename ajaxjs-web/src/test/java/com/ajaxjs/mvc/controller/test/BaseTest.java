@@ -1,4 +1,4 @@
-package com.ajaxjs.mvc.controller;
+package com.ajaxjs.mvc.controller.test;
 
 import javax.servlet.ServletException;
 

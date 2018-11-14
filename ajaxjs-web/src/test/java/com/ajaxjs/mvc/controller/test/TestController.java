@@ -1,4 +1,4 @@
-package com.ajaxjs.mvc.controller;
+package com.ajaxjs.mvc.controller.test;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -28,6 +28,7 @@ public class TestController {
 	@Mock
     private RequestDispatcher _dispatcher;
  
+	
 	@Test
 	public void testNews() throws ServletException, IOException {
 		FilterConfig filterConfig = mock(FilterConfig.class);

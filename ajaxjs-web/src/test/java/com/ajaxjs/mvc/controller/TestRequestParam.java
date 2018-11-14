@@ -27,8 +27,6 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.web.mock.MockRequest;
 import com.ajaxjs.web.mock.MockResponse;
 
-//import com.ajaxjs.framework.testcase.News;
-
 public class TestRequestParam {
 
 	@Path("/foo")
@@ -63,7 +61,6 @@ public class TestRequestParam {
 	}
 
 	static Map<String, String[]> map = new HashMap<>();
-
 
 	@Test
 	public void testGetArgs() {

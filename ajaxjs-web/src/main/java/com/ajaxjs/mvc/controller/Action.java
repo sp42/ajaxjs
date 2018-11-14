@@ -31,7 +31,7 @@ public class Action {
 	public String path;
 
 	/**
-	 * 控制器实例，方便反射时候跳用（如果 HTTP 对应控制器没有，则读取这个）
+	 * 控制器实例，方便反射时候调用（如果 HTTP 对应控制器没有，则读取这个）
 	 */
 	public IController controller;
 

@@ -21,6 +21,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,8 +47,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	/**
 	 * 创建一个 MVC 请求对象。构造方法会自动加入 UTF-8 编码。
 	 * 
-	 * @param request
-	 *            原始请求对象
+	 * @param request 原始请求对象
 	 */
 	public MvcRequest(HttpServletRequest request) {
 		super(request);
@@ -56,22 +56,6 @@ public class MvcRequest extends HttpServletRequestWrapper {
 			setCharacterEncoding(StandardCharsets.UTF_8.toString());// 为防止中文乱码，统一设置 UTF-8，设置请求编码方式
 		} catch (UnsupportedEncodingException e) {
 		}
-	}
-	
-	/**
-	 * 获取必填的参数
-	 * @param name 參數名称
-	 * @return 参数值
-	 */
-	public String getRequiredParameter(String name) {
-		if(name == null)
-			throw new NullPointerException("缺少参数名称");
-		
-		String value = getParameter(name);
-		if (CommonUtil.isEmptyString(value)) 
-			throw new IllegalArgumentException("缺少参数！");
-		
-		return value;
 	}
 
 	/**
@@ -95,11 +79,16 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	 */
 	public String getRoute() {
 		String route = getRequestURI().replace(getContextPath(), "");
-		return route.replaceFirst("/\\w+\\.\\w+$", ""); // 删除 index.jsp
+		return route.replaceFirst("/\\w+\\.\\w+$", ""); // 删除最后的 index.jsp
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public String getFolder() {
-		return getRequestURI().replace(getContextPath(), "").replaceFirst("^/", "").replaceFirst("/\\w+\\.\\w+$", ""); // 删除 index.jsp;
+//		return getRequestURI().replace(getContextPath(), "").replaceFirst("^/", "").replaceFirst("/\\w+\\.\\w+$", "");
+		return getRoute().replaceFirst("^/", "");
 	}
 
 	/**
@@ -118,32 +107,26 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * 取去 url 上的值
+	 * 去取 url 上的值
 	 * 
-	 * @param value
-	 *            值
-	 * @param paramName
-	 *            参数名称
+	 * @param value     值
+	 * @param paramName 参数名称
 	 * @return 值
 	 */
 	public String getValueFromPath(String value, String paramName) {
 		/* 如果 context path 上有数字那就bug，所以先去掉 */
-		String requestURI = getRequestURI().replace(getContextPath(), ""), regExp = "(" + value.replace("{" + paramName + "}", ")(\\d+)");/* 获取正则 暂时写死 数字 TODO */
+		String url = getRoute(), regExp = "(" + value.replace("{" + paramName + "}", ")(\\d+)");/* 获取正则 暂时写死 数字 TODO */
 
-		Matcher m = Pattern.compile(regExp).matcher(requestURI);
+		Matcher m = Pattern.compile(regExp).matcher(url);
 		String result = m.find() ? m.group(m.groupCount()) : null;
 
-		if (result == null)
-			throw new IllegalArgumentException("在 " + requestURI + "不能获取 " + paramName + "参数");
-
-		return result;
+		return Objects.requireNonNull(result, "在 " + url + " 不能获取 " + paramName + " 参数");
 	}
 
 	/**
 	 * 支持自动获取请求参数并封装到 bean 内
 	 * 
-	 * @param clazz
-	 *            Bean 的类引用
+	 * @param clazz Bean 的类引用
 	 * @return Java Bean
 	 */
 	public <T> T getBean(Class<T> clazz) {
@@ -155,7 +138,8 @@ public class MvcRequest extends HttpServletRequestWrapper {
 			map = MapHelper.asObject(MapHelper.toMap(getParameterMap()), true);
 		}
 
-		// 抛出 IllegalArgumentException 这个异常 有可能是参数类型不一致造成的，要求的是 string 因为 map 从 request 转换时已经变为 int（例如纯数字的时候）
+		// 抛出 IllegalArgumentException 这个异常 有可能是参数类型不一致造成的，要求的是 string 因为 map 从 request
+		// 转换时已经变为 int（例如纯数字的时候）
 		// 所以最后一个参数为 true
 		return BeanUtil.map2Bean(map, clazz, true);
 	}
@@ -163,21 +147,20 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	/**
 	 * 遍历注解的配置，需要什么类，收集起来，放到一个 hash 之中， Servlet 或 Filter 通用
 	 * 
-	 * @param servletCfg
-	 *            这两个参数任选一个，但不能同时传
-	 * @param filterCfg
-	 *            这两个参数任选一个，但不能同时传
+	 * @param servletCfg 这两个参数任选一个，但不能同时传
+	 * @param filterCfg  这两个参数任选一个，但不能同时传
 	 * @return 指定的 Servlet 或 Filter 配置对象
 	 */
-	public static Map<String, String> parseInitParams(ServletConfig servletCfg, FilterConfig filterCfg) {
+	public static Map<String, String> initParams2map(ServletConfig servletCfg, FilterConfig filterCfg) {
 		Map<String, String> map = new HashMap<>();
 
-		Enumeration<String> initParams = servletCfg == null ? filterCfg.getInitParameterNames() : servletCfg.getInitParameterNames();
+		Enumeration<String> initParams = servletCfg == null ? filterCfg.getInitParameterNames()
+				: servletCfg.getInitParameterNames();
 
 		while (initParams.hasMoreElements()) {
 			String key = initParams.nextElement();
-
 			String value;
+
 			if (servletCfg == null)
 				value = filterCfg.getInitParameter(key);
 			else
@@ -197,8 +180,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	/**
 	 * 保存到 request
 	 * 
-	 * @param map
-	 *            请求参数
+	 * @param map 请求参数
 	 */
 	public void saveToReuqest(Map<String, Object> map) {
 		for (String key : map.keySet())
@@ -217,8 +199,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	/**
 	 * 保存一个 request 对象
 	 * 
-	 * @param request
-	 *            请求对象
+	 * @param request 请求对象
 	 */
 	public static void setHttpServletRequest(HttpServletRequest request) {
 		threadLocalRequest.set(request);
@@ -253,8 +234,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	/**
 	 * 保存一个 response 对象
 	 * 
-	 * @param response
-	 *            响应对象
+	 * @param response 响应对象
 	 */
 	public static void setHttpServletResponse(HttpServletResponse response) {
 		threadLocalResponse.set(response);
@@ -282,12 +262,10 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * 获取磁盘真實地址。
+	 * 获取磁盘真實地址
 	 * 
-	 * @param cxt
-	 *            Web 上下文
-	 * @param relativePath
-	 *            相对地址
+	 * @param cxt          Web 上下文
+	 * @param relativePath 相对地址
 	 * @return 绝对地址
 	 */
 	public static String mappath(ServletContext cxt, String relativePath) {
@@ -301,8 +279,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	/**
 	 * 输入一个相对地址，补充成为绝对地址 相对地址转换为绝对地址，并转换斜杠
 	 * 
-	 * @param relativePath
-	 *            相对地址
+	 * @param relativePath 相对地址
 	 * @return 绝对地址
 	 */
 	public String mappath(String relativePath) {
@@ -327,8 +304,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	/**
 	 * 获取请求 ip
 	 * 
-	 * @param request
-	 *            请求对象
+	 * @param request 请求对象
 	 * @return 客户端 ip
 	 */
 	public String getIp() {

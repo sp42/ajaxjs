@@ -12,6 +12,19 @@ import com.ajaxjs.web.mock.MockRequest;
 
 public class TestMvcRequest {
 	@Test
+	public void testGetRequestURI() {
+		HttpServletRequest request = MockRequest.mockRequest("foo", "bar/xxx/index.jsp");
+		when(request.getAttribute("javax.servlet.forward.request_uri")).thenReturn("/abc");
+		assertEquals("/abc", new MvcRequest(request).getRequestURI());
+		assertEquals("abc", new MvcRequest(request).getFolder());
+	}
+	
+	@Test
+	public void testGetRoute() {
+		HttpServletRequest request = MockRequest.mockRequest("foo", "bar/xxx/index.jsp");
+		assertEquals("/bar/xxx", new MvcRequest(request).getRoute());
+	}
+	@Test
 	public void testGetIp() {
 		HttpServletRequest request = MockRequest.mockRequest("foo", "bar");
 		when(request.getRemoteAddr()).thenReturn("10.0.0.1");

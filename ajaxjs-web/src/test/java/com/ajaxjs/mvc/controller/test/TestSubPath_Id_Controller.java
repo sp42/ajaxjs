@@ -1,4 +1,4 @@
-package com.ajaxjs.mvc.controller;
+package com.ajaxjs.mvc.controller.test;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;

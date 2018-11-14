@@ -37,7 +37,7 @@ import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
- * Scanner controllers at Servlet starting up
+ * Servlet 启动时进行控制器扫描。Scanner controllers at Servlet starting up
  * 
  * @author Sp42 frank@ajaxjs.com
  */
@@ -45,21 +45,20 @@ public class ControllerScanner {
 	private static final LogHelper LOGGER = LogHelper.getLog(ControllerScanner.class);
 
 	/**
-	 * URL Mapping tree.
+	 * URL 与 Action 之间的映射树。URL Mapping tree.
 	 */
 	public static Map<String, Action> urlMappingTree = new HashMap<>();
 
 	/**
-	 * Parsing a Controller class.
+	 * 解析一个控制器。Parsing a Controller class.
 	 * 
-	 * @param clz a Controller class
+	 * @param clz 控制器类 a Controller class
 	 */
 	public static void add(Class<? extends IController> clz) {
 		if (!testClass(clz))
 			return;
 
-		// the path in class always starts from top 1
-		String topPath = clz.getAnnotation(Path.class).value();
+		String topPath = clz.getAnnotation(Path.class).value();// 控制器类上定义的 Path 注解总是从根目录开始的。 the path in class always starts from top 1
 		topPath = topPath.replaceAll("^/", ""); // remove the first / so that the array would be right length
 		// LOGGER.info("控制器正在解析，This controller \"{0}\" is being parsing", topPath);
 
@@ -68,8 +67,7 @@ public class ControllerScanner {
 			action = findKey(urlMappingTree, split2Queue(topPath), "");
 		} else {
 			if (urlMappingTree.containsKey(topPath)) {
-				// already there is
-				action = urlMappingTree.get(topPath);
+				action = urlMappingTree.get(topPath);// already there is
 			} else {
 				action = new Action();
 				action.path = topPath; // 需要吗？
@@ -82,14 +80,13 @@ public class ControllerScanner {
 			if (action.controller == null)
 				LOGGER.warning("在 IOC 资源库中找不到该类 {0} 的实例，请检查该类是否已经加入了 IOC 扫描？  The IOC library not found that Controller, plz check if it added to the IOC scan.", clz.getName());
 		} else {
-			// if(action.controller == null)
 			action.controller = ReflectUtil.newInstance(clz);// 保存的是 控制器 实例。
 		}
 
 		// parse class methods or find out sub-path
 		parseSubPath(clz, action);
 
-		// 会打印控制器的总路径信息，不会不会打印各个方法的路径，太细了，日志也会相应地多
+		// 会打印控制器的总路径信息，不会打印各个方法的路径，那太细了，日志也会相应地多
 		LOGGER.info("控制器已登记成功！The controller \"{0}\" (\"/{1}\") was parsed and registered", clz.toString().replaceAll("class\\s", ""), topPath); // 控制器 {0} 所有路径（包括子路径）注册成功！
 	}
 
@@ -101,7 +98,7 @@ public class ControllerScanner {
 	public static Action find(String path) {
 		Queue<String> queue = split2Queue(path);
 		Action action = onlyFindKey(urlMappingTree, queue, "");
-		
+
 		if (action == null) { // for the controller which is set Path("/"), root controller
 			queue = split2Queue2(path);
 			action = onlyFindKey(urlMappingTree, queue, "");
@@ -133,9 +130,9 @@ public class ControllerScanner {
 	}
 
 	/**
-	 * Check out all methods which has Path annotation, then add the urlMapping.
+	 * 根据路径信息加入到 urlMapping。Check out all methods which has Path annotation, then add the urlMapping.
 	 * 
-	 * @param clz 控制器类
+	 * @param clz    控制器类
 	 * @param action 父亲动作
 	 */
 	private static void parseSubPath(Class<? extends IController> clz, Action action) {
@@ -243,9 +240,10 @@ public class ControllerScanner {
 	/**
 	 * 
 	 * @param urlMappingTree A Tree contains all urlMappings
-	 * @param queue The queue of URL
-	 * @param path for remembering what findKey has travelled, here we don't use
-	 * url, because we want self-adding to match the url, if there is correct
+	 * @param queue          The queue of URL
+	 * @param path           for remembering what findKey has travelled, here we
+	 *                       don't use url, because we want self-adding to match the
+	 *                       url, if there is correct
 	 * @return the Action that looking for, null if not found
 	 */
 	private static Action findKey(Map<String, Action> urlMappingTree, Queue<String> queue, String path) {
@@ -291,12 +289,12 @@ public class ControllerScanner {
 	}
 
 	/**
-	 * Test a class if it can be parsed.
+	 * 检查控制器类是否有 Path 注解。Test a class if it can be parsed.
 	 * 
-	 * @param clz Should be a IController instance.
-	 * @return true if it's ok.
+	 * @param clz 应该是一个控制器类 Should be a IController.
+	 * @return true 表示为是一个控制器类。 true if it's ok.
 	 */
-	public static boolean testClass(Class<? extends IController> clz) {
+	private static boolean testClass(Class<? extends IController> clz) {
 		if (Modifier.isAbstract(clz.getModifiers())) // 忽略抽象类
 			return false;
 
@@ -314,14 +312,14 @@ public class ControllerScanner {
 	 * 
 	 * @param config web.xml 中的配置，已经转为 Map
 	 */
-	protected static void scannController(Map<String, String> config) {
+	public static void scannController(Map<String, String> config) {
 		if (config != null && config.get("controller") != null) {
 			String str = config.get("controller");
 
 			IControllerScanner scanner;// 定义一个扫描器，专门扫描 IController
-			
+
 			for (String packageName : CommonUtil.split(str)) {
-				scanner = new IControllerScanner(); 
+				scanner = new IControllerScanner();
 				Set<Class<IController>> IControllers = scanner.scan(packageName);
 
 				for (Class<IController> clz : IControllers)

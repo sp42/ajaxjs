@@ -109,7 +109,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 			} catch (IOException e) {
 				LOGGER.warning(e);
 			}
-			
+
 			return;
 		}
 
@@ -155,12 +155,12 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	 * 一般一个请求希望返回一个页面，这时就需要控制器返回一个模板渲染输出了。 中间执行逻辑完成，最后就是控制输出（响应） 可以跳转也可以输出模板渲染器（即使是
 	 * json 都是 模板渲染器 ）
 	 * 
-	 * @param result 模板路径是指页面模板（比如 jsp，velocity模板等）的目录文件名
-	 * @param request 请求对象
+	 * @param result   模板路径是指页面模板（比如 jsp，velocity模板等）的目录文件名
+	 * @param request  请求对象
 	 * @param response 响应对象
-	 * @param model 所有渲染数据都要放到一个 model 对象中（本质 是 map或者 bean），这样使用者就可以在模板内用 Map 对象的
-	 * key/getter 获取到对应的数据。
-	 * @param method 
+	 * @param model    所有渲染数据都要放到一个 model 对象中（本质 是 map或者 bean），这样使用者就可以在模板内用 Map 对象的
+	 *                 key/getter 获取到对应的数据。
+	 * @param method
 	 */
 	public void resultHandler(Object result, MvcRequest request, ModelAndView model, Method method) {
 		if (model != null)
@@ -197,7 +197,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 			} else if (result instanceof JsonReuslt) {
 				JsonReuslt _result = (JsonReuslt) result;
 				setJson(true).setOutput(_result.getOutputStr()).go();
-			} 
+			}
 		}
 	}
 

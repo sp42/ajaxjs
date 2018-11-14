@@ -7,15 +7,17 @@ import java.util.HashMap;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.ajaxjs.Version;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.js.JsonStruTraveler;
 
 public class TestConfig {
 	@Before
 	public void init() {
-		ConfigService.load();
+		String file = Version.class.getClassLoader().getResource("resources/site_config.json").getPath();
+		ConfigService.load(file);
 	}
-
+	
 	@Test
 	public void testConfig() {
 		assertNotNull(ConfigService.config);
@@ -24,7 +26,7 @@ public class TestConfig {
 
 		assertEquals(true, ConfigService.getValueAsBool("isDebug"));
 		assertEquals("大华", ConfigService.getValueAsString("clientShortName"));
-		assertEquals(888, ConfigService.getValueAsInt("dfd.id"));
+		assertEquals(15, ConfigService.getValueAsInt("data.articleCatalog_Id"));
 	}
 
 	@Test

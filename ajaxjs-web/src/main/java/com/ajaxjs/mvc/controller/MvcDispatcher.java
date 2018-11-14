@@ -17,7 +17,10 @@ package com.ajaxjs.mvc.controller;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,48 +52,38 @@ import com.ajaxjs.util.logger.LogHelper;
  */
 public class MvcDispatcher implements Filter {
 	private static final LogHelper LOGGER = LogHelper.getLog(MvcDispatcher.class);
-	
-	private static final String t =
-			"     ___       _       ___  __    __      _   _____        _          __  _____   _____  \n"+
-			"     /   |     | |     /   | \\ \\  / /     | | /  ___/      | |        / / | ____| |  _  \\ \n"+
-			"    / /| |     | |    / /| |  \\ \\/ /      | | | |___       | |  __   / /  | |__   | |_| |  \n"+
-			"   / / | |  _  | |   / / | |   }  {    _  | | \\___  \\      | | /  | / /   |  __|  |  _  {  \n"+
-			"  / /  | | | |_| |  / /  | |  / /\\ \\  | |_| |  ___| |      | |/   |/ /    | |___  | |_| |  \n"+
-			" /_/   |_| \\_____/ /_/   |_| /_/  \\_\\ \\_____/ /_____/      |___/|___/     |_____| |_____/ \n";
-	
+
+	private static final String t = "     ___       _       ___  __    __      _   _____        _          __  _____   _____  \n"
+			+ "     /   |     | |     /   | \\ \\  / /     | | /  ___/      | |        / / | ____| |  _  \\ \n"
+			+ "    / /| |     | |    / /| |  \\ \\/ /      | | | |___       | |  __   / /  | |__   | |_| |  \n"
+			+ "   / / | |  _  | |   / / | |   }  {    _  | | \\___  \\      | | /  | / /   |  __|  |  _  {  \n"
+			+ "  / /  | | | |_| |  / /  | |  / /\\ \\  | |_| |  ___| |      | |/   |/ /    | |___  | |_| |  \n"
+			+ " /_/   |_| \\_____/ /_/   |_| /_/  \\_\\ \\_____/ /_____/      |___/|___/     |_____| |_____/ \n";
+
 	{
-		LOGGER.infoYellow("\n" +t);
+		LOGGER.infoYellow("\n" + t);
 	}
 
 	/**
 	 * 初始化这个过滤器
 	 * 
-	 * @param fConfig
-	 *            过滤器配置，web.xml 中定义
+	 * @param _config 过滤器配置，web.xml 中定义
 	 */
 	@Override
-	public void init(FilterConfig fConfig) throws ServletException {
-		// 读取 web.xml 配置，如果有 controller 那一项就获取指定包里面的内容，看是否有属于 IController 接口的控制器，有就加入到 AnnotationUtils.controllers 集合中
-		Map<String, String> config = MvcRequest.parseInitParams(null, fConfig);
+	public void init(FilterConfig _config) throws ServletException {
+		// 读取 web.xml 配置，如果有 controller 那一项就获取指定包里面的内容，看是否有属于 IController 接口的控制器，有就加入到
+		// AnnotationUtils.controllers 集合中
+		Map<String, String> config = MvcRequest.initParams2map(null, _config);
 
-		doIoc(config);
-		ControllerScanner.scannController(config);
-	}
-
-	/**
-	 * 依赖注射扫描
-	 * 
-	 * @param config
-	 *            web.xml 中的配置，已经转为 Map
-	 */
-	private static void doIoc(Map<String, String> config) {
 		if (config != null && config.get("doIoc") != null) {
 			String doIoc = config.get("doIoc");
 			for (String packageName : CommonUtil.split(doIoc))
 				BeanContext.init(packageName);
-			
-			BeanContext.injectBeans();
+
+			BeanContext.injectBeans(); // 依赖注射扫描
 		}
+
+		ControllerScanner.scannController(config);
 	}
 
 	/**
@@ -98,7 +91,8 @@ public class MvcDispatcher implements Filter {
 	 * js/css 等静态文件有后缀，这样的话我们需要区分对待。
 	 */
 	@Override
-	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
+			throws IOException, ServletException {
 		HttpServletRequest _request = (HttpServletRequest) req;
 		HttpServletResponse _response = (HttpServletResponse) resp;
 
@@ -121,13 +115,13 @@ public class MvcDispatcher implements Filter {
 		}
 
 		Action action = ControllerScanner.find(uri);
-		
-		if(action != null) {
+
+		if (action != null) {
 			Method method = getMethod(action, httpMethod);// 要执行的方法
 			IController controller = getController(action, httpMethod);
 			System.out.println(">>>>>>>" + action);
 			System.out.println(">>>>>>>" + method);
-			
+
 			if (method != null && controller != null) {
 				dispatch(request, response, controller, method);
 				return; // 终止当前 servlet 请求
@@ -166,23 +160,24 @@ public class MvcDispatcher implements Filter {
 						break;
 				}
 			}
-			
+
 			if (!isSkip) {
 				if (method.getParameterTypes().length > 0) {
 					Object[] args = RequestParam.getArgs(request, response, method);
 					model = findModel(args);
-					
+
 					// 通过反射执行控制器方法:调用反射的 Reflect.executeMethod 方法就可以执行目标方法，并返回一个结果。
 					result = ReflectUtil.executeMethod_Throwable(controller, method, args);
 				} else {
 					result = ReflectUtil.executeMethod_Throwable(controller, method);// 方法没有参数
 				}
 			}
-			
+
 		} catch (Throwable e) {
 			err = e;
-			
-			if(e instanceof IllegalArgumentException && e.getMessage().contains("object is not an instance of declaring class")) {
+
+			if (e instanceof IllegalArgumentException
+					&& e.getMessage().contains("object is not an instance of declaring class")) {
 				LOGGER.warning("异常可能的原因：@Bean注解的名称重复，请检查 IOC 中的是否重名");
 			}
 		} finally {
@@ -203,7 +198,8 @@ public class MvcDispatcher implements Filter {
 		MvcRequest.clean();
 	}
 
-	private static void handleErr(Throwable err, Method method, MvcRequest request, MvcOutput response, ModelAndView model) {
+	private static void handleErr(Throwable err, Method method, MvcRequest request, MvcOutput response,
+			ModelAndView model) {
 		ReflectUtil.getUnderLayerErr(err).printStackTrace(); // 打印异常
 
 		String errMsg = ReflectUtil.getUnderLayerErrMsg(err);
@@ -212,7 +208,9 @@ public class MvcDispatcher implements Filter {
 		if (a != null && MediaType.APPLICATION_JSON.equals(a.value()[0])) {// 返回 json
 			response.resultHandler(String.format(MappingHelper.json_not_ok, errMsg), request, model, method);
 		} else {
-			response.resultHandler(String.format("redirect::%s/showMsg?msg=%s", request.getContextPath(), Encode.urlEncode((errMsg))), request, model, method);
+			response.resultHandler(
+					String.format("redirect::%s/showMsg?msg=%s", request.getContextPath(), Encode.urlEncode((errMsg))),
+					request, model, method);
 		}
 	}
 
@@ -223,7 +221,7 @@ public class MvcDispatcher implements Filter {
 	 * @return
 	 */
 	private static FilterAction[] getFilterActions(Method method) {
-		FilterAction[] filterActions = null; // 拦截器 
+		FilterAction[] filterActions = null; // 拦截器
 
 		if (method.getAnnotation(MvcFilter.class) != null) {
 			Class<? extends FilterAction>[] clzs = method.getAnnotation(MvcFilter.class).filters();
@@ -240,7 +238,8 @@ public class MvcDispatcher implements Filter {
 
 	private static final Pattern id = Pattern.compile("/\\d+");
 
-	private static final Pattern p = Pattern.compile("\\.jpg|\\.png|\\.gif|\\.js|\\.css|\\.less|\\.ico|\\.jpeg|\\.htm|\\.swf|\\.txt|\\.mp4|\\.flv");
+	private static final Pattern p = Pattern
+			.compile("\\.jpg|\\.png|\\.gif|\\.js|\\.css|\\.less|\\.ico|\\.jpeg|\\.htm|\\.swf|\\.txt|\\.mp4|\\.flv");
 
 	/**
 	 * Check the url if there is static asset.
@@ -255,15 +254,12 @@ public class MvcDispatcher implements Filter {
 	/**
 	 * 根据 httpMethod 请求方法返回控制器类身上的方法。
 	 * 
-	 * @param controllerInfo
-	 *            控制器类信息
-	 * @param httpMethod
-	 *            HTTP 请求的方法
+	 * @param controllerInfo 控制器类信息
+	 * @param httpMethod     HTTP 请求的方法
 	 * @return 控制器方法
 	 */
 	private static Method getMethod(Action action, String httpMethod) {
-		if (action == null)
-			throw new NullPointerException("Action 对象不存在！");
+		Objects.requireNonNull(action, "Action 对象不存在！");
 
 		switch (httpMethod.toUpperCase()) {
 		case "GET":
@@ -283,8 +279,7 @@ public class MvcDispatcher implements Filter {
 	 * 根据 httpMethod 请求方法返回控制器
 	 * 
 	 * @param action
-	 * @param httpMethod
-	 *            HTTP 请求的方法
+	 * @param httpMethod HTTP 请求的方法
 	 * @return 控制器
 	 */
 	private static IController getController(Action action, String httpMethod) {
@@ -305,17 +300,12 @@ public class MvcDispatcher implements Filter {
 	/**
 	 * 查找是 ModelAndView 类型的参数，返回之
 	 * 
-	 * @param args
-	 *            参数列表
+	 * @param args 参数列表
 	 * @return ModelAndView
 	 */
 	private static ModelAndView findModel(Object[] args) {
-		for (Object obj : args) {
-			if (obj instanceof ModelAndView)
-				return (ModelAndView) obj;
-		}
-
-		return null;
+		Optional<Object> s6 = Arrays.stream(args).filter(obj -> obj instanceof IController).findAny();
+		return s6.isPresent() ? (ModelAndView) s6.get() : null;
 	}
 
 	@Override

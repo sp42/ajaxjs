@@ -48,8 +48,7 @@ public class Config extends HashMap<String, Object> {
 	}
 
 	/**
-	 * @param jsonPath
-	 *            the jsonPath to set
+	 * @param jsonPath the jsonPath to set
 	 */
 	public void setJsonPath(String jsonPath) {
 		this.jsonPath = jsonPath;
@@ -63,8 +62,7 @@ public class Config extends HashMap<String, Object> {
 	}
 
 	/**
-	 * @param isLoaded
-	 *            the isLoaded to set
+	 * @param isLoaded the isLoaded to set
 	 */
 	public void setLoaded(boolean isLoaded) {
 		this.isLoaded = isLoaded;
@@ -78,8 +76,7 @@ public class Config extends HashMap<String, Object> {
 	}
 
 	/**
-	 * @param jsonStr
-	 *            the jsonStr to set
+	 * @param jsonStr the jsonStr to set
 	 */
 	public void setJsonStr(String jsonStr) {
 		this.jsonStr = jsonStr;
