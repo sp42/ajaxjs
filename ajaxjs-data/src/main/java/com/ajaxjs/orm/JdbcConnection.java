@@ -17,6 +17,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 
 import javax.naming.Context;
@@ -49,8 +50,8 @@ public class JdbcConnection {
 	public static DataSource getDataSource(String path) {
 		try {
 			Object obj = new InitialContext().lookup("java:/comp/env");
-			if (obj == null)
-				throw new NullPointerException("没有该节点 java:/comp/env");
+
+			Objects.requireNonNull(obj, "没有该节点 java:/comp/env");
 
 			Context context = (Context) obj; // 环境变量
 			return (DataSource) context.lookup(path);
@@ -66,16 +67,12 @@ public class JdbcConnection {
 	 * @param jndiPath JNDI 路径
 	 */
 	public static void initDbByJNDI(String jndiPath) {
-		if (jndiPath == null) {
-			LOGGER.warning("缺少 jndiPath 参数！");
-			throw new NullPointerException("缺少 jndiPath 参数！");
-		}
-		try {
-			if (JdbcConnection.getConnection() == null || JdbcConnection.getConnection().isClosed()) {
-				DataSource ds = JdbcConnection.getDataSource(jndiPath);
+		Objects.requireNonNull(jndiPath, "缺少 jndiPath 参数！");
 
-				Connection conn = JdbcConnection.getConnection(ds);
-				JdbcConnection.setConnection(conn);
+		try {
+			if (getConnection() == null || getConnection().isClosed()) {
+				Connection conn = getConnection(getDataSource(jndiPath));
+				setConnection(conn);
 				LOGGER.info("启动数据库链接……" + conn);
 			}
 		} catch (SQLException e) {
@@ -102,7 +99,7 @@ public class JdbcConnection {
 	 * 连接数据库
 	 * 
 	 * @param jdbcUrl 链接字符串
-	 * @param props 链接属性
+	 * @param props   链接属性
 	 * @return 数据库连接对象
 	 */
 	public static Connection getConnection(String jdbcUrl, Properties props) {
@@ -247,7 +244,7 @@ public class JdbcConnection {
 		if (!url.startsWith(perfix)) {
 			url = perfix + url;
 		}
-		
+
 		try {
 			SQLiteJDBCLoader.initialize();
 		} catch (Exception e) {
@@ -263,8 +260,8 @@ public class JdbcConnection {
 	/**
 	 * 根据 JDBC Url 创建 MySQL 数据源对象
 	 *
-	 * @param url 像 "jdbc:mysql://localhost:3306/databaseName"
-	 * @param user 用户名
+	 * @param url      像 "jdbc:mysql://localhost:3306/databaseName"
+	 * @param user     用户名
 	 * @param password 密码
 	 * @return 数据源对象
 	 */
@@ -288,12 +285,12 @@ public class JdbcConnection {
 	public static Connection getSqliteConnection(String url) {
 		return getConnection(getSqliteDataSource(url));
 	}
-	
+
 	/**
 	 * 测试用数据库（SQLite）
 	 */
 	public static final String testUsed_sqlite = ScanClass.getResourcesByFileName("foo.sqlite");
-	
+
 	/**
 	 * 创建 SQLite 数据库连接对象（测试用）
 	 *
@@ -306,8 +303,8 @@ public class JdbcConnection {
 	/**
 	 * 根据 JDBC Url 创建 MySQL 数据库连接对象
 	 *
-	 * @param url 像 "jdbc:mysql://localhost:3306/databaseName"
-	 * @param user 用户名
+	 * @param url      像 "jdbc:mysql://localhost:3306/databaseName"
+	 * @param user     用户名
 	 * @param password 密码
 	 * @return 数据库连接对象
 	 */
@@ -346,7 +343,7 @@ public class JdbcConnection {
 	 */
 	public static void initSqliteDBConnection(String url) {
 		DataSource ds = getSqliteDataSource(url);
-				
+
 		try {
 			initIc().bind("java:/comp/env/jdbc/sqlite", ds);
 		} catch (NamingException e) {
@@ -357,8 +354,8 @@ public class JdbcConnection {
 	/**
 	 * 根据 JDBC Url 创建 MySQL 数据库 JDNI 数据源
 	 *
-	 * @param url 像 "jdbc:mysql://localhost:3306/databaseName"
-	 * @param user 用户名
+	 * @param url      像 "jdbc:mysql://localhost:3306/databaseName"
+	 * @param user     用户名
 	 * @param password 密码
 	 */
 	public static void initMySqlDBConnection(String url, String user, String password) {

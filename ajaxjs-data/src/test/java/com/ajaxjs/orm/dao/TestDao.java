@@ -5,7 +5,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
@@ -15,11 +17,13 @@ import com.ajaxjs.orm.JdbcConnection;
 
 public class TestDao {
 	NewsDao dao;
+	NewsDaoMap mapDao;
 
 	@Before
 	public void setUp() {
 		JdbcConnection.setConnection(JdbcConnection.getTestSqliteConnection());
 		dao = new DaoHandler<NewsDao>().bind(NewsDao.class);
+		mapDao = new DaoHandler<NewsDaoMap>().bind(NewsDaoMap.class);
 	}
 
 	@After
@@ -31,35 +35,51 @@ public class TestDao {
 	public void testFindById() {
 		News news = dao.findById(1L);
 		assertNotNull(news);
+		Map<String, Object> newsMap = mapDao.findById(1L);
+		assertNotNull(newsMap);
+		assertNotNull(newsMap.get("name"));
 	}
 
-//	@Test
+	@Test
 	public void testCount() {
 		assertNotNull(dao.count());
+		assertNotNull(mapDao.count());
 	}
 
-//	@Test
+	@Test
 	public void testFindList() {
 		List<News> newsList = dao.findList(0, 5);
-		assertEquals(newsList.size(), 5);
-		assertNotNull(dao);
+		assertNotNull(newsList);
+		assertEquals(5, newsList.size());
+		
+		List<Map<String, Object>> newsListMap = mapDao.findList(0, 5);
+		assertNotNull(newsListMap);
+		assertEquals(5, newsListMap.size());
 	}
 
-//	@Test
+	@Test
 	public void testPageFindList() {
 		PageResult<News> newsList = dao.findPagedList(0, 0);
 		assertNotNull(newsList);
 		assertEquals(10, newsList.size());
+		
+		PageResult<Map<String, Object>> newsPagedListMap = mapDao.findPagedList(0, 5);
+		assertNotNull(newsPagedListMap);
+		assertEquals(5, newsPagedListMap.size());
 	}
 
-//	@Test
+	@Test
 	public void testTop10() {
 		List<News> newsList = dao.findTop10News();
-		assertEquals(newsList.size(), 10);
-		assertNotNull(dao);
+		assertNotNull(newsList);
+		assertEquals(10, newsList.size());
+		
+		List<Map<String, Object>> newsListMap = mapDao.findTop10News();
+		assertNotNull(newsListMap);
+		assertEquals(10, newsListMap.size());
 	}
 
-//	@Test
+	@Test
 	public void testCreateUpdateDelete() {
 		News news = new News();
 		news.setName("test 123");
@@ -70,5 +90,16 @@ public class TestDao {
 		assertEquals(1, dao.update(news));
 
 		assertTrue(dao.delete(news));
+		
+		Map<String, Object> newsMap = new HashMap<>();
+		newsMap.put("name", "test 123");
+		newlyId = mapDao.create(newsMap);
+		assertNotNull(newlyId);
+
+		newsMap.put("name", "test 2.");
+		assertEquals(1, mapDao.update(newsMap));
+
+		assertTrue(mapDao.delete(newsMap));
+		
 	}
 }

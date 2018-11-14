@@ -20,11 +20,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-import com.ajaxjs.orm.thirdparty.SqlBuilder;
 import com.ajaxjs.keyvalue.MappingValue;
 import com.ajaxjs.orm.JdbcHelperLambda.ExecutePs;
 import com.ajaxjs.orm.JdbcHelperLambda.HasZeoResult;
 import com.ajaxjs.orm.JdbcHelperLambda.ResultSetProcessor;
+import com.ajaxjs.orm.thirdparty.SqlBuilder;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -38,21 +38,21 @@ public class JdbcHelper {
 
 	/**
 	 * 
-	 * @param conn 数据库连接对象 数据库连接对象
-	 * @param sql SQL 语句，可以带有 ? 的占位符
+	 * @param conn         数据库连接对象 数据库连接对象
+	 * @param sql          SQL 语句，可以带有 ? 的占位符
 	 * @param hasZeoResult SQL 查询是否有数据返回，没有返回 true
 	 * @param processor
-	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
+	 * @param params       插入到 SQL 中的参数，可单个可多个可不填
 	 * @return
 	 */
-	public static <T> T select(Connection conn, String sql, HasZeoResult hasZeoResult, ResultSetProcessor<T> processor, Object... params) {
+	public static <T> T select(Connection conn, String sql, HasZeoResult hasZeoResult, ResultSetProcessor<T> processor,
+			Object... params) {
 		LOGGER.infoYellow("The SQL is---->" + JdbcUtil.printRealSql(sql, params));
 
 		try (PreparedStatement ps = conn.prepareStatement(sql)) {
 			if (params != null && params.length > 0) {
 				int i = 0;
 				for (Object param : params) {
-					System.out.println("p:" + params);
 					ps.setObject(++i, param);
 				}
 			}
@@ -76,8 +76,8 @@ public class JdbcHelper {
 	/**
 	 * 查询单个结果，保存为 Map&lt;String, Object&gt; 结构。如果查询不到任何数据返回 null。
 	 * 
-	 * @param conn 数据库连接对象ection 数据库连接对象
-	 * @param sql SQL 语句，可以带有 ? 的占位符
+	 * @param conn   数据库连接对象ection 数据库连接对象
+	 * @param sql    SQL 语句，可以带有 ? 的占位符
 	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
 	 * @return Map&lt;String, Object&gt; 结构的结果。如果查询不到任何数据返回 null。
 	 */
@@ -142,7 +142,8 @@ public class JdbcHelper {
 					try {
 						value = MappingValue.objectCast(value, property.getPropertyType());
 					} catch (NumberFormatException e) {
-						LOGGER.warning(e, "保存数据到 bean 的 {0} 字段时，转换失败，输入值：{1}，输入类型 ：{2}， 期待类型：{3}", key, value, value.getClass(), property.getPropertyType());
+						LOGGER.warning(e, "保存数据到 bean 的 {0} 字段时，转换失败，输入值：{1}，输入类型 ：{2}， 期待类型：{3}", key, value,
+								value.getClass(), property.getPropertyType());
 						continue; // 转换失败，继续下一个字段
 					}
 
@@ -161,8 +162,8 @@ public class JdbcHelper {
 	/**
 	 * 查询一组结果，保存为 List<Map<String, Object>> 结构。如果查询不到任何数据返回 null。
 	 * 
-	 * @param conn 数据库连接对象 数据库连接对象
-	 * @param sql SQL 语句，可以带有 ? 的占位符
+	 * @param conn   数据库连接对象 数据库连接对象
+	 * @param sql    SQL 语句，可以带有 ? 的占位符
 	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
 	 * @return Map<String, Object> 结构的结果。如果查询不到任何数据返回 null。
 	 */
@@ -175,8 +176,8 @@ public class JdbcHelper {
 	/**
 	 * 查询一组结果，保存为 List<Map<String, Object>> 结构。如果查询不到任何数据返回 null。
 	 * 
-	 * @param conn 数据库连接对象 数据库连接对象
-	 * @param sql SQL 语句，可以带有 ? 的占位符
+	 * @param conn   数据库连接对象 数据库连接对象
+	 * @param sql    SQL 语句，可以带有 ? 的占位符
 	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
 	 * @return Map<String, Object> 结构的结果。如果查询不到任何数据返回 null。
 	 */
@@ -226,9 +227,9 @@ public class JdbcHelper {
 	/**
 	 * 有且只有一行记录，并只返回第一列的字段。可指定字段的数据类型
 	 * 
-	 * @param conn 数据库连接对象
-	 * @param sql SQL 语句，可以带有 ? 的占位符
-	 * @param clz 期望的结果类型
+	 * @param conn   数据库连接对象
+	 * @param sql    SQL 语句，可以带有 ? 的占位符
+	 * @param clz    期望的结果类型
 	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
 	 * @return 数据库里面的值作为 T 出现
 	 */
@@ -262,12 +263,13 @@ public class JdbcHelper {
 	 * 
 	 * @param initPs 初始化一个 PreparedStatement 并返回
 	 * @param exe
-	 * @param conn 数据库连接对象
-	 * @param sql SQL 语句，可以带有 ? 的占位符
+	 * @param conn   数据库连接对象
+	 * @param sql    SQL 语句，可以带有 ? 的占位符
 	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
 	 * @return
 	 */
-	static <T> T initAndExe(BiFunction<Connection, String, PreparedStatement> initPs, ExecutePs<T> exe, Connection conn, String sql, Object... params) {
+	static <T> T initAndExe(BiFunction<Connection, String, PreparedStatement> initPs, ExecutePs<T> exe, Connection conn,
+			String sql, Object... params) {
 		String _sql = JdbcUtil.printRealSql(sql, params);
 		JdbcConnection.addSql(_sql); // 用来保存日志
 		LOGGER.infoYellow("The SQL is---->" + _sql);
@@ -286,8 +288,8 @@ public class JdbcHelper {
 	/**
 	 * 新建记录
 	 * 
-	 * @param conn 数据库连接对象
-	 * @param sql SQL 语句，可以带有 ? 的占位符
+	 * @param conn   数据库连接对象
+	 * @param sql    SQL 语句，可以带有 ? 的占位符
 	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
 	 * @return 新增主键，为兼顾主键类型，返回的类型设为同时兼容 int/long/string 的 Serializable
 	 */
@@ -315,15 +317,15 @@ public class JdbcHelper {
 			LOGGER.warning(String.format("返回 id :{0} 类型:{1}", newlyId, newlyId.getClass().getName()));
 			throw new RuntimeException("返回 id 类型不是 Serializable");
 		}
-
+		
 		return (Serializable) newlyId;
 	}
 
 	/**
 	 * 执行 SQL UPDATE 更新。
 	 * 
-	 * @param conn 数据库连接对象
-	 * @param sql SQL 语句，可以带有 ? 的占位符
+	 * @param conn   数据库连接对象
+	 * @param sql    SQL 语句，可以带有 ? 的占位符
 	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
 	 * @return 成功修改的行数
 	 * @throws SQLException
@@ -417,7 +419,7 @@ public class JdbcHelper {
 //		if(value != null)
 //			System.out.println(value.getClass());
 		if (value != null && t != value.getClass()) { // 类型相同，直接传入；类型不相同，开始转换
-			System.out.println(t);
+
 			return MappingValue.objectCast(value, t);
 		} else
 			return value;
@@ -438,8 +440,8 @@ public class JdbcHelper {
 	/**
 	 * 修改实体
 	 * 
-	 * @param conn 数据库连接对象
-	 * @param bean Bean 实体
+	 * @param conn      数据库连接对象
+	 * @param bean      Bean 实体
 	 * @param tableName 表格名称
 	 * @return 成功修改的行数，一般为 1
 	 */
@@ -464,9 +466,9 @@ public class JdbcHelper {
 	/**
 	 * 删除一条记录。注意，此方法写死 id 字段
 	 * 
-	 * @param conn 数据库连接对象
+	 * @param conn      数据库连接对象
 	 * @param tableName 表格名称
-	 * @param id ID
+	 * @param id        ID
 	 * @return 是否删除成功
 	 */
 	public static boolean deleteById(Connection conn, String tableName, Serializable id) {
@@ -567,14 +569,15 @@ public class JdbcHelper {
 	/**
 	 * 修改实体
 	 * 
-	 * @param conn 数据库连接对象
-	 * @param bean Bean 实体
+	 * @param conn      数据库连接对象
+	 * @param bean      Bean 实体
 	 * @param tableName 表格名称
 	 * @return 成功修改的行数，一般为 1
 	 */
 	public static int updateBean(Connection conn, Object bean, String tableName) {
 		try {
-			LOGGER.info("更新记录 id:{0}, name:{1}！", ReflectUtil.executeMethod(bean, "getId"), ReflectUtil.executeMethod(bean, "getName"));
+			LOGGER.info("更新记录 id:{0}, name:{1}！", ReflectUtil.executeMethod(bean, "getId"),
+					ReflectUtil.executeMethod(bean, "getName"));
 		} catch (Throwable e) {
 		}
 

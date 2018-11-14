@@ -23,9 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import com.ajaxjs.framework.dao.SqlAndArgs;
-import com.ajaxjs.framework.dao.SqlFactory;
-import com.ajaxjs.framework.dao.SqlFactoryCriteria;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.JdbcHelper;
 import com.ajaxjs.orm.annotation.Delete;
@@ -45,7 +42,6 @@ import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
  * @author Sp42 frank@ajaxjs.com
  * @param <T> DAO 实际类型引用
  */
-@SuppressWarnings("restriction")
 public class DaoHandler<T> extends JdbcHelper implements InvocationHandler {
 
 	/**
@@ -141,28 +137,18 @@ public class DaoHandler<T> extends JdbcHelper implements InvocationHandler {
 	/**
 	 * 执行 SELECT 查询
 	 * 
-	 * @param method DAO 方法
-	 * @param args 参数
+	 * @param method     DAO 方法
+	 * @param args       参数
 	 * @param returnType DAO 方法返回的目标类型
-	 * @param entryType 实体类型的类引用，通常是 map 或 bean
+	 * @param entryType  实体类型的类引用，通常是 map 或 bean
 	 * @return 查询结果
 	 * @throws DaoException
 	 */
-	private <R, B> Object select(Select select, Object[] args, Class<R> returnType, Class<B> entryType, Method method) throws DaoException {
+	private <R, B> Object select(Select select, Object[] args, Class<R> returnType, Class<B> entryType, Method method)
+			throws DaoException {
 		String sql = isSqlite(select.sqliteValue(), conn) ? select.sqliteValue() : select.value();
-
-		SqlAndArgs s = new SqlAndArgs();
-		s.sql = sql;
-		s.args = args;
-
-		s = doSqlFactory(select, s);
-		s = criteria.toSql(s);
-
-		args = s.args;
-		sql = s.sql;
-
 		Object result = null;
-		
+
 		if (returnType == int.class) {
 			result = queryOne(conn, sql, int.class, args);
 		} else if (returnType == Integer[].class) {
@@ -170,51 +156,27 @@ public class DaoHandler<T> extends JdbcHelper implements InvocationHandler {
 		} else if (returnType == String.class) {
 			result = queryOne(conn, sql, String.class, args);
 		} else if (returnType == List.class) {
-			result = queryAsBeanList(entryType, conn, sql, args);
+			result = entryType == Map.class ? queryAsMapList(conn, sql, args) : queryAsBeanList(entryType, conn, sql, args);
 		} else if (returnType == PageResult.class) {// 分页
 //				queryParam.order = new HashMap<>(); // 默认按照 id 排序
 //				queryParam.order.put("id", "DESC");
 //				sql = queryParam.orderToSql(sql);
 			result = PageResult.doPage(conn, entryType, select, sql, method, args);
+		} else if (returnType == Map.class) {
+			result = queryAsMap(conn, sql, args);
 		} else {
 			// bean
 			result = queryAsBean(returnType, conn, sql, args);
 		}
-		
-		System.out.println(returnType);
-		
+
 		return result;
 	}
-
-	/**
-	 * 
-	 * @param select
-	 * @param s
-	 * @return
-	 */
-	private SqlAndArgs doSqlFactory(Select select, SqlAndArgs s) {
-		Class<? extends SqlFactory>[] fs = select.sqlFactory();
-
-		if (!CommonUtil.isNull(fs)) {
-			for (Class<? extends SqlFactory> f : fs) {
-				SqlFactory instance = ReflectUtil.newInstance(f);
-				s = instance.toSql(s);
-			}
-		}
-
-		return s;
-	}
-
-	/**
-	 * 
-	 */
-	public final static SqlFactoryCriteria criteria = new SqlFactoryCriteria();
 
 	/**
 	 * 判断是否 SQLite 数据库
 	 * 
 	 * @param sqliteValue SQLite 数据库专用的 SQL 语句
-	 * @param conn 数据库连接对象
+	 * @param conn        数据库连接对象
 	 * @return true = 是 SQLite 数据库
 	 */
 	public static boolean isSqlite(String sqliteValue, Connection conn) {
@@ -224,10 +186,10 @@ public class DaoHandler<T> extends JdbcHelper implements InvocationHandler {
 	/**
 	 * 新增动作
 	 * 
-	 * @param insert 包含 SQL 的注解
-	 * @param args SQL 参数
+	 * @param insert     包含 SQL 的注解
+	 * @param args       SQL 参数
 	 * @param returnType DAO 方法返回的目标类型
-	 * @param beanType 实体类型的类引用，通常是 map 或 bean
+	 * @param beanType   实体类型的类引用，通常是 map 或 bean
 	 * @return 自增 id
 	 */
 	@SuppressWarnings("unchecked")
@@ -255,8 +217,8 @@ public class DaoHandler<T> extends JdbcHelper implements InvocationHandler {
 	/**
 	 * 更新动作
 	 * 
-	 * @param update 包含 SQL 的注解
-	 * @param args SQL 参数
+	 * @param update   包含 SQL 的注解
+	 * @param args     SQL 参数
 	 * @param beanType 实体类型的类引用，通常是 map 或 bean
 	 * @return 影响的行数
 	 */
@@ -280,7 +242,7 @@ public class DaoHandler<T> extends JdbcHelper implements InvocationHandler {
 	 * 删除动作
 	 * 
 	 * @param delete 包含 SQL 的注解
-	 * @param args SQL 参数
+	 * @param args   SQL 参数
 	 * @return 是否删除成功
 	 */
 	private Boolean delete(Delete delete, Object[] args) {

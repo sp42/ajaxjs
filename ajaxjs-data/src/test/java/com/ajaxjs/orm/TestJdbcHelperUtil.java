@@ -17,6 +17,6 @@ public class TestJdbcHelperUtil {
 	@Test
 	public void testPrintRealSql() {
 		String sql = printRealSql("SELECT * FROM foo WHERE phone = ?", new Object[] { "180" });
-		System.out.println(sql);
+		assertNotNull(sql);
 	}
 }

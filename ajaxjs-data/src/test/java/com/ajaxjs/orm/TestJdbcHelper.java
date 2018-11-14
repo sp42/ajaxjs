@@ -128,7 +128,7 @@ public class TestJdbcHelper {
 		assertNotNull(map);
 		assertNotNull(map.get("name"));
 
-		System.out.println(map.get("name").getGetter());
+//		System.out.println(map.get("name").getGetter());
 	}
 
 	@Test

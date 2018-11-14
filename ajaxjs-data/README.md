@@ -1,6 +1,42 @@
 AJAXJS-Data 简介
 ===========
-类似于 DBUtils 的数据库工具程序，但更为简单和轻量级。
+AJAJX-Data 类似于 DBUtils 的数据库工具程序，但更为简单和轻量级，核心的类只有两个：JdbcHelper（不超过 600 行）和 DaoHandler（不超过 250 行）。
+
+AJAXJS-Data 主要实现了以下功能：
+
+- 基于 JDBC 对象 Connection、PreparedSatatement、ResultSet 的 CRUD 封装，应用了 Java 8 函数式的风格；
+- 半 ORM 实现，兼容 Java Bean 和 Map 的两种实体容器；
+- 内置分页服务，提供基于 List 扩展的 PageList 容器；
+- 提供基于 接口+注解 DAO 的服务，类似于 MyBatis 接口 SQL 陈述，基于 Java 动态代理的实现；
+- 其他 SQL 工具函数，例如格式化 SQL、打印真实 SQL 语句。
+
+尚不支持的特性
+----------
+- 仅支持两种数据库： MySQL 和 SQLite
+- 不支持 batch 批处理
+- 不支持事务
+
+鸣谢
+==========
+
+由于本人水平有限，动态拼接 SQL 功能引用了 MyBatis 的 SQL Builder 的实现，详见 com.ajaxjs.orm.sqlbuilder 包。另外还有“雪花 id”生成器也是网友贡献的。
+
+
+安装
+-----------
+
+要求 Java 1.8+，Jar 直接下载：[130kb](https://search.maven.org/remotecontent?filepath=com/ajaxjs/ajaxjs-base/1.1.6/ajaxjs-base-1.1.6.jar)
+
+Maven 坐标：
+
+```
+<dependency>
+  <groupId>com.ajaxjs</groupId>
+  <artifactId>ajaxjs-base</artifactId>
+  <version>1.1.6</version>
+</dependency>
+```
+
 
 JDBC 封装
 ===============
@@ -98,17 +134,11 @@ SimpleORM
 
 ![这里写图片描述](https://images.gitee.com/uploads/images/2018/0722/090613_b7b1a4d3_784269.png)
 
-Java 动态 SQL
---------------------
-提炼了 MyBatis 的 SQL Builder 包，可以通过 Java 动态拼接 SQL，详见 com.ajaxjs.jdbc.sqlbuilder 包。
 
 
 
-尚不支持的特性
-----------
-- 仅支持两种数据库： MySQL 和 SQLite
-- 不支持 batch 批处理
-- 不支持事务
+
+
 
 framework
 -----------
