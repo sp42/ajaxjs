@@ -16,11 +16,6 @@ AJAXJS-Data 主要实现了以下功能：
 - 不支持 batch 批处理
 - 不支持事务
 
-鸣谢
-==========
-
-由于本人水平有限，动态拼接 SQL 功能引用了 MyBatis 的 SQL Builder 的实现，详见 com.ajaxjs.orm.sqlbuilder 包。另外还有“雪花 id”生成器也是网友贡献的。
-
 
 安装
 -----------
@@ -36,6 +31,21 @@ Maven 坐标：
   <version>1.1.6</version>
 </dependency>
 ```
+
+鸣谢
+----------
+
+由于本人水平有限，动态拼接 SQL 功能引用了 MyBatis 的 SQL Builder 的实现，详见 com.ajaxjs.orm.sqlbuilder 包。还有“雪花 id”生成器也是网友贡献的。另外下面参考的开源项目：
+
+https://gitee.com/bitprince/memory
+
+文档参考了不少，它的思路跟我的差不多的。另外下面是我之前的尝试：
+
+- http://blog.csdn.net/zhangxin09/article/details/17403211
+- http://blog.csdn.net/zhangxin09/article/details/7899525
+- http://blog.csdn.net/zhangxin09/article/details/55805849
+- http://blog.csdn.net/zhangxin09/article/details/70187712
+
 
 
 JDBC 封装
@@ -152,11 +162,3 @@ framework
 
 鸣谢开源项目 
 
-https://gitee.com/bitprince/memory
-
-文档参考了不少，它的思路跟我的差不多的。另外下面是我之前的尝试：
-
-- http://blog.csdn.net/zhangxin09/article/details/17403211
-- http://blog.csdn.net/zhangxin09/article/details/7899525
-- http://blog.csdn.net/zhangxin09/article/details/55805849
-- http://blog.csdn.net/zhangxin09/article/details/70187712
