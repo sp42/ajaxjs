@@ -38,13 +38,13 @@ Maven 坐标：
 
 
 鸣谢
-----------
+=========
 
 由于本人水平有限，动态拼接 SQL 功能引用了 MyBatis 的 SQL Builder 的实现，详见 com.ajaxjs.orm.sqlbuilder 包。还有“雪花 id”生成器也是网友贡献的。另外下面参考的开源项目：
 
 https://gitee.com/bitprince/memory
 
-文档参考了不少，它的思路跟我的差不多的。另外下面是我之前的尝试：
+最后是我之前的尝试，记录在博客上了。
 
 - http://blog.csdn.net/zhangxin09/article/details/17403211
 - http://blog.csdn.net/zhangxin09/article/details/7899525
