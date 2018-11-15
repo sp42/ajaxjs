@@ -16,7 +16,8 @@
 package com.ajaxjs.mvc.controller;
 
 import java.lang.reflect.Method;
-import java.util.Map;
+
+import com.ajaxjs.mvc.util.TreeLinked;
 
 /**
  * A action = controller + methods
@@ -24,7 +25,7 @@ import java.util.Map;
  * @author Sp42 frank@ajaxjs.com
  *
  */
-public class Action {
+public class Action extends TreeLinked<Action> {
 	/**
 	 * 完整路径
 	 */
@@ -62,9 +63,4 @@ public class Action {
 	 * 该路径的 delete 请求时对应的控制器方法
 	 */
 	public Method deleteMethod;
-
-	/**
-	 * 下级路径集合
-	 */
-	public Map<String, Action> children;
 }

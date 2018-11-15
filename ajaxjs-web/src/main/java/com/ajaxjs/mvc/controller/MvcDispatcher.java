@@ -55,10 +55,8 @@ public class MvcDispatcher implements Filter {
 	private static final LogHelper LOGGER = LogHelper.getLog(MvcDispatcher.class);
 
 	private static final String t = "     ___       _       ___  __    __      _   _____        _          __  _____   _____  \n"
-			+ "     /   |     | |     /   | \\ \\  / /     | | /  ___/      | |        / / | ____| |  _  \\ \n"
-			+ "    / /| |     | |    / /| |  \\ \\/ /      | | | |___       | |  __   / /  | |__   | |_| |  \n"
-			+ "   / / | |  _  | |   / / | |   }  {    _  | | \\___  \\      | | /  | / /   |  __|  |  _  {  \n"
-			+ "  / /  | | | |_| |  / /  | |  / /\\ \\  | |_| |  ___| |      | |/   |/ /    | |___  | |_| |  \n"
+			+ "     /   |     | |     /   | \\ \\  / /     | | /  ___/      | |        / / | ____| |  _  \\ \n" + "    / /| |     | |    / /| |  \\ \\/ /      | | | |___       | |  __   / /  | |__   | |_| |  \n"
+			+ "   / / | |  _  | |   / / | |   }  {    _  | | \\___  \\      | | /  | / /   |  __|  |  _  {  \n" + "  / /  | | | |_| |  / /  | |  / /\\ \\  | |_| |  ___| |      | |/   |/ /    | |___  | |_| |  \n"
 			+ " /_/   |_| \\_____/ /_/   |_| /_/  \\_\\ \\_____/ /_____/      |___/|___/     |_____| |_____/ \n";
 
 	{
@@ -74,7 +72,7 @@ public class MvcDispatcher implements Filter {
 	public void init(FilterConfig _config) throws ServletException {
 		// 读取 web.xml 配置，如果有 controller 那一项就获取指定包里面的内容，看是否有属于 IController 接口的控制器，有就加入到
 		// AnnotationUtils.controllers 集合中
-		Map<String, String> config = ServletHelper.initFilterConfig2Map( _config);
+		Map<String, String> config = ServletHelper.initFilterConfig2Map(_config);
 
 		if (config != null && config.get("doIoc") != null) {
 			String doIoc = config.get("doIoc");
@@ -92,8 +90,7 @@ public class MvcDispatcher implements Filter {
 	 * js/css 等静态文件有后缀，这样的话我们需要区分对待。
 	 */
 	@Override
-	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
-			throws IOException, ServletException {
+	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest _request = (HttpServletRequest) req;
 		HttpServletResponse _response = (HttpServletResponse) resp;
 
@@ -109,7 +106,7 @@ public class MvcDispatcher implements Filter {
 
 		String uri = request.getFolder(), httpMethod = request.getMethod();
 
-		System.out.println(">>>>>>>" + uri);
+//		System.out.println(">>>>>>>" + uri);
 		Matcher match = id.matcher(uri);
 		if (match.find()) {
 			uri = match.replaceAll("/{id}");
@@ -120,8 +117,8 @@ public class MvcDispatcher implements Filter {
 		if (action != null) {
 			Method method = getMethod(action, httpMethod);// 要执行的方法
 			IController controller = getController(action, httpMethod);
-			System.out.println(">>>>>>>" + action);
-			System.out.println(">>>>>>>" + method);
+//			System.out.println(">>>>>>>" + action);
+//			System.out.println(">>>>>>>" + method);
 
 			if (method != null && controller != null) {
 				dispatch(request, response, controller, method);
@@ -177,8 +174,7 @@ public class MvcDispatcher implements Filter {
 		} catch (Throwable e) {
 			err = e;
 
-			if (e instanceof IllegalArgumentException
-					&& e.getMessage().contains("object is not an instance of declaring class")) {
+			if (e instanceof IllegalArgumentException && e.getMessage().contains("object is not an instance of declaring class")) {
 				LOGGER.warning("异常可能的原因：@Bean注解的名称重复，请检查 IOC 中的是否重名");
 			}
 		} finally {
@@ -199,8 +195,7 @@ public class MvcDispatcher implements Filter {
 		MvcRequest.clean();
 	}
 
-	private static void handleErr(Throwable err, Method method, MvcRequest request, MvcOutput response,
-			ModelAndView model) {
+	private static void handleErr(Throwable err, Method method, MvcRequest request, MvcOutput response, ModelAndView model) {
 		ReflectUtil.getUnderLayerErr(err).printStackTrace(); // 打印异常
 
 		String errMsg = ReflectUtil.getUnderLayerErrMsg(err);
@@ -209,9 +204,7 @@ public class MvcDispatcher implements Filter {
 		if (a != null && MediaType.APPLICATION_JSON.equals(a.value()[0])) {// 返回 json
 			response.resultHandler(String.format(MappingHelper.json_not_ok, errMsg), request, model, method);
 		} else {
-			response.resultHandler(
-					String.format("redirect::%s/showMsg?msg=%s", request.getContextPath(), Encode.urlEncode((errMsg))),
-					request, model, method);
+			response.resultHandler(String.format("redirect::%s/showMsg?msg=%s", request.getContextPath(), Encode.urlEncode((errMsg))), request, model, method);
 		}
 	}
 
@@ -239,8 +232,7 @@ public class MvcDispatcher implements Filter {
 
 	private static final Pattern id = Pattern.compile("/\\d+");
 
-	private static final Pattern p = Pattern
-			.compile("\\.jpg|\\.png|\\.gif|\\.js|\\.css|\\.less|\\.ico|\\.jpeg|\\.htm|\\.swf|\\.txt|\\.mp4|\\.flv");
+	private static final Pattern p = Pattern.compile("\\.jpg|\\.png|\\.gif|\\.js|\\.css|\\.less|\\.ico|\\.jpeg|\\.htm|\\.swf|\\.txt|\\.mp4|\\.flv");
 
 	/**
 	 * Check the url if there is static asset.

@@ -55,7 +55,7 @@ public class RequestParam {
 		Annotation[][] annotation = method.getParameterAnnotations(); // 方法所有的注解，length 应该要和参数总数一样
 		Class<?>[] parmTypes = method.getParameterTypes();// 反射得到参数列表的各个类型，遍历之
 		ArrayList<Object> args = new ArrayList<>();// 参数列表
-		
+
 		for (int i = 0; i < parmTypes.length; i++) {
 			Class<?> clazz = parmTypes[i];
 
@@ -66,7 +66,7 @@ public class RequestParam {
 				args.add(response);
 			} else if (clazz.equals(Map.class)) { // map 参数，将请求参数转为 map
 				Map<String, Object> map;
-				
+
 				if (request.getMethod() != null && request.getMethod().equals("PUT")) {
 					map = request.getPutRequestData();
 				} else {
@@ -99,8 +99,7 @@ public class RequestParam {
 	 * @param args        参数列表
 	 * @param method      控制器方法对象
 	 */
-	private static void getArgValue(Class<?> clz, Annotation[] annotations, MvcRequest request, ArrayList<Object> args,
-			Method method) {
+	private static void getArgValue(Class<?> clz, Annotation[] annotations, MvcRequest request, ArrayList<Object> args, Method method) {
 		if (annotations.length > 0) {
 			boolean required = false; // 是否必填字段
 
