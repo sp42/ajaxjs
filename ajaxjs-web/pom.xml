@@ -64,8 +64,8 @@
 	</properties>
 
 	<build>
-		<sourceDirectory>src/main</sourceDirectory>
-		<testSourceDirectory>src/test</testSourceDirectory>
+<!-- 		<sourceDirectory>src/main</sourceDirectory> -->
+<!-- 		<testSourceDirectory>src/test</testSourceDirectory> -->
 		<resources>
 			<resource>
 				<directory>src/main</directory>
