@@ -18,15 +18,11 @@ package com.ajaxjs.mvc.controller;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -143,35 +139,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 		// 所以最后一个参数为 true
 		return BeanUtil.map2Bean(map, clazz, true);
 	}
-
-	/**
-	 * 遍历注解的配置，需要什么类，收集起来，放到一个 hash 之中， Servlet 或 Filter 通用
-	 * 
-	 * @param servletCfg 这两个参数任选一个，但不能同时传
-	 * @param filterCfg  这两个参数任选一个，但不能同时传
-	 * @return 指定的 Servlet 或 Filter 配置对象
-	 */
-	public static Map<String, String> initParams2map(ServletConfig servletCfg, FilterConfig filterCfg) {
-		Map<String, String> map = new HashMap<>();
-
-		Enumeration<String> initParams = servletCfg == null ? filterCfg.getInitParameterNames()
-				: servletCfg.getInitParameterNames();
-
-		while (initParams.hasMoreElements()) {
-			String key = initParams.nextElement();
-			String value;
-
-			if (servletCfg == null)
-				value = filterCfg.getInitParameter(key);
-			else
-				value = servletCfg.getInitParameter(key);
-
-			map.put(key, value);
-		}
-
-		return map;
-	}
-
+ 
 	/**
 	 * 全局的 callback 参数名
 	 */

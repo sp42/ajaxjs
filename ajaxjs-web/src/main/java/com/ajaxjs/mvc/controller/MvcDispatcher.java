@@ -44,6 +44,7 @@ import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.web.ServletHelper;
 
 /**
  * MVC 分发器，控制器核心类
@@ -73,7 +74,7 @@ public class MvcDispatcher implements Filter {
 	public void init(FilterConfig _config) throws ServletException {
 		// 读取 web.xml 配置，如果有 controller 那一项就获取指定包里面的内容，看是否有属于 IController 接口的控制器，有就加入到
 		// AnnotationUtils.controllers 集合中
-		Map<String, String> config = MvcRequest.initParams2map(null, _config);
+		Map<String, String> config = ServletHelper.initFilterConfig2Map( _config);
 
 		if (config != null && config.get("doIoc") != null) {
 			String doIoc = config.get("doIoc");
@@ -304,8 +305,8 @@ public class MvcDispatcher implements Filter {
 	 * @return ModelAndView
 	 */
 	private static ModelAndView findModel(Object[] args) {
-		Optional<Object> s6 = Arrays.stream(args).filter(obj -> obj instanceof IController).findAny();
-		return s6.isPresent() ? (ModelAndView) s6.get() : null;
+		Optional<Object> mv = Arrays.stream(args).filter(obj -> obj instanceof IController).findAny();
+		return mv.isPresent() ? (ModelAndView) mv.get() : null;
 	}
 
 	@Override

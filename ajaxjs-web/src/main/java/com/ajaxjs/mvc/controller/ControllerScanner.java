@@ -15,6 +15,7 @@
  */
 package com.ajaxjs.mvc.controller;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
@@ -23,6 +24,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -37,7 +39,7 @@ import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
- * Servlet 启动时进行控制器扫描。Scanner controllers at Servlet starting up
+ * Servlet 启动时进行控制器扫描，解析控制器 Path 路径，然后将其登记起来。Scanner controllers at Servlet starting up
  * 
  * @author Sp42 frank@ajaxjs.com
  */
@@ -58,8 +60,10 @@ public class ControllerScanner {
 		if (!testClass(clz))
 			return;
 
-		String topPath = clz.getAnnotation(Path.class).value();// 控制器类上定义的 Path 注解总是从根目录开始的。 the path in class always starts from top 1
+		String topPath = clz.getAnnotation(Path.class).value();// 控制器类上定义的 Path 注解总是从根目录开始的。 the path in class always
+																// starts from top 1
 		topPath = topPath.replaceAll("^/", ""); // remove the first / so that the array would be right length
+		
 		// LOGGER.info("控制器正在解析，This controller \"{0}\" is being parsing", topPath);
 
 		Action action = null;
@@ -78,7 +82,9 @@ public class ControllerScanner {
 		if (clz.getAnnotation(Bean.class) != null) { // 如果有 ioc，则从容器中查找
 			action.controller = BeanContext.getBeanByClass(clz);
 			if (action.controller == null)
-				LOGGER.warning("在 IOC 资源库中找不到该类 {0} 的实例，请检查该类是否已经加入了 IOC 扫描？  The IOC library not found that Controller, plz check if it added to the IOC scan.", clz.getName());
+				LOGGER.warning(
+						"在 IOC 资源库中找不到该类 {0} 的实例，请检查该类是否已经加入了 IOC 扫描？  The IOC library not found that Controller, plz check if it added to the IOC scan.",
+						clz.getName());
 		} else {
 			action.controller = ReflectUtil.newInstance(clz);// 保存的是 控制器 实例。
 		}
@@ -130,7 +136,8 @@ public class ControllerScanner {
 	}
 
 	/**
-	 * 根据路径信息加入到 urlMapping。Check out all methods which has Path annotation, then add the urlMapping.
+	 * 根据路径信息加入到 urlMapping。Check out all methods which has Path annotation, then
+	 * add the urlMapping.
 	 * 
 	 * @param clz    控制器类
 	 * @param action 父亲动作
@@ -163,44 +170,33 @@ public class ControllerScanner {
 	 * @param method 控制器方法
 	 * @param action Action
 	 */
+
 	private static void methodSend(Method method, Action action) {
-		if (method.getAnnotation(GET.class) != null) {
-			if (testIfEmpty(action.getMethod, action.path, "GET")) {
-				action.getMethod = method;
-				action.getMethodController = action.controller;
-			}
-		} else if (method.getAnnotation(POST.class) != null) {
-			if (testIfEmpty(action.postMethod, action.path, "POST")) {
-				action.postMethod = method;
-				action.postMethodController = action.controller;
-			}
-		} else if (method.getAnnotation(PUT.class) != null) {
-			if (testIfEmpty(action.putMethod, action.path, "PUT")) {
-				action.putMethod = method;
-				action.putMethodController = action.controller;
-			}
-		} else if (method.getAnnotation(DELETE.class) != null) {
-			if (testIfEmpty(action.deleteMethod, action.path, "DELETE")) {
-				action.deleteMethod = method;
-				// if (controller != null)
-				action.deleteMethodController = action.controller;
-			}
+		if (isSend(GET.class, method, action, () -> action.getMethod)) {
+			action.getMethod = method;
+			action.getMethodController = action.controller;
+		} else if (isSend(POST.class, method, action, () -> action.postMethod)) {
+			action.postMethod = method;
+			action.postMethodController = action.controller;
+		} else if (isSend(PUT.class, method, action, () -> action.putMethod)) {
+			action.putMethod = method;
+			action.putMethodController = action.controller;
+		} else if (isSend(DELETE.class, method, action, () -> action.deleteMethod)) {
+			action.deleteMethod = method;
+			action.deleteMethodController = action.controller;
 		}
 	}
 
-	/**
-	 * Test if it's repeated adding.
-	 * 
-	 * @param method
-	 * @param path
-	 * @param httpMethod
-	 * @return true if the Action is empty, allow to add a new method object
-	 */
-	private static boolean testIfEmpty(Method method, String path, String httpMethod) {
-		if (method == null)
-			return true;
-		else {
-			LOGGER.warning("控制器上的 {0} 的 {1} 方法业已登记，不接受重复登记！", path, httpMethod);
+	private static <T extends Annotation> boolean isSend(Class<T> anClz, Method method, Action action, Supplier<Method> getExistMethod) {
+		if (method.getAnnotation(anClz) != null) {
+			if (getExistMethod.get() == null)
+				return true; // if the Action is empty, allow to add a new method object
+			else {
+				String[] arr = anClz.toString().split("\\.");
+				LOGGER.warning("控制器上的 {0} 的 {1} 方法业已登记，不接受重复登记！", action.path, arr[arr.length - 1]);
+				return false;
+			}
+		} else {
 			return false;
 		}
 	}
