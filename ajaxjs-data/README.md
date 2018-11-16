@@ -29,7 +29,7 @@ Maven 坐标：
 <dependency>
   <groupId>com.ajaxjs</groupId>
   <artifactId>ajaxjs-data</artifactId>
-  <version>1.0.6</version>
+  <version>1.0.7</version>
 </dependency>
 ```
 

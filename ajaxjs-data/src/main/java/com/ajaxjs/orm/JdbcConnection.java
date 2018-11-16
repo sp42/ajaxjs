@@ -289,7 +289,7 @@ public class JdbcConnection {
 	/**
 	 * 测试用数据库（SQLite）
 	 */
-	public static final String testUsed_sqlite = ScanClass.getResourcesByFileName("foo.sqlite");
+	public static final String testUsed_sqlite = ScanClass.getResourcesByFileName("test_used_database.sqlite");
 
 	/**
 	 * 创建 SQLite 数据库连接对象（测试用）

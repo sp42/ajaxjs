@@ -18,8 +18,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.ajaxjs.framework.dao.SqlFactory;
-
 /**
  * 表示一个 SELECT SQL 语句
  * 
@@ -72,6 +70,4 @@ public @interface Select {
 	 * @return 是否需要条件查询
 	 */
 	boolean isQuerySupport() default false;
-
-	Class<? extends SqlFactory>[] sqlFactory() default {};
 }
