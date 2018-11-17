@@ -34,9 +34,14 @@ Maven 坐标：
 
 ![输入图片说明](https://static.oschina.net/uploads/img/201802/20113259_XALo.jpg "在这里输入图片标题")
 
+
 鸣谢
 ==========
 本人水平有限，日志组件引用了 Tomcat 的 FileHandler 源码。
+
+官网
+=========
+点击进入 [framework.ajaxjs.com](https://framework.ajaxjs.com]) 了解更多信息。
 
 
 版权声明 LICENSE
