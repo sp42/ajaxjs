@@ -21,7 +21,7 @@ AJAXJS-Data 主要实现了以下功能：
 安装
 ==========
 
-要求 Java 1.8+，Jar 直接下载：[～56kb](https://search.maven.org/remotecontent?filepath=com/ajaxjs/ajaxjs-data/1.0.7/ajaxjs-data-1.0.7.jar)
+要求 Java 1.8+，Jar 直接下载：[～56kb](https://search.maven.org/remotecontent?filepath=com/ajaxjs/ajaxjs-data/1.0.8/ajaxjs-data-1.0.8.jar)
 
 Maven 坐标：
 
@@ -29,7 +29,7 @@ Maven 坐标：
 <dependency>
   <groupId>com.ajaxjs</groupId>
   <artifactId>ajaxjs-data</artifactId>
-  <version>1.0.7</version>
+  <version>1.0.8</version>
 </dependency>
 ```
 

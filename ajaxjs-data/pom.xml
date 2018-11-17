@@ -2,138 +2,20 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.ajaxjs</groupId>
+	<parent>
+		<groupId>com.ajaxjs</groupId>
+		<artifactId>ajaxjs-parent</artifactId>
+		<version>1.0</version>
+		<relativePath>../ajajx-maven-global.xml</relativePath>
+	</parent>
+
 	<artifactId>ajaxjs-data</artifactId>
 	<name>AJAXJS-Data</name>
-	<url>https://framework.ajaxjs.com</url>
 	<description>Providing JDBC/Model/DAO/Service</description>
 
-	<version>1.0.7</version>
-
-	<scm>
-		<url>https://gitee.com/sp42_admin/ajaxjs/tree/master/ajaxjs-base</url>
-		<connection>scm:git:git@gitee.com:sp42_admin/ajaxjs.git</connection>
-		<developerConnection>scm:git:git@gitee.com:sp42_admin/ajaxjs.git</developerConnection>
-		<tag></tag>
-	</scm>
-
-	<issueManagement>
-		<url>https://gitee.com/sp42_admin/ajaxjs/issues</url>
-	</issueManagement>
-
-	<!-- Common Start -->
-	<inceptionYear>2013</inceptionYear>
-
-	<organization>
-		<name>AJAXJS</name>
-		<url>https://framework.ajaxjs.com</url>
-	</organization>
-
-	<developers>
-		<developer>
-			<name>Frank Cheung</name>
-			<email>frank@ajaxjs.com</email>
-		</developer>
-	</developers>
-
-	<licenses>
-		<license>
-			<name>The Apache Software License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-		</license>
-	</licenses>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-
-	<distributionManagement>
-		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
-
-
-	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-			</plugin>
-
-			<!-- 发布到中央库 -->
-			<plugin>
-
-				<groupId>org.sonatype.plugins</groupId>
-				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.8</version>
-				<extensions>true</extensions>
-				<configuration>
-					<serverId>ossrh</serverId>
-					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-					<autoReleaseAfterClose>true</autoReleaseAfterClose>
-				</configuration>
-			</plugin>
-
-			<!-- 加密签名 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.5</version>
-				<executions>
-					<execution>
-						<id>sign-artifacts</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<!-- 生成 java 源码 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>2.2.1</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<!-- 生成 javadoc 文档 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-
-						<configuration> <!-- add this to disable checking -->
-							<additionalparam>-Xdoclint:none</additionalparam>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+	<version>1.0.8</version>
 
 	<dependencies>
-
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -146,7 +28,6 @@
 			<artifactId>sqlite-jdbc</artifactId>
 			<version>3.15.1</version>
 		</dependency>
-
 
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
@@ -161,14 +42,6 @@
 			<version>7.0.37</version>
 			<scope>test</scope>
 		</dependency>
-
-		<!-- 模拟对象 -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.mockito</groupId> -->
-		<!-- <artifactId>mockito-all</artifactId> -->
-		<!-- <version>2.0.2-beta</version> -->
-		<!-- <scope>provided</scope> -->
-		<!-- </dependency> -->
 
 		<!-- <dependency> -->
 		<!-- <groupId>com.github.jsqlparser</groupId> -->
