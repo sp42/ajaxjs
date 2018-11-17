@@ -42,6 +42,7 @@ import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
  * @author Sp42 frank@ajaxjs.com
  * @param <T> DAO 实际类型引用
  */
+@SuppressWarnings("restriction")
 public class DaoHandler<T> extends JdbcHelper implements InvocationHandler {
 
 	/**

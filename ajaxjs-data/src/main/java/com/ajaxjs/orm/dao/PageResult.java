@@ -17,12 +17,12 @@ import java.lang.reflect.Parameter;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.ajaxjs.orm.JdbcHelper;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import com.sun.javafx.collections.MappingChange.Map;
 
 /**
  * 分页信息 bean
