@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.ajaxjs.cms.service.aop.CommonService;
 import com.ajaxjs.cms.service.aop.GlobalLogAop;
-import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
@@ -17,32 +16,32 @@ public class UserAdminServiceImpl implements UserAdminService {
 	public static UserAdminDao dao = new DaoHandler<UserAdminDao>().bind(UserAdminDao.class);
 
 	@Override
-	public User findById(Long id) throws ServiceException {
+	public User findById(Long id) {
 		return dao.findById(id);
 	}
 
 	@Override
-	public Long create(User bean) throws ServiceException {
+	public Long create(User bean) {
 		return dao.create(bean);
 	}
 
 	@Override
-	public int update(User bean) throws ServiceException {
+	public int update(User bean) {
 		return dao.update(bean);
 	}
 
 	@Override
-	public boolean delete(User bean) throws ServiceException {
+	public boolean delete(User bean) {
 		return dao.delete(bean);
 	}
 
 	@Override
-	public PageResult<User> findPagedList(QueryParams params, int start, int limit) throws ServiceException {
+	public PageResult<User> findPagedList(QueryParams params, int start, int limit) {
 		return dao.findPagedList(params, start, limit);
 	}
 
 	@Override
-	public PageResult<User> findPagedList(int start, int limit) throws ServiceException {
+	public PageResult<User> findPagedList(int start, int limit) {
 		return dao.findPagedList(start, limit);
 	}
 

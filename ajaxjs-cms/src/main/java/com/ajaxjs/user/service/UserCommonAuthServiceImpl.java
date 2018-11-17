@@ -17,7 +17,7 @@ public class UserCommonAuthServiceImpl implements UserCommonAuthService {
 	public static UserCommonAuthDao dao = new DaoHandler<UserCommonAuthDao>().bind(UserCommonAuthDao.class);
 
 	@Override
-	public UserCommonAuth findById(Long id) throws ServiceException {
+	public UserCommonAuth findById(Long id) {
 		return dao.findById(id);
 	}
 
@@ -27,7 +27,7 @@ public class UserCommonAuthServiceImpl implements UserCommonAuthService {
 	public static final String salt = "dasdsad312";
 
 	@Override
-	public Long create(UserCommonAuth bean) throws ServiceException {
+	public Long create(UserCommonAuth bean) {
 		System.out.println(bean.getPassword());
 		bean.setPassword(encode(bean.getPassword()));
 		bean.setRegisterIp(MvcRequest.getMvcRequest().getIp());
@@ -43,22 +43,22 @@ public class UserCommonAuthServiceImpl implements UserCommonAuthService {
 	}
 
 	@Override
-	public int update(UserCommonAuth bean) throws ServiceException {
+	public int update(UserCommonAuth bean) {
 		return dao.update(bean);
 	}
 
 	@Override
-	public boolean delete(UserCommonAuth bean) throws ServiceException {
+	public boolean delete(UserCommonAuth bean) {
 		return dao.delete(bean);
 	}
 
 	@Override
-	public PageResult<UserCommonAuth> findPagedList(QueryParams params, int start, int limit) throws ServiceException {
+	public PageResult<UserCommonAuth> findPagedList(QueryParams params, int start, int limit) {
 		return dao.findPagedList(params, start, limit);
 	}
 
 	@Override
-	public PageResult<UserCommonAuth> findPagedList(int start, int limit) throws ServiceException {
+	public PageResult<UserCommonAuth> findPagedList(int start, int limit) {
 		return dao.findPagedList(start, limit);
 	}
 

@@ -34,7 +34,7 @@ public class ArticleAdminController extends CommonController<Map<String, Object>
 	@GET
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, @QueryParam("catalogId") int catalogId, ModelAndView model) throws ServiceException {
+	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, @QueryParam("catalogId") int catalogId, ModelAndView model) {
 		if (catalogId == 0) {
 			catalogId = ConfigService.getValueAsInt("data.articleCatalog_Id"); // 不指定实体的子分类
 		}
@@ -60,7 +60,7 @@ public class ArticleAdminController extends CommonController<Map<String, Object>
 	@Path("{id}")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
-	public String editUI(@PathParam("id") Long id, ModelAndView model) throws ServiceException {
+	public String editUI(@PathParam("id") Long id, ModelAndView model) {
 		model.put("catelogId", ConfigService.getValueAsInt("data.articleCatalog_Id"));
 		info(id, model);
 		super.editUI(model);
@@ -72,7 +72,7 @@ public class ArticleAdminController extends CommonController<Map<String, Object>
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String create(Map<String, Object> entity, ModelAndView model) throws ServiceException {
+	public String create(Map<String, Object> entity, ModelAndView model) {
 		return super.create(entity, model);
 	}
 
@@ -81,7 +81,7 @@ public class ArticleAdminController extends CommonController<Map<String, Object>
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, Map<String, Object> entity, ModelAndView model) throws ServiceException {
+	public String update(@PathParam("id") Long id, Map<String, Object> entity, ModelAndView model) {
 		return super.update(id, entity, model);
 	}
 
@@ -90,7 +90,7 @@ public class ArticleAdminController extends CommonController<Map<String, Object>
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String delete(@PathParam("id") Long id, ModelAndView model) throws ServiceException {
+	public String delete(@PathParam("id") Long id, ModelAndView model) {
 		return super.delete(id, model);
 	}
 }

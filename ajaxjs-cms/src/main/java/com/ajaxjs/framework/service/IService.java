@@ -34,16 +34,16 @@ public interface IService<T, ID extends Serializable> {
 	 * @param id 序号
 	 * @return POJO 对象
 	 */
-	public T findById(ID id) throws ServiceException;
+	public T findById(ID id);
 
 	/**
 	 * 查询分页数据
 	 * 
 	 * @param params 查询参数
 	 * @return 分页结果对象
-	 * @throws ServiceException 业务异常
+	 * @业务异常
 	 */
-	public PageResult<T> findPagedList(QueryParams params, int start, int limit) throws ServiceException;
+	public PageResult<T> findPagedList(QueryParams params, int start, int limit);
 
 	/**
 	 * 查询分页数据
@@ -51,37 +51,37 @@ public interface IService<T, ID extends Serializable> {
 	 * @param start 开始行数
 	 * @param limit 读取行数
 	 * @return 分页结果对象
-	 * @throws ServiceException 业务异常
+	 * @业务异常
 	 */
-	public PageResult<T> findPagedList(int start, int limit) throws ServiceException;
+	public PageResult<T> findPagedList(int start, int limit);
 
 	/**
 	 * 新建记录
 	 * 
 	 * @param bean POJO 对象
 	 * @return 新建记录之序号
-	 * @throws ServiceException 业务异常
+	 * @业务异常
 	 */
 	@ValidIt
-	public ID create(@ValidObj T bean) throws ServiceException;
+	public ID create(@ValidObj T bean);
 
 	/**
 	 * 修改记录
 	 * 
 	 * @param bean POJO 对象
 	 * @return 影响的行数，理应 = 1
-	 * @throws ServiceException 业务异常
+	 * @业务异常
 	 */
-	public int update(T bean) throws ServiceException;
+	public int update(T bean);
 
 	/**
 	 * 单个删除
 	 * 
 	 * @param bean POJO 对象
 	 * @return 影响的行数
-	 * @throws ServiceException 业务异常
+	 * @业务异常
 	 */
-	public boolean delete(T bean) throws ServiceException;
+	public boolean delete(T bean);
 
 	/**
 	 * 返回业务名称，可用于 UI 显示

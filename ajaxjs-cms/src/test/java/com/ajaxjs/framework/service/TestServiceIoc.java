@@ -26,7 +26,7 @@ public class TestServiceIoc {
 	}
 
 	@Test
-	public void testIoc() throws ServiceException {
+	public void testIoc() {
 		BeanContext.init("com.ajaxjs.framework.mock");
 
 		NewsService newsService = (NewsService) BeanContext.getBean("newsService");

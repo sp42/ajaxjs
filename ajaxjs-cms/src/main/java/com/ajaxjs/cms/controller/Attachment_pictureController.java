@@ -37,8 +37,7 @@ import com.ajaxjs.web.UploadFileInfo;
  */
 @Path("/admin/attachmentPicture")
 @Bean("Attachment_pictureController")
-public class Attachment_pictureController extends CommonController<Attachment_picture, Long>
-		implements CommonEntryAdminController<Attachment_picture, Long> {
+public class Attachment_pictureController extends CommonController<Attachment_picture, Long> implements CommonEntryAdminController<Attachment_picture, Long> {
 	@Resource("Attachment_pictureService")
 	private Attachment_pictureService service;
 
@@ -54,12 +53,12 @@ public class Attachment_pictureController extends CommonController<Attachment_pi
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
-	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) throws ServiceException {
+	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
 		model.put("imgRelativePath", ConfigService.getValueAsString("uploadFile" + ".relativePath"));
 
 		model.put("catelogMap", catelogMap);
-		super.list(start, limit, model);
-		
+		list(start, limit, model, (_start, _limit) -> service.findPagedList(_start, _limit));
+
 		return jsp_perfix + "/attachment/pic-list";
 	}
 
@@ -67,16 +66,15 @@ public class Attachment_pictureController extends CommonController<Attachment_pi
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("getListByOwnerUid/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getListByOwnerUid(@PathParam("id") Long owenrUid) throws ServiceException {
-		return outputListBeanAsJson(getService().findByOwner(owenrUid));
+	public String getListByOwnerUid(@PathParam("id") Long owenrUid) {
+		return outputJson(service.findByOwner(owenrUid));
 	}
 
 	@POST
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("/upload/{id}/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String imgUpload(MvcRequest request, @PathParam("id") Long owenerId, @QueryParam("catelog") int catelogId)
-			throws IOException, ServiceException {
+	public String imgUpload(MvcRequest request, @PathParam("id") Long owenerId, @QueryParam("catelog") int catelogId) throws IOException, ServiceException {
 		final UploadFileInfo info = uploadByConfig(request);
 
 		if (info.isOk) {
@@ -94,7 +92,7 @@ public class Attachment_pictureController extends CommonController<Attachment_pi
 			if (catelogId != 0)
 				picture.setCatelog(catelogId);
 
-			final Long _newlyId = getService().create(picture);
+			final Long _newlyId = service.create(picture);
 
 			return "json::" + MappingJson.stringifySimpleObject(new Object() {
 				@SuppressWarnings("unused")
@@ -130,7 +128,7 @@ public class Attachment_pictureController extends CommonController<Attachment_pi
 			picture.setFileSize((int) (img.getFile().length() / 1024));
 			picture.setCatelog(1);
 
-			final Long _newlyId = getService().create(picture);
+			final Long _newlyId = service.create(picture);
 
 			return "json::" + MappingJson.stringifySimpleObject(new Object() {
 				@SuppressWarnings("unused")
@@ -152,7 +150,7 @@ public class Attachment_pictureController extends CommonController<Attachment_pi
 	@Path("/saveImgIndex")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String saveImgIndex(Map<String, Object> map) {
-		if (getService().saveImgIndex(map)) {
+		if (service.saveImgIndex(map)) {
 			return jsonNoOk("修改图片索引成功！");
 		}
 		return jsonNoOk("修改图片索引失败！");
@@ -186,8 +184,8 @@ public class Attachment_pictureController extends CommonController<Attachment_pi
 	@Path("{id}")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam("id") Long id, ModelAndView model, MvcRequest request) throws ServiceException {
-		Attachment_picture pic = getService().findById(id);
+	public String delete(@PathParam("id") Long id, ModelAndView model, MvcRequest request) {
+		Attachment_picture pic = service.findById(id);
 		pic.setPath(request.mappath(pic.getPath())); // 转换为绝对地址
 
 		return super.delete(pic, model);

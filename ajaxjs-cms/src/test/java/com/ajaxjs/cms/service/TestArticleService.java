@@ -32,7 +32,7 @@ public class TestArticleService {
 	}
 
 	// @Test
-	public void test() throws ServiceException {
+	public void test() {
 		CatalogService catalogService = (CatalogService) BeanContext.getBean("CatalogService");
 
 		assertNotNull(catalogService);
@@ -53,7 +53,7 @@ public class TestArticleService {
 	}
 
 	@Test
-	public void testGetAllListByParentId() throws ServiceException {
+	public void testGetAllListByParentId() {
 		CatalogService catalogService = (CatalogService) BeanContext.getBean("CatalogService");
 		catalogService.getAllListByParentId(12);
 
@@ -67,7 +67,7 @@ public class TestArticleService {
 	}
 
 	@Test
-	public void getInfo() throws ServiceException {
+	public void getInfo() {
 		ArticleService articleService = (ArticleService) BeanContext.getBean("ArticleService");
 		articleService.findById(3L);
 	}

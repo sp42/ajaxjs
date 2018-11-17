@@ -18,17 +18,17 @@ public class SectionInfoServiceImpl implements SectionInfoService {
 	public static SectionInfoDao dao = new DaoHandler<SectionInfoDao>().bind(SectionInfoDao.class);
 
 	@Override
-	public List<SectionInfo> findByParentId(int id) throws ServiceException {
+	public List<SectionInfo> findByParentId(int id) {
 		return dao.getListByParentId(id);
 	}
 
 	@Override
-	public SectionInfo findById(Long id) throws ServiceException {
+	public SectionInfo findById(Long id) {
 		return dao.findById(id);
 	}
 
 	@Override
-	public Long create(SectionInfo bean) throws ServiceException {
+	public Long create(SectionInfo bean) {
 		if (bean.getPid() != -1) { // 非根节点
 			SectionInfo parent = findById(bean.getPid().longValue()); // 保存路径信息
 
@@ -56,22 +56,22 @@ public class SectionInfoServiceImpl implements SectionInfoService {
 	}
 
 	@Override
-	public int update(SectionInfo bean) throws ServiceException {
+	public int update(SectionInfo bean) {
 		return dao.update(bean);
 	}
 
 	@Override
-	public boolean delete(SectionInfo bean) throws ServiceException {
+	public boolean delete(SectionInfo bean) {
 		return dao.deleteAll(bean.getId().intValue());
 	}
 
 	@Override
-	public PageResult<SectionInfo> findPagedList(QueryParams params, int start, int limit) throws ServiceException {
+	public PageResult<SectionInfo> findPagedList(QueryParams params, int start, int limit) {
 		return dao.findPagedList(params, start, limit);
 	}
 
 	@Override
-	public PageResult<SectionInfo> findPagedList(int start, int limit) throws ServiceException {
+	public PageResult<SectionInfo> findPagedList(int start, int limit) {
 		return dao.findPagedList(start, limit);
 	}
 

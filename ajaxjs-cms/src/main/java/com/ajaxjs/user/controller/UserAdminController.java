@@ -30,7 +30,7 @@ public class UserAdminController extends CommonController<User, Long> implements
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
-	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) throws ServiceException {
+	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
 		prepareData(model);
 		model.put("PageResult", getService().findPagedList(start, limit));
 		return jsp_perfix + "/user/list";
@@ -46,7 +46,7 @@ public class UserAdminController extends CommonController<User, Long> implements
 	@Path("{id}")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
-	public String editUI(@PathParam("id") Long id, ModelAndView model) throws ServiceException {
+	public String editUI(@PathParam("id") Long id, ModelAndView model) {
 		info(id, model);
 		return jsp_perfix + "/user/user-info";
 	}
@@ -54,7 +54,7 @@ public class UserAdminController extends CommonController<User, Long> implements
 	@POST
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
-	public String create(User entity, ModelAndView model) throws ServiceException {
+	public String create(User entity, ModelAndView model) {
 		return super.create(entity, model);
 	}
 
@@ -62,7 +62,7 @@ public class UserAdminController extends CommonController<User, Long> implements
 	@Path("{id}")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
-	public String update(@PathParam("id") Long id, User entity, ModelAndView model) throws ServiceException {
+	public String update(@PathParam("id") Long id, User entity, ModelAndView model) {
 		return super.update(id, entity, model);
 	}
 
@@ -70,7 +70,7 @@ public class UserAdminController extends CommonController<User, Long> implements
 	@Path("{id}")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
-	public String delete(@PathParam("id") Long id, ModelAndView model) throws ServiceException {
+	public String delete(@PathParam("id") Long id, ModelAndView model) {
 		User user = new User();
 		user.setId(id);
 		return super.delete(user, model);

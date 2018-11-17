@@ -52,7 +52,7 @@ public class UserRolePrivilegeController extends CommonController<Map<String, Ob
 
 	@POST
 	@Override
-	public String create(Map<String, Object> entity, ModelAndView model)throws ServiceException {
+	public String create(Map<String, Object> entity, ModelAndView model){
 		return super.create(entity, model);
 	}
 
@@ -66,7 +66,7 @@ public class UserRolePrivilegeController extends CommonController<Map<String, Ob
 	@DELETE
 	@Path("{id}")
 	@Override
-	public String delete(@PathParam("id") Integer id, ModelAndView model) throws ServiceException {
+	public String delete(@PathParam("id") Integer id, ModelAndView model) {
 		Map<String, Object> entity = new HashMap<>();
 		entity.put("id", id);
 		return super.delete(entity, model);

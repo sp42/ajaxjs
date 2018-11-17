@@ -22,7 +22,7 @@ public abstract class AbstractLoginController extends BaseUserController {
 
 	public static final String LOGIN_PASSED = "PASSED";
 
-	public String loginByPassword(User user, String password, HttpServletRequest request) throws ServiceException {
+	public String loginByPassword(User user, String password, HttpServletRequest request) {
 		LOGGER.info("检查登录是否合法");
 
 		String msg = "";

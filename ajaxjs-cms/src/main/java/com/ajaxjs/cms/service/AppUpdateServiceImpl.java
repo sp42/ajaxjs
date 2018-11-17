@@ -14,27 +14,27 @@ public class AppUpdateServiceImpl implements AppUpdateService {
 	AppUpdateDao dao = new DaoHandler<AppUpdateDao>().bind(AppUpdateDao.class);
 
 	@Override
-	public AppUpdate findById(Long id) throws ServiceException {
+	public AppUpdate findById(Long id) {
 		return dao.findById(id);
 	}
 
 	@Override
-	public Long create(AppUpdate bean) throws ServiceException {
+	public Long create(AppUpdate bean) {
 		return dao.create(bean);
 	}
 
 	@Override
-	public int update(AppUpdate bean) throws ServiceException {
+	public int update(AppUpdate bean) {
 		return dao.update(bean);
 	}
 
 	@Override
-	public boolean delete(AppUpdate bean) throws ServiceException {
+	public boolean delete(AppUpdate bean) {
 		return dao.delete(bean);
 	}
 
 	@Override
-	public PageResult<AppUpdate> findPagedList(int start, int limit) throws ServiceException {
+	public PageResult<AppUpdate> findPagedList(int start, int limit) {
 		PageResult<AppUpdate> findAppPagedList = dao.findPagedList(start, limit);
 
 		return findAppPagedList;
@@ -51,7 +51,7 @@ public class AppUpdateServiceImpl implements AppUpdateService {
 	}
 
 	@Override
-	public PageResult<AppUpdate> findPagedList(QueryParams params, int start, int limit) throws ServiceException {
+	public PageResult<AppUpdate> findPagedList(QueryParams params, int start, int limit) {
 		return dao.findPagedList(params, start, limit);
 	}
 

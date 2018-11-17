@@ -53,7 +53,7 @@ public class NewsServiceImpl implements NewsService {
 		return dao.findById(id);
 	}
 
-	public Long create(News bean) throws ServiceException {
+	public Long create(News bean) {
 		Long id = dao.create(bean);
 		bean.setId(id);
 		return bean.getId();
@@ -71,7 +71,7 @@ public class NewsServiceImpl implements NewsService {
 		return dao.findPagedList(params, start, limit);
 	}
 
-	public PageResult<News> findPagedList(int start, int limit) throws ServiceException {
+	public PageResult<News> findPagedList(int start, int limit) {
 		return findPagedList(start, limit);
 	}
 

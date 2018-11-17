@@ -32,7 +32,7 @@ public class AdsAdminController extends CommonController<Ads, Long> implements C
 	@GET
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam("catalogId") int catalogId, @QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) throws ServiceException {
+	public String list(@QueryParam("catalogId") int catalogId, @QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
 		if (catalogId == 0)
 			catalogId = getService().getDomainCatelogId(); // 不指定实体的子分类
 
@@ -50,7 +50,7 @@ public class AdsAdminController extends CommonController<Ads, Long> implements C
 	@Path("{id}")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
-	public String editUI(@PathParam("id") Long id, ModelAndView model) throws ServiceException {
+	public String editUI(@PathParam("id") Long id, ModelAndView model) {
 		model.put("domainCatalog_Id", getService().getDomainCatelogId());
 		info(id, model);
 		super.editUI(model);
@@ -72,7 +72,7 @@ public class AdsAdminController extends CommonController<Ads, Long> implements C
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String create(Ads entity, ModelAndView model) throws ServiceException {
+	public String create(Ads entity, ModelAndView model) {
 		return super.create(entity, model);
 	}
 
@@ -80,7 +80,7 @@ public class AdsAdminController extends CommonController<Ads, Long> implements C
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("{id}")
 	@Override
-	public String update(@PathParam("id") Long id, Ads entity, ModelAndView model) throws ServiceException {
+	public String update(@PathParam("id") Long id, Ads entity, ModelAndView model) {
 		return super.update(id, entity, model);
 	}
 
@@ -88,7 +88,7 @@ public class AdsAdminController extends CommonController<Ads, Long> implements C
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("{id}")
 	@Override
-	public String delete(@PathParam("id") Long id, ModelAndView model) throws ServiceException {
+	public String delete(@PathParam("id") Long id, ModelAndView model) {
 		Ads ads = new Ads();
 		ads.setId(id);
 		return super.delete(ads, model);

@@ -47,7 +47,7 @@ public class SectionInfoController extends CommonController<SectionInfo, Long> i
 	@Path("getListAndSubByParentId")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getListAndSubByParentId(@QueryParam("parentId") int parentId, ModelAndView model) throws ServiceException {
+	public String getListAndSubByParentId(@QueryParam("parentId") int parentId, ModelAndView model) {
 		return outputListBeanAsJson(getService().getAllListByParentId(parentId));
 	}
 
@@ -60,7 +60,7 @@ public class SectionInfoController extends CommonController<SectionInfo, Long> i
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String create(SectionInfo entity, ModelAndView model) throws ServiceException {
+	public String create(SectionInfo entity, ModelAndView model) {
 		return super.create(entity, model);
 	}
 
@@ -69,7 +69,7 @@ public class SectionInfoController extends CommonController<SectionInfo, Long> i
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, SectionInfo entity, ModelAndView model) throws ServiceException {
+	public String update(@PathParam("id") Long id, SectionInfo entity, ModelAndView model) {
 		return super.update(id, entity, model);
 	}
 

@@ -27,7 +27,7 @@ public abstract class AbstractRegisterController extends BaseUserController {
 		return new JsonReuslt("{\"isRepeat\":" + getService().checkIfUserPhoneRepeat(phone) + "}");
 	}
 
-	public void registerByPhone(User user, String password) throws ServiceException {
+	public void registerByPhone(User user, String password) {
 		LOGGER.info("执行用户注册");
 
 		if (password == null)

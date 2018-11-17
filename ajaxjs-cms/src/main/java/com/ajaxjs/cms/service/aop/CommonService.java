@@ -76,7 +76,7 @@ public class CommonService<T, ID extends Serializable, S extends IService<T, ID>
 	 * @param model 实体模型
 	 * @throws ServiceException
 	 */
-	private static void validate(BaseModel model) throws ServiceException {
+	private static void validate(BaseModel model) {
 		Validator validator = avf.getValidator();
 		Set<ConstraintViolation<BaseModel>> result = validator.validate(model);
 
@@ -86,7 +86,7 @@ public class CommonService<T, ID extends Serializable, S extends IService<T, ID>
 				err += r.getPropertyPath() + ":" + r.getMessage();
 			}
 
-			throw new ServiceException("数据验证不通过！" + err);
+			throw new NullPointerException("数据验证不通过！" + err);
 		}
 	}
 

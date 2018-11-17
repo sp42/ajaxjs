@@ -15,32 +15,32 @@ public class FeedbackServiceImpl implements FeedbackService {
 	FeedbackDao dao = new DaoHandler<FeedbackDao>().bind(FeedbackDao.class);
 
 	@Override
-	public Feedback findById(Long id) throws ServiceException {
+	public Feedback findById(Long id) {
 		return dao.findById(id);
 	}
 
 	@Override
-	public Long create(Feedback bean) throws ServiceException {
+	public Long create(Feedback bean) {
 		return dao.create(bean);
 	}
 
 	@Override
-	public int update(Feedback bean) throws ServiceException {
+	public int update(Feedback bean) {
 		return dao.update(bean);
 	}
 
 	@Override
-	public boolean delete(Feedback bean) throws ServiceException {
+	public boolean delete(Feedback bean) {
 		return dao.delete(bean);
 	}
 
 	@Override
-	public PageResult<Feedback> findPagedList(QueryParams params, int start, int limit) throws ServiceException {
+	public PageResult<Feedback> findPagedList(QueryParams params, int start, int limit) {
 		return dao.findPagedList(params, start, limit);
 	}
 
 	@Override
-	public PageResult<Feedback> findPagedList(int start, int limit) throws ServiceException {
+	public PageResult<Feedback> findPagedList(int start, int limit) {
 		return dao.findPagedList(start, limit);
 	}
 

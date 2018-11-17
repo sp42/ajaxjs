@@ -34,7 +34,7 @@ public class UserRoleUserController extends CommonController<Map<String, Object>
 	@GET
 	@Path("list")
 	@Override
-	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) throws ServiceException {
+	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
 		super.list(start, limit, model);
 		return jsp_perfix + "user-admin/user-list";
 	}
@@ -53,21 +53,21 @@ public class UserRoleUserController extends CommonController<Map<String, Object>
 
 	@POST
 	@Override
-	public String create(Map<String, Object> entity, ModelAndView model) throws ServiceException {
+	public String create(Map<String, Object> entity, ModelAndView model) {
 		return super.create(entity, model);
 	}
 
 	@PUT
 	@Path("{id}")
 	@Override
-	public String update(@PathParam("id") Integer id, Map<String, Object> entity, ModelAndView model) throws ServiceException {
+	public String update(@PathParam("id") Integer id, Map<String, Object> entity, ModelAndView model) {
 		return super.update(id, entity, model);
 	}
 
 	@DELETE
 	@Path("{id}")
 	@Override
-	public String delete(@PathParam("id") Integer id, ModelAndView model) throws ServiceException {
+	public String delete(@PathParam("id") Integer id, ModelAndView model) {
 		Map<String, Object> entity = new HashMap<>();
 		entity.put("id", id);
 		return super.delete(entity, model);

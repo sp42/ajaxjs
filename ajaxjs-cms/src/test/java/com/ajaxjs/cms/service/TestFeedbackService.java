@@ -35,7 +35,7 @@ public class TestFeedbackService {
 	static int[] userIds = new int[] {4, 6, 7, 8 };
 
 	@Test
-	public void testCreate() throws ServiceException {
+	public void testCreate() {
 		Feedback entity;
 		
 		for (int i = 0; i < 100; i++) {
@@ -51,7 +51,7 @@ public class TestFeedbackService {
 	}
 
 	@Test
-	public void testPageList() throws ServiceException {
+	public void testPageList() {
 		PageResult<Feedback> page;
 		page = service.findPagedList( 0, 10);
 		System.out.println(page.get(0).getUserName());

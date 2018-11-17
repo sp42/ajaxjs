@@ -21,33 +21,33 @@ public class Attachment_pictureServiceImpl implements Attachment_pictureService 
 	Attachment_pictureDao dao = new DaoHandler<Attachment_pictureDao>().bind(Attachment_pictureDao.class);
 
 	@Override
-	public Attachment_picture findById(Long id) throws ServiceException {
+	public Attachment_picture findById(Long id) {
 		return dao.findById(id);
 	}
 
 	@Override
-	public Long create(Attachment_picture bean) throws ServiceException {
+	public Long create(Attachment_picture bean) {
 		return dao.create(bean);
 	}
 
 	@Override
-	public int update(Attachment_picture bean) throws ServiceException {
+	public int update(Attachment_picture bean) {
 		return dao.update(bean);
 	}
 
 	@Override
-	public boolean delete(Attachment_picture bean) throws ServiceException {
+	public boolean delete(Attachment_picture bean) {
 		new FileUtil().setFilePath(bean.getPath()).delete(); // 删除文件
 		return dao.delete(bean);
 	}
 
 	@Override
-	public PageResult<Attachment_picture> findPagedList(QueryParams params, int start, int limit) throws ServiceException {
+	public PageResult<Attachment_picture> findPagedList(QueryParams params, int start, int limit) {
 		return dao.findPagedList(params, start, limit);
 	}
 
 	@Override
-	public PageResult<Attachment_picture> findPagedList(int start, int limit) throws ServiceException {
+	public PageResult<Attachment_picture> findPagedList(int start, int limit) {
 		return dao.findPagedList(start, limit);
 	}
 
@@ -104,7 +104,7 @@ public class Attachment_pictureServiceImpl implements Attachment_pictureService 
 	}
 
 	@Override
-	public boolean deleteByOwnerId(Long OwnerId) throws ServiceException {
+	public boolean deleteByOwnerId(Long OwnerId) {
 		return dao.deleteByOwnerId(OwnerId);
 	}
 

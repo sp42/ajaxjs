@@ -5,7 +5,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.cms.dao.GlobalLogDao;
-import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
@@ -20,7 +19,7 @@ public class SystemController implements IController, Constant {
 	@GET
 	@Path("GlobalLog")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) throws ServiceException {
+	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
 		model.put(PageResult, dao.findPagedList(start, limit));
 		return jsp_perfix + "/system/GlobalLog";
 	}

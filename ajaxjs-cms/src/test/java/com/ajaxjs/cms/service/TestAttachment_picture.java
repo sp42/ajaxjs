@@ -23,7 +23,7 @@ public class TestAttachment_picture{
 	}
 
 	@Test
-	public void testOwner() throws ServiceException {
+	public void testOwner() {
 		long sz = 469557228827836416L;
 		Attachment_pictureService owner = (Attachment_pictureService)BeanContext.getBean("Attachment_pictureService");
 		List<Attachment_picture> oo = owner.findByOwner(sz);

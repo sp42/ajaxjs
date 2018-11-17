@@ -94,9 +94,9 @@ public class UserServiceImpl implements UserService {
 			foundUser = null;
 		}
 
-		if (foundUser == null || foundUser.getId() == null || foundUser.getId() == 0) 
+		if (foundUser == null || foundUser.getId() == null || foundUser.getId() == 0)
 			throw new ServiceException("用户不存在");
-		
+
 		user.setId(foundUser.getId()); // let outside valued
 		user.setName(foundUser.getName());
 
@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService {
 
 		if (effectedRows <= 0)
 			throw new ServiceException("更新会员登录日志出错");
-		
+
 		LOGGER.info(foundUser.getName() + " 登录成功！");
 		return true;
 	}
@@ -161,7 +161,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User findById(Long id) throws ServiceException {
+	public User findById(Long id) {
 		return dao.findById(id);
 	}
 
@@ -169,8 +169,8 @@ public class UserServiceImpl implements UserService {
 	 * 不能调用该方法
 	 */
 	@Override
-	public Long create(User user) throws ServiceException {
-		throw new ServiceException("Should not execute this method!");
+	public Long create(User user) {
+		throw new Error("Should not execute this method!");
 	}
 
 	@Override
@@ -195,18 +195,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean delete(User bean) throws ServiceException {
+	public boolean delete(User bean) {
 		UserCommonAuthServiceImpl.dao.deleteByUserId(bean.getId());
 		return dao.delete(bean);
 	}
 
 	@Override
-	public PageResult<User> findPagedList(QueryParams params, int start, int limit) throws ServiceException {
+	public PageResult<User> findPagedList(QueryParams params, int start, int limit) {
 		return dao.findPagedList(params, start, limit);
 	}
 
 	@Override
-	public PageResult<User> findPagedList(int start, int limit) throws ServiceException {
+	public PageResult<User> findPagedList(int start, int limit) {
 		return dao.findPagedList(start, limit);
 	}
 
@@ -224,41 +224,41 @@ public class UserServiceImpl implements UserService {
 	public Attachment_picture findAvaterByUserId(long userId) {
 		return dao.findAvaterByUserId(userId);
 	}
- 
+
 	@Override
 	public Attachment_picture updateOrCreateAvatar(long userUId, UploadFileInfo info) throws ServiceException {
 		if (!info.isOk) {
 			throw new ServiceException("图片上传失败");
 		}
-		
+
 		Attachment_pictureService avatarService = new Attachment_pictureServiceImpl();
-		
+
 		Attachment_picture avatar = findAvaterByUserId(userUId);
 		boolean isCreate = avatar == null;
-		
-		if(isCreate) {
+
+		if (isCreate) {
 			avatar = new Attachment_picture();
 		}
-		
+
 		// 获取图片信息
 		ImageUtil img = new ImageUtil().setFilePath(info.fullPath).getSize();
-		
+
 		avatar.setOwner(userUId);
 		avatar.setName(info.saveFileName);
-		avatar.setPath(info.path); 
+		avatar.setPath(info.path);
 		avatar.setPicWidth(img.getWidth());
 		avatar.setPicHeight(img.getHeight());
 		avatar.setFileSize((int) (img.getFile().length() / 1024));
 		avatar.setCatelog(Attachment_pictureService.AVATAR);
-		
-		if(isCreate) {
-			if(avatarService.create(avatar) != null) {
+
+		if (isCreate) {
+			if (avatarService.create(avatar) != null) {
 				return avatar;
 			} else {
 				throw new ServiceException("创建图片记录失败");
 			}
 		} else {
-			if(avatarService.update(avatar) != 0) {
+			if (avatarService.update(avatar) != 0) {
 				return avatar;
 			} else {
 				throw new ServiceException("修改图片记录失败");

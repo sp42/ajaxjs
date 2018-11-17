@@ -32,7 +32,7 @@ public class FeedbackAdminController extends CommonController<Feedback, Long> im
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("list")
 	@Override
-	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) throws ServiceException {
+	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
 		super.list(start, limit, model);
 		return jsp_perfix + "/common-entity/feedback-list";
 	}
@@ -47,7 +47,7 @@ public class FeedbackAdminController extends CommonController<Feedback, Long> im
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("/{id}")
 	@Override
-	public String editUI(@PathParam("id") Long id, ModelAndView model) throws ServiceException {
+	public String editUI(@PathParam("id") Long id, ModelAndView model) {
 		info(id, model);
 		return jsp_perfix + "/common-entity/feedback";
 	}
@@ -56,7 +56,7 @@ public class FeedbackAdminController extends CommonController<Feedback, Long> im
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String create(Feedback entity, ModelAndView model) throws ServiceException {
+	public String create(Feedback entity, ModelAndView model) {
 		return super.create(entity, model);
 	}
 
@@ -65,7 +65,7 @@ public class FeedbackAdminController extends CommonController<Feedback, Long> im
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, Feedback entity, ModelAndView model) throws ServiceException {
+	public String update(@PathParam("id") Long id, Feedback entity, ModelAndView model) {
 		return super.update(id, entity, model);
 	}
 
@@ -74,7 +74,7 @@ public class FeedbackAdminController extends CommonController<Feedback, Long> im
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String delete(@PathParam("id") Long id, ModelAndView model) throws ServiceException {
+	public String delete(@PathParam("id") Long id, ModelAndView model) {
 		Feedback bean = new Feedback();
 		bean.setId(id);
 		return super.delete(bean, model);

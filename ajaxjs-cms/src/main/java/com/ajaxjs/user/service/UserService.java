@@ -82,7 +82,7 @@ public interface UserService extends IService<User, Long> {
 	 * 
 	 * @param userId 用户 id
 	 * @return 用戶頭像
-	 * @throws ServiceException 
+	 * @
 	 */
 	public Attachment_picture updateOrCreateAvatar(long userId, UploadFileInfo info) throws ServiceException;
 }

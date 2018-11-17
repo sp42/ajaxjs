@@ -37,7 +37,7 @@ public class AppUpdateAdminController extends CommonController<AppUpdate, Long> 
 	@Path("/list")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
-	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) throws ServiceException {
+	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
 		prepareData(model);
 		model.put("PageResult", getService().findPagedList(start, limit));
 		return jsp_perfix + "/common-entity/app-update-list";
@@ -53,7 +53,7 @@ public class AppUpdateAdminController extends CommonController<AppUpdate, Long> 
 	@POST
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String create(AppUpdate entity, ModelAndView model) throws ServiceException {
+	public String create(AppUpdate entity, ModelAndView model) {
 		return super.create(entity, model);
 	}
 
@@ -62,7 +62,7 @@ public class AppUpdateAdminController extends CommonController<AppUpdate, Long> 
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String delete(@PathParam("id") Long id, ModelAndView model) throws ServiceException {
+	public String delete(@PathParam("id") Long id, ModelAndView model) {
 		return super.delete(id, model);
 	}
 
@@ -70,7 +70,7 @@ public class AppUpdateAdminController extends CommonController<AppUpdate, Long> 
 	@Path("/{id}")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
-	public String editUI(@PathParam("id") Long id, ModelAndView model) throws ServiceException {
+	public String editUI(@PathParam("id") Long id, ModelAndView model) {
 		info(id, model);
 		super.editUI(model);
 		return jsp_perfix + "/common-entity/app-update";
@@ -81,7 +81,7 @@ public class AppUpdateAdminController extends CommonController<AppUpdate, Long> 
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, AppUpdate app, ModelAndView model) throws ServiceException {
+	public String update(@PathParam("id") Long id, AppUpdate app, ModelAndView model) {
 		return super.update(id, app, model);
 	}
 	

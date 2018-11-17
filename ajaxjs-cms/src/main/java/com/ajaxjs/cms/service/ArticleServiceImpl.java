@@ -18,32 +18,32 @@ public class ArticleServiceImpl implements ArticleService {
 	ArticleDao dao = new DaoHandler<ArticleDao>().bind(ArticleDao.class);
 
 	@Override
-	public Map<String, Object> findById(Long id) throws ServiceException {
+	public Map<String, Object> findById(Long id) {
 		return dao.findById(id);
 	}
 
 	@Override
-	public Long create(Map<String, Object> bean) throws ServiceException {
+	public Long create(Map<String, Object> bean) {
 		return dao.create(bean);
 	}
 
 	@Override
-	public int update(Map<String, Object> bean) throws ServiceException {
+	public int update(Map<String, Object> bean) {
 		return dao.update(bean);
 	}
 
 	@Override
-	public boolean delete(Map<String, Object> bean) throws ServiceException {
+	public boolean delete(Map<String, Object> bean) {
 		return dao.delete(bean);
 	}
 
 	@Override
-	public PageResult<Map<String, Object>> findPagedList(QueryParams params, int start, int limit) throws ServiceException {
+	public PageResult<Map<String, Object>> findPagedList(QueryParams params, int start, int limit) {
 		return dao.findPagedList(params, start, limit);
 	}
 
 	@Override
-	public PageResult<Map<String, Object>> findPagedList(int start, int limit) throws ServiceException {
+	public PageResult<Map<String, Object>> findPagedList(int start, int limit) {
 		return findPagedList(start, limit);
 	}
 

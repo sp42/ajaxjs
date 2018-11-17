@@ -35,7 +35,7 @@ public class TestAdsService {
 	static String[] expr = new String[] { "一年", "两年", "三年" };
 
 //	@Test
-	public void testCreate() throws ServiceException {
+	public void testCreate() {
 		Ads entity = new Ads();
 
 		for (int i = 0; i < 10; i++) {
@@ -45,7 +45,7 @@ public class TestAdsService {
 	}
 
 //	@Test
-	public void testPageList() throws ServiceException {
+	public void testPageList() {
 		PageResult<Ads> entities;
 		entities = service.findPagedList(0, 10);
 		System.out.println(entities);
@@ -53,7 +53,7 @@ public class TestAdsService {
 	}
 
 	@Test
-	public void testListByCatelogId() throws ServiceException {
+	public void testListByCatelogId() {
 		List<Ads> entities;
 		entities = service.findListByCatelogId(122, null);
 		System.out.println(entities);

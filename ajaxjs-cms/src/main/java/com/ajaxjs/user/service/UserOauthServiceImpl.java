@@ -1,6 +1,5 @@
 package com.ajaxjs.user.service;
 
-import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
@@ -13,32 +12,32 @@ public class UserOauthServiceImpl implements UserOauthService {
 	UserOauthDao dao = new DaoHandler<UserOauthDao>().bind(UserOauthDao.class);
 
 	@Override
-	public UserOauth findById(Long id) throws ServiceException {
+	public UserOauth findById(Long id) {
 		return dao.findById(id);
 	}
 
 	@Override
-	public Long create(UserOauth bean) throws ServiceException {
+	public Long create(UserOauth bean) {
 		return dao.create(bean);
 	}
 
 	@Override
-	public int update(UserOauth bean) throws ServiceException {
+	public int update(UserOauth bean) {
 		return dao.update(bean);
 	}
 
 	@Override
-	public boolean delete(UserOauth bean) throws ServiceException {
+	public boolean delete(UserOauth bean) {
 		return dao.delete(bean);
 	}
 
 	@Override
-	public PageResult<UserOauth> findPagedList(QueryParams params, int start, int limit) throws ServiceException {
+	public PageResult<UserOauth> findPagedList(QueryParams params, int start, int limit) {
 		return dao.findPagedList(params, start, limit);
 	}
 
 	@Override
-	public PageResult<UserOauth> findPagedList(int start, int limit) throws ServiceException {
+	public PageResult<UserOauth> findPagedList(int start, int limit) {
 		return dao.findPagedList(start, limit);
 	}
 

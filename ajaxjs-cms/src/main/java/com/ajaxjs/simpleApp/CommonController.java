@@ -66,8 +66,7 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 
 		prepareData(model);
 		model.put("actionName", "新建");
-		model.put("isCreate", true); // 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate
-										// = true 标识为创建，以便与 update 区分开来。
+		model.put("isCreate", true); // 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate = true 标识为创建，以便与 update 区分开来。
 
 		return tableName;
 	}
@@ -136,7 +135,6 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	}
 
 	/**
-	 * 
 	 * 因为范型的缘故，不能实例化 bean 对象。应该在子类实例化 bean，再调用本类的 delete()
 	 * 
 	 * @param entity 实体

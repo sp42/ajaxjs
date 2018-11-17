@@ -36,7 +36,7 @@ public class TestHrService {
 
 
 //	@Test
-	public void testCreate() throws ServiceException {
+	public void testCreate() {
 		Map<String, Object> entity;
 		
 		for (int i = 0; i < 10; i++) {
@@ -49,7 +49,7 @@ public class TestHrService {
 	}
 
 	@Test
-	public void testPageList() throws ServiceException {
+	public void testPageList() {
 		PageResult<Map<String, Object>> page;
 		page = service.findPagedList(null, 0, 10);
 		assertNotNull(page.getTotalCount());

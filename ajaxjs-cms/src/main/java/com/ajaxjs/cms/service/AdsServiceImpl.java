@@ -17,27 +17,27 @@ import com.ajaxjs.orm.dao.QueryParams;
 public class AdsServiceImpl implements AdsService {
 	AdsDao dao = new DaoHandler<AdsDao>().bind(AdsDao.class);
 
-	public Ads findById(Long id) throws ServiceException {
+	public Ads findById(Long id) {
 		return dao.findById(id);
 	}
 
 	@Override
-	public Long create(Ads bean) throws ServiceException {
+	public Long create(Ads bean) {
 		return dao.create(bean);
 	}
 
 	@Override
-	public int update(Ads bean) throws ServiceException {
+	public int update(Ads bean) {
 		return dao.update(bean);
 	}
 
 	@Override
-	public boolean delete(Ads bean) throws ServiceException {
+	public boolean delete(Ads bean) {
 		return dao.delete(bean);
 	}
 
 	@Override
-	public PageResult<Ads> findPagedList(int start, int limit) throws ServiceException {
+	public PageResult<Ads> findPagedList(int start, int limit) {
 		return dao.findPagedList(start, limit);
 	}
 
@@ -52,13 +52,13 @@ public class AdsServiceImpl implements AdsService {
 	}
 
 	@Override
-	public PageResult<Ads> findPagedList(QueryParams params, int start, int limit) throws ServiceException {
+	public PageResult<Ads> findPagedList(QueryParams params, int start, int limit) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public PageResult<Ads> findPagedListByCatelogId(int catelogId, QueryParams params, int start, int limit) throws ServiceException {
+	public PageResult<Ads> findPagedListByCatelogId(int catelogId, QueryParams params, int start, int limit) {
 		return dao.findPagedListByCatelogId(catelogId, params, start, limit);
 	}
 
@@ -68,7 +68,7 @@ public class AdsServiceImpl implements AdsService {
 	}
 
 	@Override
-	public List<Ads> findListByCatelogId(int catelogId, QueryParams params) throws ServiceException {
+	public List<Ads> findListByCatelogId(int catelogId, QueryParams params) {
 		return dao.findListByCatelogId(catelogId, params);
 	}
 

@@ -1,14 +1,13 @@
 package com.ajaxjs.user.role;
 
-import org.junit.Test;
-
-import com.ajaxjs.framework.service.ServiceException;
-import com.ajaxjs.user.role.service.UserRoleRoleServiceImpl;
-
 import static org.junit.Assert.assertNotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.junit.Test;
+
+import com.ajaxjs.user.role.service.UserRoleRoleServiceImpl;
 
 public class TestUserRoleService {
 	@Test
@@ -18,11 +17,7 @@ public class TestUserRoleService {
 		user.put("name", "foo");
 
 		UserRoleRoleServiceImpl service = new UserRoleRoleServiceImpl();
-		try {
-			assertNotNull(service.create(user));
-		} catch (ServiceException e) {
-			e.printStackTrace();
-		}
+		assertNotNull(service.create(user));
 	}
 
 }

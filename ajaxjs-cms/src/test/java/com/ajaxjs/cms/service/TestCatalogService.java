@@ -34,7 +34,7 @@ public class TestCatalogService {
 	}
 
 	// @Test
-	public void test() throws ServiceException {
+	public void test() {
 		assertNotNull(catalogService);
 
 		Catalog c = new Catalog();
@@ -53,7 +53,7 @@ public class TestCatalogService {
 	}
 
 	@Test
-	public void create() throws ServiceException {
+	public void create() {
 		Catalog c;
 		c = new Catalog();
 		c.setPid(-1);
@@ -67,7 +67,7 @@ public class TestCatalogService {
 	}
 
 //	@Test
-	public void testGetAllListByParentId() throws ServiceException {
+	public void testGetAllListByParentId() {
 		CatalogService catalogService = (CatalogService) BeanContext.getBean("CatalogService");
 		catalogService.getAllListByParentId(12);
 

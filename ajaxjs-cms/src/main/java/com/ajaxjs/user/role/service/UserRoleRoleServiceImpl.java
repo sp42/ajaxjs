@@ -20,7 +20,7 @@ public class UserRoleRoleServiceImpl implements UserRoleRoleService {
 	UserRoleRoleDao dao = new DaoHandler<UserRoleRoleDao>().bind(UserRoleRoleDao.class);
 
 	@Override
-	public Map<String, Object> findById(Integer id) throws ServiceException {
+	public Map<String, Object> findById(Integer id) {
 		return dao.findById(id);
 	}
 
@@ -34,7 +34,7 @@ public class UserRoleRoleServiceImpl implements UserRoleRoleService {
 	}
 
 	@Override
-	public Integer create(Map<String, Object> bean) throws ServiceException {
+	public Integer create(Map<String, Object> bean) {
 		Integer[] ep = getExistingPrime();
 		int prime;
 
@@ -48,22 +48,22 @@ public class UserRoleRoleServiceImpl implements UserRoleRoleService {
 	}
 
 	@Override
-	public int update(Map<String, Object> bean) throws ServiceException {
+	public int update(Map<String, Object> bean) {
 		return dao.update(bean);
 	}
 
 	@Override
-	public boolean delete(Map<String, Object> bean) throws ServiceException {
+	public boolean delete(Map<String, Object> bean) {
 		return dao.delete(bean);
 	}
 
 	@Override
-	public PageResult<Map<String, Object>> findPagedList(QueryParams params, int start, int limit) throws ServiceException {
+	public PageResult<Map<String, Object>> findPagedList(QueryParams params, int start, int limit) {
 		return dao.findPagedList(params, start, limit);
 	}
 
 	@Override
-	public PageResult<Map<String, Object>> findPagedList(int start, int limit) throws ServiceException {
+	public PageResult<Map<String, Object>> findPagedList(int start, int limit) {
 		return dao.findPagedList(start, limit);
 	}
 

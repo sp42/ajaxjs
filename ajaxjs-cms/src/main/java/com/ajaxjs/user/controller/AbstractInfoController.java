@@ -33,7 +33,7 @@ public abstract class AbstractInfoController extends BaseUserController {
 		this.passwordService = passwordService;
 	}
 
-	public String resetPassword(String new_password, HttpServletRequest request) throws ServiceException {
+	public String resetPassword(String new_password, HttpServletRequest request) {
 		LOGGER.info("重置密码");
 
 		if (getPasswordService() != null && getPasswordService().updatePwd((UserCommonAuth)request.getAttribute("UserCommonAuthId"), new_password))
@@ -42,7 +42,7 @@ public abstract class AbstractInfoController extends BaseUserController {
 			return jsonNoOk("重置密码失败！");
 	}
 
-	public String modiflyUserName(String userName, HttpServletRequest request) throws ServiceException {
+	public String modiflyUserName(String userName, HttpServletRequest request) {
 		LOGGER.info("修改用户名");
 
 		User user = new User();
@@ -56,7 +56,7 @@ public abstract class AbstractInfoController extends BaseUserController {
 			return jsonNoOk("修改用户名失败！");
 	}
 
-	public String modiflyEmail(String email) throws ServiceException {
+	public String modiflyEmail(String email) {
 		LOGGER.info("修改邮箱");
 
 		User user = new User();
@@ -69,7 +69,7 @@ public abstract class AbstractInfoController extends BaseUserController {
 			return jsonNoOk("修改邮箱失败！");
 	}
 
-	public String modiflyPhone(String phone) throws ServiceException {
+	public String modiflyPhone(String phone) {
 		LOGGER.info("修改手机");
 		User user = new User();
 		user.setId(getUserId());
@@ -90,7 +90,7 @@ public abstract class AbstractInfoController extends BaseUserController {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public String updateOrCreateAvatar(MvcRequest request) throws ServiceException {
+	public String updateOrCreateAvatar(MvcRequest request) {
 		LOGGER.info("更新头像,uid:" + getUserUid());
 		UploadFileInfo info;
 

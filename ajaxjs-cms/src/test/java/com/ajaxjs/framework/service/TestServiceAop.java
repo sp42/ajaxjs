@@ -30,7 +30,7 @@ public class TestServiceAop {
 	}
 
 	@Test
-	public void testQueryCache() throws ServiceException {
+	public void testQueryCache() {
 		NewsServiceImpl newsServiceImpl = new NewsServiceImpl();
 		NewsService newsService = new CacheService<News, Long, NewsService>().bind(newsServiceImpl);
 
@@ -45,23 +45,18 @@ public class TestServiceAop {
 	}
 
 	@Test
-	public void testAopLink() throws ServiceException {
+	public void testAopLink() {
 		NewsServiceImpl im = new NewsServiceImpl();
 		NewsService service = Aop.chain(im, new CommonTestService<News, Long, NewsService>(), new CacheService<News, Long, NewsService>());
 		assertEquals(2, service.findPagedList(2, 2).size());
 	}
 
 	@Test
-	public void testValid() throws ServiceException {
+	public void testValid() {
 		NewsService service = new ValidationService<News, Long, NewsService>().bind(new NewsServiceImpl());
 		News news = service.findById(1L);
 		news.setName(null);
 
-		try {
-
-			service.create(news);
-		} catch (ServiceException e) {
-			assertNotNull(e);
-		}
+		service.create(news);
 	}
 }

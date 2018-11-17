@@ -27,7 +27,7 @@ public class TestService {
 	}
 
 	@Test
-	public void testQuery() throws ServiceException {
+	public void testQuery() {
 		NewsServiceImpl newsService = new NewsServiceImpl();
 		assertNotNull(newsService.getFirstNews());
 
@@ -36,7 +36,7 @@ public class TestService {
 	}
 
 	@Test
-	public void testCreateAndDelete() throws ServiceException {
+	public void testCreateAndDelete() {
 		NewsServiceImpl newsService = new NewsServiceImpl();
 		News news = new News();
 		news.setName("标题一");
@@ -47,7 +47,7 @@ public class TestService {
 	}
 
 	@Test
-	public void testUpdate() throws ServiceException {
+	public void testUpdate() {
 		NewsServiceImpl newsService = new NewsServiceImpl();
 		News news = new News();
 		news.setId(1L);

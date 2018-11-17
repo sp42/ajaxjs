@@ -7,7 +7,6 @@ import com.ajaxjs.cms.dao.CatalogDao;
 import com.ajaxjs.cms.model.Catalog;
 import com.ajaxjs.cms.service.aop.CommonService;
 import com.ajaxjs.cms.service.aop.GlobalLogAop;
-import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
@@ -18,17 +17,17 @@ public class CatalogServiceImpl implements CatalogService {
 	CatalogDao dao = new DaoHandler<CatalogDao>().bind(CatalogDao.class);
 
 	@Override
-	public List<Catalog> findByParentId(int id) throws ServiceException {
+	public List<Catalog> findByParentId(int id) {
 		return dao.getListByParentId(id);
 	}
 
 	@Override
-	public Catalog findById(Long id) throws ServiceException {
+	public Catalog findById(Long id) {
 		return dao.findById(id);
 	}
 
 	@Override
-	public Long create(Catalog bean) throws ServiceException {
+	public Long create(Catalog bean) {
 		if (bean.getPid() != -1) { // 非根节点
 			Catalog parent = findById(bean.getPid().longValue()); // 保存路径信息
 
@@ -56,22 +55,22 @@ public class CatalogServiceImpl implements CatalogService {
 	}
 
 	@Override
-	public int update(Catalog bean) throws ServiceException {
+	public int update(Catalog bean) {
 		return dao.update(bean);
 	}
 
 	@Override
-	public boolean delete(Catalog bean) throws ServiceException {
+	public boolean delete(Catalog bean) {
 		return dao.deleteAll(bean.getId().intValue());
 	}
 
 	@Override
-	public PageResult<Catalog> findPagedList(QueryParams params, int start, int limit) throws ServiceException {
+	public PageResult<Catalog> findPagedList(QueryParams params, int start, int limit) {
 		return dao.findPagedList(params, start, limit);
 	}
 
 	@Override
-	public PageResult<Catalog> findPagedList(int start, int limit) throws ServiceException {
+	public PageResult<Catalog> findPagedList(int start, int limit) {
 		return dao.findPagedList(start, limit);
 	}
 
