@@ -19,7 +19,7 @@ AJAXJS-Data 主要实现了以下功能：
 
 
 安装
-==========
+---------
 
 要求 Java 1.8+，Jar 直接下载：[～56kb](https://search.maven.org/remotecontent?filepath=com/ajaxjs/ajaxjs-data/1.0.8/ajaxjs-data-1.0.8.jar)
 
@@ -34,12 +34,12 @@ Maven 坐标：
 ```
 
 教程
-==========
+---------
 参见 [wiki](https://gitee.com/sp42_admin/ajaxjs/wikis/AJAXJS-Data%20%E6%95%B0%E6%8D%AE%E5%B1%82) 教程。
 
 
 鸣谢
-=========
+---------
 
 由于本人水平有限，动态拼接 SQL 功能引用了 MyBatis 的 SQL Builder 的源码，详见 com.ajaxjs.orm.thirdparty 包。还有“雪花 id”生成器也是网友贡献的。其余 AJAXJS-Data 就没有什么依赖了（数据库 Driver 除外）。
 
@@ -56,12 +56,12 @@ https://gitee.com/bitprince/memory
 
 
 官网
-=========
+---------
 点击进入 [framework.ajaxjs.com](https://framework.ajaxjs.com]) 了解更多信息。
 
 
 版权声明 LICENSE
-==========
+---------
 作者版权所有，开源许可：Apache License, Version 2.0
 
 
