@@ -10,13 +10,13 @@ AJAXJS WEB 包含以下模块：
 - security 网站防御系统，抵御 XSS、CSRF 等攻击；
 - config 基于本地 JSON 文件的通用配置系统，完全可以代替 properties 文件实现配置模块。
 
-前端就要看 DEMO：[https://framework.ajaxjs.com/ui_demo/](https://framework.ajaxjs.com/ui_demo/)
+Ajaxjs 前端框架[请点击](../ajaxjs-web-js)
 
 
 安装
 ==========
 
-要求 Java 1.8+，Jar 直接下载：[～56kb](https://search.maven.org/remotecontent?filepath=com/ajaxjs/ajaxjs-data/1.0.7/ajaxjs-data-1.0.7.jar)
+要求 Java 1.8+，Jar 直接下载：[～1300kb，包含 class 文件 160kb，其余为 js/css/jpg 等静态资源](https://search.maven.org/remotecontent?filepath=com/ajaxjs/ajaxjs-web/1.1.2/ajaxjs-web-1.1.2.jar)
 
 Maven 坐标：
 
@@ -39,6 +39,7 @@ Maven 坐标：
 环境配置说明
 -------------
 Eclipse 用户请注意：有别于一般 Dymanic Web 项目，这是一个 Web-Fragment 项目，它基于 Servlet 3.0 特性，新建项目时适宜于下面如图的类型。
+
 ![Web-Fragment 项目](https://images.gitee.com/uploads/images/2018/1117/114116_c739299b_784269.png "TIM截图20181117113715.png")
 
 
