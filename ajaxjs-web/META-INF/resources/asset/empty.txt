@@ -1,2 +1,0 @@
-资源文件
-WebContent/asset/common 应该复制到这里来

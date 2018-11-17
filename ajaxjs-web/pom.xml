@@ -67,13 +67,13 @@
 <!-- 		<sourceDirectory>src/main</sourceDirectory> -->
 <!-- 		<testSourceDirectory>src/test</testSourceDirectory> -->
 		<resources>
-			<resource>
-				<directory>src/main</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-					<exclude>**/*.json</exclude>
-				</excludes>
-			</resource>
+<!-- 			<resource> -->
+<!-- 				<directory>src/main</directory> -->
+<!-- 				<excludes> -->
+<!-- 					<exclude>**/*.java</exclude> -->
+<!-- 					<exclude>**/*.json</exclude> -->
+<!-- 				</excludes> -->
+<!-- 			</resource> -->
 
 			<resource>
 				<directory>META-INF</directory>
@@ -83,23 +83,23 @@
 				</includes>
 			</resource>
 
-			<resource>
-				<directory>WebContent/asset</directory>
-				<targetPath>META-INF/resources/asset</targetPath>
-				<includes>
-					<include>**/*.*</include>
-				</includes>
-			</resource>
+<!-- 			<resource> -->
+<!-- 				<directory>WebContent/asset</directory> -->
+<!-- 				<targetPath>META-INF/resources/asset</targetPath> -->
+<!-- 				<includes> -->
+<!-- 					<include>**/*.*</include> -->
+<!-- 				</includes> -->
+<!-- 			</resource> -->
 		</resources>
 
-		<testResources>
-			<testResource>
-				<directory>src/test</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</testResource>
-		</testResources>
+<!-- 		<testResources> -->
+<!-- 			<testResource> -->
+<!-- 				<directory>src/test</directory> -->
+<!-- 				<excludes> -->
+<!-- 					<exclude>**/*.java</exclude> -->
+<!-- 				</excludes> -->
+<!-- 			</testResource> -->
+<!-- 		</testResources> -->
 
 		<plugins>
 			<plugin>
@@ -174,19 +174,19 @@
 	</build>
 
 	<dependencies>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>3.0.1</version>
-			<scope>provided</scope>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>javax.servlet</groupId> -->
+<!-- 			<artifactId>javax.servlet-api</artifactId> -->
+<!-- 			<version>3.0.1</version> -->
+<!-- 			<scope>provided</scope> -->
+<!-- 		</dependency> -->
 
-		<dependency>
-			<groupId>javax.servlet.jsp</groupId>
-			<artifactId>javax.servlet.jsp-api</artifactId>
-			<version>2.2.1</version>
-			<scope>provided</scope>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>javax.servlet.jsp</groupId> -->
+<!-- 			<artifactId>javax.servlet.jsp-api</artifactId> -->
+<!-- 			<version>2.2.1</version> -->
+<!-- 			<scope>provided</scope> -->
+<!-- 		</dependency> -->
 
 		<dependency>
 			<groupId>javax.websocket</groupId>
@@ -220,12 +220,12 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-			<scope>test</scope>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>junit</groupId> -->
+<!-- 			<artifactId>junit</artifactId> -->
+<!-- 			<version>4.12</version> -->
+<!-- 			<scope>test</scope> -->
+<!-- 		</dependency> -->
 
 
 		<!-- <dependency> -->

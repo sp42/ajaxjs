@@ -26,7 +26,11 @@ Maven 坐标
 |项目|作用|
 |---|---|
 |Tomcat JDBCPool|Tomcat 自带的数据库连接池|
-|Swagger|生成接口文档|
+
+Eclipse 用户请注意：有别于一般 Dymanic Web 项目，这是一个 Web-Fragment 项目，它基于 Servlet 3.0 特性，新建项目时适宜于下面如图的类型。
+
+
+
 
 环境配置说明
 -------------
