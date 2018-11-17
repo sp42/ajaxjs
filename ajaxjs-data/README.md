@@ -55,6 +55,16 @@ https://gitee.com/bitprince/memory
 - http://blog.csdn.net/zhangxin09/article/details/70187712
 
 
+官网
+=========
+点击进入 [framework.ajaxjs.com](https://framework.ajaxjs.com]) 了解更多信息。
+
+
+版权声明 LICENSE
+==========
+作者版权所有，开源许可：Apache License, Version 2.0
+
+
 
 
 
