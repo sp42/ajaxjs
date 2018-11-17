@@ -36,11 +36,11 @@ Maven 坐标：
 
 
 鸣谢
-==========
+---------
 本人水平有限，日志组件引用了 Tomcat 的 FileHandler 源码。
 
 官网
-=========
+---------
 点击进入 [framework.ajaxjs.com](https://framework.ajaxjs.com]) 了解更多信息。
 
 
