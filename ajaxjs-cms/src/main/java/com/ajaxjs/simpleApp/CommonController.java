@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseModel;
+import com.ajaxjs.framework.service.IService;
 import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.keyvalue.BeanUtil;
 import com.ajaxjs.keyvalue.MappingHelper;
@@ -91,7 +92,7 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	 * 创建实体
 	 * 
 	 * @param entity 实体
-	 * @param model  页面 Model 模型
+	 * @param model 页面 Model 模型
 	 * @return JSON 响应
 	 */
 	public String create(T entity, ModelAndView model, Function<T, ID> createAction) {
@@ -110,9 +111,9 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	/**
 	 * 修改实体
 	 * 
-	 * @param id     实体 ID
+	 * @param id 实体 ID
 	 * @param entity 实体
-	 * @param model  页面 Model 模型
+	 * @param model 页面 Model 模型
 	 * @return JSON 响应
 	 */
 	@SuppressWarnings("unchecked")
@@ -139,7 +140,7 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	 * 因为范型的缘故，不能实例化 bean 对象。应该在子类实例化 bean，再调用本类的 delete()
 	 * 
 	 * @param entity 实体
-	 * @param model  页面 Model 模型
+	 * @param model 页面 Model 模型
 	 * @return JSON 响应
 	 */
 	public String delete(T entity, ModelAndView model, Predicate<T> deleteAction) {
@@ -154,7 +155,7 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	/**
 	 * 根据 id 删除实体
 	 * 
-	 * @param id    实体 id
+	 * @param id 实体 id
 	 * @param model 页面 Model 模型
 	 * @return JSON 响应
 	 * @throws ServiceException
@@ -174,7 +175,7 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	/**
 	 * 读取单个记录或者编辑某个记录，保存到 ModelAndView 中（供视图渲染用）。
 	 * 
-	 * @param id    ID 序号
+	 * @param id ID 序号
 	 * @param model Model 模型
 	 * @return JSP 路径。缺省提供一个默认路径，但不一定要使用它，换别的也可以。
 	 */
@@ -297,8 +298,7 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	public static UploadFileInfo uploadByConfig(MvcRequest request) throws IOException {
 		UploadFileInfo info = new UploadFileInfo();
 		info.isFileOverwrite = ConfigService.getValueAsBool("uploadFile.isFileOverwrite");
-		info.saveFolder = ConfigService.getValueAsBool("uploadFile.saveFolder.isUsingRelativePath")
-				? request.mappath(ConfigService.getValueAsString("uploadFile.saveFolder.relativePath")) + File.separator
+		info.saveFolder = ConfigService.getValueAsBool("uploadFile.saveFolder.isUsingRelativePath") ? request.mappath(ConfigService.getValueAsString("uploadFile.saveFolder.relativePath")) + File.separator
 				: ConfigService.getValueAsString("uploadFile.saveFolder.absolutePath");
 
 		if (ConfigService.getValueAsBool("uploadFile.isAutoNewFileName")) {
@@ -327,5 +327,15 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 
 	public void setUiName(String uiName) {
 		this.uiName = uiName;
+	}
+
+	private IService<T, ID> service;
+
+	public IService<T, ID> getService() {
+		return service;
+	}
+
+	public void setService(IService<T, ID> service) {
+		this.service = service;
 	}
 }
