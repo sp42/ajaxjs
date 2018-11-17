@@ -10,7 +10,7 @@ AJAXJS WEB 包含以下模块：
 - security 网站防御系统，抵御 XSS、CSRF 等攻击；
 - config 基于本地 JSON 文件的通用配置系统，完全可以代替 properties 文件实现配置模块。
 
-Ajaxjs 前端框架[请点击](../ajaxjs-web-js)
+Ajaxjs 前端框架[请点击](../ajaxjs-web-js)。
 
 
 安装
@@ -34,6 +34,7 @@ Maven 坐标：
 |---|---|
 |javax.ws.rs-api| 通过 JSR-311 注解定义控制器|
 |javax.validation| 通过 JSR-303 数据校验|
+|ajaxjs-base| 基础库，详情[请点击](../ajaxjs-base)|
 
 
 环境配置说明
