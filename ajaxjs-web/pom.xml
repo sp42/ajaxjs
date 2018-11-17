@@ -4,76 +4,30 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.ajaxjs</groupId>
+	<parent>
+		<groupId>com.ajaxjs</groupId>
+		<artifactId>ajaxjs-parent</artifactId>
+		<version>1.0</version>
+		<relativePath>../ajajx-maven-global.xml</relativePath>
+	</parent>
+
 	<artifactId>ajaxjs-web</artifactId>
 	<version>1.1.2</version>
 	<packaging>jar</packaging>
-
 	<name>AJAXJS-Web</name>
 	<description>AJAXJS Web aims to full-stack, not only the server-side framework, but also integrates the front-end library. It's written in HTML5 + Java, a successor to the JVM platform, efficient, secure, stable, cross-platform and many other advantages, but it abandoned the traditional enterprise architecture brought about by the large and bloated, emphasizing the lightweight, and fast, very suitable for the Internet fast application.</description>
-	<url>https://framework.ajaxjs.com/framework/</url>
-	<inceptionYear>2015</inceptionYear>
-	<issueManagement>
-		<url>https://gitee.com/sp42/ajaxjs/issues</url>
-	</issueManagement>
-
-
-	<!-- Maven 继承 -->
-	<!-- <parent> -->
-	<!-- <groupId>com.ajaxjs</groupId> -->
-	<!-- <artifactId>ajaxjs-parent</artifactId> -->
-	<!-- <version>0.0.1-SNAPSHOT</version> -->
-	<!-- </parent> -->
-
-	<organization>
-		<name>AJAXJS</name>
-		<url>https://framework.ajaxjs.com</url>
-	</organization>
-
-	<licenses>
-		<license>
-			<name>The Apache Software License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-		</license>
-	</licenses>
-
-	<developers>
-		<developer>
-			<name>Frank Cheung</name>
-			<email>frank@ajaxjs.com</email>
-			<organization>AJAXJS</organization>
-			<organizationUrl>http://ajaxjs.com</organizationUrl>
-		</developer>
-	</developers>
-
-	<scm>
-		<connection>scm:git:git@gitee.com:sp42/ajaxjs.git</connection>
-		<developerConnection>scm:git:git@gitee.com:sp42/ajaxjs.git</developerConnection>
-		<url>https://gitee.com/sp42/ajaxjs</url>
-	</scm>
-
-	<distributionManagement>
-		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
 
 	<build>
-<!-- 		<sourceDirectory>src/main</sourceDirectory> -->
-<!-- 		<testSourceDirectory>src/test</testSourceDirectory> -->
+		<!-- <sourceDirectory>src/main</sourceDirectory> -->
+		<!-- <testSourceDirectory>src/test</testSourceDirectory> -->
 		<resources>
-<!-- 			<resource> -->
-<!-- 				<directory>src/main</directory> -->
-<!-- 				<excludes> -->
-<!-- 					<exclude>**/*.java</exclude> -->
-<!-- 					<exclude>**/*.json</exclude> -->
-<!-- 				</excludes> -->
-<!-- 			</resource> -->
+			<!-- <resource> -->
+			<!-- <directory>src/main</directory> -->
+			<!-- <excludes> -->
+			<!-- <exclude>**/*.java</exclude> -->
+			<!-- <exclude>**/*.json</exclude> -->
+			<!-- </excludes> -->
+			<!-- </resource> -->
 
 			<resource>
 				<directory>META-INF</directory>
@@ -83,94 +37,23 @@
 				</includes>
 			</resource>
 
-<!-- 			<resource> -->
-<!-- 				<directory>WebContent/asset</directory> -->
-<!-- 				<targetPath>META-INF/resources/asset</targetPath> -->
-<!-- 				<includes> -->
-<!-- 					<include>**/*.*</include> -->
-<!-- 				</includes> -->
-<!-- 			</resource> -->
+			<!-- <resource> -->
+			<!-- <directory>WebContent/asset</directory> -->
+			<!-- <targetPath>META-INF/resources/asset</targetPath> -->
+			<!-- <includes> -->
+			<!-- <include>**/*.*</include> -->
+			<!-- </includes> -->
+			<!-- </resource> -->
 		</resources>
 
-<!-- 		<testResources> -->
-<!-- 			<testResource> -->
-<!-- 				<directory>src/test</directory> -->
-<!-- 				<excludes> -->
-<!-- 					<exclude>**/*.java</exclude> -->
-<!-- 				</excludes> -->
-<!-- 			</testResource> -->
-<!-- 		</testResources> -->
-
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.3</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.sonatype.plugins</groupId>
-				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.8</version>
-				<extensions>true</extensions>
-				<configuration>
-					<serverId>ossrh</serverId>
-					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-					<autoReleaseAfterClose>true</autoReleaseAfterClose>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.6</version>
-				<executions>
-					<execution>
-						<id>sign-artifacts</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>3.0.1</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<!-- 生成 javadoc 文档 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-
-						<configuration> <!-- add this to disable checking -->
-							<additionalparam>-Xdoclint:none</additionalparam>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
+		<!-- <testResources> -->
+		<!-- <testResource> -->
+		<!-- <directory>src/test</directory> -->
+		<!-- <excludes> -->
+		<!-- <exclude>**/*.java</exclude> -->
+		<!-- </excludes> -->
+		<!-- </testResource> -->
+		<!-- </testResources> -->
 	</build>
 
 	<dependencies>
@@ -188,19 +71,19 @@
 			<scope>provided</scope>
 		</dependency>
 
-<!-- 		<dependency> -->
-<!-- 			<groupId>javax.websocket</groupId> -->
-<!-- 			<artifactId>javax.websocket-api</artifactId> -->
-<!-- 			<version>1.1</version> -->
-<!-- 			<scope>provided</scope> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>javax.websocket</groupId> -->
+		<!-- <artifactId>javax.websocket-api</artifactId> -->
+		<!-- <version>1.1</version> -->
+		<!-- <scope>provided</scope> -->
+		<!-- </dependency> -->
 
 		<dependency>
 			<groupId>javax.ws.rs</groupId>
 			<artifactId>javax.ws.rs-api</artifactId>
 			<version>2.1</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
@@ -213,6 +96,7 @@
 			<version>1.1.6</version>
 		</dependency>
 
+		<!-- 模拟对象 -->
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
@@ -220,12 +104,12 @@
 			<scope>provided</scope>
 		</dependency>
 
-<!-- 		<dependency> -->
-<!-- 			<groupId>junit</groupId> -->
-<!-- 			<artifactId>junit</artifactId> -->
-<!-- 			<version>4.12</version> -->
-<!-- 			<scope>test</scope> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>junit</groupId> -->
+		<!-- <artifactId>junit</artifactId> -->
+		<!-- <version>4.12</version> -->
+		<!-- <scope>test</scope> -->
+		<!-- </dependency> -->
 
 
 		<!-- <dependency> -->
