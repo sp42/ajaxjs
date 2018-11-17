@@ -17,7 +17,7 @@ Maven 坐标
 <dependency>
     <groupId>com.ajaxjs</groupId>
     <artifactId>ajaxjs-web</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 </dependency>
 ```
 
@@ -25,7 +25,8 @@ Maven 坐标
 -------------
 |项目|作用|
 |---|---|
-|Tomcat JDBCPool|Tomcat 自带的数据库连接池|
+|javax.ws.rs-api| 通过 JSR-311 注解定义控制器|
+|javax.validation| 通过 JSR-303 数据校验|
 
 Eclipse 用户请注意：有别于一般 Dymanic Web 项目，这是一个 Web-Fragment 项目，它基于 Servlet 3.0 特性，新建项目时适宜于下面如图的类型。
 
