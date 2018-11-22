@@ -215,7 +215,7 @@ public class BeanContext {
 	 * 扫描依赖关系并注入bean
 	 */
 	public static void injectBeans() {
-		LOGGER.info("扫描依赖关系并注入 bean...");
+		LOGGER.info("扫描依赖关系并注入 bean.");
 
 		for (String key : dependencies.keySet()) {
 			String value = dependencies.get(key);// 依赖对象的值
