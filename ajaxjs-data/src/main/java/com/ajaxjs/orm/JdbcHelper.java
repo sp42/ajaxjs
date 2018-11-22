@@ -51,6 +51,7 @@ public class JdbcHelper {
 
 		try (PreparedStatement ps = conn.prepareStatement(sql)) {
 			if (params != null && params.length > 0) {
+				LogHelper.p(params);
 				int i = 0;
 				for (Object param : params) {
 					ps.setObject(++i, param);
