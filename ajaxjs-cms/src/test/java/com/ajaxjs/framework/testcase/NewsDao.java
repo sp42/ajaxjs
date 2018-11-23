@@ -18,6 +18,7 @@ package com.ajaxjs.framework.testcase;
 import java.util.List;
 
 import com.ajaxjs.framework.News;
+import com.ajaxjs.framework.QueryParams;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
@@ -42,12 +43,17 @@ public interface NewsDao extends IDao<News, Long> {
 	@Select("SELECT COUNT(*) AS Total FROM " + tableName)
 	public int count();
 
+	@Select(value = "SELECT * FROM news")
 	@SqlFactory("getInstance")
 	public int count2();
 
 	public static String getInstance() {
 		return "SELECT * FROM news";
 	}
+	
+	@Select(value = "SELECT * FROM " + tableName)
+	@SqlFactory(clz = QueryParams.class, value = "addWhere")
+	public int count3();
 
 	@Select("SELECT * FROM news LIMIT ?, ?")
 	public List<News> findList(int start, int limit);

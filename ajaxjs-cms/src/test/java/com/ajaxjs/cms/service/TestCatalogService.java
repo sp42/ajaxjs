@@ -3,7 +3,6 @@ package com.ajaxjs.cms.service;
 import static org.junit.Assert.assertNotNull;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.AfterClass;
@@ -11,11 +10,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ajaxjs.cms.model.Catalog;
-import com.ajaxjs.cms.service.ArticleService;
-import com.ajaxjs.cms.service.CatalogService;
-import com.ajaxjs.config.ConfigService;
-import com.ajaxjs.framework.QueryParams;
-import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mock.DBConnection;
 import com.ajaxjs.orm.JdbcConnection;
@@ -56,7 +50,7 @@ public class TestCatalogService {
 		c.setPid(-1);
 		c.setName("test");
 		assertNotNull(catalogService.create(c));
-		
+
 		c = new Catalog();
 		c.setPid(119);
 		c.setName("test-sub");
@@ -68,11 +62,8 @@ public class TestCatalogService {
 		CatalogService catalogService = (CatalogService) BeanContext.getBean("CatalogService");
 		catalogService.getAllListByParentId(12);
 
-		Map<String, String[]> inputMap = new HashMap<>();
-		QueryParams qp = new QueryParams(inputMap);
-
 		ArticleService articleService = (ArticleService) BeanContext.getBean("ArticleService");
-		PageResult<Map<String, Object>> r = articleService.findPagedListByCatalogId(15, qp, 0, 5);
+		PageResult<Map<String, Object>> r = articleService.findPagedListByCatalogId(15, 0, 5);
 
 		assertNotNull(r.size());
 	}

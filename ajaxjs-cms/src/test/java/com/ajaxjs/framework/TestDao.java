@@ -2,39 +2,33 @@ package com.ajaxjs.framework;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.cms.dao.ArticleDao;
-import com.ajaxjs.mock.DBConnection;
+import com.ajaxjs.framework.testcase.NewsDao;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 
 public class TestDao {
-	ArticleDao dao;
+	NewsDao dao;
 
 	@Before
 	public void setUp() {
-		DBConnection.initTestConnection("C:\\project\\wyzx-pc\\src\\resources\\site_config.json");
-		dao = new DaoHandler<ArticleDao>().bind(ArticleDao.class);
+		JdbcConnection.setConnection(JdbcConnection.getTestSqliteConnection());
+		dao = new DaoHandler<NewsDao>().bind(NewsDao.class);
 	}
 
 	@After
 	public void setEnd() throws SQLException {
 		JdbcConnection.clean();
 	}
-
-	
 
 	Map<String, String[]> inputMap = new HashMap<>();
 	{
@@ -44,17 +38,17 @@ public class TestDao {
 
 	@Test
 	public void testFindList() {
-		List<Map<String, Object>> newsList;
-		newsList = dao.findList();
-		assertEquals(214, newsList.size());
+//		List<Map<String, Object>> newsList;
+//		newsList = dao.findList();
+//		assertEquals(214, newsList.size());
 
-		newsList = dao.findList(new QueryParams(inputMap));
-		assertNotNull(newsList);
+		int total = dao.count3();
+		assertNotNull(total);
 	}
 
-	@Test
+//	@Test
 	public void testPageFindList() {
-		PageResult<Map<String, Object>> newsList;
+		PageResult<News> newsList;
 
 		newsList = dao.findPagedList(0, 10);
 		assertEquals(newsList.size(), 10);
@@ -62,6 +56,5 @@ public class TestDao {
 //		newsList = dao.findPagedList(new QueryParams(), 0, 10);
 //		assertNotNull(newsList);
 	}
-
 
 }
