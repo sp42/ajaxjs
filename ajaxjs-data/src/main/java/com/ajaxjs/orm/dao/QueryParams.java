@@ -176,4 +176,9 @@ public class QueryParams {
 
 		return sql;
 	}
+
+	public static String addWhere(String sql) {
+		System.out.println("addWhere");
+		return "SELECT COUNT(*) FROM news";
+	}
 }

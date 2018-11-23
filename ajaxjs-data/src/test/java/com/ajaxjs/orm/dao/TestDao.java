@@ -22,7 +22,8 @@ public class TestDao {
 	@Before
 	public void setUp() {
 		JdbcConnection.setConnection(JdbcConnection.getTestSqliteConnection());
-		dao = new DaoHandler<NewsDao>().bind(NewsDao.class);
+		DaoHandler<NewsDao> daoHandler = new DaoHandler<NewsDao>();
+		dao = daoHandler.bind(NewsDao.class);
 		mapDao = new DaoHandler<NewsDaoMap>().bind(NewsDaoMap.class);
 	}
 
@@ -51,7 +52,7 @@ public class TestDao {
 		List<News> newsList = dao.findList(0, 5);
 		assertNotNull(newsList);
 		assertEquals(5, newsList.size());
-		
+
 		List<Map<String, Object>> newsListMap = mapDao.findList(0, 5);
 		assertNotNull(newsListMap);
 		assertEquals(5, newsListMap.size());
@@ -62,7 +63,7 @@ public class TestDao {
 		PageResult<News> newsList = dao.findPagedList(0, 0);
 		assertNotNull(newsList);
 		assertEquals(10, newsList.size());
-		
+
 		PageResult<Map<String, Object>> newsPagedListMap = mapDao.findPagedList(0, 5);
 		assertNotNull(newsPagedListMap);
 		assertEquals(5, newsPagedListMap.size());
@@ -73,7 +74,7 @@ public class TestDao {
 		List<News> newsList = dao.findTop10News();
 		assertNotNull(newsList);
 		assertEquals(10, newsList.size());
-		
+
 		List<Map<String, Object>> newsListMap = mapDao.findTop10News();
 		assertNotNull(newsListMap);
 		assertEquals(10, newsListMap.size());
@@ -90,7 +91,7 @@ public class TestDao {
 		assertEquals(1, dao.update(news));
 
 		assertTrue(dao.delete(news));
-		
+
 		Map<String, Object> newsMap = new HashMap<>();
 		newsMap.put("name", "test 123");
 		newlyId = mapDao.create(newsMap);
@@ -100,6 +101,15 @@ public class TestDao {
 		assertEquals(1, mapDao.update(newsMap));
 
 		assertTrue(mapDao.delete(newsMap));
-		
+	}
+
+	@Test
+	public void testSqlFactory() {
+		int total = dao.count2();
+		assertNotNull(total);
+
+		total = dao.count3();
+		assertNotNull(total);
+
 	}
 }

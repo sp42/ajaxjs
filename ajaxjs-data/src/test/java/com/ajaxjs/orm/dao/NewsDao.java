@@ -20,7 +20,7 @@ import java.util.List;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
-import com.ajaxjs.orm.annotation.SelectFromMethod;
+import com.ajaxjs.orm.annotation.SqlFactory;
 import com.ajaxjs.orm.annotation.Update;
 
 /**
@@ -39,11 +39,16 @@ public interface NewsDao extends IDao<News, Long> {
 	@Select("SELECT COUNT(*) AS Total FROM " + tableName)
 	public int count();
 
-	@SelectFromMethod("getInstance")
+	@Select("SELECT * FROM news LIMIT ?, ?")
+	@SqlFactory("getInstance")
 	public int count2();
 
-	public static String getInstance() {
-		return "SELECT * FROM news";
+	@Select("SELECT * FROM news LIMIT ?, ?")
+	@SqlFactory(value = "addWhere", clz = QueryParams.class)
+	public int count3();
+
+	public static String getInstance(String sql) {
+		return "SELECT COUNT(*) FROM news";
 	}
 
 	@Select("SELECT * FROM news LIMIT ?, ?")

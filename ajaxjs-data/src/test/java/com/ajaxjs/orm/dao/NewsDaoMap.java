@@ -21,7 +21,7 @@ import java.util.Map;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
-import com.ajaxjs.orm.annotation.SelectFromMethod;
+import com.ajaxjs.orm.annotation.SqlFactory;
 import com.ajaxjs.orm.annotation.Update;
 
 /**
@@ -40,7 +40,7 @@ public interface NewsDaoMap extends IDao<Map<String, Object>, Long> {
 	@Select("SELECT COUNT(*) AS Total FROM " + tableName)
 	public int count();
 
-	@SelectFromMethod("getInstance")
+	@SqlFactory("getInstance")
 	public int count2();
 
 	public static String getInstance() {
