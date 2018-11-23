@@ -1,13 +1,13 @@
 package com.ajaxjs.cms.service;
 
+import java.util.List;
+
 import com.ajaxjs.cms.dao.AppUpdateDao;
 import com.ajaxjs.cms.model.AppUpdate;
 import com.ajaxjs.cms.service.aop.CommonService;
-import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 
 @Bean(value = "AppUpdateService", aop = { CommonService.class })
 public class AppUpdateServiceImpl implements AppUpdateService {
@@ -34,13 +34,6 @@ public class AppUpdateServiceImpl implements AppUpdateService {
 	}
 
 	@Override
-	public PageResult<AppUpdate> findPagedList(int start, int limit) {
-		PageResult<AppUpdate> findAppPagedList = dao.findPagedList(start, limit);
-
-		return findAppPagedList;
-	}
-
-	@Override
 	public String getName() {
 		return "客户端更新接口";
 	}
@@ -51,8 +44,8 @@ public class AppUpdateServiceImpl implements AppUpdateService {
 	}
 
 	@Override
-	public PageResult<AppUpdate> findPagedList(QueryParams params, int start, int limit) {
-		return dao.findPagedList(params, start, limit);
+	public PageResult<AppUpdate> findPagedList(int start, int limit) {
+		return dao.findPagedList(start, limit);
 	}
 
 	@Override
@@ -63,6 +56,11 @@ public class AppUpdateServiceImpl implements AppUpdateService {
 	@Override
 	public AppUpdate getLastiOSVersion(int appId) {
 		return dao.getLastiOS(appId);
+	}
+
+	@Override
+	public List<AppUpdate> findList() { 
+		return null;
 	}
 
 }

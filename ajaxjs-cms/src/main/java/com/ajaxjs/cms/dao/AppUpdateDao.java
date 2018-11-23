@@ -7,7 +7,6 @@ import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.Update;
 import com.ajaxjs.orm.dao.IDao;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 
 public interface AppUpdateDao extends IDao<AppUpdate, Long> {
 	final static String tableName = "entity_app_update";
@@ -19,10 +18,6 @@ public interface AppUpdateDao extends IDao<AppUpdate, Long> {
 	@Select(value = "SELECT * FROM " + tableName + " ORDER BY id DESC")
 	@Override
 	public PageResult<AppUpdate> findPagedList(int start, int limit);
-
-	@Select(value = "SELECT * FROM " + tableName + " ORDER BY id DESC")
-	@Override
-	public PageResult<AppUpdate> findPagedList(QueryParams params, int start, int limit);
 
 	@Select("SELECT * FROM " + tableName + " WHERE appId = ? ORDER BY apkVersion DESC LIMIT 0, 1")
 	public AppUpdate getLastAndroid(int appId);

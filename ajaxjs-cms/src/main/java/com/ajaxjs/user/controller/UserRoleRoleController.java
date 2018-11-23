@@ -26,8 +26,7 @@ import com.ajaxjs.user.role.service.UserRoleRoleService;
  */
 @Path("/admin/user_admin/role_role")
 @Bean("UserRoleRoleController")
-public class UserRoleRoleController extends CommonController<Map<String, Object>, Integer, UserRoleRoleService>
-		implements CommonEntryAdminController<Map<String, Object>, Integer> {
+public class UserRoleRoleController extends CommonController<Map<String, Object>, Integer> implements CommonEntryAdminController<Map<String, Object>, Integer> {
 	@Resource("UserRoleRoleService")
 	private UserRoleRoleService service;
 

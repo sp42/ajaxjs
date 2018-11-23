@@ -9,11 +9,9 @@ import com.ajaxjs.cms.dao.Attachment_pictureDao;
 import com.ajaxjs.cms.model.Attachment_picture;
 import com.ajaxjs.cms.service.aop.CommonService;
 import com.ajaxjs.cms.service.aop.GlobalLogAop;
-import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 import com.ajaxjs.util.io.FileUtil;
 
 @Bean(value = "Attachment_pictureService", aop = { CommonService.class, GlobalLogAop.class })
@@ -42,13 +40,13 @@ public class Attachment_pictureServiceImpl implements Attachment_pictureService 
 	}
 
 	@Override
-	public PageResult<Attachment_picture> findPagedList(QueryParams params, int start, int limit) {
-		return dao.findPagedList(params, start, limit);
+	public PageResult<Attachment_picture> findPagedList(int start, int limit) {
+		return dao.findPagedList(start, limit);
 	}
 
 	@Override
-	public PageResult<Attachment_picture> findPagedList(int start, int limit) {
-		return dao.findPagedList(start, limit);
+	public List<Attachment_picture> findList() {
+		return null;
 	}
 
 	@Override

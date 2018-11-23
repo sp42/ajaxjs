@@ -7,7 +7,6 @@ import com.ajaxjs.cms.dao.section.SectionInfoDao;
 import com.ajaxjs.cms.model.SectionInfo;
 import com.ajaxjs.cms.service.aop.CommonService;
 import com.ajaxjs.cms.service.aop.GlobalLogAop;
-import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
@@ -43,7 +42,7 @@ public class SectionInfoServiceImpl implements SectionInfoService {
 		}
 
 		Long newlyId = dao.create(bean);
-		
+
 		if (newlyId != null) { // 需要创建了之后才有自己的 id
 			SectionInfo updatePath = new SectionInfo();
 			updatePath.setId(bean.getId());
@@ -66,13 +65,13 @@ public class SectionInfoServiceImpl implements SectionInfoService {
 	}
 
 	@Override
-	public PageResult<SectionInfo> findPagedList(QueryParams params, int start, int limit) {
-		return dao.findPagedList(params, start, limit);
+	public PageResult<SectionInfo> findPagedList(int start, int limit) {
+		return dao.findPagedList(start, limit);
 	}
 
 	@Override
-	public PageResult<SectionInfo> findPagedList(int start, int limit) {
-		return dao.findPagedList(start, limit);
+	public PageResult<SectionInfo> findList() {
+		return null;
 	}
 
 	@Override
@@ -105,7 +104,7 @@ public class SectionInfoServiceImpl implements SectionInfoService {
 
 			list.remove(j);// 不要父节点
 		}
-		
+
 		return list;
 	}
 

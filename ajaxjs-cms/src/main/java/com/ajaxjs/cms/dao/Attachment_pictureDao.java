@@ -9,14 +9,10 @@ import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.Update;
 import com.ajaxjs.orm.dao.IDao;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 
 public interface Attachment_pictureDao extends IDao<Attachment_picture, Long> {
 	final static String tableName = "attachment_picture";
-	
-	/**
-	 * 
-	 */
+
 	public final static String selectByUid = "SELECT path FROM attachment_picture WHERE catelog = 2 AND owner = e.uid LIMIT  0, 1";
 
 	@Select("SElECT * FROM " + tableName + " WHERE owner = ?")
@@ -29,10 +25,6 @@ public interface Attachment_pictureDao extends IDao<Attachment_picture, Long> {
 	@Select(value = "SELECT * FROM " + tableName + " ORDER BY id DESC")
 	@Override
 	public PageResult<Attachment_picture> findPagedList(int start, int limit);
-
-	@Select(value = "SELECT * FROM " + tableName + " ORDER BY id DESC")
-	@Override
-	public PageResult<Attachment_picture> findPagedList(QueryParams param, int start, int limit);
 
 	@Insert(tableName = tableName)
 	@Override

@@ -4,11 +4,9 @@ import com.ajaxjs.cms.dao.FeedbackDao;
 import com.ajaxjs.cms.model.Feedback;
 import com.ajaxjs.cms.service.aop.CommonService;
 import com.ajaxjs.cms.service.aop.GlobalLogAop;
-import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 
 @Bean(value = "FeedbackService", aop = { CommonService.class, GlobalLogAop.class })
 public class FeedbackServiceImpl implements FeedbackService {
@@ -35,13 +33,13 @@ public class FeedbackServiceImpl implements FeedbackService {
 	}
 
 	@Override
-	public PageResult<Feedback> findPagedList(QueryParams params, int start, int limit) {
-		return dao.findPagedList(params, start, limit);
+	public PageResult<Feedback> findPagedList(int start, int limit) {
+		return dao.findPagedList(start, limit);
 	}
 
 	@Override
-	public PageResult<Feedback> findPagedList(int start, int limit) {
-		return dao.findPagedList(start, limit);
+	public PageResult<Feedback> findList() {
+		return null;
 	}
 
 	@Override

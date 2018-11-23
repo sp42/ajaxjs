@@ -5,13 +5,11 @@ import java.util.Map;
 import com.ajaxjs.cms.dao.DataDictDao;
 import com.ajaxjs.cms.service.aop.CommonService;
 import com.ajaxjs.cms.service.aop.GlobalLogAop;
-import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 
-@Bean(value = "DataDictService", aop = {CommonService.class,  GlobalLogAop.class })
+@Bean(value = "DataDictService", aop = { CommonService.class, GlobalLogAop.class })
 public class DataDictServiceImpl implements DataDictService {
 	DataDictDao dao = new DaoHandler<DataDictDao>().bind(DataDictDao.class);
 
@@ -36,13 +34,13 @@ public class DataDictServiceImpl implements DataDictService {
 	}
 
 	@Override
-	public PageResult<Map<String, Object>> findPagedList(QueryParams params, int start, int limit) {
-		return dao.findPagedList(params, start, limit);
+	public PageResult<Map<String, Object>> findPagedList(int start, int limit) {
+		return dao.findPagedList(start, limit);
 	}
 
 	@Override
-	public PageResult<Map<String, Object>> findPagedList(int start, int limit) {
-		return dao.findPagedList(start, limit);
+	public PageResult<Map<String, Object>> findList() {
+		return null;
 	}
 
 	@Override

@@ -3,7 +3,6 @@ package com.ajaxjs.framework.service;
 import java.util.List;
 
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 
 /**
  * 可分类的服务
@@ -20,7 +19,7 @@ public interface Catelogable<T> {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public List<T> findListByCatelogId(int catelogId, QueryParams params) throws ServiceException;
+	public List<T> findListByCatelogId(int catelogId);
 
 	/**
 	 * 
@@ -31,7 +30,7 @@ public interface Catelogable<T> {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public PageResult<T> findPagedListByCatelogId(int catelogId, QueryParams params, int start, int limit) throws ServiceException;
+	public PageResult<T> findPagedListByCatelogId(int catelogId, int start, int limit) ;
 
 	/**
 	 * 返回实体最顶层的域 id

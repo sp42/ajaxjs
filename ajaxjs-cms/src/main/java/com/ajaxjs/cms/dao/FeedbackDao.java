@@ -9,7 +9,6 @@ import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.Update;
 import com.ajaxjs.orm.dao.IDao;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 
 public interface FeedbackDao extends IDao<Feedback, Long> {
 	public final static String tableName = "entity_feedback";
@@ -24,7 +23,7 @@ public interface FeedbackDao extends IDao<Feedback, Long> {
 
 	@Select(value = "SELECT * FROM " + tableName)
 	@Override
-	public PageResult<Feedback> findPagedList(QueryParams params, int start, int limit);
+	public List<Feedback> findList();
 
 	@Insert(tableName = tableName)
 	@Override
@@ -37,7 +36,7 @@ public interface FeedbackDao extends IDao<Feedback, Long> {
 	@Update(tableName = tableName)
 	@Override
 	public int update(Feedback bean);
-	
+
 	@Select(value = "SELECT * FROM " + tableName + " WHERE createdByUser = ?")
 	public List<Feedback> getListByUserId(long userId);
 }

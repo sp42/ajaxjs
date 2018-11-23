@@ -147,7 +147,15 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 		if (!deleteAction.test(entity))
 			throw new Error("删除失败！");
 
-		return MappingHelper.jsonOk("删除成功");
+		return jsonOk("删除成功");
+	}
+
+	public static String jsonOk(String msg) {
+		return MappingHelper.jsonOk(msg);
+	}
+
+	public static String jsonNoOk(String msg) {
+		return MappingHelper.jsonNoOk(msg);
 	}
 
 	/**

@@ -16,10 +16,7 @@ public interface DataDictDao extends IDao<Map<String, Object>, Integer> {
 
 	@Select(value = "SELECT * FROM " + tableName)
 	@Override
-	public PageResult<Map<String, Object>> findPagedList(QueryParams param, int start, int limit);
-	
-	@Select(value = "SELECT * FROM " + tableName)
-	public PageResult<Map<String, Object>> findAdminPagedList(QueryParams param);
+	public PageResult<Map<String, Object>> findPagedList( int start, int limit);
 	
 	@Select("SELECT * FROM " + tableName + " WHERE status = 1 AND id = ?")
 	@Override

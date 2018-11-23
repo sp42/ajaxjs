@@ -10,7 +10,6 @@ import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.Update;
 import com.ajaxjs.orm.dao.IDao;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 
 public interface SectionInfoDao extends IDao<SectionInfo, Long> {
 	public final static String tableName = "section_info";
@@ -22,10 +21,6 @@ public interface SectionInfoDao extends IDao<SectionInfo, Long> {
 	/**
 	 * 父id 必须在子id之前，不然下面 findParent() 找不到后面的父节点，故先排序. 前端排序的话 chrom 有稳定排序的问题，故放在后端排序
 	 */
-	@Select(value = "SELECT * FROM " + tableName + " ORDER BY pid ")
-	@Override
-	public PageResult<SectionInfo> findPagedList(QueryParams params, int start, int limit);
-	
 	@Select(value = "SELECT * FROM " + tableName + " ORDER BY pid ")
 	@Override
 	public PageResult<SectionInfo> findPagedList(int start, int limit);

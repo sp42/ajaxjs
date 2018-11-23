@@ -23,5 +23,6 @@ public class DBConnection {
 	public static void initTestDbAndIoc(String configFile, String... string2) {
 		initTestConnection(configFile);
 		BeanContext.init(string2);
+		BeanContext.injectBeans();
 	}
 }

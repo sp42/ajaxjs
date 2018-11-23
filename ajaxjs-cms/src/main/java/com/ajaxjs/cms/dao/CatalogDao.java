@@ -10,7 +10,6 @@ import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.Update;
 import com.ajaxjs.orm.dao.IDao;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 
 public interface CatalogDao extends IDao<Catalog, Long> {
 	public final static String tableName = "general_catelog";
@@ -24,12 +23,8 @@ public interface CatalogDao extends IDao<Catalog, Long> {
 	 */
 	@Select(value = "SELECT * FROM " + tableName + " ORDER BY pid ")
 	@Override
-	public PageResult<Catalog> findPagedList(QueryParams params, int start, int limit);
-	
-	@Select(value = "SELECT * FROM " + tableName + " ORDER BY pid ")
-	@Override
 	public PageResult<Catalog> findPagedList(int start, int limit);
-
+	
 	@Insert(tableName = tableName)
 	@Override
 	public Long create(Catalog bean);

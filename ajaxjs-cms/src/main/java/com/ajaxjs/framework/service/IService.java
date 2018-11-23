@@ -13,11 +13,11 @@
 package com.ajaxjs.framework.service;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.ajaxjs.framework.service.annotation.ValidIt;
 import com.ajaxjs.framework.service.annotation.ValidObj;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 
 /**
  * 业务逻辑层 业务层不绑定 DAO 泛型，目的是不强制依赖 DAO
@@ -43,7 +43,7 @@ public interface IService<T, ID extends Serializable> {
 	 * @return 分页结果对象
 	 * @业务异常
 	 */
-	public PageResult<T> findPagedList(QueryParams params, int start, int limit);
+	public List<T> findList();
 
 	/**
 	 * 查询分页数据

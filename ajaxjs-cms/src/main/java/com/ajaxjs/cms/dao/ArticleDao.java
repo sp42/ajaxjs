@@ -32,16 +32,8 @@ public interface ArticleDao extends IDao<Map<String, Object>, Long> {
 	
 	@Select(value = "SELECT * FROM " + tableName)
 	@Override
-	public List<Map<String, Object>> findList(QueryParams p);
-
-	@Select(value = "SELECT * FROM " + tableName)
-	@Override
 	public PageResult<Map<String, Object>> findPagedList(int start, int limit);
 	
-	@Select(value = "SELECT * FROM " + tableName)
-	@Override
-	public PageResult<Map<String, Object>> findPagedList(QueryParams p, int start, int limit);
-
 	@Insert(tableName = tableName)
 	@Override
 	public Long create(Map<String, Object> map);

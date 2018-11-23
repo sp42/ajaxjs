@@ -6,16 +6,14 @@ import com.ajaxjs.cms.dao.AdsDao;
 import com.ajaxjs.cms.model.Ads;
 import com.ajaxjs.cms.service.aop.CommonService;
 import com.ajaxjs.config.ConfigService;
-import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.framework.service.aop.CacheService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 
 @Bean(value = "AdsService", aop = { CommonService.class, CacheService.class })
 public class AdsServiceImpl implements AdsService {
-	AdsDao dao = new DaoHandler<AdsDao>().bind(AdsDao.class);
+	public static AdsDao dao = new DaoHandler<AdsDao>().bind(AdsDao.class);
 
 	public Ads findById(Long id) {
 		return dao.findById(id);
@@ -52,14 +50,13 @@ public class AdsServiceImpl implements AdsService {
 	}
 
 	@Override
-	public PageResult<Ads> findPagedList(QueryParams params, int start, int limit) {
-		// TODO Auto-generated method stub
+	public PageResult<Ads> findList() {
 		return null;
 	}
 
 	@Override
-	public PageResult<Ads> findPagedListByCatelogId(int catelogId, QueryParams params, int start, int limit) {
-		return dao.findPagedListByCatelogId(catelogId, params, start, limit);
+	public PageResult<Ads> findPagedListByCatelogId(int catelogId, int start, int limit) {
+		return dao.findPagedListByCatelogId(catelogId, start, limit);
 	}
 
 	@Override
@@ -68,8 +65,7 @@ public class AdsServiceImpl implements AdsService {
 	}
 
 	@Override
-	public List<Ads> findListByCatelogId(int catelogId, QueryParams params) {
-		return dao.findListByCatelogId(catelogId, params);
+	public List<Ads> findListByCatelogId(int catelogId) {
+		return dao.findListByCatelogId(catelogId);
 	}
-
 }

@@ -182,15 +182,19 @@ public class UserServiceImpl implements UserService {
 //				user.setName("user_" + user.getPhone());
 //			}
 //		}
-		if (user.getPhone() != null && dao.findByPhone(user.getPhone()) != null)
-			throw new ServiceException(user.getPhone() + " 手机号码已注册");
-
-		if (user.getName() != null && dao.findByUserName(user.getName()) != null)
-			throw new ServiceException(user.getName() + " 用户名已注册");
-
-		if (user.getEmail() != null && dao.findByEmail(user.getEmail()) != null)
-			throw new ServiceException(user.getEmail() + " 邮件已注册");
-
+//		try {
+			if (user.getPhone() != null && dao.findByPhone(user.getPhone()) != null)
+					throw new ServiceException(user.getPhone() + " 手机号码已注册");
+	
+			if (user.getName() != null && dao.findByUserName(user.getName()) != null)
+				throw new ServiceException(user.getName() + " 用户名已注册");
+	
+			if (user.getEmail() != null && dao.findByEmail(user.getEmail()) != null)
+				throw new ServiceException(user.getEmail() + " 邮件已注册");
+//		} catch (ServiceException e) {
+//			throw new NullPointerException(e.getMessage());
+//		}
+		
 		return dao.update(user);
 	}
 

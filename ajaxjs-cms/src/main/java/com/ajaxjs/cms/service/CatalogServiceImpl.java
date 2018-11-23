@@ -42,7 +42,7 @@ public class CatalogServiceImpl implements CatalogService {
 		}
 
 		Long newlyId = dao.create(bean);
-		
+
 		if (newlyId != null) { // 需要创建了之后才有自己的 id
 			Catalog updatePath = new Catalog();
 			updatePath.setId(bean.getId());
@@ -65,13 +65,13 @@ public class CatalogServiceImpl implements CatalogService {
 	}
 
 	@Override
-	public PageResult<Catalog> findPagedList(QueryParams params, int start, int limit) {
-		return dao.findPagedList(params, start, limit);
+	public PageResult<Catalog> findPagedList(int start, int limit) {
+		return dao.findPagedList(start, limit);
 	}
 
 	@Override
-	public PageResult<Catalog> findPagedList(int start, int limit) {
-		return dao.findPagedList(start, limit);
+	public PageResult<Catalog> findList() {
+		return null;
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class CatalogServiceImpl implements CatalogService {
 
 	@Override
 	public List<Catalog> findAll(QueryParams param) {
-		return dao.findPagedList(param, 0, 999999);
+		return dao.findPagedList(0, 999999);
 	}
 
 	@Override
@@ -104,7 +104,7 @@ public class CatalogServiceImpl implements CatalogService {
 
 			list.remove(j);// 不要父节点
 		}
-		
+
 		return list;
 	}
 

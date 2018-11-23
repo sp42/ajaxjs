@@ -4,7 +4,6 @@ import java.util.Map;
 
 import com.ajaxjs.cms.dao.HrDao;
 import com.ajaxjs.cms.service.aop.CommonService;
-import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
@@ -35,13 +34,13 @@ public class HrServiceImpl implements HrService {
 	}
 
 	@Override
-	public PageResult<Map<String, Object>> findPagedList(QueryParams params, int start, int limit) {
-		return dao.findPagedList(params, start, limit);
+	public PageResult<Map<String, Object>> findPagedList(int start, int limit) {
+		return dao.findPagedList(start, limit);
 	}
 
 	@Override
-	public PageResult<Map<String, Object>> findPagedList(int start, int limit) {
-		return dao.findPagedList(start, limit);
+	public PageResult<Map<String, Object>> findList() {
+		return null;
 	}
 
 	@Override

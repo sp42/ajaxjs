@@ -21,7 +21,7 @@ public interface HrDao extends IDao<Map<String, Object>, Long> {
 
 	@Select(value = "SELECT id, name, createDate, updateDate, catelog FROM " + tableName + " ORDER BY ID DESC")
 	@Override
-	public PageResult<Map<String, Object>> findPagedList(QueryParams params, int start, int limit);
+	public PageResult<Map<String, Object>> findPagedList(int start, int limit);
 
 	@Select(value = "SELECT id, name, createDate, expr, catelog FROM " + tableName)
 	public PageResult<Map<String, Object>> findPagedList_public(QueryParams params, int start, int limit);
