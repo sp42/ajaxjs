@@ -14,7 +14,7 @@ Ajaxjs 前端框架[请点击](../ajaxjs-web-js)。
 
 
 安装
-==========
+---------
 
 要求 Java 1.8+，Jar 直接下载：[～1300kb，包含 class 文件 160kb，其余为 js/css/jpg 等静态资源](https://search.maven.org/remotecontent?filepath=com/ajaxjs/ajaxjs-web/1.1.2/ajaxjs-web-1.1.2.jar)
 
@@ -45,11 +45,11 @@ Eclipse 用户请注意：有别于一般 Dymanic Web 项目，这是一个 Web-
 
 
 官网
-=========
+---------
 点击进入 [framework.ajaxjs.com](https://framework.ajaxjs.com]) 了解更多信息。
 
 
 版权声明 LICENSE
-==========
+---------
 作者版权所有，开源许可：Apache License, Version 2.0
 

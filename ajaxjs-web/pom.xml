@@ -8,7 +8,7 @@
 		<groupId>com.ajaxjs</groupId>
 		<artifactId>ajaxjs-parent</artifactId>
 		<version>1.0</version>
-		<relativePath>../ajajx-maven-global.xml</relativePath>
+		<relativePath>../ajaxjs-maven-global.xml</relativePath>
 	</parent>
 
 	<artifactId>ajaxjs-web</artifactId>
