@@ -18,8 +18,8 @@ package com.ajaxjs.cms.utils.sms;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.ajaxjs.cms.controller.CommonController;
 import com.ajaxjs.ioc.Bean;
-import com.ajaxjs.simpleApp.CommonController;
 import com.ajaxjs.util.logger.LogHelper;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;

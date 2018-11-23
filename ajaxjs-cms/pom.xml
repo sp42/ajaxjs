@@ -14,7 +14,15 @@
 	<packaging>jar</packaging>
 
 	<build>
-
+		<resources>
+			<resource>
+				<directory>META-INF</directory>
+				<targetPath>META-INF</targetPath>
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+			</resource>
+		</resources>
 	</build>
 
 	<dependencies>

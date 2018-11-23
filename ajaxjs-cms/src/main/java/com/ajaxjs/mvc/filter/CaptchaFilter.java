@@ -17,9 +17,9 @@ package com.ajaxjs.mvc.filter;
 
 import java.lang.reflect.Method;
 
+import com.ajaxjs.cms.controller.CaptchaController;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.simpleApp.CaptchaController;
 
 /**
  * 图形验证码的拦截器
