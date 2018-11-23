@@ -22,9 +22,9 @@ public class TestDao {
 	@Before
 	public void setUp() {
 		JdbcConnection.setConnection(JdbcConnection.getTestSqliteConnection());
-		DaoHandler<NewsDao> daoHandler = new DaoHandler<NewsDao>();
+		DaoHandler daoHandler = new DaoHandler();
 		dao = daoHandler.bind(NewsDao.class);
-		mapDao = new DaoHandler<NewsDaoMap>().bind(NewsDaoMap.class);
+		mapDao = new DaoHandler().bind(NewsDaoMap.class);
 	}
 
 	@After
@@ -108,4 +108,7 @@ public class TestDao {
 		int total = dao.count2();
 		assertNotNull(total); 
 	}
+ 
+	
+	
 }
