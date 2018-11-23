@@ -47,7 +47,7 @@
 	</style> 
 	
 <% if(com.ajaxjs.Version.isDebug) { %>
-	<link rel="stylesheet/less" data-global-vars='{"assetFilePath": "\"${empty param.css ? ctx : ''}/asset\"" }' type="text/css" href="${ctx}${empty param.lessFile ? '/asset/less/main.less' : param.lessFile}" />
+	<link rel="stylesheet/less" data-global-vars='{"assetFilePath": "\"${empty param.css ? ctx : ''}/asset\"" }' type="text/css" href="${empty param.lessFile ? ctx.append('/asset/less/main.less') : param.lessFile}" />
 
 	<script src="${ajaxjsui}/js/libs/less.min.js"></script>
     <script src="${ajaxjsui}/js/libs/vue.js"></script>

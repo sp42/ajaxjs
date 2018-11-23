@@ -86,8 +86,10 @@ public class SiteStruService implements ServletContextListener {
 		} else
 			LOGGER.info("没有网站的结构文件");
 
+		
+		String ajaxjsui = Version.isDebug ? "http://localhost:8080/ajaxjs-web-js" : cxt.getContextPath() + "/" + Constant.ajajx_ui;
 		cxt.setAttribute("ctx", cxt.getContextPath());
-		cxt.setAttribute("ajaxjsui", cxt.getContextPath() + "/" + Constant.ajajx_ui);
+		cxt.setAttribute("ajaxjsui", ajaxjsui);
 		cxt.setAttribute("commonAsset", cxt.getContextPath() + "/" + Constant.commonAsset); // 静态资源目录
 		cxt.setAttribute("commonJsp", cxt.getContextPath() + "/" + Constant.jsp_perfix);
 	}
