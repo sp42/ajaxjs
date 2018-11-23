@@ -13,7 +13,7 @@ import com.ajaxjs.orm.dao.PageResult;
 
 @Bean(value = "AdsService", aop = { CommonService.class, CacheService.class })
 public class AdsServiceImpl implements AdsService {
-	public static AdsDao dao = new DaoHandler<AdsDao>().bind(AdsDao.class);
+	public static AdsDao dao = new DaoHandler().bind(AdsDao.class);
 
 	public Ads findById(Long id) {
 		return dao.findById(id);

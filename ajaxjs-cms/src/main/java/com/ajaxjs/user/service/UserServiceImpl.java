@@ -1,6 +1,7 @@
 package com.ajaxjs.user.service;
 
 import java.util.Date;
+import java.util.List;
 
 import com.ajaxjs.cms.model.Attachment_picture;
 import com.ajaxjs.cms.service.Attachment_pictureService;
@@ -12,7 +13,6 @@ import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 import com.ajaxjs.user.dao.UserDao;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.model.UserCommonAuth;
@@ -26,7 +26,7 @@ import com.ajaxjs.web.UploadFileInfo;
 public class UserServiceImpl implements UserService {
 	private static final LogHelper LOGGER = LogHelper.getLog(UserServiceImpl.class);
 
-	public static UserDao dao = new DaoHandler<UserDao>().bind(UserDao.class);
+	public static UserDao dao = new DaoHandler().bind(UserDao.class);
 
 //	@Resource("User_common_authService") // 指定 service id
 	private UserCommonAuthService passwordService = new UserCommonAuthServiceImpl();
@@ -203,12 +203,7 @@ public class UserServiceImpl implements UserService {
 		UserCommonAuthServiceImpl.dao.deleteByUserId(bean.getId());
 		return dao.delete(bean);
 	}
-
-	@Override
-	public PageResult<User> findPagedList(QueryParams params, int start, int limit) {
-		return dao.findPagedList(params, start, limit);
-	}
-
+ 
 	@Override
 	public PageResult<User> findPagedList(int start, int limit) {
 		return dao.findPagedList(start, limit);
@@ -268,6 +263,12 @@ public class UserServiceImpl implements UserService {
 				throw new ServiceException("修改图片记录失败");
 			}
 		}
+	}
+
+	@Override
+	public List<User> findList() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

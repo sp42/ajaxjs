@@ -10,11 +10,10 @@ import com.ajaxjs.framework.service.aop.CacheService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 
 @Bean(value = "ArticleService", aop = { CommonService.class, CacheService.class })
 public class ArticleServiceImpl implements ArticleService {
-	ArticleDao dao = new DaoHandler<ArticleDao>().bind(ArticleDao.class);
+	ArticleDao dao = new DaoHandler().bind(ArticleDao.class);
 
 	@Override
 	public Map<String, Object> findById(Long id) {
@@ -62,20 +61,19 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public PageResult<Map<String, Object>> findPagedListCatalog(QueryParams param, int start, int limit) {
-		return dao.findPagedListCatalog(param, start, limit);
+	public PageResult<Map<String, Object>> findPagedListCatalog(int start, int limit) {
+		return dao.findPagedListCatalog(start, limit);
 	}
 
 	@Override
-	public PageResult<Map<String, Object>> findPagedListByCatalogId(int catalogId, QueryParams param, int start, int limit) {
+	public PageResult<Map<String, Object>> findPagedListByCatalogId(int catalogId, int start, int limit) {
 		int articleCatalog_Id = ConfigService.getValueAsInt("data.articleCatalog_Id");
-		return dao.findPagedListByCatalogId(catalogId == 0 ? articleCatalog_Id : catalogId, param, start, limit);
+		return dao.findPagedListByCatalogId(catalogId == 0 ? articleCatalog_Id : catalogId, start, limit);
 	}
 
 	@Override
-	public PageResult<Map<String, Object>> findPagedListByCatalogId_Api(int catalogId, QueryParams param, int start, int limit) {
-		param.status = QueryParams.FRONT_END;
-		return findPagedListByCatalogId(catalogId, param, start, limit);
+	public PageResult<Map<String, Object>> findPagedListByCatalogId_Api(int catalogId, int start, int limit) {
+		return findPagedListByCatalogId(catalogId, start, limit);
 
 	}
 }

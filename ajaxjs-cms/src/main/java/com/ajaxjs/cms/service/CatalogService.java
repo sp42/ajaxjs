@@ -6,7 +6,6 @@ import java.util.Map;
 import com.ajaxjs.cms.model.Catalog;
 import com.ajaxjs.framework.service.IService;
 import com.ajaxjs.framework.service.ServiceException;
-import com.ajaxjs.orm.dao.QueryParams;
 
 public interface CatalogService extends IService<Catalog, Long> {
 	/**
@@ -15,7 +14,7 @@ public interface CatalogService extends IService<Catalog, Long> {
 	 * @param param
 	 * @return
 	 */
-	public List<Catalog> findAll(QueryParams param);
+	public List<Catalog> findAll();
 
 	/**
 	 * 根据父 id 获取下一层的子分类列表，获取直接一层的分类。

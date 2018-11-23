@@ -8,7 +8,6 @@ import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.Update;
 import com.ajaxjs.orm.dao.IDao;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 
 public interface UserRoleRoleDao extends IDao<Map<String, Object>, Integer> {
 	final static String tableName = "user_admin_role";
@@ -19,7 +18,7 @@ public interface UserRoleRoleDao extends IDao<Map<String, Object>, Integer> {
 	
 	@Select(value = "SELECT * FROM " + tableName)
 	@Override
-	public PageResult<Map<String, Object>> findPagedList(QueryParams param, int start, int limit);
+	public PageResult<Map<String, Object>> findPagedList(int start, int limit);
 	
 	@Insert(tableName = tableName)
 	@Override

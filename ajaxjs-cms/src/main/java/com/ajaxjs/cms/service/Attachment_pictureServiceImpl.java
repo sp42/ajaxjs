@@ -16,7 +16,7 @@ import com.ajaxjs.util.io.FileUtil;
 
 @Bean(value = "Attachment_pictureService", aop = { CommonService.class, GlobalLogAop.class })
 public class Attachment_pictureServiceImpl implements Attachment_pictureService {
-	Attachment_pictureDao dao = new DaoHandler<Attachment_pictureDao>().bind(Attachment_pictureDao.class);
+	Attachment_pictureDao dao = new DaoHandler().bind(Attachment_pictureDao.class);
 
 	@Override
 	public Attachment_picture findById(Long id) {

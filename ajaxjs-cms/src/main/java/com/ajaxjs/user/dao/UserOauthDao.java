@@ -6,7 +6,6 @@ import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.Update;
 import com.ajaxjs.orm.dao.IDao;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 import com.ajaxjs.user.model.UserOauth;
 
 public interface UserOauthDao extends IDao<UserOauth, Long> {
@@ -18,7 +17,7 @@ public interface UserOauthDao extends IDao<UserOauth, Long> {
 	
 	@Select(value = "SELECT * FROM " + tableName)
 	@Override
-	public PageResult<UserOauth> findPagedList(QueryParams param, int start, int limit);
+	public PageResult<UserOauth> findPagedList(int start, int limit);
 	
 	@Insert(tableName = tableName)
 	@Override

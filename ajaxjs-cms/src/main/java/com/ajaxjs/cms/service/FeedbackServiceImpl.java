@@ -10,7 +10,7 @@ import com.ajaxjs.orm.dao.PageResult;
 
 @Bean(value = "FeedbackService", aop = { CommonService.class, GlobalLogAop.class })
 public class FeedbackServiceImpl implements FeedbackService {
-	FeedbackDao dao = new DaoHandler<FeedbackDao>().bind(FeedbackDao.class);
+	FeedbackDao dao = new DaoHandler().bind(FeedbackDao.class);
 
 	@Override
 	public Feedback findById(Long id) {

@@ -5,13 +5,13 @@ import java.util.Map;
 
 import com.ajaxjs.cms.dao.CatalogDao;
 import com.ajaxjs.cms.model.Catalog;
+import com.ajaxjs.framework.QueryParams;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.Update;
 import com.ajaxjs.orm.dao.IDao;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 import com.ajaxjs.user.model.User;
 
 public interface UserAdminDao extends IDao<User, Long> {
@@ -20,21 +20,17 @@ public interface UserAdminDao extends IDao<User, Long> {
 
 	@Select(value = "SELECT * FROM " + tableName)
 	@Override
-	public PageResult<User> findPagedList(QueryParams param, int start, int limit);
-	
-	@Select(value = "SELECT * FROM " + tableName)
-	@Override
 	public PageResult<User> findPagedList(int start, int limit);
 	
 	@Select(value = "SELECT * FROM " + tableName)
-	public PageResult<User> findAdminPagedList(QueryParams param);
+	public PageResult<User> findAdminPagedList();
 	
 	@Select("SELECT * FROM " + tableName + " WHERE id = ?")
 	@Override
 	public User findById(Long id);
 
 	@Select(value = "SELECT * FROM " + tableName)
-	public List<User> findAll(QueryParams param);
+	public List<User> findAll();
 	
 	@Insert(tableName = tableName)
 	@Override

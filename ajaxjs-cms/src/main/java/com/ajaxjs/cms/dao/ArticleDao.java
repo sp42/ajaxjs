@@ -11,7 +11,6 @@ import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.Update;
 import com.ajaxjs.orm.dao.IDao;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 
 public interface ArticleDao extends IDao<Map<String, Object>, Long> {
 	public static final String tableName = "entity_article";
@@ -50,10 +49,10 @@ public interface ArticleDao extends IDao<Map<String, Object>, Long> {
 	public List<Map<String, Object>> getTop(int limit);
 
 	@Select("SELECT entity_article.*, general_catelog.name AS catelogName FROM entity_article INNER JOIN general_catelog ON entity_article.catelog = general_catelog.id")
-	public PageResult<Map<String, Object>> findPagedListCatalog(QueryParams param, int start, int limit);
+	public PageResult<Map<String, Object>> findPagedListCatalog(int start, int limit);
 
 	@Select("SELECT * FROM entity_article WHERE catelog in ( #{catelogIds} )")
-	public PageResult<Map<String, Object>> findPagedListByCatalogId2(@Param String catelogIds, QueryParams param, int start, int limit);
+	public PageResult<Map<String, Object>> findPagedListByCatalogId2(@Param String catelogIds, int start, int limit);
 
 	@Select(value = "SELECT a.id, a.name, a.intro, a.createDate, a.updateDate, a.uid, c.name AS catelogName, (SELECT `path` FROM attachment_picture p WHERE p.`catelog` = 2 AND owner = a.uid ORDER BY ID DESC LIMIT 1) AS avatarPath FROM entity_article a "
 			+ "INNER JOIN (SELECT id, name FROM general_catelog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catelog WHERE id = ? ) , '%'))) AS c "
@@ -69,7 +68,7 @@ public interface ArticleDao extends IDao<Map<String, Object>, Long> {
 	sqliteCountSql = "SELECT COUNT(a.id) AS count FROM entity_article a "
 			+ "WHERE catelog in (SELECT id FROM general_catelog WHERE `path` LIKE ( ( SELECT `path` FROM general_catelog WHERE id = ? ) || '%')) AND 1 = 1")
 	
-	public PageResult<Map<String, Object>> findPagedListByCatalogId(int catelogIds, QueryParams param, int start, int limit);
+	public PageResult<Map<String, Object>> findPagedListByCatalogId(int catelogIds, int start, int limit);
 
 	@Select("SELECT * FROM general_catelog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catelog WHERE id = ? ) , '%'))")
 	public List<Catalog> getCatalog(int catelogParentId);

@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.ajaxjs.framework.service.IService;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 
 public interface ArticleService extends IService<Map<String, Object>, Long> {
 	/**
@@ -21,7 +20,7 @@ public interface ArticleService extends IService<Map<String, Object>, Long> {
 	 * @param param
 	 * @return
 	 */
-	public PageResult<Map<String, Object>> findPagedListCatalog(QueryParams param, int start, int limit);
+	public PageResult<Map<String, Object>> findPagedListCatalog(int start, int limit);
 
 	/**
 	 * 根據分类 id 查詢新聞
@@ -30,7 +29,7 @@ public interface ArticleService extends IService<Map<String, Object>, Long> {
 	 * @param param 查询参数
 	 * @return 新闻分页列表
 	 */
-	public PageResult<Map<String, Object>> findPagedListByCatalogId(int catalogId, QueryParams param, int start, int limit);
+	public PageResult<Map<String, Object>> findPagedListByCatalogId(int catalogId, int start, int limit);
 
 	/**
 	 * 
@@ -38,5 +37,5 @@ public interface ArticleService extends IService<Map<String, Object>, Long> {
 	 * @param param
 	 * @return
 	 */
-	public PageResult<Map<String, Object>> findPagedListByCatalogId_Api(int catalogId, QueryParams param, int start, int limit);
+	public PageResult<Map<String, Object>> findPagedListByCatalogId_Api(int catalogId, int start, int limit);
 }

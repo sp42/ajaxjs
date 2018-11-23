@@ -7,13 +7,12 @@ import com.ajaxjs.cms.service.aop.GlobalLogAop;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 import com.ajaxjs.user.dao.UserAdminDao;
 import com.ajaxjs.user.model.User;
 
 @Bean(value = "UserAdminService", aop = { CommonService.class,  GlobalLogAop.class })
 public class UserAdminServiceImpl implements UserAdminService {
-	public static UserAdminDao dao = new DaoHandler<UserAdminDao>().bind(UserAdminDao.class);
+	public static UserAdminDao dao = new DaoHandler().bind(UserAdminDao.class);
 
 	@Override
 	public User findById(Long id) {
@@ -36,11 +35,6 @@ public class UserAdminServiceImpl implements UserAdminService {
 	}
 
 	@Override
-	public PageResult<User> findPagedList(QueryParams params, int start, int limit) {
-		return dao.findPagedList(params, start, limit);
-	}
-
-	@Override
 	public PageResult<User> findPagedList(int start, int limit) {
 		return dao.findPagedList(start, limit);
 	}
@@ -57,5 +51,10 @@ public class UserAdminServiceImpl implements UserAdminService {
 	@Override
 	public List<User> getTop5() {
 		return dao.getTop5();
+	}
+
+	@Override
+	public List<User> findList() {
+		return null;
 	}
 }

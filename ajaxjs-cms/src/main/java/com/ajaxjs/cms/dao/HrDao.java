@@ -10,7 +10,6 @@ import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.Update;
 import com.ajaxjs.orm.dao.IDao;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 
 public interface HrDao extends IDao<Map<String, Object>, Long> {
 	public final static String tableName = "entity_hr";
@@ -24,7 +23,7 @@ public interface HrDao extends IDao<Map<String, Object>, Long> {
 	public PageResult<Map<String, Object>> findPagedList(int start, int limit);
 
 	@Select(value = "SELECT id, name, createDate, expr, catelog FROM " + tableName)
-	public PageResult<Map<String, Object>> findPagedList_public(QueryParams params, int start, int limit);
+	public PageResult<Map<String, Object>> findPagedList_public(int start, int limit);
 
 	@Insert(tableName = tableName)
 	@Override
@@ -58,7 +57,7 @@ public interface HrDao extends IDao<Map<String, Object>, Long> {
 			sqliteCountSql = "SELECT COUNT(a.id) AS count FROM entity_hr a "
 					+ "WHERE catelog in (SELECT id FROM general_catelog WHERE `path` LIKE ( ( SELECT `path` FROM general_catelog WHERE id = ? ) || '%')) AND 1 = 1")
 
-	public PageResult<Map<String, Object>> findPagedListByCatalogId(int catelogIds, QueryParams param, int start, int limit);
+	public PageResult<Map<String, Object>> findPagedListByCatalogId(int catelogIds,  int start, int limit);
 	
 	@Select(value = "SELECT * FROM " + tableName + " ORDER BY ID DESC")
 	@Override

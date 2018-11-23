@@ -1,11 +1,12 @@
 package com.ajaxjs.user.service;
 
+import java.util.List;
+
 import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 import com.ajaxjs.user.dao.UserCommonAuthDao;
 import com.ajaxjs.user.model.UserCommonAuth;
 import com.ajaxjs.util.Encode;
@@ -14,7 +15,7 @@ import com.ajaxjs.util.logger.LogHelper;
 @Bean(value = "User_common_authService")
 public class UserCommonAuthServiceImpl implements UserCommonAuthService {
 	private static final LogHelper LOGGER = LogHelper.getLog(UserCommonAuthServiceImpl.class);
-	public static UserCommonAuthDao dao = new DaoHandler<UserCommonAuthDao>().bind(UserCommonAuthDao.class);
+	public static UserCommonAuthDao dao = new DaoHandler().bind(UserCommonAuthDao.class);
 
 	@Override
 	public UserCommonAuth findById(Long id) {
@@ -53,11 +54,6 @@ public class UserCommonAuthServiceImpl implements UserCommonAuthService {
 	}
 
 	@Override
-	public PageResult<UserCommonAuth> findPagedList(QueryParams params, int start, int limit) {
-		return dao.findPagedList(params, start, limit);
-	}
-
-	@Override
 	public PageResult<UserCommonAuth> findPagedList(int start, int limit) {
 		return dao.findPagedList(start, limit);
 	}
@@ -88,6 +84,11 @@ public class UserCommonAuthServiceImpl implements UserCommonAuthService {
 			
 		LOGGER.info("密码修改失败");
 		return false;
+	}
+
+	@Override
+	public List<UserCommonAuth> findList() {
+		return null;
 	}
 
 }

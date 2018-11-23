@@ -1,16 +1,16 @@
 package com.ajaxjs.user.role.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 import com.ajaxjs.user.role.dao.UserRoleUserDao;
 
 @Bean(value = "UserRoleUserService")
 public class UserRoleUserServiceImpl implements UserRoleUserService {
-	UserRoleUserDao dao = new DaoHandler<UserRoleUserDao>().bind(UserRoleUserDao.class);
+	UserRoleUserDao dao = new DaoHandler().bind(UserRoleUserDao.class);
 
 	@Override
 	public Map<String, Object> findById(Integer id) {
@@ -31,11 +31,7 @@ public class UserRoleUserServiceImpl implements UserRoleUserService {
 	public boolean delete(Map<String, Object> bean) {
 		return dao.delete(bean);
 	}
-
-	@Override
-	public PageResult<Map<String, Object>> findPagedList(QueryParams params, int start, int limit) {
-		return dao.findPagedList(params, start, limit);
-	}
+ 
 
 	@Override
 	public PageResult<Map<String, Object>> findPagedList(int start, int limit) {
@@ -50,6 +46,11 @@ public class UserRoleUserServiceImpl implements UserRoleUserService {
 	@Override
 	public String getTableName() {
 		return "user_admin";
+	}
+
+	@Override
+	public List<Map<String, Object>> findList() {
+		return null;
 	} 
 
 }

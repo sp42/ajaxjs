@@ -26,7 +26,7 @@ import com.ajaxjs.util.Encode;
  * @param <S>
  */
 public class GlobalLogAop<T, ID extends Serializable, S extends IService<T, ID>> extends Aop<S> {
-	public static final GlobalLogDao dao = new DaoHandler<GlobalLogDao>().bind(GlobalLogDao.class);
+	public static final GlobalLogDao dao = new DaoHandler().bind(GlobalLogDao.class);
 
 	@Override
 	public Object before(S o, Method method, String methodName, Object[] args) {

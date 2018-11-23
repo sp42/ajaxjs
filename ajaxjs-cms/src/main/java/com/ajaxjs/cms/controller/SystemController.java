@@ -14,7 +14,7 @@ import com.ajaxjs.orm.dao.DaoHandler;
 
 @Path("/admin")
 public class SystemController implements IController, Constant {
-	GlobalLogDao dao = new DaoHandler<GlobalLogDao>().bind(GlobalLogDao.class);
+	GlobalLogDao dao = new DaoHandler().bind(GlobalLogDao.class);
 
 	@GET
 	@Path("GlobalLog")

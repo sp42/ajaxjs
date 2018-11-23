@@ -1,15 +1,16 @@
 package com.ajaxjs.user.service;
 
+import java.util.List;
+
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 import com.ajaxjs.user.dao.UserOauthDao;
 import com.ajaxjs.user.model.UserOauth;
 
 @Bean(value = "User_oauthService")
 public class UserOauthServiceImpl implements UserOauthService {
-	UserOauthDao dao = new DaoHandler<UserOauthDao>().bind(UserOauthDao.class);
+	UserOauthDao dao = new DaoHandler().bind(UserOauthDao.class);
 
 	@Override
 	public UserOauth findById(Long id) {
@@ -32,11 +33,6 @@ public class UserOauthServiceImpl implements UserOauthService {
 	}
 
 	@Override
-	public PageResult<UserOauth> findPagedList(QueryParams params, int start, int limit) {
-		return dao.findPagedList(params, start, limit);
-	}
-
-	@Override
 	public PageResult<UserOauth> findPagedList(int start, int limit) {
 		return dao.findPagedList(start, limit);
 	}
@@ -49,6 +45,11 @@ public class UserOauthServiceImpl implements UserOauthService {
 	@Override
 	public String getTableName() {
 		return "user_oauth";
-	} 
+	}
+
+	@Override
+	public List<UserOauth> findList() {
+		return null;
+	}
 
 }

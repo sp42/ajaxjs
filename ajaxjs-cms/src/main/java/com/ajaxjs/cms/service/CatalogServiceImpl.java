@@ -10,11 +10,10 @@ import com.ajaxjs.cms.service.aop.GlobalLogAop;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 
 @Bean(value = "CatalogService", aop = { CommonService.class, GlobalLogAop.class })
 public class CatalogServiceImpl implements CatalogService {
-	CatalogDao dao = new DaoHandler<CatalogDao>().bind(CatalogDao.class);
+	CatalogDao dao = new DaoHandler().bind(CatalogDao.class);
 
 	@Override
 	public List<Catalog> findByParentId(int id) {
@@ -85,7 +84,7 @@ public class CatalogServiceImpl implements CatalogService {
 	}
 
 	@Override
-	public List<Catalog> findAll(QueryParams param) {
+	public List<Catalog> findAll() {
 		return dao.findPagedList(0, 999999);
 	}
 

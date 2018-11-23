@@ -18,7 +18,7 @@ public interface UserLoginLogDao extends IDao<UserLoginLog, Long> {
 	
 	@Select(value = "SELECT * FROM " + tableName)
 	@Override
-	public PageResult<UserLoginLog> findPagedList(QueryParams param, int start, int limit);
+	public PageResult<UserLoginLog> findPagedList(int start, int limit);
 	
 	@Insert(tableName = tableName)
 	@Override

@@ -11,12 +11,11 @@ import com.ajaxjs.cms.service.aop.GlobalLogAop;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 import com.ajaxjs.user.role.dao.UserRoleRoleDao;
 
 @Bean(value = "UserRoleRoleService", aop = { CommonService.class, GlobalLogAop.class })
 public class UserRoleRoleServiceImpl implements UserRoleRoleService {
-	UserRoleRoleDao dao = new DaoHandler<UserRoleRoleDao>().bind(UserRoleRoleDao.class);
+	UserRoleRoleDao dao = new DaoHandler().bind(UserRoleRoleDao.class);
 
 	@Override
 	public Map<String, Object> findById(Integer id) {
@@ -54,11 +53,6 @@ public class UserRoleRoleServiceImpl implements UserRoleRoleService {
 	@Override
 	public boolean delete(Map<String, Object> bean) {
 		return dao.delete(bean);
-	}
-
-	@Override
-	public PageResult<Map<String, Object>> findPagedList(QueryParams params, int start, int limit) {
-		return dao.findPagedList(params, start, limit);
 	}
 
 	@Override
@@ -137,5 +131,11 @@ public class UserRoleRoleServiceImpl implements UserRoleRoleService {
 		Integer[] arr = list.toArray(new Integer[list.size()]);
 
 		return arr;
+	}
+
+	@Override
+	public List<Map<String, Object>> findList() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -9,7 +9,6 @@ import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.Update;
 import com.ajaxjs.orm.dao.IDao;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 
 public interface DataDictDao extends IDao<Map<String, Object>, Integer> {
 	final static String tableName = "general_data_dict";
@@ -23,7 +22,7 @@ public interface DataDictDao extends IDao<Map<String, Object>, Integer> {
 	public Map<String, Object> findById(Integer id);
 
 	@Select(value = "SELECT * FROM " + tableName)
-	public List<Map<String, Object>> findAll(QueryParams param);
+	public List<Map<String, Object>> findAll();
 	
 	@Insert(tableName = tableName)
 	@Override

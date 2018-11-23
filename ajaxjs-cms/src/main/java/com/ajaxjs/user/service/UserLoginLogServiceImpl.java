@@ -1,15 +1,16 @@
 package com.ajaxjs.user.service;
 
+import java.util.List;
+
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 import com.ajaxjs.user.dao.UserLoginLogDao;
 import com.ajaxjs.user.model.UserLoginLog;
 
 @Bean(value = "User_login_logService")
 public class UserLoginLogServiceImpl implements UserLoginLogService {
-	UserLoginLogDao dao = new DaoHandler<UserLoginLogDao>().bind(UserLoginLogDao.class);
+	UserLoginLogDao dao = new DaoHandler().bind(UserLoginLogDao.class);
 
 	@Override
 	public UserLoginLog findById(Long id) {
@@ -32,11 +33,6 @@ public class UserLoginLogServiceImpl implements UserLoginLogService {
 	}
 
 	@Override
-	public PageResult<UserLoginLog> findPagedList(QueryParams params, int start, int limit) {
-		return dao.findPagedList(params, start, limit);
-	}
-
-	@Override
 	public PageResult<UserLoginLog> findPagedList(int start, int limit) {
 		return dao.findPagedList(start, limit);
 	}
@@ -49,6 +45,11 @@ public class UserLoginLogServiceImpl implements UserLoginLogService {
 	@Override
 	public String getTableName() {
 		return "user_login_log";
+	}
+
+	@Override
+	public List<UserLoginLog> findList() {
+		return null;
 	} 
 
 }

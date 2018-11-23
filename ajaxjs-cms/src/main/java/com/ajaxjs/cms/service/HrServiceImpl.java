@@ -7,11 +7,10 @@ import com.ajaxjs.cms.service.aop.CommonService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 
 @Bean(value = "HrService", aop = { CommonService.class })
 public class HrServiceImpl implements HrService {
-	HrDao dao = new DaoHandler<HrDao>().bind(HrDao.class);
+	HrDao dao = new DaoHandler().bind(HrDao.class);
 
 	@Override
 	public Map<String, Object> findById(Long id) {
@@ -54,7 +53,7 @@ public class HrServiceImpl implements HrService {
 	}
 
 	@Override
-	public PageResult<Map<String, Object>> findPagedListByCatalogId(int catalogId, QueryParams param, int start, int limit) {
-		return dao.findPagedListByCatalogId(catalogId, param, start, limit);
+	public PageResult<Map<String, Object>> findPagedListByCatalogId(int catalogId, int start, int limit) {
+		return dao.findPagedListByCatalogId(catalogId, start, limit);
 	}
 }

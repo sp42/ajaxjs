@@ -1,5 +1,6 @@
 package com.ajaxjs.user.role.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.cms.service.aop.CommonService;
@@ -7,12 +8,11 @@ import com.ajaxjs.cms.service.aop.GlobalLogAop;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 import com.ajaxjs.user.role.dao.UserRoleResourcesDao;
 
 @Bean(value = "UserRoleResourcesService", aop = {CommonService.class,  GlobalLogAop.class })
 public class UserRoleResourcesServiceImpl implements UserRoleResourcesService {
-	UserRoleResourcesDao dao = new DaoHandler<UserRoleResourcesDao>().bind(UserRoleResourcesDao.class);
+	UserRoleResourcesDao dao = new DaoHandler().bind(UserRoleResourcesDao.class);
 
 	@Override
 	public Map<String, Object> findById(Integer id) {
@@ -34,10 +34,7 @@ public class UserRoleResourcesServiceImpl implements UserRoleResourcesService {
 		return dao.delete(bean);
 	}
 
-	@Override
-	public PageResult<Map<String, Object>> findPagedList(QueryParams params, int start, int limit) {
-		return dao.findPagedList(params, start, limit);
-	}
+	 
 
 	@Override
 	public PageResult<Map<String, Object>> findPagedList(int start, int limit) {
@@ -52,6 +49,11 @@ public class UserRoleResourcesServiceImpl implements UserRoleResourcesService {
 	@Override
 	public String getTableName() {
 		return "user_admin_resources";
+	}
+
+	@Override
+	public List<Map<String, Object>> findList() {
+		return null;
 	} 
 
 }

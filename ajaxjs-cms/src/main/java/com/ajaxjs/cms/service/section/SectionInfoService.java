@@ -6,7 +6,6 @@ import java.util.Map;
 import com.ajaxjs.cms.model.SectionInfo;
 import com.ajaxjs.framework.service.IService;
 import com.ajaxjs.framework.service.ServiceException;
-import com.ajaxjs.orm.dao.QueryParams;
 
 public interface SectionInfoService extends IService<SectionInfo, Long> {
 	/**
@@ -15,7 +14,7 @@ public interface SectionInfoService extends IService<SectionInfo, Long> {
 	 * @param param
 	 * @return
 	 */
-	public List<SectionInfo> findAll(QueryParams param);
+	public List<SectionInfo> findAll();
 
 	/**
 	 * 根据父 id 获取下一层的子分类列表，获取直接一层的分类。

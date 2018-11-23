@@ -111,7 +111,7 @@ public class UserAdminController extends CommonController<User, Long> implements
 	//	public String getNewsCatalog(ModelAndView model, HttpServletRequest request) {
 	//		initDb();
 	//		prepareData(model);
-	//		CatalogDao dao = new DaoHandler<CatalogDao>().bind(CatalogDao.class);
+	//		CatalogDao dao = new DaoHandler().bind(CatalogDao.class);
 	//		List<User> result = dao.findAll(new QueryParams(request.getParameterMap()));
 	//
 	//		return outputListBeanAsJson(result);

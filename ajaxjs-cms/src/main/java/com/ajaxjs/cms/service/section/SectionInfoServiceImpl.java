@@ -10,11 +10,10 @@ import com.ajaxjs.cms.service.aop.GlobalLogAop;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 
 @Bean(value = "SectionInfoService", aop = { CommonService.class, GlobalLogAop.class })
 public class SectionInfoServiceImpl implements SectionInfoService {
-	public static SectionInfoDao dao = new DaoHandler<SectionInfoDao>().bind(SectionInfoDao.class);
+	public static SectionInfoDao dao = new DaoHandler().bind(SectionInfoDao.class);
 
 	@Override
 	public List<SectionInfo> findByParentId(int id) {
@@ -85,8 +84,8 @@ public class SectionInfoServiceImpl implements SectionInfoService {
 	}
 
 	@Override
-	public List<SectionInfo> findAll(QueryParams param) {
-		return dao.findPagedList(param, 0, 999999);
+	public List<SectionInfo> findAll() {
+		return dao.findPagedList(0, 999999);
 	}
 
 	@Override

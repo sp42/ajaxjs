@@ -11,7 +11,7 @@ import com.ajaxjs.orm.dao.PageResult;
 
 @Bean(value = "AppUpdateService", aop = { CommonService.class })
 public class AppUpdateServiceImpl implements AppUpdateService {
-	AppUpdateDao dao = new DaoHandler<AppUpdateDao>().bind(AppUpdateDao.class);
+	AppUpdateDao dao = new DaoHandler().bind(AppUpdateDao.class);
 
 	@Override
 	public AppUpdate findById(Long id) {
