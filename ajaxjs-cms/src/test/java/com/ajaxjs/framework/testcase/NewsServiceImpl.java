@@ -31,7 +31,7 @@ import com.ajaxjs.orm.dao.PageResult;
  */
 @Bean(value = "newsService", aop = { CommonTestService.class, CacheService.class })
 public class NewsServiceImpl implements NewsService {
-	private NewsDao dao = new DaoHandler<NewsDao>().bind(NewsDao.class);// 实例化 DAO。因为是 class 所以不能注入，于是一般在 Service
+	private NewsDao dao = new DaoHandler().bind(NewsDao.class);// 实例化 DAO。因为是 class 所以不能注入，于是一般在 Service
 																		// 构造器里面调用该方法
 
 	@Override

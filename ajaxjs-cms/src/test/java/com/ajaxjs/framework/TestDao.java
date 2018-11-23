@@ -1,7 +1,6 @@
 package com.ajaxjs.framework;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -12,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.ajaxjs.framework.testcase.NewsDao;
+import com.ajaxjs.framework.testcase.NewsDao2;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
@@ -22,7 +22,7 @@ public class TestDao {
 	@Before
 	public void setUp() {
 		JdbcConnection.setConnection(JdbcConnection.getTestSqliteConnection());
-		dao = new DaoHandler<NewsDao>().bind(NewsDao.class);
+		dao = new DaoHandler().bind(NewsDao.class);
 	}
 
 	@After
@@ -42,8 +42,8 @@ public class TestDao {
 //		newsList = dao.findList();
 //		assertEquals(214, newsList.size());
 
-		int total = dao.count3();
-		assertNotNull(total);
+//		int total = dao.count3();
+//		assertNotNull(total);
 	}
 
 //	@Test
@@ -57,4 +57,9 @@ public class TestDao {
 //		assertNotNull(newsList);
 	}
 
+	@Test
+	public void test2() {
+		NewsDao2 newsDao2 = new DaoHandler().bind(NewsDao2.class);
+		newsDao2.findById(1L);
+	}
 }
