@@ -144,6 +144,8 @@ public class PageResult<T> extends ArrayList<T> {
 
 			if (list != null)
 				result.addAll(list);
+			
+			
 		}
 
 		return result;

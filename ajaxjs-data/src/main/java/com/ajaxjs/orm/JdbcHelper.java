@@ -69,7 +69,6 @@ public class JdbcHelper {
 			}
 		} catch (SQLException e) {
 			LOGGER.warning(e);
-
 			return null;
 		}
 	}
@@ -135,7 +134,7 @@ public class JdbcHelper {
 			for (int i = 1; i <= rsmd.getColumnCount(); i++) {// 遍历结果集
 				String key = rsmd.getColumnLabel(i);
 				Object value = rs.getObject(i);
-
+				
 				try {
 					PropertyDescriptor property = new PropertyDescriptor(key, beanClz);
 					Method method = property.getWriteMethod();
@@ -150,8 +149,10 @@ public class JdbcHelper {
 
 					ReflectUtil.executeMethod(bean, method, value);
 				} catch (IntrospectionException | IllegalArgumentException e) {
-					if (e instanceof IntrospectionException) // 数据库返回这个字段，但是 bean 没有对应的方法
+					if (e instanceof IntrospectionException) {// 数据库返回这个字段，但是 bean 没有对应的方法
+//						LOGGER.info("数据库返回这个字段 {0}，但是 bean {1} 没有对应的方法", key, beanClz);
 						continue;
+					}
 					LOGGER.warning(e);
 				}
 			}

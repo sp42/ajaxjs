@@ -41,14 +41,6 @@ public interface IDao<T, ID extends Serializable> {
 	public List<T> findList();
 
 	/**
-	 * 列表查询，如果找不到则返回 null。
-	 * 
-	 * @param param DAO 专用的查询参数对象
-	 * @return 结果集
-	 */
-	public List<T> findList(QueryParams param);
-
-	/**
 	 * 支持分页的查询，如果找不到则返回 null。执行这个方法前应先查询符合条件的记录总数，即 int count()
 	 * 
 	 * @param start 分页之起始行数
@@ -56,16 +48,6 @@ public interface IDao<T, ID extends Serializable> {
 	 * @return 结果集
 	 */
 	public PageResult<T> findPagedList(int start, int limit);
-
-	/**
-	 * 支持分页的查询，如果找不到则返回 null。执行这个方法前应先查询符合条件的记录总数，即 int count()
-	 * 
-	 * @param param 专用的查询参数对象
-	 * @param start 分页之起始行数
-	 * @param limit 分页之偏量值
-	 * @return 结果集
-	 */
-	public PageResult<T> findPagedList(QueryParams param, int start, int limit);
 
 	/**
 	 * 新建记录

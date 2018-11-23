@@ -72,6 +72,7 @@ public class DaoHandler<T> extends JdbcHelper implements InvocationHandler {
 
 		if (method.getAnnotation(Select.class) != null) {
 			entryType = getEntryContainerType(method);
+
 			return select(method.getAnnotation(Select.class), sqlFactoryHandler, args, returnType, entryType, method);
 		}
 
@@ -138,9 +139,9 @@ public class DaoHandler<T> extends JdbcHelper implements InvocationHandler {
 		Class<?> type = method.getReturnType();
 
 		// 获取 List<String> 泛型里的 String，而不是 List 类型
-		if (type == List.class) {
+		if (type == List.class || type == PageResult.class) {
 			Type returnType = method.getGenericReturnType();
-
+			
 			if (returnType instanceof ParameterizedType) {
 				ParameterizedType _type = (ParameterizedType) returnType;
 
@@ -186,6 +187,7 @@ public class DaoHandler<T> extends JdbcHelper implements InvocationHandler {
 //				queryParam.order = new HashMap<>(); // 默认按照 id 排序
 //				queryParam.order.put("id", "DESC");
 //				sql = queryParam.orderToSql(sql);
+			
 			result = PageResult.doPage(conn, entryType, select, sql, method, args);
 		} else if (returnType == Map.class) {
 			result = queryAsMap(conn, sql, args);

@@ -106,10 +106,6 @@ public class TestDao {
 	@Test
 	public void testSqlFactory() {
 		int total = dao.count2();
-		assertNotNull(total);
-
-		total = dao.count3();
-		assertNotNull(total);
-
+		assertNotNull(total); 
 	}
 }

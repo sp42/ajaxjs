@@ -43,9 +43,6 @@ public interface NewsDao extends IDao<News, Long> {
 	@SqlFactory("getInstance")
 	public int count2();
 
-	@Select("SELECT * FROM news LIMIT ?, ?")
-	@SqlFactory(value = "addWhere", clz = QueryParams.class)
-	public int count3();
 
 	public static String getInstance(String sql) {
 		return "SELECT COUNT(*) FROM news";
