@@ -29,6 +29,7 @@ import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.SqlFactory;
+import com.ajaxjs.orm.annotation.TableName;
 import com.ajaxjs.orm.annotation.Update;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
@@ -43,7 +44,7 @@ import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
  * @param <T> DAO 实际类型引用
  */
 @SuppressWarnings("restriction")
-public class DaoHandler<T> extends JdbcHelper implements InvocationHandler {
+public class DaoHandler extends JdbcHelper implements InvocationHandler {
 
 	/**
 	 * 数据库连接对象。You should put connection by calling
@@ -114,7 +115,9 @@ public class DaoHandler<T> extends JdbcHelper implements InvocationHandler {
 		return null;
 	}
 
-	private Class<T> clz;
+	private Class<? extends IDao<?, ?>> clz;
+
+	private String tableName;
 
 	/**
 	 * 绑定 DAO 的类，实例化该接口，返回实例
@@ -123,8 +126,15 @@ public class DaoHandler<T> extends JdbcHelper implements InvocationHandler {
 	 * @return DAO 实例
 	 */
 	@SuppressWarnings("unchecked")
-	public T bind(Class<T> clz) {
+	public <T extends IDao<?, ?>> T bind(Class<T> clz) {
 		this.setClz(clz);
+		// 获取注解的表名
+		TableName tableNameA = clz.getAnnotation(TableName.class);
+
+		if (tableNameA != null) {
+			setTableName(tableNameA.value());
+		}
+
 		Object obj = Proxy.newProxyInstance(clz.getClassLoader(), new Class[] { clz }, this);
 		return (T) obj;
 	}
@@ -141,7 +151,7 @@ public class DaoHandler<T> extends JdbcHelper implements InvocationHandler {
 		// 获取 List<String> 泛型里的 String，而不是 List 类型
 		if (type == List.class || type == PageResult.class) {
 			Type returnType = method.getGenericReturnType();
-			
+
 			if (returnType instanceof ParameterizedType) {
 				ParameterizedType _type = (ParameterizedType) returnType;
 
@@ -157,6 +167,17 @@ public class DaoHandler<T> extends JdbcHelper implements InvocationHandler {
 		return type;
 	}
 
+	String handleSql(String sql, Method sqlFactoryHandler) {
+		if (sqlFactoryHandler != null)
+			sql = ReflectUtil.executeStaticMethod(sqlFactoryHandler, sql).toString();
+
+		if (tableName != null) {
+			sql = sql.replaceAll("\\$\\{\\w+\\}", tableName);
+		}
+
+		return sql;
+	}
+
 	/**
 	 * 执行 SELECT 查询
 	 * 
@@ -169,9 +190,7 @@ public class DaoHandler<T> extends JdbcHelper implements InvocationHandler {
 	 */
 	private <R, B> Object select(Select select, Method sqlFactoryHandler, Object[] args, Class<R> returnType, Class<B> entryType, Method method) throws DaoException {
 		String sql = isSqlite(select.sqliteValue(), conn) ? select.sqliteValue() : select.value();
-
-		if (sqlFactoryHandler != null)
-			sql = ReflectUtil.executeStaticMethod(sqlFactoryHandler, sql).toString();
+		sql = handleSql(sql, sqlFactoryHandler);
 
 		Object result = null;
 
@@ -187,7 +206,7 @@ public class DaoHandler<T> extends JdbcHelper implements InvocationHandler {
 //				queryParam.order = new HashMap<>(); // 默认按照 id 排序
 //				queryParam.order.put("id", "DESC");
 //				sql = queryParam.orderToSql(sql);
-			
+
 			result = PageResult.doPage(conn, entryType, select, sql, method, args);
 		} else if (returnType == Map.class) {
 			result = queryAsMap(conn, sql, args);
@@ -197,7 +216,7 @@ public class DaoHandler<T> extends JdbcHelper implements InvocationHandler {
 		}
 
 		return result;
-	} 
+	}
 
 	/**
 	 * 判断是否 SQLite 数据库
@@ -225,8 +244,7 @@ public class DaoHandler<T> extends JdbcHelper implements InvocationHandler {
 
 		if (!insert.value().equals("")) { /* 以 sql 方式创建 */
 			String sql = insert.value();
-			if (sqlFactoryHandler != null)
-				sql = ReflectUtil.executeStaticMethod(sqlFactoryHandler, sql).toString();
+			sql = handleSql(sql, sqlFactoryHandler);
 
 			id = create(conn, sql, args);
 		} else if (insert.value().equals("") && insert.tableName() != null && args[0] != null) {// 以 bean 方式创建
@@ -259,8 +277,7 @@ public class DaoHandler<T> extends JdbcHelper implements InvocationHandler {
 
 		if (!update.value().equals("")) { /* 以 sql 方式更新 */
 			String sql = update.value();
-			if (sqlFactoryHandler != null)
-				sql = ReflectUtil.executeStaticMethod(sqlFactoryHandler, sql).toString();
+			sql = handleSql(sql, sqlFactoryHandler);
 
 			effectRows = update(conn, sql, args);
 		} else if (test(update::value, update::tableName, args[0])) { // 以 bean 方式删除
@@ -283,8 +300,7 @@ public class DaoHandler<T> extends JdbcHelper implements InvocationHandler {
 	private Boolean delete(Delete delete, Method sqlFactoryHandler, Object[] args) {
 		String sql = isSqlite(delete.sqliteValue(), conn) ? delete.sqliteValue() : delete.value();
 
-		if (sqlFactoryHandler != null)
-			sql = ReflectUtil.executeStaticMethod(sqlFactoryHandler, sql).toString();
+		sql = handleSql(sql, sqlFactoryHandler);
 
 		if (!CommonUtil.isEmptyString(sql)) { /* 以 sql 方式删除 */
 			return update(conn, sql, args) >= 1;
@@ -298,11 +314,19 @@ public class DaoHandler<T> extends JdbcHelper implements InvocationHandler {
 		return crud.get().equals("") && getTableName.get() != null && entryContainer != null;
 	}
 
-	public Class<T> getClz() {
+	public Class<? extends IDao<?, ?>> getClz() {
 		return clz;
 	}
 
-	public void setClz(Class<T> clz) {
+	public void setClz(Class<? extends IDao<?, ?>> clz) {
 		this.clz = clz;
+	}
+
+	public String getTableName() {
+		return tableName;
+	}
+
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
 	}
 }
