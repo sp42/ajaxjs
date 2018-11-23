@@ -7,19 +7,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ajaxjs.cms.model.Attachment_picture;
-import com.ajaxjs.cms.service.Attachment_pictureService;
-import com.ajaxjs.framework.dao.MockDataSource;
-import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.ioc.BeanContext;
+import com.ajaxjs.mock.DBConnection;
 import com.ajaxjs.orm.JdbcConnection;
 
 public class TestAttachment_picture{
 	@BeforeClass
 	public static void initDb() {
-		JdbcConnection.setConnection(MockDataSource.getTestMySqlConnection(
-				"jdbc:mysql://115.28.242.232/zyjf?useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false", "root",
-				"root123abc"));
-		BeanContext.init("com.ajaxjs.cms");
+		DBConnection.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
 	}
 
 	@Test

@@ -9,11 +9,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.cms.service.HrService;
-import com.ajaxjs.config.ConfigService;
-import com.ajaxjs.framework.dao.MockDataSource;
-import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.ioc.BeanContext;
+import com.ajaxjs.mock.DBConnection;
 import com.ajaxjs.mock.TestHelper;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.dao.PageResult;
@@ -23,10 +20,7 @@ public class TestHrService {
 
 	@BeforeClass
 	public static void initDb() {
-		ConfigService.load("c:\\project\\wyzx-pc\\src\\resources\\site_config.json");
-		JdbcConnection.setConnection(MockDataSource.getTestMySqlConnection(ConfigService.getValueAsString("testServer.mysql.url"), ConfigService.getValueAsString("testServer.mysql.user"),
-				ConfigService.getValueAsString("testServer.mysql.password")));
-		BeanContext.init("com.ajaxjs.cms");
+		DBConnection.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
 		service = (HrService) BeanContext.getBean("HrService");
 	}
 
@@ -35,12 +29,10 @@ public class TestHrService {
 	static String[] expr = new String[] { "一年", "两年", "三年" };
 
 
-//	@Test
+	@Test
 	public void testCreate() {
-		Map<String, Object> entity;
-		
 		for (int i = 0; i < 10; i++) {
-			entity = new HashMap<>();
+			Map<String, Object> entity = new HashMap<>();
 			entity.put("name", TestHelper.getItem(names));
 			entity.put("content", TestHelper.getItem(content));
 			entity.put("expr", TestHelper.getItem(expr));
@@ -50,8 +42,7 @@ public class TestHrService {
 
 	@Test
 	public void testPageList() {
-		PageResult<Map<String, Object>> page;
-		page = service.findPagedList(null, 0, 10);
+		PageResult<Map<String, Object>> page = service.findPagedList(0, 10);
 		assertNotNull(page.getTotalCount());
 	}
 

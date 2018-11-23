@@ -15,14 +15,14 @@
  */
 package com.ajaxjs.framework.testcase;
 
+import java.util.List;
+
 import com.ajaxjs.framework.News;
-import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.framework.service.aop.CacheService;
 import com.ajaxjs.framework.service.aop.CommonTestService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 
 /**
  * 
@@ -67,12 +67,13 @@ public class NewsServiceImpl implements NewsService {
 		return dao.delete(bean);
 	}
 
-	public PageResult<News> findPagedList(QueryParams params, int start, int limit) {
-		return dao.findPagedList(params, start, limit);
-	}
-
 	public PageResult<News> findPagedList(int start, int limit) {
 		return findPagedList(start, limit);
+	}
+
+	@Override
+	public List<News> findList() {
+		return null;
 	}
 
 }

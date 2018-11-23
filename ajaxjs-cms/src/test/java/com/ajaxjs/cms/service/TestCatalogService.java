@@ -14,22 +14,19 @@ import com.ajaxjs.cms.model.Catalog;
 import com.ajaxjs.cms.service.ArticleService;
 import com.ajaxjs.cms.service.CatalogService;
 import com.ajaxjs.config.ConfigService;
-import com.ajaxjs.framework.dao.MockDataSource;
-import com.ajaxjs.framework.dao.QueryParams;
+import com.ajaxjs.framework.QueryParams;
 import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.ioc.BeanContext;
-import com.ajaxjs.jdbc.PageResult;
+import com.ajaxjs.mock.DBConnection;
 import com.ajaxjs.orm.JdbcConnection;
+import com.ajaxjs.orm.dao.PageResult;
 
 public class TestCatalogService {
 	static CatalogService catalogService;
 
 	@BeforeClass
 	public static void initDb() {
-		ConfigService.load("c:\\project\\wyzx-pc\\src\\resources\\site_config.json");
-		JdbcConnection.setConnection(MockDataSource.getTestMySqlConnection(ConfigService.getValueAsString("testServer.mysql.url"), ConfigService.getValueAsString("testServer.mysql.user"),
-				ConfigService.getValueAsString("testServer.mysql.password")));
-		BeanContext.init("com.ajaxjs.cms");
+		DBConnection.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
 		catalogService = (CatalogService) BeanContext.getBean("CatalogService");
 	}
 
@@ -66,7 +63,7 @@ public class TestCatalogService {
 		assertNotNull(catalogService.create(c));
 	}
 
-//	@Test
+	@Test
 	public void testGetAllListByParentId() {
 		CatalogService catalogService = (CatalogService) BeanContext.getBean("CatalogService");
 		catalogService.getAllListByParentId(12);

@@ -21,7 +21,7 @@ import com.ajaxjs.framework.News;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
-import com.ajaxjs.orm.annotation.SelectFromMethod;
+import com.ajaxjs.orm.annotation.SqlFactory;
 import com.ajaxjs.orm.annotation.Update;
 import com.ajaxjs.orm.dao.IDao;
 import com.ajaxjs.orm.dao.PageResult;
@@ -42,7 +42,7 @@ public interface NewsDao extends IDao<News, Long> {
 	@Select("SELECT COUNT(*) AS Total FROM " + tableName)
 	public int count();
 
-	@SelectFromMethod("getInstance")
+	@SqlFactory("getInstance")
 	public int count2();
 
 	public static String getInstance() {

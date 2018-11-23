@@ -11,45 +11,16 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ajaxjs.cms.model.Catalog;
-import com.ajaxjs.cms.service.ArticleService;
-import com.ajaxjs.cms.service.CatalogService;
-import com.ajaxjs.config.ConfigService;
-import com.ajaxjs.framework.dao.MockDataSource;
-import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.ioc.BeanContext;
+import com.ajaxjs.mock.DBConnection;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.dao.PageResult;
-import com.ajaxjs.orm.dao.QueryParams;
 
 public class TestArticleService {
 
 	@BeforeClass
 	public static void initDb() {
-		ConfigService.load("C:\\project\\wyzx-pc\\src\\main\\site_config.json");
-		JdbcConnection.setConnection(MockDataSource.getTestMySqlConnection(ConfigService.getValueAsString("testServer.mysql.url"), ConfigService.getValueAsString("testServer.mysql.user"),
-				ConfigService.getValueAsString("testServer.mysql.password")));
-		BeanContext.init("com.ajaxjs.cms");
-	}
-
-	// @Test
-	public void test() {
-		CatalogService catalogService = (CatalogService) BeanContext.getBean("CatalogService");
-
-		assertNotNull(catalogService);
-
-		Catalog c = new Catalog();
-		c.setName("foot2222");
-		c.setPid(12);
-
-		assertNotNull(catalogService.create(c));
-
-		c = new Catalog();
-		c.setName("bar2222");
-		c.setPid(14);
-
-		assertNotNull(catalogService.create(c));
-
-		catalogService.findPagedList(0, 99);
+		DBConnection.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
 	}
 
 	@Test

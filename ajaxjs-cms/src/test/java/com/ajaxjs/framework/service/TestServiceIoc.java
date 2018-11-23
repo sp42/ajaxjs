@@ -27,14 +27,16 @@ public class TestServiceIoc {
 
 	@Test
 	public void testIoc() {
-		BeanContext.init("com.ajaxjs.framework.mock");
-
+		BeanContext.init("com.ajaxjs.framework.testcase");
+		BeanContext.injectBeans();
+		
 		NewsService newsService = (NewsService) BeanContext.getBean("newsService");
 
 		assertNotNull(newsService);
 		assertEquals("新闻", newsService.getName());
+		
 		FakeController controller = (FakeController) BeanContext.getBean("Controller");
-
+		assertNotNull(controller);
 		assertNotNull(controller.getService());
 	}
 }
