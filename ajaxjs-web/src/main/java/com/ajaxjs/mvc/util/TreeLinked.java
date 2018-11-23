@@ -40,9 +40,11 @@ public abstract class TreeLinked<T> {
 				if (createIfEmpty && target.children == null) // set action
 					target.children = new HashMap<>();
 
-				T t2 = findTreeByPath(target.children, queue, path, targetFactory, createIfEmpty);
-				if (t2 != null)
-					return t2;
+				if(target != null) {
+					T t2 = findTreeByPath(target.children, queue, path, targetFactory, createIfEmpty);
+					if (t2 != null)
+						return t2;
+				}
 			}
 		}
 
