@@ -57,7 +57,7 @@ public class PageEditor implements IController, Constant {
 	 */
 	@GET
 	public String show() {
-		return commonJsp + "/pageEditor/loadIframe.jsp";
+		return jsp_perfix + "/pageEditor/loadIframe.jsp";
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class PageEditor implements IController, Constant {
 			LOGGER.warning(e);
 		}
 
-		return commonJsp + "/pageEditor/editor.jsp";
+		return jsp_perfix + "/pageEditor/editor.jsp";
 	}
 
 	/**

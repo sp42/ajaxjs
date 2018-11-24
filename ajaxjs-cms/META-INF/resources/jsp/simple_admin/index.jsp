@@ -3,7 +3,7 @@
 <html style="height: 100%;">
 	<head>
 		<jsp:include page="/asset/common/jsp/head.jsp"  flush="true">
-			<jsp:param name="lessFile" value="/asset/ajaxjs-ui/less/admin.less" />
+			<jsp:param name="lessFile" value="http://localhost:8080/ajaxjs-web-js/less/admin.less" />
 			<jsp:param name="title" value="${uiName}管理" />
 		</jsp:include>
 	</head>

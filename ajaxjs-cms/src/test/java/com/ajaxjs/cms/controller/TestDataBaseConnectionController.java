@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.ajaxjs.cms.controller.DataBaseConnectionController;
 
 public class TestDataBaseConnectionController {
 	@Test

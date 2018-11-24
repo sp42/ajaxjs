@@ -8,9 +8,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
+import com.ajaxjs.cms.controller.CommonController;
 import com.ajaxjs.framework.News;
-import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.simpleApp.CommonController;
 
 @Path("/news")
 public class NewsController extends CommonController<News, Long> {

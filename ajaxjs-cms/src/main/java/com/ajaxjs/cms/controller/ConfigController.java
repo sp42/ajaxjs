@@ -49,7 +49,7 @@ public class ConfigController implements IController {
 		model.put("configJson", FileUtil.openAsText(ConfigService.jsonPath));
 		model.put("jsonSchemePath", FileUtil.openAsText(ConfigService.jsonSchemePath));
 
-		return Constant.commonJsp + "/config/all-config";
+		return Constant.jsp_perfix + "/config/all-config";
 	}
 	
 	@Operation(
@@ -78,13 +78,13 @@ public class ConfigController implements IController {
 	@GET
 	@Path("siteStru")
 	public String siteStruUI() {
-		return Constant.commonJsp + "/config/site-stru";
+		return Constant.jsp_perfix + "/config/site-stru";
 	}
 
 	@GET
 	@Path("site")
 	public String siteUI() {
-		return Constant.commonJsp + "/config/site-config";
+		return Constant.jsp_perfix + "/config/site-config";
 	}
 
 	@Operation(
