@@ -94,51 +94,6 @@ body.admin-shell {
 		border-right: 1px solid #D1D1D1;
 		cursor: pointer;
 	}
-
-//	.leftSidebar {
-//		.acMenu ();
-//		overflow: hidden;
-//		& > li {
-//			border-top: 1px solid white;
-//			border-bottom: 1px solid lightgray;
-//			&.pressed {
-//				border-top: 0;
-//				border-bottom: 1px solid lightgray;
-//				h3 {
-//					.gradient (right , transparent , darken(@mainColor, 10));
-//				}
-//			}
-//
-//			ul {
-//				li {
-//					list-style-type: disc;
-//					padding-left: 10%;
-//					a {
-//						width: 100%;
-//						display: block;
-//					}
-//
-//					&.selected {
-//						background-color: lighten(@hightColor, 33);
-//						a {
-//							color: black;
-//						}
-//					}
-//				}
-//			}
-//
-//			h3 , li {
-//				padding: 5px 0 5px 15px;
-//				letter-spacing: 2px;
-//				line-height: 20px;
-//				color: #939da8;
-//				font-size: 12px;
-//				&:hover , a:hover {
-//					color: black;
-//				}
-//			}
-//		}
-//	}
 }
 
 .iframe {
@@ -492,9 +447,8 @@ table.listTable {
 	text-align: center;
 }
 
-
 body {
-	opacity: 0; 
+	opacity: 0;
 	transition: opacity 0.3s;
 }
 
@@ -508,8 +462,7 @@ body.active {
 	transition: border 5s;
 	position: relative;
 	margin: 3%;
-	
-	&:before, &:after  {
+	&:before , &:after {
 		content: "";
 		position: absolute;
 		bottom: -1px;
@@ -518,21 +471,21 @@ body.active {
 		top: -1px;
 		transition: all 1s;
 	}
-	
+
 	&:before {
 		transform: scale(1, 0);
 		border-left: 1px solid red;
 		border-right: 1px solid red;
 	}
-	
+
 	&:after {
 		transform: scale(0, 1);
 		border-top: 1px solid red;
 		border-bottom: 1px solid red;
 	}
-	
+
 	&:hover {
-		&:before,&:after {
+		&:before , &:after {
 			transform: scale(1);
 			transition: all 1s;
 		}
@@ -543,45 +496,49 @@ body.active {
 	font-size: .9rem;
 	margin-left: 5px;
 	.item {
-	  cursor: pointer;
+		cursor: pointer;
 	}
+
 	.bold {
-	  font-weight: bold;
+		font-weight: bold;
 	}
+
 	ul {
-	  line-height: 1.5em;
-	  margin-left: 1.5rem;
-	  border-left:1px dotted lightgray;
-	} 
-	.node>span{
-		font-weight:normal;
-		color:lightgray;
+		line-height: 1.5em;
+		margin-left: 1.5rem;
+		border-left: 1px dotted lightgray;
 	}
-	.bold:before{
+
+	.node > span {
+		font-weight: normal;
+		color: lightgray;
+	}
+
+	.bold:before {
 		content: 'o';
 		margin: -5px;
-		color:lightgray;
+		color: lightgray;
 	}
 
 	.show {
-	    animation: hideIndex 0.3s;
-	    -moz-animation: hideIndex  0.3s; /* Firefox */
-	    -webkit-animation: hideIndex  0.3s; /* Safari and Chrome */
-	    -o-animation: hideIndex  0.3s; /* Opera */
+		animation: hideIndex 0.3s;
+		-moz-animation: hideIndex 0.3s;
+		-webkit-animation: hideIndex 0.3s;
+		-o-animation: hideIndex 0.3s;
 	}
-	
+
 	@keyframes hideIndex {
-	    0%{ 
-	    	opacity: 0; 
-	    	transform:translate3d(0, -10px,0);
-	    }
-	    100%{
-	  	  opacity: 1;  
-	  	  transform:translate3d(0, 0px,0);
-	    }
+		0%{
+			opacity: 0;
+			transform: translate3d(0, -10px, 0);
+		}
+
+		100%{
+			opacity: 1;
+			transform: translate3d(0, 0px, 0);
+		}
 	}
 }
-
 
 table.aj-grid {
 	th {
@@ -593,17 +550,19 @@ table.aj-grid {
 		min-width: 120px;
 		padding: 10px 20px;
 	}
+
 	td {
 		min-width: 120px;
 		padding: 10px 20px;
 	}
+
 	th.active {
 		color: #fff;
 		.arrow {
 			opacity: 1;
 		}
 	}
-	
+
 	.arrow {
 		display: inline-block;
 		vertical-align: middle;
@@ -616,6 +575,7 @@ table.aj-grid {
 			border-right: 4px solid transparent;
 			border-bottom: 4px solid #fff;
 		}
+
 		&.dsc {
 			border-left: 4px solid transparent;
 			border-right: 4px solid transparent;
@@ -626,21 +586,23 @@ table.aj-grid {
 
 .treeGrid {
 	overflow: hidden;
-	width:95%;
-	margin:0 auto;
-	.left{
-		float:left;
-		width:22%;
+	width: 95%;
+	margin: 0 auto;
+	.left {
+		float: left;
+		width: 22%;
 	}
-	
+
 	.right {
-		float:right;
-		width:77%;
+		float: right;
+		width: 77%;
 		.inline-search {
 			float: left;
 		}
-		table{
-			width:99%;
+
+		table {
+			width: 99%;
 		}
 	}
 }
+
