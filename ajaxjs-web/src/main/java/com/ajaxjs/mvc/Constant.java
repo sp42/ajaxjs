@@ -39,11 +39,6 @@ public interface Constant {
 	public static final String commonAsset = "asset/common";
 
 	/**
-	 * 常见 jsp 页面
-	 */
-	public static final String commonJsp = "/asset/common/jsp";
-
-	/**
 	 * 全局 json 模板路径 之前缀
 	 */
 	public static final String jsp_perfix = "/jsp";
@@ -56,22 +51,22 @@ public interface Constant {
 	/**
 	 * json 路径常量（实体创建、修改）
 	 */
-	public static final String cud = commonJsp + "/json/json-cud.jsp";
+	public static final String cud = jsp_perfix + "/json/json-cud.jsp";
 
 	/**
 	 * json 路径常量（实体）
 	 */
-	public static final String show_json_info = commonJsp + "/json/showInfo.jsp";
+	public static final String show_json_info = jsp_perfix + "/json/showInfo.jsp";
 
 	/**
 	 * json 路径常量（分页列表）
 	 */
-	public static final String paged_json_List = commonJsp + "/json/json-pagedList.jsp";
+	public static final String paged_json_List = jsp_perfix + "/json/json-pagedList.jsp";
 
 	/**
 	 * json 路径常量（错误信息）
 	 */
-	public static final String paged_json_error = commonJsp + "/json/json-err.jsp";
+	public static final String paged_json_error = jsp_perfix + "/json/json-err.jsp";
 
 	/**
 	 * 显示 HTTP 405 禁止操作
