@@ -1,12 +1,6 @@
 package com.ajaxjs.util;
 
-import static com.ajaxjs.util.ReflectUtil.executeMethod;
-import static com.ajaxjs.util.ReflectUtil.getClassByName;
-import static com.ajaxjs.util.ReflectUtil.getConstructor;
-import static com.ajaxjs.util.ReflectUtil.getDeclaredMethodByInterface;
-import static com.ajaxjs.util.ReflectUtil.getMethod;
-import static com.ajaxjs.util.ReflectUtil.getMethodByUpCastingSearch;
-import static com.ajaxjs.util.ReflectUtil.newInstance;
+import static com.ajaxjs.util.ReflectUtil.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;

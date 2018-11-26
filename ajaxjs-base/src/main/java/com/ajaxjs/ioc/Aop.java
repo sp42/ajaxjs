@@ -68,8 +68,7 @@ public abstract class Aop<T> implements InvocationHandler {
 
 		this.target = target;
 
-		Object obj = Proxy.newProxyInstance(target.getClass().getClassLoader(), target.getClass().getInterfaces(),
-				this);
+		Object obj = Proxy.newProxyInstance(target.getClass().getClassLoader(), target.getClass().getInterfaces(), this);
 		return (T) obj;
 	}
 
