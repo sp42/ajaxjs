@@ -12,7 +12,7 @@
 %>
 <!DOCTYPE html>
 <html>
-	<commonTag:head lessFile="/asset/ajaxjs-ui/less/admin.less" title="网站配置" />
+	<commonTag:head lessFile="/asset/less/admin.less" title="网站配置" />
 <body>
 	<style>
 		body{

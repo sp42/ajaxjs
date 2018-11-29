@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<jsp:include page="/asset/common/jsp/head.jsp">
+	<jsp:include page="/jsp/common/head.jsp">
 		<jsp:param name="title" value="AJAXJS UI" />
 	</jsp:include>
 	<script src="${ajaxjsui}/js/libs/run_prettify.js"></script>  

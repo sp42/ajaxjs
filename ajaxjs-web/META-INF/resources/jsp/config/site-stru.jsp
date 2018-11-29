@@ -2,8 +2,8 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<jsp:include page="/asset/common/jsp/head.jsp">
-			<jsp:param name="lessFile" value="/asset/ajaxjs-ui/less/admin.less" />
+		<jsp:include page="/jsp/common/head.jsp">
+			<jsp:param name="lessFile" value="/asset/less/admin.less" />
 			<jsp:param name="title" value="网站结构" />
 		</jsp:include>
 	</head>

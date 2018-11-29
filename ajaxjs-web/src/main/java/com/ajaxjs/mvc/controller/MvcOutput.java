@@ -163,8 +163,10 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	 * @param method
 	 */
 	public void resultHandler(Object result, MvcRequest request, ModelAndView model, Method method) {
-		if (model != null)
+		System.out.println(">>>>>>>>>>>>>>>"+model);
+		if (model != null) {
 			request.saveToReuqest(model);
+		}
 
 		if (result == null) {
 			LOGGER.info("控制器方法 {0} 返回 null", method);

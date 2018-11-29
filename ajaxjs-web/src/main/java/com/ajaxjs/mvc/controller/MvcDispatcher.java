@@ -297,7 +297,7 @@ public class MvcDispatcher implements Filter {
 	 * @return ModelAndView
 	 */
 	private static ModelAndView findModel(Object[] args) {
-		Optional<Object> mv = Arrays.stream(args).filter(obj -> obj instanceof IController).findAny();
+		Optional<Object> mv = Arrays.stream(args).filter(obj -> obj instanceof ModelAndView).findAny();
 		return mv.isPresent() ? (ModelAndView) mv.get() : null;
 	}
 
