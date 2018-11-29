@@ -101,8 +101,8 @@
 					var div = document.createElement('div'); // parentNode
 					div.className = 'parentNode';
 					div.innerHTML = '+' + '<div class="valueHolder"><input type="text" value="' + el.name + '" data-note="ddddddddd" /></div>'
-					+ el.id + ' <img class="icon" src="${commonAsset}/icon/add.gif" /> \
-					<img class="icon" src="${commonAsset}/icon/delete.gif" /> <span class="up">▲</span> <span class="down">▼</span>';
+					+ el.id + ' <img class="icon" src="${commonAssetIcon}/add.gif" /> \
+					<img class="icon" src="${commonAssetIcon}/delete.gif" /> <span class="up">▲</span> <span class="down">▼</span>';
 					div.onclick = toggle;
 					li.appendChild(div);
 					//debugger;

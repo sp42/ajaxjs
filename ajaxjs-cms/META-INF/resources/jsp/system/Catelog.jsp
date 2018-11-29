@@ -22,7 +22,7 @@
 			
 			<label>新增顶级${uiName}：<input type="text" name="name" class="ajaxjs-inputField" required="required" /> </label>
 			<button class="ajaxjs-btn">
-				<img src="${commonAsset}/icon/add.gif" /> 新建${uiName}
+				<img src="${commonAssetIcon}/add.gif" /> 新建${uiName}
 			</button>
 		</form>
 		<br />
@@ -36,10 +36,10 @@
 			<input type="hidden" name="id" /> 
 
 			<button class="ajaxjs-btn">
-				<img src="${commonAsset}/icon/update.gif" /> 更新名称
+				<img src="${commonAssetIcon}/update.gif" /> 更新名称
 			</button>
 			<button class="ajaxjs-btn" onclick="sendDelete(this);return false;">
-				<img src="${commonAsset}/icon/delete.gif" /> 删除${uiName}
+				<img src="${commonAssetIcon}/delete.gif" /> 删除${uiName}
 			</button>
 		</form>
 		
@@ -48,7 +48,7 @@
 			<input type="text" name="name" class="ajaxjs-inputField" required="required" /> 
 			<input type="hidden" name="pid" />
 			<button class="ajaxjs-btn">
-				<img src="${commonAsset}/icon/add.gif" /> 新建${uiName}
+				<img src="${commonAssetIcon}/add.gif" /> 新建${uiName}
 			</button>
 		</form>
 	</div>

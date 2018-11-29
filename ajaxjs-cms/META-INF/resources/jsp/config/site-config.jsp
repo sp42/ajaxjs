@@ -81,7 +81,7 @@
 
 		<section style="text-align: center;padding:2% 0;">
 			<button class="ajaxjs-btn">
-				<img src="${commonAsset}/icon/save.gif" /> 修改
+				<img src="${commonAssetIcon}save.gif" /> 修改
 			</button>
 			<button class="ajaxjs-btn" onclick="this.up('form').reset();return false;">复 位</button>
 		</section>

@@ -61,7 +61,7 @@
 						<a href="${ctx}${current.path}" target="_blank">
 							<img src="${ctx}${current.path}" style="max-width:100px;" onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${ctx}${current.path}';" onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
 						</a>
-						<a href="javascript:entity.del('${current.id}', '${current.name}');"><img src="${commonAsset}/icon/delete.gif" style="vertical-align: sub;" />删除</a>
+						<a href="javascript:entity.del('${current.id}', '${current.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>
 					</td>
 				</tr>
 			</c:foreach>

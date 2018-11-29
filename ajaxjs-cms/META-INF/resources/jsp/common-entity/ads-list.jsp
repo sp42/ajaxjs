@@ -63,8 +63,8 @@
 						</td>
 						<td>
 							<a href="../../../${tableName}/${current.id}/" target="_blank">浏览</a>
-							<a href="${ctx}/admin/ads/${current.id}/"><img src="${commonAsset}/icon/update.gif" style="vertical-align: sub;" />编辑</a>
-							<a href="javascript:aj.admin.del('${current.id}', '${current.name}');"><img src="${commonAsset}/icon/delete.gif" style="vertical-align: sub;" />删除</a>
+							<a href="${ctx}/admin/ads/${current.id}/"><img src="${commonAssetIcon}/update.gif" style="vertical-align: sub;" />编辑</a>
+							<a href="javascript:aj.admin.del('${current.id}', '${current.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>
 						</td>
 					</tr>
 				</c:foreach>
