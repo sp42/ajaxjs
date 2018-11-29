@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	import="java.util.*, java.sql.*, com.ajaxjs.cms.controller.DataBaseShowStruController,com.ajaxjs.framework.dao.MockDataSource, com.ajaxjs.mvc.filter.DataBaseFilter,com.ajaxjs.orm.JdbcConnection"
+	import="java.util.*, java.sql.*, com.ajaxjs.cms.controller.DataBaseShowStruController, com.ajaxjs.mvc.filter.DataBaseFilter,com.ajaxjs.orm.JdbcConnection"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8" />
 	<title>表设计文档</title>
-	<link rel="stylesheet" type="text/css" href="../asset/css/sqlDoc.css" />
+	<link rel="stylesheet" type="text/css" href="${commonJsp}/system/sqlDoc.css" />
 </head>
 <body>
 	<div class="leftSide">

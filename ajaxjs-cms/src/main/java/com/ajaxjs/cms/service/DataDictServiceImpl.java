@@ -11,7 +11,7 @@ import com.ajaxjs.orm.dao.PageResult;
 
 @Bean(value = "DataDictService", aop = { CommonService.class, GlobalLogAop.class })
 public class DataDictServiceImpl implements DataDictService {
-	DataDictDao dao = new DaoHandler().bind(DataDictDao.class);
+	public static DataDictDao dao = new DaoHandler().bind(DataDictDao.class);
 
 	@Override
 	public Map<String, Object> findById(Integer id) {
