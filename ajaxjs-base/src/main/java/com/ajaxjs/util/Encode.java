@@ -124,7 +124,12 @@ public class Encode {
 	 * @return 已解码的 Byte
 	 */
 	public static byte[] base64DecodeAsByte(String str) {
-		return Base64.getDecoder().decode(str);
+		try {
+			return Base64.getDecoder().decode(str);
+		} catch (IllegalArgumentException e) {
+			LOGGER.warning("BASE64 解码失败", e);
+			return null;
+		}
 	}
 
 	/**
@@ -135,7 +140,8 @@ public class Encode {
 	 * @return 已解码的字符串
 	 */
 	public static String base64Decode(String str) {
-		return byte2String(base64DecodeAsByte(str));
+		byte[] b = base64DecodeAsByte(str);
+		return b == null ? null : byte2String(b);
 	}
 
 	/**
