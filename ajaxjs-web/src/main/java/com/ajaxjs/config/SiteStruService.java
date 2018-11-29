@@ -91,6 +91,7 @@ public class SiteStruService implements ServletContextListener {
 		cxt.setAttribute("ctx", cxt.getContextPath());
 		cxt.setAttribute("ajaxjsui", ajaxjsui);
 		cxt.setAttribute("commonAsset", cxt.getContextPath() + "/" + Constant.commonAsset); // 静态资源目录
+		cxt.setAttribute("commonAssetIcon", ajaxjsui+"/asset/common/icon/"); // 静态资源目录
 		cxt.setAttribute("commonJsp", cxt.getContextPath() + "/" + Constant.jsp_perfix);
 	}
 

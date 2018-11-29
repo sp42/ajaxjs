@@ -163,7 +163,6 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	 * @param method
 	 */
 	public void resultHandler(Object result, MvcRequest request, ModelAndView model, Method method) {
-		System.out.println(">>>>>>>>>>>>>>>"+model);
 		if (model != null) {
 			request.saveToReuqest(model);
 		}
