@@ -1,9 +1,8 @@
-package com.ajaxjs.cms.service;
+package com.ajaxjs.cms.app.catelog;
 
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.cms.model.Catelog;
 import com.ajaxjs.framework.service.IService;
 import com.ajaxjs.framework.service.ServiceException;
 

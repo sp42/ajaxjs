@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.model;
+package com.ajaxjs.cms.app.catelog;
 
 import com.ajaxjs.framework.BaseModel;
 

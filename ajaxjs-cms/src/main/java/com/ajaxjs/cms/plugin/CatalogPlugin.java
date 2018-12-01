@@ -12,8 +12,8 @@ import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
-public class Catalog {
-	private static final LogHelper LOGGER = LogHelper.getLog(Catalog.class);
+public class CatalogPlugin {
+	private static final LogHelper LOGGER = LogHelper.getLog(CatalogPlugin.class);
 
 	@SuppressWarnings("unchecked")
 	public static void doAfter(IService<?, ?> obj, Object returnObj) {

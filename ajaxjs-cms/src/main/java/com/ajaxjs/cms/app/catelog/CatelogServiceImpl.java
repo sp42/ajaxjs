@@ -1,10 +1,9 @@
-package com.ajaxjs.cms.service;
+package com.ajaxjs.cms.app.catelog;
 
 import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.cms.dao.CatalogDao;
-import com.ajaxjs.cms.model.Catelog;
 import com.ajaxjs.cms.service.aop.CommonService;
 import com.ajaxjs.cms.service.aop.GlobalLogAop;
 import com.ajaxjs.ioc.Bean;
