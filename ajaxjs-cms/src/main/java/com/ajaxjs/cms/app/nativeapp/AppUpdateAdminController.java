@@ -51,7 +51,7 @@ public class AppUpdateAdminController extends CommonController<AppUpdate, Long> 
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String create(AppUpdate entity, ModelAndView model) {
-		return super.create(entity, model);
+		return create(entity, model, _entity -> service.create(_entity));
 	}
 
 	@DELETE
@@ -60,7 +60,7 @@ public class AppUpdateAdminController extends CommonController<AppUpdate, Long> 
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
 	public String delete(@PathParam("id") Long id, ModelAndView model) {
-		return super.delete(id, model);
+		return delete(id, new AppUpdate(), model, entity -> service.delete(entity));
 	}
 
 	@GET
@@ -68,7 +68,7 @@ public class AppUpdateAdminController extends CommonController<AppUpdate, Long> 
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
 	public String editUI(@PathParam("id") Long id, ModelAndView model) {
-		info(id, model);
+//		info(id, model);
 		super.editUI(model);
 		return jsp_perfix + "/common-entity/app-update";
 	}
@@ -79,24 +79,25 @@ public class AppUpdateAdminController extends CommonController<AppUpdate, Long> 
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
 	public String update(@PathParam("id") Long id, AppUpdate app, ModelAndView model) {
-		return super.update(id, app, model);
+		return update(id, app, model, _entity -> service.update(_entity));
 	}
-	
+
 	@POST
 	@Path("/upload")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String upload(MvcRequest request) throws IOException {
 		UploadFileInfo uploadFileInfo = new UploadFileInfo();
-		uploadFileInfo.maxSingleFileSize = 1024 * 50000; //  50 MB;
+		uploadFileInfo.maxSingleFileSize = 1024 * 50000; // 50 MB;
 		uploadFileInfo.allowExtFilenames = new String[] { "apk" };
 		uploadFileInfo.isFileOverwrite = true;
 		uploadFileInfo.saveFolder = request.mappath("/app/");
-		
+
 		new UploadFile(request, uploadFileInfo).upload();
-		
+
 		uploadFileInfo.path = "/app/" + uploadFileInfo.saveFileName;
 		uploadFileInfo.visitPath = request.getBasePath() + uploadFileInfo.path;
-		
-		return String.format(json_ok_extension, "上传成功", "\"visitPath\" : \"" + uploadFileInfo.visitPath + "\"");
+
+		return "err";
+//		return String.format(json_ok_extension, "上传成功", "\"visitPath\" : \"" + uploadFileInfo.visitPath + "\"");
 	}
 }
