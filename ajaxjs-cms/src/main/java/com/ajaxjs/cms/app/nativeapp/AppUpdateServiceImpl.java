@@ -1,9 +1,7 @@
-package com.ajaxjs.cms.service;
+package com.ajaxjs.cms.app.nativeapp;
 
 import java.util.List;
 
-import com.ajaxjs.cms.dao.AppUpdateDao;
-import com.ajaxjs.cms.model.AppUpdate;
 import com.ajaxjs.cms.service.aop.CommonService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;

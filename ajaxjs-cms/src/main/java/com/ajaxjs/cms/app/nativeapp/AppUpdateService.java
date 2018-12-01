@@ -1,6 +1,5 @@
-package com.ajaxjs.cms.service;
+package com.ajaxjs.cms.app.nativeapp;
 
-import com.ajaxjs.cms.model.AppUpdate;
 import com.ajaxjs.framework.service.IService;
 
 public interface AppUpdateService extends IService<AppUpdate, Long> {

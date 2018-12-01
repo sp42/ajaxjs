@@ -1,6 +1,5 @@
-package com.ajaxjs.cms.dao;
+package com.ajaxjs.cms.app.nativeapp;
 
-import com.ajaxjs.cms.model.AppUpdate;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
