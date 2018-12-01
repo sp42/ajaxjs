@@ -1,9 +1,8 @@
-package com.ajaxjs.cms.service.section;
+package com.ajaxjs.cms.app.section;
 
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.cms.model.SectionInfo;
 import com.ajaxjs.framework.service.IService;
 import com.ajaxjs.framework.service.ServiceException;
 

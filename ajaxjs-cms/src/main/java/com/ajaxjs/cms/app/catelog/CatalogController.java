@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.controller;
+package com.ajaxjs.cms.app.catelog;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -10,6 +10,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.ajaxjs.cms.controller.CommonController;
+import com.ajaxjs.cms.controller.CommonEntryAdminController;
 import com.ajaxjs.cms.model.Catalog;
 import com.ajaxjs.cms.service.CatelogService;
 import com.ajaxjs.ioc.Bean;

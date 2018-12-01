@@ -1,34 +1,34 @@
-package com.ajaxjs.cms.service.section;
+package com.ajaxjs.cms.service;
 
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.cms.dao.section.SectionInfoDao;
-import com.ajaxjs.cms.model.SectionInfo;
+import com.ajaxjs.cms.dao.CatalogDao;
+import com.ajaxjs.cms.model.Catalog;
 import com.ajaxjs.cms.service.aop.CommonService;
 import com.ajaxjs.cms.service.aop.GlobalLogAop;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
 
-@Bean(value = "SectionInfoService", aop = { CommonService.class, GlobalLogAop.class })
-public class SectionInfoServiceImpl implements SectionInfoService {
-	public static SectionInfoDao dao = new DaoHandler().bind(SectionInfoDao.class);
+@Bean(value = "CatelogService", aop = { CommonService.class, GlobalLogAop.class })
+public class CatelogServiceImpl implements CatelogService {
+	CatalogDao dao = new DaoHandler().bind(CatalogDao.class);
 
 	@Override
-	public List<SectionInfo> findByParentId(int id) {
+	public List<Catalog> findByParentId(int id) {
 		return dao.getListByParentId(id);
 	}
 
 	@Override
-	public SectionInfo findById(Long id) {
+	public Catalog findById(Long id) {
 		return dao.findById(id);
 	}
 
 	@Override
-	public Long create(SectionInfo bean) {
+	public Long create(Catalog bean) {
 		if (bean.getPid() != -1) { // 非根节点
-			SectionInfo parent = findById(bean.getPid().longValue()); // 保存路径信息
+			Catalog parent = findById(bean.getPid().longValue()); // 保存路径信息
 
 			String path = "";
 
@@ -43,7 +43,7 @@ public class SectionInfoServiceImpl implements SectionInfoService {
 		Long newlyId = dao.create(bean);
 
 		if (newlyId != null) { // 需要创建了之后才有自己的 id
-			SectionInfo updatePath = new SectionInfo();
+			Catalog updatePath = new Catalog();
 			updatePath.setId(bean.getId());
 			updatePath.setPath((bean.getPid() == -1 ? "/" : bean.getPath()) + bean.getId());
 
@@ -54,43 +54,43 @@ public class SectionInfoServiceImpl implements SectionInfoService {
 	}
 
 	@Override
-	public int update(SectionInfo bean) {
+	public int update(Catalog bean) {
 		return dao.update(bean);
 	}
 
 	@Override
-	public boolean delete(SectionInfo bean) {
+	public boolean delete(Catalog bean) {
 		return dao.deleteAll(bean.getId().intValue());
 	}
 
 	@Override
-	public PageResult<SectionInfo> findPagedList(int start, int limit) {
+	public PageResult<Catalog> findPagedList(int start, int limit) {
 		return dao.findPagedList(start, limit);
 	}
 
 	@Override
-	public PageResult<SectionInfo> findList() {
+	public PageResult<Catalog> findList() {
 		return null;
 	}
 
 	@Override
 	public String getName() {
-		return "栏目";
+		return "分类";
 	}
 
 	@Override
 	public String getTableName() {
-		return SectionInfoDao.tableName;
+		return CatalogDao.tableName;
 	}
 
 	@Override
-	public List<SectionInfo> findAll() {
+	public List<Catalog> findAll() {
 		return dao.findPagedList(0, 999999);
 	}
 
 	@Override
-	public List<SectionInfo> getAllListByParentId(int parentId, boolean isWithParent) {
-		List<SectionInfo> list = dao.getAllListByParentId(parentId);
+	public List<Catalog> getAllListByParentId(int parentId, boolean isWithParent) {
+		List<Catalog> list = dao.getAllListByParentId(parentId);
 
 		if (!isWithParent) {
 			int j = 0;
@@ -108,7 +108,7 @@ public class SectionInfoServiceImpl implements SectionInfoService {
 	}
 
 	@Override
-	public List<SectionInfo> getAllListByParentId(int parentId) {
+	public List<Catalog> getAllListByParentId(int parentId) {
 		return getAllListByParentId(parentId, true);
 	}
 

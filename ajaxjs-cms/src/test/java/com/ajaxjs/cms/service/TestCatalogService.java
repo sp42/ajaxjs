@@ -15,13 +15,13 @@ import com.ajaxjs.mock.DBConnection;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.dao.PageResult;
 
-public class TestCatalogService {
-	static CatalogService catalogService;
+public class TestCatelogService {
+	static CatelogService catalogService;
 
 	@BeforeClass
 	public static void initDb() {
 		DBConnection.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
-		catalogService = (CatalogService) BeanContext.getBean("CatalogService");
+		catalogService = (CatelogService) BeanContext.getBean("CatelogService");
 	}
 
 	// @Test
@@ -59,7 +59,7 @@ public class TestCatalogService {
 
 	@Test
 	public void testGetAllListByParentId() {
-		CatalogService catalogService = (CatalogService) BeanContext.getBean("CatalogService");
+		CatelogService catalogService = (CatelogService) BeanContext.getBean("CatelogService");
 		catalogService.getAllListByParentId(12);
 
 		ArticleService articleService = (ArticleService) BeanContext.getBean("ArticleService");

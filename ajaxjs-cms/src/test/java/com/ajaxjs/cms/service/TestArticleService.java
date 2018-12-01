@@ -23,7 +23,7 @@ public class TestArticleService {
 
 	@Test
 	public void testGetAllListByParentId() {
-		CatalogService catalogService = (CatalogService) BeanContext.getBean("CatalogService");
+		CatelogService catalogService = (CatelogService) BeanContext.getBean("CatelogService");
 		catalogService.getAllListByParentId(12);
 
 		ArticleService articleService = (ArticleService) BeanContext.getBean("ArticleService");

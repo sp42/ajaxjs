@@ -7,7 +7,7 @@ import com.ajaxjs.cms.model.Catalog;
 import com.ajaxjs.framework.service.IService;
 import com.ajaxjs.framework.service.ServiceException;
 
-public interface CatalogService extends IService<Catalog, Long> {
+public interface CatelogService extends IService<Catalog, Long> {
 	/**
 	 * 获取所有分类
 	 * 

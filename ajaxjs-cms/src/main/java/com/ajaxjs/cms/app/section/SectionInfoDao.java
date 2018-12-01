@@ -3,7 +3,6 @@ package com.ajaxjs.cms.app.section;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.cms.model.SectionInfo;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;

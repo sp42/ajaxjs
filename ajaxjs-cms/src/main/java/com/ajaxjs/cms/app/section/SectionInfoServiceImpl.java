@@ -1,34 +1,32 @@
-package com.ajaxjs.cms.service;
+package com.ajaxjs.cms.app.section;
 
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.cms.dao.CatalogDao;
-import com.ajaxjs.cms.model.Catalog;
 import com.ajaxjs.cms.service.aop.CommonService;
 import com.ajaxjs.cms.service.aop.GlobalLogAop;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
 
-@Bean(value = "CatalogService", aop = { CommonService.class, GlobalLogAop.class })
-public class CatalogServiceImpl implements CatalogService {
-	CatalogDao dao = new DaoHandler().bind(CatalogDao.class);
+@Bean(value = "SectionInfoService", aop = { CommonService.class, GlobalLogAop.class })
+public class SectionInfoServiceImpl implements SectionInfoService {
+	public static SectionInfoDao dao = new DaoHandler().bind(SectionInfoDao.class);
 
 	@Override
-	public List<Catalog> findByParentId(int id) {
+	public List<SectionInfo> findByParentId(int id) {
 		return dao.getListByParentId(id);
 	}
 
 	@Override
-	public Catalog findById(Long id) {
+	public SectionInfo findById(Long id) {
 		return dao.findById(id);
 	}
 
 	@Override
-	public Long create(Catalog bean) {
+	public Long create(SectionInfo bean) {
 		if (bean.getPid() != -1) { // 非根节点
-			Catalog parent = findById(bean.getPid().longValue()); // 保存路径信息
+			SectionInfo parent = findById(bean.getPid().longValue()); // 保存路径信息
 
 			String path = "";
 
@@ -43,7 +41,7 @@ public class CatalogServiceImpl implements CatalogService {
 		Long newlyId = dao.create(bean);
 
 		if (newlyId != null) { // 需要创建了之后才有自己的 id
-			Catalog updatePath = new Catalog();
+			SectionInfo updatePath = new SectionInfo();
 			updatePath.setId(bean.getId());
 			updatePath.setPath((bean.getPid() == -1 ? "/" : bean.getPath()) + bean.getId());
 
@@ -54,43 +52,43 @@ public class CatalogServiceImpl implements CatalogService {
 	}
 
 	@Override
-	public int update(Catalog bean) {
+	public int update(SectionInfo bean) {
 		return dao.update(bean);
 	}
 
 	@Override
-	public boolean delete(Catalog bean) {
+	public boolean delete(SectionInfo bean) {
 		return dao.deleteAll(bean.getId().intValue());
 	}
 
 	@Override
-	public PageResult<Catalog> findPagedList(int start, int limit) {
+	public PageResult<SectionInfo> findPagedList(int start, int limit) {
 		return dao.findPagedList(start, limit);
 	}
 
 	@Override
-	public PageResult<Catalog> findList() {
+	public PageResult<SectionInfo> findList() {
 		return null;
 	}
 
 	@Override
 	public String getName() {
-		return "分类";
+		return "栏目";
 	}
 
 	@Override
 	public String getTableName() {
-		return CatalogDao.tableName;
+		return SectionInfoDao.tableName;
 	}
 
 	@Override
-	public List<Catalog> findAll() {
+	public List<SectionInfo> findAll() {
 		return dao.findPagedList(0, 999999);
 	}
 
 	@Override
-	public List<Catalog> getAllListByParentId(int parentId, boolean isWithParent) {
-		List<Catalog> list = dao.getAllListByParentId(parentId);
+	public List<SectionInfo> getAllListByParentId(int parentId, boolean isWithParent) {
+		List<SectionInfo> list = dao.getAllListByParentId(parentId);
 
 		if (!isWithParent) {
 			int j = 0;
@@ -108,7 +106,7 @@ public class CatalogServiceImpl implements CatalogService {
 	}
 
 	@Override
-	public List<Catalog> getAllListByParentId(int parentId) {
+	public List<SectionInfo> getAllListByParentId(int parentId) {
 		return getAllListByParentId(parentId, true);
 	}
 

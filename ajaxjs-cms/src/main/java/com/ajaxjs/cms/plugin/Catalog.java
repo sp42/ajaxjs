@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.cms.service.CatalogService;
+import com.ajaxjs.cms.service.CatelogService;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.service.IService;
 import com.ajaxjs.orm.dao.PageResult;
@@ -17,7 +17,7 @@ public class Catalog {
 
 	@SuppressWarnings("unchecked")
 	public static void doAfter(IService<?, ?> obj, Object returnObj) {
-		if(obj instanceof CatalogService) {
+		if(obj instanceof CatelogService) {
 			return; // 排除自己
 		}
 		
