@@ -1,10 +1,9 @@
-package com.ajaxjs.cms.plugin;
+package com.ajaxjs.cms.app.catelog;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.cms.service.CatelogService;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.service.IService;
 import com.ajaxjs.orm.dao.PageResult;

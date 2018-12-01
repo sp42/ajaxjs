@@ -9,6 +9,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.ajaxjs.cms.app.catelog.CatelogService;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mock.DBConnection;
 import com.ajaxjs.orm.JdbcConnection;

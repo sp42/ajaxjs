@@ -12,7 +12,6 @@ import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.cms.controller.CommonController;
 import com.ajaxjs.cms.controller.CommonEntryAdminController;
-import com.ajaxjs.cms.service.CatelogService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
@@ -48,7 +47,7 @@ public class CatalogController extends CommonController<Catelog, Long> implement
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getListAndSubByParentId(@QueryParam("parentId") int parentId, ModelAndView model) {
-		return outputJson(getService().getAllListByParentId(parentId), model);
+		return outputJson(service.getAllListByParentId(parentId), model);
 	}
 
 	@Override
