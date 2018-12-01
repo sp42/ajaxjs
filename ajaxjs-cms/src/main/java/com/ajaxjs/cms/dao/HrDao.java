@@ -3,7 +3,7 @@ package com.ajaxjs.cms.dao;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.cms.model.Catalog;
+import com.ajaxjs.cms.model.Catelog;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
@@ -41,7 +41,7 @@ public interface HrDao extends IDao<Map<String, Object>, Long> {
 	public List<Map<String, Object>> getTop5();
 
 	@Select("SELECT * FROM " + CatalogDao.tableName + " WHERE pid = ?")
-	public List<Catalog> getHrCatalog(int catelogParentId);
+	public List<Catelog> getHrCatalog(int catelogParentId);
 
 	@Select(value = "SELECT a.*, c.name AS catelogName FROM entity_hr a "
 			+ "INNER JOIN (SELECT id, name FROM general_catelog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catelog WHERE id = ? ) , '%'))) AS c "

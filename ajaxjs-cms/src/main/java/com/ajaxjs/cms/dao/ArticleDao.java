@@ -3,7 +3,7 @@ package com.ajaxjs.cms.dao;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.cms.model.Catalog;
+import com.ajaxjs.cms.model.Catelog;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Param;
@@ -71,5 +71,5 @@ public interface ArticleDao extends IDao<Map<String, Object>, Long> {
 	public PageResult<Map<String, Object>> findPagedListByCatalogId(int catelogIds, int start, int limit);
 
 	@Select("SELECT * FROM general_catelog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catelog WHERE id = ? ) , '%'))")
-	public List<Catalog> getCatalog(int catelogParentId);
+	public List<Catelog> getCatalog(int catelogParentId);
 }

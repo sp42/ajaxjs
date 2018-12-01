@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.cms.dao.CatalogDao;
-import com.ajaxjs.cms.model.Catalog;
+import com.ajaxjs.cms.model.Catelog;
 import com.ajaxjs.cms.service.aop.CommonService;
 import com.ajaxjs.cms.service.aop.GlobalLogAop;
 import com.ajaxjs.ioc.Bean;
@@ -16,19 +16,19 @@ public class CatelogServiceImpl implements CatelogService {
 	CatalogDao dao = new DaoHandler().bind(CatalogDao.class);
 
 	@Override
-	public List<Catalog> findByParentId(int id) {
+	public List<Catelog> findByParentId(int id) {
 		return dao.getListByParentId(id);
 	}
 
 	@Override
-	public Catalog findById(Long id) {
+	public Catelog findById(Long id) {
 		return dao.findById(id);
 	}
 
 	@Override
-	public Long create(Catalog bean) {
+	public Long create(Catelog bean) {
 		if (bean.getPid() != -1) { // 非根节点
-			Catalog parent = findById(bean.getPid().longValue()); // 保存路径信息
+			Catelog parent = findById(bean.getPid().longValue()); // 保存路径信息
 
 			String path = "";
 
@@ -43,7 +43,7 @@ public class CatelogServiceImpl implements CatelogService {
 		Long newlyId = dao.create(bean);
 
 		if (newlyId != null) { // 需要创建了之后才有自己的 id
-			Catalog updatePath = new Catalog();
+			Catelog updatePath = new Catelog();
 			updatePath.setId(bean.getId());
 			updatePath.setPath((bean.getPid() == -1 ? "/" : bean.getPath()) + bean.getId());
 
@@ -54,22 +54,22 @@ public class CatelogServiceImpl implements CatelogService {
 	}
 
 	@Override
-	public int update(Catalog bean) {
+	public int update(Catelog bean) {
 		return dao.update(bean);
 	}
 
 	@Override
-	public boolean delete(Catalog bean) {
+	public boolean delete(Catelog bean) {
 		return dao.deleteAll(bean.getId().intValue());
 	}
 
 	@Override
-	public PageResult<Catalog> findPagedList(int start, int limit) {
+	public PageResult<Catelog> findPagedList(int start, int limit) {
 		return dao.findPagedList(start, limit);
 	}
 
 	@Override
-	public PageResult<Catalog> findList() {
+	public PageResult<Catelog> findList() {
 		return null;
 	}
 
@@ -84,13 +84,13 @@ public class CatelogServiceImpl implements CatelogService {
 	}
 
 	@Override
-	public List<Catalog> findAll() {
+	public List<Catelog> findAll() {
 		return dao.findPagedList(0, 999999);
 	}
 
 	@Override
-	public List<Catalog> getAllListByParentId(int parentId, boolean isWithParent) {
-		List<Catalog> list = dao.getAllListByParentId(parentId);
+	public List<Catelog> getAllListByParentId(int parentId, boolean isWithParent) {
+		List<Catelog> list = dao.getAllListByParentId(parentId);
 
 		if (!isWithParent) {
 			int j = 0;
@@ -108,7 +108,7 @@ public class CatelogServiceImpl implements CatelogService {
 	}
 
 	@Override
-	public List<Catalog> getAllListByParentId(int parentId) {
+	public List<Catelog> getAllListByParentId(int parentId) {
 		return getAllListByParentId(parentId, true);
 	}
 

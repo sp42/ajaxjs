@@ -12,7 +12,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.cms.controller.CommonController;
 import com.ajaxjs.cms.controller.CommonEntryAdminController;
-import com.ajaxjs.cms.model.Catalog;
+import com.ajaxjs.cms.model.Catelog;
 import com.ajaxjs.cms.service.CatelogService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
@@ -23,7 +23,7 @@ import com.ajaxjs.orm.dao.PageResult;
 
 @Path("/admin/catelog")
 @Bean("CatelogAdminController")
-public class CatalogController extends CommonController<Catalog, Long> implements CommonEntryAdminController<Catalog, Long> {
+public class CatalogController extends CommonController<Catelog, Long> implements CommonEntryAdminController<Catelog, Long> {
 	@Resource("CatelogService")
 	private CatelogService service;
 
@@ -40,7 +40,7 @@ public class CatalogController extends CommonController<Catalog, Long> implement
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
-		PageResult<Catalog> result = getService().findPagedList(start, limit);
+		PageResult<Catelog> result = getService().findPagedList(start, limit);
 		return listJson(start, limit, model, (_start, _limit) -> result);
 	}
 
@@ -61,7 +61,7 @@ public class CatalogController extends CommonController<Catalog, Long> implement
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String create(Catalog entity, ModelAndView mv) {
+	public String create(Catelog entity, ModelAndView mv) {
 		return create(entity, mv, _entity -> service.create(_entity));
 	}
 
@@ -70,7 +70,7 @@ public class CatalogController extends CommonController<Catalog, Long> implement
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, Catalog entity, ModelAndView mv) {
+	public String update(@PathParam("id") Long id, Catelog entity, ModelAndView mv) {
 		return update(id, entity, mv, _entity -> service.update(_entity));
 	}
 
@@ -80,6 +80,6 @@ public class CatalogController extends CommonController<Catalog, Long> implement
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
 	public String delete(@PathParam("id") Long id, ModelAndView mv) {
-		return delete(id, new Catalog(), mv, catelog -> service.delete(catelog));
+		return delete(id, new Catelog(), mv, catelog -> service.delete(catelog));
 	}
 }

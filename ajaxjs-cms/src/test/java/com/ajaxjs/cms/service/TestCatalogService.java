@@ -9,7 +9,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.cms.model.Catalog;
+import com.ajaxjs.cms.model.Catelog;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mock.DBConnection;
 import com.ajaxjs.orm.JdbcConnection;
@@ -28,13 +28,13 @@ public class TestCatelogService {
 	public void test() {
 		assertNotNull(catalogService);
 
-		Catalog c = new Catalog();
+		Catelog c = new Catelog();
 		c.setName("foot2222");
 		c.setPid(12);
 
 		assertNotNull(catalogService.create(c));
 
-		c = new Catalog();
+		c = new Catelog();
 		c.setName("bar2222");
 		c.setPid(14);
 
@@ -45,13 +45,13 @@ public class TestCatelogService {
 
 	@Test
 	public void create() {
-		Catalog c;
-		c = new Catalog();
+		Catelog c;
+		c = new Catelog();
 		c.setPid(-1);
 		c.setName("test");
 		assertNotNull(catalogService.create(c));
 
-		c = new Catalog();
+		c = new Catelog();
 		c.setPid(119);
 		c.setName("test-sub");
 		assertNotNull(catalogService.create(c));
