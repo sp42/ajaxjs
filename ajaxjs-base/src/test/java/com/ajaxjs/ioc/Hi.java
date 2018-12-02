@@ -11,8 +11,8 @@ public class Hi {
 	public String sayHello() {
 		return "Hello " + person.getName();
 	}
-
-	public void setPerson(Person person) {
-		this.person = person;
-	}
+//
+//	public void setPerson(Person person) {
+//		this.person = person;
+//	}
 }

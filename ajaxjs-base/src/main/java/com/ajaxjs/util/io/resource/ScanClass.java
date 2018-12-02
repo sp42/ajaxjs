@@ -31,7 +31,7 @@ public class ScanClass<T> extends AbstractScanner<Class<T>> {
 	/**
 	 * 用于查找 class 文件的过滤器
 	 */
-	private final static FileFilter fileFilter = new FileFilter() {
+	public final static FileFilter fileFilter = new FileFilter() {
 		@Override
 		public boolean accept(File file) {
 			return file.isDirectory() || file.getName().endsWith(".class");

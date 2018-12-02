@@ -210,6 +210,7 @@ public abstract class AbstractScanner<T> {
 
 	public static String getResourcesByFileName(String fileName) {
 		ClassLoader classLoader = AbstractScanner.class.getClassLoader();
+
 		URL url = classLoader.getResource(fileName);
 		File file = new File(url.getFile());
 

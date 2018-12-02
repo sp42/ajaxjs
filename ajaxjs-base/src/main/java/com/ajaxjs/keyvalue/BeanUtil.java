@@ -41,13 +41,13 @@ public class BeanUtil extends ReflectUtil {
 	/**
 	 * BEAN SETXXX
 	 * 
-	 * @param bean  JAVA Bean 对象，也可以是
-	 * @param name  属性名称
+	 * @param bean JAVA Bean 对象，也可以是
+	 * @param name 属性名称
 	 * @param value 要设置的属性值
 	 */
 	public static void setProperty(Object bean, String name, Object value) {
 		String setMethodName = "set" + firstLetterUpper(name);
-		
+
 		Objects.requireNonNull(bean, bean + "执行：" + setMethodName + " 未发现类");
 		Objects.requireNonNull(value, bean + "执行：" + setMethodName + " 未发现参数 value");
 
@@ -63,7 +63,7 @@ public class BeanUtil extends ReflectUtil {
 		// 如果没找到，那忽略参数类型，只要匹配方法名称即可。这会发生在：由于被注入的对象有可能经过了 AOP 的动态代理，所以不能通过上述逻辑找到正确的方法
 		if (method == null) {
 			method = getSuperClassDeclaredMethod(clazz, setMethodName);
-		}
+		} 
 
 		// 最终还是找不到
 		Objects.requireNonNull(method, clazz.getName() + " 找不到目标方法！" + setMethodName);
@@ -86,7 +86,7 @@ public class BeanUtil extends ReflectUtil {
 	 * 根据方法名称来截取属性名称，例如把 getter 的 getXxx() 转换为 xxx 的字段名
 	 * 
 	 * @param methodName 方法名称
-	 * @param action     set|get
+	 * @param action set|get
 	 * @return 属性名称
 	 */
 	public static String getFieldName(String methodName, String action) {
@@ -117,8 +117,7 @@ public class BeanUtil extends ReflectUtil {
 					map.put(key, value);
 				}
 			}
-		} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
+		} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
 
@@ -128,8 +127,8 @@ public class BeanUtil extends ReflectUtil {
 	/**
 	 * map 转实体
 	 * 
-	 * @param map         原始数据
-	 * @param clz         实体 bean 的类
+	 * @param map 原始数据
+	 * @param clz 实体 bean 的类
 	 * @param isTransform 是否尝试转换值
 	 * @return 实体 bean 对象
 	 */
@@ -180,8 +179,7 @@ public class BeanUtil extends ReflectUtil {
 					}
 				}
 			}
-		} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
+		} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -290,7 +288,7 @@ public class BeanUtil extends ReflectUtil {
 	 * JSON 字符串转换为 Bean 对象
 	 * 
 	 * @param json JSON 字符串
-	 * @param clz  Bean 对象类引用
+	 * @param clz Bean 对象类引用
 	 * @return Bean 对象
 	 */
 	public static <T> T json2bean(String json, Class<T> clz) {

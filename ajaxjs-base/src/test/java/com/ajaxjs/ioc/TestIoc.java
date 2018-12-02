@@ -7,29 +7,54 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.ioc.Bean;
-import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.util.io.resource.ScanClass;
 
+import javassist.CannotCompileException;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtField;
+import javassist.CtNewMethod;
+import javassist.NotFoundException;
+
 public class TestIoc {
+//	@BeforeClass
+	public static void init() {
+		ClassPool pool = ClassPool.getDefault();
+		CtClass cc;
+		try {
+			cc = pool.get("com.ajaxjs.ioc.Hi");
+//			CtMethod m = CtNewMethod.make("public void setPerson(com.ajaxjs.ioc.Person person) { this.person = person; }", cc);
+//			cc.addMethod(m);
+			CtField f1 = new CtField(pool.get("com.ajaxjs.ioc.Person"), "person", cc);
+			cc.addMethod(CtNewMethod.setter("setPerson", f1));
+
+//			Class<?> c = cc.toClass(this.getClass().getClassLoader());
+
+			cc.toClass();
+//			method = c.getDeclaredMethod("setPerson", Person.class);
+		} catch (NotFoundException | CannotCompileException e) {
+			e.printStackTrace();
+		}
+	}
+
 	@Test
 	public void test() {
-		Set<Class<Object>> classes = ScanClass.scanClass("com.ajaxjs.ioc");
-		BeanContext.init(classes);
+		BeanContext.init("com.ajaxjs.ioc");
 		BeanContext.injectBeans();
 
 		Hi hi = (Hi) BeanContext.getBean("hi");
 		System.out.println(hi);
 
 		assertNotNull(hi);
-		
-		Person person = (Person)BeanContext.getBean("person");
+
+		Person person = (Person) BeanContext.getBean("person");
 		System.out.println(person.getName());
 		assertEquals("Hello Rose", hi.sayHello());
 	}
-	
+
 	@Test
 	public void testFindBeanById() {
 		BeanContext.init("com.ajaxjs.ioc");
@@ -37,14 +62,13 @@ public class TestIoc {
 
 		assertTrue(bean instanceof AA);
 	}
-	
+
 	public static interface AA {
 	}
 
 	@Bean("foo")
 	public static class AObj implements AA {
 	}
-
 
 	@Test
 	public void testFindClassByInterface() {
