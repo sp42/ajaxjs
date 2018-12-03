@@ -5,12 +5,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
-import java.util.Set;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
-
-import com.ajaxjs.util.io.resource.ScanClass;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
