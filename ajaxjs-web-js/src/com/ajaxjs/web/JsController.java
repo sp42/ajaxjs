@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,25 +17,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class JsController
+ * 打包 js
  */
 @WebServlet("/JsController")
 public class JsController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 * response)
-	 */
+	static String output = "C:\\project\\ajaxjs-web\\META-INF\\resources\\ajaxjs-ui-output";
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
 	 * 压缩 CSS 并将其保存到一个地方
-	 * 
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 * response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String css = request.getParameter("css"), type = request.getParameter("type"), fullpath = "";
@@ -51,6 +46,22 @@ public class JsController extends HttpServlet {
 		}
 
 		response.getWriter().append(output).append(request.getContextPath());
+	}
+	
+
+	/**
+	 * 获取磁盘真實地址
+	 * 
+	 * @param cxt          Web 上下文
+	 * @param relativePath 相对地址
+	 * @return 绝对地址
+	 */
+	public static String mappath(HttpServletRequest request, String relativePath) {
+		String absolute = request.getServletContext().getRealPath(relativePath);
+
+		if (absolute != null)
+			absolute = absolute.replace('\\', '/');
+		return absolute;
 	}
 
 	public static String read(String fullpath, Charset encode) throws IOException {
@@ -99,11 +110,8 @@ public class JsController extends HttpServlet {
 			Files.createFile(path);
 
 		Files.write(path, content.getBytes());
-		String[]  f = new String[] {"aa", "l434"};
+		String[] f = new String[] { "aa", "l434" };
 		System.out.println(String.join(",", f));
-	
-	}
-	
-	
 
+	}
 }
