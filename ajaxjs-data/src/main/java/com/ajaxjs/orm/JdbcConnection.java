@@ -50,13 +50,16 @@ public class JdbcConnection {
 	public static DataSource getDataSource(String path) {
 		try {
 			Object obj = new InitialContext().lookup("java:/comp/env");
-
 			Objects.requireNonNull(obj, "没有该节点 java:/comp/env");
 
 			Context context = (Context) obj; // 环境变量
-			return (DataSource) context.lookup(path);
+			Object result = context.lookup(path);
+			return (DataSource) result;
 		} catch (NamingException e) {
-			LOGGER.warning("读取数据源的配置文件失败，请检查 Tomcat 连接池配置！ path: " + path, e);
+			String msg = "读取数据源的配置文件失败，请检查 Tomcat 连接池配置！ path: " + path;
+			msg += " 提示：没发现数据库 /WebRoot/META-INF/context.xml 下的 XML 配置文件，该文件位置一般不可移动，请参阅 tomat pool 数据库连接池的相关文档。";
+			
+			LOGGER.warning(msg, e);
 			return null;
 		}
 	}
