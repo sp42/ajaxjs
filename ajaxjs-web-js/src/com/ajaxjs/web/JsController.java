@@ -8,8 +8,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -29,19 +29,25 @@ public class JsController extends HttpServlet {
 	static String output = "C:\\project\\ajaxjs-web\\META-INF\\resources\\ajaxjs-ui-output";
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		String js = "// build date:" + new Date() + "\n";
+		js += JavaScriptCompressor.compress(read(mappath(request, "js/ajaxjs-base.js")));
+		js += JavaScriptCompressor.compress(read(mappath(request, "js/ajaxjs-list.js")));
+		js += action(mappath(request, "js/widgets/"), true);
+		js += action(mappath(request, "js/widgets/admin/"), true);
+
+		save(output + "\\all.js", js);
+		response.getWriter().append("Pack js Okay.");
 	}
 
 	/**
 	 * 压缩 CSS 并将其保存到一个地方
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String css = request.getParameter("css"), type = request.getParameter("type"), fullpath = "";
-//				fullpath = request.mappath("/asset/css/" + type + ".css");
+		String css = request.getParameter("css");
 		String output = "";
 
 		try {
-			save(fullpath, css);
+			save(output + "\\all.css", css);
 
 			output = "json::{\"isOk\":true}";
 		} catch (Throwable e) {
