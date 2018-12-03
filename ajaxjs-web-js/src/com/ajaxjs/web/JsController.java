@@ -22,8 +22,12 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/JsController")
 public class JsController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 保存位置
+	 */
 	static String output = "C:\\project\\ajaxjs-web\\META-INF\\resources\\ajaxjs-ui-output";
-	
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
@@ -47,12 +51,37 @@ public class JsController extends HttpServlet {
 
 		response.getWriter().append(output).append(request.getContextPath());
 	}
-	
+
+	/**
+	 * 打包某个目录下所有的 js
+	 * 
+	 * @param _folder
+	 * @param isCompress
+	 * @return
+	 */
+	public static String action(String _folder, boolean isCompress) {
+		StringBuilder sb = new StringBuilder();
+		File folder = new File(_folder);
+
+		for (File file : folder.listFiles()) {
+			if (file.isFile()) {
+				String jsCode = null;
+				try {
+					jsCode = read(file.toPath());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				sb.append(isCompress ? JavaScriptCompressor.compress(jsCode) : jsCode);
+			}
+		}
+
+		return sb.toString();
+	}
 
 	/**
 	 * 获取磁盘真實地址
 	 * 
-	 * @param cxt          Web 上下文
+	 * @param cxt Web 上下文
 	 * @param relativePath 相对地址
 	 * @return 绝对地址
 	 */
@@ -64,16 +93,23 @@ public class JsController extends HttpServlet {
 		return absolute;
 	}
 
-	public static String read(String fullpath, Charset encode) throws IOException {
-		Path path = Paths.get(fullpath);
-
+	public static String read(Path path, Charset encode) throws IOException {
 		if (Files.isDirectory(path))
-			throw new IOException("参数 fullpath：" + fullpath + " 不能是目录，请指定文件");
+			throw new IOException("参数 fullpath：" + path.toString() + " 不能是目录，请指定文件");
 
 		if (!Files.exists(path))
-			throw new IOException(fullpath + "　不存在");
+			throw new IOException(path.toString() + "　不存在");
 
 		return new String(Files.readAllBytes(path), encode);
+	}
+
+	public static String read(String fullpath, Charset encode) throws IOException {
+		Path path = Paths.get(fullpath);
+		return read(path, encode);
+	}
+
+	public static String read(Path path) throws IOException {
+		return read(path, StandardCharsets.UTF_8);
 	}
 
 	public static String read(String fullpath) throws IOException {
