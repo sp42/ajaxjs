@@ -70,8 +70,7 @@ public class SiteStruService implements ServletContextListener {
 				cxt.setAttribute("aj_allConfig", ConfigService.config); // 所有配置保存在这里
 
 //				String configJson = JsonHelper.format(JsonHelper.stringifyMap(ConfigService.config));
-				LOGGER.infoGreen("加载 " + ConfigService.getValueAsString("clientFullName") + " " + cxt.getContextPath()
-						+ " 项目配置成功！All config loaded.");
+				LOGGER.infoGreen("加载 " + ConfigService.getValueAsString("clientFullName") + " " + cxt.getContextPath() + " 项目配置成功！All config loaded.");
 			} else
 				LOGGER.warning("加载配置失败！");
 		} else
@@ -86,13 +85,14 @@ public class SiteStruService implements ServletContextListener {
 		} else
 			LOGGER.info("没有网站的结构文件");
 
-		
 		String ajaxjsui = Version.isDebug ? "http://localhost:8080/ajaxjs-web-js" : cxt.getContextPath() + "/" + Constant.ajajx_ui;
 		cxt.setAttribute("ctx", cxt.getContextPath());
 		cxt.setAttribute("ajaxjsui", ajaxjsui);
-		cxt.setAttribute("commonAsset", cxt.getContextPath() + "/" + Constant.commonAsset); // 静态资源目录
-		cxt.setAttribute("commonAssetIcon", ajaxjsui+"/asset/common/icon/"); // 静态资源目录
+		cxt.setAttribute("commonAsset", ajaxjsui + "/asset/common"); // 静态资源目录
+		cxt.setAttribute("commonAssetIcon", ajaxjsui + "/asset/common/icon"); // 静态资源目录
 		cxt.setAttribute("commonJsp", cxt.getContextPath() + "/" + Constant.jsp_perfix);
+		cxt.setAttribute("isDebuging", Version.isDebug);
+		cxt.setAttribute("ajaxjs_ui_output", cxt.getContextPath() + "/ajaxjs-ui-output");
 	}
 
 	/**
@@ -112,7 +112,7 @@ public class SiteStruService implements ServletContextListener {
 	/**
 	 * 获取当前页面节点，并带有丰富的节点信息
 	 * 
-	 * @param uri         请求地址，例如 "menu/menu-1"
+	 * @param uri 请求地址，例如 "menu/menu-1"
 	 * @param contextPath 项目名称
 	 * @return 当前页面节点
 	 */
@@ -201,9 +201,7 @@ public class SiteStruService implements ServletContextListener {
 		return request.getRequestURI().replace(request.getContextPath(), "").replaceFirst("/\\w+\\.\\w+$", "");
 	}
 
-	private static String table = "<table class=\"siteMap\"><tr><td>%s</td></tr></table>",
-			a = "<a href=\"%s/\" class=\"indentBlock_%s\"><span class=\"dot\">·</span>%s</a>\n ",
-			newCol = "\n\t</td>\n\t<td>\n\t\t";
+	private static String table = "<table class=\"siteMap\"><tr><td>%s</td></tr></table>", a = "<a href=\"%s/\" class=\"indentBlock_%s\"><span class=\"dot\">·</span>%s</a>\n ", newCol = "\n\t</td>\n\t<td>\n\t\t";
 
 	private String siteMapCache;
 
@@ -213,7 +211,7 @@ public class SiteStruService implements ServletContextListener {
 	 * @return 页脚的网站地图
 	 */
 	public String getSiteMap(HttpServletRequest request) {
-		if (siteMapCache == null) 
+		if (siteMapCache == null)
 			siteMapCache = getSiteMap(stru, request.getContextPath());
 
 		return siteMapCache;
@@ -222,7 +220,7 @@ public class SiteStruService implements ServletContextListener {
 	/**
 	 * 获取页脚的网站地图
 	 * 
-	 * @param list        可指定数据
+	 * @param list 可指定数据
 	 * @param contextPath
 	 * @return 页脚的网站地图
 	 */
@@ -247,8 +245,7 @@ public class SiteStruService implements ServletContextListener {
 				if (0 == (int) map.get("level")) // 新的一列
 					sb.append(newCol);
 
-				sb.append(String.format(a, contextPath + map.get("fullPath").toString(), map.get("level").toString(),
-						map.get("name").toString()));
+				sb.append(String.format(a, contextPath + map.get("fullPath").toString(), map.get("level").toString(), map.get("name").toString()));
 
 				if (map.get("children") != null && map.get("children") instanceof List)
 					getSiteMap((List<Map<String, Object>>) map.get("children"), sb, contextPath);

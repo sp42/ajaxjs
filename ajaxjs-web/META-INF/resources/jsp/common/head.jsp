@@ -49,7 +49,7 @@
 <% if(com.ajaxjs.Version.isDebug) { %>
 	<link rel="stylesheet/less" data-global-vars='{"assetFilePath": "\"${empty param.css ? ctx : ''}/asset\"" }' type="text/css" href="${ctx}${empty param.lessFile ? '/asset/less/main.less' : param.lessFile}" />
 
-	<script src="${ajaxjsui}/js/libs/less.min.js"></script>
+	<script src="${ajaxjs_ui_output}/lib/less.min.js"></script>
     <script src="${ajaxjsui}/js/libs/vue.js"></script>
     <script src="${ajaxjsui}/js/ajaxjs-base.js"></script>
     <script src="${ajaxjsui}/js/widgets/admin.js"></script>
@@ -79,7 +79,7 @@
 			}  
 			
 			var cssCode = compress(aj('style[id]').innerHTML);
-			aj.xhr.post("${ctx}/js", function(json) {
+			aj.xhr.post("${ajaxjsui}/JsController", function(json) {
 				if(json.isOk)
 					alert('压缩css完成！');
 			}, {
@@ -87,14 +87,14 @@
 				css: encodeURIComponent(cssCode)
 			});
 			
-		}, 1000);
+		}, 2000);
 		</script> 
 	<%}%>
 <%}else { %>
 	<link rel="stylesheet" type="text/css" href="${ctx}/asset/css/${empty param.lessFile ? 'main' : param.lessFile.replaceAll("(?:.*/)(\\w+).less", "$1")}.css" />
 
-    <script src="${ctx}/ajaxjs-ui-output/libs/vue.min.js"></script>
-    <script src="${ctx}/ajaxjs-ui-output/all.js"></script>
+    <script src="${ajaxjs_ui_output}/lib/vue.min.js"></script>
+    <script src="${ajaxjs_ui_output}/all.js"></script>
 <%} %>
 	
    	<script>
