@@ -42,7 +42,7 @@ public class ${beanName}Controller extends CommonController&lt;Map&lt;String, Ob
 	@GET
 	@Override
 	public String createUI(ModelAndView model) {
-		model.put("uiName", getService().getName());
+		model.put("uiName", service.getName());
 		return jsp_perfix + "user-admin/privilege";
 	}
 	

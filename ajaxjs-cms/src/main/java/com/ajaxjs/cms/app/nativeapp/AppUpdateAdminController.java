@@ -36,7 +36,7 @@ public class AppUpdateAdminController extends CommonController<AppUpdate, Long> 
 	@Override
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
 		prepareData(model);
-		model.put("PageResult", getService().findPagedList(start, limit));
+		model.put("PageResult", service.findPagedList(start, limit));
 		return jsp_perfix + "/common-entity/app-update-list";
 	}
 

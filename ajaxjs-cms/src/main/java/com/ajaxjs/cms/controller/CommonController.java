@@ -164,14 +164,12 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	 * @param id 实体 id
 	 * @param model 页面 Model 模型
 	 * @return JSON 响应
-	 * @throws ServiceException
 	 */
 	@SuppressWarnings("unchecked")
 	public String delete(ID id, T entity, ModelAndView model, Predicate<T> deleteAction) {
 		if (entity instanceof Map) {
 			((Map<String, Object>) entity).put("id", id);
 		} else {
-			System.out.println(id);
 			((BaseModel) entity).setId((Long) id);
 		}
 
@@ -334,14 +332,9 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	public void setUiName(String uiName) {
 		this.uiName = uiName;
 	}
-
-	private IService<T, ID> service;
-
-	public IService<T, ID> getService() {
-		return service;
-	}
-
-	public void setService(IService<T, ID> service) {
-		this.service = service;
+	
+	public <S extends IService<T, ID>> S getService() {
+		LOGGER.warning("should overwrite this method");
+		return null;
 	}
 }

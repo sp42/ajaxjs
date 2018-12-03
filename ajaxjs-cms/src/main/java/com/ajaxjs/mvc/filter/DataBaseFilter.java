@@ -37,6 +37,7 @@ public class DataBaseFilter implements FilterAction {
 	
 	@Override
 	public boolean before(MvcRequest request, MvcOutput response, Method method) {
+		System.out.println("3424324");
 		initDb();
 		
 		return true;

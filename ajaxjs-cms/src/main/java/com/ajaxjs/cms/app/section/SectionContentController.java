@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.app.catelog;
+package com.ajaxjs.cms.app.section;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -17,19 +17,18 @@ import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.orm.dao.PageResult;
 
-@Path("/admin/catelog")
-@Bean("CatelogAdminController")
-public class CatalogController extends CommonController<Catelog, Long> implements CommonEntryAdminController<Catelog, Long> {
-	@Resource("CatelogService")
-	private CatelogService service;
+@Path("/admin/section_content")
+@Bean("SectionContentAdminController")
+public class SectionContentController extends CommonController<SectionInfo, Long> implements CommonEntryAdminController<SectionInfo, Long> {
+	@Resource("SectionInfoService")
+	private SectionInfoService service;
 
 	@GET
 	@Override
 	public String createUI(ModelAndView model) {
 		prepareData(model);
-		return jsp_perfix + "/system/Catelog";
+		return jsp_perfix_webinf + "/test";
 	}
 
 	@GET
@@ -38,8 +37,7 @@ public class CatalogController extends CommonController<Catelog, Long> implement
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
-		PageResult<Catelog> result = service.findPagedList(start, limit);
-		return listJson(start, limit, model, (_start, _limit) -> result);
+		return listJson(start, limit, model, (_start, _limit) -> service.findPagedList(_start, _limit));
 	}
 
 	@GET
@@ -59,8 +57,8 @@ public class CatalogController extends CommonController<Catelog, Long> implement
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String create(Catelog entity, ModelAndView mv) {
-		return create(entity, mv, _entity -> service.create(_entity));
+	public String create(SectionInfo entity, ModelAndView model) {
+		return create(entity, model, e -> service.create(e));
 	}
 
 	@PUT
@@ -68,8 +66,8 @@ public class CatalogController extends CommonController<Catelog, Long> implement
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, Catelog entity, ModelAndView mv) {
-		return update(id, entity, mv, _entity -> service.update(_entity));
+	public String update(@PathParam("id") Long id, SectionInfo entity, ModelAndView model) {
+		return update(id, entity, model, e -> service.update(e));
 	}
 
 	@DELETE
@@ -77,7 +75,8 @@ public class CatalogController extends CommonController<Catelog, Long> implement
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String delete(@PathParam("id") Long id, ModelAndView mv) {
-		return delete(id, new Catelog(), mv, catelog -> service.delete(catelog));
+	public String delete(@PathParam("id") Long id, ModelAndView model) {
+		return delete(id, new SectionInfo(), model, e -> service.delete(e));
 	}
+
 }

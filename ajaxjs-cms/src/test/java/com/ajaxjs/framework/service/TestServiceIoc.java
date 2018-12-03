@@ -37,6 +37,5 @@ public class TestServiceIoc {
 		
 		FakeController controller = (FakeController) BeanContext.getBean("Controller");
 		assertNotNull(controller);
-		assertNotNull(controller.getService());
 	}
 }
