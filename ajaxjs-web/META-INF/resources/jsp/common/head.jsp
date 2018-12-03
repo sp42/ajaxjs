@@ -102,8 +102,8 @@
    		aj.Vue.install = function(Vue) {
    			Vue.prototype.ajResources = {
 	   			ctx : '${ctx}',
-	   			commonAsset : '${commonAsset}',
-	   			libraryUse : '${ajaxjsui}/resources' // 庫使用的資源
+	   			commonAsset : '${ajaxjsui}/asset/common',
+	   			libraryUse : '${ajaxjsui}/asset/common/resources' // 庫使用的資源
    			};
    			
    			Vue.prototype.BUS = new Vue();
