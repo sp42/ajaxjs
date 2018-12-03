@@ -24,6 +24,12 @@ public class FeedbackAdminController extends CommonController<Feedback, Long> im
 
 	@Resource("FeedbackService")
 	private FeedbackService service;
+	
+	@Override
+	public void prepareData(ModelAndView model) {
+		model.put("uiName", "留言反馈");
+		model.put("tableName", "feedback");
+	}
 
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)

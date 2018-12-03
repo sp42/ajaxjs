@@ -27,6 +27,12 @@ import com.ajaxjs.orm.dao.PageResult;
 public class HrAdminController extends CommonController<Map<String, Object>, Long> implements CommonEntryAdminController<Map<String, Object>, Long> {
 	@Resource("HrService")
 	private HrService service;
+	
+	@Override
+	public void prepareData(ModelAndView model) {
+		model.put("uiName", "招聘");
+		model.put("tableName", "hr");
+	}
 
 	@GET
 	@Path("list")

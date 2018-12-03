@@ -22,7 +22,12 @@ import com.ajaxjs.orm.dao.PageResult;
 @Path("/admin/ads")
 @Bean("AdsAdminController")
 public class AdsAdminController extends CommonController<Ads, Long> implements CommonEntryAdminController<Ads, Long> {
-
+	@Override
+	public void prepareData(ModelAndView model) {
+		model.put("uiName", "广告");
+		model.put("tableName", "ads");
+	}
+	
 	@Resource("AdsService")
 	private AdsService service;
 
@@ -39,8 +44,7 @@ public class AdsAdminController extends CommonController<Ads, Long> implements C
 
 		model.put("PageResult", adsPage);
 		model.put("domainCatalog_Id", service.getDomainCatelogId());
-		return "/test/test";
-//		return jsp_perfix + "/common-entity/ads-list";
+		return jsp_perfix + "/common-entity/ads-list";
 	}
 
 	@GET
@@ -50,9 +54,8 @@ public class AdsAdminController extends CommonController<Ads, Long> implements C
 	public String editUI(@PathParam("id") Long id, ModelAndView model) {
 		model.put("domainCatalog_Id", service.getDomainCatelogId());
 		info(id, model, _id -> service.findById(id));
-		super.editUI(model);
-		return "/test/test2";
-//		return jsp_perfix +"/common-entity/ads";
+		editUI(model);
+		return jsp_perfix +"/common-entity/ads";
 	}
 
 	@GET
@@ -61,8 +64,7 @@ public class AdsAdminController extends CommonController<Ads, Long> implements C
 	public String createUI(ModelAndView model) {
 		model.put("domainCatalog_Id", service.getDomainCatelogId());
 		super.createUI(model);
-		return "/test/test2";
-//		return jsp_perfix +"/entity/ads";
+		return jsp_perfix +"/entity/ads";
 	}
 
 	@POST

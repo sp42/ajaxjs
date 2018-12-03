@@ -71,7 +71,7 @@
 			</tbody>
 		</table>
 		<div class="listTable pager">
-			<%@include file="/asset/common/jsp/pager.jsp" %>
+			<%@include file="/jsp/common/pager.jsp" %>
 		</div>
 	</body>
 </html>

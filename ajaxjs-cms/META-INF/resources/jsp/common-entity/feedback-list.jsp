@@ -35,7 +35,7 @@
 		<thead>
 			<tr>
 				<th>#</th>
-				<th class="name" width="500">${uiName}名称</th>
+				<th class="name" width="450">${uiName}名称</th>
 				<th>联系电话</th>
 				<th>联系邮箱</th>
 				<th>是否已回复</th>
@@ -66,7 +66,7 @@
 		</tbody>
 	</table>
 		<div style="text-align:center;margin:2%;">
-			<%@include file="/asset/common/jsp/pager.jsp" %>
+			<%@include file="/jsp/common/pager.jsp" %>
 		</div>
 	</body>
 </html>

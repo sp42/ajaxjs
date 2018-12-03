@@ -96,4 +96,10 @@ public class ArticleAdminController extends CommonController<Map<String, Object>
 	public String list(int start, int limit, ModelAndView model) {
 		return null;
 	}
+	
+	@Override
+	public void prepareData(ModelAndView model) {
+		model.put("uiName", "文章");
+		model.put("tableName", "article");
+	}
 }
