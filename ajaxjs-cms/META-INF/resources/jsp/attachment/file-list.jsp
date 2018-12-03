@@ -46,7 +46,7 @@
 					<td>
 						<a href="../../../${tableName}/${current.id}/" target="_blank">浏览</a>
 						<a href="../${current.id}/"><img src="${commonAssetIcon}/update.gif" style="vertical-align: sub;" />编辑</a>
-						<a href="javascript:entity.del('${current.id}', '${current.name}');"><img src="${commonAssetIcon}delete.gif" style="vertical-align: sub;" />删除</a>
+						<a href="javascript:entity.del('${current.id}', '${current.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>
 					</td>
 				</tr>
 			</c:foreach>

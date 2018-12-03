@@ -56,7 +56,7 @@
 						<input type="text" name="name" class="ajaxjs-inputField" /> <input type="hidden"
 							name="parentId" value="-1" />
 						<button class="ajaxjs-btn">
-							<img src="${commonAssetIcon}add.gif" /> 新建分类
+							<img src="${commonAssetIcon}/add.gif" /> 新建分类
 						</button>
 
 					</form>
@@ -69,7 +69,7 @@
 						<input type="text" name="name" class="ajaxjs-inputField" /> <input type="hidden"
 							name="parentId" />  <input type="hidden" name="level" /> 
 						<button class="ajaxjs-btn">
-							<img src="${commonAssetIcon}add.gif" /> 新建分类
+							<img src="${commonAssetIcon}/add.gif" /> 新建分类
 						</button>
 					</form>
 
@@ -82,10 +82,10 @@
 							<input type="hidden" class="noPassServerParentId" />
 
 							<button class="ajaxjs-btn">
-								<img src="${commonAssetIcon}update.gif" /> 更新名称
+								<img src="${commonAssetIcon}/update.gif" /> 更新名称
 							</button>
 							<button class="ajaxjs-btn" onclick="sendDelete(this);return false;">
-								<img src="${commonAssetIcon}delete.gif" /> 删除分类
+								<img src="${commonAssetIcon}/delete.gif" /> 删除分类
 							</button>
 						</label>
 					</form>

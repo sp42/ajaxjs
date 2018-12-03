@@ -23,7 +23,7 @@
 			&nbsp;&nbsp;
 			<label> 描述： <input type="text" name="content" class="ajaxjs-inputField" style="width: 300px;" />  </label>
 			<button class="ajaxjs-btn">
-				<img src="${commonAssetIcon}add.gif" /> 新建${uiName}
+				<img src="${commonAssetIcon}/add.gif" /> 新建${uiName}
 			</button>
 		</form>
 		<br />
@@ -56,7 +56,7 @@
 		
 	
 		var tdHtml = '<td class="id">[:=id:]</td><td class="name">[:=nameTd:]</td> <td class="content">[:=content||\'\':]</td><td class="createDate">[:=createDate:]</td>\
-		  <td class="action"><a href="#" onclick="showCreate(this);"><img src="${commonAssetIcon}add.gif" /> 新 建</a> | <a href="#" onclick="showUpdate(this);"><img src="${commonAssetIcon}update.gif" /> 修 改</a> | <a href="#" onclick="showDelete(this);"><img src="${commonAssetIcon}delete.gif" /> 删 除</a> </td>';
+		  <td class="action"><a href="#" onclick="showCreate(this);"><img src="${commonAssetIcon}/add.gif" /> 新 建</a> | <a href="#" onclick="showUpdate(this);"><img src="${commonAssetIcon}/update.gif" /> 修 改</a> | <a href="#" onclick="showDelete(this);"><img src="${commonAssetIcon}/delete.gif" /> 删 除</a> </td>';
 	</script>
 	<script src="${commonJsp}/tools/pid.js"></script>
 </body>
