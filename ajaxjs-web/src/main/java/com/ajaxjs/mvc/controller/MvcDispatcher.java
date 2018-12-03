@@ -36,6 +36,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.ioc.BeanContext;
+import com.ajaxjs.keyvalue.MapHelper;
 import com.ajaxjs.keyvalue.MappingHelper;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.FilterAction;
@@ -74,16 +75,19 @@ public class MvcDispatcher implements Filter {
 		// AnnotationUtils.controllers 集合中
 		Map<String, String> config = ServletHelper.initFilterConfig2Map(_config);
 
-		if (config != null && config.get("doIoc") != null) {
-			String doIoc = config.get("doIoc");
+		MapHelper.getValue(config, "doIoc", (String doIoc) -> {
 			for (String packageName : CommonUtil.split(doIoc))
 				BeanContext.init(packageName);
 
 			BeanContext.injectBeans(); // 依赖注射扫描
-		}
+		});
 
-		ControllerScanner.scannController(config);
+		MapHelper.getValue(config, "controller", ControllerScanner::scannController);
+
+		if (config != null && config.get("controller") == null)
+			LOGGER.info("web.xml 没有配置 MVC 过滤器或者 配置没有定义 controller");
 	}
+ 
 
 	/**
 	 * 虽然 REST 风格的 URL 一般不含后缀，我们只能将 DispatcherServlet 映射到“/”，使之变为一个默认的 Servlet， 在处理
@@ -248,7 +252,7 @@ public class MvcDispatcher implements Filter {
 	 * 根据 httpMethod 请求方法返回控制器类身上的方法。
 	 * 
 	 * @param controllerInfo 控制器类信息
-	 * @param httpMethod     HTTP 请求的方法
+	 * @param httpMethod HTTP 请求的方法
 	 * @return 控制器方法
 	 */
 	private static Method getMethod(Action action, String httpMethod) {

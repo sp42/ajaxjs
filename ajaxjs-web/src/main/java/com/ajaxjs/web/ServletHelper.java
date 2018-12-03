@@ -13,12 +13,12 @@ public class ServletHelper {
 
 	/**
 	 * 遍历注解的配置，需要什么类，收集起来，放到一个 hash 之中， Servlet 或 Filter 通用
+	 * 
 	 * @param getInitParameterNames
 	 * @param getValue
 	 * @return
 	 */
-	private static Map<String, String> initParams2map(Supplier<Enumeration<String>> getInitParameterNames,
-			Function<String, String> getValue) {
+	private static Map<String, String> initParams2map(Supplier<Enumeration<String>> getInitParameterNames, Function<String, String> getValue) {
 		Map<String, String> map = new HashMap<>();
 
 		Enumeration<String> initParams = getInitParameterNames.get();
@@ -34,18 +34,20 @@ public class ServletHelper {
 	}
 
 	/**
+	 * 将过滤器的配置转换为 Map
 	 * 
-	 * @param config
-	 * @return
+	 * @param config 过滤器配置
+	 * @return 过滤器配置的 Map 结构
 	 */
 	public static Map<String, String> initFilterConfig2Map(FilterConfig config) {
 		return initParams2map(() -> config.getInitParameterNames(), key -> config.getInitParameter(key));
 	}
 
 	/**
+	 * 将 Servlet 的配置转换为 Map
 	 * 
-	 * @param config
-	 * @return
+	 * @param config Servlet 配置
+	 * @return Servlet 配置的 Map 结构
 	 */
 	public static Map<String, String> initServletConfig2Map(ServletConfig config) {
 		return initParams2map(() -> config.getInitParameterNames(), key -> config.getInitParameter(key));

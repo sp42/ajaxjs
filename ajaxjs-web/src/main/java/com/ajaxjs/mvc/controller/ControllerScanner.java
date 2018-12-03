@@ -15,6 +15,7 @@
  */
 package com.ajaxjs.mvc.controller;
 
+import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -38,6 +39,7 @@ import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mvc.util.TreeLinked;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
+import com.ajaxjs.util.io.resource.ScanClass;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -46,8 +48,29 @@ import com.ajaxjs.util.logger.LogHelper;
  * 
  * @author Sp42 frank@ajaxjs.com
  */
-public class ControllerScanner {
+public class ControllerScanner extends ScanClass<IController> {
 	private static final LogHelper LOGGER = LogHelper.getLog(ControllerScanner.class);
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onFileAdding(Set<Class<IController>> target, File resourceFile, String packageJavaName) {
+		String className = getClassName(resourceFile, packageJavaName);
+		Class<?> clazz = ReflectUtil.getClassByName(className);
+
+		if (IController.class.isAssignableFrom(clazz)) {
+			target.add((Class<IController>) clazz);// 添加到集合中去
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onJarAdding(Set<Class<IController>> target, String resourcePath) {
+		Class<?> clazz = ReflectUtil.getClassByName(resourcePath);
+
+		if (IController.class.isAssignableFrom(clazz)) {
+			target.add((Class<IController>) clazz);// 添加到集合中去
+		}
+	}
 
 	/**
 	 * URL 与 Action 之间的映射树。URL Mapping tree.
@@ -86,7 +109,7 @@ public class ControllerScanner {
 		// 会打印控制器的总路径信息，不会打印各个方法的路径，那太细了，日志也会相应地多
 		LOGGER.info("控制器已登记成功！The controller \"{0}\" (\"/{1}\") was parsed and registered", clz.toString().replaceAll("class\\s", ""), topPath); // 控制器 {0} 所有路径（包括子路径）注册成功！
 	}
-	
+
 	/**
 	 * 检查控制器类是否有 Path 注解。Test a class if it can be parsed.
 	 * 
@@ -105,7 +128,7 @@ public class ControllerScanner {
 
 		return true;
 	}
-	
+
 	/**
 	 * 获取控制器类的根目录设置
 	 * 
@@ -119,12 +142,22 @@ public class ControllerScanner {
 		return rootPath.replaceAll("^/", ""); // remove the first / so that the array would be right length
 	}
 
+	/**
+	 * 
+	 * @param path
+	 * @return
+	 */
 	private static Action actionFactory(String path) {
 		Action _action = new Action();
 		_action.path = path.replaceAll(".$", "");
 		return _action;
 	}
 
+	/**
+	 * 
+	 * @param clz 控制器类
+	 * @param action
+	 */
 	private static void createControllerInstance(Class<? extends IController> clz, Action action) {
 		if (clz.getAnnotation(Bean.class) != null) { // 如果有 ioc，则从容器中查找
 			action.controller = BeanContext.getBeanByClass(clz);
@@ -134,12 +167,12 @@ public class ControllerScanner {
 			action.controller = ReflectUtil.newInstance(clz);// 保存的是 控制器 实例。
 		}
 	}
-	
+
 	/**
 	 * 根据路径信息加入到 urlMapping。Check out all methods which has Path annotation, then
 	 * add the urlMapping.
 	 * 
-	 * @param clz    控制器类
+	 * @param clz 控制器类
 	 * @param action 父亲动作
 	 */
 	private static void parseSubPath(Class<? extends IController> clz, Action action) {
@@ -197,7 +230,6 @@ public class ControllerScanner {
 		return new LinkedList<>(Arrays.asList(arr));
 	}
 
-
 	/**
 	 * HTTP 方法对号入座，什么方法就进入到什么属性中保存起来。
 	 * 
@@ -220,6 +252,15 @@ public class ControllerScanner {
 		}
 	}
 
+	/**
+	 * 检测是否已经登记的控制器
+	 * 
+	 * @param anClz
+	 * @param method 控制器方法
+	 * @param action
+	 * @param getExistMethod
+	 * @return
+	 */
 	private static <T extends Annotation> boolean isSend(Class<T> anClz, Method method, Action action, Supplier<Method> getExistMethod) {
 		if (method.getAnnotation(anClz) != null) {
 			if (getExistMethod.get() == null)
@@ -239,21 +280,15 @@ public class ControllerScanner {
 	 * 
 	 * @param config web.xml 中的配置，已经转为 Map
 	 */
-	public static void scannController(Map<String, String> config) {
-		if (config != null && config.get("controller") != null) {
-			String str = config.get("controller");
+	public static void scannController(String config) {
+		ControllerScanner scanner;// 定义一个扫描器，专门扫描 IController
 
-			IControllerScanner scanner;// 定义一个扫描器，专门扫描 IController
+		for (String packageName : CommonUtil.split(config)) {
+			scanner = new ControllerScanner();
+			Set<Class<IController>> IControllers = scanner.scan(packageName);
 
-			for (String packageName : CommonUtil.split(str)) {
-				scanner = new IControllerScanner();
-				Set<Class<IController>> IControllers = scanner.scan(packageName);
-
-				for (Class<IController> clz : IControllers)
-					add(clz);
-			}
-		} else {
-			LOGGER.info("web.xml 没有配置 MVC 过滤器或者 配置没有定义 controller");
+			for (Class<IController> clz : IControllers)
+				add(clz);
 		}
 	}
 }
