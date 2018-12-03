@@ -1,3 +1,4 @@
+// build date:Mon Dec 03 22:39:45 GMT+08:00 2018
 
 ajaxjs = aj = function(cssSelector, fn) {
 return Element.prototype.$.apply(document, arguments);
@@ -54,6 +55,16 @@ if (_arg && typeof _arg == fnToken && _arg.late == true)
 args[i] = _arg.apply(scope || this, args);
 }
 return self.apply(scope || this, args);
+};
+}
+Function.prototype.after = function(composeFn, isForceCall, scope) {
+var self = this;
+return function() {
+var result = self.apply(scope || this, arguments);
+if (isForceCall) {
+return composeFn.call(this, result);
+}
+return result && (typeof result.pop != 'undefined')&& (typeof result.pop != 'unknown') ? composeFn.apply(this, result) : composeFn.call(this, result);
 };
 }
 ajaxjs.params = {
@@ -302,8 +313,260 @@ fn.$ += "+'"+p[p.length-1].replace(/\'/g,"\\'").replace(/\r\n/g, '\\n').replace(
 fn.$ += ";return $;";
 }
 return data ? fn(data) : fn;
+}ajaxjs.tab = function(cfg) {
+ajaxjs.apply(this, cfg);
+var mover = this.el.querySelector(this.moverTagName || 'div');
+var children = mover.children, len = children.length;
+var stepWidth = this.stepWidth || mover.parentNode.clientWidth || window.innerWidth; 
+if(this.isMagic) 
+mover.style.width = this.isUsePx ? (stepWidth * 2) +'px' : '200%';
+else
+mover.style.width = this.isUsePx ? (stepWidth * len) +'px' : len + '00%';
+var tabWidth = this.isUsePx ? stepWidth + 'px' : (1 / len * 100).toFixed(5) + '%';
+for(var i = 0; i < len; i++) 
+children[i].style.width = this.isMagic ? '50%' : tabWidth;
+this.isUsePx && ajaxjs.throttle.init(onResize.bind(this));
+this.tabHeader = this.el.$('header');
+if (this.tabHeader && !this.disableTabHeaderJump)
+this.tabHeader.onclick = onTabHeaderPress.bind(this);
+var isWebkit = navigator.userAgent.toLowerCase().indexOf('webkit') != -1;
+this.go = function(i) {
+if(this.isGetCurrentHeight) {
+for(var p = 0; p < len; p++) {
+if(i == p) {
+this.children[p].style.height = 'initial';	
+}else{
+this.children[p].style.height = '1px';	
 }
-
+}
+}
+if(this.isMagic) {
+for(var p = 0; p < len; p++) {
+if(this.currentIndex == p) {
+continue;
+}else if(i == p) {
+children[p].classList.remove('hide');
+}else {	
+children[p].classList.add('hide');
+}
+}
+var cssText = i > this.currentIndex
+? 'translate3d({0}, 0px, 0px)'.replace('{0}', '-50%')
+: 'translate3d({0}, 0px, 0px)'.replace('{0}', '0%');
+mover.style.webkitTransition = '-webkit-transform 400ms linear';
+mover.style.webkitTransform = cssText;
+}else{
+var leftValue = this.isUsePx ? ('-' + (i * stepWidth) + 'px') : ('-' + (1 / len * 100 * i).toFixed(2) + '%');
+mover.style[isWebkit ? 'webkitTransform' : 'transform'] = 'translate3d({0}, 0px, 0px)'.replace('{0}', leftValue);
+}
+this.currentIndex = i;
+this.onItemSwitch && this.onItemSwitch.call(this, i, children[i]);
+}
+this.goPrevious = function() {
+this.currentIndex--;
+if (this.currentIndex < 0)this.currentIndex = len - 1;
+this.go(this.currentIndex); 
+}
+this.goNext = function() {
+this.currentIndex++;
+if (this.currentIndex == len)this.currentIndex = 0; 
+this.go(this.currentIndex);
+}
+this.loop = function() {
+if(this.isEnableLoop)
+this.loopTimer = window.setInterval(this.goNext.bind(this), this.autoLoop);
+}
+this.goTab = function(index) {
+onTabHeaderPress.call(this, {
+target : this.el.querySelectorAll('header ul li')[index]
+});
+}
+function onResize() {
+var stepWidth = mover.parentNode.clientWidth; 
+mover.style.width = this.isUsePx ? (stepWidth * len) +'px' : len + '00%';
+for(var i = 0; i < len; i++) 
+children[i].style.width = stepWidth + 'px';
+}
+function onTabHeaderPress(e) {
+var target = e.target,
+li = target.tagName == 'LI' ? target : target.up('li');
+if(!li)return;
+var arr = this.tabHeader.$('ul').children, index;
+for(var i = 0, j = arr.length; i < j; i++) {
+if(li == arr[i]) {
+arr[i].classList.add('active');
+index = i;
+} else
+arr[i].classList.remove('active');
+}
+this.go(index);
+this.currentIndex = index;
+var nextItem = children[index]; 
+this.onTabHeaderSwitch && this.onTabHeaderSwitch.call(this, li, nextItem, target, index);
+autoHeight.call(this, nextItem);
+}
+function autoHeight(nextItem) {
+if(this.autoHeight) {
+var tabHeaderHeight = 0;
+if(this.tabHeader) 
+tabHeaderHeight = this.tabHeader.scrollHeight;
+this.el.style.height = (nextItem.scrollHeight + tabHeaderHeight + 50) + 'px'; 
+}
+}
+}
+ajaxjs.tab.prototype = {
+isMagic : false,
+isUsePx : false,
+autoHeight : false,
+disableTabHeaderJump : false, 
+isGetCurrentHeigh : true,
+currentIndex : 0,
+autoLoop : 4000,
+initFirstTab : function() {
+this.goTab(0);
+}
+};
+ajaxjs.banner = function(cfg) {
+cfg.isUsePx = true; 
+cfg.isEnableLoop = true;
+cfg.isGetCurrentHeight = false;
+ajaxjs.tab.call(this, cfg);
+this.initIndicator = function() {
+var ol = this.el.$('ol');
+this.onItemSwitch = function(index) {
+if (ol) ol.$('li', function(li, i) {
+if(index == i) 
+li.classList.add('active');
+else
+li.classList.remove('active');
+});
+}
+var self = this;
+ol.onclick = function(e) {
+var el = e.target;
+if(el.tagName != 'LI')return;
+if (ol) ol.$('li', function(li, i) {
+if(el == li) {
+self.go(i);
+return;
+}
+});
+}
+}
+this.loop();
+this.initIndicator();
+}
+ajaxjs.banner.prototype = ajaxjs.tab.prototype;
+ajaxjs.list = function(cfg) {
+ajaxjs.apply(this, cfg);
+var args = {};
+args.start = 0;
+args.limit = 10;
+this.baseParam && ajaxjs.apply(args, this.baseParam);
+if (!this.jsonInit)
+this.jsonInit = function(json) { 
+if (json) {
+if (!json.isOk) 
+ajaxjs.alert(json.msg || '执行失败！原因未知！');
+} else {
+ajaxjs.alert('ServerSide Error!');
+}
+return {
+data : json.result,
+total : json.total
+};
+}
+this.load = function() {
+ajaxjs.xhr.get(this.url, function(json) {
+var result = this.jsonInit(json);
+var data = result.data;
+renderer.call(this, data);
+args.start += args.limit;
+this.afterDataLoad && typeof this.afterDataLoad == 'function' && this.afterDataLoad.call(this, result);
+}.bind(this), args);
+}
+function renderer(data) {
+if (!data || data.length <= 0)
+return; 
+var lis = [];
+for (var i = 0; i < data.length; i++) {
+var _data = this.renderer ? this.renderer(data[i]) : data[i]; 
+if (_data === false)
+continue; 
+var li = tppl(this.tpl, _data);
+if (this.isAppend) { 
+var loadingIndicator = this.el.$('.loadingIndicator');
+if (loadingIndicator) 
+this.el.removeChild(loadingIndicator);
+var temp = document.createElement('div');
+temp.innerHTML = li;
+this.el.appendChild(temp.$('li'));
+temp = null;
+} else {
+lis.push(li);
+}
+}
+if (!this.isAppend)
+this.el.innerHTML = lis.join('');
+}
+function getCellRequestWidth() {
+window.devicePixelRatio = window.devicePixelRatio || 1;
+var screenWidth = window.innerWidth; 
+var columns = 3; 
+var cellWidth = screenWidth * ( 1 / columns );
+var cellHight = cellWidth / (4 / 3); 
+var reqeustWidth = cellWidth * window.devicePixelRatio;
+reqeustWidth = Math.floor(reqeustWidth);
+var MaxWidth = 500;
+return reqeustWidth;
+}
+function autoHeight() {
+var firstHeight = arguments.callee.firstHeight;
+for(var i = 0 , j = imgs.length; i < j; i++) {
+var imgObj = imgs[i];
+console.log(imgObj.el.complete);
+if(i == 0 && !firstHeight)
+firstHeight = arguments.callee.firstHeight = imgObj.el.height;
+else
+imgObj.el.height = firstHeight;
+}
+}
+function fixImgHeigtBy() {
+window.innerWidth * 0.3 / 1.333
+}
+}
+ajaxjs.list.thumbFadeIn = function() {
+var imgs = [];
+this.el.$('img[data-src^="https://"]', function(img, index) {
+img.onload = function(){ this.classList.add('tran') };
+imgs.push({
+index : index, 
+el : img,	
+src : img.getAttribute('data-src') 
+});
+});
+Step(function() {
+for(var i = 0 , j = imgs.length; i < j; i++) {
+if(imgs[i].src) {
+var img = new Image();
+img.onload = this.parallel();	
+img.src = imgs[i].src;
+}
+}
+}, function() {
+var i = 0;
+var nextStep = this;
+var id = setInterval(function() {
+var imgObj = imgs[i++];
+imgObj.el.src = imgObj.src;
+if(i == imgs.length) {
+clearInterval(id);
+nextStep();
+}
+}, 300);
+}, function() {
+});
+}
 Vue.component('ajaxjs-admin-header', {
 props : {
 isCreate : Boolean,	
@@ -396,8 +659,7 @@ if (json.isOk) {
 status : status
 });
 }
-};
-aj._carousel = {
+};aj._carousel = {
 props : {
 isMagic : {	
 type : Boolean,
@@ -452,11 +714,13 @@ if(this.$isStop)
 return;
 var children = this.$el.$('header ul').children;
 var contentChild = this.$el.$('.content').children;
+if(children && contentChild && children[oldIndex] && contentChild[oldIndex]) {
 children[oldIndex].classList.remove('active');
 contentChild[oldIndex].classList.remove('active');
 children[index].classList.add('active');
 contentChild[index].classList.add('active');
 this.go(index);
+}
 }
 },
 methods : {
@@ -635,7 +899,6 @@ return '<a href="' + href + '">' + content + '</a>';
 }
 }
 });
-
 Vue.component('aj-page-captcha', {
 props : {
 imgSrc : {
@@ -1191,8 +1454,7 @@ domElement = domElement.offsetParent;
 }
 return pos;
 }
-}
-aj._simple_marquee_text = {
+}aj._simple_marquee_text = {
 props : {
 interval : {
 type : Number, 
@@ -1298,7 +1560,6 @@ el.scrollTop -= height;
 }
 }
 });
-
 Vue.component('aj-accordion-menu', {
 template : '<ul class="aj-accordion-menu" @click="onClk($event);"><slot></slot></ul>',
 methods : {
@@ -1747,7 +2008,73 @@ document.documentElement.scrollTop = document.body.scrollTop = top + speed;
 }
 }
 });
-
+Vue.component('aj-process-line', {
+template :
+'<div class="aj-process-line">\
+<div class="process-line">\
+<div v-for="(item, index) in items" :class="{current : index == current, done : index < current}">\
+<span>{{index + 1}}</span><p>{{item}}</p>\
+</div>\
+</div>\
+</div>',
+props : {
+items : {
+type: Array,
+default : function() { 
+return ['Step 1', 'Step 2', 'Step 3']; 
+}
+}
+},
+data : function() {
+return {
+current : 0
+}
+},
+methods: {
+go : function(i) {
+this.current = i;
+},
+perv: function() {
+var perv = this.current - 1;
+if (perv < 0)
+perv = this.items.length - 1;
+this.go(perv); 
+},
+next: function() {
+var next = this.current + 1;
+if (this.items.length == next)
+next = 0; 
+this.go(next);
+}
+}
+});
+aj.imageEnlarger = function() {
+var vue = new Vue({
+el : document.body.appendChild(document.createElement('div')),
+template: 
+'<div class="aj-image-large-view">\
+<div style="position: fixed;max-width:400px;transition: top ease-in 200ms, left ease-in 200ms;">\
+<img :src="imgUrl" style="width: 100%;" />\
+</div></div>',
+data : {
+imgUrl: null
+},
+mounted: function(){
+document.addEventListener('mousemove', this.move.bind(this), false);
+},
+methods: {
+move: function(e) {
+if(this.imgUrl) {
+var el = this.$el.$('div');
+el.style.top = (e.pageY + 20)+ 'px';
+el.style.left = (e.pageX - el.clientWidth) + 'px';
+}
+}
+}
+});
+aj.imageEnlarger.singleInstance = vue; 
+return vue;
+}
 ;(function() {
 ajaxjs.tree = function() {
 this.initData();
@@ -1758,11 +2085,6 @@ this.stack = [];
 this.tree = {};
 },
 makeTree : function (jsonArray) {
-if(this.isWebkit) {
-for (var i = 0; i < jsonArray.length; i++) {
-jsonArray[i].oldIndex = i;
-}
-}
 for (var i = 0, j = jsonArray.length; i < j; i++) {
 var n = jsonArray[i];
 var parentNode = findParent(this.tree, n.pid);
@@ -1811,11 +2133,6 @@ return result;
 }
 }
 return null;
-}
-var sortByPid = this.isWebkit ? function (a, b) {
-return b.v - a.v || b.oldIndex - a.oldIndex; 
-} : function (a, b) {
-return a.pid > b.pid;
 }
 ajaxjs.tree.selectUI = function() {
 ajaxjs.tree.call(this);
@@ -1868,8 +2185,7 @@ methods : {
 load : function(json) {
 var catalogArr = json.result;
 var selectUI = new ajaxjs.tree.selectUI();
-var select = aj('select');
-selectUI.renderer(catalogArr, select, this.selectedCatelogId, {makeAllOption : false});
+selectUI.renderer(catalogArr, this.$el, this.selectedCatelogId, {makeAllOption : false});
 },
 onSelected : function(e) {
 if(this.isAutoJump) {
@@ -1881,7 +2197,6 @@ this.BUS.$emit('aj-tree-catelog-select-change', e, this);
 }
 }
 });
-
 Vue.component('ajaxjs-file-upload', {
 data : function() {
 return {
@@ -2160,24 +2475,392 @@ data : function() {
 return {
 isFileSize : false,	
 isExtName : false,	
+isImgSize : false, 
 errMsg : null,	
-newlyId : null	
+newlyId : null,	
+radomId : Math.round(Math.random() * 1000),	
+uploadOk_callback: ajaxjs.xhr.defaultCallBack,	
+imgBase64Str : null	
 };
 },
 props : {
+action : {
+type : String, 
+required: true
+}, 
 fieldName : String, 
 limitSize : Number,
-limitFileType: String
+limitFileType: String,
+accpectFileType: String,
+isImgUpload : Boolean, 
+imgPlace : String,	
+imgMaxWidth : {type : Number, default : 1920},
+imgMaxHeight: {type : Number, default : 1680}
 },
 template : 
-'<div class="ajaxjs-file-upload">\
-<div class="pseudoFilePicker">\
-<label for="input_file_molding"><div><div>+</div>点击选择文件</div></label>\
+'<div class="aj-xhr-upload">\
+<div v-if="isImgUpload">\
+<img class="upload_img_perview" :src="(isFileSize && isExtName && imgBase64Str) ? imgBase64Str : imgPlace" />\
 </div>\
-<input type="file" :name="fieldName" />\
+<div class="pseudoFilePicker">\
+<label :for="\'uploadInput_\' + radomId"><div><div>+</div>点击选择{{isImgUpload ? \'图片\': \'文件\'}}</div></label>\
+</div>\
+<input type="file" :name="fieldName" class="hide" :id="\'uploadInput_\' + radomId" @change="onUploadInputChange($event)" :accept="isImgUpload ? \'image/*\' : accpectFileType" />\
 <div v-if="!isFileSize || !isExtName">{{errMsg}}</div>\
 <div v-if="isFileSize && isExtName">\
-<button @click.prevent="doUpload($event);">上传</button>\
+<button @click.prevent="doUpload();" style="min-width:110px;">上传</button>\
 </div>\
 </div>',
+methods : {
+onUploadInputChange : function(e) {
+var fileInput = e.target;
+var ext = fileInput.value.split('.').pop(); 
+if(!fileInput.files || !fileInput.files[0]) return;
+this.$fileObj = fileInput.files[0]; 
+var size = fileInput.files[0].size;
+if(this.limitSize) {
+this.isFileSize = size < this.limitSize;
+this.errMsg = "要上传的文件容量过大，请压缩到 " + this.limitSize + "kb 以下";
+} else
+this.isFileSize = true;
+if(this.limitFileType) {
+this.isExtName = new RegExp(this.limitFileType, 'i').test(ext);
+this.errMsg = '根据文件后缀名判断，此文件不能上传';	
+} else
+this.isExtName = true;
+this.readBase64(fileInput.files[0]);
+if(self.isImgUpload) {
+var imgEl = new Image();
+imgEl.onload = function() {
+if (imgEl.width > self.imgMaxWidth || imgEl.height > self.imgMaxHeight) {
+cfg.isImgSize = false;
+self.errMsg = '图片大小尺寸不符合要求哦，请重新图片吧~';
+} else {
+cfg.isImgSize = true;
+}
+}
+}
+},
+readBase64 : function(file) {
+var reader = new FileReader(), self = this;
+reader.onload = function(e) {
+var imgBase64Str = e.target.result;
+self.imgBase64Str = imgBase64Str;
+if(self.isImgUpload) {
+var imgEl = new Image();
+imgEl.onload = function() {
+if (imgEl.width > self.maxWidth || imgEl.height > self.maxHeight) {
+self.isImgSize = false;
+self.errMsg = '图片大小尺寸不符合要求哦，请重新图片吧~';
+} else {
+self.isImgSize = true;
+}
+}
+imgEl.src = imgBase64Str;
+var imgHeader = {
+"jpeg" : "/9j/4",
+"gif" : "R0lGOD",
+"png" : "iVBORw"
+};
+for ( var i in imgHeader) {
+if (~imgBase64Str.indexOf(imgHeader[i])) {
+self.isExtName = true;
+return;
+}
+}
+self.errMsg = "亲，改了扩展名我还能认得你不是图片哦";
+}
+}
+reader.readAsDataURL(file);
+},
+doUpload : function() {
+var fd = new FormData();
+fd.append("file", this.$fileObj);
+var xhr = new XMLHttpRequest();
+xhr.onreadystatechange = ajaxjs.xhr.callback.delegate(null, this.uploadOk_callback, 'json');
+xhr.open("POST", this.action, true);
+xhr.send(fd);
+},
+}
 });
+function renderRadio(scheme, namespaces, tip, value) {
+var t = '[: for (var i=0;i<list.length;i++) { :]\
+<label><input type="radio" value="[:=list[i].value:]" name="[:=list[i].name:]" data-note="[:=list[i].dataNote:]" [:=list[i].checked ? "checked" : "":] />\
+[:=list[i].text:] </label>\
+[:}:]';
+var arr = [];
+for(var i = 0, j = scheme.option.length; i < j; i++) {
+var item = scheme.option[i];
+var _arr = item.split('=');
+var checked = value == getRealValue(_arr[0]); 
+arr.push({
+name : namespaces,
+value: _arr[0],
+text : _arr[1],
+dataNote: tip,
+checked : checked
+});
+}
+return tppl(t, {
+list : arr
+});
+}
+function renderCheckbox(scheme, namespaces, tip, value) {
+var checkboxTpl = '<input type="hidden" name="[:=namespaces:]" value="[:=totalValue:]" />\
+[: for (var i=0;i<list.length;i++) { :]\
+<label><input type="checkbox" value="[:=list[i].value:]" data-name="[:=list[i].name:]" data-note="[:=list[i].dataNote:]" [:=list[i].checked ? "checked" : "":] />\
+[:=list[i].text:]</label> \
+[:}:]';
+var arr = [];
+for(var i = 0, j = scheme.option.length; i < j; i++) {
+var item = scheme.option[i];
+var _arr = item.split('=');
+var checked = isChecked(value, getRealValue(_arr[0])); 
+arr.push({
+name : namespaces,
+value: _arr[0],
+text : _arr[1],
+dataNote: tip,
+checked : checked
+});
+}
+return tppl(checkboxTpl, {
+namespaces:namespaces,
+totalValue : value,
+list : arr
+});
+}
+function initHtmlEditor(li, value, namespaces) {
+setTimeout(function() {
+var htmlEditor = new ajaxjs_HtmlEditor(li.querySelector('.htmlEditor'));
+htmlEditor.setValue(value);
+htmlEditor.sourceEditor.name = namespaces;
+htmlEditor.sourceEditor.value = value;
+}, 0);
+}
+function renderSelect(scheme, namespaces, tip, value) {
+var tpl = '<select name="[:=namespaces:]" data-note="[:=dataNote:]" />\
+[: for (var i=0;i<list.length;i++) { :]\
+<option value="[:=list[i].value:]" [:=list[i].checked ? "selected" : "":]>\
+[:=list[i].text:]</option> \
+[:}:]</select>';
+var arr = [];
+for(var i = 0, j = scheme.option.length; i < j; i++) {
+var item = scheme.option[i];
+var _arr = item.split('=');
+var checked = value == getRealValue(_arr[0]); 
+arr.push({
+value: _arr[0],
+text : _arr[1],
+checked : checked
+});
+}
+return tppl(tpl, {
+namespaces:namespaces,
+dataNote: tip,
+list : arr
+});
+}
+var tree = aj('.tree');
+function isMap(v) {
+return typeof v == 'object' && v != null;
+}
+var stack = [];
+function it(json, fn, parentEl) {
+stack.push(json);
+var ul = document.createElement('ul');
+ul.style.paddingLeft = (stack.length * 10) + "px";
+if (stack.length != 1) {
+ul.className = 'subTree';
+ul.style.height = '0';
+}
+for ( var i in json) {
+var el = json[i];
+var li = document.createElement('li');
+if (isMap(el)) {
+var div = document.createElement('div'); 
+div.className = 'parentNode';
+div.innerHTML = '+' + i;
+div.onclick = toggle;
+li.appendChild(div);
+it(el, fn, li);
+} else {
+var namespaces = getParentStack(stack); 
+if (namespaces)
+namespaces += '.' + i;
+else
+namespaces = i;
+try {
+var scheme = eval('jsonScheme.' + namespaces);
+var tip = makeTip(scheme);
+} catch (e) {
+var scheme = {
+ui : 'input_text'
+};
+var tip = '';
+}
+var html = '<div class="valueHolder">';
+if(!scheme){ 
+continue;
+}
+switch (scheme.ui) {
+case 'textarea':
+html += '<textarea name="'+namespaces+'">' + el + '</textarea>';
+break;
+case 'htmlEditor':
+break;
+case 'checkbox':
+html += renderCheckbox(scheme, namespaces, tip, el);
+break;
+case 'radio':
+html += renderRadio(scheme, namespaces, tip, el);
+break;
+case 'select':
+html += renderSelect(scheme, namespaces, tip, el);
+break;
+case 'input_text':
+default:
+html += '<input name="' + namespaces + '" type="text" value="' + el + '" data-note="' + tip + '" />';
+}
+html += ('</div>'+ (scheme.name || '') + ' ' + i);
+li.innerHTML = html;
+fn(i, el);
+}
+ul.appendChild(li);
+}
+stack.pop();
+parentEl.appendChild(ul);
+}
+function getRealValue(v) {
+switch(v) {
+case 'null':
+case 'true':
+case 'false':
+return eval(v);
+}
+if((Number(v) + "") == v)
+return Number(v);
+return v;
+}
+function isChecked(value, itemValue) {
+return (value & itemValue) == itemValue;
+}
+function getParentStack(stack) {
+var names = [];
+var last;
+for (var i = stack.length; i > 0; i--) {
+last = stack[i];
+if (last) {
+var map = stack[i - 1];
+for ( var j in map) {
+if (map[j] == last) {
+names.push(j);
+}
+}
+}
+}
+return names.reverse().join('.');
+}
+function makeTip(scheme) {
+if (!scheme || !scheme.name || !scheme.tip)
+return '';
+var html = scheme.name.bold();
+html += '<br />' + scheme.tip;
+return html;
+}
+function toggle(e) {
+var div = e.target;
+var ul = div.parentNode.$('ul');
+if (ul.style.height == '0px') {
+div.innerHTML = div.innerHTML.replace('+', '-');
+ul.style.height = ul.scrollHeight + 'px';
+setTimeout(function() {
+ul.style.height = 'auto'; 
+}, 500);
+} else {
+div.innerHTML = div.innerHTML.replace('-', '+');
+ul.style.height = '0px';
+}
+}
+it(configJson, function(item, v) {
+}, tree);
+function getList(formEl, fn) {
+var list = [];
+function add(el) {
+list.push(el);
+}
+var forEach = [].forEach;
+forEach.call(formEl.querySelectorAll('input'), add);
+forEach.call(formEl.querySelectorAll('select'), add);
+forEach.call(formEl.querySelectorAll('textarea'), add);
+list.forEach(fn);
+}
+var isIn = false;
+function everyInput(input) {
+input.onfocus = function(e) {
+var el = e.currentTarget;
+isIn = true;
+var tipsNote = el.dataset.note;
+if (tipsNote) {
+var tipsNoteEl = document.querySelector('.tipsNote');
+tipsNoteEl.querySelector('span').innerHTML = tipsNote;
+tipsNoteEl.style.top = (el.offsetTop - 10) + 'px';
+tipsNoteEl.classList.remove('hide');
+}
+}
+input.onblur = function(e) {
+setTimeout(function() {
+if (!isIn)
+document.querySelector('.tipsNote').classList.add('hide');
+}, 5000);
+isIn = false;
+}
+}
+getList(tree, everyInput);
+var oldData;
+setTimeout(function() {
+oldData = {};
+new FormData(document.querySelector('form')).forEach(function(value, key) {
+oldData[key] = value;
+});
+}, 200);
+function getDiffent() {
+var needsTo8421 = [ 'user.login.loginType', 'user.login.passWordLoginType']; 
+for (var i = 0, j = needsTo8421.length; i < j; i++)
+code8421(needsTo8421[i]);
+var htmlEditorTextareas = document.querySelectorAll('.htmlEditorTextarea');
+for (var i = 0, j = htmlEditorTextareas.length; i < j; i++) {
+var htmlEditorTextarea = htmlEditorTextareas[i];
+htmlEditorTextarea.value = htmlEditorTextareas[0].previousElementSibling.contentWindow.document.body.innerHTML;
+}
+var different = {};
+var formData = new FormData(document.querySelector('form'));
+formData.forEach(function(value, key) {
+if (oldData[key] != value) {
+different[key] = value;
+}
+});
+return different;
+}
+function save() {
+var data = getDiffent();
+console.log(data);
+if (Object.keys(data).length) {
+ajaxjs.xhr.post('?', function(json) {
+if (json && json.isOk)
+aj.alert.show('修改配置成功！');
+}, data);
+} else{
+aj.alert.show('没任何修改');
+}
+}
+function code8421(key) {
+var arr = document.querySelectorAll('input[data-name="' + key + '"]');
+var total = 0;
+for (var i = 0, j = arr.length; i < j; i++) {
+if (arr[i].checked) {
+total += Number(arr[i].value);
+}
+}
+document.querySelector('input[name="' + key + '"]').value = total;
+}

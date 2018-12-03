@@ -93,8 +93,8 @@
 <%}else { %>
 	<link rel="stylesheet" type="text/css" href="${ctx}/asset/css/${empty param.lessFile ? 'main' : param.lessFile.replaceAll("(?:.*/)(\\w+).less", "$1")}.css" />
 
-    <script src="${ajaxjsui}/js/libs/vue.min.js"></script>
-    <script src="${ajaxjsui}/output/all.js"></script>
+    <script src="${ctx}/ajaxjs-ui-output/libs/vue.min.js"></script>
+    <script src="${ctx}/ajaxjs-ui-output/all.js"></script>
 <%} %>
 	
    	<script>
@@ -103,7 +103,7 @@
    			Vue.prototype.ajResources = {
 	   			ctx : '${ctx}',
 	   			commonAsset : '${ajaxjsui}/asset/common',
-	   			libraryUse : '${ajaxjsui}/asset/common/resources' // 庫使用的資源
+	   			libraryUse  : '${ajaxjsui}/asset/common/resources' // 庫使用的資源
    			};
    			
    			Vue.prototype.BUS = new Vue();
@@ -111,7 +111,7 @@
    		
    		Vue.use(aj.Vue);
    		
-   		window.addEventListener('load', function() {
+   		window.addEventListener('load', function() { // 页面渐显效果
 			document.body.classList.add('active');
 		});
    	</script>
