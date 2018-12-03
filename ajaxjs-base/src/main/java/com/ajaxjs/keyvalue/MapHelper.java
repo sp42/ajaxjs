@@ -17,6 +17,7 @@ package com.ajaxjs.keyvalue;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
@@ -315,5 +316,19 @@ public class MapHelper {
 			_map.put(key, map.get(key));
 
 		return _map;
+	}
+	
+	/**
+	 * 判断 map 非空，然后根据 key 获取 value，若 value 非空则作为参数传入函数接口 s
+	 * @param map
+	 * @param key
+	 * @param s
+	 */
+	public static <T> void getValue(Map<String, T> map, String key, Consumer<T> s) {
+		if(map != null) {
+			T value = map.get(key);
+			if(value != null) 
+				s.accept(value);
+		}
 	}
 }
