@@ -1,7 +1,7 @@
 <%@tag pageEncoding="UTF-8"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
 <%@attribute name="left" required="true" fragment="true" description="插入左侧菜单内容"%>
-<%@attribute name="body" required="true" fragment="true"description="插入正文内容"%>
+<%@attribute name="body" required="true" fragment="true" description="插入正文内容"%>
 <%@attribute name="banner" required="true" type="String" description="Banner 图片"%>
 <%@attribute name="bodyClass" required="false" type="String" description="body 标签样式"%>
 <!DOCTYPE html>
@@ -11,7 +11,7 @@
 </head>
 <body class="${bodyClass}">
 	<div class="top">
-		<commonTag:page type="navMenu2" />
+		<%@include file="/WEB-INF/jsp/public/nav.jsp" %>
 	</div>
 
 	<div class="centerWidth">
@@ -29,6 +29,7 @@
 		</div>
 	</div>
 	<div class="bottom">
+	<%@include file="/WEB-INF/jsp/public/footer.jsp" %>
 	</div>
 </body>
 </html>
