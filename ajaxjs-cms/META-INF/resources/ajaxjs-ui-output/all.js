@@ -1,4 +1,4 @@
-// build date:Mon Dec 03 22:39:45 GMT+08:00 2018
+// build date:Tue Dec 04 10:20:03 GMT+08:00 2018
 
 ajaxjs = aj = function(cssSelector, fn) {
 return Element.prototype.$.apply(document, arguments);
@@ -313,7 +313,8 @@ fn.$ += "+'"+p[p.length-1].replace(/\'/g,"\\'").replace(/\r\n/g, '\\n').replace(
 fn.$ += ";return $;";
 }
 return data ? fn(data) : fn;
-}ajaxjs.tab = function(cfg) {
+}
+ajaxjs.tab = function(cfg) {
 ajaxjs.apply(this, cfg);
 var mover = this.el.querySelector(this.moverTagName || 'div');
 var children = mover.children, len = children.length;
@@ -567,6 +568,8 @@ nextStep();
 }, function() {
 });
 }
+
+
 Vue.component('ajaxjs-admin-header', {
 props : {
 isCreate : Boolean,	
@@ -659,7 +662,8 @@ if (json.isOk) {
 status : status
 });
 }
-};aj._carousel = {
+};
+aj._carousel = {
 props : {
 isMagic : {	
 type : Boolean,
@@ -899,6 +903,7 @@ return '<a href="' + href + '">' + content + '</a>';
 }
 }
 });
+
 Vue.component('aj-page-captcha', {
 props : {
 imgSrc : {
@@ -1259,6 +1264,7 @@ return h;
 }
 }
 });
+
 aj._list = {
 props : {
 apiUrl : {	
@@ -1454,7 +1460,8 @@ domElement = domElement.offsetParent;
 }
 return pos;
 }
-}aj._simple_marquee_text = {
+}
+aj._simple_marquee_text = {
 props : {
 interval : {
 type : Number, 
@@ -1560,6 +1567,7 @@ el.scrollTop -= height;
 }
 }
 });
+
 Vue.component('aj-accordion-menu', {
 template : '<ul class="aj-accordion-menu" @click="onClk($event);"><slot></slot></ul>',
 methods : {
@@ -1662,6 +1670,7 @@ this.selected = index;
 }
 }
 });
+
 
 document.addEventListener("DOMContentLoaded", function() {
 document.body.appendChild(document.createElement('div')).className = 'alertHolder';
@@ -1776,6 +1785,7 @@ aj.alert.$options.methods.close.apply(this, arguments);
 }
 }
 });
+
 
 Vue.component('aj-page-fullscreen-loading-indicator', {
 template : '<div class="aj-fullscreen-loading"></div>',
@@ -2075,6 +2085,7 @@ el.style.left = (e.pageX - el.clientWidth) + 'px';
 aj.imageEnlarger.singleInstance = vue; 
 return vue;
 }
+
 ;(function() {
 ajaxjs.tree = function() {
 this.initData();
@@ -2197,6 +2208,7 @@ this.BUS.$emit('aj-tree-catelog-select-change', e, this);
 }
 }
 });
+
 Vue.component('ajaxjs-file-upload', {
 data : function() {
 return {
@@ -2583,6 +2595,8 @@ xhr.send(fd);
 },
 }
 });
+
+
 function renderRadio(scheme, namespaces, tip, value) {
 var t = '[: for (var i=0;i<list.length;i++) { :]\
 <label><input type="radio" value="[:=list[i].value:]" name="[:=list[i].name:]" data-note="[:=list[i].dataNote:]" [:=list[i].checked ? "checked" : "":] />\
@@ -2661,6 +2675,7 @@ dataNote: tip,
 list : arr
 });
 }
+
 var tree = aj('.tree');
 function isMap(v) {
 return typeof v == 'object' && v != null;
