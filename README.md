@@ -2,6 +2,9 @@
 =============
 ### 特点：全栈 、轻量级、函数式和响应式编程。
 
+[![License](https://img.shields.io/badge/license-Apache--2.0-green.svg?longCache=true&style=flat)](http://www.apache.org/licenses/LICENSE-2.0.txt)
+[![Email](https://img.shields.io/badge/Contact--me-Email-orange.svg)](mailto:support@ajaxjs.com)
+
 本框架早期是前端的，故名曰 ajax-js，后打算定位为全栈框架（基于 Java）。前端提供了常见的 UI 组件，后端提供 IOC/AOP/ORM/MVC/REST 等特性，支持 Map/POJO 的 CRUD 服务，基于 DAO/Service/Controller 分层。
 
 - 前端：[Vue.js](https://cn.vuejs.org/)（MVVM+组件化） + [LESS.js](http://lesscss.org/)
@@ -34,6 +37,7 @@ AJAXJS 很少第三方的库或包依赖。功能不算很多，但应该较为�
 ----------
 
 - 官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/)  
+- 源码  [https://gitee.com/sp42_admin/ajaxjs](https://gitee.com/sp42_admin/ajaxjs) （支持 Git/SVN）
 - 博客 [http://blog.csdn.net/zhangxin09](http://blog.csdn.net/zhangxin09/) 
 - QQ 群 [3150067](//shang.qq.com/wpa/qunwpa?idkey=99415d164e2c776567c9370cc5b0bde26f4e2e7c5068978a24d1fe7c976ace93)
 - 邮箱 support@ajaxjs.com
