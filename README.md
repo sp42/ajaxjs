@@ -22,6 +22,7 @@ AJAXJS 很少第三方的库或包依赖。功能不算很多，但应该较为�
 |ajaxjs-cms|整个各个子项目的网站发布系统，[浏览项目 readme](ajaxjs-cms)|ajaxjs-data/ajaxjs-web|jar|
 |ajaxjs-demo|一个包含前后台的网站，可方便学习或作为快速手脚架，[浏览项目 readme](ajaxjs-demo)|ajaxjs-cms|war|
 |ajaxjs-tools|孵化室、测试代码、其他杂项工具|ajaxjs-web|war|
+|ajaxjs-officialwebite|官网静态网页|无|war|
 
 
 为方便管理，当前在一个 repository 中存放多个项目，且同时支持 Git/SVN 存取。如果您想单独检出某个项目，建议使用 SVN 然后指定目录检出。
