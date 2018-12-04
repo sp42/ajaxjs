@@ -1,4 +1,5 @@
-# AJAXJS Framework Base 基础库
+
+[![Maven Central](https://maven-badges-generator.herokuapp.com/maven-central/com.ajaxjs/ajaxjs-base/badge.svg)](https://maven-badges-generator.herokuapp.com/maven-central/${groupId}/${artifactId})# AJAXJS Framework Base 基础库
 
 AJAXJS Base 是一个小型的、快速可用的工具库，除了 Javassist 基本没有依赖其他第三方组件，为纯 Java 项目。有以下子模块：
 
