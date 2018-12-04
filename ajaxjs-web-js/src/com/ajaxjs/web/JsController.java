@@ -26,18 +26,20 @@ public class JsController extends HttpServlet {
 	/**
 	 * 保存位置
 	 */
-	static String output = "C:\\project\\ajaxjs-web\\META-INF\\resources\\ajaxjs-ui-output";
+	static String output = "C:\\project\\ajaxjs-cms\\META-INF\\resources\\ajaxjs-ui-output";
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String js = "// build date:" + new Date() + "\n";
-		js += JavaScriptCompressor.compress(read(mappath(request, "js/ajaxjs-base.js")));
-		js += JavaScriptCompressor.compress(read(mappath(request, "js/ajaxjs-list.js")));
-		js += action(mappath(request, "js/widgets/"), true);
-		js += action(mappath(request, "js/widgets/admin/"), true);
+		js += JavaScriptCompressor.compress(read(mappath(request, "js/ajaxjs-base.js"))) + "\n";
+		js += JavaScriptCompressor.compress(read(mappath(request, "js/ajaxjs-list.js"))) + "\n";
+		js += action(mappath(request, "js/widgets/"), true) + "\n";
+		js += action(mappath(request, "js/widgets/admin/"), true) + "\n";
 
 		save(output + "\\all.js", js);
 		response.getWriter().append("Pack js Okay.");
 	}
+
+	static String frontEnd = "C:\\project\\wstsq\\WebContent\\asset\\css";
 
 	/**
 	 * 压缩 CSS 并将其保存到一个地方
@@ -47,15 +49,15 @@ public class JsController extends HttpServlet {
 		String output = "";
 
 		try {
-			save(output + "\\all.css", css);
+			save(frontEnd + "\\main.css", css);
 
-			output = "json::{\"isOk\":true}";
+			output = "{\"isOk\":true}";
 		} catch (Throwable e) {
 			e.printStackTrace();
-			output = "json::{\"isOk\":false}";
+			output = "{\"isOk\":false}";
 		}
 
-		response.getWriter().append(output).append(request.getContextPath());
+		response.getWriter().append(output);
 	}
 
 	/**
@@ -77,6 +79,7 @@ public class JsController extends HttpServlet {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+				sb.append("\n");
 				sb.append(isCompress ? JavaScriptCompressor.compress(jsCode) : jsCode);
 			}
 		}
@@ -151,9 +154,8 @@ public class JsController extends HttpServlet {
 		if (!Files.exists(path))
 			Files.createFile(path);
 
+		System.out.println(path);
 		Files.write(path, content.getBytes());
-		String[] f = new String[] { "aa", "l434" };
-		System.out.println(String.join(",", f));
 
 	}
 }
