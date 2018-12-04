@@ -1,0 +1,308 @@
+@import 'common_style.less';
+@import 'widget/form.less';
+@import 'msgbox.less';
+.centerWidth {
+	margin: 0 auto;
+	max-width: 1200px;
+}
+
+body {
+	background-color: #f4f7fa;
+	font-size: 14px;
+}
+.logoPic{
+	height:80px;
+}
+.top {
+	background-color: white;
+	border-bottom: 1px solid #ddd;
+	header {
+		.centerWidth;
+		& > div {
+		}
+
+		.right {
+			float: right;
+			.globalSearch {
+				margin-top: 6%;
+				input[type=text] {
+					.ajaxjs-inputField;
+				}
+
+				.searchBtn {
+					background: url("@{assetFilePath}/common/images/search.png") no-repeat;
+					width: 32px;
+					height: 32px;
+					cursor: pointer;
+					float: right;
+					margin-left: 4px;
+				}
+			}
+		}
+
+		nav {
+			float: right;
+			width: 60%;
+			clear: right;
+			ul {
+				li {
+					float: left;
+					margin: 2% 4%;
+					font-size: 1rem;
+					&.selected a {
+						color: black;
+					}
+				}
+			}
+		}
+	}
+}
+
+h2 {
+	letter-spacing: 3px;
+}
+
+.body {
+	overflow: hidden;
+	width: 100%;
+	.left {
+		float: left;
+		border-right: 1px solid lightgray;
+		min-height: 500px;
+		width: 28%;
+		ul {
+			li {
+				padding: 5% 0;
+				border-bottom: 1px solid lightgray;
+				letter-spacing: 2px;
+				&.selected a {
+					color: black;
+					font-size: 1.1rem;
+				}
+			}
+		}
+	}
+
+	.right {
+		float: left;
+		width: 68%;
+		padding-left: 2%;
+	}
+}
+
+nav.anchor {
+	float: right;
+	margin: 1% 0;
+}
+
+h2.title {
+	margin: 2%;
+	letter-spacing: 2px;
+}
+
+// news 
+.newsList {
+	.list {
+		li {
+			overflow: hidden;
+			margin-bottom: 5%;
+			.thumb {
+				float: left;
+				margin-right: 3%;
+				width: 18%;
+				padding-top: 3%;
+			}
+
+			.text {
+				width: 78%;
+				float: left;
+				h4 {
+					font-size: 1.1rem;
+					letter-spacing: 3px;
+					margin-bottom: 1%;
+					font-weight: bold;
+				}
+
+				p {
+					color: #333;
+					letter-spacing: 1px;
+					text-align: justify;
+				}
+
+				.small {
+					text-align: right;
+					font-size: .8rem;
+					color: gray;
+					margin-top: 1%;
+				}
+			}
+		}
+	}
+}
+
+.hrList {
+	.right {
+		.box {
+			border: 1px solid lightgray;
+			margin-bottom: 2%;
+			header {
+				background-color: lightgray;
+				padding: 1%;
+				h4 {
+					font-size: 1.2rem;
+					letter-spacing: 2px;
+				}
+
+				h5 {
+					float: right;
+				}
+			}
+
+			& > div {
+				padding: 1%;
+			}
+		}
+	}
+}
+
+.productList {
+	.body .right {
+		ul {
+			.ajaxjs-ul-list (4);
+			li {
+				height: 300px;
+			}
+		}
+	}
+}
+
+.pageInfo {
+	text-align: center;
+	margin: 3%;
+}
+
+article {
+	h3 {
+		font-size: 1.5rem;
+		letter-spacing: 2px;
+		margin: 3% 0;
+	}
+
+	h4 {
+		text-align: right;
+	}
+
+	p {
+		.ajaxjs-text-p;
+	}
+}
+
+.bottom {
+	border-top: 1px solid #ddd;
+}
+
+footer {
+	.centerWidth;
+	text-align: center;
+	color: gray;
+	font-size: .8rem;
+}
+
+.home {
+	fieldset {
+		border: 1px solid lightgray;
+		width: 830px;
+		box-sizing: border-box;
+		padding: 2%;
+		margin-bottom: 3%;
+	}
+}
+
+// 联系我们
+.contact {
+	#map {
+		height: 320px;
+		width: 100%;
+		margin-bottom: 5%;
+	}
+
+	fieldset {
+		legend {
+			margin-left: 10%;
+			font-size: 1.1rem;
+			letter-spacing: 5px;
+		}
+
+		margin: 3% 0;
+		border: 0;
+		border-top: 1px solid lightgray;
+	}
+
+	form.feedback {
+		.ajaxjs-form;
+		dl dt {
+			width: 10%;
+		}
+
+		input , textarea {
+			.ajaxjs-inputField;
+		}
+
+		button {
+			.ajaxjs-btn;
+		}
+	}
+}
+
+.user-loign, .resetPassword {
+	fieldset {
+		border: 1px solid lightgray;
+		border-radius: 3px;
+		padding: 2%;
+		legend {
+			padding: 10px;
+			letter-spacing: 3px;
+			font-size: 1.2rem;
+		}
+	}
+
+	.login-form, form.register, form.resetPassword {
+		margin: 0 auto;
+		width: 400px;
+		input[type=text] , input[type=number] , input[type=password] {
+			.ajaxjs-inputField;
+		}
+
+		button {
+			.ajaxjs-btn;
+		}
+
+		& > div {
+			margin: 3% 0;
+			& > div {
+				display: inline-block;
+				width: 25%;
+				letter-spacing: 3px;
+			}
+		}
+
+		label {
+			& > div {
+				display: inline-block;
+				width: 25%;
+				letter-spacing: 3px;
+			}
+		}
+	}
+}
+
+.user-center{
+	height:98%;
+	&>div{
+		height:96%;
+		border-radius:10px;
+		padding:2%;
+		margin:1%;
+		background-color:lightgray;
+	}
+}
