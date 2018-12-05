@@ -21,7 +21,8 @@ config
 联系方式
 ----------
 
-- 官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/)  
+- 官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/)
+- 源码  [https://gitee.com/sp42_admin/ajaxjs](https://gitee.com/sp42_admin/ajaxjs) （支持 Git/SVN）
 - 博客 [http://blog.csdn.net/zhangxin09](http://blog.csdn.net/zhangxin09/) 
 - Q群 [3150067](//shang.qq.com/wpa/qunwpa?idkey=99415d164e2c776567c9370cc5b0bde26f4e2e7c5068978a24d1fe7c976ace93)
 - 邮箱 support@ajaxjs.com
