@@ -34,7 +34,7 @@ Maven 坐标：
 
 教程
 -----
-[参见 wiki](https://gitee.com/sp42_admin/ajaxjs/wikis)
+[参见 wiki](https://gitee.com/sp42_admin/ajaxjs/wikis) | [JavaDoc](https://framework.ajaxjs.com/framework/javadoc/ajaxjs-base/)
 
 
 单元测试覆盖率

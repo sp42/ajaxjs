@@ -1,3 +1,9 @@
+[![Maven Central](https://maven-badges-generator.herokuapp.com/maven-central/com.ajaxjs/ajaxjs-data/badge.svg)](https://maven-badges-generator.herokuapp.com/maven-central/com.ajaxjs/ajaxjs-data)
+![coverage](https://img.shields.io/badge/coverage-70%25-yellowgreen.svg?maxAge=2592000)
+[![License](https://img.shields.io/badge/license-Apache--2.0-green.svg?longCache=true&style=flat)](http://www.apache.org/licenses/LICENSE-2.0.txt)
+[![Email](https://img.shields.io/badge/Contact--me-Email-orange.svg)](mailto:support@ajaxjs.com)
+[![QQ群](https://framework.ajaxjs.com/framework/asset/qq.svg)](https://shang.qq.com/wpa/qunwpa?idkey=3877893a4ed3a5f0be01e809e7ac120e346102bd550deb6692239bb42de38e22)
+
 AJAXJS-Data 简介
 ===========
 AJAJX-Data 类似于 DBUtils 的数据库工具程序，但更为简单和干净，核心的类只有两个：JdbcHelper（不超过 600 行）和 DaoHandler（不超过 250 行）。
@@ -29,13 +35,14 @@ Maven 坐标：
 <dependency>
   <groupId>com.ajaxjs</groupId>
   <artifactId>ajaxjs-data</artifactId>
-  <version>1.0.8</version>
+  <version>${ajaxjs_data.version}</version>
 </dependency>
 ```
 
 教程
 ---------
-参见 [wiki](https://gitee.com/sp42_admin/ajaxjs/wikis/AJAXJS-Data%20%E6%95%B0%E6%8D%AE%E5%B1%82) 教程。
+参见 [wiki](https://gitee.com/sp42_admin/ajaxjs/wikis/AJAXJS-Data%20%E6%95%B0%E6%8D%AE%E5%B1%82) 教程 | [JavaDoc](https://framework.ajaxjs.com/framework/javadoc/ajaxjs-data/)
+
 
 
 鸣谢

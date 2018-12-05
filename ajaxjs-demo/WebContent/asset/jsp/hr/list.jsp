@@ -1,5 +1,4 @@
 <%@page pageEncoding="UTF-8"%>
-<%@taglib prefix="commonTag" tagdir="/WEB-INF/tags/common"%>
 <%@taglib prefix="tags" tagdir="/WEB-INF/tags/"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
 <tags:content banner="../images/news.jpg" bodyClass="hrList">
