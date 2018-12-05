@@ -27,9 +27,10 @@
 
 
 
-官网
-=========
-点击进入 [framework.ajaxjs.com](https://framework.ajaxjs.com]) 了解更多信息。
+
+教程
+---------
+参见 [wiki](https://gitee.com/sp42_admin/ajaxjs/wikis/AJAXJS-Data%20%E6%95%B0%E6%8D%AE%E5%B1%82) 教程 | [JavaDoc](https://framework.ajaxjs.com/framework/javadoc/ajaxjs-cms/)
 
 
 版权声明 LICENSE
