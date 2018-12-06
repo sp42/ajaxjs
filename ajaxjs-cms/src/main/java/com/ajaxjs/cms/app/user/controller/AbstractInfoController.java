@@ -10,6 +10,7 @@ import com.ajaxjs.cms.app.user.model.UserCommonAuth;
 import com.ajaxjs.cms.app.user.service.UserCommonAuthService;
 import com.ajaxjs.cms.model.Attachment_picture;
 import com.ajaxjs.framework.service.ServiceException;
+import com.ajaxjs.keyvalue.MappingJson;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.UploadFileInfo;
@@ -36,7 +37,7 @@ public abstract class AbstractInfoController extends BaseUserController {
 	public String resetPassword(String new_password, HttpServletRequest request) throws ServiceException {
 		LOGGER.info("重置密码");
 
-		if (getPasswordService() != null && getPasswordService().updatePwd((UserCommonAuth)request.getAttribute("UserCommonAuthId"), new_password))
+		if (getPasswordService() != null && getPasswordService().updatePwd((UserCommonAuth) request.getAttribute("UserCommonAuthId"), new_password))
 			return jsonOk("重置密码成功");
 		else
 			return jsonNoOk("重置密码失败！");
@@ -88,27 +89,24 @@ public abstract class AbstractInfoController extends BaseUserController {
 	 * @param userUid
 	 * @param request
 	 * @return
+	 * @throws IOException
 	 * @throws ServiceException
 	 */
-	public String updateOrCreateAvatar(MvcRequest request) {
+	public String updateOrCreateAvatar(MvcRequest request) throws IOException, ServiceException {
 		LOGGER.info("更新头像,uid:" + getUserUid());
 		UploadFileInfo info;
 
-		try {
-			info = Attachment_pictureController.uploadByConfig(request);
-		} catch (IOException e) {
-			throw new ServiceException(e.toString());
-		}
+		info = Attachment_pictureController.uploadByConfig(request);
 
 		final Attachment_picture avatar = getService().updateOrCreateAvatar(getUserUid(), info);
 
-		return addJsonPerfix().setObject(new Object() {
+		return MappingJson.stringifySimpleObject(new Object() {
 			@SuppressWarnings("unused")
 			public Boolean isOk = true;
 			@SuppressWarnings("unused")
 			public String msg = "修改头像成功！";
 			@SuppressWarnings("unused")
 			public String imgUrl = avatar.getPath();
-		}).toJson();
+		});
 	}
 }

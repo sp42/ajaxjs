@@ -29,7 +29,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseModel;
-import com.ajaxjs.framework.service.IService;
 import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.keyvalue.BeanUtil;
 import com.ajaxjs.keyvalue.MappingHelper;
@@ -225,6 +224,50 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	}
 
 	/**
+	 * 把 Bean 转换为 JSON
+	 * 
+	 * @param bean bean
+	 * @return JSON 结果
+	 */
+	public static String outputBeanAsJson(Object bean) {
+		if (bean != null)
+			return "json::{\"result\":" + BeanUtil.beanToJson(bean) + "}";
+		else
+			return "json::{\"result\": null}";
+	}
+
+	/**
+	 * 把 Map 转换为 JSON 数组
+	 * 
+	 * @param result Map
+	 * @return JSON 结果
+	 */
+	public static String outputMapAsJson(Map<String, Object> result) {
+		if (result != null)
+			return "json::{\"result\":" + MappingJson.stringifyMap(result) + "}";
+		else
+			return "json::{\"result\": null}";
+	}
+
+	@SuppressWarnings("unchecked")
+	public String outputJson(List<T> pageResult, ModelAndView model) {
+		String jsonStr = "[]"; // empty array
+		if (pageResult != null && pageResult.size() > 0) {
+
+			if (pageResult.get(0) instanceof Map) { // Map 类型的输出
+				List<Map<String, Object>> list = (List<Map<String, Object>>) pageResult;
+				jsonStr = MappingJson.stringifyListMap(list);
+			} else { // Bean
+				jsonStr = BeanUtil.listToJson((List<Object>) pageResult);
+			}
+		}
+
+		model.put("MapOutput", jsonStr);
+
+		return paged_json_List;
+	}
+	
+	/**
 	 * 获取全部列表数据
 	 * 
 	 * @param model Model 模型
@@ -272,24 +315,6 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	public static void saveToReuqest(ModelAndView mv, HttpServletRequest request) {
 		for (String key : mv.keySet())
 			request.setAttribute(key, mv.get(key));
-	}
-
-	@SuppressWarnings("unchecked")
-	public String outputJson(List<T> pageResult, ModelAndView model) {
-		String jsonStr = "[]"; // empty array
-		if (pageResult != null && pageResult.size() > 0) {
-
-			if (pageResult.get(0) instanceof Map) { // Map 类型的输出
-				List<Map<String, Object>> list = (List<Map<String, Object>>) pageResult;
-				jsonStr = MappingJson.stringifyListMap(list);
-			} else { // Bean
-				jsonStr = BeanUtil.listToJson((List<Object>) pageResult);
-			}
-		}
-
-		model.put("MapOutput", jsonStr);
-
-		return paged_json_List;
 	}
 
 	/**
