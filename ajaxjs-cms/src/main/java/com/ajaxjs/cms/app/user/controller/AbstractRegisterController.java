@@ -2,6 +2,7 @@ package com.ajaxjs.cms.app.user.controller;
 
 import com.ajaxjs.cms.app.user.model.User;
 import com.ajaxjs.cms.app.user.model.UserCommonAuth;
+import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.mvc.controller.JsonReuslt;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -26,7 +27,7 @@ public abstract class AbstractRegisterController extends BaseUserController {
 		return new JsonReuslt("{\"isRepeat\":" + getService().checkIfUserPhoneRepeat(phone) + "}");
 	}
 
-	public void registerByPhone(User user, String password) {
+	public void registerByPhone(User user, String password) throws ServiceException {
 		LOGGER.info("执行用户注册");
 
 		if (password == null)

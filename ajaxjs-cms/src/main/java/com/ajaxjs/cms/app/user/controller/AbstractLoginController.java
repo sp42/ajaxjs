@@ -1,4 +1,4 @@
- package com.ajaxjs.cms.app.user.controller;
+package com.ajaxjs.cms.app.user.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -22,11 +22,11 @@ public abstract class AbstractLoginController extends BaseUserController {
 
 	public static final String LOGIN_PASSED = "PASSED";
 
-	public String loginByPassword(User user, String password, HttpServletRequest request) {
+	public String loginByPassword(User user, String password, HttpServletRequest request) throws ServiceException {
 		LOGGER.info("检查登录是否合法");
 
 		String msg = "";
-		
+
 		if (request.getAttribute("CaptchaException") != null) { // 需要驗證碼參數
 			msg = ((Throwable) request.getAttribute("CaptchaException")).getMessage();
 		} else {
@@ -57,21 +57,17 @@ public abstract class AbstractLoginController extends BaseUserController {
 	 */
 	public void afterLogin(User user, HttpServletRequest request) {
 		Attachment_picture avatar = null;
-		
-		try {
-			UserService service = getService();
-			user = service.findById(user.getId());
-			avatar = ((UserService)service).findAvaterByUserId(user.getUid());
-		} catch (ServiceException e) {
-			e.printStackTrace();
-		}
-		
+
+		UserService service = getService();
+		user = service.findById(user.getId());
+		avatar = ((UserService) service).findAvaterByUserId(user.getUid());
+
 		request.getSession().setAttribute("userId", user.getId());
 		request.getSession().setAttribute("userUid", user.getUid());
 		request.getSession().setAttribute("userName", user.getName());
 		request.getSession().setAttribute("userPhone", user.getPhone());
-		
-		if(avatar != null)
+
+		if (avatar != null)
 			request.getSession().setAttribute("userAvatar", request.getContextPath() + avatar.getPath());
 	}
 

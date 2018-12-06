@@ -31,7 +31,7 @@ public class UserAdminController extends CommonController<User, Long> implements
 	@Override
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
 		prepareData(model);
-		model.put("PageResult", getService().findPagedList(start, limit));
+		model.put("PageResult", service.findPagedList(start, limit));
 		return jsp_perfix + "/user/list";
 	}
 
@@ -46,7 +46,7 @@ public class UserAdminController extends CommonController<User, Long> implements
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
 	public String editUI(@PathParam("id") Long id, ModelAndView model) {
-		info(id, model);
+		info(id, model, _id -> service.findById(_id));
 		return jsp_perfix + "/user/user-info";
 	}
 
@@ -76,7 +76,7 @@ public class UserAdminController extends CommonController<User, Long> implements
 	@GET
 	@Path("catalog")
 	public String newsCatalogUI() {
-		return commonJsp + "/simple_admin/edit-cataory";
+		return jsp_perfix + "/simple_admin/edit-cataory";
 	}
 
 	@GET

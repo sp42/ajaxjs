@@ -33,7 +33,7 @@ public abstract class AbstractInfoController extends BaseUserController {
 		this.passwordService = passwordService;
 	}
 
-	public String resetPassword(String new_password, HttpServletRequest request) {
+	public String resetPassword(String new_password, HttpServletRequest request) throws ServiceException {
 		LOGGER.info("重置密码");
 
 		if (getPasswordService() != null && getPasswordService().updatePwd((UserCommonAuth)request.getAttribute("UserCommonAuthId"), new_password))
