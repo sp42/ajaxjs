@@ -3,6 +3,7 @@ package com.ajaxjs.cms.app.user.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.cms.app.user.model.User;
+import com.ajaxjs.cms.app.user.service.UserService;
 import com.ajaxjs.cms.controller.CommonController;
 import com.ajaxjs.cms.utils.sms.Message;
 import com.ajaxjs.cms.utils.sms.SMS;
@@ -20,6 +21,12 @@ import com.ajaxjs.util.logger.LogHelper;
  */
 public abstract class BaseUserController extends CommonController<User, Long> {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseUserController.class);
+
+	private UserService service;
+
+	public UserService getService() {
+		return service;
+	}
 
 	/**
 	 * 提示已登錄
@@ -65,7 +72,7 @@ public abstract class BaseUserController extends CommonController<User, Long> {
 			Object obj = request.getSession().getAttribute("userId");
 			System.out.println(obj);
 			if (obj instanceof Integer)
-				return ((Integer)obj).longValue();
+				return ((Integer) obj).longValue();
 			else if (obj instanceof Long)
 				return (Long) obj;
 			else if (obj instanceof String) {
@@ -82,20 +89,20 @@ public abstract class BaseUserController extends CommonController<User, Long> {
 	public static Long getUserUid() {
 		Long uid = null;
 		HttpServletRequest request = MvcRequest.getHttpServletRequest();
-		
+
 		if (isLogined(request)) {
 			Object obj = request.getSession().getAttribute("userUid");
-			
-			if(obj == null)
+
+			if (obj == null)
 				throw new UnsupportedOperationException("Fail to access user id");
 			else {
-				return (Long)obj;
+				return (Long) obj;
 			}
 		}
-		
+
 		return uid;
 	}
-	
+
 	/**
 	 * 
 	 * @return
@@ -127,9 +134,9 @@ public abstract class BaseUserController extends CommonController<User, Long> {
 		User user = new User();
 		user.setId(getUserId());
 		HttpServletRequest request = MvcRequest.getHttpServletRequest();
-		if(request.getSession().getAttribute("userName") != null)
+		if (request.getSession().getAttribute("userName") != null)
 			user.setName(request.getSession().getAttribute("userName").toString());
-		if(request.getSession().getAttribute("userPhone") != null)
+		if (request.getSession().getAttribute("userPhone") != null)
 			user.setPhone(request.getSession().getAttribute("userPhone").toString());
 
 		return user;

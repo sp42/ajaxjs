@@ -17,6 +17,8 @@ public interface UserService extends IService<User, Long> {
 	 * @throws ServiceException
 	 */
 	public Long create(User user, UserCommonAuth password) throws ServiceException;
+	
+	public int doUpdate(User user) throws ServiceException;
 
 	/**
 	 * 普通口令登录

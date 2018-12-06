@@ -6,7 +6,6 @@ import java.util.Map;
 import com.ajaxjs.cms.app.catelog.Catelog;
 import com.ajaxjs.cms.app.user.model.User;
 import com.ajaxjs.cms.dao.CatalogDao;
-import com.ajaxjs.framework.QueryParams;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
@@ -52,5 +51,5 @@ public interface UserAdminDao extends IDao<User, Long> {
 	public List<Catelog> getCatalog();
 	
 	@Select(value = "SELECT user_login_log.*, user.name AS name,  user.username AS username FROM user_login_log INNER JOIN user ON user.id = user_login_log.userId")
-	public PageResult<Map<String, Object>> findLoginLog(QueryParams param, int start, int limit);
+	public PageResult<Map<String, Object>> findLoginLog(int start, int limit);
 }

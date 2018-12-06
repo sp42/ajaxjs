@@ -98,7 +98,7 @@ public class UserAdminController extends CommonController<User, Long> implements
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String login_log_list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
 		model.put("uiName", "用户登录日志");
-		model.put("PageResult", UserAdminServiceImpl.dao.findLoginLog(getParam(), start, limit));
+		model.put("PageResult", UserAdminServiceImpl.dao.findLoginLog(start, limit));
 
 		return jsp_perfix + "/user/login_log_list";
 	}

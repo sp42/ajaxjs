@@ -1,5 +1,11 @@
 package com.ajaxjs.cms.app.user.service;
 
+/**
+ * 用户常量表
+ * 
+ * @author Frank Cheung
+ *
+ */
 public interface UserConstant {
 	public static final int loginByUserName = 1;
 	public static final int loginByPhoneNumber = 2;

@@ -10,7 +10,7 @@ import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
 
-@Bean(value = "UserAdminService", aop = { CommonService.class,  GlobalLogAop.class })
+@Bean(value = "UserAdminService", aop = { CommonService.class, GlobalLogAop.class })
 public class UserAdminServiceImpl implements UserAdminService {
 	public static UserAdminDao dao = new DaoHandler().bind(UserAdminDao.class);
 
@@ -45,12 +45,7 @@ public class UserAdminServiceImpl implements UserAdminService {
 	}
 
 	public String getTableName() {
-		return "article";
-	}
-
-	@Override
-	public List<User> getTop5() {
-		return dao.getTop5();
+		return "user";
 	}
 
 	@Override

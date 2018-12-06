@@ -333,8 +333,8 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 		this.uiName = uiName;
 	}
 	
-	public <S extends IService<T, ID>> S getService() {
-		LOGGER.warning("should overwrite this method");
-		return null;
-	}
+//	public <S extends IService<T, ID>> S getService() {
+//		LOGGER.warning("should overwrite this method");
+//		return null;
+//	}
 }

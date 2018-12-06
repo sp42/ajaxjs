@@ -174,7 +174,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int update(User user) throws ServiceException {
+	public int doUpdate(User user) throws ServiceException {
 		LOGGER.info("修改用户信息");
 
 //		if (user.getName() == null) { // 如果没有用户名
@@ -183,18 +183,18 @@ public class UserServiceImpl implements UserService {
 //			}
 //		}
 //		try {
-			if (user.getPhone() != null && dao.findByPhone(user.getPhone()) != null)
-					throw new ServiceException(user.getPhone() + " 手机号码已注册");
-	
-			if (user.getName() != null && dao.findByUserName(user.getName()) != null)
-				throw new ServiceException(user.getName() + " 用户名已注册");
-	
-			if (user.getEmail() != null && dao.findByEmail(user.getEmail()) != null)
-				throw new ServiceException(user.getEmail() + " 邮件已注册");
+		if (user.getPhone() != null && dao.findByPhone(user.getPhone()) != null)
+			throw new ServiceException(user.getPhone() + " 手机号码已注册");
+
+		if (user.getName() != null && dao.findByUserName(user.getName()) != null)
+			throw new ServiceException(user.getName() + " 用户名已注册");
+
+		if (user.getEmail() != null && dao.findByEmail(user.getEmail()) != null)
+			throw new ServiceException(user.getEmail() + " 邮件已注册");
 //		} catch (ServiceException e) {
 //			throw new NullPointerException(e.getMessage());
 //		}
-		
+
 		return dao.update(user);
 	}
 
@@ -203,7 +203,7 @@ public class UserServiceImpl implements UserService {
 		UserCommonAuthServiceImpl.dao.deleteByUserId(bean.getId());
 		return dao.delete(bean);
 	}
- 
+
 	@Override
 	public PageResult<User> findPagedList(int start, int limit) {
 		return dao.findPagedList(start, limit);
@@ -267,8 +267,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<User> findList() {
-		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public int update(User bean) {
+		return 0;
 	}
 
 }

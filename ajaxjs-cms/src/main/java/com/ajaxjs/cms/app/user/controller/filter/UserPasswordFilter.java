@@ -17,12 +17,12 @@ package com.ajaxjs.cms.app.user.controller.filter;
 
 import java.lang.reflect.Method;
 
+import com.ajaxjs.cms.app.user.controller.BaseUserController;
+import com.ajaxjs.cms.app.user.model.UserCommonAuth;
+import com.ajaxjs.cms.app.user.service.UserCommonAuthServiceImpl;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.FilterAction;
-import com.ajaxjs.user.controller.BaseUserController;
-import com.ajaxjs.user.model.UserCommonAuth;
-import com.ajaxjs.user.service.UserCommonAuthServiceImpl;
 
 /**
  * 需要输入用户密码之后才能下一步的拦截器
