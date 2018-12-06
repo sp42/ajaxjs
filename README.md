@@ -30,7 +30,7 @@ AJAXJS 很少第三方的库或包依赖。功能不算很多，但应该较为�
 
 为方便管理，当前在一个 repository 中存放多个项目，且同时支持 Git/SVN 存取。如果您想单独检出某个项目，建议使用 SVN 然后指定目录检出。
 
-前端资源通过 Servlet 3.0 打包到 jar 里面。
+前端资源通过 Servlet 3.0 打包到 jar 里面。前端 [DEMO](https://framework.ajaxjs.com/framework/ui-doc/)
 
 教程
 -----
