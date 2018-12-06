@@ -119,31 +119,6 @@ public class MappingHelper {
 		return String.format(json_not_ok, msg);
 	}
 
-	/**
-	 * 把 Bean 转换为 JSON
-	 * 
-	 * @param bean bean
-	 * @return JSON 结果
-	 */
-	public static String outputBeanAsJson(Object bean) {
-		if (bean != null)
-			return "json::{\"result\":" + BeanUtil.beanToJson(bean) + "}";
-		else
-			return "json::{\"result\": null}";
-	}
-
-	/**
-	 * 把 Map 转换为 JSON 数组
-	 * 
-	 * @param result Map
-	 * @return JSON 结果
-	 */
-	public static String outputMapAsJson(Map<String, Object> result) {
-		if (result != null)
-			return "json::{\"result\":" + MappingJson.stringifyMap(result) + "}";
-		else
-			return "json::{\"result\": null}";
-	}
 
 	/**
 	 * 把 Map 集合转换为 JSON 数组
