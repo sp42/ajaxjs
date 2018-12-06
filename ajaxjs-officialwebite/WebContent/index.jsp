@@ -11,26 +11,11 @@
         <meta name="description" content="AJAXJS Web 是一款基于 Java 平台的开源 Web 框架，继承了 Java 平台的高效、安全、稳定、跨平台等诸多优势， 但却摒弃了传统企业级架构所带来的庞大和臃肿，强调轻量级，非常适合互联网小型网站的快速应用。" />
         <meta name="viewport" content="width=320, user-scalable=0, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
         <link  type="text/css" rel="stylesheet" href="asset/style.css" />
-<%
-	java.util.Locale l = request.getLocale();
-	String locate = l.toString(), targetLanguage = null;
-
-	if (locate.indexOf("en") != -1) {
-		targetLanguage = "eng";
-	} else if (locate.indexOf("zh") != -1 || locate == null) {
-		targetLanguage = "zhCN";
-	}
-
-	String force = request.getParameter("force");
-
-	if (force != null) {
-		targetLanguage = force;
-	}
-%>
     </head>
 
     <body>
-        <%
+    <%
+    	String targetLanguage = getLanguage(request);
 		if (targetLanguage.equals("eng")) {
 	%>
           <%@include file="index-eng.jsp" %>

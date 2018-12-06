@@ -1,5 +1,24 @@
 <%@page pageEncoding="UTF-8" import="java.util.*, java.net.*, java.io.*"%>
-<%!
+<%! 
+	public static String getLanguage(HttpServletRequest request) {
+		String  targetLanguage = null;
+		String force = request.getParameter("force");
+	
+		if (force != null) {
+			targetLanguage = force;
+		} else {
+			java.util.Locale l = request.getLocale();
+			String locate = l.toString();
+		
+			if (locate.indexOf("en") != -1) {
+				targetLanguage = "eng";
+			} else if (locate.indexOf("zh") != -1 || locate == null) {
+				targetLanguage = "zhCN";
+			}
+		}
+		
+		return targetLanguage;
+	}
 
 	public static String getUrl(String url) throws Throwable {
 		StringBuilder result = new StringBuilder();
@@ -28,6 +47,7 @@
 		String str = substringsBetween(getUrl("https://gitee.com/sp42_admin/ajaxjs"), "<div class='file_content markdown-body'>", "if ($('.markdown-body').children(\"style\").length != 0) {");
 		str = str.replace("<script>", "").replace("use strict", "").replace("</div>","").replace("</div>","").replace("\"\";", "");
 		str = str.replace("", "");
+		str = str.replaceAll("/sp42_admin/ajaxjs/blob", "https://gitee.com/sp42_admin/ajaxjs/blob");
 		return str;
 	}
 	public static String substringsBetween(final String str, final String open, final String close) {
