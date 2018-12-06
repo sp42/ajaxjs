@@ -1,4 +1,4 @@
-package com.ajaxjs.user.controller;
+package com.ajaxjs.cms.app.user.controller;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -8,17 +8,16 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
-import com.ajaxjs.framework.service.ServiceException;
+import com.ajaxjs.cms.app.user.model.User;
+import com.ajaxjs.cms.app.user.service.UserAdminService;
+import com.ajaxjs.cms.app.user.service.UserAdminServiceImpl;
+import com.ajaxjs.cms.controller.CommonController;
+import com.ajaxjs.cms.controller.CommonEntryAdminController;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.simpleApp.CommonController;
-import com.ajaxjs.simpleApp.CommonEntryAdminController;
-import com.ajaxjs.user.model.User;
-import com.ajaxjs.user.service.UserAdminService;
-import com.ajaxjs.user.service.UserAdminServiceImpl; 
 
 @Path("/admin/user")
 @Bean("UserAdminController")
@@ -55,7 +54,7 @@ public class UserAdminController extends CommonController<User, Long> implements
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
 	public String create(User entity, ModelAndView model) {
-		return super.create(entity, model);
+		return create(entity, model, e -> service.create(e));
 	}
 
 	@PUT
@@ -63,7 +62,7 @@ public class UserAdminController extends CommonController<User, Long> implements
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
 	public String update(@PathParam("id") Long id, User entity, ModelAndView model) {
-		return super.update(id, entity, model);
+		return update(id, entity, model, e -> service.update(e));
 	}
 
 	@DELETE
@@ -71,9 +70,7 @@ public class UserAdminController extends CommonController<User, Long> implements
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
 	public String delete(@PathParam("id") Long id, ModelAndView model) {
-		User user = new User();
-		user.setId(id);
-		return super.delete(user, model);
+		return delete(id, new User(), model, e -> service.delete(e));
 	}
 
 	@GET
@@ -106,14 +103,15 @@ public class UserAdminController extends CommonController<User, Long> implements
 		return jsp_perfix + "/user/login_log_list";
 	}
 
-	//	@GET
-	//	@Path("catalog/list")
-	//	public String getNewsCatalog(ModelAndView model, HttpServletRequest request) {
-	//		initDb();
-	//		prepareData(model);
-	//		CatalogDao dao = new DaoHandler().bind(CatalogDao.class);
-	//		List<User> result = dao.findAll(new QueryParams(request.getParameterMap()));
+	// @GET
+	// @Path("catalog/list")
+	// public String getNewsCatalog(ModelAndView model, HttpServletRequest request)
+	// {
+	// initDb();
+	// prepareData(model);
+	// CatalogDao dao = new DaoHandler().bind(CatalogDao.class);
+	// List<User> result = dao.findAll(new QueryParams(request.getParameterMap()));
 	//
-	//		return outputListBeanAsJson(result);
-	//	}
+	// return outputListBeanAsJson(result);
+	// }
 }

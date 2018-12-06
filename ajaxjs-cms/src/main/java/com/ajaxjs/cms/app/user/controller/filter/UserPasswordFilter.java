@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.user.controller.filter;
+package com.ajaxjs.cms.app.user.controller.filter;
 
 import java.lang.reflect.Method;
 

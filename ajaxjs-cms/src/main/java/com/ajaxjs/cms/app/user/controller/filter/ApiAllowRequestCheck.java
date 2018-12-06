@@ -1,4 +1,4 @@
-package com.ajaxjs.user.controller.filter;
+package com.ajaxjs.cms.app.user.controller.filter;
 
 import java.lang.reflect.Method;
 import java.util.Date;

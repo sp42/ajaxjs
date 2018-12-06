@@ -1,11 +1,11 @@
-package com.ajaxjs.user.controller.filter;
+package com.ajaxjs.cms.app.user.controller.filter;
 
 import java.lang.reflect.Method;
 
+import com.ajaxjs.cms.app.user.controller.BaseUserController;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.FilterAction;
-import com.ajaxjs.user.controller.BaseUserController;
 
 /**
  * 是否已经登录的拦截器
