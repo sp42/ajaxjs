@@ -1,7 +1,7 @@
 <%@page pageEncoding="UTF-8"%>
 <%@include file="tools.jsp" %>
 <!DOCTYPE html>
-    <html>
+<html>
     <head>
         <meta charset="UTF-8">
         <title>AJAXJS Web</title>
@@ -61,4 +61,4 @@
 		</div>
 		<!-- // CNZZ 统计 -->
     </body>
-    </html>
+</html>
