@@ -42,8 +42,8 @@ AJAXJS 很少第三方的库或包依赖。功能不算很多，但应该较为�
 ----------
 
 - 官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/)  
-- 源码 [https://gitee.com/sp42_admin/ajaxjs](https://gitee.com/sp42_admin/ajaxjs) （支持 Git/SVN）| [https://github.com/sp42/ajaxjs](https://github.com/sp42/ajaxjs) 
-- 博客 [http://blog.csdn.net/zhangxin09](http://blog.csdn.net/zhangxin09/) 
+- 源码 [开源中国 Gitee](https://gitee.com/sp42_admin/ajaxjs) （支持 Git/SVN）| [GitHub](https://github.com/sp42/ajaxjs) 
+- 博客 [blog.csdn.net/zhangxin09](http://blog.csdn.net/zhangxin09/) 
 - QQ 群 [3150067](//shang.qq.com/wpa/qunwpa?idkey=99415d164e2c776567c9370cc5b0bde26f4e2e7c5068978a24d1fe7c976ace93)
 - 邮箱 support@ajaxjs.com
 
