@@ -227,6 +227,7 @@ public class SiteStruService implements ServletContextListener {
 	 */
 	public static String getSiteMap(List<Map<String, Object>> list, String contextPath) {
 		StringBuilder sb = new StringBuilder();
+		
 		getSiteMap(list, sb, contextPath);
 
 		return String.format(table, sb.toString());
@@ -245,7 +246,6 @@ public class SiteStruService implements ServletContextListener {
 			if (map != null) {
 				if (0 == (int) map.get("level")) // 新的一列
 					sb.append(newCol);
-
 				sb.append(String.format(a, contextPath + map.get("fullPath").toString(), map.get("level").toString(), map.get("name").toString()));
 
 				if (map.get("children") != null && map.get("children") instanceof List)
