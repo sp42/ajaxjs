@@ -11,7 +11,7 @@
 - 前端：[Vue.js](https://cn.vuejs.org/)（MVVM+组件化） + [LESS.js](http://lesscss.org/)
 - 后端：Java 1.8 + Tomcat 8 + [Reactor 3](https://projectreactor.io/) + MySQL/SQLite + [Swagger V3](https://swagger.io/) 接口文档服务
 
-AJAXJS 很少第三方的库或包依赖。功能不算很多，但应该较为实用的那些。尽管“轮子”但代码都自己理过一遍，务求清晰精炼易懂易修改，避免晦涩的地方。文档、注释、单测等齐备。详见官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/) 介绍。 
+AJAXJS 很少第三方的库或包依赖。功能不算很多，但应该较为实用的那些。尽管很多都是“轮子”但自己都理过一遍代码，务求清晰精炼易懂易修改，避免晦涩的地方。文档、注释、单测等齐备。详见官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/) 介绍。 
 
 注意：整合 Reactor 3 尚在目标计划中，需要时间来调研与学习新鲜事物。
 
@@ -28,9 +28,8 @@ AJAXJS 很少第三方的库或包依赖。功能不算很多，但应该较为�
 |ajaxjs-tools|孵化室、测试代码、其他杂项工具|ajaxjs-web|war|
 
 
-为方便管理，当前在一个 repository 中存放多个项目，且同时支持 Git/SVN 存取。如果您想单独检出某个项目，建议使用 SVN 然后指定目录检出。
 
-前端资源通过 Servlet 3.0 打包到 jar 里面。前端 [DEMO](https://framework.ajaxjs.com/framework/ui-doc/)
+前端资源通过 Servlet 3.0 打包到 jar 里面。前端库快速浏览 [DEMO](https://framework.ajaxjs.com/framework/ui-doc/)。
 
 教程
 -----
