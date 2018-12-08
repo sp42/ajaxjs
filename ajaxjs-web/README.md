@@ -18,6 +18,8 @@ AJAXJS WEB 包含以下模块：
 
 Ajaxjs 前端框架[请点击](../ajaxjs-web-js)。
 
+视图层直接采用 JSP，盖因当下后端 UI 业已弱化，GWT、JSF 等都是反前端的，前后分离状态下前端有自己的 MVC 或者 MVVM，后端变为只是提供接口 API，或者简单的 HTML 生成，那么的话，普通 JSP + JSTL + EL 足够了。
+
 
 安装
 ---------
