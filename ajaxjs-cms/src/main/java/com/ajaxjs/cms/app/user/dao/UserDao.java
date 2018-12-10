@@ -2,8 +2,8 @@ package com.ajaxjs.cms.app.user.dao;
 
 import java.util.Date;
 
+import com.ajaxjs.cms.app.attachment.Attachment_picture;
 import com.ajaxjs.cms.app.user.model.User;
-import com.ajaxjs.cms.model.Attachment_picture;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;

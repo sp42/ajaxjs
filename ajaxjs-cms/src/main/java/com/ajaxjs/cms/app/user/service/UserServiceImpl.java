@@ -3,12 +3,12 @@ package com.ajaxjs.cms.app.user.service;
 import java.util.Date;
 import java.util.List;
 
+import com.ajaxjs.cms.app.attachment.Attachment_picture;
+import com.ajaxjs.cms.app.attachment.Attachment_pictureService;
+import com.ajaxjs.cms.app.attachment.Attachment_pictureServiceImpl;
 import com.ajaxjs.cms.app.user.dao.UserDao;
 import com.ajaxjs.cms.app.user.model.User;
 import com.ajaxjs.cms.app.user.model.UserCommonAuth;
-import com.ajaxjs.cms.model.Attachment_picture;
-import com.ajaxjs.cms.service.Attachment_pictureService;
-import com.ajaxjs.cms.service.Attachment_pictureServiceImpl;
 import com.ajaxjs.cms.service.aop.CommonService;
 import com.ajaxjs.cms.service.aop.GlobalLogAop;
 import com.ajaxjs.framework.service.ServiceException;

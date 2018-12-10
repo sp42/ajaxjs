@@ -20,14 +20,17 @@ import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.orm.dao.PageResult;
 
 @Path("/admin/article")
-@Bean(value = "AdminArticleController")
+@Bean
 public class ArticleAdminController extends CommonController<Map<String, Object>, Long> implements CommonEntryAdminController<Map<String, Object>, Long> {
-
 	@Resource("ArticleService")
 	private ArticleService service;
+
+	{
+		setTableName("article");
+		setUiName("文章");
+	}
 
 	@GET
 	@Path("list")
@@ -38,11 +41,15 @@ public class ArticleAdminController extends CommonController<Map<String, Object>
 		}
 
 		model.put("catelogId", ConfigService.getValueAsInt("data.articleCatalog_Id"));
-		prepareData(model);
-		PageResult<Map<String, Object>> pageResult = service.findPagedListByCatalogId(catalogId, start, limit);
-		model.put("PageResult", pageResult);
 
-		return jsp_perfix + "/common-entity/article-list";
+		final int _catalogId = catalogId;
+		super.list(start, limit, model, (s, l) -> service.findPagedListByCatalogId(_catalogId, start, limit));
+		return adminList_CMS();
+	}
+
+	@Override
+	public String list(int start, int limit, ModelAndView model) {
+		return null;
 	}
 
 	@GET
@@ -51,7 +58,7 @@ public class ArticleAdminController extends CommonController<Map<String, Object>
 		model.put("catelogId", ConfigService.getValueAsInt("data.articleCatalog_Id"));
 		super.createUI(model);
 
-		return jsp_perfix + "/common-entity/article";
+		return infoUI_CMS();
 	}
 
 	@GET
@@ -60,18 +67,17 @@ public class ArticleAdminController extends CommonController<Map<String, Object>
 	@Override
 	public String editUI(@PathParam("id") Long id, ModelAndView model) {
 		model.put("catelogId", ConfigService.getValueAsInt("data.articleCatalog_Id"));
-		info(id, model, _id -> service.findById(_id));
-		editUI(model);
+		editUI(id, model, service);
 
-		return jsp_perfix + "/common-entity/article";
+		return infoUI_CMS();
 	}
 
 	@POST
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String create(Map<String, Object> entity, ModelAndView model) {
-		return create(entity, model, e -> service.create(e));
+	public String create(Map<String, Object> entity) {
+		return create(entity, service);
 	}
 
 	@PUT
@@ -79,8 +85,8 @@ public class ArticleAdminController extends CommonController<Map<String, Object>
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, Map<String, Object> entity, ModelAndView model) {
-		return update(id, entity, model, e -> service.update(e));
+	public String update(@PathParam("id") Long id, Map<String, Object> entity) {
+		return update(id, entity, service);
 	}
 
 	@DELETE
@@ -88,18 +94,8 @@ public class ArticleAdminController extends CommonController<Map<String, Object>
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String delete(@PathParam("id") Long id, ModelAndView model) {
-		return delete(id, new HashMap<String, Object>(), model, e -> service.delete(e));
+	public String delete(@PathParam("id") Long id) {
+		return delete(id, new HashMap<String, Object>(), service);
 	}
 
-	@Override
-	public String list(int start, int limit, ModelAndView model) {
-		return null;
-	}
-	
-	@Override
-	public void prepareData(ModelAndView model) {
-		model.put("uiName", "文章");
-		model.put("tableName", "article");
-	}
 }

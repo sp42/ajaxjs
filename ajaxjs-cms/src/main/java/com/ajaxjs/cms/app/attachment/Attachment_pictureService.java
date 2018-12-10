@@ -1,9 +1,8 @@
-package com.ajaxjs.cms.service;
+package com.ajaxjs.cms.app.attachment;
 
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.cms.model.Attachment_picture;
 import com.ajaxjs.framework.service.IService;
 import com.ajaxjs.framework.service.ServiceException;
 

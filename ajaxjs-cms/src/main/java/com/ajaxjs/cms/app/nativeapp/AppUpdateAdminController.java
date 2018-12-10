@@ -23,8 +23,8 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.web.UploadFile;
 import com.ajaxjs.web.UploadFileInfo;
 
+@Bean
 @Path("/admin/appUpdate")
-@Bean("AppUpdateAdminController")
 public class AppUpdateAdminController extends CommonController<AppUpdate, Long> implements CommonEntryAdminController<AppUpdate, Long> {
 
 	@Resource("AppUpdateService")
@@ -34,52 +34,51 @@ public class AppUpdateAdminController extends CommonController<AppUpdate, Long> 
 	@Path("/list")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
-	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
-		prepareData(model);
-		model.put("PageResult", service.findPagedList(start, limit));
-		return jsp_perfix + "/common-entity/app-update-list";
+	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView mv) {
+		list(start, limit, mv, service);
+		return adminList_CMS();
 	}
 
 	@GET
 	@Override
-	public String createUI(ModelAndView model) {
-		super.createUI(model);
-		return jsp_perfix + "/common-entity/app-update";
+	public String createUI(ModelAndView mv) {
+		super.createUI(mv);
+		return infoUI_CMS();
+	}
+
+	@GET
+	@MvcFilter(filters = DataBaseFilter.class)
+	@Path("/{id}")
+	@Override
+	public String editUI(@PathParam("id") Long id, ModelAndView mv) {
+		editUI(id, mv, service);
+		return infoUI_CMS();
 	}
 
 	@POST
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String create(AppUpdate entity, ModelAndView model) {
-		return create(entity, model, _entity -> service.create(_entity));
-	}
-
-	@DELETE
-	@Path("/{id}")
-	@MvcFilter(filters = DataBaseFilter.class)
-	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String delete(@PathParam("id") Long id, ModelAndView model) {
-		return delete(id, new AppUpdate(), model, entity -> service.delete(entity));
-	}
-
-	@GET
-	@Path("/{id}")
-	@MvcFilter(filters = DataBaseFilter.class)
-	@Override
-	public String editUI(@PathParam("id") Long id, ModelAndView model) {
-//		info(id, model);
-		super.editUI(model);
-		return jsp_perfix + "/common-entity/app-update";
+	public String create(AppUpdate entity) {
+		return create(entity, service);
 	}
 
 	@PUT
-	@Path("/{id}")
 	@MvcFilter(filters = DataBaseFilter.class)
+	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, AppUpdate app, ModelAndView model) {
-		return update(id, app, model, _entity -> service.update(_entity));
+	public String update(@PathParam("id") Long id, AppUpdate entity) {
+		return update(id, entity, service);
+	}
+
+	@DELETE
+	@MvcFilter(filters = DataBaseFilter.class)
+	@Path("{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Override
+	public String delete(@PathParam("id") Long id) {
+		return delete(id, new AppUpdate(), service);
 	}
 
 	@POST

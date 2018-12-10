@@ -1,8 +1,8 @@
 package com.ajaxjs.cms.app.user.service;
 
+import com.ajaxjs.cms.app.attachment.Attachment_picture;
 import com.ajaxjs.cms.app.user.model.User;
 import com.ajaxjs.cms.app.user.model.UserCommonAuth;
-import com.ajaxjs.cms.model.Attachment_picture;
 import com.ajaxjs.framework.service.IService;
 import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.web.UploadFileInfo;

@@ -21,8 +21,8 @@ import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 
 @Path("/admin/DataDict")
-@Bean("DataDictAdminController")
-public class DataDictController extends CommonController<Map<String, Object>, Integer> implements CommonEntryAdminController<Map<String, Object>, Integer> {
+@Bean
+public class DataDictAdminController extends CommonController<Map<String, Object>, Integer> implements CommonEntryAdminController<Map<String, Object>, Integer> {
 	@Resource("DataDictService")
 	private DataDictService service;
 
@@ -30,8 +30,8 @@ public class DataDictController extends CommonController<Map<String, Object>, In
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
-	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
-		return listJson(start, limit, model, (_start, _limit) -> service.findPagedList(_start, _limit));
+	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView mv) {
+		return listJson(start, limit, service);
 	}
 
 	@GET
@@ -42,7 +42,7 @@ public class DataDictController extends CommonController<Map<String, Object>, In
 	}
 
 	@Override
-	public String editUI(@PathParam("id") Integer id, ModelAndView model) {
+	public String editUI(@PathParam("id") Integer id, ModelAndView mv) {
 		return show405;
 	}
 
@@ -50,8 +50,8 @@ public class DataDictController extends CommonController<Map<String, Object>, In
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String create(Map<String, Object> entity, ModelAndView model) {
-		return create(entity, model, _entity -> service.create(_entity));
+	public String create(Map<String, Object> entity) {
+		return create(entity, service);
 	}
 
 	@PUT
@@ -59,8 +59,8 @@ public class DataDictController extends CommonController<Map<String, Object>, In
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Integer id, Map<String, Object> entity, ModelAndView model) {
-		return update(id, entity, model,  _entity -> service.update(_entity));
+	public String update(@PathParam("id") Integer id, Map<String, Object> entity) {
+		return update(id, entity, service);
 	}
 
 	@DELETE
@@ -68,7 +68,7 @@ public class DataDictController extends CommonController<Map<String, Object>, In
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String delete(@PathParam("id") Integer id, ModelAndView mv) {
-		return delete(id, new HashMap<String, Object>(), mv, entry -> service.delete(entry));
+	public String delete(@PathParam("id") Integer id) {
+		return delete(id, new HashMap<String, Object>(), service);
 	}
 }

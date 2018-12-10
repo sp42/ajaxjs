@@ -1,12 +1,10 @@
-package com.ajaxjs.cms.service;
+package com.ajaxjs.cms.app.attachment;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.cms.dao.Attachment_pictureDao;
-import com.ajaxjs.cms.model.Attachment_picture;
 import com.ajaxjs.cms.service.aop.CommonService;
 import com.ajaxjs.cms.service.aop.GlobalLogAop;
 import com.ajaxjs.ioc.Bean;

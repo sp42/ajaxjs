@@ -19,16 +19,15 @@ import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 
 @Path("/admin/feedback")
-@Bean(value = "FeedbackAdminController")
+@Bean
 public class FeedbackAdminController extends CommonController<Feedback, Long> implements CommonEntryAdminController<Feedback, Long> {
 
 	@Resource("FeedbackService")
 	private FeedbackService service;
 	
-	@Override
-	public void prepareData(ModelAndView model) {
-		model.put("uiName", "留言反馈");
-		model.put("tableName", "feedback");
+	{
+		setTableName("feedback");
+		setUiName("留言反馈");
 	}
 
 	@GET
@@ -36,8 +35,8 @@ public class FeedbackAdminController extends CommonController<Feedback, Long> im
 	@Path("list")
 	@Override
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
-		list(start, limit, model, (_start, _limit) -> service.findPagedList(_start, _limit));
-		return jsp_perfix + "/common-entity/feedback-list";
+		list(start, limit, model, service);
+		return adminList_CMS();
 	}
 
 	@GET
@@ -50,17 +49,17 @@ public class FeedbackAdminController extends CommonController<Feedback, Long> im
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("/{id}")
 	@Override
-	public String editUI(@PathParam("id") Long id, ModelAndView model) {
-		info(id, model, _id -> service.findById(_id));
-		return jsp_perfix + "/common-entity/feedback";
+	public String editUI(@PathParam("id") Long id, ModelAndView mv) {
+		editUI(id, mv, service);
+		return infoUI_CMS();
 	}
 
 	@POST
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String create(Feedback entity, ModelAndView model) {
-		return create(entity, model, _entity -> service.create(_entity));
+	public String create(Feedback entity) {
+		return create(entity, service);
 	}
 
 	@PUT
@@ -68,8 +67,8 @@ public class FeedbackAdminController extends CommonController<Feedback, Long> im
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, Feedback entity, ModelAndView model) {
-		return update(id, entity, model,  _entity -> service.update(_entity));
+	public String update(@PathParam("id") Long id, Feedback entity) {
+		return update(id, entity, service);
 	}
 
 	@DELETE
@@ -77,7 +76,7 @@ public class FeedbackAdminController extends CommonController<Feedback, Long> im
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String delete(@PathParam("id") Long id, ModelAndView model) {
-		return delete(id, new Feedback(), model, e -> service.delete(e));
+	public String delete(@PathParam("id") Long id) {
+		return delete(id, new Feedback(), service);
 	} 
 }

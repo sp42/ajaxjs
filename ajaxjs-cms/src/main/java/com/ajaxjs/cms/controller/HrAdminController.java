@@ -20,34 +20,31 @@ import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.orm.dao.PageResult;
 
+@Bean
 @Path("/admin/hr")
-@Bean("HrAdminController")
 public class HrAdminController extends CommonController<Map<String, Object>, Long> implements CommonEntryAdminController<Map<String, Object>, Long> {
 	@Resource("HrService")
 	private HrService service;
 	
-	@Override
-	public void prepareData(ModelAndView model) {
-		model.put("uiName", "招聘");
-		model.put("tableName", "hr");
+	{
+		setUiName("招聘");
+		setTableName("hr");
 	}
 
 	@GET
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, @QueryParam("catalogId") int catalogId, ModelAndView model) {
+	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, @QueryParam("catalogId") int catalogId, ModelAndView mv) {
 		if (catalogId == 0) {
 			catalogId = ConfigService.getValueAsInt("data.hrCatalog_Id"); // 不指定实体的子分类
 		}
 
-		model.put("catelogId", ConfigService.getValueAsInt("data.hrCatalog_Id"));
-		prepareData(model);
-		PageResult<Map<String, Object>> pageResult = service.findPagedListByCatalogId(catalogId, start, limit);
-		model.put("PageResult", pageResult);
-
-		return jsp_perfix + "/common-entity/hr-list";
+		mv.put("catelogId", ConfigService.getValueAsInt("data.hrCatalog_Id"));
+		
+		final int _catalogId = catalogId;
+		super.list(start, limit, mv, (s, l) -> service.findPagedListByCatalogId(_catalogId, start, limit));
+		return adminList_CMS();
 	}
 
 	@GET
@@ -56,27 +53,26 @@ public class HrAdminController extends CommonController<Map<String, Object>, Lon
 		model.put("catelogId", ConfigService.getValueAsInt("data.hrCatalog_Id"));
 		super.createUI(model);
 
-		return jsp_perfix + "/common-entity/hr";
+		return infoUI_CMS();
 	}
 
 	@GET
 	@Path("{id}")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
-	public String editUI(@PathParam("id") Long id, ModelAndView model) {
-		model.put("catelogId", ConfigService.getValueAsInt("data.hrCatalog_Id"));
-		info(id, model, _id -> service.findById(id));
-		super.editUI(model);
+	public String editUI(@PathParam("id") Long id, ModelAndView mv) {
+		mv.put("catelogId", ConfigService.getValueAsInt("data.hrCatalog_Id"));
+		editUI(id, mv, service);
 
-		return jsp_perfix + "/common-entity/hr";
+		return infoUI_CMS();
 	}
 
 	@POST
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String create(Map<String, Object> entity, ModelAndView model) {
-		return create(entity, model, _entity -> service.create(_entity));
+	public String create(Map<String, Object> entity) {
+		return create(entity, service);
 	}
 
 	@PUT
@@ -84,8 +80,8 @@ public class HrAdminController extends CommonController<Map<String, Object>, Lon
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, Map<String, Object> entity, ModelAndView model) {
-		return update(id, entity, model, _entity -> service.update(_entity));
+	public String update(@PathParam("id") Long id, Map<String, Object> entity) {
+		return update(id, entity, service);
 	}
 
 	@DELETE
@@ -93,12 +89,12 @@ public class HrAdminController extends CommonController<Map<String, Object>, Lon
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String delete(@PathParam("id") Long id, ModelAndView model) {
-		return delete(id, new HashMap<String, Object>(), model, entry -> service.delete(entry));
+	public String delete(@PathParam("id") Long id) {
+		return delete(id, new HashMap<String, Object>(), service);
 	}
 
 	@Override
-	public String list(int start, int limit, ModelAndView model) {
+	public String list(int start, int limit, ModelAndView mv) {
 		return null;
 	}
 }

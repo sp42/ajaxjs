@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>ajaxjs-cms</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 	<packaging>jar</packaging>
 
 	<build>
@@ -26,15 +26,29 @@
 	</build>
 
 	<dependencies>
+<!-- 		<dependency> -->
+<!-- 			<groupId>javax.servlet</groupId> -->
+<!-- 			<artifactId>javax.servlet-api</artifactId> -->
+<!-- 			<version>3.1.0</version> -->
+<!-- 			<scope>provided</scope> -->
+<!-- 		</dependency> -->
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>javax.servlet.jsp</groupId> -->
+<!-- 			<artifactId>javax.servlet.jsp-api</artifactId> -->
+<!-- 			<version>2.2.1</version> -->
+<!-- 			<scope>provided</scope> -->
+<!-- 		</dependency> -->
+		
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-data</artifactId>
-			<version>1.0.8</version>
+			<version>1.0.9</version>
 		</dependency>
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-web</artifactId>
-			<version>1.1.2</version>
+			<version>1.1.3</version>
 		</dependency>
 
 

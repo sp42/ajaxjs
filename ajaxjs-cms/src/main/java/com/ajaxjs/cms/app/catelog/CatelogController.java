@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.app.section;
+package com.ajaxjs.cms.app.catelog;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -17,18 +17,19 @@ import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
+import com.ajaxjs.orm.dao.PageResult;
 
-@Path("/admin/section_content")
-@Bean("SectionContentAdminController")
-public class SectionContentController extends CommonController<SectionInfo, Long> implements CommonEntryAdminController<SectionInfo, Long> {
-	@Resource("SectionInfoService")
-	private SectionInfoService service;
+@Path("/admin/catelog")
+@Bean("CatelogAdminController")
+public class CatelogController extends CommonController<Catelog, Long> implements CommonEntryAdminController<Catelog, Long> {
+	@Resource("CatelogService")
+	private CatelogService service;
 
 	@GET
 	@Override
 	public String createUI(ModelAndView model) {
 		prepareData(model);
-		return jsp_perfix_webinf + "/test";
+		return jsp_perfix + "/system/Catelog";
 	}
 
 	@GET
@@ -37,28 +38,29 @@ public class SectionContentController extends CommonController<SectionInfo, Long
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
-		return listJson(start, limit, model, (_start, _limit) -> service.findPagedList(_start, _limit));
+		PageResult<Catelog> result = service.findPagedList(start, limit);
+		return listJson(start, limit, (_start, _limit) -> result);
 	}
 
 	@GET
 	@Path("getListAndSubByParentId")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getListAndSubByParentId(@QueryParam("parentId") int parentId, ModelAndView model) {
-		return outputJson(service.getAllListByParentId(parentId), model);
+	public String getListAndSubByParentId(@QueryParam("parentId") int parentId) {
+		return toJson(service.getAllListByParentId(parentId));
 	}
 
 	@Override
 	public String editUI(Long id, ModelAndView model) {
-		return null;
+		return show405;
 	}
 
 	@POST
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String create(SectionInfo entity, ModelAndView model) {
-		return create(entity, model, e -> service.create(e));
+	public String create(Catelog entity) {
+		return create(entity, service);
 	}
 
 	@PUT
@@ -66,8 +68,8 @@ public class SectionContentController extends CommonController<SectionInfo, Long
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, SectionInfo entity, ModelAndView model) {
-		return update(id, entity, model, e -> service.update(e));
+	public String update(@PathParam("id") Long id, Catelog entity) {
+		return update(id, entity, service);
 	}
 
 	@DELETE
@@ -75,8 +77,7 @@ public class SectionContentController extends CommonController<SectionInfo, Long
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String delete(@PathParam("id") Long id, ModelAndView model) {
-		return delete(id, new SectionInfo(), model, e -> service.delete(e));
+	public String delete(@PathParam("id") Long id) {
+		return delete(id, new Catelog(), service);
 	}
-
 }

@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseModel;
-import com.ajaxjs.framework.service.ServiceException;
+import com.ajaxjs.framework.service.IService;
 import com.ajaxjs.keyvalue.BeanUtil;
 import com.ajaxjs.keyvalue.MappingHelper;
 import com.ajaxjs.keyvalue.MappingJson;
@@ -37,6 +37,7 @@ import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
+import com.ajaxjs.orm.dao.PageResult;
 import com.ajaxjs.orm.thirdparty.SnowflakeIdWorker;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.UploadFile;
@@ -55,55 +56,54 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	private static final LogHelper LOGGER = LogHelper.getLog(CommonController.class);
 
 	/**
-	 * 新建记录 UI
+	 * 指向新建记录的页面
 	 * 
 	 * @param model 页面 Model 模型
 	 * @return 新建记录 UI JSP 模版路径
 	 */
 	public String createUI(ModelAndView model) {
-		LOGGER.info("新建记录 UI");
-
-		prepareData(model);
-		model.put("actionName", "新建");
-		model.put("isCreate", true); // 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate = true 标识为创建，以便与 update 区分开来。
-
-		return tableName;
+		return ui(model, true, "新建");
 	}
 
 	/**
-	 * 编辑记录 UI
+	 * 指向编辑记录的页面
 	 * 
 	 * @param model 页面 Model 模型
 	 * @return 编辑记录 UI JSP 模版路径
 	 */
-	public String editUI(ModelAndView model) {
-		LOGGER.info("编辑记录 UI");
+	public String editUI(ID id, ModelAndView model, IService<T, ID> service) {
+		info(id, model, _id -> service.findById(_id));
+		return ui(model, false, "修改");
+	}
+
+	private String ui(ModelAndView model, boolean isCreate, String text) {
+		LOGGER.info(text + "记录 UI");
 
 		prepareData(model);
-		model.put("actionName", "编辑");
-		model.put("isCreate", false); // 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate = true 标识为创建，以便与 update 区分开来。
+		model.put("isCreate", isCreate); // 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate = true 标识为创建，以便与 update 区分开来。
+		model.put("actionName", text);
 
-		return tableName;
+		return editUI();
 	}
 
 	/**
 	 * 创建实体
 	 * 
 	 * @param entity 实体
-	 * @param model 页面 Model 模型
 	 * @return JSON 响应
 	 */
-	public String create(T entity, ModelAndView model, Function<T, ID> createAction) {
+	public String create(T entity, Function<T, ID> createAction) {
 		LOGGER.info("创建 name:{0}，数据库将执行 INSERT 操作", entity);
-
-		prepareData(model);
 
 		ID newlyId = createAction.apply(entity);
 		if (newlyId == null)
 			throw new Error("创建失败！");
 
-		model.put("newlyId", newlyId);
-		return cud;
+		return String.format(MappingHelper.json_ok_extension, "创建实体成功", "\"newlyId\":" + newlyId);
+	}
+
+	public String create(T entity, IService<T, ID> service) {
+		return create(entity, e -> service.create(e));
 	}
 
 	/**
@@ -111,15 +111,11 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	 * 
 	 * @param id 实体 ID
 	 * @param entity 实体
-	 * @param model 页面 Model 模型
 	 * @return JSON 响应
 	 */
 	@SuppressWarnings("unchecked")
-	public String update(ID id, /* @Valid */T entity, ModelAndView model, Consumer<T> updateAction) {
+	public String update(ID id, /* @Valid */T entity, Consumer<T> updateAction) {
 		LOGGER.info("修改 name:{0}，数据库将执行 UPDATE 操作", entity);
-
-		prepareData(model);
-		model.put("isUpdate", true);
 
 		if (entity instanceof Map) {
 			((Map<String, Object>) entity).put("id", id);
@@ -130,7 +126,11 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 
 		updateAction.accept(entity);
 
-		return cud;
+		return jsonOk("修改成功");
+	}
+
+	public String update(ID id, T entity, IService<T, ID> service) {
+		return update(id, entity, e -> service.update(e));
 	}
 
 	/**
@@ -140,21 +140,13 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	 * @param model 页面 Model 模型
 	 * @return JSON 响应
 	 */
-	public String delete(T entity, ModelAndView model, Predicate<T> deleteAction) {
+	public String delete(T entity, Predicate<T> deleteAction) {
 		LOGGER.info("删除 id:{0}，数据库将执行 DELETE 操作", entity);
 
 		if (!deleteAction.test(entity))
 			throw new Error("删除失败！");
 
 		return jsonOk("删除成功");
-	}
-
-	public static String jsonOk(String msg) {
-		return MappingHelper.jsonOk(msg);
-	}
-
-	public static String jsonNoOk(String msg) {
-		return MappingHelper.jsonNoOk(msg);
 	}
 
 	/**
@@ -165,14 +157,18 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	 * @return JSON 响应
 	 */
 	@SuppressWarnings("unchecked")
-	public String delete(ID id, T entity, ModelAndView model, Predicate<T> deleteAction) {
+	public String delete(ID id, T entity, Predicate<T> deleteAction) {
 		if (entity instanceof Map) {
 			((Map<String, Object>) entity).put("id", id);
 		} else {
 			((BaseModel) entity).setId((Long) id);
 		}
 
-		return delete(entity, model, deleteAction);
+		return delete(entity, deleteAction);
+	}
+
+	public String delete(ID id, T entity, IService<T, ID> service) {
+		return delete(id, entity, e -> service.delete(e));
 	}
 
 	/**
@@ -182,13 +178,14 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	 * @param model Model 模型
 	 * @return JSP 路径。缺省提供一个默认路径，但不一定要使用它，换别的也可以。
 	 */
-	public String info(ID id, ModelAndView model, Function<ID, T> getInfoAction) {
+	public T info(ID id, ModelAndView model, Function<ID, T> getInfoAction) {
 		LOGGER.info("读取单个记录或者编辑某个记录：id 是 {0}", id);
 
 		prepareData(model);
-		model.put("info", getInfoAction.apply(id));
+		T info = getInfoAction.apply(id);
+		model.put("info", info);
 
-		return tableName;
+		return info;
 	}
 
 	/**
@@ -205,10 +202,13 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 		prepareData(model);
 
 		List<T> pageResult = findPagedList.apply(start, limit);
-
 		model.put("PageResult", pageResult);
 
 		return pageResult;
+	}
+
+	public List<T> list(int start, int limit, ModelAndView model, IService<T, ID> service) {
+		return list(start, limit, model, (_start, _limit) -> service.findPagedList(_start, _limit));
 	}
 
 	/**
@@ -219,63 +219,72 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	 * @param model
 	 * @return
 	 */
-	public String listJson(int start, int limit, ModelAndView model, BiFunction<Integer, Integer, List<T>> findPagedList) {
-		return outputJson(list(start, limit, model, findPagedList), model);
+	public String listJson(int start, int limit, BiFunction<Integer, Integer, PageResult<T>> findPagedList) {
+		LOGGER.info("获取分页列表 GET list:{0}/{1}", start, limit);
+
+		PageResult<T> pageResult = findPagedList.apply(start, limit);
+
+		String jsonStr = toJson(pageResult, false);
+		if (jsonStr == null)
+			jsonStr = "[]";
+
+		int total = pageResult.isZero() ? 0 : pageResult.getTotalCount();
+
+		return String.format(MappingHelper.json_ok_extension, "分页列表", "\"result\":" + jsonStr + ",\"total\":" + total);
+	}
+
+	public String listJson(int start, int limit, IService<T, ID> service) {
+		return listJson(start, limit, (_start, _limit) -> service.findPagedList(_start, _limit));
 	}
 
 	/**
-	 * 把 Bean 转换为 JSON
-	 * 
-	 * @param bean bean
-	 * @return JSON 结果
-	 */
-	public static String outputBeanAsJson(Object bean) {
-		if (bean != null)
-			return "json::{\"result\":" + BeanUtil.beanToJson(bean) + "}";
-		else
-			return "json::{\"result\": null}";
-	}
-
-	/**
-	 * 把 Map 转换为 JSON 数组
+	 * 把 Bean/Map/List 转换为 JSON
 	 * 
 	 * @param result Map
 	 * @return JSON 结果
 	 */
-	public static String outputMapAsJson(Map<String, Object> result) {
-		if (result != null)
-			return "json::{\"result\":" + MappingJson.stringifyMap(result) + "}";
-		else
-			return "json::{\"result\": null}";
+	public static String toJson(Object obj) {
+		return toJson(obj, true);
+	}
+
+	public String toJson(PageResult<T> pageResult, ModelAndView model) {
+		model.put("MapOutput", toJson(pageResult, false));
+		return paged_json_List;
 	}
 
 	@SuppressWarnings("unchecked")
-	public String outputJson(List<T> pageResult, ModelAndView model) {
-		String jsonStr = "[]"; // empty array
-		if (pageResult != null && pageResult.size() > 0) {
+	public static String toJson(Object obj, boolean isAdd) {
+		String jsonStr = null;
 
-			if (pageResult.get(0) instanceof Map) { // Map 类型的输出
-				List<Map<String, Object>> list = (List<Map<String, Object>>) pageResult;
-				jsonStr = MappingJson.stringifyListMap(list);
-			} else { // Bean
-				jsonStr = BeanUtil.listToJson((List<Object>) pageResult);
+		if (obj == null) {
+			jsonStr = "null";
+		} else if (obj instanceof Map) {
+			jsonStr = MappingJson.stringifyMap((Map<String, ?>) obj);
+		} else if (obj instanceof BaseModel) {
+			jsonStr = BeanUtil.beanToJson((Map<String, ?>) obj);
+		} else if (obj instanceof List) {
+			List<?> list = (List<?>) obj;
+			jsonStr = "[]"; // empty array
+
+			if (list.size() > 0) {
+				if (list.get(0) instanceof Map) { // Map 类型的输出
+					jsonStr = MappingJson.stringifyListMap((List<Map<String, Object>>) list);
+				} else { // Bean
+					jsonStr = BeanUtil.listToJson((List<Object>) list);
+				}
 			}
+		} else {
+			throw new Error("不支持数据类型");
 		}
-
-		model.put("MapOutput", jsonStr);
-
-		return paged_json_List;
+		return isAdd ? "json::{\"result\":" + jsonStr + "}" : jsonStr;
 	}
-	
-	/**
-	 * 获取全部列表数据
-	 * 
-	 * @param model Model 模型
-	 * @throws ServiceException
-	 */
-	public void listAll(ModelAndView model, BiFunction<Integer, Integer, List<T>> findPagedList) {
-		LOGGER.info("----获取全部列表----");
-		list(0, 999, model, findPagedList);
+
+	public static String jsonOk(String msg) {
+		return MappingHelper.jsonOk(msg);
+	}
+
+	public static String jsonNoOk(String msg) {
+		return MappingHelper.jsonNoOk(msg);
 	}
 
 	/**
@@ -357,9 +366,28 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	public void setUiName(String uiName) {
 		this.uiName = uiName;
 	}
-	
-//	public <S extends IService<T, ID>> S getService() {
-//		LOGGER.warning("should overwrite this method");
-//		return null;
-//	}
+
+	public static String getJspTemplatePath(String tableName) {
+		return tableName;
+	}
+
+	public String adminList_CMS() {
+		return String.format(jsp_perfix + "/common-entity/%s-list", tableName);
+	}
+
+	public String adminList() {
+		return String.format(jsp_perfix_webinf + "/entry/%s-admin-list", tableName);
+	}
+
+	public String infoUI_CMS() {
+		return jsp_perfix + "/common-entity/" + tableName;
+	}
+
+	public String editUI() {
+		return String.format(jsp_perfix_webinf + "/entry/%s-admin", tableName);
+	}
+
+	public String editUI_CMS() {
+		return String.format(jsp_perfix_webinf + "/entry/%s-admin", tableName);
+	}
 }

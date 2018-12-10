@@ -73,23 +73,21 @@ public interface CommonEntryAdminController<E, ID extends Serializable> extends 
 	 * 新建动作
 	 * 
 	 * @param entity 记录实体，可以是 Bean 或 Map
-	 * @param model  数据实体转换到页面层的对象
 	 * @return 创建后消息反馈之 JSON
 	 */
 	@POST
-	public String create(E entity, ModelAndView model);
+	public String create(E entity);
 
 	/**
 	 * 修改动作
 	 * 
 	 * @param id     ID 序号
 	 * @param entity 记录实体，可以是 Bean 或 Map
-	 * @param model  数据实体转换到页面层的对象
 	 * @return 创建后消息反馈之 JSON
 	 */
 	@PUT
 	@Path("{id}")
-	public String update(ID id, E entity, ModelAndView model);
+	public String update(ID id, E entity);
 
 	/**
 	 * 删除一记录，注意是传入 id 参数
@@ -100,5 +98,5 @@ public interface CommonEntryAdminController<E, ID extends Serializable> extends 
 	 */
 	@DELETE
 	@Path("{id}")
-	public String delete(@PathParam("id") ID id, ModelAndView model);
+	public String delete(@PathParam("id") ID id);
 }

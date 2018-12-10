@@ -16,8 +16,6 @@ import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.cms.controller.CommonController;
 import com.ajaxjs.cms.controller.CommonEntryAdminController;
-import com.ajaxjs.cms.model.Attachment_picture;
-import com.ajaxjs.cms.service.Attachment_pictureService;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.ioc.Bean;
@@ -67,7 +65,7 @@ public class Attachment_pictureController extends CommonController<Attachment_pi
 	@Path("getListByOwnerUid/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getListByOwnerUid(@PathParam("id") Long owenrUid, ModelAndView model) {
-		return outputJson(service.findByOwner(owenrUid), model);
+		return toJson(service.findByOwner(owenrUid), model);
 	}
 
 	@POST

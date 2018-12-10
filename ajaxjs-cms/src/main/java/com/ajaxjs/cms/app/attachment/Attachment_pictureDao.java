@@ -1,8 +1,7 @@
-package com.ajaxjs.cms.dao;
+package com.ajaxjs.cms.app.attachment;
 
 import java.util.List;
 
-import com.ajaxjs.cms.model.Attachment_picture;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
