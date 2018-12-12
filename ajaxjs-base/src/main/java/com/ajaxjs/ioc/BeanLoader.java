@@ -54,31 +54,12 @@ public class BeanLoader extends AbstractScanner<Class<Object>> {
 	@Override
 	public void onJarAdding(Set<Class<Object>> target, String resourcePath) {
 		ClassPool cp = ClassPool.getDefault();
-		
+
 		try {
 			CtClass cc = cp.get(resourcePath);
-			CtField[] fileds = cc.getDeclaredFields();
-			
-			for (CtField field : fileds) {
-				if (field.getAnnotation(Resource.class) != null) {
-					String setMethodName = "set" + BeanUtil.firstLetterUpper(field.getName());
-					CtMethod setter;
-					
-					try {
-						setter = cc.getDeclaredMethod(setMethodName, new CtClass[] { field.getType() });
-					} catch (NotFoundException e) {
-						// 另外一种写法
-//						String tpl = "public void %s(%s %s) { this.%s = %s; }";
-//						String m = String.format(tpl, setMethodName, field.getType().getName(), field.getName(), field.getName(), field.getName());
-//						setter = CtNewMethod.make(m, cc);
-//						System.out.println(setMethodName);
+			doAop(cc);
+			makeSetter(cc);
 
-						CtField f1 = new CtField(field.getType(), field.getName(), cc);
-						setter = CtNewMethod.setter(setMethodName, f1);
-						cc.addMethod(setter);
-					}
-				}
-			}
 //			if ("com.ajaxjs.ioc.Hi".equals(resourcePath)) {
 //				CtField f1 = new CtField(cp.get("com.ajaxjs.ioc.Person"), "person", cc);
 //				cc.addMethod(CtNewMethod.setter("setPerson", f1));
@@ -91,6 +72,49 @@ public class BeanLoader extends AbstractScanner<Class<Object>> {
 			target.add(clazz);
 		} catch (NotFoundException | ClassNotFoundException e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void makeSetter(CtClass cc) throws ClassNotFoundException, CannotCompileException, NotFoundException {
+		CtField[] fields = cc.getDeclaredFields();
+		for (CtField field : fields) {
+			if (field.getAnnotation(Resource.class) != null) {
+				String setMethodName = "set" + BeanUtil.firstLetterUpper(field.getName());
+				CtMethod setter;
+
+				try {
+					setter = cc.getDeclaredMethod(setMethodName, new CtClass[] { field.getType() });
+				} catch (NotFoundException e) {
+					// 另外一种写法
+//					String tpl = "public void %s(%s %s) { this.%s = %s; }";
+//					String m = String.format(tpl, setMethodName, field.getType().getName(), field.getName(), field.getName(), field.getName());
+//					setter = CtNewMethod.make(m, cc);
+//					System.out.println(setMethodName);
+
+					CtField f1 = new CtField(field.getType(), field.getName(), cc);
+					setter = CtNewMethod.setter(setMethodName, f1);
+					cc.addMethod(setter);
+				}
+			}
+		}
+	}
+
+	private static void doAop(CtClass cc) throws ClassNotFoundException, CannotCompileException {
+		CtMethod[] methods = cc.getMethods();
+		if (methods != null && methods.length > 0) {
+			for (CtMethod method : methods) {
+				if (method.getAnnotation(Before.class) != null) {
+					Before before = (Before) method.getAnnotation(Before.class);
+					String beforeMethod = before.value().getName() + "." + before.methodName(); // static method only
+					method.insertBefore(String.format("{ $args = %s($args); }", beforeMethod));
+				}
+
+				if (method.getAnnotation(After.class) != null) {
+					After after = (After) method.getAnnotation(After.class);
+					String afterMethod = after.value().getName() + "." + after.methodName(); // static method only
+					method.insertAfter(String.format("{ return %s($_); }", afterMethod));
+				}
+			}
 		}
 	}
 

@@ -84,7 +84,9 @@ public class BeanContext {
 			throw e;
 		}
 
-		String name = clz.getAnnotation(Bean.class).value();
+//		String name = clz.getAnnotation(Bean.class).value();
+		String name = getBeanId(clz.getAnnotation(Bean.class), clz);
+		
 		Object obj = getBean(name);
 
 		return obj == null ? null : (T) obj;
@@ -165,6 +167,7 @@ public class BeanContext {
 	}
 
 	/**
+	 * 获取 Bean 的名称，如果没有则取类 SimpleName
 	 * 
 	 * @param annotation
 	 * @param clz
