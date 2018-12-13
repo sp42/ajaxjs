@@ -74,7 +74,8 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	 * @return 请求路径
 	 */
 	public String getRoute() {
-		String route = getRequestURI().replace(getContextPath(), "");
+//		String route = getRequestURI().replace(getContextPath(), "");
+		String route = getRequestURI().replaceAll("^" + getContextPath(), "");
 		return route.replaceFirst("/\\w+\\.\\w+$", ""); // 删除最后的 index.jsp
 	}
 

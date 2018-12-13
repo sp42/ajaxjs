@@ -16,15 +16,17 @@ AJAXJS WEB 包含以下模块：
 - security 网站防御系统，抵御 XSS、CSRF 等攻击；
 - config 基于本地 JSON 文件的通用配置系统，完全可以代替 properties 文件实现配置模块。
 
-Ajaxjs 前端框架[请点击](../ajaxjs-web-js)。
+Ajaxjs 前端框架[请点击](../ajaxjs-web-js)。前端资源通过 Servlet 3.0 打包到 jar 里面。
 
 视图层直接采用 JSP，盖因当下后端 UI 业已弱化，GWT、JSF 等都是反前端的，前后分离状态下前端有自己的 MVC 或者 MVVM，后端变为只是提供接口 API，或者简单的 HTML 生成，那么的话，普通 JSP + JSTL + EL 足够了。
+
+支持热加载，修改 Java 代码后不用重启服务器，事前需要配置一下，参见[博客文档](https://blog.csdn.net/zhangxin09/article/details/84988200)。
 
 
 安装
 ---------
 
-要求 Java 1.8+，Jar 直接下载：[～1300kb，包含 class 文件 160kb，其余为 js/css/jpg 等静态资源](https://search.maven.org/remotecontent?filepath=com/ajaxjs/ajaxjs-web/1.1.2/ajaxjs-web-1.1.2.jar)
+要求 Java 1.8+，Jar 直接下载：[～100kb，包含小量 js/css/jpg 等静态资源](https://search.maven.org/remotecontent?filepath=com/ajaxjs/ajaxjs-web/1.1.3/ajaxjs-web-1.1.3.jar)
 
 Maven 坐标：
 

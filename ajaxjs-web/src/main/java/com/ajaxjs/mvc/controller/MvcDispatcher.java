@@ -110,7 +110,7 @@ public class MvcDispatcher implements Filter {
 
 		String uri = request.getFolder(), httpMethod = request.getMethod();
 
-//		System.out.println(">>>>>>>" + uri);
+		System.out.println(">>>>>>>" + uri);
 		Matcher match = id.matcher(uri);
 		if (match.find()) {
 			uri = match.replaceAll("/{id}");
@@ -121,8 +121,8 @@ public class MvcDispatcher implements Filter {
 		if (action != null) {
 			Method method = getMethod(action, httpMethod);// 要执行的方法
 			IController controller = getController(action, httpMethod);
-//			System.out.println(">>>>>>>" + action);
-//			System.out.println(">>>>>>>" + method);
+			System.out.println(">>>>>>>" + action);
+			System.out.println(">>>>>>>" + method);
 
 			if (method != null && controller != null) {
 				dispatch(request, response, controller, method);

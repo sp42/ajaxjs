@@ -51,15 +51,10 @@ import com.ajaxjs.util.logger.LogHelper;
 public class ControllerScanner extends ScanClass<IController> {
 	private static final LogHelper LOGGER = LogHelper.getLog(ControllerScanner.class);
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void onFileAdding(Set<Class<IController>> target, File resourceFile, String packageJavaName) {
 		String className = getClassName(resourceFile, packageJavaName);
-		Class<?> clazz = ReflectUtil.getClassByName(className);
-
-		if (IController.class.isAssignableFrom(clazz)) {
-			target.add((Class<IController>) clazz);// 添加到集合中去
-		}
+		onJarAdding(target, className);
 	}
 
 	@SuppressWarnings("unchecked")
