@@ -1,46 +1,45 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>package ${packageName}.service;
-
-import com.ajaxjs.framework.dao.DaoHandler;
-import com.ajaxjs.framework.dao.QueryParams;
-import com.ajaxjs.framework.service.ServiceException;
-import com.ajaxjs.jdbc.PageResult;
+import java.util.List;
+import com.ajaxjs.orm.dao.DaoHandler;
+import com.ajaxjs.orm.dao.PageResult;
 import ${packageName}.dao.${beanName}Dao;
 import ${packageName}.model.${beanName};
 import com.ajaxjs.ioc.Bean;
 
-@Bean(value = "${beanName}Service")
+@Bean("${beanName}Service")
 public class ${beanName}ServiceImpl implements ${beanName}Service {
-	${beanName}Dao dao = new DaoHandler<${beanName}Dao>().bind(${beanName}Dao.class);
+	public ${beanName}Dao dao = new DaoHandler().bind(${beanName}Dao.class);
 
 	@Override
-	public ${beanName} findById(Long id) throws ServiceException {
+	public ${beanName} findById(Long id) {
 		return dao.findById(id);
 	}
 
 	@Override
-	public Long create(${beanName} bean) throws ServiceException {
+	public Long create(${beanName} bean) {
 		return dao.create(bean);
 	}
 
 	@Override
-	public int update(${beanName} bean) throws ServiceException {
+	public int update(${beanName} bean) {
 		return dao.update(bean);
 	}
 
 	@Override
-	public boolean delete(${beanName} bean) throws ServiceException {
+	public boolean delete(${beanName} bean) {
 		return dao.delete(bean);
 	}
 
-	@Override
-	public PageResult<${beanName}> findPagedList(QueryParams params) throws ServiceException {
-		return dao.findPagedList(params);
-	}
 
 	@Override
-	public PageResult<${beanName}> findPagedList(int start, int limit) throws ServiceException {
-		return dao.findPagedList(new QueryParams(start, limit));
+	public PageResult<${beanName}> findPagedList(int start, int limit) {
+		return dao.findPagedList(start, limit);
 	}
+	
+	@Override
+	public List<${beanName}> findList() {
+		return null;
+	} 
 
 	@Override
 	public String getName() {

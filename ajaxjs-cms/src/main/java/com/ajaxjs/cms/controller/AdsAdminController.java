@@ -35,7 +35,8 @@ public class AdsAdminController extends CommonController<Ads, Long> implements C
 	public String list(@QueryParam("catalogId") int catalogId, @QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView mv) {
 		if (catalogId == 0)
 			catalogId = service.getDomainCatelogId(); // 不指定实体的子分类
-
+		mv.put("domainCatalog_Id", catalogId);
+		
 		final int _catalogId = catalogId;
 		super.list(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(_catalogId, start, limit));
 		return adminList_CMS();

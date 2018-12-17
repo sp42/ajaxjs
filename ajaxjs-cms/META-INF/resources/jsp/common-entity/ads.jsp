@@ -14,8 +14,7 @@
 		<!-- 后台头部导航 -->
 		<ajaxjs-admin-header> <template slot="title">${isCreate?'新建':'编辑'}${uiName}</template>
 		<template slot="btns"> <c:if test="${!isCreate}">
-			<a :href="ajResources.ctx + '/admin/ads/'">新建</a> | 
-				</c:if> <a :href="ajResources.ctx + '/admin/ads/list/'">${uiName}列表</a> | </template>
+			<a :href="ajResources.ctx + '/admin/ads/'">新建</a> | </c:if> <a :href="ajResources.ctx + '/admin/ads/list/'">${uiName}列表</a> | </template>
 		</ajaxjs-admin-header>
 
 		<form action="." method="${isCreate ? 'POST' : 'PUT'}"

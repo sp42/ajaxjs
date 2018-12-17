@@ -28,8 +28,7 @@ public class <%=Utils.firstLetterUpper(beanName)%> extends BaseModel {
 	
 	/**
 	 * 设置${name}
-	 * @param ${info.name}     
-	 *            ${info.comment}
+	 * @param ${info.name}  
 	 */
 	public void set${firstLetterUpperName}(${type}${' '}${info.name}) {
 		this.${info.name} = ${info.name};

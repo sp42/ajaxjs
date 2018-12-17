@@ -3,7 +3,6 @@ package com.ajaxjs.cms.app.catelog;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.cms.dao.CatalogDao;
 import com.ajaxjs.cms.service.aop.CommonService;
 import com.ajaxjs.cms.service.aop.GlobalLogAop;
 import com.ajaxjs.ioc.Bean;
@@ -12,7 +11,7 @@ import com.ajaxjs.orm.dao.PageResult;
 
 @Bean(value = "CatelogService", aop = { CommonService.class, GlobalLogAop.class })
 public class CatelogServiceImpl implements CatelogService {
-	CatalogDao dao = new DaoHandler().bind(CatalogDao.class);
+	CatelogDao dao = new DaoHandler().bind(CatelogDao.class);
 
 	@Override
 	public List<Catelog> findByParentId(int id) {
@@ -79,7 +78,7 @@ public class CatelogServiceImpl implements CatelogService {
 
 	@Override
 	public String getTableName() {
-		return CatalogDao.tableName;
+		return CatelogDao.tableName;
 	}
 
 	@Override

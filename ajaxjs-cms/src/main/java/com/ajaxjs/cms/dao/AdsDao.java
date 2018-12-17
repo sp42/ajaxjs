@@ -2,8 +2,8 @@ package com.ajaxjs.cms.dao;
 
 import java.util.List;
 
+import com.ajaxjs.cms.app.catelog.Catelogable;
 import com.ajaxjs.cms.model.Ads;
-import com.ajaxjs.framework.service.Catelogable;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;

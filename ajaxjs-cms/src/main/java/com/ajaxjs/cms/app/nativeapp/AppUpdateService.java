@@ -1,8 +1,8 @@
 package com.ajaxjs.cms.app.nativeapp;
 
-import com.ajaxjs.framework.service.IService;
+import com.ajaxjs.framework.IBaseService;
 
-public interface AppUpdateService extends IService<AppUpdate, Long> {
+public interface AppUpdateService extends IBaseService<AppUpdate> {
 	/**
 	 * 获取安卓的最新版本
 	 * 

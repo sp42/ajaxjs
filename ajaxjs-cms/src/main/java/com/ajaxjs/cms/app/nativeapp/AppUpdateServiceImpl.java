@@ -1,49 +1,17 @@
 package com.ajaxjs.cms.app.nativeapp;
 
-import java.util.List;
-
-import com.ajaxjs.cms.service.aop.CommonService;
+import com.ajaxjs.framework.BaseService;
+import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
-import com.ajaxjs.orm.dao.DaoHandler;
-import com.ajaxjs.orm.dao.PageResult;
 
-@Bean(value = "AppUpdateService", aop = { CommonService.class })
-public class AppUpdateServiceImpl implements AppUpdateService {
-	AppUpdateDao dao = new DaoHandler().bind(AppUpdateDao.class);
+@Bean("AppUpdateService")
+public class AppUpdateServiceImpl extends BaseService<AppUpdate> implements AppUpdateService {
+	AppUpdateDao dao = new Repository().bind(AppUpdateDao.class);
 
-	@Override
-	public AppUpdate findById(Long id) {
-		return dao.findById(id);
-	}
-
-	@Override
-	public Long create(AppUpdate bean) {
-		return dao.create(bean);
-	}
-
-	@Override
-	public int update(AppUpdate bean) {
-		return dao.update(bean);
-	}
-
-	@Override
-	public boolean delete(AppUpdate bean) {
-		return dao.delete(bean);
-	}
-
-	@Override
-	public String getName() {
-		return "客户端更新接口";
-	}
-
-	@Override
-	public String getTableName() {
-		return "appUpdate";
-	}
-
-	@Override
-	public PageResult<AppUpdate> findPagedList(int start, int limit) {
-		return dao.findPagedList(start, limit);
+	{
+		setUiName("客户端更新接口");
+		setShortName("appUpdate");
+		setDao(dao);
 	}
 
 	@Override
@@ -55,10 +23,4 @@ public class AppUpdateServiceImpl implements AppUpdateService {
 	public AppUpdate getLastiOSVersion(int appId) {
 		return dao.getLastiOS(appId);
 	}
-
-	@Override
-	public List<AppUpdate> findList() { 
-		return null;
-	}
-
 }

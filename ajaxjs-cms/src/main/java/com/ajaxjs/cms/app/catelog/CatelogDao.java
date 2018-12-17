@@ -1,9 +1,8 @@
-package com.ajaxjs.cms.dao;
+package com.ajaxjs.cms.app.catelog;
 
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.cms.app.catelog.Catelog;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
@@ -11,7 +10,7 @@ import com.ajaxjs.orm.annotation.Update;
 import com.ajaxjs.orm.dao.IDao;
 import com.ajaxjs.orm.dao.PageResult;
 
-public interface CatalogDao extends IDao<Catelog, Long> {
+public interface CatelogDao extends IDao<Catelog, Long> {
 	public final static String tableName = "general_catelog";
 	
 	@Select("SELECT * FROM " + tableName + " WHERE id = ?")

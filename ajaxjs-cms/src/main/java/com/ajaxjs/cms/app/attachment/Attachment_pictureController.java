@@ -33,8 +33,8 @@ import com.ajaxjs.web.UploadFileInfo;
  * @author sp42 frank@ajaxjs.com
  *
  */
+@Bean
 @Path("/admin/attachmentPicture")
-@Bean("Attachment_pictureController")
 public class Attachment_pictureController extends CommonController<Attachment_picture, Long> implements CommonEntryAdminController<Attachment_picture, Long> {
 	@Resource("Attachment_pictureService")
 	private Attachment_pictureService service;
@@ -53,9 +53,8 @@ public class Attachment_pictureController extends CommonController<Attachment_pi
 	@Override
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
 		model.put("imgRelativePath", ConfigService.getValueAsString("uploadFile" + ".relativePath"));
-
 		model.put("catelogMap", catelogMap);
-		list(start, limit, model, (_start, _limit) -> service.findPagedList(_start, _limit));
+		list(start, limit, model, service);
 
 		return jsp_perfix + "/attachment/pic-list";
 	}
@@ -64,8 +63,8 @@ public class Attachment_pictureController extends CommonController<Attachment_pi
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("getListByOwnerUid/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getListByOwnerUid(@PathParam("id") Long owenrUid, ModelAndView model) {
-		return toJson(service.findByOwner(owenrUid), model);
+	public String getListByOwnerUid(@PathParam("id") Long owenrUid) {
+		return toJson(service.findByOwner(owenrUid));
 	}
 
 	@POST
@@ -167,14 +166,14 @@ public class Attachment_pictureController extends CommonController<Attachment_pi
 
 	@POST
 	@Override
-	public String create(Attachment_picture entity, ModelAndView model) {
+	public String create(Attachment_picture entity) {
 		return show405;
 	}
 
 	@PUT
 	@Path("{id}")
 	@Override
-	public String update(@PathParam("id") Long id, Attachment_picture entity, ModelAndView model) {
+	public String update(@PathParam("id") Long id, Attachment_picture entity) {
 		return show405;
 	}
 
@@ -182,15 +181,15 @@ public class Attachment_pictureController extends CommonController<Attachment_pi
 	@Path("{id}")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam("id") Long id, ModelAndView model, MvcRequest request) {
+	public String delete(@PathParam("id") Long id, MvcRequest request) {
 		Attachment_picture pic = service.findById(id);
 		pic.setPath(request.mappath(pic.getPath())); // 转换为绝对地址
 
-		return delete(id, pic, model, _id -> service.delete(_id));
+		return delete(id, pic, service);
 	}
 
 	@Override
-	public String delete(Long id, ModelAndView model) {
+	public String delete(Long id) {
 		return null;
 	}
 }

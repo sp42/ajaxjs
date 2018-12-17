@@ -3,9 +3,9 @@ package com.ajaxjs.cms.app.user.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.ajaxjs.cms.app.catelog.CatelogDao;
 import com.ajaxjs.cms.app.catelog.Catelog;
 import com.ajaxjs.cms.app.user.model.User;
-import com.ajaxjs.cms.dao.CatalogDao;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
@@ -47,7 +47,7 @@ public interface UserAdminDao extends IDao<User, Long> {
 	public List<User> getTop5();
 	
 	
-	@Select("SELECT * FROM " + CatalogDao.tableName + " WHERE pid = " + NewsCatalogId)
+	@Select("SELECT * FROM " + CatelogDao.tableName + " WHERE pid = " + NewsCatalogId)
 	public List<Catelog> getCatalog();
 	
 	@Select(value = "SELECT user_login_log.*, user.name AS name,  user.username AS username FROM user_login_log INNER JOIN user ON user.id = user_login_log.userId")

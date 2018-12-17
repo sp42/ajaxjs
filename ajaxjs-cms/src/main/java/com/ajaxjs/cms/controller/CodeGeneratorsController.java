@@ -110,7 +110,7 @@ public class CodeGeneratorsController implements IController {
 		return "html::Done!<a href=\"" + request.getContextPath() + zipSave + "\" download>download</a>";
 	}
 
-	static final String tplSave = "/asset/jsp/system/CodeGenerator/template";
+	static final String tplSave = "/jsp/system/CodeGenerator/template";
 
 	/**
 	 * 替换为实际内容
@@ -128,7 +128,7 @@ public class CodeGeneratorsController implements IController {
 	 */
 	static void render(boolean isMap, String pojoSave, String daoSave, String serviceSave, String controllerSave, String beanName, HttpServletRequest request, HttpServletResponse response, ServletContext sc)
 			throws FileNotFoundException {
-		String dao = tplSave + "/dao.jsp", service = tplSave + "/service.jsp", serviceImp = tplSave + "/serviceImpl.jsp", controller = tplSave + "/controller_ajax.jsp";
+		String dao = tplSave + "/dao.jsp", service = tplSave + "/service.jsp", serviceImp = tplSave + "/serviceImpl.jsp", controller = tplSave + "/controller.jsp";
 
 		if (!isMap)
 			render(tplSave + "/pojo.jsp", String.format(pojoSave, beanName), sc, request, response);
