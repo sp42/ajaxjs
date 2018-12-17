@@ -1,9 +1,9 @@
 package com.ajaxjs.cms.model;
 
 import com.ajaxjs.framework.BaseModel;
+import com.ajaxjs.framework.IBaseBean;
 
-public class Feedback extends BaseModel {
-
+public class Feedback extends BaseModel implements IBaseBean {
 	private static final long serialVersionUID = 8996839117086200226L;
 	private long pid;
 	private Integer status;
@@ -14,7 +14,7 @@ public class Feedback extends BaseModel {
 	private String phone;
 	private String feedback;
 	private String userName;
-	
+
 	public long getPid() {
 		return pid;
 	}

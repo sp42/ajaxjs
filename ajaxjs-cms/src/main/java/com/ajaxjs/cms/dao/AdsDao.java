@@ -30,16 +30,4 @@ public interface AdsDao extends IDao<Ads, Long>, Catelogable<Ads> {
 	@Select(value = list)
 	@Override
 	public List<Ads> findListByCatelogId(int catelogId);
-
-	@Insert(tableName = tableName)
-	@Override
-	public Long create(Ads entry);
-
-	@Update(tableName = tableName)
-	@Override
-	public int update(Ads entry);
-
-	@Delete(tableName = tableName)
-	@Override
-	public boolean delete(Ads entry);
 }

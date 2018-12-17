@@ -4,7 +4,7 @@ import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
 
-@TableName(value = "entity_article", beanClass = AppUpdate.class)
+@TableName(value = "entity_app_update", beanClass = AppUpdate.class)
 public interface AppUpdateDao extends IBaseDao<AppUpdate> {
 
 	@Select("SELECT * FROM ${tableName} WHERE appId = ? ORDER BY apkVersion DESC LIMIT 0, 1")

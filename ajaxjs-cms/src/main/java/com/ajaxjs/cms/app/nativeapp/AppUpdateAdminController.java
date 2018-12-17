@@ -12,8 +12,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.controller.CommonController;
-import com.ajaxjs.cms.controller.CommonEntryAdminController;
+import com.ajaxjs.framework.BaseController;
+import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
@@ -25,25 +25,16 @@ import com.ajaxjs.web.UploadFileInfo;
 
 @Bean
 @Path("/admin/appUpdate")
-public class AppUpdateAdminController extends CommonController<AppUpdate, Long> implements CommonEntryAdminController<AppUpdate, Long> {
-
+public class AppUpdateAdminController extends BaseController<AppUpdate> {
 	@Resource("AppUpdateService")
 	private AppUpdateService service;
-
+	
 	@GET
 	@Path("/list")
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Override
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView mv) {
-		list(start, limit, mv, service);
-		return adminList_CMS();
-	}
-
-	@GET
-	@Override
-	public String createUI(ModelAndView mv) {
-		super.createUI(mv);
-		return infoUI_CMS();
+		listPaged(start, limit, mv);
+		return adminList();
 	}
 
 	@GET
@@ -51,8 +42,15 @@ public class AppUpdateAdminController extends CommonController<AppUpdate, Long> 
 	@Path("/{id}")
 	@Override
 	public String editUI(@PathParam("id") Long id, ModelAndView mv) {
-		editUI(id, mv, service);
-		return infoUI_CMS();
+		super.editUI(id, mv);
+		return editUI();
+	}
+	
+	@GET
+	@Override
+	public String createUI(ModelAndView mv) {
+		super.createUI(mv);
+		return editUI();
 	}
 
 	@POST
@@ -60,7 +58,7 @@ public class AppUpdateAdminController extends CommonController<AppUpdate, Long> 
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
 	public String create(AppUpdate entity) {
-		return create(entity, service);
+		return super.create(entity);
 	}
 
 	@PUT
@@ -69,16 +67,15 @@ public class AppUpdateAdminController extends CommonController<AppUpdate, Long> 
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
 	public String update(@PathParam("id") Long id, AppUpdate entity) {
-		return update(id, entity, service);
+		return super.update(id, entity);
 	}
 
 	@DELETE
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	@Override
 	public String delete(@PathParam("id") Long id) {
-		return delete(id, new AppUpdate(), service);
+		return delete(id, new AppUpdate());
 	}
 
 	@POST
@@ -98,5 +95,10 @@ public class AppUpdateAdminController extends CommonController<AppUpdate, Long> 
 
 		return "err";
 //		return String.format(json_ok_extension, "上传成功", "\"visitPath\" : \"" + uploadFileInfo.visitPath + "\"");
+	}
+
+	@Override
+	public IBaseService<AppUpdate> getService() {
+		return service;
 	}
 }

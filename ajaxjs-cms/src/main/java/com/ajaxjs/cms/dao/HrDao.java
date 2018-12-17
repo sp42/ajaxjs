@@ -3,43 +3,19 @@ package com.ajaxjs.cms.dao;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.cms.app.catelog.CatelogDao;
 import com.ajaxjs.cms.app.catelog.Catelog;
-import com.ajaxjs.orm.annotation.Delete;
-import com.ajaxjs.orm.annotation.Insert;
+import com.ajaxjs.cms.app.catelog.CatelogDao;
 import com.ajaxjs.orm.annotation.Select;
-import com.ajaxjs.orm.annotation.Update;
 import com.ajaxjs.orm.dao.IDao;
 import com.ajaxjs.orm.dao.PageResult;
 
 public interface HrDao extends IDao<Map<String, Object>, Long> {
 	public final static String tableName = "entity_hr";
 
-	@Select("SELECT * FROM " + tableName + " WHERE id = ?")
-	@Override
-	public Map<String, Object> findById(Long id);
-
 	@Select(value = "SELECT id, name, createDate, updateDate, catelog FROM " + tableName + " ORDER BY ID DESC")
 	@Override
 	public PageResult<Map<String, Object>> findPagedList(int start, int limit);
 
-	@Select(value = "SELECT id, name, createDate, expr, catelog FROM " + tableName)
-	public PageResult<Map<String, Object>> findPagedList_public(int start, int limit);
-
-	@Insert(tableName = tableName)
-	@Override
-	public Long create(Map<String, Object> bean);
-
-	@Update(tableName = tableName)
-	@Override
-	public int update(Map<String, Object> bean);
-
-	@Delete(tableName = tableName)
-	@Override
-	public boolean delete(Map<String, Object> bean);
-
-	@Select("SELECT * FROM " + tableName + " LIMIT 0, 5")
-	public List<Map<String, Object>> getTop5();
 
 	@Select("SELECT * FROM " + CatelogDao.tableName + " WHERE pid = ?")
 	public List<Catelog> getHrCatalog(int catelogParentId);
@@ -59,8 +35,5 @@ public interface HrDao extends IDao<Map<String, Object>, Long> {
 					+ "WHERE catelog in (SELECT id FROM general_catelog WHERE `path` LIKE ( ( SELECT `path` FROM general_catelog WHERE id = ? ) || '%')) AND 1 = 1")
 
 	public PageResult<Map<String, Object>> findPagedListByCatalogId(int catelogIds,  int start, int limit);
-	
-	@Select(value = "SELECT * FROM " + tableName + " ORDER BY ID DESC")
-	@Override
-	public List<Map<String, Object>> findList();
+
 }
