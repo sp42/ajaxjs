@@ -138,6 +138,11 @@ public class DaoHandler extends JdbcHelper implements InvocationHandler {
 		Object obj = Proxy.newProxyInstance(clz.getClassLoader(), new Class[] { clz }, this);
 		return (T) obj;
 	}
+	
+	public <T extends IDao<?, ?>> T bind(Class<T> clz, String tableName) {
+		setTableName(tableName);
+		return bind(clz);
+	}
 
 	/**
 	 * 获取实体的类型，可能是 map 或者 bean 类型
@@ -145,6 +150,7 @@ public class DaoHandler extends JdbcHelper implements InvocationHandler {
 	 * @param method 实体 Getter 方法
 	 * @return 实体类型的类引用
 	 */
+	
 	private static Class<?> getEntryContainerType(Method method) {
 		Class<?> type = method.getReturnType();
 
@@ -247,11 +253,15 @@ public class DaoHandler extends JdbcHelper implements InvocationHandler {
 			sql = handleSql(sql, sqlFactoryHandler);
 
 			id = create(conn, sql, args);
-		} else if (insert.value().equals("") && insert.tableName() != null && args[0] != null) {// 以 bean 方式创建
+		} else if (insert.value().equals("")  && args[0] != null) {// 以 bean 方式创建
+			String tableName = insert.tableName();// 表名可以通过注解获取（类），也可以直接 insert.tableName() 获取
+			if(tableName == null || "".equals(tableName)) 
+				tableName = getTableName();
+			
 			if (args[0] instanceof Map)
-				id = createMap(conn, (Map<String, Object>) args[0], insert.tableName());
+				id = createMap(conn, (Map<String, Object>) args[0], tableName);
 			else
-				id = createBean(conn, args[0], insert.tableName());
+				id = createBean(conn, args[0], tableName);
 		}
 
 		if (returnType == Integer.class && id.getClass() == Long.class) {

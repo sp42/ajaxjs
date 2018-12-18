@@ -369,7 +369,7 @@ public class JdbcHelper {
 			map = (Map<String, Object>) bean;
 
 			for (String field : map.keySet()) {
-				if (field.equals("id"))
+				if ("id".equals(field))
 					continue; // 忽略 id 字段
 
 				if (isInsert)
@@ -387,6 +387,9 @@ public class JdbcHelper {
 				Object value = valueHander(bean, info);
 
 				if (value != null) {// 有值的才进行操作
+					if ("id".equals(fieldName))
+						continue; // 忽略 id 字段
+					
 					if (isInsert)
 						sqlBuilder.VALUES(fieldName, "?");
 					else

@@ -21,5 +21,12 @@ public @interface TableName {
 	 * 
 	 * @return
 	 */
-	String value();
+	String value() default "";
+
+	/**
+	 * 实体类
+	 * 
+	 * @return
+	 */
+	Class<?> beanClass() default Object.class;
 }
