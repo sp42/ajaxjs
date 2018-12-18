@@ -1,8 +1,10 @@
-package com.ajaxjs.config;
+package com.ajaxjs.web;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -36,7 +38,7 @@ public class TestConfig {
 
 	@Test
 	public void testLoadJSON_in_JS() {
-		HashMap<String, Object> map = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		map.put("site.titlePrefix", "str");
 		map.put("site.keywords", 1000);
 		map.put("uploadFile.MaxTotalFileSize", 2);

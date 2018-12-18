@@ -27,10 +27,9 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class UserAgent {
 	/**
-	 * 送入一个请求，得到  UA 标识字符串
+	 * 送入一个请求，得到 UA 标识字符串
 	 * 
-	 * @param request
-	 *            请求对象
+	 * @param request 请求对象
 	 */
 	public UserAgent(HttpServletRequest request) {
 		String ua = request.getHeader("User-Agent");
@@ -126,26 +125,6 @@ public class UserAgent {
 	}
 
 	/**
-	 * 是否为安卓 2.x
-	 * 
-	 * @return true 表示为 Android 2.x 浏览器
-	 */
-	public boolean isAndroid_2() {
-		boolean is2 = Pattern.compile("Android\\s2", Pattern.CASE_INSENSITIVE).matcher(ua).find();
-		return isAndroid() && is2;
-	}
-
-	/**
-	 * 是否为安卓 2.2.x
-	 * 
-	 * @return true 表示为 Android 2.2.x 浏览器
-	 */
-	public boolean isAndroid_2_2() {
-		boolean is2_2 = Pattern.compile("Android\\s2\\.2", Pattern.CASE_INSENSITIVE).matcher(ua).find();
-		return isAndroid() && is2_2;
-	}
-
-	/**
 	 * 是否为 iPhone
 	 * 
 	 * @return true 表示为 iPhone Safari 浏览器
@@ -173,20 +152,11 @@ public class UserAgent {
 	}
 
 	/**
-	 * 是否为 WinPhone 手机
-	 * 
-	 * @return true 表示为 WinPhone 手机
-	 */
-	public boolean isWinPhone() {
-		return ua.contains("windows phone");
-	}
-
-	/**
 	 * 是否为手机
 	 * 
 	 * @return true 表示为手机
 	 */
 	public boolean isPhone() {
-		return isAndroid() || isIOS() || isWinPhone();
+		return isAndroid() || isIOS();
 	}
 }

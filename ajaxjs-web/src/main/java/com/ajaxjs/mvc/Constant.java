@@ -49,21 +49,6 @@ public interface Constant {
 	public static final String jsp_perfix_webinf = "/WEB-INF/jsp";
 
 	/**
-	 * json 路径常量（实体）
-	 */
-	public static final String show_json_info = jsp_perfix + "/json/showInfo.jsp";
-
-	/**
-	 * json 路径常量（分页列表）
-	 */
-	public static final String paged_json_List = jsp_perfix + "/json/json-pagedList.jsp";
-
-	/**
-	 * json 路径常量（错误信息）
-	 */
-	public static final String paged_json_error = jsp_perfix + "/json/json-err.jsp";
-
-	/**
 	 * 显示 HTTP 405 禁止操作
 	 */
 	public static final String show405 = String.format(MappingHelper.json_not_ok, "405， Request method not supported 禁止操作");
