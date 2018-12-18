@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.controller;
+package com.ajaxjs;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
