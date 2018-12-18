@@ -15,9 +15,9 @@
 				<template slot="title">${isCreate?'新建':'编辑'}${uiName}</template>
 				<template slot="btns">
 				<c:if test="${!isCreate}">
-					<a :href="ajResources.ctx + '/admin/article/'">新建</a> | 
+					<a :href="ajResources.ctx + '/admin/${shortName}/'">新建</a> | 
 				</c:if>
-					<a :href="ajResources.ctx + '/admin/article/list/'">${uiName}列表</a> | 
+					<a :href="ajResources.ctx + '/admin/${shortName}/list/'">${uiName}列表</a> | 
 				</template>
 			</ajaxjs-admin-header>
 
@@ -34,7 +34,7 @@
 					<label> 
 						<div class="label">栏 目：</div>  
 						<!-- 分类下拉 -->
-						<aj-tree-catelog-select field-name="catelog" :catelog-id="${catelogId}" :selected-catelog-id="${empty info || empty info.catelog? 0 : info.catelog}">
+						<aj-tree-catelog-select field-name="catelog" :catelog-id="${domainCatalog_Id}" :selected-catelog-id="${empty info || empty info.catelog? 0 : info.catelog}">
 						</aj-tree-catelog-select>
 					</label>
 			<%-- 	<c:if test="${!isCreate}"> --%>
@@ -75,7 +75,7 @@
 						<tr>
 							<td>
 <!-- 图片上传 -->
-<ajaxjs-img-upload-perview ref="uploadControl" img-place="${(empty info.avatarPath || isCreate) ? commonAsset.concat('/images/imgBg.png'): ctx.concat(info.avatarPath)}" />
+<ajaxjs-img-upload-perview ref="uploadControl" img-place="${(empty info.cover || isCreate) ? commonAsset.concat('/images/imgBg.png'): ctx.concat(info.cover)}" />
 							</td>
 						</tr>
 					</table>

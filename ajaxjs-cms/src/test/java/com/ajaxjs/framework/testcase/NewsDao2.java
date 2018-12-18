@@ -17,7 +17,6 @@ package com.ajaxjs.framework.testcase;
 
 import java.util.List;
 
-import com.ajaxjs.framework.BaseDao;
 import com.ajaxjs.framework.News;
 import com.ajaxjs.framework.QueryParams;
 import com.ajaxjs.orm.annotation.Delete;
@@ -26,6 +25,7 @@ import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.SqlFactory;
 import com.ajaxjs.orm.annotation.TableName;
 import com.ajaxjs.orm.annotation.Update;
+import com.ajaxjs.orm.dao.IDao;
 import com.ajaxjs.orm.dao.PageResult;
 
 /**
@@ -36,10 +36,10 @@ import com.ajaxjs.orm.dao.PageResult;
  */
 
 @TableName("news")
-public interface NewsDao2 extends BaseDao<News, Long> {
+public interface NewsDao2 extends IDao<News, Long> {
 	final static String tableName = "news";
 
-	@Select(findById)
+	@Select("SELECT * FROM news WHERE id = ?")
 	@Override
 	public News findById(Long id);
 
@@ -53,7 +53,7 @@ public interface NewsDao2 extends BaseDao<News, Long> {
 	public static String getInstance() {
 		return "SELECT * FROM news";
 	}
-	
+
 	@Select(value = "SELECT * FROM " + tableName)
 	@SqlFactory(clz = QueryParams.class, value = "addWhere")
 	public int count3();

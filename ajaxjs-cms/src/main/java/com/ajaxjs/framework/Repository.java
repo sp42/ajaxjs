@@ -151,7 +151,7 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 		// 获取注解的表名
 		TableName tableNameA = clz.getAnnotation(TableName.class);
 
-		if (tableNameA != null) {
+		if (tableNameA != null && !CommonUtil.isEmptyString(tableNameA.value())) {
 			setTableName(tableNameA.value());
 		}
 

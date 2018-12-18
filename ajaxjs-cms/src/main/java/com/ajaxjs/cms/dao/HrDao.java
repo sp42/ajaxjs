@@ -16,7 +16,9 @@ public interface HrDao extends IDao<Map<String, Object>, Long> {
 	@Override
 	public PageResult<Map<String, Object>> findPagedList(int start, int limit);
 
-
+	@Select("SELECT * FROM entity_hr" )
+	public List<Map<String, Object>> findList();
+	
 	@Select("SELECT * FROM " + CatelogDao.tableName + " WHERE pid = ?")
 	public List<Catelog> getHrCatalog(int catelogParentId);
 

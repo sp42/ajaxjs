@@ -4,13 +4,13 @@ import com.ajaxjs.cms.dao.FeedbackDao;
 import com.ajaxjs.cms.model.Feedback;
 import com.ajaxjs.cms.service.aop.CommonService;
 import com.ajaxjs.cms.service.aop.GlobalLogAop;
+import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
-import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
 
 @Bean(value = "FeedbackService", aop = { CommonService.class, GlobalLogAop.class })
 public class FeedbackServiceImpl implements FeedbackService {
-	FeedbackDao dao = new DaoHandler().bind(FeedbackDao.class);
+	FeedbackDao dao = new Repository().bind(FeedbackDao.class);
 
 	@Override
 	public Feedback findById(Long id) {

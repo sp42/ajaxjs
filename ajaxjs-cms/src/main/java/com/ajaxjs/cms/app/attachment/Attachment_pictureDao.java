@@ -12,8 +12,7 @@ import com.ajaxjs.orm.dao.PageResult;
 
 public interface Attachment_pictureDao extends IDao<Attachment_picture, Long> {
 	final static String tableName = "attachment_picture";
-	public final static String selectCover = "(SELECT path FROM attachment_picture p1 WHERE a.uid = p1.owner AND p1.catelog = "
-			+ DataDict.PIC_COVER + " ORDER BY p1.id DESC LIMIT 0, 1)";
+	
 	
 	public final static String selectByUid = "SELECT path FROM attachment_picture WHERE catelog = 2 AND owner = e.uid LIMIT  0, 1";
 
@@ -48,5 +47,5 @@ public interface Attachment_pictureDao extends IDao<Attachment_picture, Long> {
 	/**
 	 * 实体别名必须为 entry
 	 */
-	public final static String subSelectByUid = "SELECT path FROM attachment_picture p1 WHERE entry.uid = p1.owner AND p1.catelog = 2 ORDER BY p1.id DESC LIMIT 0, 1";
+	public final static String selectCover =   "(SELECT path FROM attachment_picture p1 WHERE entry.uid = p1.owner AND p1.catelog = "+ DataDict.PIC_COVER + " ORDER BY p1.id DESC LIMIT 0, 1)";
 }

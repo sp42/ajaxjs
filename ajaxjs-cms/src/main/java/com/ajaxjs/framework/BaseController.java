@@ -33,7 +33,7 @@ public abstract class BaseController<T extends IBaseBean> implements IController
 	 * @return 编辑记录 UI JSP 模版路径
 	 */
 	public String editUI(Long id, ModelAndView mv) {
-//		info(id, model, _id -> getService().findById(_id));
+		info(id, mv, _id -> getService().findById(_id));
 		return ui(mv, false, "修改");
 	}
 
@@ -149,7 +149,7 @@ public abstract class BaseController<T extends IBaseBean> implements IController
 		prepareData(model);
 
 		List<T> pageResult = findPagedList.apply(start, limit);
-		model.put("PageResult", pageResult);
+		model.put(PageResult, pageResult);
 
 		return pageResult;
 	}
@@ -184,4 +184,7 @@ public abstract class BaseController<T extends IBaseBean> implements IController
 	public String editUI() {
 		return String.format(jsp_perfix_webinf + "/%s/edit", getService().getShortName());
 	}
+	
+	public static final String domainEntityList = Constant.jsp_perfix + "/common-entity/domainEntity-list";
+	public static final String domainEntityEdit = Constant.jsp_perfix + "/common-entity/domainEntity";
 }
