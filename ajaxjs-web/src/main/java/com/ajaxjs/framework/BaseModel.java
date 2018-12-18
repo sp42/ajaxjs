@@ -14,14 +14,15 @@ package com.ajaxjs.framework;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 
 import javax.validation.constraints.Size;
 
 //import org.apache.bval.constraints.NotEmpty;
 
 /**
- * 基础模型类
- * 请注意不要使用 int 而是使用 Integer
+ * 基础模型类 请注意不要使用 int 而是使用 Integer
+ * 
  * @author Sp42 frank@ajaxjs.com
  *
  */
@@ -29,9 +30,9 @@ public class BaseModel implements Serializable {
 	private static final long serialVersionUID = -5313880199638314543L;
 
 	private Long id;
-	
+
 	private Long uid;
-	
+
 	public String getCover() {
 		return cover;
 	}
@@ -41,14 +42,14 @@ public class BaseModel implements Serializable {
 	}
 
 //	@NotNull(message="名称不能为空")
-	@Size(min = 2, max = 255, message="长度应该介于3和255之间")
+	@Size(min = 2, max = 255, message = "长度应该介于3和255之间")
 	private String name;
-	
-	@Size(max=60000)
+
+	@Size(max = 60000)
 	private String content;
-	
+
 	private Date createDate;
-	
+
 	private Date updateDate;
 	private String cover;
 
@@ -98,5 +99,11 @@ public class BaseModel implements Serializable {
 
 	public void setUid(Long uid) {
 		this.uid = uid;
+	}
+
+	private Map<String, Object> data;
+
+	public Map<String, Object> getData() {
+		return data;
 	}
 }

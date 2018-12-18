@@ -1,4 +1,4 @@
-<%@page pageEncoding="UTF-8" isErrorPage="true"%>
+<%@page pageEncoding="UTF-8" isErrorPage="true" trimDirectiveWhitespaces="true"%>
 <!DOCTYPE html>
 <html>
 <head>

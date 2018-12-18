@@ -114,6 +114,8 @@ public class MvcRequest extends HttpServletRequestWrapper {
 		/* 如果 context path 上有数字那就bug，所以先去掉 */
 		String url = getRoute(), regExp = "(" + value.replace("{" + paramName + "}", ")(\\d+)");/* 获取正则 暂时写死 数字 TODO */
 
+		System.out.println(value);
+		System.out.println(paramName);
 		Matcher m = Pattern.compile(regExp).matcher(url);
 		String result = m.find() ? m.group(m.groupCount()) : null;
 

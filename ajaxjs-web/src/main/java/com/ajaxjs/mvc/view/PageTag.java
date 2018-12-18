@@ -126,15 +126,6 @@ public class PageTag extends SimpleTagSupport {
 
 		String s = String.join("&", list);
 		return s;
-
-		// Service service = new Service();
-		// service.setRequest(request);
-		// String qs = MapHelper.join(service.getAll("start"), "&");
-		//
-		// if (!"".equals(qs))
-		// return "&" + qs;
-		// else
-		// return "";
 	}
 
 	public int[] jumpPage(int totalPage) {
@@ -143,10 +134,6 @@ public class PageTag extends SimpleTagSupport {
 
 	public static String arrayJoin(String[] arr) {
 		return String.join(",", arr);
-	}
-
-	public static String jsonString_covernt(String str) {
-		return str.replace("\r\n", "\\n");
 	}
 
 	public String getQueryString() {

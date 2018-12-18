@@ -49,11 +49,6 @@ public interface Constant {
 	public static final String jsp_perfix_webinf = "/WEB-INF/jsp";
 
 	/**
-	 * json 路径常量（实体创建、修改）
-	 */
-	public static final String cud = jsp_perfix + "/json/json-cud.jsp";
-
-	/**
 	 * json 路径常量（实体）
 	 */
 	public static final String show_json_info = jsp_perfix + "/json/showInfo.jsp";

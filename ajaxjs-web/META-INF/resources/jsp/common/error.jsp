@@ -1,4 +1,4 @@
-<%@page pageEncoding="UTF-8" isErrorPage="true" import="java.io.*"%>
+<%@page pageEncoding="UTF-8" isErrorPage="true" import="java.io.*" trimDirectiveWhitespaces="true"%>
 <%!
 	/**
 	 * 收集错误信息 输出到网页
