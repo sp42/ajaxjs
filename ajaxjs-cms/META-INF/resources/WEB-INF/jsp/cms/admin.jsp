@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html style="height: 100%;">
 	<head>
-		<jsp:include page="/jsp/common/head.jsp"  flush="true">
+		<jsp:include page="/jsp/common/head.jsp" flush="true">
 			<jsp:param name="lessFile" value="/asset/less/admin.less" />
 			<jsp:param name="title" value="${uiName}管理" />
 		</jsp:include>
@@ -11,7 +11,7 @@
 		<header>
 			<h1>我的控制面板</h1>
 			<menu>
-				${userName} 已登录 | <a href="${pageContext.request.contextPath}/" target="_blank">首页</a> | <a href="?action=logout">退出</a> 
+				${userName} 已登录 | <a href="${ctx}/" target="_blank">首页</a> | <a href="?action=logout">退出</a> 
 			</menu>
 		</header>
 		<section class="side">
