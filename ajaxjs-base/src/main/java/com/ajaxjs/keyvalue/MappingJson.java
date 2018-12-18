@@ -179,4 +179,13 @@ public class MappingJson {
 
 		return strs;
 	}
+
+	/**
+	 * 输出到 JSON 文本时候的换行
+	 * @param str
+	 * @return
+	 */
+	public static String jsonString_covernt(String str) {
+		return str.replace("\r\n", "\\n");
+	}
 }

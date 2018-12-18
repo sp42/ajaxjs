@@ -293,7 +293,6 @@ public class BeanUtil extends ReflectUtil {
 	 */
 	public static <T> T json2bean(String json, Class<T> clz) {
 		Map<String, Object> map = JsonHelper.parseMap(json);
-		System.out.println("::::::::::::" + map.get("age").getClass());
 		return map2Bean(map, clz, true);
 	}
 }
