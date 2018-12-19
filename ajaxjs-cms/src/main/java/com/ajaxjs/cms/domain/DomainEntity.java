@@ -49,10 +49,4 @@ public class DomainEntity extends BaseModel implements IBaseBean {
 	private String intro;
 
 	private Integer status;
-	
-	private Map<String, Object> data;
-
-	public Map<String, Object> getData() {
-		return data;
-	}
 }

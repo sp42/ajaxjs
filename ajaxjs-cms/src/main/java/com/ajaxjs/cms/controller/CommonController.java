@@ -28,11 +28,10 @@ import java.util.function.Predicate;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.service.IService;
-import com.ajaxjs.keyvalue.BeanUtil;
 import com.ajaxjs.keyvalue.MappingHelper;
-import com.ajaxjs.keyvalue.MappingJson;
 import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
@@ -224,7 +223,7 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 
 		PageResult<T> pageResult = findPagedList.apply(start, limit);
 
-		String jsonStr = toJson(pageResult, false);
+		String jsonStr = BaseController.toJson(pageResult, false);
 		if (jsonStr == null)
 			jsonStr = "[]";
 
@@ -244,39 +243,7 @@ public abstract class CommonController<T, ID extends Serializable> implements IC
 	 * @return JSON 结果
 	 */
 	public static String toJson(Object obj) {
-		return toJson(obj, true);
-	}
-
-	public String toJson(PageResult<T> pageResult, ModelAndView model) {
-		model.put("MapOutput", toJson(pageResult, false));
-		return paged_json_List;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static String toJson(Object obj, boolean isAdd) {
-		String jsonStr = null;
-
-		if (obj == null) {
-			jsonStr = "null";
-		} else if (obj instanceof Map) {
-			jsonStr = MappingJson.stringifyMap((Map<String, ?>) obj);
-		} else if (obj instanceof BaseModel) {
-			jsonStr = BeanUtil.beanToJson((Map<String, ?>) obj);
-		} else if (obj instanceof List) {
-			List<?> list = (List<?>) obj;
-			jsonStr = "[]"; // empty array
-
-			if (list.size() > 0) {
-				if (list.get(0) instanceof Map) { // Map 类型的输出
-					jsonStr = MappingJson.stringifyListMap((List<Map<String, Object>>) list);
-				} else { // Bean
-					jsonStr = BeanUtil.listToJson((List<Object>) list);
-				}
-			}
-		} else {
-			throw new Error("不支持数据类型");
-		}
-		return isAdd ? "json::{\"result\":" + jsonStr + "}" : jsonStr;
+		return BaseController.toJson(obj, true);
 	}
 
 	public static String jsonOk(String msg) {

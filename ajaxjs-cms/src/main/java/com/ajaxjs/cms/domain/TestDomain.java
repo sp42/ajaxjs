@@ -41,11 +41,11 @@ public class TestDomain {
 
 	}
 
-//	@Test
+	@Test
 	public void testDao() {
-		DomainEntityDao dao = new Repository().bind(DomainEntityDao.class);
+		DomainEntityDao dao = new Repository().bind(DomainEntityDao.class, "entity_article");
 
-		DomainEntity domain = dao.findById(60L);
+		DomainEntity domain = dao.findById(1L);
 		assertNotNull(domain);
 
 		PageResult<DomainEntity> list = dao.findPagedListByCatelogId_Cover(6, 0, 10);
@@ -70,9 +70,26 @@ public class TestDomain {
 	public void testMapDao() {
 		HrDao dao = new Repository().bind(HrDao.class);
 		EntityMap info = dao.findById(1L);
-		System.out.println(info);
+		System.out.println(info.getId());
 		
 		List<EntityMap> list = dao.findList();
 		assertNotNull(list);
+		
+		info = new EntityMap();
+		info.put("name","testMap");
+		
+		long newlyId = dao.create(info);
+		assertNotNull(newlyId);
+		
+		info.put("name", "test22");
+		info.setId(newlyId);
+		
+		int effect = dao.update(info);
+		assertEquals(1, effect);
+
+		assertTrue(dao.delete(info));
 	}
+	
+	@Test
+	public void testMapService() {}
 }
