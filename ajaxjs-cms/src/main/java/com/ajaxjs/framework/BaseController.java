@@ -1,15 +1,19 @@
 package com.ajaxjs.framework;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import com.ajaxjs.keyvalue.BeanUtil;
 import com.ajaxjs.keyvalue.MappingHelper;
+import com.ajaxjs.keyvalue.MappingJson;
 import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
+import com.ajaxjs.orm.dao.PageResult;
 import com.ajaxjs.util.logger.LogHelper;
 
 public abstract class BaseController<T extends IBaseBean> implements IController, Constant {
@@ -136,29 +140,6 @@ public abstract class BaseController<T extends IBaseBean> implements IController
 	}
 
 	/**
-	 * 分页查询
-	 * 
-	 * @param start 起始行数，默认从零开始
-	 * @param limit 偏量值，默认 8 笔记录
-	 * @param model Model 模型
-	 * @return JSP 路径。缺省提供一个默认路径，但不一定要使用它，换别的也可以。
-	 */
-	public List<T> listPaged(int start, int limit, ModelAndView model, BiFunction<Integer, Integer, List<T>> findPagedList) {
-		LOGGER.info("获取分页列表 GET list:{0}/{1}", start, limit);
-
-		prepareData(model);
-
-		List<T> pageResult = findPagedList.apply(start, limit);
-		model.put(PageResult, pageResult);
-
-		return pageResult;
-	}
-
-	public List<T> listPaged(int start, int limit, ModelAndView model) {
-		return listPaged(start, limit, model, (_start, _limit) -> getService().findPagedList(_start, _limit));
-	}
-
-	/**
 	 * 可覆盖的模版方法，用于装备其他数据，如分类这些外联的表。
 	 * 
 	 * @param mv 模型
@@ -167,6 +148,80 @@ public abstract class BaseController<T extends IBaseBean> implements IController
 		mv.put("uiName", getService().getUiName());
 		mv.put("shortName", getService().getShortName());
 		mv.put("tableName", getService().getTableName());
+	}
+	
+	/**
+	 * 分页查询
+	 * 
+	 * @param start 起始行数，默认从零开始
+	 * @param limit 偏量值，默认 8 笔记录
+	 * @param mv Model 模型
+	 * @return JSP 路径。缺省提供一个默认路径，但不一定要使用它，换别的也可以。
+	 */
+	public List<T> listPaged(int start, int limit, ModelAndView mv, BiFunction<Integer, Integer, List<T>> findPagedList) {
+		LOGGER.info("获取分页列表 GET list:{0}/{1}", start, limit);
+
+		prepareData(mv);
+
+		List<T> pageResult = findPagedList.apply(start, limit);
+		mv.put(PageResult, pageResult);
+
+		return pageResult;
+	}
+
+	public List<T> listPaged(int start, int limit, ModelAndView mv) {
+		return listPaged(start, limit, mv, (_start, _limit) -> getService().findPagedList(_start, _limit));
+	}
+
+	/**
+	 * 把 Bean/Map/List 转换为 JSON
+	 * 
+	 * @param result Map
+	 * @return JSON 结果
+	 */
+	public static String toJson(Object obj) {
+		return toJson(obj, true);
+	}
+
+	public String toJson(PageResult<T> pageResult) {
+		return pagedListJson(pageResult);
+	}
+	
+	public String pagedListJson(PageResult<T> pageResult) {
+		String jsonStr = toJson(pageResult, false);
+		if (jsonStr == null)
+			jsonStr = "[]";
+
+		int total = pageResult.isZero() ? 0 : pageResult.getTotalCount();
+
+		return String.format(MappingHelper.json_ok_extension, "分页列表", "\"result\":" + jsonStr + ",\"total\":" + total);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static String toJson(Object obj, boolean isAdd) {
+		String jsonStr = null;
+
+		if (obj == null) {
+			jsonStr = "null";
+		} else if (obj instanceof Map) {
+			jsonStr = MappingJson.stringifyMap((Map<String, ?>) obj);
+		} else if (obj instanceof BaseModel) {
+			jsonStr = BeanUtil.beanToJson((Map<String, ?>) obj);
+		} else if (obj instanceof List) {
+			List<?> list = (List<?>) obj;
+			jsonStr = "[]"; // empty array
+
+			if (list.size() > 0) {
+				if (list.get(0) instanceof Map) { // Map 类型的输出
+					jsonStr = MappingJson.stringifyListMap((List<Map<String, Object>>) list);
+				} else { // Bean
+					jsonStr = BeanUtil.listToJson((List<Object>) list);
+				}
+			}
+		} else {
+			throw new Error("不支持数据类型");
+		}
+		return isAdd ? "json::{\"result\":" + jsonStr + "}" : jsonStr;
 	}
 
 	public static String jsonOk(String msg) {

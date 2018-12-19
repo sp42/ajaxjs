@@ -9,8 +9,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.ajaxjs.cms.utils.CmsUtils;
 import com.ajaxjs.ioc.BeanContext;
-import com.ajaxjs.mock.DBConnection;
 import com.ajaxjs.mock.TestHelper;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.dao.PageResult;
@@ -20,7 +20,7 @@ public class TestHrService {
 
 	@BeforeClass
 	public static void initDb() {
-		DBConnection.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
+		CmsUtils.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
 		service = (HrService) BeanContext.getBean("HrService");
 	}
 

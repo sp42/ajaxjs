@@ -8,14 +8,14 @@ import org.junit.Test;
 
 import com.ajaxjs.cms.app.attachment.Attachment_picture;
 import com.ajaxjs.cms.app.attachment.Attachment_pictureService;
+import com.ajaxjs.cms.utils.CmsUtils;
 import com.ajaxjs.ioc.BeanContext;
-import com.ajaxjs.mock.DBConnection;
 import com.ajaxjs.orm.JdbcConnection;
 
 public class TestAttachment_picture{
 	@BeforeClass
 	public static void initDb() {
-		DBConnection.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
+		CmsUtils.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
 	}
 
 	@Test
