@@ -11,8 +11,6 @@ import org.junit.Test;
 
 import com.ajaxjs.framework.News;
 import com.ajaxjs.framework.service.aop.CacheService;
-import com.ajaxjs.framework.service.aop.CommonTestService;
-import com.ajaxjs.framework.service.aop.ValidationService;
 import com.ajaxjs.framework.testcase.NewsService;
 import com.ajaxjs.framework.testcase.NewsServiceImpl;
 import com.ajaxjs.ioc.Aop;

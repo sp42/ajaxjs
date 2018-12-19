@@ -18,8 +18,8 @@ package com.ajaxjs.framework.testcase;
 import java.util.List;
 
 import com.ajaxjs.framework.News;
+import com.ajaxjs.framework.service.CommonTestService;
 import com.ajaxjs.framework.service.aop.CacheService;
-import com.ajaxjs.framework.service.aop.CommonTestService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;

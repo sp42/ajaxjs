@@ -10,7 +10,7 @@ import javax.validation.Validator;
 
 import org.junit.Test;
 
-import com.ajaxjs.framework.service.aop.ValidationService;
+import com.ajaxjs.framework.service.ValidationService;
 
 public class TestBaseModel {
  
