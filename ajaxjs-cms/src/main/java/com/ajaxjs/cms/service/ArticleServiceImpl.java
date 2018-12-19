@@ -6,12 +6,11 @@ import java.util.Map;
 import com.ajaxjs.cms.dao.ArticleDao;
 import com.ajaxjs.cms.service.aop.CommonService;
 import com.ajaxjs.config.ConfigService;
-import com.ajaxjs.framework.service.aop.CacheService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
 
-@Bean(value = "ArticleService", aop = { CommonService.class, CacheService.class })
+@Bean(value = "ArticleService", aop = { CommonService.class })
 public class ArticleServiceImpl implements ArticleService {
 	ArticleDao dao = new DaoHandler().bind(ArticleDao.class);
 

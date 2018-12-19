@@ -1,10 +1,9 @@
 package com.ajaxjs.cms.service;
 
-import java.util.Map;
-
-import com.ajaxjs.framework.service.IService;
+import com.ajaxjs.framework.EntityMap;
+import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.orm.dao.PageResult;
 
-public interface HrService extends IService<Map<String, Object>, Long> {
-	public PageResult<Map<String, Object>> findPagedListByCatalogId(int catalogId, int start, int limit);
+public interface HrService extends IBaseService<EntityMap> {
+	public PageResult<EntityMap> findPagedListByCatalogId(int catalogId, int start, int limit);
 }

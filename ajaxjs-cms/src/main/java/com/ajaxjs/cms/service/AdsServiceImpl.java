@@ -2,16 +2,15 @@ package com.ajaxjs.cms.service;
 
 import java.util.List;
 
+import com.ajaxjs.cms.dao.Ads;
 import com.ajaxjs.cms.dao.AdsDao;
-import com.ajaxjs.cms.model.Ads;
 import com.ajaxjs.cms.service.aop.CommonService;
 import com.ajaxjs.config.ConfigService;
-import com.ajaxjs.framework.service.aop.CacheService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
 
-@Bean(value = "AdsService", aop = { CommonService.class, CacheService.class })
+@Bean(value = "AdsService", aop = { CommonService.class })
 public class AdsServiceImpl implements AdsService {
 	public static AdsDao dao = new DaoHandler().bind(AdsDao.class);
 
