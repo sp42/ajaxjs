@@ -9,6 +9,9 @@ public class EntityMap extends HashMap<String, Object> implements IBaseBean {
 	@Override
 	public Long getId() {
 		Object id = get("id");
+		if (id instanceof Integer)
+			return ((Integer) id).longValue();
+
 		return (Long) id;
 	}
 

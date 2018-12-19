@@ -346,7 +346,6 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 		String sql = update.value();
 
 		int effectRows = write(sql, sqlFactoryHandler, update::tableName, _sql -> update(conn, _sql, args), tableName -> updateBean(conn, args[0], tableName), args);
-
 		return effectRows;
 	}
 

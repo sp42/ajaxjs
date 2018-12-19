@@ -11,7 +11,7 @@ public interface IBaseDao<T extends IBaseBean> {
 	/**
 	 * 实体别名必须为 entry
 	 */
-	public final static String selectCover =   "(SELECT path FROM attachment_picture p1 WHERE entry.uid = p1.owner AND p1.catelog = "+ DataDict.PIC_COVER + " ORDER BY p1.id DESC LIMIT 0, 1)";
+	public final static String selectCover = "(SELECT path FROM attachment_picture p1 WHERE entry.uid = p1.owner AND p1.catelog = "+ DataDict.PIC_COVER + " ORDER BY p1.id DESC LIMIT 0, 1)";
 	
 //	@Select(value="SELECT GROUP_CONCAT(p.id, '|', p.`path`, '|', IFNULL(p.`catelog`, 0), '|', p.`index` SEPARATOR '\", \"') AS pics, e.*, "
 //			+ "(SELECT `path` FROM attachment_picture p WHERE p.`catelog` = 2 AND owner = e.uid ORDER BY ID DESC LIMIT 1) AS cover"

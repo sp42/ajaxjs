@@ -1,10 +1,14 @@
-package com.ajaxjs.orm.thirdparty;
+package com.ajaxjs.orm;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-public class TestSqlBuilder {
+import com.ajaxjs.orm.thirdparty.SnowflakeIdWorker;
+import com.ajaxjs.orm.thirdparty.SqlBuilder;
+
+public class TestThirdParty {
 	@Test
 	public void testBuilder() {
 		String sql = new SqlBuilder() {
@@ -32,5 +36,14 @@ public class TestSqlBuilder {
 				+ "INNER JOIN COMPANY C on D.COMPANY_ID = C.ID\n" + "WHERE (P.ID = A.ID AND P.FIRST_NAME like ?) \n" + "OR (P.LAST_NAME like ?)\n" + "GROUP BY P.ID\n" + "HAVING (P.LAST_NAME like ?) \n"
 				+ "OR (P.FIRST_NAME like ?)\n" + "ORDER BY P.ID, P.FULL_NAME";
 		assertEquals(sql, _sql);
+	}
+
+	@Test
+	public void testSnowflakeIdWorker() {
+		SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0, 0);
+		for (int i = 0; i < 1000; i++) {
+			long id = idWorker.nextId();
+			assertNotNull(id);
+		}
 	}
 }
