@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.ajaxjs.framework.EntityMap;
+import com.ajaxjs.framework.Repository;
 import com.ajaxjs.orm.JdbcHelper;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.util.CommonUtil;
@@ -115,8 +117,7 @@ public class PageResult<T> extends ArrayList<T> {
 	 * @return 分页列表，如果找不到数据，仍返回一个空的 PageList，但可以通过 getZero() 得知是否为空
 	 */
 	@SuppressWarnings("unchecked")
-	public static <B> PageResult<B> doPage(Connection conn, Class<B> entryType, Select select, String sql,
-			Method method, Object[] args) {
+	public static <B> PageResult<B> doPage(Connection conn, Class<B> entryType, Select select, String sql, Method method, Object[] args) {
 		P p = getPageParameters(method, args);
 
 		int total = countTotal(select, sql, p.args, conn);
@@ -133,6 +134,8 @@ public class PageResult<T> extends ArrayList<T> {
 			List<B> list;
 			if (entryType == Map.class) {
 				list = (List<B>) JdbcHelper.queryAsMapList(conn, sql + " LIMIT ?, ?", args);
+			} else if(entryType == EntityMap.class){
+				list = (List<B>) Repository.mapList2EntityMapList(JdbcHelper.queryAsMapList(conn, sql + " LIMIT ?, ?", args));
 			} else {
 				list = JdbcHelper.queryAsBeanList(entryType, conn, sql + " LIMIT ?, ?", args);
 			}
