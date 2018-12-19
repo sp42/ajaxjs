@@ -26,8 +26,8 @@ import org.apache.bval.jsr.ApacheValidationProvider;
 
 import com.ajaxjs.framework.service.IService;
 import com.ajaxjs.framework.service.ServiceException;
-import com.ajaxjs.framework.service.annotation.ValidIt;
-import com.ajaxjs.framework.service.annotation.ValidObj;
+import com.ajaxjs.framework.service.ValidIt;
+import com.ajaxjs.framework.service.ValidObj;
 import com.ajaxjs.ioc.Aop;
 import com.ajaxjs.util.logger.LogHelper;
 

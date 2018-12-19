@@ -7,19 +7,19 @@ import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.controller.IController;
 
 /**
- * for demo, simple use
+ * for simple use
  *
  */
 @Path("/admin")
-public class SimpleAdminController implements IController, Constant {
+public class SimpleAdminController implements IController {
 	@GET
-	@Path("/workbench")
-	public String workbench() {
-		return jsp_perfix + "/simple_admin/workbench";
+	public String admin() {
+		return Constant.cms("admin");
 	}
 
 	@GET
-	public String admin() {
-		return jsp_perfix + "/simple_admin/index";
+	@Path("/workbench")
+	public String workbench() {
+		return Constant.cms("admin-workbench");
 	}
 }

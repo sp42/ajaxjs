@@ -3,7 +3,6 @@ package com.ajaxjs.cms.dao;
 import java.util.List;
 
 import com.ajaxjs.cms.app.catelog.Catelogable;
-import com.ajaxjs.cms.model.Ads;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.dao.IDao;
 import com.ajaxjs.orm.dao.PageResult;

@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.dao.section;
+package com.ajaxjs.cms.app.catelog;
 
 public class CatelogServiceSqlFactory {
 	final static String findCatelog = " IN ( SELECT id FROM general_catelog WHERE `path` LIKE (CONCAT (( SELECT `path` FROM general_catelog WHERE id = ? ) , '%')))";

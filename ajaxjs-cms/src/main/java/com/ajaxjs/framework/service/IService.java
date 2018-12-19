@@ -15,8 +15,6 @@ package com.ajaxjs.framework.service;
 import java.io.Serializable;
 import java.util.List;
 
-import com.ajaxjs.framework.service.annotation.ValidIt;
-import com.ajaxjs.framework.service.annotation.ValidObj;
 import com.ajaxjs.orm.dao.PageResult;
 
 /**

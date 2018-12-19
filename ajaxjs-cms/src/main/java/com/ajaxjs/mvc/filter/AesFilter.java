@@ -18,7 +18,6 @@ package com.ajaxjs.mvc.filter;
 import java.lang.reflect.Method;
 import java.util.Date;
 
-import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.util.CommonUtil;
@@ -77,7 +76,7 @@ public class AesFilter implements FilterAction {
 	@Override
 	public void after(MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
 		if (request.getAttribute("errMsg") != null) {
-			response.resultHandler("redirect::" + Constant.paged_json_error, request, null, method);
+			response.resultHandler("redirect::", request, null, method);
 		}
 	}
 
