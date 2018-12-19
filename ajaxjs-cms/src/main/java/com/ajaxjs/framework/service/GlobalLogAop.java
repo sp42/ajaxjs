@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.service.aop;
+package com.ajaxjs.framework.service;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -9,7 +9,6 @@ import java.util.Map;
 
 import com.ajaxjs.cms.dao.GlobalLogDao;
 import com.ajaxjs.config.ConfigService;
-import com.ajaxjs.framework.service.IService;
 import com.ajaxjs.ioc.Aop;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.orm.JdbcConnection;

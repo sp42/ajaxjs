@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.ajaxjs.cms.dao.Ads;
 import com.ajaxjs.cms.dao.AdsDao;
-import com.ajaxjs.cms.service.aop.CommonService;
 import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.framework.service.CommonService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;

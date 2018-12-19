@@ -2,7 +2,7 @@ package com.ajaxjs.cms.app.attachment;
 
 import java.util.List;
 
-import com.ajaxjs.cms.utils.DataDict;
+import com.ajaxjs.framework.DataDict;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;

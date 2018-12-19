@@ -10,7 +10,7 @@
  * 除非因适用法律需要或书面同意，根据许可证分发的软件是基于"按原样"基础提供，
  * 无任何明示的或暗示的保证或条件。详见根据许可证许可下，特定语言的管辖权限和限制。
  */
-package com.ajaxjs.cms.service.aop;
+package com.ajaxjs.framework.service;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -26,8 +26,6 @@ import javax.validation.ValidatorFactory;
 import org.apache.bval.jsr.ApacheValidationProvider;
 
 import com.ajaxjs.framework.BaseModel;
-import com.ajaxjs.framework.service.IService;
-import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.ioc.Aop;
 import com.ajaxjs.orm.thirdparty.SnowflakeIdWorker;
 

@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.ajaxjs.cms.app.user.dao.UserAdminDao;
 import com.ajaxjs.cms.app.user.model.User;
-import com.ajaxjs.cms.service.aop.CommonService;
-import com.ajaxjs.cms.service.aop.GlobalLogAop;
+import com.ajaxjs.framework.service.CommonService;
+import com.ajaxjs.framework.service.GlobalLogAop;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;

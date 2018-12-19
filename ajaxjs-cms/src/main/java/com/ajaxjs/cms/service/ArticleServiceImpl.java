@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.cms.dao.ArticleDao;
-import com.ajaxjs.cms.service.aop.CommonService;
 import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.framework.service.CommonService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
