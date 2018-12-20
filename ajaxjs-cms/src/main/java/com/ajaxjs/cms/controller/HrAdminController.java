@@ -18,14 +18,12 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 public class HrAdminController extends DomainBaseController {
 	DomainEntityService service = new DomainEntityService("entity_hr", "data.hrCatalog_Id", "招聘", "hr");
 
-//		mv.put("catelogId", ConfigService.getValueAsInt("data.hrCatalog_Id"));
 	@GET
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, @QueryParam("catalogId") int catalogId, ModelAndView mv) {
-		if (catalogId == 0) {
+		if (catalogId == 0) 
 			catalogId = service.getDomainCatelogId(); // 不指定实体的子分类
-		}
 
 		final int _catalogId = catalogId;
 		listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(_catalogId, start, limit));

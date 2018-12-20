@@ -6,8 +6,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.cms.model.Feedback;
+import com.ajaxjs.cms.FeedbackService;
 import com.ajaxjs.cms.utils.CmsUtils;
+import com.ajaxjs.framework.EntityMap;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mock.TestHelper;
 import com.ajaxjs.orm.JdbcConnection;
@@ -29,24 +30,23 @@ public class TestFeedbackService {
 
 	@Test
 	public void testCreate() {
-
 		for (int i = 0; i < 10; i++) {
-			Feedback entity = new Feedback();
-			entity.setName(TestHelper.getItem(names));
-			entity.setContent(TestHelper.getItem(content));
-			entity.setFeedback(TestHelper.getItem(feedback));
-			entity.setCreatedByUser(TestHelper.getItem(userIds));
-			entity.setEmail(TestHelper.getEmail(1, 4));
-			entity.setPhone(TestHelper.getTel());
+			EntityMap entity = new EntityMap();
+			entity.put("name", TestHelper.getItem(names));
+			entity.put("content", TestHelper.getItem(content));
+			entity.put("feedback", TestHelper.getItem(feedback));
+			entity.put("userIds", TestHelper.getItem(userIds));
+			entity.put("email", TestHelper.getEmail(1, 4));
+			entity.put("phone", TestHelper.getTel());
 			assertNotNull(service.create(entity));
 		}
 	}
 
 	@Test
 	public void testPageList() {
-		PageResult<Feedback> page;
+		PageResult<EntityMap> page;
 		page = service.findPagedList(0, 10);
-		assertNotNull(page.get(0).getName());
+		assertNotNull(page.get(0).get("name"));
 		assertNotNull(page.getTotalCount());
 	}
 

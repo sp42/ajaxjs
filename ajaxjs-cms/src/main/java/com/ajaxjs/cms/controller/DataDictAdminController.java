@@ -13,16 +13,20 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.service.DataDictService;
+import com.ajaxjs.cms.Ads;
+import com.ajaxjs.cms.DataDictService;
+import com.ajaxjs.framework.BaseController;
+import com.ajaxjs.framework.EntityMap;
+import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 
-@Path("/admin/DataDict")
 @Bean
-public class DataDictAdminController extends CommonController<Map<String, Object>, Integer> implements CommonEntryAdminController<Map<String, Object>, Integer> {
+@Path("/admin/DataDict")
+public class DataDictAdminController extends BaseController<EntityMap> {
 	@Resource("DataDictService")
 	private DataDictService service;
 
@@ -36,13 +40,13 @@ public class DataDictAdminController extends CommonController<Map<String, Object
 
 	@GET
 	@Override
-	public String createUI(ModelAndView model) {
-		model.put("uiName", service.getName());
-		return jsp_perfix + "/system/Datadict";
+	public String createUI(ModelAndView mv) {
+		super.createUI(mv);
+		return editUI();
 	}
 
 	@Override
-	public String editUI(@PathParam("id") Integer id, ModelAndView mv) {
+	public String editUI(@PathParam("id") Long id, ModelAndView mv) {
 		return show405;
 	}
 
@@ -50,25 +54,29 @@ public class DataDictAdminController extends CommonController<Map<String, Object
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String create(Map<String, Object> entity) {
-		return create(entity, service);
+	public String create(EntityMap entity) {
+		return super.create(entity);
 	}
 
 	@PUT
-	@Path("/{id}")
 	@MvcFilter(filters = DataBaseFilter.class)
+	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Integer id, Map<String, Object> entity) {
-		return update(id, entity, service);
+	public String update(@PathParam("id") Long id, EntityMap entity) {
+		return super.update(id, entity);
 	}
 
 	@DELETE
 	@Path("/{id}")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
+	public String delete(@PathParam("id") Long id) {
+		return delete(id, new EntityMap());
+	}
+
 	@Override
-	public String delete(@PathParam("id") Integer id) {
-		return delete(id, new HashMap<String, Object>(), service);
+	public IBaseService<EntityMap> getService() {
+		return service;
 	}
 }

@@ -90,6 +90,4 @@ public class AdsAdminController extends BaseController<Ads> {
 		return service;
 	}
 
-	 
-
 }

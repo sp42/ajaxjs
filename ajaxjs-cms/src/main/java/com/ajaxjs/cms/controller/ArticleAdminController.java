@@ -13,8 +13,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.service.ArticleService;
+import com.ajaxjs.cms.ArticleService;
 import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.framework.BaseController;
+import com.ajaxjs.framework.EntityMap;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
@@ -23,14 +25,9 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 
 @Path("/admin/article")
 @Bean
-public class ArticleAdminController extends CommonController<Map<String, Object>, Long> implements CommonEntryAdminController<Map<String, Object>, Long> {
+public class ArticleAdminController extends BaseController<EntityMap>{
 	@Resource("ArticleService")
 	private ArticleService service;
-
-	{
-		setTableName("article");
-		setUiName("文章");
-	}
 
 	@GET
 	@Path("list")
@@ -45,11 +42,6 @@ public class ArticleAdminController extends CommonController<Map<String, Object>
 		final int _catalogId = catalogId;
 		super.list(start, limit, model, (s, l) -> service.findPagedListByCatalogId(_catalogId, start, limit));
 		return adminList_CMS();
-	}
-
-	@Override
-	public String list(int start, int limit, ModelAndView model) {
-		return null;
 	}
 
 	@GET

@@ -67,18 +67,18 @@ form>div>div{
 			<div>BeanName:</div><input type="text" name="beanName" /> 通常用于类名，例如 UserRoleResources
 		</div>
 		<div>
-			<div>isMap: </div><input type="radio" name="isMap" value="true">true <input type="radio" name="isMap" value="false"> false   当 isMap=false 时不生成 Bean 类，id使用 int
+			<div>isMap: </div><input type="radio" name="isMap" value="true">true <input type="radio" name="isMap" value="false" checked /> false   当 isMap=false 时不生成 Bean 类，id使用 int
 			
 			
 		</div>
 		<div>
-			<div>saveFolder: </div><input type="text" name="saveFolder" value="C:\\sp42\\project\\ajaxjs-cms\\src\\main\\com\\ajaxjs\\user\\role" size="80" /> 保存目录
+			<div>saveFolder: </div><input type="text" name="saveFolder" value="C:\\project\\temp\\CodeGenerators\\" size="80" /> 保存目录
 		</div>
 		<div>
 			<div>packageName: </div><input type="text" name="packageName" value="com.ajaxjs.user.role"  size="80" /> 包名
 		</div>
 		<div>
-			<div>dbUrl: </div><input type="text" name="dbUrl" value="jdbc:mysql://115.28.242.232/zyjf" size="80" /> 数据库配置
+			<div>dbUrl: </div><input type="text" name="dbUrl" value="jdbc:mysql://test.ajaxjs.com/devDB" size="80" /> 数据库配置
 		</div>
 		<div>
 			<div>dbUser: </div><input type="text" name="dbUser" value="root" /> 

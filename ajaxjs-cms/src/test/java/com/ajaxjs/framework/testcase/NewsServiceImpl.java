@@ -19,7 +19,6 @@ import java.util.List;
 
 import com.ajaxjs.framework.News;
 import com.ajaxjs.framework.service.CommonTestService;
-import com.ajaxjs.framework.service.aop.CacheService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
@@ -29,7 +28,7 @@ import com.ajaxjs.orm.dao.PageResult;
  * @author sp42 frank@ajaxjs.com
  *
  */
-@Bean(value = "newsService", aop = { CommonTestService.class, CacheService.class })
+@Bean(value = "newsService", aop = { CommonTestService.class})
 public class NewsServiceImpl implements NewsService {
 	private NewsDao dao = new DaoHandler().bind(NewsDao.class);// 实例化 DAO。因为是 class 所以不能注入，于是一般在 Service
 																		// 构造器里面调用该方法

@@ -5,15 +5,70 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+
+import com.ajaxjs.framework.testcase.NewsDao;
+import com.ajaxjs.framework.testcase.NewsDao2;
+import com.ajaxjs.orm.JdbcConnection;
+import com.ajaxjs.orm.dao.DaoHandler;
+import com.ajaxjs.orm.dao.PageResult;
 
 
 public class TestQuery {
+	NewsDao dao;
+
+	@Before
+	public void setUp() {
+		JdbcConnection.setConnection(JdbcConnection.getTestSqliteConnection());
+		dao = new DaoHandler().bind(NewsDao.class);
+	}
+
+	@After
+	public void setEnd() throws SQLException {
+		JdbcConnection.clean();
+	}
+
+	Map<String, String[]> inputMap2 = new HashMap<>();
+	{
+		inputMap2.put("filterField", new String[] { "status", "catelog" });
+		inputMap2.put("filterValue", new String[] { "2", "17" });
+	}
+
+	@Test
+	public void testFindList() {
+//		List<Map<String, Object>> newsList;
+//		newsList = dao.findList();
+//		assertEquals(214, newsList.size());
+
+//		int total = dao.count3();
+//		assertNotNull(total);
+	}
+
+//	@Test
+	public void testPageFindList() {
+		PageResult<News> newsList;
+
+		newsList = dao.findPagedList(0, 10);
+		assertEquals(newsList.size(), 10);
+
+//		newsList = dao.findPagedList(new QueryParams(), 0, 10);
+//		assertNotNull(newsList);
+	}
+
+	@Test
+	public void test2() {
+		NewsDao2 newsDao2 = new DaoHandler().bind(NewsDao2.class);
+		newsDao2.findById(1L);
+	}
+	
 	@Test
 	public void testQuery() {
 		HttpServletRequest request = mock(HttpServletRequest.class);
