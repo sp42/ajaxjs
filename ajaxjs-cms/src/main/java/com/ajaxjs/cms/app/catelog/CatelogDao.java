@@ -67,6 +67,7 @@ public interface CatelogDao extends IDao<Catelog, Long> {
 			"FROM general_catelog c WHERE pid = ?;")
 	public List<Map<String, Object>> getListAndSubByParentId(int parentId);
 	
+	
 	/**
 	 * 所有后代
 	 * @param parentId

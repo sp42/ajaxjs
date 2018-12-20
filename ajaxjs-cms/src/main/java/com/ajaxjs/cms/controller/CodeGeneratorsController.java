@@ -41,7 +41,7 @@ public class CodeGeneratorsController implements IController {
 
 	@GET
 	public String UI() {
-		return Constant.jsp_perfix + "/system/CodeGenerator/index";
+		return Constant.jsp_perfix_webinf + "/cms/system/code-generator/index";
 	}
 
 	@POST
@@ -110,7 +110,7 @@ public class CodeGeneratorsController implements IController {
 		return "html::Done!<a href=\"" + request.getContextPath() + zipSave + "\" download>download</a>";
 	}
 
-	static final String tplSave = "/jsp/system/CodeGenerator/template";
+	static final String tplSave = Constant.jsp_perfix_webinf + "/cms/system/code-generator";
 
 	/**
 	 * 替换为实际内容

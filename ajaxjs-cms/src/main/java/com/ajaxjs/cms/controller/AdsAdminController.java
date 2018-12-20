@@ -10,8 +10,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.model.Ads;
-import com.ajaxjs.cms.service.AdsService;
+import com.ajaxjs.cms.AdsService;
+import com.ajaxjs.cms.dao.Ads;
+import com.ajaxjs.framework.BaseController;
+import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
@@ -20,12 +22,7 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 
 @Path("/admin/ads")
 @Bean
-public class AdsAdminController extends CommonController<Ads, Long> implements CommonEntryAdminController<Ads, Long> {
-	{
-		setUiName("广告");
-		setTableName("ads");
-	}
-
+public class AdsAdminController extends BaseController<Ads> {
 	@Resource("AdsService")
 	private AdsService service;
 
@@ -35,30 +32,26 @@ public class AdsAdminController extends CommonController<Ads, Long> implements C
 	public String list(@QueryParam("catalogId") int catalogId, @QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView mv) {
 		if (catalogId == 0)
 			catalogId = service.getDomainCatelogId(); // 不指定实体的子分类
-		mv.put("domainCatalog_Id", catalogId);
 		
 		final int _catalogId = catalogId;
-		super.list(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(_catalogId, start, limit));
-		return adminList_CMS();
+		listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(_catalogId, start, limit));
+		return adminList();
 	}
 
-	@GET
-	@Override
-	public String createUI(ModelAndView mv) {
-		mv.put("domainCatalog_Id", service.getDomainCatelogId());
-		super.createUI(mv);
-
-		return infoUI_CMS();
-	}
-	
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("/{id}")
 	@Override
 	public String editUI(@PathParam("id") Long id, ModelAndView mv) {
-		mv.put("domainCatalog_Id", service.getDomainCatelogId());
-		editUI(id, mv, service);
-		return infoUI_CMS();
+		super.editUI(id, mv);
+		return editUI();
+	}
+	
+	@GET
+	@Override
+	public String createUI(ModelAndView mv) {
+		super.createUI(mv);
+		return editUI();
 	}
 
 	@POST
@@ -66,7 +59,7 @@ public class AdsAdminController extends CommonController<Ads, Long> implements C
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
 	public String create(Ads entity) {
-		return create(entity, service);
+		return super.create(entity);
 	}
 
 	@PUT
@@ -75,21 +68,28 @@ public class AdsAdminController extends CommonController<Ads, Long> implements C
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
 	public String update(@PathParam("id") Long id, Ads entity) {
-		return update(id, entity, service);
+		return super.update(id, entity);
 	}
 
 	@DELETE
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	@Override
 	public String delete(@PathParam("id") Long id) {
-		return delete(id, new Ads(), service);
-	} 
-
-	@Override
-	public String list(int start, int limit, ModelAndView model) {
-		return null;
+		return delete(id, new Ads());
 	}
+	
+	@Override
+	public void prepareData(ModelAndView mv) {
+		mv.put("domainCatalog_Id", service.getDomainCatelogId());
+		super.prepareData(mv);
+	}
+	
+	@Override
+	public IBaseService<Ads> getService() {
+		return service;
+	}
+
+	 
 
 }

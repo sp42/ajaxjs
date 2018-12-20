@@ -11,9 +11,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.ajaxjs.cms.FeedbackDao;
 import com.ajaxjs.cms.app.nativeapp.AppUpdate;
 import com.ajaxjs.cms.app.nativeapp.AppUpdateServiceImpl;
-import com.ajaxjs.cms.dao.HrDao;
 import com.ajaxjs.framework.EntityMap;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.orm.JdbcConnection;
@@ -68,7 +68,7 @@ public class TestDomain {
 
 	@Test
 	public void testMapDao() {
-		HrDao dao = new Repository().bind(HrDao.class);
+		FeedbackDao dao = new Repository().bind(FeedbackDao.class);
 		EntityMap info = dao.findById(1L);
 		System.out.println(info.getId());
 		

@@ -1,8 +1,9 @@
 package com.ajaxjs.cms.dao;
 
 import com.ajaxjs.framework.BaseModel;
+import com.ajaxjs.framework.IBaseBean;
 
-public class Ads extends BaseModel {
+public class Ads extends BaseModel implements IBaseBean {
 	private static final long serialVersionUID = 1L;
 
 	/**

@@ -4,17 +4,23 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
-import com.ajaxjs.cms.dao.GlobalLogDao;
+import com.ajaxjs.framework.EntityMap;
+import com.ajaxjs.framework.IBaseDao;
+import com.ajaxjs.framework.Repository;
 import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.orm.dao.DaoHandler;
+import com.ajaxjs.orm.annotation.TableName;
 
 @Path("/admin")
 public class SystemController implements IController, Constant {
-	GlobalLogDao dao = new DaoHandler().bind(GlobalLogDao.class);
+	@TableName(value = "general_log", beanClass = EntityMap.class)
+	public static interface GlobalLogDao extends IBaseDao<EntityMap> {
+	}
+	
+	GlobalLogDao dao = new Repository().bind(GlobalLogDao.class);
 
 	@GET
 	@Path("GlobalLog")

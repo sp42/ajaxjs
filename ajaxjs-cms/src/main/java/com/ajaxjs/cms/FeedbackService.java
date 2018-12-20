@@ -1,6 +1,5 @@
-package com.ajaxjs.cms.service;
+package com.ajaxjs.cms;
 
-import com.ajaxjs.cms.dao.FeedbackDao;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.EntityMap;
 import com.ajaxjs.framework.Repository;

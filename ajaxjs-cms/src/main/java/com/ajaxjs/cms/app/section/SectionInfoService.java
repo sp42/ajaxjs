@@ -3,10 +3,10 @@ package com.ajaxjs.cms.app.section;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.framework.service.IService;
+import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.framework.service.ServiceException;
 
-public interface SectionInfoService extends IService<SectionInfo, Long> {
+public interface SectionInfoService extends IBaseService<SectionInfo> {
 	/**
 	 * 获取所有分类
 	 * 

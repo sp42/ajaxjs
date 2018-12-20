@@ -9,6 +9,7 @@ import com.ajaxjs.cms.app.catelog.Catelog;
 import com.ajaxjs.cms.app.catelog.CatelogService;
 import com.ajaxjs.cms.app.catelog.CatelogServiceImpl;
 import com.ajaxjs.cms.app.catelog.Catelogable;
+import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.framework.service.ServiceException;
@@ -34,6 +35,11 @@ public class DomainEntityService extends BaseService<DomainEntity> implements Ca
 	}
 	public DomainEntityService(String tableName, int domainCatelogId, String uiName, String shortName) {
 		this(tableName, domainCatelogId, uiName);
+		setShortName(shortName);
+	}
+	
+	public DomainEntityService(String tableName, String configNodeName, String uiName, String shortName) {
+		this(tableName, ConfigService.getValueAsInt(configNodeName), uiName, shortName);
 		setShortName(shortName);
 	}
 

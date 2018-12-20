@@ -3,11 +3,13 @@ package com.ajaxjs.cms.dao;
 import java.util.List;
 
 import com.ajaxjs.cms.app.catelog.Catelogable;
+import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.orm.annotation.Select;
-import com.ajaxjs.orm.dao.IDao;
+import com.ajaxjs.orm.annotation.TableName;
 import com.ajaxjs.orm.dao.PageResult;
 
-public interface AdsDao extends IDao<Ads, Long>, Catelogable<Ads> {
+@TableName(value = "entity_Ads", beanClass = Ads.class)
+public interface AdsDao extends IBaseDao<Ads>, Catelogable<Ads> {
 	final static String tableName = "entity_ads";
 
 	final static String list = "SELECT e.*, c.name AS catelogName, (SELECT path FROM attachment_picture p1 WHERE e.uid = p1.owner AND p1.catelog = 2 ORDER BY p1.id DESC LIMIT 0, 1) AS cover, "
