@@ -2,7 +2,6 @@ package com.ajaxjs.cms;
 
 import java.util.Map;
 
-import com.ajaxjs.cms.dao.ArticleDao;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.EntityMap;

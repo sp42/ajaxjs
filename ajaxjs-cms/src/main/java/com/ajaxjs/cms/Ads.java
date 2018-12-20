@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.dao;
+package com.ajaxjs.cms;
 
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.IBaseBean;

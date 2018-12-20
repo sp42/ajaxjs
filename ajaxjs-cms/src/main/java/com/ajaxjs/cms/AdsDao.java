@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.dao;
+package com.ajaxjs.cms;
 
 import java.util.List;
 

@@ -10,8 +10,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.ajaxjs.cms.Ads;
 import com.ajaxjs.cms.AdsService;
-import com.ajaxjs.cms.dao.Ads;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;

@@ -2,8 +2,6 @@ package com.ajaxjs.cms;
 
 import java.util.List;
 
-import com.ajaxjs.cms.dao.Ads;
-import com.ajaxjs.cms.dao.AdsDao;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.Repository;
