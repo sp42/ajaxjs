@@ -39,12 +39,12 @@ public class AdminController implements IController, Constant {
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
 		model.put("uiName", "操作日志");
 		model.put(PageResult, dao.findPagedList(start, limit));
-		return jsp_perfix + "/system/GlobalLog";
+		return jsp_perfix_webinf + "/system/globalLog";
 	}
 
 	@GET
 	@Path("/Logger")
 	public String show(ModelAndView mv) {
-		return jsp_perfix + "/system/Logger";
+		return jsp_perfix_webinf + "/cms/system/logger";
 	}
 }

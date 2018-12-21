@@ -30,12 +30,8 @@ public class AdsAdminController extends BaseController<Ads> {
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam("catalogId") int catalogId, @QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView mv) {
-		if (catalogId == 0)
-			catalogId = service.getDomainCatelogId(); // 不指定实体的子分类
-		
-		final int _catalogId = catalogId;
-		listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(_catalogId, start, limit));
-		return adminList();
+		listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(catalogId, start, limit));
+		return adminListCMS();
 	}
 
 	@GET
@@ -44,14 +40,14 @@ public class AdsAdminController extends BaseController<Ads> {
 	@Override
 	public String editUI(@PathParam("id") Long id, ModelAndView mv) {
 		super.editUI(id, mv);
-		return editUI();
+		return editUI_CMS();
 	}
-	
+
 	@GET
 	@Override
 	public String createUI(ModelAndView mv) {
 		super.createUI(mv);
-		return editUI();
+		return editUI_CMS();
 	}
 
 	@POST
@@ -78,13 +74,13 @@ public class AdsAdminController extends BaseController<Ads> {
 	public String delete(@PathParam("id") Long id) {
 		return delete(id, new Ads());
 	}
-	
+
 	@Override
 	public void prepareData(ModelAndView mv) {
-		mv.put("domainCatalog_Id", service.getDomainCatelogId());
+		mv.put(domainCatalog_Id, service.getDomainCatelogId());
 		super.prepareData(mv);
 	}
-	
+
 	@Override
 	public IBaseService<Ads> getService() {
 		return service;

@@ -31,14 +31,14 @@ public class ArticleAdminController extends BaseController<EntityMap> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, @QueryParam("catalogId") int catalogId, ModelAndView mv) {
 		listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(catalogId, start, limit));
-		return adminList();
+		return adminListCMS();
 	}
 
 	@GET
 	@Override
 	public String createUI(ModelAndView mv) {
 		super.createUI(mv);
-		return editUI();
+		return editUI_CMS();
 	}
 
 	@GET
@@ -47,7 +47,7 @@ public class ArticleAdminController extends BaseController<EntityMap> {
 	@Override
 	public String editUI(@PathParam("id") Long id, ModelAndView mv) {
 		super.editUI(id, mv);
-		return editUI();
+		return editUI_CMS();
 	}
 
 	@POST
@@ -77,7 +77,7 @@ public class ArticleAdminController extends BaseController<EntityMap> {
 	
 	@Override
 	public void prepareData(ModelAndView mv) {
-		mv.put("domainCatalog_Id", service.getDomainCatelogId());
+		mv.put(domainCatalog_Id, service.getDomainCatelogId());
 		super.prepareData(mv);
 	}
 

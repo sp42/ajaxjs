@@ -39,6 +39,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	@Resource("Attachment_pictureService")
 	private Attachment_pictureService service;
 
+	// TODO
 	static Map<Integer, String> catelogMap = new HashMap<>();
 	static {
 		catelogMap.put(0, "普通图片");
@@ -55,7 +56,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 		mv.put("catelogMap", catelogMap);
 		listPaged(start, limit, mv);
 
-		return jsp_perfix + "/attachment/pic-list";
+		return adminListCMS();
 	}
 
 	@GET

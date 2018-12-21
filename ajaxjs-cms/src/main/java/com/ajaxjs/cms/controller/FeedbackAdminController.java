@@ -32,7 +32,7 @@ public class FeedbackAdminController extends BaseController<EntityMap>  {
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView mv) {
 		listPaged(start, limit, mv);
-		return adminList();
+		return adminListCMS();
 	}
 
 	@GET
@@ -42,12 +42,12 @@ public class FeedbackAdminController extends BaseController<EntityMap>  {
 	}
 
 	@GET
-	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("/{id}")
 	@Override
+	@Path("/{id}")
+	@MvcFilter(filters = DataBaseFilter.class)
 	public String editUI(@PathParam("id") Long id, ModelAndView mv) {
 		super.editUI(id, mv);
-		return editUI();
+		return editUI_CMS();
 	}
 
 	@POST
