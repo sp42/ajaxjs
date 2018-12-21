@@ -13,11 +13,8 @@
 			<!-- 后台头部导航 -->
 			<ajaxjs-admin-header>
 				<template slot="title">${uiName}一览</template>
-				<template slot="btns"><a :href="ajResources.ctx + '/admin/article/'">新建</a> | </template>
+				<template slot="btns"><a :href="ajResources.ctx + '/admin/${shortName}/'">新建</a> | </template>
 			</ajaxjs-admin-header>
-	
-			<!-- 搜索、分类下拉 -->
-			<aj-admin-filter-panel :catelog-id="${catelogId}" :selected-catelog-id="${empty param.catalogId ? 'null' : param.catalogId}"></aj-admin-filter-panel>
 		</div>
 		
 		<script>
@@ -67,8 +64,8 @@
 							${(empty current.status || current.status == 1) ? '已上线': '已下线'}
 						</td>
 						<td>
-							<a href="../../../${tableName}/${current.id}/" target="_blank">浏览</a>
-							<a href="${ctx}/admin/article/${current.id}/"><img src="${commonAssetIcon}/update.gif" style="vertical-align: sub;" />编辑</a>
+							<a href="../../../${shortName}/${current.id}/" target="_blank">浏览</a>
+							<a href="${ctx}/admin/${shortName}/${current.id}/"><img src="${commonAssetIcon}/update.gif" style="vertical-align: sub;" />编辑</a>
 							<a href="javascript:aj.admin.del('${current.id}', '${current.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>
 						</td>
 					</tr>
