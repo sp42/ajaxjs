@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseController;
+import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
@@ -34,7 +35,7 @@ import com.ajaxjs.web.UploadFileInfo;
  */
 @Bean
 @Path("/admin/attachmentPicture")
-public class Attachment_pictureController extends BaseController<Attachment_picture>  {
+public class Attachment_pictureController extends BaseController<Attachment_picture> {
 	@Resource("Attachment_pictureService")
 	private Attachment_pictureService service;
 
@@ -49,11 +50,10 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	@GET
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Override
-	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
-		model.put("imgRelativePath", ConfigService.getValueAsString("uploadFile" + ".relativePath"));
-		model.put("catelogMap", catelogMap);
-		list(start, limit, model, service);
+	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView mv) {
+		mv.put("imgRelativePath", ConfigService.getValueAsString("uploadFile" + ".relativePath"));
+		mv.put("catelogMap", catelogMap);
+		listPaged(start, limit, mv);
 
 		return jsp_perfix + "/attachment/pic-list";
 	}
@@ -184,11 +184,12 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 		Attachment_picture pic = service.findById(id);
 		pic.setPath(request.mappath(pic.getPath())); // 转换为绝对地址
 
-		return delete(id, pic, service);
+		return delete(id, pic);
 	}
 
 	@Override
-	public String delete(Long id) {
-		return null;
+	public IBaseService<Attachment_picture> getService() {
+		return service;
 	}
+	
 }

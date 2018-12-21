@@ -3,16 +3,14 @@ package com.ajaxjs.framework.service;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import com.ajaxjs.cms.dao.GlobalLogDao;
+import com.ajaxjs.cms.controller.AdminController;
 import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.framework.EntityMap;
 import com.ajaxjs.ioc.Aop;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.orm.JdbcConnection;
-import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.util.Encode;
 
 /**
@@ -25,7 +23,6 @@ import com.ajaxjs.util.Encode;
  * @param <S>
  */
 public class GlobalLogAop<T, ID extends Serializable, S extends IService<T, ID>> extends Aop<S> {
-	public static final GlobalLogDao dao = new DaoHandler().bind(GlobalLogDao.class);
 
 	@Override
 	public Object before(S o, Method method, String methodName, Object[] args) {
@@ -39,7 +36,7 @@ public class GlobalLogAop<T, ID extends Serializable, S extends IService<T, ID>>
 		}
 
 		if ("create".equals(methodName) || "update".equals(methodName) || "delete".equals(methodName)) {
-			Map<String, Object> map = new HashMap<>();
+			EntityMap map = new EntityMap();
 			map.put("name", methodName);
 			map.put("content", getContent(o, methodName));
 			map.put("userId", 10000); // TODO
@@ -47,7 +44,7 @@ public class GlobalLogAop<T, ID extends Serializable, S extends IService<T, ID>>
 			map.put("_sql", getSql());
 			map.put("createDate", new Date());
 
-			dao.create(map);
+			AdminController.dao.create(map);
 		}
 	}
 

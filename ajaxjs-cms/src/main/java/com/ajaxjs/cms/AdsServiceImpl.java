@@ -2,6 +2,7 @@ package com.ajaxjs.cms;
 
 import java.util.List;
 
+import com.ajaxjs.cms.app.catelog.Catelogable;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.Repository;
@@ -9,7 +10,7 @@ import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.dao.PageResult;
 
 @Bean("AdsService")
-public class AdsServiceImpl extends BaseService<Ads> implements AdsService {
+public class AdsServiceImpl extends BaseService<Ads> implements AdsService, Catelogable<Ads> {
 	public static AdsDao dao = new Repository().bind(AdsDao.class);
 
 	{
@@ -30,6 +31,6 @@ public class AdsServiceImpl extends BaseService<Ads> implements AdsService {
 
 	@Override
 	public List<Ads> findListByCatelogId(int catelogId) {
-		return dao.findListByCatelogId(catelogId);
+		return null;
 	}
 }

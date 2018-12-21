@@ -1,7 +1,7 @@
 package com.ajaxjs.cms.app.catelog;
 
 public class CatelogServiceSqlFactory {
-	final static String findCatelog = " IN ( SELECT id FROM general_catelog WHERE `path` LIKE (CONCAT (( SELECT `path` FROM general_catelog WHERE id = ? ) , '%')))";
+//	final static String findCatelog = " IN ( SELECT id FROM general_catelog WHERE `path` LIKE (CONCAT (( SELECT `path` FROM general_catelog WHERE id = ? ) , '%')))";
 
 //	public void toSql(SqlAndArgs s) {
 //		QueryParams qs = SqlFactoryCriteria.getQueryParam(s.args);

@@ -15,12 +15,23 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.orm.annotation.TableName;
 
 @Path("/admin")
-public class SystemController implements IController, Constant {
+public class AdminController implements IController, Constant {
+	@GET
+	public String admin() {
+		return Constant.cms("admin");
+	}
+
+	@GET
+	@Path("/workbench")
+	public String workbench() {
+		return Constant.cms("admin-workbench");
+	}
+	
 	@TableName(value = "general_log", beanClass = EntityMap.class)
 	public static interface GlobalLogDao extends IBaseDao<EntityMap> {
 	}
 	
-	GlobalLogDao dao = new Repository().bind(GlobalLogDao.class);
+	public static GlobalLogDao dao = new Repository().bind(GlobalLogDao.class);
 
 	@GET
 	@Path("GlobalLog")

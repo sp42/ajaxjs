@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.domain;
+package com.ajaxjs.cms;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -11,9 +11,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.cms.FeedbackDao;
 import com.ajaxjs.cms.app.nativeapp.AppUpdate;
 import com.ajaxjs.cms.app.nativeapp.AppUpdateServiceImpl;
+import com.ajaxjs.cms.domain.DomainEntity;
+import com.ajaxjs.cms.domain.DomainEntityDao;
 import com.ajaxjs.framework.EntityMap;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.orm.JdbcConnection;
@@ -68,7 +69,7 @@ public class TestDomain {
 
 	@Test
 	public void testMapDao() {
-		FeedbackDao dao = new Repository().bind(FeedbackDao.class);
+		ArticleDao dao = new Repository().bind(ArticleDao.class);
 		EntityMap info = dao.findById(1L);
 		System.out.println(info.getId());
 		

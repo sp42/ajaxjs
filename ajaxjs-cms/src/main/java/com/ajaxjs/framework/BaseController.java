@@ -1,5 +1,7 @@
 package com.ajaxjs.framework;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -7,14 +9,19 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.keyvalue.BeanUtil;
 import com.ajaxjs.keyvalue.MappingHelper;
 import com.ajaxjs.keyvalue.MappingJson;
 import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
+import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.orm.dao.PageResult;
+import com.ajaxjs.orm.thirdparty.SnowflakeIdWorker;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.web.UploadFile;
+import com.ajaxjs.web.UploadFileInfo;
 
 public abstract class BaseController<T extends IBaseBean> implements IController, Constant {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseController.class);
@@ -242,4 +249,29 @@ public abstract class BaseController<T extends IBaseBean> implements IController
 	
 	public static final String domainEntityList = Constant.jsp_perfix + "/common-entity/domainEntity-list";
 	public static final String domainEntityEdit = Constant.jsp_perfix + "/common-entity/domainEntity";
+	
+	/**
+	 * 执行文件上传，读取默认配置的上传规则
+	 * 
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	public static UploadFileInfo uploadByConfig(MvcRequest request) throws IOException {
+		UploadFileInfo info = new UploadFileInfo();
+		info.isFileOverwrite = ConfigService.getValueAsBool("uploadFile.isFileOverwrite");
+		info.saveFolder = ConfigService.getValueAsBool("uploadFile.saveFolder.isUsingRelativePath") ? request.mappath(ConfigService.getValueAsString("uploadFile.saveFolder.relativePath")) + File.separator
+				: ConfigService.getValueAsString("uploadFile.saveFolder.absolutePath");
+
+		if (ConfigService.getValueAsBool("uploadFile.isAutoNewFileName")) {
+			info.saveFileName = new SnowflakeIdWorker(0, 0).nextId() + "";
+		}
+
+		new UploadFile(request, info).upload();
+
+		info.path = ConfigService.getValueAsString("uploadFile.saveFolder.relativePath") + "/" + info.saveFileName;
+		info.visitPath = request.getContextPath() + info.path;
+
+		return info;
+	}
 }

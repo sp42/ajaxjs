@@ -36,4 +36,12 @@ public interface Catelogable<T> {
 	 * @return 域id
 	 */
 	public int getDomainCatelogId();
+
+	/**
+	 * 用于 catelogId 查询的，通常放在 LEFT JOIN 后面还需要，WHERE e.catelog = c.id。 
+	 * 还需要预留一个 catelogId 的参数
+	 * 另外也可以用 IN 查询
+	 * 
+	 */
+	public final static String getByCatelogId = " (SELECT id, name FROM general_catelog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catelog WHERE id = ? ) , '%'))) AS c ";
 }
