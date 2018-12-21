@@ -3,10 +3,10 @@ package com.ajaxjs.cms.app.attachment;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.framework.service.IService;
+import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.framework.service.ServiceException;
 
-public interface Attachment_pictureService extends IService<Attachment_picture, Long> {
+public interface Attachment_pictureService extends IBaseService<Attachment_picture> {
 
 	/**
 	 * 根据实体 uid 找到其所拥有的图片

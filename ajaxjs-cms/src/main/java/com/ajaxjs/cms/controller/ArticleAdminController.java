@@ -1,8 +1,5 @@
 package com.ajaxjs.cms.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -14,80 +11,79 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.cms.ArticleService;
-import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.EntityMap;
+import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 
-@Path("/admin/article")
 @Bean
-public class ArticleAdminController extends BaseController<EntityMap>{
+@Path("/admin/article")
+public class ArticleAdminController extends BaseController<EntityMap> {
 	@Resource("ArticleService")
 	private ArticleService service;
 
 	@GET
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, @QueryParam("catalogId") int catalogId, ModelAndView model) {
-		if (catalogId == 0) {
-			catalogId = ConfigService.getValueAsInt("data.articleCatalog_Id"); // 不指定实体的子分类
-		}
-
-		model.put("catelogId", ConfigService.getValueAsInt("data.articleCatalog_Id"));
-
-		final int _catalogId = catalogId;
-		super.list(start, limit, model, (s, l) -> service.findPagedListByCatalogId(_catalogId, start, limit));
-		return adminList_CMS();
+	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, @QueryParam("catalogId") int catalogId, ModelAndView mv) {
+		listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(catalogId, start, limit));
+		return adminList();
 	}
 
 	@GET
 	@Override
-	public String createUI(ModelAndView model) {
-		model.put("catelogId", ConfigService.getValueAsInt("data.articleCatalog_Id"));
-		super.createUI(model);
-
-		return infoUI_CMS();
+	public String createUI(ModelAndView mv) {
+		super.createUI(mv);
+		return editUI();
 	}
 
 	@GET
-	@Path("{id}")
 	@MvcFilter(filters = DataBaseFilter.class)
+	@Path("/{id}")
 	@Override
-	public String editUI(@PathParam("id") Long id, ModelAndView model) {
-		model.put("catelogId", ConfigService.getValueAsInt("data.articleCatalog_Id"));
-		editUI(id, model, service);
-
-		return infoUI_CMS();
+	public String editUI(@PathParam("id") Long id, ModelAndView mv) {
+		super.editUI(id, mv);
+		return editUI();
 	}
 
 	@POST
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String create(Map<String, Object> entity) {
-		return create(entity, service);
+	public String create(EntityMap entity) {
+		return super.create(entity);
 	}
 
 	@PUT
-	@Path("{id}")
 	@MvcFilter(filters = DataBaseFilter.class)
+	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, Map<String, Object> entity) {
-		return update(id, entity, service);
+	public String update(@PathParam("id") Long id, EntityMap entity) {
+		return super.update(id, entity);
 	}
 
 	@DELETE
-	@Path("{id}")
+	@Path("/{id}")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	@Override
 	public String delete(@PathParam("id") Long id) {
-		return delete(id, new HashMap<String, Object>(), service);
+		return delete(id, new EntityMap());
+	}
+	
+	@Override
+	public void prepareData(ModelAndView mv) {
+		mv.put("domainCatalog_Id", service.getDomainCatelogId());
+		super.prepareData(mv);
+	}
+
+	@Override
+	public IBaseService<EntityMap> getService() {
+		return service;
 	}
 
 }

@@ -8,11 +8,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
-import com.ajaxjs.cms.controller.CommonController;
 import com.ajaxjs.framework.News;
+import com.ajaxjs.mvc.controller.IController;
 
 @Path("/news")
-public class NewsController extends CommonController<News, Long> {
+public class NewsController implements IController {
 
 	@GET
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {

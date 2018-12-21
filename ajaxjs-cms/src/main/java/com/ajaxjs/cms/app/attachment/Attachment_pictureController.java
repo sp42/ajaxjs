@@ -14,9 +14,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.controller.CommonController;
-import com.ajaxjs.cms.controller.CommonEntryAdminController;
 import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
@@ -35,7 +34,7 @@ import com.ajaxjs.web.UploadFileInfo;
  */
 @Bean
 @Path("/admin/attachmentPicture")
-public class Attachment_pictureController extends CommonController<Attachment_picture, Long> implements CommonEntryAdminController<Attachment_picture, Long> {
+public class Attachment_pictureController extends BaseController<Attachment_picture>  {
 	@Resource("Attachment_pictureService")
 	private Attachment_pictureService service;
 

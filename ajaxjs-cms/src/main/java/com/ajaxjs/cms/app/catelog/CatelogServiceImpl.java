@@ -3,15 +3,21 @@ package com.ajaxjs.cms.app.catelog;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.framework.service.CommonService;
-import com.ajaxjs.framework.service.GlobalLogAop;
+import com.ajaxjs.framework.BaseService;
+import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
-import com.ajaxjs.orm.dao.DaoHandler;
 import com.ajaxjs.orm.dao.PageResult;
 
-@Bean(value = "CatelogService", aop = { CommonService.class, GlobalLogAop.class })
-public class CatelogServiceImpl implements CatelogService {
-	CatelogDao dao = new DaoHandler().bind(CatelogDao.class);
+@Bean("CatelogService")
+public class CatelogServiceImpl extends BaseService<Catelog> implements CatelogService {
+	CatelogDao dao = new Repository().bind(CatelogDao.class);
+	
+	{
+		setUiName("分类");
+		setShortName("ads");
+		setDao(dao);
+	}
+
 
 	@Override
 	public List<Catelog> findByParentId(int id) {
@@ -69,11 +75,6 @@ public class CatelogServiceImpl implements CatelogService {
 	@Override
 	public PageResult<Catelog> findList() {
 		return null;
-	}
-
-	@Override
-	public String getName() {
-		return "分类";
 	}
 
 	@Override

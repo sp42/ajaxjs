@@ -10,39 +10,36 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.controller.CommonController;
-import com.ajaxjs.cms.controller.CommonEntryAdminController;
+import com.ajaxjs.framework.BaseController;
+import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.orm.dao.PageResult;
 
 @Path("/admin/catelog")
 @Bean("CatelogAdminController")
-public class CatelogController extends CommonController<Catelog, Long> implements CommonEntryAdminController<Catelog, Long> {
+public class CatelogController extends BaseController<Catelog> {
 	@Resource("CatelogService")
 	private CatelogService service;
-
+ 
+	@GET
+	@Path("list")
+	@Produces(MediaType.APPLICATION_JSON)
+	@MvcFilter(filters = DataBaseFilter.class)
+	public String list() {
+		return toJson(service.getDao().findList());
+	}
+	
 	@GET
 	@Override
 	public String createUI(ModelAndView model) {
 		prepareData(model);
 		return jsp_perfix + "/system/Catelog";
 	}
-
 	@GET
-	@Path("list")
-	@MvcFilter(filters = DataBaseFilter.class)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Override
-	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
-		PageResult<Catelog> result = service.findPagedList(start, limit);
-		return listJson(start, limit, (_start, _limit) -> result);
-	}
 
-	@GET
 	@Path("getListAndSubByParentId")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -60,7 +57,7 @@ public class CatelogController extends CommonController<Catelog, Long> implement
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
 	public String create(Catelog entity) {
-		return create(entity, service);
+		return super.create(entity);
 	}
 
 	@PUT
@@ -69,15 +66,19 @@ public class CatelogController extends CommonController<Catelog, Long> implement
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
 	public String update(@PathParam("id") Long id, Catelog entity) {
-		return update(id, entity, service);
+		return super.update(id, entity);
 	}
 
 	@DELETE
 	@Path("{id}")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	@Override
 	public String delete(@PathParam("id") Long id) {
-		return delete(id, new Catelog(), service);
+		return delete(id, new Catelog());
+	}
+
+	@Override
+	public IBaseService<Catelog> getService() {
+		return service;
 	}
 }

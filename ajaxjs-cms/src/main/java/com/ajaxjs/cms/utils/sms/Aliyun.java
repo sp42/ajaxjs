@@ -18,7 +18,6 @@ package com.ajaxjs.cms.utils.sms;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.ajaxjs.cms.controller.CommonController;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.util.logger.LogHelper;
 import com.aliyuncs.DefaultAcsClient;
@@ -39,7 +38,7 @@ import com.aliyuncs.profile.IClientProfile;
  */
 @Bean("AliyunSMSSender")
 public class Aliyun implements SMS {
-	private static final LogHelper LOGGER = LogHelper.getLog(CommonController.class);
+	private static final LogHelper LOGGER = LogHelper.getLog(Aliyun.class);
 
 	/**
 	 * 产品名称:云通信短信API产品,开发者无需替换

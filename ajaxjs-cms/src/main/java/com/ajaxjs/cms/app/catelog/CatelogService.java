@@ -3,10 +3,10 @@ package com.ajaxjs.cms.app.catelog;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.framework.service.IService;
+import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.framework.service.ServiceException;
 
-public interface CatelogService extends IService<Catelog, Long> {
+public interface CatelogService extends IBaseService<Catelog> {
 	/**
 	 * 获取所有分类
 	 * 

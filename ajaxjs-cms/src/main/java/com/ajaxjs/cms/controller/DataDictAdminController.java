@@ -1,8 +1,5 @@
 package com.ajaxjs.cms.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -10,10 +7,8 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.Ads;
 import com.ajaxjs.cms.DataDictService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.EntityMap;
@@ -32,10 +27,10 @@ public class DataDictAdminController extends BaseController<EntityMap> {
 
 	@GET
 	@Path("list")
+	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Override
-	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView mv) {
-		return listJson(start, limit, service);
+	public String list() {
+		return toJson(service.getDao().findList());
 	}
 
 	@GET

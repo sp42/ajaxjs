@@ -3,14 +3,15 @@ package com.ajaxjs.cms.service;
 import static org.junit.Assert.assertNotNull;
 
 import java.sql.SQLException;
-import java.util.Map;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.ajaxjs.cms.ArticleService;
 import com.ajaxjs.cms.app.catelog.CatelogService;
 import com.ajaxjs.cms.utils.CmsUtils;
+import com.ajaxjs.framework.EntityMap;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.dao.PageResult;
@@ -28,7 +29,7 @@ public class TestArticleService {
 		catalogService.getAllListByParentId(12);
 
 		ArticleService articleService = (ArticleService) BeanContext.getBean("ArticleService");
-		PageResult<Map<String, Object>> r = articleService.findPagedListByCatalogId(15, 0, 5);
+		PageResult<EntityMap> r = articleService.findPagedListByCatelogId(15, 0, 5);
 
 		assertNotNull(r.size());
 	}

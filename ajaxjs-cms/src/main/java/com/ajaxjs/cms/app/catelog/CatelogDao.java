@@ -3,19 +3,15 @@ package com.ajaxjs.cms.app.catelog;
 import java.util.List;
 import java.util.Map;
 
+import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.orm.annotation.Delete;
-import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
-import com.ajaxjs.orm.annotation.Update;
-import com.ajaxjs.orm.dao.IDao;
+import com.ajaxjs.orm.annotation.TableName;
 import com.ajaxjs.orm.dao.PageResult;
 
-public interface CatelogDao extends IDao<Catelog, Long> {
+@TableName(value = "general_catelog", beanClass = Catelog.class)
+public interface CatelogDao extends IBaseDao<Catelog> {
 	public final static String tableName = "general_catelog";
-	
-	@Select("SELECT * FROM " + tableName + " WHERE id = ?")
-	@Override
-	public Catelog findById(Long id);
 
 	/**
 	 * 父id 必须在子id之前，不然下面 findParent() 找不到后面的父节点，故先排序. 前端排序的话 chrom 有稳定排序的问题，故放在后端排序
@@ -24,17 +20,6 @@ public interface CatelogDao extends IDao<Catelog, Long> {
 	@Override
 	public PageResult<Catelog> findPagedList(int start, int limit);
 	
-	@Insert(tableName = tableName)
-	@Override
-	public Long create(Catelog bean);
-
-	@Update(tableName = tableName)
-	@Override
-	public int update(Catelog bean);
-
-	@Delete(tableName = tableName)
-	@Override
-	public boolean delete(Catelog bean);
 	
 	/**
 	 * 删除所有，包括子分类
@@ -66,7 +51,6 @@ public interface CatelogDao extends IDao<Catelog, Long> {
 			+ " (SELECT GROUP_CONCAT(id, '|', name ,'|' ,`path`) FROM general_catelog WHERE `path` REGEXP CONCAT(c.path, '/[0-9]+$')) AS sub\n " + 
 			"FROM general_catelog c WHERE pid = ?;")
 	public List<Map<String, Object>> getListAndSubByParentId(int parentId);
-	
 	
 	/**
 	 * 所有后代
