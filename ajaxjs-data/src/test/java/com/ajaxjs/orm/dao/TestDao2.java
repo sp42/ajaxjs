@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,18 +12,19 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.ajaxjs.framework.EntityMap;
+import com.ajaxjs.framework.Repository;
 import com.ajaxjs.orm.JdbcConnection;
 
-public class TestDao {
-	NewsDao dao;
-	NewsDaoMap mapDao;
+public class TestDao2 {
+	NewsDao2 dao;
+	NewsDaoMap2 mapDao;
 
 	@Before
 	public void setUp() {
 		JdbcConnection.setConnection(JdbcConnection.getTestSqliteConnection());
-		DaoHandler daoHandler = new DaoHandler();
-		dao = daoHandler.bind(NewsDao.class);
-		mapDao = new DaoHandler().bind(NewsDaoMap.class);
+		dao = new Repository().bind(NewsDao2.class);
+		mapDao = new Repository().bind(NewsDaoMap2.class);
 	}
 
 	@After
@@ -53,7 +53,7 @@ public class TestDao {
 		assertNotNull(newsList);
 		assertEquals(5, newsList.size());
 
-		List<Map<String, Object>> newsListMap = mapDao.findList(0, 5);
+		List<EntityMap> newsListMap = mapDao.findList(0, 5);
 		assertNotNull(newsListMap);
 		assertEquals(5, newsListMap.size());
 	}
@@ -64,7 +64,7 @@ public class TestDao {
 		assertNotNull(newsList);
 		assertEquals(10, newsList.size());
 
-		PageResult<Map<String, Object>> newsPagedListMap = mapDao.findPagedList(0, 5);
+		PageResult<EntityMap> newsPagedListMap = mapDao.findPagedList(0, 5);
 		assertNotNull(newsPagedListMap);
 		assertEquals(5, newsPagedListMap.size());
 	}
@@ -75,7 +75,7 @@ public class TestDao {
 		assertNotNull(newsList);
 		assertEquals(10, newsList.size());
 
-		List<Map<String, Object>> newsListMap = mapDao.findTop10News();
+		List<EntityMap> newsListMap = mapDao.findTop10News();
 		assertNotNull(newsListMap);
 		assertEquals(10, newsListMap.size());
 	}
@@ -92,7 +92,7 @@ public class TestDao {
 
 		assertTrue(dao.delete(news));
 
-		Map<String, Object> newsMap = new HashMap<>();
+		EntityMap newsMap = new EntityMap();
 		newsMap.put("name", "test 123");
 		newlyId = mapDao.create(newsMap);
 		assertNotNull(newlyId);

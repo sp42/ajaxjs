@@ -182,6 +182,9 @@ public class TestHelper {
 		return items.get(random.nextInt(items.size()));
 	}
 
+	public static long getItem(long[] items) {
+		return items[random.nextInt(items.length)];
+	}
 	public static int getItem(int[] items) {
 		return items[random.nextInt(items.length)];
 	}

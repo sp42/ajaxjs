@@ -58,7 +58,7 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 	/**
 	 * 执行时的调用。不管执行哪个方法都会调用该方法。
 	 * 
-	 * @throws DaoException DAO 异常
+	 * @throws DaoException          DAO 异常
 	 * @throws SecurityException
 	 * @throws NoSuchMethodException
 	 */
@@ -152,7 +152,7 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 	 * @return DAO 实例
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> T bind(Class<T> clz) {
+	public <T extends IBaseDao<? extends IBaseBean>> T bind(Class<T> clz) {
 		this.setClz(clz);
 		// 获取注解的表名
 		TableName tableNameA = clz.getAnnotation(TableName.class);
@@ -165,12 +165,12 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 		return (T) obj;
 	}
 
-	public <T> T bind(Class<T> clz, String tableName) {
+	public <T extends IBaseDao<? extends IBaseBean>> T bind(Class<T> clz, String tableName) {
 		setTableName(tableName);
 		return bind(clz);
 	}
 
-	public <T> T bind(Class<T> clz, String tableName, Class<?> beanClz) {
+	public <T extends IBaseDao<? extends IBaseBean>> T bind(Class<T> clz, String tableName, Class<?> beanClz) {
 		setTableName(tableName);
 		setBeanClz(beanClz);
 		return bind(clz);
@@ -231,10 +231,10 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 	/**
 	 * 执行 SELECT 查询
 	 * 
-	 * @param method DAO 方法
-	 * @param args 参数
+	 * @param method     DAO 方法
+	 * @param args       参数
 	 * @param returnType DAO 方法返回的目标类型
-	 * @param entryType 实体类型的类引用，通常是 map 或 bean
+	 * @param entryType  实体类型的类引用，通常是 map 或 bean
 	 * @return 查询结果
 	 * @throws DaoException
 	 */
@@ -303,7 +303,7 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 	 * 判断是否 SQLite 数据库
 	 * 
 	 * @param sqliteValue SQLite 数据库专用的 SQL 语句
-	 * @param conn 数据库连接对象
+	 * @param conn        数据库连接对象
 	 * @return true = 是 SQLite 数据库
 	 */
 	public static boolean isSqlite(String sqliteValue, Connection conn) {
@@ -313,10 +313,10 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 	/**
 	 * 新增动作
 	 * 
-	 * @param insert 包含 SQL 的注解
-	 * @param args SQL 参数
+	 * @param insert     包含 SQL 的注解
+	 * @param args       SQL 参数
 	 * @param returnType DAO 方法返回的目标类型
-	 * @param beanType 实体类型的类引用，通常是 map 或 bean
+	 * @param beanType   实体类型的类引用，通常是 map 或 bean
 	 * @return 自增 id
 	 */
 	private <R> Serializable insert(Insert insert, Method sqlFactoryHandler, Object[] args, Class<R> returnType) {
@@ -337,8 +337,8 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 	/**
 	 * 更新动作
 	 * 
-	 * @param update 包含 SQL 的注解
-	 * @param args SQL 参数
+	 * @param update   包含 SQL 的注解
+	 * @param args     SQL 参数
 	 * @param beanType 实体类型的类引用，通常是 map 或 bean
 	 * @return 影响的行数
 	 */
@@ -370,7 +370,7 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 	 * 删除动作
 	 * 
 	 * @param delete 包含 SQL 的注解
-	 * @param args SQL 参数
+	 * @param args   SQL 参数
 	 * @return 是否删除成功
 	 */
 	private Boolean delete(Delete delete, Method sqlFactoryHandler, Object[] args) {

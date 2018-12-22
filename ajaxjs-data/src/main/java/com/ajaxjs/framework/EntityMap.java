@@ -28,32 +28,29 @@ public class EntityMap extends HashMap<String, Object> implements IBaseBean {
 
 	@Override
 	public void setCreateDate(Date createDate) {
-		// TODO Auto-generated method stub
-
+		put("createDate", createDate);
 	}
 
 	@Override
 	public Date getUpdateDate() {
-		// TODO Auto-generated method stub
-		return null;
+		Object d = get("updateDate");
+		return (Date) d;
 	}
 
 	@Override
 	public void setUpdateDate(Date updateDate) {
-		// TODO Auto-generated method stub
-
+		put("updateDate", updateDate);
 	}
 
 	@Override
 	public Long getUid() {
-		// TODO Auto-generated method stub
-		return null;
+		Object uid = get("uid");
+		return (Long) uid;
 	}
 
 	@Override
 	public void setUid(Long uid) {
-		// TODO Auto-generated method stub
-
+		put("uid", uid);
 	}
 
 }

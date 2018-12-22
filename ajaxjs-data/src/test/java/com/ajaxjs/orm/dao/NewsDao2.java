@@ -17,10 +17,12 @@ package com.ajaxjs.orm.dao;
 
 import java.util.List;
 
+import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.SqlFactory;
+import com.ajaxjs.orm.annotation.TableName;
 import com.ajaxjs.orm.annotation.Update;
 
 /**
@@ -29,7 +31,8 @@ import com.ajaxjs.orm.annotation.Update;
  * @author sp42 frank@ajaxjs.com
  *
  */
-public interface NewsDao extends IDao<News, Long> {
+@TableName(value="news", beanClass=News.class)
+public interface NewsDao2 extends IBaseDao<News> {
 	final static String tableName = "news";
 
 	@Select("SELECT * FROM " + tableName + " WHERE id = ?")

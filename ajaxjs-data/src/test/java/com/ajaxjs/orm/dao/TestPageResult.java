@@ -17,4 +17,12 @@ public class TestPageResult {
 
 		assertTrue(result.size() == 1);
 	}
+
+	@Test
+	public void testException() {
+		DaoException e = new DaoException("");
+		e.setZero(true);
+		e.setOverLimit(true);
+		assertNotNull(e);
+	}
 }

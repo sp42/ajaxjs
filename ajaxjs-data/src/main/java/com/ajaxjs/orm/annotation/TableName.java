@@ -6,6 +6,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.ajaxjs.framework.IBaseBean;
+
 /**
  * DAO 中表示表名
  * 
@@ -28,5 +30,5 @@ public @interface TableName {
 	 * 
 	 * @return
 	 */
-	Class<?> beanClass() default Object.class;
+	Class<? extends IBaseBean> beanClass() default IBaseBean.class;
 }

@@ -17,6 +17,8 @@ package com.ajaxjs.orm.dao;
 
 import java.util.List;
 
+import com.ajaxjs.framework.EntityMap;
+import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
@@ -24,50 +26,49 @@ import com.ajaxjs.orm.annotation.SqlFactory;
 import com.ajaxjs.orm.annotation.Update;
 
 /**
- * Data Acccess Object for testing.
+ * Data Access Object for testing.
  * 
  * @author sp42 frank@ajaxjs.com
  *
  */
-public interface NewsDao extends IDao<News, Long> {
+public interface NewsDaoMap2 extends IBaseDao<EntityMap> {
 	final static String tableName = "news";
 
 	@Select("SELECT * FROM " + tableName + " WHERE id = ?")
 	@Override
-	public News findById(Long id);
+	public EntityMap findById(Long id);
 
 	@Select("SELECT COUNT(*) AS Total FROM " + tableName)
 	public int count();
 
-	@Select("SELECT * FROM news LIMIT ?, ?")
 	@SqlFactory("getInstance")
 	public int count2();
 
-	public static String getInstance(String sql) {
-		return "SELECT COUNT(*) FROM news";
+	public static String getInstance() {
+		return "SELECT * FROM " + tableName;
 	}
 
-	@Select("SELECT * FROM news LIMIT ?, ?")
-	public List<News> findList(int start, int limit);
+	@Select("SELECT * FROM " + tableName + " LIMIT ?, ?")
+	public List<EntityMap> findList(int start, int limit);
 
-	@Select(value = "SELECT * FROM news")
-	public PageResult<News> findPagedList(int start, int limit);
+	@Select(value = "SELECT * FROM " + tableName)
+	public PageResult<EntityMap> findPagedList(int start, int limit);
 
-	@Select("SELECT * FROM news ORDER BY createDate LIMIT 0, 10")
-	public List<News> findTop10News();
+	@Select("SELECT * FROM " + tableName + " ORDER BY createDate LIMIT 0, 10")
+	public List<EntityMap> findTop10News();
 
-	@Insert("INSERT INTO news (status, name) VALUES (?, ?)")
+	@Insert("INSERT INTO " + tableName + " (status, name) VALUES (?, ?)")
 	public Long createBySql(int status, String name);
 
 	@Insert(tableName = tableName)
 	@Override
-	public Long create(News bean);
+	public Long create(EntityMap bean);
 
 	@Update(tableName = tableName)
 	@Override
-	public int update(News bean);
+	public int update(EntityMap bean);
 
 	@Delete(tableName = tableName)
 	@Override
-	public boolean delete(News bean);
+	public boolean delete(EntityMap bean);
 }

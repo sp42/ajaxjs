@@ -28,6 +28,14 @@ public abstract class BaseService<T extends IBaseBean> implements IBaseService<T
 		return dao.findById(id);
 	}
 
+	@SuppressWarnings("unchecked")
+	public Long createMap(Map<String, Object> map) {
+		EntityMap e = new EntityMap();
+		e.putAll(map);
+		return create((T) e);
+
+	}
+
 	@Override
 	public Long create(T bean) {
 		SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0, 0);
@@ -38,7 +46,7 @@ public abstract class BaseService<T extends IBaseBean> implements IBaseService<T
 			bean.setCreateDate(now);
 		if (bean.getUpdateDate() == null)
 			bean.setUpdateDate(now);
-		
+
 		return dao.create(bean);
 	}
 
@@ -47,10 +55,10 @@ public abstract class BaseService<T extends IBaseBean> implements IBaseService<T
 		Date now = new Date();
 		if (bean.getUpdateDate() == null)
 			bean.setUpdateDate(now);
-		
+
 		return dao.update(bean);
 	}
-	
+
 	/**
 	 * 
 	 * @param mv
@@ -73,7 +81,16 @@ public abstract class BaseService<T extends IBaseBean> implements IBaseService<T
 
 	@Override
 	public List<T> findList() {
-		return null;
+		return dao.findList();
+	}
+
+	/**
+	 * 简易的列表
+	 * 
+	 * @return
+	 */
+	public List<T> findSimpleList() {
+		return dao.findSimpleList();
 	}
 
 	@Override
