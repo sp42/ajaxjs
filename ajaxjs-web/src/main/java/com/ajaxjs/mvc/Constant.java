@@ -28,6 +28,8 @@ public interface Constant {
 	 */
 	public static final String PageResult = "PageResult";
 
+	public static final String domainCatalog_Id = "domainCatalog_Id";
+
 	/**
 	 * 前端庫的位置
 	 */
@@ -52,12 +54,4 @@ public interface Constant {
 	 * 显示 HTTP 405 禁止操作
 	 */
 	public static final String show405 = String.format(MappingHelper.json_not_ok, "405， Request method not supported 禁止操作");
-
-	public static String list(String jsp) {
-		return String.format(jsp_perfix_webinf + "/entry/%s-list", jsp);
-	}
-
-	public static String jsp(String jsp) {
-		return jsp_perfix_webinf + "/" + jsp;
-	}
 }

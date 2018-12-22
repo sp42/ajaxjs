@@ -55,9 +55,12 @@ import com.ajaxjs.web.ServletHelper;
 public class MvcDispatcher implements Filter {
 	private static final LogHelper LOGGER = LogHelper.getLog(MvcDispatcher.class);
 
-	private static final String t = "     ___       _       ___  __    __      _   _____        _          __  _____   _____  \n"
-			+ "     /   |     | |     /   | \\ \\  / /     | | /  ___/      | |        / / | ____| |  _  \\ \n" + "    / /| |     | |    / /| |  \\ \\/ /      | | | |___       | |  __   / /  | |__   | |_| |  \n"
-			+ "   / / | |  _  | |   / / | |   }  {    _  | | \\___  \\      | | /  | / /   |  __|  |  _  {  \n" + "  / /  | | | |_| |  / /  | |  / /\\ \\  | |_| |  ___| |      | |/   |/ /    | |___  | |_| |  \n"
+	private static final String t = 
+			  "     ___       _       ___  __    __      _   _____        _          __  _____   _____  \n"
+			+ "     /   |     | |     /   | \\ \\  / /     | | /  ___/      | |        / / | ____| |  _  \\ \n" 
+			+ "    / /| |     | |    / /| |  \\ \\/ /      | | | |___       | |  __   / /  | |__   | |_| |  \n"
+			+ "   / / | |  _  | |   / / | |   }  {    _  | | \\___  \\      | | /  | / /   |  __|  |  _  {  \n" 
+			+ "  / /  | | | |_| |  / /  | |  / /\\ \\  | |_| |  ___| |      | |/   |/ /    | |___  | |_| |  \n"
 			+ " /_/   |_| \\_____/ /_/   |_| /_/  \\_\\ \\_____/ /_____/      |___/|___/     |_____| |_____/ \n";
 
 	{
@@ -70,7 +73,7 @@ public class MvcDispatcher implements Filter {
 	 * @param _config 过滤器配置，web.xml 中定义
 	 */
 	@Override
-	public void init(FilterConfig _config) throws ServletException {
+	public void init(FilterConfig _config) {
 		// 读取 web.xml 配置，如果有 controller 那一项就获取指定包里面的内容，看是否有属于 IController 接口的控制器，有就加入到
 		// AnnotationUtils.controllers 集合中
 		Map<String, String> config = ServletHelper.initFilterConfig2Map(_config);
@@ -98,12 +101,12 @@ public class MvcDispatcher implements Filter {
 		HttpServletRequest _request = (HttpServletRequest) req;
 		HttpServletResponse _response = (HttpServletResponse) resp;
 
-		_request.setAttribute("requestTimeRecorder", System.currentTimeMillis()); // 每次 servlet 都会执行的。记录时间
-
-		if (isStaticAsset(_request.getRequestURI())) { // 静态资源
+		if (ServletHelper.isStaticAsset(_request.getRequestURI())) {
 			chain.doFilter(req, resp);
 			return;
 		}
+
+		_request.setAttribute("requestTimeRecorder", System.currentTimeMillis()); // 每次 servlet 都会执行的。记录时间
 
 		MvcRequest request = new MvcRequest(_request);
 		MvcOutput response = new MvcOutput(_response);
@@ -132,7 +135,7 @@ public class MvcDispatcher implements Filter {
 			}
 		}
 
-		chain.doFilter(req, resp);// 不要传 MvcRequest，以免入侵其他框架
+		chain.doFilter(req, resp);// 不用传 MvcRequest，以免入侵其他框架
 	}
 
 	/**
@@ -167,7 +170,7 @@ public class MvcDispatcher implements Filter {
 				if (method.getParameterTypes().length > 0) {
 					Object[] args = RequestParam.getArgs(request, response, method);
 					model = findModel(args);
-
+System.out.println(Arrays.toString(args));
 					// 通过反射执行控制器方法:调用反射的 Reflect.executeMethod 方法就可以执行目标方法，并返回一个结果。
 					result = ReflectUtil.executeMethod_Throwable(controller, method, args);
 				} else {
@@ -235,18 +238,6 @@ public class MvcDispatcher implements Filter {
 	}
 
 	private static final Pattern id = Pattern.compile("/\\d+");
-
-	private static final Pattern p = Pattern.compile("\\.jpg|\\.png|\\.gif|\\.js|\\.css|\\.less|\\.ico|\\.jpeg|\\.htm|\\.swf|\\.txt|\\.mp4|\\.flv");
-
-	/**
-	 * Check the url if there is static asset.
-	 * 
-	 * @param requestURI
-	 * @return
-	 */
-	public static boolean isStaticAsset(String requestURI) {
-		return p.matcher(requestURI).find();
-	}
 
 	/**
 	 * 根据 httpMethod 请求方法返回控制器类身上的方法。

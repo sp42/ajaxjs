@@ -73,7 +73,7 @@ public class HttpBasicAuthFilter implements Filter {
 
 			LOGGER.info("HTTP BasicAuth 登录失败！");
 		} else {
-			//			request.setAttribute("userName", userid);
+			// request.setAttribute("userName", userid);
 			chain.doFilter(request, response);
 		}
 	}
@@ -85,8 +85,7 @@ public class HttpBasicAuthFilter implements Filter {
 	/**
 	 * 检查是否合法登录
 	 * 
-	 * @param request
-	 *            请求对象
+	 * @param request 请求对象
 	 * @return 是否合法登录
 	 */
 	private static boolean checkAuth(HttpServletRequest request) {
@@ -106,12 +105,9 @@ public class HttpBasicAuthFilter implements Filter {
 	/**
 	 * 检查是否合法登录
 	 * 
-	 * @param authorization
-	 *            认证后每次HTTP请求都会附带上 Authorization 头信息
-	 * @param username
-	 *            用户名
-	 * @param password
-	 *            密码
+	 * @param authorization 认证后每次HTTP请求都会附带上 Authorization 头信息
+	 * @param username 用户名
+	 * @param password 密码
 	 * @return true = 认证成功/ false = 需要认证
 	 */
 	private static boolean checkAuth(String authorization, String username, String password) {

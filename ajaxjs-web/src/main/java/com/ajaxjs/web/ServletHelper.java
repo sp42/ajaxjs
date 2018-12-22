@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletConfig;
@@ -51,5 +52,17 @@ public class ServletHelper {
 	 */
 	public static Map<String, String> initServletConfig2Map(ServletConfig config) {
 		return initParams2map(() -> config.getInitParameterNames(), key -> config.getInitParameter(key));
+	}
+	
+	private static final Pattern p = Pattern.compile("\\.jpg|\\.png|\\.gif|\\.js|\\.css|\\.less|\\.ico|\\.jpeg|\\.htm|\\.swf|\\.txt|\\.mp4|\\.flv");
+
+	/**
+	 * 检查是否静态资源。Check the url if there is static asset.
+	 * 
+	 * @param url URL 地址
+	 * @return true 表示为静态资源
+	 */
+	public static boolean isStaticAsset(String url) {
+		return p.matcher(url).find();
 	}
 }
