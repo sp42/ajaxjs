@@ -32,24 +32,31 @@ public interface IBaseDao<T extends IBaseBean> {
 	 */
 	public final static String catelog_find = " IN (SELECT id FROM general_catelog WHERE `path` LIKE (CONCAT (( SELECT `path` FROM general_catelog WHERE id = ? ) , '%')))";
 	
-//	@Select(value="SELECT GROUP_CONCAT(p.id, '|', p.`path`, '|', IFNULL(p.`catelog`, 0), '|', p.`index` SEPARATOR '\", \"') AS pics, e.*, "
-//			+ "(SELECT `path` FROM attachment_picture p WHERE p.`catelog` = 2 AND owner = e.uid ORDER BY ID DESC LIMIT 1) AS cover"
-//			+ " FROM  ${tableName} e LEFT JOIN attachment_picture p ON e.uid = p.owner WHERE e.id = ?",
-//			
-//			sqliteValue = "SELECT (p.id || '|' || p.`path` || '|' || IFNULL(p.`catelog`, 0) || '|' || p.`index` ) AS pics, e.*, "
-//					+ " p.path AS cover"
-//					+ " FROM ${tableName} e LEFT JOIN attachment_picture p ON e.uid = p.owner WHERE e.id = ? ORDER BY p.id DESC LIMIT 1")
-//	public T findById_catelog_avatar(Long id);
+	// 适合附件列表
+	@Select(value="SELECT GROUP_CONCAT(p.id, '|', p.`path`, '|', IFNULL(p.`catelog`, 0), '|', p.`index` SEPARATOR '\", \"') AS pics, e.*, "
+			+ "(SELECT `path` FROM attachment_picture p WHERE p.`catelog` = 2 AND owner = e.uid ORDER BY ID DESC LIMIT 1) AS cover"
+			+ " FROM  ${tableName} e LEFT JOIN attachment_picture p ON e.uid = p.owner WHERE e.id = ?",
+			
+			sqliteValue = "SELECT (p.id || '|' || p.`path` || '|' || IFNULL(p.`catelog`, 0) || '|' || p.`index` ) AS pics, e.*, "
+					+ " p.path AS cover"
+					+ " FROM ${tableName} e LEFT JOIN attachment_picture p ON e.uid = p.owner WHERE e.id = ? ORDER BY p.id DESC LIMIT 1")
+	public T findById_Attachment(Long id);
 	
 	@Select(value = "SELECT entry.*, " + selectCover + " AS cover, gc.name AS catelogName FROM ${tableName} entry" + catelog_simple_join + " WHERE entry.id = ?")
 	public T findById_catelog_avatar(Long id);
-	
+
+	@Select("SELECT entity_article.*, general_catelog.name AS catelogName FROM entity_article LEFT JOIN general_catelog ON entity_article.catelog = general_catelog.id")
+	public PageResult<EntityMap> findPagedListCatalog(int start, int limit);
+
 	@Select("SELECT * FROM ${tableName}")
 	public List<T> findList();
 	
 	@Select("SELECT id, name FROM ${tableName}")
 	public List<T> findSimpleList();
 	
+	@Select("SELECT * FROM ${tableName} WHERE id = ?")
+	public T findById(Long id);
+
 	/**
 	 * 查询单个记录。如果找不到则返回 null
 	 * 
@@ -59,8 +66,6 @@ public interface IBaseDao<T extends IBaseBean> {
 	@Select("SELECT entry.*, gc.name AS catelogName FROM ${tableName} entry " + catelog_simple_join +" WHERE entry.id = ?")
 	public T findById_catelog(Long id);
 	
-	@Select("SELECT * FROM ${tableName} WHERE id = ?")
-	public T findById(Long id);
 
 	/**
 	 * 简单分页。注意不用在 SQL 后面加上 LIMIT，系统会自动加的
@@ -72,8 +77,8 @@ public interface IBaseDao<T extends IBaseBean> {
 	@Select("SELECT * FROM ${tableName} ORDER BY id DESC")
 	public PageResult<T> findPagedList(int start, int limit);
 	
-	@Select(value = 	"SELECT a.*, c.name AS catelogName FROM ${tableName} a INNER JOIN " + catelog_finById + "ON a.`catelog` = c.id  WHERE a.`catelog` =  c.id AND 1 = 1 ORDER BY id DESC",
-			countSql = 	"SELECT COUNT(a.id) AS count FROM ${tableName} a WHERE catelog " + catelog_find + " AND 1 = 1",
+	@Select(value = 	"SELECT entry.*, c.name AS catelogName FROM ${tableName} entry LEFT JOIN " + catelog_finById + "ON entry.`catelogId` = c.id  WHERE 1 = 1 ORDER BY id DESC",
+			countSql = 	"SELECT COUNT(entry.id) AS count FROM ${tableName} entry WHERE catelogId " + catelog_find + " AND 1 = 1",
 
 			sqliteValue = "SELECT id, name, intro, createDate, updateDate, catelog, catelogName, expr FROM ${tableName} a"
 					+ " INNER JOIN (SELECT id AS catelogId, name AS catelogName FROM general_catelog WHERE `path` LIKE (  ( SELECT `path` FROM general_catelog WHERE id = ? ) || '%')) AS c "
@@ -83,6 +88,17 @@ public interface IBaseDao<T extends IBaseBean> {
 	public PageResult<T> findPagedListByCatelogId(int catelogIds,  int start, int limit);
 
 	/**
+	 * 带封面图，可分页的列表
+	 * 
+	 * @param catelogId
+	 * @param start
+	 * @param limit
+	 * @return
+	 */
+	@Select("SELECT id, name, intro, createDate, updateDate, " + selectCover + " AS cover FROM ${tableName} entry")
+	public PageResult<T> findPagedList_Cover(int start, int limit);
+	
+	/**
 	 * 带封面图，可分类，可分页的列表
 	 * 
 	 * @param catelogId
@@ -90,8 +106,10 @@ public interface IBaseDao<T extends IBaseBean> {
 	 * @param limit
 	 * @return
 	 */
-	@Select("SELECT id, name, intro, createDate, updateDate, catelog, catelogName, " + selectCover + " AS cover " + "FROM ${tableName} entry"
-			+ " INNER JOIN (SELECT id AS catelogId, name AS catelogName FROM general_catelog WHERE `path` LIKE (  ( SELECT `path` FROM general_catelog WHERE id = ? ) || '%')) AS c " + " ON entry.`catelog` = c.catelogId")
+	@Select(      value = "SELECT entry.*, c.name AS catelogName, " + selectCover + " AS cover FROM ${tableName} entry LEFT JOIN " + catelog_finById + "ON entry.`catelogId` = c.id  WHERE 1 = 1 ORDER BY id DESC",
+			
+			sqliteValue = "SELECT id, name, createDate, updateDate, entry.catelogId, catelogName, " + selectCover + " AS cover FROM ${tableName} entry"
+			+ " LEFT JOIN (SELECT id AS catelogId, name AS catelogName FROM general_catelog WHERE `path` LIKE (  ( SELECT `path` FROM general_catelog WHERE id = ? ) || '%')) AS c " + " ON entry.`catelogId` = c.catelogId")
 	public PageResult<T> findPagedListByCatelogId_Cover(int catelogId, int start, int limit);
 
 	/**
