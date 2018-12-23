@@ -24,14 +24,14 @@ public class ArticleService extends BaseService<EntityMap> implements Catelogabl
 	public PageResult<EntityMap> findPagedListByCatelogId(int catelogId, int start, int limit) {
 		if (catelogId == 0)
 			catelogId = getDomainCatelogId();
-		return dao.findPagedListByCatalogId(catelogId, start, limit);
+		return dao.findPagedListByCatelogId(catelogId, start, limit);
 	}
 
 	@Override
 	public List<EntityMap> findListByCatelogId(int catelogId) {
 		if (catelogId == 0)
 			catelogId = getDomainCatelogId();
-		return dao.findPagedListByCatalogId(catelogId, 0, 9999);
+		return dao.findPagedListByCatelogId(catelogId, 0, 9999);
 	}
 
 	@Override

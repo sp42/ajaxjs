@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
-import com.ajaxjs.mvc.Constant;
+import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 
@@ -21,7 +21,7 @@ import com.ajaxjs.mvc.controller.IController;
 public class DataBaseShowStruController implements IController {
 	@GET
 	public String show(ModelAndView mv, HttpServletRequest request) {
-		return Constant.jsp_perfix + "/system/DataBaseShowStru";
+		return  BaseController.cms("database-show-stru");
 	}
 
 	/**
@@ -147,6 +147,7 @@ public class DataBaseShowStruController implements IController {
 		while (rs.next()) {
 			Map<String, String> fieldInfos = new HashMap<>();
 			fieldInfos.put("name", rs.getString("Field"));
+			
 			fieldInfos.put("type", rs.getString("Type"));
 			fieldInfos.put("null", rs.getString("Null"));
 			fieldInfos.put("comment", rs.getString("Comment"));

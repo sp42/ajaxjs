@@ -37,7 +37,7 @@ public class DataDictAdminController extends BaseController<EntityMap> {
 	@Override
 	public String createUI(ModelAndView mv) {
 		super.createUI(mv);
-		return editUI();
+		return editUI_CMS();
 	}
 
 	@Override

@@ -45,6 +45,13 @@
 <!-- 					</label> -->
 				<%-- </c:if> --%>
 				</div>
+				<div>
+					<label>
+						<div class="label">副标题：</div> 
+						<input placeholder="请填写${uiName}副标题" size="60" name="subTitle" value="${info.subTitle}" type="text" />
+					</label> 
+
+				</div>
 		
 				<div>
 					<label>

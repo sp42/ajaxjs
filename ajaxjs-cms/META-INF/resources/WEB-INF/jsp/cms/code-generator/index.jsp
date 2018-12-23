@@ -72,7 +72,9 @@ form>div>div{
 			
 		</div>
 		<div>
-			<div>saveFolder: </div><input type="text" name="saveFolder" value="C:\\project\\temp\\CodeGenerators\\" size="80" /> 保存目录
+			<div>saveFolder: </div><input type="text" name="saveFolder" 
+			placeholder="C:\project\temp\CodeGenerators\" 
+			value="C:\project\temp\CodeGenerators\" size="80" /> 保存目录
 		</div>
 		<div>
 			<div>packageName: </div><input type="text" name="packageName" value="com.ajaxjs.user.role"  size="80" /> 包名

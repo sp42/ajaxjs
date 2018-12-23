@@ -20,7 +20,7 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 
 @Path("/admin/catelog")
 @Bean("CatelogAdminController")
-public class CatelogController extends BaseController<Catelog> {
+public class CatelogAdminController extends BaseController<Catelog> {
 	@Resource("CatelogService")
 	private CatelogService service;
  
@@ -36,7 +36,7 @@ public class CatelogController extends BaseController<Catelog> {
 	@Override
 	public String createUI(ModelAndView model) {
 		prepareData(model);
-		return jsp_perfix + "/system/Catelog";
+		return editUI_CMS();
 	}
 	@GET
 

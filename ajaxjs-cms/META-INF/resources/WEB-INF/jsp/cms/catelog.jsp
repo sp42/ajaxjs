@@ -138,11 +138,6 @@
 			select.onchange = onSelectChange;
 			
 			ajaxjs.xhr.get('list/?limit=99', function(json) {
-				if(!json.isOk) {
-					aj.alert.show(json.msg); // 有错误就提示
-					return;
-				}
-
 				selectUI.renderer(json.result, select);
 			});
 		}

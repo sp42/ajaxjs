@@ -28,6 +28,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.keyvalue.MappingHelper;
 import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.controller.IController;
@@ -57,7 +58,7 @@ public class PageEditor implements IController, Constant {
 	 */
 	@GET
 	public String show() {
-		return Constant.cms("page-load-iframe");
+		return BaseController.cms("page-load-iframe");
 	}
 
 	/**
@@ -78,7 +79,7 @@ public class PageEditor implements IController, Constant {
 			LOGGER.warning(e);
 		}
 		
-		return Constant.cms("page-editor");
+		return BaseController.cms("page-editor");
 	}
 
 	/**

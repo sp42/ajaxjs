@@ -25,8 +25,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.keyvalue.MappingHelper;
-import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.util.io.FileUtil;
@@ -49,7 +49,7 @@ public class ConfigController implements IController {
 		model.put("configJson", FileUtil.openAsText(ConfigService.jsonPath));
 		model.put("jsonSchemePath", FileUtil.openAsText(ConfigService.jsonSchemePath));
 
-		return Constant.jsp_perfix + "/config/all-config";
+		return BaseController.cms("config-all");
 	}
 
 	@Operation(summary = "保存配置", tags = { "SystemConfig", "Admin Service ONLY" }, description = "保存配置并且刷新配置", responses = { @ApiResponse(description = "操作是否成功", content = @Content(mediaType = "application/json")) })
@@ -68,13 +68,13 @@ public class ConfigController implements IController {
 	@GET
 	@Path("siteStru")
 	public String siteStruUI() {
-		return Constant.jsp_perfix + "/config/site-stru";
+		return BaseController.cms("config-site-stru");
 	}
 
 	@GET
 	@Path("site")
 	public String siteUI() {
-		return Constant.jsp_perfix + "/config/site-config";
+		return BaseController.cms("config-site-form");
 	}
 
 	@Operation(summary = "保存网站结构", tags = { "SystemConfig", "Admin Service ONLY" }, description = "保存网站结构", responses = { @ApiResponse(description = "操作是否成功", content = @Content(mediaType = "application/json")) })

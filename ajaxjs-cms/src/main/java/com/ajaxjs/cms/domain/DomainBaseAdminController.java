@@ -14,7 +14,7 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 
-public abstract class DomainBaseController extends BaseController<DomainEntity> {
+public abstract class DomainBaseAdminController extends BaseController<DomainEntity> {
 	@GET
 	@Override
 	@MvcFilter(filters = DataBaseFilter.class)

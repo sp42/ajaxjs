@@ -25,10 +25,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
 import com.ajaxjs.cms.utils.codegenerators.Utils;
-import com.ajaxjs.mvc.Constant;
+import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.mvc.controller.IController;
-import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.util.io.ZipHelper;
 
 @Path("/admin/CodeGenerators")
 public class CodeGeneratorsController implements IController {
@@ -41,13 +39,11 @@ public class CodeGeneratorsController implements IController {
 
 	@GET
 	public String UI() {
-		return Constant.jsp_perfix_webinf + "/cms/system/code-generator/index";
+		return BaseController.cms("code-generator/index");
 	}
 
 	@POST
 	public String doGet(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException {
-		String pojoSave = saveFolder + "\\model\\%s.java", daoSave = saveFolder + "\\dao\\%s.java", serviceSave = saveFolder + "\\service\\%s.java", controllerSave = saveFolder + "\\controller\\%s.java";
-
 		if (request.getParameter("saveFolder") != null)
 			saveFolder = request.getParameter("saveFolder");
 		if (request.getParameter("packageName") != null)
@@ -59,6 +55,7 @@ public class CodeGeneratorsController implements IController {
 		if (request.getParameter("dbPassword") != null)
 			dbPassword = request.getParameter("dbPassword");
 
+		String pojoSave = saveFolder + "\\model\\%s.java", daoSave = saveFolder + "\\dao\\%s.java", serviceSave = saveFolder + "\\service\\%s.java", controllerSave = saveFolder + "\\controller\\%s.java";
 		Utils.mkdir(new String[] { saveFolder + "\\model", saveFolder + "\\dao", saveFolder + "\\service", saveFolder + "\\controller" });
 
 		ServletContext sc = request.getServletContext();
@@ -97,7 +94,6 @@ public class CodeGeneratorsController implements IController {
 				request.setAttribute("tablesComment", tablesComment);
 
 				render(isMap, pojoSave, daoSave, serviceSave, controllerSave, beanName, request, response, sc);
-
 			}
 		}
 
@@ -110,7 +106,7 @@ public class CodeGeneratorsController implements IController {
 		return "html::Done!<a href=\"" + request.getContextPath() + zipSave + "\" download>download</a>";
 	}
 
-	static final String tplSave = Constant.jsp_perfix_webinf + "/cms/system/code-generator";
+	static final String tplSave = BaseController.cms("code-generator");
 
 	/**
 	 * 替换为实际内容
@@ -143,8 +139,8 @@ public class CodeGeneratorsController implements IController {
 		render(serviceImp, String.format(serviceSave, beanName + "ServiceImpl"), sc, request, response);
 		render(controller, String.format(controllerSave, beanName + "Controller"), sc, request, response);
 
-		MvcRequest r = new MvcRequest(request);
-		ZipHelper.toZip(saveFolder, r.mappath(zipSave));
+//		MvcRequest r = new MvcRequest(request);
+//		ZipHelper.toZip(saveFolder, r.mappath(zipSave));
 	}
 
 	/**

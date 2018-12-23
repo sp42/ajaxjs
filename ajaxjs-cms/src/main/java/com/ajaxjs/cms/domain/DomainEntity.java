@@ -44,6 +44,15 @@ public class DomainEntity extends BaseModel implements IBaseBean {
 		this.status = status;
 	}
 
+	public String getSubTitle() {
+		return subTitle;
+	}
+
+	public void setSubTitle(String subTitle) {
+		this.subTitle = subTitle;
+	}
+
+	private String subTitle;
 	private String catelogName;
 
 	private String intro;

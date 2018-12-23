@@ -38,8 +38,20 @@ public class DomainEntityService extends BaseService<DomainEntity> implements Ca
 		setShortName(shortName);
 	}
 	
+	
 	public DomainEntityService(String tableName, String configNodeName, String uiName, String shortName) {
 		this(tableName, ConfigService.getValueAsInt(configNodeName), uiName, shortName);
+	}
+	
+	/**
+	 * 不用分类的
+	 * @param tableName
+	 * @param uiName
+	 * @param shortName
+	 */
+	public DomainEntityService(String tableName,  String uiName, String shortName) {
+		this(tableName);
+		setUiName(uiName);
 		setShortName(shortName);
 	}
 

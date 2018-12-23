@@ -15,19 +15,27 @@ public class Utils {
 
 		return arr[0];
 	}
-	
+
 	public static String toJavaType(String sqlType) {
-		if(sqlType.indexOf("int") != -1)
-			return "Integer";
-		if(sqlType.indexOf("varchar") != -1 || sqlType.indexOf("text") != -1)
-			return "String";
-		if(sqlType.indexOf("datetime") != -1)
-			return "java.util.Date";
-		if(sqlType.indexOf("int") != -1 || sqlType.indexOf("date") != -1)
-			return "Integer";
-		
-		System.out.println(sqlType);
-		return "void";
+		String t = "void";
+
+		if (sqlType.indexOf("varchar") != -1 || sqlType.indexOf("char") != -1 || sqlType.indexOf("text") != -1)
+			t = "String";
+		else if (sqlType.indexOf("datetime") != -1)
+			t = "java.util.Date";
+		else if (sqlType.indexOf("bigint") != -1)
+			t = "Long";
+		else if (sqlType.indexOf("int") != -1 || sqlType.indexOf("date") != -1)
+			t = "Integer";
+		else if (sqlType.indexOf("float") != -1)
+			t = "Float";
+		else if (sqlType.indexOf("double") != -1)
+			t = "Double";
+		else if (sqlType.indexOf("decimal") != -1)
+			t = "java.math.BigDecimal";
+
+		System.out.println(sqlType+":::::::::::" + t);
+		return t;
 	}
 
 	/**
@@ -39,27 +47,25 @@ public class Utils {
 	public static String firstLetterUpper(String str) {
 		return Character.toString(str.charAt(0)).toUpperCase() + str.substring(1);
 	}
-	
+
 	public static File[] getFileName(String path) {
 		File file = new File(path);
 		return file.listFiles();
 	}
-	
+
 	public static void rename(File[] files, boolean isTxt2jsp) {
 		for (File file : files) {
 			String fileName = file.getAbsolutePath();
-			if (file.exists()) 
+			if (file.exists())
 				file.renameTo(new File(isTxt2jsp ? fileName.replaceAll(".txt", ".jsp") : fileName.replaceAll(".txt", ".jsp")));
 		}
 	}
-	
+
 	/**
 	 * 获取磁盘真實地址。
 	 * 
-	 * @param cxt
-	 *            Web 上下文
-	 * @param relativePath
-	 *            相对地址
+	 * @param cxt Web 上下文
+	 * @param relativePath 相对地址
 	 * @return 绝对地址
 	 */
 	public static String mappath(ServletContext cxt, String relativePath) {
@@ -73,8 +79,8 @@ public class Utils {
 	/**
 	 * 根据 JDBC Url 创建 MySQL 数据源对象
 	 *
-	 * @param url      像 "jdbc:mysql://localhost:3306/databaseName"
-	 * @param user     用户名
+	 * @param url 像 "jdbc:mysql://localhost:3306/databaseName"
+	 * @param user 用户名
 	 * @param password 密码
 	 * @return 数据源对象
 	 * @throws SQLException

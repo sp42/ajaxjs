@@ -14,7 +14,7 @@ public class CatelogServiceImpl extends BaseService<Catelog> implements CatelogS
 	
 	{
 		setUiName("分类");
-		setShortName("ads");
+		setShortName("catelog");
 		setDao(dao);
 	}
 
@@ -44,7 +44,7 @@ public class CatelogServiceImpl extends BaseService<Catelog> implements CatelogS
 			bean.setPath(path);
 		}
 
-		Long newlyId = dao.create(bean);
+		Long newlyId = super.create(bean);
 
 		if (newlyId != null) { // 需要创建了之后才有自己的 id
 			Catelog updatePath = new Catelog();

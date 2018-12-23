@@ -4,7 +4,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
-import com.ajaxjs.cms.domain.DomainBaseController;
+import com.ajaxjs.cms.domain.DomainBaseAdminController;
 import com.ajaxjs.cms.domain.DomainEntity;
 import com.ajaxjs.cms.domain.DomainEntityService;
 import com.ajaxjs.framework.IBaseService;
@@ -15,7 +15,7 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 
 @Bean
 @Path("/admin/hr")
-public class HrAdminController extends DomainBaseController {
+public class HrAdminController extends DomainBaseAdminController {
 	DomainEntityService service = new DomainEntityService("entity_hr", "data.hrCatalog_Id", "招聘", "hr");
 
 	@GET
