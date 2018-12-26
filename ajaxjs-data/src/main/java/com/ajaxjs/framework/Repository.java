@@ -217,7 +217,7 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 		return type;
 	}
 
-	String handleSql(String sql, Method sqlFactoryHandler) {
+	public String handleSql(String sql, Method sqlFactoryHandler) {
 		if (sqlFactoryHandler != null)
 			sql = ReflectUtil.executeStaticMethod(sqlFactoryHandler, sql).toString();
 
@@ -257,7 +257,7 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 //				queryParam.order.put("id", "DESC");
 //				sql = queryParam.orderToSql(sql);
 
-			result = PageResult.doPage(conn, entryType, select, sql, method, args);
+			result = PageResult.doPage(conn, entryType, select, sql, method, this, args);
 		} else if (returnType == Map.class) {
 			result = queryAsMap(conn, sql, args);
 		} else if (returnType == EntityMap.class) {

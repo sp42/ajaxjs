@@ -213,7 +213,7 @@ public class DaoHandler extends JdbcHelper implements InvocationHandler {
 //				queryParam.order.put("id", "DESC");
 //				sql = queryParam.orderToSql(sql);
 
-			result = PageResult.doPage(conn, entryType, select, sql, method, args);
+			result = PageResult.doPage(conn, entryType, select, sql, method, null, args);
 		} else if (returnType == Map.class) {
 			result = queryAsMap(conn, sql, args);
 		} else {

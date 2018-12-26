@@ -117,10 +117,10 @@ public class PageResult<T> extends ArrayList<T> {
 	 * @return 分页列表，如果找不到数据，仍返回一个空的 PageList，但可以通过 getZero() 得知是否为空
 	 */
 	@SuppressWarnings("unchecked")
-	public static <B> PageResult<B> doPage(Connection conn, Class<B> entryType, Select select, String sql, Method method, Object[] args) {
+	public static <B> PageResult<B> doPage(Connection conn, Class<B> entryType, Select select, String sql, Method method, Repository dao, Object[] args) {
 		P p = getPageParameters(method, args);
 
-		int total = countTotal(select, sql, p.args, conn);
+		int total = countTotal(select, sql, p.args, dao, conn);
 
 		PageResult<B> result = new PageResult<>();
 
@@ -163,7 +163,7 @@ public class PageResult<T> extends ArrayList<T> {
 	 * @param conn   连接对象，判断是否 MySQL or SQLite
 	 * @return 统计行数
 	 */
-	private static int countTotal(Select select, String sql, Object[] args, Connection conn) {
+	private static int countTotal(Select select, String sql, Object[] args, Repository dao, Connection conn) {
 		String countSql;
 
 		if (CommonUtil.isEmptyString(select.countSql())) {
@@ -175,6 +175,8 @@ public class PageResult<T> extends ArrayList<T> {
 			countSql = DaoHandler.isSqlite(select.sqliteCountSql(), conn) ? select.sqliteCountSql() : select.countSql();
 		}
 
+		countSql = dao.handleSql(countSql, null);
+		
 		if (conn.toString().contains("sqlite")) {
 			return JdbcHelper.queryOne(conn, countSql, Integer.class, args);
 		} else {// mysql 返回 long，转换一下
