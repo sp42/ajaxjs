@@ -63,6 +63,17 @@ public class MappingJson {
 
 		return '{' + String.join(",", arr) + '}';
 	}
+	
+	public static String stringifyMap2 (Map<?, ?> map) {
+		if (map == null)
+			return null;
+		
+		List<String> arr = new ArrayList<>();
+		for (Object key : map.keySet())
+			arr.add('\"' + key.toString() + "\":" + obj2jsonVaule(map.get(key)));
+		
+		return '{' + String.join(",", arr) + '}';
+	}
 
 	/**
 	 * 输入一个 List<Map<String, Object>>，将其转换为 JSON Str
