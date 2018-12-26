@@ -46,6 +46,11 @@ public abstract class BaseController<T extends IBaseBean> implements IController
 		info(id, mv, getService());
 		return ui(mv, false, "修改");
 	}
+	
+	public String editUI(Long id, ModelAndView mv, Supplier<T> getInfoAction) {
+		info(id, mv, getInfoAction);
+		return ui(mv, false, "修改");
+	}
 
 	private String ui(ModelAndView mv, boolean isCreate, String text) {
 		LOGGER.info(text + "记录 UI");

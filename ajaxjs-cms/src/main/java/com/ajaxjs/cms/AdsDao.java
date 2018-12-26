@@ -6,8 +6,6 @@ import com.ajaxjs.orm.annotation.TableName;
 
 @TableName(value = "entity_Ads", beanClass = Ads.class)
 public interface AdsDao extends IBaseDao<Ads> {
-	final static String tableName = "entity_ads";
-
 	/**
 	 * 附件图片
 	 */
