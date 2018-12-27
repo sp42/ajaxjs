@@ -294,8 +294,10 @@ ajaxjs.xhr = {
 			throw 'Please fill the url in ACTION attribute.';
 
 		// form.method always GET, so form.getAttribute('method') instead
-		var method = form.getAttribute('method').toLowerCase();
-
+		var method;
+		if(form.getAttribute('method'))
+			method = form.getAttribute('method').toLowerCase();
+		
 		cfg.method = method || cfg.method || 'post';
 
 		form.addEventListener('submit', function(e, cb, cfg) {

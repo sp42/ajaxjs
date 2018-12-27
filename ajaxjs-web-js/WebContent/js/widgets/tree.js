@@ -131,6 +131,53 @@
 	ajaxjs.tree.selectUI.prototype = ajaxjs.tree.prototype;
 })();
 
+Vue.component('aj-select', {
+	props : {
+		json : {
+			type: Object,
+			required: true
+		},
+		defaultSelected : {	// 已选中的分类 id
+			type: String,
+			required: false
+		},
+		fieldName : { // 表单 name，字段名
+			type: String,
+			required: true
+		}
+	},
+	data :function() {
+        return {
+            selected : ""
+        };
+    },
+	template : '<select :name="fieldName" @change="onSelected($event);" class="ajaxjs-select" style="min-width: 200px;" v-model="selected">\
+        <option v-for="(key, v) in json" :value="v">{{key}}</option>\
+		</select>',
+		
+	created:function(){
+		if(this.defaultSelected) {
+			this.selected = this.defaultSelected;
+		} else {
+			for(var i in this.json) {
+				this.selected = i;
+				break;
+			}
+		}
+	},
+	
+	methods : {
+		onSelected : function(e) {
+		},
+		
+	    getSelected: function(){
+	        //获取选中的优惠券
+	        console.log(this.selected)
+	    }
+	}
+});
+
+
 // 下拉分类选择器，异步请求远端获取分类数据
 Vue.component('aj-tree-catelog-select', {
 	props : {
