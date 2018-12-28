@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
-import java.util.function.Supplier;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.keyvalue.BeanUtil;
@@ -46,8 +48,8 @@ public abstract class BaseController<T extends IBaseBean> implements IController
 		info(id, mv, getService());
 		return ui(mv, false, "修改");
 	}
-	
-	public String editUI(Long id, ModelAndView mv, Supplier<T> getInfoAction) {
+
+	public String editUI(Long id, ModelAndView mv, Function<Long, T> getInfoAction) {
 		info(id, mv, getInfoAction);
 		return ui(mv, false, "修改");
 	}
@@ -68,22 +70,50 @@ public abstract class BaseController<T extends IBaseBean> implements IController
 	 * @param entity 实体
 	 * @return JSON 响应
 	 */
-	public String create(Supplier<Long> createAction) {
+	public static <E extends IBaseBean> String create(E entry, Function<E, Long> createAction) {
 		LOGGER.info("创建 name:{0}，数据库将执行 INSERT 操作");
 
-		Long newlyId = createAction.get();
+		Long newlyId = createAction.apply(entry);
 		if (newlyId == null)
-			throw new Error("创建失败！");
+			throw new RuntimeException("创建失败！");
 
 		return String.format(MappingHelper.json_ok_extension, "创建实体成功", "\"newlyId\":" + newlyId);
 	}
 
-	public <E extends IBaseBean> String create(E entry, IBaseService<E> service) {
-		return create(() -> service.create(entry));
+	public static <E extends IBaseBean> String create(E entry, IBaseService<E> service) {
+		return create(entry, service::create);
 	}
 
 	public String create(T entry) {
 		return create(entry, getService());
+	}
+
+	/**
+	 * 读取单个记录或者编辑某个记录，保存到 ModelAndView 中（供视图渲染用）。
+	 * 
+	 * @param id ID 序号
+	 * @param model Model 模型
+	 * @return JSP 路径。缺省提供一个默认路径，但不一定要使用它，换别的也可以。
+	 */
+	public <E extends IBaseBean> E info(Long id, ModelAndView mv, Function<Long, E> getInfoAction) {
+		LOGGER.info("读取单个记录或者编辑某个记录：id 是 {0}", id);
+
+		E info = getInfoAction.apply(id);
+
+		if (mv != null) {
+			prepareData(mv);
+			mv.put("info", info);
+		}
+
+		return info;
+	}
+
+	public <E extends IBaseBean> E info(Long id, ModelAndView mv, IBaseService<E> service) {
+		return info(id, mv, service::findById);
+	}
+
+	public T info(Long id, ModelAndView mv) {
+		return info(id, mv, getService());
 	}
 
 	/**
@@ -93,16 +123,16 @@ public abstract class BaseController<T extends IBaseBean> implements IController
 	 * @param entity 实体
 	 * @return JSON 响应
 	 */
-	public String update(Long id, IBaseBean entity, Supplier<Integer> updateAction) {
+	public static <E extends IBaseBean> String update(Long id, E entity, Consumer<E> updateAction) {
 		LOGGER.info("修改 name:{0}，数据库将执行 UPDATE 操作", entity);
 		entity.setId(id);
-		updateAction.get();
+		updateAction.accept(entity);
 
 		return jsonOk("修改成功");
 	}
-	
-	public <E extends IBaseBean> String update(Long id, E entry, IBaseService<E> service) {
-		return update(id, entry, () -> service.update(entry));
+
+	public static <E extends IBaseBean> String update(Long id, E entry, IBaseService<E> service) {
+		return update(id, entry, service::update);
 	}
 
 	public String update(Long id, T entity) {
@@ -116,50 +146,22 @@ public abstract class BaseController<T extends IBaseBean> implements IController
 	 * @param model 页面 Model 模型
 	 * @return JSON 响应
 	 */
-	public <E extends IBaseBean> String delete(Long id, E entity, Supplier<Boolean> delAction) {
+	public static <E extends IBaseBean> String delete(Long id, E entity, Predicate<E> delAction) {
 		LOGGER.info("删除 id:{0}，数据库将执行 DELETE 操作", entity);
 		entity.setId(id);
 
-		if (!delAction.get())
+		if (!delAction.test(entity))
 			throw new Error("删除失败！");
 
 		return jsonOk("删除成功");
 	}
 
-	public <E extends IBaseBean> String delete(Long id, E entity, IBaseService<E> service) {
-		return delete(id, entity, () -> service.delete(entity));
+	public static <E extends IBaseBean> String delete(Long id, E entity, IBaseService<E> service) {
+		return delete(id, entity, service::delete);
 	}
 
 	public String delete(Long id, T entity) {
 		return delete(id, entity, getService());
-	}
-
-	/**
-	 * 读取单个记录或者编辑某个记录，保存到 ModelAndView 中（供视图渲染用）。
-	 * 
-	 * @param id ID 序号
-	 * @param model Model 模型
-	 * @return JSP 路径。缺省提供一个默认路径，但不一定要使用它，换别的也可以。
-	 */
-	public T info(Long id, ModelAndView mv) {
-		return info(id, mv, getService());
-	}
-
-	public <E extends IBaseBean> E info(Long id, ModelAndView mv, Supplier<E> getInfoAction) {
-		LOGGER.info("读取单个记录或者编辑某个记录：id 是 {0}", id);
-
-		E info = getInfoAction.get();
-
-		if (mv != null) {
-			prepareData(mv);
-			mv.put("info", info);
-		}
-
-		return info;
-	}
-
-	public <E extends IBaseBean> E info(Long id, ModelAndView mv, IBaseService<E> service) {
-		return info(id, mv, () -> service.findById(id));
 	}
 
 	/**
@@ -181,28 +183,24 @@ public abstract class BaseController<T extends IBaseBean> implements IController
 	 * @param mv Model 模型
 	 * @return JSP 路径。缺省提供一个默认路径，但不一定要使用它，换别的也可以。
 	 */
-	public List<T> listPaged(int start, int limit, ModelAndView mv, BiFunction<Integer, Integer, List<T>> findPagedList) {
-		LOGGER.info("获取分页列表 GET list:{0}/{1}", start, limit);
+
+	public <E extends IBaseBean> PageResult<E> listPaged(int start, int limit, ModelAndView mv, BiFunction<Integer, Integer, PageResult<E>> findPagedListAction) {
+		LOGGER.info("获取分页列表 GET list");
 
 		prepareData(mv);
 
-		List<T> pageResult = findPagedList.apply(start, limit);
+		PageResult<E> pageResult = findPagedListAction.apply(start, limit);
 		mv.put(PageResult, pageResult);
 
 		return pageResult;
 	}
 
-	public List<T> listPaged(int start, int limit, ModelAndView mv) {
-		return listPaged(start, limit, mv, (_start, _limit) -> getService().findPagedList(_start, _limit));
+	public <E extends IBaseBean> PageResult<E> listPaged(int start, int limit, ModelAndView mv, IBaseService<E> service) {
+		return listPaged(start, limit, mv, service::findPagedList);
 	}
-	
-	public static <E extends IBaseBean> List<E> listPaged(ModelAndView mv, Supplier<List<E>> findPagedListAction) {
-		LOGGER.info("获取分页列表 GET list");
-		
-		List<E> pageResult = findPagedListAction.get();
-		mv.put(PageResult, pageResult);
 
-		return pageResult;
+	public PageResult<T> listPaged(int start, int limit, ModelAndView mv) {
+		return listPaged(start, limit, mv, getService());
 	}
 
 	/**
