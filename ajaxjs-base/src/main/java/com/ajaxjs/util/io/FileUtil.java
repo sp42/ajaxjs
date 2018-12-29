@@ -159,7 +159,7 @@ public class FileUtil extends StreamChain<FileUtil> {
 	 * @return 返回本实例供链式调用
 	 */
 	public FileUtil delete() {
-		LOGGER.info("文件 {0} 准备删除！");
+		LOGGER.info("文件 {0} 准备删除！", file.toString());
 		if (!file.delete())
 			LOGGER.warning("文件 {0} 删除失败！", file.toString());
 

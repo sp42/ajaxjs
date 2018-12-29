@@ -1,7 +1,6 @@
 package com.ajaxjs.cms.app.attachment;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.ws.rs.DELETE;
@@ -16,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseController;
+import com.ajaxjs.framework.DataDict;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.ioc.Bean;
@@ -39,21 +39,12 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	@Resource("Attachment_pictureService")
 	private Attachment_pictureService service;
 
-	// TODO
-	static Map<Integer, String> catelogMap = new HashMap<>();
-	static {
-		catelogMap.put(0, "普通图片");
-		catelogMap.put(1, "普通图片");
-		catelogMap.put(2, "头像/封面图片");
-		catelogMap.put(3, "相册图片");
-	}
-
 	@GET
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView mv) {
 		mv.put("imgRelativePath", ConfigService.getValueAsString("uploadFile" + ".relativePath"));
-		mv.put("catelogMap", catelogMap);
+		mv.put("catelogMap", DataDict.picMap);
 		listPaged(start, limit, mv);
 
 		return adminListCMS();
@@ -65,6 +56,14 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getListByOwnerUid(@PathParam("id") Long owenrUid) {
 		return toJson(service.findByOwner(owenrUid));
+	}
+	
+	@GET
+	@MvcFilter(filters = DataBaseFilter.class)
+	@Path("getAttachmentPictureByOwner/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getAttachmentPictureByOwner(@PathParam("id") Long owenrUid) {
+		return toJson(service.findAttachmentPictureByOwner(owenrUid));
 	}
 
 	@POST

@@ -71,7 +71,7 @@
 			<%@include file="/jsp/common/pager.jsp" %>
 		</div>
 		<script>
-			aj.imageEnlarger();
+			aj.imageEnlarger();// 鼠标移动大图
 		</script>
 	</body>
 </html>

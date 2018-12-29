@@ -4,7 +4,7 @@ import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
 
-@TableName(value = "entity_Ads", beanClass = Ads.class)
+@TableName(value = "entity_ads", beanClass = Ads.class)
 public interface AdsDao extends IBaseDao<Ads> {
 	/**
 	 * 附件图片

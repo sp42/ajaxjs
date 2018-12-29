@@ -12,7 +12,8 @@ import com.ajaxjs.util.io.FileUtil;
 
 @Bean("Attachment_pictureService")
 public class Attachment_pictureServiceImpl extends BaseService<Attachment_picture> implements Attachment_pictureService {
-	Attachment_pictureDao dao = new Repository().bind(Attachment_pictureDao.class);
+	public Attachment_pictureDao dao = new Repository().bind(Attachment_pictureDao.class);
+	
 	{
 		setUiName("图片");
 		setShortName("attachment_picture");
@@ -70,6 +71,11 @@ public class Attachment_pictureServiceImpl extends BaseService<Attachment_pictur
 	@Override
 	public boolean deleteByOwnerId(Long OwnerId) {
 		return dao.deleteByOwnerId(OwnerId);
+	}
+
+	@Override
+	public List<Attachment_picture> findAttachmentPictureByOwner(Long owner) {
+		return dao.findAttachmentPictureByOwner(owner);
 	}
 
 }

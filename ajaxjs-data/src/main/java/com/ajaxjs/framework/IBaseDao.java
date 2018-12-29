@@ -55,6 +55,15 @@ public interface IBaseDao<T extends IBaseBean> {
 	public T findById_catelog(Long id);
 
 	/**
+	 * 查询单个记录，带有封面的。如果找不到则返回 null
+	 * 
+	 * @param id 记录 id
+	 * @return Bean
+	 */
+	@Select(value = "SELECT entry.*, " + selectCover + " AS cover FROM ${tableName} entry WHERE entry.id = ?")
+	public T findById_cover(Long id);
+	
+	/**
 	 * 查询单个记录，带有类别的、封面的。如果找不到则返回 null
 	 * 
 	 * @param id 记录 id
@@ -123,7 +132,7 @@ public interface IBaseDao<T extends IBaseBean> {
 	 * @param limit
 	 * @return 实体分页列表
 	 */
-	@Select("SELECT id, name, intro, createDate, updateDate, " + selectCover + " AS cover FROM ${tableName} entry")
+	@Select("SELECT id, name, subTitle, createDate, updateDate, " + selectCover + " AS cover FROM ${tableName} entry")
 	public PageResult<T> findPagedList_Cover(int start, int limit);
 	
 	/**

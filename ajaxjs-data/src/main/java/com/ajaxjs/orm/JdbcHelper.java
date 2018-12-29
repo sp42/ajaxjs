@@ -242,7 +242,16 @@ public class JdbcHelper {
 		if (map != null)
 			for (String key : map.keySet()) {// 有且只有一个记录
 				Object obj = map.get(key);
-				return obj == null ? null : (T) obj;
+				if(obj == null)
+					return null;
+				else {
+					if (obj instanceof Long && clz == int.class) {
+						Object _int = ((Long) obj).intValue();
+						return (T) _int;
+					}
+
+					return (T) obj;
+				}
 			}
 
 		return null;
