@@ -71,6 +71,8 @@ Element.prototype.insertAfter = function(newElement) {
 ajaxjs.apply = function(a, b) {
 	for ( var i in b)
 		a[i] = b[i];
+	
+	return a;
 }
 
 /*

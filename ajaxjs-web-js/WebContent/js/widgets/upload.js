@@ -462,3 +462,52 @@ Vue.component('aj-xhr-upload', {
 		},
 	}
 });
+
+// 相册列表
+Vue.component('attachment-picture-list', {
+	props : {
+		picCtx : String,
+		uploadUrl : String,
+		blankBg : String,
+		delImgUrl : String,
+		loadListUrl: String
+	},
+	data : function() {
+		return {
+			pics: []
+		};
+	},
+	template : '<table width="100%"><tr><td>\
+				<div class="label">相册图：</div>\
+				<ul>\
+					<li v-for="pic in pics" style="float:left;margin-right:1%;text-align:center;">\
+						<img :src="picCtx + pic.path" style="max-width: 180px;max-height: 160px;" /><br />\
+						<a href="#" @click="delPic(pic.id);">删 除</a>\
+					</li>\
+				</ul>\
+			</td><td>\
+			<aj-xhr-upload ref="attachmentPictureUpload" :action="uploadUrl" :is-img-upload="true" :img-place="blankBg"></aj-xhr-upload>\
+			</td></tr></table>',
+	mounted: function() {
+		this.loadAttachmentPictures();
+		this.$refs.attachmentPictureUpload.uploadOk_callback = this.loadAttachmentPictures;
+	},
+	methods : {
+		loadAttachmentPictures : function() {
+			var self = this;
+			aj.xhr.get(this.loadListUrl, function(json) {
+				self.pics = json.result;
+			});
+		},
+		delPic: function(picId) {
+			var self = this;
+			aj.xhr.dele(this.delImgUrl + picId, function(json) {
+				if(json.isOk) {
+					self.loadAttachmentPictures();
+				} else {
+					
+				}
+			});
+		}
+	}
+});
