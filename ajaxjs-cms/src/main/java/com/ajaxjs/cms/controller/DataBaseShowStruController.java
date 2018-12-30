@@ -16,12 +16,13 @@ import javax.ws.rs.Path;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
+import com.ajaxjs.orm.JdbcHelper;
 
 @Path("/admin/DataBaseShowStru")
 public class DataBaseShowStruController implements IController {
 	@GET
 	public String show(ModelAndView mv, HttpServletRequest request) {
-		return  BaseController.cms("database-show-stru");
+		return BaseController.cms("database-show-stru");
 	}
 
 	/**
@@ -36,7 +37,6 @@ public class DataBaseShowStruController implements IController {
 				String createDDL = rs.getString(2);
 				return parse(createDDL);
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -53,19 +53,22 @@ public class DataBaseShowStruController implements IController {
 	public static Map<String, String> getCommentByTableName(Connection conn, List<String> tableNames) {
 		Map<String, String> map = new HashMap<>();
 
-		try (Statement stmt = conn.createStatement();) {
+		JdbcHelper.stmt(conn, stmt -> {
 			for (String tableName : tableNames) {
-				try (ResultSet rs = stmt.executeQuery("SHOW CREATE TABLE " + tableName);) {
-					if (rs != null && rs.next()) {
-						String createDDL = rs.getString(2);
-						String comment = parse(createDDL);
-						map.put(tableName, comment);
+				JdbcHelper.rsHandle(stmt, "SHOW CREATE TABLE " + tableName, rs -> {
+					String createDDL = null;
+					try {
+						if (rs.next())
+							createDDL = rs.getString(2);
+					} catch (SQLException e) {
+						e.printStackTrace();
 					}
-				}
+
+					String comment = parse(createDDL);
+					map.put(tableName, comment);
+				});
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		});
 
 		return map;
 	}
@@ -77,6 +80,8 @@ public class DataBaseShowStruController implements IController {
 	 * @return
 	 */
 	private static String parse(String all) {
+		if (all == null)
+			return null;
 		String comment = null;
 		int index = all.indexOf("COMMENT='");
 		if (index < 0)
@@ -94,12 +99,15 @@ public class DataBaseShowStruController implements IController {
 	 */
 	public static List<String> getAllTableName(Connection conn) {
 		List<String> tables = new ArrayList<>();
-		try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery("SHOW TABLES ");) {
-			while (rs.next())
-				tables.add(rs.getString(1));
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+
+		JdbcHelper.query(conn, "SHOW TABLES", rs -> {
+			try {
+				while (rs.next())
+					tables.add(rs.getString(1));
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		});
 
 		return tables;
 	}
@@ -107,26 +115,15 @@ public class DataBaseShowStruController implements IController {
 	public static Map<String, List<Map<String, String>>> getColumnCommentByTableName(Connection conn, List<String> tableNames) {
 		Map<String, List<Map<String, String>>> map = new HashMap<>();
 
-		try (Statement stmt = conn.createStatement();) {
+		JdbcHelper.stmt(conn, stmt -> {
 			for (String tableName : tableNames) {
-				try (ResultSet rs = stmt.executeQuery("show full columns from " + tableName);) {
+				JdbcHelper.rsHandle(stmt, "SHOW FULL COLUMNS FROM " + tableName, rs -> {
 					List<Map<String, String>> list = new ArrayList<>();
-
-					while (rs.next()) {
-						Map<String, String> fieldInfos = new HashMap<>();
-						fieldInfos.put("name", rs.getString("Field"));
-						fieldInfos.put("type", rs.getString("Type"));
-						fieldInfos.put("null", rs.getString("Null"));
-						fieldInfos.put("comment", rs.getString("Comment"));
-						list.add(fieldInfos);
-					}
-
+					rs2list(rs, list);
 					map.put(tableName, list);
-				}
+				});
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		});
 
 		return map;
 	}
@@ -134,24 +131,25 @@ public class DataBaseShowStruController implements IController {
 	public static List<Map<String, String>> getColumnCommentByTableName(Connection conn, String tableName) {
 		List<Map<String, String>> list = new ArrayList<>();
 
-		try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery("show full columns from " + tableName);) {
+		JdbcHelper.query(conn, "SHOW FULL COLUMNS FROM " + tableName, rs -> {
 			rs2list(rs, list);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		});
 
 		return list;
 	}
 
-	private static void rs2list(ResultSet rs, List<Map<String, String>> list) throws SQLException {
-		while (rs.next()) {
-			Map<String, String> fieldInfos = new HashMap<>();
-			fieldInfos.put("name", rs.getString("Field"));
-			
-			fieldInfos.put("type", rs.getString("Type"));
-			fieldInfos.put("null", rs.getString("Null"));
-			fieldInfos.put("comment", rs.getString("Comment"));
-			list.add(fieldInfos);
+	private static void rs2list(ResultSet rs, List<Map<String, String>> list) {
+		try {
+			while (rs.next()) {
+				Map<String, String> fieldInfos = new HashMap<>();
+				fieldInfos.put("name", rs.getString("Field"));
+				fieldInfos.put("type", rs.getString("Type"));
+				fieldInfos.put("null", rs.getString("Null"));
+				fieldInfos.put("comment", rs.getString("Comment"));
+				list.add(fieldInfos);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 }
