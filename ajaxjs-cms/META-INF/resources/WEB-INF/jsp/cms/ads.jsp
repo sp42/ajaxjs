@@ -27,6 +27,7 @@
 			<div>
 				<label>
 					<div class="label">广告标题：</div> <input placeholder="请填写${uiName}名称" size="40" required="required" name="name" type="text" value="${info.name}" />
+					<span style="color:red;">*</span>
 				</label>
 			</div>
 			
@@ -34,12 +35,14 @@
 				<label> 
 					<div class="label">分类：</div>  
 					<!-- 分类下拉 -->
-					<aj-tree-catelog-select field-name="catelog" :catelog-id="${domainCatalog_Id}" :selected-catelog-id="${empty info.catelog ? 0 : info.catelog}"></aj-tree-catelog-select>
+					<aj-tree-catelog-select field-name="catelogId" :catelog-id="${domainCatalog_Id}" :selected-catelog-id="${empty info.catelogId ? 0 : info.catelogId}"></aj-tree-catelog-select>
+					<span style="color:red;">*</span>
 				</label>
 				&nbsp; &nbsp; &nbsp; 
 				<label>
 					<div class="label">广告目标链接：</div> 
 					<input type="text" placeholder="请填入${uiName}链接" size="60" required="required" name="link" value="${info.link}" v-model="adsLink" /> 
+					<span style="color:red;">*</span>
 					<a :href="adsLink" target="_blank">访问</a>
 				</label>
 			</div>
@@ -59,11 +62,11 @@
 					</c:otherwise>
 				</c:choose>
 						</td>
-						<td width="50"></td>
+			<!-- 			<td width="50"></td>
 						<td>
 							<div class="label" style="float: left;">展示图：</div>
-						</td>
-						<td>
+						</td> -->
+						<td style="display:none;">
 				<c:choose>
 					<c:when test="${isCreate}">
 							<span>请保存记录后再上传图片。</span>

@@ -80,15 +80,15 @@ public class Ads extends BaseModel implements IBaseBean {
 	/**
 	 * 分类 id
 	 */
-	private Integer catelog;
+	private Integer catelogId;
 
 	/**
 	 * 设置分类 id
 	 * 
 	 * @param catelogId 分类 id
 	 */
-	public void setCatelog(Integer catelogId) {
-		this.catelog = catelogId;
+	public void setCatelogId(Integer catelogId) {
+		this.catelogId = catelogId;
 	}
 
 	/**
@@ -96,8 +96,8 @@ public class Ads extends BaseModel implements IBaseBean {
 	 * 
 	 * @return 分类 id
 	 */
-	public Integer getCatelog() {
-		return catelog;
+	public Integer getCatelogId() {
+		return catelogId;
 	}
 
 	/**

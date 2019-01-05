@@ -32,6 +32,7 @@
 				<col />
 				<col />
 				<col />
+				<col />
 				<col style="text-align: center;" align="center" />
 			</colgroup>
 			<thead>
@@ -40,26 +41,36 @@
 					<th class="name">${uiName}标题</th>
 					<th>广告类型</th>
 					<th>广告链接</th>
+					<th>广告图片</th>
 					<th>创建时间</th>
 					<th class="control">控 制</th>
 				</tr>
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="6"></td>
+					<td colspan="7"></td>
 				</tr>
 			</tfoot>
 			<tbody>
 				<c:foreach var="current" items="${PageResult}">
 					<tr>
 						<td>${current.id}</td>
-						<td>${current.name}</td>
+						<td>
+						
+						${current.name}</td>
 						<td>${current.catelogName}</td>
 						<td>
 							<a href="${current.link}" target="_blank">${current.link}</a>
 						</td>
+						
 						<td>
-							<c:dateFormatter value="${current.createDate}" format="yyyy-MM-dd" />
+						<c:if test="${not empty current.cover}">
+							<img src="${ctx}${current.cover}" style="max-width:50px;max-height:60px;vertical-align: middle;" 
+						 		onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${ctx}${current.cover}';" onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
+						</c:if>
+						</td>
+						<td>
+							<c:dateFormatter value="${current.createDate}" format="yyyy-MM-dd HH:mm" />
 						</td>
 						<td>
 							<a href="../../../${tableName}/${current.id}/" target="_blank">浏览</a>
@@ -73,5 +84,8 @@
 		<div class="listTable pager">
 			<%@include file="/jsp/common/pager.jsp" %>
 		</div>
+		<script>
+			aj.imageEnlarger();// 鼠标移动大图
+		</script>
 	</body>
 </html>

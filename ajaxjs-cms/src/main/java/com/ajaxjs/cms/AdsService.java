@@ -11,7 +11,7 @@ import com.ajaxjs.orm.dao.PageResult;
 
 @Bean("AdsService")
 public class AdsService extends BaseService<Ads> implements Catelogable<Ads> {
-	public static AdsDao dao = new Repository().bind(AdsDao.class);
+	public AdsDao dao = new Repository().bind(AdsDao.class);
 
 	{
 		setUiName("广告");
@@ -20,10 +20,14 @@ public class AdsService extends BaseService<Ads> implements Catelogable<Ads> {
 	}
 
 	@Override
+	public Ads findById(Long id) {
+		return dao.findById_cover(id);
+	}
+	@Override
 	public PageResult<Ads> findPagedListByCatelogId(int catelogId, int start, int limit) {
 		if (catelogId == 0)
 			catelogId = getDomainCatelogId();
-		return dao.findPagedListByCatelogId(catelogId, start, limit);
+		return dao.findPagedListByCatelogId_Cover(catelogId, start, limit);
 	}
 
 	@Override
@@ -33,6 +37,6 @@ public class AdsService extends BaseService<Ads> implements Catelogable<Ads> {
 
 	@Override
 	public List<Ads> findListByCatelogId(int catelogId) {
-		return null;
+		return dao.findListByCatelog_Cover(catelogId);
 	}
 }

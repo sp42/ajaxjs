@@ -52,7 +52,14 @@ public class ConfigController implements IController {
 		return BaseController.cms("config-all");
 	}
 
-	@Operation(summary = "保存配置", tags = { "SystemConfig", "Admin Service ONLY" }, description = "保存配置并且刷新配置", responses = { @ApiResponse(description = "操作是否成功", content = @Content(mediaType = "application/json")) })
+	@Operation(
+		summary = "保存配置", 
+		tags = { "SystemConfig", "Admin Service ONLY" }, 
+		description = "保存配置并且刷新配置", 
+		responses = {
+			@ApiResponse(description = "操作是否成功", content = @Content(mediaType = "application/json")) 
+		}
+	)
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	public String saveAllconfig(@Parameter(description = "配置的 JSON 字符串", required = true) Map<String, Object> map, @Parameter(hidden = true) HttpServletRequest request) {

@@ -29,6 +29,7 @@ public class <%=Utils.firstLetterUpper(beanName)%> extends BaseModel implements 
 	
 	/**
 	 * 设置${name}
+	 
 	 * @param ${info.name}  
 	 */
 	public void set${firstLetterUpperName}(${type}${' '}${info.name}) {
@@ -37,6 +38,7 @@ public class <%=Utils.firstLetterUpper(beanName)%> extends BaseModel implements 
 	
 	/**
 	 * 获取${name}
+	 
 	 * @return ${name}
 	 */	
 	public ${type} get${firstLetterUpperName}() {
