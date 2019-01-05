@@ -52,8 +52,7 @@ public class MappingJson {
 	 * 
 	 * @param map 输入数据
 	 * @return JSON 字符串
-	 */
-	public static String stringifyMap(Map<String, ?> map) {
+	 */	public static String stringifyMap(Map<String, ?> map) {
 		if (map == null)
 			return null;
 
@@ -115,7 +114,6 @@ public class MappingJson {
 			return map.size() == 0 ? "{}" : stringifyMap(map);
 		} else if (value instanceof List) {
 			List<?> list = (List<?>) value;
-
 			if (list.size() == 0) {
 				return "[]";
 			} else if (list.get(0) instanceof Integer) {
@@ -150,6 +148,15 @@ public class MappingJson {
 						sb.append(", ");
 				}
 				return '[' + sb.toString() + ']';
+			} else if (list.get(0).getClass().getSuperclass().getName().contains("BaseModel")){
+				StringBuilder sb = new StringBuilder();
+
+				for (int i = 0; i < list.size(); i++) {
+					sb.append(BeanUtil.beanToJson(list.get(i)));
+					if (i != (list.size() - 1))
+						sb.append(", ");
+				}
+				return '[' + sb.toString() + ']';
 			} else {
 				// 未知类型数组，
 				return "[]";
@@ -168,7 +175,7 @@ public class MappingJson {
 				strs[i++] = obj2jsonVaule(_value); // 递归调用
 
 			return '[' + String.join(",", strs) + ']';
-		} else if (value.getClass().getName().contains("BaseModel")) {
+		} else if (value.getClass().getSuperclass().getName().contains("BaseModel")) {
 			return BeanUtil.beanToJson(value);
 		} else { // String
 			return '\"' + value.toString().replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n")

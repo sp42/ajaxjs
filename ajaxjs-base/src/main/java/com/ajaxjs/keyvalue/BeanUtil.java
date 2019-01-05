@@ -145,6 +145,9 @@ public class BeanUtil extends ReflectUtil {
 
 				if (map.containsKey(key)) {
 					value = map.get(key);
+					
+					System.out.println(key);
+					System.out.println(value);
 					// null 是不会传入 bean 的
 					if (value == null)
 						continue;

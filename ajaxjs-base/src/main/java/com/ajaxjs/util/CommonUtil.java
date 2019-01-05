@@ -212,7 +212,8 @@ public class CommonUtil {
 					return SimpleDateFormatFactory(commonDateFormat).parse(str);
 				} else if (pattern2.matcher(str).matches()) {
 					return SimpleDateFormatFactory(commonDateFormat_shortest).parse(str);
-				}
+				} else 
+					return SimpleDateFormatFactory(commonDateFormat_shorter).parse(str);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
@@ -220,7 +221,7 @@ public class CommonUtil {
 		}
 
 		return null;
-	}
+	} 
 
 	/**
 	 * SimpleDateFormat caches
