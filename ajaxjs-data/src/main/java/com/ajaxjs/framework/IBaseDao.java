@@ -103,6 +103,7 @@ public interface IBaseDao<T extends IBaseBean> {
 	 */
 	@Select("SELECT id, name FROM ${tableName}")
 	public List<T> findSimpleList();
+	
 
 	/**
 	 * 简单分页。注意不用在 SQL 后面加上 LIMIT，系统会自动加的
@@ -115,13 +116,32 @@ public interface IBaseDao<T extends IBaseBean> {
 	public PageResult<T> findPagedList(int start, int limit);
 
 	/**
+	 * 按照类别查询
+	 * 
+	 * @param start
+	 * @param limit
+	 * @return 实体分页列表
+	 */
+	@Select("SELECT entry.* FROM ${tableName} entry WHERE catelogId = ?" )
+	public List<T> findListByCatelog(int catelogId);
+	/**
+	 * 按照类别查询，带封面图的
+	 * 
+	 * @param start
+	 * @param limit
+	 * @return 实体分页列表
+	 */
+	@Select("SELECT entry.*, "+ selectCover +" AS cover FROM ${tableName} entry WHERE catelogId = ?" )
+	public List<T> findListByCatelog_Cover(int catelogId);
+
+	/**
 	 * 显示类别名称，可分页的
 	 * 
 	 * @param start
 	 * @param limit
 	 * @return 实体分页列表
 	 */
-	@Select("SELECT entry.*, gc.name AS catelogName FROM entity_article entry" + catelog_simple_join)
+	@Select("SELECT entry.*, gc.name AS catelogName FROM ${tableName} entry" + catelog_simple_join)
 	public PageResult<T> findPagedList_Catelog(int start, int limit);
 	
 	
@@ -142,13 +162,13 @@ public interface IBaseDao<T extends IBaseBean> {
 	 * @param limit
 	 * @return 实体分页列表
 	 */
-	@Select("SELECT entry.*, gc.name AS catelogName, " + selectCover + " AS cover FFROM entity_article entry" + catelog_simple_join)
+	@Select("SELECT entry.*, gc.name AS catelogName, " + selectCover + " AS cover FFROM ${tableName} entry" + catelog_simple_join)
 	public PageResult<T> findPagedListCatelog_Cover(int start, int limit);
 	
 	/**
 	 * 可分类的，可分页的列表
 	 * 
-	 * @param catelogIds
+	 * @param catelogId
 	 * @param start
 	 * @param limit
 	 * @return
@@ -159,7 +179,7 @@ public interface IBaseDao<T extends IBaseBean> {
 			sqliteValue = "SELECT id, name, createDate, updateDate, entry.catelogId, catelogName FROM ${tableName} entry INNER JOIN "
 					   		+ catelog_finById_sqlite + " ON entry.`catelogId` = c.catelogId  WHERE 1 = 1",
 			sqliteCountSql = "SELECT COUNT(entry.id) AS count FROM ${tableName} entry WHERE catelogId IN " + catelog_find_sqlite + " AND 1 = 1")
-	public PageResult<T> findPagedListByCatelogId(int catelogIds,  int start, int limit);
+	public PageResult<T> findPagedListByCatelogId(int catelogId,  int start, int limit);
 	
 	/**
 	 * 带封面图，可分类的，可分页的列表

@@ -19,6 +19,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 import com.ajaxjs.keyvalue.MappingValue;
 import com.ajaxjs.orm.JdbcHelperLambda.ExecutePs;
@@ -45,8 +46,7 @@ public class JdbcHelper {
 	 * @param params       插入到 SQL 中的参数，可单个可多个可不填
 	 * @return
 	 */
-	public static <T> T select(Connection conn, String sql, HasZeoResult hasZeoResult, ResultSetProcessor<T> processor,
-			Object... params) {
+	public static <T> T select(Connection conn, String sql, HasZeoResult hasZeoResult, ResultSetProcessor<T> processor, Object... params) {
 		LOGGER.infoYellow("The SQL is---->" + JdbcUtil.printRealSql(sql, params));
 
 		try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -489,6 +489,11 @@ public class JdbcHelper {
 		return update(conn, "DELETE FROM " + tableName + " WHERE id = ?", id) == 1;
 	}
 
+	/**
+	 * 
+	 * @author Frank Cheung
+	 *
+	 */
 	public static class BeanMethod {
 		private String fieldName;
 		private Method getter;
@@ -528,6 +533,12 @@ public class JdbcHelper {
 		}
 	}
 
+	/**
+	 * 读取一个 bean 的信息，将其保存在一个 map 中。
+	 * 
+	 * @param bean
+	 * @return
+	 */
 	public static Map<String, BeanMethod> getBeanInfo(Object bean) {
 		Map<String, BeanMethod> map = new HashMap<>();
 		Class<?> beanClz = bean.getClass();
@@ -554,6 +565,13 @@ public class JdbcHelper {
 		return map;
 	}
 
+	/**
+	 * 
+	 * @param conn
+	 * @param bean
+	 * @param tableName
+	 * @return
+	 */
 	public static Serializable createBean(Connection conn, Object bean, String tableName) {
 		try {
 			LOGGER.info("创建记录 name:{0}！", ReflectUtil.executeMethod(bean, "getName"));
@@ -599,5 +617,48 @@ public class JdbcHelper {
 		Object[] values = write(sql, bean, tableName, false);
 
 		return update(conn, sql.toString(), values);
+	}
+	
+
+	/**
+	 * ResultSet 处理器
+	 * 
+	 * @param stmt		Statement 对象
+	 * @param sql		SQL 语句
+	 * @param handle	控制器
+	 */
+	public static void rsHandle(Statement stmt, String sql, Consumer<ResultSet> handle) {
+		try (ResultSet rs = stmt.executeQuery(sql);) {
+			handle.accept(rs);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Statement 工厂
+	 * 
+	 * @param conn 		数据库连接对象
+	 * @param handle	控制器
+	 */
+	public static void stmt(Connection conn, Consumer<Statement> handle) {
+		try (Statement stmt = conn.createStatement();) {
+			handle.accept(stmt);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * stmt + rsHandle
+	 * 
+	 * @param conn 		数据库连接对象
+	 * @param sql 		SQL 语句
+	 * @param handle	控制器
+	 */
+	public static void query(Connection conn, String sql, Consumer<ResultSet> handle) {
+		stmt(conn, stmt -> {
+			rsHandle(stmt, sql, handle);
+		});
 	}
 }

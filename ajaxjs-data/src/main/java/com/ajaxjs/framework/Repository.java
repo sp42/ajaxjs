@@ -58,7 +58,7 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 	/**
 	 * 执行时的调用。不管执行哪个方法都会调用该方法。
 	 * 
-	 * @throws DaoException          DAO 异常
+	 * @throws DaoException DAO 异常
 	 * @throws SecurityException
 	 * @throws NoSuchMethodException
 	 */
@@ -231,10 +231,10 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 	/**
 	 * 执行 SELECT 查询
 	 * 
-	 * @param method     DAO 方法
-	 * @param args       参数
+	 * @param method DAO 方法
+	 * @param args 参数
 	 * @param returnType DAO 方法返回的目标类型
-	 * @param entryType  实体类型的类引用，通常是 map 或 bean
+	 * @param entryType 实体类型的类引用，通常是 map 或 bean
 	 * @return 查询结果
 	 * @throws DaoException
 	 */
@@ -244,8 +244,10 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 
 		Object result = null;
 
-		if (returnType == int.class) {
+		if (returnType == int.class || returnType == Integer.class) {
 			result = queryOne(conn, sql, int.class, args);
+		} else if (returnType == long.class || returnType == Long.class) {
+			result = queryOne(conn, sql, long.class, args);
 		} else if (returnType == Integer[].class) {
 			result = queryArray(conn, sql, Integer.class, args); // 不支持int[]
 		} else if (returnType == String.class) {
@@ -288,6 +290,9 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 	}
 
 	public static List<EntityMap> mapList2EntityMapList(List<Map<String, Object>> list) {
+		if (list == null)
+			return null;
+		
 		List<EntityMap> eList = new ArrayList<>();
 
 		for (Map<String, Object> map : list) {
@@ -303,7 +308,7 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 	 * 判断是否 SQLite 数据库
 	 * 
 	 * @param sqliteValue SQLite 数据库专用的 SQL 语句
-	 * @param conn        数据库连接对象
+	 * @param conn 数据库连接对象
 	 * @return true = 是 SQLite 数据库
 	 */
 	public static boolean isSqlite(String sqliteValue, Connection conn) {
@@ -313,10 +318,10 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 	/**
 	 * 新增动作
 	 * 
-	 * @param insert     包含 SQL 的注解
-	 * @param args       SQL 参数
+	 * @param insert 包含 SQL 的注解
+	 * @param args SQL 参数
 	 * @param returnType DAO 方法返回的目标类型
-	 * @param beanType   实体类型的类引用，通常是 map 或 bean
+	 * @param beanType 实体类型的类引用，通常是 map 或 bean
 	 * @return 自增 id
 	 */
 	private <R> Serializable insert(Insert insert, Method sqlFactoryHandler, Object[] args, Class<R> returnType) {
@@ -337,8 +342,8 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 	/**
 	 * 更新动作
 	 * 
-	 * @param update   包含 SQL 的注解
-	 * @param args     SQL 参数
+	 * @param update 包含 SQL 的注解
+	 * @param args SQL 参数
 	 * @param beanType 实体类型的类引用，通常是 map 或 bean
 	 * @return 影响的行数
 	 */
@@ -370,7 +375,7 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 	 * 删除动作
 	 * 
 	 * @param delete 包含 SQL 的注解
-	 * @param args   SQL 参数
+	 * @param args SQL 参数
 	 * @return 是否删除成功
 	 */
 	private Boolean delete(Delete delete, Method sqlFactoryHandler, Object[] args) {
