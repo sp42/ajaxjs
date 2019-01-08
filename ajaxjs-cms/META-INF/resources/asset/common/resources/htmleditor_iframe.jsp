@@ -16,6 +16,10 @@
 				padding:.5%;
 				text-align: justify;
 			}
+			
+			img{
+				max-width:90%;
+			}
 		</style>
 		<base href="${param.basePath}/" />
 	</head>

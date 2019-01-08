@@ -34,7 +34,7 @@
 					<label> 
 						<div class="label">栏 目：</div>  
 						<!-- 分类下拉 -->
-						<aj-tree-catelog-select field-name="catelog" :catelog-id="${domainCatalog_Id}" :selected-catelog-id="${empty info || empty info.catelog? 0 : info.catelog}">
+						<aj-tree-catelog-select field-name="catelogId" :catelog-id="${domainCatalog_Id}" :selected-catelog-id="${empty info || empty info.catelogId ? 0 : info.catelogId}">
 						</aj-tree-catelog-select>
 					</label>
 			<%-- 	<c:if test="${!isCreate}"> --%>

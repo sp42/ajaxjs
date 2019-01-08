@@ -9,6 +9,7 @@ public class CmsUtils {
 	public static Object[] page2start(Object[] args) {
 		int pageStart = (int) args[0];
 		int pageSize = (int) args[1];
+		
 		if (pageSize == 0)
 			pageSize = 10;
 		

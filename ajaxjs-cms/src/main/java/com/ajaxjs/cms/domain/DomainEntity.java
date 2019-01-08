@@ -10,14 +10,14 @@ public class DomainEntity extends BaseModel implements IBaseBean {
 
 	Map<String, Object> rawData;
 
-	private Integer catelog;
+	private Integer catelogId;
 
-	public Integer getCatelog() {
-		return catelog;
+	public Integer getCatelogId() {
+		return catelogId;
 	}
 
-	public void setCatelog(Integer catelog) {
-		this.catelog = catelog;
+	public void setCatelogId(Integer catelog) {
+		this.catelogId = catelog;
 	}
 
 	public String getCatelogName() {

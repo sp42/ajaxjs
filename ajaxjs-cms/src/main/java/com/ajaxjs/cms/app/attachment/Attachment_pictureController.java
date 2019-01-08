@@ -96,7 +96,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 				@SuppressWarnings("unused")
 				public String msg = "上传成功！";
 				@SuppressWarnings("unused")
-				public String imgUrl = info.visitPath;
+				public String imgUrl = info.path.replaceFirst("^/", "");
 				@SuppressWarnings("unused")
 				public Long newlyId = _newlyId;
 			});
@@ -125,6 +125,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 			picture.setCatelog(1);
 
 			final Long _newlyId = service.create(picture);
+			System.out.println(info.path);
 
 			return "json::" + MappingJson.stringifySimpleObject(new Object() {
 				@SuppressWarnings("unused")
@@ -132,7 +133,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 				@SuppressWarnings("unused")
 				public String msg = "上传成功！";
 				@SuppressWarnings("unused")
-				public String imgUrl = info.visitPath;
+				public String imgUrl = info.path;
 				@SuppressWarnings("unused")
 				public Long newlyId = _newlyId;
 			});

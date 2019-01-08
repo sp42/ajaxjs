@@ -17,7 +17,7 @@ import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.orm.dao.PageResult;
 
 public class DomainEntityService extends BaseService<DomainEntity> implements Catelogable<DomainEntity> {
-	DomainEntityDao dao;
+	public DomainEntityDao dao;
 	
 	public DomainEntityService(String tableName) {
 		dao = new Repository().bind(DomainEntityDao.class, tableName);
@@ -60,7 +60,7 @@ public class DomainEntityService extends BaseService<DomainEntity> implements Ca
 		List<DomainEntity> list = dao.findHome(1, 2, 3);
 
 		for (DomainEntity item : list) {
-			Integer catelog = (Integer) item.getCatelog();
+			Integer catelog = (Integer) item.getCatelogId();
 
 			List<DomainEntity> itemList;
 			if (data.containsKey(catelog)) {
