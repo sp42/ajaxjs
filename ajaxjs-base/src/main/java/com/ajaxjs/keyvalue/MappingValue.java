@@ -53,6 +53,8 @@ public class MappingValue {
 
 		value = value.trim();
 
+		if ("".equals(value))
+			return "";
 		if ("null".equals(value))
 			return null;
 
