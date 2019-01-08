@@ -136,6 +136,8 @@ public class MvcRequest extends HttpServletRequestWrapper {
 		} else {
 			map = MapHelper.asObject(MapHelper.toMap(getParameterMap()), true);
 		}
+		
+		System.out.println("Map:"+map);
 
 		// 抛出 IllegalArgumentException 这个异常 有可能是参数类型不一致造成的，要求的是 string 因为 map 从 request
 		// 转换时已经变为 int（例如纯数字的时候）
