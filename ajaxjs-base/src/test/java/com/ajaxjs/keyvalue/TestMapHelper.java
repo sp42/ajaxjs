@@ -74,4 +74,11 @@ public class TestMapHelper {
 			"你好"
 		);
 	}
+	
+	@Test
+	public void testXml() {
+		MappingHelper.mapToXml(data);
+		
+		
+	}
 }
