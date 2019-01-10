@@ -49,8 +49,8 @@
 				<c:foreach var="current" items="${PageResult}">
 					<tr>
 						<td>${current.id}</td>
-						<td><a href="${ctx}/admin/user/${current.userId}/">${current.name}</a></td>
-						<td>${current.loginType}</td>
+						<td><a href="${ctx}/admin/user/${current.userId}/">${current.userName}</a></td>
+						<td>${LoginType[current.loginType]}</td>
 						<td>${current.ip}</td>
 						<td><c:dateFormatter value="${current.createDate}" /></td>
 					</tr>

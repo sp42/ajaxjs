@@ -216,14 +216,14 @@ public class User extends BaseModel implements IBaseBean {
 	/**
 	 * 区域 id
 	 */
-	private Integer location;
+	private String location;
 
 	/**
 	 * 设置区域 id
 	 * 
 	 * @param location
 	 */
-	public void setLocation(Integer location) {
+	public void setLocation(String location) {
 		this.location = location;
 	}
 
@@ -232,7 +232,7 @@ public class User extends BaseModel implements IBaseBean {
 	 * 
 	 * @return 区域 id
 	 */
-	public Integer getLocation() {
+	public String getLocation() {
 		return location;
 	}
 
@@ -257,29 +257,6 @@ public class User extends BaseModel implements IBaseBean {
 	 */
 	public String getRole_id() {
 		return role_id;
-	}
-
-	/**
-	 * 信贷经理ID
-	 */
-	private Integer creditManagerId;
-
-	/**
-	 * 设置信贷经理ID
-	 * 
-	 * @param creditManagerId
-	 */
-	public void setCreditManagerId(Integer creditManagerId) {
-		this.creditManagerId = creditManagerId;
-	}
-
-	/**
-	 * 获取信贷经理ID
-	 * 
-	 * @return 信贷经理ID
-	 */
-	public Integer getCreditManagerId() {
-		return creditManagerId;
 	}
 
 }

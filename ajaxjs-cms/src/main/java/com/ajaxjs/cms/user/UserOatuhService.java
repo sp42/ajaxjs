@@ -5,7 +5,7 @@ import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
 
 @Bean("UserService")
-public class UserServiceImpl extends BaseService<User> implements UserService {
+public class UserOatuhService extends BaseService<User> implements UserService {
 	UserDao dao = new Repository().bind(UserDao.class);
 
 	{

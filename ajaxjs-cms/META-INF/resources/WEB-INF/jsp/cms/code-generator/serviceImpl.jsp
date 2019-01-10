@@ -7,8 +7,8 @@ import ${packageName}.dao.${beanName}Dao;
 import ${packageName}.model.${beanName};
 
 @Bean("${beanName}Service")
-public class ${beanName}ServiceImpl extends BaseService<${beanName}>  implements ${beanName}Service {
-	${beanName}Dao dao = new Repository().bind(${beanName}Dao.class);
+public class ${beanName}ServiceImpl extends BaseService<${beanName}> {
+	public ${beanName}Dao dao = new Repository().bind(${beanName}Dao.class);
 	
 	{
 		setUiName("客户端更新接口");
