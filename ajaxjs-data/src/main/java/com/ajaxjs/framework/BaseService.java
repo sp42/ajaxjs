@@ -38,8 +38,7 @@ public abstract class BaseService<T extends IBaseBean> implements IBaseService<T
 
 	@Override
 	public Long create(T bean) {
-		SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0, 0);
-		bean.setUid(idWorker.nextId());
+		bean.setUid(SnowflakeIdWorker.idWorker.nextId());
 		Date now = new Date();
 
 		if (bean.getCreateDate() == null)
