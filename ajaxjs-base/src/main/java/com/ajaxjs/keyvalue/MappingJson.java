@@ -1,6 +1,5 @@
 package com.ajaxjs.keyvalue;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,38 +15,6 @@ import com.ajaxjs.util.CommonUtil;
  *
  */
 public class MappingJson {
-
-	/**
-	 * 将 Simple Object 对象转换成 JSON 格式的字符串:JAVA-->JS
-	 * 
-	 * @param obj 输入数据
-	 * @return JSON 字符串
-	 */
-	public static String stringifySimpleObject(Object obj) {
-		if (obj == null)
-			return null;
-
-		List<String> arr = new ArrayList<>();
-		for (Field field : obj.getClass().getDeclaredFields()) {
-			field.setAccessible(true);
-
-			String key = field.getName();
-			if (key.indexOf("this$") != -1)
-				continue;
-
-			Object _obj = null;
-			try {
-				_obj = field.get(obj);
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-
-			arr.add('\"' + key + "\":" + obj2jsonVaule(_obj));
-		}
-
-		return '{' + String.join(",", arr) + '}';
-	}
-
 	/**
 	 * 输入一个 Map，将其转换为 JSON Str
 	 * 
@@ -82,7 +49,6 @@ public class MappingJson {
 
 		return "[" + String.join(",", str) + "]";
 	}
-	
 
 	/**
 	 * 整形数组转换为字符数组 [1, 2, ...] --"1,2,3, ..."
@@ -166,6 +132,5 @@ public class MappingJson {
 			return '\"' + value.toString().replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r") + '\"';
 		}
 	}
-
 
 }

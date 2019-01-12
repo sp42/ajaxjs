@@ -19,7 +19,6 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-import com.ajaxjs.keyvalue.MappingValue;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.io.StreamUtil;
@@ -105,6 +104,7 @@ public class JsEngineWrapper {
 	 * @param args    参数列表
 	 * @return JS 运算后的返回值，也可能是 null 没有返回
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> T call(String method, Class<T> clazz, Object binding, Object... args) {
 		Invocable inv = (Invocable) engine; // Invocable 接口是 ScriptEngine可选实现的接口。（多态）
 		Object result = null;
@@ -117,7 +117,7 @@ public class JsEngineWrapper {
 			LOGGER.warning(e, "向脚本引擎调用脚本方法异常！方法名称:" + method);
 		}
 
-		return MappingValue.TypeConvert(result, clazz);
+		return result == null ? null : (T)result;
 	}
 
 	/**
@@ -160,6 +160,7 @@ public class JsEngineWrapper {
 	 *              void。如果想有返回值，至少有个 clazz = Object.class
 	 * @return 执行结果
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> T eval(String code, Class<T> clazz) {
 		if (CommonUtil.isEmptyString(code))
 			throw new UnsupportedOperationException("JS 代码不能为空！");
@@ -174,8 +175,7 @@ public class JsEngineWrapper {
 
 		if (obj != null && clazz != null) {
 			// return Util.TypeConvert(js.eval(code), clazz); // 为什么要执行多次？
-			T _obj = MappingValue.TypeConvert(obj, clazz);
-			return _obj;
+			return (T)obj;
 		} else
 			return null;
 	}

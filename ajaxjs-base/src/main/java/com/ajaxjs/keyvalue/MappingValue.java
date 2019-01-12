@@ -29,19 +29,6 @@ import com.ajaxjs.util.CommonUtil;
  * @author Sp42 frank@ajaxjs.com
  */
 public class MappingValue {
-
-	/**
-	 * 强类型转换，有 null 检测
-	 * 
-	 * @param obj 输入的对象
-	 * @param clazz 目标类型
-	 * @return T型结果
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T TypeConvert(Object obj, Class<T> clazz) {
-		return obj == null ? null : (T) obj;
-	}
-
 	/**
 	 * 把字符串还原为 Java 里面的真实值，如 "true"--true,"123"--123,"null"--null
 	 * 
@@ -133,7 +120,8 @@ public class MappingValue {
 		} else if (t == String[].class) {
 			// 复数
 			if (value instanceof ArrayList) {
-				value = stringList2arr((ArrayList<String>) value);
+				ArrayList<String> list = (ArrayList<String>) value;
+				value = list.toArray(new String[list.size()]);
 			} else if (value instanceof String) {
 				String str = (String) value;
 				value = str.split(diver + "");
@@ -189,15 +177,5 @@ public class MappingValue {
 		for (int i = 0; i < length; i++)
 			arr[i] = fn.apply(i);
 		return arr;
-	}
-
-	/**
-	 * List&lt;String&gt; 转换为字符串数组／数组效的话率更高一些
-	 * 
-	 * @param list 字符串列表
-	 * @return 字符串数组
-	 */
-	private static String[] stringList2arr(List<String> list) {
-		return list.toArray(new String[list.size()]);
 	}
 }

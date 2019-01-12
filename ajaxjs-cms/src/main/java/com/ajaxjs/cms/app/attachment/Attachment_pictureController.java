@@ -128,7 +128,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 			final Long _newlyId = service.create(picture);
 			System.out.println(info.path);
 
-			return "json::" + MappingJson.stringifySimpleObject(new Object() {
+			return "json::" + MapUtil.toJson(new Object() {
 				@SuppressWarnings("unused")
 				public Boolean isOk = true;
 				@SuppressWarnings("unused")

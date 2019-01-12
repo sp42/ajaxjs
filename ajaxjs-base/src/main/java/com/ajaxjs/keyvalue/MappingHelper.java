@@ -85,11 +85,9 @@ public class MappingHelper {
 	 */
 	public String toJson() {
 		if (map != null) {
-			json = MappingJson.stringifyMap(map);
 		} else if (bean != null) {
 			json = BeanUtil.beanToJson(bean);
 		} else if (bean != null) {
-			json = MappingJson.stringifySimpleObject(bean);
 		}
 
 		if (json != null && addJsonPerfix)

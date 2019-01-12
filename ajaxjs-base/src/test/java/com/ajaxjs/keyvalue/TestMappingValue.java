@@ -1,6 +1,5 @@
 package com.ajaxjs.keyvalue;
 
-import static com.ajaxjs.keyvalue.MappingValue.TypeConvert;
 import static com.ajaxjs.keyvalue.MappingValue.objectCast;
 import static com.ajaxjs.keyvalue.MappingValue.toBoolean;
 import static com.ajaxjs.keyvalue.MappingValue.toJavaValue;
@@ -15,11 +14,7 @@ import java.util.List;
 import org.junit.Test;
 
 public class TestMappingValue {
-	@Test
-	public void testTypeConvert() {
-		assertTrue(12 == TypeConvert(12, Integer.class));
-		assertTrue(TypeConvert(true, Boolean.class));
-	}
+
 
 	@Test
 	public void testToJavaValue() {
