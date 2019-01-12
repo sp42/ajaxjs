@@ -210,9 +210,8 @@ public class MappingHelper {
 	public static <T> T getFromJson(String json, String key, Class<T> clz) {
 		Map<String, Object> map = new MappingHelper().setJson(json).toMap();
 
-		if (map != null && map.get(key) != null) {
+		if (map != null && map.get(key) != null)
 			return (T) map.get(key);
-		}
 
 		return null;
 	}

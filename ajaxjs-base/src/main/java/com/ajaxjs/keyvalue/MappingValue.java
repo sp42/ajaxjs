@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Function;
 
 import com.ajaxjs.util.CommonUtil;
 
@@ -32,7 +33,7 @@ public class MappingValue {
 	/**
 	 * 强类型转换，有 null 检测
 	 * 
-	 * @param obj   输入的对象
+	 * @param obj 输入的对象
 	 * @param clazz 目标类型
 	 * @return T型结果
 	 */
@@ -91,12 +92,10 @@ public class MappingValue {
 
 		if (value instanceof String) {
 			String _value = (String) value;
-			if (_value.equalsIgnoreCase("yes") || _value.equalsIgnoreCase("true") || _value.equals("1")
-					|| _value.equalsIgnoreCase("on"))
+			if (_value.equalsIgnoreCase("yes") || _value.equalsIgnoreCase("true") || _value.equals("1") || _value.equalsIgnoreCase("on"))
 				return true;
 
-			if (_value.equalsIgnoreCase("no") || _value.equalsIgnoreCase("false") || _value.equals("0")
-					|| _value.equalsIgnoreCase("off") || _value.equalsIgnoreCase("null"))
+			if (_value.equalsIgnoreCase("no") || _value.equalsIgnoreCase("false") || _value.equals("0") || _value.equalsIgnoreCase("off") || _value.equalsIgnoreCase("null"))
 				return false;
 		}
 
@@ -107,7 +106,7 @@ public class MappingValue {
 	 * 根据送入的类型作适当转换
 	 * 
 	 * @param value 送入的值
-	 * @param t     期待的类型
+	 * @param t 期待的类型
 	 * @return 已经转换类型的值
 	 */
 	@SuppressWarnings("unchecked")
@@ -170,12 +169,7 @@ public class MappingValue {
 	 * @return 整形数组
 	 */
 	private static int[] integerList2arr(List<Integer> list) {
-		int[] arr = new int[list.size()];
-
-		for (int i = 0; i < list.size(); i++)
-			arr[i] = list.get(i);
-
-		return arr;
+		return newIntArray(list.size(), index -> list.get(index));
 	}
 
 	/**
@@ -187,12 +181,14 @@ public class MappingValue {
 	 */
 	private static int[] stringArr2intArr(String value, String diver) {
 		String[] strArr = value.split(diver);
-		int[] intArr = new int[strArr.length];
+		return newIntArray(strArr.length, index -> Integer.parseInt(strArr[index].trim()));
+	}
 
-		for (int i = 0; i < strArr.length; i++)
-			intArr[i] = Integer.parseInt(strArr[i].trim());
-
-		return intArr;
+	static int[] newIntArray(int length, Function<Integer, Integer> fn) {
+		int[] arr = new int[length];
+		for (int i = 0; i < length; i++)
+			arr[i] = fn.apply(i);
+		return arr;
 	}
 
 	/**

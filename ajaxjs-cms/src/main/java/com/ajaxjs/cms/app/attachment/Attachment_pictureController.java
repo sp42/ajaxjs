@@ -17,6 +17,7 @@ import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.DataDict;
 import com.ajaxjs.framework.IBaseService;
+import com.ajaxjs.framework.MapUtil;
 import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
@@ -90,7 +91,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 
 			final Long _newlyId = service.create(picture);
 
-			return "json::" + MappingJson.stringifySimpleObject(new Object() {
+			return "json::" + MapUtil.toJson(new Object() {
 				@SuppressWarnings("unused")
 				public Boolean isOk = true;
 				@SuppressWarnings("unused")

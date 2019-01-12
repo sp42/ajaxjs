@@ -11,14 +11,13 @@ public class CmsUtils {
 		int pageSize = (int) args[1];
 		
 		if (pageSize == 0)
-			pageSize = 10;
+			pageSize = 8;
 		
 		int start = 0;
 		if (pageStart >= 1) {
 			start = (pageStart - 1) * pageSize;
 		}
 		
-		System.out.println("start:::" + start);
 		args[0] = start;
 		return args;
 	}

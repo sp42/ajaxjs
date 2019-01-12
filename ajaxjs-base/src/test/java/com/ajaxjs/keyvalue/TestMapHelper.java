@@ -77,7 +77,7 @@ public class TestMapHelper {
 	
 	@Test
 	public void testXml() {
-		MappingHelper.mapToXml(data);
+//		MappingHelper.mapToXml(data);
 		
 		
 	}

@@ -7,7 +7,7 @@ import com.ajaxjs.orm.dao.PageResult;
 
 @TableName(value = "user", beanClass = User.class)
 public interface UserDao extends IBaseDao<User> {
-	@Select("SELECT id, name, username, sex, birthday, email, phone, createDate, " + selectCover + " AS cover FROM ${tableName} entry")
+	@Select("SELECT id, avatar, name, username, sex, birthday, email, phone, createDate, location, " + selectCover + " AS cover FROM ${tableName} entry")
 	@Override
 	public PageResult<User> findPagedList_Cover(int start, int limit);
 }

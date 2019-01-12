@@ -24,6 +24,14 @@ public class UserLoginLogAdminController extends BaseController<UserLoginLog> {
 	private UserLoginLogService service;
 
 	@GET
+	@MvcFilter(filters = DataBaseFilter.class)
+	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView mv) {
+		mv.put("LoginType", UserDict.LoginType);
+		listPaged(start, limit, mv);
+		return adminListCMS();
+	}
+
+	@GET
 	@Path("/{id}")
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@PathParam("id") Long userId, @QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView mv) {
@@ -31,7 +39,6 @@ public class UserLoginLogAdminController extends BaseController<UserLoginLog> {
 		listPaged(start, limit, mv, (s, l) -> service.dao.findUserLoginLogByUserId(userId, s, l));
 		return adminListCMS();
 	}
-
 
 	@Override
 	public IBaseService<UserLoginLog> getService() {

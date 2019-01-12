@@ -244,7 +244,7 @@ public class MapHelper {
 	 * 数据结构的简单转换 String[]-->Map
 	 * 
 	 * @param columns 结对的键数组
-	 * @param values  结对的值数组
+	 * @param values 结对的值数组
 	 * @return Map 结构
 	 */
 	public static Map<String, Object> toMap(String[] columns, String[] values) {
@@ -276,7 +276,7 @@ public class MapHelper {
 	/**
 	 * 数据结构的简单转换 String[]-->Map
 	 * 
-	 * @param pairs    结对的字符串数组
+	 * @param pairs 结对的字符串数组
 	 * @param isDecode 是否 url 解码
 	 * @return Map 结构
 	 */
@@ -317,17 +317,18 @@ public class MapHelper {
 
 		return _map;
 	}
-	
+
 	/**
 	 * 判断 map 非空，然后根据 key 获取 value，若 value 非空则作为参数传入函数接口 s
+	 * 
 	 * @param map
 	 * @param key
 	 * @param s
 	 */
 	public static <T> void getValue(Map<String, T> map, String key, Consumer<T> s) {
-		if(map != null) {
+		if (map != null) {
 			T value = map.get(key);
-			if(value != null) 
+			if (value != null)
 				s.accept(value);
 		}
 	}

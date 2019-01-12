@@ -130,16 +130,16 @@ public class PageResult<T> extends ArrayList<T> {
 		} else {
 			int start = p.pageParams[0];
 			int limit = p.pageParams[1];
-			
+
 			List<B> list;
 			if (entryType == Map.class) {
 				list = (List<B>) JdbcHelper.queryAsMapList(conn, sql + " LIMIT ?, ?", args);
-			} else if(entryType == EntityMap.class){
+			} else if (entryType == EntityMap.class) {
 				list = (List<B>) Repository.mapList2EntityMapList(JdbcHelper.queryAsMapList(conn, sql + " LIMIT ?, ?", args));
 			} else {
 				list = JdbcHelper.queryAsBeanList(entryType, conn, sql + " LIMIT ?, ?", args);
 			}
-			
+
 			result.setStart(start);
 			result.setPageSize(limit);
 			result.setTotalCount(total);// 先查询总数,然后执行分页
@@ -147,8 +147,7 @@ public class PageResult<T> extends ArrayList<T> {
 
 			if (list != null)
 				result.addAll(list);
-			
-			
+
 		}
 
 		return result;
@@ -158,9 +157,9 @@ public class PageResult<T> extends ArrayList<T> {
 	 * 获取统计行数
 	 * 
 	 * @param select 业务逻辑 SQL 所在的注解
-	 * @param sql    业务逻辑 SQL
-	 * @param args   DAO 方法参数，不要包含 start/limit 参数
-	 * @param conn   连接对象，判断是否 MySQL or SQLite
+	 * @param sql 业务逻辑 SQL
+	 * @param args DAO 方法参数，不要包含 start/limit 参数
+	 * @param conn 连接对象，判断是否 MySQL or SQLite
 	 * @return 统计行数
 	 */
 	private static int countTotal(Select select, String sql, Object[] args, Repository dao, Connection conn) {
@@ -176,7 +175,7 @@ public class PageResult<T> extends ArrayList<T> {
 		}
 
 		countSql = dao.handleSql(countSql, null);
-		
+
 		if (conn.toString().contains("sqlite")) {
 			return JdbcHelper.queryOne(conn, countSql, Integer.class, args);
 		} else {// mysql 返回 long，转换一下
@@ -185,7 +184,7 @@ public class PageResult<T> extends ArrayList<T> {
 		}
 	}
 
-	static final int defaultPageSize = 10;
+	static final int defaultPageSize = 8;
 
 	static class P {
 		/**
@@ -203,7 +202,7 @@ public class PageResult<T> extends ArrayList<T> {
 	 * 获取分页参数，利用反射 DAO 方法参数列表来定位分页的 start/limit
 	 * 
 	 * @param method 方法对象
-	 * @param args   包含分页参数 start/limit 的参数列表
+	 * @param args 包含分页参数 start/limit 的参数列表
 	 * @return
 	 */
 	private static P getPageParameters(Method method, Object[] args) {
@@ -222,8 +221,7 @@ public class PageResult<T> extends ArrayList<T> {
 			Parameter param = parameters[i];
 
 			if ("arg0".equals(param.getName()) || "arg1".equals(param.getName())) {
-				throw new Error(
-						" Java 8 支持反射获取 参数 具体名称，但要打开编译开关。例如 Eclipse 须在 Store information about method parameters (usable via reflection) 打勾，或者编译时加入参数 -parameters。");
+				throw new Error(" Java 8 支持反射获取 参数 具体名称，但要打开编译开关。例如 Eclipse 须在 Store information about method parameters (usable via reflection) 打勾，或者编译时加入参数 -parameters。");
 			}
 
 			if (param.getName().equalsIgnoreCase("start")) {
@@ -259,6 +257,21 @@ public class PageResult<T> extends ArrayList<T> {
 		p.args = list.toArray();
 
 		return p;
+	}
+
+	/**
+	 * 列表不分页，转换为 PageResult
+	 * 
+	 * @param list
+	 * @return
+	 */
+	public static <X> PageResult<X> list2PageList(List<X> list) {
+		PageResult<X> pageResult = new PageResult<>();
+		pageResult.addAll(list);
+		pageResult.setPageSize(list.size());
+		pageResult.setTotalCount(list.size());
+
+		return pageResult;
 	}
 
 	/*

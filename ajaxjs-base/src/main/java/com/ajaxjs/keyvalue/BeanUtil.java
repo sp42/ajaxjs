@@ -63,7 +63,7 @@ public class BeanUtil extends ReflectUtil {
 		// 如果没找到，那忽略参数类型，只要匹配方法名称即可。这会发生在：由于被注入的对象有可能经过了 AOP 的动态代理，所以不能通过上述逻辑找到正确的方法
 		if (method == null) {
 			method = getSuperClassDeclaredMethod(clazz, setMethodName);
-		} 
+		}
 
 		// 最终还是找不到
 		Objects.requireNonNull(method, clazz.getName() + " 找不到目标方法！" + setMethodName);
@@ -126,11 +126,6 @@ public class BeanUtil extends ReflectUtil {
 
 	/**
 	 * map 转实体 产品
- 樱花甜香樱花甜香
- 清新桉树清新桉树
- 樱花樱花
- 薰衣草薰衣草
-选择净
 	 * 
 	 * @param map 原始数据
 	 * @param clz 实体 bean 的类
@@ -150,7 +145,6 @@ public class BeanUtil extends ReflectUtil {
 
 				if (map.containsKey(key)) {
 					value = map.get(key);
-					
 
 					// null 是不会传入 bean 的
 					if (value == null)

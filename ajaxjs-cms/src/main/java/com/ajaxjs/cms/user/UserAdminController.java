@@ -33,6 +33,7 @@ public class UserAdminController extends BaseController<User> {
 	@Path("/list")
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView mv) {
+		mv.put("SexGender", UserDict.SexGender);
 		listPaged(start, limit, mv, service.getDao()::findPagedList_Cover);
 		return adminList();
 	}
@@ -42,6 +43,7 @@ public class UserAdminController extends BaseController<User> {
 	@Path("/{id}")
 	@Override
 	public String editUI(@PathParam("id") Long id, ModelAndView mv) {
+		mv.put("SexGender", UserDict.SexGender);
 		super.editUI(id, mv);
 		return editUI();
 	}
@@ -49,6 +51,7 @@ public class UserAdminController extends BaseController<User> {
 	@GET
 	@Override
 	public String createUI(ModelAndView mv) {
+		mv.put("SexGender", UserDict.SexGender);
 		super.createUI(mv);
 		return editUI();
 	}
@@ -77,25 +80,31 @@ public class UserAdminController extends BaseController<User> {
 	public String delete(@PathParam("id") Long id) {
 		return delete(id, new User());
 	}
-	
+
+	@GET
+	@Path("bookmark/list")
+	public String bookmarkList(ModelAndView mv) {
+		return info("user-bookmark");
+	}
+
 	@GET
 	@Path("{id}/bookmark")
-	public  String bookmark(@PathParam("id") Long userId, ModelAndView mv) {
+	public String bookmark(@PathParam("id") Long userId, ModelAndView mv) {
 		mv.put("userId", userId);
 		return info("user-bookmark");
 	}
+
 	@GET
-	@Path("{id}/address")
-	public  String address(@PathParam("id") Long userId, ModelAndView mv) {
-		mv.put("userId", userId);
+	@Path("address/list")
+	public String addressList(ModelAndView mv) {
 		return info("user-address");
 	}
-	
+
 	@GET
-	@Path("{id}/cart")
-	public  String car(@PathParam("id") Long userId, ModelAndView mv) {
+	@Path("{id}/address")
+	public String address(@PathParam("id") Long userId, ModelAndView mv) {
 		mv.put("userId", userId);
-		return info("user-cart");
+		return info("user-address");
 	}
 
 	@Override

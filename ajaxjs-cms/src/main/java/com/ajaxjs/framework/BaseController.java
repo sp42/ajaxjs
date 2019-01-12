@@ -2,17 +2,13 @@ package com.ajaxjs.framework;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 import com.ajaxjs.config.ConfigService;
-import com.ajaxjs.keyvalue.BeanUtil;
 import com.ajaxjs.keyvalue.MappingHelper;
-import com.ajaxjs.keyvalue.MappingJson;
 import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
@@ -227,30 +223,8 @@ public abstract class BaseController<T extends IBaseBean> implements IController
 		return String.format(MappingHelper.json_ok_extension, "分页列表", "\"result\":" + jsonStr + ",\"total\":" + total);
 	}
 
-	@SuppressWarnings("unchecked")
 	public static String toJson(Object obj, boolean isAdd) {
-		String jsonStr = null;
-
-		if (obj == null) {
-			jsonStr = "null";
-		} else if (obj instanceof Map) {
-			jsonStr = MappingJson.stringifyMap((Map<String, ?>) obj);
-		} else if (obj instanceof BaseModel) {
-			jsonStr = BeanUtil.beanToJson((BaseModel) obj);
-		} else if (obj instanceof List) {
-			List<?> list = (List<?>) obj;
-			jsonStr = "[]"; // empty array
-
-			if (list.size() > 0) {
-				if (list.get(0) instanceof Map) { // Map 类型的输出
-					jsonStr = MappingJson.stringifyListMap((List<Map<String, Object>>) list);
-				} else { // Bean
-					jsonStr = BeanUtil.listToJson((List<Object>) list);
-				}
-			}
-		} else {
-			throw new Error("不支持数据类型");
-		}
+		String jsonStr = MapUtil.toJson(obj);
 		return isAdd ? "json::{\"result\":" + jsonStr + "}" : jsonStr;
 	}
 

@@ -1,4 +1,4 @@
-// build date:Tue Dec 04 10:20:03 GMT+08:00 2018
+// build date:Fri Jan 11 19:45:28 GMT+08:00 2019
 
 ajaxjs = aj = function(cssSelector, fn) {
 return Element.prototype.$.apply(document, arguments);
@@ -40,6 +40,7 @@ parent.insertBefore(newElement, targetElement.nextSibling);
 ajaxjs.apply = function(a, b) {
 for ( var i in b)
 a[i] = b[i];
+return a;
 }
 Function.prototype.delegate = function() {
 var self = this, scope = this.scope, args = arguments, aLength = arguments.length, fnToken = 'function';
@@ -172,7 +173,9 @@ if (typeof form == 'string')
 form = aj(form);
 if (!form.action)
 throw 'Please fill the url in ACTION attribute.';
-var method = form.getAttribute('method').toLowerCase();
+var method;
+if(form.getAttribute('method'))
+method = form.getAttribute('method').toLowerCase();
 cfg.method = method || cfg.method || 'post';
 form.addEventListener('submit', function(e, cb, cfg) {
 e.preventDefault();
@@ -596,7 +599,7 @@ isCreate : Boolean
 },
 template : 
 '<div class="ajaxjs-admin-info-btns">\
-<button><img :src="ajResources.commonAsset + \'/icon/save.gif\'" /> {{isCreate ? "新建":"编辑"}}</button>\
+<button><img :src="ajResources.commonAsset + \'/icon/save.gif\'" /> {{isCreate ? "新建":"保存"}}</button>\
 <button onclick="this.up(\'form\').reset();return false;">复 位</button>\
 <button v-if="!isCreate" v-on:click.prevent="del()">\
 <img :src="ajResources.commonAsset + \'/icon/delete.gif\'" /> 删 除\
@@ -2172,6 +2175,47 @@ select.appendChild(temp);
 }
 ajaxjs.tree.selectUI.prototype = ajaxjs.tree.prototype;
 })();
+Vue.component('aj-select', {
+props : {
+json : {
+type: Object,
+required: true
+},
+defaultSelected : {	
+type: String,
+required: false
+},
+fieldName : { 
+type: String,
+required: true
+}
+},
+data :function() {
+return {
+selected : ""
+};
+},
+template : '<select :name="fieldName" @change="onSelected($event);" class="ajaxjs-select" style="min-width: 200px;" v-model="selected">\
+<option v-for="(key, v) in json" :value="v">{{key}}</option>\
+</select>',
+created:function(){
+if(this.defaultSelected) {
+this.selected = this.defaultSelected;
+} else {
+for(var i in this.json) {
+this.selected = i;
+break;
+}
+}
+},
+methods : {
+onSelected : function(e) {
+},
+getSelected: function(){
+console.log(this.selected)
+}
+}
+});
 Vue.component('aj-tree-catelog-select', {
 props : {
 catelogId : { 
@@ -2593,6 +2637,52 @@ xhr.onreadystatechange = ajaxjs.xhr.callback.delegate(null, this.uploadOk_callba
 xhr.open("POST", this.action, true);
 xhr.send(fd);
 },
+}
+});
+Vue.component('attachment-picture-list', {
+props : {
+picCtx : String,
+uploadUrl : String,
+blankBg : String,
+delImgUrl : String,
+loadListUrl: String
+},
+data : function() {
+return {
+pics: []
+};
+},
+template : '<table width="100%"><tr><td>\
+<div class="label">相册图：</div>\
+<ul>\
+<li v-for="pic in pics" style="float:left;margin-right:1%;text-align:center;">\
+<img :src="picCtx + pic.path" style="max-width: 180px;max-height: 160px;" /><br />\
+<a href="#" @click="delPic(pic.id);">删 除</a>\
+</li>\
+</ul>\
+</td><td>\
+<aj-xhr-upload ref="attachmentPictureUpload" :action="uploadUrl" :is-img-upload="true" :img-place="blankBg"></aj-xhr-upload>\
+</td></tr></table>',
+mounted: function() {
+this.loadAttachmentPictures();
+this.$refs.attachmentPictureUpload.uploadOk_callback = this.loadAttachmentPictures;
+},
+methods : {
+loadAttachmentPictures : function() {
+var self = this;
+aj.xhr.get(this.loadListUrl, function(json) {
+self.pics = json.result;
+});
+},
+delPic: function(picId) {
+var self = this;
+aj.xhr.dele(this.delImgUrl + picId, function(json) {
+if(json.isOk) {
+self.loadAttachmentPictures();
+} else {
+}
+});
+}
 }
 });
 

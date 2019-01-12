@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.ajaxjs.util.CommonUtil;
 
@@ -52,25 +53,15 @@ public class MappingJson {
 	 * 
 	 * @param map 输入数据
 	 * @return JSON 字符串
-	 */	public static String stringifyMap(Map<String, ?> map) {
+	 */
+	public static String stringifyMap(Map<?, ?> map) {
 		if (map == null)
 			return null;
 
-		List<String> arr = new ArrayList<>();
-		for (String key : map.keySet())
-			arr.add('\"' + key + "\":" + obj2jsonVaule(map.get(key)));
-
-		return '{' + String.join(",", arr) + '}';
-	}
-	
-	public static String stringifyMap2 (Map<?, ?> map) {
-		if (map == null)
-			return null;
-		
 		List<String> arr = new ArrayList<>();
 		for (Object key : map.keySet())
 			arr.add('\"' + key.toString() + "\":" + obj2jsonVaule(map.get(key)));
-		
+
 		return '{' + String.join(",", arr) + '}';
 	}
 
@@ -90,6 +81,34 @@ public class MappingJson {
 			str[i] = stringifyMap(list.get(i));
 
 		return "[" + String.join(",", str) + "]";
+	}
+	
+
+	/**
+	 * 整形数组转换为字符数组 [1, 2, ...] --"1,2,3, ..."
+	 * 
+	 * @param arr 输入的整形数组
+	 * @return 字符数组
+	 */
+	private static String[] int_arr2string_arr(int[] arr) {
+		String[] strs = new String[arr.length];
+
+		for (int i = 0; i < arr.length; i++)
+			strs[i] = arr[i] + "";
+
+		return strs;
+	}
+
+	static <T> String eachList(List<T> list, Function<T, String> fn) {
+		StringBuilder sb = new StringBuilder();
+
+		for (int i = 0; i < list.size(); i++) {
+			sb.append(fn.apply(list.get(i)));
+			if (i != (list.size() - 1))
+				sb.append(", ");
+		}
+
+		return '[' + sb.toString() + ']';
 	}
 
 	/**
@@ -117,49 +136,15 @@ public class MappingJson {
 			if (list.size() == 0) {
 				return "[]";
 			} else if (list.get(0) instanceof Integer) {
-				List<Integer> intList = (List<Integer>) list;
-				StringBuilder sb = new StringBuilder();
-
-				for (int i = 0; i < intList.size(); i++) {
-					sb.append(intList.get(i));
-					if (i != (intList.size() - 1))
-						sb.append(", ");
-				}
-
-				return '[' + sb.toString() + ']';
+				return eachList((List<Integer>) list, v -> v + "");
 			} else if (list.get(0) instanceof String) {
-				List<String> strList = (List<String>) list;
-				StringBuilder sb = new StringBuilder();
-
-				for (int i = 0; i < strList.size(); i++) {
-					sb.append("\"" + strList.get(i) + "\"");
-					if (i != (strList.size() - 1))
-						sb.append(", ");
-				}
-
-				return '[' + sb.toString() + ']';
+				return eachList((List<String>) list, v -> "\"" + v + "\"");
 			} else if (list.get(0) instanceof Map) {
-				List<Map<String, ?>> maps = (List<Map<String, ?>>) list;
-				StringBuilder sb = new StringBuilder();
-
-				for (int i = 0; i < maps.size(); i++) {
-					sb.append(stringifyMap(maps.get(i)));
-					if (i != (maps.size() - 1))
-						sb.append(", ");
-				}
-				return '[' + sb.toString() + ']';
-			} else if (list.get(0).getClass().getSuperclass().getName().contains("BaseModel")){
-				StringBuilder sb = new StringBuilder();
-
-				for (int i = 0; i < list.size(); i++) {
-					sb.append(BeanUtil.beanToJson(list.get(i)));
-					if (i != (list.size() - 1))
-						sb.append(", ");
-				}
-				return '[' + sb.toString() + ']';
+				return eachList((List<Map<String, ?>>) list, v -> stringifyMap(v));
+			} else if (list.get(0).getClass().getSuperclass().getName().contains("BaseModel")) {
+				return eachList(list, v -> BeanUtil.beanToJson(v));
 			} else {
-				// 未知类型数组，
-				return "[]";
+				return "[]";// 未知类型数组，
 			}
 
 			// return stringify((Map<String, ?>)value);
@@ -178,32 +163,9 @@ public class MappingJson {
 		} else if (value.getClass().getSuperclass().getName().contains("BaseModel")) {
 			return BeanUtil.beanToJson(value);
 		} else { // String
-			return '\"' + value.toString().replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n")
-					.replace("\r", "\\r") + '\"';
+			return '\"' + value.toString().replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r") + '\"';
 		}
 	}
 
-	/**
-	 * 整形数组转换为字符数组 [1, 2, ...] --"1,2,3, ..."
-	 * 
-	 * @param arr 输入的整形数组
-	 * @return 字符数组
-	 */
-	private static String[] int_arr2string_arr(int[] arr) {
-		String[] strs = new String[arr.length];
 
-		for (int i = 0; i < arr.length; i++)
-			strs[i] = arr[i] + "";
-
-		return strs;
-	}
-
-	/**
-	 * 输出到 JSON 文本时候的换行
-	 * @param str
-	 * @return
-	 */
-	public static String jsonString_covernt(String str) {
-		return str.replace("\r\n", "\\n");
-	}
 }
