@@ -223,6 +223,9 @@ public class MappingHelper {
 	 * @return XML数据转换后的Map
 	 */
 	public static Map<String, String> xmlToMap(String strXML) {
+		if(strXML == null)
+			return null;
+		
 		Map<String, String> data = new HashMap<>();
 
 		try (InputStream stream = new ByteArrayInputStream(strXML.getBytes("UTF-8"));) {
@@ -261,13 +264,13 @@ public class MappingHelper {
 	 * @param data Map类型数据
 	 * @return XML格式的字符串
 	 */
-	public static String mapToXml(Map<String, String> data) {
+	public static String mapToXml(Map<String, ?> data) {
 		Document doc = initBuilder().newDocument();
 		Element root = doc.createElement("xml");
 		doc.appendChild(root);
 
 		for (String key : data.keySet()) {
-			String value = data.get(key);
+			String value = data.get(key).toString();
 			if (value == null)
 				value = "";
 

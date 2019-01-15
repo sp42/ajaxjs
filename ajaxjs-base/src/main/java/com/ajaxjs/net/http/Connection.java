@@ -160,7 +160,7 @@ public class Connection<T> extends Request<T> {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-			throw new ConnectException("请求地址 IO 异常！" + getUrl());
+			throw new ConnectException(String.format("请求地址 %s IO 异常: %s", getUrl(), e));
 		} finally {
 			close();// 自动关闭流
 		}
