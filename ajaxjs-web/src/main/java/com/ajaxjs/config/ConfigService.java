@@ -18,11 +18,10 @@ package com.ajaxjs.config;
 import java.util.Map;
 
 import com.ajaxjs.Version;
+import com.ajaxjs.framework.MapUtil;
 import com.ajaxjs.js.JsEngineWrapper;
 import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.js.JsonStruTraveler;
-import com.ajaxjs.keyvalue.MappingJson;
-import com.ajaxjs.keyvalue.MappingValue;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -82,12 +81,13 @@ public class ConfigService {
 	 * 保存 JSON 配置
 	 */
 	public static void save() {
-		String jsonStr = MappingJson.stringifyMap(config);
+		String jsonStr = MapUtil.toJson(config);
 		config.setJsonStr(jsonStr);
 
 		new FileUtil().setFilePath(config.getJsonPath()).setContent(jsonStr).save();// 保存文件
 	}
 
+	@SuppressWarnings("unchecked")
 	private static <T> T get(String key, T isNullValue, Class<T> vType) {
 		if (flatConfig == null || !config.isLoaded())
 			return isNullValue;
@@ -99,7 +99,7 @@ public class ConfigService {
 			return isNullValue;
 		}
 
-		return MappingValue.TypeConvert(v, vType);
+		return (T) v;
 	}
 
 	/**

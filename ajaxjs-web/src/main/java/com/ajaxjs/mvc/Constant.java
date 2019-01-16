@@ -27,6 +27,15 @@ public interface Constant {
 	 * MV 用的 key
 	 */
 	public static final String PageResult = "PageResult";
+	
+	/**
+	 * 文档显示用
+	 */
+	public static final String jsonType = "application/json";
+	
+	
+	public static final String USER_SESSION_ID = "X-Ajaxjs-Token";
+	public static final String USER_ID = "X-Ajaxjs-UserId";
 
 	public static final String domainCatalog_Id = "domainCatalog_Id";
 
@@ -54,4 +63,9 @@ public interface Constant {
 	 * 显示 HTTP 405 禁止操作
 	 */
 	public static final String show405 = String.format(MappingHelper.json_not_ok, "405， Request method not supported 禁止操作");
+	
+	/**
+	 * 显示 HTTP 401 没有权限
+	 */
+	public static final String show401 = String.format(MappingHelper.json_not_ok, "401， Request method not supported 没有权限");
 }

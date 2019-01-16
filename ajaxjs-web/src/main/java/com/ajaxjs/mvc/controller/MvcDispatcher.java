@@ -170,7 +170,6 @@ public class MvcDispatcher implements Filter {
 				if (method.getParameterTypes().length > 0) {
 					Object[] args = RequestParam.getArgs(request, response, method);
 					model = findModel(args);
-System.out.println(Arrays.toString(args));
 					// 通过反射执行控制器方法:调用反射的 Reflect.executeMethod 方法就可以执行目标方法，并返回一个结果。
 					result = ReflectUtil.executeMethod_Throwable(controller, method, args);
 				} else {

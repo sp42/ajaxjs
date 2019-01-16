@@ -31,7 +31,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.jsp.PageContext;
 
-import com.ajaxjs.keyvalue.MappingJson;
+import com.ajaxjs.framework.BaseModel;
+import com.ajaxjs.framework.MapUtil;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
@@ -83,6 +84,11 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	 * JSP 模板路径
 	 */
 	private String template;
+	
+	/**
+	 * 实体-》json
+	 */
+	private BaseModel bean;
 
 	/**
 	 * 是否输出 json
@@ -98,6 +104,8 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	 * 输出一个最简单的 html 页面（已包含 <html>、<body> 标签），并支持中文，强制 UTF-8 编码
 	 */
 	private boolean simpleHTML;
+	
+	private boolean xmlContent;
 
 	/**
 	 * 执行输出
@@ -114,7 +122,9 @@ public class MvcOutput extends HttpServletResponseWrapper {
 		}
 
 		if (getOutput_Map() != null) { // Map 的话转变为 json 输出
-			setJson(true).setOutput(MappingJson.stringifyMap(getOutput_Map()));
+			setJson(true).setOutput(MapUtil.toJson(getOutput_Map()));
+		} else if(getBean() != null) {
+			setJson(true).setOutput(MapUtil.toJson(getBean()));
 		} else if (getOutput_Obj() != null) {// map or object 二选其一
 			// setJson(true).setOutput(JsonHelper.stringify_object(getOutput_Obj()));
 		}
@@ -124,6 +134,8 @@ public class MvcOutput extends HttpServletResponseWrapper {
 		} else if (getJsonpToken() != null) {
 			setContent_Type("application/javascript");
 			setOutput(String.format("%s(%s);", getJsonpToken(), getOutput()));
+		} else if (xmlContent) {
+			setContent_Type("application/xml");
 		} else if (isSimpleHTML()) {
 			setOutput(String.format("<html><meta charset=\"utf-8\" /><body>%s</body></html>", getOutput()));
 		}
@@ -151,17 +163,20 @@ public class MvcOutput extends HttpServletResponseWrapper {
 		}
 	}
 
+	public static final String html = "html::", xml = "xml::", jsonPerfix = "json::", redirectPerfix = "redirect::";
+	
 	/**
 	 * 一般一个请求希望返回一个页面，这时就需要控制器返回一个模板渲染输出了。 中间执行逻辑完成，最后就是控制输出（响应） 可以跳转也可以输出模板渲染器（即使是
 	 * json 都是 模板渲染器 ）
 	 * 
-	 * @param result   模板路径是指页面模板（比如 jsp，velocity模板等）的目录文件名
-	 * @param request  请求对象
+	 * @param result 模板路径是指页面模板（比如 jsp，velocity模板等）的目录文件名
+	 * @param request 请求对象
 	 * @param response 响应对象
-	 * @param model    所有渲染数据都要放到一个 model 对象中（本质 是 map或者 bean），这样使用者就可以在模板内用 Map 对象的
-	 *                 key/getter 获取到对应的数据。
+	 * @param model 所有渲染数据都要放到一个 model 对象中（本质 是 map或者 bean），这样使用者就可以在模板内用 Map 对象的
+	 * key/getter 获取到对应的数据。
 	 * @param method
 	 */
+	@SuppressWarnings("unchecked")
 	public void resultHandler(Object result, MvcRequest request, ModelAndView model, Method method) {
 		if (model != null) {
 			request.saveToReuqest(model);
@@ -171,20 +186,21 @@ public class MvcOutput extends HttpServletResponseWrapper {
 			LOGGER.info("控制器方法 {0} 返回 null", method);
 		} else {
 			if (result instanceof String) {
-				String str = (String) result, html = "html::";
-
+				String str = (String) result;
 				if (str.startsWith(html)) {
 					setSimpleHTML(true).setOutput(str.replace(html, "")).go();
-				} else if (str.startsWith("redirect::")) {
-					setRedirect(str.replace("redirect::", "")).go();
-
-				} else if (str.startsWith("json::")) {
+				} else if (str.startsWith(xml)) {
+					xmlContent = true;
+					setOutput(str.replace(xml, "")).go();
+				} else if (str.startsWith(redirectPerfix)) {
+					setRedirect(str.replace(redirectPerfix, "")).go();
+				} else if (str.startsWith(jsonPerfix)) {
 					String jsonpToken = request.getParameter(MvcRequest.callback_param); // 由参数决定是否使用 jsonp
 
 					if (CommonUtil.isEmptyString(jsonpToken)) {
-						setJson(true).setOutput(str.replace("json::", "")).go();
+						setJson(true).setOutput(str.replace(jsonPerfix, "")).go();
 					} else {
-						setJsonpToken(jsonpToken).setOutput(str.replace("json::", "")).go();
+						setJsonpToken(jsonpToken).setOutput(str.replace(jsonPerfix, "")).go();
 					}
 				} else if (str.startsWith("js::")) {
 					setContent_Type("application/javascript").setOutput(str.replace("js::", "")).go();
@@ -195,9 +211,10 @@ public class MvcOutput extends HttpServletResponseWrapper {
 					LOGGER.info("执行逻辑完成，现在控制输出（响应页面模版）" + result);
 					setTemplate(str).go(request);
 				}
-			} else if (result instanceof JsonReuslt) {
-				JsonReuslt _result = (JsonReuslt) result;
-				setJson(true).setOutput(_result.getOutputStr()).go();
+			} else if (result instanceof Map) {
+				setOutput_Map((Map<String, ?>) result).go();
+			} else if (result instanceof BaseModel) {
+				setBean((BaseModel) result).go();
 			}
 		}
 	}
@@ -361,6 +378,15 @@ public class MvcOutput extends HttpServletResponseWrapper {
 
 	public MvcOutput setOutput_Obj(Object output_Obj) {
 		this.output_Obj = output_Obj;
+		return this;
+	}
+
+	public BaseModel getBean() {
+		return bean;
+	}
+
+	public MvcOutput setBean(BaseModel bean) {
+		this.bean = bean;
 		return this;
 	}
 }
