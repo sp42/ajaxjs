@@ -270,6 +270,7 @@ public class MappingHelper {
 		doc.appendChild(root);
 
 		for (String key : data.keySet()) {
+			System.out.println(key);
 			String value = data.get(key).toString();
 			if (value == null)
 				value = "";
