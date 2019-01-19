@@ -240,7 +240,7 @@ ajaxjs.xhr = {
 					}
 				}
 			} catch (e) {
-				alert('AJAX 错误:\n' + e + '\nThe url is:' + cb.url); // 提示用户 异常
+				alert('XHR 错误:\n' + e + '\nUrl is:' + cb.url); // 提示用户 异常
 			}
 
 			if (!cb)
@@ -334,7 +334,6 @@ ajaxjs.xhr.dele = ajaxjs.xhr.request.delegate(null, null, null, null, 'DELETE');
  */
 ajaxjs.xhr.serializeForm = function(form, cfg) {
 	var json = {};
-
 	if (window.FormData && FormData.prototype.forEach) { // 奇葩魅族浏览器，有
 		// FormData 却只有append 一个方法
 		var formData = new FormData(form);
@@ -347,12 +346,13 @@ ajaxjs.xhr.serializeForm = function(form, cfg) {
 		for (var i = 0, len = form.elements.length; i < len; i++) {
 			var formElement = form.elements[i], name = formElement.name, value = formElement.value;
 
-			if (formElement.name === '' || formElement.disabled || (cfg && cfg.ignoreField != name))
+			if (formElement.name === '' || formElement.disabled || (cfg && cfg.ignoreField == name))
 				continue;
 
 			switch (formElement.nodeName.toLowerCase()) {
 			case 'input':
 				switch (formElement.type) {
+				case 'number':
 				case 'text':
 				case 'hidden':
 				case 'password':
@@ -372,7 +372,7 @@ ajaxjs.xhr.serializeForm = function(form, cfg) {
 			}
 		}
 	}
-
+	
 	return json;
 }
 
