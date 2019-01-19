@@ -3,6 +3,7 @@ package com.ajaxjs.framework;
 import java.util.Date;
 import java.util.HashMap;
 
+@Deprecated
 public class EntityMap extends HashMap<String, Object> {
 	private static final long serialVersionUID = -6572963539115171049L;
 
