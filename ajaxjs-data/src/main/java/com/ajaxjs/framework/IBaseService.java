@@ -2,9 +2,7 @@ package com.ajaxjs.framework;
 
 import java.util.List;
 
-import com.ajaxjs.orm.dao.PageResult;
-
-public interface IBaseService<T extends IBaseBean> {
+public interface IBaseService<T> {
 	/**
 	 * 查询单个记录。如果找不到则返回 null
 	 * 

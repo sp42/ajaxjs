@@ -19,7 +19,6 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -33,8 +32,6 @@ import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.SqlFactory;
 import com.ajaxjs.orm.annotation.TableName;
 import com.ajaxjs.orm.annotation.Update;
-import com.ajaxjs.orm.dao.DaoException;
-import com.ajaxjs.orm.dao.PageResult;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
 
@@ -99,21 +96,25 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 		throw new DaoException("没有任何 DAO CRUD 的注解。你继承 IDAO 接口的子接口中，可能没有覆盖 IDAO 的方法" + method);
 	}
 
+	/**
+	 * 
+	 * @param method
+	 * @return
+	 * @throws DaoException
+	 */
 	private Class<?> getReturnType(Method method) throws DaoException {
 		Class<?> clz = method.getReturnType();
 
-		if (clz == IBaseBean.class) {
+		if (clz == Map.class || clz == List.class || clz == PageResult.class || clz == int.class || clz == Integer.class || clz == long.class || clz == Long.class || clz == String.class || clz == Boolean.class
+				|| clz == boolean.class)
+			return clz;
 
-			TableName t = getClz().getAnnotation(TableName.class);
+		TableName t = getClz().getAnnotation(TableName.class);
 
-			if (t == null && getBeanClz() == null) {
-				throw new DaoException("请设置注解 TableName 的 beanClass 或送入 beanClz");
-			} else {
-				clz = getBeanClz() == null ? t.beanClass() : getBeanClz();
-//				if (Map.class.isAssignableFrom(clz)) {
-//					clz = Map.class;
-//				}
-			}
+		if (t == null && getBeanClz() == null) {
+			throw new DaoException("请设置注解 TableName 的 beanClass 或送入 beanClz");
+		} else {
+			clz = getBeanClz() == null ? t.beanClass() : getBeanClz();
 		}
 
 		return clz;
@@ -140,7 +141,14 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 		return null;
 	}
 
+	/**
+	 * DAO 实际类引用，必须为接口
+	 */
 	private Class<?> clz;
+
+	/**
+	 * 实体类型
+	 */
 	private Class<?> beanClz;
 
 	private String tableName;
@@ -152,7 +160,7 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 	 * @return DAO 实例
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends IBaseDao<? extends IBaseBean>> T bind(Class<T> clz) {
+	public <T extends IBaseDao<?>> T bind(Class<T> clz) {
 		this.setClz(clz);
 		// 获取注解的表名
 		TableName tableNameA = clz.getAnnotation(TableName.class);
@@ -165,12 +173,12 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 		return (T) obj;
 	}
 
-	public <T extends IBaseDao<? extends IBaseBean>> T bind(Class<T> clz, String tableName) {
+	public <T extends IBaseDao<?>> T bind(Class<T> clz, String tableName) {
 		setTableName(tableName);
 		return bind(clz);
 	}
 
-	public <T extends IBaseDao<? extends IBaseBean>> T bind(Class<T> clz, String tableName, Class<?> beanClz) {
+	public <T extends IBaseDao<?>> T bind(Class<T> clz, String tableName, Class<?> beanClz) {
 		setTableName(tableName);
 		setBeanClz(beanClz);
 		return bind(clz);
@@ -194,9 +202,10 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 				ParameterizedType _type = (ParameterizedType) returnType;
 
 				for (Type typeArgument : _type.getActualTypeArguments()) {
-					if ("com.ajaxjs.framework.EntityMap".equals(typeArgument.getTypeName())) {
-						return EntityMap.class;
-					}
+					System.out.println("::::::::" + typeArgument.getTypeName());
+//					if ("com.ajaxjs.framework.Map<String, Object>".equals(typeArgument.getTypeName())) {
+//						return Map<String, Object>.class;
+//					}
 
 					if ("T".equals(typeArgument.toString())) {
 						TableName t = getClz().getAnnotation(TableName.class);
@@ -255,18 +264,9 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 		} else if (returnType == List.class) {
 			result = queryList(entryType, sql, args);
 		} else if (returnType == PageResult.class) {// 分页
-//				queryParam.order = new HashMap<>(); // 默认按照 id 排序
-//				queryParam.order.put("id", "DESC");
-//				sql = queryParam.orderToSql(sql);
-
 			result = PageResult.doPage(conn, entryType, select, sql, method, this, args);
 		} else if (returnType == Map.class) {
 			result = queryAsMap(conn, sql, args);
-		} else if (returnType == EntityMap.class) {
-			Map<String, Object> map = queryAsMap(conn, sql, args);
-			EntityMap eMap = new EntityMap();
-			eMap.putAll(map);
-			result = eMap;
 		} else {
 			// bean
 			result = queryAsBean(returnType, conn, sql, args);
@@ -280,28 +280,11 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 
 		if (entryType == Map.class) {
 			result = queryAsMapList(conn, sql, args);
-		} else if (entryType == EntityMap.class) {
-			result = mapList2EntityMapList(queryAsMapList(conn, sql, args));
 		} else {
 			result = queryAsBeanList(entryType, conn, sql, args);
 		}
 
 		return result;
-	}
-
-	public static List<EntityMap> mapList2EntityMapList(List<Map<String, Object>> list) {
-		if (list == null)
-			return null;
-		
-		List<EntityMap> eList = new ArrayList<>();
-
-		for (Map<String, Object> map : list) {
-			EntityMap eMap = new EntityMap();
-			eMap.putAll(map);
-			eList.add(eMap);
-		}
-
-		return eList;
 	}
 
 	/**
@@ -324,11 +307,13 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 	 * @param beanType 实体类型的类引用，通常是 map 或 bean
 	 * @return 自增 id
 	 */
+	@SuppressWarnings("unchecked")
 	private <R> Serializable insert(Insert insert, Method sqlFactoryHandler, Object[] args, Class<R> returnType) {
 		String sql = insert.value();
 		Serializable id = null; // INSERT 返回新建的 id
 
-		id = write(sql, sqlFactoryHandler, insert::tableName, _sql -> create(conn, _sql, args), tableName -> createBean(conn, args[0], tableName), args);
+		id = write(sql, sqlFactoryHandler, insert::tableName, _sql -> create(conn, _sql, args),
+				tableName -> args[0] instanceof Map ? createMap(conn, (Map<String, Object>) args[0], tableName) : createBean(conn, args[0], tableName), args);
 
 		if (returnType == Integer.class && id.getClass() == Long.class) {
 			return Integer.parseInt("" + id);
@@ -350,7 +335,9 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 	private Integer update(Update update, Method sqlFactoryHandler, Object[] args) {
 		String sql = update.value();
 
-		int effectRows = write(sql, sqlFactoryHandler, update::tableName, _sql -> update(conn, _sql, args), tableName -> updateBean(conn, args[0], tableName), args);
+		@SuppressWarnings("unchecked")
+		int effectRows = write(sql, sqlFactoryHandler, update::tableName, _sql -> update(conn, _sql, args),
+				tableName -> args[0] instanceof Map ? updateMap(conn, (Map<String, Object>) args[0], tableName) : updateBean(conn, args[0], tableName), args);
 		return effectRows;
 	}
 

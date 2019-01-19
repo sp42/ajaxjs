@@ -10,7 +10,7 @@
  * 除非因适用法律需要或书面同意，根据许可证分发的软件是基于"按原样"基础提供，
  * 无任何明示的或暗示的保证或条件。详见根据许可证许可下，特定语言的管辖权限和限制。
  */
-package com.ajaxjs.orm.dao;
+package com.ajaxjs.framework;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.framework.EntityMap;
-import com.ajaxjs.framework.Repository;
 import com.ajaxjs.orm.JdbcHelper;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.util.CommonUtil;
@@ -134,8 +132,6 @@ public class PageResult<T> extends ArrayList<T> {
 			List<B> list;
 			if (entryType == Map.class) {
 				list = (List<B>) JdbcHelper.queryAsMapList(conn, sql + " LIMIT ?, ?", args);
-			} else if (entryType == EntityMap.class) {
-				list = (List<B>) Repository.mapList2EntityMapList(JdbcHelper.queryAsMapList(conn, sql + " LIMIT ?, ?", args));
 			} else {
 				list = JdbcHelper.queryAsBeanList(entryType, conn, sql + " LIMIT ?, ?", args);
 			}
@@ -171,7 +167,7 @@ public class PageResult<T> extends ArrayList<T> {
 			countSql = "SELECT COUNT(*) AS count FROM (" + sql + ") AS t;";
 //			countSql = sql.replaceAll("SELECT.*FROM", "SELECT COUNT(\\*) AS count FROM");
 		} else {
-			countSql = DaoHandler.isSqlite(select.sqliteCountSql(), conn) ? select.sqliteCountSql() : select.countSql();
+			countSql = Repository.isSqlite(select.sqliteCountSql(), conn) ? select.sqliteCountSql() : select.countSql();
 		}
 
 		countSql = dao.handleSql(countSql, null);

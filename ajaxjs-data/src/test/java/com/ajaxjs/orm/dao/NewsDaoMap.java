@@ -18,6 +18,8 @@ package com.ajaxjs.orm.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.ajaxjs.framework.IBaseDao;
+import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
@@ -30,7 +32,7 @@ import com.ajaxjs.orm.annotation.Update;
  * @author sp42 frank@ajaxjs.com
  *
  */
-public interface NewsDaoMap extends IDao<Map<String, Object>, Long> {
+public interface NewsDaoMap extends IBaseDao<Map<String, Object>> {
 	final static String tableName = "news";
 
 	@Select("SELECT * FROM " + tableName + " WHERE id = ?")

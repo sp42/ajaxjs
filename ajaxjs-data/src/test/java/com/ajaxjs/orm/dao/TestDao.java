@@ -13,6 +13,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.ajaxjs.framework.PageResult;
+import com.ajaxjs.framework.Repository;
 import com.ajaxjs.orm.JdbcConnection;
 
 public class TestDao {
@@ -22,9 +24,8 @@ public class TestDao {
 	@Before
 	public void setUp() {
 		JdbcConnection.setConnection(JdbcConnection.getTestSqliteConnection());
-		DaoHandler daoHandler = new DaoHandler();
-		dao = daoHandler.bind(NewsDao.class);
-		mapDao = new DaoHandler().bind(NewsDaoMap.class);
+		dao = new Repository().bind(NewsDao.class);
+		mapDao = new Repository().bind(NewsDaoMap.class);
 	}
 
 	@After
@@ -62,7 +63,7 @@ public class TestDao {
 	public void testPageFindList() {
 		PageResult<News> newsList = dao.findPagedList(0, 0);
 		assertNotNull(newsList);
-		assertEquals(10, newsList.size());
+		assertEquals(8, newsList.size());
 
 		PageResult<Map<String, Object>> newsPagedListMap = mapDao.findPagedList(0, 5);
 		assertNotNull(newsPagedListMap);
@@ -92,8 +93,8 @@ public class TestDao {
 
 		assertTrue(dao.delete(news));
 
-		Map<String, Object> newsMap = new HashMap<>();
-		newsMap.put("name", "test 123");
+		Map<String, Object> newsMap = new HashMap<String, Object>();
+		newsMap.put("name", "test 123abc");
 		newlyId = mapDao.create(newsMap);
 		assertNotNull(newlyId);
 

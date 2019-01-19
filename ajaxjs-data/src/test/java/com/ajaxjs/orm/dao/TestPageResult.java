@@ -5,6 +5,9 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import com.ajaxjs.framework.DaoException;
+import com.ajaxjs.framework.PageResult;
+
 public class TestPageResult {
 	@Test
 	public void testPageResult() {

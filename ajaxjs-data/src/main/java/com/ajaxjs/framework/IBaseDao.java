@@ -6,9 +6,8 @@ import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.Update;
-import com.ajaxjs.orm.dao.PageResult;
 
-public interface IBaseDao<T extends IBaseBean> {
+public interface IBaseDao<T> {
 	
 	/**
 	 * 实体别名必须为 entry

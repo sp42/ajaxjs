@@ -18,17 +18,13 @@ package com.ajaxjs.orm.dao;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.ajaxjs.framework.IBaseBean;
-
 /**
  * A Dummy bean for testing.
  * 
  * @author sp42 frank@ajaxjs.com
  *
  */
-public class News implements IBaseBean {
-	private static final long serialVersionUID = -7216684810461800523L;
-
+public class News {
 	public Long getId() {
 		return id;
 	}
@@ -100,12 +96,10 @@ public class News implements IBaseBean {
 	
 	private Long uid;
 
-	@Override
 	public Long getUid() {
 		return uid;
 	}
 
-	@Override
 	public void setUid(Long uid) {
 		this.uid = uid;
 	}
