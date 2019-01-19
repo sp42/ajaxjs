@@ -3,11 +3,12 @@ package com.ajaxjs.framework.service;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ajaxjs.cms.controller.AdminController;
 import com.ajaxjs.config.ConfigService;
-import com.ajaxjs.framework.EntityMap;
 import com.ajaxjs.ioc.Aop;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.orm.JdbcConnection;
@@ -36,7 +37,7 @@ public class GlobalLogAop<T, ID extends Serializable, S extends IService<T, ID>>
 		}
 
 		if ("create".equals(methodName) || "update".equals(methodName) || "delete".equals(methodName)) {
-			EntityMap map = new EntityMap();
+			Map<String, Object> map = new HashMap<>();
 			map.put("name", methodName);
 			map.put("content", getContent(o, methodName));
 			map.put("userId", 10000); // TODO

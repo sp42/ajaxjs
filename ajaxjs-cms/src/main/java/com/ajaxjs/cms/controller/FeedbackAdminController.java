@@ -1,5 +1,8 @@
 package com.ajaxjs.cms.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -12,7 +15,6 @@ import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.cms.FeedbackService;
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.framework.EntityMap;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
@@ -22,7 +24,7 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 
 @Bean
 @Path("/admin/feedback")
-public class FeedbackAdminController extends BaseController<EntityMap>  {
+public class FeedbackAdminController extends BaseController<Map<String, Object>>  {
 
 	@Resource("FeedbackService")
 	private FeedbackService service;
@@ -54,7 +56,7 @@ public class FeedbackAdminController extends BaseController<EntityMap>  {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String create(EntityMap entity) {
+	public String create(Map<String, Object> entity) {
 		return super.create(entity);
 	}
 
@@ -63,7 +65,7 @@ public class FeedbackAdminController extends BaseController<EntityMap>  {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, EntityMap entity) {
+	public String update(@PathParam("id") Long id, Map<String, Object> entity) {
 		return super.update(id, entity);
 	}
 
@@ -72,11 +74,11 @@ public class FeedbackAdminController extends BaseController<EntityMap>  {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String delete(@PathParam("id") Long id) {
-		return delete(id, new EntityMap());
+		return delete(id, new HashMap<String, Object>());
 	}
 
 	@Override
-	public IBaseService<EntityMap> getService() {
+	public IBaseService<Map<String, Object>> getService() {
 		return service;
 	} 
 }

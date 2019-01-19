@@ -1,9 +1,10 @@
 package com.ajaxjs.cms.user;
 
-import com.ajaxjs.framework.BaseModel;
-import com.ajaxjs.framework.IBaseBean;
+import java.util.Date;
 
-public class User extends BaseModel implements IBaseBean {
+import com.ajaxjs.framework.BaseModel;
+
+public class User extends BaseModel {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -55,14 +56,14 @@ public class User extends BaseModel implements IBaseBean {
 	/**
 	 * 出生日期
 	 */
-	private Integer birthday;
+	private Date birthday;
 
 	/**
 	 * 设置出生日期
 	 * 
 	 * @param birthday
 	 */
-	public void setBirthday(Integer birthday) {
+	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
 	}
 
@@ -71,7 +72,7 @@ public class User extends BaseModel implements IBaseBean {
 	 * 
 	 * @return 出生日期
 	 */
-	public Integer getBirthday() {
+	public Date getBirthday() {
 		return birthday;
 	}
 

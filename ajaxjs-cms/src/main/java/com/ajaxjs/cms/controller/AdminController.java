@@ -19,7 +19,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.framework.EntityMap;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.mvc.Constant;
@@ -44,8 +43,8 @@ public class AdminController implements IController, Constant {
 		return BaseController.cms("admin-workbench");
 	}
 
-	@TableName(value = "general_log", beanClass = EntityMap.class)
-	public static interface GlobalLogDao extends IBaseDao<EntityMap> {
+	@TableName(value = "general_log")
+	public static interface GlobalLogDao extends IBaseDao<Map<String, Object>> {
 	}
 
 	public static GlobalLogDao dao = new Repository().bind(GlobalLogDao.class);

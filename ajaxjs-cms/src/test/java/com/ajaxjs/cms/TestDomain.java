@@ -5,7 +5,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
@@ -15,10 +17,9 @@ import com.ajaxjs.cms.app.nativeapp.AppUpdate;
 import com.ajaxjs.cms.app.nativeapp.AppUpdateServiceImpl;
 import com.ajaxjs.cms.domain.DomainEntity;
 import com.ajaxjs.cms.domain.DomainEntityDao;
-import com.ajaxjs.framework.EntityMap;
+import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.orm.JdbcConnection;
-import com.ajaxjs.orm.dao.PageResult;
 
 public class TestDomain {
 	@Before
@@ -70,27 +71,28 @@ public class TestDomain {
 	@Test
 	public void testMapDao() {
 		ArticleDao dao = new Repository().bind(ArticleDao.class);
-		EntityMap info = dao.findById(1L);
-		System.out.println(info.getId());
-		
-		List<EntityMap> list = dao.findList();
+		Map<String, Object> info = dao.findById(1L);
+		System.out.println(info.get("id"));
+
+		List<Map<String, Object>> list = dao.findList();
 		assertNotNull(list);
-		
-		info = new EntityMap();
-		info.put("name","testMap");
-		
+
+		info = new HashMap<String, Object>();
+		info.put("name", "testMap");
+
 		long newlyId = dao.create(info);
 		assertNotNull(newlyId);
-		
+
 		info.put("name", "test22");
-		info.setId(newlyId);
-		
+		info.put("id", newlyId);
+
 		int effect = dao.update(info);
 		assertEquals(1, effect);
 
 		assertTrue(dao.delete(info));
 	}
-	
+
 	@Test
-	public void testMapService() {}
+	public void testMapService() {
+	}
 }

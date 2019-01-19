@@ -2,6 +2,7 @@ package com.ajaxjs.framework;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -13,13 +14,12 @@ import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.orm.dao.PageResult;
 import com.ajaxjs.orm.thirdparty.SnowflakeIdWorker;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.UploadFile;
 import com.ajaxjs.web.UploadFileInfo;
 
-public abstract class BaseController<T extends IBaseBean> implements IController, Constant {
+public abstract class BaseController<T> implements IController, Constant {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseController.class);
 
 	public abstract IBaseService<T> getService();
@@ -66,7 +66,7 @@ public abstract class BaseController<T extends IBaseBean> implements IController
 	 * @param entity 实体
 	 * @return JSON 响应
 	 */
-	public static <E extends IBaseBean> String create(E entry, Function<E, Long> createAction) {
+	public static <E> String create(E entry, Function<E, Long> createAction) {
 		LOGGER.info("创建 name:{0}，数据库将执行 INSERT 操作");
 
 		Long newlyId = createAction.apply(entry);
@@ -76,7 +76,7 @@ public abstract class BaseController<T extends IBaseBean> implements IController
 		return String.format(MappingHelper.json_ok_extension, "创建实体成功", "\"newlyId\":" + newlyId);
 	}
 
-	public static <E extends IBaseBean> String create(E entry, IBaseService<E> service) {
+	public static <E> String create(E entry, IBaseService<E> service) {
 		return create(entry, service::create);
 	}
 
@@ -91,7 +91,7 @@ public abstract class BaseController<T extends IBaseBean> implements IController
 	 * @param model Model 模型
 	 * @return JSP 路径。缺省提供一个默认路径，但不一定要使用它，换别的也可以。
 	 */
-	public <E extends IBaseBean> E info(Long id, ModelAndView mv, Function<Long, E> getInfoAction) {
+	public <E> E info(Long id, ModelAndView mv, Function<Long, E> getInfoAction) {
 		LOGGER.info("读取单个记录或者编辑某个记录：id 是 {0}", id);
 
 		E info = getInfoAction.apply(id);
@@ -104,7 +104,7 @@ public abstract class BaseController<T extends IBaseBean> implements IController
 		return info;
 	}
 
-	public <E extends IBaseBean> E info(Long id, ModelAndView mv, IBaseService<E> service) {
+	public <E> E info(Long id, ModelAndView mv, IBaseService<E> service) {
 		return info(id, mv, service::findById);
 	}
 
@@ -119,15 +119,24 @@ public abstract class BaseController<T extends IBaseBean> implements IController
 	 * @param entity 实体
 	 * @return JSON 响应
 	 */
-	public static <E extends IBaseBean> String update(Long id, E entity, Consumer<E> updateAction) {
+	@SuppressWarnings("unchecked")
+	public static <E> String update(Long id, E entity, Consumer<E> updateAction) {
 		LOGGER.info("修改 name:{0}，数据库将执行 UPDATE 操作", entity);
-		entity.setId(id);
+		
+		if (entity instanceof BaseModel) {
+			((BaseModel) entity).setId(id);
+		} else if (entity instanceof Map) {
+			((Map<String, Object>) entity).put("id", id);
+		} else {
+			LOGGER.warning("未知实体类型 " + entity.getClass().getName());
+		}
+
 		updateAction.accept(entity);
 
 		return jsonOk("修改成功");
 	}
 
-	public static <E extends IBaseBean> String update(Long id, E entry, IBaseService<E> service) {
+	public static <E> String update(Long id, E entry, IBaseService<E> service) {
 		return update(id, entry, service::update);
 	}
 
@@ -142,9 +151,16 @@ public abstract class BaseController<T extends IBaseBean> implements IController
 	 * @param model 页面 Model 模型
 	 * @return JSON 响应
 	 */
-	public static <E extends IBaseBean> String delete(Long id, E entity, Predicate<E> delAction) {
+	@SuppressWarnings("unchecked")
+	public static <E> String delete(Long id, E entity, Predicate<E> delAction) {
 		LOGGER.info("删除 id:{0}，数据库将执行 DELETE 操作", entity);
-		entity.setId(id);
+		if (entity instanceof BaseModel) {
+			((BaseModel) entity).setId(id);
+		} else if (entity instanceof Map) {
+			((Map<String, Object>) entity).put("id", id);
+		} else {
+			LOGGER.warning("未知实体类型 " + entity.getClass().getName());
+		}
 
 		if (!delAction.test(entity))
 			throw new Error("删除失败！");
@@ -152,7 +168,7 @@ public abstract class BaseController<T extends IBaseBean> implements IController
 		return jsonOk("删除成功");
 	}
 
-	public static <E extends IBaseBean> String delete(Long id, E entity, IBaseService<E> service) {
+	public static <E> String delete(Long id, E entity, IBaseService<E> service) {
 		return delete(id, entity, service::delete);
 	}
 
@@ -180,7 +196,7 @@ public abstract class BaseController<T extends IBaseBean> implements IController
 	 * @return JSP 路径。缺省提供一个默认路径，但不一定要使用它，换别的也可以。
 	 */
 
-	public <E extends IBaseBean> PageResult<E> listPaged(int start, int limit, ModelAndView mv, BiFunction<Integer, Integer, PageResult<E>> findPagedListAction) {
+	public <E> PageResult<E> listPaged(int start, int limit, ModelAndView mv, BiFunction<Integer, Integer, PageResult<E>> findPagedListAction) {
 		LOGGER.info("获取分页列表 GET list");
 
 		prepareData(mv);
@@ -191,7 +207,7 @@ public abstract class BaseController<T extends IBaseBean> implements IController
 		return pageResult;
 	}
 
-	public <E extends IBaseBean> PageResult<E> listPaged(int start, int limit, ModelAndView mv, IBaseService<E> service) {
+	public <E> PageResult<E> listPaged(int start, int limit, ModelAndView mv, IBaseService<E> service) {
 		return listPaged(start, limit, mv, service::findPagedList);
 	}
 
@@ -213,7 +229,7 @@ public abstract class BaseController<T extends IBaseBean> implements IController
 		return pagedListJson(pageResult);
 	}
 
-	public static <E extends IBaseBean> String pagedListJson(PageResult<E> pageResult) {
+	public static <E> String pagedListJson(PageResult<E> pageResult) {
 		String jsonStr = toJson(pageResult, false);
 		if (jsonStr == null)
 			jsonStr = "[]";

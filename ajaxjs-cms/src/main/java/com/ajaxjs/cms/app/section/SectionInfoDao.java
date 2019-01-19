@@ -3,12 +3,12 @@ package com.ajaxjs.cms.app.section;
 import java.util.List;
 import java.util.Map;
 
+import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.Update;
 import com.ajaxjs.orm.dao.IDao;
-import com.ajaxjs.orm.dao.PageResult;
 
 public interface SectionInfoDao extends IDao<SectionInfo, Long> {
 	public final static String tableName = "section_info";

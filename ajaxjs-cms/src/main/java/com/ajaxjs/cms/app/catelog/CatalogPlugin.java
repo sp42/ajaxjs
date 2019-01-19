@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.framework.BaseModel;
+import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.service.IService;
-import com.ajaxjs.orm.dao.PageResult;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;

@@ -5,9 +5,9 @@ import java.util.List;
 import com.ajaxjs.cms.app.catelog.Catelogable;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
+import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
-import com.ajaxjs.orm.dao.PageResult;
 
 @Bean("AdsService")
 public class AdsService extends BaseService<Ads> implements Catelogable<Ads> {

@@ -1,9 +1,9 @@
 package com.ajaxjs.cms.user;
 
 import com.ajaxjs.framework.IBaseDao;
+import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
-import com.ajaxjs.orm.dao.PageResult;
 
 @TableName(value = "user", beanClass = User.class)
 public interface UserDao extends IBaseDao<User> {

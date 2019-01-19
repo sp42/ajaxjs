@@ -1,9 +1,8 @@
 package com.ajaxjs.cms.app.attachment;
 
 import com.ajaxjs.framework.BaseModel;
-import com.ajaxjs.framework.IBaseBean;
 
-public class Attachment_picture extends BaseModel implements IBaseBean {
+public class Attachment_picture extends BaseModel {
 	private static final long serialVersionUID = -5556112457279203513L;
 
 	/**

@@ -1,7 +1,5 @@
 package com.ajaxjs.framework.service;
 
-import static org.junit.Assert.assertEquals;
-
 import java.sql.SQLException;
 
 import org.junit.After;
@@ -11,7 +9,6 @@ import org.junit.Test;
 import com.ajaxjs.framework.News;
 import com.ajaxjs.framework.testcase.NewsService;
 import com.ajaxjs.framework.testcase.NewsServiceImpl;
-import com.ajaxjs.ioc.Aop;
 import com.ajaxjs.orm.JdbcConnection;
 
 public class TestServiceAop {

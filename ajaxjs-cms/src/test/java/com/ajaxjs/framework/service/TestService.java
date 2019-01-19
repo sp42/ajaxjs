@@ -11,9 +11,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.ajaxjs.framework.News;
+import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.testcase.NewsServiceImpl;
 import com.ajaxjs.orm.JdbcConnection;
-import com.ajaxjs.orm.dao.PageResult;
 
 public class TestService {
 	@Before

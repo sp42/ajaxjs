@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.framework.IBaseDao;
+import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
-import com.ajaxjs.orm.dao.PageResult;
 
 @TableName(value = "general_catelog", beanClass = Catelog.class)
 public interface CatelogDao extends IBaseDao<Catelog> {

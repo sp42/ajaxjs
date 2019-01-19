@@ -1,9 +1,8 @@
 package com.ajaxjs.cms.user;
 
 import com.ajaxjs.framework.BaseModel;
-import com.ajaxjs.framework.IBaseBean;
 
-public class UserOauth extends BaseModel implements IBaseBean {
+public class UserOauth extends BaseModel {
 	private static final long serialVersionUID = 1L;
 	
 	/**

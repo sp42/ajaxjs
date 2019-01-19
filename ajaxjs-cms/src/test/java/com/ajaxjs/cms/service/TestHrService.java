@@ -9,9 +9,9 @@ import org.junit.Test;
 import com.ajaxjs.cms.domain.DomainEntity;
 import com.ajaxjs.cms.domain.DomainEntityService;
 import com.ajaxjs.cms.utils.CmsUtils;
+import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.mock.TestHelper;
 import com.ajaxjs.orm.JdbcConnection;
-import com.ajaxjs.orm.dao.PageResult;
 
 public class TestHrService {
 	static DomainEntityService hrService;

@@ -2,7 +2,7 @@ package com.ajaxjs.cms.app.catelog;
 
 import java.util.List;
 
-import com.ajaxjs.orm.dao.PageResult;
+import com.ajaxjs.framework.PageResult;
 
 /**
  * 可分类的服务

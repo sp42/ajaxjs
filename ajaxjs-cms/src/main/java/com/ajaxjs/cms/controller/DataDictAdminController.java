@@ -1,5 +1,8 @@
 package com.ajaxjs.cms.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -11,7 +14,6 @@ import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.cms.DataDictService;
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.framework.EntityMap;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
@@ -21,7 +23,7 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 
 @Bean
 @Path("/admin/DataDict")
-public class DataDictAdminController extends BaseController<EntityMap> {
+public class DataDictAdminController extends BaseController<Map<String, Object>> {
 	@Resource("DataDictService")
 	private DataDictService service;
 
@@ -30,6 +32,7 @@ public class DataDictAdminController extends BaseController<EntityMap> {
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list() {
+		System.out.println(service.getDao().findList().get(0).getClass());
 		return toJson(service.getDao().findList());
 	}
 
@@ -49,7 +52,8 @@ public class DataDictAdminController extends BaseController<EntityMap> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String create(EntityMap entity) {
+	public String create(Map<String, Object> entity) {
+		System.out.println("::::::::::::::");
 		return super.create(entity);
 	}
 
@@ -58,7 +62,7 @@ public class DataDictAdminController extends BaseController<EntityMap> {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, EntityMap entity) {
+	public String update(@PathParam("id") Long id, Map<String, Object> entity) {
 		return super.update(id, entity);
 	}
 
@@ -67,11 +71,11 @@ public class DataDictAdminController extends BaseController<EntityMap> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String delete(@PathParam("id") Long id) {
-		return delete(id, new EntityMap());
+		return delete(id, new HashMap<String, Object>());
 	}
 
 	@Override
-	public IBaseService<EntityMap> getService() {
+	public IBaseService<Map<String, Object>> getService() {
 		return service;
 	}
 }

@@ -1,9 +1,8 @@
 package com.ajaxjs.cms.app.nativeapp;
 
 import com.ajaxjs.framework.BaseModel;
-import com.ajaxjs.framework.IBaseBean;
 
-public class AppUpdate extends BaseModel implements IBaseBean {
+public class AppUpdate extends BaseModel {
 	private static final long serialVersionUID = 1L;
 
 	/**

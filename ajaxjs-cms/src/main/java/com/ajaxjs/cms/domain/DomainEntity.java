@@ -3,9 +3,8 @@ package com.ajaxjs.cms.domain;
 import java.util.Map;
 
 import com.ajaxjs.framework.BaseModel;
-import com.ajaxjs.framework.IBaseBean;
 
-public class DomainEntity extends BaseModel implements IBaseBean {
+public class DomainEntity extends BaseModel {
 	private static final long serialVersionUID = 4485536546231872045L;
 
 	Map<String, Object> rawData;

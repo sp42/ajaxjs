@@ -19,7 +19,6 @@ import com.ajaxjs.framework.testcase.NewsDao;
 import com.ajaxjs.framework.testcase.NewsDao2;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.dao.DaoHandler;
-import com.ajaxjs.orm.dao.PageResult;
 
 
 public class TestQuery {

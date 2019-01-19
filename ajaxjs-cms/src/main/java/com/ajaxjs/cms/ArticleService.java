@@ -1,17 +1,17 @@
 package com.ajaxjs.cms;
 
 import java.util.List;
+import java.util.Map;
 
 import com.ajaxjs.cms.app.catelog.Catelogable;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.framework.EntityMap;
+import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
-import com.ajaxjs.orm.dao.PageResult;
 
 @Bean(value = "ArticleService")
-public class ArticleService extends BaseService<EntityMap> implements Catelogable<EntityMap> {
+public class ArticleService extends BaseService<Map<String, Object>> implements Catelogable<Map<String, Object>> {
 	ArticleDao dao = new Repository().bind(ArticleDao.class);
 
 	{
@@ -21,14 +21,14 @@ public class ArticleService extends BaseService<EntityMap> implements Catelogabl
 	}
 
 	@Override
-	public PageResult<EntityMap> findPagedListByCatelogId(int catelogId, int start, int limit) {
+	public PageResult<Map<String, Object>> findPagedListByCatelogId(int catelogId, int start, int limit) {
 		if (catelogId == 0)
 			catelogId = getDomainCatelogId();
 		return dao.findPagedListByCatelogId(catelogId, start, limit);
 	}
 
 	@Override
-	public List<EntityMap> findListByCatelogId(int catelogId) {
+	public List<Map<String, Object>> findListByCatelogId(int catelogId) {
 		if (catelogId == 0)
 			catelogId = getDomainCatelogId();
 		return dao.findPagedListByCatelogId(catelogId, 0, 9999);

@@ -1,7 +1,6 @@
 package com.ajaxjs.cms.app.section;
 
 import com.ajaxjs.framework.BaseModel;
-import com.ajaxjs.framework.IBaseBean;
 
 /**
  * 栏目
@@ -9,7 +8,7 @@ import com.ajaxjs.framework.IBaseBean;
  * @author Sp42 frank@ajaxjs.com
  *
  */
-public class SectionInfo extends BaseModel implements IBaseBean {
+public class SectionInfo extends BaseModel {
 	private static final long serialVersionUID = 7052077804355019403L;
 
 	/**

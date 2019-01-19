@@ -1,7 +1,6 @@
 package com.ajaxjs.cms.app.catelog;
 
 import com.ajaxjs.framework.BaseModel;
-import com.ajaxjs.framework.IBaseBean;
 
 /**
  * 类别
@@ -9,7 +8,7 @@ import com.ajaxjs.framework.IBaseBean;
  * @author Sp42 frank@ajaxjs.com
  *
  */
-public class Catelog extends BaseModel implements IBaseBean {
+public class Catelog extends BaseModel {
 
 	private static final long serialVersionUID = 7052077804355019403L;
 

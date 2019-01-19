@@ -11,10 +11,10 @@ import com.ajaxjs.cms.app.catelog.CatelogServiceImpl;
 import com.ajaxjs.cms.app.catelog.Catelogable;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
+import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.ioc.Resource;
-import com.ajaxjs.orm.dao.PageResult;
 
 public class DomainEntityService extends BaseService<DomainEntity> implements Catelogable<DomainEntity> {
 	public DomainEntityDao dao;
