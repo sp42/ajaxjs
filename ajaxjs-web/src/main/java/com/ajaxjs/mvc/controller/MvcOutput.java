@@ -21,6 +21,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -65,6 +66,8 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	 */
 	private Map<String, ?> output_Map;
 
+	private List<?> output_List;
+
 	/**
 	 * 输入内容甚至可以是个 object
 	 */
@@ -84,7 +87,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	 * JSP 模板路径
 	 */
 	private String template;
-	
+
 	/**
 	 * 实体-》json
 	 */
@@ -104,7 +107,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	 * 输出一个最简单的 html 页面（已包含 <html>、<body> 标签），并支持中文，强制 UTF-8 编码
 	 */
 	private boolean simpleHTML;
-	
+
 	private boolean xmlContent;
 
 	/**
@@ -123,7 +126,12 @@ public class MvcOutput extends HttpServletResponseWrapper {
 
 		if (getOutput_Map() != null) { // Map 的话转变为 json 输出
 			setJson(true).setOutput(MapUtil.toJson(getOutput_Map()));
-		} else if(getBean() != null) {
+		} else if (getOutput_List() != null) {
+			if (getOutput_List() == null || getOutput_List().size() == 0) {
+				setJson(true).setOutput("[]");
+			} else
+				setJson(true).setOutput(MapUtil.toJson(getOutput_List()));
+		} else if (getBean() != null) {
 			setJson(true).setOutput(MapUtil.toJson(getBean()));
 		} else if (getOutput_Obj() != null) {// map or object 二选其一
 			// setJson(true).setOutput(JsonHelper.stringify_object(getOutput_Obj()));
@@ -164,7 +172,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	}
 
 	public static final String html = "html::", xml = "xml::", jsonPerfix = "json::", redirectPerfix = "redirect::";
-	
+
 	/**
 	 * 一般一个请求希望返回一个页面，这时就需要控制器返回一个模板渲染输出了。 中间执行逻辑完成，最后就是控制输出（响应） 可以跳转也可以输出模板渲染器（即使是
 	 * json 都是 模板渲染器 ）
@@ -183,7 +191,13 @@ public class MvcOutput extends HttpServletResponseWrapper {
 		}
 
 		if (result == null) {
-			LOGGER.info("控制器方法 {0} 返回 null", method);
+			Class<?> reClz = method.getReturnType();
+			if (reClz == Map.class)
+				setJson(true).setOutput("{}").go();
+			else if (reClz == List.class)
+				setJson(true).setOutput("[]").go();
+			else
+				LOGGER.info("控制器方法 {0} 返回 null", method);
 		} else {
 			if (result instanceof String) {
 				String str = (String) result;
@@ -213,6 +227,8 @@ public class MvcOutput extends HttpServletResponseWrapper {
 				}
 			} else if (result instanceof Map) {
 				setOutput_Map((Map<String, ?>) result).go();
+			} else if (result instanceof List) {
+				setOutput_List((List<?>) result).go();
 			} else if (result instanceof BaseModel) {
 				setBean((BaseModel) result).go();
 			}
@@ -387,6 +403,15 @@ public class MvcOutput extends HttpServletResponseWrapper {
 
 	public MvcOutput setBean(BaseModel bean) {
 		this.bean = bean;
+		return this;
+	}
+
+	public List<?> getOutput_List() {
+		return output_List;
+	}
+
+	public MvcOutput setOutput_List(List<?> output_List) {
+		this.output_List = output_List;
 		return this;
 	}
 }
