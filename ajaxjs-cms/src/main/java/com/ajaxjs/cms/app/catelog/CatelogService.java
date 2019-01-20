@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.framework.IBaseService;
-import com.ajaxjs.framework.service.ServiceException;
 
 public interface CatelogService extends IBaseService<Catelog> {
 	/**
@@ -22,7 +21,7 @@ public interface CatelogService extends IBaseService<Catelog> {
 	 * @return 子分类列表
 	 * @throws ServiceException
 	 */
-	public List<Catelog> findByParentId(int id) throws ServiceException;
+	public List<Catelog> findByParentId(int id);
 
 	/**
 	 * 根据父 id 获取所有的子id列表（不包含父节点），不管多少层

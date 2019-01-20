@@ -18,7 +18,6 @@ import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.DataDict;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.framework.MapUtil;
-import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
@@ -70,7 +69,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("/upload/{id}/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String imgUpload(MvcRequest request, @PathParam("id") Long owenerId, @QueryParam("catelog") int catelogId) throws IOException, ServiceException {
+	public String imgUpload(MvcRequest request, @PathParam("id") Long owenerId, @QueryParam("catelog") int catelogId) throws IOException{
 		final UploadFileInfo info = uploadByConfig(request);
 
 		if (info.isOk) {
@@ -109,7 +108,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("/upload/staticPageUsedImg/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String imgUpload(MvcRequest request) throws IOException, ServiceException {
+	public String imgUpload(MvcRequest request) throws IOException  {
 		final UploadFileInfo info = uploadByConfig(request);
 
 		if (info.isOk) {

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.framework.IBaseService;
-import com.ajaxjs.framework.service.ServiceException;
 
 public interface Attachment_pictureService extends IBaseService<Attachment_picture> {
 
@@ -31,7 +30,7 @@ public interface Attachment_pictureService extends IBaseService<Attachment_pictu
 	 * @return
 	 * @throws ServiceException
 	 */
-	boolean deleteByOwnerId(Long OwnerId) throws ServiceException;
+	boolean deleteByOwnerId(Long OwnerId);
 
 	/**
 	 * 修改图片索引

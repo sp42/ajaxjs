@@ -45,6 +45,7 @@
 			<artifactId>ajaxjs-data</artifactId>
 			<version>1.0.9</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-web</artifactId>
@@ -71,6 +72,7 @@
 			<scope>compile</scope>
 			<version>2.0.6</version>
 		</dependency>
+		
 		<!-- 发送短信 -->
 		<dependency>
 			<groupId>com.aliyun</groupId>

@@ -13,7 +13,6 @@ import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
-import com.ajaxjs.framework.service.ServiceException;
 import com.ajaxjs.ioc.Resource;
 
 public class DomainEntityService extends BaseService<DomainEntity> implements Catelogable<DomainEntity> {
@@ -79,7 +78,7 @@ public class DomainEntityService extends BaseService<DomainEntity> implements Ca
 	@Resource("CatelogService")
 	CatelogService catelogService = new CatelogServiceImpl();
 
-	public Map<Integer, String> getDomainCatelogMap() throws ServiceException {
+	public Map<Integer, String> getDomainCatelogMap() {
 		List<Catelog> catelogList = catelogService.findByParentId(6);
 		Map<Integer, String> catelogMap = new HashMap<>();
 
