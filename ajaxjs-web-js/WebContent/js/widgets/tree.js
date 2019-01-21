@@ -146,7 +146,7 @@ Vue.component('aj-select', {
 			required: true
 		}
 	},
-	data :function() {
+	data : function() {
         return {
             selected : ""
         };
@@ -177,6 +177,40 @@ Vue.component('aj-select', {
 	}
 });
 
+// 适合数组的输入
+Vue.component('aj-select-arr', {
+	props : {
+		url : '',
+		fieldName : { // 表单 name，字段名
+			type: String,
+			required: true
+		},
+		firstOption:{
+			type:String,
+			default :'---请选择---'
+		},
+		defaultSelected : {	// 已选中的分类 id
+			type: String,
+			default: "0"
+		}
+	},
+	data : function() {
+        return {
+            json : {}
+        };
+    },
+	template:'<aj-select :json="json" :field-name="fieldName" :default-selected="defaultSelected"></aj-select>',
+	mounted : function(){
+		var self = this; 
+		aj.xhr.get(this.ajResources.ctx + this.url, function(arr) {
+			var json = {0: self.firstOption};
+			for (var i = 0, j = arr.length; i < j; i++) { // 固定 id、name 字段
+				json[arr[i].id] = arr[i].name;
+			}
+			self.json = json;
+		});
+	}
+});
 
 // 下拉分类选择器，异步请求远端获取分类数据
 Vue.component('aj-tree-catelog-select', {
@@ -217,4 +251,60 @@ Vue.component('aj-tree-catelog-select', {
 			}
 		}
 	}
+});
+
+//全国省市区 写死属性
+Vue.component('aj-china-area', {
+	template : '<div class="aj-china-area"><select v-model="province" class="ajaxjs-select" name="locationProvince">\
+		            <option value="">请选择</option>\
+		            <option v-for="(v, k) in addressData[86]" :value="k">{{v}}</option>\
+		        </select>\
+		        <select v-model="city" class="ajaxjs-select" name="locationCity">\
+		            <option value="">请选择</option>\
+		            <option v-for="(v, k) in citys" :value="k">{{v}}</option>\
+		        </select>\
+		        <select v-model="district" class="ajaxjs-select" name="locationDistrict">\
+		            <option value="">请选择</option>\
+		            <option v-for="(v, k) in districts" :value="k">{{v}}</option>\
+		        </select>\
+		    </div>',
+    props:{
+        provinceCode:String,
+        cityCode: String,
+        districtCode: String
+    },
+   data:function(){
+	   if(!China_AREA)throw '中国行政区域数据 脚本没导入';
+        return {
+        	province: this.provinceCode || '',
+        	city: this.cityCode || '',
+        	district: this.districtCode || '',
+            addressData: China_AREA
+        }
+    },
+    
+    watch:{ // 令下一级修改
+        province: function(val, oldval) {
+            if(val !== oldval) 
+                this.city = '';
+            
+        },
+        city: function(val, oldval) {
+            if(val !== oldval)
+                this.district = '';
+        }
+    },
+   
+    computed: {
+        citys:function() {
+            if(!this.province)
+                return;
+            return this.addressData[this.province];
+        },
+        districts :function(){
+            if(!this.city)
+                return;
+            return this.addressData[this.city];
+        }
+    }
 });
