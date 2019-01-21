@@ -1,6 +1,7 @@
 package com.ajaxjs.cms.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.DELETE;
@@ -32,8 +33,15 @@ public class DataDictAdminController extends BaseController<Map<String, Object>>
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list() {
-		System.out.println(service.getDao().findList().get(0).getClass());
 		return toJson(service.getDao().findList());
+	}
+
+	@GET
+	@Path("/getDictListByParentId/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@MvcFilter(filters = DataBaseFilter.class)
+	public List<Map<String, Object>> getDictListByParentId(@PathParam("id") long pId) {
+		return service.dao.findByParentId(pId);
 	}
 
 	@GET
@@ -53,7 +61,6 @@ public class DataDictAdminController extends BaseController<Map<String, Object>>
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
 	public String create(Map<String, Object> entity) {
-		System.out.println("::::::::::::::");
 		return super.create(entity);
 	}
 
