@@ -17,13 +17,11 @@ package com.ajaxjs.net.http;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
+import com.ajaxjs.util.MapTool;
 import com.ajaxjs.util.io.StreamUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -192,13 +190,13 @@ public class Client extends Connection<Client> {
 	/**
 	 * POST 请求
 	 * 
-	 * @param url  请求目标地址
+	 * @param url 请求目标地址
 	 * @param data 表单数据 KeyValue的请求数据，注意要进行 ? & 编码，使用 URLEncoder.encode()
 	 * @return 携带请求信息的 Bean
 	 */
 	public static String POST(String url, Map<String, Object> data) {
 		if (data != null && data.size() > 0) {
-			return POST(url, join(data).getBytes());
+			return POST(url, MapTool.join(data).getBytes());
 		} else {
 			return null;
 		}
@@ -207,7 +205,7 @@ public class Client extends Connection<Client> {
 	/**
 	 * POST 请求
 	 * 
-	 * @param url    请求目标地址
+	 * @param url 请求目标地址
 	 * @param params 字符串类型的请求数据
 	 * @return 请求之后的响应的内容
 	 */
@@ -219,7 +217,7 @@ public class Client extends Connection<Client> {
 	 * POST 请求
 	 * 
 	 * @param url 请求目标地址
-	 * @param b   字节格式的请求数据
+	 * @param b 字节格式的请求数据
 	 * @return 请求之后的响应的内容
 	 */
 	public static String POST(String url, byte[] b) {
@@ -240,25 +238,6 @@ public class Client extends Connection<Client> {
 		return client.getContent();
 	}
 
-	/**
-	 * Map 转换为 String
-	 * 
-	 * @param map Map
-	 * @return String
-	 */
-	public static String join(Map<String, Object> map) {
-		String[] pairs = new String[map.size()];
-
-		int i = 0;
-		try {
-			for (String key : map.keySet())
-				pairs[i++] = key + "=" + URLEncoder.encode(map.get(key).toString(), StandardCharsets.UTF_8.toString());
-		} catch (UnsupportedEncodingException e) {
-			LOGGER.warning(e);
-		}
-
-		return String.join("&", pairs);
-	}
 
 	/**
 	 * request 头和上传文件内容之间的分隔符
@@ -273,8 +252,8 @@ public class Client extends Connection<Client> {
 	/**
 	 * 模拟多段上传 TODO
 	 * 
-	 * @param url     请求目标地址
-	 * @param text    文本数据
+	 * @param url 请求目标地址
+	 * @param text 文本数据
 	 * @param fileMap 二进制（文件）数据
 	 * @return 携带请求信息的 Bean
 	 */
@@ -311,8 +290,7 @@ public class Client extends Connection<Client> {
 
 				StringBuffer strBuf = new StringBuffer();
 				strBuf.append("\r\n").append("--").append(BOUNDARY).append("\r\n");
-				strBuf.append(
-						"Content-Disposition: form-data; name=\"" + "ddd" + "\"; filename=\"" + filename + "\"\r\n");
+				strBuf.append("Content-Disposition: form-data; name=\"" + "ddd" + "\"; filename=\"" + filename + "\"\r\n");
 				// strBuf.append("Content-Type:" + contentType + "\r\n\r\n");
 				// out.write(strBuf.toString().getBytes());
 

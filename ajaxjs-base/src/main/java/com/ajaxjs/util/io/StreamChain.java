@@ -73,7 +73,7 @@ public abstract class StreamChain<T> {
 	@SuppressWarnings("unchecked")
 	public T outputWriteData() {
 		try {
-			out.write(getData());
+			out.write(getData()); // 输出流写入字节数据
 			out.flush();
 		} catch (IOException e) {
 			LOGGER.warning(e);

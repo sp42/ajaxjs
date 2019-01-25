@@ -18,18 +18,17 @@ public class TestGet {
 		assertTrue(Client.is404("http://www.qq.com/54543"));
 	}
 	
-	@Test
-	public void testRedirect() {
-		String redirect = Client.get302redirect("https://baidu.com");
-		assertTrue(url.equals(redirect));
-
-	}
 	
 	@Test
 	public void testGetFileSize() {
 		String url = "http://c.csdnimg.cn/jifen/images/xunzhang/xunzhang/bokezhuanjiamiddle.png";
 		long size = Client.getFileSize(url);
 		assertEquals(size, 4102L);
+	}
+	@Test
+	public void testRedirect() {
+		String redirect = Client.get302redirect("https://baidu.com");
+		assertTrue(url.equals(redirect));
 	}
 	
 	@Test
@@ -56,9 +55,9 @@ public class TestGet {
 		assertNotNull(html);
 	}
 	
-//	@Test
+	@Test
 	public void testDownload2disk() throws IOException {
-//		String url = "http://c.csdnimg.cn/jifen/images/xunzhang/xunzhang/bokezhuanjiamiddle.png";
+		String url = "http://c.csdnimg.cn/jifen/images/xunzhang/xunzhang/bokezhuanjiamiddle.png";
 //		Get.download2disk(url, "c:/temp/dd.png");
 		
 		

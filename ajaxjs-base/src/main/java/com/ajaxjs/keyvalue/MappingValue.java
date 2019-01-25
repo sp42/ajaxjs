@@ -114,7 +114,7 @@ public class MappingValue {
 
 		} else if (t == long.class || t == Long.class) {
 			// LONG 型
-			value = Long.valueOf(value.toString());
+			value = Long.valueOf((value == null || CommonUtil.isEmptyString(value.toString())) ? "0" : value.toString());
 		} else if (t == String.class) { // 字符串型
 			value = value.toString();
 		} else if (t == String[].class) {

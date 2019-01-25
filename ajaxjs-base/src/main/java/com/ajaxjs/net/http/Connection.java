@@ -25,8 +25,8 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.zip.GZIPInputStream;
 
-import com.ajaxjs.keyvalue.MapHelper;
 import com.ajaxjs.util.Encode;
+import com.ajaxjs.util.MapTool;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -204,7 +204,7 @@ public class Connection<T> extends Request<T> {
 		// connection.setReadTimeout(30000);
 
 		if (getCookies() != null) {
-			String cookieStr = MapHelper.join(getCookies(), ";");
+			String cookieStr = MapTool.join(getCookies(), ";");
 			connection.setRequestProperty("Cookie", cookieStr);
 		}
 
