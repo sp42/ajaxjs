@@ -202,7 +202,6 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 				ParameterizedType _type = (ParameterizedType) returnType;
 
 				for (Type typeArgument : _type.getActualTypeArguments()) {
-					System.out.println("::::::::" + typeArgument.getTypeName());
 //					if ("com.ajaxjs.framework.Map<String, Object>".equals(typeArgument.getTypeName())) {
 //						return Map<String, Object>.class;
 //					}

@@ -21,11 +21,11 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
-import com.ajaxjs.keyvalue.MappingValue;
 import com.ajaxjs.orm.JdbcHelperLambda.ExecutePs;
 import com.ajaxjs.orm.JdbcHelperLambda.HasZeoResult;
 import com.ajaxjs.orm.JdbcHelperLambda.ResultSetProcessor;
 import com.ajaxjs.orm.thirdparty.SqlBuilder;
+import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
