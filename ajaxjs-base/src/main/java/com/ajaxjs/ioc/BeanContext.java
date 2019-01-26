@@ -28,7 +28,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.util.MapTool;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -147,7 +146,7 @@ public class BeanContext {
 					dependencies.put(beanName + "." + field.getName(), dependenciObj_id);
 					// LOGGER.info("IOC 创建成功！ " + item);
 
-					String setMethodName = "set" + MapTool.firstLetterUpper(field.getName());
+					String setMethodName = "set" + ReflectUtil.firstLetterUpper(field.getName());
 					Method setter = ReflectUtil.getMethod(item, setMethodName, field.getType());
 					if (setter == null) {
 
@@ -227,7 +226,7 @@ public class BeanContext {
 			String value = dependencies.get(key);// 依赖对象的值
 			String[] split = key.split("\\.");// 数组第一个值表示 bean 对象名称，第二个值为字段属性名称
 
-			MapTool.setProperty(beans.get(split[0]), split[1], beans.get(value));
+			ReflectUtil.setProperty(beans.get(split[0]), split[1], beans.get(value));
 		}
 
 		isInitialized = true;

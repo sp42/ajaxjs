@@ -1,4 +1,4 @@
-package com.ajaxjs.util;
+package com.ajaxjs.net.http;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -15,6 +15,9 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.zip.GZIPInputStream;
 
+import com.ajaxjs.util.Encode;
+import com.ajaxjs.util.IoHelper;
+import com.ajaxjs.util.MapTool;
 import com.ajaxjs.util.io.StreamUtil;
 import com.ajaxjs.util.logger.LogHelper;
 

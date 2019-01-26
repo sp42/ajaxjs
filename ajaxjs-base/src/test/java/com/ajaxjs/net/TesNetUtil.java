@@ -1,4 +1,4 @@
-package com.ajaxjs.util;
+package com.ajaxjs.net;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import org.junit.Test;
+
+import com.ajaxjs.net.http.NetUtil;
 
 public class TesNetUtil {
 	String url = "https://www.baidu.com/";

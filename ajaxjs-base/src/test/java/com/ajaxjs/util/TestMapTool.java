@@ -1,5 +1,7 @@
 package com.ajaxjs.util;
 
+import static com.ajaxjs.util.MapTool.as;
+import static com.ajaxjs.util.MapTool.join;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -9,14 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
-
-import com.ajaxjs.util.Encode;
-import com.ajaxjs.util.MapTool;
-import com.ajaxjs.util.MappingValue;
-
-import static com.ajaxjs.util.BeanUtil.bean2Map;
-import static com.ajaxjs.util.BeanUtil.map2Bean;
-import static com.ajaxjs.util.MapTool.*;
 
 public class TestMapTool {
 	Map<String, Object> map = new HashMap<String, Object>() {
@@ -96,11 +90,11 @@ public class TestMapTool {
 
 	@Test
 	public void testMap2Bean() {
-		TestCaseUserBean user = map2Bean(userWithoutChild, TestCaseUserBean.class);// 直接转
+		TestCaseUserBean user = MapTool.map2Bean(userWithoutChild, TestCaseUserBean.class);// 直接转
 		assertNotNull(user);
 		assertEquals(user.getName(), "Jack");
 
-		user = map2Bean(MapMock.user, TestCaseUserBean.class, true);
+		user = MapTool.map2Bean(MapMock.user, TestCaseUserBean.class, true);
 
 		assertNotNull(user);
 		assertEquals("Tom", user.getChildren()[0]);
@@ -110,8 +104,8 @@ public class TestMapTool {
 
 	@Test
 	public void testBean2Map() {
-		TestCaseUserBean user = map2Bean(MapMock.user, TestCaseUserBean.class, true);
-		Map<String, Object> map = bean2Map(user);
+		TestCaseUserBean user = MapTool.map2Bean(MapMock.user, TestCaseUserBean.class, true);
+		Map<String, Object> map = MapTool.bean2Map(user);
 
 		assertNotNull(map);
 		assertEquals("Jack", map.get("name"));
