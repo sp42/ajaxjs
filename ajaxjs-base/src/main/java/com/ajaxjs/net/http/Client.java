@@ -247,7 +247,7 @@ public class Client extends Connection<Client> {
 	/**
 	 * 多段 POST 的分隔
 	 */
-	private static final String DIV = "\r\n--%s\r\nContent-Disposition: form-data; name=\"%s\"\r\n\r\n%s";
+//	private static final String DIV = "\r\n--%s\r\nContent-Disposition: form-data; name=\"%s\"\r\n\r\n%s";
 
 	/**
 	 * 模拟多段上传 TODO
