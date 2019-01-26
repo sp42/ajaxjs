@@ -1,5 +1,7 @@
 package com.ajaxjs.util;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -13,8 +15,15 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.zip.GZIPInputStream;
 
+import com.ajaxjs.util.io.StreamUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
+/**
+ * 小巧 HTTP 请求类
+ * 
+ * @author Frank Cheung
+ *
+ */
 public class NetUtil extends IoHelper {
 	private static final LogHelper LOGGER = LogHelper.getLog(NetUtil.class);
 
@@ -101,6 +110,14 @@ public class NetUtil extends IoHelper {
 		return null;
 	}
 
+	/**
+	 * 发送请求，返回响应信息
+	 * 
+	 * @param conn 链接对象
+	 * @param isEnableGzip
+	 * @param callback
+	 * @return
+	 */
 	public static <T> T getResponse(HttpURLConnection conn, Boolean isEnableGzip, Function<InputStream, T> callback) {
 		try {
 			InputStream in = conn.getInputStream();// 发起请求，接收响应
@@ -129,14 +146,6 @@ public class NetUtil extends IoHelper {
 		return null;
 	}
 
-//	public static void initHttpConnection(HttpURLConnection conn, @SuppressWarnings("unchecked") Consumer<HttpURLConnection>... setters) {
-//		for (Consumer<HttpURLConnection> setter : setters) {
-//			setter.accept(conn);
-//		}
-//	}
-
-	public static Function<InputStream, String> getContent = in -> byteStream2stringStream(in);
-
 	/**
 	 * GET 请求，返回文本内容
 	 * 
@@ -144,11 +153,15 @@ public class NetUtil extends IoHelper {
 	 * @return
 	 */
 	public static String get(String url) {
+		return get(url, false);
+	}
+
+	public static String get(String url, boolean isGzip) {
 		HttpURLConnection conn = initHttpConnection(url);
-		return getResponse(conn, false, getContent);
-//		conn.setDoInput(true);
-//		conn.setDoOutput(true);
-//		conn.connect();
+		if (isGzip)
+			setGizpRequest.accept(conn);
+
+		return getResponse(conn, isGzip, NetUtil::byteStream2stringStream);
 	}
 
 	/**
@@ -222,12 +235,36 @@ public class NetUtil extends IoHelper {
 		return size;
 	}
 
-	public static void download(String url) {
+	public static String download(String url, String saveDir, String newFileName) {
 		HttpURLConnection conn = initHttpConnection(url);
 		setUserAgentDefault.accept(conn);
 		conn.setDoInput(true);
 		conn.setDoOutput(true);
-//		conn.connect();
+
+		String fileName = newFileName == null ? IoHelper.getFileNameFromUrl(url) : newFileName;
+		String newlyFilePath = getResponse(conn, false, in -> {
+			File file = IoHelper.createFile(saveDir, fileName);
+			try (OutputStream out = new FileOutputStream(file);) {
+				IoHelper.write(in, out, true);
+				return file.toString();
+			} catch (IOException e) {
+				LOGGER.warning(e);
+			} finally {
+				try {
+					in.close();
+				} catch (IOException e) {
+					LOGGER.warning(e);
+				}
+			}
+
+			return null;
+		});
+
+		return newlyFilePath;
+	}
+
+	public static String download(String url, String saveDir) {
+		return download(url, saveDir, null);
 	}
 
 	/**
@@ -237,9 +274,9 @@ public class NetUtil extends IoHelper {
 	 * @param data 表单数据 KeyValue的请求数据，注意要进行 ? & 编码，使用 URLEncoder.encode()
 	 * @return 携带请求信息的 Bean
 	 */
-	public static String POST(String url, Map<String, Object> data) {
+	public static String post(String url, Map<String, Object> data) {
 		if (data != null && data.size() > 0) {
-			return POST(url, MapTool.join(data, v -> Encode.urlEncode(v.toString())));
+			return post(url, MapTool.join(data, v -> v == null ? null : Encode.urlEncode(v.toString())));
 		} else {
 			return null;
 		}
@@ -252,9 +289,11 @@ public class NetUtil extends IoHelper {
 	 * @param params 字符串类型的请求数据
 	 * @return 请求之后的响应的内容
 	 */
-	public static String POST(String url, String params) {
-		return POST(url, params.getBytes());
+	public static String post(String url, String params) {
+		return post(url, params.getBytes(), null);
 	}
+
+	public final static Consumer<HttpURLConnection> setFormPost = conn -> conn.setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
 	/**
 	 * POST 请求
@@ -263,9 +302,11 @@ public class NetUtil extends IoHelper {
 	 * @param b 字节格式的请求数据
 	 * @return 请求之后的响应的内容
 	 */
-	public static String POST(String url, byte[] b) {
+	public static String post(String url, byte[] b, Consumer<HttpURLConnection> fn) {
 		HttpURLConnection conn = initHttpConnection(url);
 		setMedthod.accept(conn, "POST");
+		conn.setDoOutput(true); // for conn.getOutputStream().write(someBytes);
+		conn.setDoInput(true);
 
 		try (OutputStream out = conn.getOutputStream();) {
 			out.write(b); // 输出流写入字节数据
@@ -274,12 +315,61 @@ public class NetUtil extends IoHelper {
 			LOGGER.warning("写入 post 数据时失败！{0}", e);
 		}
 
-		conn.setDoOutput(true); // for conn.getOutputStream().write(someBytes);
-		conn.setDoInput(true);
-		conn.setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+		if (fn != null)
+			fn.accept(conn);
+		else
+			setFormPost.accept(conn);
 
-		return getResponse(conn, false, getContent);
+		return getResponse(conn, false, NetUtil::byteStream2stringStream);
 	}
 
- 
+	/**
+	 * request 头和上传文件内容之间的分隔符
+	 */
+	private static final String BOUNDARY = "---------------------------123821742118716";
+
+	/**
+	 * 多段 POST 的分隔
+	 */
+	private static final String divField = "\r\n--%s\r\nContent-Disposition: form-data; name=\"%s\"\r\n\r\n%s";
+	private static final String divFile = "\r\n--%s\r\nContent-Disposition: form-data; name=\"%s\"; filename=\"%s\"\r\n";
+
+	/**
+	 * 多段上传
+	 * 
+	 * @param url
+	 * @param data 若包含 File 对象则表示二进制（文件）数据
+	 * @return
+	 */
+	public static String multiPOST(String url, Map<String, Object> data) {
+		byte[] bytes = null;
+
+		for (String key : data.keySet()) {
+			Object v = data.get(key);
+			byte[] _bytes;
+
+			if (v instanceof File) {
+				File file = (File) v;
+				String fileName = file.getName();
+				String field = String.format(divFile, BOUNDARY, key, fileName);
+
+				_bytes = StreamUtil.concat(field.getBytes(), StreamUtil.fileAsByte(file));
+
+			} else { // 普通字段
+				String field = String.format(divField, BOUNDARY, key, v.toString());
+				_bytes = field.getBytes();
+			}
+
+			if (bytes == null)
+				bytes = _bytes;
+			else
+				StreamUtil.concat(bytes, _bytes);
+		}
+
+		StreamUtil.concat(bytes, ("\r\n--" + BOUNDARY + "--\r\n").getBytes());
+
+		post(url, bytes, conn -> conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY));
+		return null;
+	}
+
 }

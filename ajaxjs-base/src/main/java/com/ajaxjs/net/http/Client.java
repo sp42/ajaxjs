@@ -260,22 +260,7 @@ public class Client extends Connection<Client> {
 	public static String multiPOST(String url, Map<String, Object> text, Map<String, String> fileMap) {
 		byte[] data = null;
 
-		if (text != null && text.size() > 0) {
-			StringBuilder strs = new StringBuilder();
-
-			for (String name : text.keySet()) {
-				String value = text.get(name).toString();
-
-				strs.append(String.format(DIV, BOUNDARY, name, value));
-
-				// strs.append("\r\n").append("--").append(BOUNDARY).append("\r\n");
-				// strs.append("Content-Disposition: form-data; name=\"" + name
-				// + "\"\r\n\r\n");
-				// strs.append(value);
-			}
-
-			data = strs.toString().getBytes();
-		}
+ 
 
 		if (fileMap != null && fileMap.size() > 0) {
 			for (String name : fileMap.keySet()) {

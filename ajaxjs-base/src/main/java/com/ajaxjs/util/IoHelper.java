@@ -2,16 +2,62 @@ package com.ajaxjs.util;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
+import javax.activation.MimetypesFileTypeMap;
+
 import com.ajaxjs.util.logger.LogHelper;
 
 public class IoHelper {
 	private static final LogHelper LOGGER = LogHelper.getLog(IoHelper.class);
+
+	/**
+	 * 
+	 * @param saveDirPath
+	 * @param fileName
+	 * @return
+	 */
+	public static File createFile(String saveDirPath, String fileName) {
+		File saveDir = new File(saveDirPath);
+		if (!saveDir.exists())
+			saveDir.mkdir();
+
+		return new File(saveDir + File.separator + fileName);
+	}
+
+	/**
+	 * 获取 URL 上的文件名，排除 ? 参数部分
+	 * 
+	 * @param url
+	 * @return
+	 */
+	public static String getFileNameFromUrl(String url) {
+		String[] arr = url.split("/");
+		String last = arr[arr.length - 1];
+		return last.split("\\?")[0];
+	}
+	
+
+	/**
+	 * 获取文件名的 MIME 类型
+	 * 
+	 * @param file
+	 *            文件对象
+	 * @return MIME 类型
+	 */
+	public static String getMime(File file) {
+		String contentType = new MimetypesFileTypeMap().getContentType(file);
+		if (file.getName().endsWith(".png"))
+			contentType = "image/png"; // TODO needs?
+		if (contentType == null)
+			contentType = "application/octet-stream";
+		return contentType;
+	}
 
 	/**
 	 * 读输入的字节流转换到字符流，将其转换为文本（多行）的字节流转换为字符串
@@ -54,7 +100,7 @@ public class IoHelper {
 	 * @param isBuffer 是否加入缓冲功能
 	 * @return 是否成功
 	 */
-	public void write(InputStream in, OutputStream out, boolean isBuffer) {
+	public static void write(InputStream in, OutputStream out, boolean isBuffer) {
 		int readSize; // 读取到的数据长度
 		byte[] buffer = new byte[bufferSize]; // 通过 byte 作为数据中转，用于存放循环读取的临时数据
 
