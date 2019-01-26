@@ -1,4 +1,4 @@
-package com.ajaxjs.keyvalue;
+package com.ajaxjs.util;
 
 /**
  * 用户的测试用例

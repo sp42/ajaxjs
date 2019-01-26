@@ -19,7 +19,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.Set;
 
-import com.ajaxjs.keyvalue.BeanUtil;
+import com.ajaxjs.util.BeanUtil;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.io.resource.AbstractScanner;
 import com.ajaxjs.util.io.resource.ScanClass;

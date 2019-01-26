@@ -1,8 +1,8 @@
-package com.ajaxjs.keyvalue;
+package com.ajaxjs.util;
 
-import static com.ajaxjs.keyvalue.MappingValue.objectCast;
-import static com.ajaxjs.keyvalue.MappingValue.toBoolean;
-import static com.ajaxjs.keyvalue.MappingValue.toJavaValue;
+import static com.ajaxjs.util.MappingValue.objectCast;
+import static com.ajaxjs.util.MappingValue.toBoolean;
+import static com.ajaxjs.util.MappingValue.toJavaValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

@@ -1,4 +1,4 @@
-package com.ajaxjs.keyvalue;
+package com.ajaxjs.util;
 
 import static org.junit.Assert.assertEquals;
 
@@ -10,9 +10,11 @@ import org.junit.Test;
 
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.MapTool;
+import com.ajaxjs.util.MappingValue;
+
 import static com.ajaxjs.util.MapTool.*;
 
-public class TestMapHelper {
+public class TestMapTool {
 	Map<String, Object> map = new HashMap<String, Object>() {
 		private static final long serialVersionUID = 1L;
 		{

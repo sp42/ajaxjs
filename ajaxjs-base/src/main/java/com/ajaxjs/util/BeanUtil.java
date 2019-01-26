@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.keyvalue;
+package com.ajaxjs.util;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -22,12 +22,10 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import com.ajaxjs.js.JsonHelper;
-import com.ajaxjs.util.ReflectUtil;
 
 /**
  * 
@@ -94,6 +92,33 @@ public class BeanUtil extends ReflectUtil {
 		return Character.toString(methodName.charAt(0)).toLowerCase() + methodName.substring(1);
 	}
 
+	@FunctionalInterface
+	public static interface EachFieldArg {
+		public void item(String key, Object value, PropertyDescriptor property);
+	}
+
+	/**
+	 * 
+	 * @param bean
+	 * @param fn
+	 */
+	static void eachField(Object bean, EachFieldArg fn) {
+		try {
+			BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass());
+
+			for (PropertyDescriptor property : beanInfo.getPropertyDescriptors()) {
+				String key = property.getName();
+				// 得到 property 对应的 getter 方法
+				Method getter = property.getReadMethod();
+				Object value = getter.invoke(bean);
+
+				fn.item(key, value, property);
+			}
+		} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * Bean 转为 Map
 	 * 
@@ -103,23 +128,10 @@ public class BeanUtil extends ReflectUtil {
 	public static <T> Map<String, Object> bean2Map(T bean) {
 		Map<String, Object> map = new HashMap<>();
 
-		try {
-			BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass());
-
-			for (PropertyDescriptor property : beanInfo.getPropertyDescriptors()) {
-				String key = property.getName();
-
-				// 过滤 class 属性
-				if (!key.equals("class")) {
-					// 得到 property 对应的 getter 方法
-					Method getter = property.getReadMethod();
-					Object value = getter.invoke(bean);
-					map.put(key, value);
-				}
-			}
-		} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
-		}
+		eachField(bean, (k, v, property) -> {
+			if (!k.equals("class")) // 过滤 class 属性
+				map.put(k, v);
+		});
 
 		return map;
 	}
@@ -134,30 +146,22 @@ public class BeanUtil extends ReflectUtil {
 	 */
 	public static <T> T map2Bean(Map<String, Object> map, Class<T> clz, boolean isTransform) {
 		T bean = newInstance(clz);
-		Object value = null;
-		String key = null; // 放在 try 外面方便调试
 
-		try {
-			BeanInfo beanInfo = Introspector.getBeanInfo(clz);
-
-			for (PropertyDescriptor property : beanInfo.getPropertyDescriptors()) {
-				key = property.getName();
-
+		eachField(bean, (key, v, property) -> {
+			try {
 				if (map.containsKey(key)) {
-					value = map.get(key);
+					Object value = map.get(key);
 
 					// null 是不会传入 bean 的
-					if (value == null)
-						continue;
+					if (value != null) {
+						Class<?> t = property.getPropertyType(); // Bean 值的类型，这是期望传入的类型，也就 setter 参数的类型
 
-					Class<?> t = property.getPropertyType(); // Bean 值的类型，这是期望传入的类型，也就 setter 参数的类型
+						if (isTransform && value != null && t != value.getClass()) { // 类型相同，直接传入；类型不相同，开始转换
+							value = MappingValue.objectCast(value, t);
+						}
 
-					if (isTransform && value != null && t != value.getClass()) { // 类型相同，直接传入；类型不相同，开始转换
-						value = MappingValue.objectCast(value, t);
+						property.getWriteMethod().invoke(bean, value);
 					}
-
-					Method setter = property.getWriteMethod();// 得到对应的 setter 方法
-					setter.invoke(bean, value);
 				}
 
 				// 子对象
@@ -179,11 +183,10 @@ public class BeanUtil extends ReflectUtil {
 						}
 					}
 				}
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
 			}
-		} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
-			return null;
-		}
+		});
 
 		return bean;
 	}
@@ -197,6 +200,18 @@ public class BeanUtil extends ReflectUtil {
 	 */
 	public static <T> T map2Bean(Map<String, Object> map, Class<T> clz) {
 		return map2Bean(map, clz, false);
+	}
+	
+	/**
+	 * JSON 字符串转换为 Bean 对象
+	 * 
+	 * @param json JSON 字符串
+	 * @param clz Bean 对象类引用
+	 * @return Bean 对象
+	 */
+	public static <T> T json2bean(String json, Class<T> clz) {
+		Map<String, Object> map = JsonHelper.parseMap(json);
+		return map2Bean(map, clz, true);
 	}
 
 	/**
@@ -212,88 +227,8 @@ public class BeanUtil extends ReflectUtil {
 			json.append("\"\"");
 		} else if (object instanceof String || object instanceof Integer || object instanceof Double) {
 			json.append("\"").append(object.toString()).append("\"");
-		} else {
-			json.append(beanToJson(object));
-		}
+		} 
 
 		return json.toString();
-	}
-
-	/**
-	 * Bean 转换为 JSON 字符串
-	 * 
-	 * 传入任意一个 Java Bean 对象生成一个指定规格的字符串
-	 * 
-	 * @param bean bean对象
-	 * @return String "{}"
-	 */
-	public static String beanToJson(Object bean) {
-		StringBuilder json = new StringBuilder();
-		json.append("{");
-		PropertyDescriptor[] props = null;
-
-		try {
-			props = Introspector.getBeanInfo(bean.getClass(), Object.class).getPropertyDescriptors();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		if (props != null) {
-			for (int i = 0; i < props.length; i++) {
-				try {
-					String name = objectToJson(props[i].getName());
-					String value = MappingJson.obj2jsonVaule(props[i].getReadMethod().invoke(bean));
-
-					json.append(name);
-					json.append(":");
-					json.append(value);
-					json.append(",");
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-
-			json.setCharAt(json.length() - 1, '}');
-		} else {
-			json.append("}");
-		}
-
-		return json.toString();
-	}
-
-	/**
-	 * 通过传入一个列表对象,调用指定方法将列表中的数据生成一个JSON规格指定字符串
-	 * 
-	 * @param list 列表对象
-	 * @return String "[{},{}]"
-	 */
-	public static String listToJson(List<?> list) {
-		StringBuilder json = new StringBuilder();
-		json.append("[");
-
-		if (list != null && list.size() > 0) {
-			for (Object obj : list) {
-				json.append(objectToJson(obj));
-				json.append(",");
-			}
-
-			json.setCharAt(json.length() - 1, ']');
-		} else {
-			json.append("]");
-		}
-
-		return json.toString();
-	}
-
-	/**
-	 * JSON 字符串转换为 Bean 对象
-	 * 
-	 * @param json JSON 字符串
-	 * @param clz Bean 对象类引用
-	 * @return Bean 对象
-	 */
-	public static <T> T json2bean(String json, Class<T> clz) {
-		Map<String, Object> map = JsonHelper.parseMap(json);
-		return map2Bean(map, clz, true);
 	}
 }

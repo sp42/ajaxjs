@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import com.ajaxjs.keyvalue.MappingValue;
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.MappingValue;
 
 /**
  * 主要的方法入口 parse()。 还有其他的一些工具方法

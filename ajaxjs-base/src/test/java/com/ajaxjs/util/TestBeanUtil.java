@@ -1,5 +1,6 @@
-package com.ajaxjs.keyvalue;
+package com.ajaxjs.util;
 
+import static com.ajaxjs.util.BeanUtil.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -8,8 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
-
-import static com.ajaxjs.keyvalue.BeanUtil.*;
 
 public class TestBeanUtil {
 	public static Map<String, Object> userWithoutChild = new HashMap<String, Object>() {

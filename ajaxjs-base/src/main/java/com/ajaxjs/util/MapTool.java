@@ -1,11 +1,36 @@
 package com.ajaxjs.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import com.ajaxjs.util.logger.LogHelper;
+
 public class MapTool {
+	private static final LogHelper LOGGER = LogHelper.getLog(MapTool.class);
+
 	/**
 	 * Map 转换为 String
 	 * 
@@ -109,5 +134,88 @@ public class MapTool {
 		}
 
 		return _map;
+	}
+
+	public static DocumentBuilder initBuilder() {
+		try {
+			return DocumentBuilderFactory.newInstance().newDocumentBuilder();
+		} catch (ParserConfigurationException e) {
+			LOGGER.warning(e);
+			return null;
+		}
+	}
+
+	/**
+	 *
+	 * 将Map转换为XML格式的字符串
+	 *
+	 * @param data Map类型数据
+	 * @return XML格式的字符串
+	 */
+	public static String mapToXml(Map<String, ?> data) {
+		Document doc = initBuilder().newDocument();
+		Element root = doc.createElement("xml");
+		doc.appendChild(root);
+
+		for (String key : data.keySet()) {
+			System.out.println(key);
+			String value = data.get(key).toString();
+			if (value == null)
+				value = "";
+
+			Element filed = doc.createElement(key);
+			filed.appendChild(doc.createTextNode(value.trim()));
+			root.appendChild(filed);
+		}
+
+		try {
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+
+			try (StringWriter writer = new StringWriter();) {
+				transformer.transform(new DOMSource(doc), new StreamResult(writer));
+				String output = writer.getBuffer().toString(); // .replaceAll("\n|\r", "");
+				return output;
+			}
+		} catch (IOException | TransformerException | TransformerFactoryConfigurationError e) {
+			LOGGER.warning(e);
+		}
+
+		return null;
+	}
+
+	/**
+	 *
+	 * 
+	 * XML格式字符串转换为Map
+	 *
+	 * @param strXML XML字符串
+	 * @return XML数据转换后的Map
+	 */
+	public static Map<String, String> xmlToMap(String strXML) {
+		if (strXML == null)
+			return null;
+
+		Map<String, String> data = new HashMap<>();
+
+		try (InputStream stream = new ByteArrayInputStream(strXML.getBytes("UTF-8"));) {
+			Document doc = initBuilder().parse(stream);
+			doc.getDocumentElement().normalize();
+			NodeList nodeList = doc.getDocumentElement().getChildNodes();
+
+			for (int idx = 0; idx < nodeList.getLength(); ++idx) {
+				Node node = nodeList.item(idx);
+				if (node.getNodeType() == Node.ELEMENT_NODE) {
+					Element element = (Element) node;
+					data.put(element.getNodeName(), element.getTextContent());
+				}
+			}
+
+			return data;
+		} catch (IOException | SAXException e) {
+			LOGGER.warning(e);
+			return null;
+		}
 	}
 }

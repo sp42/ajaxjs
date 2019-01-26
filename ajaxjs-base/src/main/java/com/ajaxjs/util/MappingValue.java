@@ -13,15 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.keyvalue;
+package com.ajaxjs.util;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
-
-import com.ajaxjs.util.CommonUtil;
 
 /**
  * 处理值的一些相关函数
@@ -177,5 +175,38 @@ public class MappingValue {
 		for (int i = 0; i < length; i++)
 			arr[i] = fn.apply(i);
 		return arr;
+	}
+
+	/**
+	 * 操作成功，返回 msg 信息
+	 */
+	public static final String json_ok = "json::{\"isOk\": true, \"msg\" : \"%s\"}";
+	/**
+	 * 操作成功，返回 msg 信息，可扩展字段的
+	 */
+	public static final String json_ok_extension = "json::{\"isOk\": true, \"msg\" : \"%s\", %s}";
+	/**
+	 * 操作失败，返回 msg 信息
+	 */
+	public static final String json_not_ok = "json::{\"isOk\": false, \"msg\" : \"%s\"}";
+
+	/**
+	 * 输出 JSON OK
+	 * 
+	 * @param msg
+	 * @return
+	 */
+	public static String jsonOk(String msg) {
+		return String.format(json_ok, msg);
+	}
+
+	/**
+	 * 输出 JSON No OK
+	 * 
+	 * @param msg
+	 * @return
+	 */
+	public static String jsonNoOk(String msg) {
+		return String.format(json_not_ok, msg);
 	}
 }

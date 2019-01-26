@@ -27,7 +27,7 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.ajaxjs.keyvalue.BeanUtil;
+import com.ajaxjs.util.BeanUtil;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
