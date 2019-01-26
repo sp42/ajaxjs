@@ -19,7 +19,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.Set;
 
-import com.ajaxjs.util.BeanUtil;
+import com.ajaxjs.util.MapTool;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.io.resource.AbstractScanner;
 import com.ajaxjs.util.io.resource.ScanClass;
@@ -79,7 +79,7 @@ public class BeanLoader extends AbstractScanner<Class<Object>> {
 		CtField[] fields = cc.getDeclaredFields();
 		for (CtField field : fields) {
 			if (field.getAnnotation(Resource.class) != null) {
-				String setMethodName = "set" + BeanUtil.firstLetterUpper(field.getName());
+				String setMethodName = "set" + MapTool.firstLetterUpper(field.getName());
 				CtMethod setter;
 
 				try {

@@ -170,10 +170,17 @@ public class MappingValue {
 		return newIntArray(strArr.length, index -> Integer.parseInt(strArr[index].trim()));
 	}
 
-	static int[] newIntArray(int length, Function<Integer, Integer> fn) {
+	/**
+	 * 
+	 * @param length
+	 * @param fn
+	 * @return
+	 */
+	private static int[] newIntArray(int length, Function<Integer, Integer> fn) {
 		int[] arr = new int[length];
 		for (int i = 0; i < length; i++)
 			arr[i] = fn.apply(i);
+		
 		return arr;
 	}
 
@@ -181,10 +188,12 @@ public class MappingValue {
 	 * 操作成功，返回 msg 信息
 	 */
 	public static final String json_ok = "json::{\"isOk\": true, \"msg\" : \"%s\"}";
+
 	/**
 	 * 操作成功，返回 msg 信息，可扩展字段的
 	 */
 	public static final String json_ok_extension = "json::{\"isOk\": true, \"msg\" : \"%s\", %s}";
+
 	/**
 	 * 操作失败，返回 msg 信息
 	 */
@@ -193,8 +202,8 @@ public class MappingValue {
 	/**
 	 * 输出 JSON OK
 	 * 
-	 * @param msg
-	 * @return
+	 * @param msg 输出信息
+	 * @return JSON 字符串
 	 */
 	public static String jsonOk(String msg) {
 		return String.format(json_ok, msg);
@@ -203,8 +212,8 @@ public class MappingValue {
 	/**
 	 * 输出 JSON No OK
 	 * 
-	 * @param msg
-	 * @return
+	 * @param msg 输出信息
+	 * @return JSON 字符串
 	 */
 	public static String jsonNoOk(String msg) {
 		return String.format(json_not_ok, msg);

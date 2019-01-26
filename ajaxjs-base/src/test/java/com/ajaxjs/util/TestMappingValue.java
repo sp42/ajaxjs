@@ -14,8 +14,6 @@ import java.util.List;
 import org.junit.Test;
 
 public class TestMappingValue {
-
-
 	@Test
 	public void testToJavaValue() {
 		assertTrue((int) toJavaValue("123") == 123);
@@ -48,7 +46,7 @@ public class TestMappingValue {
 
 		int[] arr = (int[]) objectCast("1,2,3", int[].class);
 		assertTrue(Arrays.equals(new int[] { 1, 2, 3 }, arr));
-		
+
 		List<Integer> list = new ArrayList<>();
 		list.add(1);
 		list.add(2);
@@ -58,17 +56,16 @@ public class TestMappingValue {
 
 		String[] arr2 = (String[]) objectCast("1,2,3", String[].class);
 		assertTrue(Arrays.equals(new String[] { "1", "2", "3" }, arr2));
-		
+
 		List<String> list2 = new ArrayList<>();
 		list2.add("1");
 		list2.add("2");
 		list2.add("3");
-		
+
 		arr2 = (String[]) objectCast(list2, String[].class);
 		assertTrue(Arrays.equals(new String[] { "1", "2", "3" }, arr2));
-		
+
 		assertEquals("Tue Feb 20 00:00:00 GMT+08:00 2018", ((Date) objectCast("2018-2-20", Date.class)).toString());
 	}
-	
 
 }

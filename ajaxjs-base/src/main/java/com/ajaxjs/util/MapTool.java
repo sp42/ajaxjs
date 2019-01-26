@@ -4,8 +4,10 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -28,8 +30,12 @@ import org.xml.sax.SAXException;
 
 import com.ajaxjs.util.logger.LogHelper;
 
-public class MapTool {
+public class MapTool extends ReflectUtil {
 	private static final LogHelper LOGGER = LogHelper.getLog(MapTool.class);
+
+	// --------------------------------------------------------------------------------------------------
+	// -----------------------------------------------Map转换--------------------------------------------
+	// --------------------------------------------------------------------------------------------------
 
 	/**
 	 * Map 转换为 String
@@ -136,6 +142,15 @@ public class MapTool {
 		return _map;
 	}
 
+	// --------------------------------------------------------------------------------------------------
+	// -----------------------------------------------XML------------------------------------------------
+	// --------------------------------------------------------------------------------------------------
+
+	/**
+	 * XML 转换需要的对象
+	 * 
+	 * @return XML 转换需要的对象
+	 */
 	public static DocumentBuilder initBuilder() {
 		try {
 			return DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -147,10 +162,10 @@ public class MapTool {
 
 	/**
 	 *
-	 * 将Map转换为XML格式的字符串
+	 * 将 Map 转换为 XML 格式的字符串
 	 *
-	 * @param data Map类型数据
-	 * @return XML格式的字符串
+	 * @param data Map 类型数据
+	 * @return XML 格式的字符串
 	 */
 	public static String mapToXml(Map<String, ?> data) {
 		Document doc = initBuilder().newDocument();
@@ -188,10 +203,10 @@ public class MapTool {
 	/**
 	 *
 	 * 
-	 * XML格式字符串转换为Map
+	 * XML 格式字符串转换为 Map
 	 *
-	 * @param strXML XML字符串
-	 * @return XML数据转换后的Map
+	 * @param strXML XML 字符串
+	 * @return XML 数据转换后的 Map
 	 */
 	public static Map<String, String> xmlToMap(String strXML) {
 		if (strXML == null)
@@ -217,5 +232,65 @@ public class MapTool {
 			LOGGER.warning(e);
 			return null;
 		}
+	}
+
+	// --------------------------------------------------------------------------------------------------
+	// -----------------------------------------------BeanUtils------------------------------------------
+	// --------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bean setXXX
+	 * 
+	 * @param bean JAVA Bean 对象，也可以是
+	 * @param name 属性名称
+	 * @param value 要设置的属性值
+	 */
+	public static void setProperty(Object bean, String name, Object value) {
+		String setMethodName = "set" + firstLetterUpper(name);
+
+		Objects.requireNonNull(bean, bean + "执行：" + setMethodName + " 未发现类");
+		Objects.requireNonNull(value, bean + "执行：" + setMethodName + " 未发现参数 value");
+
+		Class<?> clazz = bean.getClass();
+
+		// 要把参数父类的也包括进来
+		Method method = getMethodByUpCastingSearch(clazz, setMethodName, value);
+
+		// 如果没找到，那就试试接口的……
+		if (method == null)
+			method = getDeclaredMethodByInterface(clazz, setMethodName, value);
+
+		// 如果没找到，那忽略参数类型，只要匹配方法名称即可。这会发生在：由于被注入的对象有可能经过了 AOP 的动态代理，所以不能通过上述逻辑找到正确的方法
+		if (method == null) {
+			method = getSuperClassDeclaredMethod(clazz, setMethodName);
+		}
+
+		// 最终还是找不到
+		Objects.requireNonNull(method, clazz.getName() + " 找不到目标方法！" + setMethodName);
+
+		executeMethod(bean, method, value);
+	}
+
+	/**
+	 * 将第一个字母大写
+	 * 
+	 * @param str 字符串
+	 * @return 字符串
+	 */
+	public static String firstLetterUpper(String str) {
+		// return str.substring(0, 1).toUpperCase() + str.substring(1); // 另外一种写法
+		return Character.toString(str.charAt(0)).toUpperCase() + str.substring(1);
+	}
+
+	/**
+	 * 根据方法名称来截取属性名称，例如把 getter 的 getXxx() 转换为 xxx 的字段名
+	 * 
+	 * @param methodName 方法名称
+	 * @param action set|get
+	 * @return 属性名称
+	 */
+	public static String getFieldName(String methodName, String action) {
+		methodName = methodName.replace(action, "");
+		return Character.toString(methodName.charAt(0)).toLowerCase() + methodName.substring(1);
 	}
 }
