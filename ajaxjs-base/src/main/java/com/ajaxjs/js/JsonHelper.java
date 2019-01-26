@@ -153,7 +153,7 @@ public class JsonHelper {
 	
 		List<String> arr = new ArrayList<>();
 		for (Object key : map.keySet())
-			arr.add('\"' + key.toString() + "\":" + JsonHelper.toJson(map.get(key)));
+			arr.add('\"' + key.toString() + "\":" + toJson(map.get(key)));
 	
 		return '{' + String.join(",", arr) + '}';
 	}
@@ -177,26 +177,26 @@ public class JsonHelper {
 			return '\"' + CommonUtil.SimpleDateFormatFactory(CommonUtil.commonDateFormat).format((Date) obj) + '\"';
 	
 		} else if (obj.getClass() == Integer[].class) {
-			return JsonHelper.jsonArr((Integer[]) obj, v -> v + "");
+			return jsonArr((Integer[]) obj, v -> v + "");
 		} else if (obj.getClass() == int[].class) {
 			Integer[] arr = Arrays.stream((int[]) obj).boxed().toArray(Integer[]::new);
-			return JsonHelper.jsonArr(arr, v -> v + "");
+			return jsonArr(arr, v -> v + "");
 		} else if (obj instanceof Long[]) {
-			return JsonHelper.jsonArr((Long[]) obj, v -> v.toString());
+			return jsonArr((Long[]) obj, v -> v.toString());
 		} else if (obj instanceof long[]) {
 			Long[] arr = Arrays.stream((long[]) obj).boxed().toArray(Long[]::new);
-			return JsonHelper.jsonArr(arr, v -> v.toString());
+			return jsonArr(arr, v -> v.toString());
 		} else if (obj instanceof String[]) {
-			return JsonHelper.jsonArr((String[]) obj, v -> "\"" + v + "\"");
+			return jsonArr((String[]) obj, v -> "\"" + v + "\"");
 		} else if (obj instanceof Map) {
 			return stringifyMap((Map<?, ?>) obj);
 		} else if (obj instanceof Map[]) {
-			return JsonHelper.jsonArr((Map<?, ?>[]) obj, JsonHelper::stringifyMap);
+			return jsonArr((Map<?, ?>[]) obj, JsonHelper::stringifyMap);
 	
 		} else if (obj instanceof BaseModel) {
-			return JsonHelper.beanToJson((BaseModel) obj);
+			return beanToJson((BaseModel) obj);
 		} else if (obj instanceof BaseModel[]) {
-			return JsonHelper.jsonArr((BaseModel[]) obj, JsonHelper::beanToJson);
+			return jsonArr((BaseModel[]) obj, JsonHelper::beanToJson);
 	
 		} else if (obj instanceof List) {
 			List<?> list = (List<?>) obj;
@@ -215,7 +215,7 @@ public class JsonHelper {
 				return "[]";
 			}
 		} else if (obj instanceof Object[]) {
-			return JsonHelper.jsonArr((Object[]) obj, v -> toJson(v));
+			return jsonArr((Object[]) obj, v -> toJson(v));
 		} else if (obj instanceof Object) {
 			List<String> arr = new ArrayList<>();
 			for (Field field : obj.getClass().getDeclaredFields()) {
@@ -324,4 +324,42 @@ public class JsonHelper {
 	
 		return json.toString();
 	}
+	
+	// --------------------------------------------------------------------------------------------------
+	// --------------------------------------------JSON output-------------------------------------------
+	// --------------------------------------------------------------------------------------------------
+
+	/**
+	 * 操作失败，返回 msg 信息
+	 */
+	public static final String json_not_ok = "json::{\"isOk\": false, \"msg\" : \"%s\"}";
+
+	/**
+	 * 输出 JSON OK
+	 * 
+	 * @param msg 输出信息
+	 * @return JSON 字符串
+	 */
+	public static String jsonOk(String msg) {
+		return String.format(json_ok, msg);
+	}
+
+	/**
+	 * 输出 JSON No OK
+	 * 
+	 * @param msg 输出信息
+	 * @return JSON 字符串
+	 */
+	public static String jsonNoOk(String msg) {
+		return String.format(json_not_ok, msg);
+	}
+
+	/**
+	 * 操作成功，返回 msg 信息，可扩展字段的
+	 */
+	public static final String json_ok_extension = "json::{\"isOk\": true, \"msg\" : \"%s\", %s}";
+	/**
+	 * 操作成功，返回 msg 信息
+	 */
+	public static final String json_ok = "json::{\"isOk\": true, \"msg\" : \"%s\"}";
 }

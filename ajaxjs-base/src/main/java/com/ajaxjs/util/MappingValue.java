@@ -183,39 +183,4 @@ public class MappingValue {
 		
 		return arr;
 	}
-
-	/**
-	 * 操作成功，返回 msg 信息
-	 */
-	public static final String json_ok = "json::{\"isOk\": true, \"msg\" : \"%s\"}";
-
-	/**
-	 * 操作成功，返回 msg 信息，可扩展字段的
-	 */
-	public static final String json_ok_extension = "json::{\"isOk\": true, \"msg\" : \"%s\", %s}";
-
-	/**
-	 * 操作失败，返回 msg 信息
-	 */
-	public static final String json_not_ok = "json::{\"isOk\": false, \"msg\" : \"%s\"}";
-
-	/**
-	 * 输出 JSON OK
-	 * 
-	 * @param msg 输出信息
-	 * @return JSON 字符串
-	 */
-	public static String jsonOk(String msg) {
-		return String.format(json_ok, msg);
-	}
-
-	/**
-	 * 输出 JSON No OK
-	 * 
-	 * @param msg 输出信息
-	 * @return JSON 字符串
-	 */
-	public static String jsonNoOk(String msg) {
-		return String.format(json_not_ok, msg);
-	}
 }
