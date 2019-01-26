@@ -26,7 +26,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.keyvalue.MappingHelper;
+import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.util.io.FileUtil;
@@ -69,7 +69,7 @@ public class ConfigController implements IController {
 		if (request.getServletContext().getAttribute("aj_allConfig") != null)
 			request.getServletContext().setAttribute("aj_allConfig", ConfigService.config);
 
-		return MappingHelper.jsonOk("修改配置成功！");
+		return JsonHelper.jsonOk("修改配置成功！");
 	}
 
 	@GET

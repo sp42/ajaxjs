@@ -17,9 +17,9 @@ import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.DataDict;
 import com.ajaxjs.framework.IBaseService;
-import com.ajaxjs.framework.MapUtil;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
+import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
@@ -89,7 +89,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 
 			final Long _newlyId = service.create(picture);
 
-			return "json::" + MapUtil.toJson(new Object() {
+			return "json::" + JsonHelper.toJson(new Object() {
 				@SuppressWarnings("unused")
 				public Boolean isOk = true;
 				@SuppressWarnings("unused")
@@ -126,7 +126,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 			final Long _newlyId = service.create(picture);
 			System.out.println(info.path);
 
-			return "json::" + MapUtil.toJson(new Object() {
+			return "json::" + JsonHelper.toJson(new Object() {
 				@SuppressWarnings("unused")
 				public Boolean isOk = true;
 				@SuppressWarnings("unused")

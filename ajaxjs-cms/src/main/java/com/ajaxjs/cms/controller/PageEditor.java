@@ -29,7 +29,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.keyvalue.MappingHelper;
+import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
@@ -104,10 +104,10 @@ public class PageEditor implements IController, Constant {
 
 			save_jsp_fileContent(path, contentBody);
 
-			return MappingHelper.jsonOk("修改页面成功！");
+			return JsonHelper.jsonOk("修改页面成功！");
 		} catch (Throwable e) {
 			LOGGER.warning(e);
-			return MappingHelper.jsonNoOk(e.toString());
+			return JsonHelper.jsonNoOk(e.toString());
 		}
 	}
 

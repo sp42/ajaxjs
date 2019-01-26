@@ -17,9 +17,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.keyvalue.MapHelper;
-import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.Encode;
+import com.ajaxjs.util.MapTool;
+import com.ajaxjs.util.MappingValue;
 
 /**
  * DAO 用的查询参数，可以是 分页 的查询参数，也可以是排序、过滤、搜索等的参数 * 查询时特地需求的容器，可包含特定的对象进行查询，通过
@@ -41,8 +42,7 @@ public class QueryParams {
 	 * @param requestData 请求参数
 	 */
 	public QueryParams(Map<String, String[]> requestData) {
-		paramsMap = MapHelper.asObject(MapHelper.toMap(requestData), true);
-
+		paramsMap = MapTool.as(requestData, arr -> MappingValue.toJavaValue(arr[0]));
 		set(requestData, "filterField", "filterValue");// where 查询（精确）
 		set(requestData, "searchField", "searchValue");// search 查询（模糊）
 		set(requestData, "matchField", "matchValue");// match 查询（精确）
@@ -63,8 +63,9 @@ public class QueryParams {
 	 * @param value
 	 */
 	private void set(Map<String, String[]> requestData, String key, String value) {
-		if (requestData.containsKey(key) && requestData.containsKey(value))
-			setData(key, MapHelper.toMap(requestData.get(key), requestData.get(value)));
+		if (requestData.containsKey(key) && requestData.containsKey(value)) {
+			setData(key, MapTool.toMap(requestData.get(key), requestData.get(value), MappingValue::toJavaValue));
+		}
 	}
 
 	/**

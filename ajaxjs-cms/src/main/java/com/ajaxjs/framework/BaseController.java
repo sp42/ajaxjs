@@ -9,7 +9,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import com.ajaxjs.config.ConfigService;
-import com.ajaxjs.keyvalue.MappingHelper;
+import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
@@ -73,7 +73,7 @@ public abstract class BaseController<T> implements IController, Constant {
 		if (newlyId == null)
 			throw new RuntimeException("创建失败！");
 
-		return String.format(MappingHelper.json_ok_extension, "创建实体成功", "\"newlyId\":" + newlyId);
+		return String.format(JsonHelper.json_ok_extension, "创建实体成功", "\"newlyId\":" + newlyId);
 	}
 
 	public static <E> String create(E entry, IBaseService<E> service) {
@@ -236,20 +236,20 @@ public abstract class BaseController<T> implements IController, Constant {
 
 		int total = pageResult.isZero() ? 0 : pageResult.getTotalCount();
 
-		return String.format(MappingHelper.json_ok_extension, "分页列表", "\"result\":" + jsonStr + ",\"total\":" + total);
+		return String.format(JsonHelper.json_ok_extension, "分页列表", "\"result\":" + jsonStr + ",\"total\":" + total);
 	}
 
 	public static String toJson(Object obj, boolean isAdd) {
-		String jsonStr = MapUtil.toJson(obj);
+		String jsonStr = JsonHelper.toJson(obj);
 		return isAdd ? "json::{\"result\":" + jsonStr + "}" : jsonStr;
 	}
 
 	public static String jsonOk(String msg) {
-		return MappingHelper.jsonOk(msg);
+		return JsonHelper.jsonOk(msg);
 	}
 
 	public static String jsonNoOk(String msg) {
-		return MappingHelper.jsonNoOk(msg);
+		return JsonHelper.jsonNoOk(msg);
 	}
 
 	public static String jsp(String jsp) {

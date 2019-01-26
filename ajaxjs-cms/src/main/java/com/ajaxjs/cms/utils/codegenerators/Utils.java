@@ -34,7 +34,6 @@ public class Utils {
 		else if (sqlType.indexOf("decimal") != -1)
 			t = "java.math.BigDecimal";
 
-		System.out.println(sqlType+":::::::::::" + t);
 		return t;
 	}
 
