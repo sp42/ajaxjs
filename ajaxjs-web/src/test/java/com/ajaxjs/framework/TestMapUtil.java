@@ -1,6 +1,6 @@
 package com.ajaxjs.framework;
 
-import static com.ajaxjs.framework.MapUtil.to;
+import static com.ajaxjs.util.MapTool.as;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -34,13 +34,12 @@ public class TestMapUtil {
 
 	@Test
 	public void test() {
-		Map<String, Object> map = to(m1, null);
-		System.out.println(map);
+		Map<String, Object> map;
 
-		map = to(m1, arr -> arr[0]);
+		map = as(m1, arr -> arr[0]);
 		System.out.println(map.get("bar").getClass());
 
-		map = to(m1, arr -> MappingValue.toJavaValue(arr[0]));
+		map = as(m1, arr -> MappingValue.toJavaValue(arr[0]));
 		System.out.println(map.get("bar").getClass());
 	}
 
@@ -84,42 +83,42 @@ public class TestMapUtil {
 		String jsonStr = JsonHelper.toJson(map);
 		assertEquals("{\"bar2\":null,\"bar\":2222,\"foo\":\"11\",\"bar3\":true}", jsonStr);
 	}
-	
+
 	@Test
 	public void testObj2jsonVaule() {
-		assertEquals(null, 		JsonHelper.toJson(null));
-		assertEquals("1.0", 	JsonHelper.toJson(1D));
-		assertEquals("true", 	JsonHelper.toJson(true));
-		assertEquals("1", 		JsonHelper.toJson(1));
-		assertEquals("1", 		JsonHelper.toJson(1L));
-		assertEquals("\"2018-02-20 00:00:00\"", 		JsonHelper.toJson((Date) MappingValue.objectCast("2018-2-20", Date.class)));
-		
+		assertEquals(null, JsonHelper.toJson(null));
+		assertEquals("1.0", JsonHelper.toJson(1D));
+		assertEquals("true", JsonHelper.toJson(true));
+		assertEquals("1", JsonHelper.toJson(1));
+		assertEquals("1", JsonHelper.toJson(1L));
+		assertEquals("\"2018-02-20 00:00:00\"", JsonHelper.toJson((Date) MappingValue.objectCast("2018-2-20", Date.class)));
+
 		List<Integer> list = new ArrayList<>();
 		list.add(1);
 		list.add(2);
 		list.add(3);
-		assertEquals("[1, 2, 3]", 		JsonHelper.toJson(list));
-		assertEquals("[1, 2, 3]", 		JsonHelper.toJson(new Integer[] { 1, 2, 3 }));
-		assertEquals("[1, 2, 3]", 		JsonHelper.toJson(new int[] { 1, 2, 3 }));
-		
+		assertEquals("[1, 2, 3]", JsonHelper.toJson(list));
+		assertEquals("[1, 2, 3]", JsonHelper.toJson(new Integer[] { 1, 2, 3 }));
+		assertEquals("[1, 2, 3]", JsonHelper.toJson(new int[] { 1, 2, 3 }));
+
 		List<String> list2 = new ArrayList<>();
 		list2.add("1");
 		list2.add("2");
 		list2.add("3");
-		assertEquals("[\"1\", \"2\", \"3\"]", 		JsonHelper.toJson(list2));
-		assertEquals("[\"1\", \"2\", \"3\"]", 		JsonHelper.toJson(new String[] { "1", "2", "3" }));
-		
+		assertEquals("[\"1\", \"2\", \"3\"]", JsonHelper.toJson(list2));
+		assertEquals("[\"1\", \"2\", \"3\"]", JsonHelper.toJson(new String[] { "1", "2", "3" }));
+
 		Map<String, Object> map = new HashMap<>();
-		assertEquals("{}", 		JsonHelper.toJson(map));
+		assertEquals("{}", JsonHelper.toJson(map));
 		map.put("foo", "bar");
-		assertEquals("{\"foo\":\"bar\"}", 		JsonHelper.toJson(map));
+		assertEquals("{\"foo\":\"bar\"}", JsonHelper.toJson(map));
 		map.put("bar", 1);
-		assertEquals("{\"bar\":1,\"foo\":\"bar\"}", 		JsonHelper.toJson(map));
-		
+		assertEquals("{\"bar\":1,\"foo\":\"bar\"}", JsonHelper.toJson(map));
+
 		List<Map<String, Object>> list3 = new ArrayList<>();
-		assertEquals("[]", 		JsonHelper.toJson(list3));
+		assertEquals("[]", JsonHelper.toJson(list3));
 		list3.add(map);
 		list3.add(map);
-		assertEquals("[{\"bar\":1,\"foo\":\"bar\"}, {\"bar\":1,\"foo\":\"bar\"}]", 		JsonHelper.toJson(list3));
+		assertEquals("[{\"bar\":1,\"foo\":\"bar\"}, {\"bar\":1,\"foo\":\"bar\"}]", JsonHelper.toJson(list3));
 	}
 }

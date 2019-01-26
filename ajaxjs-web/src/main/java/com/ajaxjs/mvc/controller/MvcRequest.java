@@ -29,7 +29,9 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.MapTool;
+import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.io.StreamUtil;
 
 /**
@@ -95,7 +97,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	public Map<String, Object> getPutRequestData() {
 		try {
 			String params = new StreamUtil().setIn(getInputStream()).byteStream2stringStream().close().getContent();
-			return MapHelper.toMap(params.split("&"), true);
+			return MapTool.toMap(params.split("&"), v -> MappingValue.toJavaValue(Encode.urlDecode(v)));
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
@@ -105,7 +107,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	/**
 	 * 去取 url 上的值
 	 * 
-	 * @param value     值
+	 * @param value 值
 	 * @param paramName 参数名称
 	 * @return 值
 	 */
@@ -135,15 +137,15 @@ public class MvcRequest extends HttpServletRequestWrapper {
 		} else {
 			map = MapTool.as(getParameterMap(), arr -> arr[0]);
 		}
-		
-		System.out.println("Map:"+map);
+
+		System.out.println("Map:" + map);
 
 		// 抛出 IllegalArgumentException 这个异常 有可能是参数类型不一致造成的，要求的是 string 因为 map 从 request
 		// 转换时已经变为 int（例如纯数字的时候）
 		// 所以最后一个参数为 true
 		return MapTool.map2Bean(map, clazz, true);
 	}
- 
+
 	/**
 	 * 全局的 callback 参数名
 	 */
@@ -236,7 +238,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	/**
 	 * 获取磁盘真實地址
 	 * 
-	 * @param cxt          Web 上下文
+	 * @param cxt Web 上下文
 	 * @param relativePath 相对地址
 	 * @return 绝对地址
 	 */

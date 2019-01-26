@@ -83,7 +83,7 @@ public class PageTag extends SimpleTagSupport {
 
 		// if(queryString.startsWith("&"))
 		queryString = queryString.replaceFirst("&", "");// 去掉第一个无用的 &
-		return MapTool.toMap(queryString.split("&"));
+		return MapTool.toMap(queryString.split("&"), v -> v);
 	}
 
 	/**

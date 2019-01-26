@@ -30,9 +30,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.framework.BaseModel;
-import com.ajaxjs.keyvalue.MapHelper;
-import com.ajaxjs.keyvalue.MappingValue;
 import com.ajaxjs.mvc.ModelAndView;
+import com.ajaxjs.util.MapTool;
+import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -71,7 +71,7 @@ public class RequestParam {
 				if (request.getMethod() != null && request.getMethod().equals("PUT")) {
 					map = request.getPutRequestData();
 				} else {
-					map = MapHelper.asObject(MapHelper.toMap(request.getParameterMap()), true);
+					map = MapTool.as(request.getParameterMap(), arr -> MappingValue.toJavaValue(arr[0]));
 				}
 
 				args.add(map);
