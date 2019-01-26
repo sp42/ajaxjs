@@ -25,8 +25,8 @@ import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-import com.ajaxjs.keyvalue.MapHelper;
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.MapTool;
 
 /**
  * 分页标签
@@ -83,7 +83,7 @@ public class PageTag extends SimpleTagSupport {
 
 		// if(queryString.startsWith("&"))
 		queryString = queryString.replaceFirst("&", "");// 去掉第一个无用的 &
-		return MapHelper.toMap(queryString.split("&"));
+		return MapTool.toMap(queryString.split("&"));
 	}
 
 	/**

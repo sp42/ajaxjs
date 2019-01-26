@@ -22,12 +22,15 @@ import javax.ws.rs.QueryParam;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.ajaxjs.framework.News;
+import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.web.mock.MockRequest;
 import com.ajaxjs.web.mock.MockResponse;
 
 public class TestRequestParam {
+	public static class News extends BaseModel {
+		private static final long serialVersionUID = 1L;
+	}
 
 	@Path("/foo")
 	public static class c1 implements IController {
@@ -68,8 +71,8 @@ public class TestRequestParam {
 
 		HttpServletRequest request = MockRequest.mockRequest("/ajaxjs-web", "/combo/person");
 
-		map.put("foo", new String[] {"bar"});
-		map.put("price", new String[] {"2000.65"});
+		map.put("foo", new String[] { "bar" });
+		map.put("price", new String[] { "2000.65" });
 		when(request.getParameterMap()).thenReturn(map);
 
 		HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
@@ -85,9 +88,9 @@ public class TestRequestParam {
 		args = RequestParam.getArgs(new MvcRequest(request), response, ControllerScanner.urlMappingTree.get("foo").postMethod);
 		assertTrue(args[0] instanceof ModelAndView);
 		assertTrue(args[1] instanceof News);
-		
+
 		News news = (News) args[1];
-		System.out.println(news.getPrice());
+		System.out.println(news.getName());
 	}
 
 	@Test

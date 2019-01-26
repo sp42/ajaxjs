@@ -28,9 +28,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ajaxjs.keyvalue.BeanUtil;
-import com.ajaxjs.keyvalue.MapHelper;
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.MapTool;
 import com.ajaxjs.util.io.StreamUtil;
 
 /**
@@ -134,7 +133,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 		if (getMethod() != null && getMethod().toUpperCase().equals("PUT")) {
 			map = getPutRequestData(); // Servlet 没有 PUT 获取表单，要自己处理
 		} else {
-			map = MapHelper.asObject(MapHelper.toMap(getParameterMap()), true);
+			map = MapTool.as(getParameterMap(), arr -> arr[0]);
 		}
 		
 		System.out.println("Map:"+map);
@@ -142,7 +141,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 		// 抛出 IllegalArgumentException 这个异常 有可能是参数类型不一致造成的，要求的是 string 因为 map 从 request
 		// 转换时已经变为 int（例如纯数字的时候）
 		// 所以最后一个参数为 true
-		return BeanUtil.map2Bean(map, clazz, true);
+		return MapTool.map2Bean(map, clazz, true);
 	}
  
 	/**

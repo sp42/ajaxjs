@@ -33,7 +33,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.jsp.PageContext;
 
 import com.ajaxjs.framework.BaseModel;
-import com.ajaxjs.framework.MapUtil;
+import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
@@ -125,14 +125,14 @@ public class MvcOutput extends HttpServletResponseWrapper {
 		}
 
 		if (getOutput_Map() != null) { // Map 的话转变为 json 输出
-			setJson(true).setOutput(MapUtil.toJson(getOutput_Map()));
+			setJson(true).setOutput(JsonHelper.toJson(getOutput_Map()));
 		} else if (getOutput_List() != null) {
 			if (getOutput_List() == null || getOutput_List().size() == 0) {
 				setJson(true).setOutput("[]");
 			} else
-				setJson(true).setOutput(MapUtil.toJson(getOutput_List()));
+				setJson(true).setOutput(JsonHelper.toJson(getOutput_List()));
 		} else if (getBean() != null) {
-			setJson(true).setOutput(MapUtil.toJson(getBean()));
+			setJson(true).setOutput(JsonHelper.toJson(getBean()));
 		} else if (getOutput_Obj() != null) {// map or object 二选其一
 			// setJson(true).setOutput(JsonHelper.stringify_object(getOutput_Obj()));
 		}

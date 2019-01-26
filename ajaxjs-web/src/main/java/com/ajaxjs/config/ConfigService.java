@@ -18,7 +18,6 @@ package com.ajaxjs.config;
 import java.util.Map;
 
 import com.ajaxjs.Version;
-import com.ajaxjs.framework.MapUtil;
 import com.ajaxjs.js.JsEngineWrapper;
 import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.js.JsonStruTraveler;
@@ -81,7 +80,7 @@ public class ConfigService {
 	 * 保存 JSON 配置
 	 */
 	public static void save() {
-		String jsonStr = MapUtil.toJson(config);
+		String jsonStr = JsonHelper.toJson(config);
 		config.setJsonStr(jsonStr);
 
 		new FileUtil().setFilePath(config.getJsonPath()).setContent(jsonStr).save();// 保存文件

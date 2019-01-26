@@ -15,7 +15,7 @@
  */
 package com.ajaxjs.mvc;
 
-import com.ajaxjs.keyvalue.MappingHelper;
+import com.ajaxjs.js.JsonHelper;
 
 /**
  * 
@@ -62,10 +62,10 @@ public interface Constant {
 	/**
 	 * 显示 HTTP 405 禁止操作
 	 */
-	public static final String show405 = String.format(MappingHelper.json_not_ok, "405， Request method not supported 禁止操作");
+	public static final String show405 = String.format(JsonHelper.json_not_ok, "405， Request method not supported 禁止操作");
 	
 	/**
 	 * 显示 HTTP 401 没有权限
 	 */
-	public static final String show401 = String.format(MappingHelper.json_not_ok, "401， Request method not supported 没有权限");
+	public static final String show401 = String.format(JsonHelper.json_not_ok, "401， Request method not supported 没有权限");
 }

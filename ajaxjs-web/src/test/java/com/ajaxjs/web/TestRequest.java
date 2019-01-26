@@ -14,7 +14,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.keyvalue.MappingValue;
+import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.web.mock.MockFilter;
 import com.ajaxjs.web.mock.MockRequest;
 

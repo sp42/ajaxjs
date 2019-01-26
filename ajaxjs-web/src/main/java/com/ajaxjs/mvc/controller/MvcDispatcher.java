@@ -36,13 +36,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.ioc.BeanContext;
-import com.ajaxjs.keyvalue.MapHelper;
-import com.ajaxjs.keyvalue.MappingHelper;
+import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.FilterAction;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
+import com.ajaxjs.util.MapTool;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.ServletHelper;
@@ -78,14 +78,14 @@ public class MvcDispatcher implements Filter {
 		// AnnotationUtils.controllers 集合中
 		Map<String, String> config = ServletHelper.initFilterConfig2Map(_config);
 
-		MapHelper.getValue(config, "doIoc", (String doIoc) -> {
+		MapTool.getValue(config, "doIoc", (String doIoc) -> {
 			for (String packageName : CommonUtil.split(doIoc))
 				BeanContext.init(packageName);
 
 			BeanContext.injectBeans(); // 依赖注射扫描
 		});
 
-		MapHelper.getValue(config, "controller", ControllerScanner::scannController);
+		MapTool.getValue(config, "controller", ControllerScanner::scannController);
 
 		if (config != null && config.get("controller") == null)
 			LOGGER.info("web.xml 没有配置 MVC 过滤器或者 配置没有定义 controller");
@@ -211,7 +211,7 @@ public class MvcDispatcher implements Filter {
 		Produces a = method.getAnnotation(Produces.class);
 
 		if (a != null && MediaType.APPLICATION_JSON.equals(a.value()[0])) {// 返回 json
-			response.resultHandler(String.format(MappingHelper.json_not_ok, errMsg), request, model, method);
+			response.resultHandler(String.format(JsonHelper.json_not_ok, errMsg), request, model, method);
 		} else {
 			response.resultHandler(String.format("redirect::%s/showMsg?msg=%s", request.getContextPath(), Encode.urlEncode((errMsg))), request, model, method);
 		}

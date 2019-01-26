@@ -25,8 +25,8 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import com.ajaxjs.js.JsonHelper;
-import com.ajaxjs.keyvalue.MapHelper;
 import com.ajaxjs.mvc.controller.MvcDispatcher;
+import com.ajaxjs.util.MapTool;
 
 /**
  * 为方便单元测试，模拟请求对象
@@ -233,7 +233,7 @@ public class MockRequest extends HttpServletRequestWrapper {
 			for (String key : formBody.keySet())
 				when(request.getParameter(key)).thenReturn(formBody.get(key));
 		} else {
-			String form = MapHelper.join(formBody, "&");
+			String form = MapTool.join(formBody, "&");
 			final InputStream is = new ByteArrayInputStream(form.getBytes());
 
 			when(request.getInputStream()).thenReturn(new ServletInputStream() {
