@@ -32,7 +32,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -78,7 +77,7 @@ public class MapTool {
 	}
 
 	/**
-	 * 数据结构的简单转换 String[]-->Map
+	 * 数据结构的简单转换 String[]--》Map
 	 * 
 	 * @param pairs 结对的字符串数组
 	 * @return Map 结构
@@ -364,35 +363,5 @@ public class MapTool {
 	 */
 	public static <T> T map2Bean(Map<String, Object> map, Class<T> clz) {
 		return map2Bean(map, clz, false);
-	}
-
-	/**
-	 * JSON 字符串转换为 Bean 对象
-	 * 
-	 * @param json JSON 字符串
-	 * @param clz Bean 对象类引用
-	 * @return Bean 对象
-	 */
-	public static <T> T json2bean(String json, Class<T> clz) {
-		Map<String, Object> map = JsonHelper.parseMap(json);
-		return map2Bean(map, clz, true);
-	}
-
-	/**
-	 * 传入任意一个 object 对象生成一个指定规格的字符串
-	 * 
-	 * @param object 任意对象
-	 * @return String
-	 */
-	public static String objectToJson(Object object) {
-		StringBuilder json = new StringBuilder();
-
-		if (object == null) {
-			json.append("\"\"");
-		} else if (object instanceof String || object instanceof Integer || object instanceof Double) {
-			json.append("\"").append(object.toString()).append("\"");
-		}
-
-		return json.toString();
 	}
 }

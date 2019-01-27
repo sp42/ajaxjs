@@ -95,6 +95,12 @@ public class NetUtil extends IoHelper {
 	 */
 	public final static Consumer<HttpURLConnection> setGizpRequest = conn -> conn.addRequestProperty("Accept-Encoding", "gzip, deflate");
 
+	/**
+	 * HttpURLConnection 工厂函数
+	 * 
+	 * @param url 请求目的地址
+	 * @return HttpURLConnection 对象
+	 */
 	public static HttpURLConnection initHttpConnection(String url) {
 		URL httpUrl = null;
 
@@ -117,8 +123,8 @@ public class NetUtil extends IoHelper {
 	 * 发送请求，返回响应信息
 	 * 
 	 * @param conn 链接对象
-	 * @param isEnableGzip
-	 * @param callback
+	 * @param isEnableGzip 是否需要 GZip 解码
+	 * @param callback 回调里面请记得关闭 InputStream
 	 * @return
 	 */
 	public static <T> T getResponse(HttpURLConnection conn, Boolean isEnableGzip, Function<InputStream, T> callback) {
@@ -159,6 +165,13 @@ public class NetUtil extends IoHelper {
 		return get(url, false);
 	}
 
+	/**
+	 * GET 请求，返回文本内容
+	 * 
+	 * @param url
+	 * @param isGzip
+	 * @return
+	 */
 	public static String get(String url, boolean isGzip) {
 		HttpURLConnection conn = initHttpConnection(url);
 		if (isGzip)

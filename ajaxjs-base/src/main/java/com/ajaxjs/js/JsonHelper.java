@@ -175,7 +175,6 @@ public class JsonHelper {
 			return obj.toString();
 		} else if (obj instanceof Date) {
 			return '\"' + CommonUtil.SimpleDateFormatFactory(CommonUtil.commonDateFormat).format((Date) obj) + '\"';
-	
 		} else if (obj.getClass() == Integer[].class) {
 			return jsonArr((Integer[]) obj, v -> v + "");
 		} else if (obj.getClass() == int[].class) {
@@ -305,7 +304,7 @@ public class JsonHelper {
 		if (props != null) {
 			for (int i = 0; i < props.length; i++) {
 				try {
-					String name = MapTool.objectToJson(props[i].getName());
+					String name = "\"" + props[i].getName() + "\"";
 					String value = toJson(props[i].getReadMethod().invoke(bean));
 	
 					json.append(name);
@@ -323,6 +322,18 @@ public class JsonHelper {
 		}
 	
 		return json.toString();
+	}
+	
+	/**
+	 * JSON 字符串转换为 Bean 对象
+	 * 
+	 * @param json JSON 字符串
+	 * @param clz Bean 对象类引用
+	 * @return Bean 对象
+	 */
+	public static <T> T json2bean(String json, Class<T> clz) {
+		Map<String, Object> map = parseMap(json);
+		return MapTool.map2Bean(map, clz, true);
 	}
 	
 	// --------------------------------------------------------------------------------------------------
@@ -362,4 +373,5 @@ public class JsonHelper {
 	 * 操作成功，返回 msg 信息
 	 */
 	public static final String json_ok = "json::{\"isOk\": true, \"msg\" : \"%s\"}";
+
 }
