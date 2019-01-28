@@ -50,8 +50,10 @@ public class MapTool {
 	/**
 	 * Map 转换为 String
 	 * 
-	 * @param map Map
-	 * @return String
+	 * @param map Map 结构，Key 必须为 String 类型
+	 * @param div 分隔符
+	 * @param fn 对 Value 的处理函数，返回类型 T
+	 * @return Map 序列化字符串
 	 */
 	public static <T> String join(Map<String, T> map, String div, Function<T, String> fn) {
 		String[] pairs = new String[map.size()];
@@ -73,14 +75,15 @@ public class MapTool {
 	}
 
 	public static <T> String join(Map<String, T> map) {
-		return join(map, v -> v == null ? null : v.toString());
+		return join(map, "&");
 	}
 
 	/**
-	 * 数据结构的简单转换 String[]--》Map
+	 * String[] 转换为 Map
 	 * 
-	 * @param pairs 结对的字符串数组
-	 * @return Map 结构
+	 * @param pairs 结对的字符串数组，包含 = 字符分隔 key 和 value
+	 * @param fn 对 Value 的处理函数，返回类型 Object
+	 * @return Map 对象
 	 */
 	public static Map<String, Object> toMap(String[] pairs, Function<String, Object> fn) {
 		if (CommonUtil.isNull(pairs))
@@ -104,11 +107,12 @@ public class MapTool {
 	}
 
 	/**
-	 * 数据结构的简单转换 String[]-->Map
+	 * String[] 转换为 Map，key 与 value 分别一个数组
 	 * 
 	 * @param columns 结对的键数组
 	 * @param values 结对的值数组
-	 * @return Map 结构
+	 * @param fn 对 Value 的处理函数，返回类型 Object
+	 * @return Map 对象
 	 */
 	public static Map<String, Object> toMap(String[] columns, String[] values, Function<String, Object> fn) {
 		if (CommonUtil.isNull(columns))
@@ -144,8 +148,8 @@ public class MapTool {
 	/**
 	 * 万能 Map 转换器，为了泛型的转换而设的一个方法，怎么转换在 fn 中处理
 	 * 
-	 * @param map
-	 * @param fn
+	 * @param map 原始 Map，key 必须为 String 类型
+	 * @param fn 转换函数
 	 * @return
 	 */
 	public static <T, K> Map<String, T> as(Map<String, K> map, Function<K, T> fn) {
@@ -157,6 +161,121 @@ public class MapTool {
 		}
 
 		return _map;
+	}
+
+	// --------------------------------------------------------------------------------------------------
+	// -----------------------------------------------Bean-----------------------------------------------
+	// --------------------------------------------------------------------------------------------------
+
+	@FunctionalInterface
+	public static interface EachFieldArg {
+		public void item(String key, Object value, PropertyDescriptor property);
+	}
+
+	/**
+	 * 遍历一个 Java Bean
+	 * 
+	 * @param bean Java Bean
+	 * @param fn 执行的任务，参数有 key, value, property
+	 */
+	public static void eachField(Object bean, EachFieldArg fn) {
+		try {
+			BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass());
+
+			for (PropertyDescriptor property : beanInfo.getPropertyDescriptors()) {
+				String key = property.getName();
+				// 得到 property 对应的 getter 方法
+				Method getter = property.getReadMethod();
+				Object value = getter.invoke(bean);
+
+				fn.item(key, value, property);
+			}
+		} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			LOGGER.warning(e);
+		}
+	}
+
+	/**
+	 * Map 转为 Bean
+	 * 
+	 * @param map 原始数据
+	 * @param clz 实体 bean 的类
+	 * @param isTransform 是否尝试转换值
+	 * @return 实体 bean 对象
+	 */
+	public static <T> T map2Bean(Map<String, ?> map, Class<T> clz, boolean isTransform) {
+		T bean = ReflectUtil.newInstance(clz);
+
+		eachField(bean, (key, v, property) -> {
+			try {
+				if (map.containsKey(key)) {
+					Object value = map.get(key);
+
+					// null 是不会传入 bean 的
+					if (value != null) {
+						Class<?> t = property.getPropertyType(); // Bean 值的类型，这是期望传入的类型，也就 setter 参数的类型
+
+						if (isTransform && value != null && t != value.getClass()) { // 类型相同，直接传入；类型不相同，开始转换
+							value = MappingValue.objectCast(value, t);
+						}
+
+						property.getWriteMethod().invoke(bean, value);
+					}
+				}
+
+				// 子对象
+				for (String mKey : map.keySet()) {
+					if (mKey.contains(key + '_')) {
+						Method getter = property.getReadMethod(), setter = property.getWriteMethod();// 得到对应的 setter 方法
+
+						Object subBean = getter.invoke(bean);
+						String subBeanKey = mKey.replaceAll(key + '_', "");
+
+						if (subBean != null) {// 已有子 bean
+							if (map.get(mKey) != null) // null 值不用处理
+								ReflectUtil.setProperty(subBean, subBeanKey, map.get(mKey));
+						} else { // map2bean
+							Map<String, Object> subMap = new HashMap<>();
+							subMap.put(subBeanKey, map.get(mKey));
+							subBean = map2Bean(subMap, setter.getParameterTypes()[0], isTransform);
+							setter.invoke(bean, subBean); // 保存新建的 bean
+						}
+					}
+				}
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				LOGGER.warning(e);
+			}
+		});
+
+		return bean;
+	}
+
+	/**
+	 * map 转实体
+	 * 
+	 * @param map 原始数据
+	 * @param clz 实体 bean 的类
+	 * @return 实体 bean 对象
+	 */
+	public static <T> T map2Bean(Map<String, ?> map, Class<T> clz) {
+		return map2Bean(map, clz, false);
+	}
+
+	/**
+	 * Bean 转为 Map
+	 * 
+	 * @param bean 实体 bean 对象
+	 * @return Map 对象
+	 */
+	public static <T> Map<String, Object> bean2Map(T bean) {
+		Map<String, Object> map = new HashMap<>();
+
+		eachField(bean, (k, v, property) -> {
+			if (!k.equals("class")) // 过滤 class 属性
+				map.put(k, v);
+		});
+
+		return map;
 	}
 
 	// --------------------------------------------------------------------------------------------------
@@ -249,119 +368,5 @@ public class MapTool {
 			LOGGER.warning(e);
 			return null;
 		}
-	}
-
-	// --------------------------------------------------------------------------------------------------
-	// -----------------------------------------------Bean-----------------------------------------------
-	// --------------------------------------------------------------------------------------------------
-
-	@FunctionalInterface
-	public static interface EachFieldArg {
-		public void item(String key, Object value, PropertyDescriptor property);
-	}
-
-	/**
-	 * 
-	 * @param bean
-	 * @param fn
-	 */
-	static void eachField(Object bean, EachFieldArg fn) {
-		try {
-			BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass());
-
-			for (PropertyDescriptor property : beanInfo.getPropertyDescriptors()) {
-				String key = property.getName();
-				// 得到 property 对应的 getter 方法
-				Method getter = property.getReadMethod();
-				Object value = getter.invoke(bean);
-
-				fn.item(key, value, property);
-			}
-		} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Map 转为 Bean
-	 * 
-	 * @param map 原始数据
-	 * @param clz 实体 bean 的类
-	 * @param isTransform 是否尝试转换值
-	 * @return 实体 bean 对象
-	 */
-	public static <T> T map2Bean(Map<String, Object> map, Class<T> clz, boolean isTransform) {
-		T bean = ReflectUtil.newInstance(clz);
-
-		eachField(bean, (key, v, property) -> {
-			try {
-				if (map.containsKey(key)) {
-					Object value = map.get(key);
-
-					// null 是不会传入 bean 的
-					if (value != null) {
-						Class<?> t = property.getPropertyType(); // Bean 值的类型，这是期望传入的类型，也就 setter 参数的类型
-
-						if (isTransform && value != null && t != value.getClass()) { // 类型相同，直接传入；类型不相同，开始转换
-							value = MappingValue.objectCast(value, t);
-						}
-
-						property.getWriteMethod().invoke(bean, value);
-					}
-				}
-
-				// 子对象
-				for (String mKey : map.keySet()) {
-					if (mKey.contains(key + '_')) {
-						Method getter = property.getReadMethod(), setter = property.getWriteMethod();// 得到对应的 setter 方法
-
-						Object subBean = getter.invoke(bean);
-						String subBeanKey = mKey.replaceAll(key + '_', "");
-
-						if (subBean != null) {// 已有子 bean
-							if (map.get(mKey) != null) // null 值不用处理
-								ReflectUtil.setProperty(subBean, subBeanKey, map.get(mKey));
-						} else { // map2bean
-							Map<String, Object> subMap = new HashMap<>();
-							subMap.put(subBeanKey, map.get(mKey));
-							subBean = map2Bean(subMap, setter.getParameterTypes()[0], isTransform);
-							setter.invoke(bean, subBean); // 保存新建的 bean
-						}
-					}
-				}
-			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				e.printStackTrace();
-			}
-		});
-
-		return bean;
-	}
-
-	/**
-	 * Bean 转为 Map
-	 * 
-	 * @param bean 实体 bean 对象
-	 * @return Map 对象
-	 */
-	public static <T> Map<String, Object> bean2Map(T bean) {
-		Map<String, Object> map = new HashMap<>();
-
-		eachField(bean, (k, v, property) -> {
-			if (!k.equals("class")) // 过滤 class 属性
-				map.put(k, v);
-		});
-
-		return map;
-	}
-
-	/**
-	 * map 转实体
-	 * 
-	 * @param map 原始数据
-	 * @param clz 实体 bean 的类
-	 * @return 实体 bean 对象
-	 */
-	public static <T> T map2Bean(Map<String, Object> map, Class<T> clz) {
-		return map2Bean(map, clz, false);
 	}
 }

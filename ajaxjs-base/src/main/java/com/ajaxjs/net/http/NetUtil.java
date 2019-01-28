@@ -254,7 +254,7 @@ public class NetUtil extends IoHelper {
 	public static String download(String url, String saveDir, String newFileName) {
 		HttpURLConnection conn = initHttpConnection(url);
 		setUserAgentDefault.accept(conn);
-		conn.setDoInput(true);
+		conn.setDoInput(true);// for conn.getOutputStream().write(someBytes); 需要吗？
 		conn.setDoOutput(true);
 
 		String fileName = newFileName == null ? IoHelper.getFileNameFromUrl(url) : newFileName;

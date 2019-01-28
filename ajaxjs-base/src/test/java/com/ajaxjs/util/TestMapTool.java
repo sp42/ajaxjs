@@ -28,8 +28,22 @@ public class TestMapTool {
 	}
 
 	@Test
+	public void testToMap() {
+		assertEquals(1, MapTool.toMap(new String[] { "a", "b", "d" }, new String[] { "1", "c", "2" }, MappingValue::toJavaValue).get("a"));
+		assertEquals(1, MapTool.toMap(new String[] { "a=1", "b=2", "d=c" }, MappingValue::toJavaValue).get("a"));
+		assertEquals("你好", MapTool.toMap(new String[] { "a=%e4%bd%a0%e5%a5%bd", "b=2", "d=c" }, Encode::urlDecode).get("a"));
+	}
+
+	@Test
 	public void testAsString() {
 		assertEquals("500", as(map, v -> v.toString()).get("bar"));
+		assertEquals("[1, c, 2]", as(new HashMap<String, String[]>() {
+			private static final long serialVersionUID = 1L;
+			{
+				put("foo", new String[] { "a", "b" });
+				put("bar", new String[] { "1", "c", "2" });
+			}
+		}, v -> Arrays.toString(v)).get("bar"));
 	}
 
 	@Test
@@ -44,23 +58,6 @@ public class TestMapTool {
 		}, v -> MappingValue.toJavaValue(v.toString())).get("bar"));
 	}
 
-	@Test
-	public void testToMap() {
-		assertEquals("[1, c, 2]", as(new HashMap<String, String[]>() {
-			private static final long serialVersionUID = 1L;
-			{
-				put("foo", new String[] { "a", "b" });
-				put("bar", new String[] { "1", "c", "2" });
-			}
-		}, v -> Arrays.toString(v)).get("bar"));
-
-		assertEquals(1, MapTool.toMap(new String[] { "a", "b", "d" }, new String[] { "1", "c", "2" }, MappingValue::toJavaValue).get("a"));
-
-		assertEquals(1, MapTool.toMap(new String[] { "a=1", "b=2", "d=c" }, MappingValue::toJavaValue).get("a"));
-
-		assertEquals("你好", MapTool.toMap(new String[] { "a=%e4%bd%a0%e5%a5%bd", "b=2", "d=c" }, Encode::urlDecode).get("a"));
-	}
-	
 	public static Map<String, Object> userWithoutChild = new HashMap<String, Object>() {
 		private static final long serialVersionUID = 1L;
 		{
