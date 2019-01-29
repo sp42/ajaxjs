@@ -78,14 +78,12 @@ public class JsonHelper {
 	public static String toJson(Object obj) {
 		if (obj == null) {
 			return null;
-		} else if (obj instanceof String) {
-			return '\"' + obj.toString().replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r") + '\"';
-		} else if (obj instanceof Double) {
-			return obj + "";
 		} else if (obj instanceof Boolean || obj instanceof Number) {
 			return obj.toString();
-		} else if (obj instanceof Date) {
-			return '\"' + CommonUtil.SimpleDateFormatFactory(CommonUtil.commonDateFormat).format((Date) obj) + '\"';
+		} else if (obj instanceof String) {
+			return '\"' + obj.toString().replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r") + '\"';
+		} else if (obj instanceof String[]) {
+			return jsonArr((String[]) obj, v -> "\"" + v + "\"");
 		} else if (obj.getClass() == Integer[].class) {
 			return jsonArr((Integer[]) obj, v -> v + "");
 		} else if (obj.getClass() == int[].class) {
@@ -96,8 +94,8 @@ public class JsonHelper {
 		} else if (obj instanceof long[]) {
 			Long[] arr = Arrays.stream((long[]) obj).boxed().toArray(Long[]::new);
 			return jsonArr(arr, v -> v.toString());
-		} else if (obj instanceof String[]) {
-			return jsonArr((String[]) obj, v -> "\"" + v + "\"");
+		} else if (obj instanceof Date) {
+			return '\"' + CommonUtil.SimpleDateFormatFactory(CommonUtil.commonDateFormat).format((Date) obj) + '\"';
 		} else if (obj instanceof Map) {
 			return stringifyMap((Map<?, ?>) obj);
 		} else if (obj instanceof Map[]) {
@@ -144,8 +142,6 @@ public class JsonHelper {
 			}
 
 			return '{' + String.join(",", arr) + '}';
-		} else {
-			throw new RuntimeException("不支持数据类型");
 		}
 
 		return null;
