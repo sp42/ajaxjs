@@ -36,7 +36,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.ioc.BeanContext;
-import com.ajaxjs.js.JsonHelper;
+import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.FilterAction;
 import com.ajaxjs.mvc.filter.MvcFilter;
@@ -211,7 +211,7 @@ public class MvcDispatcher implements Filter {
 		Produces a = method.getAnnotation(Produces.class);
 
 		if (a != null && MediaType.APPLICATION_JSON.equals(a.value()[0])) {// 返回 json
-			response.resultHandler(String.format(JsonHelper.json_not_ok, errMsg), request, model, method);
+			response.resultHandler(Constant.jsonNoOk(errMsg), request, model, method);
 		} else {
 			response.resultHandler(String.format("redirect::%s/showMsg?msg=%s", request.getContextPath(), Encode.urlEncode((errMsg))), request, model, method);
 		}
