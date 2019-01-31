@@ -28,7 +28,7 @@ public class TestDataDictService {
 	@Test
 	public void testPageList() {
 		PageResult<Map<String, Object>> page;
-		page = service.dao.findPagedList(0, 10);
+		page = DataDictService.dao.findPagedList(0, 10);
 		assertNotNull(page);
 		assertNotNull(page.get(0));
 		assertNotNull(page.get(0).get("name"));

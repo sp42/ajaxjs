@@ -41,7 +41,7 @@ public class DataDictAdminController extends BaseController<Map<String, Object>>
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public List<Map<String, Object>> getDictListByParentId(@PathParam("id") long pId) {
-		return service.dao.findByParentId(pId);
+		return DataDictService.dao.findByParentId(pId);
 	}
 
 	@GET

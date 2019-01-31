@@ -73,7 +73,7 @@ public abstract class BaseController<T> implements IController, Constant {
 		if (newlyId == null)
 			throw new RuntimeException("创建失败！");
 
-		return String.format(JsonHelper.json_ok_extension, "创建实体成功", "\"newlyId\":" + newlyId);
+		return String.format(Constant.json_ok_extension, "创建实体成功", "\"newlyId\":" + newlyId);
 	}
 
 	public static <E> String create(E entry, IBaseService<E> service) {
@@ -122,7 +122,7 @@ public abstract class BaseController<T> implements IController, Constant {
 	@SuppressWarnings("unchecked")
 	public static <E> String update(Long id, E entity, Consumer<E> updateAction) {
 		LOGGER.info("修改 name:{0}，数据库将执行 UPDATE 操作", entity);
-		
+
 		if (entity instanceof BaseModel) {
 			((BaseModel) entity).setId(id);
 		} else if (entity instanceof Map) {
@@ -236,7 +236,7 @@ public abstract class BaseController<T> implements IController, Constant {
 
 		int total = pageResult.isZero() ? 0 : pageResult.getTotalCount();
 
-		return String.format(JsonHelper.json_ok_extension, "分页列表", "\"result\":" + jsonStr + ",\"total\":" + total);
+		return String.format(Constant.json_ok_extension, "分页列表", "\"result\":" + jsonStr + ",\"total\":" + total);
 	}
 
 	public static String toJson(Object obj, boolean isAdd) {
@@ -245,11 +245,11 @@ public abstract class BaseController<T> implements IController, Constant {
 	}
 
 	public static String jsonOk(String msg) {
-		return JsonHelper.jsonOk(msg);
+		return Constant.jsonOk(msg);
 	}
 
 	public static String jsonNoOk(String msg) {
-		return JsonHelper.jsonNoOk(msg);
+		return Constant.jsonNoOk(msg);
 	}
 
 	public static String jsp(String jsp) {
