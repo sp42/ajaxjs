@@ -15,6 +15,8 @@
  */
 package com.ajaxjs.mvc;
 
+import com.ajaxjs.js.JsonHelper;
+
 /**
  * 
  * @author Sp42 frank@ajaxjs.com
@@ -81,7 +83,7 @@ public interface Constant {
 	public static String jsonOk(String msg) {
 		return String.format(json_ok, msg);
 	}
-	
+
 	public static String jsonOk_Extension(Object... msg) {
 		return String.format(json_ok_extension, msg);
 	}
@@ -93,7 +95,7 @@ public interface Constant {
 	 * @return JSON 字符串
 	 */
 	public static String jsonNoOk(String msg) {
-		return String.format(json_not_ok, msg);
+		return String.format(json_not_ok, JsonHelper.jsonString_covernt(msg));
 	}
 
 	/**

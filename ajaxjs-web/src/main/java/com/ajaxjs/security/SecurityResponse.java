@@ -19,6 +19,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
+import com.ajaxjs.util.CommonUtil;
+
 /**
  * 检测 CLRF 的过滤器
  * 
@@ -60,7 +62,7 @@ public class SecurityResponse extends HttpServletResponseWrapper {
 			throw new SecurityException("超出 Cookie 允许容量：" + MAX_COOKIE_SIZE);
 
 		if (!delegate.isInWhiteList(cookie.getName()))
-			throw new SecurityException("cookie:" + cookie.getName() + " 不在白名单中，添加无效！");
+			throw new SecurityException("cookie: " + cookie.getName() + " 不在白名单中，添加无效！");
 
 		super.addCookie(newCookie);
 	}
@@ -94,10 +96,11 @@ public class SecurityResponse extends HttpServletResponseWrapper {
 	 * @return
 	 */
 	private static String filterCLRF(String value) {
-		if (value == null || value.isEmpty())
+		if (CommonUtil.isEmptyString(value))
 			return value;
 
 		StringBuilder sb = new StringBuilder();
+
 		for (int i = 0; i < value.length(); i++) {
 			if (!(value.charAt(i) == '\r' || value.charAt(i) == '\n'))
 				sb.append(value.charAt(i));
@@ -113,7 +116,7 @@ public class SecurityResponse extends HttpServletResponseWrapper {
 	 * @return
 	 */
 	private static boolean containCLRF(String name) {
-		if (name == null || name.isEmpty())
+		if (CommonUtil.isEmptyString(name))
 			return false;
 
 		for (int i = 0; i < name.length(); i++) {

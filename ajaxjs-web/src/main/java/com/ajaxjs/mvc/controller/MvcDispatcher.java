@@ -213,7 +213,7 @@ public class MvcDispatcher implements Filter {
 		if (a != null && MediaType.APPLICATION_JSON.equals(a.value()[0])) {// 返回 json
 			response.resultHandler(Constant.jsonNoOk(errMsg), request, model, method);
 		} else {
-			response.resultHandler(String.format("redirect::%s/showMsg?msg=%s", request.getContextPath(), Encode.urlEncode((errMsg))), request, model, method);
+			response.resultHandler(String.format("redirect::%s/showMsg?msg=%s", request.getContextPath(), Encode.urlEncode(errMsg)), request, model, method);
 		}
 	}
 

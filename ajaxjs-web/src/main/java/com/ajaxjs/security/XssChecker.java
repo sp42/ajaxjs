@@ -31,7 +31,6 @@ import com.ajaxjs.util.CommonUtil;
  *
  */
 public class XssChecker {
-
 	private static String xssType = "<script[^>]*?>.*?</script>";
 
 	private static Pattern xssPattern = Pattern.compile(xssType);

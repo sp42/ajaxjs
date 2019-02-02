@@ -17,9 +17,8 @@ public class WriteMehtodFilter implements FilterAction {
 
 	@Override
 	public boolean before(MvcRequest request, MvcOutput response, Method method) {
-		if (!"GET".equalsIgnoreCase(request.getMethod())) {
+		if (!"GET".equalsIgnoreCase(request.getMethod()))
 			return true;
-		}
 
 		String uri = request.getRequestURI();
 

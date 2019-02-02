@@ -24,6 +24,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
+import com.ajaxjs.util.CommonUtil;
+
 /**
  * 输入输出 Cookie 白名单验证过滤。
  * 
@@ -45,7 +47,7 @@ public class SecurityRequest extends HttpServletRequestWrapper {
 	public Cookie[] getCookies() {
 		Cookie[] cookies = super.getCookies();
 
-		if (cookies == null || cookies.length == 0)
+		if (CommonUtil.isNull(cookies))
 			return null;
 
 		List<Cookie> cookieList = new ArrayList<>();
