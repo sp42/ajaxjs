@@ -2,11 +2,13 @@ package com.ajaxjs.cms.service;
 
 import static org.junit.Assert.assertNotNull;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.cms.domain.DomainEntity;
 import com.ajaxjs.cms.domain.DomainEntityService;
 import com.ajaxjs.cms.utils.CmsUtils;
 import com.ajaxjs.framework.PageResult;
@@ -29,17 +31,17 @@ public class TestHrService {
 	@Test
 	public void testCreate() {
 		for (int i = 0; i < 10; i++) {
-			DomainEntity entity = new DomainEntity();
-			entity.setName(TestHelper.getItem(names));
-			entity.setContent(TestHelper.getItem(content));
-			entity.setIntro(TestHelper.getItem(expr));
+			Map<String, Object> entity = new HashMap<>();
+			entity.put("name", TestHelper.getItem(names));
+			entity.put("content", TestHelper.getItem(content));
+			entity.put("intro", TestHelper.getItem(expr));
 			assertNotNull(hrService.create(entity));
 		}
 	}
 
 	@Test
 	public void testPageList() {
-		PageResult<DomainEntity> page = hrService.findPagedList(0, 10);
+		PageResult<Map<String, Object>> page = hrService.findPagedList(0, 10);
 		assertNotNull(page.getTotalCount());
 	}
 

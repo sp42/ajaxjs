@@ -31,11 +31,6 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.util.io.FileUtil;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-
 /**
  * 编辑配置的控制器
  * 
@@ -52,17 +47,16 @@ public class ConfigController implements IController {
 		return BaseController.cms("config-all");
 	}
 
-	@Operation(
-		summary = "保存配置", 
-		tags = { "SystemConfig", "Admin Service ONLY" }, 
-		description = "保存配置并且刷新配置", 
-		responses = {
-			@ApiResponse(description = "操作是否成功", content = @Content(mediaType = "application/json")) 
-		}
-	)
+	/**
+	 * 保存配置并且刷新配置
+	 * 
+	 * @param map 配置的 JSON 字符串
+	 * @param request
+	 * @return
+	 */
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public String saveAllconfig(@Parameter(description = "配置的 JSON 字符串", required = true) Map<String, Object> map, @Parameter(hidden = true) HttpServletRequest request) {
+	public String saveAllconfig(Map<String, Object> map, HttpServletRequest request) {
 		ConfigService.loadJSON_in_JS(map);
 		ConfigService.load(); // 刷新配置
 
@@ -84,11 +78,17 @@ public class ConfigController implements IController {
 		return BaseController.cms("config-site-form");
 	}
 
-	@Operation(summary = "保存网站结构", tags = { "SystemConfig", "Admin Service ONLY" }, description = "保存网站结构", responses = { @ApiResponse(description = "操作是否成功", content = @Content(mediaType = "application/json")) })
+	/**
+	 * 保存网站结构
+	 * 
+	 * @param map
+	 * @param request
+	 * @return
+	 */
 	@POST
 	@Path("site")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String saveSite(Map<String, Object> map, @Parameter(hidden = true) HttpServletRequest request) {
+	public String saveSite(Map<String, Object> map, HttpServletRequest request) {
 		return saveAllconfig(map, request);
 	}
 }

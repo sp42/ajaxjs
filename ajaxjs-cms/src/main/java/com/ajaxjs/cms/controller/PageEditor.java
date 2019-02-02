@@ -35,10 +35,6 @@ import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-
 /**
  * 默认的页面编辑器
  * 
@@ -77,7 +73,7 @@ public class PageEditor implements IController, Constant {
 		} catch (Exception e) {
 			LOGGER.warning(e);
 		}
-		
+
 		return BaseController.cms("page-editor");
 	}
 
@@ -87,8 +83,6 @@ public class PageEditor implements IController, Constant {
 	 * @param request 请求对象，必填 url 和 contentBody 两个参数
 	 * @return JSON 结果
 	 */
-
-	@Operation(summary = "保存编辑页面后的内容", tags = { "Admin Service ONLY" }, description = "保存编辑页面后的内容", responses = { @ApiResponse(description = "操作是否成功", content = @Content(mediaType = "application/json")) })
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	public String save(MvcRequest request) {

@@ -15,7 +15,6 @@ import org.junit.Test;
 
 import com.ajaxjs.cms.app.nativeapp.AppUpdate;
 import com.ajaxjs.cms.app.nativeapp.AppUpdateServiceImpl;
-import com.ajaxjs.cms.domain.DomainEntity;
 import com.ajaxjs.cms.domain.DomainEntityDao;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
@@ -47,20 +46,20 @@ public class TestDomain {
 	public void testDao() {
 		DomainEntityDao dao = new Repository().bind(DomainEntityDao.class, "entity_article");
 
-		DomainEntity domain = dao.findById(1L);
+		Map<String, Object> domain = dao.findById(1L);
 		assertNotNull(domain);
 
-		PageResult<DomainEntity> list = dao.findPagedListByCatelogId_Cover(6, 0, 10);
+		PageResult<Map<String, Object>> list = dao.findPagedListByCatelogId_Cover(6, 0, 10);
 		assertNotNull(list);
 
-		domain = new DomainEntity();
-		domain.setName("test");
+		domain = new HashMap<String, Object>();
+		domain.put("name", "test");
 
 		long newlyId = dao.create(domain);
 		assertNotNull(newlyId);
 
-		domain.setName("test22");
-		domain.setId(newlyId);
+		domain.put("name", "test22");
+		domain.put("id",newlyId);
 
 		int effect = dao.update(domain);
 		assertEquals(1, effect);

@@ -1,5 +1,8 @@
 package com.ajaxjs.cms.domain;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -14,7 +17,7 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 
-public abstract class DomainBaseAdminController extends BaseController<DomainEntity> {
+public abstract class DomainBaseAdminController extends BaseController<Map<String, Object>> {
 	@GET
 	@Override
 	@MvcFilter(filters = DataBaseFilter.class)
@@ -36,7 +39,7 @@ public abstract class DomainBaseAdminController extends BaseController<DomainEnt
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String create(DomainEntity entity) {
+	public String create(Map<String, Object> entity) {
 		return super.create(entity);
 	}
 
@@ -45,7 +48,7 @@ public abstract class DomainBaseAdminController extends BaseController<DomainEnt
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, DomainEntity entity) {
+	public String update(@PathParam("id") Long id, Map<String, Object> entity) {
 		return super.update(id, entity);
 	}
 
@@ -54,6 +57,6 @@ public abstract class DomainBaseAdminController extends BaseController<DomainEnt
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String delete(@PathParam("id") Long id) {
-		return delete(id, new DomainEntity());
+		return delete(id, new HashMap<String, Object>());
 	}
 }

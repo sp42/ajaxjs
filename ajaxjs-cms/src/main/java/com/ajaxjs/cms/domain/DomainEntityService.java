@@ -15,9 +15,9 @@ import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Resource;
 
-public class DomainEntityService extends BaseService<DomainEntity> implements Catelogable<DomainEntity> {
+public class DomainEntityService extends BaseService<Map<String, Object>> implements Catelogable<Map<String, Object>> {
 	public DomainEntityDao dao;
-	
+
 	public DomainEntityService(String tableName) {
 		dao = new Repository().bind(DomainEntityDao.class, tableName);
 		setDao(dao);
@@ -32,36 +32,37 @@ public class DomainEntityService extends BaseService<DomainEntity> implements Ca
 		this(tableName, domainCatelogId);
 		setUiName(uiName);
 	}
+
 	public DomainEntityService(String tableName, int domainCatelogId, String uiName, String shortName) {
 		this(tableName, domainCatelogId, uiName);
 		setShortName(shortName);
 	}
-	
-	
+
 	public DomainEntityService(String tableName, String configNodeName, String uiName, String shortName) {
 		this(tableName, ConfigService.getValueAsInt(configNodeName), uiName, shortName);
 	}
-	
+
 	/**
 	 * 不用分类的
+	 * 
 	 * @param tableName
 	 * @param uiName
 	 * @param shortName
 	 */
-	public DomainEntityService(String tableName,  String uiName, String shortName) {
+	public DomainEntityService(String tableName, String uiName, String shortName) {
 		this(tableName);
 		setUiName(uiName);
 		setShortName(shortName);
 	}
 
-	public Map<Integer, List<DomainEntity>> getHome() {
-		Map<Integer, List<DomainEntity>> data = new HashMap<>();
-		List<DomainEntity> list = dao.findHome(1, 2, 3);
+	public Map<Integer, List<Map<String, Object>>> getHome() {
+		Map<Integer, List<Map<String, Object>>> data = new HashMap<>();
+		List<Map<String, Object>> list = dao.findHome(1, 2, 3);
 
-		for (DomainEntity item : list) {
-			Integer catelog = (Integer) item.getCatelogId();
+		for (Map<String, Object> item : list) {
+			Integer catelog = (Integer) item.get("catelogId");
 
-			List<DomainEntity> itemList;
+			List<Map<String, Object>> itemList;
 			if (data.containsKey(catelog)) {
 				itemList = data.get(catelog);
 			} else {
@@ -88,19 +89,19 @@ public class DomainEntityService extends BaseService<DomainEntity> implements Ca
 
 		return catelogMap;
 	}
-	
+
 	@Override
-	public DomainEntity findById(Long id) {
+	public Map<String, Object> findById(Long id) {
 		return dao.findById_catelog_avatar(id);
 	}
 
 	@Override
-	public List<DomainEntity> findListByCatelogId(int catelogId) {
+	public List<Map<String, Object>> findListByCatelogId(int catelogId) {
 		return null;
 	}
 
 	@Override
-	public PageResult<DomainEntity> findPagedListByCatelogId(int catelogId, int start, int limit) {
+	public PageResult<Map<String, Object>> findPagedListByCatelogId(int catelogId, int start, int limit) {
 		if (catelogId == 0)
 			catelogId = getDomainCatelogId();
 

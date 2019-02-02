@@ -1,11 +1,12 @@
 package com.ajaxjs.cms.controller;
 
+import java.util.Map;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.cms.domain.DomainBaseAdminController;
-import com.ajaxjs.cms.domain.DomainEntity;
 import com.ajaxjs.cms.domain.DomainEntityService;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
@@ -37,7 +38,7 @@ public class HrAdminController extends DomainBaseAdminController {
 	}
 
 	@Override
-	public IBaseService<DomainEntity> getService() {
+	public IBaseService<Map<String, Object>> getService() {
 		return service;
 	}
 }
