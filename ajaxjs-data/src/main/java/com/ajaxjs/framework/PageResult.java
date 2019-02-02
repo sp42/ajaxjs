@@ -215,10 +215,8 @@ public class PageResult<T> extends ArrayList<T> {
 
 		for (int i = 0; i < parameters.length; i++) {
 			Parameter param = parameters[i];
-
-			if ("arg0".equals(param.getName()) || "arg1".equals(param.getName())) {
+			if ("arg0".equals(param.getName()) || "arg1".equals(param.getName()))
 				throw new Error(" Java 8 支持反射获取 参数 具体名称，但要打开编译开关。例如 Eclipse 须在 Store information about method parameters (usable via reflection) 打勾，或者编译时加入参数 -parameters。");
-			}
 
 			if (param.getName().equalsIgnoreCase("start")) {
 
