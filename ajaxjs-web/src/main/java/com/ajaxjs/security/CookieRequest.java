@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.security.wrapper;
+package com.ajaxjs.security;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +21,6 @@ import java.util.List;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
-
-import com.ajaxjs.security.ListControl;
 
 /**
  * 输入输出 Cookie 白名单验证过滤。
@@ -36,7 +34,7 @@ public class CookieRequest extends HttpServletRequestWrapper {
 	public CookieRequest(HttpServletRequest request) {
 		super(request);
 	}
-	
+
 	@Override
 	public String getParameter(String key) {
 		return super.getParameter(key);
@@ -56,21 +54,28 @@ public class CookieRequest extends HttpServletRequestWrapper {
 			// cookieList.add(cookie);
 			// }
 
-			if (delegate.isInWhiteList(cookie.getName())) {
+			if (delegate.isInWhiteList(cookie.getName()))
 				cookieList.add(cookie);
-			}
 		}
 
 		return cookieList.toArray(new Cookie[cookieList.size()]);
 	}
 
+	/**
+	 * 按照名称获取 Cookie
+	 * 
+	 * @param name Cookie 的名称
+	 * @return Cookie
+	 */
 	public String getCookieByName(String name) {
 		Cookie[] cookies = getCookies();
+
 		for (Cookie cookie : cookies) {
 			if (name.equals(cookie.getName())) {
 				return cookie.getValue();
 			}
 		}
+
 		return null;
 	}
 }

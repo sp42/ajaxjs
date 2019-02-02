@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.security.wrapper;
+package com.ajaxjs.security;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -21,10 +21,13 @@ import javax.servlet.http.HttpServletResponseWrapper;
 
 /**
  * 检测 CLRF 的过滤器
+ * 
  * @author Frank
  *
  */
 public class CRLF_Response extends HttpServletResponseWrapper {
+	public static ListControl delegate = new ListControl();
+
 	public CRLF_Response(HttpServletResponse response) {
 		super(response);
 	}
@@ -33,23 +36,32 @@ public class CRLF_Response extends HttpServletResponseWrapper {
 	public void addCookie(Cookie cookie) {
 		// 如果 cookie 名称包含 CLRF 则抛出异常；接着过滤 cookie 内容
 		String name = cookie.getName(), value = cookie.getValue();
-	
+
 		if (containCLRF(name))
 			throw new SecurityException("Cookie 名称不能包含 CLRF 字符，该 cookie 是 ：" + name);
 
 		// 重新创建 cookie
 		Cookie newCookie = new Cookie(name, filterCLRF(value));// 已经过滤好的 Cookie value
 		newCookie.setComment(cookie.getComment());
-	
+
 		if (cookie.getDomain() != null)
 			newCookie.setDomain(cookie.getDomain());
-	
+
 		newCookie.setHttpOnly(cookie.isHttpOnly());
 		newCookie.setMaxAge(cookie.getMaxAge());
 		newCookie.setPath(cookie.getPath());
 		newCookie.setSecure(cookie.getSecure());
 		newCookie.setVersion(cookie.getVersion());
-		
+
+		/*
+		 * 检查 Cookie 容量大小和是否在白名单中。
+		 */
+		if (cookie.getValue().length() > MAX_COOKIE_SIZE)
+			throw new SecurityException("超出 Cookie 允许容量：" + MAX_COOKIE_SIZE);
+
+		if (!delegate.isInWhiteList(cookie.getName()))
+			throw new SecurityException("cookie:" + cookie.getName() + " 不在白名单中，添加无效！");
+
 		super.addCookie(newCookie);
 	}
 
@@ -65,46 +77,62 @@ public class CRLF_Response extends HttpServletResponseWrapper {
 
 	@Override
 	public void addHeader(String name, String value) {
+		value = XssChecker.clean(value);
 		super.addHeader(filterCLRF(name), filterCLRF(value));
 	}
 
 	@Override
 	public void setHeader(String name, String value) {
+		value = XssChecker.clean(value);
 		super.setHeader(filterCLRF(name), filterCLRF(value));
 	}
 
 	/**
-	 * 过滤  \r 、\n之类的换行符
+	 * 过滤 \r 、\n之类的换行符
+	 * 
 	 * @param value
 	 * @return
 	 */
 	private static String filterCLRF(String value) {
 		if (value == null || value.isEmpty())
 			return value;
-	
+
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < value.length(); i++) {
 			if (!(value.charAt(i) == '\r' || value.charAt(i) == '\n'))
 				sb.append(value.charAt(i));
 		}
-		
+
 		return sb.toString();
 	}
 
 	/**
 	 * 是否包含 \r 、\n之类的换行符
+	 * 
 	 * @param name
 	 * @return
 	 */
 	private static boolean containCLRF(String name) {
 		if (name == null || name.isEmpty())
 			return false;
-	
+
 		for (int i = 0; i < name.length(); i++) {
 			if (name.charAt(i) == '\r' || name.charAt(i) == '\n')
 				return true;
 		}
-		
+
 		return false;
+	}
+
+	/**
+	 * Cookie 最大容量
+	 */
+	private static final int MAX_COOKIE_SIZE = 4 * 1024;
+
+	// 对 Response 的 setStatus(int sc, String sm) 方法 sm 错误信息进行 XSS 过滤；
+	@SuppressWarnings("deprecation")
+	@Override
+	public void setStatus(int sc, String sm) {
+		super.setStatus(sc, XssChecker.clean(sm));
 	}
 }
