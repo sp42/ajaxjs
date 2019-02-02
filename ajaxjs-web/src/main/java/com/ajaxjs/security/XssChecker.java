@@ -15,11 +15,21 @@
  */
 package com.ajaxjs.security;
 
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.ajaxjs.util.CommonUtil;
 
+/**
+ * 获取用户输入参数和参数值进行 XSS 过滤，对 Header 和 cookie value 值进行 XSS 过滤（转码 Script 标签的< > 符号
+ * 
+ * @author Frank Cheung
+ *
+ */
 public class XssChecker {
 
 	private static String xssType = "<script[^>]*?>.*?</script>";
@@ -78,5 +88,27 @@ public class XssChecker {
 			cleaned[i] = clean(value[i]);
 
 		return cleaned;
+	}
+
+	public static Map<String, String[]> getParameterMap(Map<String, String[]> paramsMap) {
+		if (paramsMap == null)
+			return null;
+
+		Map<String, String[]> map = new HashMap<>();
+		for (String key : paramsMap.keySet())
+			map.put(clean(key, type_DELETE), clean(paramsMap.get(key)));
+
+		return map;
+	}
+
+	public static Enumeration<String> getParameterNames(Enumeration<String> enums) {
+		Vector<String> vec = new Vector<>();
+
+		while (enums.hasMoreElements()) {
+			String value = enums.nextElement();
+			vec.add(clean(value));
+		}
+
+		return vec.elements();
 	}
 }

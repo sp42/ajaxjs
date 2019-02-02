@@ -25,10 +25,10 @@ import javax.servlet.http.HttpServletResponseWrapper;
  * @author Frank
  *
  */
-public class CRLF_Response extends HttpServletResponseWrapper {
+public class SecurityResponse extends HttpServletResponseWrapper {
 	public static ListControl delegate = new ListControl();
 
-	public CRLF_Response(HttpServletResponse response) {
+	public SecurityResponse(HttpServletResponse response) {
 		super(response);
 	}
 

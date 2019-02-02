@@ -16,7 +16,9 @@
 package com.ajaxjs.security;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -28,16 +30,15 @@ import javax.servlet.http.HttpServletRequestWrapper;
  * @author Frank
  *
  */
-public class CookieRequest extends HttpServletRequestWrapper {
+public class SecurityRequest extends HttpServletRequestWrapper {
 	public static ListControl delegate = new ListControl();
 
-	public CookieRequest(HttpServletRequest request) {
+	/**
+	 * 
+	 * @param request
+	 */
+	public SecurityRequest(HttpServletRequest request) {
 		super(request);
-	}
-
-	@Override
-	public String getParameter(String key) {
-		return super.getParameter(key);
 	}
 
 	@Override
@@ -62,20 +63,40 @@ public class CookieRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * 按照名称获取 Cookie
+	 * 按照名称获取 Cookie 的值
 	 * 
 	 * @param name Cookie 的名称
-	 * @return Cookie
+	 * @return Cookie 的值
 	 */
 	public String getCookieByName(String name) {
 		Cookie[] cookies = getCookies();
 
 		for (Cookie cookie : cookies) {
-			if (name.equals(cookie.getName())) {
+			if (name.equals(cookie.getName()))
 				return cookie.getValue();
-			}
 		}
 
 		return null;
+	}
+
+	@Override
+	public String getParameter(String key) {
+		key = XssChecker.clean(key, XssChecker.type_DELETE);
+		return XssChecker.clean(super.getParameter(key));
+	}
+
+	@Override
+	public Map<String, String[]> getParameterMap() {
+		return XssChecker.getParameterMap(super.getParameterMap());
+	}
+
+	@Override
+	public Enumeration<String> getParameterNames() {
+		return XssChecker.getParameterNames(super.getParameterNames());
+	}
+
+	@Override
+	public String[] getParameterValues(String key) {
+		return XssChecker.clean(super.getParameterValues(key));
 	}
 }
