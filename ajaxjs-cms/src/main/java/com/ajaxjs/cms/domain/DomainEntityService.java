@@ -58,20 +58,21 @@ public class DomainEntityService extends BaseService<Map<String, Object>> implem
 	public Map<Integer, List<Map<String, Object>>> getHome() {
 		Map<Integer, List<Map<String, Object>>> data = new HashMap<>();
 		List<Map<String, Object>> list = dao.findHome(1, 2, 3);
+		
+		if (list != null)
+			for (Map<String, Object> item : list) {
+				Integer catelog = (Integer) item.get("catelogId");
 
-		for (Map<String, Object> item : list) {
-			Integer catelog = (Integer) item.get("catelogId");
+				List<Map<String, Object>> itemList;
+				if (data.containsKey(catelog)) {
+					itemList = data.get(catelog);
+				} else {
+					itemList = new ArrayList<>();
+					data.put(catelog, itemList);
+				}
 
-			List<Map<String, Object>> itemList;
-			if (data.containsKey(catelog)) {
-				itemList = data.get(catelog);
-			} else {
-				itemList = new ArrayList<>();
-				data.put(catelog, itemList);
+				itemList.add(item);
 			}
-
-			itemList.add(item);
-		}
 
 		return data;
 	}
