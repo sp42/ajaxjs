@@ -81,6 +81,10 @@ public interface Constant {
 	public static String jsonOk(String msg) {
 		return String.format(json_ok, msg);
 	}
+	
+	public static String jsonOk_Extension(Object... msg) {
+		return String.format(json_ok_extension, msg);
+	}
 
 	/**
 	 * 输出 JSON No OK

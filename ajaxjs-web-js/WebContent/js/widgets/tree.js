@@ -285,14 +285,14 @@ Vue.component('aj-china-area', {
     
     watch:{ // 令下一级修改
         province: function(val, oldval) {
-            if(val !== oldval) 
-                this.city = '';
+//            if(val !== oldval) 
+//                this.city = '';
             
         },
-        city: function(val, oldval) {
-            if(val !== oldval)
-                this.district = '';
-        }
+//        city: function(val, oldval) {
+//            if(val !== oldval)
+//                this.district = '';
+//        }
     },
    
     computed: {

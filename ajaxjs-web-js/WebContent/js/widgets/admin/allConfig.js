@@ -158,8 +158,10 @@ function toggle(e) {
 	}
 }
 
-it(configJson, function(item, v) {
-}, tree);
+if(window.configJson) {
+	it(configJson, function(item, v) {
+	}, tree);
+}
 
 // 遍历每个函数
 function getList(formEl, fn) {
@@ -202,7 +204,8 @@ function everyInput(input) {
 	}
 }
 
-getList(tree, everyInput);
+if(window.tree)
+	getList(tree, everyInput);
 
 
 // 保存原 form 表单数据

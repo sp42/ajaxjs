@@ -70,7 +70,8 @@ Vue.component('aj-form-calendar', {
 	    // 2012-07-08
 	    // firefox中解析 new Date('2012/12-23') 不兼容，提示invalid date 无效的日期
 		// Chrome下可以直接将其格式化成日期格式，且时分秒默认为零
-//	    var arr = date.split('-'), now = new Date(arr[0], arr[1] - 1, arr[2], " ", " ", " ");
+// var arr = date.split('-'), now = new Date(arr[0], arr[1] - 1, arr[2], " ", "
+// ", " ");
 	mounted : function () {
 		aj.apply(this, this.getDate('now'));
 		this.render();
@@ -119,19 +120,19 @@ Vue.component('aj-form-calendar', {
 			}
 
 			// 先清空内容再插入(ie的table不能用innerHTML)
-//			while (el.hasChildNodes())
-//				el.removeChild(el.firstChild);
+// while (el.hasChildNodes())
+// el.removeChild(el.firstChild);
 
 			var tbody = el.$("table tbody");
 			tbody.innerHTML = '';
 			tbody.appendChild(frag);
 
 			
-//			el.querySelector(".idCalendarPre").onclick = this.PreMonth.bind(this);
-//			el.querySelector(".idCalendarNext").onclick = this.NextMonth.bind(this);
+// el.querySelector(".idCalendarPre").onclick = this.PreMonth.bind(this);
+// el.querySelector(".idCalendarNext").onclick = this.NextMonth.bind(this);
 
 
-//			el.querySelector(".idCalendarNow").onclick = this.NowMonth.bind(this);
+// el.querySelector(".idCalendarNow").onclick = this.NowMonth.bind(this);
 			
 			this.onFinish && this.onFinish();
 		},
@@ -157,7 +158,7 @@ Vue.component('aj-form-calendar', {
 				case 'preYear':// 上一年
 					date = new Date(nowYear - 1, nowMonth - 1, 1);
 					break;
-				case 'nextYear':// 下一年	
+				case 'nextYear':// 下一年
 					date = new Date(nowYear + 1, nowMonth - 1, 1);
 					break;
 			}
@@ -197,7 +198,7 @@ Vue.component('aj-form-calendar', {
 	}
 });
 
-//帶有 input 輸入框的
+// 帶有 input 輸入框的
 Vue.component('aj-form-calendar-input', {
 	data : function(){
 		return {
@@ -245,8 +246,9 @@ Vue.component('aj-form-calendar-input', {
 	}
 });
 
-//HTML 在綫編輯器
-//注意：必须提供一个 <slot> 包含有 <textarea class="hide" name="content">${info.content}</textarea>
+// HTML 在綫編輯器
+// 注意：必须提供一个 <slot> 包含有 <textarea class="hide"
+// name="content">${info.content}</textarea>
 Vue.component('aj-form-html-editor', {
 	template : '',
 	props : {
@@ -266,7 +268,7 @@ Vue.component('aj-form-html-editor', {
 	},
 	beforeCreate : function() {
 		var xhr = new XMLHttpRequest();
-		xhr.open("GET", this.ajResources.libraryUse + '/htmleditor-tag.htm', false);// 同步方式请求 
+		xhr.open("GET", this.ajResources.libraryUse + '/htmleditor-tag.htm', false);// 同步方式请求
 		xhr.send(null);
 		this.$options.template = xhr.responseText;
 	},
@@ -315,6 +317,9 @@ Vue.component('aj-form-html-editor', {
 			case 'switchMode':
 				this.setMode();
 				break;
+			case 'cleanHTML':
+				this.cleanHTML();
+				break;
 			default:
 				this.format(clsName);
 			}
@@ -338,12 +343,12 @@ Vue.component('aj-form-html-editor', {
 			this.iframeDoc.body.innerHTML = html;
 		},
 		
-		// 設置 HTML 
+		// 設置 HTML
 		setValue : function(v) {
 			var self = this;
 			setTimeout(function() {
 				self.iframeWin.document.body.innerHTML = v;
-//				self.iframeBody.innerHTML = v; 
+// self.iframeBody.innerHTML = v;
 			}, 500);
 		},
 		
@@ -363,8 +368,10 @@ Vue.component('aj-form-html-editor', {
 		// MSWordHtmlCleaners.js https://gist.github.com/ronanguilloux/2915995
 		cleanPaste : function(html) {
 		    // Remove additional MS Word content
-		    html = html.replace(/<(\/)*(\\?xml:|meta|link|span|font|del|ins|st1:|[ovwxp]:)((.|\s)*?)>/gi, ''); // Unwanted tags
-		    html = html.replace(/(class|style|type|start)=("(.*?)"|(\w*))/gi, ''); // Unwanted sttributes
+		    html = html.replace(/<(\/)*(\\?xml:|meta|link|span|font|del|ins|st1:|[ovwxp]:)((.|\s)*?)>/gi, ''); // Unwanted
+																												// tags
+		    html = html.replace(/(class|style|type|start)=("(.*?)"|(\w*))/gi, ''); // Unwanted
+																					// sttributes
 		    html = html.replace(/<style(.*?)style>/gi, '');   // Style tags
 		    html = html.replace(/<script(.*?)script>/gi, ''); // Script tags
 		    html = html.replace(/<!--(.*?)-->/gi, '');        // HTML comments
@@ -421,22 +428,24 @@ Vue.component('aj-form-html-editor', {
 			this.format('fontsize', i);
 		},
 		
-		onFontColorPicker: function(e) {
+		onFontColorPicker(e) {
 			var color = e.target.title;
 			this.format('foreColor', color);
 		},
 		
-		onFontBgColorPicker: function(e) {
+		onFontBgColorPicker(e) {
 			var color = e.target.title;
 			this.format('backColor', color);
 		},
 		
-		createColorPickerHTML : function() {
+		createColorPickerHTML() {
 			// 定义变量
 			var cl = ['00', '33', '66', '99', 'CC', 'FF'], a, b, c, d, e, f, i, j, k, T;
 			// 创建head
 			var h = '<div class="colorhead"><span class="colortitle">颜色选择</span></div>\
-						<div class="colorbody"><table cellspaci="0" cellpadding="0"><tr>';// 创建body [6 x 6的色盘]
+						<div class="colorbody"><table cellspaci="0" cellpadding="0"><tr>';// 创建body
+																							// [6 x
+																							// 6的色盘]
 			
 			for (var i = 0; i < 6; ++i) {
 				h += '<td><table class="colorpanel" cellspacing="0" cellpadding="0">';
@@ -459,6 +468,59 @@ Vue.component('aj-form-html-editor', {
 			h += '</tr></table></div>';
 			
 			return h;
-		}
+		},
+		
+		// 清理冗余 HTML
+		cleanHTML(){
+		    // 类似于 白名单
+		    var tagsAllowed = "|h1|h2|h3|p|div|a|b|strong|br|ol|ul|li|pre|img|br|hr|font|";
+
+		    var attributesAllowed = {};
+		    attributesAllowed["div"] = "|id|class|";
+		    attributesAllowed["a"] = "|id|class|href|name|";
+		    attributesAllowed["img"] = "|src|";
+
+		    this.everyNode(this.iframeBody, node => {
+		    	var isDelete = false;
+		    	
+		    	if (node.nodeType === 1) {
+		    		var tag = node.tagName.toLowerCase();
+		    		if (tagsAllowed.indexOf("|" + tag + "|") === -1)
+		    			isDelete = true;
+		    		
+		    		if (!isDelete) { // 删除属性
+		    			var attrs = node.attributes;
+
+		    			for(var i = attrs.length - 1; i >= 0; i--) {
+		    				var name = attrs[i].name;
+		    				if (attributesAllowed[tag] == null || attributesAllowed[tag].indexOf("|" + name.toLowerCase() + "|") == -1){
+		    					node.removeAttribute(name);
+		    				}
+		    			}
+		    		}
+		    	} else if (node.nodeType === 8) {// 删除注释
+		    		isDelete = true;
+		    	}
+		    	
+		    	return isDelete;
+		    });
+
+		},
+		// 遍历节点
+	    everyNode (el, fn) {
+	        var objChildNode = el.firstChild;
+	        while (objChildNode) {
+	            if (fn(objChildNode)) { // 返回 true 则删除
+	                var next = objChildNode.nextSibling;
+	                el.removeChild(objChildNode);
+	                objChildNode = next;
+	            } else {
+	                if (objChildNode.nodeType === 1) 
+	                    this.everyNode(objChildNode, fn);
+
+	                objChildNode = objChildNode.nextSibling;
+	            }
+	        }
+	    }
 	}
 });

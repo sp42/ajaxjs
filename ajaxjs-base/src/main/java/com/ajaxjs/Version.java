@@ -46,6 +46,11 @@ public class Version {
 	 * 是否视窗操作系统
 	 */
 	public static final boolean isWindows = System.getProperty("os.name").toLowerCase().contains("window");
+	
+	/**
+	 * 是否 Linux 操作系统
+	 */
+	public static final boolean isLinux = System.getProperty("os.name").toLowerCase().contains("linux");
 
 	static {
 		// System.setProperty("user.timezone", "GMT +08");// 微软云设置时区

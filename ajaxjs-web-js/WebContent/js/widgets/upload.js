@@ -327,6 +327,23 @@ Vue.component('aj-popup-upload', {
 	}
 });
 
+//polyfill JavaScript-Canvas-to-Blob 解决了 HTMLCanvasElement.toBlob 的兼容性
+//https://github.com/blueimp/JavaScript-Canvas-to-Blob
+if (!HTMLCanvasElement.prototype.toBlob) {
+	Object.defineProperty(HTMLCanvasElement.prototype, 'toBlob', {
+		value : function(callback, type, quality) {
+			var binStr = atob(this.toDataURL(type, quality).split(',')[1]), len = binStr.length, arr = new Uint8Array(len);
+
+			for (var i = 0; i < len; i++) {
+				arr[i] = binStr.charCodeAt(i);
+			}
+
+			callback(new Blob([ arr ], {
+				type : type || 'image/png'
+			}));
+		}
+	});
+}
 
 Vue.component('aj-xhr-upload', {
 	data : function() {
@@ -338,7 +355,8 @@ Vue.component('aj-xhr-upload', {
 			newlyId : null,				// 成功上传之后的文件 id
 			radomId : Math.round(Math.random() * 1000),		// 不重复的 id
 			uploadOk_callback: ajaxjs.xhr.defaultCallBack,				// 回调函数
-	    	imgBase64Str : null			// 图片的 base64 形式，用于预览
+	    	imgBase64Str : null,			// 图片的 base64 形式，用于预览
+	    	progress : 0
 		};
 	},
 	props : {
@@ -358,7 +376,9 @@ Vue.component('aj-xhr-upload', {
 	template : 
 		'<div class="aj-xhr-upload">\
 			<div v-if="isImgUpload">\
-				<img class="upload_img_perview" :src="(isFileSize && isExtName && imgBase64Str) ? imgBase64Str : imgPlace" />\
+				<a :href="imgPlace" target="_blank">\
+					<img class="upload_img_perview" :src="(isFileSize && isExtName && imgBase64Str) ? imgBase64Str : imgPlace" />\
+				</a>\
 			</div>\
 			<div class="pseudoFilePicker">\
 				<label :for="\'uploadInput_\' + radomId"><div><div>+</div>点击选择{{isImgUpload ? \'图片\': \'文件\'}}</div></label>\
@@ -366,7 +386,7 @@ Vue.component('aj-xhr-upload', {
 			<input type="file" :name="fieldName" class="hide" :id="\'uploadInput_\' + radomId" @change="onUploadInputChange($event)" :accept="isImgUpload ? \'image/*\' : accpectFileType" />\
 			<div v-if="!isFileSize || !isExtName">{{errMsg}}</div>\
 			<div v-if="isFileSize && isExtName">\
-				<button @click.prevent="doUpload();" style="min-width:110px;">上传</button>\
+				<button @click.prevent="doUpload();" style="min-width:110px;">{{progress && progress !== 100 ? \'上传中 \' + progress + \'%\': \'上传\'}}</button>\
 			</div>\
 		</div>',
 	methods : {
@@ -378,7 +398,10 @@ Vue.component('aj-xhr-upload', {
 			
 			this.$fileObj = fileInput.files[0]; // 保留引用
 			
-			var size = fileInput.files[0].size;
+			this.$fileName = this.$fileObj.name;
+			this.$fileType = this.$fileObj.type;
+			
+			var size = this.$fileObj.size;
 			
 			if(this.limitSize) {
 				this.isFileSize = size < this.limitSize;
@@ -419,6 +442,10 @@ Vue.component('aj-xhr-upload', {
 				if(self.isImgUpload) {
 					var imgEl = new Image();
 					imgEl.onload = function() {
+						if(file.size > 300 * 1024) { // 大于 300k 才压缩
+							self.compressImg(imgEl);
+						}
+						
 						if (imgEl.width > self.maxWidth || imgEl.height > self.maxHeight) {
 							self.isImgSize = false;
 							self.errMsg = '图片大小尺寸不符合要求哦，请重新图片吧~';
@@ -453,13 +480,129 @@ Vue.component('aj-xhr-upload', {
 		
 		doUpload : function() {
 			var fd = new FormData();
-			fd.append("file", this.$fileObj);
+			if(this.$blob){
+				fd.append("file", this.$blob, this.$fileName);
+			} else 
+				fd.append("file", this.$fileObj);
 		
-			var xhr = new XMLHttpRequest();
+			var xhr = new XMLHttpRequest(), self = this;
 	        xhr.onreadystatechange = ajaxjs.xhr.callback.delegate(null, this.uploadOk_callback, 'json');
 	        xhr.open("POST", this.action, true);
+	        xhr.onprogress = function(evt) {
+	            var progress = 0;
+	            var p = ~~(evt.loaded * 1000 / evt.total);
+	            p = p / 10;
+	            
+	            if(progress !== p) {
+	            	progress = p;
+	            	console.log('progress: ', p);
+	            }
+	            self.progress = progress;
+	        };
 	        xhr.send(fd);
 		},
+		
+		// 图片压缩
+		compressImg: function(imgObj) {
+			var self = this;
+			var maxWidth = 1000, maxHeight = 1500;
+			var fitSizeObj = this.fitSize(imgObj.width, imgObj.height, maxWidth, maxHeight);
+			var targetWidth = fitSizeObj.targetWidth, targetHeight = fitSizeObj.targetHeight;
+			
+			var orient = this.getPhotoOrientation(imgObj);// 获取照片的拍摄方向
+			
+			if (orient == 6) {
+				targetWidth = fitSizeObj.targetHeight;
+				targetHeight = fitSizeObj.targetWidth;
+			}
+			
+			var comp = new Image();
+			comp.onload = function() {
+				var canvas = document.createElement('canvas');
+				canvas.width = targetWidth;
+				canvas.height = targetHeight;
+				canvas.getContext('2d').drawImage(this, 0, 0, targetWidth, targetHeight); // 图片压缩
+				
+				// canvas转为blob并上传
+				canvas.toBlob(function(blob) {
+					self.$blob = blob;
+				}, self.$fileType || 'image/jpeg');
+			}
+			
+			comp.src = this.rotate(imgObj, orient);
+		},
+		fitSize: function (originWidth, originHeight, maxWidth, maxHeight) {
+		    // 目标尺寸
+		    var targetWidth = originWidth, targetHeight = originHeight;
+		    
+		    // 图片尺寸超过400x400的限制
+		    if (originWidth > maxWidth || originHeight > maxHeight) {
+		        if (originWidth / originHeight > maxWidth / maxHeight) {
+		            // 更宽，按照宽度限定尺寸
+		            targetWidth = maxWidth;
+		            targetHeight = Math.round(maxWidth * (originHeight / originWidth));
+		        } else {
+		            targetHeight = maxHeight;
+		            targetWidth = Math.round(maxHeight * (originWidth / originHeight));
+		        }
+		    }
+		    
+		    return {
+		    	targetWidth : targetWidth, targetHeight : targetHeight
+		    };
+		},
+		getPhotoOrientation : function (img) {
+		    var orient;
+		    EXIF.getData(img, function () {
+		        orient = EXIF.getTag(this, 'Orientation');
+		    });
+		    
+		    return orient;
+		},
+		rotate : function (img, orient) {
+			var width = img.width, height = img.height, 
+			canvas = document.createElement('canvas'), ctx = canvas.getContext("2d");
+			
+			// set proper canvas dimensions before transform & export
+			if ([ 5, 6, 7, 8 ].indexOf(orient) > -1) {
+				canvas.width = height;
+				canvas.height = width;
+			} else {
+				canvas.width = width;
+				canvas.height = height;
+			}
+			
+			// transform context before drawing image
+			switch (orient) {
+			case 2:
+				ctx.transform(-1, 0, 0, 1, width, 0);
+				break;
+			case 3:
+				ctx.transform(-1, 0, 0, -1, width, height);
+				break;
+			case 4:
+				ctx.transform(1, 0, 0, -1, 0, height);
+				break;
+			case 5:
+				ctx.transform(0, 1, 1, 0, 0, 0);
+				break;
+			case 6:
+				ctx.transform(0, 1, -1, 0, height, 0);
+				break;
+			case 7:
+				ctx.transform(0, -1, -1, 0, height, width);
+				break;
+			case 8:
+				ctx.transform(0, -1, 1, 0, 0, width);
+				break;
+			default:
+				ctx.transform(1, 0, 0, 1, 0, 0);
+			}
+
+			ctx.drawImage(img, 0, 0);
+			
+			return canvas.toDataURL('image/jpeg');
+		}
 	}
 });
 
@@ -481,7 +624,7 @@ Vue.component('attachment-picture-list', {
 				<div class="label">相册图：</div>\
 				<ul>\
 					<li v-for="pic in pics" style="float:left;margin-right:1%;text-align:center;">\
-						<img :src="picCtx + pic.path" style="max-width: 180px;max-height: 160px;" /><br />\
+						<a href="picCtx + pic.path" target="_blank"><img :src="picCtx + pic.path" style="max-width: 180px;max-height: 160px;" /></a><br />\
 						<a href="#" @click="delPic(pic.id);">删 除</a>\
 					</li>\
 				</ul>\

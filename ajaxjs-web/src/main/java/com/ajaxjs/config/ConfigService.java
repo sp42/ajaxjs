@@ -92,7 +92,6 @@ public class ConfigService {
 			return isNullValue;
 
 		Object v = flatConfig.get(key);
-
 		if (v == null) {
 			LOGGER.warning("没发现配置 " + key);
 			return isNullValue;
