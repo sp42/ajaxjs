@@ -71,7 +71,7 @@ public class JdbcConnection {
 	 */
 	public static void initDbByJNDI(String jndiPath) {
 		Objects.requireNonNull(jndiPath, "缺少 jndiPath 参数！");
-
+System.out.println(jndiPath);
 		try {
 			if (getConnection() == null || getConnection().isClosed()) {
 				Connection conn = getConnection(getDataSource(jndiPath));
