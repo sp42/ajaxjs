@@ -176,7 +176,7 @@ public interface IBaseDao<T> {
 			countSql = 	"SELECT COUNT(entry.id) AS count FROM ${tableName} entry WHERE catelogId IN " + catelog_find + " AND 1 = 1",
 
 			sqliteValue = "SELECT id, name, createDate, updateDate, entry.catelogId, catelogName FROM ${tableName} entry INNER JOIN "
-					   		+ catelog_finById_sqlite + " ON entry.`catelogId` = c.catelogId  WHERE 1 = 1",
+					   		+ catelog_finById_sqlite + " ON entry.`catelogId` = c.catelogId  WHERE 1 = 1 ORDER BY id DESC",
 			sqliteCountSql = "SELECT COUNT(entry.id) AS count FROM ${tableName} entry WHERE catelogId IN " + catelog_find_sqlite + " AND 1 = 1")
 	public PageResult<T> findPagedListByCatelogId(int catelogId,  int start, int limit);
 	
