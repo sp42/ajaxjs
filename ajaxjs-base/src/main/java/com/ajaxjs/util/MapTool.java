@@ -337,8 +337,6 @@ public class MapTool {
 	}
 
 	/**
-	 *
-	 * 
 	 * XML 格式字符串转换为 Map
 	 *
 	 * @param strXML XML 字符串

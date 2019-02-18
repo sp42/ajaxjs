@@ -17,8 +17,10 @@ package com.ajaxjs.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
@@ -105,6 +107,25 @@ public class CommonUtil {
 	public static String regMatch(String regexp, String str, int groupIndex) {
 		Matcher m = Pattern.compile(regexp).matcher(str);
 		return m.find() ? m.group(groupIndex) : null;
+	}
+	
+	/**
+	 * 返回所有匹配项
+	 * 
+	 * @param regexp     正则
+	 * @param str        测试的字符串
+	 * @return 匹配结果
+	 */
+	public static String[] regMatchAll(String regexp, String str) {
+		Matcher m = Pattern.compile(regexp).matcher(str);
+		List<String> list = new ArrayList<>();
+		while (m.find()) {
+			String g = m.group();
+			list.add(g);
+		}
+
+		String[] result = list.toArray(new String[list.size()]);
+		return result;
 	}
 
 	/**
