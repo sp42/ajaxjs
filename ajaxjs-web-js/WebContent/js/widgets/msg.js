@@ -129,6 +129,10 @@ document.addEventListener("DOMContentLoaded", function() {
 // 浮層組件，通常要復用這個組件
 Vue.component('aj-layer', {
 	template : '<div class="aj-modal hide" @click="close($event);"><div><slot></slot></div></div>',
+	props :{
+		// 默认点击窗体关闭，当 notCloseWhenTap = true 时禁止关闭
+		notCloseWhenTap: Boolean
+	},
 	methods : {
 		show : function(cfg) {
 			this.$el.classList.remove('hide');
@@ -136,8 +140,9 @@ Vue.component('aj-layer', {
 			if(cfg && cfg.afterClose)
 				this.afterClose = cfg.afterClose;
 		},
-		close : function(e) {
-			aj.alert.$options.methods.close.apply(this, arguments);
+		close : function(e) { // isForceClose = 强制关闭
+			if(e.isForceClose || !this.notCloseWhenTap)
+				aj.alert.$options.methods.close.apply(this, arguments);
 		}
 	}
 });

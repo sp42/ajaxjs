@@ -28,6 +28,10 @@ Vue.component('aj-page-captcha', {
 		onClk : function(e) {
 			var img = e.target;
 			img.src = img.src.replace(/\?\d+$/, '') + '?' + new Date().valueOf();
+		},
+		refreshCode: function(){
+			var img = this.$el.querySelector('img');
+			img.src = img.src.replace(/\?\d+$/, '') + '?' + new Date().valueOf();
 		}
 	}
 });
