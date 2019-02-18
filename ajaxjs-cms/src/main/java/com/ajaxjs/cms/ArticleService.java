@@ -24,6 +24,7 @@ public class ArticleService extends BaseService<Map<String, Object>> implements 
 	public PageResult<Map<String, Object>> findPagedListByCatelogId(int catelogId, int start, int limit) {
 		if (catelogId == 0)
 			catelogId = getDomainCatelogId();
+
 		return dao.findPagedListByCatelogId(catelogId, start, limit);
 	}
 
@@ -31,6 +32,7 @@ public class ArticleService extends BaseService<Map<String, Object>> implements 
 	public List<Map<String, Object>> findListByCatelogId(int catelogId) {
 		if (catelogId == 0)
 			catelogId = getDomainCatelogId();
+
 		return dao.findPagedListByCatelogId(catelogId, 0, 9999);
 	}
 

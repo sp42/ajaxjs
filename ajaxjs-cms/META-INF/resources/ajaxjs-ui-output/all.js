@@ -1,4 +1,4 @@
-// build date:Tue Jan 22 18:41:21 GMT+08:00 2019
+// build date:Thu Feb 14 11:47:53 GMT+08:00 2019
 
 ajaxjs = aj = function(cssSelector, fn) {
 return Element.prototype.$.apply(document, arguments);
@@ -931,6 +931,10 @@ methods : {
 onClk : function(e) {
 var img = e.target;
 img.src = img.src.replace(/\?\d+$/, '') + '?' + new Date().valueOf();
+},
+refreshCode: function(){
+var img = this.$el.querySelector('img');
+img.src = img.src.replace(/\?\d+$/, '') + '?' + new Date().valueOf();
 }
 }
 });
@@ -1155,6 +1159,9 @@ break;
 case 'switchMode':
 this.setMode();
 break;
+case 'cleanHTML':
+this.cleanHTML();
+break;
 default:
 this.format(clsName);
 }
@@ -1234,18 +1241,18 @@ for(var els = e.currentTarget.children, i = 0, j = els.length; i < j; i++)
 if(el == els[i]) break;
 this.format('fontsize', i);
 },
-onFontColorPicker: function(e) {
+onFontColorPicker(e) {
 var color = e.target.title;
 this.format('foreColor', color);
 },
-onFontBgColorPicker: function(e) {
+onFontBgColorPicker(e) {
 var color = e.target.title;
 this.format('backColor', color);
 },
-createColorPickerHTML : function() {
+createColorPickerHTML() {
 var cl = ['00', '33', '66', '99', 'CC', 'FF'], a, b, c, d, e, f, i, j, k, T;
 var h = '<div class="colorhead"><span class="colortitle">颜色选择</span></div>\
-<div class="colorbody"><table cellspaci="0" cellpadding="0"><tr>';// 创建body [6 x 6的色盘]
+<div class="colorbody"><table cellspaci="0" cellpadding="0"><tr>';// 创建body
 for (var i = 0; i < 6; ++i) {
 h += '<td><table class="colorpanel" cellspacing="0" cellpadding="0">';
 for (var j = 0, a = cl[i]; j < 6; ++j) {
@@ -1265,6 +1272,47 @@ if (cl[i] == '66') h += '</tr><tr>';
 }
 h += '</tr></table></div>';
 return h;
+},
+cleanHTML(){
+var tagsAllowed = "|h1|h2|h3|p|div|a|b|strong|br|ol|ul|li|pre|img|br|hr|font|";
+var attributesAllowed = {};
+attributesAllowed["div"] = "|id|class|";
+attributesAllowed["a"] = "|id|class|href|name|";
+attributesAllowed["img"] = "|src|";
+this.everyNode(this.iframeBody, node => {
+var isDelete = false;
+if (node.nodeType === 1) {
+var tag = node.tagName.toLowerCase();
+if (tagsAllowed.indexOf("|" + tag + "|") === -1)
+isDelete = true;
+if (!isDelete) { 
+var attrs = node.attributes;
+for(var i = attrs.length - 1; i >= 0; i--) {
+var name = attrs[i].name;
+if (attributesAllowed[tag] == null || attributesAllowed[tag].indexOf("|" + name.toLowerCase() + "|") == -1){
+node.removeAttribute(name);
+}
+}
+}
+} else if (node.nodeType === 8) {
+isDelete = true;
+}
+return isDelete;
+});
+},
+everyNode (el, fn) {
+var objChildNode = el.firstChild;
+while (objChildNode) {
+if (fn(objChildNode)) { 
+var next = objChildNode.nextSibling;
+el.removeChild(objChildNode);
+objChildNode = next;
+} else {
+if (objChildNode.nodeType === 1) 
+this.everyNode(objChildNode, fn);
+objChildNode = objChildNode.nextSibling;
+}
+}
 }
 }
 });
@@ -1778,13 +1826,17 @@ cfg && cfg.afterClose && cfg.afterClose(div, this);
 });
 Vue.component('aj-layer', {
 template : '<div class="aj-modal hide" @click="close($event);"><div><slot></slot></div></div>',
+props :{
+notCloseWhenTap: Boolean
+},
 methods : {
 show : function(cfg) {
 this.$el.classList.remove('hide');
 if(cfg && cfg.afterClose)
 this.afterClose = cfg.afterClose;
 },
-close : function(e) {
+close : function(e) { 
+if(e.isForceClose || !this.notCloseWhenTap)
 aj.alert.$options.methods.close.apply(this, arguments);
 }
 }
@@ -2316,13 +2368,7 @@ addressData: China_AREA
 },
 watch:{ 
 province: function(val, oldval) {
-if(val !== oldval) 
-this.city = '';
 },
-city: function(val, oldval) {
-if(val !== oldval)
-this.district = '';
-}
 },
 computed: {
 citys:function() {

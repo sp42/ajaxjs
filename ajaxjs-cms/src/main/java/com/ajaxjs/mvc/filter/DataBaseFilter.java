@@ -34,17 +34,17 @@ public class DataBaseFilter implements FilterAction {
 	 * 为方便单测，设一个开关
 	 */
 	public static boolean isAutoClose = true;
-	
+
 	@Override
 	public boolean before(MvcRequest request, MvcOutput response, Method method) {
 		initDb();
-		
+
 		return true;
 	}
 
 	@Override
 	public void after(MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
-		if(isAutoClose)
+		if (isAutoClose)
 			JdbcConnection.closeDb(); // 关闭数据库连接
 	}
 
@@ -61,5 +61,9 @@ public class DataBaseFilter implements FilterAction {
 			config += "_deploy"; // 约定生产环境后面加上 _deploy
 
 		JdbcConnection.initDbByJNDI(config);
+	}
+
+	public static void closeDb() {
+		JdbcConnection.closeDb(); // 关闭数据库连接
 	}
 }
