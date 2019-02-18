@@ -27,6 +27,12 @@ public interface Constant {
 	 * MV 用的 key
 	 */
 	public static final String PageResult = "PageResult";
+	
+	public static final String start = "start";
+	
+	public static final String limit = "limit";
+	
+	public static final String catelogId = "catelogId";
 
 	/**
 	 * 文档显示用
