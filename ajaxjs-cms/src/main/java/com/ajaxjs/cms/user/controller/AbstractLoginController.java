@@ -1,8 +1,10 @@
-package com.ajaxjs.cms.user;
+package com.ajaxjs.cms.user.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.cms.app.attachment.Attachment_picture;
+import com.ajaxjs.cms.user.User;
+import com.ajaxjs.cms.user.UserCommonAuth;
 import com.ajaxjs.cms.user.service.UserConstant;
 import com.ajaxjs.cms.user.service.UserService;
 import com.ajaxjs.framework.ServiceException;

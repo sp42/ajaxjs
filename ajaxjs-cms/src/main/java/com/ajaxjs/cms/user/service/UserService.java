@@ -24,7 +24,7 @@ public class UserService extends BaseService<User> {
 	private static final LogHelper LOGGER = LogHelper.getLog(UserService.class);
 
 	public UserDao dao = new Repository().bind(UserDao.class);
-	
+
 	{
 		setUiName("用户");
 		setShortName("user");
@@ -37,7 +37,7 @@ public class UserService extends BaseService<User> {
 	 * @param user
 	 * @param password
 	 * @return
-	 * @throws ServiceException 
+	 * @throws ServiceException
 	 */
 	public Long register(User user, UserCommonAuth password) throws ServiceException {
 		LOGGER.info("用户注册");
@@ -60,20 +60,40 @@ public class UserService extends BaseService<User> {
 		return userId;
 	}
 
+	/**
+	 * 检查用户名是否重复
+	 * 
+	 * @return 用户名是否重复
+	 */
 	public boolean checkIfUserNameRepeat(User user) {
 		return user.getName() != null && dao.findByUserName(user.getName()) != null;
 	}
 
+	/**
+	 * 检查用户名是否重复
+	 * 
+	 * @return 用户名是否重复
+	 */
 	public boolean checkIfUserNameRepeat(String userName) {
 		User user = new User();
 		user.setName(userName);
 		return checkIfUserNameRepeat(user);
 	}
 
+	/**
+	 * 检查用户手机是否重复
+	 * 
+	 * @return 手机是否重复
+	 */
 	public boolean checkIfUserPhoneRepeat(User user) {
 		return user.getPhone() != null && dao.findByPhone(user.getPhone()) != null;
 	}
 
+	/**
+	 * 检查用户手机是否重复
+	 * 
+	 * @return 手机是否重复
+	 */
 	public boolean checkIfUserPhoneRepeat(String phone) {
 		User user = new User();
 		user.setPhone(phone);
@@ -82,6 +102,7 @@ public class UserService extends BaseService<User> {
 
 	public boolean loginByPassword(User user, UserCommonAuth userLoginInfo) throws ServiceException {
 		User foundUser = null;
+
 		switch (userLoginInfo.getLoginType()) {
 		case UserConstant.loginByUserName:
 			foundUser = dao.findByUserName(user.getName());
@@ -123,6 +144,13 @@ public class UserService extends BaseService<User> {
 
 	private static final String encryptKey = "ErZwd#@$#@D32";
 
+	/**
+	 * 通过邮件重置密码
+	 * 
+	 * @param user 必须包含 email 字段
+	 * @return 返回修改密码的 Token
+	 * @throws ServiceException
+	 */
 	public String resetPasswordByEmail(User user) throws ServiceException {
 		LOGGER.info("重置密码");
 
@@ -140,6 +168,14 @@ public class UserService extends BaseService<User> {
 		return emailToken + timeToken;
 	}
 
+	/**
+	 * 验证重置密码的 token 是否有效
+	 * 
+	 * @param token
+	 * @param email 用户提交用于对比的 email
+	 * @return
+	 * @throws ServiceException
+	 */
 	public boolean validResetPasswordByEmail(String token, String email) throws ServiceException {
 		String emailToken = token.substring(0, 32), timeToken = token.substring(32, token.length());
 
@@ -167,6 +203,7 @@ public class UserService extends BaseService<User> {
 	/**
 	 * 不能调用该方法
 	 */
+	@Override
 	public Long create(User user) {
 		throw new Error("Should not execute this method!");
 	}

@@ -4,11 +4,14 @@ import java.util.List;
 
 import com.ajaxjs.cms.user.UserCommonAuth;
 import com.ajaxjs.framework.BaseService;
+import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.mvc.controller.MvcRequest;
+import com.ajaxjs.orm.annotation.Delete;
+import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -95,4 +98,13 @@ public class UserCommonAuthService extends BaseService<UserCommonAuth>  {
 		return null;
 	}
 
+	public static interface UserCommonAuthDao extends IBaseDao<UserCommonAuth> {
+		final static String tableName = "user_common_auth";
+
+		@Select("SELECT * FROM " + tableName + " WHERE userId = ?")
+		public UserCommonAuth findByUserId(Long id);
+
+		@Delete("DELETE FROM " + tableName + " WHERE userId = ?")
+		public boolean deleteByUserId(Long userId);
+	}
 }

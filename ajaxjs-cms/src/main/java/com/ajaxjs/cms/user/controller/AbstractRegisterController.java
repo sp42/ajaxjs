@@ -1,5 +1,7 @@
-package com.ajaxjs.cms.user;
+package com.ajaxjs.cms.user.controller;
 
+import com.ajaxjs.cms.user.User;
+import com.ajaxjs.cms.user.UserCommonAuth;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.util.logger.LogHelper;
 

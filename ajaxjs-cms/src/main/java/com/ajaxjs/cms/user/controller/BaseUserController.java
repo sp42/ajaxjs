@@ -1,7 +1,8 @@
-package com.ajaxjs.cms.user;
+package com.ajaxjs.cms.user.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.ajaxjs.cms.user.User;
 import com.ajaxjs.cms.user.service.UserService;
 import com.ajaxjs.cms.utils.sms.Message;
 import com.ajaxjs.cms.utils.sms.SMS;
