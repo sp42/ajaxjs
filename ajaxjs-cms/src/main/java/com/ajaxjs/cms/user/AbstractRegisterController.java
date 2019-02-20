@@ -1,7 +1,6 @@
 package com.ajaxjs.cms.user;
 
-import com.ajaxjs.cms.app.user.model.UserCommonAuth;
-import com.ajaxjs.mvc.controller.JsonReuslt;
+import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -19,13 +18,13 @@ public abstract class AbstractRegisterController extends BaseUserController {
 	 * @param phone 手机号码
 	 * @return true=已存在
 	 */
-	public JsonReuslt checkIfUserPhoneRepeat(String phone) {
+	public String checkIfUserPhoneRepeat(String phone) {
 		LOGGER.info("检查是否重复的手机号码：" + phone);
 
-		return new JsonReuslt("{\"isRepeat\":" + getService().checkIfUserPhoneRepeat(phone) + "}");
+		return ("{\"isRepeat\":" + getService().checkIfUserPhoneRepeat(phone) + "}");
 	}
 
-	public void registerByPhone(User user, String password) {
+	public void registerByPhone(User user, String password) throws ServiceException {
 		LOGGER.info("执行用户注册");
 
 		if (password == null)
@@ -35,7 +34,7 @@ public abstract class AbstractRegisterController extends BaseUserController {
 		passwordModel.setPhone_verified(1); // 已验证
 		passwordModel.setPassword(password);
 
-		long id = getService().create(user, passwordModel);
+		long id = getService().register(user, passwordModel);
 		LOGGER.info("创建用户成功，id：" + id);
 	}
 

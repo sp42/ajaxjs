@@ -1,20 +1,18 @@
 package com.ajaxjs.cms.user.service;
 
 import java.util.Date;
-import java.util.List;
 
 import com.ajaxjs.cms.app.attachment.Attachment_picture;
 import com.ajaxjs.cms.app.attachment.Attachment_pictureService;
 import com.ajaxjs.cms.app.attachment.Attachment_pictureServiceImpl;
 import com.ajaxjs.cms.user.User;
 import com.ajaxjs.cms.user.UserCommonAuth;
-import com.ajaxjs.cms.user.UserLoginLogService.UserLoginLogDao;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
+import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.mvc.controller.MvcRequest;
-
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.cryptography.SymmetricCipher;
 import com.ajaxjs.util.io.image.ImageUtil;
@@ -22,19 +20,33 @@ import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.UploadFileInfo;
 
 @Bean("UserService")
-public class BaseUserService extends BaseService<User> {
-	private static final LogHelper LOGGER = LogHelper.getLog(BaseUserService.class);
-	
-	public UserDao dao = new Repository().bind(UserDao.class);
+public class UserService extends BaseService<User> {
+	private static final LogHelper LOGGER = LogHelper.getLog(UserService.class);
 
-	public Long create(User user, UserCommonAuth password) {
+	public UserDao dao = new Repository().bind(UserDao.class);
+	
+	{
+		setUiName("用户");
+		setShortName("user");
+		setDao(dao);
+	}
+
+	/**
+	 * 普通口令注册
+	 * 
+	 * @param user
+	 * @param password
+	 * @return
+	 * @throws ServiceException 
+	 */
+	public Long register(User user, UserCommonAuth password) throws ServiceException {
 		LOGGER.info("用户注册");
 
 		if (checkIfUserPhoneRepeat(user))
-			throw new Exception(user.getPhone() + "手机号码已注册");
+			throw new ServiceException(user.getPhone() + "手机号码已注册");
 
 		if (checkIfUserNameRepeat(user))
-			throw new Exception(user.getName() + "用户名已注册");
+			throw new ServiceException(user.getName() + "用户名已注册");
 
 		Long userId = dao.create(user);
 
@@ -42,8 +54,8 @@ public class BaseUserService extends BaseService<User> {
 
 		password.setUserId(Integer.parseInt(userId.toString()));
 
-		CommonService.onCreate(password);
-		passwordService.create(password);
+//		CommonService.onCreate(password);
+//		passwordService.create(password);
 
 		return userId;
 	}
@@ -68,7 +80,7 @@ public class BaseUserService extends BaseService<User> {
 		return checkIfUserPhoneRepeat(user);
 	}
 
-	public boolean loginByPassword(User user, UserCommonAuth userLoginInfo) {
+	public boolean loginByPassword(User user, UserCommonAuth userLoginInfo) throws ServiceException {
 		User foundUser = null;
 		switch (userLoginInfo.getLoginType()) {
 		case UserConstant.loginByUserName:
@@ -85,7 +97,7 @@ public class BaseUserService extends BaseService<User> {
 		}
 
 		if (foundUser == null || foundUser.getId() == null || foundUser.getId() == 0)
-			throw new Exception("用户不存在");
+			throw new ServiceException("用户不存在");
 
 		user.setId(foundUser.getId()); // let outside valued
 		user.setName(foundUser.getName());
@@ -98,12 +110,12 @@ public class BaseUserService extends BaseService<User> {
 		}
 
 		if (foundUser == null || foundUser.getId() == 0)
-			throw new Exception("非法用户！");
+			throw new ServiceException("非法用户！");
 
 		long effectedRows = dao.updateLoginInfo(foundUser.getId(), userLoginInfo.getLoginType(), new Date(), MvcRequest.getMvcRequest().getIp());
 
 		if (effectedRows <= 0)
-			throw new Exception("更新会员登录日志出错");
+			throw new ServiceException("更新会员登录日志出错");
 
 		LOGGER.info(foundUser.getName() + " 登录成功！");
 		return true;
@@ -111,16 +123,16 @@ public class BaseUserService extends BaseService<User> {
 
 	private static final String encryptKey = "ErZwd#@$#@D32";
 
-	public String resetPasswordByEmail(User user) {
+	public String resetPasswordByEmail(User user) throws ServiceException {
 		LOGGER.info("重置密码");
 
 		String email = user.getEmail();
 		if (email == null)
-			throw new Exception("请提交邮件地址");
+			throw new ServiceException("请提交邮件地址");
 		user = dao.findByEmail(email);
 
 		if (user == null)
-			throw new Exception("该 email：" + email + " 的用户不存在！");
+			throw new ServiceException("该 email：" + email + " 的用户不存在！");
 
 		String expireHex = Long.toHexString(System.currentTimeMillis());
 		String emailToken = Encode.md5(encryptKey + email), timeToken = SymmetricCipher.AES_Encrypt(expireHex, encryptKey);
@@ -128,11 +140,11 @@ public class BaseUserService extends BaseService<User> {
 		return emailToken + timeToken;
 	}
 
-	public boolean validResetPasswordByEmail(String token, String email) {
+	public boolean validResetPasswordByEmail(String token, String email) throws ServiceException {
 		String emailToken = token.substring(0, 32), timeToken = token.substring(32, token.length());
 
 		if (!Encode.md5(encryptKey + email).equals(emailToken)) {
-			throw new Exception("非法 email 账号！ " + email);
+			throw new ServiceException("非法 email 账号！ " + email);
 		}
 
 		String expireHex = SymmetricCipher.AES_Decrypt(timeToken, encryptKey);
@@ -142,7 +154,7 @@ public class BaseUserService extends BaseService<User> {
 		if (result <= 12) {
 			// 合法
 		} else {
-			throw new Exception("该请求已经过期，请重新发起！ ");
+			throw new ServiceException("该请求已经过期，请重新发起！ ");
 		}
 
 		return true;
@@ -159,7 +171,7 @@ public class BaseUserService extends BaseService<User> {
 		throw new Error("Should not execute this method!");
 	}
 
-	public int doUpdate(User user) {
+	public int doUpdate(User user) throws ServiceException {
 		LOGGER.info("修改用户信息");
 
 //		if (user.getName() == null) { // 如果没有用户名
@@ -169,13 +181,13 @@ public class BaseUserService extends BaseService<User> {
 //		}
 //		try {
 		if (user.getPhone() != null && dao.findByPhone(user.getPhone()) != null)
-			throw new Exception(user.getPhone() + " 手机号码已注册");
+			throw new ServiceException(user.getPhone() + " 手机号码已注册");
 
 		if (user.getName() != null && dao.findByUserName(user.getName()) != null)
-			throw new Exception(user.getName() + " 用户名已注册");
+			throw new ServiceException(user.getName() + " 用户名已注册");
 
 		if (user.getEmail() != null && dao.findByEmail(user.getEmail()) != null)
-			throw new Exception(user.getEmail() + " 邮件已注册");
+			throw new ServiceException(user.getEmail() + " 邮件已注册");
 //		} catch (Exception e) {
 //			throw new NullPointerException(e.getMessage());
 //		}
@@ -199,9 +211,8 @@ public class BaseUserService extends BaseService<User> {
 	}
 
 	public Attachment_picture updateOrCreateAvatar(long userUId, UploadFileInfo info) throws Exception {
-		if (!info.isOk) 
-			throw new Exception("图片上传失败");
-		
+		if (!info.isOk)
+			throw new ServiceException("图片上传失败");
 
 		Attachment_pictureService avatarService = new Attachment_pictureServiceImpl();
 
@@ -227,13 +238,13 @@ public class BaseUserService extends BaseService<User> {
 			if (avatarService.create(avatar) != null) {
 				return avatar;
 			} else {
-				throw new Exception("创建图片记录失败");
+				throw new ServiceException("创建图片记录失败");
 			}
 		} else {
 			if (avatarService.update(avatar) != 0) {
 				return avatar;
 			} else {
-				throw new Exception("修改图片记录失败");
+				throw new ServiceException("修改图片记录失败");
 			}
 		}
 	}

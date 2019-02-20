@@ -1,13 +1,11 @@
-package com.ajaxjs.cms.app.user.controller;
+package com.ajaxjs.cms.user;
 
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.cms.app.attachment.Attachment_picture;
-import com.ajaxjs.cms.app.user.model.User;
-import com.ajaxjs.cms.app.user.model.UserCommonAuth;
-import com.ajaxjs.cms.app.user.service.UserConstant;
-import com.ajaxjs.cms.app.user.service.UserService;
-import com.ajaxjs.framework.service.ServiceException;
+import com.ajaxjs.cms.user.service.UserConstant;
+import com.ajaxjs.cms.user.service.UserService;
+import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -60,7 +58,7 @@ public abstract class AbstractLoginController extends BaseUserController {
 
 		UserService service = getService();
 		user = service.findById(user.getId());
-		avatar = ((UserService) service).findAvaterByUserId(user.getUid());
+		avatar = service.findAvaterByUserId(user.getUid());
 
 		request.getSession().setAttribute("userId", user.getId());
 		request.getSession().setAttribute("userUid", user.getUid());

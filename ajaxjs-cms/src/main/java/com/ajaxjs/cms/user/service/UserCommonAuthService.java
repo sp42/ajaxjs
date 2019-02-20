@@ -3,16 +3,20 @@ package com.ajaxjs.cms.user.service;
 import java.util.List;
 
 import com.ajaxjs.cms.user.UserCommonAuth;
+import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.PageResult;
+import com.ajaxjs.framework.Repository;
+import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.logger.LogHelper;
 
 @Bean(value = "User_common_authService")
-public class UserCommonAuthService {
+public class UserCommonAuthService extends BaseService<UserCommonAuth>  {
 	private static final LogHelper LOGGER = LogHelper.getLog(UserCommonAuthService.class);
-	public static UserCommonAuthDao dao = new DaoHandler().bind(UserCommonAuthDao.class);
+	
+	public static UserCommonAuthDao dao = new Repository().bind(UserCommonAuthDao.class);
 
 	@Override
 	public UserCommonAuth findById(Long id) {
@@ -54,11 +58,7 @@ public class UserCommonAuthService {
 	public PageResult<UserCommonAuth> findPagedList(int start, int limit) {
 		return dao.findPagedList(start, limit);
 	}
-
-	@Override
-	public String getName() {
-		return "";
-	}
+ 
 
 	@Override
 	public String getTableName() {
@@ -73,7 +73,6 @@ public class UserCommonAuthService {
 	 * @param new_password
 	 * @return
 	 */
-	@Override
 	public boolean updatePwd(UserCommonAuth auth, String new_password) throws ServiceException {
 		UserCommonAuth newAuth = new UserCommonAuth();
 		newAuth.setId(auth.getId());
