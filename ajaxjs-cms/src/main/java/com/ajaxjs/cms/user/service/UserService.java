@@ -12,6 +12,7 @@ import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.ioc.Bean;
+import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.cryptography.SymmetricCipher;
@@ -31,6 +32,9 @@ public class UserService extends BaseService<User> {
 		setDao(dao);
 	}
 
+	@Resource("User_common_authService")
+	private UserCommonAuthService passwordService;
+
 	/**
 	 * 普通口令注册
 	 * 
@@ -49,13 +53,10 @@ public class UserService extends BaseService<User> {
 			throw new ServiceException(user.getName() + "用户名已注册");
 
 		Long userId = dao.create(user);
-
 		user.setId(userId);
 
-		password.setUserId(Integer.parseInt(userId.toString()));
-
-//		CommonService.onCreate(password);
-//		passwordService.create(password);
+		password.setUserId(userId);
+		passwordService.create(password);
 
 		return userId;
 	}

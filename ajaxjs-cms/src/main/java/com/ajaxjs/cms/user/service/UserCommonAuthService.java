@@ -15,7 +15,7 @@ import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.logger.LogHelper;
 
-@Bean(value = "User_common_authService")
+@Bean("User_common_authService")
 public class UserCommonAuthService extends BaseService<UserCommonAuth>  {
 	private static final LogHelper LOGGER = LogHelper.getLog(UserCommonAuthService.class);
 	
@@ -33,11 +33,9 @@ public class UserCommonAuthService extends BaseService<UserCommonAuth>  {
 
 	@Override
 	public Long create(UserCommonAuth bean) {
-		System.out.println(bean.getPassword());
 		bean.setPassword(encode(bean.getPassword()));
 		bean.setRegisterIp(MvcRequest.getMvcRequest().getIp());
-
-		System.out.println("saved:" + bean.getPassword());
+		
 		return dao.create(bean);
 	}
 

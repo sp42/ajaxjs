@@ -14,7 +14,7 @@ public class UserCommonAuth extends BaseModel {
 	/**
 	 * 用户id
 	 */
-	private Integer userId;
+	private Long userId;
 
 	/**
 	 * 设置用户id
@@ -22,7 +22,7 @@ public class UserCommonAuth extends BaseModel {
 	 * @param userId
 	 *            用户id
 	 */
-	public void setUserId(Integer userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
@@ -31,7 +31,7 @@ public class UserCommonAuth extends BaseModel {
 	 * 
 	 * @return 用户id
 	 */
-	public Integer getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 
