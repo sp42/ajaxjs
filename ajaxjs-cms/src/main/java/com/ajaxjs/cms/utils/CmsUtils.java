@@ -35,6 +35,11 @@ public class CmsUtils {
 		DataBaseFilter.isAutoClose = false;
 	}
 
+	/**
+	 * 
+	 * @param configFile
+	 * @param string2
+	 */
 	public static void initTestDbAndIoc(String configFile, String... string2) {
 		initTestConnection(configFile);
 		BeanContext.init(string2);

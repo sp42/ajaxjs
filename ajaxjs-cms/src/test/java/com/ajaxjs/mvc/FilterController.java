@@ -8,8 +8,8 @@ import javax.ws.rs.Path;
 
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.filter.AesFilter;
-import com.ajaxjs.mvc.filter.CaptchaFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
+import com.ajaxjs.web.captcha.CaptchaFilter;
 
 
 // 测试基本的 HTTP 四个方法已经自定义流程控制

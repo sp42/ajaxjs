@@ -40,4 +40,8 @@ public class ArticleService extends BaseService<Map<String, Object>> implements 
 	public int getDomainCatelogId() {
 		return ConfigService.getValueAsInt("data.articleCatalog_Id");
 	}
+	
+	public List<Map<String, Object>> findListTop(int top) {
+		return dao.findListTop(top);
+	}
 }

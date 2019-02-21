@@ -24,7 +24,7 @@ import com.ajaxjs.web.UploadFileInfo;
 public class UserService extends BaseService<User> {
 	private static final LogHelper LOGGER = LogHelper.getLog(UserService.class);
 
-	public UserDao dao = new Repository().bind(UserDao.class);
+	public static UserDao dao = new Repository().bind(UserDao.class);
 
 	{
 		setUiName("用户");
@@ -34,6 +34,14 @@ public class UserService extends BaseService<User> {
 
 	@Resource("User_common_authService")
 	private UserCommonAuthService passwordService;
+
+	public UserCommonAuthService getPasswordService() {
+		return passwordService;
+	}
+
+	public void setPasswordService(UserCommonAuthService passwordService) {
+		this.passwordService = passwordService;
+	}
 
 	/**
 	 * 普通口令注册
@@ -51,8 +59,8 @@ public class UserService extends BaseService<User> {
 
 		if (checkIfUserNameRepeat(user))
 			throw new ServiceException(user.getName() + "用户名已注册");
-
-		Long userId = dao.create(user);
+		
+		Long userId = create(user);
 		user.setId(userId);
 
 		password.setUserId(userId);
@@ -84,9 +92,10 @@ public class UserService extends BaseService<User> {
 	/**
 	 * 检查用户手机是否重复
 	 * 
-	 * @return 手机是否重复
+	 * @return 手机是否重复 true=重複
 	 */
 	public boolean checkIfUserPhoneRepeat(User user) {
+		System.out.println(dao.findByPhone(user.getPhone()) != null);
 		return user.getPhone() != null && dao.findByPhone(user.getPhone()) != null;
 	}
 
@@ -105,7 +114,7 @@ public class UserService extends BaseService<User> {
 		User foundUser = null;
 
 		switch (userLoginInfo.getLoginType()) {
-		case UserConstant.loginByUserName:
+		case UserConstant.LOGIN_BY_USERNAME:
 			foundUser = dao.findByUserName(user.getName());
 			break;
 		case UserConstant.loginByPhoneNumber:
@@ -125,6 +134,12 @@ public class UserService extends BaseService<User> {
 		user.setName(foundUser.getName());
 
 		UserCommonAuth auth = UserCommonAuthService.dao.findByUserId(foundUser.getId());
+		
+		if(auth == null) {
+			ServiceException e = new ServiceException("系統異常，用戶 " + foundUser.getId() + " 沒有對應的密碼記錄");
+			LOGGER.warning(e);
+			return false;
+		}
 
 		if (!auth.getPassword().equalsIgnoreCase(UserCommonAuthService.encode(userLoginInfo.getPassword()))) {
 			LOGGER.info("密码不正确，数据库密码：{0}, 提交密码 {1}", auth.getPassword(), UserCommonAuthService.encode(userLoginInfo.getPassword()));
@@ -199,14 +214,6 @@ public class UserService extends BaseService<User> {
 
 	public User findById(Long id) {
 		return dao.findById(id);
-	}
-
-	/**
-	 * 不能调用该方法
-	 */
-	@Override
-	public Long create(User user) {
-		throw new Error("Should not execute this method!");
 	}
 
 	public int doUpdate(User user) throws ServiceException {

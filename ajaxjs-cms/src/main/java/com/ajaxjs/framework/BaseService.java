@@ -9,8 +9,14 @@ import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.JdbcHelper;
 import com.ajaxjs.orm.thirdparty.SnowflakeIdWorker;
 
+/**
+ * 基础业务类
+ * 
+ * @author Frank Cheung
+ *
+ * @param <T> 实体
+ */
 public abstract class BaseService<T> implements IBaseService<T> {
-
 	@Override
 	public IBaseDao<T> getDao() {
 		return dao;
@@ -113,7 +119,9 @@ public abstract class BaseService<T> implements IBaseService<T> {
 	}
 
 	private String uiName;
+
 	private String tableName;
+
 	private String shortName;
 
 	@Override

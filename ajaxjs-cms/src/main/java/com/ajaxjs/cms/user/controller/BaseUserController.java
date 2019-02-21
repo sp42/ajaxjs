@@ -20,12 +20,9 @@ import com.ajaxjs.util.logger.LogHelper;
  */
 public abstract class BaseUserController extends BaseController<User> {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseUserController.class);
-
-	private UserService service;
-
-	public UserService getService() {
-		return service;
-	}
+	
+	@Override
+	public abstract UserService getService();
 
 	/**
 	 * 提示已登錄

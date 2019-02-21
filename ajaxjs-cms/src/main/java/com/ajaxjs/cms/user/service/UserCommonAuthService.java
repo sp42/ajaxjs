@@ -12,14 +12,21 @@ import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Select;
+import com.ajaxjs.orm.annotation.TableName;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.logger.LogHelper;
 
 @Bean("User_common_authService")
-public class UserCommonAuthService extends BaseService<UserCommonAuth>  {
+public class UserCommonAuthService extends BaseService<UserCommonAuth> {
 	private static final LogHelper LOGGER = LogHelper.getLog(UserCommonAuthService.class);
-	
+
 	public static UserCommonAuthDao dao = new Repository().bind(UserCommonAuthDao.class);
+	
+	{
+		setUiName("用户口令");
+		setShortName("UserCommonAuth");
+		setDao(dao);
+	}
 
 	@Override
 	public UserCommonAuth findById(Long id) {
@@ -34,9 +41,13 @@ public class UserCommonAuthService extends BaseService<UserCommonAuth>  {
 	@Override
 	public Long create(UserCommonAuth bean) {
 		bean.setPassword(encode(bean.getPassword()));
-		bean.setRegisterIp(MvcRequest.getMvcRequest().getIp());
-		
-		return dao.create(bean);
+		try {
+			bean.setRegisterIp(MvcRequest.getMvcRequest().getIp());
+		} catch (Exception e) {
+			// 测试环境不能获取 ip
+		}
+
+		return super.create(bean);
 	}
 
 	public static String encode(String p) {
@@ -59,7 +70,6 @@ public class UserCommonAuthService extends BaseService<UserCommonAuth>  {
 	public PageResult<UserCommonAuth> findPagedList(int start, int limit) {
 		return dao.findPagedList(start, limit);
 	}
- 
 
 	@Override
 	public String getTableName() {
@@ -96,13 +106,12 @@ public class UserCommonAuthService extends BaseService<UserCommonAuth>  {
 		return null;
 	}
 
+	@TableName(value = "user_common_auth", beanClass = UserCommonAuth.class)
 	public static interface UserCommonAuthDao extends IBaseDao<UserCommonAuth> {
-		final static String tableName = "user_common_auth";
-
-		@Select("SELECT * FROM " + tableName + " WHERE userId = ?")
+		@Select("SELECT * FROM ${tableName} WHERE userId = ?")
 		public UserCommonAuth findByUserId(Long id);
 
-		@Delete("DELETE FROM " + tableName + " WHERE userId = ?")
+		@Delete("DELETE FROM ${tableName} WHERE userId = ?")
 		public boolean deleteByUserId(Long userId);
 	}
 }

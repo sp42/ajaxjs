@@ -1,5 +1,7 @@
 package com.ajaxjs.cms.user.controller;
 
+import java.util.HashMap;
+
 import com.ajaxjs.cms.user.User;
 import com.ajaxjs.cms.user.UserCommonAuth;
 import com.ajaxjs.framework.ServiceException;
@@ -23,7 +25,12 @@ public abstract class AbstractRegisterController extends BaseUserController {
 	public String checkIfUserPhoneRepeat(String phone) {
 		LOGGER.info("检查是否重复的手机号码：" + phone);
 
-		return ("{\"isRepeat\":" + getService().checkIfUserPhoneRepeat(phone) + "}");
+		return toJson(new HashMap<String, Boolean>() {
+			private static final long serialVersionUID = -5033049204280154615L;
+			{
+				put("isRepeat", getService().checkIfUserPhoneRepeat(phone));
+			}
+		});
 	}
 
 	public void registerByPhone(User user, String password) throws ServiceException {
