@@ -47,10 +47,10 @@
 		</div>
 
 		<div class="brief">
-				<label>
-					<div class="label">用户简介：</div> 
-					<textarea rows="15" cols="20" style="width: 90%;" class="ajaxjs-inputField" name="intro">${info.intro}</textarea>
-				</label>
+			<label>
+				<div class="label">用户简介：</div> 
+				<textarea rows="15" cols="20" style="width: 90%;" class="ajaxjs-inputField" name="intro">${info.intro}</textarea>
+			</label>
 		</div>
 
 
