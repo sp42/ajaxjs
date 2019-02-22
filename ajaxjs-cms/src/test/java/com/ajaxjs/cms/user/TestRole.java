@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import com.ajaxjs.cms.AdsService;
 import com.ajaxjs.cms.user.role.RoleService;
+import com.ajaxjs.cms.user.role.RoleUtil;
 import com.ajaxjs.cms.utils.CmsUtils;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.orm.JdbcConnection;
@@ -45,7 +46,7 @@ public class TestRole {
 
 	@Test
 	public void testGetGetPrimeNumber() {
-		assertEquals("[2, 3, 5, 7]", Arrays.toString(RoleService.getPrimeNumber(10)));
+		assertEquals("[2, 3, 5, 7]", Arrays.toString(RoleUtil.getPrimeNumber(10)));
 	}
 
 	@Test

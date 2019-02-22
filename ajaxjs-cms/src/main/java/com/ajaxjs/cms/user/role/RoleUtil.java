@@ -72,4 +72,51 @@ public class RoleUtil {
 	public static Set<Integer> getSingleKeyLock(int num) {
 		return getSingleKeyLock(num, null);
 	}
+	
+
+	/**
+	 * 求 1 到 n 所有质数
+	 * 
+	 * @param n
+	 * @return
+	 */
+	private static int[] _getPrimeNumber(int n) {
+		int[] priArr = new int[n];
+
+		// 质数为大于1的自然数, 故i从2开始
+		for (int i = 2; i < n; i++) {
+			// isPrime作为当前这个数是否为质数的标记位
+			boolean isPrime = true;
+
+			for (int j = 2; j < i; j++) {
+				if (i % j == 0) {
+					isPrime = false;
+					break;
+				}
+			}
+
+			if (isPrime)
+				priArr[i] = i;
+		}
+
+		return priArr;
+	}
+
+	/**
+	 * 求 1 到 n 所有质数
+	 * 
+	 * @param n
+	 * @return
+	 */
+	public static Integer[] getPrimeNumber(int n) {
+		int[] arr = _getPrimeNumber(n);
+		List<Integer> list = new ArrayList<>();
+
+		for (int i = 0; i < arr.length; i++) {
+			if (arr[i] != 0) 
+				list.add(arr[i]);
+		}
+
+		return list.toArray(new Integer[list.size()]);
+	}
 }

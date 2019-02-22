@@ -1,9 +1,7 @@
 package com.ajaxjs.cms.user.role;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.framework.BaseService;
@@ -25,7 +23,7 @@ public class RoleService extends BaseService<Map<String, Object>> {
 	
 	@TableName(value = "user_role", beanClass = Map.class)
 	public static interface RoleDao extends IBaseDao<Map<String, Object>> {
-		@Select(value = "SELECT accessKey FROM ${tableName}")
+		@Select("SELECT accessKey FROM ${tableName}")
 		public Integer[] getExistingPrime();
 	}
 
@@ -60,7 +58,7 @@ public class RoleService extends BaseService<Map<String, Object>> {
 	 */
 	public static int getNextPrime(Integer[] existingPrime) {
 		int max = Collections.max(Arrays.asList(existingPrime));
-		Integer[] p = getPrimeNumber(200);
+		Integer[] p = RoleUtil.getPrimeNumber(200);
 
 		for (int i : p) {
 			if (i > max)
@@ -70,47 +68,4 @@ public class RoleService extends BaseService<Map<String, Object>> {
 		return 0;
 	}
 
-	/**
-	 * 求 1 到n 所有质数
-	 * 
-	 * @param n
-	 * @return
-	 */
-	private static int[] _getPrimeNumber(int n) {
-		int[] priArr = new int[n];
-
-		// 质数为大于1的自然数, 故i从2开始
-		for (int i = 2; i < n; i++) {
-			// isPrime作为当前这个数是否为质数的标记位
-			boolean isPrime = true;
-
-			for (int j = 2; j < i; j++) {
-				if (i % j == 0) {
-					isPrime = false;
-					break;
-				}
-			}
-
-			if (isPrime)
-				priArr[i] = i;
-		}
-
-		return priArr;
-	}
-
-	public static Integer[] getPrimeNumber(int n) {
-		List<Integer> list = new ArrayList<>();
-
-		int[] retArr = _getPrimeNumber(n);
-
-		for (int i = 0; i < retArr.length; i++) {
-			if (retArr[i] != 0) {
-				list.add(retArr[i]);
-			}
-		}
-
-		Integer[] arr = list.toArray(new Integer[list.size()]);
-
-		return arr;
-	}
 }
