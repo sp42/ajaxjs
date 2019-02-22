@@ -11,7 +11,7 @@ import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
 
-@Bean("UserRoleRoleService")
+@Bean("UserRoleService")
 public class RoleService extends BaseService<Map<String, Object>> {
 	RoleDao dao = new Repository().bind(RoleDao.class);
 
@@ -38,7 +38,7 @@ public class RoleService extends BaseService<Map<String, Object>> {
 			prime = getNextPrime(ep);
 
 		bean.put("accessKey", prime);
-		return dao.create(bean);
+		return create(bean);
 	}
 
 	/**
