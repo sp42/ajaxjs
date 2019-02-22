@@ -97,6 +97,7 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 	}
 
 	/**
+	 * DAO 方法返回类型
 	 * 
 	 * @param method
 	 * @return
@@ -104,9 +105,9 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 	 */
 	private Class<?> getReturnType(Method method) throws DaoException {
 		Class<?> clz = method.getReturnType();
-
+		
 		if (clz == Map.class || clz == List.class || clz == PageResult.class || clz == int.class || clz == Integer.class || clz == long.class || clz == Long.class || clz == String.class || clz == Boolean.class
-				|| clz == boolean.class)
+				|| clz == boolean.class || clz.isArray())
 			return clz;
 
 		TableName t = getClz().getAnnotation(TableName.class);
@@ -124,7 +125,7 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 		SqlFactory sqlFactory = method.getAnnotation(SqlFactory.class);
 
 		if (sqlFactory != null) {
-			String methodName = sqlFactory.value();
+			String methodName = sqlFactory.value(); 
 
 			Class<?> clz = sqlFactory.clz();
 			if (clz == null || clz.equals(Object.class)) {
@@ -194,6 +195,9 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 	private Class<?> getEntryContainerType(Method method) throws DaoException {
 		Class<?> type = method.getReturnType();
 
+		if (type.isArray())
+			return type.getComponentType();
+
 		// 获取 List<String> 泛型里的 String，而不是 List 类型
 		if (type == List.class || type == PageResult.class) {
 			Type returnType = method.getGenericReturnType();
@@ -252,6 +256,7 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 
 		Object result = null;
 
+		System.out.println("-------------------------------" + returnType);
 		if (returnType == int.class || returnType == Integer.class) {
 			result = queryOne(conn, sql, int.class, args);
 		} else if (returnType == long.class || returnType == Long.class) {

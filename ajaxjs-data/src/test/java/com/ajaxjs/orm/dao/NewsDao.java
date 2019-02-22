@@ -42,6 +42,9 @@ public interface NewsDao extends IBaseDao<News> {
 
 	@Select("SELECT COUNT(*) AS Total FROM " + tableName)
 	public Integer count();
+	
+	@Select("SELECT id FROM " + tableName)
+	public Integer[] findAllIds();
 
 	@Select("SELECT * FROM news LIMIT ?, ?")
 	@SqlFactory("getInstance")

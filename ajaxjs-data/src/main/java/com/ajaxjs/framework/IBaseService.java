@@ -2,6 +2,13 @@ package com.ajaxjs.framework;
 
 import java.util.List;
 
+/**
+ * 通用业务方法
+ * 
+ * @author Frank Cheung
+ *
+ * @param <T> 实体
+ */
 public interface IBaseService<T> {
 	/**
 	 * 查询单个记录。如果找不到则返回 null
@@ -77,7 +84,7 @@ public interface IBaseService<T> {
 	 * @return 数据库表名
 	 */
 	public String getTableName();
-	
+
 	/**
 	 * 获取 DAO 对象，直接在 Controller 里面使用 DAO，跳过 Service
 	 * 

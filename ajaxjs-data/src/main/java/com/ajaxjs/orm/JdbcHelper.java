@@ -86,6 +86,7 @@ public class JdbcHelper {
 	}
 
 	/**
+	 * 查询单个结果，保存为 Bean。如果查询不到任何数据返回 null。
 	 * 
 	 * @param beanClz
 	 * @param connection
@@ -162,7 +163,7 @@ public class JdbcHelper {
 	}
 
 	/**
-	 * 查询一组结果，保存为 List<Map<String, Object>> 结构。如果查询不到任何数据返回 null。
+	 * 查询一组结果，保存为 List&lt;Map&lt;String, Object&gt;&gt; 结构。如果查询不到任何数据返回 null。
 	 * 
 	 * @param conn   数据库连接对象 数据库连接对象
 	 * @param sql    SQL 语句，可以带有 ? 的占位符
@@ -174,9 +175,16 @@ public class JdbcHelper {
 			return forEachRs(rs, _rs -> getResultMap(_rs));
 		}, params);
 	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> List<T> queryAsList(Connection conn, String sql, Object... params) {
+		return select(conn, sql, null, (ResultSet rs) -> {
+			return forEachRs(rs, _rs -> (T) rs.getObject(0));
+		}, params);
+	}
 
 	/**
-	 * 查询一组结果，保存为 List<Map<String, Object>> 结构。如果查询不到任何数据返回 null。
+	 * 查询一组结果，保存为 List&lt;Bean&gt; 结构。如果查询不到任何数据返回 null。
 	 * 
 	 * @param conn   数据库连接对象 数据库连接对象
 	 * @param sql    SQL 语句，可以带有 ? 的占位符
@@ -257,6 +265,15 @@ public class JdbcHelper {
 		return null;
 	}
 
+	/**
+	 * 查询数组
+	 * 
+	 * @param conn 数据库连接对象
+	 * @param sql SQL 语句，可以带有 ? 的占位符
+	 * @param clz 注意 Integer.class 不能用 int.class 代替 
+	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T[] queryArray(Connection conn, String sql, Class<T> clz, Object... params) {
 		return select(conn, sql, null, (ResultSet rs) -> {
@@ -264,8 +281,9 @@ public class JdbcHelper {
 
 			Object array = Array.newInstance(clz, list.size());// List 转为数组
 
-			for (int i = 0; i < list.size(); i++)
+			for (int i = 0; i < list.size(); i++) {
 				Array.set(array, i, list.get(i));
+			}
 			return (T[]) array;
 		}, params);
 	}

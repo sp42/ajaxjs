@@ -47,6 +47,15 @@ public class TestDao {
 		assertNotNull(dao.count());
 		assertNotNull(mapDao.count());
 	}
+	
+	
+	@Test
+	public void testQueryAsArray() {
+		Integer[] arr = dao.findAllIds();
+		assertNotNull(arr);
+		assertTrue(arr.length > 0);
+	}
+
 
 	@Test
 	public void testFindList() {

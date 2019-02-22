@@ -70,6 +70,13 @@ public class TestJdbcHelper {
 	}
 
 	@Test
+	public void testQueryAsArray() {
+		Integer[] arr = JdbcHelper.queryArray(conn, "SELECT id FROM news", Integer.class);
+		assertNotNull(arr);
+		assertTrue(arr.length > 0);
+	}
+
+	@Test
 	public void testQueryOne() {
 		int count = queryOne(conn, "SELECT COUNT(*) AS count FROM news", int.class);
 		assertTrue(count > 0);
@@ -127,8 +134,6 @@ public class TestJdbcHelper {
 
 		assertNotNull(map);
 		assertNotNull(map.get("name"));
-
-//		System.out.println(map.get("name").getGetter());
 	}
 
 	@Test
