@@ -43,7 +43,6 @@ import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
  * 
  * @author Sp42 frank@ajaxjs.com
  */
-@SuppressWarnings("restriction")
 public class Repository extends JdbcHelper implements InvocationHandler {
 
 	/**
