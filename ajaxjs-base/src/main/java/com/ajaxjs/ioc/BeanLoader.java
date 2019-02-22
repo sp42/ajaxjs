@@ -58,7 +58,6 @@ public class BeanLoader extends AbstractScanner<Class<Object>> {
 			CtClass cc = cp.get(resourcePath);
 			doAop(cc);
 			makeSetter(cc);
-
 //			if ("com.ajaxjs.ioc.Hi".equals(resourcePath)) {
 //				CtField f1 = new CtField(cp.get("com.ajaxjs.ioc.Person"), "person", cc);
 //				cc.addMethod(CtNewMethod.setter("setPerson", f1));
