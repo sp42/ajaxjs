@@ -10,52 +10,6 @@
 		margin: 0;
 	}
 	
-	caption {
-		font-size: 14px;
-		font-weight: bold;
-	}
-	
-	table {
-		border-collapse: collapse;
-		border: 1px #525152 solid;
-		width: 50%;
-		margin: 0 auto;
-		margin-top: 100px;
-	}
-	
-	th, td {
-		border: 1px #525152 solid;
-		text-align: center;
-		font-size: 12px;
-		line-height: 30px;
-	}
-	
-	/*模拟对角线*/
-	.out {
-		border-top: 40px #D6D3D6 solid; /*上边框宽度等于表格第一行行高*/
-		width: 0px; /*让容器宽度为0*/
-		height: 0px; /*让容器高度为0*/
-		border-left: 80px #BDBABD solid; /*左边框宽度等于表格第一行第一格宽度*/
-		position: relative; /*让里面的两个子容器绝对定位*/
-	}
-	
-	b {
-		font-style: normal;
-		display: block;
-		position: absolute;
-		top: -40px;
-		left: -40px;
-		width: 35px;
-	}
-	
-	em {
-		font-style: normal;
-		display: block;
-		position: absolute;
-		top: -25px;
-		left: -70px;
-		width: 55x;
-	}
 	
 	
 	
@@ -150,51 +104,10 @@ to {
 </div>
 
 <div class="logo">
-    <a href="http://www.haorooms.com"><img src="http://sandbox.runjs.cn/uploads/rs/216/0y89gzo2/banner03.jpg" /></a>
+    <a href="http://www.haorooms.com"><img src="https://pic1.zhimg.com/80/f72949cfeafa969f97b2ae994d37092e_hd.jpg" /></a>
 </div>
 
 
-	<table>
-		<caption>用div+css模拟表格对角线</caption>
-		<tr>
-			<th style="width: 80px;">
-				<div class="out">
-					<b>类别</b> <em>姓名</em>
-				</div>
-			</th>
-			<th>年级</th>
-			<th>班级</th>
-			<th>成绩</th>
-			<th>班级均分</th>
-		</tr>
-		<tr>
-			<td class="t1">张三</td>
-			<td>三</td>
-			<td>2</td>
-			<td>62</td>
-			<td>61</td>
-		</tr>
-		<tr>
-			<td class="t1">李四</td>
-			<td>三</td>
-			<td>1</td>
-			<td>48</td>
-			<td>67</td>
-		</tr>
-		<tr>
-			<td class="t1">王五</td>
-			<td>三</td>
-			<td>5</td>
-			<td>79</td>
-			<td>63</td>
-		</tr>
-		<tr>
-			<td class="t1">赵六</td>
-			<td>三</td>
-			<td>4</td>
-			<td>89</td>
-			<td>66</td>
-		</tr>
-	</table>
+
 </body>
 </html>
