@@ -38,7 +38,7 @@ public class RoleService extends BaseService<Map<String, Object>> {
 			prime = getNextPrime(ep);
 
 		bean.put("accessKey", prime);
-		return create(bean);
+		return super.create(bean);
 	}
 
 	/**

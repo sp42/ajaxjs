@@ -278,6 +278,9 @@ public class JdbcHelper {
 	public static <T> T[] queryArray(Connection conn, String sql, Class<T> clz, Object... params) {
 		return select(conn, sql, null, (ResultSet rs) -> {
 			List<T> list = forEachRs(rs, _rs -> (T) rs.getObject(1));
+			
+			if(list == null)
+				return null;
 
 			Object array = Array.newInstance(clz, list.size());// List 转为数组
 
