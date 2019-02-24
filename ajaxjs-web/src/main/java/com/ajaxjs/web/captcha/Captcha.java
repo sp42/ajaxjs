@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.web;
+package com.ajaxjs.web.captcha;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -102,8 +102,7 @@ public class Captcha extends ImageUtil {
 	/**
 	 * 设置验证码
 	 * 
-	 * @param code
-	 *            验证码
+	 * @param code 验证码
 	 */
 	public void setCode(String code) {
 		this.code = code;

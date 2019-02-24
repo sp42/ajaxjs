@@ -28,7 +28,6 @@ document.addEventListener("DOMContentLoaded", function() {
 			show : function(text, cfg) {
 				this.showText = text;
 				this.$el.classList.remove('hide');
-				
 				aj.apply(this, cfg);
 				
 				return this;

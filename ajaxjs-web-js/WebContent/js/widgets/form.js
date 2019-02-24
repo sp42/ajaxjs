@@ -21,7 +21,7 @@ Vue.component('aj-page-captcha', {
 		'<table class="aj-page-captcha"><tr>\
 			<td><input type="text" :name="fieldName" placeholder="输入右侧验证码" data-regexp="integer" required /></td>\
 			<td style="vertical-align: top;">\
-				<img :src="imgSrc || ajResources.ctx + \'/Captcha/\'" @click="onClk($event);" title="点击刷新图片" />\
+				<img :src="imgSrc || ajResources.ctx + \'/Captcha\'" @click="onClk($event);" title="点击刷新图片" />\
 			</td>\
 		</tr></table>',
 	methods : {
