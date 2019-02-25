@@ -14,7 +14,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ajaxjs.cms.AdsService;
-import com.ajaxjs.cms.user.role.Note;
 import com.ajaxjs.cms.user.role.RightConstant;
 import com.ajaxjs.cms.user.role.RoleService;
 import com.ajaxjs.cms.user.role.RoleUtil;
@@ -78,14 +77,10 @@ public class TestRole {
 			for (Field field : clz.getDeclaredFields()) {
 				// 确保你要取的,是常量.否则,就不用进去这个获取操作了
 				if (Modifier.isFinal(field.getModifiers())) {
-					String name = field.getName(), note = null;
+					String name = field.getName();
 					int value = (int) field.get(null);
-					Note noteA = field.getAnnotation(Note.class);
-					
-					if (noteA != null)
-						note = noteA.value();
-
-					System.out.println(name + ":" + value + ":" + note);
+				 
+					System.out.println(name + ":" + value);
 				}
 			}
 		} catch (IllegalArgumentException | IllegalAccessException e) {

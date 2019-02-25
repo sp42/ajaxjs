@@ -1,8 +1,5 @@
 package com.ajaxjs.cms.user.role;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -21,11 +18,12 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 
-@Path("/admin/role/role")
+@Path("/admin/role/privilege")
 @Bean
-public class RoleController extends BaseController<Map<String, Object>> {
-	@Resource("UserRoleService")
-	private RoleService service;
+public class PrivilegeController extends BaseController<Privilege> {
+	
+	@Resource("UserRolePrivilegeService")
+	private PrivilegeService service;
 
 	@GET
 	@Path("list")
@@ -42,14 +40,14 @@ public class RoleController extends BaseController<Map<String, Object>> {
 	@GET
 	public String jsp(ModelAndView mv) {
 		prepareData(mv);
-		return jsp("user/role/user-group");
+		return jsp("user/role/assign-right");
 	}
 
 	@POST
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String create(Map<String, Object> entity) {
+	public String create(Privilege entity) {
 		return super.create(entity);
 	}
 
@@ -58,7 +56,7 @@ public class RoleController extends BaseController<Map<String, Object>> {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, Map<String, Object> entity) {
+	public String update(@PathParam("id") Long id, Privilege entity) {
 		return super.update(id, entity);
 	}
 
@@ -67,11 +65,11 @@ public class RoleController extends BaseController<Map<String, Object>> {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String delete(@PathParam("id") Long id) {
-		return delete(id, new HashMap<>());
+		return delete(id, new Privilege());
 	}
 
 	@Override
-	public IBaseService<Map<String, Object>> getService() {
+	public IBaseService<Privilege> getService() {
 		return service;
 	}
 }

@@ -1,7 +1,5 @@
 package com.ajaxjs.cms.user.role;
 
-import java.util.Map;
-
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.Repository;
@@ -9,7 +7,7 @@ import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.annotation.TableName;
 
 @Bean("UserRolePrivilegeService")
-public class PrivilegeService extends BaseService<Map<String, Object>> {
+public class PrivilegeService extends BaseService<Privilege> {
 
 	UserRolePrivilegeDao dao = new Repository().bind(UserRolePrivilegeDao.class);
 
@@ -19,7 +17,7 @@ public class PrivilegeService extends BaseService<Map<String, Object>> {
 		setDao(dao);
 	}
 
-	@TableName(value = "user_privilege", beanClass = Map.class)
-	public static interface UserRolePrivilegeDao extends IBaseDao<Map<String, Object>> {
+	@TableName(value = "user_privilege", beanClass = Privilege.class)
+	public static interface UserRolePrivilegeDao extends IBaseDao<Privilege> {
 	}
 }
