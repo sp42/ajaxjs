@@ -24,19 +24,23 @@ public interface IBaseDao<T> {
 	 * 简单关联 catelog 表，注意表名称 alies 为 gc
 	 */
 	public final static String catelog_simple_join = " LEFT JOIN general_catelog gc ON gc.id = entry.catelogId ";
+	
+	public final static String pathLike_mysql  = " FROM general_catelog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catelog WHERE id = ? ) , '%'))";
+	public final static String pathLike_sqlite = " FROM general_catelog WHERE `path` LIKE ( (SELECT `path` FROM general_catelog WHERE id = ? ) || '%')";
+	 
 
 	/**
 	 * 用于 catelogId 查询的，通常放在 LEFT JOIN 后面还需要，WHERE e.catelog = c.id。 还需要预留一个
 	 * catelogId 的参数 另外也可以用 IN 查询
 	 */
-	public final static String catelog_finById = " (SELECT id, name FROM general_catelog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catelog WHERE id = ? ) , '%'))) AS c ";
-	public final static String catelog_finById_sqlite = "(SELECT id AS catelogId, name AS catelogName FROM general_catelog WHERE `path` LIKE (  ( SELECT `path` FROM general_catelog WHERE id = ? ) || '%')) AS c";
+	public final static String catelog_finById = " (SELECT id, name " + pathLike_mysql + ") AS c ";
+	public final static String catelog_finById_sqlite = "(SELECT id AS catelogId, name AS catelogName " + pathLike_sqlite + ") AS c";
 
 	/**
 	 * IN 查询用
 	 */
-	public final static String catelog_find = "(SELECT id FROM general_catelog WHERE `path` LIKE (CONCAT (( SELECT `path` FROM general_catelog WHERE id = ? ) , '%')))";
-	public final static String catelog_find_sqlite = "(SELECT id FROM general_catelog WHERE `path` LIKE ( ( SELECT `path` FROM general_catelog WHERE id = ? ) || '%'))";
+	public final static String catelog_find =        "(SELECT id " + pathLike_mysql + ")";
+	public final static String catelog_find_sqlite = "(SELECT id " + pathLike_sqlite + ")";
 
 	// ---------------- find one-------------------
 

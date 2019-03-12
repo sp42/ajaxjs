@@ -49,6 +49,7 @@ public class BaseModel implements Serializable {
 	private Date createDate;
 
 	private Date updateDate;
+	
 	private String cover;
 
 	public String getName() {

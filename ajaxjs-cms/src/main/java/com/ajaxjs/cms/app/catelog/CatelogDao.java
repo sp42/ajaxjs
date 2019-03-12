@@ -26,10 +26,10 @@ public interface CatelogDao extends IBaseDao<Catelog> {
 	 * @param id
 	 * @return
 	 */
-	@Delete(value="DELETE FROM general_catelog WHERE id in ( SELECT n.id FROM (" + // 如果子查询的 from 子句和更新、删除对象使用同一张表，会出现错误。
-			"(SELECT id FROM general_catelog WHERE `path` LIKE ( CONCAT ( (SELECT `path` FROM general_catelog WHERE id = ?) , '%')))) AS n)", 
-			sqliteValue="DELETE FROM general_catelog " + 
-			"WHERE id in (SELECT id FROM general_catelog WHERE \"path\" LIKE (( SELECT \"path\" FROM general_catelog WHERE id = ?) || '%'));")
+	@Delete(value = "DELETE FROM general_catelog WHERE id in ( SELECT n.id FROM (" + // 如果子查询的 from 子句和更新、删除对象使用同一张表，会出现错误。
+			"(SELECT id FROM general_catelog WHERE `path` LIKE ( CONCAT ( (SELECT `path` FROM general_catelog WHERE id = ?) , '/%')))) AS n)", 
+			sqliteValue = "DELETE FROM general_catelog " + 
+			"WHERE id in (SELECT id FROM general_catelog WHERE \"path\" LIKE (( SELECT \"path\" FROM general_catelog WHERE id = ?) || '/%'));")
 	public boolean deleteAll(int id);
 
 	/**
@@ -57,7 +57,7 @@ public interface CatelogDao extends IBaseDao<Catelog> {
 	 * @param parentId
 	 * @return
 	 */
-	@Select(value = "SELECT * FROM general_catelog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catelog WHERE id = ? ) , '%'))", 
+	@Select(value = "SELECT * FROM general_catelog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catelog WHERE id = ? ) , '/%'))", 
 			sqliteValue = "SELECT * FROM general_catelog WHERE " + 
 			"	\"path\" LIKE (  ( " + 
 			"	SELECT" + 
@@ -65,7 +65,7 @@ public interface CatelogDao extends IBaseDao<Catelog> {
 			"	FROM" + 
 			"		general_catelog" + 
 			"	WHERE" + 
-			"		id = ? ) || '%')")
+			"		id = ? ) || '/%')")
 	public List<Catelog> getAllListByParentId(int parentId);
 
 }
