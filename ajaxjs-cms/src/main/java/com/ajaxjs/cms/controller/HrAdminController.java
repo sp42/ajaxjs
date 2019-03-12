@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.cms.domain.DomainBaseAdminController;
@@ -40,5 +41,22 @@ public class HrAdminController extends DomainBaseAdminController {
 	@Override
 	public IBaseService<Map<String, Object>> getService() {
 		return service;
+	}
+	
+	@GET
+	@Override
+	@MvcFilter(filters = DataBaseFilter.class)
+	public String createUI(ModelAndView mv) {
+		super.createUI(mv);
+		return cms("hr");
+	}
+	
+	@GET
+	@Override
+	@Path("/{id}")
+	@MvcFilter(filters = DataBaseFilter.class)
+	public String editUI(@PathParam("id") Long id, ModelAndView mv) {
+		super.editUI(id, mv);
+		return cms("hr");
 	}
 }

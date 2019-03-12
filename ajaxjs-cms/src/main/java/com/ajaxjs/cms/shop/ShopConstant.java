@@ -11,6 +11,7 @@ public interface ShopConstant {
 	public static final int TRADE_CANCELLED = 2;
 	public static final int TRADE_FINISHED = 3;
 	public static final int TRADE_SHIPPING = 4;
+	
 	public static final Map<Integer, String> TradeStatus = new HashMap() {
 		private static final long serialVersionUID = -1L;
 
