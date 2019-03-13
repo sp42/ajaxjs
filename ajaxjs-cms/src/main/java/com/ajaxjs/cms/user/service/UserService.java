@@ -14,6 +14,7 @@ import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.controller.MvcRequest;
+import com.ajaxjs.orm.thirdparty.SnowflakeIdWorker;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.cryptography.SymmetricCipher;
 import com.ajaxjs.util.io.image.ImageUtil;
@@ -54,12 +55,12 @@ public class UserService extends BaseService<User> {
 	public Long register(User user, UserCommonAuth password) throws ServiceException {
 		LOGGER.info("用户注册");
 
-		if (checkIfUserPhoneRepeat(user))
+		if (user.getPhone() != null && checkIfUserPhoneRepeat(user))
 			throw new ServiceException(user.getPhone() + "手机号码已注册");
 
-		if (checkIfUserNameRepeat(user))
+		if (user.getName() != null && checkIfUserNameRepeat(user))
 			throw new ServiceException(user.getName() + "用户名已注册");
-		
+
 		Long userId = create(user);
 		user.setId(userId);
 
@@ -95,7 +96,6 @@ public class UserService extends BaseService<User> {
 	 * @return 手机是否重复 true=重複
 	 */
 	public boolean checkIfUserPhoneRepeat(User user) {
-		System.out.println(dao.findByPhone(user.getPhone()) != null);
 		return user.getPhone() != null && dao.findByPhone(user.getPhone()) != null;
 	}
 
@@ -113,18 +113,12 @@ public class UserService extends BaseService<User> {
 	public boolean loginByPassword(User user, UserCommonAuth userLoginInfo) throws ServiceException {
 		User foundUser = null;
 
-		switch (userLoginInfo.getLoginType()) {
-		case UserConstant.LOGIN_BY_USERNAME:
+		if (user.getName() != null) {
 			foundUser = dao.findByUserName(user.getName());
-			break;
-		case UserConstant.loginByPhoneNumber:
+		} else if ((user.getPhone() != null)) {
 			foundUser = dao.findByPhone(user.getPhone());
-			break;
-		case UserConstant.loginByEmail:
+		} else if (user.getEmail() != null) {
 			foundUser = dao.findByEmail(user.getEmail());
-			break;
-		default:
-			foundUser = null;
 		}
 
 		if (foundUser == null || foundUser.getId() == null || foundUser.getId() == 0)
@@ -134,8 +128,8 @@ public class UserService extends BaseService<User> {
 		user.setName(foundUser.getName());
 
 		UserCommonAuth auth = UserCommonAuthService.dao.findByUserId(foundUser.getId());
-		
-		if(auth == null) {
+
+		if (auth == null) {
 			ServiceException e = new ServiceException("系統異常，用戶 " + foundUser.getId() + " 沒有對應的密碼記錄");
 			LOGGER.warning(e);
 			return false;
@@ -149,7 +143,7 @@ public class UserService extends BaseService<User> {
 		if (foundUser == null || foundUser.getId() == 0)
 			throw new ServiceException("非法用户！");
 
-		long effectedRows = dao.updateLoginInfo(foundUser.getId(), userLoginInfo.getLoginType(), new Date(), MvcRequest.getMvcRequest().getIp());
+		long effectedRows = dao.updateLoginInfo(foundUser.getId(), userLoginInfo.getLoginType(), new Date(), MvcRequest.getMvcRequest().getIp(), SnowflakeIdWorker.idWorker.nextId());
 
 		if (effectedRows <= 0)
 			throw new ServiceException("更新会员登录日志出错");

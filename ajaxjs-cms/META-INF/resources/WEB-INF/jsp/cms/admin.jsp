@@ -20,12 +20,12 @@
 			<div class="closeBtn" onclick="hideSider(this);"></div>
 			<span class="menu">
 				<aj-accordion-menu>
-			    	<%@include file="/WEB-INF/jsp/admin/admin-menu.jsp" %>
+			    	<%@include file="/WEB-INF/jsp/user/admin-menu.jsp" %>
 			    </aj-accordion-menu>
 			</span>
 		</section>
 		<section class="iframe">
-			<iframe src="admin/workbench/" name="iframepage"></iframe>
+			<iframe src="${ctx}/user/center/home" name="iframepage"></iframe>
 		</section>
 	    <script>
 		 	// 判断当前页面是否在iframe中 

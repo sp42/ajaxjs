@@ -36,7 +36,7 @@ public abstract class AbstractLoginController extends BaseUserController {
 				UserCommonAuth phoneLoign = new UserCommonAuth();
 				phoneLoign.setPassword(password);
 				phoneLoign.setLoginType(UserConstant.loginByPhoneNumber);
-System.out.println(getService());
+				
 				if (getService().loginByPassword(user, phoneLoign)) {
 					afterLogin(user, request);
 					msg = LOGIN_PASSED;

@@ -18,7 +18,7 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 
-@Path("/admin/role/privilege")
+@Path("/admin/user/privilege")
 @Bean
 public class PrivilegeController extends BaseController<Privilege> {
 	

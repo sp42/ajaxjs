@@ -37,12 +37,6 @@ public class AdminController implements IController, Constant {
 		return BaseController.cms("admin");
 	}
 
-	@GET
-	@Path("/workbench")
-	public String workbench() {
-		return BaseController.cms("admin-workbench");
-	}
-
 	@TableName(value = "general_log")
 	public static interface GlobalLogDao extends IBaseDao<Map<String, Object>> {
 	}
