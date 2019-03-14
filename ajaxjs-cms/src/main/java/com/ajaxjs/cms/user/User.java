@@ -240,15 +240,15 @@ public class User extends BaseModel {
 	/**
 	 * 角色ID
 	 */
-	private String role_id;
+	private Integer roleId;
 
 	/**
 	 * 设置角色ID
 	 * 
 	 * @param role_id
 	 */
-	public void setRole_id(String role_id) {
-		this.role_id = role_id;
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
 	}
 
 	/**
@@ -256,8 +256,8 @@ public class User extends BaseModel {
 	 * 
 	 * @return 角色ID
 	 */
-	public String getRole_id() {
-		return role_id;
+	public Integer getRoleId() {
+		return roleId;
 	}
 
 }

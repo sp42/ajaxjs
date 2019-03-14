@@ -66,6 +66,19 @@ public abstract class AbstractLoginController extends BaseUserController {
 		request.getSession().setAttribute("userUid", user.getUid());
 		request.getSession().setAttribute("userName", user.getName());
 		request.getSession().setAttribute("userPhone", user.getPhone());
+		request.getSession().setAttribute("userGroupId", user.getRoleId());
+		
+		// 获取资源权限总值
+		request.getSession().setAttribute("userGroupId", user.getRoleId());
+		
+		if(user.getRoleId() == null || user.getRoleId() == 0L) {
+			// 未设置用户权限
+		} else {			
+			long privilegeTotal = UserService.dao.getPrivilegeByUserGroupId(user.getRoleId());
+			
+			System.out.println("privilegeTotal:" +privilegeTotal);
+			request.getSession().setAttribute("privilegeTotal", privilegeTotal);
+		}
 
 		if (avatar != null)
 			request.getSession().setAttribute("userAvatar", request.getContextPath() + avatar.getPath());

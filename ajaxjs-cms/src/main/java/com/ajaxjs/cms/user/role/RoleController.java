@@ -91,4 +91,12 @@ public class RoleController extends BaseController<Map<String, Object>> {
 		}
 
 	}
+	
+	@GET
+	@Path("{id}")
+	@MvcFilter(filters = DataBaseFilter.class)
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getInfo(@PathParam("id") Long id) {
+		return toJson(service.getDao().findById(id));
+	}
 }

@@ -29,19 +29,19 @@ public class RoleService extends BaseService<Map<String, Object>> {
 		public Integer[] getExistingPrime();
 	}
 
-	@Override
-	public Long create(Map<String, Object> bean) {
-		Integer[] ep = getExistingPrime();
-		int prime;
-
-		if (ep == null || ep.length == 0) {
-			prime = 2;
-		} else
-			prime = getNextPrime(ep);
-
-		bean.put("accessKey", prime);
-		return super.create(bean);
-	}
+//	@Override
+//	public Long create(Map<String, Object> bean) {
+//		Integer[] ep = getExistingPrime();
+//		int prime;
+//
+//		if (ep == null || ep.length == 0) {
+//			prime = 2;
+//		} else
+//			prime = getNextPrime(ep);
+//
+//		bean.put("accessKey", prime);
+//		return super.create(bean);
+//	}
 
 	/**
 	 * 获取当前最大的质数
@@ -82,7 +82,8 @@ public class RoleService extends BaseService<Map<String, Object>> {
 		Map<String, Object> userGroup = findById(userGroupId);
 		if(userGroup == null || resId == 0) 
 			throw new ServiceException("参数异常");
-		long num = (long) userGroup.get("accessKey");
+		
+		long num = userGroup.get("accessKey") == null ? 0L : (long) userGroup.get("accessKey");
 		long newlyResRight = RightConstant.set(num, resId, isEnable);
 
 		Map<String, Object> newlyUserGroup = new HashMap<>();

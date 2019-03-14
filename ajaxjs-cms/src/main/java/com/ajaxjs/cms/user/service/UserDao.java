@@ -50,4 +50,7 @@ public interface UserDao extends IBaseDao<User> {
 
 	@Select("SELECT * FROM attachment_picture WHERE catelog = 2 AND owner = ? ORDER BY id DESC LIMIT 1")
 	Attachment_picture findAvaterByUserId(long userId);
+	
+	@Select("SELECT accessKey FROM user_role WHERE id = ?")
+	Long getPrivilegeByUserGroupId(long userGroupId);
 }
