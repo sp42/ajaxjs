@@ -66,7 +66,8 @@ public class UserPcLoginController extends AbstractLoginController {
 	@Path("/logout")
 	public String doLogout() {
 		super.logout();
-		return "/user/index.jsp?msg=" + Encode.urlEncode("退出成功！");
+		return jsonOk("退出成功！");
+//		return "/user/index.jsp?msg=" + Encode.urlEncode("退出成功！");
 	}
 
 	@POST

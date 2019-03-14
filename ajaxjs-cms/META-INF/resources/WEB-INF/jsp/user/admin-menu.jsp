@@ -1,7 +1,6 @@
 <%@page pageEncoding="UTF-8" import="com.ajaxjs.cms.user.role.RightConstant"%>
 <%
 	long privilegeTotal = (long)request.getSession().getAttribute("privilegeTotal");
-System.out.println(privilegeTotal);
 %>
 <li>
 	<h3>内容管理</h3>
@@ -18,8 +17,6 @@ System.out.println(privilegeTotal);
 	<%if(RightConstant.check(privilegeTotal, RightConstant.ARTICLE_ONLINE)){ %>
 		<li><a target="iframepage" href="${ctx}/admin/topic/list/">专题管理</a></li>
 	<%}%>
-		<li><a target="iframepage" href="${ctx}/admin/help/list/">文章管理</a></li>
-		
 	<%if(RightConstant.check(privilegeTotal, RightConstant.FEEDBACK)){ %>
 		<li><a target="iframepage" href="${ctx}/admin/feedback/list/">留言反馈管理</a></li>
 	<%}%>
@@ -97,3 +94,13 @@ System.out.println(privilegeTotal);
 	</ul>
 </li>
 <%}%>
+<li>
+	<h3>个人信息</h3>
+	<ul>
+		<%-- <li><a href="${ctx}/user/center/home/">概览</a></li> --%>
+		<li><a  target="iframepage" href="${ctx}/user/center/info/">个人信息</a></li>
+		<li><a  target="iframepage" href="${ctx}/user/center/loginInfo/">账户安全</a></li>
+<%-- 		<li><a href="${ctx}/user/center/feedback/">留言反馈</a></li> --%>
+		<li><a href="javascript:logout();">退出登录</a></li>
+	</ul>
+</li>

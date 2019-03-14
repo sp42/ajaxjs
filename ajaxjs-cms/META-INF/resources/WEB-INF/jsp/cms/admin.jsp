@@ -11,7 +11,8 @@
 		<header>
 			<h1>我的控制面板</h1>
 			<menu>
-				${userName} 已登录 | <a href="${ctx}/" target="_blank">首页</a> | <a href="?action=logout">退出</a> 
+				${userName} 已登录 | <a href="${ctx}/" target="_blank">首页</a> | <a href="${ctx}/admin/" target="iframepage">后台首页</a> 
+				| <a href="javascript:logout();">退出</a> 
 			</menu>
 		</header>
 		<section class="side">
@@ -28,6 +29,16 @@
 			<iframe src="${ctx}/user/center/home" name="iframepage"></iframe>
 		</section>
 	    <script>
+	    
+	    	function logout() {
+	    		aj.xhr.get('${ctx}/user/login/logout', json => {
+	  				if(json.isOk) {
+	  					aj.msg.show(json.msg);
+	  					setTimeout(()=>location.assign('${ctx}/admin/login/'), 1000);
+	  				}
+	    		});
+	    	}
+	    	
 		 	// 判断当前页面是否在iframe中 
 		    if (self != top) {    
 		    	parent.window.location.reload();

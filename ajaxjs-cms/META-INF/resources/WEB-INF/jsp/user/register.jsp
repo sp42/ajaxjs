@@ -4,14 +4,12 @@
 <html>
 <head>
 <jsp:include page="/jsp/common/head.jsp">
-	<jsp:param name="lessFile" value="/asset/less/main.less" />
+	<jsp:param name="lessFile" value="/asset/less/admin.less" />
 </jsp:include>
 </head>
 <body class="userRegister">
-	<%@include file="/WEB-INF/jsp/nav.jsp"%>
 	<h3 class="jb">欢迎注册</h3>
-
- 	<form class="user-form center" style="width:50%" action="../user/register" method="post" @submit="onSubmit">
+ 	<form class="user-form centerBody" style="width:50%" action="../user/register" method="post" @submit="onSubmit">
 		<dl>
 			<label>
 				<dt>用户 ID</dt>
@@ -54,6 +52,14 @@
 			</label>
 
 		</dl>
+		<dl>		
+			<label>
+				<dt>验证码:</dt>
+				<dd class="captcha">
+					<aj-page-captcha field-name="captchaImgCode"></aj-page-captcha>
+				</dd>
+			</label>
+		</dl>
 		<dl>
 			<dt></dt>
 			<dd class="bottomLink">
@@ -65,7 +71,7 @@
 			<dt></dt>
 			<dd>
 				<div style="color:red;"><span v-html="errMsg.join('<br >')"></span></div>
-				<button>注册</button> <a href="login">已有账号，立刻登录</a>
+				<button>注册</button> <a href="../login/">已有账号，立刻登录</a>
 			</dd>
 		</dl>
 	</form>
@@ -195,6 +201,5 @@
 			}
 		});
 	</script>
-	<%@include file="/WEB-INF/jsp/footer.jsp"%>
 </body>
 </html>

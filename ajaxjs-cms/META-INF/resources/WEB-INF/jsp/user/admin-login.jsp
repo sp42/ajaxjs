@@ -62,7 +62,7 @@ button{
 <body>
 	<div class="form">
 		<div class="box-title-login"></div>
-		<h2>${aj_allConfig.site.titlePrefix} 后台管理系统</h2>
+		<h2>${aj_allConfig.site.titlePrefix}<br/> 后台管理系统</h2>
 		<form class="form-1" action="${ctx}/user/login" method="POST">
 			<table align="center">
 				<tr>

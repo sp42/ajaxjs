@@ -36,44 +36,38 @@ public class UserCenterController extends BaseUserController {
 	@Resource("UserService")
 	private UserService service;
 
-	@GET
-	public String center(HttpServletRequest r) {
-		String ctxPath = r.getContextPath();
-		return "redirect::" + ctxPath + (isLogined() ? "/user/center/home/" : "/user/login/");
-	}
-
 	static ArticleDao newsDao = new Repository().bind(ArticleDao.class);
 
 	@GET
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Path("/home")
 	public String home(ModelAndView mv) {
-		// 更多动态
-		List<Map<String, Object>> topNews = newsDao.findListTop(5);
-		mv.put("topNews", topNews);
-
-		// 最近登录
-		Map<String, String[]> requestData = new HashMap<>();
-		requestData.put("filterField", new String[] { "userId" });
-		requestData.put("filterValue", new String[] { getUserId().toString() });
+//		// 更多动态
+//		List<Map<String, Object>> topNews = newsDao.findListTop(5);
+//		mv.put("topNews", topNews);
+//
+//		// 最近登录
+//		Map<String, String[]> requestData = new HashMap<>();
+//		requestData.put("filterField", new String[] { "userId" });
+//		requestData.put("filterValue", new String[] { getUserId().toString() });
 //		PageResult<Map<String, Object>> loginLog = userDao.findLoginLog(0, 5);
 //		mv.put("loginLog", loginLog);
 
-		return "/user/home";
+		return jsp("user/home");
 	}
 
 	@GET
 	@Path("/info")
 	@MvcFilter(filters = { LoginCheck.class })
 	public String info() {
-		return "/user/info";
+		return jsp("user/info");
 	}
 
 	@GET
 	@Path("/info/modifly")
 	@MvcFilter(filters = { LoginCheck.class })
 	public String infoModifly() {
-		return "/user/infoModifly";
+		return jsp("user/infoModifly");
 	}
 
 	@GET
@@ -82,7 +76,7 @@ public class UserCenterController extends BaseUserController {
 	public String avatar(ModelAndView mv) {
 		Attachment_picture avatar = service.findAvaterByUserId(getUserUid());
 		mv.put("avatar", avatar);
-		return "/user/avater";
+		return jsp("user/avater");
 	}
 
 	@GET
@@ -90,7 +84,7 @@ public class UserCenterController extends BaseUserController {
 	@Path("/loginInfo")
 	public String changePassword(ModelAndView mv) {
 		mv.put("email", UserService.dao.findById(getUserId()).getEmail());
-		return "/user/loginInfo";
+		return jsp("user/loginInfo");
 	}
 
 	static FeedbackDao feedbackDao = new Repository().bind(FeedbackDao.class);
@@ -101,7 +95,7 @@ public class UserCenterController extends BaseUserController {
 	public String feedback(ModelAndView mv) {
 		List<Map<String, Object>> feedbacks = feedbackDao.getListByUserId(getUserId());
 		mv.put("feedbacks", feedbacks);
-		return "/user/feedback";
+		return jsp("user/feedback");
 	}
 
 	@POST

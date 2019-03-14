@@ -4,11 +4,10 @@
 <html>
 <head>
 <jsp:include page="/jsp/common/head.jsp">
-	<jsp:param name="lessFile" value="/asset/less/main.less" />
+	<jsp:param name="lessFile" value="/asset/less/admin.less" />
 </jsp:include>
 </head>
 <body class="userLogin">
-	<%@include file="/WEB-INF/jsp/nav.jsp"%>
 	<h3 class="jb">欢迎登录</h3>
 	<div class="tab">
 		<form class="user-form center" action="${ctx}/user/login/" @submit="onSubmit" method="POST" style="width: 50%;">
@@ -49,7 +48,7 @@
 			<dl>
 				<dt></dt>
 				<dd class="bottomLink">
-					<a href="?bySMS=1">切换短信登录</a> <a href="${ctx}/user/register">没有账号？点击注册</a>
+					<a href="../register/">没有账号？点击注册</a>
 				</dd>
 			</dl>
 		</form>
@@ -93,6 +92,5 @@
 		// 			}
 		// 		});
 	</script>
-	<%@include file="/WEB-INF/jsp/footer.jsp"%>
 </body>
 </html>

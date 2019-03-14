@@ -3,27 +3,28 @@
 <html>
 <head>
 <jsp:include page="/jsp/common/head.jsp">
-	<jsp:param name="lessFile" value="/asset/less/main.less" />
+	<jsp:param name="lessFile" value="/asset/less/admin.less" />
 </jsp:include>
 </head>
 <body>
-	<%@include file="/WEB-INF/jsp/nav.jsp"%>
-	
 	<div class="center userCenter">
 		<%@include file="user-center-menu.jsp"%>
 		
 		
 		<div class="right">
-			<a href="modifly" class="btn right">修改信息</a>
+			
 			<h3 class="jb">会员信息</h3>
 
-			<form class="user-form center" action="${ctx}/user/add_information" method="post">
+			<form class="user-form">
 				<div class="formBox">
 					<br /> <br />
 					<div class="userAvatar">
-						<img src="${empty userAvatar ? ctx.concat('/asset/images/avatar.png') : userAvatar}" />
+						<img src="${empty userAvatar ? ctx.concat('/asset/common/images/avatar.png') : userAvatar}" />
 						<br />
 						<a href="avatar">修改头像</a>
+						<br />
+						<br />
+						<button onclick="location.assign('modifly');return false;">修改信息</button>
 					</div>
 					<dl>
 						<label>
@@ -69,6 +70,5 @@
 		// AJAX 表单提交
 		ajaxjs.xhr.form(add_information, ajaxjs.xhr.defaultCallBack);
 	</script>
-	<%@include file="/WEB-INF/jsp/footer.jsp"%>
 </body>
 </html>

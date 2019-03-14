@@ -4,12 +4,10 @@
 <html>
 <head>
 <jsp:include page="/jsp/common/head.jsp">
-	<jsp:param name="lessFile" value="/asset/less/main.less" />
+	<jsp:param name="lessFile" value="/asset/less/admin.less" />
 </jsp:include>
 </head>
 <body>
-	<%@include file="/WEB-INF/jsp/nav.jsp"%>
-	
 	<div class="center userCenter">
 		<%@include file="user-center-menu.jsp"%>
 		
@@ -84,7 +82,5 @@
 			
 		</div>
 	</div>
-
-	<%@include file="/WEB-INF/jsp/footer.jsp"%>
 </body>
 </html>

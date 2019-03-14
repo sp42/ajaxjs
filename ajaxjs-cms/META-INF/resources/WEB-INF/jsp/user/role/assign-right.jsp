@@ -2,15 +2,16 @@
 <%
 	long num = 0;
 	num = RightConstant.set(num, 1, true);
+/*
 	num = RightConstant.set(num, 2, true);
 	num = RightConstant.set(num, 8, true);
-
+*/
 %>
 <!DOCTYPE html>
 <html>
 <head>
 <jsp:include page="/jsp/common/head.jsp">
-	<jsp:param name="title" value="" />
+	<jsp:param name="lessFile" value="/asset/less/admin.less" />
 </jsp:include>
 <style type="text/css">
 	th {

@@ -1,5 +1,5 @@
 <%@ page pageEncoding="UTF-8"%>
-		<menu>
+		<menu class="hide">
 			<ul>
 				<li><a href="${ctx}/user/center/home/">概览</a></li>
 				<li><a href="${ctx}/user/center/info/">会员信息</a></li>
