@@ -318,7 +318,7 @@ Vue.component('aj-tree-item', {
                 <span v-if="isFolder">[{{ open ? \'-\' : \'+\' }}]</span>\
               </div>\
               <ul v-show="open" v-if="isFolder" :class="{show: open}">\
-                <aj-tree-item class="item" v-for="(model, index) in model.children" :key="index" :model="model"></aj-tree-item>\
+                <aj-tree-item :event-bus="eventBus" class="item" v-for="(model, index) in model.children" :key="index" :model="model"></aj-tree-item>\
                 <li v-if="allowAddNode" class="add" @click="addChild">+</li>\
               </ul>\
           </li>',
@@ -327,7 +327,8 @@ Vue.component('aj-tree-item', {
         allowAddNode: { // 是否允许添加新节点
         	type: Boolean,
         	default:false
-        }
+        },
+        eventBus: Object
     },
     data: function () {
         return {
@@ -343,7 +344,13 @@ Vue.component('aj-tree-item', {
         toggle: function () {
             if (this.isFolder)
                 this.open = !this.open;
-           alert(this.isFolder())
+            
+            if(this.eventBus) {
+            	this.eventBus.$emit('treenodeclick', this.model);
+            }
+        },
+        fireEvent(){
+        	//this.$emit('treenodeclick', this.model);
         },
         // 变为文件夹
         changeType: function () {
@@ -362,14 +369,15 @@ Vue.component('aj-tree-item', {
 });
 
 Vue.component('aj-tree', {
-	template : '<ul class="aj-tree"><aj-tree-item :model="treeData"></aj-tree-item></ul>',
+	template : '<ul class="aj-tree"><aj-tree-item :model="treeData" :event-bus="this.eventBus"></aj-tree-item></ul>',
 	props: {
 		url: String, 
 		topNodeName : String // 根节点显示名称
 	},
 	data: function() {
 		return {
-			treeData: { name : this.topNodeName || 'TOP', children : null }
+			treeData: { name : this.topNodeName || 'TOP', children : null },
+			eventBus: new Vue()
 		};
 	},
 	mounted : function() {
@@ -377,6 +385,9 @@ Vue.component('aj-tree', {
 			json => 
 				this.treeData.children = this.makeTree(json.result)
 		);
+		this.eventBus.$on('treenodeclick', data => { // 递归组件怎么事件上报呢？通过事件 bus
+			this.$emit('treenodeclick', data);
+		});
 	},
 	methods: {
 		makeTree (jsonArray) {
@@ -419,6 +430,9 @@ Vue.component('aj-tree', {
 			}
 
 			return null;
+		},
+		captureBubble(data) {
+			this.$emit('treenodeclick', data);
 		}
 	}
 });
