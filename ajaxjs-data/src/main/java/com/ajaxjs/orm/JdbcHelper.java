@@ -257,6 +257,11 @@ public class JdbcHelper {
 						Object _int = ((Long) obj).intValue();
 						return (T) _int;
 					}
+					
+					if (obj instanceof Integer && (clz == long.class || clz == Long.class)) {
+						Object _int = ((Integer) obj).longValue();
+						return (T) _int;
+					}
 
 					return (T) obj;
 				}
