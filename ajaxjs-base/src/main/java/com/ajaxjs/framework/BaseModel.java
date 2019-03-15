@@ -14,6 +14,7 @@ package com.ajaxjs.framework;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 //import org.apache.bval.constraints.NotEmpty;
@@ -26,6 +27,10 @@ import java.util.Map;
  */
 public class BaseModel implements Serializable {
 	private static final long serialVersionUID = -5313880199638314543L;
+	/**
+	 * 扩展字段
+	 */
+	public Map<String, Object> extractData = new HashMap<>();
 
 	private Long id;
 
@@ -104,5 +109,13 @@ public class BaseModel implements Serializable {
 
 	public Map<String, Object> getData() {
 		return data;
+	}
+
+	public Map<String, Object> getExtractData() {
+		return extractData;
+	}
+
+	public void setExtractData(Map<String, Object> extractData) {
+		this.extractData = extractData;
 	}
 }
