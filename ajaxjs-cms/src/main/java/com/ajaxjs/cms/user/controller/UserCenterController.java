@@ -1,10 +1,8 @@
 package com.ajaxjs.cms.user.controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -16,8 +14,6 @@ import javax.ws.rs.core.MediaType;
 import com.ajaxjs.cms.ArticleDao;
 import com.ajaxjs.cms.FeedbackService.FeedbackDao;
 import com.ajaxjs.cms.app.attachment.Attachment_picture;
-import com.ajaxjs.cms.user.controller.BaseUserController;
-import com.ajaxjs.cms.user.controller.LoginCheck;
 import com.ajaxjs.cms.user.service.UserCommonAuthService;
 import com.ajaxjs.cms.user.service.UserService;
 import com.ajaxjs.framework.Repository;
