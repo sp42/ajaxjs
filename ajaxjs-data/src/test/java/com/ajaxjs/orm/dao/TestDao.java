@@ -118,5 +118,13 @@ public class TestDao {
 		int total = dao.count2();
 		assertNotNull(total); 
 	}
-
+	
+	@Test
+	public void testDoSql() {
+		int total = dao.count3(2, oldSql -> {
+			return "SELECT COUNT(*) FROM news WHERE id > ?";
+		});
+		
+		assertNotNull(total);
+	}
 }

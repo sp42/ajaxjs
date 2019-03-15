@@ -51,7 +51,7 @@ public class JdbcHelper {
 
 		try (PreparedStatement ps = conn.prepareStatement(sql)) {
 			if (params != null && params.length > 0) {
-				LogHelper.p(params);
+//				LogHelper.p(params);
 				int i = 0;
 				for (Object param : params) {
 					ps.setObject(++i, param);
@@ -134,14 +134,15 @@ public class JdbcHelper {
 
 			for (int i = 1; i <= rsmd.getColumnCount(); i++) {// 遍历结果集
 				String key = rsmd.getColumnLabel(i);
-				Object value = rs.getObject(i);
+				Object _value = rs.getObject(i);
 				
 				try {
 					PropertyDescriptor property = new PropertyDescriptor(key, beanClz);
 					Method method = property.getWriteMethod();
-
+					Object value = null;
+					
 					try {
-						value = MappingValue.objectCast(value, property.getPropertyType());
+						value = MappingValue.objectCast(_value, property.getPropertyType());
 					} catch (NumberFormatException e) {
 						LOGGER.warning(e, "保存数据到 bean 的 {0} 字段时，转换失败，输入值：{1}，输入类型 ：{2}， 期待类型：{3}", key, value,
 								value.getClass(), property.getPropertyType());
@@ -152,6 +153,17 @@ public class JdbcHelper {
 				} catch (IntrospectionException | IllegalArgumentException e) {
 					if (e instanceof IntrospectionException) {// 数据库返回这个字段，但是 bean 没有对应的方法
 //						LOGGER.info("数据库返回这个字段 {0}，但是 bean {1} 没有对应的方法", key, beanClz);
+						
+						try {
+							if(beanClz.getField("extractData") != null) {
+								@SuppressWarnings("unchecked")
+								Map<String, Object> map = (Map<String, Object>)ReflectUtil.executeMethod(bean, "getExtractData");
+//								System.out.println("bean 可以扩展 " + key + "::" + _value);
+								map.put(key, _value);
+							}
+						} catch (NoSuchFieldException | SecurityException e1) {
+							//LOGGER.warning(e);
+						}
 						continue;
 					}
 					LOGGER.warning(e);

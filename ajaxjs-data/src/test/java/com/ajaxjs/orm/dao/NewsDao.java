@@ -16,6 +16,7 @@
 package com.ajaxjs.orm.dao;
 
 import java.util.List;
+import java.util.function.Function;
 
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.PageResult;
@@ -49,6 +50,9 @@ public interface NewsDao extends IBaseDao<News> {
 	@Select("SELECT * FROM news LIMIT ?, ?")
 	@SqlFactory("getInstance")
 	public int count2();
+
+	@Select("SELECT * FROM news LIMIT ?, ?")
+	public int count3(int t, Function<String, String> doSql);
 
 	public static String getInstance(String sql) {
 		return "SELECT COUNT(*) FROM news";

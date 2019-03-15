@@ -1,6 +1,7 @@
 package com.ajaxjs.framework;
 
 import java.util.List;
+import java.util.function.Function;
 
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
@@ -121,6 +122,9 @@ public interface IBaseDao<T> {
 	 */
 	@Select("SELECT * FROM ${tableName} ORDER BY id DESC")
 	public PageResult<T> findPagedList(int start, int limit);
+	
+	@Select("SELECT * FROM ${tableName} WHERE 1 = 1  ORDER BY id DESC")
+	public PageResult<T> findPagedList(int start, int limit, Function<String, String> doSql);
 
 	/**
 	 * 取头 X 笔的记录

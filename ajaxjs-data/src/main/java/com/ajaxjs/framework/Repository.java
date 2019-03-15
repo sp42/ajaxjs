@@ -19,6 +19,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -104,7 +105,7 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 	 */
 	private Class<?> getReturnType(Method method) throws DaoException {
 		Class<?> clz = method.getReturnType();
-		
+
 		if (clz == Map.class || clz == List.class || clz == PageResult.class || clz == int.class || clz == Integer.class || clz == long.class || clz == Long.class || clz == String.class || clz == Boolean.class
 				|| clz == boolean.class || clz.isArray())
 			return clz;
@@ -124,7 +125,7 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 		SqlFactory sqlFactory = method.getAnnotation(SqlFactory.class);
 
 		if (sqlFactory != null) {
-			String methodName = sqlFactory.value(); 
+			String methodName = sqlFactory.value();
 
 			Class<?> clz = sqlFactory.clz();
 			if (clz == null || clz.equals(Object.class)) {
@@ -253,9 +254,13 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 		String sql = isSqlite(select.sqliteValue(), conn) ? select.sqliteValue() : select.value();
 		sql = handleSql(sql, sqlFactoryHandler);
 
+		Object[] r = doSql(sql, args);
+		sql = (String) r[0];
+		args = (Object[]) r[1];
+
 		Object result = null;
 
-		System.out.println("-------------------------------" + returnType);
+//		System.out.println("-------------------------------" + returnType);
 		if (returnType == int.class || returnType == Integer.class) {
 			result = queryOne(conn, sql, int.class, args);
 		} else if (returnType == long.class || returnType == Long.class) {
@@ -266,6 +271,7 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 			result = queryOne(conn, sql, String.class, args);
 		} else if (returnType == List.class) {
 			result = queryList(entryType, sql, args);
+		System.out.println("List-------------------------------" +sql+"::" + result);
 		} else if (returnType == PageResult.class) {// 分页
 			result = PageResult.doPage(conn, entryType, select, sql, method, this, args);
 		} else if (returnType == Map.class) {
@@ -276,6 +282,43 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 		}
 
 		return result;
+	}
+
+	/**
+	 * 传入一个匿名函数，转化 sql
+	 * 
+	 * @param sql
+	 * @param args 参数有变动
+	 * @return
+	 */
+	private static Object[] doSql(String sql, Object[] args) {
+		Object[] _args = new Object[2];
+		_args[0] = sql;
+		_args[1] = args;
+		
+		if(args != null && args.length > 0) {
+			String realSql = null;
+			List<Object> list = new ArrayList<>();
+			boolean found = false;
+			
+			for (Object obj : args) {
+				if (obj instanceof Function) {
+					found = true;
+					@SuppressWarnings("unchecked")
+					Function<String, String> fn = (Function<String, String>) obj;
+					realSql = fn.apply(sql);
+				} else {
+					list.add(obj);
+				}
+			}
+			
+			if(found) {
+				_args[0] = realSql;
+				_args[1] = list.toArray();				
+			}
+		}
+		
+		return _args;
 	}
 
 	private Object queryList(Class<?> entryType, String sql, Object[] args) {
