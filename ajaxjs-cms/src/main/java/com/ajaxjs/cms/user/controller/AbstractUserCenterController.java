@@ -24,12 +24,12 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 public abstract class AbstractUserCenterController extends BaseUserController {
 	public static ArticleDao newsDao = new Repository().bind(ArticleDao.class);
 
-	@GET
-	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Path("/home")
-	public String home(ModelAndView mv) {
-		return jsp("user/home");
-	}
+//	@GET
+//	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
+//	@Path("/home")
+//	public String home(ModelAndView mv) {
+//		return jsp("user/home");
+//	}
 
 	@GET
 	@Path("/info")

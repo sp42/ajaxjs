@@ -1,5 +1,4 @@
-<%@ page import="java.util.*,java.io.*" pageEncoding="utf-8"
-	contentType="application/msexcel"%>
+<%@ page import="java.util.*, java.io.*" pageEncoding="utf-8" contentType="application/msexcel"%>
 <%
 	//response.setHeader("Content-disposition","inline; filename=videos.xls");  
 	response.setHeader("Content-disposition", "attachment; filename=test.xls");
@@ -26,7 +25,7 @@
 			<td>name</td>
 		</tr>
 		<tr>
-			<td>8787897</td>
+			<td>440105198309060315</td>
 			<td>你好 我是中国人</td>
 		</tr>
 	</table>

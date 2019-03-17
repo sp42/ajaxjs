@@ -47,13 +47,6 @@ public class QueryParams {
 		set(requestData, "searchField", "searchValue");// search 查询（模糊）
 		set(requestData, "matchField", "matchValue");// match 查询（精确）
 		set(requestData, "orderField", "orderField");// order 查询
-
-		if (requestData.containsKey("status")) {
-			status = Integer.parseInt(requestData.get("status")[0]);
-		}
-	}
-
-	public QueryParams() {
 	}
 
 	/**
@@ -89,18 +82,7 @@ public class QueryParams {
 		}
 	}
 
-	public int status;
-
 	public Map<String, Object> filter = null, search = null, match = null, order = null;
-
-	/**
-	 * 前端用的
-	 */
-	public static final int FRONT_END = 999;
-
-	public static final int ONLINE = 1;
-
-	public static final int OFFLINE = 2;
 
 	/**
 	 * 所有 where 条件
@@ -112,7 +94,7 @@ public class QueryParams {
 	 * 
 	 * @param sql 输入的原 SQL 语句
 	 * @return 添加 WHERE 子语句的 SQL 语句
-	 */
+	 */ 
 	public String addWhereToSql(String sql) {
 		if (filter != null) {
 			for (String key : filter.keySet())
@@ -127,13 +109,6 @@ public class QueryParams {
 		if (match != null) {
 			for (String key : match.keySet())
 				wheres.add(key + " LIKE '" + Encode.urlChinese(match.get(key).toString()) + "'");
-		}
-
-		if (status != 0) {
-			if (status == FRONT_END) {
-				wheres.add(" status IS NULL OR status = " + ONLINE);
-			} else
-				wheres.add(" status = " + status);
 		}
 
 		// 增加到原 sql 身上

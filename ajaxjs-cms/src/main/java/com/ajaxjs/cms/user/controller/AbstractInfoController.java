@@ -21,7 +21,7 @@ import com.ajaxjs.web.UploadFileInfo;
 public abstract class AbstractInfoController extends BaseUserController {
 	private static final LogHelper LOGGER = LogHelper.getLog(AbstractInfoController.class);
 
-	private UserCommonAuthService passwordService;
+	private UserCommonAuthService passwordService = new UserCommonAuthService();
 
 	public UserCommonAuthService getPasswordService() {
 		return passwordService;

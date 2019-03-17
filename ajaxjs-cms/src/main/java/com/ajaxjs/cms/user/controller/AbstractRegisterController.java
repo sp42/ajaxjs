@@ -17,7 +17,6 @@ import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -38,13 +37,13 @@ public abstract class AbstractRegisterController extends BaseUserController {
 		return jsp("user/register");
 	}
 
-	@POST
-	@MvcFilter(filters = {  DataBaseFilter.class })
-	public String doRegister(User user, @NotNull @QueryParam("password") String password) throws ServiceException {
-		registerByPhone(user, password);
-
-		return "/user/index.jsp?msg=" + Encode.urlEncode("恭喜你，注册成功！<a href=\"../user/login/\">马上登录</a>") ;
-	}
+//	@POST
+//	@MvcFilter(filters = {  DataBaseFilter.class })
+//	public String doRegister(User user, @NotNull @QueryParam("password") String password) throws ServiceException {
+//		registerByPhone(user, password);
+//
+//		return "/user/index.jsp?msg=" + Encode.urlEncode("恭喜你，注册成功！<a href=\"../user/login/\">马上登录</a>") ;
+//	}
 
 	/**
 	 * 检查是否重复的手机号码

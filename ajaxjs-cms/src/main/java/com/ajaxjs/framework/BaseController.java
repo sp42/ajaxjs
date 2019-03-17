@@ -2,11 +2,15 @@ package com.ajaxjs.framework;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+
+import javax.servlet.http.HttpServletResponse;
 
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.js.JsonHelper;
@@ -284,8 +288,43 @@ public abstract class BaseController<T> implements IController, Constant {
 		return info(getService().getShortName() + "-edit");
 	}
 
+	/**
+	 * 后台列表
+	 * 
+	 * @return
+	 */
 	public String adminList() {
 		return info(getService().getShortName() + "-admin-list");
+	}
+
+	/**
+	 * 输出 Excel XSL 格式文件
+	 * 
+	 * @param response
+	 * 
+	 * @return
+	 */
+	public String adminList_Excel(HttpServletResponse response, String fileName) {
+		String now = fileName + "-" + LocalDate.now().toString();
+		
+		try {
+			now = new String(now.getBytes(), "iso8859-1");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		// <base href="<%=basePath%>">
+		// String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+		
+		// <%@ page pageEncoding="utf-8" contentType="application/msexcel"%>
+		response.setContentType("application/vnd.ms-excel;charset=UTF-8");
+		
+		response.setHeader("Content-Disposition", String.format("attachment; filename=%s.xls", now));
+		// response.setHeader("Content-disposition","inline; filename=videos.xls");
+
+		// 以上这行设定传送到前端浏览器时的档名为test.xls
+		// 就是靠这一行，让前端浏览器以为接收到一个excel档
+		
+		return info(getService().getShortName() + "-admin-list-xsl");
 	}
 
 	/**
