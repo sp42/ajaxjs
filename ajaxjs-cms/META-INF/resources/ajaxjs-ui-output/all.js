@@ -1,4 +1,4 @@
-// build date:Thu Feb 14 11:47:53 GMT+08:00 2019
+// build date:Sun Mar 17 23:33:50 GMT+08:00 2019
 
 ajaxjs = aj = function(cssSelector, fn) {
 return Element.prototype.$.apply(document, arguments);
@@ -640,7 +640,7 @@ default : false
 template: 
 '<div class="aj-admin-filter-panel">\
 <form action="?" method="GET">\
-<input type="hidden" name="searchField" value="content" />\
+<input type="hidden" name="searchField" value="name" />\
 <input type="text" name="searchValue" placeholder="请输入正文之关键字" style="float: inherit;" class="ajaxjs-inputField" />\
 <button style="margin-top: 0;" class="ajaxjs-btn">搜索</button>\
 </form>\
@@ -924,7 +924,7 @@ template :
 '<table class="aj-page-captcha"><tr>\
 <td><input type="text" :name="fieldName" placeholder="输入右侧验证码" data-regexp="integer" required /></td>\
 <td style="vertical-align: top;">\
-<img :src="imgSrc || ajResources.ctx + \'/Captcha/\'" @click="onClk($event);" title="点击刷新图片" />\
+<img :src="imgSrc || ajResources.ctx + \'/Captcha\'" @click="onClk($event);" title="点击刷新图片" />\
 </td>\
 </tr></table>',
 methods : {
@@ -2383,6 +2383,120 @@ return this.addressData[this.city];
 }
 }
 });
+Vue.component('aj-tree-item', {
+template: 
+'<li>\
+<div :class="{bold: isFolder, node: true}" @click="toggle">\
+<span>········</span>{{ model.name }}\
+<span v-if="isFolder">[{{ open ? \'-\' : \'+\' }}]</span>\
+</div>\
+<ul v-show="open" v-if="isFolder" :class="{show: open}">\
+<aj-tree-item :event-bus="eventBus" class="item" v-for="(model, index) in model.children" :key="index" :model="model"></aj-tree-item>\
+<li v-if="allowAddNode" class="add" @click="addChild">+</li>\
+</ul>\
+</li>',
+props: {
+model: Object,
+allowAddNode: { 
+type: Boolean,
+default:false
+},
+eventBus: Object
+},
+data: function () {
+return {
+open: false
+};
+},
+computed: {
+isFolder: function () {
+return this.model.children && this.model.children.length;
+}
+},
+methods: {
+toggle: function () {
+if (this.isFolder)
+this.open = !this.open;
+if(this.eventBus) {
+this.eventBus.$emit('treenodeclick', this.model);
+}
+},
+fireEvent(){
+},
+changeType: function () {
+if (!this.isFolder) {
+Vue.set(this.model, 'children', []);
+this.addChild();
+this.open = true;
+}
+},
+addChild: function () {
+this.model.children.push({
+name: 'new stuff'
+});
+}
+}
+});
+Vue.component('aj-tree', {
+template : '<ul class="aj-tree"><aj-tree-item :model="treeData" :event-bus="this.eventBus"></aj-tree-item></ul>',
+props: {
+url: String, 
+topNodeName : String 
+},
+data: function() {
+return {
+treeData: { name : this.topNodeName || 'TOP', children : null },
+eventBus: new Vue()
+};
+},
+mounted : function() {
+aj.xhr.get(this.ajResources.ctx + this.url, 
+json => 
+this.treeData.children = this.makeTree(json.result)
+);
+this.eventBus.$on('treenodeclick', data => { 
+this.$emit('treenodeclick', data);
+});
+},
+methods: {
+makeTree (jsonArray) {
+var arr = [];
+for (var i = 0, j = jsonArray.length; i < j; i++) {
+var n = jsonArray[i];
+if(n.pid === -1) {
+arr.push(n);
+} else {
+var parentNode = this.findParent(arr, n.pid);
+if (parentNode) {
+if (!parentNode.children)
+parentNode.children = [];
+parentNode.children.push(n);
+} else{
+console.log('parent not found!');
+}
+}
+}
+return arr;
+},
+findParent (jsonArray, id) {
+for (var i = 0, j = jsonArray.length; i < j; i++) {
+var map = jsonArray[i];
+if (map.id == id)
+return map;
+if (map.children) {
+var result = arguments.callee(map.children, id);
+if (result != null)
+return result;
+}
+}
+return null;
+},
+captureBubble(data) {
+this.$emit('treenodeclick', data);
+}
+}
+});
+
 
 Vue.component('ajaxjs-file-upload', {
 data : function() {
