@@ -155,10 +155,18 @@ public class JdbcHelper {
 //						LOGGER.info("数据库返回这个字段 {0}，但是 bean {1} 没有对应的方法", key, beanClz);
 						
 						try {
-							if(beanClz.getField("extractData") != null) {
+							if((_value != null) && beanClz.getField("extractData") != null) {
+								Object obj = ReflectUtil.executeMethod(bean, "getExtractData");
+								
+//								System.out.println(":::::::::key::"+ key +":::v:::" + _value);
+								if(obj == null) {
+									Map<String, Object> extractData = new HashMap<>();
+									ReflectUtil.executeMethod(bean, "setExtractData", extractData);
+									obj = ReflectUtil.executeMethod(bean, "getExtractData");
+								}
+								
 								@SuppressWarnings("unchecked")
-								Map<String, Object> map = (Map<String, Object>)ReflectUtil.executeMethod(bean, "getExtractData");
-//								System.out.println("bean 可以扩展 " + key + "::" + _value);
+								Map<String, Object> map = (Map<String, Object>)obj; 
 								map.put(key, _value);
 							}
 						} catch (NoSuchFieldException | SecurityException e1) {

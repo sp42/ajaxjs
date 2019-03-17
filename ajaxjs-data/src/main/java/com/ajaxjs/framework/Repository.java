@@ -271,7 +271,6 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 			result = queryOne(conn, sql, String.class, args);
 		} else if (returnType == List.class) {
 			result = queryList(entryType, sql, args);
-		System.out.println("List-------------------------------" +sql+"::" + result);
 		} else if (returnType == PageResult.class) {// 分页
 			result = PageResult.doPage(conn, entryType, select, sql, method, this, args);
 		} else if (returnType == Map.class) {
