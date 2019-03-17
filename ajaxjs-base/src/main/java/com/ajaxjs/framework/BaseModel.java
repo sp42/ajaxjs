@@ -30,7 +30,7 @@ public class BaseModel implements Serializable {
 	/**
 	 * 扩展字段
 	 */
-	public Map<String, Object> extractData = new HashMap<>();
+	public Map<String, Object> extractData;
 
 	private Long id;
 
@@ -115,7 +115,7 @@ public class BaseModel implements Serializable {
 		return extractData;
 	}
 
-	public void setExtractData(Map<String, Object> extractData) {
+	public void setExtractData(HashMap<String, Object> extractData /*若为 Map 不能进行反射，即使强类型也不行*/) {
 		this.extractData = extractData;
 	}
 }
