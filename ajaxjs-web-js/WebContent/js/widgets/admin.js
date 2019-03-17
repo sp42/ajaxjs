@@ -69,7 +69,7 @@ Vue.component('aj-admin-filter-panel', {
 	template: 
 		'<div class="aj-admin-filter-panel">\
 			<form action="?" method="GET">\
-				<input type="hidden" name="searchField" value="content" />\
+				<input type="hidden" name="searchField" value="name" />\
 				<input type="text" name="searchValue" placeholder="请输入正文之关键字" style="float: inherit;" class="ajaxjs-inputField" />\
 				<button style="margin-top: 0;" class="ajaxjs-btn">搜索</button>\
 			</form>\
