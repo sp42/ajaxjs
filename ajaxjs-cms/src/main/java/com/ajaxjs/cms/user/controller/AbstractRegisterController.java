@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.user.controller;
+ package com.ajaxjs.cms.user.controller;
 
 import java.util.HashMap;
 
