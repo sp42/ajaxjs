@@ -56,6 +56,9 @@ public class MappingValue {
 				if ((int_value + "").equals(value)) // 判断为整形
 					return int_value;
 			} catch (NumberFormatException e) {// 不能转换为数字
+				if(value.matches("[0-9]{1,13}(\\.[0-9]*)?")) {
+					return Double.parseDouble(value);
+				}
 			}
 
 		return value;

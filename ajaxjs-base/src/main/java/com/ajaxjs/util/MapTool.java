@@ -218,7 +218,7 @@ public class MapTool {
 						if (isTransform && value != null && t != value.getClass()) { // 类型相同，直接传入；类型不相同，开始转换
 							value = MappingValue.objectCast(value, t);
 						}
-
+						System.out.println("v:" + value + " type: " + value.getClass());
 						property.getWriteMethod().invoke(bean, value);
 					}
 				}

@@ -23,21 +23,21 @@ public class AdminFilter implements Filter {
 	public void doFilter(ServletRequest _request, ServletResponse _response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) _request;
 		HttpServletResponse response = (HttpServletResponse) _response;
-		
+
 		if (request.getRequestURI().equals(request.getContextPath() + "/admin/login/")) {
 			request.getRequestDispatcher(BaseController.jsp("user/admin-login.jsp")).forward(request, response);
 		} else if (request.getSession().getAttribute("userId") == null) {
 			response.setStatus(401, "Authentication Required");
 			response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
 			response.setContentType("text/html");
-			response.getWriter().append(noAccess);
+			response.getWriter().append(String.format(noAccess, request.getContextPath()));
 		} else {
 			chain.doFilter(request, response);
 		}
 
 	}
-	
-	static final String noAccess = "<meta charset=\"utf-8\" /> 禁止访问，非法权限。Authentication Required";
+
+	static final String noAccess = "<meta charset=\"utf-8\" /> 禁止访问，非法权限。Authentication Required <a href=\"%s/admin/login/\">登 录</a>";
 
 	@Override
 	public void destroy() {

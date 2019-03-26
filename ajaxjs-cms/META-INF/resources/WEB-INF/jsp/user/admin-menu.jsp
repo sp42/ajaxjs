@@ -20,6 +20,7 @@
 	<%if(RightConstant.check(privilegeTotal, RightConstant.FEEDBACK)){ %>
 		<li><a target="iframepage" href="${ctx}/admin/feedback/list/">留言反馈管理</a></li>
 	<%}%>
+		<%@include file="/WEB-INF/jsp/user/admin-extra-menu.jsp" %>
 	</ul>
 </li>
 
@@ -29,12 +30,11 @@
 	<ul>
 		<li><a target="iframepage" href="${ctx}/admin/goods/list/">商品管理</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/simple-group/list/">团购管理</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/user/list/">用户管理</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/order/list/">订单管理</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/cart/list/">购物车一览</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/user/address/list/">地址薄一览</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/user/bookmark/list/">收藏一览</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/userLoginLog/">登录日志</a></li>
+
 	</ul>
 </li>
 	<%}%>
@@ -71,8 +71,10 @@
 	<%}%>
 	<%if(RightConstant.check(privilegeTotal, RightConstant.USER)){ %>
 <li> 
-	<h3>权限管理</h3>
+	<h3>用户管理</h3>
 	<ul>
+		<li><a target="iframepage" href="${ctx}/admin/user/list/">用户管理</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/userLoginLog/">登录日志</a></li>
 	<%if(RightConstant.check(privilegeTotal, RightConstant.USER_PRIVILEGE)){ %>
 		<li><a target="iframepage" href="${ctx}/admin/user/privilege/">用户-权限管理</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/user/user_group/">用户组管理</a></li>

@@ -27,6 +27,7 @@ import java.util.Map;
  */
 public class BaseModel implements Serializable {
 	private static final long serialVersionUID = -5313880199638314543L;
+
 	/**
 	 * 扩展字段
 	 */
@@ -34,15 +35,15 @@ public class BaseModel implements Serializable {
 
 	private Long id;
 
+	/**
+	 * 唯一 id
+	 */
 	private Long uid;
 
-	public String getCover() {
-		return cover;
-	}
-
-	public void setCover(String cover) {
-		this.cover = cover;
-	}
+	/**
+	 * 状态
+	 */
+	private Integer status;
 
 //	@NotNull(message="名称不能为空")
 //	@Size(min = 2, max = 255, message = "长度应该介于3和255之间")
@@ -51,10 +52,19 @@ public class BaseModel implements Serializable {
 //	@Size(max = 60000)
 	private String content;
 
+	/**
+	 * 创建日期
+	 */
 	private Date createDate;
 
+	/**
+	 * 修改日期
+	 */
 	private Date updateDate;
-	
+
+	/**
+	 * 封面图片
+	 */
 	private String cover;
 
 	public String getName() {
@@ -105,17 +115,27 @@ public class BaseModel implements Serializable {
 		this.uid = uid;
 	}
 
-	private Map<String, Object> data;
-
-	public Map<String, Object> getData() {
-		return data;
-	}
-
 	public Map<String, Object> getExtractData() {
 		return extractData;
 	}
 
-	public void setExtractData(HashMap<String, Object> extractData /*若为 Map 不能进行反射，即使强类型也不行*/) {
+	public void setExtractData(HashMap<String, Object> extractData /* 若为 Map 不能进行反射，即使强类型也不行 */) {
 		this.extractData = extractData;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	public String getCover() {
+		return cover;
+	}
+
+	public void setCover(String cover) {
+		this.cover = cover;
 	}
 }

@@ -13,7 +13,6 @@
 			<!-- 后台头部导航 -->
 			<ajaxjs-admin-header>
 				<template slot="title">${uiName}一览</template>
-				<template slot="btns"><a :href="ajResources.ctx + '/admin/${shortName}/'">新建</a> | </template>
 			</ajaxjs-admin-header>
 		</div>
 		
@@ -38,7 +37,7 @@
 					<th class="name">${uiName}名称</th>
 					<th>创建时间</th>
 					<th>修改时间</th>
-					<th>分 类</th>
+					<th>用户</th>
 					<th>是否上线</th>
 					<th class="control">控 制</th>
 				</tr>
@@ -59,7 +58,17 @@
 						<td>
 							 <c:dateFormatter value="${current.updateDate}" format="yyyy-MM-dd" /> 
 						</td>
-						<td>${current.catelogName}</td>
+						<td>	
+							<!-- 读取用户标识 -->
+							<c:if test="${empty current.userId}">
+								匿名用户
+							</c:if>
+							<c:if test="${not empty current.userId}">
+								<a href="${ctx}/user/center/info/${current.userId}/">
+									${ empty current.userName ? current.userNickName : current.userName}
+								</a>
+							</c:if>
+						</td>
 						<td>
 							${(empty current.status || current.status == 1) ? '已上线': '已下线'}
 						</td>

@@ -16,7 +16,7 @@
 			<form class="user-form center" action="${ctx}/user/add_information"
 				method="post">
 				<div class="formBox">
-					<p>为提供更好的服务，请完善下面信息</p>
+					<p>支持jpg、png、jpeg、bmp，图片大小5M以内 </p>
 <!-- 图片上传 -->
 <ajaxjs-img-upload-perview ref="uploadControl" img-place="${empty avatar ? commonAsset.concat('/images/imgBg.png'): ctx.concat(avatar.path)}" />
 				</div>

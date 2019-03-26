@@ -21,7 +21,10 @@ import com.ajaxjs.cms.utils.sms.SMS;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.controller.MvcRequest;
+import com.ajaxjs.mvc.filter.DataBaseFilter;
+import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.web.captcha.CaptchaFilter;
 
 /**
  * 注册控制器
@@ -41,9 +44,9 @@ public abstract class AbstractLoginController extends BaseUserController {
 		return jsp("user/login");
 	}
 
-//	@POST
-//	@MvcFilter(filters = { CaptchaFilter.class, DataBaseFilter.class })
-//	@Produces(MediaType.APPLICATION_JSON)
+	@POST
+	@MvcFilter(filters = { CaptchaFilter.class, DataBaseFilter.class })
+	@Produces(MediaType.APPLICATION_JSON)
 	public String loginAction(@BeanParam User user,  @NotNull  @QueryParam("password") String password, HttpServletRequest request) throws ServiceException {
 		String msg = loginByPassword(user, password, request);
 

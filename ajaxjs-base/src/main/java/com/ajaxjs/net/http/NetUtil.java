@@ -251,14 +251,8 @@ public class NetUtil extends IoHelper {
 		return size;
 	}
 
-	public static String download(String url, String saveDir, String newFileName) {
-		HttpURLConnection conn = initHttpConnection(url);
-		setUserAgentDefault.accept(conn);
-		conn.setDoInput(true);// for conn.getOutputStream().write(someBytes); 需要吗？
-		conn.setDoOutput(true);
-
-		String fileName = newFileName == null ? IoHelper.getFileNameFromUrl(url) : newFileName;
-		String newlyFilePath = getResponse(conn, false, in -> {
+	public static Function<InputStream, String> initDownload2disk_Callback(String saveDir, String fileName) {
+		return in -> {
 			File file = IoHelper.createFile(saveDir, fileName);
 			try (OutputStream out = new FileOutputStream(file);) {
 				IoHelper.write(in, out, true);
@@ -274,7 +268,17 @@ public class NetUtil extends IoHelper {
 			}
 
 			return null;
-		});
+		};
+	}
+
+	public static String download(String url, String saveDir, String newFileName) {
+		HttpURLConnection conn = initHttpConnection(url);
+		setUserAgentDefault.accept(conn);
+		conn.setDoInput(true);// for conn.getOutputStream().write(someBytes); 需要吗？
+		conn.setDoOutput(true);
+
+		String fileName = newFileName == null ? IoHelper.getFileNameFromUrl(url) : newFileName;
+		String newlyFilePath = getResponse(conn, false, initDownload2disk_Callback(saveDir, fileName));
 
 		return newlyFilePath;
 	}
@@ -311,18 +315,36 @@ public class NetUtil extends IoHelper {
 
 	public final static Consumer<HttpURLConnection> setFormPost = conn -> conn.setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
+	public static String post(String url, byte[] b, Consumer<HttpURLConnection> fn) {
+		return post(url, b, fn, null);
+	}
+
+	public static String post_download(String url, Map<String, Object> data, String saveDir, String fileName) {
+		if (data != null && data.size() > 0) {
+			return post(url, "{\"path\":\"pages/index/index\"}".getBytes(), null, initDownload2disk_Callback(saveDir, fileName));
+		} else {
+			return null;
+		}
+	}
+
 	/**
 	 * POST 请求
 	 * 
 	 * @param url 请求目标地址
 	 * @param b 字节格式的请求数据
+	 * @param fn 对 Conn 进行配置
 	 * @return 请求之后的响应的内容
 	 */
-	public static String post(String url, byte[] b, Consumer<HttpURLConnection> fn) {
+	public static String post(String url, byte[] b, Consumer<HttpURLConnection> fn, Function<InputStream, String> responseHandler) {
 		HttpURLConnection conn = initHttpConnection(url);
 		setMedthod.accept(conn, "POST");
 		conn.setDoOutput(true); // for conn.getOutputStream().write(someBytes);
 		conn.setDoInput(true);
+		
+		if (fn != null)
+			fn.accept(conn);
+		else
+			setFormPost.accept(conn);
 
 		try (OutputStream out = conn.getOutputStream();) {
 			out.write(b); // 输出流写入字节数据
@@ -331,12 +353,7 @@ public class NetUtil extends IoHelper {
 			LOGGER.warning("写入 post 数据时失败！{0}", e);
 		}
 
-		if (fn != null)
-			fn.accept(conn);
-		else
-			setFormPost.accept(conn);
-
-		return getResponse(conn, false, NetUtil::byteStream2stringStream);
+		return getResponse(conn, false, responseHandler == null ? NetUtil::byteStream2stringStream : responseHandler);
 	}
 
 	/**

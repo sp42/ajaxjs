@@ -17,11 +17,8 @@
 		<div class="admin-entry-form">
 			<!-- 后台头部导航 -->
 			<ajaxjs-admin-header>
-				<template slot="title">${isCreate?'新建':'编辑'}${uiName}</template>
+				<template slot="title">${uiName}</template>
 				<template slot="btns">
-				<c:if test="${!isCreate}">
-					<a :href="ajResources.ctx + '/admin/${tableName}/'">新建</a> | 
-				</c:if>
 					<a :href="ajResources.ctx + '/admin/${tableName}/list/'">${uiName}列表</a> | 
 				</template>
 			</ajaxjs-admin-header>
@@ -42,6 +39,18 @@
 				</div>
 				<div>
 					<label>
+						<div class="label">用户：
+							<!-- 读取用户标识 -->
+							<c:if test="${empty info.userId}">
+								匿名用户
+							</c:if>
+							<c:if test="${not empty info.userId}">
+								
+								<a href="${ctx}/user/center/info/${info.userId}/">
+									${ empty info.userName ? info.userNickName : info.userName}
+								</a>
+							</c:if>
+						</div>
 						<div class="label">联系手机：${info.phone}</div>  <div class="label">联系邮箱：<a href="mailto:${info.email}">${info.email}</a></div>
 					</label>
 				</div>

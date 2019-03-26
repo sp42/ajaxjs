@@ -50,5 +50,4 @@ public class Tools {
 
 		return candidateAddress;
 	}
-
 }

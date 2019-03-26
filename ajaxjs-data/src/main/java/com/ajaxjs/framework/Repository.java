@@ -272,7 +272,7 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 		} else if (returnType == List.class) {
 			result = queryList(entryType, sql, args);
 		} else if (returnType == PageResult.class) {// 分页
-			result = PageResult.doPage(conn, entryType, select, sql, method, this, args);
+			result = PageResult.doPage(conn, entryType, select, sql, method, this, args, r[2]);
 		} else if (returnType == Map.class) {
 			result = queryAsMap(conn, sql, args);
 		} else {
@@ -291,7 +291,7 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 	 * @return
 	 */
 	private static Object[] doSql(String sql, Object[] args) {
-		Object[] _args = new Object[2];
+		Object[] _args = new Object[3];
 		_args[0] = sql;
 		_args[1] = args;
 		
@@ -306,6 +306,7 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 					@SuppressWarnings("unchecked")
 					Function<String, String> fn = (Function<String, String>) obj;
 					realSql = fn.apply(sql);
+					_args[2] = fn;
 				} else {
 					list.add(obj);
 				}

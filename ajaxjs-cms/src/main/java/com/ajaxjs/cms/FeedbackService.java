@@ -3,6 +3,7 @@ package com.ajaxjs.cms;
 import java.util.List;
 import java.util.Map;
 
+import com.ajaxjs.cms.user.UserDao;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.PageResult;
@@ -13,14 +14,21 @@ import com.ajaxjs.orm.annotation.TableName;
 
 @Bean("FeedbackService")
 public class FeedbackService extends BaseService<Map<String, Object>> {
-	@TableName(value = "entity_feedback")
+	@TableName(value = "entity_feedback", beanClass = Map.class)
 	public static interface FeedbackDao extends IBaseDao<Map<String, Object>> {
-		@Select(value = "SELECT e.*, u.name AS userName FROM ${tableName} e LEFT JOIN user u ON u.id = e.createdByUser")
+		public static final String sql = "SELECT e.*, " + UserDao.getUserName + " FROM ${tableName} e LEFT JOIN user u ON u.id = e.userId";
+
+		@Select(value = sql + " ORDER BY e.id DESC")
 		@Override
 		public PageResult<Map<String, Object>> findPagedList(int start, int limit);
 
-		@Select(value = "SELECT * FROM ${tableName}  WHERE createdByUser = ?")
+		@Select(value = sql + " WHERE e.id = ?")
+		@Override
+		public Map<String, Object> findById(Long id);
+
+		@Select(value = "SELECT * FROM ${tableName} WHERE userId = ?")
 		public List<Map<String, Object>> getListByUserId(long userId);
+
 	}
 
 	FeedbackDao dao = new Repository().bind(FeedbackDao.class);

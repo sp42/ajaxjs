@@ -18,6 +18,7 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.ajaxjs.orm.JdbcHelper;
 import com.ajaxjs.orm.annotation.Select;
@@ -115,10 +116,10 @@ public class PageResult<T> extends ArrayList<T> {
 	 * @return 分页列表，如果找不到数据，仍返回一个空的 PageList，但可以通过 getZero() 得知是否为空
 	 */
 	@SuppressWarnings("unchecked")
-	public static <B> PageResult<B> doPage(Connection conn, Class<B> entryType, Select select, String sql, Method method, Repository dao, Object[] args) {
+	public static <B> PageResult<B> doPage(Connection conn, Class<B> entryType, Select select, String sql, Method method, Repository dao, Object[] args, Object _sqlHandler) {
 		P p = getPageParameters(method, args);
 
-		int total = countTotal(select, sql, p.args, dao, conn);
+		int total = countTotal(select, sql, p.args, dao, conn, (Function<String, String>) _sqlHandler);
 
 		PageResult<B> result = new PageResult<>();
 
@@ -158,7 +159,7 @@ public class PageResult<T> extends ArrayList<T> {
 	 * @param conn 连接对象，判断是否 MySQL or SQLite
 	 * @return 统计行数
 	 */
-	private static int countTotal(Select select, String sql, Object[] args, Repository dao, Connection conn) {
+	private static int countTotal(Select select, String sql, Object[] args, Repository dao, Connection conn, Function<String, String> sqlHandler) {
 		String countSql;
 
 		if (CommonUtil.isEmptyString(select.countSql())) {
@@ -168,6 +169,10 @@ public class PageResult<T> extends ArrayList<T> {
 //			countSql = sql.replaceAll("SELECT.*FROM", "SELECT COUNT(\\*) AS count FROM");
 		} else {
 			countSql = Repository.isSqlite(select.sqliteCountSql(), conn) ? select.sqliteCountSql() : select.countSql();
+		}
+
+		if (sqlHandler != null) {
+			countSql = sqlHandler.apply(countSql);
 		}
 
 		countSql = dao.handleSql(countSql, null);

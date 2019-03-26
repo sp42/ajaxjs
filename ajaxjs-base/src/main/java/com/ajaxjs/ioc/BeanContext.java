@@ -85,7 +85,7 @@ public class BeanContext {
 
 //		String name = clz.getAnnotation(Bean.class).value();
 		String name = getBeanId(clz.getAnnotation(Bean.class), clz);
-		
+
 		Object obj = getBean(name);
 
 		return obj == null ? null : (T) obj;
@@ -119,6 +119,9 @@ public class BeanContext {
 				beanName = getBeanId(namedAnno, item);
 			}
 
+			if (beansClz.containsKey("beanName")) {
+				LOGGER.warning("相同的 bean name 已经存在" + beanName);
+			}
 			if (ReflectUtil.hasArgsCon(item)) {
 				beansClz.put(beanName, item);
 			} else {

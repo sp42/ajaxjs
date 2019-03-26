@@ -25,6 +25,12 @@
 						<br />
 						<br />
 						<button onclick="location.assign('modifly');return false;">修改信息</button>
+						<br />
+						<br />
+						<button onclick="location.assign('modifly');return false;">绑定设置</button>
+						<br />
+						<br />
+						<button onclick="location.assign('modifly');return false;">账号注销</button>
 					</div>
 					<dl>
 						<label>
