@@ -216,7 +216,7 @@ public class LogHelper {
 	 */
 	public void warning(Throwable e, String msg, Object... params) {
 		for (int i = 0; i < params.length; i++) // jre 没有这个方法的重载，写一个吧
-			msg = msg.replace("{" + i + "}", params[i].toString());
+			msg = msg.replace("{" + i + "}", params[i] == null ? "[NULL]" : params[i].toString());
 
 		warning(e, msg);
 	}
