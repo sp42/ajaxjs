@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<jsp:include page="/jsp/common/head.jsp">
+<jsp:include page="/WEB-INF/jsp/head.jsp">
 	<jsp:param name="lessFile" value="/asset/less/admin.less" />
 	<jsp:param name="title" value="&#x540E;&#x53F0;&#x7BA1;&#x7406;" />
 </jsp:include>

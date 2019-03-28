@@ -134,11 +134,12 @@ public class MvcRequest extends HttpServletRequestWrapper {
 
 		if (getMethod() != null && getMethod().toUpperCase().equals("PUT")) {
 			map = getPutRequestData(); // Servlet 没有 PUT 获取表单，要自己处理
+			System.out.println("111111Map:" + map);
 		} else {
-			map = MapTool.as(getParameterMap(), arr -> arr[0]);
+			map = MapTool.as(getParameterMap(), arr -> MappingValue.toJavaValue(arr[0]));
+			System.out.println("22222222Map:" + map);
 		}
 
-		System.out.println("Map:" + map);
 
 		// 抛出 IllegalArgumentException 这个异常 有可能是参数类型不一致造成的，要求的是 string 因为 map 从 request
 		// 转换时已经变为 int（例如纯数字的时候）

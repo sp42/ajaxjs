@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html style="height: 100%;">
 	<head>
-		<jsp:include page="/jsp/common/head.jsp"  flush="true">
+		<jsp:include page="/WEB-INF/jsp/head.jsp"  flush="true">
 			<jsp:param name="lessFile" value="/asset/less/admin.less" />
 			<jsp:param name="title" value="${uiName}管理" />
 		</jsp:include>

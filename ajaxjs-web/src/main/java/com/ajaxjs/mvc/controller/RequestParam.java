@@ -168,7 +168,7 @@ public class RequestParam {
 		if (clz == String.class) {
 			args.add(value);
 		} else if (clz == int.class || clz == Integer.class) {
-			args.add(value == null || "".equals(value) ? 0 : Integer.parseInt(value));
+			args.add(value == null || "".equals(value) || "null".equals(value) ? 0 : Integer.parseInt(value));
 		} else if (clz == long.class || clz == Long.class) {
 			args.add(value == null || "".equals(value) ? 0L : (Long.parseLong(value)));
 		} else if (clz == boolean.class || clz == Boolean.class) {

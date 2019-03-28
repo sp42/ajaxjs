@@ -11,7 +11,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.ArticleDao;
 import com.ajaxjs.cms.FeedbackService.FeedbackDao;
 import com.ajaxjs.cms.app.attachment.Attachment_picture;
 import com.ajaxjs.cms.user.service.UserService;
@@ -22,7 +21,6 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 
  
 public abstract class AbstractUserCenterController extends BaseUserController {
-	public static ArticleDao newsDao = new Repository().bind(ArticleDao.class);
 
 //	@GET
 //	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })

@@ -3,7 +3,7 @@
 	<!DOCTYPE html>
 	<html>
 		<head>
-			<jsp:include page="/jsp/common/head.jsp">
+			<jsp:include page="/WEB-INF/jsp/head.jsp">
 				<jsp:param name="lessFile" value="/asset/less/admin.less" />
 				<jsp:param name="title" value="${uiName}管理" />
 			</jsp:include>
@@ -68,7 +68,7 @@
 		</tbody>
 		</table>
 		<div class="listTable pager">
-			<%@include file="/jsp/common/pager.jsp" %>
+			<%@include file="/WEB-INF/jsp/pager.jsp" %>
 		</div>
 		<script>
 			aj.imageEnlarger();// 鼠标移动大图

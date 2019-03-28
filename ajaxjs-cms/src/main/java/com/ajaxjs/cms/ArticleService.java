@@ -6,13 +6,19 @@ import java.util.Map;
 import com.ajaxjs.cms.app.catelog.Catelogable;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
+import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
+import com.ajaxjs.orm.annotation.TableName;
 
 @Bean(value = "ArticleService")
 public class ArticleService extends BaseService<Map<String, Object>> implements Catelogable<Map<String, Object>> {
-	ArticleDao dao = new Repository().bind(ArticleDao.class);
+	@TableName(value = "entity_article", beanClass = Map.class)
+	public interface ArticleDao extends IBaseDao<Map<String, Object>> {
+	}
+
+	public static ArticleDao dao = new Repository().bind(ArticleDao.class);
 
 	{
 		setUiName("文章");

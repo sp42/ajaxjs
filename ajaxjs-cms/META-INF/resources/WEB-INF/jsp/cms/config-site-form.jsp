@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<jsp:include page="/jsp/common/head.jsp">
+		<jsp:include page="/WEB-INF/jsp/head.jsp">
 			<jsp:param name="lessFile" value="/asset/less/admin.less" />
 			<jsp:param name="title" value="网站结构" />
 		</jsp:include>

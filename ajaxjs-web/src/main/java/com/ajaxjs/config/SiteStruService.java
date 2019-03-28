@@ -28,6 +28,7 @@ import com.ajaxjs.Version;
 import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.js.JsonStruTraveler;
 import com.ajaxjs.mvc.Constant;
+import com.ajaxjs.net.http.Tools;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -86,7 +87,7 @@ public class SiteStruService implements ServletContextListener {
 			LOGGER.info("没有网站的结构文件");
 
 		String ctx = cxt.getContextPath();
-		String ajaxjsui = Version.isDebug ? "http://192.168.1.88:8080/ajaxjs-web-js" : ctx + "/" + Constant.ajajx_ui;
+		String ajaxjsui = Version.isDebug ? "http://" + Tools.getIp() + ":8080/ajaxjs-web-js" : ctx + "/" + Constant.ajajx_ui;
 		cxt.setAttribute("ctx", ctx);
 		cxt.setAttribute("ajaxjsui", ajaxjsui);
 		cxt.setAttribute("commonAsset", ctx + "/asset/common"); // 静态资源目录

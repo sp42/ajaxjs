@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<jsp:include page="/jsp/common/head.jsp">
+		<jsp:include page="/WEB-INF/jsp/head.jsp">
 			<jsp:param name="lessFile" value="/asset/less/admin.less" />
 			<jsp:param name="title" value="${uiName}管理" />
 		</jsp:include>
@@ -64,7 +64,7 @@
 		</table>
 		
 		<div style="text-align:center;margin:2%;">
-			<%@include file="/jsp/common/pager.jsp" %>
+			<%@include file="/WEB-INF/jsp/pager.jsp" %>
 		</div>
 	</body>
 </html>

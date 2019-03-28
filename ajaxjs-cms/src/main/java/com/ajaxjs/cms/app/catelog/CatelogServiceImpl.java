@@ -90,17 +90,17 @@ public class CatelogServiceImpl extends BaseService<Catelog> implements CatelogS
 	@Override
 	public List<Catelog> getAllListByParentId(int parentId, boolean isWithParent) {
 		List<Catelog> list = dao.getAllListByParentId(parentId);
-
-		if (!isWithParent) {
-			int j = 0;
+		
+		if (!isWithParent && list != null) {
 			for (int i = 0; i < list.size(); i++) {
+				System.out.println(list.get(i).getName() +"::" + parentId+ " id:::" + list.get(i).getId());
 				if (list.get(i).getId() == new Integer(parentId).longValue()) {
-					j = i;
+					list.remove(i);// 不要父节点
 					break;
 				}
 			}
 
-			list.remove(j);// 不要父节点
+			
 		}
 
 		return list;
