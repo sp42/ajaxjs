@@ -38,8 +38,8 @@ public class CatelogAdminController extends BaseController<Catelog> {
 		prepareData(model);
 		return editUI_CMS();
 	}
+	
 	@GET
-
 	@Path("getListAndSubByParentId")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)

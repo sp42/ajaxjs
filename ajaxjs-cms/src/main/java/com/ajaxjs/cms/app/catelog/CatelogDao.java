@@ -67,5 +67,4 @@ public interface CatelogDao extends IBaseDao<Catelog> {
 			"	WHERE" + 
 			"		id = ? ) || '/%')")
 	public List<Catelog> getAllListByParentId(int parentId);
-
 }

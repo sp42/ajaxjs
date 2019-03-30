@@ -23,9 +23,6 @@ public class CatelogServiceSqlFactory {
 //
 //		s.sql = s.sql.replaceAll("#\\{ajSql:(\\s?\\w+,?)+\\}", "");
 //	}
-//
-//	public static String parser(String sql, Method method, Object[] args) {
-//		return null;
-//	}
+
 
 }

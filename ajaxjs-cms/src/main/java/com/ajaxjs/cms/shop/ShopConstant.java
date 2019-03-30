@@ -5,7 +5,9 @@ import java.util.Map;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public interface ShopConstant {
-
+	public static final int ENTRY_GOODS = 56;
+	public static final int ENTRY_GROUP = 57;
+	
 	public static final int TRADING = 0;
 	public static final int TRADE_DONE = 1;
 	public static final int TRADE_CANCELLED = 2;

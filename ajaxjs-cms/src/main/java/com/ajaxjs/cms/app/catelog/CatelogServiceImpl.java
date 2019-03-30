@@ -10,14 +10,13 @@ import com.ajaxjs.ioc.Bean;
 
 @Bean("CatelogService")
 public class CatelogServiceImpl extends BaseService<Catelog> implements CatelogService {
-	CatelogDao dao = new Repository().bind(CatelogDao.class);
+	public static CatelogDao dao = new Repository().bind(CatelogDao.class);
 	
 	{
 		setUiName("分类");
 		setShortName("catelog");
 		setDao(dao);
 	}
-
 
 	@Override
 	public List<Catelog> findByParentId(int id) {
