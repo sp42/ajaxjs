@@ -66,4 +66,8 @@ public class DataDictService extends BaseService<Map<String, Object>> {
 
 		return map;
 	}
+	
+	public static final int ENTRY_ARTICLE = 52;
+	public static final int ENTRY_TOPIC = 54;
+	public static final int ENTRY_ADS = 55;
 }
