@@ -104,6 +104,13 @@ public interface IBaseDao<T> {
 	 */
 	@Select("SELECT * FROM ${tableName}")
 	public List<T> findList();
+	
+	
+	@Select("SELECT * FROM ${tableName}")
+	public List<T> findList(Function<String, String> doSql);
+	
+	@Select("SELECT entry.*, " + selectCover + " AS cover FROM ${tableName} entry")
+	public List<T> findList_Cover(Function<String, String> doSql);
 
 	/**
 	 * 查询所有数据，只包含 id、name 两个字段

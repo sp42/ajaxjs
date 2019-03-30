@@ -15,6 +15,7 @@ package com.ajaxjs.framework;
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
@@ -254,7 +255,7 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 		String sql = isSqlite(select.sqliteValue(), conn) ? select.sqliteValue() : select.value();
 		sql = handleSql(sql, sqlFactoryHandler);
 
-		Object[] r = doSql(sql, args);
+		Object[] r = doSql(sql, method,args);
 		sql = (String) r[0];
 		args = (Object[]) r[1];
 
@@ -287,26 +288,38 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 	 * 传入一个匿名函数，转化 sql
 	 * 
 	 * @param sql
+	 * @param method 
 	 * @param args 参数有变动
 	 * @return
 	 */
-	private static Object[] doSql(String sql, Object[] args) {
+	private static Object[] doSql(String sql, Method method, Object[] args) {
 		Object[] _args = new Object[3];
 		_args[0] = sql;
 		_args[1] = args;
+		
 		
 		if(args != null && args.length > 0) {
 			String realSql = null;
 			List<Object> list = new ArrayList<>();
 			boolean found = false;
 			
+			Parameter[] parameters = method.getParameters();
+			int i = 0;
+			
 			for (Object obj : args) {
-				if (obj instanceof Function) {
+				Parameter p = parameters[i++];
+				if(Function.class.equals(p.getType())) {
 					found = true;
-					@SuppressWarnings("unchecked")
-					Function<String, String> fn = (Function<String, String>) obj;
-					realSql = fn.apply(sql);
-					_args[2] = fn;
+					if (obj instanceof Function) {
+						@SuppressWarnings("unchecked")
+						Function<String, String> fn = (Function<String, String>) obj;
+						realSql = fn.apply(sql);
+						_args[2] = fn;
+					} else {
+						// obj is null;
+						realSql = sql; // SQL 不变，去掉 fn 参数
+						_args[2] = null;
+					}
 				} else {
 					list.add(obj);
 				}

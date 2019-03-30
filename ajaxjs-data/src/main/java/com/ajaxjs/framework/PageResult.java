@@ -16,6 +16,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -119,8 +120,11 @@ public class PageResult<T> extends ArrayList<T> {
 	public static <B> PageResult<B> doPage(Connection conn, Class<B> entryType, Select select, String sql, Method method, Repository dao, Object[] args, Object _sqlHandler) {
 		P p = getPageParameters(method, args);
 
+		System.out.println("::::::::::::::::::::::::::::::::::::" + Arrays.toString(p.args));
+
 		int total = countTotal(select, sql, p.args, dao, conn, (Function<String, String>) _sqlHandler);
 
+		System.out.println("::::::::::::::::::::::::::::::::::::" + total);
 		PageResult<B> result = new PageResult<>();
 
 		if (total <= 0) {
@@ -216,7 +220,7 @@ public class PageResult<T> extends ArrayList<T> {
 			pageParams[1] = defaultPageSize;
 		}
 
-		int removeStartIndex = 0, removeLimitIndex = 0;
+		int removeStartIndex = 0, removeLimitIndex = 0, sqlHandlerIndex = 0;
 
 		for (int i = 0; i < parameters.length; i++) {
 			Parameter param = parameters[i];
@@ -239,13 +243,15 @@ public class PageResult<T> extends ArrayList<T> {
 				}
 
 				removeLimitIndex = i;
+			} else if (Function.class.equals(param.getType())) {
+				sqlHandlerIndex = i;
 			}
 		}
 
 		List<Object> list = new ArrayList<>(); // 移除分页参数，形成新的参数列表
 
 		for (int i = 0; i < args.length; i++) {
-			if (i == removeStartIndex || i == removeLimitIndex) {
+			if (i == removeStartIndex || i == removeLimitIndex || i == sqlHandlerIndex) {
 
 			} else {
 				list.add(args[i]);

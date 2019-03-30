@@ -39,11 +39,29 @@ public class BaseModel implements Serializable {
 	 * 唯一 id
 	 */
 	private Long uid;
-
+	
 	/**
-	 * 状态
+	 * 数据字典：状态
 	 */
 	private Integer status;
+
+	/**
+	 * 设置数据字典：状态
+	 * 
+	 * @param status 数据字典：状态
+	 */
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	/**
+	 * 获取数据字典：状态
+	 * 
+	 * @return 数据字典：状态
+	 */
+	public Integer getStatus() {
+		return status;
+	}
 
 //	@NotNull(message="名称不能为空")
 //	@Size(min = 2, max = 255, message = "长度应该介于3和255之间")
@@ -121,14 +139,6 @@ public class BaseModel implements Serializable {
 
 	public void setExtractData(HashMap<String, Object> extractData /* 若为 Map 不能进行反射，即使强类型也不行 */) {
 		this.extractData = extractData;
-	}
-
-	public Integer getStatus() {
-		return status;
-	}
-
-	public void setStatus(Integer status) {
-		this.status = status;
 	}
 
 	public String getCover() {
