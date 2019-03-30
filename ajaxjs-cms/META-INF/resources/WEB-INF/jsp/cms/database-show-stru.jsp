@@ -15,7 +15,7 @@
 <head>
 	<meta charset="UTF-8" />
 	<title>表设计文档</title>
-	<link rel="stylesheet" type="text/css" href="${commonJsp}/system/sqlDoc.css" />
+	<link rel="stylesheet" type="text/css" href="${ctx}/asset/admin/sqlDoc.css" />
 </head>
 <body>
 	<div class="leftSide">
