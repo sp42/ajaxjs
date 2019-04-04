@@ -32,7 +32,7 @@ public class AppUpdateAdminController extends BaseController<AppUpdate> {
 	@GET
 	@Path("/list")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView mv) {
+	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
 		listPaged(start, limit, mv);
 		return adminList();
 	}

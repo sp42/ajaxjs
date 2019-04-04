@@ -11,25 +11,24 @@ import com.ajaxjs.orm.annotation.TableName;
 
 @TableName(value = "general_catelog", beanClass = Catelog.class)
 public interface CatelogDao extends IBaseDao<Catelog> {
-	public final static String tableName = "general_catelog";
-
 	/**
 	 * 父id 必须在子id之前，不然下面 findParent() 找不到后面的父节点，故先排序. 前端排序的话 chrom 有稳定排序的问题，故放在后端排序
 	 */
-	@Select(value = "SELECT * FROM " + tableName + " ORDER BY pid ")
+	@Select(value = "SELECT * FROM ${tableName} ORDER BY pid ")
 	@Override
 	public PageResult<Catelog> findPagedList(int start, int limit);
 	
 	
 	/**
 	 * 删除所有，包括子分类
+	 * 
 	 * @param id
 	 * @return
 	 */
-	@Delete(value = "DELETE FROM general_catelog WHERE id in ( SELECT n.id FROM (" + // 如果子查询的 from 子句和更新、删除对象使用同一张表，会出现错误。
-			"(SELECT id FROM general_catelog WHERE `path` LIKE ( CONCAT ( (SELECT `path` FROM general_catelog WHERE id = ?) , '/%')))) AS n)", 
-			sqliteValue = "DELETE FROM general_catelog " + 
-			"WHERE id in (SELECT id FROM general_catelog WHERE \"path\" LIKE (( SELECT \"path\" FROM general_catelog WHERE id = ?) || '/%'));")
+	@Delete(value = "DELETE FROM ${tableName} WHERE id in ( SELECT n.id FROM (" + // 如果子查询的 from 子句和更新、删除对象使用同一张表，会出现错误。
+			"(SELECT id FROM ${tableName} WHERE `path` LIKE ( CONCAT ( (SELECT `path` FROM general_catelog WHERE id = ?) , '%')))) AS n)", 
+			sqliteValue = "DELETE FROM ${tableName} " + 
+			"WHERE id in (SELECT id FROM ${tableName} WHERE \"path\" LIKE (( SELECT \"path\" FROM general_catelog WHERE id = ?) || '%'));")
 	public boolean deleteAll(int id);
 
 	/**
@@ -38,7 +37,7 @@ public interface CatelogDao extends IBaseDao<Catelog> {
 	 * @param parentId
 	 * @return
 	 */
-	@Select(value = "SELECT * FROM " + tableName + " WHERE pid = ?")
+	@Select(value = "SELECT * FROM ${tableName} WHERE pid = ?")
 	public List<Catelog> getListByParentId(int parentId);
 	
 	/**
@@ -54,10 +53,11 @@ public interface CatelogDao extends IBaseDao<Catelog> {
 	
 	/**
 	 * 所有后代
+	 * 
 	 * @param parentId
 	 * @return
 	 */
-	@Select(value = "SELECT * FROM general_catelog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catelog WHERE id = ? ) , '/%'))", 
+	@Select(value = "SELECT * FROM general_catelog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catelog WHERE id = ? ) , '%'))", 
 			sqliteValue = "SELECT * FROM general_catelog WHERE " + 
 			"	\"path\" LIKE (  ( " + 
 			"	SELECT" + 
@@ -65,6 +65,6 @@ public interface CatelogDao extends IBaseDao<Catelog> {
 			"	FROM" + 
 			"		general_catelog" + 
 			"	WHERE" + 
-			"		id = ? ) || '/%')")
+			"		id = ? ) || '%')")
 	public List<Catelog> getAllListByParentId(int parentId);
 }

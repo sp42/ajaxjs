@@ -44,7 +44,7 @@ public class CatelogAdminController extends BaseController<Catelog> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getListAndSubByParentId(@QueryParam("parentId") int parentId) {
-		return toJson(service.getAllListByParentId(parentId));
+		return toJson(service.findAllListByParentId(parentId));
 	}
 
 	@Override

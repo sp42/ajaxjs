@@ -78,7 +78,7 @@ public class CatelogServiceImpl extends BaseService<Catelog> implements CatelogS
 
 	@Override
 	public String getTableName() {
-		return CatelogDao.tableName;
+		return "general_catelog";
 	}
 
 	@Override
@@ -87,31 +87,28 @@ public class CatelogServiceImpl extends BaseService<Catelog> implements CatelogS
 	}
 
 	@Override
-	public List<Catelog> getAllListByParentId(int parentId, boolean isWithParent) {
+	public List<Catelog> findAllListByParentId(int parentId, boolean isWithParent) {
 		List<Catelog> list = dao.getAllListByParentId(parentId);
 		
 		if (!isWithParent && list != null) {
 			for (int i = 0; i < list.size(); i++) {
-				System.out.println(list.get(i).getName() +"::" + parentId+ " id:::" + list.get(i).getId());
 				if (list.get(i).getId() == new Integer(parentId).longValue()) {
 					list.remove(i);// 不要父节点
 					break;
 				}
 			}
-
-			
 		}
 
 		return list;
 	}
 
 	@Override
-	public List<Catelog> getAllListByParentId(int parentId) {
-		return getAllListByParentId(parentId, true);
+	public List<Catelog> findAllListByParentId(int parentId) {
+		return findAllListByParentId(parentId, true);
 	}
 
 	@Override
-	public List<Map<String, Object>> getListAndSubByParentId(int parentId) {
+	public List<Map<String, Object>> findListAndSubByParentId(int parentId) {
 		return dao.getListAndSubByParentId(parentId);
 	}
 

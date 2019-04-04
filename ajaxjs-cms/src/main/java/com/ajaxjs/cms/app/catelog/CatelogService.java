@@ -24,13 +24,13 @@ public interface CatelogService extends IBaseService<Catelog> {
 	public List<Catelog> findByParentId(int id);
 
 	/**
-	 * 根据父 id 获取所有的子id列表（不包含父节点），不管多少层
+	 * 根据父 id 获取所有的子id列表（可以不包含父节点），不管多少层
 	 * 
 	 * @param parentId 父 id
 	 * @param isWithParent 是否需要连同父节点一起返回
 	 * @return 所有的子id列表
 	 */
-	public List<Catelog> getAllListByParentId(int parentId, boolean isWithParent);
+	public List<Catelog> findAllListByParentId(int parentId, boolean isWithParent);
 
 	/**
 	 * 根据父 id 获取所有的子id列表（包含父节点），不管多少层
@@ -38,12 +38,13 @@ public interface CatelogService extends IBaseService<Catelog> {
 	 * @param parentId 父 id
 	 * @return
 	 */
-	public List<Catelog> getAllListByParentId(int parentId);
+	public List<Catelog> findAllListByParentId(int parentId);
 
 	/**
+	 * 获取下一级和下下一级，一共只获取这两级
 	 * 
-	 * @param parentId
+	 * @param parentId 父 id
 	 * @return
 	 */
-	public List<Map<String, Object>> getListAndSubByParentId(int parentId);
+	public List<Map<String, Object>> findListAndSubByParentId(int parentId);
 }
