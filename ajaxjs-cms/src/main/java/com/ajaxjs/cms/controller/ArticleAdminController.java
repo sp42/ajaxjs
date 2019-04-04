@@ -31,9 +31,17 @@ public class ArticleAdminController extends BaseController<Map<String, Object>> 
 	@GET
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, @QueryParam("catalogId") int catalogId, ModelAndView mv) {
-		listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(catalogId, start, limit));
+	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catelogId) int catelogId, ModelAndView mv) {
+		listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(catelogId, start, limit));
 		return adminListCMS();
+	}
+	
+	@GET
+	@Path("listJson")
+	@Produces(MediaType.APPLICATION_JSON)
+	@MvcFilter(filters = DataBaseFilter.class)
+	public String listJson(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catelogId) int catelogId, ModelAndView mv) {
+		return pagedListJson(listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(catelogId, start, limit)));
 	}
 
 	@GET

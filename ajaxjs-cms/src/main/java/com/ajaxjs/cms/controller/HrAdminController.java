@@ -23,12 +23,12 @@ public class HrAdminController extends DomainBaseAdminController {
 	@GET
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, @QueryParam("catalogId") int catalogId, ModelAndView mv) {
-		if (catalogId == 0) 
-			catalogId = service.getDomainCatelogId(); // 不指定实体的子分类
+	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catelogId) int catelogId, ModelAndView mv) {
+		if (catelogId == 0) 
+			catelogId = service.getDomainCatelogId(); // 不指定实体的子分类
 
-		final int _catalogId = catalogId;
-		listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(_catalogId, start, limit));
+		final int _catelogId = catelogId;
+		listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(_catelogId, start, limit));
 		return domainEntityList;
 	}
 

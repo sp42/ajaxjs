@@ -29,8 +29,8 @@ public class AdsAdminController extends BaseController<Ads> {
 	@GET
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam("catalogId") int catalogId, @QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView mv) {
-		listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(catalogId, start, limit));
+	public String list(@QueryParam(catelogId) int catelogId, @QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+		listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(catelogId, start, limit));
 		return adminListCMS();
 	}
 

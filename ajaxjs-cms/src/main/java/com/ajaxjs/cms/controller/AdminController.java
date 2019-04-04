@@ -46,7 +46,7 @@ public class AdminController implements IController, Constant {
 	@GET
 	@Path("GlobalLog")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView model) {
+	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView model) {
 		model.put("uiName", "操作日志");
 		model.put(PageResult, dao.findPagedList(start, limit));
 		return BaseController.cms("global-log");

@@ -39,12 +39,30 @@ import com.ajaxjs.util.io.FileUtil;
  */
 @Path("/admin/config")
 public class ConfigController implements IController {
+	/**
+	 * 全部配置
+	 * 
+	 * @param model
+	 * @return
+	 */
 	@GET
-	public String allUI(ModelAndView model) {
+	public String allConfig(ModelAndView model) {
 		model.put("configJson", FileUtil.openAsText(ConfigService.jsonPath));
 		model.put("jsonSchemePath", FileUtil.openAsText(ConfigService.jsonSchemePath));
 
 		return BaseController.cms("config-all");
+	}
+
+	@GET
+	@Path("siteStru")
+	public String siteStruUI() {
+		return BaseController.cms("config-site-stru");
+	}
+
+	@GET
+	@Path("site")
+	public String siteUI() {
+		return BaseController.cms("config-site-form");
 	}
 
 	/**
@@ -64,18 +82,6 @@ public class ConfigController implements IController {
 			request.getServletContext().setAttribute("aj_allConfig", ConfigService.config);
 
 		return Constant.jsonOk("修改配置成功！");
-	}
-
-	@GET
-	@Path("siteStru")
-	public String siteStruUI() {
-		return BaseController.cms("config-site-stru");
-	}
-
-	@GET
-	@Path("site")
-	public String siteUI() {
-		return BaseController.cms("config-site-form");
 	}
 
 	/**
