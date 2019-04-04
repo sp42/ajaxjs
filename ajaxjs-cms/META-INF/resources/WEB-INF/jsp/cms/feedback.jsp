@@ -51,7 +51,10 @@
 								</a>
 							</c:if>
 						</div>
-						<div class="label">联系手机：${info.phone}</div>  <div class="label">联系邮箱：<a href="mailto:${info.email}">${info.email}</a></div>
+						<div class="label">
+							联系手机：${info.phone}</div>  <div class="label">联系邮箱：<a href="mailto:${info.email}">${info.email}</a>
+							留言时间：<c:dateFormatter value="${info.createDate}" format="yyyy-MM-dd HH:mm" />
+						</div>
 					</label>
 				</div>
 		 

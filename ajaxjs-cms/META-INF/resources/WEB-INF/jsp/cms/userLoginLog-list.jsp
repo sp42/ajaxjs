@@ -29,6 +29,7 @@
 				<col />
 				<col />
 				<col />
+				<col />
 				<col style="text-align: center;" align="center" />
 			</colgroup>
 			<thead>
@@ -37,12 +38,14 @@
 					<th class="name">用户名称</th>
 					<th>登录类型</th>
 					<th>登录ip</th>
+					<th>客户端标识</th>
+					<th>是否登录后台</th>
 					<th>登录时间</th>
 				</tr>
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="5"></td>
+					<td colspan="7"></td>
 				</tr>
 			</tfoot>
 			<tbody>
@@ -52,6 +55,8 @@
 						<td><a href="${ctx}/admin/user/${current.userId}/">${current.userName}</a></td>
 						<td>${LoginType[current.loginType]}</td>
 						<td>${current.ip}</td>
+						<td style="width:430px;">${current.userAgent}</td>
+						<td>${current.adminLogin ? '是' : '否'}</td>
 						<td><c:dateFormatter value="${current.createDate}" /></td>
 					</tr>
 				</c:foreach>

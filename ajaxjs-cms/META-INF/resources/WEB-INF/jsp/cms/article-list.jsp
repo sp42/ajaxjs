@@ -33,6 +33,7 @@
 				<col />
 				<col />
 				<col />
+				<col />
 				<col style="text-align: center;" align="center" />
 			</colgroup>
 			<thead>
@@ -43,12 +44,13 @@
 					<th>修改时间</th>
 					<th>分 类</th>
 					<th>是否上线</th>
+					<th>封面图片</th>
 					<th class="control">控 制</th>
 				</tr>
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="8"></td>
+					<td colspan="9"></td>
 				</tr>
 			</tfoot>
 			<tbody>
@@ -67,6 +69,12 @@
 							${(empty current.status || current.status == 1) ? '已上线': '已下线'}
 						</td>
 						<td>
+						<c:if test="${not empty current.cover}">
+							<img src="${ctx}${current.cover}" style="max-width:50px;max-height:60px;vertical-align: middle;" 
+						 		onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${ctx}${current.cover}';" onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
+						</c:if>
+						</td>
+						<td>
 							<a href="../../../${shortName}/${current.id}/" target="_blank">浏览</a>
 							<a href="${ctx}/admin/${shortName}/${current.id}/"><img src="${commonAssetIcon}/update.gif" style="vertical-align: sub;" />编辑</a>
 							<a href="javascript:aj.admin.del('${current.id}', '${current.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>
@@ -78,5 +86,8 @@
 		<div class="listTable pager">
 			<%@include file="/WEB-INF/jsp/pager.jsp" %>
 		</div>
+		<script>
+			aj.imageEnlarger();// 鼠标移动大图
+		</script>
 	</body>
 </html>

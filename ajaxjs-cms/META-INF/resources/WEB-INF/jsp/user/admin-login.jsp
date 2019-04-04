@@ -106,6 +106,7 @@ button{
 				beforeSubmit(form, json) {
 					var el = aj('input[name=password]');
 					json.password = md5(el.value);
+					json.isAdminLogin = true;
 				}
 			});
 			

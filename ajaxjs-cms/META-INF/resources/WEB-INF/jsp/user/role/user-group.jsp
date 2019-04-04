@@ -58,6 +58,6 @@
 		var tdHtml = '<td class="id">[:=id:]</td><td class="name">[:=nameTd:]</td> <td class="content">[:=content||\'\':]</td><td width="120" style="text-align:center;">[:=accessKey:]</td><td class="createDate">[:=createDate:]</td>\
 		  <td class="action"><a href="#" onclick="showCreate(this);"><img src="${commonAssetIcon}/add.gif" /> 新 建</a> | <a href="#" onclick="showUpdate(this);"><img src="${commonAssetIcon}/update.gif" /> 修 改</a> | <a href="#" onclick="showDelete(this);"><img src="${commonAssetIcon}/delete.gif" /> 删 除</a> </td>';
 	</script>
-	<script src="${ctx}/asset/js/user/user-group.js"></script>
+	<script src="${ctx}/asset/admin/user-group.js"></script>
 </body>
 </html>

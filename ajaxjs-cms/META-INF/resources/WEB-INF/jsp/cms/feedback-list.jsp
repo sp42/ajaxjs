@@ -36,9 +36,9 @@
 					<th>#</th>
 					<th class="name">${uiName}名称</th>
 					<th>创建时间</th>
-					<th>修改时间</th>
 					<th>用户</th>
-					<th>是否上线</th>
+					<th>用户手机</th>
+					<th>是否回复</th>
 					<th class="control">控 制</th>
 				</tr>
 			</thead>
@@ -52,12 +52,7 @@
 					<tr>
 						<td>${current.id}</td>
 						<td title="${current.intro}">${current.name}</td>
-						<td>
-							<c:dateFormatter value="${current.createDate}" format="yyyy-MM-dd" />
-						</td>
-						<td>
-							 <c:dateFormatter value="${current.updateDate}" format="yyyy-MM-dd" /> 
-						</td>
+						<td><c:dateFormatter value="${current.createDate}" format="yyyy-MM-dd HH:mm" /></td>
 						<td>	
 							<!-- 读取用户标识 -->
 							<c:if test="${empty current.userId}">
@@ -69,11 +64,9 @@
 								</a>
 							</c:if>
 						</td>
+						<td>${current.phone}</td>
+						<td>${empty current.feedback ? '未回复': '已回复'}</td>
 						<td>
-							${(empty current.status || current.status == 1) ? '已上线': '已下线'}
-						</td>
-						<td>
-							<a href="../../../${shortName}/${current.id}/" target="_blank">浏览</a>
 							<a href="${ctx}/admin/${shortName}/${current.id}/"><img src="${commonAssetIcon}/update.gif" style="vertical-align: sub;" />编辑</a>
 							<a href="javascript:aj.admin.del('${current.id}', '${current.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>
 						</td>

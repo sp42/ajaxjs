@@ -7,7 +7,7 @@
 			<jsp:param name="title" value="全局配置" />
 		</jsp:include>
 	</head>
-<body class="configForm admin-entry-form">
+<body class="admin-entry-form">
 	<div>	
 		<ajaxjs-admin-header>
 			<template slot="title">全局配置：<span>请点击有+号菜单项以展开下一级的内容</span></template>
@@ -27,14 +27,13 @@
 		<p>小白用户请谨慎修改配置参数！</p>
 	</form>
 	
-	
 	<script>
 		new Vue({el : 'body>div'});
 		var configJson = ${configJson};
 		var jsonScheme = ${jsonSchemePath};
 	</script>
 	
-	<script src="${ajaxjsui}/js/widgets/admin/allConfig-renderer.js"></script>
-	<script src="${ajaxjsui}/js/widgets/admin/allConfig.js"></script>
+	<script src="${ctx}/asset/admin/allConfig-renderer.js"></script>
+	<script src="${ctx}/asset/admin/allConfig.js"></script>
 </body>
 </html>

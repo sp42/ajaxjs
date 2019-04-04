@@ -217,7 +217,7 @@
 		  <td>&nbsp;</td>
 	  </tr>
 	</table>
-	<script src="${ctx}/asset/js/user/assign-right.js"></script>
+	<script src="${ctx}/asset/admin/user-assign-right.js"></script>
 	<script>
 		VUE = new Vue({
 			el : 'table', 
