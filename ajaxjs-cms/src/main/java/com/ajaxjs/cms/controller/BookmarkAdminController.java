@@ -22,7 +22,6 @@ public class BookmarkAdminController extends BaseController<SectionList> {
 	@Path("/list")
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
-		System.out.println("::::::::::::");
 		listPaged(start, limit, mv, (s, l) -> SectionListService.dao.findPagedListByCatelogId(ConfigService.getValueAsInt("data.section.useBookmark_Catelog_Id"), start, limit));
 		return info("user-bookmark");
 	}

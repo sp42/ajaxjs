@@ -1,17 +1,26 @@
 package com.ajaxjs.cms.user;
 
+import java.util.function.Function;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.framework.BaseController;
+import com.ajaxjs.framework.BaseService;
+import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.IBaseService;
+import com.ajaxjs.framework.PageResult;
+import com.ajaxjs.framework.QueryParams;
+import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
-import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
+import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
+import com.ajaxjs.orm.annotation.Select;
+import com.ajaxjs.orm.annotation.TableName;
 
 /**
  * 
@@ -20,28 +29,52 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 @Bean
 @Path("/admin/userLoginLog")
 public class UserLoginLogAdminController extends BaseController<UserLoginLog> {
-	@Resource("UserLoginLogService")
-	private UserLoginLogService service;
-
-	@GET
-	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView mv) {
-		mv.put("LoginType", UserDict.LoginType);
-		listPaged(start, limit, mv);
-		return adminListCMS();
+	@TableName(value = "user_login_log", beanClass = UserLoginLog.class)
+	public static interface UserLoginLogDao extends IBaseDao<UserLoginLog> {
+		@Select("SELECT e.*, user.name AS userName FROM ${tableName} e LEFT JOIN user ON user.id = e.userId WHERE 1 = 1 ORDER BY e.id DESC")
+		@Override
+		public PageResult<UserLoginLog> findPagedList(int start, int limit, Function<String, String> sqlHandler);
 	}
 
+	public static class UserLoginLogService extends BaseService<UserLoginLog> {
+		public UserLoginLogDao dao = new Repository().bind(UserLoginLogDao.class);
+
+		{
+			setUiName("用户登录日志");
+			setShortName("userLoginLog");
+			setDao(dao);
+		}
+
+	}
+
+	public static UserLoginLogService service = new UserLoginLogService();
+
 	@GET
-	@Path("/{id}")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@PathParam("id") Long userId, @QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView mv) {
+	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv, HttpServletRequest req) {
 		mv.put("LoginType", UserDict.LoginType);
-		listPaged(start, limit, mv, (s, l) -> service.dao.findUserLoginLogByUserId(userId, s, l));
+		listPaged(start, limit, mv, (s, l) -> service.dao.findPagedList(s, l, QueryParams.initSqlHandler(req)));
 		return adminListCMS();
 	}
 
 	@Override
 	public IBaseService<UserLoginLog> getService() {
 		return service;
+	}
+
+	/**
+	 * 获取客户端有关信息
+	 * 
+	 * @param bean
+	 * @param request
+	 */
+	public static void initBean(UserLoginLog bean, HttpServletRequest request) {
+		String ip = ((MvcRequest) request).getIp();
+		if ("0:0:0:0:0:0:0:1".equals(ip))
+			ip = "localhost";
+
+		bean.setIp(ip);
+		bean.setUserAgent(request.getHeader("user-agent"));
+		bean.setAdminLogin("true".equals(request.getParameter("isAdminLogin")));
 	}
 }

@@ -13,8 +13,6 @@ import com.ajaxjs.framework.Repository;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
-import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.orm.thirdparty.SnowflakeIdWorker;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.cryptography.SymmetricCipher;
 import com.ajaxjs.util.io.image.ImageUtil;
@@ -142,11 +140,6 @@ public class UserService extends BaseService<User> {
 
 		if (foundUser == null || foundUser.getId() == 0)
 			throw new ServiceException("非法用户！");
-
-		long effectedRows = dao.updateLoginInfo(foundUser.getId(), userLoginInfo.getLoginType(), new Date(), MvcRequest.getMvcRequest().getIp(), SnowflakeIdWorker.idWorker.nextId());
-
-		if (effectedRows <= 0)
-			throw new ServiceException("更新会员登录日志出错");
 
 		LOGGER.info(foundUser.getName() + " 登录成功！");
 		return true;

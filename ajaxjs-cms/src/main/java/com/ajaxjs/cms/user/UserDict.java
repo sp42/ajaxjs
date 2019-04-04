@@ -3,16 +3,17 @@ package com.ajaxjs.cms.user;
 import java.util.HashMap;
 import java.util.Map;
 
-@SuppressWarnings({ "unchecked", "rawtypes" })
 public interface UserDict {
 	public static final int WECHAT = 1;
 	public static final int PASSWORD = 2;
+	public static final int WECHAT_MINI = 3;
 
-	public static final Map<Integer, String> LoginType = new HashMap() {
+	public static final Map<Integer, String> LoginType = new HashMap<Integer, String>() {
 		private static final long serialVersionUID = -1L;
 		{
 			put(WECHAT, "微信");
 			put(PASSWORD, "普通密码账号");
+			put(WECHAT_MINI, "小程序");
 		}
 	};
 
@@ -20,7 +21,7 @@ public interface UserDict {
 	public static final int MALE = 1;
 	public static final int FEMALE = 2;
 
-	public static final Map<Integer, String> SexGender = new HashMap() {
+	public static final Map<Integer, String> SexGender = new HashMap<Integer, String>() {
 		private static final long serialVersionUID = -1L;
 		{
 			put(UNKNOW, "未知");

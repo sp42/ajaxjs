@@ -33,7 +33,7 @@ public class UserAdminController extends BaseController<User> {
 	@GET
 	@Path("/list")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView mv) {
+	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
 		mv.put("SexGender", UserDict.SexGender);
 		listPaged(start, limit, mv, service.getDao()::findPagedList_Cover);
 		return adminList();
@@ -80,19 +80,6 @@ public class UserAdminController extends BaseController<User> {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String delete(@PathParam("id") Long id) {
 		return delete(id, new User());
-	}
-
-	@GET
-	@Path("bookmark/list")
-	public String bookmarkList(ModelAndView mv) {
-		return info("user-bookmark");
-	}
-
-	@GET
-	@Path("{id}/bookmark")
-	public String bookmark(@PathParam("id") Long userId, ModelAndView mv) {
-		mv.put("userId", userId);
-		return info("user-bookmark");
 	}
 
 	@GET

@@ -110,13 +110,13 @@ public class DomainEntityService extends BaseService<Map<String, Object>> implem
 		if (catelogId == 0)
 			catelogId = getDomainCatelogId();
 
+		
 		return dao.findPagedListByCatelogId(catelogId, start, limit == 0 ? 5 : limit);
 	}
 	
 	public PageResult<Map<String, Object>> findPagedListByCatelogId_Cover(int catelogId, int start, int limit) {
 		if (catelogId == 0)
 			catelogId = getDomainCatelogId();
-		
 		return dao.findPagedListByCatelogId_Cover(catelogId, start, limit == 0 ? 5 : limit);
 	}
 

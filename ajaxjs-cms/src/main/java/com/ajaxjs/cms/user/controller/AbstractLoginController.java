@@ -15,6 +15,9 @@ import javax.ws.rs.core.MediaType;
 import com.ajaxjs.cms.app.attachment.Attachment_picture;
 import com.ajaxjs.cms.user.User;
 import com.ajaxjs.cms.user.UserCommonAuth;
+import com.ajaxjs.cms.user.UserDict;
+import com.ajaxjs.cms.user.UserLoginLog;
+import com.ajaxjs.cms.user.UserLoginLogAdminController;
 import com.ajaxjs.cms.user.service.UserConstant;
 import com.ajaxjs.cms.user.service.UserService;
 import com.ajaxjs.cms.utils.sms.SMS;
@@ -34,7 +37,7 @@ import com.ajaxjs.web.captcha.CaptchaFilter;
  */
 public abstract class AbstractLoginController extends BaseUserController {
 	private static final LogHelper LOGGER = LogHelper.getLog(AbstractLoginController.class);
-	
+
 	@Resource("AliyunSMSSender")
 	private SMS sms;
 
@@ -47,7 +50,7 @@ public abstract class AbstractLoginController extends BaseUserController {
 	@POST
 	@MvcFilter(filters = { CaptchaFilter.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
-	public String loginAction(@BeanParam User user,  @NotNull  @QueryParam("password") String password, HttpServletRequest request) throws ServiceException {
+	public String loginAction(@BeanParam User user, @NotNull @QueryParam("password") String password, HttpServletRequest request) throws ServiceException {
 		String msg = loginByPassword(user, password, request);
 
 		if (msg.equals(LOGIN_PASSED)) {
@@ -99,7 +102,7 @@ public abstract class AbstractLoginController extends BaseUserController {
 				UserCommonAuth phoneLoign = new UserCommonAuth();
 				phoneLoign.setPassword(password);
 				phoneLoign.setLoginType(UserConstant.loginByPhoneNumber);
-				
+
 				if (getService().loginByPassword(user, phoneLoign)) {
 					afterLogin(user, request);
 					msg = LOGIN_PASSED;
@@ -111,8 +114,8 @@ public abstract class AbstractLoginController extends BaseUserController {
 
 		return msg;
 	}
-	
-	 public abstract BiConsumer<User, HttpServletRequest> getAfterLoginCB();
+
+	public abstract BiConsumer<User, HttpServletRequest> getAfterLoginCB();
 
 	/**
 	 * 会员登录之后的动作，会保存 userId 和 userName 在 Session中
@@ -121,6 +124,17 @@ public abstract class AbstractLoginController extends BaseUserController {
 	 * @param request 请求对象
 	 */
 	public void afterLogin(User user, HttpServletRequest request) {
+		// 用户登录日志
+		UserLoginLog userLoginLog = new UserLoginLog();
+		userLoginLog.setUserId(user.getId());
+		userLoginLog.setLoginType(UserDict.PASSWORD);
+		UserLoginLogAdminController.initBean(userLoginLog, request);
+		
+		if (UserLoginLogAdminController.service.create(userLoginLog) <= 0) {
+			LOGGER.warning("更新会员登录日志出错");
+		}
+
+		//
 		Attachment_picture avatar = null;
 
 		UserService service = getService();
@@ -132,19 +146,19 @@ public abstract class AbstractLoginController extends BaseUserController {
 		request.getSession().setAttribute("userName", user.getName());
 		request.getSession().setAttribute("userPhone", user.getPhone());
 		request.getSession().setAttribute("userGroupId", user.getRoleId());
-		
+
 		// 获取资源权限总值
 		request.getSession().setAttribute("userGroupId", user.getRoleId());
-		
-		if(getAfterLoginCB() != null) {
+
+		if (getAfterLoginCB() != null) {
 			getAfterLoginCB().accept(user, request);
 		}
-		
-		if(user.getRoleId() == null || user.getRoleId() == 0L) {
+
+		if (user.getRoleId() == null || user.getRoleId() == 0L) {
 			// 未设置用户权限
-		} else {			
+		} else {
 			long privilegeTotal = UserService.dao.getPrivilegeByUserGroupId(user.getRoleId());
-			
+
 //			System.out.println("privilegeTotal:" +privilegeTotal);
 			request.getSession().setAttribute("privilegeTotal", privilegeTotal);
 		}

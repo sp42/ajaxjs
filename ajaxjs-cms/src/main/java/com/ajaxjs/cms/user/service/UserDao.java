@@ -1,19 +1,13 @@
 package com.ajaxjs.cms.user.service;
 
-import java.util.Date;
-
 import com.ajaxjs.cms.app.attachment.Attachment_picture;
 import com.ajaxjs.cms.user.User;
 import com.ajaxjs.framework.IBaseDao;
-import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
 
 @TableName(value = "user", beanClass = User.class)
 public interface UserDao extends IBaseDao<User> {
-	@Insert("INSERT INTO user_login_log (userId, loginType, createDate, ip, uid) VALUES (?, ?, ?, ?, ?)")
-	Long updateLoginInfo(long userId, long loginType, Date lastLoginDate, String ip, long uid);
-
 	/**
 	 * 根据用户名码查找用户
 	 * 

@@ -25,33 +25,59 @@ import com.ajaxjs.util.CommonUtil;
 public abstract class SectionListService extends BaseService<SectionList> implements Catelogable<SectionList> {
 
 	@TableName(value = "section_list", beanClass = SectionList.class)
-	public interface BookmarkDao extends IBaseDao<SectionList> {
-		@Select("SELECT id FROM ${tableName} WHERE entryId = ? AND entryTypeId = ?")
-		public Long checkIfExist(long entryId, int entryType);
+	public interface SectionListDao extends IBaseDao<SectionList> {
+		@Select("SELECT id FROM ${tableName} WHERE entryId = ? AND entryTypeId = ? AND userId = ?")
+		public Long checkIfExist(long entryId, int entryType, long userId);
 
 		@Select("")
 		public List<SectionList> unionAll(Function<String, String> doSql);
 	}
 
-	public static BookmarkDao dao = new Repository().bind(BookmarkDao.class);
+	public static SectionListDao dao = new Repository().bind(SectionListDao.class);
 
 	{
 		setDao(dao);
 	}
-	
+
 	@FunctionalInterface
 	public static interface ScanTable {
-	    public void addSql(Map<Integer, List<String>> map, List<String> sqls, int entryTypeId);
+		public void addSql(List<String> sqls, int entryTypeId, String entryIds, String caseSql);
 	}
-	
-	public static final String select = "SELECT entry.id AS entryId, entry.name,  %s AS entryTypeId, " + IBaseDao.selectCover + " AS cover FROM %s entry WHERE id in (%s)\n";
 
+	public static final String select = "SELECT entry.id AS entryId, entry.name,  %s AS entryTypeId, %s, " + IBaseDao.selectCover + " AS cover FROM %s entry WHERE id in (%s)\n";
+
+	
+	/**
+	 *
+	 * 
+	 * @param sectionId
+	 * @param fn
+	 * @return
+	 */
 	public List<SectionList> findSectionListBySectionId(int sectionId, ScanTable fn) {
 		return union(getListByCatelogId(sectionId), fn);
 	}
-	
+
+	/**
+	 * 获取中间表中匹配的数据
+	 * 
+	 * @param catelogId
+	 * @return
+	 */
 	public List<SectionList> getListByCatelogId(int catelogId) {
 		return dao.findList(sql -> sql + " WHERE catelogId = " + catelogId);
+	}
+
+	/**
+	 * 获取中间表中匹配的数据，可分页的
+	 * 
+	 * @param start
+	 * @param limit
+	 * @param catelogId
+	 * @return
+	 */
+	public PageResult<SectionList> getListByCatelogId(int start, int limit, int catelogId) {
+		return dao.findPagedList(start, limit, sql -> sql.replaceAll(" 1 = 1", " catelogId = " + catelogId));
 	}
 
 	/**
@@ -71,17 +97,38 @@ public abstract class SectionListService extends BaseService<SectionList> implem
 				if (!map.containsKey(entryTypeId)) {
 					map.put(entryTypeId, new ArrayList<>());
 				}
-				map.get(entryTypeId).add(b.getEntryId() + "");
+				map.get(entryTypeId).add(b.getEntryId() + "_" + b.getId());
 			});
 
 			List<String> sqls = new ArrayList<>();
 
 			for (Integer entryTypeId : map.keySet()) {
-				fn.addSql(map, sqls, entryTypeId);
+				List<String> l = map.get(entryTypeId);
+				List<String> entryIds = new ArrayList<>(), cases = new ArrayList<>();
+				
+				for(String i : l) {
+					String[] arr = i.split("_");
+					String entryId = arr[0], sectionId = arr[1];
+					entryIds.add(entryId);
+					cases.add(String.format(" WHEN entry.id = %s THEN %s ", entryId, sectionId));
+				}
+				
+				String caseSql = String.format("(CASE %s END) AS id", String.join(" ", cases));
+					
+				fn.addSql(sqls, entryTypeId, String.join(", ", entryIds), caseSql);
 			}
 
 //			System.out.println(String.join("UNION \n", sqls));
 			List<SectionList> bs = dao.unionAll(sql -> String.join("UNION \n", sqls));
+
+			if (list instanceof PageResult) {
+				// 分页要处理一下
+				PageResult<SectionList> p = (PageResult<SectionList>) list;
+				p.clear();
+				p.addAll(bs);
+
+				return (List<SectionList>) p;
+			}
 			return bs;
 		}
 	}

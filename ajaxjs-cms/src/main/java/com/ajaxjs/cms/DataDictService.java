@@ -70,4 +70,13 @@ public class DataDictService extends BaseService<Map<String, Object>> {
 	public static final int ENTRY_ARTICLE = 52;
 	public static final int ENTRY_TOPIC = 54;
 	public static final int ENTRY_ADS = 55;
+	
+	public static final Map<Integer, String> Entry_IdName = new HashMap<Integer, String>() {
+		private static final long serialVersionUID = -1L;
+
+		{
+			put(ENTRY_ARTICLE, new ArticleService().getUiName());
+			put(ENTRY_TOPIC, new AdsService().getUiName());
+		}
+	};
 }
