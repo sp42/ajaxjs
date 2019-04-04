@@ -130,7 +130,7 @@ public interface IBaseDao<T> {
 	@Select("SELECT * FROM ${tableName} ORDER BY id DESC")
 	public PageResult<T> findPagedList(int start, int limit);
 	
-	@Select("SELECT * FROM ${tableName} WHERE 1 = 1  ORDER BY id DESC")
+	@Select("SELECT * FROM ${tableName} WHERE 1 = 1 ORDER BY id DESC")
 	public PageResult<T> findPagedList(int start, int limit, Function<String, String> doSql);
 
 	/**
@@ -179,7 +179,7 @@ public interface IBaseDao<T> {
 	 * @param limit
 	 * @return 实体分页列表
 	 */
-	@Select("SELECT id, name, subTitle, createDate, updateDate, " + selectCover + " AS cover FROM ${tableName} entry")
+	@Select("SELECT id, name, createDate, updateDate, " + selectCover + " AS cover FROM ${tableName} entry")
 	public PageResult<T> findPagedList_Cover(int start, int limit);
 
 	/**

@@ -261,7 +261,6 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 
 		Object result = null;
 
-//		System.out.println("-------------------------------" + returnType);
 		if (returnType == int.class || returnType == Integer.class) {
 			result = queryOne(conn, sql, int.class, args);
 		} else if (returnType == long.class || returnType == Long.class) {

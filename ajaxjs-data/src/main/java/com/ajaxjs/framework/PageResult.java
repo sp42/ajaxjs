@@ -16,7 +16,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.sql.Connection;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -120,11 +119,10 @@ public class PageResult<T> extends ArrayList<T> {
 	public static <B> PageResult<B> doPage(Connection conn, Class<B> entryType, Select select, String sql, Method method, Repository dao, Object[] args, Object _sqlHandler) {
 		P p = getPageParameters(method, args);
 
-		System.out.println("::::::::::::::::::::::::::::::::::::" + Arrays.toString(p.args));
+//		System.out.println("::::::::::::::::::::::::::::::::::::" + Arrays.toString(p.args));
 
 		int total = countTotal(select, sql, p.args, dao, conn, (Function<String, String>) _sqlHandler);
 
-		System.out.println("::::::::::::::::::::::::::::::::::::" + total);
 		PageResult<B> result = new PageResult<>();
 
 		if (total <= 0) {
@@ -175,12 +173,13 @@ public class PageResult<T> extends ArrayList<T> {
 			countSql = Repository.isSqlite(select.sqliteCountSql(), conn) ? select.sqliteCountSql() : select.countSql();
 		}
 
-		if (sqlHandler != null) {
-			countSql = sqlHandler.apply(countSql);
+		if (sqlHandler != null) { // 为什么要重复执行一次？
+//			countSql = sqlHandler.apply(countSql);
 		}
 
 		countSql = dao.handleSql(countSql, null);
 
+		
 		if (conn.toString().contains("sqlite")) {
 			return JdbcHelper.queryOne(conn, countSql, Integer.class, args);
 		} else {// mysql 返回 long，转换一下
@@ -220,7 +219,7 @@ public class PageResult<T> extends ArrayList<T> {
 			pageParams[1] = defaultPageSize;
 		}
 
-		int removeStartIndex = 0, removeLimitIndex = 0, sqlHandlerIndex = 0;
+		Integer removeStartIndex = null, removeLimitIndex = null, sqlHandlerIndex = null;
 
 		for (int i = 0; i < parameters.length; i++) {
 			Parameter param = parameters[i];
@@ -250,8 +249,8 @@ public class PageResult<T> extends ArrayList<T> {
 
 		List<Object> list = new ArrayList<>(); // 移除分页参数，形成新的参数列表
 
-		for (int i = 0; i < args.length; i++) {
-			if (i == removeStartIndex || i == removeLimitIndex || i == sqlHandlerIndex) {
+		for (Integer i = 0; i < args.length; i++) {
+			if (i.equals(removeStartIndex) || i.equals(removeLimitIndex) || i.equals(sqlHandlerIndex)) {
 
 			} else {
 				list.add(args[i]);
