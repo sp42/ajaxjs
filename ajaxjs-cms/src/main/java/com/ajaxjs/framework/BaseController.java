@@ -186,9 +186,11 @@ public abstract class BaseController<T> implements IController, Constant {
 	 * @param mv 模型
 	 */
 	public void prepareData(ModelAndView mv) {
-		mv.put("uiName", getService().getUiName());
-		mv.put("shortName", getService().getShortName());
-		mv.put("tableName", getService().getTableName());
+		if (getService() != null) {
+			mv.put("uiName", getService().getUiName());
+			mv.put("shortName", getService().getShortName());
+			mv.put("tableName", getService().getTableName());
+		}
 	}
 
 	/**
@@ -235,10 +237,10 @@ public abstract class BaseController<T> implements IController, Constant {
 
 	public static <E> String pagedListJson(PageResult<E> pageResult) {
 		String jsonStr = toJson(pageResult, false);
-		if (jsonStr == null)
+		if (jsonStr == null || pageResult == null)
 			jsonStr = "[]";
 
-		int total = pageResult.isZero() ? 0 : pageResult.getTotalCount();
+		int total = pageResult == null || pageResult.isZero() ? 0 : pageResult.getTotalCount();
 
 		return String.format(Constant.json_ok_extension, "分页列表", "\"result\":" + jsonStr + ",\"total\":" + total);
 	}
@@ -306,24 +308,25 @@ public abstract class BaseController<T> implements IController, Constant {
 	 */
 	public String adminList_Excel(HttpServletResponse response, String fileName) {
 		String now = fileName + "-" + LocalDate.now().toString();
-		
+
 		try {
 			now = new String(now.getBytes(), "iso8859-1");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 		// <base href="<%=basePath%>">
-		// String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
-		
+		// String basePath = request.getScheme() + "://" + request.getServerName() + ":"
+		// + request.getServerPort() + request.getContextPath() + "/";
+
 		// <%@ page pageEncoding="utf-8" contentType="application/msexcel"%>
 		response.setContentType("application/vnd.ms-excel;charset=UTF-8");
-		
+
 		response.setHeader("Content-Disposition", String.format("attachment; filename=%s.xls", now));
 		// response.setHeader("Content-disposition","inline; filename=videos.xls");
 
 		// 以上这行设定传送到前端浏览器时的档名为test.xls
 		// 就是靠这一行，让前端浏览器以为接收到一个excel档
-		
+
 		return info(getService().getShortName() + "-admin-list-xsl");
 	}
 

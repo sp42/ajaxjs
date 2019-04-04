@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+
+import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
@@ -94,7 +97,7 @@ public class QueryParams {
 	 * 
 	 * @param sql 输入的原 SQL 语句
 	 * @return 添加 WHERE 子语句的 SQL 语句
-	 */ 
+	 */
 	public String addWhereToSql(String sql) {
 		if (filter != null) {
 			for (String key : filter.keySet())
@@ -161,5 +164,22 @@ public class QueryParams {
 			inputMap.put("filterValue", new String[] { "2", "17" });
 		}
 		return new QueryParams(inputMap).addWhereToSql(sql);
+	}
+
+	/**
+	 * 
+	 * @param req
+	 * @return
+	 */
+	public static Function<String, String> initSqlHandler(HttpServletRequest req) {
+		Map<String, String[]> requestData = req.getParameterMap();
+		
+		return sql -> {
+			if (requestData.size() > 0) {
+				return new QueryParams(requestData).addWhereToSql(sql);
+			} else {
+				return sql;
+			}
+		};
 	}
 }
