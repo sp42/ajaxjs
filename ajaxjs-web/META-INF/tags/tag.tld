@@ -50,11 +50,13 @@
 			<name>var</name>
 			<required>true</required>
 			<rtexprvalue>true</rtexprvalue>
+			<description>变量名称</description>
 		</attribute>
 		<attribute>
 			<name>items</name>
 			<required>true</required>
 			<rtexprvalue>true</rtexprvalue>
+			<description>输入的数据集合</description>
 		</attribute>
 	</tag>
 

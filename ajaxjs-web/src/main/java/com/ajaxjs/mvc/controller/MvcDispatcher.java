@@ -172,8 +172,8 @@ public class MvcDispatcher implements Filter {
 					model = findModel(args);
 					// 通过反射执行控制器方法:调用反射的 Reflect.executeMethod 方法就可以执行目标方法，并返回一个结果。
 					
-					System.out.println(Arrays.toString(args));
-					System.out.println(method);
+//					System.out.println(Arrays.toString(args));
+//					System.out.println(method);
 					result = ReflectUtil.executeMethod_Throwable(controller, method, args);
 				} else {
 					result = ReflectUtil.executeMethod_Throwable(controller, method);// 方法没有参数
