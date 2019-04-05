@@ -1,6 +1,7 @@
 package com.ajaxjs.framework;
 
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * 通用业务方法
@@ -36,6 +37,15 @@ public interface IBaseService<T> {
 	 * @业务异常
 	 */
 	public PageResult<T> findPagedList(int start, int limit);
+	
+	/**
+	 * 
+	 * @param start
+	 * @param limit
+	 * @param sqlHandler
+	 * @return
+	 */
+	public PageResult<T> findPagedList(int start, int limit, Function<String, String> sqlHandler);
 
 	/**
 	 * 新建记录
