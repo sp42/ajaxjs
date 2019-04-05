@@ -45,7 +45,6 @@ public abstract class SectionListService extends BaseService<SectionList> implem
 	}
 
 	public static final String select = "SELECT entry.id AS entryId, entry.name,  %s AS entryTypeId, %s, " + IBaseDao.selectCover + " AS cover FROM %s entry WHERE id in (%s)\n";
-
 	
 	/**
 	 *
@@ -56,6 +55,18 @@ public abstract class SectionListService extends BaseService<SectionList> implem
 	 */
 	public List<SectionList> findSectionListBySectionId(int sectionId, ScanTable fn) {
 		return union(getListByCatelogId(sectionId), fn);
+	}
+	
+	/**
+	 * 可分页的
+	 * 
+	 * @param start
+	 * @param limit
+	 * @param sectionId
+	 * @return
+	 */
+	public PageResult<SectionList> findSectionListBySectionId(int start, int limit, int sectionId, ScanTable fn) {
+		return (PageResult<SectionList>) union(getListByCatelogId(start, limit, sectionId), fn);
 	}
 
 	/**
@@ -97,24 +108,30 @@ public abstract class SectionListService extends BaseService<SectionList> implem
 				if (!map.containsKey(entryTypeId)) {
 					map.put(entryTypeId, new ArrayList<>());
 				}
-				map.get(entryTypeId).add(b.getEntryId() + "_" + b.getId());
+				map.get(entryTypeId).add(b.getEntryId() + "_" + b.getId() + "_" + b.getUserId() + "_" + b.getCreateDate());
 			});
 
 			List<String> sqls = new ArrayList<>();
+			String sqlCase = " WHEN entry.id = %s THEN %s ", sqlCaseStr = " WHEN entry.id = %s THEN '%s' ";
 
 			for (Integer entryTypeId : map.keySet()) {
 				List<String> l = map.get(entryTypeId);
-				List<String> entryIds = new ArrayList<>(), cases = new ArrayList<>();
+				List<String> entryIds = new ArrayList<>(), cases = new ArrayList<>(), userIds = new ArrayList<>(), dates = new ArrayList<>();
 				
 				for(String i : l) {
 					String[] arr = i.split("_");
-					String entryId = arr[0], sectionId = arr[1];
+					String entryId = arr[0], sectionId = arr[1], userId = arr[2], date = arr[3];
+					
 					entryIds.add(entryId);
-					cases.add(String.format(" WHEN entry.id = %s THEN %s ", entryId, sectionId));
+					cases.add(String.format(sqlCase, entryId, sectionId));
+					userIds.add(String.format(sqlCase, entryId, userId));
+					dates.add(String.format(sqlCaseStr, entryId, date));
 				}
 				
 				String caseSql = String.format("(CASE %s END) AS id", String.join(" ", cases));
-					
+				caseSql += String.format(", (CASE %s END) AS userId", String.join(" ", userIds));
+				caseSql += String.format(", (CASE %s END) AS createDate", String.join(" ", dates));
+				
 				fn.addSql(sqls, entryTypeId, String.join(", ", entryIds), caseSql);
 			}
 

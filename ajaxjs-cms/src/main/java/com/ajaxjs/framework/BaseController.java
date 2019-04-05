@@ -77,7 +77,7 @@ public abstract class BaseController<T> implements IController, Constant {
 		if (newlyId == null)
 			throw new RuntimeException("创建失败！");
 
-		return String.format(Constant.json_ok_extension, "创建实体成功", "\"newlyId\":" + newlyId);
+		return Constant.jsonOk_Extension("创建实体成功", "\"newlyId\":" + newlyId);
 	}
 
 	public static <E> String create(E entry, IBaseService<E> service) {
@@ -242,7 +242,7 @@ public abstract class BaseController<T> implements IController, Constant {
 
 		int total = pageResult == null || pageResult.isZero() ? 0 : pageResult.getTotalCount();
 
-		return String.format(Constant.json_ok_extension, "分页列表", "\"result\":" + jsonStr + ",\"total\":" + total);
+		return Constant.jsonOk_Extension("分页列表", "\"result\":" + jsonStr + ",\"total\":" + total);
 	}
 
 	public static String toJson(Object obj, boolean isAdd) {

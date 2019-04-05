@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.user;
+package com.ajaxjs.cms.user.controller;
 
 import java.util.function.Function;
 
@@ -7,6 +7,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
+import com.ajaxjs.cms.user.UserDict;
+import com.ajaxjs.cms.user.UserLoginLog;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
@@ -14,7 +16,6 @@ import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.QueryParams;
 import com.ajaxjs.framework.Repository;
-import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
@@ -24,11 +25,10 @@ import com.ajaxjs.orm.annotation.TableName;
 
 /**
  * 
- * 控制器
+ * 登录日志
  */
-@Bean
 @Path("/admin/userLoginLog")
-public class UserLoginLogAdminController extends BaseController<UserLoginLog> {
+public class LoginLogController extends BaseController<UserLoginLog> {
 	@TableName(value = "user_login_log", beanClass = UserLoginLog.class)
 	public static interface UserLoginLogDao extends IBaseDao<UserLoginLog> {
 		@Select("SELECT e.*, user.name AS userName FROM ${tableName} e LEFT JOIN user ON user.id = e.userId WHERE 1 = 1 ORDER BY e.id DESC")
@@ -44,7 +44,6 @@ public class UserLoginLogAdminController extends BaseController<UserLoginLog> {
 			setShortName("userLoginLog");
 			setDao(dao);
 		}
-
 	}
 
 	public static UserLoginLogService service = new UserLoginLogService();
@@ -53,8 +52,9 @@ public class UserLoginLogAdminController extends BaseController<UserLoginLog> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv, HttpServletRequest req) {
 		mv.put("LoginType", UserDict.LoginType);
-		listPaged(start, limit, mv, (s, l) -> service.dao.findPagedList(s, l, QueryParams.initSqlHandler(req)));
-		return adminListCMS();
+		listPaged(start, limit, mv, (s, l) -> service.findPagedList(s, l, QueryParams.initSqlHandler(req)));
+		
+		return jsp("user/login-log-list");
 	}
 
 	@Override

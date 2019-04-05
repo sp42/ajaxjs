@@ -79,6 +79,7 @@
 		<li><a target="iframepage" href="${ctx}/admin/user/list/">用户管理</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/bookmark/list/">用户收藏</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/userLoginLog/">登录日志</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/userGlobalLog/">操作日志</a></li>
 	<%if(RightConstant.check(privilegeTotal, RightConstant.USER_PRIVILEGE)){ %>
 		<li><a target="iframepage" href="${ctx}/admin/user/privilege/">用户-权限管理</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/user/user_group/">用户组管理</a></li>
@@ -91,7 +92,7 @@
 <li>
 	<h3>开发工具</h3>
 	<ul>
-		<li><a target="iframepage" href="${ctx}/admin/DataBaseConnection/">数据库连接管理</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/DataBase/">数据库管理</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/CodeGenerators/">代码生成器</a></li>
 		<li><a target="iframepage" href="${ajaxjsui}/doc">前端文档</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/DataBaseShowStru">表字段浏览</a></li>

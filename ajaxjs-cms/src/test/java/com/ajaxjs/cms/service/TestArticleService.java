@@ -26,7 +26,7 @@ public class TestArticleService {
 	@Test
 	public void testGetAllListByParentId() {
 		CatelogService catalogService = (CatelogService) BeanContext.getBean("CatelogService");
-		catalogService.getAllListByParentId(12);
+		catalogService.findAllListByParentId(12);
 
 		ArticleService articleService = (ArticleService) BeanContext.getBean("ArticleService");
 		PageResult<Map<String, Object>> r = articleService.findPagedListByCatelogId(15, 0, 5);

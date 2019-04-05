@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.user;
+package com.ajaxjs.cms.user.controller;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -10,6 +10,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.ajaxjs.cms.user.User;
+import com.ajaxjs.cms.user.UserDict;
 import com.ajaxjs.cms.user.service.UserService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;

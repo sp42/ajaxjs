@@ -17,7 +17,6 @@ import com.ajaxjs.cms.user.User;
 import com.ajaxjs.cms.user.UserCommonAuth;
 import com.ajaxjs.cms.user.UserDict;
 import com.ajaxjs.cms.user.UserLoginLog;
-import com.ajaxjs.cms.user.UserLoginLogAdminController;
 import com.ajaxjs.cms.user.service.UserConstant;
 import com.ajaxjs.cms.user.service.UserService;
 import com.ajaxjs.cms.utils.sms.SMS;
@@ -128,9 +127,9 @@ public abstract class AbstractLoginController extends BaseUserController {
 		UserLoginLog userLoginLog = new UserLoginLog();
 		userLoginLog.setUserId(user.getId());
 		userLoginLog.setLoginType(UserDict.PASSWORD);
-		UserLoginLogAdminController.initBean(userLoginLog, request);
+		LoginLogController.initBean(userLoginLog, request);
 		
-		if (UserLoginLogAdminController.service.create(userLoginLog) <= 0) {
+		if (LoginLogController.service.create(userLoginLog) <= 0) {
 			LOGGER.warning("更新会员登录日志出错");
 		}
 

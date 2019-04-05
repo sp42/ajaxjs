@@ -20,6 +20,7 @@ import java.util.function.Function;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.MapTool;
@@ -168,18 +169,24 @@ public class QueryParams {
 
 	/**
 	 * 
+	 * @return 返回 null 而不是空 sqlHandler
+	 */
+	public static QueryParams init() {
+		Map<String, String[]> requestData = MvcRequest.getHttpServletRequest().getParameterMap();
+		return requestData.size() > 0 ? new QueryParams(requestData) : null;
+	}
+
+	/**
+	 * 
 	 * @param req
 	 * @return
 	 */
 	public static Function<String, String> initSqlHandler(HttpServletRequest req) {
 		Map<String, String[]> requestData = req.getParameterMap();
-		
-		return sql -> {
-			if (requestData.size() > 0) {
-				return new QueryParams(requestData).addWhereToSql(sql);
-			} else {
-				return sql;
-			}
-		};
+		return initSqlHandler(new QueryParams(requestData));
+	}
+
+	public static Function<String, String> initSqlHandler(QueryParams qs) {
+		return sql -> qs == null ? sql : qs.addWhereToSql(sql);
 	}
 }

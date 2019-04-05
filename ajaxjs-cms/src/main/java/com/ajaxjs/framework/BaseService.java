@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.JdbcHelper;
@@ -116,6 +117,11 @@ public abstract class BaseService<T> implements IBaseService<T> {
 	@Override
 	public PageResult<T> findPagedList(int start, int limit) {
 		return dao.findPagedList(start, limit);
+	}
+	
+	@Override
+	public PageResult<T> findPagedList(int start, int limit, Function<String, String> sqlHandler) {
+		return dao.findPagedList(start, limit, sqlHandler);
 	}
 
 	private String uiName;
