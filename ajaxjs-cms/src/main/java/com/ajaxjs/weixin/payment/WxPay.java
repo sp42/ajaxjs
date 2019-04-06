@@ -3,10 +3,14 @@ package com.ajaxjs.weixin.payment;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.ajaxjs.net.http.Client;
+import com.ajaxjs.shop.ShopHelper;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.MapTool;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.weixin.CommonWxUtil;
+import com.ajaxjs.weixin.mini_app.MiniApp;
 
 /**
  * 支付方法
@@ -18,11 +22,11 @@ public class WxPay implements PayConstant {
 	private static final LogHelper LOGGER = LogHelper.getLog(WxPay.class);
 
 	/**
-	 * 统一下单请
+	 * 生成统一下单用的信息
 	 * 
-	 * @param order
+	 * @param order 订单对象
 	 * @param perpayInfo
-	 * @return
+	 * @return 统一下单用的信息
 	 */
 	public static Map<String, String> unifiedOrder(OrderInfo order, PerpayInfo perpayInfo) {
 		LOGGER.info("微信统一下单请求交易开始");
@@ -51,7 +55,7 @@ public class WxPay implements PayConstant {
 		data.put("out_trade_no", order.getOrderNo());
 
 		// 标价金额 total_fee 是 Int 88 订单总金额，单位为分，详见支付金额 默认单位为分，系统是元，所以需要*100
-		data.put("total_fee", PaySignatures.toCent(order.getTotalPrice()));
+		data.put("total_fee", ShopHelper.toCent(order.getTotalPrice()));
 
 		// 终端IP spbill_create_ip 是 String(16) 123.12.12.123
 		// APP和网页支付提交用户端ip，Native支付填调用微信支付API的机器IP。
@@ -91,7 +95,7 @@ public class WxPay implements PayConstant {
 
 		/** 以下五个参数，在 this.fillRequestData 方法中会自动赋值 **/
 		// 小程序ID appid 是 String(32) wxd678efh567hg6787 微信分配的小程序ID
-		data.put("appid", CommonWxUtil.getAppId());
+		data.put("appid", MiniApp.getAppId());
 		// 商户号 mch_id 是 String(32) 1230000109 微信支付分配的商户号
 		data.put("mch_id", PaySignatures.getMchId());
 		// 随机字符串 nonce_str 是 String(32) 随机字符串，长度要求在32位以内。
@@ -102,5 +106,35 @@ public class WxPay implements PayConstant {
 		data.put("sign", PaySignatures.generateSignature(data, PaySignatures.getMchSecretId()));
 
 		return data;
+	}
+
+	/**
+	 * 获取 perpayid
+	 * 
+	 * @param map
+	 * @return
+	 */
+	public static PerpayReturn sendUnifiedOrder(Map<String, String> map) {
+		String xml = MapTool.mapToXml(map);
+//		LOGGER.info(" 请求 perpayid" + xml);
+
+		String result = Client.POST(PayConstant.unifiedorderUrl, xml);
+		LOGGER.info(" 获取 perpayid 结果" + result);
+
+		Map<String, String> resultMap = MapTool.xmlToMap(result);
+
+		PerpayReturn perpayReturn = MapTool.map2Bean(MapTool.as(resultMap, v -> v == null ? null : (Object) v), PerpayReturn.class);
+
+		return perpayReturn;
+	}
+
+	/**
+	 * 
+	 * @param orderInfo
+	 * @param perpayInfo
+	 * @return
+	 */
+	public static PerpayReturn sendUnifiedOrder(OrderInfo orderInfo, PerpayInfo perpayInfo) {
+		return sendUnifiedOrder(unifiedOrder(orderInfo, perpayInfo));
 	}
 }

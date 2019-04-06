@@ -6,7 +6,7 @@ import java.util.Map;
 import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.net.http.NetUtil;
 import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.weixin.CommonWxUtil;
+import com.ajaxjs.weixin.mini_app.MiniApp;
 
 /**
  * {"access_token":"ACCESS_TOKEN","expires_in":7200}
@@ -66,7 +66,7 @@ public class AccessToken {
 	 * @return
 	 */
 	public static AccessToken miniP_factory() {
-		String appId = CommonWxUtil.getAppId(), appSecret = CommonWxUtil.getAppSecret();
+		String appId = MiniApp.getAppId(), appSecret = MiniApp.getAppSecret();
 		return new AccessToken(appId, appSecret);
 	}
 

@@ -1,6 +1,5 @@
 package com.ajaxjs.weixin.payment;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +8,7 @@ import java.util.Set;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.weixin.CommonWxUtil;
+import com.ajaxjs.weixin.mini_app.MiniApp;
 
 public final class PaySignatures implements PayConstant {
 
@@ -28,17 +28,6 @@ public final class PaySignatures implements PayConstant {
 	 */
 	public static String getMchSecretId() {
 		return ConfigService.getValueAsString("mini_program.MchSecretId");
-	}
-	
-
-	/**
-	 * 转换为分的字符串
-	 * 
-	 * @param price 单位是元
-	 * @return 分的字符串
-	 */
-	public static String toCent(BigDecimal price) {
-		return String.valueOf(price.multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP).intValue());
 	}
 
 	/**
@@ -79,7 +68,7 @@ public final class PaySignatures implements PayConstant {
 	 */
 	public static Map<String, String> getPayParam(String perpayId, String nonceStr) {
 		Map<String, String> map = new HashMap<>();
-		map.put("appId", CommonWxUtil.getAppId());
+		map.put("appId", MiniApp.getAppId());
 		map.put("timeStamp", CommonWxUtil.getTimeStamp());
 		map.put("nonceStr", CommonWxUtil.getNonceStr());
 		map.put("package", "prepay_id=" + perpayId);

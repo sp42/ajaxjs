@@ -2,8 +2,6 @@ package com.ajaxjs.weixin;
 
 import java.util.Random;
 
-import com.ajaxjs.config.ConfigService;
-
 public class CommonWxUtil {
 
 	/**
@@ -36,24 +34,6 @@ public class CommonWxUtil {
 
 	public static String getNonceStr() {
 		return getNonceStr(10);
-	}
-
-	/**
-	 * 返回 App Id
-	 * 
-	 * @return
-	 */
-	public static String getAppId() {
-		return ConfigService.getValueAsString("mini_program.AppId");
-	}
-
-	/**
-	 * 返回 App 密钥
-	 * 
-	 * @return
-	 */
-	public static String getAppSecret() {
-		return ConfigService.getValueAsString("mini_program.AppSecret");
 	}
 
 }
