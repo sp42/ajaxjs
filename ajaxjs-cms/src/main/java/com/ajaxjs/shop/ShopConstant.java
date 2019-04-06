@@ -53,4 +53,19 @@ public interface ShopConstant {
 			put(PAYED_OFFLINE, "线下付款已收款");
 		}
 	};
+	
+	public static final int RELEASED = 1;
+	public static final int NOT_RELEASE = 2;
+	public static final int DONE = 3;
+	public static final int CANCELLED = 4;
+
+	public static final Map<Integer, String> GroupStatus = new HashMap<Integer, String>() {
+		private static final long serialVersionUID = -1L;
+		{
+			put(RELEASED, "发布");
+			put(NOT_RELEASE, "未发布");
+			put(DONE, "团成");
+			put(CANCELLED, "未团成");
+		}
+	};
 }

@@ -245,6 +245,12 @@ public abstract class BaseController<T> implements IController, Constant {
 		return Constant.jsonOk_Extension("分页列表", "\"result\":" + jsonStr + ",\"total\":" + total);
 	}
 
+	/**
+	 * 
+	 * @param obj
+	 * @param isAdd 是否添加生成 json 的前缀 json::
+	 * @return
+	 */
 	public static String toJson(Object obj, boolean isAdd) {
 		String jsonStr = JsonHelper.toJson(obj);
 		return isAdd ? "json::{\"result\":" + jsonStr + "}" : jsonStr;

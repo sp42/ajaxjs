@@ -118,7 +118,7 @@ public abstract class BaseService<T> implements IBaseService<T> {
 	public PageResult<T> findPagedList(int start, int limit) {
 		return dao.findPagedList(start, limit);
 	}
-	
+
 	@Override
 	public PageResult<T> findPagedList(int start, int limit, Function<String, String> sqlHandler) {
 		return dao.findPagedList(start, limit, sqlHandler);
@@ -157,4 +157,13 @@ public abstract class BaseService<T> implements IBaseService<T> {
 		this.shortName = shortName;
 	}
 
+	/**
+	 * 生成查询表达式的高阶函数
+	 * 
+	 * @param eq
+	 * @return
+	 */
+	public static Function<String, String> addWhere(String eq) {
+		return sql -> sql + " WHERE " + eq;
+	}
 }
