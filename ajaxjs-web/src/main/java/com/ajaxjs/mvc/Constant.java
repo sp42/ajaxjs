@@ -32,6 +32,8 @@ public interface Constant {
 	
 	public static final String limit = "limit";
 	
+	public static final String id = "id";
+	
 	public static final String catelogId = "catelogId";
 
 	/**
