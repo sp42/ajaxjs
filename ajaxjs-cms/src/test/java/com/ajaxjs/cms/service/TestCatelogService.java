@@ -10,33 +10,33 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ajaxjs.cms.ArticleService;
-import com.ajaxjs.cms.app.catelog.Catelog;
-import com.ajaxjs.cms.app.catelog.CatelogService;
+import com.ajaxjs.cms.app.catalog.Catalog;
+import com.ajaxjs.cms.app.catalog.CatalogService;
 import com.ajaxjs.cms.utils.CmsUtils;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.orm.JdbcConnection;
 
 public class TestCatelogService {
-	static CatelogService catalogService;
+	static CatalogService catalogService;
 
 	@BeforeClass
 	public static void initDb() {
 		CmsUtils.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
-		catalogService = (CatelogService) BeanContext.getBean("CatelogService");
+		catalogService = (CatalogService) BeanContext.getBean("CatelogService");
 	}
 
 	// @Test
 	public void test() {
 		assertNotNull(catalogService);
 
-		Catelog c = new Catelog();
+		Catalog c = new Catalog();
 		c.setName("foot2222");
 		c.setPid(12);
 
 		assertNotNull(catalogService.create(c));
 
-		c = new Catelog();
+		c = new Catalog();
 		c.setName("bar2222");
 		c.setPid(14);
 
@@ -47,13 +47,13 @@ public class TestCatelogService {
 
 	@Test
 	public void create() {
-		Catelog c;
-		c = new Catelog();
+		Catalog c;
+		c = new Catalog();
 		c.setPid(-1);
 		c.setName("test");
 		assertNotNull(catalogService.create(c));
 
-		c = new Catelog();
+		c = new Catalog();
 		c.setPid(119);
 		c.setName("test-sub");
 		assertNotNull(catalogService.create(c));
@@ -61,7 +61,7 @@ public class TestCatelogService {
 
 	@Test
 	public void testGetAllListByParentId() {
-		CatelogService catalogService = (CatelogService) BeanContext.getBean("CatelogService");
+		CatalogService catalogService = (CatalogService) BeanContext.getBean("CatelogService");
 		catalogService.findAllListByParentId(12);
 
 		ArticleService articleService = (ArticleService) BeanContext.getBean("ArticleService");
