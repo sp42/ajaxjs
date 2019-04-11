@@ -5,17 +5,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.cms.app.catelog.Catelog;
-import com.ajaxjs.cms.app.catelog.CatelogService;
-import com.ajaxjs.cms.app.catelog.CatelogServiceImpl;
-import com.ajaxjs.cms.app.catelog.Catelogable;
+import com.ajaxjs.cms.app.catalog.Catalog;
+import com.ajaxjs.cms.app.catalog.CatalogService;
+import com.ajaxjs.cms.app.catalog.CatalogServiceImpl;
+import com.ajaxjs.cms.app.catalog.Catalogable;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Resource;
 
-public class DomainEntityService extends BaseService<Map<String, Object>> implements Catelogable<Map<String, Object>> {
+public class DomainEntityService extends BaseService<Map<String, Object>> implements Catalogable<Map<String, Object>> {
 	public DomainEntityDao dao;
 
 	public DomainEntityService(String tableName) {
@@ -78,13 +78,13 @@ public class DomainEntityService extends BaseService<Map<String, Object>> implem
 	}
 
 	@Resource("CatelogService")
-	CatelogService catelogService = new CatelogServiceImpl();
+	CatalogService catelogService = new CatalogServiceImpl();
 
 	public Map<Integer, String> getDomainCatelogMap() {
-		List<Catelog> catelogList = catelogService.findByParentId(6);
+		List<Catalog> catelogList = catelogService.findByParentId(6);
 		Map<Integer, String> catelogMap = new HashMap<>();
 
-		for (Catelog c : catelogList) {
+		for (Catalog c : catelogList) {
 			catelogMap.put(c.getId().intValue(), c.getName());
 		}
 
