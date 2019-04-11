@@ -171,10 +171,10 @@ public class PageResult<T> extends ArrayList<T> {
 //			countSql = sql.replaceAll("SELECT.*FROM", "SELECT COUNT(\\*) AS count FROM");
 		} else {
 			countSql = Repository.isSqlite(select.sqliteCountSql(), conn) ? select.sqliteCountSql() : select.countSql();
-		}
-
-		if (sqlHandler != null) { // 为什么要重复执行一次？
-//			countSql = sqlHandler.apply(countSql);
+			
+			if (sqlHandler != null) { // 如果有注解分页的要重复执行一次？
+				countSql = sqlHandler.apply(countSql);
+			}
 		}
 
 		countSql = dao.handleSql(countSql, null);

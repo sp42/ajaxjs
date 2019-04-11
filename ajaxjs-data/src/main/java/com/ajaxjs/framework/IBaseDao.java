@@ -25,10 +25,9 @@ public interface IBaseDao<T> {
 	 * 简单关联 catelog 表，注意表名称 alies 为 gc
 	 */
 	public final static String catelog_simple_join = " LEFT JOIN general_catelog gc ON gc.id = entry.catelogId ";
-	
-	public final static String pathLike_mysql  = " FROM general_catelog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catelog WHERE id = ? ) , '%'))";
+
+	public final static String pathLike_mysql = " FROM general_catelog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catelog WHERE id = ? ) , '%'))";
 	public final static String pathLike_sqlite = " FROM general_catelog WHERE `path` LIKE ( (SELECT `path` FROM general_catelog WHERE id = ? ) || '%')";
-	 
 
 	/**
 	 * 用于 catelogId 查询的，通常放在 LEFT JOIN 后面还需要，WHERE e.catelog = c.id。 还需要预留一个
@@ -40,10 +39,18 @@ public interface IBaseDao<T> {
 	/**
 	 * IN 查询用
 	 */
-	public final static String catelog_find =        "(SELECT id " + pathLike_mysql + ")";
+	public final static String catelog_find = "(SELECT id " + pathLike_mysql + ")";
 	public final static String catelog_find_sqlite = "(SELECT id " + pathLike_sqlite + ")";
 
 	// ---------------- find one-------------------
+	/**
+	 * 查询单个记录。如果找不到则返回 null
+	 * 
+	 * @param doSql 查找的条件
+	 * @return Bean
+	 */
+	@Select("SELECT * FROM ${tableName}")
+	public T find(Function<String, String> doSql);
 
 	/**
 	 * 查询单个记录。如果找不到则返回 null
@@ -104,11 +111,10 @@ public interface IBaseDao<T> {
 	 */
 	@Select("SELECT * FROM ${tableName}")
 	public List<T> findList();
-	
-	
+
 	@Select("SELECT * FROM ${tableName}")
 	public List<T> findList(Function<String, String> doSql);
-	
+
 	@Select("SELECT entry.*, " + selectCover + " AS cover FROM ${tableName} entry")
 	public List<T> findList_Cover(Function<String, String> doSql);
 
@@ -129,7 +135,7 @@ public interface IBaseDao<T> {
 	 */
 	@Select("SELECT * FROM ${tableName} ORDER BY id DESC")
 	public PageResult<T> findPagedList(int start, int limit);
-	
+
 	@Select("SELECT * FROM ${tableName} WHERE 1 = 1 ORDER BY id DESC")
 	public PageResult<T> findPagedList(int start, int limit, Function<String, String> doSql);
 
@@ -220,8 +226,8 @@ public interface IBaseDao<T> {
 			+ "ON entry.`catelogId` = c.id  WHERE 1 = 1 ORDER BY id DESC", countSql = "SELECT COUNT(entry.id) AS count FROM ${tableName} entry WHERE catelogId IN " + catelog_find + " AND 1 = 1",
 
 			sqliteValue = "SELECT entry.*, catelogName, " + selectCover + " AS cover FROM ${tableName} entry INNER JOIN " + catelog_finById_sqlite
-					+ " ON entry.`catelogId` = c.catelogId WHERE 1 = 1 ORDER BY id DESC", 
-			sqliteCountSql = "SELECT COUNT(entry.id) AS count FROM ${tableName} entry WHERE catelogId IN " + catelog_find_sqlite + " AND 1 = 1")
+					+ " ON entry.`catelogId` = c.catelogId WHERE 1 = 1 ORDER BY id DESC", sqliteCountSql = "SELECT COUNT(entry.id) AS count FROM ${tableName} entry WHERE catelogId IN " + catelog_find_sqlite
+							+ " AND 1 = 1")
 	public PageResult<T> findPagedListByCatelogId_Cover(int catelogId, int start, int limit);
 
 	// ---------------- create、update、delete------------------
