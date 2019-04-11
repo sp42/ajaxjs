@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.app.catelog;
+package com.ajaxjs.cms.app.catalog;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;

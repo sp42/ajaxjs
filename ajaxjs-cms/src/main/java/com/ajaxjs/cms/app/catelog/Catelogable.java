@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.app.catelog;
+package com.ajaxjs.cms.app.catalog;
 
 import java.util.List;
 
