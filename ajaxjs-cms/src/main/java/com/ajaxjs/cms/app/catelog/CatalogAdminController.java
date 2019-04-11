@@ -20,9 +20,9 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 
 @Path("/admin/catelog")
 @Bean("CatelogAdminController")
-public class CatelogAdminController extends BaseController<Catelog> {
+public class CatalogAdminController extends BaseController<Catalog> {
 	@Resource("CatelogService")
-	private CatelogService service;
+	private CatalogService service;
  
 	@GET
 	@Path("list")
@@ -56,7 +56,7 @@ public class CatelogAdminController extends BaseController<Catelog> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String create(Catelog entity) {
+	public String create(Catalog entity) {
 		return super.create(entity);
 	}
 
@@ -65,7 +65,7 @@ public class CatelogAdminController extends BaseController<Catelog> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, Catelog entity) {
+	public String update(@PathParam("id") Long id, Catalog entity) {
 		return super.update(id, entity);
 	}
 
@@ -74,11 +74,11 @@ public class CatelogAdminController extends BaseController<Catelog> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String delete(@PathParam("id") Long id) {
-		return delete(id, new Catelog());
+		return delete(id, new Catalog());
 	}
 
 	@Override
-	public IBaseService<Catelog> getService() {
+	public IBaseService<Catalog> getService() {
 		return service;
 	}
 }

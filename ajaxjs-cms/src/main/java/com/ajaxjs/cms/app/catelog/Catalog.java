@@ -8,7 +8,7 @@ import com.ajaxjs.framework.BaseModel;
  * @author Sp42 frank@ajaxjs.com
  *
  */
-public class Catelog extends BaseModel {
+public class Catalog extends BaseModel {
 
 	private static final long serialVersionUID = 7052077804355019403L;
 

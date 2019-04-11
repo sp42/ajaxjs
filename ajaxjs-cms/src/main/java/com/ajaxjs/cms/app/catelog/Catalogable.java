@@ -11,7 +11,7 @@ import com.ajaxjs.framework.PageResult;
  *
  * @param <T> 实体类型
  */
-public interface Catelogable<T> {
+public interface Catalogable<T> {
 	/**
 	 * 获取指定类别的数据
 	 * 

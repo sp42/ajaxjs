@@ -9,14 +9,14 @@ import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
 
-@TableName(value = "general_catelog", beanClass = Catelog.class)
-public interface CatelogDao extends IBaseDao<Catelog> {
+@TableName(value = "general_catelog", beanClass = Catalog.class)
+public interface CatalogDao extends IBaseDao<Catalog> {
 	/**
 	 * 父id 必须在子id之前，不然下面 findParent() 找不到后面的父节点，故先排序. 前端排序的话 chrom 有稳定排序的问题，故放在后端排序
 	 */
 	@Select(value = "SELECT * FROM ${tableName} ORDER BY pid ")
 	@Override
-	public PageResult<Catelog> findPagedList(int start, int limit);
+	public PageResult<Catalog> findPagedList(int start, int limit);
 	
 	
 	/**
@@ -38,7 +38,7 @@ public interface CatelogDao extends IBaseDao<Catelog> {
 	 * @return
 	 */
 	@Select(value = "SELECT * FROM ${tableName} WHERE pid = ?")
-	public List<Catelog> getListByParentId(int parentId);
+	public List<Catalog> getListByParentId(int parentId);
 	
 	/**
 	 * 获取下一级和下下一级，一共只获取这两级
@@ -66,5 +66,5 @@ public interface CatelogDao extends IBaseDao<Catelog> {
 			"		general_catelog" + 
 			"	WHERE" + 
 			"		id = ? ) || '%')")
-	public List<Catelog> getAllListByParentId(int parentId);
+	public List<Catalog> getAllListByParentId(int parentId);
 }

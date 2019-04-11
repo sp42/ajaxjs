@@ -5,14 +5,14 @@ import java.util.Map;
 
 import com.ajaxjs.framework.IBaseService;
 
-public interface CatelogService extends IBaseService<Catelog> {
+public interface CatalogService extends IBaseService<Catalog> {
 	/**
 	 * 获取所有分类
 	 * 
 	 * @param param
 	 * @return
 	 */
-	public List<Catelog> findAll();
+	public List<Catalog> findAll();
 
 	/**
 	 * 根据父 id 获取下一层的子分类列表，获取直接一层的分类。
@@ -21,7 +21,7 @@ public interface CatelogService extends IBaseService<Catelog> {
 	 * @return 子分类列表
 	 * @throws ServiceException
 	 */
-	public List<Catelog> findByParentId(int id);
+	public List<Catalog> findByParentId(int id);
 
 	/**
 	 * 根据父 id 获取所有的子id列表（可以不包含父节点），不管多少层
@@ -30,7 +30,7 @@ public interface CatelogService extends IBaseService<Catelog> {
 	 * @param isWithParent 是否需要连同父节点一起返回
 	 * @return 所有的子id列表
 	 */
-	public List<Catelog> findAllListByParentId(int parentId, boolean isWithParent);
+	public List<Catalog> findAllListByParentId(int parentId, boolean isWithParent);
 
 	/**
 	 * 根据父 id 获取所有的子id列表（包含父节点），不管多少层
@@ -38,7 +38,7 @@ public interface CatelogService extends IBaseService<Catelog> {
 	 * @param parentId 父 id
 	 * @return
 	 */
-	public List<Catelog> findAllListByParentId(int parentId);
+	public List<Catalog> findAllListByParentId(int parentId);
 
 	/**
 	 * 获取下一级和下下一级，一共只获取这两级
