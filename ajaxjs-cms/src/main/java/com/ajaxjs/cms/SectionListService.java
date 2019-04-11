@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.ajaxjs.cms.app.catelog.Catelogable;
+import com.ajaxjs.cms.app.catalog.Catalogable;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
@@ -22,7 +22,7 @@ import com.ajaxjs.util.CommonUtil;
  * @author Frank Cheung
  *
  */
-public abstract class SectionListService extends BaseService<SectionList> implements Catelogable<SectionList> {
+public abstract class SectionListService extends BaseService<SectionList> implements Catalogable<SectionList> {
 
 	@TableName(value = "section_list", beanClass = SectionList.class)
 	public interface SectionListDao extends IBaseDao<SectionList> {

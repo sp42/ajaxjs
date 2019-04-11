@@ -3,7 +3,7 @@ package com.ajaxjs.cms;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.cms.app.catelog.Catelogable;
+import com.ajaxjs.cms.app.catalog.Catalogable;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
@@ -13,7 +13,7 @@ import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.annotation.TableName;
 
 @Bean(value = "ArticleService")
-public class ArticleService extends BaseService<Map<String, Object>> implements Catelogable<Map<String, Object>> {
+public class ArticleService extends BaseService<Map<String, Object>> implements Catalogable<Map<String, Object>> {
 	@TableName(value = "entity_article", beanClass = Map.class)
 	public interface ArticleDao extends IBaseDao<Map<String, Object>> {
 	}

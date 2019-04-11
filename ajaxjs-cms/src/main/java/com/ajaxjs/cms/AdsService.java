@@ -2,7 +2,7 @@ package com.ajaxjs.cms;
 
 import java.util.List;
 
-import com.ajaxjs.cms.app.catelog.Catelogable;
+import com.ajaxjs.cms.app.catalog.Catalogable;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
@@ -12,7 +12,7 @@ import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.annotation.TableName;
 
 @Bean("AdsService")
-public class AdsService extends BaseService<Ads> implements Catelogable<Ads> {
+public class AdsService extends BaseService<Ads> implements Catalogable<Ads> {
 
 	@TableName(value = "entity_ads", beanClass = Ads.class)
 	public interface AdsDao extends IBaseDao<Ads> {
