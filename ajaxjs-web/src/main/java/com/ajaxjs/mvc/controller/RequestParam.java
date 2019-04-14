@@ -31,6 +31,7 @@ import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.mvc.ModelAndView;
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.MapTool;
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.logger.LogHelper;
@@ -152,6 +153,9 @@ public class RequestParam {
 		value = a instanceof HeaderParam ? request.getHeader(key) : request.getParameter(key);
 
 		if (required && value == null)
+			throw new NullPointerException("客户端缺少提交的参数 " + key);
+		
+		if (required && CommonUtil.isEmptyString(value))
 			throw new NullPointerException("客户端缺少提交的参数 " + key);
 
 		return value;

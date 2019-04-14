@@ -11,7 +11,6 @@
 	"data": {
 		"articleCatalog_Id": 15,
 		"hrCatalog_Id": 112,
-		"bankCatelog_Id": 90,
 		"loanCatalog_Id": 60,
 		"adsCatalog_Id" : 122,
 		"database_node": null

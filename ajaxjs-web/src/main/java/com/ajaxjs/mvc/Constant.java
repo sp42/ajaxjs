@@ -34,7 +34,7 @@ public interface Constant {
 	
 	public static final String id = "id";
 	
-	public static final String catelogId = "catelogId";
+	public static final String catalogId = "catelogId";
 
 	/**
 	 * 文档显示用
