@@ -77,11 +77,11 @@ public class DomainEntityService extends BaseService<Map<String, Object>> implem
 		return data;
 	}
 
-	@Resource("CatelogService")
-	CatalogService catelogService = new CatalogServiceImpl();
+	@Resource("闪亮杯国际少儿音乐大赛")
+	CatalogService catalogService = new CatalogServiceImpl();
 
 	public Map<Integer, String> getDomainCatelogMap() {
-		List<Catalog> catelogList = catelogService.findByParentId(6);
+		List<Catalog> catelogList = catalogService.findByParentId(6);
 		Map<Integer, String> catelogMap = new HashMap<>();
 
 		for (Catalog c : catelogList) {

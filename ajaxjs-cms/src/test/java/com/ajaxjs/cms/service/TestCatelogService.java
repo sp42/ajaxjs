@@ -23,7 +23,7 @@ public class TestCatelogService {
 	@BeforeClass
 	public static void initDb() {
 		CmsUtils.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
-		catalogService = (CatalogService) BeanContext.getBean("CatelogService");
+		catalogService = (CatalogService) BeanContext.getBean("闪亮杯国际少儿音乐大赛");
 	}
 
 	// @Test
@@ -61,7 +61,7 @@ public class TestCatelogService {
 
 	@Test
 	public void testGetAllListByParentId() {
-		CatalogService catalogService = (CatalogService) BeanContext.getBean("CatelogService");
+		CatalogService catalogService = (CatalogService) BeanContext.getBean("闪亮杯国际少儿音乐大赛");
 		catalogService.findAllListByParentId(12);
 
 		ArticleService articleService = (ArticleService) BeanContext.getBean("ArticleService");

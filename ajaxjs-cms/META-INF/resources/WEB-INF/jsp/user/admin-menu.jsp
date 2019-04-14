@@ -35,6 +35,7 @@
 		<li><a target="iframepage" href="${ctx}/admin/cart/list/">购物车一览</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/user/address/list/">地址薄一览</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/seller/list/">商家管理</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/bookmark/list/">收藏一览</a></li>
 	</ul>
 </li>
 	<%}%>
@@ -77,7 +78,6 @@
 	<h3>用户管理</h3>
 	<ul>
 		<li><a target="iframepage" href="${ctx}/admin/user/list/">用户管理</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/bookmark/list/">用户收藏</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/userLoginLog/">登录日志</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/userGlobalLog/">操作日志</a></li>
 	<%if(RightConstant.check(privilegeTotal, RightConstant.USER_PRIVILEGE)){ %>

@@ -28,7 +28,7 @@ public class PrivilegeController extends BaseController<Privilege> {
 	@GET
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(catelogId) int catelogId, @QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+	public String list(@QueryParam(catalogId) int catelogId, @QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
 		return toJson(service.getDao().findList());
 	}
 

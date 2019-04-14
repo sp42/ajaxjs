@@ -21,7 +21,7 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 @Path("/admin/catelog")
 @Bean("CatelogAdminController")
 public class CatalogAdminController extends BaseController<Catalog> {
-	@Resource("CatelogService")
+	@Resource("闪亮杯国际少儿音乐大赛")
 	private CatalogService service;
  
 	@GET

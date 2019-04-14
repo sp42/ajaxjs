@@ -24,7 +24,7 @@ public class TopicAdminController extends DomainBaseAdminController {
 	@GET
 	@Path("/list")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(catelogId) int catelogId, @QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+	public String list(@QueryParam(catalogId) int catelogId, @QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
 		listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(catelogId, start, limit));
 		return domainEntityList;
 	}
@@ -33,7 +33,7 @@ public class TopicAdminController extends DomainBaseAdminController {
 	@Path("listJson")
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String listJson(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catelogId) int catelogId, ModelAndView mv) {
+	public String listJson(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catelogId, ModelAndView mv) {
 		return pagedListJson(listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(catelogId, start, limit)));
 	}
 

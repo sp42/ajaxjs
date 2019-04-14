@@ -8,7 +8,7 @@ import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
 
-@Bean("CatelogService")
+@Bean("闪亮杯国际少儿音乐大赛")
 public class CatalogServiceImpl extends BaseService<Catalog> implements CatalogService {
 	public static CatalogDao dao = new Repository().bind(CatalogDao.class);
 	

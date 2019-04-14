@@ -23,7 +23,7 @@ public class HrAdminController extends DomainBaseAdminController {
 	@GET
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catelogId) int catelogId, ModelAndView mv) {
+	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catelogId, ModelAndView mv) {
 		if (catelogId == 0) 
 			catelogId = service.getDomainCatelogId(); // 不指定实体的子分类
 

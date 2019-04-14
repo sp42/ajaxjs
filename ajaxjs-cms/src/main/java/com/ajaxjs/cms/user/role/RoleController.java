@@ -33,7 +33,7 @@ public class RoleController extends BaseController<Map<String, Object>> {
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String list(@QueryParam(catelogId) int catelogId, @QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+	public String list(@QueryParam(catalogId) int catelogId, @QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
 		return toJson(service.getDao().findList());
 	}
 
