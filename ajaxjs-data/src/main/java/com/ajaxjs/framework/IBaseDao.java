@@ -185,7 +185,7 @@ public interface IBaseDao<T> {
 	 * @param limit
 	 * @return 实体分页列表
 	 */
-	@Select("SELECT id, name, createDate, updateDate, " + selectCover + " AS cover FROM ${tableName} entry")
+	@Select("SELECT id, name, createDate, updateDate, " + selectCover + " AS cover FROM ${tableName} entry ORDER BY id DESC")
 	public PageResult<T> findPagedList_Cover(int start, int limit);
 
 	/**

@@ -259,5 +259,17 @@ public class User extends BaseModel {
 	public Integer getRoleId() {
 		return roleId;
 	}
-
+	
+	public static String getSexText(int sex) {
+		if(sex == 1)
+			return "男";
+		else if(sex == 2)
+			return "女";
+		else
+			return "未知";
+	}
+	
+	public String getSexText() {
+		return getSexText(getSex());
+	}
 }

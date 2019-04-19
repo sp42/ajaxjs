@@ -32,9 +32,9 @@
 		<li><a target="iframepage" href="${ctx}/admin/goods/list/">商品管理</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/simple-group/list/">团购管理</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/order/list/">订单管理</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/seller/list/">商家管理</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/cart/list/">购物车一览</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/user/address/list/">地址薄一览</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/seller/list/">商家管理</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/bookmark/list/">收藏一览</a></li>
 	</ul>
 </li>

@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -33,6 +34,14 @@ public abstract class AbstractUserCenterController extends BaseUserController {
 	@Path("/info")
 	@MvcFilter(filters = { LoginCheck.class })
 	public String info() {
+		return jsp("user/info");
+	}
+	
+	@GET
+	@Path("/info/{id}")
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class  })
+	public String info2(@PathParam("id")Long userId, ModelAndView mv) {
+		mv.put("info", getService().findById(userId));
 		return jsp("user/info");
 	}
 

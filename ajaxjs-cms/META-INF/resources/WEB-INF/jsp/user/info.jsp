@@ -6,15 +6,14 @@
 	<jsp:param name="lessFile" value="/asset/less/admin.less" />
 </jsp:include>
 </head>
+<%!
+
+%>
 <body>
 	<div class="center userCenter">
 		<%@include file="user-center-menu.jsp"%>
-		
-		
 		<div class="right">
-			
 			<h3 class="jb">会员信息</h3>
-
 			<form class="user-form">
 				<div class="formBox">
 					<br /> <br />
@@ -34,16 +33,20 @@
 					</div>
 					<dl>
 						<label>
-							<dt>用户名</dt>
-							<dd>${userName}</dd>
+							<dt>用户 id</dt>
+							<dd>${empty info ? userId : info.id}</dd>
+						</label>
+						<label>
+							<dt>用户账户名</dt>
+							<dd>${empty info ? name : info.name}</dd>
 						</label>
 						<label>
 							<dt>用户姓名</dt>
-							<dd>${user.name}</dd>
+							<dd>${empty info ? userName : info.username}</dd>
 						</label>
 						<label>
 							<dt>用户性别</dt>
-							<dd>${user.sex  == 1 ?'男':'女'}</dd>
+							<dd>${empty info ? (user.sex == 1 ?'男': (user.sex == 2 ?'女':'未知')) : info.getSexText()}</dd>
 						</label>
 						<label>
 							<dt>出生日期</dt>

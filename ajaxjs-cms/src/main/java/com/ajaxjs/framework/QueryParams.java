@@ -106,8 +106,10 @@ public class QueryParams {
 		}
 
 		if (search != null) {
-			for (String key : search.keySet())
+			for (String key : search.keySet()) {
+				System.out.println(key);
 				wheres.add(key + " LIKE '%" + Encode.urlChinese(search.get(key).toString()) + "%'");
+			}
 		}
 
 		if (match != null) {

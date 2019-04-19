@@ -83,7 +83,16 @@ public class RoleService extends BaseService<Map<String, Object>> {
 		if(userGroup == null || resId == 0) 
 			throw new ServiceException("参数异常");
 		
-		long num = userGroup.get("accessKey") == null ? 0L : (long) userGroup.get("accessKey");
+		// sqlite 没有 long，郁闷
+		long num;
+		Object obj = userGroup.get("accessKey");
+		
+		if(obj== null) {
+			num = 0L;
+		} else {
+			num = obj instanceof Integer ? ((Integer) userGroup.get("accessKey")).longValue() : (long) userGroup.get("accessKey");
+		}
+
 		long newlyResRight = RightConstant.set(num, resId, isEnable);
 
 		Map<String, Object> newlyUserGroup = new HashMap<>();
