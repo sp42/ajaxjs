@@ -46,11 +46,11 @@ public interface IBaseDao<T> {
 	/**
 	 * 查询单个记录。如果找不到则返回 null
 	 * 
-	 * @param doSql 查找的条件
+	 * @param sqlHandler 查找的条件
 	 * @return Bean
 	 */
 	@Select("SELECT * FROM ${tableName}")
-	public T find(Function<String, String> doSql);
+	public T find(Function<String, String> sqlHandler);
 
 	/**
 	 * 查询单个记录。如果找不到则返回 null
@@ -113,10 +113,10 @@ public interface IBaseDao<T> {
 	public List<T> findList();
 
 	@Select("SELECT * FROM ${tableName}")
-	public List<T> findList(Function<String, String> doSql);
+	public List<T> findList(Function<String, String> sqlHandler);
 
 	@Select("SELECT entry.*, " + selectCover + " AS cover FROM ${tableName} entry")
-	public List<T> findList_Cover(Function<String, String> doSql);
+	public List<T> findList_Cover(Function<String, String> sqlHandler);
 
 	/**
 	 * 查询所有数据，只包含 id、name 两个字段
@@ -133,11 +133,12 @@ public interface IBaseDao<T> {
 	 * @param limit
 	 * @return 实体分页列表
 	 */
+	
 	@Select("SELECT * FROM ${tableName} ORDER BY id DESC")
 	public PageResult<T> findPagedList(int start, int limit);
-
+	
 	@Select("SELECT * FROM ${tableName} WHERE 1 = 1 ORDER BY id DESC")
-	public PageResult<T> findPagedList(int start, int limit, Function<String, String> doSql);
+	public PageResult<T> findPagedList(int start, int limit, Function<String, String> sqlHandler);
 
 	/**
 	 * 取头 X 笔的记录
@@ -147,26 +148,6 @@ public interface IBaseDao<T> {
 	 */
 	@Select("SELECT * FROM ${tableName} ORDER BY id DESC LIMIT ?")
 	public PageResult<T> findListTop(int top);
-
-	/**
-	 * 按照类别查询
-	 * 
-	 * @param start
-	 * @param limit
-	 * @return 实体分页列表
-	 */
-	@Select("SELECT entry.* FROM ${tableName} entry WHERE catelogId = ?")
-	public List<T> findListByCatelog(int catelogId);
-
-	/**
-	 * 按照类别查询，带封面图的
-	 * 
-	 * @param start
-	 * @param limit
-	 * @return 实体分页列表
-	 */
-	@Select("SELECT entry.*, " + selectCover + " AS cover FROM ${tableName} entry WHERE catelogId = ?")
-	public List<T> findListByCatelog_Cover(int catelogId);
 
 	/**
 	 * 显示类别名称，可分页的
@@ -228,7 +209,7 @@ public interface IBaseDao<T> {
 			sqliteValue = "SELECT entry.*, catelogName, " + selectCover + " AS cover FROM ${tableName} entry INNER JOIN " + catelog_finById_sqlite
 					+ " ON entry.`catelogId` = c.catelogId WHERE 1 = 1 ORDER BY id DESC", sqliteCountSql = "SELECT COUNT(entry.id) AS count FROM ${tableName} entry WHERE catelogId IN " + catelog_find_sqlite
 							+ " AND 1 = 1")
-	public PageResult<T> findPagedListByCatelogId_Cover(int catelogId, int start, int limit);
+	public PageResult<T> findPagedListByCatelogId_Cover(int catelogId, int start, int limit, Function<String, String> sqlHandler);
 
 	// ---------------- create、update、delete------------------
 
