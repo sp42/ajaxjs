@@ -15,7 +15,6 @@ public interface CatalogDao extends IBaseDao<Catalog> {
 	 * 父id 必须在子id之前，不然下面 findParent() 找不到后面的父节点，故先排序. 前端排序的话 chrom 有稳定排序的问题，故放在后端排序
 	 */
 	@Select(value = "SELECT * FROM ${tableName} ORDER BY pid ")
-	@Override
 	public PageResult<Catalog> findPagedList(int start, int limit);
 	
 	

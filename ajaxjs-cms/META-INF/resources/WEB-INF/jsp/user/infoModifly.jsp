@@ -11,7 +11,7 @@
 		<%@include file="user-center-menu.jsp"%>
 		
 		<div class="right">
-			<h3 class="jb">会员信息</h3>
+			<h3 class="jb">用户信息</h3>
 
 			<form class="user-form center" action="${ctx}/user/add_information"
 				method="post">

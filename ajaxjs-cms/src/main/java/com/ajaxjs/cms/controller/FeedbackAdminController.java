@@ -3,6 +3,7 @@ package com.ajaxjs.cms.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -16,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 import com.ajaxjs.cms.FeedbackService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
+import com.ajaxjs.framework.QueryParams;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
@@ -32,8 +34,8 @@ public class FeedbackAdminController extends BaseController<Map<String, Object>>
 	@GET
 	@Path("/list")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
-		listPaged(start, limit, mv);
+	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv, HttpServletRequest r) {
+		listPaged(start, limit, mv, (s, l) -> service.findPagedList(s, l, QueryParams.initSqlHandler(r)));
 		return adminListCMS();
 	}
 

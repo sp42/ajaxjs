@@ -35,7 +35,7 @@
 				<tr>
 					<th>#</th>
 					<th class="name">${uiName}名称</th>
-					<th>创建时间</th>
+					<th>留言时间</th>
 					<th>用户</th>
 					<th>用户手机</th>
 					<th>是否回复</th>
@@ -44,7 +44,7 @@
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="8"></td>
+					<td colspan="8">点击“用户”记录可以过滤显示特定的数据。</td>
 				</tr>
 			</tfoot>
 			<tbody>
@@ -59,7 +59,7 @@
 								匿名用户
 							</c:if>
 							<c:if test="${not empty current.userId}">
-								<a href="${ctx}/user/center/info/${current.userId}/">
+								<a href="?filterField=userId&filterValue=${current.userId}">
 									${ empty current.userName ? current.userNickName : current.userName}
 								</a>
 							</c:if>
@@ -67,8 +67,13 @@
 						<td>${current.phone}</td>
 						<td>${empty current.feedback ? '未回复': '已回复'}</td>
 						<td>
-							<a href="${ctx}/admin/${shortName}/${current.id}/"><img src="${commonAssetIcon}/update.gif" style="vertical-align: sub;" />编辑</a>
-							<a href="javascript:aj.admin.del('${current.id}', '${current.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>
+						<c:if test="${not empty current.userId}">
+							<a href="${ctx}/user/center/info/${current.userId}/">
+								<img src="${commonAssetIcon}/user.png" style="width:16px;vertical-align: sub;" />用户详情
+							</a>
+						</c:if>
+							<a href="${ctx}/admin/${shortName}/${current.id}/"><img src="${commonAssetIcon}/update.gif" style="vertical-align: sub;" /> 编辑</a>
+							<a href="javascript:aj.admin.del('${current.id}', '${current.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" /> 删除</a>
 						</td>
 					</tr>
 				</c:foreach>

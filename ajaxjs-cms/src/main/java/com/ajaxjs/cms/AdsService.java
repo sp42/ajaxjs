@@ -35,7 +35,7 @@ public class AdsService extends BaseService<Ads> implements Catalogable<Ads> {
 	public PageResult<Ads> findPagedListByCatelogId(int catelogId, int start, int limit) {
 		if (catelogId == 0)
 			catelogId = getDomainCatelogId();
-		return dao.findPagedListByCatelogId_Cover(catelogId, start, limit);
+		return dao.findPagedListByCatelogId_Cover(catelogId, start, limit, null);
 	}
 
 	@Override
@@ -45,6 +45,6 @@ public class AdsService extends BaseService<Ads> implements Catalogable<Ads> {
 
 	@Override
 	public List<Ads> findListByCatelogId(int catelogId) {
-		return dao.findListByCatelog_Cover(catelogId);
+		return dao.findList_Cover(BaseService.addWhere("catelogId" + catelogId));
 	}
 }

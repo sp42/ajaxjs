@@ -84,19 +84,6 @@ public class UserAdminController extends BaseController<User> {
 		return delete(id, new User());
 	}
 
-	@GET
-	@Path("address/list")
-	public String addressList(ModelAndView mv) {
-		return info("user-address");
-	}
-
-	@GET
-	@Path("{id}/address")
-	public String address(@PathParam("id") Long userId, ModelAndView mv) {
-		mv.put("userId", userId);
-		return info("user-address");
-	}
-
 	@Override
 	public IBaseService<User> getService() {
 		return service;

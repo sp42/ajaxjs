@@ -213,6 +213,22 @@ public abstract class BaseController<T> implements IController, Constant {
 		return pageResult;
 	}
 
+	@FunctionalInterface
+	static public interface PagedDao<T> {
+		public PageResult<T> d(Integer s, Integer l, Function<String, String> sqlHandler);
+	}
+
+	public <E> PageResult<E> listPaged2(int start, int limit, ModelAndView mv, PagedDao<E> findPagedListAction) {
+		LOGGER.info("获取分页列表 GET list");
+
+		prepareData(mv);
+
+		PageResult<E> pageResult = findPagedListAction.d(start, limit, null);
+		mv.put(PageResult, pageResult);
+
+		return pageResult;
+	}
+
 	public <E> PageResult<E> listPaged(int start, int limit, ModelAndView mv, IBaseService<E> service) {
 		return listPaged(start, limit, mv, service::findPagedList);
 	}
@@ -231,7 +247,7 @@ public abstract class BaseController<T> implements IController, Constant {
 		return toJson(obj, true);
 	}
 
-	public String toJson(PageResult<T> pageResult) {
+	public static String toJson(PageResult<?> pageResult) {
 		return pagedListJson(pageResult);
 	}
 

@@ -116,7 +116,7 @@ public abstract class BaseService<T> implements IBaseService<T> {
 
 	@Override
 	public PageResult<T> findPagedList(int start, int limit) {
-		return dao.findPagedList(start, limit);
+		return dao.findPagedList(start, limit, null);
 	}
 
 	@Override

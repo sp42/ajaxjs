@@ -107,8 +107,8 @@ public class QueryParams {
 
 		if (search != null) {
 			for (String key : search.keySet()) {
-				System.out.println(key);
-				wheres.add(key + " LIKE '%" + Encode.urlChinese(search.get(key).toString()) + "%'");
+//				wheres.add(key + " LIKE '%" + Encode.urlChinese(search.get(key).toString()) + "%'");
+				wheres.add(key + " LIKE '%" + search.get(key).toString() + "%'");
 			}
 		}
 
@@ -129,6 +129,8 @@ public class QueryParams {
 			} else {
 				sql += " WHERE " + c;
 			}
+			
+			wheres.clear(); // 重复执行导致没有退栈
 		}
 
 		return sql;
@@ -189,6 +191,10 @@ public class QueryParams {
 	}
 
 	public static Function<String, String> initSqlHandler(QueryParams qs) {
-		return sql -> qs == null ? sql : qs.addWhereToSql(sql);
+		System.out.println("=================");
+		return sql ->{ 
+			System.out.println(":::::::::::::::::");
+			return qs == null ? sql : qs.addWhereToSql(sql);
+		};
 	}
 }

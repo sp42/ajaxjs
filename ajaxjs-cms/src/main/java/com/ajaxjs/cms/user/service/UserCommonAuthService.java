@@ -68,7 +68,7 @@ public class UserCommonAuthService extends BaseService<UserCommonAuth> {
 
 	@Override
 	public PageResult<UserCommonAuth> findPagedList(int start, int limit) {
-		return dao.findPagedList(start, limit);
+		return dao.findPagedList(start, limit, null);
 	}
 
 	@Override

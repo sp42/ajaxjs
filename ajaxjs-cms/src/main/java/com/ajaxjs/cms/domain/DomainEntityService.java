@@ -12,8 +12,8 @@ import com.ajaxjs.cms.app.catalog.Catalogable;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.PageResult;
+import com.ajaxjs.framework.QueryParams;
 import com.ajaxjs.framework.Repository;
-import com.ajaxjs.ioc.Resource;
 
 public class DomainEntityService extends BaseService<Map<String, Object>> implements Catalogable<Map<String, Object>> {
 	public DomainEntityDao dao;
@@ -77,8 +77,7 @@ public class DomainEntityService extends BaseService<Map<String, Object>> implem
 		return data;
 	}
 
-	@Resource("闪亮杯国际少儿音乐大赛")
-	CatalogService catalogService = new CatalogServiceImpl();
+	private CatalogService catalogService = new CatalogServiceImpl();
 
 	public Map<Integer, String> getDomainCatelogMap() {
 		List<Catalog> catelogList = catalogService.findByParentId(6);
@@ -117,7 +116,7 @@ public class DomainEntityService extends BaseService<Map<String, Object>> implem
 	public PageResult<Map<String, Object>> findPagedListByCatelogId_Cover(int catelogId, int start, int limit) {
 		if (catelogId == 0)
 			catelogId = getDomainCatelogId();
-		return dao.findPagedListByCatelogId_Cover(catelogId, start, limit == 0 ? 5 : limit);
+		return dao.findPagedListByCatelogId_Cover(catelogId, start, limit == 0 ? 5 : limit, QueryParams.initSqlHandler(QueryParams.init()));
 	}
 
 	private int domainCatelogId;

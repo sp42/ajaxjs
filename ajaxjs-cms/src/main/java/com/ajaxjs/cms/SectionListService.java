@@ -159,7 +159,7 @@ public abstract class SectionListService extends BaseService<SectionList> implem
 	public PageResult<SectionList> findPagedListByCatelogId(int catelogId, int start, int limit) {
 		if (catelogId == 0)
 			catelogId = getDomainCatelogId();
-		return dao.findPagedListByCatelogId_Cover(catelogId, start, limit);
+		return dao.findPagedListByCatelogId_Cover(catelogId, start, limit, null);
 	}
 
 	@Override
@@ -169,6 +169,6 @@ public abstract class SectionListService extends BaseService<SectionList> implem
 
 	@Override
 	public List<SectionList> findListByCatelogId(int catelogId) {
-		return dao.findListByCatelog_Cover(catelogId);
+		return dao.findList_Cover(BaseService.addWhere("catelogId" + catelogId));
 	}
 }

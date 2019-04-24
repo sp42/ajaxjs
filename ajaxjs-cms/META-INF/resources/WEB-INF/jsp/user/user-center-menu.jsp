@@ -2,7 +2,7 @@
 		<menu class="hide">
 			<ul>
 				<li><a href="${ctx}/user/center/home/">概览</a></li>
-				<li><a href="${ctx}/user/center/info/">会员信息</a></li>
+				<li><a href="${ctx}/user/center/info/">用户信息</a></li>
 				<li><a href="${ctx}/user/center/loginInfo/">账户安全</a></li>
 				<li><a href="${ctx}/user/center/feedback/">留言反馈</a></li>
 				<li><a href="${ctx}/user/login/logout/">退出登录</a></li>

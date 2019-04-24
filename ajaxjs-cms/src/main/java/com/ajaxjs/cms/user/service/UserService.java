@@ -235,7 +235,7 @@ public class UserService extends BaseService<User> {
 
 	@Override
 	public PageResult<User> findPagedList(int start, int limit) {
-		return dao.findPagedList(start, limit);
+		return dao.findPagedList(start, limit, null);
 	}
 
 	public Attachment_picture findAvaterByUserId(long userId) {
