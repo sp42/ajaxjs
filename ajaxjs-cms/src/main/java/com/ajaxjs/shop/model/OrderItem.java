@@ -9,10 +9,14 @@ public class OrderItem extends BaseModel {
 	
 	private String formatName;
 	
+	private Long sellerId;
+	
 	/**
 	 * 主订单号 id
 	 */
 	private Long orderId;
+	
+	private Long groupId;
 	
 	/**
 	 * 设置主订单号 id
@@ -225,6 +229,22 @@ public class OrderItem extends BaseModel {
 
 	public void setFormatName(String formatName) {
 		this.formatName = formatName;
+	}
+
+	public Long getSellerId() {
+		return sellerId;
+	}
+
+	public void setSellerId(Long sellerId) {
+		this.sellerId = sellerId;
+	}
+
+	public Long getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(Long groupId) {
+		this.groupId = groupId;
 	}
 	
 }

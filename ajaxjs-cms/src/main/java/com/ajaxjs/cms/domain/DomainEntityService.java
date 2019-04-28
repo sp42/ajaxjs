@@ -110,7 +110,7 @@ public class DomainEntityService extends BaseService<Map<String, Object>> implem
 			catelogId = getDomainCatelogId();
 
 		
-		return dao.findPagedListByCatelogId(catelogId, start, limit == 0 ? 5 : limit);
+		return dao.findPagedListByCatelogId(catelogId, start, limit == 0 ? 5 : limit, QueryParams.initSqlHandler(QueryParams.init()));
 	}
 	
 	public PageResult<Map<String, Object>> findPagedListByCatelogId_Cover(int catelogId, int start, int limit) {

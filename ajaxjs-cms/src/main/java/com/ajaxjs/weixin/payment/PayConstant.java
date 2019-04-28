@@ -5,7 +5,7 @@ public interface PayConstant {
 	/**
 	 * 统一下单
 	 */
-	public static final String notifyUrl = "https://wx.ajaxjs.com/shop/api/order/wxNotify";
+	public static final String notifyUrl = "https://api.gdjjh.cn/shop/api/order/wxNotify";
 
 	public static final String unifiedorderUrl = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 

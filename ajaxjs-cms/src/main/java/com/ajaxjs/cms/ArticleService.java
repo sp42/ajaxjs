@@ -8,6 +8,7 @@ import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.PageResult;
+import com.ajaxjs.framework.QueryParams;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.annotation.TableName;
@@ -31,7 +32,7 @@ public class ArticleService extends BaseService<Map<String, Object>> implements 
 		if (catelogId == 0)
 			catelogId = getDomainCatelogId();
 
-		return dao.findPagedListByCatelogId(catelogId, start, limit);
+		return dao.findPagedListByCatelogId(catelogId, start, limit, QueryParams.initSqlHandler(QueryParams.init()));
 	}
 
 	@Override
@@ -39,7 +40,7 @@ public class ArticleService extends BaseService<Map<String, Object>> implements 
 		if (catelogId == 0)
 			catelogId = getDomainCatelogId();
 
-		return dao.findPagedListByCatelogId(catelogId, 0, 9999);
+		return dao.findPagedListByCatelogId(catelogId, 0, 9999, QueryParams.initSqlHandler(QueryParams.init()));
 	}
 
 	@Override

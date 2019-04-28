@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import javax.servlet.http.HttpServletRequest;
@@ -101,20 +102,31 @@ public class QueryParams {
 	 */
 	public String addWhereToSql(String sql) {
 		if (filter != null) {
-			for (String key : filter.keySet())
-				wheres.add(key + " = " + Encode.urlChinese(filter.get(key).toString()));
+			for (String key : filter.keySet()) {
+				if(filter.get(key) == null)
+					continue;
+				String str = filter.get(key).toString();
+				wheres.add(key + " = " + Encode.urlChinese(str));
+			}
 		}
 
 		if (search != null) {
 			for (String key : search.keySet()) {
+				if(search.get(key) == null)
+					continue;
+				String str = search.get(key).toString();
 //				wheres.add(key + " LIKE '%" + Encode.urlChinese(search.get(key).toString()) + "%'");
-				wheres.add(key + " LIKE '%" + search.get(key).toString() + "%'");
+				wheres.add(key + " LIKE '%" + str + "%'");
 			}
 		}
 
 		if (match != null) {
-			for (String key : match.keySet())
-				wheres.add(key + " LIKE '" + Encode.urlChinese(match.get(key).toString()) + "'");
+			for (String key : match.keySet()) {
+				if(match.get(key) == null)
+					continue;
+				String str = match.get(key).toString();
+				wheres.add(key + " LIKE '" + Encode.urlChinese(str) + "'");
+			}
 		}
 
 		// 增加到原 sql 身上
@@ -129,7 +141,7 @@ public class QueryParams {
 			} else {
 				sql += " WHERE " + c;
 			}
-			
+
 			wheres.clear(); // 重复执行导致没有退栈
 		}
 
@@ -176,7 +188,12 @@ public class QueryParams {
 	 * @return 返回 null 而不是空 sqlHandler
 	 */
 	public static QueryParams init() {
+		HttpServletRequest r = MvcRequest.getHttpServletRequest();
+		if (r == null)
+			return null;
+
 		Map<String, String[]> requestData = MvcRequest.getHttpServletRequest().getParameterMap();
+		System.out.println(requestData);
 		return requestData.size() > 0 ? new QueryParams(requestData) : null;
 	}
 
@@ -191,10 +208,15 @@ public class QueryParams {
 	}
 
 	public static Function<String, String> initSqlHandler(QueryParams qs) {
-		System.out.println("=================");
-		return sql ->{ 
-			System.out.println(":::::::::::::::::");
+		return sql -> {
 			return qs == null ? sql : qs.addWhereToSql(sql);
 		};
+	}
+	public static Function<String, String> makeQuery(String querySql) {
+		return sql -> sql.replaceAll("(?i)1\\s?(=|AND)\\s?1", querySql);
+	}
+
+	public static <T> BiFunction<Integer, Integer, PageResult<T>> doPageFilterQuery(BaseController.PagedDao<T> fn) {
+		return (s, l) -> fn.apply(s, l, QueryParams.initSqlHandler(QueryParams.init()));
 	}
 }

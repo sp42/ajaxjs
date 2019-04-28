@@ -31,7 +31,8 @@
 	<ul>
 		<li><a target="iframepage" href="${ctx}/admin/goods/list/">商品管理</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/simple-group/list/">团购管理</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/order/list/">订单管理</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/order/list/">用户订单</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/orderItem/list/">订单明细</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/cart/list/">购物车一览</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/bookmark/list/">收藏一览</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/address/list/">地址薄一览</a></li>

@@ -21,6 +21,8 @@ public class OrderInfo extends BaseModel {
 	
 	
 	private String transactionId;
+	
+
 
 	/**
 	 * 设置唯一订单号
@@ -538,7 +540,7 @@ public class OrderInfo extends BaseModel {
 	public void setTransactionId(String transactionId) {
 		this.transactionId = transactionId;
 	}
-
+ 
 	private OrderItem[] orderItems;
 
 }

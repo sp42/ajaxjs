@@ -25,9 +25,9 @@ public interface ShopConstant {
 		}
 	};
 
-	public static final int WX_PAY = 0;
-	public static final int ALI_PAY = 1;
-	public static final int OFFLINE_PAY = 2;
+	public static final int WX_PAY = 1;
+	public static final int ALI_PAY = 2;
+	public static final int OFFLINE_PAY = 3;
 
 	public static final Map<Integer, String> PayType = new HashMap<Integer, String>() {
 		private static final long serialVersionUID = -1L;

@@ -215,7 +215,7 @@ public abstract class BaseController<T> implements IController, Constant {
 
 	@FunctionalInterface
 	static public interface PagedDao<T> {
-		public PageResult<T> d(Integer s, Integer l, Function<String, String> sqlHandler);
+		public PageResult<T> apply(Integer s, Integer l, Function<String, String> sqlHandler);
 	}
 
 	public <E> PageResult<E> listPaged2(int start, int limit, ModelAndView mv, PagedDao<E> findPagedListAction) {
@@ -223,7 +223,7 @@ public abstract class BaseController<T> implements IController, Constant {
 
 		prepareData(mv);
 
-		PageResult<E> pageResult = findPagedListAction.d(start, limit, null);
+		PageResult<E> pageResult = findPagedListAction.apply(start, limit, null);
 		mv.put(PageResult, pageResult);
 
 		return pageResult;
