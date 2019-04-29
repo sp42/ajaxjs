@@ -313,6 +313,29 @@ Vue.component('aj-process-line', {
 	}
 });
 
+// 函数节流
+function throttleV2(fn, delay, mustRunDelay) {
+ 	var timer = null;
+ 	var t_start;
+ 	
+ 	return function() {
+ 		var context = this, args = arguments, t_curr = +new Date();
+ 		clearTimeout(timer);
+ 		
+ 		if(!t_start) 
+ 			t_start = t_curr;
+ 		
+ 		if(t_curr - t_start >= mustRunDelay) {
+ 			fn.apply(context, args);
+ 			t_start = t_curr;
+ 		} else {
+ 			timer = setTimeout(function() {
+ 				fn.apply(context, args);
+ 			}, delay);
+ 		}
+ 	};
+};
+ 
 // 悬浮显示大图。工厂方法
 aj.imageEnlarger = function() {
 	var vue = new Vue({
@@ -326,14 +349,20 @@ aj.imageEnlarger = function() {
 			imgUrl: null
 		},
 		mounted: function(){// 不能用 onmousemove 直接绑定事件
-			document.addEventListener('mousemove', this.move.bind(this), false);
+			document.addEventListener('mousemove', throttleV2(this.move.bind(this), 50, 5000), false);
 		},
 		methods: {
 			move: function(e) {
 				if(this.imgUrl) {
 					var el = this.$el.$('div');
+					var w = 0, imgWidth = this.$el.$('img').clientWidth;
+					
+					if(imgWidth > e.pageX) {
+						w = imgWidth;
+					}
+				
 					el.style.top = (e.pageY + 20)+ 'px';
-					el.style.left = (e.pageX - el.clientWidth) + 'px';
+					el.style.left = (e.pageX - el.clientWidth + w) + 'px';
 				}
 			}
 		}

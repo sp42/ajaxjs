@@ -108,7 +108,6 @@
 			
 			// 生成 option
 			var temp = document.createDocumentFragment();
-
 			this.output(this.tree, function(node, nodeId) {
 				var option = document.createElement('option'); // 节点
 				option.value = nodeId;
@@ -225,7 +224,8 @@ Vue.component('aj-tree-catelog-select', {
 		},
 		fieldName : { // 表单 name，字段名
 			type: String,
-			required: false
+			required: false,
+			default:'catelogId'
 		},
 		isAutoJump : Boolean // 是否自动跳转 catalogId
 	},
@@ -245,7 +245,7 @@ Vue.component('aj-tree-catelog-select', {
 		onSelected : function(e) {
 			if(this.isAutoJump) {
 				var el = e.target, catalogId = el.selectedOptions[0].value;
-				location.assign('?catalogId=' + catalogId);
+				location.assign('?' + this.fieldName + '=' + catalogId);
 			} else {
 				this.BUS.$emit('aj-tree-catelog-select-change', e, this);
 			}

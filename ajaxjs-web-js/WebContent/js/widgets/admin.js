@@ -61,20 +61,25 @@ Vue.component('aj-admin-filter-panel', {
 			type: Number,
 			required: false
 		},
-		noCatelog :{
+		noCatelog : {
 			type : Boolean, // 是否不需要 分类下拉
 			default : false
+		},
+		searchFieldValue : { // 搜索哪个字段？默认为 name
+			required: false,
+			default : 'name'
 		}
 	},
 	template: 
 		'<div class="aj-admin-filter-panel">\
 			<form action="?" method="GET">\
-				<input type="hidden" name="searchField" value="name" />\
-				<input type="text" name="searchValue" placeholder="请输入正文之关键字" style="float: inherit;" class="ajaxjs-inputField" />\
+				<input type="hidden" name="searchField" :value="searchFieldValue" />\
+				<input type="text" name="searchValue" placeholder="请输入搜索之关键字" style="float: inherit;" class="ajaxjs-inputField" />\
 				<button style="margin-top: 0;" class="ajaxjs-btn">搜索</button>\
-			</form>\
-			<span v-if="!noCatelog">{{label||\'分类\'}}：<aj-tree-catelog-select :is-auto-jump="true" :catelog-id="catelogId" :selected-catelog-id="selectedCatelogId"></aj-tree-catelog-select></span>\
-		</div>'
+			</form><slot></slot>\
+			<span v-if="!noCatelog">{{label||\'分类\'}}：\
+				<aj-tree-catelog-select :is-auto-jump="true" :catelog-id="catelogId" :selected-catelog-id="selectedCatelogId"></aj-tree-catelog-select></span>\
+		 </div>'
 });
 
 aj.admin = {

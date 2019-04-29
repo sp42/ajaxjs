@@ -14,7 +14,8 @@ aj._list = {
 	data : function() {
 		return {
 			result : [],		// 展示的数据
-			baseParam: {}		// 每次请求都附带的参数
+			baseParam: {},		// 每次请求都附带的参数
+			realApiUrl: this.apiUrl
 		};
 	}
 };
@@ -29,7 +30,7 @@ Vue.component('aj-simple-list', {
 				</slot>\
 			</li></ul>',
 	mounted : function() {
-		ajaxjs.xhr.get(this.apiUrl, function(json) {
+		ajaxjs.xhr.get(this.realApiUrl, function(json) {
 			aj.apply(this, json);
 		}.bind(this), this.baseParam);
 	}
@@ -93,14 +94,15 @@ Vue.component('aj-page-list', {
 			</footer><div v-show="!!autoLoadWhenReachedBottom" class="buttom"></div>\
 		</div>',
 	mounted : function() {
-		ajaxjs.xhr.get(this.$props.apiUrl, this.doAjaxGet, {
+//		ajaxjs.xhr.get(this.$props.apiUrl, this.doAjaxGet, {
+			ajaxjs.xhr.get(this.realApiUrl, this.doAjaxGet, {
 			limit : this.pageSize
 		});
 		
 		if(!!this.autoLoadWhenReachedBottom) {
 			var scrollSpy = new aj.scrollSpy({
 				scrollInElement : aj(this.autoLoadWhenReachedBottom),
-				spyOn : this.$el.$('.buttom')
+				spyOn : thish.$el.$('.buttom')
 			});
 			
 			scrollSpy.onScrollSpyBackInSight = function (e) {
@@ -149,7 +151,8 @@ Vue.component('aj-page-list', {
 			
 			this.baseParam && aj.apply(params, this.baseParam);
 			
-			ajaxjs.xhr.get(this.$props.apiUrl, this.doAjaxGet, params);
+//			ajaxjs.xhr.get(this.$props.apiUrl, this.doAjaxGet, params);
+			ajaxjs.xhr.get(this.realApiUrl, this.doAjaxGet, params);
 		},
 		// 分页，跳到第几页，下拉控件传入指定的页码
 		jumpPageBySelect : function (e) {
