@@ -172,7 +172,6 @@ public class PageResult<T> extends ArrayList<T> {
 		} else {
 			countSql = Repository.isSqlite(select.sqliteCountSql(), conn) ? select.sqliteCountSql() : select.countSql();
 			
-			System.out.println(">>>" + countSql);
 			if (sqlHandler != null) { // 如果有注解分页的要重复执行一次？
 				countSql = sqlHandler.apply(countSql);
 			}
