@@ -52,6 +52,15 @@
 			</label>
 
 		</dl>
+		<dl>
+			<label>
+				<dt>重复密码:</dt>
+				<dd>
+					<input type="password" name="password2" placeholder="重复密码" required />
+				</dd>
+			</label>
+
+		</dl>
 		<dl>		
 			<label>
 				<dt>验证码:</dt>

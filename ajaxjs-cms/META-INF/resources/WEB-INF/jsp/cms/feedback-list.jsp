@@ -52,7 +52,7 @@
 					<tr>
 						<td>${current.id}</td>
 						<td title="${current.intro}">${current.name}</td>
-						<td><c:dateFormatter value="${current.createDate}" format="yyyy-MM-dd HH:mm" /></td>
+						<td><c:dateFormatter value="${current.createDate}" /></td>
 						<td>	
 							<!-- 读取用户标识 -->
 							<c:if test="${empty current.userId}">

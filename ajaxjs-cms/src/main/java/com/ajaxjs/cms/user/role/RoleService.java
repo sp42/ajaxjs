@@ -3,6 +3,7 @@ package com.ajaxjs.cms.user.role;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.framework.BaseService;
@@ -25,6 +26,11 @@ public class RoleService extends BaseService<Map<String, Object>> {
 
 	@TableName(value = "user_role", beanClass = Map.class)
 	public static interface RoleDao extends IBaseDao<Map<String, Object>> {
+		
+		@Select("SELECT * FROM ${tableName} ORDER BY pid ")
+		@Override
+		public List<Map<String, Object>> findList();
+		 
 		@Select("SELECT accessKey FROM ${tableName}")
 		public Integer[] getExistingPrime();
 	}

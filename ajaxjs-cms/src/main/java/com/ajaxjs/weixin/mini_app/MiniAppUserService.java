@@ -44,8 +44,14 @@ public class MiniAppUserService extends BaseService<User> {
 		public int saveOpenId(UserOauth bean);
 	}
 
-	public UserDao dao = new Repository().bind(UserDao.class);
+	public static UserDao dao = new Repository().bind(UserDao.class);
 
+	{
+		setUiName("微信小程序用户服务");
+		setShortName("miniAppUserService");
+		setDao(dao);
+	}
+	
 	/**
 	 * 登录凭证校验， 获取 session_key 和 openid 等
 	 */
@@ -54,8 +60,8 @@ public class MiniAppUserService extends BaseService<User> {
 //	@Resource("UserService")
 //	private UserService userService;
 
-	@Resource("UserOauthService")
-	private UserOauthService userOauthService;
+//	@Resource("UserOauthService")
+	private UserOauthService userOauthService = new UserOauthService();
 
 	/**
 	 * 获取用户 openId
@@ -69,7 +75,7 @@ public class MiniAppUserService extends BaseService<User> {
 		User user = dao.findUserByOauthId(token.getOpenId());
 
 		if (user == null) {
-			LOGGER.info("没有会员，新注册");
+			LOGGER.info("没有会员，新注册 " + userInfoJson);
 			user = register(userInfoJson, token.getOpenId());
 		} else {
 			LOGGER.info("用户已经注册过");

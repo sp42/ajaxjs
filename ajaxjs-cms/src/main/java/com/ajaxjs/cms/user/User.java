@@ -268,8 +268,4 @@ public class User extends BaseModel {
 		else
 			return "未知";
 	}
-	
-	public String getSexText() {
-		return getSexText(getSex());
-	}
 }

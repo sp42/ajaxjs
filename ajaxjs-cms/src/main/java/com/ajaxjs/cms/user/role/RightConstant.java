@@ -47,6 +47,8 @@ public interface RightConstant {
 	
 	public static final int SHOP = 22;
 	
+	public static final int SHOP_SELLER = 23;
+	
 	/**
 	 * 查询num的第pos位权限值
 	 * 

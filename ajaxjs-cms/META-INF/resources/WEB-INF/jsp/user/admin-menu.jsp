@@ -20,38 +20,36 @@
 	<%if(RightConstant.check(privilegeTotal, RightConstant.FEEDBACK)){ %>
 		<li><a target="iframepage" href="${ctx}/admin/feedback/list/">留言反馈管理</a></li>
 	<%}%>
+	<%if(RightConstant.check(privilegeTotal, RightConstant.SECTION)){ %>
 		<li><a target="iframepage" href="${ctx}/admin/section/">栏目管理</a></li>
+	<%}%>
 		<%@include file="/WEB-INF/jsp/user/admin-extra-menu.jsp" %>
 	</ul>
 </li>
 
-<%if(RightConstant.check(privilegeTotal, RightConstant.SHOP)){ %>
+<%if(RightConstant.check(privilegeTotal, RightConstant.SHOP) || RightConstant.check(privilegeTotal, RightConstant.SHOP_SELLER)){ %>
 <li>
 	<h3>商城管理</h3>
 	<ul>
+	<%if(RightConstant.check(privilegeTotal, RightConstant.SHOP)){ %>
 		<li><a target="iframepage" href="${ctx}/admin/goods/list/">商品管理</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/simple-group/list/">团购管理</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/order/list/">用户订单</a></li>
+	<%}%>
+	<%if(RightConstant.check(privilegeTotal, RightConstant.SHOP) || RightConstant.check(privilegeTotal, RightConstant.SHOP_SELLER)){ %>
 		<li><a target="iframepage" href="${ctx}/admin/orderItem/list/">订单明细</a></li>
+	<%}%>
+	<%if(RightConstant.check(privilegeTotal, RightConstant.SHOP)){ %>
 		<li><a target="iframepage" href="${ctx}/admin/cart/list/">购物车一览</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/bookmark/list/">收藏一览</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/address/list/">地址薄一览</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/seller/list/">商家管理</a></li>
+	<%}%>
 	</ul>
 </li>
-	<%}%>
-	<%if(RightConstant.check(privilegeTotal, RightConstant.SECTION)){ %>
-	
-	<!-- 
-<li> 
- 	<h3>栏目管理</h3>
-	<ul> 
- 		<li><a target="iframepage" href="${ctx}/admin/section_info/">栏目信息</a></li> 
- 		<li><a target="iframepage" href="${ctx}/admin/section_content/">栏目内容</a></li> 
-	</ul> 
- </li> 
-	 -->
-	<%}%>
+<%}%>
+
+ 
 	<%if(RightConstant.check(privilegeTotal, RightConstant.WEBSITE)){ %>
 <li>
 	<h3>网站管理</h3>

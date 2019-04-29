@@ -128,9 +128,13 @@
 		  	<aj-admin-role-check-right :is-enable="resRight(<%=RightConstant.PRODUCT_OFFLINE%>)" :res-id="<%=RightConstant.PRODUCT_OFFLINE%>" :set-right-value="5"></aj-admin-role-check-right>		  </td>
 	  </tr>
 	    <tr>
-	      <td class="t1">商城模块</td>
-	      <td></td>
+	      <td class="t1" rowspan="2">商城模块</td>
+	      <td>商城管理员</td>
 	      <td><aj-admin-role-check-right :is-enable="resRight(<%=RightConstant.SHOP%>)" :res-id="<%=RightConstant.SHOP%>"></aj-admin-role-check-right></td>
+      </tr>
+	    <tr>
+	      <td>商家</td>
+	      <td><aj-admin-role-check-right :is-enable="resRight(<%=RightConstant.SHOP_SELLER%>)" :res-id="<%=RightConstant.SHOP_SELLER%>"></aj-admin-role-check-right></td>
       </tr>
       <tr>
 		  <td class="t1">留言反馈模块</td>

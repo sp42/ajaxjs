@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 import com.ajaxjs.orm.JdbcConnection;
@@ -36,6 +37,8 @@ public abstract class BaseService<T> implements IBaseService<T> {
 
 	@Override
 	public Long create(T bean) {
+		Objects.requireNonNull(bean, "Bean 实体不能为空");
+		
 		if (bean instanceof BaseModel) {
 			BaseModel model = (BaseModel) bean;
 			if (model.getUid() == null)

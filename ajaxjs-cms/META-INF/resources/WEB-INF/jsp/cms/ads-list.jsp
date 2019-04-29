@@ -70,7 +70,7 @@
 						</c:if>
 						</td>
 						<td>
-							<c:dateFormatter value="${current.createDate}" format="yyyy-MM-dd HH:mm" />
+							<c:dateFormatter value="${current.createDate}" />
 						</td>
 						<td>
 							<a href="../../../${tableName}/${current.id}/" target="_blank">浏览</a>
