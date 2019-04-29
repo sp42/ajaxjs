@@ -1,10 +1,23 @@
 <%@page pageEncoding="UTF-8" isErrorPage="true" import="java.io.*" trimDirectiveWhitespaces="true"%>
 <%!
 	/**
+	 * 获取相关信息
+	 * 
+	 * @param request 请求对象
+	 */
+	public static String getSth(HttpServletRequest request, String key) {
+		Object obj = request.getAttribute(key);
+		if(obj == null) {
+			return null;
+		} else {
+			return obj.toString().replaceAll("<|>", "");
+		}
+	}
+
+	/**
 	 * 收集错误信息 输出到网页
 	 * 
-	 * @param request
-	 *            请求对象
+	 * @param request 请求对象
 	 */
 	public static OutputStream getError(HttpServletRequest request, Throwable ex) {
 		OutputStream os = new ByteArrayOutputStream();// 创建一个空的字节流，保存错误信息
@@ -13,10 +26,10 @@
 		// 不要用 java 7 的 autoClose，因为要在 tomcat 里面手动打开
 		try {
 			// 收集错误信息
-			ps.println("错误代码: " + request.getAttribute("javax.servlet.error.status_code").toString().replaceAll("<|>", ""));
-			ps.println("异常 Servlet: " + request.getAttribute("javax.servlet.error.servlet_name").toString().replaceAll("<|>", ""));
-			ps.println("出错页面地址: " + request.getAttribute("javax.servlet.error.request_uri").toString().replaceAll("<|>", ""));
-			ps.println("访问的路径: " + request.getAttribute("javax.servlet.forward.request_uri").toString().replaceAll("<|>", ""));
+			ps.println("错误代码: " + getSth(request, "javax.servlet.error.status_code"));
+			ps.println("异常 Servlet: " + getSth(request, "javax.servlet.error.servlet_name"));
+			ps.println("出错页面地址: " + getSth(request, "javax.servlet.error.request_uri"));
+			ps.println("访问的路径: " + getSth(request, "javax.servlet.forward.request_uri"));
 			ps.println();
 
 			for (String key : request.getParameterMap().keySet()) {

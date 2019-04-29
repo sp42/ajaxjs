@@ -115,7 +115,7 @@ Vue.component('aj-grid', {
     template:
 		'<div><form action="?" method="GET" style="float:right;">\
 			<input type="hidden" name="searchField" value="content" />\
-			<input type="text" name="searchValue" placeholder="请输入正文之关键字" class="ajaxjs-inputField" />\
+			<input type="text" name="searchValue" placeholder="请输入搜索之关键字" class="ajaxjs-inputField" />\
 			<button style="margin-top: 0;" class="ajaxjs-btn">搜索</button>\
 		</form>\
         <table class="aj-grid ajaxjs-niceTable"><thead><tr>\

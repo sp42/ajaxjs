@@ -135,6 +135,8 @@ public class MvcRequest extends HttpServletRequestWrapper {
 		if (getMethod() != null && getMethod().toUpperCase().equals("PUT")) {
 			map = getPutRequestData(); // Servlet 没有 PUT 获取表单，要自己处理
 			System.out.println("111111Map:" + map);
+			if(map.get("tel")!=null)
+			System.out.println("111111Map:" + map.get("tel").getClass());
 		} else {
 			map = MapTool.as(getParameterMap(), arr -> MappingValue.toJavaValue(arr[0]));
 			System.out.println("22222222Map:" + map);
@@ -186,11 +188,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	 * @return 请求对象
 	 */
 	public static HttpServletRequest getHttpServletRequest() {
-		HttpServletRequest request = threadLocalRequest.get();
-		if (request == null)
-			throw new RuntimeException("请求对象未初始化");
-
-		return request;
+		return threadLocalRequest.get();
 	}
 
 	/**

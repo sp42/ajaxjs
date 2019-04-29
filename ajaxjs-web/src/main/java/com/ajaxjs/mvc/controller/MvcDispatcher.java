@@ -41,7 +41,6 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.FilterAction;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.MapTool;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
@@ -213,7 +212,12 @@ public class MvcDispatcher implements Filter {
 		if (a != null && MediaType.APPLICATION_JSON.equals(a.value()[0])) {// 返回 json
 			response.resultHandler(Constant.jsonNoOk(errMsg), request, model, method);
 		} else {
-			response.resultHandler(String.format("redirect::%s/showMsg?msg=%s", request.getContextPath(), Encode.urlEncode(errMsg)), request, model, method);
+			request.setAttribute("javax.servlet.error.status_code", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			request.setAttribute("javax.servlet.error.exception_type", err.getClass());
+			request.setAttribute("javax.servlet.error.exception", err);
+			response.resultHandler("/WEB-INF/jsp/error.jsp", request, model, method);
+			
+//			response.resultHandler(String.format("redirect::%s/showMsg?msg=%s", request.getContextPath(), Encode.urlEncode(errMsg)), request, model, method);
 		}
 	}
 
