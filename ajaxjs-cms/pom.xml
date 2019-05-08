@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>ajaxjs-cms</artifactId>
-	<version>1.0.3</version>
+	<version>1.0.4</version>
 	<packaging>jar</packaging>
 
 	<build>
@@ -43,13 +43,13 @@
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-data</artifactId>
-			<version>1.1.0</version>
+			<version>1.1.1</version>
 		</dependency>
 		
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-web</artifactId>
-			<version>1.1.4</version>
+			<version>1.1.5</version>
 		</dependency>
 
 		<dependency>

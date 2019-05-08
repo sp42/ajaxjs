@@ -12,7 +12,7 @@
 	</parent>
 
 	<artifactId>ajaxjs-web</artifactId>
-	<version>1.1.4</version>
+	<version>1.1.5</version>
 	<packaging>jar</packaging>
 	<name>AJAXJS-Web</name>
 	<description>AJAXJS Web aims to full-stack, not only the server-side framework, but also integrates the front-end library. It's written in HTML5 + Java, a successor to the JVM platform, efficient, secure, stable, cross-platform and many other advantages, but it abandoned the traditional enterprise architecture brought about by the large and bloated, emphasizing the lightweight, and fast, very suitable for the Internet fast application.</description>
@@ -93,7 +93,7 @@
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-base</artifactId>
-			<version>1.1.9</version>
+			<version>1.2.0</version>
 		</dependency>
 
 		<!-- 模拟对象 -->
