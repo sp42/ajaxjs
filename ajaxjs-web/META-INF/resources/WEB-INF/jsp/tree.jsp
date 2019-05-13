@@ -1,4 +1,4 @@
-guo<%@page pageEncoding="UTF-8"%>
+<%@page pageEncoding="UTF-8"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
 <!DOCTYPE html>
 <html>
