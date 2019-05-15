@@ -5,9 +5,8 @@
 %>package ${packageName}.model;
 
 import com.ajaxjs.framework.BaseModel;
-import com.ajaxjs.framework.IBaseBean;
 
-public class <%=Utils.firstLetterUpper(beanName)%> extends BaseModel implements IBaseBean {
+public class <%=Utils.firstLetterUpper(beanName)%> extends BaseModel  {
 	private static final long serialVersionUID = 1L;
 	<%
 		for (Map<String, String> i : fields) {

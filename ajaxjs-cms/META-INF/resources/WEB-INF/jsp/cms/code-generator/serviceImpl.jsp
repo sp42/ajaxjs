@@ -7,7 +7,7 @@ import ${packageName}.dao.${beanName}Dao;
 import ${packageName}.model.${beanName};
 
 @Bean("${beanName}Service")
-public class ${beanName}ServiceImpl extends BaseService<${beanName}> {
+public class ${beanName}ServiceImpl2 extends BaseService<${beanName}> {
 	public ${beanName}Dao dao = new Repository().bind(${beanName}Dao.class);
 	
 	{
