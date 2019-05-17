@@ -11,7 +11,7 @@
 - 前端：[Vue.js](https://cn.vuejs.org/)（MVVM+组件化） + [LESS.js](http://lesscss.org/)
 - 后端：Java 1.8 + Tomcat 8 + [Reactor 3](https://projectreactor.io/) + MySQL/SQLite + [Swagger V3](https://swagger.io/) 接口文档服务
 
-作为佛系框架，也不主张伸手依赖别人呢。因此 AJAXJS 很少第三方的库或包依赖。功能不算很多，但应该较为实用的那些。尽管很多都是“轮子”但自己都理过一遍代码，务求清晰精炼平易近人，易懂易修改，避免晦涩的地方。文档、注释、单测等齐备。详见官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/) 介绍。 
+作为佛系框架，也不主张伸手依赖别人。因此呢， AJAXJS 很少第三方的库或包依赖。关于“轮子”一说，的确是，不过就是自己都理过一遍代码，不是随便贴人家代码，而且务求清晰精炼平易近人，易懂易修改，避免晦涩的地方。文档、注释、单测等齐备。详见官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/) 介绍。 
 
 注意：整合 Reactor 3 尚在目标计划中，需要时间来调研与学习新鲜事物。
 
