@@ -6,7 +6,7 @@
 [![Email](https://img.shields.io/badge/Contact--me-Email-orange.svg)](mailto:support@ajaxjs.com)
 [![QQ群](https://framework.ajaxjs.com/framework/asset/qq.svg)](https://shang.qq.com/wpa/qunwpa?idkey=3877893a4ed3a5f0be01e809e7ac120e346102bd550deb6692239bb42de38e22)
 
-“上善若水”虽语出自道家经典，但代表本佛系性格的框架窃以为亦无妨。因为我个人制作的这个框架，有是有参考的不少的框架及其思想，但太新的那些特性就跟不上了。传统的 IOC/AOP/ORM/MVC/REST/ DAO/Service/Controller 都有，自认觉得够用、用起来顺手已经不错了。另外如果要说什么买点的，还有就是本框架早期是前端的，故名曰 ajax-js，后自学了 Java，于是也算个全栈框架。
+“上善若水”虽语出自道家经典，但代表本佛系性格的框架窃以为亦无妨。因为我个人制作的这个框架，有是有参考的不少的框架及其思想，但太新的那些特性就跟不上了。传统的 IOC/AOP/ORM/MVC/REST/DAO/Service/Controller 都有，自认觉得够用、用起来顺手已经不错了。性能和选型没特别考量——只希望没有太明显的短板和少点 bug。另外如果要说什么买点的话，那就是本框架早期是前端的，故名曰 ajax-js，后来自学了 Java，于是也算个全栈框架。
 
 - 前端：[Vue.js](https://cn.vuejs.org/)（MVVM+组件化） + [LESS.js](http://lesscss.org/)
 - 后端：Java 1.8 + Tomcat 8 + [Reactor 3](https://projectreactor.io/) + MySQL/SQLite + [Swagger V3](https://swagger.io/) 接口文档服务
