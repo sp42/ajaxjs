@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -56,7 +57,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	public String getListByOwnerUid(@PathParam("id") Long owenrUid) {
 		return toJson(service.findByOwner(owenrUid));
 	}
-	
+
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("getAttachmentPictureByOwner/{id}")
@@ -65,11 +66,19 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 		return toJson(service.findAttachmentPictureByOwner(owenrUid));
 	}
 
+//	@POST
+//	@MvcFilter(filters = DataBaseFilter.class)
+//	@Path("/uploadMultiple/{id}/")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public String imgUpload(MvcRequest request, @PathParam("id") Long owenerId, @QueryParam("catelog") int catelogId, @FormParam("imgUrls") String imgUrls) throws IOException {
+//		
+//	}
+	
 	@POST
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("/upload/{id}/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String imgUpload(MvcRequest request, @PathParam("id") Long owenerId, @QueryParam("catelog") int catelogId) throws IOException{
+	public String imgUpload(MvcRequest request, @PathParam("id") Long owenerId, @QueryParam("catelog") int catelogId) throws IOException {
 		final UploadFileInfo info = uploadByConfig(request);
 
 		if (info.isOk) {
@@ -108,7 +117,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("/upload/staticPageUsedImg/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String imgUpload(MvcRequest request) throws IOException  {
+	public String imgUpload(MvcRequest request) throws IOException {
 		final UploadFileInfo info = uploadByConfig(request);
 
 		if (info.isOk) {
@@ -191,5 +200,5 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	public IBaseService<Attachment_picture> getService() {
 		return service;
 	}
-	
+
 }

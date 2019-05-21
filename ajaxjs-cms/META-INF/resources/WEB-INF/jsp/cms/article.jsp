@@ -34,35 +34,55 @@
 					<label> 
 						<div class="label">栏 目：</div>  
 						<!-- 分类下拉 -->
-						<aj-tree-catelog-select field-name="catelogId" :catelog-id="${domainCatalog_Id}" :selected-catelog-id="${empty info || empty info.catelog? 0 : info.catelog}">
+						<aj-tree-catelog-select field-name="catelogId" :catelog-id="${domainCatalog_Id}" :selected-catelog-id="${empty info || empty info.catelogId? 0 : info.catelogId}">
 						</aj-tree-catelog-select>
 					</label>
-			<%-- 	<c:if test="${!isCreate}"> --%>
-<!-- 					<label> -->
-<!-- 						<div class="label">创建日期：</div>  -->
-<!-- 						日历控件 -->
-<%-- 						<aj-form-calendar-input field-name="date" field-value="<c:dateFormatter value="${info.createDate}" format="yyyy-MM-dd" />"></aj-form-calendar-input> --%>
-<!-- 					</label> -->
-				<%-- </c:if> --%>
+		
+ 					<label>
+ 						<div class="label">创建日期：</div>  
+						<aj-form-calendar-input field-name="createDate" field-value="<c:dateFormatter value="${info.createDate}" />">
+						</aj-form-calendar-input> 
+ 					</label> 
+
 				</div>
 		
 				<div>
 					<label>
+						<div class="label">作者：</div> 
+						<input placeholder="" size="10" name="author" value="${info.author}" type="text" />
+					</label> 
+					<label> 
+						<div class="label">出处：</div>  
+						<input placeholder="" size="30" name="source" value="${info.source}" type="text" />
+					</label>
+					<label> 
+						<div class="label">源网址：</div>  
+						<input placeholder="" size="30" name="sourceUrl" value="${info.sourceUrl}" type="text" />
+					</label>
+				</div>
+				
+				<div>
+					<label>
 						<div class="label">摘 要：</div> 
-						<textarea rows="15" cols="20" style="width: 90%; height: 50px;" class="ajaxjs-inputField" name="intro">${info.intro}</textarea>
+						<textarea rows="10" cols="20" style="width: 90%; height: 30px;" class="ajaxjs-inputField" name="intro">${info.intro}</textarea>
 					</label>
 				</div>
 		
 				<div>
+					<label>
+						<div class="label">关键字：</div> 
+						<input placeholder="逗号或空格隔开多个关键字" size="50" name="keywords" value="${info.keywords}" type="text" />
+					</label> 
+				</div>
+				<div>
 					<div class="label" style="vertical-align: top;">正 文：</div>
 						<div style="display: inline-block; width: 90%;">
 							<!-- HTML 在线编辑器，需要 textarea 包裹着内容 -->
-							<aj-form-html-editor field-name="content" base-path="${ctx}" ref="htmleditor">
+							<aj-form-html-editor field-name="content" base-path="${ctx}" ref="htmleditor" upload-image-action-url="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catelog=2">
 								<textarea class="hide" name="content">${info.content}</textarea>
 							</aj-form-html-editor>
 						</div>
 				</div>
-				
 				
 				<div>
 					<div class="label" style="float:left;">封面图：</div> 
@@ -75,7 +95,8 @@
 						<tr>
 							<td>
 <!-- 图片上传 -->
-<ajaxjs-img-upload-perview ref="uploadControl" img-place="${(empty info.avatarPath || isCreate) ? commonAsset.concat('/images/imgBg.png'): ctx.concat(info.avatarPath)}" />
+<ajaxjs-img-upload-perview ref="uploadControl" 
+	img-place="${(empty info.avatarPath || isCreate) ? commonAsset.concat('/images/imgBg.png'): ctx.concat(info.avatarPath)}" />
 							</td>
 						</tr>
 					</table>

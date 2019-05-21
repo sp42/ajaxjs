@@ -10,6 +10,7 @@ import java.util.function.Function;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.JdbcHelper;
 import com.ajaxjs.orm.thirdparty.SnowflakeIdWorker;
+import com.ajaxjs.util.CommonUtil;
 
 /**
  * 基础业务类
@@ -57,7 +58,9 @@ public abstract class BaseService<T> implements IBaseService<T> {
 				map.put("uid", SnowflakeIdWorker.idWorker.nextId());
 
 			Date now = new Date();
-			if (map.get("createDate") == null)
+			Object createDate = map.get("createDate");
+			
+			if (createDate == null || (createDate != null && CommonUtil.isEmptyString(createDate.toString())))
 				map.put("createDate", now);
 			if (map.get("updateDate") == null)
 				map.put("updateDate", now);

@@ -35,14 +35,16 @@ public class DataDictService extends BaseService<Map<String, Object>> {
 	 * @param bean 实体列表
 	 * @return 以 id 作为键值的 map
 	 */
-	public static Map<Integer, BaseModel> list_bean2map_id_as_key(List<? extends BaseModel> bean) {
+	public static Map<Long, BaseModel> list_bean2map_id_as_key(List<? extends BaseModel> bean) {
 		if (CommonUtil.isNull(bean))
 			return null;
 
-		Map<Integer, BaseModel> map = new HashMap<>();
+		Map<Long, BaseModel> map = new HashMap<>();
 
-		for (BaseModel item : bean)
-			map.put(new Long(item.getId()).intValue(), item);
+		for (BaseModel item : bean) {
+//			map.put(new Long(item.getId()).intValue(), item);
+			map.put(item.getId(), item);
+		}
 
 		return map;
 	}

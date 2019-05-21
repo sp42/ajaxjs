@@ -1,8 +1,11 @@
 package com.ajaxjs.net.http;
 
 import java.io.IOException;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
+import java.net.Socket;
 import java.util.Enumeration;
 import java.util.Map;
 
@@ -27,32 +30,55 @@ public class Tools {
 		InetAddress candidateAddress = null;
 
 		try {
-
 			// 遍历所有的网络接口
 			for (Enumeration<?> ifaces = NetworkInterface.getNetworkInterfaces(); ifaces.hasMoreElements();) {
 				NetworkInterface iface = (NetworkInterface) ifaces.nextElement();
 
-				// 在所有的接口下再遍历IP
+				// 在所有的接口下再遍历 IP
 				for (Enumeration<?> inetAddrs = iface.getInetAddresses(); inetAddrs.hasMoreElements();) {
 					InetAddress inetAddr = (InetAddress) inetAddrs.nextElement();
 
-					if (!inetAddr.isLoopbackAddress()) {// 排除loopback类型地址
+					if (!inetAddr.isLoopbackAddress()) {// 排除 loopback 类型地址
 						if (inetAddr.isSiteLocalAddress())
-							return inetAddr;// 如果是site-local地址，就是它了
+							return inetAddr;// 如果是 site-local 地址，就是它了
 						else if (candidateAddress == null)
-							candidateAddress = inetAddr;// site-local类型的地址未被发现，先记录候选地址
-
+							candidateAddress = inetAddr;// site-local 类型的地址未被发现，先记录候选地址
 					}
 				}
 			}
 
 			if (candidateAddress != null)
-				candidateAddress = InetAddress.getLocalHost();// 如果没有发现 non-loopback地址.只能用最次选的方案
+				candidateAddress = InetAddress.getLocalHost();// 如果没有发现 non-loopback 地址.只能用最次选的方案
 		} catch (Exception e) {
 			System.err.println(e);
 		}
 
 		return candidateAddress;
+	}
+
+	/**
+	 * 如果放在不能连接公网的环境，这个方法就不适用了
+	 * 
+	 * @return
+	 */
+	public static String getLocalIp() {
+		try (Socket socket = new Socket();) {
+			socket.connect(new InetSocketAddress("baidu.com", 80));
+			return socket.getLocalAddress().getHostAddress();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static String getLocalIp2() {
+		try (DatagramSocket socket = new DatagramSocket()) {
+			socket.connect(InetAddress.getByName("114.114.114.114"), 10002);
+			return socket.getLocalAddress().getHostAddress();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	/**

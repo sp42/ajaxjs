@@ -14,6 +14,9 @@
 			p {
 				margin: 0 0 .6% 0;
 				padding:.5%;
+				line-height: 160%;
+				font-size: 1rem;
+				letter-spacing: 1px;
 				text-align: justify;
 			}
 			
