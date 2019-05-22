@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletConfig;
+import javax.servlet.http.HttpServletRequest;
 
 public class ServletHelper {
 
@@ -53,7 +54,7 @@ public class ServletHelper {
 	public static Map<String, String> initServletConfig2Map(ServletConfig config) {
 		return initParams2map(() -> config.getInitParameterNames(), key -> config.getInitParameter(key));
 	}
-	
+
 	private static final Pattern p = Pattern.compile("\\.jpg|\\.png|\\.gif|\\.js|\\.css|\\.less|\\.ico|\\.jpeg|\\.htm|\\.swf|\\.txt|\\.mp4|\\.flv");
 
 	/**
@@ -64,5 +65,34 @@ public class ServletHelper {
 	 */
 	public static boolean isStaticAsset(String url) {
 		return p.matcher(url).find();
+	}
+
+	/**
+	 * 获取所有 URL 上的参数
+	 * 
+	 * @param r 请求对象
+	 * @param without 不需要的字段
+	 * @return URL 查询参数结对的字符串
+	 */
+	public static String getAllQueryParameters(HttpServletRequest r, String without) {
+		StringBuilder sb = new StringBuilder();
+		Enumeration<String> parameterList = r.getParameterNames();
+		int i = 0;
+
+		while (parameterList.hasMoreElements()) {
+			String name = parameterList.nextElement().toString();
+			if (name.equals(without)) // 排除指定的
+				continue;
+
+			if (i++ > 0)
+				sb.append("&");
+			sb.append(name + "=" + r.getParameter(name));
+		}
+
+		return sb.toString();
+	}
+
+	public static String getAllQueryParameters(HttpServletRequest r) {
+		return getAllQueryParameters(r, null);
 	}
 }

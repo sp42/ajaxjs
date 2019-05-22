@@ -141,6 +141,8 @@ aj._carousel = {
 			}else{
 				var isWebkit = navigator.userAgent.toLowerCase().indexOf('webkit') != -1;
 				
+				if(!this.stepWidth)
+					this.setItemWidth();
 				var leftValue =  this.isUsePx ? ('-' + (i * this.stepWidth) + 'px') : ('-' + (1 / len * 100  * i).toFixed(2) + '%');
 				mover.style[this.isWebkit ? 'webkitTransform' : 'transform'] = 'translate3d({0}, 0px, 0px)'.replace('{0}', leftValue);
 				
@@ -269,7 +271,7 @@ Vue.component('aj-banner', {
 			default: false
 		},
 		
-		autoLoop : {
+		autoLoop : { // autoLoop = 0 时不自动轮播
 			type : Number,
 			default : 4000 
 		},
@@ -310,7 +312,8 @@ Vue.component('aj-banner', {
 	},
 	methods:{
 	    loop : function() {
-	    	this.loopTimer = window.setInterval(this.goNext.bind(this), this.autoLoop);
+	    	if(this.autoLoop)
+	    		this.loopTimer = window.setInterval(this.goNext.bind(this), this.autoLoop);
 	    },
 	    getContent : function(content, href) {
 	    	if(!href)

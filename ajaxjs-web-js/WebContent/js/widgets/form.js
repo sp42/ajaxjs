@@ -270,7 +270,8 @@ Vue.component('aj-form-html-editor', {
 			type: String,
 			required: false,
 			default : ''
-		}
+		},
+		uploadImageActionUrl: String
 	},
 	beforeCreate : function() {
 		var xhr = new XMLHttpRequest();
@@ -287,17 +288,59 @@ Vue.component('aj-form-html-editor', {
 		
 		this.toolbarEl = el.$('.toolbar');
 		
-		// 这个方法只能写在 onload 事件 不写 onload 里还不执行
+		// 这个方法只能写在 onload 事件里面， 不写 onload 里还不执行
 		this.iframeWin.onload = function() {
 			this.iframeDoc 	= this.iframeWin.document;
 			this.iframeDoc.designMode = 'on';
 			this.iframeBody = this.iframeDoc.body;
 			// 有内容
 			this.sourceEditor.value && this.setValue(this.sourceEditor.value);
+		    // 直接剪切板粘贴上传图片
+			this.iframeDoc.addEventListener('paste', this.onImagePaste);
 		}.bind(this);
 	},
 	
+	
 	methods: {
+		onImagePaste(event) {
+			var items = event.clipboardData && event.clipboardData.items;
+			var file = null; // file就是剪切板中的图片文件
+			if (items && items.length) {
+				// 检索剪切板items
+				for (var i = 0; i < items.length; i++) {
+					if (items[i].type.indexOf('image') !== -1) {
+						if(window.isCreate) { // 有图片
+							aj.alert.show('请保存记录后再上传图片。');
+							return;
+						}
+						
+						file = items[i].getAsFile();
+						break;
+					}
+				}
+			}
+			
+			if(!this.uploadImageActionUrl) {
+				alert('未提供图片上传地址');
+				return;
+			}
+			
+			if(file) {
+				var imgInsert = event.target, self = this;
+				event.preventDefault();
+				aj.img.changeBlobImageQuality(file, (newBlob)=> {					       
+					Vue.options.components["aj-xhr-upload"].extendOptions.methods.doUpload.call({
+						action: this.uploadImageActionUrl,
+						progress: 0,
+						uploadOk_callback(j) {
+							self.format("insertImage", self.basePath + '/' + j.imgUrl);
+						},
+						$blob: newBlob,
+						$fileName: 'foo.jpg'
+					});
+				});
+			}  
+		},
 		onToolBarClk : function(e) {
 			var el = e.target, clsName = el.className;
 			
@@ -326,6 +369,9 @@ Vue.component('aj-form-html-editor', {
 			case 'cleanHTML':
 				this.cleanHTML();
 				break;
+			case 'saveRemoteImage2Local':
+				this.saveRemoteImage2Local();
+				break;
 			default:
 				this.format(clsName);
 			}
@@ -347,6 +393,20 @@ Vue.component('aj-form-html-editor', {
 		
 		insertEl : function (html) {// 重複？
 			this.iframeDoc.body.innerHTML = html;
+		},
+		
+		saveRemoteImage2Local(){
+			var str = [], arr = this.iframeDoc.querySelectorAll('img');
+			for(var i = 0, j = arr.length; i <j; i++) {
+				var imgEl = arr[i], url = imgEl.getAttribute('src');
+				
+				if(/^http/.test(url)) {
+					str.push(url);
+				}
+			}
+			aj.xhr.post('', (json)=>{
+				console.log(json);
+			}, {urls: str.join('|')});
 		},
 		
 		// 設置 HTML

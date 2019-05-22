@@ -62,6 +62,7 @@
     <script src="${ajaxjsui}/js/widgets/upload.js"></script>
     <script src="${ajaxjsui}/js/widgets/carousel.js"></script>
     <script src="${ajaxjsui}/js/widgets/marquee.js"></script>
+    <script src="${ajaxjsui}/js/widgets/img.js"></script>
     
     <% if(request.getParameter("css")  != null) { %> 
 		<script>

@@ -88,7 +88,8 @@ public class Foreach extends SimpleTagSupport {
 		Iterator<Object> it = collection.iterator();
 		JspContext context = getJspContext();
 		int i = 0;
-
+		
+		context.setAttribute("totalCount", collection.size()); // 写出循环总次数
 		while (it.hasNext()) {
 			Object value = it.next();
 			context.setAttribute(var, value); // 每遍历出数据后写出
@@ -98,6 +99,5 @@ public class Foreach extends SimpleTagSupport {
 				f.invoke(null);
 		}
 
-		context.setAttribute("totalCount", i); // 写出循环总次数
 	}
 }
