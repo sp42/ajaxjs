@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.util.Enumeration;
 import java.util.Map;
 
+import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.util.MapTool;
 
 public class Tools {
@@ -125,5 +126,34 @@ public class Tools {
 		} else {
 			throw new IOException("接口返回不成功 " + map);
 		}
+	}
+
+	/**
+	 * http://ip.taobao.com/instructions.html
+	 * http://blog.zhukunqian.com/?p=1998
+	 * http://pv.sohu.com/cityjson?ie=utf-8
+	 * https://gitee.com/meaktsui/ChinaIpSearch
+	 * @param ip
+	 * @param isCache
+	 * @return
+	 * @throws IOException
+	 */
+	@SuppressWarnings("unchecked")
+	public static Map<String, Object> getIpLocation(String ip, boolean isCache) throws IOException {
+		String url = "http://ip.taobao.com/service/getIpInfo.php?ip=" + ip;
+		String xml = NetUtil.simpleGET(url);
+		Map<String, Object> map = JsonHelper.parseMap(xml);
+
+		if (map.get("code") != null && (0 == (int) map.get("code"))) {
+			Object obj = map.get("data");
+
+			return (Map<String, Object>) obj;
+		} else {
+			throw new IOException("接口返回不成功 " + map);
+		}
+	}
+
+	public static Map<String, Object> getIpLocation(String ip) throws IOException {
+		return getIpLocation(ip, true);
 	}
 }
