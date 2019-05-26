@@ -20,11 +20,4 @@ public class TestTools {
 		assertNotNull(ip);
 		System.out.println(ip);
 	}
-
-	@Test
-	public void testGetIpLocation() throws IOException {
-		Map<String, Object> ip = Tools.getIpLocation("119.33.28.152");
-		assertNotNull(ip);
-		System.out.println(ip);
-	}
 }
