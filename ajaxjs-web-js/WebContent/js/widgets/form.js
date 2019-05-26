@@ -302,6 +302,11 @@ Vue.component('aj-form-html-editor', {
 	
 	
 	methods: {
+		/*
+		 * 富文本编辑器中粘贴图片时，chrome可以得到e.clipBoardData.items并从中获取二进制数据，以便ajax上传到后台，
+		 * 实现粘贴图片的功能。firefox中items为undefined，可选的方案：1将base64原样上传到后台进行文件存储替换，2将内容清空，待粘贴完毕后取图片src，再恢复现场
+		 * https://stackoverflow.com/questions/2176861/javascript-get-clipboard-data-on-paste-event-cross-browser
+		 */
 		onImagePaste(event) {
 			var items = event.clipboardData && event.clipboardData.items;
 			var file = null; // file就是剪切板中的图片文件
@@ -333,7 +338,8 @@ Vue.component('aj-form-html-editor', {
 						action: this.uploadImageActionUrl,
 						progress: 0,
 						uploadOk_callback(j) {
-							self.format("insertImage", self.basePath + '/' + j.imgUrl);
+//							self.format("insertImage", self.basePath + '/' + j.imgUrl);
+							self.format("insertImage", j.imgUrl);
 						},
 						$blob: newBlob,
 						$fileName: 'foo.jpg'
