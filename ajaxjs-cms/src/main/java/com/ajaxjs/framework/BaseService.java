@@ -87,6 +87,8 @@ public abstract class BaseService<T> implements IBaseService<T> {
 	}
 
 	/**
+	 * 相邻记录
+	 * @TODO 没权限的不要列出
 	 * 
 	 * @param mv
 	 * @param tableName
@@ -94,8 +96,8 @@ public abstract class BaseService<T> implements IBaseService<T> {
 	 */
 	public static void getNeighbor(Map<String, Object> map, String tableName, Serializable id) {
 		Map<String, Object> perv, next;
-		perv = JdbcHelper.queryAsMap(JdbcConnection.getConnection(), "SELECT id, name FROM " + tableName + " WHERE status = 1 AND id < ? ORDER BY id DESC LIMIT 1", id);
-		next = JdbcHelper.queryAsMap(JdbcConnection.getConnection(), "SELECT id, name FROM " + tableName + " WHERE status = 1 AND id > ? LIMIT 1", id);
+		perv = JdbcHelper.queryAsMap(JdbcConnection.getConnection(), "SELECT id, name FROM " + tableName + " WHERE id < ? ORDER BY id DESC LIMIT 1", id);
+		next = JdbcHelper.queryAsMap(JdbcConnection.getConnection(), "SELECT id, name FROM " + tableName + " WHERE id > ? LIMIT 1", id);
 
 		map.put("neighbor_pervInfo", perv);
 		map.put("neighbor_nextInfo", next);
