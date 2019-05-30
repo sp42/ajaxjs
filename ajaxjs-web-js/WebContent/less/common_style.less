@@ -270,7 +270,7 @@
 
 	100% {
 		opacity: 0;
-		display:none;
+		display: none;
 	}
 }
 
@@ -280,7 +280,7 @@
 	-webkit-animation: fade-in @duration;
 }
 
-.aj-p, .ajaxjs-text-p {
+.aj-p , .ajaxjs-text-p {
 	color: #333;
 	line-height: 160%;
 	margin: 15px 0;
@@ -352,9 +352,6 @@
 		background-size: 100%;
 	}
 }
-
-
-
 
 // 箭头 父容器必须 position: relative;
 .aj-arrow {
@@ -457,7 +454,7 @@
 .aj-mask {
 	width: 100%;
 	height: 100%;
-	background-color: rgba(0,0,0, .5);
+	background-color: rgba(0, 0, 0, .5);
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -465,38 +462,126 @@
 }
 
 .aj-tableList {
-	header{
-		background-color:#f7f8fa;
-		font-weight:bold;
-		margin-bottom:2%;
-		height:37px;
-		line-height:10px;
-		&>div{
+	header {
+		background-color: #f7f8fa;
+		font-weight: bold;
+		margin-bottom: 2%;
+		height: 37px;
+		line-height: 10px;
+		& > div {
 			display: inline-block;
-			padding:1% 0;
-			text-align:center;
+			padding: 1% 0;
+			text-align: center;
 			box-sizing: border-box;
 		}
 	}
+
 	ul {
 		li {
-			padding:2% 0;
-			border-bottom:1px solid #eee;
-			font-size:.9rem;
+			padding: 2% 0;
+			border-bottom: 1px solid #eee;
+			font-size: .9rem;
 			text-align: left;
 			& > div {
 				display: inline-block;
 				vertical-align: middle;
 				text-align: center;
-				
 				img {
 					vertical-align: middle;
 				}
 			}
 		}
 	}
-	
-	.aj-page-list footer{
+
+	.aj-page-list footer {
 		margin-top: 30px;
 	}
 }
+
+.aj-pc-list-1 {
+	& > ul {
+		padding: 2%;
+		li {
+			border-bottom: 3px solid #cececd;
+			border-right: 1px solid #cececd;
+			margin: auto;
+			margin-bottom: 3%;
+			display: block;
+			overflow: hidden;
+			clear: both;
+			background-color: white;
+			padding: 2%;
+			box-sizing: border-box;
+			h3 {
+				padding-bottom: 1%;
+				font-weight: bold;
+				letter-spacing: 2px;
+			}
+
+			p {
+				font-size: .9rem;
+				text-align: justify;
+				line-height: 180%;
+				color: gray;
+			}
+
+			div {
+				font-size: .9rem;
+				text-align: right;
+				color: lightgray;
+				margin-top: 1%;
+				a {
+					font-weight: bold;
+					color: gray;
+				}
+			}
+		}
+	}
+
+	.pageInfo {
+		text-align: center;
+		font-size: 1rem;
+		padding: 5% 0;
+		.info {
+			color: gray;
+		}
+	}
+}
+
+.aj-article-info {
+	article {
+		h1 {
+			text-align: center;
+			font-size: 1.8rem;
+			padding: 3%;
+			letter-spacing: 3px;
+		}
+
+		h2 {
+			font-weight: bold;
+			text-align: left;
+			font-size: 1.1rem;
+			padding: 1% 0;
+		}
+
+		h4 {
+			text-align: center;
+			color: gray;
+			font-size: .95rem;
+		}
+
+		p {
+			.ajaxjs-text-p;
+			text-indent: 2em;
+		}
+	}
+}
+
+footer.aj-footer-1 {
+	text-align: center;
+	color: gray;
+	font-size: .9rem;
+	padding: 2% 0;
+	clear: both;
+}
+
