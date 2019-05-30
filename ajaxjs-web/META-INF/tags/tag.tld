@@ -31,7 +31,8 @@
 		<body-content>scriptless</body-content>
 		<attribute>
 			<name>test</name>
-			<required>false</required>
+			<description>判断的表达式</description>
+			<required>true</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
