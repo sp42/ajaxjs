@@ -34,7 +34,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String index(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catelogId, ModelAndView mv) {
 		if (limit == 0)
-			limit = 4;
+			limit = 6;
 
 		if (catelogId == 0)
 			catelogId = ConfigService.getValueAsInt("data.articleCatalog_Id");
