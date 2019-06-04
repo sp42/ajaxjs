@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8" />
+		<title>Bigfoot Web</title>
+		<meta name="description" content="“大脚 Bigfoot”是一款基于 Java 平台原创的 Web 框架，继承了 Java
+				平台的高效、安全、稳定、跨平台等诸多优势，但却摒弃了传统 SSH 企业级架构所带来的庞大和臃肿，汲取了 PHP
+				的简洁和方便，非常适合互联网中小型网站的应用。" />
+		<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+    	<meta name="keywords" content="Bigfoot,Bigfoot Web, Bigfoot Java, Java, Web 开发, Java 框架, Web 框架, Java 开源, 开源, Web 开源框架" />
+		<style>
+			body{
+				-webkit-font-smoothing:antialiased;
+				font-family: "Microsoft YaHei","ff-tisa-web-pro-1","ff-tisa-web-pro-2","Lucida Grande","Hiragino Sans GB","Hiragino Sans GB W3",Arial;
+				padding-top:30px;
+				font-size:.9rem;
+			}
+
+			.body{
+				margin:0 auto;
+				width:830px;
+			}
+			nav{
+			
+				background:url(images/b_03.jpg) no-repeat;
+				height:80px;
+				background-size:100% 100%;
+			}
+			
+			nav ul{
+				width: 400px;
+				float:right;
+				margin-right:50px;  
+				margin-top:30px;
+		 
+			}
+			nav ul li{
+				float:left;
+				width: 20%;
+				text-align:center;
+				font-size:.9rem; 
+ 				list-style:none;
+			}
+				 
+			.top{
+				height:300px;
+				width:829px;
+				background-color:#e7e7e7;
+				border-radius:0 0 10px 10px;
+				padding-bottom: 10px;
+
+			}
+			
+			.top>div{
+				padding:10px 20px;
+			}
+			.top img{
+				float:right; 
+			}
+			.top ul{
+				font-size:.8rem;
+			}
+			.bottom {
+				padding:0;
+				margin:0;
+				clear: left;
+				overflow: hidden;
+				width:100%;
+			}
+			.bottom li{
+				background-repeat:no-repeat;
+				width:33%;
+				height:170px;
+				float:left;
+				background-size:100% 100%!important;
+				list-style:none;
+				
+			}
+			.bottom li p{
+				padding:2px 0 0 16px;
+				font-size: .8rem;
+				letter-spacing:1px;
+				color:#333;
+			}
+			footer{
+				text-align:center;
+				color:gray;
+				font-size:.7rem;
+				padding:20px 0;  
+				border-top:gray 1px dashed;
+				margin:0 auto;
+				width:98%;
+				margin-top:20px;
+			}
+			a{
+				color:black;
+			}
+			a:hover{
+				color:#7b7400;
+			}
+			.s{
+				font-size:.8rem;
+				color:gray;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="body">
+			<nav>
+			<ul>
+				<li><a href="index.htm">首 页</a></li>
+				<li><a href="http://code.taobao.org/p/bigfoot_v2/src/">SVN 源码</a></li>
+				<li><a href="doc">JavaDoc</a></li>
+				<li><a href="http://blog.csdn.net/zhangxin09">作者博客</a></li>
+				<li><a href="http://blog.csdn.net/zhangxin09">论坛</a></li>
+			</ul>
+		</nav>
+		<div class="top">
+			<div>“大脚 Bigfoot”是一款基于 Java 平台原创的 Web 框架，继承了 Java
+				平台的高效、安全、稳定、跨平台等诸多优势，但却摒弃了传统 SSH 企业级架构所带来的庞大和臃肿，汲取了 PHP
+				的简洁和方便，非常适合互联网中小型网站的应用。</div>
+			<img src="images/b_07.jpg" width="240" title="欢迎使用 Bigfoot" />
+			<ul>
+				<li>免费、开源、简单、概念清晰；力求高聚合、低耦合</li>
+				<li>一体化全栈式方案，前端库可以游离于服务框架，反之亦然</li>
+				<li>满足业界技术点最低消费：MVC+Ioc+AOP+ORM+JSON，轻量级</li>
+				<li>提供大量的接口适合二次扩展 </li>
+				<li>业务逻辑基于  Rhino 规则引擎 </li>
+				<li>混合语言编程，提供服务端 JS 环境，特别适合从前端过来的开发人员</li>
+				<li>完备的文档、充足的注释，具备 JUnit 单元测试</li>
+				<li>谨慎采用第三方库，当前基本免 JAR 依赖（除数据库驱动外）。提倡“够用就好、就地取材”</li>
+			</ul>
+			<div>QQ 群：3150067，<a href="http://blog.csdn.net/zhangxin09">作者博客</a> <a href="http://blog.csdn.net/zhangxin09/article/category/5013605">相关教程</a>
+			<a href="http://blog.csdn.net/zhangxin09">论坛</a>
+			<br /><span class="s">Bigfoot Web 基于 Apache License, Version 2.0 开源协议</span></div>
+		</div>
+
+		<ul class="bottom">
+				<li style="background:url(images/b_10.jpg)">
+					<p>
+						<b>后端基础组件：</b><br />SQLite/MySQL 数据库、<br />数据连接池采用 Tomcat Pool、<br />使用 TagFiles/SimpleTag 页面标签、<br />日志采用 JDK 自带的 Logger、<br />JSON 转换让 JDK 自带的 Rhino 转换<br /> DOM 解析 XML、Socket 发送邮件
+					</p>
+				</li>
+				
+				<li style="background:url(images/b_11.jpg)">
+					<p><b>前端组件 Bigfoot.js：</b>
+					<br />HTML5 + CSS3 + 原生 JavaScript
+					<br/> 基于 Less.js 预编译、Nodejs 构建系统 
+					<br />响应式PC 端和手机端，支持 IE8+/FF/Chrome/Android 浏览器/iOS Safari，兼容 Ext JS 富客户端
+					<br />演示： <a href="ui_demo/demo/tab.jsp">tab</a> <a href="ui_demo/demo/lightbox.jsp">lightbox</a></p>
+				</li>
+				<li style="background:url(images/b_12.jpg)">
+				<p><b>下 载：</b><br /><a href="download/doc-2015-9-4"> Bigfoot 使用手册 200kb, pdf</a><br /><a href=""> Bigfoot 源码 40kb, zip</a><br /><a href="download/doc-2015-9-4.zip"> Bigfoot JavaDoc 文档打包</a></p>
+				</li>
+			</ul>
+			<footer>
+				©copyright 2015 QQ 群：3150067 <a href="http://blog.csdn.net/zhangxin09">作者博客</a>
+				<br />
+				粤  ICP 证 020598 号
+			</footer>
+	</div>
+	
+	</body>
+</html>
