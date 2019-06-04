@@ -15,7 +15,7 @@ package com.ajaxjs.framework.service;
 import java.io.Serializable;
 import java.util.List;
 
-import com.ajaxjs.framework.PageResult;
+import com.ajaxjs.orm.dao.PageResult;
 
 /**
  * 业务逻辑层 业务层不绑定 DAO 泛型，目的是不强制依赖 DAO
