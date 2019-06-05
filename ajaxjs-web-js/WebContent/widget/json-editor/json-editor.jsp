@@ -30,7 +30,7 @@
 			}	
 		</style> 
 		
-		<link rel="stylesheet/less" data-global-vars='{"assetFilePath": "\"/myblog/asset\"" }' type="text/css" href="/ajaxjs-web-js/widget/json-editor.less" />
+		<link rel="stylesheet/less" data-global-vars='{"assetFilePath": "\"/myblog/asset\"" }' type="text/css" href="/ajaxjs-web-js/widget/json-editor/json-editor.less" />
 	
 	
    		<script src="http://192.168.1.88:8080/ajaxjs-web-js/js/libs/vue.js"></script>

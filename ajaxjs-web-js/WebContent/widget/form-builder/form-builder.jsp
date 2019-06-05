@@ -1,5 +1,4 @@
 <%@page pageEncoding="UTF-8"%>
-<%@include file="tools.jsp" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -9,7 +8,7 @@
 	    <meta name="author"      content="Frank Chueng, frank@ajaxjs.com" />
 		<meta name="renderer"	 content="webkit" /> <meta name="robots" 	 content="index,follow" />
 		<meta http-equiv="X-UA-Compatible" content="edge,chrome=1" />
-		<title>博客&#10;&#10;</title>
+		<title>Form Builder</title>
 		<style type="text/css">
 			/* AJAXJS Base CSS */
 			body,dl,dt,dd,ul,li,pre,form,fieldset,input,p,blockquote,th,td,h1,h2,h3,h4,h5{margin:0;padding:0;}
@@ -31,22 +30,11 @@
 			}	
 		</style> 
 		
-		<link rel="stylesheet/less" data-global-vars='{"assetFilePath": "\"/myblog/asset\"" }' type="text/css" href="/ajaxjs-web-js/less/desktop.less" />
+		<link rel="stylesheet/less" data-global-vars='{"assetFilePath": "\"/myblog/asset\"" }' type="text/css" href="/ajaxjs-web-js/widget/form-builder/form-builder.less" />
 	
 	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/libs/vue.js"></script>
 	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/libs/less.min.js"></script>
 	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/ajaxjs-base.js"></script>
-	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/widgets/admin.js"></script>
-	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/widgets/form.js"></script>
-	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/widgets/list.js"></script> 
-	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/widgets/menu.js"></script>
-	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/widgets/msg.js"></script>
-	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/widgets/page.js"></script>
-	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/widgets/tree.js"></script>
-	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/widgets/upload.js"></script>
-	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/widgets/carousel.js"></script>
-	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/widgets/marquee.js"></script>
-	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/widgets/img.js"></script>
 	    
 	    <script>
 	   		aj.Vue = {};
@@ -84,6 +72,6 @@
 		
 		<div class="mask"></div>
 		
-		<script src="desktop.js"></script>
+		<script src="form-builder.js"></script>
     </body>
 </html>
