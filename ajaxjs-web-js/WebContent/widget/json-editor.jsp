@@ -1,5 +1,4 @@
 <%@page pageEncoding="UTF-8"%>
-<%@include file="tools.jsp" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -31,24 +30,13 @@
 			}	
 		</style> 
 		
-		<link rel="stylesheet/less" data-global-vars='{"assetFilePath": "\"/myblog/asset\"" }' type="text/css" href="/ajaxjs-web-js/less/json-editor.less" />
+		<link rel="stylesheet/less" data-global-vars='{"assetFilePath": "\"/myblog/asset\"" }' type="text/css" href="/ajaxjs-web-js/widget/json-editor.less" />
 	
 	
    		<script src="http://192.168.1.88:8080/ajaxjs-web-js/js/libs/vue.js"></script>
 	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/libs/less.min.js"></script>
 	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/ajaxjs-base.js"></script>
-	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/widgets/admin.js"></script>
-	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/widgets/form.js"></script>
-	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/widgets/list.js"></script> 
-	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/widgets/menu.js"></script>
-	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/widgets/msg.js"></script>
-	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/widgets/page.js"></script>
-	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/widgets/tree.js"></script>
-	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/widgets/upload.js"></script>
-	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/widgets/carousel.js"></script>
-	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/widgets/marquee.js"></script>
-	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/widgets/img.js"></script>
-	    
+
 	    
 	    <script>
 	   		aj.Vue = {};
@@ -175,7 +163,7 @@
 			});
 		</script>
 		
-		<script src="json.js"></script>
+		<script src="simpleData.js"></script>
 		<script src="json-editor.js"></script>
     </body>
 </html>
