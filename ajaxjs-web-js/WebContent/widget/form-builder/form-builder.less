@@ -1,123 +1,204 @@
-body {
-	overflow: hidden;
-	& > .stage {
-		height: 96vh;
-		background-color: #007cbf;
-		width: 100%;
-	}
+@import '../../less/common_style.less';
+@import '../../less/widgets/form.less';
+@import '../../less/admin.less';
+@import 'codeColor.less';
+html , body {
+	height: 100%;
+}
 
-	& > menu {
-		width: 100%;
-		height: 4vh;
-		line-height: 4vh;
+* {
+	box-sizing: border-box;
+}
+
+h3.title {
+	padding: 2%;
+	border-top: 1px solid #e1e1e1;
+	border-bottom: 1px solid white;
+	color: #888;
+	background-image: linear-gradient(#f1f1f1, #e1e1e1);
+	font-size: .9rem;
+}
+
+body {
+	.components {
+		float: left;
+		width: 15%;
+		background-color: #fbfbfb;
+		height: 100%;
+		border-right: 2px solid #a7a7a7;
 		box-sizing: border-box;
-		position: fixed;
-		bottom: 0;
-		left: 0;
-		margin: 0;
-		border-top: 1px solid white;
-		background-image: linear-gradient(93deg, #d1ede9, #c1e9e3 3%, #b1e4dc 12%, #6ea0ce 90%, #2a5cbf);
-		padding: 0;
-		& > .button {
-			margin-top: 5px;
-			margin-left: 10px;
+		li {
+			height: 30px;
+			line-height: 30px;
+			padding-left: 5%;
+			margin-top: 3%;
 			cursor: pointer;
-			width: 80px;
-			height: 15px;
-			font-size: 14px;
-			line-height: 15px;
-			padding: 5px 10px 3px;
-			border-radius: 16px;
-			border: 2px solid #ccc;
-			position: relative;
-			color: #fff;
-			text-shadow: rgba(10, 10, 10, 0.5) 1px 2px 2px;
-			text-align: center;
-			vertical-align: middle;
-			white-space: nowrap;
-			text-overflow: ellipsis;
-			overflow: hidden;
-			background-color: rgba(60, 132, 198, 0.8);
-			border-top-color: #8ba2c1;
-			border-right-color: #5890bf;
-			border-bottom-color: #4f93ca;
-			border-left-color: #768fa5;
-			box-shadow: rgba(66, 140, 240, 0.5) 0px 10px 16px;
-			background-image: -webkit-gradient(linear, 0% 0%, 0% 90%, from(rgba(28, 91, 155, 0.8)), to(rgba(108, 191, 255, .9)));
-			.glare {
-				position: absolute;
-				top: 0;
-				left: 5px;
-				-webkit-border-radius: 8px;
-				-moz-border-radius: 8px;
-				height: 1px;
-				width: 90%;
-				padding: 8px 0;
-				background-color: rgba(255, 255, 255, 0.25);
-				background-image: -webkit-gradient(linear, 0% 0%, 0% 95%, from(rgba(255, 255, 255, 0.7)), to(rgba(255, 255, 255, 0)));
+			img {
+				vertical-align: middle;
+				margin-right: 8px;
 			}
 		}
 	}
-}
 
-.window {
-	width: 500px;
-	height: 400px;
-	background-color: #c3d8ed;
-	position: fixed;
-	padding: 1%;
-	top: 10%;
-	left: 10%;
-	border-radius: 1%;
-	border: 1px solid gray;
-	border-top-color: white;
-	box-shadow: 2px 2px 2px rgba(0, 0, 0, .3);
-	    box-sizing: border-box;
-	& > header {
-		background-image: line-gradient(to left, red, white);
-		h1 {
-			font-size: 1rem;
+	> .center {
+		float: left;
+		width: 65%;
+		height: 100%;
+		header {
+			height: 10%;
+			background-color: #eaeaea;
+			border-bottom: 1px solid #a7a7a7;
+			box-sizing: border-box;
+			> div {
+				padding: 1% 0 0 2%;
+				button {
+					.aj-btn;
+					font-size: .9rem;
+					width: 10%;
+					padding-left: 0;
+					padding-right: 0;
+				}
+
+				span {
+					padding-top: 2%;
+					padding-right: 2%;
+					float: right;
+					.active {
+						font-weight: bold;
+					}
+				}
+			}
 		}
 
-		& > div {
-			float: right;
+		.codeEdit {
+			height: 100%;
+			padding: 5%;
+			pre , textarea {
+				.aj-input;
+				width: 100%;
+				height: 100%;
+				resize: none;
+				font-size: 1rem;
+			}
+		}
+	}
+
+	> .right {
+		float: left;
+		width: 20%;
+		height: 100%;
+		background-color: #eaeaea;
+		border-left: 2px solid #a7a7a7;
+		box-sizing: border-box;
+		position: relative;
+	}
+}
+
+.stage {
+	height: 90%;
+	padding: 3% 0;
+	background: url('asset/grid-noise-bg.jpg') repeat;
+}
+
+.admin-entry-form form {
+	background-color: white;
+}
+
+.dataSource {
+	height: 60%;
+	label {
+		margin: 2%;
+		display: block;
+		select {
+			width: 80%;
+			height: 25px;
+		}
+	}
+
+	ul {
+		max-height: 100%;
+		background-color: #f1efef;
+		overflow-x: hidden;
+		overflow-y: auto;
+		li {
+			padding: 3%;
+			border-bottom: 1px solid lightgray;
+			border-top: 1px solid white;
+			overflow: hidden;
 			div {
-				width: 15px;
-				height: 10px;
-				border: 1px solid gray;
-				border-radius: 3px;
-				padding: 5px;
-				text-align: center;
-				cursor: pointer;
-				color: white;
-				margin-left: 10px;
-				font-size: 23px;
-				line-height: 10px;
 				float: left;
-				background-image: -webkit-gradient(linear, 0% 0%, 0% 90%, from(rgba(220, 228, 236, 0.8)), to(rgba(185, 225, 255, 0.9)));
-				text-shadow: 0 1px black, 1px 0 black, -1px 0 black, 0 -1px black;
-				&.max {
-					font-size: 14px;
+				width: 50%;
+				&.comment {
+					color: gray;
+					overflow: hidden;
+					font-size: .8rem;
 				}
 			}
 		}
 	}
+}
 
-	& > div {
-		background-color: white;
-		height: 96%;
-		border: 1px solid #666;
-		iframe {
+.property {
+	border-left: 1px solid white;
+	box-sizing: border-box;
+	bottom: 0;
+	left: 0;
+	position: absolute;
+	width: 100%;
+	table {
+		width: 100%;
+		.ajaxjs-borderTable;
+	}
+
+	td {
+		&.key {
+			width: 45%;
+			padding-left: 8%;
+		}
+
+		input[type=text] {
 			border: 0;
 			width: 100%;
-			height: 100%;
+			margin: 0;
+			background-color: transparent;
 		}
+
+		select {
+			width: 100%;
+			height: 25px;
+			option {
+				font-size: .9rem;
+			}
+		}
+	}
+
+	.bottom {
+		height: 20px;
+		width: 100%;
+		border-top: 1px solid white;
+		color: #888;
+		background-color: #f1f1f1;
 	}
 }
 
-.mask {
-	position: fixed;
-	background-color: rgba(255, 255, 255, .5);
-	border: 1px solid blue;
+.statusBar {
+	margin: 0 auto;
+	height: 30px;
+	line-height: 30px;
+	padding: 0 2%;
+	background-color: rgba(0, 0, 0, .3);
+	border-radius: 20px;
+	color: white;
+	position: absolute;
+	width: 40%;
+	left: 28%;
+	bottom: 2%;
+	box-shadow: 2px 2px 2px rgba(0, 0, 0, .5);
+	animation-name: fade-in;
+	animation-duration: 700ms;
+	animation-fill-mode: forwards;
+	&.hideMe {
+		animation-name: fade-out-hide;
+	}
 }
 
