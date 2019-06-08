@@ -9,20 +9,49 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
+import com.ajaxjs.mvc.filter.DataBaseFilter;
+import com.ajaxjs.mvc.filter.MvcFilter;
+import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.JdbcHelper;
 
 @Path("/admin/DataBaseShowStru")
 public class DataBaseShowStruController implements IController {
 	@GET
-	public String show(ModelAndView mv, HttpServletRequest request) {
+	public String show(ModelAndView mv) {
 		return BaseController.cms("database-show-stru");
+	}
+
+	@GET
+	@Path("showTables")
+	@Produces(MediaType.APPLICATION_JSON)
+	@MvcFilter(filters = DataBaseFilter.class)
+	public String showTables(ModelAndView mv) {
+		Connection conn = JdbcConnection.getConnection();
+
+		List<String> tables = DataBaseShowStruController.getAllTableName(conn);
+
+		return BaseController.toJson(tables);
+	}
+	
+	@GET
+	@Path("showTableAllByTableName")
+	@Produces(MediaType.APPLICATION_JSON)
+	@MvcFilter(filters = DataBaseFilter.class)
+	public String showTableAllByTableName(ModelAndView mv, @QueryParam("tableName") @NotNull String tableName) {
+		Connection conn = JdbcConnection.getConnection();
+		
+		List<Map<String, String>> table = DataBaseShowStruController.getColumnCommentByTableName(conn, tableName);
+		return BaseController.toJson(table);
 	}
 
 	/**
