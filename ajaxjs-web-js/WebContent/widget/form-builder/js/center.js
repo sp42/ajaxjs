@@ -21,6 +21,32 @@ FB.center = new Vue({
 				this.focusEl = el;
 
 			}
+		},
+		onDragEnter() {
+			var div = event.currentTarget;
+//			debugger;
+			// 当拖拽元素进入潜在放置区域时，高亮处理
+			div.style.backgroundColor = '#ead1d1';
+			event.dataTransfer.dropEffect ='copy';
+		},
+		onDragLeave(){
+			var div = event.currentTarget;
+			div.style.backgroundColor = '';
+		},
+		onDrop(){
+			this.onDragLeave();
+			var div = event.currentTarget;
+			var text = event.dataTransfer.getData("text");
+			var el;
+			switch(text) {
+				case 'Text Field':
+					el = document.createElement('input');
+					el.type = 'text';
+					div.$('label').appendChild(el);
+				break;
+			}
+			
+			this.focusEl = el;
 		}
 	},
 	watch:{

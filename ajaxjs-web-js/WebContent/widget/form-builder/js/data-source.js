@@ -5,7 +5,6 @@ FB.dataSource = new Vue({
 		fields:[]
 	},
 	mounted() {
-		//FB.statusBar.showMsg('加载表名中');
 		aj.xhr.get('/shop/admin/DataBaseShowStru/showTables/', json => this.tables = json.result);
 	},
 	methods:{

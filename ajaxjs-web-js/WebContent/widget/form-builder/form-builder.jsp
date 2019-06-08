@@ -65,11 +65,11 @@
     		<h3 class="title">Components</h3>
     		<ul>
     			<li><img src="asset/icon/label.png" />Label</li>
-    			<li><img src="asset/icon/inputText.png" />Text Field</li>
+    			<li draggable="true" ondragstart="event.dataTransfer.setData('text', event.target.innerText);"><img src="asset/icon/inputText.png" />Text Field</li>
     			<li><img src="asset/icon/button.png" />Button</li>
     			<li><img src="asset/icon/radio.png" />Radio</li>
     			<li><img src="asset/icon/checkbox.png" />CheckBox</li>
-    			<li><img src="asset/icon/textarea.png" />Textarea</li>
+    			<li><img src="asset/icon/textarea.png" />Text Area</li>
     			<li><img src="asset/icon/label.png" />Label</li>
     		</ul>
     	</div>
@@ -93,10 +93,14 @@
 							<input placeholder="请填写${uiName}名称" size="60" required="required" name="name" value="${info.name}" type="text" />
 						</label> 
 					</div>
-					<div>
+					<div @dragenter="onDragEnter" @dragleave="onDragLeave">
+						<label>
+							<div contenteditable="true" class="label">名 称：</div><input placeholder="请填写766名称" required="required" name="name22" value="${info.name}" type="text" />
+						</label> 
+					</div>
+					<div @dragenter="onDragEnter" @dragleave="onDragLeave" ondragover="event.preventDefault();" @drop="onDrop">
 						<label>
 							<div contenteditable="true" class="label">名 称：</div> 
-							<input placeholder="请填写766名称" size="60" required="required" name="name22" value="${info.name}" type="text" />
 						</label> 
 					</div>
 				</form>
@@ -123,7 +127,10 @@ setTimeout(function(){
 					</select>
     			</label>
     			<ul>
-    				<li v-for="v in fields"><div>{{v.name}}</div><div class="comment">{{v.comment}}</div></li>
+    				<li v-for="v in fields" draggable="true">
+    					<div>{{v.name}}<span>:{{v.type}}</span> <img :src="ajResources.commonAsset + '/icon/add.gif'" title="绑定该字段" /></div>
+    					<div class="comment">{{v.comment}}</div>
+    				</li>
     			</ul>
     		</div>
 
@@ -177,8 +184,6 @@ setTimeout(function(){
 		<!-- 状态栏 -->
 		<div class="statusBar" v-bind:class="{hideMe:!show}">{{text}}</div>
 		
-		
-
 		<script>
 			FB={};
 			FB.statusBar = new Vue({
@@ -202,10 +207,9 @@ setTimeout(function(){
 					}
 				}
 			});
-			
 		</script>
-		<script src="form-builder.js"></script>
-		<script src="center.js"></script>
-		<script src="property-editor.js"></script>
+		<script src="js/center.js"></script>
+		<script src="js/data-source.js"></script>
+		<script src="js/property-editor.js"></script>
     </body>
 </html>

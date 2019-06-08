@@ -3,5 +3,12 @@ FB.propertyEditor = new Vue({
 	data :{
 		name:'',
 		placeHolder:''
+	},
+	watch :{
+		placeHolder(v){
+			if(FB.center.focusEl) {
+				FB.center.focusEl.placeholder = v;
+			}
+		}
 	}
 });

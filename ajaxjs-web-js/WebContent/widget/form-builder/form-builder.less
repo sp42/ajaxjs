@@ -33,6 +33,7 @@ body {
 			padding-left: 5%;
 			margin-top: 3%;
 			cursor: pointer;
+			user-select: none;
 			img {
 				vertical-align: middle;
 				margin-right: 8px;
@@ -102,6 +103,13 @@ body {
 
 .admin-entry-form form {
 	background-color: white;
+	input[type=text]{
+		.aj-input;
+	}
+}
+
+.admin-entry-form > form > div {
+	transition: background-color 300ms ease-in;
 }
 
 .dataSource {
@@ -121,13 +129,29 @@ body {
 		overflow-x: hidden;
 		overflow-y: auto;
 		li {
-			padding: 3%;
+			padding: 2%;
 			border-bottom: 1px solid lightgray;
 			border-top: 1px solid white;
 			overflow: hidden;
+			min-height: 40px;
+			line-height: 180%;
+			&:hover img {
+				display: initial;
+			}
+
 			div {
 				float: left;
 				width: 50%;
+				span {
+					color: gray;
+				}
+
+				img {
+					display: none;
+					cursor: pointer;
+					vertical-align: middle;
+				}
+
 				&.comment {
 					color: gray;
 					overflow: hidden;
