@@ -26,7 +26,7 @@ import com.ajaxjs.framework.BaseModel;
  * @author sp42 frank@ajaxjs.com
  *
  */
-final class User extends BaseModel {
+final class TestUser extends BaseModel {
 	private static final long serialVersionUID = 1L;
 
 	private long id;

@@ -31,6 +31,12 @@ public class PicDownload {
 		this.newFileNameFn = newFileNameFn;
 	}
 
+	/**
+	 * Download
+	 * 
+	 * @param url
+	 * @param i
+	 */
 	public void exec(String url, int i) {
 		String newFileName;
 
