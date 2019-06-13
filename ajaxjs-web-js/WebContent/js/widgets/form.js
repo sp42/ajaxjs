@@ -402,17 +402,28 @@ Vue.component('aj-form-html-editor', {
 		},
 		
 		saveRemoteImage2Local(){
-			var str = [], arr = this.iframeDoc.querySelectorAll('img');
+			var str = [], remotePicArr = [], arr = this.iframeDoc.querySelectorAll('img');
+
 			for(var i = 0, j = arr.length; i <j; i++) {
 				var imgEl = arr[i], url = imgEl.getAttribute('src');
 				
 				if(/^http/.test(url)) {
 					str.push(url);
+					remotePicArr.push(imgEl);
 				}
 			}
-			aj.xhr.post('', (json)=>{
-				console.log(json);
-			}, {urls: str.join('|')});
+			
+			if(str.length)
+				aj.xhr.post('../downAllPics/', json=>{
+					var _arr = json.result.pics;
+					for(var i = 0, j = _arr.length; i <j; i++) {
+						remotePicArr[i].src = "images/" + _arr[i];
+					}
+					
+					aj.alert.show('所有图片下载完成。');
+				}, {pics: str.join('|')});
+			else
+				aj.alert.show('未发现有远程图片');
 		},
 		
 		// 設置 HTML

@@ -33,7 +33,6 @@ public class JsController extends HttpServlet {
 		js += JavaScriptCompressor.compress(read(mappath(request, "js/ajaxjs-base.js"))) + "\n";
 		js += JavaScriptCompressor.compress(read(mappath(request, "js/ajaxjs-list.js"))) + "\n";
 		js += action(mappath(request, "js/widgets/"), true) + "\n";
-		js += action(mappath(request, "js/widgets/admin/"), true) + "\n";
 
 		save(output + "\\all.js", js);
 		response.getWriter().append("Pack js Okay.");
@@ -70,19 +69,21 @@ public class JsController extends HttpServlet {
 	public static String action(String _folder, boolean isCompress) {
 		StringBuilder sb = new StringBuilder();
 		File folder = new File(_folder);
+		File[] files = folder.listFiles();
 
-		for (File file : folder.listFiles()) {
-			if (file.isFile()) {
-				String jsCode = null;
-				try {
-					jsCode = read(file.toPath());
-				} catch (IOException e) {
-					e.printStackTrace();
+		if (files != null)
+			for (File file : files) {
+				if (file.isFile()) {
+					String jsCode = null;
+					try {
+						jsCode = read(file.toPath());
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					sb.append("\n");
+					sb.append(isCompress ? JavaScriptCompressor.compress(jsCode) : jsCode);
 				}
-				sb.append("\n");
-				sb.append(isCompress ? JavaScriptCompressor.compress(jsCode) : jsCode);
 			}
-		}
 
 		return sb.toString();
 	}

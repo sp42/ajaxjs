@@ -1,3 +1,13 @@
+// 判断浏览器是否缩放 getScreenScaleNum() == 100 
+function getScreenScaleNum() { 
+    var e = 0, i = window.screen; 
+    return void 0 !== window.devicePixelRatio ? 
+    e = window.devicePixelRatio 
+    : ~this.ua.indexOf("msie") 
+        ? i.deviceXDPI && i.logicalXDPI && (e = i.deviceXDPI / i.logicalXDPI) 
+        : void 0 !== window.outerWidth && void 0 !== window.innerWidth && (e = window.outerWidth / window.innerWidth), e && (e = Math.round(100 * e)), 99 !== e && 101 !== e || (e = 100), e 
+}
+
 Vue.component('aj-window', {
 	template : 
 			'<div class="window">\
