@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.zip.GZIPInputStream;
 
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.IoHelper;
 import com.ajaxjs.util.MapTool;
@@ -254,8 +255,11 @@ public class NetUtil extends IoHelper {
 	public static Function<InputStream, String> initDownload2disk_Callback(String saveDir, String fileName) {
 		return in -> {
 			File file = IoHelper.createFile(saveDir, fileName);
+
 			try (OutputStream out = new FileOutputStream(file);) {
 				IoHelper.write(in, out, true);
+				LOGGER.info("文件 {0} 写入成功", file.toString());
+
 				return file.toString();
 			} catch (IOException e) {
 				LOGGER.warning(e);
@@ -271,15 +275,26 @@ public class NetUtil extends IoHelper {
 		};
 	}
 
+	/**
+	 * 
+	 * @param url 远程地址
+	 * @param saveDir 保存的目录
+	 * @param newFileName 是否有新的文件名，如无请传 null
+	 * @return 下载文件的完整磁盘路径
+	 */
 	public static String download(String url, String saveDir, String newFileName) {
 		HttpURLConnection conn = initHttpConnection(url);
 		setUserAgentDefault.accept(conn);
 		conn.setDoInput(true);// for conn.getOutputStream().write(someBytes); 需要吗？
 		conn.setDoOutput(true);
 
-		String fileName = newFileName == null ? IoHelper.getFileNameFromUrl(url) : newFileName;
-		String newlyFilePath = getResponse(conn, false, initDownload2disk_Callback(saveDir, fileName));
+		String fileName = IoHelper.getFileNameFromUrl(url);
+		if (newFileName != null) {
+			// 新文件名 + 旧扩展名
+			fileName = newFileName + CommonUtil.regMatch("\\.\\w+$", fileName);
+		}
 
+		String newlyFilePath = getResponse(conn, false, initDownload2disk_Callback(saveDir, fileName));
 		return newlyFilePath;
 	}
 
@@ -340,7 +355,7 @@ public class NetUtil extends IoHelper {
 		setMedthod.accept(conn, "POST");
 		conn.setDoOutput(true); // for conn.getOutputStream().write(someBytes);
 		conn.setDoInput(true);
-		
+
 		if (fn != null)
 			fn.accept(conn);
 		else

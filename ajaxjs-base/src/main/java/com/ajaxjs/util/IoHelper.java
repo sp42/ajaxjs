@@ -89,6 +89,7 @@ public class IoHelper {
 	public static String getFileNameFromUrl(String url) {
 		String[] arr = url.split("/");
 		String last = arr[arr.length - 1];
+
 		return last.split("\\?")[0];
 	}
 
@@ -102,8 +103,10 @@ public class IoHelper {
 		String contentType = new MimetypesFileTypeMap().getContentType(file);
 		if (file.getName().endsWith(".png"))
 			contentType = "image/png"; // TODO needs?
+		
 		if (contentType == null)
 			contentType = "application/octet-stream";
+		
 		return contentType;
 	}
 
