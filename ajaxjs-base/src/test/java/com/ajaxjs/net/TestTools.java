@@ -2,11 +2,6 @@ package com.ajaxjs.net;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.io.IOException;
-import java.util.Map;
-
-import org.junit.Test;
-
 import com.ajaxjs.net.http.Tools;
 
 public class TestTools {
