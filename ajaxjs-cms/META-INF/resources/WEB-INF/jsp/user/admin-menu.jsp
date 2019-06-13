@@ -1,4 +1,4 @@
-<%@page pageEncoding="UTF-8" import="com.ajaxjs.cms.user.role.RightConstant"%>
+<%@page pageEncoding="UTF-8" import="com.ajaxjs.user.role.RightConstant"%>
 <%
 	long privilegeTotal = (long)request.getSession().getAttribute("privilegeTotal");
 %>

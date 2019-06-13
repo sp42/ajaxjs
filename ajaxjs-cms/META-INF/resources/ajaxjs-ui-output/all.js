@@ -1,4 +1,4 @@
-// build date:Sun Mar 17 23:33:50 GMT+08:00 2019
+// build date:Wed Jun 12 08:45:22 GMT+08:00 2019
 
 ajaxjs = aj = function(cssSelector, fn) {
 return Element.prototype.$.apply(document, arguments);
@@ -632,19 +632,24 @@ selectedCatelogId :{
 type: Number,
 required: false
 },
-noCatelog :{
+noCatelog : {
 type : Boolean, 
 default : false
+},
+searchFieldValue : { 
+required: false,
+default : 'name'
 }
 },
 template: 
 '<div class="aj-admin-filter-panel">\
 <form action="?" method="GET">\
-<input type="hidden" name="searchField" value="name" />\
-<input type="text" name="searchValue" placeholder="请输入正文之关键字" style="float: inherit;" class="ajaxjs-inputField" />\
+<input type="hidden" name="searchField" :value="searchFieldValue" />\
+<input type="text" name="searchValue" placeholder="请输入搜索之关键字" style="float: inherit;" class="ajaxjs-inputField" />\
 <button style="margin-top: 0;" class="ajaxjs-btn">搜索</button>\
-</form>\
-<span v-if="!noCatelog">{{label||\'分类\'}}：<aj-tree-catelog-select :is-auto-jump="true" :catelog-id="catelogId" :selected-catelog-id="selectedCatelogId"></aj-tree-catelog-select></span>\
+</form><slot></slot>\
+<span v-if="!noCatelog">{{label||\'分类\'}}：\
+<aj-tree-catelog-select :is-auto-jump="true" :catelog-id="catelogId" :selected-catelog-id="selectedCatelogId"></aj-tree-catelog-select></span>\
 </div>'
 });
 aj.admin = {
@@ -763,6 +768,8 @@ mover.style.webkitTransition = '-webkit-transform 400ms linear';
 mover.style.webkitTransform = cssText;
 }else{
 var isWebkit = navigator.userAgent.toLowerCase().indexOf('webkit') != -1;
+if(!this.stepWidth)
+this.setItemWidth();
 var leftValue = this.isUsePx ? ('-' + (i * this.stepWidth) + 'px') : ('-' + (1 / len * 100 * i).toFixed(2) + '%');
 mover.style[this.isWebkit ? 'webkitTransform' : 'transform'] = 'translate3d({0}, 0px, 0px)'.replace('{0}', leftValue);
 }
@@ -860,7 +867,7 @@ default: true
 isGetCurrentHeight : {
 default: false
 },
-autoLoop : {
+autoLoop : { 
 type : Number,
 default : 4000 
 },
@@ -897,6 +904,7 @@ this.loop();
 },
 methods:{
 loop : function() {
+if(this.autoLoop)
 this.loopTimer = window.setInterval(this.goNext.bind(this), this.autoLoop);
 },
 getContent : function(content, href) {
@@ -939,25 +947,28 @@ img.src = img.src.replace(/\?\d+$/, '') + '?' + new Date().valueOf();
 }
 });
 Vue.component('aj-form-calendar', {
-data: function() {
+data() {
+var date = new Date;
 return {
-year : 2017,
-month : 2,
+date : date,
+year : date.getFullYear(),
+month : date.getMonth() + 1,
 day : 1
 };
 },
 props : {
+showTime: false
 },
 template : 
 '<div class="aj-form-calendar">\
 <div class="selectYearMonth">\
-<a href="#" @click="setYear(\'preYear\')" class="preYear">&lt;</a> \
-<select>\
+<a href="#" @click="getDate(\'preYear\')" class="preYear" title="上一年">&lt;</a> \
+<select @change="setMonth($event)" v-model="month">\
 <option value="1">一月</option><option value="2">二月</option><option value="3">三月</option><option value="4">四月</option>\
 <option value="5">五月</option><option value="6">六月</option><option value="7">七月</option><option value="8">八月</option>\
 <option value="9">九月</option><option value="10">十月</option><option value="11">十一月</option><option value="12">十二月</option>\
 </select>\
-<a href="#" @click="setYear(\'nextYear\')" class="nextYear">&gt;</a>\
+<a href="#" @click="getDate(\'nextYear\')" class="nextYear" title="下一年">&gt;</a>\
 </div>\
 <div class="showCurrentYearMonth">\
 <span class="showYear">{{year}}</span>/<span class="showMonth">{{month}}</span>\
@@ -968,16 +979,25 @@ template :
 </thead>\
 <tbody @click="pickDay($event);"></tbody>\
 </table>\
+<div v-if="showTime">\
+时 <select class="hour ajaxjs-select"><option v-for="n in 24">{{n}}</option></select> \
+分 <select class="minute ajaxjs-select"><option v-for="n in 61">{{n - 1}}</option></select>\
+<a href="#" @click="pickupTime($event)">选择时间</a>\
+</div>\
 </div>',
-mounted : function () {
-aj.apply(this, this.getDate('now'));
+mounted () {
+this.$options.watch.date.call(this);
+},
+watch : {
+date (n) {
+this.year = this.date.getFullYear();
+this.month = this.date.getMonth() + 1;
 this.render();
+}
 },
 methods : {
-render : function () {
-var el = this.$el;
+render () {
 var arr = this.getDateArr();
-this.days = [];
 var frag = document.createDocumentFragment();
 while (arr.length) {
 var row = document.createElement("tr"); 
@@ -987,57 +1007,48 @@ if (arr.length) {
 var d = arr.shift();
 if (d) {
 cell.innerHTML = d;
-cell.className = 'day day_' + this.year + '-' + this.month + '-' + d;
-cell.title = this.year + '-' + this.month + '-' + d;
-this.days[d] = cell;
+var text = this.year + '-' + this.month + '-' + d;
+cell.className = 'day day_' + text;
+cell.title = text;
 var on = new Date(this.year, this.month - 1, d);
 if (this.isSameDay(on, this.date)) {
 cell.classList.add('onToday');
 this.onToday && this.onToday(cell);
 }
-this.selectDay && this.onSelectDay && this.isSameDay(on, this.selectDay) && this.onSelectDay(cell);
 }
 }
 row.appendChild(cell);
 }
 frag.appendChild(row);
 }
-var tbody = el.$("table tbody");
+var tbody = this.$el.$("table tbody");
 tbody.innerHTML = '';
 tbody.appendChild(frag);
-this.onFinish && this.onFinish();
 },
-setYear : function(type) {
-this.year = this.getDate(type).year;
-},
-nextYear : function() {
-},
-getDate: function (dateType) {
-var now = new Date(), date, nowYear = now.getFullYear(), nowMonth = now.getMonth() + 1;
+getDate (dateType, month) {
+var nowYear = this.date.getFullYear(), nowMonth = this.date.getMonth() + 1; 
 switch (dateType) {
-case 'now':
-date = now;
-break;
 case 'preMonth':
-date = new Date(nowYear, nowMonth - 2, 1);
+this.date = new Date(nowYear, nowMonth - 2, 1);
 break;
 case 'nextMonth':
-date = new Date(nowYear, nowMonth, 1);
+this.date = new Date(nowYear, nowMonth, 1);
+break;
+case 'setMonth':
+this.date = new Date(nowYear, month - 1, 1);
 break;
 case 'preYear':
-date = new Date(nowYear - 1, nowMonth - 1, 1);
+this.date = new Date(nowYear - 1, nowMonth - 1, 1);
 break;
 case 'nextYear':
-date = new Date(nowYear + 1, nowMonth - 1, 1);
+this.date = new Date(nowYear + 1, nowMonth - 1, 1);
 break;
 }
-return {
-date : date,
-year : date.getFullYear(),
-month : date.getMonth() + 1,
-};
 },
-getDateArr: function () {
+setMonth(e){
+this.getDate('setMonth', Number(e.target.selectedOptions[0].value));
+},
+getDateArr () {
 var arr = [];
 for (var i = 1, firstDay = new Date(this.year, this.month - 1, 1).getDay(); i <= firstDay; i++)
 arr.push(0);
@@ -1045,12 +1056,16 @@ for (var i = 1, monthDay = new Date(this.year, this.month, 0).getDate(); i <= mo
 arr.push(i);
 return arr;
 },
-pickDay : function(e) {
+pickDay (e) {
 var el = e.target, date = el.title;
 this.$emit('pick-date', date);
 return date;
 },
-isSameDay: function (d1, d2) {
+pickupTime(e) {
+var time = this.$el.$('.hour').selectedOptions[0].value + ':' + this.$el.$('.minute').selectedOptions[0].value;
+this.$emit('pick-time', time);
+},
+isSameDay (d1, d2) {
 return (d1.getFullYear() == d2.getFullYear() && d1.getMonth() == d2.getMonth() && d1.getDate() == d2.getDate());
 }
 }
@@ -1058,7 +1073,8 @@ return (d1.getFullYear() == d2.getFullYear() && d1.getMonth() == d2.getMonth() &
 Vue.component('aj-form-calendar-input', {
 data : function(){
 return {
-date : this.fieldValue
+date : this.fieldValue, 
+time : ''
 }
 },
 props : {
@@ -1070,20 +1086,28 @@ fieldValue : {
 type: String,
 required: false
 },
+showTime: false,
 positionFixed : Boolean 
 },
 template : 
 '<div class="aj-form-calendar-input" @mouseover="onMouseOver($event)">\
 <div class="icon" ><div class="menu"></div></div>\
-<input placeholder="请输入日期" :name="fieldName" :value="date" type="text" />\
-<aj-form-calendar @pick-date="recEvent"></aj-form-calendar>\
+<input placeholder="请输入日期" :name="fieldName" :value="date +\' \' + time" type="text" />\
+<aj-form-calendar ref="calendar" :show-time="showTime" @pick-date="recEvent" @pick-time="recTimeEvent"></aj-form-calendar>\
 </div>',
 mounted : function() {
 if(this.positionFixed) {
 this.$el.$('.aj-form-calendar').classList.add('positionFixed');
 }
+if(this.fieldValue) {
+var arr = this.fieldValue.split(' ')[0], arr = arr.split('-'), date = new Date(arr[0], arr[1] - 1, arr[2], " ", "", " ");
+this.$refs.calendar.date = date;
+}
 },
 methods : {
+recTimeEvent: function(time) {
+this.time = time;
+},
 recEvent: function(date) {
 this.date = date;
 },
@@ -1113,7 +1137,8 @@ basePath : {
 type: String,
 required: false,
 default : ''
-}
+},
+uploadImageActionUrl: String
 },
 beforeCreate : function() {
 var xhr = new XMLHttpRequest();
@@ -1133,9 +1158,45 @@ this.iframeDoc = this.iframeWin.document;
 this.iframeDoc.designMode = 'on';
 this.iframeBody = this.iframeDoc.body;
 this.sourceEditor.value && this.setValue(this.sourceEditor.value);
+this.iframeDoc.addEventListener('paste', this.onImagePaste);
 }.bind(this);
 },
 methods: {
+onImagePaste(event) {
+var items = event.clipboardData && event.clipboardData.items;
+var file = null; 
+if (items && items.length) {
+for (var i = 0; i < items.length; i++) {
+if (items[i].type.indexOf('image') !== -1) {
+if(window.isCreate) { 
+aj.alert.show('请保存记录后再上传图片。');
+return;
+}
+file = items[i].getAsFile();
+break;
+}
+}
+}
+if(!this.uploadImageActionUrl) {
+alert('未提供图片上传地址');
+return;
+}
+if(file) {
+var imgInsert = event.target, self = this;
+event.preventDefault();
+aj.img.changeBlobImageQuality(file, (newBlob)=> {	
+Vue.options.components["aj-xhr-upload"].extendOptions.methods.doUpload.call({
+action: this.uploadImageActionUrl,
+progress: 0,
+uploadOk_callback(j) {
+self.format("insertImage", j.imgUrl);
+},
+$blob: newBlob,
+$fileName: 'foo.jpg'
+});
+});
+} 
+},
 onToolBarClk : function(e) {
 var el = e.target, clsName = el.className;
 clsName = clsName.split(' ').shift();
@@ -1162,6 +1223,9 @@ break;
 case 'cleanHTML':
 this.cleanHTML();
 break;
+case 'saveRemoteImage2Local':
+this.saveRemoteImage2Local();
+break;
 default:
 this.format(clsName);
 }
@@ -1179,6 +1243,18 @@ this.iframeWin.focus();
 },
 insertEl : function (html) {
 this.iframeDoc.body.innerHTML = html;
+},
+saveRemoteImage2Local(){
+var str = [], arr = this.iframeDoc.querySelectorAll('img');
+for(var i = 0, j = arr.length; i <j; i++) {
+var imgEl = arr[i], url = imgEl.getAttribute('src');
+if(/^http/.test(url)) {
+str.push(url);
+}
+}
+aj.xhr.post('', (json)=>{
+console.log(json);
+}, {urls: str.join('|')});
 },
 setValue : function(v) {
 var self = this;
@@ -1317,6 +1393,59 @@ objChildNode = objChildNode.nextSibling;
 }
 });
 
+aj.img = (function() {
+function dataURLtoBlob(dataurl) {
+var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]), len = bstr.length, u8arr = new Uint8Array(len);
+while (len--)
+u8arr[len] = bstr.charCodeAt(len);
+return new Blob([ u8arr ], {
+type : mime
+});
+}
+return {	
+imageToCanvas(imgUrl, cb, isCovernt2DataUrl) {
+var img = new Image();
+img.onload = () => {
+var canvas = document.createElement('canvas');
+canvas.width = img.width;
+canvas.height = img.height;
+canvas.getContext('2d').drawImage(img, 0, 0);
+if(isCovernt2DataUrl) {
+cb(canvas.toDataURL(isCovernt2DataUrl.format || 'image/jpeg', isCovernt2DataUrl.quality || .9));
+} else {
+cb(canvas);
+}
+}
+img.src = imgUrl;
+},
+imageElToBlob(imgUrl, cb) {
+this.imageToCanvas(imgUrl, (canvas) => {
+cb(dataURLtoBlob(canvas));
+}, true)
+},
+changeBlobImageQuality (blob, callback, format, quality) {
+format = format || 'image/jpeg';
+quality = quality || 0.9; 
+var fr = new FileReader();
+fr.onload = function(e) {
+var dataURL = e.target.result;
+var img = new Image();
+img.onload = function() {
+var canvas = document.createElement('canvas');
+var ctx = canvas.getContext('2d');
+canvas.width = img.width;
+canvas.height = img.height;
+ctx.drawImage(img, 0, 0);
+var newDataURL = canvas.toDataURL(format, quality);
+callback && callback(dataURLtoBlob(newDataURL));
+canvas = null;
+};
+img.src = dataURL;
+};
+fr.readAsDataURL(blob); 
+}
+};
+})();
 aj._list = {
 props : {
 apiUrl : {	
@@ -1331,7 +1460,8 @@ required : false
 data : function() {
 return {
 result : [],	
-baseParam: {}	
+baseParam: {},	
+realApiUrl: this.apiUrl
 };
 }
 };
@@ -1343,7 +1473,7 @@ template : '<ul class="aj-simple-list"><li v-for="(item, index) in result">\
 </slot>\
 </li></ul>',
 mounted : function() {
-ajaxjs.xhr.get(this.apiUrl, function(json) {
+ajaxjs.xhr.get(this.realApiUrl, function(json) {
 aj.apply(this, json);
 }.bind(this), this.baseParam);
 }
@@ -1400,13 +1530,13 @@ template :
 </footer><div v-show="!!autoLoadWhenReachedBottom" class="buttom"></div>\
 </div>',
 mounted : function() {
-ajaxjs.xhr.get(this.$props.apiUrl, this.doAjaxGet, {
+ajaxjs.xhr.get(this.realApiUrl, this.doAjaxGet, {
 limit : this.pageSize
 });
 if(!!this.autoLoadWhenReachedBottom) {
 var scrollSpy = new aj.scrollSpy({
 scrollInElement : aj(this.autoLoadWhenReachedBottom),
-spyOn : this.$el.$('.buttom')
+spyOn : thish.$el.$('.buttom')
 });
 scrollSpy.onScrollSpyBackInSight = function (e) {
 this.nextPage();
@@ -1446,7 +1576,7 @@ ajaxGet : function () {
 var params = {};
 aj.apply(params, { start : this.pageStart, limit : this.pageSize });
 this.baseParam && aj.apply(params, this.baseParam);
-ajaxjs.xhr.get(this.$props.apiUrl, this.doAjaxGet, params);
+ajaxjs.xhr.get(this.realApiUrl, this.doAjaxGet, params);
 },
 jumpPageBySelect : function (e) {
 var selectEl = e.target;
@@ -2114,6 +2244,24 @@ this.go(next);
 }
 }
 });
+function throttleV2(fn, delay, mustRunDelay) {
+var timer = null;
+var t_start;
+return function() {
+var context = this, args = arguments, t_curr = +new Date();
+clearTimeout(timer);
+if(!t_start) 
+t_start = t_curr;
+if(t_curr - t_start >= mustRunDelay) {
+fn.apply(context, args);
+t_start = t_curr;
+} else {
+timer = setTimeout(function() {
+fn.apply(context, args);
+}, delay);
+}
+};
+};
 aj.imageEnlarger = function() {
 var vue = new Vue({
 el : document.body.appendChild(document.createElement('div')),
@@ -2126,14 +2274,18 @@ data : {
 imgUrl: null
 },
 mounted: function(){
-document.addEventListener('mousemove', this.move.bind(this), false);
+document.addEventListener('mousemove', throttleV2(this.move.bind(this), 50, 5000), false);
 },
 methods: {
 move: function(e) {
 if(this.imgUrl) {
 var el = this.$el.$('div');
+var w = 0, imgWidth = this.$el.$('img').clientWidth;
+if(imgWidth > e.pageX) {
+w = imgWidth;
+}
 el.style.top = (e.pageY + 20)+ 'px';
-el.style.left = (e.pageX - el.clientWidth) + 'px';
+el.style.left = (e.pageX - el.clientWidth + w) + 'px';
 }
 }
 }
@@ -2314,7 +2466,8 @@ required: false
 },
 fieldName : { 
 type: String,
-required: false
+required: false,
+default:'catelogId'
 },
 isAutoJump : Boolean 
 },
@@ -2331,7 +2484,7 @@ selectUI.renderer(catalogArr, this.$el, this.selectedCatelogId, {makeAllOption :
 onSelected : function(e) {
 if(this.isAutoJump) {
 var el = e.target, catalogId = el.selectedOptions[0].value;
-location.assign('?catalogId=' + catalogId);
+location.assign('?' + this.fieldName + '=' + catalogId);
 } else {
 this.BUS.$emit('aj-tree-catelog-select-change', e, this);
 }
@@ -3046,290 +3199,3 @@ self.loadAttachmentPictures();
 }
 }
 });
-
-
-function renderRadio(scheme, namespaces, tip, value) {
-var t = '[: for (var i=0;i<list.length;i++) { :]\
-<label><input type="radio" value="[:=list[i].value:]" name="[:=list[i].name:]" data-note="[:=list[i].dataNote:]" [:=list[i].checked ? "checked" : "":] />\
-[:=list[i].text:] </label>\
-[:}:]';
-var arr = [];
-for(var i = 0, j = scheme.option.length; i < j; i++) {
-var item = scheme.option[i];
-var _arr = item.split('=');
-var checked = value == getRealValue(_arr[0]); 
-arr.push({
-name : namespaces,
-value: _arr[0],
-text : _arr[1],
-dataNote: tip,
-checked : checked
-});
-}
-return tppl(t, {
-list : arr
-});
-}
-function renderCheckbox(scheme, namespaces, tip, value) {
-var checkboxTpl = '<input type="hidden" name="[:=namespaces:]" value="[:=totalValue:]" />\
-[: for (var i=0;i<list.length;i++) { :]\
-<label><input type="checkbox" value="[:=list[i].value:]" data-name="[:=list[i].name:]" data-note="[:=list[i].dataNote:]" [:=list[i].checked ? "checked" : "":] />\
-[:=list[i].text:]</label> \
-[:}:]';
-var arr = [];
-for(var i = 0, j = scheme.option.length; i < j; i++) {
-var item = scheme.option[i];
-var _arr = item.split('=');
-var checked = isChecked(value, getRealValue(_arr[0])); 
-arr.push({
-name : namespaces,
-value: _arr[0],
-text : _arr[1],
-dataNote: tip,
-checked : checked
-});
-}
-return tppl(checkboxTpl, {
-namespaces:namespaces,
-totalValue : value,
-list : arr
-});
-}
-function initHtmlEditor(li, value, namespaces) {
-setTimeout(function() {
-var htmlEditor = new ajaxjs_HtmlEditor(li.querySelector('.htmlEditor'));
-htmlEditor.setValue(value);
-htmlEditor.sourceEditor.name = namespaces;
-htmlEditor.sourceEditor.value = value;
-}, 0);
-}
-function renderSelect(scheme, namespaces, tip, value) {
-var tpl = '<select name="[:=namespaces:]" data-note="[:=dataNote:]" />\
-[: for (var i=0;i<list.length;i++) { :]\
-<option value="[:=list[i].value:]" [:=list[i].checked ? "selected" : "":]>\
-[:=list[i].text:]</option> \
-[:}:]</select>';
-var arr = [];
-for(var i = 0, j = scheme.option.length; i < j; i++) {
-var item = scheme.option[i];
-var _arr = item.split('=');
-var checked = value == getRealValue(_arr[0]); 
-arr.push({
-value: _arr[0],
-text : _arr[1],
-checked : checked
-});
-}
-return tppl(tpl, {
-namespaces:namespaces,
-dataNote: tip,
-list : arr
-});
-}
-
-var tree = aj('.tree');
-function isMap(v) {
-return typeof v == 'object' && v != null;
-}
-var stack = [];
-function it(json, fn, parentEl) {
-stack.push(json);
-var ul = document.createElement('ul');
-ul.style.paddingLeft = (stack.length * 10) + "px";
-if (stack.length != 1) {
-ul.className = 'subTree';
-ul.style.height = '0';
-}
-for ( var i in json) {
-var el = json[i];
-var li = document.createElement('li');
-if (isMap(el)) {
-var div = document.createElement('div'); 
-div.className = 'parentNode';
-div.innerHTML = '+' + i;
-div.onclick = toggle;
-li.appendChild(div);
-it(el, fn, li);
-} else {
-var namespaces = getParentStack(stack); 
-if (namespaces)
-namespaces += '.' + i;
-else
-namespaces = i;
-try {
-var scheme = eval('jsonScheme.' + namespaces);
-var tip = makeTip(scheme);
-} catch (e) {
-var scheme = {
-ui : 'input_text'
-};
-var tip = '';
-}
-var html = '<div class="valueHolder">';
-if(!scheme){ 
-continue;
-}
-switch (scheme.ui) {
-case 'textarea':
-html += '<textarea name="'+namespaces+'">' + el + '</textarea>';
-break;
-case 'htmlEditor':
-break;
-case 'checkbox':
-html += renderCheckbox(scheme, namespaces, tip, el);
-break;
-case 'radio':
-html += renderRadio(scheme, namespaces, tip, el);
-break;
-case 'select':
-html += renderSelect(scheme, namespaces, tip, el);
-break;
-case 'input_text':
-default:
-html += '<input name="' + namespaces + '" type="text" value="' + el + '" data-note="' + tip + '" />';
-}
-html += ('</div>'+ (scheme.name || '') + ' ' + i);
-li.innerHTML = html;
-fn(i, el);
-}
-ul.appendChild(li);
-}
-stack.pop();
-parentEl.appendChild(ul);
-}
-function getRealValue(v) {
-switch(v) {
-case 'null':
-case 'true':
-case 'false':
-return eval(v);
-}
-if((Number(v) + "") == v)
-return Number(v);
-return v;
-}
-function isChecked(value, itemValue) {
-return (value & itemValue) == itemValue;
-}
-function getParentStack(stack) {
-var names = [];
-var last;
-for (var i = stack.length; i > 0; i--) {
-last = stack[i];
-if (last) {
-var map = stack[i - 1];
-for ( var j in map) {
-if (map[j] == last) {
-names.push(j);
-}
-}
-}
-}
-return names.reverse().join('.');
-}
-function makeTip(scheme) {
-if (!scheme || !scheme.name || !scheme.tip)
-return '';
-var html = scheme.name.bold();
-html += '<br />' + scheme.tip;
-return html;
-}
-function toggle(e) {
-var div = e.target;
-var ul = div.parentNode.$('ul');
-if (ul.style.height == '0px') {
-div.innerHTML = div.innerHTML.replace('+', '-');
-ul.style.height = ul.scrollHeight + 'px';
-setTimeout(function() {
-ul.style.height = 'auto'; 
-}, 500);
-} else {
-div.innerHTML = div.innerHTML.replace('-', '+');
-ul.style.height = '0px';
-}
-}
-if(window.configJson) {
-it(configJson, function(item, v) {
-}, tree);
-}
-function getList(formEl, fn) {
-var list = [];
-function add(el) {
-list.push(el);
-}
-var forEach = [].forEach;
-forEach.call(formEl.querySelectorAll('input'), add);
-forEach.call(formEl.querySelectorAll('select'), add);
-forEach.call(formEl.querySelectorAll('textarea'), add);
-list.forEach(fn);
-}
-var isIn = false;
-function everyInput(input) {
-input.onfocus = function(e) {
-var el = e.currentTarget;
-isIn = true;
-var tipsNote = el.dataset.note;
-if (tipsNote) {
-var tipsNoteEl = document.querySelector('.tipsNote');
-tipsNoteEl.querySelector('span').innerHTML = tipsNote;
-tipsNoteEl.style.top = (el.offsetTop - 10) + 'px';
-tipsNoteEl.classList.remove('hide');
-}
-}
-input.onblur = function(e) {
-setTimeout(function() {
-if (!isIn)
-document.querySelector('.tipsNote').classList.add('hide');
-}, 5000);
-isIn = false;
-}
-}
-if(window.tree)
-getList(tree, everyInput);
-var oldData;
-setTimeout(function() {
-oldData = {};
-new FormData(document.querySelector('form')).forEach(function(value, key) {
-oldData[key] = value;
-});
-}, 200);
-function getDiffent() {
-var needsTo8421 = [ 'user.login.loginType', 'user.login.passWordLoginType']; 
-for (var i = 0, j = needsTo8421.length; i < j; i++)
-code8421(needsTo8421[i]);
-var htmlEditorTextareas = document.querySelectorAll('.htmlEditorTextarea');
-for (var i = 0, j = htmlEditorTextareas.length; i < j; i++) {
-var htmlEditorTextarea = htmlEditorTextareas[i];
-htmlEditorTextarea.value = htmlEditorTextareas[0].previousElementSibling.contentWindow.document.body.innerHTML;
-}
-var different = {};
-var formData = new FormData(document.querySelector('form'));
-formData.forEach(function(value, key) {
-if (oldData[key] != value) {
-different[key] = value;
-}
-});
-return different;
-}
-function save() {
-var data = getDiffent();
-console.log(data);
-if (Object.keys(data).length) {
-ajaxjs.xhr.post('?', function(json) {
-if (json && json.isOk)
-aj.alert.show('修改配置成功！');
-}, data);
-} else{
-aj.alert.show('没任何修改');
-}
-}
-function code8421(key) {
-var arr = document.querySelectorAll('input[data-name="' + key + '"]');
-var total = 0;
-for (var i = 0, j = arr.length; i < j; i++) {
-if (arr[i].checked) {
-total += Number(arr[i].value);
-}
-}
-document.querySelector('input[name="' + key + '"]').value = total;
-}

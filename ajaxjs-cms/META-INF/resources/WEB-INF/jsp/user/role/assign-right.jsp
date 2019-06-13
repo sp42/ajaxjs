@@ -1,4 +1,4 @@
-<%@page pageEncoding="UTF-8" import="com.ajaxjs.cms.user.role.RightConstant"%>
+<%@page pageEncoding="UTF-8" import="com.ajaxjs.user.role.RightConstant"%>
 <%
 	long num = 0;
 	num = RightConstant.set(num, 1, true);
