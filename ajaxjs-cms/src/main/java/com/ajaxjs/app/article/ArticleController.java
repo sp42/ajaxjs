@@ -7,8 +7,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
-import com.ajaxjs.cms.ArticleService;
 import com.ajaxjs.cms.DataDictService;
+import com.ajaxjs.cms.app.ArticleService;
 import com.ajaxjs.cms.app.catalog.CatalogService;
 import com.ajaxjs.cms.app.catalog.CatalogServiceImpl;
 import com.ajaxjs.config.ConfigService;

@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.service;
+package com.ajaxjs.cms;
 
 import static org.junit.Assert.assertNotNull;
 

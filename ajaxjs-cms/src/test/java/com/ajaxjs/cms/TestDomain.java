@@ -13,8 +13,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.cms.app.nativeapp.AppUpdate;
-import com.ajaxjs.cms.app.nativeapp.AppUpdateServiceImpl;
+import com.ajaxjs.cms.app.ArticleService;
+import com.ajaxjs.cms.appupdate.AppUpdate;
+import com.ajaxjs.cms.appupdate.AppUpdateServiceImpl;
 import com.ajaxjs.cms.domain.DomainEntityDao;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;

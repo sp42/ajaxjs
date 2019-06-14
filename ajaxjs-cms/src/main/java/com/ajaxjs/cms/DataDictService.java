@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.ajaxjs.cms.app.ArticleService;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;

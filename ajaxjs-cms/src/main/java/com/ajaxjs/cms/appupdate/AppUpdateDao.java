@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.app.nativeapp;
+package com.ajaxjs.cms.appupdate;
 
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.orm.annotation.Select;
