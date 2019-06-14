@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE xml>
+<taglib>
+	<description>自定义标签库</description>
+	<!-- 使用前，将该文件复制在项目 WEB-INF 目录下 -->
+	<tlib-version>1.2</tlib-version>
+	<jsp-version>2.1</jsp-version>
+	<short-name>utility</short-name>
+	<uri>/ajaxjs</uri>
+	<info> A simple tag library for ajaxjs </info>
+
+	<tag>
+		<name>if</name>
+		<tag-class>com.ajaxjs.mvc.view.If</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>test</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>choose</name>
+		<tag-class>com.ajaxjs.mvc.view.Choose</tag-class>
+		<body-content>scriptless</body-content>
+	</tag>
+	<tag>
+		<name>when</name>
+		<tag-class>com.ajaxjs.mvc.view.When</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>test</name>
+			<description>判断的表达式</description>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>otherwise</name>
+		<tag-class>com.ajaxjs.mvc.view.OtherWise</tag-class>
+		<body-content>scriptless</body-content>
+	</tag>
+
+	<tag>
+		<name>foreach</name>
+		<tag-class>com.ajaxjs.mvc.view.Foreach</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>var</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>变量名称</description>
+		</attribute>
+		<attribute>
+			<name>items</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>输入的数据集合</description>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>loop</name>
+		<tag-class>com.ajaxjs.mvc.view.Loop</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>cnt</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>dateFormatter</name>
+		<tag-class>com.ajaxjs.mvc.view.DateUtil</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>format</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>格式</description>
+		</attribute>
+		<attribute>
+			<name>value</name>
+			<description>输入日期</description>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+
+	<tag>
+		<name>pageUtil</name>
+		<tag-class>com.ajaxjs.mvc.view.PageTag</tag-class>
+		<description>分页辅助标签</description>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>queryString</name>
+			<description>URL 参数</description>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>totalPage</name>
+			<required>true</required>
+			<description>总页数</description>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	
+	<tag>
+		<name>siteStru</name>
+		<tag-class>com.ajaxjs.mvc.view.SiteStruTag</tag-class>
+		<description>网站页面结构标签</description>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>type</name>
+			<required>true</required>
+			<description>标签类型</description>
+		</attribute>
+	</tag>
+	
+	<tag>
+		<name>logined</name>
+		<tag-class>com.ajaxjs.mvc.view.UserLogined</tag-class>
+		<description>會員已经登录时</description>
+		<body-content>scriptless</body-content>
+	</tag>
+	
+	<tag>
+		<name>notLogined</name>
+		<tag-class>com.ajaxjs.mvc.view.UserNotLogined</tag-class>
+		<description>會員没有登录时</description>
+		<body-content>scriptless</body-content>
+
+	</tag>
+</taglib>
