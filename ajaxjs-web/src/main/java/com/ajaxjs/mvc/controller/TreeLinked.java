@@ -7,6 +7,12 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.function.Function;
 
+/**
+ * 
+ * @author Frank Cheung
+ *
+ * @param <T>
+ */
 public abstract class TreeLinked<T> {
 	/**
 	 * 下级路径集合
@@ -51,6 +57,13 @@ public abstract class TreeLinked<T> {
 		return null;
 	}
 
+	/**
+	 * 
+	 * @param treeNode
+	 * @param queue
+	 * @param path
+	 * @return
+	 */
 	public static <T extends TreeLinked<T>> T findTreeByPath(Map<String, T> treeNode, Queue<String> queue, String path) {
 		return findTreeByPath(treeNode, queue, path, null, false);
 	}
