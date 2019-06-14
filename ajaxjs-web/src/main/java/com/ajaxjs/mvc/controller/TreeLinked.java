@@ -1,4 +1,4 @@
-package com.ajaxjs.mvc.util;
+package com.ajaxjs.mvc.controller;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -40,7 +40,7 @@ public abstract class TreeLinked<T> {
 				if (createIfEmpty && target.children == null) // set action
 					target.children = new HashMap<>();
 
-				if(target != null) {
+				if (target != null) {
 					T t2 = findTreeByPath(target.children, queue, path, targetFactory, createIfEmpty);
 					if (t2 != null)
 						return t2;
@@ -54,7 +54,13 @@ public abstract class TreeLinked<T> {
 	public static <T extends TreeLinked<T>> T findTreeByPath(Map<String, T> treeNode, Queue<String> queue, String path) {
 		return findTreeByPath(treeNode, queue, path, null, false);
 	}
-	
+
+	/**
+	 * 输入一个路径，转换为队列结构
+	 * 
+	 * @param path 路径，用 / 分隔开
+	 * @return 路径队列
+	 */
 	public static Queue<String> split2Queue(String path) {
 		String[] arr = path.split("/");
 		return new LinkedList<>(Arrays.asList(arr));

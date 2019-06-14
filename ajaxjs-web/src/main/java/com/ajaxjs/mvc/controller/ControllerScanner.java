@@ -36,7 +36,6 @@ import javax.ws.rs.Path;
 
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.BeanContext;
-import com.ajaxjs.mvc.util.TreeLinked;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.io.resource.ScanClass;

@@ -252,7 +252,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	/**
 	 * 输入一个相对地址，补充成为绝对地址 相对地址转换为绝对地址，并转换斜杠
 	 * 
-	 * @param relativePath 相对地址
+	 * @param relativePath 相对地址，例如 /images
 	 * @return 绝对地址
 	 */
 	public String mappath(String relativePath) {

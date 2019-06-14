@@ -17,8 +17,6 @@ package com.ajaxjs.mvc.controller;
 
 import java.lang.reflect.Method;
 
-import com.ajaxjs.mvc.util.TreeLinked;
-
 /**
  * A action = controller + methods
  * 
