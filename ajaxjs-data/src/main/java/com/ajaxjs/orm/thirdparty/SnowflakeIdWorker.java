@@ -123,4 +123,13 @@ public class SnowflakeIdWorker {
 	}
 
 	public static final SnowflakeIdWorker idWorker = new SnowflakeIdWorker(0, 0);
+
+	/**
+	 * 新的 id，这是常用的方法
+	 * 
+	 * @return 新的 id
+	 */
+	public static long getId() {
+		return idWorker.nextId();
+	}
 }
