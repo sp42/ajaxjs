@@ -45,7 +45,7 @@ public class DataBaseFilter implements FilterAction {
 	@Override
 	public void after(MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
 		if (isAutoClose)
-			JdbcConnection.closeDb(); // 关闭数据库连接
+			closeDb();
 	}
 
 	/**
@@ -63,7 +63,10 @@ public class DataBaseFilter implements FilterAction {
 		JdbcConnection.initDbByJNDI(config);
 	}
 
+	/**
+	 * 关闭数据库连接
+	 */
 	public static void closeDb() {
-		JdbcConnection.closeDb(); // 关闭数据库连接
+		JdbcConnection.closeDb();
 	}
 }
