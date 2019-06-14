@@ -3,7 +3,9 @@ package com.ajaxjs.cms.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -19,8 +21,11 @@ import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
+import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
+import com.ajaxjs.net.http.PicDownload;
+import com.ajaxjs.orm.thirdparty.SnowflakeIdWorker;
 
 @Bean
 @Path("/admin/article")
@@ -35,7 +40,7 @@ public class ArticleAdminController extends BaseController<Map<String, Object>> 
 		listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(catelogId, start, limit));
 		return adminListCMS();
 	}
-	
+
 	@GET
 	@Path("listJson")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -84,7 +89,7 @@ public class ArticleAdminController extends BaseController<Map<String, Object>> 
 	public String delete(@PathParam("id") Long id) {
 		return delete(id, new HashMap<String, Object>());
 	}
-	
+
 	@Override
 	public void prepareData(ModelAndView mv) {
 		mv.put(domainCatalog_Id, service.getDomainCatelogId());
@@ -96,4 +101,28 @@ public class ArticleAdminController extends BaseController<Map<String, Object>> 
 		return service;
 	}
 
+	/**
+	 * 下载远程图片到本地服务器
+	 * 
+	 * @param start
+	 * @param limit
+	 * @param catelogId
+	 * @param mv
+	 * @return
+	 */
+	@POST
+	@Path("downAllPics")
+	@Produces(MediaType.APPLICATION_JSON)
+	@MvcFilter(filters = DataBaseFilter.class)
+	public String downAllPics(@NotNull @FormParam("pics") String pics, MvcRequest r) {
+		System.out.println(pics);
+		String[] arr = pics.split("\\|");
+
+		new PicDownload(arr, r.mappath("/images"), () -> SnowflakeIdWorker.getId() + "").start();
+
+		return toJson(new Object() {
+			@SuppressWarnings("unused")
+			public String[] pics = arr;
+		});
+	}
 }

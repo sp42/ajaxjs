@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.ajaxjs.cms.user.UserDao;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.PageResult;
@@ -12,6 +11,7 @@ import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
+import com.ajaxjs.user.service.UserDao;
 
 @Bean("FeedbackService")
 public class FeedbackService extends BaseService<Map<String, Object>> {

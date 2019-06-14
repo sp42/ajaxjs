@@ -10,13 +10,12 @@ public class Filter implements FilterAction {
 
 	@Override
 	public boolean before(MvcRequest request, MvcOutput response, Method method) {
-
 		return true;
 	}
 
 	@Override
 	public void after(MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
-		
+
 	}
 
 }
