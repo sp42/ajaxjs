@@ -30,69 +30,75 @@ import com.ajaxjs.web.captcha.CaptchaFilter;
 @Path("/user")
 @Bean("UserCenterController")
 public class AdminUserController extends AbstractUserCenterController {
-	@Resource("User_common_authService")
-	private UserCommonAuthService authService;
-
-	@Resource("UserService")
-	private UserService service;
-
-	@GET
-	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Path("/center/home")
-	public String home(ModelAndView mv, HttpServletRequest r) {
-		return jsp("user/home");
-	}
 
 	@Override
 	public UserService getService() {
-		return service;
+		// TODO Auto-generated method stub
+		return null;
 	}
-
-	static class RegisterController extends AbstractRegisterController {
-		private UserService service;
-
-		public RegisterController(UserService service) {
-			this.service = service;
-		}
-
-		@Override
-		public UserService getService() {
-			return service;
-		}
-	}
-
-	@POST
-	@Path("/register")
-	@MvcFilter(filters = { DataBaseFilter.class })
-	@Produces(MediaType.APPLICATION_JSON)
-	public String doRegister(User user, @NotNull @QueryParam("password") String password) throws ServiceException {
-		new RegisterController(service).registerByPhone(user, password);
-		return jsonOk("恭喜你，注册成功");
-	}
-
-	static class LoginController extends AbstractLoginController {
-		private UserService service;
-
-		public LoginController(UserService service) {
-			this.service = service;
-		}
-
-		@Override
-		public UserService getService() {
-			return service;
-		}
-
-		@Override
-		public BiConsumer<User, HttpServletRequest> getAfterLoginCB() {
-			return null;
-		}
-	}
-
-	@Path("/login")
-	@POST
-	@MvcFilter(filters = { CaptchaFilter.class, DataBaseFilter.class })
-	@Produces(MediaType.APPLICATION_JSON)
-	public String loginAction(@BeanParam User user, @NotNull @QueryParam("password") String password, HttpServletRequest request) throws ServiceException {
-		return new LoginController(service).loginAction(user, password, request);
-	}
+//	@Resource("User_common_authService")
+//	private UserCommonAuthService authService;
+//
+//	@Resource("UserService")
+//	private UserService service;
+//
+//	@GET
+//	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
+//	@Path("/center/home")
+//	public String home(ModelAndView mv, HttpServletRequest r) {
+//		return jsp("user/home");
+//	}
+//
+//	@Override
+//	public UserService getService() {
+//		return service;
+//	}
+//
+//	static class RegisterController extends AbstractRegisterController {
+//		private UserService service;
+//
+//		public RegisterController(UserService service) {
+//			this.service = service;
+//		}
+//
+//		@Override
+//		public UserService getService() {
+//			return service;
+//		}
+//	}
+//
+//	@POST
+//	@Path("/register")
+//	@MvcFilter(filters = { DataBaseFilter.class })
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public String doRegister(User user, @NotNull @QueryParam("password") String password) throws ServiceException {
+//		new RegisterController(service).registerByPhone(user, password);
+//		return jsonOk("恭喜你，注册成功");
+//	}
+//
+//	static class LoginController extends AbstractLoginController {
+//		private UserService service;
+//
+//		public LoginController(UserService service) {
+//			this.service = service;
+//		}
+//
+//		@Override
+//		public UserService getService() {
+//			return service;
+//		}
+//
+//		@Override
+//		public BiConsumer<User, HttpServletRequest> getAfterLoginCB() {
+//			return null;
+//		}
+//	}
+//
+//	@Path("/login")
+//	@POST
+//	@MvcFilter(filters = { CaptchaFilter.class, DataBaseFilter.class })
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public String loginAction(@BeanParam User user, @NotNull @QueryParam("password") String password, HttpServletRequest request) throws ServiceException {
+//		return new LoginController(service).loginAction(user, password, request);
+//	}
 }
