@@ -33,7 +33,7 @@
 |ajaxjs-data|数据层，类似 DBUtils 的 JDBC 封装，更小巧和简单，[浏览项目 readme](ajaxjs-data)|ajaxjs-base|jar|
 |ajaxjs-web|MVC 框架，类似 Spring MVC 的精简实现，[浏览项目 readme](ajaxjs-web)|ajaxjs-base|jar|
 |ajaxjs-web-js|独立的前端框架，基于 vue.js 2.x，并包含官网静态页[浏览项目 readme](ajaxjs-web-js) \| [DEMO](https://framework.ajaxjs.com/framework/ui-doc/)|vue.js/less.js|war|
-|ajaxjs-framework|框架基础设施，也是一个完整后台程序，[浏览项目 readme](ajaxjs-framework)|ajaxjs-data+ajaxjs-web|jar|
+|ajaxjs-framework|框架基础设施，也是一个完整后台程序，框架初学者可以这里开始[浏览项目 readme](ajaxjs-framework)|ajaxjs-data+ajaxjs-web|jar|
 |ajaxjs-user|会员系统，[浏览项目 readme](ajaxjs-user)|ajaxjs-framework|jar|
 |ajaxjs-cms|整个各个子项目的网站发布系统，[浏览项目 readme](ajaxjs-cms)|ajaxjs-user|jar|
 |ajaxjs-demo|一个包含前后台的网站，可方便学习或作为快速手脚架，[浏览项目 readme](ajaxjs-demo)|ajaxjs-cms|war|
