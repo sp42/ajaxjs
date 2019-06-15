@@ -6,27 +6,13 @@
 
 AJAXJS WEB
 =============
-AJAXJS WEB 包含以下模块：
-
-- mvc 模块，类似 SpringMVC 基于注解的控制器的写法，实现了 Url-JavaMethod 映射、参数自动化注入（支持 Query/Path 参数，Form2Bean/Map）、Restful 风格支持（基于 JSR 注解）、返回结果解析（原生JSON/HTML/JSP返回）、异常统一结构化规范支持、拦截器支持等等。当前支持 JSP 视图。
-- 通过 Servlet 3.0 的 web-fragment 提供了静态资源打包，包括 UI 库的各种控件、自定义标签库、404/500 页等；
-- web Http 与 Servlet 工具类，例如通过 HttpServletRequestWrapper 扩展了 Request 对象，还有一个文件上传组件和验证码组件、Mock 模拟对象；
-- view 视图模块，提供一个简单的、基于 JSP/JSTL 的扩展标签；
-- upload 简易的文件上传组件；
-- security 网站防御系统，抵御 XSS、CSRF 等攻击；
-- config 基于本地 JSON 文件的通用配置系统，完全可以代替 properties 文件实现配置模块。
-
-Ajaxjs 前端框架[请点击](../ajaxjs-web-js)。前端资源通过 Servlet 3.0 打包到 jar 里面。
-
-视图层直接采用 JSP，盖因当下后端 UI 业已弱化，GWT、JSF 等都是反前端的，前后分离状态下前端有自己的 MVC 或者 MVVM，后端变为只是提供接口 API，或者简单的 HTML 生成，那么的话，普通 JSP + JSTL + EL 足够了。
-
-支持热加载，修改 Java 代码后不用重启服务器，事前需要配置一下，参见[博客文档](https://blog.csdn.net/zhangxin09/article/details/84988200)。
+用八个类实现类似 Spring MVC 的功能，外加其他实用的功能。
 
 
 安装
 ---------
 
-要求 Java 1.8+，Jar 直接下载：[～100kb，包含小量 js/css/jpg 等静态资源](https://search.maven.org/remotecontent?filepath=com/ajaxjs/ajaxjs-web/1.1.3/ajaxjs-web-1.1.3.jar)
+要求 Java 1.8+，Jar 约～100kb，包含小量 js/css/jpg 等静态资源。[ 直接下载 jar 包](https://search.maven.org/remotecontent?filepath=com/ajaxjs/ajaxjs-web/1.1.5/ajaxjs-web-1.1.3.jar)。
 
 Maven 坐标：
 
@@ -45,6 +31,32 @@ Maven 坐标：
 |javax.ws.rs-api| 通过 JSR-311 注解定义控制器|
 |javax.validation| 通过 JSR-303 数据校验|
 |ajaxjs-base| 基础库，详情[请点击](../ajaxjs-base)|
+
+
+一引用 ajaxjs-web.jar 包，将为您的项目呈现如下特性。
+
+自定义 404/500 页
+---------------------
+通过 Servlet 3.0 的 web-fragment 提供了静态资源打包功能实现。
+
+[输入图片说明](https://images.gitee.com/uploads/images/2019/0615/221036_09ca6c0a_784269.png "屏幕截图.png")
+
+AJAXJS WEB 包含以下模块：
+
+- mvc 模块，类似 SpringMVC 基于注解的控制器的写法，实现了 Url-JavaMethod 映射、参数自动化注入（支持 Query/Path 参数，Form2Bean/Map）、Restful 风格支持（基于 JSR 注解）、返回结果解析（原生JSON/HTML/JSP返回）、异常统一结构化规范支持、拦截器支持等等。当前支持 JSP 视图。
+- 包括 UI 库的各种控件、自定义标签库、404/500 页等；
+- web Http 与 Servlet 工具类，例如通过 HttpServletRequestWrapper 扩展了 Request 对象，还有一个文件上传组件和验证码组件、Mock 模拟对象；
+- view 视图模块，提供一个简单的、基于 JSP/JSTL 的扩展标签；
+- upload 简易的文件上传组件；
+- security 网站防御系统，抵御 XSS、CSRF 等攻击；
+- config 基于本地 JSON 文件的通用配置系统，完全可以代替 properties 文件实现配置模块。
+
+Ajaxjs 前端框架[请点击](../ajaxjs-web-js)。前端资源通过 Servlet 3.0 打包到 jar 里面。
+
+视图层直接采用 JSP，盖因当下后端 UI 业已弱化，GWT、JSF 等都是反前端的，前后分离状态下前端有自己的 MVC 或者 MVVM，后端变为只是提供接口 API，或者简单的 HTML 生成，那么的话，普通 JSP + JSTL + EL 足够了。
+
+支持热加载，修改 Java 代码后不用重启服务器，事前需要配置一下，参见[博客文档](https://blog.csdn.net/zhangxin09/article/details/84988200)。
+
 
 
 环境配置说明
