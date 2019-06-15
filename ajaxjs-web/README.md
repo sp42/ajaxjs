@@ -32,14 +32,19 @@ Maven 坐标：
 |javax.validation| 通过 JSR-303 数据校验|
 |ajaxjs-base| 基础库，详情[请点击](../ajaxjs-base)|
 
+功能说明
+===========
 
 一引用 ajaxjs-web.jar 包，将为您的项目呈现如下特性。
 
 自定义 404/500 页
 ---------------------
-通过 Servlet 3.0 的 web-fragment 提供了静态资源打包功能实现。
+通过 Servlet 3.0 的 web-fragment 提供了静态资源打包功能实现。默认页面如下：
 
-[输入图片说明](https://images.gitee.com/uploads/images/2019/0615/221036_09ca6c0a_784269.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0615/221036_09ca6c0a_784269.png)
+
+JAR 包里面的 META-INF/resources/ 为约定好的固定目录，web-fragment.xml 也是约定好的固定文件名，顾名思义 web.xml 的碎片（一部分）。 META-INF/resources/ 即 Web 虚拟目录的根目录。
+![](https://images.gitee.com/uploads/images/2019/0615/221447_99fb7075_784269.png)
 
 AJAXJS WEB 包含以下模块：
 
