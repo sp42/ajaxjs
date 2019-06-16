@@ -32,9 +32,9 @@ Maven 坐标：
 </dependency>
 ```
 
-教程
+参见
 -----
-[参见 wiki](https://gitee.com/sp42_admin/ajaxjs/wikis) | [JavaDoc](https://framework.ajaxjs.com/framework/javadoc/ajaxjs-base/)
+[wiki 教程](https://gitee.com/sp42_admin/ajaxjs/wikis) | [JavaDoc](https://framework.ajaxjs.com/framework/javadoc/ajaxjs-base/)
 
 
 单元测试覆盖率
