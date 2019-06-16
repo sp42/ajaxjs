@@ -1,4 +1,4 @@
-<%@tag pageEncoding="UTF-8"%>
+<%@tag pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
 <%@taglib uri="/ajaxjs" 		prefix="c" %>
 <%@taglib uri="/ajaxjs_config"	prefix="config"%>
 <%@taglib tagdir="/WEB-INF/tags/" prefix="tagfile"%>
@@ -26,7 +26,6 @@
 		});
 	</script>
 </c:if>
-
 
 
 <%@attribute name="bodyClass" required="false" type="String" description="body 标签样式"%>

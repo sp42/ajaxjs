@@ -1,11 +1,7 @@
 <%@page pageEncoding="UTF-8"%>
-<%@taglib prefix="tags" tagdir="/WEB-INF/tags/"%>
-<tags:content banner="../../images/contact.jpg" bodyClass="contact">
-	<jsp:attribute name="left">
-
-	</jsp:attribute>
+<%@taglib prefix="tagfiles" tagdir="/WEB-INF/tags/"%>
+<tagfiles:common type="content" banner="../../images/contact.jpg" showPageHelper="true" bodyClass="contact">
 	<jsp:attribute name="body">
-
 		<div id="map"></div>
 		<script src="//api.map.baidu.com/api?ak=6dcb06a7f08c5039a08c62fe4e2617e5&type=lite&v=1.0"></script>
 		<script>
@@ -31,8 +27,6 @@
 			<li>邮箱地址 bp@egdtv.com</li>
 			<li>公司地址 广州市天河区高普路国家软件基地</li>
 		</ul>
-		
-		
 	</jsp:attribute>
-</tags:content>
+</tagfiles:common>
 

@@ -1,9 +1,9 @@
 <%@page pageEncoding="UTF-8"%>
 <%@taglib prefix="tagfiles" tagdir="/WEB-INF/tags/"%>
-<tagfiles:common type="content" banner="../../images/contact.jpg" showPageHelper="true">
+<tagfiles:common type="content" banner="../images/contact.jpg" showPageHelper="true">
 	<jsp:attribute name="body">
 		
-		<img src="../../images/about.jpg" width="100%" /> 
+		<img src="../images/about.jpg" width="100%" /> 
 		<article>
 		<!-- Editable AREA|START -->
 		<p>

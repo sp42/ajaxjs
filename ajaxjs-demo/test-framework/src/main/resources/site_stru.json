@@ -4,12 +4,12 @@
 		"id": "about",
 		"children": [
 			{
-				"name": "公司简介",
-				"id": "intro"
-			},{
 				"name": "企业文化",
 				"id": "cultrue"
 			},{
+				"name": "员工风采",
+				"id": "staff"
+			}, {
 				"name": "隐私政策",
 				"id": "privacy"
 			},{
@@ -34,43 +34,10 @@
 			}
 		]
 	},
+
 	{
-		"name": "污水提升器",
-		"id": "product",
-		"children": [
-			{
-				"name": "污水提升器",
-				"id": "house"
-			},{
-				"name": "废水泵",
-				"id": "shop"
-			},{
-				"name": "污水提升站",
-				"id": "department"
-			},{
-				"name": "一体式提升器",
-				"id": "shop"
-			},{
-				"name": "冷凝水泵系列",
-				"id": "department"
-			}
-		]
-	},
-	{
-		"name": "应用案例",
-		"id": "case",
-		"children": [
-			{
-				"name": "别墅装修",
-				"id": "house"
-			},{
-				"name": "商业办公",
-				"id": "shop"
-			},{
-				"name": "公寓改造",
-				"id": "department"
-			}
-		]
+		"name": "产品中心",
+		"id": "product"
 	},
 	{
 		"name": "招聘中心",
@@ -78,7 +45,7 @@
 	},
 		{
 		"name": "联系与留言",
-		"id": "contact_feedback",
+		"id": "contact",
 		"children": [
 			{
 				"name": "联系我们",
