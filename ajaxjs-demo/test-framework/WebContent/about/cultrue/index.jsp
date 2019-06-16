@@ -1,15 +1,10 @@
 <%@page pageEncoding="UTF-8"%>
-<%@taglib prefix="tags" tagdir="/WEB-INF/tags/"%>
-<tags:content banner="../../images/contact.jpg" bodyClass="">
-	<jsp:attribute name="left">
-		<commonTag:page type="secondLevelMenu" />
-		<div style="text-align:right;margin:5%;">
-		<a href="../">回到上一层</a>
-		</div>
-	</jsp:attribute>
+<%@taglib prefix="tagfiles" tagdir="/WEB-INF/tags/"%>
+<tagfiles:common type="content" banner="../../images/contact.jpg" showPageHelper="true">
 	<jsp:attribute name="body">
+		
+		<img src="../../images/about.jpg" width="100%" /> 
 		<article>
-		<h3>${PAGE.node.name}</h3>
 <!-- Editable AREA|START -->
 		<p>
 80年代，耐克产品开始从田径场和体育馆进入寻常百姓家(特别是十几岁的少年)。耐克公司必须在不失去正规体育传统市场情况下，尽力扩大耐克广告的吸引力，为此耐克必须像Levi's品牌(牛仔服的领导品牌 牛仔裤的发明者李维·施特劳斯建立)一样，成为青年文化的组成部分和身份象征。耐克公司在两个完全不同的市场作战，它面临的难题是在适应流行意识和宣传体育成就上如何获得平衡与一致，耐克公司开始重新思考其广告策略了。</p>
@@ -20,14 +15,7 @@
 
 <!-- Editable AREA|END -->
 		</article>
-		<div style="padding: 20px 0;" align="right">
-			<!-- 分享功能 -->
-			<commonTag:article type="share" />
-			<!-- 调整页面字号 -->
-			<commonTag:article type="adjustFontSize" />
-			<!-- 页面功能 -->
-			<commonTag:article type="function" />
-		</div>
+	
 	</jsp:attribute>
-</tags:content>
+</tagfiles:common>
 

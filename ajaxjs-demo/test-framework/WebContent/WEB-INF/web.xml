@@ -3,7 +3,7 @@
 	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	id="WebApp_ID" version="3.1">
-	<display-name>test-framework</display-name>
+	<display-name>ajaxjs-demo</display-name>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.htm</welcome-file>
@@ -11,8 +11,8 @@
 		<welcome-file>default.html</welcome-file>
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
-	</welcome-file-list>
-
+	</welcome-file-list>	
+	
 	<!-- 指定一种登录验证方式。当前为 HTTP Basic Auth -->
 	<filter>
 		<filter-name>HttpBasicAuthFilter</filter-name>
@@ -36,12 +36,12 @@
 		<init-param>
 			<description>依赖注射</description>
 			<param-name>doIoc</param-name>
-			<param-value>com.ajaxjs.cms</param-value>
+			<param-value>com.ajaxjs.cms, cn.nike</param-value>
 		</init-param>
 		<init-param>
 			<description>指定搜索的包名，多个可以用 逗号 分开</description>
 			<param-name>controller</param-name>
-			<param-value>com.ajaxjs.cms</param-value>
+			<param-value>com.ajaxjs.cms, cn.nike</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>
