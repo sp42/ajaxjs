@@ -6,13 +6,13 @@
 
 AJAXJS WEB
 =============
-非常简单的一个 web 库，用八个类实现类似 Spring MVC 的功能，外加其他实用的功能。
+非常简单的一个 web 库，用 8 个类实现类似 Spring MVC 的功能，外加其他实用的功能。
 
 
 安装
 ---------
 
-要求 Java 1.8+，JSP v2.2+。Jar 约～83.5kb，[ 直接下载 jar 包](https://search.maven.org/remotecontent?filepath=com/ajaxjs/ajaxjs-web/1.1.5/ajaxjs-web-1.1.3.jar)。
+要求 Java 1.8+，JSP v2.2+。Jar 体积约～83.5kb，[直接下载 jar 包](https://search.maven.org/remotecontent?filepath=com/ajaxjs/ajaxjs-web/1.1.5/ajaxjs-web-1.1.3.jar)。
 
 Maven 坐标：
 
@@ -30,7 +30,7 @@ Maven 坐标：
 |---|---|
 |javax.ws.rs-api| 通过 JSR-311 注解定义控制器|
 |javax.validation| 通过 JSR-303 数据校验|
-|ajaxjs-base| 基础库，详情[请点击](../ajaxjs-base)|
+|ajaxjs-base| 基础工具库，详情[请点击](../ajaxjs-base)|
 
 功能说明
 ===========
@@ -39,7 +39,7 @@ Maven 坐标：
 
 自定义 404/500 页
 ---------------------
-通过 Servlet 3.0 的 web-fragment 提供了静态资源打包功能实现。默认页面如下：
+通过 Servlet 3.0 的 web-fragment 静态资源打包功能实现美化 404、500 页面。默认效果如下：
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0615/221036_09ca6c0a_784269.png)
 
@@ -49,13 +49,14 @@ JAR 包里面的 META-INF/resources/ 为约定好的固定目录，web-fragment.
 
 自定义标签库
 ----------------
-学过 JSTL 都会熟悉这个，纯粹“轮子”一个但只有 8个类和一个 tld 配置文件。源码在 com.ajaxjs.mvc.view。提供下列标签：
+学过 JSTL 都会熟悉这个，纯粹“轮子”一个但只有 7 个 SimpleTagSupport 类和一个 tld 配置文件。源码在 com.ajaxjs.mvc.view。提供下列标签：
 
 - if 条件判断逻辑
 - choose 条件判断逻辑，类似 if……else……逻辑的判断
 - foreach 迭代逻辑
 - 日期格式化标签
-- PageTag 分页标签
+
+例子：
 
 ```
 Hello,
@@ -136,7 +137,7 @@ security 网站防御
 
 教程
 =========
-参见 [wiki](https://gitee.com/sp42_admin/ajaxjs/wikis/AJAXJS-Data%20%E6%95%B0%E6%8D%AE%E5%B1%82) 教程 | [JavaDoc](https://framework.ajaxjs.com/framework/javadoc/ajaxjs-web/) | 点击进入 [framework.ajaxjs.com](https://framework.ajaxjs.com]) 了解更多信息。
+参见 [wiki](https://gitee.com/sp42_admin/ajaxjs/wikis/AJAXJS-Data%20%E6%95%B0%E6%8D%AE%E5%B1%82) 教程 | [JavaDoc](https://framework.ajaxjs.com/framework/javadoc/ajaxjs-web/) | 点击进入官网 [framework.ajaxjs.com](https://framework.ajaxjs.com]) 了解更多信息。
 
 
 
