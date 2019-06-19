@@ -89,24 +89,4 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
-
-
-	<tag>
-		<name>pageUtil</name>
-		<tag-class>com.ajaxjs.mvc.view.PageTag</tag-class>
-		<description>分页辅助标签</description>
-		<body-content>scriptless</body-content>
-		<attribute>
-			<name>queryString</name>
-			<description>URL 参数</description>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>totalPage</name>
-			<required>true</required>
-			<description>总页数</description>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-	</tag>
 </taglib>
