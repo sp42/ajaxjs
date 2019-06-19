@@ -27,6 +27,7 @@ public interface IBaseDao<T> {
 	public final static String catelog_simple_join = " LEFT JOIN general_catelog gc ON gc.id = entry.catelogId ";
 
 	public final static String pathLike_mysql = " FROM general_catelog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catelog WHERE id = ? ) , '%'))";
+//	public final static String pathLike_sqlite = " FROM general_catelog WHERE `path` LIKE ( (SELECT `path` FROM general_catelog WHERE id = ? ) || '/%')";
 	public final static String pathLike_sqlite = " FROM general_catelog WHERE `path` LIKE ( (SELECT `path` FROM general_catelog WHERE id = ? ) || '%')";
 
 	/**
