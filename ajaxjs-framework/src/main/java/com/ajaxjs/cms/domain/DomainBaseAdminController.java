@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.app.domain;
+package com.ajaxjs.cms.domain;
 
 import java.util.HashMap;
 import java.util.Map;
