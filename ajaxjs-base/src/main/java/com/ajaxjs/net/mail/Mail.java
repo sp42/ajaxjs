@@ -29,7 +29,6 @@ public class Mail {
 	private String password;
 	private String subject;
 	private boolean isHTML_body;
-
 	private int port = 25;
 
 	public String getContent() {

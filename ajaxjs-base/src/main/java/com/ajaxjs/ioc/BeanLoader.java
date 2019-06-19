@@ -97,9 +97,16 @@ public class BeanLoader extends AbstractScanner<Class<Object>> {
 		}
 	}
 
+	/**
+	 * 
+	 * @param cc
+	 * @throws ClassNotFoundException
+	 * @throws CannotCompileException
+	 */
 	private static void doAop(CtClass cc) throws ClassNotFoundException, CannotCompileException {
 		CtMethod[] methods = cc.getMethods();
 		if (methods != null && methods.length > 0) {
+			
 			for (CtMethod method : methods) {
 				if (method.getAnnotation(Before.class) != null) {
 					Before before = (Before) method.getAnnotation(Before.class);

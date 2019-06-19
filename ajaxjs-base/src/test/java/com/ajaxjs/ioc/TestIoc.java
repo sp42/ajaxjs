@@ -20,6 +20,7 @@ public class TestIoc {
 	public static void init() {
 		ClassPool pool = ClassPool.getDefault();
 		CtClass cc;
+		
 		try {
 			cc = pool.get("com.ajaxjs.ioc.Hi");
 //			CtMethod m = CtNewMethod.make("public void setPerson(com.ajaxjs.ioc.Person person) { this.person = person; }", cc);

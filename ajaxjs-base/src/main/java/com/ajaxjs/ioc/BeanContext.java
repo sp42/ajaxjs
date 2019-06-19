@@ -122,6 +122,7 @@ public class BeanContext {
 			if (beansClz.containsKey("beanName")) {
 				LOGGER.warning("相同的 bean name 已经存在" + beanName);
 			}
+			
 			if (ReflectUtil.hasArgsCon(item)) {
 				beansClz.put(beanName, item);
 			} else {
@@ -161,6 +162,12 @@ public class BeanContext {
 		}
 	}
 
+	/**
+	 * 
+	 * @param namedAnno
+	 * @param clz
+	 * @return
+	 */
 	private static String getBeanId(Named namedAnno, Class<?> clz) {
 		if (namedAnno == null || CommonUtil.isEmptyString(namedAnno.value())) {
 			return clz.getSimpleName().toLowerCase();
@@ -194,6 +201,10 @@ public class BeanContext {
 			init(packageName);
 	}
 
+	/**
+	 * 
+	 * @param packageName
+	 */
 	public static void init(String packageName) {
 		init(BeanLoader.scanClass(packageName));
 	}
