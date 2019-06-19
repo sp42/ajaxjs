@@ -9,7 +9,7 @@
         maxActive="100" maxIdle="30" maxWait="10000" 
         username="user2" password="password1" 
         driverClassName="org.sqlite.JDBC"
-        url="jdbc:sqlite:C:\project\myblog\WebContent\META-INF\blog.sqlite" />
+        url="jdbc:sqlite:C:\project\test-framework\WebContent\META-INF\database.sqlite" />
 
     <!-- jdbc/sqlite_mac 为开发环境使用的配置，一般为 mac 的路径 -->
     <Resource 
