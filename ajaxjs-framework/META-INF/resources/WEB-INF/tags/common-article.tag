@@ -1,7 +1,7 @@
 <%@tag pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="/ajaxjs"%>
 <%@attribute name="left" required="false" fragment="true" description="插入左侧菜单内容"%>
-<%@attribute name="type" required="false" type="String" description="标签类型"%>
+<%@attribute name="type" required="true" type="String" description="标签类型，必填"%>
 <%@attribute name="isOnlyCreateDate" required="false" type="Boolean" description="是否只显示创建日期"%>
 
 <c:if test="${type == 'list'}">
