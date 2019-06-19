@@ -12,10 +12,7 @@
 	"data": {
 		"database_node":"jdbc/sqlite",
 		"articleCatalog_Id": 1,
-		"hrCatalog_Id": 112,
-		"bankCatelog_Id": 90,
-		"loanCatalog_Id": 60,
-		"adsCatalog_Id" : 122
+		"hrCatalog_Id": 1080413699
 	},
 	"news_Id": {
 		"company_news_North": 48,

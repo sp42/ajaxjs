@@ -5,6 +5,8 @@
 	<ul>
 		<li><a target="iframepage" href="${ctx}/admin/article/list/">新闻列表</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/article/">新建新闻</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/hr/list/">招聘列表</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/hr/">新建招聘</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/attachmentPicture/list/">图片列表</a></li>
 	</ul>
 </li>
