@@ -14,9 +14,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.ajaxjs.cms.app.ArticleService;
+import com.ajaxjs.cms.app.domain.DomainEntityDao;
 import com.ajaxjs.cms.appupdate.AppUpdate;
 import com.ajaxjs.cms.appupdate.AppUpdateServiceImpl;
-import com.ajaxjs.cms.domain.DomainEntityDao;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.orm.JdbcConnection;

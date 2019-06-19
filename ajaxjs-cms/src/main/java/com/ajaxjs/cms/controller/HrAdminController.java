@@ -7,8 +7,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
-import com.ajaxjs.cms.domain.DomainBaseAdminController;
-import com.ajaxjs.cms.domain.DomainEntityService;
+import com.ajaxjs.cms.app.domain.DomainBaseAdminController;
+import com.ajaxjs.cms.app.domain.DomainEntityService;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.mvc.ModelAndView;
