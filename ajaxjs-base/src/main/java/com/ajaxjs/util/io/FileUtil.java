@@ -107,6 +107,8 @@ public class FileUtil extends StreamChain<FileUtil> {
 	 */
 	public FileUtil save() {
 		OutputStream out = null;
+		
+		LOGGER.info("写文件: " + file);
 
 		try {
 			out = new FileOutputStream(file);

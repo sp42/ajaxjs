@@ -12,15 +12,16 @@ document.addEventListener("DOMContentLoaded", function() {
 			afterClose : null,	// 关闭弹窗后的回调
 			showOk : false,
 			showYes : false,
-			showNo : false
+			showNo : false,
+			showSave : false
 		},
 		template : 
 			'<div class="aj-modal hide" @click="close($event);">\
 				<div><div v-html="showText"></div>\
 					<div>\
 						<button v-show="showOk"  @click="onBtnClk($event)" class="ok">确定</button>\
-						<button v-show="showYes" @click="onBtnClk($event)" class="yes">是</button>\
-						<button v-show="showNo"  @click="onBtnClk($event)" class="no">否</button>\
+						<button v-show="showYes" @click="onBtnClk($event)" class="yes">{{showSave? \'保存\': \'是\'}}</button>\
+						<button v-show="showNo"  @click="onBtnClk($event)" class="no">{{showSave? \'否\': \'否\'}}</button>\
 					</div>\
 				</div>\
 			</div>',
@@ -81,14 +82,15 @@ document.addEventListener("DOMContentLoaded", function() {
 	 * @param {String} text 显示的文本
 	 * @param {Function} callback 回调函数
 	 */
-	aj.showConfirm = function(text, callback) {
+	aj.showConfirm = function(text, callback, showSave) {
 		var alertObj = aj.alert.show(text, {
 			showYes : true,
 			showNo :true,
 			showOk :false,
+			showSave: showSave,
 			onYesClk : function(e) {
 				alertObj.$el.classList.add('hide');
-				callback && callback();
+				callback && callback(alertObj.$el, e);
 			},
 			onNoClk : function(e) { // 在box里面触发关闭，不能直接用 alertObj.close(e);
 				alertObj.$el.classList.add('hide');

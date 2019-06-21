@@ -214,7 +214,7 @@ Vue.component('aj-form-calendar-input', {
 	
 	template : 
 		'<div class="aj-form-calendar-input" @mouseover="onMouseOver($event)">\
-			<div class="icon" ><div class="menu"></div></div>\
+			<div class="icon fa fa-calendar"></div>\
 			<input placeholder="请输入日期" :name="fieldName" :value="date +\' \' + time" type="text" />\
 			<aj-form-calendar ref="calendar" :show-time="showTime" @pick-date="recEvent" @pick-time="recTimeEvent"></aj-form-calendar>\
 		</div>',
