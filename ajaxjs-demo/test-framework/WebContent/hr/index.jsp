@@ -1,5 +1,6 @@
 <%@page pageEncoding="UTF-8" import="com.ajaxjs.mvc.filter.DataBaseFilter, com.ajaxjs.orm.JdbcConnection, com.ajaxjs.cms.domain.*"%>
 <%@taglib prefix="tags" tagdir="/WEB-INF/tags/"%>
+<%@taglib uri="/ajaxjs" prefix="c"%>
 <%@taglib uri="/ajaxjs_config" prefix="config"%>
 <%
 	DataBaseFilter.initDb();
@@ -7,7 +8,7 @@
 	request.setAttribute("list", service.findList());
 	JdbcConnection.closeDb(); // 关闭数据库连接
 %>
-<tags:content banner="../asset/images/6_03.png" bodyClass="">
+<tags:content banner="../images/hr.jpg" bodyClass="">
 	<jsp:attribute name="left">
 
 	</jsp:attribute>
