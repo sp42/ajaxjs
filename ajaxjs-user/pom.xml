@@ -12,7 +12,7 @@
 	<artifactId>ajaxjs-user</artifactId>
 	<version>1.0.0</version>
 	<build>
-		<plugins>
+<!-- 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.3</version>
@@ -21,7 +21,19 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-		</plugins>
+		</plugins> -->
+		
+		<!-- 复制静态资源 -->
+		<resources>
+			<resource>
+				<directory>META-INF</directory>
+				<targetPath>META-INF</targetPath>
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+			</resource>
+		</resources>
+		
 	</build>
 	<dependencies>
 		<dependency>
