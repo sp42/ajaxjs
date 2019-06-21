@@ -64,6 +64,7 @@ public interface CatalogDao extends IBaseDao<Catalog> {
 			"	FROM" + 
 			"		general_catelog" + 
 			"	WHERE" + 
-			"		id = ? ) || '%')")
+//			"		id = ? ) || '%')")
+			"		id = ? ) || '/%')")
 	public List<Catalog> getAllListByParentId(int parentId);
 }

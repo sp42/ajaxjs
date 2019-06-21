@@ -49,12 +49,13 @@ public class SiteStruService implements ServletContextListener {
 	public static String jsonPath = Version.srcFolder + "site_stru.json";
 
 	/**
-	  * 加载网站结构的配置
+	 * 加载网站结构的配置
 	 */
 	public static void load() {
 		stru = new SiteStru();
 		stru.setJsonPath(jsonPath);
 		stru.setJsonStr(FileUtil.openAsText(jsonPath));
+		stru.clear();
 		stru.addAll(JsonHelper.parseList(stru.getJsonStr()));
 		stru.setLoaded(true);
 	}
@@ -70,7 +71,8 @@ public class SiteStruService implements ServletContextListener {
 			if (ConfigService.config.isLoaded()) {
 				cxt.setAttribute("aj_allConfig", ConfigService.config); // 所有配置保存在这里
 
-//				String configJson = JsonHelper.format(JsonHelper.stringifyMap(ConfigService.config));
+				// String configJson =
+				// JsonHelper.format(JsonHelper.stringifyMap(ConfigService.config));
 				LOGGER.infoGreen("加载 " + ConfigService.getValueAsString("clientFullName") + " " + cxt.getContextPath()
 						+ " 项目配置成功！All config loaded.");
 			} else
@@ -79,17 +81,13 @@ public class SiteStruService implements ServletContextListener {
 			LOGGER.info("没有项目配置文件");
 
 		if (new File(jsonPath).exists()) {
-			load();
-			t.travelList(stru);
-
+			loadSiteStru();
 			cxt.setAttribute("SITE_STRU", this); // 所有网站结构保存在这里
-			LOGGER.infoGreen("加载网站的结构文件成功 Site Structure Config Loaded.");
 		} else
 			LOGGER.info("没有网站的结构文件");
 
 		String ctx = cxt.getContextPath();
-		String ajaxjsui = Version.isDebug ? "http://" + Tools.getIp() + ":8080/ajaxjs-web-js"
-				: ctx + "/" + Constant.ajajx_ui;
+		String ajaxjsui = Version.isDebug ? "http://" + Tools.getIp() + ":8080/ajaxjs-web-js" : ctx + "/" + Constant.ajajx_ui;
 		cxt.setAttribute("ctx", ctx);
 		cxt.setAttribute("ajaxjsui", ajaxjsui);
 		cxt.setAttribute("commonAsset", ctx + "/asset/common"); // 静态资源目录
@@ -97,6 +95,12 @@ public class SiteStruService implements ServletContextListener {
 		cxt.setAttribute("commonJsp", ctx + "/" + Constant.jsp_perfix);
 		cxt.setAttribute("isDebuging", Version.isDebug);
 		cxt.setAttribute("ajaxjs_ui_output", ctx + "/ajaxjs-ui-output");
+	}
+
+	public static void loadSiteStru() {
+		load();
+		t.travelList(stru);
+		LOGGER.infoGreen("加载网站的结构文件成功 Site Structure Config Loaded.");
 	}
 
 	/**
@@ -116,8 +120,10 @@ public class SiteStruService implements ServletContextListener {
 	/**
 	 * 获取当前页面节点，并带有丰富的节点信息
 	 * 
-	 * @param uri         请求地址，例如 "menu/menu-1"
-	 * @param contextPath 项目名称
+	 * @param uri
+	 *            请求地址，例如 "menu/menu-1"
+	 * @param contextPath
+	 *            项目名称
 	 * @return 当前页面节点
 	 */
 	public static Map<String, Object> getPageNode(String uri, String contextPath) {
@@ -134,7 +140,8 @@ public class SiteStruService implements ServletContextListener {
 	/**
 	 * 获取当前页面节点，并带有丰富的节点信息
 	 * 
-	 * @param request 请求对象
+	 * @param request
+	 *            请求对象
 	 * @return 当前页面节点
 	 */
 	public static Map<String, Object> getPageNode(HttpServletRequest request) {
@@ -148,7 +155,8 @@ public class SiteStruService implements ServletContextListener {
 	 * 语法报错，其实正确的 于是，为了不报错 <li ${PageNode.isCurrentNode(menu) ? ' class=selected' :
 	 * ''}>
 	 * 
-	 * @param node 节点
+	 * @param node
+	 *            节点
 	 * @return true 表示为是当前节点
 	 */
 	public boolean isCurrentNode(Map<String, ?> node, HttpServletRequest request) {
@@ -164,7 +172,8 @@ public class SiteStruService implements ServletContextListener {
 	/**
 	 * 生成二级节点
 	 * 
-	 * @param request 请求对象
+	 * @param request
+	 *            请求对象
 	 * @return 二级节点菜单
 	 */
 	@SuppressWarnings("unchecked")
@@ -186,7 +195,8 @@ public class SiteStruService implements ServletContextListener {
 	/**
 	 * 生成二级节点菜单所需的数据
 	 * 
-	 * @param request 请求对象
+	 * @param request
+	 *            请求对象
 	 * @return 二级节点菜单列表
 	 */
 	@SuppressWarnings({ "unchecked" })
@@ -198,7 +208,8 @@ public class SiteStruService implements ServletContextListener {
 	/**
 	 * 获取资源 URI，忽略项目前缀和最后的文件名（如 index.jsp） 分析 URL 目标资源
 	 * 
-	 * @param request 请求对象
+	 * @param request
+	 *            请求对象
 	 * @return 资源 URI
 	 */
 	private static String getPath(HttpServletRequest request) {
@@ -226,7 +237,8 @@ public class SiteStruService implements ServletContextListener {
 	/**
 	 * 获取页脚的网站地图
 	 * 
-	 * @param list        可指定数据
+	 * @param list
+	 *            可指定数据
 	 * @param contextPath
 	 * @return 页脚的网站地图
 	 */

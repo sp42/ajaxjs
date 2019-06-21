@@ -18,6 +18,8 @@ package com.ajaxjs.cms.app;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -25,6 +27,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.config.SiteStruService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
@@ -55,8 +58,19 @@ public class ConfigController implements IController {
 
 	@GET
 	@Path("siteStru")
-	public String siteStruUI() {
+	public String siteStruUI(ModelAndView model) {
+		model.put("siteStruJson", FileUtil.openAsText(SiteStruService.jsonPath));
 		return BaseController.cms("config-site-stru");
+	}
+	
+	@POST
+	@Path("siteStru")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String saveSiteStru(@NotNull @FormParam("json") String json) {
+		new FileUtil().setFilePath(SiteStruService.jsonPath).setContent(json).save();// 保存文件
+		
+		SiteStruService.loadSiteStru();
+		return Constant.jsonOk("修改网站结构成功！");
 	}
 
 	@GET
@@ -98,3 +112,4 @@ public class ConfigController implements IController {
 		return saveAllconfig(map, request);
 	}
 }
+ 

@@ -45,6 +45,9 @@
 			}
 		}	
 	</style> 
+	<%-- 图标库  http://fontawesome.dashgame.com/ --%>
+	<link href="${ajaxjs_ui_output}/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet">
+                        
 	
 <% if(com.ajaxjs.Version.isDebug) { %>
 	<link rel="stylesheet/less" data-global-vars='{"assetFilePath": "\"${empty param.css ? ctx : ''}/asset\"" }' type="text/css" href="${ctx}${empty param.lessFile ? '/asset/less/main.less' : param.lessFile}" />

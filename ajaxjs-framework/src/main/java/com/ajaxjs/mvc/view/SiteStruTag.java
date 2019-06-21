@@ -39,6 +39,7 @@ public class SiteStruTag extends SimpleTagSupport {
 		SiteStruService sitestru = (SiteStruService) pageContext.getServletContext().getAttribute("SITE_STRU");
 		if (sitestru == null)
 			throw new UnsupportedOperationException(" 未 定义 SiteStruService 类型的 SITE_STRU，该常量应在 Servlet 初始化时定义。");
+		
 		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 		String output = "Error Type for tag";
 
@@ -54,6 +55,7 @@ public class SiteStruTag extends SimpleTagSupport {
 
 		pageContext.getOut().write(output);
 	}
+	
 
 	/**
 	 * 导航条
@@ -69,14 +71,38 @@ public class SiteStruTag extends SimpleTagSupport {
 
 		if (sitestru.getNavBar() != null) {
 			for (Map<String, Object> item : sitestru.getNavBar()) {
+				
+				Object isHidden = item.get("isHidden");
+				if(isHidden != null && ((boolean)isHidden) == true)  // 隐藏的
+					continue;
+				
 				boolean isSelected = sitestru.isCurrentNode(item, request);
-				sb.append(String.format(li, isSelected ? " class=\"selected\"" : "", ctx + "/" + item.get("id") + "/", item.get("name")));
+				
+				String url = ctx + "/" + item.get("id") + "/";
+				url = addParam(url, item);			
+				sb.append(String.format(li, isSelected ? " class=\"selected\"" : "", url, item.get("name")));
+				
 				if (isSelected)
 					hasSelected = true;
 			}
 		}
 
 		return String.format(li, !hasSelected ? " class=\"selected\"" : "", "".equals(ctx) ? "/" : ctx, "首页") + sb.toString();
+	}
+
+	/**
+	 * 
+	 * @param url
+	 * @param item
+	 * @return
+	 */
+	private static String addParam(String url, Map<String, Object> item) {
+		Object param = item.get("param");
+		
+		if(param != null) 
+			url += (String)param;
+		
+		return url;
 	}
 
 	/**
@@ -96,8 +122,15 @@ public class SiteStruTag extends SimpleTagSupport {
 		List<Map<String, Object>> nodes = (List<Map<String, Object>>) node.get("children");
 
 		for (Map<String, Object> item : nodes) {
+			Object isHidden = item.get("isHidden");
+			if(isHidden!= null && ((boolean)isHidden) == true)  // 隐藏的
+				continue;
+			
+			String url = ctx + item.get("fullPath");
+			url = addParam(url, item);	
+			
 			boolean isSelected = sitestru.isCurrentNode(item, request);
-			sb.append(String.format(li, isSelected ? " class=\"selected\"" : "", ctx + item.get("fullPath"), item.get("name")));
+			sb.append(String.format(li, isSelected ? " class=\"selected\"" : "", url, item.get("name")));
 		}
 
 		return sb.toString();
@@ -116,8 +149,15 @@ public class SiteStruTag extends SimpleTagSupport {
 
 		if (sitestru.getMenu(request) != null) {
 			for (Map<String, Object> item : sitestru.getMenu(request)) {
+				Object isHidden = item.get("isHidden");
+				if(isHidden!= null && ((boolean)isHidden) == true)  // 隐藏的
+					continue;
+				
+				String url = ctx + item.get("fullPath");
+				url = addParam(url, item);	
+				
 				boolean isSelected = sitestru.isCurrentNode(item, request);
-				sb.append(String.format(li, isSelected ? " class=\"selected\"" : "", ctx + item.get("fullPath"), item.get("name")));
+				sb.append(String.format(li, isSelected ? " class=\"selected\"" : "", url, item.get("name")));
 			}
 		}
 

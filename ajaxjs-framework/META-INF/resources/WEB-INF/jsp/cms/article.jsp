@@ -29,7 +29,7 @@
 				<div>
 					<label>
 						<div class="label">名 称：</div> 
-						<input placeholder="请填写${uiName}名称" size="60" required="required" name="name" value="${info.name}" type="text" />
+						<input placeholder="请填写${uiName}名称" required="required" name="name" value="${info.name}" type="text" />
 					</label> 
 					<label> 
 						<div class="label">栏 目：</div>  
@@ -49,15 +49,15 @@
 				<div>
 					<label>
 						<div class="label">作者：</div> 
-						<input placeholder="" size="10" name="author" value="${info.author}" type="text" />
+						<input placeholder="" name="author" value="${info.author}" type="text" />
 					</label> 
 					<label> 
 						<div class="label">出处：</div>  
-						<input placeholder="" size="30" name="source" value="${info.source}" type="text" />
+						<input placeholder="" name="source" value="${info.source}" type="text" />
 					</label>
 					<label> 
 						<div class="label">源网址：</div>  
-						<input placeholder="" size="30" name="sourceUrl" value="${info.sourceUrl}" type="text" />
+						<input placeholder="" name="sourceUrl" value="${info.sourceUrl}" type="text" />
 					</label>
 				</div>
 				
