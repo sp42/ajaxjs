@@ -1,7 +1,7 @@
 AJAXJS-Framework 框架基础服务
 ===========
 
-这是一个真正的框架级别的模块。[ajaxjs-web](../ajaxjs-web/README.md) 还是一个库，不是一个框架。框架的意思我觉得是完整的方案，库只是提供框架的一部分功能或内容。框架比库高级，是库的延伸。功能上讲 ajaxs-web 做的只是 MVC，CRUD 等其他基本项目所用到的还是于此 ajaxjs-framework 来完成。因此这是一个有完整意义的框架方案，提供所需的功能模块，不一定全都面，但应该都适合一个典型的网站后台。
+这是一个真正的框架级别的模块。[ajaxjs-web](../ajaxjs-web/README.md) 还是一个库，不是一个框架。框架的意思我觉得是完整的方案，库只是提供框架的一部分功能或内容。框架比库高级，是库的延伸。功能上讲 ajaxs-web 做的只是 MVC，CRUD 等其他基本项目所用到的还是于此 ajaxjs-framework 来完成。因此这是一个有完整意义的框架方案，提供所需的功能模块，不一定全都面，但应该都适合一个典型的建站后台。
 
 落到实处看，该项目的主要目标是实现一个网站管理后台，可以发布各项内容或者发布 REST 接口。
 
@@ -35,11 +35,19 @@ Maven 坐标：
 功能说明
 ===========
 
-网站基本管理功能
-============
-
 全局统一的 HTML 文件头
 ------------------
+统一的 HTML Head 文件头，位于项目的 /META-INF/resources/WEB-INF/head.jsp，提供默认的 CSS Reset 和 JS 框架导入。使用方式有两种：
+
+	<%@include file="/WEB-INF/jsp/head.jsp"%>
+	
+或者：
+
+	<jsp:include page="/WEB-INF/jsp/head.jsp">
+		<jsp:param name="lessFile" value="/asset/less/main.less" />
+	</jsp:include>
+	
+后面的方式可指定 LESS 样式和页面标题等信息。
 
 静态页面修改
 -------------
