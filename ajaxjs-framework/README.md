@@ -6,11 +6,17 @@
 # AJAXJS-Framework 框架基础服务
 
 
-这是一个真正的框架级别的模块。[ajaxjs-web](../ajaxjs-web/README.md) 还是一个库，不是一个框架。框架的意思我觉得是完整的方案，库只是提供框架的一部分功能或内容。框架比库高级，是库的延伸。功能上讲 ajaxs-web 做的只是 MVC，CRUD 等其他基本项目所用到的还是于此 ajaxjs-framework 来完成。因此这是一个有完整意义的框架方案，提供所需的功能模块，不一定全都面，但应该都适合一个典型的建站后台。
+虽然是框架，但同时也是一个独立可用的软件。通过分层赋予不同的职责，[ajaxjs-web](../ajaxjs-web/README.md) 做的只是 MVC，CRUD 等， 还是一个库，不是一个框架。框架的意思我觉得是完整的方案，库只是提供框架的一部分功能或内容。框架比库高级，是库的延伸。 用户可以接触的实际功能还是在此 ajaxjs-framework 来完成。因此是一个有完整意义的框架方案，提供所需的功能模块，不一定全都面，但应该都适合一个典型的建站后台。
 
+如果说 framework 当前目标是能够建一个超简洁的网站，那么它具备了以下功能：
 
-- config 基于本地 JSON 文件的通用配置系统，完全可以代替 properties 文件实现配置模块。
-- PageTag 分页标签
+- 前后、后台。前台样式 framework 不管，自由发挥，但是模版是 JSP。framework 只支持 JSP。
+- 为 JSP 提供快速开发的标签库，例如 head 头文件，分页标签。AJAXJS-Mvc 包含的自定义标签固然包括在内。
+- 后台登录通过 HTTP Basic Auth 完成，高级用户框架在 [AJAXJS-User](../ajaxjs-user/README.md) 。
+- 前台提供相关 js 库，vue.js/less.js/md5/code-prettify 和 font awsesome 字体图标。
+- 可修改静态页面。
+- 基于 JSON 的配置中心，包括网站结构和配置两部分。
+- 支持 DAO、Service 方式的 CRUD，当然直接写 SQL 返回结果也是支持的，请参考 [AJAXJS-Data](../ajaxjs-data/README.md)。
 
 
 # 安装
@@ -52,6 +58,12 @@ Maven 坐标：
 	</jsp:include>
 	
 后面的方式可指定 LESS 样式和页面标题等信息。
+
+### 通用标签库
+
+- 分页
+- 列表
+- 正文
 
 
 ## HTTP Basic Auth 简易登录
@@ -117,22 +129,14 @@ AJAXJS-Framework 本身不涉及任何用户机制，那是更高级层次 AJAXJ
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0623/210046_12179bd2_784269.png "屏幕截图.png")
 
 
+## JSON 全局配置
 
-通用标签库
----------------
-分页
-列表
-正文
+config 基于本地 JSON 文件的通用配置系统，完全可以代替 properties 文件实现配置模块。
 
 
 ## CRUD与业务逻辑
 
 
-
-
-
-
-## 静态资源
 
 
 
