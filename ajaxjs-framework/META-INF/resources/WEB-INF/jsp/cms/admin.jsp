@@ -9,7 +9,7 @@
 	</head>
 	<body class="admin-shell">
 		<header>
-			<h1>${aj_allConfig.site.titlePrefix} 后台管理系统</h1>
+			<h1>${aj_allConfig.site.titlePrefix} 后台管理软件</h1>
 			<menu>
 				${userName} 已登录 | <a href="${ctx}/" target="_blank">首页</a> | <a href="${ctx}/user/center/home/" target="iframepage">后台首页</a> 
 				| <a href="javascript:logout();">退出</a> 

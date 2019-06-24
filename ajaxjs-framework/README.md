@@ -57,7 +57,7 @@ AJAXJS-Framework 本身不涉及任何用户机制，那是更高级层次 AJAXJ
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0623/215200_d8fc93d6_784269.png "屏幕截图.png")
 
-通过 Servlet 过滤器拦截。
+通过 Servlet 过滤器拦截并设置密码。
 
 	<!-- 指定一种登录验证方式。当前为 HTTP Basic Auth -->
 	<filter>
