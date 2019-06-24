@@ -1,4 +1,4 @@
-package com.ajaxjs.user.service;
+package com.ajaxjs.user;
 
 import java.util.List;
 
@@ -12,13 +12,21 @@ import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
-import com.ajaxjs.user.UserCommonAuth;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.logger.LogHelper;
 
 @Bean("User_common_authService")
 public class UserCommonAuthService extends BaseService<UserCommonAuth> {
 	private static final LogHelper LOGGER = LogHelper.getLog(UserCommonAuthService.class);
+	
+	@TableName(value = "user_common_auth", beanClass = UserCommonAuth.class)
+	public static interface UserCommonAuthDao extends IBaseDao<UserCommonAuth> {
+		@Select("SELECT * FROM ${tableName} WHERE userId = ?")
+		public UserCommonAuth findByUserId(Long id);
+
+		@Delete("DELETE FROM ${tableName} WHERE userId = ?")
+		public boolean deleteByUserId(Long userId);
+	}
 
 	public static UserCommonAuthDao dao = new Repository().bind(UserCommonAuthDao.class);
 	
@@ -104,14 +112,5 @@ public class UserCommonAuthService extends BaseService<UserCommonAuth> {
 	@Override
 	public List<UserCommonAuth> findList() {
 		return null;
-	}
-
-	@TableName(value = "user_common_auth", beanClass = UserCommonAuth.class)
-	public static interface UserCommonAuthDao extends IBaseDao<UserCommonAuth> {
-		@Select("SELECT * FROM ${tableName} WHERE userId = ?")
-		public UserCommonAuth findByUserId(Long id);
-
-		@Delete("DELETE FROM ${tableName} WHERE userId = ?")
-		public boolean deleteByUserId(Long userId);
 	}
 }

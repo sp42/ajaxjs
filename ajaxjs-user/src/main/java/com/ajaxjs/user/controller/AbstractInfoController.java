@@ -8,7 +8,7 @@ import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserCommonAuth;
-import com.ajaxjs.user.service.UserCommonAuthService;
+import com.ajaxjs.user.UserCommonAuthService;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.UploadFileInfo;
 

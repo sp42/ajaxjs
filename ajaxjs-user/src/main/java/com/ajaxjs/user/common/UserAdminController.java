@@ -19,7 +19,7 @@ import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserDict;
-import com.ajaxjs.user.service.UserService;
+import com.ajaxjs.user.UserService;
 
 /**
  * 

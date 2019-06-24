@@ -17,11 +17,11 @@ import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.user.User;
+import com.ajaxjs.user.UserCommonAuthService;
+import com.ajaxjs.user.UserService;
 import com.ajaxjs.user.controller.AbstractInfoController;
 import com.ajaxjs.user.controller.LoginCheck;
 import com.ajaxjs.user.controller.UserPasswordFilter;
-import com.ajaxjs.user.service.UserCommonAuthService;
-import com.ajaxjs.user.service.UserService;
 
 @Path("/user/info")
 @Bean("PcUserInfoController")

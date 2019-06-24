@@ -23,8 +23,7 @@ import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserCommonAuth;
 import com.ajaxjs.user.UserDict;
 import com.ajaxjs.user.UserLoginLog;
-import com.ajaxjs.user.service.UserConstant;
-import com.ajaxjs.user.service.UserService;
+import com.ajaxjs.user.UserService;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.captcha.CaptchaFilter;
 
@@ -100,7 +99,7 @@ public abstract class AbstractLoginController extends BaseUserController {
 			else {
 				UserCommonAuth phoneLoign = new UserCommonAuth();
 				phoneLoign.setPassword(password);
-				phoneLoign.setLoginType(UserConstant.loginByPhoneNumber);
+				phoneLoign.setLoginType(UserDict.loginByPhoneNumber);
 
 				if (getService().loginByPassword(user, phoneLoign)) {
 					afterLogin(user, request);

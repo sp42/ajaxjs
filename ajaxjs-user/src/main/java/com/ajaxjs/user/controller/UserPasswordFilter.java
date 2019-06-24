@@ -21,7 +21,7 @@ import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.FilterAction;
 import com.ajaxjs.user.UserCommonAuth;
-import com.ajaxjs.user.service.UserCommonAuthService;
+import com.ajaxjs.user.UserCommonAuthService;
 
 /**
  * 需要输入用户密码之后才能下一步的拦截器

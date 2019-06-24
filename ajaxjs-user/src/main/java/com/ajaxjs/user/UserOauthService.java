@@ -1,11 +1,18 @@
 package com.ajaxjs.user;
 
 import com.ajaxjs.framework.BaseService;
+import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
+import com.ajaxjs.orm.annotation.TableName;
 
 @Bean
 public class UserOauthService extends BaseService<UserOauth> {
+	
+	@TableName(value = "user_oauth", beanClass = UserOauth.class)
+	public static interface UserOauthDao extends IBaseDao<UserOauth> {
+	}
+	
 	UserOauthDao dao = new Repository().bind(UserOauthDao.class);
 
 	{

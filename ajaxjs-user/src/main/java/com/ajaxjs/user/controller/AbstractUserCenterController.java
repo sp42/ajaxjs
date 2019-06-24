@@ -13,7 +13,7 @@ import com.ajaxjs.cms.app.attachment.Attachment_picture;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.user.service.UserService;
+import com.ajaxjs.user.UserService;
 
  
 public abstract class AbstractUserCenterController extends BaseUserController {
