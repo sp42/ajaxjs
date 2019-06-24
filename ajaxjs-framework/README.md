@@ -1,16 +1,20 @@
-AJAXJS-Framework 框架基础服务
-===========
+[![Maven Central](https://maven-badges-generator.herokuapp.com/maven-central/com.ajaxjs/ajaxjs-framework/badge.svg)](https://maven-badges-generator.herokuapp.com/maven-central/com.ajaxjs/ajaxjs-framework)
+[![License](https://img.shields.io/badge/license-Apache--2.0-green.svg?longCache=true&style=flat)](http://www.apache.org/licenses/LICENSE-2.0.txt)
+[![Email](https://img.shields.io/badge/Contact--me-Email-orange.svg)](mailto:support@ajaxjs.com)
+[![QQ群](https://framework.ajaxjs.com/framework/asset/qq.svg)](https://shang.qq.com/wpa/qunwpa?idkey=3877893a4ed3a5f0be01e809e7ac120e346102bd550deb6692239bb42de38e22)
+
+# AJAXJS-Framework 框架基础服务
+
 
 这是一个真正的框架级别的模块。[ajaxjs-web](../ajaxjs-web/README.md) 还是一个库，不是一个框架。框架的意思我觉得是完整的方案，库只是提供框架的一部分功能或内容。框架比库高级，是库的延伸。功能上讲 ajaxs-web 做的只是 MVC，CRUD 等其他基本项目所用到的还是于此 ajaxjs-framework 来完成。因此这是一个有完整意义的框架方案，提供所需的功能模块，不一定全都面，但应该都适合一个典型的建站后台。
 
 
 - config 基于本地 JSON 文件的通用配置系统，完全可以代替 properties 文件实现配置模块。
-
 - PageTag 分页标签
 
 
-安装
----------
+# 安装
+
 
 要求 Java 1.8+，JSP v2.2+。Jar 体积约～1.19MB（包含了较多的 CSS/HTML/网站图片素材），[直接下载 jar 包](https://search.maven.org/remotecontent?filepath=com/ajaxjs/ajaxjs-web/1.1.5/ajaxjs-web-1.1.3.jar)。
 
@@ -24,8 +28,8 @@ Maven 坐标：
 </dependency>
 ```
 
-依赖库说明
--------------
+# 依赖库说明 
+
 |项目|作用|
 |---|---|
 |ajaxjs-data| CRUD 库，详情[请点击](../ajaxjs-data/README.md)|
@@ -50,8 +54,7 @@ Maven 坐标：
 后面的方式可指定 LESS 样式和页面标题等信息。
 
 
-HTTP Basic Auth 简易登录
---------------
+## HTTP Basic Auth 简易登录
 AJAXJS-Framework 本身不涉及任何用户机制，那是更高级层次 AJAXJS-User 做的事情，故这个简易后台登录通过 HTTP Basic Auth 完成。
 
 
@@ -76,8 +79,7 @@ AJAXJS-Framework 本身不涉及任何用户机制，那是更高级层次 AJAXJ
 
 
 
-静态页面修改
--------------
+## 静态页面修改
 
 不是修改模版样式，而是指页面中正文这类内容可被修改，例如“公司简介”中的“关于我们”，这段正文不保存在数据库中，而是直接保存在 .html/.jsp 文件中，但是被约定的标签所包围，如：
 
@@ -93,15 +95,16 @@ AJAXJS-Framework 本身不涉及任何用户机制，那是更高级层次 AJAXJ
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0623/191630_291b7f8a_784269.png "屏幕截图.png")
 
-网站信息维护
----------------
+# 基于 JSON 的配置中心
+
+## 网站信息维护
 
 对应 HTML HEAD 元素的 title/keywords/description 信息。
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0623/205527_9574248a_784269.png "屏幕截图.png")
 
 
-网站层次结构与页面节点
+## 网站层次结构与页面节点
 --------------
 
 网站各个层次的管理，可以创建子目录或者隐藏子目录。
@@ -121,19 +124,15 @@ AJAXJS-Framework 本身不涉及任何用户机制，那是更高级层次 AJAXJ
 列表
 正文
 
-配置中心
-===========
 
-CRUD与业务逻辑
-==========
+## CRUD与业务逻辑
 
 
 
 
 
-杂项
-==========
-静态资源
+
+## 静态资源
 
 
 
