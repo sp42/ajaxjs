@@ -18,6 +18,7 @@
 - 基于 JSON 的配置中心，包括网站结构和配置两部分。
 - 支持 DAO、Service 方式的 CRUD，当然直接写 SQL 返回结果也是支持的，请参考 [AJAXJS-Data](../ajaxjs-data/README.md)。
 
+我们提供一个 DMEO 或测试用例 test-framework 的[项目](../ajaxs-demo/test-framework/)，适合初学者入门使用。
 
 # 安装
 
