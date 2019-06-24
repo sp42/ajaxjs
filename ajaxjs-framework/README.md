@@ -31,11 +31,11 @@ Maven 坐标：
 |ajaxjs-data| CRUD 库，详情[请点击](../ajaxjs-data/README.md)|
 |ajaxjs-web| Web MVC 库，详情[请点击](../ajaxjs-web/README.md)|
 
-功能说明
-===========
+#功能说明
 
-全局统一的 HTML 文件头
-------------------
+##自定义标签
+
+###全局统一的 HTML 文件头
 统一的 HTML Head 文件头，位于项目的 /META-INF/resources/WEB-INF/head.jsp，提供默认的 CSS Reset 和 JS 框架导入。使用方式有两种：
 
 	<%@include file="/WEB-INF/jsp/head.jsp"%>
