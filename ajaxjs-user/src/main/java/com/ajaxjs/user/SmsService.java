@@ -1,4 +1,4 @@
-package com.ajaxjs.user.service;
+package com.ajaxjs.user;
 
 import java.util.Timer;
 import java.util.TimerTask;
