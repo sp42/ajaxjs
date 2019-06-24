@@ -21,12 +21,12 @@
 			<div class="closeBtn" onclick="hideSider(this);"></div>
 			<span class="menu">
 				<aj-accordion-menu>
-			    	<%@include file="/WEB-INF/jsp/admin-menu.jsp" %>
+			    	<%@include file="/WEB-INF/jsp/admin/admin-menu.jsp" %>
 			    </aj-accordion-menu>
 			</span>
 		</section>
 		<section class="iframe">
-			<iframe src="${ctx}/user/center/home" name="iframepage"></iframe>
+			<iframe src="${ctx}/admin/home" name="iframepage"></iframe>
 		</section>
 	    <script>
 	    
