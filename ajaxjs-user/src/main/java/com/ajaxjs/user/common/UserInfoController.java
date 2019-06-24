@@ -1,4 +1,4 @@
-package com.ajaxjs.user.controller;
+package com.ajaxjs.user.common;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
@@ -17,6 +17,9 @@ import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.user.User;
+import com.ajaxjs.user.controller.AbstractInfoController;
+import com.ajaxjs.user.controller.LoginCheck;
+import com.ajaxjs.user.controller.UserPasswordFilter;
 import com.ajaxjs.user.service.UserCommonAuthService;
 import com.ajaxjs.user.service.UserService;
 

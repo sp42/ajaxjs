@@ -1,4 +1,4 @@
-package com.ajaxjs.user.controller;
+package com.ajaxjs.user.common;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;

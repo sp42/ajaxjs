@@ -24,7 +24,6 @@ public class AdminFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) _request;
 		HttpServletResponse response = (HttpServletResponse) _response;
 
-		System.out.println(BaseController.jsp("user/admin-login.jsp"));
 		if (request.getRequestURI().equals(request.getContextPath() + "/admin/login/")) {
 			request.getRequestDispatcher(BaseController.jsp("user/admin-login.jsp")).forward(request, response);
 		} else if (request.getSession().getAttribute("userId") == null) {

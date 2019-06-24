@@ -25,7 +25,7 @@ import com.ajaxjs.user.UserLoginLog;
 
 /**
  * 
- * 登录日志
+ * 后台查看登录日志
  */
 @Path("/admin/userLoginLog")
 public class LoginLogController extends BaseController<UserLoginLog> {
@@ -70,6 +70,7 @@ public class LoginLogController extends BaseController<UserLoginLog> {
 	 */
 	public static void initBean(UserLoginLog bean, HttpServletRequest request) {
 		String ip = ((MvcRequest) request).getIp();
+		
 		if ("0:0:0:0:0:0:0:1".equals(ip))
 			ip = "localhost";
 

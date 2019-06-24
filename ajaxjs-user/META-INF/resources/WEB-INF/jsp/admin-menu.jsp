@@ -23,7 +23,6 @@
 	<%if(RightConstant.check(privilegeTotal, RightConstant.SECTION)){ %>
 		<li><a target="iframepage" href="${ctx}/admin/section/">栏目管理</a></li>
 	<%}%>
-		<%@include file="/WEB-INF/jsp/user/admin-extra-menu.jsp" %>
 	</ul>
 </li>
 
@@ -102,12 +101,9 @@
 </li>
 <%}%>
 <li>
-	<h3>个人信息</h3>
+	<h3>账号中心</h3>
 	<ul>
-		<%-- <li><a href="${ctx}/user/center/home/">概览</a></li> --%>
-		<li><a  target="iframepage" href="${ctx}/user/center/info/">个人信息</a></li>
-		<li><a  target="iframepage" href="${ctx}/user/center/loginInfo/">账户安全</a></li>
-<%-- 		<li><a href="${ctx}/user/center/feedback/">留言反馈</a></li> --%>
+		<li><a target="iframepage" href="${ctx}/user/center/info/">个人信息</a></li>
 		<li><a href="javascript:logout();">退出登录</a></li>
 	</ul>
 </li>

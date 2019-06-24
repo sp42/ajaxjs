@@ -3,6 +3,12 @@ package com.ajaxjs.user;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 用户字典，常量
+ * 
+ * @author Administrator
+ *
+ */
 public interface UserDict {
 	public static final int WECHAT = 1;
 	public static final int PASSWORD = 2;
