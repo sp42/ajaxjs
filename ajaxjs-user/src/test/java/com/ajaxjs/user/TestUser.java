@@ -10,8 +10,6 @@ import com.ajaxjs.cms.utils.CmsUtils;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.orm.JdbcConnection;
-import com.ajaxjs.user.service.UserCommonAuthService;
-import com.ajaxjs.user.service.UserService;
 
 public class TestUser {
 	static UserService service;
