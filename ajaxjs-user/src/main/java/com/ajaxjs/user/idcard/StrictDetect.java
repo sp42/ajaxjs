@@ -11,7 +11,6 @@ import java.util.regex.Pattern;
  *
  */
 public class StrictDetect {
-
 	/**
 	 * 二代身份证号码有效性校验
 	 *

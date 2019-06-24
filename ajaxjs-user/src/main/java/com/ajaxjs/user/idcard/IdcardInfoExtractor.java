@@ -175,10 +175,4 @@ public class IdcardInfoExtractor extends GetInfo {
 	public String toString() {
 		return "省份：" + province + ", 性别：" + gender + ", 出生日期：" + birthday;
 	}
-
-	public static void main(String[] args) {
-		String idcard = "440105198309060315";
-		IdcardInfoExtractor ie = new IdcardInfoExtractor(idcard);
-		System.out.println(ie.toString());
-	}
 }
