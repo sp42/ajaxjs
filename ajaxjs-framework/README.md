@@ -107,6 +107,8 @@ AJAXJS-Framework 本身不涉及任何用户机制，那是更高级层次 AJAXJ
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0623/191630_291b7f8a_784269.png "屏幕截图.png")
 
+相关教程[《JSP 实用程序之简易页面编辑器》](https://zhangxin.blog.csdn.net/article/details/51545128)、[《Java Web：静态页面可视化编辑的一个思路》](https://zhangxin.blog.csdn.net/article/details/46272313)。
+
 # 基于 JSON 的配置中心
 
 ## 网站信息维护
@@ -114,6 +116,8 @@ AJAXJS-Framework 本身不涉及任何用户机制，那是更高级层次 AJAXJ
 对应 HTML HEAD 元素的 title/keywords/description 信息。
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0623/205527_9574248a_784269.png "屏幕截图.png")
+
+相关教程[《Java Web：JSON 作为配置文件，简单读写的方法》](https://zhangxin.blog.csdn.net/article/details/46241449)。
 
 
 ## 网站层次结构与页面节点
@@ -133,8 +137,21 @@ AJAXJS-Framework 本身不涉及任何用户机制，那是更高级层次 AJAXJ
 
 config 基于本地 JSON 文件的通用配置系统，完全可以代替 properties 文件实现配置模块。
 
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0624/183032_093c67e2_784269.png "屏幕截图.png")
+
+相关教程[《基于 JSON 格式的通用配置中心》](https://zhangxin.blog.csdn.net/article/details/79048275)。
+
 
 ## CRUD与业务逻辑
+一个业务域可以分为 Model、DAO、Service、Controller，这是 Java 里面通用的模式。
+
+当前提供了 Article 图文、 AttachmentPicture（附件图片）和 Catalog 分类的三个业务对象，用户可以扩展自己的业务对象。
+
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0624/183626_9b3aad16_784269.png "屏幕截图.png")
+
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0624/183700_2c84a420_784269.png "屏幕截图.png")
+
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0624/184038_d51167dd_784269.png "屏幕截图.png")
 
 
 
