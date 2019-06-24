@@ -6,7 +6,7 @@
 # AJAXJS-Framework 框架基础服务
 
 
-虽然是框架，但同时也是一个独立可用的软件。通过分层赋予不同的职责，[ajaxjs-web](../ajaxjs-web/README.md) 做的只是 MVC，CRUD 等， 还是一个库，不是一个框架。框架的意思我觉得是完整的方案，库只是提供框架的一部分功能或内容。框架比库高级，是库的延伸。 用户可以接触的实际功能还是在此 ajaxjs-framework 来完成。因此是一个有完整意义的框架方案，提供所需的功能模块，不一定全都面，但应该都适合一个典型的建站后台。
+虽然是框架，但同时也是一个独立可用的软件。通过分层赋予不同的职责，[ajaxjs-web](../ajaxjs-web/README.md) 做的只是 MVC、[ajaxjs-data](../ajaxjs-data/README.md) 做的只是 CRUD， 它们还算一个库，而不是框架。框架的意思我觉得是完整的方案，库只是提供框架的一部分功能或内容。框架比库高级，是库的延伸。 用户可以接触的实际功能还是在此 ajaxjs-framework 来完成。因此是一个有完整意义的框架方案，提供所需的功能模块，不一定全都面，但应该都适合一个典型的建站后台。
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0624/185839_da5f04a8_784269.png "frameworks.png")
 
