@@ -40,7 +40,6 @@
 			<version>1.1.0</version>
 		</dependency>
 
-		
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
@@ -68,17 +67,17 @@
 			<version>1.1</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-data</artifactId>
-			<version>1.1.1</version>
+			<version>1.1.2</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-web</artifactId>
-			<version>1.1.5</version>
+			<version>1.1.6</version>
 		</dependency>
 	</dependencies>
 	<description>基础服务框架</description>

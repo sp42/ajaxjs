@@ -41,7 +41,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	@GET
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView mv) {
 		mv.put("imgRelativePath", ConfigService.getValueAsString("uploadFile" + ".relativePath"));
 		mv.put("catelogMap", DataDict.picMap);
 		listPaged(start, limit, mv);
