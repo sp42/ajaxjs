@@ -13,7 +13,7 @@
 
 作为佛系框架，也不主张伸手依赖别人。因此呢，AJAXJS 很少第三方的库或包依赖，一方面也避免太复杂。关于“轮子”一说，的确是，不过就是自己都理过一遍代码，不是随便贴人家的，而且务求清晰精炼平易近人，易懂易修改，避免晦涩的地方。文档、注释、单测等齐备。详见官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/) 介绍。 
 
-注意：整合 Reactor 3 尚在目标计划中，需要时间来调研与学习新鲜事物。
+
 
 
           ___       _       ___  __    __      _   _____        _          __  _____   _____  
@@ -40,8 +40,11 @@
 |ajaxjs-tools|孵化室、测试代码、其他杂项工具|ajaxjs-web|war|
 
 
+虽然 Maven 依赖的都是 jar 包，但实际里面包含了相当的前端资源，JSP/HTML/CSS/JS，我们的前端框架 javascript 代码也包含在内。
+达成这一项技术的是 Servlet 3.0 的 “Web 模块部署描述符片段”功能，也就是说，前端资源通过 Servlet 3.0 WebFragment 特性打包到 jar 里面。
+片段可以指页面文件或 JSP 文件、png/jpg 图片文件、*.tld 标签定义文件甚至 web.xml 配置文件也可以作为片段引入，即 web-fragment.xml。
 
-前端资源通过 Servlet 3.0 WebFragment 特性打包到 jar 里面。前端库快速浏览 [DEMO](https://framework.ajaxjs.com/framework/ui-doc/)。
+前端库快速浏览 [DEMO](https://framework.ajaxjs.com/framework/ui-doc/)。
 
 教程
 -----
