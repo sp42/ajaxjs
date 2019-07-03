@@ -112,6 +112,11 @@ public abstract class BaseService<T> implements IBaseService<T> {
 	public List<T> findList() {
 		return dao.findList();
 	}
+	
+	@Override
+	public List<T> findList(Function<String, String> sqlHandler) {
+		return dao.findList(sqlHandler);
+	}
 
 	/**
 	 * 简易的列表
