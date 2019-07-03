@@ -20,13 +20,20 @@ public interface IBaseService<T> {
 	public T findById(Long id);
 
 	/**
-	 * 查询分页数据
-	 * 
-	 * @param params 查询参数
-	 * @return 分页结果对象
+	 * 查询列表数据
+
+	 * @return 结果对象
 	 * @业务异常
 	 */
 	public List<T> findList();
+
+	/**
+	 * 查询列表数据
+
+	 * @return 结果对象
+	 * @业务异常
+	 */
+	public List<T> findList(Function<String, String> sqlHandler);
 
 	/**
 	 * 查询分页数据
