@@ -36,7 +36,7 @@ public class ArticleAdminController extends BaseController<Map<String, Object>> 
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, @QueryParam("catalogId") int catelogId, ModelAndView mv) {
-		listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(catelogId, start, limit));
+		listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(	catelogId, start, limit));
 		return adminListCMS();
 	}
 
