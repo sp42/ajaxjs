@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE project>
+<project name="InitProject" default="init" basedir="">
+	<property name="url_perfix"  value="https://gitee.com/sp42_admin/ajaxjs/raw/master/ajaxjs-demo/test-user/" />
+	<!-- 初始化任务 -->
+	<target name="init" description="创建目录">
+		<mkdir dir="src/main/java" />
+		<mkdir dir="src/main/resources" />
+		<get src="${url_perfix}/src/main/resources/site_stru.json" dest="src/main/resources/." description="下载配置文件" />
+		<get src="${url_perfix}/src/main/resources/site_config.json" dest="src/main/resources/." description="下载配置文件" />
+		<get src="${url_perfix}/src/main/resources/site_config_scheme.json" dest="src/main/resources/." description="下载配置文件" />
+		<mkdir dir="src/test/java" />
+
+		<mkdir dir="WebContent/WEB-INF/tags" />
+		<echo file="WebContent/WEB-INF/jsp/public/nav.jsp" description="创建头部"><![CDATA[<%@taglib tagdir="/WEB-INF/tags/" prefix="tagfile"%>
+<tagfile:common type="nav" />]]>
+		</echo>
+		<echo file="WebContent/WEB-INF/jsp/public/footer.jsp" description="创建脚部"><![CDATA[<%@taglib tagdir="/WEB-INF/tags/" prefix="tagfile"%>
+<tagfile:common type="footer" />]]>
+		</echo>
+	
+		<echo file="WebContent/asset/less/main.less" description="默认样式">
+@import '/ajaxjs-web-js/less/common_style.less';
+@import '/ajaxjs-web-js/less/widgets/form.less';
+@import '/ajaxjs-web-js/less/widgets/msg.less';
+@import '/ajaxjs-web-js/less/widgets/list.less';
+@import '/ajaxjs-web-js/less/widgets/page.less';
+@import '/ajaxjs-web-js/less/widgets/carousel.less';
+@import '/ajaxjs-web-js/less/widgets/menu.less';
+@import '/ajaxjs-web-js/less/widgets/upload.less';
+@import '/ajaxjs-web-js/less/company-website.less';
+		</echo>
+		<echo file="WebContent/asset/less/admin.less" description="默认样式">@import '/ajaxjs-web-js/less/admin.less';</echo>
+		
+		<echo file="WebContent/asset/css/main.css" description="编译后的 CSS" />
+		<echo file="WebContent/asset/css/admin.css" description="编译后的 CSS（后台的）" />
+		
+		<mkdir dir="WebContent/asset/images" />
+		<mkdir dir="WebContent/images" />
+		<echo message="CSS goes here..." file="WebContent/images/.empty" level="debug"  description="利用日志创建文本" />
+		
+		<get src="${url_perfix}/WebContent/WEB-INF/web.xml" dest="WebContent/WEB-INF/." description="下载 web.xml 配置文件" />
+		<get src="${url_perfix}/WebContent/META-INF/context.xml" dest="WebContent/META-INF/." description="下载数据库配置文件" />
+		<!-- <get src="${url_perfix}/WebContent/META-INF/database.sqlite" dest="WebContent/META-INF/." description="下载数据库配置文件" /> -->
+	</target>
+</project>
