@@ -29,6 +29,7 @@
 @import '/ajaxjs-web-js/less/widgets/menu.less';
 @import '/ajaxjs-web-js/less/widgets/upload.less';
 @import '/ajaxjs-web-js/less/company-website.less';
+@mainColor :red;
 		</echo>
 		<echo file="WebContent/asset/less/admin.less" description="默认样式">@import '/ajaxjs-web-js/less/admin.less';</echo>
 		
