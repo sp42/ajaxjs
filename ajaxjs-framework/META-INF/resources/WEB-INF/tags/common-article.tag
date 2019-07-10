@@ -58,6 +58,15 @@
 			</c:if>
 		</div>
 		
+	 	<!-- 版权声明 -->
+		<div style="font-size: 10pt;color: gray;text-align: right;">
+			<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/">
+				<img alt="知识共享许可协议" style="border-width:0;vertical-align: middle;" src="https://i.creativecommons.org/l/by-nc-sa/3.0/cn/88x31.png" />
+			</a> 
+			本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/">知识共享署名-非商业性使用-相同方式共享 3.0 中国大陆许可协议</a>进行许可。
+		</div>	
+		
+		
 		<table class="vue" style="float:right;margin:10px 0 20px 0;">
 			<tr>
 				<td>
@@ -69,10 +78,7 @@
 						<a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
 						<a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
 						<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
-					</div>
-					<script>
-						window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
-					</script>
+					</div> 
 					<!-- // -->
 				</td>
 				<td>
@@ -102,5 +108,6 @@
 	</div>
 	<script>
 		new Vue({ el : '.vue' });
+		window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
 	</script>
 </c:if>
