@@ -1,4 +1,8 @@
 <%@page pageEncoding="UTF-8"%>
+<%
+	String shop = "test-shop";
+	request.setAttribute("shop", shop);
+%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -41,9 +45,9 @@
 	   		aj.Vue = {};
 	   		aj.Vue.install = function(Vue) {
 	   			Vue.prototype.ajResources = {
-		   			ctx : '/shop',
-		   			commonAsset : '/shop/asset/common',
-		   			libraryUse  : '/shop/asset/common/resources' // 庫使用的資源
+		   			ctx : '/${shop}',
+		   			commonAsset : '/${shop}/asset/common',
+		   			libraryUse  : '/${shop}/asset/common/resources' // 庫使用的資源
 	   			};
 	   			
 	   			Vue.prototype.BUS = new Vue();
@@ -90,12 +94,26 @@
 					<div>
 						<label>
 							<div contenteditable="true" class="label">名 称：</div> 
-							<input placeholder="请填写${uiName}名称" size="60" required="required" name="name" value="${info.name}" type="text" />
+							<input placeholder="请填写${uiName}名称" required="required" name="name" value="${info.name}" type="text" />
+						</label> 
+						<label>
+							<div contenteditable="true" class="label">名 称：</div> 
+							<input placeholder="请填写${uiName}名称"  required="required" name="name" value="${info.name}" type="text" />
 						</label> 
 					</div>
 					<div @dragenter="onDragEnter" @dragleave="onDragLeave">
-						<label>
+						<label> 
 							<div contenteditable="true" class="label">名 称：</div><input placeholder="请填写766名称" required="required" name="name22" value="${info.name}" type="text" />
+						</label> 
+					</div>
+					<div @dragenter="onDragEnter" @dragleave="onDragLeave" ondragover="event.preventDefault();" @drop="onDrop">
+						<label>
+							<div contenteditable="true" class="label">名 称：</div> 
+						</label> 
+					</div>
+					<div @dragenter="onDragEnter" @dragleave="onDragLeave" ondragover="event.preventDefault();" @drop="onDrop">
+						<label>
+							<div contenteditable="true" class="label">名 称：</div> 
 						</label> 
 					</div>
 					<div @dragenter="onDragEnter" @dragleave="onDragLeave" ondragover="event.preventDefault();" @drop="onDrop">

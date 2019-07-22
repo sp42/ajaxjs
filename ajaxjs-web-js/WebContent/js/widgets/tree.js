@@ -273,8 +273,9 @@ Vue.component('aj-china-area', {
         cityCode: String,
         districtCode: String
     },
-   data:function(){
+   data() {
 	   if(!China_AREA)throw '中国行政区域数据 脚本没导入';
+	   
         return {
         	province: this.provinceCode || '',
         	city: this.cityCode || '',
@@ -295,13 +296,13 @@ Vue.component('aj-china-area', {
 //        }
     },
    
-    computed: {
-        citys:function() {
+    computed : {
+        citys() {
             if(!this.province)
                 return;
             return this.addressData[this.province];
         },
-        districts :function(){
+        districts() {
             if(!this.city)
                 return;
             return this.addressData[this.city];
