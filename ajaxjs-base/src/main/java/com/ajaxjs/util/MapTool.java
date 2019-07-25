@@ -184,6 +184,7 @@ public class MapTool {
 
 			for (PropertyDescriptor property : beanInfo.getPropertyDescriptors()) {
 				String key = property.getName();
+				
 				// 得到 property 对应的 getter 方法
 				Method getter = property.getReadMethod();
 				Object value = getter.invoke(bean);
