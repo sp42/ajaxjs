@@ -12,7 +12,13 @@
 		<div class="admin-entry-form">
 			<!-- 后台头部导航 -->
 			<ajaxjs-admin-header>
-				<template slot="title">${isCreate?'新建':'编辑'}${uiName}</template>
+				<template slot="title">
+					${isCreate?'新建':'编辑'}${uiName}
+					
+					<c:if test="${!isCreate}">
+						#${info.id} <!-- 外显 id -->
+					</c:if>
+				</template>
 				<template slot="btns">
 				<c:if test="${!isCreate}">
 					<a :href="ajResources.ctx + '/admin/article/'">新建</a> | 
