@@ -8,15 +8,15 @@
 	<script src="${ajaxjsui}/js/libs/md5.min.js"></script>
 	
 	<style>
-	.aj-carousel > div{
-		    border-top: 2px solid #E7E7E7;
-	}
-	.aj-carousel.aj-carousel-tab > div > div {
-	    background-color: white;
-	}
-	.aj-carousel.aj-carousel-tab header li.active {
-		border-color:white;
-	}
+		.aj-carousel > div{
+			    border-top: 2px solid #E7E7E7;
+		}
+		.aj-carousel.aj-carousel-tab > div > div {
+		    background-color: white;
+		}
+		.aj-carousel.aj-carousel-tab header li.active {
+			border-color:white;
+		}
 	</style>
 </head>
 <body>
