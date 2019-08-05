@@ -30,10 +30,10 @@ public class DaoException extends Exception {
 	public DaoException(String message) {
 		super(message);
 	}
-	
+
 	private boolean zero = true; // 是否空数据
 	private boolean overLimit = false; // 是否已经找到数据，但分页超出了
-	
+
 	public boolean isZero() {
 		return zero;
 	}
