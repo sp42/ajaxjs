@@ -1,3 +1,18 @@
+/**
+ * Copyright sp42 frank@ajaxjs.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.ajaxjs.net.http;
 
 import java.io.File;
@@ -6,19 +21,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.util.Map;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.zip.GZIPInputStream;
 
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.IoHelper;
-import com.ajaxjs.util.MapTool;
 import com.ajaxjs.util.io.StreamUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -28,59 +37,8 @@ import com.ajaxjs.util.logger.LogHelper;
  * @author Frank Cheung
  *
  */
-public class NetUtil extends IoHelper {
+public class NetUtil extends HttpBasicRequest {
 	private static final LogHelper LOGGER = LogHelper.getLog(NetUtil.class);
-
-	/**
-	 * 简单 GET 请求（原始 API 版），返回文本。
-	 * 
-	 * @param url 请求目标地址
-	 * @return 响应内容（如 HTML，JSON 等）
-	 */
-	public static String simpleGET(String url) {
-		try {
-			return byteStream2stringStream(new URL(url).openStream());
-		} catch (IOException e) {
-			LOGGER.warning(e);
-			return null;
-		}
-	}
-
-	/**
-	 * 设置请求方法
-	 */
-	public final static BiConsumer<HttpURLConnection, String> setMedthod = (conn, method) -> {
-		try {
-			conn.setRequestMethod(method);
-		} catch (ProtocolException e) {
-			LOGGER.warning(e);
-		}
-	};
-
-	/**
-	 * 设置 cookies
-	 */
-	public final static BiConsumer<HttpURLConnection, Map<String, String>> setCookies = (conn, map) -> conn.addRequestProperty("Cookie", MapTool.join(map, ";"));
-
-	/**
-	 * 请求来源
-	 */
-	public final static BiConsumer<HttpURLConnection, String> setReferer = (conn, url) -> conn.addRequestProperty("Referer", url); // httpUrl.getHost()?
-
-	/**
-	 * 设置超时 （单位：秒）
-	 */
-	public final static BiConsumer<HttpURLConnection, Integer> setTimeout = (conn, timeout) -> conn.setConnectTimeout(timeout * 1000);
-
-	/**
-	 * 客户端识别
-	 */
-	public final static BiConsumer<HttpURLConnection, String> setUserAgent = (conn, url) -> conn.addRequestProperty("User-Agent", url);
-
-	/**
-	 * 默认的客户端识别
-	 */
-	public final static Consumer<HttpURLConnection> setUserAgentDefault = conn -> setUserAgent.accept(conn, "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
 
 	/**
 	 * HTTP Basic 用户认证
@@ -91,102 +49,12 @@ public class NetUtil extends IoHelper {
 		conn.setRequestProperty("Authorization", "Basic " + encoding);
 	};
 
-	/**
-	 * 设置启动 GZip 请求
-	 */
-	public final static Consumer<HttpURLConnection> setGizpRequest = conn -> conn.addRequestProperty("Accept-Encoding", "gzip, deflate");
-
-	/**
-	 * HttpURLConnection 工厂函数
-	 * 
-	 * @param url 请求目的地址
-	 * @return HttpURLConnection 对象
-	 */
-	public static HttpURLConnection initHttpConnection(String url) {
-		URL httpUrl = null;
-
-		try {
-			httpUrl = new URL(url);
-		} catch (MalformedURLException e) {
-			LOGGER.warning(e, "初始化连接出错！URL {0} 格式不对！", url);
-		}
-
-		try {
-			return (HttpURLConnection) httpUrl.openConnection();
-		} catch (IOException e) {
-			LOGGER.warning(e, "初始化连接出错！URL {0}。", url);
-		}
-
-		return null;
-	}
-
-	/**
-	 * 发送请求，返回响应信息
-	 * 
-	 * @param conn 链接对象
-	 * @param isEnableGzip 是否需要 GZip 解码
-	 * @param callback 回调里面请记得关闭 InputStream
-	 * @return
-	 */
-	public static <T> T getResponse(HttpURLConnection conn, Boolean isEnableGzip, Function<InputStream, T> callback) {
-		try {
-			InputStream in = conn.getInputStream();// 发起请求，接收响应
-
-			// 是否启动 GZip 请求
-			// 有些网站强制加入 Content-Encoding:gzip，而不管之前的是否有 GZip 的请求
-			boolean isGzip = isEnableGzip || "gzip".equals(conn.getHeaderField("Content-Encoding"));
-
-			if (isGzip)
-				in = new GZIPInputStream(in);
-
-			int responseCode = conn.getResponseCode();
-			if (responseCode >= 400) {// 如果返回的结果是400以上，那么就说明出问题了
-				RuntimeException e = new RuntimeException(responseCode < 500 ? responseCode + "：客户端请求参数错误！" : responseCode + "：抱歉！我们服务端出错了！");
-				LOGGER.warning(e);
-			}
-
-			if (callback == null) {
-				in.close();
-			} else
-				return callback.apply(in);
-		} catch (IOException e) {
-			LOGGER.warning(e);
-		}
-
-		return null;
-	}
-
-	/**
-	 * GET 请求，返回文本内容
-	 * 
-	 * @param url
-	 * @return
-	 */
-	public static String get(String url) {
-		return get(url, false);
-	}
-
-	/**
-	 * GET 请求，返回文本内容
-	 * 
-	 * @param url
-	 * @param isGzip
-	 * @return
-	 */
-	public static String get(String url, boolean isGzip) {
-		HttpURLConnection conn = initHttpConnection(url);
-		if (isGzip)
-			setGizpRequest.accept(conn);
-
-		return getResponse(conn, isGzip, NetUtil::byteStream2stringStream);
-	}
 
 	/**
 	 * HEAD 请求
 	 * 
-	 * @param url
-	 * @param headKey
-	 * @return
+	 * @param url 请求目标地址
+	 * @return 请求连接对象
 	 */
 	public static HttpURLConnection head(String url) {
 		HttpURLConnection conn = initHttpConnection(url);
@@ -200,7 +68,7 @@ public class NetUtil extends IoHelper {
 	/**
 	 * 得到 HTTP 302 的跳转地址
 	 * 
-	 * @param url 目标地址
+	 * @param url 请求目标地址
 	 * @return 跳转地址
 	 */
 	public static String get302redirect(String url) {
@@ -210,7 +78,7 @@ public class NetUtil extends IoHelper {
 	/**
 	 * 检测资源是否存在
 	 * 
-	 * @param url 目标地址
+	 * @param url 请求目标地址
 	 * @return true 表示 404 不存在
 	 */
 	public static boolean is404(String url) {
@@ -225,33 +93,19 @@ public class NetUtil extends IoHelper {
 	/**
 	 * 得到资源的文件大小
 	 * 
-	 * @param url 目标地址
+	 * @param url 请求目标地址
 	 * @return 文件大小
 	 */
 	public static long getFileSize(String url) {
-		return Long.parseLong(head(url).getHeaderField("content-length"));
+		return head(url).getContentLength();
 	}
 
 	/**
-	 * 获取远程资源的大小 （另外一种写法，可作为参考之）
 	 * 
-	 * @param url 目标地址
-	 * @return 文件大小
+	 * @param saveDir
+	 * @param fileName
+	 * @return
 	 */
-	public static long getRemoteSize(String url) {
-		long size = 0;
-
-		try {
-			HttpURLConnection conn = (HttpURLConnection) (new URL(url)).openConnection();
-			size = conn.getContentLength();
-			conn.disconnect();
-		} catch (IOException e) {
-			LOGGER.warning(e);
-		}
-
-		return size;
-	}
-
 	public static Function<InputStream, String> initDownload2disk_Callback(String saveDir, String fileName) {
 		return in -> {
 			File file = IoHelper.createFile(saveDir, fileName);
@@ -277,7 +131,7 @@ public class NetUtil extends IoHelper {
 
 	/**
 	 * 
-	 * @param url 远程地址
+	 * @param url 请求目标地址
 	 * @param saveDir 保存的目录
 	 * @param newFileName 是否有新的文件名，如无请传 null
 	 * @return 下载文件的完整磁盘路径
@@ -302,74 +156,16 @@ public class NetUtil extends IoHelper {
 		return download(url, saveDir, null);
 	}
 
-	/**
-	 * POST 请求
-	 * 
-	 * @param url 请求目标地址
-	 * @param data 表单数据 KeyValue的请求数据，注意要进行 ? & 编码，使用 URLEncoder.encode()
-	 * @return 携带请求信息的 Bean
-	 */
-	public static String post(String url, Map<String, Object> data) {
-		if (data != null && data.size() > 0) {
-			return post(url, MapTool.join(data, v -> v == null ? null : Encode.urlEncode(v.toString())));
-		} else {
-			return null;
-		}
-	}
-
-	/**
-	 * POST 请求
-	 * 
-	 * @param url 请求目标地址
-	 * @param params 字符串类型的请求数据
-	 * @return 请求之后的响应的内容
-	 */
-	public static String post(String url, String params) {
-		return post(url, params.getBytes(), null);
-	}
-
-	public final static Consumer<HttpURLConnection> setFormPost = conn -> conn.setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-
-	public static String post(String url, byte[] b, Consumer<HttpURLConnection> fn) {
-		return post(url, b, fn, null);
-	}
-
 	public static String post_download(String url, Map<String, Object> data, String saveDir, String fileName) {
 		if (data != null && data.size() > 0) {
-			return post(url, "{\"path\":\"pages/index/index\"}".getBytes(), null, initDownload2disk_Callback(saveDir, fileName));
+			return post(url, "{\"path\":\"pages/index/index\"}".getBytes(), null,
+					initDownload2disk_Callback(saveDir, fileName));
 		} else {
 			return null;
 		}
 	}
 
-	/**
-	 * POST 请求
-	 * 
-	 * @param url 请求目标地址
-	 * @param b 字节格式的请求数据
-	 * @param fn 对 Conn 进行配置
-	 * @return 请求之后的响应的内容
-	 */
-	public static String post(String url, byte[] b, Consumer<HttpURLConnection> fn, Function<InputStream, String> responseHandler) {
-		HttpURLConnection conn = initHttpConnection(url);
-		setMedthod.accept(conn, "POST");
-		conn.setDoOutput(true); // for conn.getOutputStream().write(someBytes);
-		conn.setDoInput(true);
 
-		if (fn != null)
-			fn.accept(conn);
-		else
-			setFormPost.accept(conn);
-
-		try (OutputStream out = conn.getOutputStream();) {
-			out.write(b); // 输出流写入字节数据
-			out.flush();
-		} catch (IOException e) {
-			LOGGER.warning("写入 post 数据时失败！{0}", e);
-		}
-
-		return getResponse(conn, false, responseHandler == null ? NetUtil::byteStream2stringStream : responseHandler);
-	}
 
 	/**
 	 * request 头和上传文件内容之间的分隔符

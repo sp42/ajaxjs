@@ -1,3 +1,18 @@
+/**
+ * Copyright sp42 frank@ajaxjs.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.ajaxjs.net.http;
 
 import java.io.IOException;
@@ -10,14 +25,24 @@ import java.util.Enumeration;
 import java.util.Map;
 
 import com.ajaxjs.util.MapTool;
+import com.ajaxjs.util.io.FileUtil;
+import com.ajaxjs.util.logger.LogHelper;
 
+/**
+ * ip 工具类
+ * 
+ * @author sp42
+ *
+ */
 public class Tools {
-	static String ip;
+	private static final LogHelper LOGGER = LogHelper.getLog(FileUtil.class);
+
+	static String ip; // 本地 ip 地址缓存
 
 	/**
 	 * 获取本机 ip，带缓存的
 	 * 
-	 * @return
+	 * @return 本地 ip 地址
 	 */
 	public static String getIp() {
 		if (ip == null)
@@ -26,6 +51,11 @@ public class Tools {
 		return ip;
 	}
 
+	/**
+	 * 获取本机局域网地址
+	 * 
+	 * @return 本机局域网地址对象
+	 */
 	public static InetAddress getLocalHostLANAddress() {
 		InetAddress candidateAddress = null;
 
@@ -50,33 +80,38 @@ public class Tools {
 			if (candidateAddress != null)
 				candidateAddress = InetAddress.getLocalHost();// 如果没有发现 non-loopback 地址.只能用最次选的方案
 		} catch (Exception e) {
-			System.err.println(e);
+			LOGGER.warning(e);
 		}
 
 		return candidateAddress;
 	}
 
 	/**
-	 * 如果放在不能连接公网的环境，这个方法就不适用了
+	 * 如果 getLocalHostLANAddress() 放在不能连接公网的环境，那个方法就不适用了，可以使用这个方法
 	 * 
-	 * @return
+	 * @return 本地 ip 地址
 	 */
 	public static String getLocalIp() {
 		try (Socket socket = new Socket();) {
 			socket.connect(new InetSocketAddress("baidu.com", 80));
 			return socket.getLocalAddress().getHostAddress();
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 			return null;
 		}
 	}
 
+	/**
+	 * 第二种方法
+	 * 
+	 * @return 本地 ip 地址
+	 */
 	public static String getLocalIp2() {
 		try (DatagramSocket socket = new DatagramSocket()) {
 			socket.connect(InetAddress.getByName("114.114.114.114"), 10002);
 			return socket.getLocalAddress().getHostAddress();
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 			return null;
 		}
 	}
@@ -116,7 +151,8 @@ public class Tools {
 	 * @throws IOException
 	 */
 	public static Map<String, String> getWhois(String domain) throws IOException {
-		String url = "http://api.k780.com/?app=domain.whois&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=xml&domain=" + domain;
+		String url = "http://api.k780.com/?app=domain.whois&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=xml&domain="
+				+ domain;
 		String xml = NetUtil.simpleGET(url);
 		Map<String, String> map = MapTool.xmlToMap(xml);
 
