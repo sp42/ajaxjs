@@ -21,15 +21,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
 
 /**
- * 通过 Telnet 命令实现简易邮件发送器
- * 
- * https://blog.csdn.net/axman/article/details/1487853
+ * 简易邮件发送器
  * 
  * @author Sp42 frank@ajaxjs.com
  */
@@ -38,7 +35,7 @@ public class Sender extends Socket {
 	 * 发送一封邮件
 	 * 
 	 * @param bean 邮件实体
-	 * @throws IOException          IO异常
+	 * @throws IOException IO异常
 	 * @throws UnknownHostException 未知主机异常
 	 */
 	public Sender(Mail bean) throws UnknownHostException, IOException {
@@ -46,30 +43,15 @@ public class Sender extends Socket {
 		this.bean = bean;
 	}
 
-	/**
-	 * 换行符常量
-	 */
-	public static final String lineFeet = "\r\n";
+	public static final String lineFeet = "\r\n"; // 换行符常量
 
-	/**
-	 * 邮件信息
-	 */
-	private Mail bean;
+	private Mail bean; // 邮件信息
 
-	/**
-	 * 成功标识
-	 */
-	private static final int ok_250_Code = 250;
+	private static final int ok_250_Code = 250;// 成功标识
 
-	/**
-	 * 接受指令用的缓冲区
-	 */
-	private BufferedReader in;
+	private BufferedReader in; // 接受指令用的缓冲区
 
-	/**
-	 * 发送指令用的流
-	 */
-	private DataOutputStream os;
+	private DataOutputStream os; // 发送指令用的流
 
 	/**
 	 * 发送邮件
@@ -170,7 +152,7 @@ public class Sender extends Socket {
 	 * 发送smtp指令 并返回服务器响应信息
 	 * 
 	 * @param string 指令
-	 * @param from   指令参数
+	 * @param from 指令参数
 	 * @return 服务器响应信息
 	 */
 	private String sendCommand(String string, String from) {
@@ -207,19 +189,12 @@ public class Sender extends Socket {
 	/**
 	 * 输入期望 code，然后查找字符串中的数字，看是否与之匹配。匹配则返回 true。
 	 * 
-	 * @param str  输入的字符串，应该要包含数字
+	 * @param str 输入的字符串，应该要包含数字
 	 * @param code 期望值
 	 * @return 是否与之匹配
 	 */
 	private static boolean isOkCode(String str, int code) {
-		int _code = 0;
-
-		Pattern p = Pattern.compile("^\\d+");
-		Matcher m = p.matcher(str);
-		while (m.find()) {
-			_code = Integer.parseInt(m.group(0));
-			break;
-		}
+		int _code = Integer.parseInt(CommonUtil.regMatch("^\\d+", str));
 
 		return _code == code;
 	}

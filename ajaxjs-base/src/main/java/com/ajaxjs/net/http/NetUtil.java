@@ -27,7 +27,6 @@ import java.util.function.Function;
 
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
-import com.ajaxjs.util.IoHelper;
 import com.ajaxjs.util.io.StreamUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -48,7 +47,6 @@ public class NetUtil extends HttpBasicRequest {
 		String encoding = Encode.base64Encode(username + ":" + password);
 		conn.setRequestProperty("Authorization", "Basic " + encoding);
 	};
-
 
 	/**
 	 * HEAD 请求
@@ -101,17 +99,18 @@ public class NetUtil extends HttpBasicRequest {
 	}
 
 	/**
+	 * 写入磁盘的回调
 	 * 
-	 * @param saveDir
-	 * @param fileName
-	 * @return
+	 * @param saveDir 保存的目录
+	 * @param fileName 文件名
+	 * @return 下载文件的完整磁盘路径
 	 */
 	public static Function<InputStream, String> initDownload2disk_Callback(String saveDir, String fileName) {
 		return in -> {
-			File file = IoHelper.createFile(saveDir, fileName);
+			File file = createFile(saveDir, fileName);
 
 			try (OutputStream out = new FileOutputStream(file);) {
-				IoHelper.write(in, out, true);
+				write(in, out, true);
 				LOGGER.info("文件 {0} 写入成功", file.toString());
 
 				return file.toString();
@@ -130,6 +129,7 @@ public class NetUtil extends HttpBasicRequest {
 	}
 
 	/**
+	 * 下载二进制文件
 	 * 
 	 * @param url 请求目标地址
 	 * @param saveDir 保存的目录
@@ -142,7 +142,7 @@ public class NetUtil extends HttpBasicRequest {
 		conn.setDoInput(true);// for conn.getOutputStream().write(someBytes); 需要吗？
 		conn.setDoOutput(true);
 
-		String fileName = IoHelper.getFileNameFromUrl(url);
+		String fileName = getFileNameFromUrl(url);
 		if (newFileName != null) {
 			// 新文件名 + 旧扩展名
 			fileName = newFileName + CommonUtil.regMatch("\\.\\w+$", fileName);
@@ -152,11 +152,26 @@ public class NetUtil extends HttpBasicRequest {
 		return newlyFilePath;
 	}
 
+	/**
+	 * 下载二进制文件
+	 * 
+	 * @param url 请求目标地址
+	 * @param saveDir 保存的目录
+	 * @return 下载文件的完整磁盘路径
+	 */
 	public static String download(String url, String saveDir) {
 		return download(url, saveDir, null);
 	}
 
-	public static String post_download(String url, Map<String, Object> data, String saveDir, String fileName) {
+	/**
+	 * POST 方法请求，然后返回的响应是文件下载
+	 * @param url 请求目标地址
+	 * @param data 请求数据
+	 * @param saveDir 保存的目录
+	 * @param fileName 文件名
+	 * @return 下载文件的完整磁盘路径
+	 */
+	public static String postDownload(String url, Map<String, Object> data, String saveDir, String fileName) {
 		if (data != null && data.size() > 0) {
 			return post(url, "{\"path\":\"pages/index/index\"}".getBytes(), null,
 					initDownload2disk_Callback(saveDir, fileName));
@@ -164,8 +179,6 @@ public class NetUtil extends HttpBasicRequest {
 			return null;
 		}
 	}
-
-
 
 	/**
 	 * request 头和上传文件内容之间的分隔符
@@ -176,7 +189,7 @@ public class NetUtil extends HttpBasicRequest {
 	 * 多段 POST 的分隔
 	 */
 	private static final String divField = "\r\n--%s\r\nContent-Disposition: form-data; name=\"%s\"\r\n\r\n%s";
-	private static final String divFile = "\r\n--%s\r\nContent-Disposition: form-data; name=\"%s\"; filename=\"%s\"\r\n";
+	private static final String divFile  = "\r\n--%s\r\nContent-Disposition: form-data; name=\"%s\"; filename=\"%s\"\r\n";
 
 	/**
 	 * 多段上传
@@ -198,7 +211,6 @@ public class NetUtil extends HttpBasicRequest {
 				String field = String.format(divFile, BOUNDARY, key, fileName);
 
 				_bytes = StreamUtil.concat(field.getBytes(), StreamUtil.fileAsByte(file));
-
 			} else { // 普通字段
 				String field = String.format(divField, BOUNDARY, key, v.toString());
 				_bytes = field.getBytes();
@@ -212,8 +224,7 @@ public class NetUtil extends HttpBasicRequest {
 
 		StreamUtil.concat(bytes, ("\r\n--" + BOUNDARY + "--\r\n").getBytes());
 
-		post(url, bytes, conn -> conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY));
-		return null;
+		return post(url, bytes, conn -> conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY));
 	}
 
 }

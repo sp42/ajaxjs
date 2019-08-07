@@ -37,7 +37,7 @@ import com.ajaxjs.util.logger.LogHelper;
  * @author Sp42 frank@ajaxjs.com
  */
 public class FileUtil extends StreamChain<FileUtil> {
-	static final LogHelper LOGGER = LogHelper.getLog(FileUtil.class);
+	private static final LogHelper LOGGER = LogHelper.getLog(FileUtil.class);
 
 	private String filePath;
 

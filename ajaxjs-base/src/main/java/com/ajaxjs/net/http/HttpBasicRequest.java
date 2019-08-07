@@ -225,15 +225,12 @@ public class HttpBasicRequest extends IoHelper {
 	 * 
 	 * @param url 请求目标地址
 	 * @param b 请求数据
-	 * @param fn
+	 * @param fn 对 Conn 进行配置
 	 * @return 请求之后的响应的内容
 	 */
 	public static String post(String url, byte[] b, Consumer<HttpURLConnection> fn) {
 		return post(url, b, fn, null);
 	}
-
-	public final static Consumer<HttpURLConnection> setFormPost = conn -> conn.setRequestProperty("Content-type",
-			"application/x-www-form-urlencoded;charset=utf-8");
 
 	/**
 	 * POST 请求
@@ -264,4 +261,7 @@ public class HttpBasicRequest extends IoHelper {
 
 		return getResponse(conn, false, responseHandler == null ? IoHelper::byteStream2stringStream : responseHandler);
 	}
+
+	public final static Consumer<HttpURLConnection> setFormPost = conn -> conn.setRequestProperty("Content-type",
+			"application/x-www-form-urlencoded;charset=utf-8");
 }
