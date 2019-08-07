@@ -13,14 +13,15 @@ import com.ajaxjs.net.mail.Mail;
 import com.ajaxjs.net.mail.Sender;
 
 public class TestMail {
-//	@Test
+	@Test
 	public void test163() {
 		Mail mail = new Mail();
 		mail.setMailServer("smtp.163.com");
 		mail.setAccount("pacoweb");
 		mail.setFrom("pacoweb@163.com");
+		mail.setPassword("1120");
 		mail.setTo("sp42@qq.com");
-		mail.setSubject("hihi你好");
+		mail.setSubject("hihi44你好");
 		mail.setHTML_body(true);
 		mail.setContent("dsfds放到沙发dfsfd<a href=\"http://qq.com\">fdsfds</a>");
 
@@ -35,7 +36,7 @@ public class TestMail {
 		assertTrue(is);
 	}
 
-	@Test
+//	@Test
 	public void testGetWhois() throws IOException {
 		Map<String, String> text = Tools.getWhois("qq.com");
 		System.out.println(text);

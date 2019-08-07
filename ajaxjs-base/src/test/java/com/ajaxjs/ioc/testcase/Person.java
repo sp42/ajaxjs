@@ -1,4 +1,4 @@
-package com.ajaxjs.ioc;
+package com.ajaxjs.ioc.testcase;
 
 import javax.inject.Named;
 

@@ -8,7 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.ajaxjs.ioc.Aop;
-import com.ajaxjs.ioc.ReturnBefore;
+import com.ajaxjs.ioc.annotation.ReturnBefore;
+import com.ajaxjs.ioc.testcase.Subject;
 import com.ajaxjs.util.logger.LogHelper;
 
 public class TestHandler {	

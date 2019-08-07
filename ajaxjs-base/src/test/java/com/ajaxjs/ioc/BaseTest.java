@@ -1,5 +1,6 @@
 package com.ajaxjs.ioc;
 
+import com.ajaxjs.ioc.testcase.Subject;
 import com.ajaxjs.util.logger.LogHelper;
 
 class BaseTest implements Subject {

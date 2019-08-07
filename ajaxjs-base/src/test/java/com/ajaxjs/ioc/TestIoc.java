@@ -8,6 +8,9 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.ajaxjs.ioc.testcase.Hi;
+import com.ajaxjs.ioc.testcase.Person;
+
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -37,7 +40,7 @@ public class TestIoc {
 		}
 	}
 
-	@Test
+//	@Test
 	public void test() {
 		BeanContext.init("com.ajaxjs.ioc");
 		BeanContext.injectBeans();
@@ -53,6 +56,21 @@ public class TestIoc {
 	}
 
 	@Test
+	public void test2() {
+		BeanContext.init("com.ajaxjs.ioc");
+		BeanContext.injectBeans();
+
+		Hi hi = (Hi) BeanContext.getBean("hi");
+		System.out.println(hi);
+
+		assertNotNull(hi);
+
+		Person person = (Person) BeanContext.getBean("person");
+		System.out.println(person.getName());
+		assertEquals("Hello Rose", hi.sayHello());
+	}
+	
+//	@Test
 	public void testFindBeanById() {
 		BeanContext.init("com.ajaxjs.ioc");
 		Object bean = BeanContext.getBean("foo");
