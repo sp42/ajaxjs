@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Sp42 frank@ajaxjs.com
+ * Copyright sp42 frank@ajaxjs.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.Set;
 
+import com.ajaxjs.ioc.annotation.After;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.io.resource.AbstractScanner;
 import com.ajaxjs.util.io.resource.ScanClass;

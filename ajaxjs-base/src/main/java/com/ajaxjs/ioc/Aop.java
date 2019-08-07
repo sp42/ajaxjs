@@ -20,6 +20,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Objects;
 
+import com.ajaxjs.ioc.annotation.ReturnAsArg;
+import com.ajaxjs.ioc.annotation.ReturnBefore;
+
 /**
  * AOP 抽象类
  * 

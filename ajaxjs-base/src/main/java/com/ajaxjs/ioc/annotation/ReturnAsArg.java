@@ -13,34 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.ioc;
+package com.ajaxjs.ioc.annotation;
 
 /**
- * 如果前置方法 before 返回该实例则表示在 before之后中止 aop
+ * 如果前置方法 before 返回该实例则表示在
  * 
  * @author Sp42 frank@ajaxjs.com
+ *
  */
-public class ReturnBefore {
-	/**
-	 * 保存返回值
-	 */
-	private Object returnValue;
+public class ReturnAsArg {
+	private Object[] args;
 
-	/**
-	 * 创建一个返回值
-	 * 
-	 * @param returnValue 返回值
-	 */
-	public ReturnBefore(Object returnValue) {
-		this.returnValue = returnValue;
+	public ReturnAsArg(Object[] args) {
+		this.args = args;
 	}
 
-	/**
-	 * 获取返回值
-	 * 
-	 * @return 返回值
-	 */
-	public Object getReturnValue() {
-		return returnValue;
+	public ReturnAsArg(Object args) {
+		this.args = new Object[]{args};
+	}
+
+	public Object[] getArgs() {
+		return args;
 	}
 }
