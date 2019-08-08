@@ -27,11 +27,12 @@ import java.util.function.Function;
 
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
-import com.ajaxjs.util.io.StreamUtil;
+import com.ajaxjs.util.FileHelper;
+import com.ajaxjs.util.IoHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
- * 小巧 HTTP 请求类
+ * 比 HttpBasicRequest 提供更多的功能
  * 
  * @author Frank Cheung
  *
@@ -107,7 +108,7 @@ public class NetUtil extends HttpBasicRequest {
 	 */
 	public static Function<InputStream, String> initDownload2disk_Callback(String saveDir, String fileName) {
 		return in -> {
-			File file = createFile(saveDir, fileName);
+			File file = FileHelper.createFile(saveDir, fileName);
 
 			try (OutputStream out = new FileOutputStream(file);) {
 				write(in, out, true);
@@ -142,7 +143,7 @@ public class NetUtil extends HttpBasicRequest {
 		conn.setDoInput(true);// for conn.getOutputStream().write(someBytes); 需要吗？
 		conn.setDoOutput(true);
 
-		String fileName = getFileNameFromUrl(url);
+		String fileName = FileHelper.getFileNameFromUrl(url);
 		if (newFileName != null) {
 			// 新文件名 + 旧扩展名
 			fileName = newFileName + CommonUtil.regMatch("\\.\\w+$", fileName);
@@ -165,6 +166,7 @@ public class NetUtil extends HttpBasicRequest {
 
 	/**
 	 * POST 方法请求，然后返回的响应是文件下载
+	 * 
 	 * @param url 请求目标地址
 	 * @param data 请求数据
 	 * @param saveDir 保存的目录
@@ -183,22 +185,24 @@ public class NetUtil extends HttpBasicRequest {
 	/**
 	 * request 头和上传文件内容之间的分隔符
 	 */
-	private static final String BOUNDARY = "---------------------------123821742118716";
-
 	/**
 	 * 多段 POST 的分隔
 	 */
 	private static final String divField = "\r\n--%s\r\nContent-Disposition: form-data; name=\"%s\"\r\n\r\n%s";
-	private static final String divFile  = "\r\n--%s\r\nContent-Disposition: form-data; name=\"%s\"; filename=\"%s\"\r\n";
 
-	/**
-	 * 多段上传
-	 * 
-	 * @param url
-	 * @param data 若包含 File 对象则表示二进制（文件）数据
-	 * @return
-	 */
-	public static String multiPOST(String url, Map<String, Object> data) {
+	// 换行符
+	private static final String newLine = "\r\n";
+	private static final String boundaryPrefix = "--";
+	// 定义数据分隔线
+	public static String BOUNDARY = "------------7d4a6d158c9";
+	private static String str = boundaryPrefix + BOUNDARY + newLine
+			+ "Content-Disposition: form-data;name=\"%s\";filename=\"%s\"" + newLine + "Content-Type:%s" + newLine
+			+ newLine;
+
+	// 定义最后数据分隔线，即--加上BOUNDARY再加上--。
+	private static byte[] endData = (newLine + boundaryPrefix + BOUNDARY + boundaryPrefix + newLine).getBytes();
+
+	public static byte[] toFromData(Map<String, Object> data) {
 		byte[] bytes = null;
 
 		for (String key : data.keySet()) {
@@ -207,24 +211,34 @@ public class NetUtil extends HttpBasicRequest {
 
 			if (v instanceof File) {
 				File file = (File) v;
-				String fileName = file.getName();
-				String field = String.format(divFile, BOUNDARY, key, fileName);
+				String field = String.format(str, key, file.getName(), "application/octet-stream");
 
-				_bytes = StreamUtil.concat(field.getBytes(), StreamUtil.fileAsByte(file));
+				_bytes = IoHelper.concat(field.getBytes(), IoHelper.fileAsByte(file));
 			} else { // 普通字段
 				String field = String.format(divField, BOUNDARY, key, v.toString());
 				_bytes = field.getBytes();
 			}
 
-			if (bytes == null)
+			if (bytes == null) // 第一次时候为空
 				bytes = _bytes;
 			else
-				StreamUtil.concat(bytes, _bytes);
+				bytes = IoHelper.concat(bytes, _bytes);
 		}
 
-		StreamUtil.concat(bytes, ("\r\n--" + BOUNDARY + "--\r\n").getBytes());
+		System.out.println(new String(bytes));
+		return IoHelper.concat(bytes, endData);
+	}
 
-		return post(url, bytes, conn -> conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY));
+	/**
+	 * 多段上传
+	 * 
+	 * @param url 请求目标地址
+	 * @param data 请求数据，若包含 File 对象则表示二进制（文件）数据
+	 * @return 请求之后的响应的内容
+	 */
+	public static String multiPOST(String url, Map<String, Object> data) {
+		return post(url, toFromData(data),
+				conn -> conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY));
 	}
 
 }

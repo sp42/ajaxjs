@@ -137,23 +137,6 @@ public class FileUtil extends StreamChain<FileUtil> {
 		return file.isDirectory() ? file.list() : null;
 	}
 
-	/**
-	 * 复制文件 TODO
-	 * 
-	 * @return 返回本实例供链式调用
-	 */
-	public FileUtil copyTo() {
-		return this;
-	}
-
-	/**
-	 * 移动文件 TODO
-	 * 
-	 * @return 返回本实例供链式调用
-	 */
-	public FileUtil moveTo() {
-		return this;
-	}
 
 	/**
 	 * 删除文件

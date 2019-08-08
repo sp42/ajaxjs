@@ -32,7 +32,7 @@ import com.ajaxjs.util.logger.LogHelper;
  * @author Sp42 frank@ajaxjs.com
  * @param <T> 该泛型是子类，以便实现链式调用
  */
-public abstract class StreamChain<T> {
+public class StreamChain<T> {
 	private static final LogHelper LOGGER = LogHelper.getLog(StreamChain.class);
 
 	/**

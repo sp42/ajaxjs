@@ -12,6 +12,8 @@
  */
 package com.ajaxjs.js;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 import javax.script.Invocable;
@@ -20,8 +22,8 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.IoHelper;
 import com.ajaxjs.util.io.FileUtil;
-import com.ajaxjs.util.io.StreamUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -89,8 +91,16 @@ public class JsEngineWrapper {
 	 * @return 当前实例，可以链式调用这个方法加载多个 js 文件
 	 */
 	public JsEngineWrapper load(Class<?> clazz, String fileName) {
-		String code = new StreamUtil().setIn(clazz.getResourceAsStream(fileName)).byteStream2stringStream().close().getContent();
-		eval(code);
+		String code = null;
+		
+		try(InputStream in = clazz.getResourceAsStream(fileName)){
+			code = IoHelper.byteStream2string(in);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		if(code != null)
+			eval(code);
 
 		return this;
 	}

@@ -160,7 +160,7 @@ public class HttpBasicRequest extends IoHelper {
 	 */
 	public static String simpleGET(String url) {
 		try {
-			return byteStream2stringStream(new URL(url).openStream());
+			return byteStream2string(new URL(url).openStream());
 		} catch (IOException e) {
 			LOGGER.warning(e);
 			return null;
@@ -189,7 +189,7 @@ public class HttpBasicRequest extends IoHelper {
 		if (isGzip)
 			setGizpRequest.accept(conn);
 
-		return getResponse(conn, isGzip, IoHelper::byteStream2stringStream);
+		return getResponse(conn, isGzip, IoHelper::byteStream2string);
 	}
 
 	/////////////////////// --------- POST -------------///////////////////////
@@ -259,7 +259,7 @@ public class HttpBasicRequest extends IoHelper {
 			LOGGER.warning("写入 post 数据时失败！{0}", e);
 		}
 
-		return getResponse(conn, false, responseHandler == null ? IoHelper::byteStream2stringStream : responseHandler);
+		return getResponse(conn, false, responseHandler == null ? IoHelper::byteStream2string : responseHandler);
 	}
 
 	public final static Consumer<HttpURLConnection> setFormPost = conn -> conn.setRequestProperty("Content-type",
