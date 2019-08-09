@@ -1,5 +1,5 @@
 /**
- b * Copyright sp42 frank@ajaxjs.com
+ * Copyright sp42 frank@ajaxjs.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,8 +36,6 @@ public class IoHelper {
 	
 	/**
 	 * 输出流写入字节数据
-	 * 
-	 * @return 返回本实例供链式调用
 	 */
 	public static void outputWriteData(OutputStream out, byte[] data) {
 		try {

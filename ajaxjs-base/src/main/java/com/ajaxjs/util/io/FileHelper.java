@@ -1,3 +1,18 @@
+/**
+ * Copyright sp42 frank@ajaxjs.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.ajaxjs.util.io;
 
 import java.io.File;
@@ -7,17 +22,30 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.DirectoryStream;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.function.Predicate;
 
 import javax.activation.MimetypesFileTypeMap;
 
 import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.logger.LogHelper;
 
+/**
+ * 文件操作工具类
+ * 
+ * @author sp42 frank@ajaxjs.com
+ *
+ */
 public class FileHelper extends IoHelper {
 	private static final LogHelper LOGGER = LogHelper.getLog(FileHelper.class);
 
@@ -80,9 +108,10 @@ public class FileHelper extends IoHelper {
 	}
 
 	/**
-	 * 写文件不能用 FileWriter，原因是会中文乱码
+	 * 保存文本文件 写文件不能用 FileWriter，原因是会中文乱码
 	 * 
-	 * @return 返回本实例供链式调用
+	 * @param file 文件对象
+	 * @param text 文本内容
 	 */
 	public static void save(File file, String text) {
 		LOGGER.info("正在保存文件{0}， 保存内容：\n{1}", file.toString(), text);
@@ -103,11 +132,16 @@ public class FileHelper extends IoHelper {
 	 * @param text The content of file, in text.
 	 */
 	public static void save(String fullPath, String text) {
-		LOGGER.info("正在保存文件{0}， 保存内容：\n{1}", fullPath, text);
-
 		save(new File(fullPath), text);
 	}
 
+	/**
+	 * 
+	 * @param file
+	 * @param data
+	 * @param off
+	 * @param len
+	 */
 	public static void save(File file, byte[] data, int off, int len) {
 		try (OutputStream out = new FileOutputStream(file)) {
 			out.write(data, off, len);
@@ -136,31 +170,24 @@ public class FileHelper extends IoHelper {
 	}
 
 	/**
-	 * 读取文件文本内容。 此方法不适合读取很大的文件，因为可能存在内存空间不足的问题。开发者还应该明确规定文件的字符编码，以避免任异常或解析错误。 默认是
-	 * UTF-8 编码。如果读入的文件的编码是 ANSI 编码，那么会报 java.nio.charset.MalformedInputException:
-	 * Input length = 1 错误
+	 * 旧方法保存文本内容
 	 * 
-	 * @param filePath
-	 * @return
+	 * @param fullpath
+	 * @param content
+	 * @throws IOException
 	 */
-	public static String readFile(String filePath) {
-		StringBuilder sb = new StringBuilder();
+	public static void saveClassic(String fullpath, String content) throws IOException {
+		File file = new File(fullpath);
 
-		try {
-			Files.lines(Paths.get(filePath), StandardCharsets.UTF_8).forEach(str -> sb.append(str));
-			return sb.toString();
-		} catch (IOException e) {
-			LOGGER.warning(e);
-			return null;
-		}
-	}
+		if (file.isDirectory())
+			throw new IOException("参数 fullpath：" + fullpath + " 不能是目录，请指定文件");
 
-	public static String readFile2(String filePath) {
-		try {
-			return Encode.byte2String(Files.readAllBytes(Paths.get(filePath)));
-		} catch (IOException e) {
-			LOGGER.warning(e);
-			return null;
+		try (FileOutputStream fop = new FileOutputStream(file)) {
+			if (!file.exists())
+				file.createNewFile();
+
+			fop.write(content.getBytes());
+			fop.flush();
 		}
 	}
 
@@ -277,7 +304,10 @@ public class FileHelper extends IoHelper {
 	 * @return 文件内容
 	 */
 	public static String openAsText(String filePath) {
-		return byteStream2string(path2FileIn(filePath));
+		// old way
+		// byteStream2string(path2FileIn(filePath));
+		
+		return openAsText(filePath, StandardCharsets.UTF_8);
 	}
 
 	/**
@@ -291,6 +321,51 @@ public class FileHelper extends IoHelper {
 	}
 
 	/**
+	 * 读取文件文本内容。 此方法不适合读取很大的文件，因为可能存在内存空间不足的问题。开发者还应该明确规定文件的字符编码，以避免任异常或解析错误。 默认是
+	 * UTF-8 编码。如果读入的文件的编码是 ANSI 编码，那么会报 java.nio.charset.MalformedInputException:
+	 * Input length = 1 错误
+	 * 
+	 * @param filePath
+	 * @return
+	 */
+	public static String readFile(String filePath) {
+		StringBuilder sb = new StringBuilder();
+
+		try {
+			Files.lines(Paths.get(filePath), StandardCharsets.UTF_8).forEach(str -> sb.append(str));
+			return sb.toString();
+		} catch (IOException e) {
+			LOGGER.warning(e);
+			return null;
+		}
+	}
+
+	/**
+	 * 打开文件，返回其文本内容，可指定编码
+	 * 
+	 * @param filePath 文件磁盘路径
+	 * @param encode 文件编码
+	 * @return 文件内容
+	 * @throws IOException IO 异常
+	 */
+	public static String openAsText(String filePath, Charset encode) {
+		Path path = Paths.get(filePath);
+
+		try {
+			if (Files.isDirectory(path))
+				throw new IOException("参数 fullpath：" + filePath + " 不能是目录，请指定文件");
+			if (!Files.exists(path))
+				throw new FileNotFoundException(filePath + "　不存在");
+
+			return new String(Files.readAllBytes(path), encode);
+		} catch (IOException e) {
+			LOGGER.warning(e);
+		}
+
+		return null;
+	}
+
+	/**
 	 * 返回某个文件夹里面的所有文件
 	 * 
 	 * @return 文件名集合
@@ -299,19 +374,125 @@ public class FileHelper extends IoHelper {
 		return file.isDirectory() ? file.list() : null;
 	}
 
+	/**
+	 * 删除文件或目录
+	 * 
+	 * @param filePath 文件的完全路径
+	 */
 	public static void delete(String filePath) {
-		delete(new File(filePath));
+		try {
+			Files.delete(Paths.get(filePath));
+		} catch (IOException e) {
+			LOGGER.warning(e);
+		}
 	}
-	
+
 	/**
 	 * 删除文件
 	 * 
-	 * @return 返回本实例供链式调用
+	 * @param filePath 文件的完全路径
+	 */
+	public static void deleteOldWay(String filePath) {
+		delete(new File(filePath));
+	}
+
+	/**
+	 * 删除文件
+	 * 
+	 * @param file 文件对象
 	 */
 	public static void delete(File file) {
 		LOGGER.info("文件 {0} 准备删除！", file.toString());
 
 		if (!file.delete())
 			LOGGER.warning("文件 {0} 删除失败！", file.toString());
+	}
+
+	/**
+	 * 复制文件
+	 * 
+	 * @param target 源文件
+	 * @param dest 目的文件/目录，如果最后一个为目录，则不改名，如果最后一个为文件名，则改名
+	 * @return 是否操作成功
+	 * @throws IOException IO 异常
+	 */
+	public static boolean copy(String target, String dest) {
+		try {
+			Files.copy(Paths.get(target), Paths.get(dest));
+		} catch (IOException e) {
+			LOGGER.warning(e);
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * 移动文件
+	 * 
+	 * @param target 源文件
+	 * @param dest 目的文件/目录，如果最后一个为目录，则不改名，如果最后一个为文件名，则改名
+	 * @return 是否操作成功
+	 * @throws IOException IO 异常
+	 */
+	public static boolean move(String target, String dest) {
+		try {
+			Files.copy(Paths.get(target), Paths.get(dest));
+		} catch (IOException e) {
+			LOGGER.warning(e);
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * 遍历整个文件目录，递归的
+	 * 
+	 * @param _dir 指定的目录
+	 * @param method 搜索函数
+	 * @return 搜索结果
+	 * @throws IOException
+	 */
+	public static List<Path> walkFileTree(String _dir, Predicate<Path> method) throws IOException {
+		Path dir = Paths.get(_dir);
+		if (!Files.isDirectory(dir))
+			throw new IOException("参数 ：" + _dir + " 不是目录，请指定目录");
+
+		List<Path> result = new LinkedList<>();
+		Files.walkFileTree(dir, new SimpleFileVisitor<Path>() {
+			@Override
+			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+				if (method.test(file))
+					result.add(file);
+
+				return FileVisitResult.CONTINUE;
+			}
+		});
+
+		return result;
+	}
+
+	/**
+	 * 遍历整个目录，非递归的
+	 * 
+	 * @param _dir 指定的目录
+	 * @param method 搜索函数
+	 * @return 搜索结果
+	 * @throws IOException
+	 */
+	public static List<Path> walkFile(String _dir, Predicate<Path> method) throws IOException {
+		Path dir = Paths.get(_dir);
+		if (!Files.isDirectory(dir))
+			throw new IOException("参数 ：" + _dir + " 不是目录，请指定目录");
+
+		List<Path> result = new LinkedList<>();
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
+			for (Path e : stream) {
+				if (method.test(e))
+					result.add(e);
+			}
+		}
+
+		return result;
 	}
 }
