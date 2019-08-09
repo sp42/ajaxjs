@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import com.ajaxjs.util.io.FileUtil;
 
-public class TestStreamUtil {
+public class TestIoHelper {
 	String dir = TestFileUtil.class.getResource("/").getPath();
 	String fullpath = dir + File.separator + "bar.txt";
 	

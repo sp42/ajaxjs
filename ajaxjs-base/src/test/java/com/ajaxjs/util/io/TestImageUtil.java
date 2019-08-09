@@ -11,7 +11,7 @@ import com.ajaxjs.util.io.image.ImageUtil;
 import com.ajaxjs.util.io.resource.AbstractScanner;
 
 public class TestImageUtil {
-	String img = AbstractScanner.getResourceFilePath(TestStreamUtil.class, "test.jpg");
+	String img = AbstractScanner.getResourceFilePath(TestIoHelper.class, "test.jpg");
 	
 	@Test
 	public void 获取图片大小() {
