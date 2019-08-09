@@ -10,7 +10,7 @@ import org.junit.Test;
 import com.ajaxjs.util.io.image.ImageUtil;
 import com.ajaxjs.util.resource.AbstractScanner;
 
-public class TestImageUtil {
+public class TestImageHelper {
 	String img = AbstractScanner.getResourceFilePath(TestIoHelper.class, "test.jpg");
 	
 	@Test

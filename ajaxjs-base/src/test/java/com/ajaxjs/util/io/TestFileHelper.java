@@ -15,8 +15,8 @@ import com.ajaxjs.util.io.ZipHelper;
 
 import static com.ajaxjs.util.io.FileUtil.*;
 
-public class TestFileUtil {
-	String dir = TestFileUtil.class.getResource("/").getPath();
+public class TestFileHelper {
+	String dir = TestFileHelper.class.getResource("/").getPath();
 	String fullpath = dir + File.separator + "bar.txt";
 
 	@Test
