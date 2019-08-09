@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 import com.ajaxjs.util.logger.LogHelper;
@@ -52,29 +53,33 @@ public class IoHelper {
 	 * @return 字符串
 	 */
 	public static String byteStream2string(InputStream in) {
+		return byteStream2string_Charset(in, StandardCharsets.UTF_8);
+	}
+	
+	public static String byteStream2string_Charset(InputStream in, Charset encode) {
 		StringBuilder result = new StringBuilder();
-
+		
 		// InputStreamReader 从一个数据源读取字节，并自动将其转换成 Unicode 字符
 		// 相对地，OutputStreamWriter 将字符的 Unicode 编码写到字节输出流
-		try (InputStreamReader inReader = new InputStreamReader(in, StandardCharsets.UTF_8);
+		try (InputStreamReader inReader = new InputStreamReader(in, encode);
 				/*
 				 * Decorator，装饰模式，又称为 Wrapper，使它具有了缓冲功能 BufferedInputStream、BufferedOutputStream
 				 * 只是在这之前动态的为它们加上一些功能（像是缓冲区功能）
 				 */
 				BufferedReader reader = new BufferedReader(inReader);) {
-
+			
 			String line = null;
 			while ((line = reader.readLine()) != null) { // 一次读入一行，直到读入null为文件结束
 				// 指定编码集的另外一种方法 line = new String(line.getBytes(), encodingSet);
 				result.append(line);
 				result.append('\n');
 			}
-
+			
 		} catch (IOException e) {
 			LOGGER.warning(e);
 			return null;
 		}
-
+		
 		return result.toString();
 	}
 	

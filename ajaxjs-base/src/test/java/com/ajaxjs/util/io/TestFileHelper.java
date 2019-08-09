@@ -10,25 +10,23 @@ import java.util.Calendar;
 
 import org.junit.Test;
 
-import com.ajaxjs.util.io.FileUtil;
-import com.ajaxjs.util.io.ZipHelper;
-
-import static com.ajaxjs.util.io.FileUtil.*;
+import com.ajaxjs.util.resource.AbstractScanner;
 
 public class TestFileHelper {
-	String dir = TestFileHelper.class.getResource("/").getPath();
+	String dir = AbstractScanner.getRootPath.apply(TestFileHelper.class);
 	String fullpath = dir + File.separator + "bar.txt";
 
 	@Test
 	public void testCreateRead() {
 		// create and update
-		new FileUtil().setFilePath(fullpath).setOverwrite(true).setContent("hihi").save().close();
+		FileHelper.saveText(fullpath, "hihi");
+
 		// read
 		String result = FileHelper.openAsText(fullpath);
 
 		assertTrue(result.startsWith("hihi"));
 
-		FileHelper.save(fullpath, "hihi2");
+		FileHelper.saveText(fullpath, "hihi2");
 		assertTrue(FileHelper.openAsText(fullpath).startsWith("hihi2"));
 
 		// delete
@@ -63,7 +61,7 @@ public class TestFileHelper {
 		} catch (IOException e) {
 		}
 	}
-	
+
 	@Test
 	public void testZip() {
 		ZipHelper.toZip("C:\\temp\\ajaxjs-security", "C:\\temp\\dd.zip");

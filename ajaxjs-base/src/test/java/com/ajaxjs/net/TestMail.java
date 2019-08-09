@@ -19,7 +19,6 @@ public class TestMail {
 		mail.setMailServer("smtp.163.com");
 		mail.setAccount("pacoweb");
 		mail.setFrom("pacoweb@163.com");
-		mail.setPassword("1120");
 		mail.setTo("sp42@qq.com");
 		mail.setSubject("hihi44你好");
 		mail.setHTML_body(true);

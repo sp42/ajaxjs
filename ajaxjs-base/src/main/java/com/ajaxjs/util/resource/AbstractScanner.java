@@ -23,6 +23,8 @@ import java.util.Enumeration;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -185,6 +187,21 @@ public abstract class AbstractScanner<T> {
 			}
 		}
 	}
+	
+	/**
+	 * 
+	 */
+	public static BiFunction<Class<?>, String, String> getPath = (clz, name) -> Encode.urlDecode(new File(clz.getResource(name).getPath()).toString());
+	
+	/**
+	 * 获取当前类的所在工程路径
+	 */
+	public static Function<Class<?>,  String> getRootPath = clz -> getPath.apply(clz, "/");
+	
+	/**
+	 * 获取当前类的绝对路径
+	 */
+	public static Function<Class<?>,  String> getCurrentPath = clz -> getPath.apply(clz, "");
 
 	/**
 	 * 获取当前类所在的目录下的一个资源 Returns the filepath under this clazz. u can warp this path

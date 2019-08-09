@@ -90,17 +90,17 @@ public class FileHelper extends IoHelper {
 	/**
 	 * 创建文件，注意这是一个空的文件。如果没有指定目录则创建；检测是否可以覆盖文件
 	 * 
-	 * @param fullPath 文件完整路径，最后一个元素是文件名
+	 * @param filePath 文件完整路径，最后一个元素是文件名
 	 * @param isOverwrite 是否覆盖文件
 	 * @return 文件对象
 	 * @throws IOException
 	 */
-	public static File createFile(String fullPath, boolean isOverwrite) throws IOException {
-		LOGGER.info("正在新建文件 {0}", fullPath);
+	public static File createFile(String filePath, boolean isOverwrite) throws IOException {
+		LOGGER.info("正在新建文件 {0}", filePath);
 
-		mkDirByFileName(fullPath);
+		mkDirByFileName(filePath);
 
-		File file = new File(fullPath);
+		File file = new File(filePath);
 		if (!isOverwrite && file.exists())
 			throw new IOException("文件已经存在，禁止覆盖！");
 
@@ -113,26 +113,44 @@ public class FileHelper extends IoHelper {
 	 * @param file 文件对象
 	 * @param text 文本内容
 	 */
-	public static void save(File file, String text) {
+	public static void saveText(File file, String text) {
 		LOGGER.info("正在保存文件{0}， 保存内容：\n{1}", file.toString(), text);
 
-		// OutputStreramWriter将输出的字符流转化为字节流输出（字符流已带缓冲）
-		try (OutputStream out = new FileOutputStream(file);
-				OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);) {
-			writer.write(text);
-		} catch (IOException e) {
-			LOGGER.warning(e);
-		}
+		save(file, text.getBytes(), true, false);
+	}
+
+	public static void saveText(String filePath, String text) {
+		saveText(new File(filePath), text);
 	}
 
 	/**
-	 * Shorthand for saving text file
+	 * 旧方法保存文本内容
 	 * 
-	 * @param fullPath Full path of the file
-	 * @param text The content of file, in text.
+	 * @param file 文件对象
+	 * @param data 文件内容
+	 * @param isOverwrite 是否覆盖文件
+	 * @param isOldWay 是否已旧的方式打开
 	 */
-	public static void save(String fullPath, String text) {
-		save(new File(fullPath), text);
+	public static void save(File file, byte[] data, boolean isOverwrite, boolean isOldWay) {
+		LOGGER.info("正在保存文件" + file);
+
+		try {
+			if (!isOverwrite && file.exists())
+				throw new IOException(file + "文件已经存在，禁止覆盖！");
+
+			if (file.isDirectory())
+				throw new IOException(file + " 不能是目录，请指定文件");
+
+			if (!file.exists())
+				file.createNewFile();
+
+			if (isOldWay)
+				save(file, data, 0, data.length);
+			else
+				Files.write(file.toPath(), data);
+		} catch (IOException e) {
+			LOGGER.warning(e);
+		}
 	}
 
 	/**
@@ -145,49 +163,27 @@ public class FileHelper extends IoHelper {
 	public static void save(File file, byte[] data, int off, int len) {
 		try (OutputStream out = new FileOutputStream(file)) {
 			out.write(data, off, len);
+			out.flush();
 		} catch (IOException e) {
 			LOGGER.warning(e);
 		}
 	}
-
+	
 	/**
-	 * 保存文本文件，注意该方法会覆盖现有相同文件名的文件
+	 * 保存文本文件 写文件不能用 FileWriter，原因是会中文乱码
 	 * 
-	 * @param folder 如果路径不存在则自动创建
-	 * @param fileName 保存的文件名
+	 * @param file 文件对象
 	 * @param text 文本内容
-	 * @return 新建文件的 Path 对象
 	 */
-	public static Path save(String folder, String fileName, String text) {
-		LOGGER.info("正在保存文件{0}， 保存内容：\n{1}", folder + fileName, text);
+	public static void saveTextOld(File file, String text) {
+		LOGGER.info("正在保存文件{0}， 保存内容：\n{1}", file.toString(), text);
 
-		try {
-			return Files.write(createFile(folder, fileName).toPath(), text.getBytes());
+		// OutputStreramWriter将输出的字符流转化为字节流输出（字符流已带缓冲）
+		try (OutputStream out = new FileOutputStream(file);
+				OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);) {
+			writer.write(text);
 		} catch (IOException e) {
 			LOGGER.warning(e);
-			return null;
-		}
-	}
-
-	/**
-	 * 旧方法保存文本内容
-	 * 
-	 * @param fullpath
-	 * @param content
-	 * @throws IOException
-	 */
-	public static void saveClassic(String fullpath, String content) throws IOException {
-		File file = new File(fullpath);
-
-		if (file.isDirectory())
-			throw new IOException("参数 fullpath：" + fullpath + " 不能是目录，请指定文件");
-
-		try (FileOutputStream fop = new FileOutputStream(file)) {
-			if (!file.exists())
-				file.createNewFile();
-
-			fop.write(content.getBytes());
-			fop.flush();
 		}
 	}
 
@@ -304,10 +300,50 @@ public class FileHelper extends IoHelper {
 	 * @return 文件内容
 	 */
 	public static String openAsText(String filePath) {
-		// old way
-		// byteStream2string(path2FileIn(filePath));
-		
-		return openAsText(filePath, StandardCharsets.UTF_8);
+		return openAsText(filePath, StandardCharsets.UTF_8, false);
+	}
+
+	/**
+	 * 打开文件，返回其文本内容，可指定编码
+	 * 
+	 * @param filePath 文件磁盘路径
+	 * @param encode 文件编码，默认是 UTF-8 编码。开发者还应该明确规定文件的字符编码，以避免任异常或解析错误。如果读入的文件的编码是
+	 *            ANSI 编码，那么会报 java.nio.charset.MalformedInputException:Input length
+	 *            = 1 错误
+	 * @param isOldWay 是否已旧的方式打开
+	 * @return 文件内容
+	 */
+	public static String openAsText(String filePath, Charset encode, boolean isOldWay) {
+		LOGGER.info("正在读取文件{0}", filePath);
+
+		Path path = Paths.get(filePath);
+
+		try {
+			if (Files.isDirectory(path))
+				throw new IOException("参数 fullpath：" + filePath + " 不能是目录，请指定文件");
+			if (!Files.exists(path))
+				throw new FileNotFoundException(filePath + "　不存在");
+		} catch (IOException e) {
+			LOGGER.warning(e);
+			return null;
+		}
+
+		if (isOldWay)
+			return byteStream2string(path2FileIn(filePath));
+		else {
+			try {
+				// 此方法不适合读取很大的文件，因为可能存在内存空间不足的问题。
+				// StringBuilder sb = new StringBuilder();
+				// Files.lines(path, encode).forEach(str -> sb.append(str));
+				// return sb.toString();
+
+				return new String(Files.readAllBytes(path), encode);
+			} catch (IOException e) {
+				LOGGER.warning(e);
+			}
+
+			return null;
+		}
 	}
 
 	/**
@@ -318,51 +354,6 @@ public class FileHelper extends IoHelper {
 	 */
 	public static byte[] openAsByte(File file) {
 		return inputStream2Byte(path2FileIn(file));
-	}
-
-	/**
-	 * 读取文件文本内容。 此方法不适合读取很大的文件，因为可能存在内存空间不足的问题。开发者还应该明确规定文件的字符编码，以避免任异常或解析错误。 默认是
-	 * UTF-8 编码。如果读入的文件的编码是 ANSI 编码，那么会报 java.nio.charset.MalformedInputException:
-	 * Input length = 1 错误
-	 * 
-	 * @param filePath
-	 * @return
-	 */
-	public static String readFile(String filePath) {
-		StringBuilder sb = new StringBuilder();
-
-		try {
-			Files.lines(Paths.get(filePath), StandardCharsets.UTF_8).forEach(str -> sb.append(str));
-			return sb.toString();
-		} catch (IOException e) {
-			LOGGER.warning(e);
-			return null;
-		}
-	}
-
-	/**
-	 * 打开文件，返回其文本内容，可指定编码
-	 * 
-	 * @param filePath 文件磁盘路径
-	 * @param encode 文件编码
-	 * @return 文件内容
-	 * @throws IOException IO 异常
-	 */
-	public static String openAsText(String filePath, Charset encode) {
-		Path path = Paths.get(filePath);
-
-		try {
-			if (Files.isDirectory(path))
-				throw new IOException("参数 fullpath：" + filePath + " 不能是目录，请指定文件");
-			if (!Files.exists(path))
-				throw new FileNotFoundException(filePath + "　不存在");
-
-			return new String(Files.readAllBytes(path), encode);
-		} catch (IOException e) {
-			LOGGER.warning(e);
-		}
-
-		return null;
 	}
 
 	/**
@@ -423,6 +414,7 @@ public class FileHelper extends IoHelper {
 			LOGGER.warning(e);
 			return false;
 		}
+		
 		return true;
 	}
 

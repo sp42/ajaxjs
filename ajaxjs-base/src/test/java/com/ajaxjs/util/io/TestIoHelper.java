@@ -6,10 +6,10 @@ import java.io.File;
 
 import org.junit.Test;
 
-import com.ajaxjs.util.io.FileUtil;
+import com.ajaxjs.util.resource.AbstractScanner;
 
 public class TestIoHelper {
-	String dir = TestFileHelper.class.getResource("/").getPath();
+	String dir = AbstractScanner.getRootPath.apply(TestIoHelper.class);
 	String fullpath = dir + File.separator + "bar.txt";
 	
 	@Test
@@ -33,7 +33,7 @@ public class TestIoHelper {
 	public void testFileAsByte() {
 		File file = new File(fullpath);
 		
-		new FileUtil().setFile(file).setOverwrite(true).setContent("ab").save().close();
+		FileHelper.saveText(file, "ab");
 		
 		byte[] b = FileHelper.openAsByte(new File(fullpath));
 		byte a = 97;
