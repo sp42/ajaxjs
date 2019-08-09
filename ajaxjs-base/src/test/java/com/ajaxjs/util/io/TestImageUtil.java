@@ -1,4 +1,4 @@
-package com.ajaxjs.util.io.image;
+package com.ajaxjs.util.io;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -9,8 +9,6 @@ import org.junit.Test;
 
 import com.ajaxjs.util.io.image.ImageUtil;
 import com.ajaxjs.util.io.resource.AbstractScanner;
-
-import com.ajaxjs.util.io.TestStreamUtil;
 
 public class TestImageUtil {
 	String img = AbstractScanner.getResourceFilePath(TestStreamUtil.class, "test.jpg");

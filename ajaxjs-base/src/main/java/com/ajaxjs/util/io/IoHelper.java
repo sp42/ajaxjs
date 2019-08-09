@@ -18,7 +18,6 @@ package com.ajaxjs.util.io;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -81,7 +80,7 @@ public class IoHelper {
 		return result.toString();
 	}
 	
-	static final int bufferSize = 1024; // 1K 的数据块
+	public static final int bufferSize = 1024; // 1K 的数据块
 
 	/**
 	 * 两端速度不匹配，需要协调 理想环境下，速度一样快，那就没必要搞流，直接一坨给弄过去就可以了 流的意思很形象，就是一点一滴的，不是一坨坨大批量的
@@ -125,7 +124,6 @@ public class IoHelper {
 	 * @return 返回本实例供链式调用
 	 * @throws IOException
 	 */
-
 	public static byte[] inputStream2Byte(InputStream in) {
 		// 使用内存操作流，读取二进制
 		try(ByteArrayOutputStream out = new ByteArrayOutputStream();){
@@ -158,7 +156,6 @@ public class IoHelper {
 		}
 	}
 
-
 	/**
 	 * 在字节数组里查找某个字节数组，找到返回&lt;=0，未找到返回-1
 	 * 
@@ -186,7 +183,6 @@ public class IoHelper {
 		return -1;
 	}
 
-
 	/**
 	 * 在字节数组里查找某个字节数组，找到返回&lt;=0，未找到返回-1
 	 * 
@@ -197,7 +193,6 @@ public class IoHelper {
 	public static int byteIndexOf(byte[] data, byte[] search) {
 		return byteIndexOf(data, search, 0);
 	}
-
 
 	/**
 	 * 合并两个字节数组
@@ -212,27 +207,5 @@ public class IoHelper {
 		System.arraycopy(b, 0, c, a.length, b.length);
 	
 		return c;
-	}
-
-
-	/**
-	 * 获得指定文件的 byte 数组
-	 * 
-	 * @param file 文件对象
-	 * @return 文件字节数组
-	 */
-	public static byte[] fileAsByte(File file) {
-		FileUtil fu = new FileUtil();
-		byte[] b = null;
-	
-		try {
-			b = fu.setFile(file).read().inputStream2Byte().getData();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			fu.close();
-		}
-	
-		return b;
 	}
 }

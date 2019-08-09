@@ -1,7 +1,12 @@
 package com.ajaxjs.util.io;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,50 +18,117 @@ import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.logger.LogHelper;
 
-public class FileHelper {
+public class FileHelper extends IoHelper {
 	private static final LogHelper LOGGER = LogHelper.getLog(FileHelper.class);
 
 	/**
-	 * 如果没有输出目录则先创建
+	 * 创建目录
 	 * 
-	 * @param fullPath 完整路径，最后一个元素为文件名
+	 * @param folder 目录
 	 */
-	public static void mkDir(String fullPath) {
-		String arr[] = fullPath.split("\\/|\\\\");
-		arr[arr.length - 1] = "";// 取消文件名，让最后一个元素为空字符串
-		String folder = String.join(File.separator, arr);
-	
+	public static void mkDir(String folder) {
 		File f = new File(folder); // 先检查目录是否存在，若不存在建立
 		if (!f.exists())
 			f.mkdirs();
 	}
 
 	/**
+	 * 根据文件名创建目录。 先剥离文件名，剩下的就是目录名。 如果没有输出目录则先创建。
+	 * 
+	 * @param filePath 完整路径，最后一个元素为文件名
+	 */
+	public static void mkDirByFileName(String filePath) {
+		String arr[] = filePath.split("\\/|\\\\");
+		arr[arr.length - 1] = "";// 取消文件名，让最后一个元素为空字符串
+		String folder = String.join(File.separator, arr);
+
+		mkDir(folder);
+	}
+
+	/**
 	 * 新建一个空文件
 	 * 
-	 * @param saveDirPath 	如果路径不存在则自动创建
-	 * @param fileName 		保存的文件名
+	 * @param folder 如果路径不存在则自动创建
+	 * @param fileName 保存的文件名
 	 * @return 新建文件的 File 对象
 	 */
-	public static File createFile(String saveDirPath, String fileName) {
-		File saveDir = new File(saveDirPath);
-		if (!saveDir.exists())
-			saveDir.mkdir();
+	public static File createFile(String folder, String fileName) {
+		LOGGER.info("正在新建文件 {0}", folder + fileName);
 
-		return new File(saveDir + File.separator + fileName);
+		mkDir(folder);
+		return new File(folder + File.separator + fileName);
+	}
+
+	/**
+	 * 创建文件，注意这是一个空的文件。如果没有指定目录则创建；检测是否可以覆盖文件
+	 * 
+	 * @param fullPath 文件完整路径，最后一个元素是文件名
+	 * @param isOverwrite 是否覆盖文件
+	 * @return 文件对象
+	 * @throws IOException
+	 */
+	public static File createFile(String fullPath, boolean isOverwrite) throws IOException {
+		LOGGER.info("正在新建文件 {0}", fullPath);
+
+		mkDirByFileName(fullPath);
+
+		File file = new File(fullPath);
+		if (!isOverwrite && file.exists())
+			throw new IOException("文件已经存在，禁止覆盖！");
+
+		return file;
+	}
+
+	/**
+	 * 写文件不能用 FileWriter，原因是会中文乱码
+	 * 
+	 * @return 返回本实例供链式调用
+	 */
+	public static void save(File file, String text) {
+		LOGGER.info("正在保存文件{0}， 保存内容：\n{1}", file.toString(), text);
+
+		// OutputStreramWriter将输出的字符流转化为字节流输出（字符流已带缓冲）
+		try (OutputStream out = new FileOutputStream(file);
+				OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);) {
+			writer.write(text);
+		} catch (IOException e) {
+			LOGGER.warning(e);
+		}
+	}
+
+	/**
+	 * Shorthand for saving text file
+	 * 
+	 * @param fullPath Full path of the file
+	 * @param text The content of file, in text.
+	 */
+	public static void save(String fullPath, String text) {
+		LOGGER.info("正在保存文件{0}， 保存内容：\n{1}", fullPath, text);
+
+		save(new File(fullPath), text);
+	}
+
+	public static void save(File file, byte[] data, int off, int len) {
+		try (OutputStream out = new FileOutputStream(file)) {
+			out.write(data, off, len);
+		} catch (IOException e) {
+			LOGGER.warning(e);
+		}
 	}
 
 	/**
 	 * 保存文本文件，注意该方法会覆盖现有相同文件名的文件
 	 * 
-	 * @param saveDirPath	如果路径不存在则自动创建
-	 * @param fileName 		保存的文件名
-	 * @param text			文本内容
+	 * @param folder 如果路径不存在则自动创建
+	 * @param fileName 保存的文件名
+	 * @param text 文本内容
 	 * @return 新建文件的 Path 对象
 	 */
-	public static Path createFile(String saveDirPath, String fileName, String text) {
+	public static Path save(String folder, String fileName, String text) {
+		LOGGER.info("正在保存文件{0}， 保存内容：\n{1}", folder + fileName, text);
+
 		try {
-			return Files.write(createFile(saveDirPath, fileName).toPath(), text.getBytes());
+			return Files.write(createFile(folder, fileName).toPath(), text.getBytes());
 		} catch (IOException e) {
 			LOGGER.warning(e);
 			return null;
@@ -91,7 +163,7 @@ public class FileHelper {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * 获取文件名的 MIME 类型。检测手段不会真正打开文件进行检查而是单纯文件名的字符串判断。
 	 * 
@@ -100,11 +172,11 @@ public class FileHelper {
 	 */
 	public static String getMime(String filename) {
 		Path path = Paths.get(filename); // works on java7
-	
+
 		try {
 			return Files.probeContentType(path);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 			return null;
 		}
 	}
@@ -117,13 +189,13 @@ public class FileHelper {
 	 */
 	public static String getMime(File file) {
 		String contentType = new MimetypesFileTypeMap().getContentType(file);
-		
+
 		if (file.getName().endsWith(".png"))
 			contentType = "image/png"; // TODO needs?
-		
+
 		if (contentType == null)
 			contentType = "application/octet-stream";
-		
+
 		return contentType;
 	}
 
@@ -135,7 +207,7 @@ public class FileHelper {
 	public static String getDirNameByDate() {
 		String datatime = CommonUtil.now("yyyy-MM-dd");
 		String year = datatime.substring(0, 4), mouth = datatime.substring(5, 7), day = datatime.substring(8, 10);
-	
+
 		return File.separator + year + File.separator + mouth + File.separator + day + File.separator;
 	}
 
@@ -147,7 +219,7 @@ public class FileHelper {
 	 */
 	public static String getFileName(String str) {
 		String[] arr = str.split("/");
-	
+
 		return arr[arr.length - 1];
 	}
 
@@ -172,13 +244,74 @@ public class FileHelper {
 	}
 
 	/**
-	 * 打开文件，返回其文本内容
+	 * 输入文件的完全路径，返回文件输入流 FileInputStream
 	 * 
-	 * @param path 文件磁盘路径
-	 * @return 文件内容
+	 * @param filePath 文件的完全路径
+	 * @return 文件输入流
 	 */
-	public static String openAsText(String path) {
-		return new FileUtil().setFilePath(path).read().byteStream2stringStream().close().getContent();
+	public static FileInputStream path2FileIn(String filePath) {
+		return path2FileIn(new File(filePath));
 	}
 
+	/**
+	 * 输入文件对象，返回文件输入流 FileInputStream
+	 * 
+	 * @param file 文件对象
+	 * @return 文件输入流
+	 */
+	public static FileInputStream path2FileIn(File file) {
+		try {
+			if (!file.exists())
+				throw new FileNotFoundException(file.getPath() + " 不存在！");
+			return new FileInputStream(file);
+		} catch (FileNotFoundException e) {
+			LOGGER.warning(e);
+			return null;
+		}
+	}
+
+	/**
+	 * 打开文件，返回其文本内容
+	 * 
+	 * @param filePath 文件的完全路径
+	 * @return 文件内容
+	 */
+	public static String openAsText(String filePath) {
+		return byteStream2string(path2FileIn(filePath));
+	}
+
+	/**
+	 * 获得指定文件的 byte 数组
+	 * 
+	 * @param file 文件对象
+	 * @return 文件字节数组
+	 */
+	public static byte[] openAsByte(File file) {
+		return inputStream2Byte(path2FileIn(file));
+	}
+
+	/**
+	 * 返回某个文件夹里面的所有文件
+	 * 
+	 * @return 文件名集合
+	 */
+	public static String[] getFiles(File file) {
+		return file.isDirectory() ? file.list() : null;
+	}
+
+	public static void delete(String filePath) {
+		delete(new File(filePath));
+	}
+	
+	/**
+	 * 删除文件
+	 * 
+	 * @return 返回本实例供链式调用
+	 */
+	public static void delete(File file) {
+		LOGGER.info("文件 {0} 准备删除！", file.toString());
+
+		if (!file.delete())
+			LOGGER.warning("文件 {0} 删除失败！", file.toString());
+	}
 }

@@ -24,42 +24,42 @@ public class TestFileUtil {
 		// create and update
 		new FileUtil().setFilePath(fullpath).setOverwrite(true).setContent("hihi").save().close();
 		// read
-		String result = new FileUtil().setFilePath(fullpath).read().byteStream2stringStream().close().getContent();
+		String result = FileHelper.openAsText(fullpath);
 
 		assertTrue(result.startsWith("hihi"));
 
-		save(fullpath, "hihi2");
-		assertTrue(openAsText(fullpath).startsWith("hihi2"));
+		FileHelper.save(fullpath, "hihi2");
+		assertTrue(FileHelper.openAsText(fullpath).startsWith("hihi2"));
 
 		// delete
-		new FileUtil().setFilePath(fullpath).delete();
+		FileHelper.delete(fullpath);
 	}
 
 	@Test
 	public void testGetFileName() {
-		assertEquals("bar.java", getFileName("c:/foo/bar.java"));
+		assertEquals("bar.java", FileHelper.getFileName("c:/foo/bar.java"));
 	}
 
 	@Test
 	public void testGetFileSuffix() {
-		assertEquals("java", getFileSuffix("c:/foo/bar.java"));
+		assertEquals("java", FileHelper.getFileSuffix("c:/foo/bar.java"));
 	}
 
 	@Test
 	public void testGetMime() {
-		assertEquals("text/html", getMime("C:\\foo\\bar.htm"));
+		assertEquals("text/html", FileHelper.getMime("C:\\foo\\bar.htm"));
 	}
 
 	@Test
 	public void testGetDirNameByDate() {
-		assertTrue(getDirNameByDate().startsWith("\\" + Calendar.getInstance().get(Calendar.YEAR)));
+		assertTrue(FileHelper.getDirNameByDate().startsWith("\\" + Calendar.getInstance().get(Calendar.YEAR)));
 	}
 
 	@Test
 	public void testCreateFile() {
 		try {
-			assertNotNull(createFile(fullpath, true));
-			new FileUtil().setFilePath(fullpath).delete();
+			assertNotNull(FileHelper.createFile(fullpath, true));
+			FileHelper.delete(fullpath);
 		} catch (IOException e) {
 		}
 	}

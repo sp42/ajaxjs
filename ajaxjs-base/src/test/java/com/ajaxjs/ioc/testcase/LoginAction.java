@@ -1,16 +1,21 @@
 package com.ajaxjs.ioc.testcase;
 
+import com.ajaxjs.ioc.Bean;
+import com.ajaxjs.ioc.Resource;
+
+@Bean
 public class LoginAction {
+	@Resource("CaptchaServiceImpl_A")
 	private CaptchaService captchaService;
+	
+	@Resource("CaptchaServiceImpl_B")
+	public CaptchaService captchaService2;
 
 	public CaptchaService getCaptchaService() {
 		return captchaService;
 	}
 
-	public void setCaptchaService(CaptchaService captchaService) {
-		this.captchaService = captchaService;
-	}
-	
+ 
 	public SendSMSService getSendSMSService() {
 		return sendSMSService;
 	}

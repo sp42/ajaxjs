@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.ajaxjs.ioc.testcase.Hi;
+import com.ajaxjs.ioc.testcase.LoginAction;
 import com.ajaxjs.ioc.testcase.Person;
 
 import javassist.CannotCompileException;
@@ -57,17 +58,15 @@ public class TestIoc {
 
 	@Test
 	public void test2() {
-		BeanContext.init("com.ajaxjs.ioc");
+		BeanContext.init("com.ajaxjs.ioc.testcase");
 		BeanContext.injectBeans();
 
-		Hi hi = (Hi) BeanContext.getBean("hi");
-		System.out.println(hi);
+		LoginAction loginAction = (LoginAction) BeanContext.getBean("LoginAction");
+		System.out.println(loginAction.getCaptchaService());
+		loginAction.getCaptchaService().showImage();
+		loginAction.captchaService2.showImage();
 
-		assertNotNull(hi);
-
-		Person person = (Person) BeanContext.getBean("person");
-		System.out.println(person.getName());
-		assertEquals("Hello Rose", hi.sayHello());
+		assertNotNull(loginAction);
 	}
 	
 //	@Test

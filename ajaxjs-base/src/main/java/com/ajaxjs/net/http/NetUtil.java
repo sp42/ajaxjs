@@ -213,7 +213,7 @@ public class NetUtil extends HttpBasicRequest {
 				File file = (File) v;
 				String field = String.format(str, key, file.getName(), "application/octet-stream");
 
-				_bytes = IoHelper.concat(field.getBytes(), IoHelper.fileAsByte(file));
+				_bytes = IoHelper.concat(field.getBytes(), FileHelper.openAsByte(file));
 			} else { // 普通字段
 				String field = String.format(divField, BOUNDARY, key, v.toString());
 				_bytes = field.getBytes();

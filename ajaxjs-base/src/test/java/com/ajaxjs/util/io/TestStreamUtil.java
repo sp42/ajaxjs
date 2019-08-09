@@ -7,7 +7,6 @@ import java.io.File;
 import org.junit.Test;
 
 import com.ajaxjs.util.io.FileUtil;
-import com.ajaxjs.util.io.StreamUtil;
 
 public class TestStreamUtil {
 	String dir = TestFileUtil.class.getResource("/").getPath();
@@ -16,7 +15,7 @@ public class TestStreamUtil {
 	@Test
 	public void testFileConcat() {
 		byte[] ab = new byte[] {97, 98}, c = new byte[] {99};
-		byte[] abc = StreamUtil.concat(ab, c);
+		byte[] abc = IoHelper.concat(ab, c);
 		
 		assertEquals('a', abc[0]);
 		assertEquals('b', abc[1]);
@@ -27,15 +26,16 @@ public class TestStreamUtil {
 	public void testByteIndexOf() {
 		byte[] abcd = new byte[] {97, 98, 99, 100}, bc = new byte[] {98, 99};
 		
-		assertEquals(1, StreamUtil.byteIndexOf(abcd, bc, 0));
+		assertEquals(1, IoHelper.byteIndexOf(abcd, bc, 0));
 	}
 	
 	@Test
 	public void testFileAsByte() {
 		File file = new File(fullpath);
+		
 		new FileUtil().setFile(file).setOverwrite(true).setContent("ab").save().close();
 		
-		byte[] b = StreamUtil.fileAsByte(new File(fullpath));
+		byte[] b = FileHelper.openAsByte(new File(fullpath));
 		byte a = 97;
 		assertEquals(b[0], a);
 		file.delete();

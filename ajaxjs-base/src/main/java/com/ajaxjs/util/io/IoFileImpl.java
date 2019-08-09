@@ -183,31 +183,4 @@ public class IoFileImpl {
 
 		return result;
 	}
-
-	static boolean get(Path p) {
-//		System.out.println(p);
-		return true;
-	}
-
-	public static void main(String[] args) throws IOException {
-		walkFileTree("C:\\sp42\\sp42_share\\book\\", IoFileImpl::get);
-		FunctionInterfaceTest f = p -> p + "ddf";
-
-//		walk("C:\\sp42\\sp42_share\\book\\");
-
-		System.out.println(f.getInfo("dsadsa"));
-
-		FunctionInterfaceTest f2 = IoFileImpl::foo;
-		System.out.println(f.getInfo("dsadsa"));
-		System.out.println(f2.getInfo("foooooooo"));
-	}
-
-	public static String foo(String input) {
-		return input + "sdsad";
-	}
-
-	@FunctionalInterface
-	public interface FunctionInterfaceTest {
-		public String getInfo(String input);
-	}
 }

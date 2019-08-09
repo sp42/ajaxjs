@@ -184,7 +184,7 @@ public class ImageHelper {
 	public static void saveFile(BufferedImage img, File file, boolean isFixICC) {
 		String fileName = file.getName();
 		String ext = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
-		FileHelper.mkDir(file.getPath()); // 如果目录不存在，先创建
+		FileHelper.mkDirByFileName(file.getPath()); // 如果目录不存在，先创建
 
 		try {
 			ImageIO.write(isFixICC ? fixICC(img) : img, ext, file);
