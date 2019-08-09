@@ -3,7 +3,7 @@ package com.ajaxjs.weixin.payment;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.ajaxjs.net.http.Client;
+import com.ajaxjs.net.http.HttpBasicRequest;
 import com.ajaxjs.shop.ShopHelper;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.util.CommonUtil;
@@ -118,7 +118,7 @@ public class WxPay implements PayConstant {
 		String xml = MapTool.mapToXml(map);
 //		LOGGER.info(" 请求 perpayid" + xml);
 
-		String result = Client.POST(PayConstant.unifiedorderUrl, xml);
+		String result = HttpBasicRequest.post(PayConstant.unifiedorderUrl, xml);
 		LOGGER.info(" 获取 perpayid 结果" + result);
 
 		Map<String, String> resultMap = MapTool.xmlToMap(result);

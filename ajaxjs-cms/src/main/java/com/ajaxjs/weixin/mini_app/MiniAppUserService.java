@@ -10,7 +10,7 @@ import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.net.http.Client;
+import com.ajaxjs.net.http.NetUtil;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
@@ -140,7 +140,7 @@ public class MiniAppUserService extends BaseService<User> {
 	private static UserLoginToken intiToken(String jsCode) {
 		String appId = MiniApp.getAppId(), appSecret = MiniApp.getAppSecret();
 		String url = String.format(code2Session, appId, appSecret, jsCode);
-		String json = Client.simpleGET(url);
+		String json = NetUtil.simpleGET(url);
 
 		Map<String, Object> map = JsonHelper.parseMap(json);
 
