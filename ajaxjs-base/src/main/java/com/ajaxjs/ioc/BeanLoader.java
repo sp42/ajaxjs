@@ -22,8 +22,8 @@ import java.util.Set;
 import com.ajaxjs.ioc.annotation.After;
 import com.ajaxjs.ioc.annotation.Before;
 import com.ajaxjs.util.ReflectUtil;
-import com.ajaxjs.util.io.resource.AbstractScanner;
-import com.ajaxjs.util.io.resource.ScanClass;
+import com.ajaxjs.util.resource.AbstractScanner;
+import com.ajaxjs.util.resource.ScanClass;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;

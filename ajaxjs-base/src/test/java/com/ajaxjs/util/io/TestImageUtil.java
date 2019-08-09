@@ -8,7 +8,7 @@ import java.io.File;
 import org.junit.Test;
 
 import com.ajaxjs.util.io.image.ImageUtil;
-import com.ajaxjs.util.io.resource.AbstractScanner;
+import com.ajaxjs.util.resource.AbstractScanner;
 
 public class TestImageUtil {
 	String img = AbstractScanner.getResourceFilePath(TestIoHelper.class, "test.jpg");

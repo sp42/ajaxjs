@@ -8,8 +8,8 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import com.ajaxjs.util.io.resource.AbstractScanner;
-import com.ajaxjs.util.io.resource.ScanClass;
+import com.ajaxjs.util.resource.AbstractScanner;
+import com.ajaxjs.util.resource.ScanClass;
 
 public class TestResource {
 	@Test
