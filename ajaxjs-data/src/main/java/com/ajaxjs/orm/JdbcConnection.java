@@ -28,8 +28,8 @@ import javax.sql.DataSource;
 import org.sqlite.SQLiteDataSource;
 import org.sqlite.SQLiteJDBCLoader;
 
-import com.ajaxjs.util.io.resource.ScanClass;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.resource.ScanClass;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 /**
@@ -317,7 +317,7 @@ public class JdbcConnection {
 
 	/**
 	 * JDNI 是一个为 Java 应用程序提供命名服务的应用程序接口
-	 * https://www.cnblogs.com/zhchoutai/p/7389089.html 模拟数据库链接的配置 需要加入
+	 * 模拟数据库链接的配置 需要加入
 	 * tomcat-juli.jar 这个包，tomcat7 此包位于 tomcat 根目录的 bin 下。
 	 *
 	 * @return InitialContext 上下文

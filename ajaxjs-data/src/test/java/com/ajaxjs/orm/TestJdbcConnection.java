@@ -20,7 +20,6 @@ import org.junit.Test;
 public class TestJdbcConnection {
 	Connection conn;
 
-
 	@Before
 	public void setUp() throws SQLException {
 		conn = getTestSqliteConnection();

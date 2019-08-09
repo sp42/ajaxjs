@@ -17,6 +17,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * 自定义函数接口
+ * 
+ * @author Frank Cheung
+ *
+ */
 public class JdbcHelperLambda {
 	/**
 	 * 
