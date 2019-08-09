@@ -25,7 +25,6 @@ import java.util.Enumeration;
 import java.util.Map;
 
 import com.ajaxjs.util.MapTool;
-import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -35,7 +34,7 @@ import com.ajaxjs.util.logger.LogHelper;
  *
  */
 public class Tools {
-	private static final LogHelper LOGGER = LogHelper.getLog(FileUtil.class);
+	private static final LogHelper LOGGER = LogHelper.getLog(Tools.class);
 
 	static String ip; // 本地 ip 地址缓存
 
