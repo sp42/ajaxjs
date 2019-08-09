@@ -36,10 +36,28 @@ import com.ajaxjs.util.logger.LogHelper;
 public class ImageHelper {
 	private static final LogHelper LOGGER = LogHelper.getLog(ImageHelper.class);
 
+	public File file;
+
+	public int width;
+
+	public int height;
+
+	/**
+	 * 提供一些方便的属性
+	 * 
+	 * @param filePath 图片文件完整路径
+	 */
+	public ImageHelper(String filePath) {
+		file = new File(filePath);
+		Integer[] arr = getBufferedImgSize.apply(getImg(file));
+		width = arr[0];
+		height = arr[1];
+	}
+
 	/**
 	 * 根据文件名获取图片对象
 	 * 
-	 * @param filePath 磁盘上文件名
+	 * @param filePath 图片文件完整路径
 	 * @return 图片对象
 	 */
 	public static BufferedImage getImg(String filePath) {
@@ -88,15 +106,13 @@ public class ImageHelper {
 			height) -> new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
 	/**
-	 * 获取图片对象分辨率大小。
-	 * 数组中 0 = width 1 = height
+	 * 获取图片对象分辨率大小。 数组中 0 = width 1 = height
 	 */
 	public static final Function<Image, Integer[]> getImgSize = img -> new Integer[] { img.getWidth(null),
 			img.getHeight(null) };
 
 	/**
-	 * 获取缓冲图片对象分辨率大小。
-	 * 数组中 0 = width 1 = height
+	 * 获取缓冲图片对象分辨率大小。 数组中 0 = width 1 = height
 	 */
 	public static final Function<BufferedImage, Integer[]> getBufferedImgSize = img -> new Integer[] { img.getWidth(),
 			img.getHeight() };
@@ -211,10 +227,9 @@ public class ImageHelper {
 
 		return imageNew;
 	}
-	
 
 	/**
-	 *  保存图片文件。 TODO 其实可以考虑使用 bufferedWrite(InputStream is, OutputStream out) 保存的
+	 * 保存图片文件。 TODO 其实可以考虑使用 bufferedWrite(InputStream is, OutputStream out) 保存的
 	 * 《使用ImageIO.write存储png格式图片性能较差问题》http://zhang-xzhi-xjtu.iteye.com/blog/1328084
 	 * 
 	 * @param bImg 缓冲图片对象
@@ -230,7 +245,7 @@ public class ImageHelper {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * 保存图片文件
 	 * 
@@ -334,6 +349,7 @@ public class ImageHelper {
 
 	/**
 	 * 为图片添加水印图片
+	 * 
 	 * @param img 图片对象
 	 * @param watermark 水印文件
 	 * @return 缓冲图片对象

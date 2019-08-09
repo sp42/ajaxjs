@@ -143,6 +143,7 @@ public class SendEmail {
 	// 返回出来以便能在错误时知道返回的错误码
 	public boolean sendHeader() {
 		try {
+			@SuppressWarnings("unused")
 			String line;
 			doCommand(null);
 			if (authentication) {
@@ -226,6 +227,7 @@ public class SendEmail {
 		// 按RFC标准进行折行自理,主题的换行必须以"?="结束,并以"空格=?字符集?数据编码"开始
 		message = Encode.base64Encode(message);
 
+		@SuppressWarnings("unused")
 		String line;
 		if (!sendHeader())
 			return false;

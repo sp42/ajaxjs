@@ -1,4 +1,4 @@
-package com.ajaxjs.util.io.resource;
+package com.ajaxjs.util.io;
 
 import static org.junit.Assert.assertEquals;
 
