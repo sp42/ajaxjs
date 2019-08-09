@@ -8,7 +8,7 @@ import java.util.Map;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
-import com.ajaxjs.util.io.FileUtil;
+import com.ajaxjs.util.io.FileHelper;
 
 @Bean("Attachment_pictureService")
 public class Attachment_pictureServiceImpl extends BaseService<Attachment_picture> implements Attachment_pictureService {
@@ -22,7 +22,7 @@ public class Attachment_pictureServiceImpl extends BaseService<Attachment_pictur
 
 	@Override
 	public boolean delete(Attachment_picture bean) {
-		new FileUtil().setFilePath(bean.getPath()).delete(); // 删除文件
+		FileHelper.delete(bean.getPath()); // 删除文件
 		return dao.delete(bean);
 	}
 

@@ -32,7 +32,7 @@ import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
-import com.ajaxjs.util.io.FileUtil;
+import com.ajaxjs.util.io.FileHelper;
 
 /**
  * 编辑配置的控制器
@@ -50,8 +50,8 @@ public class ConfigController implements IController {
 	 */
 	@GET
 	public String allConfig(ModelAndView model) {
-		model.put("configJson", FileUtil.openAsText(ConfigService.jsonPath));
-		model.put("jsonSchemePath", FileUtil.openAsText(ConfigService.jsonSchemePath));
+		model.put("configJson", FileHelper.openAsText(ConfigService.jsonPath));
+		model.put("jsonSchemePath", FileHelper.openAsText(ConfigService.jsonSchemePath));
 
 		return BaseController.cms("config-all");
 	}
@@ -59,7 +59,7 @@ public class ConfigController implements IController {
 	@GET
 	@Path("siteStru")
 	public String siteStruUI(ModelAndView model) {
-		model.put("siteStruJson", FileUtil.openAsText(SiteStruService.jsonPath));
+		model.put("siteStruJson", FileHelper.openAsText(SiteStruService.jsonPath));
 		return BaseController.cms("config-site-stru");
 	}
 	
@@ -67,7 +67,7 @@ public class ConfigController implements IController {
 	@Path("siteStru")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String saveSiteStru(@NotNull @FormParam("json") String json) {
-		new FileUtil().setFilePath(SiteStruService.jsonPath).setContent(json).save();// 保存文件
+		FileHelper.save(SiteStruService.jsonPath, json);
 		
 		SiteStruService.loadSiteStru();
 		return Constant.jsonOk("修改网站结构成功！");

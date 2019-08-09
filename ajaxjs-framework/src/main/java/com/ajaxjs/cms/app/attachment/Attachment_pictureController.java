@@ -24,7 +24,6 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.util.io.image.ImageUtil;
 import com.ajaxjs.web.UploadFileInfo;
 
 /**

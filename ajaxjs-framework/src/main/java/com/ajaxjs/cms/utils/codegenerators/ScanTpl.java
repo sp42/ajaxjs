@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import com.ajaxjs.util.io.resource.AbstractScanner;
+import com.ajaxjs.util.resource.AbstractScanner;
 
 public class ScanTpl extends AbstractScanner<Object> {
 	private final static FileFilter fileFilter = new FileFilter() {

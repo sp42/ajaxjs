@@ -32,7 +32,7 @@ import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.util.io.FileUtil;
+import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -122,7 +122,7 @@ public class PageEditor implements IController, Constant {
 	 * @throws IOException
 	 */
 	public static String read_jsp_fileContent(String fullFilePath) throws IOException {
-		String jsp_fileContent = FileUtil.openAsText(fullFilePath);
+		String jsp_fileContent = FileHelper.openAsText(fullFilePath);
 
 		int start = jsp_fileContent.indexOf(startToken), end = jsp_fileContent.indexOf(endToken);
 
@@ -164,11 +164,11 @@ public class PageEditor implements IController, Constant {
 	 */
 	public static void save_jsp_fileContent(String rawFullFilePath, String newContent) throws IOException {
 		String fullFilePath = getFullPathByRequestUrl(rawFullFilePath); // 真实的磁盘文件路径
-		String jsp_fileContent = FileUtil.openAsText(fullFilePath), toDel_fileContent = read_jsp_fileContent(fullFilePath);// 读取旧内容
+		String jsp_fileContent = FileHelper.openAsText(fullFilePath), toDel_fileContent = read_jsp_fileContent(fullFilePath);// 读取旧内容
 
 		if (toDel_fileContent != null) {
 			jsp_fileContent = jsp_fileContent.replace(toDel_fileContent, newContent);
-			new FileUtil().setFilePath(fullFilePath).setContent(jsp_fileContent).save().close(); // 保存新内容
+			FileHelper.save(fullFilePath, jsp_fileContent);
 		} else {
 			throw new IOException("页面文件中没有标记可编辑区域之标识。请参考： startToken/endTpoken");
 		}

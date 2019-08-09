@@ -11,7 +11,7 @@ import com.ajaxjs.cms.utils.sms.Aliyun;
 import com.ajaxjs.cms.utils.sms.Message;
 import com.ajaxjs.cms.utils.sms.SMS;
 import com.ajaxjs.ioc.BeanContext;
-import com.ajaxjs.util.io.resource.ScanClass;
+import com.ajaxjs.util.resource.ScanClass;
 
 public class TestSMS {
 //	@Test

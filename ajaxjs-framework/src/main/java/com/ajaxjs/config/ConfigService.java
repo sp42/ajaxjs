@@ -21,7 +21,7 @@ import com.ajaxjs.Version;
 import com.ajaxjs.js.JsEngineWrapper;
 import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.js.JsonStruTraveler;
-import com.ajaxjs.util.io.FileUtil;
+import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -69,7 +69,7 @@ public class ConfigService {
 
 		config = new Config();
 		config.setJsonPath(jsonPath);
-		config.setJsonStr(FileUtil.openAsText(jsonPath));
+		config.setJsonStr(FileHelper.openAsText(jsonPath));
 		config.putAll(JsonHelper.parseMap(config.getJsonStr()));
 		config.setLoaded(true);
 		
@@ -85,8 +85,7 @@ public class ConfigService {
 	public static void save() {
 		String jsonStr = JsonHelper.toJson(config);
 		config.setJsonStr(jsonStr);
-
-		new FileUtil().setFilePath(config.getJsonPath()).setContent(jsonStr).save();// 保存文件
+		FileHelper.save(config.getJsonPath(), jsonStr);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -170,7 +169,7 @@ public class ConfigService {
 	 */
 	public static void loadJSON_in_JS(Map<String, Object> map) {
 		JsEngineWrapper js = new JsEngineWrapper();
-		js.eval("allConfig = " + FileUtil.openAsText(ConfigService.jsonPath));
+		js.eval("allConfig = " + FileHelper.openAsText(ConfigService.jsonPath));
 
 		for (String key : map.keySet()) {
 			String jsKey = transform(key);
@@ -201,7 +200,7 @@ public class ConfigService {
 		}
 
 		String json = js.eval("JSON.stringify(allConfig);", String.class);
-		FileUtil.save(ConfigService.jsonPath, json);
+		FileHelper.save(ConfigService.jsonPath, json);
 	}
 
 }

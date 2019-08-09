@@ -29,7 +29,7 @@ import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.js.JsonStruTraveler;
 import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.net.http.Tools;
-import com.ajaxjs.util.io.FileUtil;
+import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -54,7 +54,7 @@ public class SiteStruService implements ServletContextListener {
 	public static void load() {
 		stru = new SiteStru();
 		stru.setJsonPath(jsonPath);
-		stru.setJsonStr(FileUtil.openAsText(jsonPath));
+		stru.setJsonStr(FileHelper.openAsText(jsonPath));
 		stru.clear();
 		stru.addAll(JsonHelper.parseList(stru.getJsonStr()));
 		stru.setLoaded(true);
