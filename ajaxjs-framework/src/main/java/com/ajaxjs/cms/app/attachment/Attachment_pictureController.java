@@ -24,6 +24,7 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
+import com.ajaxjs.util.io.ImageHelper;
 import com.ajaxjs.web.UploadFileInfo;
 
 /**
@@ -81,15 +82,15 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 
 		if (info.isOk) {
 			// 获取图片信息
-			ImageUtil img = new ImageUtil().setFilePath(info.fullPath).getSize();
+			ImageHelper imgHelper = new ImageHelper(info.fullPath);
 
 			Attachment_picture picture = new Attachment_picture();
 			picture.setOwner(owenerId);
 			picture.setName(info.saveFileName);
 			picture.setPath(info.path);
-			picture.setPicWidth(img.getWidth());
-			picture.setPicHeight(img.getHeight());
-			picture.setFileSize((int) (img.getFile().length() / 1024));
+			picture.setPicWidth(imgHelper.width);
+			picture.setPicHeight(imgHelper.height);
+			picture.setFileSize((int) (imgHelper.file.length() / 1024));
 
 			if (catelogId != 0)
 				picture.setCatelog(catelogId);
@@ -120,14 +121,14 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 
 		if (info.isOk) {
 			// 获取图片信息
-			ImageUtil img = new ImageUtil().setFilePath(info.fullPath).getSize();
+			ImageHelper imgHelper = new ImageHelper(info.fullPath);
 
 			Attachment_picture picture = new Attachment_picture();
 			picture.setName(info.saveFileName);
 			picture.setPath(info.path);
-			picture.setPicWidth(img.getWidth());
-			picture.setPicHeight(img.getHeight());
-			picture.setFileSize((int) (img.getFile().length() / 1024));
+			picture.setPicWidth(imgHelper.width);
+			picture.setPicHeight(imgHelper.height);
+			picture.setFileSize((int) (imgHelper.file.length() / 1024));
 			picture.setCatelog(1);
 
 			final Long _newlyId = service.create(picture);
