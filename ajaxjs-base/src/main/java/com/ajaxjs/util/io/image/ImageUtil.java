@@ -34,6 +34,7 @@ import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
+import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.FileUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -172,7 +173,7 @@ public class ImageUtil extends FileUtil {
 
 			try (ImageInputStream in = ImageIO.createImageInputStream(getIn());) {
 
-				String fileSuffix = FileUtil.getFileSuffix(getFilePath());
+				String fileSuffix = FileHelper.getFileSuffix(getFilePath());
 				Iterator<ImageReader> it = ImageIO.getImageReadersByFormatName(fileSuffix);
 				ImageReader reader = it.next();
 				reader.setInput(in, true);

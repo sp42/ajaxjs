@@ -27,8 +27,8 @@ import java.util.function.Function;
 
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
-import com.ajaxjs.util.FileHelper;
-import com.ajaxjs.util.IoHelper;
+import com.ajaxjs.util.io.FileHelper;
+import com.ajaxjs.util.io.IoHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**

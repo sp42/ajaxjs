@@ -12,7 +12,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import com.ajaxjs.util.io.FileUtil;
+import com.ajaxjs.util.io.FileHelper;
 
 /**
  * 图片助手类
@@ -184,7 +184,7 @@ public class ImageHelper {
 	public static void saveFile(BufferedImage img, File file, boolean isFixICC) {
 		String fileName = file.getName();
 		String ext = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
-		FileUtil.mkDir(file.getPath()); // 如果目录不存在，先创建
+		FileHelper.mkDir(file.getPath()); // 如果目录不存在，先创建
 
 		try {
 			ImageIO.write(isFixICC ? fixICC(img) : img, ext, file);

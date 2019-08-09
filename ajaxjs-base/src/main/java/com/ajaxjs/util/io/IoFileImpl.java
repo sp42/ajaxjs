@@ -68,6 +68,29 @@ public class IoFileImpl {
 
 		return true;
 	}
+	
+
+	/**
+	 * 旧方法保存文本内容
+	 * 
+	 * @param fullpath
+	 * @param content
+	 * @throws IOException
+	 */
+	public static void saveClassic(String fullpath, String content) throws IOException {
+		File file = new File(fullpath);
+	
+		if (file.isDirectory())
+			throw new IOException("参数 fullpath：" + fullpath + " 不能是目录，请指定文件");
+
+		try (FileOutputStream fop = new FileOutputStream(file)) {
+			if (!file.exists())
+				file.createNewFile();
+
+			fop.write(content.getBytes());
+			fop.flush();
+		}
+	}
 
 	/**
 	 * 删除文件或目录
@@ -107,26 +130,6 @@ public class IoFileImpl {
 		return true;
 	}
 
-	/**
-	 * 旧方法保存文本内容
-	 * 
-	 * @param fullpath
-	 * @param content
-	 * @throws IOException
-	 */
-	public static void saveClassic(String fullpath, String content) throws IOException {
-		File file = new File(fullpath);
-		if (file.isDirectory())
-			throw new IOException("参数 fullpath：" + fullpath + " 不能是目录，请指定文件");
-
-		try (FileOutputStream fop = new FileOutputStream(file)) {
-			if (!file.exists())
-				file.createNewFile();
-
-			fop.write(content.getBytes());
-			fop.flush();
-		}
-	}
 
 	// Charset.forName("GBK");
 
@@ -139,12 +142,11 @@ public class IoFileImpl {
 	 * @throws IOException
 	 */
 	public static List<Path> walkFileTree(String _dir, Predicate<Path> method) throws IOException {
-		List<Path> result = new LinkedList<>();
-
 		Path dir = Paths.get(_dir);
 		if (!Files.isDirectory(dir))
 			throw new IOException("参数 ：" + _dir + " 不是目录，请指定目录");
 
+		List<Path> result = new LinkedList<>();
 		Files.walkFileTree(dir, new SimpleFileVisitor<Path>() {
 			@Override
 			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
@@ -167,12 +169,11 @@ public class IoFileImpl {
 	 * @throws IOException
 	 */
 	public static List<Path> walkFile(String _dir, Predicate<Path> method) throws IOException {
-		List<Path> result = new LinkedList<>();
-
 		Path dir = Paths.get(_dir);
 		if (!Files.isDirectory(dir))
 			throw new IOException("参数 ：" + _dir + " 不是目录，请指定目录");
 
+		List<Path> result = new LinkedList<>();
 		try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
 			for (Path e : stream) {
 				if (method.test(e))
@@ -189,7 +190,6 @@ public class IoFileImpl {
 	}
 
 	public static void main(String[] args) throws IOException {
-
 		walkFileTree("C:\\sp42\\sp42_share\\book\\", IoFileImpl::get);
 		FunctionInterfaceTest f = p -> p + "ddf";
 

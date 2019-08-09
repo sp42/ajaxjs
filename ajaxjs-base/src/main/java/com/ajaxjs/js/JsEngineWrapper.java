@@ -22,8 +22,8 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.util.IoHelper;
-import com.ajaxjs.util.io.FileUtil;
+import com.ajaxjs.util.io.FileHelper;
+import com.ajaxjs.util.io.IoHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -78,7 +78,7 @@ public class JsEngineWrapper {
 	 */
 	public JsEngineWrapper load(String path) {
 		LOGGER.info("加载 js: {0} 文件", path);
-		eval(FileUtil.openAsText(path));
+		eval(FileHelper.openAsText(path));
 
 		return this;
 	}
