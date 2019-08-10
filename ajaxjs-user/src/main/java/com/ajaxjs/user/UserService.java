@@ -13,7 +13,7 @@ import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.cryptography.SymmetricCipher;
-import com.ajaxjs.util.io.image.ImageUtil;
+import com.ajaxjs.util.io.ImageHelper;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.UploadFileInfo;
 
@@ -254,14 +254,14 @@ public class UserService extends BaseService<User> {
 		}
 
 		// 获取图片信息
-		ImageUtil img = new ImageUtil().setFilePath(info.fullPath).getSize();
+		ImageHelper imgHelper = new ImageHelper(info.fullPath);
 
 		avatar.setOwner(userUId);
 		avatar.setName(info.saveFileName);
 		avatar.setPath(info.path);
-		avatar.setPicWidth(img.getWidth());
-		avatar.setPicHeight(img.getHeight());
-		avatar.setFileSize((int) (img.getFile().length() / 1024));
+		avatar.setPicWidth(imgHelper.width);
+		avatar.setPicHeight(imgHelper.height);
+		avatar.setFileSize((int) (imgHelper.file.length() / 1024));
 		avatar.setCatelog(Attachment_pictureService.AVATAR);
 
 		if (isCreate) {

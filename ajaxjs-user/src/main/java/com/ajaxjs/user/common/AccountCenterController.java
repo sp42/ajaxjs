@@ -2,6 +2,7 @@ package com.ajaxjs.user.common;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -13,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
+import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
@@ -22,16 +24,73 @@ import com.ajaxjs.user.UserService;
 import com.ajaxjs.user.controller.AbstractInfoController;
 import com.ajaxjs.user.controller.LoginCheck;
 import com.ajaxjs.user.controller.UserPasswordFilter;
+import com.ajaxjs.user.controller.LoginLogController.UserLoginLogService;
+import com.ajaxjs.util.logger.LogHelper;
 
-@Path("/user/info")
+/**
+ * 用户账号中心
+ * 
+ * @author Administrator
+ *
+ */
+@Path("/user/account-center")
 @Bean("PcUserInfoController")
-public class UserInfoController extends AbstractInfoController {
+public class AccountCenterController extends AbstractInfoController {
+	private static final LogHelper LOGGER = LogHelper.getLog(AccountCenterController.class);
 
 	@Resource("UserService")
 	private UserService service;
 
 	@Resource("User_common_authService") // 指定 service id
 	private UserCommonAuthService passwordService;
+	
+	@GET
+	@Path("/account-center")
+	public String accountcenter() {
+		LOGGER.info("用户会员中心");
+		return jsp_perfix_webinf + "/user/account-center/info";
+	}
+	
+	@GET
+	@Path("/profile")
+	public String profile() {
+		LOGGER.info("用户会员中心-个人信息");
+		return jsp_perfix_webinf + "/user/account-center/profile";
+	}
+
+	@GET
+	@Path("/address")
+	public String address() {
+		LOGGER.info("用户会员中心-我的地址");
+		return jsp_perfix_webinf + "/user/account-center/address";
+	}
+
+	@GET
+	@Path("/safe")
+	public String safe() {
+		LOGGER.info("用户会员中心-账号安全");
+		return jsp_perfix_webinf + "/user/account-center/safe";
+	}
+
+	@GET
+	@Path("/oauth")
+	public String oauth() {
+		LOGGER.info("用户会员中心-账户绑定");
+		return jsp_perfix_webinf + "/user/account-center/oauth";
+	}
+ 
+
+	public static UserLoginLogService userLoginLogService = new UserLoginLogService();
+	
+	@GET
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
+	@Path("/log_history")
+	public String logHistory(ModelAndView mv) {
+		LOGGER.info("用户会员中心-登录历史");
+		long userId = getUserId();
+		mv.put("list", userLoginLogService.findList(sql -> sql + " WHERE userId = " + userId + " ORDER BY id DESC LIMIT 0, 10"));
+		return jsp_perfix_webinf + "/user/account-center/log_history";
+	}
 
 	@PUT
 	@Path("/{id}")

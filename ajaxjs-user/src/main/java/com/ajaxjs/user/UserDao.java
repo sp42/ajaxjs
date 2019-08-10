@@ -48,7 +48,7 @@ public interface UserDao extends IBaseDao<User> {
 	@Select("SELECT accessKey FROM user_role WHERE id = ?")
 	Long getPrivilegeByUserGroupId(long userGroupId);
 
-	@Select("SELECT id, avatar, name, username, sex, birthday, email, phone, createDate, location, " + selectCover + " AS cover FROM ${tableName} entry")
+	@Select("SELECT id, avatar, name, username, sex, birthday, email, phone, createDate, location, roleId, " + selectCover + " AS cover FROM ${tableName} entry")
 	@Override
 	public PageResult<User> findPagedList_Cover(int start, int limit);
 

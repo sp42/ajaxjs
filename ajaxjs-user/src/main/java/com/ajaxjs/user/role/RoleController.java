@@ -23,8 +23,8 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 
-@Path("/admin/user/user_group")
 @Bean
+@Path("/admin/user/user_group")
 public class RoleController extends BaseController<Map<String, Object>> {
 	@Resource("UserRoleService")
 	private RoleService service;

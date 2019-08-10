@@ -70,11 +70,11 @@ public abstract class AbstractLoginController extends BaseUserController {
 	 */
 	@GET
 	@Path("/logout")
+	@Produces(MediaType.APPLICATION_JSON)
 	public String doLogout() {
 		LOGGER.info("用户登出");
 		MvcRequest.getHttpServletRequest().getSession().invalidate();
 		return jsonOk("退出成功！");
-//		return "/user/index.jsp?msg=" + Encode.urlEncode("退出成功！");
 	}
 
 	@POST

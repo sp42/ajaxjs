@@ -38,7 +38,7 @@ import com.ajaxjs.web.captcha.CaptchaFilter;
 @Bean
 public class UserController extends AbstractUserCenterController {
 	private static final LogHelper LOGGER = LogHelper.getLog(UserController.class);
-	
+
 	@Resource("User_common_authService")
 	private UserCommonAuthService authService;
 
@@ -52,12 +52,12 @@ public class UserController extends AbstractUserCenterController {
 		LOGGER.info("用户会员中心（前台）");
 		return jsp("user/home");
 	}
-	
+
 	@GET
-	@Path("/accountcenter")
+	@Path("/account-center")
 	public String accountcenter() {
 		LOGGER.info("用户会员中心（前台）");
-		return jsp_perfix_webinf + "/user/info";
+		return jsp_perfix_webinf + "/user/account-center/info";
 	}
 
 	@GET
@@ -73,7 +73,6 @@ public class UserController extends AbstractUserCenterController {
 		LOGGER.info("用户登录页");
 		return jsp_perfix_webinf + "/user/login";
 	}
-
 
 	@Override
 	public UserService getService() {
@@ -127,5 +126,17 @@ public class UserController extends AbstractUserCenterController {
 	public String loginAction(@BeanParam User user, @NotNull @QueryParam("password") String password,
 			HttpServletRequest request) throws ServiceException {
 		return new LoginController(service).loginAction(user, password, request);
+	}
+
+	/**
+	 * 用户登出
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("/logout")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String doLogout() {
+		return new LoginController(service).doLogout();
 	}
 }

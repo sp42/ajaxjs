@@ -10,6 +10,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.ajaxjs.cms.app.catalog.CatalogServiceImpl;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
@@ -20,25 +21,28 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserDict;
 import com.ajaxjs.user.UserService;
+import com.ajaxjs.user.role.RoleService;
 
 /**
- * 
- * 控制器
+ * 用户系统后台部分的控制器
  */
-
 @Bean
 @Path("/admin/user")
 public class UserAdminController extends BaseController<User> {
 	@Resource("UserService")
 	private UserService service;
+	
+	@Resource("UserRoleService")
+	private RoleService roleService;
 
 	@GET
 	@Path("/list")
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
 		mv.put("SexGender", UserDict.SexGender);
+		mv.put("UserGroups", CatalogServiceImpl.list2map_id_as_key(roleService.getDao().findList()));
 		listPaged(start, limit, mv, service.getDao()::findPagedList_Cover);
-		return adminList();
+		return jsp("user/user-admin-list");
 	}
 
 	@GET
