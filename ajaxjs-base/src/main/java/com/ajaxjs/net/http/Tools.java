@@ -36,7 +36,7 @@ import com.ajaxjs.util.logger.LogHelper;
 public class Tools {
 	private static final LogHelper LOGGER = LogHelper.getLog(Tools.class);
 
-	static String ip; // 本地 ip 地址缓存
+	public static String ip; // 本地 ip 地址缓存
 
 	/**
 	 * 获取本机 ip，带缓存的
