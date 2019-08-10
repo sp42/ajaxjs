@@ -21,13 +21,11 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-import com.ajaxjs.util.io.image.ImageUtil;
-
 /**
  * 验证码的简单实现
  * 
  */
-public class Captcha extends ImageUtil {
+public class Captcha {
 	/**
 	 * 验证码
 	 */

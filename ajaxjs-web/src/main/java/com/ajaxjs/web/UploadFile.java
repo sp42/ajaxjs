@@ -17,15 +17,16 @@ package com.ajaxjs.web;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.util.io.FileUtil;
-import com.ajaxjs.util.io.StreamUtil;
+import com.ajaxjs.util.Encode;
+import com.ajaxjs.util.io.FileHelper;
+import com.ajaxjs.util.io.IoHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -40,24 +41,14 @@ public class UploadFile extends HttpServletRequestWrapper {
 	/**
 	 * 创建一个上传请求对象
 	 * 
-	 * @param request
-	 *            请求对象
-	 */
-	public UploadFile(HttpServletRequest request) {
-		super(request);
-	}
-
-	/**
-	 * 
-	 * @param request
-	 * @param uploadFileInfo
+	 * @param request 			请求对象
+	 * @param uploadFileInfo	上传的配置信息
 	 */
 	public UploadFile(HttpServletRequest request, UploadFileInfo uploadFileInfo) {
 		super(request);
 		setUploadFileInfo(uploadFileInfo);
 	}
 
-	private UploadFileInfo uploadFileInfo;
 
 	/**
 	 * 原始的字符串
@@ -77,7 +68,8 @@ public class UploadFile extends HttpServletRequestWrapper {
 	private void check() throws IOException {
 		if (!getMethod().equals("POST"))
 			throw new IllegalArgumentException("必须 POST 请求");
-
+		
+		Objects.requireNonNull(uploadFileInfo, "缺少配置对象");
 		if (getContentLength() > uploadFileInfo.maxTotalFileSize) // 是否超大
 			throw new IOException("文件大小超过系统限制！");
 
@@ -91,34 +83,32 @@ public class UploadFile extends HttpServletRequestWrapper {
 	 * @return 分割符
 	 */
 	private byte[] getBoundary() {
-		System.out.println(getContentType());
 		String boundary = CommonUtil.regMatch("boundary=((?:-|\\w)+)$", getContentType(), 1);
-		System.out.println(boundary);
 		return boundary.getBytes();
 	}
 
 	/**
-	 * 执行上传
+	 * 执行上传，主要的调用方法
 	 * 
 	 * @return 上传结果
 	 * @throws IOException
 	 */
 	public UploadFileInfo upload() throws IOException {
 		check();
-		ServletInputStream in = null;
 
-		try {
-			in = getInputStream();
+		try (ServletInputStream in = getInputStream()){			
+			dataBytes = IoHelper.inputStream2Byte(in);
 		} catch (IOException e) {
 			LOGGER.warning(e);
+			throw e;
 		}
 
-		dataBytes = new StreamUtil().setIn(in).inputStream2Byte().close().getData();
 		dataStr = Encode.byte2String(dataBytes);
 
 		parseMeta(dataStr);
 
 		int offset = get(dataBytes), length = getLength(offset);
+ 
 		return save(offset, length);
 	}
 
@@ -130,6 +120,7 @@ public class UploadFile extends HttpServletRequestWrapper {
 	 */
 	public void parseMeta(String dataStr) {
 		uploadFileInfo.name = CommonUtil.regMatch("name=\"(\\w+)\"", dataStr, 1);
+		
 		if (uploadFileInfo.name == null)
 			throw new IllegalArgumentException("你的表单中没有设置一个 name，不能获取字段");
 
@@ -144,26 +135,31 @@ public class UploadFile extends HttpServletRequestWrapper {
 
 		if (uploadFileInfo.allowExtFilenames != null && uploadFileInfo.allowExtFilenames.length > 0) {
 			boolean isFound = false;
+			
 			for (String _ext : uploadFileInfo.allowExtFilenames) {
 				if (_ext.equalsIgnoreCase(ext)) {
 					isFound = true;
 					break;
 				}
 			}
+			
 			if (!isFound)
-				throw new IllegalArgumentException(ext + " 上传类型不匹配");
+				throw new IllegalArgumentException(ext + " 上传类型不允许上传");
 		}
 	}
 
 	/**
 	 * 获取上传文件的长度
 	 * 
-	 * @param start
-	 *            开始位置
+	 * @param start 开始位置
 	 * @return 文件长度
 	 */
 	private int getLength(int start) {
-		int endPos = StreamUtil.byteIndexOf(dataBytes, getBoundary(), start) - 4;
+		int found = IoHelper.byteIndexOf(dataBytes, getBoundary(), start);
+		if(found == -1 )
+			throw new IllegalArgumentException("找不到 Boundary");
+		
+		int endPos = found - 4;
 		if (start == endPos)
 			throw new IllegalArgumentException("上传表单中没有二进制数据，上传文件为空！");
 
@@ -187,9 +183,9 @@ public class UploadFile extends HttpServletRequestWrapper {
 		uploadFileInfo.fullPath = uploadFileInfo.saveFolder + uploadFileInfo.saveFileName;
 
 		try {
-			File file = FileUtil.createFile(uploadFileInfo.fullPath, uploadFileInfo.isFileOverwrite);
+			File file = FileHelper.createFile(uploadFileInfo.fullPath, uploadFileInfo.isFileOverwrite);
 			// 写入文件
-			new FileUtil().setData(dataBytes).setFile(file).save(offset, length).close();
+			FileHelper.save(file, dataBytes, offset, length);
 			uploadFileInfo.isOk = true;
 		} catch (IOException e) {
 			uploadFileInfo.isOk = false;
@@ -199,6 +195,8 @@ public class UploadFile extends HttpServletRequestWrapper {
 
 		return uploadFileInfo;
 	}
+	
+	private UploadFileInfo uploadFileInfo;
 
 	public UploadFileInfo getUploadFileInfo() {
 		return uploadFileInfo;
@@ -208,6 +206,7 @@ public class UploadFile extends HttpServletRequestWrapper {
 		this.uploadFileInfo = uploadFileInfo;
 	}
 
+	// 换行符的字节码
 	private final static byte[] b = "\n".getBytes();
 
 	/**
@@ -220,9 +219,11 @@ public class UploadFile extends HttpServletRequestWrapper {
 
 		for (int i = 0; i < dataBytes.length; i++) {
 			int temp = i, j = 0;
+			
 			while (dataBytes[temp] == b[j]) {
 				temp++;
 				j++;
+				
 				if (j == b.length) {
 					skip++;
 					if (skip == 3)

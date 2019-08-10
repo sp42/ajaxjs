@@ -38,8 +38,8 @@ import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
-import com.ajaxjs.util.io.resource.ScanClass;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.resource.ScanClass;
 
 /**
  * Servlet 启动时进行控制器扫描，解析控制器 Path 路径，然后将其登记起来。Scanner controllers at Servlet

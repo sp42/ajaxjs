@@ -1,7 +1,7 @@
 package com.ajaxjs.web;
 
 /**
- * 上传配置信息
+ * 上传的配置信息
  * 
  * @author sp42 frank@ajaxjs.com
  *

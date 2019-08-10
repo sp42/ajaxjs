@@ -16,6 +16,7 @@
 package com.ajaxjs.mvc.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
@@ -32,7 +33,7 @@ import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.MapTool;
 import com.ajaxjs.util.MappingValue;
-import com.ajaxjs.util.io.StreamUtil;
+import com.ajaxjs.util.io.IoHelper;
 
 /**
  * 通过 HttpServletRequestWrapper （装饰模式的应用）增强 HttpServletRequest的功能。
@@ -95,8 +96,8 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	 * @return 参数、值集合
 	 */
 	public Map<String, Object> getPutRequestData() {
-		try {
-			String params = new StreamUtil().setIn(getInputStream()).byteStream2stringStream().close().getContent();
+		try(InputStream in = getInputStream()) {
+			String params = IoHelper.byteStream2string(in);
 			return MapTool.toMap(params.split("&"), v -> MappingValue.toJavaValue(Encode.urlDecode(v)));
 		} catch (IOException e) {
 			e.printStackTrace();

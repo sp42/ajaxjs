@@ -105,22 +105,25 @@ public class MockRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * 返回 MVC 的 JSP 跳转
+	 * 
 	 * @return
 	 */
 	public String getRequestDispatcheResult() {
 		return MockResponse.getRequestDispatcheResult(old);
 	}
-	
+
 	/**
 	 * 返回控制器输出的响应文本
+	 * 
 	 * @return
 	 */
 	public String getStringResult() {
 		return testInstance.writer.toString();
 	}
-	
+
 	/**
 	 * 返回控制器输出的响应 JSON Map
+	 * 
 	 * @return
 	 */
 	public Map<String, Object> getStringResultJson() {
@@ -140,32 +143,32 @@ public class MockRequest extends HttpServletRequestWrapper {
 	 */
 	public static void mockRequestAttribute(HttpServletRequest request, String... keys) {
 		final Map<String, Object> hash = new HashMap<>();
-	
+
 		doAnswer(new Answer<Void>() {
 			@Override
 			public Void answer(InvocationOnMock invocation) throws Throwable {
 				String key = invocation.getArgumentAt(0, String.class);
 				Object value = invocation.getArgumentAt(1, Object.class);
 				hash.put(key, value);
-	
+
 				return null;
 			}
 		}).when(request).setAttribute(anyString(), anyObject());
-	
+
 		Answer<Object> aswser = new Answer<Object>() {
 			@Override
 			public Object answer(InvocationOnMock invocation) {
 				Object[] args = invocation.getArguments();
 				Object obj = hash.get(args[0].toString());
-	
+
 				return obj;
 			}
 		};
-	
+
 		for (String key : keys) {
 			doAnswer(aswser).when(request).getAttribute(key);
 		}
-	
+
 		// doThrow(new Exception()).when(request).setAttribute(anyString(),
 		// anyString());
 	}
@@ -179,7 +182,7 @@ public class MockRequest extends HttpServletRequestWrapper {
 	public static void mockSession(HttpServletRequest request, final Map<String, Object> map) {
 		HttpSession session = mock(HttpSession.class);
 		when(request.getSession()).thenReturn(session);
-	
+
 		when(session.getAttribute(anyString())).thenAnswer(new Answer<Object>() {
 			@Override
 			public Object answer(InvocationOnMock aInvocation) throws Throwable {
@@ -187,7 +190,7 @@ public class MockRequest extends HttpServletRequestWrapper {
 				return map.get(key);
 			}
 		});
-	
+
 		doAnswer(new Answer<Object>() {
 			@Override
 			public Object answer(InvocationOnMock aInvocation) throws Throwable {
@@ -208,17 +211,17 @@ public class MockRequest extends HttpServletRequestWrapper {
 	 */
 	public static HttpServletRequest mockRequest(String contextPath, String path) {
 		HttpServletRequest request = mock(HttpServletRequest.class);
-	
+
 		if (!path.startsWith("/"))
 			path = "/" + path;
-	
+
 		when(request.getPathInfo()).thenReturn(contextPath + path);
 		when(request.getRequestURI()).thenReturn(contextPath + path);
 		when(request.getContextPath()).thenReturn(contextPath);
-	
+
 		return request;
 	}
-	
+
 	/**
 	 * 模拟表单请求
 	 * 
@@ -228,7 +231,8 @@ public class MockRequest extends HttpServletRequestWrapper {
 	 * @return 表单请求
 	 * @throws IOException
 	 */
-	public static HttpServletRequest mockFormRequest(HttpServletRequest request, Map<String, String> formBody, boolean isByGetParams) throws IOException {
+	public static HttpServletRequest mockFormRequest(HttpServletRequest request, Map<String, String> formBody,
+			boolean isByGetParams) throws IOException {
 		if (isByGetParams) {
 			for (String key : formBody.keySet())
 				when(request.getParameter(key)).thenReturn(formBody.get(key));
@@ -242,14 +246,17 @@ public class MockRequest extends HttpServletRequestWrapper {
 					return is.read();
 				}
 
-				
+				@Override
 				public boolean isFinished() {
 					return false;
 				}
 
+				@Override
 				public boolean isReady() {
 					return false;
 				}
+
+				@Override
 				public void setReadListener(ReadListener arg0) {
 				}
 			});

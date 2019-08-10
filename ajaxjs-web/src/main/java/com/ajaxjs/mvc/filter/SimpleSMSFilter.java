@@ -43,6 +43,5 @@ public class SimpleSMSFilter extends SessionValueFilter {
 
 	@Override
 	public void after(MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
-
 	}
 }
