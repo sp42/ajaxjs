@@ -85,7 +85,7 @@ public class ConfigService {
 	public static void save() {
 		String jsonStr = JsonHelper.toJson(config);
 		config.setJsonStr(jsonStr);
-		FileHelper.save(config.getJsonPath(), jsonStr);
+		FileHelper.saveText(config.getJsonPath(), jsonStr);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -200,7 +200,7 @@ public class ConfigService {
 		}
 
 		String json = js.eval("JSON.stringify(allConfig);", String.class);
-		FileHelper.save(ConfigService.jsonPath, json);
+		FileHelper.saveText(ConfigService.jsonPath, json);
 	}
 
 }

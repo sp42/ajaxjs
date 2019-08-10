@@ -67,7 +67,7 @@ public class ConfigController implements IController {
 	@Path("siteStru")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String saveSiteStru(@NotNull @FormParam("json") String json) {
-		FileHelper.save(SiteStruService.jsonPath, json);
+		FileHelper.saveText(SiteStruService.jsonPath, json);
 		
 		SiteStruService.loadSiteStru();
 		return Constant.jsonOk("修改网站结构成功！");

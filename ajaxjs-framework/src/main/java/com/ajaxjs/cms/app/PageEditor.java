@@ -168,7 +168,7 @@ public class PageEditor implements IController, Constant {
 
 		if (toDel_fileContent != null) {
 			jsp_fileContent = jsp_fileContent.replace(toDel_fileContent, newContent);
-			FileHelper.save(fullFilePath, jsp_fileContent);
+			FileHelper.saveText(fullFilePath, jsp_fileContent);
 		} else {
 			throw new IOException("页面文件中没有标记可编辑区域之标识。请参考： startToken/endTpoken");
 		}
