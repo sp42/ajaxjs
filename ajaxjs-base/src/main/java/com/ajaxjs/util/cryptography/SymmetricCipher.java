@@ -102,6 +102,7 @@ public class SymmetricCipher {
 		}
 
 		byte[] buf;
+		
 		try {
 			// 为了防止解密时报javax.crypto.IllegalBlockSizeException: Input length must
 			// be multiple of 8 when decrypting with padded cipher异常，
@@ -122,20 +123,17 @@ public class SymmetricCipher {
 	 * @return 密钥对象
 	 */
 	private SecretKey generateKey(String key) {
-		SecureRandom secureRandom;
-		KeyGenerator kg;
-
 		try {
-			secureRandom = SecureRandom.getInstance("SHA1PRNG");
+			SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
 			secureRandom.setSeed(key.getBytes());
-			kg = KeyGenerator.getInstance(ALGORITHM);
+			KeyGenerator kg = KeyGenerator.getInstance(ALGORITHM);
+			kg.init(keySize, secureRandom);
+			
+			return kg.generateKey();// 生成密钥
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 			return null;
 		}
-
-		kg.init(keySize, secureRandom);
-		return kg.generateKey();// 生成密钥
 	}
 
 	final static SymmetricCipher AES = new SymmetricCipher();

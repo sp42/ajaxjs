@@ -22,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import java.util.function.BiFunction;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -151,20 +152,28 @@ public class Encode {
 	 * @return MD5 摘要，返回32位大写的字符串
 	 */
 	public static String md5(String str) {
-		byte[] b = str.getBytes(StandardCharsets.UTF_8);
+		return hash.apply("MD5", str);
+	}
+
+	/**
+	 * 
+	 */
+	private static BiFunction<String, String, String> hash = (hash, str) -> {
+		MessageDigest md = null;
 
 		try {
-			b = MessageDigest.getInstance("MD5").digest(b);
+			md = MessageDigest.getInstance(hash);
 		} catch (NoSuchAlgorithmException e) {
 			LOGGER.warning(e);
 			return null;
 		}
 
-		return DatatypeConverter.printHexBinary(b);
-	}
-
-	static final char[] hexDigits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
-
+		md.update(str.getBytes(StandardCharsets.UTF_8));
+		
+		// byte数组转化为16进制字符串输出。注意安卓环境下无此方法
+		return DatatypeConverter.printHexBinary(md.digest()).toLowerCase();
+	};
+	
 	/**
 	 * 生成字符串的 SHA1 哈希值
 	 * 
@@ -172,32 +181,7 @@ public class Encode {
 	 * @return 字符串的 SHA1 哈希值
 	 */
 	public static String getSHA1(String str) {
-		if (null == str || 0 == str.length())
-			return null;
-
-		MessageDigest md = null;
-
-		try {
-			md = MessageDigest.getInstance("SHA1");
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-			return null;
-		}
-
-		md.update(str.getBytes(StandardCharsets.UTF_8));
-
-		byte[] bytes = md.digest();
-		int j = bytes.length;
-		char[] buf = new char[j * 2];
-		int k = 0;
-
-		for (int i = 0; i < j; i++) {
-			byte byte0 = bytes[i];
-			buf[k++] = hexDigits[byte0 >>> 4 & 0xf];
-			buf[k++] = hexDigits[byte0 & 0xf];
-		}
-
-		return new String(buf);
+		return hash.apply("SHA1", str);
 	}
 
 	/**
@@ -207,37 +191,7 @@ public class Encode {
 	 * @return 字符串的 SHA2 哈希值
 	 */
 	public static String getSHA256(String str) {
-		MessageDigest md;
-
-		try {
-			md = MessageDigest.getInstance("SHA-256");
-			md.update(str.getBytes(StandardCharsets.UTF_8));
-			return byte2Hex(md.digest());
-		} catch (NoSuchAlgorithmException e) {
-			LOGGER.warning(e);
-			return null;
-		}
+		return hash.apply("SHA-256", str);
 	}
 
-	/**
-	 * 将 byte 转为 16 进制
-	 * 
-	 * @param bytes 字节数组
-	 * @return Hex
-	 */
-	public static String byte2Hex(byte[] bytes) {
-		StringBuffer stringBuffer = new StringBuffer();
-		String temp = null;
-
-		for (int i = 0; i < bytes.length; i++) {
-			temp = Integer.toHexString(bytes[i] & 0xFF);
-
-			if (temp.length() == 1)
-				stringBuffer.append("0");// 1得到一位的进行补0操作
-
-			stringBuffer.append(temp);
-		}
-
-		return stringBuffer.toString();
-	}
 }

@@ -45,11 +45,13 @@ public class RSA {
 	public static final String KEY_ALGORITHM = "RSA";
 	/** 貌似默认是RSA/NONE/PKCS1Padding，未验证 */
 	public static final String CIPHER_ALGORITHM = "RSA/ECB/PKCS1Padding";
-	public static final String PUBLIC_KEY = "publicKey";
-	public static final String PRIVATE_KEY = "privateKey";
 
 	/** RSA密钥长度必须是64的倍数，在512~65536之间。默认是1024 */
 	public static final int KEY_SIZE = 2048;
+	
+	public static final String PUBLIC_KEY ="publicKey";
+	
+	public static final String PRIVATE_KEY = "privateKey";
 
 	/**
 	 * 生成密钥对。注意这里是生成密钥对KeyPair，再由密钥对获取公私钥
@@ -57,39 +59,38 @@ public class RSA {
 	 * @return 密钥对
 	 */
 	public static Map<String, byte[]> generateKeyBytes() {
-		KeyPairGenerator keyPairGenerator;
+		KeyPairGenerator generator;
 
 		try {
-			keyPairGenerator = KeyPairGenerator.getInstance(KEY_ALGORITHM);
+			generator = KeyPairGenerator.getInstance(KEY_ALGORITHM);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 			return null;
 		}
 
-		keyPairGenerator.initialize(KEY_SIZE);
-		KeyPair keyPair = keyPairGenerator.generateKeyPair();
+		generator.initialize(KEY_SIZE);
+		KeyPair keyPair = generator.generateKeyPair();
 		RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
 		RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
+		
+		Map<String, byte[]> map = new HashMap<>();
+		map.put("publicKey", publicKey.getEncoded());
+		map.put("privateKey", privateKey.getEncoded());
 
-		Map<String, byte[]> keyMap = new HashMap<>();
-		keyMap.put(PUBLIC_KEY, publicKey.getEncoded());
-		keyMap.put(PRIVATE_KEY, privateKey.getEncoded());
-
-		return keyMap;
+		return map;
 	}
 
 	/**
 	 * 还原公钥，X509EncodedKeySpec 用于构建公钥的规范
 	 * 
-	 * @param keyBytes 公钥字节码
+	 * @param key 公钥字节码
 	 * @return 公钥
 	 */
-	public static PublicKey restorePublicKey(byte[] keyBytes) {
-		X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(keyBytes);
+	public static PublicKey restorePublicKey(byte[] key) {
+		X509EncodedKeySpec keySpec = new X509EncodedKeySpec(key);
 
 		try {
-			KeyFactory factory = KeyFactory.getInstance(KEY_ALGORITHM);
-			return factory.generatePublic(x509EncodedKeySpec);
+			return KeyFactory.getInstance(KEY_ALGORITHM).generatePublic(keySpec);
 		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
 			e.printStackTrace();
 			return null;
@@ -99,15 +100,14 @@ public class RSA {
 	/**
 	 * 还原私钥，PKCS8EncodedKeySpec 用于构建私钥的规范
 	 * 
-	 * @param keyBytes 私钥字节码
+	 * @param key 私钥字节码
 	 * @return 私钥
 	 */
-	public static PrivateKey restorePrivateKey(byte[] keyBytes) {
-		PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(keyBytes);
+	public static PrivateKey restorePrivateKey(byte[] key) {
+		PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(key);
 
 		try {
-			KeyFactory factory = KeyFactory.getInstance(KEY_ALGORITHM);
-			return factory.generatePrivate(pkcs8EncodedKeySpec);
+			return KeyFactory.getInstance(KEY_ALGORITHM).generatePrivate(keySpec);
 		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
 			e.printStackTrace();
 			return null;
@@ -117,7 +117,7 @@ public class RSA {
 	/**
 	 * 加密，三步走。
 	 * 
-	 * @param key       密钥
+	 * @param key 密钥
 	 * @param plainText 加密的内容
 	 * @return 结果
 	 */
@@ -136,7 +136,7 @@ public class RSA {
 	/**
 	 * 解密，三步走。
 	 * 
-	 * @param key         密钥
+	 * @param key 密钥
 	 * @param encodedText 解密的内容
 	 * @return 解密结果
 	 */
