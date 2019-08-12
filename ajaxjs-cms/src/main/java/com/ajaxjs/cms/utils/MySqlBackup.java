@@ -79,7 +79,7 @@ public class MySqlBackup implements ServletContextListener {
 		}
 
 		public static Map<String, String> loadConfig(String configFile, String name) {
-			String xml = FileHelper.readFile(configFile);
+			String xml = FileHelper.openAsText(configFile);
 			// 多个 resources 节点组成
 			String[] results = CommonUtil.regMatchAll("(?<=<Resource)[^>]+(?<!/)", xml);
 
@@ -125,7 +125,7 @@ public class MySqlBackup implements ServletContextListener {
 			try {
 				Process process = Runtime.getRuntime().exec("C:\\Program Files\\MySQL\\MySQL Workbench 6.3 CE\\mysqldump -h" + hostIP + " -u" + userName + " -p" + password + " --set-charset=UTF8 " + databaseName);
 				String sql = IoHelper.byteStream2string(process.getInputStream());
-				FileHelper.save("c:/temp", CommonUtil.now("yyyy-MM-dd_HH-mm-ss") + ".sql", sql);
+				FileHelper.saveText("c:/temp/" + CommonUtil.now("yyyy-MM-dd_HH-mm-ss") + ".sql", sql);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
