@@ -1,7 +1,7 @@
-<%@page pageEncoding="UTF-8" import="com.ajaxjs.user.role.RightConstant"%>
+<%@page pageEncoding="UTF-8" import="com.ajaxjs.user.role.RightConstant, com.ajaxjs.user.role.RoleService"%>
 <%
 	long num = 0;
-	num = RightConstant.set(num, 1, true);
+	num = RoleService.set(num, 1, true);
 /*
 	num = RightConstant.set(num, 2, true);
 	num = RightConstant.set(num, 8, true);
