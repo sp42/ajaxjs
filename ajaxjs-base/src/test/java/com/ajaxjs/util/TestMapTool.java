@@ -123,7 +123,7 @@ public class TestMapTool {
 
 	@Test
 	public void testXml() {
-//		MappingHelper.mapToXml(data);
-
+		String xml = MapTool.mapToXml(userWithoutChild);
+		assertEquals(xml, MapTool.mapToXml(MapTool.xmlToMap(xml)));
 	}
 }

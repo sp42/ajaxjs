@@ -28,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
+ * 流操作
  * 
  * @author sp42 frank@ajaxjs.com
  *
@@ -37,6 +38,9 @@ public class IoHelper {
 	
 	/**
 	 * 输出流写入字节数据
+	 * 
+	 * @param out 	输出流
+	 * @param data	字节数据
 	 */
 	public static void outputWriteData(OutputStream out, byte[] data) {
 		try {
@@ -46,16 +50,24 @@ public class IoHelper {
 			LOGGER.warning(e);
 		}
 	}
-
+	
 	/**
 	 * 读输入的字节流转换到字符流，将其转换为文本（多行）的字节流转换为字符串
 	 * 
+	 * @param in 输入流
 	 * @return 字符串
 	 */
 	public static String byteStream2string(InputStream in) {
 		return byteStream2string_Charset(in, StandardCharsets.UTF_8);
 	}
 	
+	/**
+	 * 读输入的字节流转换到字符流，将其转换为文本（多行）的字节流转换为字符串。可指定字符编码
+	 * 
+	 * @param in 		输入流
+	 * @param encode	字符编码
+	 * @return 字符串
+	 */
 	public static String byteStream2string_Charset(InputStream in, Charset encode) {
 		StringBuilder result = new StringBuilder();
 		
@@ -124,8 +136,8 @@ public class IoHelper {
 	 * InputStream 转换到 byte[]. 从输入流中获取数据， 转换到 byte[] 也就是 in
 	 * 转到内存。虽然大家可能都在内存里面了但还不能直接使用，要转换
 	 * 
+	 * @param in 		输入流
 	 * @return 返回本实例供链式调用
-	 * @throws IOException
 	 */
 	public static byte[] inputStream2Byte(InputStream in) {
 		// 使用内存操作流，读取二进制
@@ -142,6 +154,7 @@ public class IoHelper {
 	/**
 	 * 送入 byte[] 转换为输出流。可指定 byte[] 某一部分数据
 	 * 
+	 * @param out 	 输出流
 	 * @param off    偏移
 	 * @param length 长度
 	 * @return 返回本实例供链式调用
