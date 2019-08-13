@@ -20,7 +20,7 @@ import java.util.Map;
 import com.ajaxjs.Version;
 import com.ajaxjs.js.JsEngineWrapper;
 import com.ajaxjs.js.JsonHelper;
-import com.ajaxjs.js.JsonStruTraveler;
+import com.ajaxjs.js.ListMap;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -76,7 +76,7 @@ public class ConfigService {
 		if(config.get("isDebug") != null) 
 			Version.isDebug = (boolean)config.get("isDebug");
 
-		flatConfig = JsonStruTraveler.flatMap(config);
+		flatConfig = ListMap.flatMap(config);
 	}
 
 	/**

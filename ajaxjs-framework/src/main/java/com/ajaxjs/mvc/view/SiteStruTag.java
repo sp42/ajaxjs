@@ -10,6 +10,7 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 import com.ajaxjs.config.SiteStruService;
+import com.ajaxjs.js.ListMap;
 
 /**
  * 输出页面的相关结构信息
@@ -78,7 +79,7 @@ public class SiteStruTag extends SimpleTagSupport {
 				
 				boolean isSelected = sitestru.isCurrentNode(item, request);
 				
-				String url = ctx + "/" + item.get("id") + "/";
+				String url = ctx + "/" + item.get(ListMap.ID) + "/";
 				url = addParam(url, item);			
 				sb.append(String.format(li, isSelected ? " class=\"selected\"" : "", url, item.get("name")));
 				
@@ -119,14 +120,14 @@ public class SiteStruTag extends SimpleTagSupport {
 
 		// node 在 head.jsp 中保存
 		Map<String, Object> node = (Map<String, Object>) request.getAttribute("PAGE_Node");
-		List<Map<String, Object>> nodes = (List<Map<String, Object>>) node.get("children");
+		List<Map<String, Object>> nodes = (List<Map<String, Object>>) node.get(ListMap.CHILDREN);
 
 		for (Map<String, Object> item : nodes) {
 			Object isHidden = item.get("isHidden");
 			if(isHidden!= null && ((boolean)isHidden) == true)  // 隐藏的
 				continue;
 			
-			String url = ctx + item.get("fullPath");
+			String url = ctx + item.get(ListMap.PATH);
 			url = addParam(url, item);	
 			
 			boolean isSelected = sitestru.isCurrentNode(item, request);
@@ -153,7 +154,7 @@ public class SiteStruTag extends SimpleTagSupport {
 				if(isHidden!= null && ((boolean)isHidden) == true)  // 隐藏的
 					continue;
 				
-				String url = ctx + item.get("fullPath");
+				String url = ctx + item.get(ListMap.PATH);
 				url = addParam(url, item);	
 				
 				boolean isSelected = sitestru.isCurrentNode(item, request);
@@ -188,7 +189,7 @@ public class SiteStruTag extends SimpleTagSupport {
 			sb.append(String.format(tpl, ctx + arr[0], arr[1]));
 		}
 
-		sb.append(String.format(tpl, ctx + node.get("fullPath"), node.get("name")));
+		sb.append(String.format(tpl, ctx + node.get(ListMap.PATH), node.get("name")));
 		sb.append("</nav>");
 
 		// 如果有分类的话，先显示分类 （适合列表的情形）

@@ -1,17 +1,12 @@
 /**
- * Copyright Sp42 frank@ajaxjs.com
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright Sp42 frank@ajaxjs.com Licensed under the Apache License, Version
+ * 2.0 (the "License"); you may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+ * or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
  */
 package com.ajaxjs.config;
 
@@ -27,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.ajaxjs.Version;
 import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.js.JsonStruTraveler;
+import com.ajaxjs.js.ListMap;
 import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.net.http.Tools;
 import com.ajaxjs.util.io.FileHelper;
@@ -87,7 +83,8 @@ public class SiteStruService implements ServletContextListener {
 			LOGGER.info("没有网站的结构文件");
 
 		String ctx = cxt.getContextPath();
-		String ajaxjsui = Version.isDebug ? "http://" + Tools.getIp() + ":8080/ajaxjs-web-js" : ctx + "/" + Constant.ajajx_ui;
+		String ajaxjsui = Version.isDebug ? "http://" + Tools.getIp() + ":8080/ajaxjs-web-js"
+				: ctx + "/" + Constant.ajajx_ui;
 		cxt.setAttribute("ctx", ctx);
 		cxt.setAttribute("ajaxjsui", ajaxjsui);
 		cxt.setAttribute("commonAsset", ctx + "/asset/common"); // 静态资源目录
@@ -120,10 +117,8 @@ public class SiteStruService implements ServletContextListener {
 	/**
 	 * 获取当前页面节点，并带有丰富的节点信息
 	 * 
-	 * @param uri
-	 *            请求地址，例如 "menu/menu-1"
-	 * @param contextPath
-	 *            项目名称
+	 * @param uri			请求地址，例如 "menu/menu-1"
+	 * @param contextPath	项目名称
 	 * @return 当前页面节点
 	 */
 	public static Map<String, Object> getPageNode(String uri, String contextPath) {
@@ -140,8 +135,7 @@ public class SiteStruService implements ServletContextListener {
 	/**
 	 * 获取当前页面节点，并带有丰富的节点信息
 	 * 
-	 * @param request
-	 *            请求对象
+	 * @param request 请求对象
 	 * @return 当前页面节点
 	 */
 	public static Map<String, Object> getPageNode(HttpServletRequest request) {
@@ -155,16 +149,15 @@ public class SiteStruService implements ServletContextListener {
 	 * 语法报错，其实正确的 于是，为了不报错 <li ${PageNode.isCurrentNode(menu) ? ' class=selected' :
 	 * ''}>
 	 * 
-	 * @param node
-	 *            节点
+	 * @param node 节点
 	 * @return true 表示为是当前节点
 	 */
 	public boolean isCurrentNode(Map<String, ?> node, HttpServletRequest request) {
-		if (node == null || node.get("fullPath") == null)
+		if (node == null || node.get(ListMap.PATH) == null)
 			return false;
 
 		String uri = request.getRequestURI(), contextPath = request.getContextPath();
-		String fullPath = node.get("fullPath").toString(), ui = contextPath.concat("/").concat(fullPath).concat("/");
+		String fullPath = node.get(ListMap.PATH).toString(), ui = contextPath.concat("/").concat(fullPath).concat("/");
 
 		return uri.equals(ui) || uri.indexOf(fullPath) != -1;
 	}
@@ -172,8 +165,7 @@ public class SiteStruService implements ServletContextListener {
 	/**
 	 * 生成二级节点
 	 * 
-	 * @param request
-	 *            请求对象
+	 * @param request 请求对象
 	 * @return 二级节点菜单
 	 */
 	@SuppressWarnings("unchecked")
@@ -195,21 +187,20 @@ public class SiteStruService implements ServletContextListener {
 	/**
 	 * 生成二级节点菜单所需的数据
 	 * 
-	 * @param request
-	 *            请求对象
+	 * @param request 请求对象
 	 * @return 二级节点菜单列表
 	 */
 	@SuppressWarnings({ "unchecked" })
 	public List<Map<String, Object>> getMenu(HttpServletRequest request) {
 		Map<String, Object> map = getSecondLevelNode(request);
-		return map != null && map.get("children") != null ? (List<Map<String, Object>>) map.get("children") : null;
+		return map != null && map.get(ListMap.CHILDREN) != null ? (List<Map<String, Object>>) map.get(ListMap.CHILDREN)
+				: null;
 	}
 
 	/**
 	 * 获取资源 URI，忽略项目前缀和最后的文件名（如 index.jsp） 分析 URL 目标资源
 	 * 
-	 * @param request
-	 *            请求对象
+	 * @param request 请求对象
 	 * @return 资源 URI
 	 */
 	private static String getPath(HttpServletRequest request) {
@@ -237,8 +228,7 @@ public class SiteStruService implements ServletContextListener {
 	/**
 	 * 获取页脚的网站地图
 	 * 
-	 * @param list
-	 *            可指定数据
+	 * @param list  可指定数据
 	 * @param contextPath
 	 * @return 页脚的网站地图
 	 */
@@ -261,13 +251,13 @@ public class SiteStruService implements ServletContextListener {
 	private static void getSiteMap(List<Map<String, Object>> list, StringBuilder sb, String contextPath) {
 		for (Map<String, Object> map : list) {
 			if (map != null) {
-				if (0 == (int) map.get("level")) // 新的一列
+				if (0 == (int) map.get(ListMap.LEVEL)) // 新的一列
 					sb.append(newCol);
-				sb.append(String.format(a, contextPath + map.get("fullPath").toString(), map.get("level").toString(),
-						map.get("name").toString()));
+				sb.append(String.format(a, contextPath + map.get(ListMap.PATH).toString(),
+						map.get(ListMap.LEVEL).toString(), map.get("name").toString()));
 
-				if (map.get("children") != null && map.get("children") instanceof List)
-					getSiteMap((List<Map<String, Object>>) map.get("children"), sb, contextPath);
+				if (map.get(ListMap.CHILDREN) != null && map.get(ListMap.CHILDREN) instanceof List)
+					getSiteMap((List<Map<String, Object>>) map.get(ListMap.CHILDREN), sb, contextPath);
 			}
 		}
 	}
