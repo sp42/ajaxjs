@@ -24,12 +24,9 @@ public class Token {
 	/**
 	 * 创建一个 Token
 	 * 
-	 * @param type
-	 *            TokenId
-	 * @param typeName
-	 *            Token 名称
-	 * @param typeNameChinese
-	 *            Token 名称（中文名）
+	 * @param type TokenId
+	 * @param typeName Token 名称
+	 * @param typeNameChinese Token 名称（中文名）
 	 */
 	public Token(int type, String typeName, String typeNameChinese) {
 		this.type = type;
@@ -40,14 +37,10 @@ public class Token {
 	/**
 	 * 创建一个 Token
 	 * 
-	 * @param type
-	 *            TokenId
-	 * @param typeName
-	 *            Token 名称
-	 * @param typeNameChinese
-	 *            Token 名称（中文名）
-	 * @param javaValue
-	 *            Java 类型的值，通常是已知的
+	 * @param type TokenId
+	 * @param typeName Token 名称
+	 * @param typeNameChinese Token 名称（中文名）
+	 * @param javaValue Java 类型的值，通常是已知的
 	 */
 	public Token(int type, String typeName, String typeNameChinese, Object javaValue) {
 		this(type, typeName, typeNameChinese);
@@ -57,16 +50,11 @@ public class Token {
 	/**
 	 * 创建一个 Token
 	 * 
-	 * @param type
-	 *            TokenId
-	 * @param typeName
-	 *            Token 名称
-	 * @param typeNameChinese
-	 *            Token 名称（中文名）
-	 * @param javaValue
-	 *            Java 类型的值，通常是已知的
-	 * @param value
-	 *            JSON 值（String|Number）
+	 * @param type TokenId
+	 * @param typeName Token 名称
+	 * @param typeNameChinese Token 名称（中文名）
+	 * @param javaValue Java 类型的值，通常是已知的
+	 * @param value JSON 值（String|Number）
 	 */
 	public Token(int type, String typeName, String typeNameChinese, Object javaValue, String value) {
 		this(type, typeName, typeNameChinese, javaValue);
@@ -109,15 +97,17 @@ public class Token {
 		else if (this instanceof StringToken)
 			return StringToken.unescape(value);
 		else if (this instanceof NumberToken) {
-//			System.out.println(value.indexOf('.') != -1);
+			// System.out.println(value.indexOf('.') != -1);
 			// 奇葩问题
-//			System.out.println(false ? Double.parseDouble(value) : Integer.parseInt(value));
-			if(value.indexOf('.') != -1) {
+			// System.out.println(false ? Double.parseDouble(value) :
+			// Integer.parseInt(value));
+			if (value.indexOf('.') != -1) {
 				return Double.parseDouble(value);
 			} else {
 				return Integer.parseInt(value);
 			}
-//			return value.indexOf('.') != -1 ? Double.parseDouble(value) : Integer.parseInt(value);
+			// return value.indexOf('.') != -1 ? Double.parseDouble(value) :
+			// Integer.parseInt(value);
 		} else
 			throw new JsonParseException("获取 Java 值失败！");
 	}
@@ -153,8 +143,7 @@ public class Token {
 	}
 
 	/**
-	 * @param javaValue
-	 *            the javaValue to set
+	 * @param javaValue the javaValue to set
 	 */
 	public void setJavaValue(Object javaValue) {
 		this.javaValue = javaValue;
@@ -168,8 +157,7 @@ public class Token {
 	}
 
 	/**
-	 * @param typeName
-	 *            the typeName to set
+	 * @param typeName the typeName to set
 	 */
 	public void setTypeName(String typeName) {
 		this.typeName = typeName;
@@ -183,8 +171,7 @@ public class Token {
 	}
 
 	/**
-	 * @param typeNameChinese
-	 *            the typeNameChinese to set
+	 * @param typeNameChinese the typeNameChinese to set
 	 */
 	public void setTypeNameChinese(String typeNameChinese) {
 		this.typeNameChinese = typeNameChinese;

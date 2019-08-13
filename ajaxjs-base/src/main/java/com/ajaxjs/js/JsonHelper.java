@@ -34,7 +34,7 @@ import com.ajaxjs.util.MapTool;
 /**
  * 序列化/反序列化 JSON
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
 public class JsonHelper {
 	/**

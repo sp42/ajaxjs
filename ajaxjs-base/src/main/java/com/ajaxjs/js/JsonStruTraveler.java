@@ -71,7 +71,16 @@ public class JsonStruTraveler {
 		Map<String, Object> map = null;
 
 		while (!queue.isEmpty()) {
-			map = findMap(list, queue.poll());
+			String str = queue.poll();
+			
+			for (Map<String, Object> _map : list) {
+				if (_map.get(id).toString().equals(str)) {
+					map = _map;
+					break;
+				}
+			}
+			
+//			map = findMap(list, queue.poll());
 
 			if (map != null) {
 				if (queue.isEmpty()) {
@@ -205,7 +214,6 @@ public class JsonStruTraveler {
 		 * @param key 键名称
 		 */
 		public void exitKey(String key);
-
 	}
 
 	/**
