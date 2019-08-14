@@ -1,4 +1,4 @@
-package com.ajaxjs.util;
+package com.ajaxjs.util.map;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -32,6 +32,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.MappingValue;
+import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**

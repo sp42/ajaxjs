@@ -1,4 +1,4 @@
-package com.ajaxjs.js;
+package com.ajaxjs.util.map;
 
 import java.util.Map;
 import java.util.function.Consumer;
@@ -40,7 +40,20 @@ public class ListMapConfig {
 		 * @param level
 		 * @return
 		 */
-		public boolean execute(String key, Object obj, Map<String, Object> map, Map<String, Object> superMap, int level);
+		public boolean execute(String key, Object obj, Map<String, Object> map, Map<String, Object> superMap,
+				int level);
+	}
+
+	public static class Context {
+		private boolean stop;
+
+		public boolean isStop() {
+			return stop;
+		}
+
+		public void setStop(boolean stop) {
+			this.stop = stop;
+		}
 	}
 
 	public MapHandler mapHandler;

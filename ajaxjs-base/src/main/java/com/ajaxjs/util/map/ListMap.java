@@ -1,4 +1,4 @@
-package com.ajaxjs.js;
+package com.ajaxjs.util.map;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
+
+import com.ajaxjs.util.map.ListMapConfig.Context;
 
 public class ListMap {
 	public static void traveler(Map<String, Object> map, ListMapConfig config) {

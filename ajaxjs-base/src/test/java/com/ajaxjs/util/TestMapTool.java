@@ -1,7 +1,7 @@
 package com.ajaxjs.util;
 
-import static com.ajaxjs.util.MapTool.as;
-import static com.ajaxjs.util.MapTool.join;
+import static com.ajaxjs.util.map.MapTool.as;
+import static com.ajaxjs.util.map.MapTool.join;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
+
+import com.ajaxjs.util.map.MapTool;
 
 public class TestMapTool {
 	Map<String, Object> map = new HashMap<String, Object>() {

@@ -26,7 +26,7 @@ import java.util.Stack;
 
 /**
  * JSON 结构的遍历者 注意输入必须为 list 而不能是 map
- * 
+ * @deprecated
  * @author Sp42 frank@ajaxjs.com
  */
 public class JsonStruTraveler {

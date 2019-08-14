@@ -24,8 +24,8 @@ import java.net.Socket;
 import java.util.Enumeration;
 import java.util.Map;
 
-import com.ajaxjs.util.MapTool;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.map.MapTool;
 
 /**
  * ip 工具类

@@ -2,7 +2,7 @@ package com.ajaxjs.js;
 
 import static com.ajaxjs.js.JsonHelper.format;
 import static com.ajaxjs.js.JsonHelper.parseMap;
-import static com.ajaxjs.util.MapTool.as;
+import static com.ajaxjs.util.map.MapTool.as;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 

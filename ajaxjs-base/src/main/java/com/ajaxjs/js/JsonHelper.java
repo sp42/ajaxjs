@@ -29,7 +29,7 @@ import java.util.function.Function;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.js.jsonparser.syntax.FMS;
 import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.util.MapTool;
+import com.ajaxjs.util.map.MapTool;
 
 /**
  * 序列化/反序列化 JSON
