@@ -10,7 +10,7 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 import com.ajaxjs.config.SiteStruService;
-import com.ajaxjs.js.ListMap;
+import com.ajaxjs.util.map.ListMap;
 
 /**
  * 输出页面的相关结构信息

@@ -20,9 +20,9 @@ import java.util.Map;
 import com.ajaxjs.Version;
 import com.ajaxjs.js.JsEngineWrapper;
 import com.ajaxjs.js.JsonHelper;
-import com.ajaxjs.js.ListMap;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.map.ListMap;
 
 /**
  * 以 JSON 为存储格式的配置系统，在 JVM 中以 Map/List 结构保存 该类是单例。

@@ -24,8 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
-import com.ajaxjs.util.MapTool;
 import com.ajaxjs.util.MappingValue;
+import com.ajaxjs.util.map.MapTool;
 
 /**
  * DAO 用的查询参数，可以是 分页 的查询参数，也可以是排序、过滤、搜索等的参数 * 查询时特地需求的容器，可包含特定的对象进行查询，通过
