@@ -52,11 +52,19 @@ public class JsEngineWrapper {
 	 * js 引擎
 	 */
 	private ScriptEngine engine;
-
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public ScriptEngine getEngine() {
 		return engine;
 	}
 
+	/**
+	 * 
+	 * @param engine
+	 */
 	public void setEngine(ScriptEngine engine) {
 		this.engine = engine;
 	}

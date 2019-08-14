@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.js;
+package com.ajaxjs.util.map;
 
 import java.util.ArrayList;
 import java.util.Arrays;

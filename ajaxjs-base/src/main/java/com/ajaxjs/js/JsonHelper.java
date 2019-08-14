@@ -150,8 +150,8 @@ public class JsonHelper {
 	/**
 	 * 输入任意类型数组，在 fn 作适当的转换，返回 JSON 字符串
 	 * 
-	 * @param o 数组
-	 * @param fn 元素处理器，返回元素 JSON 字符串
+	 * @param o		数组
+	 * @param fn	元素处理器，返回元素 JSON 字符串
 	 * @return 数组的 JSON 字符串
 	 */
 	public static <T> String jsonArr(T[] o, Function<T, String> fn) {
@@ -170,10 +170,11 @@ public class JsonHelper {
 	}
 
 	/**
+	 * List 专为 JSON 字符串
 	 * 
-	 * @param list
-	 * @param fn 元素处理器，返回元素 JSON 字符串
-	 * @return
+	 * @param list	列表
+	 * @param fn	元素处理器，返回元素 JSON 字符串
+	 * @return 列表的 JSON 字符串
 	 */
 	static <T> String eachList(List<T> list, Function<T, String> fn) {
 		StringBuilder sb = new StringBuilder();
@@ -252,8 +253,8 @@ public class JsonHelper {
 	/**
 	 * JSON 字符串转换为 Bean 对象
 	 * 
-	 * @param json JSON 字符串
-	 * @param clz Bean 对象类引用
+	 * @param json	JSON 字符串
+	 * @param clz	Bean 对象类引用
 	 * @return Bean 对象
 	 */
 	public static <T> T json2bean(String json, Class<T> clz) {
@@ -316,16 +317,17 @@ public class JsonHelper {
 	 * 输出到 JSON 文本时候的换行
 	 * 
 	 * @param str JSON 字符串
-	 * @return
+	 * @return 转换后的字符串
 	 */
 	public static String jsonString_covernt(String str) {
 		return str.replace("\r\n", "\\n");
 	}
 
 	/**
+	 * 转义注释和缩进
 	 * 
 	 * @param str JSON 字符串
-	 * @return
+	 * @return 转换后的字符串
 	 */
 	public static String javaValue2jsonValue(String str) {
 		return str.replaceAll("\"", "\\\\\"").replaceAll("\t", "\\\\\t");

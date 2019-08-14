@@ -1,3 +1,18 @@
+/**
+ * Copyright sp42 frank@ajaxjs.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.ajaxjs.util.map;
 
 import java.util.Arrays;
@@ -10,11 +25,32 @@ import java.util.Stack;
 
 import com.ajaxjs.util.map.ListMapConfig.Context;
 
+/**
+ * 遍历 ListMap 或 MapList
+ * 
+ * @author sp42 frank@ajaxjs.com
+ *
+ */
 public class ListMap {
+	/**
+	 * 遍历一个 MapList
+	 * 
+	 * @param map		输入的 MapList
+	 * @param config	关于回调函数的配置
+	 */
 	public static void traveler(Map<String, Object> map, ListMapConfig config) {
 		traveler(map, new Context(), null, 0, config);
 	}
 
+	/**
+	 * 遍历一个 MapList
+	 * 
+	 * @param map		输入的 MapList
+	 * @param fristCtx	用于是否退出遍历的变量
+	 * @param superMap	父级 Map
+	 * @param level		深度
+	 * @param config	关于回调函数的配置
+	 */
 	@SuppressWarnings("unchecked")
 	public static void traveler(Map<String, Object> map, Context fristCtx, Map<String, Object> superMap, int level,
 			ListMapConfig config) {
@@ -52,8 +88,7 @@ public class ListMap {
 	 * 遍历一个 ListMap
 	 * 
 	 * @param list 		输入的 ListMap
-	 * @param mapFn 	Map 对象的回调函数
-	 * @param entryFn 	Map 对象身上各个 key/value 的回调函数
+	 * @param config 	关于回调函数的配置
 	 */
 	public static void traveler(List<Map<String, Object>> list, ListMapConfig config) {
 		traveler(list, new Context(), null, 0, config);
@@ -62,10 +97,11 @@ public class ListMap {
 	/**
 	 * 遍历一个 ListMap
 	 * 
-	 * @param list 		输入的 ListMap
-	 * @param mapFn 	Map 对象的回调函数
-	 * @param fristCtx 	用于是否阻止遍历的变量，因为 java 非对象参数是按值的，不能修改那个对象，所以得用一个对象。
-	 * @param superCtx 	父级上下文
+	 * @param list		输入的 ListMap
+	 * @param fristCtx	用于是否退出遍历的变量
+	 * @param superMap	父级 Map
+	 * @param level		深度
+	 * @param config	关于回调函数的配置
 	 */
 	public static void traveler(List<Map<String, Object>> list, Context fristCtx, Map<String, Object> superMap,
 			int level, ListMapConfig config) {
@@ -181,23 +217,6 @@ public class ListMap {
 
 		return map;
 	}
-
-	// /**
-	// * 在 Map List 中查找符合 key 的 map
-	// *
-	// * @param list map 列表
-	// * @param str 目标 key
-	// * @return Map
-	// */
-	// private static Map<String, Object> findMap(List<Map<String, Object>> list,
-	// String str) {
-	// for (Map<String, Object> map : list) {
-	// if (map.get(id).toString().equals(str))
-	// return map;
-	// }
-	//
-	// return null;
-	// }
 
 	/////////////////////////// flatMap ///////////////////////
 	/**

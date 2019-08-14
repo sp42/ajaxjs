@@ -7,7 +7,8 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.js.JsonStruTraveler.TravelMapList_Iterator;
+import com.ajaxjs.util.map.JsonStruTraveler;
+import com.ajaxjs.util.map.JsonStruTraveler.TravelMapList_Iterator;
 
 public class TestStruTravler {
 	JsonStruTraveler t = new JsonStruTraveler();

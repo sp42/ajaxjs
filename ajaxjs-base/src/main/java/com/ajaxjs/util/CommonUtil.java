@@ -27,7 +27,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 工具类
+ * 普通未分类的工具类
  * 
  * @author Sp42 frank@ajaxjs.com
  *
