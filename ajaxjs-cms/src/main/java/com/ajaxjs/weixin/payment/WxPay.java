@@ -7,8 +7,8 @@ import com.ajaxjs.net.http.HttpBasicRequest;
 import com.ajaxjs.shop.ShopHelper;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.util.MapTool;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.map.MapTool;
 import com.ajaxjs.weixin.CommonWxUtil;
 import com.ajaxjs.weixin.mini_app.MiniApp;
 

@@ -8,7 +8,7 @@ import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
-import com.ajaxjs.js.JsonHelper;
+import com.ajaxjs.jsonparser.JsonHelper;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.net.http.NetUtil;
 import com.ajaxjs.orm.annotation.Insert;

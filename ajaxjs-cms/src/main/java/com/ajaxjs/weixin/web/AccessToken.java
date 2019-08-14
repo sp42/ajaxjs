@@ -3,7 +3,7 @@ package com.ajaxjs.weixin.web;
 import java.util.Calendar;
 import java.util.Map;
 
-import com.ajaxjs.js.JsonHelper;
+import com.ajaxjs.jsonparser.JsonHelper;
 import com.ajaxjs.net.http.NetUtil;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.weixin.mini_app.MiniApp;
