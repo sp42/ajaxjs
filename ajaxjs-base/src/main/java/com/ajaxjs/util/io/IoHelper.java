@@ -54,7 +54,7 @@ public class IoHelper {
 	/**
 	 * 读输入的字节流转换到字符流，将其转换为文本（多行）的字节流转换为字符串
 	 * 
-	 * @param in 输入流
+	 * @param in 输入流，无须手动关闭
 	 * @return 字符串
 	 */
 	public static String byteStream2string(InputStream in) {
@@ -64,7 +64,7 @@ public class IoHelper {
 	/**
 	 * 读输入的字节流转换到字符流，将其转换为文本（多行）的字节流转换为字符串。可指定字符编码
 	 * 
-	 * @param in 		输入流
+	 * @param in 		输入流，无须手动关闭
 	 * @param encode	字符编码
 	 * @return 字符串
 	 */
@@ -86,7 +86,7 @@ public class IoHelper {
 				result.append(line);
 				result.append('\n');
 			}
-			
+			inReader.close();
 		} catch (IOException e) {
 			LOGGER.warning(e);
 			return null;
@@ -101,7 +101,7 @@ public class IoHelper {
 	 * 两端速度不匹配，需要协调 理想环境下，速度一样快，那就没必要搞流，直接一坨给弄过去就可以了 流的意思很形象，就是一点一滴的，不是一坨坨大批量的
 	 * 带缓冲的一入一出 出是字节流，所以要缓冲（字符流自带缓冲，所以不需要额外缓冲） 请注意，改方法不会关闭流 close，你需要手动关闭
 	 * 
-	 * @param in       输入流
+	 * @param in       输入流，无须手动关闭
 	 * @param out      输出流
 	 * @param isBuffer 是否加入缓冲功能
 	 * @return 是否成功

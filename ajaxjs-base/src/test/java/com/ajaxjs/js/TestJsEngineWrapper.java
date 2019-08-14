@@ -9,11 +9,13 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.ajaxjs.jsonparser.JsEngineWrapper;
+
 /**
  * @author Sp42 frank@ajaxjs.com
  *
  */
-public class TestJSEngineWrapper {
+public class TestJsEngineWrapper {
 	@Test
 	public void testEngineFactory() {
 		assertNotNull(JsEngineWrapper.engineFactory());
@@ -34,11 +36,11 @@ public class TestJSEngineWrapper {
 	public void testLoad() {
 		Object obj;
 
-		engine.load(TestJSEngineWrapper.class.getResource("test.js").getFile().toString());
+		engine.load(TestJsEngineWrapper.class.getResource("test.js").getFile().toString());
 		obj = engine.eval("foo");
 		assertNotNull(obj);
 
-		engine.load(TestJSEngineWrapper.class, "test.js");
+		engine.load(TestJsEngineWrapper.class, "test.js");
 		obj = engine.eval("foo");
 		assertNotNull(obj);
 	}

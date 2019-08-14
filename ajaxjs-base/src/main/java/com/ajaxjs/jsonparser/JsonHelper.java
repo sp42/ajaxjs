@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.js;
+package com.ajaxjs.jsonparser;
 
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
