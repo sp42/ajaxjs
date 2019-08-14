@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import com.ajaxjs.Version;
 import com.ajaxjs.config.ConfigService;
-import com.ajaxjs.js.JsonStruTraveler;
+import com.ajaxjs.util.map.JsonStruTraveler;
 
 public class TestConfig {
 	@Before

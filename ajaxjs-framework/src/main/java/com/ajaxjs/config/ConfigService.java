@@ -18,8 +18,8 @@ package com.ajaxjs.config;
 import java.util.Map;
 
 import com.ajaxjs.Version;
-import com.ajaxjs.js.JsEngineWrapper;
-import com.ajaxjs.js.JsonHelper;
+import com.ajaxjs.jsonparser.JsEngineWrapper;
+import com.ajaxjs.jsonparser.JsonHelper;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.ListMap;

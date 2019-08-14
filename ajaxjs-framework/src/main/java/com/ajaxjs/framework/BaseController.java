@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ajaxjs.config.ConfigService;
-import com.ajaxjs.js.JsonHelper;
+import com.ajaxjs.jsonparser.JsonHelper;
 import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;

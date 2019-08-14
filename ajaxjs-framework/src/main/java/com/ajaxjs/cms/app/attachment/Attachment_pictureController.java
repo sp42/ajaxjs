@@ -19,7 +19,7 @@ import com.ajaxjs.framework.DataDict;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
-import com.ajaxjs.js.JsonHelper;
+import com.ajaxjs.jsonparser.JsonHelper;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
