@@ -34,7 +34,10 @@ import com.ajaxjs.util.logger.LogHelper;
  */
 public class JsEngineWrapper {
 	private static final LogHelper LOGGER = LogHelper.getLog(JsEngineWrapper.class);
-
+	
+	/**
+	 * 创建一个 JS 引擎的包装器 
+	 */
 	public JsEngineWrapper() {
 		this(engineFactory());
 	}
@@ -54,16 +57,16 @@ public class JsEngineWrapper {
 	private ScriptEngine engine;
 	
 	/**
-	 * 
-	 * @return
+	 * 返回 js 引擎
+	 * @return js 引擎
 	 */
 	public ScriptEngine getEngine() {
 		return engine;
 	}
 
 	/**
-	 * 
-	 * @param engine
+	 * 保存 js 引擎
+	 * @param engine js 引擎
 	 */
 	public void setEngine(ScriptEngine engine) {
 		this.engine = engine;
