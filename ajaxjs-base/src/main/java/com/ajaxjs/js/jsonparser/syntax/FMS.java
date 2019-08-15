@@ -17,6 +17,7 @@ package com.ajaxjs.js.jsonparser.syntax;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Objects;
 
 import com.ajaxjs.js.jsonparser.JsonParseException;
 import com.ajaxjs.js.jsonparser.lexer.Lexer;
@@ -45,13 +46,12 @@ public class FMS implements States {
 	/**
 	 * 创建一个状态机
 	 * 
-	 * @param jsonStr JSON 字符串
+	 * @param json JSON 字符串
 	 */
-	public FMS(String jsonStr) {
-		if (jsonStr == null)
-			throw new NullPointerException("没有输入的 JSON 字符串。");
-
-		lex = new Lexer(jsonStr);
+	public FMS(String json) {
+		Objects.requireNonNull(json, "没有输入的 JSON 字符串。");
+	
+		lex = new Lexer(json);
 		opt = new Operator(lex);
 	}
 

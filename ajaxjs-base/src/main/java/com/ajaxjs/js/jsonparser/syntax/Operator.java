@@ -68,9 +68,9 @@ public class Operator {
 	/**
 	 * 遇到对象，将其保存
 	 * 
-	 * @param from 当前状态 id
-	 * @param to 下一个状态 id
-	 * @param input 输入 Token
+	 * @param from		当前状态 id
+	 * @param to 		下一个状态 id
+	 * @param input 	输入 Token
 	 * @return 下一个状态 id
 	 */
 	public State objs(State from, State to, Token input) {
@@ -86,9 +86,9 @@ public class Operator {
 	/**
 	 * 遇到数组，将其保存
 	 * 
-	 * @param from 当前状态 id
-	 * @param to 下一个状态 id
-	 * @param input 输入 Token
+	 * @param from 		当前状态 id
+	 * @param to 		下一个状态 id
+	 * @param input 	输入 Token
 	 * @return 下一个状态 id
 	 */
 	public State arrs(State from, State to, Token input) {
@@ -104,8 +104,8 @@ public class Operator {
 	/**
 	 * 在状态栈里拿出一个状态来进行运算后，返回一个新的状态作为状态机的新状态
 	 * 
-	 * @param from 当前状态 id
-	 * @param to 下一个状态 id
+	 * @param from 	当前状态 id
+	 * @param to 	下一个状态 id
 	 * @param input 输入 Token
 	 * @return 下一个状态 id
 	 */
@@ -114,8 +114,7 @@ public class Operator {
 		if (input == Tokens.ARRE || input == Tokens.OBJE) {
 			curObj = objStack.pop();
 			curValue = curObj;
-		} else if (input == Tokens.TRUE || input == Tokens.FALSE || input == Tokens.NIL || input.getType() == 0
-				|| input.getType() == 1) {
+		} else if (input == Tokens.TRUE || input == Tokens.FALSE || input == Tokens.NIL || input.getType() == 0 || input.getType() == 1) {
 			curValue = getRealValue(input);
 		}
 
@@ -141,8 +140,8 @@ public class Operator {
 	/**
 	 * 对象的 key 入栈
 	 * 
-	 * @param from 当前状态 id
-	 * @param to 下一个状态 id
+	 * @param from 	当前状态 id
+	 * @param to 	下一个状态 id
 	 * @param input 输入 Token
 	 * @return 下一个状态 id
 	 */
@@ -155,8 +154,8 @@ public class Operator {
 	/**
 	 * 保存数组的元素
 	 * 
-	 * @param from 当前状态 id
-	 * @param to 下一个状态 id
+	 * @param from	当前状态 id
+	 * @param to 	下一个状态 id
 	 * @param input 输入 Token
 	 * @return 下一个状态 id
 	 */
@@ -171,8 +170,8 @@ public class Operator {
 	/**
 	 * 保存对象元素的 key 和 value
 	 * 
-	 * @param from 当前状态 id
-	 * @param to 下一个状态 id
+	 * @param from	 当前状态 id
+	 * @param to	下一个状态 id
 	 * @param input 输入 Token
 	 * @return 下一个状态 id
 	 */

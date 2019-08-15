@@ -102,15 +102,16 @@ public class JSONParser {
 		if (CommonUtil.isEmptyString(jsonStr))
 			return null;
 
-		Stack<Map<String, Object>> maps = new Stack<>(); // 用来保存所有父级对象
-		Stack<List<Object>> lists = new Stack<>(); // 用来表示多层的list对象
-		Stack<Boolean> isList = new Stack<>();// 判断是不是list
-		Stack<String> keys = new Stack<>(); // 用来表示多层的key
+Stack<Map<String, Object>> maps = new Stack<>(); // 用来保存所有父级对象
+Stack<List<Object>> lists = new Stack<>(); // 用来表示多层的list对象
+Stack<Boolean> isList = new Stack<>();// 判断是不是list
+Stack<String> keys = new Stack<>(); // 用来表示多层的key
 
 		boolean hasQuoataion = false; // 是否有引号
 		String keytmp = null;
 		Object valuetmp = null;
 		StringBuilder builder = new StringBuilder();
+		
 		char[] cs = jsonStr.toCharArray();
 
 		for (int i = 0; i < cs.length; i++) {

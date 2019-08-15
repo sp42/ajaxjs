@@ -7,7 +7,7 @@
 
 # AJAXJS Framework Base 基础库
 
-AJAXJS Base 是一个小型的、快速可用的工具库，除了 Javassist 基本没有依赖其他第三方组件，为纯 Java 项目。有以下子模块：
+AJAXJS Base 是一个小型的、快速可用的工具库，除了 Javassist 基本没有依赖其他第三方组件，为纯 Java 项目。既然为工具库（Utils、Helper），那么它符合以下特征：1、多为静态方法；2、应比较精炼，不是什么方法都往里面加。它有以下子模块：
 
 - ioc/aop，一个基于 Javassist 的 ioc 依赖注射实现。[原理](http://blog.csdn.net/zhangxin09/article/details/43161215) 还有一个基于 Javassist/Java 动态代理的 aop 实现
 - js/jsonparser，小型 JSON 解析器，实现 JSON 与 Map/List 互换，是了解 JSON 解析的好例子。[>>详细用法参见文档](http://ajaxjs.mydoc.io/?t=208700)。
@@ -16,7 +16,7 @@ AJAXJS Base 是一个小型的、快速可用的工具库，除了 Javassist 基
 - util/io，有文件工具类、资源扫描器和简易图片处理器。[详细教程](http://blog.csdn.net/zhangxin09/article/details/46592177#t15)；
 - util/reflect，反射工具包，进行反射操作封装。[详细教程](http://blog.csdn.net/zhangxin09/article/details/78941797)；
 - util/cryptography，加密解密工具包。[详细教程](http://blog.csdn.net/zhangxin09/article/details/78684764)
-- net/mail，无须 JavaMail 发送邮件。原理是通过最简单的 telnet 发送
+- net/mail，无须 JavaMail 发送邮件。原理是通过最简单的 telnet 发送 [文档]（https://gitee.com/sp42_admin/ajaxjs/wikis/%E9%82%AE%E4%BB%B6%E5%8F%91%E9%80%81%E7%BB%84%E4%BB%B6?sort_id=1558530）
 - net/http，发送 HTTP 的客户端
 - keyvalue，键对值转换的助手类
 
