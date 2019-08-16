@@ -1,7 +1,7 @@
 package com.ajaxjs.js;
 
-import static com.ajaxjs.jsonparser.JsonHelper.format;
-import static com.ajaxjs.jsonparser.JsonHelper.parseMap;
+import static com.ajaxjs.util.map.JsonHelper.format;
+import static com.ajaxjs.util.map.JsonHelper.parseMap;
 import static com.ajaxjs.util.map.MapTool.as;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -14,8 +14,8 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.ajaxjs.jsonparser.JsonHelper;
 import com.ajaxjs.util.MappingValue;
+import com.ajaxjs.util.map.JsonHelper;
 
 public class TestJsonHelper {
 	

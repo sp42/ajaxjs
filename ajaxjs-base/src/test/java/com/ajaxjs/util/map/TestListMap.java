@@ -1,4 +1,4 @@
-package com.ajaxjs.js;
+package com.ajaxjs.util.map;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.ajaxjs.js.TestJsonHelper;
 import com.ajaxjs.util.map.ListMap;
 import com.ajaxjs.util.map.ListMapConfig;
 

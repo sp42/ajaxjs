@@ -17,13 +17,12 @@ package com.ajaxjs.js.jsonparser.lexer;
 
 import java.util.Stack;
 
-import com.ajaxjs.js.jsonparser.JSONParser;
 import com.ajaxjs.js.jsonparser.JsonParseException;
 
 /**
  * 词法分析器
  */
-public class Lexer {
+public class Lexer extends BaseLexer {
 	/**
 	 * 当前行号
 	 */
@@ -110,13 +109,12 @@ public class Lexer {
 			startCol = getColNum();
 
 			if (c == '"' || c == '\'') {
-				String s = getStrValue(c);
-				return new StringToken(s);
-			} else if (JSONParser.isLetterUnderline(c)) {
-				return getDefToken();
-			} else if (JSONParser.isNum(c) || c == '-') {
+				return new StringToken(getStrValue(c));
+			} else if (isLetterUnderline(c)) {
+				return getValueToken();
+			} else if (isNum(c) || c == '-') {
 				return new NumberToken(getNumValue());
-			} else if (JSONParser.isSpace(c)) {
+			} else if (isSpace(c)) {
 				continue;
 			} else {
 				return parseSymbol(c);
@@ -161,7 +159,7 @@ public class Lexer {
 		char c;
 
 		while ((c = nextChar()) != 0) {
-			if (!JSONParser.isDecimal(c))
+			if (!isDecimal(c))
 				return str.substring(start, revertChar());
 		}
 
@@ -174,12 +172,12 @@ public class Lexer {
 	 * 
 	 * @return true、false、null 的 Token
 	 */
-	private Token getDefToken() {
+	private Token getValueToken() {
 		int start = cur;
 		char c;
 
 		while ((c = nextChar()) != 0) {
-			if (!JSONParser.isNumLetterUnderline(c)) {
+			if (!isNumLetterUnderline(c)) {
 				String value = str.substring(start, revertChar());
 
 				if ("true".equals(value)) {
@@ -236,7 +234,7 @@ public class Lexer {
 		char c = str.charAt(cur);
 
 		if (c == '\n') { // 遇到换行，记录一下所在行数，用于调试
-			++lineNum;
+			lineNum++;
 			colMarks.push(cur);
 		}
 
@@ -253,10 +251,9 @@ public class Lexer {
 			return 0;
 
 		int rcur = cur--;
-		char c = str.charAt(rcur);
-
-		if (c == '\n') {
-			--lineNum;
+		
+		if (str.charAt(rcur) == '\n') {
+			lineNum--;
 			colMarks.pop();
 		}
 
@@ -266,7 +263,7 @@ public class Lexer {
 	/**
 	 * 抛出一个 JsonParseException 异常
 	 * 
-	 * @param msg 异常信息
+	 * @param msg	异常信息
 	 * @return JsonParseException 异常
 	 */
 	public JsonParseException exceptionFactory(String msg) {
@@ -276,8 +273,8 @@ public class Lexer {
 	/**
 	 * 抛出一个 JsonParseException 异常
 	 * 
-	 * @param msg 异常信息
-	 * @param e 异常对象
+	 * @param msg	异常信息
+	 * @param e 	异常对象
 	 * @return JsonParseException 异常
 	 */
 	public JsonParseException exceptionFactory(String msg, Throwable e) {

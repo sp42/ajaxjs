@@ -39,7 +39,7 @@ public class StringToken extends Token {
 	 * @param str
 	 * @return 转义后的结果
 	 */
-	static String unescape(String str) {
+	public static String unescape(String str) {
 		StringBuilder sb = new StringBuilder();
 
 		for (int i = 0; i < str.length(); i++) {

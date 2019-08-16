@@ -1,4 +1,4 @@
-package com.ajaxjs.util;
+package com.ajaxjs.util.map;
 
 import static com.ajaxjs.util.map.MapTool.as;
 import static com.ajaxjs.util.map.MapTool.join;
@@ -12,6 +12,9 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.ajaxjs.util.Encode;
+import com.ajaxjs.util.MappingValue;
+import com.ajaxjs.util.TestCaseUserBean;
 import com.ajaxjs.util.map.MapTool;
 
 public class TestMapTool {

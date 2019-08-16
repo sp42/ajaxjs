@@ -17,7 +17,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import com.ajaxjs.js.jsonparser.JsonParseException;
 import com.ajaxjs.js.jsonparser.lexer.Lexer;
+import com.ajaxjs.js.jsonparser.lexer.NumberToken;
+import com.ajaxjs.js.jsonparser.lexer.StringToken;
 import com.ajaxjs.js.jsonparser.lexer.Token;
 import com.ajaxjs.js.jsonparser.lexer.Tokens;
 
@@ -114,7 +117,8 @@ public class Operator {
 		if (input == Tokens.ARRE || input == Tokens.OBJE) {
 			curObj = objStack.pop();
 			curValue = curObj;
-		} else if (input == Tokens.TRUE || input == Tokens.FALSE || input == Tokens.NIL || input.getType() == 0 || input.getType() == 1) {
+		} else if (input == Tokens.TRUE || input == Tokens.FALSE || input == Tokens.NIL || input.getType() == 0
+				|| input.getType() == 1) {
 			curValue = getRealValue(input);
 		}
 
@@ -185,13 +189,32 @@ public class Operator {
 
 	/**
 	 * 获取 Token 的值（Java 的值）
-	 * 
-	 * @param input 输入 Token
+	 * 根据 value（从 JSON 得来的） 转换为 Java 可读取的值
+	 * @param token 输入 Token
 	 * @return Token 的值
 	 */
-	private Object getRealValue(Token input) {
+	private Object getRealValue(Token token) {
 		try {
-			return input.toJavaValue();
+			if (token == Tokens.TRUE || token == Tokens.FALSE || token == Tokens.NIL)
+				return token.getJavaValue();
+			else if (token instanceof StringToken)
+				return StringToken.unescape(token.getValue());
+			else if (token instanceof NumberToken) {
+				// System.out.println(value.indexOf('.') != -1);
+				// 奇葩问题
+				// System.out.println(false ? Double.parseDouble(value) :
+				// Integer.parseInt(value));
+				if (token.getValue().indexOf('.') != -1) {
+					return Double.parseDouble(token.getValue());
+				} else {
+					return Integer.parseInt(token.getValue());
+				}
+				// return value.indexOf('.') != -1 ? Double.parseDouble(value) :
+				// Integer.parseInt(value);
+			} else
+				throw new JsonParseException("获取 Java 值失败！");
+
+			// return input.toJavaValue();
 		} catch (RuntimeException e) {
 			lex.exceptionFactory("字符串转换错误", e);
 			return null;

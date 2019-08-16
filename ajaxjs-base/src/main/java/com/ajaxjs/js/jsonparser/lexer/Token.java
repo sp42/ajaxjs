@@ -15,8 +15,6 @@
  */
 package com.ajaxjs.js.jsonparser.lexer;
 
-import com.ajaxjs.js.jsonparser.JsonParseException;
-
 /**
  * Token 类型
  */
@@ -24,41 +22,41 @@ public class Token {
 	/**
 	 * 创建一个 Token
 	 * 
-	 * @param type TokenId
-	 * @param typeName Token 名称
-	 * @param typeNameChinese Token 名称（中文名）
+	 * @param type 		TokenId
+	 * @param name 		Token 名称
+	 * @param cnName	Token 名称（中文名）
 	 */
-	public Token(int type, String typeName, String typeNameChinese) {
+	public Token(int type, String name, String cnName) {
 		this.type = type;
-		this.typeName = typeName;
-		this.typeNameChinese = typeNameChinese;
+		this.typeName = name;
+		this.typeNameChinese = cnName;
 	}
 
 	/**
 	 * 创建一个 Token
 	 * 
-	 * @param type TokenId
-	 * @param typeName Token 名称
-	 * @param typeNameChinese Token 名称（中文名）
-	 * @param javaValue Java 类型的值，通常是已知的
+	 * @param type 		TokenId
+	 * @param name 		Token 名称
+	 * @param cnName	Token 名称（中文名）
+	 * @param value Java 类型的值，通常是已知的
 	 */
-	public Token(int type, String typeName, String typeNameChinese, Object javaValue) {
-		this(type, typeName, typeNameChinese);
-		this.javaValue = javaValue;
+	public Token(int type, String name, String cnName, Object value) {
+		this(type, name, cnName);
+		this.javaValue = value;
 	}
 
 	/**
 	 * 创建一个 Token
 	 * 
-	 * @param type TokenId
-	 * @param typeName Token 名称
-	 * @param typeNameChinese Token 名称（中文名）
-	 * @param javaValue Java 类型的值，通常是已知的
-	 * @param value JSON 值（String|Number）
+	 * @param type 		TokenId
+	 * @param name 		Token 名称
+	 * @param cnName	Token 名称（中文名）
+	 * @param value 	Java 类型的值，通常是已知的
+	 * @param value 	JSON 值（String|Number）
 	 */
-	public Token(int type, String typeName, String typeNameChinese, Object javaValue, String value) {
-		this(type, typeName, typeNameChinese, javaValue);
-		this.value = value;
+	public Token(int type, String name, String cnName, Object value, String jsonValue) {
+		this(type, name, cnName, value);
+		this.value = jsonValue;
 	}
 
 	/**
@@ -86,31 +84,31 @@ public class Token {
 	 */
 	private Object javaValue;
 
-	/**
-	 * 根据 value（从 JSON 得来的） 转换为 Java 可读取的值
-	 * 
-	 * @return Java 中的类型
-	 */
-	public Object toJavaValue() {
-		if (this == Tokens.TRUE || this == Tokens.FALSE || this == Tokens.NIL)
-			return getJavaValue();
-		else if (this instanceof StringToken)
-			return StringToken.unescape(value);
-		else if (this instanceof NumberToken) {
-			// System.out.println(value.indexOf('.') != -1);
-			// 奇葩问题
-			// System.out.println(false ? Double.parseDouble(value) :
-			// Integer.parseInt(value));
-			if (value.indexOf('.') != -1) {
-				return Double.parseDouble(value);
-			} else {
-				return Integer.parseInt(value);
-			}
-			// return value.indexOf('.') != -1 ? Double.parseDouble(value) :
-			// Integer.parseInt(value);
-		} else
-			throw new JsonParseException("获取 Java 值失败！");
-	}
+//	/**
+//	 * 根据 value（从 JSON 得来的） 转换为 Java 可读取的值
+//	 * 
+//	 * @return Java 中的类型
+//	 */
+//	public Object toJavaValue() {
+//		if (this == Tokens.TRUE || this == Tokens.FALSE || this == Tokens.NIL)
+//			return getJavaValue();
+//		else if (this instanceof StringToken)
+//			return StringToken.unescape(value);
+//		else if (this instanceof NumberToken) {
+//			// System.out.println(value.indexOf('.') != -1);
+//			// 奇葩问题
+//			// System.out.println(false ? Double.parseDouble(value) :
+//			// Integer.parseInt(value));
+//			if (value.indexOf('.') != -1) {
+//				return Double.parseDouble(value);
+//			} else {
+//				return Integer.parseInt(value);
+//			}
+//			// return value.indexOf('.') != -1 ? Double.parseDouble(value) :
+//			// Integer.parseInt(value);
+//		} else
+//			throw new JsonParseException("获取 Java 值失败！");
+//	}
 
 	private static String strTpl = "[ %s | %s : %s]";
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.jsonparser;
+package com.ajaxjs.util.map;
 
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -29,7 +29,6 @@ import java.util.function.Function;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.js.jsonparser.syntax.FMS;
 import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.util.map.MapTool;
 
 /**
  * 序列化/反序列化 JSON
