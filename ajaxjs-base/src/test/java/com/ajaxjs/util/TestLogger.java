@@ -1,15 +1,20 @@
-package com.ajaxjs.util.logger;
+package com.ajaxjs.util;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+
 import org.junit.Test;
 
+import com.ajaxjs.util.logger.FileHandler;
 import com.ajaxjs.util.logger.LogHelper;
 
-public class TestLogHelper {
+public class TestLogger {
 	@Test
 	public void testLog() {
-		LogHelper log = new LogHelper(TestLogHelper.class);
+		LogHelper log = new LogHelper(TestLogger.class);
 		assertNotNull(log);
 
 		log.info("bar");
@@ -18,7 +23,7 @@ public class TestLogHelper {
 		log.warning(new Exception("致命错误！"), "脚本引擎 {0} 没有 {1}() 这个方法", "js", "foo");
 	}
 
-	private static final LogHelper log = LogHelper.getLog(TestLogHelper.class);
+	private static final LogHelper log = LogHelper.getLog(TestLogger.class);
 
 	@Test
 	public void testGetLog() {
@@ -29,7 +34,7 @@ public class TestLogHelper {
 
 	@Test
 	public void testCatchEx() {
-		LogHelper log = LogHelper.getLog(TestLogHelper.class);
+		LogHelper log = LogHelper.getLog(TestLogger.class);
 
 		try {
 			throw new Throwable("h");
@@ -45,5 +50,16 @@ public class TestLogHelper {
 	public static void getCurrentCodeLine() {
 		StackTraceElement s = Thread.currentThread().getStackTrace()[1];
 		System.out.printf("%s.%s(%s:%s)%n", s.getClassName(), s.getMethodName(), s.getFileName(), s.getLineNumber());
+	}
+	
+	@Test
+	public void testFileHandler () throws SecurityException, IOException {
+		FileHandler handler = new FileHandler("c:/temp", "hhh", ".log");
+		assertNotNull(handler);
+		LogRecord record = new LogRecord(Level.WARNING, "test");
+		handler.flush();
+		record.setMessage("fooiiiiiiiiiiiiiiiiiiii");
+		handler.publish(record);
+		handler.close();
 	}
 }

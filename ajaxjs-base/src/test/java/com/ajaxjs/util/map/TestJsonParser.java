@@ -1,18 +1,20 @@
-package com.ajaxjs.js.jsonparser;
+package com.ajaxjs.util.map;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
 
-import com.ajaxjs.js.jsonparser.JSONParser;
 import com.ajaxjs.js.jsonparser.JsonParseException;
 import com.ajaxjs.js.jsonparser.lexer.Lexer;
 import com.ajaxjs.js.jsonparser.lexer.Token;
 import com.ajaxjs.js.jsonparser.lexer.Tokens;
-import com.ajaxjs.util.map.JsonHelper;
+
+
 
 public class TestJsonParser {
 	String str = "{foo:[],\n\ta:[1,-23333,-0.3,0.17,5.2,\"\\u82B1\\u6979~\"],\n\tb:[\"a\tbc\",\"12  3\",\"4,5\\\"6\",{\n\t\t\t\t\tx:1,\n\t\t\t\t\ty:\"cc\\ncc\"\n\t\t\t\t},4.56],\n\t\"text\":\"I'm OK~\",\n\t\"1-2\":234,\n\tmybool:false,\n\tmynull:null,\n\tmyreal:true\n}\n";
@@ -46,7 +48,7 @@ public class TestJsonParser {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testJson2Map() {
-		Object obj = JSONParser.json2Map2("{x1:true, x2:2000, x3:\"1:hello world\",a:{b:{c:{d:{e:[1,\"j\",3,4,5,6]}}}}}");
+		Object obj = JsonHelper.json2Map("{x1:true, x2:2000, x3:\"1:hello world\",a:{b:{c:{d:{e:[1,\"j\",3,4,5,6]}}}}}");
 		assertTrue(obj instanceof Map);
 		Map<String, Object> map = (Map<String, Object>) obj;
 		assertTrue(map.get("a") instanceof Map);
