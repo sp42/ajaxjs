@@ -74,18 +74,18 @@ public class ScanClass<T> extends AbstractScanner<Class<T>> {
 	 * @return 结果
 	 */
 	public static Set<Class<Object>> scanClass(String... packageJavaNames) {
-		Set<Class<Object>> classes = null;
+		Set<Class<Object>> clzes = null;
 		ScanClass<Object> scanner = new ScanClass<>();
 
 		for (String packageJavaName : packageJavaNames) {
-			if (classes == null) {
-				classes = scanner.scan(packageJavaName);
+			if (clzes == null) {
+				clzes = scanner.scan(packageJavaName);
 			} else {
-				classes.addAll(classes);
+				clzes.addAll(clzes);
 			}
 		}
 
-		return classes;
+		return clzes;
 	}
 
 	/**
@@ -96,10 +96,10 @@ public class ScanClass<T> extends AbstractScanner<Class<T>> {
 	 * @return 类名
 	 */
 	public static String getClassName(File file, String packageJavaName) {
-		String className = file.getName().substring(0, file.getName().length() - 6);
-		className = packageJavaName + '.' + className;
+		String clzName = file.getName().substring(0, file.getName().length() - 6);
+		clzName = packageJavaName + '.' + clzName;
 
-		return className;
+		return clzName;
 	}
 
 }
