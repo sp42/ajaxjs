@@ -99,8 +99,8 @@ public class MappingValue {
 	/**
 	 * 根据送入的类型作适当转换
 	 * 
-	 * @param value 送入的值
-	 * @param t 期待的类型
+	 * @param value	送入的值
+	 * @param t 	期待的类型
 	 * @return 已经转换类型的值
 	 */
 	@SuppressWarnings("unchecked")

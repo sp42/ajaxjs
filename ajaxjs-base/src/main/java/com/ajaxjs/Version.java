@@ -1,17 +1,12 @@
 /**
- * Copyright 2015 Sp42 frank@ajaxjs.com
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2015 Sp42 frank@ajaxjs.com Licensed under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+ * or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
  */
 package com.ajaxjs;
 
@@ -46,14 +41,15 @@ public class Version {
 	 * 是否视窗操作系统
 	 */
 	public static final boolean isWindows = System.getProperty("os.name").toLowerCase().contains("window");
-	
+
 	/**
 	 * 是否 Linux 操作系统
 	 */
 	public static final boolean isLinux = System.getProperty("os.name").toLowerCase().contains("linux");
 
 	static {
-		// System.setProperty("user.timezone", "GMT +08");// 微软云设置时区
+		System.setProperty("user.timezone", "GMT +08");// 设置中国时区
+
 		if (System.getProperty("java.vm.vendor").indexOf("Oracle") == -1
 				|| System.getProperty("java.vm.vendor").contains("openJDK")) {
 			LOGGER.warning("本框架不支持 OpenJDK!如果你是 Linux 系统，请把自带的 OpenJDK 卸载，改用 Oracle JVM");
@@ -80,7 +76,7 @@ public class Version {
 	/**
 	 * 检测是否 tomcat 以及版本
 	 * 
-	 * @param serverInfo 字符串如 Tomcat/7
+	 * @param serverInfo 字符串如 Tomcat/8
 	 */
 	public static void tomcatVersionDetect(String serverInfo) {
 		String result = CommonUtil.regMatch("(?<=Tomcat/)(\\d)", serverInfo);
