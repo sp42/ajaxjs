@@ -1,4 +1,4 @@
-package com.ajaxjs.js;
+package com.ajaxjs.jsonparser;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

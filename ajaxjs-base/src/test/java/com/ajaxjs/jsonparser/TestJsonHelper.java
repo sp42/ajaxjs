@@ -1,4 +1,4 @@
-package com.ajaxjs.js;
+package com.ajaxjs.jsonparser;
 
 import static com.ajaxjs.util.map.JsonHelper.format;
 import static com.ajaxjs.util.map.JsonHelper.parseMap;
