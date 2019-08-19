@@ -42,10 +42,10 @@ public class CaptchaController extends HttpServlet {
 	 */
 	public static void init(HttpServletResponse response, HttpSession session) {
 		Captcha captcha = new Captcha();
-		captcha.setWidth(60).setHeight(20);
-		captcha.get();
+		captcha.setWidth(60);
+		captcha.setHeight(20);
 
-		new MvcOutput(response).noCache().setContent_Type("image/jpeg").go(captcha.getbImg());
+		new MvcOutput(response).noCache().setContent_Type("image/jpeg").go(captcha.get());
 
 		session.setAttribute(SESSION_KEY, captcha.getCode());
 	}

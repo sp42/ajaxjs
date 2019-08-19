@@ -29,9 +29,9 @@ import javax.ws.rs.QueryParam;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.util.MapTool;
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.map.MapTool;
 
 /**
  * 处理请求参数

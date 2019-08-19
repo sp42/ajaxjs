@@ -19,6 +19,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.util.Random;
 
 /**
@@ -26,6 +27,9 @@ import java.util.Random;
  * 
  */
 public class Captcha {
+	private int width;
+	
+	private int height;
 	/**
 	 * 验证码
 	 */
@@ -36,7 +40,7 @@ public class Captcha {
 	 * 
 	 * @return 图片对象
 	 */
-	public Captcha get() {
+	public RenderedImage get() {
 		BufferedImage image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);// 在内存中创建图像
 		Graphics g = image.getGraphics(); // 获取图形上下文
 		g.setColor(getRandColor(200, 250)); // 设定背景
@@ -61,10 +65,9 @@ public class Captcha {
 
 		g.dispose();// 图象生效
 
-		setbImg(image);
 		setCode(sRand);
 
-		return this;
+		return image;
 	}
 
 	/**
@@ -104,6 +107,22 @@ public class Captcha {
 	 */
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
 	}
 
 }

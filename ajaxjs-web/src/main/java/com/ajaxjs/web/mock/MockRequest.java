@@ -24,9 +24,9 @@ import javax.servlet.http.HttpSession;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.mvc.controller.MvcDispatcher;
-import com.ajaxjs.util.MapTool;
+import com.ajaxjs.util.map.JsonHelper;
+import com.ajaxjs.util.map.MapTool;
 
 /**
  * 为方便单元测试，模拟请求对象

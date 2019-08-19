@@ -26,7 +26,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.util.MapTool;
+import com.ajaxjs.util.map.MapTool;
 
 /**
  * 分页标签

@@ -31,9 +31,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
-import com.ajaxjs.util.MapTool;
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.io.IoHelper;
+import com.ajaxjs.util.map.MapTool;
 
 /**
  * 通过 HttpServletRequestWrapper （装饰模式的应用）增强 HttpServletRequest的功能。

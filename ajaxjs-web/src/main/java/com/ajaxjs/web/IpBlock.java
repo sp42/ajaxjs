@@ -5,10 +5,10 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.net.http.NetUtil;
 import com.ajaxjs.util.LRUCache;
+import com.ajaxjs.util.map.JsonHelper;
 
 public class IpBlock {
 	static LRUCache<String, Boolean> cache = new LRUCache<>(20);

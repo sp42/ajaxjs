@@ -15,7 +15,7 @@
  */
 package com.ajaxjs.mvc;
 
-import com.ajaxjs.js.JsonHelper;
+import com.ajaxjs.util.map.JsonHelper;
 
 /**
  * 

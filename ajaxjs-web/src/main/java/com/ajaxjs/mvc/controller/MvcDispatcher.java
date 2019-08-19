@@ -41,9 +41,9 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.FilterAction;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.util.MapTool;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.map.MapTool;
 import com.ajaxjs.web.ServletHelper;
 
 /**
