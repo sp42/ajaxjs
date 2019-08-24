@@ -72,7 +72,7 @@ public class HttpBasicRequest extends IoHelper {
 			.setConnectTimeout(timeout * 1000);
 
 	/**
-	 * 客户端识别
+	 * 设置客户端识别
 	 */
 	public final static BiConsumer<HttpURLConnection, String> setUserAgent = (conn, url) -> conn
 			.addRequestProperty("User-Agent", url);
@@ -128,8 +128,7 @@ public class HttpBasicRequest extends IoHelper {
 
 			int responseCode = conn.getResponseCode();
 			if (responseCode >= 400) {// 如果返回的结果是400以上，那么就说明出问题了
-				RuntimeException e = new RuntimeException(
-						responseCode < 500 ? responseCode + "：客户端请求参数错误！" : responseCode + "：抱歉！我们服务端出错了！");
+				RuntimeException e = new RuntimeException(responseCode < 500 ? responseCode + "：客户端请求参数错误！" : responseCode + "：抱歉！我们服务端出错了！");
 				LOGGER.warning(e);
 			}
 
@@ -240,8 +239,7 @@ public class HttpBasicRequest extends IoHelper {
 	 * @param fn 对 Conn 进行配置
 	 * @return 请求之后的响应的内容
 	 */
-	public static String post(String url, byte[] b, Consumer<HttpURLConnection> fn,
-			Function<InputStream, String> responseHandler) {
+	public static String post(String url, byte[] b, Consumer<HttpURLConnection> fn, Function<InputStream, String> responseHandler) {
 		HttpURLConnection conn = initHttpConnection(url);
 		setMedthod.accept(conn, "POST");
 		conn.setDoOutput(true); // for conn.getOutputStream().write(someBytes);
