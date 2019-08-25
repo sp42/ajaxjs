@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title> 正弦曲线 </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+    #content {
+        width: 600px;
+        height: 200px;
+        border: 1px solid #213478;
+        position: relative;
+        left: 0px;
+        top: 0px;
+    }
+
+    #graph {
+        position: absolute;
+        left: 0;
+        top: 0
+    }
+    </style>
+</head>
+
+<body>
+    <div id="content">
+        <div id="graph"></div>
+    </div>
+    <script>
+        function T$(i) { return document.getElementById(i); }
+        var xlen = T$('content').clientWidth;
+        x_posy = T$('content').clientHeight / 2, angle = 0;
+
+        function DrawSine(amp) {
+            this.amp = amp;
+            this.drawXaxis();
+            this.drawYaxis();
+        }
+
+        DrawSine.prototype = {
+            drawXaxis() {
+                for (var i = 0, arr = []; i < xlen; ++i) 
+                    arr[i] = this.createDot(1, 1, i, x_posy, '#213478');
+                
+                T$('graph').innerHTML += arr.join('');
+            },
+
+            drawYaxis() {
+                var amp = this.amp;
+                for (var i = 0, arr = []; i < xlen; ++i) 
+                    arr[i] = this.createDot(2, 2, i += amp, x_posy + Math.sin(angle += .1) * x_posy, '#FF9933');
+                
+                T$('graph').innerHTML += arr.join('');
+            },
+
+            createDot(w, h, x, y, c) {
+                return '<div style="width:' + w + 'px;height:' + h + 'px;font-size:0;background-color:' + c + ';position:absolute;left:' + x + 'px;top:' + y + 'px;"><\/div>';
+            }
+        }
+
+
+    new DrawSine(2 /* 波长 */ );
+    </script>
+</body>
+
+</html>

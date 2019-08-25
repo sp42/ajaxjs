@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title> Fountain </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+    #stage {
+        width: 200px;
+        height: 400px;
+        border: 1px solid #993300;
+        position: relative;
+        margin: auto;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="stage">
+        <div id="fountain"></div>
+        <input type="button" value="Run" id="run" />
+        <input type="button" value="Stop" id="stop" />
+    </div>
+    <script>
+    /**
+     * 小球类 Ball
+     * @param {number} diameter 直径
+     */
+    var Ball = function(diameter, x, y, vx, vy) {
+        var ball = document.createElement('div');
+        var r = Math.floor(Math.random() * 255);
+        var g = Math.floor(Math.random() * 255);
+        var b = Math.floor(Math.random() * 255);
+
+        ball.style.width = ball.style.height = diameter + 'px';
+        ball.style.backgroundColor = 'rgb(' + r + ', ' + g + ', ' + b + ')';
+        ball.style.left = x + 'px';
+        ball.style.top = y + 'px';
+        ball.vx = vx;
+        ball.vy = vy;
+        
+        ball.style.position = 'absolute';
+
+        return ball;
+    };
+
+    function T$(id) { return document.getElementById(id) }
+
+    /**
+     * 喷泉主类 Fountain
+     * @param {string} 舞台ID
+     * @param {number} 水滴数目
+     * @param {number} 重力加速度
+     */
+    var Fountain = function(stage, count, gravity) {
+        this.stage = T$(stage);
+        this.count = count;
+        this.gravity = gravity;
+        this.timer = null;
+    };
+
+    Fountain.prototype = {
+        initialize: function() {
+            // 生成一定数目的随机颜色小球
+            var self = this,
+                count = this.count, j = 0,
+                frag = document.createDocumentFragment(),
+                stage = this.stage,  gravity = this.gravity;
+
+            // 设置小球参数(直径, 半径,  舞台位置)
+            var diameter = 4,
+                radius = diameter / 2,
+                x = stage.clientWidth / 2,
+                y = stage.clientHeight;
+
+            var balls = [];
+
+            for (; j < count; j++) {
+                var ball = new Ball(diameter, x, y, Math.random() * 4 - 1, Math.random() * -10 - 10);
+                balls[j] = ball;
+                frag.appendChild(ball);
+            }
+
+            T$('fountain').innerHTML = '';
+            T$('fountain').appendChild(frag);
+            clearTimeout(this.timer);
+
+            function Run() {
+                for (var i = 0, len = balls.length; i < len; i++) {
+                    var ball = balls[i];
+                    ball.vy += gravity;
+                    ball.style.left = (ball.offsetLeft + ball.vx) + 'px';
+                    ball.style.top = (ball.offsetTop + ball.vy) + 'px';
+                    // 边界检测
+                    if (ball.offsetLeft - radius > x || ball.offsetLeft + radius < 0 ||
+                        ball.offsetTop - radius > y || ball.offsetTop + radius < 0) {
+                        ball.style.left = x + 'px';
+                        ball.style.top = y + 'px';
+                        ball.vx = Math.random() * 4 - 1;
+                        ball.vy = Math.random() * -10 - 10;
+                    }
+                }
+                self.timer = setTimeout(Run, 10);
+            }
+
+            Run();
+        }
+    };
+
+    // 在舞台中央生成30个彩色水滴. 重力加速度为.5
+    var fountain = new Fountain('stage', 30, 0.5);
+    T$('run').onclick = () =>{
+        fountain.initialize();
+    }
+
+    T$('stop').onclick = () =>{
+        clearTimeout(fountain.timer);
+    }
+
+    fountain.initialize();
+
+    </script>
+</body>
+
+</html>

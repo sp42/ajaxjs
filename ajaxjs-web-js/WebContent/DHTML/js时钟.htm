@@ -1,0 +1,110 @@
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>js时钟</title>
+	<style type="text/css">
+		#clock {
+			height: 300px;
+			width: 300px;
+			border: 1px solid #ccc;
+			position: relative;
+		}
+
+		.point {
+			line-height: 1px;
+			background-color: #000;
+			font-size: 1px;
+			position: absolute;
+			height: 3px;
+			width: 3px;
+		}
+
+		.hourone {
+			height: 8px;
+			width: 8px;
+		}
+
+		.minuteone {
+			height: 6px;
+			width: 6px;
+			background-color: #888;
+		}
+
+		.secondone {
+			background-color: #f00;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="clock"></div>
+
+	<script>
+		var fn_sin = (angle, raduis) => Math.round(Math.sin(angle * Math.PI / 180) * raduis);
+		var fn_cos = (angle, raduis) => Math.round(Math.cos(angle * Math.PI / 180) * raduis);
+		var calhour = (h, m) => ((h * 60 + m) / (12 * 60)) * 360 - 90;
+		var calaa = (m) => (m / 60) * 360 - 90;
+
+
+		function Clock(box) {
+			var bh = box.clientHeight, bw = box.clientWidth, centerX = bw / 2, centerY = bh / 2;
+			this.raduis =  (centerY >= centerX ? centerY : centerX) - 10;
+			this.centerX = centerX, this.centerY = centerY;
+			this.box = box;
+
+			this.createPoint();
+
+			var hour = this.createEl(30, 'hourone'),
+				minute = this.createEl(30, 'minuteone'),
+				second = this.createEl(40, 'secondone');
+
+			var update = (function () {
+				var d = new Date();
+				var h = Math.abs(d.getHours()), m = d.getUTCMinutes(), s = d.getSeconds();
+
+				this.set(hour, calhour(h, m), 0.5);
+				this.set(minute, calaa(m), 0.6);
+				this.set(second, calaa(s), 0.8);
+			}).bind(this);
+
+			update();
+			this.timer = setInterval(update, 1000);
+		}
+
+		Clock.prototype = {
+			createPoint() {
+				var _el = document.createElement('span');
+				_el.className = "point";
+
+				for (var angle = 0; angle < 360; angle += 30) {
+					var el = _el.cloneNode(true);
+					el.style.left = this.centerX + fn_cos(angle, this.raduis) + 'px';
+					el.style.top  = this.centerY + fn_sin(angle, this.raduis) + 'px';
+					this.box.appendChild(el);
+				}
+			},
+			createEl(amount, clsName) {
+				var arr = [], _el = document.createElement('span');
+				_el.className = "point " + clsName;
+
+				for (var i = 0; i < amount; i++) {
+					var el = _el.cloneNode(true);
+					this.box.appendChild(el);
+					arr.push(el);
+				}
+
+				return arr;
+			},
+			set(arr, angle, offset) {
+				for (var i = 0, len = arr.length; i < len; i++) {
+					var raduis = i / len * this.raduis * offset;
+					arr[i].style.left = this.centerX + fn_cos(angle, raduis) + "px";
+					arr[i].style.top  = this.centerY + fn_sin(angle, raduis) + "px";
+				}
+			}
+		};
+
+		new Clock(document.getElementById("clock"));
+	</script>
+</body>
+</html>

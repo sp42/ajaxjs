@@ -1,0 +1,247 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>气泡屏保</title>
+    <style type="text/css">
+    #screen {
+        width: 800px;
+        height: 640px;
+        position: relative;
+        background: url('bg1.jpg');
+    }
+
+    #inner {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+    }
+
+    .ball_one {
+        background-image: url('bubble.png');
+        background-position: -66px -58px;
+    }
+
+    .ball_two {
+        background-image: url('bubble.png');
+        background-position: -66px -126px;
+    }
+
+    .ball_three {
+        background-image: url('bubble.png');
+        background-position: -66px -194px;
+    }
+
+    .ball_four {
+        background-image: url('bubble.png');
+        background-position: -66px -263px;
+    }
+
+    .ball_five {
+        background-image: url('bubble.png');
+        background-position: -66px -331px;
+    }
+
+    .ball_six {
+        background-image: url('bubble.png');
+        background-position: -66px -399px;
+    }
+
+    #start,
+    #stop,
+    #change {
+        width: 100px;
+        height: 28px;
+    }
+    </style>
+</head>
+
+<body>
+    <center>
+        <div id="screen">
+            <div id="inner"></div>
+        </div>
+        <input type="button" value="重新演示" id="start" />
+        <input type="button" value="停止检测" id="stop" />
+        <input type="button" value="更换背景" id="change" />
+    </center>
+    <script>
+    var T$ = function(id) { return document.getElementById(id); }
+    var $extend = function(des, src) { for (var p in src) { des[p] = src[p] } return des; }
+
+    var Bubble = function() {
+        // 小球随机样式
+        var clss = ['ball_one', 'ball_two', 'ball_three', 'ball_four', 'ball_five', 'ball_six'];
+
+        var Ball = function(radius, clsname) {
+            var ball = document.createElement('div');
+            ball.className = clsname;
+
+            with(ball.style) {
+                width = height = (radius || 10) + 'px';
+                position = 'absolute';
+            }
+
+            return ball;
+        };
+
+        // 屏保主类
+        var Screen = function(cid, config) {
+            if (!(this instanceof Screen))
+                return new Screen(cid, config);
+
+            this.container = T$(cid);
+            if (!this.container) return;
+
+            config = $extend(Screen.Config, config || {});
+            // 配置属性
+            this.ballsnum = config.ballsnum;
+            this.diameter = 55;
+            this.radius = this.diameter / 2;
+            this.bounce = config.bounce;
+            this.spring = config.spring;
+            this.gravity = config.gravity;
+            this.balls = [];
+            this.timer = null;
+            // 上下左右边界
+            this.T_bound = 0;
+            this.B_bound = this.container.clientHeight;
+            this.L_bound = 0;
+            this.R_bound = this.container.clientWidth;
+        };
+
+        // 静态属性
+        Screen.Config = {
+            ballsnum: 5, // 小球数目
+            spring: 0.8, // 弹力加速度
+            bounce: -0.95, // 反弹
+            gravity: 0.1 // 重力
+        };
+
+        Screen.prototype = {
+            initialize() {
+                // 生成小球
+                this.createBalls();
+
+                // 侦听碰撞
+                this.timer = setInterval(() => {
+                    this.hitTest();
+                }, 32);
+            },
+            createBalls() {
+                var num = this.ballsnum, i = 0;
+                var frag = document.createDocumentFragment();
+
+                for (; i < num; i++) {
+                    var ball = new Ball(this.diameter, clss[Math.floor(Math.random() * (clss.length - 1))]);
+                    ball.radius = this.radius;
+                    ball.diameter = this.diameter;
+                    ball.style.left = (Math.random() * this.B_bound) + 'px';
+                    ball.style.top = (Math.random() * this.R_bound) + 'px';
+                    ball.vx = Math.random() * 6 - 3;
+                    ball.vy = Math.random() * 6 - 3;
+
+                    frag.appendChild(ball);
+                    this.balls[i] = ball;
+                }
+
+                this.container.appendChild(frag);
+            },
+            // 碰撞检测
+            hitTest() {
+                var num = this.ballsnum,
+                    balls = this.balls,
+                    diameter = this.diameter,
+                    spring = this.spring;
+
+                for (var i = 0; i < num - 1; i++) {
+                    var ball0 = balls[i];
+                    ball0.x = ball0.offsetLeft;
+                    ball0.y = ball0.offsetTop;
+
+                    for (var j = i + 1; j < num; j++) {
+                        var ball1 = balls[j];
+                        ball1.x = ball1.offsetLeft;
+                        ball1.y = ball1.offsetTop;
+                        var dx = ball1.x - ball0.x;
+                        var dy = ball1.y - ball0.y;
+                        var dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < diameter) {
+                            var ax = ((ball0.x + dx / dist * diameter) - ball1.x) * spring;
+                            var ay = ((ball0.y + dy / dist * diameter) - ball1.y) * spring;
+                            ball0.vx -= ax;
+                            ball0.vy -= ay;
+                            ball1.vx += ax;
+                            ball1.vy += ay;
+                        }
+                    }
+                }
+
+                for (var i = 0; i < num; i++)
+                    this.move(balls[i]);
+            },
+            // 气泡运动
+            move(ball) {
+                var T = this.T_bound,
+                    B = this.B_bound,
+                    L = this.L_bound,
+                    R = this.R_bound,
+                    BC = this.bounce,
+                    BX = ball.offsetLeft,
+                    BT = ball.offsetTop;
+
+                ball.vy += this.gravity;
+                ball.style.left = (BX + ball.vx) + 'px';
+                ball.style.top = (BT + ball.vy) + 'px';
+
+                // 边界检测
+                if (BX + ball.diameter > R) {
+                    ball.style.left = R - ball.diameter + 'px';
+                    ball.vx *= BC;
+                } else if (BX < L) {
+                    ball.style.left = L + 'px';
+                    ball.vx *= BC;
+                }
+                if (BT + ball.diameter > B) {
+                    ball.style.top = B - ball.diameter + 'px';
+                    ball.vy *= BC;
+                } else if (BT < T) {
+                    ball.style.top = T + 'px';
+                    ball.vy *= BC;
+                }
+            }
+        };
+        return { Screen: Screen }
+    }();
+
+
+    (function() {
+        var sc = Bubble.Screen('inner', { ballsnum: 10, spring: 0.8, bounce: -0.95, gravity: 0.1 });
+        sc.initialize();
+
+        T$('start').onclick = () => {
+            clearInterval(sc.timer);
+            document.getElementById('inner').innerHTML = '';
+            sc.initialize();
+        };
+
+        T$('stop').onclick = () => { clearInterval(sc.timer); }
+        var bound = false;
+
+        T$('change').onclick = () => {
+            if (!bound) {
+                T$('screen').style.backgroundImage = 'url("bg2.jpg")';
+                bound = true;
+            } else {
+                T$('screen').style.backgroundImage = 'url("bg1.jpg")';
+                bound = false;
+            }
+        }
+    })();
+    </script>
+</body>
+
+</html>
