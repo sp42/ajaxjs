@@ -6,12 +6,12 @@
 [![Email](https://img.shields.io/badge/Contact--me-Email-orange.svg)](mailto:support@ajaxjs.com)
 [![QQ群](https://framework.ajaxjs.com/framework/asset/qq.svg)](https://shang.qq.com/wpa/qunwpa?idkey=3877893a4ed3a5f0be01e809e7ac120e346102bd550deb6692239bb42de38e22)
 
-“上善若水”虽语出自道家经典，但代表本框架的佛系性格——窃以为亦无妨。因为我个人制作的这个框架，有是有参考现今不少的框架及其思想，但太新的那些特性就跟不上了。传统的 IOC/AOP/ORM/MVC/REST/DAO/Service/Controller 都有，自认觉得够用、用起来顺手已经不错了。性能和选型没特别考量——只希望没有太明显的短板和少点 bug。另外如果要说什么卖点的话，全栈框架算一个，前端后端都是我包办的，——本框架早期是前端的，故名曰 ajax-js，后来才自学 Java。
+“上善若水”虽语出自道家经典，但代表本框架的佛系性格——个人窃以为将其理念引用到本框架亦无妨。因制作此框架是有参考现今不少的框架及其思想，但太新的那些特性就跟不上了。传统的 IOC/AOP/ORM/MVC/REST/DAO/Service/Controller 都有，自认觉得够用、用起来顺手已经不错了。性能和选型没特别考量——只希望没有太明显的短板和少点 bug。另外如果要说什么卖点的话，全栈框架算一个，前端后端都是我包办的，——本框架早期是前端的，故名曰 ajax-js，后来才自学 Java。
 
 - 前端：[Vue.js](https://cn.vuejs.org/)（MVVM+组件化） + [LESS.js](http://lesscss.org/)
-- 后端：Java 1.8 + Tomcat 8 + [Reactor 3](https://projectreactor.io/) + MySQL/SQLite + [Swagger V3](https://swagger.io/) 接口文档服务
+- 后端：Java 1.8 + Tomcat 8  + MySQL/SQLite + [Swagger V3](https://swagger.io/) 接口文档服务
 
-作为佛系框架，也不主张伸手依赖别人。因此呢，AJAXJS 很少第三方的库或包依赖，一方面也避免太复杂。关于“轮子”一说，的确是，不过就是自己都理过一遍代码，不是随便贴人家的，而且务求清晰精炼平易近人，易懂易修改，避免晦涩的地方。文档、注释、单测等齐备。详见官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/) 介绍。 
+作为佛系框架，也不主张伸手依赖别人。因此呢，AJAXJS 很少第三方的库或包依赖，一方面也避免太复杂。关于“轮子”一说，的确是，不过就是自己都理过一遍代码，不是随便粘贴人家的，而且务求清晰精炼平易近人，易懂易修改，避免晦涩的地方。文档、注释、单测等齐备。详见官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/) 介绍。 
 
 
 
@@ -37,6 +37,7 @@
 |ajaxjs-user|会员系统，[浏览项目 readme](ajaxjs-user)|ajaxjs-framework|jar|
 |ajaxjs-cms|整个各个子项目的网站发布系统，[浏览项目 readme](ajaxjs-cms)|ajaxjs-user|jar|
 |ajaxjs-demo|一个包含前后台的网站，可方便学习或作为快速手脚架，[浏览项目 readme](ajaxjs-demo)|ajaxjs-cms|war|
+|ajaxjs-book|案例|N/A|N/A|
 |ajaxjs-tools|孵化室、测试代码、其他杂项工具|ajaxjs-web|war|
 
 
