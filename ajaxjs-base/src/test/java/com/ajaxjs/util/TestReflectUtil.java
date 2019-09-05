@@ -117,25 +117,24 @@ public class TestReflectUtil {
 	public class Foo3 {
 		public void m1() {
 		}
-
+	
 		public String m1(String arg) {
 			return arg;
 		}
 	}
-
+	
 	class Bar3 extends Foo3 {
 		public void m2() {
 		}
 	}
-
+	
 	@Test
 	public void testExecuteMethod() {
 		assertEquals(executeMethod(new Foo3(), "m1"), null);
-		assertEquals(executeMethod(new Foo3(), "m1", "fdf"), "fdf");
+		assertEquals(executeMethod(new Foo3(), "m1", "foo"), "foo");
 		assertEquals(executeMethod(new Bar2(), "m1"), null);
-		assertEquals(executeMethod(new Bar3(), "m1", "fdf"), "fdf");
-		assertEquals(executeMethod(new Bar3(), "m1", String.class, "fdf"), "fdf");
-		// assertNotNull(executeMethod(foo, "Bar2"));
-		// assertNotNull(executeMethod(foo, "Bar3", "fdf"));
+		assertEquals(executeMethod(new Bar3(), "m1", "bar"), "bar");
+		assertEquals(executeMethod(new Bar3(), "m1", String.class, "foo"), "foo");
+	
 	}
 }

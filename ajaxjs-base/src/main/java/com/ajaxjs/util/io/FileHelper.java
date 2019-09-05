@@ -333,11 +333,9 @@ public class FileHelper extends IoHelper {
 		else {
 			try {
 				// 此方法不适合读取很大的文件，因为可能存在内存空间不足的问题。
-				// StringBuilder sb = new StringBuilder();
-				// Files.lines(path, encode).forEach(str -> sb.append(str));
-				// return sb.toString();
-
-				return new String(Files.readAllBytes(path), encode);
+				 StringBuilder sb = new StringBuilder();
+				 Files.lines(path, encode).forEach(str -> sb.append(str));
+				 return sb.toString();
 			} catch (IOException e) {
 				LOGGER.warning(e);
 			}

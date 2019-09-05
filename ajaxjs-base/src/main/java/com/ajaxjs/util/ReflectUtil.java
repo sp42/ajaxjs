@@ -47,7 +47,8 @@ public class ReflectUtil {
 			}
 		}
 
-		Constructor<T> constructor = getConstructor(clz, ReflectUtil.args2class(args)); // 获取构造器
+		// 获取构造器
+		Constructor<T> constructor = getConstructor(clz, args2class(args)); 
 		return newInstance(constructor, args);
 	}
 
@@ -144,9 +145,10 @@ public class ReflectUtil {
 	}
 
 	/**
+	 * 根据类名字符串获取类对象，可强类型转换类型
 	 * 
 	 * @param className 类全称
-	 * @param clz
+	 * @param clz		要转换的目标类型
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -237,7 +239,7 @@ public class ReflectUtil {
 	 */
 	public static Method getMethod(Object obj, String method, Object... args) {
 		if (!CommonUtil.isNull(args)) {
-			return getMethod(obj, method, ReflectUtil.args2class(args));
+			return getMethod(obj, method, args2class(args));
 		} else
 			return getMethod(obj, method);
 	}
@@ -284,7 +286,7 @@ public class ReflectUtil {
 						// (Class<?>)intf);
 						// methodObj = cls.getMethod(methodName,
 						// ReflectNewInstance.getClassByInterface(intf));
-						methodObj = getSuperClassDeclaredMethod(clz, method, ReflectUtil.getClassByInterface(intf));
+						methodObj = getSuperClassDeclaredMethod(clz, method, getClassByInterface(intf));
 
 						if (methodObj != null)
 							return methodObj;
@@ -420,7 +422,7 @@ public class ReflectUtil {
 	 */
 	public static Object executeMethod(Object instnace, String method, Object... args) {
 		// 没有方法对象，先找到方法对象。可以支持方法重载，按照参数列表
-		Class<?>[] clazzes = ReflectUtil.args2class(args);
+		Class<?>[] clazzes = args2class(args);
 		Method methodObj = getMethod(instnace.getClass(), method, clazzes);
 
 		return methodObj != null ? executeMethod(instnace, methodObj, args) : null;
@@ -503,9 +505,9 @@ public class ReflectUtil {
 	}
 
 	/**
-	 * Bean setXXX
+	 * 调用 bean 对象的 setter 方法
 	 * 
-	 * @param bean	JAVA Bean 对象，也可以是
+	 * @param bean	Bean 对象
 	 * @param name	属性名称
 	 * @param value 要设置的属性值
 	 */

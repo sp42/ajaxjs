@@ -14,8 +14,7 @@ public class TestListMap {
 	static ListMapConfig config = new ListMapConfig();
 
 	static {
-		config.mapEntryHandler = (String key, Object obj, Map<String, Object> map, Map<String, Object> superMap,
-				int level) -> {
+		config.mapEntryHandler = (String key, Object obj, Map<String, Object> map, Map<String, Object> superMap, int level) -> {
 			System.out.println(key + ":" + obj);
 			return true;
 		};

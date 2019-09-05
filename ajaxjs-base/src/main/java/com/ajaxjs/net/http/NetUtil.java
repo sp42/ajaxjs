@@ -225,7 +225,6 @@ public class NetUtil extends HttpBasicRequest {
 				bytes = IoHelper.concat(bytes, _bytes);
 		}
 
-		System.out.println(new String(bytes));
 		return IoHelper.concat(bytes, endData);
 	}
 

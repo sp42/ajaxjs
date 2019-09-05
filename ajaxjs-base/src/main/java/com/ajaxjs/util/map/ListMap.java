@@ -52,8 +52,7 @@ public class ListMap {
 	 * @param config	关于回调函数的配置
 	 */
 	@SuppressWarnings("unchecked")
-	public static void traveler(Map<String, Object> map, Context fristCtx, Map<String, Object> superMap, int level,
-			ListMapConfig config) {
+	public static void traveler(Map<String, Object> map, Context fristCtx, Map<String, Object> superMap, int level, ListMapConfig config) {
 		if (config != null && config.mapHandler != null && !config.mapHandler.execute(map, superMap, level))
 			return;
 
@@ -103,8 +102,7 @@ public class ListMap {
 	 * @param level		深度
 	 * @param config	关于回调函数的配置
 	 */
-	public static void traveler(List<Map<String, Object>> list, Context fristCtx, Map<String, Object> superMap,
-			int level, ListMapConfig config) {
+	public static void traveler(List<Map<String, Object>> list, Context fristCtx, Map<String, Object> superMap, int level, ListMapConfig config) {
 		for (Map<String, Object> map : list) {
 			if (map == null)
 				continue;

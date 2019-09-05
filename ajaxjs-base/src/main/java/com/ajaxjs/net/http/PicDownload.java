@@ -56,14 +56,12 @@ public class PicDownload {
 		String newFileName;
 
 		try {
-//			System.out.println(Thread.currentThread().getName() + " 开始下载");
 			if (newFileNameFn == null) {
 				newFileName = NetUtil.download(url, saveFolder);
 			} else {
 				newFileName = NetUtil.download(url, saveFolder, newFileNameFn.get());
 			}
 
-//			System.out.println(Thread.currentThread().getName() + " 下载完成");
 			String[] _arr = newFileName.split("\\\\");
 			String f = _arr[_arr.length - 1];
 			arr[i] = f;
@@ -90,7 +88,5 @@ public class PicDownload {
 				"http://531.yishu1000.com/201906/004/3.jpg" };
 
 		new PicDownload(testArr, "c:/temp", null).start();
-
-		System.out.println("全部完成" + Arrays.toString(testArr));
 	}
 }

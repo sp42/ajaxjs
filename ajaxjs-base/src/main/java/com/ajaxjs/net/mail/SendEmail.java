@@ -381,7 +381,7 @@ public class SendEmail {
 				// String[] att = {"a.zip","b.zip"};
 				System.out.print(sm.send(subject, message, null));
 			} else {
-				System.out.println("怎么连不上SMTP服务器啊？/r/n");
+				System.err.println("怎么连不上SMTP服务器啊？/r/n");
 
 			}
 		} finally {

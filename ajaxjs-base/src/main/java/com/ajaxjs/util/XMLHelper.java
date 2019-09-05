@@ -82,7 +82,6 @@ public class XMLHelper {
 				Matcher m = p.matcher(path[i]);
 				if (m.find()) {
 					String tagName = m.group(1);
-					System.out.println(input + "----" + tagName);
 					int index = (m.group(3) == null) ? 0 : new Integer(m.group(3)).intValue();
 					ele = getElementsByTag(input, tagName);
 					input = ele[index];
@@ -222,6 +221,5 @@ public class XMLHelper {
 	public static void main(String[] args) {
 		new XMLHelper("<ROOT>sss <PARENT>sss <CHILD>aaaa</CHILD>ss </PARENT>sss </ROOT>")
 				.getElementByMultiPath("ROOT[0]#PARENT#CHILD");
-//		System.out.println(child);
 	}
 }

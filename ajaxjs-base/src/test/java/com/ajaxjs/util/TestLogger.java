@@ -18,7 +18,7 @@ public class TestLogger {
 		assertNotNull(log);
 
 		log.info("bar");
-		log.warning("fooo");
+		log.warning("foo");
 		log.warning("脚本引擎 {0} 没有 {1}() 这个方法", "js", "foo");
 		log.warning(new Exception("致命错误！"), "脚本引擎 {0} 没有 {1}() 这个方法", "js", "foo");
 	}
@@ -28,8 +28,8 @@ public class TestLogger {
 	@Test
 	public void testGetLog() {
 		assertNotNull(log);
-		log.warning("dsada");
-		log.info("dsada");
+		log.warning("You got an error!");
+		log.info("It's ok.");
 	}
 
 	@Test
@@ -37,7 +37,7 @@ public class TestLogger {
 		LogHelper log = LogHelper.getLog(TestLogger.class);
 
 		try {
-			throw new Throwable("h");
+			throw new Throwable("You got an error!");
 		} catch (Throwable e) {
 			assertNotNull(e);
 			log.warning(e);
@@ -51,14 +51,14 @@ public class TestLogger {
 		StackTraceElement s = Thread.currentThread().getStackTrace()[1];
 		System.out.printf("%s.%s(%s:%s)%n", s.getClassName(), s.getMethodName(), s.getFileName(), s.getLineNumber());
 	}
-	
-	@Test
-	public void testFileHandler () throws SecurityException, IOException {
-		FileHandler handler = new FileHandler("c:/temp", "hhh", ".log");
+
+//	 @Test
+	public void testFileHandler() throws SecurityException, IOException {
+		FileHandler handler = new FileHandler("c:/temp", "CMS-", ".log");
 		assertNotNull(handler);
 		LogRecord record = new LogRecord(Level.WARNING, "test");
 		handler.flush();
-		record.setMessage("fooiiiiiiiiiiiiiiiiiiii");
+		record.setMessage("You got a message!");
 		handler.publish(record);
 		handler.close();
 	}

@@ -39,35 +39,36 @@ public class LogHelper {
 		className = clazz.getName().trim();
 		logger = Logger.getLogger(className);
 
-		if (!Version.isDebug) {
-//			if(fileHandler == null) {
-//				fileHandler = new FileHandler(Version.srcFolder, null, ".log");
-//			}
+//		if (!Version.isDebug) {
+//		System.out.println(Version.srcFolder);
+			if(fileHandler == null) {
+				fileHandler = new FileHandler(Version.srcFolder, null, ".log");
+			}
 //		
-//			logger.addHandler(fileHandler);// 初始化保存到磁盤的處理器
-		}
+			logger.addHandler(fileHandler);// 初始化保存到磁盤的處理器
+//		}
 
 		logger.setFilter(filter);
 	}
 	
 	/**
 	 * 简单打印信息，用于代替 System.out.println()
+	 * 
 	 * @param msg
 	 */
 	public static void p(String msg) {
 		Logger.getGlobal().info(msg);
 	}
+	
 	/**
 	 * 简单打印信息，用于代替 System.out.println()
+	 * 
 	 * @param msg
 	 */
 	public static void p(Object[] arr) {
 		Logger.getGlobal().info(Arrays.toString(arr));
 	}
 	
-	
-
-	@SuppressWarnings("unused")
 	private static FileHandler fileHandler;
 
 	private static final int NORMAL = 0;

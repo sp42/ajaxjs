@@ -10,6 +10,8 @@
  */
 package com.ajaxjs;
 
+import java.io.File;
+
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -30,7 +32,8 @@ public class Version {
 	/**
 	 * 源码磁盘目录
 	 */
-	public static final String srcFolder = Version.class.getClassLoader().getResource("").getPath();
+	public static final String srcFolder = new File(Version.class.getClassLoader().getResource("").getPath()).toString();
+//	public static final String srcFolder = AbstractScanner.getResourceFilePath(Version.class, "");
 
 	/**
 	 * 是否苹果操作系统
