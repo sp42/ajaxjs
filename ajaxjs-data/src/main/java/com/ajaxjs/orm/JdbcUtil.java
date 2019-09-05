@@ -74,11 +74,7 @@ public class JdbcUtil {
 			arr[i] = arr[i] + inSql;
 		}
 
-		return String.join(" ", arr).trim();
-
-//		int cols = params.length;
-//		Object[] values = new Object[cols];
-//		System.arraycopy(params, 0, values, 0, cols);
+		return String.join(" ", arr).trim(); 
 	}
 
 	/**

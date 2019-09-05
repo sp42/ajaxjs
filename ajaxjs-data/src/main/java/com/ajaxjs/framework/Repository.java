@@ -48,17 +48,18 @@ import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 public class Repository extends JdbcHelper implements InvocationHandler {
 
 	/**
-	 * 数据库连接对象。You should put connection by calling
-	 * JdbcConnection.setConnection(conn).
+	 * 数据库连接对象。You should put connection by calling JdbcConnection.setConnection(conn).
 	 */
 	private Connection conn;
 
 	/**
 	 * 执行时的调用。不管执行哪个方法都会调用该方法。
 	 * 
+	 * @param proxy
+	 * @param method
+	 * @param args
+	 * @return
 	 * @throws DaoException DAO 异常
-	 * @throws SecurityException
-	 * @throws NoSuchMethodException
 	 */
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws DaoException {
@@ -122,6 +123,12 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 		return clz;
 	}
 
+	/**
+	 * 
+	 * @param method
+	 * @return
+	 * @throws DaoException
+	 */
 	private Method getSqlFactoryHandler(Method method) throws DaoException {
 		SqlFactory sqlFactory = method.getAnnotation(SqlFactory.class);
 

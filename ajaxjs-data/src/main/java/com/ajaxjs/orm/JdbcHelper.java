@@ -42,15 +42,58 @@ import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
+ * 完成 SQL 到 Java 的转换
  * 
  * @author Frank Cheung
  *
  */
 public class JdbcHelper {
 	private static final LogHelper LOGGER = LogHelper.getLog(JdbcHelper.class);
+	
+	/**
+	 * Statement 工厂
+	 * 
+	 * @param conn 		数据库连接对象
+	 * @param handle	控制器
+	 */
+	public static void stmt(Connection conn, Consumer<Statement> handle) {
+		try (Statement stmt = conn.createStatement();) {
+			handle.accept(stmt);
+		} catch (SQLException e) {
+			LOGGER.warning(e);
+		}
+	}
 
 	/**
+	 * stmt + rsHandle
 	 * 
+	 * @param conn 		数据库连接对象
+	 * @param sql 		SQL 语句
+	 * @param handle	控制器
+	 */
+	public static void query(Connection conn, String sql, Consumer<ResultSet> handle) {
+		stmt(conn, stmt -> {
+			rsHandle(stmt, sql, handle);
+		});
+	}
+
+	/**
+	 * ResultSet 处理器
+	 * 
+	 * @param stmt		Statement 对象
+	 * @param sql		SQL 语句
+	 * @param handle	控制器
+	 */
+	public static void rsHandle(Statement stmt, String sql, Consumer<ResultSet> handle) {
+		try (ResultSet rs = stmt.executeQuery(sql);) {
+			handle.accept(rs);
+		} catch (SQLException e) {
+			LOGGER.warning(e);
+		}
+	}
+ 
+	/**
+	 * 执行查询
 	 * @param conn         数据库连接对象 数据库连接对象
 	 * @param sql          SQL 语句，可以带有 ? 的占位符
 	 * @param hasZeoResult SQL 查询是否有数据返回，没有返回 true
@@ -86,7 +129,7 @@ public class JdbcHelper {
 	}
 
 	/**
-	 * 查询单个结果，保存为 Map&lt;String, Object&gt; 结构。如果查询不到任何数据返回 null。
+	 * 查询单行记录(单个结果)，保存为 Map&lt;String, Object&gt; 结构。如果查询不到任何数据返回 null。
 	 * 
 	 * @param conn   数据库连接对象ection 数据库连接对象
 	 * @param sql    SQL 语句，可以带有 ? 的占位符
@@ -98,7 +141,7 @@ public class JdbcHelper {
 	}
 
 	/**
-	 * 查询单个结果，保存为 Bean。如果查询不到任何数据返回 null。
+	 * 查询单行记录(单个结果)，保存为 Bean。如果查询不到任何数据返回 null。
 	 * 
 	 * @param beanClz
 	 * @param connection
@@ -132,11 +175,10 @@ public class JdbcHelper {
 	}
 
 	/**
-	 * 记录集合转换为 Map
+	 * 记录集合转换为 bean
 	 * 
-	 * @param rs 记录集合
-	 * @return Map 结果
-	 * @throws SQLException 转换时的 SQL 异常
+	 * @param beanClz 实体类
+	 * @return ResultSet 处理器，传入 ResultSet 类型对象返回 T 类型的 bean
 	 */
 	public static <T> ResultSetProcessor<T> getResultBean(Class<T> beanClz) {
 		T bean = ReflectUtil.newInstance(beanClz);
@@ -208,6 +250,13 @@ public class JdbcHelper {
 		}, params);
 	}
 	
+	/**
+	 * 
+	 * @param conn
+	 * @param sql
+	 * @param params
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public static <T> List<T> queryAsList(Connection conn, String sql, Object... params) {
 		return select(conn, sql, null, (ResultSet rs) -> {
@@ -337,8 +386,7 @@ public class JdbcHelper {
 	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
 	 * @return
 	 */
-	static <T> T initAndExe(BiFunction<Connection, String, PreparedStatement> initPs, ExecutePs<T> exe, Connection conn,
-			String sql, Object... params) {
+	static <T> T initAndExe(BiFunction<Connection, String, PreparedStatement> initPs, ExecutePs<T> exe, Connection conn, String sql, Object... params) {
 		String _sql = JdbcUtil.printRealSql(sql, params);
 		JdbcConnection.addSql(_sql); // 用来保存日志
 		LOGGER.infoYellow("The SQL is---->" + _sql);
@@ -349,7 +397,7 @@ public class JdbcHelper {
 
 			return exe.execute(ps);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 			return null;
 		}
 	}
@@ -525,7 +573,15 @@ public class JdbcHelper {
 
 		return update(conn, sql.toString(), values);
 	}
-
+	
+	/**
+	 * 删除一个实体，以是 Map 或 Bean。注意，此方法写死 id 字段
+	 * 
+	 * @param conn		数据库连接对象
+	 * @param bean		实体，可以是 Map 或 Bean
+	 * @param tableName 表格名称
+	 * @return
+	 */
 	public static boolean delete(Connection conn, Object bean, String tableName) {
 		if (bean instanceof Map) {
 			@SuppressWarnings("unchecked")
@@ -617,7 +673,7 @@ public class JdbcHelper {
 				map.put(filedName, m);
 			}
 		} catch (IntrospectionException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 
 		return map;
@@ -676,47 +732,5 @@ public class JdbcHelper {
 
 		return update(conn, sql.toString(), values);
 	}
-	
 
-	/**
-	 * ResultSet 处理器
-	 * 
-	 * @param stmt		Statement 对象
-	 * @param sql		SQL 语句
-	 * @param handle	控制器
-	 */
-	public static void rsHandle(Statement stmt, String sql, Consumer<ResultSet> handle) {
-		try (ResultSet rs = stmt.executeQuery(sql);) {
-			handle.accept(rs);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Statement 工厂
-	 * 
-	 * @param conn 		数据库连接对象
-	 * @param handle	控制器
-	 */
-	public static void stmt(Connection conn, Consumer<Statement> handle) {
-		try (Statement stmt = conn.createStatement();) {
-			handle.accept(stmt);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * stmt + rsHandle
-	 * 
-	 * @param conn 		数据库连接对象
-	 * @param sql 		SQL 语句
-	 * @param handle	控制器
-	 */
-	public static void query(Connection conn, String sql, Consumer<ResultSet> handle) {
-		stmt(conn, stmt -> {
-			rsHandle(stmt, sql, handle);
-		});
-	}
 }

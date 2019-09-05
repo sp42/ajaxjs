@@ -57,7 +57,7 @@ public class JdbcConnection {
 			return (DataSource) result;
 		} catch (NamingException e) {
 			String msg = "读取数据源的配置文件失败，请检查 Tomcat 连接池配置！ path: " + path;
-			msg += " 提示：没发现数据库 /WebRoot/META-INF/context.xml 下的 XML 配置文件，该文件位置一般不可移动，请参阅 tomat pool 数据库连接池的相关文档。";
+			msg += " 提示：没发现数据库 /WebRoot/META-INF/context.xml 下的 XML 配置文件，该文件位置一般不可移动，请参阅 TomatPool 数据库连接池的相关文档。";
 			
 			LOGGER.warning(msg, e);
 			return null;
@@ -71,12 +71,13 @@ public class JdbcConnection {
 	 */
 	public static void initDbByJNDI(String jndiPath) {
 		Objects.requireNonNull(jndiPath, "缺少 jndiPath 参数！");
+		LOGGER.info("启动数据库 JNDI 链接……"+ jndiPath);
 		
 		try {
 			if (getConnection() == null || getConnection().isClosed()) {
 				Connection conn = getConnection(getDataSource(jndiPath));
 				setConnection(conn);
-				LOGGER.info("启动数据库链接……" + conn);
+				LOGGER.info("数据库链接详情：" + conn);
 			}
 		} catch (SQLException e) {
 			LOGGER.warning(e);
