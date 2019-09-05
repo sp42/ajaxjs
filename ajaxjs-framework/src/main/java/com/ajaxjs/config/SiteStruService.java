@@ -25,7 +25,6 @@ import com.ajaxjs.net.http.Tools;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.util.map.JsonStruTraveler;
 import com.ajaxjs.util.map.ListMap;
 
 /**
@@ -42,7 +41,7 @@ public class SiteStruService implements ServletContextListener {
 	/**
 	 * 配置 json 文件的路径
 	 */
-	public static String jsonPath = Version.srcFolder + "site_stru.json";
+	public static String jsonPath = Version.srcFolder + File.separator + "site_stru.json";
 
 	/**
 	 * 加载网站结构的配置
@@ -60,7 +59,7 @@ public class SiteStruService implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent e) {
 		ServletContext cxt = e.getServletContext();
 		Version.tomcatVersionDetect(cxt.getServerInfo());
-
+System.out.println(ConfigService.jsonPath);
 		if (new File(ConfigService.jsonPath).exists()) {
 			ConfigService.load();
 
@@ -96,7 +95,8 @@ public class SiteStruService implements ServletContextListener {
 
 	public static void loadSiteStru() {
 		load();
-		t.travelList(stru);
+		ListMap.buildPath(stru);
+//		t.travelList(stru);
 		LOGGER.infoGreen("加载网站的结构文件成功 Site Structure Config Loaded.");
 	}
 
@@ -110,11 +110,6 @@ public class SiteStruService implements ServletContextListener {
 	}
 
 	/**
-	 * JSON 查找器
-	 */
-	private static final JsonStruTraveler t = new JsonStruTraveler();
-
-	/**
 	 * 获取当前页面节点，并带有丰富的节点信息
 	 * 
 	 * @param uri			请求地址，例如 "menu/menu-1"
@@ -126,7 +121,7 @@ public class SiteStruService implements ServletContextListener {
 		String path = uri.replace(contextPath, "").replaceAll("/\\d+", "").replaceFirst("/\\w+\\.\\w+$", "");
 
 		if (stru != null && stru.isLoaded()) {
-			Map<String, Object> map = t.findByPath(path, stru);
+			Map<String, Object> map = ListMap.findByPath(path, stru);
 			return map;
 		} else
 			return null;
@@ -175,7 +170,7 @@ public class SiteStruService implements ServletContextListener {
 
 			path = path.substring(1, path.length());
 			String second = path.split("/")[0];
-			Map<String, Object> map = t.findByPath(second, stru);
+			Map<String, Object> map = ListMap.findByPath(second, stru);
 			request.setAttribute("secondLevel_Node", map); // 保存二级栏目节点之数据
 
 			return map;
@@ -193,8 +188,7 @@ public class SiteStruService implements ServletContextListener {
 	@SuppressWarnings({ "unchecked" })
 	public List<Map<String, Object>> getMenu(HttpServletRequest request) {
 		Map<String, Object> map = getSecondLevelNode(request);
-		return map != null && map.get(ListMap.CHILDREN) != null ? (List<Map<String, Object>>) map.get(ListMap.CHILDREN)
-				: null;
+		return map != null && map.get(ListMap.CHILDREN) != null ? (List<Map<String, Object>>) map.get(ListMap.CHILDREN) : null;
 	}
 
 	/**

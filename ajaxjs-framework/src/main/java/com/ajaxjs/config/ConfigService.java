@@ -15,6 +15,7 @@
  */
 package com.ajaxjs.config;
 
+import java.io.File;
 import java.util.Map;
 
 import com.ajaxjs.Version;
@@ -45,17 +46,18 @@ public class ConfigService {
 	/**
 	 * 配置 json 文件的路径
 	 */
-	public static String jsonPath = Version.srcFolder + "site_config.json";
+	public static String jsonPath = Version.srcFolder + File.separator + "site_config.json";
 
 	/**
 	 * 配置 json 说明文件的路径
 	 */
-	public static String jsonSchemePath = Version.srcFolder + "site_config_scheme.json";
+	public static String jsonSchemePath = Version.srcFolder + File.separator + "site_config_scheme.json";
 
 	/**
 	 * 加载 JSON 配置（默认路径）
 	 */
 	public static void load() {
+		System.out.println(jsonPath);
 		load(jsonPath);
 	}
 
@@ -77,6 +79,10 @@ public class ConfigService {
 			Version.isDebug = (boolean)config.get("isDebug");
 
 		flatConfig = ListMap.flatMap(config);
+	}
+	
+	public static void main(String[] args) {
+		JsonHelper.parseMap(FileHelper.openAsText("C:\\sp42\\dev\\eclipse-workspace-new2\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\myblog\\WEB-INF\\classes\\site_config.json"));
 	}
 
 	/**

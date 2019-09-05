@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import com.ajaxjs.Version;
 import com.ajaxjs.config.ConfigService;
-import com.ajaxjs.util.map.JsonStruTraveler;
+import com.ajaxjs.util.map.ListMap;
 
 public class TestConfig {
 	@Before
@@ -24,7 +24,7 @@ public class TestConfig {
 	public void testConfig() {
 		assertNotNull(ConfigService.config);
 
-		JsonStruTraveler.flatMap(ConfigService.config);
+		ListMap.flatMap(ConfigService.config);
 
 		assertEquals(true, ConfigService.getValueAsBool("isDebug"));
 		assertEquals("大华", ConfigService.getValueAsString("clientShortName"));
