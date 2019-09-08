@@ -76,7 +76,7 @@ public class MvcDispatcher implements Filter {
 		// 读取 web.xml 配置，如果有 controller 那一项就获取指定包里面的内容，看是否有属于 IController 接口的控制器，有就加入到
 		// AnnotationUtils.controllers 集合中
 		Map<String, String> config = ServletHelper.initFilterConfig2Map(_config);
-
+		
 		MapTool.getValue(config, "doIoc", (String doIoc) -> {
 			for (String packageName : CommonUtil.split(doIoc))
 				BeanContext.init(packageName);
