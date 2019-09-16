@@ -203,6 +203,14 @@ public class MvcDispatcher implements Filter {
 		MvcRequest.clean();
 	}
 
+	/**
+	 * 
+	 * @param err
+	 * @param method
+	 * @param request
+	 * @param response
+	 * @param model
+	 */
 	private static void handleErr(Throwable err, Method method, MvcRequest request, MvcOutput response, ModelAndView model) {
 		ReflectUtil.getUnderLayerErr(err).printStackTrace(); // 打印异常
 

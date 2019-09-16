@@ -20,6 +20,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
@@ -45,9 +46,9 @@ public class RequestParam {
 	/**
 	 * 对控制器的方法进行分析，看需要哪些参数。将得到的参数签名和请求过来的参数相匹配，再传入到方法中去执行。
 	 * 
-	 * @param request 请求对象
-	 * @param response 响应对象
-	 * @param method 控制器方法对象
+	 * @param request 	请求对象
+	 * @param response	响应对象
+	 * @param method 	控制器方法对象
 	 * @return 参数列表
 	 */
 	public static Object[] getArgs(MvcRequest request, HttpServletResponse response, Method method) {
@@ -100,16 +101,20 @@ public class RequestParam {
 	 */
 	private static void getArgValue(Class<?> clz, Annotation[] annotations, MvcRequest request, ArrayList<Object> args, Method method) {
 		if (annotations.length > 0) {
-			boolean required = false; // 是否必填字段
+			boolean required = false; 	// 是否必填字段
+			String defaultValue = null; // 默认值
 
 			for (Annotation a : annotations) {
 				if (a instanceof NotNull)
 					required = true;
+				
+				if (a instanceof DefaultValue) 
+					defaultValue = ((DefaultValue)a).value();
+			
 
 				if (a instanceof QueryParam || a instanceof FormParam || a instanceof HeaderParam) { // 找到匹配的参数，这是说控制器上的方法是期望得到一个 url query string
 					// 参数的
-					getArgValue(clz, args, getArgValue(a, request, required)); // 根据注解的名字，获取 QueryParam 参数实际值，此时是 String
-																				 // 类型，要转为到控制器方法期望的类型。
+					getArgValue(clz, args, getArgValue(a, request, required), defaultValue); // 根据注解的名字，获取 QueryParam 参数实际值，此时是 String  类型，要转为到控制器方法期望的类型。
 
 					break; // 只需要执行一次，参见调用的那个方法就知道了
 				} else if (a instanceof PathParam) { // URL 上面的参数
@@ -146,7 +151,7 @@ public class RequestParam {
 		} else if (a instanceof HeaderParam) {
 			key = ((HeaderParam) a).value();
 		}
-
+		
 		value = a instanceof HeaderParam ? request.getHeader(key) : request.getParameter(key);
 
 		if (required && value == null)
@@ -161,15 +166,24 @@ public class RequestParam {
 	/**
 	 * 开始转换为控制器方法上的类型，支持 String、int/Integer、boolean/Boolean
 	 * 
-	 * @param clz
-	 * @param args
-	 * @param value
+	 * @param clz			方法目标类型
+	 * @param args			保存转换后值的列表容器
+	 * @param value			请求过来的原始值，都是字符串
+	 * @param defaultValue	默认值
 	 */
-	private static void getArgValue(Class<?> clz, ArrayList<Object> args, String value) {
+	private static void getArgValue(Class<?> clz, ArrayList<Object> args, String value, String defaultValue) {
 		if (clz == String.class) {
-			args.add(value);
+			args.add(value == null ? defaultValue : value);
 		} else if (clz == int.class || clz == Integer.class) {
-			args.add(value == null || "".equals(value) || "null".equals(value) ? 0 : Integer.parseInt(value));
+			boolean isNull = value == null || "".equals(value) || "null".equals(value);
+			int v = 0;
+			
+			if(isNull && defaultValue != null)
+				v =  Integer.parseInt(defaultValue);
+			else if(!isNull)
+				v = Integer.parseInt(value);
+		
+			args.add(v);
 		} else if (clz == long.class || clz == Long.class) {
 			args.add(value == null || "".equals(value) ? 0L : (Long.parseLong(value)));
 		} else if (clz == boolean.class || clz == Boolean.class) {

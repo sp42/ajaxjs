@@ -22,7 +22,6 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
@@ -39,6 +38,7 @@ import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.map.ListMap;
 import com.ajaxjs.util.resource.ScanClass;
 
 /**
@@ -67,11 +67,6 @@ public class ControllerScanner extends ScanClass<IController> {
 	}
 
 	/**
-	 * URL 与 Action 之间的映射树。URL Mapping tree.
-	 */
-	public static Map<String, Action> urlMappingTree = new HashMap<>();
-
-	/**
 	 * 解析一个控制器。Parsing a Controller class.
 	 * 
 	 * @param clz 控制器类 a Controller class
@@ -83,19 +78,20 @@ public class ControllerScanner extends ScanClass<IController> {
 		String topPath = getRootPath(clz);
 		// LOGGER.info("控制器正在解析，This controller \"{0}\" is being parsing", topPath);
 
-		Action action = null;
-
-		if (topPath.contains("/")) {
-			action = TreeLinked.findTreeByPath(urlMappingTree, TreeLinked.split2Queue(topPath), "", ControllerScanner::actionFactory, true);
-		} else {
-			if (urlMappingTree.containsKey(topPath)) {
-				action = urlMappingTree.get(topPath);// already there is
-			} else {
-				action = new Action();
-				action.path = topPath; // 需要吗？
-				urlMappingTree.put(topPath, action);
-			}
-		}
+		Action action = IController.findTreeByPath(IController.urlMappingTree, ListMap.split2Queue(topPath), "", true);
+//		Action action = null;
+//
+//		if (topPath.contains("/")) {// 多层的
+//			action = IController.findTreeByPath(IController.urlMappingTree, ListMap.split2Queue(topPath), "", true);
+//		} else {
+//			if (IController.urlMappingTree.containsKey(topPath)) {
+//				action = IController.urlMappingTree.get(topPath);// already there is
+//			} else {
+//				action = new Action();
+//				action.path = topPath; // 需要吗？
+//				IController.urlMappingTree.put(topPath, action);
+//			}
+//		}
 
 		createControllerInstance(clz, action);
 		parseSubPath(clz, action);// parse class methods or find out sub-path
@@ -133,24 +129,15 @@ public class ControllerScanner extends ScanClass<IController> {
 		Path a = clz.getAnnotation(Path.class);
 		Objects.requireNonNull(a, "控制器类应该至少设置一个 Path 注解。");
 		String rootPath = a.value();// 控制器类上定义的 Path 注解总是从根目录开始的。 the path in class always starts from top 1
+		
 		return rootPath.replaceAll("^/", ""); // remove the first / so that the array would be right length
 	}
 
 	/**
+	 * 创建控制器实例
 	 * 
-	 * @param path
-	 * @return
-	 */
-	private static Action actionFactory(String path) {
-		Action _action = new Action();
-		_action.path = path.replaceAll(".$", "");
-		return _action;
-	}
-
-	/**
-	 * 
-	 * @param clz 控制器类
-	 * @param action
+	 * @param clz 		控制器类
+	 * @param action	动作对象
 	 */
 	private static void createControllerInstance(Class<? extends IController> clz, Action action) {
 		if (clz.getAnnotation(Bean.class) != null) { // 如果有 ioc，则从容器中查找
@@ -181,7 +168,7 @@ public class ControllerScanner extends ScanClass<IController> {
 				if (action.children == null)
 					action.children = new HashMap<>();
 
-				Action subAction = TreeLinked.findTreeByPath(action.children, TreeLinked.split2Queue(subPathValue), action.path + "/", ControllerScanner::actionFactory, true);
+				Action subAction = IController.findTreeByPath(action.children, ListMap.split2Queue(subPathValue), action.path + "/", true);
 				subAction.controller = action.controller; // the same controller cause the same class over there
 				methodSend(method, subAction);
 			} else {
@@ -197,12 +184,12 @@ public class ControllerScanner extends ScanClass<IController> {
 	 * @return
 	 */
 	public static Action find(String path) {
-		Queue<String> queue = TreeLinked.split2Queue(path);
-		Action action = TreeLinked.findTreeByPath(urlMappingTree, queue, "");
+		Queue<String> queue = ListMap.split2Queue(path);
+		Action action = IController.findTreeByPath(IController.urlMappingTree, queue, "");
 
 		if (action == null) { // for the controller which is set Path("/"), root controller
 			queue = split2Queue2(path);
-			action = TreeLinked.findTreeByPath(urlMappingTree, queue, "");
+			action = IController.findTreeByPath(IController.urlMappingTree, queue, "");
 		}
 
 		return action;

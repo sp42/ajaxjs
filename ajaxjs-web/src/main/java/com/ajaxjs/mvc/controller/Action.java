@@ -16,6 +16,7 @@
 package com.ajaxjs.mvc.controller;
 
 import java.lang.reflect.Method;
+import java.util.Map;
 
 /**
  * A action = controller + methods
@@ -23,17 +24,24 @@ import java.lang.reflect.Method;
  * @author Sp42 frank@ajaxjs.com
  *
  */
-public class Action extends TreeLinked<Action> {
+public class Action {
 	/**
 	 * 完整路径
 	 */
 	public String path;
+	
+	/**
+	 * 下级路径集合
+	 */
+	public Map<String, Action> children;
+	
 
 	/**
 	 * 控制器实例，方便反射时候调用（如果 HTTP 对应控制器没有，则读取这个）
 	 */
 	public IController controller;
 
+	// 下面是不同HTTP方法的控制器
 	public IController getMethodController;
 
 	public IController postMethodController;
