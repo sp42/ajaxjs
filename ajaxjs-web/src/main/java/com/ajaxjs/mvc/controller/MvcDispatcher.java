@@ -118,7 +118,7 @@ public class MvcDispatcher implements Filter {
 			uri = match.replaceAll("/{id}");
 		}
 
-		Action action = ControllerScanner.find(uri);
+		Action action = IController.find(uri);
 
 		if (action != null) {
 			Method method = getMethod(action, httpMethod);// 要执行的方法
