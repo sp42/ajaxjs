@@ -24,18 +24,14 @@ import com.ajaxjs.mvc.controller.MvcRequest;
  * 过滤器动作
  * 
  * @author sp42 frank@ajaxjs.com
- *
  */
 public interface FilterAction {
 	/**
 	 * 在 MVC 方法之前调用
 	 * 
-	 * @param request
-	 *            请求对象
-	 * @param response
-	 *            响应对象
-	 * @param method
-	 *            方法对象
+	 * @param request 	请求对象
+	 * @param response 	响应对象
+	 * @param method 	方法对象
 	 * @return 是否要中止控制器方法的执行
 	 */
 	public boolean before(MvcRequest request, MvcOutput response, Method method);
@@ -43,14 +39,10 @@ public interface FilterAction {
 	/**
 	 * 在 MVC 方法之后调用
 	 * 
-	 * @param request
-	 *            请求对象
-	 * @param response
-	 *            响应对象
-	 * @param method
-	 *            方法对象
-	 * @param isSkip
-	 *            是否已经中止控制器方法的执行，也就是 before() 返回的值
+	 * @param request  	请求对象
+	 * @param response 	响应对象
+	 * @param method	方法对象
+	 * @param isSkip 	是否已经中止控制器方法的执行，也就是 before() 返回的值
 	 */
 	public void after(MvcRequest request, MvcOutput response, Method method, boolean isSkip);
 

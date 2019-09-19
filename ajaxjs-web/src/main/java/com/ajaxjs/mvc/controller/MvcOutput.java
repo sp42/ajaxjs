@@ -127,9 +127,9 @@ public class MvcOutput extends HttpServletResponseWrapper {
 		if (getOutput_Map() != null) { // Map 的话转变为 json 输出
 			setJson(true).setOutput(JsonHelper.toJson(getOutput_Map()));
 		} else if (getOutput_List() != null) {
-			if (getOutput_List() == null || getOutput_List().size() == 0) {
+			if (getOutput_List() == null || getOutput_List().size() == 0) 
 				setJson(true).setOutput("[]");
-			} else
+			else
 				setJson(true).setOutput(JsonHelper.toJson(getOutput_List()));
 		} else if (getBean() != null) {
 			setJson(true).setOutput(JsonHelper.toJson(getBean()));
@@ -192,6 +192,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 
 		if (result == null) {
 			Class<?> reClz = method.getReturnType();
+			
 			if (reClz == Map.class)
 				setJson(true).setOutput("{}").go();
 			else if (reClz == List.class)
@@ -201,6 +202,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 		} else {
 			if (result instanceof String) {
 				String str = (String) result;
+				
 				if (str.startsWith(html)) {
 					setSimpleHTML(true).setOutput(str.replace(html, "")).go();
 				} else if (str.startsWith(xml)) {

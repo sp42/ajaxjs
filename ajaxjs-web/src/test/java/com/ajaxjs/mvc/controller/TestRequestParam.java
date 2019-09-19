@@ -78,14 +78,14 @@ public class TestRequestParam {
 		HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
 		StringWriter writer = MockResponse.writerFactory(response);
 
-		Object[] args = RequestParam.getArgs(new MvcRequest(request), response, ControllerScanner.urlMappingTree.get("foo").getMethod);
+		Object[] args = RequestParam.getArgs(new MvcRequest(request), response, IController.urlMappingTree.get("foo").getMethod);
 		assertNotNull(writer.toString());
 
 		assertTrue(args[0] instanceof Map);
 		assertTrue(args[1] instanceof HttpServletRequest);
 		assertTrue(args[2] instanceof HttpServletResponse);
 
-		args = RequestParam.getArgs(new MvcRequest(request), response, ControllerScanner.urlMappingTree.get("foo").postMethod);
+		args = RequestParam.getArgs(new MvcRequest(request), response, IController.urlMappingTree.get("foo").postMethod);
 		assertTrue(args[0] instanceof ModelAndView);
 		assertTrue(args[1] instanceof News);
 
@@ -102,14 +102,14 @@ public class TestRequestParam {
 		when(request.getParameter("sex")).thenReturn("bar");
 
 		ControllerScanner.add(c1.class);
-		Object[] args = RequestParam.getArgs(new MvcRequest(request), response, ControllerScanner.urlMappingTree.get("foo").children.get("bar").getMethod);
+		Object[] args = RequestParam.getArgs(new MvcRequest(request), response, IController.urlMappingTree.get("foo").children.get("bar").getMethod);
 		assertEquals("foo", args[0]);
 		assertEquals("bar", args[1]);
 
-		args = RequestParam.getArgs(new MvcRequest(request), response, ControllerScanner.urlMappingTree.get("foo").children.get("bar").postMethod);
+		args = RequestParam.getArgs(new MvcRequest(request), response, IController.urlMappingTree.get("foo").children.get("bar").postMethod);
 		assertEquals("bar", args[0]);
 
-		args = RequestParam.getArgs(new MvcRequest(request), response, ControllerScanner.urlMappingTree.get("foo").children.get("{id}").putMethod);
+		args = RequestParam.getArgs(new MvcRequest(request), response, IController.urlMappingTree.get("foo").children.get("{id}").putMethod);
 		assertEquals("12888", args[0]);
 	}
 

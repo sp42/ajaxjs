@@ -1,16 +1,11 @@
 /**
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+ * applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
+ * OF ANY KIND, either express or implied. See the License for the specific
+ * language governing permissions and limitations under the License.
  */
 package com.ajaxjs.web.mock;
 
@@ -43,11 +38,13 @@ public class MockFilter {
 	public static class DummyController extends HttpServlet {
 		private static final long serialVersionUID = 1L;
 
-		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		protected void doGet(HttpServletRequest request, HttpServletResponse response)
+				throws ServletException, IOException {
 			response.getWriter().append("Served at: ").append(request.getContextPath());
 		}
 
-		protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		protected void doPost(HttpServletRequest request, HttpServletResponse response)
+				throws ServletException, IOException {
 			doGet(request, response);
 		}
 	}
@@ -56,7 +53,8 @@ public class MockFilter {
 		public void destroy() {
 		}
 
-		public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+		public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+				throws IOException, ServletException {
 			chain.doFilter(request, response);
 		}
 
@@ -90,7 +88,7 @@ public class MockFilter {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * 初始化 Servlet 配置，这里是模拟 注解
 	 * 
@@ -132,7 +130,7 @@ public class MockFilter {
 		when(filterConfig.getInitParameterNames()).thenReturn(v.elements());
 		when(filterConfig.getInitParameter("urlPatterns")).thenReturn("/service/*");
 		when(filterConfig.getServletContext()).thenReturn(context);
-	
+
 		return filterConfig;
 	}
 }

@@ -58,18 +58,18 @@ public class ControllerScanner extends ScanClass<IController> {
 	 * @param clz 控制器类 a Controller class
 	 */
 	public static void add(Class<? extends IController> clz) {
-		if (!testClass(clz))
-			return;
+		if (!testClass(clz)) return;
 
 		String topPath = getRootPath(clz);
-		 LOGGER.info("控制器正在解析，This controller \"{0}\" is being parsing", topPath);
+		LOGGER.info("控制器正在解析，This controller \"{0}\" is being parsing", topPath);
 
 		Action action = IController.findTreeByPath(IController.urlMappingTree, topPath, "", true);
 		action.createControllerInstance(clz);
 		action.parseMethod();
 
 		// 会打印控制器的总路径信息，不会打印各个方法的路径，那太细了，日志也会相应地多
-		LOGGER.info("控制器已登记成功！The controller \"{0}\" (\"/{1}\") was parsed and registered", clz.toString().replaceAll("class\\s", ""), topPath); // 控制器 {0} 所有路径（包括子路径）注册成功！
+		LOGGER.info("控制器已登记成功！The controller \"{0}\" (\"/{1}\") was parsed and registered", 
+				clz.toString().replaceAll("class\\s", ""), topPath); // 控制器 {0} 所有路径（包括子路径）注册成功！
 	}
 
 	/**

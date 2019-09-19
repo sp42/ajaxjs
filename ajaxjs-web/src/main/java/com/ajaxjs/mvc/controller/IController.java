@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.ajaxjs.util.map.ListMap;
 
@@ -31,14 +33,16 @@ public interface IController {
 	public static Map<String, Action> urlMappingTree = new HashMap<>();
 
 	/**
+	 * 输入队列，查找节点。可选创建新 Action 节点，如果不存在的话。
 	 * 
 	 * @param tree			保存在Map的一棵树
 	 * @param path			路径队列
 	 * @param basePath		起始路径，如为空应传空字符串
 	 * @param createIfEmpty 如果找不到该节点，是否自动为其创建节点？若为非null 表示为写入模式，不单纯是查找。
-	 * @return
+	 * @return 目标 Action 或新建的 Action
 	 */
-	public static Action findTreeByPath(Map<String, Action> tree, Queue<String> path, String basePath, boolean createIfEmpty) {
+	public static Action findTreeByPath(Map<String, Action> tree, Queue<String> path, 
+			String basePath, boolean createIfEmpty) {
 		while (!path.isEmpty()) {
 			String key = path.poll(); // remove the first item in the queue and return it
 			basePath += key + "/";
@@ -89,12 +93,19 @@ public interface IController {
 		return findTreeByPath(tree, ListMap.split2Queue(path), basePath);
 	}
 	
+	static final Pattern id = Pattern.compile("/\\d+");
+	
 	/**
 	 * 
 	 * @param path
 	 * @return
 	 */
-	public static Action find(String path) {
+	public static Action findTreeByPath(String path) {
+		Matcher match = id.matcher(path); // 处理Path上的参数
+		if (match.find()) {
+			path = match.replaceAll("/{id}");
+		}
+		
 		Action action = findTreeByPath(urlMappingTree, path, "");
 
 		if (action == null) { // for the controller which is set Path

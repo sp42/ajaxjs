@@ -19,10 +19,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -111,23 +108,18 @@ public class MvcDispatcher implements Filter {
 		MvcOutput response = new MvcOutput(_response);
 
 		String uri = request.getFolder(), httpMethod = request.getMethod();
-
 //		System.out.println(">>>>>>>" + uri);
-		Matcher match = id.matcher(uri);
-		if (match.find()) {
-			uri = match.replaceAll("/{id}");
-		}
 
-		Action action = IController.find(uri);
+		Action action = IController.findTreeByPath(uri);
 
 		if (action != null) {
-			Method method = getMethod(action, httpMethod);// 要执行的方法
-			IController controller = getController(action, httpMethod);
+			Method method = action.getMethod(httpMethod);// 要执行的方法
+			IController controller = action.getController(httpMethod);
 //			System.out.println(">>>>>>>" + action);
 //			System.out.println(">>>>>>>" + method);
 
 			if (method != null && controller != null) {
-				dispatch(request, response, controller, method);
+				execute(request, response, controller, method);
 				return; // 终止当前 servlet 请求
 			} else {
 //				LOGGER.info("{0} {1} 控制器没有这个方法！", httpMethod, request.getRequestURI());
@@ -138,16 +130,17 @@ public class MvcDispatcher implements Filter {
 	}
 
 	/**
-	 * 分发
+	 * 执行控制器方法
 	 * 
-	 * @param request
-	 * @param response
-	 * @param controller
-	 * @param method
+	 * @param request		请求对象
+	 * @param response		响应对象
+	 * @param controller	控制器对象
+	 * @param method		控制器方法
 	 */
-	private static void dispatch(MvcRequest request, MvcOutput response, IController controller, Method method) {
+	private static void execute(MvcRequest request, MvcOutput response, IController controller, Method method) {
 		MvcRequest.setHttpServletRequest(request);
 		MvcRequest.setHttpServletResponse(response);
+		
 
 		Throwable err = null; // 收集错误信息
 		Object result = null;
@@ -182,9 +175,8 @@ public class MvcDispatcher implements Filter {
 		} catch (Throwable e) {
 			err = e;
 
-			if (e instanceof IllegalArgumentException && e.getMessage().contains("object is not an instance of declaring class")) {
+			if (e instanceof IllegalArgumentException && e.getMessage().contains("object is not an instance of declaring class")) 
 				LOGGER.warning("异常可能的原因：@Bean注解的名称重复，请检查 IOC 中的是否重名");
-			}
 		} finally {
 			if (isDoFilter) {
 				for (FilterAction filterAction : filterActions)
@@ -249,54 +241,6 @@ public class MvcDispatcher implements Filter {
 		}
 
 		return filterActions;
-	}
-
-	private static final Pattern id = Pattern.compile("/\\d+");
-
-	/**
-	 * 根据 httpMethod 请求方法返回控制器类身上的方法。
-	 * 
-	 * @param controllerInfo 控制器类信息
-	 * @param httpMethod HTTP 请求的方法
-	 * @return 控制器方法
-	 */
-	private static Method getMethod(Action action, String httpMethod) {
-		Objects.requireNonNull(action, "Action 对象不存在！");
-
-		switch (httpMethod.toUpperCase()) {
-		case "GET":
-			return action.getMethod;
-		case "POST":
-			return action.postMethod;
-		case "PUT":
-			return action.putMethod;
-		case "DELETE":
-			return action.deleteMethod;
-		}
-
-		return null;
-	}
-
-	/**
-	 * 根据 httpMethod 请求方法返回控制器
-	 * 
-	 * @param action
-	 * @param httpMethod HTTP 请求的方法
-	 * @return 控制器
-	 */
-	private static IController getController(Action action, String httpMethod) {
-		switch (httpMethod.toUpperCase()) {
-		case "GET":
-			return action.getMethodController;
-		case "POST":
-			return action.postMethodController;
-		case "PUT":
-			return action.putMethodController;
-		case "DELETE":
-			return action.deleteMethodController;
-		default:
-			return action.controller;
-		}
 	}
 
 	/**

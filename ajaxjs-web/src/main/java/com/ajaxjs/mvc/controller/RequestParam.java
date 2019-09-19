@@ -93,11 +93,11 @@ public class RequestParam {
 	/**
 	 * 根据注解和类型从 request 中取去参数值。 参数名字与 QueryParam 一致 或者 PathParam
 	 * 
-	 * @param clz 参数类型
-	 * @param annotations 参数的注解
-	 * @param request 请求对象
-	 * @param args 参数列表
-	 * @param method 控制器方法对象
+	 * @param clz 			参数类型
+	 * @param annotations 	参数的注解
+	 * @param request 		请求对象
+	 * @param args 			参数列表
+	 * @param method 		控制器方法对象
 	 */
 	private static void getArgValue(Class<?> clz, Annotation[] annotations, MvcRequest request, ArrayList<Object> args, Method method) {
 		if (annotations.length > 0) {
@@ -119,6 +119,7 @@ public class RequestParam {
 					break; // 只需要执行一次，参见调用的那个方法就知道了
 				} else if (a instanceof PathParam) { // URL 上面的参数
 					Path path = method.getAnnotation(Path.class);
+					
 					if (path != null) {
 						String paramName = ((PathParam) a).value(), value = request.getValueFromPath(path.value(), paramName);
 
@@ -131,7 +132,7 @@ public class RequestParam {
 				}
 			}
 		} else {
-			args.add("nothing to add args"); // 不知道传什么，就空字符串吧
+			args.add("Nothing to add args"); // 不知道传什么，就空字符串吧
 		}
 	}
 

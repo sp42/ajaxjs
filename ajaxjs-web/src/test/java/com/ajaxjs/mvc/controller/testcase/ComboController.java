@@ -4,7 +4,9 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -57,7 +59,13 @@ public class ComboController implements IController {
 
 	@POST
 	@Path("person")
-	public String b2(@QueryParam("name") String name) {
+	public String b2(@DefaultValue("Jack") @QueryParam("name") String name, @DefaultValue("20") @QueryParam("age") int age) {
+		return "json::{\"name\":\"" + name + "\"}";
+	}
+	
+	@POST
+	@Path("testDefault")
+	public String testDefault(@NotNull @QueryParam("name") String name, @QueryParam("age") int age) {
 		return "json::{\"name\":\"" + name + "\"}";
 	}
 

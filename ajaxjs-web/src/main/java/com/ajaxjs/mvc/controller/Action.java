@@ -97,7 +97,6 @@ public class Action {
 	/**
 	 * 根据路径信息加入到 urlMapping。Check out all methods which has Path annotation, then add the urlMapping.
 	 */
-
 	public void parseMethod() {
 		Class<? extends IController> clz = controller.getClass();
 		
@@ -163,6 +162,49 @@ public class Action {
 			}
 		} else {
 			return false;
+		}
+	}
+	
+	/**
+	 * 根据 httpMethod 请求方法返回控制器类身上的方法。
+	 * 
+	 * @param controllerInfo 控制器类信息
+	 * @param method HTTP 请求的方法
+	 * @return 控制器方法
+	 */
+	public Method getMethod(String method) {
+		switch (method.toUpperCase()) {
+		case "GET":
+			return getMethod;
+		case "POST":
+			return postMethod;
+		case "PUT":
+			return putMethod;
+		case "DELETE":
+			return deleteMethod;
+		}
+
+		return null;
+	}
+
+	/**
+	 * 根据 httpMethod 请求方法返回控制器
+	 * 
+	 * @param method HTTP 请求的方法
+	 * @return 控制器
+	 */
+	public IController getController(String method) {
+		switch (method.toUpperCase()) {
+		case "GET":
+			return getMethodController;
+		case "POST":
+			return postMethodController;
+		case "PUT":
+			return putMethodController;
+		case "DELETE":
+			return deleteMethodController;
+		default:
+			return controller;
 		}
 	}
 }
