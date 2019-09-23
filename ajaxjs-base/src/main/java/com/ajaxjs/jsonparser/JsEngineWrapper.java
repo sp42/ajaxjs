@@ -78,7 +78,9 @@ public class JsEngineWrapper {
 	 * @return js 引擎
 	 */
 	public static ScriptEngine engineFactory() {
-		return new ScriptEngineManager().getEngineByName(System.getProperty("java.version").contains("1.8.") ? "nashorn" : "rhino");
+		return new ScriptEngineManager().getEngineByName(
+			System.getProperty("java.version").contains("1.8.") ? "nashorn" : "rhino"
+		);
 	}
 
 	/**

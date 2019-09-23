@@ -238,14 +238,15 @@ public class LogHelper {
 	 */
 	private String getMethodName() {
 		StackTraceElement frame = null;
-
+		
+		// Thread.getCurrentThread().getStackTrace() 暴露了当前线程的运行栈信息
 		for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
 			String clzName = ste.getClassName();
 
 			if (ste.isNativeMethod() || clzName.equals(Thread.class.getName()) || clzName.equals(getClass().getName()))
-				continue;
+				continue;// 过滤不要的类
 
-			if (clzName.equals(className)) {
+			if (clzName.equals(className)) {// className是字符串，表示所在的类名
 				frame = ste;
 				break;
 			}
@@ -258,4 +259,7 @@ public class LogHelper {
 		}
 	}
 
+	public static void main(String[] args) {
+		
+	}
 }

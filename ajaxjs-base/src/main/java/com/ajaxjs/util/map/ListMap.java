@@ -143,6 +143,16 @@ public class ListMap {
 	}
 
 	/////////////////////////// findByPath /////////////////
+	/**
+	 * 输入一个路径，转换为队列结构
+	 * 
+	 * @param path 路径，用 / 分隔开
+	 * @return 路径队列
+	 */
+	public static Queue<String> split2Queue(String path) {
+		String[] arr = path.split("/");
+		return new LinkedList<>(Arrays.asList(arr));
+	}
 
 	/**
 	 * 根据路径查找节点
@@ -157,10 +167,7 @@ public class ListMap {
 		if (str.endsWith("/"))
 			str = str.substring(0, str.length() - 1);
 
-		String[] arr = str.split("/");
-		Queue<String> q = new LinkedList<>(Arrays.asList(arr));
-
-		return findByPath(q, list);
+		return findByPath(split2Queue(str), list);
 	}
 
 	/**

@@ -151,9 +151,9 @@ public class MapTool {
 	/**
 	 * 判断 map 非空，然后根据 key 获取 value，若 value 非空则作为参数传入函数接口 s
 	 * 
-	 * @param map
-	 * @param key
-	 * @param s
+	 * @param map	输入的map
+	 * @param key	map的键
+	 * @param s		如果过非空，那么接着要做什么？在这个回调函数中处理。传入的参数就是map.get(key)的值
 	 */
 	public static <T> void getValue(Map<String, T> map, String key, Consumer<T> s) {
 		if (map != null) {
