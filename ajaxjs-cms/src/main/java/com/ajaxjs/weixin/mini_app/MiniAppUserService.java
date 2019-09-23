@@ -8,7 +8,6 @@ import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
-import com.ajaxjs.jsonparser.JsonHelper;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.net.http.NetUtil;
 import com.ajaxjs.orm.annotation.Insert;
@@ -22,6 +21,7 @@ import com.ajaxjs.user.UserOauthService;
 import com.ajaxjs.user.controller.LoginLogController;
 import com.ajaxjs.util.cryptography.SymmetricCipher;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.map.JsonHelper;
 
 /**
  * 小程序用户开放能力
