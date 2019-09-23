@@ -6,7 +6,8 @@
     <meta name="keywords"    content="${aj_allConfig.site.keywords}" />
     <meta name="description" content="${aj_allConfig.site.description}" />
     <meta name="author"      content="Frank Chueng, frank@ajaxjs.com" />
-	<meta name="renderer"	 content="webkit" /> <%-- 360 优先使用 Google Chrome Frame 和最新版本 IE --%>
+	<%-- 360 优先使用 Google Chrome Frame 和最新版本 IE --%>
+	<meta name="renderer"	 content="webkit" /> 
 	<meta name="robots" 	 content="index,follow" />
 	<meta http-equiv="X-UA-Compatible" content="edge,chrome=1" />
 <%

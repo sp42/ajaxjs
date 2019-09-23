@@ -59,15 +59,14 @@ public class SiteStruService implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent e) {
 		ServletContext cxt = e.getServletContext();
 		Version.tomcatVersionDetect(cxt.getServerInfo());
-System.out.println(ConfigService.jsonPath);
+		
 		if (new File(ConfigService.jsonPath).exists()) {
 			ConfigService.load();
 
 			if (ConfigService.config.isLoaded()) {
 				cxt.setAttribute("aj_allConfig", ConfigService.config); // 所有配置保存在这里
 
-				// String configJson =
-				// JsonHelper.format(JsonHelper.stringifyMap(ConfigService.config));
+				// String configJson = JsonHelper.format(JsonHelper.stringifyMap(ConfigService.config));
 				LOGGER.infoGreen("加载 " + ConfigService.getValueAsString("clientFullName") + " " + cxt.getContextPath()
 						+ " 项目配置成功！All config loaded.");
 			} else
