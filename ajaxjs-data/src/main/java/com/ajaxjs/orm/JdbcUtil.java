@@ -34,7 +34,7 @@ public class JdbcUtil {
 	public static boolean isClosePrintRealSql = false;
 
 	/**
-	 * 在开发过程，SQL语句有可能写错，如果能把运行时出错的 SQL 语句直接打印出来，那对排错非常方便，因为其可以直接拷贝到数据库客户端进行调试。
+	 * 打印真实 SQL 执行语句
 	 * 
 	 * @param sql    SQL 语句，可以带有 ? 的占位符
 	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
@@ -60,7 +60,7 @@ public class JdbcUtil {
 			Object value = params[i];
 			String inSql;
 
-			if (value instanceof Date) {
+			if (value instanceof Date) {// 只考虑了字符串、布尔、数字和日期类型的转换
 				inSql = "'" + value + "'";
 			} else if (value instanceof String) {
 				inSql = "'" + value + "'";

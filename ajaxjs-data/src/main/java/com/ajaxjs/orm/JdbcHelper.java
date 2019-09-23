@@ -94,14 +94,17 @@ public class JdbcHelper {
  
 	/**
 	 * 执行查询
-	 * @param conn         数据库连接对象 数据库连接对象
-	 * @param sql          SQL 语句，可以带有 ? 的占位符
-	 * @param hasZeoResult SQL 查询是否有数据返回，没有返回 true
-	 * @param processor
-	 * @param params       插入到 SQL 中的参数，可单个可多个可不填
-	 * @return
+	 * 
+	 * @param conn         	数据库连接对象 数据库连接对象
+	 * @param sql          	SQL 语句，可以带有 ? 的占位符
+	 * @param hasZeoResult	SQL 查询是否有数据返回，没有返回 true
+	 * @param processor	   	如何转换RS到目标结果的处理器
+	 * @param params       	插入到 SQL 中的参数，可单个可多个可不填
+	 * @return	RS 转换后的目标结果
 	 */
-	public static <T> T select(Connection conn, String sql, HasZeoResult hasZeoResult, ResultSetProcessor<T> processor, Object... params) {
+	public static <T> T select(Connection conn, String sql, HasZeoResult hasZeoResult, 
+			ResultSetProcessor<T> processor, Object... params) {
+		
 		LOGGER.infoYellow("The SQL is---->" + JdbcUtil.printRealSql(sql, params));
 
 		try (PreparedStatement ps = conn.prepareStatement(sql)) {
