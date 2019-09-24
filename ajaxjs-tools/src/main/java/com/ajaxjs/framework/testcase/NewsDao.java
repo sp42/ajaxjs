@@ -18,13 +18,13 @@ package com.ajaxjs.framework.testcase;
 import java.util.List;
 
 import com.ajaxjs.framework.IBaseDao;
-import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.SqlFactory;
 import com.ajaxjs.orm.annotation.TableName;
 import com.ajaxjs.orm.annotation.Update;
+import com.ajaxjs.orm.dao.PageResult;
 
 /**
  * Data Acccess Object for testing.

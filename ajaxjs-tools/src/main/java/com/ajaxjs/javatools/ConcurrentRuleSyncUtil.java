@@ -16,7 +16,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.logging.Logger;
+
+import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.logger.LogHelper;
 
 
 
@@ -27,6 +29,8 @@ import java.util.logging.Logger;
  *
  */
 public class ConcurrentRuleSyncUtil {
+	private static final LogHelper LOGGER = LogHelper.getLog(ConcurrentRuleSyncUtil.class);
+	
 	private static final int MAX_THREAD = 10; // 最多启动的线程数
 
 	private static final ExecutorService exec = Executors.newFixedThreadPool(MAX_THREAD);
@@ -149,7 +153,7 @@ public class ConcurrentRuleSyncUtil {
 			String encoding = "UTF-8";
 			String contextType = httpUrlConn.getContentType();
 
-			if (!Util.isEmptyString(contextType)) {
+			if (!CommonUtil.isEmptyString(contextType)) {
 				int pos = contextType.lastIndexOf("=");
 				if (pos > -1)
 					encoding = contextType.substring(pos + 1);

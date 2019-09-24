@@ -24,9 +24,12 @@ import java.nio.file.WatchService;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+
+import com.ajaxjs.util.logger.LogHelper;
 
 public class FileHelper {
+	private static final LogHelper LOGGER = LogHelper.getLog(FileHelper.class);
+	
 
 	/**
 	 * 计算一个文件夹以及子文件夹在内的总大小
@@ -306,7 +309,7 @@ public class FileHelper {
 					WatchKey key;
 					try {
 						key = watcher.take();
-					} catch (InterruptedException _) {
+					} catch (InterruptedException e) {
 						return;
 					}
 
