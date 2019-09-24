@@ -121,7 +121,7 @@ public class TestJdbcHelper {
 		assertNotNull(info.getName());
 	}
 
-	@Test
+//	@Test
 	public void testQueryAsBeanList() {
 		List<News> news = queryAsBeanList(News.class, conn, "SELECT * FROM news");
 		assertNotNull(news.get(0).getName());

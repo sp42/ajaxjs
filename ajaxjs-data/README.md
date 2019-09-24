@@ -47,10 +47,7 @@ Maven 坐标：
 
 鸣谢
 ---------
-
-由于本人水平有限，动态拼接 SQL 功能引用了 MyBatis 的 SQL Builder 的源码，详见 com.ajaxjs.orm.thirdparty 包。还有“雪花 id”生成器也是网友贡献的。其余 AJAXJS-Data 就没有什么依赖了（数据库 Driver 除外）。
-
-另外下面参考的开源项目：
+参考的开源项目：
 
 https://gitee.com/bitprince/memory
 

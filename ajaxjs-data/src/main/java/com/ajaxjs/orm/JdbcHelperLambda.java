@@ -13,7 +13,6 @@
 package com.ajaxjs.orm;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -33,26 +32,9 @@ public class JdbcHelperLambda {
 		/**
 		 * 
 		 * @param resultSet
-		 * @param currentRow
 		 * @throws SQLException SQL 异常
 		 */
 		public T process(ResultSet resultSet) throws SQLException;
-	}
-
-	/**
-	 * 
-	 * @param <T>
-	 */
-	@FunctionalInterface
-	public static interface ExecutePs<T> {
-		/**
-		 * 执行 SQL 语句
-		 * 
-		 * @param ps PreparedStatement 对象
-		 * @return 执行 SQL后的结果
-		 * @throws SQLException SQL 异常
-		 */
-		public T execute(PreparedStatement ps) throws SQLException;
 	}
 
 	/**
