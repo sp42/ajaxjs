@@ -47,9 +47,9 @@ Maven 坐标：
 
 鸣谢
 ---------
-参考的开源项目：
+参考的开源项目：https://gitee.com/bitprince/memory
 
-https://gitee.com/bitprince/memory
+使用了 Twitter 的分布式自增ID算法 Snowflake:雪花生成器。
 
 最后是我之前的尝试，记录在博客上了。
 

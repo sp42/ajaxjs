@@ -1,5 +1,12 @@
-package com.ajaxjs.orm.thirdparty;
+package com.ajaxjs.orm;
 
+/**
+ * 
+ * Twitter 的分布式自增ID算法 Snowflake:雪花生成器
+ * 
+ * @author Administrator
+ *
+ */
 public class SnowflakeIdWorker {
 	/** 开始时间截 (2015-01-01) */
 	private final long twepoch = 1420041600000L;
