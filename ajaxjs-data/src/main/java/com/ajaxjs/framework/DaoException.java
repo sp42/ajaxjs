@@ -24,8 +24,7 @@ public class DaoException extends Exception {
 	/**
 	 * 创建一个 DAO 异常对象。
 	 * 
-	 * @param message
-	 *            错误信息提示
+	 * @param message  错误信息提示
 	 */
 	public DaoException(String message) {
 		super(message);

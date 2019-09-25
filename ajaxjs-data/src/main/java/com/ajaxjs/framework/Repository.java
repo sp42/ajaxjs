@@ -1,12 +1,7 @@
 /**
- * 版权所有 2017 Sp42 frank@ajaxjs.com
- * 
- * 根据 2.0 版本 Apache 许可证("许可证")授权；
- * 根据本许可证，用户可以不使用此文件。
- * 用户可从下列网址获得许可证副本：
- * 
- *    http://www.apache.org/licenses/LICENSE-2.0
- *    
+ * 版权所有 2017 Sp42 frank@ajaxjs.com 根据 2.0 版本 Apache 许可证("许可证")授权；
+ * 根据本许可证，用户可以不使用此文件。 用户可从下列网址获得许可证副本：
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 除非因适用法律需要或书面同意，根据许可证分发的软件是基于"按原样"基础提供，
  * 无任何明示的或暗示的保证或条件。详见根据许可证许可下，特定语言的管辖权限和限制。
  */
@@ -19,7 +14,6 @@ import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +21,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.ajaxjs.orm.JdbcConnection;
-import com.ajaxjs.orm.JdbcHelper;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
@@ -43,21 +36,15 @@ import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
  * Data Access Object 负责对数据库的增删改查工作最后的工作。 框架中一般无须写出实现，提供接口即可。 通过 Java
  * 代理自动实现接口的实例 必须是接口原类型，而不是接口其父类，也就是不支持多态
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
-public class Repository extends JdbcHelper implements InvocationHandler {
-
-	/**
-	 * 数据库连接对象。You should put connection by calling JdbcConnection.setConnection(conn).
-	 */
-	private Connection conn;
-
+public class Repository extends RepositoryBase implements InvocationHandler {
 	/**
 	 * 执行时的调用。不管执行哪个方法都会调用该方法。
 	 * 
-	 * @param proxy
-	 * @param method
-	 * @param args
+	 * @param proxy		代理对象
+	 * @param method	DAO 方法对象
+	 * @param args		DAO 方法的参数
 	 * @return
 	 * @throws DaoException DAO 异常
 	 */
@@ -75,7 +62,7 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 
 		Method sqlFactoryHandler = getSqlFactoryHandler(method);
 
-		if (method.getAnnotation(Select.class) != null) {
+		if (isRead(method)) {
 			entryType = getEntryContainerType(method);
 
 			return select(method.getAnnotation(Select.class), sqlFactoryHandler, args, returnType, entryType, method);
@@ -86,13 +73,13 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 		else
 			throw new DaoException("DAO 接口方法:" + method + " 签名缺少实体参数！");
 
-		if (method.getAnnotation(Insert.class) != null)
+		if (isCreate(method))
 			return insert(method.getAnnotation(Insert.class), sqlFactoryHandler, args, returnType);
 
-		if (method.getAnnotation(Update.class) != null)
+		if (isUpdate(method))
 			return update(method.getAnnotation(Update.class), sqlFactoryHandler, args);
 
-		if (method.getAnnotation(Delete.class) != null)
+		if (isDelete(method))
 			return delete(method.getAnnotation(Delete.class), sqlFactoryHandler, args);
 
 		throw new DaoException("没有任何 DAO CRUD 的注解。你继承 IDAO 接口的子接口中，可能没有覆盖 IDAO 的方法" + method);
@@ -101,31 +88,31 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 	/**
 	 * DAO 方法返回类型
 	 * 
-	 * @param method
-	 * @return
+	 * @param method DAO 方法对象
+	 * @return DAO 方法返回类型
 	 * @throws DaoException
 	 */
 	private Class<?> getReturnType(Method method) throws DaoException {
 		Class<?> clz = method.getReturnType();
 
-		if (clz == Map.class || clz == List.class || clz == PageResult.class || clz == int.class || clz == Integer.class || clz == long.class || clz == Long.class || clz == String.class || clz == Boolean.class
+		if (clz == Map.class || clz == List.class || clz == PageResult.class || clz == int.class || clz == Integer.class
+				|| clz == long.class || clz == Long.class || clz == String.class || clz == Boolean.class
 				|| clz == boolean.class || clz.isArray())
 			return clz;
 
 		TableName t = getClz().getAnnotation(TableName.class);
 
-		if (t == null && getBeanClz() == null) {
+		if (t == null && getBeanClz() == null)
 			throw new DaoException("请设置注解 TableName 的 beanClass 或送入 beanClz");
-		} else {
+		else
 			clz = getBeanClz() == null ? t.beanClass() : getBeanClz();
-		}
 
 		return clz;
 	}
 
 	/**
 	 * 
-	 * @param method
+	 * @param method DAO 方法对象
 	 * @return
 	 * @throws DaoException
 	 */
@@ -136,11 +123,11 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 			String methodName = sqlFactory.value();
 
 			Class<?> clz = sqlFactory.clz();
-			if (clz == null || clz.equals(Object.class)) {
-				clz = this.clz;
-			}
+			if (clz == null || clz.equals(Object.class))
+				clz = getClz();
 
 			Method m = ReflectUtil.getMethod(clz, methodName, String.class);
+
 			if (m == null)
 				throw new DaoException("找不到对应的 SqlFactory，应该为 Function<String, String>");
 
@@ -149,18 +136,6 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 
 		return null;
 	}
-
-	/**
-	 * DAO 实际类引用，必须为接口
-	 */
-	private Class<?> clz;
-
-	/**
-	 * 实体类型
-	 */
-	private Class<?> beanClz;
-
-	private String tableName;
 
 	/**
 	 * 绑定 DAO 的类，实例化该接口，返回实例
@@ -174,9 +149,8 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 		// 获取注解的表名
 		TableName tableNameA = clz.getAnnotation(TableName.class);
 
-		if (tableNameA != null && !CommonUtil.isEmptyString(tableNameA.value())) {
+		if (tableNameA != null && !CommonUtil.isEmptyString(tableNameA.value()))
 			setTableName(tableNameA.value());
-		}
 
 		Object obj = Proxy.newProxyInstance(clz.getClassLoader(), new Class[] { clz }, this);
 		return (T) obj;
@@ -214,21 +188,20 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 				ParameterizedType _type = (ParameterizedType) returnType;
 
 				for (Type typeArgument : _type.getActualTypeArguments()) {
-//					if ("com.ajaxjs.framework.Map<String, Object>".equals(typeArgument.getTypeName())) {
-//						return Map<String, Object>.class;
-//					}
+					// if ("com.ajaxjs.framework.Map<String,
+					// Object>".equals(typeArgument.getTypeName())) {
+					// return Map<String, Object>.class;
+					// }
 
 					if ("T".equals(typeArgument.toString())) {
 						TableName t = getClz().getAnnotation(TableName.class);
-						if (t == null && getBeanClz() == null) {
+						if (t == null && getBeanClz() == null)
 							throw new DaoException("请设置注解 TableName 的 beanClass 或送入 beanClz");
-						} else {
+						else
 							return getBeanClz() == null ? t.beanClass() : getBeanClz();
-						}
-
-					} else if (typeArgument instanceof ParameterizedTypeImpl) {
+					} else if (typeArgument instanceof ParameterizedTypeImpl)
 						return Map.class; // 写死的
-					} else
+					else
 						return (Class<?>) typeArgument;
 				}
 			}
@@ -237,13 +210,18 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 		return type;
 	}
 
+	/**
+	 * 
+	 * @param sql
+	 * @param sqlFactoryHandler
+	 * @return
+	 */
 	public String handleSql(String sql, Method sqlFactoryHandler) {
 		if (sqlFactoryHandler != null)
 			sql = ReflectUtil.executeStaticMethod(sqlFactoryHandler, sql).toString();
 
-		if (tableName != null) {
-			sql = sql.replaceAll("\\$\\{\\w+\\}", tableName);
-		}
+		if (getTableName() != null)
+			sql = sql.replaceAll("\\$\\{\\w+\\}", getTableName());
 
 		return sql;
 	}
@@ -251,18 +229,22 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 	/**
 	 * 执行 SELECT 查询
 	 * 
-	 * @param method DAO 方法
-	 * @param args 参数
-	 * @param returnType DAO 方法返回的目标类型
-	 * @param entryType 实体类型的类引用，通常是 map 或 bean
+	 * @param select
+	 * @param sqlFactoryHandler		DAO 方法对象
+	 * @param args					DAO 方法的参数
+	 * @param returnType			DAO 方法返回的目标类型
+	 * @param entryType				实体类型的类引用，通常是 map 或 bean
+	 * @param method
 	 * @return 查询结果
 	 * @throws DaoException
 	 */
-	private <R, B> Object select(Select select, Method sqlFactoryHandler, Object[] args, Class<R> returnType, Class<B> entryType, Method method) throws DaoException {
+	private <R, B> Object select(Select select, Method sqlFactoryHandler, Object[] args, Class<R> returnType,
+			Class<B> entryType, Method method) throws DaoException {
 		String sql = isSqlite(select.sqliteValue(), conn) ? select.sqliteValue() : select.value();
+
 		sql = handleSql(sql, sqlFactoryHandler);
 
-		Object[] r = doSql(sql, method,args);
+		Object[] r = doSql(sql, method, args);
 		sql = (String) r[0];
 		args = (Object[]) r[1];
 
@@ -283,8 +265,7 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 		} else if (returnType == Map.class) {
 			result = queryAsMap(conn, sql, args);
 		} else {
-			// bean
-			result = queryAsBean(returnType, conn, sql, args);
+			result = queryAsBean(returnType, conn, sql, args); // bean
 		}
 
 		return result;
@@ -302,20 +283,20 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 		Object[] _args = new Object[3];
 		_args[0] = sql;
 		_args[1] = args;
-		
-		
-		if(args != null && args.length > 0) {
+
+		if (args != null && args.length > 0) {
 			String realSql = null;
 			List<Object> list = new ArrayList<>();
 			boolean found = false;
-			
+
 			Parameter[] parameters = method.getParameters();
 			int i = 0;
-			
+
 			for (Object obj : args) {
 				Parameter p = parameters[i++];
-				if(Function.class.equals(p.getType())) {
+				if (Function.class.equals(p.getType())) {
 					found = true;
+
 					if (obj instanceof Function) {
 						@SuppressWarnings("unchecked")
 						Function<String, String> fn = (Function<String, String>) obj;
@@ -326,60 +307,78 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 						realSql = sql; // SQL 不变，去掉 fn 参数
 						_args[2] = null;
 					}
-				} else {
+				} else
 					list.add(obj);
-				}
 			}
-			
-			if(found) {
+
+			if (found) {
 				_args[0] = realSql;
-				_args[1] = list.toArray();				
+				_args[1] = list.toArray();
 			}
 		}
-		
+
 		return _args;
 	}
 
+	/**
+	 * 
+	 * @param entryType
+	 * @param sql
+	 * @param args
+	 * @return
+	 */
 	private Object queryList(Class<?> entryType, String sql, Object[] args) {
-		Object result;
+		return entryType == Map.class ? queryAsMapList(conn, sql, args) : queryAsBeanList(entryType, conn, sql, args);
+	}
+	
+	private <T> Function<Method, T> getFn(Supplier<String> getSql, Supplier<String> getTableName, Object[] args, Function<DaoInfo, T> writeSql, Function<DaoInfo, T> writeBean) {
+		Object bean = args[0];
+		
+		DaoInfo daoInfo = new DaoInfo();
+		daoInfo.sql = getSql.get();
+		// 表名可以通过注解获取（类），也可以直接 insert.tableName() 获取
+		daoInfo.tableName = CommonUtil.isEmptyString(getTableName.get()) ? getTableName(): getTableName.get();
+		daoInfo.isMap = bean instanceof Map;
+		daoInfo.bean = bean;
 
-		if (entryType == Map.class) {
-			result = queryAsMapList(conn, sql, args);
-		} else {
-			result = queryAsBeanList(entryType, conn, sql, args);
+		Function<Method, T> executeBySql = method -> {
+			daoInfo.sql = handleSql(daoInfo.sql, method);
+			return writeSql.apply(daoInfo);
+		}, executeByBean = method -> writeBean.apply(daoInfo);
+
+		if (!CommonUtil.isEmptyString(daoInfo.sql)) { /* 以 sql 方式更新 */
+			return executeBySql;
+		} else if (CommonUtil.isEmptyString(daoInfo.sql) && bean != null) { // 以 bean 方式删除
+			return executeByBean;
 		}
 
-		return result;
+		throw new RuntimeException("程序错误");
 	}
 
-	/**
-	 * 判断是否 SQLite 数据库
-	 * 
-	 * @param sqliteValue SQLite 数据库专用的 SQL 语句
-	 * @param conn 数据库连接对象
-	 * @return true = 是 SQLite 数据库
-	 */
-	public static boolean isSqlite(String sqliteValue, Connection conn) {
-		return !CommonUtil.isEmptyString(sqliteValue) && conn.toString().contains("sqlite");
-	}
-
+	@SuppressWarnings("unchecked")
+	private Function<DaoInfo, Serializable> createEntity = daoInfo -> daoInfo.isMap
+								? createMap(conn, (Map<String, Object>) daoInfo.bean, daoInfo.tableName)
+								: createBean(conn, daoInfo.bean, daoInfo.tableName);
+	
+	@SuppressWarnings("unchecked")
+	private Function<DaoInfo, Integer> updateEntity = daoInfo -> daoInfo.isMap
+								? updateMap(conn, (Map<String, Object>) daoInfo.bean, daoInfo.tableName)
+								: updateBean(conn, daoInfo.bean, daoInfo.tableName);
+	
 	/**
 	 * 新增动作
 	 * 
-	 * @param insert 包含 SQL 的注解
-	 * @param args SQL 参数
-	 * @param returnType DAO 方法返回的目标类型
-	 * @param beanType 实体类型的类引用，通常是 map 或 bean
+	 * @param insert 		包含 SQL 的注解
+	 * @param args 			SQL 参数
+	 * @param returnType 	DAO 方法返回的目标类型
+	 * @param beanType 		实体类型的类引用，通常是 map 或 bean
 	 * @return 自增 id
-	 */
-	@SuppressWarnings("unchecked")
+	 */								
 	private <R> Serializable insert(Insert insert, Method sqlFactoryHandler, Object[] args, Class<R> returnType) {
-		String sql = insert.value();
-		Serializable id = null; // INSERT 返回新建的 id
-
-		id = write(sql, sqlFactoryHandler, insert::tableName, _sql -> create(conn, _sql, args),
-				tableName -> args[0] instanceof Map ? createMap(conn, (Map<String, Object>) args[0], tableName) : createBean(conn, args[0], tableName), args);
-
+		Function<DaoInfo, Serializable> writeSql =  daoInfo -> create(conn, daoInfo.sql, args);
+		// INSERT 返回新建的 id
+		Serializable id = getFn(insert::value, insert::tableName, args, writeSql, createEntity).apply(sqlFactoryHandler);
+		
 		if (returnType == Integer.class && id.getClass() == Long.class) {
 			return Integer.parseInt("" + id);
 		} else if (returnType == Long.class && id.getClass() == Integer.class) {
@@ -392,73 +391,29 @@ public class Repository extends JdbcHelper implements InvocationHandler {
 	/**
 	 * 更新动作
 	 * 
-	 * @param update 包含 SQL 的注解
-	 * @param args SQL 参数
-	 * @param beanType 实体类型的类引用，通常是 map 或 bean
+	 * @param update 	包含 SQL 的注解
+	 * @param args 		SQL 参数
+	 * @param beanType 	实体类型的类引用，通常是 Map 或 Bean
 	 * @return 影响的行数
 	 */
 	private Integer update(Update update, Method sqlFactoryHandler, Object[] args) {
-		String sql = update.value();
-
-		@SuppressWarnings("unchecked")
-		int effectRows = write(sql, sqlFactoryHandler, update::tableName, _sql -> update(conn, _sql, args),
-				tableName -> args[0] instanceof Map ? updateMap(conn, (Map<String, Object>) args[0], tableName) : updateBean(conn, args[0], tableName), args);
-		return effectRows;
-	}
-
-	private <T> T write(String sql, Method sqlFactoryHandler, Supplier<String> getTableNameByAnn, Function<String, T> writeSql, Function<String, T> writeBean, Object[] args) {
-		T r = null;
-
-		if (!sql.equals("")) { /* 以 sql 方式更新 */
-			sql = handleSql(sql, sqlFactoryHandler);
-			r = writeSql.apply(sql);
-		} else if (sql.equals("") && args[0] != null) { // 以 bean 方式删除
-			String tableName = getTableNameByAnn.get();// 表名可以通过注解获取（类），也可以直接 insert.tableName() 获取
-			if (tableName == null || "".equals(tableName))
-				tableName = getTableName();
-
-			r = writeBean.apply(tableName);
-		}
-
-		return r;
+		Function<DaoInfo, Integer> writeSql = daoInfo -> update(conn, daoInfo.sql, args);
+		return getFn(update::value, update::tableName, args, writeSql, updateEntity).apply(sqlFactoryHandler);
 	}
 
 	/**
 	 * 删除动作
 	 * 
-	 * @param delete 包含 SQL 的注解
-	 * @param args SQL 参数
-	 * @return 是否删除成功
+	 * @param delete				包含 SQL 的注解
+	 * @param sqlFactoryHandler		
+	 * @param args					SQL 参数
+	 * @return
 	 */
 	private Boolean delete(Delete delete, Method sqlFactoryHandler, Object[] args) {
-		String sql = isSqlite(delete.sqliteValue(), conn) ? delete.sqliteValue() : delete.value();
-
-		boolean isDeleted = write(sql, sqlFactoryHandler, delete::tableName, _sql -> update(conn, _sql, args) >= 1, tableName -> delete(conn, args[0], tableName), args);
-
-		return isDeleted;
-	}
-
-	public Class<?> getClz() {
-		return clz;
-	}
-
-	public void setClz(Class<?> clz) {
-		this.clz = clz;
-	}
-
-	public String getTableName() {
-		return tableName;
-	}
-
-	public void setTableName(String tableName) {
-		this.tableName = tableName;
-	}
-
-	public Class<?> getBeanClz() {
-		return beanClz;
-	}
-
-	public void setBeanClz(Class<?> beanClz) {
-		this.beanClz = beanClz;
+		Supplier<String> getSql = isSqlite(delete.sqliteValue(), conn) ? delete::sqliteValue : delete::value;
+		
+		return getFn(getSql, delete::tableName, args,
+				daoInfo -> update(conn, daoInfo.sql, args) >= 1, // DELETE SQL 也是用 update 方法
+				daoInfo -> delete(conn, daoInfo.bean, daoInfo.tableName)).apply(sqlFactoryHandler);
 	}
 }
