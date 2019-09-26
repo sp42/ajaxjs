@@ -13,29 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.framework;
-
-import java.util.HashMap;
-import java.util.Map;
+package com.ajaxjs.framework.model;
 
 /**
- * 数据字典，常量
+ * Writer Info
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
-public interface DataDict {
-	public static final int PIC_NORMAL = 1;
-	public static final int PIC_COVER = 2;
-	public static final int PIC_in_GALLERY = 3;
-
-	public static final Map<Integer, String> picMap = new HashMap() {
-		private static final long serialVersionUID = -1L;
-		{
-			put(PIC_NORMAL, "普通图片");
-			put(PIC_COVER, "头像/封面");
-			put(PIC_in_GALLERY, "相册图片");
-		}
-	};
+public class DaoInfo {
+	public String tableName; 	// 表名
+	public String sql;			// 执行的 SQL 语句
+	public Object bean;		// Bean
+	public boolean isMap;		// true = map, false = bean
 }

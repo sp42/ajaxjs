@@ -29,16 +29,16 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface TableName {
 	/**
-	 * SQL 表名
+	 * 可以在 DAO 上指定 SQL 表名是什么
 	 * 
-	 * @return
+	 * @return SQL 表名
 	 */
 	String value() default "";
 
 	/**
-	 * 实体类
+	 * 可以在 DAO 上指定 Bean 实体类是什么
 	 * 
-	 * @return
+	 * @return 实体类
 	 */
 	Class<?> beanClass() default Object.class;
 }
