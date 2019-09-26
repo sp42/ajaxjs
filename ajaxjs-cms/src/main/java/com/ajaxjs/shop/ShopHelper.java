@@ -3,7 +3,7 @@ package com.ajaxjs.shop;
 import java.math.BigDecimal;
 import java.util.Calendar;
 
-import com.ajaxjs.orm.thirdparty.SnowflakeIdWorker;
+import com.ajaxjs.orm.SnowflakeIdWorker;
 
 public class ShopHelper {
 	/**

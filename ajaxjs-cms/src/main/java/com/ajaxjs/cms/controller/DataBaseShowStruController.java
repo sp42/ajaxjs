@@ -141,6 +141,12 @@ public class DataBaseShowStruController implements IController {
 		return tables;
 	}
 
+	/**
+	 * 
+	 * @param conn			数据库连接对象
+	 * @param tableNames	多张表的表名
+	 * @return 包含给个字段注释的 Map，key 是表名，value 是各个列。列中的Map
+	 */
 	public static Map<String, List<Map<String, String>>> getColumnCommentByTableName(Connection conn, List<String> tableNames) {
 		Map<String, List<Map<String, String>>> map = new HashMap<>();
 
