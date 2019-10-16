@@ -189,10 +189,9 @@ public class IoHelper {
 			while (data[temp] == search[j]) {
 				temp++;
 				j++;
-				if (j == len) {
-					
+				
+				if (j == len) 
 					return i;
-				}
 			}
 		}
 	

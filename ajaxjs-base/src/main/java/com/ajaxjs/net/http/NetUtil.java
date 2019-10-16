@@ -181,12 +181,9 @@ public class NetUtil extends HttpBasicRequest {
 			return null;
 		}
 	}
-
+ 
 	/**
-	 * request 头和上传文件内容之间的分隔符
-	 */
-	/**
-	 * 多段 POST 的分隔
+	 * 多段 POST 的分隔，request 头和上传文件内容之间的分隔符
 	 */
 	private static final String divField = "\r\n--%s\r\nContent-Disposition: form-data; name=\"%s\"\r\n\r\n%s";
 
@@ -202,6 +199,11 @@ public class NetUtil extends HttpBasicRequest {
 	// 定义最后数据分隔线，即--加上BOUNDARY再加上--。
 	private static byte[] endData = (newLine + boundaryPrefix + BOUNDARY + boundaryPrefix + newLine).getBytes();
 
+	/**
+	 * 
+	 * @param data
+	 * @return
+	 */
 	public static byte[] toFromData(Map<String, Object> data) {
 		byte[] bytes = null;
 
@@ -231,13 +233,12 @@ public class NetUtil extends HttpBasicRequest {
 	/**
 	 * 多段上传
 	 * 
-	 * @param url 请求目标地址
-	 * @param data 请求数据，若包含 File 对象则表示二进制（文件）数据
+	 * @param url 	请求目标地址
+	 * @param data 	请求数据，若包含 File 对象则表示二进制（文件）数据
 	 * @return 请求之后的响应的内容
 	 */
 	public static String multiPOST(String url, Map<String, Object> data) {
-		return post(url, toFromData(data),
-				conn -> conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY));
+		return post(url, toFromData(data), conn -> conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY));
 	}
 
 }
