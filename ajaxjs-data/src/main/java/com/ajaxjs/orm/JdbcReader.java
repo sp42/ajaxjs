@@ -97,8 +97,7 @@ public class JdbcReader {
 	 * @param params       	插入到 SQL 中的参数，可单个可多个可不填
 	 * @return	RS 转换后的目标结果
 	 */
-	public static <T> T select(Connection conn, String sql, HasZeoResult hasZeoResult, ResultSetProcessor<T> processor,
-			Object... params) {
+	public static <T> T select(Connection conn, String sql, HasZeoResult hasZeoResult, ResultSetProcessor<T> processor, Object... params) {
 
 		LOGGER.infoYellow("The SQL is---->" + JdbcUtil.printRealSql(sql, params));
 
@@ -118,7 +117,8 @@ public class JdbcReader {
 					}
 				}
 
-				return processor.process(rs);
+				T r = processor.process(rs);
+				return r;
 			}
 		} catch (SQLException e) {
 			LOGGER.warning(e);
@@ -180,14 +180,13 @@ public class JdbcReader {
 	 * @return ResultSet 处理器，传入 ResultSet 类型对象返回 T 类型的 bean
 	 */
 	public static <T> ResultSetProcessor<T> getResultBean(Class<T> beanClz) {
-		T bean = ReflectUtil.newInstance(beanClz);
-
 		return rs -> {
+			T bean = ReflectUtil.newInstance(beanClz);
 			ResultSetMetaData rsmd = rs.getMetaData();
 
 			for (int i = 1; i <= rsmd.getColumnCount(); i++) {// 遍历结果集
 				String key = rsmd.getColumnLabel(i);
-				Object _value = rs.getObject(i);
+				Object _value = rs.getObject(i); // Real value in DB
 
 				try {
 					PropertyDescriptor property = new PropertyDescriptor(key, beanClz);
@@ -227,6 +226,7 @@ public class JdbcReader {
 						}
 						continue;
 					}
+					
 					LOGGER.warning(e);
 				}
 			}
@@ -283,9 +283,11 @@ public class JdbcReader {
 	static <T> List<T> forEachRs(ResultSet rs, ResultSetProcessor<T> processor) throws SQLException {
 		List<T> list = new ArrayList<>();
 
-		while (rs.next())
-			list.add(processor.process(rs));
-
+		while (rs.next()){
+			T d = processor.process(rs);
+			list.add(d);
+		}
+		
 		return list.size() > 0 ? list : null; // 找不到记录返回 null，不返回空的 list
 	}
 
