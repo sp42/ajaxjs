@@ -43,8 +43,8 @@ public class ForgetPassword extends VerifyToken {
 
 		Mail mail = new Mail();// 创建邮件实体
 		mail.setMailServer("smtp.163.com");// 指定邮件 SMTP 服务器
-		mail.setAccount("pacoweb@163.com");// 发送人在 SMTP 上的账户
-		mail.setPassword("1120");// 密码
+//		mail.setAccount("pacoweb@163.com");// 发送人在 SMTP 上的账户
+//		mail.setPassword("1120");// 密码
 		mail.setFrom("pacoweb@163.com");// 指定发件人
 		mail.setTo("sp42@qq.com");// 收件人
 		mail.setSubject("用户 " + email + " 重置密码");// 邮件主题
