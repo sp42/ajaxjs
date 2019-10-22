@@ -1,2 +1,0 @@
-AJAXJS Web DEMO
-============= 
