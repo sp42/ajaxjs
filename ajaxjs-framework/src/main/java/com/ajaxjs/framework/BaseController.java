@@ -17,7 +17,7 @@ import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.orm.thirdparty.SnowflakeIdWorker;
+import com.ajaxjs.orm.SnowflakeIdWorker;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.web.UploadFile;

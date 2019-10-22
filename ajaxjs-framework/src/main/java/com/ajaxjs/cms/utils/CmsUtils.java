@@ -45,4 +45,8 @@ public class CmsUtils {
 		BeanContext.init(string2);
 		BeanContext.injectBeans();
 	}
+	
+	public static void loadSQLiteTest(String db) {
+		JdbcConnection.setConnection(JdbcConnection.getSqliteConnection(db));
+	}
 }

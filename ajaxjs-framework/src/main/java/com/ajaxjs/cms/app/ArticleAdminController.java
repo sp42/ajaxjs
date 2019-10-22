@@ -24,7 +24,7 @@ import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.net.http.PicDownload;
-import com.ajaxjs.orm.thirdparty.SnowflakeIdWorker;
+import com.ajaxjs.orm.SnowflakeIdWorker;
 
 @Bean
 @Path("/admin/article")

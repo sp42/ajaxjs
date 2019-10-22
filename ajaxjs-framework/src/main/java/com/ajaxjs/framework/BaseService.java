@@ -9,7 +9,7 @@ import java.util.function.Function;
 
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.JdbcHelper;
-import com.ajaxjs.orm.thirdparty.SnowflakeIdWorker;
+import com.ajaxjs.orm.SnowflakeIdWorker;
 import com.ajaxjs.util.CommonUtil;
 
 /**

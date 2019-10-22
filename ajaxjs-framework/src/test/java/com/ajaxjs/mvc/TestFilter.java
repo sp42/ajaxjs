@@ -43,11 +43,11 @@ public class TestFilter extends BaseTest {
 		request = MockRequest.mockRequest("/ajaxjs-web", "/filter/captcha");
 
 		Map<String, Object> map = new HashMap<>();
-		map.put(CaptchaController.SESSION_KEY, "123123");
+		map.put(CaptchaController.CAPTCHA_CODE, "123123");
 		MockRequest.mockSession(request, map);
 
 		when(request.getMethod()).thenReturn("GET");
-		when(request.getParameter(CaptchaController.submitedFieldName)).thenReturn("12313");
+		when(request.getParameter(CaptchaController.CAPTCHA_CODE)).thenReturn("12313");
 		dispatcher.doFilter(request, response, chain);
 
 		assertEquals("{\"isOk\": false, \"msg\" : \"验证码不正确\"}", writer.toString());
