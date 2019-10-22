@@ -77,6 +77,15 @@ public interface IBaseDao<T> {
 	 */
 	@Select("SELECT * FROM ${tableName} WHERE id = ?")
 	public T findById(Long id);
+	
+	/**
+	 * 
+	 * 
+	 * @param uid 全局唯一标识
+	 * @return
+	 */
+	@Select("SELECT * FROM ${tableName} WHERE uid = ?")
+	public T findByUid(long uid);
 
 	/**
 	 * 查询单个记录，带有类别的。如果找不到则返回 null

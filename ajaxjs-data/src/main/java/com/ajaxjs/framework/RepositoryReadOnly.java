@@ -123,7 +123,9 @@ public class RepositoryReadOnly extends RepositoryBase {
 		Class<?> returnType = getReturnType(method);
 		Object result = null;
 
-		if (returnType == int.class || returnType == Integer.class) {
+		if (returnType == boolean.class || returnType == Boolean.class) {
+			result = queryOne(conn, sql, Object.class, args) == null;
+		} else if (returnType == int.class || returnType == Integer.class) {
 			result = queryOne(conn, sql, int.class, args);
 		} else if (returnType == long.class || returnType == Long.class) {
 			result = queryOne(conn, sql, long.class, args);

@@ -124,9 +124,9 @@ public class Repository extends RepositoryReadOnly {
 		// INSERT 返回新建的 id
 		Serializable id = getFn(insert::value, insert::tableName, args, method, writeSql, createEntity);
 
-		if (returnType == Integer.class && id.getClass() == Long.class) {
+		if ((returnType == Integer.class || returnType == int.class) && id.getClass() == Long.class) {
 			return Integer.parseInt("" + id);
-		} else if (returnType == Long.class && id.getClass() == Integer.class) {
+		} else if ((returnType == Long.class || returnType == long.class) && id.getClass() == Integer.class) {
 			return new Long((Integer) id);
 		} else {
 			return id;

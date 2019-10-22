@@ -203,14 +203,15 @@ public class JdbcReader {
 
 					ReflectUtil.executeMethod(bean, method, value);
 				} catch (IntrospectionException | IllegalArgumentException e) {
-					if (e instanceof IntrospectionException) {// 数据库返回这个字段，但是 bean 没有对应的方法
-						// LOGGER.info("数据库返回这个字段 {0}，但是 bean {1} 没有对应的方法", key, beanClz);
+					if (e instanceof IntrospectionException) {
+						// 数据库返回这个字段，但是 bean 没有对应的方法
+//						LOGGER.info("数据库返回这个字段 {0}，但是 bean {1} 没有对应的方法", key, beanClz);
 
 						try {
 							if ((_value != null) && beanClz.getField("extractData") != null) {
 								Object obj = ReflectUtil.executeMethod(bean, "getExtractData");
 
-								// System.out.println(":::::::::key::"+ key +":::v:::" + _value);
+//								System.out.println(":::::::::key::"+ key +":::v:::" + _value);
 								if (obj == null) {
 									Map<String, Object> extractData = new HashMap<>();
 									ReflectUtil.executeMethod(bean, "setExtractData", extractData);
@@ -222,8 +223,9 @@ public class JdbcReader {
 								map.put(key, _value);
 							}
 						} catch (NoSuchFieldException | SecurityException e1) {
-							// LOGGER.warning(e);
+//							 LOGGER.warning(e);
 						}
+						
 						continue;
 					}
 					
