@@ -273,7 +273,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 		if (port != 80)
 			prefix += ":" + port;
 
-		return prefix + "/" + getContextPath();
+		return prefix + getContextPath();
 	}
 
 	/**

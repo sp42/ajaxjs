@@ -1,17 +1,12 @@
 /**
- * Copyright 2015 Sp42 frank@ajaxjs.com
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2015 Sp42 frank@ajaxjs.com Licensed under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+ * or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
  */
 package com.ajaxjs.web.captcha;
 
@@ -28,19 +23,17 @@ import com.ajaxjs.mvc.filter.SessionValueFilter;
  *
  */
 public class CaptchaFilter extends SessionValueFilter {
-
 	@Override
 	public boolean before(MvcRequest request, MvcOutput response, Method method) {
-		String captchaCode = getClientSideArgs(request, CaptchaController.submitedFieldName), 
-			sessionValue = getServerSideValue(request, CaptchaController.SESSION_KEY);
+		String captchaCode = getClientSideArgs(request, CaptchaController.CAPTCHA_CODE),
+				sessionValue = getServerSideValue(request, CaptchaController.CAPTCHA_CODE);
 
 		// 判断用户输入的验证码是否通过
 		if (captchaCode.equalsIgnoreCase(sessionValue)) {
-			request.getSession().removeAttribute(CaptchaController.SESSION_KEY);// 通过之后记得要 清除验证码
+			request.getSession().removeAttribute(CaptchaController.CAPTCHA_CODE);// 通过之后记得要 清除验证码
 			return true;
-		} else {
+		} else
 			throw new IllegalAccessError("验证码不正确");
-		}
 	}
 
 	@Override

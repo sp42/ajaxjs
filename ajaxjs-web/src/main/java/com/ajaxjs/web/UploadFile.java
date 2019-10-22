@@ -1,17 +1,12 @@
 /**
- * Copyright Sp42 frank@ajaxjs.com
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright Sp42 frank@ajaxjs.com Licensed under the Apache License, Version
+ * 2.0 (the "License"); you may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+ * or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
  */
 package com.ajaxjs.web;
 
@@ -49,7 +44,6 @@ public class UploadFile extends HttpServletRequestWrapper {
 		setUploadFileInfo(uploadFileInfo);
 	}
 
-
 	/**
 	 * 原始的字符串
 	 */
@@ -60,31 +54,24 @@ public class UploadFile extends HttpServletRequestWrapper {
 	 */
 	private byte dataBytes[];
 
+	private UploadFileInfo uploadFileInfo; // 配置信息
+
 	/**
 	 * 预检查
 	 * 
 	 * @throws IOException
 	 */
 	private void check() throws IOException {
+		Objects.requireNonNull(uploadFileInfo, "缺少配置对象");
+
 		if (!getMethod().equals("POST"))
 			throw new IllegalArgumentException("必须 POST 请求");
-		
-		Objects.requireNonNull(uploadFileInfo, "缺少配置对象");
+
 		if (getContentLength() > uploadFileInfo.maxTotalFileSize) // 是否超大
 			throw new IOException("文件大小超过系统限制！");
 
 		if (getContentType().indexOf("multipart/form-data") == -1)// 取得客户端上传的数据类型
 			throw new IllegalArgumentException("未设置表单  multipart/form-data");
-	}
-
-	/**
-	 * 取得数据分割字符串，数据分割线开始位置boundary=---------------------------
-	 * 
-	 * @return 分割符
-	 */
-	private byte[] getBoundary() {
-		String boundary = CommonUtil.regMatch("boundary=((?:-|\\w)+)$", getContentType(), 1);
-		return boundary.getBytes();
 	}
 
 	/**
@@ -96,7 +83,7 @@ public class UploadFile extends HttpServletRequestWrapper {
 	public UploadFileInfo upload() throws IOException {
 		check();
 
-		try (ServletInputStream in = getInputStream()){			
+		try (ServletInputStream in = getInputStream()) {
 			dataBytes = IoHelper.inputStream2Byte(in);
 		} catch (IOException e) {
 			LOGGER.warning(e);
@@ -105,44 +92,43 @@ public class UploadFile extends HttpServletRequestWrapper {
 
 		dataStr = Encode.byte2String(dataBytes);
 
-		parseMeta(dataStr);
+		parse(dataStr);
 
-		int offset = get(dataBytes), length = getLength(offset);
- 
+		int offset = getOffset(), length = getLength(offset);
+
 		return save(offset, length);
 	}
 
 	/**
 	 * 解析 HTTP 报文，得出 文件名 和文件类型
 	 * 
-	 * @param dataStr
-	 *            HTTP 报文字符串
+	 * @param dataStr HTTP 报文字符串
 	 */
-	public void parseMeta(String dataStr) {
+	private void parse(String dataStr) {
 		uploadFileInfo.name = CommonUtil.regMatch("name=\"(\\w+)\"", dataStr, 1);
-		
+
 		if (uploadFileInfo.name == null)
 			throw new IllegalArgumentException("你的表单中没有设置一个 name，不能获取字段");
 
 		uploadFileInfo.oldFilename = CommonUtil.regMatch("filename=\"([^\"]*)\"", dataStr, 1);
 		uploadFileInfo.contentType = CommonUtil.regMatch("Content-Type:\\s?([\\w/]+)", dataStr, 1);
 
-		//文件扩展名判断
+		// 文件扩展名判断
 		String[] arr = uploadFileInfo.oldFilename.split("\\."); // 获取文件扩展名
 		String ext = arr[arr.length - 1];
-		
+
 		uploadFileInfo.extName = ext.toLowerCase();
 
 		if (uploadFileInfo.allowExtFilenames != null && uploadFileInfo.allowExtFilenames.length > 0) {
 			boolean isFound = false;
-			
+
 			for (String _ext : uploadFileInfo.allowExtFilenames) {
 				if (_ext.equalsIgnoreCase(ext)) {
 					isFound = true;
 					break;
 				}
 			}
-			
+
 			if (!isFound)
 				throw new IllegalArgumentException(ext + " 上传类型不允许上传");
 		}
@@ -155,10 +141,13 @@ public class UploadFile extends HttpServletRequestWrapper {
 	 * @return 文件长度
 	 */
 	private int getLength(int start) {
-		int found = IoHelper.byteIndexOf(dataBytes, getBoundary(), start);
-		if(found == -1 )
+		// 取得数据分割字符串，数据分割线开始位置boundary=---------------------------
+		String boundary = CommonUtil.regMatch("boundary=((?:-|\\w)+)$", getContentType(), 1);
+		int found = IoHelper.byteIndexOf(dataBytes, boundary.getBytes(), start);
+
+		if (found == -1)
 			throw new IllegalArgumentException("找不到 Boundary");
-		
+
 		int endPos = found - 4;
 		if (start == endPos)
 			throw new IllegalArgumentException("上传表单中没有二进制数据，上传文件为空！");
@@ -169,16 +158,15 @@ public class UploadFile extends HttpServletRequestWrapper {
 	/**
 	 * 保存文件
 	 * 
-	 * @param offset
-	 * @param length
+	 * @param offset	偏移开始位置
+	 * @param length	文件长度
 	 * @return 上传结果
 	 */
 	private UploadFileInfo save(int offset, int length) {
-		if (uploadFileInfo.saveFileName == null) {
+		if (uploadFileInfo.saveFileName == null)
 			uploadFileInfo.saveFileName = uploadFileInfo.oldFilename; // 如不指定 saveFileName 则默认上传的
-		} else {
+		else
 			uploadFileInfo.saveFileName += "." + uploadFileInfo.extName;
-		}
 
 		uploadFileInfo.fullPath = uploadFileInfo.saveFolder + uploadFileInfo.saveFileName;
 
@@ -195,8 +183,6 @@ public class UploadFile extends HttpServletRequestWrapper {
 
 		return uploadFileInfo;
 	}
-	
-	private UploadFileInfo uploadFileInfo;
 
 	public UploadFileInfo getUploadFileInfo() {
 		return uploadFileInfo;
@@ -214,16 +200,16 @@ public class UploadFile extends HttpServletRequestWrapper {
 	 * @param dataBytes
 	 * @return
 	 */
-	public static int get(byte[] dataBytes) {
+	private int getOffset() {
 		int skip = 0;
 
 		for (int i = 0; i < dataBytes.length; i++) {
 			int temp = i, j = 0;
-			
+
 			while (dataBytes[temp] == b[j]) {
 				temp++;
 				j++;
-				
+
 				if (j == b.length) {
 					skip++;
 					if (skip == 3)
