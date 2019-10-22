@@ -1,3 +1,4 @@
+<%@page import="com.ajaxjs.web.captcha.CaptchaController"%>
 <%@page pageEncoding="UTF-8"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
 <!DOCTYPE html>
@@ -35,7 +36,7 @@
 				<label>
 					<dt>验证码:</dt>
 					<dd class="captcha">
-						<aj-page-captcha field-name="captchaImgCode"></aj-page-captcha>
+						<aj-page-captcha field-name="<%=CaptchaController.CAPTCHA_CODE%>"></aj-page-captcha>
 					</dd>
 				</label>
 			</dl>

@@ -113,10 +113,10 @@
 		</c:when>
 		<c:when test="${param.action == 'modiflyEmail'}">
 		<div class="test-pl">
-			<aj-process-line ref="processLine" :items="['填写新邮箱', '完成']"></aj-process-line>
+			<aj-process-line ref="processLine" :items="['填写新邮箱', '邮箱审核', '完成']"></aj-process-line>
 		</div>
 		
-		<form class="user-form center" action="${ctx}/user/info/modiflyEmail" method="POST" style="margin-left: 15%;">
+		<form class="form-1" action="${ctx}/user/info/modiflyEmail" method="POST" style="margin-left: 15%;">
 			<dl>
 				<label>
 					<dt>邮箱</dt>
