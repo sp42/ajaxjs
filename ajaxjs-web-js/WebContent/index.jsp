@@ -31,7 +31,7 @@
             </style>
             <section class="page-header">
                 <h1>AJAXJS Web Framework</h1>
-                <h2 class="project-tagline">全栈 、轻量级、函数式&amp;响应式编程</h2>
+                <h2 class="project-tagline">全栈 、轻量级、函数式编程</h2>
             </section>
 
             <section class="main-content">
