@@ -84,6 +84,17 @@ public class CommonUtil {
 	public static boolean containsIgnoreCase(String a, String b) {
 		return a.toLowerCase().contains(b.toLowerCase());
 	}
+	
+	/**
+	 * 测试字符串是否正则
+	 * 
+	 * @param regexp	正则
+	 * @param str		测试的字符串
+	 * @return true 表示匹配
+	 */
+	public static boolean regTest(String regexp, String str) {
+		return Pattern.compile(regexp).matcher(str).find();
+	}
 
 	/**
 	 * 使用正则的快捷方式
@@ -119,6 +130,7 @@ public class CommonUtil {
 	public static String[] regMatchAll(String regexp, String str) {
 		Matcher m = Pattern.compile(regexp).matcher(str);
 		List<String> list = new ArrayList<>();
+		
 		while (m.find()) {
 			String g = m.group();
 			list.add(g);
