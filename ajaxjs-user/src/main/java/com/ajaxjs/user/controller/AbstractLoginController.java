@@ -6,7 +6,6 @@ import java.util.function.BiConsumer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.BeanParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -28,6 +27,7 @@ import com.ajaxjs.user.UserCommonAuth;
 import com.ajaxjs.user.UserDict;
 import com.ajaxjs.user.UserLoginLog;
 import com.ajaxjs.user.UserService;
+import com.ajaxjs.user.UserUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.captcha.CaptchaController;
 import com.ajaxjs.web.captcha.CaptchaFilter;
@@ -46,7 +46,7 @@ public abstract class AbstractLoginController extends BaseUserController {
 	public final static int LOGIN_USER_EMAIL = 2;
 
 	public final static int LOGIN_USER_PHONE = 4;
-	
+
 	public static final String LOGIN_PASSED = "PASSED";
 
 	@Resource("AliyunSMSSender")
@@ -56,7 +56,7 @@ public abstract class AbstractLoginController extends BaseUserController {
 	@Path("/login")
 	public String login(ModelAndView mv) {
 		LOGGER.info("用户登录页");
-		
+
 		setUserId(mv);
 		mv.put(CaptchaController.CAPTCHA_CODE, CaptchaController.CAPTCHA_CODE);
 
@@ -67,7 +67,13 @@ public abstract class AbstractLoginController extends BaseUserController {
 	@Path("/login")
 	@MvcFilter(filters = { CaptchaFilter.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
-	public String loginAction(@BeanParam User user, @NotNull @QueryParam("password") String password, HttpServletRequest req) throws ServiceException {
+	public String loginByPassword(@NotNull @QueryParam("userID") String userID, @NotNull @QueryParam("password") String password, HttpServletRequest req) throws ServiceException {
+		LOGGER.info("执行登录（按密码的）");
+		
+		userID = userID.trim();
+		
+		User user = new User();
+
 		String msg = loginByPassword(user, password, req);
 
 		if (msg.equals(LOGIN_PASSED)) {
@@ -83,6 +89,33 @@ public abstract class AbstractLoginController extends BaseUserController {
 		return jsonNoOk("登录失败！");
 	}
 
+	public String loginByPassword(User user, String password, HttpServletRequest req) throws ServiceException {
+		LOGGER.info("检查登录是否合法");
+
+		String msg = "";
+
+		if (req.getAttribute("CaptchaException") != null) { // 需要驗證碼參數
+			msg = ((Throwable) req.getAttribute("CaptchaException")).getMessage();
+		} else {
+			if (password == null)
+				msg = "密码不能为空";
+			else {
+				UserCommonAuth phoneLoign = new UserCommonAuth();
+				phoneLoign.setPassword(password);
+				phoneLoign.setLoginType(UserDict.loginByPhoneNumber);
+
+				if (getService().loginByPassword(user, phoneLoign)) {
+					afterLogin(user, req);
+					msg = LOGIN_PASSED;
+				} else {
+					msg = "用户登录失败！";
+				}
+			}
+		}
+
+		return msg;
+	}
+
 	/**
 	 * 用户登出
 	 * 
@@ -93,9 +126,9 @@ public abstract class AbstractLoginController extends BaseUserController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String doLogout() {
 		LOGGER.info("用户登出");
-		
+
 		MvcRequest.getHttpServletRequest().getSession().invalidate();
-		
+
 		return jsonOk("退出成功！");
 	}
 
@@ -104,33 +137,6 @@ public abstract class AbstractLoginController extends BaseUserController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String sendSMScode(@NotNull @QueryParam("phoneNo") String phoneNo) {
 		return super.sendSMScode(phoneNo);
-	}
-
-	public String loginByPassword(User user, String password, HttpServletRequest request) throws ServiceException {
-		LOGGER.info("检查登录是否合法");
-
-		String msg = "";
-
-		if (request.getAttribute("CaptchaException") != null) { // 需要驗證碼參數
-			msg = ((Throwable) request.getAttribute("CaptchaException")).getMessage();
-		} else {
-			if (password == null)
-				msg = "密码不能为空";
-			else {
-				UserCommonAuth phoneLoign = new UserCommonAuth();
-				phoneLoign.setPassword(password);
-				phoneLoign.setLoginType(UserDict.loginByPhoneNumber);
-
-				if (getService().loginByPassword(user, phoneLoign)) {
-					afterLogin(user, request);
-					msg = LOGIN_PASSED;
-				} else {
-					msg = "用户登录失败！";
-				}
-			}
-		}
-
-		return msg;
 	}
 
 	public abstract BiConsumer<User, HttpServletRequest> getAfterLoginCB();
@@ -186,17 +192,6 @@ public abstract class AbstractLoginController extends BaseUserController {
 	}
 
 	/**
-	 * 测试 8421 码是否包含 v
-	 * 
-	 * @param v		当前权限值
-	 * @param all	同值
-	 * @return true=已包含
-	 */
-	public static boolean testBCD(int v, int all) {
-		return (v & all) == v;
-	}
-
-	/**
 	 * 设置用户显示可选择的帐号
 	 * 
 	 * @param mv
@@ -206,11 +201,11 @@ public abstract class AbstractLoginController extends BaseUserController {
 
 		int passWordLoginType = ConfigService.getValueAsInt("user.login.passWordLoginType");
 
-		if (testBCD(AbstractLoginController.LOGIN_USER_ID, passWordLoginType))
+		if (UserUtil.testBCD(AbstractLoginController.LOGIN_USER_ID, passWordLoginType))
 			userID.add("用户名");
-		if (testBCD(AbstractLoginController.LOGIN_USER_EMAIL, passWordLoginType))
+		if (UserUtil.testBCD(AbstractLoginController.LOGIN_USER_EMAIL, passWordLoginType))
 			userID.add("邮件");
-		if (testBCD(AbstractLoginController.LOGIN_USER_PHONE, passWordLoginType))
+		if (UserUtil.testBCD(AbstractLoginController.LOGIN_USER_PHONE, passWordLoginType))
 			userID.add("手机");
 
 		mv.put("userID", String.join("/", userID));

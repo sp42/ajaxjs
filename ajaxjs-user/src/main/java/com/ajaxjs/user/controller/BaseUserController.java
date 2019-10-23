@@ -9,7 +9,7 @@ import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.SimpleSMSFilter;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserService;
-import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.user.UserUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -20,7 +20,7 @@ import com.ajaxjs.util.logger.LogHelper;
  */
 public abstract class BaseUserController extends BaseController<User> {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseUserController.class);
-	
+
 	@Override
 	public abstract UserService getService();
 
@@ -28,11 +28,6 @@ public abstract class BaseUserController extends BaseController<User> {
 	 * 提示已登錄
 	 */
 	public static String loginedMsg = "redirect::/showMsg?msg=已经登录用户无法執行該操作";
-
-	/**
-	 * 验证手机号码是否正确
-	 */
-	public static final String phoneRegex = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(17[013678])|(18[0,5-9]))\\d{8}$";
 
 	/**
 	 * 会员是否已经登录
@@ -51,6 +46,7 @@ public abstract class BaseUserController extends BaseController<User> {
 	 */
 	public static boolean isLogined() {
 		HttpServletRequest request = MvcRequest.getHttpServletRequest();
+
 		if (request == null)
 			throw new NullPointerException("ThreadLocal 未定义 HttpServletRequest。请先保存 HttpServletRequest");
 
@@ -70,14 +66,14 @@ public abstract class BaseUserController extends BaseController<User> {
 				return ((Integer) obj).longValue();
 			else if (obj instanceof Long)
 				return (Long) obj;
-			else if (obj instanceof String) {
+			else if (obj instanceof String)
 				return Long.parseLong((String) obj);
-			} else {
+			else
 				throw new UnsupportedOperationException("Unknow type! " + obj);
-			}
-		} else if (request.getParameter("userId") != null) {
+
+		} else if (request.getParameter("userId") != null)
 			return Long.parseLong(request.getParameter("userId"));
-		} else
+		else
 			throw new UnsupportedOperationException("Fail to access user id");
 	}
 
@@ -129,10 +125,10 @@ public abstract class BaseUserController extends BaseController<User> {
 		User user = new User();
 		user.setId(getUserId());
 		HttpServletRequest request = MvcRequest.getHttpServletRequest();
-		
+
 		if (request.getSession().getAttribute("userName") != null)
 			user.setName(request.getSession().getAttribute("userName").toString());
-		
+
 		if (request.getSession().getAttribute("userPhone") != null)
 			user.setPhone(request.getSession().getAttribute("userPhone").toString());
 
@@ -152,7 +148,7 @@ public abstract class BaseUserController extends BaseController<User> {
 		if (phoneNo.length() != 11) {
 			return jsonNoOk(phoneNo + " 中国大陆手机号应为11位数");
 		} else {
-			if (CommonUtil.regMatch(phoneRegex, phoneNo) == null) {
+			if (UserUtil.isVaildPhone(phoneNo)) {
 				return jsonNoOk(phoneNo + " 为非法手机号码");
 			} else {
 				int randomCode = (int) ((Math.random() * 9 + 1) * 100000);
@@ -165,7 +161,8 @@ public abstract class BaseUserController extends BaseController<User> {
 
 				if (sms.send(message)) {
 					LOGGER.info("发送手机 " + phoneNo + " 验证码成功");
-					MvcRequest.getHttpServletRequest().getSession().setAttribute(SimpleSMSFilter.SMS_KEY_NAME, randomCode + "");
+					MvcRequest.getHttpServletRequest().getSession().setAttribute(SimpleSMSFilter.SMS_KEY_NAME,
+							randomCode + "");
 					return jsonOk("发送手机 " + phoneNo + " 验证码成功");
 				} else {
 					return jsonNoOk("发送手机 " + phoneNo + " 验证码失敗");

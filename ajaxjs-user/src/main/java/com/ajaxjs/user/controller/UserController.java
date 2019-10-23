@@ -36,5 +36,4 @@ public class UserController extends AbstractRegisterController {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

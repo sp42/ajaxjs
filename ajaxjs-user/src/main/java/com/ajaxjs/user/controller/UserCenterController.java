@@ -1,17 +1,16 @@
 package com.ajaxjs.user.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.framework.ServiceException;
+import com.ajaxjs.cms.app.attachment.Attachment_picture;
+import com.ajaxjs.cms.app.attachment.Attachment_pictureController;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
@@ -22,6 +21,7 @@ import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserCommonAuthService;
 import com.ajaxjs.user.UserService;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.web.UploadFileInfo;
 
 /**
  * 用户中心（前端的）
@@ -44,21 +44,21 @@ public class UserCenterController extends AbstractAccountInfoController {
 //	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String home(ModelAndView mv, HttpServletRequest r) {
 		LOGGER.info("用户会员中心（前台）");
-		return jsp_perfix_webinf + "/user/user-center/home";
+		return jsp("user/user-center/home");
 	}
 	
 	@GET
 	@Path("/profile")
 	public String profile() {
 		LOGGER.info("用户会员中心-个人信息");
-		return jsp_perfix_webinf + "/user/user-center/profile";
+		return jsp("user/user-center/profile");
 	}
 	
 	@GET
 	@Path("/address")
 	public String address() {
 		LOGGER.info("用户会员中心-我的地址");
-		return jsp_perfix_webinf + "/user/user-center/address";
+		return jsp("user/user-center/address");
 	}
 
 	@PUT
@@ -68,51 +68,29 @@ public class UserCenterController extends AbstractAccountInfoController {
 	public String update(@PathParam("id") Long id, User entity) {
 		return super.update(id, entity);
 	}
-
+	
 	@POST
 	@Path("/avatar")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
-	@Override
 	public String updateOrCreateAvatar(MvcRequest request) throws Exception {
-		return super.updateOrCreateAvatar(request);
+		LOGGER.info("更新头像,uid:" + getUserUid());
+		UploadFileInfo info;
+
+		info = Attachment_pictureController.uploadByConfig(request);
+
+		final Attachment_picture avatar = getService().updateOrCreateAvatar(getUserUid(), info);
+
+		return toJson(new Object() {
+			@SuppressWarnings("unused")
+			public Boolean isOk = true;
+			@SuppressWarnings("unused")
+			public String msg = "修改头像成功！";
+			@SuppressWarnings("unused")
+			public String imgUrl = avatar.getPath();
+		});
 	}
 
-	@POST
-	@Path("/resetPassword")
-	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class, UserPasswordFilter.class })
-	@Produces(MediaType.APPLICATION_JSON)
-	@Override
-	public String resetPassword(@NotNull @QueryParam("new_password") String new_password, HttpServletRequest request) throws ServiceException {
-		return super.resetPassword(new_password, request);
-	}
-
-	@POST
-	@Path("/modiflyUserName")
-	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Produces(MediaType.APPLICATION_JSON)
-	@Override
-	public String modiflyUserName(@NotNull @QueryParam("userName") String userName, HttpServletRequest request) {
-		return super.modiflyUserName(userName, request);
-	}
-
-	@POST
-	@Path("/modiflyEmail")
-	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Produces(MediaType.APPLICATION_JSON)
-	@Override
-	public String modiflyEmail(@NotNull @QueryParam("email") String email) {
-		return super.modiflyEmail(email);
-	}
-
-	@POST
-	@Path("/modiflyPhone")
-	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Produces(MediaType.APPLICATION_JSON)
-	@Override
-	public String modiflyPhone(@NotNull @QueryParam("phone") String phone) {
-		return super.modiflyPhone(phone);
-	}
 
 	@Override
 	public UserService getService() {

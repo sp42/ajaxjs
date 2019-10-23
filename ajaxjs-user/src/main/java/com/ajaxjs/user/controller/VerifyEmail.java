@@ -18,8 +18,8 @@ import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserService;
+import com.ajaxjs.user.UserUtil;
 import com.ajaxjs.user.service.VerifyToken;
-import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
 
 @Path("/user/verifyEmail")
@@ -29,7 +29,7 @@ public class VerifyEmail extends BaseUserController {
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
 	public String save(@NotNull @FormParam("email") String email) {
-		if (!VerifyEmailService.isVaildEmail(email))
+		if (!UserUtil.isVaildEmail(email))
 			throw new IllegalArgumentException(email + "不是合法的邮件地址");
 
 		User user = getUserDetail();
@@ -39,10 +39,10 @@ public class VerifyEmail extends BaseUserController {
 
 		int v = user.getVerify();
 		if ((VerifyToken.EMAIL & v) == VerifyToken.EMAIL) {
-			//  发现之前的 已验证的标识,现在重新验证,所以改为未验证状态.
-			v -=  VerifyToken.EMAIL;
+			// 发现之前的 已验证的标识,现在重新验证,所以改为未验证状态.
+			v -= VerifyToken.EMAIL;
 		}
-		
+
 		saveEmail.setVerify(v);
 		userService.update(saveEmail);
 		return jsonOk("等待审核");
@@ -71,17 +71,6 @@ public class VerifyEmail extends BaseUserController {
 		 */
 		public static boolean isVerifed(String email) {
 			return false;
-		}
-
-		/**
-		 * 是否合法的邮件
-		 * 
-		 * @param email
-		 * @return
-		 */
-		public static boolean isVaildEmail(String email) {
-			String regexp = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
-			return CommonUtil.regTest(regexp, email);
 		}
 
 		/**
@@ -123,7 +112,6 @@ public class VerifyEmail extends BaseUserController {
 
 			return false;
 		}
-
 
 	}
 }

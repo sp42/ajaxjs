@@ -1,14 +1,16 @@
 package com.ajaxjs.user.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.app.attachment.Attachment_picture;
-import com.ajaxjs.cms.app.attachment.Attachment_pictureController;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.user.User;
@@ -16,7 +18,6 @@ import com.ajaxjs.user.UserCommonAuth;
 import com.ajaxjs.user.UserCommonAuthService;
 import com.ajaxjs.user.controller.LoginLogController.UserLoginLogService;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.web.UploadFileInfo;
 
 /**
  * 帐号管理控制器
@@ -41,14 +42,14 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 	@Path("/account")
 	public String account() {
 		LOGGER.info("用户会员中心-帐号管理-首页");
-		return jsp_perfix_webinf + "/user/user-center/account";
+		return jsp("user/user-center/account");
 	}
 
 	@GET
 	@Path("/account/oauth")
 	public String oauth() {
 		LOGGER.info("用户会员中心-账户绑定");
-		return jsp_perfix_webinf + "/user/user-center/oauth";
+		return jsp("user/user-center/oauth");
 	}
 
 	public static UserLoginLogService userLoginLogService = new UserLoginLogService();
@@ -59,12 +60,18 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 	public String logHistory(ModelAndView mv) {
 		LOGGER.info("用户会员中心-登录历史");
 		long userId = getUserId();
-		mv.put("list", userLoginLogService .findList(sql -> sql + " WHERE userId = " + userId + " ORDER BY id DESC LIMIT 0, 10"));
-		
-		return jsp_perfix_webinf + "/user/user-center/log-history";
+		mv.put("list", userLoginLogService
+				.findList(sql -> sql + " WHERE userId = " + userId + " ORDER BY id DESC LIMIT 0, 10"));
+
+		return jsp("user/user-center/log-history");
 	}
 
-	public String resetPassword(String new_password, HttpServletRequest request) throws ServiceException {
+	@POST
+	@Path("/resetPassword")
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class, UserPasswordFilter.class })
+	@Produces(MediaType.APPLICATION_JSON)
+	public String resetPassword(@NotNull @QueryParam("new_password") String new_password, HttpServletRequest request)
+			throws ServiceException {
 		LOGGER.info("重置密码");
 
 		if (getPasswordService() != null && getPasswordService()
@@ -74,7 +81,11 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 			return jsonNoOk("重置密码失败！");
 	}
 
-	public String modiflyUserName(String userName, HttpServletRequest request) {
+	@POST
+	@Path("/modiflyUserName")
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
+	@Produces(MediaType.APPLICATION_JSON)
+	public String modiflyUserName(@NotNull @QueryParam("userName") String userName, HttpServletRequest request) {
 		LOGGER.info("修改用户名");
 
 		User user = new User();
@@ -88,20 +99,25 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 			return jsonNoOk("修改用户名失败！");
 	}
 
-	public String modiflyEmail(String email) {
+	@POST
+	@Path("/modiflyEmail")
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
+	@Produces(MediaType.APPLICATION_JSON)
+	public String modiflyEmail(@NotNull @QueryParam("email") String email) {
 		LOGGER.info("修改邮箱");
 
 		User user = new User();
 		user.setId(getUserId());
 		user.setEmail(email);
 
-		if (getService().update(user) != 0)
-			return jsonOk("修改邮箱成功");
-		else
-			return jsonNoOk("修改邮箱失败！");
+		return getService().update(user) != 0 ? jsonOk("修改邮箱成功") : jsonNoOk("修改邮箱失败！");
 	}
 
-	public String modiflyPhone(String phone) {
+	@POST
+	@Path("/modiflyPhone")
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
+	@Produces(MediaType.APPLICATION_JSON)
+	public String modiflyPhone(@NotNull @QueryParam("phone") String phone) {
 		LOGGER.info("修改手机");
 		User user = new User();
 		user.setId(getUserId());
@@ -112,31 +128,5 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 			return jsonOk("修改手机成功");
 		} else
 			return jsonNoOk("修改手机失败！");
-	}
-
-	/**
-	 * 更新头像
-	 * 
-	 * @param userUid
-	 * @param request
-	 * @return
-	 * @throws Exception 
-	 */
-	public String updateOrCreateAvatar(MvcRequest request) throws Exception {
-		LOGGER.info("更新头像,uid:" + getUserUid());
-		UploadFileInfo info;
-
-		info = Attachment_pictureController.uploadByConfig(request);
-
-		final Attachment_picture avatar = getService().updateOrCreateAvatar(getUserUid(), info);
-
-		return toJson(new Object() {
-			@SuppressWarnings("unused")
-			public Boolean isOk = true;
-			@SuppressWarnings("unused")
-			public String msg = "修改头像成功！";
-			@SuppressWarnings("unused")
-			public String imgUrl = avatar.getPath();
-		});
 	}
 }
