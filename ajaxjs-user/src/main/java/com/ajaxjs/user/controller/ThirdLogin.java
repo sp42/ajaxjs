@@ -36,7 +36,7 @@ public class ThirdLogin implements IController {
 			LOGGER.info("userInfoMap::::::::::" + userInfoMap);
 
 		} else {
-//			result = "微博授权失败";
+			// result = "微博授权失败";
 		}
 		return "json::{'OK':true}";
 	}
