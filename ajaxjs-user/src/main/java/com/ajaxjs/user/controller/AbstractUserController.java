@@ -1,7 +1,6 @@
-package com.ajaxjs.user.controller;
+ package com.ajaxjs.user.controller;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.function.BiConsumer;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +14,6 @@ import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.cms.app.attachment.Attachment_picture;
 import com.ajaxjs.cms.utils.sms.SMS;
-import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
@@ -25,21 +23,21 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserCommonAuth;
 import com.ajaxjs.user.UserDict;
-import com.ajaxjs.user.UserLoginLog;
 import com.ajaxjs.user.UserService;
-import com.ajaxjs.user.UserUtil;
+import com.ajaxjs.user.login.LoginService;
+import com.ajaxjs.user.login.UserLoginLog;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.captcha.CaptchaController;
 import com.ajaxjs.web.captcha.CaptchaFilter;
 
 /**
- * 注册控制器
+ * 注册控制器。为方便使用，它继承与登录控制器，但它们的关系的平等的。只是为了 Java的单根继承
  * 
  * @author Frank Cheung
  *
  */
-public abstract class AbstractLoginController extends BaseUserController {
-	private static final LogHelper LOGGER = LogHelper.getLog(AbstractLoginController.class);
+public abstract class AbstractUserController extends BaseUserController {
+	private static final LogHelper LOGGER = LogHelper.getLog(AbstractUserController.class);
 
 	public final static int LOGIN_USER_ID = 1;
 
@@ -47,17 +45,12 @@ public abstract class AbstractLoginController extends BaseUserController {
 
 	public final static int LOGIN_USER_PHONE = 4;
 
-	public static final String LOGIN_PASSED = "PASSED";
-
-	@Resource("AliyunSMSSender")
-	private SMS sms;
-
 	@GET
 	@Path("/login")
 	public String login(ModelAndView mv) {
 		LOGGER.info("用户登录页");
 
-		setUserId(mv);
+		LoginService.setUserId(mv);
 		mv.put(CaptchaController.CAPTCHA_CODE, CaptchaController.CAPTCHA_CODE);
 
 		return jsp("user/login");
@@ -74,46 +67,20 @@ public abstract class AbstractLoginController extends BaseUserController {
 		
 		User user = new User();
 
-		String msg = loginByPassword(user, password, req);
+		String msg = LoginService.loginByPassword(user, password, req);
 
-		if (msg.equals(LOGIN_PASSED)) {
+		if (msg.equals(UserDict.LOGIN_PASSED)) {
 			String name = getUserBySession().getName();
 
 			if (name == null)
 				name = getUserBySession().getPhone();
 
 			msg = "用户 " + name + " 欢迎回来！ <a href=\"" + req.getContextPath() + "/user/center/\">点击进入“用户中心”</a>";
+			
 			return jsonOk(name + " 登录成功");
 		}
 
 		return jsonNoOk("登录失败！");
-	}
-
-	public String loginByPassword(User user, String password, HttpServletRequest req) throws ServiceException {
-		LOGGER.info("检查登录是否合法");
-
-		String msg = "";
-
-		if (req.getAttribute("CaptchaException") != null) { // 需要驗證碼參數
-			msg = ((Throwable) req.getAttribute("CaptchaException")).getMessage();
-		} else {
-			if (password == null)
-				msg = "密码不能为空";
-			else {
-				UserCommonAuth phoneLoign = new UserCommonAuth();
-				phoneLoign.setPassword(password);
-				phoneLoign.setLoginType(UserDict.loginByPhoneNumber);
-
-				if (getService().loginByPassword(user, phoneLoign)) {
-					afterLogin(user, req);
-					msg = LOGIN_PASSED;
-				} else {
-					msg = "用户登录失败！";
-				}
-			}
-		}
-
-		return msg;
 	}
 
 	/**
@@ -190,24 +157,67 @@ public abstract class AbstractLoginController extends BaseUserController {
 		if (avatar != null)
 			request.getSession().setAttribute("userAvatar", request.getContextPath() + avatar.getPath());
 	}
+	
+	@GET
+	@Path("/register")
+	public String regsiter() {
+		LOGGER.info("用户注册页");
+		
+		return jsp("user/register");
+	}
+	
+	@POST
+	@Path("/register")
+	@MvcFilter(filters = { DataBaseFilter.class })
+	@Produces(MediaType.APPLICATION_JSON)
+	public String doRegister(User user, @NotNull @QueryParam("password") String password) throws ServiceException {
+		LOGGER.info("正在注册");
+		
+		registerByPhone(user, password);
+		
+		return jsonOk("恭喜你，注册成功");
+	}
+
+//	@POST
+//	@MvcFilter(filters = {  DataBaseFilter.class })
+//	public String doRegister(User user, @NotNull @QueryParam("password") String password) throws ServiceException {
+//		registerByPhone(user, password);
+//
+//		return "/user/index.jsp?msg=" + Encode.urlEncode("恭喜你，注册成功！<a href=\"../user/login/\">马上登录</a>") ;
+//	}
 
 	/**
-	 * 设置用户显示可选择的帐号
+	 * 检查是否重复的手机号码
 	 * 
-	 * @param mv
+	 * @param phone 手机号码
+	 * @return true=已存在
 	 */
-	public static void setUserId(ModelAndView mv) {
-		List<String> userID = new ArrayList<>();
+	@GET
+	@Path("/checkIfUserPhoneRepeat")
+	@MvcFilter(filters = { DataBaseFilter.class })
+	public String checkIfUserPhoneRepeat(@NotNull @QueryParam("phone") String phone) {
+		LOGGER.info("检查是否重复的手机号码：" + phone);
 
-		int passWordLoginType = ConfigService.getValueAsInt("user.login.passWordLoginType");
-
-		if (UserUtil.testBCD(AbstractLoginController.LOGIN_USER_ID, passWordLoginType))
-			userID.add("用户名");
-		if (UserUtil.testBCD(AbstractLoginController.LOGIN_USER_EMAIL, passWordLoginType))
-			userID.add("邮件");
-		if (UserUtil.testBCD(AbstractLoginController.LOGIN_USER_PHONE, passWordLoginType))
-			userID.add("手机");
-
-		mv.put("userID", String.join("/", userID));
+		return toJson(new HashMap<String, Boolean>() {
+			private static final long serialVersionUID = -5033049204280154615L;
+			{
+				put("isRepeat", getService().checkIfUserPhoneRepeat(phone));
+			}
+		});
 	}
+
+	private void registerByPhone(User user, String password) throws ServiceException {
+		LOGGER.info("执行用户注册");
+
+		if (password == null)
+			throw new IllegalArgumentException("注册密码不能为空");
+
+		UserCommonAuth passwordModel = new UserCommonAuth();
+		passwordModel.setPhone_verified(1); // 已验证
+		passwordModel.setPassword(password);
+
+		long id = getService().register(user, passwordModel);
+		LOGGER.info("创建用户成功，id：" + id);
+	}
+
 }

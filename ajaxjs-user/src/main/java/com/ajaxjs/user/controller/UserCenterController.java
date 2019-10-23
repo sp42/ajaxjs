@@ -11,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.cms.app.attachment.Attachment_picture;
 import com.ajaxjs.cms.app.attachment.Attachment_pictureController;
+import com.ajaxjs.cms.utils.sms.SMS;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
@@ -20,6 +21,7 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserCommonAuthService;
 import com.ajaxjs.user.UserService;
+import com.ajaxjs.user.filter.LoginCheck;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.UploadFileInfo;
 
@@ -36,9 +38,22 @@ public class UserCenterController extends AbstractAccountInfoController {
 
 	@Resource("UserService")
 	private UserService service;
+	
+	@Override
+	public UserService getService() {
+		return service;
+	}
 
 	@Resource("User_common_authService") // 指定 service id
 	private UserCommonAuthService passwordService;
+	
+	@Resource("AliyunSMSSender")
+	private SMS sms;
+	
+	@Override
+	public SMS getSms() {
+		return sms;
+	}
 	
 	@GET
 //	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
@@ -91,9 +106,4 @@ public class UserCenterController extends AbstractAccountInfoController {
 		});
 	}
 
-
-	@Override
-	public UserService getService() {
-		return service;
-	}
 }

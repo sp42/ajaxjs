@@ -21,7 +21,7 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
 import com.ajaxjs.user.UserDict;
-import com.ajaxjs.user.UserLoginLog;
+import com.ajaxjs.user.login.UserLoginLog;
 
 /**
  * 

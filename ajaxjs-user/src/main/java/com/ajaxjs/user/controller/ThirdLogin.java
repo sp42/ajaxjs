@@ -10,7 +10,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.mvc.controller.IController;
-import com.ajaxjs.user.oauth_login.Weibo;
+import com.ajaxjs.user.login.Weibo;
 import com.ajaxjs.util.logger.LogHelper;
 
 @Path("/user/thirdpartrybinding")

@@ -13,13 +13,16 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.ajaxjs.cms.utils.sms.SMS;
 import com.ajaxjs.framework.BaseService;
+import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserService;
 import com.ajaxjs.user.UserUtil;
-import com.ajaxjs.user.service.VerifyToken;
+import com.ajaxjs.user.filter.LoginCheck;
+import com.ajaxjs.user.token.VerifyToken;
 import com.ajaxjs.util.Encode;
 
 @Path("/user/verifyEmail")
@@ -44,7 +47,7 @@ public class VerifyEmail extends BaseUserController {
 		}
 
 		saveEmail.setVerify(v);
-		userService.update(saveEmail);
+		service.update(saveEmail);
 		return jsonOk("等待审核");
 	}
 
@@ -55,11 +58,17 @@ public class VerifyEmail extends BaseUserController {
 		return jsonOk("等待审核");
 	}
 
-	UserService userService = new UserService();
+	@Resource("UserService")
+	private UserService service;
 
 	@Override
 	public UserService getService() {
-		return userService;
+		return service;
+	}
+	
+	@Override
+	public SMS getSms() {
+		return null;
 	}
 
 	public static class VerifyEmailService extends BaseService<Map<String, Object>> {

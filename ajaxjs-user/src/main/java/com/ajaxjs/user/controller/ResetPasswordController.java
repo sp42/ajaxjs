@@ -14,8 +14,8 @@ import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.user.service.ForgetPassword;
-import com.ajaxjs.user.service.VerifyToken;
+import com.ajaxjs.user.token.ForgetPassword;
+import com.ajaxjs.user.token.VerifyToken;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**

@@ -5,6 +5,7 @@ import java.util.function.BiConsumer;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Path;
 
+import com.ajaxjs.cms.utils.sms.SMS;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.user.User;
@@ -19,12 +20,20 @@ import com.ajaxjs.user.UserService;
  */
 @Path("/user")
 @Bean
-public class UserController extends AbstractRegisterController {
+public class UserController extends AbstractUserController {
 	@Resource("User_common_authService")
 	private UserCommonAuthService authService;
 
 	@Resource("UserService")
 	private UserService service;
+	
+	@Resource("AliyunSMSSender")
+	private SMS sms;
+	
+	@Override
+	public SMS getSms() {
+		return sms;
+	}
 
 	@Override
 	public UserService getService() {

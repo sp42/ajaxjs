@@ -24,6 +24,8 @@ public abstract class BaseUserController extends BaseController<User> {
 	@Override
 	public abstract UserService getService();
 
+	public abstract SMS getSms();
+
 	/**
 	 * 提示已登錄
 	 */
@@ -159,10 +161,9 @@ public abstract class BaseUserController extends BaseController<User> {
 				message.setTemplateCode("SMS_128495105");
 				message.setTemplateParam(String.format("{\"code\":\"%s\"}", randomCode));
 
-				if (sms.send(message)) {
+				if (getSms().send(message)) {
 					LOGGER.info("发送手机 " + phoneNo + " 验证码成功");
-					MvcRequest.getHttpServletRequest().getSession().setAttribute(SimpleSMSFilter.SMS_KEY_NAME,
-							randomCode + "");
+					MvcRequest.getHttpServletRequest().getSession().setAttribute(SimpleSMSFilter.SMS_KEY_NAME, randomCode + "");
 					return jsonOk("发送手机 " + phoneNo + " 验证码成功");
 				} else {
 					return jsonNoOk("发送手机 " + phoneNo + " 验证码失敗");
@@ -171,13 +172,4 @@ public abstract class BaseUserController extends BaseController<User> {
 		}
 	}
 
-	private SMS sms;
-
-	public SMS getSms() {
-		return sms;
-	}
-
-	public void setSms(SMS sms) {
-		this.sms = sms;
-	}
 }

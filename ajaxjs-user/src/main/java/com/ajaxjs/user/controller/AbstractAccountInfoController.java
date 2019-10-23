@@ -17,6 +17,8 @@ import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserCommonAuth;
 import com.ajaxjs.user.UserCommonAuthService;
 import com.ajaxjs.user.controller.LoginLogController.UserLoginLogService;
+import com.ajaxjs.user.filter.LoginCheck;
+import com.ajaxjs.user.filter.UserPasswordFilter;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**

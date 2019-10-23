@@ -14,6 +14,7 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.user.UserService;
+import com.ajaxjs.user.filter.LoginCheck;
 
 @Deprecated
 public abstract class AbstractUserCenterController extends BaseUserController {
