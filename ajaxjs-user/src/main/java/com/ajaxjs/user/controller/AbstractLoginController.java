@@ -1,5 +1,7 @@
 package com.ajaxjs.user.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiConsumer;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,8 +16,10 @@ import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.cms.app.attachment.Attachment_picture;
 import com.ajaxjs.cms.utils.sms.SMS;
+import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.ioc.Resource;
+import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
@@ -25,6 +29,7 @@ import com.ajaxjs.user.UserDict;
 import com.ajaxjs.user.UserLoginLog;
 import com.ajaxjs.user.UserService;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.web.captcha.CaptchaController;
 import com.ajaxjs.web.captcha.CaptchaFilter;
 
 /**
@@ -36,27 +41,42 @@ import com.ajaxjs.web.captcha.CaptchaFilter;
 public abstract class AbstractLoginController extends BaseUserController {
 	private static final LogHelper LOGGER = LogHelper.getLog(AbstractLoginController.class);
 
+	public final static int LOGIN_USER_ID = 1;
+
+	public final static int LOGIN_USER_EMAIL = 2;
+
+	public final static int LOGIN_USER_PHONE = 4;
+	
+	public static final String LOGIN_PASSED = "PASSED";
+
 	@Resource("AliyunSMSSender")
 	private SMS sms;
 
 	@GET
-	public String login(@QueryParam("bySMS") boolean bySMS) {
-		LOGGER.info("进入登录页面");
+	@Path("/login")
+	public String login(ModelAndView mv) {
+		LOGGER.info("用户登录页");
+		
+		setUserId(mv);
+		mv.put(CaptchaController.CAPTCHA_CODE, CaptchaController.CAPTCHA_CODE);
+
 		return jsp("user/login");
 	}
 
 	@POST
+	@Path("/login")
 	@MvcFilter(filters = { CaptchaFilter.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
-	public String loginAction(@BeanParam User user, @NotNull @QueryParam("password") String password, HttpServletRequest request) throws ServiceException {
-		String msg = loginByPassword(user, password, request);
+	public String loginAction(@BeanParam User user, @NotNull @QueryParam("password") String password, HttpServletRequest req) throws ServiceException {
+		String msg = loginByPassword(user, password, req);
 
 		if (msg.equals(LOGIN_PASSED)) {
 			String name = getUserBySession().getName();
+
 			if (name == null)
 				name = getUserBySession().getPhone();
 
-			msg = "用户 " + name + " 欢迎回来！ <a href=\"" + request.getContextPath() + "/user/center/\">点击进入“用户中心”</a>";
+			msg = "用户 " + name + " 欢迎回来！ <a href=\"" + req.getContextPath() + "/user/center/\">点击进入“用户中心”</a>";
 			return jsonOk(name + " 登录成功");
 		}
 
@@ -73,7 +93,9 @@ public abstract class AbstractLoginController extends BaseUserController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String doLogout() {
 		LOGGER.info("用户登出");
+		
 		MvcRequest.getHttpServletRequest().getSession().invalidate();
+		
 		return jsonOk("退出成功！");
 	}
 
@@ -83,8 +105,6 @@ public abstract class AbstractLoginController extends BaseUserController {
 	public String sendSMScode(@NotNull @QueryParam("phoneNo") String phoneNo) {
 		return super.sendSMScode(phoneNo);
 	}
-
-	public static final String LOGIN_PASSED = "PASSED";
 
 	public String loginByPassword(User user, String password, HttpServletRequest request) throws ServiceException {
 		LOGGER.info("检查登录是否合法");
@@ -127,7 +147,7 @@ public abstract class AbstractLoginController extends BaseUserController {
 		userLoginLog.setUserId(user.getId());
 		userLoginLog.setLoginType(UserDict.PASSWORD);
 		LoginLogController.initBean(userLoginLog, request);
-		
+
 		if (LoginLogController.service.create(userLoginLog) <= 0) {
 			LOGGER.warning("更新会员登录日志出错");
 		}
@@ -157,7 +177,7 @@ public abstract class AbstractLoginController extends BaseUserController {
 		} else {
 			long privilegeTotal = UserService.dao.getPrivilegeByUserGroupId(user.getRoleId());
 
-//			System.out.println("privilegeTotal:" +privilegeTotal);
+			// System.out.println("privilegeTotal:" +privilegeTotal);
 			request.getSession().setAttribute("privilegeTotal", privilegeTotal);
 		}
 
@@ -165,4 +185,34 @@ public abstract class AbstractLoginController extends BaseUserController {
 			request.getSession().setAttribute("userAvatar", request.getContextPath() + avatar.getPath());
 	}
 
+	/**
+	 * 测试 8421 码是否包含 v
+	 * 
+	 * @param v		当前权限值
+	 * @param all	同值
+	 * @return true=已包含
+	 */
+	public static boolean testBCD(int v, int all) {
+		return (v & all) == v;
+	}
+
+	/**
+	 * 设置用户显示可选择的帐号
+	 * 
+	 * @param mv
+	 */
+	public static void setUserId(ModelAndView mv) {
+		List<String> userID = new ArrayList<>();
+
+		int passWordLoginType = ConfigService.getValueAsInt("user.login.passWordLoginType");
+
+		if (testBCD(AbstractLoginController.LOGIN_USER_ID, passWordLoginType))
+			userID.add("用户名");
+		if (testBCD(AbstractLoginController.LOGIN_USER_EMAIL, passWordLoginType))
+			userID.add("邮件");
+		if (testBCD(AbstractLoginController.LOGIN_USER_PHONE, passWordLoginType))
+			userID.add("手机");
+
+		mv.put("userID", String.join("/", userID));
+	}
 }

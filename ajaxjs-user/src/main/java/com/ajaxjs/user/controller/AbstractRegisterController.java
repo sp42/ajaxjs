@@ -20,21 +20,35 @@ import com.ajaxjs.user.UserCommonAuth;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
- * 注册控制器
+ * 注册控制器。为方便使用，它继承与登录控制器，但它们的关系的平等的。只是为了 Java的单根继承
  * 
  * @author Frank Cheung
  *
  */
-public abstract class AbstractRegisterController extends BaseUserController {
+public abstract class AbstractRegisterController extends AbstractLoginController {
 	private static final LogHelper LOGGER = LogHelper.getLog(AbstractRegisterController.class);
 	
 	@Resource("AliyunSMSSender")
 	private SMS sms;
-
+	
 	@GET
-	public String register() {
-		LOGGER.info("进入注册页面");
+	@Path("/register")
+	public String regsiter() {
+		LOGGER.info("用户注册页");
+		
 		return jsp("user/register");
+	}
+	
+	@POST
+	@Path("/register")
+	@MvcFilter(filters = { DataBaseFilter.class })
+	@Produces(MediaType.APPLICATION_JSON)
+	public String doRegister(User user, @NotNull @QueryParam("password") String password) throws ServiceException {
+		LOGGER.info("正在注册");
+		
+		registerByPhone(user, password);
+		
+		return jsonOk("恭喜你，注册成功");
 	}
 
 //	@POST
@@ -72,8 +86,7 @@ public abstract class AbstractRegisterController extends BaseUserController {
 		return super.sendSMScode(phoneNo);
 	}
 
-
-	public void registerByPhone(User user, String password) throws ServiceException {
+	private void registerByPhone(User user, String password) throws ServiceException {
 		LOGGER.info("执行用户注册");
 
 		if (password == null)

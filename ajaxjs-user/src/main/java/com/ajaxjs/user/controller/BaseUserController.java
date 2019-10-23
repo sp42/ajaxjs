@@ -129,8 +129,10 @@ public abstract class BaseUserController extends BaseController<User> {
 		User user = new User();
 		user.setId(getUserId());
 		HttpServletRequest request = MvcRequest.getHttpServletRequest();
+		
 		if (request.getSession().getAttribute("userName") != null)
 			user.setName(request.getSession().getAttribute("userName").toString());
+		
 		if (request.getSession().getAttribute("userPhone") != null)
 			user.setPhone(request.getSession().getAttribute("userPhone").toString());
 
