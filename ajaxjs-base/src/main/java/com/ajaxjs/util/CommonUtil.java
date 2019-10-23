@@ -1,17 +1,12 @@
 /**
- * Copyright sp42 frank@ajaxjs.com
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright sp42 frank@ajaxjs.com Licensed under the Apache License, Version
+ * 2.0 (the "License"); you may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+ * or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
  */
 package com.ajaxjs.util;
 
@@ -84,7 +79,11 @@ public class CommonUtil {
 	public static boolean containsIgnoreCase(String a, String b) {
 		return a.toLowerCase().contains(b.toLowerCase());
 	}
-	
+
+	private static Matcher getMatcher(String regexp, String str) {
+		return Pattern.compile(regexp).matcher(str);
+	}
+
 	/**
 	 * 测试字符串是否正则
 	 * 
@@ -93,7 +92,7 @@ public class CommonUtil {
 	 * @return true 表示匹配
 	 */
 	public static boolean regTest(String regexp, String str) {
-		return Pattern.compile(regexp).matcher(str).find();
+		return getMatcher(regexp, str).find();
 	}
 
 	/**
@@ -116,10 +115,10 @@ public class CommonUtil {
 	 * @return 匹配结果
 	 */
 	public static String regMatch(String regexp, String str, int groupIndex) {
-		Matcher m = Pattern.compile(regexp).matcher(str);
+		Matcher m = getMatcher(regexp, str);
 		return m.find() ? m.group(groupIndex) : null;
 	}
-	
+
 	/**
 	 * 返回所有匹配项
 	 * 
@@ -128,9 +127,9 @@ public class CommonUtil {
 	 * @return 匹配结果
 	 */
 	public static String[] regMatchAll(String regexp, String str) {
-		Matcher m = Pattern.compile(regexp).matcher(str);
+		Matcher m = getMatcher(regexp, str);
 		List<String> list = new ArrayList<>();
-		
+
 		while (m.find()) {
 			String g = m.group();
 			list.add(g);
@@ -245,7 +244,7 @@ public class CommonUtil {
 					return SimpleDateFormatFactory(commonDateFormat).parse(str);
 				} else if (pattern2.matcher(str).matches()) {
 					return SimpleDateFormatFactory(commonDateFormat_shortest).parse(str);
-				} else 
+				} else
 					return SimpleDateFormatFactory(commonDateFormat_shorter).parse(str);
 			} catch (ParseException e) {
 				e.printStackTrace();
@@ -254,7 +253,7 @@ public class CommonUtil {
 		}
 
 		return null;
-	} 
+	}
 
 	/**
 	 * SimpleDateFormat caches
