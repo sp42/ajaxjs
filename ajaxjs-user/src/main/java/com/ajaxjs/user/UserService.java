@@ -11,6 +11,8 @@ import com.ajaxjs.framework.Repository;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
+import com.ajaxjs.orm.JdbcConnection;
+import com.ajaxjs.orm.JdbcReader;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.cryptography.SymmetricCipher;
 import com.ajaxjs.util.io.ImageHelper;
@@ -43,19 +45,28 @@ public class UserService extends BaseService<User> {
 	/**
 	 * 普通口令注册
 	 * 
-	 * @param user
-	 * @param password
-	 * @return
+	 * @param user			用户对象
+	 * @param password		密码对象
+	 * @return	新用户之 id
 	 * @throws ServiceException
 	 */
 	public Long register(User user, UserCommonAuth password) throws ServiceException {
 		LOGGER.info("用户注册");
 
-		if (user.getPhone() != null && checkIfUserPhoneRepeat(user))
-			throw new ServiceException(user.getPhone() + "手机号码已注册");
-
-		if (user.getName() != null && checkIfUserNameRepeat(user))
-			throw new ServiceException(user.getName() + "用户名已注册");
+		if (user.getPhone() != null) {
+			user.setPhone(user.getPhone().trim()); // 消除空格
+			checkIfRepeated("phone", user.getPhone(), "手机号码");
+		}
+		
+		if (user.getName() != null) {
+			user.setName(user.getName().trim());
+			checkIfRepeated("name", user.getName(), "用户名");
+		}
+		
+		if (user.getEmail() != null) {
+			user.setEmail(user.getEmail().trim());
+			checkIfRepeated("email", user.getEmail(), "邮箱");
+		}
 
 		Long userId = create(user);
 		user.setId(userId);
@@ -67,82 +78,58 @@ public class UserService extends BaseService<User> {
 	}
 
 	/**
-	 * 检查用户名是否重复
 	 * 
-	 * @return 用户名是否重复
+	 * @param user
+	 * @param password
+	 * @throws ServiceException
 	 */
-	public boolean checkIfUserNameRepeat(User user) {
-		return user.getName() != null && dao.findByUserName(user.getName()) != null;
+	public void register(User user, String password) throws ServiceException {
+		LOGGER.info("执行用户注册");
+
+		if (password == null)
+			throw new IllegalArgumentException("注册密码不能为空");
+
+		UserCommonAuth passwordModel = new UserCommonAuth();
+		passwordModel.setPhone_verified(1); // 已验证
+		passwordModel.setPassword(password);
+
+		long id = register(user, passwordModel);
+		LOGGER.info("创建用户成功，id：" + id);
 	}
 
 	/**
-	 * 检查用户名是否重复
+	 * 检查某个值是否已经存在一样的值
 	 * 
-	 * @return 用户名是否重复
+	 * @param field		数据库里面的字段名称
+	 * @param value		欲检查的值
+	 * @param type		提示的类型
+	 * @return true=值重复
+	 * @throws ServiceException
 	 */
-	public boolean checkIfUserNameRepeat(String userName) {
-		User user = new User();
-		user.setName(userName);
-		return checkIfUserNameRepeat(user);
+	private static boolean checkIfRepeated(String field, String value, String type) throws ServiceException {
+		if (value != null && checkIfRepeated(field, value))
+			throw new ServiceException(type + " " + value + " 已注册");
+
+		return false;
 	}
 
 	/**
-	 * 检查用户手机是否重复
+	 * 检查某个值是否已经存在一样的值
 	 * 
-	 * @return 手机是否重复 true=重複
+	 * @param field		数据库里面的字段名称
+	 * @param value		欲检查的值
+	 * @return true=值重复
 	 */
-	public boolean checkIfUserPhoneRepeat(User user) {
-		return user.getPhone() != null && dao.findByPhone(user.getPhone()) != null;
+	public static boolean checkIfRepeated(String field, String value) {
+		value = value.trim();
+		
+		return value != null && JdbcReader.queryOne(JdbcConnection.getConnection(),
+				"SELECT * FROM user WHERE " + field + " = ? LIMIT 1", Object.class, value) != null;
 	}
 
 	/**
-	 * 检查用户手机是否重复
 	 * 
-	 * @return 手机是否重复
 	 */
-	public boolean checkIfUserPhoneRepeat(String phone) {
-		User user = new User();
-		user.setPhone(phone);
-		return checkIfUserPhoneRepeat(user);
-	}
-
-	public boolean loginByPassword(User user, UserCommonAuth userLoginInfo) throws ServiceException {
-		User foundUser = null;
-
-		if (user.getName() != null) {
-			foundUser = dao.findByUserName(user.getName());
-		} else if ((user.getPhone() != null)) {
-			foundUser = dao.findByPhone(user.getPhone());
-		} else if (user.getEmail() != null) {
-			foundUser = dao.findByEmail(user.getEmail());
-		}
-
-		if (foundUser == null || foundUser.getId() == null || foundUser.getId() == 0)
-			throw new ServiceException("用户不存在");
-
-		user.setId(foundUser.getId()); // let outside valued
-		user.setName(foundUser.getName());
-
-		UserCommonAuth auth = UserCommonAuthService.dao.findByUserId(foundUser.getId());
-
-		if (auth == null) {
-			ServiceException e = new ServiceException("系統異常，用戶 " + foundUser.getId() + " 沒有對應的密碼記錄");
-			LOGGER.warning(e);
-			return false;
-		}
-
-		if (!auth.getPassword().equalsIgnoreCase(UserCommonAuthService.encode(userLoginInfo.getPassword()))) {
-			LOGGER.info("密码不正确，数据库密码：{0}, 提交密码 {1}", auth.getPassword(), UserCommonAuthService.encode(userLoginInfo.getPassword()));
-			return false;
-		}
-
-		if (foundUser == null || foundUser.getId() == 0)
-			throw new ServiceException("非法用户！");
-
-		LOGGER.info(foundUser.getName() + " 登录成功！");
-		return true;
-	}
-
 	private static final String encryptKey = "ErZwd#@$#@D32";
 
 	/**
@@ -156,15 +143,18 @@ public class UserService extends BaseService<User> {
 		LOGGER.info("重置密码");
 
 		String email = user.getEmail();
+
 		if (email == null)
 			throw new ServiceException("请提交邮件地址");
+
 		user = dao.findByEmail(email);
 
 		if (user == null)
 			throw new ServiceException("该 email：" + email + " 的用户不存在！");
 
 		String expireHex = Long.toHexString(System.currentTimeMillis());
-		String emailToken = Encode.md5(encryptKey + email), timeToken = SymmetricCipher.AES_Encrypt(expireHex, encryptKey);
+		String emailToken = Encode.md5(encryptKey + email),
+				timeToken = SymmetricCipher.AES_Encrypt(expireHex, encryptKey);
 
 		return emailToken + timeToken;
 	}
@@ -204,12 +194,12 @@ public class UserService extends BaseService<User> {
 	public int doUpdate(User user) throws ServiceException {
 		LOGGER.info("修改用户信息");
 
-//		if (user.getName() == null) { // 如果没有用户名
-//			if (user.getPhone() != null) { // 则使用 user_{phone} 作为用户名
-//				user.setName("user_" + user.getPhone());
-//			}
-//		}
-//		try {
+		// if (user.getName() == null) { // 如果没有用户名
+		// if (user.getPhone() != null) { // 则使用 user_{phone} 作为用户名
+		// user.setName("user_" + user.getPhone());
+		// }
+		// }
+		// try {
 		if (user.getPhone() != null && dao.findByPhone(user.getPhone()) != null)
 			throw new ServiceException(user.getPhone() + " 手机号码已注册");
 
@@ -218,9 +208,9 @@ public class UserService extends BaseService<User> {
 
 		if (user.getEmail() != null && dao.findByEmail(user.getEmail()) != null)
 			throw new ServiceException(user.getEmail() + " 邮件已注册");
-//		} catch (Exception e) {
-//			throw new NullPointerException(e.getMessage());
-//		}
+		// } catch (Exception e) {
+		// throw new NullPointerException(e.getMessage());
+		// }
 
 		return dao.update(user);
 	}
@@ -236,22 +226,17 @@ public class UserService extends BaseService<User> {
 		return dao.findPagedList(start, limit, null);
 	}
 
-	public Attachment_picture findAvaterByUserId(long userId) {
-		return dao.findAvaterByUserId(userId);
-	}
-
 	public Attachment_picture updateOrCreateAvatar(long userUId, UploadFileInfo info) throws Exception {
 		if (!info.isOk)
 			throw new ServiceException("图片上传失败");
 
 		Attachment_pictureService avatarService = new Attachment_pictureServiceImpl();
 
-		Attachment_picture avatar = findAvaterByUserId(userUId);
+		Attachment_picture avatar = dao.findAvaterByUserId(userUId);
 		boolean isCreate = avatar == null;
 
-		if (isCreate) {
+		if (isCreate)
 			avatar = new Attachment_picture();
-		}
 
 		// 获取图片信息
 		ImageHelper imgHelper = new ImageHelper(info.fullPath);

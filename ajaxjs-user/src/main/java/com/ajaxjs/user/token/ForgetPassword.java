@@ -1,7 +1,8 @@
-package com.ajaxjs.user.service;
+package com.ajaxjs.user.token;
 
 import java.util.Objects;
 
+import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.net.mail.Mail;
 import com.ajaxjs.net.mail.Sender;
@@ -9,7 +10,7 @@ import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserCommonAuth;
 import com.ajaxjs.user.UserCommonAuthService;
 import com.ajaxjs.user.UserService;
-import com.ajaxjs.user.controller.VerifyEmail.VerifyEmailService;
+import com.ajaxjs.user.UserUtil;
 
 /**
  * 忘记密码
@@ -24,8 +25,8 @@ public class ForgetPassword extends VerifyToken {
 	 * 
 	 * @param email
 	 */
-	public String findByEmail(String siteBasePath, String email) {
-		if (!VerifyEmailService.isVaildEmail(email))
+	public static String findByEmail(String siteBasePath, String email) {
+		if (!UserUtil.isVaildEmail(email))
 			throw new IllegalArgumentException(email + "不是合法的邮件地址");
 
 		User user = UserService.dao.findByEmail(email);
@@ -42,8 +43,9 @@ public class ForgetPassword extends VerifyToken {
 		html = String.format(html, email, url, url);
 
 		Mail mail = new Mail();// 创建邮件实体
-		mail.setMailServer("smtp.163.com");// 指定邮件 SMTP 服务器
- 
+		mail.setMailServer(ConfigService.getValueAsString("mailServer.server"));// 指定邮件 SMTP 服务器
+		mail.setAccount(ConfigService.getValueAsString("mailServer.user"));// 发送人在 SMTP 上的账户
+		mail.setPassword(ConfigService.getValueAsString("mailServer.password"));// 密码
 		mail.setFrom("pacoweb@163.com");// 指定发件人
 		mail.setTo("sp42@qq.com");// 收件人
 		mail.setSubject("用户 " + email + " 重置密码");// 邮件主题
@@ -51,14 +53,13 @@ public class ForgetPassword extends VerifyToken {
 		mail.setContent(html);// 邮件正文
 
 		String msg = Sender.send(mail) ? "操作成功！已经发送找回密码链接到您邮箱。请在30分钟内重置密码" : "邮件发送失败";
+
 		return msg;
 	}
 
-	public static final int TIMEOUT = 1;
-
 	public boolean verifyTokenRestPsw(String token, String psw) throws ServiceException {
 		try {
-			User user = verifyToken(token, TIMEOUT, false);
+			User user = verifyToken(token, getTimeout(), false);
 			UserCommonAuth old = UserCommonAuthService.dao.findByUserId(user.getId());
 			boolean isOk = new UserCommonAuthService().updatePwd(old, psw);
 			findDel(user, FORGET_PASSWORD); // 任务完成，删除 token

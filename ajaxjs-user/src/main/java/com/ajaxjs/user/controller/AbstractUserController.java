@@ -1,4 +1,4 @@
- package com.ajaxjs.user.controller;
+package com.ajaxjs.user.controller;
 
 import java.util.HashMap;
 import java.util.function.BiConsumer;
@@ -12,20 +12,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.app.attachment.Attachment_picture;
-import com.ajaxjs.cms.utils.sms.SMS;
 import com.ajaxjs.framework.ServiceException;
-import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.user.User;
-import com.ajaxjs.user.UserCommonAuth;
-import com.ajaxjs.user.UserDict;
 import com.ajaxjs.user.UserService;
 import com.ajaxjs.user.login.LoginService;
-import com.ajaxjs.user.login.UserLoginLog;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.captcha.CaptchaController;
 import com.ajaxjs.web.captcha.CaptchaFilter;
@@ -38,12 +32,6 @@ import com.ajaxjs.web.captcha.CaptchaFilter;
  */
 public abstract class AbstractUserController extends BaseUserController {
 	private static final LogHelper LOGGER = LogHelper.getLog(AbstractUserController.class);
-
-	public final static int LOGIN_USER_ID = 1;
-
-	public final static int LOGIN_USER_EMAIL = 2;
-
-	public final static int LOGIN_USER_PHONE = 4;
 
 	@GET
 	@Path("/login")
@@ -60,27 +48,29 @@ public abstract class AbstractUserController extends BaseUserController {
 	@Path("/login")
 	@MvcFilter(filters = { CaptchaFilter.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
-	public String loginByPassword(@NotNull @QueryParam("userID") String userID, @NotNull @QueryParam("password") String password, HttpServletRequest req) throws ServiceException {
+	public String loginByPassword(@NotNull @QueryParam("userID") String userID,
+			@NotNull @QueryParam("password") String password, HttpServletRequest req) throws ServiceException {
 		LOGGER.info("执行登录（按密码的）");
-		
+		if(isLogined())
+			return jsonNoOk("你已经登录，无须重复登录！");
+
 		userID = userID.trim();
-		
-		User user = new User();
+		User user = LoginService.loginByPassword(userID, password);
 
-		String msg = LoginService.loginByPassword(user, password, req);
-
-		if (msg.equals(UserDict.LOGIN_PASSED)) {
-			String name = getUserBySession().getName();
-
-			if (name == null)
-				name = getUserBySession().getPhone();
-
-			msg = "用户 " + name + " 欢迎回来！ <a href=\"" + req.getContextPath() + "/user/center/\">点击进入“用户中心”</a>";
+		if (user != null) {
+			LoginService.saveLoginLog(user, req);
 			
-			return jsonOk(name + " 登录成功");
-		}
+			if (getAfterLoginCB() != null) 
+				getAfterLoginCB().accept(user, req);
+			
+			LoginService.afterLogin(user, req);
+			
+			String msg = user.getName() == null ? user.getPhone() : user.getName();
 
-		return jsonNoOk("登录失败！");
+			return jsonOk("用户 " + msg + "登录成功！欢迎回来！ <a href=\"" + req.getContextPath() + "/user/user-center/\">点击进入“用户中心”</a>。");
+		} else {
+			return jsonNoOk("登录失败！");
+		}
 	}
 
 	/**
@@ -108,83 +98,35 @@ public abstract class AbstractUserController extends BaseUserController {
 
 	public abstract BiConsumer<User, HttpServletRequest> getAfterLoginCB();
 
-	/**
-	 * 会员登录之后的动作，会保存 userId 和 userName 在 Session中
-	 * 
-	 * @param user 用户
-	 * @param request 请求对象
-	 */
-	public void afterLogin(User user, HttpServletRequest request) {
-		// 用户登录日志
-		UserLoginLog userLoginLog = new UserLoginLog();
-		userLoginLog.setUserId(user.getId());
-		userLoginLog.setLoginType(UserDict.PASSWORD);
-		LoginLogController.initBean(userLoginLog, request);
-
-		if (LoginLogController.service.create(userLoginLog) <= 0) {
-			LOGGER.warning("更新会员登录日志出错");
-		}
-
-		//
-		Attachment_picture avatar = null;
-
-		UserService service = getService();
-		user = service.findById(user.getId());
-		avatar = service.findAvaterByUserId(user.getUid());
-
-		request.getSession().setAttribute("userId", user.getId());
-		request.getSession().setAttribute("userUid", user.getUid());
-		request.getSession().setAttribute("userName", user.getName());
-		request.getSession().setAttribute("userPhone", user.getPhone());
-		request.getSession().setAttribute("userGroupId", user.getRoleId());
-
-		// 获取资源权限总值
-		request.getSession().setAttribute("userGroupId", user.getRoleId());
-
-		if (getAfterLoginCB() != null) {
-			getAfterLoginCB().accept(user, request);
-		}
-
-		if (user.getRoleId() == null || user.getRoleId() == 0L) {
-			// 未设置用户权限
-		} else {
-			long privilegeTotal = UserService.dao.getPrivilegeByUserGroupId(user.getRoleId());
-
-			// System.out.println("privilegeTotal:" +privilegeTotal);
-			request.getSession().setAttribute("privilegeTotal", privilegeTotal);
-		}
-
-		if (avatar != null)
-			request.getSession().setAttribute("userAvatar", request.getContextPath() + avatar.getPath());
-	}
-	
 	@GET
 	@Path("/register")
 	public String regsiter() {
 		LOGGER.info("用户注册页");
-		
+
 		return jsp("user/register");
 	}
-	
+
 	@POST
 	@Path("/register")
 	@MvcFilter(filters = { DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
 	public String doRegister(User user, @NotNull @QueryParam("password") String password) throws ServiceException {
 		LOGGER.info("正在注册");
-		
-		registerByPhone(user, password);
-		
+
+		getService().register(user, password);
+
 		return jsonOk("恭喜你，注册成功");
 	}
 
-//	@POST
-//	@MvcFilter(filters = {  DataBaseFilter.class })
-//	public String doRegister(User user, @NotNull @QueryParam("password") String password) throws ServiceException {
-//		registerByPhone(user, password);
-//
-//		return "/user/index.jsp?msg=" + Encode.urlEncode("恭喜你，注册成功！<a href=\"../user/login/\">马上登录</a>") ;
-//	}
+	// @POST
+	// @MvcFilter(filters = { DataBaseFilter.class })
+	// public String doRegister(User user, @NotNull @QueryParam("password") String
+	// password) throws ServiceException {
+	// registerByPhone(user, password);
+	//
+	// return "/user/index.jsp?msg=" + Encode.urlEncode("恭喜你，注册成功！<a
+	// href=\"../user/login/\">马上登录</a>") ;
+	// }
 
 	/**
 	 * 检查是否重复的手机号码
@@ -201,23 +143,10 @@ public abstract class AbstractUserController extends BaseUserController {
 		return toJson(new HashMap<String, Boolean>() {
 			private static final long serialVersionUID = -5033049204280154615L;
 			{
-				put("isRepeat", getService().checkIfUserPhoneRepeat(phone));
+				getService();
+				put("isRepeat", UserService.checkIfRepeated("phone", phone));
 			}
 		});
-	}
-
-	private void registerByPhone(User user, String password) throws ServiceException {
-		LOGGER.info("执行用户注册");
-
-		if (password == null)
-			throw new IllegalArgumentException("注册密码不能为空");
-
-		UserCommonAuth passwordModel = new UserCommonAuth();
-		passwordModel.setPhone_verified(1); // 已验证
-		passwordModel.setPassword(password);
-
-		long id = getService().register(user, passwordModel);
-		LOGGER.info("创建用户成功，id：" + id);
 	}
 
 }

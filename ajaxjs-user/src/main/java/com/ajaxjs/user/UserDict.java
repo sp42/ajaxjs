@@ -10,9 +10,12 @@ import java.util.Map;
  *
  */
 public interface UserDict {
-	public static final int LOGIN_BY_USERNAME = 1;
-	public static final int loginByPhoneNumber = 2;
-	public static final int loginByEmail = 4;
+	public static final String LOGIN_PASSED = "PASSED";
+	
+	public static final int PSW_LOGIN_ID = 1;
+	public static final int PSW_LOGIN_EMAIL = 2;
+	public static final int PSW_LOGIN_PHONE = 4;
+
 	
 	public static final int WECHAT = 1;
 	public static final int PASSWORD = 2;

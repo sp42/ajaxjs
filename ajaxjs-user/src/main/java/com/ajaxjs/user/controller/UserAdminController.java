@@ -42,6 +42,7 @@ public class UserAdminController extends BaseController<User> {
 		mv.put("SexGender", UserDict.SexGender);
 		mv.put("UserGroups", CatalogServiceImpl.list2map_id_as_key(roleService.getDao().findList()));
 		listPaged(start, limit, mv, service.getDao()::findPagedList_Cover);
+		
 		return jsp("user/user-admin-list");
 	}
 
@@ -52,6 +53,7 @@ public class UserAdminController extends BaseController<User> {
 	public String editUI(@PathParam("id") Long id, ModelAndView mv) {
 		mv.put("SexGender", UserDict.SexGender);
 		super.editUI(id, mv);
+		
 		return editUI();
 	}
 
@@ -60,6 +62,7 @@ public class UserAdminController extends BaseController<User> {
 	public String createUI(ModelAndView mv) {
 		mv.put("SexGender", UserDict.SexGender);
 		super.createUI(mv);
+		
 		return editUI();
 	}
 

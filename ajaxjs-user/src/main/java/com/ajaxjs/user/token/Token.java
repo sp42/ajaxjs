@@ -1,4 +1,4 @@
-package com.ajaxjs.user;
+package com.ajaxjs.user.token;
 
 import java.util.Date;
 import java.util.Random;
@@ -103,6 +103,7 @@ public class Token {
 	public static String[] getAutoLoginToken(String storeToken, String serverAESkey) {
 		String hashedPassword = removeSalt(storeToken, serverAESkey);
 		String slat = initSalt();
+		
 		return new String[] { slat, SymmetricCipher.AES_Encrypt(slat + hashedPassword, serverAESkey) };
 	}
 
@@ -127,6 +128,7 @@ public class Token {
 	public static Date decryptTimeStampToken(String token, String aesKey) {
 		String timeStamp = SymmetricCipher.AES_Decrypt(token + "", aesKey);
 		long t = Long.parseLong(timeStamp);
+		
 		return new Date(t);
 	}
 }

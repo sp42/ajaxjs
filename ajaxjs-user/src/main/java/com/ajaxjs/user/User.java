@@ -260,6 +260,11 @@ public class User extends BaseModel {
 		return roleId;
 	}
 	
+	/**
+	 * 验证项
+	 */
+	private int verify;
+	
 	public static String getSexText(int sex) {
 		if(sex == 1)
 			return "男";
@@ -267,5 +272,13 @@ public class User extends BaseModel {
 			return "女";
 		else
 			return "未知";
+	}
+
+	public int getVerify() {
+		return verify;
+	}
+
+	public void setVerify(int verify) {
+		this.verify = verify;
 	}
 }

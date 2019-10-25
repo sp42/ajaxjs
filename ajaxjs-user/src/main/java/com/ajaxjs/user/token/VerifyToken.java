@@ -1,11 +1,11 @@
-package com.ajaxjs.user.service;
+package com.ajaxjs.user.token;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Random;
 
+import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.Repository;
@@ -14,6 +14,7 @@ import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserService;
+import com.ajaxjs.user.UserUtil;
 import com.ajaxjs.util.Encode;
 
 /**
@@ -50,25 +51,6 @@ public class VerifyToken extends BaseService<Map<String, Object>> {
 	public static VerifyEmailDao dao = new Repository().bind(VerifyEmailDao.class);
 
 	/**
-	 * 生成指定长度的随机字符，可能包含数字
-	 * 
-	 * @param length 户要求产生字符串的长度
-	 * @return
-	 */
-	public static String getRandomString(int length) {
-		String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-		Random random = new Random();
-		StringBuffer sb = new StringBuffer();
-
-		for (int i = 0; i < length; i++) {
-			int number = random.nextInt(62);
-			sb.append(str.charAt(number));
-		}
-
-		return sb.toString();
-	}
-
-	/**
 	 * 根据邮件和用户 uid 生成 Token
 	 * 
 	 * @param email
@@ -76,7 +58,7 @@ public class VerifyToken extends BaseService<Map<String, Object>> {
 	 * @return
 	 */
 	public static String saveTokenWithEmailUser(String email, long userUid, int type) {
-		String randromStr = getRandomString(6);
+		String randromStr = UserUtil.getRandomString(6);
 		Date now = new Date();
 
 		String str = userUid + email + randromStr + now.getTime(), token = Encode.md5(str);
@@ -96,6 +78,21 @@ public class VerifyToken extends BaseService<Map<String, Object>> {
 		}
 	}
 
+	/**
+	 * 默认的 Token 验证所允许的超时时间
+	 */
+	public static final int TIMEOUT = 1;
+
+	/**
+	 * 返回 Token 验证所允许的超时时间
+	 * 
+	 * @return
+	 */
+	public static int getTimeout() {
+		int c = ConfigService.getValueAsInt("user.tokenTimeout");
+		return c == 0 ? TIMEOUT : c;
+	}
+
 	public static User verifyToken(String token, int timeout, boolean isVerifyMark) {
 		Map<String, Object> data = VerifyToken.dao.findByToken(token);
 		Objects.requireNonNull(data, "没有找到该 token: " + token + "。 非法请求！");
@@ -110,8 +107,15 @@ public class VerifyToken extends BaseService<Map<String, Object>> {
 
 		long diff = new Date().getTime() - createDate;
 
-		if (diff > (timeout * 3600000))
+		Long existId = (long) data.get("id");
+		if (diff > (timeout * 3600000)) {
+			// 删除已超时的 token
+			Map<String, Object> map = new HashMap<>();
+			map.put("id", existId);
+			VerifyToken.dao.delete(map);
+
 			throw new IllegalArgumentException("该 Token 已超时");
+		}
 
 		long userUid = (long) data.get("entityUid");
 		User user = UserService.dao.findByUid(userUid);

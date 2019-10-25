@@ -50,10 +50,11 @@ public class LoginLogController extends BaseController<UserLoginLog> {
 
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv, HttpServletRequest req) {
+	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv,
+			HttpServletRequest req) {
 		mv.put("LoginType", UserDict.LoginType);
 		listPaged(start, limit, mv, (s, l) -> service.findPagedList(s, l, QueryParams.initSqlHandler(req)));
-		
+
 		return jsp("user/login-log-list");
 	}
 
@@ -69,8 +70,11 @@ public class LoginLogController extends BaseController<UserLoginLog> {
 	 * @param request
 	 */
 	public static void initBean(UserLoginLog bean, HttpServletRequest request) {
+		if (request == null)
+			return;
+
 		String ip = ((MvcRequest) request).getIp();
-		
+
 		if ("0:0:0:0:0:0:0:1".equals(ip))
 			ip = "localhost";
 

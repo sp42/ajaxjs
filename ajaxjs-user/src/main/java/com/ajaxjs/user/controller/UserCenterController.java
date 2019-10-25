@@ -1,12 +1,14 @@
 package com.ajaxjs.user.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.cms.app.attachment.Attachment_picture;
@@ -56,8 +58,8 @@ public class UserCenterController extends AbstractAccountInfoController {
 	}
 	
 	@GET
-//	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	public String home(ModelAndView mv, HttpServletRequest r) {
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
+	public String home(ModelAndView mv) {
 		LOGGER.info("用户会员中心（前台）");
 		return jsp("user/user-center/home");
 	}
@@ -70,12 +72,86 @@ public class UserCenterController extends AbstractAccountInfoController {
 	}
 	
 	@GET
+	@Path("/profile/avater")
+	public String avater() {
+		LOGGER.info("用户会员中心-个人信息-修改头像");
+		return jsp("user/user-center/avater");
+	}
+	
+	@GET
 	@Path("/address")
 	public String address() {
 		LOGGER.info("用户会员中心-我的地址");
 		return jsp("user/user-center/address");
 	}
 
+
+//	@GET
+//	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
+//	@Path("/home")
+//	public String home(ModelAndView mv) {
+//		return jsp("user/home");
+//	}
+
+	@GET
+	@Path("/info")
+	@MvcFilter(filters = { LoginCheck.class })
+	public String info() {
+		return jsp("user/info");
+	}
+	
+	@GET
+	@Path("/info/{id}")
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class  })
+	public String info2(@PathParam("id")Long userId, ModelAndView mv) {
+		mv.put("info", getService().findById(userId));
+		return jsp("user/info");
+	}
+
+	@GET
+	@Path("/info/modifly")
+	@MvcFilter(filters = { LoginCheck.class })
+	public String infoModifly() {
+		return jsp("user/infoModifly");
+	}
+
+	@GET
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
+	@Path("/info/avatar")
+	public String avatar(ModelAndView mv) {
+		
+		Attachment_picture avatar = UserService.dao.findAvaterByUserId(getUserUid());
+		mv.put("avatar", avatar);
+		return jsp("user/avater");
+	}
+
+	@GET
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
+	@Path("/loginInfo")
+	public String changePassword(ModelAndView mv) {
+		mv.put("email", UserService.dao.findById(getUserId()).getEmail());
+		return jsp("user/loginInfo");
+	}
+
+//	static FeedbackDao feedbackDao = new Repository().bind(FeedbackDao.class);
+//
+//	@GET
+//	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
+//	@Path("/feedback")
+//	public String feedback(ModelAndView mv) {
+//		List<Map<String, Object>> feedbacks = feedbackDao.getListByUserId(getUserId());
+//		mv.put("feedbacks", feedbacks);
+//		return jsp("user/feedback");
+//	}
+
+	@POST
+	@Path("/sendSMScode")
+	@Produces(MediaType.APPLICATION_JSON)
+	@MvcFilter(filters = { LoginCheck.class })
+	public String sendSMScode(@QueryParam("phoneNo") @NotNull String phoneNo) {
+		return super.sendSMScode(phoneNo);
+	}
+	
 	@PUT
 	@Path("/{id}")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })

@@ -49,6 +49,7 @@ public class UserCommonAuthService extends BaseService<UserCommonAuth> {
 	@Override
 	public Long create(UserCommonAuth bean) {
 		bean.setPassword(encode(bean.getPassword()));
+		
 		try {
 			bean.setRegisterIp(MvcRequest.getMvcRequest().getIp());
 		} catch (Exception e) {
@@ -90,12 +91,12 @@ public class UserCommonAuthService extends BaseService<UserCommonAuth> {
 	 * @param userId
 	 * @param password
 	 * @param new_password
-	 * @return
+	 * @return 是否修改成功
 	 */
 	public boolean updatePwd(UserCommonAuth auth, String new_password) throws ServiceException {
 		UserCommonAuth newAuth = new UserCommonAuth();
 		newAuth.setId(auth.getId());
-		newAuth.setPassword(UserCommonAuthService.encode(new_password));
+		newAuth.setPassword(encode(new_password));
 
 		if (auth.getPassword().equalsIgnoreCase(newAuth.getPassword()))
 			throw new ServiceException("新密码与旧密码一致，没有修改");

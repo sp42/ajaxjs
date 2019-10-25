@@ -1,11 +1,11 @@
-package com.ajaxjs.user.oauth_login;
+package com.ajaxjs.user.login;
 
 import java.util.Map;
 
-import com.ajaxjs.js.JsonHelper;
 import com.ajaxjs.net.http.NetUtil;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.map.JsonHelper;
 
 public class Weibo {
 	private static final LogHelper LOGGER = LogHelper.getLog(Weibo.class);

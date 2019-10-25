@@ -15,7 +15,7 @@ public interface UserDao extends IBaseDao<User> {
 	 * @return 返回用户，若 null 表示找不到用户
 	 */
 	@Select("SELECT * FROM user WHERE name = ?")
-	User findByUserName(String userName);
+	public User findByUserName(String userName);
 
 	/**
 	 * 根据手机号码查找用户
@@ -24,7 +24,7 @@ public interface UserDao extends IBaseDao<User> {
 	 * @return 返回用户，若 null 表示找不到用户
 	 */
 	@Select("SELECT * FROM user WHERE phone = ? LIMIT 1")
-	User findByPhone(String phone);
+	public User findByPhone(String phone);
 
 	/**
 	 * 根据 email 查找用户
@@ -33,7 +33,7 @@ public interface UserDao extends IBaseDao<User> {
 	 * @return 返回用户，若 null 表示找不到用户
 	 */
 	@Select("SELECT * FROM user WHERE email = ? LIMIT 1")
-	User findByEmail(String email);
+	public User findByEmail(String email);
 
 	/**
 	 * 查找用户头像
@@ -43,10 +43,10 @@ public interface UserDao extends IBaseDao<User> {
 	 */
 
 	@Select("SELECT * FROM attachment_picture WHERE catelog = 2 AND owner = ? ORDER BY id DESC LIMIT 1")
-	Attachment_picture findAvaterByUserId(long userId);
+	public Attachment_picture findAvaterByUserId(long userId);
 
 	@Select("SELECT accessKey FROM user_role WHERE id = ?")
-	Long getPrivilegeByUserGroupId(long userGroupId);
+	public Long getPrivilegeByUserGroupId(long userGroupId);
 
 	@Select("SELECT id, avatar, name, username, sex, birthday, email, phone, createDate, location, roleId, " + selectCover + " AS cover FROM ${tableName} entry")
 	@Override

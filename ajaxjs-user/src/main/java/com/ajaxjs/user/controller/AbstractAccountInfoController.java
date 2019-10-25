@@ -41,6 +41,7 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 	}
 
 	@GET
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Path("/account")
 	public String account() {
 		LOGGER.info("用户会员中心-帐号管理-首页");
@@ -48,6 +49,7 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 	}
 
 	@GET
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Path("/account/oauth")
 	public String oauth() {
 		LOGGER.info("用户会员中心-账户绑定");

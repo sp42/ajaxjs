@@ -1,4 +1,4 @@
-package com.ajaxjs.user;
+package com.ajaxjs.user.login;
 
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
