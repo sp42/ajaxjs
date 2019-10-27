@@ -7,9 +7,9 @@ import com.ajaxjs.cms.utils.sms.SMS;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.SimpleSMSFilter;
-import com.ajaxjs.user.User;
-import com.ajaxjs.user.UserService;
 import com.ajaxjs.user.UserUtil;
+import com.ajaxjs.user.model.User;
+import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**

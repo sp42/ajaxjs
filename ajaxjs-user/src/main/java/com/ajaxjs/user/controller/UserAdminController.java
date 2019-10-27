@@ -18,10 +18,10 @@ import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserDict;
-import com.ajaxjs.user.UserService;
+import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.role.RoleService;
+import com.ajaxjs.user.service.UserService;
 
 /**
  * 用户系统后台部分的控制器

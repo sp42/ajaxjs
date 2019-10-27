@@ -1,4 +1,4 @@
-package com.ajaxjs.user;
+package com.ajaxjs.user.service;
 
 import java.util.Date;
 
@@ -13,6 +13,9 @@ import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.JdbcReader;
+import com.ajaxjs.user.UserDao;
+import com.ajaxjs.user.model.User;
+import com.ajaxjs.user.model.UserCommonAuth;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.cryptography.SymmetricCipher;
 import com.ajaxjs.util.io.ImageHelper;

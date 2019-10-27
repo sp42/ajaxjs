@@ -13,12 +13,12 @@ import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.user.User;
-import com.ajaxjs.user.UserCommonAuth;
-import com.ajaxjs.user.UserCommonAuthService;
 import com.ajaxjs.user.controller.LoginLogController.UserLoginLogService;
 import com.ajaxjs.user.filter.LoginCheck;
 import com.ajaxjs.user.filter.UserPasswordFilter;
+import com.ajaxjs.user.model.User;
+import com.ajaxjs.user.model.UserCommonAuth;
+import com.ajaxjs.user.service.UserCommonAuthService;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -48,45 +48,17 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 		return jsp("user/user-center/account");
 	}
 
+	
 	@GET
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Path("/account/oauth")
-	public String oauth() {
-		LOGGER.info("用户会员中心-账户绑定");
-		return jsp("user/user-center/oauth");
-	}
-
-	public static UserLoginLogService userLoginLogService = new UserLoginLogService();
-
-	@GET
-	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Path("/account/log-history")
-	public String logHistory(ModelAndView mv) {
-		LOGGER.info("用户会员中心-登录历史");
-		long userId = getUserId();
-		mv.put("list", userLoginLogService
-				.findList(sql -> sql + " WHERE userId = " + userId + " ORDER BY id DESC LIMIT 0, 10"));
-
-		return jsp("user/user-center/log-history");
+	@Path("/account/safe")
+	public String safe() {
+		LOGGER.info("用户会员中心-帐号管理-帐号安全修改");
+		return jsp("user/user-center/safe");
 	}
 
 	@POST
-	@Path("/resetPassword")
-	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class, UserPasswordFilter.class })
-	@Produces(MediaType.APPLICATION_JSON)
-	public String resetPassword(@NotNull @QueryParam("new_password") String new_password, HttpServletRequest request)
-			throws ServiceException {
-		LOGGER.info("重置密码");
-
-		if (getPasswordService() != null && getPasswordService()
-				.updatePwd((UserCommonAuth) request.getAttribute("UserCommonAuthId"), new_password))
-			return jsonOk("重置密码成功");
-		else
-			return jsonNoOk("重置密码失败！");
-	}
-
-	@POST
-	@Path("/modiflyUserName")
+	@Path("/safe/modiflyUserName")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
 	public String modiflyUserName(@NotNull @QueryParam("userName") String userName, HttpServletRequest request) {
@@ -104,7 +76,7 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 	}
 
 	@POST
-	@Path("/modiflyEmail")
+	@Path("/safe/modiflyEmail")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
 	public String modiflyEmail(@NotNull @QueryParam("email") String email) {
@@ -118,7 +90,7 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 	}
 
 	@POST
-	@Path("/modiflyPhone")
+	@Path("/safe/modiflyPhone")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
 	public String modiflyPhone(@NotNull @QueryParam("phone") String phone) {
@@ -132,5 +104,61 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 			return jsonOk("修改手机成功");
 		} else
 			return jsonNoOk("修改手机失败！");
+	}
+	
+	@POST
+	@Path("/safe/resetPassword")
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class, UserPasswordFilter.class })
+	@Produces(MediaType.APPLICATION_JSON)
+	public String resetPassword(@NotNull @QueryParam("new_password") String new_password, HttpServletRequest request)
+			throws ServiceException {
+		LOGGER.info("重置密码");
+
+		if (getPasswordService() != null && getPasswordService()
+				.updatePwd((UserCommonAuth) request.getAttribute("UserCommonAuthId"), new_password))
+			return jsonOk("重置密码成功");
+		else
+			return jsonNoOk("重置密码失败！");
+	}
+	
+	public static UserLoginLogService userLoginLogService = new UserLoginLogService();
+
+	@GET
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
+	@Path("/account/log-history")
+	public String logHistory(ModelAndView mv) {
+		LOGGER.info("用户会员中心-登录历史");
+		long userId = getUserId();
+		mv.put("list", userLoginLogService
+				.findList(sql -> sql + " WHERE userId = " + userId + " ORDER BY id DESC LIMIT 0, 10"));
+
+		return jsp("user/user-center/log-history");
+	}
+	
+	@GET
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
+	@Path("/account/oauth")
+	public String oauth() {
+		LOGGER.info("用户会员中心-账户绑定");
+		return jsp("user/user-center/oauth");
+	}
+
+	@GET
+	@MvcFilter(filters = { LoginCheck.class })
+	@Path("/account/delete-account")
+	public String deleteAccount() {
+		LOGGER.info("用户会员中心-账户管理-删除帐号");
+
+		return jsp("user/user-center/delete-account");
+	}
+
+	@POST
+	@Path("/account/delete-account")
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class, UserPasswordFilter.class })
+	@Produces(MediaType.APPLICATION_JSON)
+	public String doDeleteAccount() {
+		LOGGER.info("用户会员中心-账户管理-删除帐号");
+
+		return jsonOk("删除帐号成功");
 	}
 }

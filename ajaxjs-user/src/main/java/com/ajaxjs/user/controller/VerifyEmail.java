@@ -18,10 +18,10 @@ import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.user.User;
-import com.ajaxjs.user.UserService;
 import com.ajaxjs.user.UserUtil;
 import com.ajaxjs.user.filter.LoginCheck;
+import com.ajaxjs.user.model.User;
+import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.user.token.VerifyToken;
 import com.ajaxjs.util.Encode;
 

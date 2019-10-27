@@ -10,13 +10,13 @@ import com.ajaxjs.cms.app.attachment.Attachment_picture;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.user.User;
-import com.ajaxjs.user.UserCommonAuth;
-import com.ajaxjs.user.UserCommonAuthService;
 import com.ajaxjs.user.UserDict;
-import com.ajaxjs.user.UserService;
 import com.ajaxjs.user.UserUtil;
 import com.ajaxjs.user.controller.LoginLogController;
+import com.ajaxjs.user.model.User;
+import com.ajaxjs.user.model.UserCommonAuth;
+import com.ajaxjs.user.service.UserCommonAuthService;
+import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.logger.LogHelper;
 
 public class LoginService extends UserService {
@@ -61,10 +61,15 @@ public class LoginService extends UserService {
 		if (auth == null)
 			throw new ServiceException("系統異常，用戶 " + user.getId() + " 沒有對應的密碼記錄");
 
-		String submitPsw = UserCommonAuthService.encode(password);
+		return checkUserLogin(auth.getPassword(), password);
+	}
 
-		if (!auth.getPassword().equalsIgnoreCase(submitPsw)) {
-			LOGGER.info("密码不正确，数据库密码：{0}, 提交密码 {1}", auth.getPassword(), submitPsw);
+	public static boolean checkUserLogin(String passwordInDB, String password) throws ServiceException {
+		passwordInDB = passwordInDB.trim();
+		password = UserCommonAuthService.encode(password.trim());
+
+		if (!passwordInDB.equalsIgnoreCase(password)) {
+			LOGGER.info("密码不正确，数据库密码：{0}, 提交密码 {1}", passwordInDB, password);
 
 			throw new ServiceException("密码不正确");
 		}

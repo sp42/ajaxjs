@@ -8,9 +8,9 @@ import javax.ws.rs.Path;
 import com.ajaxjs.cms.utils.sms.SMS;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
-import com.ajaxjs.user.User;
-import com.ajaxjs.user.UserCommonAuthService;
-import com.ajaxjs.user.UserService;
+import com.ajaxjs.user.model.User;
+import com.ajaxjs.user.service.UserCommonAuthService;
+import com.ajaxjs.user.service.UserService;
 
 /**
  * 用户总的控制器

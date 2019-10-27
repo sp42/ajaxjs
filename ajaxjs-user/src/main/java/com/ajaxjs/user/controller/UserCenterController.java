@@ -20,10 +20,10 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.user.User;
-import com.ajaxjs.user.UserCommonAuthService;
-import com.ajaxjs.user.UserService;
 import com.ajaxjs.user.filter.LoginCheck;
+import com.ajaxjs.user.model.User;
+import com.ajaxjs.user.service.UserCommonAuthService;
+import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.UploadFileInfo;
 

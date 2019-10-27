@@ -12,9 +12,9 @@ import com.ajaxjs.framework.Repository;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
-import com.ajaxjs.user.User;
-import com.ajaxjs.user.UserService;
 import com.ajaxjs.user.UserUtil;
+import com.ajaxjs.user.model.User;
+import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.Encode;
 
 /**

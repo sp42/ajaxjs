@@ -6,11 +6,11 @@ import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.net.mail.Mail;
 import com.ajaxjs.net.mail.Sender;
-import com.ajaxjs.user.User;
-import com.ajaxjs.user.UserCommonAuth;
-import com.ajaxjs.user.UserCommonAuthService;
-import com.ajaxjs.user.UserService;
 import com.ajaxjs.user.UserUtil;
+import com.ajaxjs.user.model.User;
+import com.ajaxjs.user.model.UserCommonAuth;
+import com.ajaxjs.user.service.UserCommonAuthService;
+import com.ajaxjs.user.service.UserService;
 
 /**
  * 忘记密码

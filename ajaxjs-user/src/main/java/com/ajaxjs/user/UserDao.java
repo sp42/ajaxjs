@@ -5,6 +5,7 @@ import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
+import com.ajaxjs.user.model.User;
 
 @TableName(value = "user", beanClass = User.class)
 public interface UserDao extends IBaseDao<User> {

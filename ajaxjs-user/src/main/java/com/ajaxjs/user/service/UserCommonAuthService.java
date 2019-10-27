@@ -1,4 +1,4 @@
-package com.ajaxjs.user;
+package com.ajaxjs.user.service;
 
 import java.util.List;
 
@@ -12,6 +12,7 @@ import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
+import com.ajaxjs.user.model.UserCommonAuth;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.logger.LogHelper;
 

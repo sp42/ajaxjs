@@ -17,12 +17,14 @@ package com.ajaxjs.user.filter;
 
 import java.lang.reflect.Method;
 
+import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.FilterAction;
-import com.ajaxjs.user.UserCommonAuth;
-import com.ajaxjs.user.UserCommonAuthService;
 import com.ajaxjs.user.controller.BaseUserController;
+import com.ajaxjs.user.login.LoginService;
+import com.ajaxjs.user.model.UserCommonAuth;
+import com.ajaxjs.user.service.UserCommonAuthService;
 
 /**
  * 需要输入用户密码之后才能下一步的拦截器
@@ -37,12 +39,13 @@ public class UserPasswordFilter implements FilterAction {
 		String password = request.getParameter("password");
 		UserCommonAuth auth = UserCommonAuthService.dao.findByUserId(BaseUserController.getUserId());
 		request.setAttribute("UserCommonAuthId", auth);
-
-		if (auth.getPassword().equalsIgnoreCase(UserCommonAuthService.encode(password))) {
-			return true;
-		} else {
+		
+		try {
+			return LoginService.checkUserLogin(auth.getPassword(), password);
+		} catch (ServiceException e) {
 			throw new IllegalAccessError("用户名或密码错误");
 		}
+
 	}
 
 	@Override
