@@ -51,6 +51,7 @@ public abstract class BaseService<T> implements IBaseService<T> {
 				model.setCreateDate(now);
 			if (model.getUpdateDate() == null)
 				model.setUpdateDate(now);
+			
 		} else if (bean instanceof Map) {
 			@SuppressWarnings("unchecked")
 			Map<String, Object> map = (Map<String, Object>) bean;
