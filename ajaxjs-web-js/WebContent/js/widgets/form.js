@@ -54,13 +54,13 @@ Vue.component('aj-form-calendar', {
 	template : 
 		'<div class="aj-form-calendar">\
 			<div class="selectYearMonth">\
-				<a href="#" @click="getDate(\'preYear\')" class="preYear" title="上一年">&lt;</a> \
+				<a href="###" @click="getDate(\'preYear\')" class="preYear" title="上一年">&lt;</a> \
 				<select @change="setMonth($event)" v-model="month">\
 					<option value="1">一月</option><option value="2">二月</option><option value="3">三月</option><option value="4">四月</option>\
 					<option value="5">五月</option><option value="6">六月</option><option value="7">七月</option><option value="8">八月</option>\
 					<option value="9">九月</option><option value="10">十月</option><option value="11">十一月</option><option value="12">十二月</option>\
 				</select>\
-				<a href="#" @click="getDate(\'nextYear\')" class="nextYear" title="下一年">&gt;</a>\
+				<a href="###" @click="getDate(\'nextYear\')" class="nextYear" title="下一年">&gt;</a>\
 			</div>\
 			<div class="showCurrentYearMonth">\
 				<span class="showYear">{{year}}</span>/<span class="showMonth">{{month}}</span>\
@@ -114,8 +114,9 @@ Vue.component('aj-form-calendar', {
 								this.onToday && this.onToday(cell);
 							}
 //							
-//							// 判断是否选择日期
-//							this.selectDay && this.onSelectDay && this.isSameDay(on, this.selectDay) && this.onSelectDay(cell);
+// // 判断是否选择日期
+// this.selectDay && this.onSelectDay && this.isSameDay(on, this.selectDay) &&
+// this.onSelectDay(cell);
 						}
 					}
 					row.appendChild(cell);
@@ -161,7 +162,7 @@ Vue.component('aj-form-calendar', {
 		// 获取空白的非上月天数 + 当月天数
 		getDateArr () {
 			var arr = [];
-			// 用 当月第一天 在一周中的日期值 作为  当月 离 第一天的天数
+			// 用 当月第一天 在一周中的日期值 作为 当月 离 第一天的天数
 			for (var i = 1, firstDay = new Date(this.year, this.month - 1, 1).getDay(); i <= firstDay; i++)
 				arr.push(0);
 
@@ -226,9 +227,10 @@ Vue.component('aj-form-calendar-input', {
 	    // 2012-07-08
 	    // firefox中解析 new Date('2012/12-23') 不兼容，提示invalid date 无效的日期
 		// Chrome下可以直接将其格式化成日期格式，且时分秒默认为零
-		// var arr = date.split('-'), now = new Date(arr[0], arr[1] - 1, arr[2], " ", "", " ");
+		// var arr = date.split('-'), now = new Date(arr[0], arr[1] - 1, arr[2],
+		// " ", "", " ");
 		if(this.fieldValue) {
-//			debugger;
+// debugger;
 			var arr = this.fieldValue.split(' ')[0], arr = arr.split('-'), date = new Date(arr[0], arr[1] - 1, arr[2], " ", "", " ");
 			this.$refs.calendar.date = date;
 		}
@@ -338,7 +340,7 @@ Vue.component('aj-form-html-editor', {
 						action: this.uploadImageActionUrl,
 						progress: 0,
 						uploadOk_callback(j) {
-//							self.format("insertImage", self.basePath + '/' + j.imgUrl);
+// self.format("insertImage", self.basePath + '/' + j.imgUrl);
 							self.format("insertImage", j.imgUrl);
 						},
 						$blob: newBlob,
@@ -607,3 +609,168 @@ Vue.component('aj-form-html-editor', {
 	    }
 	}
 });
+
+
+
+/**
+ * 表单验证器
+ * 
+ * https://www.w3cplus.com/css/form-validation-part-2-the-constraint-validation-api-javascript.html
+ * https://github.com/cferdinandi/validate/blob/master/src/js/validate.js
+ */
+;(function(){
+	
+	// 验证字段
+	function hasError (field) {
+	
+		if (field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') 
+			return;
+		
+		// 获取 validity
+		var validity = field.validity;
+		
+		// 如果通过验证,就返回 null
+		if (validity.valid) return;
+		
+		// 如果是必填字段但是字段为空时
+		if (validity.valueMissing) return '该项是必填项';
+		
+		// 如果类型不正确
+		if (validity.typeMismatch) {
+			// Email
+			if (field.type === 'email') return '请输入有效的邮件地址';
+			
+			// URL
+			if (field.type === 'url') return '请输入一个有效的网址';
+			
+			return '请输入正确的类型';
+		}
+		
+		// 如果输入的字符数太短
+		if (validity.tooShort) return 'Please lengthen this text to ' + field.getAttribute('minLength') + ' characters or more. You are currently using ' + field.value.length + ' characters.';
+		
+		// 如果输入的字符数太长
+		if (validity.tooLong) return 'Please shorten this text to no more than ' + field.getAttribute('maxLength') + ' characters. You are currently using ' + field.value.length + ' characters.';
+		
+		// 如果数字输入类型输入的值不是数字
+		if (validity.badInput) return 'Please enter a number.';
+		
+		// 如果数字值与步进间隔不匹配
+		if (validity.stepMismatch) return 'Please select a valid value.';
+		
+		// 如果数字字段的值大于max的值
+		if (validity.rangeOverflow) return 'Please select a value that is no more than ' + field.getAttribute('max') + '.';
+		
+		// 如果数字字段的值小于min的值
+		if (validity.rangeUnderflow) return 'Please select a value that is no less than ' + field.getAttribute('min') + '.';
+		
+		// 如果模式不匹配
+		if (validity.patternMismatch) {
+			// 如果包含模式信息，返回自定义错误
+			if (field.hasAttribute('title')) return field.getAttribute('title');
+			
+			// 否则, 返回一般错误
+			return 'Please match the requested format.';
+		}
+		
+		// 如果是其他的错误, 返回一个通用的 catchall 错误
+		return 'The value you entered for this field is invalid.';
+	}
+	
+	function showError(field, error) {
+	    // 将错误类添加到字段
+	    field.classList.add('error');
+
+	    // 获取字段id 或者 name
+	    var id = field.id || field.name;
+	    if (!id) return;
+
+	    // 检查错误消息字段是否已经存在
+	    // 如果没有, 就创建一个
+	    var message = field.form.querySelector('.error-message#error-for-' + id );
+	    if (!message) {
+	        message = document.createElement('div');
+	        message.className = 'error-message';
+	        message.id = 'error-for-' + id;
+	        field.parentNode.insertBefore( message, field.nextSibling );
+	    }
+
+	    // 添加ARIA role 到字段
+	    field.setAttribute('aria-describedby', 'error-for-' + id);
+
+	    // 更新错误信息
+	    message.innerHTML = error;
+
+	    // 显示错误信息
+	    message.style.display = 'block';
+	    message.style.visibility = 'visible';
+	};
+	
+	// 移除所有的错误信息
+	function removeError(field) {
+	    // 删除字段的错误类
+	    field.classList.remove('error');
+
+	    // 移除字段的 ARIA role
+	    field.removeAttribute('aria-describedby');
+
+	    // 获取字段的 id 或者 name
+	    var id = field.id || field.name;
+	    if (!id) return;
+
+	    // 检查DOM中是否有错误消息
+	    var message = field.form.querySelector('.error-message#error-for-' + id + '');
+	    if (!message) return;
+
+	    // 如果是这样的话, 就隐藏它
+	    message.innerHTML = '';
+	    message.style.display = 'none';
+	    message.style.visibility = 'hidden';
+	}
+	
+	aj.formValidator = function(el) {
+		el.setAttribute('novalidate', true);
+		
+		// 监听所有的失去焦点的事件
+		document.addEventListener('blur', event => {
+
+			var error = hasError(event.target);
+
+		    // 如果有错误,就把它显示出来
+		    if (error) {
+		        showError(event.target, error);
+		        return;
+		    }
+		    
+		    // 否则, 移除所有存在的错误信息
+		    removeError(event.target);
+		}, true);
+	}
+	
+	aj.formValidator.onSubmit = function(form) {
+		// 获取所有的表单元素
+	    var fields = form.elements;
+
+	    // 验证每一个字段
+	    // 将具有错误的第一个字段存储到变量中以便稍后我们将其默认获得焦点
+	    var error, hasErrors;
+	    for (var i = 0; i < fields.length; i++) {
+	        error = hasError(fields[i]);
+	        
+	        if (error) {
+	            showError(fields[i], error);
+	            if (!hasErrors) 
+	                hasErrors = fields[i];
+	        }
+	    }
+	    
+	    // 如果有错误,停止提交表单并使出现错误的第一个元素获得焦点
+	    if (hasErrors) {
+	        hasErrors.focus();
+	        return false;
+	    }
+	    
+	    return true;
+	}
+})();
+

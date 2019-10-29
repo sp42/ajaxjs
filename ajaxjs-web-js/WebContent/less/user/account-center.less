@@ -1,7 +1,9 @@
 @import '../common_style.less';
-
-body.account-center {
-	height: 100%;
+.account-center {
+	min-height: 600px;
+	margin-bottom: 2%;
+	clear: both;
+	overflow: hidden;
 	> .center {
 		width: 80%;
 		margin: 5% auto;
@@ -14,7 +16,7 @@ body.account-center {
 			height: 100%;
 			float: left;
 			.avatar {
-				width: 130px;
+				width: 100px;
 				margin: 10% auto;
 				img {
 					border-radius: 50%;
@@ -34,6 +36,7 @@ body.account-center {
 				padding-bottom: 10%;
 				li {
 					border-top: 1px solid lightgray;
+					list-style-type: none;
 					padding: 5%;
 					text-align: center;
 					font-size: 1.1rem;
@@ -50,7 +53,6 @@ body.account-center {
 			float: left;
 			border-radius: 0 10px 10px 10px;
 			display: flex;
-			//justify-content: center;
 			flex-direction: column;
 			border: 1px solid #e6e3e3;
 			box-sizing: border-box;
@@ -58,12 +60,17 @@ body.account-center {
 			> h3 {
 				width: 80%;
 				margin: 5% auto;
-				color: #417BB5;
 				text-align: center;
 				font-weight: 700;
 				letter-spacing: 5px;
-				font-size: 1.4rem;
-				padding: 1%;
+				font-size: 1.8rem;
+			}
+
+			.achor {
+				text-align: right;
+				padding-right: 5%;
+				font-size: .9rem;
+				margin-bottom:3%;
 			}
 		}
 	}
@@ -75,7 +82,7 @@ body.account-center {
 			padding: 4% 0;
 			div {
 				display: inline-block;
-				width: 25%;
+				min-width: 25%;
 				&.ok {
 					color: green;
 					&::before {
@@ -109,11 +116,29 @@ body.account-center {
 			}
 		}
 	}
-	
-	p.note{
+
+	p.note {
 		.aj-p;
-		margin:5%;
-		font-size:.9rem;
+		margin: 1% 5%;
+		font-size: .9rem;
+		border: 1px solid lightgray;
+		border-radius: 3px;
+		background-color: #eee;
+		padding: 1% 2%;
 	}
 }
 
+.list-table{
+	table{
+		.ajaxjs-borderTable;
+		width:90%;
+		th, td{
+			text-align:center;
+			border: none;
+		}
+	}
+	min-height:500px;
+}
+.pager{
+	margin:3% auto;
+}

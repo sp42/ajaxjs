@@ -255,15 +255,15 @@ Vue.component('aj-tree-catelog-select', {
 
 //全国省市区 写死属性
 Vue.component('aj-china-area', {
-	template : '<div class="aj-china-area"><select v-model="province" class="ajaxjs-select" name="locationProvince">\
+	template : '<div class="aj-china-area">省/自治区 <select v-model="province" class="ajaxjs-select" name="locationProvince">\
 		            <option value="">请选择</option>\
 		            <option v-for="(v, k) in addressData[86]" :value="k">{{v}}</option>\
 		        </select>\
-		        <select v-model="city" class="ajaxjs-select" name="locationCity">\
+		        市 <select v-model="city" class="ajaxjs-select" name="locationCity">\
 		            <option value="">请选择</option>\
 		            <option v-for="(v, k) in citys" :value="k">{{v}}</option>\
 		        </select>\
-		        <select v-model="district" class="ajaxjs-select" name="locationDistrict">\
+		       区/县  <select v-model="district" class="ajaxjs-select" name="locationDistrict">\
 		            <option value="">请选择</option>\
 		            <option v-for="(v, k) in districts" :value="k">{{v}}</option>\
 		        </select>\

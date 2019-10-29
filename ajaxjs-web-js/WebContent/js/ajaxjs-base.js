@@ -294,6 +294,8 @@ ajaxjs.xhr = {
 
 		if (!form.action)
 			throw 'Please fill the url in ACTION attribute.';
+		
+		!cfg.noFormValid && aj.formValidator(form);
 
 		// form.method always GET, so form.getAttribute('method') instead
 		var method;
@@ -305,6 +307,10 @@ ajaxjs.xhr = {
 		form.addEventListener('submit', function(e, cb, cfg) {
 			e.preventDefault();// 禁止 form 默认提交
 			var form = e.target;
+			
+			if(!cfg.noFormValid && !aj.formValidator.onSubmit(form))
+				return;
+			
 			var json = ajaxjs.xhr.serializeForm(form, cfg);
 
 			if (cfg && cfg.beforeSubmit && cfg.beforeSubmit(form, json) === false)
@@ -315,6 +321,13 @@ ajaxjs.xhr = {
 			else
 				ajaxjs.xhr.post(form.action, cb, json);
 		}.delegate(null, cb, cfg));
+		
+		var returnBtn = form.$('button.returnBtn'); // shorthand for back btn
+		if (returnBtn)
+			returnBtn.onclick = e => {
+				e.preventDefault();
+				history.back();
+			};
 	}
 };
 
@@ -334,6 +347,7 @@ ajaxjs.xhr.dele = ajaxjs.xhr.request.delegate(null, null, null, null, 'DELETE');
  */
 ajaxjs.xhr.serializeForm = function(form, cfg) {
 	var json = {};
+	
 	if (window.FormData && FormData.prototype.forEach) { // 奇葩魅族浏览器，有
 		// FormData 却只有append 一个方法
 		var formData = new FormData(form);
@@ -377,17 +391,22 @@ ajaxjs.xhr.serializeForm = function(form, cfg) {
 }
 
 // 默认的回调，有专属的字段并呼叫专属的控件
-ajaxjs.xhr.defaultCallBack = function(json) {
+ajaxjs.xhr.defaultCallBack_cb = function(json, xhr, onOK, onFail) {
 	if (json) {
 		if (json.isOk) {
+			!!onOK && onOK(json);
 			ajaxjs.alert.show(json.msg || '操作成功！');
 		} else {
+			!!onFail && onFail(json);
 			ajaxjs.alert.show(json.msg || '执行失败！原因未知！');
 		}
 	} else {
+		cb && cb.onFail && cb.onFail(json);
 		ajaxjs.alert.show('ServerSide Error!');
 	}
 }
+
+ajaxjs.xhr.defaultCallBack = ajaxjs.xhr.defaultCallBack_cb.delegate(null);
 
 // --------------------------------------------------------
 // 拖放/触控 Drag&Drop
