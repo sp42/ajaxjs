@@ -146,8 +146,7 @@ public class HttpBasicRequest extends IoHelper {
 	/**
 	 * 设置启动 GZip 请求
 	 */
-	public final static Consumer<HttpURLConnection> setGizpRequest = conn -> conn.addRequestProperty("Accept-Encoding",
-			"gzip, deflate");
+	public final static Consumer<HttpURLConnection> setGizpRequest = conn -> conn.addRequestProperty("Accept-Encoding", "gzip, deflate");
 
 	/////////////////////// --------- GET -------------///////////////////////
 
