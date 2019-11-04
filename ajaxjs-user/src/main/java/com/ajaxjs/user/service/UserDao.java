@@ -1,4 +1,4 @@
-package com.ajaxjs.user;
+package com.ajaxjs.user.service;
 
 import com.ajaxjs.cms.app.attachment.Attachment_picture;
 import com.ajaxjs.framework.IBaseDao;

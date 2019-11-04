@@ -148,5 +148,26 @@ public abstract class AbstractUserController extends BaseUserController {
 			}
 		});
 	}
+	
+	/**
+	 * 检查是否重复的用户名
+	 * 
+	 * @param phone 手机号码
+	 * @return true=已存在
+	 */
+	@GET
+	@Path("/checkIfUserNameRepeat")
+	@MvcFilter(filters = { DataBaseFilter.class })
+	public String checkIfUserNamePhoneRepeat(@NotNull @QueryParam("name") String name) {
+		LOGGER.info("检查是否重复的用户名：" + name);
+		
+		return toJson(new HashMap<String, Boolean>() {
+			private static final long serialVersionUID = -5033049204280154615L;
+			{
+				getService();
+				put("isRepeat", UserService.checkIfRepeated("name", name));
+			}
+		});
+	}
 
 }

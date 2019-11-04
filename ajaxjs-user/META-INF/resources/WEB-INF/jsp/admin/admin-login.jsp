@@ -1,4 +1,5 @@
 <%@page pageEncoding="UTF-8"%>
+<%@taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -63,55 +64,9 @@
 	<div class="form">
 		<div class="box-title-login"></div>
 		<h2>${aj_allConfig.site.titlePrefix}<br/> 后台管理系统</h2>
-		<form class="form-1" action="${ctx}/user/login" method="POST">
-			<table align="center">
-				<tr>
-					<td>用户名&nbsp;&nbsp; </td>
-					<td><input type="text" name="name" placeholder="请输入用户名" /></td>
-				</tr>
-				<tr>
-					<td>密 &nbsp;&nbsp;码&nbsp;&nbsp; </td>
-					<td><input type="password" name="password" placeholder="请输入用户密码" /></td>
-				</tr>
-				<tr>
-					<td>验证码&nbsp;&nbsp; </td>
-					<td><aj-page-captcha field-name="captchaImgCode"></aj-page-captcha></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td>
-						<button>立即登录</button>
-					</td>
-				</tr>
-			</table>
-		</form>
-		<script src="${ajaxjs_ui_output}/lib/md5.min.js"></script>
-		<script>
-			// 表单提交
-			aj.xhr.form('form', function(json) {
-				if (json && json.msg) {
-					if(json.isOk)
-						aj.alert.show(json.msg, {
-							afterClose(){
-								location.assign("../");
-							}
-						});
-					else {
-						aj.alert.show(json.msg);
-						// 每次失败后要刷新验证码
-						TABLE.$children[0].refreshCode();
-					}
-				}
-			}, {
-				beforeSubmit(form, json) {
-					var el = aj('input[name=password]');
-					json.password = md5(el.value);
-					json.isAdminLogin = true;
-				}
-			});
-			
-			TABLE = new Vue({el:'table'});
-		</script>
+
+		<tags:user type="login" isAdminLogin="true" />
+		
 	</div>
 	<footer>
 		<div>版权所有：${aj_allConfig.clientFullName}</div>

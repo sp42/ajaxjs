@@ -28,7 +28,7 @@ public class ThirdLogin implements IController {
 			// 获取token
 			Map<String, Object> map = Weibo.getAccessToken(code);
 			String accessToken = map.get("access_token").toString(), uid = map.get("uid").toString();
-			int expires = (int) map.get("expires_in");
+//			int expires = (int) map.get("expires_in");
 
 			LOGGER.info("accessToken::::::::::" + accessToken);
 

@@ -1,6 +1,5 @@
 package com.ajaxjs.user.controller;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;

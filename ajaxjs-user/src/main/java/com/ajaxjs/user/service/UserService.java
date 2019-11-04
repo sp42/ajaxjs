@@ -13,7 +13,6 @@ import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.JdbcReader;
-import com.ajaxjs.user.UserDao;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.model.UserCommonAuth;
 import com.ajaxjs.util.Encode;

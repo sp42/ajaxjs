@@ -1,6 +1,9 @@
-package com.ajaxjs.user.idcard;
+package com.ajaxjs.user;
 
 import org.junit.Test;
+
+import com.ajaxjs.user.idcard.GetInfo;
+import com.ajaxjs.user.idcard.IdcardInfoExtractor;
 
 public class TestIdCard {
 	@Test

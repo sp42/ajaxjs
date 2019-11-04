@@ -15,7 +15,7 @@ public class Weibo {
 	private final static String GET_TOKEN_URL = "https://api.weibo.com/oauth2/access_token";
 	private final static String REDIRECT_URI = "http://localhost:8080/shop/callback.jsp";
 	private final static String GET_USER_INFO = "https://api.weibo.com/2/users/show.json";
-	private final static String GET_TOKEN_INFO_URL = "https://api.weibo.com/oauth2/get_token_info";
+//	private final static String GET_TOKEN_INFO_URL = "https://api.weibo.com/oauth2/get_token_info";
 	private final static String STATE = "register";
 
 	public String weiboLogin() {
