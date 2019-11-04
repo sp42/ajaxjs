@@ -34,6 +34,9 @@ public class LoginLogController extends BaseController<UserLoginLog> {
 		@Select("SELECT e.*, user.name AS userName FROM ${tableName} e LEFT JOIN user ON user.id = e.userId WHERE 1 = 1 ORDER BY e.id DESC")
 		@Override
 		public PageResult<UserLoginLog> findPagedList(int start, int limit, Function<String, String> sqlHandler);
+		
+		@Select("SELECT * FROM ${tableName} WHERE userId = ? ORDER BY createDate LIMIT 1")
+		public UserLoginLog getLastUserLoginedInfo(long userId);
 	}
 
 	public static class UserLoginLogService extends BaseService<UserLoginLog> {
