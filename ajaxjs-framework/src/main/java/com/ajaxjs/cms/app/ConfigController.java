@@ -53,14 +53,14 @@ public class ConfigController implements IController {
 		model.put("configJson", FileHelper.openAsText(ConfigService.jsonPath));
 		model.put("jsonSchemePath", FileHelper.openAsText(ConfigService.jsonSchemePath));
 
-		return BaseController.cms("config-all");
+		return BaseController.page("config-all");
 	}
 
 	@GET
 	@Path("siteStru")
 	public String siteStruUI(ModelAndView model) {
 		model.put("siteStruJson", FileHelper.openAsText(SiteStruService.jsonPath));
-		return BaseController.cms("config-site-stru");
+		return BaseController.page("config-site-stru");
 	}
 	
 	@POST
@@ -76,7 +76,7 @@ public class ConfigController implements IController {
 	@GET
 	@Path("site")
 	public String siteUI() {
-		return BaseController.cms("config-site-form");
+		return BaseController.page("config-site-form");
 	}
 
 	/**

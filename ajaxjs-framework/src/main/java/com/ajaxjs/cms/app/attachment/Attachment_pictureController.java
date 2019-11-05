@@ -46,7 +46,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 		mv.put("catelogMap", DataDict.picMap);
 		listPaged(start, limit, mv);
 
-		return adminListCMS();
+		return adminList();
 	}
 
 	@GET

@@ -14,16 +14,17 @@ import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
+import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 
 @Path("/admin/catelog")
-@Bean("CatelogAdminController")
+@Bean
 public class CatalogAdminController extends BaseController<Catalog> {
 	@Resource("CatalogService")
 	private CatalogService service;
- 
+
 	@GET
 	@Path("list")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -31,14 +32,14 @@ public class CatalogAdminController extends BaseController<Catalog> {
 	public String list() {
 		return toJson(service.getDao().findList());
 	}
-	
+
 	@GET
 	@Override
 	public String createUI(ModelAndView model) {
 		prepareData(model);
-		return editUI_CMS();
+		return editUI();
 	}
-	
+
 	@GET
 	@Path("getListAndSubByParentId")
 	@MvcFilter(filters = DataBaseFilter.class)
@@ -61,19 +62,19 @@ public class CatalogAdminController extends BaseController<Catalog> {
 	}
 
 	@PUT
-	@Path("/{id}")
+	@Path(idInfo)
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, Catalog entity) {
+	public String update(@PathParam(Constant.id) Long id, Catalog entity) {
 		return super.update(id, entity);
 	}
 
 	@DELETE
-	@Path("{id}")
+	@Path(idInfo)
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam("id") Long id) {
+	public String delete(@PathParam(Constant.id) Long id) {
 		return delete(id, new Catalog());
 	}
 

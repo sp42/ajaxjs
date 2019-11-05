@@ -9,7 +9,6 @@ import com.ajaxjs.framework.BaseModel;
  *
  */
 public class Catalog extends BaseModel {
-
 	private static final long serialVersionUID = 7052077804355019403L;
 
 	/**
@@ -24,6 +23,11 @@ public class Catalog extends BaseModel {
 	public void setPid(Integer pid) {
 		this.pid = pid;
 	}
+	
+	/**
+	 * 路径
+	 */
+	private String path;
 
 	public String getPath() {
 		return path;
@@ -32,9 +36,4 @@ public class Catalog extends BaseModel {
 	public void setPath(String path) {
 		this.path = path;
 	}
-
-	/**
-	 * 路径
-	 */
-	private String path;
 }
