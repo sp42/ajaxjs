@@ -39,7 +39,7 @@ public class CodeGeneratorsController implements IController {
 
 	@GET
 	public String UI() {
-		return BaseController.cms("code-generator/index");
+		return BaseController.page("code-generator/index");
 	}
 
 	@POST
@@ -106,7 +106,7 @@ public class CodeGeneratorsController implements IController {
 		return "html::Done!<a href=\"" + request.getContextPath() + zipSave + "\" download>download</a>";
 	}
 
-	static final String tplSave = BaseController.cms("code-generator");
+	static final String tplSave = BaseController.page("code-generator");
 
 	/**
 	 * 替换为实际内容

@@ -11,7 +11,7 @@ import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
-import com.ajaxjs.user.UserDao;
+import com.ajaxjs.user.service.UserDao;
 
 @Bean("FeedbackService")
 public class FeedbackService extends BaseService<Map<String, Object>> {

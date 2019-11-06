@@ -20,34 +20,34 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 
-@Path("/admin/ads")
+@Path("/ads")
 @Bean
 public class AdsAdminController extends BaseController<Ads> {
 	@Resource("AdsService")
 	private AdsService service;
 
 	@GET
-	@Path("list")
+	@Path(list)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(catalogId) int catelogId, @QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
-		listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(catelogId, start, limit));
-		return adminListCMS();
+	public String list(@QueryParam(catalogId) int catalogId, @QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+		listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(catalogId, start, limit));
+		return adminList();
 	}
 
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("/{id}")
+	@Path(idInfo)
 	@Override
-	public String editUI(@PathParam("id") Long id, ModelAndView mv) {
+	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
 		super.editUI(id, mv);
-		return editUI_CMS();
+		return editUI();
 	}
 
 	@GET
 	@Override
 	public String createUI(ModelAndView mv) {
 		super.createUI(mv);
-		return editUI_CMS();
+		return editUI();
 	}
 
 	@POST
@@ -60,18 +60,18 @@ public class AdsAdminController extends BaseController<Ads> {
 
 	@PUT
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("{id}")
+	@Path(idInfo)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, Ads entity) {
+	public String update(@PathParam(id) Long id, Ads entity) {
 		return super.update(id, entity);
 	}
 
 	@DELETE
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("{id}")
+	@Path(idInfo)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam("id") Long id) {
+	public String delete(@PathParam(id) Long id) {
 		return delete(id, new Ads());
 	}
 

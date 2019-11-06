@@ -35,7 +35,7 @@ public class DataBaseController implements IController, Constant {
 	@GET
 	public String show(ModelAndView mv, MvcRequest request) {
 		mv.put("list", get(request.mappath("/META-INF/context.xml")));
-		return BaseController.cms("database-connection");
+		return BaseController.page("database-connection");
 	}
 
 	/**

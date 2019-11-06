@@ -28,7 +28,7 @@ import com.ajaxjs.orm.JdbcHelper;
 public class DataBaseShowStruController implements IController {
 	@GET
 	public String show(ModelAndView mv) {
-		return BaseController.cms("database-show-stru");
+		return BaseController.page("database-show-stru");
 	}
 
 	@GET

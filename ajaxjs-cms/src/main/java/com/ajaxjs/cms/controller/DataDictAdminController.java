@@ -18,6 +18,7 @@ import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
+import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
@@ -29,7 +30,7 @@ public class DataDictAdminController extends BaseController<Map<String, Object>>
 	private DataDictService service;
 
 	@GET
-	@Path("list")
+	@Path(list)
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list() {
@@ -37,10 +38,10 @@ public class DataDictAdminController extends BaseController<Map<String, Object>>
 	}
 
 	@GET
-	@Path("/getDictListByParentId/{id}")
+	@Path("getDictListByParentId/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public List<Map<String, Object>> getDictListByParentId(@PathParam("id") long pId) {
+	public List<Map<String, Object>> getDictListByParentId(@PathParam(id) long pId) {
 		return DataDictService.dao.findByParentId(pId);
 	}
 
@@ -48,11 +49,11 @@ public class DataDictAdminController extends BaseController<Map<String, Object>>
 	@Override
 	public String createUI(ModelAndView mv) {
 		super.createUI(mv);
-		return editUI_CMS();
+		return editUI();
 	}
 
 	@Override
-	public String editUI(@PathParam("id") Long id, ModelAndView mv) {
+	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
 		return show405;
 	}
 
@@ -66,18 +67,18 @@ public class DataDictAdminController extends BaseController<Map<String, Object>>
 
 	@PUT
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("{id}")
+	@Path(Constant.idInfo)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, Map<String, Object> entity) {
+	public String update(@PathParam(id) Long id, Map<String, Object> entity) {
 		return super.update(id, entity);
 	}
 
 	@DELETE
-	@Path("/{id}")
+	@Path(Constant.idInfo)
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam("id") Long id) {
+	public String delete(@PathParam(id) Long id) {
 		return delete(id, new HashMap<String, Object>());
 	}
 

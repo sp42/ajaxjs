@@ -26,7 +26,7 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 
 @Bean
 @Path("/admin/feedback")
-public class FeedbackAdminController extends BaseController<Map<String, Object>>  {
+public class FeedbackController extends BaseController<Map<String, Object>> {
 
 	@Resource("FeedbackService")
 	private FeedbackService service;
@@ -36,51 +36,55 @@ public class FeedbackAdminController extends BaseController<Map<String, Object>>
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv, HttpServletRequest r) {
 		listPaged(start, limit, mv, (s, l) -> service.findPagedList(s, l, QueryParams.initSqlHandler(r)));
-		return adminListCMS();
+		return adminList();
 	}
 
 	@GET
 	@Override
+	@Path("/feedback")
 	public String createUI(ModelAndView model) {
 		return show405;
 	}
 
-	@GET
-	@Override
-	@Path("/{id}")
-	@MvcFilter(filters = DataBaseFilter.class)
-	public String editUI(@PathParam("id") Long id, ModelAndView mv) {
-		super.editUI(id, mv);
-		return editUI_CMS();
-	}
-
 	@POST
+	@Path("/feedback")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
 	public String create(Map<String, Object> entity) {
+		// 外界用户提交反馈，可能是游客
 		return super.create(entity);
 	}
 
+	@GET
+	@Override
+	@Path(idInfo)
+	@MvcFilter(filters = DataBaseFilter.class)
+	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
+		super.editUI(id, mv);
+		return editUI();
+	}
+
+
 	@PUT
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("{id}")
+	@Path(idInfo)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, Map<String, Object> entity) {
+	public String update(@PathParam(id) Long id, Map<String, Object> entity) {
 		return super.update(id, entity);
 	}
 
 	@DELETE
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("{id}")
+	@Path(idInfo)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam("id") Long id) {
+	public String delete(@PathParam(id) Long id) {
 		return delete(id, new HashMap<String, Object>());
 	}
 
 	@Override
 	public IBaseService<Map<String, Object>> getService() {
 		return service;
-	} 
+	}
 }

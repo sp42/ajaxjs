@@ -17,17 +17,17 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 
 @Bean
 @Path("/admin/hr")
-public class HrAdminController extends DomainBaseAdminController {
+public class HrController extends DomainBaseAdminController {
 	DomainEntityService service = new DomainEntityService("entity_hr", "data.hrCatalog_Id", "招聘", "hr");
 
 	@GET
-	@Path("list")
+	@Path(list)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catelogId, ModelAndView mv) {
-		if (catelogId == 0) 
-			catelogId = service.getDomainCatelogId(); // 不指定实体的子分类
+	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
+		if (catalogId == 0) 
+			catalogId = service.getDomainCatelogId(); // 不指定实体的子分类
 
-		final int _catelogId = catelogId;
+		final int _catelogId = catalogId;
 		listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(_catelogId, start, limit));
 		return domainEntityList;
 	}
@@ -48,15 +48,15 @@ public class HrAdminController extends DomainBaseAdminController {
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String createUI(ModelAndView mv) {
 		super.createUI(mv);
-		return cms("hr");
+		return page("hr");
 	}
 	
 	@GET
 	@Override
-	@Path("/{id}")
+	@Path(idInfo)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String editUI(@PathParam("id") Long id, ModelAndView mv) {
+	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
 		super.editUI(id, mv);
-		return cms("hr");
+		return page("hr");
 	}
 }
