@@ -32,7 +32,7 @@ public class FeedbackController extends BaseController<Map<String, Object>> {
 	private FeedbackService service;
 
 	@GET
-	@Path("/list")
+	@Path(list)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv, HttpServletRequest r) {
 		listPaged(start, limit, mv, (s, l) -> service.findPagedList(s, l, QueryParams.initSqlHandler(r)));
@@ -43,6 +43,7 @@ public class FeedbackController extends BaseController<Map<String, Object>> {
 	@Override
 	@Path("/feedback")
 	public String createUI(ModelAndView model) {
+		System.out.println("feedback");
 		return show405;
 	}
 

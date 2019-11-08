@@ -30,7 +30,7 @@ public class AppUpdateAdminController extends BaseController<AppUpdate> {
 	private AppUpdateService service;
 	
 	@GET
-	@Path("/list")
+	@Path(list)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
 		listPaged(start, limit, mv);
@@ -39,9 +39,9 @@ public class AppUpdateAdminController extends BaseController<AppUpdate> {
 
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("/{id}")
+	@Path(idInfo)
 	@Override
-	public String editUI(@PathParam("id") Long id, ModelAndView mv) {
+	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
 		super.editUI(id, mv);
 		return editUI();
 	}
@@ -63,18 +63,18 @@ public class AppUpdateAdminController extends BaseController<AppUpdate> {
 
 	@PUT
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("{id}")
+	@Path(idInfo)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, AppUpdate entity) {
+	public String update(@PathParam(id) Long id, AppUpdate entity) {
 		return super.update(id, entity);
 	}
 
 	@DELETE
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("{id}")
+	@Path(idInfo)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam("id") Long id) {
+	public String delete(@PathParam(id) Long id) {
 		return delete(id, new AppUpdate());
 	}
 
