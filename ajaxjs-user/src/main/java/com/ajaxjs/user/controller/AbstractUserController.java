@@ -34,7 +34,7 @@ public abstract class AbstractUserController extends BaseUserController {
 	private static final LogHelper LOGGER = LogHelper.getLog(AbstractUserController.class);
 
 	@GET
-	@Path("/login")
+	@Path("login")
 	public String login(ModelAndView mv) {
 		LOGGER.info("用户登录页");
 
@@ -45,7 +45,7 @@ public abstract class AbstractUserController extends BaseUserController {
 	}
 
 	@POST
-	@Path("/login")
+	@Path("login")
 	@MvcFilter(filters = { CaptchaFilter.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
 	public String loginByPassword(@NotNull @QueryParam("userID") String userID,
@@ -79,7 +79,7 @@ public abstract class AbstractUserController extends BaseUserController {
 	 * @return
 	 */
 	@GET
-	@Path("/logout")
+	@Path("logout")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String doLogout() {
 		LOGGER.info("用户登出");
@@ -99,7 +99,7 @@ public abstract class AbstractUserController extends BaseUserController {
 	public abstract BiConsumer<User, HttpServletRequest> getAfterLoginCB();
 
 	@GET
-	@Path("/register")
+	@Path("register")
 	public String regsiter() {
 		LOGGER.info("用户注册页");
 
@@ -107,7 +107,7 @@ public abstract class AbstractUserController extends BaseUserController {
 	}
 
 	@POST
-	@Path("/register")
+	@Path("register")
 	@MvcFilter(filters = { DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
 	public String doRegister(User user, @NotNull @QueryParam("password") String password) throws ServiceException {
@@ -135,7 +135,7 @@ public abstract class AbstractUserController extends BaseUserController {
 	 * @return true=已存在
 	 */
 	@GET
-	@Path("/checkIfUserPhoneRepeat")
+	@Path("checkIfUserPhoneRepeat")
 	@MvcFilter(filters = { DataBaseFilter.class })
 	public String checkIfUserPhoneRepeat(@NotNull @QueryParam("phone") String phone) {
 		LOGGER.info("检查是否重复的手机号码：" + phone);
@@ -156,7 +156,7 @@ public abstract class AbstractUserController extends BaseUserController {
 	 * @return true=已存在
 	 */
 	@GET
-	@Path("/checkIfUserNameRepeat")
+	@Path("checkIfUserNameRepeat")
 	@MvcFilter(filters = { DataBaseFilter.class })
 	public String checkIfUserNamePhoneRepeat(@NotNull @QueryParam("name") String name) {
 		LOGGER.info("检查是否重复的用户名：" + name);

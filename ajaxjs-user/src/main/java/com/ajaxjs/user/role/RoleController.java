@@ -33,12 +33,12 @@ public class RoleController extends BaseController<Map<String, Object>> {
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String list(@QueryParam(catalogId) int catelogId, @QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
 		return toJson(service.getDao().findList());
 	}
 
 	@Override
-	public String editUI(@PathParam("id") Long id, ModelAndView mv) {
+	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
 		return show405;
 	}
 
@@ -58,18 +58,18 @@ public class RoleController extends BaseController<Map<String, Object>> {
 
 	@PUT
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("{id}")
+	@Path(idInfo)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, Map<String, Object> entity) {
+	public String update(@PathParam(id) Long id, Map<String, Object> entity) {
 		return super.update(id, entity);
 	}
 
 	@DELETE
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("{id}")
+	@Path(idInfo)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam("id") Long id) {
+	public String delete(@PathParam(id) Long id) {
 		return delete(id, new HashMap<>());
 	}
 
@@ -79,7 +79,7 @@ public class RoleController extends BaseController<Map<String, Object>> {
 	}
 
 	@POST
-	@Path("/updateResourceRightValue")
+	@Path("updateResourceRightValue")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String updateResourceRightValue(@FormParam("userGroupId") long userGroupId, @FormParam("resId") int resId, @FormParam("isEnable") boolean isEnable) {
@@ -94,10 +94,10 @@ public class RoleController extends BaseController<Map<String, Object>> {
 	}
 
 	@GET
-	@Path("{id}")
+	@Path(idInfo)
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getInfo(@PathParam("id") Long id) {
+	public String getInfo(@PathParam(id) Long id) {
 		return toJson(service.getDao().findById(id));
 	}
 }

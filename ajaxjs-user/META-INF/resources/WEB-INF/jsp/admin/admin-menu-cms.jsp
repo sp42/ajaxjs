@@ -1,6 +1,7 @@
 <%@page pageEncoding="UTF-8" import="com.ajaxjs.user.role.RightConstant, com.ajaxjs.user.role.RoleService"%>
+ 
 <%
-	long privilegeTotal = (long)request.getSession().getAttribute("privilegeTotal");
+	long privilegeTotal = request.getSession().getAttribute("privilegeTotal") == null ? 0 : (long)request.getSession().getAttribute("privilegeTotal");
 %>
 <li>
 	<h3>内容管理</h3>

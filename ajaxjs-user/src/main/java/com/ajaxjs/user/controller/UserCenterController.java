@@ -65,6 +65,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 	
 	@GET
 	@Path("/profile")
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String profile() {
 		LOGGER.info("用户会员中心-个人信息");
 		return jsp("user/user-center/profile");
@@ -72,6 +73,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 	
 	@GET
 	@Path("/profile/avater")
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String avater() {
 		LOGGER.info("用户会员中心-个人信息-修改头像");
 		return jsp("user/user-center/avater");
@@ -79,6 +81,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 	
 	@GET
 	@Path("/address")
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String address() {
 		LOGGER.info("用户会员中心-我的地址");
 		return jsp("user/user-center/address");
@@ -94,22 +97,22 @@ public class UserCenterController extends AbstractAccountInfoController {
 
 	@GET
 	@Path("/info")
-	@MvcFilter(filters = { LoginCheck.class })
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String info() {
 		return jsp("user/info");
 	}
 	
 	@GET
 	@Path("/info/{id}")
-	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class  })
-	public String info2(@PathParam("id")Long userId, ModelAndView mv) {
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
+	public String info2(@PathParam(id)Long userId, ModelAndView mv) {
 		mv.put("info", getService().findById(userId));
 		return jsp("user/info");
 	}
 
 	@GET
 	@Path("/info/modifly")
-	@MvcFilter(filters = { LoginCheck.class })
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String infoModifly() {
 		return jsp("user/infoModifly");
 	}
@@ -152,10 +155,10 @@ public class UserCenterController extends AbstractAccountInfoController {
 	}
 	
 	@PUT
-	@Path("/{id}")
+	@Path(idInfo)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Override
-	public String update(@PathParam("id") Long id, User entity) {
+	public String update(@PathParam(id) Long id, User entity) {
 		return super.update(id, entity);
 	}
 	

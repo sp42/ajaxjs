@@ -21,19 +21,19 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 @Path("/admin/user/privilege")
 @Bean
 public class PrivilegeController extends BaseController<Privilege> {
-	
+
 	@Resource("UserRolePrivilegeService")
 	private PrivilegeService service;
 
 	@GET
-	@Path("list")
+	@Path(list)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(catalogId) int catelogId, @QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
 		return toJson(service.getDao().findList());
 	}
 
 	@Override
-	public String editUI(@PathParam("id") Long id, ModelAndView mv) {
+	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
 		return show405;
 	}
 
@@ -53,18 +53,18 @@ public class PrivilegeController extends BaseController<Privilege> {
 
 	@PUT
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("{id}")
+	@Path(idInfo)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, Privilege entity) {
+	public String update(@PathParam(id) Long id, Privilege entity) {
 		return super.update(id, entity);
 	}
 
 	@DELETE
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("{id}")
+	@Path(idInfo)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam("id") Long id) {
+	public String delete(@PathParam(id) Long id) {
 		return delete(id, new Privilege());
 	}
 

@@ -36,7 +36,7 @@ public class UserAdminController extends BaseController<User> {
 	private RoleService roleService;
 
 	@GET
-	@Path("/list")
+	@Path(list)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
 		mv.put("SexGender", UserDict.SexGender);
@@ -48,9 +48,9 @@ public class UserAdminController extends BaseController<User> {
 
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("/{id}")
+	@Path(idInfo)
 	@Override
-	public String editUI(@PathParam("id") Long id, ModelAndView mv) {
+	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
 		mv.put("SexGender", UserDict.SexGender);
 		super.editUI(id, mv);
 		
@@ -76,18 +76,18 @@ public class UserAdminController extends BaseController<User> {
 
 	@PUT
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("{id}")
+	@Path(idInfo)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, User entity) {
+	public String update(@PathParam(id) Long id, User entity) {
 		return super.update(id, entity);
 	}
 
 	@DELETE
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("{id}")
+	@Path(idInfo)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam("id") Long id) {
+	public String delete(@PathParam(id) Long id) {
 		return delete(id, new User());
 	}
 

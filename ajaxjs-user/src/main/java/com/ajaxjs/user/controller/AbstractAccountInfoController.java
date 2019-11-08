@@ -42,7 +42,7 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 
 	@GET
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Path("/account")
+	@Path("account")
 	public String account(ModelAndView mv) {
 		LOGGER.info("用户会员中心-帐号管理-首页");
 		
@@ -53,14 +53,14 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 	
 	@GET
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Path("/account/safe")
+	@Path("account/safe")
 	public String safe() {
 		LOGGER.info("用户会员中心-帐号管理-帐号安全修改");
 		return jsp("user/user-center/safe");
 	}
 
 	@POST
-	@Path("/safe/modiflyUserName")
+	@Path("safe/modiflyUserName")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
 	public String modiflyUserName(@NotNull @QueryParam("userName") String userName, HttpServletRequest request) {
@@ -78,7 +78,7 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 	}
 
 	@POST
-	@Path("/safe/modiflyEmail")
+	@Path("safe/modiflyEmail")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
 	public String modiflyEmail(@NotNull @QueryParam("email") String email) {
@@ -92,7 +92,7 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 	}
 
 	@POST
-	@Path("/safe/modiflyPhone")
+	@Path("safe/modiflyPhone")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
 	public String modiflyPhone(@NotNull @QueryParam("phone") String phone) {
@@ -109,7 +109,7 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 	}
 	
 	@POST
-	@Path("/safe/resetPassword")
+	@Path("safe/resetPassword")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class, UserPasswordFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
 	public String resetPassword(@NotNull @QueryParam("new_password") String new_password, HttpServletRequest request)
@@ -127,7 +127,7 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 
 	@GET
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Path("/account/log-history")
+	@Path("account/log-history")
 	public String logHistory(ModelAndView mv) {
 		LOGGER.info("用户会员中心-登录历史");
 		long userId = getUserId();
@@ -139,7 +139,7 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 	
 	@GET
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Path("/account/oauth")
+	@Path("account/oauth")
 	public String oauth() {
 		LOGGER.info("用户会员中心-账户绑定");
 		return jsp("user/user-center/oauth");
@@ -147,7 +147,7 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 
 	@GET
 	@MvcFilter(filters = { LoginCheck.class })
-	@Path("/account/delete-account")
+	@Path("account/delete-account")
 	public String deleteAccount() {
 		LOGGER.info("用户会员中心-账户管理-删除帐号");
 
@@ -155,7 +155,7 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 	}
 
 	@POST
-	@Path("/account/delete-account")
+	@Path("account/delete-account")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class, UserPasswordFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
 	public String doDeleteAccount() {

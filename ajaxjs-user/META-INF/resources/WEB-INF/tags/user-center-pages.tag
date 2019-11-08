@@ -1,7 +1,7 @@
 <%@tag pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <%@taglib uri="/ajaxjs" prefix="c" %>
 <%@attribute name="type" required="true" type="String" description="标签类型"%>
-
+<script src="${ajaxjs_ui_output}/lib/md5.min.js"></script>
 <c:if test="${type == 'account'}">	
 	<ul class="safe">
 		<li>	
@@ -40,6 +40,49 @@
 			<div style="padding-left:3%;">删除帐号</div><div>删除该帐号以及所有该帐号关联的信息</div>
 		</li>
 	</ul>
+</c:if>
+
+<c:if test="${type == 'modiflyUserName'}">
+	<div class="test-pl">
+		<aj-process-line ref="processLine" :items="['填写登录名信息', '检查是否可用', '完成']"></aj-process-line>
+	</div>
+	
+	<form class="aj-form fixed-width" action="${ctx}/user/info/modiflyUserName" method="POST">
+		<dl>
+			<label>
+				<dt>用户名</dt>
+				<dd>
+					<input type="text" name="userName" value="${userName}" placeholder="请输入用户名" required pattern=".{4,10}"/>
+					<div class="note">请输入您的由4~10位由中文26个英文字母的用户名</div>
+				</dd>
+			</label>
+		</dl>
+		<dl>
+			<dt></dt>
+			<dd>
+
+				<button>提交</button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <button class="returnBtn">返回</button>
+
+			</dd>
+		</dl>
+	</form>
+	
+	<script>
+		ProcessLine = new Vue({el : '.test-pl'});
+		
+		aj.xhr.form('.aj-form', json => {
+			if (json) {
+				if (json.isOk) {
+					ajaxjs.alert.show(json.msg || '操作成功！');
+					ProcessLine.$refs.processLine.go(1);
+				} else {
+					ajaxjs.alert.show(json.msg || '执行失败！原因未知！');
+				}
+			} else {
+				ajaxjs.alert.show('ServerSide Error!');
+			}
+		});
+	</script>
 </c:if>
 
 <c:if test="${type == 'modiflyPhone'}">
