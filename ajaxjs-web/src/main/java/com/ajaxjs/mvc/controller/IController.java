@@ -41,9 +41,9 @@ public interface IController {
 	 * @param createIfEmpty 如果找不到该节点，是否自动为其创建节点？若为非null 表示为写入模式，不单纯是查找。
 	 * @return 目标 Action 或新建的 Action
 	 */
-	public static Action findTreeByPath(Map<String, Action> tree, Queue<String> path, 
-			String basePath, boolean createIfEmpty) {
+	public static Action findTreeByPath(Map<String, Action> tree, Queue<String> path, String basePath, boolean createIfEmpty) {
 		while (!path.isEmpty()) {
+			 
 			String key = path.poll(); // remove the first item in the queue and return it
 			basePath += key + "/";
 
@@ -67,6 +67,8 @@ public interface IController {
 					Action t2 = findTreeByPath(target.children, path, basePath, createIfEmpty);
 					if (t2 != null)
 						return t2;
+				} else {
+					break;
 				}
 			}
 		}
@@ -93,7 +95,7 @@ public interface IController {
 		return findTreeByPath(tree, ListMap.split2Queue(path), basePath);
 	}
 	
-	static final Pattern id = Pattern.compile("/\\d+");
+	static final Pattern idRegexp = Pattern.compile("/\\d+");
 	
 	/**
 	 * 
@@ -101,16 +103,16 @@ public interface IController {
 	 * @return
 	 */
 	public static Action findTreeByPath(String path) {
-		Matcher match = id.matcher(path); // 处理Path上的参数
+		Matcher match = idRegexp.matcher(path); // 处理Path上的参数
 		if (match.find()) {
 			path = match.replaceAll("/{id}");
 		}
 		
 		Action action = findTreeByPath(urlMappingTree, path, "");
 
-		if (action == null) { // for the controller which is set Path
-			action = findTreeByPath(urlMappingTree, split2Queue2(path), "");
-		}
+//		if (action == null) { // for the controller which is set Path
+//			action = findTreeByPath(urlMappingTree, split2Queue2(path), "");
+//		}
 
 		return action;
 	}

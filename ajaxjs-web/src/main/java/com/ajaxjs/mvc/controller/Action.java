@@ -105,15 +105,25 @@ public class Action {
 
 			if (subPath != null) {
 				String subPathValue = subPath.value();
-				subPathValue = subPathValue.replaceAll("^/", ""); // 一律不要前面的 /
-
-				// add sub action starts from parent Node, not the top node
-				if (children == null)
-					children = new HashMap<>();
-
-				Action subAction = IController.findTreeByPath(children, subPathValue, path + "/", true);
-				subAction.controller = controller; // the same controller cause the same class over there
-				subAction.methodSend(method);
+				
+				if(subPathValue.startsWith("/")) { // 根目录开始
+					subPathValue = subPathValue.replaceAll("^/", ""); // 一律不要前面的 /
+		
+					Action subAction = IController.findTreeByPath(IController.urlMappingTree, subPathValue, "", true);
+					subAction.controller = controller; 
+					subAction.methodSend(method);
+					
+				} else {					
+					subPathValue = subPathValue.replaceAll("^/", ""); // 一律不要前面的 /
+					
+					// add sub action starts from parent Node, not the top node
+					if (children == null)
+						children = new HashMap<>();
+					
+					Action subAction = IController.findTreeByPath(children, subPathValue, path + "/", true);
+					subAction.controller = controller; // the same controller cause the same class over there
+					subAction.methodSend(method);
+				}
 			} else {
 				// this method is for class url
 				methodSend(method); // 没有 Path 信息，就是属于类本身的方法（一般最多只有四个方法 GET/POST/PUT/DELETE）

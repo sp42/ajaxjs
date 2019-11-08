@@ -25,7 +25,7 @@ public class FormController implements IController {
 	}
 
 	@POST
-	@Path("/map")
+	@Path("map")
 	public String map(Map<String, Object> map) {
 //		int age = (int) map.get("age");
 //		System.out.println(map.get("age").getClass());
@@ -33,7 +33,7 @@ public class FormController implements IController {
 	}
 
 	@POST
-	@Path("/bean")
+	@Path("bean")
 	public String bean(News news) {
 		System.out.println(news.getName());
 		return "html::" + news.getName();

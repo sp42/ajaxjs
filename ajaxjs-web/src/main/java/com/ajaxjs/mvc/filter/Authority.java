@@ -25,11 +25,13 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface MvcFilter {
+public @interface Authority {
 	/**
-	 * MVC 的拦截器，可以多个，用 {} 表示数组
+	 * MVC 的拦截器
 	 * 
 	 * @return MVC 的拦截器
 	 */
-	Class<? extends FilterAction>[] filters();
+	Class<? extends FilterAction> filter();
+	
+	int value();
 }

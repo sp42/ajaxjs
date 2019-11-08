@@ -37,6 +37,19 @@ public class TestSubPath_Id_Controller extends BaseTest {
 		
 		assertEquals("<html><meta charset=\"utf-8\" /><body>Hello World!</body></html>", writer.toString());
 	}
+	@Test
+	public void testTopPath() throws ServletException, IOException {
+		HttpServletRequest request = MockRequest.mockRequest("/ajaxjs-web", "/TopPath");
+		when(request.getMethod()).thenReturn("GET");
+		when(request.getParameter("name")).thenReturn("Jack");
+		
+		HttpServletResponse response = mock(HttpServletResponse.class);
+		StringWriter writer = MockResponse.writerFactory(response);
+		
+		dispatcher.doFilter(request, response, chain);
+		
+		assertEquals("<html><meta charset=\"utf-8\" /><body>MyTopPath</body></html>", writer.toString());
+	}
 	
 	@Test
 	public void testSubPathGet() throws ServletException, IOException {

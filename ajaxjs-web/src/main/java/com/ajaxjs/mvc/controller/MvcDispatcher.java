@@ -1,23 +1,22 @@
 /**
  * Copyright 2015 sp42 frank@ajaxjs.com
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a
+ * copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations
+ * under the License.
  */
 package com.ajaxjs.mvc.controller;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -35,6 +34,7 @@ import javax.ws.rs.core.MediaType;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
+import com.ajaxjs.mvc.filter.Authority;
 import com.ajaxjs.mvc.filter.FilterAction;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.util.CommonUtil;
@@ -51,12 +51,9 @@ import com.ajaxjs.web.ServletHelper;
 public class MvcDispatcher implements Filter {
 	private static final LogHelper LOGGER = LogHelper.getLog(MvcDispatcher.class);
 
-	private static final String t = 
-			  "     ___       _       ___  __    __      _   _____        _          __  _____   _____  \n"
-			+ "     /   |     | |     /   | \\ \\  / /     | | /  ___/      | |        / / | ____| |  _  \\ \n" 
-			+ "    / /| |     | |    / /| |  \\ \\/ /      | | | |___       | |  __   / /  | |__   | |_| |  \n"
-			+ "   / / | |  _  | |   / / | |   }  {    _  | | \\___  \\      | | /  | / /   |  __|  |  _  {  \n" 
-			+ "  / /  | | | |_| |  / /  | |  / /\\ \\  | |_| |  ___| |      | |/   |/ /    | |___  | |_| |  \n"
+	private static final String t = "     ___       _       ___  __    __      _   _____        _          __  _____   _____  \n"
+			+ "     /   |     | |     /   | \\ \\  / /     | | /  ___/      | |        / / | ____| |  _  \\ \n" + "    / /| |     | |    / /| |  \\ \\/ /      | | | |___       | |  __   / /  | |__   | |_| |  \n"
+			+ "   / / | |  _  | |   / / | |   }  {    _  | | \\___  \\      | | /  | / /   |  __|  |  _  {  \n" + "  / /  | | | |_| |  / /  | |  / /\\ \\  | |_| |  ___| |      | |/   |/ /    | |___  | |_| |  \n"
 			+ " /_/   |_| \\_____/ /_/   |_| /_/  \\_\\ \\_____/ /_____/      |___/|___/     |_____| |_____/ \n";
 
 	{
@@ -73,7 +70,7 @@ public class MvcDispatcher implements Filter {
 		// 读取 web.xml 配置，如果有 controller 那一项就获取指定包里面的内容，看是否有属于 IController 接口的控制器，有就加入到
 		// AnnotationUtils.controllers 集合中
 		Map<String, String> config = ServletHelper.initFilterConfig2Map(_config);
-		
+
 		MapTool.getValue(config, "doIoc", (String doIoc) -> {
 			for (String packageName : CommonUtil.split(doIoc))
 				BeanContext.init(packageName);
@@ -86,11 +83,9 @@ public class MvcDispatcher implements Filter {
 		if (config != null && config.get("controller") == null)
 			LOGGER.info("web.xml 没有配置 MVC 过滤器或者 配置没有定义 controller");
 	}
- 
 
 	/**
-	 * 虽然 REST 风格的 URL 一般不含后缀，我们只能将 DispatcherServlet 映射到“/”，使之变为一个默认的 Servlet， 在处理
-	 * js/css 等静态文件有后缀，这样的话我们需要区分对待。
+	 * 虽然 REST 风格的 URL 一般不含后缀，我们只能将 DispatcherServlet 映射到“/”，使之变为一个默认的 Servlet， 在处理 js/css 等静态文件有后缀，这样的话我们需要区分对待。
 	 */
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
@@ -132,15 +127,14 @@ public class MvcDispatcher implements Filter {
 	/**
 	 * 执行控制器方法
 	 * 
-	 * @param request		请求对象
-	 * @param response		响应对象
-	 * @param controller	控制器对象
-	 * @param method		控制器方法
+	 * @param request 请求对象
+	 * @param response 响应对象
+	 * @param controller 控制器对象
+	 * @param method 控制器方法
 	 */
 	private static void execute(MvcRequest request, MvcOutput response, IController controller, Method method) {
 		MvcRequest.setHttpServletRequest(request);
 		MvcRequest.setHttpServletResponse(response);
-		
 
 		Throwable err = null; // 收集错误信息
 		Object result = null;
@@ -163,7 +157,7 @@ public class MvcDispatcher implements Filter {
 					Object[] args = RequestParam.getArgs(request, response, method);
 					model = findModel(args);
 					// 通过反射执行控制器方法:调用反射的 Reflect.executeMethod 方法就可以执行目标方法，并返回一个结果。
-					
+
 //					System.out.println(Arrays.toString(args));
 //					System.out.println(method);
 					result = ReflectUtil.executeMethod_Throwable(controller, method, args);
@@ -175,7 +169,7 @@ public class MvcDispatcher implements Filter {
 		} catch (Throwable e) {
 			err = e;
 
-			if (e instanceof IllegalArgumentException && e.getMessage().contains("object is not an instance of declaring class")) 
+			if (e instanceof IllegalArgumentException && e.getMessage().contains("object is not an instance of declaring class"))
 				LOGGER.warning("异常可能的原因：@Bean注解的名称重复，请检查 IOC 中的是否重名");
 		} finally {
 			if (isDoFilter) {
@@ -216,7 +210,7 @@ public class MvcDispatcher implements Filter {
 			request.setAttribute("javax.servlet.error.exception_type", err.getClass());
 			request.setAttribute("javax.servlet.error.exception", err);
 			response.resultHandler("/WEB-INF/jsp/error.jsp", request, model, method);
-			
+
 //			response.resultHandler(String.format("redirect::%s/showMsg?msg=%s", request.getContextPath(), Encode.urlEncode(errMsg)), request, model, method);
 		}
 	}
@@ -228,19 +222,23 @@ public class MvcDispatcher implements Filter {
 	 * @return
 	 */
 	private static FilterAction[] getFilterActions(Method method) {
-		FilterAction[] filterActions = null; // 拦截器
+		List<FilterAction> list = new ArrayList<>();// 拦截器
 
 		if (method.getAnnotation(MvcFilter.class) != null) {
 			Class<? extends FilterAction>[] clzs = method.getAnnotation(MvcFilter.class).filters();
-			filterActions = new FilterAction[clzs.length];
 
-			int i = 0;
 			for (Class<? extends FilterAction> clz : clzs) {
-				filterActions[i++] = ReflectUtil.newInstance(clz);
+				list.add(ReflectUtil.newInstance(clz));
 			}
 		}
 
-		return filterActions;
+		if (method.getAnnotation(Authority.class) != null) {
+			Authority a = method.getAnnotation(Authority.class);
+			Class<? extends FilterAction> clz = a.filter();
+			list.add(ReflectUtil.newInstance(clz, a.value()));
+		}
+
+		return list.toArray(new FilterAction[list.size()]);
 	}
 
 	/**

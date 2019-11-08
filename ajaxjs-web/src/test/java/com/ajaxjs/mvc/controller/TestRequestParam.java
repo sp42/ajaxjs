@@ -56,7 +56,7 @@ public class TestRequestParam {
 			return "getInfo2";
 		}
 
-		@Path("/{id}")
+		@Path("{id}")
 		@PUT
 		public String getInfo4(@PathParam("id") String id) {
 			return "getInfo2";
