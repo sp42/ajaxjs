@@ -1,11 +1,27 @@
 @import '../common_style.less';
+
+fieldset.user {
+	margin: 5% auto;
+	width: 33%;
+	padding: 2%;
+	border: 1px solid gray;
+	border-radius: 10px;
+	legend {
+		font-weight: bold;
+		background-color: #eee;
+		padding: 2%;
+		border-radius: 5px;
+		border: 1px solid gray;
+		min-width: 40%
+	}
+}
+		
 .account-center {
 	min-height: 600px;
 	margin-bottom: 2%;
 	clear: both;
 	overflow: hidden;
 	> .center {
-		width: 80%;
 		margin: 5% auto;
 		height: 82%;
 		.left {
@@ -83,6 +99,7 @@
 			div {
 				display: inline-block;
 				min-width: 25%;
+				box-sizing: border-box;
 				&.ok {
 					color: green;
 					&::before {

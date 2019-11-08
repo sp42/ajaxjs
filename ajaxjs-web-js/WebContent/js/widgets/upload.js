@@ -25,13 +25,18 @@ Vue.component('ajaxjs-file-upload', {
 	    
 	    limitSize : Number,
 	    
-	    limitFileType: String
+	    limitFileType: String,
+	    labelId : {
+	    	type : String,
+	    	required : false,
+	    	default : 'input_file_molding'
+	    }
 	},
 	template : 
 		'<div class="ajaxjs-file-upload">\
 			<div class="pseudoFilePicker">\
-				<input type="hidden" v-if="fieldName" :name="fieldName" :value="newlyId || filedId" />\
-				<label for="input_file_molding"><div><div>+</div>点击选择文件</div></label>\
+				<input type="hidden" v-if="fieldName" :name="fieldName" :value="newlyId || filedId" :id="labelId" />\
+				<label :for="labelId"><div><div>+</div>点击选择文件</div></label>\
 			</div>\
 			<div v-if="!isFileSize || !isExtName">{{errMsg}}</div>\
 			<div v-if="isFileSize && isExtName">\
@@ -98,7 +103,7 @@ Vue.component('ajaxjs-img-upload-perview', {
 	    limit : {
 	    	type : Object,
 	    	required : false,
-	    	default : function(){
+	    	default(){
 	    		return { // 上传限制
 					maxSize : 600,
 					fileExt: /png|gif|jpg|jpeg/i,
@@ -128,7 +133,7 @@ Vue.component('ajaxjs-img-upload-perview', {
 			</div>\
 		</div>',
 		
-	created : function(){
+	created (){
 		this.BUS.$on('upload-file-selected', this.onUploadInputChange);
 	},
 
@@ -141,7 +146,7 @@ Vue.component('ajaxjs-img-upload-perview', {
 		};
 		
 		return {
-			onUploadInputChange : function(e) {
+			onUploadInputChange(e) {
 				var fileInput = e.target;
 				
 				for(var i = 0, j = fileInput.files.length; i < j; i++) {
@@ -150,16 +155,16 @@ Vue.component('ajaxjs-img-upload-perview', {
 					reader.readAsDataURL(fileObj);
 				}
 			},
-			afterLoad : function (e, fileObj, self) {
+			afterLoad (e, fileObj, self) {
 				var imgBase64Str = e.target.result;
 				var isOk = self.checkFile(fileObj, imgBase64Str, self);
 				
 				self.imgBase64Str = imgBase64Str;
 			},
-			isShowErrMessage : function() {
+			isShowErrMessage() {
 				return !this.isFileSize || !this.isExtName || !this.isImgSize || !this.isFileTypeCheck;
 			},
-			checkFile : function (fileObj, imgBase64Str, cfg) {
+			checkFile(fileObj, imgBase64Str, cfg) {
 				var defaultLimit = cfg.limit;
 				
 				if(fileObj.size > defaultLimit.maxSize * 1024) {  // 文件的大小，单位为字节B
@@ -192,6 +197,7 @@ Vue.component('ajaxjs-img-upload-perview', {
 				imgEl.src = imgBase64Str;
 				
 				cfg.isFileTypeCheck = false;
+				
 				for ( var i in imgHeader) {
 					if (~imgBase64Str.indexOf(imgHeader[i])){
 						cfg.isFileTypeCheck = true;
@@ -201,7 +207,7 @@ Vue.component('ajaxjs-img-upload-perview', {
 				
 				cfg.errMsg = "亲，改了扩展名我还能认得你不是图片哦";
 			},
-			doUpload : function(e) {
+			doUpload(e) {
 				// 先周围找下 form，没有的话找全局的
 				var form = this.$parent.$refs.uploadIframe && this.$parent.$refs.uploadIframe.$el;
 				if(!form) {
@@ -221,7 +227,7 @@ Vue.component('ajaxjs-img-upload-perview', {
 //通过 iframe 实现无刷新文件上传
 //这里包含一个 form元素，form元素不能嵌套在 form 里面，故独立出来一个组件
 Vue.component('ajaxjs-fileupload-iframe', {
-	data : function() {
+	data() {
 		return {
 			radomId : Math.round(Math.random() * 1000),
 			uploadOk_callback: function(){}
@@ -248,7 +254,7 @@ Vue.component('ajaxjs-fileupload-iframe', {
 		</form>',
 	methods : {
 		// 上传后成功的提示
-		iframe_callback: function (e) { 
+		iframe_callback (e) { 
 			var json = e.target.contentDocument.body.innerText;
 			
 			if(json[0] == '{') {
@@ -264,7 +270,7 @@ Vue.component('ajaxjs-fileupload-iframe', {
 				}
 			}
 		},
-		fireUploadFileSelected : function(e) {// 在附近查找 上传组件：就近原则
+		fireUploadFileSelected(e) {// 在附近查找 上传组件：就近原则
 			var p = this.$parent;
 			while(p && p.$refs && !p.$refs.uploadControl) {
 				p = p.$parent;
@@ -281,7 +287,7 @@ Vue.component('ajaxjs-fileupload-iframe', {
 * 将上传控件嵌入到一个浮出层中
 */
 Vue.component('aj-popup-upload', {
-	data : function() {
+	data() {
 		return {
 			text : {}
 		};
@@ -308,7 +314,7 @@ Vue.component('aj-popup-upload', {
 			<ajaxjs-fileupload-iframe :upload-url="uploadUrl" label-id="foo1" ref="uploadIframe"></ajaxjs-fileupload-iframe>\
 			<div>上传限制：{{text.maxSize}}kb 或以下，分辨率：{{text.maxHeight}}x{{text.maxWidth}}</div>\
 		</aj-layer>',
-	mounted: function() {
+	mounted() {
 		// todo 是否不需要对象，而是逐个列出
 		this.text = this.$refs.uploadControl.$options.props.limit.default();
 	},
@@ -318,7 +324,7 @@ Vue.component('aj-popup-upload', {
 		 * 
 		 * @paran {Function} callback 上传成功之后的回调函数
 		 */
-		show : function(callback) {
+		show(callback) {
 			if(callback)
 				this.$refs.uploadIframe.uploadOk_callback = callback;
 			
@@ -346,7 +352,7 @@ if (!HTMLCanvasElement.prototype.toBlob) {
 }
 
 Vue.component('aj-xhr-upload', {
-	data : function() {
+	data () {
 		return {
 			isFileSize : false,			// 文件大小检查
 			isExtName : false,			// 文件扩展名检查
@@ -390,7 +396,7 @@ Vue.component('aj-xhr-upload', {
 			</div>\
 		</div>',
 	methods : {
-		onUploadInputChange : function(e) {
+		onUploadInputChange(e) {
 			var fileInput = e.target;
 			var ext = fileInput.value.split('.').pop(); // 扩展名
 			
@@ -432,7 +438,7 @@ Vue.component('aj-xhr-upload', {
 			}
 		},
 
-		readBase64 : function(file) {
+		readBase64 (file) {
 			var reader = new FileReader(), self = this;
 			
 			reader.onload = function(e) {
@@ -478,8 +484,9 @@ Vue.component('aj-xhr-upload', {
 			reader.readAsDataURL(file);
 		},
 		
-		doUpload : function() {
+		doUpload() {
 			var fd = new FormData();
+			
 			if(this.$blob){
 				fd.append("file", this.$blob, this.$fileName);
 			} else 
@@ -497,13 +504,15 @@ Vue.component('aj-xhr-upload', {
 	            	progress = p;
 	            	console.log('progress: ', p);
 	            }
+	            
 	            self.progress = progress;
 	        };
+	        
 	        xhr.send(fd);
 		},
 		
 		// 图片压缩
-		compressImg: function(imgObj) {
+		compressImg(imgObj) {
 			var self = this;
 			var maxWidth = 1000, maxHeight = 1500;
 			var fitSizeObj = this.fitSize(imgObj.width, imgObj.height, maxWidth, maxHeight);
@@ -531,7 +540,7 @@ Vue.component('aj-xhr-upload', {
 			
 			comp.src = this.rotate(imgObj, orient);
 		},
-		fitSize: function (originWidth, originHeight, maxWidth, maxHeight) {
+		fitSize(originWidth, originHeight, maxWidth, maxHeight) {
 		    // 目标尺寸
 		    var targetWidth = originWidth, targetHeight = originHeight;
 		    
@@ -551,7 +560,7 @@ Vue.component('aj-xhr-upload', {
 		    	targetWidth : targetWidth, targetHeight : targetHeight
 		    };
 		},
-		getPhotoOrientation : function (img) {
+		getPhotoOrientation(img) {
 		    var orient;
 		    EXIF.getData(img, function () {
 		        orient = EXIF.getTag(this, 'Orientation');
@@ -559,7 +568,7 @@ Vue.component('aj-xhr-upload', {
 		    
 		    return orient;
 		},
-		rotate : function (img, orient) {
+		rotate(img, orient) {
 			var width = img.width, height = img.height, 
 			canvas = document.createElement('canvas'), ctx = canvas.getContext("2d");
 			
@@ -615,7 +624,7 @@ Vue.component('attachment-picture-list', {
 		delImgUrl : String,
 		loadListUrl: String
 	},
-	data : function() {
+	data() {
 		return {
 			pics: []
 		};
@@ -631,22 +640,18 @@ Vue.component('attachment-picture-list', {
 			</td><td>\
 			<aj-xhr-upload ref="attachmentPictureUpload" :action="uploadUrl" :is-img-upload="true" :img-place="blankBg"></aj-xhr-upload>\
 			</td></tr></table>',
-	mounted: function() {
+	mounted() {
 		this.loadAttachmentPictures();
 		this.$refs.attachmentPictureUpload.uploadOk_callback = this.loadAttachmentPictures;
 	},
 	methods : {
-		loadAttachmentPictures : function() {
-			var self = this;
-			aj.xhr.get(this.loadListUrl, function(json) {
-				self.pics = json.result;
-			});
+		loadAttachmentPictures() {
+			aj.xhr.get(this.loadListUrl, json => this.pics = json.result);
 		},
-		delPic: function(picId) {
-			var self = this;
-			aj.xhr.dele(this.delImgUrl + picId, function(json) {
+		delPic(picId) {
+			aj.xhr.dele(this.delImgUrl + picId, json => {
 				if(json.isOk) {
-					self.loadAttachmentPictures();
+					this.loadAttachmentPictures();
 				} else {
 					
 				}

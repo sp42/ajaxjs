@@ -25,6 +25,8 @@
 		
 		// 生成树
 		makeTree : function (jsonArray) {
+			if(!jsonArray)return;
+	
 			// 父id 必须在子id之前，不然下面 findParent() 找不到后面的父节点，故先排序
 			
 			for (var i = 0, j = jsonArray.length; i < j; i++) {

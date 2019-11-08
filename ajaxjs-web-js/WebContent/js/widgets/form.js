@@ -19,7 +19,7 @@ Vue.component('aj-page-captcha', {
 	},
 	template : 
 		'<table class="aj-page-captcha"><tr>\
-			<td><input type="text" :name="fieldName" placeholder="输入右侧验证码" data-regexp="integer" required /></td>\
+			<td><input type="text" :name="fieldName" placeholder="输入右侧验证码" data-regexp="integer" required autocomplete="off" size="10" /></td>\
 			<td style="vertical-align: top;">\
 				<img :src="imgSrc || ajResources.ctx + \'/Captcha\'" @click="onClk($event);" title="点击刷新图片" />\
 			</td>\
@@ -216,7 +216,7 @@ Vue.component('aj-form-calendar-input', {
 	template : 
 		'<div class="aj-form-calendar-input" @mouseover="onMouseOver($event)">\
 			<div class="icon fa fa-calendar"></div>\
-			<input placeholder="请输入日期" :name="fieldName" :value="date +\' \' + time" type="text" />\
+			<input placeholder="请输入日期" :name="fieldName" :value="date +\' \' + time" type="text" autocomplete="off" />\
 			<aj-form-calendar ref="calendar" :show-time="showTime" @pick-date="recEvent" @pick-time="recTimeEvent"></aj-form-calendar>\
 		</div>',
 	mounted : function() {

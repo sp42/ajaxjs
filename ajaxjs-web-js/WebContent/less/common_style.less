@@ -508,6 +508,7 @@
 	& > ul {
 		padding: 2%;
 		li {
+			border:1px solid #cececd;
 			border-bottom: 3px solid #cececd;
 			border-right: 1px solid #cececd;
 			margin: auto;
@@ -518,6 +519,10 @@
 			background-color: white;
 			padding: 2%;
 			box-sizing: border-box;
+			
+			&:nth-child(odd) {
+			  background-color:#F5F5F5;
+			}
 			h3 {
 				padding-bottom: 2%;
 				font-weight: bold;
@@ -534,7 +539,7 @@
 			div {
 				font-size: .9rem;
 				text-align: right;
-				color: lightgray;
+				color: gray;
 				margin-top: 1%;
 				a {
 					font-weight: bold;
@@ -547,7 +552,58 @@
 	.pageInfo {
 		text-align: center;
 		font-size: 1rem;
-		padding: 2% 0;
+		.info {
+			color: gray;
+		}
+	}
+}
+.aj-pc-list-2 {
+	& > ul {
+		clear:both;
+		overflow:hidden;
+		li {
+			float:left;
+			width:47%;
+			border:1px solid #cececd;
+			border-bottom: 3px solid #cececd;
+			border-right: 1px solid #cececd;
+			margin: 3% 3% 0 0;
+			display: block;
+			overflow: hidden;
+			background-color: white;
+			padding: 2%;
+			box-sizing: border-box;
+			height:230px;
+
+			h3 {
+				padding-bottom: 2%;
+				font-weight: bold;
+				letter-spacing: 2px;
+			}
+
+			p {
+				font-size: .9rem;
+				text-align: justify;
+				line-height: 180%;
+				color: gray;
+			}
+
+			div {
+				font-size: .9rem;
+				text-align: right;
+				color: gray;
+				margin-top: 1%;
+				a {
+					font-weight: bold;
+					color: gray;
+				}
+			}
+		}
+	}
+
+	.pageInfo {
+		text-align: center;
+		font-size: 1rem;
 		.info {
 			color: gray;
 		}
@@ -580,6 +636,11 @@
 		p {
 			.ajaxjs-text-p;
 			text-indent: 2em;
+		}
+		li{
+			.ajaxjs-text-p;
+			list-style-type: inherit;
+			margin-left:3%;
 		}
 
 		img {
