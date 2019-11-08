@@ -171,6 +171,8 @@ public abstract class BaseService<T> implements IBaseService<T> {
 		this.shortName = shortName;
 	}
 
+	public static final int defaultPageSize = 6;
+	
 	/**
 	 * 生成查询表达式的高阶函数
 	 * 

@@ -38,7 +38,7 @@ public abstract class BaseController<T> implements IController, Constant {
 	/**
 	 * 指向新建记录的页面
 	 * 
-	 * @param model 	页面 Model 模型
+	 * @param model 页面 Model 模型
 	 * @return 新建记录 UI JSP 模版路径
 	 */
 	public String createUI(ModelAndView mv) {
@@ -49,7 +49,7 @@ public abstract class BaseController<T> implements IController, Constant {
 	 * 指向编辑记录的页面
 	 * 
 	 * @param id
-	 * @param mv	页面 Model 模型
+	 * @param mv 页面 Model 模型
 	 * @return
 	 */
 	public String editUI(Long id, ModelAndView mv) {
@@ -82,7 +82,7 @@ public abstract class BaseController<T> implements IController, Constant {
 	/**
 	 * 创建实体
 	 * 
-	 * @param entry			实体
+	 * @param entry 实体
 	 * @param createAction
 	 * @return
 	 */
@@ -108,8 +108,8 @@ public abstract class BaseController<T> implements IController, Constant {
 	/**
 	 * 读取单个记录或者编辑某个记录，保存到 ModelAndView 中（供视图渲染用）。
 	 * 
-	 * @param id 		ID 序号
-	 * @param model 	Model 模型
+	 * @param id ID 序号
+	 * @param model Model 模型
 	 * @return JSP 路径。缺省提供一个默认路径，但不一定要使用它，换别的也可以。
 	 */
 	public <E> E info(Long id, ModelAndView mv, Function<Long, E> getInfoAction) {
@@ -127,8 +127,8 @@ public abstract class BaseController<T> implements IController, Constant {
 
 	/**
 	 * 
-	 * @param id		ID 序号
-	 * @param mv		Model 模型
+	 * @param id ID 序号
+	 * @param mv Model 模型
 	 * @param service
 	 * @return
 	 */
@@ -138,8 +138,8 @@ public abstract class BaseController<T> implements IController, Constant {
 
 	/**
 	 * 
-	 * @param id		ID 序号
-	 * @param mv		Model 模型
+	 * @param id ID 序号
+	 * @param mv Model 模型
 	 * @return
 	 */
 	public T info(Long id, ModelAndView mv) {
@@ -149,8 +149,8 @@ public abstract class BaseController<T> implements IController, Constant {
 	/**
 	 * 修改实体
 	 * 
-	 * @param id 		实体 Long
-	 * @param entity 	实体
+	 * @param id 实体 Long
+	 * @param entity 实体
 	 * @return JSON 响应
 	 */
 	@SuppressWarnings("unchecked")
@@ -180,8 +180,8 @@ public abstract class BaseController<T> implements IController, Constant {
 	/**
 	 * 根据 id 删除实体
 	 * 
-	 * @param id 		实体 id
-	 * @param model 	页面 Model 模型
+	 * @param id 实体 id
+	 * @param model 页面 Model 模型
 	 * @return JSON 响应
 	 */
 	@SuppressWarnings("unchecked")
@@ -238,14 +238,13 @@ public abstract class BaseController<T> implements IController, Constant {
 	/**
 	 * 分页查询
 	 * 
-	 * @param start		起始行数，默认从零开始
-	 * @param limit		偏量值，默认 8 笔记录
-	 * @param mv		Model 模型
+	 * @param start 起始行数，默认从零开始
+	 * @param limit 偏量值，默认 8 笔记录
+	 * @param mv Model 模型
 	 * @param findPagedListAction
 	 * @return
 	 */
-	public <E> PageResult<E> listPaged(int start, int limit, ModelAndView mv,
-			BiFunction<Integer, Integer, PageResult<E>> findPagedListAction) {
+	public <E> PageResult<E> listPaged(int start, int limit, ModelAndView mv, BiFunction<Integer, Integer, PageResult<E>> findPagedListAction) {
 		LOGGER.info("获取分页列表 GET list");
 
 		prepareData(mv);
@@ -341,8 +340,8 @@ public abstract class BaseController<T> implements IController, Constant {
 	/**
 	 * 将 Object 转换为 JSON 字符串
 	 * 
-	 * @param obj		普通对象
-	 * @param isAdd 	是否添加生成 json 的前缀 json::
+	 * @param obj 普通对象
+	 * @param isAdd 是否添加生成 json 的前缀 json::
 	 * @return JSON 字符串
 	 */
 	public static String toJson(Object obj, boolean isAdd) {
@@ -382,32 +381,16 @@ public abstract class BaseController<T> implements IController, Constant {
 	 * @param jsp
 	 * @return
 	 */
-	public static String cms(String jsp) {
-		return jsp("cms/" + jsp);
+	public static String page(String jsp) {
+		return jsp("pages/" + jsp);
 	}
 
-	public String adminListCMS() {
-		return cms(getService().getShortName() + "-list");
+	public String list() {
+		return page(getService().getShortName() + "-list");
 	}
 
-	public String editUI_CMS() {
-		return cms(getService().getShortName());
-	}
-
-	public static final String domainEntityList = cms("common-entity-admin-list");
-
-	public static final String domainEntityEdit = cms("common-entity");
-
-	public static String info(String jsp) {
-		return jsp("entry/" + jsp);
-	}
-
-	public static String list(String jsp) {
-		return jsp(String.format("entry/%s-list", jsp));
-	}
-
-	public String editUI() {
-		return info(getService().getShortName() + "-edit");
+	public String info() {
+		return page(getService().getShortName() + "-info");
 	}
 
 	/**
@@ -416,14 +399,22 @@ public abstract class BaseController<T> implements IController, Constant {
 	 * @return
 	 */
 	public String adminList() {
-		return info(getService().getShortName() + "-admin-list");
+		return page(getService().getShortName() + "-admin-list");
 	}
+
+	public String editUI() {
+		return page(getService().getShortName() + "-edit");
+	}
+
+	public static final String domainEntityList = page("common-entity-admin-list");
+
+	public static final String domainEntityEdit = page("common-entity");
 
 	/**
 	 * 输出 Excel XSL 格式文件
 	 * 
-	 * @param response		响应对象
-	 * @param fileName		文件名
+	 * @param response 响应对象
+	 * @param fileName 文件名
 	 * @return
 	 */
 	public String adminList_Excel(HttpServletResponse response, String fileName) {
@@ -447,21 +438,20 @@ public abstract class BaseController<T> implements IController, Constant {
 		// 以上这行设定传送到前端浏览器时的档名为test.xls
 		// 就是靠这一行，让前端浏览器以为接收到一个excel档
 
-		return info(getService().getShortName() + "-admin-list-xsl");
+		return page(getService().getShortName() + "-admin-list-xsl");
 	}
 
 	/**
 	 * 执行文件上传，读取默认配置的上传规则
 	 * 
-	 * @param request	请求对象
+	 * @param request 请求对象
 	 * @return 上传结果对象
 	 * @throws IOException
 	 */
 	public static UploadFileInfo uploadByConfig(MvcRequest request) throws IOException {
 		UploadFileInfo info = new UploadFileInfo();
 		info.isFileOverwrite = ConfigService.getValueAsBool("uploadFile.isFileOverwrite");
-		info.saveFolder = ConfigService.getValueAsBool("uploadFile.saveFolder.isUsingRelativePath")
-				? request.mappath(ConfigService.getValueAsString("uploadFile.saveFolder.relativePath")) + File.separator
+		info.saveFolder = ConfigService.getValueAsBool("uploadFile.saveFolder.isUsingRelativePath") ? request.mappath(ConfigService.getValueAsString("uploadFile.saveFolder.relativePath")) + File.separator
 				: ConfigService.getValueAsString("uploadFile.saveFolder.absolutePath");
 
 		if (ConfigService.getValueAsBool("uploadFile.isAutoNewFileName"))

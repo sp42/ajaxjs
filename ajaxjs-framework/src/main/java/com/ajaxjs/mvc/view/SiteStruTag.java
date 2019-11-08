@@ -181,14 +181,18 @@ public class SiteStruTag extends SimpleTagSupport {
 		// MVC模式下，url 路径还是按照 JSP 的而不是 Servlet 的，我们希望统一的路径是按照 Servlet 的，故所以这里 Servlet 优先
 
 		Map<String, Object> node = (Map<String, Object>) request.getAttribute("PAGE_Node");
-		List<String> supers = (List<String>) node.get("supers");
 		String tpl = " » <a href=\"%s\">%s</a>";
 
-		for (String _super : supers) {
-			String[] arr = _super.split(":");
-			sb.append(String.format(tpl, ctx + arr[0], arr[1]));
-		}
+		if(node.get("supers") != null) {
+			String _supers = (String) node.get("supers");
+			String[] supers = _supers.split(",");
 
+			for (String _super : supers) {
+				String[] arr = _super.split(":");
+				sb.append(String.format(tpl, ctx + arr[0], arr[1]));
+			}
+		}
+		
 		sb.append(String.format(tpl, ctx + node.get(ListMap.PATH), node.get("name")));
 		sb.append("</nav>");
 
