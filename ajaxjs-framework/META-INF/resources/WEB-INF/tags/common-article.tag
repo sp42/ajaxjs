@@ -5,8 +5,9 @@
 <%@attribute name="isOnlyCreateDate" required="false" type="Boolean" description="是否只显示创建日期"%>
 
 <c:if test="${type == 'list'}">
+<%@attribute name="listClass" required="fasle" type="String" description="列表样式类"%>
 	<c:if test="${not empty PageResult}">
-		<div class="aj-pc-list-1">
+		<div class="${empty listClass ? 'aj-pc-list-1' : listClass}">
 			<ul>
 				<c:foreach items="${PageResult}" var="item">
 					<li>
