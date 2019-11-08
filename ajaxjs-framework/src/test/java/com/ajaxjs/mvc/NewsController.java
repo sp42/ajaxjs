@@ -24,7 +24,7 @@ public class NewsController implements IController {
 	}
 
 	@GET
-	@Path("/{id}")
+	@Path("{id}")
 	public String getInfo(@PathParam("id") Long id, ModelAndView model)  {
 
 		return "";
@@ -36,13 +36,13 @@ public class NewsController implements IController {
 	}
 
 	@PUT
-	@Path("/{id}")
+	@Path("{id}")
 	public String update(@PathParam("id") Long id, News news, ModelAndView model)  {
 		return "";
 	}
 
 	@DELETE
-	@Path("/{id}")
+	@Path("{id}")
 	public String delete(News news, ModelAndView model)  {
 		return "";
 	}
