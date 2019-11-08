@@ -116,8 +116,11 @@ public class ListMap {
 	 * 
 	 * @param list 输入的 ListMap
 	 */
+	public static void buildPath(List<Map<String, Object>> list, boolean saveSupers) {
+		buildPath(list, ID, PATH, LEVEL, saveSupers);
+	}
 	public static void buildPath(List<Map<String, Object>> list) {
-		buildPath(list, ID, PATH, LEVEL);
+		buildPath(list, ID, PATH, LEVEL, false);
 	}
 
 	/**
@@ -128,20 +131,35 @@ public class ListMap {
 	 * @param path 	map 的路径字段
 	 * @param level map 的深度
 	 */
-	public static void buildPath(List<Map<String, Object>> list, String id, String path, String level) {
+	public static void buildPath(List<Map<String, Object>> list, String id, String path, String level, boolean saveSupers) {
 		ListMapConfig config = new ListMapConfig();
 		config.mapHandler = (map, superMap, _level) -> {
 			String superPath = superMap == null ? "" : superMap.get(path).toString();
 			map.put(path, superPath + "/" + map.get(id));
 			map.put(level, _level);
+			
+			if(saveSupers && superMap != null) {
+				String supers;
+				if(map.get("supers") == null) {
+					supers = "";
+					map.put("supers", supers);
+				} else {
+					supers = map.get("supers").toString();
+				}
 
+				supers += ("".equals(supers) ? "" : "," ) + superPath + ":" + superMap.get("name");
+				map.put("supers", supers);
+				//supers.add(superPath + ":" + superMap.get("name"));
+			}
 			// System.out.println(map.get(id) + "@" + _level + ":" + map.get(path));
 			return true;
 		};
 
 		traveler(list, config);
 	}
-
+	public static void buildPath(List<Map<String, Object>> list, String id, String path, String level) {
+		buildPath(list, id, path, level, false);
+	}
 	/////////////////////////// findByPath /////////////////
 	/**
 	 * 输入一个路径，转换为队列结构
