@@ -22,6 +22,7 @@
 			<span class="menu">
 				<aj-accordion-menu>
 			    	<%@include file="/WEB-INF/jsp/admin/admin-menu.jsp" %>
+					
 			    </aj-accordion-menu>
 			</span>
 		</section>
