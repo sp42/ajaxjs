@@ -17,7 +17,6 @@ import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.cms.app.catalog.CatalogService;
 import com.ajaxjs.cms.app.catalog.CatalogServiceImpl;
-import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.BaseService;
@@ -34,8 +33,8 @@ import com.ajaxjs.orm.SnowflakeIdWorker;
 @Bean
 @Path("/news")
 public class NewsController extends BaseController<Map<String, Object>> {
-	@Resource("ArticleService")
-	private ArticleService service;
+	@Resource("NewsService")
+	private NewsService service;
 
 	@Override
 	public IBaseService<Map<String, Object>> getService() {
@@ -46,15 +45,9 @@ public class NewsController extends BaseController<Map<String, Object>> {
 
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(admin) int catalogId, ModelAndView mv) {
-		if (limit == 0)
-			limit = 6;
-
-		if (catalogId == 0)
-			catalogId = ConfigService.getValueAsInt("data.articleCatalog_Id");
-
-		mv.put(PageResult, service.findPagedListByCatelogId(catalogId, start, limit));
-		prepareData(mv);
+//	@Authority(filter = DataBaseFilter.class, value = 1)
+	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
+		listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(catalogId, start, limit));
 
 		return list();
 	}
@@ -63,14 +56,14 @@ public class NewsController extends BaseController<Map<String, Object>> {
 	@Path("listJson")
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String listJson(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(admin) int catalogId, ModelAndView mv) {
+	public String listJson(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
 		return pagedListJson(listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(catalogId, start, limit)));
 	}
 
 	@GET
 	@Path(idInfo)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String getInfo(@PathParam("id") Long id, ModelAndView mv) {
+	public String getInfo(@PathParam(id) Long id, ModelAndView mv) {
 		prepareData(mv);
 		mv.put("info", service.findById(id));
 		BaseService.getNeighbor(mv, "entity_article", id);
@@ -88,9 +81,9 @@ public class NewsController extends BaseController<Map<String, Object>> {
 	//////////////////// 后台 ///////////////////
 
 	@GET
-	@Path(adminList)
+	@Path("/admin/news/list")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String adminList(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(admin) int catalogId, ModelAndView mv) {
+	public String adminList(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
 		listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(catalogId, start, limit));
 		mv.put("domainCatalog_Id", service.getDomainCatelogId());
 		super.prepareData(mv);
@@ -99,7 +92,7 @@ public class NewsController extends BaseController<Map<String, Object>> {
 	}
 
 	@GET
-	@Path(admin)
+	@Path("/admin/news")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
 	public String createUI(ModelAndView mv) {
@@ -108,7 +101,7 @@ public class NewsController extends BaseController<Map<String, Object>> {
 	}
 
 	@POST
-	@Path(admin)
+	@Path("/admin/news")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
@@ -118,9 +111,9 @@ public class NewsController extends BaseController<Map<String, Object>> {
 
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path(adminId)
+	@Path("/admin/news/{id}")
 	@Override
-	public String editUI(@PathParam("id") Long id, ModelAndView mv) {
+	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
 		mv.put("domainCatalog_Id", service.getDomainCatelogId());
 		super.editUI(id, mv);
 		return editUI();
@@ -128,24 +121,24 @@ public class NewsController extends BaseController<Map<String, Object>> {
 
 	@PUT
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path(adminId)
+	@Path("/admin/news/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, Map<String, Object> entity) {
+	public String update(@PathParam(id) Long id, Map<String, Object> entity) {
 		return super.update(id, entity);
 	}
 
 	@DELETE
-	@Path(adminId)
+	@Path("/admin/news/{id}")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam("id") Long id) {
+	public String delete(@PathParam(id) Long id) {
 		return delete(id, new HashMap<String, Object>());
 	}
 
 	// 下载远程图片到本地服务器
 	@POST
-	@Path("admin/downAllPics")
+	@Path("/admin/news/downAllPics")
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String downAllPics(@NotNull @FormParam("pics") String pics, MvcRequest r) {

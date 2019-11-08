@@ -49,6 +49,9 @@ public class ArticleService extends BaseService<Map<String, Object>> implements 
 
 	@Override
 	public PageResult<Map<String, Object>> findPagedListByCatelogId(int catelogId, int start, int limit) {
+		if (limit == 0)
+			limit = defaultPageSize;
+		
 		if (catelogId == 0)
 			catelogId = getDomainCatelogId();
 

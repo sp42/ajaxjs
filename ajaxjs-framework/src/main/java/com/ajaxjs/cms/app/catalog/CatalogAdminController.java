@@ -14,13 +14,12 @@ import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
-import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 
-@Path("/admin/catelog")
 @Bean
+@Path("/admin/catelog")
 public class CatalogAdminController extends BaseController<Catalog> {
 	@Resource("CatalogService")
 	private CatalogService service;
@@ -66,7 +65,7 @@ public class CatalogAdminController extends BaseController<Catalog> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam(Constant.id) Long id, Catalog entity) {
+	public String update(@PathParam(id) Long id, Catalog entity) {
 		return super.update(id, entity);
 	}
 
@@ -74,7 +73,7 @@ public class CatalogAdminController extends BaseController<Catalog> {
 	@Path(idInfo)
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam(Constant.id) Long id) {
+	public String delete(@PathParam(id) Long id) {
 		return delete(id, new Catalog());
 	}
 

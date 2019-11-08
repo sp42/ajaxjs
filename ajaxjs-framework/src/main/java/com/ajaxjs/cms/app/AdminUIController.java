@@ -12,7 +12,7 @@ import com.ajaxjs.mvc.controller.IController;
  * @author Administrator
  *
  */
-//@Path("/admin")
+@Path("/admin")
 public class AdminUIController implements IController, Constant {
 	@GET
 	public String admin() {
@@ -24,7 +24,7 @@ public class AdminUIController implements IController, Constant {
 	 * @return
 	 */
 	@GET
-	@Path("/home")
+	@Path("home")
 	public String home() {
 		return jsp_perfix_webinf + "/admin/home";
 	}

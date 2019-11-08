@@ -41,7 +41,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	@GET
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView mv) {
+	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
 		mv.put("imgRelativePath", ConfigService.getValueAsString("uploadFile" + ".relativePath"));
 		mv.put("catelogMap", DataDict.picMap);
 		listPaged(start, limit, mv);
@@ -53,7 +53,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("getListByOwnerUid/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getListByOwnerUid(@PathParam("id") Long owenrUid) {
+	public String getListByOwnerUid(@PathParam(id) Long owenrUid) {
 		return toJson(service.findByOwner(owenrUid));
 	}
 
@@ -61,7 +61,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("getAttachmentPictureByOwner/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getAttachmentPictureByOwner(@PathParam("id") Long owenrUid) {
+	public String getAttachmentPictureByOwner(@PathParam(id) Long owenrUid) {
 		return toJson(service.findAttachmentPictureByOwner(owenrUid));
 	}
 
@@ -69,15 +69,15 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 //	@MvcFilter(filters = DataBaseFilter.class)
 //	@Path("/uploadMultiple/{id}/")
 //	@Produces(MediaType.APPLICATION_JSON)
-//	public String imgUpload(MvcRequest request, @PathParam("id") Long owenerId, @QueryParam("catelog") int catelogId, @FormParam("imgUrls") String imgUrls) throws IOException {
+//	public String imgUpload(MvcRequest request, @PathParam(id) Long owenerId, @QueryParam("catelog") int catelogId, @FormParam("imgUrls") String imgUrls) throws IOException {
 //		
 //	}
-	
+
 	@POST
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("/upload/{id}/")
+	@Path("upload/{id}/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String imgUpload(MvcRequest request, @PathParam("id") Long owenerId, @QueryParam("catelog") int catelogId) throws IOException {
+	public String imgUpload(MvcRequest request, @PathParam(id) Long owenerId, @QueryParam(catalogId) int catalogId) throws IOException {
 		final UploadFileInfo info = uploadByConfig(request);
 
 		if (info.isOk) {
@@ -92,8 +92,8 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 			picture.setPicHeight(imgHelper.height);
 			picture.setFileSize((int) (imgHelper.file.length() / 1024));
 
-			if (catelogId != 0)
-				picture.setCatelog(catelogId);
+			if (catalogId != 0)
+				picture.setCatelog(catalogId);
 
 			final Long _newlyId = service.create(picture);
 
@@ -114,7 +114,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 
 	@POST
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("/upload/staticPageUsedImg/")
+	@Path("upload/staticPageUsedImg/")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String imgUpload(MvcRequest request) throws IOException {
 		final UploadFileInfo info = uploadByConfig(request);
@@ -151,7 +151,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 
 	@POST
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("/saveImgIndex")
+	@Path("saveImgIndex")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String saveImgIndex(Map<String, Object> map) {
 		if (service.saveImgIndex(map)) {
@@ -178,17 +178,17 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	}
 
 	@PUT
-	@Path("{id}")
+	@Path(id)
 	@Override
-	public String update(@PathParam("id") Long id, Attachment_picture entity) {
+	public String update(@PathParam(id) Long id, Attachment_picture entity) {
 		return show405;
 	}
 
 	@DELETE
-	@Path("{id}")
+	@Path(id)
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam("id") Long id, MvcRequest request) {
+	public String delete(@PathParam(id) Long id, MvcRequest request) {
 		Attachment_picture pic = service.findById(id);
 		pic.setPath(request.mappath(pic.getPath())); // 转换为绝对地址
 

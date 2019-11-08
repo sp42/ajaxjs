@@ -17,7 +17,7 @@ public class CatalogServiceImpl extends BaseService<Catalog> implements CatalogS
 	
 	{
 		setUiName("分类");
-		setShortName("catelog");
+		setShortName("catalog");
 		setDao(dao);
 	}
 

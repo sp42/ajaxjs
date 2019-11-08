@@ -28,9 +28,9 @@ public abstract class DomainBaseAdminController extends BaseController<Map<Strin
 
 	@GET
 	@Override
-	@Path("/{id}")
+	@Path(idInfo)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String editUI(@PathParam("id") Long id, ModelAndView mv) {
+	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
 		super.editUI(id, mv);
 		return domainEntityEdit;
 	}
@@ -45,18 +45,18 @@ public abstract class DomainBaseAdminController extends BaseController<Map<Strin
 
 	@PUT
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("{id}")
+	@Path(idInfo)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, Map<String, Object> entity) {
+	public String update(@PathParam(id) Long id, Map<String, Object> entity) {
 		return super.update(id, entity);
 	}
 
 	@DELETE
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("{id}")
+	@Path(idInfo)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam("id") Long id) {
+	public String delete(@PathParam(id) Long id) {
 		return delete(id, new HashMap<String, Object>());
 	}
 }

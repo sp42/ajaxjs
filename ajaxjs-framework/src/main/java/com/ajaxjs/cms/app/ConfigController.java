@@ -32,6 +32,7 @@ import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
+import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.util.io.FileHelper;
 
 /**
@@ -69,7 +70,7 @@ public class ConfigController implements IController {
 	public String saveSiteStru(@NotNull @FormParam("json") String json) {
 		FileHelper.saveText(SiteStruService.jsonPath, json);
 		
-		SiteStruService.loadSiteStru();
+		SiteStruService.loadSiteStru(MvcRequest.getHttpServletRequest().getServletContext());
 		return Constant.jsonOk("修改网站结构成功！");
 	}
 
