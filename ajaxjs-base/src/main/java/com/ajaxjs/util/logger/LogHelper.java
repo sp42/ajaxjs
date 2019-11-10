@@ -41,11 +41,11 @@ public class LogHelper {
 
 //		if (!Version.isDebug) {
 //		System.out.println(Version.srcFolder);
-			if(fileHandler == null) {
-				fileHandler = new FileHandler(Version.srcFolder, null, ".log");
-			}
-//		
-			logger.addHandler(fileHandler);// 初始化保存到磁盤的處理器
+//			if(fileHandler == null) {
+//				fileHandler = new FileHandler(Version.srcFolder, null, ".log");
+//			}
+////		
+//			logger.addHandler(fileHandler);// 初始化保存到磁盤的處理器
 //		}
 
 		logger.setFilter(filter);

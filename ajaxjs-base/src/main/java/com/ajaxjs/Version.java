@@ -27,7 +27,7 @@ public class Version {
 	/**
 	 * 是否调试模式（开发模式）
 	 */
-	public static boolean isDebug;
+	public static final boolean isDebug;
 
 	/**
 	 * 源码磁盘目录
