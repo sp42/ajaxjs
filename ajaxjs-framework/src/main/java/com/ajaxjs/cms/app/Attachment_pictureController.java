@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.app.attachment;
+package com.ajaxjs.cms.app;
 
 import java.io.IOException;
 import java.util.Map;

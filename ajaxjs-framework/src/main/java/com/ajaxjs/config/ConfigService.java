@@ -75,8 +75,8 @@ public class ConfigService {
 		config.putAll(JsonHelper.parseMap(config.getJsonStr()));
 		config.setLoaded(true);
 		
-		if(config.get("isDebug") != null) 
-			Version.isDebug = (boolean)config.get("isDebug");
+//		if(config.get("isDebug") != null) 
+//			Version.isDebug = (boolean)config.get("isDebug");
 
 		flatConfig = ListMap.flatMap(config);
 	}

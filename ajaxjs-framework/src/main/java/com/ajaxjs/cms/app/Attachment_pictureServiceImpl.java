@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.app.attachment;
+package com.ajaxjs.cms.app;
 
 import java.util.Collections;
 import java.util.Comparator;

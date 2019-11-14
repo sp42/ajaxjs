@@ -97,10 +97,10 @@ public class PageEditor implements IController, Constant {
 
 			save_jsp_fileContent(path, contentBody);
 
-			return Constant.jsonOk("修改页面成功！");
+			return BaseController.jsonOk("修改页面成功！");
 		} catch (Throwable e) {
 			LOGGER.warning(e);
-			return Constant.jsonNoOk(e.toString());
+			return BaseController.jsonNoOk(e.toString());
 		}
 	}
 

@@ -47,9 +47,7 @@ public class NewsController extends BaseController<Map<String, Object>> {
 	@MvcFilter(filters = DataBaseFilter.class)
 //	@Authority(filter = DataBaseFilter.class, value = 1)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
-		listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(catalogId, start, limit));
-
-		return list();
+		return page(mv, service.list(catalogId, start, limit, CommonConstant.ON_LINE), false);
 	}
 
 	@GET
@@ -57,7 +55,7 @@ public class NewsController extends BaseController<Map<String, Object>> {
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String listJson(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
-		return pagedListJson(listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(catalogId, start, limit)));
+		return toJson(service.list(catalogId, start, limit, CommonConstant.ON_LINE));
 	}
 
 	@GET

@@ -7,10 +7,15 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 
+import javax.servlet.http.HttpServletRequest;
+
+import com.ajaxjs.cms.app.CommonConstant;
+import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.JdbcHelper;
 import com.ajaxjs.orm.SnowflakeIdWorker;
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.MappingValue;
 
 /**
  * 基础业务类
@@ -39,7 +44,7 @@ public abstract class BaseService<T> implements IBaseService<T> {
 	@Override
 	public Long create(T bean) {
 		Objects.requireNonNull(bean, "Bean 实体不能为空");
-		
+
 		if (bean instanceof BaseModel) {
 			BaseModel model = (BaseModel) bean;
 			if (model.getUid() == null)
@@ -51,7 +56,7 @@ public abstract class BaseService<T> implements IBaseService<T> {
 				model.setCreateDate(now);
 			if (model.getUpdateDate() == null)
 				model.setUpdateDate(now);
-			
+
 		} else if (bean instanceof Map) {
 			@SuppressWarnings("unchecked")
 			Map<String, Object> map = (Map<String, Object>) bean;
@@ -60,7 +65,7 @@ public abstract class BaseService<T> implements IBaseService<T> {
 
 			Date now = new Date();
 			Object createDate = map.get("createDate");
-			
+
 			if (createDate == null || (createDate != null && CommonUtil.isEmptyString(createDate.toString())))
 				map.put("createDate", now);
 			if (map.get("updateDate") == null)
@@ -89,6 +94,7 @@ public abstract class BaseService<T> implements IBaseService<T> {
 
 	/**
 	 * 相邻记录
+	 * 
 	 * @TODO 没权限的不要列出
 	 * 
 	 * @param mv
@@ -113,7 +119,7 @@ public abstract class BaseService<T> implements IBaseService<T> {
 	public List<T> findList() {
 		return dao.findList();
 	}
-	
+
 	@Override
 	public List<T> findList(Function<String, String> sqlHandler) {
 		return dao.findList(sqlHandler);
@@ -136,6 +142,18 @@ public abstract class BaseService<T> implements IBaseService<T> {
 	@Override
 	public PageResult<T> findPagedList(int start, int limit, Function<String, String> sqlHandler) {
 		return dao.findPagedList(start, limit, sqlHandler);
+	}
+
+	/**
+	 * 根据关键字搜索的高阶函数
+	 * 
+	 * @param keyword
+	 * @param isExact
+	 * @return
+	 */
+	public static Function<String, String> likeSqlHandler(String field, String keyword, boolean isExact) {
+		String _keyword = isExact ? keyword : "%" + keyword + "%";
+		return sql -> sql.replace(IBaseDao.WHERE_REMARK, field + "LIKE " + _keyword + IBaseDao.WHERE_REMARK_AND);
 	}
 
 	private String uiName;
@@ -172,7 +190,7 @@ public abstract class BaseService<T> implements IBaseService<T> {
 	}
 
 	public static final int defaultPageSize = 6;
-	
+
 	/**
 	 * 生成查询表达式的高阶函数
 	 * 
@@ -181,5 +199,50 @@ public abstract class BaseService<T> implements IBaseService<T> {
 	 */
 	public static Function<String, String> addWhere(String eq) {
 		return sql -> sql + " WHERE " + eq;
+	}
+
+	public static Function<String, String> setSqlHandler(String where) {
+		return where == null ? sql -> sql : sql -> sql.replace(IBaseDao.WHERE_REMARK, where + IBaseDao.WHERE_REMARK_AND);
+	}
+
+	public static String searchQuery(String sql) {
+		return searchQuery(sql, new String[] { "name", "content" });
+	}
+
+	public static String searchQuery(String sql, String[] fields) {
+		HttpServletRequest r = MvcRequest.getHttpServletRequest();
+		if (r == null || CommonUtil.isEmptyString(r.getParameter("keyword")))
+			return sql;
+
+		String keyword = r.getParameter("keyword"), isExact = r.getParameter("isExact");
+
+		keyword = keyword.trim();
+
+		String like = MappingValue.toBoolean(isExact) ? keyword : ("'%" + keyword + "%'");
+
+		for (int i = 0; i < fields.length; i++) {
+			fields[i] = fields[i] + " LIKE " + like;
+		}
+
+		return setSqlHandler("(" + String.join(" OR ", fields) + ")").apply(sql);
+	}
+
+	public static Function<String, String> setStatus(int status) {
+		String setStatus;
+
+		switch (status) {
+		case CommonConstant.DELTETED:
+			setStatus = null;
+			break;
+		case CommonConstant.ON_LINE:
+			setStatus = "(status = 1 OR status IS NULL)";
+			break;
+		case CommonConstant.ON_OFFLINE: // 常用于后台查看数据
+		default:
+			setStatus = "(status = 0 OR status = 1 OR status is NULL)";
+
+		}
+
+		return setSqlHandler(setStatus);
 	}
 }

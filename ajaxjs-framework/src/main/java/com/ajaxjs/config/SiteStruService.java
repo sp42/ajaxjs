@@ -102,6 +102,8 @@ public class SiteStruService implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent e) {
 		ServletContext ctx = e.getServletContext();
 		Version.tomcatVersionDetect(ctx.getServerInfo());
+		
+		System.out.println(ConfigService.jsonPath);
 
 		if (new File(ConfigService.jsonPath).exists()) {
 			ConfigService.load();

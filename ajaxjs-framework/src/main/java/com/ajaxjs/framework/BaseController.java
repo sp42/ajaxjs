@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -94,7 +93,7 @@ public abstract class BaseController<T> implements IController, Constant {
 		if (newlyId == null)
 			throw new RuntimeException("创建失败！");
 
-		return Constant.jsonOk_Extension("创建实体成功", "\"newlyId\":" + newlyId);
+		return jsonOk_Extension("创建实体成功", "\"newlyId\":" + newlyId);
 	}
 
 	public static <E> String create(E entry, IBaseService<E> service) {
@@ -236,70 +235,24 @@ public abstract class BaseController<T> implements IController, Constant {
 	}
 
 	/**
-	 * 分页查询
 	 * 
-	 * @param start 起始行数，默认从零开始
-	 * @param limit 偏量值，默认 8 笔记录
-	 * @param mv Model 模型
-	 * @param findPagedListAction
+	 * @param mv
+	 * @param pageResult
+	 * @param isAdmin 是否后台列表
 	 * @return
 	 */
-	public <E> PageResult<E> listPaged(int start, int limit, ModelAndView mv, BiFunction<Integer, Integer, PageResult<E>> findPagedListAction) {
+	public String page(ModelAndView mv, PageResult<T> pageResult, boolean isAdmin) {
 		LOGGER.info("获取分页列表 GET list");
 
 		prepareData(mv);
-
-		PageResult<E> pageResult = findPagedListAction.apply(start, limit);
 		mv.put(PageResult, pageResult);
-
-		return pageResult;
+		
+		return list(isAdmin);
 	}
 
 	@FunctionalInterface
 	static public interface PagedDao<T> {
 		public PageResult<T> apply(Integer s, Integer l, Function<String, String> sqlHandler);
-	}
-
-	/**
-	 * 
-	 * @param start
-	 * @param limit
-	 * @param mv
-	 * @param findPagedListAction
-	 * @return
-	 */
-	public <E> PageResult<E> listPaged2(int start, int limit, ModelAndView mv, PagedDao<E> findPagedListAction) {
-		LOGGER.info("获取分页列表 GET list");
-
-		prepareData(mv);
-
-		PageResult<E> pageResult = findPagedListAction.apply(start, limit, null);
-		mv.put(PageResult, pageResult);
-
-		return pageResult;
-	}
-
-	/**
-	 * 
-	 * @param start
-	 * @param limit
-	 * @param mv
-	 * @param service
-	 * @return
-	 */
-	public <E> PageResult<E> listPaged(int start, int limit, ModelAndView mv, IBaseService<E> service) {
-		return listPaged(start, limit, mv, service::findPagedList);
-	}
-
-	/**
-	 * 
-	 * @param start
-	 * @param limit
-	 * @param mv
-	 * @return
-	 */
-	public PageResult<T> listPaged(int start, int limit, ModelAndView mv) {
-		return listPaged(start, limit, mv, getService());
 	}
 
 	/**
@@ -313,31 +266,6 @@ public abstract class BaseController<T> implements IController, Constant {
 	}
 
 	/**
-	 * 
-	 * @param pageResult
-	 * @return
-	 */
-	public static String toJson(PageResult<?> pageResult) {
-		return pagedListJson(pageResult);
-	}
-
-	/**
-	 * 
-	 * @param pageResult
-	 * @return
-	 */
-	public static <E> String pagedListJson(PageResult<E> pageResult) {
-		String jsonStr = toJson(pageResult, false);
-
-		if (jsonStr == null || pageResult == null)
-			jsonStr = "[]";
-
-		int total = pageResult == null || pageResult.isZero() ? 0 : pageResult.getTotalCount();
-
-		return Constant.jsonOk_Extension("分页列表", "\"result\":" + jsonStr + ",\"total\":" + total);
-	}
-
-	/**
 	 * 将 Object 转换为 JSON 字符串
 	 * 
 	 * @param obj 普通对象
@@ -346,26 +274,61 @@ public abstract class BaseController<T> implements IController, Constant {
 	 */
 	public static String toJson(Object obj, boolean isAdd) {
 		String jsonStr = JsonHelper.toJson(obj);
+
 		return isAdd ? "json::{\"result\":" + jsonStr + "}" : jsonStr;
 	}
 
 	/**
+	 * 分页转为 JSON
 	 * 
-	 * @param msg 操作信息
-	 * @return JSON 字符串
+	 * @param pageResult
+	 * @return
 	 */
-	public static String jsonOk(String msg) {
-		return Constant.jsonOk(msg);
+	public static String toJson(PageResult<?> pageResult) {
+		String jsonStr = toJson(pageResult, false);
+
+		if (jsonStr == null || pageResult == null)
+			jsonStr = "[]";
+
+		int total = pageResult == null || pageResult.isZero() ? 0 : pageResult.getTotalCount();
+
+		return jsonOk_Extension("分页列表", "\"result\":" + jsonStr + ",\"total\":" + total);
 	}
 
 	/**
+	 * 输出 JSON OK
 	 * 
-	 * @param msg 操作信息
+	 * @param msg 输出信息
+	 * @return JSON 字符串
+	 */
+	public static String jsonOk(String msg) {
+		return String.format(json_ok, JsonHelper.javaValue2jsonValue(msg));
+	}
+
+	public static String jsonOk_Extension(Object... msg) {
+		return String.format(json_ok_extension, msg);
+	}
+
+	/**
+	 * 输出 JSON No OK
+	 * 
+	 * @param msg 输出信息
 	 * @return JSON 字符串
 	 */
 	public static String jsonNoOk(String msg) {
-		return Constant.jsonNoOk(msg);
+		return String.format(json_not_ok, JsonHelper.jsonString_covernt(msg));
 	}
+
+
+	/**
+	 * 显示 HTTP 405 禁止操作
+	 */
+	public static final String show405 = jsonNoOk("405， Request method not supported 禁止操作");
+
+	/**
+	 * 显示 HTTP 401 没有权限
+	 */
+	public static final String show401 = jsonNoOk("401， Request method not supported 没有权限");
 
 	/**
 	 * 
@@ -385,30 +348,22 @@ public abstract class BaseController<T> implements IController, Constant {
 		return jsp("pages/" + jsp);
 	}
 
-	public String list() {
-		return page(getService().getShortName() + "-list");
+	/**
+	 * 
+	 * @param isAdmin 是否后台列表
+	 * @return
+	 */
+	public String list(boolean isAdmin) {
+		return page(getService().getShortName() + (isAdmin ? "-admin-list" : "-list"));
 	}
 
 	public String info() {
 		return page(getService().getShortName() + "-info");
 	}
 
-	/**
-	 * 后台列表
-	 * 
-	 * @return
-	 */
-	public String adminList() {
-		return page(getService().getShortName() + "-admin-list");
-	}
-
 	public String editUI() {
 		return page(getService().getShortName() + "-edit");
 	}
-
-	public static final String domainEntityList = page("common-entity-admin-list");
-
-	public static final String domainEntityEdit = page("common-entity");
 
 	/**
 	 * 输出 Excel XSL 格式文件

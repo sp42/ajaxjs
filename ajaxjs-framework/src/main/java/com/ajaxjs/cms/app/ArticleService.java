@@ -19,6 +19,8 @@ import com.ajaxjs.orm.annotation.TableName;
 public class ArticleService extends BaseService<Map<String, Object>> implements Catalogable<Map<String, Object>> {
 	@TableName(value = "entity_article", beanClass = Map.class)
 	public interface ArticleDao extends IBaseDao<Map<String, Object>> {
+		@Select("SELECT e.id, e.name, e.createDate, e.updateDate, e.catalogId, e.intro FROM ${tableName} e WHERE " + WHERE_REMARK)
+		public PageResult<Map<String, Object>> list(int start, int limit, Function<String, String> sqlHandler);
 
 		/**
 		 * 可分类的，可分页的列表
@@ -28,13 +30,13 @@ public class ArticleService extends BaseService<Map<String, Object>> implements 
 		 * @param limit
 		 * @return
 		 */
-		@Select(value = "SELECT entry.id, entry.name, entry.createDate, entry.updateDate, entry.catelogId, intro, c.name AS catelogName FROM ${tableName} entry INNER JOIN " + catelog_finById
-				+ "ON entry.`catelogId` = c.id  WHERE 1 = 1 ORDER BY entry.createDate DESC", 
-				countSql = "SELECT COUNT(entry.id) AS count FROM ${tableName} entry WHERE catelogId IN " + catelog_find + " AND 1 = 1",
+		@Select(value = "SELECT entry.id, entry.name, entry.createDate, entry.updateDate, entry.catalogId, intro, c.name AS catelogName FROM ${tableName} entry INNER JOIN " + catelog_finById
+				+ "ON entry.`catalogId` = c.id  WHERE 1 = 1 ORDER BY entry.createDate DESC", 
+				countSql = "SELECT COUNT(entry.id) AS count FROM ${tableName} entry WHERE catalogId IN " + catelog_find + " AND 1 = 1",
 
-				sqliteValue = "SELECT id, name, createDate, updateDate, entry.catelogId, catelogName, intro FROM ${tableName} entry INNER JOIN " + catelog_finById_sqlite
-						+ " ON entry.`catelogId` = c.catelogId  WHERE 1 = 1 ORDER BY entry.createDate DESC", 
-				sqliteCountSql = "SELECT COUNT(entry.id) AS count FROM ${tableName} entry WHERE catelogId IN " + catelog_find_sqlite + " AND 1 = 1")
+				sqliteValue = "SELECT id, name, createDate, updateDate, entry.catelogId, catalogName, intro FROM ${tableName} entry INNER JOIN " + catelog_finById_sqlite
+						+ " ON entry.`catelogId` = c.catelogId  WHERE 1 = 1 ORDER BY entry.createDate DESC", sqliteCountSql = "SELECT COUNT(entry.id) AS count FROM ${tableName} entry WHERE catelogId IN "
+								+ catelog_find_sqlite + WHERE_REMARK_AND)
 		@Override
 		public PageResult<Map<String, Object>> findPagedListByCatelogId(int catelogId, int start, int limit, Function<String, String> sqlHandler);
 	}
@@ -47,11 +49,15 @@ public class ArticleService extends BaseService<Map<String, Object>> implements 
 		setDao(dao);
 	}
 
+	public PageResult<Map<String, Object>> list(int catelogId, int start, int limit, int status) {
+		return dao.list(0, 10, Catalogable.setCatalog(catelogId, this).andThen(setStatus(status)).andThen(BaseService::searchQuery));
+	}
+
 	@Override
 	public PageResult<Map<String, Object>> findPagedListByCatelogId(int catelogId, int start, int limit) {
 		if (limit == 0)
 			limit = defaultPageSize;
-		
+
 		if (catelogId == 0)
 			catelogId = getDomainCatelogId();
 
@@ -70,7 +76,7 @@ public class ArticleService extends BaseService<Map<String, Object>> implements 
 	public int getDomainCatelogId() {
 		return ConfigService.getValueAsInt("data.articleCatalog_Id");
 	}
-	
+
 	public List<Map<String, Object>> findListTop(int top) {
 		return dao.findListTop(top);
 	}

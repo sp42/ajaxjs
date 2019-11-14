@@ -35,6 +35,8 @@ import com.ajaxjs.util.map.MapTool;
  * @author Sp42 frank@ajaxjs.com
  *
  */
+
+@Deprecated
 public class QueryParams {
 	/**
 	 * 请求的数据
@@ -193,7 +195,7 @@ public class QueryParams {
 			return null;
 
 		Map<String, String[]> requestData = MvcRequest.getHttpServletRequest().getParameterMap();
-		System.out.println(requestData);
+		
 		return requestData.size() > 0 ? new QueryParams(requestData) : null;
 	}
 

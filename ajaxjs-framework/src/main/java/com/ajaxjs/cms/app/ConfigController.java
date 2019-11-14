@@ -29,7 +29,6 @@ import javax.ws.rs.core.MediaType;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.config.SiteStruService;
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
@@ -71,7 +70,7 @@ public class ConfigController implements IController {
 		FileHelper.saveText(SiteStruService.jsonPath, json);
 		
 		SiteStruService.loadSiteStru(MvcRequest.getHttpServletRequest().getServletContext());
-		return Constant.jsonOk("修改网站结构成功！");
+		return BaseController.jsonOk("修改网站结构成功！");
 	}
 
 	@GET
@@ -96,7 +95,7 @@ public class ConfigController implements IController {
 		if (request.getServletContext().getAttribute("aj_allConfig") != null)
 			request.getServletContext().setAttribute("aj_allConfig", ConfigService.config);
 
-		return Constant.jsonOk("修改配置成功！");
+		return BaseController.jsonOk("修改配置成功！");
 	}
 
 	/**
