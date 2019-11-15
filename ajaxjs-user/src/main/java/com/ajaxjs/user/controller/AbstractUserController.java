@@ -127,27 +127,6 @@ public abstract class AbstractUserController extends BaseUserController {
 	// return "/user/index.jsp?msg=" + Encode.urlEncode("恭喜你，注册成功！<a
 	// href=\"../user/login/\">马上登录</a>") ;
 	// }
-
-	/**
-	 * 检查是否重复的手机号码
-	 * 
-	 * @param phone 手机号码
-	 * @return true=已存在
-	 */
-	@GET
-	@Path("checkIfUserPhoneRepeat")
-	@MvcFilter(filters = { DataBaseFilter.class })
-	public String checkIfUserPhoneRepeat(@NotNull @QueryParam("phone") String phone) {
-		LOGGER.info("检查是否重复的手机号码：" + phone);
-
-		return toJson(new HashMap<String, Boolean>() {
-			private static final long serialVersionUID = -5033049204280154615L;
-			{
-				getService();
-				put("isRepeat", UserService.checkIfRepeated("phone", phone));
-			}
-		});
-	}
 	
 	/**
 	 * 检查是否重复的用户名
@@ -170,4 +149,46 @@ public abstract class AbstractUserController extends BaseUserController {
 		});
 	}
 
+	/**
+	 * 检查是否重复的手机号码
+	 * 
+	 * @param phone 手机号码
+	 * @return true=已存在
+	 */
+	@GET
+	@Path("checkIfUserEmailRepeat")
+	@MvcFilter(filters = { DataBaseFilter.class })
+	public String checkIfUserEmailRepeat(@NotNull @QueryParam("email") String email) {
+		LOGGER.info("检查是否重复的邮件：" + email);
+
+		return toJson(new HashMap<String, Boolean>() {
+			private static final long serialVersionUID = -5033049204280154615L;
+			{
+				getService();
+				put("isRepeat", UserService.checkIfRepeated("email", email));
+			}
+		});
+	}
+	
+	/**
+	 * 检查是否重复的手机号码
+	 * 
+	 * @param phone 手机号码
+	 * @return true=已存在
+	 */
+	@GET
+	@Path("checkIfUserPhoneRepeat")
+	@MvcFilter(filters = { DataBaseFilter.class })
+	public String checkIfUserPhoneRepeat(@NotNull @QueryParam("phone") String phone) {
+		LOGGER.info("检查是否重复的手机号码：" + phone);
+
+		return toJson(new HashMap<String, Boolean>() {
+			private static final long serialVersionUID = -5033049204280154615L;
+			{
+				getService();
+				put("isRepeat", UserService.checkIfRepeated("phone", phone));
+			}
+		});
+	}
+	
 }

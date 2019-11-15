@@ -14,7 +14,7 @@
 			<label>
 				<dt>用户帐号</dt>
 				<dd>
-					<input type="text" name="userID" placeholder="请输入${userID}" required="required" />
+					<input type="text" name="userID" placeholder="请输入${userID}" required pattern="^[a-zA-Z0-9_-]{4,10}$" />
 				</dd>
 			</label>
 		</dl>
@@ -22,7 +22,7 @@
 			<label>
 				<dt>登录密码</dt>
 				<dd>
-					<input type="password" name="password" placeholder="6~10位数字或英文字母" required="required" 
+					<input type="password" name="password" placeholder="6~10位数字或英文字母" required
 					 pattern="[0-9A-Za-z]{6,10}" title="请输入您的由6~10位由数字和26个英文字母的登录密码" />
 					
 				</dd>
@@ -51,7 +51,7 @@
 			</c:if>
 			
 			<c:if test="${!isAdminLogin}">
-				<a href="../register/">没有账号？点击注册</a> | <a href="${ctx}/user/reset_password/">忘记密码</a>
+				<a href="${ctx}/user/register/">没有账号？点击注册</a> | <a href="${ctx}/user/reset_password/">忘记密码</a>
 			</c:if>
 			</dd>
 		</dl> 
@@ -64,7 +64,7 @@
 				ajaxjs.xhr.form(
 					this.$el, 
 					ajaxjs.xhr.defaultCallBack_cb.delegate(null, null, 
-						j => setTimeout("location.assign('${ctx}/user/user-center/')", 3000), j => this.$children[0].refreshCode()) ,
+						j => setTimeout("location.assign('${ctx}/${isAdminLogin ? 'admin' : 'user/user-center'}/')", 3000), j => this.$children[0].refreshCode()) ,
 					{
 						beforeSubmit(f, json) {
 							json.password =  md5(json.password);

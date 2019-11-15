@@ -13,11 +13,12 @@
 		</li>
 		<li>	
 			<a href="${ctx}/user/user-center/account/safe/?action=modiflyPhone">更换手机</a>
-			<div class="${empty userPhone ? 'fail' : 'ok' }">绑定手机</div><div>${empty userPhone ? '未绑定手机' : userPhone}</div>
+			<div class="${empty userInfo.phone ? 'fail' : 'ok' }">绑定手机</div><div>${empty userPhone ? '未绑定手机' : userPhone}</div>
 		</li>
 		<li>	
 			<a href="${ctx}/user/user-center/account/safe/?action=modiflyEmail">设置邮箱</a>
-			<div class="${empty email ? 'fail' : 'ok' }">绑定邮箱</div><div>${empty email ? '未绑定邮箱' : email}</div>
+			<div class="${empty userInfo.email ? 'fail' : 'ok' }">绑定邮箱</div><div>${empty userInfo.email ? '未绑定邮箱' : userInfo.email} 
+				&nbsp;${empty userInfo.email ? '' : (isEmailVerified ? '已验证' :'未验证 &nbsp;<a href="#">点击验证</a>')}</div>
 		</li>
 		<li>	
 			<a href="${ctx}/user/user-center/account/safe/?action=resetPsw">修改密码</a>

@@ -7,12 +7,12 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
+import com.ajaxjs.cms.app.CommonConstant;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.framework.QueryParams;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
@@ -53,10 +53,9 @@ public class LoginLogController extends BaseController<UserLoginLog> {
 
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv,
-			HttpServletRequest req) {
-		mv.put("LoginType", UserDict.LoginType);
-		listPaged(start, limit, mv, (s, l) -> service.findPagedList(s, l, QueryParams.initSqlHandler(req)));
+	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+		mv.put("LoginType", UserDict.LOGIN_TYPE);
+		page(mv, service.findPagedList(start, limit, sql -> BaseService.betweenCreateDate(sql, "e.createDate")), CommonConstant.UI_ADMIN);
 
 		return jsp("user/login-log-list");
 	}

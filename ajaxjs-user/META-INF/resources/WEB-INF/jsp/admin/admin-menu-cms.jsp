@@ -3,6 +3,8 @@
 <%
 	long privilegeTotal = request.getSession().getAttribute("privilegeTotal") == null ? 0 : (long)request.getSession().getAttribute("privilegeTotal");
 %>
+
+<%--
 <li>
 	<h3>内容管理</h3>
 	<ul>
@@ -26,7 +28,7 @@
 	<%}%>
 	</ul>
 </li>
-
+--%>
 <%if(RoleService.check(privilegeTotal, RightConstant.SHOP) || RoleService.check(privilegeTotal, RightConstant.SHOP_SELLER)){ %>
 <li>
 	<h3>商城管理</h3>
@@ -58,21 +60,8 @@
 		<li><a target="iframepage" href="${ctx}/admin/page_editor/">页面管理</a></li>
 	</ul>
 </li>
-	<%}%>
-	<%if(RoleService.check(privilegeTotal, RightConstant.GLOBAL_SETTING)){ %>
-
-<li>
-	<h3>全局数据</h3>
-	<ul>
-		<li><a target="iframepage" href="${ctx}/admin/config/site/">项目信息</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/attachmentPicture/list/">图片列表</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/config/">所有配置</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/catelog/">分类管理</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/DataDict/">数据字典管理</a></li>
-	</ul>
-</li>
-	<%}%>
-	<%if(RoleService.check(privilegeTotal, RightConstant.USER)){ %>
+<%}%>
+<%if(RoleService.check(privilegeTotal, RightConstant.USER)){ %>
 <li> 
 	<h3>用户管理</h3>
 	<ul>
@@ -87,15 +76,29 @@
 	</ul>
 </li> 
 <%}%>
+
+<%if(RoleService.check(privilegeTotal, RightConstant.GLOBAL_SETTING)){ %>
+
+<li>
+	<h3>全局数据</h3>
+	<ul>
+		<li><a target="iframepage" href="${ctx}/admin/config/site/">项目信息</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/attachmentPicture/list/">图片列表</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/config/">所有配置</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/catelog/">分类管理</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/DataDict/">数据字典管理</a></li>
+	</ul>
+</li>
+<%}%>
+
 <%if(RoleService.check(privilegeTotal, RightConstant.DEVELOPER_TOOL)){ %>
 <li>
 	<h3>开发工具</h3>
 	<ul>
 		<li><a target="iframepage" href="${ctx}/admin/DataBase/">数据库管理</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/CodeGenerators/">代码生成器</a></li>
-		<li><a target="iframepage" href="${ajaxjsui}/doc">前端文档</a></li>
+		<li><a target="iframepage" href="${ajaxjsui}/ui-doc">前端文档</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/DataBaseShowStru">表字段浏览</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/GlobalLog/">操作日志浏览</a></li>
 		<li><a target="iframepage" href="${ctx}/asset/admin/tomcat-log.jsp">后台日志浏览</a></li>
 		<li><a target="iframepage" href="${ctx}/jsp/swagger-ui/">API 文档</a></li>
 	</ul>

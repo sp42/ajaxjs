@@ -45,7 +45,18 @@
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="7"></td>
+					<td colspan="7">
+						<form action="." method="GET" class="dateRange" @submit="valid($event)">
+							起始时间：
+							<aj-form-calendar-input field-name="startDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
+							截至时间：
+							<aj-form-calendar-input field-name="endDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
+							<button class="aj-btn">查询</button>
+						</form>
+						<script type="text/javascript">
+							aj.form.betweenDate('.dateRange');
+						</script>
+					</td>
 				</tr>
 			</tfoot>
 			<tbody>

@@ -15,13 +15,15 @@ public interface UserDict {
 	public static final int PSW_LOGIN_ID = 1;
 	public static final int PSW_LOGIN_EMAIL = 2;
 	public static final int PSW_LOGIN_PHONE = 4;
+	
+	public static final int VERIFIED_EMAIL = 1;
 
 	
 	public static final int WECHAT = 1;
 	public static final int PASSWORD = 2;
 	public static final int WECHAT_MINI = 3;
 
-	public static final Map<Integer, String> LoginType = new HashMap<Integer, String>() {
+	public static final Map<Integer, String> LOGIN_TYPE = new HashMap<Integer, String>() {
 		private static final long serialVersionUID = -1L;
 		{
 			put(WECHAT, "微信");
@@ -34,7 +36,7 @@ public interface UserDict {
 	public static final int MALE = 1;
 	public static final int FEMALE = 2;
 
-	public static final Map<Integer, String> SexGender = new HashMap<Integer, String>() {
+	public static final Map<Integer, String> SEX_GENDER = new HashMap<Integer, String>() {
 		private static final long serialVersionUID = -1L;
 		{
 			put(UNKNOW, "未知");

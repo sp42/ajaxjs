@@ -64,7 +64,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 	}
 	
 	@GET
-	@Path("/profile")
+	@Path("profile")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String profile() {
 		LOGGER.info("用户会员中心-个人信息");
@@ -72,7 +72,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 	}
 	
 	@GET
-	@Path("/profile/avater")
+	@Path("profile/avater")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String avater() {
 		LOGGER.info("用户会员中心-个人信息-修改头像");
@@ -80,7 +80,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 	}
 	
 	@GET
-	@Path("/address")
+	@Path("address")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String address() {
 		LOGGER.info("用户会员中心-我的地址");
@@ -96,14 +96,14 @@ public class UserCenterController extends AbstractAccountInfoController {
 //	}
 
 	@GET
-	@Path("/info")
+	@Path("info")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String info() {
 		return jsp("user/info");
 	}
 	
 	@GET
-	@Path("/info/{id}")
+	@Path("info/{id}")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String info2(@PathParam(id)Long userId, ModelAndView mv) {
 		mv.put("info", getService().findById(userId));
@@ -111,7 +111,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 	}
 
 	@GET
-	@Path("/info/modifly")
+	@Path("info/modifly")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String infoModifly() {
 		return jsp("user/infoModifly");
@@ -119,7 +119,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 
 	@GET
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Path("/info/avatar")
+	@Path("info/avatar")
 	public String avatar(ModelAndView mv) {
 		
 		Attachment_picture avatar = UserService.dao.findAvaterByUserId(getUserUid());
@@ -129,7 +129,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 
 	@GET
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Path("/loginInfo")
+	@Path("loginInfo")
 	public String changePassword(ModelAndView mv) {
 		mv.put("email", UserService.dao.findById(getUserId()).getEmail());
 		return jsp("user/loginInfo");
@@ -147,7 +147,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 //	}
 
 	@POST
-	@Path("/sendSMScode")
+	@Path("sendSMScode")
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = { LoginCheck.class })
 	public String sendSMScode(@QueryParam("phoneNo") @NotNull String phoneNo) {
@@ -163,7 +163,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 	}
 	
 	@POST
-	@Path("/avatar")
+	@Path("avatar")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
 	public String updateOrCreateAvatar(MvcRequest request) throws Exception {

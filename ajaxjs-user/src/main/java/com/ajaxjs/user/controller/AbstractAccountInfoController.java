@@ -13,6 +13,7 @@ import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
+import com.ajaxjs.user.UserDict;
 import com.ajaxjs.user.controller.LoginLogController.UserLoginLogService;
 import com.ajaxjs.user.filter.LoginCheck;
 import com.ajaxjs.user.filter.UserPasswordFilter;
@@ -46,11 +47,14 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 	public String account(ModelAndView mv) {
 		LOGGER.info("用户会员中心-帐号管理-首页");
 		
+		User user = getService().findById(getUserId());
+		mv.put("userInfo", user);
+		mv.put("isEmailVerified", (UserDict.VERIFIED_EMAIL & user.getVerify()) == UserDict.VERIFIED_EMAIL);
 		mv.put("lastUserLoginedInfo", LoginLogController.service.dao.getLastUserLoginedInfo(getUserId()));
+		
 		return jsp("user/user-center/account");
 	}
 
-	
 	@GET
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Path("account/safe")
@@ -107,22 +111,20 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 		} else
 			return jsonNoOk("修改手机失败！");
 	}
-	
+
 	@POST
-	@Path("safe/resetPassword")
+	@Path("account/safe/resetPassword")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class, UserPasswordFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
-	public String resetPassword(@NotNull @QueryParam("new_password") String new_password, HttpServletRequest request)
-			throws ServiceException {
+	public String resetPassword(@NotNull @QueryParam("new_password") String new_password, HttpServletRequest request) throws ServiceException {
 		LOGGER.info("重置密码");
 
-		if (getPasswordService() != null && getPasswordService()
-				.updatePwd((UserCommonAuth) request.getAttribute("UserCommonAuthId"), new_password))
+		if (getPasswordService() != null && getPasswordService().updatePwd((UserCommonAuth) request.getAttribute("UserCommonAuthId"), new_password))
 			return jsonOk("重置密码成功");
 		else
 			return jsonNoOk("重置密码失败！");
 	}
-	
+
 	public static UserLoginLogService userLoginLogService = new UserLoginLogService();
 
 	@GET
@@ -131,12 +133,11 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 	public String logHistory(ModelAndView mv) {
 		LOGGER.info("用户会员中心-登录历史");
 		long userId = getUserId();
-		mv.put("list", userLoginLogService
-				.findList(sql -> sql + " WHERE userId = " + userId + " ORDER BY id DESC LIMIT 0, 10"));
+		mv.put("list", userLoginLogService.findList(sql -> sql + " WHERE userId = " + userId + " ORDER BY id DESC LIMIT 0, 10"));
 
 		return jsp("user/user-center/log-history");
 	}
-	
+
 	@GET
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Path("account/oauth")

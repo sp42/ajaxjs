@@ -10,6 +10,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.ajaxjs.cms.app.CommonConstant;
 import com.ajaxjs.cms.app.catalog.CatalogServiceImpl;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
@@ -31,7 +32,7 @@ import com.ajaxjs.user.service.UserService;
 public class UserAdminController extends BaseController<User> {
 	@Resource("UserService")
 	private UserService service;
-	
+
 	@Resource("UserRoleService")
 	private RoleService roleService;
 
@@ -39,10 +40,11 @@ public class UserAdminController extends BaseController<User> {
 	@Path(list)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
-		mv.put("SexGender", UserDict.SexGender);
+		mv.put("SexGender", UserDict.SEX_GENDER);
 		mv.put("UserGroups", CatalogServiceImpl.list2map_id_as_key(roleService.getDao().findList()));
-		listPaged(start, limit, mv, service.getDao()::findPagedList_Cover);
-		
+
+		page(mv, service.getDao().findPagedList_Cover(start, limit), CommonConstant.UI_ADMIN);
+
 		return jsp("user/user-admin-list");
 	}
 
@@ -51,18 +53,18 @@ public class UserAdminController extends BaseController<User> {
 	@Path(idInfo)
 	@Override
 	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
-		mv.put("SexGender", UserDict.SexGender);
+		mv.put("SexGender", UserDict.SEX_GENDER);
 		super.editUI(id, mv);
-		
+
 		return editUI();
 	}
 
 	@GET
 	@Override
 	public String createUI(ModelAndView mv) {
-		mv.put("SexGender", UserDict.SexGender);
+		mv.put("SexGender", UserDict.SEX_GENDER);
 		super.createUI(mv);
-		
+
 		return editUI();
 	}
 
