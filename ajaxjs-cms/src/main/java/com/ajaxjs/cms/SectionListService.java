@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.ajaxjs.cms.app.catalog.Catalogable;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
@@ -22,7 +21,7 @@ import com.ajaxjs.util.CommonUtil;
  * @author Frank Cheung
  *
  */
-public abstract class SectionListService extends BaseService<SectionList> implements Catalogable<SectionList> {
+public abstract class SectionListService extends BaseService<SectionList> {
 
 	@TableName(value = "section_list", beanClass = SectionList.class)
 	public interface SectionListDao extends IBaseDao<SectionList> {
@@ -155,19 +154,16 @@ public abstract class SectionListService extends BaseService<SectionList> implem
 		return dao.findById_cover(id);
 	}
 
-	@Override
 	public PageResult<SectionList> findPagedListByCatelogId(int catelogId, int start, int limit) {
 		if (catelogId == 0)
-			catelogId = getDomainCatelogId();
+			catelogId = getDomainCatalogId();
 		return dao.findPagedListByCatelogId_Cover(catelogId, start, limit, null);
 	}
 
-	@Override
-	public int getDomainCatelogId() {
+	public int getDomainCatalogId() {
 		return ConfigService.getValueAsInt("data.adsCatalog_Id");
 	}
 
-	@Override
 	public List<SectionList> findListByCatelogId(int catelogId) {
 		return dao.findList_Cover(BaseService.addWhere("catelogId" + catelogId));
 	}
