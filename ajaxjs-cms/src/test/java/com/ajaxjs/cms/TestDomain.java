@@ -13,10 +13,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.ajaxjs.cms.CommonEntityService.CommonEntityyDao;
 import com.ajaxjs.cms.app.ArticleService;
-import com.ajaxjs.cms.appupdate.AppUpdate;
-import com.ajaxjs.cms.appupdate.AppUpdateServiceImpl;
-import com.ajaxjs.cms.domain.DomainEntityDao;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.orm.JdbcConnection;
@@ -32,20 +30,9 @@ public class TestDomain {
 		JdbcConnection.clean();
 	}
 
-//	@Test
-	public void testService() {
-		AppUpdateServiceImpl service = new AppUpdateServiceImpl();
-		PageResult<AppUpdate> list = service.findPagedList(0, 10);
-		assertNotNull(list);
-
-		AppUpdate entry = service.findById(60L);
-		assertNotNull(entry);
-
-	}
-
 	@Test
 	public void testDao() {
-		DomainEntityDao dao = new Repository().bind(DomainEntityDao.class, "entity_article");
+		CommonEntityyDao dao = new Repository().bind(CommonEntityyDao.class, "entity_article");
 
 		Map<String, Object> domain = dao.findById(1L);
 		assertNotNull(domain);

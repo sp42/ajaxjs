@@ -9,19 +9,17 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.cms.domain.DomainEntityService;
+import com.ajaxjs.cms.controller.HrController;
 import com.ajaxjs.cms.utils.CmsUtils;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.mock.TestHelper;
 import com.ajaxjs.orm.JdbcConnection;
 
 public class TestHrService {
-	static DomainEntityService hrService;
 
 	@BeforeClass
 	public static void initDb() {
 		CmsUtils.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
-		hrService = new DomainEntityService("entity_hr", "data.hrCatalog_Id", "招聘", "hr");
 	}
 
 	static String[] names = new String[] { "招聘文员两名", "招聘会计一名" };
@@ -35,13 +33,13 @@ public class TestHrService {
 			entity.put("name", TestHelper.getItem(names));
 			entity.put("content", TestHelper.getItem(content));
 			entity.put("intro", TestHelper.getItem(expr));
-			assertNotNull(hrService.create(entity));
+			assertNotNull(HrController.service.create(entity));
 		}
 	}
 
 	@Test
 	public void testPageList() {
-		PageResult<Map<String, Object>> page = hrService.findPagedList(0, 10);
+		PageResult<Map<String, Object>> page = HrController.service.findPagedList(0, 10);
 		assertNotNull(page.getTotalCount());
 	}
 

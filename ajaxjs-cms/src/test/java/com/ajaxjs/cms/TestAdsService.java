@@ -43,7 +43,7 @@ public class TestAdsService {
 		List<Ads> entities;
 		entities = service.findListByCatelogId(122);
 		assertNotNull(entities.size());
-		assertNotNull(service.findPagedListByCatelogId(122, 0, 5).size());
+		assertNotNull(service.findPagedList(122, 0, 5, 1).size());
 	}
 
 	@AfterClass
