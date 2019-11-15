@@ -44,12 +44,15 @@ public class CalculateRows {
 		try {
 			for (int i = 0; i < childs.length; i++) {
 				File file = childs[i];
+
 				if (!file.isDirectory()) {
 					if (file.getName().endsWith(type)) {
 						classcount++;
 						boolean comment = false;
+
 						try (BufferedReader br = new BufferedReader(new FileReader(file));) {
 							String line = "";
+
 							while ((line = br.readLine()) != null) {
 								allLines++;
 								line = line.trim();
