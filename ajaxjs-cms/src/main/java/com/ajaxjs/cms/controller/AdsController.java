@@ -22,19 +22,10 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 
 @Path("/ads")
 @Bean
-public class AdsAdminController extends BaseController<Ads> {
+public class AdsController extends BaseController<Ads> {
 	@Resource("AdsService")
 	private AdsService service;
-
-	@GET
-	@Path(list)
-	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(catalogId) int catalogId, @QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
-		listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(catalogId, start, limit));
-		return adminList();
-	}
-
-	@GET
+ 
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path(idInfo)
 	@Override
@@ -77,7 +68,7 @@ public class AdsAdminController extends BaseController<Ads> {
 
 	@Override
 	public void prepareData(ModelAndView mv) {
-		mv.put(domainCatalog_Id, service.getDomainCatelogId());
+		mv.put(domainCatalog_Id, service.getDomainCatalogId());
 		super.prepareData(mv);
 	}
 

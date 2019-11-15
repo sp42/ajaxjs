@@ -23,6 +23,7 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 数据库管理
@@ -32,10 +33,14 @@ import com.ajaxjs.util.CommonUtil;
  */
 @Path("/admin/DataBase")
 public class DataBaseController implements IController, Constant {
+	private static final LogHelper LOGGER = LogHelper.getLog(DataBaseController.class);
+	
 	@GET
 	public String show(ModelAndView mv, MvcRequest request) {
+		LOGGER.info("数据库管理");
 		mv.put("list", get(request.mappath("/META-INF/context.xml")));
-		return BaseController.page("database-connection");
+		
+		return BaseController.admin("database-connection");
 	}
 
 	/**
@@ -44,6 +49,7 @@ public class DataBaseController implements IController, Constant {
 	 * @return
 	 */
 	public static List<Map<String, String>> get(String file) {
+		
 		try {
 			Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
 			NodeList resource = document.getElementsByTagName("Resource");
@@ -68,7 +74,7 @@ public class DataBaseController implements IController, Constant {
 
 			return list;
 		} catch (SAXException | IOException | ParserConfigurationException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 			return null;
 		}
 	}

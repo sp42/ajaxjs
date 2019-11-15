@@ -22,12 +22,24 @@ import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
+import com.ajaxjs.util.logger.LogHelper;
 
 @Bean
 @Path("/admin/DataDict")
-public class DataDictAdminController extends BaseController<Map<String, Object>> {
+public class DataDictController extends BaseController<Map<String, Object>> {
+	private static final LogHelper LOGGER = LogHelper.getLog(DataDictController.class);
+	
 	@Resource("DataDictService")
 	private DataDictService service;
+	
+	@GET
+	@Override
+	public String createUI(ModelAndView mv) {
+		LOGGER.info("数据字典管理");
+		super.createUI(mv);
+		
+		return admin(service.getShortName());
+	}
 
 	@GET
 	@Path(list)
@@ -43,13 +55,6 @@ public class DataDictAdminController extends BaseController<Map<String, Object>>
 	@MvcFilter(filters = DataBaseFilter.class)
 	public List<Map<String, Object>> getDictListByParentId(@PathParam(id) long pId) {
 		return DataDictService.dao.findByParentId(pId);
-	}
-
-	@GET
-	@Override
-	public String createUI(ModelAndView mv) {
-		super.createUI(mv);
-		return editUI();
 	}
 
 	@Override

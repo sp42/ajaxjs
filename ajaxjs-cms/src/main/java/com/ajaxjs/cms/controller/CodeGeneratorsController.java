@@ -27,9 +27,12 @@ import javax.ws.rs.Path;
 import com.ajaxjs.cms.utils.codegenerators.Utils;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.mvc.controller.IController;
+import com.ajaxjs.util.logger.LogHelper;
 
 @Path("/admin/CodeGenerators")
 public class CodeGeneratorsController implements IController {
+	private static final LogHelper LOGGER = LogHelper.getLog(CodeGeneratorsController.class);
+	
 	static private String saveFolder = "C:\\temp";
 	static private String packageName = "com.ajaxjs.user.role";
 	static private String dbUrl = "jdbc:mysql://115.28.242.232/zyjf";
@@ -39,7 +42,9 @@ public class CodeGeneratorsController implements IController {
 
 	@GET
 	public String UI() {
-		return BaseController.page("code-generator/index");
+		LOGGER.info("代码生成器");
+		
+		return BaseController.admin("code-generator/index");
 	}
 
 	@POST
@@ -100,13 +105,13 @@ public class CodeGeneratorsController implements IController {
 		try {
 			conn.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 
 		return "html::Done!<a href=\"" + request.getContextPath() + zipSave + "\" download>download</a>";
 	}
 
-	static final String tplSave = BaseController.page("code-generator");
+	static final String tplSave = BaseController.admin("code-generator");
 
 	/**
 	 * 替换为实际内容
@@ -211,7 +216,7 @@ public class CodeGeneratorsController implements IController {
 			// System.out.println(save);
 			os.writeTo(fos);
 		} catch (IOException | ServletException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 	}
 }

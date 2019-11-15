@@ -17,28 +17,30 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.JdbcHelper;
+import com.ajaxjs.util.logger.LogHelper;
 
 @Path("/admin/DataBaseShowStru")
 public class DataBaseShowStruController implements IController {
+	private static final LogHelper LOGGER = LogHelper.getLog(DataBaseShowStruController.class);
+	
 	@GET
-	public String show(ModelAndView mv) {
-		return BaseController.page("database-show-stru");
+	public String show() {
+		LOGGER.info("表字段浏览");
+		
+		return BaseController.admin("database-show-stru");
 	}
 
 	@GET
 	@Path("showTables")
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String showTables(ModelAndView mv) {
-		Connection conn = JdbcConnection.getConnection();
-
-		List<String> tables = DataBaseShowStruController.getAllTableName(conn);
+	public String showTables() {
+		List<String> tables = getAllTableName(JdbcConnection.getConnection());
 
 		return BaseController.toJson(tables);
 	}
@@ -47,10 +49,9 @@ public class DataBaseShowStruController implements IController {
 	@Path("showTableAllByTableName")
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String showTableAllByTableName(ModelAndView mv, @QueryParam("tableName") @NotNull String tableName) {
-		Connection conn = JdbcConnection.getConnection();
+	public String showTableAllByTableName(@QueryParam("tableName") @NotNull String tableName) {
+		List<Map<String, String>> table = getColumnCommentByTableName(JdbcConnection.getConnection(), tableName);
 		
-		List<Map<String, String>> table = DataBaseShowStruController.getColumnCommentByTableName(conn, tableName);
 		return BaseController.toJson(table);
 	}
 
@@ -67,7 +68,7 @@ public class DataBaseShowStruController implements IController {
 				return parse(createDDL);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 
 		return null;
@@ -134,7 +135,7 @@ public class DataBaseShowStruController implements IController {
 				while (rs.next())
 					tables.add(rs.getString(1));
 			} catch (SQLException e) {
-				e.printStackTrace();
+				LOGGER.warning(e);
 			}
 		});
 
@@ -184,7 +185,7 @@ public class DataBaseShowStruController implements IController {
 				list.add(fieldInfos);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 	}
 }
