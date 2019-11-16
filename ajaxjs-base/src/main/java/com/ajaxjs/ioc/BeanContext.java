@@ -78,7 +78,8 @@ public class BeanContext {
 	@SuppressWarnings("unchecked")
 	public static <T> T getBeanByClass(Class<T> clz) {
 		if (clz.getAnnotation(Bean.class) == null) {
-			IllegalArgumentException e = new IllegalArgumentException(clz + " 这不是一个 ioc 的 bean。This is not a bean object that can be put into IOC.");
+			IllegalArgumentException e = new IllegalArgumentException(
+					clz + " 这不是一个 ioc 的 bean。This is not a bean object that can be put into IOC.");
 			LOGGER.warning(e);
 			throw e;
 		}
@@ -122,7 +123,7 @@ public class BeanContext {
 			if (beansClz.containsKey("beanName")) {
 				LOGGER.warning("相同的 bean name 已经存在" + beanName);
 			}
-			
+
 			if (ReflectUtil.hasArgsCon(item)) {
 				beansClz.put(beanName, item);
 			} else {
@@ -141,7 +142,11 @@ public class BeanContext {
 					 * 要查找哪一个 bean？就是说依赖啥对象？以什么为依据？我们说是那个 bean 的 id。首先你可以在 Resource
 					 * 注解中指定，如果这觉得麻烦，可以不在注解指定，直接指定变量名即可（就算不通过注解指定，都可以利用 反射 获取字段名，作为依赖的凭据，效果一样）
 					 */
-					String dependenciObj_id = res == null ? field.getAnnotation(Named.class).value() : res.value();// 获取依赖的 bean 的名称,如果为 null, 则使用字段名称
+					String dependenciObj_id = res == null ? field.getAnnotation(Named.class).value() : res.value();// 获取依赖的
+																													// bean
+																													// 的名称,如果为
+																													// null,
+																													// 则使用字段名称
 
 					if (CommonUtil.isEmptyString(dependenciObj_id))
 						dependenciObj_id = field.getName(); // 此时 bean 的 id 一定要与 fieldName 一致
@@ -212,7 +217,7 @@ public class BeanContext {
 	/**
 	 * 创建 Bean 实例
 	 * 
-	 * @param item bena 的类
+	 * @param item       bena 的类
 	 * @param annotation
 	 * @return Bean 实例
 	 */
@@ -249,12 +254,13 @@ public class BeanContext {
 	/**
 	 * 运行时修改注解
 	 * 
-	 * @param clazzToLookFor 需要修改的类
+	 * @param clazzToLookFor    需要修改的类
 	 * @param annotationToAlter 注解类
-	 * @param annotationValue 注解的实例，注解也是接口的一种，所以需要接口的实例
+	 * @param annotationValue   注解的实例，注解也是接口的一种，所以需要接口的实例
 	 */
 	@SuppressWarnings("unchecked")
-	public static void alterAnnotationOn(Class<?> clazzToLookFor, Class<? extends Annotation> annotationToAlter, Annotation annotationValue) {
+	public static void alterAnnotationOn(Class<?> clazzToLookFor, Class<? extends Annotation> annotationToAlter,
+			Annotation annotationValue) {
 		Map<Class<? extends Annotation>, Annotation> map = null;
 
 		try {
