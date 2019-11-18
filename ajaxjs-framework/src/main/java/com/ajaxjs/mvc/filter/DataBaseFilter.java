@@ -36,7 +36,7 @@ public class DataBaseFilter implements FilterAction {
 	public static boolean isAutoClose = true;
 
 	@Override
-	public boolean before(MvcRequest request, MvcOutput response, Method method) {
+	public boolean before(MvcRequest request, MvcOutput response, Method method, Object[] args) {
 		initDb();
 
 		return true;

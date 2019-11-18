@@ -53,7 +53,7 @@ public class PageEditor implements IController, Constant {
 	 */
 	@GET
 	public String show() {
-		return BaseController.page("page-load-iframe");
+		return BaseController.admin("page-load-iframe");
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class PageEditor implements IController, Constant {
 			LOGGER.warning(e);
 		}
 
-		return BaseController.page("page-editor");
+		return BaseController.admin("page-editor");
 	}
 
 	/**

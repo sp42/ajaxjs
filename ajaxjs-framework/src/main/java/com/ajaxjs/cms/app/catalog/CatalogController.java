@@ -20,7 +20,7 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 
 @Bean
 @Path("/admin/catelog")
-public class CatalogAdminController extends BaseController<Catalog> {
+public class CatalogController extends BaseController<Catalog> {
 	@Resource("CatalogService")
 	private CatalogService service;
 
@@ -36,7 +36,7 @@ public class CatalogAdminController extends BaseController<Catalog> {
 	@Override
 	public String createUI(ModelAndView model) {
 		prepareData(model);
-		return editUI();
+		return admin(service.getShortName());
 	}
 
 	@GET

@@ -17,8 +17,8 @@
 			</ajaxjs-admin-header>
 	
 			<!-- 搜索、分类下拉 -->
-			<aj-admin-filter-panel :catelog-id="${domainCatalog_Id}" search-field-value="entry.name" 
-				:selected-catelog-id="${empty param.catelogId ? 'null' : param.catelogId}">
+			<aj-admin-filter-panel :catalog-id="${domainCatalog_Id}" search-field-value="entry.name" 
+				:selected-catalog-id="${empty param.catalogId ? 'null' : param.catalogId}">
 			</aj-admin-filter-panel>
 	
 		</div>
@@ -53,8 +53,25 @@
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="9"></td>
+					<td colspan="9">
+					<div style="float:left;margin-top: .5%;">
+						<a href="?downloadXSL=true&<%=com.ajaxjs.web.ServletHelper.getAllQueryParameters(request) %>" target="_blank">
+							<img src="${commonAssetIcon}/excel.png" width="16" style="vertical-align: middle;" /> 下载 Excel 格式
+						</a>
+					
+					</div>
+						<form action="." method="GET" class="dateRange" @submit="valid($event)">
+							起始时间：
+							<aj-form-calendar-input field-name="startDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
+							截至时间：
+							<aj-form-calendar-input field-name="endDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
+							<button class="aj-btn">查询</button>
+						</form>
+					</td>
 				</tr>
+				<script>
+					aj.form.betweenDate('.dateRange');
+				</script>
 			</tfoot>
 			<tbody>
 				<c:foreach var="current" items="${PageResult}">
@@ -67,14 +84,18 @@
 						<td>
 							 <c:dateFormatter value="${current.updateDate}" format="yyyy-MM-dd" /> 
 						</td>
-						<td>${current.catelogName}</td>
 						<td>
-							${(empty current.status || current.status == 1) ? '已上线': '已下线'}
+							<a href="?catalogId=${current.catalogId}">${newsCatalogs[current.catalogId].name}</a></td>
+						<td>
+							${(empty current.stat || current.stat == 1) ? '已上线': '已下线'}
 						</td>
 						<td>
 						<c:if test="${not empty current.cover}">
-							<img src="${ctx}${current.cover}" style="max-width:50px;max-height:60px;vertical-align: middle;" 
-						 		onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${ctx}${current.cover}';" onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
+							<a href="${current.cover.startsWith('http') ? current.cover : ctx.concat('/images/').concat(current.cover)}" target="_blank">
+								<img src="${current.cover.startsWith('http') ? current.cover : ctx.concat('/images/').concat(current.cover)}" style="max-width:50px;max-height:60px;vertical-align: middle;" 
+							 		onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${current.cover.startsWith('http') ? current.cover : ctx.concat('/images/').concat(current.cover)}';" 
+							 		onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
+							</a>
 						</c:if>
 						</td>
 						<td>

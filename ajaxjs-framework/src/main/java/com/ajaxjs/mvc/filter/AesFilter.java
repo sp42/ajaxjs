@@ -41,7 +41,7 @@ public class AesFilter implements FilterAction {
 	public static String aesKey = "hihi";
 
 	@Override
-	public boolean before(MvcRequest request, MvcOutput response, Method method) {
+	public boolean before(MvcRequest request, MvcOutput response, Method method, Object[] args) {
 		String errMsg = null;
 		String p = request.getParameter(requestQueryStringParamterName);
 		

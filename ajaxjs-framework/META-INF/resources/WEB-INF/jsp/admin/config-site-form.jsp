@@ -7,7 +7,7 @@
 			<jsp:param name="title" value="网站结构" />
 		</jsp:include>
 	</head>
-<body class="configForm admin-entry-form">
+<body>
 	<div>
 		<!-- 后台头部导航 -->
 		<ajaxjs-admin-header>
@@ -17,8 +17,9 @@
 	<script>
 		new Vue({el:' body > div'});
 	</script>
+	<div class="configForm admin-entry-form">
 	
-	<form method="POST" action=".">
+	<form method="POST" action="." >
 		<div class="row">
 			<dl>
 				<label>
@@ -86,6 +87,8 @@
 			<button class="ajaxjs-btn" onclick="this.up('form').reset();return false;">复 位</button>
 		</section>
 	</form>
+	
+	</div>
 	<script>
 		ajaxjs.xhr.form('form');
 	</script>

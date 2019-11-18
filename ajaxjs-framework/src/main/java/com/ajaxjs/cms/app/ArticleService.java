@@ -4,23 +4,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.ajaxjs.cms.app.catalog.Catalogable;
+import com.ajaxjs.cms.app.catalog.CatalogServiceImpl;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.framework.QueryParams;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
 
-@Bean(value = "ArticleService")
-public class ArticleService extends BaseService<Map<String, Object>> implements Catalogable<Map<String, Object>> {
+@Bean
+public class ArticleService extends BaseService<Map<String, Object>> {
 	@TableName(value = "entity_article", beanClass = Map.class)
 	public interface ArticleDao extends IBaseDao<Map<String, Object>> {
-		@Select("SELECT e.id, e.name, e.createDate, e.updateDate, e.catalogId, e.intro FROM ${tableName} e WHERE " + WHERE_REMARK)
+		@Select("SELECT e.id, e.name, e.createDate, e.updateDate, e.catalogId, e.intro, e.cover, e.stat FROM ${tableName} e WHERE " + WHERE_REMARK+ DESCENDING_ID)
 		public PageResult<Map<String, Object>> list(int start, int limit, Function<String, String> sqlHandler);
+		
+		@Select("SELECT e.id, e.name, e.createDate, e.cover FROM ${tableName} e WHERE " + WHERE_REMARK + DESCENDING_ID)
+		public List<Map<String, Object>> simpleList(Function<String, String> sqlHandler);
 
 		/**
 		 * 可分类的，可分页的列表
@@ -49,35 +51,17 @@ public class ArticleService extends BaseService<Map<String, Object>> implements 
 		setDao(dao);
 	}
 
-	public PageResult<Map<String, Object>> list(int catelogId, int start, int limit, int status) {
-		return dao.list(0, 10, Catalogable.setCatalog(catelogId, this).andThen(setStatus(status)).andThen(BaseService::searchQuery));
+	public PageResult<Map<String, Object>> list(int catalogId, int start, int limit, int status) {
+		return dao.list(start, limit, 
+			CatalogServiceImpl.setCatalog(catalogId, getDomainCatalogId())
+			.andThen(setStatus(status)).andThen(BaseService::searchQuery).andThen(BaseService::betweenCreateDate));
 	}
 
-	@Override
-	public PageResult<Map<String, Object>> findPagedListByCatelogId(int catelogId, int start, int limit) {
-		if (limit == 0)
-			limit = defaultPageSize;
-
-		if (catelogId == 0)
-			catelogId = getDomainCatelogId();
-
-		return dao.findPagedListByCatelogId(catelogId, start, limit, QueryParams.initSqlHandler(QueryParams.init()));
-	}
-
-	@Override
-	public List<Map<String, Object>> findListByCatelogId(int catelogId) {
-		if (catelogId == 0)
-			catelogId = getDomainCatelogId();
-
-		return dao.findPagedListByCatelogId(catelogId, 0, 9999, QueryParams.initSqlHandler(QueryParams.init()));
-	}
-
-	@Override
-	public int getDomainCatelogId() {
+	public int getDomainCatalogId() {
 		return ConfigService.getValueAsInt("data.articleCatalog_Id");
 	}
 
 	public List<Map<String, Object>> findListTop(int top) {
-		return dao.findListTop(top);
+		return dao.simpleList(CatalogServiceImpl.setCatalog(getDomainCatalogId(), getDomainCatalogId()).andThen(BaseService.setStatus(1).andThen(sql -> sql + " LIMIT 0, " + top)));
 	}
 }

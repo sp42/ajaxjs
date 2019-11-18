@@ -340,12 +340,23 @@ public abstract class BaseController<T> implements IController, Constant {
 	}
 
 	/**
+	 * 普通页面模板目录
 	 * 
 	 * @param jsp
 	 * @return
 	 */
 	public static String page(String jsp) {
 		return jsp("pages/" + jsp);
+	}
+	
+	/**
+	 * 后台用页面模板目录
+	 * 
+	 * @param jsp
+	 * @return
+	 */
+	public static String admin(String jsp) {
+		return jsp("admin/" + jsp);
 	}
 
 	/**
@@ -378,7 +389,7 @@ public abstract class BaseController<T> implements IController, Constant {
 		try {
 			now = new String(now.getBytes(), "iso8859-1");
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 		// <base href="<%=basePath%>">
 		// String basePath = request.getScheme() + "://" + request.getServerName() + ":"

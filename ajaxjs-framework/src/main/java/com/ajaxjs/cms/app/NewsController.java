@@ -15,10 +15,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.app.catalog.CatalogService;
-import com.ajaxjs.cms.app.catalog.CatalogServiceImpl;
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
@@ -27,6 +24,7 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
+import com.ajaxjs.mvc.filter.XslMaker;
 import com.ajaxjs.net.http.PicDownload;
 import com.ajaxjs.orm.SnowflakeIdWorker;
 
@@ -41,10 +39,8 @@ public class NewsController extends BaseController<Map<String, Object>> {
 		return service;
 	}
 
-	private static CatalogService catelogService = new CatalogServiceImpl();
-
 	@GET
-	@MvcFilter(filters = DataBaseFilter.class)
+	@MvcFilter(filters = {DataBaseFilter.class})
 //	@Authority(filter = DataBaseFilter.class, value = 1)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
 		return page(mv, service.list(catalogId, start, limit, CommonConstant.ON_LINE), false);
@@ -63,7 +59,15 @@ public class NewsController extends BaseController<Map<String, Object>> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String getInfo(@PathParam(id) Long id, ModelAndView mv) {
 		prepareData(mv);
-		mv.put("info", service.findById(id));
+		Map<String, Object> map = service.findById(id);
+		
+		// 前台不能看
+		Object status = map.get("stat");
+		if(status != null && (2 == (int)status || 0 == (int)status)) {
+			throw new IllegalArgumentException("实体已下线或已不存在");
+		}
+		
+		mv.put("info", map);
 		BaseService.getNeighbor(mv, "entity_article", id);
 
 		return info();
@@ -71,22 +75,17 @@ public class NewsController extends BaseController<Map<String, Object>> {
 
 	@Override
 	public void prepareData(ModelAndView mv) {
-		int catalogId = service.getDomainCatelogId();
-		Map<Long, BaseModel> map = CatalogServiceImpl.list_bean2map_id_as_key(catelogService.findByParentId(catalogId));
-		mv.put("catalogs", map);
+		mv.put("domainCatalog_Id", service.getDomainCatalogId());
+		super.prepareData(mv);
 	}
 
 	//////////////////// 后台 ///////////////////
 
 	@GET
 	@Path("/admin/news/list")
-	@MvcFilter(filters = DataBaseFilter.class)
+	@MvcFilter(filters = {DataBaseFilter.class, XslMaker.class})
 	public String adminList(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
-		listPaged(start, limit, mv, (s, l) -> service.findPagedListByCatelogId(catalogId, start, limit));
-		mv.put("domainCatalog_Id", service.getDomainCatelogId());
-		super.prepareData(mv);
-
-		return adminList();
+		return page(mv, service.list(catalogId, start, limit, CommonConstant.OFF_LINE), true);
 	}
 
 	@GET
@@ -94,7 +93,6 @@ public class NewsController extends BaseController<Map<String, Object>> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
 	public String createUI(ModelAndView mv) {
-		mv.put("domainCatalog_Id", service.getDomainCatelogId());
 		return super.createUI(mv);
 	}
 
@@ -112,9 +110,7 @@ public class NewsController extends BaseController<Map<String, Object>> {
 	@Path("/admin/news/{id}")
 	@Override
 	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
-		mv.put("domainCatalog_Id", service.getDomainCatelogId());
-		super.editUI(id, mv);
-		return editUI();
+		return super.editUI(id, mv);
 	}
 
 	@PUT

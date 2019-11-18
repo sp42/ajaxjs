@@ -16,6 +16,7 @@ import com.ajaxjs.orm.JdbcHelper;
 import com.ajaxjs.orm.SnowflakeIdWorker;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.MappingValue;
+import com.ajaxjs.web.ServletHelper;
 
 /**
  * 基础业务类
@@ -145,6 +146,24 @@ public abstract class BaseService<T> implements IBaseService<T> {
 	}
 
 	/**
+	 * 有简单分类功能
+	 * 
+	 * @param catelogId
+	 * @param start
+	 * @param limit
+	 * @param status
+	 * @return
+	 */
+	public PageResult<T> findPagedList(int catalogId, int start, int limit, int status) {
+		Function<String, String> fn = setStatus(status).andThen(BaseService::searchQuery);
+
+		if (catalogId != 0)
+			fn = fn.andThen(setSqlHandler("catelogId = " + catalogId));
+
+		return dao.findPagedList(start, limit, fn);
+	}
+
+	/**
 	 * 根据关键字搜索的高阶函数
 	 * 
 	 * @param keyword
@@ -202,7 +221,7 @@ public abstract class BaseService<T> implements IBaseService<T> {
 	}
 
 	public static Function<String, String> setSqlHandler(String where) {
-		return where == null ? sql -> sql : sql -> sql.replace(IBaseDao.WHERE_REMARK, where + IBaseDao.WHERE_REMARK_AND);
+		return where == null ? sql -> sql : sql -> sql.replace(IBaseDao.WHERE_REMARK, "(" + where + ")" + IBaseDao.WHERE_REMARK_AND);
 	}
 
 	public static String searchQuery(String sql) {
@@ -217,6 +236,12 @@ public abstract class BaseService<T> implements IBaseService<T> {
 		String keyword = r.getParameter("keyword"), isExact = r.getParameter("isExact");
 
 		keyword = keyword.trim();
+		
+		if(!ServletHelper.preventSQLInject(keyword)) { // 防止 SQL 注入
+			return null;
+		}
+		
+		keyword = ServletHelper.MysqlRealScapeString(keyword);
 
 		String like = MappingValue.toBoolean(isExact) ? keyword : ("'%" + keyword + "%'");
 
@@ -224,7 +249,7 @@ public abstract class BaseService<T> implements IBaseService<T> {
 			fields[i] = fields[i] + " LIKE " + like;
 		}
 
-		return setSqlHandler("(" + String.join(" OR ", fields) + ")").apply(sql);
+		return setSqlHandler(String.join(" OR ", fields)).apply(sql);
 	}
 
 	public static Function<String, String> setStatus(int status) {
@@ -235,14 +260,37 @@ public abstract class BaseService<T> implements IBaseService<T> {
 			setStatus = null;
 			break;
 		case CommonConstant.ON_LINE:
-			setStatus = "(status = 1 OR status IS NULL)";
+			setStatus = "stat = 1 OR stat IS NULL";
 			break;
-		case CommonConstant.ON_OFFLINE: // 常用于后台查看数据
+		case CommonConstant.OFF_LINE: // 常用于后台查看数据
 		default:
-			setStatus = "(status = 0 OR status = 1 OR status is NULL)";
+			setStatus = "stat = 0 OR stat = 1 OR stat is NULL";
 
 		}
 
 		return setSqlHandler(setStatus);
 	}
+
+	/**
+	 * 时间范围的查询
+	 * 
+	 * @param sql
+	 * @return
+	 */
+	
+	public static String betweenCreateDate(String sql) {
+		return betweenCreateDate(sql, "createDate");
+	}
+	
+	public static String betweenCreateDate(String sql, String fieldName) {
+		HttpServletRequest r = MvcRequest.getHttpServletRequest();
+		String startDate = r.getParameter("startDate"), endDate = r.getParameter("endDate");
+		if (r == null || CommonUtil.isEmptyString(startDate) || CommonUtil.isEmptyString(endDate))
+			return sql;
+
+		return setSqlHandler(fieldName + " BETWEEN '" + startDate + "' AND DATE_ADD('" + endDate + "', INTERVAL 1 DAY)").apply(sql);
+	}
+	
+	
+
 }

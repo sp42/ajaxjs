@@ -21,9 +21,9 @@
 				</template>
 				<template slot="btns">
 				<c:if test="${!isCreate}">
-					<a :href="ajResources.ctx + '/admin/article/'">新建</a> | 
+					<a :href="ajResources.ctx + '/admin/${shortName}/'">新建</a> | 
 				</c:if>
-					<a :href="ajResources.ctx + '/admin/article/list/'">${uiName}列表</a> | 
+					<a :href="ajResources.ctx + '/admin/${shortName}/list/'">${uiName}列表</a> | 
 				</template>
 			</ajaxjs-admin-header>
 
@@ -35,12 +35,12 @@
 				<div>
 					<label>
 						<div class="label">名 称：</div> 
-						<input placeholder="请填写${uiName}名称" required="required" name="name" value="${info.name}" type="text" />
+						<input placeholder="请填写${uiName}名称" required name="name" value="${info.name}" type="text" />
 					</label> 
 					<label> 
 						<div class="label">栏 目：</div>  
 						<!-- 分类下拉 -->
-						<aj-tree-catelog-select field-name="catelogId" :catelog-id="${domainCatalog_Id}" :selected-catelog-id="${empty info || empty info.catelogId? 0 : info.catelogId}">
+						<aj-tree-catelog-select field-name="catalogId" :catalog-id="${domainCatalog_Id}" :selected-catalog-id="${empty info || empty info.catalogId? 0 : info.catalogId}">
 						</aj-tree-catelog-select>
 					</label>
 		
@@ -79,6 +79,10 @@
 						<div class="label">关键字：</div> 
 						<input placeholder="逗号或空格隔开多个关键字" size="50" name="keywords" value="${info.keywords}" type="text" />
 					</label> 
+					<label>
+						<div class="label">热度：</div> 
+						<input placeholder="整数" size="20" name="keywords" value="${info.hot}" type="text" />
+					</label> 
 				</div>
 				<div>
 					<div class="label" style="vertical-align: top;">正 文：</div>
@@ -88,6 +92,20 @@
 								<textarea class="hide" name="content">${info.content}</textarea>
 							</aj-form-html-editor>
 						</div>
+				</div>
+				<div> 
+						<div class="label">状态：</div> 
+					<label>
+					
+						<input name="stat" value="1" type="radio" ${info.stat == 1 ? 'checked' : ''} /> 上线中 
+					</label> 
+					<label>
+						<input name="stat" value="0" type="radio" ${info.stat == 0 ? 'checked' : ''} /> 已下线 
+					</label> 
+					<label>
+						<input name="stat" value="2" type="radio" ${info.stat == 2 ? 'checked' : ''}  /> 已删除
+					</label> 
+			
 				</div>
 				
 <!-- 图片上传 -->

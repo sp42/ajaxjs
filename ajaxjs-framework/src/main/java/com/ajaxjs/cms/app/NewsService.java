@@ -11,7 +11,7 @@ public class NewsService extends ArticleService {
 	}
 
 	@Override
-	public int getDomainCatelogId() {
+	public int getDomainCatalogId() {
 		return ConfigService.getValueAsInt("data.newsCatalog_Id");
 	}
 }

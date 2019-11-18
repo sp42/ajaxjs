@@ -6,6 +6,7 @@
 
 <c:if test="${type == 'list'}">
 <%@attribute name="listClass" required="fasle" type="String" description="列表样式类"%>
+<%@attribute name="catalogs"  required="fasle" type="java.util.Map" description="类别"%>
 	<c:if test="${not empty PageResult}">
 		<div class="${empty listClass ? 'aj-pc-list-1' : listClass}">
 			<ul>
@@ -14,10 +15,15 @@
 						<h3>
 							<a href="${item.id}/">${item.name}</a>
 						</h3>
+						<c:if test="${not empty item.cover}">
+							<a href="${item.id}/">
+								<img src="${item.cover.startsWith('http') ? item.cover : ctx.concat('/images/').concat(item.cover)}" />
+							</a>
+						</c:if>
 						<p>${item.intro}……</p>
 						<div>
-							<c:dateFormatter value="${item.createDate}" />
-							类别：<a href="?catelogId=${item.catelogId}">${catalogs[item.catelogId].name}</a>
+							<c:dateFormatter value="${item.createDate}" format="YYYY-MM-dd" />
+							类别：<a href="?catalogId=${item.catalogId}">${catalogs[item.catalogId].name}</a>
 							| <a href="${item.id}/">阅读更多»</a>
 						</div>
 					</li>
@@ -39,9 +45,10 @@
 				</c:when>
 				<c:otherwise>
 					文/${empty info.author ? '佚名' : info.author}  
-					<c:if test="${not empty info.sourceUrl}"><a href="${info.sourceUrl}/" target="_blank">源网址</a></c:if>
-					<c:if test="${not empty info.source}">出处： ${info.sourceUrl}</c:if>
-					创建于：<c:dateFormatter value="${info.createDate}" /> 最后编辑 ：<c:dateFormatter value="${info.updateDate}" />
+					<c:if test="${not empty info.source}">出处/${info.source}</c:if>
+					<c:if test="${not empty info.sourceUrl}"><a href="${info.sourceUrl}" target="_blank">源网址 &#128279;</a></c:if>
+					<br />
+					创建于/<c:dateFormatter value="${info.createDate}" format="YYYY-MM-dd" /> 最后编辑/<c:dateFormatter value="${info.updateDate}" format="YYYY-MM-dd" />
 				</c:otherwise>
 			</c:choose>
 			</h4>

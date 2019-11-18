@@ -3,6 +3,7 @@ package com.ajaxjs.cms.app.catalog;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.BaseService;
@@ -14,6 +15,16 @@ import com.ajaxjs.util.CommonUtil;
 @Bean("CatalogService")
 public class CatalogServiceImpl extends BaseService<Catalog> implements CatalogService {
 	public static CatalogDao dao = new Repository().bind(CatalogDao.class);
+	
+	/**
+	 * 
+	 */
+	public final static String PATH_LIKE_MYSQL = " FROM general_catelog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catelog WHERE id = %d ) , '%%'))";
+	
+	/**
+	 * IN 查询用
+	 */
+	public final static String CATALOG_FIND = "e.catalogId IN (SELECT id " + PATH_LIKE_MYSQL + ")";
 	
 	{
 		setUiName("分类");
@@ -115,6 +126,19 @@ public class CatalogServiceImpl extends BaseService<Catalog> implements CatalogS
 		return dao.getListAndSubByParentId(parentId);
 	}
 	
+
+	/**
+	 * 
+	 * @param catelogId
+	 * @param service
+	 * @return
+	 */
+	public static Function<String, String> setCatalog(int catelogId, int domainCatalogId) {
+		if (catelogId == 0)
+			catelogId = domainCatalogId;
+		
+		return BaseService.setSqlHandler(String.format(CATALOG_FIND, catelogId));
+	}
 
 	/**
 	 * 把列表（BaseModel 结构）转换为 map，以 id 作为键值。key 本来是 long，为照顾 el 转换为 int

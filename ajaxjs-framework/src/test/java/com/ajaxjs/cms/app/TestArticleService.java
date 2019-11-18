@@ -34,7 +34,7 @@ public class TestArticleService {
 		catalogService.findAllListByParentId(12);
 
 		ArticleService articleService = (ArticleService) BeanContext.getBean("ArticleService");
-		PageResult<Map<String, Object>> r = articleService.findPagedListByCatelogId(15, 0, 5);
+		PageResult<Map<String, Object>> r = articleService.list(15, 0, 5, 1);
 		
 		
 
@@ -47,10 +47,11 @@ public class TestArticleService {
 			inputMap.put("searchField", new String[] { "name", "content" });
 			inputMap.put("searchValue", new String[] { "name", "jj" });
 		}
+		
 		when(request.getParameterMap()).thenReturn(inputMap);
 		
 		MvcRequest.setHttpServletRequest(request);
-		r = articleService.findPagedListByCatelogId(15, 0, 5);
+		r = articleService.list(15, 0, 5, 1);
 		assertNotNull(r.size());
 	}
 

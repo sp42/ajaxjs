@@ -1,17 +1,14 @@
 /**
  * Copyright Sp42 frank@ajaxjs.com
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a
+ * copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations
+ * under the License.
  */
 package com.ajaxjs.cms.app;
 
@@ -33,6 +30,7 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.util.io.FileHelper;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 编辑配置的控制器
@@ -42,53 +40,51 @@ import com.ajaxjs.util.io.FileHelper;
  */
 @Path("/admin/config")
 public class ConfigController implements IController {
-	/**
-	 * 全部配置
-	 * 
-	 * @param model
-	 * @return
-	 */
+	private static final LogHelper LOGGER = LogHelper.getLog(ConfigController.class);
+
 	@GET
 	public String allConfig(ModelAndView model) {
+		LOGGER.info("编辑全部配置");
+
 		model.put("configJson", FileHelper.openAsText(ConfigService.jsonPath));
 		model.put("jsonSchemePath", FileHelper.openAsText(ConfigService.jsonSchemePath));
 
-		return BaseController.page("config-all");
+		return BaseController.admin("config-all");
 	}
 
 	@GET
 	@Path("siteStru")
 	public String siteStruUI(ModelAndView model) {
+		LOGGER.info("编辑网站结构");
+		
 		model.put("siteStruJson", FileHelper.openAsText(SiteStruService.jsonPath));
-		return BaseController.page("config-site-stru");
+		
+		return BaseController.admin("config-site-stru");
 	}
-	
+
 	@POST
 	@Path("siteStru")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String saveSiteStru(@NotNull @FormParam("json") String json) {
 		FileHelper.saveText(SiteStruService.jsonPath, json);
-		
 		SiteStruService.loadSiteStru(MvcRequest.getHttpServletRequest().getServletContext());
+		
 		return BaseController.jsonOk("修改网站结构成功！");
 	}
 
 	@GET
 	@Path("site")
 	public String siteUI() {
-		return BaseController.page("config-site-form");
+		LOGGER.info("编辑网站信息");
+		
+		return BaseController.admin("config-site-form");
 	}
 
-	/**
-	 * 保存配置并且刷新配置
-	 * 
-	 * @param map 配置的 JSON 字符串
-	 * @param request
-	 * @return
-	 */
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	public String saveAllconfig(Map<String, Object> map, HttpServletRequest request) {
+		LOGGER.info("保存配置并且刷新配置");
+		
 		ConfigService.loadJSON_in_JS(map);
 		ConfigService.load(); // 刷新配置
 
@@ -98,13 +94,6 @@ public class ConfigController implements IController {
 		return BaseController.jsonOk("修改配置成功！");
 	}
 
-	/**
-	 * 保存网站结构
-	 * 
-	 * @param map
-	 * @param request
-	 * @return
-	 */
 	@POST
 	@Path("site")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -112,4 +101,3 @@ public class ConfigController implements IController {
 		return saveAllconfig(map, request);
 	}
 }
- 
