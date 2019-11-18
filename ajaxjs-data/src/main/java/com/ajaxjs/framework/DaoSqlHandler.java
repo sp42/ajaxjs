@@ -64,7 +64,12 @@ public class DaoSqlHandler {
 					if (obj instanceof Function) {
 						@SuppressWarnings("unchecked")
 						Function<String, String> fn = (Function<String, String>) obj;
-						realSql = fn.apply(sql);
+						String _sql = fn.apply(sql);
+						
+						if(_sql == null)
+							info.isStop = true;
+						
+						realSql = _sql == null ? sql : _sql;
 						info.sqlHandler = fn;
 					} else {
 						// obj is null; 虽然接口上有声明，但实际没有传入 Function<String, String>，依然是原来的 SQL 不变

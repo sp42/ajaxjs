@@ -118,6 +118,9 @@ public class RepositoryReadOnly extends RepositoryBase {
 		String sql = isSqlite(select.sqliteValue(), conn) ? select.sqliteValue() : select.value();
 
 		ArgsInfo info = handleSql(sql, method, args);
+		if(info.isStop)
+			return null;
+		
 		sql = info.sql;
 		args = info.args;
 
@@ -208,8 +211,6 @@ public class RepositoryReadOnly extends RepositoryBase {
 	public <B> PageResult<B> doPage(Class<B> entityType, Select select, ArgsInfo info) throws DaoException {
 		PageParams p = getPageParameters(info.method, info.args);
 
-		// System.out.println("::::::::::::::::::::::::::::::::::::" +
-		// Arrays.toString(p.args));
 
 		int total = countTotal(select, info.sql, p.args, info);
 
@@ -232,6 +233,7 @@ public class RepositoryReadOnly extends RepositoryBase {
 			result.setStart(start);
 			result.setPageSize(limit);
 			result.setTotalCount(total);// 先查询总数,然后执行分页
+			System.out.println("::::::::::::::::::::::::::::::::::::");
 			result.page();
 
 			if (list != null)

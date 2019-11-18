@@ -31,6 +31,7 @@ import com.ajaxjs.orm.annotation.Update;
  * @param <T> 实体
  */
 public interface IBaseDao<T> {
+	public final static String DESCENDING_ID = " ORDER BY id DESC";
 
 	/**
 	 * 实体别名必须为 entry
@@ -129,6 +130,13 @@ public interface IBaseDao<T> {
 	public T findById_Attachment(Long id);
 
 	// ---------------- find list-------------------
+
+	/**
+	 * 搜索的占位符
+	 */
+	public static final String WHERE_REMARK = "1 = 1";
+
+	public static final String WHERE_REMARK_AND = " AND " + WHERE_REMARK;
 
 	/**
 	 * 查询所有数据

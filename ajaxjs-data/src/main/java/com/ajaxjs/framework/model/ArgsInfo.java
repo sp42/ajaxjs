@@ -35,4 +35,9 @@ public class ArgsInfo {
 	public Function<String, String> sqlHandler;
 	
 	public Method method;
+	
+	/**
+	 * 是否停止执行 SQL
+	 */
+	public boolean isStop;
 }

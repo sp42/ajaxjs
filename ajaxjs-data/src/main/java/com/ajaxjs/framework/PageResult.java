@@ -1,9 +1,6 @@
 /**
- * 版权所有 2017 Sp42 frank@ajaxjs.com 根据 2.0 版本 Apache 许可证("许可证")授权；
- * 根据本许可证，用户可以不使用此文件。 用户可从下列网址获得许可证副本：
- * http://www.apache.org/licenses/LICENSE-2.0
- * 除非因适用法律需要或书面同意，根据许可证分发的软件是基于"按原样"基础提供，
- * 无任何明示的或暗示的保证或条件。详见根据许可证许可下，特定语言的管辖权限和限制。
+ * 版权所有 2017 Sp42 frank@ajaxjs.com 根据 2.0 版本 Apache 许可证("许可证")授权； 根据本许可证，用户可以不使用此文件。 用户可从下列网址获得许可证副本： http://www.apache.org/licenses/LICENSE-2.0
+ * 除非因适用法律需要或书面同意，根据许可证分发的软件是基于"按原样"基础提供， 无任何明示的或暗示的保证或条件。详见根据许可证许可下，特定语言的管辖权限和限制。
  */
 package com.ajaxjs.framework;
 
@@ -86,6 +83,8 @@ public class PageResult<T> extends ArrayList<T> {
 		setTotalPage(totalPage);
 
 		int currentPage = (getStart() / getPageSize()) + 1;
+
+		System.out.println("_____" + currentPage);
 		setCurrentPage(currentPage);
 	}
 
@@ -110,8 +109,7 @@ public class PageResult<T> extends ArrayList<T> {
 	}
 
 	/*
-	 * 分页时高效的总页数计算 我们一般分页是这样来计算页码的： int row=200; //记录总数 int page=5;//每页数量 int
-	 * count=row%5==0?row/page:row/page+1; 上面这种是用的最多的! 那么下面我们来一种最简单的，不用任何判断！ 看代码：
+	 * 分页时高效的总页数计算 我们一般分页是这样来计算页码的： int row=200; //记录总数 int page=5;//每页数量 int count=row%5==0?row/page:row/page+1; 上面这种是用的最多的! 那么下面我们来一种最简单的，不用任何判断！ 看代码：
 	 * int row=21; int pageCount=5; int sum=(row-1)/pageCount+1;//这样就计算好了页码数量，逢1进1
 	 */
 }

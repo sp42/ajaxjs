@@ -221,7 +221,7 @@ public class JdbcHelper extends JdbcReader {
 		List<Object> values = new ArrayList<>();
 
 		everyMap(map, (field, value) -> {
-			fields.add(field + " = ?");
+			fields.add("`" + field + "` = ?");
 			values.add(value);
 		});
 
