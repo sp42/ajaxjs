@@ -1,6 +1,9 @@
 package com.ajaxjs.user.controller;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.BiConsumer;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +15,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
@@ -20,6 +24,7 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.user.login.LoginService;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.service.UserService;
+import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.captcha.CaptchaController;
 import com.ajaxjs.web.captcha.CaptchaFilter;
@@ -48,10 +53,9 @@ public abstract class AbstractUserController extends BaseUserController {
 	@Path("login")
 	@MvcFilter(filters = { CaptchaFilter.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
-	public String loginByPassword(@NotNull @QueryParam("userID") String userID,
-			@NotNull @QueryParam("password") String password, HttpServletRequest req) throws ServiceException {
+	public String loginByPassword(@NotNull @QueryParam("userID") String userID, @NotNull @QueryParam("password") String password, HttpServletRequest req) throws ServiceException {
 		LOGGER.info("执行登录（按密码的）");
-		if(isLogined())
+		if (isLogined())
 			return jsonNoOk("你已经登录，无须重复登录！");
 
 		userID = userID.trim();
@@ -59,12 +63,12 @@ public abstract class AbstractUserController extends BaseUserController {
 
 		if (user != null) {
 			LoginService.saveLoginLog(user, req);
-			
-			if (getAfterLoginCB() != null) 
+
+			if (getAfterLoginCB() != null)
 				getAfterLoginCB().accept(user, req);
-			
+
 			LoginService.afterLogin(user, req);
-			
+
 			String msg = user.getName() == null ? user.getPhone() : user.getName();
 
 			return jsonOk("用户 " + msg + "登录成功！欢迎回来！ <a href=\"" + req.getContextPath() + "/user/user-center/\">点击进入“用户中心”</a>。");
@@ -110,8 +114,20 @@ public abstract class AbstractUserController extends BaseUserController {
 	@Path("register")
 	@MvcFilter(filters = { DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
-	public String doRegister(User user, @NotNull @QueryParam("password") String password) throws ServiceException {
+	public String doRegister(User user, @NotNull @QueryParam("password") String password, Map<String, Object> map) throws ServiceException {
 		LOGGER.info("正在注册");
+
+		if (ConfigService.getValueAsString("user.customRegister") != null) {
+			String[] arr = ConfigService.getValueAsString("user.customRegister").split("#");
+			Method method = ReflectUtil.getMethod(ReflectUtil.getClassByName(arr[0]), arr[1], Map.class);
+
+			try {
+				return (String) method.invoke(null, map);
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
+			}
+
+		}
 
 		getService().register(user, password);
 
@@ -127,7 +143,7 @@ public abstract class AbstractUserController extends BaseUserController {
 	// return "/user/index.jsp?msg=" + Encode.urlEncode("恭喜你，注册成功！<a
 	// href=\"../user/login/\">马上登录</a>") ;
 	// }
-	
+
 	/**
 	 * 检查是否重复的用户名
 	 * 
@@ -139,7 +155,7 @@ public abstract class AbstractUserController extends BaseUserController {
 	@MvcFilter(filters = { DataBaseFilter.class })
 	public String checkIfUserNamePhoneRepeat(@NotNull @QueryParam("name") String name) {
 		LOGGER.info("检查是否重复的用户名：" + name);
-		
+
 		return toJson(new HashMap<String, Boolean>() {
 			private static final long serialVersionUID = -5033049204280154615L;
 			{
@@ -169,7 +185,7 @@ public abstract class AbstractUserController extends BaseUserController {
 			}
 		});
 	}
-	
+
 	/**
 	 * 检查是否重复的手机号码
 	 * 
@@ -190,5 +206,5 @@ public abstract class AbstractUserController extends BaseUserController {
 			}
 		});
 	}
-	
+
 }
