@@ -226,6 +226,8 @@ public class MapTool {
 		T bean = ReflectUtil.newInstance(clz);
 
 		eachField(bean, (key, v, property) -> {
+			
+			System.out.println("key:"+key);
 			try {
 				if (map.containsKey(key)) {
 					Object value = map.get(key);
@@ -234,7 +236,7 @@ public class MapTool {
 					if (value != null) {
 						Class<?> t = property.getPropertyType(); // Bean 值的类型，这是期望传入的类型，也就 setter 参数的类型
 
-						if (isTransform && value != null && t != value.getClass()) { // 类型相同，直接传入；类型不相同，开始转换
+						if (isTransform && t != value.getClass()) { // 类型相同，直接传入；类型不相同，开始转换
 							value = MappingValue.objectCast(value, t);
 						}
 						System.out.println("v:" + value + " type: " + value.getClass());

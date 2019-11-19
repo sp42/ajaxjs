@@ -35,27 +35,28 @@ public class BaseModel implements Serializable {
 	 */
 	private Long uid;
 
+	
 	/**
 	 * 数据字典：状态
 	 */
-	private Integer status;
-
+	private Integer stat;
+	
 	/**
 	 * 设置数据字典：状态
-	 * 
-	 * @param status 数据字典：状态
+	 
+	 * @param stat  
 	 */
-	public void setStatus(Integer status) {
-		this.status = status;
+	public void setStat(Integer stat) {
+		this.stat = stat;
 	}
-
+	
 	/**
 	 * 获取数据字典：状态
-	 * 
+	 
 	 * @return 数据字典：状态
-	 */
-	public Integer getStatus() {
-		return status;
+	 */	
+	public Integer getStat() {
+		return stat;
 	}
 
 	// @NotNull(message="名称不能为空")
