@@ -227,7 +227,7 @@ public class JdbcHelper extends JdbcReader {
 
 		StringBuilder sb = initSB(tableName, false);
 		sb.append(String.join(", ", fields));
-		sb.append("WHERE id = ?");
+		sb.append(" WHERE id = ?");
 
 		values.add(map.get("id"));
 		
@@ -418,7 +418,7 @@ public class JdbcHelper extends JdbcReader {
 
 		StringBuilder sb = initSB(tableName, false);
 		sb.append(String.join(", ", fields));
-		sb.append("WHERE id = ?");
+		sb.append(" WHERE id = ?");
 
 		values.add(ReflectUtil.executeMethod(bean, "getId"));
 		

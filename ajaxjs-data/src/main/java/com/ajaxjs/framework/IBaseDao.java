@@ -31,6 +31,13 @@ import com.ajaxjs.orm.annotation.Update;
  * @param <T> 实体
  */
 public interface IBaseDao<T> {
+	/**
+	 * 搜索的占位符
+	 */
+	public static final String WHERE_REMARK = "1 = 1";
+
+	public static final String WHERE_REMARK_AND = " AND " + WHERE_REMARK;
+	
 	public final static String DESCENDING_ID = " ORDER BY id DESC";
 
 	/**
@@ -52,12 +59,14 @@ public interface IBaseDao<T> {
 	 * catelogId 的参数 另外也可以用 IN 查询
 	 */
 	public final static String catelog_finById = " (SELECT id, name " + pathLike_mysql + ") AS c ";
+	
 	public final static String catelog_finById_sqlite = "(SELECT id AS catelogId, name AS catelogName " + pathLike_sqlite + ") AS c";
 
 	/**
 	 * IN 查询用
 	 */
 	public final static String catelog_find = "(SELECT id " + pathLike_mysql + ")";
+	
 	public final static String catelog_find_sqlite = "(SELECT id " + pathLike_sqlite + ")";
 
 	// ---------------- find one-------------------
@@ -67,7 +76,7 @@ public interface IBaseDao<T> {
 	 * @param sqlHandler 查找的条件
 	 * @return Bean
 	 */
-	@Select("SELECT * FROM ${tableName}")
+	@Select("SELECT * FROM ${tableName} WHERE " + WHERE_REMARK)
 	public T find(Function<String, String> sqlHandler);
 
 	/**
@@ -78,15 +87,6 @@ public interface IBaseDao<T> {
 	 */
 	@Select("SELECT * FROM ${tableName} WHERE id = ?")
 	public T findById(Long id);
-	
-	/**
-	 * 
-	 * 
-	 * @param uid 全局唯一标识
-	 * @return
-	 */
-	@Select("SELECT * FROM ${tableName} WHERE uid = ?")
-	public T findByUid(long uid);
 
 	/**
 	 * 查询单个记录，带有类别的。如果找不到则返回 null
@@ -131,34 +131,17 @@ public interface IBaseDao<T> {
 
 	// ---------------- find list-------------------
 
-	/**
-	 * 搜索的占位符
-	 */
-	public static final String WHERE_REMARK = "1 = 1";
-
-	public static final String WHERE_REMARK_AND = " AND " + WHERE_REMARK;
 
 	/**
-	 * 查询所有数据
+	 * 查询列表数据
 	 * 
 	 * @return 实体列表
 	 */
-	@Select("SELECT * FROM ${tableName}")
-	public List<T> findList();
-
-	@Select("SELECT * FROM ${tableName}")
+	@Select("SELECT * FROM ${tableName} WHERE " + WHERE_REMARK)
 	public List<T> findList(Function<String, String> sqlHandler);
 
 	@Select("SELECT entry.*, " + selectCover + " AS cover FROM ${tableName} entry")
 	public List<T> findList_Cover(Function<String, String> sqlHandler);
-
-	/**
-	 * 查询所有数据，只包含 id、name 两个字段
-	 * 
-	 * @return 实体列表
-	 */
-	@Select("SELECT id, name FROM ${tableName}")
-	public List<T> findSimpleList();
 
 	/**
 	 * 简单分页。注意不用在 SQL 后面加上 LIMIT，系统会自动加的
@@ -167,21 +150,8 @@ public interface IBaseDao<T> {
 	 * @param limit
 	 * @return 实体分页列表
 	 */
-	
-	@Select("SELECT * FROM ${tableName} ORDER BY id DESC")
-	public PageResult<T> findPagedList(int start, int limit);
-	
 	@Select("SELECT * FROM ${tableName} WHERE 1 = 1 ORDER BY id DESC")
 	public PageResult<T> findPagedList(int start, int limit, Function<String, String> sqlHandler);
-
-	/**
-	 * 取头 X 笔的记录
-	 * 
-	 * @param top
-	 * @return
-	 */
-	@Select("SELECT * FROM ${tableName} ORDER BY id DESC LIMIT ?")
-	public PageResult<T> findListTop(int top);
 
 	/**
 	 * 显示类别名称，可分页的
