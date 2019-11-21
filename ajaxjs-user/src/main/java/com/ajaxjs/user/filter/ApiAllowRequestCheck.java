@@ -12,7 +12,7 @@ import com.ajaxjs.util.cryptography.SymmetricCipher;
 public class ApiAllowRequestCheck implements FilterAction {
 
 	@Override
-	public boolean before(MvcRequest request, MvcOutput response, Method method) {
+	public boolean before(MvcRequest request, MvcOutput response, Method method, Object[] args) {
 		String token = request.getHeader("token");
 
 		String AES_Key = ConfigService.getValueAsString("Symmetric.AES_Key");

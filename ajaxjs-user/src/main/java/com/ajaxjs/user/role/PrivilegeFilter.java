@@ -16,7 +16,7 @@ public class PrivilegeFilter implements FilterAction {
 	}
 
 	@Override
-	public boolean before(MvcRequest request, MvcOutput response, Method method) {
+	public boolean before(MvcRequest request, MvcOutput response, Method method, Object[] args) {
 		HttpSession session = request.getSession();
 		Object privilegeTotal = session.getAttribute("privilegeTotal");
 

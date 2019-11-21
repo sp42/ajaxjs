@@ -1,5 +1,6 @@
 package com.ajaxjs.user.controller;
 
+import java.util.List;
 import java.util.function.Function;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +35,7 @@ public class LoginLogController extends BaseController<UserLoginLog> {
 		@Select("SELECT e.*, user.name AS userName FROM ${tableName} e LEFT JOIN user ON user.id = e.userId WHERE 1 = 1 ORDER BY e.id DESC")
 		@Override
 		public PageResult<UserLoginLog> findPagedList(int start, int limit, Function<String, String> sqlHandler);
-		
+
 		@Select("SELECT * FROM ${tableName} WHERE userId = ? ORDER BY createDate LIMIT 1")
 		public UserLoginLog getLastUserLoginedInfo(long userId);
 	}
@@ -47,15 +48,23 @@ public class LoginLogController extends BaseController<UserLoginLog> {
 			setShortName("userLoginLog");
 			setDao(dao);
 		}
+
+		public PageResult<UserLoginLog> findAll(int start, @QueryParam(limit) int limit) {
+			return findPagedList(start, limit, betweenCreateDate.andThen(BaseService::findByAny));
+		}
+
+		public List<UserLoginLog> findListByUserId(long userId) {
+			return findList(findByAny("userId", userId).andThen(BaseService::orderById_DESC).andThen(top(10)));
+		}
 	}
 
-	public static UserLoginLogService service = new UserLoginLogService();
+	public final static UserLoginLogService service = new UserLoginLogService();
 
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
 		mv.put("LoginType", UserDict.LOGIN_TYPE);
-		page(mv, service.findPagedList(start, limit, sql -> BaseService.betweenCreateDate(sql, "e.createDate")), CommonConstant.UI_ADMIN);
+		page(mv, service.findAll(start, limit), CommonConstant.UI_ADMIN);
 
 		return jsp("user/login-log-list");
 	}

@@ -16,7 +16,7 @@ import com.ajaxjs.user.controller.BaseUserController;
 public class LoginCheck implements FilterAction {
 
 	@Override
-	public boolean before(MvcRequest request, MvcOutput response, Method method) {
+	public boolean before(MvcRequest request, MvcOutput response, Method method, Object[] args) {
 		if (BaseUserController.isLogined(request)) {
 			return true;
 		} else {

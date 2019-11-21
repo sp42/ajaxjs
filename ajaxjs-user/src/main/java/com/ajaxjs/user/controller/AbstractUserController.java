@@ -119,19 +119,22 @@ public abstract class AbstractUserController extends BaseUserController {
 
 		if (ConfigService.getValueAsString("user.customRegister") != null) {
 			String[] arr = ConfigService.getValueAsString("user.customRegister").split("#");
-			Method method = ReflectUtil.getMethod(ReflectUtil.getClassByName(arr[0]), arr[1], Map.class);
+			Method method = ReflectUtil.getMethod(ReflectUtil.getClassByName(arr[0]), arr[1], Map.class, AbstractUserController.class);
 
 			try {
-				return (String) method.invoke(null, map);
+				return (String) method.invoke(null, map, this);
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				e.printStackTrace();
+				Throwable _e = ReflectUtil.getUnderLayerErr(e);
+				_e.printStackTrace();
+				throw new ServiceException(_e.getMessage());
 			}
 
+		} else {
+			getService().register(user, password);
+			return jsonOk("恭喜你，注册成功");
 		}
 
-		getService().register(user, password);
 
-		return jsonOk("恭喜你，注册成功");
 	}
 
 	// @POST

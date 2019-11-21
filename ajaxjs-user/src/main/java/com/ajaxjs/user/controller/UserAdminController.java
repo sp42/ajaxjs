@@ -41,9 +41,9 @@ public class UserAdminController extends BaseController<User> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
 		mv.put("SexGender", UserDict.SEX_GENDER);
-		mv.put("UserGroups", CatalogServiceImpl.list2map_id_as_key(roleService.getDao().findList()));
+		mv.put("UserGroups", CatalogServiceImpl.list2map_id_as_key(roleService.getDao().findList(null)));
 
-		page(mv, service.getDao().findPagedList_Cover(start, limit), CommonConstant.UI_ADMIN);
+		page(mv, service.getDao().findPagedList(start, limit, null), CommonConstant.UI_ADMIN);
 
 		return jsp("user/user-admin-list");
 	}
@@ -56,7 +56,7 @@ public class UserAdminController extends BaseController<User> {
 		mv.put("SexGender", UserDict.SEX_GENDER);
 		super.editUI(id, mv);
 
-		return editUI();
+		return jsp("user/user-edit");
 	}
 
 	@GET

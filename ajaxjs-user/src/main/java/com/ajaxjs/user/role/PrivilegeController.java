@@ -29,7 +29,7 @@ public class PrivilegeController extends BaseController<Privilege> {
 	@Path(list)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
-		return toJson(service.getDao().findList());
+		return toJson(service.findList());
 	}
 
 	@Override

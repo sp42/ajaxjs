@@ -132,8 +132,8 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 	@Path("account/log-history")
 	public String logHistory(ModelAndView mv) {
 		LOGGER.info("用户会员中心-登录历史");
-		long userId = getUserId();
-		mv.put("list", userLoginLogService.findList(sql -> sql + " WHERE userId = " + userId + " ORDER BY id DESC LIMIT 0, 10"));
+		
+		mv.put("list", userLoginLogService.findListByUserId(getUserId()));
 
 		return jsp("user/user-center/log-history");
 	}

@@ -35,7 +35,7 @@ import com.ajaxjs.user.service.UserCommonAuthService;
 public class UserPasswordFilter implements FilterAction {
 
 	@Override
-	public boolean before(MvcRequest request, MvcOutput response, Method method) {
+	public boolean before(MvcRequest request, MvcOutput response, Method method, Object[] args) {
 		String password = request.getParameter("password");
 		UserCommonAuth auth = UserCommonAuthService.dao.findByUserId(BaseUserController.getUserId());
 		request.setAttribute("UserCommonAuthId", auth);
