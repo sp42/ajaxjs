@@ -61,7 +61,7 @@ public class TestDomain {
 		Map<String, Object> info = dao.findById(1L);
 		System.out.println(info.get("id"));
 
-		List<Map<String, Object>> list = dao.findList();
+		List<Map<String, Object>> list = dao.findList(null);
 		assertNotNull(list);
 
 		info = new HashMap<String, Object>();

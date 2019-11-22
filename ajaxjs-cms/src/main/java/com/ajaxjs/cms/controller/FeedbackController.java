@@ -3,7 +3,6 @@ package com.ajaxjs.cms.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -18,7 +17,6 @@ import com.ajaxjs.cms.FeedbackService;
 import com.ajaxjs.cms.app.CommonConstant;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
-import com.ajaxjs.framework.QueryParams;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
@@ -37,18 +35,44 @@ public class FeedbackController extends BaseController<Map<String, Object>> {
 	@GET
 	@Path(list)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv, HttpServletRequest r) {
+	public String adminList(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
 		LOGGER.info("留言反馈列表");
-		return page(mv, service.findPagedList(start, limit, QueryParams.initSqlHandler(r)), true);
+		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE));
+	}
+	
+	@GET
+	@MvcFilter(filters = DataBaseFilter.class)
+	@Path(idInfo)
+	@Override
+	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
+		return super.editUI(id, mv);
 	}
 
+	@PUT
+	@MvcFilter(filters = DataBaseFilter.class)
+	@Path(idInfo)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Override
+	public String update(@PathParam(id) Long id, Map<String, Object> entity) {
+		return super.update(id, entity);
+	}
+
+	@DELETE
+	@Path(idInfo)
+	@MvcFilter(filters = DataBaseFilter.class)
+	@Produces(MediaType.APPLICATION_JSON)
+	public String delete(@PathParam(id) Long id) {
+		return delete(id, new HashMap<String, Object>());
+	}
+	
+	//////////////////// 前台  ///////////////////
+	
 	@GET
 	@Path("/feedback")
 	public String jsp(ModelAndView model) {
-		System.out.println("feedback");
 		return show405;
 	}
-
+	
 	@POST
 	@Path("/feedback")
 	@MvcFilter(filters = DataBaseFilter.class)
@@ -57,48 +81,6 @@ public class FeedbackController extends BaseController<Map<String, Object>> {
 	public String create(Map<String, Object> entity) {
 		// 外界用户提交反馈，可能是游客
 		return super.create(entity);
-	}
-	
-	//////////////////// 后台 ///////////////////
-
-	@GET
-	@Path("/admin/feedback/list")
-	@MvcFilter(filters = DataBaseFilter.class)
-	public String adminList(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
-		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE), true);
-	}
-
-	@GET
-	@Path("/admin/feedback")
-	@MvcFilter(filters = DataBaseFilter.class)
-	@Override
-	public String createUI(ModelAndView mv) {
-		return super.createUI(mv);
-	}
-
-	@GET
-	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("/admin/feedback/{id}")
-	@Override
-	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
-		return super.editUI(id, mv);
-	}
-
-	@PUT
-	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("/admin/feedback/{id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Override
-	public String update(@PathParam(id) Long id, Map<String, Object> entity) {
-		return super.update(id, entity);
-	}
-
-	@DELETE
-	@Path("/admin/feedback/{id}")
-	@MvcFilter(filters = DataBaseFilter.class)
-	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam(id) Long id) {
-		return delete(id, new HashMap<String, Object>());
 	}
 
 	@Override

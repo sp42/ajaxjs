@@ -10,7 +10,6 @@ import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
-import com.ajaxjs.framework.QueryParams;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
@@ -36,7 +35,7 @@ public class CartAdminController extends BaseController<Cart> {
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
-		page(start, limit, mv,  service.findCartList(s, l, QueryParams.init()));
+		page(mv, service.findCartList(start, limit, null));
 		return jsp("shop/cart-admin-list");
 	}
 

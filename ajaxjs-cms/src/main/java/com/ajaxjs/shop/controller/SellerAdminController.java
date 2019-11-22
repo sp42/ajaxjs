@@ -10,7 +10,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.app.CommonConstant;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
@@ -31,7 +30,7 @@ public class SellerAdminController extends BaseController<Seller> {
 	@Path(list)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
-		page(mv, service.findPagedList(start, limit, null), CommonConstant.UI_ADMIN);
+		page(mv, service.findPagedList(start, limit, null));
 		return jsp("shop/seller-admin-list");
 	}
 

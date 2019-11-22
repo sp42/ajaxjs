@@ -46,13 +46,12 @@ public class OrderItemAdminController extends BaseController<OrderItem> {
 		long p = (long) session.getAttribute("privilegeTotal");
 		long sellerId = session.getAttribute("sellerId") == null ? 0 : (long) session.getAttribute("sellerId");
 		
-		if (r.getParameter("downloadXSL") != null) {
-			listPaged(0, 999999, mv, (s, l) -> service.findOrderItemDetailList(start, limit, p, sellerId, r.getParameterMap()));
+		page(mv, service.findOrderItemDetailList(start, limit, p, sellerId, r.getParameterMap()));
 
+		if (r.getParameter("downloadXSL") != null) {
 			return adminList_Excel(response, service.getUiName());
 		} else {
-			listPaged(start, limit, mv, (s, l) -> service.findOrderItemDetailList(start, limit, p, sellerId, r.getParameterMap()));
-			return adminList();
+			return jsp("shop/order-item-admin-list");
 		}
 	}
 
