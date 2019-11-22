@@ -38,6 +38,9 @@ public interface IBaseDao<T> {
 
 	public static final String WHERE_REMARK_AND = " AND " + WHERE_REMARK;
 	
+	/**
+	 * 按照 id 字段进行降序
+	 */
 	public final static String DESCENDING_ID = " ORDER BY id DESC";
 
 	/**
@@ -89,24 +92,6 @@ public interface IBaseDao<T> {
 	public T findById(Long id);
 
 	/**
-	 * 查询单个记录，带有类别的。如果找不到则返回 null
-	 * 
-	 * @param id 记录 id
-	 * @return Bean
-	 */
-	@Select("SELECT entry.*, gc.name AS catelogName FROM ${tableName} entry " + catelog_simple_join + " WHERE entry.id = ?")
-	public T findById_catelog(Long id);
-
-	/**
-	 * 查询单个记录，带有封面的。如果找不到则返回 null
-	 * 
-	 * @param id 记录 id
-	 * @return Bean
-	 */
-	@Select(value = "SELECT entry.*, " + selectCover + " AS cover FROM ${tableName} entry WHERE entry.id = ?")
-	public T findById_cover(Long id);
-
-	/**
 	 * 查询单个记录，带有类别的、封面的。如果找不到则返回 null
 	 * 
 	 * @param id 记录 id
@@ -130,8 +115,6 @@ public interface IBaseDao<T> {
 	public T findById_Attachment(Long id);
 
 	// ---------------- find list-------------------
-
-
 	/**
 	 * 查询列表数据
 	 * 
@@ -139,10 +122,7 @@ public interface IBaseDao<T> {
 	 */
 	@Select("SELECT * FROM ${tableName} WHERE " + WHERE_REMARK)
 	public List<T> findList(Function<String, String> sqlHandler);
-
-	@Select("SELECT entry.*, " + selectCover + " AS cover FROM ${tableName} entry")
-	public List<T> findList_Cover(Function<String, String> sqlHandler);
-
+	
 	/**
 	 * 简单分页。注意不用在 SQL 后面加上 LIMIT，系统会自动加的
 	 * 
@@ -152,36 +132,6 @@ public interface IBaseDao<T> {
 	 */
 	@Select("SELECT * FROM ${tableName} WHERE 1 = 1 ORDER BY id DESC")
 	public PageResult<T> findPagedList(int start, int limit, Function<String, String> sqlHandler);
-
-	/**
-	 * 显示类别名称，可分页的
-	 * 
-	 * @param start
-	 * @param limit
-	 * @return 实体分页列表
-	 */
-	@Select("SELECT entry.*, gc.name AS catelogName FROM ${tableName} entry" + catelog_simple_join)
-	public PageResult<T> findPagedList_Catelog(int start, int limit);
-
-	/**
-	 * 带封面图，可分页的
-	 * 
-	 * @param start
-	 * @param limit
-	 * @return 实体分页列表
-	 */
-	@Select("SELECT entry.*, " + selectCover + " AS cover FROM ${tableName} entry ORDER BY id DESC")
-	public PageResult<T> findPagedList_Cover(int start, int limit);
-
-	/**
-	 * 显示类别名称， 带封面图，可分页的
-	 * 
-	 * @param start
-	 * @param limit
-	 * @return 实体分页列表
-	 */
-	@Select("SELECT entry.*, gc.name AS catelogName, " + selectCover + " AS cover FFROM ${tableName} entry" + catelog_simple_join)
-	public PageResult<T> findPagedListCatelog_Cover(int start, int limit);
 
 	/**
 	 * 可分类的，可分页的列表

@@ -401,7 +401,7 @@ ajaxjs.xhr.defaultCallBack_cb = function(json, xhr, onOK, onFail) {
 			ajaxjs.alert.show(json.msg || '执行失败！原因未知！');
 		}
 	} else {
-		cb && cb.onFail && cb.onFail(json);
+		onFail && onFail(json);
 		ajaxjs.alert.show('ServerSide Error!');
 	}
 }

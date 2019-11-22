@@ -60,6 +60,39 @@ body.admin-shell {
 	}
 }
 
+.aj-accordion-menu {
+	i{
+		weight:16px;
+		height:16px;
+		display:inline-block;
+		font: normal normal normal 14px/1 FontAwesome;
+	}
+	
+	
+	
+	.content i::before {
+		content: "\f0f6";
+	}
+	.shop i::before {
+		content: "\f07a";
+	}
+	.user i::before {
+		content: "\f2c0";
+	}
+	.site i::before {
+		content: "\f26b";
+	}
+	.config i::before {
+		content: "\f013";
+	}
+	.tools i::before {
+		content: "\f233";
+	}
+	.accountCenter i::before {
+		content: "\f2bd";
+	}
+}
+
 @sidebarWidth: 15%;
 .side {
 	.widthFx;
@@ -180,7 +213,7 @@ header.ajaxjs-admin-header {
 			text-align: center;
 		}
 
-		input[type=text] {
+		input[type=text], input[type=email] {
 			.ajaxjs-inputField;
 		}
 
@@ -201,7 +234,6 @@ header.ajaxjs-admin-header {
 }
 
 .configForm {
-	.ajaxjs-form;
 	dl dt {
 		width: 10%;
 	}

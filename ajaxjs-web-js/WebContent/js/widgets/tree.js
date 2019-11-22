@@ -216,32 +216,32 @@ Vue.component('aj-select-arr', {
 // 下拉分类选择器，异步请求远端获取分类数据
 Vue.component('aj-tree-catelog-select', {
 	props : {
-		catelogId : { 			// 请求远端的分类 id，必填
+		catalogId : { 			// 请求远端的分类 id，必填
 			type: Number,
 			required: true
 		},
-		selectedCatelogId : {	// 已选中的分类 id
+		selectedCatalogId : {	// 已选中的分类 id
 			type: Number,
 			required: false
 		},
 		fieldName : { // 表单 name，字段名
 			type: String,
 			required: false,
-			default:'catelogId'
+			default:'catalogId'
 		},
 		isAutoJump : Boolean // 是否自动跳转 catalogId
 	},
 	template : '<select :name="fieldName" @change="onSelected($event);" class="aj-tree-catelog-select ajaxjs-select" style="width: 200px;"></select>',
 		
 	mounted : function() {
-		aj.xhr.get(this.ajResources.ctx + "/admin/catelog/getListAndSubByParentId", this.load.bind(this), {parentId : this.catelogId});
+		aj.xhr.get(this.ajResources.ctx + "/admin/catelog/getListAndSubByParentId", this.load.bind(this), {parentId : this.catalogId});
 	},
 	
 	methods : {
 		load : function(json) {
 			var catalogArr = json.result;
 			var selectUI = new ajaxjs.tree.selectUI();
-			selectUI.renderer(catalogArr, this.$el, this.selectedCatelogId, {makeAllOption : false});
+			selectUI.renderer(catalogArr, this.$el, this.selectedCatalogId, {makeAllOption : false});
 		},
 		
 		onSelected : function(e) {
@@ -257,15 +257,15 @@ Vue.component('aj-tree-catelog-select', {
 
 //全国省市区 写死属性
 Vue.component('aj-china-area', {
-	template : '<div class="aj-china-area">省/自治区 <select v-model="province" class="ajaxjs-select" name="locationProvince">\
+	template : '<div class="aj-china-area"><span>省份</span> <select v-model="province" class="ajaxjs-select" name="locationProvince">\
 		            <option value="">请选择</option>\
 		            <option v-for="(v, k) in addressData[86]" :value="k">{{v}}</option>\
 		        </select>\
-		        市 <select v-model="city" class="ajaxjs-select" name="locationCity">\
+		<span>市 </span><select v-model="city" class="ajaxjs-select" name="locationCity">\
 		            <option value="">请选择</option>\
 		            <option v-for="(v, k) in citys" :value="k">{{v}}</option>\
 		        </select>\
-		       区/县  <select v-model="district" class="ajaxjs-select" name="locationDistrict">\
+		<span>区/县</span>  <select v-model="district" class="ajaxjs-select" name="locationDistrict">\
 		            <option value="">请选择</option>\
 		            <option v-for="(v, k) in districts" :value="k">{{v}}</option>\
 		        </select>\

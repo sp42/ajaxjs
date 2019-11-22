@@ -207,7 +207,13 @@ Vue.component('aj-form-calendar-input', {
 		},
 		fieldValue : {
 			type: String,// 表单值，可选的
-			required: false
+			required: false,
+			default : ''
+		},
+		dateOnly : { // 是否只处理日期，不考虑时间
+			type: Boolean,// 表单值，可选的
+			required: false,
+			default : true
 		},
 		showTime: false,
 		positionFixed : Boolean // 是否采用固定定位
@@ -216,7 +222,7 @@ Vue.component('aj-form-calendar-input', {
 	template : 
 		'<div class="aj-form-calendar-input" @mouseover="onMouseOver($event)">\
 			<div class="icon fa fa-calendar"></div>\
-			<input placeholder="请输入日期" :name="fieldName" :value="date +\' \' + time" type="text" autocomplete="off" />\
+			<input placeholder="请输入日期" :name="fieldName" :value="date + (dateOnly ? \'\' : \' \' + time)" type="text" autocomplete="off" class="aj-input" />\
 			<aj-form-calendar ref="calendar" :show-time="showTime" @pick-date="recEvent" @pick-time="recTimeEvent"></aj-form-calendar>\
 		</div>',
 	mounted : function() {
@@ -240,7 +246,8 @@ Vue.component('aj-form-calendar-input', {
 			this.time = time;
 		},
 		recEvent: function(date) {
-			this.date = date;
+		
+			this.date = date.trim();
 		},
 		onMouseOver : function(e) {
 			if(this.positionFixed) {
@@ -629,7 +636,7 @@ Vue.component('aj-form-html-editor', {
 		// 获取 validity
 		var validity = field.validity;
 		
-		// 如果通过验证,就返回 null
+		// 如果通过验证,就返回 undefined
 		if (validity.valid) return;
 		
 		// 如果是必填字段但是字段为空时
@@ -670,7 +677,7 @@ Vue.component('aj-form-html-editor', {
 			if (field.hasAttribute('title')) return field.getAttribute('title');
 			
 			// 否则, 返回一般错误
-			return 'Please match the requested format.';
+			return '格式要求不正确';
 		}
 		
 		// 如果是其他的错误, 返回一个通用的 catchall 错误
@@ -747,6 +754,8 @@ Vue.component('aj-form-html-editor', {
 		}, true);
 	}
 	
+	aj.formValidator.hasError = hasError;
+	
 	aj.formValidator.onSubmit = function(form) {
 		// 获取所有的表单元素
 	    var fields = form.elements;
@@ -774,3 +783,26 @@ Vue.component('aj-form-html-editor', {
 	}
 })();
 
+if(!aj.form)
+	aj.form = {};
+
+aj.form.betweenDate = function(el){	
+	new Vue({
+		el : el,
+		methods:{
+			valid(e){
+				var start = this.$el.$('input[name=startDate]').value, end = this.$el.$('input[name=endDate]').value;
+				
+				if(!start||!end){
+					aj.showOk("输入数据不能为空");					
+					e.preventDefault();
+				}
+				
+				if(new Date(start) > new Date(end)) {
+					aj.showOk("起始日期不能晚于结束日期");					
+					e.preventDefault();
+				}
+			}
+		}
+	});
+}
