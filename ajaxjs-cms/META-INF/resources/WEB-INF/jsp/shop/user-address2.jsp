@@ -6,7 +6,7 @@
 	DataBaseFilter.initDb();
 	boolean byUser = request.getAttribute("userId") != null;
 	UserAddressDao dao = new Repository().bind(UserAddressDao.class);
-	request.setAttribute("PageResult", byUser ? dao.findListByUserId((long) request.getAttribute("userId")) : dao.findList());
+	request.setAttribute("PageResult", byUser ? dao.findListByUserId((long) request.getAttribute("userId")) : dao.findList(null));
 	
 	JdbcConnection.closeDb();
 %>
