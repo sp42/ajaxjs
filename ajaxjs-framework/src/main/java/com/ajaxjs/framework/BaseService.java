@@ -42,6 +42,10 @@ public abstract class BaseService<T> implements IBaseService<T> {
 		return dao.findById(id);
 	}
 
+	public T findByUid(long uid) {
+		return dao.find(byUid(uid));
+	}
+
 	@Override
 	public Long create(T bean) {
 		Objects.requireNonNull(bean, "Bean 实体不能为空");
@@ -118,21 +122,12 @@ public abstract class BaseService<T> implements IBaseService<T> {
 
 	@Override
 	public List<T> findList() {
-		return dao.findList();
+		return dao.findList(null);
 	}
 
 	@Override
 	public List<T> findList(Function<String, String> sqlHandler) {
 		return dao.findList(sqlHandler);
-	}
-
-	/**
-	 * 简易的列表
-	 * 
-	 * @return
-	 */
-	public List<T> findSimpleList() {
-		return dao.findSimpleList();
 	}
 
 	@Override
@@ -158,7 +153,7 @@ public abstract class BaseService<T> implements IBaseService<T> {
 		Function<String, String> fn = setStatus(status).andThen(BaseService::searchQuery);
 
 		if (catalogId != 0)
-			fn = fn.andThen(setSqlHandler("catelogId = " + catalogId));
+			fn = fn.andThen(setWhere("catelogId = " + catalogId));
 
 		return dao.findPagedList(start, limit, fn);
 	}
@@ -219,28 +214,48 @@ public abstract class BaseService<T> implements IBaseService<T> {
 	public static Function<String, String> addWhere(String eq) {
 		return sql -> sql + " WHERE " + eq;
 	}
-
-	public static Function<String, String> setSqlHandler(String where) {
-		return where == null ? sql -> sql : sql -> sql.replace(IBaseDao.WHERE_REMARK, "(" + where + ")" + IBaseDao.WHERE_REMARK_AND);
+	
+	/**
+	 */
+	public static Function<String, String> setWhere(String where) {
+		return where == null ? sql -> sql : sql -> {
+			return sql.replace(IBaseDao.WHERE_REMARK, "(" + where + ")" + IBaseDao.WHERE_REMARK_AND);
+		};
 	}
 
+	public static final Function<String, String> byUid(long uid) {
+		return setWhere("uid = " + uid);
+	}
+	
+	/**
+	 * 
+	 * @param sql 输入的SQL
+	 * @return 修改后的 SQL
+	 */
 	public static String searchQuery(String sql) {
 		return searchQuery(sql, new String[] { "name", "content" });
 	}
 
+	/**
+	 * 
+	 * @param sql
+	 * @param fields
+	 * @return
+	 */
 	public static String searchQuery(String sql, String[] fields) {
 		HttpServletRequest r = MvcRequest.getHttpServletRequest();
+		
 		if (r == null || CommonUtil.isEmptyString(r.getParameter("keyword")))
 			return sql;
 
 		String keyword = r.getParameter("keyword"), isExact = r.getParameter("isExact");
 
 		keyword = keyword.trim();
-		
-		if(!ServletHelper.preventSQLInject(keyword)) { // 防止 SQL 注入
+
+		if (!ServletHelper.preventSQLInject(keyword)) { // 防止 SQL 注入
 			return null;
 		}
-		
+
 		keyword = ServletHelper.MysqlRealScapeString(keyword);
 
 		String like = MappingValue.toBoolean(isExact) ? keyword : ("'%" + keyword + "%'");
@@ -249,9 +264,14 @@ public abstract class BaseService<T> implements IBaseService<T> {
 			fields[i] = fields[i] + " LIKE " + like;
 		}
 
-		return setSqlHandler(String.join(" OR ", fields)).apply(sql);
+		return setWhere(String.join(" OR ", fields)).apply(sql);
 	}
 
+	/**
+	 * 
+	 * @param status
+	 * @return
+	 */
 	public static Function<String, String> setStatus(int status) {
 		String setStatus;
 
@@ -268,29 +288,90 @@ public abstract class BaseService<T> implements IBaseService<T> {
 
 		}
 
-		return setSqlHandler(setStatus);
+		return setWhere(setStatus);
 	}
 
 	/**
 	 * 时间范围的查询
 	 * 
-	 * @param sql
-	 * @return
+	 * @param sql 输入的SQL
+	 * @return 修改后的 SQL
 	 */
-	
 	public static String betweenCreateDate(String sql) {
 		return betweenCreateDate(sql, "createDate");
 	}
-	
+
+	/**
+	 * 
+	 * @param sql
+	 * @param fieldName
+	 * @return
+	 */
 	public static String betweenCreateDate(String sql, String fieldName) {
 		HttpServletRequest r = MvcRequest.getHttpServletRequest();
 		String startDate = r.getParameter("startDate"), endDate = r.getParameter("endDate");
+		
 		if (r == null || CommonUtil.isEmptyString(startDate) || CommonUtil.isEmptyString(endDate))
 			return sql;
 
-		return setSqlHandler(fieldName + " BETWEEN '" + startDate + "' AND DATE_ADD('" + endDate + "', INTERVAL 1 DAY)").apply(sql);
+		return setWhere(fieldName + " BETWEEN '" + startDate + "' AND DATE_ADD('" + endDate + "', INTERVAL 1 DAY)").apply(sql);
+	}
+
+	/**
+	 * 
+	 */
+	public static final Function<String, String> betweenCreateDate = sql -> BaseService.betweenCreateDate(sql, "e.createDate");
+
+	/**
+	 * 按照 id 字段进行降序
+	 * 
+	 * @param sql 输入的SQL
+	 * @return 修改后的 SQL
+	 */
+	public static String orderById_DESC(String sql) {
+		return sql + IBaseDao.DESCENDING_ID;
 	}
 	
-	
+	/**
+	 * 
+	 * @param sql 输入的SQL
+	 * @return 修改后的 SQL
+	 */
+	public static String findByAny(String sql) {
+		HttpServletRequest r = MvcRequest.getHttpServletRequest();
+		String value = r.getParameter("filterValue");
 
+		if (value == null) {
+			return sql;
+		}
+		if (CommonUtil.regTest("\\d+", value)) {
+
+		} else if (CommonUtil.regTest("[A-Za-z]", value)) {
+			value = "'" + value + "'";
+		}
+
+		return setWhere(r.getParameter("filterField") + " = " + value).apply(sql);
+	}
+
+	/**
+	 * 
+	 * @param field
+	 * @param value
+	 * @return
+	 */
+	public static Function<String, String> findByAny(String field, Object value) {
+		if (value instanceof String)
+			value = "'" + value + "'";
+
+		return setWhere(field + " = " + value);
+	}
+
+	/**
+	 * 
+	 * @param top
+	 * @return
+	 */
+	public static Function<String, String> top(int top) {
+		return sql -> sql + " LIMIT 0, " + top;
+	}
 }

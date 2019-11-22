@@ -47,4 +47,5 @@ public interface CatalogService extends IBaseService<Catalog> {
 	 * @return
 	 */
 	public List<Map<String, Object>> findListAndSubByParentId(int parentId);
+
 }

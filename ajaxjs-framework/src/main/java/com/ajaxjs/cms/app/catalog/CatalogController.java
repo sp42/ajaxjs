@@ -29,7 +29,7 @@ public class CatalogController extends BaseController<Catalog> {
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list() {
-		return toJson(service.getDao().findList());
+		return toJson(service.getDao().findList(null));
 	}
 
 	@GET

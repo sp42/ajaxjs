@@ -242,7 +242,7 @@ public abstract class BaseController<T> implements IController, Constant {
 	 * @return
 	 */
 	public String page(ModelAndView mv, PageResult<T> pageResult, boolean isAdmin) {
-		LOGGER.info("获取分页列表 GET list");
+		LOGGER.info("获取" + getService().getUiName() + "分页列表 GET list");
 
 		prepareData(mv);
 		mv.put(PageResult, pageResult);

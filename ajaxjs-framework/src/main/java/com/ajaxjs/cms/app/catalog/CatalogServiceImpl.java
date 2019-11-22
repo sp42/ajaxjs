@@ -126,18 +126,21 @@ public class CatalogServiceImpl extends BaseService<Catalog> implements CatalogS
 		return dao.getListAndSubByParentId(parentId);
 	}
 	
+	public static Function<String, String> whereByCatalogId (int catalogId){
+		return addWhere("catalogId = " + catalogId);
+	}
 
 	/**
 	 * 
-	 * @param catelogId
+	 * @param catalogId
 	 * @param service
 	 * @return
 	 */
-	public static Function<String, String> setCatalog(int catelogId, int domainCatalogId) {
-		if (catelogId == 0)
-			catelogId = domainCatalogId;
+	public static Function<String, String> setCatalog(int catalogId, int domainCatalogId) {
+		if (catalogId == 0)
+			catalogId = domainCatalogId;
 		
-		return BaseService.setSqlHandler(String.format(CATALOG_FIND, catelogId));
+		return setWhere(String.format(CATALOG_FIND, catalogId));
 	}
 
 	/**
