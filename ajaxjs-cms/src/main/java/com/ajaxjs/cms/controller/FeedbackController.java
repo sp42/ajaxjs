@@ -38,6 +38,7 @@ public class FeedbackController extends BaseController<Map<String, Object>> {
 	@Path(list)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv, HttpServletRequest r) {
+		LOGGER.info("留言反馈列表");
 		return page(mv, service.findPagedList(start, limit, QueryParams.initSqlHandler(r)), true);
 	}
 

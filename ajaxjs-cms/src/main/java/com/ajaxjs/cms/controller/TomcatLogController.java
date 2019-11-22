@@ -10,19 +10,35 @@ import javax.websocket.OnError;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 
 import com.ajaxjs.Version;
 import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.framework.BaseController;
+import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
- * 參考自 https://blog.csdn.net/xiao__gui/article/details/50041673
+ * 实时浏览 Tomcat 日志
+ * 
+ * 參考自 https://blog.csdn.net/xiao__gui/article/details/50041673 混合了 WebSocket
  * 
  * @author Frank Cheung
  *
  */
 @ServerEndpoint("/tomcat_log")
-public class TomcatLogWebSocketHandle {
+@Path("/admin/tomcat-log")
+public class TomcatLogController implements IController {
+	private static final LogHelper LOGGER = LogHelper.getLog(TomcatLogController.class);
+
+	@GET
+	public String UI() {
+		LOGGER.info("实时浏览 Tomcat 日志");
+
+		return BaseController.jsp("admin/tomcat-log");
+	}
 
 	/**
 	 * 
@@ -40,18 +56,18 @@ public class TomcatLogWebSocketHandle {
 
 		@Override
 		public void run() {
-			
+
 			String line;
 			try {
-				if(Version.isLinux) {
+				if (Version.isLinux) {
 					while ((line = reader.readLine()) != null) {
 						// 将实时日志通过WebSocket发送给客户端，给每一行添加一个HTML换行
 						session.getBasicRemote().sendText(line + "<br>");
 					}
-				} else {					
+				} else {
 					session.getBasicRemote().sendText("該功能只支持 Linux 操作系統。");
 				}
-				
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -74,7 +90,7 @@ public class TomcatLogWebSocketHandle {
 			// 执行tail -f命令
 			process = Runtime.getRuntime().exec("tail -f " + path);
 			inputStream = process.getInputStream();
-			
+
 //			String logFile = "C:\\sp42\\dev\\eclipse-workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp1\\logs\\localhost_access_log.2019-01-31.txt";
 //			inputStream = new FileInputStream(new File(logFile));
 
@@ -105,4 +121,5 @@ public class TomcatLogWebSocketHandle {
 	public void onError(Throwable thr) {
 		thr.printStackTrace();
 	}
+
 }

@@ -160,69 +160,6 @@ public class OrderItem extends BaseModel {
 		return goodsAmount;
 	}
 	
-	/**
-	 * 卖家备货状态：0=备货中
-	 */
-	private Integer status;
-	
-	/**
-	 * 设置卖家备货状态：0=备货中
-	 * @param status  
-	 */
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
-	
-	/**
-	 * 获取卖家备货状态：0=备货中
-	 * @return 卖家备货状态：0=备货中
-	 */	
-	public Integer getStatus() {
-		return status;
-	}
-	
-	/**
-	 * 创建者 id
-	 */
-	private Integer createByUser;
-	
-	/**
-	 * 设置创建者 id
-	 * @param createByUser  
-	 */
-	public void setCreateByUser(Integer createByUser) {
-		this.createByUser = createByUser;
-	}
-	
-	/**
-	 * 获取创建者 id
-	 * @return 创建者 id
-	 */	
-	public Integer getCreateByUser() {
-		return createByUser;
-	}
-	
-	/**
-	 * 是否已删除 1=已删除；0/null；未删除
-	 */
-	private Integer deleted;
-	
-	/**
-	 * 设置是否已删除 1=已删除；0/null；未删除
-	 * @param deleted  
-	 */
-	public void setDeleted(Integer deleted) {
-		this.deleted = deleted;
-	}
-	
-	/**
-	 * 获取是否已删除 1=已删除；0/null；未删除
-	 * @return 是否已删除 1=已删除；0/null；未删除
-	 */	
-	public Integer getDeleted() {
-		return deleted;
-	}
-
 	public String getFormatName() {
 		return formatName;
 	}

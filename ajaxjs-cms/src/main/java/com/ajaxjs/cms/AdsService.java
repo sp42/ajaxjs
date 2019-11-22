@@ -2,6 +2,7 @@ package com.ajaxjs.cms;
 
 import java.util.List;
 
+import com.ajaxjs.cms.app.catalog.CatalogServiceImpl;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
@@ -24,16 +25,13 @@ public class AdsService extends BaseService<Ads> {
 		setDao(dao);
 	}
 
-	@Override
-	public Ads findById(Long id) {
-		return dao.findById_cover(id);
-	}
+
 
 	public int getDomainCatalogId() {
 		return ConfigService.getValueAsInt("data.adsCatalog_Id");
 	}
 
-	public List<Ads> findListByCatelogId(int catelogId) {
-		return dao.findList_Cover(BaseService.addWhere("catelogId" + catelogId));
+	public List<Ads> findListByCatalogId(int catalogId) {
+		return dao.findList(CatalogServiceImpl.whereByCatalogId(catalogId));
 	}
 }

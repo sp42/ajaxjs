@@ -227,29 +227,6 @@ public class OrderInfo extends BaseModel {
 	}
 
 	/**
-	 * 数据字典：状态
-	 */
-	private Integer status;
-
-	/**
-	 * 设置数据字典：状态
-	 * 
-	 * @param status
-	 */
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
-
-	/**
-	 * 获取数据字典：状态
-	 * 
-	 * @return 数据字典：状态
-	 */
-	public Integer getStatus() {
-		return status;
-	}
-
-	/**
 	 * 创建者 id
 	 */
 	private Integer createByUser;
