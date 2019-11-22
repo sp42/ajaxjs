@@ -3,7 +3,6 @@ package com.ajaxjs.orm;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.Arrays;
 
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.Update;
@@ -38,6 +37,7 @@ public class TestDynamicProxy {
 	 * @param clz 这个参数必须是接口类型
 	 * @return 代理执行之后的结果
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T extends Foo> T getProxy(Class<T> clz) {
 		if (!clz.isInterface())
 			throw new IllegalArgumentException("这不是一个接口参数");
