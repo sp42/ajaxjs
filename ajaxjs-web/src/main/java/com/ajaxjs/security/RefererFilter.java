@@ -15,7 +15,7 @@ import com.ajaxjs.util.CommonUtil;
  */
 public class RefererFilter implements FilterAction {
 	@Override
-	public boolean before(MvcRequest request, MvcOutput response, Method method) {
+	public boolean before(MvcRequest request, MvcOutput response, Method method, Object[] args) {
 		String referer = request.getHeader("referer");
 
 		if (CommonUtil.isEmptyString(referer))

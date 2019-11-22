@@ -24,7 +24,7 @@ import com.ajaxjs.mvc.filter.SessionValueFilter;
  */
 public class CaptchaFilter extends SessionValueFilter {
 	@Override
-	public boolean before(MvcRequest request, MvcOutput response, Method method) {
+	public boolean before(MvcRequest request, MvcOutput response, Method method, Object[] args) {
 		String captchaCode = getClientSideArgs(request, CaptchaController.CAPTCHA_CODE),
 				sessionValue = getServerSideValue(request, CaptchaController.CAPTCHA_CODE);
 

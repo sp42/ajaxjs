@@ -12,8 +12,6 @@
  */
 package com.ajaxjs.mvc;
 
-import com.ajaxjs.util.map.JsonHelper;
-
 /**
  * 
  * @author Sp42 frank@ajaxjs.com
@@ -35,7 +33,12 @@ public interface Constant {
 
 	public static final String idInfo = "{id}";
 
-	public static final String catalogId = "catelogId";
+	public static final String catalogId = "catalogId";
+	
+	/**
+	 * 搜索关键字
+	 */
+	public static final String keyword = "keyword";
 
 	/**
 	 * 文档显示用
@@ -82,38 +85,4 @@ public interface Constant {
 	 * 操作成功，返回 msg 信息
 	 */
 	public static final String json_ok = "json::{\"isOk\": true, \"msg\" : \"%s\"}";
-
-	/**
-	 * 输出 JSON OK
-	 * 
-	 * @param msg 输出信息
-	 * @return JSON 字符串
-	 */
-	public static String jsonOk(String msg) {
-		return String.format(json_ok, JsonHelper.javaValue2jsonValue(msg));
-	}
-
-	public static String jsonOk_Extension(Object... msg) {
-		return String.format(json_ok_extension, msg);
-	}
-
-	/**
-	 * 输出 JSON No OK
-	 * 
-	 * @param msg 输出信息
-	 * @return JSON 字符串
-	 */
-	public static String jsonNoOk(String msg) {
-		return String.format(json_not_ok, JsonHelper.jsonString_covernt(msg));
-	}
-
-	/**
-	 * 显示 HTTP 405 禁止操作
-	 */
-	public static final String show405 = jsonNoOk("405， Request method not supported 禁止操作");
-
-	/**
-	 * 显示 HTTP 401 没有权限
-	 */
-	public static final String show401 = jsonNoOk("401， Request method not supported 没有权限");
 }

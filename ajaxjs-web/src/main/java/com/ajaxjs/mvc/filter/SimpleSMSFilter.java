@@ -30,7 +30,7 @@ public class SimpleSMSFilter extends SessionValueFilter {
 	public static final String SMS_KEY_NAME = "randomSmsCode";
 
 	@Override
-	public boolean before(MvcRequest request, MvcOutput response, Method method) {
+	public boolean before(MvcRequest request, MvcOutput response, Method method, Object[] args) {
 		String client = getClientSideArgs(request, SMS_KEY_NAME), server = getServerSideValue(request, SMS_KEY_NAME);
 
 		if (client.equals(server)) {

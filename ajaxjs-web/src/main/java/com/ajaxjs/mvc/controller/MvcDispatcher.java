@@ -40,6 +40,7 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.map.MapTool;
 import com.ajaxjs.web.ServletHelper;
 
@@ -142,28 +143,30 @@ public class MvcDispatcher implements Filter {
 
 		FilterAction[] filterActions = getFilterActions(method);
 		boolean isDoFilter = !CommonUtil.isNull(filterActions), isSkip = false; // 是否中止控制器方法调用，由拦截器决定
-
+		Object[] args = null;// 方法没有参数
+		boolean hasArgs = method.getParameterTypes().length > 0;
+		
 		try {
+			if (hasArgs) {
+				args = RequestParam.getArgs(request, response, method);
+				model = findModel(args);
+				// 通过反射执行控制器方法:调用反射的 Reflect.executeMethod 方法就可以执行目标方法，并返回一个结果。
+
+//				System.out.println(Arrays.toString(args));
+//				System.out.println(method);
+			}
+			
 			if (isDoFilter) {
 				for (FilterAction filterAction : filterActions) {
-					isSkip = !filterAction.before(request, response, method); // 相当于 AOP 前置
+					isSkip = !filterAction.before(request, response, method, args); // 相当于 AOP 前置
 					if (isSkip)
 						break;
 				}
 			}
 
 			if (!isSkip) {
-				if (method.getParameterTypes().length > 0) {
-					Object[] args = RequestParam.getArgs(request, response, method);
-					model = findModel(args);
-					// 通过反射执行控制器方法:调用反射的 Reflect.executeMethod 方法就可以执行目标方法，并返回一个结果。
-
-//					System.out.println(Arrays.toString(args));
-//					System.out.println(method);
-					result = ReflectUtil.executeMethod_Throwable(controller, method, args);
-				} else {
-					result = ReflectUtil.executeMethod_Throwable(controller, method);// 方法没有参数
-				}
+				result = hasArgs ? ReflectUtil.executeMethod_Throwable(controller, method, args) 
+								 : ReflectUtil.executeMethod_Throwable(controller, method);
 			}
 
 		} catch (Throwable e) {
@@ -204,7 +207,7 @@ public class MvcDispatcher implements Filter {
 		Produces a = method.getAnnotation(Produces.class);
 
 		if (a != null && MediaType.APPLICATION_JSON.equals(a.value()[0])) {// 返回 json
-			response.resultHandler(Constant.jsonNoOk(errMsg), request, model, method);
+			response.resultHandler(String.format(Constant.json_not_ok, JsonHelper.jsonString_covernt(errMsg)), request, model, method);
 		} else {
 			request.setAttribute("javax.servlet.error.status_code", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			request.setAttribute("javax.servlet.error.exception_type", err.getClass());

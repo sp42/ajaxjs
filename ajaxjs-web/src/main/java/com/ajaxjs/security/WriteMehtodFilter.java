@@ -16,7 +16,7 @@ public class WriteMehtodFilter implements FilterAction {
 	public static ListControl accessList = new ListControl();
 
 	@Override
-	public boolean before(MvcRequest request, MvcOutput response, Method method) {
+	public boolean before(MvcRequest request, MvcOutput response, Method method, Object[] args) {
 		if (!"GET".equalsIgnoreCase(request.getMethod()))
 			return true;
 

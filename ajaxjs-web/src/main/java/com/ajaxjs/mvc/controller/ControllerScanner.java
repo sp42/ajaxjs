@@ -78,11 +78,12 @@ public class ControllerScanner extends ScanClass<IController> {
 	 * @param clz 应该是一个控制器类 Should be a IController.
 	 * @return true 表示为是一个控制器类。 true if it's ok.
 	 */
-	private static boolean testClass(Class<? extends IController> clz) {
+	private static boolean testClass(Class<? extends IController> clz) {		
 		if (Modifier.isAbstract(clz.getModifiers())) // 忽略抽象类
 			return false;
 
 		Path path = clz.getAnnotation(Path.class); // 总路径
+		
 		if (path == null && !Modifier.isAbstract(clz.getModifiers())) {
 			LOGGER.warning("{0} 不存在任何 Path 信息！No Path info!", clz.toString());
 			return false;

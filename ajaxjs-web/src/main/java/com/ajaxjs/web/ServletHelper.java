@@ -118,4 +118,49 @@ public class ServletHelper {
 	public static String getAllQueryParameters(HttpServletRequest r) {
 		return getAllQueryParameters(r, null);
 	}
+	
+	/**
+	 * 
+	 * @param p
+	 * @return
+	 */
+	public static boolean preventSQLInject(String p) {
+		p = p.toUpperCase();
+
+		if (p.indexOf("DELETE") >= 0 || p.indexOf("ASCII") >= 0
+			|| p.indexOf("UPDATE") >= 0 || p.indexOf("SELECT") >= 0
+			|| p.indexOf("'") >= 0 || p.indexOf("SUBSTR(") >= 0
+			|| p.indexOf("COUNT(") >= 0 || p.indexOf(" OR ") >= 0
+			|| p.indexOf(" AND ") >= 0 || p.indexOf("DROP") >= 0
+			|| p.indexOf("EXECUTE") >= 0 || p.indexOf("EXEC") >= 0
+			|| p.indexOf("TRUNCATE") >= 0 || p.indexOf("INTO") >= 0
+			|| p.indexOf("DECLARE") >= 0 || p.indexOf("MASTER") >= 0
+			) {
+
+		    return false;
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public static String MysqlRealScapeString(String str) {  
+		if (str != null && str.length() > 0) {
+		    str = str.replace("\\", "\\\\");
+		    str = str.replace("'", "\\'");
+		    str = str.replace("\0", "\\0");
+		    str = str.replace("\n", "\\n");
+		    str = str.replace("\r", "\\r");
+		    str = str.replace("\"", "\\\"");
+		    str = str.replace("\\x1a", "\\Z");
+		   
+		    return str;
+		}
+		  
+		return null;
+	}
 }

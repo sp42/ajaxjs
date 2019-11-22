@@ -32,9 +32,10 @@ public interface FilterAction {
 	 * @param request 	请求对象
 	 * @param response 	响应对象
 	 * @param method 	方法对象
+	 * @param args      执行的参数
 	 * @return 是否要中止控制器方法的执行
 	 */
-	public boolean before(MvcRequest request, MvcOutput response, Method method);
+	public boolean before(MvcRequest request, MvcOutput response, Method method, Object[] args);
 
 	/**
 	 * 在 MVC 方法之后调用
