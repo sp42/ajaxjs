@@ -34,7 +34,6 @@ public class TestVerifyEmail {
 	
 	@Test
 	public void testForgetPsw() {
-		ForgetPassword f = new ForgetPassword();
-		f.findByEmail("http://qq.com/sds", "frank@ajaxjs.com");
+		ForgetPassword.findByEmail("http://qq.com/sds", "frank@ajaxjs.com");
 	}
 }

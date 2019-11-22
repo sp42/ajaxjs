@@ -1,8 +1,9 @@
-package com.ajaxjs.user;
+	package com.ajaxjs.user;
 
 import static com.ajaxjs.user.role.RoleUtil.getR;
 import static com.ajaxjs.user.role.RoleUtil.getSingleKeyLock;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -14,7 +15,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ajaxjs.cms.utils.CmsUtils;
-import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.user.role.RightConstant;
 import com.ajaxjs.user.role.RoleService;
@@ -61,6 +61,7 @@ public class TestRole {
 	@Test
 	public void testGetR() {
 		int r = getR(5, 686070);
+		assertNotNull(r);
 		System.out.println("::::::" + (15 & 7));
 	}
 
