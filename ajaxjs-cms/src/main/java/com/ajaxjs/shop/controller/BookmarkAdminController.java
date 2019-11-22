@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.cms.DataDictService;
 import com.ajaxjs.cms.SectionList;
+import com.ajaxjs.cms.app.CommonConstant;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
@@ -31,7 +32,7 @@ public class BookmarkAdminController extends BaseController<SectionList> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
 		mv.put("entryTypeIdNameMap", DataDictService.Entry_IdName);
-		listPaged(start, limit, mv, service::findSectionListBySectionId);
+		page(mv, service.findSectionListBySectionId(start, limit), CommonConstant.UI_ADMIN);
 		
 //		return info("user-bookmark");
 		return "";

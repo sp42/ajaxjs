@@ -36,8 +36,8 @@ public class CartAdminController extends BaseController<Cart> {
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
-		listPaged(start, limit, mv,  (s, l) -> service.findCartList(s, l, QueryParams.init()));
-		return adminList();
+		page(start, limit, mv,  service.findCartList(s, l, QueryParams.init()));
+		return jsp("shop/cart-admin-list");
 	}
 
 	@DELETE

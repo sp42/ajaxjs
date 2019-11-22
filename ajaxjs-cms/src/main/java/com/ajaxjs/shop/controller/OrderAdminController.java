@@ -11,9 +11,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.ajaxjs.cms.app.CommonConstant;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
-import com.ajaxjs.framework.QueryParams;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
@@ -23,8 +23,10 @@ import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.model.OrderItem;
 import com.ajaxjs.shop.service.OrderInfoService;
+import com.ajaxjs.user.filter.LoginCheck;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.service.UserService;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 
@@ -33,6 +35,8 @@ import com.ajaxjs.user.service.UserService;
 @Bean
 @Path("/admin/order")
 public class OrderAdminController extends BaseController<OrderInfo> {
+	private static final LogHelper LOGGER = LogHelper.getLog(OrderAdminController.class);
+	
 	@Resource("OrderInfoService")
 	private OrderInfoService service;
 
@@ -40,8 +44,10 @@ public class OrderAdminController extends BaseController<OrderInfo> {
 	@Path(list)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
-		listPaged(start, limit, mv, QueryParams.doPageFilterQuery(OrderInfoService.dao::findPagedList));
-		return adminList();
+		LOGGER.info("订单列表");
+		
+		page(mv, service.findPagedList(start, limit, null), CommonConstant.UI_ADMIN);
+		return jsp("shop/order-admin-list");
 	}
 
 	@Override
@@ -94,6 +100,14 @@ public class OrderAdminController extends BaseController<OrderInfo> {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String delete(@PathParam(id) Long id) {
 		return delete(id, new OrderInfo());
+	}
+	
+	@Path("/shop/order")
+	@GET
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
+	public String account(ModelAndView mv) {
+		LOGGER.info("浏览我的订单");
+		return jsp("shop/order");
 	}
 
 	@Override

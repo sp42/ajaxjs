@@ -13,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.ajaxjs.cms.app.CommonConstant;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.IBaseService;
@@ -41,8 +42,8 @@ public class GoodsAdminController extends BaseController<Goods> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(catalogId) int catelogId, @QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
 		prepareData(mv);
-		listPaged(start, limit, mv, (_start, _limit) -> service.findPagedListByCatalogId(catelogId, start, limit));
-		return adminList();
+		page(mv, service.findPagedListByCatalogId(catelogId, start, limit), CommonConstant.UI_ADMIN);
+		return jsp("shop/goods-admin-list");
 	}
 
 	@GET
@@ -50,7 +51,7 @@ public class GoodsAdminController extends BaseController<Goods> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String listJson(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
-		return pagedListJson(listPaged(start, limit, mv, service::findGoods_Format));
+		return toJson(service.findGoods_Format(start, limit));
 	}
 
 	@GET
