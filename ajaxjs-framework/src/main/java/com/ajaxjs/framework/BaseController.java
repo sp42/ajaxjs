@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.ajaxjs.cms.app.CommonConstant;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
@@ -248,6 +249,10 @@ public abstract class BaseController<T> implements IController, Constant {
 		mv.put(PageResult, pageResult);
 		
 		return list(isAdmin);
+	}
+	
+	public String page(ModelAndView mv, PageResult<T> pageResult) {
+		return page(mv, pageResult, CommonConstant.UI_ADMIN);
 	}
 
 	@FunctionalInterface

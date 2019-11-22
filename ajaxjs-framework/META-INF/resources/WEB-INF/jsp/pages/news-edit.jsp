@@ -27,7 +27,7 @@
 				</template>
 			</ajaxjs-admin-header>
 
-			<form action="." method="${isCreate ? 'POST' : 'PUT'}" class="entityEdit">
+			<form action="." method="${isCreate ? 'POST' : 'PUT'}">
 			<c:if test="${!isCreate}">
 				<input type="hidden" name="id" value="${info.id}" /><!-- 传送 id 参数 -->
 			</c:if>
@@ -161,7 +161,7 @@
 			App = new Vue({el: '.admin-entry-form'});
 		
 			// 表单提交
-			aj.xhr.form('form.entityEdit', function(json) {
+			aj.xhr.form('.admin-entry-form form', function(json) {
 					 if(json && json.msg)
 						 aj.alert.show(json.msg);
 						${isCreate ? 'json && json.isOk && setTimeout(function(){location.assign(json.newlyId + "/");}, 2000);' : ''}
