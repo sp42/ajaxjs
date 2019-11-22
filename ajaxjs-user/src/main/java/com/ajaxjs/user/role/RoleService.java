@@ -28,7 +28,6 @@ public class RoleService extends BaseService<Map<String, Object>> {
 	public static interface RoleDao extends IBaseDao<Map<String, Object>> {
 		
 		@Select("SELECT * FROM ${tableName} ORDER BY pid ")
-		@Override
 		public List<Map<String, Object>> findList();
 		 
 		@Select("SELECT accessKey FROM ${tableName}")

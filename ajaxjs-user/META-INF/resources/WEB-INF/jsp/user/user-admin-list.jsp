@@ -17,7 +17,14 @@
 			</ajaxjs-admin-header>
 			
 			<!-- 搜索、分类下拉 -->
-			<aj-admin-filter-panel :no-catelog="true"></aj-admin-filter-panel>
+			<aj-admin-filter-panel :no-catalog="true">
+				<select class="ajaxjs-select" name="level" style="width:130px;">
+					<option>选择用户组</option>
+					<c:foreach items="${UserGroups}" var="item">
+						<option value="${item.key}" ${item.key == param.level ? 'selected' : ''}>${item.value.name}</option>
+					</c:foreach>
+				</select> 
+			</aj-admin-filter-panel>
 		</div>
 		
 		<script>
@@ -41,11 +48,10 @@
 				<tr>
 					<th>#</th>
 					<th>头像</th>
-					<th class="name">${uiName}账号名称</th>
+					<th class="name">${uiName}账号</th>
 					<th>用户姓名</th>
 					<th>性别</th>
 					<th>邮件/手机</th>
-					<th>地区</th>
 					<th>注册日期</th>
 					<th>用户组</th>
 					<th class="control">控 制</th>
@@ -53,34 +59,34 @@
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="10"></td>
+					<td colspan="9"></td>
 				</tr>
 			</tfoot>
 			<tbody>
 				<c:foreach var="current" items="${PageResult}">
 					<tr>
 						<td>${current.id}</td>
-						<td><img src="${current.avatar}" style="max-width:80px;" /></td>
 						<td>
-						<c:if test="${not empty current.cover}">
-							<img src="${ctx}${current.cover}" style="max-width:50px;max-height:60px;vertical-align: middle;" 
-						 		onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${ctx}${current.cover}';" onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
-						</c:if>
+							<c:if test="${not empty current.avatar}">
+								<img src="${ctx}${current.avatar}" style="max-width:50px;max-height:60px;vertical-align: middle;" 
+							 		onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${ctx}${current.avatar}';" onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
+							</c:if>
+						</td>
+						<td>
 							${current.name}
 						</td>
 						<td>${current.username}</td>
 						<td>${SexGender[current.sex]}</td>
 						<td>${current.email}<br />${current.phone}</td>
-						<td>${current.location}</td>
 						<td><c:dateFormatter value="${current.createDate}" /></td>
 						<td>${UserGroups[current.roleId].name}</td>
 						<td>
-							<a href="../../userLoginLog/?filterField=userId&filterValue=${current.id}">登录日志</a> | 
-							<a href="../${current.id}/bookmark/">收藏</a> | 
-							<a href="../${current.id}/address/">地址簿</a> | 
-							<a href="10000/order">订单</a> | 
-							<a href="../../cart/list/${current.id}">购物车</a>
-							| <a href="../${current.id}">详情</a> | <a href="javascript:aj.admin.del('${current.id}', '${current.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>
+							<a href="${ctx}/admin/userLoginLog/?filterField=userId&filterValue=${current.id}">登录日志</a> | 
+							<a href="${ctx}/admin/like/list/?filterField=userId&filterValue=${current.id}">点赞</a> | 
+							<a href="${ctx}/admin/bookmark/?filterField=userId&filterValue=${current.id}">收藏</a> | 
+							<a href="${ctx}/admin/address/?filterField=userId&filterValue=${current.id}">地址簿</a> | 
+							<a href="../${current.id}/">详情</a> | 
+							<a href="javascript:aj.admin.del('${current.id}', '${current.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>
 						</td> 
 					</tr>
 				</c:foreach>

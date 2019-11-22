@@ -144,9 +144,11 @@
 				<label style="font-size: .9rem;" for="agreement">  同意《<a href="${ctx}/about/service">用户注册协议</a>、<a href="${ctx}/about/privacy">隐私政策》</a></label>
 				<br />
 				<br />
-				<button>注册</button> &nbsp;&nbsp;&nbsp;&nbsp;<a href="${ctx}/user/login/" style="font-size: .9rem;">登录</a>
+				<button>注册</button> &nbsp;&nbsp;&nbsp;&nbsp;<a href="${ctx}/user/login/" style="font-size: .9rem;">我已是会员，点此登录</a>
 			</dd>
 		</dl>
+		<!-- 注册用户组 -->
+		<input type="hidden" name="roleId" value="30" />
 	</form>
 	
 	<script src="${ajaxjs_ui_output}/lib/md5.min.js"></script>

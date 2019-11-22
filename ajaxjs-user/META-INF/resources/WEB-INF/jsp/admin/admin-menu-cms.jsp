@@ -31,7 +31,7 @@
 --%>
 <%if(RoleService.check(privilegeTotal, RightConstant.SHOP) || RoleService.check(privilegeTotal, RightConstant.SHOP_SELLER)){ %>
 <li>
-	<h3>商城管理</h3>
+	<h3 class="shop"><i></i> 商城管理</h3>
 	<ul>
 	<%if(RoleService.check(privilegeTotal, RightConstant.SHOP)){ %>
 		<li><a target="iframepage" href="${ctx}/admin/goods/list/">商品管理</a></li>
@@ -43,31 +43,21 @@
 	<%}%>
 	<%if(RoleService.check(privilegeTotal, RightConstant.SHOP)){ %>
 		<li><a target="iframepage" href="${ctx}/admin/cart/list/">购物车一览</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/bookmark/list/">收藏一览</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/address/list/">地址薄一览</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/seller/list/">商城用户管理</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/seller/list/">商家管理</a></li>
 	<%}%>
 	</ul>
 </li>
 <%}%>
 
- 
-	<%if(RoleService.check(privilegeTotal, RightConstant.WEBSITE)){ %>
-<li>
-	<h3>网站管理</h3>
-	<ul>
-		<li><a target="iframepage" href="${ctx}/admin/config/siteStru/">网站结构</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/page_editor/">页面管理</a></li>
-	</ul>
-</li>
-<%}%>
 <%if(RoleService.check(privilegeTotal, RightConstant.USER)){ %>
 <li> 
-	<h3>用户管理</h3>
+	<h3 class="user"><i></i> 用户管理</h3>
 	<ul>
 		<li><a target="iframepage" href="${ctx}/admin/user/list/">用户管理</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/userLoginLog/">登录日志</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/userGlobalLog/">操作日志</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/bookmark/list/">收藏一览</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/address/list/">地址薄一览</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/like/list/">点赞一览</a></li>
 	<%if(RoleService.check(privilegeTotal, RightConstant.USER_PRIVILEGE)){ %>
 		<li><a target="iframepage" href="${ctx}/admin/user/privilege/">用户-权限管理</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/user/user_group/">用户组管理</a></li>
@@ -77,35 +67,47 @@
 </li> 
 <%}%>
 
+<%if(RoleService.check(privilegeTotal, RightConstant.WEBSITE)){ %>
+<li>
+	<h3 class="site"><i></i> 网站管理</h3>
+	<ul>
+		<li><a target="iframepage" href="${ctx}/admin/config/site/">网站信息</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/config/siteStru/">网站结构</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/page_editor/">页面管理</a></li>
+	</ul>
+</li>
+<%}%>
+
 <%if(RoleService.check(privilegeTotal, RightConstant.GLOBAL_SETTING)){ %>
 
 <li>
-	<h3>全局数据</h3>
+	<h3 class="config"><i></i> 全局数据</h3>
 	<ul>
-		<li><a target="iframepage" href="${ctx}/admin/config/site/">项目信息</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/attachmentPicture/list/">图片列表</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/config/">所有配置</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/catelog/">分类管理</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/DataDict/">数据字典管理</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/attachmentPicture/list/">图片列表</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/userLoginLog/">登录日志</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/userGlobalLog/">操作日志</a></li>
 	</ul>
 </li>
 <%}%>
 
 <%if(RoleService.check(privilegeTotal, RightConstant.DEVELOPER_TOOL)){ %>
 <li>
-	<h3>开发工具</h3>
+	<h3 class="tools"><i></i> 开发工具</h3>
 	<ul>
 		<li><a target="iframepage" href="${ctx}/admin/DataBase/">数据库管理</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/CodeGenerators/">代码生成器</a></li>
 		<li><a target="iframepage" href="${ajaxjsui}/ui-doc">前端文档</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/DataBaseShowStru">表字段浏览</a></li>
-		<li><a target="iframepage" href="${ctx}/asset/admin/tomcat-log.jsp">后台日志浏览</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/tomcat-log/">后台日志浏览</a></li>
 		<li><a target="iframepage" href="${ctx}/jsp/swagger-ui/">API 文档</a></li>
 	</ul>
 </li>
 <%}%>
 <li>
-	<h3>账号中心</h3>
+	<h3 class="accountCenter"><i></i> 账号中心</h3>
 	<ul>
 		<li><a target="iframepage" href="${ctx}/user/account-center/">账号中心</a></li>
 		<li><a href="javascript:logout();">退出登录</a></li>

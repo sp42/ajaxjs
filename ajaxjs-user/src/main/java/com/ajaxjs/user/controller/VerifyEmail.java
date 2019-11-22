@@ -105,7 +105,7 @@ public class VerifyEmail extends BaseUserController {
 				throw new IllegalArgumentException("该 Token 已超时");
 
 			long userUid = (long) data.get("entityUid");
-			User user = UserService.dao.findByUid(userUid);
+			User user = new UserService().findByUid(userUid);
 			Objects.requireNonNull(data, "程序异常，没有找到对应的用户，用户 uid 为 " + userUid);
 
 			int v = user.getVerify();

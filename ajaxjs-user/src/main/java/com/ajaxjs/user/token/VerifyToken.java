@@ -118,7 +118,7 @@ public class VerifyToken extends BaseService<Map<String, Object>> {
 		}
 
 		long userUid = (long) data.get("entityUid");
-		User user = UserService.dao.findByUid(userUid);
+		User user = new UserService().findByUid(userUid);
 		Objects.requireNonNull(data, "程序异常，没有找到对应的用户，用户 uid 为 " + userUid);
 
 		if (isVerifyMark) {
