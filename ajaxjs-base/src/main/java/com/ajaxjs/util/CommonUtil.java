@@ -238,7 +238,10 @@ public class CommonUtil {
 			return Objet2Date(Long.parseLong(obj + "000")); /* 10 位长 int，后面补充三个零为13位 long 时间戳 */
 		else if (obj instanceof String) {
 			String str = obj.toString();
-
+			
+			if(isEmptyString(str))
+				return null;
+			
 			try {
 				if (pattern.matcher(str).matches()) {
 					return SimpleDateFormatFactory(commonDateFormat).parse(str);
