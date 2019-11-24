@@ -233,7 +233,6 @@ public class RepositoryReadOnly extends RepositoryBase {
 			result.setStart(start);
 			result.setPageSize(limit);
 			result.setTotalCount(total);// 先查询总数,然后执行分页
-			System.out.println("::::::::::::::::::::::::::::::::::::");
 			result.page();
 
 			if (list != null)

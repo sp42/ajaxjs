@@ -84,7 +84,6 @@ public class PageResult<T> extends ArrayList<T> {
 
 		int currentPage = (getStart() / getPageSize()) + 1;
 
-		System.out.println("_____" + currentPage);
 		setCurrentPage(currentPage);
 	}
 

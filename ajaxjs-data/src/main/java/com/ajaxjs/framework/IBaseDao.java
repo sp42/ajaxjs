@@ -46,7 +46,7 @@ public interface IBaseDao<T> {
 	/**
 	 * 实体别名必须为 entry
 	 */
-	public final static String selectCover = "(SELECT path FROM attachment_picture p1 WHERE entry.uid = p1.owner AND p1.catelog = " + DataDict.PIC_COVER + " ORDER BY p1.id DESC LIMIT 0, 1)";
+	public final static String selectCover = "(SELECT path FROM attachment_picture p1 WHERE entry.uid = p1.owner AND p1.catalog = 1 ORDER BY p1.id DESC LIMIT 0, 1)";
 
 	/**
 	 * 简单关联 catelog 表，注意表名称 alies 为 gc
