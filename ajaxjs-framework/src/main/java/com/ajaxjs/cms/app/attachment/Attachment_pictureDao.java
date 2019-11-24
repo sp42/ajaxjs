@@ -2,7 +2,6 @@ package com.ajaxjs.cms.app.attachment;
 
 import java.util.List;
 
-import com.ajaxjs.framework.DataDict;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Select;
@@ -20,6 +19,6 @@ public interface Attachment_pictureDao extends IBaseDao<Attachment_picture> {
 	@Update("UPDATE ${tableName} SET `index` = ? WHERE id = ?")
 	public int saveImgIndex(int index, Long imgId);
 
-	@Select("SElECT * FROM ${tableName} WHERE owner = ? AND catelog = " + DataDict.PIC_in_GALLERY)
+	@Select("SElECT * FROM ${tableName} WHERE owner = ? AND catalog = " + Attachment_pictureService.ATTACHMENT)
 	public List<Attachment_picture> findAttachmentPictureByOwner(Long owner);
 }

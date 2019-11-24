@@ -37,8 +37,8 @@
 				<th>#</th>
 				<th class="name">${uiName}名称</th>
 				<th>${uiName}分类</th>
-				<th>${uiName}尺寸</th>
-				<th>${uiName}文件大小</th>
+				<th>${uiName}尺寸<br/>${uiName}文件大小</th>
+				<th>创建者</th>
 				<th>创建时间</th>
 				<th class="control">控 制</th>
 			</tr>
@@ -53,13 +53,15 @@
 				<tr>
 					<td>${current.id}</td>
 					<td>${current.name}</td>
-					<td>${catelogMap[current.catelog]}</td>
-					<td>${current.fileSize}KB</td>
-					<td>${current.picWidth}x${current.picHeight}</td>
+					<td>${DICT[current.catalog]}</td>
+					<td>${current.picWidth}x${current.picHeight}<br />${current.fileSize}KB</td>
+					<td>${current.owner}</td>
 					<td><c:dateFormatter value="${current.createDate}" /></td>
 					<td>
 						<a href="${ctx}${current.path}" target="_blank">
-							<img src="${ctx}${current.path}" style="max-width:100px;" onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${ctx}${current.path}';" onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
+							<img src="${ctx}${current.path}" style="max-width:100px; vertical-align: middle;" 
+							onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${ctx}${current.path}';" 
+							onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
 						</a>
 						<a href="javascript:entity.del('${current.id}', '${current.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>
 					</td>

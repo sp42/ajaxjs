@@ -334,29 +334,6 @@ public class Attachment_picture extends BaseModel {
 		return updateDate;
 	}
 
-	/**
-	 * 是否已删除 1=已删除；0/null；未删除
-	 */
-	private Integer deleted;
-
-	/**
-	 * 设置是否已删除 1=已删除；0/null；未删除
-	 * 
-	 * @param deleted 是否已删除 1=已删除；0/null；未删除
-	 */
-	public void setDeleted(Integer deleted) {
-		this.deleted = deleted;
-	}
-
-	/**
-	 * 获取是否已删除 1=已删除；0/null；未删除
-	 * 
-	 * @return 是否已删除 1=已删除；0/null；未删除
-	 */
-	public Integer getDeleted() {
-		return deleted;
-	}
-
 	public String getUrlRelativePath() {
 		return urlRelativePath;
 	}
@@ -373,14 +350,14 @@ public class Attachment_picture extends BaseModel {
 		this.index = index;
 	}
 
-	public int getCatelog() {
-		return catelog;
+	public int getCatalog() {
+		return catalog;
 	}
 
-	public void setCatelog(int catelog) {
-		this.catelog = catelog;
+	public void setCatalog(int catalog) {
+		this.catalog = catalog;
 	}
 
-	private int catelog;
+	private int catalog;
 
 }

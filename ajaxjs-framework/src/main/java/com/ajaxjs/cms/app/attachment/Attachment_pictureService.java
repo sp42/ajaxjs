@@ -1,5 +1,6 @@
 package com.ajaxjs.cms.app.attachment;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,5 +44,23 @@ public interface Attachment_pictureService extends IBaseService<Attachment_pictu
 	/**
 	 * 頭像
 	 */
+	public static final int COMMON_IMG = 1;
+
 	public static final int AVATAR = 2;
+
+	public static final int ALBUM = 3;
+	
+	public static final int ATTACHMENT = 4;
+	
+	public static final Map<Integer, String> DICT = new HashMap<Integer, String>() {
+		private static final long serialVersionUID = 1L;
+
+		{
+			put(0, "普通图片");
+			put(COMMON_IMG, "普通图片");
+			put(AVATAR, "封面/头像");
+			put(ALBUM, "相册图片");
+			put(ATTACHMENT, "附件图片");
+		}
+	};
 }

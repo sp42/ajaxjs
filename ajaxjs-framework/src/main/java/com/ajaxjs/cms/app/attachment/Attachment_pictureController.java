@@ -36,6 +36,21 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	@Resource("Attachment_pictureService")
 	private Attachment_pictureService service;
 
+	public void setService(Attachment_pictureService service) {
+		this.service = service;
+	}
+
+	@GET
+	@Path(list)
+	@MvcFilter(filters = { DataBaseFilter.class })
+//	@Authority(filter = DataBaseFilter.class, value = 1)
+	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
+		page(mv, service.findPagedList(start, limit, null));
+		mv.put("DICT", Attachment_pictureService.DICT);
+
+		return jsp("admin/" + service.getShortName() + "-list");
+	}
+
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("getListByOwnerUid/{id}")
@@ -80,7 +95,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 			picture.setFileSize((int) (imgHelper.file.length() / 1024));
 
 			if (catalogId != 0)
-				picture.setCatelog(catalogId);
+				picture.setCatalog(catalogId);
 
 			final Long _newlyId = service.create(picture);
 
@@ -116,7 +131,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 			picture.setPicWidth(imgHelper.width);
 			picture.setPicHeight(imgHelper.height);
 			picture.setFileSize((int) (imgHelper.file.length() / 1024));
-			picture.setCatelog(1);
+			picture.setCatalog(1);
 
 			final Long _newlyId = service.create(picture);
 			System.out.println(info.path);
