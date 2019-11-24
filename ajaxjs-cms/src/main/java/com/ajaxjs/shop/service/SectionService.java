@@ -2,12 +2,12 @@ package com.ajaxjs.shop.service;
 
 import java.util.List;
 
-import com.ajaxjs.cms.DataDictService;
 import com.ajaxjs.cms.SectionList;
 import com.ajaxjs.cms.SectionListService;
 import com.ajaxjs.cms.app.catalog.Catalog;
 import com.ajaxjs.cms.app.catalog.CatalogService;
 import com.ajaxjs.cms.app.catalog.CatalogServiceImpl;
+import com.ajaxjs.cms.controller.DataDictController;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.PageResult;
@@ -31,10 +31,10 @@ public class SectionService extends SectionListService {
 
 	private ScanTable fn = (sqls, entryTypeId, entryIds, caseSql) -> {
 		switch (entryTypeId) {
-		case DataDictService.ENTRY_TOPIC:
+		case DataDictController.DataDictService.ENTRY_TOPIC:
 			sqls.add(String.format(select, entryTypeId, caseSql, "entity_topic", entryIds));
 			break;
-		case DataDictService.ENTRY_ADS:
+		case DataDictController.DataDictService.ENTRY_ADS:
 			sqls.add(String.format(select, entryTypeId, caseSql, "entity_ads", entryIds));
 			break;
 		case ShopConstant.ENTRY_GOODS:

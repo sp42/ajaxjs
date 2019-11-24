@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.cms.DataDictService;
 import com.ajaxjs.cms.app.attachment.Attachment_pictureService;
+import com.ajaxjs.cms.controller.DataDictController;
 import com.ajaxjs.cms.controller.TopicController;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
@@ -93,9 +93,9 @@ public class GoodsService extends BaseService<Goods> {
 	}
 
 	static {
-		DataDictService.Entry_IdName.put(ShopConstant.ENTRY_GOODS, new GoodsService().getUiName());
-		DataDictService.Entry_IdName.put(ShopConstant.ENTRY_GROUP, new GroupService().getUiName());
-		DataDictService.Entry_IdName.put(DataDictService.ENTRY_TOPIC, TopicController.service.getUiName());
+		DataDictController.DataDictService.Entry_IdName.put(ShopConstant.ENTRY_GOODS, new GoodsService().getUiName());
+		DataDictController.DataDictService.Entry_IdName.put(ShopConstant.ENTRY_GROUP, new GroupService().getUiName());
+		DataDictController.DataDictService.Entry_IdName.put(DataDictController.DataDictService.ENTRY_TOPIC, TopicController.service.getUiName());
 	}
 
 	public int getDomainCatalogId() {

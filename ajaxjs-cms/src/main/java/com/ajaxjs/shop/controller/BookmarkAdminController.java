@@ -8,8 +8,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.DataDictService;
 import com.ajaxjs.cms.SectionList;
+import com.ajaxjs.cms.controller.DataDictController;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
@@ -30,7 +30,7 @@ public class BookmarkAdminController extends BaseController<SectionList> {
 	@Path(list)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
-		mv.put("entryTypeIdNameMap", DataDictService.Entry_IdName);
+		mv.put("entryTypeIdNameMap", DataDictController.DataDictService.Entry_IdName);
 		page(mv, service.findSectionListBySectionId(start, limit));
 		
 //		return info("user-bookmark");
@@ -40,7 +40,7 @@ public class BookmarkAdminController extends BaseController<SectionList> {
 	@GET
 	@Path(idInfo)
 	public String bookmark(@PathParam(id) Long userId, ModelAndView mv) {
-		mv.put("entryTypeIdNameMap", DataDictService.Entry_IdName);
+		mv.put("entryTypeIdNameMap", DataDictController.DataDictService.Entry_IdName);
 		mv.put("userId", userId);
 		
 		return "user-bookmark";

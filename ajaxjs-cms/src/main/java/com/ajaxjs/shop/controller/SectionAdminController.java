@@ -12,9 +12,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.DataDictService;
 import com.ajaxjs.cms.SectionList;
 import com.ajaxjs.cms.app.catalog.Catalog;
+import com.ajaxjs.cms.controller.DataDictController;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
@@ -46,8 +46,8 @@ public class SectionAdminController extends BaseController<SectionList> {
 
 	@GET
 	public String jsp(ModelAndView mv) {
-		mv.put("entryIdNameMap",  DataDictService.Entry_IdName);
-		mv.put("entryIdNameJson", toJson(DataDictService.Entry_IdName, false));
+		mv.put("entryIdNameMap",  DataDictController.DataDictService.Entry_IdName);
+		mv.put("entryIdNameJson", toJson(DataDictController.DataDictService.Entry_IdName, false));
 		prepareData(mv);
 		return jsp("section-list");
 	}
