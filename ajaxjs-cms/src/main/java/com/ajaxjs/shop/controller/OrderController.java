@@ -34,8 +34,8 @@ import com.ajaxjs.util.logger.LogHelper;
  */
 @Bean
 @Path("/admin/order")
-public class OrderAdminController extends BaseController<OrderInfo> {
-	private static final LogHelper LOGGER = LogHelper.getLog(OrderAdminController.class);
+public class OrderController extends BaseController<OrderInfo> {
+	private static final LogHelper LOGGER = LogHelper.getLog(OrderController.class);
 	
 	@Resource("OrderInfoService")
 	private OrderInfoService service;

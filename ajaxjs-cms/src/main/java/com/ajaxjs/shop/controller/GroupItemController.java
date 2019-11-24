@@ -25,7 +25,7 @@ import com.ajaxjs.shop.service.GroupItemService;
  */
 @Bean
 @Path("/admin/groupItem")
-public class GroupItemAdminController extends BaseController<GroupItem> {
+public class GroupItemController extends BaseController<GroupItem> {
 	@Resource("GroupItemService")
 	private GroupItemService service;
 

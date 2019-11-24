@@ -34,7 +34,7 @@ import com.ajaxjs.shop.service.SellerService;
  */
 @Bean
 @Path("/admin/orderItem")
-public class OrderItemAdminController extends BaseController<OrderItem> {
+public class OrderItemController extends BaseController<OrderItem> {
 	@Resource("OrderItemService")
 	private OrderItemService service;
 

@@ -26,7 +26,7 @@ import com.ajaxjs.shop.service.SectionService;
 
 @Path("/admin/section")
 @Bean
-public class SectionAdminController extends BaseController<SectionList> {
+public class SectionController extends BaseController<SectionList> {
 	
 	@Resource("SectionService")
 	private SectionService service;

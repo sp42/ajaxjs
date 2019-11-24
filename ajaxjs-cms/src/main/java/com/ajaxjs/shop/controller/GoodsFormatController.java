@@ -24,7 +24,7 @@ import com.ajaxjs.shop.service.GoodsFormatService;
  */
 @Bean
 @Path("/admin/goodsFormat")
-public class GoodsFormatAdminController extends BaseController<GoodsFormat> {
+public class GoodsFormatController extends BaseController<GoodsFormat> {
 	@Resource("GoodsFormatService")
 	private GoodsFormatService service;
 

@@ -21,7 +21,7 @@ import com.ajaxjs.shop.service.ShopBookmarkService;
 
 @Bean
 @Path("/admin/bookmark")
-public class BookmarkAdminController extends BaseController<SectionList> {
+public class BookmarkController extends BaseController<SectionList> {
 
 	@Resource("ShopBookmarkService")
 	private ShopBookmarkService service;
