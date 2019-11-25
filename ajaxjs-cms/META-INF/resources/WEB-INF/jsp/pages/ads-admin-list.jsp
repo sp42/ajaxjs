@@ -17,7 +17,7 @@
 			</ajaxjs-admin-header>
 	
 			<!-- 搜索、分类下拉 -->
-			<aj-admin-filter-panel :catelog-id="${domainCatalog_Id}" :selected-catelog-id="${empty param.catalogId ? 'null' : param.catalogId}"></aj-admin-filter-panel>
+			<aj-admin-filter-panel :catalog-id="${domainCatalog_Id}" :selected-catalog-id="${empty param.catalogId ? 'null' : param.catalogId}"></aj-admin-filter-panel>
 		</div>
 		
 		<script>

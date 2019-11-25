@@ -7,10 +7,12 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.cms.Ads;
 import com.ajaxjs.cms.AdsService;
+import com.ajaxjs.cms.app.CommonConstant;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
@@ -18,15 +20,27 @@ import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
+import com.ajaxjs.util.logger.LogHelper;
 
-@Path("/ads")
+@Path("/admin/ads")
 @Bean
 public class AdsController extends BaseController<Ads> {
+	private static final LogHelper LOGGER = LogHelper.getLog(AdsController.class);
+	
 	@Resource("AdsService")
 	private AdsService service;
- 
+	
+	@GET
+	@Path(list)
 	@MvcFilter(filters = DataBaseFilter.class)
+	public String adminList(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
+		LOGGER.info("留言反馈列表");
+		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE));
+	}
+ 
+	@GET
 	@Path(idInfo)
+	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
 	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
 		super.editUI(id, mv);

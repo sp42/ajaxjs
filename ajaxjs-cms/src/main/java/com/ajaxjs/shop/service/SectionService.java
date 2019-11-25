@@ -74,7 +74,7 @@ public class SectionService extends SectionListService {
 	private CatalogService catalogService = new CatalogServiceImpl();
 
 	/**
-	 * SectionInfo 是一棵树。为简约起见，SectionInfo 没有独立弄成一张表放进去，而是放进 catelog 表。一般在后台里调用该方法
+	 * SectionInfo 是一棵树。为简约起见，SectionInfo 没有独立弄成一张表放进去，而是放进 catalog 表。一般在后台里调用该方法
 	 * 
 	 * @return
 	 */

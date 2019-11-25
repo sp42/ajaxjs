@@ -17,8 +17,7 @@
 			<a :href="ajResources.ctx + '/admin/${shortName}/'">新建</a> | </c:if> <a :href="ajResources.ctx + '/admin/${shortName}/list/'">${uiName}列表</a> | </template>
 		</ajaxjs-admin-header>
 
-		<form action="." method="${isCreate ? 'POST' : 'PUT'}"
-			class="entityEdit">
+		<form action="." method="${isCreate ? 'POST' : 'PUT'}">
 			<c:if test="${!isCreate}">
 				<input type="hidden" name="id" value="${info.id}" />
 				<!-- 传送 id 参数 -->
@@ -35,7 +34,7 @@
 				<label> 
 					<div class="label">分类：</div>  
 					<!-- 分类下拉 -->
-					<aj-tree-catelog-select field-name="catelogId" :catelog-id="${domainCatalog_Id}" :selected-catelog-id="${empty info.catelogId ? 0 : info.catelogId}"></aj-tree-catelog-select>
+					<aj-tree-catelog-select field-name="catalogId" :catalog-id="${domainCatalog_Id}" :selected-catalog-id="${empty info.catelogId ? 0 : info.catelogId}"></aj-tree-catelog-select>
 					<span style="color:red;">*</span>
 				</label>
 				&nbsp; &nbsp; &nbsp; 

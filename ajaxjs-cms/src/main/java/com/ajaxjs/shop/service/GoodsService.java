@@ -108,6 +108,6 @@ public class GoodsService extends BaseService<Goods> {
 	}
  
 	public PageResult<Goods> findPagedListByCatalogId(int catelogId, int start, int limit) {
-		return dao.findPagedListByCatelogId_Cover(catelogId == 0 ? getDomainCatalogId() : catelogId, start, limit, QueryParams.initSqlHandler(QueryParams.init()));
+		return dao.findPagedListByCatalogId_Cover(catelogId == 0 ? getDomainCatalogId() : catelogId, start, limit, QueryParams.initSqlHandler(QueryParams.init()));
 	}
 }

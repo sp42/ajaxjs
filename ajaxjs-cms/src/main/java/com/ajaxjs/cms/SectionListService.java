@@ -40,6 +40,13 @@ public abstract class SectionListService extends BaseService<SectionList> {
 
 	@FunctionalInterface
 	public static interface ScanTable {
+		/**
+		 * 
+		 * @param sqls
+		 * @param entryTypeId
+		 * @param entryIds
+		 * @param caseSql
+		 */
 		public void addSql(List<String> sqls, int entryTypeId, String entryIds, String caseSql);
 	}
 
@@ -71,11 +78,11 @@ public abstract class SectionListService extends BaseService<SectionList> {
 	/**
 	 * 获取中间表中匹配的数据
 	 * 
-	 * @param catelogId
+	 * @param catalogId
 	 * @return
 	 */
-	public List<SectionList> getListByCatelogId(int catelogId) {
-		return dao.findList(sql -> sql + " WHERE catelogId = " + catelogId);
+	public List<SectionList> getListByCatelogId(int catalogId) {
+		return dao.findList(sql -> sql + " WHERE catelogId = " + catalogId);
 	}
 
 	/**
@@ -101,6 +108,7 @@ public abstract class SectionListService extends BaseService<SectionList> {
 			return null;
 		} else {
 			Map<Integer, List<String>> map = new HashMap<>();
+			
 			// 分组
 			list.forEach(b -> {
 				int entryTypeId = b.getEntryTypeId();
@@ -145,21 +153,23 @@ public abstract class SectionListService extends BaseService<SectionList> {
 
 				return (List<SectionList>) p;
 			}
+			
 			return bs;
 		}
 	}
 
-	public PageResult<SectionList> findPagedListByCatelogId(int catelogId, int start, int limit) {
-		if (catelogId == 0)
-			catelogId = getDomainCatalogId();
-		return dao.findPagedListByCatelogId_Cover(catelogId, start, limit, null);
+	public PageResult<SectionList> findPagedListByCatalogId(int catalogId, int start, int limit) {
+		if (catalogId == 0)
+			catalogId = getDomainCatalogId();
+		
+		return dao.findPagedListByCatalogId_Cover(catalogId, start, limit, null);
 	}
 
 	public int getDomainCatalogId() {
 		return ConfigService.getValueAsInt("data.adsCatalog_Id");
 	}
 
-	public List<SectionList> findListByCatelogId(int catelogId) {
+	public List<SectionList> findListByCatalogId(int catelogId) {
 		return dao.findList(addWhere("catelogId" + catelogId));
 	}
 }

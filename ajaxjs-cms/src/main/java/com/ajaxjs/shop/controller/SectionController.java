@@ -39,11 +39,6 @@ public class SectionController extends BaseController<SectionList> {
 		return toJson(service.findSectionListBySectionId(start, limit, sectionId));
 	}
 
-	@Override
-	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
-		return show405;
-	}
-
 	@GET
 	public String jsp(ModelAndView mv) {
 		mv.put("entryIdNameMap",  DataDictController.DataDictService.Entry_IdName);
@@ -70,8 +65,8 @@ public class SectionController extends BaseController<SectionList> {
 	}
 
 	@PUT
-	@MvcFilter(filters = DataBaseFilter.class)
 	@Path(idInfo)
+	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
 	public String update(@PathParam(id) Long id, SectionList entity) {
@@ -79,8 +74,8 @@ public class SectionController extends BaseController<SectionList> {
 	}
 
 	@DELETE
-	@MvcFilter(filters = DataBaseFilter.class)
 	@Path(idInfo)
+	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String delete(@PathParam(id) Long id) {
 		return delete(id, new SectionList());
