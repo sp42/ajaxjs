@@ -51,11 +51,11 @@ public interface IBaseDao<T> {
 	/**
 	 * 简单关联 catelog 表，注意表名称 alies 为 gc
 	 */
-	public final static String catelog_simple_join = " LEFT JOIN general_catelog gc ON gc.id = entry.catelogId ";
+	public final static String catelog_simple_join = " LEFT JOIN general_catalog gc ON gc.id = entry.catelogId ";
 
-	public final static String pathLike_mysql = " FROM general_catelog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catelog WHERE id = ? ) , '%'))";
-//	public final static String pathLike_sqlite = " FROM general_catelog WHERE `path` LIKE ( (SELECT `path` FROM general_catelog WHERE id = ? ) || '/%')";
-	public final static String pathLike_sqlite = " FROM general_catelog WHERE `path` LIKE ( (SELECT `path` FROM general_catelog WHERE id = ? ) || '%')";
+	public final static String pathLike_mysql = " FROM general_catalog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catalog WHERE id = ? ) , '%'))";
+//	public final static String pathLike_sqlite = " FROM general_catalog WHERE `path` LIKE ( (SELECT `path` FROM general_catalog WHERE id = ? ) || '/%')";
+	public final static String pathLike_sqlite = " FROM general_catalog WHERE `path` LIKE ( (SELECT `path` FROM general_catalog WHERE id = ? ) || '%')";
 
 	/**
 	 * 用于 catelogId 查询的，通常放在 LEFT JOIN 后面还需要，WHERE e.catelog = c.id。 还需要预留一个
@@ -163,7 +163,7 @@ public interface IBaseDao<T> {
 			sqliteValue = "SELECT entry.*, catelogName, " + selectCover + " AS cover FROM ${tableName} entry INNER JOIN " + catelog_finById_sqlite
 					+ " ON entry.`catelogId` = c.catelogId WHERE 1 = 1 ORDER BY id DESC", sqliteCountSql = "SELECT COUNT(entry.id) AS count FROM ${tableName} entry WHERE catelogId IN " + catelog_find_sqlite
 							+ " AND 1 = 1")
-	public PageResult<T> findPagedListByCatelogId_Cover(int catelogId, int start, int limit, Function<String, String> sqlHandler);
+	public PageResult<T> findPagedListByCatalogId_Cover(int catelogId, int start, int limit, Function<String, String> sqlHandler);
 
 	// ---------------- create、update、delete------------------
 
