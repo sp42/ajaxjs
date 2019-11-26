@@ -5,7 +5,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.Function;
 
+import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.util.CommonUtil;
 
 /**
@@ -15,6 +17,9 @@ import com.ajaxjs.util.CommonUtil;
  *
  */
 public class UserUtil {
+	public static Function<String, String> whereByuserId(long userId) {
+		return BaseService.setWhere("userId = " + userId);
+	}
 
 	/**
 	 * 生成指定长度的随机字符，可能包含数字
@@ -68,8 +73,8 @@ public class UserUtil {
 	/**
 	 * 测试 8421 码是否包含 v
 	 * 
-	 * @param v		当前权限值
-	 * @param all	同值
+	 * @param v 当前权限值
+	 * @param all 同值
 	 * @return true=已包含
 	 */
 	public static boolean testBCD(int v, int all) {
@@ -86,8 +91,7 @@ public class UserUtil {
 		/**
 		 * 是否可以发送
 		 * 
-		 * @param id
-		 *            手机号或者 ip
+		 * @param id 手机号或者 ip
 		 * @return 如果成功将发送时间修改为当前时间, 则返回true. 否则返回false
 		 */
 		public static boolean canSend(String id) {

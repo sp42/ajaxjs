@@ -11,6 +11,40 @@ public class User extends BaseModel {
 	 * 用户姓名
 	 */
 	private String username;
+	
+	private String jobTitle;
+	
+	private String address;
+	
+	private Long locationProvince;
+	
+	private Long locationCity;
+	
+	private Long locationDistrict;
+
+	public Long getLocationProvince() {
+		return locationProvince;
+	}
+
+	public void setLocationProvince(Long locationProvince) {
+		this.locationProvince = locationProvince;
+	}
+
+	public Long getLocationCity() {
+		return locationCity;
+	}
+
+	public void setLocationCity(Long locationCity) {
+		this.locationCity = locationCity;
+	}
+
+	public Long getLocationDistrict() {
+		return locationDistrict;
+	}
+
+	public void setLocationDistrict(Long locationDistrict) {
+		this.locationDistrict = locationDistrict;
+	}
 
 	/**
 	 * 设置用户姓名
@@ -190,29 +224,7 @@ public class User extends BaseModel {
 	public Integer getStatus() {
 		return status;
 	}
-
-	/**
-	 * 是否已删除
-	 */
-	private Integer deleted;
-
-	/**
-	 * 设置是否已删除
-	 * 
-	 * @param deleted
-	 */
-	public void setDeleted(Integer deleted) {
-		this.deleted = deleted;
-	}
-
-	/**
-	 * 获取是否已删除
-	 * 
-	 * @return 是否已删除
-	 */
-	public Integer getDeleted() {
-		return deleted;
-	}
+ 
 
 	/**
 	 * 区域 id
@@ -280,5 +292,21 @@ public class User extends BaseModel {
 
 	public void setVerify(int verify) {
 		this.verify = verify;
+	}
+
+	public String getJobTitle() {
+		return jobTitle;
+	}
+
+	public void setJobTitle(String jobTitle) {
+		this.jobTitle = jobTitle;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 }

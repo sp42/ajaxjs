@@ -221,6 +221,8 @@
 		  <td>&nbsp;</td>
 	  </tr>
 	</table>
+	
+	<p class="aj-note">修改权限后，用户退出当前帐号重新登录才有效。</p>
 	<script src="${ctx}/asset/admin/user-assign-right.js"></script>
 	<script>
 		VUE = new Vue({

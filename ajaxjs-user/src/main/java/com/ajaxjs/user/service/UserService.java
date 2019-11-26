@@ -6,7 +6,6 @@ import com.ajaxjs.cms.app.attachment.Attachment_picture;
 import com.ajaxjs.cms.app.attachment.Attachment_pictureService;
 import com.ajaxjs.cms.app.attachment.Attachment_pictureServiceImpl;
 import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.ioc.Bean;
@@ -189,10 +188,6 @@ public class UserService extends BaseService<User> {
 		return true;
 	}
 
-	public User findById(Long id) {
-		return dao.findById(id);
-	}
-
 	public int doUpdate(User user) throws ServiceException {
 		LOGGER.info("修改用户信息");
 
@@ -223,11 +218,6 @@ public class UserService extends BaseService<User> {
 		return dao.delete(bean);
 	}
 
-	@Override
-	public PageResult<User> findPagedList(int start, int limit) {
-		return dao.findPagedList(start, limit, null);
-	}
-
 	public Attachment_picture updateOrCreateAvatar(long userUId, UploadFileInfo info) throws Exception {
 		if (!info.isOk)
 			throw new ServiceException("图片上传失败");
@@ -249,7 +239,7 @@ public class UserService extends BaseService<User> {
 		avatar.setPicWidth(imgHelper.width);
 		avatar.setPicHeight(imgHelper.height);
 		avatar.setFileSize((int) (imgHelper.file.length() / 1024));
-		avatar.setCatelog(Attachment_pictureService.AVATAR);
+		avatar.setCatalog(Attachment_pictureService.AVATAR);
 
 		if (isCreate) {
 			if (avatarService.create(avatar) != null) {

@@ -14,7 +14,7 @@
 			<label>
 				<dt>用户帐号</dt>
 				<dd>
-					<input type="text" name="userID" placeholder="请输入${userID}" required pattern="^[a-zA-Z0-9_-]{4,10}$" />
+					<input type="text" name="userID" placeholder="请输入${userID}" required pattern="^[a-zA-Z0-9_-]{4,20}$" />
 				</dd>
 			</label>
 		</dl>
@@ -87,7 +87,7 @@
 			<label>
 				<dt>用户名</dt>
 				<dd>
-					<input type="text" name="name" placeholder="4-15位英文/数字/下划线/中划线" @blur="checkUserId($event)" pattern="^[a-zA-Z0-9_-]{4,15}$" required />
+					<input type="text" name="name" placeholder="4-15位英文/数字/下划线/中划线" @blur="checkUserId($event)" pattern="^[a-zA-Z0-9_-]{4,20}$" required />
 					<span>{{checkUserIdMsg}}</span>
 				</dd>
 			</label>

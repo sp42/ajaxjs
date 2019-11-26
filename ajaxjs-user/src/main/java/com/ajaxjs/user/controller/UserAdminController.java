@@ -1,5 +1,9 @@
 package com.ajaxjs.user.controller;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -20,9 +24,11 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.user.UserDict;
+import com.ajaxjs.user.filter.LoginCheck;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.role.RoleService;
 import com.ajaxjs.user.service.UserService;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 用户系统后台部分的控制器
@@ -30,6 +36,8 @@ import com.ajaxjs.user.service.UserService;
 @Bean
 @Path("/admin/user")
 public class UserAdminController extends BaseController<User> {
+	private static final LogHelper LOGGER = LogHelper.getLog(UserAdminController.class);
+	
 	@Resource("UserService")
 	private UserService service;
 
@@ -40,8 +48,13 @@ public class UserAdminController extends BaseController<User> {
 	@Path(list)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+		LOGGER.info("后台-会员列表");
+		
+		List<Map<String, Object>> userGroups = roleService.getDao().findList(null);
+		
 		mv.put("SexGender", UserDict.SEX_GENDER);
-		mv.put("UserGroups", CatalogServiceImpl.list2map_id_as_key(roleService.getDao().findList(null)));
+		mv.put("UserGroups", CatalogServiceImpl.list2map_id_as_key(userGroups));
+		mv.put("UserGroupsJSON", toJson(userGroups, false).replaceAll("\"", "'"));
 
 		page(mv, service.getDao().findPagedList(start, limit, null), CommonConstant.UI_ADMIN);
 
@@ -53,6 +66,7 @@ public class UserAdminController extends BaseController<User> {
 	@Path(idInfo)
 	@Override
 	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
+		mv.put("UserGroupsJSON", toJson(roleService.getDao().findList(null), false).replaceAll("\"", "'"));
 		mv.put("SexGender", UserDict.SEX_GENDER);
 		super.editUI(id, mv);
 
@@ -91,6 +105,27 @@ public class UserAdminController extends BaseController<User> {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String delete(@PathParam(id) Long id) {
 		return delete(id, new User());
+	}
+	
+	@GET
+	@Path("account-center")
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
+	public String accountCenter(ModelAndView mv, HttpServletRequest r) {
+		LOGGER.info("后台-账号中心");
+		
+		mv.put("UserGroups", CatalogServiceImpl.list2map_id_as_key(RoleService.dao.findList(null)));
+		mv.put("info", service.findById(BaseUserController.getUserId(r)));
+		
+		return jsp("admin/account-center");
+	}
+	@GET
+	@Path("profile")
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
+	public String profile(ModelAndView mv, HttpServletRequest r) {
+		LOGGER.info("后台-个人信息");
+		
+		mv.put("info", service.findById(BaseUserController.getUserId(r)));
+		return jsp("admin/user-profile");
 	}
 
 	@Override

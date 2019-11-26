@@ -133,8 +133,6 @@ public abstract class AbstractUserController extends BaseUserController {
 			getService().register(user, password);
 			return jsonOk("恭喜你，注册成功");
 		}
-
-
 	}
 
 	// @POST

@@ -6,7 +6,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.ajaxjs.cms.app.attachment.Attachment_picture;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.mvc.ModelAndView;
@@ -104,10 +103,12 @@ public class LoginService extends UserService {
 			return;
 
 		HttpSession sess = request.getSession();
+
 		sess.setAttribute("userId", user.getId());
 		sess.setAttribute("userUid", user.getUid());
 		sess.setAttribute("userName", user.getName());
 		sess.setAttribute("userPhone", user.getPhone());
+		sess.setAttribute("userAvatar", user.getAvatar() == null ? null : (request.getContextPath() + "/" + user.getAvatar()));
 
 		// 获取资源权限总值
 		sess.setAttribute("userGroupId", user.getRoleId());
@@ -120,10 +121,9 @@ public class LoginService extends UserService {
 			sess.setAttribute("privilegeTotal", privilegeTotal);
 		}
 
-		Attachment_picture avatar = dao.findAvaterByUserId(user.getUid());
-
-		if (avatar != null)
-			sess.setAttribute("userAvatar", request.getContextPath() + avatar.getPath());
+//		Attachment_picture avatar = dao.findAvaterByUserId(user.getUid());
+//
+//		if (avatar != null)
 	}
 
 	/**

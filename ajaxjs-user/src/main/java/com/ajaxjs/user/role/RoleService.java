@@ -16,7 +16,7 @@ import com.ajaxjs.orm.annotation.TableName;
 
 @Bean("UserRoleService")
 public class RoleService extends BaseService<Map<String, Object>> {
-	RoleDao dao = new Repository().bind(RoleDao.class);
+	public static RoleDao dao = new Repository().bind(RoleDao.class);
 
 	{
 		setUiName("用户角色");

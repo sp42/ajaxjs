@@ -55,9 +55,9 @@
 	<h3 class="user"><i></i> 用户管理</h3>
 	<ul>
 		<li><a target="iframepage" href="${ctx}/admin/user/list/">用户管理</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/bookmark/list/">收藏一览</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/address/list/">地址薄一览</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/like/list/">点赞一览</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/bookmark/list/">收藏一览</a></li>
+		<li><a target="iframepage" href="${ctx}/under_construction">点赞一览</a></li>
 	<%if(RoleService.check(privilegeTotal, RightConstant.USER_PRIVILEGE)){ %>
 		<li><a target="iframepage" href="${ctx}/admin/user/privilege/">用户-权限管理</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/user/user_group/">用户组管理</a></li>
@@ -85,7 +85,6 @@
 	<ul>
 		<li><a target="iframepage" href="${ctx}/admin/config/">所有配置</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/catelog/">分类管理</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/DataDict/">数据字典管理</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/attachmentPicture/list/">图片列表</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/userLoginLog/">登录日志</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/userGlobalLog/">操作日志</a></li>
@@ -102,14 +101,15 @@
 		<li><a target="iframepage" href="${ajaxjsui}/ui-doc">前端文档</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/DataBaseShowStru">表字段浏览</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/tomcat-log/">后台日志浏览</a></li>
-		<li><a target="iframepage" href="${ctx}/jsp/swagger-ui/">API 文档</a></li>
+		<%-- <li><a target="iframepage" href="${ctx}/jsp/swagger-ui/">API 文档</a></li> --%>
 	</ul>
 </li>
 <%}%>
 <li>
 	<h3 class="accountCenter"><i></i> 账号中心</h3>
 	<ul>
-		<li><a target="iframepage" href="${ctx}/user/account-center/">账号中心</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/user/account-center/">账号中心</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/user/profile">个人信息</a></li>
 		<li><a href="javascript:logout();">退出登录</a></li>
 	</ul>
 </li>

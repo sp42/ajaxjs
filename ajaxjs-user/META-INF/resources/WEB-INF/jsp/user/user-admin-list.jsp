@@ -18,12 +18,8 @@
 			
 			<!-- 搜索、分类下拉 -->
 			<aj-admin-filter-panel :no-catalog="true">
-				<select class="ajaxjs-select" name="level" style="width:130px;">
-					<option>选择用户组</option>
-					<c:foreach items="${UserGroups}" var="item">
-						<option value="${item.key}" ${item.key == param.level ? 'selected' : ''}>${item.value.name}</option>
-					</c:foreach>
-				</select> 
+				<aj-tree-user-role-select :value="${empty param.roleId ? '0' : param.roleId}" :json="${UserGroupsJSON}">
+				</aj-tree-user-role-select>
 			</aj-admin-filter-panel>
 		</div>
 		
@@ -68,8 +64,8 @@
 						<td>${current.id}</td>
 						<td>
 							<c:if test="${not empty current.avatar}">
-								<img src="${ctx}${current.avatar}" style="max-width:50px;max-height:60px;vertical-align: middle;" 
-							 		onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${ctx}${current.avatar}';" onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
+								<img src="${ctx}/${current.avatar}" style="max-width:50px;max-height:60px;vertical-align: middle;" 
+							 		onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${ctx}/${current.avatar}';" onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
 							</c:if>
 						</td>
 						<td>

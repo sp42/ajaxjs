@@ -12,8 +12,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ajaxjs.framework.BaseController;
-
 /**
  * 进入后台一切资源的拦截器
  */
@@ -26,7 +24,7 @@ public class UserAdminFilter implements Filter {
 
 		if (request.getRequestURI().equals(request.getContextPath() + "/admin/login/")) {
 			// 后台登录
-			request.getRequestDispatcher(BaseController.jsp("admin/admin-login.jsp")).forward(request, response);
+			chain.doFilter(request, response);
 		} else if (request.getSession().getAttribute("userId") == null) {
 			response.setStatus(401, "Authentication Required");
 			response.setCharacterEncoding(StandardCharsets.UTF_8.toString());

@@ -1,10 +1,7 @@
 package com.ajaxjs.user.service;
 
-import java.util.function.Function;
-
 import com.ajaxjs.cms.app.attachment.Attachment_picture;
 import com.ajaxjs.framework.IBaseDao;
-import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
 import com.ajaxjs.user.model.User;
@@ -44,16 +41,11 @@ public interface UserDao extends IBaseDao<User> {
 	 * @param userId
 	 * @return
 	 */
-
 	@Select("SELECT * FROM attachment_picture WHERE catelog = 2 AND owner = ? ORDER BY id DESC LIMIT 1")
 	public Attachment_picture findAvaterByUserId(long userId);
 
 	@Select("SELECT accessKey FROM user_role WHERE id = ?")
 	public Long getPrivilegeByUserGroupId(long userGroupId);
-
-	@Select("SELECT id, avatar, name, username, sex, birthday, email, phone, createDate, location, roleId, " + selectCover + " AS cover FROM ${tableName} entry")
-	@Override
-	public PageResult<User> findPagedList(int start, int limit, Function<String, String> sqlHandler);
 
 	/**
 	 * 获取用户的名称，读取两个值，用户 id 即 user.name 和 用户昵称 user.username user 表名缩写必须为 u
