@@ -43,7 +43,7 @@ public class GroupController extends BaseController<Group> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
 		page(mv, service.findPagedList(start, limit, null), CommonConstant.UI_ADMIN);
-		return jsp("");
+		return jsp("shop/simple-group-admin-list");
 	}
 	
 	@GET
@@ -60,14 +60,15 @@ public class GroupController extends BaseController<Group> {
 	@Override
 	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
 		super.editUI(id, mv);
-		return editUI();
+		return jsp("shop/simple-group-edit");
 	}
 
 	@GET
+	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
 	public String createUI(ModelAndView mv) {
 		super.createUI(mv);
-		return editUI();
+		return jsp("shop/simple-group-edit");
 	}
 
 	@POST

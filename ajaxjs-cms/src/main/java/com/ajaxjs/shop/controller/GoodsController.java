@@ -64,7 +64,7 @@ public class GoodsController extends BaseController<Goods> {
 	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
 		IBaseDao<Goods> dao = service.getDao();
 		super.editUI(id, mv, dao::findById_catelog_avatar);
-		return editUI();
+		return jsp("shop/goods-edit");
 	}
 	
 	@GET
@@ -76,10 +76,11 @@ public class GoodsController extends BaseController<Goods> {
 	}
 
 	@GET
+	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
 	public String createUI(ModelAndView mv) {
 		super.createUI(mv);
-		return editUI();
+		return jsp("shop/goods-edit");
 	}
 
 	@POST

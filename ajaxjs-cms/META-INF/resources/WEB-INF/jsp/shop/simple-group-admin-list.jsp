@@ -86,7 +86,7 @@
 						<td>${current.soldNumber}/${current.maxGoodsNumber}</td>
 						<td>￥${current.coverPrice}/￥${current.titlePrice}</td>
 						<td><a href="?filterField=sellerId&filterValue=${current.sellerId}">${sellers[current.sellerId].name}</a></td>
-						<td>${statusMap[current.status]}</td>
+						<td>${statusMap[current.stat]}</td>
 						<td>
 							<a href="${ctx}/admin/${shortName}/${current.id}/"><img src="${commonAssetIcon}/update.gif" style="vertical-align: sub;" />编辑</a>
 							<a href="javascript:aj.admin.del('${current.id}', '${current.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>

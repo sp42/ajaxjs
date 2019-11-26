@@ -21,7 +21,7 @@
 				</template>
 			</ajaxjs-admin-header>
 
-			<form action="." method="${isCreate ? 'POST' : 'PUT'}" class="entityEdit">
+			<form action="." method="${isCreate ? 'POST' : 'PUT'}">
 			<c:if test="${!isCreate}">
 				<input type="hidden" name="id" value="${info.id}" /><!-- 传送 id 参数 -->
 			</c:if>
@@ -206,7 +206,7 @@
 				mounted(){
 					// 表单提交
 					aj.xhr.form('form.entityEdit', json => {
-						if(json && json.msg){
+						if(json && json.msg) {
 							aj.alert.show(json.msg);
 							${isCreate} && json && json.isOk && setTimeout(()=>location.assign(json.newlyId + "/"), 2000);
 						}

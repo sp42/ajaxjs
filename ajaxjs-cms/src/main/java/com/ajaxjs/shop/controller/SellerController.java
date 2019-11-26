@@ -64,14 +64,14 @@ public class SellerController extends BaseController<Seller> {
 	@Override
 	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
 		super.editUI(id, mv);
-		return editUI();
+		return jsp("shop/seller-edit");
 	}
 	
 	@GET
 	@Override
 	public String createUI(ModelAndView mv) {
 		super.createUI(mv);
-		return editUI();
+		return jsp("shop/seller-edit");
 	}
 
 	@POST

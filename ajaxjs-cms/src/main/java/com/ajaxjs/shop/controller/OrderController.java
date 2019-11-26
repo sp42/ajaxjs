@@ -82,7 +82,7 @@ public class OrderController extends BaseController<OrderInfo> {
 		List<OrderItem> items = OrderInfoService.dao.findOrderItemListByOrderId(id);
 		mv.put("orderItems", items);
 		
-		return editUI();
+		return jsp("shop/order-edit");
 	}
 
 	@PUT

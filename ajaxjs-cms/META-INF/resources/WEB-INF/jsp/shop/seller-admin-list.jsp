@@ -62,7 +62,7 @@
 						<td>${current.tel}</td>
 						<td><c:dateFormatter value="${current.createDate}" /></td>
 						<td><c:dateFormatter value="${current.updateDate}" /></td>
-						<td>${(empty current.status || current.status == 1) ? '已上线': '已下线'}</td>
+						<td>${(empty current.stat || current.stat == 1) ? '已上线': '已下线'}</td>
 						<td>
 							<a href="${ctx}/admin/${shortName}/${current.id}/"><img src="${commonAssetIcon}/update.gif" style="vertical-align: sub;" />编辑</a>
 							<a href="javascript:aj.admin.del('${current.id}', '${current.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>
