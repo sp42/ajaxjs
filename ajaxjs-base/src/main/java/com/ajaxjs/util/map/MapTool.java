@@ -227,7 +227,6 @@ public class MapTool {
 
 		eachField(bean, (key, v, property) -> {
 			
-			System.out.println("key:"+key);
 			try {
 				if (map.containsKey(key)) {
 					Object value = map.get(key);
