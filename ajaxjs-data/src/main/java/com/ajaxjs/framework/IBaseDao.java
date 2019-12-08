@@ -51,7 +51,7 @@ public interface IBaseDao<T> {
 	/**
 	 * 简单关联 catelog 表，注意表名称 alies 为 gc
 	 */
-	public final static String catelog_simple_join = " LEFT JOIN general_catalog gc ON gc.id = entry.catelogId ";
+	public final static String catelog_simple_join = " LEFT JOIN general_catalog gc ON gc.id = entry.catalogId ";
 
 	public final static String pathLike_mysql = " FROM general_catalog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catalog WHERE id = ? ) , '%'))";
 //	public final static String pathLike_sqlite = " FROM general_catalog WHERE `path` LIKE ( (SELECT `path` FROM general_catalog WHERE id = ? ) || '/%')";
@@ -63,7 +63,7 @@ public interface IBaseDao<T> {
 	 */
 	public final static String catelog_finById = " (SELECT id, name " + pathLike_mysql + ") AS c ";
 	
-	public final static String catelog_finById_sqlite = "(SELECT id AS catelogId, name AS catelogName " + pathLike_sqlite + ") AS c";
+	public final static String catelog_finById_sqlite = "(SELECT id AS catalogId, name AS catalogName " + pathLike_sqlite + ") AS c";
 
 	/**
 	 * IN 查询用
@@ -106,11 +106,11 @@ public interface IBaseDao<T> {
 	 * @param id
 	 * @return
 	 */
-	@Select(value = "SELECT GROUP_CONCAT(p.id, '|', p.`path`, '|', IFNULL(p.`catelog`, 0), '|', p.`index` SEPARATOR '\", \"') AS pics, e.*, "
-			+ "(SELECT `path` FROM attachment_picture p WHERE p.`catelog` = 2 AND owner = e.uid ORDER BY ID DESC LIMIT 1) AS cover"
+	@Select(value = "SELECT GROUP_CONCAT(p.id, '|', p.`path`, '|', IFNULL(p.`catalog`, 0), '|', p.`index` SEPARATOR '\", \"') AS pics, e.*, "
+			+ "(SELECT `path` FROM attachment_picture p WHERE p.`catalog` = 2 AND owner = e.uid ORDER BY ID DESC LIMIT 1) AS cover"
 			+ " FROM  ${tableName} e LEFT JOIN attachment_picture p ON e.uid = p.owner WHERE e.id = ?",
 
-			sqliteValue = "SELECT (p.id || '|' || p.`path` || '|' || IFNULL(p.`catelog`, 0) || '|' || p.`index` ) AS pics, e.*, " + " p.path AS cover"
+			sqliteValue = "SELECT (p.id || '|' || p.`path` || '|' || IFNULL(p.`catalog`, 0) || '|' || p.`index` ) AS pics, e.*, " + " p.path AS cover"
 					+ " FROM ${tableName} e LEFT JOIN attachment_picture p ON e.uid = p.owner WHERE e.id = ? ORDER BY p.id DESC LIMIT 1")
 	public T findById_Attachment(Long id);
 
