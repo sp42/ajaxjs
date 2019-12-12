@@ -91,6 +91,10 @@ public class BeanContext {
 
 		return obj == null ? null : (T) obj;
 	}
+	
+	public static <T> T  getBean(Class<T> clz) {
+		return getBeanByClass(clz);
+	}
 
 	/**
 	 * 扫描注解、创建 bean 对象、记录依赖关系
@@ -113,7 +117,6 @@ public class BeanContext {
 			if (annotation == null && namedAnno == null)
 				continue; // 不是 bean 啥都不用做
 
-			// LOGGER.info("IOC 扫描：" + item);
 			String beanName = getBeanId(annotation, item);
 
 			if (CommonUtil.isEmptyString(beanName)) {

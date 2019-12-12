@@ -27,17 +27,17 @@ public class XMLHelper {
 	/**
 	 * 获取某个节点
 	 * 
-	 * @param dbCfg
+	 * @param dbXmlCfg 数据库配置的 XML 文件
 	 * @param xpath
 	 * @param fn
 	 */
-	public static void xPath(String dbCfg, String xpath, Consumer<Node> fn) {
+	public static void xPath(String dbXmlCfg, String xpath, Consumer<Node> fn) {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
 
 		try {
 			XPathExpression expr = XPathFactory.newInstance().newXPath().compile(xpath);
-			NodeList nodes = (NodeList) expr.evaluate(factory.newDocumentBuilder().parse(dbCfg), XPathConstants.NODESET);
+			NodeList nodes = (NodeList) expr.evaluate(factory.newDocumentBuilder().parse(dbXmlCfg), XPathConstants.NODESET);
 
 			for (int i = 0; i < nodes.getLength(); i++)
 				fn.accept(nodes.item(i));

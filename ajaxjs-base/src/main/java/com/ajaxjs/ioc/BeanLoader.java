@@ -75,8 +75,16 @@ public class BeanLoader extends AbstractScanner<Class<Object>> {
 		}
 	}
 
+	/**
+	 * 
+	 * @param cc
+	 * @throws ClassNotFoundException
+	 * @throws CannotCompileException
+	 * @throws NotFoundException
+	 */
 	private void makeSetter(CtClass cc) throws ClassNotFoundException, CannotCompileException, NotFoundException {
 		CtField[] fields = cc.getDeclaredFields();
+		
 		for (CtField field : fields) {
 			if (field.getAnnotation(Resource.class) != null) {
 				String setMethodName = "set" + ReflectUtil.firstLetterUpper(field.getName());
