@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.snaker.engine.DBAccess;
 import org.snaker.engine.IManagerService;
 import org.snaker.engine.IOrderService;
@@ -29,7 +27,6 @@ import org.snaker.engine.cfg.Configuration;
 import org.snaker.engine.entity.Order;
 import org.snaker.engine.entity.Process;
 import org.snaker.engine.entity.Task;
-import org.snaker.engine.helper.AssertHelper;
 import org.snaker.engine.helper.DateHelper;
 import org.snaker.engine.helper.StringHelper;
 import org.snaker.engine.model.NodeModel;
@@ -38,6 +35,8 @@ import org.snaker.engine.model.StartModel;
 import org.snaker.engine.model.TaskModel;
 import org.snaker.engine.model.TransitionModel;
 
+import com.ajaxjs.util.logger.LogHelper;
+
 /**
  * 基本的流程引擎实现类
  * 
@@ -45,32 +44,33 @@ import org.snaker.engine.model.TransitionModel;
  * @since 1.0
  */
 public class SnakerEngineImpl implements SnakerEngine {
-	private static final Logger log = LoggerFactory.getLogger(SnakerEngineImpl.class);
+	public static final LogHelper LOGGER = LogHelper.getLog(SnakerEngineImpl.class);
+
 	/**
 	 * Snaker配置对象
 	 */
 	protected Configuration configuration;
-	
+
 	/**
 	 * 流程定义业务类
 	 */
 	protected IProcessService processService;
-	
+
 	/**
 	 * 流程实例业务类
 	 */
 	protected IOrderService orderService;
-	
+
 	/**
 	 * 任务业务类
 	 */
 	protected ITaskService taskService;
-	
+
 	/**
 	 * 查询业务类
 	 */
 	protected IQueryService queryService;
-	
+
 	/**
 	 * 管理业务类
 	 */
@@ -96,27 +96,27 @@ public class SnakerEngineImpl implements SnakerEngine {
 			TransactionInterceptor interceptor = ServiceContext.find(TransactionInterceptor.class);
 			// 如果初始化配置时提供了访问对象，就对DBAccess进行初始化
 			Object accessObject = this.configuration.getAccessDBObject();
-			
+
 			if (accessObject != null) {
-				if (interceptor != null) 
+				if (interceptor != null)
 					interceptor.initialize(accessObject);
-				
+
 				access.initialize(accessObject);
 			}
-			
+
 			setDBAccess(access);
 			access.runScript();
 		}
-		
+
 		CacheManager cacheManager = ServiceContext.find(CacheManager.class);
-		if (cacheManager == null) 
+		if (cacheManager == null)
 			// 默认使用内存缓存管理器
 			cacheManager = new MemoryCacheManager();
-		
+
 		List<CacheManagerAware> cacheServices = ServiceContext.findList(CacheManagerAware.class);
-		for (CacheManagerAware cacheService : cacheServices) 
+		for (CacheManagerAware cacheService : cacheServices)
 			cacheService.setCacheManager(cacheManager);
-		
+
 		return this;
 	}
 
@@ -198,10 +198,10 @@ public class SnakerEngineImpl implements SnakerEngine {
 	public Order startInstanceById(String id, String operator, Map<String, Object> args) {
 		if (args == null)
 			args = new HashMap<>();
-		
+
 		Process process = process().getProcessById(id);
 		process().check(process, id);
-		
+
 		return startProcess(process, operator, args);
 	}
 
@@ -240,16 +240,16 @@ public class SnakerEngineImpl implements SnakerEngine {
 	public Order startInstanceByName(String name, Integer version, String operator, Map<String, Object> args) {
 		if (args == null)
 			args = new HashMap<>();
-		
+
 		Process process = process().getProcessByVersion(name, version);
 		process().check(process, name);
-		
+
 		return startProcess(process, operator, args);
 	}
 
 	private Order startProcess(Process process, String operator, Map<String, Object> args) {
 		Execution execution = execute(process, operator, args, null, null);
-		
+
 		if (process.getModel() != null) {
 			StartModel start = process.getModel().getStart();
 			Objects.requireNonNull(start, "流程定义[name=" + process.getName() + ", version=" + process.getVersion() + "]没有开始节点");
@@ -269,7 +269,7 @@ public class SnakerEngineImpl implements SnakerEngine {
 
 		Execution current = execute(process, execution.getOperator(), execution.getArgs(), execution.getParentOrder().getId(), execution.getParentNodeName());
 		start.execute(current);
-		
+
 		return current.getOrder();
 	}
 
@@ -285,11 +285,8 @@ public class SnakerEngineImpl implements SnakerEngine {
 	 */
 	private Execution execute(Process process, String operator, Map<String, Object> args, String parentId, String parentNodeName) {
 		Order order = order().createOrder(process, operator, args, parentId, parentNodeName);
-		
-		if (log.isDebugEnabled()) {
-			log.debug("创建流程实例对象:" + order);
-		}
-		
+		LOGGER.info("创建流程实例对象:" + order);
+
 		Execution current = new Execution(this, process, order, args);
 		current.setOperator(operator);
 		return current;
@@ -376,32 +373,34 @@ public class SnakerEngineImpl implements SnakerEngine {
 	private Execution execute(String taskId, String operator, Map<String, Object> args) {
 		if (args == null)
 			args = new HashMap<String, Object>();
+
 		Task task = task().complete(taskId, operator, args);
-		if (log.isDebugEnabled()) {
-			log.debug("任务[taskId=" + taskId + "]已完成");
-		}
+		LOGGER.info("任务[taskId=" + taskId + "]已完成");
 		Order order = query().getOrder(task.getOrderId());
 		Objects.requireNonNull(order, "指定的流程实例[id=" + task.getOrderId() + "]已完成或不存在");
 		order.setLastUpdator(operator);
 		order.setLastUpdateTime(DateHelper.getTime());
 		order().updateOrder(order);
+
 		// 协办任务完成不产生执行对象
-		if (!task.isMajor()) {
+		if (!task.isMajor())
 			return null;
-		}
+
 		Map<String, Object> orderMaps = order.getVariableMap();
 		if (orderMaps != null) {
 			for (Map.Entry<String, Object> entry : orderMaps.entrySet()) {
-				if (args.containsKey(entry.getKey())) {
+				if (args.containsKey(entry.getKey()))
 					continue;
-				}
+
 				args.put(entry.getKey(), entry.getValue());
 			}
 		}
+
 		Process process = process().getProcessById(order.getProcessId());
 		Execution execution = new Execution(this, process, order, args);
 		execution.setOperator(operator);
 		execution.setTask(task);
+
 		return execution;
 	}
 

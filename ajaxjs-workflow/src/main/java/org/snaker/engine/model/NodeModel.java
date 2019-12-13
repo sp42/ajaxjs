@@ -1,30 +1,22 @@
-/* Copyright 2013-2015 www.snakerflow.com.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+/*
+ * Copyright 2013-2015 www.snakerflow.com. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+ * or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 package org.snaker.engine.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.snaker.engine.Action;
 import org.snaker.engine.SnakerException;
 import org.snaker.engine.SnakerInterceptor;
 import org.snaker.engine.core.Execution;
 import org.snaker.engine.helper.ClassHelper;
-import org.snaker.engine.helper.StringHelper;
+
+import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 节点元素（存在输入输出的变迁）
@@ -33,19 +25,18 @@ import org.snaker.engine.helper.StringHelper;
  * @since 1.0
  */
 public abstract class NodeModel extends BaseModel implements Action {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -2377317472320109317L;
-	private static final Logger log = LoggerFactory.getLogger(NodeModel.class);
+
+	public static final LogHelper LOGGER = LogHelper.getLog(NodeModel.class);
+
 	/**
 	 * 输入变迁集合
 	 */
-	private List<TransitionModel> inputs = new ArrayList<TransitionModel>();
+	private List<TransitionModel> inputs = new ArrayList<>();
 	/**
 	 * 输出变迁集合
 	 */
-	private List<TransitionModel> outputs = new ArrayList<TransitionModel>();
+	private List<TransitionModel> outputs = new ArrayList<>();
 	/**
 	 * layout
 	 */
@@ -61,11 +52,11 @@ public abstract class NodeModel extends BaseModel implements Action {
 	/**
 	 * 前置局部拦截器实例集合
 	 */
-	private List<SnakerInterceptor> preInterceptorList = new ArrayList<SnakerInterceptor>();
+	private List<SnakerInterceptor> preInterceptorList = new ArrayList<>();
 	/**
 	 * 后置局部拦截器实例集合
 	 */
-	private List<SnakerInterceptor> postInterceptorList = new ArrayList<SnakerInterceptor>();
+	private List<SnakerInterceptor> postInterceptorList = new ArrayList<>();
 
 	/**
 	 * 具体节点模型需要完成的执行逻辑
@@ -105,18 +96,16 @@ public abstract class NodeModel extends BaseModel implements Action {
 	 */
 	private void intercept(List<SnakerInterceptor> interceptorList, Execution execution) {
 		try {
-			for (SnakerInterceptor interceptor : interceptorList) {
+			for (SnakerInterceptor interceptor : interceptorList)
 				interceptor.intercept(execution);
-			}
 		} catch (Exception e) {
-			log.error("拦截器执行失败=" + e.getMessage());
+			LOGGER.warning("拦截器执行失败=" + e.getMessage());
 			throw new SnakerException(e);
 		}
 	}
 
 	/**
-	 * 根据父节点模型、当前节点模型判断是否可退回。可退回条件： 1、满足中间无fork、join、subprocess模型
-	 * 2、满足父节点模型如果为任务模型时，参与类型为any
+	 * 根据父节点模型、当前节点模型判断是否可退回。可退回条件： 1、满足中间无fork、join、subprocess模型 2、满足父节点模型如果为任务模型时，参与类型为any
 	 * 
 	 * @param parent 父节点模型
 	 * @return 是否可以退回
@@ -132,9 +121,8 @@ public abstract class NodeModel extends BaseModel implements Action {
 			if (source == parent)
 				return true;
 
-			if (source instanceof ForkModel || source instanceof JoinModel || source instanceof SubProcessModel || source instanceof StartModel) {
+			if (source instanceof ForkModel || source instanceof JoinModel || source instanceof SubProcessModel || source instanceof StartModel)
 				continue;
-			}
 
 			result = result || canRejected(source, parent);
 		}
@@ -143,19 +131,19 @@ public abstract class NodeModel extends BaseModel implements Action {
 
 	public <T> List<T> getNextModels(Class<T> clazz) {
 		List<T> models = new ArrayList<T>();
-		for (TransitionModel tm : this.getOutputs()) 
+		for (TransitionModel tm : this.getOutputs())
 			addNextModels(models, tm, clazz);
-		
+
 		return models;
 	}
 
+	@SuppressWarnings("unchecked")
 	protected <T> void addNextModels(List<T> models, TransitionModel tm, Class<T> clazz) {
 		if (clazz.isInstance(tm.getTarget())) {
 			models.add((T) tm.getTarget());
 		} else {
-			for (TransitionModel tm2 : tm.getTarget().getOutputs()) {
+			for (TransitionModel tm2 : tm.getTarget().getOutputs()) 
 				addNextModels(models, tm2, clazz);
-			}
 		}
 	}
 
@@ -189,9 +177,11 @@ public abstract class NodeModel extends BaseModel implements Action {
 
 	public void setPreInterceptors(String preInterceptors) {
 		this.preInterceptors = preInterceptors;
-		if (StringHelper.isNotEmpty(preInterceptors)) {
+
+		if (!CommonUtil.isEmptyString(preInterceptors)) {
 			for (String interceptor : preInterceptors.split(",")) {
 				SnakerInterceptor instance = (SnakerInterceptor) ClassHelper.newInstance(interceptor);
+				
 				if (instance != null)
 					this.preInterceptorList.add(instance);
 			}
@@ -204,9 +194,11 @@ public abstract class NodeModel extends BaseModel implements Action {
 
 	public void setPostInterceptors(String postInterceptors) {
 		this.postInterceptors = postInterceptors;
-		if (StringHelper.isNotEmpty(postInterceptors)) {
+
+		if (!CommonUtil.isEmptyString(postInterceptors)) {
 			for (String interceptor : postInterceptors.split(",")) {
 				SnakerInterceptor instance = (SnakerInterceptor) ClassHelper.newInstance(interceptor);
+				
 				if (instance != null)
 					this.postInterceptorList.add(instance);
 			}

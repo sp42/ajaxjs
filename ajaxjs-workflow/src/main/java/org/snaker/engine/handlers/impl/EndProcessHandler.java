@@ -16,9 +16,10 @@ import org.snaker.engine.entity.Order;
 import org.snaker.engine.entity.Process;
 import org.snaker.engine.entity.Task;
 import org.snaker.engine.handlers.IHandler;
-import org.snaker.engine.helper.StringHelper;
 import org.snaker.engine.model.ProcessModel;
 import org.snaker.engine.model.SubProcessModel;
+
+import com.ajaxjs.util.CommonUtil;
 
 /**
  * 结束流程实例的处理器
@@ -45,7 +46,7 @@ public class EndProcessHandler implements IHandler {
 		engine.order().complete(order.getId());// 结束当前流程实例
 
 		// 如果存在父流程，则重新构造Execution执行对象，交给父流程的SubProcessModel模型execute
-		if (StringHelper.isNotEmpty(order.getParentId())) {
+		if (!CommonUtil.isEmptyString(order.getParentId())) {
 			Order parentOrder = engine.query().getOrder(order.getParentId());
 			if (parentOrder == null)
 				return;

@@ -25,6 +25,8 @@ import org.snaker.engine.helper.JsonHelper;
 import org.snaker.engine.helper.StringHelper;
 import org.snaker.engine.model.ProcessModel;
 
+import com.ajaxjs.util.CommonUtil;
+
 /**
  * 流程实例业务类
  * 
@@ -57,14 +59,14 @@ public class OrderService extends AccessService implements IOrderService {
 		ProcessModel model = process.getModel();
 		
 		if (model != null && args != null) {
-			if (StringHelper.isNotEmpty(model.getExpireTime())) {
+			if (!CommonUtil.isEmptyString(model.getExpireTime())) {
 				String expireTime = DateHelper.parseTime(args.get(model.getExpireTime()));
 				order.setExpireTime(expireTime);
 			}
 			
 			String orderNo = (String) args.get(SnakerEngine.ID);
 			
-			if (StringHelper.isNotEmpty(orderNo)) 
+			if (!CommonUtil.isEmptyString(orderNo)) 
 				order.setOrderNo(orderNo);
 			 else 
 				order.setOrderNo(model.getGenerator().generate(model));

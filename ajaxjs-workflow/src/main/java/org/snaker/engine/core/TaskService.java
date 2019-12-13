@@ -25,7 +25,6 @@ import org.snaker.engine.entity.Order;
 import org.snaker.engine.entity.Process;
 import org.snaker.engine.entity.Task;
 import org.snaker.engine.entity.TaskActor;
-import org.snaker.engine.helper.AssertHelper;
 import org.snaker.engine.helper.DateHelper;
 import org.snaker.engine.helper.JsonHelper;
 import org.snaker.engine.helper.StringHelper;
@@ -36,6 +35,8 @@ import org.snaker.engine.model.ProcessModel;
 import org.snaker.engine.model.TaskModel;
 import org.snaker.engine.model.TaskModel.PerformType;
 import org.snaker.engine.model.TaskModel.TaskType;
+
+import com.ajaxjs.util.CommonUtil;
 
 /**
  * 任务执行业务类
@@ -158,7 +159,7 @@ public class TaskService extends AccessService implements ITaskService {
 		Objects.requireNonNull(histTask, "指定的历史任务[id=" + taskId + "]不存在");
 		boolean isAllowed = true;
 
-		if (StringHelper.isNotEmpty(histTask.getOperator()))
+		if (!CommonUtil.isEmptyString(histTask.getOperator()))
 			isAllowed = histTask.getOperator().equals(operator);
 
 		if (isAllowed) {
@@ -240,7 +241,7 @@ public class TaskService extends AccessService implements ITaskService {
 			access().removeTaskActor(task.getId(), actors);
 			Map<String, Object> taskData = task.getVariableMap();
 			String actorStr = (String) taskData.get(Task.KEY_ACTOR);
-			if (StringHelper.isNotEmpty(actorStr)) {
+			if (!CommonUtil.isEmptyString(actorStr)) {
 				String[] actorArray = actorStr.split(",");
 				StringBuilder newActor = new StringBuilder(actorStr.length());
 				boolean isMatch;
@@ -471,7 +472,7 @@ public class TaskService extends AccessService implements ITaskService {
 	private String[] getTaskActors(TaskModel model, Execution execution) {
 		Object assigneeObject = null;
 		AssignmentHandler handler = model.getAssignmentHandlerObject();
-		if (StringHelper.isNotEmpty(model.getAssignee())) {
+		if (!CommonUtil.isEmptyString(model.getAssignee())) {
 			assigneeObject = execution.getArgs().get(model.getAssignee());
 		} else if (handler != null) {
 			if (handler instanceof Assignment) {
@@ -531,11 +532,11 @@ public class TaskService extends AccessService implements ITaskService {
 	 * 判断当前操作人operator是否允许执行taskId指定的任务
 	 */
 	public boolean isAllowed(Task task, String operator) {
-		if (StringHelper.isNotEmpty(operator)) {
+		if (!CommonUtil.isEmptyString(operator)) {
 			if (SnakerEngine.ADMIN.equalsIgnoreCase(operator) || SnakerEngine.AUTO.equalsIgnoreCase(operator))
 				return true;
 
-			if (StringHelper.isNotEmpty(task.getOperator()))
+			if (!CommonUtil.isEmptyString(task.getOperator()))
 				return operator.equals(task.getOperator());
 		}
 

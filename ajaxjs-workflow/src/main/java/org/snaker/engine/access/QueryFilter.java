@@ -15,6 +15,7 @@
 package org.snaker.engine.access;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import org.apache.commons.lang.StringUtils;
 import org.snaker.engine.helper.AssertHelper;
@@ -109,7 +110,7 @@ public class QueryFilter implements Serializable {
 		return processId;
 	}
 	public QueryFilter setProcessId(String processId) {
-		AssertHelper.notEmpty(processId);
+		Objects.requireNonNull(processId);
 		this.processId = processId;
 		return this;
 	}
@@ -117,7 +118,7 @@ public class QueryFilter implements Serializable {
 		return orderId;
 	}
 	public QueryFilter setOrderId(String orderId) {
-		AssertHelper.notEmpty(orderId);
+		Objects.requireNonNull(orderId);
 		this.orderId = orderId;
 		return this;
 	}
@@ -125,7 +126,7 @@ public class QueryFilter implements Serializable {
 		return taskId;
 	}
 	public QueryFilter setTaskId(String taskId) {
-		AssertHelper.notEmpty(taskId);
+		Objects.requireNonNull(taskId);
 		this.taskId = taskId;
 		return this;
 	}
@@ -133,7 +134,7 @@ public class QueryFilter implements Serializable {
 		return createTimeStart;
 	}
 	public QueryFilter setCreateTimeStart(String createTimeStart) {
-		AssertHelper.notEmpty(createTimeStart);
+		Objects.requireNonNull(createTimeStart);
 		this.createTimeStart = createTimeStart;
 		return this;
 	}
@@ -141,7 +142,7 @@ public class QueryFilter implements Serializable {
 		return createTimeEnd;
 	}
 	public QueryFilter setCreateTimeEnd(String createTimeEnd) {
-		AssertHelper.notEmpty(createTimeEnd);
+		Objects.requireNonNull(createTimeEnd);
 		this.createTimeEnd = createTimeEnd;
 		return this;
 	}
@@ -154,7 +155,7 @@ public class QueryFilter implements Serializable {
 		return this;
 	}
 	public QueryFilter setOperator(String operator) {
-		AssertHelper.notEmpty(operator);
+		Objects.requireNonNull(operator);
 		this.operators = new String[1];
 		this.operators[0] = operator;
 		return this;
@@ -168,7 +169,7 @@ public class QueryFilter implements Serializable {
 		return this;
 	}
 	public QueryFilter setName(String name) {
-		AssertHelper.notEmpty(name);
+		Objects.requireNonNull(name);
 		this.names = new String[1];
 		this.names[0] = name;
 		return this;
@@ -177,7 +178,7 @@ public class QueryFilter implements Serializable {
 		return displayName;
 	}
 	public QueryFilter setDisplayName(String displayName) {
-		AssertHelper.notEmpty(displayName);
+		Objects.requireNonNull(displayName);
 		this.displayName = displayName;
 		return this;
 	}
@@ -193,7 +194,7 @@ public class QueryFilter implements Serializable {
 		return parentId;
 	}
 	public QueryFilter setParentId(String parentId) {
-		AssertHelper.notEmpty(parentId);
+		Objects.requireNonNull(parentId);
 		this.parentId = parentId;
 		return this;
 	}
@@ -201,7 +202,7 @@ public class QueryFilter implements Serializable {
 		return orderNo;
 	}
 	public QueryFilter setOrderNo(String orderNo) {
-		AssertHelper.notEmpty(orderNo);
+		Objects.requireNonNull(orderNo);
 		this.orderNo = orderNo;
 		return this;
 	}
@@ -241,7 +242,7 @@ public class QueryFilter implements Serializable {
 		return operateTime;
 	}
 	public QueryFilter setOperateTime(String operateTime) {
-		AssertHelper.notEmpty(operateTime);
+		Objects.requireNonNull(operateTime);
 		this.operateTime = operateTime;
 		return this;
 	}
@@ -249,7 +250,7 @@ public class QueryFilter implements Serializable {
 		return processType;
 	}
 	public QueryFilter setProcessType(String processType) {
-		AssertHelper.notEmpty(processType);
+		Objects.requireNonNull(processType);
 		this.processType = processType;
 		return this;
 	}

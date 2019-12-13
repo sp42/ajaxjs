@@ -14,8 +14,6 @@ import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.snaker.engine.Context;
 import org.snaker.engine.SnakerEngine;
 import org.snaker.engine.SnakerException;
@@ -32,6 +30,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.ajaxjs.util.logger.LogHelper;
+
 /**
  * 只允许应用程序存在一个Configuration实例 初始化服务上下文，查找流程引擎实现类并初始化依赖的服务
  * 
@@ -39,10 +39,8 @@ import org.w3c.dom.NodeList;
  * @since 1.0
  */
 public class Configuration {
-	/**
-	 * 
-	 */
-	private static final Logger log = LoggerFactory.getLogger(Configuration.class);
+	public static final LogHelper LOGGER = LogHelper.getLog(Configuration.class);
+
 	private static final String BASE_CONFIG_FILE = "base.config.xml";
 	private final static String EXT_CONFIG_FILE = "ext.config.xml";
 	private final static String USER_CONFIG_FILE = "snaker.xml";
@@ -85,9 +83,9 @@ public class Configuration {
 	 * @throws SnakerException
 	 */
 	public SnakerEngine buildSnakerEngine() throws SnakerException {
-		if (log.isInfoEnabled()) {
-			log.info("SnakerEngine start......");
-		}
+
+		LOGGER.info("SnakerEngine start......");
+
 		parser();
 		/**
 		 * 由服务上下文返回流程引擎
@@ -96,8 +94,7 @@ public class Configuration {
 		if (configEngine == null)
 			throw new SnakerException("配置无法发现SnakerEngine的实现类");
 
-		if (log.isInfoEnabled())
-			log.info("SnakerEngine be found:" + configEngine.getClass());
+		LOGGER.info("SnakerEngine be found:" + configEngine.getClass());
 
 		return configEngine.configure(this);
 	}
@@ -106,33 +103,30 @@ public class Configuration {
 	 * 依次解析框架固定的配置及用户自定义的配置 固定配置文件:base.config.xml 扩展配置文件:ext.config.xml 用户自定义配置文件:snaker.xml
 	 */
 	protected void parser() {
-		if (log.isDebugEnabled()) {
-			log.debug("Service parsing start......");
-		}
+		LOGGER.info("Service parsing start......");
 
 		// 默认使用snaker.xml配置自定义的bean
 		String config = ConfigHelper.getProperty("config");
-		if (StringHelper.isEmpty(config)) {
+		if (StringHelper.isEmpty(config))
 			config = USER_CONFIG_FILE;
-		}
+
 		parser(config);
 		parser(BASE_CONFIG_FILE);
 
 		if (!isCMB()) {
 			parser(EXT_CONFIG_FILE);
+
 			for (Entry<String, Class<?>> entry : txClass.entrySet()) {
 				if (interceptor != null) {
 					Object instance = interceptor.getProxy(entry.getValue());
 					ServiceContext.put(entry.getKey(), instance);
-				} else {
+				} else
 					ServiceContext.put(entry.getKey(), entry.getValue());
-				}
 			}
 		}
 
-		if (log.isDebugEnabled()) {
-			log.debug("Service parsing finish......");
-		}
+		LOGGER.info("Service parsing finish......");
+
 	}
 
 	/**
@@ -143,16 +137,18 @@ public class Configuration {
 	private void parser(String resource) {
 		// 解析所有配置节点，并实例化class指定的类
 		DocumentBuilder documentBuilder = XmlHelper.createDocumentBuilder();
+
 		try {
 			if (documentBuilder != null) {
 				InputStream input = StreamHelper.openStream(resource);
 				if (input == null)
 					return;
+
 				Document doc = documentBuilder.parse(input);
 				Element configElement = doc.getDocumentElement();
 				NodeList nodeList = configElement.getChildNodes();
 				int nodeSize = nodeList.getLength();
-				
+
 				for (int i = 0; i < nodeSize; i++) {
 					Node node = nodeList.item(i);
 					if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -160,22 +156,23 @@ public class Configuration {
 						String name = element.getAttribute("name");
 						String className = element.getAttribute("class");
 						String proxy = element.getAttribute("proxy");
-						if (StringHelper.isEmpty(name)) 
+
+						if (StringHelper.isEmpty(name))
 							name = className;
-						
+
 						if (ServiceContext.exist(name)) {
-							log.warn("Duplicate name is:" + name);
+							LOGGER.warning("Duplicate name is:" + name);
 							continue;
 						}
-						
+
 						Class<?> clazz = ClassHelper.loadClass(className);
-						
+
 						if (TransactionInterceptor.class.isAssignableFrom(clazz)) {
 							interceptor = (TransactionInterceptor) ClassHelper.instantiate(clazz);
 							ServiceContext.put(name, interceptor);
 							continue;
 						}
-						
+
 						if (proxy != null && proxy.equalsIgnoreCase("transaction")) {
 							txClass.put(name, clazz);
 						} else {
