@@ -15,10 +15,10 @@
 package org.snaker.engine.cache.memory;
 
 import java.util.Map;
+import java.util.Objects;
 
 import org.snaker.engine.cache.Cache;
 import org.snaker.engine.cache.CacheException;
-import org.snaker.engine.helper.AssertHelper;
 
 /**
  * 基于内存管理cache
@@ -38,7 +38,7 @@ public class MemoryCache<K, V> implements Cache<K, V> {
 	 * @param backingMap
 	 */
 	public MemoryCache(Map<K, V> backingMap) {
-		AssertHelper.notNull(backingMap);
+		Objects.requireNonNull(backingMap);
 		this.map = backingMap;
 	}
 

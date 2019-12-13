@@ -149,7 +149,7 @@ public class QueryFilter implements Serializable {
 		return operators;
 	}
 	public QueryFilter setOperators(String[] operators) {
-		AssertHelper.notNull(operators);
+		Objects.requireNonNull(operators);
 		this.operators = operators;
 		return this;
 	}
@@ -163,7 +163,7 @@ public class QueryFilter implements Serializable {
 		return names;
 	}
 	public QueryFilter setNames(String[] names) {
-		AssertHelper.notNull(names);
+		Objects.requireNonNull(names);
 		this.names = names;
 		return this;
 	}
@@ -185,7 +185,7 @@ public class QueryFilter implements Serializable {
 		return state;
 	}
 	public QueryFilter setState(Integer state) {
-		AssertHelper.notNull(state);
+		Objects.requireNonNull(state);
 		this.state = state;
 		return this;
 	}
@@ -209,7 +209,7 @@ public class QueryFilter implements Serializable {
 		return taskType;
 	}
 	public QueryFilter setTaskType(Integer taskType) {
-		AssertHelper.notNull(taskType);
+		Objects.requireNonNull(taskType);
 		this.taskType = taskType;
 		return this;
 	}
@@ -217,7 +217,7 @@ public class QueryFilter implements Serializable {
 		return performType;
 	}
 	public QueryFilter setPerformType(Integer performType) {
-		AssertHelper.notNull(performType);
+		Objects.requireNonNull(performType);
 		this.performType = performType;
 		return this;
 	}
@@ -225,7 +225,7 @@ public class QueryFilter implements Serializable {
 		return excludedIds;
 	}
 	public QueryFilter setExcludedIds(String[] excludedIds) {
-		AssertHelper.notNull(excludedIds);
+		Objects.requireNonNull(excludedIds);
 		this.excludedIds = excludedIds;
 		return this;
 	}
@@ -233,7 +233,7 @@ public class QueryFilter implements Serializable {
 		return version;
 	}
 	public QueryFilter setVersion(Integer version) {
-		AssertHelper.notNull(version);
+		Objects.requireNonNull(version);
 		this.version = version;
 		return this;
 	}

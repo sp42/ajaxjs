@@ -1,16 +1,8 @@
-/* Copyright 2013-2015 www.snakerflow.com.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+/*
+ * Copyright 2013-2015 www.snakerflow.com. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+ * or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 package org.snaker.engine.cfg;
 
@@ -56,16 +48,15 @@ public class Configuration {
 	private final static String USER_CONFIG_FILE = "snaker.xml";
 
 	/**
-	 * 访问数据库的对象，根据使用的orm框架进行设置。如果未提供此项设置，则按照默认orm加载方式初始化 jdbc:DataSource
-	 * hibernate:SessionFactory mybatis:SqlSessionFactory
+	 * 访问数据库的对象，根据使用的orm框架进行设置。如果未提供此项设置，则按照默认orm加载方式初始化 jdbc:DataSource hibernate:SessionFactory mybatis:SqlSessionFactory
 	 */
 	private Object accessDBObject;
-	
+
 	/**
 	 * 事务拦截器抽象类
 	 */
 	private TransactionInterceptor interceptor = null;
-	
+
 	/**
 	 * 需要事务管理的class类型
 	 */
@@ -102,18 +93,17 @@ public class Configuration {
 		 * 由服务上下文返回流程引擎
 		 */
 		SnakerEngine configEngine = ServiceContext.getEngine();
-		if (configEngine == null) 
+		if (configEngine == null)
 			throw new SnakerException("配置无法发现SnakerEngine的实现类");
-		
-		if (log.isInfoEnabled()) 
+
+		if (log.isInfoEnabled())
 			log.info("SnakerEngine be found:" + configEngine.getClass());
-		
+
 		return configEngine.configure(this);
 	}
 
 	/**
-	 * 依次解析框架固定的配置及用户自定义的配置 固定配置文件:base.config.xml 扩展配置文件:ext.config.xml
-	 * 用户自定义配置文件:snaker.xml
+	 * 依次解析框架固定的配置及用户自定义的配置 固定配置文件:base.config.xml 扩展配置文件:ext.config.xml 用户自定义配置文件:snaker.xml
 	 */
 	protected void parser() {
 		if (log.isDebugEnabled()) {
@@ -127,7 +117,7 @@ public class Configuration {
 		}
 		parser(config);
 		parser(BASE_CONFIG_FILE);
-		
+
 		if (!isCMB()) {
 			parser(EXT_CONFIG_FILE);
 			for (Entry<String, Class<?>> entry : txClass.entrySet()) {
@@ -162,6 +152,7 @@ public class Configuration {
 				Element configElement = doc.getDocumentElement();
 				NodeList nodeList = configElement.getChildNodes();
 				int nodeSize = nodeList.getLength();
+				
 				for (int i = 0; i < nodeSize; i++) {
 					Node node = nodeList.item(i);
 					if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -169,19 +160,22 @@ public class Configuration {
 						String name = element.getAttribute("name");
 						String className = element.getAttribute("class");
 						String proxy = element.getAttribute("proxy");
-						if (StringHelper.isEmpty(name)) {
+						if (StringHelper.isEmpty(name)) 
 							name = className;
-						}
+						
 						if (ServiceContext.exist(name)) {
 							log.warn("Duplicate name is:" + name);
 							continue;
 						}
+						
 						Class<?> clazz = ClassHelper.loadClass(className);
+						
 						if (TransactionInterceptor.class.isAssignableFrom(clazz)) {
 							interceptor = (TransactionInterceptor) ClassHelper.instantiate(clazz);
 							ServiceContext.put(name, interceptor);
 							continue;
 						}
+						
 						if (proxy != null && proxy.equalsIgnoreCase("transaction")) {
 							txClass.put(name, clazz);
 						} else {

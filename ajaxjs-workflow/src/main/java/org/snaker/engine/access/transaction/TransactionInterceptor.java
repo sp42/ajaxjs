@@ -86,7 +86,7 @@ public abstract class TransactionInterceptor implements MethodInterceptor {
 			}
 			try {
 				status = getTransaction();
-				AssertHelper.notNull(status);
+				Objects.requireNonNull(status);
 				//调用具体无事务支持的业务逻辑
 				result = proxy.invokeSuper(obj, args);
 				//如果整个执行过程无异常抛出，则提交TransactionStatus持有的transaction对象

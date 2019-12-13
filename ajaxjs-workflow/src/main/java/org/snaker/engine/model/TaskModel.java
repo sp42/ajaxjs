@@ -209,7 +209,7 @@ public class TaskModel extends WorkModel {
 		if(StringHelper.isNotEmpty(assignmentHandlerStr)) {
 			this.assignmentHandler = assignmentHandlerStr;
 			assignmentHandlerObject = (AssignmentHandler)ClassHelper.newInstance(assignmentHandlerStr);
-			AssertHelper.notNull(assignmentHandlerObject, "分配参与者处理类实例化失败");
+			Objects.requireNonNull(assignmentHandlerObject, "分配参与者处理类实例化失败");
 		}
 	}
 
@@ -229,7 +229,7 @@ public class TaskModel extends WorkModel {
 		if(StringHelper.isNotEmpty(callbackStr)) {
 			this.callback = callbackStr;
 			callbackObject = (JobCallback)ClassHelper.newInstance(callbackStr);
-			AssertHelper.notNull(callbackObject, "回调处理类实例化失败");
+			Objects.requireNonNull(callbackObject, "回调处理类实例化失败");
 		}
 	}
 

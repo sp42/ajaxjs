@@ -15,12 +15,12 @@
 package org.snaker.engine.core;
 
 import java.util.List;
+import java.util.Objects;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.snaker.engine.Context;
 import org.snaker.engine.SnakerEngine;
-import org.snaker.engine.helper.AssertHelper;
+
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 单实例的服务上下文
@@ -29,7 +29,7 @@ import org.snaker.engine.helper.AssertHelper;
  * @since 1.5
  */
 public abstract class ServiceContext {
-	private static final Logger log = LoggerFactory.getLogger(ServiceContext.class);
+	public static final LogHelper LOGGER = LogHelper.getLog(ServiceContext.class);
 	
 	/**
 	 * 上下文接口服务{@link Context}
@@ -62,10 +62,11 @@ public abstract class ServiceContext {
 	 * @return
 	 */
 	public static SnakerEngine getEngine() {
-		AssertHelper.notNull(context, "未注册服务上下文");
-		if(engine == null) {
+		Objects.requireNonNull(context, "未注册服务上下文");
+		
+		if(engine == null) 
 			engine = context.find(SnakerEngine.class);
-		}
+		
 		return engine;
 	}
 	
@@ -75,10 +76,9 @@ public abstract class ServiceContext {
 	 * @param object 服务实例
 	 */
 	public static void put(String name, Object object) {
-		AssertHelper.notNull(context, "未注册服务上下文");
-		if(log.isInfoEnabled()) {
-			log.info("put new instance[name=" + name + "][object=" + object + "]");
-		}
+		Objects.requireNonNull(context, "未注册服务上下文");
+		LOGGER.info("put new instance[name=" + name + "][object=" + object + "]");
+	
 		context.put(name, object);
 	}
 	
@@ -88,10 +88,9 @@ public abstract class ServiceContext {
 	 * @param clazz 服务类型
 	 */
 	public static void put(String name, Class<?> clazz) {
-		AssertHelper.notNull(context, "未注册服务上下文");
-		if(log.isInfoEnabled()) {
-			log.info("put new instance[name=" + name + "][clazz=" + clazz.getName() + "]");
-		}
+		Objects.requireNonNull(context, "未注册服务上下文");
+		LOGGER.info("put new instance[name=" + name + "][clazz=" + clazz.getName() + "]");
+	
 		context.put(name, clazz);
 	}
 	
@@ -101,7 +100,7 @@ public abstract class ServiceContext {
 	 * @return
 	 */
 	public static boolean exist(String name) {
-		AssertHelper.notNull(context, "未注册服务上下文");
+		Objects.requireNonNull(context, "未注册服务上下文");
 		return context.exist(name);
 	}
 
@@ -111,7 +110,7 @@ public abstract class ServiceContext {
 	 * @return
 	 */
 	public static <T> T find(Class<T> clazz) {
-		AssertHelper.notNull(context, "未注册服务上下文");
+		Objects.requireNonNull(context, "未注册服务上下文");
 		return context.find(clazz);
 	}
 	
@@ -121,7 +120,7 @@ public abstract class ServiceContext {
 	 * @return
 	 */
 	public static <T> List<T> findList(Class<T> clazz) {
-		AssertHelper.notNull(context, "未注册服务上下文");
+		Objects.requireNonNull(context, "未注册服务上下文");
 		return context.findList(clazz);
 	}
 	
@@ -132,7 +131,7 @@ public abstract class ServiceContext {
 	 * @return
 	 */
 	public static <T> T findByName(String name, Class<T> clazz) {
-		AssertHelper.notNull(context, "未注册服务上下文");
+		Objects.requireNonNull(context, "未注册服务上下文");
 		return context.findByName(name, clazz);
 	}
 }

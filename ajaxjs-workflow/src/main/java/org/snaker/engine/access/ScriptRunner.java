@@ -49,7 +49,7 @@ public class ScriptRunner {
     }
 
     public void runScript(String resource) throws IOException, SQLException {
-        AssertHelper.notNull(resource);
+        Objects.requireNonNull(resource);
         InputStream input = StreamHelper.getStreamFromClasspath(resource);
         Reader reader = new InputStreamReader(input, "UTF-8");
         runScript(reader);
@@ -60,7 +60,7 @@ public class ScriptRunner {
      * @param reader 脚本资源
      */
     public void runScript(Reader reader) throws IOException, SQLException {
-        AssertHelper.notNull(connection);
+        Objects.requireNonNull(connection);
         try {
             boolean originalAutoCommit = connection.getAutoCommit();
             try {

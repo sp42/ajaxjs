@@ -1,24 +1,30 @@
-/* Copyright 2013-2015 www.snakerflow.com.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+/*
+ * Copyright 2013-2015 www.snakerflow.com. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+ * or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 package org.snaker.engine.core;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
-import org.snaker.engine.*;
-import org.snaker.engine.entity.*;
+import org.snaker.engine.Assignment;
+import org.snaker.engine.AssignmentHandler;
+import org.snaker.engine.Completion;
+import org.snaker.engine.ITaskService;
+import org.snaker.engine.SnakerEngine;
+import org.snaker.engine.SnakerException;
+import org.snaker.engine.TaskAccessStrategy;
+import org.snaker.engine.entity.HistoryTask;
+import org.snaker.engine.entity.Order;
 import org.snaker.engine.entity.Process;
+import org.snaker.engine.entity.Task;
+import org.snaker.engine.entity.TaskActor;
 import org.snaker.engine.helper.AssertHelper;
 import org.snaker.engine.helper.DateHelper;
 import org.snaker.engine.helper.JsonHelper;
@@ -64,23 +70,27 @@ public class TaskService extends AccessService implements ITaskService {
 	 */
 	public Task complete(String taskId, String operator, Map<String, Object> args) {
 		Task task = access().getTask(taskId);
-		AssertHelper.notNull(task, "指定的任务[id=" + taskId + "]不存在");
+		Objects.requireNonNull(task, "指定的任务[id=" + taskId + "]不存在");
 		task.setVariable(JsonHelper.toJson(args));
-		if (!isAllowed(task, operator)) {
+
+		if (!isAllowed(task, operator))
 			throw new SnakerException("当前参与者[" + operator + "]不允许执行任务[taskId=" + taskId + "]");
-		}
+
 		HistoryTask history = new HistoryTask(task);
 		history.setFinishTime(DateHelper.getTime());
 		history.setTaskState(STATE_FINISH);
 		history.setOperator(operator);
+
 		if (history.getActorIds() == null) {
 			List<TaskActor> actors = access().getTaskActorsByTaskId(task.getId());
 			String[] actorIds = new String[actors.size()];
-			for (int i = 0; i < actors.size(); i++) {
+
+			for (int i = 0; i < actors.size(); i++)
 				actorIds[i] = actors.get(i).getActorId();
-			}
+
 			history.setActorIds(actorIds);
 		}
+
 		access().saveHistory(history);
 		access().deleteTask(task);
 		Completion completion = getCompletion();
@@ -130,7 +140,7 @@ public class TaskService extends AccessService implements ITaskService {
 	 */
 	public Task take(String taskId, String operator) {
 		Task task = access().getTask(taskId);
-		AssertHelper.notNull(task, "指定的任务[id=" + taskId + "]不存在");
+		Objects.requireNonNull(task, "指定的任务[id=" + taskId + "]不存在");
 		if (!isAllowed(task, operator)) {
 			throw new SnakerException("当前参与者[" + operator + "]不允许提取任务[taskId=" + taskId + "]");
 		}
@@ -145,7 +155,7 @@ public class TaskService extends AccessService implements ITaskService {
 	 */
 	public Task resume(String taskId, String operator) {
 		HistoryTask histTask = access().getHistTask(taskId);
-		AssertHelper.notNull(histTask, "指定的历史任务[id=" + taskId + "]不存在");
+		Objects.requireNonNull(histTask, "指定的历史任务[id=" + taskId + "]不存在");
 		boolean isAllowed = true;
 
 		if (StringHelper.isNotEmpty(histTask.getOperator()))
@@ -175,7 +185,7 @@ public class TaskService extends AccessService implements ITaskService {
 	 */
 	public void addTaskActor(String taskId, Integer performType, String... actors) {
 		Task task = access().getTask(taskId);
-		AssertHelper.notNull(task, "指定的任务[id=" + taskId + "]不存在");
+		Objects.requireNonNull(task, "指定的任务[id=" + taskId + "]不存在");
 
 		if (!task.isMajor())
 			return;
@@ -221,7 +231,7 @@ public class TaskService extends AccessService implements ITaskService {
 	 */
 	public void removeTaskActor(String taskId, String... actors) {
 		Task task = access().getTask(taskId);
-		AssertHelper.notNull(task, "指定的任务[id=" + taskId + "]不存在");
+		Objects.requireNonNull(task, "指定的任务[id=" + taskId + "]不存在");
 
 		if (actors == null || actors.length == 0)
 			return;
@@ -261,7 +271,7 @@ public class TaskService extends AccessService implements ITaskService {
 	 */
 	public Task withdrawTask(String taskId, String operator) {
 		HistoryTask hist = access().getHistTask(taskId);
-		AssertHelper.notNull(hist, "指定的历史任务[id=" + taskId + "]不存在");
+		Objects.requireNonNull(hist, "指定的历史任务[id=" + taskId + "]不存在");
 		List<Task> tasks;
 		if (hist.isPerformAny()) {
 			tasks = access().getNextActiveTasks(hist.getId());
@@ -294,10 +304,9 @@ public class TaskService extends AccessService implements ITaskService {
 		NodeModel current = model.getNode(currentTask.getTaskName());
 		HistoryTask history = access().getHistTask(parentTaskId);
 		NodeModel parent = model.getNode(history.getTaskName());
-		
-		if (!NodeModel.canRejected(current, parent)) 
+
+		if (!NodeModel.canRejected(current, parent))
 			throw new SnakerException("无法驳回至上一步处理，请确认上一步骤并非fork、join、suprocess以及会签任务");
-		
 
 		Task task = history.undoTask();
 		task.setId(StringHelper.getPrimaryKey());
@@ -333,7 +342,7 @@ public class TaskService extends AccessService implements ITaskService {
 	 */
 	public List<Task> createNewTask(String taskId, int taskType, String... actors) {
 		Task task = access().getTask(taskId);
-		AssertHelper.notNull(task, "指定的任务[id=" + taskId + "]不存在");
+		Objects.requireNonNull(task, "指定的任务[id=" + taskId + "]不存在");
 		List<Task> tasks = new ArrayList<Task>();
 		try {
 			Task newTask = (Task) task.clone();
@@ -355,13 +364,13 @@ public class TaskService extends AccessService implements ITaskService {
 	 */
 	public TaskModel getTaskModel(String taskId) {
 		Task task = access().getTask(taskId);
-		AssertHelper.notNull(task);
+		Objects.requireNonNull(task);
 		Order order = access().getOrder(task.getOrderId());
-		AssertHelper.notNull(order);
+		Objects.requireNonNull(order);
 		Process process = ServiceContext.getEngine().process().getProcessById(order.getProcessId());
 		ProcessModel model = process.getModel();
 		NodeModel nodeModel = model.getNode(task.getTaskName());
-		AssertHelper.notNull(nodeModel, "任务id无法找到节点模型.");
+		Objects.requireNonNull(nodeModel, "任务id无法找到节点模型.");
 		if (nodeModel instanceof TaskModel) {
 			return (TaskModel) nodeModel;
 		} else {
@@ -483,27 +492,31 @@ public class TaskService extends AccessService implements ITaskService {
 	private String[] getTaskActors(Object actors) {
 		if (actors == null)
 			return null;
+
 		String[] results;
+
 		if (actors instanceof String) {
 			// 如果值为字符串类型，则使用逗号,分隔
 			return ((String) actors).split(",");
 		} else if (actors instanceof List) {
 			// jackson会把stirng[]转成arraylist，此处增加arraylist的逻辑判断,by 红豆冰沙2014.11.21
-			List<?> list = (List) actors;
+			List<?> list = (List<?>) actors;
 			results = new String[list.size()];
-			for (int i = 0; i < list.size(); i++) {
+			for (int i = 0; i < list.size(); i++)
 				results[i] = (String) list.get(i);
-			}
+
 			return results;
 		} else if (actors instanceof Long) {
 			// 如果为Long类型，则返回1个元素的String[]
 			results = new String[1];
 			results[0] = String.valueOf((Long) actors);
+
 			return results;
 		} else if (actors instanceof Integer) {
 			// 如果为Integer类型，则返回1个元素的String[]
 			results = new String[1];
 			results[0] = String.valueOf((Integer) actors);
+
 			return results;
 		} else if (actors instanceof String[]) {
 			// 如果为String[]类型，则直接返回
@@ -519,16 +532,17 @@ public class TaskService extends AccessService implements ITaskService {
 	 */
 	public boolean isAllowed(Task task, String operator) {
 		if (StringHelper.isNotEmpty(operator)) {
-			if (SnakerEngine.ADMIN.equalsIgnoreCase(operator) || SnakerEngine.AUTO.equalsIgnoreCase(operator)) {
+			if (SnakerEngine.ADMIN.equalsIgnoreCase(operator) || SnakerEngine.AUTO.equalsIgnoreCase(operator))
 				return true;
-			}
-			if (StringHelper.isNotEmpty(task.getOperator())) {
+
+			if (StringHelper.isNotEmpty(task.getOperator()))
 				return operator.equals(task.getOperator());
-			}
 		}
+
 		List<TaskActor> actors = access().getTaskActorsByTaskId(task.getId());
 		if (actors == null || actors.isEmpty())
 			return true;
+		
 		return !StringHelper.isEmpty(operator) && getStrategy().isAllowed(operator, actors);
 	}
 
@@ -537,14 +551,16 @@ public class TaskService extends AccessService implements ITaskService {
 	}
 
 	public TaskAccessStrategy getStrategy() {
-		if (strategy != null) {
+		if (strategy != null) 
 			return strategy;
-		}
+		
 		strategy = ServiceContext.find(TaskAccessStrategy.class);
+		
 		if (strategy == null) {
 			ServiceContext.put(TaskAccessStrategy.class.getName(), GeneralAccessStrategy.class);
 			strategy = ServiceContext.find(TaskAccessStrategy.class);
 		}
+		
 		return strategy;
 	}
 }

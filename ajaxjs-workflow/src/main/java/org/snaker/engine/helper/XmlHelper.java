@@ -1,16 +1,8 @@
-/* Copyright 2013-2015 www.snakerflow.com.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+/*
+ * Copyright 2013-2015 www.snakerflow.com. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+ * or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 package org.snaker.engine.helper;
 
@@ -25,6 +17,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import com.ajaxjs.util.XMLHelper;
+
 /**
  * xml解析的帮助类
  * 
@@ -35,16 +29,7 @@ public class XmlHelper {
 	/**
 	 * DocumentBuilderFactory实例
 	 */
-	private static DocumentBuilderFactory documentBuilderFactory = createDocumentBuilderFactory();
-
-	/**
-	 * 获取DocumentBuilderFactory
-	 * 
-	 * @return
-	 */
-	private static DocumentBuilderFactory createDocumentBuilderFactory() {
-		return DocumentBuilderFactory.newInstance();
-	}
+	private static DocumentBuilderFactory documentBuilderFactory = XMLHelper.initBuilderFactory();
 
 	/**
 	 * 由DocumentBuilderFactory产生DocumentBuilder实例
@@ -67,19 +52,20 @@ public class XmlHelper {
 	 * @return
 	 */
 	public static List<Element> elements(Element element, String tagName) {
-		if (element == null || !element.hasChildNodes()) {
+		if (element == null || !element.hasChildNodes())
 			return Collections.emptyList();
-		}
 
-		List<Element> elements = new ArrayList<Element>();
+		List<Element> elements = new ArrayList<>();
+
 		for (Node child = element.getFirstChild(); child != null; child = child.getNextSibling()) {
 			if (child.getNodeType() == Node.ELEMENT_NODE) {
 				Element childElement = (Element) child;
-				String childTagName = childElement.getNodeName();
-				if (tagName.equals(childTagName))
+
+				if (tagName.equals(childElement.getNodeName()))
 					elements.add(childElement);
 			}
 		}
+
 		return elements;
 	}
 }

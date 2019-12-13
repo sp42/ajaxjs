@@ -32,5 +32,10 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>1.7.25</version>
 		</dependency>
+		<dependency>
+			<groupId>com.ajaxjs</groupId>
+			<artifactId>ajaxjs-cms</artifactId>
+			<version>1.0.4</version>
+		</dependency>
 	</dependencies>
 </project>

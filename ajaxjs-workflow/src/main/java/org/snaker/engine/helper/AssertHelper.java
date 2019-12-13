@@ -26,9 +26,9 @@ public abstract class AssertHelper {
 	 * @param message 异常打印信息
 	 */
 	public static void isTrue(boolean expression, String message) {
-		if (!expression) {
+		if (!expression) 
 			throw new IllegalArgumentException(message);
-		}
+		
 	}
 
 	/**
@@ -45,9 +45,8 @@ public abstract class AssertHelper {
 	 * @param message 异常打印信息
 	 */
 	public static void isNull(Object object, String message) {
-		if (object != null) {
+		if (object != null) 
 			throw new IllegalArgumentException(message);
-		}
 	}
 
 	/**

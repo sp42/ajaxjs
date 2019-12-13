@@ -77,10 +77,10 @@ public abstract class JdbcHelper {
 //		String password = ConfigHelper.getProperty("jdbc.password");
 //		int maxActive = ConfigHelper.getNumerProperty("jdbc.max.active");
 //		int maxIdle = ConfigHelper.getNumerProperty("jdbc.max.idle");
-//		AssertHelper.notNull(driver);
-//		AssertHelper.notNull(url);
-//		AssertHelper.notNull(username);
-//		AssertHelper.notNull(password);
+//		Objects.requireNonNull(driver);
+//		Objects.requireNonNull(url);
+//		Objects.requireNonNull(username);
+//		Objects.requireNonNull(password);
 //		//初始化DBCP数据源
 //		BasicDataSource ds = new BasicDataSource();
 //		ds.setDriverClassName(driver);
@@ -108,7 +108,7 @@ public abstract class JdbcHelper {
 				}
 			}
 		}
-		AssertHelper.notNull(dataSource);
+		Objects.requireNonNull(dataSource);
 		return dataSource;
 	}
 	

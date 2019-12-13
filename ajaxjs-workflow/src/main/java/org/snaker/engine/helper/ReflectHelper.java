@@ -1,16 +1,8 @@
-/* Copyright 2013-2015 www.snakerflow.com.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+/*
+ * Copyright 2013-2015 www.snakerflow.com. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+ * or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 package org.snaker.engine.helper;
 
@@ -23,12 +15,14 @@ import org.snaker.engine.SnakerException;
 
 /**
  * 反射帮助类
+ * 
  * @author yuqs
  * @since 1.0
  */
 public class ReflectHelper {
 	/**
 	 * 利用反射获取指定对象的指定属性
+	 * 
 	 * @param obj 目标对象
 	 * @param fieldName 目标属性
 	 * @return 目标属性的值
@@ -36,8 +30,10 @@ public class ReflectHelper {
 	public static Object getFieldValue(Object obj, String fieldName) {
 		Object result = null;
 		Field field = getField(obj, fieldName);
+		
 		if (field != null) {
 			field.setAccessible(true);
+			
 			try {
 				result = field.get(obj);
 			} catch (IllegalArgumentException e) {
@@ -51,19 +47,19 @@ public class ReflectHelper {
 
 	/**
 	 * 利用反射获取指定对象里面的指定属性
+	 * 
 	 * @param obj 目标对象
 	 * @param fieldName 目标属性
 	 * @return 目标字段
 	 */
 	private static Field getField(Object obj, String fieldName) {
 		Field field = null;
-		for (Class<?> clazz = obj.getClass(); clazz != Object.class; clazz = clazz
-				.getSuperclass()) {
+		for (Class<?> clazz = obj.getClass(); clazz != Object.class; clazz = clazz.getSuperclass()) {
 			try {
 				field = clazz.getDeclaredField(fieldName);
 				break;
 			} catch (NoSuchFieldException e) {
-				//ignore exception
+				// ignore exception
 			}
 		}
 		return field;
@@ -71,12 +67,12 @@ public class ReflectHelper {
 
 	/**
 	 * 利用反射设置指定对象的指定属性为指定的值
+	 * 
 	 * @param obj 目标对象
 	 * @param fieldName 目标属性
 	 * @param fieldValue 目标值
 	 */
-	public static void setFieldValue(Object obj, String fieldName,
-			Object fieldValue) {
+	public static void setFieldValue(Object obj, String fieldName, Object fieldValue) {
 		Field field = getField(obj, fieldName);
 		if (field != null) {
 			try {
@@ -89,9 +85,10 @@ public class ReflectHelper {
 			}
 		}
 	}
-	
+
 	/**
 	 * 根据指定的对象、方法、参数反射调用，并返回调用结果
+	 * 
 	 * @param method 方法
 	 * @param target 对象
 	 * @param args 参数数组
@@ -108,34 +105,31 @@ public class ReflectHelper {
 			return method.invoke(target, args);
 		} catch (InvocationTargetException e) {
 			Throwable targetException = e.getTargetException();
-			throw new SnakerException("不能调用 '" + method.getName() + "' with "
-					+ Arrays.toString(args) + " on " + target + ": "
-					+ targetException.getMessage(), targetException);
+			throw new SnakerException("不能调用 '" + method.getName() + "' with " + Arrays.toString(args) + " on " + target + ": " + targetException.getMessage(), targetException);
 		} catch (Exception e) {
-			throw new SnakerException("不能调用 '" + method.getName() + "' with "
-					+ Arrays.toString(args) + " on " + target + ": "
-					+ e.getMessage(), e);
+			throw new SnakerException("不能调用 '" + method.getName() + "' with " + Arrays.toString(args) + " on " + target + ": " + e.getMessage(), e);
 		}
 	}
-	
+
 	/**
-	 * 根据class类型、methodName方法名称，返回Method对象。
-	 * 注意：这里不检查参数类型，所以自定义的java类应该避免使用重载方法
+	 * 根据class类型、methodName方法名称，返回Method对象。 注意：这里不检查参数类型，所以自定义的java类应该避免使用重载方法
+	 * 
 	 * @param clazz
 	 * @param methodName
 	 * @return
 	 */
 	public static Method findMethod(Class<?> clazz, String methodName) {
 		Method[] candidates = clazz.getDeclaredMethods();
+		
 		for (int i = 0; i < candidates.length; i++) {
 			Method candidate = candidates[i];
-			if (candidate.getName().equals(methodName)) {
+			if (candidate.getName().equals(methodName)) 
 				return candidate;
-			}
 		}
-		if (clazz.getSuperclass() != null) {
+		
+		if (clazz.getSuperclass() != null) 
 			return findMethod(clazz.getSuperclass(), methodName);
-		}
+		
 		return null;
 	}
 }

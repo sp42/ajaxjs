@@ -73,76 +73,76 @@ public class QueryService extends AccessService implements IQueryService {
 	}
 	
 	public List<Task> getActiveTasks(QueryFilter filter) {
-		AssertHelper.notNull(filter);
+		Objects.requireNonNull(filter);
 		return access().getActiveTasks(null, filter);
 	}
 	
 	public List<Task> getActiveTasks(Page<Task> page, QueryFilter filter) {
-		AssertHelper.notNull(filter);
+		Objects.requireNonNull(filter);
 		return access().getActiveTasks(page, filter);
 	}
 	
 	public List<Order> getActiveOrders(QueryFilter filter) {
-		AssertHelper.notNull(filter);
+		Objects.requireNonNull(filter);
 		return access().getActiveOrders(null, filter);
 	}
 	
 	public List<Order> getActiveOrders(Page<Order> page, QueryFilter filter) {
-		AssertHelper.notNull(filter);
+		Objects.requireNonNull(filter);
 		return access().getActiveOrders(page, filter);
 	}
 	
 	public List<HistoryOrder> getHistoryOrders(QueryFilter filter) {
-		AssertHelper.notNull(filter);
+		Objects.requireNonNull(filter);
 		return access().getHistoryOrders(null, filter);
 	}
 
 	public List<HistoryOrder> getHistoryOrders(Page<HistoryOrder> page, QueryFilter filter) {
-		AssertHelper.notNull(filter);
+		Objects.requireNonNull(filter);
 		return access().getHistoryOrders(page, filter);
 	}
 
 	public List<HistoryTask> getHistoryTasks(QueryFilter filter) {
-		AssertHelper.notNull(filter);
+		Objects.requireNonNull(filter);
 		return access().getHistoryTasks(null, filter);
 	}
 
 	public List<HistoryTask> getHistoryTasks(Page<HistoryTask> page, QueryFilter filter) {
-		AssertHelper.notNull(filter);
+		Objects.requireNonNull(filter);
 		return access().getHistoryTasks(page, filter);
 	}
 	
 	public List<WorkItem> getWorkItems(Page<WorkItem> page, QueryFilter filter) {
-		AssertHelper.notNull(filter);
+		Objects.requireNonNull(filter);
 		return access().getWorkItems(page, filter);
 	}
 	
 	public List<HistoryOrder> getCCWorks(Page<HistoryOrder> page, QueryFilter filter) {
-		AssertHelper.notNull(filter);
+		Objects.requireNonNull(filter);
 		return access().getCCWorks(page, filter);
 	}
 
 	public List<WorkItem> getHistoryWorkItems(Page<WorkItem> page, QueryFilter filter) {
-		AssertHelper.notNull(filter);
+		Objects.requireNonNull(filter);
 		return access().getHistoryWorkItems(page, filter);
 	}
 
 	public <T> T nativeQueryObject(Class<T> T, String sql, Object... args) {
 		AssertHelper.notEmpty(sql);
-		AssertHelper.notNull(T);
+		Objects.requireNonNull(T);
 		return access().queryObject(T, sql, args);
 	}
 
 	public <T> List<T> nativeQueryList(Class<T> T, String sql, Object... args) {
 		AssertHelper.notEmpty(sql);
-		AssertHelper.notNull(T);
+		Objects.requireNonNull(T);
 		return access().queryList(T, sql, args);
 	}
 
 	public <T> List<T> nativeQueryList(Page<T> page, Class<T> T, String sql,
 			Object... args) {
 		AssertHelper.notEmpty(sql);
-		AssertHelper.notNull(T);
+		Objects.requireNonNull(T);
 		return access().queryList(page, new QueryFilter(), T, sql, args);
 	}
 }
