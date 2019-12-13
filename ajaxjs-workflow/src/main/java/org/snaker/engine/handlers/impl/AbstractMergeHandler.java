@@ -26,6 +26,8 @@ import org.snaker.engine.model.ProcessModel;
 import org.snaker.engine.model.SubProcessModel;
 import org.snaker.engine.model.TaskModel;
 
+import com.ajaxjs.util.CommonUtil;
+
 /**
  * 合并处理的抽象处理器
  * 需要子类提供查询无法合并的task集合的参数map
@@ -33,11 +35,11 @@ import org.snaker.engine.model.TaskModel;
  * @since 1.0
  */
 public abstract class AbstractMergeHandler implements IHandler {
+	/**
+	 * 查询当前流程实例的无法参与合并的node列表
+	 * 若所有中间node都完成，则设置为已合并状态，告诉model可继续执行join的输出变迁
+	 */
 	public void handle(Execution execution) {
-		/**
-		 * 查询当前流程实例的无法参与合并的node列表
-		 * 若所有中间node都完成，则设置为已合并状态，告诉model可继续执行join的输出变迁
-		 */
 		IQueryService queryService = execution.getEngine().query();
 		Order order = execution.getOrder();
 		ProcessModel model = execution.getModel();
@@ -46,27 +48,23 @@ public abstract class AbstractMergeHandler implements IHandler {
 		boolean isTaskMerged = false;
 		
 		if(model.containsNodeNames(SubProcessModel.class, activeNodes)) {
-			QueryFilter filter = new QueryFilter().setParentId(order.getId())
-					.setExcludedIds(new String[]{execution.getChildOrderId()});
+			QueryFilter filter = new QueryFilter().setParentId(order.getId()).setExcludedIds(new String[]{execution.getChildOrderId()});
 			List<Order> orders = queryService.getActiveOrders(filter);
-			//如果所有子流程都已完成，则表示可合并
-			if(orders == null || orders.isEmpty()) {
+			
+			if(CommonUtil.isNull(orders)) {// 如果所有 task 都已完成，则表示可合并
 				isSubProcessMerged = true;
 			}
-		} else {
+		} else 
 			isSubProcessMerged = true;
-		}
+		
 		if(isSubProcessMerged && model.containsNodeNames(TaskModel.class, activeNodes)) {
-			QueryFilter filter = new QueryFilter().
-					setOrderId(order.getId()).
-					setExcludedIds(new String[]{execution.getTask().getId() }).
-					setNames(activeNodes);
+			QueryFilter filter = new QueryFilter().setOrderId(order.getId()).setExcludedIds(new String[]{execution.getTask().getId() }).setNames(activeNodes);
+			
 			List<Task> tasks = queryService.getActiveTasks(filter);
-			if(tasks == null || tasks.isEmpty()) {
-				//如果所有task都已完成，则表示可合并
+			if(CommonUtil.isNull(tasks)) // 如果所有 task 都已完成，则表示可合并
 				isTaskMerged = true;
-			}
 		}
+		
 		execution.setMerged(isSubProcessMerged && isTaskMerged);
 	}
 
