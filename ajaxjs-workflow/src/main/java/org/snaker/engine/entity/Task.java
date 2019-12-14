@@ -1,16 +1,8 @@
-/* Copyright 2013-2015 www.snakerflow.com.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+/*
+ * Copyright 2013-2015 www.snakerflow.com. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+ * or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 package org.snaker.engine.entity;
 
@@ -19,21 +11,21 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 
-import org.snaker.engine.helper.JsonHelper;
+import com.ajaxjs.util.map.JsonHelper;
 import org.snaker.engine.model.TaskModel;
 import org.snaker.engine.model.TaskModel.TaskType;
 
 /**
  * 任务实体类
+ * 
  * @author yuqs
  * @since 1.0
  */
 public class Task implements Serializable, Cloneable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -189094546633914087L;
+
 	public static final String KEY_ACTOR = "S-ACTOR";
+
 	/**
 	 * 主键ID
 	 */
@@ -42,13 +34,13 @@ public class Task implements Serializable, Cloneable {
 	 * 版本
 	 */
 	private Integer version = 0;
-    /**
-     * 流程实例ID
-     */
-    private String orderId;
-    /**
-     * 任务名称
-     */
+	/**
+	 * 流程实例ID
+	 */
+	private String orderId;
+	/**
+	 * 任务名称
+	 */
 	private String taskName;
 	/**
 	 * 任务显示名称
@@ -61,64 +53,70 @@ public class Task implements Serializable, Cloneable {
 	/**
 	 * 任务类型（0：主办任务；1：协办任务）
 	 */
-    private Integer taskType;
-    /**
-     * 任务处理者ID
-     */
-    private String operator;
-    /**
-     * 任务创建时间
-     */
-    private String createTime;
-    /**
-     * 任务完成时间
-     */
-    private String finishTime;
-    /**
-     * 期望任务完成时间
-     */
-    private String expireTime;
-    /**
-     * 期望的完成时间date类型
-     */
-    private Date expireDate;
-    /**
-     * 提醒时间date类型
-     */
-    private Date remindDate;
-    /**
-     * 任务关联的表单url
-     */
-    private String actionUrl;
-    /**
-     * 任务参与者列表
-     */
-    private String[] actorIds;
-    /**
-     * 父任务Id
-     */
-    private String parentTaskId;
+	private Integer taskType;
 	/**
-     * 任务附属变量
-     */
-    private String variable;
-    /**
-     * 保持模型对象
-     */
-    private TaskModel model;
-    
-    public Task() {
-    	
-    }
-    
-    public Task(String id) {
-    	this.id = id;
-    }
-    
-    public boolean isMajor() {
-    	return this.taskType == TaskType.Major.ordinal();
-    }
-    
+	 * 任务处理者ID
+	 */
+	private String operator;
+	/**
+	 * 任务创建时间
+	 */
+	private String createTime;
+	/**
+	 * 任务完成时间
+	 */
+	private String finishTime;
+	/**
+	 * 期望任务完成时间
+	 */
+	private String expireTime;
+	
+	/**
+	 * 期望的完成时间date类型
+	 */
+	private Date expireDate;
+	
+	/**
+	 * 提醒时间date类型
+	 */
+	private Date remindDate;
+	
+	/**
+	 * 任务关联的表单url
+	 */
+	private String actionUrl;
+	/**
+	 * 任务参与者列表
+	 */
+	private String[] actorIds;
+	
+	/**
+	 * 父任务Id
+	 */
+	private String parentTaskId;
+	
+	/**
+	 * 任务附属变量
+	 */
+	private String variable;
+	
+	/**
+	 * 保持模型对象
+	 */
+	private TaskModel model;
+
+	public Task() {
+
+	}
+
+	public Task(String id) {
+		this.id = id;
+	}
+
+	public boolean isMajor() {
+		return this.taskType == TaskType.Major.ordinal();
+	}
+
 	public String getParentTaskId() {
 		return parentTaskId;
 	}
@@ -216,9 +214,9 @@ public class Task implements Serializable, Cloneable {
 	}
 
 	public String[] getActorIds() {
-		if(actorIds == null) {
-			String actorStr = (String)getVariableMap().get(KEY_ACTOR);
-			if(actorStr != null) {
+		if (actorIds == null) {
+			String actorStr = (String) getVariableMap().get(KEY_ACTOR);
+			if (actorStr != null) {
 				actorIds = actorStr.split(",");
 			}
 		}
@@ -228,7 +226,7 @@ public class Task implements Serializable, Cloneable {
 	public void setActorIds(String[] actorIds) {
 		this.actorIds = actorIds;
 	}
-	
+
 	public Integer getPerformType() {
 		return performType;
 	}
@@ -244,7 +242,7 @@ public class Task implements Serializable, Cloneable {
 	public void setVersion(Integer version) {
 		this.version = version;
 	}
-	
+
 	public Date getExpireDate() {
 		return expireDate;
 	}
@@ -268,14 +266,15 @@ public class Task implements Serializable, Cloneable {
 	public void setModel(TaskModel model) {
 		this.model = model;
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	public Map<String, Object> getVariableMap() {
-        Map<String, Object> map = JsonHelper.fromJson(this.variable, Map.class);
-        if(map == null) return Collections.emptyMap();
-        return map;
+		Map<String, Object> map = JsonHelper.parseMap(this.variable);
+		if (map == null)
+			return Collections.emptyMap();
+		
+		return map;
 	}
-	
+
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
 	}
@@ -289,6 +288,7 @@ public class Task implements Serializable, Cloneable {
 		sb.append(",taskType=").append(this.taskType);
 		sb.append(",createTime=").append(this.createTime);
 		sb.append(",performType=").append(this.performType).append(")");
+		
 		return sb.toString();
 	}
 }

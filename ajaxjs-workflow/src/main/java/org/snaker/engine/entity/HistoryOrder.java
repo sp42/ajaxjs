@@ -12,7 +12,8 @@ import java.util.Map;
 
 import org.snaker.engine.SnakerEngine;
 import org.snaker.engine.core.ServiceContext;
-import org.snaker.engine.helper.JsonHelper;
+
+import com.ajaxjs.util.map.JsonHelper;
 
 /**
  * 历史流程实例实体类
@@ -197,11 +198,11 @@ public class HistoryOrder implements Serializable {
 		this.variable = variable;
 	}
 
-	@SuppressWarnings("unchecked")
 	public Map<String, Object> getVariableMap() {
-		Map<String, Object> map = JsonHelper.fromJson(this.variable, Map.class);
+		Map<String, Object> map = JsonHelper.parseMap(this.variable);
 		if (map == null)
 			return Collections.emptyMap();
+		
 		return map;
 	}
 
@@ -210,6 +211,7 @@ public class HistoryOrder implements Serializable {
 		Process process = engine.process().getProcessById(this.processId);
 		if (process == null)
 			return this.processId;
+		
 		return process.getDisplayName();
 	}
 

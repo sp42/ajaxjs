@@ -21,10 +21,10 @@ import org.snaker.engine.entity.Order;
 import org.snaker.engine.entity.Process;
 import org.snaker.engine.entity.Task;
 import org.snaker.engine.helper.DateHelper;
-import org.snaker.engine.helper.JsonHelper;
 import org.snaker.engine.helper.StringHelper;
 import org.snaker.engine.model.ProcessModel;
 
+import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.CommonUtil;
 
 /**
@@ -57,24 +57,24 @@ public class OrderService extends AccessService implements IOrderService {
 		order.setLastUpdator(order.getCreator());
 		order.setProcessId(process.getId());
 		ProcessModel model = process.getModel();
-		
+
 		if (model != null && args != null) {
 			if (!CommonUtil.isEmptyString(model.getExpireTime())) {
 				String expireTime = DateHelper.parseTime(args.get(model.getExpireTime()));
 				order.setExpireTime(expireTime);
 			}
-			
+
 			String orderNo = (String) args.get(SnakerEngine.ID);
-			
-			if (!CommonUtil.isEmptyString(orderNo)) 
+
+			if (!CommonUtil.isEmptyString(orderNo))
 				order.setOrderNo(orderNo);
-			 else 
+			else
 				order.setOrderNo(model.getGenerator().generate(model));
 		}
 
 		order.setVariable(JsonHelper.toJson(args));
 		saveOrder(order);
-		
+
 		return order;
 	}
 
@@ -103,7 +103,7 @@ public class OrderService extends AccessService implements IOrderService {
 			ccorder.setCreator(creator);
 			ccorder.setStatus(STATE_ACTIVE);
 			ccorder.setCreateTime(DateHelper.getTime());
-			
+
 			access().saveCCOrder(ccorder);
 		}
 	}
@@ -131,7 +131,7 @@ public class OrderService extends AccessService implements IOrderService {
 	public void updateCCStatus(String orderId, String... actorIds) {
 		List<CCOrder> ccorders = access().getCCOrder(orderId, actorIds);
 		Objects.nonNull(ccorders);
-		
+
 		for (CCOrder ccorder : ccorders) {
 			ccorder.setStatus(STATE_FINISH);
 			ccorder.setFinishTime(DateHelper.getTime());
@@ -145,8 +145,8 @@ public class OrderService extends AccessService implements IOrderService {
 	public void deleteCCOrder(String orderId, String actorId) {
 		List<CCOrder> ccorders = access().getCCOrder(orderId, actorId);
 		Objects.nonNull(ccorders);
-		
-		for (CCOrder ccorder : ccorders) 
+
+		for (CCOrder ccorder : ccorders)
 			access().deleteCCOrder(ccorder);
 	}
 
@@ -162,8 +162,8 @@ public class OrderService extends AccessService implements IOrderService {
 		access().updateHistory(history);
 		access().deleteOrder(order);
 		Completion completion = getCompletion();
-		
-		if (completion != null) 
+
+		if (completion != null)
 			completion.complete(history);
 	}
 
@@ -182,10 +182,10 @@ public class OrderService extends AccessService implements IOrderService {
 	public void terminate(String orderId, String operator) {
 		SnakerEngine engine = ServiceContext.getEngine();
 		List<Task> tasks = engine.query().getActiveTasks(new QueryFilter().setOrderId(orderId));
-		
-		for (Task task : tasks) 
+
+		for (Task task : tasks)
 			engine.task().complete(task.getId(), operator);
-		
+
 		Order order = access().getOrder(orderId);
 		HistoryOrder history = new HistoryOrder(order);
 		history.setOrderState(STATE_TERMINATION);
@@ -194,8 +194,8 @@ public class OrderService extends AccessService implements IOrderService {
 		access().updateHistory(history);
 		access().deleteOrder(order);
 		Completion completion = getCompletion();
-		
-		if (completion != null) 
+
+		if (completion != null)
 			completion.complete(history);
 	}
 
@@ -214,12 +214,12 @@ public class OrderService extends AccessService implements IOrderService {
 
 		SnakerEngine engine = ServiceContext.getEngine();
 		List<HistoryTask> histTasks = access().getHistoryTasks(null, new QueryFilter().setOrderId(orderId));
-		
+
 		if (histTasks != null && !histTasks.isEmpty()) {
 			HistoryTask histTask = histTasks.get(0);
 			engine.task().resume(histTask.getId(), histTask.getOperator());
 		}
-		
+
 		return order;
 	}
 
@@ -231,24 +231,24 @@ public class OrderService extends AccessService implements IOrderService {
 	public void cascadeRemove(String id) {
 		HistoryOrder historyOrder = access().getHistOrder(id);
 		Objects.nonNull(historyOrder);
-		
+
 		List<Task> activeTasks = access().getActiveTasks(null, new QueryFilter().setOrderId(id));
 		List<HistoryTask> historyTasks = access().getHistoryTasks(null, new QueryFilter().setOrderId(id));
-		
-		for (Task task : activeTasks) 
+
+		for (Task task : activeTasks)
 			access().deleteTask(task);
-		
-		for (HistoryTask historyTask : historyTasks) 
+
+		for (HistoryTask historyTask : historyTasks)
 			access().deleteHistoryTask(historyTask);
-		
+
 		List<CCOrder> ccOrders = access().getCCOrder(id);
-		for (CCOrder ccOrder : ccOrders) 
+		for (CCOrder ccOrder : ccOrders)
 			access().deleteCCOrder(ccOrder);
 
 		Order order = access().getOrder(id);
 		access().deleteHistoryOrder(historyOrder);
-		
-		if (order != null) 
+
+		if (order != null)
 			access().deleteOrder(order);
 	}
 }

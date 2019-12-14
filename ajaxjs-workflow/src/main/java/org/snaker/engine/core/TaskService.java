@@ -26,7 +26,6 @@ import org.snaker.engine.entity.Process;
 import org.snaker.engine.entity.Task;
 import org.snaker.engine.entity.TaskActor;
 import org.snaker.engine.helper.DateHelper;
-import org.snaker.engine.helper.JsonHelper;
 import org.snaker.engine.helper.StringHelper;
 import org.snaker.engine.impl.GeneralAccessStrategy;
 import org.snaker.engine.model.CustomModel;
@@ -36,6 +35,7 @@ import org.snaker.engine.model.TaskModel;
 import org.snaker.engine.model.TaskModel.PerformType;
 import org.snaker.engine.model.TaskModel.TaskType;
 
+import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.CommonUtil;
 
 /**

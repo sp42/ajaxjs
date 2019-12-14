@@ -20,31 +20,6 @@ import com.ajaxjs.util.logger.LogHelper;
 public class ClassHelper {
 	public static final LogHelper LOGGER = LogHelper.getLog(ClassHelper.class);
 
-	/**
-	 * 查询结果总记录数的类型转换
-	 * 
-	 * @param count
-	 * @return
-	 */
-	public static long castLong(Object count) {
-		if (count == null)
-			return -1L;
-		if (count instanceof Long) {
-			return (Long) count;
-		} else if (count instanceof BigDecimal) {
-			return ((BigDecimal) count).longValue();
-		} else if (count instanceof Integer) {
-			return ((Integer) count).longValue();
-		} else if (count instanceof BigInteger) {
-			return ((BigInteger) count).longValue();
-		} else if (count instanceof Byte) {
-			return ((Byte) count).longValue();
-		} else if (count instanceof Short) {
-			return ((Short) count).longValue();
-		} else {
-			return -1L;
-		}
-	}
 
 	/**
 	 * 根据指定的类名称加载类

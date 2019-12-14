@@ -30,10 +30,10 @@ public class ReflectHelper {
 	public static Object getFieldValue(Object obj, String fieldName) {
 		Object result = null;
 		Field field = getField(obj, fieldName);
-		
+
 		if (field != null) {
 			field.setAccessible(true);
-			
+
 			try {
 				result = field.get(obj);
 			} catch (IllegalArgumentException e) {
@@ -120,16 +120,16 @@ public class ReflectHelper {
 	 */
 	public static Method findMethod(Class<?> clazz, String methodName) {
 		Method[] candidates = clazz.getDeclaredMethods();
-		
+
 		for (int i = 0; i < candidates.length; i++) {
 			Method candidate = candidates[i];
-			if (candidate.getName().equals(methodName)) 
+			if (candidate.getName().equals(methodName))
 				return candidate;
 		}
-		
-		if (clazz.getSuperclass() != null) 
+
+		if (clazz.getSuperclass() != null)
 			return findMethod(clazz.getSuperclass(), methodName);
-		
+
 		return null;
 	}
 }

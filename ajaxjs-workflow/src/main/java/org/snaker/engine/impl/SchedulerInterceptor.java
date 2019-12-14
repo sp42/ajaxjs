@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.Map;
 
 import org.snaker.engine.SnakerInterceptor;
+import org.snaker.engine.WorkflowUtils;
 import org.snaker.engine.core.Execution;
 import org.snaker.engine.core.ServiceContext;
 import org.snaker.engine.entity.Task;
@@ -68,7 +69,7 @@ public class SchedulerInterceptor implements SnakerInterceptor {
 			if (jobType == JobType.REMINDER.ordinal()) {
 				TaskModel model = (TaskModel) task.getModel();
 
-				if (model != null && NumberUtils.isNumber(model.getReminderRepeat()))
+				if (model != null && WorkflowUtils.isNumeric(model.getReminderRepeat()))
 					entity.setPeriod(Integer.parseInt(model.getReminderRepeat()));
 			}
 

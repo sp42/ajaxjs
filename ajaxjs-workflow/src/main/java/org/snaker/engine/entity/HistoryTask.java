@@ -1,16 +1,8 @@
-/* Copyright 2013-2015 www.snakerflow.com.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+/*
+ * Copyright 2013-2015 www.snakerflow.com. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+ * or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 package org.snaker.engine.entity;
 
@@ -18,11 +10,13 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
 
-import org.snaker.engine.helper.JsonHelper;
 import org.snaker.engine.model.TaskModel.PerformType;
+
+import com.ajaxjs.util.map.JsonHelper;
 
 /**
  * 历史任务实体类
+ * 
  * @author yuqs
  * @since 1.0
  */
@@ -36,13 +30,13 @@ public class HistoryTask implements Serializable {
 	 * 主键ID
 	 */
 	private String id;
-    /**
-     * 流程实例ID
-     */
-    private String orderId;
-    /**
-     * 任务名称
-     */
+	/**
+	 * 流程实例ID
+	 */
+	private String orderId;
+	/**
+	 * 任务名称
+	 */
 	private String taskName;
 	/**
 	 * 任务显示名称
@@ -55,45 +49,45 @@ public class HistoryTask implements Serializable {
 	/**
 	 * 任务类型
 	 */
-    private Integer taskType;
-    /**
-     * 任务状态（0：结束；1：活动）
-     */
-    private Integer taskState;
-    /**
-     * 任务处理者ID
-     */
-    private String operator;
-    /**
-     * 任务创建时间
-     */
-    private String createTime;
-    /**
-     * 任务完成时间
-     */
-    private String finishTime;
-    /**
-     * 期望任务完成时间
-     */
-    private String expireTime;
-    /**
-     * 任务关联的表单url
-     */
-    private String actionUrl;
-    /**
-     * 任务参与者列表
-     */
-    private String[] actorIds;
-    /**
-     * 父任务Id
-     */
-    private String parentTaskId;
+	private Integer taskType;
 	/**
-     * 任务附属变量
-     */
-    private String variable;
-    
-    public String getParentTaskId() {
+	 * 任务状态（0：结束；1：活动）
+	 */
+	private Integer taskState;
+	/**
+	 * 任务处理者ID
+	 */
+	private String operator;
+	/**
+	 * 任务创建时间
+	 */
+	private String createTime;
+	/**
+	 * 任务完成时间
+	 */
+	private String finishTime;
+	/**
+	 * 期望任务完成时间
+	 */
+	private String expireTime;
+	/**
+	 * 任务关联的表单url
+	 */
+	private String actionUrl;
+	/**
+	 * 任务参与者列表
+	 */
+	private String[] actorIds;
+	/**
+	 * 父任务Id
+	 */
+	private String parentTaskId;
+	/**
+	 * 任务附属变量
+	 */
+	private String variable;
+
+	public String getParentTaskId() {
 		return parentTaskId;
 	}
 
@@ -110,47 +104,49 @@ public class HistoryTask implements Serializable {
 	}
 
 	public HistoryTask() {
-    	
-    }
-    
-    public HistoryTask(Task task) {
-    	this.id = task.getId();
-    	this.orderId = task.getOrderId();
-    	this.createTime = task.getCreateTime();
-    	this.displayName = task.getDisplayName();
-    	this.taskName = task.getTaskName();
-    	this.taskType = task.getTaskType();
-    	this.expireTime = task.getExpireTime();
-    	this.actionUrl = task.getActionUrl();
-    	this.actorIds = task.getActorIds();
-    	this.parentTaskId = task.getParentTaskId();
-    	this.variable = task.getVariable();
-    	this.performType = task.getPerformType();
-    }
-    
-    /**
-     * 根据历史任务产生撤回的任务对象
-     * @return 任务对象
-     */
-    public Task undoTask() {
-    	Task task = new Task();
-    	task.setOrderId(this.getOrderId());;
-    	task.setTaskName(this.getTaskName());
-    	task.setDisplayName(this.getDisplayName());
-    	task.setTaskType(this.getTaskType());
-    	task.setExpireTime(this.getExpireTime());
-    	task.setActionUrl(this.getActionUrl());
-    	task.setParentTaskId(this.getParentTaskId());
-    	task.setVariable(this.getVariable());
-    	task.setPerformType(this.getPerformType());
-    	task.setOperator(this.getOperator());
-    	return task;
-    }
-    
-    public boolean isPerformAny() {
-    	return this.performType.intValue() == PerformType.ANY.ordinal();
-    }
-    
+
+	}
+
+	public HistoryTask(Task task) {
+		this.id = task.getId();
+		this.orderId = task.getOrderId();
+		this.createTime = task.getCreateTime();
+		this.displayName = task.getDisplayName();
+		this.taskName = task.getTaskName();
+		this.taskType = task.getTaskType();
+		this.expireTime = task.getExpireTime();
+		this.actionUrl = task.getActionUrl();
+		this.actorIds = task.getActorIds();
+		this.parentTaskId = task.getParentTaskId();
+		this.variable = task.getVariable();
+		this.performType = task.getPerformType();
+	}
+
+	/**
+	 * 根据历史任务产生撤回的任务对象
+	 * 
+	 * @return 任务对象
+	 */
+	public Task undoTask() {
+		Task task = new Task();
+		task.setOrderId(this.getOrderId());
+		;
+		task.setTaskName(this.getTaskName());
+		task.setDisplayName(this.getDisplayName());
+		task.setTaskType(this.getTaskType());
+		task.setExpireTime(this.getExpireTime());
+		task.setActionUrl(this.getActionUrl());
+		task.setParentTaskId(this.getParentTaskId());
+		task.setVariable(this.getVariable());
+		task.setPerformType(this.getPerformType());
+		task.setOperator(this.getOperator());
+		return task;
+	}
+
+	public boolean isPerformAny() {
+		return this.performType.intValue() == PerformType.ANY.ordinal();
+	}
+
 	public String getTaskName() {
 		return taskName;
 	}
@@ -238,7 +234,7 @@ public class HistoryTask implements Serializable {
 	public void setOrderId(String orderId) {
 		this.orderId = orderId;
 	}
-	
+
 	public Integer getPerformType() {
 		return performType;
 	}
@@ -254,14 +250,15 @@ public class HistoryTask implements Serializable {
 	public void setActorIds(String[] actorIds) {
 		this.actorIds = actorIds;
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	public Map<String, Object> getVariableMap() {
-        Map<String, Object> map = JsonHelper.fromJson(this.variable, Map.class);
-        if(map == null) return Collections.emptyMap();
-        return map;
+		Map<String, Object> map = JsonHelper.parseMap(this.variable);
+		if (map == null)
+			return Collections.emptyMap();
+		
+		return map;
 	}
-	
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("HistoryTask(id=").append(this.id);

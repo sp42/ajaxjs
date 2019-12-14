@@ -6,6 +6,8 @@
  */
 package org.snaker.engine.access.jdbc;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -150,9 +152,36 @@ public class JdbcAccess extends AbstractDBAccess implements DBAccess {
 	public Integer getLatestProcessVersion(String name) {
 		String where = " where name = ?";
 		Object result = query(1, QUERY_VERSION + where, name);
-		return new Long(ClassHelper.castLong(result)).intValue();
+		
+		return new Long(castLong(result)).intValue();
 	}
 
+	/**
+	 * 查询结果总记录数的类型转换
+	 * 
+	 * @param count
+	 * @return
+	 */
+	public static long castLong(Object count) {
+		if (count == null)
+			return -1L;
+		if (count instanceof Long) {
+			return (Long) count;
+		} else if (count instanceof BigDecimal) {
+			return ((BigDecimal) count).longValue();
+		} else if (count instanceof Integer) {
+			return ((Integer) count).longValue();
+		} else if (count instanceof BigInteger) {
+			return ((BigInteger) count).longValue();
+		} else if (count instanceof Byte) {
+			return ((Byte) count).longValue();
+		} else if (count instanceof Short) {
+			return ((Short) count).longValue();
+		} else {
+			return -1L;
+		}
+	}
+	
 	public boolean isORM() {
 		return false;
 	}
