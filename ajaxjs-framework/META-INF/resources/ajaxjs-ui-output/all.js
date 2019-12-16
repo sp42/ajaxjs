@@ -1,4 +1,4 @@
-// build date:Wed Jun 12 08:45:22 GMT+08:00 2019
+// build date:Tue Nov 26 18:25:56 GMT+08:00 2019
 
 ajaxjs = aj = function(cssSelector, fn) {
 return Element.prototype.$.apply(document, arguments);
@@ -173,6 +173,7 @@ if (typeof form == 'string')
 form = aj(form);
 if (!form.action)
 throw 'Please fill the url in ACTION attribute.';
+!cfg.noFormValid && aj.formValidator(form);
 var method;
 if(form.getAttribute('method'))
 method = form.getAttribute('method').toLowerCase();
@@ -180,6 +181,8 @@ cfg.method = method || cfg.method || 'post';
 form.addEventListener('submit', function(e, cb, cfg) {
 e.preventDefault();
 var form = e.target;
+if(!cfg.noFormValid && !aj.formValidator.onSubmit(form))
+return;
 var json = ajaxjs.xhr.serializeForm(form, cfg);
 if (cfg && cfg.beforeSubmit && cfg.beforeSubmit(form, json) === false)
 return;
@@ -188,6 +191,12 @@ ajaxjs.xhr.put(form.action, cb, json);
 else
 ajaxjs.xhr.post(form.action, cb, json);
 }.delegate(null, cb, cfg));
+var returnBtn = form.$('button.returnBtn'); 
+if (returnBtn)
+returnBtn.onclick = e => {
+e.preventDefault();
+history.back();
+};
 }
 };
 ajaxjs.xhr.get = ajaxjs.xhr.request.delegate(null, null, null, null, 'GET');
@@ -232,17 +241,21 @@ break;
 }
 return json;
 }
-ajaxjs.xhr.defaultCallBack = function(json) {
+ajaxjs.xhr.defaultCallBack_cb = function(json, xhr, onOK, onFail) {
 if (json) {
 if (json.isOk) {
+!!onOK && onOK(json);
 ajaxjs.alert.show(json.msg || '操作成功！');
 } else {
+!!onFail && onFail(json);
 ajaxjs.alert.show(json.msg || '执行失败！原因未知！');
 }
 } else {
+onFail && onFail(json);
 ajaxjs.alert.show('ServerSide Error!');
 }
 }
+ajaxjs.xhr.defaultCallBack = ajaxjs.xhr.defaultCallBack_cb.delegate(null);
 ajaxjs.throttle = {
 event : {},
 handler : [],
@@ -596,7 +609,10 @@ template :
 })
 Vue.component('ajaxjs-admin-info-btns', {
 props : {
-isCreate : Boolean 
+isCreate : {
+type: Boolean, 
+default:false
+}
 },
 template : 
 '<div class="ajaxjs-admin-info-btns">\
@@ -604,7 +620,8 @@ template :
 <button onclick="this.up(\'form\').reset();return false;">复 位</button>\
 <button v-if="!isCreate" v-on:click.prevent="del()">\
 <img :src="ajResources.commonAsset + \'/icon/delete.gif\'" /> 删 除\
-</button><slot></slot>\
+</button>\
+<button onclick="history.back();return false;">返回</button><slot></slot>\
 </div>',
 methods : {
 del : function () {
@@ -624,15 +641,15 @@ label : {
 type : String,
 required : false
 },
-catelogId :{	
+catalogId :{	
 type: Number,
 required: false
 },
-selectedCatelogId :{ 
+selectedCatalogId :{ 
 type: Number,
 required: false
 },
-noCatelog : {
+noCatalog : {
 type : Boolean, 
 default : false
 },
@@ -645,11 +662,11 @@ template:
 '<div class="aj-admin-filter-panel">\
 <form action="?" method="GET">\
 <input type="hidden" name="searchField" :value="searchFieldValue" />\
-<input type="text" name="searchValue" placeholder="请输入搜索之关键字" style="float: inherit;" class="ajaxjs-inputField" />\
+<input type="text" name="keyword" placeholder="请输入搜索之关键字" style="float: inherit;" class="ajaxjs-inputField" />\
 <button style="margin-top: 0;" class="ajaxjs-btn">搜索</button>\
 </form><slot></slot>\
-<span v-if="!noCatelog">{{label||\'分类\'}}：\
-<aj-tree-catelog-select :is-auto-jump="true" :catelog-id="catelogId" :selected-catelog-id="selectedCatelogId"></aj-tree-catelog-select></span>\
+<span v-if="!noCatalog">{{label||\'分类\'}}：\
+<aj-tree-catelog-select :is-auto-jump="true" :catalog-id="catalogId" :selected-catalog-id="selectedCatalogId"></aj-tree-catelog-select></span>\
 </div>'
 });
 aj.admin = {
@@ -930,7 +947,7 @@ default : 'captcha'
 },
 template : 
 '<table class="aj-page-captcha"><tr>\
-<td><input type="text" :name="fieldName" placeholder="输入右侧验证码" data-regexp="integer" required /></td>\
+<td><input type="text" :name="fieldName" placeholder="输入右侧验证码" data-regexp="integer" required autocomplete="off" size="10" /></td>\
 <td style="vertical-align: top;">\
 <img :src="imgSrc || ajResources.ctx + \'/Captcha\'" @click="onClk($event);" title="点击刷新图片" />\
 </td>\
@@ -962,13 +979,13 @@ showTime: false
 template : 
 '<div class="aj-form-calendar">\
 <div class="selectYearMonth">\
-<a href="#" @click="getDate(\'preYear\')" class="preYear" title="上一年">&lt;</a> \
+<a href="###" @click="getDate(\'preYear\')" class="preYear" title="上一年">&lt;</a> \
 <select @change="setMonth($event)" v-model="month">\
 <option value="1">一月</option><option value="2">二月</option><option value="3">三月</option><option value="4">四月</option>\
 <option value="5">五月</option><option value="6">六月</option><option value="7">七月</option><option value="8">八月</option>\
 <option value="9">九月</option><option value="10">十月</option><option value="11">十一月</option><option value="12">十二月</option>\
 </select>\
-<a href="#" @click="getDate(\'nextYear\')" class="nextYear" title="下一年">&gt;</a>\
+<a href="###" @click="getDate(\'nextYear\')" class="nextYear" title="下一年">&gt;</a>\
 </div>\
 <div class="showCurrentYearMonth">\
 <span class="showYear">{{year}}</span>/<span class="showMonth">{{month}}</span>\
@@ -1084,15 +1101,21 @@ required: true
 },
 fieldValue : {
 type: String,
-required: false
+required: false,
+default : ''
+},
+dateOnly : { 
+type: Boolean,
+required: false,
+default : true
 },
 showTime: false,
 positionFixed : Boolean 
 },
 template : 
 '<div class="aj-form-calendar-input" @mouseover="onMouseOver($event)">\
-<div class="icon" ><div class="menu"></div></div>\
-<input placeholder="请输入日期" :name="fieldName" :value="date +\' \' + time" type="text" />\
+<div class="icon fa fa-calendar"></div>\
+<input placeholder="请输入日期" :name="fieldName" :value="date + (dateOnly ? \'\' : \' \' + time)" type="text" autocomplete="off" class="aj-input" />\
 <aj-form-calendar ref="calendar" :show-time="showTime" @pick-date="recEvent" @pick-time="recTimeEvent"></aj-form-calendar>\
 </div>',
 mounted : function() {
@@ -1109,7 +1132,7 @@ recTimeEvent: function(time) {
 this.time = time;
 },
 recEvent: function(date) {
-this.date = date;
+this.date = date.trim();
 },
 onMouseOver : function(e) {
 if(this.positionFixed) {
@@ -1245,16 +1268,24 @@ insertEl : function (html) {
 this.iframeDoc.body.innerHTML = html;
 },
 saveRemoteImage2Local(){
-var str = [], arr = this.iframeDoc.querySelectorAll('img');
+var str = [], remotePicArr = [], arr = this.iframeDoc.querySelectorAll('img');
 for(var i = 0, j = arr.length; i <j; i++) {
 var imgEl = arr[i], url = imgEl.getAttribute('src');
 if(/^http/.test(url)) {
 str.push(url);
+remotePicArr.push(imgEl);
 }
 }
-aj.xhr.post('', (json)=>{
-console.log(json);
-}, {urls: str.join('|')});
+if(str.length)
+aj.xhr.post('../downAllPics/', json=>{
+var _arr = json.result.pics;
+for(var i = 0, j = _arr.length; i <j; i++) {
+remotePicArr[i].src = "images/" + _arr[i];
+}
+aj.alert.show('所有图片下载完成。');
+}, {pics: str.join('|')});
+else
+aj.alert.show('未发现有远程图片');
 },
 setValue : function(v) {
 var self = this;
@@ -1392,6 +1423,108 @@ objChildNode = objChildNode.nextSibling;
 }
 }
 });
+;(function(){
+function hasError (field) {
+if (field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') 
+return;
+var validity = field.validity;
+if(!validity)return 'No validity';
+if (validity.valid) return;
+if (validity.valueMissing) return '该项是必填项';
+if (validity.typeMismatch) {
+if (field.type === 'email') return '请输入有效的邮件地址';
+if (field.type === 'url') return '请输入一个有效的网址';
+return '请输入正确的类型';
+}
+if (validity.tooShort) return 'Please lengthen this text to ' + field.getAttribute('minLength') + ' characters or more. You are currently using ' + field.value.length + ' characters.';
+if (validity.tooLong) return 'Please shorten this text to no more than ' + field.getAttribute('maxLength') + ' characters. You are currently using ' + field.value.length + ' characters.';
+if (validity.badInput) return 'Please enter a number.';
+if (validity.stepMismatch) return 'Please select a valid value.';
+if (validity.rangeOverflow) return 'Please select a value that is no more than ' + field.getAttribute('max') + '.';
+if (validity.rangeUnderflow) return 'Please select a value that is no less than ' + field.getAttribute('min') + '.';
+if (validity.patternMismatch) {
+if (field.hasAttribute('title')) return field.getAttribute('title');
+return '格式要求不正确';
+}
+return 'The value you entered for this field is invalid.';
+}
+function showError(field, error) {
+field.classList.add('error');
+var id = field.id || field.name;
+if (!id) return;
+var message = field.form.querySelector('.error-message#error-for-' + id );
+if (!message) {
+message = document.createElement('div');
+message.className = 'error-message';
+message.id = 'error-for-' + id;
+field.parentNode.insertBefore( message, field.nextSibling );
+}
+field.setAttribute('aria-describedby', 'error-for-' + id);
+message.innerHTML = error;
+message.style.display = 'inline-block';
+message.style.visibility = 'visible';
+};
+function removeError(field) {
+field.classList.remove('error');
+field.removeAttribute('aria-describedby');
+var id = field.id || field.name;
+if (!id) return;
+var message = field.form.querySelector('.error-message#error-for-' + id + '');
+if (!message) return;
+message.innerHTML = '';
+message.style.display = 'none';
+message.style.visibility = 'hidden';
+}
+aj.formValidator = function(el) {
+el.setAttribute('novalidate', true);
+document.addEventListener('blur', event => {
+var error = hasError(event.target);
+if (error) {
+showError(event.target, error);
+return;
+}
+removeError(event.target);
+}, true);
+}
+aj.formValidator.hasError = hasError;
+aj.formValidator.onSubmit = function(form) {
+var fields = form.elements;
+var error, hasErrors;
+for (var i = 0; i < fields.length; i++) {
+error = hasError(fields[i]);
+if (error) {
+showError(fields[i], error);
+if (!hasErrors) 
+hasErrors = fields[i];
+}
+}
+if (hasErrors) {
+hasErrors.focus();
+return false;
+}
+return true;
+}
+})();
+if(!aj.form)
+aj.form = {};
+aj.form.betweenDate = function(el){	
+new Vue({
+el : el,
+methods:{
+valid(e){
+var start = this.$el.$('input[name=startDate]').value, end = this.$el.$('input[name=endDate]').value;
+if(!start||!end){
+aj.showOk("输入数据不能为空");	
+e.preventDefault();
+}
+if(new Date(start) > new Date(end)) {
+aj.showOk("起始日期不能晚于结束日期");	
+e.preventDefault();
+}
+}
+}
+});
+}
 
 aj.img = (function() {
 function dataURLtoBlob(dataurl) {
@@ -1863,15 +1996,16 @@ showText : '',
 afterClose : null,	
 showOk : false,
 showYes : false,
-showNo : false
+showNo : false,
+showSave : false
 },
 template : 
 '<div class="aj-modal hide" @click="close($event);">\
 <div><div v-html="showText"></div>\
 <div>\
 <button v-show="showOk" @click="onBtnClk($event)" class="ok">确定</button>\
-<button v-show="showYes" @click="onBtnClk($event)" class="yes">是</button>\
-<button v-show="showNo" @click="onBtnClk($event)" class="no">否</button>\
+<button v-show="showYes" @click="onBtnClk($event)" class="yes">{{showSave? \'保存\': \'是\'}}</button>\
+<button v-show="showNo" @click="onBtnClk($event)" class="no">{{showSave? \'否\': \'否\'}}</button>\
 </div>\
 </div>\
 </div>',
@@ -1916,14 +2050,15 @@ callback && callback();
 }
 });
 }
-aj.showConfirm = function(text, callback) {
+aj.showConfirm = function(text, callback, showSave) {
 var alertObj = aj.alert.show(text, {
 showYes : true,
 showNo :true,
 showOk :false,
+showSave: showSave,
 onYesClk : function(e) {
 alertObj.$el.classList.add('hide');
-callback && callback();
+callback && callback(alertObj.$el, e);
 },
 onNoClk : function(e) { 
 alertObj.$el.classList.add('hide');
@@ -2304,6 +2439,7 @@ this.stack = [];
 this.tree = {};
 },
 makeTree : function (jsonArray) {
+if(!jsonArray)return;
 for (var i = 0, j = jsonArray.length; i < j; i++) {
 var n = jsonArray[i];
 var parentNode = findParent(this.tree, n.pid);
@@ -2456,30 +2592,30 @@ self.json = json;
 });
 Vue.component('aj-tree-catelog-select', {
 props : {
-catelogId : { 
+catalogId : { 
 type: Number,
 required: true
 },
-selectedCatelogId : {	
+selectedCatalogId : {	
 type: Number,
 required: false
 },
 fieldName : { 
 type: String,
 required: false,
-default:'catelogId'
+default:'catalogId'
 },
 isAutoJump : Boolean 
 },
 template : '<select :name="fieldName" @change="onSelected($event);" class="aj-tree-catelog-select ajaxjs-select" style="width: 200px;"></select>',
 mounted : function() {
-aj.xhr.get(this.ajResources.ctx + "/admin/catelog/getListAndSubByParentId", this.load.bind(this), {parentId : this.catelogId});
+aj.xhr.get(this.ajResources.ctx + "/admin/catelog/getListAndSubByParentId", this.load.bind(this), {parentId : this.catalogId});
 },
 methods : {
 load : function(json) {
 var catalogArr = json.result;
 var selectUI = new ajaxjs.tree.selectUI();
-selectUI.renderer(catalogArr, this.$el, this.selectedCatelogId, {makeAllOption : false});
+selectUI.renderer(catalogArr, this.$el, this.selectedCatalogId, {makeAllOption : false});
 },
 onSelected : function(e) {
 if(this.isAutoJump) {
@@ -2491,16 +2627,29 @@ this.BUS.$emit('aj-tree-catelog-select-change', e, this);
 }
 }
 });
+Vue.component('aj-tree-user-role-select', {
+props : {
+value : { 
+type: Number,
+required: true
+},
+json:Array
+},
+template : '<select name="roleId" class="ajaxjs-select"></select>',
+mounted () {
+new ajaxjs.tree.selectUI().renderer(this.json, this.$el, this.value, {makeAllOption : false});
+}
+});
 Vue.component('aj-china-area', {
-template : '<div class="aj-china-area"><select v-model="province" class="ajaxjs-select" name="locationProvince">\
+template : '<div class="aj-china-area"><span>省份</span> <select v-model="province" class="ajaxjs-select" name="locationProvince">\
 <option value="">请选择</option>\
 <option v-for="(v, k) in addressData[86]" :value="k">{{v}}</option>\
 </select>\
-<select v-model="city" class="ajaxjs-select" name="locationCity">\
+<span>市 </span><select v-model="city" class="ajaxjs-select" name="locationCity">\
 <option value="">请选择</option>\
 <option v-for="(v, k) in citys" :value="k">{{v}}</option>\
 </select>\
-<select v-model="district" class="ajaxjs-select" name="locationDistrict">\
+<span>区/县</span> <select v-model="district" class="ajaxjs-select" name="locationDistrict">\
 <option value="">请选择</option>\
 <option v-for="(v, k) in districts" :value="k">{{v}}</option>\
 </select>\
@@ -2510,7 +2659,7 @@ provinceCode:String,
 cityCode: String,
 districtCode: String
 },
-data:function(){
+data() {
 if(!China_AREA)throw '中国行政区域数据 脚本没导入';
 return {
 province: this.provinceCode || '',
@@ -2523,13 +2672,13 @@ watch:{
 province: function(val, oldval) {
 },
 },
-computed: {
-citys:function() {
+computed : {
+citys() {
 if(!this.province)
 return;
 return this.addressData[this.province];
 },
-districts :function(){
+districts() {
 if(!this.city)
 return;
 return this.addressData[this.city];
@@ -2670,13 +2819,18 @@ type: Number,
 required: false
 },
 limitSize : Number,
-limitFileType: String
+limitFileType: String,
+labelId : {
+type : String,
+required : false,
+default : 'input_file_molding'
+}
 },
 template : 
 '<div class="ajaxjs-file-upload">\
 <div class="pseudoFilePicker">\
-<input type="hidden" v-if="fieldName" :name="fieldName" :value="newlyId || filedId" />\
-<label for="input_file_molding"><div><div>+</div>点击选择文件</div></label>\
+<input type="hidden" v-if="fieldName" :name="fieldName" :value="newlyId || filedId" :id="labelId" />\
+<label :for="labelId"><div><div>+</div>点击选择文件</div></label>\
 </div>\
 <div v-if="!isFileSize || !isExtName">{{errMsg}}</div>\
 <div v-if="isFileSize && isExtName">\
@@ -2733,7 +2887,7 @@ required: false
 limit : {
 type : Object,
 required : false,
-default : function(){
+default(){
 return { 
 maxSize : 600,
 fileExt: /png|gif|jpg|jpeg/i,
@@ -2762,7 +2916,7 @@ template :
 <button @click.prevent="doUpload($event);" style="padding: .4em 1.3em; width: 80px;">上传</button>\
 </div>\
 </div>',
-created : function(){
+created (){
 this.BUS.$on('upload-file-selected', this.onUploadInputChange);
 },
 methods : (function () {
@@ -2772,7 +2926,7 @@ var imgHeader = {
 "png" : "iVBORw"
 };
 return {
-onUploadInputChange : function(e) {
+onUploadInputChange(e) {
 var fileInput = e.target;
 for(var i = 0, j = fileInput.files.length; i < j; i++) {
 var reader = new FileReader(), fileObj = fileInput.files[i];
@@ -2780,15 +2934,15 @@ reader.onload = this.afterLoad.delegate(null, fileObj, this);
 reader.readAsDataURL(fileObj);
 }
 },
-afterLoad : function (e, fileObj, self) {
+afterLoad (e, fileObj, self) {
 var imgBase64Str = e.target.result;
 var isOk = self.checkFile(fileObj, imgBase64Str, self);
 self.imgBase64Str = imgBase64Str;
 },
-isShowErrMessage : function() {
+isShowErrMessage() {
 return !this.isFileSize || !this.isExtName || !this.isImgSize || !this.isFileTypeCheck;
 },
-checkFile : function (fileObj, imgBase64Str, cfg) {
+checkFile(fileObj, imgBase64Str, cfg) {
 var defaultLimit = cfg.limit;
 if(fileObj.size > defaultLimit.maxSize * 1024) { 
 cfg.isFileSize = false;
@@ -2824,7 +2978,7 @@ return;
 }
 cfg.errMsg = "亲，改了扩展名我还能认得你不是图片哦";
 },
-doUpload : function(e) {
+doUpload(e) {
 var form = this.$parent.$refs.uploadIframe && this.$parent.$refs.uploadIframe.$el;
 if(!form) {
 form = this.$parent.$el.$('form');
@@ -2837,7 +2991,7 @@ return false;
 })()
 });
 Vue.component('ajaxjs-fileupload-iframe', {
-data : function() {
+data() {
 return {
 radomId : Math.round(Math.random() * 1000),
 uploadOk_callback: function(){}
@@ -2863,7 +3017,7 @@ template :
 <iframe :name="\'upframe_\' + radomId" class="hide" @load="iframe_callback($event);"></iframe>\
 </form>',
 methods : {
-iframe_callback: function (e) { 
+iframe_callback (e) { 
 var json = e.target.contentDocument.body.innerText;
 if(json[0] == '{') {
 json = JSON.parse(json);
@@ -2876,7 +3030,7 @@ this.uploadOk_callback(imgUrl, json);
 }
 }
 },
-fireUploadFileSelected : function(e) {
+fireUploadFileSelected(e) {
 var p = this.$parent;
 while(p && p.$refs && !p.$refs.uploadControl) {
 p = p.$parent;
@@ -2886,7 +3040,7 @@ p.$refs.uploadControl.onUploadInputChange(e);
 }
 });
 Vue.component('aj-popup-upload', {
-data : function() {
+data() {
 return {
 text : {}
 };
@@ -2913,11 +3067,11 @@ template :
 <ajaxjs-fileupload-iframe :upload-url="uploadUrl" label-id="foo1" ref="uploadIframe"></ajaxjs-fileupload-iframe>\
 <div>上传限制：{{text.maxSize}}kb 或以下，分辨率：{{text.maxHeight}}x{{text.maxWidth}}</div>\
 </aj-layer>',
-mounted: function() {
+mounted() {
 this.text = this.$refs.uploadControl.$options.props.limit.default();
 },
 methods : {
-show : function(callback) {
+show(callback) {
 if(callback)
 this.$refs.uploadIframe.uploadOk_callback = callback;
 this.$children[0].show();
@@ -2938,7 +3092,7 @@ type : type || 'image/png'
 });
 }
 Vue.component('aj-xhr-upload', {
-data : function() {
+data () {
 return {
 isFileSize : false,	
 isExtName : false,	
@@ -2946,7 +3100,10 @@ isImgSize : false,
 errMsg : null,	
 newlyId : null,	
 radomId : Math.round(Math.random() * 1000),	
-uploadOk_callback: ajaxjs.xhr.defaultCallBack,	
+uploadOk_callback: this.hiddenField ? json => {
+this.$el.$('input[name=' + this.hiddenField + ']').value = json.imgUrl;
+ajaxjs.xhr.defaultCallBack(json);
+} : ajaxjs.xhr.defaultCallBack,	
 imgBase64Str : null,	
 progress : 0
 };
@@ -2958,6 +3115,11 @@ required: true
 }, 
 fieldName : String, 
 limitSize : Number,
+hiddenField:{	
+type:String,
+default: null
+},
+hiddenFieldValue: String,
 limitFileType: String,
 accpectFileType: String,
 isImgUpload : Boolean, 
@@ -2967,6 +3129,7 @@ imgMaxHeight: {type : Number, default : 1680}
 },
 template : 
 '<div class="aj-xhr-upload">\
+<input v-if="hiddenField" type="hidden" :name="hiddenField" :value="hiddenFieldValue" />\
 <div v-if="isImgUpload">\
 <a :href="imgPlace" target="_blank">\
 <img class="upload_img_perview" :src="(isFileSize && isExtName && imgBase64Str) ? imgBase64Str : imgPlace" />\
@@ -2982,7 +3145,7 @@ template :
 </div>\
 </div>',
 methods : {
-onUploadInputChange : function(e) {
+onUploadInputChange(e) {
 var fileInput = e.target;
 var ext = fileInput.value.split('.').pop(); 
 if(!fileInput.files || !fileInput.files[0]) return;
@@ -3013,7 +3176,7 @@ cfg.isImgSize = true;
 }
 }
 },
-readBase64 : function(file) {
+readBase64 (file) {
 var reader = new FileReader(), self = this;
 reader.onload = function(e) {
 var imgBase64Str = e.target.result;
@@ -3048,7 +3211,7 @@ self.errMsg = "亲，改了扩展名我还能认得你不是图片哦";
 }
 reader.readAsDataURL(file);
 },
-doUpload : function() {
+doUpload() {
 var fd = new FormData();
 if(this.$blob){
 fd.append("file", this.$blob, this.$fileName);
@@ -3069,7 +3232,7 @@ self.progress = progress;
 };
 xhr.send(fd);
 },
-compressImg: function(imgObj) {
+compressImg(imgObj) {
 var self = this;
 var maxWidth = 1000, maxHeight = 1500;
 var fitSizeObj = this.fitSize(imgObj.width, imgObj.height, maxWidth, maxHeight);
@@ -3091,7 +3254,7 @@ self.$blob = blob;
 }
 comp.src = this.rotate(imgObj, orient);
 },
-fitSize: function (originWidth, originHeight, maxWidth, maxHeight) {
+fitSize(originWidth, originHeight, maxWidth, maxHeight) {
 var targetWidth = originWidth, targetHeight = originHeight;
 if (originWidth > maxWidth || originHeight > maxHeight) {
 if (originWidth / originHeight > maxWidth / maxHeight) {
@@ -3106,14 +3269,14 @@ return {
 targetWidth : targetWidth, targetHeight : targetHeight
 };
 },
-getPhotoOrientation : function (img) {
+getPhotoOrientation(img) {
 var orient;
 EXIF.getData(img, function () {
 orient = EXIF.getTag(this, 'Orientation');
 });
 return orient;
 },
-rotate : function (img, orient) {
+rotate(img, orient) {
 var width = img.width, height = img.height, 
 canvas = document.createElement('canvas'), ctx = canvas.getContext("2d");
 if ([ 5, 6, 7, 8 ].indexOf(orient) > -1) {
@@ -3161,7 +3324,7 @@ blankBg : String,
 delImgUrl : String,
 loadListUrl: String
 },
-data : function() {
+data() {
 return {
 pics: []
 };
@@ -3177,22 +3340,18 @@ template : '<table width="100%"><tr><td>\
 </td><td>\
 <aj-xhr-upload ref="attachmentPictureUpload" :action="uploadUrl" :is-img-upload="true" :img-place="blankBg"></aj-xhr-upload>\
 </td></tr></table>',
-mounted: function() {
+mounted() {
 this.loadAttachmentPictures();
 this.$refs.attachmentPictureUpload.uploadOk_callback = this.loadAttachmentPictures;
 },
 methods : {
-loadAttachmentPictures : function() {
-var self = this;
-aj.xhr.get(this.loadListUrl, function(json) {
-self.pics = json.result;
-});
+loadAttachmentPictures() {
+aj.xhr.get(this.loadListUrl, json => this.pics = json.result);
 },
-delPic: function(picId) {
-var self = this;
-aj.xhr.dele(this.delImgUrl + picId, function(json) {
+delPic(picId) {
+aj.xhr.dele(this.delImgUrl + picId, json => {
 if(json.isOk) {
-self.loadAttachmentPictures();
+this.loadAttachmentPictures();
 } else {
 }
 });

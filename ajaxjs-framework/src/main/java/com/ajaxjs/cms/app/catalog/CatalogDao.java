@@ -9,7 +9,7 @@ import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
 
-@TableName(value = "general_catelog", beanClass = Catalog.class)
+@TableName(value = "general_catalog", beanClass = Catalog.class)
 public interface CatalogDao extends IBaseDao<Catalog> {
 	/**
 	 * 父id 必须在子id之前，不然下面 findParent() 找不到后面的父节点，故先排序. 前端排序的话 chrom 有稳定排序的问题，故放在后端排序
@@ -25,9 +25,9 @@ public interface CatalogDao extends IBaseDao<Catalog> {
 	 * @return
 	 */
 	@Delete(value = "DELETE FROM ${tableName} WHERE id in ( SELECT n.id FROM (" + // 如果子查询的 from 子句和更新、删除对象使用同一张表，会出现错误。
-			"(SELECT id FROM ${tableName} WHERE `path` LIKE ( CONCAT ( (SELECT `path` FROM general_catelog WHERE id = ?) , '%')))) AS n)", 
+			"(SELECT id FROM ${tableName} WHERE `path` LIKE ( CONCAT ( (SELECT `path` FROM general_catalog WHERE id = ?) , '%')))) AS n)", 
 			sqliteValue = "DELETE FROM ${tableName} " + 
-			"WHERE id in (SELECT id FROM ${tableName} WHERE \"path\" LIKE (( SELECT \"path\" FROM general_catelog WHERE id = ?) || '%'));")
+			"WHERE id in (SELECT id FROM ${tableName} WHERE \"path\" LIKE (( SELECT \"path\" FROM general_catalog WHERE id = ?) || '%'));")
 	public boolean deleteAll(int id);
 
 	/**
@@ -46,8 +46,8 @@ public interface CatalogDao extends IBaseDao<Catalog> {
 	 * @return
 	 */
 	@Select("SELECT c.id, c.name, c.path, "
-			+ " (SELECT GROUP_CONCAT(id, '|', name ,'|' ,`path`) FROM general_catelog WHERE `path` REGEXP CONCAT(c.path, '/[0-9]+$')) AS sub\n " + 
-			"FROM general_catelog c WHERE pid = ?;")
+			+ " (SELECT GROUP_CONCAT(id, '|', name ,'|' ,`path`) FROM general_catalog WHERE `path` REGEXP CONCAT(c.path, '/[0-9]+$')) AS sub\n " + 
+			"FROM general_catalog c WHERE pid = ?;")
 	public List<Map<String, Object>> getListAndSubByParentId(int parentId);
 	
 	/**
@@ -56,13 +56,13 @@ public interface CatalogDao extends IBaseDao<Catalog> {
 	 * @param parentId
 	 * @return
 	 */
-	@Select(value = "SELECT * FROM general_catelog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catelog WHERE id = ? ) , '%'))", 
-			sqliteValue = "SELECT * FROM general_catelog WHERE " + 
+	@Select(value = "SELECT * FROM general_catalog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catalog WHERE id = ? ) , '%'))", 
+			sqliteValue = "SELECT * FROM general_catalog WHERE " + 
 			"	\"path\" LIKE (  ( " + 
 			"	SELECT" + 
 			"		\"path\" " + 
 			"	FROM" + 
-			"		general_catelog" + 
+			"		general_catalog" + 
 			"	WHERE" + 
 //			"		id = ? ) || '%')")
 			"		id = ? ) || '/%')")

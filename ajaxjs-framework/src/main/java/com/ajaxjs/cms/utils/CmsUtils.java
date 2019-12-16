@@ -49,11 +49,10 @@ public class CmsUtils {
 		BeanContext.injectBeans();
 	}
 
-	public static void init(String configFile, String dbCfg, String... string2) {
+	public static void init(String configFile, String dbXmlCfg, String... string2) {
 		ConfigService.load(configFile);
 
-
-		XMLHelper.xPath(dbCfg, "//Resource[@name='" + ConfigService.getValueAsString("data.database_node") + "']", node -> {
+		XMLHelper.xPath(dbXmlCfg, "//Resource[@name='" + ConfigService.getValueAsString("data.database_node") + "']", node -> {
 			NamedNodeMap map = node.getAttributes();
 			
 			String  url 		= map.getNamedItem("url").getNodeValue(),
@@ -61,11 +60,21 @@ public class CmsUtils {
 					password 	= map.getNamedItem("password").getNodeValue();
 
 			JdbcConnection.setConnection(JdbcConnection.getMySqlConnection(url, user, password));
+			
 			DataBaseFilter.isAutoClose = false;
 			
 			BeanContext.init(string2);
 			BeanContext.injectBeans();
 		});
+	}
+	
+	/**
+	 * 
+	 * @param projectFolder
+	 * @param packages
+	 */
+	public static void init2(String projectFolder, String... packages) {
+		init(projectFolder + "\\src\\main\\resources\\site_config.json", projectFolder + "\\WebContent\\META-INF\\context.xml", packages);
 	}
 
 	public static void loadSQLiteTest(String db) {

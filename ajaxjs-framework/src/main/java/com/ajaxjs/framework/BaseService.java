@@ -204,18 +204,9 @@ public abstract class BaseService<T> implements IBaseService<T> {
 	}
 
 	public static final int defaultPageSize = 6;
-
-	/**
-	 * 生成查询表达式的高阶函数
-	 * 
-	 * @param eq
-	 * @return
-	 */
-	public static Function<String, String> addWhere(String eq) {
-		return sql -> sql + " WHERE " + eq;
-	}
 	
 	/**
+	 * 生成查询表达式的高阶函数
 	 */
 	public static Function<String, String> setWhere(String where) {
 		return where == null ? sql -> sql : sql -> {
@@ -309,6 +300,9 @@ public abstract class BaseService<T> implements IBaseService<T> {
 	 */
 	public static String betweenCreateDate(String sql, String fieldName) {
 		HttpServletRequest r = MvcRequest.getHttpServletRequest();
+		if(r ==null)
+			return sql;
+		
 		String startDate = r.getParameter("startDate"), endDate = r.getParameter("endDate");
 		
 		if (r == null || CommonUtil.isEmptyString(startDate) || CommonUtil.isEmptyString(endDate))

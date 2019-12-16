@@ -19,7 +19,7 @@ public class CatalogServiceImpl extends BaseService<Catalog> implements CatalogS
 	/**
 	 * 
 	 */
-	public final static String PATH_LIKE_MYSQL = " FROM general_catelog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catelog WHERE id = %d ) , '%%'))";
+	public final static String PATH_LIKE_MYSQL = " FROM general_catalog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catalog WHERE id = %d ) , '%%'))";
 	
 	/**
 	 * IN 查询用
@@ -92,7 +92,7 @@ public class CatalogServiceImpl extends BaseService<Catalog> implements CatalogS
 
 	@Override
 	public String getTableName() {
-		return "general_catelog";
+		return "general_catalog";
 	}
 
 	@Override
@@ -127,7 +127,7 @@ public class CatalogServiceImpl extends BaseService<Catalog> implements CatalogS
 	}
 	
 	public static Function<String, String> whereByCatalogId (int catalogId){
-		return addWhere("catalogId = " + catalogId);
+		return setWhere("catalogId = " + catalogId);
 	}
 
 	/**

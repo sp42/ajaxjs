@@ -7,6 +7,7 @@
 package com.ajaxjs.config;
 
 import java.io.File;
+import java.lang.reflect.UndeclaredThrowableException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -146,9 +147,19 @@ public class SiteStruService implements ServletContextListener {
 
 		if (!CommonUtil.isEmptyString(startUp_Class)) {
 			LOGGER.info("执行 Servlet 启动回调");
-			Class<ServletStartUp> clz = ReflectUtil.getClassByName(startUp_Class, ServletStartUp.class);
-			ServletStartUp startUp = ReflectUtil.newInstance(clz);
-			startUp.onStartUp(cxt);
+			try {				
+				Class<ServletStartUp> clz = ReflectUtil.getClassByName(startUp_Class, ServletStartUp.class);
+				ServletStartUp startUp = ReflectUtil.newInstance(clz);
+				startUp.onStartUp(cxt);
+			}catch(Throwable e) {
+				if(e instanceof UndeclaredThrowableException) {
+					Throwable _e = ReflectUtil.getUnderLayerErr(e);
+					_e.printStackTrace();
+					
+				}
+				
+				throw e;
+			}
 		}
 	}
 

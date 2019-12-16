@@ -14,13 +14,13 @@ public class Product extends BaseModel {
 	/**
 	 * 分类 id
 	 */
-	private Integer catalogId;
+	private Long catalogId;
 	
 	/**
 	 * 设置分类 id
 	 * @param catelogId  
 	 */
-	public void setCatalogId(Integer catalogId) {
+	public void setCatalogId(Long catalogId) {
 		this.catalogId = catalogId;
 	}
 	
@@ -28,7 +28,7 @@ public class Product extends BaseModel {
 	 * 获取分类 id
 	 * @return 分类 id
 	 */	
-	public Integer getCatalogId() {
+	public Long getCatalogId() {
 		return catalogId;
 	}
 	

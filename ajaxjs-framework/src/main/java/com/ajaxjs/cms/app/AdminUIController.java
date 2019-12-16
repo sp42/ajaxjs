@@ -36,4 +36,5 @@ public class AdminUIController implements IController, Constant {
 	public String home() {
 		return BaseController.jsp("admin/home");
 	}
+
 }

@@ -88,7 +88,8 @@
 					json.isOk && alert('压缩css完成！');
 				}, {
 					type : '${param.css}',
-					css: encodeURIComponent(cssCode)
+					css: encodeURIComponent(cssCode),
+					saveFolder : '${aj_allConfig.System.project_folder.replace('\\', '\\\\')}\\WebContent\\asset\\css' 
 				});
 				
 			}, 2000);

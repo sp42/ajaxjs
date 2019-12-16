@@ -67,11 +67,11 @@
 							<aj-form-calendar-input field-name="endDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
 							<button class="aj-btn">查询</button>
 						</form>
+						<script>
+							aj.form.betweenDate('.dateRange');
+						</script>
 					</td>
 				</tr>
-				<script>
-					aj.form.betweenDate('.dateRange');
-				</script>
 			</tfoot>
 			<tbody>
 				<c:foreach var="current" items="${PageResult}">

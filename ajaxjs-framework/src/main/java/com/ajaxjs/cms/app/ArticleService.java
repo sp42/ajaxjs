@@ -16,6 +16,7 @@ import com.ajaxjs.orm.annotation.TableName;
 
 @Bean
 public class ArticleService extends BaseService<Map<String, Object>> {
+
 	@TableName(value = "entity_article", beanClass = Map.class)
 	public interface ArticleDao extends IBaseDao<Map<String, Object>> {
 		@Select("SELECT e.id, e.name, e.createDate, e.updateDate, e.catalogId, e.intro, e.cover, e.stat FROM ${tableName} e WHERE " + WHERE_REMARK+ DESCENDING_ID)
