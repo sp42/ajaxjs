@@ -91,25 +91,31 @@ public class MvcRequest extends HttpServletRequestWrapper {
 		return getRoute().replaceFirst("^/", "");
 	}
 
+	private Map<String, Object> putRequestData;
+
 	/**
 	 * 获取 PUT 请求所提交的内容。 Servlet 不能获取 PUT 请求内容，所以这里写一个方法
 	 * 
 	 * @return 参数、值集合
 	 */
 	public Map<String, Object> getPutRequestData() {
-		try(InputStream in = getInputStream()) {
-			String params = IoHelper.byteStream2string(in);
-			return MapTool.toMap(params.split("&"), v -> MappingValue.toJavaValue(Encode.urlDecode(v)));
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
+		if (putRequestData == null)
+			try (InputStream in = getInputStream()) {
+				String params = IoHelper.byteStream2string(in);
+				putRequestData = MapTool.toMap(params.split("&"), v -> MappingValue.toJavaValue(Encode.urlDecode(v)));
+				return putRequestData;
+			} catch (IOException e) {
+				e.printStackTrace();
+				return null;
+			}
+		else
+			return putRequestData;
 	}
 
 	/**
 	 * 去取 url 上的值
 	 * 
-	 * @param value 值
+	 * @param value     值
 	 * @param paramName 参数名称
 	 * @return 值
 	 */
@@ -143,7 +149,6 @@ public class MvcRequest extends HttpServletRequestWrapper {
 			map = MapTool.as(getParameterMap(), arr -> MappingValue.toJavaValue(arr[0]));
 //			System.out.println("22222222Map:" + map);
 		}
-
 
 		// 抛出 IllegalArgumentException 这个异常 有可能是参数类型不一致造成的，要求的是 string 因为 map 从 request
 		// 转换时已经变为 int（例如纯数字的时候）
@@ -239,7 +244,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	/**
 	 * 获取磁盘真實地址
 	 * 
-	 * @param cxt Web 上下文
+	 * @param cxt          Web 上下文
 	 * @param relativePath 相对地址
 	 * @return 绝对地址
 	 */
@@ -306,5 +311,31 @@ public class MvcRequest extends HttpServletRequestWrapper {
 			ip = getRemoteAddr();
 
 		return ip;
+	}
+
+	/**
+	 * 如果有这个参数返回 true。
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public boolean hasParameter(String key) {
+		return !CommonUtil.isEmptyString(getParameter(key));
+	}
+	
+	/**
+	 *  返回 SQL 安全的参数
+	 *  
+	 * @TODO
+	 * @param key
+	 * @return
+	 */
+	public String getIdOnly(String key) {
+		String p = getParameter(key);
+		
+		if(!CommonUtil.regTest("\\d+", p)) 
+			throw new IllegalArgumentException("参数 "+ key +" 必须为数字");
+		
+		return p;
 	}
 }

@@ -25,15 +25,23 @@ import com.ajaxjs.mvc.filter.SessionValueFilter;
 public class CaptchaFilter extends SessionValueFilter {
 	@Override
 	public boolean before(MvcRequest request, MvcOutput response, Method method, Object[] args) {
-		String captchaCode = getClientSideArgs(request, CaptchaController.CAPTCHA_CODE),
-				sessionValue = getServerSideValue(request, CaptchaController.CAPTCHA_CODE);
-
-		// 判断用户输入的验证码是否通过
-		if (captchaCode.equalsIgnoreCase(sessionValue)) {
-			request.getSession().removeAttribute(CaptchaController.CAPTCHA_CODE);// 通过之后记得要 清除验证码
-			return true;
-		} else
-			throw new IllegalAccessError("验证码不正确");
+		try {
+			String captchaCode = getClientSideArgs(request, CaptchaController.CAPTCHA_CODE),
+					sessionValue = getServerSideValue(request, CaptchaController.CAPTCHA_CODE);
+			
+			// 判断用户输入的验证码是否通过
+			if (captchaCode.equalsIgnoreCase(sessionValue)) {
+				request.getSession().removeAttribute(CaptchaController.CAPTCHA_CODE);// 通过之后记得要 清除验证码
+				return true;
+			} else
+				throw new IllegalAccessError("验证码不正确");
+			
+		} catch(Throwable e) {
+			if(e instanceof NullPointerException)
+				throw new NullPointerException("验证码已经过期，请刷新");
+			
+			throw e;
+		}
 	}
 
 	@Override
