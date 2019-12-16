@@ -6,7 +6,6 @@
  */
 package org.snaker.engine.helper;
 
-import org.apache.commons.lang.StringUtils;
 import org.snaker.engine.SnakerException;
 
 /**
@@ -73,11 +72,12 @@ public class StringHelper {
 		if (isEmpty(orderby) || isEmpty(order))
 			return "";
 		
-		String[] orderByArray = StringUtils.split(orderby, ',');
-		String[] orderArray = StringUtils.split(order, ',');
+		String[] orderByArray = orderby.split(",");
+		String[] orderArray = order.split(",");
 		
 		if (orderArray.length != orderByArray.length)
 			throw new SnakerException("分页多重排序参数中,排序字段与排序方向的个数不相等");
+		
 		StringBuilder orderStr = new StringBuilder(30);
 		orderStr.append(" order by ");
 
