@@ -38,8 +38,9 @@ public class CartController extends BaseController<Cart> {
 	@GET
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
-		page(mv, service.findCartList(start, limit, null));
+	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam("userId") long userId, ModelAndView mv) {
+		LOGGER.info("后台-购物车-列表");
+		page(mv, service.findPagedList(start, limit, userId));
 		return jsp("shop/cart-admin-list");
 	}
 

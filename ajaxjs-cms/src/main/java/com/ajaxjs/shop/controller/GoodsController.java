@@ -14,7 +14,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.cms.app.CommonConstant;
+import com.ajaxjs.cms.app.catalog.CatalogServiceImpl;
 import com.ajaxjs.framework.BaseController;
+import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
@@ -43,9 +45,8 @@ public class GoodsController extends BaseController<Goods> {
 	@GET
 	@Path(list)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(catalogId) int catelogId, @QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
-		prepareData(mv);
-		page(mv, service.findPagedListByCatalogId(catelogId, start, limit), CommonConstant.UI_ADMIN);
+	public String list(@QueryParam(catalogId) int catalogId, @QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+		page(mv, service.findPagedListByCatalogId(catalogId, start, limit, CommonConstant.OFF_LINE), CommonConstant.UI_ADMIN);
 		return jsp("shop/goods-admin-list");
 	}
 
@@ -111,8 +112,11 @@ public class GoodsController extends BaseController<Goods> {
 	@GET
 	@Path("/shop/goods")
 	@MvcFilter(filters = { DataBaseFilter.class })
-	public String list(ModelAndView mv) {
+	public String list(@QueryParam(catalogId) int catelogId, ModelAndView mv, @QueryParam(start) int start, @QueryParam(limit) int limit) {
 		LOGGER.info("浏览商品");
+		
+		
+		page(mv, service.findPagedListByCatalogId(catelogId, start, 9, CommonConstant.ON_LINE), CommonConstant.UI_FRONTEND);
 		return jsp("shop/goods");
 	}
 	
@@ -131,6 +135,10 @@ public class GoodsController extends BaseController<Goods> {
 		sellerService.findList().forEach(seller -> map.put(seller.getId(), seller));
 		mv.put("sellers", map);
 		mv.put(domainCatalog_Id, service.getDomainCatalogId());
+		
+		Map<Long, BaseModel> cMap = CatalogServiceImpl.list_bean2map_id_as_key(new CatalogServiceImpl().findAllListByParentId(service.getDomainCatalogId()));
+		mv.put("goodsCatalogs", cMap);
+	
 		super.prepareData(mv);
 	}
 

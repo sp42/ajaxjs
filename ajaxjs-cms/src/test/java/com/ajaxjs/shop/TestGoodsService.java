@@ -1,33 +1,32 @@
 package com.ajaxjs.shop;
 
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.ajaxjs.cms.app.CommonConstant;
 import com.ajaxjs.cms.utils.CmsUtils;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mock.TestHelper;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.SnowflakeIdWorker;
 import com.ajaxjs.shop.model.Goods;
+import com.ajaxjs.shop.service.CartService;
 import com.ajaxjs.shop.service.GoodsService;
-import com.ajaxjs.shop.service.SellerService;
+import com.ajaxjs.shop.service.ShopBookmarkService;
 import com.ajaxjs.user.model.UserAddress;
 import com.ajaxjs.user.service.UserAddressService;
 
 public class TestGoodsService {
 //	static GoodsService service;
-//	static ShopBookmarkService goodsBookmarkService;
+	static ShopBookmarkService goodsBookmarkService;
 
 	@BeforeClass
 	public static void initDb() {
 		CmsUtils.init2("c:\\project\\bgdiving", "com.ajaxjs.cms", "com.ajaxjs.user", "com.ajaxjs.shop");
-		
-//		System.out.println(new GoodsService().findList());
-		
-		System.out.println("------------------------->" + BeanContext.getBean(GoodsService.class).findList());
-//		service = BeanContext.getBean(GoodsService.class);
-//		System.out.println(service.findList());
+
 //		goodsBookmarkService = (ShopBookmarkService) BeanContext.getBean("GoodsBookmarkService");
 	}
 
@@ -53,9 +52,6 @@ public class TestGoodsService {
 		}
 	}
 
-
- 
-
 //	@Test
 	public void testGoodsAddress() {
 		UserAddressService userAddressService = (UserAddressService) BeanContext.getBean("UserAddressService");
@@ -79,8 +75,13 @@ public class TestGoodsService {
 		return "2018" + (SnowflakeIdWorker.idWorker.nextId() + "").substring(8, 18);
 	}
 
-//	@Test
+	@Test
 	public void testPageList() {
+		GoodsService service = BeanContext.getBean(GoodsService.class);
+		assertNotNull(service.findPagedList(0, 10));
+		assertNotNull(service.findPagedListByCatalogId(145, 0, 10, CommonConstant.ON_LINE));
+		
+		
 //		List<Goods> goodsList = goodsBookmarkService.getGoodsListByUserId(10000L);
 //		assertNotNull(goodsList);
 //		PageResult<Goods> page = service.findPagedList(0, 10);
@@ -90,10 +91,18 @@ public class TestGoodsService {
 //		System.out.println(goods.getTotalCount());
 //		assertNotNull(goods.getTotalCount());
 	}
+	
+
+	@Test
+	public void testCartPageList() {
+		CartService cartService = BeanContext.getBean(CartService.class);
+		assertNotNull(cartService.findPagedList(0, 10).get(0));
+		assertNotNull(cartService.findList().get(0));
+		assertNotNull(cartService.findListByUserId(1133L).get(0));
+	}
 
 	@Test
 	public void testGetGoodsDetal() {
-
 	}
 
 	@AfterClass

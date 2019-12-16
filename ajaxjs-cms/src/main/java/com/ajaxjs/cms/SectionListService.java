@@ -170,6 +170,6 @@ public abstract class SectionListService extends BaseService<SectionList> {
 	}
 
 	public List<SectionList> findListByCatalogId(int catelogId) {
-		return dao.findList(addWhere("catelogId" + catelogId));
+		return dao.findList(setWhere("catelogId" + catelogId));
 	}
 }

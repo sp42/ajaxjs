@@ -111,8 +111,8 @@ public class GroupService extends BaseService<Group> {
 
 		if(groupsIds.size() >0 ) {			
 			String ids = String.join(",", groupsIds);
+			List<Group> list = dao.findList(setWhere("e.id IN (" + ids + ")")), noPassGroup = new ArrayList<>();
 			
-			List<Group> list = dao.findList(addWhere("e.id IN (" + ids + ")")), noPassGroup = new ArrayList<>();
 			for(Group group : list) {
 				if(group.getCurrentPerson() < group.getMinimumPerson()) {
 					noPassGroup.add(group);

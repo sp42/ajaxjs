@@ -44,7 +44,7 @@ public class OrderController extends BaseController<OrderInfo> {
 	@Path(list)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
-		LOGGER.info("订单列表");
+		LOGGER.info("后台-订单列表");
 		
 		page(mv, service.findPagedList(start, limit, null), CommonConstant.UI_ADMIN);
 		return jsp("shop/order-admin-list");

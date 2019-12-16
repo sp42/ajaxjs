@@ -36,6 +36,6 @@ public class GoodsFormatService extends BaseService<GoodsFormat> {
 	 * @return 商品的所有规格
 	 */
 	public List<GoodsFormat> findByGoodsId(long goodsId) {
-		return dao.findList(sql -> sql + " WHERE goodsId = " + goodsId);
+		return dao.findList(setWhere("goodsId = " + goodsId));
 	}
 }

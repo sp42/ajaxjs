@@ -9,9 +9,9 @@ import java.util.function.Function;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.framework.QueryParams;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
+import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
 import com.ajaxjs.shop.model.Cart;
@@ -30,12 +30,14 @@ public class CartService extends BaseService<Cart> {
 
 	@TableName(value = "shop_cart", beanClass = Cart.class)
 	public static interface CartDao extends IBaseDao<Cart> {
-		public static final String sql = "SELECT c.*, entry.id AS goodsId, entry.name AS goodsName," 
-				+ " f.name AS goodsFormat, f.price, " + selectCover
-				+ " AS cover FROM ${tableName} c INNER JOIN shop_goods_format f ON c.goodsFormatId = f.id INNER JOIN shop_goods entry ON f.goodsId = entry.id WHERE 1 = 1 ORDER BY c.id DESC";
+		public static final String sql = 
+				  "SELECT e.*, g.id AS goodsId, g.name AS goodsName, g.cover, f.name AS goodsFormat, f.price FROM ${tableName} e "
+				+ "INNER JOIN shop_goods_format f ON e.goodsFormatId = f.id "
+				+ "INNER JOIN shop_goods g ON f.goodsId = g.id" + WHERE_REMARK_ORDER;
 
 		@Select(sql)
-		public PageResult<Cart> find(int start, int limit, Function<String, String> sqlHandler);
+		@Override
+		public PageResult<Cart> findPagedList(int start, int limit, Function<String, String> sqlHandler);
 
 		@Select(sql)
 		@Override
@@ -59,20 +61,32 @@ public class CartService extends BaseService<Cart> {
 		setUiName("购物车");
 	}
 
-	public PageResult<Cart> findCartList(int start, int limit, QueryParams qs) {
-		return dao.find(start, limit, QueryParams.initSqlHandler(qs));
+	public PageResult<Cart> findPagedList(int start, int limit, long userId) {
+		return dao.findPagedList(start, limit, 
+			userId != 0L ? setWhere(" e.userId = " + userId).andThen(BaseService::betweenCreateDate) : BaseService::betweenCreateDate);
 	}
-
-	public List<Cart> findCartList(QueryParams qs) {
-		return dao.findList(QueryParams.initSqlHandler(qs));
+	
+	@Override
+	public List<Cart> findList() {
+		return dao.findList(BaseService::betweenCreateDate);
 	}
 
 	public List<Cart> findCartListIn(String[] cartIds) {
-		return dao.findList(QueryParams.makeQuery(" c.id IN (" + String.join(",", cartIds) + ")"));
+		return dao.findList(setWhere(" e.id IN (" + String.join(",", cartIds) + ")"));
 	}
 
-//	@Resource("UserAddressService")
-	private static UserAddressService userAddressService = new UserAddressService();
+	/**
+	 * 根据用户 id 查询其购物车内容
+	 * 
+	 * @param userId 用户 id
+	 * @return
+	 */
+	public List<Cart> findListByUserId(long userId) {
+		return dao.findList(setWhere(" e.userId = " + userId));
+	}
+	
+	@Resource("UserAddressService")
+	private static UserAddressService userAddressService;
 
 	/**
 	 * SQL 查询是否有数据返回，没有返回 true
@@ -103,7 +117,8 @@ public class CartService extends BaseService<Cart> {
 		fn.apply(carts, address, actualPrice);
 	}
 	
-	private GroupService groupService = new GroupService();
+	@Resource("GroupService")
+	private GroupService groupService;
 
 	@Override
 	public Long create(Cart bean) {
@@ -118,6 +133,7 @@ public class CartService extends BaseService<Cart> {
 	public boolean delete(Cart bean) {
 		bean = findById(bean.getId());
 		Long groupId = bean.getGroupId();
+		
 		if (groupId != null) {// 增加当前参团人数
 			groupService.downCurrentPerson(groupId);
 		}

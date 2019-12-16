@@ -7,6 +7,11 @@
 			<jsp:param name="lessFile" value="/asset/less/admin.less" />
 			<jsp:param name="title" value="${uiName}管理" />
 		</jsp:include>
+		<style>
+			select {
+				min-width:120px;
+			}
+		</style>
 	</head>
 	<body>
 		<div class="admin-entry-form">
@@ -35,7 +40,7 @@
 					<label> 
 						<div class="label">栏 目：</div>  
 						<!-- 分类下拉 -->
-						<aj-tree-catelog-select field-name="catelogId" :catelog-id="${domainCatalog_Id}" :selected-catelog-id="${empty info || empty info.catelogId? 0 : info.catelogId}">
+						<aj-tree-catelog-select field-name="catalogId" :catalog-id="${domainCatalog_Id}" :selected-catalog-id="${empty info || empty info.catalogId? 0 : info.catalogId}">
 						</aj-tree-catelog-select>
 						<span style="color:red;">*</span>
 					</label>
@@ -95,9 +100,9 @@
 					</li>
 				</ul>
 							</td>
+							<td width="10"></td>
 							<td valign="bottom">
 								<button @click="addGoodsFormatItems($event)" class="ajaxjs-btn">+</button>
-							
 							</td>
 						</tr>
 					</table>
@@ -161,44 +166,14 @@
 		</form>
 		
 		<script>
-			aj.xhr.form('#goodsFormat', ajaxjs.xhr.defaultCallBack.after(function() {
-				App.loadGoodsFormatItemList();
-			}));
-			
-
 			Vue.component('shop-goods-format-item', {
-				props : {
-					imgSrc : {
-						type: String, // 生成图片验证码地址
-						required: false,
-					},
-					
-					fieldName : {	// 提交的字段名
-						type: String,
-						required: false
-					}
-				},
 				template : 
 					'<div>\
-						分类 <input type="text" form="goodsFormat" size="15" name="name"  required="required" placeholder="规格/分类/型号" />\
-						价格 <input type="text" form="goodsFormat" size="10" name="price" required="required" /> 元\
+						分类 <input type="text" form="goodsFormat" size="15" name="name"  required placeholder="规格/分类/型号" />\
+						价格 <input type="text" form="goodsFormat" size="10" name="price" required placeholder="最终实际交易金额" /> 元\
 					    规格详情 <input type="text" form="goodsFormat" size="40" name="content" />\
-					<button form="goodsFormat" class="ajaxjs-btn">保存</button></div>',
-				methods : {
-					onClk : function(e) {
-						var img = e.target;
-						img.src = img.src.replace(/\?\d+$/, '') + '?' + new Date().valueOf();
-					},
-					addRow :  function(){
-						alert(9);
-					},
-					submit: function(e){
-						e.preventDefault();
-					}
-				}
+						   <button form="goodsFormat" class="ajaxjs-btn">保存</button> </div>'
 			});
-			
-	
 			
 			App = new Vue({
 				el: '.admin-entry-form',
@@ -208,25 +183,23 @@
 					attachmentPictures:[]
 				},
 				methods: {
-					loadGoodsFormatItemList: function(){
-						var self = this;
-						${!isCreate} && aj.xhr.get('${ctx}/admin/goodsFormat', function(json) {
-							self.goodsFormatItemList = json.result;
+					loadGoodsFormatItemList(){
+						${!isCreate} && aj.xhr.get('${ctx}/admin/goodsFormat', json => {
+							this.goodsFormatItemList = json.result;
 						}, {
 							goodsId: ${isCreate ? 0 : info.id} 
 						});
 					},
-					addGoodsFormatItems : function(e) {
+					addGoodsFormatItems(e) {
 						e.preventDefault();
 						this.goodsFormatItems.push({
 						});
 
 						return false;
 					},
-					delGoodsFormat : function(id) {
-						var self = this;
-						aj.xhr.dele('${ctx}/admin/goodsFormat/' +id, ajaxjs.xhr.defaultCallBack.after(function(){
-							self.loadGoodsFormatItemList();
+					delGoodsFormat (id) {
+						aj.xhr.dele('${ctx}/admin/goodsFormat/' +id, ajaxjs.xhr.defaultCallBack.after(() => {
+							this.loadGoodsFormatItemList();
 						}));
 					}
 				}
@@ -235,15 +208,16 @@
 			${!isCreate ? 'App.loadGoodsFormatItemList();' : '' }
 		
 			// 表单提交
-			aj.xhr.form('form.entityEdit', function(json) {
+			aj.xhr.form('form.entityEdit', json => {
 					 if(json && json.msg)
 						 aj.alert.show(json.msg);
 						${isCreate ? 'json && json.isOk && setTimeout(function(){location.assign(json.newlyId + "/");}, 2000);' : ''}
-				}, {beforeSubmit : function(form, json) {
+				}, {beforeSubmit (form, json) {
 					json.content = App.$refs.htmleditor.getValue({cleanWord : eval('${aj_allConfig.article.cleanWordTag}'), encode : true});
 				}
 			});
 			
+			aj.xhr.form('#goodsFormat', ajaxjs.xhr.defaultCallBack.after(App.loadGoodsFormatItemList));
 		</script>
 		<c:if test="${isCreate}">
 			<script>

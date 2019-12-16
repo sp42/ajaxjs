@@ -24,10 +24,12 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
 import com.ajaxjs.shop.model.Seller;
+import com.ajaxjs.util.logger.LogHelper;
 
 @Bean
 @Path("/admin/seller")
 public class SellerController extends BaseController<Seller> {
+	private static final LogHelper LOGGER = LogHelper.getLog(BaseController.class);
 	
 	@TableName(value = "shop_seller", beanClass = Seller.class)
 	public static interface SellerDao extends IBaseDao<Seller> {
@@ -54,6 +56,8 @@ public class SellerController extends BaseController<Seller> {
 	@Path(list)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+		LOGGER.info("获取" + getService().getUiName() + "分页列表 GET list");
+		
 		page(mv, service.findPagedList(start, limit, null));
 		return jsp("shop/seller-admin-list");
 	}

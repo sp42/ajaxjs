@@ -5,15 +5,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 
 import com.ajaxjs.framework.BaseService;
+import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
+import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.ShopHelper;
 import com.ajaxjs.shop.model.Cart;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.model.OrderItem;
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.weixin.payment.PayConstant;
 import com.ajaxjs.weixin.payment.PaySignatures;
@@ -39,6 +43,18 @@ public class OrderInfoService extends BaseService<OrderInfo> implements PayConst
 		setShortName("order");
 		setDao(dao);
 	}
+	
+	public PageResult<OrderInfo> findPagedList(int start, int limit, int tradeStatus, int payStatus, String orderNo) {
+		Function<String, String> sqlHander = BaseService::betweenCreateDate;
+		if(tradeStatus != 0)
+			sqlHander.andThen(setWhere("tradeStatus = " + tradeStatus));
+
+		if(payStatus != 0)
+			sqlHander.andThen(setWhere("tradeStatus = " + payStatus));
+		
+		if(!CommonUtil.isEmptyString(orderNo))
+		return findPagedList(start, limit, sqlHander);
+	}
 
 	/**
 	 * 查找用户交易过的所有订单
@@ -47,7 +63,7 @@ public class OrderInfoService extends BaseService<OrderInfo> implements PayConst
 	 * @return 订单列表
 	 */
 	public List<OrderInfo> findOrderListByUserId(long userId) {
-		return dao.findList(addWhere("buyerId = " + userId));
+		return dao.findList(setWhere("buyerId = " + userId));
 	}
 
 	/**
@@ -57,7 +73,7 @@ public class OrderInfoService extends BaseService<OrderInfo> implements PayConst
 	 * @return 单个订单
 	 */
 	public OrderInfo findOrderByOrderNo(String orderNo) {
-		return dao.find(addWhere("orderNo ='" + orderNo + "'"));
+		return dao.find(setWhere("orderNo ='" + orderNo + "'"));
 	}
 
 	/**
@@ -140,12 +156,11 @@ public class OrderInfoService extends BaseService<OrderInfo> implements PayConst
 		return map;
 	}
 
-//	@Resource("OrderItemService")
-	private OrderItemService orderItemService = new OrderItemService();
+	@Resource("OrderItemService")
+	private OrderItemService orderItemService;
 
-//	@Resource("CartService")
-	private CartService cartService = new CartService();
-
+	@Resource("CartService")
+	private CartService cartService;
 
 	/**
 	 * 删除订单关联的明细表项

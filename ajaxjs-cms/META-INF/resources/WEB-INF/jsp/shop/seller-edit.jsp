@@ -205,7 +205,7 @@
 				
 				mounted(){
 					// 表单提交
-					aj.xhr.form('form.entityEdit', json => {
+					aj.xhr.form('.admin-entry-form form', json => {
 						if(json && json.msg) {
 							aj.alert.show(json.msg);
 							${isCreate} && json && json.isOk && setTimeout(()=>location.assign(json.newlyId + "/"), 2000);

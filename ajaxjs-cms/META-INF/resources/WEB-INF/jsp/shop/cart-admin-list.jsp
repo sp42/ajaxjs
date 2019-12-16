@@ -15,9 +15,6 @@
 				<template slot="title">${uiName}一览</template>
 				<template slot="btns"><a :href="ajResources.ctx + '/admin/${shortName}/'">新建</a> | </template>
 			</ajaxjs-admin-header>
-	
-			<!-- 搜索、分类下拉 -->
-			<aj-admin-filter-panel :no-catalog="true" search-field-value="entry.name"></aj-admin-filter-panel>
 		</div>
 		
 		<script>
@@ -55,7 +52,18 @@
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="11"></td>
+					<td colspan="11">
+						<form action="." method="GET" class="dateRange" @submit="valid($event)">
+							起始时间：
+							<aj-form-calendar-input field-name="startDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
+							截至时间：
+							<aj-form-calendar-input field-name="endDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
+							<button class="aj-btn">查询</button>
+						</form>
+						<script>
+							aj.form.betweenDate('.dateRange');
+						</script>
+					</td>
 				</tr>
 			</tfoot>
 			<tbody>
@@ -79,8 +87,8 @@
 						<td>${current.goodsNumber}</td>
 						<td>￥${current.goodsNumber * current.price}</td>
 						<td>${empty current.groupId ? '否' : '是'}</td>
-						<td>
-							<a href="?filterField=userId&filterValue=${current.userId}">
+						<td title="过滤此用户购物车">
+							<a href="?userId=${current.userId}">
 								#${current.userId}
 							</a>
 						</td>
