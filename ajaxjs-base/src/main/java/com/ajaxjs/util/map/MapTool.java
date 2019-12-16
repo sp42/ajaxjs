@@ -30,9 +30,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -50,6 +47,7 @@ import org.xml.sax.SAXException;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.ReflectUtil;
+import com.ajaxjs.util.XMLHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -302,19 +300,6 @@ public class MapTool {
 	// -----------------------------------------------XML------------------------------------------------
 	// --------------------------------------------------------------------------------------------------
 
-	/**
-	 * XML 转换需要的对象
-	 * 
-	 * @return XML 转换需要的对象
-	 */
-	public static DocumentBuilder initBuilder() {
-		try {
-			return DocumentBuilderFactory.newInstance().newDocumentBuilder();
-		} catch (ParserConfigurationException e) {
-			LOGGER.warning(e);
-			return null;
-		}
-	}
 
 	/**
 	 *
@@ -324,7 +309,7 @@ public class MapTool {
 	 * @return XML 格式的字符串
 	 */
 	public static String mapToXml(Map<String, ?> data) {
-		Document doc = initBuilder().newDocument();
+		Document doc = XMLHelper.initBuilder().newDocument();
 		Element root = doc.createElement("xml");
 		doc.appendChild(root);
 
@@ -369,7 +354,7 @@ public class MapTool {
 		Map<String, String> data = new HashMap<>();
 
 		try (InputStream stream = new ByteArrayInputStream(strXML.getBytes("UTF-8"));) {
-			Document doc = initBuilder().parse(stream);
+			Document doc = XMLHelper.initBuilder().parse(stream);
 			doc.getDocumentElement().normalize();
 			NodeList nodeList = doc.getDocumentElement().getChildNodes();
 
