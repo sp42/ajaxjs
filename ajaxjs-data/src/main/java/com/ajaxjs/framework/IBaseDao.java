@@ -35,6 +35,8 @@ public interface IBaseDao<T> {
 	 * 搜索的占位符
 	 */
 	public static final String WHERE_REMARK = "1 = 1";
+	
+	public static final String WHERE_REMARK_ORDER = " WHERE 1 = 1 ORDER BY e.id DESC";
 
 	public static final String WHERE_REMARK_AND = " AND " + WHERE_REMARK;
 	
@@ -130,7 +132,7 @@ public interface IBaseDao<T> {
 	 * @param limit
 	 * @return 实体分页列表
 	 */
-	@Select("SELECT * FROM ${tableName} WHERE 1 = 1 ORDER BY id DESC")
+	@Select("SELECT * FROM ${tableName} e WHERE 1 = 1 ORDER BY id DESC")
 	public PageResult<T> findPagedList(int start, int limit, Function<String, String> sqlHandler);
 
 	/**
