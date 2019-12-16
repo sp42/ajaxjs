@@ -23,7 +23,10 @@ Vue.component('ajaxjs-admin-header', {
 // 后台增加、编辑、复位、删除按钮
 Vue.component('ajaxjs-admin-info-btns', {
 	props : {
-		isCreate : Boolean // true=新建/fasle=编辑
+		isCreate : {
+			type: Boolean, // true=新建/fasle=编辑
+			default:false
+		}
 	},
 	template : 
 		'<div class="ajaxjs-admin-info-btns">\
@@ -31,7 +34,8 @@ Vue.component('ajaxjs-admin-info-btns', {
 			<button onclick="this.up(\'form\').reset();return false;">复 位</button>\
 			<button v-if="!isCreate" v-on:click.prevent="del()">\
 				<img :src="ajResources.commonAsset + \'/icon/delete.gif\'" /> 删 除\
-			</button><slot></slot>\
+			</button>\
+			<button onclick="history.back();return false;">返回</button><slot></slot>\
 		</div>',
 	methods : {
 		del : function () {

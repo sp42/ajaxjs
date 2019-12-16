@@ -47,6 +47,7 @@ body > nav {
 			line-height: 50px;
 			letter-spacing: 5px;
 			text-align: center;
+			font-size: 1rem;
 			a {
 				color: white;
 				&:visited {
@@ -166,5 +167,22 @@ form.feedback {
 
 	button {
 		.ajaxjs-btn;
+	}
+}
+
+.emptyUserAvatar{
+	width:100px;
+	height:100px;
+	&::before {
+		font: normal normal normal 100px/1 FontAwesome;
+		color:lightgray;
+	    content: "\f2bd";
+	}
+	&.small{
+		width:16px;
+		height:16px;
+		&::before {
+			font: normal normal normal 16px/1 FontAwesome;
+		}
 	}
 }

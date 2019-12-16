@@ -255,6 +255,21 @@ Vue.component('aj-tree-catelog-select', {
 	}
 });
 
+Vue.component('aj-tree-user-role-select', {
+	props : {
+		value : { 			// 请求远端的分类 id，必填
+			type: Number,
+			required: true
+		},
+		json:Array
+	},
+	template : '<select name="roleId" class="ajaxjs-select"></select>',
+	
+	mounted () {
+		new ajaxjs.tree.selectUI().renderer(this.json, this.$el, this.value, {makeAllOption : false});
+	}
+});
+
 //全国省市区 写死属性
 Vue.component('aj-china-area', {
 	template : '<div class="aj-china-area"><span>省份</span> <select v-model="province" class="ajaxjs-select" name="locationProvince">\

@@ -1,4 +1,5 @@
 /**
+
  * 表單控件
  */
 
@@ -629,12 +630,12 @@ Vue.component('aj-form-html-editor', {
 	
 	// 验证字段
 	function hasError (field) {
-	
-		if (field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') 
+		if (field.form || field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') 
 			return;
 		
 		// 获取 validity
 		var validity = field.validity;
+		if(!validity)return 'No validity';
 		
 		// 如果通过验证,就返回 undefined
 		if (validity.valid) return;
@@ -692,9 +693,9 @@ Vue.component('aj-form-html-editor', {
 	    var id = field.id || field.name;
 	    if (!id) return;
 
-	    // 检查错误消息字段是否已经存在
-	    // 如果没有, 就创建一个
+	    // 检查错误消息字段是否已经存在 如果没有, 就创建一个
 	    var message = field.form.querySelector('.error-message#error-for-' + id );
+	    
 	    if (!message) {
 	        message = document.createElement('div');
 	        message.className = 'error-message';
@@ -709,7 +710,7 @@ Vue.component('aj-form-html-editor', {
 	    message.innerHTML = error;
 
 	    // 显示错误信息
-	    message.style.display = 'block';
+	    message.style.display = 'inline-block';
 	    message.style.visibility = 'visible';
 	};
 	

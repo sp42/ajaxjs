@@ -14,11 +14,11 @@
 
 // -webkit-text-stroke: 1px rgba(255,255,255,0.5);
 .aj-btn, .ajaxjs-btn, .ajaxjs-btn-1 {
-	height: 26px;
+	height: 28px;
 	font-size: .8rem;
-	line-height: 15px;
+	line-height: 18px;
 	padding: .4em 2.3em;
-	margin: 10px;
+	margin: 10px auto;
 	color: #333;
 	letter-spacing: .3em;
 	border-radius: 4px;
@@ -255,9 +255,9 @@
 	
 	input[type=submit] , button {
 		min-width: 120px;
-    	max-height: 50px;
-    	font-size: 1rem;
-	    font-weight: 900;
+    	max-height: 40px;
+    	font-size: .95rem;
+	    font-weight: bold;
 	    letter-spacing: 2px;
 	    color: #333;
 		padding: 10px 20px;
@@ -315,5 +315,76 @@
 	}
 }
 
- 
+.admin-entry-form {
+	& > form {
+		margin: 0 5%;
+		border: 1px solid #e3e3e3;
+		overflow: hidden;
+		& > div {
+			padding: 1% 2%;
+			border-bottom: 1px solid #e3e3e3;
+			&:last-child {
+				border-bottom: 0;
+			}
+		}
+
+		& > div:nth-child(even) {
+			border-top: 1px solid white;
+			background: #f5f5f5;
+		}
+
+		div.label {
+			display: inline-block;
+			min-width: 70px;
+			text-align: center;
+		}
+
+		input[type=text], input[type=email],textarea {
+			.ajaxjs-inputField;
+		}
+
+		textarea {
+			min-height: 90px;
+		}
+
+		.htmlEditor {
+			width: 90%;
+			margin: 0 auto;
+			display: inline-block;
+		}
+	}
+
+	.sub, .sub-2  {
+		color: gray;
+		font-size:.9rem;
+		transition: color linear 300ms;
+	}
+
+ 	.sub{
+		margin: 1% 0 0 15%;
+ 	}
+	
+	.sub-2{
+		display:inline-block;
+	}
+	
+	form>div:hover .sub, form>div:hover .sub-2 {
+		color: black;
+	}
+	
+	.buttons {
+		text-align: center;
+	}
+	.error-message {
+		padding-left:1%;
+		color:red;
+	}
+	
+	.ajaxjs-admin-info-btns {
+		text-align: center;
+		button {
+			.ajaxjs-btn;
+		}
+	}
+}
 

@@ -360,7 +360,10 @@ Vue.component('aj-xhr-upload', {
 			errMsg : null,				// 错误信息
 			newlyId : null,				// 成功上传之后的文件 id
 			radomId : Math.round(Math.random() * 1000),		// 不重复的 id
-			uploadOk_callback: ajaxjs.xhr.defaultCallBack,				// 回调函数
+			uploadOk_callback: this.hiddenField ? json => {
+				this.$el.$('input[name=' + this.hiddenField + ']').value = json.imgUrl;
+				ajaxjs.xhr.defaultCallBack(json);
+			} : ajaxjs.xhr.defaultCallBack,				// 回调函数
 	    	imgBase64Str : null,			// 图片的 base64 形式，用于预览
 	    	progress : 0
 		};
@@ -372,6 +375,11 @@ Vue.component('aj-xhr-upload', {
 		}, 		
 		fieldName : String, 	// input name 字段名
 	    limitSize : Number,
+	    hiddenField:{			// 上传后的文件名保存在这个隐藏域之中
+	    	type:String,
+	    	default: null
+	    },
+	    hiddenFieldValue: String,
 	    limitFileType: String,
 	    accpectFileType: String,// 可以上传类型
 	    isImgUpload : Boolean, 	// 是否图片上传
@@ -381,6 +389,7 @@ Vue.component('aj-xhr-upload', {
 	},
 	template : 
 		'<div class="aj-xhr-upload">\
+			<input v-if="hiddenField" type="hidden" :name="hiddenField" :value="hiddenFieldValue" />\
 			<div v-if="isImgUpload">\
 				<a :href="imgPlace" target="_blank">\
 					<img class="upload_img_perview" :src="(isFileSize && isExtName && imgBase64Str) ? imgBase64Str : imgPlace" />\

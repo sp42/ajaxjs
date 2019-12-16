@@ -26,7 +26,7 @@ public class JsController extends HttpServlet {
 	/**
 	 * 保存位置
 	 */
-	static String output = "C:\\project\\ajaxjs-cms\\META-INF\\resources\\ajaxjs-ui-output";
+	static String output = "C:\\project\\ajaxjs-framework\\META-INF\\resources\\ajaxjs-ui-output";
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String js = "// build date:" + new Date() + "\n";
@@ -44,11 +44,14 @@ public class JsController extends HttpServlet {
 	 * 压缩 CSS 并将其保存到一个地方
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
 		String css = request.getParameter("css");
 		String output = "";
-
+		String saveFolder = request.getParameter("saveFolder") == null ? frontEnd : request.getParameter("saveFolder");
+		
+		System.out.println(request.getParameter("saveFolder"));
 		try {
-			save(frontEnd + "\\main.css", css);
+			save(saveFolder + "\\main.css", css);
 
 			output = "{\"isOk\":true}";
 		} catch (Throwable e) {
