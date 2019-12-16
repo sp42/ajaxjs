@@ -1,4 +1,4 @@
-<%@page pageEncoding="UTF-8"%>
+<%@page pageEncoding="UTF-8" import="com.ajaxjs.user.role.RoleService, com.ajaxjs.user.role.RightConstantDummy"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
 <!DOCTYPE html>
 <html>
@@ -118,14 +118,14 @@
 						</aj-xhr-upload>
 					</div>
 				</div>
-				
+				<c:if test="${RoleService.check(RightConstantDummy.USER_PRIVILEGE)}">
 				<div>
 					<div class="label">用户组</div> 
 					<!-- 分类下拉 -->
 					<aj-tree-user-role-select :value="${info.roleId}" :json="${UserGroupsJSON}" style="width: 300px;"></aj-tree-user-role-select>
 					<div class="sub-2">用户组对应着权限，请谨慎设置。</div>
 				</div>
-
+				</c:if>
 				<div> 
 					<div class="label">状态：</div> 
 					<label>

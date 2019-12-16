@@ -5,6 +5,8 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
@@ -125,13 +127,24 @@ public abstract class AbstractUserController extends BaseUserController {
 				return (String) method.invoke(null, map, this);
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				Throwable _e = ReflectUtil.getUnderLayerErr(e);
-				_e.printStackTrace();
 				throw new ServiceException(_e.getMessage());
 			}
 
 		} else {
 			getService().register(user, password);
 			return jsonOk("恭喜你，注册成功");
+		}
+	}
+	
+	public static Object ioc(String config, BiFunction<Class<?>, String, Method> getMethod, Function<Method, Object> execute) throws ServiceException {
+		String[] arr = ConfigService.getValueAsString(config).split("#");
+		Method method = getMethod.apply(ReflectUtil.getClassByName(arr[0]), arr[1]);
+		
+		try {
+			return execute.apply(method);
+		} catch (Throwable e) {
+			Throwable _e = ReflectUtil.getUnderLayerErr(e);
+			throw new ServiceException(_e.getMessage());
 		}
 	}
 

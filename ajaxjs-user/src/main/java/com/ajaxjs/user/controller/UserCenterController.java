@@ -1,6 +1,7 @@
 package com.ajaxjs.user.controller;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
@@ -18,6 +19,8 @@ import com.ajaxjs.cms.app.attachment.Attachment_pictureController;
 import com.ajaxjs.cms.app.attachment.Attachment_pictureService;
 import com.ajaxjs.cms.app.attachment.Attachment_pictureServiceImpl;
 import com.ajaxjs.cms.utils.sms.SMS;
+import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
@@ -29,6 +32,7 @@ import com.ajaxjs.user.filter.LoginCheck;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.service.UserCommonAuthService;
 import com.ajaxjs.user.service.UserService;
+import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.UploadFileInfo;;
 
@@ -64,8 +68,24 @@ public class UserCenterController extends AbstractAccountInfoController {
 	
 	@GET
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	public String home(ModelAndView mv) {
+	public String home(ModelAndView mv) throws ServiceException {
 		LOGGER.info("用户会员中心（前台）");
+		
+		if(ConfigService.getValueAsString("user.customUserCenterHome") != null) {
+			AbstractUserController.ioc("user.customUserCenterHome", 
+				(clz, method)-> ReflectUtil.getMethod(clz, method, mv), 
+				method-> {
+					try {
+						return method.invoke(null, mv);
+					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+						Throwable _e = ReflectUtil.getUnderLayerErr(e);
+						LOGGER.warning(_e);
+						return null;
+					}
+				}
+			);
+		}
+		
 		return jsp("user/user-center/home");
 	}
 	

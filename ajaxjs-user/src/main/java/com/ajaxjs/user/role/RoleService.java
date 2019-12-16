@@ -5,12 +5,16 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.ioc.Bean;
+import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
 
@@ -120,6 +124,17 @@ public class RoleService extends BaseService<Map<String, Object>> {
 	public static boolean check(long num, int pos) {
 		num >>>= pos;// 右移X位
 		return (num & 1) == 1;
+	}
+	
+	
+	public static boolean check(int pos) {
+		HttpServletRequest request = MvcRequest.getHttpServletRequest();
+		Objects.requireNonNull(request);
+		Object _privilegeTotal = request.getSession().getAttribute("privilegeTotal");
+		Objects.requireNonNull(_privilegeTotal);
+		long privilegeTotal = (long)_privilegeTotal;
+		
+		return check(privilegeTotal, pos);
 	}
 
 	/**
