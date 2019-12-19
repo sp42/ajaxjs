@@ -11,7 +11,7 @@
 - 前端：[Vue.js](https://cn.vuejs.org/)（MVVM+组件化） + [LESS.js](http://lesscss.org/)
 - 后端：Java 1.8 + Tomcat 8  + MySQL/SQLite + [Swagger V3](https://swagger.io/) 接口文档服务
 
-作为佛系框架，也不主张伸手依赖别人。因此呢，AJAXJS 很少第三方的库或包依赖，一方面也避免太复杂。关于“轮子”一说，的确是，不过就是自己都理过一遍代码，不是随便粘贴人家的，而且务求清晰精炼平易近人，易懂易修改，避免晦涩的地方。文档、注释、单测等齐备。详见官网 [https://framework.ajaxjs.com](https://framework.ajaxjs.com/) 介绍。 
+作为佛系框架，也不主张伸手依赖别人。因此呢，AJAXJS 很少第三方的库或包依赖，一方面也避免太复杂。关于“轮子”一说，的确是，不过就是自己都理过一遍代码，不是随便粘贴人家的，而且务求清晰精炼平易近人，易懂易修改，避免晦涩的地方。文档、注释、单测等齐备。详见官网 [https://framework.ajaxjs.com/framework/](https://framework.ajaxjs.com/framework/) 介绍。 
 
 
 
@@ -49,7 +49,7 @@
 
 教程
 -----
-[参见 wiki](https://gitee.com/sp42_admin/ajaxjs/wikis)
+[参见 wiki](https://gitee.com/sp42_admin/ajaxjs/wikis/pages)
 
 
 联系方式
