@@ -508,7 +508,7 @@ public class ReflectUtil {
 	 * 调用 bean 对象的 setter 方法
 	 * 
 	 * @param bean	Bean 对象
-	 * @param name	属性名称
+	 * @param name	属性名称，前缀不要带 set
 	 * @param value 要设置的属性值
 	 */
 	public static void setProperty(Object bean, String name, Object value) {
