@@ -52,7 +52,10 @@ public class OrderInfoService extends BaseService<OrderInfo> implements PayConst
 		if(payStatus != 0)
 			sqlHander.andThen(setWhere("tradeStatus = " + payStatus));
 		
-		if(!CommonUtil.isEmptyString(orderNo))
+		if(!CommonUtil.isEmptyString(orderNo)) {
+		// TODO	
+		}
+		
 		return findPagedList(start, limit, sqlHander);
 	}
 
