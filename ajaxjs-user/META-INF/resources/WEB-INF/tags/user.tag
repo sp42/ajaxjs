@@ -9,7 +9,7 @@
 <c:if test="${type == 'login'}">
 	<%@attribute name="isAdminLogin" required="false" type="Boolean" description="是否后台的登录"%>
 	
-	<form class="aj-form" action="${ctx}/user/login/" method="POST">
+	<form class="aj-form" action="${ctx}/user/login/" method="POST" data-msg-newline="true">
 		<dl>
 			<label>
 				<dt>用户帐号</dt>
