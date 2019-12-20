@@ -630,7 +630,7 @@ Vue.component('aj-form-html-editor', {
 	
 	// 验证字段
 	function hasError (field) {
-		if (field.form || field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') 
+		if (field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') 
 			return;
 		
 		// 获取 validity
@@ -685,7 +685,7 @@ Vue.component('aj-form-html-editor', {
 		return 'The value you entered for this field is invalid.';
 	}
 	
-	function showError(field, error) {
+	function showError(field, error, isNewLine) {
 	    // 将错误类添加到字段
 	    field.classList.add('error');
 
@@ -710,7 +710,8 @@ Vue.component('aj-form-html-editor', {
 	    message.innerHTML = error;
 
 	    // 显示错误信息
-	    message.style.display = 'inline-block';
+	    if(!isNewLine)
+	    	message.style.display = 'inline-block';
 	    message.style.visibility = 'visible';
 	};
 	
@@ -737,6 +738,7 @@ Vue.component('aj-form-html-editor', {
 	}
 	
 	aj.formValidator = function(el) {
+		var isMsgNewLine = el.dataset.msgNewline ==="true";
 		el.setAttribute('novalidate', true);
 		
 		// 监听所有的失去焦点的事件
@@ -746,7 +748,7 @@ Vue.component('aj-form-html-editor', {
 
 		    // 如果有错误,就把它显示出来
 		    if (error) {
-		        showError(event.target, error);
+		        showError(event.target, error, isMsgNewLine);
 		        return;
 		    }
 		    
