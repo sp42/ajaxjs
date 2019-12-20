@@ -24,10 +24,12 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.beanutils.BeanUtils;
+//import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.dbutils.handlers.AbstractListHandler;
 import org.snaker.engine.SnakerException;
 import org.snaker.engine.helper.ClassHelper;
+
+import com.ajaxjs.util.ReflectUtil;
 
 /**
  * 该类主要解决数据库字段与类属性之间的转换存在下划线的情况(如：taskId->task_id)
@@ -85,10 +87,12 @@ public class BeanPropertyHandler<T> extends AbstractListHandler<T> {
 					 */
 					Object value = JdbcHelper.getResultSetValue(rs, index, pd.getPropertyType());
 					try {
+						ReflectUtil.setProperty(mappedObject, pd.getName(), value);
+						
 						/**
 						 * 使用apache-beanutils设置对象的属性
 						 */
-						BeanUtils.setProperty(mappedObject, pd.getName(), value);
+//						BeanUtils.setProperty(mappedObject, pd.getName(), value);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

@@ -9,14 +9,17 @@ package org.snaker.engine.access;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.*;
-
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.snaker.engine.DBAccess;
 import org.snaker.engine.SnakerException;
+import org.snaker.engine.WorkflowUtils;
 import org.snaker.engine.access.dialect.Dialect;
+import org.snaker.engine.access.jdbc.JdbcAccess;
 import org.snaker.engine.access.jdbc.JdbcHelper;
 import org.snaker.engine.core.ServiceContext;
 import org.snaker.engine.entity.CCOrder;
@@ -29,11 +32,9 @@ import org.snaker.engine.entity.Surrogate;
 import org.snaker.engine.entity.Task;
 import org.snaker.engine.entity.TaskActor;
 import org.snaker.engine.entity.WorkItem;
-import org.snaker.engine.helper.ClassHelper;
 import org.snaker.engine.helper.ConfigHelper;
 import org.snaker.engine.helper.StringHelper;
 
-import com.ajaxjs.shop.service.OrderInfoService;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -514,11 +515,11 @@ public abstract class AbstractDBAccess implements DBAccess {
 		}
 		if (actorIds != null && actorIds.length > 0) {
 			where.append(" and actor_Id in (");
-			where.append(StringUtils.repeat("?,", actorIds.length));
+			where.append(CommonUtil.repeatStr("?,", "", actorIds.length));
 			where.deleteCharAt(where.length() - 1);
 			where.append(") ");
 		}
-		return queryList(CCOrder.class, where.toString(), ArrayUtils.add(actorIds, 0, orderId));
+		return queryList(CCOrder.class, where.toString(), WorkflowUtils.add(actorIds, 0, orderId));
 	}
 
 	public Process getProcess(String id) {
@@ -1021,7 +1022,8 @@ public abstract class AbstractDBAccess implements DBAccess {
 				list = Collections.emptyList();
 
 			page.setResult(list);
-			page.setTotalCount(ClassHelper.castLong(count));
+			page.setTotalCount(JdbcAccess.castLong(count));
+			
 			return list;
 		} catch (Exception e) {
 			LOGGER.warning(e.getMessage(), e);

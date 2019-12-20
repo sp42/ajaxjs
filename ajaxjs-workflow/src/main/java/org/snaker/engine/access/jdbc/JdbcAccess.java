@@ -23,7 +23,6 @@ import org.snaker.engine.DBAccess;
 import org.snaker.engine.SnakerException;
 import org.snaker.engine.access.AbstractDBAccess;
 import org.snaker.engine.entity.Process;
-import org.snaker.engine.helper.ClassHelper;
 
 import com.ajaxjs.util.logger.LogHelper;
 
