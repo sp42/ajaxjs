@@ -28,10 +28,15 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.mvc.filter.XslMaker;
 import com.ajaxjs.net.http.PicDownload;
 import com.ajaxjs.orm.SnowflakeIdWorker;
+import com.ajaxjs.util.logger.LogHelper;
 
 @Bean
 @Path("/news")
 public class NewsController extends BaseController<Map<String, Object>> {
+	
+	private static final LogHelper LOGGER = LogHelper.getLog(NewsController.class);
+	
+	
 	@Resource("NewsService")
 	private NewsService service;
 
@@ -44,6 +49,7 @@ public class NewsController extends BaseController<Map<String, Object>> {
 	@MvcFilter(filters = { DataBaseFilter.class })
 //	@Authority(filter = DataBaseFilter.class, value = 1)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
+		LOGGER.info("新闻列表-前台");
 		return page(mv, service.list(catalogId, start, limit, CommonConstant.ON_LINE), false);
 	}
 
