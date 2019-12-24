@@ -37,9 +37,9 @@ public class Repository extends RepositoryReadOnly {
 	/**
 	 * 执行时的调用。不管执行哪个方法都会调用该方法。
 	 * 
-	 * @param proxy		代理对象
-	 * @param method	DAO 方法对象
-	 * @param args		DAO 方法的参数
+	 * @param proxy  代理对象
+	 * @param method DAO 方法对象
+	 * @param args   DAO 方法的参数
 	 * @return DAO 方法执行的结果
 	 * @throws DaoException DAO 异常
 	 */
@@ -76,7 +76,7 @@ public class Repository extends RepositoryReadOnly {
 	 * @param writeSql
 	 * @param writeBean
 	 * @return
-	 * @throws DaoException 
+	 * @throws DaoException
 	 */
 	private <T> T getFn(Supplier<String> getSql, Supplier<String> getTableName, Object[] args, Method method,
 			Function<DaoInfo, T> writeSql, Function<DaoInfo, T> writeBean) throws DaoException {
@@ -112,8 +112,8 @@ public class Repository extends RepositoryReadOnly {
 	/**
 	 * 新增动作
 	 * 
-	 * @param method		DAO 方法对象
-	 * @param args			DAO 方法的参数
+	 * @param method DAO 方法对象
+	 * @param args   DAO 方法的参数
 	 * @return 自增 id
 	 * @throws DaoException
 	 */
@@ -136,10 +136,10 @@ public class Repository extends RepositoryReadOnly {
 	/**
 	 * 更新动作
 	 * 
-	 * @param method 	DAO 方法对象
-	 * @param args 		DAO 方法的参数
+	 * @param method DAO 方法对象
+	 * @param args   DAO 方法的参数
 	 * @return 影响的行数
-	 * @throws DaoException 
+	 * @throws DaoException
 	 */
 	private int update(Method method, Object[] args) throws DaoException {
 		Update update = method.getAnnotation(Update.class);
@@ -151,10 +151,10 @@ public class Repository extends RepositoryReadOnly {
 	/**
 	 * 删除动作
 	 * 
-	 * @param method		DAO 方法对象
-	 * @param args			DAO 方法的参数
+	 * @param method DAO 方法对象
+	 * @param args   DAO 方法的参数
 	 * @return 是否删除成功
-	 * @throws DaoException 
+	 * @throws DaoException
 	 */
 	private Boolean delete(Method method, Object[] args) throws DaoException {
 		Delete delete = method.getAnnotation(Delete.class);

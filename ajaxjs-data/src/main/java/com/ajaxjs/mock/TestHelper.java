@@ -67,12 +67,11 @@ public class TestHelper {
 			.split(",");
 	private static final String[] email_suffix = "@gmail.com,@yahoo.com,@msn.com,@hotmail.com,@aol.com,@ask.com,@live.com,@qq.com,@0355.net,@163.com,@163.net,@263.net,@3721.net,@yeah.net,@googlemail.com,@126.com,@sina.com,@sohu.com,@yahoo.com.cn"
 			.split(",");
-	
-	
-	
-   public final static String[] provinces = new String[] {"广东","广西","46"," 海南","重庆 ","四川","贵州"};
-   public final static String[] cites = new String[] {"北京","上海","天津","重庆","河北","石家庄","沧州","承德","秦皇岛"};
-   public final static String[] districts = new String[] {"锦江区","青羊区","金牛区","武侯区","成华区","龙泉驿区","青白江区","新都区","温江区"};
+
+	public final static String[] provinces = new String[] { "广东", "广西", "46", " 海南", "重庆 ", "四川", "贵州" };
+	public final static String[] cites = new String[] { "北京", "上海", "天津", "重庆", "河北", "石家庄", "沧州", "承德", "秦皇岛" };
+	public final static String[] districts = new String[] { "锦江区", "青羊区", "金牛区", "武侯区", "成华区", "龙泉驿区", "青白江区", "新都区",
+			"温江区" };
 
 	public static int getNum(int start, int end) {
 		return (int) (Math.random() * (end - start + 1) + start);
@@ -203,6 +202,7 @@ public class TestHelper {
 	public static long getItem(long[] items) {
 		return items[random.nextInt(items.length)];
 	}
+
 	public static int getItem(int[] items) {
 		return items[random.nextInt(items.length)];
 	}

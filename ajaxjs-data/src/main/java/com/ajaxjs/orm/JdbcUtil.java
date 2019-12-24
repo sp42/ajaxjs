@@ -75,7 +75,7 @@ public class JdbcUtil {
 			arr[i] = arr[i] + inSql;
 		}
 
-		return String.join(" ", arr).trim(); 
+		return String.join(" ", arr).trim();
 	}
 
 	/**
@@ -116,12 +116,12 @@ public class JdbcUtil {
 		sql = sql.replaceAll("\\s+(?i)ASC", " ASC");
 
 		return sql;
-	}	
-	
+	}
+
 	/**
 	 * 判断是否 SQLite 数据库
 	 * 
-	 * @param conn 	数据库连接对象
+	 * @param conn 数据库连接对象
 	 * @return true = 是 SQLite 数据库
 	 */
 	public static boolean isSqlite(Connection conn) {

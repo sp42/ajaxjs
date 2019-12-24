@@ -108,7 +108,8 @@ public class PageResult<T> extends ArrayList<T> {
 	}
 
 	/*
-	 * 分页时高效的总页数计算 我们一般分页是这样来计算页码的： int row=200; //记录总数 int page=5;//每页数量 int count=row%5==0?row/page:row/page+1; 上面这种是用的最多的! 那么下面我们来一种最简单的，不用任何判断！ 看代码：
+	 * 分页时高效的总页数计算 我们一般分页是这样来计算页码的： int row=200; //记录总数 int page=5;//每页数量 int
+	 * count=row%5==0?row/page:row/page+1; 上面这种是用的最多的! 那么下面我们来一种最简单的，不用任何判断！ 看代码：
 	 * int row=21; int pageCount=5; int sum=(row-1)/pageCount+1;//这样就计算好了页码数量，逢1进1
 	 */
 }

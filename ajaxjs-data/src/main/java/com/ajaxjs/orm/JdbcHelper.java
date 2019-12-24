@@ -50,11 +50,11 @@ public class JdbcHelper extends JdbcReader {
 	/**
 	 * 初始化一个 PreparedStatement并执行
 	 * 
-	 * @param initPs 	初始化一个 PreparedStatement 并返回
-	 * @param exe		如何执行SQL？
-	 * @param conn   	数据库连接对象
-	 * @param sql    	SQL 语句，可以带有 ? 的占位符
-	 * @param params 	插入到 SQL 中的参数，可单个可多个可不填
+	 * @param initPs 初始化一个 PreparedStatement 并返回
+	 * @param exe    如何执行SQL？
+	 * @param conn   数据库连接对象
+	 * @param sql    SQL 语句，可以带有 ? 的占位符
+	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
 	 * @return PreparedStatement 对象
 	 */
 	static <T> T initAndExe(BiFunction<Connection, String, PreparedStatement> initPs,
@@ -144,7 +144,7 @@ public class JdbcHelper extends JdbcReader {
 	/**
 	 * 
 	 * @param tableName 表格名称
-	 * @param isInsert	true=新建记录
+	 * @param isInsert  true=新建记录
 	 * @return
 	 */
 	private static StringBuilder initSB(String tableName, boolean isInsert) {
@@ -157,12 +157,12 @@ public class JdbcHelper extends JdbcReader {
 
 		return sb;
 	}
-	
+
 	/**
 	 * 遍历 Map
 	 * 
-	 * @param map		Map 实体
-	 * @param onField	每当访问一字段时的回调
+	 * @param map     Map 实体
+	 * @param onField 每当访问一字段时的回调
 	 */
 	private static void everyMap(Map<String, Object> map, BiConsumer<String, Object> onField) {
 		if (map.size() == 0)
@@ -175,18 +175,18 @@ public class JdbcHelper extends JdbcReader {
 			onField.accept(field, map.get(field));
 		}
 	}
-	
+
 	/**
 	 * 新建记录，送入的数据是 Map
 	 * 
-	 * @param conn			数据库连接对象
-	 * @param map			Map 实体
-	 * @param tableName		表格名称
+	 * @param conn      数据库连接对象
+	 * @param map       Map 实体
+	 * @param tableName 表格名称
 	 * @return 新增主键，为兼顾主键类型，返回的类型设为同时兼容 int/long/string 的 Serializable
 	 */
 	public static Serializable createMap(Connection conn, Map<String, Object> map, String tableName) {
 		LOGGER.info("DAO 创建记录 name:{0}！", map.get("name"));
-		
+
 		List<String> fields = new ArrayList<>(), placeholders = new ArrayList<>();
 		List<Object> values = new ArrayList<>();
 
@@ -199,7 +199,7 @@ public class JdbcHelper extends JdbcReader {
 		StringBuilder sb = initSB(tableName, true);
 		sb.append("(" + String.join(", ", fields) + ")");
 		sb.append(" VALUES (" + String.join(", ", placeholders) + ")");
-		
+
 		Serializable newlyId = create(conn, sb.toString(), values.toArray());
 
 		map.put("id", newlyId); // id 一开始是没有的，保存之后才有，现在增加到实体
@@ -230,7 +230,7 @@ public class JdbcHelper extends JdbcReader {
 		sb.append(" WHERE id = ?");
 
 		values.add(map.get("id"));
-		
+
 		return update(conn, sb.toString(), values.toArray());
 	}
 
@@ -309,7 +309,7 @@ public class JdbcHelper extends JdbcReader {
 
 		return map;
 	}
-	
+
 	/**
 	 * 遍历 Bean
 	 * 
@@ -327,7 +327,6 @@ public class JdbcHelper extends JdbcReader {
 				if ("id".equals(fieldName))
 					continue; // 忽略 id 字段
 
-
 				onField.accept(fieldName, value);
 			}
 		}
@@ -335,7 +334,7 @@ public class JdbcHelper extends JdbcReader {
 
 	/**
 	 * 
-	 * @param bean	Bean 实体
+	 * @param bean Bean 实体
 	 * @param info
 	 * @return
 	 */
@@ -352,9 +351,9 @@ public class JdbcHelper extends JdbcReader {
 	/**
 	 * 新建记录，送入的数据是 Bean
 	 * 
-	 * @param conn			数据库连接对象
-	 * @param bean			Bean 实体
-	 * @param tableName		表格名称
+	 * @param conn      数据库连接对象
+	 * @param bean      Bean 实体
+	 * @param tableName 表格名称
 	 * @return 新增主键，为兼顾主键类型，返回的类型设为同时兼容 int/long/string 的 Serializable
 	 */
 	public static Serializable createBean(Connection conn, Object bean, String tableName) {
@@ -362,7 +361,7 @@ public class JdbcHelper extends JdbcReader {
 			LOGGER.info("创建记录 name:{0}！", ReflectUtil.executeMethod(bean, "getName"));
 		} catch (Throwable e) {
 		}
-		
+
 		List<String> fields = new ArrayList<>(), placeholders = new ArrayList<>();
 		List<Object> values = new ArrayList<>();
 
@@ -377,7 +376,7 @@ public class JdbcHelper extends JdbcReader {
 		sb.append(" VALUES (" + String.join(", ", placeholders) + ")");
 
 		Serializable newlyId = create(conn, sb.toString(), values.toArray());
-		
+
 		try {
 			Class<?> idClz = bean.getClass().getMethod("getId").getReturnType();// 根据 getter 推断 id 类型
 
@@ -407,7 +406,7 @@ public class JdbcHelper extends JdbcReader {
 					ReflectUtil.executeMethod(bean, "getName"));
 		} catch (Throwable e) {
 		}
-		
+
 		List<String> fields = new ArrayList<>();
 		List<Object> values = new ArrayList<>();
 
@@ -421,15 +420,15 @@ public class JdbcHelper extends JdbcReader {
 		sb.append(" WHERE id = ?");
 
 		values.add(ReflectUtil.executeMethod(bean, "getId"));
-		
+
 		return update(conn, sb.toString(), values.toArray());
 	}
 
 	/**
 	 * 删除一个实体，以是 Map 或 Bean。注意，此方法写死 id 字段
 	 * 
-	 * @param conn		数据库连接对象
-	 * @param bean		实体，可以是 Map 或 Bean
+	 * @param conn      数据库连接对象
+	 * @param bean      实体，可以是 Map 或 Bean
 	 * @param tableName 表格名称
 	 * @return 是否删除成功，true 表示为成功
 	 */
