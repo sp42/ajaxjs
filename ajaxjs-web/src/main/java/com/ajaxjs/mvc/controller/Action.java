@@ -86,7 +86,7 @@ public class Action {
 	 */
 	public void createControllerInstance(Class<? extends IController> clz) {
 		if (clz.getAnnotation(Bean.class) != null) { // 如果有 ioc，则从容器中查找
-			controller = BeanContext.getBeanByClass(clz);
+			controller = BeanContext.getBean(clz);
 			if (controller == null)
 				LOGGER.warning("在 IOC 资源库中找不到该类 {0} 的实例，请检查该类是否已经加入了 IOC 扫描？  The IOC library not found that Controller, plz check if it added to the IOC scan.", clz.getName());
 		} else {

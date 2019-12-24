@@ -58,7 +58,8 @@ public class ControllerScanner extends ScanClass<IController> {
 	 * @param clz 控制器类 a Controller class
 	 */
 	public static void add(Class<? extends IController> clz) {
-		if (!testClass(clz)) return;
+		if (!testClass(clz))
+			return;
 
 		String topPath = getRootPath(clz);
 		LOGGER.info("控制器正在解析，This controller \"{0}\" is being parsing", topPath);
@@ -68,7 +69,7 @@ public class ControllerScanner extends ScanClass<IController> {
 		action.parseMethod();
 
 		// 会打印控制器的总路径信息，不会打印各个方法的路径，那太细了，日志也会相应地多
-		LOGGER.info("控制器已登记成功！The controller \"{0}\" (\"/{1}\") was parsed and registered", 
+		LOGGER.info("控制器已登记成功！The controller \"{0}\" (\"/{1}\") was parsed and registered",
 				clz.toString().replaceAll("class\\s", ""), topPath); // 控制器 {0} 所有路径（包括子路径）注册成功！
 	}
 
@@ -78,12 +79,12 @@ public class ControllerScanner extends ScanClass<IController> {
 	 * @param clz 应该是一个控制器类 Should be a IController.
 	 * @return true 表示为是一个控制器类。 true if it's ok.
 	 */
-	private static boolean testClass(Class<? extends IController> clz) {		
+	private static boolean testClass(Class<? extends IController> clz) {
 		if (Modifier.isAbstract(clz.getModifiers())) // 忽略抽象类
 			return false;
 
 		Path path = clz.getAnnotation(Path.class); // 总路径
-		
+
 		if (path == null && !Modifier.isAbstract(clz.getModifiers())) {
 			LOGGER.warning("{0} 不存在任何 Path 信息！No Path info!", clz.toString());
 			return false;
@@ -102,10 +103,10 @@ public class ControllerScanner extends ScanClass<IController> {
 		Path a = clz.getAnnotation(Path.class);
 		Objects.requireNonNull(a, "控制器类应该至少设置一个 Path 注解。");
 		String rootPath = a.value();// 控制器类上定义的 Path 注解总是从根目录开始的。 the path in class always starts from top 1
-		
+
 		return rootPath.replaceAll("^/", ""); // remove the first / so that the array would be right length
 	}
-	
+
 	/**
 	 * 扫描控制器
 	 * 

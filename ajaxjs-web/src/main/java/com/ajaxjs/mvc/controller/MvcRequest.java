@@ -322,20 +322,20 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	public boolean hasParameter(String key) {
 		return !CommonUtil.isEmptyString(getParameter(key));
 	}
-	
+
 	/**
-	 *  返回 SQL 安全的参数
-	 *  
+	 * 返回 SQL 安全的参数
+	 * 
 	 * @TODO
 	 * @param key
 	 * @return
 	 */
 	public String getIdOnly(String key) {
 		String p = getParameter(key);
-		
-		if(!CommonUtil.regTest("\\d+", p)) 
-			throw new IllegalArgumentException("参数 "+ key +" 必须为数字");
-		
+
+		if (!CommonUtil.regTest("\\d+", p))
+			throw new IllegalArgumentException("参数 " + key + " 必须为数字");
+
 		return p;
 	}
 }
