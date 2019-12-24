@@ -15,6 +15,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.ajaxjs.cms.filter.FrontEndOnlyCheck;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseService;
@@ -40,7 +41,7 @@ public class NewsController extends BaseController<Map<String, Object>> {
 	}
 
 	@GET
-	@MvcFilter(filters = {DataBaseFilter.class})
+	@MvcFilter(filters = { DataBaseFilter.class })
 //	@Authority(filter = DataBaseFilter.class, value = 1)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
 		return page(mv, service.list(catalogId, start, limit, CommonConstant.ON_LINE), false);
@@ -56,18 +57,10 @@ public class NewsController extends BaseController<Map<String, Object>> {
 
 	@GET
 	@Path(idInfo)
-	@MvcFilter(filters = DataBaseFilter.class)
+	@MvcFilter(filters = { DataBaseFilter.class, FrontEndOnlyCheck.class })
 	public String getInfo(@PathParam(id) Long id, ModelAndView mv) {
 		prepareData(mv);
-		Map<String, Object> map = service.findById(id);
-		
-		// 前台不能看
-		Object status = map.get("stat");
-		if(status != null && (2 == (int)status || 0 == (int)status)) {
-			throw new IllegalArgumentException("实体已下线或已不存在");
-		}
-		
-		mv.put("info", map);
+		mv.put(info, service.findById(id));
 		BaseService.getNeighbor(mv, "entity_article", id);
 
 		return info();
@@ -83,7 +76,7 @@ public class NewsController extends BaseController<Map<String, Object>> {
 
 	@GET
 	@Path("/admin/news/list")
-	@MvcFilter(filters = {DataBaseFilter.class, XslMaker.class})
+	@MvcFilter(filters = { DataBaseFilter.class, XslMaker.class })
 	public String adminList(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
 		return page(mv, service.list(catalogId, start, limit, CommonConstant.OFF_LINE), true);
 	}

@@ -18,6 +18,7 @@ package com.ajaxjs.mvc.filter;
 import java.lang.reflect.Method;
 import java.util.Date;
 
+import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.util.CommonUtil;
@@ -41,7 +42,7 @@ public class AesFilter implements FilterAction {
 	public static String aesKey = "hihi";
 
 	@Override
-	public boolean before(MvcRequest request, MvcOutput response, Method method, Object[] args) {
+	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args) {
 		String errMsg = null;
 		String p = request.getParameter(requestQueryStringParamterName);
 		
@@ -74,7 +75,7 @@ public class AesFilter implements FilterAction {
 	final int d = 15 * 60000; // 15分钟
 
 	@Override
-	public void after(MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
+	public void after(ModelAndView model, MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
 		if (request.getAttribute("errMsg") != null) {
 			response.resultHandler("redirect::", request, null, method);
 		}

@@ -19,6 +19,7 @@ import java.lang.reflect.Method;
 
 import com.ajaxjs.Version;
 import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.orm.JdbcConnection;
@@ -36,14 +37,14 @@ public class DataBaseFilter implements FilterAction {
 	public static boolean isAutoClose = true;
 
 	@Override
-	public boolean before(MvcRequest request, MvcOutput response, Method method, Object[] args) {
+	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args) {
 		initDb();
 
 		return true;
 	}
 
 	@Override
-	public void after(MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
+	public void after(ModelAndView model, MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
 		if (isAutoClose)
 			closeDb();
 	}

@@ -1,4 +1,4 @@
-// build date:Tue Nov 26 18:25:56 GMT+08:00 2019
+// build date:Fri Dec 20 15:18:35 GMT+08:00 2019
 
 ajaxjs = aj = function(cssSelector, fn) {
 return Element.prototype.$.apply(document, arguments);
@@ -1448,7 +1448,7 @@ return '格式要求不正确';
 }
 return 'The value you entered for this field is invalid.';
 }
-function showError(field, error) {
+function showError(field, error, isNewLine) {
 field.classList.add('error');
 var id = field.id || field.name;
 if (!id) return;
@@ -1461,6 +1461,7 @@ field.parentNode.insertBefore( message, field.nextSibling );
 }
 field.setAttribute('aria-describedby', 'error-for-' + id);
 message.innerHTML = error;
+if(!isNewLine)
 message.style.display = 'inline-block';
 message.style.visibility = 'visible';
 };
@@ -1476,11 +1477,12 @@ message.style.display = 'none';
 message.style.visibility = 'hidden';
 }
 aj.formValidator = function(el) {
+var isMsgNewLine = el.dataset.msgNewline ==="true";
 el.setAttribute('novalidate', true);
 document.addEventListener('blur', event => {
 var error = hasError(event.target);
 if (error) {
-showError(event.target, error);
+showError(event.target, error, isMsgNewLine);
 return;
 }
 removeError(event.target);
