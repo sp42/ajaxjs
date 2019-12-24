@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Objects;
 
+import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.FilterAction;
@@ -12,7 +13,7 @@ import com.ajaxjs.user.controller.BaseUserController;
 public class CurrentUserOnly implements FilterAction {
 
 	@Override
-	public boolean before(MvcRequest request, MvcOutput response, Method method, Object[] args) {
+	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args) {
 		String id;
 
 		if ("PUT".equals(request.getMethod())) {
@@ -32,7 +33,7 @@ public class CurrentUserOnly implements FilterAction {
 	}
 
 	@Override
-	public void after(MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
+	public void after(ModelAndView model, MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
 		// TODO Auto-generated method stub
 
 	}

@@ -18,6 +18,7 @@ package com.ajaxjs.user.filter;
 import java.lang.reflect.Method;
 
 import com.ajaxjs.framework.ServiceException;
+import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.FilterAction;
@@ -35,7 +36,7 @@ import com.ajaxjs.user.service.UserCommonAuthService;
 public class UserPasswordFilter implements FilterAction {
 
 	@Override
-	public boolean before(MvcRequest request, MvcOutput response, Method method, Object[] args) {
+	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args) {
 		String password = request.getParameter("password");
 		UserCommonAuth auth = UserCommonAuthService.dao.findByUserId(BaseUserController.getUserId());
 		request.setAttribute("UserCommonAuthId", auth);
@@ -49,6 +50,6 @@ public class UserPasswordFilter implements FilterAction {
 	}
 
 	@Override
-	public void after(MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
+	public void after(ModelAndView model, MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
 	}
 }

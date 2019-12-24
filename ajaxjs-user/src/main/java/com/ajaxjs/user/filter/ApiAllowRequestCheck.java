@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.Date;
 
 import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.FilterAction;
@@ -12,7 +13,7 @@ import com.ajaxjs.util.cryptography.SymmetricCipher;
 public class ApiAllowRequestCheck implements FilterAction {
 
 	@Override
-	public boolean before(MvcRequest request, MvcOutput response, Method method, Object[] args) {
+	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args) {
 		String token = request.getHeader("token");
 
 		String AES_Key = ConfigService.getValueAsString("Symmetric.AES_Key");
@@ -48,7 +49,7 @@ public class ApiAllowRequestCheck implements FilterAction {
 	}
 
 	@Override
-	public void after(MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
+	public void after(ModelAndView model, MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
 
 	}
 

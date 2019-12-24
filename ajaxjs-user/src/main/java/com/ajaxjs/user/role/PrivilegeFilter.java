@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 
 import javax.servlet.http.HttpSession;
 
+import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.FilterAction;
@@ -16,7 +17,7 @@ public class PrivilegeFilter implements FilterAction {
 	}
 
 	@Override
-	public boolean before(MvcRequest request, MvcOutput response, Method method, Object[] args) {
+	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args) {
 		HttpSession session = request.getSession();
 		Object privilegeTotal = session.getAttribute("privilegeTotal");
 
@@ -27,7 +28,7 @@ public class PrivilegeFilter implements FilterAction {
 	}
 
 	@Override
-	public void after(MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
+	public void after(ModelAndView model, MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
 	}
 
 }
