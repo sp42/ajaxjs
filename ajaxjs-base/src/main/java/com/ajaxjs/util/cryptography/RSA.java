@@ -48,9 +48,9 @@ public class RSA {
 
 	/** RSA密钥长度必须是64的倍数，在512~65536之间。默认是1024 */
 	public static final int KEY_SIZE = 2048;
-	
-	public static final String PUBLIC_KEY ="publicKey";
-	
+
+	public static final String PUBLIC_KEY = "publicKey";
+
 	public static final String PRIVATE_KEY = "privateKey";
 
 	/**
@@ -72,7 +72,7 @@ public class RSA {
 		KeyPair keyPair = generator.generateKeyPair();
 		RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
 		RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-		
+
 		Map<String, byte[]> map = new HashMap<>();
 		map.put("publicKey", publicKey.getEncoded());
 		map.put("privateKey", privateKey.getEncoded());
@@ -117,7 +117,7 @@ public class RSA {
 	/**
 	 * 加密，三步走。
 	 * 
-	 * @param key 密钥
+	 * @param key       密钥
 	 * @param plainText 加密的内容
 	 * @return 结果
 	 */
@@ -136,7 +136,7 @@ public class RSA {
 	/**
 	 * 解密，三步走。
 	 * 
-	 * @param key 密钥
+	 * @param key         密钥
 	 * @param encodedText 解密的内容
 	 * @return 解密结果
 	 */

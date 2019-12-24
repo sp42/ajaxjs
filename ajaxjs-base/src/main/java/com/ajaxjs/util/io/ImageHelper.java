@@ -82,7 +82,7 @@ public class ImageHelper {
 	/**
 	 * BufferedImage 转换为 byte[]。 在传输中，图片是不能直接传的，因此需要把图片变为字节数组，然后传输比较方便。
 	 * 
-	 * @param bImg 缓冲图片对象
+	 * @param bImg   缓冲图片对象
 	 * @param format 图片格式，例如 "jpg"
 	 * @return 图片字节码
 	 */
@@ -120,9 +120,9 @@ public class ImageHelper {
 	/**
 	 * 按照一定范围控制图片的高宽
 	 * 
-	 * @param originWidth 图片原始尺寸
+	 * @param originWidth  图片原始尺寸
 	 * @param originHeight
-	 * @param maxWidth 最大尺寸限制
+	 * @param maxWidth     最大尺寸限制
 	 * @param maxHeight
 	 * @return 0=宽、1=高
 	 */
@@ -148,7 +148,7 @@ public class ImageHelper {
 	/**
 	 * 缩放比例
 	 * 
-	 * @param img 图片对象
+	 * @param img    图片对象
 	 * @param height
 	 * @param width
 	 * @return 缩放比例之后的高宽
@@ -170,8 +170,8 @@ public class ImageHelper {
 	/**
 	 * 拉伸图片到指定尺寸
 	 * 
-	 * @param img 缓冲图片对象
-	 * @param width 宽
+	 * @param img    缓冲图片对象
+	 * @param width  宽
 	 * @param height 高
 	 * @return 指定尺寸的缓冲图片对象
 	 */
@@ -202,7 +202,7 @@ public class ImageHelper {
 	/**
 	 * 加入边框
 	 * 
-	 * @param bImg 缓冲图片对象
+	 * @param bImg        缓冲图片对象
 	 * @param borderWidth 边框宽度
 	 * @param borderColor 边框颜色
 	 * @return
@@ -232,9 +232,9 @@ public class ImageHelper {
 	 * 保存图片文件。 TODO 其实可以考虑使用 bufferedWrite(InputStream is, OutputStream out) 保存的
 	 * 《使用ImageIO.write存储png格式图片性能较差问题》http://zhang-xzhi-xjtu.iteye.com/blog/1328084
 	 * 
-	 * @param bImg 缓冲图片对象
+	 * @param bImg   缓冲图片对象
 	 * @param format 图片格式，例如 "jpg"
-	 * @param file 图片文件对象
+	 * @param file   图片文件对象
 	 * @return 是否操作成功
 	 */
 	public static boolean save(BufferedImage bImg, String format, File file) {
@@ -249,8 +249,8 @@ public class ImageHelper {
 	/**
 	 * 保存图片文件
 	 * 
-	 * @param bImg 缓冲图片对象
-	 * @param file 保存的文件对象
+	 * @param bImg     缓冲图片对象
+	 * @param file     保存的文件对象
 	 * @param isFixICC 是否修复 jpg 输出红色一层的问题
 	 */
 	public static void save(BufferedImage bImg, File file, boolean isFixICC) {
@@ -264,7 +264,7 @@ public class ImageHelper {
 	/**
 	 * 保存图片文件
 	 * 
-	 * @param bImg 缓冲图片对象
+	 * @param bImg     缓冲图片对象
 	 * @param filePath 保存的文件路径
 	 */
 	public static void save(BufferedImage bImg, String filePath) {
@@ -284,7 +284,7 @@ public class ImageHelper {
 	/**
 	 * 保存图片文件
 	 * 
-	 * @param bImg 缓冲图片对象
+	 * @param bImg     缓冲图片对象
 	 * @param filePath 保存的文件路径
 	 * @param isFixICC 是否修复 jpg 输出红色一层的问题
 	 */
@@ -295,7 +295,7 @@ public class ImageHelper {
 	/**
 	 * 旋转图片
 	 * 
-	 * @param img 图片对象
+	 * @param img   图片对象
 	 * @param angel 旋转角度
 	 * @return 缓冲图片对象
 	 */
@@ -350,7 +350,7 @@ public class ImageHelper {
 	/**
 	 * 为图片添加水印图片
 	 * 
-	 * @param img 图片对象
+	 * @param img       图片对象
 	 * @param watermark 水印文件
 	 * @return 缓冲图片对象
 	 */
@@ -372,9 +372,9 @@ public class ImageHelper {
 	/**
 	 * 图片裁切
 	 * 
-	 * @param x 选择区域左上角的x坐标
-	 * @param y 选择区域左上角的y坐标
-	 * @param width 选择区域的宽度
+	 * @param x      选择区域左上角的x坐标
+	 * @param y      选择区域左上角的y坐标
+	 * @param width  选择区域的宽度
 	 * @param height 选择区域的高度
 	 * @return 缓冲图片对象
 	 */
@@ -397,7 +397,7 @@ public class ImageHelper {
 	/**
 	 * 为图片添加水印文字
 	 * 
-	 * @param img 图片对象
+	 * @param img       图片对象
 	 * @param watermark 水印文字
 	 * @return 缓冲图片对象
 	 */

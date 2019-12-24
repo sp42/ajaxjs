@@ -36,7 +36,7 @@ public class PicDownload {
 	 * @param arr
 	 * @param saveFolder
 	 * @param newFileNameFn How to specify a new file name, if it is null then use
-	 * old name
+	 *                      old name
 	 */
 	public PicDownload(String[] arr, String saveFolder, Supplier<String> newFileNameFn) {
 		latch = new CountDownLatch(arr.length);
@@ -83,7 +83,8 @@ public class PicDownload {
 	}
 
 	public static void main(String[] args) throws InterruptedException {
-		String[] testArr = new String[] { "https://bbsimage.res.meizu.com/forum/2019/01/23/153122zrz85kuvubbiibbs.jpg", "http://531.yishu1000.com/201906/004/1.jpg", "http://531.yishu1000.com/201906/004/2.jpg",
+		String[] testArr = new String[] { "https://bbsimage.res.meizu.com/forum/2019/01/23/153122zrz85kuvubbiibbs.jpg",
+				"http://531.yishu1000.com/201906/004/1.jpg", "http://531.yishu1000.com/201906/004/2.jpg",
 				"http://531.yishu1000.com/201906/004/3.jpg" };
 
 		new PicDownload(testArr, "c:/temp", null).start();

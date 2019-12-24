@@ -76,7 +76,7 @@ public class BeanContext {
 	 * @return 该类的实例，如果没有返回 null
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T getBeanByClass(Class<T> clz) {
+	public static <T> T getBean(Class<T> clz) {
 		if (clz.getAnnotation(Bean.class) == null) {
 			IllegalArgumentException e = new IllegalArgumentException(
 					clz + " 这不是一个 ioc 的 bean。This is not a bean object that can be put into IOC.");
@@ -86,16 +86,11 @@ public class BeanContext {
 
 //		String name = clz.getAnnotation(Bean.class).value();
 		String name = getBeanId(clz.getAnnotation(Bean.class), clz);
-
 		Object obj = getBean(name);
 
 		return obj == null ? null : (T) obj;
 	}
 	
-	public static <T> T  getBean(Class<T> clz) {
-		return getBeanByClass(clz);
-	}
-
 	/**
 	 * 扫描注解、创建 bean 对象、记录依赖关系
 	 * 
@@ -119,13 +114,11 @@ public class BeanContext {
 
 			String beanName = getBeanId(annotation, item);
 
-			if (CommonUtil.isEmptyString(beanName)) {
+			if (CommonUtil.isEmptyString(beanName)) 
 				beanName = getBeanId(namedAnno, item);
-			}
 
-			if (beansClz.containsKey("beanName")) {
+			if (beansClz.containsKey("beanName")) 
 				LOGGER.warning("相同的 bean name 已经存在" + beanName);
-			}
 
 			if (ReflectUtil.hasArgsCon(item)) {
 				beansClz.put(beanName, item);
@@ -150,7 +143,6 @@ public class BeanContext {
 																													// 的名称,如果为
 																													// null,
 																													// 则使用字段名称
-
 					if (CommonUtil.isEmptyString(dependenciObj_id))
 						dependenciObj_id = field.getName(); // 此时 bean 的 id 一定要与 fieldName 一致
 
@@ -173,29 +165,29 @@ public class BeanContext {
 	/**
 	 * 
 	 * @param namedAnno
-	 * @param clz
+	 * @param clz       Bean 类
 	 * @return
 	 */
 	private static String getBeanId(Named namedAnno, Class<?> clz) {
-		if (namedAnno == null || CommonUtil.isEmptyString(namedAnno.value())) {
+		if (namedAnno == null || CommonUtil.isEmptyString(namedAnno.value()))
 			return clz.getSimpleName().toLowerCase();
-		} else
+		else
 			return namedAnno.value();
 	}
 
 	/**
 	 * 获取 Bean 的名称，如果没有则取类 SimpleName
 	 * 
-	 * @param annotation
-	 * @param clz
-	 * @return
+	 * @param annotation Bean 类注解
+	 * @param clz        Bean 类
+	 * @return Bean 名称
 	 */
 	private static String getBeanId(Bean annotation, Class<?> clz) {
 		if (annotation == null)
 			return null;
-		else if (CommonUtil.isEmptyString(annotation.value())) {
+		else if (CommonUtil.isEmptyString(annotation.value()))
 			return clz.getSimpleName();
-		} else
+		else
 			return annotation.value();
 	}
 

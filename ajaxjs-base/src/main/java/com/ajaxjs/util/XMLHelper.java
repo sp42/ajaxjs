@@ -31,6 +31,7 @@ public class XMLHelper {
 
 	/**
 	 * 创建 DocumentBuilderFactory 实例
+	 * 
 	 * @return DocumentBuilderFactory 实例
 	 */
 	public static DocumentBuilderFactory initBuilderFactory() {
@@ -64,7 +65,8 @@ public class XMLHelper {
 
 		try {
 			XPathExpression expr = XPathFactory.newInstance().newXPath().compile(xpath);
-			NodeList nodes = (NodeList) expr.evaluate(factory.newDocumentBuilder().parse(dbXmlCfg), XPathConstants.NODESET);
+			NodeList nodes = (NodeList) expr.evaluate(factory.newDocumentBuilder().parse(dbXmlCfg),
+					XPathConstants.NODESET);
 
 			for (int i = 0; i < nodes.getLength(); i++)
 				fn.accept(nodes.item(i));
@@ -89,10 +91,8 @@ public class XMLHelper {
 
 			if (_map != null) {
 				for (int i = 0, n = _map.getLength(); i < n; i++) {
-
 					Node _node = _map.item(i);
 					map.put(_node.getNodeName(), _node.getNodeValue());
-
 				}
 			}
 		});

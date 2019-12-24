@@ -76,7 +76,7 @@ public class FileHelper extends IoHelper {
 	/**
 	 * 新建一个空文件
 	 * 
-	 * @param folder 如果路径不存在则自动创建
+	 * @param folder   如果路径不存在则自动创建
 	 * @param fileName 保存的文件名
 	 * @return 新建文件的 File 对象
 	 */
@@ -90,7 +90,7 @@ public class FileHelper extends IoHelper {
 	/**
 	 * 创建文件，注意这是一个空的文件。如果没有指定目录则创建；检测是否可以覆盖文件
 	 * 
-	 * @param filePath 文件完整路径，最后一个元素是文件名
+	 * @param filePath    文件完整路径，最后一个元素是文件名
 	 * @param isOverwrite 是否覆盖文件
 	 * @return 文件对象
 	 * @throws IOException
@@ -126,10 +126,10 @@ public class FileHelper extends IoHelper {
 	/**
 	 * 旧方法保存文本内容
 	 * 
-	 * @param file 文件对象
-	 * @param data 文件内容
+	 * @param file        文件对象
+	 * @param data        文件内容
 	 * @param isOverwrite 是否覆盖文件
-	 * @param isOldWay 是否已旧的方式打开
+	 * @param isOldWay    是否已旧的方式打开
 	 */
 	public static void save(File file, byte[] data, boolean isOverwrite, boolean isOldWay) {
 		LOGGER.info("正在保存文件" + file);
@@ -168,7 +168,7 @@ public class FileHelper extends IoHelper {
 			LOGGER.warning(e);
 		}
 	}
-	
+
 	/**
 	 * 保存文本文件 写文件不能用 FileWriter，原因是会中文乱码
 	 * 
@@ -286,6 +286,7 @@ public class FileHelper extends IoHelper {
 		try {
 			if (!file.exists())
 				throw new FileNotFoundException(file.getPath() + " 不存在！");
+
 			return new FileInputStream(file);
 		} catch (FileNotFoundException e) {
 			LOGGER.warning(e);
@@ -307,9 +308,9 @@ public class FileHelper extends IoHelper {
 	 * 打开文件，返回其文本内容，可指定编码
 	 * 
 	 * @param filePath 文件磁盘路径
-	 * @param encode 文件编码，默认是 UTF-8 编码。开发者还应该明确规定文件的字符编码，以避免任异常或解析错误。如果读入的文件的编码是
-	 *            ANSI 编码，那么会报 java.nio.charset.MalformedInputException:Input length
-	 *            = 1 错误
+	 * @param encode   文件编码，默认是 UTF-8 编码。开发者还应该明确规定文件的字符编码，以避免任异常或解析错误。如果读入的文件的编码是
+	 *                 ANSI 编码，那么会报 java.nio.charset.MalformedInputException:Input
+	 *                 length = 1 错误
 	 * @param isOldWay 是否已旧的方式打开
 	 * @return 文件内容
 	 */
@@ -321,6 +322,7 @@ public class FileHelper extends IoHelper {
 		try {
 			if (Files.isDirectory(path))
 				throw new IOException("参数 fullpath：" + filePath + " 不能是目录，请指定文件");
+
 			if (!Files.exists(path))
 				throw new FileNotFoundException(filePath + "　不存在");
 		} catch (IOException e) {
@@ -333,9 +335,9 @@ public class FileHelper extends IoHelper {
 		else {
 			try {
 				// 此方法不适合读取很大的文件，因为可能存在内存空间不足的问题。
-				 StringBuilder sb = new StringBuilder();
-				 Files.lines(path, encode).forEach(str -> sb.append(str));
-				 return sb.toString();
+				StringBuilder sb = new StringBuilder();
+				Files.lines(path, encode).forEach(str -> sb.append(str));
+				return sb.toString();
 			} catch (IOException e) {
 				LOGGER.warning(e);
 			}
@@ -401,7 +403,7 @@ public class FileHelper extends IoHelper {
 	 * 复制文件
 	 * 
 	 * @param target 源文件
-	 * @param dest 目的文件/目录，如果最后一个为目录，则不改名，如果最后一个为文件名，则改名
+	 * @param dest   目的文件/目录，如果最后一个为目录，则不改名，如果最后一个为文件名，则改名
 	 * @return 是否操作成功
 	 * @throws IOException IO 异常
 	 */
@@ -412,7 +414,7 @@ public class FileHelper extends IoHelper {
 			LOGGER.warning(e);
 			return false;
 		}
-		
+
 		return true;
 	}
 
@@ -420,7 +422,7 @@ public class FileHelper extends IoHelper {
 	 * 移动文件
 	 * 
 	 * @param target 源文件
-	 * @param dest 目的文件/目录，如果最后一个为目录，则不改名，如果最后一个为文件名，则改名
+	 * @param dest   目的文件/目录，如果最后一个为目录，则不改名，如果最后一个为文件名，则改名
 	 * @return 是否操作成功
 	 * @throws IOException IO 异常
 	 */
@@ -438,13 +440,14 @@ public class FileHelper extends IoHelper {
 	/**
 	 * 遍历整个文件目录，递归的
 	 * 
-	 * @param _dir 指定的目录
+	 * @param _dir   指定的目录
 	 * @param method 搜索函数
 	 * @return 搜索结果
 	 * @throws IOException
 	 */
 	public static List<Path> walkFileTree(String _dir, Predicate<Path> method) throws IOException {
 		Path dir = Paths.get(_dir);
+
 		if (!Files.isDirectory(dir))
 			throw new IOException("参数 ：" + _dir + " 不是目录，请指定目录");
 
@@ -465,13 +468,14 @@ public class FileHelper extends IoHelper {
 	/**
 	 * 遍历整个目录，非递归的
 	 * 
-	 * @param _dir 指定的目录
+	 * @param _dir   指定的目录
 	 * @param method 搜索函数
 	 * @return 搜索结果
 	 * @throws IOException
 	 */
 	public static List<Path> walkFile(String _dir, Predicate<Path> method) throws IOException {
 		Path dir = Paths.get(_dir);
+
 		if (!Files.isDirectory(dir))
 			throw new IOException("参数 ：" + _dir + " 不是目录，请指定目录");
 

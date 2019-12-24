@@ -35,12 +35,12 @@ import com.ajaxjs.util.logger.LogHelper;
  */
 public class IoHelper {
 	private static final LogHelper LOGGER = LogHelper.getLog(IoHelper.class);
-	
+
 	/**
 	 * 输出流写入字节数据
 	 * 
-	 * @param out 	输出流
-	 * @param data	字节数据
+	 * @param out  输出流
+	 * @param data 字节数据
 	 */
 	public static void outputWriteData(OutputStream out, byte[] data) {
 		try {
@@ -50,7 +50,7 @@ public class IoHelper {
 			LOGGER.warning(e);
 		}
 	}
-	
+
 	/**
 	 * 读输入的字节流转换到字符流，将其转换为文本（多行）的字节流转换为字符串
 	 * 
@@ -60,17 +60,17 @@ public class IoHelper {
 	public static String byteStream2string(InputStream in) {
 		return byteStream2string_Charset(in, StandardCharsets.UTF_8);
 	}
-	
+
 	/**
 	 * 读输入的字节流转换到字符流，将其转换为文本（多行）的字节流转换为字符串。可指定字符编码
 	 * 
-	 * @param in 		输入流，无须手动关闭
-	 * @param encode	字符编码
+	 * @param in     输入流，无须手动关闭
+	 * @param encode 字符编码
 	 * @return 字符串
 	 */
 	public static String byteStream2string_Charset(InputStream in, Charset encode) {
 		StringBuilder result = new StringBuilder();
-		
+
 		// InputStreamReader 从一个数据源读取字节，并自动将其转换成 Unicode 字符
 		// 相对地，OutputStreamWriter 将字符的 Unicode 编码写到字节输出流
 		try (InputStreamReader inReader = new InputStreamReader(in, encode);
@@ -79,7 +79,7 @@ public class IoHelper {
 				 * 只是在这之前动态的为它们加上一些功能（像是缓冲区功能）
 				 */
 				BufferedReader reader = new BufferedReader(inReader);) {
-			
+
 			String line = null;
 			while ((line = reader.readLine()) != null) { // 一次读入一行，直到读入null为文件结束
 				// 指定编码集的另外一种方法 line = new String(line.getBytes(), encodingSet);
@@ -91,10 +91,10 @@ public class IoHelper {
 			LOGGER.warning(e);
 			return null;
 		}
-		
+
 		return result.toString();
 	}
-	
+
 	public static final int bufferSize = 1024; // 1K 的数据块
 
 	/**
@@ -124,7 +124,7 @@ public class IoHelper {
 					out.write(buffer, 0, readSize);
 					// readSize = in.read(buffer, 0, bufferSize);
 				}
-				
+
 				out.flush();
 			}
 		} catch (IOException e) {
@@ -136,14 +136,14 @@ public class IoHelper {
 	 * InputStream 转换到 byte[]. 从输入流中获取数据， 转换到 byte[] 也就是 in
 	 * 转到内存。虽然大家可能都在内存里面了但还不能直接使用，要转换
 	 * 
-	 * @param in 		输入流
+	 * @param in 输入流
 	 * @return 返回本实例供链式调用
 	 */
 	public static byte[] inputStream2Byte(InputStream in) {
 		// 使用内存操作流，读取二进制
-		try(ByteArrayOutputStream out = new ByteArrayOutputStream();){
+		try (ByteArrayOutputStream out = new ByteArrayOutputStream();) {
 			write(in, out, true);
-			
+
 			return out.toByteArray();
 		} catch (IOException e) {
 			LOGGER.warning(e);
@@ -154,7 +154,7 @@ public class IoHelper {
 	/**
 	 * 送入 byte[] 转换为输出流。可指定 byte[] 某一部分数据
 	 * 
-	 * @param out 	 输出流
+	 * @param out    输出流
 	 * @param off    偏移
 	 * @param length 长度
 	 * @return 返回本实例供链式调用
@@ -165,7 +165,7 @@ public class IoHelper {
 				_out.write(data);
 			else
 				_out.write(data, off, length);
-			
+
 			_out.flush();
 		} catch (IOException e) {
 			LOGGER.warning(e);
@@ -182,19 +182,19 @@ public class IoHelper {
 	 */
 	public static int byteIndexOf(byte[] data, byte[] search, int start) {
 		int len = search.length;
-		
+
 		for (int i = start; i < data.length; i++) {
 			int temp = i, j = 0;
-			
+
 			while (data[temp] == search[j]) {
 				temp++;
 				j++;
-				
-				if (j == len) 
+
+				if (j == len)
 					return i;
 			}
 		}
-	
+
 		return -1;
 	}
 
@@ -220,7 +220,7 @@ public class IoHelper {
 		byte[] c = new byte[a.length + b.length];
 		System.arraycopy(a, 0, c, 0, a.length);
 		System.arraycopy(b, 0, c, a.length, b.length);
-	
+
 		return c;
 	}
 }

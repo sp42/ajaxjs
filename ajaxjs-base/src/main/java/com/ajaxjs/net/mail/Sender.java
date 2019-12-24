@@ -35,7 +35,7 @@ public class Sender extends Socket {
 	 * 发送一封邮件
 	 * 
 	 * @param bean 邮件实体
-	 * @throws IOException IO异常
+	 * @throws IOException          IO异常
 	 * @throws UnknownHostException 未知主机异常
 	 */
 	public Sender(Mail bean) throws UnknownHostException, IOException {
@@ -152,7 +152,7 @@ public class Sender extends Socket {
 	 * 发送smtp指令 并返回服务器响应信息
 	 * 
 	 * @param string 指令
-	 * @param from 指令参数
+	 * @param from   指令参数
 	 * @return 服务器响应信息
 	 */
 	private String sendCommand(String string, String from) {
@@ -189,7 +189,7 @@ public class Sender extends Socket {
 	/**
 	 * 输入期望 code，然后查找字符串中的数字，看是否与之匹配。匹配则返回 true。
 	 * 
-	 * @param str 输入的字符串，应该要包含数字
+	 * @param str  输入的字符串，应该要包含数字
 	 * @param code 期望值
 	 * @return 是否与之匹配
 	 */

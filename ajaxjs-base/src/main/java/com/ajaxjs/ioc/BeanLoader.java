@@ -84,7 +84,7 @@ public class BeanLoader extends AbstractScanner<Class<Object>> {
 	 */
 	private void makeSetter(CtClass cc) throws ClassNotFoundException, CannotCompileException, NotFoundException {
 		CtField[] fields = cc.getDeclaredFields();
-		
+
 		for (CtField field : fields) {
 			if (field.getAnnotation(Resource.class) != null) {
 				String setMethodName = "set" + ReflectUtil.firstLetterUpper(field.getName());
@@ -115,7 +115,7 @@ public class BeanLoader extends AbstractScanner<Class<Object>> {
 	 */
 	private static void doAop(CtClass cc) throws ClassNotFoundException, CannotCompileException {
 		CtMethod[] methods = cc.getMethods();
-		
+
 		if (methods != null && methods.length > 0) {
 			for (CtMethod method : methods) {
 				if (method.getAnnotation(Before.class) != null) {
@@ -136,29 +136,29 @@ public class BeanLoader extends AbstractScanner<Class<Object>> {
 	/**
 	 * 输入包名，获取所有的 classs
 	 * 
-	 * @param packageJavaName 包名
+	 * @param packageName Java 包名
 	 * @return 结果
 	 */
-	public static Set<Class<Object>> scanClass(String packageJavaName) {
-		return new BeanLoader().scan(packageJavaName);
+	public static Set<Class<Object>> scanClass(String packageName) {
+		return new BeanLoader().scan(packageName);
 	}
 
 	/**
 	 * 输入多个包名，获取所有的 class。多个 set 可以用 addAll 合并之
 	 * 
-	 * @param packageJavaNames 包名
+	 * @param packageNames Java 包名
 	 * @return 结果
 	 */
-	public static Set<Class<Object>> scanClass(String... packageJavaNames) {
+	public static Set<Class<Object>> scanClass(String... packageNames) {
 		Set<Class<Object>> classes = null;
 		BeanLoader scanner = new BeanLoader();
 
-		for (String packageJavaName : packageJavaNames) {
-			if (classes == null) {
+		for (String packageJavaName : packageNames) {
+			if (classes == null)
 				classes = scanner.scan(packageJavaName);
-			} else {
+			else
 				classes.addAll(classes);
-			}
+
 		}
 
 		return classes;

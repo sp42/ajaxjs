@@ -196,20 +196,20 @@ public class SendEmail {
 						return false;
 				}
 			}
-			
+
 			if (bccArr != null) {
 				for (int i = 0; i < bccArr.length; i++) {
 					if (-1 == (line = doCommand("RCPT TO: " + bccArr[i] + "/r/n")).indexOf("250"))
 						return false;
 				}
 			}
-			
+
 			if (-1 == (line = doCommand("DATA/r/n")).indexOf("354"))
 				return false;
 		} catch (IOException e) {
 			return false;
 		}
-		
+
 		return true;
 	}
 

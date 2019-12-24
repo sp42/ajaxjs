@@ -40,15 +40,16 @@ public class LogHelper {
 		logger = Logger.getLogger(className);
 
 		if (!Version.isDebug) {
-			if(fileHandler == null) {
+			if (fileHandler == null) {
 				fileHandler = new FileHandler(Version.srcFolder, null, ".log");
 			}
+			
 			logger.addHandler(fileHandler);// 初始化保存到磁盤的處理器
 		}
 
 		logger.setFilter(filter);
 	}
-	
+
 	/**
 	 * 简单打印信息，用于代替 System.out.println()
 	 * 
@@ -57,7 +58,7 @@ public class LogHelper {
 	public static void p(String msg) {
 		Logger.getGlobal().info(msg);
 	}
-	
+
 	/**
 	 * 简单打印信息，用于代替 System.out.println()
 	 * 
@@ -66,7 +67,7 @@ public class LogHelper {
 	public static void p(Object[] arr) {
 		Logger.getGlobal().info(Arrays.toString(arr));
 	}
-	
+
 	private static FileHandler fileHandler;
 
 	private static final int NORMAL = 0;
@@ -236,7 +237,7 @@ public class LogHelper {
 	 */
 	private String getMethodName() {
 		StackTraceElement frame = null;
-		
+
 		// Thread.getCurrentThread().getStackTrace() 暴露了当前线程的运行栈信息
 		for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
 			String clzName = ste.getClassName();
@@ -250,14 +251,9 @@ public class LogHelper {
 			}
 		}
 
-		if (frame != null) {// 超链接，跳到源码所在行数
+		if (frame != null) // 超链接，跳到源码所在行数
 			return String.format(".%s(%s:%s)", frame.getMethodName(), frame.getFileName(), frame.getLineNumber());
-		} else {
+		 else 
 			return null;
-		}
-	}
-
-	public static void main(String[] args) {
-		
 	}
 }
