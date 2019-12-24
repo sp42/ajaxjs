@@ -2,6 +2,7 @@ package com.ajaxjs.security;
 
 import java.lang.reflect.Method;
 
+import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.FilterAction;
@@ -15,7 +16,7 @@ import com.ajaxjs.util.CommonUtil;
  */
 public class RefererFilter implements FilterAction {
 	@Override
-	public boolean before(MvcRequest request, MvcOutput response, Method method, Object[] args) {
+	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args) {
 		String referer = request.getHeader("referer");
 
 		if (CommonUtil.isEmptyString(referer))
@@ -25,7 +26,7 @@ public class RefererFilter implements FilterAction {
 	}
 
 	@Override
-	public void after(MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
+	public void after(ModelAndView model, MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
 
 	}
 }

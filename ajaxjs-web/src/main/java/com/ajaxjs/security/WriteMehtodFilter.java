@@ -2,6 +2,7 @@ package com.ajaxjs.security;
 
 import java.lang.reflect.Method;
 
+import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.FilterAction;
@@ -16,7 +17,7 @@ public class WriteMehtodFilter implements FilterAction {
 	public static ListControl accessList = new ListControl();
 
 	@Override
-	public boolean before(MvcRequest request, MvcOutput response, Method method, Object[] args) {
+	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args) {
 		if (!"GET".equalsIgnoreCase(request.getMethod()))
 			return true;
 
@@ -31,6 +32,6 @@ public class WriteMehtodFilter implements FilterAction {
 	}
 
 	@Override
-	public void after(MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
+	public void after(ModelAndView model, MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
 	}
 }

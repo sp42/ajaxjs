@@ -17,6 +17,7 @@ package com.ajaxjs.mvc.filter;
 
 import java.lang.reflect.Method;
 
+import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 
@@ -30,7 +31,7 @@ public class SimpleSMSFilter extends SessionValueFilter {
 	public static final String SMS_KEY_NAME = "randomSmsCode";
 
 	@Override
-	public boolean before(MvcRequest request, MvcOutput response, Method method, Object[] args) {
+	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args) {
 		String client = getClientSideArgs(request, SMS_KEY_NAME), server = getServerSideValue(request, SMS_KEY_NAME);
 
 		if (client.equals(server)) {
@@ -42,6 +43,6 @@ public class SimpleSMSFilter extends SessionValueFilter {
 	}
 
 	@Override
-	public void after(MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
+	public void after(ModelAndView model, MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
 	}
 }

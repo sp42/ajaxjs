@@ -158,7 +158,7 @@ public class MvcDispatcher implements Filter {
 			
 			if (isDoFilter) {
 				for (FilterAction filterAction : filterActions) {
-					isSkip = !filterAction.before(request, response, method, args); // 相当于 AOP 前置
+					isSkip = !filterAction.before(model, request, response, method, args); // 相当于 AOP 前置
 					if (isSkip)
 						break;
 				}
@@ -177,7 +177,7 @@ public class MvcDispatcher implements Filter {
 		} finally {
 			if (isDoFilter) {
 				for (FilterAction filterAction : filterActions)
-					filterAction.after(request, response, method, isSkip); // 后置调用
+					filterAction.after(model, request, response, method, isSkip); // 后置调用
 			}
 		}
 

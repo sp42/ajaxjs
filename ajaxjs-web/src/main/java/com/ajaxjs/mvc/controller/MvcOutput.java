@@ -173,6 +173,8 @@ public class MvcOutput extends HttpServletResponseWrapper {
 
 	public static final String html = "html::", xml = "xml::", jsonPerfix = "json::", redirectPerfix = "redirect::";
 
+	private boolean isSet;
+	
 	/**
 	 * 一般一个请求希望返回一个页面，这时就需要控制器返回一个模板渲染输出了。 中间执行逻辑完成，最后就是控制输出（响应） 可以跳转也可以输出模板渲染器（即使是
 	 * json 都是 模板渲染器 ）
@@ -186,6 +188,9 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	 */
 	@SuppressWarnings("unchecked")
 	public void resultHandler(Object result, MvcRequest request, ModelAndView model, Method method) {
+		if(isSet)
+			return;
+		
 		if (model != null) {
 			request.saveToReuqest(model);
 		}
@@ -415,5 +420,13 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	public MvcOutput setOutput_List(List<?> output_List) {
 		this.output_List = output_List;
 		return this;
+	}
+
+	public boolean isSet() {
+		return isSet;
+	}
+
+	public void setSet(boolean isSet) {
+		this.isSet = isSet;
 	}
 }

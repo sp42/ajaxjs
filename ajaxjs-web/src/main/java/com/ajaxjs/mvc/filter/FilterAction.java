@@ -17,6 +17,7 @@ package com.ajaxjs.mvc.filter;
 
 import java.lang.reflect.Method;
 
+import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 
@@ -28,6 +29,7 @@ import com.ajaxjs.mvc.controller.MvcRequest;
 public interface FilterAction {
 	/**
 	 * 在 MVC 方法之前调用
+	 * @param model 
 	 * 
 	 * @param request 	请求对象
 	 * @param response 	响应对象
@@ -35,16 +37,17 @@ public interface FilterAction {
 	 * @param args      执行的参数
 	 * @return 是否要中止控制器方法的执行
 	 */
-	public boolean before(MvcRequest request, MvcOutput response, Method method, Object[] args);
+	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args);
 
 	/**
 	 * 在 MVC 方法之后调用
+	 * @param model 
 	 * 
 	 * @param request  	请求对象
 	 * @param response 	响应对象
 	 * @param method	方法对象
 	 * @param isSkip 	是否已经中止控制器方法的执行，也就是 before() 返回的值
 	 */
-	public void after(MvcRequest request, MvcOutput response, Method method, boolean isSkip);
+	public void after(ModelAndView model, MvcRequest request, MvcOutput response, Method method, boolean isSkip);
 
 }

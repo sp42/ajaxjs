@@ -31,6 +31,8 @@ public interface Constant {
 	
 	public static final String list = "list";
 
+	public static final String info = "info";
+	
 	public static final String idInfo = "{id}";
 
 	public static final String catalogId = "catalogId";

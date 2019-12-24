@@ -12,6 +12,7 @@ package com.ajaxjs.web.captcha;
 
 import java.lang.reflect.Method;
 
+import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.SessionValueFilter;
@@ -24,7 +25,7 @@ import com.ajaxjs.mvc.filter.SessionValueFilter;
  */
 public class CaptchaFilter extends SessionValueFilter {
 	@Override
-	public boolean before(MvcRequest request, MvcOutput response, Method method, Object[] args) {
+	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args) {
 		try {
 			String captchaCode = getClientSideArgs(request, CaptchaController.CAPTCHA_CODE),
 					sessionValue = getServerSideValue(request, CaptchaController.CAPTCHA_CODE);
@@ -45,6 +46,6 @@ public class CaptchaFilter extends SessionValueFilter {
 	}
 
 	@Override
-	public void after(MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
+	public void after(ModelAndView model, MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
 	}
 }
