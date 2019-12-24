@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.cms.app.CommonConstant;
 import com.ajaxjs.cms.app.catalog.CatalogServiceImpl;
+import com.ajaxjs.cms.filter.FrontEndOnlyCheck;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.IBaseDao;
@@ -115,9 +116,17 @@ public class GoodsController extends BaseController<Goods> {
 	public String list(@QueryParam(catalogId) int catelogId, ModelAndView mv, @QueryParam(start) int start, @QueryParam(limit) int limit) {
 		LOGGER.info("浏览商品");
 		
-		
 		page(mv, service.findPagedListByCatalogId(catelogId, start, 9, CommonConstant.ON_LINE), CommonConstant.UI_FRONTEND);
 		return jsp("shop/goods");
+	}
+	
+	@GET
+	@Path("/shop/goods/{id}/")
+	@MvcFilter(filters = { DataBaseFilter.class, FrontEndOnlyCheck.class })
+	public String showInfo(@PathParam(id) Long id, ModelAndView mv) {
+		LOGGER.info("浏览商品 info");
+		mv.put(info, service.findById(id));
+		return jsp("shop/goods-info");
 	}
 	
 	@Override
