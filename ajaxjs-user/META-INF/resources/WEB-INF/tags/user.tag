@@ -1,7 +1,7 @@
 <%@tag pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <%@taglib uri="/ajaxjs" prefix="c" %>
 <%@attribute name="type" required="true" type="String" description="标签类型"%>
-
+<%@taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
 <%
 	request.setAttribute("CAPTCHA_CODE", com.ajaxjs.web.captcha.CaptchaController.CAPTCHA_CODE);
 %>
@@ -12,7 +12,7 @@
 	<form class="aj-form" action="${ctx}/user/login/" method="POST" data-msg-newline="true">
 		<dl>
 			<label>
-				<dt>用户帐号</dt>
+				<dt><tags:i18n zh="用户帐号" eng="User Account" /></dt>
 				<dd>
 					<input type="text" name="userID" placeholder="请输入${userID}" required pattern="^[a-zA-Z0-9_-]{4,20}$" />
 				</dd>
@@ -20,9 +20,9 @@
 		</dl>
 		<dl>
 			<label>
-				<dt>登录密码</dt>
+				<dt><tags:i18n zh="登录密码" eng="Login Password" /></dt>
 				<dd>
-					<input type="password" name="password" placeholder="6~10位数字或英文字母" required
+					<input type="password" name="password" placeholder="<tags:i18n zh="6~10位数字或英文字母" eng="6 to 10 digits or English letters" />" required
 					 pattern="[0-9A-Za-z]{6,10}" title="请输入您的由6~10位由数字和26个英文字母的登录密码" />
 					
 				</dd>
@@ -30,7 +30,7 @@
 		</dl>
 		<dl>
 			<label>
-				<dt>验证码</dt>
+				<dt><tags:i18n zh="验证码" eng="CAPTCHA" /></dt>
 				<dd class="captcha" style="font-size: .8rem;">
 					<aj-page-captcha field-name="${CAPTCHA_CODE}"></aj-page-captcha>
 				</dd>
@@ -40,7 +40,7 @@
 		<dl>
 			<dt></dt>
 			<dd style="font-size: .8rem;">
-				<button>登录</button>
+				<button><tags:i18n zh="登录" eng="Login" /></button>
 				<br />
 				<br />
 				
@@ -51,7 +51,7 @@
 			</c:if>
 			
 			<c:if test="${!isAdminLogin}">
-				<a href="${ctx}/user/register/">没有账号？点击注册</a> | <a href="${ctx}/user/reset_password/">忘记密码</a>
+				<a href="${ctx}/user/register/"><tags:i18n zh="没有账号？点击注册" eng="No account? Click to register" /></a> | <a href="${ctx}/user/reset_password/"><tags:i18n zh="忘记密码" eng="forget password" /></a>
 			</c:if>
 			</dd>
 		</dl> 
