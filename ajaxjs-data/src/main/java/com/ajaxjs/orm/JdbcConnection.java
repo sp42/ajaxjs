@@ -61,7 +61,7 @@ public class JdbcConnection {
 		} catch (NamingException e) {
 			String msg = "读取数据源的配置文件失败，请检查 Tomcat 连接池配置！ path: " + path;
 			msg += " 提示：没发现数据库 /WebRoot/META-INF/context.xml 下的 XML 配置文件，该文件位置一般不可移动，请参阅 TomatPool 数据库连接池的相关文档。";
-			
+
 			LOGGER.warning(msg, e);
 			return null;
 		}
@@ -74,8 +74,8 @@ public class JdbcConnection {
 	 */
 	public static void initDbByJNDI(String jndiPath) {
 		Objects.requireNonNull(jndiPath, "缺少 jndiPath 参数！");
-		LOGGER.info("启动数据库 JNDI 链接……"+ jndiPath);
-		
+		LOGGER.info("启动数据库 JNDI 链接……" + jndiPath);
+
 		try {
 			if (getConnection() == null || getConnection().isClosed()) {
 				Connection conn = getConnection(getDataSource(jndiPath));
@@ -320,9 +320,8 @@ public class JdbcConnection {
 	}
 
 	/**
-	 * JDNI 是一个为 Java 应用程序提供命名服务的应用程序接口
-	 * 模拟数据库链接的配置 需要加入
-	 * tomcat-juli.jar 这个包，tomcat7 此包位于 tomcat 根目录的 bin 下。
+	 * JDNI 是一个为 Java 应用程序提供命名服务的应用程序接口 模拟数据库链接的配置 需要加入 tomcat-juli.jar 这个包，tomcat7
+	 * 此包位于 tomcat 根目录的 bin 下。
 	 *
 	 * @return InitialContext 上下文
 	 */

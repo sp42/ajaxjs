@@ -22,14 +22,14 @@ package com.ajaxjs.js.jsonparser;
  */
 public class JsonParseException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * 创建一个 JSON 解析异常对象
 	 * 
 	 * @param charNum
-	 * @param lineNum	错误所在的行数
-	 * @param colNum	错误所在的列数
-	 * @param message	异常信息
+	 * @param lineNum 错误所在的行数
+	 * @param colNum  错误所在的列数
+	 * @param message 异常信息
 	 */
 	public JsonParseException(int charNum, int lineNum, int colNum, String message) {
 		this.charNum = charNum;
@@ -42,10 +42,10 @@ public class JsonParseException extends RuntimeException {
 	 * 创建一个 JSON 解析异常对象
 	 * 
 	 * @param charNum
-	 * @param lineNum	错误所在的行数
-	 * @param colNum	错误所在的列数
-	 * @param message	异常信息
-	 * @param cause		异常对象
+	 * @param lineNum 错误所在的行数
+	 * @param colNum  错误所在的列数
+	 * @param message 异常信息
+	 * @param cause   异常对象
 	 */
 	public JsonParseException(int charNum, int lineNum, int colNum, String message, Throwable cause) {
 		this(charNum, lineNum, colNum, message);
@@ -73,9 +73,10 @@ public class JsonParseException extends RuntimeException {
 
 	@Override
 	public String getMessage() {
-		return "JsonParseException[char: " + charNum + ", line: " + lineNum + ", column: " + colNum + "]" + desc + (cause == null ? "" : cause.toString());
+		return "JsonParseException[char: " + charNum + ", line: " + lineNum + ", column: " + colNum + "]" + desc
+				+ (cause == null ? "" : cause.toString());
 	}
-	
+
 	@Override
 	public String toString() {
 		return getMessage();

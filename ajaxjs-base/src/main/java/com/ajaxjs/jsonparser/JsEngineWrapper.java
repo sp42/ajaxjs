@@ -34,9 +34,9 @@ import com.ajaxjs.util.logger.LogHelper;
  */
 public class JsEngineWrapper {
 	private static final LogHelper LOGGER = LogHelper.getLog(JsEngineWrapper.class);
-	
+
 	/**
-	 * 创建一个 JS 引擎的包装器 
+	 * 创建一个 JS 引擎的包装器
 	 */
 	public JsEngineWrapper() {
 		this(engineFactory());
@@ -55,9 +55,10 @@ public class JsEngineWrapper {
 	 * js 引擎
 	 */
 	private ScriptEngine engine;
-	
+
 	/**
 	 * 返回 js 引擎
+	 * 
 	 * @return js 引擎
 	 */
 	public ScriptEngine getEngine() {
@@ -66,6 +67,7 @@ public class JsEngineWrapper {
 
 	/**
 	 * 保存 js 引擎
+	 * 
 	 * @param engine js 引擎
 	 */
 	public void setEngine(ScriptEngine engine) {
@@ -78,9 +80,8 @@ public class JsEngineWrapper {
 	 * @return js 引擎
 	 */
 	public static ScriptEngine engineFactory() {
-		return new ScriptEngineManager().getEngineByName(
-			System.getProperty("java.version").contains("1.8.") ? "nashorn" : "rhino"
-		);
+		return new ScriptEngineManager()
+				.getEngineByName(System.getProperty("java.version").contains("1.8.") ? "nashorn" : "rhino");
 	}
 
 	/**
@@ -105,14 +106,14 @@ public class JsEngineWrapper {
 	 */
 	public JsEngineWrapper load(Class<?> clazz, String fileName) {
 		String code = null;
-		
-		try(InputStream in = clazz.getResourceAsStream(fileName)){
+
+		try (InputStream in = clazz.getResourceAsStream(fileName)) {
 			code = IoHelper.byteStream2string(in);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
-		
-		if(code != null)
+
+		if (code != null)
 			eval(code);
 
 		return this;
@@ -140,7 +141,7 @@ public class JsEngineWrapper {
 			LOGGER.warning(e, "向脚本引擎调用脚本方法异常！方法名称:" + method);
 		}
 
-		return result == null ? null : (T)result;
+		return result == null ? null : (T) result;
 	}
 
 	/**
@@ -198,7 +199,7 @@ public class JsEngineWrapper {
 
 		if (obj != null && clazz != null) {
 			// return Util.TypeConvert(js.eval(code), clazz); // 为什么要执行多次？
-			return (T)obj;
+			return (T) obj;
 		} else
 			return null;
 	}

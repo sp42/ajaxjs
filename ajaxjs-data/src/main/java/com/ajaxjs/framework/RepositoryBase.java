@@ -36,7 +36,8 @@ import com.ajaxjs.util.CommonUtil;
  */
 public abstract class RepositoryBase extends JdbcHelper implements InvocationHandler {
 	/**
-	 * 数据库连接对象。You should put connection by calling JdbcConnection.setConnection(conn).
+	 * 数据库连接对象。You should put connection by calling
+	 * JdbcConnection.setConnection(conn).
 	 */
 	Connection conn;
 
@@ -82,7 +83,7 @@ public abstract class RepositoryBase extends JdbcHelper implements InvocationHan
 	/**
 	 * 检查是否已经存在数据库连接对象，并且如是执行 toString() 方法，那么返回 true
 	 * 
-	 * @param method	DAO 方法对象
+	 * @param method DAO 方法对象
 	 * @return true 表示为执行 toString() 方法
 	 * @throws DaoException
 	 */
@@ -133,10 +134,8 @@ public abstract class RepositoryBase extends JdbcHelper implements InvocationHan
 		return method -> isNull.apply(method, a);
 	};
 
-	static Function<Method, Boolean> 
-			  isRead = higherOrderFn.apply(Select.class), 
-			isCreate = higherOrderFn.apply(Insert.class),
-			isUpdate = higherOrderFn.apply(Update.class), 
+	static Function<Method, Boolean> isRead = higherOrderFn.apply(Select.class),
+			isCreate = higherOrderFn.apply(Insert.class), isUpdate = higherOrderFn.apply(Update.class),
 			isDelete = higherOrderFn.apply(Delete.class);
 
 	static boolean isRead(Method method) {
@@ -158,8 +157,8 @@ public abstract class RepositoryBase extends JdbcHelper implements InvocationHan
 	/**
 	 * 判断是否有专属 SQLite 数据库的 SQL
 	 * 
-	 * @param sqliteValue 	SQLite 数据库专用的 SQL 语句
-	 * @param conn 			数据库连接对象
+	 * @param sqliteValue SQLite 数据库专用的 SQL 语句
+	 * @param conn        数据库连接对象
 	 * @return true = 是 SQLite 数据库
 	 */
 	static boolean isSqlite(String sqliteValue, Connection conn) {

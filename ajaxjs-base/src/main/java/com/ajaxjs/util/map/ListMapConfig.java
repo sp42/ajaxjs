@@ -29,9 +29,9 @@ public class ListMapConfig {
 		/**
 		 * 执行回调函数
 		 * 
-		 * @param map		当前 Map
-		 * @param superMap	父级 Map
-		 * @param level		深度
+		 * @param map      当前 Map
+		 * @param superMap 父级 Map
+		 * @param level    深度
 		 * @return true 表示为跳出遍历
 		 */
 		public boolean execute(Map<String, Object> map, Map<String, Object> superMap, int level);
@@ -47,14 +47,15 @@ public class ListMapConfig {
 		/**
 		 * 执行回调函数
 		 * 
-		 * @param key 		键名称
-		 * @param obj		键值
-		 * @param map		当前 Map
-		 * @param superMap	父级 Map
-		 * @param level		深度
+		 * @param key      键名称
+		 * @param obj      键值
+		 * @param map      当前 Map
+		 * @param superMap 父级 Map
+		 * @param level    深度
 		 * @return true 表示为跳出遍历
 		 */
-		public boolean execute(String key, Object obj, Map<String, Object> map, Map<String, Object> superMap, int level);
+		public boolean execute(String key, Object obj, Map<String, Object> map, Map<String, Object> superMap,
+				int level);
 	}
 
 	public static class Context {

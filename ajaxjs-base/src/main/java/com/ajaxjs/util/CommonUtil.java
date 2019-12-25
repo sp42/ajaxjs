@@ -87,8 +87,8 @@ public class CommonUtil {
 	/**
 	 * 测试字符串是否正则
 	 * 
-	 * @param regexp	正则
-	 * @param str		测试的字符串
+	 * @param regexp 正则
+	 * @param str    测试的字符串
 	 * @return true 表示匹配
 	 */
 	public static boolean regTest(String regexp, String str) {
@@ -122,8 +122,8 @@ public class CommonUtil {
 	/**
 	 * 返回所有匹配项
 	 * 
-	 * @param regexp     正则
-	 * @param str        测试的字符串
+	 * @param regexp 正则
+	 * @param str    测试的字符串
 	 * @return 匹配结果
 	 */
 	public static String[] regMatchAll(String regexp, String str) {
@@ -238,10 +238,10 @@ public class CommonUtil {
 			return Objet2Date(Long.parseLong(obj + "000")); /* 10 位长 int，后面补充三个零为13位 long 时间戳 */
 		else if (obj instanceof String) {
 			String str = obj.toString();
-			
-			if(isEmptyString(str))
+
+			if (isEmptyString(str))
 				return null;
-			
+
 			try {
 				if (pattern.matcher(str).matches()) {
 					return SimpleDateFormatFactory(commonDateFormat).parse(str);

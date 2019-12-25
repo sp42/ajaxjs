@@ -68,7 +68,7 @@ public class MapTool {
 	 * 
 	 * @param map Map 结构，Key 必须为 String 类型
 	 * @param div 分隔符
-	 * @param fn 对 Value 的处理函数，返回类型 T
+	 * @param fn  对 Value 的处理函数，返回类型 T
 	 * @return Map 序列化字符串
 	 */
 	public static <T> String join(Map<String, T> map, String div, Function<T, String> fn) {
@@ -98,7 +98,7 @@ public class MapTool {
 	 * String[] 转换为 Map
 	 * 
 	 * @param pairs 结对的字符串数组，包含 = 字符分隔 key 和 value
-	 * @param fn 对 Value 的处理函数，返回类型 Object
+	 * @param fn    对 Value 的处理函数，返回类型 Object
 	 * @return Map 对象
 	 */
 	public static Map<String, Object> toMap(String[] pairs, Function<String, Object> fn) {
@@ -126,8 +126,8 @@ public class MapTool {
 	 * String[] 转换为 Map，key 与 value 分别一个数组
 	 * 
 	 * @param columns 结对的键数组
-	 * @param values 结对的值数组
-	 * @param fn 对 Value 的处理函数，返回类型 Object
+	 * @param values  结对的值数组
+	 * @param fn      对 Value 的处理函数，返回类型 Object
 	 * @return Map 对象
 	 */
 	public static Map<String, Object> toMap(String[] columns, String[] values, Function<String, Object> fn) {
@@ -149,9 +149,9 @@ public class MapTool {
 	/**
 	 * 判断 map 非空，然后根据 key 获取 value，若 value 非空则作为参数传入函数接口 s
 	 * 
-	 * @param map	输入的map
-	 * @param key	map的键
-	 * @param s		如果过非空，那么接着要做什么？在这个回调函数中处理。传入的参数就是map.get(key)的值
+	 * @param map 输入的map
+	 * @param key map的键
+	 * @param s   如果过非空，那么接着要做什么？在这个回调函数中处理。传入的参数就是map.get(key)的值
 	 */
 	public static <T> void getValue(Map<String, T> map, String key, Consumer<T> s) {
 		if (map != null) {
@@ -165,7 +165,7 @@ public class MapTool {
 	 * 万能 Map 转换器，为了泛型的转换而设的一个方法，怎么转换在 fn 中处理
 	 * 
 	 * @param map 原始 Map，key 必须为 String 类型
-	 * @param fn 转换函数
+	 * @param fn  转换函数
 	 * @return
 	 */
 	public static <T, K> Map<String, T> as(Map<String, K> map, Function<K, T> fn) {
@@ -192,7 +192,7 @@ public class MapTool {
 	 * 遍历一个 Java Bean
 	 * 
 	 * @param bean Java Bean
-	 * @param fn 执行的任务，参数有 key, value, property
+	 * @param fn   执行的任务，参数有 key, value, property
 	 */
 	public static void eachField(Object bean, EachFieldArg fn) {
 		try {
@@ -200,14 +200,15 @@ public class MapTool {
 
 			for (PropertyDescriptor property : beanInfo.getPropertyDescriptors()) {
 				String key = property.getName();
-				
+
 				// 得到 property 对应的 getter 方法
 				Method getter = property.getReadMethod();
 				Object value = getter.invoke(bean);
 
 				fn.item(key, value, property);
 			}
-		} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+		} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
 			LOGGER.warning(e);
 		}
 	}
@@ -215,8 +216,8 @@ public class MapTool {
 	/**
 	 * Map 转为 Bean
 	 * 
-	 * @param map 原始数据
-	 * @param clz 实体 bean 的类
+	 * @param map         原始数据
+	 * @param clz         实体 bean 的类
 	 * @param isTransform 是否尝试转换值
 	 * @return 实体 bean 对象
 	 */
@@ -224,7 +225,7 @@ public class MapTool {
 		T bean = ReflectUtil.newInstance(clz);
 
 		eachField(bean, (key, v, property) -> {
-			
+
 			try {
 				if (map.containsKey(key)) {
 					Object value = map.get(key);
@@ -299,7 +300,6 @@ public class MapTool {
 	// --------------------------------------------------------------------------------------------------
 	// -----------------------------------------------XML------------------------------------------------
 	// --------------------------------------------------------------------------------------------------
-
 
 	/**
 	 *

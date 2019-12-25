@@ -50,8 +50,8 @@ public class JdbcReader {
 	/**
 	 * Statement 工厂
 	 * 
-	 * @param conn 		数据库连接对象
-	 * @param handle	控制器
+	 * @param conn   数据库连接对象
+	 * @param handle 控制器
 	 */
 	public static void stmt(Connection conn, Consumer<Statement> handle) {
 		try (Statement stmt = conn.createStatement();) {
@@ -64,9 +64,9 @@ public class JdbcReader {
 	/**
 	 * ResultSet 处理器
 	 * 
-	 * @param stmt		Statement 对象
-	 * @param sql		SQL 语句
-	 * @param handle	控制器
+	 * @param stmt   Statement 对象
+	 * @param sql    SQL 语句
+	 * @param handle 控制器
 	 */
 	public static void rsHandle(Statement stmt, String sql, Consumer<ResultSet> handle) {
 		try (ResultSet rs = stmt.executeQuery(sql);) {
@@ -79,9 +79,9 @@ public class JdbcReader {
 	/**
 	 * stmt + rsHandle
 	 * 
-	 * @param conn 		数据库连接对象
-	 * @param sql 		SQL 语句
-	 * @param handle	控制器
+	 * @param conn   数据库连接对象
+	 * @param sql    SQL 语句
+	 * @param handle 控制器
 	 */
 	public static void query(Connection conn, String sql, Consumer<ResultSet> handle) {
 		stmt(conn, stmt -> rsHandle(stmt, sql, handle));
@@ -90,14 +90,15 @@ public class JdbcReader {
 	/**
 	 * 执行查询
 	 * 
-	 * @param conn         	数据库连接对象 数据库连接对象
-	 * @param sql          	SQL 语句，可以带有 ? 的占位符
-	 * @param hasZeoResult	SQL 查询是否有数据返回，没有返回 true
-	 * @param processor	   	如何转换RS到目标结果的处理器
-	 * @param params       	插入到 SQL 中的参数，可单个可多个可不填
-	 * @return	RS 转换后的目标结果
+	 * @param conn         数据库连接对象 数据库连接对象
+	 * @param sql          SQL 语句，可以带有 ? 的占位符
+	 * @param hasZeoResult SQL 查询是否有数据返回，没有返回 true
+	 * @param processor    如何转换RS到目标结果的处理器
+	 * @param params       插入到 SQL 中的参数，可单个可多个可不填
+	 * @return RS 转换后的目标结果
 	 */
-	public static <T> T select(Connection conn, String sql, HasZeoResult hasZeoResult, ResultSetProcessor<T> processor, Object... params) {
+	public static <T> T select(Connection conn, String sql, HasZeoResult hasZeoResult, ResultSetProcessor<T> processor,
+			Object... params) {
 
 		LOGGER.infoYellow("The SQL is---->" + JdbcUtil.printRealSql(sql, params));
 
@@ -127,11 +128,11 @@ public class JdbcReader {
 	}
 
 	/**
-	 * 查询单行记录(单个结果)，保存为  Map<String, Object> 结构。如果查询不到任何数据返回 null。
+	 * 查询单行记录(单个结果)，保存为 Map<String, Object> 结构。如果查询不到任何数据返回 null。
 	 * 
-	 * @param conn   	数据库连接对象
-	 * @param sql    	SQL 语句，可以带有 ? 的占位符
-	 * @param params 	插入到 SQL 中的参数，可单个可多个可不填
+	 * @param conn   数据库连接对象
+	 * @param sql    SQL 语句，可以带有 ? 的占位符
+	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
 	 * @return Map<String, Object> 结构的结果。如果查询不到任何数据返回 null。
 	 */
 	public static Map<String, Object> queryAsMap(Connection conn, String sql, Object... params) {
@@ -141,10 +142,10 @@ public class JdbcReader {
 	/**
 	 * 查询单行记录(单个结果)，保存为 Bean。如果查询不到任何数据返回 null。
 	 * 
-	 * @param beanClz		Bean 实体的类
-	 * @param connection	数据库连接对象
-	 * @param sql			SQL 语句，可以带有 ? 的占位符
-	 * @param params		插入到 SQL 中的参数，可单个可多个可不填
+	 * @param beanClz    Bean 实体的类
+	 * @param connection 数据库连接对象
+	 * @param sql        SQL 语句，可以带有 ? 的占位符
+	 * @param params     插入到 SQL 中的参数，可单个可多个可不填
 	 * @return 查询结果。如果查询不到任何数据返回 null。
 	 */
 	public static <T> T queryAsBean(Class<T> beanClz, Connection connection, String sql, Object... params) {
@@ -225,10 +226,10 @@ public class JdbcReader {
 						} catch (NoSuchFieldException | SecurityException e1) {
 //							 LOGGER.warning(e);
 						}
-						
+
 						continue;
 					}
-					
+
 					LOGGER.warning(e);
 				}
 			}
@@ -239,9 +240,9 @@ public class JdbcReader {
 
 	/**
 	 * 
-	 * @param conn		数据库连接对象
-	 * @param sql		SQL 语句，可以带有 ? 的占位符
-	 * @param params	插入到 SQL 中的参数，可单个可多个可不填
+	 * @param conn   数据库连接对象
+	 * @param sql    SQL 语句，可以带有 ? 的占位符
+	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -264,10 +265,10 @@ public class JdbcReader {
 	/**
 	 * 查询一组结果，保存为 List<Bean> 结构。如果查询不到任何数据返回 null。
 	 * 
-	 * @param beanClz	Bean 实体的类
-	 * @param conn   	数据库连接对象
-	 * @param sql    	SQL 语句，可以带有 ? 的占位符
-	 * @param params 	插入到 SQL 中的参数，可单个可多个可不填
+	 * @param beanClz Bean 实体的类
+	 * @param conn    数据库连接对象
+	 * @param sql     SQL 语句，可以带有 ? 的占位符
+	 * @param params  插入到 SQL 中的参数，可单个可多个可不填
 	 * @return List<Bean> 结构的结果。如果查询不到任何数据返回 null。
 	 */
 	public static <T> List<T> queryAsBeanList(Class<T> beanClz, Connection conn, String sql, Object... params) {
@@ -277,28 +278,28 @@ public class JdbcReader {
 	/**
 	 * ResultSet 迭代器
 	 * 
-	 * @param rs			结果集合
-	 * @param processor		单行处理器
-	 * @return	多行记录列表集合
+	 * @param rs        结果集合
+	 * @param processor 单行处理器
+	 * @return 多行记录列表集合
 	 * @throws SQLException
 	 */
 	static <T> List<T> forEachRs(ResultSet rs, ResultSetProcessor<T> processor) throws SQLException {
 		List<T> list = new ArrayList<>();
 
-		while (rs.next()){
+		while (rs.next()) {
 			T d = processor.process(rs);
 			list.add(d);
 		}
-		
+
 		return list.size() > 0 ? list : null; // 找不到记录返回 null，不返回空的 list
 	}
 
 	/**
 	 * 判断 ResultSet 是否有匹配的查询数据
 	 * 
-	 * @param conn	数据库连接对象
-	 * @param rs	结果集合
-	 * @param sql	SQL 语句，可以带有 ? 的占位符
+	 * @param conn 数据库连接对象
+	 * @param rs   结果集合
+	 * @param sql  SQL 语句，可以带有 ? 的占位符
 	 * @return true 表示有数据
 	 * @throws SQLException
 	 */
@@ -361,10 +362,10 @@ public class JdbcReader {
 	/**
 	 * 查询数组
 	 * 
-	 * @param conn 		数据库连接对象
-	 * @param sql 		SQL 语句，可以带有 ? 的占位符
-	 * @param clz 		注意 Integer.class 不能用 int.class 代替 
-	 * @param params 	插入到 SQL 中的参数，可单个可多个可不填
+	 * @param conn   数据库连接对象
+	 * @param sql    SQL 语句，可以带有 ? 的占位符
+	 * @param clz    注意 Integer.class 不能用 int.class 代替
+	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
 	 * @return 数组结构的结果集合
 	 */
 	@SuppressWarnings("unchecked")

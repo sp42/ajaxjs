@@ -102,7 +102,7 @@ public class NetUtil extends HttpBasicRequest {
 	/**
 	 * 写入磁盘的回调
 	 * 
-	 * @param saveDir 保存的目录
+	 * @param saveDir  保存的目录
 	 * @param fileName 文件名
 	 * @return 下载文件的完整磁盘路径
 	 */
@@ -132,8 +132,8 @@ public class NetUtil extends HttpBasicRequest {
 	/**
 	 * 下载二进制文件
 	 * 
-	 * @param url 请求目标地址
-	 * @param saveDir 保存的目录
+	 * @param url         请求目标地址
+	 * @param saveDir     保存的目录
 	 * @param newFileName 是否有新的文件名，如无请传 null
 	 * @return 下载文件的完整磁盘路径
 	 */
@@ -156,7 +156,7 @@ public class NetUtil extends HttpBasicRequest {
 	/**
 	 * 下载二进制文件
 	 * 
-	 * @param url 请求目标地址
+	 * @param url     请求目标地址
 	 * @param saveDir 保存的目录
 	 * @return 下载文件的完整磁盘路径
 	 */
@@ -167,9 +167,9 @@ public class NetUtil extends HttpBasicRequest {
 	/**
 	 * POST 方法请求，然后返回的响应是文件下载
 	 * 
-	 * @param url 请求目标地址
-	 * @param data 请求数据
-	 * @param saveDir 保存的目录
+	 * @param url      请求目标地址
+	 * @param data     请求数据
+	 * @param saveDir  保存的目录
 	 * @param fileName 文件名
 	 * @return 下载文件的完整磁盘路径
 	 */
@@ -181,7 +181,7 @@ public class NetUtil extends HttpBasicRequest {
 			return null;
 		}
 	}
- 
+
 	/**
 	 * 多段 POST 的分隔，request 头和上传文件内容之间的分隔符
 	 */
@@ -233,12 +233,13 @@ public class NetUtil extends HttpBasicRequest {
 	/**
 	 * 多段上传
 	 * 
-	 * @param url 	请求目标地址
-	 * @param data 	请求数据，若包含 File 对象则表示二进制（文件）数据
+	 * @param url  请求目标地址
+	 * @param data 请求数据，若包含 File 对象则表示二进制（文件）数据
 	 * @return 请求之后的响应的内容
 	 */
 	public static String multiPOST(String url, Map<String, Object> data) {
-		return post(url, toFromData(data), conn -> conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY));
+		return post(url, toFromData(data),
+				conn -> conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY));
 	}
 
 }

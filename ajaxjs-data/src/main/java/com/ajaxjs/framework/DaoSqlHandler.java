@@ -36,9 +36,9 @@ public class DaoSqlHandler {
 	/**
 	 * 找到 SqlHandler（函数式版）并将其从参数列表中剔除，拿出来执行，返回新的 SQL。因为剔除了，这是 args 亦有变动，剩下的才是SQL参数
 	 * 
-	 * @param sql		SQL 语句
-	 * @param method	DAO 方法对象 
-	 * @param args 		DAO 执行时实际传入的参数，参数有变动
+	 * @param sql    SQL 语句
+	 * @param method DAO 方法对象
+	 * @param args   DAO 执行时实际传入的参数，参数有变动
 	 * @return 处理过的参数信息
 	 */
 	static ArgsInfo doSql(String sql, Method method, Object[] args) {
@@ -65,10 +65,10 @@ public class DaoSqlHandler {
 						@SuppressWarnings("unchecked")
 						Function<String, String> fn = (Function<String, String>) obj;
 						String _sql = fn.apply(sql);
-						
-						if(_sql == null)
+
+						if (_sql == null)
 							info.isStop = true;
-						
+
 						realSql = _sql == null ? sql : _sql;
 						info.sqlHandler = fn;
 					} else {
@@ -92,9 +92,9 @@ public class DaoSqlHandler {
 	/**
 	 * 基于注解的 SQL 处理器
 	 * 
-	 * @param sql		SQL 语句
-	 * @param method	DAO 方法对象 
-	 * @param daoClz	DAO 类引用
+	 * @param sql    SQL 语句
+	 * @param method DAO 方法对象
+	 * @param daoClz DAO 类引用
 	 * @return 处理过的 SQL
 	 * @throws DaoException
 	 */

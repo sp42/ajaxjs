@@ -86,10 +86,12 @@ public class MappingValue {
 
 		if (value instanceof String) {
 			String _value = (String) value;
-			if (_value.equalsIgnoreCase("yes") || _value.equalsIgnoreCase("true") || _value.equals("1") || _value.equalsIgnoreCase("on"))
+			if (_value.equalsIgnoreCase("yes") || _value.equalsIgnoreCase("true") || _value.equals("1")
+					|| _value.equalsIgnoreCase("on"))
 				return true;
 
-			if (_value.equalsIgnoreCase("no") || _value.equalsIgnoreCase("false") || _value.equals("0") || _value.equalsIgnoreCase("off") || _value.equalsIgnoreCase("null"))
+			if (_value.equalsIgnoreCase("no") || _value.equalsIgnoreCase("false") || _value.equals("0")
+					|| _value.equalsIgnoreCase("off") || _value.equalsIgnoreCase("null"))
 				return false;
 		}
 
@@ -99,8 +101,8 @@ public class MappingValue {
 	/**
 	 * 根据送入的类型作适当转换
 	 * 
-	 * @param value	送入的值
-	 * @param t 	期待的类型
+	 * @param value 送入的值
+	 * @param t     期待的类型
 	 * @return 已经转换类型的值
 	 */
 	@SuppressWarnings("unchecked")
@@ -121,7 +123,8 @@ public class MappingValue {
 
 		} else if (t == long.class || t == Long.class) {
 			// LONG 型
-			value = Long.valueOf((value == null || CommonUtil.isEmptyString(value.toString())) ? "0" : value.toString());
+			value = Long
+					.valueOf((value == null || CommonUtil.isEmptyString(value.toString())) ? "0" : value.toString());
 		} else if (t == String.class) { // 字符串型
 			value = value.toString();
 		} else if (t == String[].class) {

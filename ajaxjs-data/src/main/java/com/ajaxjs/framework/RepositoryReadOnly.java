@@ -41,14 +41,13 @@ import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
  * @author sp42 frank@ajaxjs.com
  *
  */
-@SuppressWarnings("restriction")
 public class RepositoryReadOnly extends RepositoryBase {
 	/**
 	 * 执行时的调用。不管执行哪个方法都会调用该方法。
 	 * 
-	 * @param proxy		代理对象
-	 * @param method	DAO 方法对象
-	 * @param args		DAO 方法的参数
+	 * @param proxy  代理对象
+	 * @param method DAO 方法对象
+	 * @param args   DAO 方法的参数
 	 * @return DAO 方法执行的结果
 	 * @throws DaoException DAO 异常
 	 */
@@ -88,17 +87,17 @@ public class RepositoryReadOnly extends RepositoryBase {
 	/**
 	 * 处理 SQL 语句
 	 * 
-	 * @param sql		原始 SQL 语句
-	 * @param method	DAO 方法对象
-	 * @param args		DAO 方法的参数
+	 * @param sql    原始 SQL 语句
+	 * @param method DAO 方法对象
+	 * @param args   DAO 方法的参数
 	 * @return 处理过的 SQL 语句
-	 * @throws DaoException 
+	 * @throws DaoException
 	 */
 	public ArgsInfo handleSql(String sql, Method method, Object[] args) throws DaoException {
 		if (method != null && method.getAnnotation(SqlFactory.class) != null)
 			sql = DaoSqlHandler.doSqlFactory(sql, method, getClz());
 
-		if (getTableName() != null)		// 替换 ${tableName}为真实的表名
+		if (getTableName() != null) // 替换 ${tableName}为真实的表名
 			sql = sql.replaceAll("\\$\\{\\w+\\}", getTableName());
 
 		return DaoSqlHandler.doSql(sql, method, args);
@@ -107,9 +106,9 @@ public class RepositoryReadOnly extends RepositoryBase {
 	/**
 	 * 执行 SELECT 查询
 	 * 
-	 * @param method		DAO 方法对象
-	 * @param args			DAO 方法的参数
-	 * @param returnType	DAO 方法返回的目标类型
+	 * @param method     DAO 方法对象
+	 * @param args       DAO 方法的参数
+	 * @param returnType DAO 方法返回的目标类型
 	 * @return 查询结果
 	 * @throws DaoException
 	 */
@@ -118,9 +117,9 @@ public class RepositoryReadOnly extends RepositoryBase {
 		String sql = isSqlite(select.sqliteValue(), conn) ? select.sqliteValue() : select.value();
 
 		ArgsInfo info = handleSql(sql, method, args);
-		if(info.isStop)
+		if (info.isStop)
 			return null;
-		
+
 		sql = info.sql;
 		args = info.args;
 
@@ -182,7 +181,7 @@ public class RepositoryReadOnly extends RepositoryBase {
 
 					if ("T".equals(typeArgument.toString())) {
 						TableName t = getClz().getAnnotation(TableName.class);
-						
+
 						if (t == null && getBeanClz() == null)
 							throw new DaoException("请设置注解 TableName 的 beanClass 或送入 beanClz");
 						else
@@ -197,12 +196,12 @@ public class RepositoryReadOnly extends RepositoryBase {
 
 		return type;
 	}
-	
+
 	/**
 	 * 分页操作：一、先查询有没有记录（不用查 列 column）；二、实际分页查询（加入 LIMIT ?, ? 语句，拼凑参数）
 	 * 
-	 * @param entityType	实体类型
-	 * @param select		业务逻辑 SQL 所在的注解
+	 * @param entityType 实体类型
+	 * @param select     业务逻辑 SQL 所在的注解
 	 * @param info
 	 * @return 分页列表，如果找不到数据，仍返回一个空的 PageList，但可以通过 getZero() 得知是否为空
 	 * @throws DaoException
@@ -210,7 +209,6 @@ public class RepositoryReadOnly extends RepositoryBase {
 	@SuppressWarnings("unchecked")
 	public <B> PageResult<B> doPage(Class<B> entityType, Select select, ArgsInfo info) throws DaoException {
 		PageParams p = getPageParameters(info.method, info.args);
-
 
 		int total = countTotal(select, info.sql, p.args, info);
 
@@ -224,7 +222,7 @@ public class RepositoryReadOnly extends RepositoryBase {
 			int limit = p.pageParams[1];
 
 			List<B> list;
-			
+
 			if (entityType == Map.class)
 				list = (List<B>) queryAsMapList(conn, info.sql + " LIMIT ?, ?", info.args);
 			else
@@ -245,17 +243,17 @@ public class RepositoryReadOnly extends RepositoryBase {
 	/**
 	 * 获取统计行数
 	 * 
-	 * @param select 		业务逻辑 SQL 所在的注解
-	 * @param sql 			业务逻辑 SQL
-	 * @param args 			DAO 方法参数，不要包含 start/limit 参数
-	 * @param info		 	连接对象，判断是否 MySQL or SQLite
+	 * @param select 业务逻辑 SQL 所在的注解
+	 * @param sql    业务逻辑 SQL
+	 * @param args   DAO 方法参数，不要包含 start/limit 参数
+	 * @param info   连接对象，判断是否 MySQL or SQLite
 	 * @return 统计行数
-	 * @throws DaoException 
+	 * @throws DaoException
 	 */
 	private int countTotal(Select select, String sql, Object[] args, ArgsInfo info) throws DaoException {
 		String countSql = select.countSql(), sqliteCountSql = select.sqliteCountSql();
 		String _sql;
-		
+
 		if (CommonUtil.isEmptyString(countSql)) {
 			// 另外一种统计方式，但较慢 子查询
 			// 这是默认的实现，你可以通过增加 sqlCount 注解给出特定的 统计行数 之 SQL
@@ -264,8 +262,8 @@ public class RepositoryReadOnly extends RepositoryBase {
 		} else {
 			_sql = countSql;
 		}
-		
-		if (isSqlite(sqliteCountSql, conn)) 
+
+		if (isSqlite(sqliteCountSql, conn))
 			_sql = sqliteCountSql;
 
 		if (JdbcUtil.isSqlite(conn)) {
@@ -281,8 +279,8 @@ public class RepositoryReadOnly extends RepositoryBase {
 	/**
 	 * 获取分页参数，利用反射 DAO 方法参数列表来定位分页的 start/limit
 	 * 
-	 * @param method 	方法对象
-	 * @param args		包含分页参数 start/limit 的参数列表
+	 * @param method 方法对象
+	 * @param args   包含分页参数 start/limit 的参数列表
 	 * @return 分页信息
 	 */
 	private static PageParams getPageParameters(Method method, Object[] args) {

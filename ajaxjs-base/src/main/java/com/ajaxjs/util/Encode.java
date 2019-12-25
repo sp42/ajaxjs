@@ -169,11 +169,11 @@ public class Encode {
 		}
 
 		md.update(str.getBytes(StandardCharsets.UTF_8));
-		
+
 		// byte数组转化为16进制字符串输出。注意安卓环境下无此方法
 		return DatatypeConverter.printHexBinary(md.digest()).toLowerCase();
 	};
-	
+
 	/**
 	 * 生成字符串的 SHA1 哈希值
 	 * 

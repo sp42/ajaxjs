@@ -35,26 +35,25 @@ public class BaseModel implements Serializable {
 	 */
 	private Long uid;
 
-	
 	/**
 	 * 数据字典：状态
 	 */
 	private Integer stat;
-	
+
 	/**
 	 * 设置数据字典：状态
-	 
-	 * @param stat  
+	 * 
+	 * @param stat
 	 */
 	public void setStat(Integer stat) {
 		this.stat = stat;
 	}
-	
+
 	/**
 	 * 获取数据字典：状态
-	 
+	 * 
 	 * @return 数据字典：状态
-	 */	
+	 */
 	public Integer getStat() {
 		return stat;
 	}

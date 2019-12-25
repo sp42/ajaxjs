@@ -35,8 +35,8 @@ public class ListMap {
 	/**
 	 * 遍历一个 MapList
 	 * 
-	 * @param map		输入的 MapList
-	 * @param config	关于回调函数的配置
+	 * @param map    输入的 MapList
+	 * @param config 关于回调函数的配置
 	 */
 	public static void traveler(Map<String, Object> map, ListMapConfig config) {
 		traveler(map, new Context(), null, 0, config);
@@ -45,14 +45,15 @@ public class ListMap {
 	/**
 	 * 遍历一个 MapList
 	 * 
-	 * @param map		输入的 MapList
-	 * @param fristCtx	用于是否退出遍历的变量
-	 * @param superMap	父级 Map
-	 * @param level		深度
-	 * @param config	关于回调函数的配置
+	 * @param map      输入的 MapList
+	 * @param fristCtx 用于是否退出遍历的变量
+	 * @param superMap 父级 Map
+	 * @param level    深度
+	 * @param config   关于回调函数的配置
 	 */
 	@SuppressWarnings("unchecked")
-	public static void traveler(Map<String, Object> map, Context fristCtx, Map<String, Object> superMap, int level, ListMapConfig config) {
+	public static void traveler(Map<String, Object> map, Context fristCtx, Map<String, Object> superMap, int level,
+			ListMapConfig config) {
 		if (config != null && config.mapHandler != null && !config.mapHandler.execute(map, superMap, level))
 			return;
 
@@ -86,8 +87,8 @@ public class ListMap {
 	/**
 	 * 遍历一个 ListMap
 	 * 
-	 * @param list 		输入的 ListMap
-	 * @param config 	关于回调函数的配置
+	 * @param list   输入的 ListMap
+	 * @param config 关于回调函数的配置
 	 */
 	public static void traveler(List<Map<String, Object>> list, ListMapConfig config) {
 		traveler(list, new Context(), null, 0, config);
@@ -96,11 +97,11 @@ public class ListMap {
 	/**
 	 * 遍历一个 ListMap
 	 * 
-	 * @param list		输入的 ListMap
-	 * @param fristCtx	用于是否退出遍历的变量
-	 * @param superMap	父级 Map
-	 * @param level		深度
-	 * @param config	关于回调函数的配置
+	 * @param list     输入的 ListMap
+	 * @param fristCtx 用于是否退出遍历的变量
+	 * @param superMap 父级 Map
+	 * @param level    深度
+	 * @param config   关于回调函数的配置
 	 */
 	public static void traveler(List<Map<String, Object>> list, Context fristCtx, Map<String, Object> superMap, int level, ListMapConfig config) {
 		for (Map<String, Object> map : list) {
@@ -119,6 +120,7 @@ public class ListMap {
 	public static void buildPath(List<Map<String, Object>> list, boolean saveSupers) {
 		buildPath(list, ID, PATH, LEVEL, saveSupers);
 	}
+
 	public static void buildPath(List<Map<String, Object>> list) {
 		buildPath(list, ID, PATH, LEVEL, false);
 	}
@@ -126,30 +128,31 @@ public class ListMap {
 	/**
 	 * 为每个 Map 加上 path 和 level 字段，分别是路径和深度
 	 * 
-	 * @param list 	输入的 ListMap
-	 * @param id 	map 的表示字段
-	 * @param path 	map 的路径字段
+	 * @param list  输入的 ListMap
+	 * @param id    map 的表示字段
+	 * @param path  map 的路径字段
 	 * @param level map 的深度
 	 */
 	public static void buildPath(List<Map<String, Object>> list, String id, String path, String level, boolean saveSupers) {
 		ListMapConfig config = new ListMapConfig();
+		
 		config.mapHandler = (map, superMap, _level) -> {
 			String superPath = superMap == null ? "" : superMap.get(path).toString();
 			map.put(path, superPath + "/" + map.get(id));
 			map.put(level, _level);
-			
-			if(saveSupers && superMap != null) {
+
+			if (saveSupers && superMap != null) {
 				String supers;
-				if(map.get("supers") == null) {
+				if (map.get("supers") == null) {
 					supers = "";
 					map.put("supers", supers);
 				} else {
 					supers = map.get("supers").toString();
 				}
 
-				supers += ("".equals(supers) ? "" : "," ) + superPath + ":" + superMap.get("name");
+				supers += ("".equals(supers) ? "" : ",") + superPath + ":" + superMap.get("name");
 				map.put("supers", supers);
-				//supers.add(superPath + ":" + superMap.get("name"));
+				// supers.add(superPath + ":" + superMap.get("name"));
 			}
 			// System.out.println(map.get(id) + "@" + _level + ":" + map.get(path));
 			return true;
@@ -157,9 +160,11 @@ public class ListMap {
 
 		traveler(list, config);
 	}
+
 	public static void buildPath(List<Map<String, Object>> list, String id, String path, String level) {
 		buildPath(list, id, path, level, false);
 	}
+
 	/////////////////////////// findByPath /////////////////
 	/**
 	 * 输入一个路径，转换为队列结构
@@ -190,6 +195,7 @@ public class ListMap {
 
 	/**
 	 * TODO
+	 * 
 	 * @param str
 	 * @param list
 	 * @return

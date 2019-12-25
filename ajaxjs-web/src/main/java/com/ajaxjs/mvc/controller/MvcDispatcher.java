@@ -53,8 +53,10 @@ public class MvcDispatcher implements Filter {
 	private static final LogHelper LOGGER = LogHelper.getLog(MvcDispatcher.class);
 
 	private static final String t = "     ___       _       ___  __    __      _   _____        _          __  _____   _____  \n"
-			+ "     /   |     | |     /   | \\ \\  / /     | | /  ___/      | |        / / | ____| |  _  \\ \n" + "    / /| |     | |    / /| |  \\ \\/ /      | | | |___       | |  __   / /  | |__   | |_| |  \n"
-			+ "   / / | |  _  | |   / / | |   }  {    _  | | \\___  \\      | | /  | / /   |  __|  |  _  {  \n" + "  / /  | | | |_| |  / /  | |  / /\\ \\  | |_| |  ___| |      | |/   |/ /    | |___  | |_| |  \n"
+			+ "     /   |     | |     /   | \\ \\  / /     | | /  ___/      | |        / / | ____| |  _  \\ \n"
+			+ "    / /| |     | |    / /| |  \\ \\/ /      | | | |___       | |  __   / /  | |__   | |_| |  \n"
+			+ "   / / | |  _  | |   / / | |   }  {    _  | | \\___  \\      | | /  | / /   |  __|  |  _  {  \n"
+			+ "  / /  | | | |_| |  / /  | |  / /\\ \\  | |_| |  ___| |      | |/   |/ /    | |___  | |_| |  \n"
 			+ " /_/   |_| \\_____/ /_/   |_| /_/  \\_\\ \\_____/ /_____/      |___/|___/     |_____| |_____/ \n";
 
 	{
@@ -86,10 +88,12 @@ public class MvcDispatcher implements Filter {
 	}
 
 	/**
-	 * 虽然 REST 风格的 URL 一般不含后缀，我们只能将 DispatcherServlet 映射到“/”，使之变为一个默认的 Servlet， 在处理 js/css 等静态文件有后缀，这样的话我们需要区分对待。
+	 * 虽然 REST 风格的 URL 一般不含后缀，我们只能将 DispatcherServlet 映射到“/”，使之变为一个默认的 Servlet， 在处理
+	 * js/css 等静态文件有后缀，这样的话我们需要区分对待。
 	 */
 	@Override
-	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
+			throws IOException, ServletException {
 		HttpServletRequest _request = (HttpServletRequest) req;
 		HttpServletResponse _response = (HttpServletResponse) resp;
 
@@ -128,10 +132,10 @@ public class MvcDispatcher implements Filter {
 	/**
 	 * 执行控制器方法
 	 * 
-	 * @param request 请求对象
-	 * @param response 响应对象
+	 * @param request    请求对象
+	 * @param response   响应对象
 	 * @param controller 控制器对象
-	 * @param method 控制器方法
+	 * @param method     控制器方法
 	 */
 	private static void execute(MvcRequest request, MvcOutput response, IController controller, Method method) {
 		MvcRequest.setHttpServletRequest(request);
@@ -145,7 +149,7 @@ public class MvcDispatcher implements Filter {
 		boolean isDoFilter = !CommonUtil.isNull(filterActions), isSkip = false; // 是否中止控制器方法调用，由拦截器决定
 		Object[] args = null;// 方法没有参数
 		boolean hasArgs = method.getParameterTypes().length > 0;
-		
+
 		try {
 			if (hasArgs) {
 				args = RequestParam.getArgs(request, response, method);
@@ -155,7 +159,7 @@ public class MvcDispatcher implements Filter {
 //				System.out.println(Arrays.toString(args));
 //				System.out.println(method);
 			}
-			
+
 			if (isDoFilter) {
 				for (FilterAction filterAction : filterActions) {
 					isSkip = !filterAction.before(model, request, response, method, args); // 相当于 AOP 前置
@@ -165,14 +169,15 @@ public class MvcDispatcher implements Filter {
 			}
 
 			if (!isSkip) {
-				result = hasArgs ? ReflectUtil.executeMethod_Throwable(controller, method, args) 
-								 : ReflectUtil.executeMethod_Throwable(controller, method);
+				result = hasArgs ? ReflectUtil.executeMethod_Throwable(controller, method, args)
+						: ReflectUtil.executeMethod_Throwable(controller, method);
 			}
 
 		} catch (Throwable e) {
 			err = e;
 
-			if (e instanceof IllegalArgumentException && e.getMessage().contains("object is not an instance of declaring class"))
+			if (e instanceof IllegalArgumentException
+					&& e.getMessage().contains("object is not an instance of declaring class"))
 				LOGGER.warning("异常可能的原因：@Bean注解的名称重复，请检查 IOC 中的是否重名");
 		} finally {
 			if (isDoFilter) {
@@ -200,14 +205,16 @@ public class MvcDispatcher implements Filter {
 	 * @param response
 	 * @param model
 	 */
-	private static void handleErr(Throwable err, Method method, MvcRequest request, MvcOutput response, ModelAndView model) {
+	private static void handleErr(Throwable err, Method method, MvcRequest request, MvcOutput response,
+			ModelAndView model) {
 		ReflectUtil.getUnderLayerErr(err).printStackTrace(); // 打印异常
 
 		String errMsg = ReflectUtil.getUnderLayerErrMsg(err);
 		Produces a = method.getAnnotation(Produces.class);
 
 		if (a != null && MediaType.APPLICATION_JSON.equals(a.value()[0])) {// 返回 json
-			response.resultHandler(String.format(Constant.json_not_ok, JsonHelper.jsonString_covernt(errMsg)), request, model, method);
+			response.resultHandler(String.format(Constant.json_not_ok, JsonHelper.jsonString_covernt(errMsg)), request,
+					model, method);
 		} else {
 			request.setAttribute("javax.servlet.error.status_code", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			request.setAttribute("javax.servlet.error.exception_type", err.getClass());

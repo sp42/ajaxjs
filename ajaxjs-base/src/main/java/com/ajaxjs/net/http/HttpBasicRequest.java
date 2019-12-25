@@ -110,9 +110,9 @@ public class HttpBasicRequest extends IoHelper {
 	/**
 	 * 发送请求，返回响应信息
 	 * 
-	 * @param conn 			请求连接对象
-	 * @param isEnableGzip	 是否需要 GZip 解码
-	 * @param callback 		回调里面请记得关闭 InputStream
+	 * @param conn         请求连接对象
+	 * @param isEnableGzip 是否需要 GZip 解码
+	 * @param callback     回调里面请记得关闭 InputStream
 	 * @return 可指定返回类型
 	 */
 	public static <T> T getResponse(HttpURLConnection conn, Boolean isEnableGzip, Function<InputStream, T> callback) {
@@ -128,7 +128,8 @@ public class HttpBasicRequest extends IoHelper {
 
 			int responseCode = conn.getResponseCode();
 			if (responseCode >= 400) {// 如果返回的结果是400以上，那么就说明出问题了
-				RuntimeException e = new RuntimeException(responseCode < 500 ? responseCode + "：客户端请求参数错误！" : responseCode + "：抱歉！我们服务端出错了！");
+				RuntimeException e = new RuntimeException(
+						responseCode < 500 ? responseCode + "：客户端请求参数错误！" : responseCode + "：抱歉！我们服务端出错了！");
 				LOGGER.warning(e);
 			}
 
@@ -178,19 +179,19 @@ public class HttpBasicRequest extends IoHelper {
 	/**
 	 * GET 请求，返回文本内容
 	 * 
-	 * @param url 		请求目标地址
-	 * @param isGzip	true 表示为带 GZip 压缩
+	 * @param url    请求目标地址
+	 * @param isGzip true 表示为带 GZip 压缩
 	 * @return 响应的文本内容
 	 */
 	public static String get(String url, boolean isGzip) {
 		return get(url, isGzip, null);
 	}
-	
+
 	/**
 	 * GET 请求，返回文本内容
 	 * 
-	 * @param url 		请求目标地址
-	 * @param isGzip	true 表示为带 GZip 压缩
+	 * @param url    请求目标地址
+	 * @param isGzip true 表示为带 GZip 压缩
 	 * @return 响应的文本内容
 	 */
 	public static String get(String url, boolean isGzip, Consumer<HttpURLConnection> fn) {
@@ -198,9 +199,9 @@ public class HttpBasicRequest extends IoHelper {
 		if (isGzip)
 			setGizpRequest.accept(conn);
 
-		if(fn != null)
+		if (fn != null)
 			fn.accept(conn);
-		
+
 		return getResponse(conn, isGzip, IoHelper::byteStream2string);
 	}
 
@@ -209,8 +210,8 @@ public class HttpBasicRequest extends IoHelper {
 	/**
 	 * POST 请求
 	 * 
-	 * @param url	请求目标地址
-	 * @param data	表单数据 KeyValue的请求数据，注意要进行 ? & 编码，使用 URLEncoder.encode()
+	 * @param url  请求目标地址
+	 * @param data 表单数据 KeyValue的请求数据，注意要进行 ? & 编码，使用 URLEncoder.encode()
 	 * @return 携带请求信息的 Bean
 	 */
 	public static String post(String url, Map<String, Object> data) {
@@ -224,8 +225,8 @@ public class HttpBasicRequest extends IoHelper {
 	/**
 	 * POST 请求
 	 * 
-	 * @param url		请求目标地址
-	 * @param params	字符串类型的请求数据
+	 * @param url    请求目标地址
+	 * @param params 字符串类型的请求数据
 	 * @return 请求之后的响应的内容
 	 */
 	public static String post(String url, String params) {
@@ -235,9 +236,9 @@ public class HttpBasicRequest extends IoHelper {
 	/**
 	 * POST 请求
 	 * 
-	 * @param url 	请求目标地址
-	 * @param b 	请求数据
-	 * @param fn 	对 Conn 进行配置
+	 * @param url 请求目标地址
+	 * @param b   请求数据
+	 * @param fn  对 Conn 进行配置
 	 * @return 请求之后的响应的内容
 	 */
 	public static String post(String url, byte[] b, Consumer<HttpURLConnection> fn) {
@@ -247,12 +248,13 @@ public class HttpBasicRequest extends IoHelper {
 	/**
 	 * POST 请求
 	 * 
-	 * @param url 	请求目标地址
-	 * @param b 	字节格式的请求数据
-	 * @param fn 	对 Conn 进行配置
+	 * @param url 请求目标地址
+	 * @param b   字节格式的请求数据
+	 * @param fn  对 Conn 进行配置
 	 * @return 请求之后的响应的内容
 	 */
-	public static String post(String url, byte[] b, Consumer<HttpURLConnection> fn, Function<InputStream, String> responseHandler) {
+	public static String post(String url, byte[] b, Consumer<HttpURLConnection> fn,
+			Function<InputStream, String> responseHandler) {
 		HttpURLConnection conn = initHttpConnection(url);
 		setMedthod.accept(conn, "POST");
 		conn.setDoOutput(true); // for conn.getOutputStream().write(someBytes);
@@ -275,6 +277,5 @@ public class HttpBasicRequest extends IoHelper {
 
 	public final static Consumer<HttpURLConnection> setFormPost = conn -> conn.setRequestProperty("Content-type",
 			"application/x-www-form-urlencoded;charset=utf-8");
-	
-	 
+
 }
