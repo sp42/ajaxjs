@@ -3,6 +3,7 @@ package com.ajaxjs.shop.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -29,6 +30,7 @@ import com.ajaxjs.shop.model.Goods;
 import com.ajaxjs.shop.model.Seller;
 import com.ajaxjs.shop.service.GoodsService;
 import com.ajaxjs.shop.service.SellerService;
+import com.ajaxjs.user.controller.BaseUserController;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -125,7 +127,7 @@ public class GoodsController extends BaseController<Goods> {
 	@MvcFilter(filters = { DataBaseFilter.class, FrontEndOnlyCheck.class })
 	public String showInfo(@PathParam(id) Long id, ModelAndView mv) {
 		LOGGER.info("浏览商品 info");
-		mv.put(info, service.findById(id));
+		mv.put(info, service.getGoodsDetail(id, BaseUserController.getUserId()));
 		return jsp("shop/goods-info");
 	}
 	

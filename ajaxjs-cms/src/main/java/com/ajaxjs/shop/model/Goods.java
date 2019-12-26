@@ -9,11 +9,21 @@ public class Goods extends Product {
 	 * 商家
 	 */
 	private Long sellerId;
+	
+	/**
+	 * 简介
+	 */
+	private String intro;
 
 	/**
 	 * 标题价格
 	 */
 	private String titlePrice;
+	
+	/**
+	 * 评分
+	 */
+	private int score;
 
 	/**
 	 * 封面价格
@@ -50,6 +60,22 @@ public class Goods extends Product {
 
 	public void setSellerId(Long sellerId) {
 		this.sellerId = sellerId;
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	public String getIntro() {
+		return intro;
+	}
+
+	public void setIntro(String intro) {
+		this.intro = intro;
 	}
 	
 }
