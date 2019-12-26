@@ -23,7 +23,7 @@
 				<dt><tags:i18n zh="登录密码" eng="Login Password" /></dt>
 				<dd>
 					<input type="password" name="password" placeholder="<tags:i18n zh="6~10位数字或英文字母" eng="6 to 10 digits or English letters" />" required
-					 pattern="[0-9A-Za-z]{6,10}" title="请输入您的由6~10位由数字和26个英文字母的登录密码" />
+					 pattern="[0-9A-Za-z]{6,10}" title="请输入6~10位数字或英文密码" />
 					
 				</dd>
 			</label>
@@ -39,11 +39,10 @@
 		</dl>
 		<dl>
 			<dt></dt>
-			<dd style="font-size: .8rem;">
+			<dd style="font-size: .8rem;;text-align: left">
 				<button><tags:i18n zh="登录" eng="Login" /></button>
 				<br />
-				<br />
-				
+
 		
 			<c:if test="${aj_allConfig.user.login.thridOauth}">
 				<a href="#" onClick="loginWeibo();"><img src="http://www.sinaimg.cn/blog/developer/wiki/240.png" /></a>
