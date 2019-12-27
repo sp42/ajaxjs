@@ -76,7 +76,8 @@ public abstract class BaseUserController extends BaseController<User> {
 		} else if (request.getParameter("userId") != null)
 			return Long.parseLong(request.getParameter("userId"));
 		else
-			throw new UnsupportedOperationException("Fail to access user id");
+			return 0L;
+//			throw new UnsupportedOperationException("Fail to access user id");
 	}
 
 	public static Long getUserUid() {
