@@ -19,6 +19,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
@@ -64,7 +65,9 @@ public class RequestParam {
 				args.add(request);
 			} else if (clazz.equals(HttpServletResponse.class)) {
 				args.add(response);
-			} else if (clazz.equals(Map.class)) { // map 参数，将请求参数转为 map
+			} else if (clazz.equals(HttpSession.class)) {
+				args.add(request.getSession());
+			}else if (clazz.equals(Map.class)) { // map 参数，将请求参数转为 map
 				Map<String, Object> map;
 
 				if (request.getMethod() != null && request.getMethod().equals("PUT")) {
