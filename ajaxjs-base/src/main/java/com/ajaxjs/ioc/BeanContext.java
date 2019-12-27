@@ -27,6 +27,7 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
@@ -90,7 +91,7 @@ public class BeanContext {
 
 		return obj == null ? null : (T) obj;
 	}
-	
+
 	/**
 	 * 扫描注解、创建 bean 对象、记录依赖关系
 	 * 
@@ -114,10 +115,10 @@ public class BeanContext {
 
 			String beanName = getBeanId(annotation, item);
 
-			if (CommonUtil.isEmptyString(beanName)) 
+			if (CommonUtil.isEmptyString(beanName))
 				beanName = getBeanId(namedAnno, item);
 
-			if (beansClz.containsKey("beanName")) 
+			if (beansClz.containsKey("beanName"))
 				LOGGER.warning("相同的 bean name 已经存在" + beanName);
 
 			if (ReflectUtil.hasArgsCon(item)) {
@@ -142,7 +143,8 @@ public class BeanContext {
 																													// bean
 																													// 的名称,如果为
 																													// null,
-																													// 则使用字段名称
+					dependenciObj_id = parseId(dependenciObj_id); // 则使用字段名称
+
 					if (CommonUtil.isEmptyString(dependenciObj_id))
 						dependenciObj_id = field.getName(); // 此时 bean 的 id 一定要与 fieldName 一致
 
@@ -160,6 +162,28 @@ public class BeanContext {
 				}
 			}
 		}
+	}
+
+	/**
+	 * 可以从 JSON 配置文件读取依赖对象。这时以 autoWire: 开头指向配置内容，内容即具体 Bean 的 id。
+	 * 
+	 * @param dependenciObj_id
+	 * @return
+	 */
+	private static String parseId(String dependenciObj_id) {
+		if (dependenciObj_id.startsWith("autoWire:")) {
+			String str = dependenciObj_id.replaceFirst("autoWire:", "");
+			String[] arr = str.split("\\|");
+			String extendedId = ConfigService.getValueAsString(arr[0]);
+
+			if (extendedId == null)
+				return arr[1]; // 没有扩展，读取默认的
+			else {
+				return extendedId;
+			}
+		}
+
+		return dependenciObj_id;
 	}
 
 	/**
