@@ -85,8 +85,8 @@ public class CartService extends BaseService<Cart> {
 		return dao.findList(setWhere(" e.userId = " + userId));
 	}
 	
-	@Resource("UserAddressService")
-	private static UserAddressService userAddressService;
+//	@Resource("UserAddressService")
+	private static UserAddressService userAddressService = new UserAddressService();
 
 	/**
 	 * SQL 查询是否有数据返回，没有返回 true
