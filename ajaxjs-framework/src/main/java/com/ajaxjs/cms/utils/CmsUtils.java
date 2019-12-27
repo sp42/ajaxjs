@@ -9,6 +9,11 @@ import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.util.XMLHelper;
 
 public class CmsUtils {
+	/**
+	 * 
+	 * @param args
+	 * @return
+	 */
 	public static Object[] page2start(Object[] args) {
 		int pageStart = (int) args[0];
 		int pageSize = (int) args[1];
@@ -28,53 +33,62 @@ public class CmsUtils {
 	/**
 	 * 单测专用的初始化数据库连接方法
 	 * 
-	 * @param configFile JSON 配置文件
+	 * @param configFile JSON 配置文件路径
 	 */
 	public static void initTestConnection(String configFile) {
 		ConfigService.load(configFile);
-		JdbcConnection.setConnection(JdbcConnection.getMySqlConnection(ConfigService.getValueAsString("testServer.mysql.url"), ConfigService.getValueAsString("testServer.mysql.user"),
-				ConfigService.getValueAsString("testServer.mysql.password")));
+		JdbcConnection
+				.setConnection(JdbcConnection.getMySqlConnection(ConfigService.getValueAsString("testServer.mysql.url"),
+						ConfigService.getValueAsString("testServer.mysql.user"),
+						ConfigService.getValueAsString("testServer.mysql.password")));
 
 		DataBaseFilter.isAutoClose = false;
 	}
 
 	/**
 	 * 
-	 * @param configFile
-	 * @param string2
+	 * @param configFile JSON 配置文件路径
+	 * @param packages   一个或多个搜索的包名
 	 */
-	public static void initTestDbAndIoc(String configFile, String... string2) {
+	public static void initTestDbAndIoc(String configFile, String... packages) {
 		initTestConnection(configFile);
-		BeanContext.init(string2);
+		BeanContext.init(packages);
 		BeanContext.injectBeans();
 	}
 
-	public static void init(String configFile, String dbXmlCfg, String... string2) {
-		ConfigService.load(configFile);
-
-		XMLHelper.xPath(dbXmlCfg, "//Resource[@name='" + ConfigService.getValueAsString("data.database_node") + "']", node -> {
-			NamedNodeMap map = node.getAttributes();
-			
-			String  url 		= map.getNamedItem("url").getNodeValue(),
-					user 		= map.getNamedItem("username").getNodeValue(),
-					password 	= map.getNamedItem("password").getNodeValue();
-
-			JdbcConnection.setConnection(JdbcConnection.getMySqlConnection(url, user, password));
-			
-			DataBaseFilter.isAutoClose = false;
-			
-			BeanContext.init(string2);
-			BeanContext.injectBeans();
-		});
-	}
-	
 	/**
 	 * 
-	 * @param projectFolder
-	 * @param packages
+	 * @param configFile JSON 配置文件路径
+	 * @param dbXmlCfg   数据库配置文件
+	 * @param packages   一个或多个搜索的包名
+	 */
+	public static void init(String configFile, String dbXmlCfg, String... packages) {
+		ConfigService.load(configFile);
+
+		XMLHelper.xPath(dbXmlCfg, "//Resource[@name='" + ConfigService.getValueAsString("data.database_node") + "']",
+				node -> {
+					NamedNodeMap map = node.getAttributes();
+
+					String url = map.getNamedItem("url").getNodeValue(),
+							user = map.getNamedItem("username").getNodeValue(),
+							password = map.getNamedItem("password").getNodeValue();
+
+					JdbcConnection.setConnection(JdbcConnection.getMySqlConnection(url, user, password));
+					DataBaseFilter.isAutoClose = false;
+					BeanContext.init(packages);
+					BeanContext.injectBeans();
+				});
+	}
+
+	/**
+	 * 方便写单测时用的初始化方法
+	 * 
+	 * @param projectFolder	项目目录，用于读取配置文件
+	 * @param packages      一个或多个搜索的包名
 	 */
 	public static void init2(String projectFolder, String... packages) {
-		init(projectFolder + "\\src\\main\\resources\\site_config.json", projectFolder + "\\WebContent\\META-INF\\context.xml", packages);
+		init(projectFolder + "\\src\\main\\resources\\site_config.json",
+				projectFolder + "\\WebContent\\META-INF\\context.xml", packages);
 	}
 
 	public static void loadSQLiteTest(String db) {

@@ -103,7 +103,7 @@ public class SiteStruService implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent e) {
 		ServletContext ctx = e.getServletContext();
 		Version.tomcatVersionDetect(ctx.getServerInfo());
-		
+
 		System.out.println(ConfigService.jsonPath);
 
 		if (new File(ConfigService.jsonPath).exists()) {
@@ -112,8 +112,10 @@ public class SiteStruService implements ServletContextListener {
 			if (ConfigService.config.isLoaded()) {
 				ctx.setAttribute("aj_allConfig", ConfigService.config); // 所有配置保存在这里
 
-				// String configJson = JsonHelper.format(JsonHelper.stringifyMap(ConfigService.config));
-				LOGGER.infoGreen("加载 " + ConfigService.getValueAsString("clientFullName") + " " + ctx.getContextPath() + " 项目配置成功！All config loaded.");
+				// String configJson =
+				// JsonHelper.format(JsonHelper.stringifyMap(ConfigService.config));
+				LOGGER.infoGreen("加载 " + ConfigService.getValueAsString("clientFullName") + " " + ctx.getContextPath()
+						+ " 项目配置成功！All config loaded.");
 
 				onStartUp(ctx);
 			} else
@@ -128,7 +130,8 @@ public class SiteStruService implements ServletContextListener {
 			LOGGER.info("没有网站的结构文件");
 
 		String ctxPath = ctx.getContextPath();
-		String ajaxjsui = Version.isDebug ? "http://" + Tools.getIp() + ":8080/ajaxjs-web-js" : ctxPath + "/" + Constant.ajajx_ui;
+		String ajaxjsui = Version.isDebug ? "http://" + Tools.getIp() + ":8080/ajaxjs-web-js"
+				: ctxPath + "/" + Constant.ajajx_ui;
 
 		ctx.setAttribute("ctx", ctxPath);
 		ctx.setAttribute("ajaxjsui", ajaxjsui);
@@ -147,17 +150,17 @@ public class SiteStruService implements ServletContextListener {
 
 		if (!CommonUtil.isEmptyString(startUp_Class)) {
 			LOGGER.info("执行 Servlet 启动回调");
-			try {				
+			try {
 				Class<ServletStartUp> clz = ReflectUtil.getClassByName(startUp_Class, ServletStartUp.class);
 				ServletStartUp startUp = ReflectUtil.newInstance(clz);
 				startUp.onStartUp(cxt);
-			}catch(Throwable e) {
-				if(e instanceof UndeclaredThrowableException) {
+			} catch (Throwable e) {
+				if (e instanceof UndeclaredThrowableException) {
 					Throwable _e = ReflectUtil.getUnderLayerErr(e);
 					_e.printStackTrace();
-					
+
 				}
-				
+
 				throw e;
 			}
 		}
@@ -182,7 +185,7 @@ public class SiteStruService implements ServletContextListener {
 	/**
 	 * 获取当前页面节点，并带有丰富的节点信息
 	 * 
-	 * @param uri 请求地址，例如 "menu/menu-1"
+	 * @param uri         请求地址，例如 "menu/menu-1"
 	 * @param contextPath 项目名称
 	 * @return 当前页面节点
 	 */
@@ -208,8 +211,11 @@ public class SiteStruService implements ServletContextListener {
 	}
 
 	/**
-	 * 用于 current 的对比 <li ${pageContext.request.contextPath.concat('/').concat(menu.fullPath). concat('/') == pageContext.request.requestURI ? '
-	 * class=selected' : ''}> IDE 语法报错，其实正确的 于是，为了不报错 <li ${PageNode.isCurrentNode(menu) ? ' class=selected' : ''}>
+	 * 用于 current 的对比 <li
+	 * ${pageContext.request.contextPath.concat('/').concat(menu.fullPath).
+	 * concat('/') == pageContext.request.requestURI ? ' class=selected' : ''}> IDE
+	 * 语法报错，其实正确的 于是，为了不报错 <li ${PageNode.isCurrentNode(menu) ? ' class=selected' :
+	 * ''}>
 	 * 
 	 * @param node 节点
 	 * @return true 表示为是当前节点
@@ -255,7 +261,8 @@ public class SiteStruService implements ServletContextListener {
 	@SuppressWarnings({ "unchecked" })
 	public List<Map<String, Object>> getMenu(HttpServletRequest request) {
 		Map<String, Object> map = getSecondLevelNode(request);
-		return map != null && map.get(ListMap.CHILDREN) != null ? (List<Map<String, Object>>) map.get(ListMap.CHILDREN) : null;
+		return map != null && map.get(ListMap.CHILDREN) != null ? (List<Map<String, Object>>) map.get(ListMap.CHILDREN)
+				: null;
 	}
 
 	/**
@@ -268,7 +275,9 @@ public class SiteStruService implements ServletContextListener {
 		return request.getRequestURI().replace(request.getContextPath(), "").replaceFirst("/\\w+\\.\\w+$", "");
 	}
 
-	private static String table = "<table class=\"siteMap\"><tr><td>%s</td></tr></table>", a = "<a href=\"%s\" class=\"indentBlock_%s\"><span class=\"dot\">·</span>%s</a>\n ", newCol = "\n\t</td>\n\t<td>\n\t\t";
+	private static String table = "<table class=\"siteMap\"><tr><td>%s</td></tr></table>",
+			a = "<a href=\"%s\" class=\"indentBlock_%s\"><span class=\"dot\">·</span>%s</a>\n ",
+			newCol = "\n\t</td>\n\t<td>\n\t\t";
 
 	private String siteMapCache;
 
@@ -287,7 +296,7 @@ public class SiteStruService implements ServletContextListener {
 	/**
 	 * 获取页脚的网站地图
 	 * 
-	 * @param list 可指定数据
+	 * @param list        可指定数据
 	 * @param contextPath
 	 * @return 页脚的网站地图
 	 */
@@ -312,7 +321,8 @@ public class SiteStruService implements ServletContextListener {
 			if (map != null) {
 				if (0 == (int) map.get(ListMap.LEVEL)) // 新的一列
 					sb.append(newCol);
-				sb.append(String.format(a, contextPath + map.get(ListMap.PATH).toString(), map.get(ListMap.LEVEL).toString(), map.get("name").toString()));
+				sb.append(String.format(a, contextPath + map.get(ListMap.PATH).toString(),
+						map.get(ListMap.LEVEL).toString(), map.get("name").toString()));
 
 				if (map.get(ListMap.CHILDREN) != null && map.get(ListMap.CHILDREN) instanceof List)
 					getSiteMap((List<Map<String, Object>>) map.get(ListMap.CHILDREN), sb, contextPath);

@@ -19,6 +19,7 @@ import com.ajaxjs.cms.filter.FrontEndOnlyCheck;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseService;
+import com.ajaxjs.framework.ViewObjectService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
@@ -36,8 +37,7 @@ public class NewsController extends BaseController<Map<String, Object>> {
 	
 	private static final LogHelper LOGGER = LogHelper.getLog(NewsController.class);
 	
-	
-	@Resource("NewsService")
+	@Resource("autoWire:ioc.NewsService|NewsService")
 	private NewsService service;
 
 	@Override
@@ -50,6 +50,7 @@ public class NewsController extends BaseController<Map<String, Object>> {
 //	@Authority(filter = DataBaseFilter.class, value = 1)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
 		LOGGER.info("新闻列表-前台");
+		((ViewObjectService)service).showList(mv);
 		return page(mv, service.list(catalogId, start, limit, CommonConstant.ON_LINE), false);
 	}
 
@@ -65,9 +66,12 @@ public class NewsController extends BaseController<Map<String, Object>> {
 	@Path(idInfo)
 	@MvcFilter(filters = { DataBaseFilter.class, FrontEndOnlyCheck.class })
 	public String getInfo(@PathParam(id) Long id, ModelAndView mv) {
+		
 		prepareData(mv);
 		mv.put(info, service.findById(id));
 		BaseService.getNeighbor(mv, "entity_article", id);
+
+		((ViewObjectService)service).showInfo(mv, id);
 
 		return info();
 	}

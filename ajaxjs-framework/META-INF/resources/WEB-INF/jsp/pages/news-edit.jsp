@@ -119,6 +119,13 @@
 					<table>
 						<tr>
 							<td>
+						<!-- 图片上传 --> 
+						<aj-xhr-upload action="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catalog=1" :is-img-upload="true" 
+							hidden-field="license" 
+							hidden-field-value="${info.license}" 
+							img-place="${empty info.license ? commonAsset.concat('/images/imgBg.png') : ctx.concat('/').concat(info.license)}">
+						</aj-xhr-upload>
+							
 <ajaxjs-img-upload-perview ref="uploadControl" img-place="${(empty info.avatarPath || isCreate) ? commonAsset.concat('/images/imgBg.png'): ctx.concat(info.avatarPath)}" />
 							</td>
 						</tr>

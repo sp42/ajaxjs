@@ -10,19 +10,21 @@ import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
+import com.ajaxjs.framework.ViewObjectService;
 import com.ajaxjs.ioc.Bean;
+import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
 
 @Bean
-public class ArticleService extends BaseService<Map<String, Object>> {
+public class ArticleService extends BaseService<Map<String, Object>> implements ViewObjectService {
 
 	@TableName(value = "entity_article", beanClass = Map.class)
 	public interface ArticleDao extends IBaseDao<Map<String, Object>> {
 		@Select("SELECT e.id, e.name, e.createDate, e.updateDate, e.catalogId, e.intro, e.cover, e.stat FROM ${tableName} e WHERE " + WHERE_REMARK+ DESCENDING_ID)
 		public PageResult<Map<String, Object>> list(int start, int limit, Function<String, String> sqlHandler);
 		
-		@Select("SELECT e.id, e.name, e.createDate, e.cover FROM ${tableName} e WHERE " + WHERE_REMARK + DESCENDING_ID)
+		@Select("SELECT e.id, e.name, e.createDate, e.cover, e.intro FROM ${tableName} e WHERE " + WHERE_REMARK + DESCENDING_ID)
 		public List<Map<String, Object>> simpleList(Function<String, String> sqlHandler);
 
 		/**
@@ -63,6 +65,17 @@ public class ArticleService extends BaseService<Map<String, Object>> {
 	}
 
 	public List<Map<String, Object>> findListTop(int top) {
-		return dao.simpleList(CatalogServiceImpl.setCatalog(getDomainCatalogId(), getDomainCatalogId()).andThen(BaseService.setStatus(1).andThen(sql -> sql + " LIMIT 0, " + top)));
+		return dao.simpleList(CatalogServiceImpl.setCatalog(getDomainCatalogId(), getDomainCatalogId()).
+				andThen(BaseService.setStatus(CommonConstant.ON_LINE).andThen(sql -> sql + " LIMIT 0, " + top)));
+	}
+
+	@Override
+	public void showList(ModelAndView mv) {
+		
+	}
+
+	@Override
+	public void showInfo(ModelAndView mv, Long id) {
+		
 	}
 }
