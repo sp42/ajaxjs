@@ -183,7 +183,7 @@ public class CommonUtil {
 	 * @return 转换到 yyyy-MM-dd HH:mm:ss 格式的时间
 	 */
 	public static String formatDate(Date date) {
-		return SimpleDateFormatFactory(commonDateFormat).format(date);
+		return simpleDateFormatFactory(commonDateFormat).format(date);
 	}
 
 	/**
@@ -193,7 +193,7 @@ public class CommonUtil {
 	 * @return 转换到 YYYY-MM-dd HH:MM 格式的时间
 	 */
 	public static String formatDateShorter(Date date) {
-		return SimpleDateFormatFactory(commonDateFormat_shorter).format(date);
+		return simpleDateFormatFactory(commonDateFormat_shorter).format(date);
 	}
 
 	/**
@@ -203,7 +203,7 @@ public class CommonUtil {
 	 * @return 转换到期望格式的当前时间
 	 */
 	public static String now(String format) {
-		return SimpleDateFormatFactory(format).format(new Date());
+		return simpleDateFormatFactory(format).format(new Date());
 	}
 
 	/**
@@ -244,11 +244,11 @@ public class CommonUtil {
 
 			try {
 				if (pattern.matcher(str).matches()) {
-					return SimpleDateFormatFactory(commonDateFormat).parse(str);
+					return simpleDateFormatFactory(commonDateFormat).parse(str);
 				} else if (pattern2.matcher(str).matches()) {
-					return SimpleDateFormatFactory(commonDateFormat_shortest).parse(str);
+					return simpleDateFormatFactory(commonDateFormat_shortest).parse(str);
 				} else
-					return SimpleDateFormatFactory(commonDateFormat_shorter).parse(str);
+					return simpleDateFormatFactory(commonDateFormat_shorter).parse(str);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
@@ -271,7 +271,7 @@ public class CommonUtil {
 	 * @param format 日期格式
 	 * @return 格式日期的对象
 	 */
-	public static SimpleDateFormat SimpleDateFormatFactory(String format) {
+	public static SimpleDateFormat simpleDateFormatFactory(String format) {
 		if (!formaters.containsKey(format))
 			formaters.put(format, new SimpleDateFormat(format));
 

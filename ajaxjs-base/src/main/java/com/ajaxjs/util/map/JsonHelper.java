@@ -98,7 +98,7 @@ public class JsonHelper {
 			Long[] arr = Arrays.stream((long[]) obj).boxed().toArray(Long[]::new);
 			return jsonArr(arr, v -> v.toString());
 		} else if (obj instanceof Date) {
-			return '\"' + CommonUtil.SimpleDateFormatFactory(CommonUtil.commonDateFormat).format((Date) obj) + '\"';
+			return '\"' + CommonUtil.simpleDateFormatFactory(CommonUtil.commonDateFormat).format((Date) obj) + '\"';
 		} else if (obj instanceof Map) {
 			return stringifyMap((Map<?, ?>) obj);
 		} else if (obj instanceof Map[]) {

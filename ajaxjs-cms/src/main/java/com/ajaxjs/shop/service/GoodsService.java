@@ -81,14 +81,14 @@ public class GoodsService extends BaseService<Goods> {
 	 * @return Map as a ViewObject
 	 */
 	public Map<String, Object> getGoodsDetail(long id, long userId) {
-		Goods goods = dao.findById_catelog_avatar(id);
+		Goods goods = dao.findById_catalog(id, null);
 		Map<String, Object> map = new HashMap<>();
 
 		map.put("info", goods);
 		map.put("formats", goodsFormatService.findByGoodsId(goods.getId()));
 		map.put("pics", pictureService.findAttachmentPictureByOwner(goods.getUid())); // banner images
-		map.put("userHasCollect", userId == 0L ? false : ShopBookmarkService.userHasCollect(userId, id, ShopConstant.ENTRY_GOODS));
-		map.put("cartGoodsCount", userId == 0L ? 0 : CartService.dao.getCartListCountByUserId(userId));
+//		map.put("userHasCollect", userId == 0L ? false : ShopBookmarkService.userHasCollect(userId, id, ShopConstant.ENTRY_GOODS));
+//		map.put("cartGoodsCount", userId == 0L ? 0 : CartService.dao.getCartListCountByUserId(userId));
 
 		return map;
 	}

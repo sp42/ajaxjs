@@ -630,7 +630,7 @@ Vue.component('aj-form-html-editor', {
 	
 	// 验证字段
 	function hasError (field) {
-		if (field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') 
+		if (field.getAttribute('form') != null || field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') 
 			return;
 		
 		// 获取 validity

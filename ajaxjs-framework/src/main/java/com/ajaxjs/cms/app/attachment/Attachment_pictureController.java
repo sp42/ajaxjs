@@ -22,6 +22,7 @@ import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.util.io.ImageHelper;
+import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.web.UploadFileInfo;
 
@@ -33,6 +34,8 @@ import com.ajaxjs.web.UploadFileInfo;
 @Bean
 @Path("/admin/attachmentPicture")
 public class Attachment_pictureController extends BaseController<Attachment_picture> {
+	private static final LogHelper LOGGER = LogHelper.getLog(Attachment_pictureController.class);
+	
 	@Resource("Attachment_pictureService")
 	private Attachment_pictureService service;
 
@@ -80,24 +83,25 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	@Path("upload/{id}/")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String imgUpload(MvcRequest request, @PathParam(id) Long owenerId, @QueryParam(catalogId) int catalogId) throws IOException {
+		LOGGER.info("上传图片");
 		final UploadFileInfo info = uploadByConfig(request);
 
 		if (info.isOk) {
 			// 获取图片信息
 			ImageHelper imgHelper = new ImageHelper(info.fullPath);
 
-			Attachment_picture picture = new Attachment_picture();
-			picture.setOwner(owenerId);
-			picture.setName(info.saveFileName);
-			picture.setPath(info.path);
-			picture.setPicWidth(imgHelper.width);
-			picture.setPicHeight(imgHelper.height);
-			picture.setFileSize((int) (imgHelper.file.length() / 1024));
+			Attachment_picture pic = new Attachment_picture();
+			pic.setOwner(owenerId);
+			pic.setName(info.saveFileName);
+			pic.setPath(info.path);
+			pic.setPicWidth(imgHelper.width);
+			pic.setPicHeight(imgHelper.height);
+			pic.setFileSize((int) (imgHelper.file.length() / 1024));
 
 			if (catalogId != 0)
-				picture.setCatalog(catalogId);
+				pic.setCatalog(catalogId);
 
-			final Long _newlyId = service.create(picture);
+			final Long _newlyId = service.create(pic);
 
 			return "json::" + JsonHelper.toJson(new Object() {
 				@SuppressWarnings("unused")
@@ -180,14 +184,14 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	}
 
 	@PUT
-	@Path(id)
+	@Path(idInfo)
 	@Override
 	public String update(@PathParam(id) Long id, Attachment_picture entity) {
 		return show405;
 	}
 
 	@DELETE
-	@Path(id)
+	@Path(idInfo)
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String delete(@PathParam(id) Long id, MvcRequest request) {

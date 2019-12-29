@@ -643,7 +643,7 @@ Vue.component('attachment-picture-list', {
 				<ul>\
 					<li v-for="pic in pics" style="float:left;margin-right:1%;text-align:center;">\
 						<a href="picCtx + pic.path" target="_blank"><img :src="picCtx + pic.path" style="max-width: 180px;max-height: 160px;" /></a><br />\
-						<a href="#" @click="delPic(pic.id);">删 除</a>\
+						<a href="###" @click="delPic(pic.id);">删 除</a>\
 					</li>\
 				</ul>\
 			</td><td>\
@@ -658,7 +658,7 @@ Vue.component('attachment-picture-list', {
 			aj.xhr.get(this.loadListUrl, json => this.pics = json.result);
 		},
 		delPic(picId) {
-			aj.xhr.dele(this.delImgUrl + picId, json => {
+			aj.xhr.dele(this.delImgUrl + picId + "/", json => {
 				if(json.isOk) {
 					this.loadAttachmentPictures();
 				} else {

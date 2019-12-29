@@ -45,8 +45,7 @@ public class Foreach extends SimpleTagSupport {
 	/**
 	 * 判别集合，支持 Collection、Map、Array
 	 * 
-	 * @param items
-	 *            输入的集合
+	 * @param items 输入的集合
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void setItems(Object items) { // int[]
@@ -60,7 +59,7 @@ public class Foreach extends SimpleTagSupport {
 			collection = ((Map) items).entrySet(); // set
 
 		if (items.getClass().isArray()) {
-			collection = new ArrayList<Object>();
+			collection = new ArrayList<>();
 			int length = Array.getLength(items);
 
 			for (int i = 0; i < length; i++) {
@@ -73,23 +72,31 @@ public class Foreach extends SimpleTagSupport {
 	/**
 	 * 保存变量
 	 * 
-	 * @param var
-	 *            变量
+	 * @param var 变量
 	 */
 	public void setVar(String var) {
 		this.var = var;
+	}
+
+	public String getVar() {
+		return var;
 	}
 
 	@Override
 	public void doTag() throws JspException, IOException {
 		if (collection == null || collection.iterator() == null || collection.isEmpty())
 			return;
-		
+
 		Iterator<Object> it = collection.iterator();
 		JspContext context = getJspContext();
 		int i = 0;
-		
+
 		context.setAttribute("totalCount", collection.size()); // 写出循环总次数
+		String var = getVar();
+
+		if (var == null)
+			var = "item"; // 默认
+
 		while (it.hasNext()) {
 			Object value = it.next();
 			context.setAttribute(var, value); // 每遍历出数据后写出

@@ -54,6 +54,11 @@ public interface IBaseDao<T> {
 	 * 简单关联 catelog 表，注意表名称 alies 为 gc
 	 */
 	public final static String catelog_simple_join = " LEFT JOIN general_catalog gc ON gc.id = entry.catalogId ";
+	
+	/**
+	 * 左连接分类表，实体简写必须为 e
+	 */
+	public final static String LEFT_JOIN_CATALOG = " LEFT JOIN general_catalog gc ON gc.id = e.catalogId ";
 
 	public final static String pathLike_mysql = " FROM general_catalog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catalog WHERE id = ? ) , '%'))";
 //	public final static String pathLike_sqlite = " FROM general_catalog WHERE `path` LIKE ( (SELECT `path` FROM general_catalog WHERE id = ? ) || '/%')";
@@ -95,12 +100,13 @@ public interface IBaseDao<T> {
 
 	/**
 	 * 查询单个记录，带有类别的、封面的。如果找不到则返回 null
-	 * 
-	 * @param id 记录 id
-	 * @return Bean
+
+	 * @param id		 id 记录 id
+	 * @param sqlHandler 查找的条件
+	 * @return 单个记录
 	 */
-	@Select(value = "SELECT entry.*, gc.name AS catelogName, " + selectCover + " AS cover FROM ${tableName} entry" + catelog_simple_join + " WHERE entry.id = ?")
-	public T findById_catelog_avatar(Long id);
+	@Select(value = "SELECT e.*, gc.name AS catelogName FROM ${tableName} e " + LEFT_JOIN_CATALOG + " WHERE e.id = ? " + WHERE_REMARK_AND)
+	public T findById_catalog(Long id, Function<String, String> sqlHandler);
 
 	/**
 	 * 适合附件列表 TODO

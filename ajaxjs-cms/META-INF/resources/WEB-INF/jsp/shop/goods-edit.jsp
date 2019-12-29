@@ -40,7 +40,7 @@
 					<label> 
 						<div class="label">栏 目：</div>  
 						<!-- 分类下拉 -->
-						<aj-tree-catelog-select field-name="catalogId" :catalog-id="${domainCatalog_Id}" :selected-catalog-id="${empty info || empty info.catalogId? 0 : info.catalogId}">
+			 			<aj-tree-catelog-select field-name="catalogId" :catalog-id="${domainCatalog_Id}" :selected-catalog-id="${empty info || empty info.catalogId? 0 : info.catalogId}">
 						</aj-tree-catelog-select>
 						<span style="color:red;">*</span>
 					</label>
@@ -132,14 +132,18 @@
 					<table width="90%">
 						<tr>
 							<td width="350">
-<!-- 图片上传 -->
-<ajaxjs-img-upload-perview ref="uploadControl" img-place="${(empty info.cover || isCreate) ? commonAsset.concat('/images/imgBg.png'): ctx.concat(info.cover)}" />
+						<!-- 图片上传 --> 
+						<aj-xhr-upload action="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catalog=1" :is-img-upload="true" 
+							hidden-field="cover" 
+							hidden-field-value="${info.cover}" 
+							img-place="${isCreate || empty info.cover ? commonAsset.concat('/images/imgBg.png') : ctx.concat('/').concat(info.cover)}">
+						</aj-xhr-upload>
 							</td>
 							
 							<td width="50"></td>
 							<td>
 								<attachment-picture-list pic-ctx="${ctx}"
-									upload-url="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catelog=3"
+									upload-url="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catalogId=4" 
 									blank-bg="${commonAsset.concat('/images/imgBg.png')}" 
 									load-list-url="${ctx}/admin/attachmentPicture/getAttachmentPictureByOwner/${info.uid}" 
 									del-img-url="${ctx}/admin/attachmentPicture/"></attachment-picture-list>
@@ -155,8 +159,8 @@
 				</div>
 			</form>
 	<!-- 图片上传（iframe 辅助） -->
-	<ajaxjs-fileupload-iframe upload-url="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catelog=2" ref="uploadIframe"></ajaxjs-fileupload-iframe>
-			
+<%-- 	<ajaxjs-fileupload-iframe upload-url="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catelog=2" ref="uploadIframe"></ajaxjs-fileupload-iframe>
+			 --%>
 	<!-- 弹出层上传对话框 -->
 	<aj-popup-upload ref="uploadLayer" upload-url="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catelog=1" img-place="${commonAsset.concat('/images/imgBg.png')}"></aj-popup-upload>
 		</div>
@@ -184,11 +188,11 @@
 				},
 				methods: {
 					loadGoodsFormatItemList(){
-						${!isCreate} && aj.xhr.get('${ctx}/admin/goodsFormat', json => {
+			 			${!isCreate} && aj.xhr.get('${ctx}/admin/goodsFormat', json => {
 							this.goodsFormatItemList = json.result;
 						}, {
 							goodsId: ${isCreate ? 0 : info.id} 
-						});
+						}); 
 					},
 					addGoodsFormatItems(e) {
 						e.preventDefault();
@@ -217,8 +221,8 @@
 				}
 			});
 			
-			aj.xhr.form('#goodsFormat', ajaxjs.xhr.defaultCallBack.after(App.loadGoodsFormatItemList));
-		</script>
+			aj.xhr.form('#goodsFormat', ajaxjs.xhr.defaultCallBack.after(App.loadGoodsFormatItemList), {noFormValid:true});
+		</script> 
 		<c:if test="${isCreate}">
 			<script>
 				window.isCreate = true;

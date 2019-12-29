@@ -49,7 +49,7 @@ public class DateUtil extends SimpleTagSupport {
 		if (date == null)
 			return;
 
-		String format = this.format == null ? CommonUtil.formatDateShorter(date) : CommonUtil.SimpleDateFormatFactory(this.format).format(date);
+		String format = this.format == null ? CommonUtil.formatDateShorter(date) : CommonUtil.simpleDateFormatFactory(this.format).format(date);
 		getJspContext().getOut().write(format);
 	}
 

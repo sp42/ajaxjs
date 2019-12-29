@@ -72,7 +72,6 @@ public abstract class BaseController<T> implements IController, Constant {
 	private String ui(ModelAndView mv, boolean isCreate, String text) {
 		LOGGER.info(text + "记录 UI");
 
-		prepareData(mv);
 		mv.put("isCreate", isCreate); // 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate = true 标识为创建，以便与 update 区分开来。
 		mv.put("actionName", text);
 
@@ -113,8 +112,6 @@ public abstract class BaseController<T> implements IController, Constant {
 	 * @return JSP 路径。缺省提供一个默认路径，但不一定要使用它，换别的也可以。
 	 */
 	public <E> E info(Long id, ModelAndView mv, Function<Long, E> getInfoAction) {
-		LOGGER.info("读取单个记录或者编辑某个记录：id 是 {0}", id);
-
 		E info = getInfoAction.apply(id);
 
 		if (mv != null) {

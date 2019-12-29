@@ -49,7 +49,7 @@
 		<body-content>scriptless</body-content>
 		<attribute>
 			<name>var</name>
-			<required>true</required>
+			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<description>变量名称</description>
 		</attribute>

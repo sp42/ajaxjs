@@ -21,6 +21,19 @@ public class Goods extends Product {
 	private String titlePrice;
 	
 	/**
+	 * 封面
+	 */
+	private String cover;
+	
+	public String getCover() {
+		return cover;
+	}
+
+	public void setCover(String cover) {
+		this.cover = cover;
+	}
+
+	/**
 	 * 评分
 	 */
 	private int score;

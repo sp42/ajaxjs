@@ -3,7 +3,6 @@ package com.ajaxjs.shop.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -15,10 +14,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.cms.app.CommonConstant;
-import com.ajaxjs.cms.app.catalog.CatalogServiceImpl;
 import com.ajaxjs.cms.filter.FrontEndOnlyCheck;
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
@@ -67,7 +64,7 @@ public class GoodsController extends BaseController<Goods> {
 	@Override
 	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
 		IBaseDao<Goods> dao = service.getDao();
-		super.editUI(id, mv, dao::findById_catelog_avatar);
+		super.editUI(id, mv, dao::findById);
 		return jsp("shop/goods-edit");
 	}
 	
@@ -146,9 +143,9 @@ public class GoodsController extends BaseController<Goods> {
 		sellerService.findList().forEach(seller -> map.put(seller.getId(), seller));
 		mv.put("sellers", map);
 		mv.put(domainCatalog_Id, service.getDomainCatalogId());
-		
-		Map<Long, BaseModel> cMap = CatalogServiceImpl.list_bean2map_id_as_key(new CatalogServiceImpl().findAllListByParentId(service.getDomainCatalogId()));
-		mv.put("goodsCatalogs", cMap);
+//		
+//		Map<Long, BaseModel> cMap = CatalogServiceImpl.list_bean2map_id_as_key(new CatalogServiceImpl().findAllListByParentId(service.getDomainCatalogId()));
+//		mv.put("goodsCatalogs", cMap);
 	
 		super.prepareData(mv);
 	}
