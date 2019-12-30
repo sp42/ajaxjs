@@ -81,7 +81,7 @@ public abstract class BaseController<T> implements IController, Constant {
 	/**
 	 * 创建实体
 	 * 
-	 * @param entry 实体
+	 * @param entry        实体
 	 * @param createAction
 	 * @return
 	 */
@@ -107,7 +107,7 @@ public abstract class BaseController<T> implements IController, Constant {
 	/**
 	 * 读取单个记录或者编辑某个记录，保存到 ModelAndView 中（供视图渲染用）。
 	 * 
-	 * @param id ID 序号
+	 * @param id    ID 序号
 	 * @param model Model 模型
 	 * @return JSP 路径。缺省提供一个默认路径，但不一定要使用它，换别的也可以。
 	 */
@@ -124,8 +124,8 @@ public abstract class BaseController<T> implements IController, Constant {
 
 	/**
 	 * 
-	 * @param id ID 序号
-	 * @param mv Model 模型
+	 * @param id      ID 序号
+	 * @param mv      Model 模型
 	 * @param service
 	 * @return
 	 */
@@ -146,7 +146,7 @@ public abstract class BaseController<T> implements IController, Constant {
 	/**
 	 * 修改实体
 	 * 
-	 * @param id 实体 Long
+	 * @param id     实体 Long
 	 * @param entity 实体
 	 * @return JSON 响应
 	 */
@@ -177,7 +177,7 @@ public abstract class BaseController<T> implements IController, Constant {
 	/**
 	 * 根据 id 删除实体
 	 * 
-	 * @param id 实体 id
+	 * @param id    实体 id
 	 * @param model 页面 Model 模型
 	 * @return JSON 响应
 	 */
@@ -236,16 +236,16 @@ public abstract class BaseController<T> implements IController, Constant {
 	 * 
 	 * @param mv
 	 * @param pageResult
-	 * @param isAdmin 是否后台列表
+	 * @param isAdmin    是否后台列表
 	 * @return
 	 */
 	public String page(ModelAndView mv, PageResult<T> pageResult, boolean isAdmin) {
 		prepareData(mv);
 		mv.put(PageResult, pageResult);
-		
+
 		return list(isAdmin);
 	}
-	
+
 	public String page(ModelAndView mv, PageResult<T> pageResult) {
 		return page(mv, pageResult, CommonConstant.UI_ADMIN);
 	}
@@ -268,7 +268,7 @@ public abstract class BaseController<T> implements IController, Constant {
 	/**
 	 * 将 Object 转换为 JSON 字符串
 	 * 
-	 * @param obj 普通对象
+	 * @param obj   普通对象
 	 * @param isAdd 是否添加生成 json 的前缀 json::
 	 * @return JSON 字符串
 	 */
@@ -319,7 +319,6 @@ public abstract class BaseController<T> implements IController, Constant {
 		return String.format(json_not_ok, JsonHelper.jsonString_covernt(msg));
 	}
 
-
 	/**
 	 * 显示 HTTP 405 禁止操作
 	 */
@@ -348,7 +347,7 @@ public abstract class BaseController<T> implements IController, Constant {
 	public static String page(String jsp) {
 		return jsp("pages/" + jsp);
 	}
-	
+
 	/**
 	 * 后台用页面模板目录
 	 * 
@@ -407,6 +406,27 @@ public abstract class BaseController<T> implements IController, Constant {
 		return page(getService().getShortName() + "-admin-list-xsl");
 	}
 
+	public static UploadFileInfo uploadByConfig(MvcRequest request, Consumer<UploadFileInfo> fn) throws IOException {
+		UploadFileInfo info = new UploadFileInfo();
+		info.isFileOverwrite = ConfigService.getValueAsBool("uploadFile.isFileOverwrite");
+		info.saveFolder = ConfigService.getValueAsBool("uploadFile.saveFolder.isUsingRelativePath")
+				? request.mappath(ConfigService.getValueAsString("uploadFile.saveFolder.relativePath")) + File.separator
+				: ConfigService.getValueAsString("uploadFile.saveFolder.absolutePath");
+
+		if (ConfigService.getValueAsBool("uploadFile.isAutoNewFileName"))
+			info.saveFileName = new SnowflakeIdWorker(0, 0).nextId() + "";
+
+		if (fn != null)
+			fn.accept(info);
+
+		new UploadFile(request, info).upload();
+
+		info.path = ConfigService.getValueAsString("uploadFile.saveFolder.relativePath") + "/" + info.saveFileName;
+		info.visitPath = request.getContextPath() + info.path;
+
+		return info;
+	}
+
 	/**
 	 * 执行文件上传，读取默认配置的上传规则
 	 * 
@@ -415,20 +435,7 @@ public abstract class BaseController<T> implements IController, Constant {
 	 * @throws IOException
 	 */
 	public static UploadFileInfo uploadByConfig(MvcRequest request) throws IOException {
-		UploadFileInfo info = new UploadFileInfo();
-		info.isFileOverwrite = ConfigService.getValueAsBool("uploadFile.isFileOverwrite");
-		info.saveFolder = ConfigService.getValueAsBool("uploadFile.saveFolder.isUsingRelativePath") ? request.mappath(ConfigService.getValueAsString("uploadFile.saveFolder.relativePath")) + File.separator
-				: ConfigService.getValueAsString("uploadFile.saveFolder.absolutePath");
-
-		if (ConfigService.getValueAsBool("uploadFile.isAutoNewFileName"))
-			info.saveFileName = new SnowflakeIdWorker(0, 0).nextId() + "";
-
-		new UploadFile(request, info).upload();
-
-		info.path = ConfigService.getValueAsString("uploadFile.saveFolder.relativePath") + "/" + info.saveFileName;
-		info.visitPath = request.getContextPath() + info.path;
-
-		return info;
+		return uploadByConfig(request, null);
 	}
 
 }

@@ -1,4 +1,4 @@
-// build date:Fri Dec 20 15:18:35 GMT+08:00 2019
+// build date:Mon Dec 30 10:39:30 GMT+08:00 2019
 
 ajaxjs = aj = function(cssSelector, fn) {
 return Element.prototype.$.apply(document, arguments);
@@ -1425,7 +1425,7 @@ objChildNode = objChildNode.nextSibling;
 });
 ;(function(){
 function hasError (field) {
-if (field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') 
+if (field.getAttribute('form') != null || field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') 
 return;
 var validity = field.validity;
 if(!validity)return 'No validity';
@@ -3102,10 +3102,13 @@ isImgSize : false,
 errMsg : null,	
 newlyId : null,	
 radomId : Math.round(Math.random() * 1000),	
-uploadOk_callback: this.hiddenField ? json => {
+uplodedFileUrl:null,
+uploadOk_callback: json => {
+this.uplodedFileUrl = json.imgUrl;
+if(this.hiddenField)
 this.$el.$('input[name=' + this.hiddenField + ']').value = json.imgUrl;
 ajaxjs.xhr.defaultCallBack(json);
-} : ajaxjs.xhr.defaultCallBack,	
+},	
 imgBase64Str : null,	
 progress : 0
 };
@@ -3336,7 +3339,7 @@ template : '<table width="100%"><tr><td>\
 <ul>\
 <li v-for="pic in pics" style="float:left;margin-right:1%;text-align:center;">\
 <a href="picCtx + pic.path" target="_blank"><img :src="picCtx + pic.path" style="max-width: 180px;max-height: 160px;" /></a><br />\
-<a href="#" @click="delPic(pic.id);">删 除</a>\
+<a href="###" @click="delPic(pic.id);">删 除</a>\
 </li>\
 </ul>\
 </td><td>\
@@ -3351,7 +3354,7 @@ loadAttachmentPictures() {
 aj.xhr.get(this.loadListUrl, json => this.pics = json.result);
 },
 delPic(picId) {
-aj.xhr.dele(this.delImgUrl + picId, json => {
+aj.xhr.dele(this.delImgUrl + picId + "/", json => {
 if(json.isOk) {
 this.loadAttachmentPictures();
 } else {
