@@ -26,7 +26,6 @@ import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.model.OrderItem;
 import com.ajaxjs.shop.model.Seller;
 import com.ajaxjs.shop.service.OrderItemService;
-import com.ajaxjs.shop.service.SellerService;
 
 /**
  * 
@@ -55,15 +54,12 @@ public class OrderItemController extends BaseController<OrderItem> {
 		}
 	}
 
-	@Resource("SellerService")
-	private SellerService sellerService;
-
 	@Override
 	public void prepareData(ModelAndView mv) {
 		super.prepareData(mv);
 		// 商家数据，记录不多，可以这样做
 		Map<Long, Seller> map = new HashMap<>();
-		sellerService.findList().forEach(seller -> map.put(seller.getId(), seller));
+		SellerController.SellerService.dao.findList(null).forEach(seller -> map.put(seller.getId(), seller));
 		
 		mv.put("sellers", map);
 		mv.put("TradeStatusDict", ShopConstant.TradeStatus);

@@ -1,6 +1,8 @@
-package com.ajaxjs.shop.model;
+package com.ajaxjs.shop.dep;
 
 import java.util.Date;
+
+import com.ajaxjs.shop.model.Goods;
 
 /**
  * 团购

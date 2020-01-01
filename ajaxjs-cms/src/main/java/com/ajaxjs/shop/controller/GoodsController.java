@@ -26,7 +26,6 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.shop.model.Goods;
 import com.ajaxjs.shop.model.Seller;
 import com.ajaxjs.shop.service.GoodsService;
-import com.ajaxjs.shop.service.SellerService;
 import com.ajaxjs.user.controller.BaseUserController;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -131,16 +130,13 @@ public class GoodsController extends BaseController<Goods> {
 	@Override
 	public IBaseService<Goods> getService() {
 		return service;
-	}
-
-	@Resource("SellerService")
-	private SellerService sellerService;
+	} 
 	
 	@Override
 	public void prepareData(ModelAndView mv) {
 		// 商家数据，记录不多，可以这样做
 		Map<Long, Seller> map = new HashMap<>();
-		sellerService.findList().forEach(seller -> map.put(seller.getId(), seller));
+		SellerController.SellerService.dao.findList(null).forEach(seller -> map.put(seller.getId(), seller));
 		mv.put("sellers", map);
 		mv.put(domainCatalog_Id, service.getDomainCatalogId());
 //		

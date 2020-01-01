@@ -1,7 +1,6 @@
 package com.ajaxjs.shop.service;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.cms.app.attachment.Attachment_pictureService;
@@ -10,15 +9,14 @@ import com.ajaxjs.cms.controller.DataDictController;
 import com.ajaxjs.cms.controller.TopicController;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.orm.annotation.Select;
-import com.ajaxjs.orm.annotation.TableName;
 import com.ajaxjs.shop.ShopConstant;
+import com.ajaxjs.shop.dao.GoodsDao;
+import com.ajaxjs.shop.dep.GroupService;
 import com.ajaxjs.shop.model.Goods;
 
 /**
@@ -45,22 +43,11 @@ public class GoodsService extends BaseService<Goods> {
 
 	@Resource("CartService")
 	private CartService shopCartService;
-
-	@TableName(value = "shop_goods", beanClass = Goods.class)
-	public static interface GoodsDao extends IBaseDao<Goods> {
-		@Select(value = "SELECT entry.*, gc.name AS catelogName, " + selectCover + " AS cover, "
-				+ "(SELECT GROUP_CONCAT(id, '|', name, '|', price, '|', uid, '|', coverPrice) FROM shop_goods_format f WHERE entry.id = f.goodsId ) AS formats "
-				+ "FROM shop_goods entry " + catelog_simple_join + " ORDER BY entry.id DESC", 
-				countSql = "SELECT COUNT(id) AS count FROM ${tableName}")
-		PageResult<Map<String, Object>> findGoods_Format(int start, int limit);
-		
-		
-		@Select("SELECT o.buyerId, o.createDate, u.username, u.avatar FROM shop_order_item o "+
-			"INNER JOIN user u ON u.id = o.buyerId "+
-			"INNER JOIN shop_goods entry ON entry.id = o.goodsId "+
-			"INNER JOIN shop_group g ON g.goodsId = entry.id " +
-			"WHERE g.id = ?")
-		List<Map<String, Object>> findWhoBoughtGoods(long goodsId);
+	
+	static {
+		DataDictController.DataDictService.Entry_IdName.put(ShopConstant.ENTRY_GOODS, new GoodsService().getUiName());
+		DataDictController.DataDictService.Entry_IdName.put(ShopConstant.ENTRY_GROUP, new GroupService().getUiName());
+		DataDictController.DataDictService.Entry_IdName.put(DataDictController.DataDictService.ENTRY_TOPIC, TopicController.service.getUiName());
 	}
 
 	/**
@@ -91,12 +78,6 @@ public class GoodsService extends BaseService<Goods> {
 //		map.put("cartGoodsCount", userId == 0L ? 0 : CartService.dao.getCartListCountByUserId(userId));
 
 		return map;
-	}
-
-	static {
-		DataDictController.DataDictService.Entry_IdName.put(ShopConstant.ENTRY_GOODS, new GoodsService().getUiName());
-		DataDictController.DataDictService.Entry_IdName.put(ShopConstant.ENTRY_GROUP, new GroupService().getUiName());
-		DataDictController.DataDictService.Entry_IdName.put(DataDictController.DataDictService.ENTRY_TOPIC, TopicController.service.getUiName());
 	}
 
 	public int getDomainCatalogId() {

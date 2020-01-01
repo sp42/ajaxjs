@@ -1,4 +1,4 @@
-package com.ajaxjs.shop.service;
+package com.ajaxjs.shop.dep;
 
 import java.util.List;
 

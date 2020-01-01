@@ -1,4 +1,4 @@
-package com.ajaxjs.shop.controller;
+package com.ajaxjs.shop.dep;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -16,8 +16,6 @@ import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.shop.model.GroupItem;
-import com.ajaxjs.shop.service.GroupItemService;
 
 /**
  * 

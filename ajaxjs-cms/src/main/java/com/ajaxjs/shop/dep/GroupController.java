@@ -1,4 +1,4 @@
-package com.ajaxjs.shop.controller;
+package com.ajaxjs.shop.dep;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,10 +22,9 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.shop.ShopConstant;
-import com.ajaxjs.shop.model.Group;
+import com.ajaxjs.shop.controller.SellerController;
+import com.ajaxjs.shop.controller.SellerController.SellerService;
 import com.ajaxjs.shop.model.Seller;
-import com.ajaxjs.shop.service.GroupService;
-import com.ajaxjs.shop.service.SellerService;
 import com.ajaxjs.util.map.JsonHelper;
 
 /**
@@ -104,7 +103,7 @@ public class GroupController extends BaseController<Group> {
 	@Override
 	public void prepareData(ModelAndView mv) {
 		Map<Long, Seller> map = new HashMap<>();
-		sellerService.findList().forEach(seller -> map.put(seller.getId(), seller));
+		SellerController.SellerService.dao.findList(null).forEach(seller -> map.put(seller.getId(), seller));
 		mv.put("sellers", map);
 		
 		mv.put("statusMap", ShopConstant.GroupStatus);

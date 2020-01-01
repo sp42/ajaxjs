@@ -1,4 +1,4 @@
-package com.ajaxjs.shop.service;
+package com.ajaxjs.shop.dep;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +17,8 @@ import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
 import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.model.Cart;
-import com.ajaxjs.shop.model.Group;
+import com.ajaxjs.shop.service.CartService;
+import com.ajaxjs.shop.service.GoodsFormatService;
 
 @Bean
 public class GroupService extends BaseService<Group> {

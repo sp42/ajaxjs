@@ -1,4 +1,4 @@
-package com.ajaxjs.shop.controller;
+package com.ajaxjs.shop.dep;
 
 import java.util.List;
 
@@ -22,7 +22,6 @@ import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.shop.service.SectionService;
 
 @Path("/admin/section")
 @Bean

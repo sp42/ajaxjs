@@ -1,4 +1,4 @@
-package com.ajaxjs.shop.model;
+package com.ajaxjs.shop.dep;
 
 import com.ajaxjs.framework.BaseModel;
 

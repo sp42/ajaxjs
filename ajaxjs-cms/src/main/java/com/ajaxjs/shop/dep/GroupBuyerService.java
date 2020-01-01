@@ -1,11 +1,10 @@
-package com.ajaxjs.shop.service;
+package com.ajaxjs.shop.dep;
 
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.orm.annotation.TableName;
-import com.ajaxjs.shop.model.GroupBuyer;
 
 @Bean
 public class GroupBuyerService extends BaseService<GroupBuyer> {
