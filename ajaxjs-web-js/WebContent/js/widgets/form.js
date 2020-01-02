@@ -283,13 +283,13 @@ Vue.component('aj-form-html-editor', {
 		},
 		uploadImageActionUrl: String
 	},
-	beforeCreate : function() {
+	beforeCreate() {
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", this.ajResources.libraryUse + '/htmleditor-tag.htm', false);// 同步方式请求
 		xhr.send(null);
 		this.$options.template = xhr.responseText;
 	},
-	mounted : function() {
+	mounted() {
 		var el = this.$el;
 		this.iframeEl 	  = el.$('iframe');
 		this.sourceEditor = el.$('textarea');
@@ -357,7 +357,7 @@ Vue.component('aj-form-html-editor', {
 				});
 			}  
 		},
-		onToolBarClk : function(e) {
+		onToolBarClk(e) {
 			var el = e.target, clsName = el.className;
 			
 			clsName = clsName.split(' ').shift();
@@ -393,7 +393,7 @@ Vue.component('aj-form-html-editor', {
 			}
 		},
 		
-		format : function (type, para) {
+		format(type, para) {
 			this.iframeWin.focus();
 			
 			if (!para) {
@@ -407,7 +407,7 @@ Vue.component('aj-form-html-editor', {
 			this.iframeWin.focus();
 		},
 		
-		insertEl : function (html) {// 重複？
+		insertEl(html) {// 重複？
 			this.iframeDoc.body.innerHTML = html;
 		},
 		
@@ -437,16 +437,15 @@ Vue.component('aj-form-html-editor', {
 		},
 		
 		// 設置 HTML
-		setValue : function(v) {
-			var self = this;
-			setTimeout(function() {
-				self.iframeWin.document.body.innerHTML = v;
+		setValue(v) {
+			setTimeout(() => {
+				this.iframeWin.document.body.innerHTML = v;
 // self.iframeBody.innerHTML = v;
 			}, 500);
 		},
 		
 		// 獲取 HTML
-		getValue : function(cfg) {
+		getValue(cfg) {
 			var result = this.iframeBody.innerHTML;
 			
 			if(cfg && cfg.cleanWord)
@@ -459,12 +458,10 @@ Vue.component('aj-form-html-editor', {
 		},
 		
 		// MSWordHtmlCleaners.js https://gist.github.com/ronanguilloux/2915995
-		cleanPaste : function(html) {
+		cleanPaste(html) {
 		    // Remove additional MS Word content
-		    html = html.replace(/<(\/)*(\\?xml:|meta|link|span|font|del|ins|st1:|[ovwxp]:)((.|\s)*?)>/gi, ''); // Unwanted
-																												// tags
-		    html = html.replace(/(class|style|type|start)=("(.*?)"|(\w*))/gi, ''); // Unwanted
-																					// sttributes
+		    html = html.replace(/<(\/)*(\\?xml:|meta|link|span|font|del|ins|st1:|[ovwxp]:)((.|\s)*?)>/gi, ''); // Unwanted tags
+		    html = html.replace(/(class|style|type|start)=("(.*?)"|(\w*))/gi, ''); // Unwanted sttributes
 		    html = html.replace(/<style(.*?)style>/gi, '');   // Style tags
 		    html = html.replace(/<script(.*?)script>/gi, ''); // Script tags
 		    html = html.replace(/<!--(.*?)-->/gi, '');        // HTML comments
@@ -473,7 +470,7 @@ Vue.component('aj-form-html-editor', {
 		},
 		
 		// 切換 HTML 編輯 or 可視化編輯
-		setMode : function () {
+		setMode() {
 			if (this.mode == 'iframe') {
 				this.iframeEl.classList.add('hide');
 				this.sourceEditor.classList.remove('hide');
@@ -490,7 +487,7 @@ Vue.component('aj-form-html-editor', {
 		},
 		
 		// 使图片灰色
-		grayImg: function (isGray) {
+		grayImg(isGray) {
 			this.toolbarEl.$('span', function(item) {
 				if(item.className.indexOf('switchMode') != -1) {
 					item.style.color = isGray ? 'red' : '';
@@ -500,7 +497,7 @@ Vue.component('aj-form-html-editor', {
 			});
 		},
 		
-		onFontfamilyChoserClk : function(e) {
+		onFontfamilyChoserClk(e) {
 			var el = e.target; 
 			
 			this.format('fontname', el.innerHTML);
@@ -508,12 +505,12 @@ Vue.component('aj-form-html-editor', {
 			var menuPanel = el.parentNode;
 			menuPanel.style.display = 'none';
 
-			setTimeout(function() {
+			setTimeout(() => {
 				menuPanel.style.display = '';
 			}, 300);
 		},
 		
-		onFontsizeChoserClk : function(e) {	
+		onFontsizeChoserClk(e) {	
 			var el = e.target;
 			for(var els = e.currentTarget.children, i = 0, j = els.length; i < j; i++)
 				if(el == els[i]) break;
@@ -789,14 +786,14 @@ Vue.component('aj-form-html-editor', {
 if(!aj.form)
 	aj.form = {};
 
-aj.form.betweenDate = function(el){	
+aj.form.betweenDate = function(el) {	
 	new Vue({
 		el : el,
 		methods:{
 			valid(e){
 				var start = this.$el.$('input[name=startDate]').value, end = this.$el.$('input[name=endDate]').value;
 				
-				if(!start||!end){
+				if(!start||!end) {
 					aj.showOk("输入数据不能为空");					
 					e.preventDefault();
 				}

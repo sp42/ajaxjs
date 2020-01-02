@@ -29,10 +29,10 @@ Vue.component('aj-simple-list', {
 					<a :href="(hrefStr || \'\').replace(\'{id}\', item.id)" @click="show(item.id, index, $event)" :id="item.id">{{item.name}}</a>\
 				</slot>\
 			</li></ul>',
-	mounted : function() {
-		ajaxjs.xhr.get(this.realApiUrl, function(json) {
+	mounted() {
+		ajaxjs.xhr.get(this.realApiUrl, json => {
 			aj.apply(this, json);
-		}.bind(this), this.baseParam);
+		}, this.baseParam);
 	}
 });
 
@@ -44,7 +44,7 @@ Vue.component('aj-simple-list', {
 Vue.component('aj-page-list', {
 	mixins: [aj._list],
 	
-	data : function() {
+	data() {
 		return {
 			pageSize : this.initPageSize,
 			total : 0,
@@ -93,9 +93,9 @@ Vue.component('aj-page-list', {
 				</div>\
 			</footer><div v-show="!!autoLoadWhenReachedBottom" class="buttom"></div>\
 		</div>',
-	mounted : function() {
+	mounted() {
 //		ajaxjs.xhr.get(this.$props.apiUrl, this.doAjaxGet, {
-			ajaxjs.xhr.get(this.realApiUrl, this.doAjaxGet, {
+		ajaxjs.xhr.get(this.realApiUrl, this.doAjaxGet, {
 			limit : this.pageSize
 		});
 		
@@ -105,62 +105,60 @@ Vue.component('aj-page-list', {
 				spyOn : thish.$el.$('.buttom')
 			});
 			
-			scrollSpy.onScrollSpyBackInSight = function (e) {
+			scrollSpy.onScrollSpyBackInSight = e => {
 				this.nextPage();
-			}.bind(this);
+			};
 		}
 	},
 	
-	created : function() {
+	created() {
 		this.BUS.$on('base-param-change', this.onBaseParamChange.bind(this));
 	},
 	
 	methods : {
-		count: function () {
+		count() {
 			var totalPage = this.total / this.pageSize, yushu = this.total % this.pageSize;
 			this.totalPage = parseInt(yushu == 0 ? totalPage : totalPage + 1);
 			this.currentPage = (this.pageStart / this.pageSize) + 1;
 		},
-		previousPage : function() {
+		previousPage() {
 			this.pageStart -= this.pageSize;
 			this.currentPage = (this.pageStart / this.pageSize) + 1;
 			
 			this.ajaxGet();
 		},
-		nextPage : function() {
+		nextPage() {
 			this.pageStart += this.pageSize;
 			this.currentPage = (this.pageStart / this.pageSize) + 1;
 			
 			this.ajaxGet();
 		},
-		onPageSizeChange : function(e) {
+		onPageSizeChange(e) {
 			this.pageSize = Number(e.target.value);
 			this.count();
 			this.ajaxGet();
 		},
 		
-		doAjaxGet : function(json) {
+		doAjaxGet(json) {
 			this.total = json.total;
 			this.result = this.isDataAppend ? this.result.concat(json.result) : json.result;
 			this.count();
 		}, 
-		ajaxGet : function () {
+		ajaxGet() {
 			var params = {};
-			
 			aj.apply(params, { start : this.pageStart, limit : this.pageSize });
-			
 			this.baseParam && aj.apply(params, this.baseParam);
 			
 //			ajaxjs.xhr.get(this.$props.apiUrl, this.doAjaxGet, params);
 			ajaxjs.xhr.get(this.realApiUrl, this.doAjaxGet, params);
 		},
 		// 分页，跳到第几页，下拉控件传入指定的页码
-		jumpPageBySelect : function (e) {
+		jumpPageBySelect(e) {
 			var selectEl = e.target;
 			this.currentPage = selectEl.options[selectEl.selectedIndex].value;
 		},
 		
-		onBaseParamChange : function(params) {
+		onBaseParamChange(params) {
 			aj.apply(this.baseParam, params);
 			
 			this.pageStart = 0; // 每次 baseParam 被改变，都是从第一笔开始
@@ -168,7 +166,7 @@ Vue.component('aj-page-list', {
 		}
 	},
 	watch: {
-		'baseParam' : function(index, oldIndex) {
+		baseParam(index, oldIndex) {
 			this.ajaxGet();
 		}
 	}
@@ -181,7 +179,6 @@ Vue.component('aj-page-list', {
  *            如果是在区域内滚动的话，则要传入滚动面板的元素，移动端会适用
  */
 aj.scrollSpy = function(cfg) {
-   
     var isScrollInElement = !!(cfg && cfg.scrollInElement);
     
     var handleScroll = function () {
@@ -200,7 +197,6 @@ aj.scrollSpy = function(cfg) {
             
             var usableViewPosition = currentViewPosition;
 
-            
             if (element.isInViewPort == false) 
                 usableViewPosition -= el.clientHeight;
 

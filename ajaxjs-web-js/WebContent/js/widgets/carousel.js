@@ -32,18 +32,17 @@ aj._carousel = {
 		initItems : Array // 输入的数据
 	},
 	
-	data : function() {
+	data() {
 		return {
 			selected : 0
 		};
 	},
 	
-	mounted: function() {
-		
+	mounted() {
 		this.mover = this.$el.$('div.content'); 
 		var mover = this.mover, children = mover.children, len = children.length;
 		
-		setTimeout(function() {
+		setTimeout(() => {
 			var stepWidth = this.setItemWidth();
 			
 			if(this.isMagic) 
@@ -66,7 +65,7 @@ aj._carousel = {
 					headerUl.children[i].style.width = tabWidth;
 			
 			this.doHeight(this.selected);
-		}.bind(this), 400);
+		}, 400);
 		
 		// 登记 resize 事件，以便 resize 容器的时候调整大小。
 		// 使用 isUsePx = true 的好处是不用登记 resize 事件
@@ -74,7 +73,7 @@ aj._carousel = {
 	},
 	
 	watch:{
-		'selected' : function(index, oldIndex) {
+		selected(index, oldIndex) {
 			if(this.$isStop) // 停止，不切换，在做向导式时有用
 				return;
 			
@@ -94,12 +93,12 @@ aj._carousel = {
 	},
 	
 	methods : {
-		setItemWidth : function() {
+		setItemWidth() {
 			this.stepWidth = this.stepWidth || this.mover.parentNode.clientWidth || window.innerWidth; // 获取容器宽度作为 item 宽度
 			return this.stepWidth;
 		},
 		
-		changeTab : function(index) {
+		changeTab(index) {
 			this.selected = index;
 			this.go(index);
 		},
@@ -107,10 +106,9 @@ aj._carousel = {
 		/**
 		 * 跳到指定的那一帧
 		 * 
-		 * @param {Number}
-		 *            i
+		 * @param {Number} i
 		 */
-		go : function(i) {
+		go(i) {
 			this.$emit('before-carousel-item-switch', this, i);
 			if(this.$isStop) // 停止，不切换，在做向导式时有用
 				return;
@@ -154,7 +152,7 @@ aj._carousel = {
 		},
 		
 	    // 跳到前一帧。
-		 goPrevious : function() {
+		 goPrevious() {
 			if(this.$isStop) // 停止，不切换，在做向导式时有用
 				return;
 				
@@ -169,7 +167,7 @@ aj._carousel = {
 	    /**
 		 * 跳到下一帧。
 		 */
-	    goNext : function() {
+	    goNext() {
 			if(this.$isStop) // 停止，不切换，在做向导式时有用
 				return;
 			
@@ -182,7 +180,7 @@ aj._carousel = {
 	    },
 		
 	    // 重复了
-	    onResize : function () {
+	    onResize() {
 			var stepWidth   = this.mover.parentNode.clientWidth; // 获取容器宽度作为
 																	// item 宽度
 			this.mover.style.width = this.isUsePx ? (stepWidth * this.len) +'px' : this.len + '00%';
@@ -192,7 +190,7 @@ aj._carousel = {
 		},
 		
 		// 控制高度 解决高度问题
-		doHeight: function(i) {
+		doHeight(i) {
 			if(this.isGetCurrentHeight) {
 				var mover = this.mover, children = mover.children, len = children.length;
 				for(var p = 0; p < len; p++) {
@@ -205,7 +203,7 @@ aj._carousel = {
 			}
 		},
 		
-		doAutoHeight : function (nextItem) {
+		doAutoHeight(nextItem) {
 			 if(this.autoHeight) {
 				 var tabHeaderHeight = 0;
 				 if(this.tabHeader) 
@@ -215,21 +213,19 @@ aj._carousel = {
 			 }
 		 },
 		 
-		 autoChangeTab: function(e) {
+		 autoChangeTab(e) {
 			if(this.$isStop) // 停止，不切换，在做向导式时有用
 				return;
 				
 			 var el = e.currentTarget;
 			 var children = el.parentNode.children;
 			 for(var i = 0, j = children.length; i < j; i++) {
-				 if(el == children[i]) {
+				 if(el == children[i]) 
 					 break;
-				 }
 			 }
 
 			 this.selected = i;
 		 }
-			
 	}
 };
 
@@ -244,7 +240,7 @@ Vue.component('aj-carousel', {
 				<div v-for="(item, index) in items" :class="{\'active\': index === selected}" v-html="item.content"></div>\
 			</div>\
 		</div>',
-	data : function() {
+	data() {
 		return {
 			items : this.initItems || [
 				{name : '杜甫：望岳', content : '岱宗夫如何，齊魯青未了。<br>\
@@ -296,7 +292,7 @@ Vue.component('aj-banner', {
 				<div v-for="(item, index) in items" :class="{\'active\': index === selected}" v-html="getContent(item.content, item.href)"></div>\
 			</div>\
 		</div>',
-	data : function() {
+	data() {
 		return {
 			items : this.initItems || [
 				{name : '杜甫：望岳', content : '<img src="../images/20150826162352938.jpg" />', href : 'http://qq.com'},
@@ -307,15 +303,15 @@ Vue.component('aj-banner', {
 		}; 
 	},
 	
-	mounted: function() {
+	mounted() {
 		this.loop();
 	},
 	methods:{
-	    loop : function() {
+	    loop() {
 	    	if(this.autoLoop)
 	    		this.loopTimer = window.setInterval(this.goNext.bind(this), this.autoLoop);
 	    },
-	    getContent : function(content, href) {
+	    getContent(content, href) {
 	    	if(!href)
 	    		return content;
 	    	else

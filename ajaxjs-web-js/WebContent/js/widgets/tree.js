@@ -147,7 +147,7 @@ Vue.component('aj-select', {
 			required: true
 		}
 	},
-	data : function() {
+	data() {
         return {
             selected : ""
         };
@@ -156,7 +156,7 @@ Vue.component('aj-select', {
         <option v-for="(key, v) in json" :value="v">{{key}}</option>\
 		</select>',
 		
-	created:function(){
+	created() {
 		if(this.defaultSelected) {
 			this.selected = this.defaultSelected;
 		} else {
@@ -168,10 +168,10 @@ Vue.component('aj-select', {
 	},
 	
 	methods : {
-		onSelected : function(e) {
+		onSelected(e) {
 		},
 		
-	    getSelected: function(){
+	    getSelected() {
 	        //获取选中的优惠券
 	        console.log(this.selected)
 	    }
@@ -195,13 +195,13 @@ Vue.component('aj-select-arr', {
 			default: "0"
 		}
 	},
-	data : function() {
+	data() {
         return {
             json : {}
         };
     },
 	template:'<aj-select :json="json" :field-name="fieldName" :default-selected="defaultSelected"></aj-select>',
-	mounted : function(){
+	mounted() {
 		var self = this; 
 		aj.xhr.get(this.ajResources.ctx + this.url, function(arr) {
 			var json = {0: self.firstOption};
@@ -233,18 +233,18 @@ Vue.component('aj-tree-catelog-select', {
 	},
 	template : '<select :name="fieldName" @change="onSelected($event);" class="aj-tree-catelog-select ajaxjs-select" style="width: 200px;"></select>',
 		
-	mounted : function() {
+	mounted() {
 		aj.xhr.get(this.ajResources.ctx + "/admin/catelog/getListAndSubByParentId", this.load.bind(this), {parentId : this.catalogId});
 	},
 	
 	methods : {
-		load : function(json) {
+		load(json) {
 			var catalogArr = json.result;
 			var selectUI = new ajaxjs.tree.selectUI();
 			selectUI.renderer(catalogArr, this.$el, this.selectedCatalogId, {makeAllOption : false});
 		},
 		
-		onSelected : function(e) {
+		onSelected(e) {
 			if(this.isAutoJump) {
 				var el = e.target, catalogId = el.selectedOptions[0].value;
 				location.assign('?' + this.fieldName + '=' + catalogId);
@@ -264,8 +264,7 @@ Vue.component('aj-tree-user-role-select', {
 		json:Array
 	},
 	template : '<select name="roleId" class="ajaxjs-select"></select>',
-	
-	mounted () {
+	mounted() {
 		new ajaxjs.tree.selectUI().renderer(this.json, this.$el, this.value, {makeAllOption : false});
 	}
 });
@@ -302,18 +301,18 @@ Vue.component('aj-china-area', {
     },
     
     watch:{ // 令下一级修改
-        province: function(val, oldval) {
+        province(val, oldval) {
 //            if(val !== oldval) 
 //                this.city = '';
             
         },
-//        city: function(val, oldval) {
+//        city(val, oldval) {
 //            if(val !== oldval)
 //                this.district = '';
 //        }
     },
    
-    computed : {
+    computed: {
         citys() {
             if(!this.province)
                 return;
@@ -348,37 +347,36 @@ Vue.component('aj-tree-item', {
         },
         eventBus: Object
     },
-    data: function () {
+    data() {
         return {
             open: false
         };
     },
     computed: {
-        isFolder: function () {
+        isFolder() {
             return this.model.children && this.model.children.length;
         }
     },
     methods: {
-        toggle: function () {
+        toggle() {
             if (this.isFolder)
                 this.open = !this.open;
             
-            if(this.eventBus) {
+            if(this.eventBus) 
             	this.eventBus.$emit('treenodeclick', this.model);
-            }
         },
-        fireEvent(){
+        fireEvent() {
         	//this.$emit('treenodeclick', this.model);
         },
         // 变为文件夹
-        changeType: function () {
+        changeType() {
             if (!this.isFolder) {
                 Vue.set(this.model, 'children', []);
                 this.addChild();
                 this.open = true;
             }
         },
-        addChild: function () {
+        addChild() {
             this.model.children.push({
                 name: 'new stuff'
             });
@@ -392,13 +390,13 @@ Vue.component('aj-tree', {
 		url: String, 
 		topNodeName : String // 根节点显示名称
 	},
-	data: function() {
+	data() {
 		return {
 			treeData: { name : this.topNodeName || 'TOP', children : null },
 			eventBus: new Vue()
 		};
 	},
-	mounted : function() {
+	mounted() {
 		aj.xhr.get(this.ajResources.ctx + this.url, 
 			json => 
 				this.treeData.children = this.makeTree(json.result)

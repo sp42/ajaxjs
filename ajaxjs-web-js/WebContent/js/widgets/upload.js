@@ -4,7 +4,7 @@
 
 // 文件选择器和校验
 Vue.component('ajaxjs-file-upload', {
-	data : function() {
+	data() {
 		return {
 			isFileSize : false,			// 文件大小检查
 			isExtName : false,			// 文件扩展名检查
@@ -44,7 +44,7 @@ Vue.component('ajaxjs-file-upload', {
 			</div>\
 		</div>',
 	methods : {
-		onUploadInputChange : function(e) {
+		onUploadInputChange(e) {
 			var fileInput = e.target;
 			var ext = fileInput.value.split('.').pop(); // 扩展名
 			var size = fileInput.files[0].size;
@@ -59,7 +59,7 @@ Vue.component('ajaxjs-file-upload', {
 			else
 				this.isExtName = true;
 		},
-		doUpload : function(e) {
+		doUpload(e) {
 			// 先周围找下 form，没有的话找全局的
 			var form = this.$parent.$refs.uploadIframe && this.$parent.$refs.uploadIframe.$el;
 			if(!form) {
@@ -78,7 +78,7 @@ Vue.component('ajaxjs-file-upload', {
 //图片选择器、预览和校验
 //建议每次创建实例时声明 ref="uploadControl" 以便对应组件
 Vue.component('ajaxjs-img-upload-perview', {
-	data : function() {
+	data() {
 		return {
 			imgBase64Str : null, 		// 图片的 base64 形式，用于预览
 			isFileSize : false,			// 文件大小检查
@@ -133,11 +133,11 @@ Vue.component('ajaxjs-img-upload-perview', {
 			</div>\
 		</div>',
 		
-	created (){
+	created() {
 		this.BUS.$on('upload-file-selected', this.onUploadInputChange);
 	},
 
-	methods : (function () {
+	methods: (function () {
 		// 文件头判别，看看是否为图片
 		var imgHeader = {
 			"jpeg" : "/9j/4",
@@ -360,10 +360,15 @@ Vue.component('aj-xhr-upload', {
 			errMsg : null,				// 错误信息
 			newlyId : null,				// 成功上传之后的文件 id
 			radomId : Math.round(Math.random() * 1000),		// 不重复的 id
-			uploadOk_callback: this.hiddenField ? json => {
-				this.$el.$('input[name=' + this.hiddenField + ']').value = json.imgUrl;
+			uplodedFileUrl:null,
+			uploadOk_callback: json => {// 回调函数
+				this.uplodedFileUrl = json.imgUrl;
+				
+				if(this.hiddenField)
+					this.$el.$('input[name=' + this.hiddenField + ']').value = json.imgUrl;
+				
 				ajaxjs.xhr.defaultCallBack(json);
-			} : ajaxjs.xhr.defaultCallBack,				// 回调函数
+			},				
 	    	imgBase64Str : null,			// 图片的 base64 形式，用于预览
 	    	progress : 0
 		};
@@ -429,7 +434,6 @@ Vue.component('aj-xhr-upload', {
 				this.errMsg = '根据文件后缀名判断，此文件不能上传';				
 			} else
 				this.isExtName = true;
-			
 		
 			this.readBase64(fileInput.files[0]);
 			
@@ -447,7 +451,7 @@ Vue.component('aj-xhr-upload', {
 			}
 		},
 
-		readBase64 (file) {
+		readBase64(file) {
 			var reader = new FileReader(), self = this;
 			
 			reader.onload = function(e) {

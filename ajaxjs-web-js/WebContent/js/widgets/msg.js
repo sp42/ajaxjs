@@ -26,14 +26,14 @@ document.addEventListener("DOMContentLoaded", function() {
 				</div>\
 			</div>',
 		methods : {
-			show : function(text, cfg) {
+			show(text, cfg) {
 				this.showText = text;
 				this.$el.classList.remove('hide');
 				aj.apply(this, cfg);
 				
 				return this;
 			},
-			close : function(e) {
+			close(e) {
 				var div = e.target; // check if in the box
 				if (div && div.className.indexOf('modal') != -1) {
 					this.$el.classList.add('hide');
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
 					this.afterClose && this.afterClose(div, this);
 				}
 			},
-			onBtnClk : function(e) {
+			onBtnClk(e) {
 				var el = e.target;
 				switch(el.className) {
 					case 'ok':
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			showYes : false,
 			showNo :false,
 			showOk :true,
-			onOkClk : function(e) { // 在box里面触发关闭，不能直接用 alertObj.close(e);
+			onOkClk(e) { // 在box里面触发关闭，不能直接用 alertObj.close(e);
 				alertObj.$el.classList.add('hide');
 				callback && callback();
 			}
@@ -88,11 +88,11 @@ document.addEventListener("DOMContentLoaded", function() {
 			showNo :true,
 			showOk :false,
 			showSave: showSave,
-			onYesClk : function(e) {
+			onYesClk(e) {
 				alertObj.$el.classList.add('hide');
 				callback && callback(alertObj.$el, e);
 			},
-			onNoClk : function(e) { // 在box里面触发关闭，不能直接用 alertObj.close(e);
+			onNoClk(e) { // 在box里面触发关闭，不能直接用 alertObj.close(e);
 				alertObj.$el.classList.add('hide');
 			}
 		});
@@ -108,16 +108,16 @@ document.addEventListener("DOMContentLoaded", function() {
 		},
 		template : '<div class="aj-topMsg" v-html="showText"></div>',
 		methods : {
-			show : function(text, cfg) {
+			show (text, cfg) {
 				this.showText = text;
 				var el = this.$el;
 				
-				setTimeout(function() {
+				setTimeout(()=> {
 					el.classList.remove('fadeOut');
 					el.classList.add('fadeIn');
 				}, 0);
 				
-				setTimeout(function() { // 自动隐藏，无须 close
+				setTimeout(() => { // 自动隐藏，无须 close
 					el.classList.remove('fadeIn');
 					el.classList.add('fadeOut');
 					cfg && cfg.afterClose && cfg.afterClose(div, this);
@@ -129,21 +129,27 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // 浮層組件，通常要復用這個組件
 Vue.component('aj-layer', {
-	template : '<div class="aj-modal hide" @click="close($event);"><div><slot></slot></div></div>',
-	props :{
+	template: '<div class="aj-modal hide" @click="close($event);"><div><slot></slot></div></div>',
+	props: {
 		// 默认点击窗体关闭，当 notCloseWhenTap = true 时禁止关闭
 		notCloseWhenTap: Boolean
 	},
-	methods : {
-		show : function(cfg) {
+	methods: {
+		show (cfg) {
 			this.$el.classList.remove('hide');
 //			this.BUS.emit('aj-layer-closed', this);
 			if(cfg && cfg.afterClose)
 				this.afterClose = cfg.afterClose;
 		},
-		close : function(e) { // isForceClose = 强制关闭
-			if(e.isForceClose || !this.notCloseWhenTap)
-				aj.alert.$options.methods.close.apply(this, arguments);
+		close(e) { // isForceClose = 强制关闭
+			if(!e) {
+				aj.alert.$options.methods.close.call(this, {
+					target : aj('.aj-modal')
+				});
+			}else{
+				if(e.isForceClose || !this.notCloseWhenTap)
+					aj.alert.$options.methods.close.apply(this, arguments);
+			}
 		}
 	}
 });

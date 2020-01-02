@@ -6,7 +6,7 @@
 // 推荐一款loading图标的网站，https://icons8.com/ preloaders/
 Vue.component('aj-page-fullscreen-loading-indicator', {
 	template : '<div class="aj-fullscreen-loading"></div>',
-	beforeCreate : function () {
+	beforeCreate () {
 		document.onreadystatechange = function () {
 		    if(document.readyState === "complete") {
 		        aj(".aj-fullscreen-loading").classList.add('fadeOut');
@@ -30,10 +30,10 @@ Vue.component('aj-page-share', {
 				<img src="http://static.youku.com/v1.0.0691/v/img/ico_dou_16x16.png" /></a>\
 		</div>',
 	computed : {
-		title : function() {
+		title() {
 			return encodeURIComponent(document.title);
 		},
-		url : function() {
+		url() {
 			return document.location.href;
 		}
 	}
@@ -58,7 +58,7 @@ Vue.component('aj-adjust-font-size', {
 			</ul>\
 		</div>',
 	methods : {
-		onClk : function(e) {
+		onClk(e) {
 			var el = e.target, target = el.innerHTML;
 			
 			if(el.tagName != 'LABEL')
@@ -73,7 +73,7 @@ Vue.component('aj-adjust-font-size', {
 			}
 		},
 
-		setFontSize : function (fontSize) {
+		setFontSize (fontSize) {
 			aj(this.$props.articleTarget, function(p){
 				p.style.fontSize = fontSize;
 			});
@@ -98,7 +98,7 @@ Vue.component('aj-misc-function', {
 		</div>',
 	methods : {
 		// 打印页面
-		printContent : function () {
+		printContent() {
       		var printHTML = "<html><head><title></title><style>body{padding:2%};</style></head><body>";
       		printHTML +=  aj('article').innerHTML;
       		printHTML += "</body></html>";
@@ -109,7 +109,7 @@ Vue.component('aj-misc-function', {
 		},
 	
 		// 发送邮件
-		sendMail : function () {
+		sendMail() {
 			location.href = 'mailto:xxx@tagzine.com?subject= '
 					+ document.title
 					+ '&body=\u6211\u5411\u4F60\u63A8\u8350\u8FD9\u6761\u6587\u7AE0\uFF0C\u5E0C\u671B\u4F60\u559C\u6B22\uFF01\u6587\u7AE0\u6807\u9898\uFF1A'
@@ -143,7 +143,7 @@ Vue.component('aj-article-body', {
 			required: false
 		}
 	},
-	data: function(){
+	data(){
 		return {
 			content : this.initContent,
 			createDate : this.initCreateDate
@@ -178,7 +178,7 @@ Vue.component('aj-baidu-search', {
 		 	<div class="searchBtn" onclick="this.parentNode.submit();"></div>\
 		 </form></div>',
 	computed : {
-		getSiteDomainName : function() {
+		getSiteDomainName() {
 			return this.$props.siteDomainName || location.host || document.domain;
 		}
 	}
@@ -197,7 +197,7 @@ Vue.component('aj-chinese-switch', {
 			<a href="javascript:;" onclick="toSimpleChinese(this);" class="simpleChinese selected">简体中文</a>\
 			/<a href="javascript:;" class="Chinese" onclick="toChinese(this);">正体中文</a>\
 		</span>',
-	created: function() {
+	created() {
 		document.body.appendChild(document.createElement('script')).src = this.$props.jsurl;
 	}
 });
