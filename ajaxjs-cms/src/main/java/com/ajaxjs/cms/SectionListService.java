@@ -162,7 +162,7 @@ public abstract class SectionListService extends BaseService<SectionList> {
 		if (catalogId == 0)
 			catalogId = getDomainCatalogId();
 		
-		return dao.findPagedListByCatalogId_Cover(catalogId, start, limit, null);
+		return dao.findPagedList(start, limit, null);
 	}
 
 	public int getDomainCatalogId() {

@@ -18,9 +18,10 @@ import com.ajaxjs.shop.model.Cart;
  */
 @Bean
 public class CartService extends BaseService<Cart> {
+	
 	@Resource("GroupService")
 	private GroupService groupService;
-	
+
 	public static CartDao dao = new Repository().bind(CartDao.class);
 
 	{
@@ -30,13 +31,8 @@ public class CartService extends BaseService<Cart> {
 	}
 
 	public PageResult<Cart> findPagedList(int start, int limit, long userId) {
-		return dao.findPagedList(start, limit,
-				userId != 0L ? setWhere(" e.userId = " + userId).andThen(BaseService::betweenCreateDate) : BaseService::betweenCreateDate);
-	}
-
-	@Override
-	public List<Cart> findList() {
-		return dao.findList(BaseService::betweenCreateDate);
+		return dao.findPagedList(start, limit, userId != 0L ? byUserId(userId).andThen(BaseService::betweenCreateDate)
+				: BaseService::betweenCreateDate);
 	}
 
 	/**
@@ -46,7 +42,7 @@ public class CartService extends BaseService<Cart> {
 	 * @return 多个购物车实体
 	 */
 	public List<Cart> findCartListIn(String[] cartIds) {
-		return dao.findList(setWhere(" e.id IN (" + String.join(",", cartIds) + ")"));
+		return dao.findList(in("e.id", cartIds));
 	}
 
 	/**

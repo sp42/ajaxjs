@@ -44,8 +44,8 @@ public class GoodsController extends BaseController<Goods> {
 	@GET
 	@Path(list)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(catalogId) int catalogId, @QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
-		page(mv, service.findPagedListByCatalogId(catalogId, start, limit, CommonConstant.OFF_LINE), CommonConstant.UI_ADMIN);
+	public String list(@QueryParam(catalogId) int catalogId, @QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam("sellerId") int sellerId, ModelAndView mv) {
+		page(mv, service.findPagedListByCatalogId(catalogId, start, limit, CommonConstant.OFF_LINE, sellerId), CommonConstant.UI_ADMIN);
 		return jsp("shop/goods-admin-list");
 	}
 
@@ -111,10 +111,10 @@ public class GoodsController extends BaseController<Goods> {
 	@GET
 	@Path("/shop/goods")
 	@MvcFilter(filters = { DataBaseFilter.class })
-	public String list(@QueryParam(catalogId) int catelogId, ModelAndView mv, @QueryParam(start) int start, @QueryParam(limit) int limit) {
+	public String list(@QueryParam(catalogId) int catelogId, ModelAndView mv, @QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam("sellerId") int sellerId) {
 		LOGGER.info("浏览商品");
 		
-		page(mv, service.findPagedListByCatalogId(catelogId, start, 9, CommonConstant.ON_LINE), CommonConstant.UI_FRONTEND);
+		page(mv, service.findPagedListByCatalogId(catelogId, start, 9, CommonConstant.ON_LINE, sellerId), CommonConstant.UI_FRONTEND);
 		return jsp("shop/goods");
 	}
 	
@@ -123,6 +123,7 @@ public class GoodsController extends BaseController<Goods> {
 	@MvcFilter(filters = { DataBaseFilter.class, FrontEndOnlyCheck.class })
 	public String showInfo(@PathParam(id) Long id, ModelAndView mv) {
 		LOGGER.info("浏览商品 info");
+		
 		mv.put(info, service.getGoodsDetail(id, BaseUserController.getUserId()));
 		return jsp("shop/goods-info");
 	}

@@ -23,7 +23,6 @@ import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.controller.SellerController;
-import com.ajaxjs.shop.controller.SellerController.SellerService;
 import com.ajaxjs.shop.model.Seller;
 import com.ajaxjs.util.map.JsonHelper;
 
@@ -97,9 +96,6 @@ public class GroupController extends BaseController<Group> {
 		return delete(id, new Group());
 	}
 
-	@Resource("SellerService")
-	private SellerService sellerService;
-	
 	@Override
 	public void prepareData(ModelAndView mv) {
 		Map<Long, Seller> map = new HashMap<>();

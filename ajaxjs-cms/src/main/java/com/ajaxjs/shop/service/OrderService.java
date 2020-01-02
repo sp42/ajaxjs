@@ -31,15 +31,21 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 	private static final LogHelper LOGGER = LogHelper.getLog(OrderService.class);
 
 	public static OrderInfoDao dao = new Repository().bind(OrderInfoDao.class);
+	
+	{
+		setUiName("订单");
+		setShortName("order");
+		setDao(dao);
+	}
 
 	@Resource("UserAddressService")
 	private UserAddressService addService = new UserAddressService();
 
 	@Resource("CartService")
-	private CartService cartService;
+	private CartService cartService = new CartService();
 	
 	@Resource("OrderItemService")
-	private OrderItemService orderItemService;
+	private OrderItemService orderItemService = new OrderItemService();
 
 	/**
 	 * 分页查找
@@ -51,7 +57,7 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 	 * @param orderNo
 	 * @return
 	 */
-	public PageResult<OrderInfo> findPagedList(int start, int limit, int tradeStatus, int payStatus, String orderNo) {
+	public PageResult<OrderInfo> findPagedList(int start, int limit, int tradeStatus, int payStatus, String orderNo, long userId) {
 		Function<String, String> sqlHander = BaseService::betweenCreateDate;
 
 		if (tradeStatus != 0)
@@ -62,6 +68,9 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 
 		if (!CommonUtil.isEmptyString(orderNo))
 			sqlHander.andThen(by("orderNo", orderNo));
+		
+		if(userId != 0)
+			sqlHander.andThen(by("buyerId", userId));
 
 		return findPagedList(start, limit, sqlHander);
 	}
@@ -145,19 +154,14 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 		// 购物车转为订单
 		List<Cart> carts = cartService.findCartListIn(cartIds);
 		BigDecimal actualPrice = getActualPrice(carts);
-		UserAddress address = addService.findById(addressId);
 
 		OrderInfo order = new OrderInfo();
 		order.setBuyerId(userId);
 		order.setTotalPrice(actualPrice);
 		order.setOrderPrice(actualPrice); // 当前没有优惠券
 
-		order.setShippingTarget(address.getName());
-		order.setShippingPhone(address.getPhone());
-		order.setShippingCode(address.getZipCode());
-		// 复制地址
-		// TODO
-//		order.setShippingAddress(address.getProvince() + address.getCity() + address.getDistrict() + address.getAddress());
+		getAddress(order, addressId);
+
 		order.setOrderNo(ShopHelper.getOutterOrderNo()); // 生成外显的订单号
 
 		create(order); // 保存订单
@@ -193,6 +197,29 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 		order.setOrderItems(orderItems);
 
 		return order;
+	}
+
+	/**
+	 * 复制地址
+	 * 
+	 * @param order
+	 * @param addressId
+	 */
+	private void getAddress(OrderInfo order, long addressId) {
+		System.out.println(UserAddressService.AREA_DATA.get("China_AREA", "86", "210000"));
+		System.out.println(UserAddressService.AREA_DATA.get("China_AREA", "210000", "210100"));
+		
+		UserAddress address = addService.findById(addressId);
+		order.setShippingTarget(address.getName());
+		order.setShippingPhone(address.getPhone());
+		order.setShippingCode(address.getZipCode());
+
+		String p = address.getLocationProvince() + "", c = address.getLocationCity() + "", d = address.getLocationDistrict() + "";
+		
+		order.setShippingAddress(UserAddressService.AREA_DATA.get("China_AREA", "86", p).toString() 
+				+ UserAddressService.AREA_DATA.get("China_AREA", p, c)
+				+ UserAddressService.AREA_DATA.get("China_AREA", c, d) + address.getAddress());
+		
 	}
 
 	/**

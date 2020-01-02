@@ -37,7 +37,7 @@ public class TestDomain {
 		Map<String, Object> domain = dao.findById(1L);
 		assertNotNull(domain);
 
-		PageResult<Map<String, Object>> list = dao.findPagedListByCatalogId_Cover(6, 0, 10, null);
+		PageResult<Map<String, Object>> list = dao.findPagedList(0, 2, null);
 		assertNotNull(list);
 
 		domain = new HashMap<String, Object>();

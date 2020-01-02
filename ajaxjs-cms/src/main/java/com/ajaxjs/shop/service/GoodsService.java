@@ -2,6 +2,7 @@ package com.ajaxjs.shop.service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.ajaxjs.cms.app.attachment.Attachment_pictureService;
 import com.ajaxjs.cms.app.catalog.CatalogServiceImpl;
@@ -13,7 +14,6 @@ import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
-import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.dao.GoodsDao;
 import com.ajaxjs.shop.dep.GroupService;
@@ -43,11 +43,12 @@ public class GoodsService extends BaseService<Goods> {
 
 	@Resource("CartService")
 	private CartService shopCartService;
-	
+
 	static {
 		DataDictController.DataDictService.Entry_IdName.put(ShopConstant.ENTRY_GOODS, new GoodsService().getUiName());
 		DataDictController.DataDictService.Entry_IdName.put(ShopConstant.ENTRY_GROUP, new GroupService().getUiName());
-		DataDictController.DataDictService.Entry_IdName.put(DataDictController.DataDictService.ENTRY_TOPIC, TopicController.service.getUiName());
+		DataDictController.DataDictService.Entry_IdName.put(DataDictController.DataDictService.ENTRY_TOPIC,
+				TopicController.service.getUiName());
 	}
 
 	/**
@@ -83,19 +84,13 @@ public class GoodsService extends BaseService<Goods> {
 	public int getDomainCatalogId() {
 		return ConfigService.getValueAsInt("data.productCatalog_Id");
 	}
-	
-	static String sellerFilter(String sql) {
-		MvcRequest r = MvcRequest.getMvcRequest();
+
+	public PageResult<Goods> findPagedListByCatalogId(int catalogId, int start, int limit, int status, int sellerId) {
+		Function<String, String> sqlHander = CatalogServiceImpl.setCatalog(catalogId, getDomainCatalogId()).andThen(setStatus(status)).andThen(BaseService::searchQuery).andThen(BaseService::betweenCreateDate);
 		
-		if (r == null || !r.hasParameter("sellerId"))
-			return sql;
+		if(sellerId != 0) 
+			sqlHander.andThen(by("sellerId", sellerId));
 		
-		return setWhere("sellerId = " + r.getIdOnly("sellerId")).apply(sql);
-	}
- 
-	public PageResult<Goods> findPagedListByCatalogId(int catalogId, int start, int limit, int status) {
-		return dao.findPagedList(start, limit, 
-				CatalogServiceImpl.setCatalog(catalogId, getDomainCatalogId())
-				.andThen(setStatus(status)).andThen(BaseService::searchQuery).andThen(BaseService::betweenCreateDate).andThen(GoodsService::sellerFilter));
+		return dao.findPagedList(start, limit, sqlHander);
 	}
 }

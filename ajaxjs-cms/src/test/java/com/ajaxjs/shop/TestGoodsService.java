@@ -12,10 +12,10 @@ import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mock.TestHelper;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.SnowflakeIdWorker;
+import com.ajaxjs.shop.dep.ShopBookmarkService;
 import com.ajaxjs.shop.model.Goods;
 import com.ajaxjs.shop.service.CartService;
 import com.ajaxjs.shop.service.GoodsService;
-import com.ajaxjs.shop.service.ShopBookmarkService;
 import com.ajaxjs.user.model.UserAddress;
 import com.ajaxjs.user.service.UserAddressService;
 
@@ -61,9 +61,7 @@ public class TestGoodsService {
 			bean.setName(TestHelper.getChineseName());
 			bean.setMobile(TestHelper.getTel());
 			bean.setPhone(TestHelper.getTel());
-			bean.setProvince(TestHelper.getItem(TestHelper.provinces));
-			bean.setCity(TestHelper.getItem(TestHelper.cites));
-			bean.setDistrict(TestHelper.getItem(TestHelper.districts));
+
 			bean.setAddress(TestHelper.getRoad());
 			bean.setUserId(10000L);
 			userAddressService.create(bean);
@@ -79,7 +77,7 @@ public class TestGoodsService {
 	public void testPageList() {
 		GoodsService service = BeanContext.getBean(GoodsService.class);
 		assertNotNull(service.findPagedList(0, 10));
-		assertNotNull(service.findPagedListByCatalogId(145, 0, 10, CommonConstant.ON_LINE));
+		assertNotNull(service.findPagedListByCatalogId(145, 0, 10, 0, CommonConstant.ON_LINE));
 		
 		
 //		List<Goods> goodsList = goodsBookmarkService.getGoodsListByUserId(10000L);

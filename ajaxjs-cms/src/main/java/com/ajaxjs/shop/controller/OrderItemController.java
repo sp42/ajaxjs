@@ -45,7 +45,7 @@ public class OrderItemController extends BaseController<OrderItem> {
 		long p = (long) session.getAttribute("privilegeTotal");
 		long sellerId = session.getAttribute("sellerId") == null ? 0 : (long) session.getAttribute("sellerId");
 		
-		page(mv, service.findOrderItemDetailList(start, limit, p, sellerId, r.getParameterMap()));
+		page(mv, service.findPagedList(start, limit, p, sellerId));
 
 		if (r.getParameter("downloadXSL") != null) {
 			return adminList_Excel(response, service.getUiName());

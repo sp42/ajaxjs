@@ -2,6 +2,8 @@ package com.ajaxjs.shop.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -29,6 +31,7 @@ import com.ajaxjs.shop.service.OrderService;
 import com.ajaxjs.user.controller.BaseUserController;
 import com.ajaxjs.user.filter.LoginCheck;
 import com.ajaxjs.user.model.User;
+import com.ajaxjs.user.service.UserAddressService;
 import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -41,19 +44,34 @@ import com.ajaxjs.util.logger.LogHelper;
 public class OrderController extends BaseController<OrderInfo> {
 	private static final LogHelper LOGGER = LogHelper.getLog(OrderController.class);
 
-	@Resource("OrderInfoService")
-	private WxPayService service;
-
 	@Resource("autoWire:ioc.OrderService|OrderService")
-	private OrderService orderSercice;
+	private OrderService service;
 
 	/////////// 前台 //////////////
 	@GET
 	@Path("/shop/order")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	public String account(ModelAndView mv) {
+	public String account(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
 		LOGGER.info("浏览我的订单");
+		
+		prepareData(mv);
+		mv.put(PageResult, service.findPagedList(start, limit, 0, 0, null, BaseUserController.getUserId()));
 		return jsp("shop/order");
+	}
+	
+	@GET
+	@Path("/shop/order/" + idInfo)
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
+	public String orderDetail(@PathParam(id) Long id, ModelAndView mv) {
+		LOGGER.info("浏览我的订单明细");
+		
+		prepareData(mv);
+		mv.put(info, service.findById(id));
+		// 订单明细
+		List<OrderItem> items = WxPayService.dao.findOrderItemListByOrderId(id);
+		mv.put("orderItems", items);
+		
+		return jsp("shop/order-info");
 	}
 
 	@Path("/shop/order/checkout")
@@ -61,7 +79,8 @@ public class OrderController extends BaseController<OrderInfo> {
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String checkout(ModelAndView mv) {
 		LOGGER.info("下单");
-		orderSercice.showCheckout(mv);
+		
+		service.showCheckout(mv);
 		return jsp("shop/checkout");
 	}
 
@@ -69,11 +88,18 @@ public class OrderController extends BaseController<OrderInfo> {
 	@Path("/shop/order")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
-	public String processOrder(@FormParam("addressId") long addressId, String _cartIds) {
-		LOGGER.info("处理订单");
-		String[] cartIds = _cartIds.split("|");
-		orderSercice.processOrder(BaseUserController.getUserId(), addressId, cartIds);
-		return "";
+	public String processOrder(@FormParam("addressId") @NotNull long addressId, @FormParam("cartIds") @NotNull String _cartIds, ModelAndView mv, HttpServletRequest r) {
+		LOGGER.info("处理订单 结账");
+		
+		UserAddressService.initData(r);
+		String[] cartIds = _cartIds.split(",");
+		OrderInfo order = service.processOrder(BaseUserController.getUserId(), addressId, cartIds);
+		
+		if(order != null) {
+			return jsonOk("交易成功！");
+		} 
+
+		return jsonNoOk("交易不成功！");
 	}
 
 	/////////// 后台 //////////////
@@ -100,8 +126,8 @@ public class OrderController extends BaseController<OrderInfo> {
 	private UserService userService;
 
 	@GET
-	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Path(idInfo)
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Override
 	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
 		super.editUI(id, mv);
