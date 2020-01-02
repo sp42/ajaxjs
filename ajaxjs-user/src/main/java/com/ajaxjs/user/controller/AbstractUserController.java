@@ -50,6 +50,13 @@ public abstract class AbstractUserController extends BaseUserController {
 
 		return jsp("user/login");
 	}
+	
+	@GET
+	@Path("isLogin")
+	public String isLogin() {
+		LOGGER.info("查看用户是否已经登陆");
+		return toJson(isLogined());
+	}
 
 	@POST
 	@Path("login")

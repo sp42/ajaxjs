@@ -30,10 +30,10 @@ public class RoleService extends BaseService<Map<String, Object>> {
 
 	@TableName(value = "user_role", beanClass = Map.class)
 	public static interface RoleDao extends IBaseDao<Map<String, Object>> {
-		
+
 		@Select("SELECT * FROM ${tableName} ORDER BY pid ")
 		public List<Map<String, Object>> findList();
-		 
+
 		@Select("SELECT accessKey FROM ${tableName}")
 		public Integer[] getExistingPrime();
 	}
@@ -85,21 +85,22 @@ public class RoleService extends BaseService<Map<String, Object>> {
 	 * @param resId
 	 * @param isEnable
 	 * @return
-	 * @throws ServiceException 
+	 * @throws ServiceException
 	 */
 	public long updateResourceRightValue(long userGroupId, int resId, boolean isEnable) throws ServiceException {
 		Map<String, Object> userGroup = findById(userGroupId);
-		if(userGroup == null || resId == 0) 
+		if (userGroup == null || resId == 0)
 			throw new ServiceException("参数异常");
-		
+
 		// sqlite 没有 long，郁闷
 		long num;
 		Object obj = userGroup.get("accessKey");
-		
-		if(obj== null) {
+
+		if (obj == null) {
 			num = 0L;
 		} else {
-			num = obj instanceof Integer ? ((Integer) userGroup.get("accessKey")).longValue() : (long) userGroup.get("accessKey");
+			num = obj instanceof Integer ? ((Integer) userGroup.get("accessKey")).longValue()
+					: (long) userGroup.get("accessKey");
 		}
 
 		long newlyResRight = set(num, resId, isEnable);
@@ -108,11 +109,9 @@ public class RoleService extends BaseService<Map<String, Object>> {
 		newlyUserGroup.put("id", userGroup.get("id"));
 		newlyUserGroup.put("accessKey", newlyResRight);
 		update(newlyUserGroup);
-		
+
 		return newlyResRight;
 	}
-
-	
 
 	/**
 	 * 查询num的第pos位权限值
@@ -126,14 +125,22 @@ public class RoleService extends BaseService<Map<String, Object>> {
 		return (num & 1) == 1;
 	}
 	
-	
+	public static boolean simple8421(int num, int pos) {
+		return (num & pos) == pos;
+	}
+
+	/**
+	 * 
+	 * @param pos
+	 * @return
+	 */
 	public static boolean check(int pos) {
 		HttpServletRequest request = MvcRequest.getHttpServletRequest();
 		Objects.requireNonNull(request);
 		Object _privilegeTotal = request.getSession().getAttribute("privilegeTotal");
 		Objects.requireNonNull(_privilegeTotal);
-		long privilegeTotal = (long)_privilegeTotal;
-		
+		long privilegeTotal = (long) _privilegeTotal;
+
 		return check(privilegeTotal, pos);
 	}
 
@@ -142,11 +149,11 @@ public class RoleService extends BaseService<Map<String, Object>> {
 	 * 
 	 * @param num 权限值
 	 * @param pos 从右数起第pos位,从0开始
-	 * @param v 值
+	 * @param v   值
 	 */
 	public static long set(long num, int pos, boolean v) {
 		boolean old = check(num, pos);// 原权限
-		
+
 		if (v) {// 期望改为无权限
 			if (!old) {// 原来有权限
 				num = num + (1L << pos);// 将第pos位设置为1
@@ -156,7 +163,7 @@ public class RoleService extends BaseService<Map<String, Object>> {
 				num = num - (1L << pos);// 将第pos位设置为0
 			}
 		}
-		
+
 		return num;
 	}
 
@@ -168,7 +175,7 @@ public class RoleService extends BaseService<Map<String, Object>> {
 		// 得到64位值
 		byte[] buf = new byte[64];
 		int pos = 64;
-		
+
 		do {
 			buf[--pos] = (byte) (reLong & 1);
 			reLong >>>= 1;// 右移一位，相当除以2

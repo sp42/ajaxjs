@@ -55,73 +55,35 @@ public class UserAddress extends BaseModel {
 		return phone;
 	}
 
-	/**
-	 * 省份
-	 */
-	private String province;
 
-	/**
-	 * 设置省份
-	 * 
-	 * @param province
-	 */
-	public void setProvince(String province) {
-		this.province = province;
+	
+	private Long locationProvince;
+	
+	private Long locationCity;
+	
+	private Long locationDistrict;
+	public Long getLocationProvince() {
+		return locationProvince;
 	}
 
-	/**
-	 * 获取省份
-	 * 
-	 * @return 省份
-	 */
-	public String getProvince() {
-		return province;
+	public void setLocationProvince(Long locationProvince) {
+		this.locationProvince = locationProvince;
 	}
 
-	/**
-	 * 城市
-	 */
-	private String city;
-
-	/**
-	 * 设置城市
-	 * 
-	 * @param city
-	 */
-	public void setCity(String city) {
-		this.city = city;
+	public Long getLocationCity() {
+		return locationCity;
 	}
 
-	/**
-	 * 获取城市
-	 * 
-	 * @return 城市
-	 */
-	public String getCity() {
-		return city;
+	public void setLocationCity(Long locationCity) {
+		this.locationCity = locationCity;
 	}
 
-	/**
-	 * 区县
-	 */
-	private String district;
-
-	/**
-	 * 设置区县
-	 * 
-	 * @param district
-	 */
-	public void setDistrict(String district) {
-		this.district = district;
+	public Long getLocationDistrict() {
+		return locationDistrict;
 	}
 
-	/**
-	 * 获取区县
-	 * 
-	 * @return 区县
-	 */
-	public String getDistrict() {
-		return district;
+	public void setLocationDistrict(Long locationDistrict) {
+		this.locationDistrict = locationDistrict;
 	}
 
 	/**
@@ -150,15 +112,15 @@ public class UserAddress extends BaseModel {
 	/**
 	 * 邮编
 	 */
-	private String zopCode;
+	private String zipCode;
 
 	/**
 	 * 设置邮编
 	 * 
-	 * @param zopCode
+	 * @param zipCode
 	 */
-	public void setZopCode(String zopCode) {
-		this.zopCode = zopCode;
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
 	}
 
 	/**
@@ -166,8 +128,8 @@ public class UserAddress extends BaseModel {
 	 * 
 	 * @return 邮编
 	 */
-	public String getZopCode() {
-		return zopCode;
+	public String getZipCode() {
+		return zipCode;
 	}
 
 	/**

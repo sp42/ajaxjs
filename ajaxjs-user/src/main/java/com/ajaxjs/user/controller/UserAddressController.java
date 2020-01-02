@@ -42,13 +42,14 @@ public class UserAddressController extends BaseController<UserAddress> {
 	@Path(list)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv, HttpServletRequest r) {
-		page(mv, service.findPagedList(start, limit, null), CommonConstant.UI_FRONTEND);
+		mv.put(list, service.findListByUserId(BaseUserController.getUserId()));
 		return jsp(jsp);
 	}
 
 	@GET
 	@MvcFilter(filters = { LoginCheck.class })
-	public String createUI() {
+	public String createUI(ModelAndView mv) {
+		mv.put("isCreate", true);
 		return jsp(jsp + "-info");
 	}
 
@@ -70,6 +71,7 @@ public class UserAddressController extends BaseController<UserAddress> {
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
 	public String createUserAddress(@NotNull @BeanParam UserAddress entity) {
+		entity.setUserId(BaseUserController.getUserId());
 		return create(entity, service);
 	}
 

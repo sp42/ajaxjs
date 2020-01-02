@@ -50,11 +50,11 @@ public class LoginLogController extends BaseController<UserLoginLog> {
 		}
 
 		public PageResult<UserLoginLog> findAll(int start, @QueryParam(limit) int limit) {
-			return findPagedList(start, limit, betweenCreateDate.andThen(BaseService::findByAny));
+			return findPagedList(start, limit, byAny().andThen(BaseService::betweenCreateDate));
 		}
 
 		public List<UserLoginLog> findListByUserId(long userId) {
-			return findList(findByAny("userId", userId).andThen(BaseService::orderById_DESC).andThen(top(10)));
+			return findList(by("userId", userId).andThen(BaseService::orderById_DESC).andThen(top(10)));
 		}
 	}
 

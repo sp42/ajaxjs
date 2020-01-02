@@ -1,25 +1,27 @@
 package com.ajaxjs.user.service;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.function.Function;
+
+import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
+import com.ajaxjs.jsonparser.JsEngineWrapper;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
 import com.ajaxjs.user.model.UserAddress;
+import com.ajaxjs.util.io.IoHelper;
 
 @Bean
 public class UserAddressService extends BaseService<UserAddress> {
 
 	@TableName(value = "user_address", beanClass = UserAddress.class)
 	public static interface UserAddressDao extends IBaseDao<UserAddress> {
-		@Select("SELECT * FROM ${tableName} WHERE userId = ?")
-		public List<UserAddress> findListByUserId(long userId);
-
 		@Select("SELECT a.*, u.name AS userIdName, u.username FROM ${tableName} a LEFT JOIN user u ON u.id = a.userId WHERE 1 = 1 ORDER BY id DESC")
 		public PageResult<UserAddress> findPagedList(int start, int limit, Function<String, String> doSql);
 
@@ -53,6 +55,10 @@ public class UserAddressService extends BaseService<UserAddress> {
 		}
 	}
 
+	public List<UserAddress> findListByUserId(long userId) {
+		return findList(by("userId", userId));
+	}
+
 	@Override
 	public Long create(UserAddress bean) {
 		checkIfExist(bean);
@@ -63,5 +69,24 @@ public class UserAddressService extends BaseService<UserAddress> {
 	public int update(UserAddress bean) {
 		checkIfExist(bean);
 		return super.update(bean);
+	}
+
+	public static JsEngineWrapper AREA_DATA;
+
+	/**
+	 * 
+	 * @param r
+	 */
+	public static void initData(HttpServletRequest r) {
+		if (UserAddressService.AREA_DATA == null) {
+			InputStream in = r.getServletContext().getResourceAsStream("/ajaxjs-ui-output/lib/China_AREA_full.js");
+
+			if (in != null) {
+				JsEngineWrapper js = new JsEngineWrapper();
+				js.eval(IoHelper.byteStream2string(in));
+
+				UserAddressService.AREA_DATA = js;
+			}
+		}
 	}
 }
