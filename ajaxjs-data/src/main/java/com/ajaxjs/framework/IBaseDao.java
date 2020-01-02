@@ -35,26 +35,37 @@ public interface IBaseDao<T> {
 	 * 搜索的占位符
 	 */
 	public static final String WHERE_REMARK = "1 = 1";
-	
-	public static final String WHERE_REMARK_ORDER = " WHERE 1 = 1 ORDER BY e.id DESC";
 
 	public static final String WHERE_REMARK_AND = " AND " + WHERE_REMARK;
-	
+
 	/**
 	 * 按照 id 字段进行降序
 	 */
 	public final static String DESCENDING_ID = " ORDER BY id DESC";
 
+	public static final String WHERE_REMARK_ORDER = " WHERE " + WHERE_REMARK + DESCENDING_ID;
+
 	/**
 	 * 实体别名必须为 entry
 	 */
+	@Deprecated
 	public final static String selectCover = "(SELECT path FROM attachment_picture p1 WHERE entry.uid = p1.owner AND p1.catalog = 1 ORDER BY p1.id DESC LIMIT 0, 1)";
 
 	/**
-	 * 简单关联 catelog 表，注意表名称 alies 为 gc
+	 * 
+	 * @deprecated
+	 * @param id
+	 * @return
 	 */
-	public final static String catelog_simple_join = " LEFT JOIN general_catalog gc ON gc.id = entry.catalogId ";
-	
+	@Select(value = "SELECT GROUP_CONCAT(p.id, '|', p.`path`, '|', IFNULL(p.`catalog`, 0), '|', p.`index` SEPARATOR '\", \"') AS pics, e.*, "
+			+ "(SELECT `path` FROM attachment_picture p WHERE p.`catalog` = 2 AND owner = e.uid ORDER BY ID DESC LIMIT 1) AS cover"
+			+ " FROM  ${tableName} e LEFT JOIN attachment_picture p ON e.uid = p.owner WHERE e.id = ?",
+
+			sqliteValue = "SELECT (p.id || '|' || p.`path` || '|' || IFNULL(p.`catalog`, 0) || '|' || p.`index` ) AS pics, e.*, "
+					+ " p.path AS cover"
+					+ " FROM ${tableName} e LEFT JOIN attachment_picture p ON e.uid = p.owner WHERE e.id = ? ORDER BY p.id DESC LIMIT 1")
+	public T findById_Attachment(Long id);
+
 	/**
 	 * 左连接分类表，实体简写必须为 e
 	 */
@@ -69,116 +80,72 @@ public interface IBaseDao<T> {
 	 * catelogId 的参数 另外也可以用 IN 查询
 	 */
 	public final static String catelog_finById = " (SELECT id, name " + pathLike_mysql + ") AS c ";
-	
-	public final static String catelog_finById_sqlite = "(SELECT id AS catalogId, name AS catalogName " + pathLike_sqlite + ") AS c";
+	public final static String catelog_finById_sqlite = "(SELECT id AS catalogId, name AS catalogName "
+			+ pathLike_sqlite + ") AS c";
 
 	/**
-	 * IN 查询用
+	 * IN 查询用，多用于分页统计总数
 	 */
 	public final static String catelog_find = "(SELECT id " + pathLike_mysql + ")";
-	
 	public final static String catelog_find_sqlite = "(SELECT id " + pathLike_sqlite + ")";
 
 	// ---------------- find one-------------------
+
 	/**
 	 * 查询单个记录。如果找不到则返回 null
 	 * 
 	 * @param sqlHandler 查找的条件
-	 * @return Bean
+	 * @return 单个记录
 	 */
-	@Select("SELECT * FROM ${tableName} WHERE " + WHERE_REMARK)
+	@Select("SELECT * FROM ${tableName} e WHERE " + WHERE_REMARK)
 	public T find(Function<String, String> sqlHandler);
 
 	/**
 	 * 查询单个记录。如果找不到则返回 null
 	 * 
 	 * @param id 记录 id
-	 * @return Bean
+	 * @return 单个记录
 	 */
-	@Select("SELECT * FROM ${tableName} WHERE id = ?")
+	@Select("SELECT * FROM ${tableName} e WHERE e.id = ?")
 	public T findById(Long id);
 
 	/**
-	 * 查询单个记录，带有类别的、封面的。如果找不到则返回 null
-
-	 * @param id		 id 记录 id
+	 * 查询单个记录，带有类别的。如果找不到则返回 null
+	 * 
+	 * @param id         记录 id
 	 * @param sqlHandler 查找的条件
 	 * @return 单个记录
 	 */
-	@Select(value = "SELECT e.*, gc.name AS catelogName FROM ${tableName} e " + LEFT_JOIN_CATALOG + " WHERE e.id = ? " + WHERE_REMARK_AND)
+	@Select("SELECT e.*, gc.name AS catalogName FROM ${tableName} e" + LEFT_JOIN_CATALOG + " WHERE e.id = ? " + WHERE_REMARK_AND)
 	public T findById_catalog(Long id, Function<String, String> sqlHandler);
-
-	/**
-	 * 适合附件列表 TODO
-	 * 
-	 * @param id
-	 * @return
-	 */
-	@Select(value = "SELECT GROUP_CONCAT(p.id, '|', p.`path`, '|', IFNULL(p.`catalog`, 0), '|', p.`index` SEPARATOR '\", \"') AS pics, e.*, "
-			+ "(SELECT `path` FROM attachment_picture p WHERE p.`catalog` = 2 AND owner = e.uid ORDER BY ID DESC LIMIT 1) AS cover"
-			+ " FROM  ${tableName} e LEFT JOIN attachment_picture p ON e.uid = p.owner WHERE e.id = ?",
-
-			sqliteValue = "SELECT (p.id || '|' || p.`path` || '|' || IFNULL(p.`catalog`, 0) || '|' || p.`index` ) AS pics, e.*, " + " p.path AS cover"
-					+ " FROM ${tableName} e LEFT JOIN attachment_picture p ON e.uid = p.owner WHERE e.id = ? ORDER BY p.id DESC LIMIT 1")
-	public T findById_Attachment(Long id);
-
 	// ---------------- find list-------------------
+
 	/**
 	 * 查询列表数据
 	 * 
+	 * @param sqlHandler SQL 处理器。如果你不需要查询条件，可以传入 null
 	 * @return 实体列表
 	 */
-	@Select("SELECT * FROM ${tableName} WHERE " + WHERE_REMARK)
+	@Select("SELECT * FROM ${tableName} e WHERE " + WHERE_REMARK)
 	public List<T> findList(Function<String, String> sqlHandler);
-	
+
 	/**
 	 * 简单分页。注意不用在 SQL 后面加上 LIMIT，系统会自动加的
 	 * 
 	 * @param start
 	 * @param limit
+	 * @param sqlHandler SQL 处理器。如果你不需要查询条件，可以传入 null
 	 * @return 实体分页列表
 	 */
-	@Select("SELECT * FROM ${tableName} e WHERE 1 = 1 ORDER BY id DESC")
+	@Select("SELECT * FROM ${tableName} e " + WHERE_REMARK_ORDER)
 	public PageResult<T> findPagedList(int start, int limit, Function<String, String> sqlHandler);
-
-	/**
-	 * 可分类的，可分页的列表
-	 * 
-	 * @param catelogId
-	 * @param start
-	 * @param limit
-	 * @return
-	 */
-	@Select(value = "SELECT entry.*, c.name AS catelogName FROM ${tableName} entry INNER JOIN " + catelog_finById
-			+ "ON entry.`catelogId` = c.id  WHERE 1 = 1 ORDER BY id DESC", countSql = "SELECT COUNT(entry.id) AS count FROM ${tableName} entry WHERE catelogId IN " + catelog_find + " AND 1 = 1",
-
-			sqliteValue = "SELECT id, name, createDate, updateDate, entry.catelogId, catelogName FROM ${tableName} entry INNER JOIN " + catelog_finById_sqlite
-					+ " ON entry.`catelogId` = c.catelogId  WHERE 1 = 1 ORDER BY id DESC", sqliteCountSql = "SELECT COUNT(entry.id) AS count FROM ${tableName} entry WHERE catelogId IN " + catelog_find_sqlite
-							+ " AND 1 = 1")
-	public PageResult<T> findPagedListByCatelogId(int catelogId, int start, int limit, Function<String, String> sqlHandler);
-
-	/**
-	 * 带封面图，可分类的，可分页的列表
-	 * 
-	 * @param catelogId
-	 * @param start
-	 * @param limit
-	 * @return
-	 */
-	@Select(value = "SELECT entry.*, c.name AS catelogName, " + selectCover + " AS cover FROM ${tableName} entry INNER JOIN " + catelog_finById
-			+ "ON entry.`catelogId` = c.id  WHERE 1 = 1 ORDER BY id DESC", countSql = "SELECT COUNT(entry.id) AS count FROM ${tableName} entry WHERE catelogId IN " + catelog_find + " AND 1 = 1",
-
-			sqliteValue = "SELECT entry.*, catelogName, " + selectCover + " AS cover FROM ${tableName} entry INNER JOIN " + catelog_finById_sqlite
-					+ " ON entry.`catelogId` = c.catelogId WHERE 1 = 1 ORDER BY id DESC", sqliteCountSql = "SELECT COUNT(entry.id) AS count FROM ${tableName} entry WHERE catelogId IN " + catelog_find_sqlite
-							+ " AND 1 = 1")
-	public PageResult<T> findPagedListByCatalogId_Cover(int catelogId, int start, int limit, Function<String, String> sqlHandler);
 
 	// ---------------- create、update、delete------------------
 
 	/**
 	 * 新建记录
 	 * 
-	 * @param bean POJO 对象
+	 * @param bean 实体对象
 	 * @return 新建记录之序号
 	 */
 	@Insert
@@ -187,7 +154,7 @@ public interface IBaseDao<T> {
 	/**
 	 * 修改记录
 	 * 
-	 * @param bean POJO 对象
+	 * @param bean 实体对象
 	 * @return 影响的行数，理应 = 1
 	 */
 	@Update
@@ -196,7 +163,7 @@ public interface IBaseDao<T> {
 	/**
 	 * 单个删除
 	 * 
-	 * @param bean POJO 对象
+	 * @param bean 实体对象
 	 * @return 影响的行数
 	 */
 	@Delete

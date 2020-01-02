@@ -357,11 +357,6 @@ public class JdbcHelper extends JdbcReader {
 	 * @return 新增主键，为兼顾主键类型，返回的类型设为同时兼容 int/long/string 的 Serializable
 	 */
 	public static Serializable createBean(Connection conn, Object bean, String tableName) {
-		try {
-			LOGGER.info("创建记录 name:{0}！", ReflectUtil.executeMethod(bean, "getName"));
-		} catch (Throwable e) {
-		}
-
 		List<String> fields = new ArrayList<>(), placeholders = new ArrayList<>();
 		List<Object> values = new ArrayList<>();
 
