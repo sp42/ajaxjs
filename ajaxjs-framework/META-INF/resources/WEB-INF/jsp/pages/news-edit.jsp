@@ -121,12 +121,11 @@
 							<td>
 						<!-- 图片上传 --> 
 						<aj-xhr-upload action="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catalog=1" :is-img-upload="true" 
-							hidden-field="license" 
-							hidden-field-value="${info.license}" 
-							img-place="${empty info.license ? commonAsset.concat('/images/imgBg.png') : ctx.concat('/').concat(info.license)}">
+							hidden-field="cover" 
+							hidden-field-value="${info.cover}" 
+							img-place="${empty info.cover ? commonAsset.concat('/images/imgBg.png') : ctx.concat('/').concat(info.cover)}">
 						</aj-xhr-upload>
 							
-<ajaxjs-img-upload-perview ref="uploadControl" img-place="${(empty info.avatarPath || isCreate) ? commonAsset.concat('/images/imgBg.png'): ctx.concat(info.avatarPath)}" />
 							</td>
 						</tr>
 					</table>
@@ -158,8 +157,6 @@
 					<ajaxjs-admin-info-btns :is-create="${isCreate}"></ajaxjs-admin-info-btns>
 				</div>
 			</form>
-	<!-- 图片上传（iframe 辅助） -->
-	<ajaxjs-fileupload-iframe upload-url="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catelog=2" ref="uploadIframe"></ajaxjs-fileupload-iframe>
 			
 	<!-- 弹出层上传对话框 -->
 	<aj-popup-upload ref="uploadLayer" upload-url="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catelog=1" img-place="${commonAsset.concat('/images/imgBg.png')}"></aj-popup-upload>
@@ -172,7 +169,7 @@
 					 if(json && json.msg)
 						 aj.alert.show(json.msg);
 						${isCreate ? 'json && json.isOk && setTimeout(function(){location.assign(json.newlyId + "/");}, 2000);' : ''}
-				}, {beforeSubmit : function(form, json) {
+				}, {beforeSubmit(form, json) {
 					json.content = App.$refs.htmleditor.getValue({cleanWord : eval('${aj_allConfig.article.cleanWordTag}'), encode : true});
 				}
 			});

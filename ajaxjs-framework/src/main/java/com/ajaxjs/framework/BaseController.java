@@ -42,6 +42,7 @@ public abstract class BaseController<T> implements IController, Constant {
 	 * @return 新建记录 UI JSP 模版路径
 	 */
 	public String createUI(ModelAndView mv) {
+		prepareData(mv);
 		return ui(mv, true, "新建");
 	}
 

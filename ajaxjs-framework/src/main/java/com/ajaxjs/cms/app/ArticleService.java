@@ -23,12 +23,10 @@ public class ArticleService extends BaseService<Map<String, Object>> implements 
 
 	@TableName(value = "entity_article", beanClass = Map.class)
 	public interface ArticleDao extends IBaseDao<Map<String, Object>> {
-		@Select("SELECT e.id, e.name, e.createDate, e.updateDate, e.catalogId, e.intro, e.cover, e.stat FROM ${tableName} e WHERE "
-				+ WHERE_REMARK + DESCENDING_ID)
+		@Select("SELECT e.id, e.name, e.createDate, e.updateDate, e.catalogId, e.intro, e.cover, e.stat FROM ${tableName} e " + WHERE_REMARK_ORDER)
 		public PageResult<Map<String, Object>> list(int start, int limit, Function<String, String> sqlHandler);
 
-		@Select("SELECT e.id, e.name, e.createDate, e.cover, e.intro FROM ${tableName} e WHERE " + WHERE_REMARK
-				+ DESCENDING_ID)
+		@Select("SELECT e.id, e.name, e.createDate, e.cover, e.intro FROM ${tableName} e " + WHERE_REMARK_ORDER)
 		public List<Map<String, Object>> simpleList(Function<String, String> sqlHandler);
 
 		/**
@@ -39,16 +37,14 @@ public class ArticleService extends BaseService<Map<String, Object>> implements 
 		 * @param limit
 		 * @return
 		 */
-		@Select(value = "SELECT entry.id, entry.name, entry.createDate, entry.updateDate, entry.catalogId, intro, c.name AS catelogName FROM ${tableName} entry INNER JOIN "
+		@Select(value = "SELECT e.id, e.name, e.createDate, e.updateDate, e.catalogId, intro, c.name AS catalogName FROM ${tableName} e INNER JOIN "
 				+ catelog_finById
-				+ "ON entry.`catalogId` = c.id  WHERE 1 = 1 ORDER BY entry.createDate DESC", countSql = "SELECT COUNT(entry.id) AS count FROM ${tableName} entry WHERE catalogId IN "
-						+ catelog_find + " AND 1 = 1",
+				+ "ON e.`catalogId` = c.id " + WHERE_REMARK_ORDER, 
+				countSql = "SELECT COUNT(e.id) AS count FROM ${tableName} e WHERE catalogId IN " + catelog_find + WHERE_REMARK_AND,
 
-				sqliteValue = "SELECT id, name, createDate, updateDate, entry.catelogId, catalogName, intro FROM ${tableName} entry INNER JOIN "
-						+ catelog_finById_sqlite
-						+ " ON entry.`catelogId` = c.catelogId  WHERE 1 = 1 ORDER BY entry.createDate DESC", sqliteCountSql = "SELECT COUNT(entry.id) AS count FROM ${tableName} entry WHERE catelogId IN "
-								+ catelog_find_sqlite + WHERE_REMARK_AND)
-		@Override
+				sqliteValue = "SELECT id, name, createDate, updateDate, e.catalogId, catalogName, intro FROM ${tableName} e INNER JOIN " + catelog_finById_sqlite
+						+ " ON e.`catalogId` = c.catalogId " + WHERE_REMARK_ORDER, 
+				sqliteCountSql = "SELECT COUNT(e.id) AS count FROM ${tableName} e WHERE catelogId IN " + catelog_find_sqlite + WHERE_REMARK_AND)
 		public PageResult<Map<String, Object>> findPagedListByCatelogId(int catelogId, int start, int limit,
 				Function<String, String> sqlHandler);
 
@@ -91,14 +87,14 @@ public class ArticleService extends BaseService<Map<String, Object>> implements 
 		for (Map<String, Object> map : list) {
 			int year = (int)map.get("year"), month = (int)map.get("month");
 
-			map.put("start", year + "-" + month + "-1"); // 某个月份的第一天
+			map.put("startDate", year + "-" + month + "-1"); // 某个月份的第一天
 			
 			Calendar calendar = Calendar.getInstance();
 			calendar.set(year, month, 1); // 这里先设置要获取月份的下月的第一天
 			calendar.add(Calendar.DATE, -1);//这里将日期值减去一天，从而获取到要求的月份最后一天
 			
 			String end = CommonUtil.simpleDateFormatFactory(CommonUtil.commonDateFormat_shortest).format(calendar.getTime());
-			map.put("end", end);
+			map.put("endDate", end);
 		}
 		
 		return list;
