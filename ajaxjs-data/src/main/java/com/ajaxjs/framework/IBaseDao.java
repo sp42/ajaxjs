@@ -46,12 +46,6 @@ public interface IBaseDao<T> {
 	public static final String WHERE_REMARK_ORDER = " WHERE " + WHERE_REMARK + DESCENDING_ID;
 
 	/**
-	 * 实体别名必须为 entry
-	 */
-	@Deprecated
-	public final static String selectCover = "(SELECT path FROM attachment_picture p1 WHERE entry.uid = p1.owner AND p1.catalog = 1 ORDER BY p1.id DESC LIMIT 0, 1)";
-
-	/**
 	 * 
 	 * @deprecated
 	 * @param id
@@ -65,29 +59,6 @@ public interface IBaseDao<T> {
 					+ " p.path AS cover"
 					+ " FROM ${tableName} e LEFT JOIN attachment_picture p ON e.uid = p.owner WHERE e.id = ? ORDER BY p.id DESC LIMIT 1")
 	public T findById_Attachment(Long id);
-
-	/**
-	 * 左连接分类表，实体简写必须为 e
-	 */
-	public final static String LEFT_JOIN_CATALOG = " LEFT JOIN general_catalog gc ON gc.id = e.catalogId ";
-
-	public final static String pathLike_mysql = " FROM general_catalog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catalog WHERE id = ? ) , '%'))";
-//	public final static String pathLike_sqlite = " FROM general_catalog WHERE `path` LIKE ( (SELECT `path` FROM general_catalog WHERE id = ? ) || '/%')";
-	public final static String pathLike_sqlite = " FROM general_catalog WHERE `path` LIKE ( (SELECT `path` FROM general_catalog WHERE id = ? ) || '%')";
-
-	/**
-	 * 用于 catelogId 查询的，通常放在 LEFT JOIN 后面还需要，WHERE e.catelog = c.id。 还需要预留一个
-	 * catelogId 的参数 另外也可以用 IN 查询
-	 */
-	public final static String catelog_finById = " (SELECT id, name " + pathLike_mysql + ") AS c ";
-	public final static String catelog_finById_sqlite = "(SELECT id AS catalogId, name AS catalogName "
-			+ pathLike_sqlite + ") AS c";
-
-	/**
-	 * IN 查询用，多用于分页统计总数
-	 */
-	public final static String catelog_find = "(SELECT id " + pathLike_mysql + ")";
-	public final static String catelog_find_sqlite = "(SELECT id " + pathLike_sqlite + ")";
 
 	// ---------------- find one-------------------
 
@@ -108,7 +79,12 @@ public interface IBaseDao<T> {
 	 */
 	@Select("SELECT * FROM ${tableName} e WHERE e.id = ?")
 	public T findById(Long id);
-
+	
+	/**
+	 * 左连接分类表，实体简写必须为 e
+	 */
+	public final static String LEFT_JOIN_CATALOG = " LEFT JOIN general_catalog gc ON gc.id = e.catalogId ";
+	
 	/**
 	 * 查询单个记录，带有类别的。如果找不到则返回 null
 	 * 

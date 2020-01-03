@@ -4,12 +4,12 @@ import java.util.List;
 
 import com.ajaxjs.cms.SectionList;
 import com.ajaxjs.cms.SectionListService;
+import com.ajaxjs.cms.app.attachment.Attachment_pictureDao;
 import com.ajaxjs.cms.app.catalog.Catalog;
 import com.ajaxjs.cms.app.catalog.CatalogService;
 import com.ajaxjs.cms.app.catalog.CatalogServiceImpl;
 import com.ajaxjs.cms.controller.DataDictController;
 import com.ajaxjs.config.ConfigService;
-import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.shop.ShopConstant;
@@ -26,7 +26,7 @@ public class SectionService extends SectionListService {
 		setShortName("secion");
 	}
 
-	public static final String selectGroups = "SELECT g.id AS entryId, entry.name, %s AS entryTypeId, %s, (" + IBaseDao.selectCover
+	public static final String selectGroups = "SELECT g.id AS entryId, entry.name, %s AS entryTypeId, %s, (" + Attachment_pictureDao.LINK_COVER
 			+ ") AS cover FROM shop.shop_goods entry INNER JOIN shop_group g ON g.goodsId = entry.id WHERE g.id in (%s)\n";
 
 	private ScanTable fn = (sqls, entryTypeId, entryIds, caseSql) -> {

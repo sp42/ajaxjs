@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import com.ajaxjs.cms.app.attachment.Attachment_pictureDao;
 import com.ajaxjs.cms.app.attachment.Attachment_pictureService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
@@ -25,11 +26,11 @@ public class GroupService extends BaseService<Group> {
 
 	@TableName(value = "shop_group", beanClass = Group.class)
 	public static interface GroupDao extends IBaseDao<Group> {
-		@Select(value = "SELECT entry.name, entry.subTitle, entry.coverPrice, entry.titlePrice, entry.sellerId, g.*, (" + selectCover
+		@Select(value = "SELECT entry.name, entry.subTitle, entry.coverPrice, entry.titlePrice, entry.sellerId, g.*, (" + Attachment_pictureDao.LINK_COVER
 				+ ") AS cover FROM shop_goods entry INNER JOIN ${tableName} g ON g.goodsId = entry.id WHERE 1 = 1", countSql = "SELECT COUNT(*) AS count FROM shop_goods entry INNER JOIN ${tableName} g ON g.goodsId = entry.id WHERE 1 = 1")
 		public PageResult<Group> findPagedList_Cover(int start, int limit, Function<String, String> sqlHandler);
 
-		@Select("SELECT entry.*, g.*, entry.uid, entry.id AS goodsId, (" + selectCover + ") AS cover FROM shop.shop_goods entry INNER JOIN ${tableName} g ON g.goodsId = entry.id WHERE g.id = ?")
+		@Select("SELECT entry.*, g.*, entry.uid, entry.id AS goodsId, (" + Attachment_pictureDao.LINK_COVER + ") AS cover FROM shop.shop_goods entry INNER JOIN ${tableName} g ON g.goodsId = entry.id WHERE g.id = ?")
 		@Override
 		public Group findById(Long id);
 		

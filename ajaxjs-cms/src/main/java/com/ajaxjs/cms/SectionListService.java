@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import com.ajaxjs.cms.app.attachment.Attachment_pictureDao;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
@@ -50,7 +51,7 @@ public abstract class SectionListService extends BaseService<SectionList> {
 		public void addSql(List<String> sqls, int entryTypeId, String entryIds, String caseSql);
 	}
 
-	public static final String select = "SELECT entry.id AS entryId, entry.name,  %s AS entryTypeId, %s, " + IBaseDao.selectCover + " AS cover FROM %s entry WHERE id in (%s)\n";
+	public static final String select = "SELECT entry.id AS entryId, entry.name,  %s AS entryTypeId, %s, " + Attachment_pictureDao.LINK_COVER + " AS cover FROM %s entry WHERE id in (%s)\n";
 	
 	/**
 	 *
