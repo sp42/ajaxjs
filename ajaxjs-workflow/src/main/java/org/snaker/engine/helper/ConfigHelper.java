@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import com.ajaxjs.shop.service.OrderInfoService;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -20,7 +19,7 @@ import com.ajaxjs.util.logger.LogHelper;
  * @since 1.0
  */
 public class ConfigHelper {
-	public static final LogHelper LOGGER = LogHelper.getLog(OrderInfoService.class);
+	public static final LogHelper LOGGER = LogHelper.getLog(ConfigHelper.class);
 
 	/**
 	 * 常用配置属性文件名称.

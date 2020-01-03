@@ -12,7 +12,6 @@ import javax.transaction.UserTransaction;
 
 import org.snaker.engine.SnakerException;
 
-import com.ajaxjs.shop.service.OrderInfoService;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -22,7 +21,7 @@ import com.ajaxjs.util.logger.LogHelper;
  * @since 1.0
  */
 public class JtaTransactionInterceptor extends TransactionInterceptor {
-	public static final LogHelper LOGGER = LogHelper.getLog(OrderInfoService.class);
+	public static final LogHelper LOGGER = LogHelper.getLog(JtaTransactionInterceptor.class);
 
 	public void initialize(Object accessObject) {
 		// ignore
@@ -37,11 +36,13 @@ public class JtaTransactionInterceptor extends TransactionInterceptor {
 		if (status == Status.STATUS_ACTIVE)
 			return new TransactionStatus(null, false);
 
-		if ((status != Status.STATUS_NO_TRANSACTION) && (status != Status.STATUS_COMMITTED) && (status != Status.STATUS_ROLLEDBACK))
+		if ((status != Status.STATUS_NO_TRANSACTION) && (status != Status.STATUS_COMMITTED)
+				&& (status != Status.STATUS_ROLLEDBACK))
 			throw new SnakerException("无效的事务状态:" + status);
 
 		Transaction suspendedTransaction = null;
-		if ((status == Status.STATUS_ACTIVE) || (status == Status.STATUS_COMMITTED) || (status == Status.STATUS_ROLLEDBACK))
+		if ((status == Status.STATUS_ACTIVE) || (status == Status.STATUS_COMMITTED)
+				|| (status == Status.STATUS_ROLLEDBACK))
 			suspendedTransaction = JtaTransactionHelper.suspend();
 
 		try {
@@ -67,7 +68,8 @@ public class JtaTransactionInterceptor extends TransactionInterceptor {
 
 		LOGGER.info("rollback transaction=" + txStatus);
 
-		if ((txStatus != Status.STATUS_NO_TRANSACTION) && (txStatus != Status.STATUS_COMMITTED) && (txStatus != Status.STATUS_ROLLEDBACK))
+		if ((txStatus != Status.STATUS_NO_TRANSACTION) && (txStatus != Status.STATUS_COMMITTED)
+				&& (txStatus != Status.STATUS_ROLLEDBACK))
 			JtaTransactionHelper.rollback();
 	}
 }

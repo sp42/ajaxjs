@@ -10,7 +10,6 @@ import org.snaker.engine.SnakerInterceptor;
 import org.snaker.engine.core.Execution;
 import org.snaker.engine.entity.Task;
 
-import com.ajaxjs.shop.service.OrderInfoService;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -20,7 +19,7 @@ import com.ajaxjs.util.logger.LogHelper;
  * @since 1.0
  */
 public class LogInterceptor implements SnakerInterceptor {
-	public static final LogHelper LOGGER = LogHelper.getLog(OrderInfoService.class);
+	public static final LogHelper LOGGER = LogHelper.getLog(LogInterceptor.class);
 
 	/**
 	 * 拦截产生的任务对象，打印日志
