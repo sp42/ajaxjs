@@ -21,4 +21,9 @@ public interface Attachment_pictureDao extends IBaseDao<Attachment_picture> {
 
 	@Select("SElECT * FROM ${tableName} WHERE owner = ? AND catalog = " + Attachment_pictureService.ATTACHMENT)
 	public List<Attachment_picture> findAttachmentPictureByOwner(Long owner);
+	
+	/**
+	 * 实体别名必须为 entry
+	 */
+	public final static String LINK_COVER = "(SELECT path FROM attachment_picture p1 WHERE entry.uid = p1.owner AND p1.catalog = 1 ORDER BY p1.id DESC LIMIT 0, 1)";
 }

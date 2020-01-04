@@ -47,11 +47,6 @@ public class CatalogController extends BaseController<Catalog> {
 		return toJson(service.findAllListByParentId(parentId));
 	}
 
-	@Override
-	public String editUI(Long id, ModelAndView model) {
-		return show405;
-	}
-
 	@POST
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import com.ajaxjs.cms.app.catalog.CatalogDao;
 import com.ajaxjs.cms.app.catalog.CatalogServiceImpl;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
@@ -38,13 +39,13 @@ public class ArticleService extends BaseService<Map<String, Object>> implements 
 		 * @return
 		 */
 		@Select(value = "SELECT e.id, e.name, e.createDate, e.updateDate, e.catalogId, intro, c.name AS catalogName FROM ${tableName} e INNER JOIN "
-				+ catelog_finById
+				+ CatalogDao.catelog_finById
 				+ "ON e.`catalogId` = c.id " + WHERE_REMARK_ORDER, 
-				countSql = "SELECT COUNT(e.id) AS count FROM ${tableName} e WHERE catalogId IN " + catelog_find + WHERE_REMARK_AND,
+				countSql = "SELECT COUNT(e.id) AS count FROM ${tableName} e WHERE catalogId IN " + CatalogDao.CATALOG_FIND + WHERE_REMARK_AND,
 
-				sqliteValue = "SELECT id, name, createDate, updateDate, e.catalogId, catalogName, intro FROM ${tableName} e INNER JOIN " + catelog_finById_sqlite
+				sqliteValue = "SELECT id, name, createDate, updateDate, e.catalogId, catalogName, intro FROM ${tableName} e INNER JOIN " + CatalogDao.catelog_finById_sqlite
 						+ " ON e.`catalogId` = c.catalogId " + WHERE_REMARK_ORDER, 
-				sqliteCountSql = "SELECT COUNT(e.id) AS count FROM ${tableName} e WHERE catelogId IN " + catelog_find_sqlite + WHERE_REMARK_AND)
+				sqliteCountSql = "SELECT COUNT(e.id) AS count FROM ${tableName} e WHERE catelogId IN " + CatalogDao.CATALOG_FIND_SQLITE + WHERE_REMARK_AND)
 		public PageResult<Map<String, Object>> findPagedListByCatelogId(int catelogId, int start, int limit,
 				Function<String, String> sqlHandler);
 

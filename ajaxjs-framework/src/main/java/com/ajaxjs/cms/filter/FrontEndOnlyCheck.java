@@ -4,6 +4,7 @@ package com.ajaxjs.cms.filter;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+import com.ajaxjs.cms.app.CommonConstant;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
@@ -34,16 +35,14 @@ public class FrontEndOnlyCheck implements FilterAction {
 
 		Integer status = null;
 
-		if (info instanceof BaseModel) {
+		if (info instanceof BaseModel)
 			status = ((BaseModel) info).getStat();
-		} else if (info instanceof Map) {
+		else if (info instanceof Map)
 			status = (Integer) ((Map<String, Object>) info).get("stat");
-		}
-		
-		if(status != null && (2 == (int)status || 0 == (int)status)) {
-			System.out.println("sdsadsds");
-			isSkip = true;
-			
+
+		if (status != null && (CommonConstant.DELTETED == (int) status || CommonConstant.OFF_LINE == (int) status)) {
+			isSkip = true; // 好像没什么用
+
 			response.resultHandler("html::实体已下线或已不存在", request, null, method);
 			response.setSet(true);
 		}

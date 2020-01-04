@@ -67,4 +67,22 @@ public interface CatalogDao extends IBaseDao<Catalog> {
 //			"		id = ? ) || '%')")
 			"		id = ? ) || '/%')")
 	public List<Catalog> getAllListByParentId(int parentId);
+
+	public final static String PATH_LIKE_MYSQL = " FROM general_catalog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catalog WHERE id = ? ) , '%'))";
+//	public final static String pathLike_sqlite = " FROM general_catalog WHERE `path` LIKE ( (SELECT `path` FROM general_catalog WHERE id = ? ) || '/%')";
+	public final static String PATH_LIKE_SQLITE = " FROM general_catalog WHERE `path` LIKE ( (SELECT `path` FROM general_catalog WHERE id = ? ) || '%')";
+
+	/**
+	 * 用于 catelogId 查询的，通常放在 LEFT JOIN 后面还需要，WHERE e.catelog = c.id。 还需要预留一个
+	 * catelogId 的参数 另外也可以用 IN 查询
+	 */
+	public final static String catelog_finById = " (SELECT id, name " + PATH_LIKE_MYSQL + ") AS c ";
+	public final static String catelog_finById_sqlite = "(SELECT id AS catalogId, name AS catalogName "
+			+ PATH_LIKE_SQLITE + ") AS c";
+
+	/**
+	 * IN 查询用，多用于分页统计总数
+	 */
+	public final static String CATALOG_FIND 	   = "(SELECT id " + PATH_LIKE_MYSQL + ")";
+	public final static String CATALOG_FIND_SQLITE = "(SELECT id " + PATH_LIKE_SQLITE + ")";
 }

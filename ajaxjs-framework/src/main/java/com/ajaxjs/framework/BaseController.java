@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -38,42 +37,38 @@ public abstract class BaseController<T> implements IController, Constant {
 	/**
 	 * 指向新建记录的页面
 	 * 
-	 * @param model 页面 Model 模型
+	 * @param mv 页面 Model 模型
 	 * @return 新建记录 UI JSP 模版路径
 	 */
 	public String createUI(ModelAndView mv) {
-		prepareData(mv);
 		return ui(mv, true, "新建");
 	}
 
 	/**
 	 * 指向编辑记录的页面
 	 * 
-	 * @param id
-	 * @param mv 页面 Model 模型
-	 * @return
+	 * @param mv   页面 Model 模型
+	 * @param bean 实体
+	 * @return JSP 模版路径
 	 */
-	public String editUI(Long id, ModelAndView mv) {
-		info(id, mv, getService());
-		return ui(mv, false, "修改");
-	}
-
-	public String editUI(Long id, ModelAndView mv, Function<Long, T> getInfoAction) {
-		info(id, mv, getInfoAction);
+	public String editUI(ModelAndView mv, Object bean) {
+		mv.put(info, bean);// 读取单个记录或者编辑某个记录，保存到 ModelAndView 中（供视图渲染用）。
 		return ui(mv, false, "修改");
 	}
 
 	/**
 	 * 
-	 * @param mv
-	 * @param isCreate
+	 * @param mv       页面 Model 模型
+	 * @param isCreate 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate = true 标识为创建，以便与
+	 *                 update 区分开来。
 	 * @param text
-	 * @return
+	 * @return JSP 模版路径
 	 */
 	private String ui(ModelAndView mv, boolean isCreate, String text) {
 		LOGGER.info(text + "记录 UI");
 
-		mv.put("isCreate", isCreate); // 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate = true 标识为创建，以便与 update 区分开来。
+		prepareData(mv);
+		mv.put("isCreate", isCreate);
 		mv.put("actionName", text);
 
 		return editUI();
@@ -82,142 +77,66 @@ public abstract class BaseController<T> implements IController, Constant {
 	/**
 	 * 创建实体
 	 * 
-	 * @param entry        实体
-	 * @param createAction
-	 * @return
+	 * @param bean 实体
+	 * @return 新建实体之 id
 	 */
-	public static <E> String create(E entry, Function<E, Long> createAction) {
-		LOGGER.info("创建 name:{0}，数据库将执行 INSERT 操作");
-
-		Long newlyId = createAction.apply(entry);
-
+	public String create(T bean) {
+		Long newlyId = getService().create(bean);
 		if (newlyId == null)
-			throw new RuntimeException("创建失败！");
+			throw new Error("创建失败！");
 
 		return jsonOk_Extension("创建实体成功", "\"newlyId\":" + newlyId);
 	}
 
-	public static <E> String create(E entry, IBaseService<E> service) {
-		return create(entry, service::create);
-	}
-
-	public String create(T entry) {
-		return create(entry, getService());
-	}
-
 	/**
-	 * 读取单个记录或者编辑某个记录，保存到 ModelAndView 中（供视图渲染用）。
+	 * 设置实体之 id
 	 * 
-	 * @param id    ID 序号
-	 * @param model Model 模型
-	 * @return JSP 路径。缺省提供一个默认路径，但不一定要使用它，换别的也可以。
+	 * @param id   实体 id
+	 * @param bean 实体
 	 */
-	public <E> E info(Long id, ModelAndView mv, Function<Long, E> getInfoAction) {
-		E info = getInfoAction.apply(id);
-
-		if (mv != null) {
-			prepareData(mv);
-			mv.put("info", info);
-		}
-
-		return info;
-	}
-
-	/**
-	 * 
-	 * @param id      ID 序号
-	 * @param mv      Model 模型
-	 * @param service
-	 * @return
-	 */
-	public <E> E info(Long id, ModelAndView mv, IBaseService<E> service) {
-		return info(id, mv, service::findById);
-	}
-
-	/**
-	 * 
-	 * @param id ID 序号
-	 * @param mv Model 模型
-	 * @return
-	 */
-	public T info(Long id, ModelAndView mv) {
-		return info(id, mv, getService());
+	@SuppressWarnings("unchecked")
+	private void setId(Long id, T bean) {
+		if (bean instanceof BaseModel)
+			((BaseModel) bean).setId(id);
+		else if (bean instanceof Map)
+			((Map<String, Object>) bean).put("id", id);
+		else
+			LOGGER.warning("未知实体类型 " + bean.getClass().getName());
 	}
 
 	/**
 	 * 修改实体
 	 * 
-	 * @param id     实体 Long
-	 * @param entity 实体
+	 * @param id   实体 id
+	 * @param bean 实体
 	 * @return JSON 响应
 	 */
-	@SuppressWarnings("unchecked")
-	public static <E> String update(Long id, E entity, Consumer<E> updateAction) {
-		LOGGER.info("修改 name:{0}，数据库将执行 UPDATE 操作", entity);
+	public String update(Long id, T bean) {
+		LOGGER.info("修改 name:{0}，数据库将执行 UPDATE 操作", bean);
 
-		if (entity instanceof BaseModel)
-			((BaseModel) entity).setId(id);
-		else if (entity instanceof Map)
-			((Map<String, Object>) entity).put("id", id);
-		else
-			LOGGER.warning("未知实体类型 " + entity.getClass().getName());
-
-		updateAction.accept(entity);
+		setId(id, bean);
+		getService().update(bean);
 
 		return jsonOk("修改成功");
-	}
-
-	public static <E> String update(Long id, E entry, IBaseService<E> service) {
-		return update(id, entry, service::update);
-	}
-
-	public String update(Long id, T entity) {
-		return update(id, entity, getService());
 	}
 
 	/**
 	 * 根据 id 删除实体
 	 * 
-	 * @param id    实体 id
-	 * @param model 页面 Model 模型
+	 * @param id   实体 id
+	 * @param bean 实体
 	 * @return JSON 响应
 	 */
-	@SuppressWarnings("unchecked")
-	public static <E> String delete(Long id, E entity, Predicate<E> delAction) {
-		LOGGER.info("删除 id:{0}，数据库将执行 DELETE 操作", entity);
 
-		if (entity instanceof BaseModel)
-			((BaseModel) entity).setId(id);
-		else if (entity instanceof Map)
-			((Map<String, Object>) entity).put("id", id);
-		else
-			LOGGER.warning("未知实体类型 " + entity.getClass().getName());
+	public String delete(Long id, T bean) {
+		LOGGER.info("删除 id:{0}，数据库将执行 DELETE 操作", bean);
 
-		if (!delAction.test(entity))
+		setId(id, bean);
+
+		if (!getService().delete(bean))
 			throw new Error("删除失败！");
 
 		return jsonOk("删除成功");
-	}
-
-	/**
-	 * 
-	 * @param id
-	 * @param entity
-	 * @param service
-	 * @return
-	 */
-	public static <E> String delete(Long id, E entity, IBaseService<E> service) {
-		return delete(id, entity, service::delete);
-	}
-
-	/**
-	 * 
-	 * @param id
-	 * @param entity
-	 * @return
-	 */
-	public String delete(Long id, T entity) {
-		return delete(id, entity, getService());
 	}
 
 	/**
@@ -226,7 +145,7 @@ public abstract class BaseController<T> implements IController, Constant {
 	 * @param mv Model 模型
 	 */
 	public void prepareData(ModelAndView mv) {
-		if (getService() != null) {
+		if (mv != null && getService() != null) {
 			mv.put("uiName", getService().getUiName());
 			mv.put("shortName", getService().getShortName());
 			mv.put("tableName", getService().getTableName());

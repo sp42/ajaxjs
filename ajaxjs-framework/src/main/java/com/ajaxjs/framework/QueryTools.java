@@ -7,6 +7,7 @@ import java.util.function.Function;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.cms.app.CommonConstant;
+import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.JdbcHelper;
 import com.ajaxjs.util.CommonUtil;
@@ -42,14 +43,42 @@ public class QueryTools {
 	}
 
 	/**
+	 * 替换 1=1 为查询语句。这是基础的方法
+	 * 
+	 * @param sql
+	 * @param where
+	 * @return
+	 */
+	public static String where(String sql, String where) {
+		return sql.replace(IBaseDao.WHERE_REMARK, "(" + where + ")" + IBaseDao.WHERE_REMARK_AND);
+	}
+
+	public static String equals(String field, Object value) {
+		if (value instanceof String)
+			value = "'" + value + "'";
+
+		return field + " = " + value;
+	}
+
+	/**
+	 * 
+	 * @param sql
+	 * @param field
+	 * @param value
+	 * @return
+	 */
+	public static String where(String sql, String field, Object value) {
+		return where(sql, equals(field, value));
+	}
+
+	/**
 	 * 生成查询表达式的高阶函数
 	 * 
 	 * @param where WHERE 子语句
 	 * @return SQL 处理器
 	 */
 	public static Function<String, String> setWhere(String where) {
-		return where == null ? sql -> sql
-				: sql -> sql.replace(IBaseDao.WHERE_REMARK, "(" + where + ")" + IBaseDao.WHERE_REMARK_AND);
+		return where == null ? sql -> sql : sql -> where(sql, where);
 	}
 
 	/**
@@ -60,10 +89,55 @@ public class QueryTools {
 	 * @return SQL 处理器
 	 */
 	public static Function<String, String> by(String field, Object value) {
-		if (value instanceof String)
-			value = "'" + value + "'";
+		return setWhere(equals(field, value));
+	}
 
-		return setWhere(field + " = " + value);
+	/**
+	 * 控制器和业务方法可以不用提供 value 的参数，由 HttpServletRequest 获取
+	 * 
+	 * @param r
+	 * @param query
+	 * @param type
+	 * @return
+	 */
+	public static Object getValue(HttpServletRequest r, String query, Class<?> type) {
+		if (r != null && r.getParameter(query) != null) {
+			String _v = r.getParameter(query);
+			Object v = null;
+
+			if (type == String.class) {
+				if (!ServletHelper.preventSQLInject(_v)) // 防止 SQL 注入
+					return setWhere(null);
+				v = _v;
+			} else if (type == Long.class || type == long.class)
+				v = Long.parseLong(_v);
+			else if (type == Integer.class || type == int.class)
+				v = Integer.parseInt(_v);
+
+			return v;
+		}
+
+		return null;
+	}
+
+	public static Object getValue(String query, Class<?> type) {
+		return getValue(MvcRequest.getHttpServletRequest(), query, type);
+	}
+
+	/**
+	 * 控制器和业务方法可以不用提供 value 的参数，由 HttpServletRequest 获取
+	 * 
+	 * @param r
+	 * @param query
+	 * @param field
+	 * @param type
+	 * @return
+	 */
+	public static Function<String, String> by(String query, Class<?> type, String field) {
+		return sql -> {
+			Object v = getValue(query, type);
+			return v == null ? sql : where(sql, field, v);
+		};
 	}
 
 	/**

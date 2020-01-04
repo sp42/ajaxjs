@@ -15,17 +15,17 @@ import com.ajaxjs.util.CommonUtil;
 @Bean("CatalogService")
 public class CatalogServiceImpl extends BaseService<Catalog> implements CatalogService {
 	public static CatalogDao dao = new Repository().bind(CatalogDao.class);
-	
+
 	/**
 	 * 
 	 */
 	public final static String PATH_LIKE_MYSQL = " FROM general_catalog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catalog WHERE id = %d ) , '%%'))";
-	
+
 	/**
 	 * IN 查询用
 	 */
 	public final static String CATALOG_FIND = "e.catalogId IN (SELECT id " + PATH_LIKE_MYSQL + ")";
-	
+
 	{
 		setUiName("分类");
 		setShortName("catalog");
@@ -103,7 +103,7 @@ public class CatalogServiceImpl extends BaseService<Catalog> implements CatalogS
 	@Override
 	public List<Catalog> findAllListByParentId(int parentId, boolean isWithParent) {
 		List<Catalog> list = dao.getAllListByParentId(parentId);
-		
+
 		if (!isWithParent && list != null) {
 			for (int i = 0; i < list.size(); i++) {
 				if (list.get(i).getId() == new Integer(parentId).longValue()) {
@@ -125,8 +125,8 @@ public class CatalogServiceImpl extends BaseService<Catalog> implements CatalogS
 	public List<Map<String, Object>> findListAndSubByParentId(int parentId) {
 		return dao.getListAndSubByParentId(parentId);
 	}
-	
-	public static Function<String, String> whereByCatalogId (int catalogId){
+
+	public static Function<String, String> whereByCatalogId(int catalogId) {
 		return setWhere("catalogId = " + catalogId);
 	}
 
@@ -139,8 +139,18 @@ public class CatalogServiceImpl extends BaseService<Catalog> implements CatalogS
 	public static Function<String, String> setCatalog(int catalogId, int domainCatalogId) {
 		if (catalogId == 0)
 			catalogId = domainCatalogId;
-		
-		return setWhere(String.format(CATALOG_FIND, catalogId));
+
+		return setCatalog(catalogId);
+	}
+
+	public static Function<String, String> setCatalog(int catalogId) {
+		return setWhere(catalogId == 0 ? null : String.format(CATALOG_FIND, catalogId));
+	}
+
+	public static Function<String, String> setCatalog() {
+		Object v = getValue("catalogId", int.class);
+
+		return v == null ? setWhere(null) : setCatalog((int) v);
 	}
 
 	/**

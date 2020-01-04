@@ -171,12 +171,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	public String createUI(ModelAndView model) {
 		return show405;
 	}
-
-	@Override
-	public String editUI(Long id, ModelAndView model) {
-		return show405;
-	}
-
+	
 	@POST
 	@Override
 	public String create(Attachment_picture entity) {
