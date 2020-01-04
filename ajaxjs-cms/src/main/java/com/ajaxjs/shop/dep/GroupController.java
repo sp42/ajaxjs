@@ -55,9 +55,8 @@ public class GroupController extends BaseController<Group> {
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path(idInfo)
-	@Override
 	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
-		super.editUI(id, mv);
+		editUI(mv, service.findById(id));
 		return jsp("shop/simple-group-edit");
 	}
 

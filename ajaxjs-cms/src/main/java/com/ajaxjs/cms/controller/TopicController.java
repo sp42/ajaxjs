@@ -86,9 +86,8 @@ public class TopicController extends BaseController<Map<String, Object>> {
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("/admin/topic/{id}")
-	@Override
 	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
-		return super.editUI(id, mv);
+		return editUI(mv, service.findById(id));
 	}
 
 	@PUT

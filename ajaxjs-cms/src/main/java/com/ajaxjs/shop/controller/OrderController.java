@@ -128,9 +128,8 @@ public class OrderController extends BaseController<OrderInfo> {
 	@GET
 	@Path(idInfo)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Override
 	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
-		super.editUI(id, mv);
+		editUI(mv, service.findById(id));
 
 		// 获取用户名
 		OrderInfo order = (OrderInfo) mv.get("info");

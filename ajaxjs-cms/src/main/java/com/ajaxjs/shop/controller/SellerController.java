@@ -63,9 +63,8 @@ public class SellerController extends BaseController<Seller> {
 	@GET
 	@Path(idInfo)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Override
 	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
-		super.editUI(id, mv);
+		editUI(mv, service.findById(id));
 		return jsp("shop/seller-edit");
 	}
 

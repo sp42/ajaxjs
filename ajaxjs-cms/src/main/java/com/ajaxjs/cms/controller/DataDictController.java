@@ -106,11 +106,6 @@ public class DataDictController extends BaseController<Map<String, Object>> {
 		return DataDictService.dao.findByParentId(pId);
 	}
 
-	@Override
-	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
-		return show405;
-	}
-
 	@POST
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)

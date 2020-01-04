@@ -16,7 +16,6 @@ import javax.ws.rs.core.MediaType;
 import com.ajaxjs.cms.app.CommonConstant;
 import com.ajaxjs.cms.filter.FrontEndOnlyCheck;
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
@@ -37,15 +36,17 @@ import com.ajaxjs.util.logger.LogHelper;
 @Path("/admin/goods")
 public class GoodsController extends BaseController<Goods> {
 	private static final LogHelper LOGGER = LogHelper.getLog(GoodsController.class);
-	
+
 	@Resource("GoodsService")
 	private GoodsService service;
 
 	@GET
 	@Path(list)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(catalogId) int catalogId, @QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam("sellerId") int sellerId, ModelAndView mv) {
-		page(mv, service.findPagedListByCatalogId(catalogId, start, limit, CommonConstant.OFF_LINE, sellerId), CommonConstant.UI_ADMIN);
+	public String list(@QueryParam(catalogId) int catalogId, @QueryParam(start) int start, @QueryParam(limit) int limit,
+			@QueryParam("sellerId") int sellerId, ModelAndView mv) {
+		page(mv, service.findPagedListByCatalogId(catalogId, start, limit, CommonConstant.OFF_LINE, sellerId),
+				CommonConstant.UI_ADMIN);
 		return jsp("shop/goods-admin-list");
 	}
 
@@ -60,13 +61,12 @@ public class GoodsController extends BaseController<Goods> {
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path(idInfo)
-	@Override
 	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
-		IBaseDao<Goods> dao = service.getDao();
-		super.editUI(id, mv, dao::findById);
+		editUI(mv, service.findById(id));
+
 		return jsp("shop/goods-edit");
 	}
-	
+
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("getJson/{id}")
@@ -111,28 +111,30 @@ public class GoodsController extends BaseController<Goods> {
 	@GET
 	@Path("/shop/goods")
 	@MvcFilter(filters = { DataBaseFilter.class })
-	public String list(@QueryParam(catalogId) int catelogId, ModelAndView mv, @QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam("sellerId") int sellerId) {
+	public String list(@QueryParam(catalogId) int catelogId, ModelAndView mv, @QueryParam(start) int start,
+			@QueryParam(limit) int limit, @QueryParam("sellerId") int sellerId) {
 		LOGGER.info("浏览商品");
-		
-		page(mv, service.findPagedListByCatalogId(catelogId, start, 9, CommonConstant.ON_LINE, sellerId), CommonConstant.UI_FRONTEND);
+
+		page(mv, service.findPagedListByCatalogId(catelogId, start, 9, CommonConstant.ON_LINE, sellerId),
+				CommonConstant.UI_FRONTEND);
 		return jsp("shop/goods");
 	}
-	
+
 	@GET
 	@Path("/shop/goods/{id}/")
 	@MvcFilter(filters = { DataBaseFilter.class, FrontEndOnlyCheck.class })
 	public String showInfo(@PathParam(id) Long id, ModelAndView mv) {
 		LOGGER.info("浏览商品 info");
-		
+
 		mv.put(info, service.getGoodsDetail(id, BaseUserController.getUserId()));
 		return jsp("shop/goods-info");
 	}
-	
+
 	@Override
 	public IBaseService<Goods> getService() {
 		return service;
-	} 
-	
+	}
+
 	@Override
 	public void prepareData(ModelAndView mv) {
 		// 商家数据，记录不多，可以这样做
@@ -143,7 +145,7 @@ public class GoodsController extends BaseController<Goods> {
 //		
 //		Map<Long, BaseModel> cMap = CatalogServiceImpl.list_bean2map_id_as_key(new CatalogServiceImpl().findAllListByParentId(service.getDomainCatalogId()));
 //		mv.put("goodsCatalogs", cMap);
-	
+
 		super.prepareData(mv);
 	}
 

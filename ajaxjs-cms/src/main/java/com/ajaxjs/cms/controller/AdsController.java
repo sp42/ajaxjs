@@ -41,10 +41,8 @@ public class AdsController extends BaseController<Ads> {
 	@GET
 	@Path(idInfo)
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Override
 	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
-		super.editUI(id, mv);
-		return editUI();
+		return editUI(mv, service.findById(id));
 	}
 
 	@GET

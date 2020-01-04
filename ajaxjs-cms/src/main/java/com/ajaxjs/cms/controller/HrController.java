@@ -79,9 +79,8 @@ public class HrController extends BaseController<Map<String, Object>> {
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("/admin/hr/{id}")
-	@Override
 	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
-		return super.editUI(id, mv);
+		return editUI(mv, service.findById(id));
 	}
 
 	@PUT
