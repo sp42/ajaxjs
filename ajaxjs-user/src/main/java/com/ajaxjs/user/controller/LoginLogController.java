@@ -23,6 +23,7 @@ import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
 import com.ajaxjs.user.UserDict;
 import com.ajaxjs.user.login.UserLoginLog;
+import com.ajaxjs.user.service.UserDao;
 
 /**
  * 
@@ -32,7 +33,7 @@ import com.ajaxjs.user.login.UserLoginLog;
 public class LoginLogController extends BaseController<UserLoginLog> {
 	@TableName(value = "user_login_log", beanClass = UserLoginLog.class)
 	public static interface UserLoginLogDao extends IBaseDao<UserLoginLog> {
-		@Select("SELECT e.*, user.name AS userName FROM ${tableName} e LEFT JOIN user ON user.id = e.userId WHERE 1 = 1 ORDER BY e.id DESC")
+		@Select("SELECT e.*, user.name AS userName FROM ${tableName} e " + UserDao.LEFT_JOIN_USER + WHERE_REMARK_ORDER)
 		@Override
 		public PageResult<UserLoginLog> findPagedList(int start, int limit, Function<String, String> sqlHandler);
 

@@ -11,6 +11,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.ajaxjs.user.role.RightConstant;
+import com.ajaxjs.user.role.RoleService;
 
 /**
  * 进入后台一切资源的拦截器
@@ -22,10 +26,11 @@ public class UserAdminFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) _request;
 		HttpServletResponse response = (HttpServletResponse) _response;
 
+		HttpSession s = request.getSession();
 		if (request.getRequestURI().equals(request.getContextPath() + "/admin/login/")) {
 			// 后台登录
 			chain.doFilter(request, response);
-		} else if (request.getSession().getAttribute("userId") == null) {
+		} else if (!RoleService.check(s, RightConstant.ADMIN_SYSTEM_ALLOW_ENTNER)) {
 			response.setStatus(401, "Authentication Required");
 			response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
 			response.setContentType("text/html");

@@ -64,11 +64,10 @@ public class UserAdminController extends BaseController<User> {
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path(idInfo)
-	@Override
 	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
 		mv.put("UserGroupsJSON", toJson(roleService.getDao().findList(null), false).replaceAll("\"", "'"));
 		mv.put("SexGender", UserDict.SEX_GENDER);
-		super.editUI(id, mv);
+		editUI(mv, service.findById(id));
 
 		return jsp("user/user-edit");
 	}

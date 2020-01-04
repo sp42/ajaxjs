@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
@@ -124,7 +125,7 @@ public class RoleService extends BaseService<Map<String, Object>> {
 		num >>>= pos;// 右移X位
 		return (num & 1) == 1;
 	}
-	
+
 	public static boolean simple8421(int num, int pos) {
 		return (num & pos) == pos;
 	}
@@ -137,8 +138,15 @@ public class RoleService extends BaseService<Map<String, Object>> {
 	public static boolean check(int pos) {
 		HttpServletRequest request = MvcRequest.getHttpServletRequest();
 		Objects.requireNonNull(request);
-		Object _privilegeTotal = request.getSession().getAttribute("privilegeTotal");
-		Objects.requireNonNull(_privilegeTotal);
+		return check(request.getSession(), pos);
+	}
+
+	public static boolean check(HttpSession s, int pos) {
+		Objects.requireNonNull(s);
+		Object _privilegeTotal = s.getAttribute("privilegeTotal");
+		if (_privilegeTotal == null)
+			return false;
+		
 		long privilegeTotal = (long) _privilegeTotal;
 
 		return check(privilegeTotal, pos);

@@ -57,7 +57,7 @@ public class UserAddressController extends BaseController<UserAddress> {
 	@Path(idInfo)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
-		super.editUI(id, mv);
+		editUI(mv, service.findById(id));
 		return jsp(jsp + "-info");
 	}
 
@@ -70,17 +70,17 @@ public class UserAddressController extends BaseController<UserAddress> {
 	@POST
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
-	public String createUserAddress(@NotNull @BeanParam UserAddress entity) {
-		entity.setUserId(BaseUserController.getUserId());
-		return create(entity, service);
+	public String createUserAddress(@NotNull @BeanParam UserAddress bean) {
+		bean.setUserId(BaseUserController.getUserId());
+		return create(bean);
 	}
 
 	@PUT
 	@Path(idInfo)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
-	public String updateUserAddress(@PathParam(id) Long id, UserAddress entity) {
-		return update(id, entity, service);
+	public String updateUserAddress(@PathParam(id) Long id, UserAddress bean) {
+		return update(id, bean);
 	}
 
 	@DELETE

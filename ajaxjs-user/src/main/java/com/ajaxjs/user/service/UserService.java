@@ -1,6 +1,7 @@
 package com.ajaxjs.user.service;
 
 import java.util.Date;
+import java.util.function.Function;
 
 import com.ajaxjs.cms.app.attachment.Attachment_picture;
 import com.ajaxjs.cms.app.attachment.Attachment_pictureService;
@@ -46,9 +47,9 @@ public class UserService extends BaseService<User> {
 	/**
 	 * 普通口令注册
 	 * 
-	 * @param user			用户对象
-	 * @param password		密码对象
-	 * @return	新用户之 id
+	 * @param user     用户对象
+	 * @param password 密码对象
+	 * @return 新用户之 id
 	 * @throws ServiceException
 	 */
 	public Long register(User user, UserCommonAuth password) throws ServiceException {
@@ -58,12 +59,12 @@ public class UserService extends BaseService<User> {
 			user.setPhone(user.getPhone().trim()); // 消除空格
 			checkIfRepeated("phone", user.getPhone(), "手机号码");
 		}
-		
+
 		if (user.getName() != null) {
 			user.setName(user.getName().trim());
 			checkIfRepeated("name", user.getName(), "用户名");
 		}
-		
+
 		if (user.getEmail() != null) {
 			user.setEmail(user.getEmail().trim());
 			checkIfRepeated("email", user.getEmail(), "邮箱");
@@ -101,9 +102,9 @@ public class UserService extends BaseService<User> {
 	/**
 	 * 检查某个值是否已经存在一样的值
 	 * 
-	 * @param field		数据库里面的字段名称
-	 * @param value		欲检查的值
-	 * @param type		提示的类型
+	 * @param field 数据库里面的字段名称
+	 * @param value 欲检查的值
+	 * @param type  提示的类型
 	 * @return true=值重复
 	 * @throws ServiceException
 	 */
@@ -117,13 +118,13 @@ public class UserService extends BaseService<User> {
 	/**
 	 * 检查某个值是否已经存在一样的值
 	 * 
-	 * @param field		数据库里面的字段名称
-	 * @param value		欲检查的值
+	 * @param field 数据库里面的字段名称
+	 * @param value 欲检查的值
 	 * @return true=值重复
 	 */
 	public static boolean checkIfRepeated(String field, String value) {
 		value = value.trim();
-		
+
 		return value != null && JdbcReader.queryOne(JdbcConnection.getConnection(),
 				"SELECT * FROM user WHERE " + field + " = ? LIMIT 1", Object.class, value) != null;
 	}
@@ -218,6 +219,8 @@ public class UserService extends BaseService<User> {
 		return dao.delete(bean);
 	}
 
+
+
 	public Attachment_picture updateOrCreateAvatar(long userUId, UploadFileInfo info) throws Exception {
 		if (!info.isOk)
 			throw new ServiceException("图片上传失败");
@@ -255,5 +258,16 @@ public class UserService extends BaseService<User> {
 			}
 		}
 	}
+	
+	/**
+	 * 按实体 userId 查找的高阶函数
+	 * 
+	 * @param uid userId
+	 * @return SQL 处理器
+	 */
+	public static Function<String, String> byUserId(long userId) {
+		return by("userId", userId);
+	}
 
+	public static Function<String, String> byUserId = by("userId", long.class, "userId");
 }

@@ -37,11 +37,6 @@ public class RoleController extends BaseController<Map<String, Object>> {
 		return toJson(service.findList());
 	}
 
-	@Override
-	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
-		return show405;
-	}
-
 	@GET
 	public String jsp(ModelAndView mv) {
 		prepareData(mv);
