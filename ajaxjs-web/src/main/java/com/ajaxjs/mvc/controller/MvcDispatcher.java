@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
@@ -216,11 +217,16 @@ public class MvcDispatcher implements Filter {
 			response.resultHandler(String.format(Constant.json_not_ok, JsonHelper.jsonString_covernt(errMsg)), request,
 					model, method);
 		} else {
-			request.setAttribute("javax.servlet.error.status_code", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			request.setAttribute("javax.servlet.error.exception_type", err.getClass());
-			request.setAttribute("javax.servlet.error.exception", err);
-			response.resultHandler("/WEB-INF/jsp/error.jsp", request, model, method);
-
+			if (err instanceof IllegalAccessError && ConfigService.getValueAsString("page.onNoLogin") != null) {
+				response.resultHandler(
+						"redirect::" + request.getContextPath() + ConfigService.getValueAsString("page.onNoLogin"),
+						request, model, method);
+			} else {
+				request.setAttribute("javax.servlet.error.status_code", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				request.setAttribute("javax.servlet.error.exception_type", err.getClass());
+				request.setAttribute("javax.servlet.error.exception", err);
+				response.resultHandler("/WEB-INF/jsp/error.jsp", request, model, method);
+			}
 //			response.resultHandler(String.format("redirect::%s/showMsg?msg=%s", request.getContextPath(), Encode.urlEncode(errMsg)), request, model, method);
 		}
 	}
