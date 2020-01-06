@@ -34,7 +34,7 @@
 				<label> 
 					<div class="label">分类：</div>  
 					<!-- 分类下拉 -->
-					<aj-tree-catelog-select field-name="catalogId" :catalog-id="${domainCatalog_Id}" :selected-catalog-id="${empty info.catelogId ? 0 : info.catelogId}"></aj-tree-catelog-select>
+					<aj-tree-catelog-select field-name="catalogId" :catalog-id="${domainCatalog_Id}" :selected-catalog-id="${empty info.catalogId ? 0 : info.catalogId}"></aj-tree-catelog-select>
 					<span style="color:red;">*</span>
 				</label>
 				&nbsp; &nbsp; &nbsp; 
@@ -56,40 +56,25 @@
 					</c:when>
 					<c:otherwise>
 							<!-- 图片上传 -->
-							<aj-xhr-upload action="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catelog=2" 
-								:is-img-upload="true" img-place="${empty info.cover ? commonAsset.concat('/images/imgBg.png') : ctx.concat(info.cover)}"></aj-xhr-upload>
+							<aj-xhr-upload action="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catalog=2" 
+								:is-img-upload="true" 
+								hidden-field="cover" 
+								hidden-field-value="${info.cover}" 
+								img-place="${empty info.cover ? commonAsset.concat('/images/imgBg.png') : ctx.concat('/').concat(info.cover)}">
+							</aj-xhr-upload>
 					</c:otherwise>
 				</c:choose>
-						</td>
-			<!-- 			<td width="50"></td>
-						<td>
-							<div class="label" style="float: left;">展示图：</div>
-						</td> -->
-						<td style="display:none;">
-				<c:choose>
-					<c:when test="${isCreate}">
-							<span>请保存记录后再上传图片。</span>
-					</c:when>
-					<c:otherwise>
-							<!-- 图片上传 --> 
-							<aj-xhr-upload action="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catelog=1" 
-								:is-img-upload="true" img-place="${empty info.img ? commonAsset.concat('/images/imgBg.png') : ctx.concat(info.img)}"></aj-xhr-upload>
-					</c:otherwise>
-				</c:choose>
-						</td>
 						
 					</tr>
 				</table>
 			</div>
 			<div>
 				<!--按钮 -->
-				<ajaxjs-admin-info-btns :is-create="${isCreate ? true : false}"></ajaxjs-admin-info-btns>
+				<ajaxjs-admin-info-btns :is-create="${isCreate}"></ajaxjs-admin-info-btns>
 			</div>
 		</form>
 	</div>
 	
-	
-	<script src="${ctx}/test/test.js"></script>
 	<script>
 		App = new Vue({
 			el : '.admin-entry-form',
@@ -99,7 +84,7 @@
 		});
 
 		// 表单提交
-		aj.xhr.form('form.entityEdit', function(json) {
+		aj.xhr.form('.admin-entry-form form', json => {
 			if (json && json.msg)
 				aj.alert.show(json.msg);
 			${isCreate ? 'json && json.isOk && setTimeout(function(){location.assign(json.newlyId + "/");}, 2000);': ''}

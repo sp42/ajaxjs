@@ -31,7 +31,7 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 	private static final LogHelper LOGGER = LogHelper.getLog(OrderService.class);
 
 	public static OrderInfoDao dao = new Repository().bind(OrderInfoDao.class);
-	
+
 	{
 		setUiName("订单");
 		setShortName("order");
@@ -43,7 +43,7 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 
 	@Resource("CartService")
 	private CartService cartService = new CartService();
-	
+
 	@Resource("OrderItemService")
 	private OrderItemService orderItemService = new OrderItemService();
 
@@ -57,7 +57,8 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 	 * @param orderNo
 	 * @return
 	 */
-	public PageResult<OrderInfo> findPagedList(int start, int limit, int tradeStatus, int payStatus, String orderNo, long userId) {
+	public PageResult<OrderInfo> findPagedList(int start, int limit, int tradeStatus, int payStatus, String orderNo,
+			long userId) {
 		Function<String, String> sqlHander = BaseService::betweenCreateDate;
 
 		if (tradeStatus != 0)
@@ -68,8 +69,8 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 
 		if (!CommonUtil.isEmptyString(orderNo))
 			sqlHander.andThen(by("orderNo", orderNo));
-		
-		if(userId != 0)
+
+		if (userId != 0)
 			sqlHander.andThen(by("buyerId", userId));
 
 		return findPagedList(start, limit, sqlHander);
@@ -94,7 +95,7 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 	public OrderInfo findByOrderNo(String orderNo) {
 		return dao.find(by("orderNo", orderNo));
 	}
-	
+
 	/**
 	 * 获取订单实体，包含详细的信息
 	 * 
@@ -116,7 +117,6 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 
 		return map;
 	}
-	
 
 	/**
 	 * 删除订单关联的明细表项
@@ -125,7 +125,7 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 	 */
 	public void deleteOrderItems(long orderId) {
 		List<OrderItem> orderItems = dao.findOrderItemListByOrderId_Simple(orderId);
-		
+
 		for (OrderItem orderItem : orderItems)
 			orderItemService.delete(orderItem);
 	}
@@ -200,6 +200,14 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 	}
 
 	/**
+	 * 当处理完毕订单后执行
+	 * 
+	 * @param order
+	 */
+	public void onProcessOrderDone(OrderInfo order) {
+	}
+
+	/**
 	 * 复制地址
 	 * 
 	 * @param order
@@ -208,18 +216,19 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 	private void getAddress(OrderInfo order, long addressId) {
 		System.out.println(UserAddressService.AREA_DATA.get("China_AREA", "86", "210000"));
 		System.out.println(UserAddressService.AREA_DATA.get("China_AREA", "210000", "210100"));
-		
+
 		UserAddress address = addService.findById(addressId);
 		order.setShippingTarget(address.getName());
 		order.setShippingPhone(address.getPhone());
 		order.setShippingCode(address.getZipCode());
 
-		String p = address.getLocationProvince() + "", c = address.getLocationCity() + "", d = address.getLocationDistrict() + "";
-		
-		order.setShippingAddress(UserAddressService.AREA_DATA.get("China_AREA", "86", p).toString() 
+		String p = address.getLocationProvince() + "", c = address.getLocationCity() + "",
+				d = address.getLocationDistrict() + "";
+
+		order.setShippingAddress(UserAddressService.AREA_DATA.get("China_AREA", "86", p).toString()
 				+ UserAddressService.AREA_DATA.get("China_AREA", p, c)
 				+ UserAddressService.AREA_DATA.get("China_AREA", c, d) + address.getAddress());
-		
+
 	}
 
 	/**

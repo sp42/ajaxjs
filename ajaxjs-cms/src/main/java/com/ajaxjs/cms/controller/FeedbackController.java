@@ -37,7 +37,7 @@ public class FeedbackController extends BaseController<Map<String, Object>> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String adminList(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
 		LOGGER.info("留言反馈列表");
-		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE));
+		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE, true));
 	}
 	
 	@GET

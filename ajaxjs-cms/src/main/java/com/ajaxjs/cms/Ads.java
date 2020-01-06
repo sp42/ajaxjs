@@ -28,43 +28,22 @@ public class Ads extends BaseModel {
 		return createByUser;
 	}
 
-	/**
-	 * 是否已删除 1=已删除；0/null；未删除
-	 */
-	private Integer deleted;
 
-	/**
-	 * 设置是否已删除 1=已删除；0/null；未删除
-	 * 
-	 * @param deleted 是否已删除 1=已删除；0/null；未删除
-	 */
-	public void setDeleted(Integer deleted) {
-		this.deleted = deleted;
-	}
 
-	/**
-	 * 获取是否已删除 1=已删除；0/null；未删除
-	 * 
-	 * @return 是否已删除 1=已删除；0/null；未删除
-	 */
-	public Integer getDeleted() {
-		return deleted;
-	}
-
-	private String catelogName;
+	private String catalogName;
 
 	/**
 	 * 分类 id
 	 */
-	private Integer catelogId;
+	private Integer catalogId;
 
 	/**
 	 * 设置分类 id
 	 * 
-	 * @param catelogId 分类 id
+	 * @param catalogId 分类 id
 	 */
-	public void setCatelogId(Integer catelogId) {
-		this.catelogId = catelogId;
+	public void setCatalogId(Integer catalogId) {
+		this.catalogId = catalogId;
 	}
 
 	/**
@@ -72,8 +51,8 @@ public class Ads extends BaseModel {
 	 * 
 	 * @return 分类 id
 	 */
-	public Integer getCatelogId() {
-		return catelogId;
+	public Integer getCatalogId() {
+		return catalogId;
 	}
 
 	/**
@@ -99,24 +78,25 @@ public class Ads extends BaseModel {
 		return link;
 	}
 
-	public String getCatelogName() {
-		return catelogName;
+	public String getCatalogName() {
+		return catalogName;
 	}
 
-	public void setCatelogName(String catelogName) {
-		this.catelogName = catelogName;
-	}
-
-	public String getImg() {
-		return img;
-	}
-
-	public void setImg(String img) {
-		this.img = img;
+	public void setCatalogName(String catalogName) {
+		this.catalogName = catalogName;
 	}
 
 	/**
 	 * 广告图片
 	 */
-	private String img;
+	private String cover;
+
+	public String getCover() {
+		return cover;
+	}
+
+	public void setCover(String cover) {
+		this.cover = cover;
+	}
+	
 }

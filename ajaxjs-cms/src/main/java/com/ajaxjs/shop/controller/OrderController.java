@@ -94,6 +94,7 @@ public class OrderController extends BaseController<OrderInfo> {
 		UserAddressService.initData(r);
 		String[] cartIds = _cartIds.split(",");
 		OrderInfo order = service.processOrder(BaseUserController.getUserId(), addressId, cartIds);
+		service.onProcessOrderDone(order);
 		
 		if(order != null) {
 			return jsonOk("交易成功！");

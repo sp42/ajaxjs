@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.ajaxjs.cms.SectionList;
 import com.ajaxjs.cms.SectionListService;
-import com.ajaxjs.cms.app.attachment.Attachment_pictureDao;
 import com.ajaxjs.cms.app.catalog.Catalog;
 import com.ajaxjs.cms.app.catalog.CatalogService;
 import com.ajaxjs.cms.app.catalog.CatalogServiceImpl;
@@ -26,22 +25,22 @@ public class SectionService extends SectionListService {
 		setShortName("secion");
 	}
 
-	public static final String selectGroups = "SELECT g.id AS entryId, entry.name, %s AS entryTypeId, %s, (" + Attachment_pictureDao.LINK_COVER
-			+ ") AS cover FROM shop.shop_goods entry INNER JOIN shop_group g ON g.goodsId = entry.id WHERE g.id in (%s)\n";
+	public static final String SELECT_GROUPS = "SELECT g.id AS entryId, entry.name, %s AS entryTypeId, %s FROM shop.shop_goods entry INNER JOIN shop_group g ON g.goodsId = entry.id WHERE g.id in (%s)\n";
 
-	private ScanTable fn = (sqls, entryTypeId, entryIds, caseSql) -> {
-		switch (entryTypeId) {
+	private static ScanTable fn = (sqls, entityTypeId, entityIds, caseSql) -> {
+		switch (entityTypeId) {
 		case DataDictController.DataDictService.ENTRY_TOPIC:
-			sqls.add(String.format(select, entryTypeId, caseSql, "entity_topic", entryIds));
+			sqls.add(String.format(SELECT, entityTypeId, caseSql, "entity_topic", entityIds));
 			break;
 		case DataDictController.DataDictService.ENTRY_ADS:
-			sqls.add(String.format(select, entryTypeId, caseSql, "entity_ads", entryIds));
+			sqls.add(String.format(SELECT, entityTypeId, caseSql, "entity_ads", entityIds));
 			break;
 		case ShopConstant.ENTRY_GOODS:
-			sqls.add(String.format(select, entryTypeId, caseSql, "shop_goods", entryIds));
+			sqls.add(String.format(SELECT, entityTypeId, caseSql, "shop_goods", entityIds));
 			break;
 		case ShopConstant.ENTRY_GROUP:
-			sqls.add(String.format(selectGroups, entryTypeId, caseSql.replaceAll("WHEN entry.id", "WHEN g.id") /*修正一下，别名有所不同*/, entryIds));
+			sqls.add(String.format(SELECT_GROUPS, entityTypeId,
+					caseSql.replaceAll("WHEN entry.id", "WHEN g.id") /* 修正一下，别名有所不同 */, entityIds));
 			break;
 		}
 	};
@@ -52,7 +51,7 @@ public class SectionService extends SectionListService {
 	 * @return
 	 */
 	public List<SectionList> findAds() {
-		return findSectionListBySectionId(ConfigService.getValueAsInt("data.section.ads_Catelog_Id"));
+		return findSectionListBySectionId(ConfigService.getValueAsInt("data.section.ads_Catalog_Id"));
 	}
 
 	public List<SectionList> findSectionListBySectionId(int sectionId) {
@@ -68,7 +67,7 @@ public class SectionService extends SectionListService {
 	 * @return
 	 */
 	public PageResult<SectionList> findSectionListBySectionId(int start, int limit, int sectionId) {
-		return super.findSectionListBySectionId(start, limit, sectionId, fn);
+		return findSectionListBySectionId(start, limit, sectionId, fn);
 	}
 
 	private CatalogService catalogService = new CatalogServiceImpl();
@@ -79,7 +78,8 @@ public class SectionService extends SectionListService {
 	 * @return
 	 */
 	public List<Catalog> findSectionCatalog() {
-		List<Catalog> c = catalogService.findAllListByParentId(ConfigService.getValueAsInt("data.section.sectionList_Catelog_Id"), false);
+		List<Catalog> c = catalogService
+				.findAllListByParentId(ConfigService.getValueAsInt("data.section.sectionList_Catalog_Id"), false);
 		Catalog parent = new Catalog();
 		parent.setId(154L);
 		parent.setName("栏目");

@@ -27,10 +27,10 @@ public class ShopBookmarkService extends SectionListService {
 	private ScanTable fn = (sqls, entryTypeId, entryIds, caseSql) -> {
 		switch (entryTypeId) {
 		case ShopConstant.ENTRY_GOODS:
-			sqls.add(String.format(select, entryTypeId, caseSql, "shop_goods", entryIds));
+			sqls.add(String.format(SELECT, entryTypeId, caseSql, "shop_goods", entryIds));
 			break;
 		case ShopConstant.ENTRY_GROUP:
-			sqls.add(String.format(SectionService.selectGroups, entryTypeId, caseSql.replaceAll("WHEN entry.id", "WHEN g.id") /* 修正一下，别名有所不同 */, entryIds));
+			sqls.add(String.format(SectionService.SELECT_GROUPS, entryTypeId, caseSql.replaceAll("WHEN entry.id", "WHEN g.id") /* 修正一下，别名有所不同 */, entryIds));
 			break;
 		}
 	};
@@ -64,7 +64,7 @@ public class ShopBookmarkService extends SectionListService {
 	 * @return
 	 */
 	public List<SectionList> findBookmarks() {
-		return union(getListByCatelogId(ConfigService.getValueAsInt("data.section.useBookmark_Catelog_Id")), fn);
+		return union(getListByCatalogId(ConfigService.getValueAsInt("data.section.useBookmark_Catalog_Id")), fn);
 	}
 	
 	/**

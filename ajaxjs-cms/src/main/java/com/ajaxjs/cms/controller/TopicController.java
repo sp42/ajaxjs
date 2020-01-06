@@ -34,7 +34,7 @@ public class TopicController extends BaseController<Map<String, Object>> {
 	@Path(list)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(catalogId) int catalogId, @QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
-		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.ON_LINE), false);
+		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.ON_LINE, true));
 	}
 
 	@GET
@@ -63,7 +63,7 @@ public class TopicController extends BaseController<Map<String, Object>> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String adminList(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
 		LOGGER.info("专题后台列表");
-		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE), true);
+		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE, false), true);
 	}
 
 	@GET
