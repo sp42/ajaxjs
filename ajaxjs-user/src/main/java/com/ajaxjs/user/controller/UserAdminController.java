@@ -15,7 +15,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.cms.app.CommonConstant;
-import com.ajaxjs.cms.app.catalog.CatalogServiceImpl;
+import com.ajaxjs.cms.app.catalog.CatalogService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
@@ -53,7 +53,7 @@ public class UserAdminController extends BaseController<User> {
 		List<Map<String, Object>> userGroups = roleService.getDao().findList(null);
 		
 		mv.put("SexGender", UserDict.SEX_GENDER);
-		mv.put("UserGroups", CatalogServiceImpl.list2map_id_as_key(userGroups));
+		mv.put("UserGroups", CatalogService.list2map_id_as_key(userGroups));
 		mv.put("UserGroupsJSON", toJson(userGroups, false).replaceAll("\"", "'"));
 
 		page(mv, service.getDao().findPagedList(start, limit, null), CommonConstant.UI_ADMIN);
@@ -112,7 +112,7 @@ public class UserAdminController extends BaseController<User> {
 	public String accountCenter(ModelAndView mv, HttpServletRequest r) {
 		LOGGER.info("后台-账号中心");
 		
-		mv.put("UserGroups", CatalogServiceImpl.list2map_id_as_key(RoleService.dao.findList(null)));
+		mv.put("UserGroups", CatalogService.list2map_id_as_key(RoleService.dao.findList(null)));
 		mv.put("info", service.findById(BaseUserController.getUserId(r)));
 		
 		return jsp("admin/account-center");

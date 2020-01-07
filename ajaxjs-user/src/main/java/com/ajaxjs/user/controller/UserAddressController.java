@@ -102,7 +102,7 @@ public class UserAddressController extends BaseController<UserAddress> {
 	@Path("/admin/address/list")
 	@MvcFilter(filters = { DataBaseFilter.class, XslMaker.class })
 	public String adminList(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
-		page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE), true);
+		page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE, true), true);
 		return jsp(jsp + "-admin-list");
 	}
 

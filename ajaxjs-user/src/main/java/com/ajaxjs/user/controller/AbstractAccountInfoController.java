@@ -9,7 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.app.catalog.CatalogServiceImpl;
+import com.ajaxjs.cms.app.catalog.CatalogService;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
@@ -54,7 +54,7 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 		mv.put("isEmailVerified", (UserDict.VERIFIED_EMAIL & user.getVerify()) == UserDict.VERIFIED_EMAIL);
 		mv.put("lastUserLoginedInfo", LoginLogController.service.dao.getLastUserLoginedInfo(getUserId()));
 		
-		mv.put("UserGroups", CatalogServiceImpl.list2map_id_as_key(RoleService.dao.findList(null)));
+		mv.put("UserGroups", CatalogService.list2map_id_as_key(RoleService.dao.findList(null)));
 		
 		return jsp("user/user-center/account");
 	}

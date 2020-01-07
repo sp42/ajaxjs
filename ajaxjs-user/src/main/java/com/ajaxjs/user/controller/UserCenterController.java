@@ -17,7 +17,6 @@ import javax.ws.rs.core.MediaType;
 import com.ajaxjs.cms.app.attachment.Attachment_picture;
 import com.ajaxjs.cms.app.attachment.Attachment_pictureController;
 import com.ajaxjs.cms.app.attachment.Attachment_pictureService;
-import com.ajaxjs.cms.app.attachment.Attachment_pictureServiceImpl;
 import com.ajaxjs.cms.utils.sms.SMS;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.ServiceException;
@@ -120,7 +119,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 	@MvcFilter(filters = { LoginCheck.class, CurrentUserOnly.class, DataBaseFilter.class })
 	public String saveAvater(MvcRequest request, @PathParam(id) Long owenerUid) throws IOException {
 		Attachment_pictureController c = new Attachment_pictureController();
-		c.setService(new Attachment_pictureServiceImpl());
+		c.setService(new Attachment_pictureService());
 		
 		return c.imgUpload(request, owenerUid, Attachment_pictureService.AVATAR);
 	}

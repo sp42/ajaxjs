@@ -5,7 +5,6 @@ import java.util.function.Function;
 
 import com.ajaxjs.cms.app.attachment.Attachment_picture;
 import com.ajaxjs.cms.app.attachment.Attachment_pictureService;
-import com.ajaxjs.cms.app.attachment.Attachment_pictureServiceImpl;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.framework.ServiceException;
@@ -225,7 +224,7 @@ public class UserService extends BaseService<User> {
 		if (!info.isOk)
 			throw new ServiceException("图片上传失败");
 
-		Attachment_pictureService avatarService = new Attachment_pictureServiceImpl();
+		Attachment_pictureService avatarService = new Attachment_pictureService();
 
 		Attachment_picture avatar = dao.findAvaterByUserId(userUId);
 		boolean isCreate = avatar == null;

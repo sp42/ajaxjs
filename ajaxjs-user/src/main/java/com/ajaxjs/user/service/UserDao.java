@@ -53,4 +53,6 @@ public interface UserDao extends IBaseDao<User> {
 	public static final String getUserName = " u.name AS userName, u.username AS userNickName ";
 	
 	public static final String LEFT_JOIN_USER = " LEFT JOIN user ON user.id = e.userId ";
+	
+	public static final String LEFT_JOIN_USER_SELECT = "SELECT e.*, user.name AS userName FROM ${tableName} e " + UserDao.LEFT_JOIN_USER + IBaseDao.WHERE_REMARK_ORDER;
 }

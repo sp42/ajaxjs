@@ -24,6 +24,7 @@ import com.ajaxjs.orm.annotation.TableName;
 import com.ajaxjs.user.UserDict;
 import com.ajaxjs.user.login.UserLoginLog;
 import com.ajaxjs.user.service.UserDao;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 
@@ -31,9 +32,11 @@ import com.ajaxjs.user.service.UserDao;
  */
 @Path("/admin/userLoginLog")
 public class LoginLogController extends BaseController<UserLoginLog> {
+	private static final LogHelper LOGGER = LogHelper.getLog(LoginLogController.class);
+
 	@TableName(value = "user_login_log", beanClass = UserLoginLog.class)
 	public static interface UserLoginLogDao extends IBaseDao<UserLoginLog> {
-		@Select("SELECT e.*, user.name AS userName FROM ${tableName} e " + UserDao.LEFT_JOIN_USER + WHERE_REMARK_ORDER)
+		@Select(UserDao.LEFT_JOIN_USER_SELECT)
 		@Override
 		public PageResult<UserLoginLog> findPagedList(int start, int limit, Function<String, String> sqlHandler);
 
@@ -64,6 +67,7 @@ public class LoginLogController extends BaseController<UserLoginLog> {
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+		LOGGER.info("用户登录日志-后台列表");
 		mv.put("LoginType", UserDict.LOGIN_TYPE);
 		page(mv, service.findAll(start, limit), CommonConstant.UI_ADMIN);
 
