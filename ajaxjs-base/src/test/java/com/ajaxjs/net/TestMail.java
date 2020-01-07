@@ -18,7 +18,6 @@ public class TestMail {
 		Mail mail = new Mail();
 		mail.setMailServer("smtp.163.com");
 		mail.setAccount("pacoweb");
-		mail.setPassword("abc123");
 		mail.setFrom("pacoweb@163.com");
 		mail.setTo("frank@ajaxjs.com");
 		mail.setSubject("你好容祯");
@@ -33,7 +32,6 @@ public class TestMail {
 		Mail mail = new Mail();
 		mail.setMailServer("smtp.ym.163.com");
 		mail.setAccount("admin@bgdiving.com");
-		mail.setPassword("bgdiving123123");
 		mail.setFrom("admin@bgdiving.com");
 		mail.setTo("frank@ajaxjs.com");
 		mail.setSubject("你好容祯");
