@@ -79,21 +79,7 @@ public interface IBaseDao<T> {
 	 */
 	@Select("SELECT * FROM ${tableName} e WHERE e.id = ?")
 	public T findById(Long id);
-	
-	/**
-	 * 左连接分类表，实体简写必须为 e
-	 */
-	public final static String LEFT_JOIN_CATALOG = " LEFT JOIN general_catalog gc ON gc.id = e.catalogId ";
-	
-	/**
-	 * 查询单个记录，带有类别的。如果找不到则返回 null
-	 * 
-	 * @param id         记录 id
-	 * @param sqlHandler 查找的条件
-	 * @return 单个记录
-	 */
-	@Select("SELECT e.*, gc.name AS catalogName FROM ${tableName} e" + LEFT_JOIN_CATALOG + " WHERE e.id = ? " + WHERE_REMARK_AND)
-	public T findById_catalog(Long id, Function<String, String> sqlHandler);
+
 	// ---------------- find list-------------------
 
 	/**
