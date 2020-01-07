@@ -79,7 +79,7 @@ Vue.component('aj-admin-filter-panel', {
 			<form action="?" method="GET">\
 				<input type="hidden" name="searchField" :value="searchFieldValue" />\
 				<input type="text" name="keyword" placeholder="请输入搜索之关键字" style="float: inherit;" class="ajaxjs-inputField" />\
-				<button style="margin-top: 0;" class="ajaxjs-btn">搜索</button>\
+				<button style="margin-top: 0;" class="ajaxjs-btn">搜索</button> &nbsp;\
 			</form><slot></slot>\
 			<span v-if="!noCatalog">{{label||\'分类\'}}：\
 				<aj-tree-catelog-select :is-auto-jump="true" :catalog-id="catalogId" :selected-catalog-id="selectedCatalogId"></aj-tree-catelog-select></span>\

@@ -266,6 +266,9 @@ Vue.component('aj-tree-user-role-select', {
 	template : '<select name="roleId" class="ajaxjs-select"></select>',
 	mounted() {
 		new ajaxjs.tree.selectUI().renderer(this.json, this.$el, this.value, {makeAllOption : false});
+		this.$el.onchange = () => {
+			location.assign("?roleId=" + this.$el.options[this.$el.selectedIndex].value);
+		}
 	}
 });
 
