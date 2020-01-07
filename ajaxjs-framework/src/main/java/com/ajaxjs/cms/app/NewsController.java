@@ -77,7 +77,7 @@ public class NewsController extends BaseController<Map<String, Object>> {
 
 	@Override
 	public void prepareData(ModelAndView mv) {
-		mv.put("domainCatalog_Id", service.getDomainCatalogId());
+		mv.put(domainCatalog_Id, service.getDomainCatalogId());
 		super.prepareData(mv);
 	}
 

@@ -4,85 +4,54 @@ import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.framework.IBaseDao;
-import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
 
 @TableName(value = "general_catalog", beanClass = Catalog.class)
 public interface CatalogDao extends IBaseDao<Catalog> {
+	public final static String PATH_LIKE_MYSQL	  = "SELECT *  FROM general_catalog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catalog WHERE id = ?  ) , '%'))";
 	/**
-	 * 父id 必须在子id之前，不然下面 findParent() 找不到后面的父节点，故先排序. 前端排序的话 chrom 有稳定排序的问题，故放在后端排序
+	 * 供其它实体关联时候用，可以获取下级所有子分类
 	 */
-	@Select(value = "SELECT * FROM ${tableName} ORDER BY pid ")
-	public PageResult<Catalog> findPagedList(int start, int limit);
-	
-	
+	public final static String PATH_LIKE_MYSQL_ID = "SELECT id FROM general_catalog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catalog WHERE id = %d ) , '%%'))";
+	public final static String PATH_LIKE_SQLITE = "SELECT * FROM general_catalog WHERE `path` LIKE ( (SELECT `path` FROM general_catalog WHERE id = ? ) || '%')";
+//	public final static String pathLike_sqlite = " FROM general_catalog WHERE `path` LIKE ( (SELECT `path` FROM general_catalog WHERE id = ? ) || '/%')";
+
+	@Select(value = PATH_LIKE_MYSQL, sqliteValue = PATH_LIKE_SQLITE)
+	public List<Catalog> getAllListByParentId(int pId);
+
 	/**
-	 * 删除所有，包括子分类
+	 * 获取下一级和下下一级，一共只获取这两级
+	 * 
+	 * @param pId
+	 * @return
+	 */
+	@Select("SELECT c.id, c.name, c.path, "
+			+ " (SELECT GROUP_CONCAT(id, '|', name ,'|' ,`path`) FROM ${tableName} WHERE `path` REGEXP CONCAT(c.path, '/[0-9]+$')) AS sub\n "
+			+ "FROM ${tableName} c WHERE pid = ?;")
+	public List<Map<String, Object>> getListAndSubByParentId(int pId);
+
+	/**
+	 * 删除所有，包括子分类 如果子查询的 from 子句和更新、删除对象使用同一张表，会出现错误。
 	 * 
 	 * @param id
 	 * @return
 	 */
-	@Delete(value = "DELETE FROM ${tableName} WHERE id in ( SELECT n.id FROM (" + // 如果子查询的 from 子句和更新、删除对象使用同一张表，会出现错误。
-			"(SELECT id FROM ${tableName} WHERE `path` LIKE ( CONCAT ( (SELECT `path` FROM general_catalog WHERE id = ?) , '%')))) AS n)", 
-			sqliteValue = "DELETE FROM ${tableName} " + 
-			"WHERE id in (SELECT id FROM ${tableName} WHERE \"path\" LIKE (( SELECT \"path\" FROM general_catalog WHERE id = ?) || '%'));")
+	@Delete(value = "DELETE FROM ${tableName} WHERE id in ( SELECT n.id FROM ("
+			+ "(SELECT id FROM ${tableName} WHERE `path` LIKE ( CONCAT ( (SELECT `path` FROM {tableName} WHERE id = ?) , '%')))) AS n)", 
+			sqliteValue = "DELETE FROM ${tableName} "
+					+ "WHERE id in (SELECT id FROM ${tableName} WHERE \"path\" LIKE (( SELECT \"path\" FROM {tableName} WHERE id = ?) || '%'));")
 	public boolean deleteAll(int id);
 
 	/**
-	 * 根据父 id 获取下一层的子分类列表，获取直接一层的分类。
-	 * 
-	 * @param parentId
-	 * @return
+	 * 左连接分类表，实体简写必须为 e
 	 */
-	@Select(value = "SELECT * FROM ${tableName} WHERE pid = ?")
-	public List<Catalog> getListByParentId(int parentId);
-	
-	/**
-	 * 获取下一级和下下一级，一共只获取这两级
-	 * 
-	 * @param parentId
-	 * @return
-	 */
-	@Select("SELECT c.id, c.name, c.path, "
-			+ " (SELECT GROUP_CONCAT(id, '|', name ,'|' ,`path`) FROM general_catalog WHERE `path` REGEXP CONCAT(c.path, '/[0-9]+$')) AS sub\n " + 
-			"FROM general_catalog c WHERE pid = ?;")
-	public List<Map<String, Object>> getListAndSubByParentId(int parentId);
-	
-	/**
-	 * 所有后代
-	 * 
-	 * @param parentId
-	 * @return
-	 */
-	@Select(value = "SELECT * FROM general_catalog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catalog WHERE id = ? ) , '%'))", 
-			sqliteValue = "SELECT * FROM general_catalog WHERE " + 
-			"	\"path\" LIKE (  ( " + 
-			"	SELECT" + 
-			"		\"path\" " + 
-			"	FROM" + 
-			"		general_catalog" + 
-			"	WHERE" + 
-//			"		id = ? ) || '%')")
-			"		id = ? ) || '/%')")
-	public List<Catalog> getAllListByParentId(int parentId);
-
-	public final static String PATH_LIKE_MYSQL = " FROM general_catalog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catalog WHERE id = ? ) , '%'))";
-//	public final static String pathLike_sqlite = " FROM general_catalog WHERE `path` LIKE ( (SELECT `path` FROM general_catalog WHERE id = ? ) || '/%')";
-	public final static String PATH_LIKE_SQLITE = " FROM general_catalog WHERE `path` LIKE ( (SELECT `path` FROM general_catalog WHERE id = ? ) || '%')";
+	public final static String LEFT_JOIN_CATALOG = " LEFT JOIN general_catalog gc ON gc.id = e.catalogId ";
 
 	/**
-	 * 用于 catelogId 查询的，通常放在 LEFT JOIN 后面还需要，WHERE e.catelog = c.id。 还需要预留一个
-	 * catelogId 的参数 另外也可以用 IN 查询
+	 * 关联分类表以获取分类名称，即增加了 catalogName 字段。另外如果前台不需要显示的话，只是后台的话，可以用 map 显示
 	 */
-	public final static String catelog_finById = " (SELECT id, name " + PATH_LIKE_MYSQL + ") AS c ";
-	public final static String catelog_finById_sqlite = "(SELECT id AS catalogId, name AS catalogName "
-			+ PATH_LIKE_SQLITE + ") AS c";
-
-	/**
-	 * IN 查询用，多用于分页统计总数
-	 */
-	public final static String CATALOG_FIND 	   = "(SELECT id " + PATH_LIKE_MYSQL + ")";
-	public final static String CATALOG_FIND_SQLITE = "(SELECT id " + PATH_LIKE_SQLITE + ")";
+	public final static String SELECT_CATALOGNAME = "SELECT e.*, gc.name catalogName FROM ${tableName} e"
+			+ LEFT_JOIN_CATALOG + WHERE_REMARK_ORDER;
 }

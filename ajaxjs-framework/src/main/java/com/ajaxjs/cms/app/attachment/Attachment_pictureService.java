@@ -1,12 +1,25 @@
 package com.ajaxjs.cms.app.attachment;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.framework.IBaseService;
+import com.ajaxjs.framework.BaseService;
+import com.ajaxjs.framework.Repository;
+import com.ajaxjs.ioc.Bean;
+import com.ajaxjs.util.io.FileHelper;
 
-public interface Attachment_pictureService extends IBaseService<Attachment_picture> {
+@Bean
+public class Attachment_pictureService extends BaseService<Attachment_picture> {
+	public Attachment_pictureDao dao = new Repository().bind(Attachment_pictureDao.class);
+
+	{
+		setUiName("图片");
+		setShortName("attachment_picture");
+		setDao(dao);
+	}
 
 	/**
 	 * 根据实体 uid 找到其所拥有的图片
@@ -14,24 +27,41 @@ public interface Attachment_pictureService extends IBaseService<Attachment_pictu
 	 * @param owner 实体 uid
 	 * @return 图片列表
 	 */
-	List<Attachment_picture> findByOwner(Long owner);
+	public List<Attachment_picture> findByOwner(Long owner) {
+		List<Attachment_picture> list = dao.findList(by("owner", owner));
+
+		if (null != list) {
+			Collections.sort(list, new Comparator<Attachment_picture>() {
+				@Override
+				public int compare(Attachment_picture pic1, Attachment_picture pic2) {
+					if (pic1.getIndex() == null)
+						return -1;
+					if (pic2.getIndex() == null)
+						return -1;
+
+					if (pic1.getIndex() > pic2.getIndex())
+						return 1;
+
+					if (pic1.getIndex() == pic2.getIndex())
+						return 0;
+
+					return -1;
+				}
+			});
+		}
+
+		return list;
+	}
 
 	/**
 	 * 根据实体 uid 找到其所拥有的相册图片
 	 * 
-	 * @param owner
-	 * @return
+	 * @param owner 实体 uid
+	 * @return 图片列表
 	 */
-	public List<Attachment_picture> findAttachmentPictureByOwner(Long owner);
-
-	/**
-	 * 根据实体Uid删除图片
-	 * 
-	 * @param OwnerId
-	 * @return
-	 * @throws ServiceException
-	 */
-	boolean deleteByOwnerId(Long OwnerId);
+	public List<Attachment_picture> findAttachmentPictureByOwner(Long owner) {
+		return dao.findList(by("owner", owner).andThen(by("catalog", Attachment_pictureService.ATTACHMENT)));
+	}
 
 	/**
 	 * 修改图片索引
@@ -39,7 +69,35 @@ public interface Attachment_pictureService extends IBaseService<Attachment_pictu
 	 * @param map
 	 * @return
 	 */
-	boolean saveImgIndex(Map<String, Object> map);
+	public boolean saveImgIndex(Map<String, Object> map) {
+		boolean isOk = true;
+
+		for (String str : map.keySet()) {
+			int index = (int) map.get(str);
+			Long imgId = Long.parseLong(str);
+
+			if (dao.saveImgIndex(index, imgId) < 0)
+				isOk = false;
+		}
+
+		return isOk;
+	}
+
+	@Override
+	public boolean delete(Attachment_picture bean) {
+		FileHelper.delete(bean.getPath()); // 删除文件
+		return dao.delete(bean);
+	}
+
+	/**
+	 * 根据实体Uid删除图片
+	 * 
+	 * @param owner 实体 uid
+	 * @return
+	 */
+	public boolean deleteByOwnerId(Long OwnerId) {
+		return dao.deleteByOwnerId(OwnerId);
+	}
 
 	/**
 	 * 頭像
@@ -49,9 +107,9 @@ public interface Attachment_pictureService extends IBaseService<Attachment_pictu
 	public static final int AVATAR = 2;
 
 	public static final int ALBUM = 3;
-	
+
 	public static final int ATTACHMENT = 4;
-	
+
 	public static final Map<Integer, String> DICT = new HashMap<Integer, String>() {
 		private static final long serialVersionUID = 1L;
 
@@ -63,4 +121,5 @@ public interface Attachment_pictureService extends IBaseService<Attachment_pictu
 			put(ATTACHMENT, "附件图片");
 		}
 	};
+
 }

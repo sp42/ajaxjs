@@ -5,8 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.ajaxjs.cms.app.catalog.CatalogDao;
-import com.ajaxjs.cms.app.catalog.CatalogServiceImpl;
+import com.ajaxjs.cms.app.catalog.CatalogService;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
@@ -21,7 +20,6 @@ import com.ajaxjs.util.CommonUtil;
 
 @Bean
 public class ArticleService extends BaseService<Map<String, Object>> implements ViewObjectService {
-
 	@TableName(value = "entity_article", beanClass = Map.class)
 	public interface ArticleDao extends IBaseDao<Map<String, Object>> {
 		@Select("SELECT e.id, e.name, e.createDate, e.updateDate, e.catalogId, e.intro, e.cover, e.stat FROM ${tableName} e " + WHERE_REMARK_ORDER)
@@ -30,26 +28,8 @@ public class ArticleService extends BaseService<Map<String, Object>> implements 
 		@Select("SELECT e.id, e.name, e.createDate, e.cover, e.intro FROM ${tableName} e " + WHERE_REMARK_ORDER)
 		public List<Map<String, Object>> simpleList(Function<String, String> sqlHandler);
 
-		/**
-		 * 可分类的，可分页的列表
-		 * 
-		 * @param catelogId
-		 * @param start
-		 * @param limit
-		 * @return
-		 */
-		@Select(value = "SELECT e.id, e.name, e.createDate, e.updateDate, e.catalogId, intro, c.name AS catalogName FROM ${tableName} e INNER JOIN "
-				+ CatalogDao.catelog_finById
-				+ "ON e.`catalogId` = c.id " + WHERE_REMARK_ORDER, 
-				countSql = "SELECT COUNT(e.id) AS count FROM ${tableName} e WHERE catalogId IN " + CatalogDao.CATALOG_FIND + WHERE_REMARK_AND,
 
-				sqliteValue = "SELECT id, name, createDate, updateDate, e.catalogId, catalogName, intro FROM ${tableName} e INNER JOIN " + CatalogDao.catelog_finById_sqlite
-						+ " ON e.`catalogId` = c.catalogId " + WHERE_REMARK_ORDER, 
-				sqliteCountSql = "SELECT COUNT(e.id) AS count FROM ${tableName} e WHERE catelogId IN " + CatalogDao.CATALOG_FIND_SQLITE + WHERE_REMARK_AND)
-		public PageResult<Map<String, Object>> findPagedListByCatelogId(int catelogId, int start, int limit,
-				Function<String, String> sqlHandler);
-
-		@Select("SELECT YEAR(`createDate`) year , MONTH(`createDate`) month FROM entity_article t "
+		@Select("SELECT YEAR(`createDate`) year , MONTH(`createDate`) month FROM ${tableName} "
 				+ "GROUP BY YEAR(`createDate`), MONTH(`createDate`) ORDER BY YEAR(`createDate`) DESC, MONTH(`createDate`) DESC LIMIT 0, ?")
 		public List<Map<String, Object>> groupByMonth(int maxMonth);
 	}
@@ -63,7 +43,7 @@ public class ArticleService extends BaseService<Map<String, Object>> implements 
 	}
 
 	public PageResult<Map<String, Object>> list(int catalogId, int start, int limit, int status) {
-		return dao.list(start, limit, CatalogServiceImpl.setCatalog(catalogId, getDomainCatalogId())
+		return dao.list(start, limit, CatalogService.setCatalog(catalogId, getDomainCatalogId())
 				.andThen(setStatus(status)).andThen(BaseService::searchQuery).andThen(BaseService::betweenCreateDate));
 	}
 
@@ -72,7 +52,7 @@ public class ArticleService extends BaseService<Map<String, Object>> implements 
 	}
 
 	public List<Map<String, Object>> findListTop(int top) {
-		return dao.simpleList(CatalogServiceImpl.setCatalog(getDomainCatalogId(), getDomainCatalogId())
+		return dao.simpleList(CatalogService.setCatalog(getDomainCatalogId(), getDomainCatalogId())
 				.andThen(BaseService.setStatus(CommonConstant.ON_LINE).andThen(sql -> sql + " LIMIT 0, " + top)));
 	}
 
