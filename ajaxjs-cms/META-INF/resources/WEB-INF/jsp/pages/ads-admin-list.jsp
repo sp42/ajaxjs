@@ -58,7 +58,7 @@
 						<td>
 						
 						${current.name}</td>
-						<td>${current.catalogName}</td>
+						<td>${catalogs[current.catalogId].name}</td>
 						<td>
 							<a href="${current.link}" target="_blank">${current.link}</a>
 						</td>

@@ -62,16 +62,16 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 		Function<String, String> sqlHander = BaseService::betweenCreateDate;
 
 		if (tradeStatus != 0)
-			sqlHander.andThen(by("tradeStatus", tradeStatus));
+			sqlHander = sqlHander.andThen(by("tradeStatus", tradeStatus));
 
 		if (payStatus != 0)
-			sqlHander.andThen(by("tradeStatus", payStatus));
+			sqlHander = sqlHander.andThen(by("tradeStatus", payStatus));
 
 		if (!CommonUtil.isEmptyString(orderNo))
-			sqlHander.andThen(by("orderNo", orderNo));
+			sqlHander = sqlHander.andThen(by("orderNo", orderNo));
 
 		if (userId != 0)
-			sqlHander.andThen(by("buyerId", userId));
+			sqlHander = sqlHander.andThen(by("buyerId", userId));
 
 		return findPagedList(start, limit, sqlHander);
 	}

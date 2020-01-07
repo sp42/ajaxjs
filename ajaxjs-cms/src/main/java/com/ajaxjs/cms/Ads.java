@@ -35,14 +35,14 @@ public class Ads extends BaseModel {
 	/**
 	 * 分类 id
 	 */
-	private Integer catalogId;
+	private Long catalogId;
 
 	/**
 	 * 设置分类 id
 	 * 
 	 * @param catalogId 分类 id
 	 */
-	public void setCatalogId(Integer catalogId) {
+	public void setCatalogId(Long catalogId) {
 		this.catalogId = catalogId;
 	}
 
@@ -51,7 +51,7 @@ public class Ads extends BaseModel {
 	 * 
 	 * @return 分类 id
 	 */
-	public Integer getCatalogId() {
+	public Long getCatalogId() {
 		return catalogId;
 	}
 

@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import com.ajaxjs.cms.app.attachment.Attachment_pictureService;
-import com.ajaxjs.cms.app.catalog.CatalogServiceImpl;
+import com.ajaxjs.cms.app.catalog.CatalogService;
 import com.ajaxjs.cms.controller.DataDictController;
 import com.ajaxjs.cms.controller.TopicController;
 import com.ajaxjs.config.ConfigService;
@@ -69,7 +69,8 @@ public class GoodsService extends BaseService<Goods> {
 	 * @return Map as a ViewObject
 	 */
 	public Map<String, Object> getGoodsDetail(long id, long userId) {
-		Goods goods = dao.findById_catalog(id, null);
+		// 查询单个记录，带有类别的。如果找不到则返回 null
+		Goods goods = dao.find(by("id", id));
 		Map<String, Object> map = new HashMap<>();
 
 		map.put("info", goods);
@@ -86,11 +87,12 @@ public class GoodsService extends BaseService<Goods> {
 	}
 
 	public PageResult<Goods> findPagedListByCatalogId(int catalogId, int start, int limit, int status, int sellerId) {
-		Function<String, String> sqlHander = CatalogServiceImpl.setCatalog(catalogId, getDomainCatalogId()).andThen(setStatus(status)).andThen(BaseService::searchQuery).andThen(BaseService::betweenCreateDate);
-		
-		if(sellerId != 0) 
+		Function<String, String> sqlHander = CatalogService.setCatalog(catalogId, getDomainCatalogId())
+				.andThen(setStatus(status)).andThen(BaseService::searchQuery).andThen(BaseService::betweenCreateDate);
+
+		if (sellerId != 0)
 			sqlHander.andThen(by("sellerId", sellerId));
-		
+
 		return dao.findPagedList(start, limit, sqlHander);
 	}
 }

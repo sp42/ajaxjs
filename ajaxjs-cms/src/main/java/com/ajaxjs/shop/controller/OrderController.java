@@ -108,10 +108,10 @@ public class OrderController extends BaseController<OrderInfo> {
 	@GET
 	@Path(list)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv, @QueryParam("userId") long userId) {
 		LOGGER.info("后台-订单列表");
 
-		page(mv, service.findPagedList(start, limit, null), CommonConstant.UI_ADMIN);
+		page(mv, service.findPagedList(start, limit, 0, 0, null, userId), CommonConstant.UI_ADMIN);
 		return jsp("shop/order-admin-list");
 	}
 

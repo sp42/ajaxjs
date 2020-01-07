@@ -2,7 +2,7 @@ package com.ajaxjs.cms;
 
 import java.util.Map;
 
-import com.ajaxjs.cms.app.catalog.CatalogServiceImpl;
+import com.ajaxjs.cms.app.catalog.CatalogService;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
@@ -78,6 +78,6 @@ public class CommonEntityService extends BaseService<Map<String, Object>> {
 	 * @return
 	 */
 	public PageResult<Map<String, Object>> findPagedListJoinCatalog(int catelogId, int start, int limit, int status) {
-		return dao.findPagedList(0, 10, CatalogServiceImpl.setCatalog(catelogId, getDomainCatalogId()).andThen(setStatus(status)).andThen(BaseService::searchQuery));
+		return dao.findPagedList(0, 10, CatalogService.setCatalog(catelogId, getDomainCatalogId()).andThen(setStatus(status)).andThen(BaseService::searchQuery));
 	}
 }

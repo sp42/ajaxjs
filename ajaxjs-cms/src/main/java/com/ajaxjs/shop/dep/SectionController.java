@@ -43,7 +43,7 @@ public class SectionController extends BaseController<SectionList> {
 		mv.put("entryIdNameMap",  DataDictController.DataDictService.Entry_IdName);
 		mv.put("entryIdNameJson", toJson(DataDictController.DataDictService.Entry_IdName, false));
 		prepareData(mv);
-		return jsp("section-list");
+		return page("section-list");
 	}
 	
 	@GET

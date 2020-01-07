@@ -13,6 +13,8 @@ import javax.ws.rs.core.MediaType;
 import com.ajaxjs.cms.Ads;
 import com.ajaxjs.cms.AdsService;
 import com.ajaxjs.cms.app.CommonConstant;
+import com.ajaxjs.cms.app.catalog.CatalogService;
+import com.ajaxjs.cms.app.catalog.CatalogService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
@@ -30,11 +32,16 @@ public class AdsController extends BaseController<Ads> {
 	@Resource("AdsService")
 	private AdsService service;
 	
+	@Resource("CatalogService")
+	private CatalogService catalogService;
+	
 	@GET
 	@Path(list)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String adminList(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
 		LOGGER.info("广告列表");
+		
+		mv.put("catalogs", CatalogService.list_bean2map_id_as_key(catalogService.findAllListByParentId(service.getDomainCatalogId())));
 		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE, false));
 	}
  

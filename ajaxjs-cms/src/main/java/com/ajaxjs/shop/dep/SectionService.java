@@ -6,7 +6,7 @@ import com.ajaxjs.cms.SectionList;
 import com.ajaxjs.cms.SectionListService;
 import com.ajaxjs.cms.app.catalog.Catalog;
 import com.ajaxjs.cms.app.catalog.CatalogService;
-import com.ajaxjs.cms.app.catalog.CatalogServiceImpl;
+import com.ajaxjs.cms.app.catalog.CatalogService;
 import com.ajaxjs.cms.controller.DataDictController;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.PageResult;
@@ -70,7 +70,7 @@ public class SectionService extends SectionListService {
 		return findSectionListBySectionId(start, limit, sectionId, fn);
 	}
 
-	private CatalogService catalogService = new CatalogServiceImpl();
+	private CatalogService catalogService = new CatalogService();
 
 	/**
 	 * SectionInfo 是一棵树。为简约起见，SectionInfo 没有独立弄成一张表放进去，而是放进 catalog 表。一般在后台里调用该方法

@@ -45,6 +45,7 @@ public class GoodsController extends BaseController<Goods> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(catalogId) int catalogId, @QueryParam(start) int start, @QueryParam(limit) int limit,
 			@QueryParam("sellerId") int sellerId, ModelAndView mv) {
+		LOGGER.info("商城-商品-后台列表");
 		page(mv, service.findPagedListByCatalogId(catalogId, start, limit, CommonConstant.OFF_LINE, sellerId),
 				CommonConstant.UI_ADMIN);
 		return jsp("shop/goods-admin-list");
