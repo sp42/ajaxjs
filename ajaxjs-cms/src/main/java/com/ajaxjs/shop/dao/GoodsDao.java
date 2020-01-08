@@ -22,8 +22,4 @@ public interface GoodsDao extends IBaseDao<Goods> {
 			+ "INNER JOIN user u ON u.id = o.buyerId INNER JOIN ${tableName} e ON e.id = o.goodsId "
 			+ "INNER JOIN shop_group g ON g.goodsId = e.id WHERE e.id = ?")
 	List<Map<String, Object>> findWhoBoughtGoods(long goodsId);
-
-	@Select(CatalogDao.SELECT_CATALOGNAME)
-	@Override
-	public Goods findById(Long id);
 }

@@ -1,12 +1,14 @@
 package com.ajaxjs.shop.service;
 
 import java.util.List;
+import java.util.function.Function;
 
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
+import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.shop.dao.CartDao;
 import com.ajaxjs.shop.dep.GroupService;
 import com.ajaxjs.shop.model.Cart;
@@ -18,7 +20,7 @@ import com.ajaxjs.shop.model.Cart;
  */
 @Bean
 public class CartService extends BaseService<Cart> {
-	
+
 	@Resource("GroupService")
 	private GroupService groupService;
 
@@ -31,8 +33,8 @@ public class CartService extends BaseService<Cart> {
 	}
 
 	public PageResult<Cart> findPagedList(int start, int limit, long userId) {
-		return dao.findPagedList(start, limit, userId != 0L ? byUserId(userId).andThen(BaseService::betweenCreateDate)
-				: BaseService::betweenCreateDate);
+		Function<String, String> b = betweenCreateDate("e.createDate", MvcRequest.getHttpServletRequest());
+		return findPagedList(start, limit, userId != 0L ? byUserId(userId).andThen(b) : b);
 	}
 
 	/**

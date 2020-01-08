@@ -63,6 +63,7 @@ public class GoodsController extends BaseController<Goods> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path(idInfo)
 	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
+		LOGGER.info("商城-商品-后台详情");
 		editUI(mv, service.findById(id));
 
 		return jsp("shop/goods-edit");

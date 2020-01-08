@@ -88,7 +88,25 @@
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="10"><a href="?downloadXSL=true" target="_blank"><img src="${commonAssetIcon}/excel.png" width="16" style="vertical-align: middle;" /> 下载 Excel 格式</a></td>
+					<td colspan="10">
+						<!-- 表格底部菜单 -->
+						<div style="float:left;margin-top: .5%;">
+							<a href="?downloadXSL=true&<%=com.ajaxjs.web.ServletHelper.getAllQueryParameters(request) %>" target="_blank">
+								<img src="${commonAssetIcon}/excel.png" width="16" style="vertical-align: middle;" /> 下载 Excel 格式
+							</a>
+						</div>
+						
+						<form action="." method="GET" class="dateRange" @submit="valid($event)">
+							起始时间：
+							<aj-form-calendar-input field-name="startDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
+							截至时间：
+							<aj-form-calendar-input field-name="endDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
+							<button class="aj-btn">查询</button>
+						</form>
+						<script>
+							aj.form.betweenDate('.dateRange');
+						</script>
+					</td>
 				</tr>
 			</tfoot>
 			<tbody>

@@ -64,10 +64,10 @@
 					<th>#</th>
 					<th>订单号</th>
 					<th>支付类型</th>
+					<th>订单金额</th>
 					<th>最终金额</th>
 					<th>交易状态</th>
 					<th>支付状态</th>
-					<th>用户id</th>
 					<th>下单日期/支付日期</th>
 					<th class="control">控 制</th>
 				</tr>
@@ -76,6 +76,17 @@
 				<tr>
 					<td colspan="10">
 						一张订单可以包含多个商品，每个商品对应一张子订单，于是一张订单包含多张子订单。
+						
+						<form action="." method="GET" class="dateRange" @submit="valid($event)">
+							起始时间：
+							<aj-form-calendar-input field-name="startDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
+							截至时间：
+							<aj-form-calendar-input field-name="endDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
+							<button class="aj-btn">查询</button>
+						</form>
+						<script>
+							aj.form.betweenDate('.dateRange');
+						</script>
 					</td>
 				</tr>
 			</tfoot>
@@ -85,15 +96,23 @@
 						<td>${current.id}</td>
 						<td>${current.orderNo}<br/>${current.outerTradeNo}</td>
 						<td>${PayTypeDict[current.payType]}</td>
+						<td>￥${current.orderPrice}</td>
 						<td>￥${current.totalPrice}</td>
 						<td>${TradeStatusDict[current.tradeStatus]}</td>
 						<td>${PayStatusDict[current.payStatus]}</td>
-						<td><a href="?filterField=buyerId&filterValue=${current.buyerId}">#${current.buyerId}</a></td>
 						<td>
 							<c:dateFormatter value="${current.createDate}" />
 							<c:dateFormatter value="${current.payDate}" />
 						</td>
-						<td><a href="../${current.id}/">详情</a></td>
+						<td>
+							<a href="${ctx}/admin/user/${current.buyerId}/">
+								<img src="${commonAssetIcon}/user.png" style="width:16px;vertical-align: sub;" />用户详情
+							</a> | 
+							<a href="?userId=${current.buyerId}">
+								该用户订单
+							</a> | 
+							<a href="../${current.id}/">订单详情</a>
+						</td>
 					</tr>
 				</c:foreach>
 			</tbody>
