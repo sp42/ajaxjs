@@ -259,16 +259,22 @@ Vue.component('aj-tree-user-role-select', {
 	props : {
 		value : { 			// 请求远端的分类 id，必填
 			type: Number,
-			required: true
+			required: false
 		},
-		json:Array
+		json:Array,
+		noJump:{		// 是否自动跳转
+			type:Boolean,
+			required: false,
+			defualt: false
+		}
 	},
 	template : '<select name="roleId" class="ajaxjs-select"></select>',
 	mounted() {
 		new ajaxjs.tree.selectUI().renderer(this.json, this.$el, this.value, {makeAllOption : false});
-		this.$el.onchange = () => {
-			location.assign("?roleId=" + this.$el.options[this.$el.selectedIndex].value);
-		}
+		if(!this.noJump)
+			this.$el.onchange = () => {
+				location.assign("?roleId=" + this.$el.options[this.$el.selectedIndex].value);
+			}		
 	}
 });
 
