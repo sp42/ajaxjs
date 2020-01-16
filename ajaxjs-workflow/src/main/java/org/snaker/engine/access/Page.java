@@ -8,8 +8,6 @@ package org.snaker.engine.access;
 
 import java.util.List;
 
-import org.snaker.engine.helper.ConfigHelper;
-
 /**
  * 与具体DBAccess实现无关的分页参数及查询结果封装.
  * 
@@ -31,9 +29,7 @@ public class Page<T> {
 	private List<T> result;
 
 	public Page() {
-		this.pageSize = ConfigHelper.getNumerProperty("jdbc.pageSize");
-		if (pageSize <= 0)
-			pageSize = PAGE_SIZE;
+		pageSize = PAGE_SIZE;
 	}
 
 	public Page(int pageSize) {
