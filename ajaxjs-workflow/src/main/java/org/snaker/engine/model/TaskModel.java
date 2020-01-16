@@ -12,7 +12,7 @@ import java.util.Objects;
 
 import org.snaker.engine.AssignmentHandler;
 import org.snaker.engine.core.Execution;
-import org.snaker.engine.handlers.impl.MergeActorHandler;
+import org.snaker.engine.handlers.MergeActorHandler;
 import org.snaker.engine.scheduling.JobCallback;
 
 import com.ajaxjs.util.CommonUtil;

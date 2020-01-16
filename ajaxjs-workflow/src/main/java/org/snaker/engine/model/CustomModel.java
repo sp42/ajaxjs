@@ -64,6 +64,7 @@ public class CustomModel extends WorkModel {
 			handler.handle(execution);
 		} else {
 			Method method = ReflectHelper.findMethod(invokeObject.getClass(), methodName);
+
 			if (method == null)
 				throw new SnakerException("自定义模型[class=" + clazz + "]无法找到方法名称:" + methodName);
 

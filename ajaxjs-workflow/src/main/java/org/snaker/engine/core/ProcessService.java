@@ -15,9 +15,6 @@ import org.snaker.engine.SnakerException;
 import org.snaker.engine.WorkflowUtils;
 import org.snaker.engine.access.Page;
 import org.snaker.engine.access.QueryFilter;
-import org.snaker.engine.cache.Cache;
-import org.snaker.engine.cache.CacheManager;
-import org.snaker.engine.cache.CacheManagerAware;
 import org.snaker.engine.entity.HistoryOrder;
 import org.snaker.engine.entity.Process;
 import org.snaker.engine.helper.DateHelper;
@@ -26,6 +23,9 @@ import org.snaker.engine.model.ProcessModel;
 import org.snaker.engine.parser.ModelParser;
 
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.cache.Cache;
+import com.ajaxjs.util.cache.CacheManager;
+import com.ajaxjs.util.cache.CacheManagerAware;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**

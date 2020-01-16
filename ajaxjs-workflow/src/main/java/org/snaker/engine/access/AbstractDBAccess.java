@@ -116,7 +116,6 @@ public abstract class AbstractDBAccess implements DBAccess {
 	public abstract void saveOrUpdate(Map<String, Object> map);
 
 	public void initialize(Object accessObject) {
-
 	}
 
 	/**
@@ -293,6 +292,7 @@ public abstract class AbstractDBAccess implements DBAccess {
 					order.getExpireTime(), order.getId(), order.getVersion() };
 			int[] type = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
 					Types.INTEGER };
+			
 			saveOrUpdate(buildMap(ORDER_UPDATE, args, type));
 		}
 	}
@@ -465,7 +465,8 @@ public abstract class AbstractDBAccess implements DBAccess {
 	public List<Surrogate> getSurrogate(Page<Surrogate> page, QueryFilter filter) {
 		StringBuilder sql = new StringBuilder(SURROGATE_QUERY);
 		sql.append(" where 1=1 and state = 1 ");
-		List<Object> paramList = new ArrayList<Object>();
+		List<Object> paramList = new ArrayList<>();
+		
 		if (filter.getNames() != null && filter.getNames().length > 0) {
 			sql.append(" and process_Name in(");
 			for (int i = 0; i < filter.getNames().length; i++) {
@@ -475,6 +476,7 @@ public abstract class AbstractDBAccess implements DBAccess {
 			sql.deleteCharAt(sql.length() - 1);
 			sql.append(") ");
 		}
+		
 		if (filter.getOperators() != null && filter.getOperators().length > 0) {
 			sql.append(" and operator in (");
 			for (String actor : filter.getOperators()) {
@@ -484,15 +486,18 @@ public abstract class AbstractDBAccess implements DBAccess {
 			sql.deleteCharAt(sql.length() - 1);
 			sql.append(") ");
 		}
+		
 		if (!CommonUtil.isEmptyString(filter.getOperateTime())) {
 			sql.append(" and sdate <= ? and edate >= ? ");
 			paramList.add(filter.getOperateTime());
 			paramList.add(filter.getOperateTime());
 		}
+		
 		if (!filter.isOrderBySetted()) {
 			filter.setOrder(QueryFilter.DESC);
 			filter.setOrderBy("sdate");
 		}
+		
 		return queryList(page, filter, Surrogate.class, sql.toString(), paramList.toArray());
 	}
 
@@ -541,15 +546,16 @@ public abstract class AbstractDBAccess implements DBAccess {
 		StringBuilder where = new StringBuilder(QUERY_CCORDER);
 		where.append(" where 1 = 1 ");
 
-		if (!CommonUtil.isEmptyString(orderId)) {
+		if (!CommonUtil.isEmptyString(orderId)) 
 			where.append(" and order_Id = ?");
-		}
+		
 		if (actorIds != null && actorIds.length > 0) {
 			where.append(" and actor_Id in (");
 			where.append(CommonUtil.repeatStr("?,", "", actorIds.length));
 			where.deleteCharAt(where.length() - 1);
 			where.append(") ");
 		}
+		
 		return queryList(CCOrder.class, where.toString(), WorkflowUtils.add(actorIds, 0, orderId));
 	}
 
@@ -561,7 +567,8 @@ public abstract class AbstractDBAccess implements DBAccess {
 	public List<Process> getProcesss(Page<Process> page, QueryFilter filter) {
 		StringBuilder sql = new StringBuilder(QUERY_PROCESS);
 		sql.append(" where 1=1 ");
-		List<Object> paramList = new ArrayList<Object>();
+		List<Object> paramList = new ArrayList<>();
+		
 		if (filter.getNames() != null && filter.getNames().length > 0) {
 			sql.append(" and name in(");
 			for (int i = 0; i < filter.getNames().length; i++) {
@@ -979,10 +986,11 @@ public abstract class AbstractDBAccess implements DBAccess {
 		sql.append(" left join wf_hist_task_actor ta on ta.task_id=t.id ");
 		sql.append(" left join wf_process p on p.id = o.process_id ");
 		sql.append(" where 1=1 ");
+		
 		/**
 		 * 查询条件构造sql的where条件
 		 */
-		List<Object> paramList = new ArrayList<Object>();
+		List<Object> paramList = new ArrayList<>();
 		if (filter.getOperators() != null && filter.getOperators().length > 0) {
 			sql.append(" and ta.actor_Id in (");
 			for (String actor : filter.getOperators()) {

@@ -15,7 +15,7 @@
 package org.snaker.engine.model;
 
 import org.snaker.engine.core.Execution;
-import org.snaker.engine.handlers.impl.MergeBranchHandler;
+import org.snaker.engine.handlers.MergeBranchHandler;
 
 /**
  * 合并定义join元素

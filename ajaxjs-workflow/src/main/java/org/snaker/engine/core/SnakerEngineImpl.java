@@ -21,9 +21,6 @@ import org.snaker.engine.IQueryService;
 import org.snaker.engine.ITaskService;
 import org.snaker.engine.SnakerEngine;
 import org.snaker.engine.access.transaction.TransactionInterceptor;
-import org.snaker.engine.cache.CacheManager;
-import org.snaker.engine.cache.CacheManagerAware;
-import org.snaker.engine.cache.MemoryCacheManager;
 import org.snaker.engine.entity.Order;
 import org.snaker.engine.entity.Process;
 import org.snaker.engine.entity.Task;
@@ -35,6 +32,9 @@ import org.snaker.engine.model.TaskModel;
 import org.snaker.engine.model.TransitionModel;
 
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.cache.CacheManager;
+import com.ajaxjs.util.cache.CacheManagerAware;
+import com.ajaxjs.util.cache.MemoryCacheManager;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**

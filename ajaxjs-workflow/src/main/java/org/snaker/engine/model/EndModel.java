@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.snaker.engine.core.Execution;
-import org.snaker.engine.handlers.impl.EndProcessHandler;
+import org.snaker.engine.handlers.EndProcessHandler;
 
 /**
  * 结束节点end元素

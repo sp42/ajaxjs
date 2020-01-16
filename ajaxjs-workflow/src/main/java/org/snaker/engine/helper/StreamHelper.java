@@ -1,15 +1,11 @@
 package org.snaker.engine.helper;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
-import java.net.URL;
 
 import org.snaker.engine.SnakerException;
 
@@ -21,51 +17,8 @@ import org.snaker.engine.SnakerException;
  */
 public class StreamHelper {
 	public static final int DEFAULT_CHUNK_SIZE = 1024;
-	
+
 	public static final int BUFFERSIZE = 4096;
-
-	/**
-	 * 根据文件名称resource打开输入流，并返回
-	 * 
-	 * @param resource
-	 * @return
-	 */
-	public static InputStream openStream(String resource) {
-		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		InputStream stream = classLoader.getResourceAsStream(resource);
-
-		if (stream == null) {
-			stream = StreamHelper.class.getClassLoader().getResourceAsStream(resource);
-		}
-
-		return stream;
-	}
-
-	public static InputStream getStreamFromString(String text) {
-		try {
-			byte[] bytes = text.getBytes("UTF-8");
-			return new ByteArrayInputStream(bytes);
-		} catch (Exception e) {
-			throw new AssertionError(e);
-		}
-	}
-
-	public static InputStream getStreamFromFile(File file) {
-		InputStream stream = null;
-		try {
-			if (!file.exists()) {
-				throw new SnakerException("file " + file + " doesn't exist");
-			}
-			if (file.isDirectory()) {
-				throw new SnakerException("file " + file + " is a directory");
-			}
-			stream = new FileInputStream(file);
-
-		} catch (Exception e) {
-			throw new SnakerException("couldn't access file " + file + ": " + e.getMessage(), e);
-		}
-		return stream;
-	}
 
 	public static InputStream getStreamFromClasspath(String resourceName) {
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -78,18 +31,7 @@ public class StreamHelper {
 		if (stream == null) {
 			throw new SnakerException("resource " + resourceName + " does not exist");
 		}
-		
-		return stream;
-	}
 
-	public static InputStream getStreamFromUrl(URL url) {
-		InputStream stream = null;
-		try {
-			stream = url.openStream();
-		} catch (IOException e) {
-			throw new SnakerException("couldn't open URL stream", e);
-		}
-		
 		return stream;
 	}
 
@@ -154,7 +96,7 @@ public class StreamHelper {
 			writer.write(buffer, 0, n);
 			count += n;
 		}
-		
+
 		return count;
 
 	}
