@@ -108,19 +108,19 @@ public class Configuration {
 	private void parser(String resource) {
 		XMLHelper.xPath(Version.srcFolder + File.separator + resource, "config", configNode -> {
 			NodeList nodeList = configNode.getChildNodes();
-			
+
 			for (int i = 0; i < nodeList.getLength(); i++) {
 				Node node = nodeList.item(i);
 				if (node.getNodeType() == Node.ELEMENT_NODE) {
 					Element element = (Element) node;
-					
+
 					String name = element.getAttribute("name");
 					String className = element.getAttribute("class");
 					String proxy = element.getAttribute("proxy");
-					
+
 					if (CommonUtil.isEmptyString(name))
 						name = className;
-					
+
 					if (ServiceContext.exist(name)) {
 						LOGGER.warning("Duplicate name is:" + name);
 						continue;
@@ -139,7 +139,7 @@ public class Configuration {
 					} else {
 						ServiceContext.put(name, clazz);
 					}
-		
+
 				}
 			}
 		});
