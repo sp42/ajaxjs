@@ -25,6 +25,7 @@ import java.util.Enumeration;
 import java.util.Map;
 
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.map.MapTool;
 
 /**
@@ -159,6 +160,43 @@ public class Tools {
 			return map;
 		} else {
 			throw new IOException("接口返回不成功 " + map);
+		}
+	}
+
+	/**
+	 * http://ip.taobao.com/instructions.html http://blog.zhukunqian.com/?p=1998
+	 * http://pv.sohu.com/cityjson?ie=utf-8 https://gitee.com/meaktsui/ChinaIpSearch
+	 * 
+	 * @param ip
+	 * @return
+	 * @throws IOException
+	 */
+	@SuppressWarnings("unchecked")
+	public static Map<String, Object> getIpLocation(String ip) throws IOException {
+		String url = "http://ip.taobao.com/service/getIpInfo.php?ip=" + ip;
+		System.out.println(url);
+		String xml = NetUtil.simpleGET(url);
+		Map<String, Object> map = JsonHelper.parseMap(xml);
+
+		if (map != null && map.get("code") != null && (0 == (int) map.get("code"))) {
+			Object obj = map.get("data");
+
+			return (Map<String, Object>) obj;
+		} else {
+			throw new IOException("接口返回不成功 " + map);
+		}
+	}
+
+	public static String getIpLocation2(String ip) throws IOException {
+		String url = "http://ip-api.com/json/" + ip + "?lang=zh-CN";
+		String jsonStr = NetUtil.get(url);
+		
+		Map<String, Object> map = JsonHelper.parseMap(jsonStr);
+
+		if (jsonStr != null && map != null && map.get("status").toString().equals("success")) {
+			return "" + map.get("country") + map.get("regionName") + map.get("city");
+		} else {
+			throw new IOException("接口返回不成功 " + jsonStr);
 		}
 	}
 }

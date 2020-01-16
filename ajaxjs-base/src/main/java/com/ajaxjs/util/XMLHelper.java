@@ -65,8 +65,7 @@ public class XMLHelper {
 
 		try {
 			XPathExpression expr = XPathFactory.newInstance().newXPath().compile(xpath);
-			NodeList nodes = (NodeList) expr.evaluate(factory.newDocumentBuilder().parse(dbXmlCfg),
-					XPathConstants.NODESET);
+			NodeList nodes = (NodeList) expr.evaluate(factory.newDocumentBuilder().parse(dbXmlCfg), XPathConstants.NODESET);
 
 			for (int i = 0; i < nodes.getLength(); i++)
 				fn.accept(nodes.item(i));

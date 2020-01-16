@@ -1,4 +1,4 @@
-package com.ajaxjs.util;
+package com.ajaxjs.util.cache;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

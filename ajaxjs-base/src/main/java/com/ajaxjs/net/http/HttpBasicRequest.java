@@ -226,7 +226,7 @@ public class HttpBasicRequest extends IoHelper {
 	 * POST 请求
 	 * 
 	 * @param url    请求目标地址
-	 * @param params 字符串类型的请求数据
+	 * @param params 字符串类型的请求数据，例如 ip=35.220.250.107&verifycode=
 	 * @return 请求之后的响应的内容
 	 */
 	public static String post(String url, String params) {

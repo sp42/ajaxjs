@@ -39,6 +39,11 @@ public class ReflectUtil {
 	 * @return 对象实例
 	 */
 	public static <T> T newInstance(Class<T> clz, Object... args) {
+		if (clz.isInterface()) {
+			LOGGER.warning("所传递的class类型参数为接口，无法实例化");
+			return null;
+		}
+		
 		if (args == null || args.length == 0) {
 			try {
 				return clz.newInstance();
