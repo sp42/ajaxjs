@@ -4,7 +4,7 @@
  * or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  * either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
-package org.snaker.engine.access.jdbc;
+package org.snaker.engine.access;
 
 import java.math.BigDecimal;
 import java.sql.Blob;
@@ -26,8 +26,9 @@ import org.snaker.engine.access.dialect.Dialect;
 import org.snaker.engine.access.dialect.MySqlDialect;
 import org.snaker.engine.access.dialect.OracleDialect;
 import org.snaker.engine.access.transaction.TransactionObjectHolder;
-import org.snaker.engine.helper.ConfigHelper;
-import org.snaker.engine.helper.StringHelper;
+
+import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.util.CommonUtil;
 
 /**
  * Jdbc操作帮助类
@@ -83,18 +84,18 @@ public abstract class JdbcHelper {
 //		Objects.requireNonNull(url);
 //		Objects.requireNonNull(username);
 //		Objects.requireNonNull(password);
-//		//初始化DBCP数据源
+//		// 初始化DBCP数据源
 //		BasicDataSource ds = new BasicDataSource();
 //		ds.setDriverClassName(driver);
 //		ds.setUrl(url);
 //		ds.setUsername(username);
 //		ds.setPassword(password);
-//        if(maxActive != 0) {
-//		    ds.setMaxActive(maxActive);
-//        }
-//        if(maxIdle != 0) {
-//		    ds.setMaxIdle(maxIdle);
-//        }
+//		if (maxActive != 0) {
+//			ds.setMaxActive(maxActive);
+//		}
+//		if (maxIdle != 0) {
+//			ds.setMaxIdle(maxIdle);
+//		}
 //		dataSource = ds;
 	}
 
@@ -124,10 +125,13 @@ public abstract class JdbcHelper {
 	public static Connection getConnection(DataSource ds) throws SQLException {
 		// 通过ThreadLocale中获取Connection，如果为空，则通过dataSource返回新的连接对象
 		Connection conn = (Connection) TransactionObjectHolder.get();
+
 		if (conn != null)
 			return conn;
+
 		if (ds != null)
 			return ds.getConnection();
+
 		return getDataSource().getConnection();
 	}
 
@@ -139,9 +143,9 @@ public abstract class JdbcHelper {
 	 */
 	public static <T> T requiredSingleResult(Collection<T> results) {
 		int size = (results != null ? results.size() : 0);
-		if (size == 0) {
+		if (size == 0)
 			return null;
-		}
+
 		return results.iterator().next();
 	}
 
@@ -155,9 +159,10 @@ public abstract class JdbcHelper {
 	 */
 	public static String lookupColumnName(ResultSetMetaData resultSetMetaData, int columnIndex) throws SQLException {
 		String name = resultSetMetaData.getColumnLabel(columnIndex);
-		if (name == null || name.length() < 1) {
+
+		if (name == null || name.length() < 1)
 			name = resultSetMetaData.getColumnName(columnIndex);
-		}
+
 		return name;
 	}
 
@@ -171,9 +176,8 @@ public abstract class JdbcHelper {
 	 * @throws SQLException
 	 */
 	public static Object getResultSetValue(ResultSet rs, int index, Class<?> requiredType) throws SQLException {
-		if (requiredType == null) {
+		if (requiredType == null)
 			return getResultSetValue(rs, index);
-		}
 
 		Object value = null;
 		boolean wasNullCheck = false;
@@ -198,7 +202,8 @@ public abstract class JdbcHelper {
 		} else if (float.class.equals(requiredType) || Float.class.equals(requiredType)) {
 			value = rs.getFloat(index);
 			wasNullCheck = true;
-		} else if (double.class.equals(requiredType) || Double.class.equals(requiredType) || Number.class.equals(requiredType)) {
+		} else if (double.class.equals(requiredType) || Double.class.equals(requiredType)
+				|| Number.class.equals(requiredType)) {
 			value = rs.getDouble(index);
 			wasNullCheck = true;
 		} else if (byte[].class.equals(requiredType)) {
@@ -219,9 +224,9 @@ public abstract class JdbcHelper {
 			value = getResultSetValue(rs, index);
 		}
 
-		if (wasNullCheck && value != null && rs.wasNull()) {
+		if (wasNullCheck && value != null && rs.wasNull())
 			value = null;
-		}
+
 		return value;
 	}
 
@@ -236,14 +241,16 @@ public abstract class JdbcHelper {
 	public static Object getResultSetValue(ResultSet rs, int index) throws SQLException {
 		Object obj = rs.getObject(index);
 		String className = null;
-		if (obj != null) {
+
+		if (obj != null)
 			className = obj.getClass().getName();
-		}
+
 		if (obj instanceof Blob) {
 			obj = rs.getBytes(index);
 		} else if (obj instanceof Clob) {
 			obj = rs.getString(index);
-		} else if (className != null && ("oracle.sql.TIMESTAMP".equals(className) || "oracle.sql.TIMESTAMPTZ".equals(className))) {
+		} else if (className != null
+				&& ("oracle.sql.TIMESTAMP".equals(className) || "oracle.sql.TIMESTAMPTZ".equals(className))) {
 			obj = rs.getTimestamp(index);
 		} else if (className != null && className.startsWith("oracle.sql.DATE")) {
 			String metaDataClassName = rs.getMetaData().getColumnClassName(index);
@@ -258,42 +265,6 @@ public abstract class JdbcHelper {
 			}
 		}
 		return obj;
-	}
-
-	/**
-	 * conn不为空时，关闭conn
-	 * 
-	 * @param conn
-	 * @throws SQLException
-	 */
-	public static void close(Connection conn) throws SQLException {
-		if (conn != null) {
-			conn.close();
-		}
-	}
-
-	/**
-	 * rs不为空时，关闭rs
-	 * 
-	 * @param rs
-	 * @throws SQLException
-	 */
-	public static void close(ResultSet rs) throws SQLException {
-		if (rs != null) {
-			rs.close();
-		}
-	}
-
-	/**
-	 * stmt不为空时，关闭stmt
-	 * 
-	 * @param stmt
-	 * @throws SQLException
-	 */
-	public static void close(Statement stmt) throws SQLException {
-		if (stmt != null) {
-			stmt.close();
-		}
 	}
 
 	/**
@@ -320,7 +291,8 @@ public abstract class JdbcHelper {
 		DatabaseMetaData databaseMetaData = conn.getMetaData();
 		String databaseProductName = databaseMetaData.getDatabaseProductName();
 		String dbType = databaseTypeMappings.getProperty(databaseProductName);
-		if (StringHelper.isEmpty(dbType))
+		
+		if (CommonUtil.isEmptyString(dbType))
 			return null;
 		if (dbType.equalsIgnoreCase("mysql"))
 			return new MySqlDialect();
@@ -345,23 +317,15 @@ public abstract class JdbcHelper {
 	 * @return 是否执行成功
 	 */
 	public static boolean isExec(Connection conn) {
-		Statement stmt = null;
-		try {
-			String sql = ConfigHelper.getProperty("schema.test");
-			if (StringHelper.isEmpty(sql)) {
-				sql = "select * from wf_process";
-			}
-			stmt = conn.createStatement();
+		String sql = ConfigService.getValueAsString("schema.test");
+		if (CommonUtil.isEmptyString(sql))
+			sql = "select * from wf_process";
+		
+		try (Statement stmt = conn.createStatement()) {
 			stmt.execute(sql);
 			return true;
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			return false;
-		} finally {
-			try {
-				JdbcHelper.close(stmt);
-			} catch (SQLException e) {
-				// ignore
-			}
 		}
 	}
 }

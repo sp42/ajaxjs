@@ -4,7 +4,7 @@
  * or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  * either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
-package org.snaker.engine.access.jdbc;
+package org.snaker.engine.access;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -20,8 +20,6 @@ import javax.sql.DataSource;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.snaker.engine.DBAccess;
-import org.snaker.engine.SnakerException;
-import org.snaker.engine.access.AbstractDBAccess;
 import org.snaker.engine.entity.Process;
 
 import com.ajaxjs.util.logger.LogHelper;
@@ -58,6 +56,7 @@ public class JdbcAccess extends AbstractDBAccess implements DBAccess {
 	public void initialize(Object accessObject) {
 		if (accessObject == null)
 			return;
+
 		if (accessObject instanceof DataSource)
 			this.dataSource = (DataSource) accessObject;
 	}
@@ -79,23 +78,15 @@ public class JdbcAccess extends AbstractDBAccess implements DBAccess {
 		super.saveProcess(process);
 
 		if (process.getBytes() != null) {
-			Connection conn = null;
-			PreparedStatement pstmt = null;
-
 			try {
-				conn = getConnection();
-				pstmt = conn.prepareStatement(PROCESS_UPDATE_BLOB);
-				pstmt.setBytes(1, process.getBytes());
-				pstmt.setString(2, process.getId());
-				pstmt.execute();
-			} catch (Exception e) {
-				throw new SnakerException(e.getMessage(), e.getCause());
-			} finally {
-				try {
-					JdbcHelper.close(pstmt);
-				} catch (SQLException e) {
-					throw new SnakerException(e.getMessage(), e.getCause());
+				Connection conn = getConnection();
+				try (PreparedStatement pstmt = conn.prepareStatement(PROCESS_UPDATE_BLOB)) {
+					pstmt.setBytes(1, process.getBytes());
+					pstmt.setString(2, process.getId());
+					pstmt.execute();
 				}
+			} catch (SQLException e) {
+				LOGGER.warning(e);
 			}
 		}
 	}
@@ -105,24 +96,17 @@ public class JdbcAccess extends AbstractDBAccess implements DBAccess {
 	 */
 	public void updateProcess(Process process) {
 		super.updateProcess(process);
-		if (process.getBytes() != null) {
-			Connection conn = null;
-			PreparedStatement pstmt = null;
 
+		if (process.getBytes() != null) {
 			try {
-				conn = getConnection();
-				pstmt = conn.prepareStatement(PROCESS_UPDATE_BLOB);
-				pstmt.setBytes(1, process.getBytes());
-				pstmt.setString(2, process.getId());
-				pstmt.execute();
-			} catch (Exception e) {
-				throw new SnakerException(e.getMessage(), e.getCause());
-			} finally {
-				try {
-					JdbcHelper.close(pstmt);
-				} catch (SQLException e) {
-					throw new SnakerException(e.getMessage(), e.getCause());
+				Connection conn = getConnection();
+				try (PreparedStatement pstmt = conn.prepareStatement(PROCESS_UPDATE_BLOB)) {
+					pstmt.setBytes(1, process.getBytes());
+					pstmt.setString(2, process.getId());
+					pstmt.execute();
 				}
+			} catch (SQLException e) {
+				LOGGER.warning(e);
 			}
 		}
 	}
@@ -131,7 +115,7 @@ public class JdbcAccess extends AbstractDBAccess implements DBAccess {
 	 * 查询指定列
 	 * 
 	 * @param column 结果集的列索引号
-	 * @param sql sql语句
+	 * @param sql    sql语句
 	 * @param params 查询参数
 	 * @return 指定列的结果对象
 	 */
@@ -151,7 +135,7 @@ public class JdbcAccess extends AbstractDBAccess implements DBAccess {
 	public Integer getLatestProcessVersion(String name) {
 		String where = " where name = ?";
 		Object result = query(1, QUERY_VERSION + where, name);
-		
+
 		return new Long(castLong(result)).intValue();
 	}
 
@@ -180,7 +164,7 @@ public class JdbcAccess extends AbstractDBAccess implements DBAccess {
 			return -1L;
 		}
 	}
-	
+
 	public boolean isORM() {
 		return false;
 	}

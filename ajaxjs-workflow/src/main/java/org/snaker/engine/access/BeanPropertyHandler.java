@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.snaker.engine.access.jdbc;
+package org.snaker.engine.access;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -32,10 +32,10 @@ import org.snaker.engine.helper.ClassHelper;
 import com.ajaxjs.util.ReflectUtil;
 
 /**
- * 该类主要解决数据库字段与类属性之间的转换存在下划线的情况(如：taskId->task_id)
- * 该类主要参考Spring JDBC的rowmapper方式
+ * 该类主要解决数据库字段与类属性之间的转换存在下划线的情况(如：taskId->task_id) 该类主要参考Spring JDBC的rowmapper方式
  * dbutils使用BeanHandler、BeanListHandler来处理返回集与bean的转换
  * 这里统一使用BeanPropertyHandler，当返回单条记录时，使用JdbcHelper的requiredSingleResult做处理
+ * 
  * @author yuqs
  * @since 1.0
  * @param <T>
@@ -52,6 +52,7 @@ public class BeanPropertyHandler<T> extends AbstractListHandler<T> {
 
 	/**
 	 * 构造函数，根据bean对象的class类型初始化mappedFields
+	 * 
 	 * @param mappedClass
 	 */
 	public BeanPropertyHandler(Class<T> mappedClass) {
@@ -68,6 +69,7 @@ public class BeanPropertyHandler<T> extends AbstractListHandler<T> {
 		T mappedObject = ClassHelper.instantiate(mappedClass);
 		ResultSetMetaData rsmd = rs.getMetaData();
 		int columnCount = rsmd.getColumnCount();
+
 		/**
 		 * 对ResultSet结果集字段进行循环
 		 */
@@ -80,6 +82,7 @@ public class BeanPropertyHandler<T> extends AbstractListHandler<T> {
 			 * 根据映射字段集合返回字段名称对应的属性描述符对象
 			 */
 			PropertyDescriptor pd = this.mappedFields.get(column.replaceAll(" ", "").toLowerCase());
+
 			if (pd != null) {
 				try {
 					/**
@@ -88,7 +91,7 @@ public class BeanPropertyHandler<T> extends AbstractListHandler<T> {
 					Object value = JdbcHelper.getResultSetValue(rs, index, pd.getPropertyType());
 					try {
 						ReflectUtil.setProperty(mappedObject, pd.getName(), value);
-						
+
 						/**
 						 * 使用apache-beanutils设置对象的属性
 						 */
@@ -101,17 +104,20 @@ public class BeanPropertyHandler<T> extends AbstractListHandler<T> {
 				}
 			}
 		}
+
 		return mappedObject;
 	}
 
 	/**
 	 * 根据bean对象的class初始化字段映射集合
+	 * 
 	 * @param mappedClass
 	 */
 	protected void initialize(Class<T> mappedClass) {
 		this.mappedClass = mappedClass;
 		this.mappedFields = new HashMap<String, PropertyDescriptor>();
 		PropertyDescriptor[] pds = null;
+
 		try {
 			/**
 			 * 返回bean的属性描述对象数组
@@ -133,11 +139,13 @@ public class BeanPropertyHandler<T> extends AbstractListHandler<T> {
 
 	/**
 	 * 属性名称转换为下划线，如taskId->task_id
+	 * 
 	 * @param name
 	 * @return
 	 */
 	private static String underscoreName(String name) {
 		StringBuilder result = new StringBuilder();
+
 		if (name != null && name.length() > 0) {
 			result.append(name.substring(0, 1).toLowerCase());
 			for (int i = 1; i < name.length(); i++) {
@@ -150,23 +158,24 @@ public class BeanPropertyHandler<T> extends AbstractListHandler<T> {
 				}
 			}
 		}
+
 		return result.toString();
 	}
 
 	/**
 	 * 由Introspector返回指定类型的BeanInfo对象，再返回需要的属性描述对象数组PropertyDescriptor[]
+	 * 
 	 * @param c
 	 * @return PropertyDescriptor[]
 	 * @throws SQLException
 	 */
-	private PropertyDescriptor[] propertyDescriptors(Class<?> c)
-			throws SQLException {
+	private PropertyDescriptor[] propertyDescriptors(Class<?> c) throws SQLException {
 		BeanInfo beanInfo = null;
+		
 		try {
 			beanInfo = Introspector.getBeanInfo(c);
 		} catch (IntrospectionException e) {
-			throw new SQLException("Bean introspection failed: "
-					+ e.getMessage());
+			throw new SQLException("Bean introspection failed: " + e.getMessage());
 		}
 
 		return beanInfo.getPropertyDescriptors();
