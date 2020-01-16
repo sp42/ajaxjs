@@ -20,10 +20,10 @@ import java.util.Map;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
+import org.snaker.engine.TestSnakerBase;
 import org.snaker.engine.entity.Order;
 import org.snaker.engine.helper.DateHelper;
 import org.snaker.engine.helper.StreamHelper;
-import org.snaker.engine.test.TestSnakerBase;
 
 /**
  * @author yuqs

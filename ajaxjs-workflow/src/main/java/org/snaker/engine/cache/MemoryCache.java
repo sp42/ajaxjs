@@ -12,13 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.snaker.engine.cache.memory;
+package org.snaker.engine.cache;
 
 import java.util.Map;
 import java.util.Objects;
-
-import org.snaker.engine.cache.Cache;
-import org.snaker.engine.cache.CacheException;
 
 /**
  * 基于内存管理cache
@@ -42,19 +39,19 @@ public class MemoryCache<K, V> implements Cache<K, V> {
 		this.map = backingMap;
 	}
 
-	public V get(K key) throws CacheException {
+	public V get(K key) {
 		return map.get(key);
 	}
 
-	public V put(K key, V value) throws CacheException {
+	public V put(K key, V value) {
 		return map.put(key, value);
 	}
 
-	public V remove(K key) throws CacheException {
+	public V remove(K key) {
 		return map.remove(key);
 	}
 
-	public void clear() throws CacheException {
+	public void clear() {
 		map.clear();
 	}
 }

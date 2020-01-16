@@ -27,9 +27,6 @@ import java.util.Map;
  * @since 2.0
  */
 public class FieldModel extends BaseModel {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3439646328045814844L;
 
 	/**
@@ -40,7 +37,7 @@ public class FieldModel extends BaseModel {
 	/**
 	 * 字段模型对应的属性key/value数据
 	 */
-	private Map<String, String> attrMap = new HashMap<String, String>();
+	private Map<String, String> attrMap = new HashMap<>();
 
 	public String getType() {
 		return type;
@@ -53,7 +50,7 @@ public class FieldModel extends BaseModel {
 	/**
 	 * 向属性集合添加key/value数据
 	 * 
-	 * @param name 属性名称
+	 * @param name  属性名称
 	 * @param value 属性值
 	 */
 	public void addAttr(String name, String value) {

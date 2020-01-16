@@ -33,26 +33,32 @@ public abstract class NodeModel extends BaseModel implements Action {
 	 * 输入变迁集合
 	 */
 	private List<TransitionModel> inputs = new ArrayList<>();
+
 	/**
 	 * 输出变迁集合
 	 */
 	private List<TransitionModel> outputs = new ArrayList<>();
+
 	/**
 	 * layout
 	 */
 	private String layout;
+
 	/**
 	 * 局部前置拦截器
 	 */
 	private String preInterceptors;
+
 	/**
 	 * 局部后置拦截器
 	 */
 	private String postInterceptors;
+
 	/**
 	 * 前置局部拦截器实例集合
 	 */
 	private List<SnakerInterceptor> preInterceptorList = new ArrayList<>();
+
 	/**
 	 * 后置局部拦截器实例集合
 	 */
@@ -92,7 +98,7 @@ public abstract class NodeModel extends BaseModel implements Action {
 	 * 拦截方法
 	 * 
 	 * @param interceptorList 拦截器列表
-	 * @param execution 执行对象
+	 * @param execution       执行对象
 	 */
 	private void intercept(List<SnakerInterceptor> interceptorList, Execution execution) {
 		try {
@@ -105,7 +111,8 @@ public abstract class NodeModel extends BaseModel implements Action {
 	}
 
 	/**
-	 * 根据父节点模型、当前节点模型判断是否可退回。可退回条件： 1、满足中间无fork、join、subprocess模型 2、满足父节点模型如果为任务模型时，参与类型为any
+	 * 根据父节点模型、当前节点模型判断是否可退回。可退回条件： 1、满足中间无fork、join、subprocess模型
+	 * 2、满足父节点模型如果为任务模型时，参与类型为any
 	 * 
 	 * @param parent 父节点模型
 	 * @return 是否可以退回
@@ -121,7 +128,8 @@ public abstract class NodeModel extends BaseModel implements Action {
 			if (source == parent)
 				return true;
 
-			if (source instanceof ForkModel || source instanceof JoinModel || source instanceof SubProcessModel || source instanceof StartModel)
+			if (source instanceof ForkModel || source instanceof JoinModel || source instanceof SubProcessModel
+					|| source instanceof StartModel)
 				continue;
 
 			result = result || canRejected(source, parent);
@@ -142,7 +150,7 @@ public abstract class NodeModel extends BaseModel implements Action {
 		if (clazz.isInstance(tm.getTarget())) {
 			models.add((T) tm.getTarget());
 		} else {
-			for (TransitionModel tm2 : tm.getTarget().getOutputs()) 
+			for (TransitionModel tm2 : tm.getTarget().getOutputs())
 				addNextModels(models, tm2, clazz);
 		}
 	}
@@ -181,7 +189,7 @@ public abstract class NodeModel extends BaseModel implements Action {
 		if (!CommonUtil.isEmptyString(preInterceptors)) {
 			for (String interceptor : preInterceptors.split(",")) {
 				SnakerInterceptor instance = (SnakerInterceptor) ClassHelper.newInstance(interceptor);
-				
+
 				if (instance != null)
 					this.preInterceptorList.add(instance);
 			}
@@ -198,7 +206,7 @@ public abstract class NodeModel extends BaseModel implements Action {
 		if (!CommonUtil.isEmptyString(postInterceptors)) {
 			for (String interceptor : postInterceptors.split(",")) {
 				SnakerInterceptor instance = (SnakerInterceptor) ClassHelper.newInstance(interceptor);
-				
+
 				if (instance != null)
 					this.postInterceptorList.add(instance);
 			}

@@ -92,7 +92,6 @@ public class ConfigHelper {
 
 			if (in == null)
 				LOGGER.warning("在 Classpath 中找不到配置文件 " + filename);
-
 		} else {
 			try {
 				properties.load(in);

@@ -1,10 +1,10 @@
 package test.query;
 
 import org.junit.Test;
+import org.snaker.engine.TestSnakerBase;
 import org.snaker.engine.access.Page;
 import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.entity.Order;
-import org.snaker.engine.test.TestSnakerBase;
 
 /**
  * 流程实例查询测试

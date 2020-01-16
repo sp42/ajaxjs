@@ -26,9 +26,6 @@ import com.ajaxjs.util.logger.LogHelper;
 public class DecisionModel extends NodeModel {
 	public static final LogHelper LOGGER = LogHelper.getLog(DecisionModel.class);
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -806621814645169999L;
 
 	/**
@@ -51,6 +48,7 @@ public class DecisionModel extends NodeModel {
 	 */
 	private transient Expression expression;
 
+	@Override
 	public void exec(Execution execution) {
 		LOGGER.info(execution.getOrder().getId() + "->decision execution.getArgs():" + execution.getArgs());
 
@@ -62,14 +60,15 @@ public class DecisionModel extends NodeModel {
 			throw new SnakerException("表达式解析器为空，请检查配置.");
 
 		String next = null;
+
 		if (!CommonUtil.isEmptyString(expr))
 			next = expression.eval(String.class, expr, execution.getArgs());
 		else if (decide != null)
 			next = decide.decide(execution);
 
 		LOGGER.info(execution.getOrder().getId() + "->decision expression[expr=" + expr + "] return result:" + next);
-
 		boolean isfound = false;
+
 		for (TransitionModel tm : getOutputs()) {
 			if (StringHelper.isEmpty(next)) {
 				String expr = tm.getExpr();
@@ -106,7 +105,7 @@ public class DecisionModel extends NodeModel {
 
 	public void setHandleClass(String handleClass) {
 		this.handleClass = handleClass;
-		if (!CommonUtil.isEmptyString(handleClass)) 
+		if (!CommonUtil.isEmptyString(handleClass))
 			decide = (DecisionHandler) ClassHelper.newInstance(handleClass);
 	}
 }

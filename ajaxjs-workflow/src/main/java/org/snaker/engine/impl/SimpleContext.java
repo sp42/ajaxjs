@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.snaker.engine.Configuration;
 import org.snaker.engine.Context;
-import org.snaker.engine.cfg.Configuration;
 import org.snaker.engine.helper.ClassHelper;
 
 /**
@@ -26,7 +26,7 @@ public class SimpleContext implements Context {
 	/**
 	 * 上下文注册的配置对象
 	 */
-	private Map<String, Object> contextMap = new HashMap<String, Object>();
+	private Map<String, Object> contextMap = new HashMap<>();
 
 	/**
 	 * 根据服务名称查找对象
@@ -61,6 +61,7 @@ public class SimpleContext implements Context {
 	 */
 	public <T> List<T> findList(Class<T> clazz) {
 		List<T> list = new ArrayList<>();
+		
 		for (Entry<String, Object> entry : contextMap.entrySet()) {
 			if (clazz.isInstance(entry.getValue()))
 				list.add(clazz.cast(entry.getValue()));

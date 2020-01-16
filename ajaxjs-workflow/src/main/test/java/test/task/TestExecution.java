@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
-import org.snaker.engine.test.TestSnakerBase;
+import org.snaker.engine.TestSnakerBase;
 
 /**
  * @author yuqs

@@ -17,7 +17,6 @@ import com.ajaxjs.util.logger.LogHelper;
 public class ClassHelper {
 	public static final LogHelper LOGGER = LogHelper.getLog(ClassHelper.class);
 
-
 	/**
 	 * 根据指定的类名称加载类
 	 * 

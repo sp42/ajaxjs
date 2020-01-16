@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.snaker.engine.Configuration;
 import org.snaker.engine.DBAccess;
 import org.snaker.engine.IManagerService;
 import org.snaker.engine.IOrderService;
@@ -22,8 +23,7 @@ import org.snaker.engine.SnakerEngine;
 import org.snaker.engine.access.transaction.TransactionInterceptor;
 import org.snaker.engine.cache.CacheManager;
 import org.snaker.engine.cache.CacheManagerAware;
-import org.snaker.engine.cache.memory.MemoryCacheManager;
-import org.snaker.engine.cfg.Configuration;
+import org.snaker.engine.cache.MemoryCacheManager;
 import org.snaker.engine.entity.Order;
 import org.snaker.engine.entity.Process;
 import org.snaker.engine.entity.Task;
@@ -252,7 +252,8 @@ public class SnakerEngineImpl implements SnakerEngine {
 
 		if (process.getModel() != null) {
 			StartModel start = process.getModel().getStart();
-			Objects.requireNonNull(start, "流程定义[name=" + process.getName() + ", version=" + process.getVersion() + "]没有开始节点");
+			Objects.requireNonNull(start,
+					"流程定义[name=" + process.getName() + ", version=" + process.getVersion() + "]没有开始节点");
 			start.execute(execution);
 		}
 
@@ -267,7 +268,8 @@ public class SnakerEngineImpl implements SnakerEngine {
 		StartModel start = process.getModel().getStart();
 		Objects.requireNonNull(start, "流程定义[id=" + process.getId() + "]没有开始节点");
 
-		Execution current = execute(process, execution.getOperator(), execution.getArgs(), execution.getParentOrder().getId(), execution.getParentNodeName());
+		Execution current = execute(process, execution.getOperator(), execution.getArgs(),
+				execution.getParentOrder().getId(), execution.getParentNodeName());
 		start.execute(current);
 
 		return current.getOrder();
@@ -276,14 +278,15 @@ public class SnakerEngineImpl implements SnakerEngine {
 	/**
 	 * 创建流程实例，并返回执行对象
 	 * 
-	 * @param process 流程定义
-	 * @param operator 操作人
-	 * @param args 参数列表
-	 * @param parentId 父流程实例id
+	 * @param process        流程定义
+	 * @param operator       操作人
+	 * @param args           参数列表
+	 * @param parentId       父流程实例id
 	 * @param parentNodeName 启动子流程的父流程节点名称
-	 * @return Execution
+	 * @return Execution 执行对象
 	 */
-	private Execution execute(Process process, String operator, Map<String, Object> args, String parentId, String parentNodeName) {
+	private Execution execute(Process process, String operator, Map<String, Object> args, String parentId,
+			String parentNodeName) {
 		Order order = order().createOrder(process, operator, args, parentId, parentNodeName);
 		LOGGER.info("创建流程实例对象:" + order);
 
@@ -314,18 +317,23 @@ public class SnakerEngineImpl implements SnakerEngine {
 		Execution execution = execute(taskId, operator, args);
 		if (execution == null)
 			return Collections.emptyList();
+		
 		ProcessModel model = execution.getProcess().getModel();
+		
 		if (model != null) {
 			NodeModel nodeModel = model.getNode(execution.getTask().getTaskName());
 			// 将执行对象交给该任务对应的节点模型执行
 			nodeModel.execute(execution);
 		}
+		
 		return execution.getTasks();
 	}
 
 	/**
-	 * 根据任务主键ID，操作人ID，参数列表执行任务，并且根据nodeName跳转到任意节点 1、nodeName为null时，则驳回至上一步处理 2、nodeName不为null时，则任意跳转，即动态创建转移
+	 * 根据任务主键ID，操作人ID，参数列表执行任务，并且根据nodeName跳转到任意节点 1、nodeName为null时，则驳回至上一步处理
+	 * 2、nodeName不为null时，则任意跳转，即动态创建转移
 	 */
+
 	public List<Task> executeAndJumpTask(String taskId, String operator, Map<String, Object> args, String nodeName) {
 		Execution execution = execute(taskId, operator, args);
 		if (execution == null)
@@ -365,9 +373,9 @@ public class SnakerEngineImpl implements SnakerEngine {
 	/**
 	 * 根据任务主键ID，操作人ID，参数列表完成任务，并且构造执行对象
 	 * 
-	 * @param taskId 任务id
+	 * @param taskId   任务id
 	 * @param operator 操作人
-	 * @param args 参数列表
+	 * @param args     参数列表
 	 * @return Execution
 	 */
 	private Execution execute(String taskId, String operator, Map<String, Object> args) {

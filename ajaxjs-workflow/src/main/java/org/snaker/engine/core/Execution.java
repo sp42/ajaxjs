@@ -25,50 +25,58 @@ import org.snaker.engine.model.ProcessModel;
  * @since 1.0
  */
 public class Execution implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3730741790729624400L;
+
 	/**
 	 * SnakerEngine holder
 	 */
 	private SnakerEngine engine;
+
 	/**
 	 * 流程定义对象
 	 */
 	private Process process;
+
 	/**
 	 * 流程实例对象
 	 */
 	private Order order;
+
 	/**
 	 * 父流程实例
 	 */
 	private Order parentOrder;
+
 	/**
 	 * 父流程实例节点名称
 	 */
 	private String parentNodeName;
+
 	/**
 	 * 子流程实例节点名称
 	 */
 	private String childOrderId;
+
 	/**
 	 * 执行参数
 	 */
 	private Map<String, Object> args;
+
 	/**
 	 * 操作人
 	 */
 	private String operator;
+
 	/**
 	 * 任务
 	 */
 	private Task task;
+
 	/**
 	 * 返回的任务列表
 	 */
-	private List<Task> tasks = new ArrayList<Task>();
+	private List<Task> tasks = new ArrayList<>();
+
 	/**
 	 * 是否已合并 针对join节点的处理
 	 */
@@ -77,9 +85,9 @@ public class Execution implements Serializable {
 	/**
 	 * 用于产生子流程执行对象使用
 	 * 
-	 * @param execution
-	 * @param process
-	 * @param parentNodeName
+	 * @param execution      执行对象
+	 * @param process        接收流程定义
+	 * @param parentNodeName 父节点名称
 	 */
 	Execution(Execution execution, Process process, String parentNodeName) {
 		if (execution == null || process == null || parentNodeName == null)
@@ -96,9 +104,9 @@ public class Execution implements Serializable {
 	/**
 	 * 构造函数，接收流程定义、流程实例对象、执行参数
 	 * 
-	 * @param process
-	 * @param order
-	 * @param args
+	 * @param process 接收流程定义
+	 * @param order   流程实例对象
+	 * @param args    执行参数
 	 */
 	public Execution(SnakerEngine engine, Process process, Order order, Map<String, Object> args) {
 		if (process == null || order == null)
@@ -113,10 +121,10 @@ public class Execution implements Serializable {
 	/**
 	 * 根据当前执行对象execution、子流程定义process、当前节点名称产生子流程的执行对象
 	 * 
-	 * @param execution
-	 * @param process
-	 * @param parentNodeName
-	 * @return
+	 * @param execution      执行对象
+	 * @param process        接收流程定义
+	 * @param parentNodeName 父节点名称
+	 * @return 子流程的执行对象
 	 */
 	public Execution createSubExecution(Execution execution, Process process, String parentNodeName) {
 		return new Execution(execution, process, parentNodeName);

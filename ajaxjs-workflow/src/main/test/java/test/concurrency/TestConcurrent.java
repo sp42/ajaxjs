@@ -18,8 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.snaker.engine.SnakerEngine;
+import org.snaker.engine.TestSnakerBase;
 import org.snaker.engine.entity.Process;
-import org.snaker.engine.test.TestSnakerBase;
 
 /**
  * 测试并发

@@ -9,7 +9,6 @@ package org.snaker.engine;
 import java.util.List;
 import java.util.Map;
 
-import org.snaker.engine.cfg.Configuration;
 import org.snaker.engine.core.Execution;
 import org.snaker.engine.entity.Order;
 import org.snaker.engine.entity.Task;

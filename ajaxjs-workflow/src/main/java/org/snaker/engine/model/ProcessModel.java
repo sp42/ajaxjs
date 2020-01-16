@@ -28,6 +28,7 @@ public class ProcessModel extends BaseModel {
 	 * 节点元素集合
 	 */
 	private List<NodeModel> nodes = new ArrayList<>();
+
 	private List<TaskModel> taskModels = new ArrayList<>();
 
 	/**
@@ -63,6 +64,7 @@ public class ProcessModel extends BaseModel {
 	 */
 	public List<WorkModel> getWorkModels() {
 		List<WorkModel> models = new ArrayList<WorkModel>();
+
 		for (NodeModel node : nodes) {
 			if (node instanceof WorkModel) {
 				models.add((WorkModel) node);
@@ -90,7 +92,7 @@ public class ProcessModel extends BaseModel {
 	 * 根据指定的节点类型返回流程定义中所有模型对象
 	 * 
 	 * @param clazz 节点类型
-	 * @param <T> 泛型
+	 * @param <T>   泛型
 	 * @return 节点列表
 	 */
 	public <T> List<T> getModels(Class<T> clazz) {

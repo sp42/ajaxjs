@@ -4,7 +4,7 @@
  * or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  * either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
-package org.snaker.engine.cfg;
+package org.snaker.engine;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -14,9 +14,6 @@ import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
 
-import org.snaker.engine.Context;
-import org.snaker.engine.SnakerEngine;
-import org.snaker.engine.SnakerException;
 import org.snaker.engine.access.transaction.TransactionInterceptor;
 import org.snaker.engine.core.ServiceContext;
 import org.snaker.engine.helper.ClassHelper;
@@ -30,6 +27,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -83,14 +81,12 @@ public class Configuration {
 	 * @throws SnakerException
 	 */
 	public SnakerEngine buildSnakerEngine() throws SnakerException {
-
 		LOGGER.info("SnakerEngine start......");
 
 		parser();
-		/**
-		 * 由服务上下文返回流程引擎
-		 */
+		// 由服务上下文返回流程引擎
 		SnakerEngine configEngine = ServiceContext.getEngine();
+		
 		if (configEngine == null)
 			throw new SnakerException("配置无法发现SnakerEngine的实现类");
 
@@ -107,7 +103,7 @@ public class Configuration {
 
 		// 默认使用snaker.xml配置自定义的bean
 		String config = ConfigHelper.getProperty("config");
-		if (StringHelper.isEmpty(config))
+		if (CommonUtil.isEmptyString(config))
 			config = USER_CONFIG_FILE;
 
 		parser(config);
