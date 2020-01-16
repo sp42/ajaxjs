@@ -6,12 +6,12 @@
  */
 package org.snaker.engine.parser.impl;
 
-import org.snaker.engine.helper.ConfigHelper;
 import org.snaker.engine.model.NodeModel;
 import org.snaker.engine.model.SubProcessModel;
 import org.snaker.engine.parser.AbstractNodeParser;
 import org.w3c.dom.Element;
 
+import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.util.CommonUtil;
 
 /**
@@ -49,6 +49,6 @@ public class SubProcessParser extends AbstractNodeParser {
 		if (!CommonUtil.isEmptyString(form))
 			model.setForm(form);
 		else
-			model.setForm(ConfigHelper.getProperty("subprocessurl"));
+			model.setForm(ConfigService.getValueAsString("workflow.subprocessurl"));
 	}
 }
