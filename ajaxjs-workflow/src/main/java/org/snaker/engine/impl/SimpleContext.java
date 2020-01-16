@@ -14,7 +14,8 @@ import java.util.Map.Entry;
 
 import org.snaker.engine.Configuration;
 import org.snaker.engine.Context;
-import org.snaker.engine.helper.ClassHelper;
+
+import com.ajaxjs.util.ReflectUtil;
 
 /**
  * 简单的服务查找实现类，由 {@link Configuration}设置
@@ -103,6 +104,6 @@ public class SimpleContext implements Context {
 	 * @param clazz
 	 */
 	public void put(String name, Class<?> clazz) {
-		contextMap.put(name, ClassHelper.instantiate(clazz));
+		contextMap.put(name, ReflectUtil.newInstance(clazz));
 	}
 }

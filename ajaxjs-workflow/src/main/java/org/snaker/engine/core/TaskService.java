@@ -20,13 +20,13 @@ import org.snaker.engine.ITaskService;
 import org.snaker.engine.SnakerEngine;
 import org.snaker.engine.SnakerException;
 import org.snaker.engine.TaskAccessStrategy;
+import org.snaker.engine.WorkflowUtils;
 import org.snaker.engine.entity.HistoryTask;
 import org.snaker.engine.entity.Order;
 import org.snaker.engine.entity.Process;
 import org.snaker.engine.entity.Task;
 import org.snaker.engine.entity.TaskActor;
 import org.snaker.engine.helper.DateHelper;
-import org.snaker.engine.helper.StringHelper;
 import org.snaker.engine.impl.GeneralAccessStrategy;
 import org.snaker.engine.model.CustomModel;
 import org.snaker.engine.model.NodeModel;
@@ -35,8 +35,8 @@ import org.snaker.engine.model.TaskModel;
 import org.snaker.engine.model.TaskModel.PerformType;
 import org.snaker.engine.model.TaskModel.TaskType;
 
-import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.map.JsonHelper;
 
 /**
  * 任务执行业务类
@@ -120,7 +120,7 @@ public class TaskService extends AccessService implements ITaskService {
 	 */
 	public HistoryTask history(Execution execution, CustomModel model) {
 		HistoryTask historyTask = new HistoryTask();
-		historyTask.setId(StringHelper.getPrimaryKey());
+		historyTask.setId(WorkflowUtils.getPrimaryKey());
 		historyTask.setOrderId(execution.getOrder().getId());
 		String currentTime = DateHelper.getTime();
 		historyTask.setCreateTime(currentTime);
@@ -164,7 +164,7 @@ public class TaskService extends AccessService implements ITaskService {
 
 		if (isAllowed) {
 			Task task = histTask.undoTask();
-			task.setId(StringHelper.getPrimaryKey());
+			task.setId(WorkflowUtils.getPrimaryKey());
 			task.setCreateTime(DateHelper.getTime());
 			access().saveTask(task);
 			assignTask(task.getId(), task.getOperator());
@@ -200,7 +200,7 @@ public class TaskService extends AccessService implements ITaskService {
 			assignTask(task.getId(), actors);
 			Map<String, Object> data = task.getVariableMap();
 			String oldActor = (String) data.get(Task.KEY_ACTOR);
-			data.put(Task.KEY_ACTOR, oldActor + "," + StringHelper.getStringByArray(actors));
+			data.put(Task.KEY_ACTOR, oldActor + "," + String.join(",", actors));
 			task.setVariable(JsonHelper.toJson(data));
 			access().updateTask(task);
 			break;
@@ -208,7 +208,7 @@ public class TaskService extends AccessService implements ITaskService {
 			try {
 				for (String actor : actors) {
 					Task newTask = (Task) task.clone();
-					newTask.setId(StringHelper.getPrimaryKey());
+					newTask.setId(WorkflowUtils.getPrimaryKey());
 					newTask.setCreateTime(DateHelper.getTime());
 					newTask.setOperator(actor);
 					Map<String, Object> taskData = task.getVariableMap();
@@ -247,7 +247,7 @@ public class TaskService extends AccessService implements ITaskService {
 				boolean isMatch;
 				for (String actor : actorArray) {
 					isMatch = false;
-					if (StringHelper.isEmpty(actor))
+					if (CommonUtil.isEmptyString(actor))
 						continue;
 					for (String removeActor : actors) {
 						if (actor.equals(removeActor)) {
@@ -287,7 +287,7 @@ public class TaskService extends AccessService implements ITaskService {
 		}
 
 		Task task = hist.undoTask();
-		task.setId(StringHelper.getPrimaryKey());
+		task.setId(WorkflowUtils.getPrimaryKey());
 		task.setCreateTime(DateHelper.getTime());
 		access().saveTask(task);
 		assignTask(task.getId(), task.getOperator());
@@ -299,7 +299,7 @@ public class TaskService extends AccessService implements ITaskService {
 	 */
 	public Task rejectTask(ProcessModel model, Task currentTask) {
 		String parentTaskId = currentTask.getParentTaskId();
-		if (StringHelper.isEmpty(parentTaskId) || parentTaskId.equals(START)) {
+		if (CommonUtil.isEmptyString(parentTaskId) || parentTaskId.equals(START)) {
 			throw new SnakerException("上一步任务ID为空，无法驳回至上一步处理");
 		}
 		NodeModel current = model.getNode(currentTask.getTaskName());
@@ -310,7 +310,7 @@ public class TaskService extends AccessService implements ITaskService {
 			throw new SnakerException("无法驳回至上一步处理，请确认上一步骤并非fork、join、suprocess以及会签任务");
 
 		Task task = history.undoTask();
-		task.setId(StringHelper.getPrimaryKey());
+		task.setId(WorkflowUtils.getPrimaryKey());
 		task.setCreateTime(DateHelper.getTime());
 		task.setOperator(history.getOperator());
 		access().saveTask(task);
@@ -329,7 +329,7 @@ public class TaskService extends AccessService implements ITaskService {
 			return;
 		for (String actorId : actorIds) {
 			// 修复当actorId为null的bug
-			if (StringHelper.isEmpty(actorId))
+			if (CommonUtil.isEmptyString(actorId))
 				continue;
 			TaskActor taskActor = new TaskActor();
 			taskActor.setTaskId(taskId);
@@ -395,10 +395,10 @@ public class TaskService extends AccessService implements ITaskService {
 		Date expireDate = DateHelper.processTime(args, taskModel.getExpireTime());
 		Date remindDate = DateHelper.processTime(args, taskModel.getReminderTime());
 		String form = (String) args.get(taskModel.getForm());
-		String actionUrl = StringHelper.isEmpty(form) ? taskModel.getForm() : form;
+		String actionUrl = CommonUtil.isEmptyString(form) ? taskModel.getForm() : form;
 
 		String[] actors = getTaskActors(taskModel, execution);
-		args.put(Task.KEY_ACTOR, StringHelper.getStringByArray(actors));
+		args.put(Task.KEY_ACTOR, String.join(",", actors));
 		Task task = createTaskBase(taskModel, execution);
 		task.setActionUrl(actionUrl);
 		task.setExpireDate(expireDate);
@@ -454,7 +454,7 @@ public class TaskService extends AccessService implements ITaskService {
 	 * 由DBAccess实现类持久化task对象
 	 */
 	private Task saveTask(Task task, String... actors) {
-		task.setId(StringHelper.getPrimaryKey());
+		task.setId(WorkflowUtils.getPrimaryKey());
 		task.setPerformType(PerformType.ANY.ordinal());
 		access().saveTask(task);
 		assignTask(task.getId(), actors);
@@ -544,7 +544,7 @@ public class TaskService extends AccessService implements ITaskService {
 		if (actors == null || actors.isEmpty())
 			return true;
 		
-		return !StringHelper.isEmpty(operator) && getStrategy().isAllowed(operator, actors);
+		return !CommonUtil.isEmptyString(operator) && getStrategy().isAllowed(operator, actors);
 	}
 
 	public void setStrategy(TaskAccessStrategy strategy) {

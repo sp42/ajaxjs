@@ -13,6 +13,7 @@ import java.util.Objects;
 import org.snaker.engine.Completion;
 import org.snaker.engine.IOrderService;
 import org.snaker.engine.SnakerEngine;
+import org.snaker.engine.WorkflowUtils;
 import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.entity.CCOrder;
 import org.snaker.engine.entity.HistoryOrder;
@@ -21,7 +22,6 @@ import org.snaker.engine.entity.Order;
 import org.snaker.engine.entity.Process;
 import org.snaker.engine.entity.Task;
 import org.snaker.engine.helper.DateHelper;
-import org.snaker.engine.helper.StringHelper;
 import org.snaker.engine.model.ProcessModel;
 
 import com.ajaxjs.util.map.JsonHelper;
@@ -48,7 +48,7 @@ public class OrderService extends AccessService implements IOrderService {
 	 */
 	public Order createOrder(Process process, String operator, Map<String, Object> args, String parentId, String parentNodeName) {
 		Order order = new Order();
-		order.setId(StringHelper.getPrimaryKey());
+		order.setId(WorkflowUtils.getPrimaryKey());
 		order.setParentId(parentId);
 		order.setParentNodeName(parentNodeName);
 		order.setCreateTime(DateHelper.getTime());

@@ -12,6 +12,7 @@ import java.util.Objects;
 
 import org.snaker.engine.IProcessService;
 import org.snaker.engine.SnakerException;
+import org.snaker.engine.WorkflowUtils;
 import org.snaker.engine.access.Page;
 import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.cache.Cache;
@@ -21,7 +22,6 @@ import org.snaker.engine.entity.HistoryOrder;
 import org.snaker.engine.entity.Process;
 import org.snaker.engine.helper.DateHelper;
 import org.snaker.engine.helper.StreamHelper;
-import org.snaker.engine.helper.StringHelper;
 import org.snaker.engine.model.ProcessModel;
 import org.snaker.engine.parser.ModelParser;
 
@@ -68,7 +68,8 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 		Objects.requireNonNull(process, "指定的流程定义[id/name=" + idOrName + "]不存在");
 
 		if (process.getState() != null && process.getState() == 0)
-			throw new IllegalArgumentException("指定的流程定义[id/name=" + idOrName + ",version=" + process.getVersion() + "]为非活动状态");
+			throw new IllegalArgumentException(
+					"指定的流程定义[id/name=" + idOrName + ",version=" + process.getVersion() + "]为非活动状态");
 	}
 
 	/**
@@ -144,6 +145,7 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 
 		if (entityCache != null)
 			entity = entityCache.get(processName);
+
 		if (entity != null) {
 			LOGGER.info("obtain process[name={0}] from cache.", processName);
 			return entity;
@@ -170,7 +172,7 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 	/**
 	 * 根据流程定义xml的输入流解析为字节数组，保存至数据库中，并且put到缓存中
 	 * 
-	 * @param input 定义输入流
+	 * @param input   定义输入流
 	 * @param creator 创建人
 	 */
 	public String deploy(InputStream input, String creator) {
@@ -180,12 +182,13 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 			ProcessModel model = ModelParser.parse(bytes);
 			Integer version = access().getLatestProcessVersion(model.getName());
 			Process entity = new Process();
-			entity.setId(StringHelper.getPrimaryKey());
-			if (version == null || version < 0) {
+			entity.setId(WorkflowUtils.getPrimaryKey());
+
+			if (version == null || version < 0)
 				entity.setVersion(0);
-			} else {
+			else
 				entity.setVersion(version + 1);
-			}
+
 			entity.setState(STATE_ACTIVE);
 			entity.setModel(model);
 			entity.setBytes(bytes);
@@ -210,6 +213,7 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 		Objects.requireNonNull(input);
 		Process entity = access().getProcess(id);
 		Objects.requireNonNull(entity);
+
 		try {
 			byte[] bytes = StreamHelper.readBytes(input);
 			ProcessModel model = ModelParser.parse(bytes);
@@ -217,11 +221,12 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 			entity.setModel(model);
 			entity.setBytes(bytes);
 			access().updateProcess(entity);
+
 			if (!oldProcessName.equalsIgnoreCase(entity.getName())) {
 				Cache<String, Process> entityCache = ensureAvailableEntityCache();
-				if (entityCache != null) {
+				if (entityCache != null)
 					entityCache.remove(oldProcessName + DEFAULT_SEPARATOR + entity.getVersion());
-				}
+
 			}
 			cache(entity);
 		} catch (Exception e) {
@@ -248,9 +253,9 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 		Process entity = access().getProcess(id);
 		List<HistoryOrder> historyOrders = access().getHistoryOrders(null, new QueryFilter().setProcessId(id));
 
-		for (HistoryOrder historyOrder : historyOrders) {
+		for (HistoryOrder historyOrder : historyOrders)
 			ServiceContext.getEngine().order().cascadeRemove(historyOrder.getId());
-		}
+
 		access().deleteProcess(entity);
 		clear(entity);
 	}
@@ -317,17 +322,17 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 
 	private Cache<String, Process> ensureAvailableEntityCache() {
 		Cache<String, Process> entityCache = ensureEntityCache();
-		if (entityCache == null && this.cacheManager != null) {
+		if (entityCache == null && this.cacheManager != null)
 			entityCache = this.cacheManager.getCache(CACHE_ENTITY);
-		}
+
 		return entityCache;
 	}
 
 	private Cache<String, String> ensureAvailableNameCache() {
 		Cache<String, String> nameCache = ensureNameCache();
-		if (nameCache == null && this.cacheManager != null) {
+		if (nameCache == null && this.cacheManager != null)
 			nameCache = this.cacheManager.getCache(CACHE_NAME);
-		}
+
 		return nameCache;
 	}
 

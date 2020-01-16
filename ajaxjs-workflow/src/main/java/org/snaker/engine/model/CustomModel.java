@@ -12,10 +12,10 @@ import java.util.Map;
 import org.snaker.engine.SnakerException;
 import org.snaker.engine.core.Execution;
 import org.snaker.engine.handlers.IHandler;
-import org.snaker.engine.helper.ClassHelper;
 import org.snaker.engine.helper.ReflectHelper;
 
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.ReflectUtil;
 
 /**
  * 自定义模型
@@ -54,7 +54,7 @@ public class CustomModel extends WorkModel {
 	@Override
 	public void exec(Execution execution) {
 		if (invokeObject == null)
-			invokeObject = ClassHelper.newInstance(clazz);
+			invokeObject = ReflectUtil.newInstance(clazz);
 
 		if (invokeObject == null)
 			throw new SnakerException("自定义模型[class=" + clazz + "]实例化对象失败");

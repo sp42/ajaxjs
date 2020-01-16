@@ -11,10 +11,9 @@ import org.snaker.engine.Expression;
 import org.snaker.engine.SnakerException;
 import org.snaker.engine.core.Execution;
 import org.snaker.engine.core.ServiceContext;
-import org.snaker.engine.helper.ClassHelper;
-import org.snaker.engine.helper.StringHelper;
 
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -70,7 +69,7 @@ public class DecisionModel extends NodeModel {
 		boolean isfound = false;
 
 		for (TransitionModel tm : getOutputs()) {
-			if (StringHelper.isEmpty(next)) {
+			if (CommonUtil.isEmptyString(next)) {
 				String expr = tm.getExpr();
 
 				if (!CommonUtil.isEmptyString(expr) && expression.eval(Boolean.class, expr, execution.getArgs())) {
@@ -106,6 +105,6 @@ public class DecisionModel extends NodeModel {
 	public void setHandleClass(String handleClass) {
 		this.handleClass = handleClass;
 		if (!CommonUtil.isEmptyString(handleClass))
-			decide = (DecisionHandler) ClassHelper.newInstance(handleClass);
+			decide = (DecisionHandler) ReflectUtil.newInstance(handleClass);
 	}
 }

@@ -6,12 +6,14 @@
  */
 package org.snaker.engine.parser;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import org.snaker.engine.helper.XmlHelper;
 import org.snaker.engine.model.NodeModel;
 import org.snaker.engine.model.TransitionModel;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 /**
  * 抽象dom节点解析类 完成通用的属性、变迁解析
@@ -36,7 +38,7 @@ public abstract class AbstractNodeParser implements NodeParser {
 		model.setPreInterceptors(element.getAttribute(ATTR_PREINTERCEPTORS));
 		model.setPostInterceptors(element.getAttribute(ATTR_POSTINTERCEPTORS));
 
-		List<Element> transitions = XmlHelper.elements(element, NODE_TRANSITION);
+		List<Element> transitions = elements(element, NODE_TRANSITION);
 
 		for (Element te : transitions) {
 			TransitionModel transition = new TransitionModel();
@@ -52,6 +54,31 @@ public abstract class AbstractNodeParser implements NodeParser {
 		}
 
 		parseNode(model, element);
+	}
+	
+	/**
+	 * 从element元素查找所有tagName指定的子节点元素集合
+	 * 
+	 * @param element
+	 * @param tagName
+	 * @return
+	 */
+	private static List<Element> elements(Element element, String tagName) {
+		if (element == null || !element.hasChildNodes())
+			return Collections.emptyList();
+
+		List<Element> elements = new ArrayList<>();
+
+		for (Node child = element.getFirstChild(); child != null; child = child.getNextSibling()) {
+			if (child.getNodeType() == Node.ELEMENT_NODE) {
+				Element childElement = (Element) child;
+
+				if (tagName.equals(childElement.getNodeName()))
+					elements.add(childElement);
+			}
+		}
+
+		return elements;
 	}
 
 	/**

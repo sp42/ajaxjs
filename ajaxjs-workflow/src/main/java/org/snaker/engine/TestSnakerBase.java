@@ -14,11 +14,7 @@ package org.snaker.engine;
  */
 public class TestSnakerBase {
 	protected String processId;
-	protected SnakerEngine engine = getEngine();
+	protected SnakerEngine engine = new Configuration().buildSnakerEngine();
 	protected IProcessService processService = engine.process();
 	protected IQueryService queryService = engine.query();
-
-	protected SnakerEngine getEngine() {
-		return new Configuration().buildSnakerEngine();
-	}
 }

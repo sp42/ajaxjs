@@ -13,11 +13,10 @@ import java.util.Objects;
 import org.snaker.engine.AssignmentHandler;
 import org.snaker.engine.core.Execution;
 import org.snaker.engine.handlers.impl.MergeActorHandler;
-import org.snaker.engine.helper.ClassHelper;
-import org.snaker.engine.helper.StringHelper;
 import org.snaker.engine.scheduling.JobCallback;
 
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.ReflectUtil;
 
 /**
  * 任务定义task元素
@@ -169,7 +168,7 @@ public class TaskModel extends WorkModel {
 	}
 
 	public void setTaskType(String taskType) {
-		this.taskType = (StringHelper.isEmpty(taskType) ? TASKTYPE_MAJOR : taskType);
+		this.taskType = (CommonUtil.isEmptyString(taskType) ? TASKTYPE_MAJOR : taskType);
 	}
 
 	public String getPerformType() {
@@ -177,7 +176,7 @@ public class TaskModel extends WorkModel {
 	}
 
 	public void setPerformType(String performType) {
-		this.performType = (StringHelper.isEmpty(performType) ? PERFORMTYPE_ANY : performType);
+		this.performType = (CommonUtil.isEmptyString(performType) ? PERFORMTYPE_ANY : performType);
 	}
 
 	public String getReminderTime() {
@@ -211,7 +210,7 @@ public class TaskModel extends WorkModel {
 	public void setAssignmentHandler(String assignmentHandlerStr) {
 		if (!CommonUtil.isEmptyString(assignmentHandlerStr)) {
 			this.assignmentHandler = assignmentHandlerStr;
-			assignmentHandlerObject = (AssignmentHandler) ClassHelper.newInstance(assignmentHandlerStr);
+			assignmentHandlerObject = (AssignmentHandler) ReflectUtil.newInstance(assignmentHandlerStr);
 			Objects.requireNonNull(assignmentHandlerObject, "分配参与者处理类实例化失败");
 		}
 	}
@@ -231,7 +230,7 @@ public class TaskModel extends WorkModel {
 	public void setCallback(String callbackStr) {
 		if (!CommonUtil.isEmptyString(callbackStr)) {
 			this.callback = callbackStr;
-			callbackObject = (JobCallback) ClassHelper.newInstance(callbackStr);
+			callbackObject = (JobCallback) ReflectUtil.newInstance(callbackStr);
 			Objects.requireNonNull(callbackObject, "回调处理类实例化失败");
 		}
 	}

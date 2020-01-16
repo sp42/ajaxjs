@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.Objects;
 
 import org.snaker.engine.IManagerService;
+import org.snaker.engine.WorkflowUtils;
 import org.snaker.engine.access.Page;
 import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.entity.Surrogate;
 import org.snaker.engine.helper.DateHelper;
-import org.snaker.engine.helper.StringHelper;
 
 import com.ajaxjs.util.CommonUtil;
 
@@ -32,8 +32,8 @@ public class ManagerService extends AccessService implements IManagerService {
 		Objects.requireNonNull(surrogate);
 		surrogate.setState(STATE_ACTIVE);
 
-		if (StringHelper.isEmpty(surrogate.getId())) {
-			surrogate.setId(StringHelper.getPrimaryKey());
+		if (CommonUtil.isEmptyString(surrogate.getId())) {
+			surrogate.setId(WorkflowUtils.getPrimaryKey());
 			access().saveSurrogate(surrogate);
 		} else
 			access().updateSurrogate(surrogate);

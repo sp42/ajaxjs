@@ -87,4 +87,13 @@ public class WorkflowUtils {
 		return result;
 	}
 
+	/**
+	 * 获取uuid类型的字符串
+	 * 
+	 * @return uuid字符串
+	 */
+	public static String getPrimaryKey() {
+		return java.util.UUID.randomUUID().toString().replace("-", "");
+	}
+
 }

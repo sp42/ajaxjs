@@ -27,7 +27,6 @@ import java.util.Map;
 //import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.dbutils.handlers.AbstractListHandler;
 import org.snaker.engine.SnakerException;
-import org.snaker.engine.helper.ClassHelper;
 
 import com.ajaxjs.util.ReflectUtil;
 
@@ -66,7 +65,7 @@ public class BeanPropertyHandler<T> extends AbstractListHandler<T> {
 		/**
 		 * 根据bean的class类型实例化为对象
 		 */
-		T mappedObject = ClassHelper.instantiate(mappedClass);
+		T mappedObject = ReflectUtil.newInstance(mappedClass);
 		ResultSetMetaData rsmd = rs.getMetaData();
 		int columnCount = rsmd.getColumnCount();
 
@@ -171,7 +170,7 @@ public class BeanPropertyHandler<T> extends AbstractListHandler<T> {
 	 */
 	private PropertyDescriptor[] propertyDescriptors(Class<?> c) throws SQLException {
 		BeanInfo beanInfo = null;
-		
+
 		try {
 			beanInfo = Introspector.getBeanInfo(c);
 		} catch (IntrospectionException e) {

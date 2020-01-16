@@ -13,7 +13,6 @@ import javax.xml.parsers.DocumentBuilder;
 
 import org.snaker.engine.SnakerException;
 import org.snaker.engine.core.ServiceContext;
-import org.snaker.engine.helper.XmlHelper;
 import org.snaker.engine.model.NodeModel;
 import org.snaker.engine.model.ProcessModel;
 import org.snaker.engine.model.TransitionModel;
@@ -22,6 +21,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import com.ajaxjs.util.XMLHelper;
 
 /**
  * 流程定义xml文件的模型解析器
@@ -36,7 +37,7 @@ public class ModelParser {
 	 * @param bytes
 	 */
 	public static ProcessModel parse(byte[] bytes) {
-		DocumentBuilder documentBuilder = XmlHelper.createDocumentBuilder();
+		DocumentBuilder documentBuilder = XMLHelper.initBuilder();
 
 		if (documentBuilder != null) {
 			Document doc = null;

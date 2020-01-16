@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE Context>
 <config>
-	<!--jdbc的数据库访问与事务拦截器-->
-	<bean class="org.snaker.engine.access.jdbc.JdbcAccess"/>
-	<bean class="org.snaker.engine.access.transaction.DataSourceTransactionInterceptor"/>
+	<!--jdbc的数据库访问与事务拦截器 -->
+	<bean class="org.snaker.engine.access.jdbc.JdbcAccess" />
+	<bean class="org.snaker.engine.access.transaction.DataSourceTransactionInterceptor" />
 	
 	<!-- 
 	<bean class="org.snaker.engine.access.transaction.JtaTransactionInterceptor"/>
@@ -16,16 +16,16 @@
 	 -->
 	 
 	<!-- 配置任务访问的策略类，如果涉及到组、角色作为参与者，则需要自定义策略类-->
-	<bean class="test.task.group.CustomAccessStrategy"/>
+	<bean class="test.task.group.CustomAccessStrategy" />
 	
 	<!-- 任务拦截器，这里可配置多个拦截器，在任务执行后进行拦截处理(如：记录日志、短信提醒等) -->
-	<bean class="org.snaker.engine.impl.LogInterceptor"/>
-	<bean class="org.snaker.engine.impl.SurrogateInterceptor"/>
+	<bean class="org.snaker.engine.impl.LogInterceptor" />
+	<bean class="org.snaker.engine.impl.SurrogateInterceptor" />
 	
 	<!-- 
 	配置表达式引擎实现类
 	org.snaker.engine.spring.SpelExpression
 	org.snaker.engine.impl.JuelExpression
 	 -->
-	<bean class="org.snaker.engine.impl.JuelExpression"/>
+	<bean class="org.snaker.engine.impl.JuelExpression" />
 </config>

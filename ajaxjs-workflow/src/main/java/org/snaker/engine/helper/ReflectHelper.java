@@ -23,7 +23,7 @@ public class ReflectHelper {
 	/**
 	 * 利用反射获取指定对象的指定属性
 	 * 
-	 * @param obj 目标对象
+	 * @param obj       目标对象
 	 * @param fieldName 目标属性
 	 * @return 目标属性的值
 	 */
@@ -48,7 +48,7 @@ public class ReflectHelper {
 	/**
 	 * 利用反射获取指定对象里面的指定属性
 	 * 
-	 * @param obj 目标对象
+	 * @param obj       目标对象
 	 * @param fieldName 目标属性
 	 * @return 目标字段
 	 */
@@ -68,8 +68,8 @@ public class ReflectHelper {
 	/**
 	 * 利用反射设置指定对象的指定属性为指定的值
 	 * 
-	 * @param obj 目标对象
-	 * @param fieldName 目标属性
+	 * @param obj        目标对象
+	 * @param fieldName  目标属性
 	 * @param fieldValue 目标值
 	 */
 	public static void setFieldValue(Object obj, String fieldName, Object fieldValue) {
@@ -91,13 +91,13 @@ public class ReflectHelper {
 	 * 
 	 * @param method 方法
 	 * @param target 对象
-	 * @param args 参数数组
+	 * @param args   参数数组
 	 * @return 方法调用的返回数据
 	 */
 	public static Object invoke(Method method, Object target, Object[] args) {
-		if (method == null) {
+		if (method == null)
 			throw new SnakerException("方法不能为空");
-		}
+
 		try {
 			if (!method.isAccessible()) {
 				method.setAccessible(true);
@@ -105,9 +105,11 @@ public class ReflectHelper {
 			return method.invoke(target, args);
 		} catch (InvocationTargetException e) {
 			Throwable targetException = e.getTargetException();
-			throw new SnakerException("不能调用 '" + method.getName() + "' with " + Arrays.toString(args) + " on " + target + ": " + targetException.getMessage(), targetException);
+			throw new SnakerException("不能调用 '" + method.getName() + "' with " + Arrays.toString(args) + " on " + target
+					+ ": " + targetException.getMessage(), targetException);
 		} catch (Exception e) {
-			throw new SnakerException("不能调用 '" + method.getName() + "' with " + Arrays.toString(args) + " on " + target + ": " + e.getMessage(), e);
+			throw new SnakerException("不能调用 '" + method.getName() + "' with " + Arrays.toString(args) + " on " + target
+					+ ": " + e.getMessage(), e);
 		}
 	}
 

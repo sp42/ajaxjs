@@ -13,9 +13,9 @@ import org.snaker.engine.Action;
 import org.snaker.engine.SnakerException;
 import org.snaker.engine.SnakerInterceptor;
 import org.snaker.engine.core.Execution;
-import org.snaker.engine.helper.ClassHelper;
 
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -188,7 +188,7 @@ public abstract class NodeModel extends BaseModel implements Action {
 
 		if (!CommonUtil.isEmptyString(preInterceptors)) {
 			for (String interceptor : preInterceptors.split(",")) {
-				SnakerInterceptor instance = (SnakerInterceptor) ClassHelper.newInstance(interceptor);
+				SnakerInterceptor instance = (SnakerInterceptor) ReflectUtil.newInstance(interceptor);
 
 				if (instance != null)
 					this.preInterceptorList.add(instance);
@@ -205,7 +205,7 @@ public abstract class NodeModel extends BaseModel implements Action {
 
 		if (!CommonUtil.isEmptyString(postInterceptors)) {
 			for (String interceptor : postInterceptors.split(",")) {
-				SnakerInterceptor instance = (SnakerInterceptor) ClassHelper.newInstance(interceptor);
+				SnakerInterceptor instance = (SnakerInterceptor) ReflectUtil.newInstance(interceptor);
 
 				if (instance != null)
 					this.postInterceptorList.add(instance);

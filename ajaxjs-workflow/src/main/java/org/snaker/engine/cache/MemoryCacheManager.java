@@ -17,7 +17,7 @@ package org.snaker.engine.cache;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.snaker.engine.helper.StringHelper;
+import com.ajaxjs.util.CommonUtil;
 
 /**
  * 基于虚拟机内存的cache管理器
@@ -33,7 +33,7 @@ public class MemoryCacheManager implements CacheManager {
 	}
 
 	public <K, V> Cache<K, V> getCache(String name) {
-		if (StringHelper.isEmpty(name))
+		if (CommonUtil.isEmptyString(name))
 			throw new IllegalArgumentException("Cache名称不能为空.");
 
 		Cache cache;

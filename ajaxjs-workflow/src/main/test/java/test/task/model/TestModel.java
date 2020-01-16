@@ -17,10 +17,12 @@
 
 package test.task.model;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.Before;
 import org.junit.Test;
-import org.snaker.engine.Configuration;
-import org.snaker.engine.SnakerEngine;
 import org.snaker.engine.TestSnakerBase;
 import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.entity.Order;
@@ -28,21 +30,12 @@ import org.snaker.engine.entity.Task;
 import org.snaker.engine.helper.StreamHelper;
 import org.snaker.engine.model.TaskModel;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * 测试模型操作
  * @author yuqs
  * @since 2.0
  */
 public class TestModel extends TestSnakerBase {
-    @Override
-    protected SnakerEngine getEngine() {
-        return  new Configuration().initProperties("snaker1.properties").buildSnakerEngine();
-    }
-
     @Before
     public void before() {
         processId = engine.process().deploy(StreamHelper.getStreamFromClasspath("test/task/simple/process.snaker"));

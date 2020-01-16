@@ -10,6 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
+import com.ajaxjs.util.CommonUtil;
+
 //import org.joda.time.DateTime;
 
 /**
@@ -61,13 +63,15 @@ public class DateHelper {
 	 * @return Date类型
 	 */
 	public static Date processTime(Map<String, Object> args, String parameter) {
-		if (StringHelper.isEmpty(parameter))
+		if (CommonUtil.isEmptyString(parameter))
 			return null;
+		
 		Object data = args.get(parameter);
 		if (data == null)
 			data = parameter;
 
 		Date result = null;
+		
 		if (data instanceof Date) {
 			return (Date) data;
 		} else if (data instanceof Long) {

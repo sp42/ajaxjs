@@ -28,13 +28,13 @@ import org.snaker.engine.entity.Order;
 import org.snaker.engine.entity.Process;
 import org.snaker.engine.entity.Task;
 import org.snaker.engine.helper.DateHelper;
-import org.snaker.engine.helper.StringHelper;
 import org.snaker.engine.model.NodeModel;
 import org.snaker.engine.model.ProcessModel;
 import org.snaker.engine.model.StartModel;
 import org.snaker.engine.model.TaskModel;
 import org.snaker.engine.model.TransitionModel;
 
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -329,11 +329,14 @@ public class SnakerEngineImpl implements SnakerEngine {
 
 	public List<Task> executeAndJumpTask(String taskId, String operator, Map<String, Object> args, String nodeName) {
 		Execution execution = execute(taskId, operator, args);
+		
 		if (execution == null)
 			return Collections.emptyList();
+		
 		ProcessModel model = execution.getProcess().getModel();
 		Objects.requireNonNull(model, "当前任务未找到流程定义模型");
-		if (StringHelper.isEmpty(nodeName)) {
+		
+		if (CommonUtil.isEmptyString(nodeName)) {
 			Task newTask = task().rejectTask(model, execution.getTask());
 			execution.addTask(newTask);
 		} else {

@@ -11,7 +11,6 @@ import org.snaker.engine.SnakerEngine;
 import org.snaker.engine.SnakerInterceptor;
 import org.snaker.engine.core.Execution;
 import org.snaker.engine.entity.Task;
-import org.snaker.engine.helper.StringHelper;
 
 import com.ajaxjs.util.CommonUtil;
 
@@ -31,7 +30,7 @@ public class SurrogateInterceptor implements SnakerInterceptor {
 				continue;
 
 			for (String actor : task.getActorIds()) {
-				if (StringHelper.isEmpty(actor))
+				if (CommonUtil.isEmptyString(actor))
 					continue;
 
 				String agent = engine.manager().getSurrogate(actor, execution.getProcess().getName());

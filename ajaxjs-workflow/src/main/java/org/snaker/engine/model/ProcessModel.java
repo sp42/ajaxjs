@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.snaker.engine.INoGenerator;
-import org.snaker.engine.helper.ClassHelper;
 import org.snaker.engine.impl.DefaultNoGenerator;
 
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.ReflectUtil;
 
 /**
  * 流程定义process元素
@@ -191,7 +191,7 @@ public class ProcessModel extends BaseModel {
 	public void setInstanceNoClass(String instanceNoClass) {
 		this.instanceNoClass = instanceNoClass;
 		if (!CommonUtil.isEmptyString(instanceNoClass))
-			generator = (INoGenerator) ClassHelper.newInstance(instanceNoClass);
+			generator = (INoGenerator) ReflectUtil.newInstance(instanceNoClass);
 	}
 
 	public INoGenerator getGenerator() {

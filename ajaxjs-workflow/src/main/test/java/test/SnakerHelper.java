@@ -18,7 +18,7 @@ import javax.sql.DataSource;
 
 import org.snaker.engine.Configuration;
 import org.snaker.engine.SnakerEngine;
-import org.snaker.engine.access.jdbc.JdbcHelper;
+import org.snaker.engine.access.JdbcHelper;
 
 /**
  * Snaker引擎帮助类

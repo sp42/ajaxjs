@@ -6,28 +6,21 @@
  */
 package org.snaker.engine;
 
-import java.io.InputStream;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
-
-import javax.xml.parsers.DocumentBuilder;
 
 import org.snaker.engine.access.transaction.TransactionInterceptor;
 import org.snaker.engine.core.ServiceContext;
-import org.snaker.engine.helper.ClassHelper;
-import org.snaker.engine.helper.ConfigHelper;
-import org.snaker.engine.helper.StreamHelper;
-import org.snaker.engine.helper.StringHelper;
-import org.snaker.engine.helper.XmlHelper;
 import org.snaker.engine.impl.SimpleContext;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.ajaxjs.Version;
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.ReflectUtil;
+import com.ajaxjs.util.XMLHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -44,7 +37,8 @@ public class Configuration {
 	private final static String USER_CONFIG_FILE = "snaker.xml";
 
 	/**
-	 * 访问数据库的对象，根据使用的orm框架进行设置。如果未提供此项设置，则按照默认orm加载方式初始化 jdbc:DataSource hibernate:SessionFactory mybatis:SqlSessionFactory
+	 * 访问数据库的对象，根据使用的orm框架进行设置。如果未提供此项设置，则按照默认orm加载方式初始化 jdbc:DataSource
+	 * hibernate:SessionFactory mybatis:SqlSessionFactory
 	 */
 	private Object accessDBObject;
 
@@ -81,12 +75,23 @@ public class Configuration {
 	 * @throws SnakerException
 	 */
 	public SnakerEngine buildSnakerEngine() throws SnakerException {
-		LOGGER.info("SnakerEngine start......");
+		LOGGER.info("Service parsing start......");
+		// 依次解析框架固定的配置及用户自定义的配置 固定配置文件:base.config.xml 扩展配置文件:ext.config.xml
+		// 用户自定义配置文件:snaker.xml
+		parser(USER_CONFIG_FILE);
+		parser(BASE_CONFIG_FILE);
+		parser(EXT_CONFIG_FILE);
 
-		parser();
+		for (String key : txClass.keySet()) {
+			Class<?> clz = txClass.get(key);
+			Object instance = interceptor == null ? clz : interceptor.getProxy(clz);
+			ServiceContext.put(key, instance);
+		}
+
+		LOGGER.info("Service parsing finish......");
 		// 由服务上下文返回流程引擎
 		SnakerEngine configEngine = ServiceContext.getEngine();
-		
+
 		if (configEngine == null)
 			throw new SnakerException("配置无法发现SnakerEngine的实现类");
 
@@ -96,91 +101,48 @@ public class Configuration {
 	}
 
 	/**
-	 * 依次解析框架固定的配置及用户自定义的配置 固定配置文件:base.config.xml 扩展配置文件:ext.config.xml 用户自定义配置文件:snaker.xml
-	 */
-	protected void parser() {
-		LOGGER.info("Service parsing start......");
-
-		// 默认使用snaker.xml配置自定义的bean
-		String config = ConfigHelper.getProperty("config");
-		if (CommonUtil.isEmptyString(config))
-			config = USER_CONFIG_FILE;
-
-		parser(config);
-		parser(BASE_CONFIG_FILE);
-
-		if (!isCMB()) {
-			parser(EXT_CONFIG_FILE);
-
-			for (Entry<String, Class<?>> entry : txClass.entrySet()) {
-				if (interceptor != null) {
-					Object instance = interceptor.getProxy(entry.getValue());
-					ServiceContext.put(entry.getKey(), instance);
-				} else
-					ServiceContext.put(entry.getKey(), entry.getValue());
-			}
-		}
-
-		LOGGER.info("Service parsing finish......");
-
-	}
-
-	/**
 	 * 解析给定resource配置，并注册到ServiceContext上下文中
 	 * 
 	 * @param resource 资源
 	 */
 	private void parser(String resource) {
-		// 解析所有配置节点，并实例化class指定的类
-		DocumentBuilder documentBuilder = XmlHelper.createDocumentBuilder();
-
-		try {
-			if (documentBuilder != null) {
-				InputStream input = StreamHelper.openStream(resource);
-				if (input == null)
-					return;
-
-				Document doc = documentBuilder.parse(input);
-				Element configElement = doc.getDocumentElement();
-				NodeList nodeList = configElement.getChildNodes();
-				int nodeSize = nodeList.getLength();
-
-				for (int i = 0; i < nodeSize; i++) {
-					Node node = nodeList.item(i);
-					if (node.getNodeType() == Node.ELEMENT_NODE) {
-						Element element = (Element) node;
-						String name = element.getAttribute("name");
-						String className = element.getAttribute("class");
-						String proxy = element.getAttribute("proxy");
-
-						if (StringHelper.isEmpty(name))
-							name = className;
-
-						if (ServiceContext.exist(name)) {
-							LOGGER.warning("Duplicate name is:" + name);
-							continue;
-						}
-
-						Class<?> clazz = ClassHelper.loadClass(className);
-
-						if (TransactionInterceptor.class.isAssignableFrom(clazz)) {
-							interceptor = (TransactionInterceptor) ClassHelper.instantiate(clazz);
-							ServiceContext.put(name, interceptor);
-							continue;
-						}
-
-						if (proxy != null && proxy.equalsIgnoreCase("transaction")) {
-							txClass.put(name, clazz);
-						} else {
-							ServiceContext.put(name, clazz);
-						}
+		XMLHelper.xPath(Version.srcFolder + File.separator + resource, "config", configNode -> {
+			NodeList nodeList = configNode.getChildNodes();
+			
+			for (int i = 0; i < nodeList.getLength(); i++) {
+				Node node = nodeList.item(i);
+				if (node.getNodeType() == Node.ELEMENT_NODE) {
+					Element element = (Element) node;
+					
+					String name = element.getAttribute("name");
+					String className = element.getAttribute("class");
+					String proxy = element.getAttribute("proxy");
+					
+					if (CommonUtil.isEmptyString(name))
+						name = className;
+					
+					if (ServiceContext.exist(name)) {
+						LOGGER.warning("Duplicate name is:" + name);
+						continue;
 					}
+
+					Class<?> clazz = ReflectUtil.getClassByName(className);
+
+					if (TransactionInterceptor.class.isAssignableFrom(clazz)) {
+						interceptor = (TransactionInterceptor) ReflectUtil.newInstance(clazz);
+						ServiceContext.put(name, interceptor);
+						continue;
+					}
+
+					if (proxy != null && proxy.equalsIgnoreCase("transaction")) {
+						txClass.put(name, clazz);
+					} else {
+						ServiceContext.put(name, clazz);
+					}
+		
 				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new SnakerException("资源解析失败，请检查配置文件[" + resource + "]", e.getCause());
-		}
+		});
 	}
 
 	/**
@@ -191,28 +153,6 @@ public class Configuration {
 	 */
 	public Configuration initAccessDBObject(Object dbObject) {
 		this.accessDBObject = dbObject;
-		return this;
-	}
-
-	/**
-	 * 可装载自定义的属性配置文件
-	 * 
-	 * @param fileName 属性文件名称
-	 * @return Configuration
-	 */
-	public Configuration initProperties(String fileName) {
-		ConfigHelper.loadProperties(fileName);
-		return this;
-	}
-
-	/**
-	 * 可装载已有的属性对象
-	 * 
-	 * @param properties 属性对象
-	 * @return Configuration
-	 */
-	public Configuration initProperties(Properties properties) {
-		ConfigHelper.loadProperties(properties);
 		return this;
 	}
 

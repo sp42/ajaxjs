@@ -17,7 +17,6 @@ package test.time.expire;
 import java.util.List;
 
 import org.snaker.engine.entity.Task;
-import org.snaker.engine.helper.ClassHelper;
 import org.snaker.engine.scheduling.JobCallback;
 
 import com.ajaxjs.util.logger.LogHelper;
@@ -28,7 +27,7 @@ import com.ajaxjs.util.logger.LogHelper;
  */
 public class TestCallback implements JobCallback {
 
-	public static final LogHelper LOGGER = LogHelper.getLog(ClassHelper.class);
+	public static final LogHelper LOGGER = LogHelper.getLog(TestCallback.class);
 	
 	public void callback(String taskId, List<Task> newTasks) {
 		LOGGER.info("callback taskId=" + taskId);
