@@ -28,10 +28,12 @@ import net.sf.cglib.proxy.MethodProxy;
  */
 public abstract class TransactionInterceptor implements MethodInterceptor {
 	public static final LogHelper LOGGER = LogHelper.getLog(TransactionInterceptor.class);
+
 	/**
 	 * 需要拦截的事务方法集合
 	 */
-	private static final List<String> txMethods = new ArrayList<String>();
+	private static final List<String> txMethods = new ArrayList<>();
+
 	static {
 		txMethods.add("start*");
 		txMethods.add("execute*");
@@ -75,15 +77,16 @@ public abstract class TransactionInterceptor implements MethodInterceptor {
 
 		if (isMatch(method.getName())) {
 			LOGGER.info("intercept method is[name=" + method.getName() + "]");
+
 			try {
 				status = getTransaction();
 				Objects.requireNonNull(status);
 				// 调用具体无事务支持的业务逻辑
 				result = proxy.invokeSuper(obj, args);
 				// 如果整个执行过程无异常抛出，则提交TransactionStatus持有的transaction对象
-				if (status.isNewTransaction()) {
+				if (status.isNewTransaction())
 					commit(status);
-				}
+
 			} catch (Exception e) {
 				rollback(status);
 				throw new SnakerException(e);
@@ -92,6 +95,7 @@ public abstract class TransactionInterceptor implements MethodInterceptor {
 			LOGGER.info("****don't intercept method is[name=" + method.getName() + "]");
 			result = proxy.invokeSuper(obj, args);
 		}
+
 		return result;
 	}
 

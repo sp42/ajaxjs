@@ -7,11 +7,10 @@
 package org.snaker.engine.access.transaction;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
-import org.snaker.engine.access.jdbc.JdbcHelper;
+import org.snaker.engine.access.JdbcHelper;
 
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -29,6 +28,7 @@ public class DataSourceTransactionInterceptor extends TransactionInterceptor {
 	public void initialize(Object accessObject) {
 		if (accessObject == null)
 			return;
+
 		if (accessObject instanceof DataSource) {
 			this.dataSource = (DataSource) accessObject;
 		}
@@ -56,49 +56,28 @@ public class DataSourceTransactionInterceptor extends TransactionInterceptor {
 		if (!status.isNewTransaction())
 			throw new RuntimeException("It should be TRUE!");
 
-		Connection conn = (Connection) status.getTransaction();
-
-		if (conn != null) {
-			try {
-				LOGGER.info("commit transaction=" + conn.hashCode());
-
-				conn.commit();
-			} catch (Exception e) {
-				LOGGER.warning(e);
-				throw new RuntimeException(e.getMessage(), e);
-			} finally {
-				try {
-					JdbcHelper.close(conn);
-				} catch (SQLException e) {
-					LOGGER.warning(e);
-					throw new RuntimeException(e.getMessage(), e);
-				}
-				TransactionObjectHolder.unbind();
-			}
+		try (Connection conn = (Connection) status.getTransaction();) {
+			LOGGER.info("commit transaction=" + conn.hashCode());
+			conn.commit();
+		} catch (Exception e) {
+			LOGGER.warning(e);
+			throw new RuntimeException(e.getMessage(), e);
+		} finally {
+			TransactionObjectHolder.unbind();
 		}
 	}
 
 	protected void rollback(TransactionStatus status) {
-		Connection conn = (Connection) status.getTransaction();
-		
-		if (conn != null) {
+		try (Connection conn = (Connection) status.getTransaction();) {
 			LOGGER.info("rollback transaction=" + conn.hashCode());
-
-			try {
-				if (!conn.isClosed())
-					conn.rollback();
-			} catch (Exception e) {
-				LOGGER.warning(e);
-				throw new RuntimeException(e.getMessage(), e.getCause());
-			} finally {
-				try {
-					JdbcHelper.close(conn);
-				} catch (SQLException e) {
-					LOGGER.warning(e);
-					throw new RuntimeException(e.getMessage(), e);
-				}
-				TransactionObjectHolder.unbind();
-			}
+			if (!conn.isClosed())
+				conn.rollback();
+		} catch (Exception e) {
+			LOGGER.warning(e);
+			throw new RuntimeException(e.getMessage(), e.getCause());
+		} finally {
+			TransactionObjectHolder.unbind();
 		}
 	}
+
 }

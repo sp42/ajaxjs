@@ -16,21 +16,21 @@ package org.snaker.engine.access.transaction;
 
 /**
  * 事务状态
+ * 
  * @author yuqs
  * @since 1.0
  */
 public class TransactionStatus {
 	/**
-	 * 事务对象，此处支持两类：
-	 * Connection：JDBC方式对象类型
-	 * Session：Hibernate方式对象类型
+	 * 事务对象，此处支持两类： Connection：JDBC方式对象类型 Session：Hibernate方式对象类型
 	 */
 	private Object transaction;
+
 	/**
 	 * 是否为新的事务，考虑到业务层互相调用导致事务提前commit
 	 */
 	private final boolean newTransaction;
-	
+
 	public TransactionStatus(Object transaction, boolean newTransaction) {
 		this.transaction = transaction;
 		this.newTransaction = newTransaction;

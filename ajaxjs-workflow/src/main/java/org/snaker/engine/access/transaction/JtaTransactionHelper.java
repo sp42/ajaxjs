@@ -22,7 +22,8 @@ import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
 import org.snaker.engine.SnakerException;
-import org.snaker.engine.helper.ConfigHelper;
+
+import com.ajaxjs.config.ConfigService;
 
 /**
  * Jta事务帮助类
@@ -31,13 +32,8 @@ import org.snaker.engine.helper.ConfigHelper;
  * @since 1.0
  */
 public class JtaTransactionHelper {
-	private static String userTransactionJndiName = ConfigHelper
-			.getProperty("tx.jta.userTransaction");
-	private static String transactionManagerJndiName = ConfigHelper
-			.getProperty("tx.jta.transactionManager");
-
 	public static UserTransaction lookupJeeUserTransaction() {
-		return (UserTransaction) lookupFromJndi(userTransactionJndiName);
+		return (UserTransaction) lookupFromJndi(ConfigService.getValueAsString("workflow.tx.jta.userTransaction"));
 	}
 
 	public static javax.transaction.Transaction lookupJeeTransaction() {
@@ -45,13 +41,12 @@ public class JtaTransactionHelper {
 			TransactionManager transactionManager = lookupJeeTransactionManager();
 			return transactionManager.getTransaction();
 		} catch (Exception e) {
-			throw new SnakerException("无法从事务管理中获取事务对象["
-					+ transactionManagerJndiName + "]:\n" + e.getMessage(), e);
+			throw new SnakerException("无法从事务管理中获取事务对象[" + ConfigService.getValueAsString("workflow.tx.jta.transactionManager") + "]:\n" + e.getMessage(), e);
 		}
 	}
 
 	public static TransactionManager lookupJeeTransactionManager() {
-		return (TransactionManager) lookupFromJndi(transactionManagerJndiName);
+		return (TransactionManager) lookupFromJndi(ConfigService.getValueAsString("workflow.tx.jta.transactionManager"));
 	}
 
 	public static Object lookupFromJndi(String jndiName) {
@@ -59,18 +54,19 @@ public class JtaTransactionHelper {
 			InitialContext initialContext = new InitialContext();
 			return initialContext.lookup(jndiName);
 		} catch (Exception e) {
-			throw new SnakerException("无法找到jndi名称[" + jndiName + "]\n"
-					+ e.getMessage(), e);
+			throw new SnakerException("无法找到jndi名称[" + jndiName + "]\n" + e.getMessage(), e);
 		}
 	}
 
 	public static int getUserTransactionStatus(UserTransaction userTransaction) {
 		int status = -1;
+		
 		try {
 			status = userTransaction.getStatus();
 		} catch (SystemException e) {
 			throw new SnakerException("无法获取事务状态:" + e.getMessage(), e);
 		}
+		
 		return status;
 	}
 
@@ -86,9 +82,7 @@ public class JtaTransactionHelper {
 		try {
 			lookupJeeUserTransaction().setRollbackOnly();
 		} catch (Exception e) {
-			throw new SnakerException(
-					"couldn't set user transaction to rollback only: "
-							+ e.getMessage(), e);
+			throw new SnakerException("couldn't set user transaction to rollback only: " + e.getMessage(), e);
 		}
 	}
 
@@ -96,8 +90,7 @@ public class JtaTransactionHelper {
 		try {
 			lookupJeeTransaction().registerSynchronization(synchronization);
 		} catch (Exception e) {
-			throw new SnakerException("couldn't register synchronization: "
-					+ e.getMessage(), e);
+			throw new SnakerException("couldn't register synchronization: " + e.getMessage(), e);
 		}
 	}
 
