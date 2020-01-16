@@ -4,7 +4,7 @@
  * or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  * either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
-package org.snaker.engine.handlers.impl;
+package org.snaker.engine.handlers;
 
 import java.util.List;
 
@@ -13,7 +13,6 @@ import org.snaker.engine.SnakerInterceptor;
 import org.snaker.engine.core.Execution;
 import org.snaker.engine.core.ServiceContext;
 import org.snaker.engine.entity.Task;
-import org.snaker.engine.handlers.IHandler;
 import org.snaker.engine.model.TaskModel;
 
 import com.ajaxjs.util.logger.LogHelper;

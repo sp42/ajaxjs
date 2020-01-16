@@ -4,7 +4,7 @@
  * or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  * either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
-package org.snaker.engine.handlers.impl;
+package org.snaker.engine.handlers;
 
 import java.util.List;
 
@@ -50,7 +50,7 @@ public class MergeBranchHandler extends AbstractMergeHandler {
 	/**
 	 * 对join节点的所有输入变迁进行递归，查找join至fork节点的所有中间task元素
 	 * 
-	 * @see org.snaker.engine.handlers.impl.AbstractMergeHandler#findActiveNodes()
+	 * @see org.snaker.engine.handlers.AbstractMergeHandler#findActiveNodes()
 	 */
 	protected String[] findActiveNodes() {
 		StringBuilder buffer = new StringBuilder(20);

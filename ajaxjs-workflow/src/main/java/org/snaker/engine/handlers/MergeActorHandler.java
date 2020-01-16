@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.snaker.engine.handlers.impl;
+package org.snaker.engine.handlers;
 
 /**
  * actor all方式的合并处理器
@@ -35,7 +35,7 @@ public class MergeActorHandler extends AbstractMergeHandler {
 
 	/**
 	 * actor all方式，查询参数为：orderId、taskName
-	 * @see org.snaker.engine.handlers.impl.AbstractMergeHandler#findActiveNodes()
+	 * @see org.snaker.engine.handlers.AbstractMergeHandler#findActiveNodes()
 	 */
 	protected String[] findActiveNodes() {
 		return new String[]{taskName};
