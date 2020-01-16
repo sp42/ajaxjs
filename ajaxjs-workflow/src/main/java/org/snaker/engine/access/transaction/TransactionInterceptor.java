@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Objects;
 
 import org.snaker.engine.SnakerException;
-import org.snaker.engine.helper.StringHelper;
 
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -107,11 +106,52 @@ public abstract class TransactionInterceptor implements MethodInterceptor {
 	 */
 	private boolean isMatch(String methodName) {
 		for (String pattern : txMethods) {
-			if (StringHelper.simpleMatch(pattern, methodName))
+			if (simpleMatch(pattern, methodName))
 				return true;
 		}
 
 		return false;
+	}
+
+	/**
+	 * 简单字符串匹配方法，支持匹配类型为： *what *what* what*
+	 * 
+	 * @param pattern 匹配模式
+	 * @param str     字符串
+	 * @return 是否匹配
+	 */
+	private static boolean simpleMatch(String pattern, String str) {
+		if (pattern == null || str == null)
+			return false;
+
+		int firstIndex = pattern.indexOf('*');
+
+		if (firstIndex == -1)
+			return pattern.equals(str);
+
+		if (firstIndex == 0) {
+			if (pattern.length() == 1)
+				return true;
+
+			int nextIndex = pattern.indexOf('*', firstIndex + 1);
+			if (nextIndex == -1)
+				return str.endsWith(pattern.substring(1));
+
+			String part = pattern.substring(1, nextIndex);
+			int partIndex = str.indexOf(part);
+
+			while (partIndex != -1) {
+				if (simpleMatch(pattern.substring(nextIndex), str.substring(partIndex + part.length())))
+					return true;
+
+				partIndex = str.indexOf(part, partIndex + 1);
+			}
+
+			return false;
+		}
+
+		return (str.length() >= firstIndex && pattern.substring(0, firstIndex).equals(str.substring(0, firstIndex))
+				&& simpleMatch(pattern.substring(firstIndex), str.substring(firstIndex)));
 	}
 
 	/**
