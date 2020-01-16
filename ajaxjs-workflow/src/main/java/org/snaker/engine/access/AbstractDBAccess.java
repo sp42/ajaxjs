@@ -19,8 +19,6 @@ import org.snaker.engine.DBAccess;
 import org.snaker.engine.SnakerException;
 import org.snaker.engine.WorkflowUtils;
 import org.snaker.engine.access.dialect.Dialect;
-import org.snaker.engine.access.jdbc.JdbcAccess;
-import org.snaker.engine.access.jdbc.JdbcHelper;
 import org.snaker.engine.core.ServiceContext;
 import org.snaker.engine.entity.CCOrder;
 import org.snaker.engine.entity.HistoryOrder;
@@ -32,9 +30,8 @@ import org.snaker.engine.entity.Surrogate;
 import org.snaker.engine.entity.Task;
 import org.snaker.engine.entity.TaskActor;
 import org.snaker.engine.entity.WorkItem;
-import org.snaker.engine.helper.ConfigHelper;
-import org.snaker.engine.helper.StringHelper;
 
+import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -125,7 +122,7 @@ public abstract class AbstractDBAccess implements DBAccess {
 	/**
 	 * isORM为false，需要构造map传递给实现类
 	 * 
-	 * @param sql 需要执行的sql语句
+	 * @param sql  需要执行的sql语句
 	 * @param args sql语句中的参数列表
 	 * @param type sql语句中的参数类型
 	 * @return 构造的map
@@ -142,7 +139,7 @@ public abstract class AbstractDBAccess implements DBAccess {
 	 * isORM为true，只存放对象传递给orm框架
 	 * 
 	 * @param entity 实体对象
-	 * @param su 保存或更新的标识
+	 * @param su     保存或更新的标识
 	 * @return 构造的map
 	 */
 	private Map<String, Object> buildMap(Object entity, String su) {
@@ -153,7 +150,8 @@ public abstract class AbstractDBAccess implements DBAccess {
 	}
 
 	/**
-	 * 获取数据库方言 根据数据库连接的DatabaseMetaData获取数据库厂商，自动适配具体的方言 当数据库类型未提供支持时无法自动获取方言，建议通过配置完成
+	 * 获取数据库方言 根据数据库连接的DatabaseMetaData获取数据库厂商，自动适配具体的方言
+	 * 当数据库类型未提供支持时无法自动获取方言，建议通过配置完成
 	 * 
 	 * @return 方言对象
 	 */
@@ -181,9 +179,11 @@ public abstract class AbstractDBAccess implements DBAccess {
 		if (isORM()) {
 			saveOrUpdate(buildMap(process, SAVE));
 		} else {
-			Object[] args = new Object[] { process.getId(), process.getName(), process.getDisplayName(), process.getType(), process.getInstanceUrl(), process.getState(), process.getVersion(), process.getCreateTime(),
-					process.getCreator() };
-			int[] type = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR };
+			Object[] args = new Object[] { process.getId(), process.getName(), process.getDisplayName(),
+					process.getType(), process.getInstanceUrl(), process.getState(), process.getVersion(),
+					process.getCreateTime(), process.getCreator() };
+			int[] type = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR,
+					Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR };
 			saveOrUpdate(buildMap(PROCESS_INSERT, args, type));
 		}
 	}
@@ -195,8 +195,10 @@ public abstract class AbstractDBAccess implements DBAccess {
 		if (isORM()) {
 			saveOrUpdate(buildMap(process, UPDATE));
 		} else {
-			Object[] args = new Object[] { process.getName(), process.getDisplayName(), process.getState(), process.getInstanceUrl(), process.getCreateTime(), process.getCreator(), process.getId() };
-			int[] type = new int[] { Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR };
+			Object[] args = new Object[] { process.getName(), process.getDisplayName(), process.getState(),
+					process.getInstanceUrl(), process.getCreateTime(), process.getCreator(), process.getId() };
+			int[] type = new int[] { Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.VARCHAR,
+					Types.VARCHAR, Types.VARCHAR };
 			saveOrUpdate(buildMap(PROCESS_UPDATE, args, type));
 		}
 	}
@@ -225,10 +227,13 @@ public abstract class AbstractDBAccess implements DBAccess {
 		if (isORM()) {
 			saveOrUpdate(buildMap(task, SAVE));
 		} else {
-			Object[] args = new Object[] { task.getId(), task.getOrderId(), task.getTaskName(), task.getDisplayName(), task.getTaskType(), task.getPerformType(), task.getOperator(), task.getCreateTime(),
-					task.getFinishTime(), task.getExpireTime(), task.getActionUrl(), task.getParentTaskId(), task.getVariable(), task.getVersion() };
-			int[] type = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
-					Types.VARCHAR, Types.INTEGER };
+			Object[] args = new Object[] { task.getId(), task.getOrderId(), task.getTaskName(), task.getDisplayName(),
+					task.getTaskType(), task.getPerformType(), task.getOperator(), task.getCreateTime(),
+					task.getFinishTime(), task.getExpireTime(), task.getActionUrl(), task.getParentTaskId(),
+					task.getVariable(), task.getVersion() };
+			int[] type = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER,
+					Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
+					Types.VARCHAR, Types.VARCHAR, Types.INTEGER };
 			saveOrUpdate(buildMap(TASK_INSERT, args, type));
 		}
 	}
@@ -237,9 +242,13 @@ public abstract class AbstractDBAccess implements DBAccess {
 		if (isORM()) {
 			saveOrUpdate(buildMap(order, SAVE));
 		} else {
-			Object[] args = new Object[] { order.getId(), order.getProcessId(), order.getCreator(), order.getCreateTime(), order.getParentId(), order.getParentNodeName(), order.getExpireTime(), order.getLastUpdateTime(),
-					order.getLastUpdator(), order.getOrderNo(), order.getVariable(), order.getVersion() };
-			int[] type = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER };
+			Object[] args = new Object[] { order.getId(), order.getProcessId(), order.getCreator(),
+					order.getCreateTime(), order.getParentId(), order.getParentNodeName(), order.getExpireTime(),
+					order.getLastUpdateTime(), order.getLastUpdator(), order.getOrderNo(), order.getVariable(),
+					order.getVersion() };
+			int[] type = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
+					Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
+					Types.INTEGER };
 			saveOrUpdate(buildMap(ORDER_INSERT, args, type));
 		}
 	}
@@ -249,7 +258,8 @@ public abstract class AbstractDBAccess implements DBAccess {
 			saveOrUpdate(buildMap(ccorder, SAVE));
 		} else {
 			int[] type = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER };
-			saveOrUpdate(buildMap(CCORDER_INSERT, new Object[] { ccorder.getOrderId(), ccorder.getActorId(), ccorder.getCreator(), ccorder.getCreateTime(), ccorder.getStatus() }, type));
+			saveOrUpdate(buildMap(CCORDER_INSERT, new Object[] { ccorder.getOrderId(), ccorder.getActorId(),
+					ccorder.getCreator(), ccorder.getCreateTime(), ccorder.getStatus() }, type));
 		}
 	}
 
@@ -258,7 +268,8 @@ public abstract class AbstractDBAccess implements DBAccess {
 			saveOrUpdate(buildMap(taskActor, SAVE));
 		} else {
 			int[] type = new int[] { Types.VARCHAR, Types.VARCHAR };
-			saveOrUpdate(buildMap(TASK_ACTOR_INSERT, new Object[] { taskActor.getTaskId(), taskActor.getActorId() }, type));
+			saveOrUpdate(
+					buildMap(TASK_ACTOR_INSERT, new Object[] { taskActor.getTaskId(), taskActor.getActorId() }, type));
 		}
 	}
 
@@ -266,8 +277,10 @@ public abstract class AbstractDBAccess implements DBAccess {
 		if (isORM()) {
 			saveOrUpdate(buildMap(task, UPDATE));
 		} else {
-			Object[] args = new Object[] { task.getFinishTime(), task.getOperator(), task.getVariable(), task.getExpireTime(), task.getActionUrl(), task.getId(), task.getVersion() };
-			int[] type = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER };
+			Object[] args = new Object[] { task.getFinishTime(), task.getOperator(), task.getVariable(),
+					task.getExpireTime(), task.getActionUrl(), task.getId(), task.getVersion() };
+			int[] type = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
+					Types.VARCHAR, Types.INTEGER };
 			saveOrUpdate(buildMap(TASK_UPDATE, args, type));
 		}
 	}
@@ -276,8 +289,10 @@ public abstract class AbstractDBAccess implements DBAccess {
 		if (isORM()) {
 			saveOrUpdate(buildMap(order, UPDATE));
 		} else {
-			Object[] args = new Object[] { order.getLastUpdator(), order.getLastUpdateTime(), order.getVariable(), order.getExpireTime(), order.getId(), order.getVersion() };
-			int[] type = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER };
+			Object[] args = new Object[] { order.getLastUpdator(), order.getLastUpdateTime(), order.getVariable(),
+					order.getExpireTime(), order.getId(), order.getVersion() };
+			int[] type = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
+					Types.INTEGER };
 			saveOrUpdate(buildMap(ORDER_UPDATE, args, type));
 		}
 	}
@@ -286,7 +301,8 @@ public abstract class AbstractDBAccess implements DBAccess {
 		if (isORM()) {
 			saveOrUpdate(buildMap(ccorder, UPDATE));
 		} else {
-			Object[] args = new Object[] { ccorder.getStatus(), ccorder.getFinishTime(), ccorder.getOrderId(), ccorder.getActorId() };
+			Object[] args = new Object[] { ccorder.getStatus(), ccorder.getFinishTime(), ccorder.getOrderId(),
+					ccorder.getActorId() };
 			int[] type = new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR };
 			saveOrUpdate(buildMap(CCORDER_UPDATE, args, type));
 		}
@@ -328,9 +344,11 @@ public abstract class AbstractDBAccess implements DBAccess {
 		if (isORM()) {
 			saveOrUpdate(buildMap(order, SAVE));
 		} else {
-			Object[] args = new Object[] { order.getId(), order.getProcessId(), order.getOrderState(), order.getCreator(), order.getCreateTime(), order.getEndTime(), order.getParentId(), order.getExpireTime(),
-					order.getOrderNo(), order.getVariable() };
-			int[] type = new int[] { Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR };
+			Object[] args = new Object[] { order.getId(), order.getProcessId(), order.getOrderState(),
+					order.getCreator(), order.getCreateTime(), order.getEndTime(), order.getParentId(),
+					order.getExpireTime(), order.getOrderNo(), order.getVariable() };
+			int[] type = new int[] { Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.VARCHAR,
+					Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR };
 			saveOrUpdate(buildMap(ORDER_HISTORY_INSERT, args, type));
 		}
 	}
@@ -339,7 +357,8 @@ public abstract class AbstractDBAccess implements DBAccess {
 		if (isORM()) {
 			saveOrUpdate(buildMap(order, UPDATE));
 		} else {
-			Object[] args = new Object[] { order.getOrderState(), order.getEndTime(), order.getVariable(), order.getId() };
+			Object[] args = new Object[] { order.getOrderState(), order.getEndTime(), order.getVariable(),
+					order.getId() };
 			int[] type = new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR };
 			saveOrUpdate(buildMap(ORDER_HISTORY_UPDATE, args, type));
 		}
@@ -358,8 +377,9 @@ public abstract class AbstractDBAccess implements DBAccess {
 			saveOrUpdate(buildMap(task, SAVE));
 			if (task.getActorIds() != null) {
 				for (String actorId : task.getActorIds()) {
-					if (StringHelper.isEmpty(actorId))
+					if (CommonUtil.isEmptyString(actorId))
 						continue;
+
 					HistoryTaskActor hist = new HistoryTaskActor();
 					hist.setActorId(actorId);
 					hist.setTaskId(task.getId());
@@ -367,16 +387,22 @@ public abstract class AbstractDBAccess implements DBAccess {
 				}
 			}
 		} else {
-			Object[] args = new Object[] { task.getId(), task.getOrderId(), task.getTaskName(), task.getDisplayName(), task.getTaskType(), task.getPerformType(), task.getTaskState(), task.getOperator(),
-					task.getCreateTime(), task.getFinishTime(), task.getExpireTime(), task.getActionUrl(), task.getParentTaskId(), task.getVariable() };
-			int[] type = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
-					Types.VARCHAR, Types.VARCHAR };
+			Object[] args = new Object[] { task.getId(), task.getOrderId(), task.getTaskName(), task.getDisplayName(),
+					task.getTaskType(), task.getPerformType(), task.getTaskState(), task.getOperator(),
+					task.getCreateTime(), task.getFinishTime(), task.getExpireTime(), task.getActionUrl(),
+					task.getParentTaskId(), task.getVariable() };
+			int[] type = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER,
+					Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
+					Types.VARCHAR, Types.VARCHAR, Types.VARCHAR };
+
 			saveOrUpdate(buildMap(TASK_HISTORY_INSERT, args, type));
+
 			if (task.getActorIds() != null) {
 				for (String actorId : task.getActorIds()) {
-					if (StringHelper.isEmpty(actorId))
+					if (CommonUtil.isEmptyString(actorId))
 						continue;
-					saveOrUpdate(buildMap(TASK_ACTOR_HISTORY_INSERT, new Object[] { task.getId(), actorId }, new int[] { Types.VARCHAR, Types.VARCHAR }));
+					saveOrUpdate(buildMap(TASK_ACTOR_HISTORY_INSERT, new Object[] { task.getId(), actorId },
+							new int[] { Types.VARCHAR, Types.VARCHAR }));
 				}
 			}
 		}
@@ -402,9 +428,11 @@ public abstract class AbstractDBAccess implements DBAccess {
 		if (isORM()) {
 			saveOrUpdate(buildMap(surrogate, SAVE));
 		} else {
-			Object[] args = new Object[] { surrogate.getId(), surrogate.getProcessName(), surrogate.getOperator(), surrogate.getSurrogate(), surrogate.getOdate(), surrogate.getSdate(), surrogate.getEdate(),
+			Object[] args = new Object[] { surrogate.getId(), surrogate.getProcessName(), surrogate.getOperator(),
+					surrogate.getSurrogate(), surrogate.getOdate(), surrogate.getSdate(), surrogate.getEdate(),
 					surrogate.getState() };
-			int[] type = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER };
+			int[] type = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
+					Types.VARCHAR, Types.VARCHAR, Types.INTEGER };
 			saveOrUpdate(buildMap(SURROGATE_INSERT, args, type));
 		}
 	}
@@ -413,8 +441,10 @@ public abstract class AbstractDBAccess implements DBAccess {
 		if (isORM()) {
 			saveOrUpdate(buildMap(surrogate, UPDATE));
 		} else {
-			Object[] args = new Object[] { surrogate.getProcessName(), surrogate.getSurrogate(), surrogate.getOdate(), surrogate.getSdate(), surrogate.getEdate(), surrogate.getState(), surrogate.getId() };
-			int[] type = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR };
+			Object[] args = new Object[] { surrogate.getProcessName(), surrogate.getSurrogate(), surrogate.getOdate(),
+					surrogate.getSdate(), surrogate.getEdate(), surrogate.getState(), surrogate.getId() };
+			int[] type = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
+					Types.INTEGER, Types.VARCHAR };
 			saveOrUpdate(buildMap(SURROGATE_UPDATE, args, type));
 		}
 	}
@@ -477,7 +507,8 @@ public abstract class AbstractDBAccess implements DBAccess {
 	}
 
 	public List<Task> getNextActiveTasks(String orderId, String taskName, String parentTaskId) {
-		String sql = QUERY_TASK + " where parent_task_id in ( select ht.id from wf_hist_task ht where ht.order_id=? and ht.task_name=? and ht.parent_task_id=? )";
+		String sql = QUERY_TASK
+				+ " where parent_task_id in ( select ht.id from wf_hist_task ht where ht.order_id=? and ht.task_name=? and ht.parent_task_id=? )";
 		return queryList(Task.class, sql, orderId, taskName, parentTaskId);
 	}
 
@@ -804,10 +835,14 @@ public abstract class AbstractDBAccess implements DBAccess {
 
 	public List<WorkItem> getWorkItems(Page<WorkItem> page, QueryFilter filter) {
 		StringBuilder sql = new StringBuilder();
-		sql.append(" select distinct o.process_Id, t.order_Id, t.id as id, t.id as task_Id, p.display_Name as process_Name, p.instance_Url, o.parent_Id, o.creator, ");
-		sql.append(" o.create_Time as order_Create_Time, o.expire_Time as order_Expire_Time, o.order_No, o.variable as order_Variable, ");
-		sql.append(" t.display_Name as task_Name, t.task_Name as task_Key, t.task_Type, t.perform_Type, t.operator, t.action_Url, ");
-		sql.append(" t.create_Time as task_Create_Time, t.finish_Time as task_End_Time, t.expire_Time as task_Expire_Time, t.variable as task_Variable ");
+		sql.append(
+				" select distinct o.process_Id, t.order_Id, t.id as id, t.id as task_Id, p.display_Name as process_Name, p.instance_Url, o.parent_Id, o.creator, ");
+		sql.append(
+				" o.create_Time as order_Create_Time, o.expire_Time as order_Expire_Time, o.order_No, o.variable as order_Variable, ");
+		sql.append(
+				" t.display_Name as task_Name, t.task_Name as task_Key, t.task_Type, t.perform_Type, t.operator, t.action_Url, ");
+		sql.append(
+				" t.create_Time as task_Create_Time, t.finish_Time as task_End_Time, t.expire_Time as task_Expire_Time, t.variable as task_Variable ");
 		sql.append(" from wf_task t ");
 		sql.append(" left join wf_order o on t.order_id = o.id ");
 		sql.append(" left join wf_task_actor ta on ta.task_id=t.id ");
@@ -879,7 +914,8 @@ public abstract class AbstractDBAccess implements DBAccess {
 
 	public List<HistoryOrder> getCCWorks(Page<HistoryOrder> page, QueryFilter filter) {
 		StringBuilder sql = new StringBuilder();
-		sql.append(" select id,process_Id,order_State,priority,cc.creator,cc.create_Time,end_Time,parent_Id,expire_Time,order_No,variable ");
+		sql.append(
+				" select id,process_Id,order_State,priority,cc.creator,cc.create_Time,end_Time,parent_Id,expire_Time,order_No,variable ");
 		sql.append(" from wf_cc_order cc ");
 		sql.append(" left join wf_hist_order o on cc.order_id = o.id ");
 		sql.append(" where 1=1 ");
@@ -930,10 +966,14 @@ public abstract class AbstractDBAccess implements DBAccess {
 
 	public List<WorkItem> getHistoryWorkItems(Page<WorkItem> page, QueryFilter filter) {
 		StringBuilder sql = new StringBuilder();
-		sql.append(" select distinct o.process_Id, t.order_Id, t.id as id, t.id as task_Id, p.display_Name as process_Name, p.instance_Url, o.parent_Id, o.creator, ");
-		sql.append(" o.create_Time as order_Create_Time, o.expire_Time as order_Expire_Time, o.order_No, o.variable as order_Variable, ");
-		sql.append(" t.display_Name as task_Name, t.task_Name as task_Key, t.task_Type, t.perform_Type,t.operator, t.action_Url, ");
-		sql.append(" t.create_Time as task_Create_Time, t.finish_Time as task_End_Time, t.expire_Time as task_Expire_Time, t.variable as task_Variable ");
+		sql.append(
+				" select distinct o.process_Id, t.order_Id, t.id as id, t.id as task_Id, p.display_Name as process_Name, p.instance_Url, o.parent_Id, o.creator, ");
+		sql.append(
+				" o.create_Time as order_Create_Time, o.expire_Time as order_Expire_Time, o.order_No, o.variable as order_Variable, ");
+		sql.append(
+				" t.display_Name as task_Name, t.task_Name as task_Key, t.task_Type, t.perform_Type,t.operator, t.action_Url, ");
+		sql.append(
+				" t.create_Time as task_Create_Time, t.finish_Time as task_End_Time, t.expire_Time as task_Expire_Time, t.variable as task_Variable ");
 		sql.append(" from wf_hist_task t ");
 		sql.append(" left join wf_hist_order o on t.order_id = o.id ");
 		sql.append(" left join wf_hist_task_actor ta on ta.task_id=t.id ");
@@ -1003,7 +1043,7 @@ public abstract class AbstractDBAccess implements DBAccess {
 	}
 
 	public <T> List<T> queryList(Page<T> page, QueryFilter filter, Class<T> clazz, String sql, Object... args) {
-		String orderby = StringHelper.buildPageOrder(filter.getOrder(), filter.getOrderBy());
+		String orderby = buildPageOrder(filter.getOrder(), filter.getOrderBy());
 		String querySQL = sql + orderby;
 
 		if (page == null)
@@ -1023,7 +1063,7 @@ public abstract class AbstractDBAccess implements DBAccess {
 
 			page.setResult(list);
 			page.setTotalCount(JdbcAccess.castLong(count));
-			
+
 			return list;
 		} catch (Exception e) {
 			LOGGER.warning(e.getMessage(), e);
@@ -1032,39 +1072,59 @@ public abstract class AbstractDBAccess implements DBAccess {
 	}
 
 	/**
+	 * 构造排序条件
+	 * 
+	 * @param order   排序方向
+	 * @param orderby 排序字段
+	 * @return 组装好的排序sql
+	 */
+	private static String buildPageOrder(String order, String orderby) {
+		if (CommonUtil.isEmptyString(orderby) || CommonUtil.isEmptyString(order))
+			return "";
+
+		String[] orderByArray = orderby.split(",");
+		String[] orderArray = order.split(",");
+
+		if (orderArray.length != orderByArray.length)
+			throw new SnakerException("分页多重排序参数中,排序字段与排序方向的个数不相等");
+
+		StringBuilder orderStr = new StringBuilder(30);
+		orderStr.append(" order by ");
+
+		for (int i = 0; i < orderByArray.length; i++)
+			orderStr.append(orderByArray[i]).append(" ").append(orderArray[i]).append(" ,");
+
+		orderStr.deleteCharAt(orderStr.length() - 1);
+		return orderStr.toString();
+	}
+
+	/**
 	 * 运行脚本
 	 */
 	public void runScript() {
-		String autoStr = ConfigHelper.getProperty("schema.auto");
-		if (autoStr == null || !autoStr.equalsIgnoreCase("true")) {
+		String autoStr = ConfigService.getValueAsString("workflow.schema.auto");
+		if (autoStr == null || !autoStr.equalsIgnoreCase("true"))
 			return;
-		}
-		Connection conn = null;
-		try {
-			conn = getConnection();
+
+		try (Connection conn = getConnection()) {
 			if (JdbcHelper.isExec(conn)) {
 				LOGGER.info("script has completed execution.skip this step");
 				return;
 			}
+
 			String databaseType = JdbcHelper.getDatabaseType(conn);
 			String schema = "db/core/schema-" + databaseType + ".sql";
 			ScriptRunner runner = new ScriptRunner(conn, true);
 			runner.runScript(schema);
 		} catch (Exception e) {
 			throw new SnakerException(e);
-		} finally {
-			try {
-				JdbcHelper.close(conn);
-			} catch (SQLException e) {
-				// ignore
-			}
 		}
 	}
 
 	/**
 	 * 分页查询时，符合条件的总记录数
 	 * 
-	 * @param sql sql语句
+	 * @param sql  sql语句
 	 * @param args 参数数组
 	 * @return 总记录数
 	 */
