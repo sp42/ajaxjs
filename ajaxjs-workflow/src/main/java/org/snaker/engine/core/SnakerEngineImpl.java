@@ -93,18 +93,24 @@ public class SnakerEngineImpl implements SnakerEngine {
 		if (!this.configuration.isCMB()) {
 			DBAccess access = ServiceContext.find(DBAccess.class);
 			Objects.requireNonNull(access);
-			TransactionInterceptor interceptor = ServiceContext.find(TransactionInterceptor.class);
 			// 如果初始化配置时提供了访问对象，就对DBAccess进行初始化
 			Object accessObject = this.configuration.getAccessDBObject();
 
+			System.out.println("sdsadss---------"+ accessObject);
 			if (accessObject != null) {
+				TransactionInterceptor interceptor = ServiceContext.find(TransactionInterceptor.class);
+				System.out.println("sdsadss---------" + interceptor);
 				if (interceptor != null)
 					interceptor.initialize(accessObject);
 
 				access.initialize(accessObject);
 			}
 
-			setDBAccess(access);
+			// 注入dbAccess
+			List<AccessService> services = ServiceContext.findList(AccessService.class);
+			for (AccessService service : services) {
+				service.setAccess(access);
+			}
 			access.runScript();
 		}
 
@@ -118,18 +124,6 @@ public class SnakerEngineImpl implements SnakerEngine {
 			cacheService.setCacheManager(cacheManager);
 
 		return this;
-	}
-
-	/**
-	 * 注入dbAccess
-	 * 
-	 * @param access db访问对象
-	 */
-	protected void setDBAccess(DBAccess access) {
-		List<AccessService> services = ServiceContext.findList(AccessService.class);
-		for (AccessService service : services) {
-			service.setAccess(access);
-		}
 	}
 
 	/**
@@ -252,8 +246,7 @@ public class SnakerEngineImpl implements SnakerEngine {
 
 		if (process.getModel() != null) {
 			StartModel start = process.getModel().getStart();
-			Objects.requireNonNull(start,
-					"流程定义[name=" + process.getName() + ", version=" + process.getVersion() + "]没有开始节点");
+			Objects.requireNonNull(start, "流程定义[name=" + process.getName() + ", version=" + process.getVersion() + "]没有开始节点");
 			start.execute(execution);
 		}
 
