@@ -32,10 +32,13 @@ public class ScriptRunner {
 	public static final LogHelper LOGGER = LogHelper.getLog(ScriptRunner.class);
 
 	private static final String DEFAULT_DELIMITER = ";";
+
 	// 数据库连接对象
 	private Connection connection;
+
 	// 是否自动提交
 	private boolean autoCommit;
+
 	// 默认的分隔符;
 	private String delimiter = DEFAULT_DELIMITER;
 
@@ -51,8 +54,7 @@ public class ScriptRunner {
 	public void runScript(String resource) throws IOException, SQLException {
 		Objects.requireNonNull(resource);
 		InputStream input = StreamHelper.getStreamFromClasspath(resource);
-		Reader reader = new InputStreamReader(input, "UTF-8");
-		runScript(reader);
+		runScript(new InputStreamReader(input, "UTF-8"));
 	}
 
 	/**
@@ -65,9 +67,9 @@ public class ScriptRunner {
 		try {
 			boolean originalAutoCommit = connection.getAutoCommit();
 			try {
-				if (originalAutoCommit != this.autoCommit) {
+				if (originalAutoCommit != this.autoCommit)
 					connection.setAutoCommit(this.autoCommit);
-				}
+
 				runScript(connection, reader);
 			} finally {
 				connection.setAutoCommit(originalAutoCommit);
@@ -84,9 +86,9 @@ public class ScriptRunner {
 	/**
 	 * 根据给定的sql脚本资源、数据库连接对象，执行sql脚本
 	 * 
-	 * @param conn 数据库连接对象
+	 * @param conn   数据库连接对象
 	 * @param reader sql脚本资源
-	 * @throws IOException io异常
+	 * @throws IOException  io异常
 	 * @throws SQLException sql异常
 	 */
 	private void runScript(Connection conn, Reader reader) throws IOException, SQLException {
