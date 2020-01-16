@@ -53,7 +53,7 @@ public class ModelParser {
 				process.setInstanceNoClass(processE.getAttribute(NodeParser.ATTR_INSTANCENOCLASS));
 				NodeList nodeList = processE.getChildNodes();
 				int nodeSize = nodeList.getLength();
-				
+
 				for (int i = 0; i < nodeSize; i++) {
 					Node node = nodeList.item(i);
 					if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -66,7 +66,7 @@ public class ModelParser {
 				for (NodeModel node : process.getNodes()) {
 					for (TransitionModel transition : node.getOutputs()) {
 						String to = transition.getTo();
-						
+
 						for (NodeModel node2 : process.getNodes()) {
 							if (to.equalsIgnoreCase(node2.getName())) {
 								node2.getInputs().add(transition);
@@ -80,7 +80,7 @@ public class ModelParser {
 			} catch (SAXException | IOException e) {
 				e.printStackTrace();
 				throw new SnakerException(e);
-			} 
+			}
 		} else {
 			throw new SnakerException("documentBuilder is null");
 		}

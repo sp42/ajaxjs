@@ -28,7 +28,8 @@ public abstract class AbstractNodeParser implements NodeParser {
 	protected NodeModel model;
 
 	/**
-	 * 实现NodeParser接口的parse函数 由子类产生各自的模型对象，设置常用的名称属性，并且解析子节点transition，构造TransitionModel模型对象
+	 * 实现NodeParser接口的parse函数
+	 * 由子类产生各自的模型对象，设置常用的名称属性，并且解析子节点transition，构造TransitionModel模型对象
 	 */
 	public void parse(Element element) {
 		model = newModel();
@@ -55,7 +56,7 @@ public abstract class AbstractNodeParser implements NodeParser {
 
 		parseNode(model, element);
 	}
-	
+
 	/**
 	 * 从element元素查找所有tagName指定的子节点元素集合
 	 * 

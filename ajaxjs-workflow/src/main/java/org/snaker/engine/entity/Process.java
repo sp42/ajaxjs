@@ -28,56 +28,64 @@ import org.snaker.engine.model.ProcessModel;
  * @since 1.0
  */
 public class Process implements Serializable {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 6541688543201014542L;
+	
 	/**
 	 * 主键ID
 	 */
 	private String id;
+	
 	/**
 	 * 版本
 	 */
 	private Integer version;
+	
     /**
      * 流程定义名称
      */
 	private String name;
+	
     /**
      * 流程定义显示名称
      */
 	private String displayName;
+	
     /**
      * 流程定义类型（预留字段）
      */
 	private String type;
+	
 	/**
 	 * 当前流程的实例url（一般为流程第一步的url）
 	 * 该字段可以直接打开流程申请的表单
 	 */
 	private String instanceUrl;
+	
     /**
      * 是否可用的开关
      */
 	private Integer state;
+	
 	/**
 	 * 创建时间
 	 */
 	private String createTime;
+	
 	/**
 	 * 创建人
 	 */
 	private String creator;
+	
 	/**
 	 * 流程定义模型
 	 */
     private ProcessModel model;
+    
     /**
      * 流程定义xml
      */
     private Blob content;
+    
     /**
      * 流程定义字节数组
      */

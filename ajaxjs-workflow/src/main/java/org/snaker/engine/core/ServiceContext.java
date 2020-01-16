@@ -23,79 +23,85 @@ import org.snaker.engine.SnakerEngine;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
- * 单实例的服务上下文
- * 具体的上下文查找服务交给Context的实现类
+ * 单实例的服务上下文 具体的上下文查找服务交给Context的实现类
+ * 
  * @author yuqs
  * @since 1.5
  */
 public abstract class ServiceContext {
 	public static final LogHelper LOGGER = LogHelper.getLog(ServiceContext.class);
-	
+
 	/**
 	 * 上下文接口服务{@link Context}
 	 */
 	private static Context context;
-	
+
 	/**
 	 * 流程引擎的引用
 	 */
 	private static SnakerEngine engine;
-	
+
 	/**
 	 * 获取Context实现类
+	 * 
 	 * @return
 	 */
 	public static Context getContext() {
 		return context;
 	}
-	
+
 	/**
 	 * 设置Context实现类
+	 * 
 	 * @param context
 	 */
 	public static void setContext(Context context) {
 		ServiceContext.context = context;
 	}
-	
+
 	/**
 	 * 获取注册的引擎实例
+	 * 
 	 * @return
 	 */
 	public static SnakerEngine getEngine() {
 		Objects.requireNonNull(context, "未注册服务上下文");
-		
-		if(engine == null) 
+
+		if (engine == null)
 			engine = context.find(SnakerEngine.class);
-		
+
 		return engine;
 	}
-	
+
 	/**
 	 * 向上下文添加服务实例
-	 * @param name 服务名称
+	 * 
+	 * @param name   服务名称
 	 * @param object 服务实例
 	 */
 	public static void put(String name, Object object) {
 		Objects.requireNonNull(context, "未注册服务上下文");
 		LOGGER.info("put new instance[name=" + name + "][object=" + object + "]");
-	
+
 		context.put(name, object);
 	}
-	
+
 	/**
 	 * 向上下文添加服务实例
-	 * @param name 服务名称
+	 * 
+	 * @param name  服务名称
 	 * @param clazz 服务类型
 	 */
 	public static void put(String name, Class<?> clazz) {
 		Objects.requireNonNull(context, "未注册服务上下文");
 		LOGGER.info("put new instance[name=" + name + "][clazz=" + clazz.getName() + "]");
-	
+
 		context.put(name, clazz);
 	}
-	
+
 	/**
 	 * 根据服务名称判断是否存在服务实例
+	 * 
 	 * @param name 服务名称
 	 * @return
 	 */
@@ -106,6 +112,7 @@ public abstract class ServiceContext {
 
 	/**
 	 * 对外部提供的查找对象方法，根据class类型查找
+	 * 
 	 * @param clazz 服务类型
 	 * @return
 	 */
@@ -113,9 +120,10 @@ public abstract class ServiceContext {
 		Objects.requireNonNull(context, "未注册服务上下文");
 		return context.find(clazz);
 	}
-	
+
 	/**
 	 * 对外部提供的查找对象实例列表方法，根据class类型查找集合
+	 * 
 	 * @param clazz 服务类型
 	 * @return
 	 */
@@ -123,10 +131,11 @@ public abstract class ServiceContext {
 		Objects.requireNonNull(context, "未注册服务上下文");
 		return context.findList(clazz);
 	}
-	
+
 	/**
 	 * 对外部提供的查找对象方法，根据名称、class类型查找
-	 * @param name 服务名称
+	 * 
+	 * @param name  服务名称
 	 * @param clazz 服务类型
 	 * @return
 	 */

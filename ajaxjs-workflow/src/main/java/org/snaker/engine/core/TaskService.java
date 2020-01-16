@@ -48,7 +48,7 @@ public class TaskService extends AccessService implements ITaskService {
 	private static final String START = "start";
 
 	// 访问策略接口
-	private TaskAccessStrategy strategy = null;
+	private TaskAccessStrategy strategy;
 
 	/**
 	 * 完成指定任务

@@ -22,51 +22,58 @@ import com.ajaxjs.util.map.JsonHelper;
  * @since 1.0
  */
 public class HistoryOrder implements Serializable {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5853727929104539328L;
+	
 	/**
 	 * 主键ID
 	 */
 	private String id;
+	
 	/**
 	 * 流程定义ID
 	 */
 	private String processId;
+	
 	/**
 	 * 流程实例状态（0：结束；1：活动）
 	 */
 	private Integer orderState;
+	
 	/**
 	 * 流程实例创建者ID
 	 */
 	private String creator;
+	
 	/**
 	 * 流程实例创建时间
 	 */
 	private String createTime;
+	
 	/**
 	 * 流程实例结束时间
 	 */
 	private String endTime;
+	
 	/**
 	 * 流程实例为子流程时，该字段标识父流程实例ID
 	 */
 	private String parentId;
+	
 	/**
 	 * 流程实例期望完成时间
 	 */
 	private String expireTime;
+	
 	/**
 	 * 流程实例优先级
 	 */
 	private Integer priority;
+	
 	/**
 	 * 流程实例编号
 	 */
 	private String orderNo;
+	
 	/**
 	 * 流程实例附属变量
 	 */

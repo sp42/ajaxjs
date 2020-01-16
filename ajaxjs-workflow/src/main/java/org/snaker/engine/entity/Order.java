@@ -19,10 +19,8 @@ import com.ajaxjs.util.map.JsonHelper;
  * @since 1.0
  */
 public class Order implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -8335779448165343933L;
+	
 	/**
 	 * 主键ID
 	 */
@@ -31,46 +29,57 @@ public class Order implements Serializable {
 	 * 版本
 	 */
 	private Integer version = 0;
+	
 	/**
 	 * 流程定义ID
 	 */
 	private String processId;
+	
 	/**
 	 * 流程实例创建者ID
 	 */
 	private String creator;
+	
 	/**
 	 * 流程实例创建时间
 	 */
 	private String createTime;
+	
 	/**
 	 * 流程实例为子流程时，该字段标识父流程实例ID
 	 */
 	private String parentId;
+	
 	/**
 	 * 流程实例为子流程时，该字段标识父流程哪个节点模型启动的子流程
 	 */
 	private String parentNodeName;
+	
 	/**
 	 * 流程实例期望完成时间
 	 */
 	private String expireTime;
+	
 	/**
 	 * 流程实例上一次更新时间
 	 */
 	private String lastUpdateTime;
+	
 	/**
 	 * 流程实例上一次更新人员ID
 	 */
 	private String lastUpdator;
+	
 	/**
 	 * 流程实例优先级
 	 */
 	private Integer priority;
+	
 	/**
 	 * 流程实例编号
 	 */
 	private String orderNo;
+	
 	/**
 	 * 流程实例附属变量
 	 */

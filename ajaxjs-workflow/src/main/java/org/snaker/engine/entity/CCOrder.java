@@ -16,6 +16,7 @@ import java.io.Serializable;
  */
 public class CCOrder implements Serializable {
 	private static final long serialVersionUID = -7596174225209412843L;
+
 	private String orderId;
 	private String actorId;
 	private String creator;

@@ -27,6 +27,7 @@ import org.snaker.engine.handlers.StartSubProcessHandler;
  */
 public class TransitionModel extends BaseModel implements Action {
 	private static final long serialVersionUID = 3688123410411321158L;
+
 	/**
 	 * 变迁的源节点引用
 	 */

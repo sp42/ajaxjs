@@ -21,67 +21,78 @@ import com.ajaxjs.util.map.JsonHelper;
  * @since 1.0
  */
 public class HistoryTask implements Serializable {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 6814632180050362450L;
+
 	/**
 	 * 主键ID
 	 */
 	private String id;
+
 	/**
 	 * 流程实例ID
 	 */
 	private String orderId;
+
 	/**
 	 * 任务名称
 	 */
 	private String taskName;
+
 	/**
 	 * 任务显示名称
 	 */
 	private String displayName;
+
 	/**
 	 * 参与方式（0：普通任务；1：参与者fork任务[即：如果10个参与者，需要每个人都要完成，才继续流转]）
 	 */
 	private Integer performType;
+
 	/**
 	 * 任务类型
 	 */
 	private Integer taskType;
+
 	/**
 	 * 任务状态（0：结束；1：活动）
 	 */
 	private Integer taskState;
+
 	/**
 	 * 任务处理者ID
 	 */
 	private String operator;
+
 	/**
 	 * 任务创建时间
 	 */
 	private String createTime;
+
 	/**
 	 * 任务完成时间
 	 */
 	private String finishTime;
+
 	/**
 	 * 期望任务完成时间
 	 */
 	private String expireTime;
+
 	/**
 	 * 任务关联的表单url
 	 */
 	private String actionUrl;
+
 	/**
 	 * 任务参与者列表
 	 */
 	private String[] actorIds;
+
 	/**
 	 * 父任务Id
 	 */
 	private String parentTaskId;
+
 	/**
 	 * 任务附属变量
 	 */
@@ -255,7 +266,7 @@ public class HistoryTask implements Serializable {
 		Map<String, Object> map = JsonHelper.parseMap(this.variable);
 		if (map == null)
 			return Collections.emptyMap();
-		
+
 		return map;
 	}
 
