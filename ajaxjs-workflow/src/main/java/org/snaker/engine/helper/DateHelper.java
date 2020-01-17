@@ -45,6 +45,7 @@ public class DateHelper {
 	public static String parseTime(Object date) {
 		if (date == null)
 			return null;
+		
 		if (date instanceof Date) {
 //			return new DateTime((Date)date).toString(DATE_FORMAT_DEFAULT);
 			SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT_DEFAULT);
@@ -52,6 +53,7 @@ public class DateHelper {
 		} else if (date instanceof String) {
 			return String.valueOf(date);
 		}
+		
 		return "";
 	}
 

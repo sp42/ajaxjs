@@ -10,9 +10,9 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 import org.snaker.engine.SnakerException;
+import org.snaker.engine.WorkflowUtils;
 import org.snaker.engine.core.Execution;
 import org.snaker.engine.handlers.IHandler;
-import org.snaker.engine.helper.ReflectHelper;
 
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
@@ -63,13 +63,13 @@ public class CustomModel extends WorkModel {
 			IHandler handler = (IHandler) invokeObject;
 			handler.handle(execution);
 		} else {
-			Method method = ReflectHelper.findMethod(invokeObject.getClass(), methodName);
+			Method method = WorkflowUtils.findMethod(invokeObject.getClass(), methodName);
 
 			if (method == null)
 				throw new SnakerException("自定义模型[class=" + clazz + "]无法找到方法名称:" + methodName);
 
 			Object[] objects = getArgs(execution.getArgs(), args);
-			Object returnValue = ReflectHelper.invoke(method, invokeObject, objects);
+			Object returnValue = ReflectUtil.executeMethod(invokeObject, method, objects);
 
 			if (!CommonUtil.isEmptyString(var))
 				execution.getArgs().put(var, returnValue);

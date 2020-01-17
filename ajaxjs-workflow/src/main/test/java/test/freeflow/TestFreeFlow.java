@@ -21,9 +21,9 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.snaker.engine.TestSnakerBase;
+import org.snaker.engine.WorkflowUtils;
 import org.snaker.engine.entity.Order;
 import org.snaker.engine.entity.Task;
-import org.snaker.engine.helper.StreamHelper;
 import org.snaker.engine.model.TaskModel;
 
 /**
@@ -33,7 +33,7 @@ import org.snaker.engine.model.TaskModel;
 public class TestFreeFlow extends TestSnakerBase {
 	@Before
 	public void before() {
-		processId = engine.process().deploy(StreamHelper.getStreamFromClasspath("test/freeflow/free.snaker"));
+		processId = engine.process().deploy(WorkflowUtils.getStreamFromClasspath("test/freeflow/free.snaker"));
 	}
 	
 	@Test

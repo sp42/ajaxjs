@@ -20,8 +20,8 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.snaker.engine.TestSnakerBase;
+import org.snaker.engine.WorkflowUtils;
 import org.snaker.engine.entity.Order;
-import org.snaker.engine.helper.StreamHelper;
 
 /**
  * @author yuqs
@@ -30,7 +30,7 @@ import org.snaker.engine.helper.StreamHelper;
 public class TestCC extends TestSnakerBase {
 	@Before
 	public void before() {
-		processId = engine.process().deploy(StreamHelper.getStreamFromClasspath("test/task/simple/process.snaker"));
+		processId = engine.process().deploy(WorkflowUtils.getStreamFromClasspath("test/task/simple/process.snaker"));
 	}
 
 	@Test

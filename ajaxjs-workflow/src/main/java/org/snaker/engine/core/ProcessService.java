@@ -18,7 +18,6 @@ import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.entity.HistoryOrder;
 import org.snaker.engine.entity.Process;
 import org.snaker.engine.helper.DateHelper;
-import org.snaker.engine.helper.StreamHelper;
 import org.snaker.engine.model.ProcessModel;
 import org.snaker.engine.parser.ModelParser;
 
@@ -178,7 +177,7 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 	public String deploy(InputStream input, String creator) {
 		Objects.requireNonNull(input);
 		try {
-			byte[] bytes = StreamHelper.readBytes(input);
+			byte[] bytes = WorkflowUtils.readBytes(input);
 			ProcessModel model = ModelParser.parse(bytes);
 			Integer version = access().getLatestProcessVersion(model.getName());
 			Process entity = new Process();
@@ -215,7 +214,7 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 		Objects.requireNonNull(entity);
 
 		try {
-			byte[] bytes = StreamHelper.readBytes(input);
+			byte[] bytes = WorkflowUtils.readBytes(input);
 			ProcessModel model = ModelParser.parse(bytes);
 			String oldProcessName = entity.getName();
 			entity.setModel(model);

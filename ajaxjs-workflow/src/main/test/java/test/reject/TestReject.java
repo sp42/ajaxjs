@@ -20,7 +20,7 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.snaker.engine.TestSnakerBase;
-import org.snaker.engine.helper.StreamHelper;
+import org.snaker.engine.WorkflowUtils;
 
 /**
  * @author yuqs
@@ -29,7 +29,7 @@ import org.snaker.engine.helper.StreamHelper;
 public class TestReject extends TestSnakerBase {
 	@Before
 	public void before() {
-		processId = engine.process().deploy(StreamHelper
+		processId = engine.process().deploy(WorkflowUtils
 						.getStreamFromClasspath("test/reject/reject.snaker"));
 		engine.startInstanceById(processId);
 	}

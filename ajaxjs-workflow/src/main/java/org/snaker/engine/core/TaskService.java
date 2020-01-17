@@ -115,7 +115,7 @@ public class TaskService extends AccessService implements ITaskService {
 	 * 任务历史记录方法
 	 * 
 	 * @param execution 执行对象
-	 * @param model 自定义节点模型
+	 * @param model     自定义节点模型
 	 * @return 历史任务对象
 	 */
 	public HistoryTask history(Execution execution, CustomModel model) {
@@ -142,9 +142,9 @@ public class TaskService extends AccessService implements ITaskService {
 	public Task take(String taskId, String operator) {
 		Task task = access().getTask(taskId);
 		Objects.requireNonNull(task, "指定的任务[id=" + taskId + "]不存在");
-		if (!isAllowed(task, operator)) {
+		if (!isAllowed(task, operator))
 			throw new SnakerException("当前参与者[" + operator + "]不允许提取任务[taskId=" + taskId + "]");
-		}
+
 		task.setOperator(operator);
 		task.setFinishTime(DateHelper.getTime());
 		access().updateTask(task);
@@ -241,24 +241,29 @@ public class TaskService extends AccessService implements ITaskService {
 			access().removeTaskActor(task.getId(), actors);
 			Map<String, Object> taskData = task.getVariableMap();
 			String actorStr = (String) taskData.get(Task.KEY_ACTOR);
+
 			if (!CommonUtil.isEmptyString(actorStr)) {
 				String[] actorArray = actorStr.split(",");
 				StringBuilder newActor = new StringBuilder(actorStr.length());
 				boolean isMatch;
+
 				for (String actor : actorArray) {
 					isMatch = false;
 					if (CommonUtil.isEmptyString(actor))
 						continue;
+
 					for (String removeActor : actors) {
 						if (actor.equals(removeActor)) {
 							isMatch = true;
 							break;
 						}
 					}
+
 					if (isMatch)
 						continue;
 					newActor.append(actor).append(",");
 				}
+
 				newActor.deleteCharAt(newActor.length() - 1);
 				taskData.put(Task.KEY_ACTOR, newActor.toString());
 				task.setVariable(JsonHelper.toJson(taskData));
@@ -274,17 +279,17 @@ public class TaskService extends AccessService implements ITaskService {
 		HistoryTask hist = access().getHistTask(taskId);
 		Objects.requireNonNull(hist, "指定的历史任务[id=" + taskId + "]不存在");
 		List<Task> tasks;
-		if (hist.isPerformAny()) {
+
+		if (hist.isPerformAny())
 			tasks = access().getNextActiveTasks(hist.getId());
-		} else {
+		else
 			tasks = access().getNextActiveTasks(hist.getOrderId(), hist.getTaskName(), hist.getParentTaskId());
-		}
-		if (tasks == null || tasks.isEmpty()) {
+
+		if (tasks == null || tasks.isEmpty())
 			throw new SnakerException("后续活动任务已完成或不存在，无法撤回.");
-		}
-		for (Task task : tasks) {
+
+		for (Task task : tasks)
 			access().deleteTask(task);
-		}
 
 		Task task = hist.undoTask();
 		task.setId(WorkflowUtils.getPrimaryKey());
@@ -299,9 +304,9 @@ public class TaskService extends AccessService implements ITaskService {
 	 */
 	public Task rejectTask(ProcessModel model, Task currentTask) {
 		String parentTaskId = currentTask.getParentTaskId();
-		if (CommonUtil.isEmptyString(parentTaskId) || parentTaskId.equals(START)) {
+		if (CommonUtil.isEmptyString(parentTaskId) || parentTaskId.equals(START))
 			throw new SnakerException("上一步任务ID为空，无法驳回至上一步处理");
-		}
+
 		NodeModel current = model.getNode(currentTask.getTaskName());
 		HistoryTask history = access().getHistTask(parentTaskId);
 		NodeModel parent = model.getNode(history.getTaskName());
@@ -321,12 +326,13 @@ public class TaskService extends AccessService implements ITaskService {
 	/**
 	 * 对指定的任务分配参与者。参与者可以为用户、部门、角色
 	 * 
-	 * @param taskId 任务id
+	 * @param taskId   任务id
 	 * @param actorIds 参与者id集合
 	 */
 	private void assignTask(String taskId, String... actorIds) {
 		if (actorIds == null || actorIds.length == 0)
 			return;
+
 		for (String actorId : actorIds) {
 			// 修复当actorId为null的bug
 			if (CommonUtil.isEmptyString(actorId))
@@ -344,7 +350,8 @@ public class TaskService extends AccessService implements ITaskService {
 	public List<Task> createNewTask(String taskId, int taskType, String... actors) {
 		Task task = access().getTask(taskId);
 		Objects.requireNonNull(task, "指定的任务[id=" + taskId + "]不存在");
-		List<Task> tasks = new ArrayList<Task>();
+		List<Task> tasks = new ArrayList<>();
+
 		try {
 			Task newTask = (Task) task.clone();
 			newTask.setTaskType(taskType);
@@ -372,11 +379,12 @@ public class TaskService extends AccessService implements ITaskService {
 		ProcessModel model = process.getModel();
 		NodeModel nodeModel = model.getNode(task.getTaskName());
 		Objects.requireNonNull(nodeModel, "任务id无法找到节点模型.");
-		if (nodeModel instanceof TaskModel) {
+
+		if (nodeModel instanceof TaskModel)
 			return (TaskModel) nodeModel;
-		} else {
+		else
 			throw new IllegalArgumentException("任务id找到的节点模型不匹配");
-		}
+
 	}
 
 	/**
@@ -387,11 +395,12 @@ public class TaskService extends AccessService implements ITaskService {
 	 * @return List<Task> 任务列表
 	 */
 	public List<Task> createTask(TaskModel taskModel, Execution execution) {
-		List<Task> tasks = new ArrayList<Task>();
+		List<Task> tasks = new ArrayList<>();
 
 		Map<String, Object> args = execution.getArgs();
 		if (args == null)
 			args = new HashMap<String, Object>();
+
 		Date expireDate = DateHelper.processTime(args, taskModel.getExpireTime());
 		Date remindDate = DateHelper.processTime(args, taskModel.getReminderTime());
 		String form = (String) args.get(taskModel.getForm());
@@ -414,11 +423,13 @@ public class TaskService extends AccessService implements ITaskService {
 			// 任务执行方式为参与者中每个都要执行完才可驱动流程继续流转，该方法根据参与者个数产生对应的task数量
 			for (String actor : actors) {
 				Task singleTask;
+
 				try {
 					singleTask = (Task) task.clone();
 				} catch (CloneNotSupportedException e) {
 					singleTask = task;
 				}
+
 				singleTask = saveTask(singleTask, actor);
 				singleTask.setRemindDate(remindDate);
 				tasks.add(singleTask);
@@ -430,7 +441,7 @@ public class TaskService extends AccessService implements ITaskService {
 	/**
 	 * 根据模型、执行对象、任务类型构建基本的task对象
 	 * 
-	 * @param model 模型
+	 * @param model     模型
 	 * @param execution 执行对象
 	 * @return Task任务对象
 	 */
@@ -465,7 +476,7 @@ public class TaskService extends AccessService implements ITaskService {
 	/**
 	 * 根据Task模型的assignee、assignmentHandler属性以及运行时数据，确定参与者
 	 * 
-	 * @param model 模型
+	 * @param model     模型
 	 * @param execution 执行对象
 	 * @return 参与者数组
 	 */
@@ -524,7 +535,8 @@ public class TaskService extends AccessService implements ITaskService {
 			return (String[]) actors;
 		} else {
 			// 其它类型，抛出不支持的类型异常
-			throw new SnakerException("任务参与者对象[" + actors + "]类型不支持." + "合法参数示例:Long,Integer,new String[]{},'10000,20000',List<String>");
+			throw new SnakerException(
+					"任务参与者对象[" + actors + "]类型不支持." + "合法参数示例:Long,Integer,new String[]{},'10000,20000',List<String>");
 		}
 	}
 
@@ -543,7 +555,7 @@ public class TaskService extends AccessService implements ITaskService {
 		List<TaskActor> actors = access().getTaskActorsByTaskId(task.getId());
 		if (actors == null || actors.isEmpty())
 			return true;
-		
+
 		return !CommonUtil.isEmptyString(operator) && getStrategy().isAllowed(operator, actors);
 	}
 
@@ -552,16 +564,16 @@ public class TaskService extends AccessService implements ITaskService {
 	}
 
 	public TaskAccessStrategy getStrategy() {
-		if (strategy != null) 
+		if (strategy != null)
 			return strategy;
-		
+
 		strategy = ServiceContext.find(TaskAccessStrategy.class);
-		
+
 		if (strategy == null) {
 			ServiceContext.put(TaskAccessStrategy.class.getName(), GeneralAccessStrategy.class);
 			strategy = ServiceContext.find(TaskAccessStrategy.class);
 		}
-		
+
 		return strategy;
 	}
 }

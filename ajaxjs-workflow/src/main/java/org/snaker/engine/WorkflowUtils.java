@@ -1,6 +1,11 @@
 package org.snaker.engine;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Array;
+import java.lang.reflect.Method;
 import java.util.regex.Pattern;
 
 public class WorkflowUtils {
@@ -11,20 +16,23 @@ public class WorkflowUtils {
 	}
 
 	/**
-	 *  ArrayUtils.add
+	 * ArrayUtils.add
 	 * 
 	 * <p>
-	 * Inserts the specified element at the specified position in the array. Shifts the element currently at that position (if any) and any subsequent
-	 * elements to the right (adds one to their indices).
+	 * Inserts the specified element at the specified position in the array. Shifts
+	 * the element currently at that position (if any) and any subsequent elements
+	 * to the right (adds one to their indices).
 	 * </p>
 	 *
 	 * <p>
-	 * This method returns a new array with the same elements of the input array plus the given element on the specified position. The component type of
-	 * the returned array is always the same as that of the input array.
+	 * This method returns a new array with the same elements of the input array
+	 * plus the given element on the specified position. The component type of the
+	 * returned array is always the same as that of the input array.
 	 * </p>
 	 *
 	 * <p>
-	 * If the input array is <code>null</code>, a new one element array is returned whose component type is the same as the element.
+	 * If the input array is <code>null</code>, a new one element array is returned
+	 * whose component type is the same as the element.
 	 * </p>
 	 *
 	 * <pre>
@@ -35,11 +43,12 @@ public class WorkflowUtils {
 	 * ArrayUtils.add(["a", "b"], 3, "c") = ["a", "b", "c"]
 	 * </pre>
 	 *
-	 * @param array the array to add the element to, may be <code>null</code>
-	 * @param index the position of the new object
+	 * @param array   the array to add the element to, may be <code>null</code>
+	 * @param index   the position of the new object
 	 * @param element the object to add
 	 * @return A new array containing the existing elements and the new element
-	 * @throws IndexOutOfBoundsException if the index is out of range (index < 0 || index > array.length).
+	 * @throws IndexOutOfBoundsException if the index is out of range (index < 0 ||
+	 *                                   index > array.length).
 	 */
 
 	public static Object[] add(Object[] array, int index, Object element) {
@@ -56,13 +65,13 @@ public class WorkflowUtils {
 	}
 
 	/**
-	 * Underlying implementation of add(array, index, element) methods. The last parameter is the class, which may not equal element.getClass for
-	 * primitives.
+	 * Underlying implementation of add(array, index, element) methods. The last
+	 * parameter is the class, which may not equal element.getClass for primitives.
 	 *
-	 * @param array the array to add the element to, may be <code>null</code>
-	 * @param index the position of the new object
+	 * @param array   the array to add the element to, may be <code>null</code>
+	 * @param index   the position of the new object
 	 * @param element the object to add
-	 * @param clss the type of the element being added
+	 * @param clss    the type of the element being added
 	 * @return A new array containing the existing elements and the new element
 	 */
 	private static Object add(Object array, int index, Object element, Class<?> clss) {
@@ -95,5 +104,61 @@ public class WorkflowUtils {
 	public static String getPrimaryKey() {
 		return java.util.UUID.randomUUID().toString().replace("-", "");
 	}
+
+	/**
+	 * 根据class类型、methodName方法名称，返回Method对象。 注意：这里不检查参数类型，所以自定义的java类应该避免使用重载方法
+	 * 
+	 * @param clazz
+	 * @param methodName
+	 * @return
+	 */
+	public static Method findMethod(Class<?> clazz, String methodName) {
+		Method[] candidates = clazz.getDeclaredMethods();
+
+		for (int i = 0; i < candidates.length; i++) {
+			Method candidate = candidates[i];
+			if (candidate.getName().equals(methodName))
+				return candidate;
+		}
+
+		if (clazz.getSuperclass() != null)
+			return findMethod(clazz.getSuperclass(), methodName);
+
+		return null;
+	}
+
+	public static InputStream getStreamFromClasspath(String resourceName) {
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		InputStream stream = classLoader.getResourceAsStream(resourceName);
+
+		if (stream == null)
+			stream = WorkflowUtils.class.getClassLoader().getResourceAsStream(resourceName);
+
+		if (stream == null)
+			throw new SnakerException("resource " + resourceName + " does not exist");
+
+		return stream;
+	}
+
+	public static long transfer(InputStream in, OutputStream out) throws IOException {
+		long total = 0;
+		byte[] buffer = new byte[BUFFERSIZE];
+
+		for (int count; (count = in.read(buffer)) != -1;) {
+			out.write(buffer, 0, count);
+			total += count;
+		}
+
+		return total;
+	}
+
+	public static byte[] readBytes(InputStream in) throws IOException {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		transfer(in, out);
+		
+		return out.toByteArray();
+	}
+
+	public static final int BUFFERSIZE = 4096;
 
 }

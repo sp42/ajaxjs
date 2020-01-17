@@ -21,10 +21,10 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.snaker.engine.TestSnakerBase;
+import org.snaker.engine.WorkflowUtils;
 import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.entity.Order;
 import org.snaker.engine.entity.Task;
-import org.snaker.engine.helper.StreamHelper;
 
 /**
  * 测试简单的子流程
@@ -35,9 +35,9 @@ import org.snaker.engine.helper.StreamHelper;
 public class TestSubProcess1 extends TestSnakerBase {
 	@Before
 	public void before() {
-		engine.process().deploy(StreamHelper
+		engine.process().deploy(WorkflowUtils
 				.getStreamFromClasspath("test/subprocess/child.snaker"));
-		processId = engine.process().deploy(StreamHelper
+		processId = engine.process().deploy(WorkflowUtils
 						.getStreamFromClasspath("test/subprocess/subprocess1.snaker"));
 	}
 	

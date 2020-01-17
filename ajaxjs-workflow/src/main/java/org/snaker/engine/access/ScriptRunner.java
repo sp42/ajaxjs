@@ -18,7 +18,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Objects;
 
-import org.snaker.engine.helper.StreamHelper;
+import org.snaker.engine.WorkflowUtils;
 
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -53,7 +53,7 @@ public class ScriptRunner {
 
 	public void runScript(String resource) throws IOException, SQLException {
 		Objects.requireNonNull(resource);
-		InputStream input = StreamHelper.getStreamFromClasspath(resource);
+		InputStream input = WorkflowUtils.getStreamFromClasspath(resource);
 		runScript(new InputStreamReader(input, "UTF-8"));
 	}
 

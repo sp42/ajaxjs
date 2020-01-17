@@ -20,7 +20,7 @@ package test.task.field;
 import org.junit.Before;
 import org.junit.Test;
 import org.snaker.engine.TestSnakerBase;
-import org.snaker.engine.helper.StreamHelper;
+import org.snaker.engine.WorkflowUtils;
 import org.snaker.engine.model.ProcessModel;
 import org.snaker.engine.model.TaskModel;
 
@@ -30,7 +30,7 @@ import org.snaker.engine.model.TaskModel;
 public class TestField extends TestSnakerBase {
     @Before
     public void before() {
-        processId = engine.process().deploy(StreamHelper.getStreamFromClasspath("test/task/field/process.snaker"));
+        processId = engine.process().deploy(WorkflowUtils.getStreamFromClasspath("test/task/field/process.snaker"));
     }
 
     @Test

@@ -19,10 +19,10 @@ package test.task.resume;
 import org.junit.Before;
 import org.junit.Test;
 import org.snaker.engine.TestSnakerBase;
+import org.snaker.engine.WorkflowUtils;
 import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.entity.Order;
 import org.snaker.engine.entity.Task;
-import org.snaker.engine.helper.StreamHelper;
 
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +35,7 @@ import java.util.Map;
 public class TestResume extends TestSnakerBase {
 	@Before
 	public void before() {
-		processId = engine.process().deploy(StreamHelper.getStreamFromClasspath("test/task/simple/process.snaker"));
+		processId = engine.process().deploy(WorkflowUtils.getStreamFromClasspath("test/task/simple/process.snaker"));
 	}
 	
 	@Test

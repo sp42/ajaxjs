@@ -21,9 +21,9 @@ import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.snaker.engine.TestSnakerBase;
+import org.snaker.engine.WorkflowUtils;
 import org.snaker.engine.entity.Order;
 import org.snaker.engine.helper.DateHelper;
-import org.snaker.engine.helper.StreamHelper;
 
 /**
  * @author yuqs
@@ -33,7 +33,7 @@ public class TestExpire extends TestSnakerBase {
 	private static final String PROCESSNAME = "expire";
 	@Before
 	public void before() {
-		engine.process().deploy(StreamHelper.getStreamFromClasspath("test/time/expire/process.snaker"));
+		engine.process().deploy(WorkflowUtils.getStreamFromClasspath("test/time/expire/process.snaker"));
 	}
 	
 	@Test

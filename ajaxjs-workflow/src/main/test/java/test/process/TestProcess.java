@@ -19,8 +19,8 @@ import java.util.Map;
 
 import org.junit.Test;
 import org.snaker.engine.TestSnakerBase;
+import org.snaker.engine.WorkflowUtils;
 import org.snaker.engine.entity.Process;
-import org.snaker.engine.helper.StreamHelper;
 
 /**
  * @author yuqs
@@ -29,7 +29,7 @@ import org.snaker.engine.helper.StreamHelper;
 public class TestProcess extends TestSnakerBase {
 	@Test
 	public void test() {
-		processId = engine.process().deploy(StreamHelper.
+		processId = engine.process().deploy(WorkflowUtils.
 				getStreamFromClasspath("test/task/simple/process.snaker"));
 		Process process = engine.process().getProcessById(processId);
 		System.out.println("output 1="+process);
