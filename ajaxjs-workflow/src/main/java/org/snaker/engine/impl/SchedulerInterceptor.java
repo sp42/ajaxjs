@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.Map;
 
 import org.snaker.engine.SnakerInterceptor;
-import org.snaker.engine.WorkflowUtils;
 import org.snaker.engine.core.Execution;
 import org.snaker.engine.core.ServiceContext;
 import org.snaker.engine.entity.Task;
@@ -20,6 +19,7 @@ import org.snaker.engine.scheduling.JobEntity;
 import org.snaker.engine.scheduling.JobEntity.JobType;
 
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.workflow.WorkflowUtils;
 
 /**
  * 时限控制拦截器 主要拦截任务的expireDate(期望完成时间) 再交给具体的调度器完成调度处理

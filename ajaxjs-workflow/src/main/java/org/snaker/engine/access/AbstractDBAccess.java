@@ -17,7 +17,6 @@ import java.util.Map;
 
 import org.snaker.engine.DBAccess;
 import org.snaker.engine.SnakerException;
-import org.snaker.engine.WorkflowUtils;
 import org.snaker.engine.access.dialect.Dialect;
 import org.snaker.engine.core.ServiceContext;
 import org.snaker.engine.entity.CCOrder;
@@ -34,6 +33,7 @@ import org.snaker.engine.entity.WorkItem;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.workflow.WorkflowUtils;
 
 /**
  * 抽象数据库访问类 封装SQL语句的构造

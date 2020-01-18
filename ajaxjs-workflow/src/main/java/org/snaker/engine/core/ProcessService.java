@@ -12,7 +12,6 @@ import java.util.Objects;
 
 import org.snaker.engine.IProcessService;
 import org.snaker.engine.SnakerException;
-import org.snaker.engine.WorkflowUtils;
 import org.snaker.engine.access.Page;
 import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.entity.HistoryOrder;
@@ -26,6 +25,7 @@ import com.ajaxjs.util.cache.Cache;
 import com.ajaxjs.util.cache.CacheManager;
 import com.ajaxjs.util.cache.CacheManagerAware;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.workflow.WorkflowUtils;
 
 /**
  * 流程定义业务类

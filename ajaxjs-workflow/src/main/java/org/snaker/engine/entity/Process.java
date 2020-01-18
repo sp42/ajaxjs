@@ -19,8 +19,9 @@ import java.io.Serializable;
 import java.sql.Blob;
 
 import org.snaker.engine.SnakerException;
-import org.snaker.engine.WorkflowUtils;
 import org.snaker.engine.model.ProcessModel;
+
+import com.ajaxjs.workflow.WorkflowUtils;
 
 /**
  * 流程定义实体类

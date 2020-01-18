@@ -20,7 +20,6 @@ import org.snaker.engine.ITaskService;
 import org.snaker.engine.SnakerEngine;
 import org.snaker.engine.SnakerException;
 import org.snaker.engine.TaskAccessStrategy;
-import org.snaker.engine.WorkflowUtils;
 import org.snaker.engine.entity.HistoryTask;
 import org.snaker.engine.entity.Order;
 import org.snaker.engine.entity.Process;
@@ -37,6 +36,7 @@ import org.snaker.engine.model.TaskModel.TaskType;
 
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.map.JsonHelper;
+import com.ajaxjs.workflow.WorkflowUtils;
 
 /**
  * 任务执行业务类

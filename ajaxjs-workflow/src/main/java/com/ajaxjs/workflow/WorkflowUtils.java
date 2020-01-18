@@ -1,4 +1,4 @@
-package org.snaker.engine;
+package com.ajaxjs.workflow;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -7,6 +7,8 @@ import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.regex.Pattern;
+
+import org.snaker.engine.SnakerException;
 
 public class WorkflowUtils {
 	private static final Pattern pattern = Pattern.compile("[0-9]*");

@@ -10,12 +10,12 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 import org.snaker.engine.SnakerException;
-import org.snaker.engine.WorkflowUtils;
 import org.snaker.engine.core.Execution;
 import org.snaker.engine.handlers.IHandler;
 
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
+import com.ajaxjs.workflow.WorkflowUtils;
 
 /**
  * 自定义模型
