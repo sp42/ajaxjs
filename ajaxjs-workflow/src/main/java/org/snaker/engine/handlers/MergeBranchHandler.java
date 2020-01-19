@@ -52,6 +52,7 @@ public class MergeBranchHandler extends AbstractMergeHandler {
 	 * 
 	 * @see org.snaker.engine.handlers.AbstractMergeHandler#findActiveNodes()
 	 */
+	@Override
 	protected String[] findActiveNodes() {
 		StringBuilder buffer = new StringBuilder(20);
 		findForkTaskNames(model, buffer);

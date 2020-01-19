@@ -46,8 +46,7 @@ public interface IOrderService {
 	 * @param parentNodeName 父流程节点模型
 	 * @return 活动流程实例对象
 	 */
-	Order createOrder(Process process, String operator, Map<String, Object> args, String parentId,
-			String parentNodeName);
+	Order createOrder(Process process, String operator, Map<String, Object> args, String parentId, String parentNodeName);
 
 	/**
 	 * 向指定实例id添加全局变量数据

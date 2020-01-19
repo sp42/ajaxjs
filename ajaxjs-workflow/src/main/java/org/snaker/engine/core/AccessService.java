@@ -11,7 +11,7 @@ import org.snaker.engine.DBAccess;
 import org.snaker.engine.impl.GeneralCompletion;
 
 /**
- * 作为抽象父类，提供给子类access实现方式
+ * 作为抽象父类，提供给子类 access 实现方式
  * 
  * @author yuqs
  * @since 1.0
@@ -21,22 +21,22 @@ public abstract class AccessService {
 	 * 状态；活动状态
 	 */
 	public static final Integer STATE_ACTIVE = 1;
-	
+
 	/**
 	 * 状态：结束状态
 	 */
 	public static final Integer STATE_FINISH = 0;
-	
+
 	/**
 	 * 状态：终止状态
 	 */
 	public static final Integer STATE_TERMINATION = 2;
-	
+
 	/**
 	 * 数据库的access
 	 */
 	protected DBAccess access;
-	
+
 	/**
 	 * 完成触发接口
 	 */
@@ -67,6 +67,11 @@ public abstract class AccessService {
 		this.completion = completion;
 	}
 
+	/**
+	 * 获取完成对象
+	 * 
+	 * @return 完成对象
+	 */
 	public Completion getCompletion() {
 		if (completion != null)
 			return completion;

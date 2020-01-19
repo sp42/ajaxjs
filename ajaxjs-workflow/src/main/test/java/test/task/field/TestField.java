@@ -20,9 +20,10 @@ package test.task.field;
 import org.junit.Before;
 import org.junit.Test;
 import org.snaker.engine.TestSnakerBase;
-import org.snaker.engine.WorkflowUtils;
 import org.snaker.engine.model.ProcessModel;
 import org.snaker.engine.model.TaskModel;
+
+import com.ajaxjs.workflow.WorkflowUtils;
 
 /**
  * @author yuqs

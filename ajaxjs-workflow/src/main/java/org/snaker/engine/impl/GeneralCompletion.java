@@ -31,10 +31,12 @@ import com.ajaxjs.util.logger.LogHelper;
 public class GeneralCompletion implements Completion {
 	public static final LogHelper LOGGER = LogHelper.getLog(GeneralCompletion.class);
 
+	@Override
     public void complete(HistoryTask task) {
     	LOGGER.info("The task[{0}] has been user[{1}] has completed", task.getId(), task.getOperator());
     }
 
+	@Override
     public void complete(HistoryOrder order) {
     	LOGGER.info("The order[{0}] has completed", order.getId());
     }

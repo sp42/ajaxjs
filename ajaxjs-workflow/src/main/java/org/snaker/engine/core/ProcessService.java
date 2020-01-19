@@ -67,8 +67,7 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 		Objects.requireNonNull(process, "指定的流程定义[id/name=" + idOrName + "]不存在");
 
 		if (process.getState() != null && process.getState() == 0)
-			throw new IllegalArgumentException(
-					"指定的流程定义[id/name=" + idOrName + ",version=" + process.getVersion() + "]为非活动状态");
+			throw new IllegalArgumentException("指定的流程定义[id/name=" + idOrName + ",version=" + process.getVersion() + "]为非活动状态");
 	}
 
 	/**

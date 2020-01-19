@@ -17,8 +17,9 @@ package test.task.config;
 import org.junit.Before;
 import org.junit.Test;
 import org.snaker.engine.TestSnakerBase;
-import org.snaker.engine.WorkflowUtils;
 import org.snaker.engine.entity.Order;
+
+import com.ajaxjs.workflow.WorkflowUtils;
 
 /**
  * @author yuqs

@@ -20,7 +20,8 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.snaker.engine.TestSnakerBase;
-import org.snaker.engine.WorkflowUtils;
+
+import com.ajaxjs.workflow.WorkflowUtils;
 
 /**
  * @author yuqs

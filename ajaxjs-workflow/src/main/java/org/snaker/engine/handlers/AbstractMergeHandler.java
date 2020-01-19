@@ -37,6 +37,7 @@ public abstract class AbstractMergeHandler implements IHandler {
 	/**
 	 * 查询当前流程实例的无法参与合并的node列表 若所有中间node都完成，则设置为已合并状态，告诉model可继续执行join的输出变迁
 	 */
+	@Override
 	public void handle(Execution execution) {
 		IQueryService queryService = execution.getEngine().query();
 		Order order = execution.getOrder();

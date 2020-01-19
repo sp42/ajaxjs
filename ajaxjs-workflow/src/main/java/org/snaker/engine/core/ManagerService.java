@@ -25,9 +25,7 @@ import com.ajaxjs.workflow.WorkflowUtils;
  * @since 1.4
  */
 public class ManagerService extends AccessService implements IManagerService {
-	/**
-	 * @param surrogate 替代
-	 */
+	@Override
 	public void saveOrUpdate(Surrogate surrogate) {
 		Objects.requireNonNull(surrogate);
 		surrogate.setState(STATE_ACTIVE);
@@ -39,27 +37,31 @@ public class ManagerService extends AccessService implements IManagerService {
 			access().updateSurrogate(surrogate);
 	}
 
+	@Override
 	public void deleteSurrogate(String id) {
 		Surrogate surrogate = getSurrogate(id);
 		Objects.requireNonNull(surrogate);
 		access().deleteSurrogate(surrogate);
 	}
 
+	@Override
 	public Surrogate getSurrogate(String id) {
 		return access().getSurrogate(id);
 	}
 
+	@Override
 	public List<Surrogate> getSurrogate(QueryFilter filter) {
 		Objects.requireNonNull(filter);
 		return access().getSurrogate(null, filter);
 	}
 
+	@Override
 	public List<Surrogate> getSurrogate(Page<Surrogate> page, QueryFilter filter) {
 		Objects.requireNonNull(filter);
 		return access().getSurrogate(page, filter);
 	}
 
-
+	@Override
 	public String getSurrogate(String operator, String processName) {
 		Objects.requireNonNull(operator);
 		QueryFilter filter = new QueryFilter().setOperator(operator).setOperateTime(DateHelper.getTime());
