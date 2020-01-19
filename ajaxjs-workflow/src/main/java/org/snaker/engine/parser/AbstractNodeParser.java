@@ -30,7 +30,9 @@ public abstract class AbstractNodeParser implements NodeParser {
 	/**
 	 * 实现NodeParser接口的parse函数
 	 * 由子类产生各自的模型对象，设置常用的名称属性，并且解析子节点transition，构造TransitionModel模型对象
+	 * 
 	 */
+	@Override
 	public void parse(Element element) {
 		model = newModel();
 		model.setName(element.getAttribute(ATTR_NAME));
@@ -60,9 +62,9 @@ public abstract class AbstractNodeParser implements NodeParser {
 	/**
 	 * 从element元素查找所有tagName指定的子节点元素集合
 	 * 
-	 * @param element
-	 * @param tagName
-	 * @return
+	 * @param element XML 父元素
+	 * @param tagName 子元素标签名称
+	 * @return 子节点元素集合
 	 */
 	private static List<Element> elements(Element element, String tagName) {
 		if (element == null || !element.hasChildNodes())
@@ -85,23 +87,23 @@ public abstract class AbstractNodeParser implements NodeParser {
 	/**
 	 * 子类可覆盖此方法，完成特定的解析
 	 * 
-	 * @param model
-	 * @param element
+	 * @param model   节点模型
+	 * @param element DOM 元素
 	 */
 	protected void parseNode(NodeModel model, Element element) {
-
 	}
 
 	/**
 	 * 抽象方法，由子类产生各自的模型对象
 	 * 
-	 * @return
+	 * @return 模型对象
 	 */
 	protected abstract NodeModel newModel();
 
 	/**
 	 * 返回模型对象
 	 */
+	@Override
 	public NodeModel getModel() {
 		return model;
 	}

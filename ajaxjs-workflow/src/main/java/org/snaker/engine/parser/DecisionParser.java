@@ -12,22 +12,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.snaker.engine.parser.impl;
+package org.snaker.engine.parser;
 
-import org.snaker.engine.model.EndModel;
+import org.snaker.engine.model.DecisionModel;
 import org.snaker.engine.model.NodeModel;
-import org.snaker.engine.parser.AbstractNodeParser;
+import org.w3c.dom.Element;
 
 /**
- * 结束节点解析类
+ * 决策节点解析类
+ * 
  * @author yuqs
  * @since 1.0
  */
-public class EndParser extends AbstractNodeParser {
+public class DecisionParser extends AbstractNodeParser {
 	/**
-	 * 产生EndModel模型对象
+	 * 解析decisition节点的特有属性expr
 	 */
+	@Override
+	protected void parseNode(NodeModel node, Element element) {
+		DecisionModel decision = (DecisionModel) node;
+		decision.setExpr(element.getAttribute(ATTR_EXPR));
+		decision.setHandleClass(element.getAttribute(ATTR_HANDLECLASS));
+	}
+
+	@Override
 	protected NodeModel newModel() {
-		return new EndModel();
+		return new DecisionModel();
 	}
 }

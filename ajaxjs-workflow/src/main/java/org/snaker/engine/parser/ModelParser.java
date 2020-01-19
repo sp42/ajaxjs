@@ -89,7 +89,7 @@ public class ModelParser {
 	/**
 	 * 对流程定义xml的节点，根据其节点对应的解析器解析节点内容
 	 * 
-	 * @param node
+	 * @param node DOM 节点
 	 * @return
 	 */
 	private static NodeModel parseModel(Node node) {

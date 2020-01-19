@@ -4,12 +4,11 @@
  * or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  * either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
-package org.snaker.engine.parser.impl;
+package org.snaker.engine.parser;
 
 import org.snaker.engine.model.FieldModel;
 import org.snaker.engine.model.NodeModel;
 import org.snaker.engine.model.TaskModel;
-import org.snaker.engine.parser.AbstractNodeParser;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -27,6 +26,7 @@ public class TaskParser extends AbstractNodeParser {
 	/**
 	 * 由于任务节点需要解析form、assignee属性，这里覆盖抽象类方法实现
 	 */
+	@Override
 	protected void parseNode(NodeModel node, Element element) {
 		TaskModel task = (TaskModel) node;
 		task.setForm(element.getAttribute(ATTR_FORM));
@@ -39,9 +39,9 @@ public class TaskParser extends AbstractNodeParser {
 		task.setPerformType(element.getAttribute(ATTR_PERFORMTYPE));
 		task.setTaskType(element.getAttribute(ATTR_TASKTYPE));
 		task.setAssignmentHandler(element.getAttribute(ATTR_ASSIGNEE_HANDLER));
-		
+
 		NodeList fieldList = element.getElementsByTagName(ATTR_FIELD);
-		List<FieldModel> fields = new ArrayList<FieldModel>();
+		List<FieldModel> fields = new ArrayList<>();
 
 		for (int i = 0; i < fieldList.getLength(); i++) {
 			Element item = (Element) fieldList.item(i);
@@ -58,12 +58,11 @@ public class TaskParser extends AbstractNodeParser {
 
 			fields.add(fieldModel);
 		}
+
 		task.setFields(fields);
 	}
 
-	/**
-	 * 产生TaskModel模型对象
-	 */
+	@Override
 	protected NodeModel newModel() {
 		return new TaskModel();
 	}

@@ -68,12 +68,12 @@ public interface NodeParser {
 	/**
 	 * 节点dom元素解析方法，由实现类完成解析
 	 * 
-	 * @param element dom元素
+	 * @param element DOM 元素
 	 */
 	public void parse(Element element);
 
 	/**
-	 * 解析成功后，提供返回NodeModel模型对象
+	 * 解析成功后，提供返回 NodeModel 模型对象
 	 * 
 	 * @return 节点模型
 	 */

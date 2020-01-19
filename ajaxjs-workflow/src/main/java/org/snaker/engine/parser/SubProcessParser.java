@@ -4,11 +4,10 @@
  * or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  * either express or implied. See the License for the specific language governing permissions and limitations under the License.
  */
-package org.snaker.engine.parser.impl;
+package org.snaker.engine.parser;
 
 import org.snaker.engine.model.NodeModel;
 import org.snaker.engine.model.SubProcessModel;
-import org.snaker.engine.parser.AbstractNodeParser;
 import org.w3c.dom.Element;
 
 import com.ajaxjs.config.ConfigService;
@@ -21,16 +20,7 @@ import com.ajaxjs.util.CommonUtil;
  * @since 1.0
  */
 public class SubProcessParser extends AbstractNodeParser {
-	/**
-	 * 产生SubProcessModel模型对象
-	 */
-	protected NodeModel newModel() {
-		return new SubProcessModel();
-	}
-
-	/**
-	 * 解析decisition节点的特有属性expr
-	 */
+	@Override
 	protected void parseNode(NodeModel node, Element element) {
 		SubProcessModel model = (SubProcessModel) node;
 		model.setProcessName(element.getAttribute(ATTR_PROCESSNAME));
@@ -45,10 +35,11 @@ public class SubProcessParser extends AbstractNodeParser {
 
 		model.setVersion(ver);
 		String form = element.getAttribute(ATTR_FORM);
+		model.setForm(CommonUtil.isEmptyString(form) ? ConfigService.getValueAsString("workflow.subprocessurl") : form);
+	}
 
-		if (!CommonUtil.isEmptyString(form))
-			model.setForm(form);
-		else
-			model.setForm(ConfigService.getValueAsString("workflow.subprocessurl"));
+	@Override
+	protected NodeModel newModel() {
+		return new SubProcessModel();
 	}
 }

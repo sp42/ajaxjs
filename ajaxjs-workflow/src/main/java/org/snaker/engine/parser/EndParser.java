@@ -12,22 +12,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.snaker.engine.parser.impl;
+package org.snaker.engine.parser;
 
-import org.snaker.engine.model.ForkModel;
+import org.snaker.engine.model.EndModel;
 import org.snaker.engine.model.NodeModel;
-import org.snaker.engine.parser.AbstractNodeParser;
 
 /**
- * 分支节点解析类
+ * 结束节点解析类
+ * 
  * @author yuqs
  * @since 1.0
  */
-public class ForkParser extends AbstractNodeParser {
-	/**
-	 * 产生ForkModel模型对象
-	 */
+public class EndParser extends AbstractNodeParser {
+	@Override
 	protected NodeModel newModel() {
-		return new ForkModel();
+		return new EndModel();
 	}
 }
