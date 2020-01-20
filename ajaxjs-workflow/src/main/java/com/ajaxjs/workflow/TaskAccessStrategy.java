@@ -12,25 +12,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.snaker.engine.impl;
+package com.ajaxjs.workflow;
 
-import java.util.Random;
+import java.util.List;
 
-//import org.joda.time.DateTime;
-import org.snaker.engine.INoGenerator;
-import org.snaker.engine.model.ProcessModel;
-
-import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.workflow.model.entity.TaskActor;
 
 /**
- * 默认的流程实例编号生成器 编号生成规则为:yyyyMMdd-HH:mm:ss-SSS-random
+ * 任务访问策略类 用于判断给定的操作人员是否允许执行某个任务
  * 
- * @author yuqs
- * @since 1.0
  */
-public class DefaultNoGenerator implements INoGenerator {
-	@Override
-	public String generate(ProcessModel model) { 
-		return CommonUtil.now("yyyyMMdd-HH:mm:ss-SSS") + "-" + new Random().nextInt(1000);
-	}
+public interface TaskAccessStrategy {
+	/**
+	 * 根据操作人id、参与者集合判断是否允许访问所属任务
+	 * 
+	 * @param operator 操作人id
+	 * @param actors   参与者列表 传递至该接口的实现类中的参与者都是为非空
+	 * @return boolean 是否允许访问
+	 */
+	boolean isAllowed(String operator, List<TaskActor> actors);
 }

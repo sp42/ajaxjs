@@ -12,25 +12,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.snaker.engine.impl;
+package com.ajaxjs.workflow.parser;
 
-import java.util.Random;
-
-//import org.joda.time.DateTime;
-import org.snaker.engine.INoGenerator;
-import org.snaker.engine.model.ProcessModel;
-
-import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.workflow.model.NodeModel;
+import com.ajaxjs.workflow.model.StartModel;
 
 /**
- * 默认的流程实例编号生成器 编号生成规则为:yyyyMMdd-HH:mm:ss-SSS-random
+ * 开始节点解析类
  * 
- * @author yuqs
- * @since 1.0
  */
-public class DefaultNoGenerator implements INoGenerator {
+public class StartParser extends AbstractNodeParser {
 	@Override
-	public String generate(ProcessModel model) { 
-		return CommonUtil.now("yyyyMMdd-HH:mm:ss-SSS") + "-" + new Random().nextInt(1000);
+	protected NodeModel newModel() {
+		return new StartModel();
 	}
 }

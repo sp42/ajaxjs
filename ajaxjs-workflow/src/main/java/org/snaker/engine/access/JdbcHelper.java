@@ -21,6 +21,7 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 //import org.apache.commons.dbcp.BasicDataSource;
 import org.snaker.engine.access.dialect.Dialect;
 import org.snaker.engine.access.dialect.MySqlDialect;
@@ -80,22 +81,19 @@ public abstract class JdbcHelper {
 //		String password = ConfigHelper.getProperty("jdbc.password");
 //		int maxActive = ConfigHelper.getNumerProperty("jdbc.max.active");
 //		int maxIdle = ConfigHelper.getNumerProperty("jdbc.max.idle");
-//		Objects.requireNonNull(driver);
-//		Objects.requireNonNull(url);
-//		Objects.requireNonNull(username);
-//		Objects.requireNonNull(password);
-//		// 初始化DBCP数据源
+	
+		//初始化DBCP数据源
 //		BasicDataSource ds = new BasicDataSource();
 //		ds.setDriverClassName(driver);
 //		ds.setUrl(url);
 //		ds.setUsername(username);
 //		ds.setPassword(password);
-//		if (maxActive != 0) {
-//			ds.setMaxActive(maxActive);
-//		}
-//		if (maxIdle != 0) {
-//			ds.setMaxIdle(maxIdle);
-//		}
+////        if(maxActive != 0) {
+////		    ds.setMaxActive(maxActive);
+////        }
+//        if(maxIdle != 0) {
+//		    ds.setMaxIdle(maxIdle);
+//        }
 //		dataSource = ds;
 	}
 

@@ -1,30 +1,21 @@
-/*
- * Copyright 2013-2015 www.snakerflow.com. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
- * or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and limitations under the License.
- */
-package org.snaker.engine.model;
+package com.ajaxjs.workflow.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.snaker.engine.Action;
-import org.snaker.engine.SnakerException;
-import org.snaker.engine.SnakerInterceptor;
-import org.snaker.engine.core.Execution;
-
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.workflow.Action;
+import com.ajaxjs.workflow.Execution;
 
+import com.ajaxjs.workflow.WorkflowException;
+import com.ajaxjs.workflow.interceptor.SnakerInterceptor;
 /**
  * 节点元素（存在输入输出的变迁）
  * 
- * @author yuqs
- * @since 1.0
  */
-public abstract class NodeModel extends BaseModel implements Action {
+public abstract class NodeModel extends BaseWfModel implements Action {
 	private static final long serialVersionUID = -2377317472320109317L;
 
 	public static final LogHelper LOGGER = LogHelper.getLog(NodeModel.class);
@@ -107,7 +98,7 @@ public abstract class NodeModel extends BaseModel implements Action {
 				interceptor.intercept(execution);
 		} catch (Exception e) {
 			LOGGER.warning("拦截器执行失败=" + e.getMessage());
-			throw new SnakerException(e);
+			throw new WorkflowException(e);
 		}
 	}
 

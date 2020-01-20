@@ -12,25 +12,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.snaker.engine.impl;
+package com.ajaxjs.workflow.parser;
 
-import java.util.Random;
+import org.w3c.dom.Element;
 
-//import org.joda.time.DateTime;
-import org.snaker.engine.INoGenerator;
-import org.snaker.engine.model.ProcessModel;
 
-import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.workflow.model.DecisionModel;
+import com.ajaxjs.workflow.model.NodeModel;
 
 /**
- * 默认的流程实例编号生成器 编号生成规则为:yyyyMMdd-HH:mm:ss-SSS-random
+ * 决策节点解析类
  * 
- * @author yuqs
- * @since 1.0
  */
-public class DefaultNoGenerator implements INoGenerator {
+public class DecisionParser extends AbstractNodeParser {
+	/**
+	 * 解析decisition节点的特有属性expr
+	 */
 	@Override
-	public String generate(ProcessModel model) { 
-		return CommonUtil.now("yyyyMMdd-HH:mm:ss-SSS") + "-" + new Random().nextInt(1000);
+	protected void parseNode(NodeModel node, Element element) {
+		DecisionModel decision = (DecisionModel) node;
+		decision.setExpr(element.getAttribute(ATTR_EXPR));
+		decision.setHandleClass(element.getAttribute(ATTR_HANDLECLASS));
+	}
+
+	@Override
+	protected NodeModel newModel() {
+		return new DecisionModel();
 	}
 }

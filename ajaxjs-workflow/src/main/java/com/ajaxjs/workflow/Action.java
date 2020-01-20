@@ -12,25 +12,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.snaker.engine.impl;
-
-import java.util.Random;
-
-//import org.joda.time.DateTime;
-import org.snaker.engine.INoGenerator;
-import org.snaker.engine.model.ProcessModel;
-
-import com.ajaxjs.util.CommonUtil;
+package com.ajaxjs.workflow;
 
 /**
- * 默认的流程实例编号生成器 编号生成规则为:yyyyMMdd-HH:mm:ss-SSS-random
- * 
- * @author yuqs
- * @since 1.0
+ * 所有的模型对象需要实现的接口，需要实现execute方法，每个节点的执行方式不一样
  */
-public class DefaultNoGenerator implements INoGenerator {
-	@Override
-	public String generate(ProcessModel model) { 
-		return CommonUtil.now("yyyyMMdd-HH:mm:ss-SSS") + "-" + new Random().nextInt(1000);
-	}
+public interface Action {
+	/**
+	 * 根据当前的执行对象所维持的process、order、model、args对所属流程实例进行执行
+	 * 
+	 * @param execution 执行对象
+	 */
+	public void execute(Execution execution);
 }

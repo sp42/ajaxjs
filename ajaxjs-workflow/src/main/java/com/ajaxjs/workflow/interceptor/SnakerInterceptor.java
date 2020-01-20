@@ -12,25 +12,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.snaker.engine.impl;
+package com.ajaxjs.workflow.interceptor;
 
-import java.util.Random;
-
-//import org.joda.time.DateTime;
-import org.snaker.engine.INoGenerator;
-import org.snaker.engine.model.ProcessModel;
-
-import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.workflow.Execution;
 
 /**
- * 默认的流程实例编号生成器 编号生成规则为:yyyyMMdd-HH:mm:ss-SSS-random
+ * 任务拦截器，对产生的任务结果进行拦截
  * 
- * @author yuqs
- * @since 1.0
  */
-public class DefaultNoGenerator implements INoGenerator {
-	@Override
-	public String generate(ProcessModel model) { 
-		return CommonUtil.now("yyyyMMdd-HH:mm:ss-SSS") + "-" + new Random().nextInt(1000);
-	}
+public interface SnakerInterceptor {
+	/**
+	 * 拦截方法，参数为执行对象
+	 * 
+	 * @param execution 执行对象。可从中获取执行的数据
+	 */
+	public void intercept(Execution execution);
 }

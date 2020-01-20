@@ -12,25 +12,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.snaker.engine.impl;
+package com.ajaxjs.workflow.scheduling;
 
-import java.util.Random;
+import java.util.List;
 
-//import org.joda.time.DateTime;
-import org.snaker.engine.INoGenerator;
-import org.snaker.engine.model.ProcessModel;
-
-import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.workflow.model.entity.Task;
 
 /**
- * 默认的流程实例编号生成器 编号生成规则为:yyyyMMdd-HH:mm:ss-SSS-random
+ * 任务job执行后的回调类
  * 
- * @author yuqs
- * @since 1.0
  */
-public class DefaultNoGenerator implements INoGenerator {
-	@Override
-	public String generate(ProcessModel model) { 
-		return CommonUtil.now("yyyyMMdd-HH:mm:ss-SSS") + "-" + new Random().nextInt(1000);
-	}
+public interface JobCallback {
+	/**
+	 * 回调函数
+	 * 
+	 * @param taskId   当前任务id
+	 * @param newTasks 新产生的任务集合
+	 */
+	void callback(String taskId, List<Task> newTasks);
 }

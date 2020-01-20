@@ -12,25 +12,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.snaker.engine.impl;
-
-import java.util.Random;
-
-//import org.joda.time.DateTime;
-import org.snaker.engine.INoGenerator;
-import org.snaker.engine.model.ProcessModel;
-
-import com.ajaxjs.util.CommonUtil;
+package com.ajaxjs.workflow.handler;
 
 /**
- * 默认的流程实例编号生成器 编号生成规则为:yyyyMMdd-HH:mm:ss-SSS-random
+ * actor all方式的合并处理器
  * 
  * @author yuqs
  * @since 1.0
  */
-public class DefaultNoGenerator implements INoGenerator {
+public class MergeActorHandler extends AbstractMergeHandler {
+	/**
+	 * 调用者需要提供actor all的任务名称
+	 */
+	private String taskName;
+
+	/**
+	 * 构造函数，由调用者提供taskName
+	 * 
+	 * @param taskName
+	 */
+	public MergeActorHandler(String taskName) {
+		this.taskName = taskName;
+	}
+
+	/**
+	 * actor all方式，查询参数为：orderId、taskName
+	 * 
+	 * @see org.snaker.engine.handlers.AbstractMergeHandler#findActiveNodes()
+	 */
 	@Override
-	public String generate(ProcessModel model) { 
-		return CommonUtil.now("yyyyMMdd-HH:mm:ss-SSS") + "-" + new Random().nextInt(1000);
+	protected String[] findActiveNodes() {
+		return new String[] { taskName };
 	}
 }

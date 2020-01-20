@@ -12,25 +12,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.snaker.engine.impl;
+package com.ajaxjs.workflow.model;
 
-import java.util.Random;
+import java.util.Collections;
+import java.util.List;
 
-//import org.joda.time.DateTime;
-import org.snaker.engine.INoGenerator;
-import org.snaker.engine.model.ProcessModel;
-
-import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.workflow.Execution;
+import com.ajaxjs.workflow.handler.EndProcessHandler;
 
 /**
- * 默认的流程实例编号生成器 编号生成规则为:yyyyMMdd-HH:mm:ss-SSS-random
+ * 结束节点end元素
  * 
  * @author yuqs
  * @since 1.0
  */
-public class DefaultNoGenerator implements INoGenerator {
+public class EndModel extends NodeModel {
+	private static final long serialVersionUID = -7793175180140842894L;
+
 	@Override
-	public String generate(ProcessModel model) { 
-		return CommonUtil.now("yyyyMMdd-HH:mm:ss-SSS") + "-" + new Random().nextInt(1000);
+	public void exec(Execution execution) {
+		fire(new EndProcessHandler(), execution);
+	}
+
+	/**
+	 * 结束节点无输出变迁
+	 */
+	@Override
+	public List<TransitionModel> getOutputs() {
+		return Collections.emptyList();
 	}
 }

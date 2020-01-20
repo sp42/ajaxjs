@@ -12,25 +12,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.snaker.engine.impl;
+package com.ajaxjs.workflow.model;
 
-import java.util.Random;
-
-//import org.joda.time.DateTime;
-import org.snaker.engine.INoGenerator;
-import org.snaker.engine.model.ProcessModel;
-
-import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.workflow.Execution;
 
 /**
- * 默认的流程实例编号生成器 编号生成规则为:yyyyMMdd-HH:mm:ss-SSS-random
+ * 分支定义fork元素
  * 
  * @author yuqs
  * @since 1.0
  */
-public class DefaultNoGenerator implements INoGenerator {
+public class ForkModel extends NodeModel {
+	private static final long serialVersionUID = 2030281774771653617L;
+
 	@Override
-	public String generate(ProcessModel model) { 
-		return CommonUtil.now("yyyyMMdd-HH:mm:ss-SSS") + "-" + new Random().nextInt(1000);
+	protected void exec(Execution execution) {
+		runOutTransition(execution);
 	}
 }

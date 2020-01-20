@@ -47,8 +47,7 @@ public class OrderService extends AccessService implements IOrderService {
 	/**
 	 * 创建活动实例
 	 */
-	public Order createOrder(Process process, String operator, Map<String, Object> args, String parentId,
-			String parentNodeName) {
+	public Order createOrder(Process process, String operator, Map<String, Object> args, String parentId, String parentNodeName) {
 		Order order = new Order();
 		order.setId(WorkflowUtils.getPrimaryKey());
 		order.setParentId(parentId);

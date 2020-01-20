@@ -150,6 +150,7 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 		}
 
 		List<Process> processs = access().getProcesss(null, new QueryFilter().setName(name).setVersion(version));
+		
 		if (processs != null && !processs.isEmpty()) {
 			LOGGER.info("obtain process[name={0}] from database.", processName);
 			entity = processs.get(0);
@@ -175,6 +176,7 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 	 */
 	public String deploy(InputStream input, String creator) {
 		Objects.requireNonNull(input);
+		
 		try {
 			byte[] bytes = WorkflowUtils.readBytes(input);
 			ProcessModel model = ModelParser.parse(bytes);
@@ -194,6 +196,7 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 			entity.setCreator(creator);
 			saveProcess(entity);
 			cache(entity);
+			
 			return entity.getId();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -222,9 +225,9 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 
 			if (!oldProcessName.equalsIgnoreCase(entity.getName())) {
 				Cache<String, Process> entityCache = ensureAvailableEntityCache();
+				
 				if (entityCache != null)
 					entityCache.remove(oldProcessName + DEFAULT_SEPARATOR + entity.getVersion());
-
 			}
 			cache(entity);
 		} catch (Exception e) {
@@ -293,9 +296,8 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 			LOGGER.info("cache process id is[{}],name is[{0}]", entity.getId(), processName);
 			entityCache.put(processName, entity);
 			nameCache.put(entity.getId(), processName);
-		} else {
+		} else 
 			LOGGER.info("no cache implementation class");
-		}
 	}
 
 	/**
@@ -319,19 +321,21 @@ public class ProcessService extends AccessService implements IProcessService, Ca
 	}
 
 	private Cache<String, Process> ensureAvailableEntityCache() {
-		Cache<String, Process> entityCache = ensureEntityCache();
-		if (entityCache == null && this.cacheManager != null)
-			entityCache = this.cacheManager.getCache(CACHE_ENTITY);
+		Cache<String, Process> cache = ensureEntityCache();
+		
+		if (cache == null && cacheManager != null)
+			cache = cacheManager.getCache(CACHE_ENTITY);
 
-		return entityCache;
+		return cache;
 	}
 
 	private Cache<String, String> ensureAvailableNameCache() {
-		Cache<String, String> nameCache = ensureNameCache();
-		if (nameCache == null && this.cacheManager != null)
-			nameCache = this.cacheManager.getCache(CACHE_NAME);
+		Cache<String, String> cache = ensureNameCache();
+		
+		if (cache == null && cacheManager != null)
+			cache = cacheManager.getCache(CACHE_NAME);
 
-		return nameCache;
+		return cache;
 	}
 
 	public Cache<String, Process> ensureEntityCache() {

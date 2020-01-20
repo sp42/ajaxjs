@@ -80,14 +80,17 @@ public class Configuration {
 		// 用户自定义配置文件:snaker.xml
 		parser(USER_CONFIG_FILE);
 		parser(BASE_CONFIG_FILE);
-		parser(EXT_CONFIG_FILE);
 
-		for (String key : txClass.keySet()) {
-			Class<?> clz = txClass.get(key);
-			Object instance = interceptor == null ? clz : interceptor.getProxy(clz);
-			ServiceContext.put(key, instance);
+		if (!isCMB()) {
+			parser(EXT_CONFIG_FILE);
+
+			for (String key : txClass.keySet()) {
+				Class<?> clz = txClass.get(key);
+				Object instance = interceptor == null ? clz : interceptor.getProxy(clz);
+				ServiceContext.put(key, instance);
+			}
 		}
-
+		
 		LOGGER.info("Service parsing finish......");
 		// 由服务上下文返回流程引擎
 		SnakerEngine configEngine = ServiceContext.getEngine();

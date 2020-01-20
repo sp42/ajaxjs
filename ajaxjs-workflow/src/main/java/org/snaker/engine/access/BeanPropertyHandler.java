@@ -89,7 +89,11 @@ public class BeanPropertyHandler<T> extends AbstractListHandler<T> {
 					 */
 					Object value = JdbcHelper.getResultSetValue(rs, index, pd.getPropertyType());
 					try {
-						ReflectUtil.setProperty(mappedObject, pd.getName(), value);
+//						System.out.println(mappedObject);
+//						System.out.println(pd.getName());
+//						System.out.println(value);
+						if(value != null)
+							ReflectUtil.setProperty(mappedObject, pd.getName(), value);
 
 						/**
 						 * 使用apache-beanutils设置对象的属性

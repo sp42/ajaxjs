@@ -22,15 +22,16 @@ import java.util.Map;
 import org.snaker.engine.SnakerEngine;
 import org.snaker.engine.access.Page;
 import org.snaker.engine.access.QueryFilter;
+import org.snaker.engine.core.SnakerEngineImpl;
 import org.snaker.engine.entity.HistoryTask;
 import org.snaker.engine.entity.Order;
 import org.snaker.engine.entity.Process;
 import org.snaker.engine.entity.Surrogate;
 import org.snaker.engine.entity.Task;
-import org.snaker.engine.helper.StreamHelper;
 import org.snaker.engine.model.TaskModel.TaskType;
 
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.workflow.WorkflowUtils;
 
 /**
  * @author yuqs
@@ -38,11 +39,11 @@ import com.ajaxjs.util.CommonUtil;
  */
  
 public class SnakerEngineFacets {
-	private SnakerEngine engine;
+	private SnakerEngine engine = new SnakerEngineImpl();
 
 	public void initFlows() {
-		engine.process().deploy(StreamHelper.getStreamFromClasspath("flows/leave.snaker"));
-		engine.process().deploy(StreamHelper.getStreamFromClasspath("flows/borrow.snaker"));
+		engine.process().deploy(WorkflowUtils.getStreamFromClasspath("flows/leave.snaker"));
+		engine.process().deploy(WorkflowUtils.getStreamFromClasspath("flows/borrow.snaker"));
 	}
 
 	public SnakerEngine getEngine() {
