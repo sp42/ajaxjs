@@ -12,18 +12,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package test.concurrency.forkjoin;
+package test.concurrency;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.snaker.engine.TestSnakerBase;
-import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.entity.Order;
-import org.snaker.engine.entity.Task;
 
 import com.ajaxjs.workflow.WorkflowUtils;
 
@@ -31,24 +28,20 @@ import com.ajaxjs.workflow.WorkflowUtils;
  * @author yuqs
  * @since 1.0
  */
-public class TestForkJoin extends TestSnakerBase {
+public class TestActorAll extends TestSnakerBase {
 	@Before
 	public void before() {
 		processId = engine.process().deploy(WorkflowUtils
-						.getStreamFromClasspath("test/concurrency/forkjoin/process.snaker"));
+						.getStreamFromClasspath("test/concurrency/actorall/process.snaker"));
 	}
 	
 	@Test
 	public void test() {
 		Map<String, Object> args = new HashMap<String, Object>();
-		args.put("task1.operator", new String[]{"1"});
-		args.put("task2.operator", new String[]{"1"});
-		args.put("task3.operator", new String[]{"1"});
+		args.put("task1.operator", new String[]{"1", "2"});
 		Order order = engine.startInstanceById(processId, "2", args);
 		System.out.println(order);
-		List<Task> tasks = queryService.getActiveTasks(new QueryFilter().setOrderId(order.getId()));
-		for(Task task : tasks) {
-			engine.executeTask(task.getId(), "1");
-		}
+		//Assert.assertEquals(2, tasks.size());
+		//execute(tasks, args);
 	}
 }
