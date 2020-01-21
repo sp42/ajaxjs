@@ -14,7 +14,7 @@
  */
 package com.ajaxjs.workflow.interceptor;
 
-import com.ajaxjs.workflow.Execution;
+import com.ajaxjs.workflow.model.Execution;
 
 /**
  * 任务拦截器，对产生的任务结果进行拦截

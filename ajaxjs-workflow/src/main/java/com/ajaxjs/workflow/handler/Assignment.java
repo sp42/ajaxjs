@@ -17,7 +17,7 @@
 
 package com.ajaxjs.workflow.handler;
 
-import com.ajaxjs.workflow.Execution;
+import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.TaskModel;
 
 /**

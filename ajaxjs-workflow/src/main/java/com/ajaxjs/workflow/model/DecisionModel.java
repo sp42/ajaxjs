@@ -6,16 +6,19 @@
  */
 package com.ajaxjs.workflow.model;
 
+import java.util.Map;
+import java.util.Map.Entry;
 
-import org.snaker.engine.core.ServiceContext;
+import javax.el.ExpressionFactory;
 
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.workflow.Execution;
-import com.ajaxjs.workflow.Expression;
 import com.ajaxjs.workflow.WorkflowException;
 import com.ajaxjs.workflow.handler.DecisionHandler;
+
+import de.odysseus.el.ExpressionFactoryImpl;
+import de.odysseus.el.util.SimpleContext;
 
 /**
  * 决策定义decision元素
@@ -41,26 +44,34 @@ public class DecisionModel extends NodeModel {
 	 */
 	private DecisionHandler decide;
 
+	private ExpressionFactory factory = new ExpressionFactoryImpl();
+
 	/**
 	 * 表达式解析器
+	 * 
+	 * @param <T>
+	 * @param T    返回类型
+	 * @param expr 表达式串
+	 * @param args 参数列表
+	 * @return 返回对象
 	 */
-	private transient Expression expression;
+	@SuppressWarnings("unchecked")
+	public <T> T eval(Class<T> T, String expr, Map<String, Object> args) {
+		SimpleContext context = new SimpleContext();
+
+		for (Entry<String, Object> entry : args.entrySet())
+			context.setVariable(entry.getKey(), factory.createValueExpression(entry.getValue(), Object.class));
+
+		return (T) factory.createValueExpression(context, expr, T).getValue(context);
+	}
 
 	@Override
 	public void exec(Execution execution) {
 		LOGGER.info(execution.getOrder().getId() + "->decision execution.getArgs():" + execution.getArgs());
-
-		if (expression == null)
-			expression = ServiceContext.getContext().find(Expression.class);
-
-		LOGGER.info("expression is " + expression);
-		if (expression == null)
-			throw new WorkflowException("表达式解析器为空，请检查配置.");
-
 		String next = null;
 
 		if (!CommonUtil.isEmptyString(expr))
-			next = expression.eval(String.class, expr, execution.getArgs());
+			next = eval(String.class, expr, execution.getArgs());
 		else if (decide != null)
 			next = decide.decide(execution);
 
@@ -71,7 +82,7 @@ public class DecisionModel extends NodeModel {
 			if (CommonUtil.isEmptyString(next)) {
 				String expr = tm.getExpr();
 
-				if (!CommonUtil.isEmptyString(expr) && expression.eval(Boolean.class, expr, execution.getArgs())) {
+				if (!CommonUtil.isEmptyString(expr) && eval(Boolean.class, expr, execution.getArgs())) {
 					tm.setEnabled(true);
 					tm.execute(execution);
 					isfound = true;
@@ -103,6 +114,7 @@ public class DecisionModel extends NodeModel {
 
 	public void setHandleClass(String handleClass) {
 		this.handleClass = handleClass;
+
 		if (!CommonUtil.isEmptyString(handleClass))
 			decide = (DecisionHandler) ReflectUtil.newInstance(handleClass);
 	}

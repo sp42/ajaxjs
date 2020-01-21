@@ -1,6 +1,6 @@
 package com.ajaxjs.workflow.handler;
 
-import com.ajaxjs.workflow.Execution;
+import com.ajaxjs.workflow.model.Execution;
 
 /**
  * 分配参与者的处理接口 建议使用Assignment接口

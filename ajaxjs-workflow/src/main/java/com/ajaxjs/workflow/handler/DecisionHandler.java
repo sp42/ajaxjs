@@ -14,7 +14,7 @@
  */
 package com.ajaxjs.workflow.handler;
 
-import com.ajaxjs.workflow.Execution;
+import com.ajaxjs.workflow.model.Execution;
 
 /**
  * 决策处理器接口

@@ -16,8 +16,8 @@ import java.util.concurrent.Future;
 import org.snaker.engine.SnakerEngine;
 import org.snaker.engine.access.QueryFilter;
 
-import com.ajaxjs.workflow.Execution;
 import com.ajaxjs.workflow.WorkflowException;
+import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.SubProcessModel;
 import com.ajaxjs.workflow.model.entity.Order;
 
@@ -80,8 +80,6 @@ public class StartSubProcessHandler implements IHandler {
 	/**
 	 * Future模式的任务执行。通过call返回任务结果集
 	 * 
-	 * @author yuqs
-	 * @since 1.0
 	 */
 	class ExecuteTask implements Callable<Order> {
 		private SnakerEngine engine;

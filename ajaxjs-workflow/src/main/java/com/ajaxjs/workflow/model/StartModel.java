@@ -17,8 +17,6 @@ package com.ajaxjs.workflow.model;
 import java.util.Collections;
 import java.util.List;
 
-import com.ajaxjs.workflow.Execution;
-
 /**
  * 开始节点定义start元素
  * 

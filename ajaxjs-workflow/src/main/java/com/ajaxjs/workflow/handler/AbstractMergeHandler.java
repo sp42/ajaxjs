@@ -20,7 +20,7 @@ import org.snaker.engine.IQueryService;
 import org.snaker.engine.access.QueryFilter;
 
 import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.workflow.Execution;
+import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.ProcessModel;
 import com.ajaxjs.workflow.model.SubProcessModel;
 import com.ajaxjs.workflow.model.TaskModel;

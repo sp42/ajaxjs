@@ -14,8 +14,6 @@
  */
 package com.ajaxjs.workflow.model;
 
-import com.ajaxjs.workflow.Execution;
-
 /**
  * 子流程定义subprocess元素
  * 

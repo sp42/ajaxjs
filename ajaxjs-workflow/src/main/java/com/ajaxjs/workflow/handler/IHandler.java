@@ -1,6 +1,6 @@
 package com.ajaxjs.workflow.handler;
 
-import com.ajaxjs.workflow.Execution;
+import com.ajaxjs.workflow.model.Execution;
 
 /**
  * 流程各模型操作处理接口

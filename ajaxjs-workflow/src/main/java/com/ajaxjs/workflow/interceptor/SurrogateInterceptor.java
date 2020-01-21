@@ -10,7 +10,7 @@ import org.snaker.engine.ITaskService;
 import org.snaker.engine.SnakerEngine;
 
 import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.workflow.Execution;
+import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.entity.Task;
 
 /**

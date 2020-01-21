@@ -7,7 +7,7 @@
 package com.ajaxjs.workflow.interceptor;
 
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.workflow.Execution;
+import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.entity.Task;
 
 /**

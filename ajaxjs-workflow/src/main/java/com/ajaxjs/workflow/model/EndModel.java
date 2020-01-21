@@ -17,7 +17,6 @@ package com.ajaxjs.workflow.model;
 import java.util.Collections;
 import java.util.List;
 
-import com.ajaxjs.workflow.Execution;
 import com.ajaxjs.workflow.handler.EndProcessHandler;
 
 /**

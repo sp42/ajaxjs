@@ -6,8 +6,6 @@ import java.util.List;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.workflow.Execution;
-
 import com.ajaxjs.workflow.WorkflowException;
 import com.ajaxjs.workflow.interceptor.SnakerInterceptor;
 /**

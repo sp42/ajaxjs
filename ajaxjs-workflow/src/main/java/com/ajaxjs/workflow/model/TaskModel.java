@@ -12,7 +12,6 @@ import java.util.Objects;
 
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
-import com.ajaxjs.workflow.Execution;
 import com.ajaxjs.workflow.handler.AssignmentHandler;
 import com.ajaxjs.workflow.handler.MergeActorHandler;
 import com.ajaxjs.workflow.scheduling.JobCallback;

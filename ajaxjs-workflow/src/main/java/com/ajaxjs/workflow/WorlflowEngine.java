@@ -18,6 +18,7 @@ import com.ajaxjs.workflow.model.entity.Process;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.NodeModel;
 import com.ajaxjs.workflow.model.ProcessModel;
 import com.ajaxjs.workflow.model.StartModel;

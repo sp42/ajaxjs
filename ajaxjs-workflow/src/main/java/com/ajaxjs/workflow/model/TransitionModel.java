@@ -14,7 +14,6 @@
  */
 package com.ajaxjs.workflow.model;
 
-import com.ajaxjs.workflow.Execution;
 import com.ajaxjs.workflow.handler.CreateTaskHandler;
 import com.ajaxjs.workflow.handler.StartSubProcessHandler;
 

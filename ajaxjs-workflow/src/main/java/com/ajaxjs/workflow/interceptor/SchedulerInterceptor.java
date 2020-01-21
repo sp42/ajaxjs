@@ -12,8 +12,8 @@ import java.util.Map;
 import org.snaker.engine.core.ServiceContext;
 
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.workflow.Execution;
 import com.ajaxjs.workflow.WorkflowUtils;
+import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.TaskModel;
 import com.ajaxjs.workflow.model.entity.Task;
 import com.ajaxjs.workflow.scheduling.IScheduler;

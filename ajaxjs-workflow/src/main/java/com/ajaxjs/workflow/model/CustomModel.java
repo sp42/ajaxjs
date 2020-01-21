@@ -11,7 +11,6 @@ import java.util.Map;
 
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
-import com.ajaxjs.workflow.Execution;
 import com.ajaxjs.workflow.WorkflowException;
 import com.ajaxjs.workflow.WorkflowUtils;
 import com.ajaxjs.workflow.handler.IHandler;

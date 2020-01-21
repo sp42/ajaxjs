@@ -14,8 +14,6 @@
  */
 package com.ajaxjs.workflow.model;
 
-import com.ajaxjs.workflow.Execution;
-
 /**
  * 分支定义fork元素
  * 

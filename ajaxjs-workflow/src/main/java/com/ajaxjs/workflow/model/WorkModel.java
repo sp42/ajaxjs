@@ -17,12 +17,13 @@ package com.ajaxjs.workflow.model;
 /**
  * 工作元素，业务逻辑的
  * 
- * @author yuqs
- * @since 1.0
  */
 public abstract class WorkModel extends NodeModel {
 	private static final long serialVersionUID = 761102386160546149L;
 
+	/**
+	 * 
+	 */
 	private String form;
 
 	public String getForm() {
