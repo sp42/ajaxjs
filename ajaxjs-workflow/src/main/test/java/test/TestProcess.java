@@ -30,8 +30,7 @@ import com.ajaxjs.workflow.WorkflowUtils;
 public class TestProcess extends TestSnakerBase {
 	@Test
 	public void test() {
-		processId = engine.process().deploy(WorkflowUtils.
-				getStreamFromClasspath("test/task/simple/process.snaker"));
+		processId = engine.process().deploy(WorkflowUtils.getStreamFromClasspath("test/task/simple/process.snaker"));
 		Process process = engine.process().getProcessById(processId);
 		System.out.println("output 1="+process);
 		process = engine.process().getProcessByVersion(process.getName(), process.getVersion());
@@ -40,6 +39,8 @@ public class TestProcess extends TestSnakerBase {
 		args.put("task1.operator", "1");
 		engine.startInstanceById(processId, "1", args);
 		engine.process().undeploy(processId);
+		
+		System.out.println(engine.process().getProcessByName("subprocess1"));
 		//engine.startInstanceById(processId, "1", args);
 	}
 }
