@@ -6,27 +6,20 @@
  */
 package com.ajaxjs.workflow;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import org.snaker.engine.helper.DateHelper;
-import com.ajaxjs.workflow.model.entity.Process;
-
 import com.ajaxjs.ioc.Resource;
-import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.workflow.model.Execution;
-import com.ajaxjs.workflow.model.NodeModel;
-import com.ajaxjs.workflow.model.ProcessModel;
 import com.ajaxjs.workflow.model.StartModel;
-import com.ajaxjs.workflow.model.TaskModel;
-import com.ajaxjs.workflow.model.TransitionModel;
 import com.ajaxjs.workflow.model.entity.Order;
-import com.ajaxjs.workflow.model.entity.Task;
+import com.ajaxjs.workflow.model.entity.Process;
+import com.ajaxjs.workflow.service.OrderService;
 import com.ajaxjs.workflow.service.ProcessService;
+import com.ajaxjs.workflow.service.SurrpgateService;
+import com.ajaxjs.workflow.service.TaskService;
 
 /**
  * 基本的流程引擎实现类
@@ -39,6 +32,9 @@ public class WorlflowEngine {
 
 	@Resource("ProcessService")
 	private ProcessService processService;
+
+	@Resource("OrderService")
+	private OrderService orderService;
 
 	/**
 	 * 根据流程定义 ID，操作人 ID，参数列表启动流程实例
@@ -116,8 +112,8 @@ public class WorlflowEngine {
 	 * @param parentNodeName 启动子流程的父流程节点名称
 	 * @return Execution 执行对象
 	 */
-	private Execution execute(Process process, String operator, Map<String, Object> args, String parentId, String parentNodeName) {
-		Order order = order().createOrder(process, operator, args, parentId, parentNodeName);
+	private Execution execute(Process process, String operator, Map<String, Object> args, Long parentId, String parentNodeName) {
+		Order order = orderService.create(process, operator, args, parentId, parentNodeName);
 		LOGGER.info("创建流程实例对象:" + order);
 
 		Execution current = new Execution(this, process, order, args);
@@ -233,4 +229,53 @@ public class WorlflowEngine {
 //
 //		return execution;
 //	}
+
+	/**
+	 * 获取 process 服务
+	 * 
+	 * @return ProcessService 流程定义服务
+	 */
+	public ProcessService process() {
+		return processService;
+	}
+
+//	/**
+//	 * 获取查询服务
+//	 * 
+//	 * @return IQueryService 常用查询服务
+//	 */
+//	public IQueryService query();
+
+	/**
+	 * 获取实例服务
+	 * 
+	 * @return IQueryService 流程实例服务
+	 */
+	public OrderService order() {
+		return orderService;
+	}
+
+	@Resource("TaskService")
+	private TaskService taskService;
+
+	/**
+	 * 获取任务服务
+	 * 
+	 * @return TaskService 任务服务
+	 */
+	public TaskService task() {
+		return taskService;
+	}
+
+	@Resource("SurrpgateService")
+	private SurrpgateService surrpgateService;
+
+	/**
+	 * 获取管理服务
+	 * 
+	 * @return SurrpgateService 管理服务
+	 */
+	public SurrpgateService manager() {
+		return surrpgateService;
+	}
 }

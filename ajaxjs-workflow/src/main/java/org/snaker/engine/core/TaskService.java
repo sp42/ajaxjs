@@ -304,6 +304,7 @@ public class TaskService extends AccessService implements ITaskService {
 	 */
 	public Task rejectTask(ProcessModel model, Task currentTask) {
 		String parentTaskId = currentTask.getParentTaskId();
+		
 		if (CommonUtil.isEmptyString(parentTaskId) || parentTaskId.equals(START))
 			throw new SnakerException("上一步任务ID为空，无法驳回至上一步处理");
 
@@ -320,6 +321,7 @@ public class TaskService extends AccessService implements ITaskService {
 		task.setOperator(history.getOperator());
 		access().saveTask(task);
 		assignTask(task.getId(), task.getOperator());
+		
 		return task;
 	}
 
@@ -483,6 +485,7 @@ public class TaskService extends AccessService implements ITaskService {
 	private String[] getTaskActors(TaskModel model, Execution execution) {
 		Object assigneeObject = null;
 		AssignmentHandler handler = model.getAssignmentHandlerObject();
+
 		if (!CommonUtil.isEmptyString(model.getAssignee())) {
 			assigneeObject = execution.getArgs().get(model.getAssignee());
 		} else if (handler != null) {
@@ -492,6 +495,7 @@ public class TaskService extends AccessService implements ITaskService {
 				assigneeObject = handler.assign(execution);
 			}
 		}
+
 		return getTaskActors(assigneeObject == null ? model.getAssignee() : assigneeObject);
 	}
 
@@ -514,6 +518,7 @@ public class TaskService extends AccessService implements ITaskService {
 			// jackson会把stirng[]转成arraylist，此处增加arraylist的逻辑判断,by 红豆冰沙2014.11.21
 			List<?> list = (List<?>) actors;
 			results = new String[list.size()];
+
 			for (int i = 0; i < list.size(); i++)
 				results[i] = (String) list.get(i);
 
@@ -535,8 +540,7 @@ public class TaskService extends AccessService implements ITaskService {
 			return (String[]) actors;
 		} else {
 			// 其它类型，抛出不支持的类型异常
-			throw new SnakerException(
-					"任务参与者对象[" + actors + "]类型不支持." + "合法参数示例:Long,Integer,new String[]{},'10000,20000',List<String>");
+			throw new SnakerException("任务参与者对象[" + actors + "]类型不支持." + "合法参数示例:Long,Integer,new String[]{},'10000,20000',List<String>");
 		}
 	}
 

@@ -54,8 +54,7 @@ public abstract class AbstractMergeHandler implements IHandler {
 			isSubProcessMerged = true;
 
 		if (isSubProcessMerged && model.containsNodeNames(TaskModel.class, activeNodes)) {
-			QueryFilter filter = new QueryFilter().setOrderId(order.getId())
-					.setExcludedIds(new String[] { execution.getTask().getId() }).setNames(activeNodes);
+			QueryFilter filter = new QueryFilter().setOrderId(order.getId()).setExcludedIds(new String[] { execution.getTask().getId() }).setNames(activeNodes);
 			List<Task> tasks = queryService.getActiveTasks(filter);
 
 			if (CommonUtil.isNull(tasks)) // 如果所有 task 都已完成，则表示可合并

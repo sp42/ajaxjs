@@ -11,10 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.snaker.engine.SnakerEngine;
-import org.snaker.engine.SnakerException;
-
 import com.ajaxjs.workflow.WorkflowException;
+import com.ajaxjs.workflow.WorlflowEngine;
 import com.ajaxjs.workflow.model.entity.Order;
 import com.ajaxjs.workflow.model.entity.Process;
 import com.ajaxjs.workflow.model.entity.Task;
@@ -27,9 +25,57 @@ public class Execution implements Serializable {
 	private static final long serialVersionUID = 3730741790729624400L;
 
 	/**
-	 * SnakerEngine holder
+	 * 构造函数，接收流程定义、流程实例对象、执行参数
+	 * 
+	 * @param process 接收流程定义
+	 * @param order   流程实例对象
+	 * @param args    执行参数
 	 */
-	private SnakerEngine engine;
+	public Execution(WorlflowEngine engine, Process process, Order order, Map<String, Object> args) {
+		if (process == null || order == null)
+			throw new WorkflowException("构造Execution对象失败，请检查process、order是否为空");
+
+		this.engine = engine;
+		this.process = process;
+		this.order = order;
+		this.args = args;
+	}
+
+	/**
+	 * 用于产生子流程执行对象使用
+	 * 
+	 * @param execution      执行对象
+	 * @param process        接收流程定义
+	 * @param parentNodeName 父节点名称
+	 */
+	public Execution(Execution execution, Process process, String parentNodeName) {
+		if (execution == null || process == null || parentNodeName == null)
+			throw new WorkflowException("构造Execution对象失败，请检查execution、process、parentNodeName是否为空");
+
+		this.engine = execution.getEngine();
+		this.process = process;
+		this.args = execution.getArgs();
+		this.parentOrder = execution.getOrder();
+		this.parentNodeName = parentNodeName;
+		this.operator = execution.getOperator();
+	}
+
+	/**
+	 * 根据当前执行对象 execution、子流程定 义process、当前节点名称产生子流程的执行对象
+	 * 
+	 * @param execution      执行对象
+	 * @param process        接收流程定义
+	 * @param parentNodeName 父节点名称
+	 * @return 子流程的执行对象
+	 */
+	public static Execution createSubExecution(Execution execution, Process process, String parentNodeName) {
+		return new Execution(execution, process, parentNodeName);
+	}
+
+	/**
+	 * WorlflowEngine holder
+	 */
+	private WorlflowEngine engine;
 
 	/**
 	 * 流程定义对象
@@ -80,54 +126,6 @@ public class Execution implements Serializable {
 	 * 是否已合并 针对join节点的处理
 	 */
 	private boolean isMerged = false;
-
-	/**
-	 * 用于产生子流程执行对象使用
-	 * 
-	 * @param execution      执行对象
-	 * @param process        接收流程定义
-	 * @param parentNodeName 父节点名称
-	 */
-	Execution(Execution execution, Process process, String parentNodeName) {
-		if (execution == null || process == null || parentNodeName == null)
-			throw new SnakerException("构造Execution对象失败，请检查execution、process、parentNodeName是否为空");
-
-		this.engine = execution.getEngine();
-		this.process = process;
-		this.args = execution.getArgs();
-		this.parentOrder = execution.getOrder();
-		this.parentNodeName = parentNodeName;
-		this.operator = execution.getOperator();
-	}
-
-	/**
-	 * 构造函数，接收流程定义、流程实例对象、执行参数
-	 * 
-	 * @param process 接收流程定义
-	 * @param order   流程实例对象
-	 * @param args    执行参数
-	 */
-	public Execution(SnakerEngine engine, Process process, Order order, Map<String, Object> args) {
-		if (process == null || order == null)
-			throw new WorkflowException("构造Execution对象失败，请检查process、order是否为空");
-
-		this.engine = engine;
-		this.process = process;
-		this.order = order;
-		this.args = args;
-	}
-
-	/**
-	 * 根据当前执行对象execution、子流程定义process、当前节点名称产生子流程的执行对象
-	 * 
-	 * @param execution      执行对象
-	 * @param process        接收流程定义
-	 * @param parentNodeName 父节点名称
-	 * @return 子流程的执行对象
-	 */
-	public Execution createSubExecution(Execution execution, Process process, String parentNodeName) {
-		return new Execution(execution, process, parentNodeName);
-	}
 
 	/**
 	 * 获取流程定义对象
@@ -249,9 +247,9 @@ public class Execution implements Serializable {
 	/**
 	 * 获取引擎
 	 * 
-	 * @return
+	 * @return 引擎
 	 */
-	public SnakerEngine getEngine() {
+	public WorlflowEngine getEngine() {
 		return engine;
 	}
 

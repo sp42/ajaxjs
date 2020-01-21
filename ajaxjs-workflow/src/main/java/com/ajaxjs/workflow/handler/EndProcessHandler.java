@@ -13,6 +13,7 @@ import org.snaker.engine.SnakerException;
 import org.snaker.engine.access.QueryFilter;
 
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.workflow.WorlflowEngine;
 import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.ProcessModel;
 import com.ajaxjs.workflow.model.SubProcessModel;
@@ -31,7 +32,7 @@ public class EndProcessHandler implements IHandler {
 	 */
 	@Override
 	public void handle(Execution execution) {
-		SnakerEngine engine = execution.getEngine();
+		WorlflowEngine engine = execution.getEngine();
 		Order order = execution.getOrder();
 		List<Task> tasks = engine.query().getActiveTasks(new QueryFilter().setOrderId(order.getId()));
 

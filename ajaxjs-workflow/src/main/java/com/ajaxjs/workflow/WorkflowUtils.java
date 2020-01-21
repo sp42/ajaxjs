@@ -19,10 +19,8 @@ import java.lang.reflect.Method;
 import java.util.Random;
 import java.util.regex.Pattern;
 
-import org.snaker.engine.SnakerException;
-import org.snaker.engine.model.ProcessModel;
-
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.workflow.model.ProcessModel;
 
 /**
  * 工作流工具类
@@ -167,7 +165,7 @@ public class WorkflowUtils {
 			stream = WorkflowUtils.class.getClassLoader().getResourceAsStream(resourceName);
 
 		if (stream == null)
-			throw new SnakerException("resource " + resourceName + " does not exist");
+			throw new WorkflowException("resource " + resourceName + " does not exist");
 
 		return stream;
 	}
