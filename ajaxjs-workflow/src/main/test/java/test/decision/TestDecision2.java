@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package test.decision.handler;
+package test.decision;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,20 +29,20 @@ import com.ajaxjs.workflow.WorkflowUtils;
  * @author yuqs
  * @since 1.0
  */
-public class TestDecision3 extends TestSnakerBase {
+public class TestDecision2 extends TestSnakerBase {
 	@Before
 	public void before() {
-		processId = engine.process().deploy(WorkflowUtils
-						.getStreamFromClasspath("test/decision/handler/process.snaker"));
+		processId = engine.process().deploy(WorkflowUtils.getStreamFromClasspath("test/decision/condition/process.snaker"));
 	}
 	
 	@Test
 	public void test() {
-		Map<String, Object> args = new HashMap<String, Object>();
+		Map<String, Object> args = new HashMap<>();
 		args.put("task1.operator", new String[]{"1"});
 		args.put("task2.operator", new String[]{"1"});
 		args.put("task3.operator", new String[]{"1"});
-		args.put("content", "toTask3");
+		args.put("content", 250);
+		
 		Order order = engine.startInstanceById(processId, "2", args);
 		System.out.println(order);
 	}

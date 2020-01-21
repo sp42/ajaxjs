@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package test.decision.expression;
+package test.decision;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,24 +25,24 @@ import org.snaker.engine.entity.Order;
 import com.ajaxjs.workflow.WorkflowUtils;
 
 /**
- * 测试决策分支流程1：决策节点decision使用expr属性决定后置路线
+ * 测试决策分支流程2：使用transition的expr属性决定后置路线
  * @author yuqs
  * @since 1.0
  */
-public class TestDecision1 extends TestSnakerBase {
+public class TestDecision3 extends TestSnakerBase {
 	@Before
 	public void before() {
 		processId = engine.process().deploy(WorkflowUtils
-						.getStreamFromClasspath("test/decision/expression/process.snaker"));
+						.getStreamFromClasspath("test/decision/handler/process.snaker"));
 	}
 	
 	@Test
 	public void test() {
 		Map<String, Object> args = new HashMap<String, Object>();
-		//args.put("task1.operator", new String[]{"1","2"});
+		args.put("task1.operator", new String[]{"1"});
 		args.put("task2.operator", new String[]{"1"});
-		//args.put("task3.operator", new String[]{"1","2"});
-		args.put("content", "toTask2");
+		args.put("task3.operator", new String[]{"1"});
+		args.put("content", "toTask3");
 		Order order = engine.startInstanceById(processId, "2", args);
 		System.out.println(order);
 	}
