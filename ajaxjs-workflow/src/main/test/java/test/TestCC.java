@@ -12,14 +12,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package test.process;
+package test;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.snaker.engine.TestSnakerBase;
-import org.snaker.engine.entity.Process;
+import org.snaker.engine.entity.Order;
 
 import com.ajaxjs.workflow.WorkflowUtils;
 
@@ -27,19 +28,19 @@ import com.ajaxjs.workflow.WorkflowUtils;
  * @author yuqs
  * @since 1.0
  */
-public class TestProcess extends TestSnakerBase {
+public class TestCC extends TestSnakerBase {
+	@Before
+	public void before() {
+		processId = engine.process().deploy(WorkflowUtils.getStreamFromClasspath("test/task/simple/process.snaker"));
+	}
+
 	@Test
 	public void test() {
-		processId = engine.process().deploy(WorkflowUtils.
-				getStreamFromClasspath("test/task/simple/process.snaker"));
-		Process process = engine.process().getProcessById(processId);
-		System.out.println("output 1="+process);
-		process = engine.process().getProcessByVersion(process.getName(), process.getVersion());
-		System.out.println("output 2="+process);
 		Map<String, Object> args = new HashMap<String, Object>();
-		args.put("task1.operator", "1");
-		engine.startInstanceById(processId, "1", args);
-		engine.process().undeploy(processId);
-		//engine.startInstanceById(processId, "1", args);
+		args.put("task1.operator", new String[] { "1" });
+		Order order = engine.startInstanceByName("simple", 0, "2", args);
+		engine.order().createCCOrder(order.getId(), "test");
+		engine.order().updateCCStatus("b0fcc08da45d4e88819d9c287917b525", "test");
+		engine.order().deleteCCOrder("01b960b9d5df4be7b8565b9f64bc1856", "test");
 	}
 }
