@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @author yuqs
  * @since 1.0
  */
-public class HistoryTaskActor implements Serializable {
+public class TaskActorHistory implements Serializable {
 	private static final long serialVersionUID = -998098931519373599L;
 
 	/**

@@ -17,10 +17,8 @@ import com.ajaxjs.util.map.JsonHelper;
 /**
  * 历史任务实体类
  * 
- * @author yuqs
- * @since 1.0
  */
-public class HistoryTask implements Serializable {
+public class TaskHistory extends Task {
 	private static final long serialVersionUID = 6814632180050362450L;
 
 	/**
@@ -114,11 +112,11 @@ public class HistoryTask implements Serializable {
 		this.variable = variable;
 	}
 
-	public HistoryTask() {
+	public TaskHistory() {
 
 	}
 
-	public HistoryTask(Task task) {
+	public TaskHistory(Task task) {
 		this.id = task.getId();
 		this.orderId = task.getOrderId();
 		this.createTime = task.getCreateTime();

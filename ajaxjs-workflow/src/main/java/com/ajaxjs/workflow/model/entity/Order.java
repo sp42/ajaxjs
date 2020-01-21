@@ -8,88 +8,74 @@ package com.ajaxjs.workflow.model.entity;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Map;
 
+import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.util.map.JsonHelper;
 
 /**
  * 流程工作单实体类（一般称为流程实例）
  * 
- * @author yuqs
- * @since 1.0
  */
-public class Order implements Serializable {
+public class Order extends BaseModel implements Serializable {
 	private static final long serialVersionUID = -8335779448165343933L;
-	
-	/**
-	 * 主键ID
-	 */
-	private String id;
+
 	/**
 	 * 版本
 	 */
 	private Integer version = 0;
-	
+
 	/**
 	 * 流程定义ID
 	 */
-	private String processId;
-	
+	private Long processId;
+
 	/**
 	 * 流程实例创建者ID
 	 */
 	private String creator;
-	
-	/**
-	 * 流程实例创建时间
-	 */
-	private String createTime;
-	
+
 	/**
 	 * 流程实例为子流程时，该字段标识父流程实例ID
 	 */
-	private String parentId;
-	
+	private Long parentId;
+
 	/**
 	 * 流程实例为子流程时，该字段标识父流程哪个节点模型启动的子流程
 	 */
 	private String parentNodeName;
-	
+
 	/**
 	 * 流程实例期望完成时间
 	 */
-	private String expireTime;
-	
-	/**
-	 * 流程实例上一次更新时间
-	 */
-	private String lastUpdateTime;
-	
+	private Date expireDate;
+
 	/**
 	 * 流程实例上一次更新人员ID
 	 */
 	private String lastUpdator;
-	
+
 	/**
 	 * 流程实例优先级
 	 */
 	private Integer priority;
-	
+
 	/**
 	 * 流程实例编号
 	 */
 	private String orderNo;
-	
+
 	/**
 	 * 流程实例附属变量
 	 */
 	private String variable;
 
-	public String getProcessId() {
+	public Long getProcessId() {
 		return processId;
 	}
 
-	public void setProcessId(String processId) {
+	public void setProcessId(Long processId) {
 		this.processId = processId;
 	}
 
@@ -101,36 +87,20 @@ public class Order implements Serializable {
 		this.creator = creator;
 	}
 
-	public String getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(String createTime) {
-		this.createTime = createTime;
-	}
-
-	public String getParentId() {
+	public Long getParentId() {
 		return parentId;
 	}
 
-	public void setParentId(String parentId) {
+	public void setParentId(Long parentId) {
 		this.parentId = parentId;
 	}
 
-	public String getExpireTime() {
-		return expireTime;
+	public Date getExpireDate() {
+		return expireDate;
 	}
 
-	public void setExpireTime(String expireTime) {
-		this.expireTime = expireTime;
-	}
-
-	public String getLastUpdateTime() {
-		return lastUpdateTime;
-	}
-
-	public void setLastUpdateTime(String lastUpdateTime) {
-		this.lastUpdateTime = lastUpdateTime;
+	public void setExpireDate(Date expireDate) {
+		this.expireDate = expireDate;
 	}
 
 	public String getLastUpdator() {
@@ -149,14 +119,6 @@ public class Order implements Serializable {
 		this.priority = priority;
 	}
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
 	public String getParentNodeName() {
 		return parentNodeName;
 	}
@@ -170,10 +132,10 @@ public class Order implements Serializable {
 	}
 
 	public Map<String, Object> getVariableMap() {
-		Map<String, Object> map = JsonHelper.parseMap(this.variable);
+		Map<String, Object> map = JsonHelper.parseMap(variable);
 		if (map == null)
 			return Collections.emptyMap();
-		
+
 		return map;
 	}
 
@@ -199,11 +161,12 @@ public class Order implements Serializable {
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Order(id=").append(this.id);
-		sb.append(",processId=").append(this.processId);
-		sb.append(",creator=").append(this.creator);
-		sb.append(",createTime").append(this.createTime);
-		sb.append(",orderNo=").append(this.orderNo).append(")");
+		sb.append("Order(id=").append(getId());
+		sb.append(",processId=").append(processId);
+		sb.append(",creator=").append(creator);
+		sb.append(",createDate").append(getCreateDate());
+		sb.append(",orderNo=").append(orderNo).append(")");
+
 		return sb.toString();
 	}
 }

@@ -1,7 +1,5 @@
 package com.ajaxjs.workflow.controller;
 
-import java.util.Map;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
@@ -12,17 +10,13 @@ import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
+import com.ajaxjs.workflow.model.entity.Process;
 import com.ajaxjs.workflow.service.ProcessService;
 
 @Path("/process")
-public class PController extends BaseController<Map<String, Object>> {
+public class PController extends BaseController<Process> {
 	@Resource("ProcessService")
 	private ProcessService service = new ProcessService();
-
-	@Override
-	public IBaseService<Map<String, Object>> getService() {
-		return service;
-	}
 
 	@GET
 	@Path("list")
@@ -31,5 +25,10 @@ public class PController extends BaseController<Map<String, Object>> {
 		mv.put(PageResult, service.findPagedList(start, limit));
 		prepareData(mv);
 		return jsp("workflow/process-admin-list.jsp");
+	}
+
+	@Override
+	public IBaseService<Process> getService() {
+		return service;
 	}
 }

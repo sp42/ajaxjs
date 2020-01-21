@@ -15,10 +15,10 @@
  *
  */
 
-package com.ajaxjs.workflow;
+package com.ajaxjs.workflow.task;
 
-import com.ajaxjs.workflow.model.entity.HistoryOrder;
-import com.ajaxjs.workflow.model.entity.HistoryTask;
+import com.ajaxjs.workflow.model.entity.OrderHistory;
+import com.ajaxjs.workflow.model.entity.TaskHistory;
 
 /**
  * 任务、实例完成时触发动作的接口
@@ -30,12 +30,12 @@ public interface Completion {
 	 * 
 	 * @param task 任务对象
 	 */
-	public void complete(HistoryTask task);
+	public void complete(TaskHistory task);
 
 	/**
 	 * 实例完成触发执行
 	 * 
 	 * @param order 实例对象
 	 */
-	public void complete(HistoryOrder order);
+	public void complete(OrderHistory order);
 }

@@ -16,9 +16,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 import org.snaker.engine.SnakerException;
+import org.snaker.engine.model.ProcessModel;
+
+import com.ajaxjs.util.CommonUtil;
 
 /**
  * 工作流工具类
@@ -27,6 +31,16 @@ import org.snaker.engine.SnakerException;
  *
  */
 public class WorkflowUtils {
+	/**
+	 * 默认的流程实例编号生成器 编号生成规则为:yyyyMMdd-HH:mm:ss-SSS-random
+	 * 
+	 * @param model
+	 * @return
+	 */
+	public static String generate(ProcessModel model) { 
+		return CommonUtil.now("yyyyMMdd-HH:mm:ss-SSS") + "-" + new Random().nextInt(1000);
+	}
+	
 	private static final Pattern pattern = Pattern.compile("[0-9]*");
 
 	public static boolean isNumeric(String str) {

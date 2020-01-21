@@ -12,7 +12,7 @@ import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.cache.Cache;
 import com.ajaxjs.util.cache.CacheManager;
 import com.ajaxjs.util.cache.CacheManagerAware;
-import com.ajaxjs.workflow.WorkflowCont;
+import com.ajaxjs.workflow.WorkflowConstant;
 import com.ajaxjs.workflow.dao.ProcessDao;
 import com.ajaxjs.workflow.model.ProcessModel;
 import com.ajaxjs.workflow.model.entity.Process;
@@ -71,7 +71,7 @@ public class ProcessService extends BaseService<Process> implements CacheManager
 		bean.setName(model.getName());
 		bean.setDisplayName(model.getDisplayName());
 		bean.setContent(processXml);
-		bean.setStat(WorkflowCont.STATE_ACTIVE);
+		bean.setStat(WorkflowConstant.STATE_ACTIVE);
 
 		Integer ver = dao.getLatestProcessVersion(model.getName());
 		bean.setVersion(ver == null || ver < 0 ? 0 : ver + 1);
@@ -90,11 +90,11 @@ public class ProcessService extends BaseService<Process> implements CacheManager
 	public void undeploy(long id) {
 		Process bean = new Process();
 		bean.setId(id);
-		bean.setStat(WorkflowCont.STATE_FINISH);
+		bean.setStat(WorkflowConstant.STATE_FINISH);
 
 		update(bean);
 
-		beanCache.get(nameCache.get(id)).setStat(WorkflowCont.STATE_FINISH); // 只是修改了 状态
+		beanCache.get(nameCache.get(id)).setStat(WorkflowConstant.STATE_FINISH); // 只是修改了 状态
 	}
 
 	/**
@@ -141,7 +141,7 @@ public class ProcessService extends BaseService<Process> implements CacheManager
 	public void check(Process process, String idOrName) {
 		Objects.requireNonNull(process, "指定的流程定义[id/name=" + idOrName + "]不存在");
 
-		if (process.getStat() != null && process.getStat() == WorkflowCont.STATE_FINISH)
+		if (process.getStat() != null && process.getStat() == WorkflowConstant.STATE_FINISH)
 			throw new IllegalArgumentException(
 					"指定的流程定义[id/name=" + idOrName + ",version=" + process.getVersion() + "]为非活动状态");
 	}

@@ -1,6 +1,12 @@
 package com.ajaxjs.workflow;
 
-public interface WorkflowCont {
+/**
+ * 常量表
+ * 
+ * @author Administrator
+ *
+ */
+public interface WorkflowConstant {
 	/**
 	 * 状态；活动状态
 	 */

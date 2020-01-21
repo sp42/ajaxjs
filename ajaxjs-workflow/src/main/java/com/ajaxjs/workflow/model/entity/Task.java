@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 
+import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.workflow.model.TaskModel;
 import com.ajaxjs.workflow.model.TaskModel.TaskType;
@@ -21,15 +22,11 @@ import com.ajaxjs.workflow.model.TaskModel.TaskType;
  * @author yuqs
  * @since 1.0
  */
-public class Task implements Serializable, Cloneable {
+public class Task extends BaseModel implements Serializable, Cloneable {
 	private static final long serialVersionUID = -189094546633914087L;
 
 	public static final String KEY_ACTOR = "S-ACTOR";
 
-	/**
-	 * 主键ID
-	 */
-	private String id;
 	/**
 	 * 版本
 	 */
@@ -37,50 +34,43 @@ public class Task implements Serializable, Cloneable {
 	/**
 	 * 流程实例ID
 	 */
-	private String orderId;
-	/**
-	 * 任务名称
-	 */
-	private String taskName;
+	private Long orderId;
+
 	/**
 	 * 任务显示名称
 	 */
 	private String displayName;
+
 	/**
 	 * 参与方式（0：普通任务；1：参与者会签任务）
 	 */
 	private Integer performType;
+
 	/**
 	 * 任务类型（0：主办任务；1：协办任务）
 	 */
 	private Integer taskType;
+
 	/**
 	 * 任务处理者ID
 	 */
 	private String operator;
-	/**
-	 * 任务创建时间
-	 */
-	private String createTime;
+
 	/**
 	 * 任务完成时间
 	 */
-	private String finishTime;
-	/**
-	 * 期望任务完成时间
-	 */
-	private String expireTime;
-	
+	private Date finishDate;
+
 	/**
 	 * 期望的完成时间date类型
 	 */
 	private Date expireDate;
-	
+
 	/**
 	 * 提醒时间date类型
 	 */
 	private Date remindDate;
-	
+
 	/**
 	 * 任务关联的表单url
 	 */
@@ -89,28 +79,27 @@ public class Task implements Serializable, Cloneable {
 	 * 任务参与者列表
 	 */
 	private String[] actorIds;
-	
+
 	/**
 	 * 父任务Id
 	 */
 	private String parentTaskId;
-	
+
 	/**
 	 * 任务附属变量
 	 */
 	private String variable;
-	
+
 	/**
 	 * 保持模型对象
 	 */
 	private TaskModel model;
 
 	public Task() {
-
 	}
 
-	public Task(String id) {
-		this.id = id;
+	public Task(Long id) {
+		setId(id);
 	}
 
 	public boolean isMajor() {
@@ -133,14 +122,6 @@ public class Task implements Serializable, Cloneable {
 		this.variable = variable;
 	}
 
-	public String getTaskName() {
-		return taskName;
-	}
-
-	public void setTaskName(String taskName) {
-		this.taskName = taskName;
-	}
-
 	public Integer getTaskType() {
 		return taskType;
 	}
@@ -157,28 +138,12 @@ public class Task implements Serializable, Cloneable {
 		this.operator = operator;
 	}
 
-	public String getCreateTime() {
-		return createTime;
+	public Date getFinishDate() {
+		return finishDate;
 	}
 
-	public void setCreateTime(String createTime) {
-		this.createTime = createTime;
-	}
-
-	public String getFinishTime() {
-		return finishTime;
-	}
-
-	public void setFinishTime(String finishTime) {
-		this.finishTime = finishTime;
-	}
-
-	public String getExpireTime() {
-		return expireTime;
-	}
-
-	public void setExpireTime(String expireTime) {
-		this.expireTime = expireTime;
+	public void setFinishDate(Date finishDate) {
+		this.finishDate = finishDate;
 	}
 
 	public String getActionUrl() {
@@ -197,19 +162,11 @@ public class Task implements Serializable, Cloneable {
 		this.displayName = displayName;
 	}
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getOrderId() {
+	public Long getOrderId() {
 		return orderId;
 	}
 
-	public void setOrderId(String orderId) {
+	public void setOrderId(Long orderId) {
 		this.orderId = orderId;
 	}
 
@@ -271,7 +228,7 @@ public class Task implements Serializable, Cloneable {
 		Map<String, Object> map = JsonHelper.parseMap(this.variable);
 		if (map == null)
 			return Collections.emptyMap();
-		
+
 		return map;
 	}
 
@@ -281,14 +238,14 @@ public class Task implements Serializable, Cloneable {
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Task(id=").append(this.id);
-		sb.append(",orderId=").append(this.orderId);
-		sb.append(",taskName=").append(this.taskName);
-		sb.append(",displayName").append(this.displayName);
-		sb.append(",taskType=").append(this.taskType);
-		sb.append(",createTime=").append(this.createTime);
-		sb.append(",performType=").append(this.performType).append(")");
-		
+		sb.append("Task(id=").append(getId());
+		sb.append(",orderId=").append(orderId);
+		sb.append(",taskName=").append(getName());
+		sb.append(",displayName").append(displayName);
+		sb.append(",taskType=").append(taskType);
+		sb.append(",createDate=").append(getCreateDate());
+		sb.append(",performType=").append(performType).append(")");
+
 		return sb.toString();
 	}
 }

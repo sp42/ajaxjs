@@ -15,7 +15,7 @@
  *
  */
 
-package com.ajaxjs.workflow;
+package com.ajaxjs.workflow.task;
 
 import org.snaker.engine.Completion;
 import org.snaker.engine.entity.HistoryOrder;
