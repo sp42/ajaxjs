@@ -12,20 +12,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.workflow.parser;
+package com.ajaxjs.workflow.model.parser;
 
-import com.ajaxjs.workflow.model.JoinModel;
 import com.ajaxjs.workflow.model.NodeModel;
+import com.ajaxjs.workflow.model.StartModel;
 
 /**
- * 合并节点解析类
+ * 开始节点解析类
  * 
- * @author yuqs
- * @since 1.0
  */
-public class JoinParser extends AbstractNodeParser {
+public class StartParser extends AbstractNodeParser {
 	@Override
 	protected NodeModel newModel() {
-		return new JoinModel();
+		return new StartModel();
 	}
 }

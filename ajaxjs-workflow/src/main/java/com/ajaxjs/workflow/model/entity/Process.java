@@ -1,9 +1,11 @@
 package com.ajaxjs.workflow.model.entity;
 
 import com.ajaxjs.framework.BaseModel;
+import com.ajaxjs.workflow.model.ProcessModel;
 
 public class Process extends BaseModel {
 	private static final long serialVersionUID = -2466821536491858398L;
+
 	/**
 	 * 版本
 	 */
@@ -13,6 +15,21 @@ public class Process extends BaseModel {
 	 * 流程定义显示名称
 	 */
 	private String displayName;
+
+	/**
+	 * 流程定义模型
+	 */
+	private ProcessModel model;
+
+	/**
+	 * 流程定义类型（预留字段）
+	 */
+	private String type;
+
+	/**
+	 * 当前流程的实例url（一般为流程第一步的url） 该字段可以直接打开流程申请的表单
+	 */
+	private String instanceUrl;
 
 	public Integer getVersion() {
 		return version;
@@ -46,13 +63,12 @@ public class Process extends BaseModel {
 		this.instanceUrl = instanceUrl;
 	}
 
-	/**
-	 * 流程定义类型（预留字段）
-	 */
-	private String type;
-	
-	/**
-	 * 当前流程的实例url（一般为流程第一步的url） 该字段可以直接打开流程申请的表单
-	 */
-	private String instanceUrl;
+	public ProcessModel getModel() {
+		return model;
+	}
+
+	public void setModel(ProcessModel model) {
+		this.model = model;
+	}
+
 }

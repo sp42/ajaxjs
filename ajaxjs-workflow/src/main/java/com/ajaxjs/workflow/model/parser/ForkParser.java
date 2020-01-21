@@ -12,18 +12,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.workflow.parser;
+package com.ajaxjs.workflow.model.parser;
 
-import com.ajaxjs.workflow.model.EndModel;
+import com.ajaxjs.workflow.model.ForkModel;
 import com.ajaxjs.workflow.model.NodeModel;
 
 /**
- * 结束节点解析类
+ * 分支节点解析类
  * 
  */
-public class EndParser extends AbstractNodeParser {
+public class ForkParser extends AbstractNodeParser {
 	@Override
 	protected NodeModel newModel() {
-		return new EndModel();
+		return new ForkModel();
 	}
 }

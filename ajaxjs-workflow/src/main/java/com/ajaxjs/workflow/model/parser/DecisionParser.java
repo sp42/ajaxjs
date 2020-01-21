@@ -12,18 +12,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.workflow.parser;
+package com.ajaxjs.workflow.model.parser;
 
-import com.ajaxjs.workflow.model.ForkModel;
+import org.w3c.dom.Element;
+
+
+import com.ajaxjs.workflow.model.DecisionModel;
 import com.ajaxjs.workflow.model.NodeModel;
 
 /**
- * 分支节点解析类
+ * 决策节点解析类
  * 
  */
-public class ForkParser extends AbstractNodeParser {
+public class DecisionParser extends AbstractNodeParser {
+	/**
+	 * 解析decisition节点的特有属性expr
+	 */
+	@Override
+	protected void parseNode(NodeModel node, Element element) {
+		DecisionModel decision = (DecisionModel) node;
+		decision.setExpr(element.getAttribute(ATTR_EXPR));
+		decision.setHandleClass(element.getAttribute(ATTR_HANDLECLASS));
+	}
+
 	@Override
 	protected NodeModel newModel() {
-		return new ForkModel();
+		return new DecisionModel();
 	}
 }

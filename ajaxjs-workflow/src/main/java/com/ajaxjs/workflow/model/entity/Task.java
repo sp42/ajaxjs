@@ -12,8 +12,8 @@ import java.util.Date;
 import java.util.Map;
 
 import com.ajaxjs.util.map.JsonHelper;
-import org.snaker.engine.model.TaskModel;
-import org.snaker.engine.model.TaskModel.TaskType;
+import com.ajaxjs.workflow.model.TaskModel;
+import com.ajaxjs.workflow.model.TaskModel.TaskType;
 
 /**
  * 任务实体类
