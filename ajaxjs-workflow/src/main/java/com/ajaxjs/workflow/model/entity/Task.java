@@ -101,8 +101,13 @@ public class Task extends BaseModel implements Cloneable {
 		setId(id);
 	}
 
+	/**
+	 * 任务是否主办类型
+	 * 
+	 * @return true 表示为主办类型
+	 */
 	public boolean isMajor() {
-		return this.taskType == TaskType.Major.ordinal();
+		return taskType == TaskType.Major.ordinal();
 	}
 
 	public Long getParentTaskId() {
@@ -169,6 +174,10 @@ public class Task extends BaseModel implements Cloneable {
 		this.orderId = orderId;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public Long[] getActorIds() {
 		if (actorIds == null) {
 			String actorStr = (String) getVariableMap().get(KEY_ACTOR);
@@ -231,16 +240,16 @@ public class Task extends BaseModel implements Cloneable {
 		this.model = model;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public Map<String, Object> getVariableMap() {
 		Map<String, Object> map = JsonHelper.parseMap(variable);
 		if (map == null)
 			return Collections.emptyMap();
 
 		return map;
-	}
-
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
 	}
 
 	public String toString() {

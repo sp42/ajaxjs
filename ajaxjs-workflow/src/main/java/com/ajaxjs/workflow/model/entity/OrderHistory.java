@@ -8,33 +8,35 @@ package com.ajaxjs.workflow.model.entity;
 
 import java.util.Date;
 
-import org.snaker.engine.SnakerEngine;
-import org.snaker.engine.core.ServiceContext;
-
 /**
  * 历史流程实例实体类
  * 
+ * history 减少了 version 和 parentNodeName 字段，增加了 endDate 字段
  */
 public class OrderHistory extends Order {
 	private static final long serialVersionUID = 5853727929104539328L;
-	
+
+	/**
+	 * 创建历史流程实例
+	 */
 	public OrderHistory() {
 	}
-	
+
 	/**
+	 * 根据 Order 创建历史流程实例
 	 * 
-	 * @param order
+	 * @param order 活动实例对象
 	 */
 	public OrderHistory(Order order) {
 		setId(order.getId());
-		this.processId = order.getProcessId();
-		this.createDate = order.getCreateDate();
-		this.expireDate = order.getExpireDate();
-		this.creator = order.getCreator();
-		this.parentId = order.getParentId();
-		this.priority = order.getPriority();
-		this.orderNo = order.getOrderNo();
-		this.variable = order.getVariable();
+		setProcessId(order.getProcessId());
+		setCreateDate(order.getCreateDate());
+		setExpireDate(order.getExpireDate());
+		setCreator(order.getCreator());
+		setParentId(order.getParentId());
+		setPriority(order.getPriority());
+		setOrderNo(order.getOrderNo());
+		setVariable(order.getVariable());
 	}
 
 	/**
@@ -44,42 +46,27 @@ public class OrderHistory extends Order {
 	 */
 	public Order undo() {
 		Order order = new Order();
-		order.setId(this.id);
-		order.setProcessId(this.processId);
-		order.setParentId(this.parentId);
-		order.setCreator(this.creator);
-		order.setCreateDate(this.createDate);
-		order.setLastUpdator(this.creator);
-		order.setLastUpdateDate(this.endDate);
-		order.setExpireDate(this.expireDate);
-		order.setOrderNo(this.orderNo);
-		order.setPriority(this.priority);
-		order.setVariable(this.variable);
+		order.setId(getId());
+		order.setProcessId(getProcessId());
+		order.setParentId(getParentId());
+		order.setCreator(getCreator());
+		order.setCreateDate(getCreateDate());
+		order.setUpdator(getUpdator());
+		order.setUpdateDate(getEndDate());
+		order.setExpireDate(getExpireDate());
+		order.setOrderNo(getOrderNo());
+		order.setPriority(getPriority());
+		order.setVariable(getVariable());
 		order.setVersion(0);
 
 		return order;
 	}
 
 	/**
-	 * TODO ????
-	 * 
-	 * @return
-	 */
-	public String getProcessName() {
-		SnakerEngine engine = ServiceContext.getEngine();
-		Process process = engine.process().getProcessById(getProcessId());
-
-		if (process == null)
-			return getProcessId() + "";
-
-		return process.getDisplayName();
-	}
-
-	/**
 	 * 流程实例结束时间
 	 */
 	private Date endDate;
-	
+
 	public Date getEndDate() {
 		return endDate;
 	}

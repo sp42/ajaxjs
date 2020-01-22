@@ -9,16 +9,25 @@ package com.ajaxjs.workflow.model.entity;
 import org.snaker.engine.model.TaskModel.PerformType;
 
 /**
- * 历史任务实体类
+ * 历史任务实体类。
  * 
+ * history 减少了 version 字段
  */
 public class TaskHistory extends Task {
 	private static final long serialVersionUID = 6814632180050362450L;
 
+	/**
+	 * 创建历史任务
+	 */
 	public TaskHistory() {
 	}
 
-	public TaskHistory(Task task) {	
+	/**
+	 * 根据 task 创建历史任务
+	 * 
+	 * @param task 任务对象
+	 */
+	public TaskHistory(Task task) {
 		setId(task.getId());
 		setOrderId(task.getOrderId());
 		setCreateDate(task.getCreateDate());
@@ -54,6 +63,11 @@ public class TaskHistory extends Task {
 		return task;
 	}
 
+	/**
+	 * 是否任意的（ANY）参与类型
+	 * 
+	 * @return true 表示为任意的参与类型
+	 */
 	public boolean isPerformAny() {
 		return getPerformType().intValue() == PerformType.ANY.ordinal();
 	}

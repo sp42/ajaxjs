@@ -6,40 +6,10 @@
  */
 package com.ajaxjs.workflow.model.entity;
 
-import java.io.Serializable;
-
 /**
  * 历史任务参与者实体类
  * 
- * @author yuqs
- * @since 1.0
  */
-public class TaskActorHistory implements Serializable {
+public class TaskActorHistory extends TaskActor {
 	private static final long serialVersionUID = -998098931519373599L;
-
-	/**
-	 * 关联的任务ID
-	 */
-	private Long taskId;
-
-	/**
-	 * 关联的参与者ID（参与者可以为用户、部门、角色）
-	 */
-	private Long actorId;
-
-	public Long getTaskId() {
-		return taskId;
-	}
-
-	public void setTaskId(Long taskId) {
-		this.taskId = taskId;
-	}
-
-	public Long getActorId() {
-		return actorId;
-	}
-
-	public void setActorId(Long actorId) {
-		this.actorId = actorId;
-	}
 }

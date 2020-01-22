@@ -53,7 +53,7 @@ public class Order extends BaseModel {
 	/**
 	 * 流程实例上一次更新人员ID
 	 */
-	private String lastUpdator;
+	private Long updator;
 
 	/**
 	 * 流程实例优先级
@@ -102,12 +102,12 @@ public class Order extends BaseModel {
 		this.expireDate = expireDate;
 	}
 
-	public String getLastUpdator() {
-		return lastUpdator;
+	public Long getUpdator() {
+		return updator;
 	}
 
-	public void setLastUpdator(String lastUpdator) {
-		this.lastUpdator = lastUpdator;
+	public void setUpdator(Long lastUpdator) {
+		this.updator = lastUpdator;
 	}
 
 	public Integer getPriority() {
