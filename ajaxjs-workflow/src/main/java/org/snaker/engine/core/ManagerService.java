@@ -61,6 +61,13 @@ public class ManagerService extends AccessService implements IManagerService {
 		return access().getSurrogate(page, filter);
 	}
 
+	/**
+	 * 根据授权人、流程名称获取最终代理人 如存在user1->user2->user3，那么最终返回user3
+	 * 
+	 * @param operator    授权人
+	 * @param processName 流程名称
+	 * @return String 代理人
+	 */
 	@Override
 	public String getSurrogate(String operator, String processName) {
 		Objects.requireNonNull(operator);

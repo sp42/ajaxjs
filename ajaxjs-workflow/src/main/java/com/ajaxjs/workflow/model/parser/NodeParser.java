@@ -95,7 +95,7 @@ public interface NodeParser {
 		XMLHelper.parseXML(processXml, (el, nodeList) -> {
 			process.setName(el.getAttribute(ATTR_NAME));
 			process.setDisplayName(el.getAttribute(ATTR_DISPLAYNAME));
-			process.setExpireTime(el.getAttribute(ATTR_EXPIRETIME));
+			process.setExpireDate(el.getAttribute(ATTR_EXPIRETIME));
 			process.setInstanceUrl(el.getAttribute(ATTR_INSTANCEURL));
 			process.setInstanceNoClass(el.getAttribute(ATTR_INSTANCENOCLASS));
 

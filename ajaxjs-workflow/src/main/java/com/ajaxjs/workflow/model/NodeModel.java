@@ -8,6 +8,7 @@ import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.workflow.WorkflowException;
 import com.ajaxjs.workflow.interceptor.SnakerInterceptor;
+
 /**
  * 节点元素（存在输入输出的变迁）
  * 
@@ -114,11 +115,11 @@ public abstract class NodeModel extends BaseWfModel implements Action {
 
 		for (TransitionModel tm : current.getInputs()) {
 			NodeModel source = tm.getSource();
+			
 			if (source == parent)
 				return true;
 
-			if (source instanceof ForkModel || source instanceof JoinModel || source instanceof SubProcessModel
-					|| source instanceof StartModel)
+			if (source instanceof ForkModel || source instanceof JoinModel || source instanceof SubProcessModel || source instanceof StartModel)
 				continue;
 
 			result = result || canRejected(source, parent);
@@ -128,7 +129,7 @@ public abstract class NodeModel extends BaseWfModel implements Action {
 
 	public <T> List<T> getNextModels(Class<T> clazz) {
 		List<T> models = new ArrayList<>();
-		
+
 		for (TransitionModel tm : this.getOutputs())
 			addNextModels(models, tm, clazz);
 

@@ -53,7 +53,7 @@ public class Task extends BaseModel implements Cloneable {
 	/**
 	 * 任务处理者ID
 	 */
-	private String operator;
+	private Long operator;
 
 	/**
 	 * 任务完成时间
@@ -77,12 +77,12 @@ public class Task extends BaseModel implements Cloneable {
 	/**
 	 * 任务参与者列表
 	 */
-	private String[] actorIds;
+	private Long[] actorIds;
 
 	/**
 	 * 父任务Id
 	 */
-	private String parentTaskId;
+	private Long parentTaskId;
 
 	/**
 	 * 任务附属变量
@@ -105,11 +105,11 @@ public class Task extends BaseModel implements Cloneable {
 		return this.taskType == TaskType.Major.ordinal();
 	}
 
-	public String getParentTaskId() {
+	public Long getParentTaskId() {
 		return parentTaskId;
 	}
 
-	public void setParentTaskId(String parentTaskId) {
+	public void setParentTaskId(Long parentTaskId) {
 		this.parentTaskId = parentTaskId;
 	}
 
@@ -129,11 +129,11 @@ public class Task extends BaseModel implements Cloneable {
 		this.taskType = taskType;
 	}
 
-	public String getOperator() {
+	public Long getOperator() {
 		return operator;
 	}
 
-	public void setOperator(String operator) {
+	public void setOperator(Long operator) {
 		this.operator = operator;
 	}
 
@@ -169,17 +169,25 @@ public class Task extends BaseModel implements Cloneable {
 		this.orderId = orderId;
 	}
 
-	public String[] getActorIds() {
+	public Long[] getActorIds() {
 		if (actorIds == null) {
 			String actorStr = (String) getVariableMap().get(KEY_ACTOR);
 			if (actorStr != null) {
-				actorIds = actorStr.split(",");
+				String[] actorStrs = actorStr.split(",");
+				Long[] ids = new Long[actorStrs.length];
+				int i = 0;
+
+				for (String s : actorStrs)
+					ids[i++] = Long.parseLong(s);
+
+				actorIds = ids;
 			}
 		}
+
 		return actorIds;
 	}
 
-	public void setActorIds(String[] actorIds) {
+	public void setActorIds(Long[] actorIds) {
 		this.actorIds = actorIds;
 	}
 
@@ -224,7 +232,7 @@ public class Task extends BaseModel implements Cloneable {
 	}
 
 	public Map<String, Object> getVariableMap() {
-		Map<String, Object> map = JsonHelper.parseMap(this.variable);
+		Map<String, Object> map = JsonHelper.parseMap(variable);
 		if (map == null)
 			return Collections.emptyMap();
 

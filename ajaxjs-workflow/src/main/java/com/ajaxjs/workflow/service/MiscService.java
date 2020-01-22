@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.Repository;
+import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.workflow.dao.MiscDao;
 
 /**
@@ -11,6 +12,7 @@ import com.ajaxjs.workflow.dao.MiscDao;
  * @author Administrator
  *
  */
+@Bean
 public class MiscService extends BaseService<Map<String, Object>> {
 	{
 		setUiName("其他查询");

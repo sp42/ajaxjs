@@ -7,6 +7,7 @@
 package com.ajaxjs.workflow.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.snaker.engine.INoGenerator;
@@ -39,7 +40,7 @@ public class ProcessModel extends BaseWfModel {
 	/**
 	 * 期望完成时间
 	 */
-	private String expireTime;
+	private Date expireDate;
 
 	/**
 	 * 实例编号生成的class
@@ -167,12 +168,12 @@ public class ProcessModel extends BaseWfModel {
 		this.nodes = nodes;
 	}
 
-	public String getExpireTime() {
-		return expireTime;
+	public Date getExpireDate() {
+		return expireDate;
 	}
 
-	public void setExpireTime(String expireTime) {
-		this.expireTime = expireTime;
+	public void setExpireDate(Date expireDate) {
+		this.expireDate = expireDate;
 	}
 
 	public String getInstanceUrl() {

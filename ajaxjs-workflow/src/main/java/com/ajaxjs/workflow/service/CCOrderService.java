@@ -1,18 +1,24 @@
 package com.ajaxjs.workflow.service;
 
+import java.util.List;
+
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.Repository;
-import com.ajaxjs.workflow.dao.SurrogateDao;
-import com.ajaxjs.workflow.model.entity.Surrogate;
+import com.ajaxjs.workflow.dao.CCOrderDao;
+import com.ajaxjs.workflow.model.entity.CCOrder;
 
-public class CCOrderService extends BaseService<Surrogate> {
+public class CCOrderService extends BaseService<CCOrder> {
 	{
 		setUiName("委托");
 		setShortName("surrogate");
 		setDao(dao);
 	}
 
-	public static SurrogateDao dao = new Repository().bind(SurrogateDao.class);
+	public static CCOrderDao dao = new Repository().bind(CCOrderDao.class);
+
+	public List<CCOrder> findByOrderId(Long orderId) {
+		return findList(by("orderId", orderId));
+	}
 	
 //	/**
 //	 * 创建抄送实例

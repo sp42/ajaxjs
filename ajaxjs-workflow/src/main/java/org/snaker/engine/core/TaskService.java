@@ -296,6 +296,7 @@ public class TaskService extends AccessService implements ITaskService {
 		task.setCreateTime(DateHelper.getTime());
 		access().saveTask(task);
 		assignTask(task.getId(), task.getOperator());
+		
 		return task;
 	}
 
