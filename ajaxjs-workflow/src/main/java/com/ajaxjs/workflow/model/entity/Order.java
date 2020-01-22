@@ -6,7 +6,6 @@
  */
 package com.ajaxjs.workflow.model.entity;
 
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
@@ -18,7 +17,7 @@ import com.ajaxjs.util.map.JsonHelper;
  * 流程工作单实体类（一般称为流程实例）
  * 
  */
-public class Order extends BaseModel implements Serializable {
+public class Order extends BaseModel {
 	private static final long serialVersionUID = -8335779448165343933L;
 
 	/**

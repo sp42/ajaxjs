@@ -6,60 +6,54 @@
  */
 package com.ajaxjs.workflow.model.entity;
 
-import java.io.Serializable;
+import java.util.Date;
+
+import com.ajaxjs.framework.BaseModel;
 
 /**
  * 抄送实例实体
  * 
- * @author yuqs
- * @since 1.5
  */
-public class CCOrder implements Serializable {
+public class CCOrder extends BaseModel {
 	private static final long serialVersionUID = -7596174225209412843L;
 
-	private String orderId;
-	private String actorId;
-	private String creator;
-	private String createTime;
-	private String finishTime;
+	private Long orderId;
 
-	public String getOrderId() {
+	private Long actorId;
+
+	private Long creator;
+
+	private Date finishDate;
+
+	public Long getOrderId() {
 		return orderId;
 	}
 
-	public void setOrderId(String orderId) {
+	public void setOrderId(Long orderId) {
 		this.orderId = orderId;
 	}
 
-	public String getCreator() {
+	public Long getCreator() {
 		return creator;
 	}
 
-	public void setCreator(String creator) {
+	public void setCreator(Long creator) {
 		this.creator = creator;
 	}
 
-	public String getActorId() {
+	public Long getActorId() {
 		return actorId;
 	}
 
-	public void setActorId(String actorId) {
+	public void setActorId(Long actorId) {
 		this.actorId = actorId;
 	}
 
-	public String getCreateTime() {
-		return createTime;
+	public Date getFinishTime() {
+		return finishDate;
 	}
 
-	public void setCreateTime(String createTime) {
-		this.createTime = createTime;
-	}
-
-	public String getFinishTime() {
-		return finishTime;
-	}
-
-	public void setFinishTime(String finishTime) {
-		this.finishTime = finishTime;
+	public void setFinishTime(Date finishTime) {
+		this.finishDate = finishTime;
 	}
 }

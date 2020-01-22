@@ -6,10 +6,10 @@
  */
 package com.ajaxjs.workflow.interceptor;
 
-import org.snaker.engine.ITaskService;
-import org.snaker.engine.SnakerEngine;
+
 
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.workflow.WorlflowEngine;
 import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.entity.Task;
 
@@ -23,7 +23,7 @@ import com.ajaxjs.workflow.model.entity.Task;
 public class SurrogateInterceptor implements SnakerInterceptor {
 	@Override
 	public void intercept(Execution execution) {
-		SnakerEngine engine = execution.getEngine();
+		WorlflowEngine engine = execution.getEngine();
 
 		for (Task task : execution.getTasks()) {
 			if (task.getActorIds() == null)

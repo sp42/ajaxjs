@@ -6,7 +6,6 @@
  */
 package com.ajaxjs.workflow.model.entity;
 
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
@@ -22,7 +21,7 @@ import com.ajaxjs.workflow.model.TaskModel.TaskType;
  * @author yuqs
  * @since 1.0
  */
-public class Task extends BaseModel implements Serializable, Cloneable {
+public class Task extends BaseModel implements Cloneable {
 	private static final long serialVersionUID = -189094546633914087L;
 
 	public static final String KEY_ACTOR = "S-ACTOR";

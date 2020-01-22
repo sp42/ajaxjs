@@ -15,12 +15,11 @@
 package com.ajaxjs.workflow.model.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 委托代理实体类
  * 
- * @author yuqs
- * @since 1.4
  */
 public class Surrogate implements Serializable {
 	private static final long serialVersionUID = -7359321877096338448L;
@@ -28,79 +27,79 @@ public class Surrogate implements Serializable {
 	/**
 	 * 流程name
 	 */
-	private String processName;
+	private Date processName;
 
 	/**
 	 * 授权人
 	 */
-	private String operator;
+	private Long operator;
 
 	/**
 	 * 代理人
 	 */
-	private String surrogate;
+	private Long surrogate;
 
 	/**
 	 * 操作时间
 	 */
-	private String odate;
+	private Date operatorDate;
 
 	/**
 	 * 开始时间
 	 */
-	private String sdate;
+	private Date startDate;
 
 	/**
 	 * 结束时间
 	 */
-	private String edate;
+	private Date endDate;
 
-	public String getProcessName() {
+	public Date getProcessName() {
 		return processName;
 	}
 
-	public void setProcessName(String processName) {
+	public void setProcessName(Date processName) {
 		this.processName = processName;
 	}
 
-	public String getOperator() {
+	public Long getOperator() {
 		return operator;
 	}
 
-	public void setOperator(String operator) {
+	public void setOperator(Long operator) {
 		this.operator = operator;
 	}
 
-	public String getSurrogate() {
+	public Long getSurrogate() {
 		return surrogate;
 	}
 
-	public void setSurrogate(String surrogate) {
+	public void setSurrogate(Long surrogate) {
 		this.surrogate = surrogate;
 	}
 
-	public String getOdate() {
-		return odate;
+	public Date getOdate() {
+		return operatorDate;
 	}
 
-	public void setOdate(String odate) {
-		this.odate = odate;
+	public void setOdate(Date odate) {
+		this.operatorDate = odate;
 	}
 
-	public String getSdate() {
-		return sdate;
+	public Date getSdate() {
+		return startDate;
 	}
 
-	public void setSdate(String sdate) {
-		this.sdate = sdate;
+	public void setSdate(Date sdate) {
+		this.startDate = sdate;
 	}
 
-	public String getEdate() {
-		return edate;
+	public Date getEdate() {
+		return endDate;
 	}
 
-	public void setEdate(String edate) {
-		this.edate = edate;
+	public void setEdate(Date edate) {
+		this.endDate = edate;
 	}
 
 }
