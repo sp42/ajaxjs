@@ -295,7 +295,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 			if (index != -1)
 				ip = ip.substring(0, index);
 
-			return ip;
+			return ip.startsWith("::ffff:") ? ip.replaceAll("::ffff:", "") : ip;
 		}
 
 		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))
@@ -310,7 +310,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))
 			ip = getRemoteAddr();
 
-		return ip;
+		return ip.startsWith("::ffff:") ? ip.replaceAll("::ffff:", "") : ip;
 	}
 
 	/**

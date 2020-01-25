@@ -170,6 +170,7 @@ public class MvcDispatcher implements Filter {
 			}
 
 			if (!isSkip) {
+				System.out.println(Arrays.toString(args));
 				result = hasArgs ? ReflectUtil.executeMethod_Throwable(controller, method, args)
 						: ReflectUtil.executeMethod_Throwable(controller, method);
 			}
