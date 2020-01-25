@@ -83,7 +83,7 @@ public class CmsUtils {
 	/**
 	 * 方便写单测时用的初始化方法
 	 * 
-	 * @param projectFolder	项目目录，用于读取配置文件
+	 * @param projectFolder 项目目录，用于读取配置文件
 	 * @param packages      一个或多个搜索的包名
 	 */
 	public static void init2(String projectFolder, String... packages) {
