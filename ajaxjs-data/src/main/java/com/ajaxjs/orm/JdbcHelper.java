@@ -34,6 +34,7 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import com.ajaxjs.orm.annotation.IgnoreDB;
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
@@ -57,8 +58,8 @@ public class JdbcHelper extends JdbcReader {
 	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
 	 * @return PreparedStatement 对象
 	 */
-	static <T> T initAndExe(BiFunction<Connection, String, PreparedStatement> initPs,
-			Function<PreparedStatement, T> exe, Connection conn, String sql, Object... params) {
+	static <T> T initAndExe(BiFunction<Connection, String, PreparedStatement> initPs, Function<PreparedStatement, T> exe, Connection conn, String sql,
+			Object... params) {
 		String _sql = JdbcUtil.printRealSql(sql, params);
 		LOGGER.infoYellow("The SQL is---->" + _sql);
 		JdbcConnection.addSql(_sql); // 用来保存日志
@@ -106,12 +107,12 @@ public class JdbcHelper extends JdbcReader {
 			return null;
 		}, conn, sql, params);
 
-		if (!(newlyId instanceof Serializable)) {
+		if (newlyId != null && !(newlyId instanceof Serializable)) {
 			LOGGER.warning(String.format("返回 id :{0} 类型:{1}", newlyId, newlyId.getClass().getName()));
 			throw new RuntimeException("返回 id 类型不是 Serializable");
 		}
 
-		return (Serializable) newlyId;
+		return newlyId == null ? 0 : (Serializable) newlyId;
 	}
 
 	/**
@@ -151,8 +152,10 @@ public class JdbcHelper extends JdbcReader {
 		StringBuilder sb = new StringBuilder();
 		sb.append(isInsert ? "INSERT INTO " : "UPDATE ");
 		sb.append(tableName + " ");
+
 		if (!isInsert)
 			sb.append("SET");
+
 		sb.append(" ");
 
 		return sb;
@@ -245,6 +248,8 @@ public class JdbcHelper extends JdbcReader {
 		private Method setter;
 		private Class<?> type;
 
+		private Boolean ignoreDB; // 是否不参与数据库的操作
+
 		public String getFieldName() {
 			return fieldName;
 		}
@@ -276,6 +281,14 @@ public class JdbcHelper extends JdbcReader {
 		public void setType(Class<?> type) {
 			this.type = type;
 		}
+
+		public Boolean getIgnoreDB() {
+			return ignoreDB;
+		}
+
+		public void setIgnoreDB(Boolean ignoreDB) {
+			this.ignoreDB = ignoreDB;
+		}
 	}
 
 	/**
@@ -296,11 +309,14 @@ public class JdbcHelper extends JdbcReader {
 				if ("class".equals(filedName))
 					continue;
 
+				Method method = property.getReadMethod();
+
 				BeanMethod m = new BeanMethod();
 				m.setFieldName(filedName);
-				m.setGetter(property.getReadMethod());
+				m.setGetter(method);
 				m.setSetter(property.getWriteMethod());
 				m.setType(property.getPropertyType()); // Bean 值的类型，这是期望传入的类型，也就 setter 参数的类型
+				m.setIgnoreDB(method.getAnnotation(IgnoreDB.class) == null);
 				map.put(filedName, m);
 			}
 		} catch (IntrospectionException e) {
@@ -322,6 +338,9 @@ public class JdbcHelper extends JdbcReader {
 		for (String fieldName : infoMap.keySet()) {
 			BeanMethod info = infoMap.get(fieldName);
 			Object value = valueHander(bean, info);
+
+			if (!info.getIgnoreDB())
+				continue;
 
 			if (value != null) {// 有值的才进行操作
 				if ("id".equals(fieldName))
@@ -397,8 +416,7 @@ public class JdbcHelper extends JdbcReader {
 	 */
 	public static int updateBean(Connection conn, Object bean, String tableName) {
 		try {
-			LOGGER.info("更新记录 id:{0}, name:{1}！", ReflectUtil.executeMethod(bean, "getId"),
-					ReflectUtil.executeMethod(bean, "getName"));
+			LOGGER.info("更新记录 id:{0}, name:{1}！", ReflectUtil.executeMethod(bean, "getId"), ReflectUtil.executeMethod(bean, "getName"));
 		} catch (Throwable e) {
 		}
 
