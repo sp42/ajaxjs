@@ -29,5 +29,5 @@ public interface JobCallback {
 	 * @param taskId   当前任务id
 	 * @param newTasks 新产生的任务集合
 	 */
-	void callback(String taskId, List<Task> newTasks);
+	void callback(Long taskId, List<Task> newTasks);
 }

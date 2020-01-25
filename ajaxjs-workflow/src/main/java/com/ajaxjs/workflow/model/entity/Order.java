@@ -33,7 +33,7 @@ public class Order extends BaseModel {
 	/**
 	 * 流程实例创建者ID
 	 */
-	private String creator;
+	private Long creator;
 
 	/**
 	 * 流程实例为子流程时，该字段标识父流程实例ID
@@ -78,11 +78,11 @@ public class Order extends BaseModel {
 		this.processId = processId;
 	}
 
-	public String getCreator() {
+	public Long getCreator() {
 		return creator;
 	}
 
-	public void setCreator(String creator) {
+	public void setCreator(Long creator) {
 		this.creator = creator;
 	}
 

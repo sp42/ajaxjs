@@ -13,19 +13,16 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.snaker.engine.SnakerEngine;
-import org.snaker.engine.access.QueryFilter;
-
 import com.ajaxjs.workflow.WorkflowException;
+import com.ajaxjs.workflow.WorlflowEngine;
 import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.SubProcessModel;
 import com.ajaxjs.workflow.model.entity.Order;
+import com.ajaxjs.workflow.model.entity.Process;
 
 /**
  * 启动子流程的处理器
  * 
- * @author yuqs
- * @since 1.0
  */
 public class StartSubProcessHandler implements IHandler {
 	private SubProcessModel model;
@@ -50,10 +47,10 @@ public class StartSubProcessHandler implements IHandler {
 	@Override
 	public void handle(Execution execution) {
 		// 根据子流程模型名称获取子流程定义对象
-		SnakerEngine engine = execution.getEngine();
-		Process process = engine.process().getProcessByVersion(model.getProcessName(), model.getVersion());
+		WorlflowEngine engine = execution.getEngine();
+		Process process = engine.process().findByVersion(model.getProcessName(), model.getVersion());
 
-		Execution child = execution.createSubExecution(execution, process, model.getName());
+		Execution child = Execution.createSubExecution(execution, process, model.getName());
 		Order order = null;
 
 		if (isFutureRunning) {
@@ -74,7 +71,7 @@ public class StartSubProcessHandler implements IHandler {
 			order = engine.startInstanceByExecution(child);
 
 		Objects.requireNonNull(order, "子流程创建失败");
-		execution.addTasks(engine.query().getActiveTasks(new QueryFilter().setOrderId(order.getId())));
+		execution.addTasks(engine.task().findByOrderId(order.getId()));
 	}
 
 	/**
@@ -82,8 +79,8 @@ public class StartSubProcessHandler implements IHandler {
 	 * 
 	 */
 	class ExecuteTask implements Callable<Order> {
-		private SnakerEngine engine;
-		
+		private WorlflowEngine engine;
+
 		private Execution child;
 
 		/**
@@ -94,8 +91,8 @@ public class StartSubProcessHandler implements IHandler {
 		 * @param parentNodeName
 		 */
 		public ExecuteTask(Execution execution, Process process, String parentNodeName) {
-			this.engine = execution.getEngine();
-			child = execution.createSubExecution(execution, process, parentNodeName);
+			engine = execution.getEngine();
+			child = Execution.createSubExecution(execution, process, parentNodeName);
 		}
 
 		public Order call() throws Exception {

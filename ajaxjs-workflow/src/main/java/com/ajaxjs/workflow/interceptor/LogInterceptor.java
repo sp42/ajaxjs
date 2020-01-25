@@ -26,11 +26,11 @@ public class LogInterceptor implements SnakerInterceptor {
 			StringBuffer buffer = new StringBuffer(100);
 			buffer.append("创建任务[标识=").append(task.getId());
 			buffer.append(",名称=").append(task.getDisplayName());
-			buffer.append(",创建时间=").append(task.getCreateTime());
+			buffer.append(",创建时间=").append(task.getCreateDate());
 			buffer.append(",参与者={");
 
 			if (task.getActorIds() != null) {
-				for (String actor : task.getActorIds())
+				for (Long actor : task.getActorIds())
 					buffer.append(actor).append(";");
 			}
 

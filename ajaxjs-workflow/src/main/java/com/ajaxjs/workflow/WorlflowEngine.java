@@ -44,7 +44,7 @@ public class WorlflowEngine {
 	 * @param args     参数列表
 	 * @return 流程实例
 	 */
-	public Order startInstanceById(Long id, String operator, Map<String, Object> args) {
+	public Order startInstanceById(Long id, Long operator, Map<String, Object> args) {
 		if (args == null)
 			args = new HashMap<>();
 
@@ -60,7 +60,7 @@ public class WorlflowEngine {
 	 * @param args     参数列表
 	 * @return 流程实例
 	 */
-	public Order startInstanceByName(String name, Integer version, String operator, Map<String, Object> args) {
+	public Order startInstanceByName(String name, Integer version, Long operator, Map<String, Object> args) {
 		if (args == null)
 			args = new HashMap<>();
 
@@ -75,7 +75,7 @@ public class WorlflowEngine {
 	 * @param args     参数列表
 	 * @return 流程实例
 	 */
-	private Order startProcess(Process process, String operator, Map<String, Object> args) {
+	private Order startProcess(Process process, Long operator, Map<String, Object> args) {
 		processService.check(process, process.getName());
 		Execution execution = execute(process, operator, args, null, null);
 
@@ -112,7 +112,7 @@ public class WorlflowEngine {
 	 * @param parentNodeName 启动子流程的父流程节点名称
 	 * @return Execution 执行对象
 	 */
-	private Execution execute(Process process, String operator, Map<String, Object> args, Long parentId, String parentNodeName) {
+	private Execution execute(Process process, Long operator, Map<String, Object> args, Long parentId, String parentNodeName) {
 		Order order = orderService.create(process, operator, args, parentId, parentNodeName);
 		LOGGER.info("创建流程实例对象:" + order);
 

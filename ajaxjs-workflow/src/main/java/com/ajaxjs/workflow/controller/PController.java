@@ -10,7 +10,6 @@ import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.workflow.model.entity.Process;
 import com.ajaxjs.workflow.service.ProcessService;
 
 @Path("/process")

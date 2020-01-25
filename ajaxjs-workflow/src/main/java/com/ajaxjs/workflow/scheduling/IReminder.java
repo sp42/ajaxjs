@@ -27,5 +27,5 @@ public interface IReminder {
 	 * @param nodeModel 节点模型
 	 * @param data      数据
 	 */
-	void remind(Process process, String orderId, String taskId, NodeModel nodeModel, Map<String, Object> data);
+	void remind(Process process, Long orderId, Long taskId, NodeModel nodeModel, Map<String, Object> data);
 }

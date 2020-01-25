@@ -54,12 +54,12 @@ public class OrderService extends BaseService<Order> {
 	 * @param parentNodeName 父流程节点模型
 	 * @return 活动流程实例对象
 	 */
-	public Order create(Process process, String operator, Map<String, Object> args, Long parentId, String parentNodeName) {
+	public Order create(Process process, Long operator, Map<String, Object> args, Long parentId, String parentNodeName) {
 		Order order = new Order();
 		order.setParentId(parentId);
 		order.setParentNodeName(parentNodeName);
 		order.setCreator(operator);
-		order.setLastUpdator(order.getCreator());
+		order.setUpdator(order.getCreator());
 		order.setProcessId(process.getId());
 		ProcessModel model = process.getModel();
 
@@ -93,7 +93,7 @@ public class OrderService extends BaseService<Order> {
 	 * @param args     参数列表
 	 * @return Order 活动流程实例对象
 	 */
-	public Order create(Process process, String operator, Map<String, Object> args) {
+	public Order create(Process process, Long operator, Map<String, Object> args) {
 		return create(process, operator, args, null, null);
 	}
 

@@ -18,8 +18,8 @@ import org.snaker.engine.core.ServiceContext;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.XMLHelper;
-import com.ajaxjs.workflow.WorkflowException;
 import com.ajaxjs.workflow.model.NodeModel;
 import com.ajaxjs.workflow.model.ProcessModel;
 import com.ajaxjs.workflow.model.TransitionModel;
@@ -95,14 +95,14 @@ public interface NodeParser {
 		XMLHelper.parseXML(processXml, (el, nodeList) -> {
 			process.setName(el.getAttribute(ATTR_NAME));
 			process.setDisplayName(el.getAttribute(ATTR_DISPLAYNAME));
-			process.setExpireDate(el.getAttribute(ATTR_EXPIRETIME));
+			process.setExpireDate(CommonUtil.Objet2Date(el.getAttribute(ATTR_EXPIRETIME)));
 			process.setInstanceUrl(el.getAttribute(ATTR_INSTANCEURL));
 			process.setInstanceNoClass(el.getAttribute(ATTR_INSTANCENOCLASS));
 
 			for (int i = 0; i < nodeList.getLength(); i++) {
 				Node node = nodeList.item(i);
 				if (node.getNodeType() == Node.ELEMENT_NODE) {
-						// TODO
+					// TODO
 //						NodeModel model = parseModel(node);
 //						process.getNodes().add(model);
 				}

@@ -6,8 +6,6 @@
  */
 package com.ajaxjs.workflow.interceptor;
 
-
-
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.workflow.WorlflowEngine;
 import com.ajaxjs.workflow.model.Execution;
@@ -29,8 +27,8 @@ public class SurrogateInterceptor implements SnakerInterceptor {
 			if (task.getActorIds() == null)
 				continue;
 
-			for (String actor : task.getActorIds()) {
-				if (CommonUtil.isEmptyString(actor))
+			for (Long actor : task.getActorIds()) {
+				if (actor == null || actor == 0)
 					continue;
 
 				String agent = engine.manager().getSurrogate(actor, execution.getProcess().getName());

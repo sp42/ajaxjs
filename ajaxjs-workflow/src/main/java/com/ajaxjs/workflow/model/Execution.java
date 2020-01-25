@@ -100,7 +100,7 @@ public class Execution implements Serializable {
 	/**
 	 * 子流程实例节点名称
 	 */
-	private String childOrderId;
+	private Long childOrderId;
 
 	/**
 	 * 执行参数
@@ -110,7 +110,7 @@ public class Execution implements Serializable {
 	/**
 	 * 操作人
 	 */
-	private String operator;
+	private Long operator;
 
 	/**
 	 * 任务
@@ -195,7 +195,7 @@ public class Execution implements Serializable {
 	 * 
 	 * @return
 	 */
-	public String getOperator() {
+	public Long getOperator() {
 		return operator;
 	}
 
@@ -204,7 +204,7 @@ public class Execution implements Serializable {
 	 * 
 	 * @param operator
 	 */
-	public void setOperator(String operator) {
+	public void setOperator(Long operator) {
 		this.operator = operator;
 	}
 
@@ -261,11 +261,11 @@ public class Execution implements Serializable {
 		return parentNodeName;
 	}
 
-	public String getChildOrderId() {
+	public Long getChildOrderId() {
 		return childOrderId;
 	}
 
-	public void setChildOrderId(String childOrderId) {
+	public void setChildOrderId(Long childOrderId) {
 		this.childOrderId = childOrderId;
 	}
 }
