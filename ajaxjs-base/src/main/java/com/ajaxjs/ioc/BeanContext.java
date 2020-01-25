@@ -18,11 +18,14 @@ package com.ajaxjs.ioc;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -79,8 +82,7 @@ public class BeanContext {
 	@SuppressWarnings("unchecked")
 	public static <T> T getBean(Class<T> clz) {
 		if (clz.getAnnotation(Bean.class) == null) {
-			IllegalArgumentException e = new IllegalArgumentException(
-					clz + " 这不是一个 ioc 的 bean。This is not a bean object that can be put into IOC.");
+			IllegalArgumentException e = new IllegalArgumentException(clz + " 这不是一个 ioc 的 bean。This is not a bean object that can be put into IOC.");
 			LOGGER.warning(e);
 			throw e;
 		}
@@ -264,7 +266,12 @@ public class BeanContext {
 			String value = dependencies.get(key);// 依赖对象的值
 			String[] split = key.split("\\.");// 数组第一个值表示 bean 对象名称，第二个值为字段属性名称
 
-			ReflectUtil.setProperty(beans.get(split[0]), split[1], beans.get(value));
+			Object bean = beans.get(split[0]), argBean = beans.get(value);
+
+			Objects.requireNonNull(bean, split[0] + "执行：" + split[1] + " 未发现类");
+			Objects.requireNonNull(argBean, "容器中找不到实例 " + value + "。请确定是否为组件添加 @Bean 注解?");
+
+			ReflectUtil.setProperty(bean, split[1], argBean);
 		}
 
 		isInitialized = true;
@@ -278,8 +285,7 @@ public class BeanContext {
 	 * @param annotationValue   注解的实例，注解也是接口的一种，所以需要接口的实例
 	 */
 	@SuppressWarnings("unchecked")
-	public static void alterAnnotationOn(Class<?> clazzToLookFor, Class<? extends Annotation> annotationToAlter,
-			Annotation annotationValue) {
+	public static void alterAnnotationOn(Class<?> clazzToLookFor, Class<? extends Annotation> annotationToAlter, Annotation annotationValue) {
 		Map<Class<? extends Annotation>, Annotation> map = null;
 
 		try {
@@ -313,5 +319,32 @@ public class BeanContext {
 		}
 
 		return list;
+	}
+
+	/**
+	 * 扫描某个包下面的所有类，实例化保存到 map，供以后调用
+	 * 
+	 * @param pack     要扫描的包名
+	 * @param giveName key 取名规则，可为 null
+	 */
+	public static void simplePut(String pack, Function<Class<?>, String> giveName) {
+		Set<Class<Object>> set = BeanLoader.scanClass(pack);
+
+		for (Class<Object> clz : set) {
+			String name = clz.getName();
+
+			if (clz.isPrimitive() || Modifier.isAbstract(clz.getModifiers()) || clz.isAnnotation() || clz.isInterface() || clz.isArray()
+					|| name.indexOf("$") != -1) {
+			} else {
+				if (giveName != null)
+					name = giveName.apply(clz);
+
+				try {
+					beans.put(name, clz.newInstance());
+				} catch (InstantiationException | IllegalAccessException e) {
+					// 忽略不能实例化的
+				}
+			}
+		}
 	}
 }

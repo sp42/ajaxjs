@@ -12,6 +12,8 @@ public interface CacheManager {
 	 * @return Cache
 	 */
 	public <K, V> Cache<K, V> getCache(String name);
+	
+	public <V> Cache<String, V> getCache(String name, Class<V> clz);
 
 	/**
 	 * 销毁cache

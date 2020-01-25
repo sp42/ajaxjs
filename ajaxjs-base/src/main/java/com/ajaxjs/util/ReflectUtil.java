@@ -43,7 +43,7 @@ public class ReflectUtil {
 			LOGGER.warning("所传递的class类型参数为接口，无法实例化");
 			return null;
 		}
-		
+
 		if (args == null || args.length == 0) {
 			try {
 				return clz.newInstance();
@@ -520,7 +520,7 @@ public class ReflectUtil {
 		String setMethodName = "set" + firstLetterUpper(name);
 
 		Objects.requireNonNull(bean, bean + "执行：" + setMethodName + " 未发现类");
-		Objects.requireNonNull(value, bean + "执行：" + setMethodName + " 未发现参数 value");
+//		Objects.requireNonNull(value, bean + "执行：" + setMethodName + " 未发现参数 value");
 
 		Class<?> clazz = bean.getClass();
 

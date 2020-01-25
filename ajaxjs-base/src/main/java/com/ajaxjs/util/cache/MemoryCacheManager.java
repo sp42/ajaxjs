@@ -6,17 +6,16 @@ import java.util.concurrent.ConcurrentHashMap;
  * 基于虚拟机内存的cache管理器
  * 
  */
-@SuppressWarnings("rawtypes")
-public class MemoryCacheManager extends ConcurrentHashMap<String, Cache> implements CacheManager {
+public class MemoryCacheManager extends ConcurrentHashMap<String, Cache<?, ?>> implements CacheManager {
 	private static final long serialVersionUID = -8273827743219735439L;
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public <K, V> Cache<K, V> getCache(String name) {
-		Cache<K, V> cache = get(name);
+		@SuppressWarnings("unchecked")
+		Cache<K, V> cache = (Cache<K, V>) get(name);
 
 		if (cache == null) {
-			cache = new MemoryCache<K, V>();
+			cache = new MemoryCache<>();
 			put(name, cache);
 		}
 
@@ -27,5 +26,17 @@ public class MemoryCacheManager extends ConcurrentHashMap<String, Cache> impleme
 	public void destroy() {
 		while (!isEmpty())
 			clear();
+	}
+
+	@Override
+	public <V> Cache<String, V> getCache(String name, Class<V> clz) {
+		@SuppressWarnings("unchecked")
+		Cache<String, V> cache = (Cache<String, V>) get(name);
+		if (cache == null) {
+			cache = new MemoryCache<>();
+			put(name, cache);
+		}
+
+		return cache;
 	}
 }

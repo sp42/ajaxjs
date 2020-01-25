@@ -1,8 +1,11 @@
 package com.ajaxjs.util;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -13,6 +16,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -55,7 +59,7 @@ public class XMLHelper {
 	/**
 	 * 获取某个节点
 	 * 
-	 * @param dbXmlCfg 数据库配置的 XML 文件
+	 * @param dbXmlCfg 数据库配置的 XML 文件，必须是路径
 	 * @param xpath
 	 * @param fn
 	 */
@@ -65,12 +69,24 @@ public class XMLHelper {
 
 		try {
 			XPathExpression expr = XPathFactory.newInstance().newXPath().compile(xpath);
-			NodeList nodes = (NodeList) expr.evaluate(factory.newDocumentBuilder().parse(dbXmlCfg), XPathConstants.NODESET);
+			NodeList nodes = (NodeList) expr.evaluate(factory.newDocumentBuilder().parse(dbXmlCfg),
+					XPathConstants.NODESET);
 
 			for (int i = 0; i < nodes.getLength(); i++)
 				fn.accept(nodes.item(i));
 
 		} catch (ParserConfigurationException | SAXException | IOException | XPathExpressionException e) {
+			LOGGER.warning(e);
+		}
+	}
+
+	public static void parseXML(String xml, BiConsumer<Element, NodeList> fn) {
+		try (InputStream in = new ByteArrayInputStream(xml.getBytes("UTF-8"))) {
+			Element el = initBuilder().parse(in).getDocumentElement();
+			NodeList nodeList = el.getChildNodes();
+
+			fn.accept(el, nodeList);
+		} catch (SAXException | IOException e) {
 			LOGGER.warning(e);
 		}
 	}

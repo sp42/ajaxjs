@@ -119,7 +119,6 @@ public class IoHelper {
 				}
 			} else {
 				// readSize = in.read(buffer, 0, bufferSize);
-
 				while ((readSize = in.read(buffer, 0, bufferSize)) != -1) {
 					out.write(buffer, 0, readSize);
 					// readSize = in.read(buffer, 0, bufferSize);
