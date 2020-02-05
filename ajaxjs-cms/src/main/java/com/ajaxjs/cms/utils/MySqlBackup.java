@@ -43,7 +43,6 @@ public class MySqlBackup implements ServletContextListener {
 
 	public static void main(String[] args) {
 		Map<String, String> map = BackupTask.loadConfig("C:\\project\\register\\WebContent\\META-INF\\context.xml", "jdbc/mysql_deploy");
-		System.out.println(map);
 	}
 
 	public static class BackupTask extends TimerTask {
@@ -91,7 +90,7 @@ public class MySqlBackup implements ServletContextListener {
 						_map = MapTool.as(map, v -> v == null ? null : v.toString().replaceAll("^\"|\"$", ""));
 						_map.put("host", CommonUtil.regMatch("(?<=mysql://)[^/]+", _map.get("url")));
 						_map.put("databaseName", CommonUtil.regMatch("\\w+(?=\\?)", _map.get("url")));
-						System.out.println(_map.get("databaseName"));
+						
 						return _map;
 					}
 				}

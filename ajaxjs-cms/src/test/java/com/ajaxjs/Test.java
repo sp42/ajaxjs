@@ -1,5 +1,7 @@
 package com.ajaxjs;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.io.Serializable;
 import java.lang.reflect.Method;
 
@@ -17,7 +19,7 @@ public class Test {
         Method[] methods = Foo.class.getMethods();
         for (Method m : methods) {
             if (m.getAnnotation(Deprecated.class) != null) {
-                System.out.println(m);
+            	assertNotNull(m);
             }
         }
     }

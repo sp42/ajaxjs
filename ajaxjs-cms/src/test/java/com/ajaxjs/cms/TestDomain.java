@@ -59,7 +59,6 @@ public class TestDomain {
 	public void testMapDao() {
 		ArticleService.ArticleDao dao = new Repository().bind(ArticleService.ArticleDao.class);
 		Map<String, Object> info = dao.findById(1L);
-		System.out.println(info.get("id"));
 
 		List<Map<String, Object>> list = dao.findList(null);
 		assertNotNull(list);

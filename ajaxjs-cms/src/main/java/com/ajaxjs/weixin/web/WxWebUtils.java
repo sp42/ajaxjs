@@ -88,7 +88,7 @@ public class WxWebUtils {
 		if (jsApiTicket == null) {
 			accessToken = getAccessToken(appId, appSecret);
 			jsApiTicket = getJsApiTicket(accessToken.getToken());
-			System.out.println("第一次获取");
+			// 第一次获取
 		} else {
 			// 重新获取
 			if (!jsApiTicket.getExpiresDate().after(Calendar.getInstance())) {
@@ -108,8 +108,6 @@ public class WxWebUtils {
 		map.put("timestamp", CommonWxUtil.getTimeStamp());
 		
 		String raw = generateSignature(map);
-		System.out.println(raw);
-		System.out.println(Encode.getSHA1(raw));
 		
 		map.put("signature", Encode.getSHA1(raw));
 

@@ -48,7 +48,6 @@ public class TestFeedbackService {
 	public void testPageList() {
 		PageResult<Map<String, Object>> page;
 		page = service.findPagedList(0, 10);
-		System.out.println(page);
 		assertNotNull(page);
 //		assertNotNull(page.get(0));
 //		assertNotNull(page.get(0).get("name"));

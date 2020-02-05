@@ -221,7 +221,6 @@ public class CodeGeneratorsController implements IController {
 			rd.include(request, rep);
 			pw.flush();
 
-			// System.out.println(save);
 			os.writeTo(fos);
 		} catch (IOException | ServletException e) {
 			LOGGER.warning(e);

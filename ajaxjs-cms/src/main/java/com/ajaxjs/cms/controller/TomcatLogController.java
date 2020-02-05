@@ -86,7 +86,6 @@ public class TomcatLogController implements IController {
 		try {
 			String today = CommonUtil.now(CommonUtil.commonDateFormat_shortest);
 			String path = ConfigService.getValueAsString("System.tomcat_log") + String.format("catalina.%s.log", today);
-			System.out.println(path);
 			// 执行tail -f命令
 			process = Runtime.getRuntime().exec("tail -f " + path);
 			inputStream = process.getInputStream();

@@ -73,7 +73,6 @@ public class GroupController extends BaseController<Group> {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
 	public String create(Group entity) {
-		System.out.println(entity.getEndTime());
 		return super.create(entity);
 	}
 
@@ -83,7 +82,6 @@ public class GroupController extends BaseController<Group> {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
 	public String update(@PathParam(id) Long id, Group entity) {
-		System.out.println(entity.getEndTime());
 		return super.update(id, entity);
 	}
 

@@ -86,7 +86,6 @@ public class TestGoodsService {
 //		assertNotNull(page.getTotalCount());
 
 //		PageResult<Map<String, Object>> goods = service.findGoods_Format(0, 10);
-//		System.out.println(goods.getTotalCount());
 //		assertNotNull(goods.getTotalCount());
 	}
 	

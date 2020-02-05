@@ -124,7 +124,6 @@ public class AccessToken {
 		if (Calendar.getInstance().after(getExpiresDate())) {
 			// 超时了，重新获取
 			load();
-//			System.out.println("重新获取");
 		}
 
 		return token;

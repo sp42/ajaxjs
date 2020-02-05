@@ -3,6 +3,7 @@ package com.ajaxjs.cms.utils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.logging.Logger;
 
 /**
  * 
@@ -20,19 +21,19 @@ public class CalculateRows {
 		File f = new File("C:\\project\\shop"); // 目录
 		String type = ".java";// 查找什么类型的代码，如".java"就是查找以java开发的代码量，".php"就是查找以PHP开发的代码量
 		CalculateRows.treeFile(f, type);
-		System.out.println("路径：" + f.getPath());
-		System.out.println(type + "类数量：" + classcount);
-		System.out.println("代码数量：" + writeLines);
-		System.out.println("注释数量：" + commentLines);
-		System.out.println("空行数量：" + normalLines);
+		Logger.getGlobal().info("路径：" + f.getPath());
+		Logger.getGlobal().info(type + "类数量：" + classcount);
+		Logger.getGlobal().info("代码数量：" + writeLines);
+		Logger.getGlobal().info("注释数量：" + commentLines);
+		Logger.getGlobal().info("空行数量：" + normalLines);
 
 		if (classcount == 0) {
-			System.out.println("代码平均数量:" + 0);
+			Logger.getGlobal().info("代码平均数量:" + 0);
 		} else {
-			System.out.println("代码平均数量:" + writeLines / classcount);
+			Logger.getGlobal().info("代码平均数量:" + writeLines / classcount);
 		}
 
-		System.out.println("总 行数量：" + allLines);
+		Logger.getGlobal().info("总 行数量：" + allLines);
 	}
 
 	/**

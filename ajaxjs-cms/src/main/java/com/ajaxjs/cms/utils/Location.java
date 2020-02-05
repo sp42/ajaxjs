@@ -29,7 +29,6 @@ public class Location {
         
         for (int i = 0; i < doubles.length; i++) {
             Double z = getShortLocal(doubles[i][0], doubles[i][1], initlocal[0], initlocal[1]);        
-            System.out.println(z);
             //获取最短距离后把经纬度和距离存放到对象中
             LocalAddress localaddress = new LocalAddress(doubles[i][0], doubles[i][1], z);
             //将对象用list保存
