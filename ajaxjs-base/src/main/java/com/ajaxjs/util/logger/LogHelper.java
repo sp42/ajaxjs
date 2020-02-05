@@ -43,7 +43,7 @@ public class LogHelper {
 			if (fileHandler == null) {
 				fileHandler = new FileHandler(Version.srcFolder, null, ".log");
 			}
-			
+
 			logger.addHandler(fileHandler);// 初始化保存到磁盤的處理器
 		}
 
@@ -51,7 +51,7 @@ public class LogHelper {
 	}
 
 	/**
-	 * 简单打印信息，用于代替 System.out.println()
+	 * 简单打印信息
 	 * 
 	 * @param msg
 	 */
@@ -60,7 +60,7 @@ public class LogHelper {
 	}
 
 	/**
-	 * 简单打印信息，用于代替 System.out.println()
+	 * 简单打印信息
 	 * 
 	 * @param msg
 	 */
@@ -253,7 +253,7 @@ public class LogHelper {
 
 		if (frame != null) // 超链接，跳到源码所在行数
 			return String.format(".%s(%s:%s)", frame.getMethodName(), frame.getFileName(), frame.getLineNumber());
-		 else 
+		else
 			return null;
 	}
 }

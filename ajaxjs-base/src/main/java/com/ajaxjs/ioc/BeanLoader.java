@@ -97,7 +97,6 @@ public class BeanLoader extends AbstractScanner<Class<Object>> {
 //					String tpl = "public void %s(%s %s) { this.%s = %s; }";
 //					String m = String.format(tpl, setMethodName, field.getType().getName(), field.getName(), field.getName(), field.getName());
 //					setter = CtNewMethod.make(m, cc);
-//					System.out.println(setMethodName);
 
 					CtField f1 = new CtField(field.getType(), field.getName(), cc);
 					setter = CtNewMethod.setter(setMethodName, f1);

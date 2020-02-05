@@ -25,7 +25,6 @@ public class TestJsonParser {
 		Token tk = null;
 		int i = 0;
 		while ((tk = lexcer.next()) != Tokens.EOF) {
-			System.out.println(tk);
 			i++;
 			assertNotNull(tk);
 		}

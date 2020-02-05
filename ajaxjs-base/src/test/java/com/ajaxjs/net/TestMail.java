@@ -1,6 +1,7 @@
 package com.ajaxjs.net;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -52,7 +53,7 @@ public class TestMail {
 //	@Test
 	public void testGetWhois() throws IOException {
 		Map<String, String> text = Tools.getWhois("qq.com");
-		System.out.println(text);
+		assertNotNull(text);
 	}
 
 }

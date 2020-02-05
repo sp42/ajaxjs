@@ -174,7 +174,6 @@ public class Tools {
 	@SuppressWarnings("unchecked")
 	public static Map<String, Object> getIpLocation(String ip) throws IOException {
 		String url = "http://ip.taobao.com/service/getIpInfo.php?ip=" + ip;
-		System.out.println(url);
 		String xml = NetUtil.simpleGET(url);
 		Map<String, Object> map = JsonHelper.parseMap(xml);
 

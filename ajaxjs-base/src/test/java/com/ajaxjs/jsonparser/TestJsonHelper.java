@@ -40,10 +40,10 @@ public class TestJsonHelper {
 		Map<String, Object> map;
 
 		map = as(m1, arr -> arr[0]);
-		System.out.println(map.get("bar").getClass());
+		assertNotNull(map.get("bar").getClass());
 
 		map = as(m1, arr -> MappingValue.toJavaValue(arr[0]));
-		System.out.println(map.get("bar").getClass());
+		assertNotNull(map.get("bar").getClass());
 	}
 
 	@Test

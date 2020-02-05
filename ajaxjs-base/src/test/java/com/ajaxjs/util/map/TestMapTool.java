@@ -119,7 +119,6 @@ public class TestMapTool {
 //		String json = beanToJson(user);
 //		assertNotNull(json);
 //
-//		System.out.println(json);
 //		user = json2bean(json, TestCaseUserBean.class);
 //		assertEquals("Jack", user.getName());
 //		assertEquals(2, user.getLuckyNumbers()[0]);

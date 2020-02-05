@@ -47,12 +47,10 @@ public class TestIoc {
 		BeanContext.injectBeans();
 
 		Hi hi = (Hi) BeanContext.getBean("hi");
-		System.out.println(hi);
 
 		assertNotNull(hi);
 
 		Person person = (Person) BeanContext.getBean("person");
-		System.out.println(person.getName());
 		assertEquals("Hello Rose", hi.sayHello());
 	}
 
@@ -62,7 +60,6 @@ public class TestIoc {
 		BeanContext.injectBeans();
 
 		LoginAction loginAction = (LoginAction) BeanContext.getBean("LoginAction");
-		System.out.println(loginAction.getCaptchaService());
 		loginAction.getCaptchaService().showImage();
 		loginAction.captchaService2.showImage();
 

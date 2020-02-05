@@ -157,10 +157,7 @@ public class BeanContext {
 					String setMethodName = "set" + ReflectUtil.firstLetterUpper(field.getName());
 					Method setter = ReflectUtil.getMethod(item, setMethodName, field.getType());
 					if (setter == null) {
-
 					}
-//					System.out.println();
-
 				}
 			}
 		}

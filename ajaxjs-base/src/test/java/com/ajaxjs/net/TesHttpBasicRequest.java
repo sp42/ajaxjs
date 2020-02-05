@@ -43,6 +43,7 @@ public class TesHttpBasicRequest {
 		String html = NetUtil.get("https://gitee.com/sp42_admin/ajaxjs", true, conn -> {
 			HttpBasicRequest.setUserAgentDefault.accept(conn);
 		});
-		System.out.println(html);
+
+		assertNotNull(html);
 	}
 }
