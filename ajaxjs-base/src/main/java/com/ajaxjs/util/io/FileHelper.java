@@ -30,6 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.LinkedList;
 import java.util.List;
@@ -408,8 +409,23 @@ public class FileHelper extends IoHelper {
 	 * @throws IOException IO 异常
 	 */
 	public static boolean copy(String target, String dest) {
+		return copy(target, dest, false);
+	}
+
+	/**
+	 * 复制文件
+	 * 
+	 * @param target             源文件
+	 * @param dest               目的文件/目录，如果最后一个为目录，则不改名，如果最后一个为文件名，则改名
+	 * @param isREPLACE_EXISTING 是否替换已存在的文件
+	 * @return
+	 */
+	public static boolean copy(String target, String dest, boolean isREPLACE_EXISTING) {
 		try {
-			Files.copy(Paths.get(target), Paths.get(dest));
+			if (isREPLACE_EXISTING)
+				Files.copy(Paths.get(target), Paths.get(dest), StandardCopyOption.REPLACE_EXISTING);
+			else
+				Files.copy(Paths.get(target), Paths.get(dest));
 		} catch (IOException e) {
 			LOGGER.warning(e);
 			return false;
