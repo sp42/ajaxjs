@@ -16,7 +16,6 @@ public class TestTools {
 	public void testGetIpLocation() throws IOException {
 		Map<String, Object> ip = Tools.getIpLocation("35.220.250.107");
 		assertNotNull(ip);
-		System.out.println(ip);
 		
 		assertTrue(!IpBlock.isChinaMainlandIp("35.220.250.107"));
 	}

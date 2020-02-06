@@ -26,14 +26,12 @@ public class FormController implements IController {
 	@Path("map")
 	public String map(Map<String, Object> map) {
 //		int age = (int) map.get("age");
-//		System.out.println(map.get("age").getClass());
 		return "html::" + map.get("username");
 	}
 
 	@POST
 	@Path("bean")
 	public String bean(News news) {
-		System.out.println(news.getName());
 		return "html::" + news.getName();
 	}
 

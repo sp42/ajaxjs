@@ -123,8 +123,6 @@ public class MvcRequest extends HttpServletRequestWrapper {
 		/* 如果 context path 上有数字那就bug，所以先去掉 */
 		String url = getRoute(), regExp = "(" + value.replace("{" + paramName + "}", ")(\\d+)");/* 获取正则 暂时写死 数字 TODO */
 
-//		System.out.println(value);
-//		System.out.println(paramName);
 		Matcher m = Pattern.compile(regExp).matcher(url);
 		String result = m.find() ? m.group(m.groupCount()) : null;
 
@@ -142,12 +140,8 @@ public class MvcRequest extends HttpServletRequestWrapper {
 
 		if (getMethod() != null && getMethod().toUpperCase().equals("PUT")) {
 			map = getPutRequestData(); // Servlet 没有 PUT 获取表单，要自己处理
-//			System.out.println("111111Map:" + map);
-//			if(map.get("tel")!=null)
-//			System.out.println("111111Map:" + map.get("tel").getClass());
 		} else {
 			map = MapTool.as(getParameterMap(), arr -> MappingValue.toJavaValue(arr[0]));
-//			System.out.println("22222222Map:" + map);
 		}
 
 		// 抛出 IllegalArgumentException 这个异常 有可能是参数类型不一致造成的，要求的是 string 因为 map 从 request

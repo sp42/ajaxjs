@@ -90,7 +90,7 @@ public class TestRequestParam {
 		assertTrue(args[1] instanceof News);
 
 		News news = (News) args[1];
-		System.out.println(news.getName());
+		assertNotNull(news.getName());
 	}
 
 	@Test

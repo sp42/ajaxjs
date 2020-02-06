@@ -47,6 +47,11 @@ public class HttpBasicAuthFilter implements Filter {
 	 * 登录密码
 	 */
 	private static String pwd = "123123";
+	
+	/**
+	 * 报告是否启动的状态，让外界知晓
+	 */
+	public static boolean isEnadble = false;
 
 	@Override
 	public void init(FilterConfig config) throws ServletException {
@@ -54,6 +59,8 @@ public class HttpBasicAuthFilter implements Filter {
 
 		if (config.getInitParameter("adminPassword") != null)
 			pwd = config.getInitParameter("adminPassword");// 读取 web.xml 配置里的密码
+		
+		isEnadble = true;
 	}
 
 	@Override

@@ -107,17 +107,13 @@ public class MvcDispatcher implements Filter {
 
 		MvcRequest request = new MvcRequest(_request);
 		MvcOutput response = new MvcOutput(_response);
-
 		String uri = request.getFolder(), httpMethod = request.getMethod();
-//		System.out.println(">>>>>>>" + uri);
-
 		Action action = IController.findTreeByPath(uri);
 
 		if (action != null) {
 			Method method = action.getMethod(httpMethod);// 要执行的方法
 			IController controller = action.getController(httpMethod);
-//			System.out.println(">>>>>>>" + action);
-//			System.out.println(">>>>>>>" + method);
+//			LOGGER.info("uri: {0}, action: {1}, method: {2}", uri, action, method);
 
 			if (method != null && controller != null) {
 				execute(request, response, controller, method);
@@ -156,9 +152,6 @@ public class MvcDispatcher implements Filter {
 				args = RequestParam.getArgs(request, response, method);
 				model = findModel(args);
 				// 通过反射执行控制器方法:调用反射的 Reflect.executeMethod 方法就可以执行目标方法，并返回一个结果。
-
-//				System.out.println(Arrays.toString(args));
-//				System.out.println(method);
 			}
 
 			if (isDoFilter) {
@@ -170,7 +163,6 @@ public class MvcDispatcher implements Filter {
 			}
 
 			if (!isSkip) {
-				System.out.println(Arrays.toString(args));
 				result = hasArgs ? ReflectUtil.executeMethod_Throwable(controller, method, args)
 						: ReflectUtil.executeMethod_Throwable(controller, method);
 			}
