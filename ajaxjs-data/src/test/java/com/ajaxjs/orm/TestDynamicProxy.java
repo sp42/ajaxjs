@@ -27,7 +27,6 @@ public class TestDynamicProxy {
 				// 处理更新的方法……
 			}
 
-			System.out.println("执行方法……"); // 无论调用哪个方法，都会执行这个 invoke()
 			return "我是返回值";
 		}
 	}
@@ -48,6 +47,5 @@ public class TestDynamicProxy {
 
 	public static void main(String[] args) {
 		Foo foo = getProxy(Foo.class);
-		System.out.println(foo);
 	}
 }

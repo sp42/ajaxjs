@@ -212,7 +212,7 @@ public class JdbcReader {
 							if ((_value != null) && beanClz.getField("extractData") != null) {
 								Object obj = ReflectUtil.executeMethod(bean, "getExtractData");
 
-//								System.out.println(":::::::::key::"+ key +":::v:::" + _value);
+//								LOGGER.info(":::::::::key::"+ key +":::v:::" + _value);
 								if (obj == null) {
 									Map<String, Object> extractData = new HashMap<>();
 									ReflectUtil.executeMethod(bean, "setExtractData", extractData);
