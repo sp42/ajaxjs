@@ -1,6 +1,7 @@
 package com.ajaxjs.ioc;
 
 import java.lang.reflect.Method;
+import java.util.logging.Logger;
 
 import org.junit.Test;
 
@@ -12,17 +13,17 @@ public class TestSimpleAop {
 		@Before(value = Bar.class, methodName = "bar")
 		@Before(value = Bar.class, methodName = "bar2")
 		public static void foo() {
-			System.out.println("foo");
+			Logger.getGlobal().info("foo");
 		}
 	}
 
 	static class Bar {
 		public void bar() {
-			System.out.println("bar");
+			Logger.getGlobal().info("bar");
 		}
 
 		public static void bar2() {
-			System.out.println("bar");
+			Logger.getGlobal().info("bar");
 		}
 	}
 
@@ -37,11 +38,11 @@ public class TestSimpleAop {
 			String methodName = before.methodName();
 
 			Method beforeMethod = beforeActor.getMethod(methodName);
-			
-			if(ReflectUtil.isStaticMethod(beforeMethod)) {
+
+			if (ReflectUtil.isStaticMethod(beforeMethod)) {
 //				ReflectUtil.executeMethod(beforeMethod, args); // 静态方法
 			}
-			System.out.println(beforeMethod);
+			Logger.getGlobal().info(beforeMethod.toString());
 		}
 	}
 }

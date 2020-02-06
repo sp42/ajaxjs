@@ -15,7 +15,6 @@ public class TestListMap {
 
 	static {
 		config.mapEntryHandler = (String key, Object obj, Map<String, Object> map, Map<String, Object> superMap, int level) -> {
-			System.out.println(key + ":" + obj);
 			return true;
 		};
 	}
@@ -27,7 +26,6 @@ public class TestListMap {
 		ListMapConfig config2 = new ListMapConfig();
 		config2.mapEntryHandler = (key, obj, map, superMap, level) -> {
 			if (key.equals("id")) {
-				System.out.println(key + ":");
 				return false;
 			}
 
@@ -35,10 +33,7 @@ public class TestListMap {
 		};
 
 		ListMap.traveler(TestJsonHelper.list, config2);
-
 		ListMap.buildPath(TestJsonHelper.list);
-
-		System.out.println(TestJsonHelper.list);
 	}
 
 //	@Test
@@ -57,6 +52,5 @@ public class TestListMap {
 	public void testFlatMap() {
 		Map<String, Object> fMap = ListMap.flatMap(TestJsonHelper.map);
 		assertEquals(7, fMap.get("data.jobCatalog_Id"));
-		System.out.println(fMap);
 	}
 }
