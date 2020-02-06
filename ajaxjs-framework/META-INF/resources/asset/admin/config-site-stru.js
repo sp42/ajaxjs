@@ -1,6 +1,6 @@
 var tree = aj('.tree');
 var tpl = aj('.tpl').value;
-var stack = [], indexs = [];
+var stack = [], indexs = [], ids =[];
 
 function it(json, fn, parentEl) {
 	stack.push(json);
@@ -16,10 +16,11 @@ function it(json, fn, parentEl) {
 	for ( var i = 0, j = json.length; i < j; i++) {
 		indexs.push(i);
 		var el = json[i];
+		ids.push(el.id);
 		
 		var li = document.createElement('li');
+			li.dataset.path = ids.join('/');
 			li.dataset.jsonPath = indexs.join('-');
-		
 
 		if (el.children) {
 			var div = document.createElement('div'); // parentNode
@@ -45,6 +46,17 @@ function it(json, fn, parentEl) {
 		li.querySelector('input[name=id]').value = el.id;
 		li.querySelector('input[name=name]').value = el.name;
 		li.querySelector('.name').innerHTML = el.id;
+		li.$('button.initJSP').onclick = e => {
+			aj.showConfirm('提示：<br />初始化页面会<b>覆盖</b>原有的页面，确定进行初始化？？', ()=> {
+				var el = e.target, li = el.up('li');
+				var path = li.dataset.path;
+				
+				aj.xhr.post('initJSP', json => {
+					if(json.isOk)
+						aj.msg.show(json.msg);				
+				}, {path: path});
+			});
+		};
 		
 		
 		var isHidden = li.querySelector('input[type=checkbox]');
@@ -54,6 +66,7 @@ function it(json, fn, parentEl) {
 		
 		ul.appendChild(li);
 		indexs.pop();
+		ids.pop();
 	}
 	
 	stack.pop();

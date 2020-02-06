@@ -107,12 +107,12 @@ public class PageEditor implements IController, Constant {
 	/**
 	 * 可编辑标识开始
 	 */
-	private final static String startToken = "<!-- Editable AREA|START -->";
+	private final static String START_TOKEN = "<!-- Editable AREA|START -->";
 
 	/**
 	 * 可编辑标识结束
 	 */
-	private final static String endToken = "<!-- Editable AREA|END -->";
+	private final static String END_TOKEN = "<!-- Editable AREA|END -->";
 
 	/**
 	 * 根据 页面中可编辑区域之标识，取出来。
@@ -124,14 +124,14 @@ public class PageEditor implements IController, Constant {
 	public static String read_jsp_fileContent(String fullFilePath) throws IOException {
 		String jsp_fileContent = FileHelper.openAsText(fullFilePath);
 
-		int start = jsp_fileContent.indexOf(startToken), end = jsp_fileContent.indexOf(endToken);
+		int start = jsp_fileContent.indexOf(START_TOKEN), end = jsp_fileContent.indexOf(END_TOKEN);
 
 		try {
-			jsp_fileContent = jsp_fileContent.substring(start + startToken.length(), end);
+			jsp_fileContent = jsp_fileContent.substring(start + START_TOKEN.length(), end);
 		} catch (StringIndexOutOfBoundsException e) {
 			jsp_fileContent = null;
 
-			String msg = "页面文件" + fullFilePath + "中没有标记可编辑区域之标识。请参考：" + startToken + "/" + endToken;
+			String msg = "页面文件" + fullFilePath + "中没有标记可编辑区域之标识。请参考：" + START_TOKEN + "/" + END_TOKEN;
 			LOGGER.info(msg);
 			throw new IOException(msg);
 		}

@@ -12,6 +12,7 @@
  */
 package com.ajaxjs.cms.app;
 
+import java.io.File;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -56,10 +57,23 @@ public class ConfigController implements IController {
 	@Path("siteStru")
 	public String siteStruUI(ModelAndView model) {
 		LOGGER.info("编辑网站结构");
-		
+
 		model.put("siteStruJson", FileHelper.openAsText(SiteStruService.jsonPath));
-		
+
 		return BaseController.admin("config-site-stru");
+	}
+
+	@POST
+	@Path("siteStru/initJSP")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String siteStruUI_initJSP(@FormParam("path") String path, MvcRequest r) {
+		LOGGER.info("初始化 JSP 页面");
+		String folder = r.mappath(path);
+		FileHelper.mkDir(folder);
+		String dest = folder + File.separator + "index.jsp";
+		FileHelper.copy(r.mappath(BaseController.jsp_perfix_webinf + File.separator + "common-page.jsp"), dest, true);
+
+		return BaseController.jsonOk("初始化 JSP 页面成功！");
 	}
 
 	@POST
@@ -68,7 +82,7 @@ public class ConfigController implements IController {
 	public String saveSiteStru(@NotNull @FormParam("json") String json) {
 		FileHelper.saveText(SiteStruService.jsonPath, json);
 		SiteStruService.loadSiteStru(MvcRequest.getHttpServletRequest().getServletContext());
-		
+
 		return BaseController.jsonOk("修改网站结构成功！");
 	}
 
@@ -76,7 +90,7 @@ public class ConfigController implements IController {
 	@Path("site")
 	public String siteUI() {
 		LOGGER.info("编辑网站信息");
-		
+
 		return BaseController.admin("config-site-form");
 	}
 
@@ -84,7 +98,7 @@ public class ConfigController implements IController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String saveAllconfig(Map<String, Object> map, HttpServletRequest request) {
 		LOGGER.info("保存配置并且刷新配置");
-		
+
 		ConfigService.loadJSON_in_JS(map);
 		ConfigService.load(); // 刷新配置
 

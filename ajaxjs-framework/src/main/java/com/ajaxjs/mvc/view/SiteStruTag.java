@@ -40,23 +40,29 @@ public class SiteStruTag extends SimpleTagSupport {
 		SiteStruService sitestru = (SiteStruService) pageContext.getServletContext().getAttribute("SITE_STRU");
 		if (sitestru == null)
 			throw new UnsupportedOperationException(" 未 定义 SiteStruService 类型的 SITE_STRU，该常量应在 Servlet 初始化时定义。");
-		
+
 		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 		String output = "Error Type for tag";
 
-		if ("nav-bar".equals(type)) {
+		switch (type) {
+		case "navBar":
 			output = buildNavBar(sitestru, request);
-		} else if ("secondLevelMenu".equals(type)) { // 二级菜单
-			output = buildSecondLevelMenu(sitestru, request);
-		} else if ("submenu".equals(type) && request.getAttribute("PAGE_Node") != null) { // 次级菜单
-			output = buildSubMenu(sitestru, request);
-		} else if ("breadcrumb".equals(type) && request.getAttribute("PAGE_Node") != null) { // 面包屑导航
+			break;
+		case "secondLevelMenu":// 二级菜单
+			if (request.getAttribute("PAGE_Node") != null)
+				output = buildSecondLevelMenu(sitestru, request);
+			break;
+		case "subMenu":
+			if (request.getAttribute("PAGE_Node") != null)
+				output = buildSubMenu(sitestru, request);// 次级菜单
+			break;
+		case "breadCrumb":// 面包屑导航
 			output = buildBreadCrumb(sitestru, request);
+			break;
 		}
 
 		pageContext.getOut().write(output);
 	}
-	
 
 	/**
 	 * 导航条
@@ -72,17 +78,17 @@ public class SiteStruTag extends SimpleTagSupport {
 
 		if (sitestru.getNavBar() != null) {
 			for (Map<String, Object> item : sitestru.getNavBar()) {
-				
+
 				Object isHidden = item.get("isHidden");
-				if(isHidden != null && ((boolean)isHidden) == true)  // 隐藏的
+				if (isHidden != null && ((boolean) isHidden) == true) // 隐藏的
 					continue;
-				
+
 				boolean isSelected = sitestru.isCurrentNode(item, request);
-				
+
 				String url = ctx + "/" + item.get(ListMap.ID) + "/";
-				url = addParam(url, item);			
+				url = addParam(url, item);
 				sb.append(String.format(li, isSelected ? " class=\"selected\"" : "", url, item.get("name")));
-				
+
 				if (isSelected)
 					hasSelected = true;
 			}
@@ -99,10 +105,10 @@ public class SiteStruTag extends SimpleTagSupport {
 	 */
 	private static String addParam(String url, Map<String, Object> item) {
 		Object param = item.get("param");
-		
-		if(param != null) 
-			url += (String)param;
-		
+
+		if (param != null)
+			url += (String) param;
+
 		return url;
 	}
 
@@ -124,12 +130,12 @@ public class SiteStruTag extends SimpleTagSupport {
 
 		for (Map<String, Object> item : nodes) {
 			Object isHidden = item.get("isHidden");
-			if(isHidden!= null && ((boolean)isHidden) == true)  // 隐藏的
+			if (isHidden != null && ((boolean) isHidden) == true) // 隐藏的
 				continue;
-			
+
 			String url = ctx + item.get(ListMap.PATH);
-			url = addParam(url, item);	
-			
+			url = addParam(url, item);
+
 			boolean isSelected = sitestru.isCurrentNode(item, request);
 			sb.append(String.format(li, isSelected ? " class=\"selected\"" : "", url, item.get("name")));
 		}
@@ -151,12 +157,12 @@ public class SiteStruTag extends SimpleTagSupport {
 		if (sitestru.getMenu(request) != null) {
 			for (Map<String, Object> item : sitestru.getMenu(request)) {
 				Object isHidden = item.get("isHidden");
-				if(isHidden!= null && ((boolean)isHidden) == true)  // 隐藏的
+				if (isHidden != null && ((boolean) isHidden) == true) // 隐藏的
 					continue;
-				
+
 				String url = ctx + item.get(ListMap.PATH);
-				url = addParam(url, item);	
-				
+				url = addParam(url, item);
+
 				boolean isSelected = sitestru.isCurrentNode(item, request);
 				sb.append(String.format(li, isSelected ? " class=\"selected\"" : "", url, item.get("name")));
 			}
@@ -176,14 +182,15 @@ public class SiteStruTag extends SimpleTagSupport {
 	private static String buildBreadCrumb(SiteStruService sitestru, HttpServletRequest request) {
 		String ctx = request.getContextPath();
 		StringBuilder sb = new StringBuilder();
-
 		sb.append(String.format("<nav class=\"anchor\">您的位置 ：<a href=\"%s\">首 页 </a>", ctx));
 		// MVC模式下，url 路径还是按照 JSP 的而不是 Servlet 的，我们希望统一的路径是按照 Servlet 的，故所以这里 Servlet 优先
 
 		Map<String, Object> node = (Map<String, Object>) request.getAttribute("PAGE_Node");
 		String tpl = " » <a href=\"%s\">%s</a>";
 
-		if(node.get("supers") != null) {
+		if (node == null && request.getRequestURI().indexOf(ctx + "/index") != -1) {
+			// 首页
+		} else if (node.get("supers") != null) {
 			String _supers = (String) node.get("supers");
 			String[] supers = _supers.split(",");
 
@@ -191,13 +198,13 @@ public class SiteStruTag extends SimpleTagSupport {
 				String[] arr = _super.split(":");
 				sb.append(String.format(tpl, ctx + arr[0], arr[1]));
 			}
+
+			sb.append(String.format(tpl, ctx + node.get(ListMap.PATH), node.get("name")));
 		}
-		
-		sb.append(String.format(tpl, ctx + node.get(ListMap.PATH), node.get("name")));
+
 		sb.append("</nav>");
 
 		// 如果有分类的话，先显示分类 （适合列表的情形）
-
 		return sb.toString();
 	}
 }

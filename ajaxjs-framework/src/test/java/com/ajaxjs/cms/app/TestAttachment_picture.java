@@ -1,5 +1,7 @@
 package com.ajaxjs.cms.app;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.util.List;
 
 import org.junit.AfterClass;
@@ -24,7 +26,7 @@ public class TestAttachment_picture{
 		Attachment_pictureService owner = (Attachment_pictureService)BeanContext.getBean("Attachment_pictureService");
 		List<Attachment_picture> oo = owner.findByOwner(sz);
 		for (Attachment_picture aa : oo) {
-			System.out.println(aa.getPath());
+			assertNotNull(aa.getPath());
 		}
 	}
 

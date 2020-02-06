@@ -33,12 +33,12 @@
 			}
 		%>
 		<div class="edit">
-			<aj-form-html-editor field-name="content" base-path="../" ref="htmleditor">
+			<aj-form-html-editor field-name="content" base-path="${ctx}${param.url.replaceAll('/$', '')}" ref="htmleditor">
 				<textarea class="hide" name="content">${contentBody}</textarea>
 			</aj-form-html-editor>
 			
 			<!-- 弹出层上传对话框 -->
-			<aj-popup-upload ref="uploadLayer" upload-url="${ctx}/admin/attachmentPicture/upload/staticPageUsedImg/" img-place="${commonAsset.concat('/images/imgBg.png')}">
+			<aj-popup-upload ref="uploadLayer" upload-url="${ctx}/admin/attachmentPicture/upload/staticPageUsedImg/?url=${param.url}" img-place="${commonAsset.concat('/images/imgBg.png')}">
 			</aj-popup-upload>
 		</div>
 		<script>

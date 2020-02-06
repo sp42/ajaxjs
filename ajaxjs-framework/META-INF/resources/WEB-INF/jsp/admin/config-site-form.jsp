@@ -27,7 +27,7 @@
 			</div>
 			<div>
 				<label>
-					<div class="label">公司全称<span class="required-note">*</span></div> 
+					<div class="label">公司简称<span class="required-note">*</span></div> 
 					<input type="text" placeholder="公司简称" name="clientShortName" data-note2="请输入你公司的简称" value="${aj_allConfig.clientShortName}" />
 				</label>
 			</div>

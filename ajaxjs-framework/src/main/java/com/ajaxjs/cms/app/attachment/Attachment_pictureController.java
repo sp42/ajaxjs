@@ -21,6 +21,7 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.io.ImageHelper;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
@@ -119,38 +120,25 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	}
 
 	@POST
-	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("upload/staticPageUsedImg/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String imgUpload(MvcRequest request) throws IOException {
+	public String imgUpload(MvcRequest request, @QueryParam("url")String url) throws IOException {
 		final UploadFileInfo info = uploadByConfig(request);
+		
+		url = url.replaceAll("^/|/$", "");
+		int folderDeep = url.split("/").length;
+		final String _imgUrl = CommonUtil.repeatStr("../", "", folderDeep) + info.path.replaceAll("^/", "");
 
 		if (info.isOk) {
 			// 获取图片信息
-			ImageHelper imgHelper = new ImageHelper(info.fullPath);
-
-			Attachment_picture picture = new Attachment_picture();
-			picture.setName(info.saveFileName);
-			picture.setPath(info.path);
-			picture.setPicWidth(imgHelper.width);
-			picture.setPicHeight(imgHelper.height);
-			picture.setFileSize((int) (imgHelper.file.length() / 1024));
-			picture.setCatalog(1);
-
-			final Long _newlyId = service.create(picture);
-			System.out.println(info.path);
-
 			return "json::" + JsonHelper.toJson(new Object() {
 				@SuppressWarnings("unused")
 				public Boolean isOk = true;
 				@SuppressWarnings("unused")
 				public String msg = "上传成功！";
 				@SuppressWarnings("unused")
-				public String imgUrl = info.path;
-				@SuppressWarnings("unused")
-				public Long newlyId = _newlyId;
+				public String imgUrl = _imgUrl;
 			});
-
 		} else
 			return jsonNoOk("上传失败！");
 	}

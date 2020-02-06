@@ -37,14 +37,12 @@ public class ScanTpl extends AbstractScanner<Object> {
 	public static void test() throws IOException {
 		URL url = ScanTpl.class.getProtectionDomain().getCodeSource().getLocation();
 		File file = new File(url.getFile()); // jar 包磁盘路径
-		System.out.println(file.getCanonicalPath());
 		JarFile jar = new JarFile(file);
 		Enumeration<JarEntry> i = jar.entries();
 
 		while (i.hasMoreElements()) {
 			JarEntry e = i.nextElement();
 			if (e.getName().startsWith("META-INF/asset/jsp/system/CodeGenerator/template")) {
-				System.out.println(e.getName());
 			}
 		}
 

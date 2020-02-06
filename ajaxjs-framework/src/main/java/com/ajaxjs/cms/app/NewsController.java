@@ -137,7 +137,6 @@ public class NewsController extends BaseController<Map<String, Object>> {
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String downAllPics(@NotNull @FormParam("pics") String pics, MvcRequest r) {
-		System.out.println(pics);
 		String[] arr = pics.split("\\|");
 
 		new PicDownload(arr, r.mappath("/images"), () -> SnowflakeIdWorker.getId() + "").start();

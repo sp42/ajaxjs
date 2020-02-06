@@ -7,24 +7,24 @@
 		<jsp:param name="title" value="浏览页面以选择编辑" />
 	</jsp:include>
 	<style type="text/css">
-	html, body {
-		height: 100%;
-		overflow: hidden;
-	}
-	
-	body>div {
-		height: 99%;
-	}
-	
-	iframe {
-		border: 0;
-		width: 100%;
-		height: 95%;
-	}
-	
-	button {
-		padding: 5px 20px;
-	}
+		html, body {
+			height: 100%;
+			overflow: hidden;
+		}
+		
+		body>div {
+			height: 99%;
+		}
+		
+		iframe {
+			border: 0;
+			width: 100%;
+			height: 95%;
+		}
+		
+		button {
+			padding: 5px 20px;
+		}
 	</style>
 </head>
 <body>
@@ -40,11 +40,11 @@
 				url : ""
 			},
 			methods : {
-				onchange : function(e) {
+				onchange(e) {
 					var el = e.target;
 					this.url = location.origin + el.contentWindow.location.pathname;
 				},
-				clk : function() {
+				clk() {
 					var url = aj('iframe').contentDocument.location.href;
 					// 去掉 dom 返回的前缀
 					url = url.replace(/http:\/\/[^\/]*/, '');

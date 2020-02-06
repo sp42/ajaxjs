@@ -35,6 +35,8 @@
 			<input type="text" size="10" name="id"    placeholder="id标识符，必填" />   <button class="saveId">   <img class="icon" src="${commonAssetIcon}/save.gif" /> 保存</button>
 			<input type="text" size="10" name="name"  placeholder="显示的名称，必填"  />	<button class="saveName"> <img class="icon" src="${commonAssetIcon}/save.gif" /> 保存</button>
 			<input type="text" size="10" name="param" placeholder="参数，选填" />		<button class="saveParam"><img class="icon" src="${commonAssetIcon}/save.gif" /> 保存</button>
+			
+			<button class="initJSP">初始化页面 </button>
 		</div>
 		<span class="name">new</span> 
 		<span class="fa fa-plus" style="color:#00c3fa;"></span> 

@@ -12,6 +12,7 @@ import com.aliyuncs.profile.IClientProfile;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Logger;
 
 /**
  * Created on 17/6/7. 短信API产品的DEMO程序,工程中包含了一个SmsDemo类，直接通过
@@ -97,34 +98,34 @@ public class TestSmsSimple {
 	public static void main(String[] args) throws ClientException, InterruptedException {
 		//发短信
 		SendSmsResponse response = sendSms();
-		System.out.println("短信接口返回的数据----------------");
-		System.out.println("Code=" + response.getCode());
-		System.out.println("Message=" + response.getMessage());
-		System.out.println("RequestId=" + response.getRequestId());
-		System.out.println("BizId=" + response.getBizId());
+		Logger.getGlobal().info("短信接口返回的数据----------------");
+		Logger.getGlobal().info("Code=" + response.getCode());
+		Logger.getGlobal().info("Message=" + response.getMessage());
+		Logger.getGlobal().info("RequestId=" + response.getRequestId());
+		Logger.getGlobal().info("BizId=" + response.getBizId());
 
 		Thread.sleep(3000L);
 
 		//查明细
 		if (response.getCode() != null && response.getCode().equals("OK")) {
 			QuerySendDetailsResponse querySendDetailsResponse = querySendDetails(response.getBizId());
-			System.out.println("短信明细查询接口返回数据----------------");
-			System.out.println("Code=" + querySendDetailsResponse.getCode());
-			System.out.println("Message=" + querySendDetailsResponse.getMessage());
+			Logger.getGlobal().info("短信明细查询接口返回数据----------------");
+			Logger.getGlobal().info("Code=" + querySendDetailsResponse.getCode());
+			Logger.getGlobal().info("Message=" + querySendDetailsResponse.getMessage());
 			int i = 0;
 			for (QuerySendDetailsResponse.SmsSendDetailDTO smsSendDetailDTO : querySendDetailsResponse.getSmsSendDetailDTOs()) {
-				System.out.println("SmsSendDetailDTO[" + i + "]:");
-				System.out.println("Content=" + smsSendDetailDTO.getContent());
-				System.out.println("ErrCode=" + smsSendDetailDTO.getErrCode());
-				System.out.println("OutId=" + smsSendDetailDTO.getOutId());
-				System.out.println("PhoneNum=" + smsSendDetailDTO.getPhoneNum());
-				System.out.println("ReceiveDate=" + smsSendDetailDTO.getReceiveDate());
-				System.out.println("SendDate=" + smsSendDetailDTO.getSendDate());
-				System.out.println("SendStatus=" + smsSendDetailDTO.getSendStatus());
-				System.out.println("Template=" + smsSendDetailDTO.getTemplateCode());
+				Logger.getGlobal().info("SmsSendDetailDTO[" + i + "]:");
+				Logger.getGlobal().info("Content=" + smsSendDetailDTO.getContent());
+				Logger.getGlobal().info("ErrCode=" + smsSendDetailDTO.getErrCode());
+				Logger.getGlobal().info("OutId=" + smsSendDetailDTO.getOutId());
+				Logger.getGlobal().info("PhoneNum=" + smsSendDetailDTO.getPhoneNum());
+				Logger.getGlobal().info("ReceiveDate=" + smsSendDetailDTO.getReceiveDate());
+				Logger.getGlobal().info("SendDate=" + smsSendDetailDTO.getSendDate());
+				Logger.getGlobal().info("SendStatus=" + smsSendDetailDTO.getSendStatus());
+				Logger.getGlobal().info("Template=" + smsSendDetailDTO.getTemplateCode());
 			}
-			System.out.println("TotalCount=" + querySendDetailsResponse.getTotalCount());
-			System.out.println("RequestId=" + querySendDetailsResponse.getRequestId());
+			Logger.getGlobal().info("TotalCount=" + querySendDetailsResponse.getTotalCount());
+			Logger.getGlobal().info("RequestId=" + querySendDetailsResponse.getRequestId());
 		}
 	}
 }
