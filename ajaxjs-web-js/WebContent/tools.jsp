@@ -21,9 +21,7 @@
 	}
 
 	public static String getUrl(String url) throws Throwable {
-		String html = NetUtil.get("https://gitee.com/sp42_admin/ajaxjs", true, conn -> {
-			NetUtil.setUserAgentDefault.accept(conn);
-		});
+		String html = NetUtil.get("https://gitee.com/sp42_admin/ajaxjs", true);
 		
 		return html;
 	}

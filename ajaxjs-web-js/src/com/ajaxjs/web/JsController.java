@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -49,7 +50,8 @@ public class JsController extends HttpServlet {
 		String output = "";
 		String saveFolder = request.getParameter("saveFolder") == null ? frontEnd : request.getParameter("saveFolder");
 		
-		System.out.println(request.getParameter("saveFolder"));
+		Logger.getGlobal().info(request.getParameter("saveFolder"));
+		
 		try {
 			save(saveFolder + "\\main.css", css);
 
@@ -145,7 +147,6 @@ public class JsController extends HttpServlet {
 
 	public void test() throws IOException {
 		String content = read("c://temp//newfile.txt");
-		System.out.println(content);
 		save("c://temp//newfile2.txt", content);
 	}
 
@@ -158,7 +159,7 @@ public class JsController extends HttpServlet {
 		if (!Files.exists(path))
 			Files.createFile(path);
 
-		System.out.println(path);
+		Logger.getGlobal().info(path.toString());
 		Files.write(path, content.getBytes());
 
 	}
