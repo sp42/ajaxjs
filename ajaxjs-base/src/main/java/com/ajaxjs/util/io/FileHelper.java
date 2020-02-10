@@ -49,6 +49,9 @@ import com.ajaxjs.util.logger.LogHelper;
  */
 public class FileHelper extends IoHelper {
 	private static final LogHelper LOGGER = LogHelper.getLog(FileHelper.class);
+	// 当前系统的分隔符(linux、windows)
+
+	public static final String separator = File.separator;
 
 	/**
 	 * 创建目录
@@ -117,7 +120,7 @@ public class FileHelper extends IoHelper {
 	public static void saveText(File file, String text) {
 		LOGGER.info("正在保存文件{0}， 保存内容：\n{1}", file.toString(), text);
 
-		save(file, text.getBytes(), true, false);
+		save(file, text.getBytes(StandardCharsets.UTF_8), true, false);
 	}
 
 	public static void saveText(String filePath, String text) {
