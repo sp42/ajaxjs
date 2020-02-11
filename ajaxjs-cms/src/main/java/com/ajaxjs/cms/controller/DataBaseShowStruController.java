@@ -27,11 +27,11 @@ import com.ajaxjs.util.logger.LogHelper;
 @Path("/admin/DataBaseShowStru")
 public class DataBaseShowStruController implements IController {
 	private static final LogHelper LOGGER = LogHelper.getLog(DataBaseShowStruController.class);
-	
+
 	@GET
 	public String show() {
 		LOGGER.info("表字段浏览");
-		
+
 		return BaseController.admin("database-show-stru");
 	}
 
@@ -44,14 +44,14 @@ public class DataBaseShowStruController implements IController {
 
 		return BaseController.toJson(tables);
 	}
-	
+
 	@GET
 	@Path("showTableAllByTableName")
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String showTableAllByTableName(@QueryParam("tableName") @NotNull String tableName) {
 		List<Map<String, String>> table = getColumnCommentByTableName(JdbcConnection.getConnection(), tableName);
-		
+
 		return BaseController.toJson(table);
 	}
 
@@ -62,7 +62,8 @@ public class DataBaseShowStruController implements IController {
 	 * @return 表注释
 	 */
 	public static String getCommentByTableName(Connection conn, String tableName) {
-		try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery("SHOW CREATE TABLE " + tableName);) {
+		try (Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery("SHOW CREATE TABLE " + tableName);) {
 			if (rs != null && rs.next()) {
 				String createDDL = rs.getString(2);
 				return parse(createDDL);
@@ -91,7 +92,7 @@ public class DataBaseShowStruController implements IController {
 						if (rs.next())
 							createDDL = rs.getString(2);
 					} catch (SQLException e) {
-						e.printStackTrace();
+						LOGGER.warning(e);
 					}
 
 					String comment = parse(createDDL);
@@ -143,12 +144,14 @@ public class DataBaseShowStruController implements IController {
 	}
 
 	/**
+	 * 获取多张表的各个字段的注释
 	 * 
-	 * @param conn			数据库连接对象
-	 * @param tableNames	多张表的表名
+	 * @param conn       数据库连接对象
+	 * @param tableNames 多张表的表名
 	 * @return 包含给个字段注释的 Map，key 是表名，value 是各个列。列中的Map
 	 */
-	public static Map<String, List<Map<String, String>>> getColumnCommentByTableName(Connection conn, List<String> tableNames) {
+	public static Map<String, List<Map<String, String>>> getColumnCommentByTableName(Connection conn,
+			List<String> tableNames) {
 		Map<String, List<Map<String, String>>> map = new HashMap<>();
 
 		JdbcHelper.stmt(conn, stmt -> {
@@ -164,6 +167,13 @@ public class DataBaseShowStruController implements IController {
 		return map;
 	}
 
+	/**
+	 * 获取一张表的各个字段的注释
+	 * 
+	 * @param conn      数据库连接对象
+	 * @param tableName 单张表名
+	 * @return
+	 */
 	public static List<Map<String, String>> getColumnCommentByTableName(Connection conn, String tableName) {
 		List<Map<String, String>> list = new ArrayList<>();
 
@@ -174,6 +184,11 @@ public class DataBaseShowStruController implements IController {
 		return list;
 	}
 
+	/**
+	 * 
+	 * @param rs
+	 * @param list
+	 */
 	private static void rs2list(ResultSet rs, List<Map<String, String>> list) {
 		try {
 			while (rs.next()) {
