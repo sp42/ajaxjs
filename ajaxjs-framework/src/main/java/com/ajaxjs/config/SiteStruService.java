@@ -112,8 +112,7 @@ public class SiteStruService implements ServletContextListener {
 
 				// String configJson =
 				// JsonHelper.format(JsonHelper.stringifyMap(ConfigService.config));
-				LOGGER.infoGreen("加载 " + ConfigService.getValueAsString("clientFullName") + " " + ctx.getContextPath()
-						+ " 项目配置成功！All config loaded.");
+				LOGGER.infoGreen("加载 " + ConfigService.getValueAsString("clientFullName") + " " + ctx.getContextPath() + " 项目配置成功！All config loaded.");
 				
 				if(ConfigService.getValueAsBool("isForceProductEnv")) {
 					LOGGER.infoGreen("强制为生产环境模式 isDebug=false");
@@ -143,6 +142,7 @@ public class SiteStruService implements ServletContextListener {
 		ctx.setAttribute("commonJsp", ctxPath + "/" + Constant.jsp_perfix);
 		ctx.setAttribute("isDebuging", Version.isDebug);
 		ctx.setAttribute("ajaxjs_ui_output", ctxPath + "/ajaxjs-ui-output");
+
 	}
 
 	/**
