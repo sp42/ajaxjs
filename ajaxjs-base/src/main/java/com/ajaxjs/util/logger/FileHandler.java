@@ -230,7 +230,6 @@ public class FileHandler extends Handler {
 	 */
 	@Override
 	public void publish(LogRecord record) {
-
 		if (!isLoggable(record)) {
 			return;
 		}
@@ -323,19 +322,17 @@ public class FileHandler extends Handler {
 	 */
 	@Override
 	public void flush() {
-
 		writerLock.readLock().lock();
 		try {
-			if (writer == null) {
+			if (writer == null)
 				return;
-			}
+
 			writer.flush();
 		} catch (Exception e) {
 			reportError(null, e, ErrorManager.FLUSH_FAILURE);
 		} finally {
 			writerLock.readLock().unlock();
 		}
-
 	}
 
 	/**
@@ -371,8 +368,7 @@ public class FileHandler extends Handler {
 			suffix = suffix.substring(1);
 		}
 
-		pattern = Pattern
-				.compile("^(" + Pattern.quote(prefix) + ")\\d{4}-\\d{1,2}-\\d{1,2}(" + Pattern.quote(suffix) + ")$");
+		pattern = Pattern.compile("^(" + Pattern.quote(prefix) + ")\\d{4}-\\d{1,2}-\\d{1,2}(" + Pattern.quote(suffix) + ")$");
 		String sMaxDays = getProperty(className + ".maxDays", String.valueOf(DEFAULT_MAX_DAYS));
 		if (maxDays <= 0) {
 			try {
@@ -430,12 +426,7 @@ public class FileHandler extends Handler {
 
 	private String getProperty(String name, String defaultValue) {
 		String value = LogManager.getLogManager().getProperty(name);
-		if (value == null) {
-			value = defaultValue;
-		} else {
-			value = value.trim();
-		}
-		return value;
+		return value == null ? defaultValue : value.trim();
 	}
 
 	/**
@@ -459,6 +450,7 @@ public class FileHandler extends Handler {
 		writerLock.writeLock().lock();
 		FileOutputStream fos = null;
 		OutputStream os = null;
+		
 		try {
 			File pathname = new File(dir.getAbsoluteFile(), prefix + (rotatable ? date : "") + suffix);
 			File parent = pathname.getParentFile();
@@ -522,6 +514,7 @@ public class FileHandler extends Handler {
 			public boolean accept(File dir, String name) {
 				boolean result = false;
 				String date = obtainDateFromFilename(name);
+				
 				if (date != null) {
 					try {
 						Date dateFromFile = formatter.parse(date);
@@ -537,6 +530,7 @@ public class FileHandler extends Handler {
 
 	private String obtainDateFromFilename(String name) {
 		String date = name;
+		
 		if (pattern.matcher(date).matches()) {
 			date = date.substring(prefix.length());
 			return date.substring(0, date.length() - suffix.length());

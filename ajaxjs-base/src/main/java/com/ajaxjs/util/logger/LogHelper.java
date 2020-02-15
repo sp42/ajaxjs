@@ -15,6 +15,7 @@
  */
 package com.ajaxjs.util.logger;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.logging.Filter;
 import java.util.logging.Level;
@@ -38,16 +39,14 @@ public class LogHelper {
 	public LogHelper(Class<?> clazz) {
 		className = clazz.getName().trim();
 		logger = Logger.getLogger(className);
+		logger.setFilter(filter);
 
 		if (!Version.isDebug) {
-			if (fileHandler == null) {
-				fileHandler = new FileHandler(Version.srcFolder, null, ".log");
-			}
-
+			String logFolder = new File(LogHelper.class.getClassLoader().getResource("").getPath()).toString();
+			logFolder = logFolder.replace("classes", "LogHelper");
+			FileHandler fileHandler = new FileHandler(logFolder, null, ".log");
 			logger.addHandler(fileHandler);// 初始化保存到磁盤的處理器
 		}
-
-		logger.setFilter(filter);
 	}
 
 	/**
@@ -67,8 +66,6 @@ public class LogHelper {
 	public static void p(Object[] arr) {
 		Logger.getGlobal().info(Arrays.toString(arr));
 	}
-
-	private static FileHandler fileHandler;
 
 	private static final int NORMAL = 0;
 	private static final int BRIGHT = 1;

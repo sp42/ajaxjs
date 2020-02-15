@@ -64,6 +64,6 @@ public class TestFileHelper {
 
 	@Test
 	public void testZip() {
-		ZipHelper.toZip("C:\\temp\\ajaxjs-security", "C:\\temp\\dd.zip");
+		ZipHelper.zip("C:\\temp\\ajaxjs-security", "C:\\temp\\dd.zip");
 	}
 }
