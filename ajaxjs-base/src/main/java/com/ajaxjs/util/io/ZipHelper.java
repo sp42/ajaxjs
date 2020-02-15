@@ -19,10 +19,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.util.function.Function;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
@@ -37,122 +35,100 @@ public class ZipHelper {
 	private static final LogHelper LOGGER = LogHelper.getLog(ZipHelper.class);
 
 	/**
-	 * 列出ZIP文件中的条目 http://www.importnew.com/12800.html TODO
+	 * 解压文件
 	 * 
-	 * @param zipFile ZIP 包
+	 * @param zipFile 解压文件路径
+	 * @param save    输出解压文件路径
 	 */
-	public static void list(String zipFile) {
-		try (ZipFile zip = new ZipFile(zipFile)) {
-
-		} catch (IOException e) {
-			LOGGER.warning(e);
-		}
-	}
-
-	/**
-	 * 解压缩文件
-	 * 
-	 * @param zipFile        ZIP 包
-	 * @param destinationDir 目的目录
-	 * @return 是否操作成功
-	 */
-	public static boolean unzip(String zipFile, String destinationDir) {
-		File destDir = new File(destinationDir);
-		byte[] buffer = new byte[1024];
+	public static void unzip(String save, String zipFile) {
+		File folder = new File(save);
+		if (!folder.exists())
+			folder.mkdir();
 
 		try (ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));) {
-			ZipEntry zipEntry = zis.getNextEntry();
+			ZipEntry ze;
+			while ((ze = zis.getNextEntry()) != null) {
+				File newFile = new File(save + File.separator + ze.getName());
+				System.out.println("file unzip : " + newFile.getAbsoluteFile());
 
-			while (zipEntry != null) {
-				File newFile = newFile(destDir, zipEntry);
-
-				try (OutputStream fos = new FileOutputStream(newFile);) {
-					int len;
-
-					while ((len = zis.read(buffer)) > 0)
-						fos.write(buffer, 0, len);
+				// 大部分网络上的源码，这里没有判断子目录
+				if (ze.isDirectory()) {
+					newFile.mkdirs();
+				} else {
+					new File(newFile.getParent()).mkdirs();
+					FileOutputStream fos = new FileOutputStream(newFile);
+					IoHelper.write(zis, fos, false);
+					fos.close();
 				}
 
-				zipEntry = zis.getNextEntry();
+//				ze = zis.getNextEntry();
 			}
+			zis.closeEntry();
 		} catch (IOException e) {
-			LOGGER.warning(e);
-		}
-
-		return true;
-	}
-
-	/**
-	 * 
-	 * @param destinationDir 目的目录
-	 * @param zipEntry       ZIP 包里面的条目
-	 * @return
-	 * @throws IOException IO 异常
-	 */
-	private static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
-		File destFile = new File(destinationDir, zipEntry.getName());
-
-		String destDirPath = destinationDir.getCanonicalPath();
-		String destFilePath = destFile.getCanonicalPath();
-
-		if (!destFilePath.startsWith(destDirPath + File.separator))
-			throw new IOException("Entry is outside of the target dir: " + zipEntry.getName());
-
-		return destFile;
-	}
-
-	/**
-	 * 压缩文件
-	 * 
-	 * @param sourceFile 目录或文件
-	 * @param zos        压缩流
-	 * @param name       压缩后的名称
-	 * @throws IOException
-	 */
-	static void compress(File sourceFile, ZipOutputStream zos, String name) throws IOException {
-		if (sourceFile.isFile()) {
-			zos.putNextEntry(new ZipEntry(name));
-
-			try (InputStream in = new FileInputStream(sourceFile);) {
-				IoHelper.write(in, zos, true);
-			}
-
-			zos.closeEntry();
-		} else {
-			File[] listFiles = sourceFile.listFiles();
-
-			if (listFiles == null || listFiles.length == 0) {
-				// 空文件夹的处理 没有文件，不需要文件的copy
-				zos.putNextEntry(new ZipEntry(name + "/"));
-				zos.closeEntry();
-			} else {
-				for (File file : listFiles) {
-					compress(file, zos, name + "\\" + file.getName());
-				}
-			}
+			e.printStackTrace();
 		}
 	}
 
 	/**
 	 * 压缩文件
 	 * 
-	 * @param dir  要压缩的本地目录
-	 * @param save 保存的文件名，例如 c:\\temp\\foo.zip
-	 * @return 如果压缩成功返回 true
+	 * @param sourceFile 要压缩的目录或文件
+	 * @param save       压缩后的名称
 	 */
-	public static boolean toZip(String dir, String save) {
+	public static void zip(String sourceFile, String save) {
+		zip(sourceFile, save, null);
+	}
+
+	/**
+	 * 压缩文件
+	 * 
+	 * @param zipFile   要压缩的目录或文件
+	 * @param save      压缩后的名称
+	 * @param everyFile
+	 */
+	public static void zip(String zipFile, String save, Function<File, Boolean> everyFile) {
 		long start = System.currentTimeMillis();
-		File sourceFile = new File(dir);
 
-		try (OutputStream saveOut = new FileOutputStream(new File(save));
-				ZipOutputStream zos = new ZipOutputStream(saveOut);) {
-			compress(sourceFile, zos, sourceFile.getName());
+		try (FileOutputStream fos = new FileOutputStream(save); ZipOutputStream zipOut = new ZipOutputStream(fos);) {
 
-			LOGGER.info("压缩完成，耗时：" + (System.currentTimeMillis() - start) + " ms");
-			return true;
+			File fileToZip = new File(zipFile);
+			zip(fileToZip, fileToZip.getName(), zipOut, everyFile);
 		} catch (IOException e) {
 			LOGGER.warning(e);
-			return false;
+		}
+
+		LOGGER.info("压缩完成，耗时：" + (System.currentTimeMillis() - start) + " ms");
+	}
+
+	private static void zip(File fileToZip, String fileName, ZipOutputStream zipOut,
+			Function<File, Boolean> everyFile) {
+		if (fileToZip.isHidden())
+			return;
+
+		if (everyFile != null && !everyFile.apply(fileToZip)) {
+			return; // 跳过不要的
+		}
+
+		try {
+			if (fileToZip.isDirectory()) {
+				zipOut.putNextEntry(new ZipEntry(fileName.endsWith("/") ? fileName : fileName + "/"));
+				zipOut.closeEntry();
+
+				File[] children = fileToZip.listFiles();
+				for (File childFile : children) {
+					zip(childFile, fileName + "/" + childFile.getName(), zipOut, everyFile);
+				}
+
+				return;
+			}
+
+			zipOut.putNextEntry(new ZipEntry(fileName));
+
+			try (FileInputStream fis = new FileInputStream(fileToZip);) {
+				IoHelper.write(fis, zipOut, false);
+			}
+		} catch (IOException e) {
+			LOGGER.warning(e);
 		}
 	}
 }
