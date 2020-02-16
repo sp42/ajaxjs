@@ -1,6 +1,5 @@
 package com.ajaxjs.backup;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -13,6 +12,7 @@ import java.util.Objects;
 import com.ajaxjs.orm.JdbcReader;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.io.FileHelper;
+import com.ajaxjs.util.io.ZipHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -204,14 +204,9 @@ public class MysqlExport {
 
 		FileHelper.saveText(sqlFile, exportToSql());
 		// 压缩 zip
+		ZipHelper.zip(sqlFile, sqlFile.replace(".sql", ".zip"));
+		FileHelper.delete(sqlFile);
 
-//		// zip the file
-//		zipFileName = saveFolder + "/" + sqlFileName.replace(".sql", ".zip");
-//		File generatedZipFile = new File(zipFileName);
-//		ZipUtil.pack(sqlFolder, generatedZipFile);
-//
-//		// clear the generated temp files
-//		clearTempFiles(true);
 	}
 
 }
