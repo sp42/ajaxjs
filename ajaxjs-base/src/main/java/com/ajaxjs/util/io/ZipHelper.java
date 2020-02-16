@@ -41,9 +41,10 @@ public class ZipHelper {
 	 * @param save    输出解压文件路径
 	 */
 	public static void unzip(String save, String zipFile) {
+		long start = System.currentTimeMillis();
 		File folder = new File(save);
 		if (!folder.exists())
-			folder.mkdir();
+			folder.mkdirs();
 
 		try (ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));) {
 			ZipEntry ze;
@@ -55,7 +56,8 @@ public class ZipHelper {
 				if (ze.isDirectory()) {
 					newFile.mkdirs();
 				} else {
-					new File(newFile.getParent()).mkdirs();
+//					new File(newFile.getParent()).mkdirs();
+					FileHelper.initFolder(newFile);
 					FileOutputStream fos = new FileOutputStream(newFile);
 					IoHelper.write(zis, fos, false);
 					fos.close();
@@ -67,6 +69,8 @@ public class ZipHelper {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		LOGGER.info("解压缩完成，耗时：{0}ms，保存在{1}", System.currentTimeMillis() - start, save);
 	}
 
 	/**
@@ -83,21 +87,22 @@ public class ZipHelper {
 	 * 压缩文件
 	 * 
 	 * @param zipFile   要压缩的目录或文件
-	 * @param save      压缩后的名称
+	 * @param save      压缩后 zip 文件名
 	 * @param everyFile
 	 */
 	public static void zip(String zipFile, String save, Function<File, Boolean> everyFile) {
 		long start = System.currentTimeMillis();
+		File fileToZip = new File(zipFile);
+
+		FileHelper.initFolder(save);
 
 		try (FileOutputStream fos = new FileOutputStream(save); ZipOutputStream zipOut = new ZipOutputStream(fos);) {
-
-			File fileToZip = new File(zipFile);
 			zip(fileToZip, fileToZip.getName(), zipOut, everyFile);
 		} catch (IOException e) {
 			LOGGER.warning(e);
 		}
 
-		LOGGER.info("压缩完成，耗时：" + (System.currentTimeMillis() - start) + " ms");
+		LOGGER.info("压缩完成，耗时：{0}ms，保存在{1}", System.currentTimeMillis() - start, save);
 	}
 
 	private static void zip(File fileToZip, String fileName, ZipOutputStream zipOut,
@@ -124,8 +129,8 @@ public class ZipHelper {
 
 			zipOut.putNextEntry(new ZipEntry(fileName));
 
-			try (FileInputStream fis = new FileInputStream(fileToZip);) {
-				IoHelper.write(fis, zipOut, false);
+			try (FileInputStream in = new FileInputStream(fileToZip);) {
+				IoHelper.write(in, zipOut, false);
 			}
 		} catch (IOException e) {
 			LOGGER.warning(e);

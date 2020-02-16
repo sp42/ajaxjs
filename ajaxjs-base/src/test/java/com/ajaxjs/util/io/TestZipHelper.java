@@ -5,10 +5,10 @@ import org.junit.Test;
 public class TestZipHelper {
 	@Test
 	public void testFileZip() throws Exception {
-		ZipHelper.zip("c:\\temp", "c:\\temp2\\test.zip");
+		ZipHelper.zip("c:/temp/", "c:\\temp2\\bar\\test.zip");
 	}
 
-	@Test
+//	@Test
 	public void testSpeicalFileZip() throws Exception {
 		ZipHelper.zip("c:\\temp", "c:\\temp2\\test.zip", file -> {
 			System.out.println(file);
@@ -19,7 +19,7 @@ public class TestZipHelper {
 		});
 	}
 
-	@Test
+//	@Test
 	public void testFileUnZip() throws Exception {
 		ZipHelper.unzip("c:\\temp2\\", "c:\\temp2\\test.zip");
 	}

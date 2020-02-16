@@ -78,6 +78,27 @@ public class FileHelper extends IoHelper {
 	}
 
 	/**
+	 * 检测文件所在的目录是否存在，如果没有则建立。可以跨多个未建的目录
+	 * 
+	 * @param file 必须是文件，不是目录
+	 */
+	public static void initFolder(File file) {
+		File parentFolder = new File(file.getParent());
+		if (!parentFolder.exists())
+			parentFolder.mkdirs();
+
+	}
+
+	/**
+	 * 检测文件所在的目录是否存在，如果没有则建立。可以跨多个未建的目录
+	 * 
+	 * @param file 必须是文件，不是目录
+	 */
+	public static void initFolder(String file) {
+		initFolder(new File(file));
+	}
+
+	/**
 	 * 新建一个空文件
 	 * 
 	 * @param folder   如果路径不存在则自动创建
@@ -397,8 +418,13 @@ public class FileHelper extends IoHelper {
 	 * @param file 文件对象
 	 */
 	public static void delete(File file) {
-		LOGGER.info("文件 {0} 准备删除！", file.toString());
-
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            for (File f : files) {
+            	delete(f);
+            }
+        }
+		
 		if (!file.delete())
 			LOGGER.warning("文件 {0} 删除失败！", file.toString());
 	}
