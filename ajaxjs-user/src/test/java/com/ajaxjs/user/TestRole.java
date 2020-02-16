@@ -41,10 +41,7 @@ public class TestRole {
 	@Test
 	public void testGetGetExistingPrime() {
 		Integer[] ep = new RoleService().getExistingPrime();
-		System.out.println(Arrays.toString(ep));
 		Arrays.toString(ep);
-
-		// System.out.println(getNextPrime());
 	}
 
 	@Test
@@ -80,7 +77,7 @@ public class TestRole {
 					String name = field.getName();
 					int value = (int) field.get(null);
 				 
-					System.out.println(name + ":" + value);
+					assertNotNull(name + ":" + value);
 				}
 			}
 		} catch (IllegalArgumentException | IllegalAccessException e) {

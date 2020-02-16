@@ -1,5 +1,7 @@
 package com.ajaxjs.user;
 
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Test;
 
 import com.ajaxjs.user.idcard.GetInfo;
@@ -11,14 +13,14 @@ public class TestIdCard {
 		String idcard15 = "142431199001145";// 15位
 		String idcard18 = "33072619901128272X";// 18位
 		GetInfo iv = new GetInfo();
-		System.out.println(iv.isValidatedAllIdcard(idcard15));
-		System.out.println(iv.isValidatedAllIdcard(idcard18));
+		assertNotNull(iv.isValidatedAllIdcard(idcard15));
+		assertNotNull(iv.isValidatedAllIdcard(idcard18));
 	}
 
 	@Test
 	public void testIdcardInfoExtractor() {
 		String idcard = "440105198309060315";
 		IdcardInfoExtractor ie = new IdcardInfoExtractor(idcard);
-		System.out.println(ie.toString());
+		assertNotNull(ie.toString());
 	}
 }
