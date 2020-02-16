@@ -108,7 +108,13 @@ public class MvcDispatcher implements Filter {
 		MvcRequest request = new MvcRequest(_request);
 		MvcOutput response = new MvcOutput(_response);
 		String uri = request.getFolder(), httpMethod = request.getMethod();
-		Action action = IController.findTreeByPath(uri);
+		Action action = null;
+
+		try {
+			action = IController.findTreeByPath(uri);
+		} catch (Throwable e) {
+			LOGGER.warning(e);
+		}
 
 		if (action != null) {
 			Method method = action.getMethod(httpMethod);// 要执行的方法
