@@ -55,7 +55,18 @@
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="9"></td>
+					<td colspan="9">
+						<form action="." method="GET" class="dateRange" @submit="valid($event)">
+							起始时间：
+							<aj-form-calendar-input field-name="startDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
+							截至时间：
+							<aj-form-calendar-input field-name="endDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
+							<button class="aj-btn">查询</button>
+						</form>
+						<script>
+							aj.form.betweenDate('.dateRange');
+						</script>
+					</td>
 				</tr>
 			</tfoot>
 			<tbody>
@@ -77,10 +88,7 @@
 						<td><c:dateFormatter value="${current.createDate}" /></td>
 						<td>${UserGroups[current.roleId].name}</td>
 						<td>
-							<a href="${ctx}/admin/userLoginLog/?filterField=userId&filterValue=${current.id}">登录日志</a> | 
-							<a href="${ctx}/admin/like/list/?filterField=userId&filterValue=${current.id}">点赞</a> | 
-							<a href="${ctx}/admin/bookmark/?filterField=userId&filterValue=${current.id}">收藏</a> | 
-							<a href="${ctx}/admin/address/?filterField=userId&filterValue=${current.id}">地址簿</a> | 
+							<a href="${ctx}/admin/userLoginLog/?userId=${current.id}">登录日志</a> | 
 							<a href="../${current.id}/">详情</a> | 
 							<a href="javascript:aj.admin.del('${current.id}', '${current.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>
 						</td> 

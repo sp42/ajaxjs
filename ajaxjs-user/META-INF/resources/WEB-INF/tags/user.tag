@@ -285,3 +285,15 @@
 	</script>
 	
 </c:if>
+
+<c:if test="${type == 'onNoLogin'}">
+	<fieldset class="onNoLogin">
+		<legend>尚未登录，没有权限操作 </legend>
+		<p>抱歉，您尚未登录，无法进行下一步操作。请先<a href="${ctx}/user/login/">【登录】</a>，三秒钟之后自动跳转。</p>
+		<script>
+			setTimeout(function() {
+				location.assign("${ctx}/user/login/");
+			}, 3000);
+		</script>
+	</fieldset>
+</c:if>

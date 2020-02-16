@@ -43,7 +43,7 @@
 	<%}%>
 	<%if(RoleService.check(privilegeTotal, RightConstant.SHOP)){ %>
 		<li><a target="iframepage" href="${ctx}/admin/cart/list/">购物车一览</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/seller/list/">商城用户管理</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/shop-user/">商城用户管理</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/seller/list/">商家管理</a></li>
 	<%}%>
 	</ul>

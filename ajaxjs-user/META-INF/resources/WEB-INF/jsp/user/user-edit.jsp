@@ -122,7 +122,7 @@
 				<div>
 					<div class="label">用户组</div> 
 					<!-- 分类下拉 -->
-					<aj-tree-user-role-select :value="${info.roleId}" :json="${UserGroupsJSON}" style="width: 300px;"></aj-tree-user-role-select>
+					<aj-tree-user-role-select :no-jump="true" :value="${empty info.roleId ? 0 : info.roleId}" :json="${UserGroupsJSON}" style="width: 300px;"></aj-tree-user-role-select>
 					<div class="sub-2">用户组对应着权限，请谨慎设置。</div>
 				</div>
 				</c:if>

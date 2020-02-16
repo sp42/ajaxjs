@@ -30,6 +30,7 @@
 				<col />
 				<col />
 				<col />
+				<col />
 				<col style="text-align: center;" align="center" />
 			</colgroup>
 			<thead>
@@ -38,6 +39,7 @@
 					<th class="name">用户名称</th>
 					<th>登录类型</th>
 					<th>登录ip</th>
+					<th>ip地区</th>
 					<th>客户端标识</th>
 					<th>是否登录后台</th>
 					<th>登录时间</th>
@@ -45,7 +47,7 @@
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="7">
+					<td colspan="8">
 						<form action="." method="GET" class="dateRange" @submit="valid($event)">
 							起始时间：
 							<aj-form-calendar-input field-name="startDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
@@ -66,6 +68,7 @@
 						<td><a href="${ctx}/admin/user/${current.userId}/">${current.userName}</a></td>
 						<td>${LoginType[current.loginType]}</td>
 						<td>${current.ip}</td>
+						<td>${current.ipLocation}</td>
 						<td style="width:430px;">${current.userAgent}</td>
 						<td>${current.adminLogin ? '是' : '否'}</td>
 						<td><c:dateFormatter value="${current.createDate}" /></td>
