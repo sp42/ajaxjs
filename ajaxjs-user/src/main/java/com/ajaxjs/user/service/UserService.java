@@ -6,6 +6,7 @@ import java.util.function.Function;
 import com.ajaxjs.cms.app.attachment.Attachment_picture;
 import com.ajaxjs.cms.app.attachment.Attachment_pictureService;
 import com.ajaxjs.framework.BaseService;
+import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.ioc.Bean;
@@ -186,6 +187,20 @@ public class UserService extends BaseService<User> {
 		}
 
 		return true;
+	}
+	
+	public final static String CATALOG_FIND = "e.catalogId IN ( SELECT id FROM user_role WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM user_role WHERE id = %d ) , '%%')) )";
+	
+	public static Function<String, String> setRoleId() {
+		Object v = getValue("roleId", int.class);
+		/* user_role 表没有 path 字段，不能那样子玩了  */
+//		return v == null ? setWhere(null) : setWhere(String.format(CATALOG_FIND, (int) v));
+		return v == null ? setWhere(null) : by("roleId", v);
+	}
+	
+	@Override
+	public PageResult<User> findPagedList(int start, int limit) {
+		return super.findPagedList(start, limit, setRoleId().andThen(BaseService::betweenCreateDate));
 	}
 
 	public int doUpdate(User user) throws ServiceException {

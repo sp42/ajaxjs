@@ -21,6 +21,8 @@ public class UserLoginLog extends BaseModel {
 	 * 是否登录后台
 	 */
 	private Boolean adminLogin;
+	
+	private String ipLocation;
 
 	/**
 	 * 设置用户 id
@@ -108,6 +110,14 @@ public class UserLoginLog extends BaseModel {
 
 	public void setUserAgent(String userAgent) {
 		this.userAgent = userAgent;
+	}
+
+	public String getIpLocation() {
+		return ipLocation;
+	}
+
+	public void setIpLocation(String ipLocation) {
+		this.ipLocation = ipLocation;
 	}
 
 }

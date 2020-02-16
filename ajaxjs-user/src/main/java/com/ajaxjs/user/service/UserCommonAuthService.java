@@ -61,8 +61,7 @@ public class UserCommonAuthService extends BaseService<UserCommonAuth> {
 	}
 
 	public static String encode(String p) {
-//		System.out.println("p:::::::::::::::::::::::::" + p);
-//		System.out.println("encode:::::::::::::::::::::::::" + Encode.md5(p.toLowerCase() + salt));
+//		LOGGER.info("encode:::::::::::::::::::::::::" + Encode.md5(p.toLowerCase() + salt));
 		return Encode.md5(p.toLowerCase() + salt);
 	}
 

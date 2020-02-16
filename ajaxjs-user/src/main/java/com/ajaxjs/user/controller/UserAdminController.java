@@ -56,7 +56,7 @@ public class UserAdminController extends BaseController<User> {
 		mv.put("UserGroups", CatalogService.list2map_id_as_key(userGroups));
 		mv.put("UserGroupsJSON", toJson(userGroups, false).replaceAll("\"", "'"));
 
-		page(mv, service.getDao().findPagedList(start, limit, null), CommonConstant.UI_ADMIN);
+		page(mv, service.findPagedList(start, limit), CommonConstant.UI_ADMIN);
 
 		return jsp("user/user-admin-list");
 	}

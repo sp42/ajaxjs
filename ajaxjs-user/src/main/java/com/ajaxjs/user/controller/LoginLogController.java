@@ -1,5 +1,6 @@
 package com.ajaxjs.user.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.function.Function;
 
@@ -19,11 +20,13 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
+import com.ajaxjs.net.http.Tools;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
 import com.ajaxjs.user.UserDict;
 import com.ajaxjs.user.login.UserLoginLog;
 import com.ajaxjs.user.service.UserDao;
+import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -53,8 +56,9 @@ public class LoginLogController extends BaseController<UserLoginLog> {
 			setDao(dao);
 		}
 
-		public PageResult<UserLoginLog> findAll(int start, @QueryParam(limit) int limit) {
-			return findPagedList(start, limit, byAny().andThen(BaseService::betweenCreateDate));
+		public PageResult<UserLoginLog> findPagedList(int start, int limit) {
+			return findPagedList(start, limit,
+					byAny().andThen(BaseService::betweenCreateDate).andThen(UserService.byUserId));
 		}
 
 		public List<UserLoginLog> findListByUserId(long userId) {
@@ -69,7 +73,7 @@ public class LoginLogController extends BaseController<UserLoginLog> {
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
 		LOGGER.info("用户登录日志-后台列表");
 		mv.put("LoginType", UserDict.LOGIN_TYPE);
-		page(mv, service.findAll(start, limit), CommonConstant.UI_ADMIN);
+		page(mv, service.findPagedList(start, limit), CommonConstant.UI_ADMIN);
 
 		return jsp("user/login-log-list");
 	}
@@ -90,9 +94,16 @@ public class LoginLogController extends BaseController<UserLoginLog> {
 			return;
 
 		String ip = ((MvcRequest) request).getIp();
-
-		if ("0:0:0:0:0:0:0:1".equals(ip))
+		if ("0:0:0:0:0:0:0:1".equals(ip)) {
 			ip = "localhost";
+			bean.setIpLocation("本机");
+		} else {
+			try {
+				bean.setIpLocation(Tools.getIpLocation2(ip));
+			} catch (IOException e) {
+				LOGGER.warning(e);
+			}
+		}
 
 		bean.setIp(ip);
 		bean.setUserAgent(request.getHeader("user-agent"));
