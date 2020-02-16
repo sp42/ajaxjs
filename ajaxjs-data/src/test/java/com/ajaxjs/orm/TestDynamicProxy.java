@@ -44,8 +44,4 @@ public class TestDynamicProxy {
 		Object obj = Proxy.newProxyInstance(clz.getClassLoader(), new Class[] { clz }, new DynamicProxy());
 		return (T) obj;
 	}
-
-	public static void main(String[] args) {
-		Foo foo = getProxy(Foo.class);
-	}
 }
