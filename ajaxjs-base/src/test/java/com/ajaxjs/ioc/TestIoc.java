@@ -51,6 +51,7 @@ public class TestIoc {
 		assertNotNull(hi);
 
 		Person person = (Person) BeanContext.getBean("person");
+		assertNotNull(person);
 		assertEquals("Hello Rose", hi.sayHello());
 	}
 
