@@ -27,8 +27,9 @@ import java.util.zip.ZipOutputStream;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
+ * ZIP 压缩/解压缩
  * 
- * @author Administrator
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class ZipHelper {
@@ -37,10 +38,13 @@ public class ZipHelper {
 	/**
 	 * 解压文件
 	 * 
-	 * @param zipFile 解压文件路径
-	 * @param save    输出解压文件路径
+	 * @param save    解压文件的路径，必须为目录
+	 * @param zipFile 输入的解压文件路径，例如C:/temp/foo.zip或 c:\\temp\\bar.zip
 	 */
 	public static void unzip(String save, String zipFile) {
+		if (!new File(save).isDirectory())
+			throw new IllegalArgumentException("保存的路径必须为目录路径");
+
 		long start = System.currentTimeMillis();
 		File folder = new File(save);
 		if (!folder.exists())
@@ -67,7 +71,7 @@ public class ZipHelper {
 			}
 			zis.closeEntry();
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 
 		LOGGER.info("解压缩完成，耗时：{0}ms，保存在{1}", System.currentTimeMillis() - start, save);
@@ -76,50 +80,57 @@ public class ZipHelper {
 	/**
 	 * 压缩文件
 	 * 
-	 * @param sourceFile 要压缩的目录或文件
-	 * @param save       压缩后的名称
+	 * @param toZip   要压缩的目录或文件
+	 * @param saveZip 压缩后保存的 zip 文件名
 	 */
-	public static void zip(String sourceFile, String save) {
-		zip(sourceFile, save, null);
+	public static void zip(String toZip, String saveZip) {
+		zip(toZip, saveZip, null);
 	}
 
 	/**
 	 * 压缩文件
 	 * 
-	 * @param zipFile   要压缩的目录或文件
-	 * @param save      压缩后 zip 文件名
-	 * @param everyFile
+	 * @param toZip     要压缩的目录或文件
+	 * @param saveZip   压缩后保存的 zip 文件名
+	 * @param everyFile 输入 File，可在这 Lambda 里面判断是否加入 ZIP 压缩，返回 true 表示允许，反之不行
 	 */
-	public static void zip(String zipFile, String save, Function<File, Boolean> everyFile) {
+	public static void zip(String toZip, String saveZip, Function<File, Boolean> everyFile) {
 		long start = System.currentTimeMillis();
-		File fileToZip = new File(zipFile);
+		File fileToZip = new File(toZip);
 
-		FileHelper.initFolder(save);
+		FileHelper.initFolder(saveZip);
 
-		try (FileOutputStream fos = new FileOutputStream(save); ZipOutputStream zipOut = new ZipOutputStream(fos);) {
+		try (FileOutputStream fos = new FileOutputStream(saveZip); ZipOutputStream zipOut = new ZipOutputStream(fos);) {
 			zip(fileToZip, fileToZip.getName(), zipOut, everyFile);
 		} catch (IOException e) {
 			LOGGER.warning(e);
 		}
 
-		LOGGER.info("压缩完成，耗时：{0}ms，保存在{1}", System.currentTimeMillis() - start, save);
+		LOGGER.info("压缩完成，耗时：{0}ms，保存在{1}", System.currentTimeMillis() - start, saveZip);
 	}
 
-	private static void zip(File fileToZip, String fileName, ZipOutputStream zipOut,
-			Function<File, Boolean> everyFile) {
-		if (fileToZip.isHidden())
+	/**
+	 * 内部的压缩方法
+	 * 
+	 * @param toZip     要压缩的目录或文件
+	 * @param fileName  ZIP 内的文件名
+	 * @param zipOut    ZIP 流
+	 * @param everyFile 输入 File，可在这 Lambda 里面判断是否加入 ZIP 压缩，返回 true 表示允许，反之不行
+	 */
+	private static void zip(File toZip, String fileName, ZipOutputStream zipOut, Function<File, Boolean> everyFile) {
+		if (toZip.isHidden())
 			return;
 
-		if (everyFile != null && !everyFile.apply(fileToZip)) {
+		if (everyFile != null && !everyFile.apply(toZip)) {
 			return; // 跳过不要的
 		}
 
 		try {
-			if (fileToZip.isDirectory()) {
+			if (toZip.isDirectory()) {
 				zipOut.putNextEntry(new ZipEntry(fileName.endsWith("/") ? fileName : fileName + "/"));
 				zipOut.closeEntry();
 
-				File[] children = fileToZip.listFiles();
+				File[] children = toZip.listFiles();
 				for (File childFile : children) {
 					zip(childFile, fileName + "/" + childFile.getName(), zipOut, everyFile);
 				}
@@ -129,7 +140,7 @@ public class ZipHelper {
 
 			zipOut.putNextEntry(new ZipEntry(fileName));
 
-			try (FileInputStream in = new FileInputStream(fileToZip);) {
+			try (FileInputStream in = new FileInputStream(toZip);) {
 				IoHelper.write(in, zipOut, false);
 			}
 		} catch (IOException e) {

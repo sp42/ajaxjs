@@ -142,15 +142,11 @@ public class ListMap {
 			map.put(level, _level);
 
 			if (saveSupers && superMap != null) {
-				String supers;
-				if (map.get("supers") == null) {
-					supers = "";
-					map.put("supers", supers);
-				} else {
-					supers = map.get("supers").toString();
-				}
+				Object _supers = superMap.get("supers");
+				String supers = _supers == null ? "" : _supers.toString();
 
-				supers += ("".equals(supers) ? "" : ",") + superPath + ":" + superMap.get("name");
+				supers += ("".equals(supers) ? "" : ",");
+				supers += superPath + ":" + superMap.get("name");
 				map.put("supers", supers);
 				// supers.add(superPath + ":" + superMap.get("name"));
 			}

@@ -83,6 +83,9 @@ public class FileHelper extends IoHelper {
 	 * @param file 必须是文件，不是目录
 	 */
 	public static void initFolder(File file) {
+		if (file.isDirectory())
+			throw new IllegalArgumentException("参数必须是文件，不是目录");
+
 		File parentFolder = new File(file.getParent());
 		if (!parentFolder.exists())
 			parentFolder.mkdirs();
@@ -418,13 +421,13 @@ public class FileHelper extends IoHelper {
 	 * @param file 文件对象
 	 */
 	public static void delete(File file) {
-        if (file.isDirectory()) {
-            File[] files = file.listFiles();
-            for (File f : files) {
-            	delete(f);
-            }
-        }
-		
+		if (file.isDirectory()) {
+			File[] files = file.listFiles();
+			for (File f : files) {
+				delete(f);
+			}
+		}
+
 		if (!file.delete())
 			LOGGER.warning("文件 {0} 删除失败！", file.toString());
 	}
