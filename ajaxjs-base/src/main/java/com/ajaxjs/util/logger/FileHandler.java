@@ -339,7 +339,6 @@ public class FileHandler extends Handler {
 	 * Configure from <code>LogManager</code> properties.
 	 */
 	private void configure() {
-
 		Timestamp ts = new Timestamp(System.currentTimeMillis());
 		String tsString = ts.toString().substring(0, 19);
 		date = tsString.substring(0, 10);

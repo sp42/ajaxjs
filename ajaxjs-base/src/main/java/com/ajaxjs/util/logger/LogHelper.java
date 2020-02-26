@@ -42,10 +42,10 @@ public class LogHelper {
 		logger.setFilter(filter);
 
 		if (!Version.isDebug) {
-			String logFolder = new File(LogHelper.class.getClassLoader().getResource("").getPath()).toString();
+			String logFolder = LogHelper.class.getClassLoader().getResource("").getPath();
+			logFolder = new File(logFolder).toString();
 			logFolder = logFolder.replace("classes", "LogHelper");
-			FileHandler fileHandler = new FileHandler(logFolder, null, ".log");
-			logger.addHandler(fileHandler);// 初始化保存到磁盤的處理器
+			logger.addHandler(new FileHandler(logFolder, null, ".log"));// 初始化保存到磁盤的處理器
 		}
 	}
 
