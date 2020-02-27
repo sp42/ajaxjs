@@ -181,7 +181,6 @@ function JSON_CRUD_ARR(jsonData, indexs) {
 		
 		_arr = (_arr instanceof Array) ? _arr : _arr.children;  
 		_arr = _arr[arr[i]];
-		
 	}
 	
 	this.arr = _arr.children || _arr;
@@ -214,7 +213,9 @@ JSON_CRUD_ARR.prototype = {
 			name: name
 		});
 	},
-	
+	addTop(id, name) {
+		
+	},
 	updateParam(newParam) {
 		this.arr[this.lastIndex].param = newParam;
 	},
@@ -260,3 +261,19 @@ function swapElements(a, b) {
 	else
 		return bp.insertBefore(a, b), ap.insertBefore(b, an);
 }
+
+aj('.addTop').onclick = e => {
+	aj.showConfirm(aj('.addTpl').value, el => {
+		var id = el.$('input[name=id]').value;
+		var name = el.$('input[name=name]').value;
+		
+		jsonData.push({
+			id : id,
+			name: name
+		})
+		
+		saveJsonToServer(() => {
+			location.reload();
+		});
+	}, true);
+};

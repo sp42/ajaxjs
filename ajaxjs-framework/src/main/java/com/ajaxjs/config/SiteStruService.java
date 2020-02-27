@@ -112,9 +112,10 @@ public class SiteStruService implements ServletContextListener {
 
 				// String configJson =
 				// JsonHelper.format(JsonHelper.stringifyMap(ConfigService.config));
-				LOGGER.infoGreen("加载 " + ConfigService.getValueAsString("clientFullName") + " " + ctx.getContextPath() + " 项目配置成功！All config loaded.");
-				
-				if(ConfigService.getValueAsBool("isForceProductEnv")) {
+				LOGGER.infoGreen("加载 " + ConfigService.getValueAsString("clientFullName") + " " + ctx.getContextPath()
+						+ " 项目配置成功！All config loaded.");
+
+				if (ConfigService.getValueAsBool("isForceProductEnv")) {
 					LOGGER.infoGreen("强制为生产环境模式 isDebug=false");
 					Version.isDebug = false;
 				}
@@ -305,7 +306,6 @@ public class SiteStruService implements ServletContextListener {
 	 */
 	public static String getSiteMap(List<Map<String, Object>> list, String contextPath) {
 		StringBuilder sb = new StringBuilder();
-
 		getSiteMap(list, sb, contextPath);
 
 		return String.format(table, sb.toString());

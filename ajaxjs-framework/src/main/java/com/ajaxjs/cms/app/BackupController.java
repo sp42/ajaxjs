@@ -20,10 +20,7 @@ import com.ajaxjs.util.io.ZipHelper;
 
 @Path("/admin/backup")
 public class BackupController implements IController {
-	@GET
-	public String jsp() {
-		return BaseController.admin("backup");
-	}
+ 
 	
 	@Path("images")
 	@GET

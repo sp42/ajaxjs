@@ -74,6 +74,7 @@ td {
 		down = (file) =>{			
 			var link = aj('#downLink');
 			link.href = '${ctx}/temp/' + file;
+			// 前端实现文件自动下载 不知为何第一次下载不行，要等好久，其实文件已经在服务端上了
 			setTimeout(()=>{
 				link.click();
 			}, 5500);

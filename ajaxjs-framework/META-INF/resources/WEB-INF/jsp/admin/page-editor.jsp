@@ -33,7 +33,7 @@
 			}
 		%>
 		<div class="edit">
-			<aj-form-html-editor field-name="content" base-path="${ctx}${param.url.replaceAll('/$', '')}" ref="htmleditor">
+			<aj-form-html-editor field-name="content" base-path="${ctx}${param.url.replaceAll('/$', '')}" ref="htmleditor" upload-image-action-url="${ctx}/admin/attachmentPicture/upload/staticPageUsedImg/?url=${param.url}">
 				<textarea class="hide" name="content">${contentBody}</textarea>
 			</aj-form-html-editor>
 			

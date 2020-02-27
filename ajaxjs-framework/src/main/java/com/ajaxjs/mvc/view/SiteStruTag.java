@@ -10,6 +10,7 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 import com.ajaxjs.config.SiteStruService;
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.map.ListMap;
 
 /**
@@ -33,6 +34,7 @@ public class SiteStruTag extends SimpleTagSupport {
 	 * 列表标签
 	 */
 	private final static String li = "<li%s><a href=\"%s\">%s</a></li>";
+	private final static String liExt = "<li%s><a href=\"%s\">%s</a><ul>%s</ul></li></li>";
 
 	@Override
 	public void doTag() throws JspException, IOException {
@@ -75,6 +77,20 @@ public class SiteStruTag extends SimpleTagSupport {
 		String ctx = request.getContextPath();
 		StringBuilder sb = new StringBuilder();
 		boolean hasSelected = false;
+		Object _customNavLi = request.getAttribute("customNavLi");
+		boolean showNavSubMenu = request.getAttribute("showNavSubMenu") != null
+				&& (boolean) request.getAttribute("showNavSubMenu");
+		boolean customSubMenu = false;
+		String showNavSubMenuUl = null, showNavSubMenuLi = null;
+
+		if (showNavSubMenu) {
+			Object _showNavSubMenuUl = request.getAttribute("showNavSubMenuUl");
+			if (_showNavSubMenuUl != null) {
+				customSubMenu = true;
+				showNavSubMenuUl = (String) _showNavSubMenuUl;
+				showNavSubMenuLi = (String) request.getAttribute("showNavSubMenuLi");
+			}
+		}
 
 		if (sitestru.getNavBar() != null) {
 			for (Map<String, Object> item : sitestru.getNavBar()) {
@@ -87,14 +103,56 @@ public class SiteStruTag extends SimpleTagSupport {
 
 				String url = ctx + "/" + item.get(ListMap.ID) + "/";
 				url = addParam(url, item);
-				sb.append(String.format(li, isSelected ? " class=\"selected\"" : "", url, item.get("name")));
+
+				if (_customNavLi == null)
+					sb.append(String.format(li, isSelected ? " class=\"selected\"" : "", url, item.get("name")));
+				else {
+					String _li = _customNavLi.toString();
+					if (isSelected) {
+						_li = _li.replace("class=\"", "class=\"selected ");
+					}
+
+					if (showNavSubMenu) {
+						if (customSubMenu)
+							sb.append(String.format(_li, url, item.get("name"),
+									buildSubMenu(showNavSubMenuUl, showNavSubMenuLi, item, ctx)));
+						else {
+							// 默认标签的菜单
+						}
+					} else
+						sb.append(String.format(_li, url, item.get("name")));
+				}
 
 				if (isSelected)
 					hasSelected = true;
 			}
 		}
+		if (_customNavLi == null) {
+			return String.format(li, !hasSelected ? " class=\"home selected\"" : " class=\"home\"",
+					"".equals(ctx) ? "/" : ctx, "首页") + sb.toString();
+		} else {
+			String _li = _customNavLi.toString();
+			if (showNavSubMenu)
+				return String.format(_li.replace("class=\"", "class=\"home "), "".equals(ctx) ? "/" : ctx, "首页", "")
+						+ sb.toString();
+			else
+				return String.format(_li.replace("class=\"", "class=\"home "), "".equals(ctx) ? "/" : ctx, "首页")
+						+ sb.toString();
+		}
+	}
 
-		return String.format(li, !hasSelected ? " class=\"selected\"" : "", "".equals(ctx) ? "/" : ctx, "首页") + sb.toString();
+	private static String buildSubMenu(String showNavSubMenuUl, String showNavSubMenuLi, Map<String, Object> item,
+			String ctx) {
+		StringBuilder sb = new StringBuilder();
+		@SuppressWarnings("unchecked")
+		List<Map<String, Object>> menu = (List<Map<String, Object>>) item.get(ListMap.CHILDREN);
+
+		for (Map<String, Object> m : menu) {
+			String url = ctx + m.get("fullPath").toString();
+			sb.append(String.format(showNavSubMenuLi, url, m.get("name").toString()));
+		}
+
+		return String.format(showNavSubMenuUl, sb.toString());
 	}
 
 	/**
@@ -113,7 +171,7 @@ public class SiteStruTag extends SimpleTagSupport {
 	}
 
 	/**
-	 * 次级菜单
+	 * 次级菜单，只是该节点下面的 children
 	 * 
 	 * @param sitestru
 	 * @param request
@@ -155,6 +213,8 @@ public class SiteStruTag extends SimpleTagSupport {
 		StringBuilder sb = new StringBuilder();
 
 		if (sitestru.getMenu(request) != null) {
+			boolean showSubMenu = request.getAttribute("showSubMenu") != null;
+
 			for (Map<String, Object> item : sitestru.getMenu(request)) {
 				Object isHidden = item.get("isHidden");
 				if (isHidden != null && ((boolean) isHidden) == true) // 隐藏的
@@ -164,7 +224,20 @@ public class SiteStruTag extends SimpleTagSupport {
 				url = addParam(url, item);
 
 				boolean isSelected = sitestru.isCurrentNode(item, request);
-				sb.append(String.format(li, isSelected ? " class=\"selected\"" : "", url, item.get("name")));
+				if (showSubMenu) {
+					StringBuilder subMenu = new StringBuilder();
+					@SuppressWarnings("unchecked")
+					List<Map<String, Object>> menu = (List<Map<String, Object>>) item.get(ListMap.CHILDREN);
+					if (!CommonUtil.isNull(menu))
+						for (Map<String, Object> m : menu) {
+							String _url = ctx + m.get("fullPath").toString();
+							subMenu.append(String.format(li, "", _url, "» " + m.get("name").toString()));
+						}
+
+					sb.append(String.format(liExt, isSelected ? " class=\"selected\"" : "", url, item.get("name"),
+							subMenu.toString()));
+				} else
+					sb.append(String.format(li, isSelected ? " class=\"selected\"" : "", url, item.get("name")));
 			}
 		}
 
@@ -190,13 +263,16 @@ public class SiteStruTag extends SimpleTagSupport {
 
 		if (node == null && request.getRequestURI().indexOf(ctx + "/index") != -1) {
 			// 首页
-		} else if (node.get("supers") != null) {
-			String _supers = (String) node.get("supers");
-			String[] supers = _supers.split(",");
+		} else if (node != null) {
+			if (node.get("supers") != null) {
+				String _supers = (String) node.get("supers");
+				String[] supers = _supers.split(",");
 
-			for (String _super : supers) {
-				String[] arr = _super.split(":");
-				sb.append(String.format(tpl, ctx + arr[0], arr[1]));
+				for (String _super : supers) {
+					String[] arr = _super.split(":");
+					if(!CommonUtil.isNull(arr) && arr.length >= 2)
+						sb.append(String.format(tpl, ctx + arr[0], arr[1]));
+				}
 			}
 
 			sb.append(String.format(tpl, ctx + node.get(ListMap.PATH), node.get("name")));

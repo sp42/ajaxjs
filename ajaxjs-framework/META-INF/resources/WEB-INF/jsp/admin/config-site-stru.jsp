@@ -54,9 +54,14 @@
 		<br />
 		名称 <input type="text" class="aj-input" name="name" placeholder="显示的名称，必填" />
 	</textarea>
+	<br />
+	<br />
 	<script>
 		jsonData = ${siteStruJson};
 	</script>
+	<center>
+		<button class="aj-btn addTop">新增顶级节点</button>
+	</center>
 	<script src="${ctx}/asset/admin/config-site-stru.js"></script>
 </body>
 </html>
