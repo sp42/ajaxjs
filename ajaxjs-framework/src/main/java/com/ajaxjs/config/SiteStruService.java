@@ -49,6 +49,8 @@ public class SiteStruService implements ServletContextListener {
 
 	/**
 	 * 加载网站结构的配置
+	 * 
+	 * @param ctx Servlet 上下文
 	 */
 	public static void load(ServletContext ctx) {
 		stru = new SiteStru();
@@ -63,7 +65,7 @@ public class SiteStruService implements ServletContextListener {
 	 * 数据库的数据转换为菜单显示。需要 Servlet 启动时从数据库拉取数据并静态保存
 	 * 
 	 * @param list
-	 * @param cxt
+	 * @param cxt  Servlet 上下文
 	 * @return
 	 */
 	private static List<Map<String, Object>> db2menu(List<Map<String, Object>> list, ServletContext cxt) {
@@ -170,6 +172,11 @@ public class SiteStruService implements ServletContextListener {
 		}
 	}
 
+	/**
+	 * 加载网站结构
+	 * 
+	 * @param cxt Servlet 上下文
+	 */
 	public static void loadSiteStru(ServletContext cxt) {
 		load(cxt);
 		ListMap.buildPath(stru, true);

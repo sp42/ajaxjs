@@ -56,9 +56,9 @@
 	</textarea>
 	<br />
 	<br />
-	<script>
-		jsonData = ${siteStruJson};
-	</script>
+<script>
+	jsonData = ${siteStruJson};
+</script>
 	<center>
 		<button class="aj-btn addTop">新增顶级节点</button>
 	</center>

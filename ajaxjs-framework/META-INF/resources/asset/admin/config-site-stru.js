@@ -267,10 +267,10 @@ aj('.addTop').onclick = e => {
 		var id = el.$('input[name=id]').value;
 		var name = el.$('input[name=name]').value;
 		
-		jsonData.push({
+		jsonData.push({ // push() 是数组添加元素的方法
 			id : id,
 			name: name
-		})
+		});
 		
 		saveJsonToServer(() => {
 			location.reload();
