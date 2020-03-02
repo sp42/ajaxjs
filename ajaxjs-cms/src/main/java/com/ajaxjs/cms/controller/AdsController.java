@@ -14,7 +14,6 @@ import com.ajaxjs.cms.Ads;
 import com.ajaxjs.cms.AdsService;
 import com.ajaxjs.cms.app.CommonConstant;
 import com.ajaxjs.cms.app.catalog.CatalogService;
-import com.ajaxjs.cms.app.catalog.CatalogService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;

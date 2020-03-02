@@ -20,17 +20,12 @@ import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
 import com.ajaxjs.cms.utils.codegenerators.Utils;
-import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
-import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.util.XMLHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
 @Path("/admin/CodeGenerators")
@@ -43,17 +38,6 @@ public class CodeGeneratorsController implements IController {
 	static private String dbUser = "root";
 	static private String dbPassword = "root123abc";
 	static private String zipSave = "/download/code.zip";
-
-	@GET
-	public String UI(ModelAndView mv, MvcRequest r) {
-		LOGGER.info("代码生成器");
-
-		Map<String, String> map = XMLHelper.nodeAsMap(r.mappath("/META-INF/context.xml"), "//Resource[@name='" + ConfigService.getValueAsString("data.database_node") + "']");
-		mv.put("saveFolder", ConfigService.getValueAsString("System.project_folder") + "\\src"); // 臨時保存
-		mv.put("conn", map);
-		
-		return BaseController.admin("code-generator/index");
-	}
 
 	@POST
 	public String doGet(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException {
