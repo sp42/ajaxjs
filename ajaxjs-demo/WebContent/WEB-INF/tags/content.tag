@@ -3,8 +3,8 @@
 <%@taglib uri="/ajaxjs_config"	prefix="config"%>
 <%@taglib tagdir="/WEB-INF/tags/" prefix="tagfile"%>
 
-<%@attribute name="left" 		required="true"  fragment="true" description="插入左侧菜单内容"%>
-<%@attribute name="body" 		required="true"  fragment="true" description="插入正文内容"%>
+<%@attribute name="left" 		required="false" fragment="true" description="插入左侧菜单内容"%>
+<%@attribute name="body" 		required="false" fragment="true" description="插入正文内容"%>
 <%@attribute name="bannerText" 	required="false" type="String" description="Banner 文字"%>
 <%@attribute name="bannerImg" 	required="false" type="String" description="Banner 图片"%>
 <%@attribute name="bodyClass" 	required="false" type="String" description="body 标签样式"%>
@@ -54,16 +54,22 @@
 	</section>
 	
 	<!-- 正文 -->
-	<div class="centerWidth">
-
-		<div class="body">
-			<div class="left">
-				<jsp:invoke fragment="left" />
-			</div>
-			<div class="right">
-				<jsp:invoke fragment="body" />
-			</div>
-		</div>
+	<div class="centerWidth body">
+		<c:choose>
+			<c:when test="${left != null && body != null}">
+				<!-- 左、右结构 -->
+				<div class="left">
+					<jsp:invoke fragment="left" />
+				</div>
+				<div class="right">
+					<jsp:invoke fragment="body" />
+				</div>
+			</c:when>
+			<c:otherwise>
+				<!-- 不分结构 -->
+				<jsp:doBody />
+			</c:otherwise>
+		</c:choose>
 	</div>
 	
 	<!-- 页脚 -->
