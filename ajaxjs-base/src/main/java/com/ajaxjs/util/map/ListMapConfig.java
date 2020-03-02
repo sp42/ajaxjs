@@ -58,6 +58,11 @@ public class ListMapConfig {
 				int level);
 	}
 
+	/**
+	 * 上下文
+	 * 
+	 * @author sp42 frank@ajaxjs.com
+	 */
 	public static class Context {
 		private boolean stop;
 

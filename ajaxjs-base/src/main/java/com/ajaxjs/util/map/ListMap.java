@@ -103,7 +103,8 @@ public class ListMap {
 	 * @param level    深度
 	 * @param config   关于回调函数的配置
 	 */
-	public static void traveler(List<Map<String, Object>> list, Context fristCtx, Map<String, Object> superMap, int level, ListMapConfig config) {
+	public static void traveler(List<Map<String, Object>> list, Context fristCtx, Map<String, Object> superMap,
+			int level, ListMapConfig config) {
 		for (Map<String, Object> map : list) {
 			if (map == null)
 				continue;
@@ -115,7 +116,8 @@ public class ListMap {
 	/**
 	 * 为每个 Map 加上 path 和 level 字段，分别是路径和深度。默认字段为 "id", "fullPath", "level"。
 	 * 
-	 * @param list 输入的 ListMap
+	 * @param list       输入的 ListMap
+	 * @param saveSupers 是否生成父级节点的信息（包含id和名称）
 	 */
 	public static void buildPath(List<Map<String, Object>> list, boolean saveSupers) {
 		buildPath(list, ID, PATH, LEVEL, saveSupers);
@@ -133,9 +135,10 @@ public class ListMap {
 	 * @param path  map 的路径字段
 	 * @param level map 的深度
 	 */
-	public static void buildPath(List<Map<String, Object>> list, String id, String path, String level, boolean saveSupers) {
+	public static void buildPath(List<Map<String, Object>> list, String id, String path, String level,
+			boolean saveSupers) {
 		ListMapConfig config = new ListMapConfig();
-		
+
 		config.mapHandler = (map, superMap, _level) -> {
 			String superPath = superMap == null ? "" : superMap.get(path).toString();
 			map.put(path, superPath + "/" + map.get(id));
@@ -216,7 +219,8 @@ public class ListMap {
 	 * @return Map
 	 */
 	@SuppressWarnings("unchecked")
-	private static Map<String, Object> findByPath(Queue<String> queue, List<Map<String, Object>> list) {
+	private static Map<String, Object> findByPath(Queue<String> queue, 
+			List<Map<String, Object>> list) {
 		Map<String, Object> map = null;
 
 		while (!queue.isEmpty()) {
