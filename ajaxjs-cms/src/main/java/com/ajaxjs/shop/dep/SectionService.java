@@ -6,7 +6,6 @@ import com.ajaxjs.cms.SectionList;
 import com.ajaxjs.cms.SectionListService;
 import com.ajaxjs.cms.app.catalog.Catalog;
 import com.ajaxjs.cms.app.catalog.CatalogService;
-import com.ajaxjs.cms.app.catalog.CatalogService;
 import com.ajaxjs.cms.controller.DataDictController;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.PageResult;
