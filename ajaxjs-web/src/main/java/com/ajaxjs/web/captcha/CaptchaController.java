@@ -22,6 +22,7 @@ import com.ajaxjs.mvc.controller.MvcOutput;
 @WebServlet("/Captcha")
 public class CaptchaController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
 	/**
 	 * 表单中指定的字段名称 或是 SESSION 的键值
 	 */
@@ -38,6 +39,9 @@ public class CaptchaController extends HttpServlet {
 	/**
 	 * 生成验证码图片
 	 * 
+	 * @param width     图片宽度
+	 * @param height    图片高度
+	 * @param randomStr 随机字符串
 	 * @return 图片对象
 	 */
 	public static RenderedImage getCaptcha(int width, int height, String randomStr) {
@@ -65,7 +69,7 @@ public class CaptchaController extends HttpServlet {
 
 		return image;
 	}
-	
+
 	/**
 	 * 随机产生四位验证码
 	 * 
@@ -95,24 +99,21 @@ public class CaptchaController extends HttpServlet {
 			bc = 255;
 
 		Random random = new Random();
-		int r = fc + random.nextInt(bc - fc);
-		int g = fc + random.nextInt(bc - fc);
-		int b = fc + random.nextInt(bc - fc);
+		int r = fc + random.nextInt(bc - fc), g = fc + random.nextInt(bc - fc), b = fc + random.nextInt(bc - fc);
 
 		return new Color(r, g, b);
 	}
-	
+
 	/**
 	 * 显示验证码图片并将认证码存入 Session
 	 * 
-	 * @param response	响应对象
-	 * @param session	会话对象
+	 * @param response 响应对象
+	 * @param session  会话对象
 	 */
 	public static void init(HttpServletResponse response, HttpSession session) {
 		String code = getRandom();
-
-		new MvcOutput(response).noCache().setContent_Type("image/jpeg").go(getCaptcha(60, 20, code));
-
+		MvcOutput re = response instanceof MvcOutput ? (MvcOutput) response : new MvcOutput(response);
+		re.noCache().setContent_Type("image/jpeg").go(getCaptcha(60, 20, code));
 		session.setAttribute(CAPTCHA_CODE, code);
 	}
 

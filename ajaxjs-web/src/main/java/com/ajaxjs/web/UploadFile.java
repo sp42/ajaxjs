@@ -36,8 +36,8 @@ public class UploadFile extends HttpServletRequestWrapper {
 	/**
 	 * 创建一个上传请求对象
 	 * 
-	 * @param request 			请求对象
-	 * @param uploadFileInfo	上传的配置信息
+	 * @param request        请求对象
+	 * @param uploadFileInfo 上传的配置信息
 	 */
 	public UploadFile(HttpServletRequest request, UploadFileInfo uploadFileInfo) {
 		super(request);
@@ -81,6 +81,10 @@ public class UploadFile extends HttpServletRequestWrapper {
 	 * @throws IOException
 	 */
 	public UploadFileInfo upload() throws IOException {
+		if (uploadFileInfo.beforeUpload != null && !uploadFileInfo.beforeUpload.apply(uploadFileInfo)) {
+			return null;
+		}
+
 		check();
 
 		try (ServletInputStream in = getInputStream()) {
@@ -158,8 +162,8 @@ public class UploadFile extends HttpServletRequestWrapper {
 	/**
 	 * 保存文件
 	 * 
-	 * @param offset	偏移开始位置
-	 * @param length	文件长度
+	 * @param offset 偏移开始位置
+	 * @param length 文件长度
 	 * @return 上传结果
 	 */
 	private UploadFileInfo save(int offset, int length) {
@@ -180,6 +184,9 @@ public class UploadFile extends HttpServletRequestWrapper {
 			uploadFileInfo.errMsg = e.getMessage();
 			LOGGER.warning(e);
 		}
+
+		if (uploadFileInfo.afterUpload != null)
+			uploadFileInfo.afterUpload.accept(uploadFileInfo);
 
 		return uploadFileInfo;
 	}

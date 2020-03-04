@@ -15,6 +15,9 @@
  */
 package com.ajaxjs.web;
 
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 /**
  * 上传的配置信息
  * 
@@ -31,7 +34,7 @@ public class UploadFileInfo {
 	 * 原始文件名
 	 */
 	public String oldFilename;
-	
+
 	/**
 	 * 文件扩展名
 	 */
@@ -77,12 +80,12 @@ public class UploadFileInfo {
 	 * 
 	 */
 	public String saveFileName;
-	
+
 	/**
 	 * 上传成功之文件之目录+文件名（从 web 根目录开始起）
 	 */
 	public String path;
-	
+
 	/**
 	 * 上传成功之文件完整的磁盘路径
 	 */
@@ -102,4 +105,14 @@ public class UploadFileInfo {
 	 * 若不成功，是什么异常信息
 	 */
 	public String errMsg;
+
+	/**
+	 * 上传之前触发的事件
+	 */
+	public Function<UploadFileInfo, Boolean> beforeUpload;
+	
+	/**
+	 * 上传之后触发的事件
+	 */
+	public Consumer<UploadFileInfo> afterUpload;
 }

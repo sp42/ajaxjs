@@ -34,8 +34,7 @@ public class When extends SimpleTagSupport {
 	/**
 	 * 自身为 true 才执行
 	 * 
-	 * @param test
-	 *            true 表示为执行
+	 * @param test true 表示为执行
 	 */
 	public void setTest(boolean test) {
 		this.test = test;
