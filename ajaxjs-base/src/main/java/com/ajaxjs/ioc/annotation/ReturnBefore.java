@@ -17,7 +17,7 @@ package com.ajaxjs.ioc.annotation;
 /**
  * 如果前置方法 before 返回该实例则表示在 before之后中止 aop
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
 public class ReturnBefore {
 	/**

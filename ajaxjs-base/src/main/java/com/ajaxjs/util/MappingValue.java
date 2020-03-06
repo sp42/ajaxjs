@@ -24,7 +24,7 @@ import java.util.function.Function;
 /**
  * 处理值的一些相关函数
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
 public class MappingValue {
 	/**

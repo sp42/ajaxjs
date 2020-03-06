@@ -18,7 +18,7 @@ package com.ajaxjs.net.mail;
 /**
  * 邮件模型
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
 public class Mail {
 	private String mailServer;

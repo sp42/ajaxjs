@@ -18,7 +18,7 @@ package com.ajaxjs.js.jsonparser.lexer;
 /**
  * 列出常见的 Token 类型。字符串类型 Token 和 数字类型 Token 两个比较特殊，须另外设类来表示。
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
 public interface Tokens {
 	/**

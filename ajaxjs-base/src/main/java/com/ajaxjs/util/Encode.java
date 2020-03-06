@@ -31,7 +31,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 字符串的编码、解密 支持 MD5、SHA-1 和 SHA-2（SHA256）摘要算法
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class Encode {

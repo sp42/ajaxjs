@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * 基础模型类 请注意不要使用 int 而是使用 Integer
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class BaseModel implements Serializable {

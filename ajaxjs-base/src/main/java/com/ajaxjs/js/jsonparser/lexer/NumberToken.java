@@ -13,7 +13,7 @@ package com.ajaxjs.js.jsonparser.lexer;
 /**
  * 数字 Token
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
 public class NumberToken extends Token {
 	/**

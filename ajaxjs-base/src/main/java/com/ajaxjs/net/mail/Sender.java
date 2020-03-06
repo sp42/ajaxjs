@@ -28,7 +28,7 @@ import com.ajaxjs.util.Encode;
 /**
  * 简易邮件发送器
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
 public class Sender extends Socket {
 	/**

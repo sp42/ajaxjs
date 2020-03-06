@@ -28,7 +28,7 @@ import com.ajaxjs.util.map.ListMap;
 /**
  * 以 JSON 为存储格式的配置系统，在 JVM 中以 Map/List 结构保存 该类是单例。
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
 public class ConfigService {
 	private static final LogHelper LOGGER = LogHelper.getLog(ConfigService.class);

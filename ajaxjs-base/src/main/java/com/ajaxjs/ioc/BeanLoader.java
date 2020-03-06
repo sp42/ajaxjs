@@ -34,9 +34,9 @@ import javassist.CtNewMethod;
 import javassist.NotFoundException;
 
 /**
- * Speical for Java Class Scanning
+ * Special for Java Class Scanning
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class BeanLoader extends AbstractScanner<Class<Object>> {
@@ -145,22 +145,20 @@ public class BeanLoader extends AbstractScanner<Class<Object>> {
 	/**
 	 * 输入多个包名，获取所有的 class。多个 set 可以用 addAll 合并之
 	 * 
-	 * @param packageNames Java 包名
+	 * @param packages Java 包名
 	 * @return 结果
 	 */
-	public static Set<Class<Object>> scanClass(String... packageNames) {
+	public static Set<Class<Object>> scanClass(String... packages) {
 		Set<Class<Object>> classes = null;
 		BeanLoader scanner = new BeanLoader();
 
-		for (String packageJavaName : packageNames) {
+		for (String packageName : packages) {
 			if (classes == null)
-				classes = scanner.scan(packageJavaName);
+				classes = scanner.scan(packageName);
 			else
 				classes.addAll(classes);
-
 		}
 
 		return classes;
 	}
-
 }

@@ -18,7 +18,7 @@ package com.ajaxjs.ioc;
 /**
  * AOP 专用异常信息
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
 public class AopException extends Exception {
 	private static final long serialVersionUID = 5423010532958020537L;

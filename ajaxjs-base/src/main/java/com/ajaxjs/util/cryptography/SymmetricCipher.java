@@ -32,7 +32,7 @@ import com.ajaxjs.util.Encode;
 /**
  * 对称算法
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class SymmetricCipher {

@@ -27,7 +27,7 @@ import com.ajaxjs.Version;
 /**
  * 自定义日志工具类，封装了 Java 自带的日志类 java.util.logging.Logger。
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class LogHelper {

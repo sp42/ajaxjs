@@ -13,7 +13,7 @@ package com.ajaxjs.util.cache;
 /**
  * 缓存接口
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  *
  * @param <K> 键
  * @param <V> 值

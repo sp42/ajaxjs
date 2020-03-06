@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
 /**
  * 状态
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
 public class State {
 	/**

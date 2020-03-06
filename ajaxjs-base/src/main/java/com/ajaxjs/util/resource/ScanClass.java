@@ -24,7 +24,7 @@ import com.ajaxjs.util.ReflectUtil;
 /**
  * Speical for Java Class Scanning
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class ScanClass<T> extends AbstractScanner<Class<T>> {

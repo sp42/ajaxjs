@@ -22,7 +22,7 @@ import java.lang.annotation.Target;
 /**
  * 表示可纳入在 IOC 里面管理的对象
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)

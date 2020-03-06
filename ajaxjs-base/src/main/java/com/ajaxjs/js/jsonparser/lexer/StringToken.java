@@ -20,7 +20,7 @@ import com.ajaxjs.js.jsonparser.JsonParseException;
 /**
  * 字符串 Token
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
 public class StringToken extends Token {
 	/**

@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 /**
  * 普通未分类的工具类
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class CommonUtil {

@@ -95,7 +95,7 @@ public class IoHelper {
 		return result.toString();
 	}
 
-	public static final int bufferSize = 1024; // 1K 的数据块
+	public static final int BUFFER_SIZE = 1024; // 1K 的数据块
 
 	/**
 	 * 两端速度不匹配，需要协调 理想环境下，速度一样快，那就没必要搞流，直接一坨给弄过去就可以了 流的意思很形象，就是一点一滴的，不是一坨坨大批量的
@@ -108,7 +108,7 @@ public class IoHelper {
 	 */
 	public static void write(InputStream in, OutputStream out, boolean isBuffer) {
 		int readSize; // 读取到的数据长度
-		byte[] buffer = new byte[bufferSize]; // 通过 byte 作为数据中转，用于存放循环读取的临时数据
+		byte[] buffer = new byte[BUFFER_SIZE]; // 通过 byte 作为数据中转，用于存放循环读取的临时数据
 
 		try {
 			if (isBuffer) {
@@ -118,8 +118,9 @@ public class IoHelper {
 					}
 				}
 			} else {		
+				// 每次读 1KB 数据，将输入流数据写入到输出流中
 				// readSize = in.read(buffer, 0, bufferSize);
-				while ((readSize = in.read(buffer, 0, bufferSize)) != -1) {
+				while ((readSize = in.read(buffer, 0, BUFFER_SIZE)) != -1) {
 					out.write(buffer, 0, readSize);
 					// readSize = in.read(buffer, 0, bufferSize);
 				}
@@ -159,7 +160,7 @@ public class IoHelper {
 	 * @return 返回本实例供链式调用
 	 */
 	public static void stringStream2output(OutputStream out, byte[] data, int off, int length) {
-		try (OutputStream _out = new BufferedOutputStream(out, bufferSize);) {
+		try (OutputStream _out = new BufferedOutputStream(out, BUFFER_SIZE);) {
 			if (off == 0 && length == 0)
 				_out.write(data);
 			else

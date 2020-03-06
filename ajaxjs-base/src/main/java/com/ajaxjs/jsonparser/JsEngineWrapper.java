@@ -29,7 +29,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * JS 引擎的包装器
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class JsEngineWrapper {

@@ -23,7 +23,7 @@ import java.lang.annotation.Target;
 /**
  * 表示可注入的资源
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
 @Target({ FIELD })
 @Retention(RetentionPolicy.RUNTIME)

@@ -17,7 +17,7 @@ package com.ajaxjs.js.jsonparser.syntax;
 
 /**
  * 状态常量表
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
 public interface States {
 	/**

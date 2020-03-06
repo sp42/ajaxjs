@@ -26,7 +26,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 反射工具包
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
 public class ReflectUtil {
 	private static final LogHelper LOGGER = LogHelper.getLog(ReflectUtil.class);

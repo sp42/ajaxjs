@@ -20,7 +20,7 @@ import java.util.HashMap;
 /**
  * 配置 Model
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
 public class Config extends HashMap<String, Object> {
 	private static final long serialVersionUID = 93681331885687612L;

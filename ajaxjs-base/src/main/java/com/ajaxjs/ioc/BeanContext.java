@@ -38,7 +38,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * IOC 管理器，单例
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
 public class BeanContext {
 	private static final LogHelper LOGGER = LogHelper.getLog(BeanContext.class);
@@ -82,7 +82,8 @@ public class BeanContext {
 	@SuppressWarnings("unchecked")
 	public static <T> T getBean(Class<T> clz) {
 		if (clz.getAnnotation(Bean.class) == null) {
-			IllegalArgumentException e = new IllegalArgumentException(clz + " 这不是一个 ioc 的 bean。This is not a bean object that can be put into IOC.");
+			IllegalArgumentException e = new IllegalArgumentException(
+					clz + " 这不是一个 ioc 的 bean。This is not a bean object that can be put into IOC.");
 			LOGGER.warning(e);
 			throw e;
 		}
@@ -175,27 +176,25 @@ public class BeanContext {
 			String[] arr = str.split("\\|");
 			String extendedId = ConfigService.getValueAsString(arr[0]);
 
-			if (extendedId == null)
-				return arr[1]; // 没有扩展，读取默认的
-			else {
-				return extendedId;
-			}
+			// 没有扩展，读取默认的
+			return extendedId == null ? arr[1] : extendedId;
 		}
 
 		return dependenciObj_id;
 	}
 
 	/**
+	 * 如果有 Named 注解则读取它的值，否则读取类本身的名称，转换为小写
 	 * 
-	 * @param namedAnno
-	 * @param clz       Bean 类
-	 * @return
+	 * @param name Name 注解
+	 * @param clz  Bean 类
+	 * @return 组件 Id
 	 */
-	private static String getBeanId(Named namedAnno, Class<?> clz) {
-		if (namedAnno == null || CommonUtil.isEmptyString(namedAnno.value()))
+	private static String getBeanId(Named name, Class<?> clz) {
+		if (name == null || CommonUtil.isEmptyString(name.value()))
 			return clz.getSimpleName().toLowerCase();
 		else
-			return namedAnno.value();
+			return name.value();
 	}
 
 	/**
@@ -282,7 +281,8 @@ public class BeanContext {
 	 * @param annotationValue   注解的实例，注解也是接口的一种，所以需要接口的实例
 	 */
 	@SuppressWarnings("unchecked")
-	public static void alterAnnotationOn(Class<?> clazzToLookFor, Class<? extends Annotation> annotationToAlter, Annotation annotationValue) {
+	public static void alterAnnotationOn(Class<?> clazzToLookFor, Class<? extends Annotation> annotationToAlter,
+			Annotation annotationValue) {
 		Map<Class<? extends Annotation>, Annotation> map = null;
 
 		try {
@@ -330,8 +330,8 @@ public class BeanContext {
 		for (Class<Object> clz : set) {
 			String name = clz.getName();
 
-			if (clz.isPrimitive() || Modifier.isAbstract(clz.getModifiers()) || clz.isAnnotation() || clz.isInterface() || clz.isArray()
-					|| name.indexOf("$") != -1) {
+			if (clz.isPrimitive() || Modifier.isAbstract(clz.getModifiers()) || clz.isAnnotation() || clz.isInterface()
+					|| clz.isArray() || name.indexOf("$") != -1) {
 			} else {
 				if (giveName != null)
 					name = giveName.apply(clz);

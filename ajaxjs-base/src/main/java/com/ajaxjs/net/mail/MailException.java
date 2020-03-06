@@ -18,7 +18,7 @@ package com.ajaxjs.net.mail;
 /**
  * 扩展的一个 mail 异常类
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
 public class MailException extends Exception {
 	private static final long serialVersionUID = 4576939650789860518L;

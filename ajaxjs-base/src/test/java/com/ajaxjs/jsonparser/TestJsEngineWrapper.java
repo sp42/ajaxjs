@@ -12,7 +12,7 @@ import org.junit.Test;
 import com.ajaxjs.jsonparser.JsEngineWrapper;
 
 /**
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class TestJsEngineWrapper {

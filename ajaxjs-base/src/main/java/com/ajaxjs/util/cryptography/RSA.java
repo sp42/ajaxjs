@@ -38,7 +38,7 @@ import javax.crypto.NoSuchPaddingException;
 /**
  * RSA 非对称加密/解密
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class RSA {

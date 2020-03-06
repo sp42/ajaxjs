@@ -18,7 +18,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 初始化，检测是否可以运行
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class Version {

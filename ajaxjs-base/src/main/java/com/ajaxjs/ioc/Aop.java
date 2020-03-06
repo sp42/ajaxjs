@@ -26,7 +26,7 @@ import com.ajaxjs.ioc.annotation.ReturnBefore;
 /**
  * AOP 抽象类
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  * @param <T> T 必须是目标对象的其中一个接口类型
  */
 public abstract class Aop<T> implements InvocationHandler {
@@ -84,6 +84,7 @@ public abstract class Aop<T> implements InvocationHandler {
 
 		// 如果作为参数
 		boolean isBeforeReturn = beforeReturn != null && beforeReturn instanceof ReturnAsArg;
+		
 		if (isBeforeReturn)
 			args = ((ReturnAsArg) beforeReturn).getArgs();
 

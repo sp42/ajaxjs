@@ -35,7 +35,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 资源访问器。扫描过程是递归的
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public abstract class AbstractScanner<T> {
