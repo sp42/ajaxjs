@@ -206,7 +206,7 @@ public class NetUtil extends HttpBasicRequest {
 	 */
 	public static byte[] toFromData(Map<String, Object> data) {
 		byte[] bytes = null;
-
+		
 		for (String key : data.keySet()) {
 			Object v = data.get(key);
 			byte[] _bytes;

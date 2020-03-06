@@ -258,17 +258,17 @@ public class BeanContext {
 	public static void injectBeans() {
 		LOGGER.info("扫描依赖关系并注入 bean.");
 
-		for (String key : dependencies.keySet()) {
-			String value = dependencies.get(key);// 依赖对象的值
-			String[] split = key.split("\\.");// 数组第一个值表示 bean 对象名称，第二个值为字段属性名称
+		dependencies.forEach((k, v) -> {
+//			String value = dependencies.get(key);// 依赖对象的值
+			String[] split = k.split("\\.");// 数组第一个值表示 bean 对象名称，第二个值为字段属性名称
 
-			Object bean = beans.get(split[0]), argBean = beans.get(value);
+			Object bean = beans.get(split[0]), argBean = beans.get(v);
 
 			Objects.requireNonNull(bean, split[0] + "执行：" + split[1] + " 未发现类");
-			Objects.requireNonNull(argBean, "容器中找不到实例 " + value + "。请确定是否为组件添加 @Bean 注解?");
+			Objects.requireNonNull(argBean, "容器中找不到实例 " + v + "。请确定是否为组件添加 @Bean 注解?");
 
 			ReflectUtil.setProperty(bean, split[1], argBean);
-		}
+		});
 
 		isInitialized = true;
 	}
@@ -308,12 +308,11 @@ public class BeanContext {
 	@SuppressWarnings("unchecked")
 	public static <T> List<T> findBeanByInterface(Class<T> interfaceClz) {
 		List<T> list = new ArrayList<>();
-
-		for (String key : beans.keySet()) {
-			Object obj = beans.get(key);
-			if (interfaceClz.isAssignableFrom(obj.getClass()))
-				list.add((T) obj);
-		}
+ 
+		beans.forEach((key, bean) -> {
+			if (interfaceClz.isAssignableFrom(bean.getClass()))
+				list.add((T) bean);
+		});
 
 		return list;
 	}

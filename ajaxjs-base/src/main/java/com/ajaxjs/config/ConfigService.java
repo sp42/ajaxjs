@@ -97,7 +97,7 @@ public class ConfigService {
 	/**
 	 * 
 	 * @param <T>
-	 * @param key 配置键值
+	 * @param key         配置键值
 	 * @param isNullValue
 	 * @param vType
 	 * @return
@@ -108,7 +108,7 @@ public class ConfigService {
 			return isNullValue;
 
 		Object v = flatConfig.get(key);
-		
+
 		if (v == null) {
 			LOGGER.warning("没发现配置 " + key);
 			return isNullValue;
@@ -186,11 +186,11 @@ public class ConfigService {
 		JsEngineWrapper js = new JsEngineWrapper();
 		js.eval("allConfig = " + FileHelper.openAsText(ConfigService.jsonPath));
 
-		for (String key : map.keySet()) {
-			String jsKey = transform(key);
+		map.forEach((k, v) -> {
+			String jsKey = transform(k);
 			String jsCode = "";
 
-			if (map.get(key) == null) {
+			if (v == null) {
 				jsCode = String.format("allConfig%s = null;", jsKey);
 			} else {
 				// 获取原来的类型，再作适当的类型转换
@@ -198,21 +198,21 @@ public class ConfigService {
 
 				switch (type) {
 				case "string":
-					jsCode = String.format("allConfig%s = '%s';", jsKey, map.get(key));
+					jsCode = String.format("allConfig%s = '%s';", jsKey, v);
 					break;
 				case "number":
 				case "boolean":
-					jsCode = String.format("allConfig%s = %s;", jsKey, map.get(key));
+					jsCode = String.format("allConfig%s = %s;", jsKey, v);
 					break;
 				case "object":
-					jsCode = String.format("allConfig%s = '%s';", jsKey, map.get(key));
+					jsCode = String.format("allConfig%s = '%s';", jsKey, v);
 				default:
 					LOGGER.info("未处理 js 类型： " + type);
 				}
 			}
 
 			js.eval(jsCode);
-		}
+		});
 
 		String json = js.eval("JSON.stringify(allConfig);", String.class);
 		FileHelper.saveText(ConfigService.jsonPath, json);

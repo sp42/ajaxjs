@@ -57,29 +57,29 @@ public abstract class AbstractScanner<T> {
 	 * Fire this function when resource found in file system.
 	 * 
 	 * @param target          The target collection
-	 * @param resourceFile    The full path of resource
-	 * @param packageJavaName The name of package in Java
+	 * @param resource    The full path of resource
+	 * @param packageName The name of package in Java
 	 */
-	abstract public void onFileAdding(Set<T> target, File resourceFile, String packageJavaName);
+	abstract public void onFileAdding(Set<T> target, File resource, String packageName);
 
 	/**
 	 * Fire this function when resource found in JAR file.
 	 * 
 	 * @param target       The target collection
-	 * @param resourcePath The full path of resource
+	 * @param resource The full path of resource
 	 */
-	abstract public void onJarAdding(Set<T> target, String resourcePath);
+	abstract public void onJarAdding(Set<T> target, String resource);
 
 	/**
 	 * 扫描
 	 * 
-	 * @param packageJavaName 包名
+	 * @param packageName Java 包名
 	 * @return 扫描结果
 	 */
-	public Set<T> scan(String packageJavaName) {
-		packageJavaName = packageJavaName.trim();
+	public Set<T> scan(String packageName) {
+		packageName = packageName.trim();
 
-		String packageDirName = packageJavaName.replace('.', '/');
+		String packageDirName = packageName.replace('.', '/');
 		Enumeration<URL> resources = getResources(packageDirName);
 
 		while (resources.hasMoreElements()) {
@@ -88,11 +88,11 @@ public abstract class AbstractScanner<T> {
 			switch (url.getProtocol()) {
 			case "file":
 				String filePath = Encode.urlDecode(url.getPath());
-				findInFile(filePath, packageJavaName);
+				findInFile(filePath, packageName);
 				break;
 			case "jar":
 			case "zip":
-				findInJar(url, packageDirName, packageJavaName);
+				findInJar(url, packageDirName, packageName);
 				break;
 			}
 		}
@@ -104,13 +104,13 @@ public abstract class AbstractScanner<T> {
 	/**
 	 * 获取指定目录的资源
 	 * 
-	 * @param packageDirName 包全称
+	 * @param packageDir 包全称
 	 * @return 该目录下所有的资源
 	 */
-	private static Enumeration<URL> getResources(String packageDirName) {
+	private static Enumeration<URL> getResources(String packageDir) {
 		try {
-			Enumeration<URL> url = Thread.currentThread().getContextClassLoader().getResources(packageDirName);
-			Objects.requireNonNull(url, packageDirName + "没有这个 Java 目录。");
+			Enumeration<URL> url = Thread.currentThread().getContextClassLoader().getResources(packageDir);
+			Objects.requireNonNull(url, packageDir + "没有这个 Java 目录。");
 
 			return url;
 		} catch (IOException e) {
@@ -125,20 +125,20 @@ public abstract class AbstractScanner<T> {
 	 * @param packageName 包名
 	 * @param filePath    包的物理路径
 	 */
-	private void findInFile(String filePath, String packageJavaName) {
+	private void findInFile(String filePath, String packageName) {
 		File dir = new File(filePath);
 		if (!dir.exists() || !dir.isDirectory()) {
-			LOGGER.warning("包{0}下没有任何文件{1}", filePath, packageJavaName);
+			LOGGER.warning("包{0}下没有任何文件{1}", filePath, packageName);
 			return;
 		}
 
-//		LOGGER.info("正在扫描包：{0}，该包下面的类正准备被扫描。", packageJavaName);
+//		LOGGER.info("正在扫描包：{0}，该包下面的类正准备被扫描。", packageName);
 
 		for (File file : dir.listFiles(getFileFilter())) {
 			if (file.isDirectory()) { // 如果是目录 则递归继续扫描
-				findInFile(file.getAbsolutePath(), packageJavaName + "." + file.getName());
+				findInFile(file.getAbsolutePath(), packageName + "." + file.getName());
 			} else {
-				onFileAdding(result, file, packageJavaName);
+				onFileAdding(result, file, packageName);
 			}
 		}
 	}
@@ -148,12 +148,12 @@ public abstract class AbstractScanner<T> {
 	 * 
 	 * @param classes
 	 * @param url
-	 * @param packageDirName
-	 * @param packageJavaName
+	 * @param packageDir
+	 * @param packageName
 	 */
-	private void findInJar(URL url, String packageDirName, String packageJavaName) {
+	private void findInJar(URL url, String packageDir, String packageName) {
 		JarFile jar = null;
-		String fileUrl = url.getFile().replace("!/" + packageDirName, "").replace("file:/", "");
+		String fileUrl = url.getFile().replace("!/" + packageDir, "").replace("file:/", "");
 
 		try {
 			jar = new JarFile(new File(Version.isWindows ? fileUrl : "/" + fileUrl));
@@ -173,15 +173,15 @@ public abstract class AbstractScanner<T> {
 				name = name.substring(1);
 
 			// 如果前半部分和定义的包名相同
-			if (name.startsWith(packageDirName)) {
+			if (name.startsWith(packageDir)) {
 				int idx = name.lastIndexOf('/');
 				if (idx != -1) {
-					packageJavaName = name.substring(0, idx).replace('/', '.'); // 如果以"/"结尾 是一个包，获取包名 把"/"替换成"."
+					packageName = name.substring(0, idx).replace('/', '.'); // 如果以"/"结尾 是一个包，获取包名 把"/"替换成"."
 
 					if (name.endsWith(".class") && !entry.isDirectory()) {
-						String className = name.substring(packageJavaName.length() + 1, name.length() - 6);// 去掉后面的".class"
-																											// 获取真正的类名
-						onJarAdding(result, packageJavaName + '.' + className);
+						String className = name.substring(packageName.length() + 1, name.length() - 6);// 去掉后面的".class"
+																										// 获取真正的类名
+						onJarAdding(result, packageName + '.' + className);
 					}
 				}
 			}
@@ -208,12 +208,12 @@ public abstract class AbstractScanner<T> {
 	 * 获取当前类所在的目录下的一个资源 Returns the filepath under this clazz. u can warp this path
 	 * by new File.
 	 * 
-	 * @param cls              类
-	 * @param resourceFileName 资源文件名
+	 * @param cls      类
+	 * @param resource 资源文件名
 	 * @return 资源路径
 	 */
-	public static String getResourceFilePath(Class<?> cls, String resourceFileName) {
-		return Encode.urlDecode(cls.getResource(resourceFileName).getPath());
+	public static String getResourceFilePath(Class<?> cls, String resource) {
+		return Encode.urlDecode(cls.getResource(resource).getPath());
 	}
 
 	/**
@@ -226,6 +226,11 @@ public abstract class AbstractScanner<T> {
 		return clz.getResource("").getPath();
 	}
 
+	/**
+	 * 
+	 * @param fileName
+	 * @return
+	 */
 	public static String getResourcesByFileName(String fileName) {
 		ClassLoader classLoader = AbstractScanner.class.getClassLoader();
 

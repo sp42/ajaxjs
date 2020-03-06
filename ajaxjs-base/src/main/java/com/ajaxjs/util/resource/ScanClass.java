@@ -45,39 +45,39 @@ public class ScanClass<T> extends AbstractScanner<Class<T>> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void onFileAdding(Set<Class<T>> target, File resourceFile, String packageJavaName) {
-		Class<T> clazz = (Class<T>) ReflectUtil.getClassByName(getClassName(resourceFile, packageJavaName));
+	public void onFileAdding(Set<Class<T>> target, File resource, String packageName) {
+		Class<T> clazz = (Class<T>) ReflectUtil.getClassByName(getClassName(resource, packageName));
 		target.add(clazz);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void onJarAdding(Set<Class<T>> target, String resourcePath) {
-		Class<T> clazz = (Class<T>) ReflectUtil.getClassByName(resourcePath);
+	public void onJarAdding(Set<Class<T>> target, String resource) {
+		Class<T> clazz = (Class<T>) ReflectUtil.getClassByName(resource);
 		target.add(clazz);
 	}
 
 	/**
 	 * 输入包名，获取所有的 classs
 	 * 
-	 * @param packageJavaName 包名
+	 * @param packageName 包名
 	 * @return 结果
 	 */
-	public static Set<Class<Object>> scanClass(String packageJavaName) {
-		return new ScanClass<Object>().scan(packageJavaName);
+	public static Set<Class<Object>> scanClass(String packageName) {
+		return new ScanClass<Object>().scan(packageName);
 	}
 
 	/**
 	 * 输入多个包名，获取所有的 class。多个 set 可以用 addAll 合并之
 	 * 
-	 * @param packageJavaNames 包名
+	 * @param packages 包名
 	 * @return 结果
 	 */
-	public static Set<Class<Object>> scanClass(String... packageJavaNames) {
+	public static Set<Class<Object>> scanClass(String... packages) {
 		Set<Class<Object>> clzes = null;
 		ScanClass<Object> scanner = new ScanClass<>();
 
-		for (String packageJavaName : packageJavaNames) {
+		for (String packageJavaName : packages) {
 			if (clzes == null) {
 				clzes = scanner.scan(packageJavaName);
 			} else {
@@ -91,15 +91,14 @@ public class ScanClass<T> extends AbstractScanner<Class<T>> {
 	/**
 	 * Java 类文件 去掉后面的 .class 只留下类名
 	 * 
-	 * @param file            Java 类文件
-	 * @param packageJavaName 包名称
+	 * @param file        Java 类文件
+	 * @param packageName 包名称
 	 * @return 类名
 	 */
-	public static String getClassName(File file, String packageJavaName) {
+	public static String getClassName(File file, String packageName) {
 		String clzName = file.getName().substring(0, file.getName().length() - 6);
-		clzName = packageJavaName + '.' + clzName;
+		clzName = packageName + '.' + clzName;
 
 		return clzName;
 	}
-
 }

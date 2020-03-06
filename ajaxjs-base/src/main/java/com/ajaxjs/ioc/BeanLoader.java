@@ -46,18 +46,18 @@ public class BeanLoader extends AbstractScanner<Class<Object>> {
 	}
 
 	@Override
-	public void onFileAdding(Set<Class<Object>> target, File resourceFile, String packageJavaName) {
-		String resourcePath = ScanClass.getClassName(resourceFile, packageJavaName);
+	public void onFileAdding(Set<Class<Object>> target, File resource, String packageName) {
+		String resourcePath = ScanClass.getClassName(resource, packageName);
 		onJarAdding(target, resourcePath);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void onJarAdding(Set<Class<Object>> target, String resourcePath) {
+	public void onJarAdding(Set<Class<Object>> target, String resource) {
 		ClassPool cp = ClassPool.getDefault();
 
 		try {
-			CtClass cc = cp.get(resourcePath);
+			CtClass cc = cp.get(resource);
 			doAop(cc);
 			makeSetter(cc);
 //			if ("com.ajaxjs.ioc.Hi".equals(resourcePath)) {
@@ -68,7 +68,7 @@ public class BeanLoader extends AbstractScanner<Class<Object>> {
 			Class<Object> clazz = (Class<Object>) cc.toClass();
 			target.add(clazz);
 		} catch (CannotCompileException e) {
-			Class<Object> clazz = (Class<Object>) ReflectUtil.getClassByName(resourcePath);
+			Class<Object> clazz = (Class<Object>) ReflectUtil.getClassByName(resource);
 			target.add(clazz);
 		} catch (NotFoundException | ClassNotFoundException e) {
 			e.printStackTrace();

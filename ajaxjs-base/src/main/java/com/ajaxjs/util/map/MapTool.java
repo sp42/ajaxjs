@@ -170,11 +170,7 @@ public class MapTool {
 	 */
 	public static <T, K> Map<String, T> as(Map<String, K> map, Function<K, T> fn) {
 		Map<String, T> _map = new HashMap<>();
-
-		for (String key : map.keySet()) {
-			K value = map.get(key);
-			_map.put(key.toString(), value == null ? null : fn.apply(value));
-		}
+		map.forEach((k, v) -> _map.put(k, v == null ? null : fn.apply(v)));
 
 		return _map;
 	}
@@ -313,15 +309,15 @@ public class MapTool {
 		Element root = doc.createElement("xml");
 		doc.appendChild(root);
 
-		for (String key : data.keySet()) {
-			String value = data.get(key).toString();
+		data.forEach((k, v) -> {
+			String value = data.get(k).toString();
 			if (value == null)
 				value = "";
 
-			Element filed = doc.createElement(key);
+			Element filed = doc.createElement(k);
 			filed.appendChild(doc.createTextNode(value.trim()));
 			root.appendChild(filed);
-		}
+		});
 
 		try {
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
