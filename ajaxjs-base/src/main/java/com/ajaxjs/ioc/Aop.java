@@ -39,7 +39,6 @@ public abstract class Aop<T> implements InvocationHandler {
 	 * 前置调用
 	 * 
 	 * @param target     本体对象
-	 * 
 	 * @param method     方法对象
 	 * @param methodName 方法名称
 	 * @param args       参数列表
@@ -84,7 +83,7 @@ public abstract class Aop<T> implements InvocationHandler {
 
 		// 如果作为参数
 		boolean isBeforeReturn = beforeReturn != null && beforeReturn instanceof ReturnAsArg;
-		
+
 		if (isBeforeReturn)
 			args = ((ReturnAsArg) beforeReturn).getArgs();
 
