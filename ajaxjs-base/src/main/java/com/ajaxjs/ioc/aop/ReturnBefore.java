@@ -1,5 +1,4 @@
 /**
- * Copyright sp42 frank@ajaxjs.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,38 +12,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.ioc.annotation;
+package com.ajaxjs.ioc.aop;
 
 /**
- * 如果前置方法 before 返回该实例则表示在
+ * 如果前置方法 before 返回该实例则表示在 before之后中止 aop
  * 
  * @author sp42 frank@ajaxjs.com
- *
  */
-public class ReturnAsArg {
-	private Object[] args;
+public class ReturnBefore {
+	/**
+	 * 保存返回值
+	 */
+	private Object returnValue;
 
 	/**
+	 * 创建一个返回值
 	 * 
-	 * @param args
+	 * @param returnValue 返回值
 	 */
-	public ReturnAsArg(Object[] args) {
-		this.args = args;
+	public ReturnBefore(Object returnValue) {
+		this.returnValue = returnValue;
 	}
 
 	/**
+	 * 获取返回值
 	 * 
-	 * @param args
+	 * @return 返回值
 	 */
-	public ReturnAsArg(Object args) {
-		this.args = new Object[]{args};
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public Object[] getArgs() {
-		return args;
+	public Object getReturnValue() {
+		return returnValue;
 	}
 }

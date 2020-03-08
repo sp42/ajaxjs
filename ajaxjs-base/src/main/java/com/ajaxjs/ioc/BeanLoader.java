@@ -19,8 +19,8 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.Set;
 
-import com.ajaxjs.ioc.annotation.After;
-import com.ajaxjs.ioc.annotation.Before;
+import com.ajaxjs.ioc.aop.After;
+import com.ajaxjs.ioc.aop.Before;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.resource.AbstractScanner;
