@@ -21,6 +21,7 @@ import java.util.Set;
 
 import com.ajaxjs.ioc.annotation.After;
 import com.ajaxjs.ioc.annotation.Before;
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.resource.AbstractScanner;
 import com.ajaxjs.util.resource.ScanClass;
@@ -115,7 +116,7 @@ public class BeanLoader extends AbstractScanner<Class<Object>> {
 	private static void doAop(CtClass cc) throws ClassNotFoundException, CannotCompileException {
 		CtMethod[] methods = cc.getMethods();
 
-		if (methods != null && methods.length > 0) {
+		if (!CommonUtil.isNull(methods)) {
 			for (CtMethod method : methods) {
 				if (method.getAnnotation(Before.class) != null) {
 					Before before = (Before) method.getAnnotation(Before.class);
