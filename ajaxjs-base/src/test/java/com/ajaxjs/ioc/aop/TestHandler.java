@@ -1,4 +1,4 @@
-package com.ajaxjs.ioc;
+package com.ajaxjs.ioc.aop;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -7,8 +7,9 @@ import java.lang.reflect.Method;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.ioc.Aop;
-import com.ajaxjs.ioc.annotation.ReturnBefore;
+import com.ajaxjs.ioc.BaseTest;
+import com.ajaxjs.ioc.aop.Aop;
+import com.ajaxjs.ioc.aop.ReturnBefore;
 import com.ajaxjs.ioc.testcase.Subject;
 import com.ajaxjs.util.logger.LogHelper;
 

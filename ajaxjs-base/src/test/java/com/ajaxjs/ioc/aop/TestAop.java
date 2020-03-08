@@ -1,19 +1,21 @@
-package com.ajaxjs.ioc;
+package com.ajaxjs.ioc.aop;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.lang.reflect.Method;
 
 import org.junit.Test;
 
-import com.ajaxjs.ioc.Aop;
-import com.ajaxjs.ioc.AopException;
-import com.ajaxjs.ioc.annotation.ReturnAsArg;
+import com.ajaxjs.ioc.BaseTest;
+import com.ajaxjs.ioc.aop.Aop;
+import com.ajaxjs.ioc.aop.ReturnAsArg;
+import com.ajaxjs.ioc.aop.TestHandler.TestAopHandler;
+import com.ajaxjs.ioc.aop.TestHandler.TestStopAopHandler;
 import com.ajaxjs.ioc.testcase.Subject;
 import com.ajaxjs.util.logger.LogHelper;
 
 public class TestAop {
-
 	Subject subject, stopSubject;
 
 	class CaccheHandler extends Aop<Subject> {
@@ -28,7 +30,6 @@ public class TestAop {
 		@Override
 		public void after(Subject target, Method method, String methodName, Object[] args, Object returnObj) {
 			LOGGER.info("print CaccheHandler.after");
-
 		}
 	}
 
@@ -82,7 +83,5 @@ public class TestAop {
 		assertNotNull(r.getArgs());
 		
 		new ReturnAsArg(new Object());
-		
-		new AopException(null, null);
 	}
 }

@@ -1,11 +1,11 @@
-package com.ajaxjs.ioc;
+package com.ajaxjs.ioc.aop;
 
 import java.lang.reflect.Method;
 import java.util.logging.Logger;
 
 import org.junit.Test;
 
-import com.ajaxjs.ioc.annotation.Before;
+import com.ajaxjs.ioc.aop.Before;
 import com.ajaxjs.util.ReflectUtil;
 
 public class TestSimpleAop {
