@@ -19,6 +19,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.ajaxjs.ioc.aop.Aop;
+
 /**
  * 表示可纳入在 IOC 里面管理的对象
  * 

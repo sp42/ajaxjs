@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.ioc;
+package com.ajaxjs.ioc.aop;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
