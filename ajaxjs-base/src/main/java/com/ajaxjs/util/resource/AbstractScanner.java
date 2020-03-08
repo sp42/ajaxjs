@@ -23,8 +23,6 @@ import java.util.Enumeration;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -56,7 +54,7 @@ public abstract class AbstractScanner<T> {
 	/**
 	 * Fire this function when resource found in file system.
 	 * 
-	 * @param target          The target collection
+	 * @param target      The target collection
 	 * @param resource    The full path of resource
 	 * @param packageName The name of package in Java
 	 */
@@ -65,7 +63,7 @@ public abstract class AbstractScanner<T> {
 	/**
 	 * Fire this function when resource found in JAR file.
 	 * 
-	 * @param target       The target collection
+	 * @param target   The target collection
 	 * @param resource The full path of resource
 	 */
 	abstract public void onJarAdding(Set<T> target, String resource);
@@ -79,8 +77,8 @@ public abstract class AbstractScanner<T> {
 	public Set<T> scan(String packageName) {
 		packageName = packageName.trim();
 
-		String packageDirName = packageName.replace('.', '/');
-		Enumeration<URL> resources = getResources(packageDirName);
+		String packageDir = packageName.replace('.', '/');
+		Enumeration<URL> resources = getResources(packageDir);
 
 		while (resources.hasMoreElements()) {
 			URL url = resources.nextElement();
@@ -92,12 +90,13 @@ public abstract class AbstractScanner<T> {
 				break;
 			case "jar":
 			case "zip":
-				findInJar(url, packageDirName, packageName);
+				findInJar(url, packageDir, packageName);
 				break;
 			}
 		}
 
-		LOGGER.info("正在扫描包名：{0}，结果数量：{1}", packageDirName, result.size());
+		LOGGER.info("正在扫描包名：{0}，结果数量：{1}", packageDir, result.size());
+
 		return result;
 	}
 
@@ -108,15 +107,16 @@ public abstract class AbstractScanner<T> {
 	 * @return 该目录下所有的资源
 	 */
 	private static Enumeration<URL> getResources(String packageDir) {
-		try {
-			Enumeration<URL> url = Thread.currentThread().getContextClassLoader().getResources(packageDir);
-			Objects.requireNonNull(url, packageDir + "没有这个 Java 目录。");
+		Enumeration<URL> url = null;
 
-			return url;
+		try {
+			url = Thread.currentThread().getContextClassLoader().getResources(packageDir);
+			Objects.requireNonNull(url, packageDir + "没有这个 Java 目录。");
 		} catch (IOException e) {
 			LOGGER.warning(e);
-			return null;
 		}
+
+		return url;
 	}
 
 	/**
@@ -129,6 +129,7 @@ public abstract class AbstractScanner<T> {
 		File dir = new File(filePath);
 		if (!dir.exists() || !dir.isDirectory()) {
 			LOGGER.warning("包{0}下没有任何文件{1}", filePath, packageName);
+
 			return;
 		}
 
@@ -189,54 +190,65 @@ public abstract class AbstractScanner<T> {
 	}
 
 	/**
+	 * 获取当前类目录下的资源文件
 	 * 
-	 */
-	public static BiFunction<Class<?>, String, String> getPath = (clz, name) -> Encode
-			.urlDecode(new File(clz.getResource(name).getPath()).toString());
-
-	/**
-	 * 获取当前类的所在工程路径
-	 */
-	public static Function<Class<?>, String> getRootPath = clz -> getPath.apply(clz, "/");
-
-	/**
-	 * 获取当前类的绝对路径
-	 */
-	public static Function<Class<?>, String> getCurrentPath = clz -> getPath.apply(clz, "");
-
-	/**
-	 * 获取当前类所在的目录下的一个资源 Returns the filepath under this clazz. u can warp this path
-	 * by new File.
-	 * 
-	 * @param cls      类
+	 * @param clz      类引用
 	 * @param resource 资源文件名
-	 * @return 资源路径
+	 * @param isDecode 是否解码
+	 * @return 当前类的绝对路径，找不到文件则返回 null
 	 */
-	public static String getResourceFilePath(Class<?> cls, String resource) {
-		return Encode.urlDecode(cls.getResource(resource).getPath());
+	public static String getResourcesFromClass(Class<?> clz, String resource, boolean isDecode) {
+		return url2path(clz.getResource(resource), isDecode);
 	}
 
 	/**
-	 * Returns the filepath under this clazz. u can warp this path by new File.
+	 * 获取当前类目录下的资源文件
 	 * 
-	 * @param clz Class you want to location
-	 * @return the path of class where is
+	 * @param clz      类引用
+	 * @param resource 资源文件名
+	 * @return 当前类的绝对路径，找不到文件则返回 null
 	 */
-	public static String getResourcesByClass(Class<?> clz) {
-		return clz.getResource("").getPath();
+	public static String getResourcesFromClass(Class<?> clz, String resource) {
+		return getResourcesFromClass(clz, resource, true);
 	}
 
 	/**
+	 * 获取 Classpath 根目录下的资源文件
 	 * 
-	 * @param fileName
+	 * @param resource 文件名称，输入空字符串这返回 Classpath 根目录
+	 * @param isDecode 是否解码
+	 * @return 所在工程路径+资源路径，找不到文件则返回 null
+	 */
+	public static String getResourcesFromClasspath(String resource, boolean isDecode) {
+		URL url = AbstractScanner.class.getClassLoader().getResource(resource);
+		return url2path(url, isDecode);
+	}
+
+	/**
+	 * 获取 Classpath 根目录下的资源文件
+	 * 
+	 * @param resource 文件名称，输入空字符串这返回 Classpath 根目录
+	 * @return 所在工程路径+资源路径，找不到文件则返回 null
+	 */
+	public static String getResourcesFromClasspath(String resource) {
+		return getResourcesFromClasspath(resource, true);
+	}
+
+	/**
+	 * url.getPath() 返回 /D:/project/a，需要转换一下
+	 * 
+	 * @param url
+	 * @param isDecode 是否解码
 	 * @return
 	 */
-	public static String getResourcesByFileName(String fileName) {
-		ClassLoader classLoader = AbstractScanner.class.getClassLoader();
+	private static String url2path(URL url, boolean isDecode) {
+		if (url == null)
+			return null;
 
-		URL url = classLoader.getResource(fileName);
-		File file = new File(url.getFile());
-
-		return file.toString();
+		if (isDecode) {
+			return Encode.urlDecode(new File(url.getPath()).toString());
+		} else {
+			return url.getPath();
+		}
 	}
 }

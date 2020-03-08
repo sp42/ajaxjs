@@ -28,15 +28,11 @@ import com.ajaxjs.util.ReflectUtil;
  *
  */
 public class ScanClass<T> extends AbstractScanner<Class<T>> {
+
 	/**
 	 * 用于查找 class 文件的过滤器
 	 */
-	public final static FileFilter fileFilter = new FileFilter() {
-		@Override
-		public boolean accept(File file) {
-			return file.isDirectory() || file.getName().endsWith(".class");
-		}
-	};
+	public final static FileFilter fileFilter = file -> file.isDirectory() || file.getName().endsWith(".class");
 
 	@Override
 	public FileFilter getFileFilter() {
@@ -97,8 +93,7 @@ public class ScanClass<T> extends AbstractScanner<Class<T>> {
 	 */
 	public static String getClassName(File file, String packageName) {
 		String clzName = file.getName().substring(0, file.getName().length() - 6);
-		clzName = packageName + '.' + clzName;
-
-		return clzName;
+		
+		return  packageName + '.' + clzName;
 	}
 }
