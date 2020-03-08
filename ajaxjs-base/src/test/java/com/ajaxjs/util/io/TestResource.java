@@ -53,6 +53,5 @@ public class TestResource {
 		
 		// 有内部类
 		assertEquals(19, anything.size());
-
 	}
 }

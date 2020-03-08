@@ -13,7 +13,7 @@ import org.junit.Test;
 import com.ajaxjs.util.resource.AbstractScanner;
 
 public class TestFileHelper {
-	String dir = AbstractScanner.getRootPath.apply(TestFileHelper.class);
+	String dir = AbstractScanner.getResourcesFromClass(TestFileHelper.class, "");
 	String fullpath = dir + File.separator + "bar.txt";
 
 	@Test

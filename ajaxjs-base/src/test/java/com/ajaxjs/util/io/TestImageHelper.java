@@ -7,7 +7,7 @@ import org.junit.Test;
 import com.ajaxjs.util.resource.AbstractScanner;
 
 public class TestImageHelper {
-	String img = AbstractScanner.getResourceFilePath(TestIoHelper.class, "test.jpg");
+	String img = AbstractScanner.getResourcesFromClass(TestIoHelper.class, "test.jpg");
 
 	@Test
 	public void 获取图片大小() {

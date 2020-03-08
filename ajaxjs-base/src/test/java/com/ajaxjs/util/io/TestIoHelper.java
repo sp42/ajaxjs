@@ -9,7 +9,7 @@ import org.junit.Test;
 import com.ajaxjs.util.resource.AbstractScanner;
 
 public class TestIoHelper {
-	String dir = AbstractScanner.getRootPath.apply(TestIoHelper.class);
+	String dir = AbstractScanner.getResourcesFromClass(TestIoHelper.class, "");
 	String fullpath = dir + File.separator + "bar.txt";
 	
 	@Test
