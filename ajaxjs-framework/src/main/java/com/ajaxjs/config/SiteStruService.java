@@ -34,7 +34,7 @@ import com.ajaxjs.util.map.ListMapConfig;
 /**
  * 网站结构的配置
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
 @javax.servlet.annotation.WebListener
 public class SiteStruService implements ServletContextListener {
@@ -145,7 +145,6 @@ public class SiteStruService implements ServletContextListener {
 		ctx.setAttribute("commonJsp", ctxPath + "/" + Constant.jsp_perfix);
 		ctx.setAttribute("isDebuging", Version.isDebug);
 		ctx.setAttribute("ajaxjs_ui_output", ctxPath + "/ajaxjs-ui-output");
-
 	}
 
 	/**
@@ -164,7 +163,6 @@ public class SiteStruService implements ServletContextListener {
 				if (e instanceof UndeclaredThrowableException) {
 					Throwable _e = ReflectUtil.getUnderLayerErr(e);
 					_e.printStackTrace();
-
 				}
 
 				throw e;

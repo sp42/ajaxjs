@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * 网站的结构配置
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
 public class SiteStru extends ArrayList<Map<String, Object>> {
 	private static final long serialVersionUID = 1737463552429455684L;

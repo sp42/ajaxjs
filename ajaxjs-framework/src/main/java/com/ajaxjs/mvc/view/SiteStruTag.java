@@ -44,7 +44,7 @@ public class SiteStruTag extends SimpleTagSupport {
 			throw new UnsupportedOperationException(" 未 定义 SiteStruService 类型的 SITE_STRU，该常量应在 Servlet 初始化时定义。");
 
 		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
-		String output = "Error Type for tag";
+		String output = "Error Type for tag : ";
 
 		switch (type) {
 		case "navBar":
@@ -61,6 +61,8 @@ public class SiteStruTag extends SimpleTagSupport {
 		case "breadCrumb":// 面包屑导航
 			output = buildBreadCrumb(sitestru, request);
 			break;
+		default:
+			output +=  type;
 		}
 
 		pageContext.getOut().write(output);

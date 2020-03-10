@@ -5,7 +5,7 @@ import com.ajaxjs.framework.BaseModel;
 /**
  * 类别
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class Catalog extends BaseModel {
