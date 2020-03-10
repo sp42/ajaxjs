@@ -96,11 +96,13 @@
 <li>
 	<h3 class="tools"><i></i> 开发工具</h3>
 	<ul>
-		<li><a target="iframepage" href="${ctx}/admin/DataBase/">数据库管理</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/developer-tool/deve">实用工具</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/developer-tool/docs">文档</a></li>
+		<%-- <li><a target="iframepage" href="${ctx}/admin/DataBase/">数据库管理</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/CodeGenerators/">代码生成器</a></li>
 		<li><a target="iframepage" href="${ajaxjsui}/ui-doc">前端文档</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/DataBaseShowStru">表字段浏览</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/tomcat-log/">后台日志浏览</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/tomcat-log/">后台日志浏览</a></li> --%>
 		<%-- <li><a target="iframepage" href="${ctx}/jsp/swagger-ui/">API 文档</a></li> --%>
 	</ul>
 </li>
