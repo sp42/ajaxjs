@@ -166,7 +166,7 @@ public class MapTool {
 	 * 
 	 * @param map 原始 Map，key 必须为 String 类型
 	 * @param fn  转换函数
-	 * @return
+	 * @return 转换后的 map
 	 */
 	public static <T, K> Map<String, T> as(Map<String, K> map, Function<K, T> fn) {
 		Map<String, T> _map = new HashMap<>();

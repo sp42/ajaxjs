@@ -277,8 +277,8 @@ public class FileHelper extends IoHelper {
 	/**
 	 * 获取 URL 上的文件名，排除 ? 参数部分
 	 * 
-	 * @param url
-	 * @return
+	 * @param url URL
+	 * @return 文件名
 	 */
 	public static String getFileNameFromUrl(String url) {
 		return getFileName(url).split("\\?")[0];
@@ -450,7 +450,7 @@ public class FileHelper extends IoHelper {
 	 * @param target             源文件
 	 * @param dest               目的文件/目录，如果最后一个为目录，则不改名，如果最后一个为文件名，则改名
 	 * @param isREPLACE_EXISTING 是否替换已存在的文件
-	 * @return
+	 * @return true 表示复制成功
 	 */
 	public static boolean copy(String target, String dest, boolean isREPLACE_EXISTING) {
 		try {

@@ -22,9 +22,9 @@ public class Token {
 	/**
 	 * 创建一个 Token
 	 * 
-	 * @param type 		TokenId
-	 * @param name 		Token 名称
-	 * @param cnName	Token 名称（中文名）
+	 * @param type   TokenId
+	 * @param name   Token 名称
+	 * @param cnName Token 名称（中文名）
 	 */
 	public Token(int type, String name, String cnName) {
 		this.type = type;
@@ -35,10 +35,10 @@ public class Token {
 	/**
 	 * 创建一个 Token
 	 * 
-	 * @param type 		TokenId
-	 * @param name 		Token 名称
-	 * @param cnName	Token 名称（中文名）
-	 * @param value Java 类型的值，通常是已知的
+	 * @param type   TokenId
+	 * @param name   Token 名称
+	 * @param cnName Token 名称（中文名）
+	 * @param value  Java 类型的值，通常是已知的
 	 */
 	public Token(int type, String name, String cnName, Object value) {
 		this(type, name, cnName);
@@ -48,11 +48,11 @@ public class Token {
 	/**
 	 * 创建一个 Token
 	 * 
-	 * @param type 		TokenId
-	 * @param name 		Token 名称
-	 * @param cnName	Token 名称（中文名）
-	 * @param value 	Java 类型的值，通常是已知的
-	 * @param value 	JSON 值（String|Number）
+	 * @param type      TokenId
+	 * @param name      Token 名称
+	 * @param cnName    Token 名称（中文名）
+	 * @param value     Java 类型的值，通常是已知的
+	 * @param jsonValue JSON 值（String|Number）
 	 */
 	public Token(int type, String name, String cnName, Object value, String jsonValue) {
 		this(type, name, cnName, value);

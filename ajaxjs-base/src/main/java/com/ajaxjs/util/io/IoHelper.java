@@ -104,7 +104,6 @@ public class IoHelper {
 	 * @param in       输入流，无须手动关闭
 	 * @param out      输出流
 	 * @param isBuffer 是否加入缓冲功能
-	 * @return 是否成功
 	 */
 	public static void write(InputStream in, OutputStream out, boolean isBuffer) {
 		int readSize; // 读取到的数据长度
@@ -117,7 +116,7 @@ public class IoHelper {
 						_out.write(buffer, 0, readSize);
 					}
 				}
-			} else {		
+			} else {
 				// 每次读 1KB 数据，将输入流数据写入到输出流中
 				// readSize = in.read(buffer, 0, bufferSize);
 				while ((readSize = in.read(buffer, 0, BUFFER_SIZE)) != -1) {
@@ -157,7 +156,6 @@ public class IoHelper {
 	 * @param out    输出流
 	 * @param off    偏移
 	 * @param length 长度
-	 * @return 返回本实例供链式调用
 	 */
 	public static void stringStream2output(OutputStream out, byte[] data, int off, int length) {
 		try (OutputStream _out = new BufferedOutputStream(out, BUFFER_SIZE);) {

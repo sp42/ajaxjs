@@ -59,29 +59,33 @@ public class XMLHelper {
 	/**
 	 * 获取某个节点
 	 * 
-	 * @param dbXmlCfg 数据库配置的 XML 文件，必须是路径
-	 * @param xpath
-	 * @param fn
+	 * @param xml   XML 文件路径
+	 * @param xpath XPath 路径
+	 * @param fn    处理节点的函数，传入 Node 类型节点
 	 */
-	public static void xPath(String dbXmlCfg, String xpath, Consumer<Node> fn) {
+	public static void xPath(String xml, String xpath, Consumer<Node> fn) {
 		DocumentBuilderFactory factory = initBuilderFactory();
 		factory.setNamespaceAware(true);
 
 		try {
 			XPathExpression expr = XPathFactory.newInstance().newXPath().compile(xpath);
-			NodeList nodes = (NodeList) expr.evaluate(factory.newDocumentBuilder().parse(dbXmlCfg),
-					XPathConstants.NODESET);
+			NodeList nodes = (NodeList) expr.evaluate(factory.newDocumentBuilder().parse(xml), XPathConstants.NODESET);
 
 			for (int i = 0; i < nodes.getLength(); i++)
 				fn.accept(nodes.item(i));
-
 		} catch (ParserConfigurationException | SAXException | IOException | XPathExpressionException e) {
 			LOGGER.warning(e);
 		}
 	}
 
-	public static void parseXML(String xml, BiConsumer<Element, NodeList> fn) {
-		try (InputStream in = new ByteArrayInputStream(xml.getBytes("UTF-8"))) {
+	/**
+	 * 解析 XML
+	 * 
+	 * @param xmlContent XML 内容
+	 * @param fn         处理节点的函数，传入 Element 类型节点和 NodeList 类型子元素列表
+	 */
+	public static void parseXML(String xmlContent, BiConsumer<Element, NodeList> fn) {
+		try (InputStream in = new ByteArrayInputStream(xmlContent.getBytes("UTF-8"))) {
 			Element el = initBuilder().parse(in).getDocumentElement();
 			NodeList nodeList = el.getChildNodes();
 
@@ -94,14 +98,14 @@ public class XMLHelper {
 	/**
 	 * 将节点所有属性都转换为 map
 	 * 
-	 * @param dbCfg
-	 * @param xpath
-	 * @return
+	 * @param xml   XML 文件路径
+	 * @param xpath XPath 路径
+	 * @return 节点 map
 	 */
-	public static Map<String, String> nodeAsMap(String dbCfg, String xpath) {
+	public static Map<String, String> nodeAsMap(String xml, String xpath) {
 		Map<String, String> map = new HashMap<>();
 
-		XMLHelper.xPath(dbCfg, xpath, node -> {
+		XMLHelper.xPath(xml, xpath, node -> {
 			NamedNodeMap _map = node.getAttributes();
 
 			if (_map != null) {

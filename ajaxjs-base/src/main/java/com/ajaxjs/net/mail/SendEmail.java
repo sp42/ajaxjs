@@ -82,7 +82,7 @@ public class SendEmail {
 	/**
 	 * 开始建立SOCKET,同时初始化输入输出,如果是应用程序本方法的功能应用在构造方法中完成
 	 * 
-	 * @return
+	 * @return 是否成功
 	 */
 	public boolean createConnect() {
 		try {
@@ -118,8 +118,8 @@ public class SendEmail {
 	/**
 	 * 为了方便调试,在一次会话中一个命令发送应该有一个响应,所以把一个命令发送和响应过程封装到一个方法中
 	 * 
-	 * @param s
-	 * @return
+	 * @param s 命令
+	 * @return 响应内容
 	 * @throws IOException
 	 */
 	public String doCommand(String s) throws IOException {
@@ -216,9 +216,9 @@ public class SendEmail {
 	/**
 	 * 在发送MAIL实体时,为了处理方便和性能的原因,我把有附件和没有附件的方法分开来.BASE64是目前任何MUA都能处理的编码,本着宽进严出的原则我们严格使用BASE64编码
 	 * 
-	 * @param subject
-	 * @param message
-	 * @return
+	 * @param subject 主题
+	 * @param message 邮件正文
+	 * @return 是否发送成功
 	 */
 	public boolean send(String subject, String message) {
 		subject = Encode.base64Encode(subject);

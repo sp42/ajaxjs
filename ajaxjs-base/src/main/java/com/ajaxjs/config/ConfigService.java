@@ -158,9 +158,10 @@ public class ConfigService {
 	}
 
 	/**
+	 * 扁平化 JSON 的 key
 	 * 
-	 * @param namespace
-	 * @return
+	 * @param namespace JSON 命名空间
+	 * @return 扁平化 JSON 的 key
 	 */
 	public static String transform(String namespace) {
 		String[] arr = namespace.split("\\.");

@@ -52,19 +52,10 @@ public class LogHelper {
 	/**
 	 * 简单打印信息
 	 * 
-	 * @param msg
+	 * @param msg 消息，可多个消息
 	 */
-	public static void p(String msg) {
-		Logger.getGlobal().info(msg);
-	}
-
-	/**
-	 * 简单打印信息
-	 * 
-	 * @param msg
-	 */
-	public static void p(Object[] arr) {
-		Logger.getGlobal().info(Arrays.toString(arr));
+	public static void p(Object... msg) {
+		Logger.getGlobal().info(Arrays.toString(msg));
 	}
 
 	private static final int NORMAL = 0;

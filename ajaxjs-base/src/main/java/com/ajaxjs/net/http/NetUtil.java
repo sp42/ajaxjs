@@ -200,13 +200,14 @@ public class NetUtil extends HttpBasicRequest {
 	private static byte[] endData = (newLine + boundaryPrefix + BOUNDARY + boundaryPrefix + newLine).getBytes();
 
 	/**
+	 * Map 转换为 byte
 	 * 
-	 * @param data
-	 * @return
+	 * @param data Map
+	 * @return Map 转换为 byte
 	 */
 	public static byte[] toFromData(Map<String, Object> data) {
 		byte[] bytes = null;
-		
+
 		for (String key : data.keySet()) {
 			Object v = data.get(key);
 			byte[] _bytes;

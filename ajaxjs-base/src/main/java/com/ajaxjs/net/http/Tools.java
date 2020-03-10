@@ -167,9 +167,6 @@ public class Tools {
 	 * http://ip.taobao.com/instructions.html http://blog.zhukunqian.com/?p=1998
 	 * http://pv.sohu.com/cityjson?ie=utf-8 https://gitee.com/meaktsui/ChinaIpSearch
 	 * 
-	 * @param ip
-	 * @return
-	 * @throws IOException
 	 */
 	@SuppressWarnings("unchecked")
 	public static Map<String, Object> getIpLocation(String ip) throws IOException {

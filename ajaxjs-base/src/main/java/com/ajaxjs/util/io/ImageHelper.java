@@ -205,7 +205,7 @@ public class ImageHelper {
 	 * @param bImg        缓冲图片对象
 	 * @param borderWidth 边框宽度
 	 * @param borderColor 边框颜色
-	 * @return
+	 * @return 加入边框的图片
 	 */
 	public static BufferedImage addBorder(BufferedImage bImg, int borderWidth, Color borderColor) {
 		Integer[] arr = getBufferedImgSize.apply(bImg);
@@ -319,7 +319,7 @@ public class ImageHelper {
 	 * 
 	 * @param src
 	 * @param angel 旋转角度
-	 * @return
+	 * @return 矩形
 	 */
 	public static Rectangle calcRotatedSize(Rectangle src, int angel) {
 		// if angel is greater than 90 degree, we need to do some conversion

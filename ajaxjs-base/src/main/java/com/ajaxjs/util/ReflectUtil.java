@@ -154,7 +154,7 @@ public class ReflectUtil {
 	 * 
 	 * @param className 类全称
 	 * @param clz       要转换的目标类型
-	 * @return
+	 * @return 类对象
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> Class<T> getClassByName(String className, Class<T> clz) {

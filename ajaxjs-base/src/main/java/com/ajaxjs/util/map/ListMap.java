@@ -196,8 +196,8 @@ public class ListMap {
 	 * TODO
 	 * 
 	 * @param str
-	 * @param list
-	 * @return
+	 * @param list 列表
+	 * @return Map
 	 */
 	public static Map<String, Object> findByPath(String str, Map<String, Object> list) {
 		return null;
