@@ -5,7 +5,7 @@ import com.ajaxjs.config.ConfigService;
 /**
  * 小程序工具方法
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class MiniApp {

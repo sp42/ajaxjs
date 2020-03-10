@@ -7,7 +7,7 @@ import com.ajaxjs.framework.BaseModel;
 /**
  * 购物车
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class Cart extends BaseModel {

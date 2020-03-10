@@ -5,7 +5,7 @@ import com.ajaxjs.user.model.User;
 /**
  * 
  * 
- * @author Frank Cheung frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com frank@ajaxjs.com
  *
  */
 public class SellerMaster extends User {

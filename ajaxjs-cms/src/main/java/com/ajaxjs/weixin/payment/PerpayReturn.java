@@ -3,7 +3,7 @@ package com.ajaxjs.weixin.payment;
 /**
  * 预付返回结果
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class PerpayReturn extends BaseResponse {

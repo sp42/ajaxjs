@@ -3,7 +3,7 @@ package com.ajaxjs.weixin.mini_app;
 /**
  * 小程序用户登录的凭证
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class UserLoginToken {

@@ -7,7 +7,7 @@ import com.ajaxjs.shop.model.Goods;
 /**
  * 团购
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class Group extends Goods {

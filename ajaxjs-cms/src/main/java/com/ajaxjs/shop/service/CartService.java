@@ -15,7 +15,7 @@ import com.ajaxjs.shop.model.Cart;
 
 /**
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 @Bean

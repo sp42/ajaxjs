@@ -27,7 +27,7 @@ import com.ajaxjs.util.map.JsonHelper;
  * 小程序用户开放能力
  * 参见：https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/login.html
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 @Bean

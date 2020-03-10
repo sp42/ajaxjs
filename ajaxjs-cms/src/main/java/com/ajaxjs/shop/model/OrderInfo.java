@@ -8,7 +8,7 @@ import com.ajaxjs.framework.BaseModel;
  * 
  * 订单实体
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class OrderInfo extends BaseModel {

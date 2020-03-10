@@ -11,7 +11,7 @@ import com.ajaxjs.weixin.mini_app.MiniApp;
 /**
  * {"access_token":"ACCESS_TOKEN","expires_in":7200}
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class AccessToken {

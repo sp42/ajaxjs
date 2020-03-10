@@ -142,7 +142,7 @@ public class CodeGeneratorsController implements IController {
 
 	/**
 	 * 
-	 * @author Frank Cheung
+	 * @author sp42 frank@ajaxjs.com
 	 *
 	 */
 	static class sO extends ServletOutputStream {

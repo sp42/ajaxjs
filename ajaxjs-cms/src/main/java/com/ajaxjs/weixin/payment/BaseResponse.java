@@ -3,7 +3,7 @@ package com.ajaxjs.weixin.payment;
 /**
  * 响应内容基类
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class BaseResponse {

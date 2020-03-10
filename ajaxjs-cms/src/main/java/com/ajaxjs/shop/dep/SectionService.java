@@ -14,7 +14,7 @@ import com.ajaxjs.shop.ShopConstant;
 
 /**
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 @Bean

@@ -15,7 +15,7 @@ import com.ajaxjs.weixin.mini_app.MiniApp;
 /**
  * 支付方法
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class WxPay implements PayConstant {

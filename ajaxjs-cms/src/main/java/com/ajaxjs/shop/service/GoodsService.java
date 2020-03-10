@@ -22,7 +22,7 @@ import com.ajaxjs.shop.model.Goods;
 /**
  * 商品
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 @Bean

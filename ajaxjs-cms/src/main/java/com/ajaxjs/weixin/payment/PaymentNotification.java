@@ -5,7 +5,7 @@ import java.util.Map;
 /**
  * 异步支付通知
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class PaymentNotification extends BaseResponse {

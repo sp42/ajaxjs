@@ -5,7 +5,7 @@ import com.ajaxjs.framework.BaseModel;
 /**
  * 店家
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class Seller extends BaseModel {

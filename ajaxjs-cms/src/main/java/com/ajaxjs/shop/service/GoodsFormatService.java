@@ -12,7 +12,7 @@ import com.ajaxjs.shop.model.GoodsFormat;
 /**
  * 商品规格
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 @Bean

@@ -20,7 +20,7 @@ import com.ajaxjs.weixin.payment.WxPay;
 /**
  * 订单核心业务
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 @Bean

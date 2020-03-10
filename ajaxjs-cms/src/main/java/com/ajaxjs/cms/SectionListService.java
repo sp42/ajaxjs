@@ -20,7 +20,7 @@ import com.ajaxjs.util.CommonUtil;
  * 表里面保存，这张表可能很长。不同类型的业务通过 catalogId 区分，例如收藏的、栏目的。
  * section 是支持混合类型的，多个不同类型的实体可以在同一个业务中（即 catalogId），他们通过 entityTypeId 实体类型 id 区分。
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public abstract class SectionListService extends BaseService<SectionList> {
