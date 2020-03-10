@@ -39,10 +39,10 @@ public class ServletHelper {
 	 * 
 	 * @param getInitParameterNames
 	 * @param getValue
-	 * @return
+	 * @return 配置 Map
 	 */
-	private static Map<String, String> initParams2map(Supplier<Enumeration<String>> getInitParameterNames, 
-													  Function<String, String> getValue) {
+	private static Map<String, String> initParams2map(Supplier<Enumeration<String>> getInitParameterNames,
+			Function<String, String> getValue) {
 		Map<String, String> map = new HashMap<>();
 
 		Enumeration<String> initParams = getInitParameterNames.get();
@@ -77,8 +77,8 @@ public class ServletHelper {
 		return initParams2map(() -> config.getInitParameterNames(), key -> config.getInitParameter(key));
 	}
 
-	private static final Pattern p = 
-	 Pattern.compile("\\.jpg|\\.png|\\.gif|\\.js|\\.css|\\.less|\\.ico|\\.jpeg|\\.htm|\\.swf|\\.txt|\\.mp4|\\.flv");
+	private static final Pattern p = Pattern
+			.compile("\\.jpg|\\.png|\\.gif|\\.js|\\.css|\\.less|\\.ico|\\.jpeg|\\.htm|\\.swf|\\.txt|\\.mp4|\\.flv");
 
 	/**
 	 * 检查是否静态资源。Check the url if there is static asset.
@@ -93,7 +93,7 @@ public class ServletHelper {
 	/**
 	 * 获取所有 URL 上的参数
 	 * 
-	 * @param r 请求对象
+	 * @param r       请求对象
 	 * @param without 不需要的字段
 	 * @return URL 查询参数结对的字符串
 	 */
@@ -118,49 +118,44 @@ public class ServletHelper {
 	public static String getAllQueryParameters(HttpServletRequest r) {
 		return getAllQueryParameters(r, null);
 	}
-	
-	/**
-	 * 
-	 * @param p
-	 * @return
-	 */
-	public static boolean preventSQLInject(String p) {
-		p = p.toUpperCase();
 
-		if (p.indexOf("DELETE") >= 0 || p.indexOf("ASCII") >= 0
-			|| p.indexOf("UPDATE") >= 0 || p.indexOf("SELECT") >= 0
-			|| p.indexOf("'") >= 0 || p.indexOf("SUBSTR(") >= 0
-			|| p.indexOf("COUNT(") >= 0 || p.indexOf(" OR ") >= 0
-			|| p.indexOf(" AND ") >= 0 || p.indexOf("DROP") >= 0
-			|| p.indexOf("EXECUTE") >= 0 || p.indexOf("EXEC") >= 0
-			|| p.indexOf("TRUNCATE") >= 0 || p.indexOf("INTO") >= 0
-			|| p.indexOf("DECLARE") >= 0 || p.indexOf("MASTER") >= 0
-			) {
-
-		    return false;
-		}
-		
-		return true;
-	}
-	
 	/**
+	 * 简单检查字符串有否 SQL 关键字
 	 * 
 	 * @param str
-	 * @return
+	 * @return true 表示为字符串中有 SQL 关键字
 	 */
-	public static String MysqlRealScapeString(String str) {  
-		if (str != null && str.length() > 0) {
-		    str = str.replace("\\", "\\\\");
-		    str = str.replace("'", "\\'");
-		    str = str.replace("\0", "\\0");
-		    str = str.replace("\n", "\\n");
-		    str = str.replace("\r", "\\r");
-		    str = str.replace("\"", "\\\"");
-		    str = str.replace("\\x1a", "\\Z");
-		   
-		    return str;
+	public static boolean preventSQLInject(String str) {
+		str = str.toUpperCase();
+
+		if (str.indexOf("DELETE") >= 0 || str.indexOf("ASCII") >= 0 || str.indexOf("UPDATE") >= 0
+				|| str.indexOf("SELECT") >= 0 || str.indexOf("'") >= 0 || str.indexOf("SUBSTR(") >= 0
+				|| str.indexOf("COUNT(") >= 0 || str.indexOf(" OR ") >= 0 || str.indexOf(" AND ") >= 0
+				|| str.indexOf("DROP") >= 0 || str.indexOf("EXECUTE") >= 0 || str.indexOf("EXEC") >= 0
+				|| str.indexOf("TRUNCATE") >= 0 || str.indexOf("INTO") >= 0 || str.indexOf("DECLARE") >= 0
+				|| str.indexOf("MASTER") >= 0) {
+
+			return false;
 		}
-		  
-		return null;
+
+		return true;
+	}
+
+	/**
+	 * 转义 MySql 语句中使用的字符串中的特殊字符
+	 * 
+	 * @param str SQL
+	 * @return 转换后的字符串
+	 */
+	public static String MysqlRealScapeString(String str) {
+		str = str.replace("\\", "\\\\");
+		str = str.replace("'", "\\'");
+		str = str.replace("\0", "\\0");
+		str = str.replace("\n", "\\n");
+		str = str.replace("\r", "\\r");
+		str = str.replace("\"", "\\\"");
+		str = str.replace("\\x1a", "\\Z");
+
+		return str;
 	}
 }

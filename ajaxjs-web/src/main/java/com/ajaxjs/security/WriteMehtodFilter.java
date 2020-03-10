@@ -10,7 +10,7 @@ import com.ajaxjs.mvc.filter.FilterAction;
 /**
  * HTTP 中的 POST、PUT、DELETE 都是写入的方法，这里对其检测
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class WriteMehtodFilter implements FilterAction {

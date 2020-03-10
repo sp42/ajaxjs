@@ -65,7 +65,7 @@ public class MockFilter {
 	/**
 	 * 进行请求 在请求之前，你可以设定请求的参数
 	 * 
-	 * @param request 请求对象
+	 * @param request  请求对象
 	 * @param response 响应对象
 	 * @return 响应对象 writer 字符串
 	 */
@@ -118,9 +118,10 @@ public class MockFilter {
 	}
 
 	/**
+	 * 模拟过滤器配置
 	 * 
-	 * @param context
-	 * @return
+	 * @param context 上下文
+	 * @return 过滤器配置
 	 */
 	public static FilterConfig initFilterConfig(ServletContext context) {
 		FilterConfig filterConfig = mock(FilterConfig.class);

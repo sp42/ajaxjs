@@ -83,8 +83,9 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 *
-	 * @return
+	 * 目录部分
+	 * 
+	 * @return 目录
 	 */
 	public String getFolder() {
 //		return getRequestURI().replace(getContextPath(), "").replaceFirst("^/", "").replaceFirst("/\\w+\\.\\w+$", "");
@@ -277,7 +278,6 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	/**
 	 * 获取请求 ip
 	 * 
-	 * @param request 请求对象
 	 * @return 客户端 ip
 	 */
 	public String getIp() {
@@ -285,6 +285,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 
 		if (!"unknown".equalsIgnoreCase(ip) && ip != null && ip.length() != 0) {
 			int index = ip.indexOf(",");
+			
 			if (index != -1)
 				ip = ip.substring(0, index);
 
@@ -309,19 +310,18 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	/**
 	 * 如果有这个参数返回 true。
 	 * 
-	 * @param key
-	 * @return
+	 * @param key 键名称
+	 * @return true 表示为有这个键
 	 */
 	public boolean hasParameter(String key) {
 		return !CommonUtil.isEmptyString(getParameter(key));
 	}
 
 	/**
-	 * 返回 SQL 安全的参数
+	 * 返回 SQL 类型安全的参数，必须为数字
 	 * 
-	 * @TODO
-	 * @param key
-	 * @return
+	 * @param key 键名称
+	 * @return Id
 	 */
 	public String getIdOnly(String key) {
 		String p = getParameter(key);

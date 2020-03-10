@@ -124,7 +124,7 @@ public class MockRequest extends HttpServletRequestWrapper {
 	/**
 	 * 返回 MVC 的 JSP 跳转
 	 * 
-	 * @return
+	 * @return MVC 的 JSP 跳转
 	 */
 	public String getRequestDispatcheResult() {
 		return MockResponse.getRequestDispatcheResult(old);
@@ -133,7 +133,7 @@ public class MockRequest extends HttpServletRequestWrapper {
 	/**
 	 * 返回控制器输出的响应文本
 	 * 
-	 * @return
+	 * @return 控制器输出的响应文本
 	 */
 	public String getStringResult() {
 		return testInstance.writer.toString();
@@ -142,7 +142,7 @@ public class MockRequest extends HttpServletRequestWrapper {
 	/**
 	 * 返回控制器输出的响应 JSON Map
 	 * 
-	 * @return
+	 * @return 控制器输出的响应 JSON Map
 	 */
 	public Map<String, Object> getStringResultJson() {
 		return JsonHelper.parseMap(getStringResult());

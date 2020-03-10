@@ -88,38 +88,41 @@ public class Action {
 		if (clz.getAnnotation(Bean.class) != null) { // 如果有 ioc，则从容器中查找
 			controller = BeanContext.getBean(clz);
 			if (controller == null)
-				LOGGER.warning("在 IOC 资源库中找不到该类 {0} 的实例，请检查该类是否已经加入了 IOC 扫描？  The IOC library not found that Controller, plz check if it added to the IOC scan.", clz.getName());
+				LOGGER.warning(
+						"在 IOC 资源库中找不到该类 {0} 的实例，请检查该类是否已经加入了 IOC 扫描？  The IOC library not found that Controller, plz check if it added to the IOC scan.",
+						clz.getName());
 		} else {
 			controller = ReflectUtil.newInstance(clz);// 保存的是 控制器 实例。
 		}
 	}
-	
+
 	/**
-	 * 根据路径信息加入到 urlMapping。Check out all methods which has Path annotation, then add the urlMapping.
+	 * 根据路径信息加入到 urlMapping。Check out all methods which has Path annotation, then
+	 * add the urlMapping.
 	 */
 	public void parseMethod() {
 		Class<? extends IController> clz = controller.getClass();
-		
+
 		for (Method method : clz.getMethods()) {
 			Path subPath = method.getAnnotation(Path.class); // 看看这个控制器方法有木有 URL 路径的信息，若有，要处理
 
 			if (subPath != null) {
 				String subPathValue = subPath.value();
-				
-				if(subPathValue.startsWith("/")) { // 根目录开始
+
+				if (subPathValue.startsWith("/")) { // 根目录开始
 					subPathValue = subPathValue.replaceAll("^/", ""); // 一律不要前面的 /
-		
+
 					Action subAction = IController.findTreeByPath(IController.urlMappingTree, subPathValue, "", true);
-					subAction.controller = controller; 
+					subAction.controller = controller;
 					subAction.methodSend(method);
-					
-				} else {					
+
+				} else {
 					subPathValue = subPathValue.replaceAll("^/", ""); // 一律不要前面的 /
-					
+
 					// add sub action starts from parent Node, not the top node
 					if (children == null)
 						children = new HashMap<>();
-					
+
 					Action subAction = IController.findTreeByPath(children, subPathValue, path + "/", true);
 					subAction.controller = controller; // the same controller cause the same class over there
 					subAction.methodSend(method);
@@ -156,7 +159,7 @@ public class Action {
 	 * 检测是否已经登记的控制器
 	 * 
 	 * @param anClz
-	 * @param method 控制器方法
+	 * @param method         控制器方法
 	 * @param action
 	 * @param getExistMethod
 	 * @return
@@ -174,11 +177,10 @@ public class Action {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * 根据 httpMethod 请求方法返回控制器类身上的方法。
 	 * 
-	 * @param controllerInfo 控制器类信息
 	 * @param method HTTP 请求的方法
 	 * @return 控制器方法
 	 */

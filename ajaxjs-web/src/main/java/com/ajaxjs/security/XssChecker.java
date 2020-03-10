@@ -27,7 +27,7 @@ import com.ajaxjs.util.CommonUtil;
 /**
  * 获取用户输入参数和参数值进行 XSS 过滤，对 Header 和 cookie value 值进行 XSS 过滤（转码 Script 标签的< > 符号
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class XssChecker {
@@ -43,7 +43,7 @@ public class XssChecker {
 	 * 默认转义
 	 * 
 	 * @param input 输入内容
-	 * @return
+	 * @return 转义文字
 	 */
 	public static String clean(String input) {
 		return clean(input, type_ESCAPSE);
@@ -54,7 +54,7 @@ public class XssChecker {
 	 * 
 	 * @param input      输入内容
 	 * @param filterType 过滤器类型
-	 * @return
+	 * @return 转义文字
 	 */
 	public static String clean(String input, String filterType) {
 		if (CommonUtil.isEmptyString(input))
@@ -75,7 +75,7 @@ public class XssChecker {
 	 * 过滤 for 数组
 	 * 
 	 * @param value
-	 * @return
+	 * @return 转义文字
 	 */
 	public static String[] clean(String[] value) {
 		if (CommonUtil.isNull(value))

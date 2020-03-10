@@ -11,7 +11,7 @@ import com.ajaxjs.util.CommonUtil;
 /**
  * Referer 来路检测
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class RefererFilter implements FilterAction {
