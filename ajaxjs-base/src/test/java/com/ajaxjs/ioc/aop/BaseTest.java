@@ -1,4 +1,4 @@
-package com.ajaxjs.ioc;
+package com.ajaxjs.ioc.aop;
 
 import com.ajaxjs.ioc.testcase.Subject;
 import com.ajaxjs.util.logger.LogHelper;

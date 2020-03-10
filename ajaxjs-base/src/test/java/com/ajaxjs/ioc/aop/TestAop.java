@@ -7,33 +7,28 @@ import java.lang.reflect.Method;
 
 import org.junit.Test;
 
-import com.ajaxjs.ioc.BaseTest;
-import com.ajaxjs.ioc.aop.Aop;
-import com.ajaxjs.ioc.aop.ReturnAsArg;
-import com.ajaxjs.ioc.aop.TestHandler.TestAopHandler;
-import com.ajaxjs.ioc.aop.TestHandler.TestStopAopHandler;
 import com.ajaxjs.ioc.testcase.Subject;
 import com.ajaxjs.util.logger.LogHelper;
 
 public class TestAop {
 	Subject subject, stopSubject;
 
-	class CaccheHandler extends Aop<Subject> {
-		private final LogHelper LOGGER = LogHelper.getLog(CaccheHandler.class);
+	class CacheHandler implements AopHandler<Subject> {
+		private final LogHelper LOGGER = LogHelper.getLog(CacheHandler.class);
 
 		@Override
 		public Object before(Subject target, Method method, String methodName, Object[] args) throws Throwable {
-			LOGGER.info("print CaccheHandler.before");
+			LOGGER.info("print CacheHandler.before");
 			return null;
 		}
 
 		@Override
 		public void after(Subject target, Method method, String methodName, Object[] args, Object returnObj) {
-			LOGGER.info("print CaccheHandler.after");
+			LOGGER.info("print CacheHandler.after");
 		}
 	}
 
-	class RightHandler extends Aop<Subject> {
+	class RightHandler implements AopHandler<Subject>  {
 		private final LogHelper LOGGER = LogHelper.getLog(RightHandler.class);
 
 		@Override
@@ -50,14 +45,13 @@ public class TestAop {
 
 	@Test
 	public void testChain() {
-		subject = Aop.chain(new BaseTest(), new TestHandler.TestAopHandler(), new TestHandler.TestStopAopHandler(), new RightHandler());
+		subject = new Aop<Subject>().bind(new BaseTest(), new TestHandler.TestAopHandler(), new TestHandler.TestStopAopHandler(), new RightHandler());
 		assertNotNull(subject);
 		subject.doIt();
 	}
 
 	@SuppressWarnings("rawtypes")
-	public class DummySub extends Aop {
-
+	public class DummySub implements AopHandler {
 		@Override
 		public Object before(Object target, Method method, String methodName, Object[] args) throws Throwable {
 			return null;

@@ -42,6 +42,7 @@ public class TestSimpleAop {
 			if (ReflectUtil.isStaticMethod(beforeMethod)) {
 //				ReflectUtil.executeMethod(beforeMethod, args); // 静态方法
 			}
+			
 			Logger.getGlobal().info(beforeMethod.toString());
 		}
 	}

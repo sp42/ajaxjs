@@ -7,7 +7,6 @@ import java.lang.reflect.Method;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.ioc.BaseTest;
 import com.ajaxjs.ioc.aop.Aop;
 import com.ajaxjs.ioc.aop.ReturnBefore;
 import com.ajaxjs.ioc.testcase.Subject;
@@ -16,10 +15,11 @@ import com.ajaxjs.util.logger.LogHelper;
 public class TestHandler {	
 	Subject subject, stopSubject;
 
+	@SuppressWarnings("unchecked")
 	@Before
 	public void setUp() {
-		subject = new TestAopHandler().bind(new BaseTest());
-		stopSubject = new TestStopAopHandler().bind(new BaseTest());
+		subject = new Aop<Subject>().bind(new BaseTest(), new TestAopHandler());
+		stopSubject = new Aop<Subject>().bind(new BaseTest(), new TestStopAopHandler());
 	}
 
 	@Test
@@ -29,7 +29,7 @@ public class TestHandler {
 		stopSubject.doIt();
 	}
 
-	static class TestAopHandler extends Aop<Subject> {
+	static class TestAopHandler implements AopHandler<Subject> {
 		private final LogHelper LOGGER = LogHelper.getLog(TestAopHandler.class);
 		
 		@Override
@@ -44,7 +44,7 @@ public class TestHandler {
 		}
 	}
 	
-	static class TestStopAopHandler extends Aop<Subject> {
+	static class TestStopAopHandler implements AopHandler<Subject> {
 		private final LogHelper LOGGER = LogHelper.getLog(TestStopAopHandler.class);
 		
 		@Override
