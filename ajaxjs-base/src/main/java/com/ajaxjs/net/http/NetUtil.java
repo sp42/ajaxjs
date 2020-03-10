@@ -34,7 +34,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 比 HttpBasicRequest 提供更多的功能
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class NetUtil extends HttpBasicRequest {

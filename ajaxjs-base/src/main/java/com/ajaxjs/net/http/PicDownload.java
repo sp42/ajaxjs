@@ -22,7 +22,7 @@ import java.util.function.Supplier;
 /**
  * 图片批量下载
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class PicDownload {

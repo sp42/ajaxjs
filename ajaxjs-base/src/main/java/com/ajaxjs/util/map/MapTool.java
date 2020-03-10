@@ -53,7 +53,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * Map 转换工具
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class MapTool {

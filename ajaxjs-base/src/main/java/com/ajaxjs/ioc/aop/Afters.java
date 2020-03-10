@@ -23,7 +23,7 @@ import java.lang.annotation.Target;
 /**
  * 前置器的容器
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 @Target(ElementType.METHOD)

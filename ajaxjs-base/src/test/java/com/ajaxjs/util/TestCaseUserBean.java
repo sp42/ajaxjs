@@ -3,7 +3,7 @@ package com.ajaxjs.util;
 /**
  * 用户的测试用例
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class TestCaseUserBean {
