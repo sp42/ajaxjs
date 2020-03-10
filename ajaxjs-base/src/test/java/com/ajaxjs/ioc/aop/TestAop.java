@@ -43,6 +43,7 @@ public class TestAop {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testChain() {
 		subject = new Aop<Subject>().bind(new BaseTest(), new TestHandler.TestAopHandler(), new TestHandler.TestStopAopHandler(), new RightHandler());
