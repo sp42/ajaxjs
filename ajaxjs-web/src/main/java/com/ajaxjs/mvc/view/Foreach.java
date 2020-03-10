@@ -28,7 +28,7 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 /**
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  * @version 2017年7月8日 下午11:10:04
  */
 public class Foreach extends SimpleTagSupport {

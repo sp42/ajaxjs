@@ -27,7 +27,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 文件上传
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class UploadFile extends HttpServletRequestWrapper {

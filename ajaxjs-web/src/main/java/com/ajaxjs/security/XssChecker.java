@@ -52,7 +52,7 @@ public class XssChecker {
 	/**
 	 * XSS 过滤器
 	 * 
-	 * @param input 输入内容
+	 * @param input      输入内容
 	 * @param filterType 过滤器类型
 	 * @return
 	 */
@@ -94,8 +94,7 @@ public class XssChecker {
 			return null;
 
 		Map<String, String[]> map = new HashMap<>();
-		for (String key : paramsMap.keySet())
-			map.put(clean(key, type_DELETE), clean(paramsMap.get(key)));
+		paramsMap.forEach((k, v) -> map.put(clean(k, type_DELETE), clean(v)));
 
 		return map;
 	}

@@ -29,7 +29,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * A action = controller + methods
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class Action {

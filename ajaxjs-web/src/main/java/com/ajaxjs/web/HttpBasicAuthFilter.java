@@ -33,7 +33,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 简单的 HTTP Basic 登录
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
 public class HttpBasicAuthFilter implements Filter {
 	private static final LogHelper LOGGER = LogHelper.getLog(HttpBasicAuthFilter.class);

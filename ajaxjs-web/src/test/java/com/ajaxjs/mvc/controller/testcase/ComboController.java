@@ -19,7 +19,7 @@ import com.ajaxjs.mvc.controller.MvcRequest;
 
 /**
  * 整合所有控制器的测试
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  *
  */
 @Path("/combo")

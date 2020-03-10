@@ -48,7 +48,7 @@ import com.ajaxjs.web.ServletHelper;
 /**
  * MVC 分发器，控制器核心类
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
 public class MvcDispatcher implements Filter {
 	private static final LogHelper LOGGER = LogHelper.getLog(MvcDispatcher.class);

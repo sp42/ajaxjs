@@ -38,7 +38,7 @@ import com.ajaxjs.util.map.MapTool;
 /**
  * 通过 HttpServletRequestWrapper （装饰模式的应用）增强 HttpServletRequest的功能。
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class MvcRequest extends HttpServletRequestWrapper {
@@ -161,8 +161,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	 * @param map 请求参数
 	 */
 	public void saveToReuqest(Map<String, Object> map) {
-		for (String key : map.keySet())
-			setAttribute(key, map.get(key));
+		map.forEach((k, v) -> setAttribute(k, v));
 	}
 
 	/*

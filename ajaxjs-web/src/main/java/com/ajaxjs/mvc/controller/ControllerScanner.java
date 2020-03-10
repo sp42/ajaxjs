@@ -31,7 +31,7 @@ import com.ajaxjs.util.resource.ScanClass;
  * Servlet 启动时进行控制器扫描，解析控制器 Path 路径，然后将其登记起来。Scanner controllers at Servlet
  * starting up
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
 public class ControllerScanner extends ScanClass<IController> {
 	private static final LogHelper LOGGER = LogHelper.getLog(ControllerScanner.class);

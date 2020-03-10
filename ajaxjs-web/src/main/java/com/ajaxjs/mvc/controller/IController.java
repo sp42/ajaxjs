@@ -23,7 +23,7 @@ import com.ajaxjs.util.map.ListMap;
 /**
  * 控制器 一个 Controller 通常拥有多个方法，每个方法负责处理一个 URL。 直接把一个 URL 映射到一个方法
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
 public interface IController {
 	

@@ -1,3 +1,18 @@
+/**
+ * Copyright sp42 frank@ajaxjs.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.ajaxjs.web.mock;
 
 import static org.mockito.Matchers.anyObject;
@@ -6,16 +21,12 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ReadListener;
 import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
@@ -31,11 +42,14 @@ import com.ajaxjs.util.map.MapTool;
 /**
  * 为方便单元测试，模拟请求对象
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class MockRequest extends HttpServletRequestWrapper {
-
+	/**
+	 * 
+	 * @param request 请求对象
+	 */
 	public MockRequest(HttpServletRequest request) {
 		super(request);
 	}
@@ -65,33 +79,37 @@ public class MockRequest extends HttpServletRequestWrapper {
 
 	public MockRequest setSession(Map<String, Object> sessionMap) {
 		MockRequest.mockSession(this, sessionMap);
+
 		return this;
 	}
 
 	public MockRequest setMethod(String string) {
 		when(getMethod()).thenReturn(string);
+
 		return this;
 	}
 
 	public MockRequest setHeader(String header, String value) {
 		when(getHeader(header)).thenReturn(value);
+
 		return this;
 	}
 
 	public MockRequest setParameterMap(Map<String, String[]> parameterMap) {
 		when(getParameterMap()).thenReturn(parameterMap);
+
 		return this;
 	}
 
 	public MockRequest setParameter(Map<String, String> parameter) {
-		for (String key : parameter.keySet()) {
-			when(getParameter(key)).thenReturn(parameter.get(key));
-		}
+		parameter.forEach((k, v) -> when(getParameter(k)).thenReturn(v));
+
 		return this;
 	}
 
 	public MockRequest setParameter(String key, String value) {
 		when(getParameter(key)).thenReturn(value);
+
 		return this;
 	}
 
@@ -181,22 +199,23 @@ public class MockRequest extends HttpServletRequestWrapper {
 	 */
 	public static void mockSession(HttpServletRequest request, final Map<String, Object> map) {
 		HttpSession session = mock(HttpSession.class);
-		when(request.getSession()).thenReturn(session);
 
+		when(request.getSession()).thenReturn(session);
 		when(session.getAttribute(anyString())).thenAnswer(new Answer<Object>() {
 			@Override
-			public Object answer(InvocationOnMock aInvocation) throws Throwable {
-				String key = (String) aInvocation.getArguments()[0];
+			public Object answer(InvocationOnMock in) throws Throwable {
+				String key = (String) in.getArguments()[0];
 				return map.get(key);
 			}
 		});
 
 		doAnswer(new Answer<Object>() {
 			@Override
-			public Object answer(InvocationOnMock aInvocation) throws Throwable {
-				String key = (String) aInvocation.getArguments()[0];
-				Object value = aInvocation.getArguments()[1];
+			public Object answer(InvocationOnMock in) throws Throwable {
+				String key = (String) in.getArguments()[0];
+				Object value = in.getArguments()[1];
 				map.put(key, value);
+
 				return null;
 			}
 		}).when(session).setAttribute(anyString(), anyObject());
@@ -206,7 +225,7 @@ public class MockRequest extends HttpServletRequestWrapper {
 	 * 模拟一个请求对象
 	 * 
 	 * @param contextPath 项目目录
-	 * @param path 要模拟的后面的目录
+	 * @param path        要模拟的后面的目录
 	 * @return 请求对象
 	 */
 	public static HttpServletRequest mockRequest(String contextPath, String path) {
@@ -225,40 +244,19 @@ public class MockRequest extends HttpServletRequestWrapper {
 	/**
 	 * 模拟表单请求
 	 * 
-	 * @param request 请求对象
-	 * @param formBody 表单数据
+	 * @param request       请求对象
+	 * @param formBody      表单数据
 	 * @param isByGetParams 是否通过 request.getParameter 返回值，而不是走表单流的方式
 	 * @return 表单请求
 	 * @throws IOException
 	 */
-	public static HttpServletRequest mockFormRequest(HttpServletRequest request, Map<String, String> formBody, boolean isByGetParams) throws IOException {
+	public static HttpServletRequest mockFormRequest(HttpServletRequest request, Map<String, String> formBody,
+			boolean isByGetParams) throws IOException {
 		if (isByGetParams) {
-			for (String key : formBody.keySet())
-				when(request.getParameter(key)).thenReturn(formBody.get(key));
+			formBody.forEach((k, v) -> when(request.getParameter(k)).thenReturn(v));
 		} else {
 			String form = MapTool.join(formBody, "&");
-			final InputStream is = new ByteArrayInputStream(form.getBytes());
-
-			when(request.getInputStream()).thenReturn(new ServletInputStream() {
-				@Override
-				public int read() throws IOException {
-					return is.read();
-				}
-
-				@Override
-				public boolean isFinished() {
-					return false;
-				}
-
-				@Override
-				public boolean isReady() {
-					return false;
-				}
-
-				@Override
-				public void setReadListener(ReadListener arg0) {
-				}
-			});
+			when(request.getInputStream()).thenReturn(new MockServletInputStream(form.getBytes()));
 		}
 
 		return request;

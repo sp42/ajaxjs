@@ -26,7 +26,7 @@ import com.ajaxjs.util.CommonUtil;
 /**
  * 格式化日期的标签
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  * @version 2017年7月8日 下午10:58:17
  */
 public class DateUtil extends SimpleTagSupport {

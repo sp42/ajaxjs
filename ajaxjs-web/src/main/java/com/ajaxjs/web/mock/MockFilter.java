@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * 为方便单元测试，模拟过滤器对象。
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
 public class MockFilter {
 	public static class DummyController extends HttpServlet {

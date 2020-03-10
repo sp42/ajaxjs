@@ -14,7 +14,7 @@ package com.ajaxjs.mvc;
 
 /**
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public interface Constant {

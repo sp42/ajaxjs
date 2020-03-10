@@ -3,55 +3,34 @@ package com.ajaxjs.web;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.ReadListener;
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Test;
 
 import com.ajaxjs.net.http.NetUtil;
 import com.ajaxjs.web.mock.MockRequest;
+import com.ajaxjs.web.mock.MockServletInputStream;
 
 public class TestUpload {
+public Map<String, Object> addConfig(Map<String, Object> params) {
+	Map<String, Object> data = new HashMap<>();
 
-	/**
-	 * 
-	 * @author Administrator
-	 *
-	 */
-	public static class MockServletInputStream extends ServletInputStream {
-		private InputStream delegate;
+	try {
+		String name = (String) params.get("name");
+		String value = (String) params.get("value");
 
-		public MockServletInputStream(byte[] b) {
-			delegate = new ByteArrayInputStream(b);
-		}
-
-		@Override
-		public int read() throws IOException {
-			return delegate.read();
-		}
-
-		@Override
-		public boolean isFinished() {
-			return false;
-		}
-
-		@Override
-		public boolean isReady() {
-			return false;
-		}
-
-		@Override
-		public void setReadListener(ReadListener readListener) {
-		}
+		// 示例代码，省略其他代码
+	} catch (Exception e) {
+		// 捕获异常
 	}
+	
+	return data;
+}
 
 	@Test
 	public void testUpload() throws IOException {
@@ -68,7 +47,6 @@ public class TestUpload {
 		Map<String, Object> map = new HashMap<>();
 		map.put("name", "foo");
 		map.put("file23", new File("C:\\temp\\newfile.txt"));
-//		map.put("file2", new File("C:\\temp\\hhh2018-11-07.log"));
 
 		byte[] b = NetUtil.toFromData(map);
 		when(request.getContentLength()).thenReturn(b.length);
@@ -78,6 +56,5 @@ public class TestUpload {
 		assertNotNull(uploadRequest);
 
 		uploadRequest.upload();
-
 	}
 }

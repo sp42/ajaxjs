@@ -20,7 +20,7 @@ import java.util.HashMap;
 /**
  * 数据实体转换到页面层的对象。携带的数据，可用于 UI 显示或者其他数据
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class ModelAndView extends HashMap<String, Object> {
