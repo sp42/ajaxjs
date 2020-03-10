@@ -26,7 +26,7 @@ import com.ajaxjs.orm.annotation.Update;
 /**
  * DAO 基类，包含大量常用的 SQL。
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  * @param <T> 实体
  */
@@ -49,7 +49,7 @@ public interface IBaseDao<T> {
 	 * 
 	 * @deprecated
 	 * @param id
-	 * @return
+	 * @return 附件列表
 	 */
 	@Select(value = "SELECT GROUP_CONCAT(p.id, '|', p.`path`, '|', IFNULL(p.`catalog`, 0), '|', p.`index` SEPARATOR '\", \"') AS pics, e.*, "
 			+ "(SELECT `path` FROM attachment_picture p WHERE p.`catalog` = 2 AND owner = e.uid ORDER BY ID DESC LIMIT 1) AS cover"

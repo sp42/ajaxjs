@@ -21,7 +21,7 @@ import java.lang.annotation.Target;
 /**
  * SQL 语句的工厂
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 @Documented

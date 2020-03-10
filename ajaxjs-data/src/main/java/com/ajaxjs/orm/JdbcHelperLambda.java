@@ -22,7 +22,7 @@ import java.sql.SQLException;
 /**
  * 自定义函数接口
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class JdbcHelperLambda {
@@ -45,13 +45,13 @@ public class JdbcHelperLambda {
 	 *
 	 */
 	@FunctionalInterface
-	public static interface HasZeoResult {
+	public static interface HasZeroResult {
 		/**
 		 * 
 		 * @param conn 数据库连接对象
 		 * @param rs
 		 * @param sql
-		 * @return
+		 * @return true 表示为没有匹配数据
 		 * @throws SQLException SQL 异常
 		 */
 		public boolean test(Connection conn, ResultSet rs, String sql) throws SQLException;

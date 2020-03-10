@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import com.ajaxjs.orm.JdbcHelperLambda.HasZeoResult;
+import com.ajaxjs.orm.JdbcHelperLambda.HasZeroResult;
 import com.ajaxjs.orm.JdbcHelperLambda.ResultSetProcessor;
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.ReflectUtil;
@@ -41,7 +41,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 完成 SQL 到 Java 的转换
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class JdbcReader {
@@ -97,7 +97,7 @@ public class JdbcReader {
 	 * @param params       插入到 SQL 中的参数，可单个可多个可不填
 	 * @return RS 转换后的目标结果
 	 */
-	public static <T> T select(Connection conn, String sql, HasZeoResult hasZeoResult, ResultSetProcessor<T> processor,
+	public static <T> T select(Connection conn, String sql, HasZeroResult hasZeoResult, ResultSetProcessor<T> processor,
 			Object... params) {
 
 		LOGGER.infoYellow("The SQL is---->" + JdbcUtil.printRealSql(sql, params));
@@ -239,11 +239,12 @@ public class JdbcReader {
 	}
 
 	/**
+	 * 查询列表
 	 * 
 	 * @param conn   数据库连接对象
 	 * @param sql    SQL 语句，可以带有 ? 的占位符
 	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
-	 * @return
+	 * @return 查询列表结果
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> List<T> queryAsList(Connection conn, String sql, Object... params) {

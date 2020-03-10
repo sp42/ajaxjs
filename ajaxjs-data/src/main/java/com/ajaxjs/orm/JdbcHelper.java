@@ -58,8 +58,8 @@ public class JdbcHelper extends JdbcReader {
 	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
 	 * @return PreparedStatement 对象
 	 */
-	static <T> T initAndExe(BiFunction<Connection, String, PreparedStatement> initPs, Function<PreparedStatement, T> exe, Connection conn, String sql,
-			Object... params) {
+	static <T> T initAndExe(BiFunction<Connection, String, PreparedStatement> initPs,
+			Function<PreparedStatement, T> exe, Connection conn, String sql, Object... params) {
 		String _sql = JdbcUtil.printRealSql(sql, params);
 		LOGGER.infoYellow("The SQL is---->" + _sql);
 		JdbcConnection.addSql(_sql); // 用来保存日志
@@ -213,7 +213,7 @@ public class JdbcHelper extends JdbcReader {
 	 * 修改实体，送入的数据是 Map
 	 * 
 	 * @param conn      数据库连接对象
-	 * @param bean      Bean 实体
+	 * @param map       Map 实体
 	 * @param tableName 表格名称
 	 * @return 成功修改的行数，一般为 1
 	 */
@@ -239,7 +239,7 @@ public class JdbcHelper extends JdbcReader {
 
 	/**
 	 * 
-	 * @author Frank Cheung
+	 * @author sp42 frank@ajaxjs.com
 	 *
 	 */
 	public static class BeanMethod {
@@ -416,7 +416,8 @@ public class JdbcHelper extends JdbcReader {
 	 */
 	public static int updateBean(Connection conn, Object bean, String tableName) {
 		try {
-			LOGGER.info("更新记录 id:{0}, name:{1}！", ReflectUtil.executeMethod(bean, "getId"), ReflectUtil.executeMethod(bean, "getName"));
+			LOGGER.info("更新记录 id:{0}, name:{1}！", ReflectUtil.executeMethod(bean, "getId"),
+					ReflectUtil.executeMethod(bean, "getName"));
 		} catch (Throwable e) {
 		}
 

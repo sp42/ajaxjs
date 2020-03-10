@@ -21,7 +21,7 @@ import java.lang.annotation.Target;
 /**
  * DAO 中表示表名
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 @Documented

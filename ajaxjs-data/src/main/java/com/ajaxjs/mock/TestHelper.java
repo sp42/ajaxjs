@@ -18,7 +18,7 @@ import java.util.Random;
 /**
  * 假数据生成器
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class TestHelper {

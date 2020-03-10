@@ -18,7 +18,7 @@ import java.util.function.Function;
 /**
  * 通用业务方法
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  * @param <T> 实体
  */
@@ -33,17 +33,15 @@ public interface IBaseService<T> {
 
 	/**
 	 * 查询列表数据
-
+	 * 
 	 * @return 结果对象
-	 * @业务异常
 	 */
 	public List<T> findList();
 
 	/**
 	 * 查询列表数据
-
+	 * 
 	 * @return 结果对象
-	 * @业务异常
 	 */
 	public List<T> findList(Function<String, String> sqlHandler);
 
@@ -53,16 +51,15 @@ public interface IBaseService<T> {
 	 * @param start 开始行数
 	 * @param limit 读取行数
 	 * @return 分页结果对象
-	 * @业务异常
 	 */
 	public PageResult<T> findPagedList(int start, int limit);
-	
+
 	/**
 	 * 
 	 * @param start
 	 * @param limit
 	 * @param sqlHandler
-	 * @return
+	 * @return 分页结果
 	 */
 	public PageResult<T> findPagedList(int start, int limit, Function<String, String> sqlHandler);
 
@@ -71,7 +68,6 @@ public interface IBaseService<T> {
 	 * 
 	 * @param bean POJO 对象
 	 * @return 新建记录之 id 序号
-	 * @业务异常
 	 */
 	public Long create(T bean);
 
@@ -80,7 +76,6 @@ public interface IBaseService<T> {
 	 * 
 	 * @param bean POJO 对象
 	 * @return 影响的行数，理应 = 1
-	 * @业务异常
 	 */
 	public int update(T bean);
 
@@ -89,7 +84,6 @@ public interface IBaseService<T> {
 	 * 
 	 * @param bean POJO 对象
 	 * @return 影响的行数
-	 * @业务异常
 	 */
 	public boolean delete(T bean);
 
