@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Location {
 	public static void main(String[] args) {
-		List<LocalAddress> ilist = new ArrayList<LocalAddress>();
+		List<LocalAddress> ilist = new ArrayList<>();
         Double localDouble  = 0.0;
     
         //定义一个二维数组存放经纬度
@@ -26,7 +26,6 @@ public class Location {
         //门店的经纬度
         Double[] initlocal = {31.1221751783,121.5011213954 };
 
-        
         for (int i = 0; i < doubles.length; i++) {
             Double z = getShortLocal(doubles[i][0], doubles[i][1], initlocal[0], initlocal[1]);        
             //获取最短距离后把经纬度和距离存放到对象中
