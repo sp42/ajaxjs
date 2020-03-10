@@ -23,7 +23,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 格式化 SQL/填充 SQL 实际值
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class JdbcUtil {

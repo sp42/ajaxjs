@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 分页信息 bean
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  *
  * @param <T> Bean 对象，也可以是 Map
  */

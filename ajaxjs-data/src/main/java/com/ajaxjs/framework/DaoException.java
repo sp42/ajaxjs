@@ -10,7 +10,7 @@ package com.ajaxjs.framework;
 /**
  * DAO 异常
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  */
 public class DaoException extends Exception {
 	private static final long serialVersionUID = 2863865657051533037L;

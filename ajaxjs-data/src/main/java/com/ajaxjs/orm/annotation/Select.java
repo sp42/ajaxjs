@@ -21,7 +21,7 @@ import java.lang.annotation.Target;
 /**
  * 表示一个 SELECT SQL 语句
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  *
  */
 @Documented

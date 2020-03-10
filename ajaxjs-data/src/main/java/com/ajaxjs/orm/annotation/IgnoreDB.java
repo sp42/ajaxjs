@@ -21,7 +21,7 @@ import java.lang.annotation.Target;
 /**
  * 是否不参与数据库的操作
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  *
  */
 @Documented
