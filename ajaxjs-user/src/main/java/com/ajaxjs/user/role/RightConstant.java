@@ -3,7 +3,7 @@ package com.ajaxjs.user.role;
 /**
  * 操作权限
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public interface RightConstant {

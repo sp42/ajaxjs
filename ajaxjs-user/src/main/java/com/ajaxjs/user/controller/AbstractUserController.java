@@ -34,7 +34,7 @@ import com.ajaxjs.web.captcha.CaptchaFilter;
 /**
  * 注册控制器。为方便使用，它继承与登录控制器，但它们的关系的平等的。只是为了 Java的单根继承
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public abstract class AbstractUserController extends BaseUserController {

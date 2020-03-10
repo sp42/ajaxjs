@@ -27,7 +27,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 帐号管理控制器
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public abstract class AbstractAccountInfoController extends BaseUserController {

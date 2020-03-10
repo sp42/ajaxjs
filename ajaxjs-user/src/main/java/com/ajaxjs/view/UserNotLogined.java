@@ -8,7 +8,7 @@ import javax.servlet.jsp.JspException;
 /**
  * 會員没有登录时
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class UserNotLogined extends AbstractUserLogin {
