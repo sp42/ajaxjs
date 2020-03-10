@@ -15,7 +15,7 @@ import com.ajaxjs.mvc.filter.FilterAction;
 /**
  * 检查实体是否可以公开给前端展示
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class FrontEndOnlyCheck implements FilterAction {

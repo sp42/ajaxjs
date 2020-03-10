@@ -5,7 +5,7 @@ import javax.servlet.ServletContext;
 /**
  * 当 Servlet 启动时执行的回调
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public interface ServletStartUp {

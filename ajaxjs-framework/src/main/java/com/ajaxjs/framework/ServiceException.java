@@ -3,7 +3,7 @@ package com.ajaxjs.framework;
 /**
  * 业务层异常
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class ServiceException extends Exception {

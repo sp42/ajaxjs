@@ -5,7 +5,7 @@ import com.ajaxjs.framework.BaseModel;
 /**
  * 产品
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class Product extends BaseModel {

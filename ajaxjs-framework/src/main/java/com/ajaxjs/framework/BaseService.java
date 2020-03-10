@@ -14,7 +14,7 @@ import com.ajaxjs.util.CommonUtil;
 /**
  * 基础业务类
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  * @param <T> 实体
  */

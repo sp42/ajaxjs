@@ -16,7 +16,7 @@ import com.ajaxjs.util.map.ListMap;
 /**
  * 输出页面的相关结构信息
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class SiteStruTag extends SimpleTagSupport {

@@ -5,7 +5,7 @@ import com.ajaxjs.net.mail.Mail;
 /**
  * 发送邮件服务
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public interface SendEmail {

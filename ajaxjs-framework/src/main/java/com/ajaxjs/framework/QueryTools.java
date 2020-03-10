@@ -17,7 +17,7 @@ import com.ajaxjs.web.ServletHelper;
 /**
  * 为方便查询的工具类
  * 
- * @author Frank Cheung
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class QueryTools {
