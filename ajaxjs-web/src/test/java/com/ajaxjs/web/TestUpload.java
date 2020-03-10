@@ -23,7 +23,6 @@ public Map<String, Object> addConfig(Map<String, Object> params) {
 	try {
 		String name = (String) params.get("name");
 		String value = (String) params.get("value");
-
 		// 示例代码，省略其他代码
 	} catch (Exception e) {
 		// 捕获异常
