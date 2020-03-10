@@ -9,7 +9,7 @@ import com.ajaxjs.util.Encode;
 /**
  * 该类的作用： 1）一些密码字段的基类，涉及 AES 密钥和盐值 2）如何生成指定长度的随机密码
  * 
- * @author Sp42 frank@ajaxjs.com
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class Token {

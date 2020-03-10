@@ -73,7 +73,7 @@ public class UserUtil {
 	/**
 	 * 测试 8421 码是否包含 v
 	 * 
-	 * @param v 当前权限值
+	 * @param v   当前权限值
 	 * @param all 同值
 	 * @return true=已包含
 	 */
@@ -116,12 +116,10 @@ public class UserUtil {
 				public void run() {
 					long expire = System.currentTimeMillis() - sendInterval;
 
-					for (String key : map.keySet()) {
-						Long sendTime = map.get(key);
-
+					map.forEach((k, sendTime) -> {
 						if (sendTime < expire)
-							map.remove(key, sendTime);
-					}
+							map.remove(k, sendTime);
+					});
 				}
 			}, 3000, cleanMapInterval);
 		}
