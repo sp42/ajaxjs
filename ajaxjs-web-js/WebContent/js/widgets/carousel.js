@@ -319,3 +319,89 @@ Vue.component('aj-banner', {
 	    }
 	}
 });
+
+// 注意：定时器保存在 DOM 元素的属性上，是否会内存泄流呢？
+Vue.component('aj-opacity-banner', {
+	template: '<ul class="aj-opacity-banner"><slot></slot></ul>',
+	props: {
+		delay:	{
+			default: 3000 // 延时
+		},
+		fps:	{
+			default: 25 // 帧速
+		}
+	},
+
+	data() {
+		return {
+			active:	0, // 当前索引
+			list:	[],	// 各帧
+			timer:	null
+		}
+	},
+	mounted() {
+		this.list = this.$el.querySelectorAll('li');
+		this.list[0].style.opacity = 1;
+		this.run();
+	},
+	methods: {
+		/* 顺序播放焦点图 */
+		run() {
+			this.timer = window.setInterval(() => {			
+	//		var controls = this.controls;
+				var active = this.active;
+				
+				this.clear();
+				active += 1;
+				active = active % this.list.length;
+	//		controls[active].className = 'active';
+				
+				this.active = active;
+				this.animate(100);
+			}, this.delay);
+		},
+		
+		per() {
+//			var controls = this.controls;
+			var active = this.active;
+			this.clear();
+			active -= 1;
+			active = active % this.list.length;
+			
+			if (active < 0)
+				active = this.list.length - 1;
+//			controls[active].className = 'active';
+
+			this.active = active;
+			this.animate(100);
+		},
+		/* 内容淡出 */
+		clear() {
+	//		this.controls[active].className = '';
+			this.animate(0);
+		},
+	
+		getOpacity(el) {
+			var val = getComputedStyle(el)["opacity"];
+			val *= 100;
+			
+			return parseFloat(val) || 0;
+		},
+		animate(params) {
+			var el = this.list[this.active], getOpacity = this.getOpacity, fps = 1000 / this.fps;
+			window.clearTimeout(el.timer);
+			window.setTimeout(function() {
+				var i = getOpacity(el), speed = (params - i) / 8;
+				speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
+				// console.log("i=" + i + "; speed="+ speed+"; s="+s+"; k="+k);
+				i += speed;
+				el.style.opacity = i / 100;
+	
+				window.clearTimeout(el.timer);
+	//			params.complete && params.complete.call(elem);
+	
+				el.timer = window.setTimeout(arguments.callee, fps);
+			}, fps);
+		}
+	}
+});

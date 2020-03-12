@@ -559,7 +559,7 @@ Vue.component('aj-form-html-editor', {
 			
 			return h;
 		},
-		
+		// TODO https://github.com/jitbit/HtmlSanitizer/blob/master/HtmlSanitizer.js
 		// 清理冗余 HTML
 		cleanHTML(){
 		    // 类似于 白名单
