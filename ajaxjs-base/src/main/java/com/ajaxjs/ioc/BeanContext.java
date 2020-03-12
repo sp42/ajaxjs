@@ -266,9 +266,12 @@ public class BeanContext {
 			Object bean = beans.get(split[0]), argBean = beans.get(v);
 
 			Objects.requireNonNull(bean, split[0] + "执行：" + split[1] + " 未发现类");
-			Objects.requireNonNull(argBean, "容器中找不到实例 " + v + "。请确定是否为组件添加 @Bean 注解?");
-
-			ReflectUtil.setProperty(bean, split[1], argBean);
+			
+			if (argBean == null) {
+				LOGGER.warning("容器中找不到实例 {0}。请确定是否为组件添加 @Bean 注解?", v);
+			} else {
+				ReflectUtil.setProperty(bean, split[1], argBean);
+			}
 		});
 
 		isInitialized = true;
@@ -309,7 +312,7 @@ public class BeanContext {
 	@SuppressWarnings("unchecked")
 	public static <T> List<T> findBeanByInterface(Class<T> interfaceClz) {
 		List<T> list = new ArrayList<>();
- 
+
 		beans.forEach((key, bean) -> {
 			if (interfaceClz.isAssignableFrom(bean.getClass()))
 				list.add((T) bean);
