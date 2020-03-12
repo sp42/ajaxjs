@@ -1,14 +1,14 @@
 // 后台头部导航
 Vue.component('ajaxjs-admin-header', {
 	props : {
-		isCreate : Boolean,	// true=新建/fasle=编辑
-		uiName : String,	// 实体名称
-		infoId : {			// 实体 id
+		isCreate: Boolean,	// true=新建/fasle=编辑
+		uiName: String,	// 实体名称
+		infoId: {			// 实体 id
 	      type: Number,
 	      required: false
 	    }
 	},
-	template : 	
+	template: 	
 		'<header class="ajaxjs-admin-header">\
 			<div>\
 				<slot name="btns"></slot>\
@@ -22,13 +22,13 @@ Vue.component('ajaxjs-admin-header', {
 
 // 后台增加、编辑、复位、删除按钮
 Vue.component('ajaxjs-admin-info-btns', {
-	props : {
+	props: {
 		isCreate : {
 			type: Boolean, // true=新建/fasle=编辑
 			default:false
 		}
 	},
-	template : 
+	template: 
 		'<div class="ajaxjs-admin-info-btns">\
 			<button><img :src="ajResources.commonAsset + \'/icon/save.gif\'" /> {{isCreate ? "新建":"保存"}}</button>\
 			<button onclick="this.up(\'form\').reset();return false;">复 位</button>\
@@ -37,10 +37,10 @@ Vue.component('ajaxjs-admin-info-btns', {
 			</button>\
 			<button onclick="history.back();return false;">返回</button><slot></slot>\
 		</div>',
-	methods : {
-		del : function () {
+	methods: {
+		del() {
 			if (confirm('确定删除？'))
-				ajaxjs.xhr.dele('.', function(json) {
+				ajaxjs.xhr.dele('.', json => {
 					if (json && json.isOk) {
 						alert(json.msg);
 						location.assign('../list/');
@@ -52,9 +52,9 @@ Vue.component('ajaxjs-admin-info-btns', {
 
 // 搜索、分类下拉
 Vue.component('aj-admin-filter-panel', {
-	props : {
+	props: {
 		label : {
-			type : String,
+			type: String,
 			required : false
 		},
 		catalogId :{		//
@@ -66,7 +66,7 @@ Vue.component('aj-admin-filter-panel', {
 			required: false
 		},
 		noCatalog : {
-			type : Boolean, // 是否不需要 分类下拉
+			type: Boolean, // 是否不需要 分类下拉
 			default : false
 		},
 		searchFieldValue : { // 搜索哪个字段？默认为 name
@@ -87,9 +87,9 @@ Vue.component('aj-admin-filter-panel', {
 });
 
 aj.admin = {
-	del : function(id, title) {
+	del(id, title) {
 		if (confirm('请确定删除记录：\n' + title + ' ？')) {
-			ajaxjs.xhr.dele('../' + id + '/', function(json) {
+			ajaxjs.xhr.dele('../' + id + '/', json=> {
 				if (json.isOk) {
 					alert('删除成功！');
 					location.reload();
@@ -97,8 +97,8 @@ aj.admin = {
 			});
 		}
 	},
-	setStatus : function(id, status) {
-		ajaxjs.xhr.post('../setStatus/' + id + '/', function(json) {
+	setStatus(id, status) {
+		ajaxjs.xhr.post('../setStatus/' + id + '/', json => {
 			if (json.isOk) {
 
 			}

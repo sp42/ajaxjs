@@ -1,17 +1,17 @@
 aj._list = {
-	props : {
+	props: {
 		apiUrl : {		// JSON 接口地址
 			type : String,
 			required : true
 		},
 		
-		hrefStr : {
+		hrefStr: {
 			type : String,
 			required : false
 		}
 	},
 	
-	data : function() {
+	data() {
 		return {
 			result : [],		// 展示的数据
 			baseParam: {},		// 每次请求都附带的参数
@@ -53,13 +53,13 @@ Vue.component('aj-page-list', {
 			currentPage : 0
 		};
 	},
-	props : {
-		initPageSize : {
+	props: {
+		initPageSize: {
 			type : Number,
 			required : false,
 			default : 5
 		},
-		isShowFooter : {
+		isShowFooter: {
 			type : Boolean,
 			default : true
 		},
@@ -72,7 +72,7 @@ Vue.component('aj-page-list', {
 			default : false
 		}
 	},
-	template : 
+	template: 
 		'<div class="aj-page-list">\
 			<ul><li v-for="(item, index) in result">\
 				<slot v-bind="item">\

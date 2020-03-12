@@ -1,26 +1,26 @@
 aj._simple_marquee_text = {
-	props : {
-		interval : {
-			type : Number, // 动画时间间隔
-			default : 500
+	props: {
+		interval: {
+			type: Number, // 动画时间间隔
+			default: 500
 		},
 		
-		canstop :{
-			type : Boolean, //  是否可以鼠标移入时候暂停动画
-			default : true
+		canstop: {
+			type: Boolean, //  是否可以鼠标移入时候暂停动画
+			default: true
 		}
 	},
-	mounted : function() {
+	mounted() {
 		if (this.canstop) {
 			this.$el.onmouseover = this.clearTimer.bind(this);
 			this.$el.onmouseout = this.start.bind(this);
 		}
 	},
-	methods : {
-		start : function() {
+	methods: {
+		start() {
 			this.$timerId = window.setInterval(this.scroll, this.interval);
 		},
-		clearTimer : function() {
+		clearTimer() {
 			this.$timerId && window.clearInterval(this.$timerId);
 		}
 	}
@@ -31,13 +31,12 @@ aj._simple_marquee_text = {
 Vue.component('aj-super-simple-marquee-text', {
 	mixins : [aj._simple_marquee_text],
 	template : '<div><slot>这是一段滚动的文字；这是一段滚动的文字；这是一段滚动的文字</slot></div>',
-	
-	mounted : function() {
+	mounted () {
 		this.$arr = this.$el.innerHTML.split("");
 		this.start();
 	},
 	methods : {
-		scroll : function () {
+		scroll() {
 			this.$arr.push(this.$arr.shift());
 			this.$el.innerHTML = this.$arr.join("");
 		}
@@ -46,16 +45,13 @@ Vue.component('aj-super-simple-marquee-text', {
 
 // 上下字幕
 Vue.component('aj-simple-marquee-text', {
-	mixins : [aj._simple_marquee_text],
-	
-	template : '<ol><li>11111111111</li><li>22222222222</li><li>33333333333</li><li>44444444444</li><li>55555555555</li></ol>',
-	
-	mounted : function() {
+	mixins: [aj._simple_marquee_text],
+	template: '<ol><li>11111111111</li><li>22222222222</li><li>33333333333</li><li>44444444444</li><li>55555555555</li></ol>',
+	mounted() {
 		this.start();
 	},
-	
-	methods : {
-		scroll : function () {
+	methods: {
+		scroll() {
 			var lastEl = this.$el.firstChild;
 			
 			while (lastEl.nodeType != 1)
@@ -67,32 +63,28 @@ Vue.component('aj-simple-marquee-text', {
 });
 
 Vue.component('aj-simple-marquee', {
-	props : {
-		interval : {
+	props: {
+		interval: {
 			default : 20
 		},
 		pauseInterval : { // 暂停间隔时间
-			type : Number,
+			type: Number,
 			default : 2000
 		},
-		itemHeight : { // 每一项的高度
-			type : Number,
-			required : 20,
+		itemHeight: { // 每一项的高度
+			type: Number,
+			required: 20,
 		},
 	},
-	
-	template : 
+	template: 
 		'<div class="aj-simple-marquee" style="width: 100%; overflow: hidden;">\
 			<div class="items"><slot></slot>\
 			</div>\
 			<div class="clone"></div>\
 		</div>',
-		
-	mixins : [aj._simple_marquee_text],
-	
-	mounted : function() {
+	mixins: [aj._simple_marquee_text],
+	mounted() {
 		var el = this.$el, children = el.$('.items').children, itemHeight = this.itemHeight;
-		
 		el.style.height = itemHeight + "px";
 		
 		var allHeight = 0;
@@ -113,8 +105,8 @@ Vue.component('aj-simple-marquee', {
 		setTimeout(this.start.bind(this), 2000);
 	},
 	
-	methods : {
-		scroll :function () {
+	methods: {
+		scroll() {
 			var el = this.$el, top = el.scrollTop, height = el.$('.items').clientHeight;
 
 			if (top <= height) {

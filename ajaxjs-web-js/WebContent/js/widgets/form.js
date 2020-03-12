@@ -6,31 +6,31 @@
 
 // 图片验证码
 Vue.component('aj-page-captcha', {
-	props : {
-		imgSrc : {
+	props: {
+		imgSrc: {
 			type: String, // 生成图片验证码地址
 			required: false,
 		},
 		
-		fieldName : {	// 提交的字段名
+		fieldName: {	// 提交的字段名
 			type: String,
 			required: false,
 			default : 'captcha'
 		}
 	},
-	template : 
+	template: 
 		'<table class="aj-page-captcha"><tr>\
 			<td><input type="text" :name="fieldName" placeholder="输入右侧验证码" data-regexp="integer" required autocomplete="off" size="10" /></td>\
 			<td style="vertical-align: top;">\
 				<img :src="imgSrc || ajResources.ctx + \'/Captcha\'" @click="onClk($event);" title="点击刷新图片" />\
 			</td>\
 		</tr></table>',
-	methods : {
-		onClk : function(e) {
+	methods: {
+		onClk(e) {
 			var img = e.target;
 			img.src = img.src.replace(/\?\d+$/, '') + '?' + new Date().valueOf();
 		},
-		refreshCode: function(){
+		refreshCode(){
 			var img = this.$el.querySelector('img');
 			img.src = img.src.replace(/\?\d+$/, '') + '?' + new Date().valueOf();
 		}
@@ -136,7 +136,7 @@ Vue.component('aj-form-calendar', {
 		},
 		
 		// 获取指定的日期
-		getDate (dateType, month) {
+		getDate(dateType, month) {
 			var nowYear = this.date.getFullYear(), nowMonth = this.date.getMonth() + 1; // 当前日期
 			
 			switch (dateType) {
@@ -161,7 +161,7 @@ Vue.component('aj-form-calendar', {
 			this.getDate('setMonth', Number(e.target.selectedOptions[0].value));
 		},
 		// 获取空白的非上月天数 + 当月天数
-		getDateArr () {
+		getDateArr() {
 			var arr = [];
 			// 用 当月第一天 在一周中的日期值 作为 当月 离 第一天的天数
 			for (var i = 1, firstDay = new Date(this.year, this.month - 1, 1).getDay(); i <= firstDay; i++)
@@ -174,7 +174,7 @@ Vue.component('aj-form-calendar', {
 			return arr;
 		},
 		// 获取日期
-		pickDay (e) {
+		pickDay(e) {
 			var el = e.target, date = el.title;
 			this.$emit('pick-date', date);
 			return date;
@@ -187,7 +187,7 @@ Vue.component('aj-form-calendar', {
 		/**
 		 * 判断两个日期是否同一日
 		 */
-		isSameDay (d1, d2) {
+		isSameDay(d1, d2) {
 			return (d1.getFullYear() == d2.getFullYear() && d1.getMonth() == d2.getMonth() && d1.getDate() == d2.getDate());
 		}
 	}
@@ -195,41 +195,39 @@ Vue.component('aj-form-calendar', {
 
 // 帶有 input 輸入框的
 Vue.component('aj-form-calendar-input', {
-	data : function(){
+	data(){
 		return {
 			date : this.fieldValue, 
 			time : ''
-		}
+		};
 	},
-	props : {
-		fieldName : { // 表单 name，字段名
+	props: {
+		fieldName: { // 表单 name，字段名
 			type: String,
 			required: true
 		},
-		fieldValue : {
+		fieldValue: {
 			type: String,// 表单值，可选的
 			required: false,
 			default : ''
 		},
-		dateOnly : { // 是否只处理日期，不考虑时间
+		dateOnly: { // 是否只处理日期，不考虑时间
 			type: Boolean,// 表单值，可选的
 			required: false,
-			default : true
+			default: true
 		},
 		showTime: false,
 		positionFixed : Boolean // 是否采用固定定位
 	},
-	
-	template : 
+	template: 
 		'<div class="aj-form-calendar-input" @mouseover="onMouseOver($event)">\
 			<div class="icon fa fa-calendar"></div>\
 			<input placeholder="请输入日期" :name="fieldName" :value="date + (dateOnly ? \'\' : \' \' + time)" type="text" autocomplete="off" class="aj-input" />\
 			<aj-form-calendar ref="calendar" :show-time="showTime" @pick-date="recEvent" @pick-time="recTimeEvent"></aj-form-calendar>\
 		</div>',
-	mounted : function() {
-		if(this.positionFixed) {
+	mounted() {
+		if(this.positionFixed) 
 			this.$el.$('.aj-form-calendar').classList.add('positionFixed');
-		}
 		
 	    // 2012-07-08
 	    // firefox中解析 new Date('2012/12-23') 不兼容，提示invalid date 无效的日期
@@ -237,20 +235,19 @@ Vue.component('aj-form-calendar-input', {
 		// var arr = date.split('-'), now = new Date(arr[0], arr[1] - 1, arr[2],
 		// " ", "", " ");
 		if(this.fieldValue) {
-// debugger;
 			var arr = this.fieldValue.split(' ')[0], arr = arr.split('-'), date = new Date(arr[0], arr[1] - 1, arr[2], " ", "", " ");
 			this.$refs.calendar.date = date;
 		}
 	},
-	methods : {
-		recTimeEvent: function(time) {
+	methods: {
+		recTimeEvent(time) {
 			this.time = time;
 		},
-		recEvent: function(date) {
+		recEvent(date) {
 		
 			this.date = date.trim();
 		},
-		onMouseOver : function(e) {
+		onMouseOver(e) {
 			if(this.positionFixed) {
 				var el = e.currentTarget;
 				var b = el.getBoundingClientRect();
@@ -266,17 +263,17 @@ Vue.component('aj-form-calendar-input', {
 // 注意：必须提供一个 <slot> 包含有 <textarea class="hide"
 // name="content">${info.content}</textarea>
 Vue.component('aj-form-html-editor', {
-	template : '',
-	props : {
-		fieldName : { // 表单 name，字段名
+	template: '',
+	props: {
+		fieldName: { // 表单 name，字段名
 			type: String,
 			required: true
 		},
-		content : { // 内容
+		content: { // 内容
 			type: String,
 			required: false
 		},
-		basePath : { // iframe 的 <base href="${param.basePath}/" />路徑
+		basePath: { // iframe 的 <base href="${param.basePath}/" />路徑
 			type: String,
 			required: false,
 			default : ''
@@ -789,8 +786,8 @@ if(!aj.form)
 aj.form.betweenDate = function(el) {	
 	new Vue({
 		el : el,
-		methods:{
-			valid(e){
+		methods: {
+			valid(e) {
 				var start = this.$el.$('input[name=startDate]').value, end = this.$el.$('input[name=endDate]').value;
 				
 				if(!start||!end) {

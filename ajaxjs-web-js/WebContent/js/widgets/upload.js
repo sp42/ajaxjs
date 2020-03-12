@@ -12,27 +12,27 @@ Vue.component('ajaxjs-file-upload', {
 			newlyId : null				// 成功上传之后的文件 id
 		};
 	},
-	props : {
+	props: {
 		fieldName : {
 			type: String,
 			required: false
 		},
 		
-		filedId : {
+		filedId: {
 	      type: Number,
 	      required: false
 	    },
 	    
-	    limitSize : Number,
+	    limitSize: Number,
 	    
 	    limitFileType: String,
-	    labelId : {
-	    	type : String,
-	    	required : false,
-	    	default : 'input_file_molding'
+	    labelId: {
+	    	type: String,
+	    	required: false,
+	    	default: 'input_file_molding'
 	    }
 	},
-	template : 
+	template: 
 		'<div class="ajaxjs-file-upload">\
 			<div class="pseudoFilePicker">\
 				<input type="hidden" v-if="fieldName" :name="fieldName" :value="newlyId || filedId" :id="labelId" />\
@@ -43,7 +43,7 @@ Vue.component('ajaxjs-file-upload', {
 				<button @click.prevent="doUpload($event);">上传</button>\
 			</div>\
 		</div>',
-	methods : {
+	methods: {
 		onUploadInputChange(e) {
 			var fileInput = e.target;
 			var ext = fileInput.value.split('.').pop(); // 扩展名
@@ -112,13 +112,13 @@ Vue.component('ajaxjs-img-upload-perview', {
 				};
 	    	}
 	    },
-	    labelId : {
-	    	type : String,
+	    labelId: {
+	    	type: String,
 	    	required : false,
 	    	default : 'input_file_molding'
 	    }
 	},
-	template : 
+	template: 
 		'<div class="ajaxjs-img-upload-perview">\
 			<div>\
 				<img class="upload_img_perview" :src="(isFileSize && isExtName && isImgSize && isFileTypeCheck && imgBase64Str) ? imgBase64Str : imgPlace" />\
@@ -198,7 +198,7 @@ Vue.component('ajaxjs-img-upload-perview', {
 				
 				cfg.isFileTypeCheck = false;
 				
-				for ( var i in imgHeader) {
+				for(var i in imgHeader) {
 					if (~imgBase64Str.indexOf(imgHeader[i])){
 						cfg.isFileTypeCheck = true;
 						return;

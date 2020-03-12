@@ -7,48 +7,24 @@
 Vue.component('aj-page-fullscreen-loading-indicator', {
 	template : '<div class="aj-fullscreen-loading"></div>',
 	beforeCreate () {
-		document.onreadystatechange = function () {
-		    if(document.readyState === "complete") {
+		document.onreadystatechange = () => {
+		    if(document.readyState === "complete") 
 		        aj(".aj-fullscreen-loading").classList.add('fadeOut');
-		    }
 		}
 	}
 });
 
-// 分享
-Vue.component('aj-page-share', {
-	template : 
-		'<div class="aj-page-share">\
-			分享到 &nbsp;&nbsp;\
-			<a title="转发至QQ空间" :href="\'http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=\' + url" target="_blank">\
-				<img src="http://static.youku.com/v1.0.0691/v/img/ico_Qzone.gif" /></a>\
-			<a title="转发至新浪微博" :href="\'http://v.t.sina.com.cn/share/share.php?appkey=2684493555&Uid=&source=&sourceUrl=&url=\' + url + \'&title=\' + title" target="_blank">\
-				<img src="http://static.youku.com/v1.0.0691/v/img/ico_sina.gif" /></a>\
-			<a title="分享到腾讯朋友" :href="\'http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?to=pengyou&url=\' + url + \'&title=\' + title" target="_blank">\
-				<img src="http://static.youku.com/v1.0.0691/v/img/ico_pengyou.png" /></a>\
-			<a title="推荐到豆瓣" :href="\'http://www.douban.com/recommend/?url=\' + url + \'&title=\' + title" target="_blank">\
-				<img src="http://static.youku.com/v1.0.0691/v/img/ico_dou_16x16.png" /></a>\
-		</div>',
-	computed : {
-		title() {
-			return encodeURIComponent(document.title);
-		},
-		url() {
-			return document.location.href;
-		}
-	}
-});
 
 // 字体大小
 Vue.component('aj-adjust-font-size', {
 	props : {
-		articleTarget : { // 正文所在的位置，通过 CSS Selector 定位
+		articleTarget: { // 正文所在的位置，通过 CSS Selector 定位
 			type: String,
 			required: false,
 			default : 'article p'
 		}
 	},
-	template : 
+	template: 
 		'<div class="aj-adjust-font-size" @click="onClk($event);">\
 			<span>字体大小</span>\
 			<ul>\
@@ -57,23 +33,22 @@ Vue.component('aj-adjust-font-size', {
 				<li><label><input type="radio" name="fontSize" /> 大</label></li>\
 			</ul>\
 		</div>',
-	methods : {
+	methods: {
 		onClk(e) {
 			var el = e.target, target = el.innerHTML;
 			
 			if(el.tagName != 'LABEL')
 				el = el.up('label');
 			
-			if(el.innerHTML.indexOf('大') != -1) {
+			if(el.innerHTML.indexOf('大') != -1) 
 				this.setFontSize('12pt');
-			}else if(el.innerHTML.indexOf('中') != -1) {
+			else if(el.innerHTML.indexOf('中') != -1) 
 				this.setFontSize('10.5pt');
-			}else if(el.innerHTML.indexOf('小') != -1) {
+			else if(el.innerHTML.indexOf('小') != -1) 
 				this.setFontSize('9pt');
-			}
 		},
 
-		setFontSize (fontSize) {
+		setFontSize(fontSize) {
 			aj(this.$props.articleTarget, function(p){
 				p.style.fontSize = fontSize;
 			});
@@ -121,23 +96,23 @@ Vue.component('aj-misc-function', {
 
 // 正文
 Vue.component('aj-article-body', {
-	props : {
-		title : { // 标题
+	props: {
+		title: { // 标题
 			type: String,
 			required: true
 		},
-		initCreateDate : String,
-		initContent : { // 正文，还可以通过 slot 添加额外内容
+		initCreateDate: String,
+		initContent: { // 正文，还可以通过 slot 添加额外内容
 			type: String,
 			required: false
 		},
-		isShowTools : { // 是否显示扩展工具栏
+		isShowTools: { // 是否显示扩展工具栏
 			type: Boolean,
 			required: false
 		},
-		neighbor : { // 相邻的两笔记录
+		neighbor: { // 相邻的两笔记录
 			type: Object,
-			default : function(){
+			default: ()=>{
 				return {};
 			},
 			required: false
@@ -145,11 +120,11 @@ Vue.component('aj-article-body', {
 	},
 	data(){
 		return {
-			content : this.initContent,
-			createDate : this.initCreateDate
+			content: this.initContent,
+			createDate: this.initCreateDate
 		};
 	},
-	template : 	
+	template: 	
 		'<div class="aj-article-body">\
 			<article>\
 				<h3>{{title}}</h3>\
@@ -187,12 +162,12 @@ Vue.component('aj-baidu-search', {
 // 正体中文
 Vue.component('aj-chinese-switch', {
 	props : {
-		jsurl : { // js字库文件较大，外部引入
+		jsurl: { // js字库文件较大，外部引入
 			type: String,
 			required: true
 		}
 	},
-	template : 
+	template: 
 		'<span>\
 			<a href="javascript:;" onclick="toSimpleChinese(this);" class="simpleChinese selected">简体中文</a>\
 			/<a href="javascript:;" class="Chinese" onclick="toChinese(this);">正体中文</a>\
@@ -246,7 +221,7 @@ Vue.component('aj-back-top', {
 	template : 
 		'<a href="###" @click="go">回到顶部</a>',
 	methods : {
-		go : function() {
+		go() {
 //			 var b = 0;//作为标志位，判断滚动事件的触发原因，是定时器触发还是其它人为操作
 //			 UserEvent2.onWinResizeFree(function(e) {
 //				 if (b != 1) clearInterval(timer);
@@ -272,7 +247,7 @@ Vue.component('aj-back-top', {
 
 // 进度条
 Vue.component('aj-process-line', {
-	template :
+	template:
 		'<div class="aj-process-line">\
 			<div class="process-line">\
 				<div v-for="(item, index) in items" :class="{current : index == current, done : index < current}">\
@@ -280,31 +255,31 @@ Vue.component('aj-process-line', {
 				</div>\
 			</div>\
 		</div>',
-	props : {
-		items : {
+	props: {
+		items: {
 			type: Array,
-			default : function() { 
+			default: function() { 
 				return ['Step 1', 'Step 2', 'Step 3']; 
 			}
 		}
 	},
-	data : function() {
+	data() {
 		return {
 			current : 0
-		}
+		};
 	},
 	methods: {
-		go : function(i) {
+		go(i) {
 			this.current = i;
 		},
-		perv: function() {
+		perv() {
 			var perv = this.current - 1;
 			if (perv < 0)
 				perv = this.items.length - 1;
 			
 		    this.go(perv); 
 		},
-		next: function() {
+		next() {
 	    	var next = this.current + 1;
 	        if (this.items.length == next)
 	        	next = 0; // 循环
@@ -314,8 +289,8 @@ Vue.component('aj-process-line', {
 	}
 });
 
-// 函数节流
-function throttleV2(fn, delay, mustRunDelay) {
+// 函数节流 https://www.cnblogs.com/moqiutao/p/6875955.html
+aj.throttleV2 = function(fn, delay, mustRunDelay) {
  	var timer = null;
  	var t_start;
  	
@@ -330,7 +305,7 @@ function throttleV2(fn, delay, mustRunDelay) {
  			fn.apply(context, args);
  			t_start = t_curr;
  		} else {
- 			timer = setTimeout(function() {
+ 			timer = setTimeout(()=>{
  				fn.apply(context, args);
  			}, delay);
  		}
@@ -340,29 +315,28 @@ function throttleV2(fn, delay, mustRunDelay) {
 // 悬浮显示大图。工厂方法
 aj.imageEnlarger = function() {
 	var vue = new Vue({
-		el : document.body.appendChild(document.createElement('div')),
+		el: document.body.appendChild(document.createElement('div')),
 		template: 
 			'<div class="aj-image-large-view">\
 				<div style="position: fixed;max-width:400px;transition: top ease-in 200ms, left ease-in 200ms;">\
 				<img :src="imgUrl" style="width: 100%;" />\
 			</div></div>',
-		data : {
+		data: {
 			imgUrl: null
 		},
-		mounted: function(){// 不能用 onmousemove 直接绑定事件
-			document.addEventListener('mousemove', throttleV2(this.move.bind(this), 50, 5000), false);
+		mounted() {// 不能用 onmousemove 直接绑定事件
+			document.addEventListener('mousemove', aj.throttleV2(this.move.bind(this), 50, 5000), false);
 		},
 		methods: {
-			move: function(e) {
+			move(e) {
 				if(this.imgUrl) {
 					var el = this.$el.$('div');
 					var w = 0, imgWidth = this.$el.$('img').clientWidth;
 					
-					if(imgWidth > e.pageX) {
+					if(imgWidth > e.pageX) 
 						w = imgWidth;
-					}
 				
-					el.style.top = (e.pageY + 20)+ 'px';
+					el.style.top = (e.pageY + 20) + 'px';
 					el.style.left = (e.pageX - el.clientWidth + w) + 'px';
 				}
 			}

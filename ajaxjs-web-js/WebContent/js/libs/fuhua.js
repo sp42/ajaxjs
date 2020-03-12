@@ -397,32 +397,6 @@ var dargFun = {
 }
 
 
-/**
- * 函数节流 https://www.cnblogs.com/moqiutao/p/6875955.html
- */
-
-var throttleV2 = function(fn, delay, mustRunDelay){
-     var timer = null;
-     var t_start;
-     return function(){
-         var context = this, args = arguments, t_curr = +new Date();
-         clearTimeout(timer);
-         if(!t_start){
-             t_start = t_curr;
-         }
-         if(t_curr - t_start >= mustRunDelay){
-             fn.apply(context, args);
-             t_start = t_curr;
-         }
-         else {
-             timer = setTimeout(function(){
-                 fn.apply(context, args);
-             }, delay);
-         }
-     };
- };
-
-
  /**
 	 * touch.js 拖动、缩放、旋转 （鼠标手势）
 	 * 
