@@ -64,14 +64,17 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	/**
 	 * 输入内容可以是个 map
 	 */
-	private Map<String, ?> output_Map;
+	private Map<String, ?> outputMap;
 
-	private List<?> output_List;
+	/**
+	 * 
+	 */
+	private List<?> outputList;
 
 	/**
 	 * 输入内容甚至可以是个 object
 	 */
-	private Object output_Obj;
+	private Object outputObj;
 
 	/**
 	 * 输出类型，默认为网页="text/html"
@@ -104,10 +107,13 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	private String jsonpToken;
 
 	/**
-	 * 输出一个最简单的 html 页面（已包含 <html>、<body> 标签），并支持中文，强制 UTF-8 编码
+	 * 输出一个最简单的 html 页面（已包含 &lt;html&gt;、&lt;body&gt; 标签），并支持中文，强制 UTF-8 编码
 	 */
 	private boolean simpleHTML;
 
+	/**
+	 * 是否输出 XML 内容
+	 */
 	private boolean xmlContent;
 
 	/**
@@ -124,16 +130,16 @@ public class MvcOutput extends HttpServletResponseWrapper {
 			return;
 		}
 
-		if (getOutput_Map() != null) { // Map 的话转变为 json 输出
-			setJson(true).setOutput(JsonHelper.toJson(getOutput_Map()));
-		} else if (getOutput_List() != null) {
-			if (getOutput_List() == null || getOutput_List().size() == 0)
+		if (getOutputMap() != null) { // Map 的话转变为 json 输出
+			setJson(true).setOutput(JsonHelper.toJson(getOutputMap()));
+		} else if (getOutputList() != null) {
+			if (getOutputList() == null || getOutputList().size() == 0)
 				setJson(true).setOutput("[]");
 			else
-				setJson(true).setOutput(JsonHelper.toJson(getOutput_List()));
+				setJson(true).setOutput(JsonHelper.toJson(getOutputList()));
 		} else if (getBean() != null) {
 			setJson(true).setOutput(JsonHelper.toJson(getBean()));
-		} else if (getOutput_Obj() != null) {// map or object 二选其一
+		} else if (getOutputObj() != null) {// map or object 二选其一
 			// setJson(true).setOutput(JsonHelper.stringify_object(getOutput_Obj()));
 		}
 
@@ -171,7 +177,10 @@ public class MvcOutput extends HttpServletResponseWrapper {
 		}
 	}
 
-	public static final String html = "html::", xml = "xml::", jsonPerfix = "json::", redirectPerfix = "redirect::";
+	/**
+	 * 各种前缀
+	 */
+	public static final String HTML = "html::", xml = "xml::", JSON_PREFIX = "json::", REDIRECT_PREFIX = "redirect::";
 
 	private boolean isSet;
 
@@ -193,7 +202,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 		if (model != null)
 			request.saveToReuqest(model);
 
-		if (result == null) {
+		if (result == null) { // 没数据
 			Class<?> reClz = method.getReturnType();
 
 			if (reClz == Map.class)
@@ -206,20 +215,20 @@ public class MvcOutput extends HttpServletResponseWrapper {
 			if (result instanceof String) {
 				String str = (String) result;
 
-				if (str.startsWith(html)) {
-					setSimpleHTML(true).setOutput(str.replace(html, "")).go();
+				if (str.startsWith(HTML)) {
+					setSimpleHTML(true).setOutput(str.replace(HTML, "")).go();
 				} else if (str.startsWith(xml)) {
 					xmlContent = true;
 					setOutput(str.replace(xml, "")).go();
-				} else if (str.startsWith(redirectPerfix)) {
-					setRedirect(str.replace(redirectPerfix, "")).go();
-				} else if (str.startsWith(jsonPerfix)) {
-					String jsonpToken = request.getParameter(MvcRequest.callback_param); // 由参数决定是否使用 jsonp
+				} else if (str.startsWith(REDIRECT_PREFIX)) {
+					setRedirect(str.replace(REDIRECT_PREFIX, "")).go();
+				} else if (str.startsWith(JSON_PREFIX)) {
+					String jsonpToken = request.getParameter(MvcRequest.CALLBACK_PARAM); // 由参数决定是否使用 jsonp
 
 					if (CommonUtil.isEmptyString(jsonpToken)) {
-						setJson(true).setOutput(str.replace(jsonPerfix, "")).go();
+						setJson(true).setOutput(str.replace(JSON_PREFIX, "")).go();
 					} else {
-						setJsonpToken(jsonpToken).setOutput(str.replace(jsonPerfix, "")).go();
+						setJsonpToken(jsonpToken).setOutput(str.replace(JSON_PREFIX, "")).go();
 					}
 				} else if (str.startsWith("js::")) {
 					setContent_Type("application/javascript").setOutput(str.replace("js::", "")).go();
@@ -231,9 +240,9 @@ public class MvcOutput extends HttpServletResponseWrapper {
 					setTemplate(str).go(request);
 				}
 			} else if (result instanceof Map) {
-				setOutput_Map((Map<String, ?>) result).go();
+				setOutputMap((Map<String, ?>) result).go();
 			} else if (result instanceof List) {
-				setOutput_List((List<?>) result).go();
+				setOutputList((List<?>) result).go();
 			} else if (result instanceof BaseModel) {
 				setBean((BaseModel) result).go();
 			}
@@ -264,19 +273,18 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	 * http://blog.sina.com.cn/s/blog_7217e4320101l8gq.html
 	 * http://www.2cto.com/kf/201109/103284.html
 	 * 
-	 * @param pageContext 页面上下文
+	 * @param ctx 页面上下文
 	 */
-	public static void fix(PageContext pageContext) {
-		HttpServletResponse response = (HttpServletResponse) pageContext.getResponse();
+	public static void fix(PageContext ctx) {
+		HttpServletResponse response = (HttpServletResponse) ctx.getResponse();
 
 		try {
 			OutputStream out = response.getOutputStream();
 			out.flush();
 			out.close();
 			response.flushBuffer();
-
-			pageContext.getOut().clear();
-			pageContext.pushBody();
+			ctx.getOut().clear();
+			ctx.pushBody();
 			// out = pageContext.pushBody();
 		} catch (IOException e) {
 			LOGGER.warning(e);
@@ -289,18 +297,16 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	 * @param output 要输出的内容
 	 */
 	public void output(String output) {
-		PrintWriter writer = null;
 		setCharacterEncoding(StandardCharsets.UTF_8.toString());
 		setContentType(getContent_Type());
 
 		try {
-			writer = getWriter();
+			PrintWriter writer = getWriter();
+			if (writer != null)
+				writer.print(output);
 		} catch (IOException e) {
 			LOGGER.warning(e);
 		}
-
-		if (writer != null)
-			writer.print(output);
 	}
 
 	/**
@@ -384,21 +390,21 @@ public class MvcOutput extends HttpServletResponseWrapper {
 		return this;
 	}
 
-	public Map<String, ?> getOutput_Map() {
-		return output_Map;
+	public Map<String, ?> getOutputMap() {
+		return outputMap;
 	}
 
-	public MvcOutput setOutput_Map(Map<String, ?> output_Map) {
-		this.output_Map = output_Map;
+	public MvcOutput setOutputMap(Map<String, ?> output_Map) {
+		this.outputMap = output_Map;
 		return this;
 	}
 
-	public Object getOutput_Obj() {
-		return output_Obj;
+	public Object getOutputObj() {
+		return outputObj;
 	}
 
-	public MvcOutput setOutput_Obj(Object output_Obj) {
-		this.output_Obj = output_Obj;
+	public MvcOutput setOutputObj(Object output_Obj) {
+		this.outputObj = output_Obj;
 		return this;
 	}
 
@@ -411,12 +417,12 @@ public class MvcOutput extends HttpServletResponseWrapper {
 		return this;
 	}
 
-	public List<?> getOutput_List() {
-		return output_List;
+	public List<?> getOutputList() {
+		return outputList;
 	}
 
-	public MvcOutput setOutput_List(List<?> output_List) {
-		this.output_List = output_List;
+	public MvcOutput setOutputList(List<?> output_List) {
+		this.outputList = output_List;
 		return this;
 	}
 

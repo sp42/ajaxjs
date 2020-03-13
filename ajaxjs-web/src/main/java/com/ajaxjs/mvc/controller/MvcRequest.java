@@ -154,7 +154,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	/**
 	 * 全局的 callback 参数名
 	 */
-	public static final String callback_param = "callback";
+	public static final String CALLBACK_PARAM = "callback";
 
 	/**
 	 * 保存到 request

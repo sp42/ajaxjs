@@ -93,8 +93,7 @@ public class MvcDispatcher implements Filter {
 	 * js/css 等静态文件有后缀，这样的话我们需要区分对待。
 	 */
 	@Override
-	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
-			throws IOException, ServletException {
+	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest _request = (HttpServletRequest) req;
 		HttpServletResponse _response = (HttpServletResponse) resp;
 
@@ -103,7 +102,7 @@ public class MvcDispatcher implements Filter {
 			return;
 		}
 
-		_request.setAttribute("requestTimeRecorder", System.currentTimeMillis()); // 每次 servlet 都会执行的。记录时间
+		_request.setAttribute("requestTimeRecorder", System.nanoTime()); // 每次 servlet 都会执行的。记录时间
 
 		MvcRequest request = new MvcRequest(_request);
 		MvcOutput response = new MvcOutput(_response);
