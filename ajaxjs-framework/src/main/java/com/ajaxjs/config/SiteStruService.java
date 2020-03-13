@@ -157,8 +157,10 @@ public class SiteStruService implements ServletContextListener {
 			LOGGER.info("执行 Servlet 启动回调");
 			try {
 				Class<ServletStartUp> clz = ReflectUtil.getClassByName(startUp_Class, ServletStartUp.class);
-				ServletStartUp startUp = ReflectUtil.newInstance(clz);
-				startUp.onStartUp(cxt);
+				if (clz != null) {
+					ServletStartUp startUp = ReflectUtil.newInstance(clz);
+					startUp.onStartUp(cxt);
+				}
 			} catch (Throwable e) {
 				if (e instanceof UndeclaredThrowableException) {
 					Throwable _e = ReflectUtil.getUnderLayerErr(e);

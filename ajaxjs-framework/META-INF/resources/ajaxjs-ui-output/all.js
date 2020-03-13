@@ -1,4 +1,4 @@
-// build date:Mon Dec 30 10:39:30 GMT+08:00 2019
+// build date:Fri Mar 13 23:49:46 CST 2020
 
 ajaxjs = aj = function(cssSelector, fn) {
 return Element.prototype.$.apply(document, arguments);
@@ -589,14 +589,14 @@ nextStep();
 
 Vue.component('ajaxjs-admin-header', {
 props : {
-isCreate : Boolean,	
-uiName : String,	
-infoId : {	
+isCreate: Boolean,	
+uiName: String,	
+infoId: {	
 type: Number,
 required: false
 }
 },
-template : 
+template: 
 '<header class="ajaxjs-admin-header">\
 <div>\
 <slot name="btns"></slot>\
@@ -608,13 +608,13 @@ template :
 </header>'
 })
 Vue.component('ajaxjs-admin-info-btns', {
-props : {
+props: {
 isCreate : {
 type: Boolean, 
 default:false
 }
 },
-template : 
+template: 
 '<div class="ajaxjs-admin-info-btns">\
 <button><img :src="ajResources.commonAsset + \'/icon/save.gif\'" /> {{isCreate ? "新建":"保存"}}</button>\
 <button onclick="this.up(\'form\').reset();return false;">复 位</button>\
@@ -623,10 +623,10 @@ template :
 </button>\
 <button onclick="history.back();return false;">返回</button><slot></slot>\
 </div>',
-methods : {
-del : function () {
+methods: {
+del() {
 if (confirm('确定删除？'))
-ajaxjs.xhr.dele('.', function(json) {
+ajaxjs.xhr.dele('.', json => {
 if (json && json.isOk) {
 alert(json.msg);
 location.assign('../list/');
@@ -636,9 +636,9 @@ location.assign('../list/');
 }
 });
 Vue.component('aj-admin-filter-panel', {
-props : {
+props: {
 label : {
-type : String,
+type: String,
 required : false
 },
 catalogId :{	
@@ -650,7 +650,7 @@ type: Number,
 required: false
 },
 noCatalog : {
-type : Boolean, 
+type: Boolean, 
 default : false
 },
 searchFieldValue : { 
@@ -663,16 +663,16 @@ template:
 <form action="?" method="GET">\
 <input type="hidden" name="searchField" :value="searchFieldValue" />\
 <input type="text" name="keyword" placeholder="请输入搜索之关键字" style="float: inherit;" class="ajaxjs-inputField" />\
-<button style="margin-top: 0;" class="ajaxjs-btn">搜索</button>\
+<button style="margin-top: 0;" class="ajaxjs-btn">搜索</button> &nbsp;\
 </form><slot></slot>\
 <span v-if="!noCatalog">{{label||\'分类\'}}：\
 <aj-tree-catelog-select :is-auto-jump="true" :catalog-id="catalogId" :selected-catalog-id="selectedCatalogId"></aj-tree-catelog-select></span>\
 </div>'
 });
 aj.admin = {
-del : function(id, title) {
+del(id, title) {
 if (confirm('请确定删除记录：\n' + title + ' ？')) {
-ajaxjs.xhr.dele('../' + id + '/', function(json) {
+ajaxjs.xhr.dele('../' + id + '/', json=> {
 if (json.isOk) {
 alert('删除成功！');
 location.reload();
@@ -680,8 +680,8 @@ location.reload();
 });
 }
 },
-setStatus : function(id, status) {
-ajaxjs.xhr.post('../setStatus/' + id + '/', function(json) {
+setStatus(id, status) {
+ajaxjs.xhr.post('../setStatus/' + id + '/', json => {
 if (json.isOk) {
 }
 }, {
@@ -713,15 +713,15 @@ default : true
 },
 initItems : Array 
 },
-data : function() {
+data() {
 return {
 selected : 0
 };
 },
-mounted: function() {
+mounted() {
 this.mover = this.$el.$('div.content'); 
 var mover = this.mover, children = mover.children, len = children.length;
-setTimeout(function() {
+setTimeout(() => {
 var stepWidth = this.setItemWidth();
 if(this.isMagic) 
 mover.style.width = this.isUsePx ? (stepWidth * 2) +'px' : '200%';
@@ -736,10 +736,10 @@ if(headerUl)
 for(var i = 0; i < len; i++) 
 headerUl.children[i].style.width = tabWidth;
 this.doHeight(this.selected);
-}.bind(this), 400);
+}, 400);
 },
 watch:{
-'selected' : function(index, oldIndex) {
+selected(index, oldIndex) {
 if(this.$isStop) 
 return;
 var children = this.$el.$('header ul').children;
@@ -754,15 +754,15 @@ this.go(index);
 }
 },
 methods : {
-setItemWidth : function() {
+setItemWidth() {
 this.stepWidth = this.stepWidth || this.mover.parentNode.clientWidth || window.innerWidth; 
 return this.stepWidth;
 },
-changeTab : function(index) {
+changeTab(index) {
 this.selected = index;
 this.go(index);
 },
-go : function(i) {
+go(i) {
 this.$emit('before-carousel-item-switch', this, i);
 if(this.$isStop) 
 return;
@@ -792,7 +792,7 @@ mover.style[this.isWebkit ? 'webkitTransform' : 'transform'] = 'translate3d({0},
 }
 this.$emit('carousel-item-switch', this, i, children[i]);
 },
-goPrevious : function() {
+goPrevious() {
 if(this.$isStop) 
 return;
 var len = this.mover.children.length;
@@ -801,7 +801,7 @@ if (this.selected < 0)
 this.selected = len - 1;
 this.go(this.selected); 
 },
-goNext : function() {
+goNext() {
 if(this.$isStop) 
 return;
 var len = this.mover.children.length;
@@ -810,13 +810,13 @@ if (this.selected == len)
 this.selected = 0; 
 this.go(this.selected);
 },
-onResize : function () {
+onResize() {
 var stepWidth = this.mover.parentNode.clientWidth; 
 this.mover.style.width = this.isUsePx ? (stepWidth * this.len) +'px' : this.len + '00%';
 for(var i = 0; i < this.len; i++) 
 this.children[i].style.width = stepWidth + 'px';
 },
-doHeight: function(i) {
+doHeight(i) {
 if(this.isGetCurrentHeight) {
 var mover = this.mover, children = mover.children, len = children.length;
 for(var p = 0; p < len; p++) {
@@ -828,7 +828,7 @@ children[p].style.height = '1px';
 }
 }
 },
-doAutoHeight : function (nextItem) {
+doAutoHeight(nextItem) {
 if(this.autoHeight) {
 var tabHeaderHeight = 0;
 if(this.tabHeader) 
@@ -836,15 +836,14 @@ tabHeaderHeight = this.tabHeader.scrollHeight;
 this.el.style.height = (nextItem.scrollHeight + tabHeaderHeight + 50) + 'px'; 
 }
 },
-autoChangeTab: function(e) {
+autoChangeTab(e) {
 if(this.$isStop) 
 return;
 var el = e.currentTarget;
 var children = el.parentNode.children;
 for(var i = 0, j = children.length; i < j; i++) {
-if(el == children[i]) {
+if(el == children[i]) 
 break;
-}
 }
 this.selected = i;
 }
@@ -861,7 +860,7 @@ template :
 <div v-for="(item, index) in items" :class="{\'active\': index === selected}" v-html="item.content"></div>\
 </div>\
 </div>',
-data : function() {
+data() {
 return {
 items : this.initItems || [
 {name : '杜甫：望岳', content : '岱宗夫如何，齊魯青未了。<br>\
@@ -907,7 +906,7 @@ template :
 <div v-for="(item, index) in items" :class="{\'active\': index === selected}" v-html="getContent(item.content, item.href)"></div>\
 </div>\
 </div>',
-data : function() {
+data() {
 return {
 items : this.initItems || [
 {name : '杜甫：望岳', content : '<img src="../images/20150826162352938.jpg" />', href : 'http://qq.com'},
@@ -916,15 +915,15 @@ items : this.initItems || [
 ]
 }; 
 },
-mounted: function() {
+mounted() {
 this.loop();
 },
 methods:{
-loop : function() {
+loop() {
 if(this.autoLoop)
 this.loopTimer = window.setInterval(this.goNext.bind(this), this.autoLoop);
 },
-getContent : function(content, href) {
+getContent(content, href) {
 if(!href)
 return content;
 else
@@ -932,32 +931,97 @@ return '<a href="' + href + '">' + content + '</a>';
 }
 }
 });
+Vue.component('aj-opacity-banner', {
+template: '<ul class="aj-opacity-banner"><slot></slot></ul>',
+props: {
+delay:	{
+default: 3000 
+},
+fps:	{
+default: 25 
+}
+},
+data() {
+return {
+active:	0, 
+list:	[],	
+timer:	null
+}
+},
+mounted() {
+this.list = this.$el.querySelectorAll('li');
+this.list[0].style.opacity = 1;
+this.run();
+},
+methods: {
+run() {
+this.timer = window.setInterval(() => {	
+var active = this.active;
+this.clear();
+active += 1;
+active = active % this.list.length;
+this.active = active;
+this.animate(100);
+}, this.delay);
+},
+per() {
+var active = this.active;
+this.clear();
+active -= 1;
+active = active % this.list.length;
+if (active < 0)
+active = this.list.length - 1;
+this.active = active;
+this.animate(100);
+},
+clear() {
+this.animate(0);
+},
+getOpacity(el) {
+var val = getComputedStyle(el)["opacity"];
+val *= 100;
+return parseFloat(val) || 0;
+},
+animate(params) {
+var el = this.list[this.active], getOpacity = this.getOpacity, fps = 1000 / this.fps;
+window.clearTimeout(el.timer);
+window.setTimeout(function() {
+var i = getOpacity(el), speed = (params - i) / 8;
+speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
+i += speed;
+el.style.opacity = i / 100;
+window.clearTimeout(el.timer);
+el.timer = window.setTimeout(arguments.callee, fps);
+}, fps);
+}
+}
+});
 
 Vue.component('aj-page-captcha', {
-props : {
-imgSrc : {
+props: {
+imgSrc: {
 type: String, 
 required: false,
 },
-fieldName : {	
+fieldName: {	
 type: String,
 required: false,
 default : 'captcha'
 }
 },
-template : 
+template: 
 '<table class="aj-page-captcha"><tr>\
 <td><input type="text" :name="fieldName" placeholder="输入右侧验证码" data-regexp="integer" required autocomplete="off" size="10" /></td>\
 <td style="vertical-align: top;">\
 <img :src="imgSrc || ajResources.ctx + \'/Captcha\'" @click="onClk($event);" title="点击刷新图片" />\
 </td>\
 </tr></table>',
-methods : {
-onClk : function(e) {
+methods: {
+onClk(e) {
 var img = e.target;
 img.src = img.src.replace(/\?\d+$/, '') + '?' + new Date().valueOf();
 },
-refreshCode: function(){
+refreshCode(){
 var img = this.$el.querySelector('img');
 img.src = img.src.replace(/\?\d+$/, '') + '?' + new Date().valueOf();
 }
@@ -1042,7 +1106,7 @@ var tbody = this.$el.$("table tbody");
 tbody.innerHTML = '';
 tbody.appendChild(frag);
 },
-getDate (dateType, month) {
+getDate(dateType, month) {
 var nowYear = this.date.getFullYear(), nowMonth = this.date.getMonth() + 1; 
 switch (dateType) {
 case 'preMonth':
@@ -1065,7 +1129,7 @@ break;
 setMonth(e){
 this.getDate('setMonth', Number(e.target.selectedOptions[0].value));
 },
-getDateArr () {
+getDateArr() {
 var arr = [];
 for (var i = 1, firstDay = new Date(this.year, this.month - 1, 1).getDay(); i <= firstDay; i++)
 arr.push(0);
@@ -1073,7 +1137,7 @@ for (var i = 1, monthDay = new Date(this.year, this.month, 0).getDate(); i <= mo
 arr.push(i);
 return arr;
 },
-pickDay (e) {
+pickDay(e) {
 var el = e.target, date = el.title;
 this.$emit('pick-date', date);
 return date;
@@ -1082,59 +1146,58 @@ pickupTime(e) {
 var time = this.$el.$('.hour').selectedOptions[0].value + ':' + this.$el.$('.minute').selectedOptions[0].value;
 this.$emit('pick-time', time);
 },
-isSameDay (d1, d2) {
+isSameDay(d1, d2) {
 return (d1.getFullYear() == d2.getFullYear() && d1.getMonth() == d2.getMonth() && d1.getDate() == d2.getDate());
 }
 }
 });
 Vue.component('aj-form-calendar-input', {
-data : function(){
+data(){
 return {
 date : this.fieldValue, 
 time : ''
-}
+};
 },
-props : {
-fieldName : { 
+props: {
+fieldName: { 
 type: String,
 required: true
 },
-fieldValue : {
+fieldValue: {
 type: String,
 required: false,
 default : ''
 },
-dateOnly : { 
+dateOnly: { 
 type: Boolean,
 required: false,
-default : true
+default: true
 },
 showTime: false,
 positionFixed : Boolean 
 },
-template : 
+template: 
 '<div class="aj-form-calendar-input" @mouseover="onMouseOver($event)">\
 <div class="icon fa fa-calendar"></div>\
 <input placeholder="请输入日期" :name="fieldName" :value="date + (dateOnly ? \'\' : \' \' + time)" type="text" autocomplete="off" class="aj-input" />\
 <aj-form-calendar ref="calendar" :show-time="showTime" @pick-date="recEvent" @pick-time="recTimeEvent"></aj-form-calendar>\
 </div>',
-mounted : function() {
-if(this.positionFixed) {
+mounted() {
+if(this.positionFixed) 
 this.$el.$('.aj-form-calendar').classList.add('positionFixed');
-}
 if(this.fieldValue) {
 var arr = this.fieldValue.split(' ')[0], arr = arr.split('-'), date = new Date(arr[0], arr[1] - 1, arr[2], " ", "", " ");
 this.$refs.calendar.date = date;
 }
 },
-methods : {
-recTimeEvent: function(time) {
+methods: {
+recTimeEvent(time) {
 this.time = time;
 },
-recEvent: function(date) {
+recEvent(date) {
 this.date = date.trim();
 },
-onMouseOver : function(e) {
+onMouseOver(e) {
 if(this.positionFixed) {
 var el = e.currentTarget;
 var b = el.getBoundingClientRect();
@@ -1146,30 +1209,30 @@ c.style.left = ((b.left - 0) + 0) + 'px';
 }
 });
 Vue.component('aj-form-html-editor', {
-template : '',
-props : {
-fieldName : { 
+template: '',
+props: {
+fieldName: { 
 type: String,
 required: true
 },
-content : { 
+content: { 
 type: String,
 required: false
 },
-basePath : { 
+basePath: { 
 type: String,
 required: false,
 default : ''
 },
 uploadImageActionUrl: String
 },
-beforeCreate : function() {
+beforeCreate() {
 var xhr = new XMLHttpRequest();
 xhr.open("GET", this.ajResources.libraryUse + '/htmleditor-tag.htm', false);
 xhr.send(null);
 this.$options.template = xhr.responseText;
 },
-mounted : function() {
+mounted() {
 var el = this.$el;
 this.iframeEl = el.$('iframe');
 this.sourceEditor = el.$('textarea');
@@ -1220,7 +1283,7 @@ $fileName: 'foo.jpg'
 });
 } 
 },
-onToolBarClk : function(e) {
+onToolBarClk(e) {
 var el = e.target, clsName = el.className;
 clsName = clsName.split(' ').shift();
 switch(clsName) {
@@ -1253,7 +1316,7 @@ default:
 this.format(clsName);
 }
 },
-format : function (type, para) {
+format(type, para) {
 this.iframeWin.focus();
 if (!para) {
 if (document.all) 
@@ -1264,7 +1327,7 @@ this.iframeDoc.execCommand(type, false, false);
 this.iframeDoc.execCommand(type, false, para);
 this.iframeWin.focus();
 },
-insertEl : function (html) {
+insertEl(html) {
 this.iframeDoc.body.innerHTML = html;
 },
 saveRemoteImage2Local(){
@@ -1287,13 +1350,12 @@ aj.alert.show('所有图片下载完成。');
 else
 aj.alert.show('未发现有远程图片');
 },
-setValue : function(v) {
-var self = this;
-setTimeout(function() {
-self.iframeWin.document.body.innerHTML = v;
+setValue(v) {
+setTimeout(() => {
+this.iframeWin.document.body.innerHTML = v;
 }, 500);
 },
-getValue : function(cfg) {
+getValue(cfg) {
 var result = this.iframeBody.innerHTML;
 if(cfg && cfg.cleanWord)
 result = this.cleanPaste(result);
@@ -1301,7 +1363,7 @@ if(cfg && cfg.encode)
 result = encodeURIComponent(result);
 return result;
 },
-cleanPaste : function(html) {
+cleanPaste(html) {
 html = html.replace(/<(\/)*(\\?xml:|meta|link|span|font|del|ins|st1:|[ovwxp]:)((.|\s)*?)>/gi, ''); 
 html = html.replace(/(class|style|type|start)=("(.*?)"|(\w*))/gi, ''); 
 html = html.replace(/<style(.*?)style>/gi, ''); 
@@ -1309,7 +1371,7 @@ html = html.replace(/<script(.*?)script>/gi, '');
 html = html.replace(/<!--(.*?)-->/gi, ''); 
 return html;
 },
-setMode : function () {
+setMode() {
 if (this.mode == 'iframe') {
 this.iframeEl.classList.add('hide');
 this.sourceEditor.classList.remove('hide');
@@ -1324,7 +1386,7 @@ this.mode = 'iframe';
 this.grayImg(false);
 }
 },
-grayImg: function (isGray) {
+grayImg(isGray) {
 this.toolbarEl.$('span', function(item) {
 if(item.className.indexOf('switchMode') != -1) {
 item.style.color = isGray ? 'red' : '';
@@ -1333,16 +1395,16 @@ item.style.filter = isGray ? 'grayscale(100%)' : '';
 }
 });
 },
-onFontfamilyChoserClk : function(e) {
+onFontfamilyChoserClk(e) {
 var el = e.target; 
 this.format('fontname', el.innerHTML);
 var menuPanel = el.parentNode;
 menuPanel.style.display = 'none';
-setTimeout(function() {
+setTimeout(() => {
 menuPanel.style.display = '';
 }, 300);
 },
-onFontsizeChoserClk : function(e) {	
+onFontsizeChoserClk(e) {	
 var el = e.target;
 for(var els = e.currentTarget.children, i = 0, j = els.length; i < j; i++)
 if(el == els[i]) break;
@@ -1509,13 +1571,13 @@ return true;
 })();
 if(!aj.form)
 aj.form = {};
-aj.form.betweenDate = function(el){	
+aj.form.betweenDate = function(el) {	
 new Vue({
 el : el,
-methods:{
-valid(e){
+methods: {
+valid(e) {
 var start = this.$el.$('input[name=startDate]').value, end = this.$el.$('input[name=endDate]').value;
-if(!start||!end){
+if(!start||!end) {
 aj.showOk("输入数据不能为空");	
 e.preventDefault();
 }
@@ -1582,17 +1644,17 @@ fr.readAsDataURL(blob);
 };
 })();
 aj._list = {
-props : {
+props: {
 apiUrl : {	
 type : String,
 required : true
 },
-hrefStr : {
+hrefStr: {
 type : String,
 required : false
 }
 },
-data : function() {
+data() {
 return {
 result : [],	
 baseParam: {},	
@@ -1607,15 +1669,15 @@ template : '<ul class="aj-simple-list"><li v-for="(item, index) in result">\
 <a :href="(hrefStr || \'\').replace(\'{id}\', item.id)" @click="show(item.id, index, $event)" :id="item.id">{{item.name}}</a>\
 </slot>\
 </li></ul>',
-mounted : function() {
-ajaxjs.xhr.get(this.realApiUrl, function(json) {
+mounted() {
+ajaxjs.xhr.get(this.realApiUrl, json => {
 aj.apply(this, json);
-}.bind(this), this.baseParam);
+}, this.baseParam);
 }
 });
 Vue.component('aj-page-list', {
 mixins: [aj._list],
-data : function() {
+data() {
 return {
 pageSize : this.initPageSize,
 total : 0,
@@ -1624,13 +1686,13 @@ pageStart: 0,
 currentPage : 0
 };
 },
-props : {
-initPageSize : {
+props: {
+initPageSize: {
 type : Number,
 required : false,
 default : 5
 },
-isShowFooter : {
+isShowFooter: {
 type : Boolean,
 default : true
 },
@@ -1643,7 +1705,7 @@ type : Boolean,
 default : false
 }
 },
-template : 
+template: 
 '<div class="aj-page-list">\
 <ul><li v-for="(item, index) in result">\
 <slot v-bind="item">\
@@ -1664,7 +1726,7 @@ template :
 </div>\
 </footer><div v-show="!!autoLoadWhenReachedBottom" class="buttom"></div>\
 </div>',
-mounted : function() {
+mounted() {
 ajaxjs.xhr.get(this.realApiUrl, this.doAjaxGet, {
 limit : this.pageSize
 });
@@ -1673,58 +1735,58 @@ var scrollSpy = new aj.scrollSpy({
 scrollInElement : aj(this.autoLoadWhenReachedBottom),
 spyOn : thish.$el.$('.buttom')
 });
-scrollSpy.onScrollSpyBackInSight = function (e) {
+scrollSpy.onScrollSpyBackInSight = e => {
 this.nextPage();
-}.bind(this);
+};
 }
 },
-created : function() {
+created() {
 this.BUS.$on('base-param-change', this.onBaseParamChange.bind(this));
 },
 methods : {
-count: function () {
+count() {
 var totalPage = this.total / this.pageSize, yushu = this.total % this.pageSize;
 this.totalPage = parseInt(yushu == 0 ? totalPage : totalPage + 1);
 this.currentPage = (this.pageStart / this.pageSize) + 1;
 },
-previousPage : function() {
+previousPage() {
 this.pageStart -= this.pageSize;
 this.currentPage = (this.pageStart / this.pageSize) + 1;
 this.ajaxGet();
 },
-nextPage : function() {
+nextPage() {
 this.pageStart += this.pageSize;
 this.currentPage = (this.pageStart / this.pageSize) + 1;
 this.ajaxGet();
 },
-onPageSizeChange : function(e) {
+onPageSizeChange(e) {
 this.pageSize = Number(e.target.value);
 this.count();
 this.ajaxGet();
 },
-doAjaxGet : function(json) {
+doAjaxGet(json) {
 this.total = json.total;
 this.result = this.isDataAppend ? this.result.concat(json.result) : json.result;
 this.count();
 }, 
-ajaxGet : function () {
+ajaxGet() {
 var params = {};
 aj.apply(params, { start : this.pageStart, limit : this.pageSize });
 this.baseParam && aj.apply(params, this.baseParam);
 ajaxjs.xhr.get(this.realApiUrl, this.doAjaxGet, params);
 },
-jumpPageBySelect : function (e) {
+jumpPageBySelect(e) {
 var selectEl = e.target;
 this.currentPage = selectEl.options[selectEl.selectedIndex].value;
 },
-onBaseParamChange : function(params) {
+onBaseParamChange(params) {
 aj.apply(this.baseParam, params);
 this.pageStart = 0; 
 this.ajaxGet();
 }
 },
 watch: {
-'baseParam' : function(index, oldIndex) {
+baseParam(index, oldIndex) {
 this.ajaxGet();
 }
 }
@@ -1779,27 +1841,27 @@ return pos;
 }
 }
 aj._simple_marquee_text = {
-props : {
-interval : {
-type : Number, 
-default : 500
+props: {
+interval: {
+type: Number, 
+default: 500
 },
-canstop :{
-type : Boolean, 
-default : true
+canstop: {
+type: Boolean, 
+default: true
 }
 },
-mounted : function() {
+mounted() {
 if (this.canstop) {
 this.$el.onmouseover = this.clearTimer.bind(this);
 this.$el.onmouseout = this.start.bind(this);
 }
 },
-methods : {
-start : function() {
+methods: {
+start() {
 this.$timerId = window.setInterval(this.scroll, this.interval);
 },
-clearTimer : function() {
+clearTimer() {
 this.$timerId && window.clearInterval(this.$timerId);
 }
 }
@@ -1807,25 +1869,25 @@ this.$timerId && window.clearInterval(this.$timerId);
 Vue.component('aj-super-simple-marquee-text', {
 mixins : [aj._simple_marquee_text],
 template : '<div><slot>这是一段滚动的文字；这是一段滚动的文字；这是一段滚动的文字</slot></div>',
-mounted : function() {
+mounted () {
 this.$arr = this.$el.innerHTML.split("");
 this.start();
 },
 methods : {
-scroll : function () {
+scroll() {
 this.$arr.push(this.$arr.shift());
 this.$el.innerHTML = this.$arr.join("");
 }
 }
 });
 Vue.component('aj-simple-marquee-text', {
-mixins : [aj._simple_marquee_text],
-template : '<ol><li>11111111111</li><li>22222222222</li><li>33333333333</li><li>44444444444</li><li>55555555555</li></ol>',
-mounted : function() {
+mixins: [aj._simple_marquee_text],
+template: '<ol><li>11111111111</li><li>22222222222</li><li>33333333333</li><li>44444444444</li><li>55555555555</li></ol>',
+mounted() {
 this.start();
 },
-methods : {
-scroll : function () {
+methods: {
+scroll() {
 var lastEl = this.$el.firstChild;
 while (lastEl.nodeType != 1)
 lastEl = lastEl.nextSibling;
@@ -1834,27 +1896,27 @@ this.$el.appendChild(this.$el.removeChild(lastEl));
 }
 });
 Vue.component('aj-simple-marquee', {
-props : {
-interval : {
+props: {
+interval: {
 default : 20
 },
 pauseInterval : { 
-type : Number,
+type: Number,
 default : 2000
 },
-itemHeight : { 
-type : Number,
-required : 20,
+itemHeight: { 
+type: Number,
+required: 20,
 },
 },
-template : 
+template: 
 '<div class="aj-simple-marquee" style="width: 100%; overflow: hidden;">\
 <div class="items"><slot></slot>\
 </div>\
 <div class="clone"></div>\
 </div>',
-mixins : [aj._simple_marquee_text],
-mounted : function() {
+mixins: [aj._simple_marquee_text],
+mounted() {
 var el = this.$el, children = el.$('.items').children, itemHeight = this.itemHeight;
 el.style.height = itemHeight + "px";
 var allHeight = 0;
@@ -1869,8 +1931,8 @@ var clone = children[0].cloneNode(true);
 el.$('.clone').appendChild(clone);
 setTimeout(this.start.bind(this), 2000);
 },
-methods : {
-scroll :function () {
+methods: {
+scroll() {
 var el = this.$el, top = el.scrollTop, height = el.$('.items').clientHeight;
 if (top <= height) {
 el.scrollTop ++;
@@ -1954,32 +2016,31 @@ template :
 </div>'
 });
 Vue.component('aj-menu-moblie-scroll', {
-props : {
-initItems : {
-type : Array,
-default : function() {
+props: {
+initItems: {
+type: Array,
+default: () => {
 return [{name : 'foo'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}, {name : 'bar'}];
 }
 }
 },
-data : function() {
+data() {
 return {
 selected : 0,
 items : this.initItems
 }
 },
-template : 
+template: 
 '<div class="aj-hoz-scroll"><div><ul>\
 <li @click="fireEvent($event, index);" v-for="item, index in items" :class="{\'selected\': index === selected}">{{item.name}}</li>\
 </ul><div class="indicator"></div></div></div>',
-mounted : function() {
-var self = this;
-setTimeout(function() {
-self.$el.$('.indicator').style.width = self.$el.$('li').clientWidth + 'px';
+mounted() {
+setTimeout(() => {
+this.$el.$('.indicator').style.width = this.$el.$('li').clientWidth + 'px';
 }, 500);
 },
 methods: {
-fireEvent : function(e, index) {
+fireEvent(e, index) {
 var el = e.target;
 this.$el.$('.indicator').style.marginLeft = el.offsetLeft + 'px';
 this.$emit('on-aj-menu-moblie-scroll-click', e, index, this.selected);
@@ -2012,20 +2073,20 @@ template :
 </div>\
 </div>',
 methods : {
-show : function(text, cfg) {
+show(text, cfg) {
 this.showText = text;
 this.$el.classList.remove('hide');
 aj.apply(this, cfg);
 return this;
 },
-close : function(e) {
+close(e) {
 var div = e.target; 
 if (div && div.className.indexOf('modal') != -1) {
 this.$el.classList.add('hide');
 this.afterClose && this.afterClose(div, this);
 }
 },
-onBtnClk : function(e) {
+onBtnClk(e) {
 var el = e.target;
 switch(el.className) {
 case 'ok':
@@ -2046,7 +2107,7 @@ var alertObj = aj.alert.show(text, {
 showYes : false,
 showNo :false,
 showOk :true,
-onOkClk : function(e) { 
+onOkClk(e) { 
 alertObj.$el.classList.add('hide');
 callback && callback();
 }
@@ -2058,11 +2119,11 @@ showYes : true,
 showNo :true,
 showOk :false,
 showSave: showSave,
-onYesClk : function(e) {
+onYesClk(e) {
 alertObj.$el.classList.add('hide');
 callback && callback(alertObj.$el, e);
 },
-onNoClk : function(e) { 
+onNoClk(e) { 
 alertObj.$el.classList.add('hide');
 }
 });
@@ -2075,14 +2136,14 @@ showText : ''
 },
 template : '<div class="aj-topMsg" v-html="showText"></div>',
 methods : {
-show : function(text, cfg) {
+show (text, cfg) {
 this.showText = text;
 var el = this.$el;
-setTimeout(function() {
+setTimeout(()=> {
 el.classList.remove('fadeOut');
 el.classList.add('fadeIn');
 }, 0);
-setTimeout(function() { 
+setTimeout(() => { 
 el.classList.remove('fadeIn');
 el.classList.add('fadeOut');
 cfg && cfg.afterClose && cfg.afterClose(div, this);
@@ -2092,19 +2153,25 @@ cfg && cfg.afterClose && cfg.afterClose(div, this);
 });
 });
 Vue.component('aj-layer', {
-template : '<div class="aj-modal hide" @click="close($event);"><div><slot></slot></div></div>',
-props :{
+template: '<div class="aj-modal hide" @click="close($event);"><div><slot></slot></div></div>',
+props: {
 notCloseWhenTap: Boolean
 },
-methods : {
-show : function(cfg) {
+methods: {
+show (cfg) {
 this.$el.classList.remove('hide');
 if(cfg && cfg.afterClose)
 this.afterClose = cfg.afterClose;
 },
-close : function(e) { 
+close(e) { 
+if(!e) {
+aj.alert.$options.methods.close.call(this, {
+target : aj('.aj-modal')
+});
+}else{
 if(e.isForceClose || !this.notCloseWhenTap)
 aj.alert.$options.methods.close.apply(this, arguments);
+}
 }
 }
 });
@@ -2112,45 +2179,22 @@ aj.alert.$options.methods.close.apply(this, arguments);
 
 Vue.component('aj-page-fullscreen-loading-indicator', {
 template : '<div class="aj-fullscreen-loading"></div>',
-beforeCreate : function () {
-document.onreadystatechange = function () {
-if(document.readyState === "complete") {
+beforeCreate () {
+document.onreadystatechange = () => {
+if(document.readyState === "complete") 
 aj(".aj-fullscreen-loading").classList.add('fadeOut');
-}
-}
-}
-});
-Vue.component('aj-page-share', {
-template : 
-'<div class="aj-page-share">\
-分享到 &nbsp;&nbsp;\
-<a title="转发至QQ空间" :href="\'http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=\' + url" target="_blank">\
-<img src="http://static.youku.com/v1.0.0691/v/img/ico_Qzone.gif" /></a>\
-<a title="转发至新浪微博" :href="\'http://v.t.sina.com.cn/share/share.php?appkey=2684493555&Uid=&source=&sourceUrl=&url=\' + url + \'&title=\' + title" target="_blank">\
-<img src="http://static.youku.com/v1.0.0691/v/img/ico_sina.gif" /></a>\
-<a title="分享到腾讯朋友" :href="\'http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?to=pengyou&url=\' + url + \'&title=\' + title" target="_blank">\
-<img src="http://static.youku.com/v1.0.0691/v/img/ico_pengyou.png" /></a>\
-<a title="推荐到豆瓣" :href="\'http://www.douban.com/recommend/?url=\' + url + \'&title=\' + title" target="_blank">\
-<img src="http://static.youku.com/v1.0.0691/v/img/ico_dou_16x16.png" /></a>\
-</div>',
-computed : {
-title : function() {
-return encodeURIComponent(document.title);
-},
-url : function() {
-return document.location.href;
 }
 }
 });
 Vue.component('aj-adjust-font-size', {
 props : {
-articleTarget : { 
+articleTarget: { 
 type: String,
 required: false,
 default : 'article p'
 }
 },
-template : 
+template: 
 '<div class="aj-adjust-font-size" @click="onClk($event);">\
 <span>字体大小</span>\
 <ul>\
@@ -2159,20 +2203,19 @@ template :
 <li><label><input type="radio" name="fontSize" /> 大</label></li>\
 </ul>\
 </div>',
-methods : {
-onClk : function(e) {
+methods: {
+onClk(e) {
 var el = e.target, target = el.innerHTML;
 if(el.tagName != 'LABEL')
 el = el.up('label');
-if(el.innerHTML.indexOf('大') != -1) {
+if(el.innerHTML.indexOf('大') != -1) 
 this.setFontSize('12pt');
-}else if(el.innerHTML.indexOf('中') != -1) {
+else if(el.innerHTML.indexOf('中') != -1) 
 this.setFontSize('10.5pt');
-}else if(el.innerHTML.indexOf('小') != -1) {
+else if(el.innerHTML.indexOf('小') != -1) 
 this.setFontSize('9pt');
-}
 },
-setFontSize : function (fontSize) {
+setFontSize(fontSize) {
 aj(this.$props.articleTarget, function(p){
 p.style.fontSize = fontSize;
 });
@@ -2194,7 +2237,7 @@ template :
 <a href="javascript:;"><span style="font-size:1.2rem;">★ </span>收 藏</a>\
 </div>',
 methods : {
-printContent : function () {
+printContent() {
 var printHTML = "<html><head><title></title><style>body{padding:2%};</style></head><body>";
 printHTML += aj('article').innerHTML;
 printHTML += "</body></html>";
@@ -2203,7 +2246,7 @@ document.body.innerHTML = printHTML;
 window.print();
 document.body.innerHTML = oldstr;
 },
-sendMail : function () {
+sendMail() {
 location.href = 'mailto:xxx@tagzine.com?subject= '
 + document.title
 + '&body=\u6211\u5411\u4F60\u63A8\u8350\u8FD9\u6761\u6587\u7AE0\uFF0C\u5E0C\u671B\u4F60\u559C\u6B22\uFF01\u6587\u7AE0\u6807\u9898\uFF1A'
@@ -2213,35 +2256,35 @@ location.href = 'mailto:xxx@tagzine.com?subject= '
 }
 });
 Vue.component('aj-article-body', {
-props : {
-title : { 
+props: {
+title: { 
 type: String,
 required: true
 },
-initCreateDate : String,
-initContent : { 
+initCreateDate: String,
+initContent: { 
 type: String,
 required: false
 },
-isShowTools : { 
+isShowTools: { 
 type: Boolean,
 required: false
 },
-neighbor : { 
+neighbor: { 
 type: Object,
-default : function(){
+default: ()=>{
 return {};
 },
 required: false
 }
 },
-data: function(){
+data(){
 return {
-content : this.initContent,
-createDate : this.initCreateDate
+content: this.initContent,
+createDate: this.initCreateDate
 };
 },
-template : 
+template: 
 '<div class="aj-article-body">\
 <article>\
 <h3>{{title}}</h3>\
@@ -2268,66 +2311,66 @@ template :
 <div class="searchBtn" onclick="this.parentNode.submit();"></div>\
 </form></div>',
 computed : {
-getSiteDomainName : function() {
+getSiteDomainName() {
 return this.$props.siteDomainName || location.host || document.domain;
 }
 }
 });
 Vue.component('aj-chinese-switch', {
 props : {
-jsurl : { 
+jsurl: { 
 type: String,
 required: true
 }
 },
-template : 
+template: 
 '<span>\
 <a href="javascript:;" onclick="toSimpleChinese(this);" class="simpleChinese selected">简体中文</a>\
 /<a href="javascript:;" class="Chinese" onclick="toChinese(this);">正体中文</a>\
 </span>',
-created: function() {
+created() {
 document.body.appendChild(document.createElement('script')).src = this.$props.jsurl;
 }
 });
-Vue.component('aj-simple-tab', {
-template : 
+Vue.component('aj-tab', {
+template: 
 '<div :class="isVertical ? \'aj-simple-tab-vertical\' : \'aj-simple-tab-horizontal\' ">\
-<ul>\
-<li v-for="(item, index) in items" :class="{\'selected\': index === selected}" @click="changeTab(index);">{{item.name}}</li>\
-</ul>\
-<div class="content">\
-<div v-for="(item, index) in items" :class="{\'selected\': index === selected}" v-html="item.content"></div>\
-</div>\
+<button v-for="tab in tabs" v-bind:key="tab.name"\
+v-bind:class="[\'tab-button\', { active: currentTab.name === tab.name }]"\
+v-on:click="currentTab = tab">{{tab.name}}\
+</button>\
+<component v-bind:is="currentTab.component" class="tab"></component>\
 </div>',
 props: {
-isVertical : Boolean, 
-initItems : Array
+isVertical : Boolean 
 },
-data : function() {
+data() {
 return {
-selected : 0,
-items : this.initItems || [
-{name : '杜甫：望岳', content : '岱宗夫如何，齊魯青未了。<br>\
-造化鐘神秀，陰陽割昏曉。<br>\
-蕩胸生層云，決眥入歸鳥，<br>\
-會當凌絕頂，一覽眾山小。'
-},
-{name : '资质证照', content : '之所以如此，端在于中国传统中存在着发达的契约。予谓不信，可看看早年由福建师范大学内部印行的两册本《明清福建经济契约文书选集》，中国社会科学出版社出版的《自贡盐业契约档案选集》，花山文艺出版社出版的共二十册的《徽州千年契约文书》;再看看近些年由安徽师范大学出版社出版的十卷本的《千年徽州契约文书集萃》，广西师范大学出版社出版的四辑共四十册《徽州文书》、三辑共三十册的《清水江文书》，民族出版社出版的多卷本《贵州清水江流域明清契约文书》，凤凰出版社出版的《敦煌契约文书辑校》，天津古籍出版社出版的《清代宁波契约文书辑校》，浙江大学出版社出版的《清代浙东契约文书辑选》……不难发现，中国传统契约文书的整理出版，完全可称为如雨后春笋般在迅速成长!'},
-{name : '资质证照', content : '笔者出于个人兴趣，在关注这些已经整理出版的、卷帙浩繁的契约文献的同时，也游走各地，或亲自搜集各类契约文书，或到一些地方档案馆查看其业已编辑成册、内部印行的传统契约文书，如在台湾宜兰、高雄，山东青岛、威海，贵州锦屏、从江等地档案机构或民间都见到过相关契约文献。记忆尤深的一次，是我和几位学生共游山东浮来山。在一处值班室里，居然发现有人以清代契约文本粘糊墙壁!足见只要我们稍加留意，在这个文明发展历经数千年的国度，不时可以发现一些令人称心的古代契约文献。'}
-]
+tabs: [],
+currentTab: {}
 };
 },
-methods : {
-changeTab : function(index) {
-this.selected = index;
+mounted() {
+var arr = this.$slots.default;
+for(var i = 0; i < arr.length; i++) {
+var el = arr[i];
+if(el.tag === 'textarea') {
+this.tabs.push({
+name : el.data.attrs['data-title'],
+component: {
+template: '<div>' + el.children[0].text + "</div>"
 }
+});
+}
+}
+this.currentTab = this.tabs[0];
 }
 });
 Vue.component('aj-back-top', {
 template : 
 '<a href="###" @click="go">回到顶部</a>',
 methods : {
-go : function() {
+go() {
 this.$timerId && window.clearInterval(this.$timerId);
 var top = speed = 0;
 this.$timerId = window.setInterval(function() {
@@ -2342,7 +2385,7 @@ document.documentElement.scrollTop = document.body.scrollTop = top + speed;
 }
 });
 Vue.component('aj-process-line', {
-template :
+template:
 '<div class="aj-process-line">\
 <div class="process-line">\
 <div v-for="(item, index) in items" :class="{current : index == current, done : index < current}">\
@@ -2350,30 +2393,30 @@ template :
 </div>\
 </div>\
 </div>',
-props : {
-items : {
+props: {
+items: {
 type: Array,
-default : function() { 
+default: function() { 
 return ['Step 1', 'Step 2', 'Step 3']; 
 }
 }
 },
-data : function() {
+data() {
 return {
 current : 0
-}
+};
 },
 methods: {
-go : function(i) {
+go(i) {
 this.current = i;
 },
-perv: function() {
+perv() {
 var perv = this.current - 1;
 if (perv < 0)
 perv = this.items.length - 1;
 this.go(perv); 
 },
-next: function() {
+next() {
 var next = this.current + 1;
 if (this.items.length == next)
 next = 0; 
@@ -2381,47 +2424,47 @@ this.go(next);
 }
 }
 });
-function throttleV2(fn, delay, mustRunDelay) {
+aj.throttleV2 = function(fn, delay, mustRunDelay) {
 var timer = null;
 var t_start;
 return function() {
-var context = this, args = arguments, t_curr = +new Date();
-clearTimeout(timer);
+var t_curr = +new Date();
+window.clearTimeout(timer);
 if(!t_start) 
 t_start = t_curr;
 if(t_curr - t_start >= mustRunDelay) {
-fn.apply(context, args);
+fn.apply(this, arguments);
 t_start = t_curr;
 } else {
-timer = setTimeout(function() {
-fn.apply(context, args);
+var args = arguments;
+timer = window.setTimeout(() => {
+fn.apply(this, args);
 }, delay);
 }
 };
 };
 aj.imageEnlarger = function() {
 var vue = new Vue({
-el : document.body.appendChild(document.createElement('div')),
+el: document.body.appendChild(document.createElement('div')),
 template: 
 '<div class="aj-image-large-view">\
 <div style="position: fixed;max-width:400px;transition: top ease-in 200ms, left ease-in 200ms;">\
 <img :src="imgUrl" style="width: 100%;" />\
 </div></div>',
-data : {
+data: {
 imgUrl: null
 },
-mounted: function(){
-document.addEventListener('mousemove', throttleV2(this.move.bind(this), 50, 5000), false);
+mounted() {
+document.addEventListener('mousemove', aj.throttleV2(this.move.bind(this), 50, 5000), false);
 },
 methods: {
-move: function(e) {
+move(e) {
 if(this.imgUrl) {
 var el = this.$el.$('div');
 var w = 0, imgWidth = this.$el.$('img').clientWidth;
-if(imgWidth > e.pageX) {
+if(imgWidth > e.pageX) 
 w = imgWidth;
-}
-el.style.top = (e.pageY + 20)+ 'px';
+el.style.top = (e.pageY + 20) + 'px';
 el.style.left = (e.pageX - el.clientWidth + w) + 'px';
 }
 }
@@ -2436,11 +2479,11 @@ ajaxjs.tree = function() {
 this.initData();
 };
 ajaxjs.tree.prototype = {
-initData : function() {
+initData() {
 this.stack = [];
 this.tree = {};
 },
-makeTree : function (jsonArray) {
+makeTree(jsonArray) {
 if(!jsonArray)return;
 for (var i = 0, j = jsonArray.length; i < j; i++) {
 var n = jsonArray[i];
@@ -2462,7 +2505,7 @@ parentNode.children.push(obj);
 }
 }
 },
-output : function (map, cb) {
+output(map, cb) {
 this.stack.push(map);
 for (var i in map) {
 map[i].level = this.stack.length;
@@ -2493,7 +2536,7 @@ return null;
 }
 ajaxjs.tree.selectUI = function() {
 ajaxjs.tree.call(this);
-this.renderer = function (json, select, selectedId, cfg) {
+this.renderer = function(json, select, selectedId, cfg) {
 this.makeTree(json);
 if(cfg) {
 if(cfg.makeAllOption) {
@@ -2519,29 +2562,29 @@ select.appendChild(temp);
 ajaxjs.tree.selectUI.prototype = ajaxjs.tree.prototype;
 })();
 Vue.component('aj-select', {
-props : {
-json : {
+props: {
+json: {
 type: Object,
 required: true
 },
-defaultSelected : {	
+defaultSelected: {	
 type: String,
 required: false
 },
-fieldName : { 
+fieldName: { 
 type: String,
 required: true
 }
 },
-data : function() {
+data() {
 return {
 selected : ""
 };
 },
-template : '<select :name="fieldName" @change="onSelected($event);" class="ajaxjs-select" style="min-width: 200px;" v-model="selected">\
+template: '<select :name="fieldName" @change="onSelected($event);" class="ajaxjs-select" style="min-width: 200px;" v-model="selected">\
 <option v-for="(key, v) in json" :value="v">{{key}}</option>\
 </select>',
-created:function(){
+created() {
 if(this.defaultSelected) {
 this.selected = this.defaultSelected;
 } else {
@@ -2552,17 +2595,17 @@ break;
 }
 },
 methods : {
-onSelected : function(e) {
+onSelected(e) {
 },
-getSelected: function(){
+getSelected() {
 console.log(this.selected)
 }
 }
 });
 Vue.component('aj-select-arr', {
-props : {
-url : '',
-fieldName : { 
+props: {
+url: '',
+fieldName: { 
 type: String,
 required: true
 },
@@ -2575,26 +2618,25 @@ type: String,
 default: "0"
 }
 },
-data : function() {
+data() {
 return {
 json : {}
 };
 },
-template:'<aj-select :json="json" :field-name="fieldName" :default-selected="defaultSelected"></aj-select>',
-mounted : function(){
-var self = this; 
-aj.xhr.get(this.ajResources.ctx + this.url, function(arr) {
-var json = {0: self.firstOption};
+template: '<aj-select :json="json" :field-name="fieldName" :default-selected="defaultSelected"></aj-select>',
+mounted() {
+aj.xhr.get(this.ajResources.ctx + this.url, arr => {
+var json = {0: this.firstOption};
 for (var i = 0, j = arr.length; i < j; i++) { 
 json[arr[i].id] = arr[i].name;
 }
-self.json = json;
+this.json = json;
 });
 }
 });
 Vue.component('aj-tree-catelog-select', {
-props : {
-catalogId : { 
+props: {
+catalogId: { 
 type: Number,
 required: true
 },
@@ -2602,24 +2644,24 @@ selectedCatalogId : {
 type: Number,
 required: false
 },
-fieldName : { 
+fieldName: { 
 type: String,
 required: false,
 default:'catalogId'
 },
-isAutoJump : Boolean 
+isAutoJump: Boolean 
 },
-template : '<select :name="fieldName" @change="onSelected($event);" class="aj-tree-catelog-select ajaxjs-select" style="width: 200px;"></select>',
-mounted : function() {
+template: '<select :name="fieldName" @change="onSelected($event);" class="aj-tree-catelog-select ajaxjs-select" style="width: 200px;"></select>',
+mounted() {
 aj.xhr.get(this.ajResources.ctx + "/admin/catelog/getListAndSubByParentId", this.load.bind(this), {parentId : this.catalogId});
 },
 methods : {
-load : function(json) {
+load(json) {
 var catalogArr = json.result;
 var selectUI = new ajaxjs.tree.selectUI();
 selectUI.renderer(catalogArr, this.$el, this.selectedCatalogId, {makeAllOption : false});
 },
-onSelected : function(e) {
+onSelected(e) {
 if(this.isAutoJump) {
 var el = e.target, catalogId = el.selectedOptions[0].value;
 location.assign('?' + this.fieldName + '=' + catalogId);
@@ -2630,20 +2672,29 @@ this.BUS.$emit('aj-tree-catelog-select-change', e, this);
 }
 });
 Vue.component('aj-tree-user-role-select', {
-props : {
-value : { 
+props: {
+value: { 
 type: Number,
-required: true
+required: false
 },
-json:Array
+json: Array,
+noJump: {	
+type: Boolean,
+required: false,
+defualt: false
+}
 },
-template : '<select name="roleId" class="ajaxjs-select"></select>',
-mounted () {
+template: '<select name="roleId" class="ajaxjs-select"></select>',
+mounted() {
 new ajaxjs.tree.selectUI().renderer(this.json, this.$el, this.value, {makeAllOption : false});
+if(!this.noJump)
+this.$el.onchange = () => {
+location.assign("?roleId=" + this.$el.options[this.$el.selectedIndex].value);
+}	
 }
 });
 Vue.component('aj-china-area', {
-template : '<div class="aj-china-area"><span>省份</span> <select v-model="province" class="ajaxjs-select" name="locationProvince">\
+template: '<div class="aj-china-area"><span>省份</span> <select v-model="province" class="ajaxjs-select" name="locationProvince">\
 <option value="">请选择</option>\
 <option v-for="(v, k) in addressData[86]" :value="k">{{v}}</option>\
 </select>\
@@ -2656,8 +2707,8 @@ template : '<div class="aj-china-area"><span>省份</span> <select v-model="prov
 <option v-for="(v, k) in districts" :value="k">{{v}}</option>\
 </select>\
 </div>',
-props:{
-provinceCode:String,
+props: {
+provinceCode: String,
 cityCode: String,
 districtCode: String
 },
@@ -2671,10 +2722,10 @@ addressData: China_AREA
 }
 },
 watch:{ 
-province: function(val, oldval) {
+province(val, oldval) {
 },
 },
-computed : {
+computed: {
 citys() {
 if(!this.province)
 return;
@@ -2707,34 +2758,33 @@ default:false
 },
 eventBus: Object
 },
-data: function () {
+data() {
 return {
 open: false
 };
 },
 computed: {
-isFolder: function () {
+isFolder() {
 return this.model.children && this.model.children.length;
 }
 },
 methods: {
-toggle: function () {
+toggle() {
 if (this.isFolder)
 this.open = !this.open;
-if(this.eventBus) {
+if(this.eventBus) 
 this.eventBus.$emit('treenodeclick', this.model);
-}
 },
-fireEvent(){
+fireEvent() {
 },
-changeType: function () {
+changeType() {
 if (!this.isFolder) {
 Vue.set(this.model, 'children', []);
 this.addChild();
 this.open = true;
 }
 },
-addChild: function () {
+addChild() {
 this.model.children.push({
 name: 'new stuff'
 });
@@ -2742,18 +2792,18 @@ name: 'new stuff'
 }
 });
 Vue.component('aj-tree', {
-template : '<ul class="aj-tree"><aj-tree-item :model="treeData" :event-bus="this.eventBus"></aj-tree-item></ul>',
+template: '<ul class="aj-tree"><aj-tree-item :model="treeData" :event-bus="this.eventBus"></aj-tree-item></ul>',
 props: {
 url: String, 
 topNodeName : String 
 },
-data: function() {
+data() {
 return {
 treeData: { name : this.topNodeName || 'TOP', children : null },
 eventBus: new Vue()
 };
 },
-mounted : function() {
+mounted() {
 aj.xhr.get(this.ajResources.ctx + this.url, 
 json => 
 this.treeData.children = this.makeTree(json.result)
@@ -2803,7 +2853,7 @@ this.$emit('treenodeclick', data);
 
 
 Vue.component('ajaxjs-file-upload', {
-data : function() {
+data() {
 return {
 isFileSize : false,	
 isExtName : false,	
@@ -2811,24 +2861,24 @@ errMsg : null,
 newlyId : null	
 };
 },
-props : {
+props: {
 fieldName : {
 type: String,
 required: false
 },
-filedId : {
+filedId: {
 type: Number,
 required: false
 },
-limitSize : Number,
+limitSize: Number,
 limitFileType: String,
-labelId : {
-type : String,
-required : false,
-default : 'input_file_molding'
+labelId: {
+type: String,
+required: false,
+default: 'input_file_molding'
 }
 },
-template : 
+template: 
 '<div class="ajaxjs-file-upload">\
 <div class="pseudoFilePicker">\
 <input type="hidden" v-if="fieldName" :name="fieldName" :value="newlyId || filedId" :id="labelId" />\
@@ -2839,8 +2889,8 @@ template :
 <button @click.prevent="doUpload($event);">上传</button>\
 </div>\
 </div>',
-methods : {
-onUploadInputChange : function(e) {
+methods: {
+onUploadInputChange(e) {
 var fileInput = e.target;
 var ext = fileInput.value.split('.').pop(); 
 var size = fileInput.files[0].size;
@@ -2853,7 +2903,7 @@ this.isExtName = new RegExp(this.limitFileType, 'i').test(ext);
 else
 this.isExtName = true;
 },
-doUpload : function(e) {
+doUpload(e) {
 var form = this.$parent.$refs.uploadIframe && this.$parent.$refs.uploadIframe.$el;
 if(!form) {
 form = this.$parent.$el.$('form');
@@ -2865,7 +2915,7 @@ return false;
 }
 });
 Vue.component('ajaxjs-img-upload-perview', {
-data : function() {
+data() {
 return {
 imgBase64Str : null, 
 isFileSize : false,	
@@ -2898,13 +2948,13 @@ maxHeight:1680
 };
 }
 },
-labelId : {
-type : String,
+labelId: {
+type: String,
 required : false,
 default : 'input_file_molding'
 }
 },
-template : 
+template: 
 '<div class="ajaxjs-img-upload-perview">\
 <div>\
 <img class="upload_img_perview" :src="(isFileSize && isExtName && isImgSize && isFileTypeCheck && imgBase64Str) ? imgBase64Str : imgPlace" />\
@@ -2918,10 +2968,10 @@ template :
 <button @click.prevent="doUpload($event);" style="padding: .4em 1.3em; width: 80px;">上传</button>\
 </div>\
 </div>',
-created (){
+created() {
 this.BUS.$on('upload-file-selected', this.onUploadInputChange);
 },
-methods : (function () {
+methods: (function () {
 var imgHeader = {
 "jpeg" : "/9j/4",
 "gif" : "R0lGOD",
@@ -2972,7 +3022,7 @@ cfg.isImgSize = true;
 }
 imgEl.src = imgBase64Str;
 cfg.isFileTypeCheck = false;
-for ( var i in imgHeader) {
+for(var i in imgHeader) {
 if (~imgBase64Str.indexOf(imgHeader[i])){
 cfg.isFileTypeCheck = true;
 return;
@@ -3181,7 +3231,7 @@ cfg.isImgSize = true;
 }
 }
 },
-readBase64 (file) {
+readBase64(file) {
 var reader = new FileReader(), self = this;
 reader.onload = function(e) {
 var imgBase64Str = e.target.result;

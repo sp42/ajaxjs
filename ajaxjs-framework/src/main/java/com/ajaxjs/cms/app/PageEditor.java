@@ -186,4 +186,5 @@ public class PageEditor extends BaseController<Object> {
 	public IBaseService<Object> getService() {
 		return null;
 	}
+
 }

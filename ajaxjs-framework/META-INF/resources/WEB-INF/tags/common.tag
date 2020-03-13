@@ -13,7 +13,7 @@
 		
 		if (request.getAttribute("requestTimeRecorder") != null) {
 			long requestTimeRecorder = (long) request.getAttribute("requestTimeRecorder");
-			long end = System.currentTimeMillis() - requestTimeRecorder;
+			long end = System.nanoTime() - requestTimeRecorder;
 			float _end = (float) end;
 			request.setAttribute("requestTimeRecorder", _end / 1000);
 		}

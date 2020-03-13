@@ -230,6 +230,7 @@ public class SiteStruTag extends SimpleTagSupport {
 					StringBuilder subMenu = new StringBuilder();
 					@SuppressWarnings("unchecked")
 					List<Map<String, Object>> menu = (List<Map<String, Object>>) item.get(ListMap.CHILDREN);
+					
 					if (!CommonUtil.isNull(menu))
 						for (Map<String, Object> m : menu) {
 							String _url = ctx + m.get("fullPath").toString();
