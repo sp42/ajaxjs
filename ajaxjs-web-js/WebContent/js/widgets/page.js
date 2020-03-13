@@ -295,18 +295,19 @@ aj.throttleV2 = function(fn, delay, mustRunDelay) {
  	var t_start;
  	
  	return function() {
- 		var context = this, args = arguments, t_curr = +new Date();
- 		clearTimeout(timer);
+ 		var t_curr = +new Date();
+ 		window.clearTimeout(timer);
  		
  		if(!t_start) 
  			t_start = t_curr;
  		
  		if(t_curr - t_start >= mustRunDelay) {
- 			fn.apply(context, args);
+ 			fn.apply(this, arguments);
  			t_start = t_curr;
  		} else {
- 			timer = setTimeout(()=>{
- 				fn.apply(context, args);
+ 			var args = arguments;
+ 			timer = window.setTimeout(() => {
+ 				fn.apply(this, args);
  			}, delay);
  		}
  	};
