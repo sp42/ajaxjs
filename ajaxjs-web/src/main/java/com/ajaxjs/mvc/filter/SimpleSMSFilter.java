@@ -37,9 +37,8 @@ public class SimpleSMSFilter extends SessionValueFilter {
 		if (client.equals(server)) {
 			request.getSession().removeAttribute(SMS_KEY_NAME);
 			return true;
-		} else {
+		} else
 			throw new IllegalAccessError("手机验证码不通过");
-		}
 	}
 
 	@Override

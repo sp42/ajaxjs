@@ -102,9 +102,9 @@ public class Foreach extends SimpleTagSupport {
 			context.setAttribute(var, value); // 每遍历出数据后写出
 			context.setAttribute("currentIndex", i++); // 每遍历出数据后写出:当前循环次数
 			JspFragment f = getJspBody();
+
 			if (f != null)
 				f.invoke(null);
 		}
-
 	}
 }

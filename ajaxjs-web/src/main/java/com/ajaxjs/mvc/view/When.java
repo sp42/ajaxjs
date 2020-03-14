@@ -43,6 +43,7 @@ public class When extends SimpleTagSupport {
 	@Override
 	public void doTag() throws JspException, IOException {
 		Choose parent = (Choose) getParent(); // 获得父类标签对象
+		
 		if (test && !parent.isExecute()) { // 判断父类为 false 那么自身为 true 才输出
 			getJspBody().invoke(null);
 			parent.setExecute(true); // 把父类设置为true

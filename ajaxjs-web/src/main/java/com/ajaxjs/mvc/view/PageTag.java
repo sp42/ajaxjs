@@ -50,8 +50,8 @@ public class PageTag extends SimpleTagSupport {
 	 * 对某段 URL 参数剔除其中的一个。
 	 * 
 	 * @param withoutParam 不需要的那个参数
-	 * @param queryString 通常由 request.getQueryString() 或
-	 * ${pageContext.request.queryString} 返回的 url 参数
+	 * @param queryString  通常由 request.getQueryString() 或
+	 *                     ${pageContext.request.queryString} 返回的 url 参数
 	 * @return 特定的 url 参数
 	 */
 	public static String getParams_without(String withoutParam, String queryString) {
@@ -71,8 +71,8 @@ public class PageTag extends SimpleTagSupport {
 	 * 对某段 URL 参数剔除其中的一个。但是返回 map。
 	 * 
 	 * @param withoutParam 不需要的那个参数
-	 * @param queryString 通常由 request.getQueryString() 或
-	 * ${pageContext.request.queryString} 返回的 url 参数
+	 * @param queryString  通常由 request.getQueryString() 或
+	 *                     ${pageContext.request.queryString} 返回的 url 参数
 	 * @return 已处理过的 Map
 	 */
 	public static Map<String, Object> getParams_without_asMap(String withoutParam, String queryString) {
@@ -113,13 +113,13 @@ public class PageTag extends SimpleTagSupport {
 			}
 
 			String aa;
-			if (name.equals("start")) {
+
+			if (name.equals("start"))
 				continue;
-			} else if (values.length == 1) {
+			else if (values.length == 1)
 				aa = String.join(name + "=", values);
-			} else {
+			else
 				aa = name + "=" + String.join("&" + name + "=", values);
-			}
 
 			list.add(aa);
 		}
