@@ -31,11 +31,11 @@ public class QueryTools {
 	public static String orderById_DESC(String sql) {
 		return sql + IBaseDao.DESCENDING_ID;
 	}
-	
+
 	/**
 	 * 设置排序
 	 * 
-	 * @param o 排序规则 
+	 * @param o 排序规则
 	 * @return SQL 处理器
 	 */
 	public static Function<String, String> orderBy(String o) {

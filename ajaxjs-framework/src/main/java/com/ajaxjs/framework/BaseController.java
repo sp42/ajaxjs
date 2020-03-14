@@ -25,9 +25,9 @@ import com.ajaxjs.web.UploadFileInfo;
 /**
  * 通用控制器
  * 
- * @author Administrator
+ * @author sp42 frank@ajaxjs.com
  *
- * @param <T>
+ * @param <T> 实体类型，可以为 Map 或 Java Bean
  */
 public abstract class BaseController<T> implements IController, Constant {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseController.class);

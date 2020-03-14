@@ -10,7 +10,6 @@ public class DefaultSendEmail implements SendEmail {
 
 	@Override
 	public boolean sendMail(Mail mail) {
-
 		mail.setMailServer("smtp.163.com");
 		mail.setAccount("pacoweb");
 		mail.setFrom("pacoweb@163.com");

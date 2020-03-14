@@ -10,7 +10,7 @@ import com.ajaxjs.mvc.controller.IController;
 /**
  * 后台界面
  * 
- * @author Administrator
+ * @author sp42 frank@ajaxjs.com
  *
  */
 @Path("/admin")

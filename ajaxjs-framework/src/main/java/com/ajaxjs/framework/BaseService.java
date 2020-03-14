@@ -16,7 +16,7 @@ import com.ajaxjs.util.CommonUtil;
  * 
  * @author sp42 frank@ajaxjs.com
  *
- * @param <T> 实体
+ * @param <T> 实体类型，可以为 Map 或 Java Bean
  */
 public abstract class BaseService<T> extends QueryTools implements IBaseService<T> {
 	@Override
