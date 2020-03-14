@@ -39,24 +39,20 @@ aj.img = (function() {
 		/**
 		 * 改变blob图片的质量，为考虑兼容性
 		 * 
-		 * @param blob
-		 *            图片对象
-		 * @param callback
-		 *            转换成功回调，接收一个新的blob对象作为参数
-		 * @param format
-		 *            目标格式，mime格式
-		 * @param quality
-		 *            介于0-1之间的数字，用于控制输出图片质量，仅当格式为jpg和webp时才支持质量，png时quality参数无效
+		 * @param blob 图片对象
+		 * @param callback 转换成功回调，接收一个新的blob对象作为参数
+		 * @param format  目标格式，mime格式
+		 * @param quality 介于0-1之间的数字，用于控制输出图片质量，仅当格式为jpg和webp时才支持质量，png时quality参数无效
 		 */
 		changeBlobImageQuality (blob, callback, format, quality) {
 			format = format || 'image/jpeg';
 			quality = quality || 0.9; // 经测试0.9最合适
 			var fr = new FileReader();
 			
-			fr.onload = function(e) {
+			fr.onload = (e) => {
 				var dataURL = e.target.result;
 				var img = new Image();
-				img.onload = function() {
+				img.onload = () => {
 					var canvas = document.createElement('canvas');
 					var ctx = canvas.getContext('2d');
 					canvas.width = img.width;
