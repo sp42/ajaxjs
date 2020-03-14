@@ -26,7 +26,7 @@ import com.ajaxjs.util.cryptography.SymmetricCipher;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
- * 简单的接口合法性校验，基于 AES 
+ * 简单的接口合法性校验，基于 AES
  * 
  * @author sp42 frank@ajaxjs.com
  *
@@ -45,7 +45,7 @@ public class AesFilter implements FilterAction {
 	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args) {
 		String errMsg = null;
 		String p = request.getParameter(requestQueryStringParamterName);
-		
+
 		if (CommonUtil.isEmptyString(p)) {
 			errMsg = "缺少参数 " + requestQueryStringParamterName;
 			LOGGER.info(errMsg);
@@ -76,30 +76,25 @@ public class AesFilter implements FilterAction {
 
 	@Override
 	public void after(ModelAndView model, MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
-		if (request.getAttribute("errMsg") != null) {
+		if (request.getAttribute("errMsg") != null)
 			response.resultHandler("redirect::", request, null, method);
-		}
 	}
 
 	/**
 	 * 创建时间戳 Token
 	 * 
-	 * @param aesKey
-	 *            AES 密钥
+	 * @param aesKey AES 密钥
 	 * @return 时间戳 Token
 	 */
 	public static String getTimeStampToken(String aesKey) {
-		long timeStamp = System.currentTimeMillis();
-		return SymmetricCipher.AES_Encrypt(timeStamp + "", aesKey);
+		return SymmetricCipher.AES_Encrypt(System.currentTimeMillis() + "", aesKey);
 	}
 
 	/**
 	 * 从加密的 Token 中还原时间戳
 	 * 
-	 * @param token
-	 *            时间戳 Token
-	 * @param aesKey
-	 *            AES 密钥
+	 * @param token  时间戳 Token
+	 * @param aesKey AES 密钥
 	 * @return 返回 null 表示解密失败！
 	 */
 	public static Date decryptTimeStampToken(String token, String aesKey) {

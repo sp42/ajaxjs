@@ -62,7 +62,7 @@ public class SiteStruTag extends SimpleTagSupport {
 			output = buildBreadCrumb(sitestru, request);
 			break;
 		default:
-			output +=  type;
+			output += type;
 		}
 
 		pageContext.getOut().write(output);
@@ -143,8 +143,7 @@ public class SiteStruTag extends SimpleTagSupport {
 		}
 	}
 
-	private static String buildSubMenu(String showNavSubMenuUl, String showNavSubMenuLi, Map<String, Object> item,
-			String ctx) {
+	private static String buildSubMenu(String showNavSubMenuUl, String showNavSubMenuLi, Map<String, Object> item, String ctx) {
 		StringBuilder sb = new StringBuilder();
 		@SuppressWarnings("unchecked")
 		List<Map<String, Object>> menu = (List<Map<String, Object>>) item.get(ListMap.CHILDREN);
@@ -230,7 +229,7 @@ public class SiteStruTag extends SimpleTagSupport {
 					StringBuilder subMenu = new StringBuilder();
 					@SuppressWarnings("unchecked")
 					List<Map<String, Object>> menu = (List<Map<String, Object>>) item.get(ListMap.CHILDREN);
-					
+
 					if (!CommonUtil.isNull(menu))
 						for (Map<String, Object> m : menu) {
 							String _url = ctx + m.get("fullPath").toString();
@@ -273,7 +272,7 @@ public class SiteStruTag extends SimpleTagSupport {
 
 				for (String _super : supers) {
 					String[] arr = _super.split(":");
-					if(!CommonUtil.isNull(arr) && arr.length >= 2)
+					if (!CommonUtil.isNull(arr) && arr.length >= 2)
 						sb.append(String.format(tpl, ctx + arr[0], arr[1]));
 				}
 			}
