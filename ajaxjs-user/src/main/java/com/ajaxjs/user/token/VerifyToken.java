@@ -20,7 +20,7 @@ import com.ajaxjs.util.Encode;
 /**
  * 可验证的 Token，用于忘记密码、验证邮箱
  * 
- * @author Administrator
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class VerifyToken extends BaseService<Map<String, Object>> {

@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * 用户字典，常量
  * 
- * @author Administrator
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public interface UserDict {

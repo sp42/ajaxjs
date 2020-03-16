@@ -5,7 +5,7 @@ import com.ajaxjs.framework.BaseModel;
 /**
  * 第三方登录服务
  * 
- * @author Administrator
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class UserOauth extends BaseModel {

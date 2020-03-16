@@ -38,7 +38,7 @@ import com.ajaxjs.web.UploadFileInfo;;
 /**
  * 用户中心（前端的）
  * 
- * @author Administrator
+ * @author sp42 frank@ajaxjs.com
  *
  */
 @Path("/user/user-center")

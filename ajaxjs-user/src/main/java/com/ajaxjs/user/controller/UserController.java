@@ -15,7 +15,7 @@ import com.ajaxjs.user.service.UserService;
 /**
  * 用户总的控制器
  * 
- * @author Administrator
+ * @author sp42 frank@ajaxjs.com
  *
  */
 @Path("/user")

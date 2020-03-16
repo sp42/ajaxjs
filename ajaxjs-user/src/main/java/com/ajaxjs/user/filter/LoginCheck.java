@@ -6,6 +6,7 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.FilterAction;
+import com.ajaxjs.mvc.filter.FilterAfterArgs;
 import com.ajaxjs.user.controller.BaseUserController;
 
 /**
@@ -26,7 +27,7 @@ public class LoginCheck implements FilterAction {
 	}
 
 	@Override
-	public void after(ModelAndView model, MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
-		
+	public boolean after(FilterAfterArgs args) {
+		return true;
 	}
 }

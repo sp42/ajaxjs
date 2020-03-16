@@ -58,4 +58,5 @@ public class GlobalLogController extends BaseController<Map<String, Object>> {
 	public IBaseService<Map<String, Object>> getService() {
 		return service;
 	}
+
 }

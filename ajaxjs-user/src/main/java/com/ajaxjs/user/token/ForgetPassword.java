@@ -15,7 +15,7 @@ import com.ajaxjs.user.service.UserService;
 /**
  * 忘记密码
  * 
- * @author Administrator
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class ForgetPassword extends VerifyToken {

@@ -22,6 +22,7 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.FilterAction;
+import com.ajaxjs.mvc.filter.FilterAfterArgs;
 import com.ajaxjs.user.controller.BaseUserController;
 import com.ajaxjs.user.login.LoginService;
 import com.ajaxjs.user.model.UserCommonAuth;
@@ -46,10 +47,10 @@ public class UserPasswordFilter implements FilterAction {
 		} catch (ServiceException e) {
 			throw new IllegalAccessError("用户名或密码错误");
 		}
-
 	}
 
 	@Override
-	public void after(ModelAndView model, MvcRequest request, MvcOutput response, Method method, boolean isSkip) {
+	public boolean after(FilterAfterArgs args) {
+		return true;
 	}
 }

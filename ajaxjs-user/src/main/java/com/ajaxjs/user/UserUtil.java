@@ -13,7 +13,7 @@ import com.ajaxjs.util.CommonUtil;
 /**
  * 用户工具类
  * 
- * @author Administrator
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class UserUtil {
