@@ -16,6 +16,8 @@
 package com.ajaxjs.mvc.filter;
 
 import java.lang.reflect.Method;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import com.ajaxjs.Version;
 import com.ajaxjs.config.ConfigService;
@@ -23,14 +25,18 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.orm.JdbcConnection;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
- * 数据库连接、关闭连接
+ * 1、数据库连接、关闭连接；2、数据库事务
+ * 
+ * https://docs.oracle.com/javase/tutorial/jdbc/basics/transactions.html
  * 
  * @author sp42 frank@ajaxjs.com
  *
  */
-public class DataBaseFilter implements FilterAction {
+public class DataBaseFilter extends JdbcConnection implements FilterAction {
+	private static final LogHelper LOGGER = LogHelper.getLog(DataBaseFilter.class);
 	/**
 	 * 为方便单测，设一个开关
 	 */
@@ -40,14 +46,34 @@ public class DataBaseFilter implements FilterAction {
 	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args) {
 		initDb();
 
+		if (method.getAnnotation(EnableTransaction.class) != null) {
+			try {
+				getConnection().setAutoCommit(false);
+			} catch (SQLException e) {
+				LOGGER.warning(e);
+			}
+		}
+
 		return true;
 	}
 
 	@Override
 	public boolean after(FilterAfterArgs args) {
-		if (isAutoClose)
-			closeDb();
-		
+		try {
+			if (args.method.getAnnotation(EnableTransaction.class) != null) {
+				doTransaction(args);
+			}
+
+			if (args.method.getAnnotation(SqlAuditing.class) != null) {
+				saveSql();
+			}
+		} catch (Throwable e) {
+			throw new RuntimeException(e.getMessage());
+		} finally {
+			if (isAutoClose) // 保证一定关闭，哪怕有异常
+				closeDb();
+		}
+
 		return true;
 	}
 
@@ -63,13 +89,31 @@ public class DataBaseFilter implements FilterAction {
 		if (!Version.isDebug)
 			config += "_deploy"; // 约定生产环境后面加上 _deploy
 
-		JdbcConnection.initDbByJNDI(config);
+		initDbByJNDI(config);
 	}
 
-	/**
-	 * 关闭数据库连接
-	 */
-	public static void closeDb() {
-		JdbcConnection.closeDb();
+	private static void doTransaction(FilterAfterArgs argsHolder) throws SQLException {
+		LOGGER.info("正在提交事务中……");
+		Connection conn = getConnection();
+
+		if (conn.isClosed())
+			throw new SQLException("数据库连接已经关闭");
+
+		if (conn.getAutoCommit())
+			throw new SQLException("数据库连接没有关闭自动提交事务");
+
+		if (argsHolder.isbeforeSkip || argsHolder.err != null)
+			conn.rollback();
+		else
+			conn.commit();
+
+		conn.setAutoCommit(true);
 	}
+	
+	private static void saveSql() {
+		for (String sql : getSqls()) {
+			System.out.println(sql);
+		}
+	}
+	
 }
