@@ -22,6 +22,7 @@ import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
+import com.ajaxjs.mvc.filter.XslMaker;
 import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.model.OrderItem;
 import com.ajaxjs.shop.model.Seller;
@@ -39,19 +40,18 @@ public class OrderItemController extends BaseController<OrderItem> {
 
 	@GET
 	@Path(list)
-	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv, HttpServletRequest r, HttpServletResponse response) {
+	@MvcFilter(filters = { DataBaseFilter.class, XslMaker.class })
+	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv,
+			HttpServletRequest r, HttpServletResponse response) {
 		HttpSession session = r.getSession();
 		long p = (long) session.getAttribute("privilegeTotal");
 		long sellerId = session.getAttribute("sellerId") == null ? 0 : (long) session.getAttribute("sellerId");
-		
+
 		page(mv, service.findPagedList(start, limit, p, sellerId));
 
-		if (r.getParameter("downloadXSL") != null) {
-			return adminList_Excel(response, service.getUiName());
-		} else {
-			return jsp("shop/order-item-admin-list");
-		}
+		mv.put(XslMaker.XSL_TEMPLATE_PATH, service.getUiName());
+
+		return jsp("shop/order-item-admin-list");
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class OrderItemController extends BaseController<OrderItem> {
 		// 商家数据，记录不多，可以这样做
 		Map<Long, Seller> map = new HashMap<>();
 		SellerController.SellerService.dao.findList(null).forEach(seller -> map.put(seller.getId(), seller));
-		
+
 		mv.put("sellers", map);
 		mv.put("TradeStatusDict", ShopConstant.TradeStatus);
 		mv.put("PayTypeDict", ShopConstant.PayType);

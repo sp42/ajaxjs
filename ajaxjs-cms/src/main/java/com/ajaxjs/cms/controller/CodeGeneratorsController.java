@@ -31,7 +31,7 @@ import com.ajaxjs.util.logger.LogHelper;
 @Path("/admin/CodeGenerators")
 public class CodeGeneratorsController implements IController {
 	private static final LogHelper LOGGER = LogHelper.getLog(CodeGeneratorsController.class);
-	
+
 	static private String saveFolder = "C:\\temp";
 	static private String packageName = "com.ajaxjs.user.role";
 	static private String dbUrl = "jdbc:mysql://115.28.242.232/zyjf";
@@ -52,8 +52,10 @@ public class CodeGeneratorsController implements IController {
 		if (request.getParameter("dbPassword") != null)
 			dbPassword = request.getParameter("dbPassword");
 
-		String pojoSave = saveFolder + "\\model\\%s.java", daoSave = saveFolder + "\\dao\\%s.java", serviceSave = saveFolder + "\\service\\%s.java", controllerSave = saveFolder + "\\controller\\%s.java";
-		Utils.mkdir(new String[] { saveFolder + "\\model", saveFolder + "\\dao", saveFolder + "\\service", saveFolder + "\\controller" });
+		String pojoSave = saveFolder + "\\model\\%s.java", daoSave = saveFolder + "\\dao\\%s.java",
+				serviceSave = saveFolder + "\\service\\%s.java", controllerSave = saveFolder + "\\controller\\%s.java";
+		Utils.mkdir(new String[] { saveFolder + "\\model", saveFolder + "\\dao", saveFolder + "\\service",
+				saveFolder + "\\controller" });
 
 		ServletContext sc = request.getServletContext();
 		request.setAttribute("packageName", packageName);
@@ -65,8 +67,10 @@ public class CodeGeneratorsController implements IController {
 
 		if (request.getParameter("getTable") != null) {
 			String tableName = request.getParameter("getTable");
-			List<Map<String, String>> columnComments = DataBaseShowStruController.getColumnCommentByTableName(conn, tableName);
-			String beanName = request.getParameter("beanName") == null ? Utils.firstLetterUpper(tableName) : request.getParameter("beanName"),
+			List<Map<String, String>> columnComments = DataBaseShowStruController.getColumnCommentByTableName(conn,
+					tableName);
+			String beanName = request.getParameter("beanName") == null ? Utils.firstLetterUpper(tableName)
+					: request.getParameter("beanName"),
 					tablesComment = DataBaseShowStruController.getCommentByTableName(conn, tableName);
 
 			request.setAttribute("fields", columnComments);
@@ -83,7 +87,8 @@ public class CodeGeneratorsController implements IController {
 			for (String tableName : tables) {
 				String beanName = Utils.firstLetterUpper(tableName);
 				Map<String, String> tablesComment = DataBaseShowStruController.getCommentByTableName(conn, tables);
-				Map<String, List<Map<String, String>>> infos = DataBaseShowStruController.getColumnCommentByTableName(conn, tables);
+				Map<String, List<Map<String, String>>> infos = DataBaseShowStruController
+						.getColumnCommentByTableName(conn, tables);
 
 				request.setAttribute("fields", infos.get(tableName));
 				request.setAttribute("tableName", tableName);
@@ -119,9 +124,11 @@ public class CodeGeneratorsController implements IController {
 	 * @param sc
 	 * @throws FileNotFoundException
 	 */
-	static void render(boolean isMap, String pojoSave, String daoSave, String serviceSave, String controllerSave, String beanName, HttpServletRequest request, HttpServletResponse response, ServletContext sc)
+	static void render(boolean isMap, String pojoSave, String daoSave, String serviceSave, String controllerSave,
+			String beanName, HttpServletRequest request, HttpServletResponse response, ServletContext sc)
 			throws FileNotFoundException {
-		String dao = tplSave + "/dao.jsp", service = tplSave + "/service.jsp", serviceImp = tplSave + "/serviceImpl.jsp", controller = tplSave + "/controller.jsp";
+		String dao = tplSave + "/dao.jsp", service = tplSave + "/service.jsp",
+				serviceImp = tplSave + "/serviceImpl.jsp", controller = tplSave + "/controller.jsp";
 
 		if (!isMap)
 			render(tplSave + "/pojo.jsp", String.format(pojoSave, beanName), sc, request, response);
@@ -146,7 +153,7 @@ public class CodeGeneratorsController implements IController {
 	 *
 	 */
 	static class sO extends ServletOutputStream {
-		ByteArrayOutputStream os;
+		private ByteArrayOutputStream os;
 
 		public sO(ByteArrayOutputStream os) {
 			this.os = os;
@@ -174,21 +181,20 @@ public class CodeGeneratorsController implements IController {
 
 	/**
 	 * 
-	 * @param url 请求页面地址，如 /sqlDoc.jsp
-	 * @param save 保存地址，如 c:\\sp42\\d.htm
+	 * @param url      请求页面地址，如 /sqlDoc.jsp
+	 * @param save     保存地址，如 c:\\sp42\\d.htm
 	 * @param sc
 	 * @param request
 	 * @param response
 	 */
-	private static void render(String url, String save, ServletContext sc, HttpServletRequest request, HttpServletResponse response) {
+	private static void render(String url, String save, ServletContext sc, HttpServletRequest request,
+			HttpServletResponse response) {
 		RequestDispatcher rd = sc.getRequestDispatcher(url);
 
-		try (
-			ByteArrayOutputStream os = new ByteArrayOutputStream(); 
-			ServletOutputStream stream = new sO(os);
-			PrintWriter pw = new PrintWriter(new OutputStreamWriter(os, "UTF-8"));
-			OutputStream fos = new FileOutputStream(save);
-		){
+		try (ByteArrayOutputStream os = new ByteArrayOutputStream();
+				ServletOutputStream stream = new sO(os);
+				PrintWriter pw = new PrintWriter(new OutputStreamWriter(os, "UTF-8"));
+				OutputStream out = new FileOutputStream(save);) {
 			HttpServletResponse rep = new HttpServletResponseWrapper(response) {
 				@Override
 				public ServletOutputStream getOutputStream() {
@@ -205,7 +211,7 @@ public class CodeGeneratorsController implements IController {
 			rd.include(request, rep);
 			pw.flush();
 
-			os.writeTo(fos);
+			os.writeTo(out);
 		} catch (IOException | ServletException e) {
 			LOGGER.warning(e);
 		}
