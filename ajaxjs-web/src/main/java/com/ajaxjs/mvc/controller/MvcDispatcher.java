@@ -37,6 +37,7 @@ import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.Authority;
 import com.ajaxjs.mvc.filter.FilterAction;
+import com.ajaxjs.mvc.filter.FilterAfterArgs;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
@@ -93,7 +94,8 @@ public class MvcDispatcher implements Filter {
 	 * js/css 等静态文件有后缀，这样的话我们需要区分对待。
 	 */
 	@Override
-	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
+			throws IOException, ServletException {
 		HttpServletRequest _request = (HttpServletRequest) req;
 		HttpServletResponse _response = (HttpServletResponse) resp;
 
@@ -102,7 +104,7 @@ public class MvcDispatcher implements Filter {
 			return;
 		}
 
-		_request.setAttribute("requestTimeRecorder", System.nanoTime()); // 每次 servlet 都会执行的。记录时间
+		_request.setAttribute("requestTimeRecorder", System.currentTimeMillis()); // 每次 servlet 都会执行的。记录时间
 
 		MvcRequest request = new MvcRequest(_request);
 		MvcOutput response = new MvcOutput(_response);
@@ -148,7 +150,7 @@ public class MvcDispatcher implements Filter {
 		ModelAndView model = null;
 
 		FilterAction[] filterActions = getFilterActions(method);
-		boolean isDoFilter = !CommonUtil.isNull(filterActions), isSkip = false; // 是否中止控制器方法调用，由拦截器决定
+		boolean isDoFilter = !CommonUtil.isNull(filterActions), isbeforeSkip = false; // 是否中止控制器方法调用，由拦截器决定
 		Object[] args = null;// 方法没有参数
 		boolean hasArgs = method.getParameterTypes().length > 0;
 
@@ -161,13 +163,13 @@ public class MvcDispatcher implements Filter {
 
 			if (isDoFilter) {
 				for (FilterAction filterAction : filterActions) {
-					isSkip = !filterAction.before(model, request, response, method, args); // 相当于 AOP 前置
-					if (isSkip)
+					isbeforeSkip = !filterAction.before(model, request, response, method, args); // 相当于 AOP 前置
+					if (isbeforeSkip)
 						break;
 				}
 			}
 
-			if (!isSkip) {
+			if (!isbeforeSkip) {
 				result = hasArgs ? ReflectUtil.executeMethod_Throwable(controller, method, args)
 						: ReflectUtil.executeMethod_Throwable(controller, method);
 			}
@@ -178,17 +180,37 @@ public class MvcDispatcher implements Filter {
 			if (e instanceof IllegalArgumentException
 					&& e.getMessage().contains("object is not an instance of declaring class"))
 				LOGGER.warning("异常可能的原因：@Bean注解的名称重复，请检查 IOC 中的是否重名");
-		} finally {
-			if (isDoFilter) {
-				for (FilterAction filterAction : filterActions)
-					filterAction.after(model, request, response, method, isSkip); // 后置调用
-			}
 		}
 
+		boolean isDoOldReturn = true; // 是否执行默认的处理 response 方法
+
+		if (isDoFilter) {
+			FilterAfterArgs argsHolder = new FilterAfterArgs();
+			argsHolder.model = model;
+			argsHolder.result = result;
+			argsHolder.method = method;
+			argsHolder.err = err;
+			argsHolder.request = request;
+			argsHolder.response = response;
+			argsHolder.isbeforeSkip = isbeforeSkip;
+
+			try { // 一有异常则退出，未执行的 afterFilter 都不执行了
+				for (FilterAction filterAction : filterActions) {
+					isDoOldReturn = filterAction.after(argsHolder); // 后置调用
+
+					if (argsHolder.isAfterSkip)
+						break;
+				}
+			} catch (Throwable e) {
+				err = e; // 让异常统一处理
+			}
+		}
+		
 		if (err != null) { // 有未处理的异常
 			handleErr(err, method, request, response, model);
-		} else if (!isSkip) {
-			response.resultHandler(result, request, model, method);
+		} else if (!isbeforeSkip) {// 前置既然不执行了，后续的当然也不执行
+			if (isDoOldReturn)
+				response.resultHandler(result, request, model, method);
 		} else {
 			LOGGER.warning("一般情况下不应执行到这一步。Should not be executed in this step.");
 		}

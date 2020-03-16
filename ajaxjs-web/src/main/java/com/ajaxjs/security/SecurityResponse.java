@@ -24,11 +24,11 @@ import com.ajaxjs.util.CommonUtil;
 /**
  * 检测 CLRF 的过滤器
  * 
- * @author Frank
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class SecurityResponse extends HttpServletResponseWrapper {
-	public static ListControl delegate = new ListControl();
+	public static SecurityFilter delegate = new SecurityFilter();
 
 	public SecurityResponse(HttpServletResponse response) {
 		super(response);
@@ -79,13 +79,13 @@ public class SecurityResponse extends HttpServletResponseWrapper {
 
 	@Override
 	public void addHeader(String name, String value) {
-		value = XssChecker.clean(value);
+		value = SecurityRequest.clean(value);
 		super.addHeader(filterCLRF(name), filterCLRF(value));
 	}
 
 	@Override
 	public void setHeader(String name, String value) {
-		value = XssChecker.clean(value);
+		value = SecurityRequest.clean(value);
 		super.setHeader(filterCLRF(name), filterCLRF(value));
 	}
 
@@ -136,6 +136,6 @@ public class SecurityResponse extends HttpServletResponseWrapper {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void setStatus(int sc, String sm) {
-		super.setStatus(sc, XssChecker.clean(sm));
+		super.setStatus(sc, SecurityRequest.clean(sm));
 	}
 }

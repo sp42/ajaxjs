@@ -29,25 +29,25 @@ import com.ajaxjs.mvc.controller.MvcRequest;
 public interface FilterAction {
 	/**
 	 * 在 MVC 方法之前调用
-	 * @param model 
 	 * 
-	 * @param request 	请求对象
-	 * @param response 	响应对象
-	 * @param method 	方法对象
-	 * @param args      执行的参数
-	 * @return 是否要中止控制器方法的执行
+	 * @param model    页面数据中间件
+	 * @param request  请求对象
+	 * @param response 响应对象
+	 * @param method   方法对象
+	 * @param args     执行的参数
+	 * @return 是否要中止控制器方法的执行，true 表示为不中断
 	 */
 	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args);
 
 	/**
 	 * 在 MVC 方法之后调用
-	 * @param model 
 	 * 
-	 * @param request  	请求对象
-	 * @param response 	响应对象
-	 * @param method	方法对象
-	 * @param isSkip 	是否已经中止控制器方法的执行，也就是 before() 返回的值
+	 * @param model    页面数据中间件
+	 * @param request  请求对象
+	 * @param response 响应对象
+	 * @param method   方法对象
+	 * @param isSkip   是否已经中止控制器方法的执行，也就是 before() 返回的值
+	 * @return 是否要中止控制器方法默认返回的执行，一般返回 true 表示按原来的执行（大多数情况）
 	 */
-	public void after(ModelAndView model, MvcRequest request, MvcOutput response, Method method, boolean isSkip);
-
+	public boolean after(FilterAfterArgs argsHolder);
 }
