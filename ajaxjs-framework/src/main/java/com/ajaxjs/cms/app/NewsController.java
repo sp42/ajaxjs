@@ -18,7 +18,6 @@ import javax.ws.rs.core.MediaType;
 import com.ajaxjs.cms.filter.FrontEndOnlyCheck;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
@@ -40,7 +39,7 @@ public class NewsController extends BaseController<Map<String, Object>> {
 	private NewsService service;
 
 	@Override
-	public IBaseService<Map<String, Object>> getService() {
+	public NewsService getService() {
 		return service;
 	}
 
@@ -49,7 +48,8 @@ public class NewsController extends BaseController<Map<String, Object>> {
 //	@Authority(filter = DataBaseFilter.class, value = 1)
 	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
 		LOGGER.info("新闻列表-前台");
-		service.showList(mv);
+		System.out.println(service);
+		getService().showList(mv);
 		return page(mv, service.list(catalogId, start, limit, CommonConstant.ON_LINE), false);
 	}
 

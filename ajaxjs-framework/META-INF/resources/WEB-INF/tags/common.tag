@@ -96,7 +96,7 @@
 				<c:otherwise>
 					文/${empty info.author ? '佚名' : info.author}  
 					<c:if test="${not empty info.source}">出处/${info.source}</c:if>
-					<c:if test="${not empty info.sourceUrl}"><a href="${info.sourceUrl}" target="_blank">源网址 &#128279;</a></c:if>
+					<c:if test="${not empty info.sourceUrl}"><a href="${info.sourceUrl}" target="_blank"> 源网址 &#128279;</a></c:if>
 					<br />
 					创建于/<c:dateFormatter value="${info.createDate}" format="YYYY-MM-dd" /> 最后编辑/<c:dateFormatter value="${info.updateDate}" format="YYYY-MM-dd" />
 				</c:otherwise>
