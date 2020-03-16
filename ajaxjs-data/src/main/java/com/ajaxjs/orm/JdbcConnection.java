@@ -129,6 +129,7 @@ public class JdbcConnection {
 		} catch (SQLException e) {
 			LOGGER.warning("数据库连接失败！", e);
 		}
+		
 		return conn;
 	}
 
@@ -196,6 +197,7 @@ public class JdbcConnection {
 	public static void addSql(String sql) {
 		if (getSqls() == null)
 			setSqls(new ArrayList<String>());
+		
 		getSqls().add(sql);
 	}
 
@@ -223,6 +225,7 @@ public class JdbcConnection {
 	public static void cleanSql() {
 		if (getSqls() != null)
 			getSqls().clear();
+		
 		sqls.set(null);
 	}
 

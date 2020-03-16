@@ -4,7 +4,7 @@ package com.ajaxjs.orm;
  * 
  * Twitter 的分布式自增ID算法 Snowflake:雪花生成器
  * 
- * @author Administrator
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class SnowflakeIdWorker {
