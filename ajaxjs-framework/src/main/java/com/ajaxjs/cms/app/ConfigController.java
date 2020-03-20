@@ -44,11 +44,35 @@ public class ConfigController implements IController {
 	private static final LogHelper LOGGER = LogHelper.getLog(ConfigController.class);
 
 	@GET
+	@Path("config")
+	public String config(ModelAndView model) {
+		LOGGER.info("参数配置");
+		loadJson(model);
+		return "/config/config";
+	}
+
+	@GET
+	@Path("data-config")
+	public String dataConfig(ModelAndView model, MvcRequest r) {
+		LOGGER.info("数据配置");
+		// 数据库管理
+		model.put("list", DataBaseShowStruController.getConnectionConfig(r.mappath("/META-INF/context.xml")));
+
+		loadJson(model);
+		return "/config/data-config";
+	}
+
+	private static void loadJson(ModelAndView model) {
+		model.put("configJson", FileHelper.openAsText("D:\\project\\bgdiving\\WebContent\\config\\config.json"));
+		model.put("schemeJson", FileHelper.openAsText("D:\\project\\bgdiving\\WebContent\\config\\scheme.json"));
+	}
+
+	@GET
 	public String allConfig(ModelAndView model) {
 		LOGGER.info("编辑全部配置");
 
-		model.put("configJson", FileHelper.openAsText(ConfigService.jsonPath));
-		model.put("jsonSchemePath", FileHelper.openAsText(ConfigService.jsonSchemePath));
+		model.put("configJson", FileHelper.openAsText(ConfigService.CONFIG_JSON_PATH));
+		model.put("jsonSchemePath", FileHelper.openAsText(ConfigService.SCHEME_JSON_PATH));
 
 		return BaseController.admin("config-all");
 	}
@@ -57,12 +81,11 @@ public class ConfigController implements IController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String saveAllconfig(Map<String, Object> map, HttpServletRequest request) {
 		LOGGER.info("保存配置并且刷新配置");
-
 		ConfigService.loadJSON_in_JS(map);
 		ConfigService.load(); // 刷新配置
 
 		if (request.getServletContext().getAttribute("aj_allConfig") != null)
-			request.getServletContext().setAttribute("aj_allConfig", ConfigService.config);
+			request.getServletContext().setAttribute("aj_allConfig", ConfigService.CONFIG);
 
 		return BaseController.jsonOk("修改配置成功！");
 	}
@@ -81,7 +104,7 @@ public class ConfigController implements IController {
 		LOGGER.info("保存网站信息");
 		return saveAllconfig(map, request);
 	}
-	
+
 	@GET
 	@Path("siteStru")
 	public String siteStruUI(ModelAndView model) {

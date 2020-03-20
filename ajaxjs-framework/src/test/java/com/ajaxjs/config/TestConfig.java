@@ -22,9 +22,9 @@ public class TestConfig {
 	
 	@Test
 	public void testConfig() {
-		assertNotNull(ConfigService.config);
+		assertNotNull(ConfigService.CONFIG);
 
-		ListMap.flatMap(ConfigService.config);
+		ListMap.flatMap(ConfigService.CONFIG);
 
 		assertEquals(true, ConfigService.getValueAsBool("isDebug"));
 		assertEquals("大华", ConfigService.getValueAsString("clientShortName"));

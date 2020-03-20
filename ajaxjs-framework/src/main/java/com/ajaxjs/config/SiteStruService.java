@@ -106,11 +106,11 @@ public class SiteStruService implements ServletContextListener {
 		ServletContext ctx = e.getServletContext();
 		Version.tomcatVersionDetect(ctx.getServerInfo());
 
-		if (new File(ConfigService.jsonPath).exists()) {
+		if (new File(ConfigService.CONFIG_JSON_PATH).exists()) {
 			ConfigService.load();
 
-			if (ConfigService.config.isLoaded()) {
-				ctx.setAttribute("aj_allConfig", ConfigService.config); // 所有配置保存在这里
+			if (ConfigService.CONFIG.isLoaded()) {
+				ctx.setAttribute("aj_allConfig", ConfigService.CONFIG); // 所有配置保存在这里
 
 				// String configJson =
 				// JsonHelper.format(JsonHelper.stringifyMap(ConfigService.config));
