@@ -56,6 +56,7 @@ public class SecurityRequest extends HttpServletRequestWrapper {
 			return null;
 
 		List<Cookie> cookieList = new ArrayList<>();
+		
 		for (Cookie cookie : cookies) {
 			// for (String name : SecurityConfigLoader.cookieWhiteList) {
 			// if (name.equalsIgnoreCase(cookie.getName()))

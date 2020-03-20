@@ -236,7 +236,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 					if (!str.contains(".jsp") && !str.endsWith(".jsp")) // 自动补充 .jsp 扩展名
 						str += ".jsp";
 
-					LOGGER.info("执行 {0} 逻辑完成，现在控制输出（响应页面模版）" + result, method);
+					LOGGER.info("执行 {0} 逻辑完成，现输出页面模版 " + result, method.toString().replaceAll("public java.lang.", ""));
 					setTemplate(str).go(request);
 				}
 			} else if (result instanceof Map) {
