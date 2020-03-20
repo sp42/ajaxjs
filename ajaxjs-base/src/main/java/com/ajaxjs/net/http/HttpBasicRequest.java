@@ -36,7 +36,7 @@ import com.ajaxjs.util.map.MapTool;
 /**
  * 发送基础的 HTTP 请求
  * 
- * @author Administrator
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class HttpBasicRequest extends IoHelper {

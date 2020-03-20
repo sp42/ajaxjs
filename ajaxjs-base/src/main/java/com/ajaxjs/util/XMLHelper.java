@@ -27,7 +27,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * https://blog.csdn.net/axman/article/details/420910
  * 
- * @author Administrator
+ * @author sp42 frank@ajaxjs.com
  *
  */
 public class XMLHelper {

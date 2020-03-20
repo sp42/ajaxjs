@@ -23,7 +23,7 @@ import java.lang.annotation.Target;
 
 /**
  * 
- * @author Administrator
+ * @author sp42 frank@ajaxjs.com
  *
  */
 @Target(ElementType.METHOD)

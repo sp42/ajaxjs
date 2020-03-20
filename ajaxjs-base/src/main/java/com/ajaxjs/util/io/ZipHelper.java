@@ -45,7 +45,7 @@ public class ZipHelper {
 		if (!new File(save).isDirectory())
 			throw new IllegalArgumentException("保存的路径必须为目录路径");
 
-		long start = System.nanoTime();
+		long start = System.currentTimeMillis();
 		File folder = new File(save);
 		
 		if (!folder.exists())
@@ -75,7 +75,7 @@ public class ZipHelper {
 			LOGGER.warning(e);
 		}
 
-		LOGGER.info("解压缩完成，耗时：{0}ms，保存在{1}", System.nanoTime() - start, save);
+		LOGGER.info("解压缩完成，耗时：{0}ms，保存在{1}", System.currentTimeMillis() - start, save);
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class ZipHelper {
 	 * @param everyFile 输入 File，可在这 Lambda 里面判断是否加入 ZIP 压缩，返回 true 表示允许，反之不行
 	 */
 	public static void zip(String toZip, String saveZip, Function<File, Boolean> everyFile) {
-		long start = System.nanoTime();
+		long start = System.currentTimeMillis();
 		File fileToZip = new File(toZip);
 
 		FileHelper.initFolder(saveZip);
@@ -107,7 +107,7 @@ public class ZipHelper {
 			LOGGER.warning(e);
 		}
 
-		LOGGER.info("压缩完成，耗时：{0}ms，保存在{1}", System.nanoTime() - start, saveZip);
+		LOGGER.info("压缩完成，耗时：{0}ms，保存在{1}", System.currentTimeMillis() - start, saveZip);
 	}
 
 	/**

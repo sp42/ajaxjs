@@ -15,15 +15,14 @@
  */
 package com.ajaxjs.config;
 
-import java.io.File;
 import java.util.Map;
 
-import com.ajaxjs.Version;
 import com.ajaxjs.jsonparser.JsEngineWrapper;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.map.ListMap;
+import com.ajaxjs.util.resource.AbstractScanner;
 
 /**
  * 以 JSON 为存储格式的配置系统，在 JVM 中以 Map/List 结构保存 该类是单例。
@@ -36,28 +35,28 @@ public class ConfigService {
 	/**
 	 * 所有的配置保存在这个 config 中
 	 */
-	public static Config config;
+	public static Config CONFIG;
 
 	/**
 	 * 所有的配置保存在这个 config 中（扁平化处理过的）
 	 */
-	public static Map<String, Object> flatConfig;
+	public static Map<String, Object> FLAT_CONFIG;
 
 	/**
 	 * 配置 json 文件的路径
 	 */
-	public static String jsonPath = Version.srcFolder + File.separator + "site_config.json";
+	public static String CONFIG_JSON_PATH = AbstractScanner.getResourcesFromClasspath("site_config.json");
 
 	/**
 	 * 配置 json 说明文件的路径
 	 */
-	public static String jsonSchemePath = Version.srcFolder + File.separator + "site_config_scheme.json";
+	public static String SCHEME_JSON_PATH = AbstractScanner.getResourcesFromClasspath("site_config_scheme.json");
 
 	/**
 	 * 加载 JSON 配置（默认路径）
 	 */
 	public static void load() {
-		load(jsonPath);
+		load(CONFIG_JSON_PATH);
 	}
 
 	/**
@@ -66,18 +65,18 @@ public class ConfigService {
 	 * @param jsonPath JSON 配置文件所在路径
 	 */
 	public static void load(String jsonPath) {
-		ConfigService.jsonPath = jsonPath; // 覆盖本地的
+		ConfigService.CONFIG_JSON_PATH = jsonPath; // 覆盖本地的
 
-		config = new Config();
-		config.setJsonPath(jsonPath);
-		config.setJsonStr(FileHelper.openAsText(jsonPath));
-		config.putAll(JsonHelper.parseMap(config.getJsonStr()));
-		config.setLoaded(true);
+		CONFIG = new Config();
+		CONFIG.setJsonPath(jsonPath);
+		CONFIG.setJsonStr(FileHelper.openAsText(jsonPath));
+		CONFIG.putAll(JsonHelper.parseMap(CONFIG.getJsonStr()));
+		CONFIG.setLoaded(true);
 
 //		if(config.get("isDebug") != null) 
 //			Version.isDebug = (boolean)config.get("isDebug");
 
-		flatConfig = ListMap.flatMap(config);
+		FLAT_CONFIG = ListMap.flatMap(CONFIG);
 	}
 
 	public static void main(String[] args) {
@@ -89,9 +88,9 @@ public class ConfigService {
 	 * 保存 JSON 配置
 	 */
 	public static void save() {
-		String jsonStr = JsonHelper.toJson(config);
-		config.setJsonStr(jsonStr);
-		FileHelper.saveText(config.getJsonPath(), jsonStr);
+		String jsonStr = JsonHelper.toJson(CONFIG);
+		CONFIG.setJsonStr(jsonStr);
+		FileHelper.saveText(CONFIG.getJsonPath(), jsonStr);
 	}
 
 	/**
@@ -104,10 +103,10 @@ public class ConfigService {
 	 */
 	@SuppressWarnings("unchecked")
 	private static <T> T get(String key, T isNullValue, Class<T> vType) {
-		if (flatConfig == null || !config.isLoaded())
+		if (FLAT_CONFIG == null || !CONFIG.isLoaded())
 			return isNullValue;
 
-		Object v = flatConfig.get(key);
+		Object v = FLAT_CONFIG.get(key);
 
 		if (v == null) {
 			LOGGER.warning("没发现配置 " + key);
@@ -185,7 +184,7 @@ public class ConfigService {
 	 */
 	public static void loadJSON_in_JS(Map<String, Object> map) {
 		JsEngineWrapper js = new JsEngineWrapper();
-		js.eval("allConfig = " + FileHelper.openAsText(ConfigService.jsonPath));
+		js.eval("allConfig = " + FileHelper.openAsText(ConfigService.CONFIG_JSON_PATH));
 
 		map.forEach((k, v) -> {
 			String jsKey = transform(k);
@@ -197,16 +196,28 @@ public class ConfigService {
 				// 获取原来的类型，再作适当的类型转换
 				String type = js.eval("typeof allConfig" + jsKey, String.class);
 
+				if ("undefined".equals(type)) {// 原 JSON 没这参数
+					js.eval(findNode);
+					js.eval("SCHEME_JSON = " + FileHelper.openAsText(ConfigService.SCHEME_JSON_PATH));
+
+					Object obj = js.eval(String.format("findNode(SCHEME_JSON, '%s'.split('.'))['type']", k));
+
+					if (obj != null)
+						type = obj.toString();
+				}
+
 				switch (type) {
 				case "string":
 					jsCode = String.format("allConfig%s = '%s';", jsKey, v);
 					break;
 				case "number":
 				case "boolean":
+				case "undefined": // 原 JSON 没这参数
 					jsCode = String.format("allConfig%s = %s;", jsKey, v);
 					break;
 				case "object":
 					jsCode = String.format("allConfig%s = '%s';", jsKey, v);
+					break;
 				default:
 					LOGGER.info("未处理 js 类型： " + type);
 				}
@@ -215,8 +226,16 @@ public class ConfigService {
 			js.eval(jsCode);
 		});
 
-		String json = js.eval("JSON.stringify(allConfig);", String.class);
-		FileHelper.saveText(ConfigService.jsonPath, json);
+		String json = js.eval("JSON.stringify(allConfig, null, 2);", String.class);
+		FileHelper.saveText(ConfigService.CONFIG_JSON_PATH, json);
 	}
 
+	private final static String findNode = "function findNode(obj, queen) {\n" + "			if(!queen.shift) {\n"
+			+ "				return null;\n" + "			}\n" + "			var first = queen.shift();\n" + " \n"
+			+ "			\n" + "			for(var i in obj) {\n" + "				if(i === first) {\n"
+			+ "					var target = obj[i];\n" + "					\n"
+			+ "					if(queen.length == 0) {\n" + "						// 找到了\n"
+			+ "						return target;\n" + "					} else {\n"
+			+ "						return arguments.callee(obj[i], queen);\n" + "					}\n"
+			+ "				}\n" + "			}\n" + "		}";
 }

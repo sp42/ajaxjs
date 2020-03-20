@@ -33,6 +33,7 @@ public class Version {
 	 * 源码磁盘目录
 	 */
 	public static final String srcFolder = new File(Version.class.getClassLoader().getResource("").getPath()).toString();
+	
 //	public static final String srcFolder = AbstractScanner.getResourceFilePath(Version.class, "");
 
 	/**
