@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.app;
+package com.ajaxjs.cms.app.developer;
 
 import java.util.Map;
 
@@ -24,7 +24,7 @@ public class DeveloperTools implements IController {
 	@GET
 	public String deve(ModelAndView mv, MvcRequest r) {
 		// 数据库管理
-		mv.put("list", DataBaseShowStruController.getConnectionConfig(r.mappath("/META-INF/context.xml")));
+		mv.put("list", DataBaseStruController.getConnectionConfig(r.mappath("/META-INF/context.xml")));
 
 		// 代码生成器
 		Map<String, String> map = XMLHelper.nodeAsMap(r.mappath("/META-INF/context.xml"),
@@ -38,6 +38,6 @@ public class DeveloperTools implements IController {
 	@Path("docs")
 	@GET
 	public String docs() {
-		return BaseController.admin("doc");
+		return BaseController.admin("developer-doc");
 	}
 }

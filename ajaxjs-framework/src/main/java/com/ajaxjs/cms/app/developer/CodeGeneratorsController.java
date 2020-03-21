@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.app;
+package com.ajaxjs.cms.app.developer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -34,9 +34,9 @@ public class CodeGeneratorsController implements IController {
 
 	static private String saveFolder = "C:\\temp";
 	static private String packageName = "com.ajaxjs.user.role";
-	static private String dbUrl = "jdbc:mysql://115.28.242.232/zyjf";
-	static private String dbUser = "root";
-	static private String dbPassword = "root123abc";
+	static private String dbUrl = "jdbc:mysql://127.0.0.1/zyjf";
+	static private String dbUser = "";
+	static private String dbPassword = "";
 	static private String zipSave = "/download/code.zip";
 
 	@POST
@@ -67,11 +67,11 @@ public class CodeGeneratorsController implements IController {
 
 		if (request.getParameter("getTable") != null) {
 			String tableName = request.getParameter("getTable");
-			List<Map<String, String>> columnComments = DataBaseShowStruController.getColumnCommentByTableName(conn,
+			List<Map<String, String>> columnComments = DataBaseStruController.getColumnCommentByTableName(conn,
 					tableName);
 			String beanName = request.getParameter("beanName") == null ? Utils.firstLetterUpper(tableName)
 					: request.getParameter("beanName"),
-					tablesComment = DataBaseShowStruController.getCommentByTableName(conn, tableName);
+					tablesComment = DataBaseStruController.getCommentByTableName(conn, tableName);
 
 			request.setAttribute("fields", columnComments);
 			request.setAttribute("tableName", tableName);
@@ -82,13 +82,13 @@ public class CodeGeneratorsController implements IController {
 			render(isMap, pojoSave, daoSave, serviceSave, controllerSave, beanName, request, response, sc);
 
 		} else {
-			List<String> tables = DataBaseShowStruController.getAllTableName(conn);
+			List<String> tables = DataBaseStruController.getAllTableName(conn);
 
 			for (String tableName : tables) {
 				String beanName = Utils.firstLetterUpper(tableName);
-				Map<String, String> tablesComment = DataBaseShowStruController.getCommentByTableName(conn, tables);
-				Map<String, List<Map<String, String>>> infos = DataBaseShowStruController
-						.getColumnCommentByTableName(conn, tables);
+				Map<String, String> tablesComment = DataBaseStruController.getCommentByTableName(conn, tables);
+				Map<String, List<Map<String, String>>> infos = DataBaseStruController.getColumnCommentByTableName(conn,
+						tables);
 
 				request.setAttribute("fields", infos.get(tableName));
 				request.setAttribute("tableName", tableName);

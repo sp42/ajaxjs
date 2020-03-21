@@ -24,6 +24,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.ajaxjs.cms.app.developer.DataBaseStruController;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.config.SiteStruService;
 import com.ajaxjs.framework.BaseController;
@@ -56,7 +57,7 @@ public class ConfigController implements IController {
 	public String dataConfig(ModelAndView model, MvcRequest r) {
 		LOGGER.info("数据配置");
 		// 数据库管理
-		model.put("list", DataBaseShowStruController.getConnectionConfig(r.mappath("/META-INF/context.xml")));
+		model.put("list", DataBaseStruController.getConnectionConfig(r.mappath("/META-INF/context.xml")));
 
 		loadJson(model);
 		return "/config/data-config";

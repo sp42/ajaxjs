@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.app;
+package com.ajaxjs.cms.app.developer;
 
 import java.io.File;
 import java.io.IOException;

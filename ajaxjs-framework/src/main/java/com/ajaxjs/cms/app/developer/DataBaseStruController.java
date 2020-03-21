@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.app;
+package com.ajaxjs.cms.app.developer;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -35,8 +35,8 @@ import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 @Path("/admin/DataBaseShowStru")
-public class DataBaseShowStruController implements IController {
-	private static final LogHelper LOGGER = LogHelper.getLog(DataBaseShowStruController.class);
+public class DataBaseStruController implements IController {
+	private static final LogHelper LOGGER = LogHelper.getLog(DataBaseStruController.class);
 
 	@GET
 	public String show() {
