@@ -17,6 +17,8 @@ package com.ajaxjs.config;
 
 import java.util.Map;
 
+import javax.script.ScriptException;
+
 import com.ajaxjs.jsonparser.JsEngineWrapper;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.logger.LogHelper;
@@ -194,9 +196,19 @@ public class ConfigService {
 				jsCode = String.format("allConfig%s = null;", jsKey);
 			} else {
 				// 获取原来的类型，再作适当的类型转换
-				String type = js.eval("typeof allConfig" + jsKey, String.class);
+				String type = null;
+				
+				try {
+					Object obj = js.getEngine().eval("typeof allConfig" + jsKey);
+					
+					if (obj != null)
+						type = obj.toString();
+				} catch (ScriptException e) {
+					// 可能没这个参数在配置里面
+				}
 
-				if ("undefined".equals(type)) {// 原 JSON 没这参数
+				
+				if ("undefined".equals(type) || type == null) {// 原 JSON 没这参数
 					js.eval(findNode);
 					js.eval("SCHEME_JSON = " + FileHelper.openAsText(ConfigService.SCHEME_JSON_PATH));
 
