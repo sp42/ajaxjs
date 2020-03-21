@@ -22,7 +22,6 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-import com.ajaxjs.Version;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.util.CommonUtil;
 
@@ -43,7 +42,7 @@ public class LogHelper {
 		logger = Logger.getLogger(className);
 		logger.setFilter(filter);
 
-		if (!Version.isDebug && ConfigService.getValueAsBool("forDelevelopers.logAsFile")) {
+		if (ConfigService.getValueAsBool("forDelevelopers.logAsFile")) {
 			String logFolder = ConfigService.getValueAsString("forDelevelopers.logAsFileFolder");
 			
 			if (CommonUtil.isEmptyString(logFolder)) {

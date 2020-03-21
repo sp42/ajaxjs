@@ -205,7 +205,7 @@ public class MvcDispatcher implements Filter {
 				err = e; // 让异常统一处理
 			}
 		}
-		
+
 		if (err != null) { // 有未处理的异常
 			handleErr(err, method, request, response, model);
 		} else if (!isbeforeSkip) {// 前置既然不执行了，后续的当然也不执行
@@ -226,9 +226,10 @@ public class MvcDispatcher implements Filter {
 	 * @param response
 	 * @param model
 	 */
-	private static void handleErr(Throwable err, Method method, MvcRequest request, MvcOutput response,
-			ModelAndView model) {
-		ReflectUtil.getUnderLayerErr(err).printStackTrace(); // 打印异常
+	private static void handleErr(Throwable err, Method method, MvcRequest request, MvcOutput response, ModelAndView model) {
+		Throwable _err = ReflectUtil.getUnderLayerErr(err);
+//		_err.printStackTrace(); // 打印异常
+		LOGGER.warning(_err);
 
 		String errMsg = ReflectUtil.getUnderLayerErrMsg(err);
 		Produces a = method.getAnnotation(Produces.class);

@@ -50,7 +50,7 @@ public class ConfigController implements IController {
 		LOGGER.info("参数配置");
 		loadJson(model);
 		return "/config/config";
-	}
+	} 
 
 	@GET
 	@Path("data-config")
@@ -64,8 +64,8 @@ public class ConfigController implements IController {
 	}
 
 	private static void loadJson(ModelAndView model) {
-		model.put("configJson", FileHelper.openAsText("D:\\project\\bgdiving\\WebContent\\config\\config.json"));
-		model.put("schemeJson", FileHelper.openAsText("D:\\project\\bgdiving\\WebContent\\config\\scheme.json"));
+		model.put("configJson", FileHelper.openAsText(ConfigService.CONFIG_JSON_PATH));
+		model.put("schemeJson", FileHelper.openAsText(ConfigService.SCHEME_JSON_PATH));
 	}
 
 	@GET

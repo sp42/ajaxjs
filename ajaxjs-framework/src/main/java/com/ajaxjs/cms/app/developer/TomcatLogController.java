@@ -14,6 +14,7 @@ import javax.ws.rs.Path;
 
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.mvc.controller.IController;
+import com.ajaxjs.util.logger.FileHandler;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -35,7 +36,9 @@ public class TomcatLogController implements IController {
 	@OnOpen
 	public void onOpen(Session session) {
 		if (ConfigService.getValueAsBool("forDelevelopers.enableWebSocketLogOutput")) {
-			tailer = new LogFileTailer("C:\\temp\\bar.txt", 1000, true);
+//			tailer = new LogFileTailer("C:\\temp\\bar.txt", 1000, true);
+			System.out.println(FileHandler.LOG_PATH);
+			tailer = new LogFileTailer(FileHandler.LOG_PATH, 1000, true);
 			tailer.setTailing(true);
 			tailer.addListener(log -> {
 				try {

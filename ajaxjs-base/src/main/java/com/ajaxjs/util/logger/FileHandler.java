@@ -435,6 +435,8 @@ public class FileHandler extends Handler {
 		openWriter();
 	}
 
+	public static String LOG_PATH;
+	
 	protected void openWriter() {
 
 		// Create the directory if necessary
@@ -452,6 +454,9 @@ public class FileHandler extends Handler {
 		
 		try {
 			File pathname = new File(dir.getAbsoluteFile(), prefix + (rotatable ? date : "") + suffix);
+			
+			LOG_PATH = pathname.toString();
+			
 			File parent = pathname.getParentFile();
 			if (!parent.mkdirs() && !parent.isDirectory()) {
 				reportError("Unable to create [" + parent + "]", null, ErrorManager.OPEN_FAILURE);

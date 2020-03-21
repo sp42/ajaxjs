@@ -162,7 +162,7 @@
 				</div>
 				<div :class="{'selected': 2 === selected}">
 					<!-- TAB 内容 -->
-					<p>实时浏览 Tomcat 日志</p>
+					<p>在这里可以实时浏览 Tomcat 日志</p>
 					<br />
 <div id="log-container" style="height: 450px; overflow-y: scroll; background: #333; color: #aaa; padding: 10px; margin: 0 auto;">
 	<div></div>
