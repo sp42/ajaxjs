@@ -10,7 +10,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.ajaxjs.cms.app;
+package com.ajaxjs.cms.app.config;
 
 import java.io.File;
 import java.util.Map;

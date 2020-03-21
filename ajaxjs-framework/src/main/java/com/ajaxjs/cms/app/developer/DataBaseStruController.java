@@ -123,6 +123,7 @@ public class DataBaseStruController implements IController {
 	private static String parse(String all) {
 		if (all == null)
 			return null;
+
 		String comment = null;
 		int index = all.indexOf("COMMENT='");
 		if (index < 0)
@@ -182,7 +183,7 @@ public class DataBaseStruController implements IController {
 	 * 
 	 * @param conn      数据库连接对象
 	 * @param tableName 单张表名
-	 * @return
+	 * @return 一张表的各个字段的注释
 	 */
 	public static List<Map<String, String>> getColumnCommentByTableName(Connection conn, String tableName) {
 		List<Map<String, String>> list = new ArrayList<>();
@@ -213,13 +214,13 @@ public class DataBaseStruController implements IController {
 			LOGGER.warning(e);
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param file
 	 * @return
 	 */
-	public static List<Map<String, String>> getConnectionConfig(String file) {	
+	public static List<Map<String, String>> getConnectionConfig(String file) {
 		try {
 			Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
 			NodeList resource = document.getElementsByTagName("Resource");

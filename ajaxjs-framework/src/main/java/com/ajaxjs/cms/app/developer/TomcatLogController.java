@@ -161,12 +161,5 @@ public class TomcatLogController implements IController {
 				LOGGER.warning(e);
 			}
 		}
-
-		public static void main(String[] args) throws IOException {
-			LogFileTailer tailer = new LogFileTailer("C:\\temp\\bar.txt", 1000, true);
-			tailer.setTailing(true);
-			tailer.addListener(System.out::println);
-			tailer.start();
-		}
 	}
 }

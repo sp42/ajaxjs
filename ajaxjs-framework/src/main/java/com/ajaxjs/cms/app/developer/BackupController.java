@@ -81,10 +81,4 @@ public class BackupController implements IController {
 		FileHelper.deleteOldWay(r.mappath("/temp/"));
 		return BaseController.jsonOk("清理成功！");
 	}
-
-	public static void main(String[] args) {
-		System.out.println(FileHelper.separator);
-		String d = "C:/sp42/dev/eclipse-workspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/ajaxjs-demo/WEB-INF/lib";
-		System.out.println(d.replaceAll("/", "\\\\"));
-	}
 }

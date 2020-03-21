@@ -28,9 +28,15 @@ import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.util.logger.LogHelper;
 
+/**
+ * 代码生成器
+ * 
+ * @author sp42 frank@ajaxjs.com
+ *
+ */
 @Path("/admin/CodeGenerators")
-public class CodeGeneratorsController implements IController {
-	private static final LogHelper LOGGER = LogHelper.getLog(CodeGeneratorsController.class);
+public class CodeGenerators implements IController {
+	private static final LogHelper LOGGER = LogHelper.getLog(CodeGenerators.class);
 
 	static private String saveFolder = "C:\\temp";
 	static private String packageName = "com.ajaxjs.user.role";
