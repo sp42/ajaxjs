@@ -32,12 +32,12 @@ public class DeveloperTools implements IController {
 		mv.put("saveFolder", ConfigService.getValueAsString("System.project_folder") + "\\src"); // 臨時保存
 		mv.put("conn", map);
 
-		return BaseController.admin("developer-tool");
+		return BaseController.admin("developer/developer-tool");
 	}
 
 	@Path("docs")
 	@GET
 	public String docs() {
-		return BaseController.admin("developer-doc");
+		return BaseController.admin("developer/developer-doc");
 	}
 }
