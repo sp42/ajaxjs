@@ -41,7 +41,7 @@ public class UserAdminFilter implements Filter {
 
 	}
 
-	static final String noAccess = "<meta charset=\"utf-8\" /> 禁止访问，非法权限。Authentication Required <a href=\"%s/admin/login/\">登 录</a>";
+	static final String noAccess = "<title>禁止访问，非法权限</title><meta charset=\"utf-8\" /> 禁止访问，非法权限。Authentication Required <a href=\"%s/admin/login/\">登 录</a>";
 
 	@Override
 	public void destroy() {

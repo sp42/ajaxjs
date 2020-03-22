@@ -79,13 +79,23 @@
 <%}%>
 
 <%if(RoleService.check(privilegeTotal, RightConstant.GLOBAL_SETTING)){ %>
-
 <li>
 	<h3 class="config"><i></i> 全局数据</h3>
 	<ul>
-		<li><a target="iframepage" href="${ctx}/admin/config/">所有配置</a></li>
+
 		<li><a target="iframepage" href="${ctx}/admin/catelog/">分类管理</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/attachment/list/">附件列表</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/attachmentPicture/list/">图片列表</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/attachmentVideo/list/">视频列表</a></li>
+
+	</ul>
+</li>
+<li>
+	<h3 class="system"><i></i> 系统维护</h3>
+	<ul>
+		<li><a target="iframepage" href="${ctx}/admin/config/config">配置参数</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/config/data-config">数据配置</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/config/">所有配置</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/userLoginLog/">登录日志</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/userGlobalLog/">操作日志</a></li>
 	</ul>
