@@ -388,3 +388,105 @@
 	}
 }
 
+
+.aj-json-form {
+	form {
+		margin:2% auto;
+		width:80%;
+		border: 1px solid #e3e3e3;
+		overflow: hidden;
+		
+		& > div {
+			padding: 1% 2%;
+			border-bottom: 1px solid #e3e3e3;
+			width:100%;
+			&:last-child {
+				border-bottom: 0;
+			}
+			
+			& > div{
+				display: inline-block;
+				
+				.sub  {
+					color: gray;
+					font-size:.8rem;
+					transition: color linear 300ms;
+					margin: 1% 0 0 0;
+				}
+
+				&:hover .sub {
+					color: black;
+				}
+			}
+			div.label {
+				display: inline-block;
+				width: 30%;
+				text-align: center;
+			}
+			div.input {
+				display: inline-block;
+				width: 68%;
+				vertical-align: middle;
+			}
+		}
+
+		& > div:nth-child(even) {
+			border-top: 1px solid white;
+			background: #f5f5f5;
+		}
+
+
+		input[type=text], input[type=email], input[type=number], textarea {
+			.ajaxjs-inputField;
+		}
+		
+		select{
+			.aj-select;
+			min-width: 200px;
+		}
+
+		textarea {
+			min-height: 90px;
+		}
+
+		.htmlEditor {
+			width: 90%;
+			margin: 0 auto;
+			display: inline-block;
+		}
+		.aj-form-html-editor .editorBody iframe, .aj-form-html-editor .editorBody textarea {
+			height:320px;
+		}
+		
+		.aj-form-html-editor ul.toolbar > li {
+			.cleanHTML, .bg-19 {
+			    display: none;
+			}
+		}
+
+		.required-note{
+			color:red;
+		}
+		.label {
+			width: 15%;
+		}
+	
+		input[type=text] , textarea {
+			//width:80%;
+		}
+		
+		&>div{
+			padding:2% 0!important;
+		}
+		
+	}
+}
+
+.aj-btnsHolder{
+	text-align: center;
+	padding:2% 0;
+	button{
+		.ajaxjs-btn;
+		margin-right:3%;
+	}
+}

@@ -32,9 +32,9 @@
 		
 		<link rel="stylesheet/less" data-global-vars='{"assetFilePath": "\"/myblog/asset\"" }' type="text/css" href="/ajaxjs-web-js/widget/desktop/desktop.less" />
 	
-	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/libs/vue.js"></script>
-	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/libs/less.min.js"></script>
-	    <script src="http://192.168.1.88:8080/ajaxjs-web-js/js/ajaxjs-base.js"></script>
+	    <script src="http://127.0.0.1:8080/ajaxjs-web-js/js/libs/vue.js"></script>
+	    <script src="http://127.0.0.1:8080/ajaxjs-web-js/js/libs/less.min.js"></script>
+	    <script src="http://127.0.0.1:8080/ajaxjs-web-js/js/ajaxjs-base.js"></script>
 	    
 	    <script>
 	   		aj.Vue = {};

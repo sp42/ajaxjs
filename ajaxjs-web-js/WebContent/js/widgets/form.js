@@ -276,7 +276,7 @@ Vue.component('aj-form-html-editor', {
 		basePath: { // iframe 的 <base href="${param.basePath}/" />路徑
 			type: String,
 			required: false,
-			default : ''
+			default: ''
 		},
 		uploadImageActionUrl: String
 	},
@@ -572,7 +572,7 @@ var HtmlSanitizer = new (function () {
 	};
 
 	var contentTagWhiteList_ = { 'FORM': true }; //tags that will be converted to DIVs
-	var attributeWhitelist_ = { 'align': true, 'color': true, 'controls': true, 'height': true, 'href': true, 'src': true, 'style': true, 'target': true, 'title': true, 'type': true, 'width': true };
+	var attributeWhitelist_ = { 'align': true, 'color': true, 'controls': true, 'height': true, 'href': true, 'src': true, 'style': false, 'target': true, 'title': true, 'type': true, 'width': true };
 	var cssWhitelist_ = { 'color': true, 'background-color': true, 'font-size': true, 'text-align': true, 'text-decoration': true, 'font-weight': true };
 	var schemaWhiteList_ = [ 'http:', 'https:', 'data:', 'm-files:', 'file:', 'ftp:' ]; //which "protocols" are allowed in "href", "src" etc
 	var uriAttributes_ = { 'href': true, 'action': true };

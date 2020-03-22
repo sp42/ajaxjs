@@ -216,6 +216,42 @@ Vue.component('aj-tab', {
     }
 });
 
+aj.tabable = {
+	data() {
+		return {
+			selected: 0
+		};
+	},
+	mounted() {
+		var ul = this.$el.querySelector('.aj-simple-tab-horizontal > ul');
+		ul.onclick = e => {
+			var el = e.target;
+			var index = Array.prototype.indexOf.call(el.parentElement.children, el);
+			this.selected = index;
+		};
+		
+		this.$options.watch.selected.call(this, 1);
+	},
+	watch: {
+		selected(v) {
+			var headers  = this.$el.querySelectorAll('.aj-simple-tab-horizontal > ul > li');
+			var contents = this.$el.querySelectorAll('.aj-simple-tab-horizontal > div > div');
+			var each = arr => {							
+				for(var i = 0, j = arr.length; i < j; i++) {
+					if(v === i) {
+						arr[i].classList.add('selected');
+					} else {
+						arr[i].classList.remove('selected');
+					}
+				}
+			};
+			
+			each(headers);
+			each(contents);
+		}
+	}
+};
+
 // 回到顶部
 Vue.component('aj-back-top', {
 	template : 
