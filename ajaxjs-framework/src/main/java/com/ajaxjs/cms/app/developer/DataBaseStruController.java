@@ -216,9 +216,10 @@ public class DataBaseStruController implements IController {
 	}
 
 	/**
+	 * 读取配置文件，转为为 map
 	 * 
-	 * @param file
-	 * @return
+	 * @param file 配置文件路径
+	 * @return 配置 map
 	 */
 	public static List<Map<String, String>> getConnectionConfig(String file) {
 		try {

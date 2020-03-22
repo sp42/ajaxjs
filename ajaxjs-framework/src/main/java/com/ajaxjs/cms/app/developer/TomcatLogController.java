@@ -18,7 +18,7 @@ import com.ajaxjs.util.logger.FileHandler;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
- * TODO 要指定日志文件名
+ * 通过浏览器 WebSocket 技术查看服务端 Tomcat 输出日志
  * 
  * @author sp42 frank@ajaxjs.com
  *
