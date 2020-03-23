@@ -28,6 +28,11 @@ import com.ajaxjs.mvc.controller.MvcRequest;
  */
 public interface FilterAction {
 	/**
+	 * 是异常但不记录到 FileHandler，例如密码错误之类的。放在 ModelAndView 中传递
+	 */
+	public static final String NOT_LOG_EXCEPTION = "NOT_LOG_EXCEPTION";
+
+	/**
 	 * 在 MVC 方法之前调用
 	 * 
 	 * @param model    页面数据中间件

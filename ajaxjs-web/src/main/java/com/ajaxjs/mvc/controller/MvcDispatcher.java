@@ -39,6 +39,8 @@ import com.ajaxjs.mvc.filter.Authority;
 import com.ajaxjs.mvc.filter.FilterAction;
 import com.ajaxjs.mvc.filter.FilterAfterArgs;
 import com.ajaxjs.mvc.filter.MvcFilter;
+import com.ajaxjs.security.SecurityRequest;
+import com.ajaxjs.security.SecurityResponse;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
@@ -105,12 +107,12 @@ public class MvcDispatcher implements Filter {
 		}
 
 		_request.setAttribute("requestTimeRecorder", System.currentTimeMillis()); // 每次 servlet 都会执行的。记录时间
-
-		MvcRequest request = new MvcRequest(_request);
-		MvcOutput response = new MvcOutput(_response);
+		boolean isEnableSecurityIO = ConfigService.getValueAsBool("security.isEnableSecurityIO");
+		MvcRequest request = new MvcRequest(isEnableSecurityIO ?  new SecurityRequest(_request) : _request);
+		MvcOutput response = new MvcOutput(isEnableSecurityIO ? new SecurityResponse(_response) : _response);
 		String uri = request.getFolder(), httpMethod = request.getMethod();
 		Action action = null;
-
+ 
 		try {
 			action = IController.findTreeByPath(uri);
 		} catch (Throwable e) {
@@ -226,10 +228,15 @@ public class MvcDispatcher implements Filter {
 	 * @param response
 	 * @param model
 	 */
-	private static void handleErr(Throwable err, Method method, MvcRequest request, MvcOutput response, ModelAndView model) {
+	private static void handleErr(Throwable err, Method method, MvcRequest request, MvcOutput response,
+			ModelAndView model) {
 		Throwable _err = ReflectUtil.getUnderLayerErr(err);
-//		_err.printStackTrace(); // 打印异常
-		LOGGER.warning(_err);
+
+		if (model.containsKey(FilterAction.NOT_LOG_EXCEPTION)
+				&& ((boolean) model.get(FilterAction.NOT_LOG_EXCEPTION))) {
+			_err.printStackTrace(); // 打印异常
+		} else
+			LOGGER.warning(_err);
 
 		String errMsg = ReflectUtil.getUnderLayerErrMsg(err);
 		Produces a = method.getAnnotation(Produces.class);

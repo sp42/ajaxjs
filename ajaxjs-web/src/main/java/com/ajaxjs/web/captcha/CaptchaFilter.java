@@ -30,18 +30,23 @@ public class CaptchaFilter extends SessionValueFilter {
 		try {
 			String captchaCode = getClientSideArgs(request, CaptchaController.CAPTCHA_CODE),
 					sessionValue = getServerSideValue(request, CaptchaController.CAPTCHA_CODE);
-			
+
 			// 判断用户输入的验证码是否通过
 			if (captchaCode.equalsIgnoreCase(sessionValue)) {
 				request.getSession().removeAttribute(CaptchaController.CAPTCHA_CODE);// 通过之后记得要 清除验证码
 				return true;
-			} else
+			} else {
+				// 是异常但不记录到 FileHandler，例如密码错误之类的
+				model.put(NOT_LOG_EXCEPTION, true);
 				throw new IllegalAccessError("验证码不正确");
-			
-		} catch(Throwable e) {
-			if(e instanceof NullPointerException)
+			}
+
+		} catch (Throwable e) {
+			if (e instanceof NullPointerException) {
+				model.put(NOT_LOG_EXCEPTION, true);
 				throw new NullPointerException("验证码已经过期，请刷新");
-			
+			}
+
 			throw e;
 		}
 	}
