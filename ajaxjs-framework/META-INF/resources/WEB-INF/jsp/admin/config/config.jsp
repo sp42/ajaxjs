@@ -37,7 +37,7 @@
 			</div>	
 		</div>
 		
-		<script src="${ctx}/config/form.js"></script>
+		<script src="${ctx}/asset/admin/config-parser.js"></script>
 		<script>
 			new Vue({
 				el:'.aj-json-form',

@@ -49,8 +49,8 @@ public class ConfigController implements IController {
 	public String config(ModelAndView model) {
 		LOGGER.info("参数配置");
 		loadJson(model);
-		return "/config/config";
-	} 
+		return BaseController.admin("config/config");
+	}
 
 	@GET
 	@Path("data-config")
@@ -60,7 +60,7 @@ public class ConfigController implements IController {
 		model.put("list", DataBaseStruController.getConnectionConfig(r.mappath("/META-INF/context.xml")));
 
 		loadJson(model);
-		return "/config/data-config";
+		return BaseController.admin("config/data-config");
 	}
 
 	private static void loadJson(ModelAndView model) {

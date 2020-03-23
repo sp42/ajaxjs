@@ -21,6 +21,7 @@
 					<li>数据库连接</li>
 					<li>数据配置</li>
 					<li>通用实体配置</li>
+					<li>图文配置</li>
 					<li>商城配置</li>
 				</ul>
 				<div>
@@ -97,12 +98,13 @@
 					</div>
 					<div><aj-json-form :scheme="scheme" :config="config" path="data"></aj-json-form></div>
 					<div><aj-json-form :scheme="scheme" :config="config" path="entity"></aj-json-form></div>
-					<div><aj-json-form :scheme="scheme" :config="config" path="data"></aj-json-form></div>
+					<div><aj-json-form :scheme="scheme" :config="config" path="domain.article"></aj-json-form></div>
+					<div><aj-json-form :scheme="scheme" :config="config" path="domain.shop"></aj-json-form></div>
 				</div>
 			</div>	
 		</div>
 		
-		<script src="${ctx}/config/form.js"></script>
+		<script src="${ctx}/asset/admin/config-parser.js"></script>
 		<script>
 			new Vue({
 				el:'.aj-json-form',
