@@ -19,10 +19,11 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
+import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.util.CommonUtil;
 
 /**
- * 检测 CLRF 的过滤器
+ * 检测 CRLF 的过滤器
  * 
  * @author sp42 frank@ajaxjs.com
  *
@@ -30,6 +31,11 @@ import com.ajaxjs.util.CommonUtil;
 public class SecurityResponse extends HttpServletResponseWrapper {
 	public static SecurityFilter delegate = new SecurityFilter();
 
+	/**
+	 * 创建一个 SecurityResponse 实例。
+	 * 
+	 * @param response 响应对象
+	 */
 	public SecurityResponse(HttpServletResponse response) {
 		super(response);
 	}
@@ -38,12 +44,14 @@ public class SecurityResponse extends HttpServletResponseWrapper {
 	public void addCookie(Cookie cookie) {
 		// 如果 cookie 名称包含 CLRF 则抛出异常；接着过滤 cookie 内容
 		String name = cookie.getName(), value = cookie.getValue();
+		boolean isCRLF_Filter = ConfigService.getValueAsBool("security.isCRLF_Filter");
 
-		if (containCLRF(name))
+		if (isCRLF_Filter && containCLRF(name))
 			throw new SecurityException("Cookie 名称不能包含 CLRF 字符，该 cookie 是 ：" + name);
 
 		// 重新创建 cookie
-		Cookie newCookie = new Cookie(name, filterCLRF(value));// 已经过滤好的 Cookie value
+		Cookie newCookie = new Cookie(name, isCRLF_Filter ? filterCLRF(value) : value);// 已经过滤好的 Cookie
+																						// value
 		newCookie.setComment(cookie.getComment());
 
 		if (cookie.getDomain() != null)
@@ -58,7 +66,8 @@ public class SecurityResponse extends HttpServletResponseWrapper {
 		/*
 		 * 检查 Cookie 容量大小和是否在白名单中。
 		 */
-		if (cookie.getValue().length() > MAX_COOKIE_SIZE)
+		if (ConfigService.getValueAsBool("security.isCookiesSizeCheck")
+				&& (cookie.getValue().length() > MAX_COOKIE_SIZE))
 			throw new SecurityException("超出 Cookie 允许容量：" + MAX_COOKIE_SIZE);
 
 		if (!delegate.isInWhiteList(cookie.getName()))
@@ -69,24 +78,40 @@ public class SecurityResponse extends HttpServletResponseWrapper {
 
 	@Override
 	public void setDateHeader(String name, long date) {
-		super.setDateHeader(filterCLRF(name), date);
+		if (ConfigService.getValueAsBool("security.isCRLF_Filter"))
+			super.setDateHeader(filterCLRF(name), date);
+		else
+			super.setDateHeader(name, date);
 	}
 
 	@Override
 	public void setIntHeader(String name, int value) {
-		super.setIntHeader(filterCLRF(name), value);
+		if (ConfigService.getValueAsBool("security.isCRLF_Filter"))
+			super.setIntHeader(filterCLRF(name), value);
+		else
+			super.setIntHeader(name, value);
 	}
 
 	@Override
 	public void addHeader(String name, String value) {
-		value = SecurityRequest.clean(value);
-		super.addHeader(filterCLRF(name), filterCLRF(value));
+		if (ConfigService.getValueAsBool("security.isXXS_Filter"))
+			value = SecurityRequest.clean(value);
+
+		if (ConfigService.getValueAsBool("security.isCRLF_Filter"))
+			super.addHeader(filterCLRF(name), filterCLRF(value));
+		else
+			super.addHeader(name, value);
 	}
 
 	@Override
 	public void setHeader(String name, String value) {
-		value = SecurityRequest.clean(value);
-		super.setHeader(filterCLRF(name), filterCLRF(value));
+		if (ConfigService.getValueAsBool("security.isXXS_Filter"))
+			value = SecurityRequest.clean(value);
+
+		if (ConfigService.getValueAsBool("security.isCRLF_Filter"))
+			super.setHeader(filterCLRF(name), filterCLRF(value));
+		else
+			super.setHeader(name, value);
 	}
 
 	/**
@@ -132,10 +157,13 @@ public class SecurityResponse extends HttpServletResponseWrapper {
 	 */
 	private static final int MAX_COOKIE_SIZE = 4 * 1024;
 
-	// 对 Response 的 setStatus(int sc, String sm) 方法 sm 错误信息进行 XSS 过滤；
+	// 对 Response 的 setStatus(int sc, String value) 方法 sm 错误信息进行 XSS 过滤；
 	@SuppressWarnings("deprecation")
 	@Override
-	public void setStatus(int sc, String sm) {
-		super.setStatus(sc, SecurityRequest.clean(sm));
+	public void setStatus(int sc, String value) {
+		if (ConfigService.getValueAsBool("security.isXXS_Filter"))
+			super.setStatus(sc, SecurityRequest.clean(value));
+		else
+			super.setStatus(sc, value);
 	}
 }

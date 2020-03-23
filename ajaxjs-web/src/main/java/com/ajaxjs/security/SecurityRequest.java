@@ -28,11 +28,12 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
+import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.util.CommonUtil;
 
 /**
- * 输入输出 Cookie 白名单验证过滤。 获取用户输入参数和参数值进行 XSS 过滤，对 Header 和 cookie value 值进行 XSS
- * 过滤（转码 Script 标签的< > 符号
+ * 输入输出 Cookie 白名单验证过滤。 获取用户输入参数名称和参数值进行 XSS 过滤，对 Header 和 cookie value 值进行 XSS
+ * 过滤（转码 Script 标签的 < > 符号）
  * 
  * @author sp42 frank@ajaxjs.com
  *
@@ -56,7 +57,7 @@ public class SecurityRequest extends HttpServletRequestWrapper {
 			return null;
 
 		List<Cookie> cookieList = new ArrayList<>();
-		
+
 		for (Cookie cookie : cookies) {
 			// for (String name : SecurityConfigLoader.cookieWhiteList) {
 			// if (name.equalsIgnoreCase(cookie.getName()))
@@ -89,8 +90,13 @@ public class SecurityRequest extends HttpServletRequestWrapper {
 
 	@Override
 	public String getParameter(String key) {
-		key = clean(key, TYPE_DELETE);
-		return clean(super.getParameter(key));
+		String v = super.getParameter(key);
+
+		if (ConfigService.getValueAsBool("security.isXXS_Filter")) {
+			key = clean(key, TYPE_DELETE);
+			return clean(v);
+		} else
+			return v;
 	}
 
 	@Override
@@ -99,33 +105,45 @@ public class SecurityRequest extends HttpServletRequestWrapper {
 		if (_map == null)
 			return null;
 
-		Map<String, String[]> map = new HashMap<>();
-		_map.forEach((k, v) -> map.put(clean(k, TYPE_DELETE), clean(v)));
+		if (ConfigService.getValueAsBool("security.isXXS_Filter")) {
+			Map<String, String[]> map = new HashMap<>();
+			_map.forEach((k, v) -> map.put(clean(k, TYPE_DELETE), clean(v)));
 
-		return map;
+			return map;
+		} else
+			return _map;
 	}
 
 	@Override
 	public Enumeration<String> getParameterNames() {
 		Enumeration<String> enums = super.getParameterNames();
-		Vector<String> vec = new Vector<>();
 
-		while (enums.hasMoreElements()) {
-			String value = enums.nextElement();
-			vec.add(clean(value));
-		}
+		if (ConfigService.getValueAsBool("security.isXXS_Filter")) {
+			Vector<String> vec = new Vector<>();
 
-		return vec.elements();
+			while (enums.hasMoreElements()) {
+				String value = enums.nextElement();
+				vec.add(clean(value));
+			}
+
+			return vec.elements();
+		} else
+			return enums;
 	}
 
 	@Override
 	public String[] getParameterValues(String key) {
-		return clean(super.getParameterValues(key));
+		String[] arr = super.getParameterValues(key);
+		
+		if (ConfigService.getValueAsBool("security.isXXS_Filter"))
+			return clean(arr);
+		else
+			return arr;
 	}
 
-	private static String XSS_Type = "<script[^>]*?>.*?</script>";
+	private static String XSS_SCRIPT = "<script[^>]*?>.*?</script>";
 
-	private static Pattern XSS_Pattern = Pattern.compile(XSS_Type);
+	private static Pattern XSS_Pattern = Pattern.compile(XSS_SCRIPT);
 
 	private static String TYPE_ESCAPSE = "escapse";
 
@@ -135,7 +153,7 @@ public class SecurityRequest extends HttpServletRequestWrapper {
 	 * 默认转义
 	 * 
 	 * @param input 输入内容
-	 * @return 转义文字
+	 * @return 转义后的字符串
 	 */
 	public static String clean(String input) {
 		return clean(input, TYPE_ESCAPSE);
@@ -144,21 +162,21 @@ public class SecurityRequest extends HttpServletRequestWrapper {
 	/**
 	 * XSS 过滤器
 	 * 
-	 * @param input      输入内容
-	 * @param filterType 过滤器类型
-	 * @return 转义文字
+	 * @param input 输入内容
+	 * @param type  过滤器类型
+	 * @return 转义后的字符串
 	 */
-	public static String clean(String input, String filterType) {
+	public static String clean(String input, String type) {
 		if (CommonUtil.isEmptyString(input))
 			return input;
 
-		if (filterType.equals(TYPE_ESCAPSE)) {
+		if (type.equals(TYPE_ESCAPSE)) {
 			Matcher matcher = XSS_Pattern.matcher(input);
 
 			if (matcher.find())
 				return matcher.group().replace("<", "&lt;").replace(">", "&gt;");
-		} else if (filterType.equals(TYPE_DELETE))
-			return input.replaceAll(XSS_Type, "");
+		} else if (type.equals(TYPE_DELETE))
+			return input.replaceAll(XSS_SCRIPT, "");
 
 		return input;
 	}
@@ -166,7 +184,7 @@ public class SecurityRequest extends HttpServletRequestWrapper {
 	/**
 	 * 过滤 for 数组
 	 * 
-	 * @param value
+	 * @param value 输入内容的数组
 	 * @return 转义文字
 	 */
 	private static String[] clean(String[] value) {

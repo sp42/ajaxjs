@@ -90,8 +90,13 @@ public class SecurityFilter implements FilterAction {
 		return true; // 没有任何信息则通过
 	}
 
+	/**
+	 * 来路检测
+	 * 
+	 * @param request 请求对象
+	 */
 	private static void refererCheck(MvcRequest request) {
-		if (ConfigService.getValueAsBool("security.enableRefererCheck")) {
+		if (ConfigService.getValueAsBool("security.isRefererCheck")) {
 			String referer = request.getHeader("referer");
 
 			if (CommonUtil.isEmptyString(referer))
