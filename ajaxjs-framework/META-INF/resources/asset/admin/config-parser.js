@@ -1,3 +1,7 @@
+/*
+ * 读取 json scheme 文件，解析它，渲染成为表单的 UI 
+ */
+
 aj.baseFormControl = {
 	props: {
 		configObj: {

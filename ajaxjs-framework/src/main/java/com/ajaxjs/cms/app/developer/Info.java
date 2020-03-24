@@ -1,39 +1,39 @@
 package com.ajaxjs.cms.app.developer;
 
+import com.ajaxjs.framework.BaseController;
+import com.ajaxjs.util.ReflectUtil;
+
 public class Info {
 
-	public Info(String tableName) {
+	public Info(String tableName, String saveFolder) {
 		this.setTableName(tableName);
+		this.saveFolder = saveFolder;
 	}
 
+	/**
+	 * 模板保存位置
+	 */
+	private static final String tplSave = BaseController.admin("developer/code-generator");
+
+	private String type;
 	private String tableName;
-	
-	private String beanName ;
+
+	private String beanName;
+
+	private String saveFolder;
 
 	/**
 	 * 请求页面地址，如 /sqlDoc.jsp
 	 */
-	private String jsp;
+	public String getJsp() {
+		return tplSave + "/" + type + ".jsp";
+	}
 
 	/**
 	 * 保存地址，如 c:\\sp42\\d.htm
 	 */
-	private String saveTarget;
-
-	public String getJsp() {
-		return jsp;
-	}
-
-	public void setJsp(String jsp) {
-		this.jsp = jsp;
-	}
-
 	public String getSaveTarget() {
-		return saveTarget;
-	}
-
-	public void setSaveTarget(String saveTarget) {
-		this.saveTarget = saveTarget;
+		return saveFolder + "/" + type + "/" + getBeanName() + ReflectUtil.firstLetterUpper(type) + ".java";
 	}
 
 	public String getTableName() {
@@ -45,10 +45,19 @@ public class Info {
 	}
 
 	public String getBeanName() {
-		return beanName;
+		return beanName == null ? ReflectUtil.firstLetterUpper(tableName) : beanName;
 	}
 
 	public void setBeanName(String beanName) {
 		this.beanName = beanName;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public Info setType(String type) {
+		this.type = type;
+		return this;
 	}
 }

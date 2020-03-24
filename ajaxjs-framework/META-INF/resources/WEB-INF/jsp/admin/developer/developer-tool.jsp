@@ -54,6 +54,7 @@
 					<li :class="{'selected': 0 === selected}" @click="selected = 0">备份数据</li>
 					<li :class="{'selected': 1 === selected}" @click="selected = 1">代码生成器</li>
 					<li :class="{'selected': 2 === selected}" @click="selected = 2">后台日志浏览</li>
+					<li :class="{'selected': 3 === selected}" @click="selected = 3">统计代码行数</li>
 				</ul>
 			<div class="content">
 				<div :class="{'selected': 0 === selected}">
@@ -104,12 +105,10 @@
 			<div>BeanName:</div><input type="text" name="beanName" /> 通常用于类名，例如 UserRoleResources
 		</div>
 		<div>
-			<div>isMap: </div><input type="radio" name="isMap" value="true">true <input type="radio" name="isMap" value="false" checked /> false   当 isMap=false 时不生成 Bean 类，id使用 int
-			
-			
+			<div>isMap: </div><input type="radio" name="isMap" value="true"> true <input type="radio" name="isMap" value="false" checked /> false   当 isMap=false 时不生成 Bean 类，id使用 int
 		</div>
-		<div>
-			<div>saveFolder: </div><input type="text" name="saveFolder" placeholder="C:\project\temp\CodeGenerators\" value="${saveFolder}" size="80" /> 保存目录
+		<div> 
+			<div>saveFolder: </div><input type="text" name="saveFolder" placeholder="C:\project\temp\CodeGenerators\" value="C:\\temp" size="80" /> 保存目录6565
 		</div>
 		<div>
 			<div>packageName: </div><input type="text" name="packageName" value="com.ajaxjs.user.role"  size="80" /> 包名
@@ -124,40 +123,10 @@
 			<div>dbPassword: </div><input type="text" name="dbPassword" value="${conn.password}" /> 
 		</div>
 		<div>
-			<button>生成</button><br>注意：仅支持 MySQL 数据库  
+			<button>生 成 单 表</button> &nbsp;&nbsp;&nbsp; <button>生成所有表的（速度较慢）</button><br>注意：仅支持 MySQL 数据库  
 		</div>
 	</form>
 	<br />
-	<hr />
-	
-	<form action="${ctx}/admin/CodeGenerators/CodeGenerators" method="post" class="form-1">
-		<div>
-			<div>saveFolder: </div><input type="text" name="saveFolder" value="C:\\temp" size="80" /> 保存目录
-		</div>
-		<div>
-			<div>packageName: </div><input type="text" name="packageName" value="com.ajaxjs.user.role"  size="80" /> 包名
-		</div>
-		<div>
-			<div>dbUrl: </div><input type="text" name="dbUrl" value="jdbc:mysql://115.28.242.232/zyjf" size="80" /> 数据库配置
-		</div>
-		<div>
-			<div>dbUser: </div><input type="text" name="dbUser" value="root" /> 
-		</div>
-		<div>
-			<div>dbPassword: </div><input type="text" name="dbPassword" value="root123abc" /> 
-		</div>	
-		<button>生成所有表的（速度较慢）</button>
-	</form>
-	<br />
-	<hr />
-	<form action="${ctx}/admin/CodeGenerators/CodeCount" method="get" class="form-1">
-		<div>
-			<div>文件夹名：</div><input type="text" name="folder" size="100" />
-		</div>
-		<div>
-			<button>统计代码行数</button>
-		</div>
-	</form>
 					<!-- // TAB 内容 -->
 				</div>
 				<div :class="{'selected': 2 === selected}">
@@ -171,7 +140,16 @@
 
 					<!-- // TAB 内容 -->
 				</div>
-				
+				<div :class="{'selected': 3 === selected}">
+					<form action="${ctx}/admin/CodeGenerators/CodeCount" method="get" class="form-1">
+						<div>
+							<div>文件夹名：</div><input type="text" name="folder" size="100" />
+						</div>
+						<div>
+							<button>统计代码行数</button>
+						</div>
+					</form>
+				</div>
 			</div>
 		</div>
 

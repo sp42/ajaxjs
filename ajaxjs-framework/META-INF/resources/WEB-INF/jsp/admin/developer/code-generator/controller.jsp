@@ -34,7 +34,7 @@ public class ${beanName}AdminController extends BaseController<${beanName}> {
 	@GET
 	@Path("/list")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam("start") int start, @QueryParam("limit") int limit, ModelAndView mv) {
+	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
 		listPaged(start, limit, mv);
 		return adminList();
 	}
@@ -43,7 +43,7 @@ public class ${beanName}AdminController extends BaseController<${beanName}> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("/{id}")
 	@Override
-	public String editUI(@PathParam("id") Long id, ModelAndView mv) {
+	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
 		super.editUI(id, mv);
 		return editUI();
 	}
@@ -68,7 +68,7 @@ public class ${beanName}AdminController extends BaseController<${beanName}> {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam("id") Long id, ${beanName} entity) {
+	public String update(@PathParam(id) Long id, ${beanName} entity) {
 		return super.update(id, entity);
 	}
 
@@ -76,7 +76,7 @@ public class ${beanName}AdminController extends BaseController<${beanName}> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam("id") Long id) {
+	public String delete(@PathParam(id) Long id) {
 		return delete(id, new ${beanName}());
 	}
 	

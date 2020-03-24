@@ -7,8 +7,8 @@
 	Connection conn = JdbcConnection.getConnection();
 	
 	List<String> tables = DataBaseStruController.getAllTableName(conn);
-	Map<String, String> tablesComment = DataBaseStruController.getCommentByTableName(conn, tables);
-	Map<String, List<Map<String, String>>> infos = DataBaseStruController.getColumnCommentByTableName(conn, tables);
+	Map<String, String> tablesComment = DataBaseStruController.getTableComment(conn, tables);
+	Map<String, List<Map<String, String>>> infos = DataBaseStruController.getColumnComment(conn, tables);
 %>
 <!DOCTYPE html>
 <html>

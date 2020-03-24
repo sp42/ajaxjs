@@ -60,7 +60,7 @@ public class DataBaseStruController implements IController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String showTableAllByTableName(@QueryParam("tableName") @NotNull String tableName) {
-		List<Map<String, String>> table = getColumnCommentByTableName(JdbcConnection.getConnection(), tableName);
+		List<Map<String, String>> table = getColumnComment(JdbcConnection.getConnection(), tableName);
 
 		return BaseController.toJson(table);
 	}
@@ -71,7 +71,7 @@ public class DataBaseStruController implements IController {
 	 * @param tableName 表名
 	 * @return 表注释
 	 */
-	public static String getCommentByTableName(Connection conn, String tableName) {
+	public static String getTableComment(Connection conn, String tableName) {
 		try (Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery("SHOW CREATE TABLE " + tableName);) {
 			if (rs != null && rs.next()) {
@@ -91,7 +91,7 @@ public class DataBaseStruController implements IController {
 	 * @param tableNames 表名集合
 	 * @return 表注释集合
 	 */
-	public static Map<String, String> getCommentByTableName(Connection conn, List<String> tableNames) {
+	public static Map<String, String> getTableComment(Connection conn, List<String> tableNames) {
 		Map<String, String> map = new HashMap<>();
 
 		JdbcHelper.stmt(conn, stmt -> {
@@ -161,7 +161,7 @@ public class DataBaseStruController implements IController {
 	 * @param tableNames 多张表的表名
 	 * @return 包含给个字段注释的 Map，key 是表名，value 是各个列。列中的Map
 	 */
-	public static Map<String, List<Map<String, String>>> getColumnCommentByTableName(Connection conn,
+	public static Map<String, List<Map<String, String>>> getColumnComment(Connection conn,
 			List<String> tableNames) {
 		Map<String, List<Map<String, String>>> map = new HashMap<>();
 
@@ -185,7 +185,7 @@ public class DataBaseStruController implements IController {
 	 * @param tableName 单张表名
 	 * @return 一张表的各个字段的注释
 	 */
-	public static List<Map<String, String>> getColumnCommentByTableName(Connection conn, String tableName) {
+	public static List<Map<String, String>> getColumnComment(Connection conn, String tableName) {
 		List<Map<String, String>> list = new ArrayList<>();
 
 		JdbcHelper.query(conn, "SHOW FULL COLUMNS FROM " + tableName, rs -> {
