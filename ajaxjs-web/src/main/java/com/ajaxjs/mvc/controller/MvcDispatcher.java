@@ -232,7 +232,7 @@ public class MvcDispatcher implements Filter {
 			ModelAndView model) {
 		Throwable _err = ReflectUtil.getUnderLayerErr(err);
 
-		if (model.containsKey(FilterAction.NOT_LOG_EXCEPTION)
+		if (model != null && model.containsKey(FilterAction.NOT_LOG_EXCEPTION)
 				&& ((boolean) model.get(FilterAction.NOT_LOG_EXCEPTION))) {
 			_err.printStackTrace(); // 打印异常
 		} else

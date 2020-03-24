@@ -33,7 +33,7 @@ import com.ajaxjs.util.CommonUtil;
 
 /**
  * 输入输出 Cookie 白名单验证过滤。 获取用户输入参数名称和参数值进行 XSS 过滤，对 Header 和 cookie value 值进行 XSS
- * 过滤（转码 Script 标签的 < > 符号）
+ * 过滤（转码 Script 标签的 &lt;、&gt; 符号）
  * 
  * @author sp42 frank@ajaxjs.com
  *
@@ -42,8 +42,9 @@ public class SecurityRequest extends HttpServletRequestWrapper {
 	public static SecurityFilter delegate = new SecurityFilter();
 
 	/**
+	 * 创建一个 SecurityRequest 实例
 	 * 
-	 * @param request
+	 * @param request 请求对象
 	 */
 	public SecurityRequest(HttpServletRequest request) {
 		super(request);
@@ -59,11 +60,6 @@ public class SecurityRequest extends HttpServletRequestWrapper {
 		List<Cookie> cookieList = new ArrayList<>();
 
 		for (Cookie cookie : cookies) {
-			// for (String name : SecurityConfigLoader.cookieWhiteList) {
-			// if (name.equalsIgnoreCase(cookie.getName()))
-			// cookieList.add(cookie);
-			// }
-
 			if (delegate.isInWhiteList(cookie.getName()))
 				cookieList.add(cookie);
 		}
@@ -134,7 +130,7 @@ public class SecurityRequest extends HttpServletRequestWrapper {
 	@Override
 	public String[] getParameterValues(String key) {
 		String[] arr = super.getParameterValues(key);
-		
+
 		if (ConfigService.getValueAsBool("security.isXXS_Filter"))
 			return clean(arr);
 		else

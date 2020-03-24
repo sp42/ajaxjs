@@ -285,7 +285,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 
 		if (!"unknown".equalsIgnoreCase(ip) && ip != null && ip.length() != 0) {
 			int index = ip.indexOf(",");
-			
+
 			if (index != -1)
 				ip = ip.substring(0, index);
 
@@ -314,7 +314,29 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	 * @return true 表示为有这个键
 	 */
 	public boolean hasParameter(String key) {
-		return !CommonUtil.isEmptyString(getParameter(key));
+		String v = getParameter(key);
+
+		if (CommonUtil.isEmptyString(v)) {
+			return false;
+		} else {
+			if (!MappingValue.toBoolean(v))
+				return false;
+			
+			return true;
+		}
+	}
+
+	/**
+	 * 获取参数的值。若为 null 时的默认值
+	 * 
+	 * @param key          键名称
+	 * @param defaultValue 若为 null 时的默认值
+	 * @return 参数内容
+	 */
+	public String getParameter(String key, String defaultValue) {
+		String v = getParameter(key);
+
+		return CommonUtil.isEmptyString(v) ? defaultValue : v;
 	}
 
 	/**

@@ -18,18 +18,17 @@ package com.ajaxjs.web.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import javax.servlet.ServletOutputStream;
-import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.mockito.ArgumentCaptor;
+
+import com.ajaxjs.web.ByteArrayServletOutputStream;
 
 /**
  * 模拟一个 Response 对象
@@ -45,27 +44,24 @@ public class MockResponse {
 	 * @return 流对象以便获取信息
 	 */
 	public static ServletOutputStream streamFactory(HttpServletResponse response) {
-		ServletOutputStream out = new ServletOutputStream() {
-			private OutputStream os = new ByteArrayOutputStream();
+		ServletOutputStream out = new ByteArrayServletOutputStream();
 
-			@Override
-			public void write(int i) throws IOException {
-				os.write(i);
-			}
-
-			@Override
-			public String toString() {
-				return os.toString();
-			}
-
-			public boolean isReady() {
-				return false;
-			}
-
-			public void setWriteListener(WriteListener arg0) {
-			}
-		};
-
+		/*
+		 * ServletOutputStream out = new ServletOutputStream() { private OutputStream os
+		 * = new ByteArrayOutputStream();
+		 * 
+		 * @Override public void write(byte[] data, int offset, int length) { try {
+		 * os.write(data, offset, length); } catch (IOException e) { // TODO
+		 * Auto-generated catch block e.printStackTrace(); } }
+		 * 
+		 * @Override public void write(int i) throws IOException { os.write(i); }
+		 * 
+		 * @Override public String toString() { return os.toString(); }
+		 * 
+		 * public boolean isReady() { return false; }
+		 * 
+		 * public void setWriteListener(WriteListener arg0) { } };
+		 */
 		try {
 			when(response.getOutputStream()).thenReturn(out);
 		} catch (IOException e) {
