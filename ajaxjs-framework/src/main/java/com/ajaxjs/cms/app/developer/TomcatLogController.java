@@ -37,7 +37,6 @@ public class TomcatLogController implements IController {
 	public void onOpen(Session session) {
 		if (ConfigService.getValueAsBool("forDelevelopers.enableWebSocketLogOutput")) {
 //			tailer = new LogFileTailer("C:\\temp\\bar.txt", 1000, true);
-			System.out.println(FileHandler.LOG_PATH);
 			tailer = new LogFileTailer(FileHandler.LOG_PATH, 1000, true);
 			tailer.setTailing(true);
 			tailer.addListener(log -> {
