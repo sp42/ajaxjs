@@ -55,7 +55,6 @@ public class ZipHelper {
 			ZipEntry ze;
 			while ((ze = zis.getNextEntry()) != null) {
 				File newFile = new File(save + File.separator + ze.getName());
-				System.out.println("file unzip : " + newFile.getAbsoluteFile());
 
 				// 大部分网络上的源码，这里没有判断子目录
 				if (ze.isDirectory()) {

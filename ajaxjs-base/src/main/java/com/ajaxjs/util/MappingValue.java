@@ -86,6 +86,8 @@ public class MappingValue {
 
 		if (value instanceof String) {
 			String _value = (String) value;
+			System.out.println(_value);
+			
 			if (_value.equalsIgnoreCase("yes") || _value.equalsIgnoreCase("true") || _value.equals("1")
 					|| _value.equalsIgnoreCase("on"))
 				return true;
