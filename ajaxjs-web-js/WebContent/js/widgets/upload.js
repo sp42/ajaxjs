@@ -360,7 +360,7 @@ Vue.component('aj-xhr-upload', {
 			errMsg : null,				// 错误信息
 			newlyId : null,				// 成功上传之后的文件 id
 			radomId : Math.round(Math.random() * 1000),		// 不重复的 id
-			uplodedFileUrl:null,
+			uplodedFileUrl: null,
 			uploadOk_callback: json => {// 回调函数
 				this.uplodedFileUrl = json.imgUrl;
 				
@@ -370,7 +370,8 @@ Vue.component('aj-xhr-upload', {
 				ajaxjs.xhr.defaultCallBack(json);
 			},				
 	    	imgBase64Str : null,			// 图片的 base64 形式，用于预览
-	    	progress : 0
+	    	progress : 0,
+	    	fileName: ''
 		};
 	},
 	props : {
@@ -381,7 +382,7 @@ Vue.component('aj-xhr-upload', {
 		fieldName : String, 	// input name 字段名
 	    limitSize : Number,
 	    hiddenField:{			// 上传后的文件名保存在这个隐藏域之中
-	    	type:String,
+	    	type: String,
 	    	default: null
 	    },
 	    hiddenFieldValue: String,
@@ -390,10 +391,11 @@ Vue.component('aj-xhr-upload', {
 	    isImgUpload : Boolean, 	// 是否图片上传
 	    imgPlace : String,		// 图片占位符，用户没有选定图片时候使用的图片
 	    imgMaxWidth : {type : Number, default : 1920},
-	    imgMaxHeight: {type : Number, default : 1680}
+	    imgMaxHeight: {type : Number, default : 1680},
+	    buttonBottom: Boolean  // 上传按钮是否位于下方
 	},
 	template : 
-		'<div class="aj-xhr-upload">\
+		'<div class="aj-xhr-upload" :style="{display: buttonBottom ? \'inherit\': \'flex\'}">\
 			<input v-if="hiddenField" type="hidden" :name="hiddenField" :value="hiddenFieldValue" />\
 			<div v-if="isImgUpload">\
 				<a :href="imgPlace" target="_blank">\
@@ -406,10 +408,16 @@ Vue.component('aj-xhr-upload', {
 			<input type="file" :name="fieldName" class="hide" :id="\'uploadInput_\' + radomId" @change="onUploadInputChange($event)" :accept="isImgUpload ? \'image/*\' : accpectFileType" />\
 			<div v-if="!isFileSize || !isExtName">{{errMsg}}</div>\
 			<div v-if="isFileSize && isExtName">\
+				{{fileName}}\
 				<button @click.prevent="doUpload();" style="min-width:110px;">{{progress && progress !== 100 ? \'上传中 \' + progress + \'%\': \'上传\'}}</button>\
 			</div>\
 		</div>',
 	methods : {
+		getFileName() {
+			var v = this.$el.$('input[type=file]').value;
+			var arr = v.split('\\');
+			this.fileName = arr.pop().trim();
+		},
 		onUploadInputChange(e) {
 			var fileInput = e.target;
 			var ext = fileInput.value.split('.').pop(); // 扩展名
@@ -449,6 +457,8 @@ Vue.component('aj-xhr-upload', {
 				}
 				
 			}
+			
+			this.getFileName();
 		},
 
 		readBase64(file) {
