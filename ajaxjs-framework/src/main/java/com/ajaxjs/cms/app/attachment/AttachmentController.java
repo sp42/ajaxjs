@@ -10,7 +10,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.app.ArticleController;
 import com.ajaxjs.cms.app.CommonConstant;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
@@ -28,7 +27,7 @@ import com.ajaxjs.util.logger.LogHelper;
  */
 @Bean
 @Path("/admin/attachment")
-public class AttachmentController extends BaseController<Attachment> {
+public class AttachmentController extends BaseController<Attachement> {
 	private static final LogHelper LOGGER = LogHelper.getLog(AttachmentController.class);
 
 	@Resource("AttachmentService")
@@ -49,7 +48,7 @@ public class AttachmentController extends BaseController<Attachment> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String create(Attachment entity) {
+	public String create(Attachement entity) {
 		return super.create(entity);
 	}
 
@@ -58,7 +57,7 @@ public class AttachmentController extends BaseController<Attachment> {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam(id) Long id, Attachment entity) {
+	public String update(@PathParam(id) Long id, Attachement entity) {
 		return super.update(id, entity);
 	}
 
@@ -67,11 +66,11 @@ public class AttachmentController extends BaseController<Attachment> {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String delete(@PathParam(id) Long id) {
-		return delete(id, new Attachment());
+		return delete(id, new Attachement());
 	}
 
 	@Override
-	public IBaseService<Attachment> getService() {
+	public IBaseService<Attachement> getService() {
 		return service;
 	}
 }

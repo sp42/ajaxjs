@@ -127,25 +127,8 @@
 						</aj-xhr-upload>
 							
 							</td>
-						</tr>
-					</table>
-				</c:otherwise>
-			</c:choose>
-				</div>
-				
-<!-- 附件上传 -->
-				<div>
-					<div class="label" style="float:left;">附件：</div> 
-			<c:choose>
-				<c:when test="${isCreate}">
-					<span>请保存记录后再上传附件。</span>
-				</c:when>
-				<c:otherwise>
-					<table>
-						<tr>
-							<td>
-								<!-- <ajaxjs-file-upload :limit-size="30000" field-name="kkk" label-id="attachmentUpload"></ajaxjs-file-upload> -->
-							</td>
+							<td style="width：20px;"></td>
+							<td> <a href="#">上传附件</a></td> 
 						</tr>
 					</table>
 				</c:otherwise>
