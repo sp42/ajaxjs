@@ -100,7 +100,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 			pic.setFileSize((int) (imgHelper.file.length() / 1024));
 
 			if (catalogId != 0)
-				pic.setCatalog(catalogId);
+				pic.setCatalogId(catalogId);
 
 			final Long _newlyId = service.create(pic);
 
