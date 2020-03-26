@@ -129,7 +129,7 @@ public abstract class BaseService<T> extends QueryTools implements IBaseService<
 
 		return dao.findPagedList(start, limit, fn);
 	}
-
+	
 	private IBaseDao<T> dao;
 
 	private String uiName;
