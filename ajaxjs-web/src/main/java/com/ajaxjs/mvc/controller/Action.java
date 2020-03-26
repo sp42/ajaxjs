@@ -102,6 +102,7 @@ public class Action {
 	 */
 	public void parseMethod() {
 		Class<? extends IController> clz = controller.getClass();
+		String topPath = null;
 
 		for (Method method : clz.getMethods()) {
 			Path subPath = method.getAnnotation(Path.class); // 看看这个控制器方法有木有 URL 路径的信息，若有，要处理
@@ -111,11 +112,14 @@ public class Action {
 
 				if (subPathValue.startsWith("/")) { // 根目录开始
 					subPathValue = subPathValue.replaceAll("^/", ""); // 一律不要前面的 /
-					
-					if(subPathValue.contains("{root}")) { // 顶部路径
-						subPathValue = subPathValue.replaceAll("\\{root\\}", ControllerScanner.getRootPath(clz));
+
+					if (subPathValue.contains("{root}")) { // 顶部路径
+						if (topPath == null)
+							topPath = ControllerScanner.getRootPath(clz);
+
+						subPathValue = subPathValue.replaceAll("\\{root\\}", topPath);
 					}
-					
+
 					Action subAction = IController.findTreeByPath(IController.urlMappingTree, subPathValue, "", true);
 					subAction.controller = controller;
 					subAction.methodSend(method);
