@@ -173,10 +173,14 @@ public class BeanContext {
 	 */
 	private static String parseId(String dependenciObj_id) {
 		if (dependenciObj_id.startsWith("autoWire:")) {
+			
+			System.out.println(dependenciObj_id);
 			String str = dependenciObj_id.replaceFirst("autoWire:", "");
 			String[] arr = str.split("\\|");
 			String extendedId = ConfigService.getValueAsString(arr[0]);
 
+			System.out.println(arr[0]);
+			System.out.println(extendedId);
 			// 没有扩展，读取默认的
 			return extendedId == null ? arr[1] : extendedId;
 		}
