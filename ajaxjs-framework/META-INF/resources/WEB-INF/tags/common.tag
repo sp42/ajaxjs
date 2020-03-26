@@ -10,7 +10,6 @@
 
 	// 要写 java 所以不用 jstl tag
 	if("footer".equals(jspContext.getAttribute("type"))) {
-		
 		if (request.getAttribute("requestTimeRecorder") != null) {
 			long requestTimeRecorder = (long) request.getAttribute("requestTimeRecorder");
 			long end = System.nanoTime() - requestTimeRecorder;
@@ -84,7 +83,6 @@
 
 <c:if test="${type == 'info' && not empty info}">
 	<%@attribute name="isOnlyCreateDate" required="false" type="Boolean" description="是否只显示创建日期"%>
-	<%@attribute name="showPageHelper" required="false" type="Boolean" fragment="false" description="是否显示分享、调整字体大小"%>
 	
 	<div class="aj-article-info">
 		<article>
@@ -122,16 +120,12 @@
 </c:if>
 	 	<!-- 版权声明 -->
 		<div style="font-size: 10pt;color: gray;text-align: right;">
-			<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/">
-				<img alt="知识共享许可协议" style="border-width:0;vertical-align: middle;" src="https://i.creativecommons.org/l/by-nc-sa/3.0/cn/88x31.png" />
-			</a> 
 			本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/">知识共享署名-非商业性使用-相同方式共享 3.0 中国大陆许可协议</a>进行许可。
 		</div>	
 		
-		<c:if test="${showPageHelper}">	
 		
 <c:if test="${ConfigService.getValueAsBool('domain.article.pageHelper')}">		
-			<table class="vue" style="float:right;margin:10px 0 20px 0;">
+			<table class="aj-pageHelper" style="float:right;margin:10px 0 20px 0;">
 				<tr>
 					<td>
 						<!-- 百度分享按钮 http://share.baidu.com/ -->
@@ -150,6 +144,11 @@
 					</td>
 				</tr>
 			</table>
+			<script>
+				new Vue({ el : '.aj-pageHelper' });
+				
+				window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+			</script>
 </c:if>
 
 <c:if test="${ConfigService.getValueAsBool('domain.article.comment')}">
@@ -172,11 +171,6 @@
 			</div>
 			<!-- City版安装代码已完成 -->
 </c:if>
-		</c:if>
 	</div>
-	<script>
-		new Vue({ el : '.vue' });
-		
-		window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
-	</script>
+
 </c:if>

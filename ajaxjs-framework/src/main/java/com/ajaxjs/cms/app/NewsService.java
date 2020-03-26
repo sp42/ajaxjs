@@ -7,7 +7,6 @@ import com.ajaxjs.ioc.Bean;
 public class NewsService extends ArticleService {
 	{
 		setUiName("新闻");
-		setShortName("news");
 	}
 
 	@Override
