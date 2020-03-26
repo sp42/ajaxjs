@@ -83,8 +83,9 @@
 	<h3 class="config"><i></i> 全局数据</h3>
 	<ul>
 
+		<li><a target="iframepage" href="${ctx}/admin/article/list/">所有图文</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/catelog/">分类管理</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/attachment/list/">附件列表</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/attachment/">附件列表</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/attachmentPicture/list/">图片列表</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/attachmentVideo/list/">视频列表</a></li>
 
