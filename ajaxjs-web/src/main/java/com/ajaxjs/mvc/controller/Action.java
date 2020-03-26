@@ -111,7 +111,11 @@ public class Action {
 
 				if (subPathValue.startsWith("/")) { // 根目录开始
 					subPathValue = subPathValue.replaceAll("^/", ""); // 一律不要前面的 /
-
+					
+					if(subPathValue.contains("{root}")) { // 顶部路径
+						subPathValue = subPathValue.replaceAll("\\{root\\}", ControllerScanner.getRootPath(clz));
+					}
+					
 					Action subAction = IController.findTreeByPath(IController.urlMappingTree, subPathValue, "", true);
 					subAction.controller = controller;
 					subAction.methodSend(method);

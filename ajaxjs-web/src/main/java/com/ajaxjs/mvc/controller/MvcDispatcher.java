@@ -115,6 +115,7 @@ public class MvcDispatcher implements Filter {
  
 		try {
 			action = IController.findTreeByPath(uri);
+			System.out.println("::::::::::::::::"+action.controller);
 		} catch (Throwable e) {
 			LOGGER.warning(e);
 		}
