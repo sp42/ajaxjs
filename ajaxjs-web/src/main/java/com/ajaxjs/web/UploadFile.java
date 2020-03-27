@@ -127,7 +127,7 @@ public class UploadFile extends HttpServletRequestWrapper {
 
 		uploadFileInfo.extName = ext.toLowerCase();
 
-		if (uploadFileInfo.allowExtFilenames != null && uploadFileInfo.allowExtFilenames.length > 0) {
+		if (!CommonUtil.isNull(uploadFileInfo.allowExtFilenames)) {
 			boolean isFound = false;
 
 			for (String _ext : uploadFileInfo.allowExtFilenames) {

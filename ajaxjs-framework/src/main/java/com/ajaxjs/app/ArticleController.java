@@ -15,6 +15,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.ajaxjs.app.attachment.AttachmentService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
@@ -60,17 +61,20 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 		return toJson(getService().list(catalogId, start, limit, CommonConstant.ON_LINE));
 	}
 
+
+	
 	@GET
 	@Path(idInfo)
 	@MvcFilter(filters = { DataBaseFilter.class, FrontEndOnlyCheck.class })
 	public String getInfo(@PathParam(id) Long id, ModelAndView mv) {
 		LOGGER.info("图文详情-前台");
-		
+		Map<String, Object> map = getService().findById(id);
 		prepareData(mv);
-		mv.put(info, getService().findById(id));
+		mv.put(info, map);
 		BaseService.getNeighbor(mv, "entity_article", id);
 		getService().showInfo(mv, id);
 
+		map.put("attachment", new AttachmentService().findByOwner((long)map.get("uid")));
 		return info();
 	}
 

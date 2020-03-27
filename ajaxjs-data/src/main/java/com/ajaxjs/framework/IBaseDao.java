@@ -121,6 +121,8 @@ public interface IBaseDao<T> {
 	 */
 	@Update
 	public int update(T bean);
+	
+//	public Long saveOrUpdate(T bean);
 
 	/**
 	 * 单个删除

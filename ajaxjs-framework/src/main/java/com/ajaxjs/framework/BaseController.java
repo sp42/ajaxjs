@@ -225,6 +225,10 @@ public abstract class BaseController<T> implements IController, Constant {
 		return String.format(json_ok, JsonHelper.javaValue2jsonValue(msg));
 	}
 
+	public static String jsonOk() {
+		return jsonOk("操作成功！");
+	}
+
 	public static String jsonOk_Extension(Object... msg) {
 		return String.format(json_ok_extension, msg);
 	}
@@ -237,6 +241,10 @@ public abstract class BaseController<T> implements IController, Constant {
 	 */
 	public static String jsonNoOk(String msg) {
 		return String.format(json_not_ok, JsonHelper.jsonString_covernt(msg));
+	}
+
+	public static String jsonNoOk() {
+		return jsonNoOk("操作失败！");
 	}
 
 	/**

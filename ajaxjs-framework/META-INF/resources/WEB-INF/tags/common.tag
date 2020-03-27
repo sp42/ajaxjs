@@ -105,6 +105,7 @@
 			
 			${info.content.replaceAll('src="[^http]', 'src="../../')}
 		</article>
+		<jsp:doBody />
 		
 <c:if test="${ConfigService.getValueAsBool('domain.article.neighborRecord')}">
 		<!-- 相邻记录 -->

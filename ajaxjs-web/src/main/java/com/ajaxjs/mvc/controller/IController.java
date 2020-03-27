@@ -108,7 +108,6 @@ public interface IController {
 		
 		if (match.find()) {
 			path = match.replaceAll("/{id}");
-			System.out.println(">>>>>>>>>" + path);
 		}
 
 		Action action = findTreeByPath(urlMappingTree, path, "");

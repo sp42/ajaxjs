@@ -25,7 +25,6 @@ import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.web.UploadFileInfo;
 
-
 /**
  * 
  * 控制器
@@ -46,8 +45,6 @@ public class AttachmentController extends BaseController<Attachment> {
 		prepareData(mv);
 		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.ON_LINE, true));
 	}
-
-
 
 	@POST
 	@MvcFilter(filters = DataBaseFilter.class)
@@ -78,21 +75,23 @@ public class AttachmentController extends BaseController<Attachment> {
 	public IBaseService<Attachment> getService() {
 		return service;
 	}
-	
+
 	// TODO owenerId 判定是否本人，而不是其他人
 	@POST
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("upload/{id}/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String imgUpload(MvcRequest request, @PathParam(id) Long owenerId, @QueryParam(catalogId) int catalogId) throws IOException {
+	public String upload(MvcRequest request, @PathParam(id) Long owenerId, @QueryParam(catalogId) int catalogId)
+			throws IOException {
 		LOGGER.info("上传附件");
+		// TODO 文件类型限制
 		final UploadFileInfo info = uploadByConfig(request);
 
 		if (info.isOk) {
 			Attachment pic = new Attachment();
 			pic.setOwner(owenerId);
 			pic.setName(info.saveFileName);
-			 pic.setFileSize((int) (info.contentLength / 1024));
+			pic.setFileSize((int) (info.contentLength / 1024));
 
 			if (catalogId != 0)
 				pic.setCatalogId(catalogId);
@@ -112,5 +111,25 @@ public class AttachmentController extends BaseController<Attachment> {
 
 		} else
 			return jsonNoOk("上传失败！");
+	}
+	
+	@GET
+	@MvcFilter(filters = DataBaseFilter.class)
+	@Path("getListByOwnerUid/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getListByOwnerUid(@PathParam(id) Long uid) {
+		return toJson(service.findByOwner(uid));
+	}
+
+	@DELETE
+	@Path(idInfo)
+	@MvcFilter(filters = DataBaseFilter.class)
+	@Produces(MediaType.APPLICATION_JSON)
+	public String delete(@PathParam(id) Long id, MvcRequest request) {
+		Attachment attachment = service.findById(id);
+		// TODO 删除物理文件
+//		attachment.setPath(request.mappath(attachment.getPath())); // 转换为绝对地址
+
+		return delete(id, attachment);
 	}
 }
