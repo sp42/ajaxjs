@@ -5,7 +5,7 @@ import com.ajaxjs.framework.BaseModel;
 /**
  * 通用附件
  */
-public class Attachement extends BaseModel  {
+public class Attachment extends BaseModel  {
 	private static final long serialVersionUID = 1L;
 	
 	/**
