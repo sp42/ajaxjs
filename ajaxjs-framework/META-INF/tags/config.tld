@@ -8,10 +8,10 @@
 	<uri>/ajaxjs_config</uri>
 	<info>配置</info>
 	<description>自定义标签库</description>
-	 
+
 	<tag>
 		<name>siteStru</name>
-		<tag-class>com.ajaxjs.mvc.view.SiteStruTag</tag-class>
+		<tag-class>com.ajaxjs.framework.view.SiteStruTag</tag-class>
 		<description>网站页面结构标签</description>
 		<body-content>scriptless</body-content>
 		<attribute>
@@ -20,10 +20,10 @@
 			<description>标签类型</description>
 		</attribute>
 	</tag>
-	
+
 	<tag>
 		<name>pageUtil</name>
-		<tag-class>com.ajaxjs.mvc.view.PageTag</tag-class>
+		<tag-class>com.ajaxjs.framework.view.PageTag</tag-class>
 		<description>分页辅助标签</description>
 		<body-content>scriptless</body-content>
 		<attribute>

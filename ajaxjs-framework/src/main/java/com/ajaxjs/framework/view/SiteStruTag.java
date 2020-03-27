@@ -1,4 +1,4 @@
-package com.ajaxjs.mvc.view;
+package com.ajaxjs.framework.view;
 
 import java.io.IOException;
 import java.util.List;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.mvc.filter;
+package com.ajaxjs.framework.filter;
 
 import java.lang.reflect.Method;
 import java.util.Date;
@@ -21,6 +21,8 @@ import java.util.Date;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
+import com.ajaxjs.mvc.filter.FilterAction;
+import com.ajaxjs.mvc.filter.FilterAfterArgs;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.cryptography.SymmetricCipher;
 import com.ajaxjs.util.logger.LogHelper;

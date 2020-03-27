@@ -6,8 +6,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 
+import com.ajaxjs.framework.filter.AesFilter;
 import com.ajaxjs.mvc.controller.IController;
-import com.ajaxjs.mvc.filter.AesFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.web.captcha.CaptchaFilter;
 

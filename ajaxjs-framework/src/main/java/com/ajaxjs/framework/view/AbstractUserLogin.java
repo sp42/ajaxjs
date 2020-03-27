@@ -1,17 +1,27 @@
-package com.ajaxjs.view;
+package com.ajaxjs.framework.view;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
+/**
+ * 会员标签的抽象类
+ * 
+ * @author sp42 frank@ajaxjs.com
+ *
+ */
 public abstract class AbstractUserLogin extends SimpleTagSupport {
-
+	/**
+	 * 标签获取请求对象的方法
+	 * 
+	 * @param context JSP 上下文对象
+	 * @return 请求对象
+	 */
 	public static HttpServletRequest getRequest(JspContext context) {
 		PageContext pageContext = (PageContext) context;
-		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 
-		return request;
+		return (HttpServletRequest) pageContext.getRequest();
 	}
 
 	/**

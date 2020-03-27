@@ -1,7 +1,7 @@
 <%@page pageEncoding="UTF-8" import="com.ajaxjs.mvc.Constant"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
 <%-- <%@attribute name="PageResult" type="com.ajaxjs.jdbc.PageResult" required="false" description="分页对象"%> --%>
-<jsp:useBean id="PageUtil" class="com.ajaxjs.mvc.view.PageTag" />
+<jsp:useBean id="PageUtil" class="com.ajaxjs.framework.view.PageTag" />
 
 <section class="pageInfo">
 	<c:choose>

@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.mvc.filter.AesFilter;
+import com.ajaxjs.framework.filter.AesFilter;
 import com.ajaxjs.web.captcha.CaptchaController;
 import com.ajaxjs.web.mock.MockRequest;
 import com.ajaxjs.web.mock.MockResponse;

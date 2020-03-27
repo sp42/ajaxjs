@@ -1,4 +1,4 @@
-package com.ajaxjs.mvc.filter;
+package com.ajaxjs.framework.filter;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
@@ -8,6 +8,8 @@ import java.util.Objects;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
+import com.ajaxjs.mvc.filter.FilterAction;
+import com.ajaxjs.mvc.filter.FilterAfterArgs;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**

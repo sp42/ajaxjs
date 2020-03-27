@@ -12,14 +12,14 @@
 
 	<tag>
 		<name>logined</name>
-		<tag-class>com.ajaxjs.view.UserLogined</tag-class>
+		<tag-class>com.ajaxjs.framework.view.UserLogined</tag-class>
 		<description>會員已经登录时</description>
 		<body-content>scriptless</body-content>
 	</tag>
 	
 	<tag>
 		<name>notLogined</name>
-		<tag-class>com.ajaxjs.view.UserNotLogined</tag-class>
+		<tag-class>com.ajaxjs.framework.view.UserNotLogined</tag-class>
 		<description>會員没有登录时</description>
 		<body-content>scriptless</body-content>
 	</tag>

@@ -1,5 +1,5 @@
 
-package com.ajaxjs.cms.filter;
+package com.ajaxjs.framework.filter;
 
 import java.lang.reflect.Method;
 import java.util.Map;

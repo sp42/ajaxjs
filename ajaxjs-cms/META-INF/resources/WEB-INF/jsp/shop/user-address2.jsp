@@ -1,6 +1,6 @@
  <%@page import="com.ajaxjs.orm.JdbcConnection"%>
 <%@page pageEncoding="UTF-8"
-	import="com.ajaxjs.framework.Repository,com.ajaxjs.user.service.UserAddressService.UserAddressDao, com.ajaxjs.mvc.filter.DataBaseFilter"%>
+	import="com.ajaxjs.framework.Repository,com.ajaxjs.user.service.UserAddressService.UserAddressDao,com.ajaxjs.framework.filter.DataBaseFilter"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
 <%
 	DataBaseFilter.initDb();

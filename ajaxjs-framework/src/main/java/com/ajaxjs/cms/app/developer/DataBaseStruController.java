@@ -26,8 +26,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.ajaxjs.framework.BaseController;
+import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.mvc.controller.IController;
-import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.JdbcHelper;

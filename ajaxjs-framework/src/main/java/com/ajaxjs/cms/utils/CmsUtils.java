@@ -3,8 +3,8 @@ package com.ajaxjs.cms.utils;
 import org.w3c.dom.NamedNodeMap;
 
 import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.ioc.BeanContext;
-import com.ajaxjs.mvc.filter.DataBaseFilter;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.util.XMLHelper;
 
