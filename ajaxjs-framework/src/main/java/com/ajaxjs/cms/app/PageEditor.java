@@ -41,7 +41,7 @@ import com.ajaxjs.util.logger.LogHelper;
  *
  */
 @Path("/admin/page_editor")
-public class PageEditor extends BaseController {
+public class PageEditor extends BaseController<Object> {
 	private static final LogHelper LOGGER = LogHelper.getLog(PageEditor.class);
 
 	/**
