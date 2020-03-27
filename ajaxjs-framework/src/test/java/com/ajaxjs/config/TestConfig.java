@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.ajaxjs.Version;
-import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.util.map.ListMap;
 
 public class TestConfig {

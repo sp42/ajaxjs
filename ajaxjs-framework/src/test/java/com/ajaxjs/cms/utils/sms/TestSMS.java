@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.utils.sms;
+	package com.ajaxjs.cms.utils.sms;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -7,9 +7,6 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import com.ajaxjs.cms.utils.sms.Aliyun;
-import com.ajaxjs.cms.utils.sms.Message;
-import com.ajaxjs.cms.utils.sms.SMS;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.util.resource.ScanClass;
 
