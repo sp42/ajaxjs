@@ -15,7 +15,6 @@ import org.junit.Test;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.TestCaseUserBean;
-import com.ajaxjs.util.map.MapTool;
 
 public class TestMapTool {
 	Map<String, Object> map = new HashMap<String, Object>() {

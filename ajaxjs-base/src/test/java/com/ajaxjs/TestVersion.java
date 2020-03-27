@@ -2,8 +2,6 @@ package com.ajaxjs;
 
 import org.junit.Test;
 
-import com.ajaxjs.Version;
-
 public class TestVersion {
 	@Test
 	public void testVersion() {

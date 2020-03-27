@@ -9,8 +9,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.jsonparser.JsEngineWrapper;
-
 /**
  * @author sp42 frank@ajaxjs.com
  *

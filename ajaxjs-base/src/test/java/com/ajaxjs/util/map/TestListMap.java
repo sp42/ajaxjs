@@ -7,8 +7,6 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.ajaxjs.jsonparser.TestJsonHelper;
-import com.ajaxjs.util.map.ListMap;
-import com.ajaxjs.util.map.ListMapConfig;
 
 public class TestListMap {
 	static ListMapConfig config = new ListMapConfig();

@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 
 import org.junit.Test;
 
-import com.ajaxjs.ioc.aop.Before;
 import com.ajaxjs.util.ReflectUtil;
 
 public class TestSimpleAop {

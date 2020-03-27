@@ -7,10 +7,8 @@ import java.lang.reflect.Method;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.ioc.aop.Aop;
-import com.ajaxjs.ioc.aop.ReturnBefore;
 import com.ajaxjs.ioc.testcase.Subject;
-import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.logger.LogHelper;		
 
 public class TestHandler {	
 	Subject subject, stopSubject;
