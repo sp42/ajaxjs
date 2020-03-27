@@ -9,10 +9,10 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.ajaxjs.js.jsonparser.JsonParseException;
-import com.ajaxjs.js.jsonparser.lexer.Lexer;
-import com.ajaxjs.js.jsonparser.lexer.Token;
-import com.ajaxjs.js.jsonparser.lexer.Tokens;
+import com.ajaxjs.jsonparser.JsonParseException;
+import com.ajaxjs.jsonparser.lexer.Lexer;
+import com.ajaxjs.jsonparser.lexer.Token;
+import com.ajaxjs.jsonparser.lexer.Tokens;
 
 
 

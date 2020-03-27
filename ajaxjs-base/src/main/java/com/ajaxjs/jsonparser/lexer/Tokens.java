@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.js.jsonparser.lexer;
+package com.ajaxjs.jsonparser.lexer;
 
 /**
  * 列出常见的 Token 类型。字符串类型 Token 和 数字类型 Token 两个比较特殊，须另外设类来表示。

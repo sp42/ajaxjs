@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.js.jsonparser;
+package com.ajaxjs.jsonparser;
 
 /**
  * JSON 解析器专用异常类

@@ -1,4 +1,4 @@
-package com.ajaxjs.js.jsonparser.lexer;
+package com.ajaxjs.jsonparser.lexer;
 
 public class BaseLexer {
 	/**

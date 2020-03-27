@@ -29,7 +29,7 @@ import java.util.Stack;
 import java.util.function.Function;
 
 import com.ajaxjs.framework.BaseModel;
-import com.ajaxjs.js.jsonparser.syntax.FMS;
+import com.ajaxjs.jsonparser.syntax.FMS;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.MappingValue;
 

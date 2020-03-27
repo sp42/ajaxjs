@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.js.jsonparser.lexer;
+package com.ajaxjs.jsonparser.lexer;
 
-import com.ajaxjs.js.jsonparser.JsonParseException;
+import com.ajaxjs.jsonparser.JsonParseException;
 
 /**
  * 字符串 Token
