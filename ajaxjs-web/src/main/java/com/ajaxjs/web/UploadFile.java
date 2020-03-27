@@ -54,7 +54,10 @@ public class UploadFile extends HttpServletRequestWrapper {
 	 */
 	private byte dataBytes[];
 
-	private UploadFileInfo uploadFileInfo; // 配置信息
+	/**
+	 * 配置信息
+	 */
+	private UploadFileInfo uploadFileInfo;
 
 	/**
 	 * 预检查
@@ -94,6 +97,7 @@ public class UploadFile extends HttpServletRequestWrapper {
 			throw e;
 		}
 
+		uploadFileInfo.contentLength = dataBytes.length;
 		dataStr = Encode.byte2String(dataBytes);
 
 		parse(dataStr);

@@ -1,6 +1,7 @@
 package com.ajaxjs.mvc.controller;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -16,13 +17,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.junit.*;
+import org.junit.Test;
 import org.mockito.Mock;
 
-import com.ajaxjs.mvc.controller.MvcDispatcher;
 import com.ajaxjs.web.mock.MockResponse;
-
-import static org.mockito.Matchers.anyString;
 
 public class TestController {
 	@Mock

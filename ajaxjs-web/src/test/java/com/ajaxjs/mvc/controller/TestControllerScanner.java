@@ -1,6 +1,7 @@
 package com.ajaxjs.mvc.controller;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -8,9 +9,6 @@ import javax.ws.rs.Path;
 
 import org.junit.Test;
 
-import com.ajaxjs.mvc.controller.Action;
-import com.ajaxjs.mvc.controller.ControllerScanner;
-import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.util.ReflectUtil;
 
 public class TestControllerScanner {
