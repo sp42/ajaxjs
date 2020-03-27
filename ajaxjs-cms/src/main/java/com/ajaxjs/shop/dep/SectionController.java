@@ -12,8 +12,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.ajaxjs.app.catalog.Catalog;
 import com.ajaxjs.cms.SectionList;
-import com.ajaxjs.cms.app.catalog.Catalog;
 import com.ajaxjs.cms.controller.DataDictController;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;

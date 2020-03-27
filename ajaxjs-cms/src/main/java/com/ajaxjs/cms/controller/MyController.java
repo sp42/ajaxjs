@@ -1,6 +1,6 @@
 package com.ajaxjs.cms.controller;
 
-import com.ajaxjs.cms.app.NewsService;
+import com.ajaxjs.app.NewsService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 

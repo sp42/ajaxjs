@@ -1,6 +1,6 @@
 package com.ajaxjs.shop.model;
 
-import com.ajaxjs.cms.app.Product;
+import com.ajaxjs.app.Product;
 
 public class Goods extends Product {
 	private static final long serialVersionUID = 1L;

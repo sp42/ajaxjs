@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.ajaxjs.cms.app.attachment.Attachment_pictureDao;
-import com.ajaxjs.cms.app.attachment.Attachment_pictureService;
+import com.ajaxjs.app.attachment.Attachment_pictureDao;
+import com.ajaxjs.app.attachment.Attachment_pictureService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.PageResult;

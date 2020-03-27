@@ -13,8 +13,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.ajaxjs.app.ArticleService;
 import com.ajaxjs.cms.AdsService;
-import com.ajaxjs.cms.app.ArticleService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;

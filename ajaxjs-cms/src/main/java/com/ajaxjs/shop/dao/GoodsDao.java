@@ -3,7 +3,7 @@ package com.ajaxjs.shop.dao;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.cms.app.catalog.CatalogDao;
+import com.ajaxjs.app.catalog.CatalogDao;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.orm.annotation.Select;

@@ -3,7 +3,7 @@ package com.ajaxjs.shop.dep;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.cms.app.attachment.Attachment_pictureDao;
+import com.ajaxjs.app.attachment.Attachment_pictureDao;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.Repository;

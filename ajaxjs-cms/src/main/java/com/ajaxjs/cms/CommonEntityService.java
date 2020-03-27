@@ -2,7 +2,7 @@ package com.ajaxjs.cms;
 
 import java.util.Map;
 
-import com.ajaxjs.cms.app.catalog.CatalogService;
+import com.ajaxjs.app.catalog.CatalogService;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
