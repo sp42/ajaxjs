@@ -14,9 +14,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.app.attachment.Attachment_picture;
-import com.ajaxjs.cms.app.attachment.Attachment_pictureController;
-import com.ajaxjs.cms.app.attachment.Attachment_pictureService;
+import com.ajaxjs.app.attachment.Attachment_picture;
+import com.ajaxjs.app.attachment.Attachment_pictureController;
+import com.ajaxjs.app.attachment.Attachment_pictureService;
 import com.ajaxjs.cms.utils.sms.SMS;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.ServiceException;

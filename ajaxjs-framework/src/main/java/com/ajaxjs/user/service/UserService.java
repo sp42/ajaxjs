@@ -3,8 +3,8 @@ package com.ajaxjs.user.service;
 import java.util.Date;
 import java.util.function.Function;
 
-import com.ajaxjs.cms.app.attachment.Attachment_picture;
-import com.ajaxjs.cms.app.attachment.Attachment_pictureService;
+import com.ajaxjs.app.attachment.Attachment_picture;
+import com.ajaxjs.app.attachment.Attachment_pictureService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;

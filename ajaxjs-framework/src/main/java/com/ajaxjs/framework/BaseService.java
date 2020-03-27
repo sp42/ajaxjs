@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 
-import com.ajaxjs.cms.app.catalog.CatalogService;
+import com.ajaxjs.app.catalog.CatalogService;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.orm.SnowflakeIdWorker;
 import com.ajaxjs.util.CommonUtil;

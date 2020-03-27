@@ -1,6 +1,6 @@
 package com.ajaxjs.user.service;
 
-import com.ajaxjs.cms.app.attachment.Attachment_picture;
+import com.ajaxjs.app.attachment.Attachment_picture;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;

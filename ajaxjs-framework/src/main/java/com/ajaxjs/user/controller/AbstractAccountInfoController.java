@@ -9,7 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.app.catalog.CatalogService;
+import com.ajaxjs.app.catalog.CatalogService;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.mvc.ModelAndView;
