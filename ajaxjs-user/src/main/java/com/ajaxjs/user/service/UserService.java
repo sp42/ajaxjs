@@ -256,7 +256,7 @@ public class UserService extends BaseService<User> {
 		avatar.setPicWidth(imgHelper.width);
 		avatar.setPicHeight(imgHelper.height);
 		avatar.setFileSize((int) (imgHelper.file.length() / 1024));
-		avatar.setCatalog(Attachment_pictureService.AVATAR);
+		avatar.setCatalogId(Attachment_pictureService.AVATAR);
 
 		if (isCreate) {
 			if (avatarService.create(avatar) != null) {
