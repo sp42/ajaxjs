@@ -63,8 +63,8 @@
 			
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
-			<artifactId>ajaxjs-user</artifactId>
-			<version>1.0.0</version>
-		</dependency>		
+			<artifactId>ajaxjs-framework</artifactId>
+			<version>1.0.1</version>
+		</dependency>	
 	</dependencies>
 </project>
