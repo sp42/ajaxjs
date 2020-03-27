@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.app;
+package com.ajaxjs.framework.app;
 
 import static org.junit.Assert.assertEquals;
 
