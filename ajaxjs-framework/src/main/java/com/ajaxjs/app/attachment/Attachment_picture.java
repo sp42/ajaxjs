@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.app.attachment;
+package com.ajaxjs.app.attachment;
 
 public class Attachment_picture extends Attachment {
 	private static final long serialVersionUID = -5556112457279203513L;

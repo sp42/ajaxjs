@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.app.attachment;
+package com.ajaxjs.app.attachment;
 
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.orm.annotation.Delete;
