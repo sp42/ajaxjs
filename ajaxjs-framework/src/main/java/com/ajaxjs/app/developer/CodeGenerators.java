@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.app.developer;
+package com.ajaxjs.app.developer;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.app;
+package com.ajaxjs.app;
 
 import java.util.Calendar;
 import java.util.List;

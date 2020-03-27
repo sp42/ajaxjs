@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.app.developer;
+package com.ajaxjs.app.developer;
 
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.util.ReflectUtil;

@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.app;
+package com.ajaxjs.app;
 
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.ioc.Bean;

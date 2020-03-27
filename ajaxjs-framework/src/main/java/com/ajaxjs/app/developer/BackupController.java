@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.app.developer;
+package com.ajaxjs.app.developer;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.DELETE;
