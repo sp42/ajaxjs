@@ -1,4 +1,4 @@
-package com.ajaxjs.security;
+package com.ajaxjs.web.secuity;
 
 import java.lang.reflect.Method;
 import java.util.List;

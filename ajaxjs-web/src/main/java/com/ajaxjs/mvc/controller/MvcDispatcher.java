@@ -39,14 +39,14 @@ import com.ajaxjs.mvc.filter.Authority;
 import com.ajaxjs.mvc.filter.FilterAction;
 import com.ajaxjs.mvc.filter.FilterAfterArgs;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.security.SecurityRequest;
-import com.ajaxjs.security.SecurityResponse;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.map.MapTool;
 import com.ajaxjs.web.ServletHelper;
+import com.ajaxjs.web.secuity.SecurityRequest;
+import com.ajaxjs.web.secuity.SecurityResponse;
 
 /**
  * MVC 分发器，控制器核心类

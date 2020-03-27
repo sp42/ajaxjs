@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.security;
+package com.ajaxjs.web.secuity;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
