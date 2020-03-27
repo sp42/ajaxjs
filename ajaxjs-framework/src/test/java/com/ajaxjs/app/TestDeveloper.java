@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.app;
+package com.ajaxjs.app;
 
 import static org.junit.Assert.assertEquals;
 
@@ -7,8 +7,8 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.ajaxjs.cms.app.developer.DataBaseStruController;
-import com.ajaxjs.cms.app.developer.TomcatLogController.LogFileTailer;
+import com.ajaxjs.app.developer.DataBaseStruController;
+import com.ajaxjs.app.developer.TomcatLogController.LogFileTailer;
 
 public class TestDeveloper {
 	@Test

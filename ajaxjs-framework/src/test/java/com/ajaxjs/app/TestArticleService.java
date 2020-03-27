@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.app;
+package com.ajaxjs.app;
 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
