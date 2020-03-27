@@ -27,7 +27,7 @@ public class JsController extends HttpServlet {
 	/**
 	 * 保存位置
 	 */
-	static String output = "d:\\project\\ajaxjs-framework\\META-INF\\resources\\ajaxjs-ui-output";
+	static String output = "c:\\project\\ajaxjs-framework\\META-INF\\resources\\ajaxjs-ui-output";
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String js = "// build date:" + new Date() + "\n";

@@ -8,6 +8,10 @@ aj._list = {
 		hrefStr: {
 			type : String,
 			required : false
+		},
+		isPage : {
+			type : Boolean, 	// 是否分页，false=读取所有数据
+			default : true
 		}
 	},
 	
@@ -140,9 +144,12 @@ Vue.component('aj-page-list', {
 		},
 		
 		doAjaxGet(json) {
-			this.total = json.total;
-			this.result = this.isDataAppend ? this.result.concat(json.result) : json.result;
-			this.count();
+			if(this.isPage) {
+				this.total = json.total;
+				this.result = this.isDataAppend ? this.result.concat(json.result) : json.result;
+				this.count();				
+			} else
+				this.result = json.result;
 		}, 
 		ajaxGet() {
 			var params = {};
