@@ -30,7 +30,7 @@
 					<div><aj-json-form :scheme="scheme" :config="config" path="user"></aj-json-form></div>
 					<div><aj-json-form :scheme="scheme" :config="config" path="mailServer"></aj-json-form></div>
 					<div><aj-json-form :scheme="scheme" :config="config" path="Symmetric"></aj-json-form></div>
-					<div><aj-json-form :scheme="scheme" :config="config" path="security"></aj-json-form></div>
+					<div><aj-json-form :scheme="scheme" :config="config" path="sms"></aj-json-form></div>
 					<div><aj-json-form :scheme="scheme" :config="config" path="security"></aj-json-form></div>
 					<div><aj-json-form :scheme="scheme" :config="config" path="forDelevelopers"></aj-json-form></div>
 				</div>
