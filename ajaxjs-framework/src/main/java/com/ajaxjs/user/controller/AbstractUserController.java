@@ -102,12 +102,7 @@ public abstract class AbstractUserController extends BaseUserController {
 		return jsonOk("退出成功！");
 	}
 
-	@POST
-	@Path("sendSMScode")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String sendSMScode(@NotNull @QueryParam("phoneNo") String phoneNo) {
-		return super.sendSMScode(phoneNo);
-	}
+	
 
 	public abstract BiConsumer<User, HttpServletRequest> getAfterLoginCB();
 

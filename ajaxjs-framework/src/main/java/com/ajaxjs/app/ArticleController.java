@@ -83,7 +83,6 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 
 	@Override
 	public void prepareData(ModelAndView mv) {
-		System.out.println(getService());
 		mv.put(domainCatalog_Id, getService().getDomainCatalogId());
 		super.prepareData(mv);
 	}
@@ -95,8 +94,6 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@MvcFilter(filters = { DataBaseFilter.class, XslMaker.class })
 	public String adminList(@QueryParam(start) int start, @QueryParam(limit) int limit,
 			@QueryParam(catalogId) int catalogId, ModelAndView mv) {
-		System.out.println(getService());
-		System.out.println("||||||||||||||" + this);
 		return page(mv, getService().list(catalogId, start, limit, CommonConstant.OFF_LINE), true);
 	}
 

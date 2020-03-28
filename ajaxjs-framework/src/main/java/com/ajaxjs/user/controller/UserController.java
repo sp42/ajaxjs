@@ -7,7 +7,6 @@ import javax.ws.rs.Path;
 
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
-import com.ajaxjs.temp.SMS;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.service.UserCommonAuthService;
 import com.ajaxjs.user.service.UserService;
@@ -26,14 +25,6 @@ public class UserController extends AbstractUserController {
 
 	@Resource("UserService")
 	private UserService service;
-	
-	@Resource("AliyunSMSSender")
-	private SMS sms;
-	
-	@Override
-	public SMS getSms() {
-		return sms;
-	}
 
 	@Override
 	public UserService getService() {

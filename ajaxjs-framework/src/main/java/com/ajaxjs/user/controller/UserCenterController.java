@@ -25,7 +25,6 @@ import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.temp.SMS;
 import com.ajaxjs.user.filter.CurrentUserOnly;
 import com.ajaxjs.user.filter.LoginCheck;
 import com.ajaxjs.user.model.User;
@@ -48,7 +47,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 
 	@Resource("UserService")
 	private UserService service;
-	
+
 	@Override
 	public UserService getService() {
 		return service;
@@ -56,38 +55,28 @@ public class UserCenterController extends AbstractAccountInfoController {
 
 	@Resource("User_common_authService") // 指定 service id
 	private UserCommonAuthService passwordService;
-	
-	@Resource("AliyunSMSSender")
-	private SMS sms;
-	
-	@Override
-	public SMS getSms() {
-		return sms;
-	}
-	
+
 	@GET
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String home(ModelAndView mv) throws ServiceException {
 		LOGGER.info("用户会员中心（前台）");
-		
-		if(ConfigService.getValueAsString("user.customUserCenterHome") != null) {
-			AbstractUserController.ioc("user.customUserCenterHome", 
-				(clz, method)-> ReflectUtil.getMethod(clz, method, mv), 
-				method-> {
-					try {
-						return method.invoke(null, mv);
-					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-						Throwable _e = ReflectUtil.getUnderLayerErr(e);
-						LOGGER.warning(_e);
-						return null;
-					}
-				}
-			);
+
+		if (ConfigService.getValueAsString("user.customUserCenterHome") != null) {
+			AbstractUserController.ioc("user.customUserCenterHome",
+					(clz, method) -> ReflectUtil.getMethod(clz, method, mv), method -> {
+						try {
+							return method.invoke(null, mv);
+						} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+							Throwable _e = ReflectUtil.getUnderLayerErr(e);
+							LOGGER.warning(_e);
+							return null;
+						}
+					});
 		}
-		
+
 		return jsp("user/user-center/home");
 	}
-	
+
 	@GET
 	@Path("profile")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
@@ -96,7 +85,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 		mv.put("info", service.findById(getUserId()));
 		return jsp("user/user-center/profile");
 	}
-	
+
 	@PUT
 	@Path("profile")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -104,7 +93,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 	public String saveProfile(User user) {
 		return update(user.getId(), user);
 	}
-	
+
 	@GET
 	@Path("profile/avater")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
@@ -112,7 +101,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 		LOGGER.info("用户会员中心-个人信息-修改头像");
 		return jsp("user/user-center/avater");
 	}
-	
+
 	@POST
 	@Path("profile/avatar/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -120,10 +109,10 @@ public class UserCenterController extends AbstractAccountInfoController {
 	public String saveAvater(MvcRequest request, @PathParam(id) Long owenerUid) throws IOException {
 		Attachment_pictureController c = new Attachment_pictureController();
 		c.setService(new Attachment_pictureService());
-		
+
 		return c.imgUpload(request, owenerUid, Attachment_pictureService.AVATAR);
 	}
-	
+
 	@GET
 	@Path("profile/avatar/updateAvatar")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -131,11 +120,10 @@ public class UserCenterController extends AbstractAccountInfoController {
 	public String updateAvatar(MvcRequest request, @NotNull @QueryParam("avatar") String avatar) throws IOException {
 		HttpSession sess = request.getSession();
 		sess.setAttribute("userAvatar", request.getContextPath() + "/" + avatar);
-		
+
 		return jsonOk("ok");
 	}
-	
-	
+
 	@GET
 	@Path("address")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
@@ -143,7 +131,6 @@ public class UserCenterController extends AbstractAccountInfoController {
 		LOGGER.info("用户会员中心-我的地址");
 		return jsp("user/user-center/address");
 	}
-
 
 //	@GET
 //	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
@@ -153,17 +140,17 @@ public class UserCenterController extends AbstractAccountInfoController {
 //	}
 
 	@GET
-	
+
 	@Path("info")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String info() {
 		return jsp("user/info");
 	}
-	
+
 	@GET
 	@Path("info/{id}")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	public String info2(@PathParam(id)Long userId, ModelAndView mv) {
+	public String info2(@PathParam(id) Long userId, ModelAndView mv) {
 		mv.put("info", getService().findById(userId));
 		return jsp("user/info");
 	}
@@ -179,7 +166,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Path("info/avatar")
 	public String avatar(ModelAndView mv) {
-		
+
 		Attachment_picture avatar = UserService.dao.findAvaterByUserId(getUserUid());
 		mv.put("avatar", avatar);
 		return jsp("user/avater");
@@ -204,14 +191,6 @@ public class UserCenterController extends AbstractAccountInfoController {
 //		return jsp("user/feedback");
 //	}
 
-	@POST
-	@Path("sendSMScode")
-	@Produces(MediaType.APPLICATION_JSON)
-	@MvcFilter(filters = { LoginCheck.class })
-	public String sendSMScode(@QueryParam("phoneNo") @NotNull String phoneNo) {
-		return super.sendSMScode(phoneNo);
-	}
-	
 	@PUT
 	@Path(idInfo)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
@@ -219,7 +198,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 	public String update(@PathParam(id) Long id, User entity) {
 		return super.update(id, entity);
 	}
-	
+
 	@POST
 	@Path("avatar")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })

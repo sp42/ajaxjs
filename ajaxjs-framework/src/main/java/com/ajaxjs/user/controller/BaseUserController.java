@@ -4,10 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.mvc.filter.SimpleSMSFilter;
-import com.ajaxjs.temp.Message;
-import com.ajaxjs.temp.SMS;
-import com.ajaxjs.user.UserUtil;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.logger.LogHelper;
@@ -23,8 +19,6 @@ public abstract class BaseUserController extends BaseController<User> {
 
 	@Override
 	public abstract UserService getService();
-
-	public abstract SMS getSms();
 
 	/**
 	 * 提示已登錄
@@ -137,40 +131,4 @@ public abstract class BaseUserController extends BaseController<User> {
 
 		return user;
 	}
-
-	/**
-	 * 发送短信
-	 * 
-	 * @param phoneNo
-	 * @param request
-	 * @return
-	 */
-	public String sendSMScode(String phoneNo) {
-		LOGGER.info("发送短信到::" + phoneNo);
-
-		if (phoneNo.length() != 11) {
-			return jsonNoOk(phoneNo + " 中国大陆手机号应为11位数");
-		} else {
-			if (UserUtil.isVaildPhone(phoneNo)) {
-				return jsonNoOk(phoneNo + " 为非法手机号码");
-			} else {
-				int randomCode = (int) ((Math.random() * 9 + 1) * 100000);
-
-				Message message = new Message();
-				message.setPhoneNo(phoneNo);
-				message.setSignName("我是zyjf");
-				message.setTemplateCode("SMS_128495105");
-				message.setTemplateParam(String.format("{\"code\":\"%s\"}", randomCode));
-
-				if (getSms().send(message)) {
-					LOGGER.info("发送手机 " + phoneNo + " 验证码成功");
-					MvcRequest.getHttpServletRequest().getSession().setAttribute(SimpleSMSFilter.SMS_KEY_NAME, randomCode + "");
-					return jsonOk("发送手机 " + phoneNo + " 验证码成功");
-				} else {
-					return jsonNoOk("发送手机 " + phoneNo + " 验证码失敗");
-				}
-			}
-		}
-	}
-
 }
