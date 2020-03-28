@@ -173,7 +173,7 @@ public class BeanContext {
 	 */
 	private static String parseId(String dependenciObj_id) {
 		if (dependenciObj_id.startsWith("autoWire:")) {
-			
+
 			System.out.println(dependenciObj_id);
 			String str = dependenciObj_id.replaceFirst("autoWire:", "");
 			String[] arr = str.split("\\|");
@@ -270,7 +270,7 @@ public class BeanContext {
 			Object bean = beans.get(split[0]), argBean = beans.get(v);
 
 			Objects.requireNonNull(bean, split[0] + "执行：" + split[1] + " 未发现类");
-			
+
 			if (argBean == null) {
 				LOGGER.warning("容器中找不到实例 {0}。请确定是否为组件添加 @Bean 注解?", v);
 			} else {
@@ -319,6 +319,18 @@ public class BeanContext {
 
 		beans.forEach((key, bean) -> {
 			if (interfaceClz.isAssignableFrom(bean.getClass()))
+				list.add((T) bean);
+		});
+
+		return list;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> List<T> findBeanByClass(Class<T> clz) {
+		List<T> list = new ArrayList<>();
+
+		beans.forEach((key, bean) -> {
+			if (clz.isInstance(bean))
 				list.add((T) bean);
 		});
 

@@ -16,6 +16,7 @@
 package com.ajaxjs.config;
 
 import java.util.Map;
+import java.util.Objects;
 
 import javax.script.ScriptException;
 
@@ -52,7 +53,23 @@ public class ConfigService {
 	/**
 	 * 配置 json 说明文件的路径
 	 */
-	public static String SCHEME_JSON_PATH = AbstractScanner.getResourcesFromClasspath("site_config_scheme.json");
+	public static final String SCHEME_JSON_PATH = AbstractScanner.getResourcesFromClasspath("site_config_scheme.json");
+
+	public static String SCHEME_JSON;
+
+	/**
+	 * 获取配置 JSON 说明文件
+	 * 
+	 * @return 配置 JSON 说明文件
+	 */
+	public static String getSchemeJson() {
+		if (SCHEME_JSON_PATH == null) {
+			Objects.requireNonNull(SCHEME_JSON, "请提供配置 JSON 说明文件。");
+
+			return SCHEME_JSON;
+		} else
+			return FileHelper.openAsText(SCHEME_JSON_PATH);
+	}
 
 	/**
 	 * 加载 JSON 配置（默认路径）
@@ -79,11 +96,6 @@ public class ConfigService {
 //			Version.isDebug = (boolean)config.get("isDebug");
 
 		FLAT_CONFIG = ListMap.flatMap(CONFIG);
-	}
-
-	public static void main(String[] args) {
-		JsonHelper.parseMap(FileHelper.openAsText(
-				"C:\\sp42\\dev\\eclipse-workspace-new2\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\myblog\\WEB-INF\\classes\\site_config.json"));
 	}
 
 	/**
@@ -197,20 +209,19 @@ public class ConfigService {
 			} else {
 				// 获取原来的类型，再作适当的类型转换
 				String type = null;
-				
+
 				try {
 					Object obj = js.getEngine().eval("typeof allConfig" + jsKey);
-					
+
 					if (obj != null)
 						type = obj.toString();
 				} catch (ScriptException e) {
 					// 可能没这个参数在配置里面
 				}
 
-				
 				if ("undefined".equals(type) || type == null) {// 原 JSON 没这参数
 					js.eval(findNode);
-					js.eval("SCHEME_JSON = " + FileHelper.openAsText(ConfigService.SCHEME_JSON_PATH));
+					js.eval("SCHEME_JSON = " + getSchemeJson());
 
 					Object obj = js.eval(String.format("findNode(SCHEME_JSON, '%s'.split('.'))['type']", k));
 
@@ -242,12 +253,34 @@ public class ConfigService {
 		FileHelper.saveText(ConfigService.CONFIG_JSON_PATH, json);
 	}
 
-	private final static String findNode = "function findNode(obj, queen) {\n" + "			if(!queen.shift) {\n"
-			+ "				return null;\n" + "			}\n" + "			var first = queen.shift();\n" + " \n"
-			+ "			\n" + "			for(var i in obj) {\n" + "				if(i === first) {\n"
-			+ "					var target = obj[i];\n" + "					\n"
-			+ "					if(queen.length == 0) {\n" + "						// 找到了\n"
-			+ "						return target;\n" + "					} else {\n"
-			+ "						return arguments.callee(obj[i], queen);\n" + "					}\n"
-			+ "				}\n" + "			}\n" + "		}";
+	public static void main(String[] args) {
+		System.out.println(findNode);
+	}
+
+	/**
+	 * 查找节点的 JavaScript 函数
+	 */
+	// @formatter:off
+	private final static String findNode = 
+		"function findNode(obj, queen) {\n" + 
+		"			if(!queen.shift) {\n" + 
+		"				return null;\n" + 
+		"			}\n" + 
+		"			var first = queen.shift();\n" + 
+		" \n" + 
+		"			\n" + 
+		"			for(var i in obj) {\n" + 
+		"				if(i === first) {\n" + 
+		"					var target = obj[i];\n" + 
+		"					\n" + 
+		"					if(queen.length == 0) {\n" + 
+		"						// 找到了\n" + 
+		"						return target;\n" + 
+		"					} else {\n" + 
+		"						return arguments.callee(obj[i], queen);\n" + 
+		"					}\n" + 
+		"				}\n" + 
+		"			}\n" + 
+		"		}";
+	// @formatter:on
 }
