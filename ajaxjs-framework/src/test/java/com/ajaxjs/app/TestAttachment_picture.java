@@ -10,14 +10,14 @@ import org.junit.Test;
 
 import com.ajaxjs.app.attachment.Attachment_picture;
 import com.ajaxjs.app.attachment.Attachment_pictureService;
-import com.ajaxjs.cms.utils.CmsUtils;
+import com.ajaxjs.framework.MockTest;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.orm.JdbcConnection;
 
 public class TestAttachment_picture{
 	@BeforeClass
 	public static void initDb() {
-		CmsUtils.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
+		MockTest.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
 	}
 
 	@Test

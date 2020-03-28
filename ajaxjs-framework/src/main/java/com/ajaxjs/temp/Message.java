@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.utils.sms;
+package com.ajaxjs.temp;
 
 /**
  * 短信内容

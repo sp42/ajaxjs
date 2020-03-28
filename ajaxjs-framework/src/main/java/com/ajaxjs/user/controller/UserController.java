@@ -5,9 +5,9 @@ import java.util.function.BiConsumer;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Path;
 
-import com.ajaxjs.cms.utils.sms.SMS;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
+import com.ajaxjs.temp.SMS;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.service.UserCommonAuthService;
 import com.ajaxjs.user.service.UserService;

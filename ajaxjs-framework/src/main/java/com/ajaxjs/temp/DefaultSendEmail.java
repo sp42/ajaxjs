@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.utils.email;
+package com.ajaxjs.temp;
 
 import java.io.IOException;
 

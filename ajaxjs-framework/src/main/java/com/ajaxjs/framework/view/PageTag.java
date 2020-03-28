@@ -40,10 +40,10 @@ public class PageTag extends SimpleTagSupport {
 
 	@Override
 	public void doTag() throws JspException, IOException {
-		JspContext context = getJspContext();
-		context.setAttribute("getParams_without_start", getParams_without("start", queryString));
-		context.setAttribute("getParams_without_asMap", getParams_without_asMap("limit", queryString));
-		context.setAttribute("page_jumpTo", jumpPage(totalPage));
+		JspContext cxt = getJspContext();
+		cxt.setAttribute("getParams_without_start", getParams_without("start", queryString));
+		cxt.setAttribute("getParams_without_asMap", getParams_without_asMap("limit", queryString));
+		cxt.setAttribute("page_jumpTo", jumpPage(totalPage));
 	}
 
 	/**

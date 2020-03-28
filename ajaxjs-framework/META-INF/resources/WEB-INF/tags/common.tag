@@ -107,15 +107,27 @@
 		</article>
 		<jsp:doBody />
 		
+<c:if test="${ConfigService.getValueAsBool('domain.article.attachmentDownload') && not empty info.attachment}">
+		<fieldset class="aj-fieldset">
+			<legend>附件下载</legend>
+			<ul>
+				<c:foreach items="${info.attachment}">
+					<li style="padding:1%;">
+						<a href="${ctx}/images/${item.name}" download>${item.name}</a> | ${item.fileSize}kb
+					</li>
+				</c:foreach>
+			</ul>
+		</fieldset>		
+</c:if>		
 <c:if test="${ConfigService.getValueAsBool('domain.article.neighborRecord')}">
 		<!-- 相邻记录 -->
 		<div class="neighborRecord">
 			<c:if test="${not empty neighbor_pervInfo}">
-				<a href="../${neighbor_pervInfo.url}/">上则记录：${neighbor_pervInfo.name}</a>
+				<a href="../${neighbor_pervInfo.id}/">上则记录：${neighbor_pervInfo.name}</a>
 			</c:if>
 				<br />
 			<c:if test="${not empty neighbor_nextInfo}">
-				<a href="../${neighbor_nextInfo.url}/">下则记录：${neighbor_nextInfo.name}</a>
+				<a href="../${neighbor_nextInfo.id}/">下则记录：${neighbor_nextInfo.name}</a>
 			</c:if>
 		</div>
 </c:if>

@@ -6,7 +6,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.cms.utils.CmsUtils;
+import com.ajaxjs.framework.MockTest;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.user.controller.VerifyEmail.VerifyEmailService;
 import com.ajaxjs.user.token.ForgetPassword;
@@ -16,7 +16,7 @@ public class TestVerifyEmail {
 
 	@BeforeClass
 	public static void initDb() {
-		CmsUtils.loadSQLiteTest("C:\\project\\test-cms\\WebContent\\META-INF\\database.sqlite");
+		MockTest.loadSQLiteTest("C:\\project\\test-cms\\WebContent\\META-INF\\database.sqlite");
 		service = new VerifyEmailService();
 	}
 

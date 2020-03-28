@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.cms.utils.sms;
+package com.ajaxjs.temp;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

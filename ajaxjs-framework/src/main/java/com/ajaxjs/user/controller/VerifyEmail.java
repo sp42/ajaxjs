@@ -13,11 +13,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.utils.sms.SMS;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.filter.MvcFilter;
+import com.ajaxjs.temp.SMS;
 import com.ajaxjs.user.UserUtil;
 import com.ajaxjs.user.filter.LoginCheck;
 import com.ajaxjs.user.model.User;

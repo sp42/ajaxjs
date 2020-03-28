@@ -14,7 +14,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ajaxjs.app.catalog.CatalogService;
-import com.ajaxjs.cms.utils.CmsUtils;
+import com.ajaxjs.framework.MockTest;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mvc.controller.MvcRequest;
@@ -25,7 +25,7 @@ public class TestArticleService {
 
 	@BeforeClass
 	public static void initDb() {
-		CmsUtils.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
+		MockTest.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
 	}
 
 	@Test

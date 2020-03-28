@@ -8,6 +8,9 @@ import java.util.Set;
 import org.junit.Test;
 
 import com.ajaxjs.ioc.BeanContext;
+import com.ajaxjs.temp.Aliyun;
+import com.ajaxjs.temp.Message;
+import com.ajaxjs.temp.SMS;
 import com.ajaxjs.util.resource.ScanClass;
 
 public class TestSMS {

@@ -6,8 +6,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.cms.utils.CmsUtils;
 import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.framework.MockTest;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.orm.JdbcConnection;
@@ -23,7 +23,7 @@ public class TestUser {
 
 	@BeforeClass
 	public static void initDb() {
-		CmsUtils.loadSQLiteTest("C:\\project\\new_gz88\\WebContent\\META-INF\\gz88.sqlite");
+		MockTest.loadSQLiteTest("C:\\project\\new_gz88\\WebContent\\META-INF\\gz88.sqlite");
 
 		BeanContext.init("com.ajaxjs.cms", "com.ajaxjs.user");
 		BeanContext.injectBeans();
