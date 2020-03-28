@@ -16,6 +16,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.app.attachment.AttachmentService;
+import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
@@ -34,7 +35,7 @@ import com.ajaxjs.util.logger.LogHelper;
 @Path("/article")
 public class ArticleController extends BaseController<Map<String, Object>> {
 	private static final LogHelper LOGGER = LogHelper.getLog(ArticleController.class);
-	
+
 	@Resource("ArticleService")
 	private ArticleService service;
 
@@ -42,11 +43,12 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	public ArticleService getService() {
 		return service;
 	}
-	
+
 	@GET
 	@MvcFilter(filters = { DataBaseFilter.class })
 //	@Authority(filter = DataBaseFilter.class, value = 1)
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
+	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId,
+			ModelAndView mv) {
 		LOGGER.info("图文列表-前台");
 		getService().showList(mv);
 		prepareData(mv);
@@ -57,12 +59,11 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@Path("listJson")
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String listJson(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
+	public String listJson(@QueryParam(start) int start, @QueryParam(limit) int limit,
+			@QueryParam(catalogId) int catalogId, ModelAndView mv) {
 		return toJson(getService().list(catalogId, start, limit, CommonConstant.ON_LINE));
 	}
 
-
-	
 	@GET
 	@Path(idInfo)
 	@MvcFilter(filters = { DataBaseFilter.class, FrontEndOnlyCheck.class })
@@ -74,7 +75,9 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 		BaseService.getNeighbor(mv, "entity_article", id);
 		getService().showInfo(mv, id);
 
-		map.put("attachment", new AttachmentService().findByOwner((long)map.get("uid")));
+		if (ConfigService.getValueAsBool("domain.article.attachmentDownload"))
+			map.put("attachment", new AttachmentService().findByOwner((long) map.get("uid")));
+		
 		return info();
 	}
 
@@ -90,9 +93,10 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@GET
 	@Path("/admin/{root}/list")
 	@MvcFilter(filters = { DataBaseFilter.class, XslMaker.class })
-	public String adminList(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
+	public String adminList(@QueryParam(start) int start, @QueryParam(limit) int limit,
+			@QueryParam(catalogId) int catalogId, ModelAndView mv) {
 		System.out.println(getService());
-		System.out.println("||||||||||||||" +this);
+		System.out.println("||||||||||||||" + this);
 		return page(mv, getService().list(catalogId, start, limit, CommonConstant.OFF_LINE), true);
 	}
 

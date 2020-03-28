@@ -8,7 +8,6 @@ import com.ajaxjs.net.mail.Sender;
 
 public class DefaultSendEmail implements SendEmail {
 
-	@Override
 	public boolean sendMail(Mail mail) {
 		mail.setMailServer("smtp.163.com");
 		mail.setAccount("pacoweb");

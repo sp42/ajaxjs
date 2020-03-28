@@ -63,9 +63,10 @@ public class ConfigController implements IController {
 		return BaseController.admin("config/data-config");
 	}
 
+	// TODO
 	private static void loadJson(ModelAndView model) {
 		model.put("configJson", FileHelper.openAsText(ConfigService.CONFIG_JSON_PATH));
-		model.put("schemeJson", FileHelper.openAsText(ConfigService.SCHEME_JSON_PATH));
+		model.put("schemeJson", ConfigService.getSchemeJson());
 	}
 
 	@GET
@@ -73,7 +74,7 @@ public class ConfigController implements IController {
 		LOGGER.info("编辑全部配置");
 
 		model.put("configJson", FileHelper.openAsText(ConfigService.CONFIG_JSON_PATH));
-		model.put("jsonSchemePath", FileHelper.openAsText(ConfigService.SCHEME_JSON_PATH));
+		model.put("jsonSchemePath", ConfigService.getSchemeJson());
 
 		return BaseController.admin("config-all");
 	}
