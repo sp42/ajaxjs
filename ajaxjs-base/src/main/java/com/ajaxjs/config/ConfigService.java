@@ -253,10 +253,6 @@ public class ConfigService {
 		FileHelper.saveText(ConfigService.CONFIG_JSON_PATH, json);
 	}
 
-	public static void main(String[] args) {
-		System.out.println(findNode);
-	}
-
 	/**
 	 * 查找节点的 JavaScript 函数
 	 */

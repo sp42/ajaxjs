@@ -173,14 +173,10 @@ public class BeanContext {
 	 */
 	private static String parseId(String dependenciObj_id) {
 		if (dependenciObj_id.startsWith("autoWire:")) {
-
-			System.out.println(dependenciObj_id);
 			String str = dependenciObj_id.replaceFirst("autoWire:", "");
 			String[] arr = str.split("\\|");
 			String extendedId = ConfigService.getValueAsString(arr[0]);
 
-			System.out.println(arr[0]);
-			System.out.println(extendedId);
 			// 没有扩展，读取默认的
 			return extendedId == null ? arr[1] : extendedId;
 		}
@@ -325,8 +321,15 @@ public class BeanContext {
 		return list;
 	}
 
+	/**
+	 * 根据类查找实例列表
+	 * 
+	 * @param <T> 目标类型
+	 * @param clz 类引用
+	 * @return 实例对象列表
+	 */
 	@SuppressWarnings("unchecked")
-	public static <T> List<T> findBeanByClass(Class<T> clz) {
+	public static <T> List<T> findByClass(Class<T> clz) {
 		List<T> list = new ArrayList<>();
 
 		beans.forEach((key, bean) -> {
@@ -335,6 +338,25 @@ public class BeanContext {
 		});
 
 		return list;
+	}
+
+	/**
+	 * 根据类查找实例
+	 * 
+	 * @param <T> 目标类型
+	 * @param clz 类引用
+	 * @return 实例对象
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T getByClass(Class<T> clz) {
+		for (String id : beans.keySet()) {
+			Object bean = beans.get(id);
+
+			if (clz.isInstance(bean))
+				return (T) bean;
+		}
+
+		return null;
 	}
 
 	/**
