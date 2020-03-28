@@ -7,7 +7,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ajaxjs.app.CommonConstant;
-import com.ajaxjs.cms.utils.CmsUtils;
+import com.ajaxjs.framework.MockTest;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mock.TestHelper;
 import com.ajaxjs.orm.JdbcConnection;
@@ -25,7 +25,7 @@ public class TestGoodsService {
 
 	@BeforeClass
 	public static void initDb() {
-		CmsUtils.init2("c:\\project\\bgdiving", "com.ajaxjs.cms", "com.ajaxjs.user", "com.ajaxjs.shop");
+		MockTest.init2("c:\\project\\bgdiving", "com.ajaxjs.cms", "com.ajaxjs.user", "com.ajaxjs.shop");
 
 //		goodsBookmarkService = (ShopBookmarkService) BeanContext.getBean("GoodsBookmarkService");
 	}

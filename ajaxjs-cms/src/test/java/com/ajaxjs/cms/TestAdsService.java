@@ -8,7 +8,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.cms.utils.CmsUtils;
+import com.ajaxjs.framework.MockTest;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mock.TestHelper;
 import com.ajaxjs.orm.JdbcConnection;
@@ -18,7 +18,7 @@ public class TestAdsService {
 
 	@BeforeClass
 	public static void initDb() {
-		CmsUtils.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
+		MockTest.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
 		service = (AdsService) BeanContext.getBean("AdsService");
 	}
 

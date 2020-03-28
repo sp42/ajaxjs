@@ -10,7 +10,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ajaxjs.cms.controller.HrController;
-import com.ajaxjs.cms.utils.CmsUtils;
+import com.ajaxjs.framework.MockTest;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.mock.TestHelper;
 import com.ajaxjs.orm.JdbcConnection;
@@ -19,7 +19,7 @@ public class TestHrService {
 
 	@BeforeClass
 	public static void initDb() {
-		CmsUtils.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
+		MockTest.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
 	}
 
 	static String[] names = new String[] { "招聘文员两名", "招聘会计一名" };
