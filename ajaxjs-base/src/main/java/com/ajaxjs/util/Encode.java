@@ -22,7 +22,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
-import java.util.function.BiFunction;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -89,9 +88,9 @@ public class Encode {
 	}
 
 	/**
-	 * url 网址中文乱码处理。 如果 Tomcat 过滤器设置了 utf-8 那么这里就不用重复转码了
+	 * URL 网址的中文乱码处理。 如果 Tomcat 过滤器设置了 utf-8 那么这里就不用重复转码了
 	 * 
-	 * @param str 通常是 url Query String 参数
+	 * @param str 通常是 URL 的 Query String 参数
 	 * @return 中文
 	 */
 	public static String urlChinese(String str) {
@@ -152,13 +151,17 @@ public class Encode {
 	 * @return MD5 摘要，返回32位大写的字符串
 	 */
 	public static String md5(String str) {
-		return hash.apply("MD5", str);
+		return hash	("MD5", str);
 	}
 
 	/**
+	 * 生成字符串的 SHA1/SHA-256 哈希值
 	 * 
+	 * @param hash 哈希算法，可以是 SHA1/SHA-256
+	 * @param str  输入的内容
+	 * @return 已哈希过的字符串
 	 */
-	private static BiFunction<String, String, String> hash = (hash, str) -> {
+	private static String hash(String hash, String str) {
 		MessageDigest md = null;
 
 		try {
@@ -181,7 +184,7 @@ public class Encode {
 	 * @return 字符串的 SHA1 哈希值
 	 */
 	public static String getSHA1(String str) {
-		return hash.apply("SHA1", str);
+		return hash("SHA1", str);
 	}
 
 	/**
@@ -191,7 +194,7 @@ public class Encode {
 	 * @return 字符串的 SHA2 哈希值
 	 */
 	public static String getSHA256(String str) {
-		return hash.apply("SHA-256", str);
+		return hash("SHA-256", str);
 	}
 
 }

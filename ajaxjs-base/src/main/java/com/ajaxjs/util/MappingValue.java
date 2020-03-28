@@ -86,8 +86,7 @@ public class MappingValue {
 
 		if (value instanceof String) {
 			String _value = (String) value;
-			System.out.println(_value);
-			
+
 			if (_value.equalsIgnoreCase("yes") || _value.equalsIgnoreCase("true") || _value.equals("1")
 					|| _value.equalsIgnoreCase("on"))
 				return true;
@@ -117,11 +116,10 @@ public class MappingValue {
 			value = Integer.parseInt(value.toString());
 		} else if (t == int[].class || t == Integer[].class) {
 			// 复数
-			if (value instanceof String) {
+			if (value instanceof String)
 				value = stringArr2intArr((String) value, diver + "");
-			} else if (value instanceof List) {
+			else if (value instanceof List)
 				value = integerList2arr((List<Integer>) value);
-			}
 
 		} else if (t == long.class || t == Long.class) {
 			// LONG 型
@@ -144,9 +142,9 @@ public class MappingValue {
 		} else if (t == Date.class) {
 			value = CommonUtil.Objet2Date(value);
 		} else if (t == BigDecimal.class) {
-			if (value instanceof Integer) {
+			if (value instanceof Integer)
 				value = new BigDecimal((Integer) value);
-			} else if (value instanceof String) {
+			else if (value instanceof String) {
 				BigDecimal b = new BigDecimal((String) value);
 				b.setScale(2, BigDecimal.ROUND_DOWN);
 
