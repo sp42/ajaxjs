@@ -6,12 +6,12 @@ import java.util.function.Function;
 import com.ajaxjs.net.mail.Mail;
 
 /**
+ * 各种服务。应继承该类进行扩展。
  * 
  * @author sp42 frank@ajaxjs.com
  *
  */
 public abstract class Services {
-
 	/**
 	 * 发送邮件：邮件实体/是否成功
 	 */
