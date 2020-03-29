@@ -228,7 +228,23 @@ public interface ConfigScheme {
 "				\"tip\": \"找回邮件的邮件\",\r\n" + 
 "				\"ui\": \"htmlEditor\"\r\n" + 
 "			}\r\n" + 
-"		}\r\n" + 
+"		}," + 
+"		\"oauthLogin\": {" + 
+"			\"weibo\": {" + 
+"				\"AppKey\": {" + 
+"					\"name\": \"微博登录 App Key\"," + 
+"					\"tip\": \"相当于 Client_ID\"" + 
+"				}," + 
+"				\"AppSecret\": {" + 
+"					\"name\": \"微博登录 App 密钥\"," + 
+"					\"tip\": \"相当于 Client_SERCRET，请不要泄漏密钥\"" + 
+"				}," + 
+"				\"callbackUrl\": {" + 
+"					\"name\": \"微博登录回调地址\"," + 
+"					\"tip\": \"授权回调页\"" + 
+"				}" + 
+"			}" + 
+"		}" + 
 "	},\r\n" + 
 "	\"mailServer\": {\r\n" + 
 "		\"server\": {\r\n" + 

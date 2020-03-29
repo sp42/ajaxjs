@@ -114,7 +114,7 @@ public class SiteStruService implements ServletContextListener {
 		Version.tomcatVersionDetect(ctx.getServerInfo());
 		ConfigService.SCHEME_JSON = ConfigScheme.JSON;
 
-		if (new File(ConfigService.CONFIG_JSON_PATH).exists()) {
+		if (ConfigService.CONFIG_JSON_PATH != null) {
 			ConfigService.load();
 
 			if (ConfigService.CONFIG.isLoaded()) {
