@@ -40,8 +40,8 @@ public class WxWebUtils {
 			if (result.get("errmsg") != null) {
 				throw new NullPointerException(result.get("errmsg").toString());
 			} else {
-				accessToken.setToken(result.get("access_token").toString());
-				accessToken.setExpiresIn((int) result.get("expires_in"));
+//				accessToken.setToken(result.get("access_token").toString());
+//				accessToken.setExpiresIn((int) result.get("expires_in"));
 			}
 		} else {
 			throw new NullPointerException("通讯腾讯  AccessToken API 接口失败");
