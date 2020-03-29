@@ -16,6 +16,7 @@ import org.junit.Test;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.orm.JdbcConnection;
+import com.ajaxjs.orm.TestJdbcConnection;
 
 public class TestDao {
 	NewsDao dao;
@@ -23,7 +24,7 @@ public class TestDao {
 
 	@Before
 	public void setUp() {
-		JdbcConnection.setConnection(JdbcConnection.getTestSqliteConnection());
+		JdbcConnection.setConnection(TestJdbcConnection.getTestSqliteConnection());
 		dao = new Repository().bind(NewsDao.class);
 		mapDao = new Repository().bind(NewsDaoMap.class);
 	}

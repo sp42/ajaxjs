@@ -17,7 +17,7 @@ public class TestJdbcHelperUtil {
 
 	@Before
 	public void setUp() throws SQLException {
-		JdbcConnection.setConnection(JdbcConnection.getTestSqliteConnection());
+		JdbcConnection.setConnection(TestJdbcConnection.getTestSqliteConnection());
 		dao = new Repository().bind(NewsDao.class);
 	}
 

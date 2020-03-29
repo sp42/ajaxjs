@@ -28,12 +28,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import org.sqlite.SQLiteDataSource;
-import org.sqlite.SQLiteJDBCLoader;
-
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.resource.ScanClass;
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 /**
  * 连接数据库。 保存线程内的连接对象，还可以保存调用过的 SQL 语句，以便于日志记录
@@ -45,50 +40,41 @@ public class JdbcConnection {
 	private static final LogHelper LOGGER = LogHelper.getLog(JdbcConnection.class);
 
 	/**
-	 * 通过 JNDI 获取数据源
+	 * 连接数据库。这种方式最简单，但是没有经过数据库连接池，要采用池化的方式，请使用 getConnectionByJNDI()。
 	 * 
-	 * @param path JNDI 的路径，参阅 META-INF/context.xml
-	 * @return 数据源对象
+	 * @param jdbcUrl 连接字符串
+	 * @param props   连接属性，可选（可为 null）
+	 * @return 数据库连接对象
 	 */
-	public static DataSource getDataSource(String path) {
-		try {
-			Object obj = new InitialContext().lookup("java:/comp/env");
-			Objects.requireNonNull(obj, "没有该节点 java:/comp/env");
-
-			Context context = (Context) obj; // 环境变量
-			Object result = context.lookup(path);
-			return (DataSource) result;
-		} catch (NamingException e) {
-			String msg = "读取数据源的配置文件失败，请检查 Tomcat 连接池配置！ path: " + path;
-			msg += " 提示：没发现数据库 /WebRoot/META-INF/context.xml 下的 XML 配置文件，该文件位置一般不可移动，请参阅 TomatPool 数据库连接池的相关文档。";
-
-			LOGGER.warning(msg, e);
-			return null;
-		}
-	}
-
-	/**
-	 * 初始化数据库连接
-	 * 
-	 * @param jndiPath JNDI 路径
-	 */
-	public static void initDbByJNDI(String jndiPath) {
-		Objects.requireNonNull(jndiPath, "缺少 jndiPath 参数！");
-		LOGGER.info("启动数据库 JNDI 链接……" + jndiPath);
+	public static Connection getConnection(String jdbcUrl, Properties props) {
+		Connection conn = null;
 
 		try {
-			if (getConnection() == null || getConnection().isClosed()) {
-				Connection conn = getConnection(getDataSource(jndiPath));
-				setConnection(conn);
-				LOGGER.info("数据库链接详情：" + conn);
-			}
+			if (props == null)
+				conn = DriverManager.getConnection(jdbcUrl);
+			else
+				conn = DriverManager.getConnection(jdbcUrl, props);
+
+			LOGGER.info("数据库连接成功： " + conn.getMetaData().getURL());
 		} catch (SQLException e) {
-			LOGGER.warning(e);
+			LOGGER.warning("数据库连接失败！", e);
 		}
+
+		return conn;
 	}
 
 	/**
-	 * 通过数据源对象获得数据库连接对象
+	 * 连接数据库。这种方式最简单，但是没有经过数据库连接池，要采用池化的方式，请使用 getConnectionByJNDI()。
+	 * 
+	 * @param jdbcUrl 连接字符串
+	 * @return 数据库连接对象
+	 */
+	public static Connection getConnection(String jdbcUrl) {
+		return getConnection(jdbcUrl, null);
+	}
+
+	/**
+	 * 根据数据源对象获得数据库连接对象
 	 * 
 	 * @param source 数据源对象
 	 * @return 数据库连接对象
@@ -103,44 +89,57 @@ public class JdbcConnection {
 	}
 
 	/**
-	 * 连接数据库
+	 * 根据 JNDI 获取数据源。这是配套 Tomcat 自带 Pool 的数据库连接池服务。
 	 * 
-	 * @param jdbcUrl 链接字符串
-	 * @param props   链接属性
-	 * @return 数据库连接对象
+	 * @param jndi JNDI 的路径，参阅 META-INF/context.xml
+	 * @return 数据源对象
 	 */
-	public static Connection getConnection(String jdbcUrl, Properties props) {
-		Connection conn = null;
-
-		if (jdbcUrl.indexOf("mysql") != -1) {
-			try {
-				Class.forName("com.mysql.jdbc.Driver");
-			} catch (ClassNotFoundException e) {
-				LOGGER.warning(e);
-			}
-		}
-
+	public static DataSource getDataSourceByJNDI(String jndi) {
 		try {
-			if (props == null)
-				conn = DriverManager.getConnection(jdbcUrl);
-			else
-				conn = DriverManager.getConnection(jdbcUrl, props);
-			LOGGER.info("数据库连接成功： " + conn.getMetaData().getURL());
-		} catch (SQLException e) {
-			LOGGER.warning("数据库连接失败！", e);
+			Object obj = new InitialContext().lookup("java:/comp/env");
+			Objects.requireNonNull(obj, "没有该节点 java:/comp/env");
+
+			Context context = (Context) obj; // 环境变量
+			Object result = context.lookup(jndi);
+
+			return (DataSource) result;
+		} catch (NamingException e) {
+			String msg = "读取数据源的配置文件失败，请检查 Tomcat 连接池配置！ path: " + jndi;
+			msg += " 提示：没发现数据库 /WebRoot/META-INF/context.xml 下的 XML 配置文件，该文件位置一般不可移动，请参阅 TomatPool 数据库连接池的相关文档。";
+			LOGGER.warning(msg, e);
+
+			return null;
 		}
-		
-		return conn;
 	}
 
 	/**
-	 * 连接数据库
+	 * 根据 JNDI 路径获得数据库连接对象。这是配套 Tomcat 自带 Pool 的数据库连接池服务。
 	 * 
-	 * @param jdbcUrl 链接字符串
+	 * @param jndi JNDI 的路径，参阅 META-INF/context.xml
 	 * @return 数据库连接对象
 	 */
-	public static Connection getConnection(String jdbcUrl) {
-		return getConnection(jdbcUrl, null);
+	public static Connection getConnectionByJNDI(String jndi) {
+		return getConnection(getDataSourceByJNDI(jndi));
+	}
+
+	/**
+	 * 初始化数据库连接并保存到 ThreadLocal 中。这是框架内最主要的调用数据库连接方法，带有池化的服务。
+	 * 
+	 * @param jndi JNDI 的路径，参阅 META-INF/context.xml
+	 */
+	public static void initDbByJNDI(String jndi) {
+		Objects.requireNonNull(jndi, "缺少 jndiPath 参数！");
+		LOGGER.info("启动数据库 JNDI 连接……" + jndi);
+
+		try {
+			if (getConnection() == null || getConnection().isClosed()) {
+				Connection conn = getConnectionByJNDI(jndi);
+				setConnection(conn);
+				LOGGER.info("数据库连接详情：" + conn);
+			}
+		} catch (SQLException e) {
+			LOGGER.warning(e);
+		}
 	}
 
 	/**
@@ -197,7 +196,7 @@ public class JdbcConnection {
 	public static void addSql(String sql) {
 		if (getSqls() == null)
 			setSqls(new ArrayList<String>());
-		
+
 		getSqls().add(sql);
 	}
 
@@ -225,7 +224,7 @@ public class JdbcConnection {
 	public static void cleanSql() {
 		if (getSqls() != null)
 			getSqls().clear();
-		
+
 		sqls.set(null);
 	}
 
@@ -237,141 +236,37 @@ public class JdbcConnection {
 		cleanSql();
 	}
 
-/////////////////
-	/*
-	 * 为方便测试提供的假对象 Mock data source object.
-	 */
-/////////////////
-
 	/**
-	 * 根据 JDBC Url 创建 SQLite 数据源对象
-	 *
-	 * @param url 以 jdbc:sqlite: 开头
-	 * @return 数据源对象
-	 */
-	public static DataSource getSqliteDataSource(String url) {
-		String perfix = "jdbc:sqlite:";
-		if (!url.startsWith(perfix)) {
-			url = perfix + url;
-		}
-
-		try {
-			SQLiteJDBCLoader.initialize();
-		} catch (Exception e) {
-			LOGGER.warning(e);
-		}
-
-		SQLiteDataSource dataSource = new SQLiteDataSource();
-		dataSource.setUrl(url);
-
-		return dataSource;
-	}
-
-	/**
-	 * 根据 JDBC Url 创建 MySQL 数据源对象
-	 *
-	 * @param url      像 "jdbc:mysql://localhost:3306/databaseName"
-	 * @param user     用户名
-	 * @param password 密码
-	 * @return 数据源对象
-	 */
-	public static DataSource getMySqlDataSource(String url, String user, String password) {
-		MysqlDataSource dataSource = new MysqlDataSource();
-		dataSource.setURL(url);
-		dataSource.setUser(user);
-		dataSource.setPassword(password);
-		dataSource.setUseUnicode(true);
-		dataSource.setCharacterEncoding("UTF-8");
-
-		return dataSource;
-	}
-
-	/**
-	 * 根据 JDBC Url 创建 SQLite 数据库连接对象
-	 *
-	 * @param url 以 jdbc:sqlite: 开头，如果没有自动加上
+	 * 根据 JDBC 连接字符串创建 MySql 数据库连接对象
+	 * 
+	 * @param jdbcUrl  JDBC 连接字符串。如果连接字符串已经包含用户名和密码，请直接使用 getConnection() 方法即可。
+	 * @param username 数据库用户名
+	 * @param password 数据库密码
 	 * @return 数据库连接对象
 	 */
-	public static Connection getSqliteConnection(String url) {
-		return getConnection(getSqliteDataSource(url));
+	public static Connection getMySqlConnection(String jdbcUrl, String username, String password) {
+		if (!jdbcUrl.startsWith("jdbc:mysql://"))
+			throw new IllegalArgumentException("参数为非法的 JDBC URL： " + jdbcUrl);
+
+		if (!jdbcUrl.contains("?"))
+			jdbcUrl += "?";
+
+		return getConnection(jdbcUrl + "&user=" + username + "&password=" + password);
 	}
 
 	/**
-	 * 测试用数据库（SQLite）
-	 */
-	public static final String testUsed_sqlite = ScanClass.getResourcesFromClasspath("test_used_database.sqlite");
-
-	/**
-	 * 创建 SQLite 数据库连接对象（测试用）
-	 *
+	 * 根据 JDBC 连接字符串创建 SQLite 数据库连接对象
+	 * 
+	 * @param jdbcUrl JDBC 连接字符串， 例如
+	 *                "jdbc:sqlite:D:/software/sqlite/java-sqlite.db"，也可以纯粹文件路径，如
+	 *                "D:\\project\\ajaxjs-data\\src\\main\\resources\\test_used_database.sqlite"，
+	 *                自动添加 jdbc:sqlite: 前缀
 	 * @return 数据库连接对象
 	 */
-	public static Connection getTestSqliteConnection() {
-		return getSqliteConnection(testUsed_sqlite);
-	}
+	public static Connection getSqliteConnection(String jdbcUrl) {
+		if (!jdbcUrl.startsWith("jdbc:sqlite:")) // 自动添加前缀
+			jdbcUrl = "jdbc:sqlite:" + jdbcUrl;
 
-	/**
-	 * 根据 JDBC Url 创建 MySQL 数据库连接对象
-	 *
-	 * @param url      像 "jdbc:mysql://localhost:3306/databaseName"
-	 * @param user     用户名
-	 * @param password 密码
-	 * @return 数据库连接对象
-	 */
-	public static Connection getMySqlConnection(String url, String user, String password) {
-		return getConnection(getMySqlDataSource(url, user, password));
-	}
-
-	/**
-	 * JDNI 是一个为 Java 应用程序提供命名服务的应用程序接口 模拟数据库链接的配置 需要加入 tomcat-juli.jar 这个包，tomcat7
-	 * 此包位于 tomcat 根目录的 bin 下。
-	 *
-	 * @return InitialContext 上下文
-	 */
-	private static InitialContext initIc() {
-		System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "org.apache.naming.java.javaURLContextFactory");
-		System.setProperty(Context.URL_PKG_PREFIXES, "org.apache.naming");
-
-		try {
-			InitialContext ic = new InitialContext();
-			ic.createSubcontext("java:");
-			ic.createSubcontext("java:/comp");
-			ic.createSubcontext("java:/comp/env");
-			ic.createSubcontext("java:/comp/env/jdbc");
-			return ic;
-		} catch (NamingException e) {
-			LOGGER.warning(e);
-			return null;
-		}
-	}
-
-	/**
-	 * 根据 JDBC Url 创建 SQLite 数据库 JDNI 数据源。
-	 *
-	 * @param url 以 jdbc:sqlite: 开头
-	 */
-	public static void initSqliteDBConnection(String url) {
-		DataSource ds = getSqliteDataSource(url);
-
-		try {
-			initIc().bind("java:/comp/env/jdbc/sqlite", ds);
-		} catch (NamingException e) {
-			LOGGER.warning(e);
-		}
-	}
-
-	/**
-	 * 根据 JDBC Url 创建 MySQL 数据库 JDNI 数据源
-	 *
-	 * @param url      像 "jdbc:mysql://localhost:3306/databaseName"
-	 * @param user     用户名
-	 * @param password 密码
-	 */
-	public static void initMySqlDBConnection(String url, String user, String password) {
-		try {
-			initIc().bind("java:/comp/env/jdbc/mysql", getMySqlDataSource(url, user, password));
-		} catch (NamingException e) {
-			LOGGER.warning(e);
-		}
-	}
+		return getConnection(jdbcUrl);
+	} 
 }
