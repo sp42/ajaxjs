@@ -7,12 +7,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ajaxjs.app.CommonConstant;
+import com.ajaxjs.cms.ShopBookmarkService;
 import com.ajaxjs.framework.MockTest;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mock.TestHelper;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.SnowflakeIdWorker;
-import com.ajaxjs.shop.dep.ShopBookmarkService;
 import com.ajaxjs.shop.model.Goods;
 import com.ajaxjs.shop.service.CartService;
 import com.ajaxjs.shop.service.GoodsService;

@@ -1,4 +1,4 @@
-package com.ajaxjs.shop.dep;
+package com.ajaxjs.cms.controller;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -9,7 +9,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.cms.SectionList;
-import com.ajaxjs.cms.controller.DataDictController;
+import com.ajaxjs.cms.ShopBookmarkService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.framework.filter.DataBaseFilter;

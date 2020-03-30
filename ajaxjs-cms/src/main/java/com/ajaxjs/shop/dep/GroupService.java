@@ -8,6 +8,7 @@ import java.util.function.Function;
 
 import com.ajaxjs.app.attachment.Attachment_pictureDao;
 import com.ajaxjs.app.attachment.Attachment_pictureService;
+import com.ajaxjs.cms.ShopBookmarkService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.PageResult;

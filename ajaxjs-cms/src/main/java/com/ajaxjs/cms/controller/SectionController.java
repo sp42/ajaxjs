@@ -1,4 +1,4 @@
-package com.ajaxjs.shop.dep;
+package com.ajaxjs.cms.controller;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.app.catalog.Catalog;
 import com.ajaxjs.cms.SectionList;
-import com.ajaxjs.cms.controller.DataDictController;
+import com.ajaxjs.cms.SectionService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.framework.filter.DataBaseFilter;

@@ -1,11 +1,9 @@
-package com.ajaxjs.shop.dep;
+package com.ajaxjs.cms;
 
 import java.util.List;
 
 import com.ajaxjs.app.catalog.Catalog;
 import com.ajaxjs.app.catalog.CatalogService;
-import com.ajaxjs.cms.SectionList;
-import com.ajaxjs.cms.SectionListService;
 import com.ajaxjs.cms.controller.DataDictController;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.PageResult;
