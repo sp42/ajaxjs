@@ -58,8 +58,7 @@ public interface ConfigScheme {
 "	},\r\n" + 
 "	\"data\": {\r\n" + 
 "		\"articleCatalog_Id\": {\r\n" + 
-"			\"name\": \"新闻分类父 id\",\r\n" + 
-"			\"type\": \"string\"\r\n" + 
+"			\"name\": \"新闻分类父 id\"\r\n" + 
 "		},\r\n" + 
 "		\"jobCatalog_Id\": {\r\n" + 
 "			\"name\": \"招聘分类父 id\",\r\n" + 

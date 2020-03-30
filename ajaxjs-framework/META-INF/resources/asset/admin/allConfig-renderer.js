@@ -6,6 +6,9 @@ function renderRadio(scheme, namespaces, tip, value) {
 		[:}:]';
 	
 	var arr = [];
+	if(!scheme.option)
+		scheme.option = ['true=是', 'false=否'];
+	
 	for(var i = 0, j = scheme.option.length; i < j; i++) {
 		var item = scheme.option[i];
 		var _arr = item.split('=');

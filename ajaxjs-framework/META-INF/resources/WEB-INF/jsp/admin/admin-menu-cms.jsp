@@ -74,6 +74,7 @@
 		<li><a target="iframepage" href="${ctx}/admin/config/site/">网站信息</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/config/siteStru/">网站结构</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/page_editor/">页面管理</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/section/">栏目内容</a></li>
 	</ul>
 </li>
 <%}%>
