@@ -10,7 +10,7 @@ import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.shop.dao.CartDao;
-import com.ajaxjs.shop.dep.GroupService;
+import com.ajaxjs.shop.group.GroupService;
 import com.ajaxjs.shop.model.Cart;
 
 /**
