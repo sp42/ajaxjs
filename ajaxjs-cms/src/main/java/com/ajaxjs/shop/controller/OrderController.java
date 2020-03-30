@@ -24,7 +24,7 @@ import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.shop.ShopConstant;
-import com.ajaxjs.shop.dep.WxPayService;
+import com.ajaxjs.shop.group.WxPayService;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.model.OrderItem;
 import com.ajaxjs.shop.service.OrderService;
