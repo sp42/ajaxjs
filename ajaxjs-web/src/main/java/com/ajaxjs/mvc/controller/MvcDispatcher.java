@@ -106,13 +106,13 @@ public class MvcDispatcher implements Filter {
 			return;
 		}
 
-		_request.setAttribute("requestTimeRecorder", System.currentTimeMillis()); // 每次 servlet 都会执行的。记录时间
+		_request.setAttribute("requestTimeRecorder", System.currentTimeMillis()); // 每次 servlet 都会执行的记录时间
 		boolean isEnableSecurityIO = ConfigService.getValueAsBool("security.isEnableSecurityIO");
-		MvcRequest request = new MvcRequest(isEnableSecurityIO ?  new SecurityRequest(_request) : _request);
+		MvcRequest request = new MvcRequest(isEnableSecurityIO ? new SecurityRequest(_request) : _request);
 		MvcOutput response = new MvcOutput(isEnableSecurityIO ? new SecurityResponse(_response) : _response);
 		String uri = request.getFolder(), httpMethod = request.getMethod();
 		Action action = null;
- 
+
 		try {
 			action = IController.findTreeByPath(uri);
 		} catch (Throwable e) {
@@ -224,12 +224,11 @@ public class MvcDispatcher implements Filter {
 	 * 
 	 * @param err
 	 * @param method
-	 * @param request
+	 * @param r
 	 * @param response
 	 * @param model
 	 */
-	private static void handleErr(Throwable err, Method method, MvcRequest request, MvcOutput response,
-			ModelAndView model) {
+	private static void handleErr(Throwable err, Method method, MvcRequest r, MvcOutput response, ModelAndView model) {
 		Throwable _err = ReflectUtil.getUnderLayerErr(err);
 
 		if (model != null && model.containsKey(FilterAction.NOT_LOG_EXCEPTION)
@@ -242,18 +241,18 @@ public class MvcDispatcher implements Filter {
 		Produces a = method.getAnnotation(Produces.class);
 
 		if (a != null && MediaType.APPLICATION_JSON.equals(a.value()[0])) {// 返回 json
-			response.resultHandler(String.format(Constant.json_not_ok, JsonHelper.jsonString_covernt(errMsg)), request,
-					model, method);
+			response.resultHandler(String.format(Constant.json_not_ok, JsonHelper.jsonString_covernt(errMsg)), r, model,
+					method);
 		} else {
 			if (err instanceof IllegalAccessError && ConfigService.getValueAsString("page.onNoLogin") != null) {
 				response.resultHandler(
-						"redirect::" + request.getContextPath() + ConfigService.getValueAsString("page.onNoLogin"),
-						request, model, method);
+						"redirect::" + r.getContextPath() + ConfigService.getValueAsString("page.onNoLogin"), r, model,
+						method);
 			} else {
-				request.setAttribute("javax.servlet.error.status_code", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-				request.setAttribute("javax.servlet.error.exception_type", err.getClass());
-				request.setAttribute("javax.servlet.error.exception", err);
-				response.resultHandler("/WEB-INF/jsp/error.jsp", request, model, method);
+				r.setAttribute("javax.servlet.error.status_code", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				r.setAttribute("javax.servlet.error.exception_type", err.getClass());
+				r.setAttribute("javax.servlet.error.exception", err);
+				response.resultHandler("/WEB-INF/jsp/error.jsp", r, model, method);
 			}
 //			response.resultHandler(String.format("redirect::%s/showMsg?msg=%s", request.getContextPath(), Encode.urlEncode(errMsg)), request, model, method);
 		}
