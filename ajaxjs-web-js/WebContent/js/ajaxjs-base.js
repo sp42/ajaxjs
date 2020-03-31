@@ -202,7 +202,8 @@ ajaxjs.xhr = {
 		cb.url = url; // 保存 url 以便记录请求路径，可用于调试
 
 		xhr.onreadystatechange = this.callback.delegate(null, cb, cfg && cfg.parseContentType);
-
+		xhr.setRequestHeader('Accept', 'application/json');
+		
 		if (method == 'POST' || method == 'PUT') {
 			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			xhr.send(params);
