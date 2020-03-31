@@ -47,8 +47,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@GET
 	@MvcFilter(filters = { DataBaseFilter.class })
 //	@Authority(filter = DataBaseFilter.class, value = 1)
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId,
-			ModelAndView mv) {
+	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
 		LOGGER.info("图文列表-前台");
 		getService().showList(mv);
 		prepareData(mv);
@@ -94,7 +93,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@MvcFilter(filters = { DataBaseFilter.class, XslMaker.class })
 	public String adminList(@QueryParam(start) int start, @QueryParam(limit) int limit,
 			@QueryParam(catalogId) int catalogId, ModelAndView mv) {
-		return page(mv, getService().list(catalogId, start, limit, CommonConstant.OFF_LINE), true);
+		return autoOutput(mv, getService().list(catalogId, start, limit, CommonConstant.OFF_LINE), true);
 	}
 
 	@GET

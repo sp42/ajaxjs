@@ -154,8 +154,8 @@ public abstract class BaseController<T> implements IController, Constant {
 
 	/**
 	 * 
-	 * @param mv
-	 * @param pageResult
+	 * @param mv         Model 模型
+	 * @param pageResult 分页数据
 	 * @param isAdmin    是否后台列表
 	 * @return
 	 */
@@ -164,6 +164,24 @@ public abstract class BaseController<T> implements IController, Constant {
 		mv.put(PageResult, pageResult);
 
 		return list(isAdmin);
+	}
+
+	/**
+	 * 自动根据客户端 HTTP 头传入的 Accept 字段决定是否输出 JSON 格式
+	 * 
+	 * @param mv         Model 模型
+	 * @param pageResult 分页数据
+	 * @param isAdmin    是否后台列表
+	 * @return
+	 */
+	public String autoOutput(ModelAndView mv, PageResult<T> pageResult, boolean isAdmin) {
+		String accept = MvcRequest.getHttpServletRequest().getHeader("Accept");
+		boolean isJson = accept != null && "application/json".equals(accept);
+
+		if (isJson) {
+			return toJson(pageResult);
+		} else
+			return page(mv, pageResult, isAdmin);
 	}
 
 	public String page(ModelAndView mv, PageResult<T> pageResult) {

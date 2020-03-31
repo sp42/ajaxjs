@@ -47,8 +47,8 @@
 		}	
 	</style> 
 	<%-- 图标库  http://fontawesome.dashgame.com/ --%>
-	<link href="${ajaxjs_ui_output}/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet">
-                        
+	<%-- <link href="${ajaxjs_ui_output}/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet"> --%>
+    <link crossorigin="anonymous" integrity="sha384-FckWOBo7yuyMS7In0aXZ0aoVvnInlnFMwCv77x9sZpFgOonQgnBj1uLwenWVtsEj" href="https://lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />                 
 	
 <% if(com.ajaxjs.Version.isDebug) { %>
 	<link rel="stylesheet/less" data-global-vars='{"assetFilePath": "\"${empty param.css ? ctx : ''}/asset\"" }' type="text/css" href="${ctx}${empty param.lessFile ? '/asset/less/main.less' : param.lessFile}" />
@@ -97,9 +97,9 @@
 	<%}%>
 <%}else { %>
 	<link rel="stylesheet" type="text/css" href="${ctx}/asset/css/${empty param.lessFile ? 'main' : param.lessFile.replaceAll("(?:.*/)(\\w+).less", "$1")}.css" />
-
-    <script src="${ajaxjs_ui_output}/lib/vue.min.js"></script>
-    <script src="${ajaxjs_ui_output}/all.js"></script>
+	<script crossorigin="anonymous" integrity="sha384-8t+aLluUVnn5SPPG/NbeZCH6TWIvaXIm/gDbutRvtEeElzxxWaZN+G/ZIEdI/f+y" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+<%--     <script src="${ajaxjs_ui_output}/lib/vue.min.js"></script>--%>
+    <script src="${ajaxjs_ui_output}/all.js"></script> 
 <%} %>
 	
    	<script>
