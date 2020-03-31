@@ -52,7 +52,7 @@ public class SectionService extends SectionListService {
 	}
 
 	public List<SectionList> findSectionListBySectionId(int sectionId) {
-		return findSectionListBySectionId(sectionId, fn);
+		return findListBySectionId(sectionId, fn);
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class SectionService extends SectionListService {
 	 * @return
 	 */
 	public PageResult<SectionList> findSectionListBySectionId(int start, int limit, int sectionId) {
-		return findSectionListBySectionId(start, limit, sectionId, fn);
+		return findListBySectionId(start, limit, sectionId, fn);
 	}
 
 	private CatalogService catalogService = new CatalogService();
@@ -76,9 +76,9 @@ public class SectionService extends SectionListService {
 	 */
 	public List<Catalog> findSectionCatalog() {
 		List<Catalog> c = catalogService
-				.findAllListByParentId(ConfigService.getValueAsInt("data.section.sectionList_Catalog_Id"), false);
+				.findAllListByParentId(ConfigService.getValueAsInt("data.section.masterCatalogId"), false);
 		Catalog parent = new Catalog();
-		parent.setId(154L);
+		parent.setId(Long.parseLong(ConfigService.getValueAsInt("data.section.masterCatalogId") + ""));
 		parent.setName("栏目");
 		parent.setPid(-1);
 		c.add(parent);

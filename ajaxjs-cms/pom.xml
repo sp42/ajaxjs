@@ -33,6 +33,41 @@
 			<version>5.1.30</version>
 		</dependency>
 
+		<!-- 发送短信 -->
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>aliyun-java-sdk-core</artifactId>
+			<version>3.2.8</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>2.0.1.Final</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.bval</groupId>
+			<artifactId>org.apache.bval.bundle</artifactId>
+			<version>2.0.3</version>
+		</dependency>
+
+
+		<!-- <dependency> <groupId>io.swagger.core.v3</groupId> <artifactId>swagger-jaxrs2</artifactId> 
+			<scope>compile</scope> <version>2.0.6</version> </dependency> -->
+
+		<dependency>
+			<groupId>com.ajaxjs</groupId>
+			<artifactId>ajaxjs-framework</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
@@ -47,35 +82,11 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- 发送短信 -->
-		<dependency>
-			<groupId>com.aliyun</groupId>
-			<artifactId>aliyun-java-sdk-core</artifactId>
-			<version>3.2.8</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.aliyun</groupId>
-			<artifactId>aliyun-java-sdk-dysmsapi</artifactId>
-			<version>1.1.0</version>
-		</dependency>
-		<!-- <dependency> <groupId>org.apache.bval</groupId> <artifactId>org.apache.bval.bundle</artifactId> 
-			<version>2.0.0</version> </dependency> -->
-
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<version>2.0.2-beta</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<!-- <dependency> <groupId>io.swagger.core.v3</groupId> <artifactId>swagger-jaxrs2</artifactId> 
-			<scope>compile</scope> <version>2.0.6</version> </dependency> -->
-
-		<dependency>
-			<groupId>com.ajaxjs</groupId>
-			<artifactId>ajaxjs-framework</artifactId>
-			<version>1.0.1</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

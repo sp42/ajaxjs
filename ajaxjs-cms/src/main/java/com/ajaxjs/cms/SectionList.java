@@ -44,15 +44,15 @@ public class SectionList extends BaseModel {
 	/**
 	 * 分类 id
 	 */
-	private Integer catelogId;
+	private Integer catalogId;
 
 	/**
 	 * 设置分类 id
 	 * 
-	 * @param catelogId 分类 id
+	 * @param catalogId 分类 id
 	 */
-	public void setCatelogId(Integer catelogId) {
-		this.catelogId = catelogId;
+	public void setCatalogId(Integer catalogId) {
+		this.catalogId = catalogId;
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class SectionList extends BaseModel {
 	 * 
 	 * @return 分类 id
 	 */
-	public Integer getCatelogId() {
-		return catelogId;
+	public Integer getCatalogId() {
+		return catalogId;
 	}
 }

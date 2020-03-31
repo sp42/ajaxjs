@@ -1,4 +1,4 @@
-package com.ajaxjs.cms;
+ package com.ajaxjs.cms;
 
 import java.util.List;
 
@@ -74,12 +74,12 @@ public class ShopBookmarkService extends SectionListService {
 	 * @return
 	 */
 	public PageResult<SectionList> findSectionListBySectionId(int start, int limit) {
-		return super.findSectionListBySectionId(start, limit, ConfigService.getValueAsInt("data.section.useBookmark_Catelog_Id"), fn);
+		return super.findListBySectionId(start, limit, ConfigService.getValueAsInt("data.section.useBookmark_Catelog_Id"), fn);
 	}
 
 	@Override
 	public Long create(SectionList bean) {
-		bean.setCatelogId(ConfigService.getValueAsInt("data.section.useBookmark_Catelog_Id"));
+		bean.setCatalogId(ConfigService.getValueAsInt("data.section.useBookmark_Catelog_Id"));
 		return super.create(bean);
 	}
 
