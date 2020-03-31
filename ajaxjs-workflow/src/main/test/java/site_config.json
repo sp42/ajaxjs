@@ -1,6 +1,0 @@
-{
-	"workflow" : {
-		"tomcat_log" : "/home/apache-tomcat-8.0.53/logs/",
-		"subprocessurl" : "C:\\project\\bgdiving"
-	}
-}
