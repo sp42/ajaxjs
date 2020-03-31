@@ -53,7 +53,7 @@
 <% if(com.ajaxjs.Version.isDebug) { %>
 	<link rel="stylesheet/less" data-global-vars='{"assetFilePath": "\"${empty param.css ? ctx : ''}/asset\"" }' type="text/css" href="${ctx}${empty param.lessFile ? '/asset/less/main.less' : param.lessFile}" />
 
-	<script src="${ajaxjs_ui_output}/lib/less.min.js"></script>
+	<script src="${ajaxjsui}/js/libs/less.min.js"></script>
     <script src="${ajaxjsui}/js/libs/vue.js"></script>
     <script src="${ajaxjsui}/js/ajaxjs-base.js"></script>
     <script src="${ajaxjsui}/js/widgets/admin.js"></script>
