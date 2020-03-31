@@ -172,9 +172,9 @@ public class CommonUtil {
 	/**
 	 * 常见的日期格式
 	 */
-	public static final String commonDateFormat = "yyyy-MM-dd HH:mm:ss";
-	public static final String commonDateFormat_shorter = "yyyy-MM-dd HH:mm";
-	public static final String commonDateFormat_shortest = "yyyy-MM-dd";
+	public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+	public static final String DATE_FORMAT_SHORT = "yyyy-MM-dd HH:mm";
+	public static final String DATE_FORMAT_SHORTER = "yyyy-MM-dd";
 
 	/**
 	 * 对输入的时间进行格式化，采用格式 yyyy-MM-dd HH:mm:ss
@@ -183,7 +183,7 @@ public class CommonUtil {
 	 * @return 转换到 yyyy-MM-dd HH:mm:ss 格式的时间
 	 */
 	public static String formatDate(Date date) {
-		return simpleDateFormatFactory(commonDateFormat).format(date);
+		return simpleDateFormatFactory(DATE_FORMAT).format(date);
 	}
 
 	/**
@@ -193,7 +193,7 @@ public class CommonUtil {
 	 * @return 转换到 YYYY-MM-dd HH:MM 格式的时间
 	 */
 	public static String formatDateShorter(Date date) {
-		return simpleDateFormatFactory(commonDateFormat_shorter).format(date);
+		return simpleDateFormatFactory(DATE_FORMAT_SHORT).format(date);
 	}
 
 	/**
@@ -212,24 +212,34 @@ public class CommonUtil {
 	 * @return 当前时间
 	 */
 	public static String now() {
-		return now(commonDateFormat);
+		return now(DATE_FORMAT);
 	}
 
-	private final static String dateReg = "((19|20)[0-9]{2})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])";
+	/**
+	 * 年月日的正则表达式，例如 2016-08-18
+	 */
+	private final static String DATE_YEAR = "((19|20)[0-9]{2})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])";
 
-	private final static Pattern pattern = Pattern.compile(dateReg + " ([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]");
+	/**
+	 * 正则实例
+	 */
+	private final static Pattern DATE_YEAR_PATTERN = Pattern.compile(DATE_YEAR);
 
-	private final static Pattern pattern2 = Pattern.compile(dateReg); // 可能是这种格式 2016-08-18
+	/**
+	 * 一般日期判断的正则
+	 */
+	private final static Pattern DATE_PATTERN = Pattern.compile(DATE_YEAR + " ([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]");
 
 	/**
 	 * 支持任意对象转换为日期类型
 	 * 
 	 * @param obj 任意对象
-	 * @return 日期类型对象，null 表示为转换失败
+	 * @return 日期类型对象，返回 null 表示为转换失败
 	 */
 	public static Date Objet2Date(Object obj) {
 		if (obj == null)
 			return null;
+
 		else if (obj instanceof Date)
 			return (Date) obj;
 		else if (obj instanceof Long)
@@ -243,12 +253,12 @@ public class CommonUtil {
 				return null;
 
 			try {
-				if (pattern.matcher(str).matches()) {
-					return simpleDateFormatFactory(commonDateFormat).parse(str);
-				} else if (pattern2.matcher(str).matches()) {
-					return simpleDateFormatFactory(commonDateFormat_shortest).parse(str);
+				if (DATE_PATTERN.matcher(str).matches()) {
+					return simpleDateFormatFactory(DATE_FORMAT).parse(str);
+				} else if (DATE_YEAR_PATTERN.matcher(str).matches()) {
+					return simpleDateFormatFactory(DATE_FORMAT_SHORTER).parse(str);
 				} else
-					return simpleDateFormatFactory(commonDateFormat_shorter).parse(str);
+					return simpleDateFormatFactory(DATE_FORMAT_SHORT).parse(str);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}

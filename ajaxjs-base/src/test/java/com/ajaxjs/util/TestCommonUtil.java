@@ -1,7 +1,7 @@
 package com.ajaxjs.util;
 
 import static com.ajaxjs.util.CommonUtil.Objet2Date;
-import static com.ajaxjs.util.CommonUtil.commonDateFormat;
+import static com.ajaxjs.util.CommonUtil.DATE_FORMAT;
 import static com.ajaxjs.util.CommonUtil.containsIgnoreCase;
 import static com.ajaxjs.util.CommonUtil.formatDate;
 import static com.ajaxjs.util.CommonUtil.formatDateShorter;
@@ -60,7 +60,7 @@ public class TestCommonUtil {
 	@Test
 	public void testNow() {
 		assertNotNull(now()); // 返回当前时间的 YYYY-MM-dd HH:MM:ss 字符串类型
-		assertNotNull(now(commonDateFormat)); // 返回当前时间，并对当前时间进行格式化
+		assertNotNull(now(DATE_FORMAT)); // 返回当前时间，并对当前时间进行格式化
 	}
 
 	@Test
