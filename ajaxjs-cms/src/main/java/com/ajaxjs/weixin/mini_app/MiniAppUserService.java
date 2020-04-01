@@ -19,7 +19,7 @@ import com.ajaxjs.user.login.UserLoginLog;
 import com.ajaxjs.user.login.UserOauth;
 import com.ajaxjs.user.login.UserOauthService;
 import com.ajaxjs.user.model.User;
-import com.ajaxjs.util.cryptography.SymmetricCipher;
+import com.ajaxjs.util.cryptography.AES_Cipher;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 
@@ -160,7 +160,7 @@ public class MiniAppUserService extends BaseService<User> {
 		Objects.requireNonNull(token.getOpenId(), "没有 open id");
 
 		String SessionId_AesKey = MiniApp.getSessionKey();
-		String sessionId = SymmetricCipher.AES_Encrypt(token.getOpenId() + token.getUserId().toString(), SessionId_AesKey);
+		String sessionId = AES_Cipher.AES_Encrypt(token.getOpenId() + token.getUserId().toString(), SessionId_AesKey);
 		token.setSessionId(sessionId);
 
 		return token;
@@ -174,7 +174,7 @@ public class MiniAppUserService extends BaseService<User> {
 	 */
 	public static Object[] decodeSessionId(String str) {
 		String SessionId_AesKey = ConfigService.getValueAsString("mini_program.SessionId_AesKey");
-		String s = SymmetricCipher.AES_Decrypt(str, SessionId_AesKey);
+		String s = AES_Cipher.AES_Decrypt(str, SessionId_AesKey);
 		Object[] r = new Object[2];
 
 		try {
