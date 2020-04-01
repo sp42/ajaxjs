@@ -9,7 +9,7 @@ import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.FilterAction;
 import com.ajaxjs.mvc.filter.FilterAfterArgs;
-import com.ajaxjs.util.cryptography.SymmetricCipher;
+import com.ajaxjs.util.cryptography.AES_Cipher;
 
 public class ApiAllowRequestCheck implements FilterAction {
 
@@ -24,7 +24,7 @@ public class ApiAllowRequestCheck implements FilterAction {
 		if (AES_Key == null)
 			throw new NullPointerException("缺少 Symmetric.AES_Key 配置");
 
-		String time = SymmetricCipher.AES_Decrypt(token, AES_Key);
+		String time = AES_Cipher.AES_Decrypt(token, AES_Key);
 
 		if (time == null) {
 			throw new IllegalAccessError("合法性请求解密的密码不正确");

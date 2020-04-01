@@ -3,7 +3,7 @@ package com.ajaxjs.user.token;
 import java.util.Date;
 import java.util.Random;
 
-import com.ajaxjs.util.cryptography.SymmetricCipher;
+import com.ajaxjs.util.cryptography.AES_Cipher;
 import com.ajaxjs.util.Encode;
 
 /**
@@ -51,7 +51,7 @@ public class Token {
 	 */
 	public static String getToken(String realPassword, String aesKey) {
 		String hashedPassword = Encode.getSHA1(realPassword);
-		return SymmetricCipher.AES_Encrypt(initSalt() + hashedPassword, aesKey);
+		return AES_Cipher.AES_Encrypt(initSalt() + hashedPassword, aesKey);
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class Token {
 	 */
 	public static String getStoreToken(String clientToken, String aesKey, String serverAESkey) {
 		String hashedPassword = removeSalt(clientToken, aesKey);
-		return SymmetricCipher.AES_Encrypt(initSalt() + hashedPassword, serverAESkey);
+		return AES_Cipher.AES_Encrypt(initSalt() + hashedPassword, serverAESkey);
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class Token {
 	 * @return HashedPassword
 	 */
 	private static String removeSalt(String token, String key) {
-		String salted = SymmetricCipher.AES_Decrypt(token, key);
+		String salted = AES_Cipher.AES_Decrypt(token, key);
 		return salted.substring(saltSize, salted.length());
 	}
 
@@ -104,7 +104,7 @@ public class Token {
 		String hashedPassword = removeSalt(storeToken, serverAESkey);
 		String slat = initSalt();
 		
-		return new String[] { slat, SymmetricCipher.AES_Encrypt(slat + hashedPassword, serverAESkey) };
+		return new String[] { slat, AES_Cipher.AES_Encrypt(slat + hashedPassword, serverAESkey) };
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class Token {
 	 */
 	public static String getTimeStampToken(String aesKey) {
 		long timeStamp = System.currentTimeMillis() / 1000;
-		return SymmetricCipher.AES_Encrypt(timeStamp + "", aesKey);
+		return AES_Cipher.AES_Encrypt(timeStamp + "", aesKey);
 	}
 
 	/**
@@ -126,7 +126,7 @@ public class Token {
 	 * @return
 	 */
 	public static Date decryptTimeStampToken(String token, String aesKey) {
-		String timeStamp = SymmetricCipher.AES_Decrypt(token + "", aesKey);
+		String timeStamp = AES_Cipher.AES_Decrypt(token + "", aesKey);
 		long t = Long.parseLong(timeStamp);
 		
 		return new Date(t);

@@ -74,7 +74,7 @@ public class ArticleService extends BaseService<Map<String, Object>> implements 
 			calendar.set(year, month, 1); // 这里先设置要获取月份的下月的第一天
 			calendar.add(Calendar.DATE, -1);//这里将日期值减去一天，从而获取到要求的月份最后一天
 			
-			String end = CommonUtil.simpleDateFormatFactory(CommonUtil.commonDateFormat_shortest).format(calendar.getTime());
+			String end = CommonUtil.simpleDateFormatFactory(CommonUtil.DATE_FORMAT_SHORTER).format(calendar.getTime());
 			map.put("endDate", end);
 		}
 		

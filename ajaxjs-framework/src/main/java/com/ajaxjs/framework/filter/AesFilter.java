@@ -24,7 +24,7 @@ import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.FilterAction;
 import com.ajaxjs.mvc.filter.FilterAfterArgs;
 import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.util.cryptography.SymmetricCipher;
+import com.ajaxjs.util.cryptography.AES_Cipher;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -94,7 +94,7 @@ public class AesFilter implements FilterAction {
 	 * @return 时间戳 Token
 	 */
 	public static String getTimeStampToken(String aesKey) {
-		return SymmetricCipher.AES_Encrypt(System.currentTimeMillis() + "", aesKey);
+		return AES_Cipher.AES_Encrypt(System.currentTimeMillis() + "", aesKey);
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class AesFilter implements FilterAction {
 	 * @return 返回 null 表示解密失败！
 	 */
 	public static Date decryptTimeStampToken(String token, String aesKey) {
-		String timeStamp = SymmetricCipher.AES_Decrypt(token + "", aesKey);
+		String timeStamp = AES_Cipher.AES_Decrypt(token + "", aesKey);
 		if (timeStamp == null)
 			return null;
 
