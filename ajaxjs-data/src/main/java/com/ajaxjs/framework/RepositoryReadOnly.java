@@ -41,6 +41,7 @@ import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
  * @author sp42 frank@ajaxjs.com
  *
  */
+@SuppressWarnings("restriction")
 public class RepositoryReadOnly extends RepositoryBase {
 	/**
 	 * 执行时的调用。不管执行哪个方法都会调用该方法。
