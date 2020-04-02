@@ -15,8 +15,10 @@
  */
 package com.ajaxjs.framework;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import com.ajaxjs.orm.annotation.Delete;
 import com.ajaxjs.orm.annotation.Insert;
@@ -122,7 +124,13 @@ public interface IBaseDao<T> {
 	@Update
 	public int update(T bean);
 	
-//	public Long saveOrUpdate(T bean);
+	/**
+	 * 
+	 * @param bean
+	 * @param saveOrUpdate 返回的 Serializable 为 id 类型，可为 long/int
+	 * @return
+	 */
+	public Serializable saveOrUpdate(T bean, Supplier<Serializable> saveOrUpdate);
 
 	/**
 	 * 单个删除

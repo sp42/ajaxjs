@@ -43,6 +43,7 @@ public class Repository extends RepositoryReadOnly {
 	 * @return DAO 方法执行的结果
 	 * @throws DaoException DAO 异常
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws DaoException {
 		if (init(method))
@@ -65,6 +66,21 @@ public class Repository extends RepositoryReadOnly {
 		if (isDelete(method))
 			return delete(method, args);
 
+		if (method.toString().contains("saveOrUpdate")) {
+			Supplier<Serializable> fn = (Supplier<Serializable>) args[1];
+			Serializable id = fn.get();
+
+			if (id != null) { // 有已经存在的记录，是 更新
+				if (args[0] instanceof Map)
+					((Map<String, Object>) args[0]).put("id", Long.parseLong(id + ""));
+				else
+					((BaseModel) args[0]).setId(Long.parseLong(id + ""));
+
+				return update(method, new Object[] { args[0] });
+			} else
+				return insert(method, new Object[] { args[0] });
+		}
+
 		throw new DaoException("没有任何 DAO CRUD 的注解。你继承 IDAO 接口的子接口中，可能没有覆盖 IDAO 的方法" + method);
 	}
 
@@ -83,9 +99,10 @@ public class Repository extends RepositoryReadOnly {
 		Object bean = args[0];
 
 		DaoInfo daoInfo = new DaoInfo();
-		daoInfo.sql = getSql.get();
+		daoInfo.sql = getSql == null ? "" : getSql.get();
 		// 表名可以通过注解获取（类），也可以直接 insert.tableName() 获取
-		daoInfo.tableName = CommonUtil.isEmptyString(getTableName.get()) ? getTableName() : getTableName.get();
+		daoInfo.tableName = (getTableName == null || CommonUtil.isEmptyString(getTableName.get())) ? getTableName()
+				: getTableName.get();
 		daoInfo.isMap = bean instanceof Map;
 		daoInfo.bean = bean;
 
@@ -121,12 +138,14 @@ public class Repository extends RepositoryReadOnly {
 		Class<?> returnType = getReturnType(method);
 		Insert insert = method.getAnnotation(Insert.class);
 		Function<DaoInfo, Serializable> writeSql = daoInfo -> create(conn, daoInfo.sql, args);
+
 		// INSERT 返回新建的 id
-		Serializable id = getFn(insert::value, insert::tableName, args, method, writeSql, createEntity);
+		Serializable id = insert == null ? getFn(null, null, args, method, writeSql, createEntity)
+				: getFn(insert::value, insert::tableName, args, method, writeSql, createEntity);
 
 		if (id == null)
 			return null;
-		else if((returnType == Integer.class || returnType == int.class) && id.getClass() == Long.class) {
+		else if ((returnType == Integer.class || returnType == int.class) && id.getClass() == Long.class) {
 			return Integer.parseInt("" + id);
 		} else if ((returnType == Long.class || returnType == long.class) && id.getClass() == Integer.class) {
 			return new Long((Integer) id);
@@ -147,7 +166,8 @@ public class Repository extends RepositoryReadOnly {
 		Update update = method.getAnnotation(Update.class);
 		Function<DaoInfo, Integer> writeSql = daoInfo -> update(conn, daoInfo.sql, args);
 
-		return getFn(update::value, update::tableName, args, method, writeSql, updateEntity);
+		return update == null ? getFn(null, null, args, method, writeSql, updateEntity)
+				: getFn(update::value, update::tableName, args, method, writeSql, updateEntity);
 	}
 
 	/**
