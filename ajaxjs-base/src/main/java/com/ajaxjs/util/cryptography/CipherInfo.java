@@ -14,33 +14,32 @@ import javax.crypto.SecretKey;
 
 import com.ajaxjs.util.logger.LogHelper;
 
+/**
+ * 加密相关的 Bean
+ * 
+ * @author sp42 frank@ajaxjs.com
+ *
+ */
 public class CipherInfo {
 	private static final LogHelper LOGGER = LogHelper.getLog(CipherInfo.class);
 
 	/**
-	 * 
-	 */
-	private String keyAlgorithm;
-
-	/**
-	 * 
+	 * 加密的算法
 	 */
 	private String cipherAlgorithm;
 
 	/**
-	 * 
+	 * 密钥的长度
 	 */
 	private int keySize;
 
 	/**
 	 * 
-	 * @param cipherAlgorithm
-	 * @param keyAlgorithm
-	 * @param keySize
+	 * @param cipherAlgorithm 加密的算法
+	 * @param keySize         密钥的长度
 	 */
-	public CipherInfo(String cipherAlgorithm, String keyAlgorithm, int keySize) {
+	public CipherInfo(String cipherAlgorithm, int keySize) {
 		this.cipherAlgorithm = cipherAlgorithm;
-		this.keyAlgorithm = keyAlgorithm;
 		this.keySize = keySize;
 	}
 
@@ -103,14 +102,6 @@ public class CipherInfo {
 
 	public void setKeySize(int keySize) {
 		this.keySize = keySize;
-	}
-
-	public String getKeyAlgorithm() {
-		return keyAlgorithm;
-	}
-
-	public void setKeyAlgorithm(String keyAlgorithm) {
-		this.keyAlgorithm = keyAlgorithm;
 	}
 
 	public String getCipherAlgorithm() {

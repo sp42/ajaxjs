@@ -28,7 +28,7 @@ import com.ajaxjs.util.Encode;
  *
  */
 public class AES_Cipher {
-	private final static CipherInfo ci = new CipherInfo("AES", null, 128);
+	private final static CipherInfo ci = new CipherInfo("AES", 128);
 
 	/**
 	 * 加密

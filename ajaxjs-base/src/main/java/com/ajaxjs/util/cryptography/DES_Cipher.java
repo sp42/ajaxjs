@@ -28,7 +28,7 @@ import com.ajaxjs.util.Encode;
  *
  */
 public class DES_Cipher {
-	private final static CipherInfo ci = new CipherInfo("DES", null, 56);
+	private final static CipherInfo ci = new CipherInfo("DES", 56);
 
 	/**
 	 * 加密

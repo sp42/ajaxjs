@@ -45,7 +45,7 @@ public class RSA_Cipher {
 
 	/* 貌似 CIPHER_ALGORITHM 默认是RSA/NONE/PKCS1Padding，未验证 */
 	/* RSA密钥长度 KEY_SIZE 必须是64的倍数，在512~65536之间。默认是1024 */
-	private final static CipherInfo ci = new CipherInfo("RSA/ECB/PKCS1Padding", "RSA", 2048);
+	private final static CipherInfo ci = new CipherInfo("RSA/ECB/PKCS1Padding", 2048);
 
 	public static final String PUBLIC_KEY = "publicKey";
 
@@ -64,7 +64,7 @@ public class RSA_Cipher {
 		KeyPairGenerator g;
 
 		try {
-			g = KeyPairGenerator.getInstance(ci.getKeyAlgorithm());
+			g = KeyPairGenerator.getInstance("RSA");
 		} catch (NoSuchAlgorithmException e) {
 			LOGGER.warning(e);
 			return null;
@@ -93,7 +93,7 @@ public class RSA_Cipher {
 		X509EncodedKeySpec ks = new X509EncodedKeySpec(key);
 
 		try {
-			return KeyFactory.getInstance(ci.getKeyAlgorithm()).generatePublic(ks);
+			return KeyFactory.getInstance("RSA").generatePublic(ks);
 		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
 			LOGGER.warning(e);
 			return null;
@@ -110,7 +110,7 @@ public class RSA_Cipher {
 		PKCS8EncodedKeySpec ks = new PKCS8EncodedKeySpec(key);
 
 		try {
-			return KeyFactory.getInstance(ci.getKeyAlgorithm()).generatePrivate(ks);
+			return KeyFactory.getInstance("RSA").generatePrivate(ks);
 		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
 			LOGGER.warning(e);
 			return null;
