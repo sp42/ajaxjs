@@ -1,52 +1,42 @@
 package com.ajaxjs.user.filter;
 
 import java.lang.reflect.Method;
-import java.util.Date;
+import java.util.Objects;
 
-import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.FilterAction;
 import com.ajaxjs.mvc.filter.FilterAfterArgs;
-import com.ajaxjs.util.cryptography.AES_Cipher;
+import com.ajaxjs.user.token.TokenInfo;
+import com.ajaxjs.user.token.TokenService;
 
+/**
+ * 简单的接口合法性校验，基于 AES
+ * 
+ * @author sp42 frank@ajaxjs.com
+ *
+ */
 public class ApiAllowRequestCheck implements FilterAction {
+	/**
+	 * 凭证验证服务
+	 */
+	private final static TokenService service = new TokenService(new TokenInfo());
+
+	static {
+		service.getInfo().setUsingTimeout(true);
+		service.getInfo().setKeyByConfig("System.api.AES_Key");
+		service.getInfo().setTimeoutByConfig("System.api.timeout");
+	}
 
 	@Override
 	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args) {
-		String token = request.getHeader("token");
-
-		String AES_Key = ConfigService.getValueAsString("Symmetric.AES_Key");
+		String token = request.getHeader(TokenInfo.TOKEN);
 		if (token == null)
-			throw new NullPointerException("缺少 token 参数，请放置 HTTP Header 请求中");
+			token = request.getParameter(TokenInfo.TOKEN);
+		Objects.requireNonNull(token, "缺少 token 参数，请放置 HTTP Header 请求中或 QueryString 中");
 
-		if (AES_Key == null)
-			throw new NullPointerException("缺少 Symmetric.AES_Key 配置");
-
-		String time = AES_Cipher.AES_Decrypt(token, AES_Key);
-
-		if (time == null) {
-			throw new IllegalAccessError("合法性请求解密的密码不正确");
-		}
-
-		time = time.replaceAll("token_", "");
-
-		long datestamp = 0L;
-
-		try {
-			datestamp = Long.parseLong(time);
-		} catch (NumberFormatException e) {
-			throw new NumberFormatException("转换时间戳格式不正确！");
-		}
-
-		long diff = new Date().getTime() - datestamp;
-
-		if (diff > ConfigService.getValueAsLong("Symmetric.apiTimeout")) {
-			throw new IllegalAccessError("请求超时！");
-		} else {
-			return true;
-		}
+		return service.verify(token);
 	}
 
 	@Override
@@ -55,4 +45,12 @@ public class ApiAllowRequestCheck implements FilterAction {
 
 	}
 
+	/**
+	 * 创建时间戳 Token
+	 * 
+	 * @return 时间戳 Token
+	 */
+	public static String getTimeStampToken() {
+		return service.getToken();
+	}
 }

@@ -1,6 +1,5 @@
 package com.ajaxjs.user;
 
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,25 +18,6 @@ import com.ajaxjs.util.CommonUtil;
 public class UserUtil {
 	public static Function<String, String> whereByuserId(long userId) {
 		return BaseService.setWhere("userId = " + userId);
-	}
-
-	/**
-	 * 生成指定长度的随机字符，可能包含数字
-	 * 
-	 * @param length 户要求产生字符串的长度
-	 * @return 随机字符
-	 */
-	public static String getRandomString(int length) {
-		String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-		Random random = new Random();
-		StringBuffer sb = new StringBuffer();
-
-		for (int i = 0; i < length; i++) {
-			int number = random.nextInt(62);
-			sb.append(str.charAt(number));
-		}
-
-		return sb.toString();
 	}
 
 	/**

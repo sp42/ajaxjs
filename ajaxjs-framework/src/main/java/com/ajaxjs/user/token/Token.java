@@ -1,10 +1,9 @@
 package com.ajaxjs.user.token;
 
 import java.util.Date;
-import java.util.Random;
 
-import com.ajaxjs.util.cryptography.AES_Cipher;
 import com.ajaxjs.util.Encode;
+import com.ajaxjs.util.cryptography.AES_Cipher;
 
 /**
  * 该类的作用： 1）一些密码字段的基类，涉及 AES 密钥和盐值 2）如何生成指定长度的随机密码
@@ -22,25 +21,6 @@ public class Token {
 	 */
 	private static final int saltSize = 8;
 
-	/**
-	 * 生成随机密码的字符和数字（从0-9a-z中选）
-	 */
-	private static final String text = "0123456789abcdefghijklmnopqrstuvwxyz";
-
-	/**
-	 * 生成随机密码。可以控制生成的密码长度， 密码由数字和字母组成。
-	 * 
-	 * @return 随机密码
-	 */
-	public synchronized static String initSalt() {
-		StringBuffer sb = new StringBuffer();
-		Random random = new Random();
-
-		for (int i = 0; i < saltSize; i++)
-			sb.append(text.charAt(random.nextInt(text.length())));
-
-		return sb.toString();
-	}
 
 	/**
 	 * 生成 Token
@@ -51,7 +31,7 @@ public class Token {
 	 */
 	public static String getToken(String realPassword, String aesKey) {
 		String hashedPassword = Encode.getSHA1(realPassword);
-		return AES_Cipher.AES_Encrypt(initSalt() + hashedPassword, aesKey);
+		return AES_Cipher.encrypt(TokenService.getRandomString(saltSize) + hashedPassword, aesKey);
 	}
 
 	/**
@@ -64,7 +44,7 @@ public class Token {
 	 */
 	public static String getStoreToken(String clientToken, String aesKey, String serverAESkey) {
 		String hashedPassword = removeSalt(clientToken, aesKey);
-		return AES_Cipher.AES_Encrypt(initSalt() + hashedPassword, serverAESkey);
+		return AES_Cipher.encrypt(TokenService.getRandomString(saltSize) + hashedPassword, serverAESkey);
 	}
 
 	/**
@@ -75,7 +55,7 @@ public class Token {
 	 * @return HashedPassword
 	 */
 	private static String removeSalt(String token, String key) {
-		String salted = AES_Cipher.AES_Decrypt(token, key);
+		String salted = AES_Cipher.decrypt(token, key);
 		return salted.substring(saltSize, salted.length());
 	}
 
@@ -102,9 +82,9 @@ public class Token {
 	 */
 	public static String[] getAutoLoginToken(String storeToken, String serverAESkey) {
 		String hashedPassword = removeSalt(storeToken, serverAESkey);
-		String slat = initSalt();
+		String slat = TokenService.getRandomString(saltSize);
 		
-		return new String[] { slat, AES_Cipher.AES_Encrypt(slat + hashedPassword, serverAESkey) };
+		return new String[] { slat, AES_Cipher.encrypt(slat + hashedPassword, serverAESkey) };
 	}
 
 	/**
@@ -115,7 +95,7 @@ public class Token {
 	 */
 	public static String getTimeStampToken(String aesKey) {
 		long timeStamp = System.currentTimeMillis() / 1000;
-		return AES_Cipher.AES_Encrypt(timeStamp + "", aesKey);
+		return AES_Cipher.encrypt(timeStamp + "", aesKey);
 	}
 
 	/**
@@ -126,7 +106,7 @@ public class Token {
 	 * @return
 	 */
 	public static Date decryptTimeStampToken(String token, String aesKey) {
-		String timeStamp = AES_Cipher.AES_Decrypt(token + "", aesKey);
+		String timeStamp = AES_Cipher.decrypt(token + "", aesKey);
 		long t = Long.parseLong(timeStamp);
 		
 		return new Date(t);

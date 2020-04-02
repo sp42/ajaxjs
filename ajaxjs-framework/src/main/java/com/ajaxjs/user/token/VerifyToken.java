@@ -12,7 +12,6 @@ import com.ajaxjs.framework.Repository;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
-import com.ajaxjs.user.UserUtil;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.Encode;
@@ -24,7 +23,6 @@ import com.ajaxjs.util.Encode;
  *
  */
 public class VerifyToken extends BaseService<Map<String, Object>> {
-
 	/**
 	 * 验证邮件
 	 */
@@ -45,7 +43,6 @@ public class VerifyToken extends BaseService<Map<String, Object>> {
 
 		@Insert("INSERT INTO ${tableName} (token, randomStr, createDate, entityUid, type) VALUES (?, ?, ?, ?, ?)")
 		public long saveToken(String token, String randromStr, Date now, long entityUid, int type);
-
 	}
 
 	public static VerifyEmailDao dao = new Repository().bind(VerifyEmailDao.class);
@@ -58,7 +55,7 @@ public class VerifyToken extends BaseService<Map<String, Object>> {
 	 * @return
 	 */
 	public static String saveTokenWithEmailUser(String email, long userUid, int type) {
-		String randromStr = UserUtil.getRandomString(6);
+		String randromStr = TokenService.getRandomString(6);
 		Date now = new Date();
 
 		String str = userUid + email + randromStr + now.getTime(), token = Encode.md5(str);
