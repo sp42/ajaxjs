@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.Set;
 
 import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.user.token.TokenService;
 import com.ajaxjs.util.Encode;
-import com.ajaxjs.weixin.CommonWxUtil;
 import com.ajaxjs.weixin.mini_app.MiniApp;
 
 public final class PaySignatures implements PayConstant {
@@ -69,8 +69,8 @@ public final class PaySignatures implements PayConstant {
 	public static Map<String, String> getPayParam(String perpayId, String nonceStr) {
 		Map<String, String> map = new HashMap<>();
 		map.put("appId", MiniApp.getAppId());
-		map.put("timeStamp", CommonWxUtil.getTimeStamp());
-		map.put("nonceStr", CommonWxUtil.getNonceStr());
+		map.put("timeStamp", System.currentTimeMillis() / 1000 + "");
+		map.put("nonceStr", TokenService.getRandomString(10));
 		map.put("package", "prepay_id=" + perpayId);
 		map.put("signType", "MD5");
 

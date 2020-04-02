@@ -7,10 +7,10 @@ import java.util.Map;
 import java.util.Set;
 
 import com.ajaxjs.net.http.NetUtil;
+import com.ajaxjs.user.token.TokenService;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.weixin.CommonWxUtil;
 
 public class WxWebUtils {
 	public final static String accessTokenApi = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s";
@@ -104,8 +104,8 @@ public class WxWebUtils {
 		Map<String, String> map = new HashMap<>();
 		map.put("url", url);
 		map.put("jsapi_ticket", jsApiTicket);
-		map.put("noncestr", CommonWxUtil.getNonceStr());
-		map.put("timestamp", CommonWxUtil.getTimeStamp());
+		map.put("noncestr", TokenService.getRandomString(10));
+		map.put("timestamp", System.currentTimeMillis() / 1000 + "");
 		
 		String raw = generateSignature(map);
 		

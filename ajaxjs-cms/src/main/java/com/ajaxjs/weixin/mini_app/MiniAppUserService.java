@@ -3,7 +3,6 @@ package com.ajaxjs.weixin.mini_app;
 import java.util.Map;
 import java.util.Objects;
 
-import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.Repository;
@@ -19,7 +18,8 @@ import com.ajaxjs.user.login.UserLoginLog;
 import com.ajaxjs.user.login.UserOauth;
 import com.ajaxjs.user.login.UserOauthService;
 import com.ajaxjs.user.model.User;
-import com.ajaxjs.util.cryptography.AES_Cipher;
+import com.ajaxjs.user.token.TokenInfo;
+import com.ajaxjs.user.token.TokenService;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 
@@ -50,7 +50,7 @@ public class MiniAppUserService extends BaseService<User> {
 		setShortName("miniAppUserService");
 		setDao(dao);
 	}
-	
+
 	/**
 	 * 登录凭证校验， 获取 session_key 和 openid 等
 	 */
@@ -65,7 +65,7 @@ public class MiniAppUserService extends BaseService<User> {
 	/**
 	 * 获取用户 openId
 	 * 
-	 * @param jsCode 小程序调用 wx.login() 获取“临时登录凭证”的密钥
+	 * @param jsCode       小程序调用 wx.login() 获取“临时登录凭证”的密钥
 	 * @param userInfoJson
 	 * @return 小程序用户登录的凭证
 	 */
@@ -91,7 +91,7 @@ public class MiniAppUserService extends BaseService<User> {
 	 * 注册新用户
 	 * 
 	 * @param userInfoJson 用户信息，微信后台提供
-	 * @param string OpenId
+	 * @param string       OpenId
 	 * @return 用户对象
 	 */
 	private User register(String userInfoJson, String openId) {
@@ -101,7 +101,8 @@ public class MiniAppUserService extends BaseService<User> {
 		user.setSex((int) map.get("gender"));
 		user.setAvatar(map.get("avatarUrl").toString());
 		user.setAvatar(map.get("avatarUrl").toString());
-		user.setLocation(map.get("country").toString() + " " + map.get("province").toString() + " " + map.get("city").toString());
+		user.setLocation(map.get("country").toString() + " " + map.get("province").toString() + " "
+				+ map.get("city").toString());
 //		Long userId = userService.create(user);
 		Long userId = create(user);
 
@@ -152,6 +153,15 @@ public class MiniAppUserService extends BaseService<User> {
 	}
 
 	/**
+	 * 凭证验证服务
+	 */
+	private final static TokenService service = new TokenService(new TokenInfo());
+
+	static {
+		service.getInfo().setKeyByConfig("mini_program.SessionId_AesKey");
+	}
+
+	/**
 	 * 
 	 * @param token
 	 * @return
@@ -159,9 +169,8 @@ public class MiniAppUserService extends BaseService<User> {
 	private static UserLoginToken getSessionId(UserLoginToken token) {
 		Objects.requireNonNull(token.getOpenId(), "没有 open id");
 
-		String SessionId_AesKey = MiniApp.getSessionKey();
-		String sessionId = AES_Cipher.AES_Encrypt(token.getOpenId() + token.getUserId().toString(), SessionId_AesKey);
-		token.setSessionId(sessionId);
+		String tokenStr = service.getToken(token.getOpenId() + token.getUserId().toString());
+		token.setSessionId(tokenStr);
 
 		return token;
 	}
@@ -173,8 +182,7 @@ public class MiniAppUserService extends BaseService<User> {
 	 * @return 0=openid,1 = userid
 	 */
 	public static Object[] decodeSessionId(String str) {
-		String SessionId_AesKey = ConfigService.getValueAsString("mini_program.SessionId_AesKey");
-		String s = AES_Cipher.AES_Decrypt(str, SessionId_AesKey);
+		String s = service.decrypt(str);
 		Object[] r = new Object[2];
 
 		try {

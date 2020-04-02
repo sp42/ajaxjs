@@ -6,10 +6,10 @@ import java.util.Map;
 import com.ajaxjs.net.http.HttpBasicRequest;
 import com.ajaxjs.shop.ShopHelper;
 import com.ajaxjs.shop.model.OrderInfo;
+import com.ajaxjs.user.token.TokenService;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.MapTool;
-import com.ajaxjs.weixin.CommonWxUtil;
 import com.ajaxjs.weixin.mini_app.MiniApp;
 
 /**
@@ -99,7 +99,7 @@ public class WxPay implements PayConstant {
 		// 商户号 mch_id 是 String(32) 1230000109 微信支付分配的商户号
 		data.put("mch_id", PaySignatures.getMchId());
 		// 随机字符串 nonce_str 是 String(32) 随机字符串，长度要求在32位以内。
-		data.put("nonce_str", CommonWxUtil.getNonceStr());
+		data.put("nonce_str", TokenService.getRandomString(10));
 		// 签名类型 sign_type 否 String(32) MD5 签名类型，默认为MD5，支持HMAC-SHA256和MD5。
 		data.put("sign_type", MD5);
 		// 签名 sign 是 String(32)
