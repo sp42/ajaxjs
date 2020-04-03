@@ -1,3 +1,18 @@
+/**
+ * Copyright 2015 sp42 frank@ajaxjs.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.ajaxjs.util.cryptography;
 
 import java.security.InvalidKeyException;
@@ -15,7 +30,7 @@ import javax.crypto.SecretKey;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
- * 加密相关的 Bean
+ * 简单封装了 Java Cipher 类提供了加密和解密的功能。
  * 
  * @author sp42 frank@ajaxjs.com
  *
@@ -24,19 +39,20 @@ public class CipherInfo {
 	private static final LogHelper LOGGER = LogHelper.getLog(CipherInfo.class);
 
 	/**
-	 * 加密的算法
+	 * 加密算法
 	 */
 	private String cipherAlgorithm;
 
 	/**
-	 * 密钥的长度
+	 * 密钥长度
 	 */
 	private int keySize;
 
 	/**
+	 * 创建一个 CipherInfo 实例
 	 * 
-	 * @param cipherAlgorithm 加密的算法
-	 * @param keySize         密钥的长度
+	 * @param cipherAlgorithm 加密算法
+	 * @param keySize         密钥长度
 	 */
 	public CipherInfo(String cipherAlgorithm, int keySize) {
 		this.cipherAlgorithm = cipherAlgorithm;
@@ -47,7 +63,7 @@ public class CipherInfo {
 	 * 进行加密或解密，三步走
 	 * 
 	 * @param algorithm 选择的算法
-	 * @param mode      模式，是解密还是加密？
+	 * @param mode      是解密模式还是加密模式？
 	 * @param key       密钥
 	 * @param s         输入的内容
 	 * @return 结果
@@ -72,11 +88,11 @@ public class CipherInfo {
 	/**
 	 * AES/DES 专用
 	 * 
-	 * @param ci
-	 * @param mode
-	 * @param key
-	 * @param bytes
-	 * @return
+	 * @param ci    密码信息
+	 * @param mode  是解密模式还是加密模式？
+	 * @param key   密钥
+	 * @param bytes 输入的内容，可以是字符串转换 byte[]
+	 * @return 转换后的内容
 	 */
 	static byte[] doCipher(CipherInfo ci, int mode, String key, byte[] bytes) {
 		SecretKey _key;// 获得密钥对象
