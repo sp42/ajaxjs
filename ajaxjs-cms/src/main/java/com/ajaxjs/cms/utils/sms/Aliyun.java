@@ -50,9 +50,7 @@ public class Aliyun implements SMS {
 	 * 产品域名,开发者无需替换
 	 */
 	private static final String domain = "dysmsapi.aliyuncs.com";
-
-	private static final String accessKeyId = "LTAIVBFtMo9AlMI5";
-	private static final String accessKeySecret = "whlhyFUYriBEkfyCl6JqFhVdWaEPU2";
+ 
 
 	static {
 		//可自助调整超时时间
