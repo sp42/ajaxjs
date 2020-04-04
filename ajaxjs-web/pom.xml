@@ -12,7 +12,7 @@
 	</parent>
 
 	<artifactId>ajaxjs-web</artifactId>
-	<version>1.1.7</version>
+	<version>1.1.8</version>
 	<packaging>jar</packaging>
 	<name>AJAXJS-Web</name>
 	<description>AJAXJS Web aims to full-stack, not only the server-side framework, but also integrates the front-end library. It's written in HTML5 + Java, a successor to the JVM platform, efficient, secure, stable, cross-platform and many other advantages, but it abandoned the traditional enterprise architecture brought about by the large and bloated, emphasizing the lightweight, and fast, very suitable for the Internet fast application.</description>
