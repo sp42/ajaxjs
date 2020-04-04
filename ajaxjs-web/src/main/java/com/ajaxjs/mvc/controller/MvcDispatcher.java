@@ -241,7 +241,7 @@ public class MvcDispatcher implements Filter {
 		Produces a = method.getAnnotation(Produces.class);
 
 		if (a != null && MediaType.APPLICATION_JSON.equals(a.value()[0])) {// 返回 json
-			response.resultHandler(String.format(Constant.json_not_ok, JsonHelper.jsonString_covernt(errMsg)), r, model,
+			response.resultHandler(String.format(Constant.JSON_NOT_OK, JsonHelper.jsonString_covernt(errMsg)), r, model,
 					method);
 		} else {
 			if (err instanceof IllegalAccessError && ConfigService.getValueAsString("page.onNoLogin") != null) {

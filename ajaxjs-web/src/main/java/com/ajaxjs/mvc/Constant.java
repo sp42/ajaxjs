@@ -28,15 +28,15 @@ public interface Constant {
 	public static final String limit = "limit";
 
 	public static final String id = "id";
-	
+
 	public static final String list = "list";
 
 	public static final String info = "info";
-	
+
 	public static final String idInfo = "{id}";
 
 	public static final String catalogId = "catalogId";
-	
+
 	/**
 	 * 搜索关键字
 	 */
@@ -76,15 +76,15 @@ public interface Constant {
 	/**
 	 * 操作失败，返回 msg 信息
 	 */
-	public static final String json_not_ok = "json::{\"isOk\": false, \"msg\" : \"%s\"}";
+	public static final String JSON_NOT_OK = "json::{\"isOk\": false, \"msg\" : \"%s\"}";
 
 	/**
 	 * 操作成功，返回 msg 信息，可扩展字段的
 	 */
-	public static final String json_ok_extension = "json::{\"isOk\": true, \"msg\" : \"%s\", %s}";
+	public static final String JSON_OK_EXTENSION = "json::{\"isOk\": true, \"msg\" : \"%s\", %s}";
 
 	/**
 	 * 操作成功，返回 msg 信息
 	 */
-	public static final String json_ok = "json::{\"isOk\": true, \"msg\" : \"%s\"}";
+	public static final String JSON_OK = "json::{\"isOk\": true, \"msg\" : \"%s\"}";
 }
