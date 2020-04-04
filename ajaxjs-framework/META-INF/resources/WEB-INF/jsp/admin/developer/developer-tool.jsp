@@ -197,8 +197,8 @@
 		}
 		
 		backupDB = () => {
-			aj.xhr.get('${ctx}/admin/backup/db/', () => {
-				down('db.zip');
+			aj.xhr.get('${ctx}/admin/backup/db/', json => {
+				down(json.zipFile);
 			});
 		}
 	</script>

@@ -240,7 +240,7 @@ public abstract class BaseController<T> implements IController, Constant {
 	 * @return JSON 字符串
 	 */
 	public static String jsonOk(String msg) {
-		return String.format(json_ok, JsonHelper.javaValue2jsonValue(msg));
+		return String.format(JSON_OK, JsonHelper.javaValue2jsonValue(msg));
 	}
 
 	public static String jsonOk() {
@@ -248,7 +248,7 @@ public abstract class BaseController<T> implements IController, Constant {
 	}
 
 	public static String jsonOk_Extension(Object... msg) {
-		return String.format(json_ok_extension, msg);
+		return String.format(JSON_OK_EXTENSION, msg);
 	}
 
 	/**
@@ -258,7 +258,7 @@ public abstract class BaseController<T> implements IController, Constant {
 	 * @return JSON 字符串
 	 */
 	public static String jsonNoOk(String msg) {
-		return String.format(json_not_ok, JsonHelper.jsonString_covernt(msg));
+		return String.format(JSON_NOT_OK, JsonHelper.jsonString_covernt(msg));
 	}
 
 	public static String jsonNoOk() {

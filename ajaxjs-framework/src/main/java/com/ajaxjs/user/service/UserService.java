@@ -16,7 +16,7 @@ import com.ajaxjs.orm.JdbcReader;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.model.UserCommonAuth;
 import com.ajaxjs.util.Encode;
-import com.ajaxjs.util.cryptography.AES_Cipher;
+import com.ajaxjs.util.cryptography.Symmetri_Cipher;
 import com.ajaxjs.util.io.ImageHelper;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.UploadFileInfo;
@@ -156,7 +156,7 @@ public class UserService extends BaseService<User> {
 
 		String expireHex = Long.toHexString(System.currentTimeMillis());
 		String emailToken = Encode.md5(encryptKey + email),
-				timeToken = AES_Cipher.AES_Encrypt(expireHex, encryptKey);
+				timeToken = Symmetri_Cipher.AES_Encrypt(expireHex, encryptKey);
 
 		return emailToken + timeToken;
 	}
@@ -176,7 +176,7 @@ public class UserService extends BaseService<User> {
 			throw new ServiceException("非法 email 账号！ " + email);
 		}
 
-		String expireHex = AES_Cipher.AES_Decrypt(timeToken, encryptKey);
+		String expireHex = Symmetri_Cipher.AES_Decrypt(timeToken, encryptKey);
 		long cha = new Date().getTime() - Long.parseLong(expireHex, 16);
 		double result = cha * 1.0 / (1000 * 60 * 60);
 

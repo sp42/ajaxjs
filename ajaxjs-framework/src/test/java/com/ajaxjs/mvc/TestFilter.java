@@ -15,7 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.framework.filter.AesFilter;
+import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.user.token.TokenService;
 import com.ajaxjs.web.captcha.CaptchaController;
 import com.ajaxjs.web.mock.MockRequest;
 import com.ajaxjs.web.mock.MockResponse;
@@ -58,7 +59,7 @@ public class TestFilter extends BaseTest {
 	public void testAesFilter()throws IOException, ServletException {
 		request = MockRequest.mockRequest("/ajaxjs-web", "/filter/api");
 		when(request.getMethod()).thenReturn("GET");
-		when(request.getParameter("token")).thenReturn(AesFilter.getTimeStampToken(AesFilter.aesKey));
+		when(request.getParameter("token")).thenReturn(TokenService.getTimeStampToken(ConfigService.getValueAsString("System.api.AES_Key")));
 
 		dispatcher.doFilter(request, response, chain);
 		assertNotNull(writer.toString());

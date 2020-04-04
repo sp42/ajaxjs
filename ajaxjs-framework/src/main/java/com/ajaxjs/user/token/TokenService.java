@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.Random;
 
-import com.ajaxjs.util.cryptography.AES_Cipher;
+import com.ajaxjs.util.cryptography.Symmetri_Cipher;
 
 public class TokenService {
 	private TokenInfo info;
@@ -28,7 +28,7 @@ public class TokenService {
 	 * @return
 	 */
 	public String decrypt(String token) {
-		String clearText = AES_Cipher.decrypt(token, info.getKey());
+		String clearText = Symmetri_Cipher.AES_Decrypt(token, info.getKey());
 
 		if (clearText == null)
 			throw new IllegalAccessError("合法性请求解密的密码不正确");
@@ -86,7 +86,7 @@ public class TokenService {
 			clearText += System.currentTimeMillis();
 
 		clearText += str;
-		return AES_Cipher.encrypt(TokenInfo.TOKEN_PERFIX + clearText, info.getKey());
+		return Symmetri_Cipher.AES_Encrypt(TokenInfo.TOKEN_PERFIX + clearText, info.getKey());
 	}
 
 	/**
@@ -96,6 +96,21 @@ public class TokenService {
 	 */
 	public String getToken() {
 		return getToken(""); // 没有要加密的内容
+	}
+
+	/**
+	 * 获取单纯时间戳的 Token
+	 * 
+	 * @param key 密钥
+	 * 
+	 * @return 时间戳 Token
+	 */
+	public static String getTimeStampToken(String key) {
+		TokenInfo info = new TokenInfo();
+		info.setUsingTimeout(true);
+		info.setKey(key);
+
+		return new TokenService(info).getToken();
 	}
 
 	private static final String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

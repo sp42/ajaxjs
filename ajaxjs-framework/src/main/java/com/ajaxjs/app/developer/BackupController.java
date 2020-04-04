@@ -20,8 +20,7 @@ import com.ajaxjs.util.io.ZipHelper;
 
 @Path("/admin/backup")
 public class BackupController implements IController {
- 
-	
+
 	@Path("images")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -70,9 +69,9 @@ public class BackupController implements IController {
 	@MvcFilter(filters = { DataBaseFilter.class })
 	public String db(MvcRequest r) {
 		String save = r.mappath("/temp/");
-		new MysqlExport(JdbcConnection.getConnection(), "workflow", save).export();
+		String zipFile = new MysqlExport(JdbcConnection.getConnection(), save).export();
 
-		return BaseController.jsonOk("备份SQL成功！");
+		return BaseController.jsonOk_Extension("备份SQL成功！", "\"zipFile\" : \"" + zipFile + "\"");
 	}
 
 	@DELETE
