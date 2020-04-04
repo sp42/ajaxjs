@@ -27,12 +27,12 @@ public class MysqlExport {
 	/**
 	 * 创建 MysqlExport 对象
 	 * 
-	 * @param conn         数据库连接对象
-	 * @param databaseName 数据库库名
-	 * @param saveFolder   保存目录
+	 * @param conn       数据库连接对象
+	 * @param saveFolder 保存目录
 	 */
-	public MysqlExport(Connection conn, String databaseName, String saveFolder) {
-		this.databaseName = databaseName;
+	public MysqlExport(Connection conn, String saveFolder) {
+		String[] arr = conn.toString().split("\\?")[0].split("/");
+		this.databaseName = arr[arr.length - 1];
 		this.saveFolder = saveFolder;
 
 		try {
@@ -187,6 +187,12 @@ public class MysqlExport {
 			sql.append(getDataInsertStatement(s.trim()));
 		}
 
+		try {
+			stmt.close();
+		} catch (SQLException e) {
+			LOGGER.warning(e);
+		}
+
 		sql.append("\n/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;").append(
 				"\n/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;")
 				.append("\n/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;");
@@ -196,17 +202,19 @@ public class MysqlExport {
 
 	/**
 	 * 执行导出
-	 *
+	 * 
+	 * @return 打包的文件名
 	 */
-	public void export() {
-		String sqlFile = saveFolder + FileHelper.separator + CommonUtil.now("yyyy_MM_dd_HH_mm_ss") + "_" + databaseName
-				+ "_database_dump.sql";
+	public String export() {
+		String fileName = "database-dump-" + CommonUtil.now("yyyy-MM-dd") + "-" + databaseName + ".sql",
+				sqlFile = saveFolder + FileHelper.separator + fileName;
 
 		FileHelper.saveText(sqlFile, exportToSql());
 		// 压缩 zip
 		ZipHelper.zip(sqlFile, sqlFile.replace(".sql", ".zip"));
 		FileHelper.delete(sqlFile);
 
+		return fileName.replace(".sql", ".zip");
 	}
 
 }

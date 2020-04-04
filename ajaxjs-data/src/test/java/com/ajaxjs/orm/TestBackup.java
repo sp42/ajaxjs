@@ -19,7 +19,7 @@ public class TestBackup {
 
 	@Test
 	public void testExport() {
-		MysqlExport m = new MysqlExport(conn, "workflow", "c:/temp");
+		MysqlExport m = new MysqlExport(conn, "c:/temp");
 		m.export();
 	}
 
