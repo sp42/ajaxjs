@@ -1,10 +1,5 @@
 package com.ajaxjs.util;
 
-import org.junit.Test;
-
-import com.ajaxjs.util.cryptography.AES_Cipher;
-import com.ajaxjs.util.cryptography.DES_Cipher;
-
 import static com.ajaxjs.util.cryptography.RSA_Cipher.PRIVATE_KEY;
 import static com.ajaxjs.util.cryptography.RSA_Cipher.PUBLIC_KEY;
 import static com.ajaxjs.util.cryptography.RSA_Cipher.decrypt;
@@ -12,11 +7,15 @@ import static com.ajaxjs.util.cryptography.RSA_Cipher.encrypt;
 import static com.ajaxjs.util.cryptography.RSA_Cipher.generatePair;
 import static com.ajaxjs.util.cryptography.RSA_Cipher.restorePrivateKey;
 import static com.ajaxjs.util.cryptography.RSA_Cipher.restorePublicKey;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Map;
+
+import org.junit.Test;
+
+import com.ajaxjs.util.cryptography.Symmetri_Cipher;
 
 public class TestCryptography {
 	public static final String input = "cy11Xlbrmzyh:604:301:1353064296";
@@ -24,14 +23,14 @@ public class TestCryptography {
 
 	@Test
 	public void testAesEncryption() {
-		String EncryptedPassword = AES_Cipher.encrypt(input, key);
-		assertEquals(input, AES_Cipher.decrypt(EncryptedPassword, key));
+		String EncryptedPassword = Symmetri_Cipher.AES_Encrypt(input, key);
+		assertEquals(input, Symmetri_Cipher.AES_Decrypt(EncryptedPassword, key));
 	}
 
 	@Test
 	public void testDesEncryption() {
-		String EncryptedPassword = DES_Cipher.encrypt(input, key);
-		assertEquals(input, DES_Cipher.decrypt(EncryptedPassword, key));
+		String EncryptedPassword = Symmetri_Cipher.DES_Encrypt(input, key);
+		assertEquals(input, Symmetri_Cipher.DES_Decrypt(EncryptedPassword, key));
 	}
 
 	public static final String RSAinput = "美好的一天";

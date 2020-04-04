@@ -38,6 +38,7 @@ import java.util.function.Predicate;
 
 import javax.activation.MimetypesFileTypeMap;
 
+import com.ajaxjs.Version;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -142,7 +143,11 @@ public class FileHelper extends IoHelper {
 	 * @param text 文本内容
 	 */
 	public static void saveText(File file, String text) {
-		LOGGER.info("正在保存文件{0}， 保存内容：\n{1}", file.toString(), text);
+		if (Version.isDebug) {
+			String _text = text.length() > 200 ? text.substring(0, 200) + "..." : text;
+			LOGGER.info("正在保存文件{0}， 保存内容：\n{1}", file.toString(), _text);
+		} else
+			LOGGER.info("正在保存文件{0}， 保存内容：\n{1}", file.toString());
 
 		save(file, text.getBytes(StandardCharsets.UTF_8), true, false);
 	}
