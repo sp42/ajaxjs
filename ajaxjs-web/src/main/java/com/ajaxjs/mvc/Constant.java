@@ -21,31 +21,31 @@ public interface Constant {
 	/**
 	 * MV 用的 key
 	 */
-	public static final String PageResult = "PageResult";
+	public static final String PAGE_RESULT = "PageResult";
 
-	public static final String start = "start";
+	public static final String START = "start";
 
-	public static final String limit = "limit";
+	public static final String LIMIT = "limit";
 
-	public static final String id = "id";
+	public static final String ID = "id";
 
-	public static final String list = "list";
+	public static final String LIST = "list";
 
-	public static final String info = "info";
+	public static final String INFO = "info";
 
-	public static final String idInfo = "{id}";
+	public static final String ID_INFO = "{id}";
 
-	public static final String catalogId = "catalogId";
+	public static final String CATALOG_ID = "catalogId";
 
 	/**
 	 * 搜索关键字
 	 */
-	public static final String keyword = "keyword";
+	public static final String KEYWORD = "keyword";
 
 	/**
 	 * 文档显示用
 	 */
-	public static final String jsonType = "application/json";
+	public static final String JSON_TYPE = "application/json";
 
 	public static final String USER_SESSION_ID = "X-Ajaxjs-Token";
 
