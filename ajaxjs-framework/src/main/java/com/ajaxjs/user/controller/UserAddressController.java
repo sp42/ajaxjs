@@ -39,10 +39,10 @@ public class UserAddressController extends BaseController<UserAddress> {
 	static String jsp = "user/address";
 
 	@GET
-	@Path(list)
+	@Path(LIST)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv, HttpServletRequest r) {
-		mv.put(list, service.findListByUserId(BaseUserController.getUserId()));
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv, HttpServletRequest r) {
+		mv.put(LIST, service.findListByUserId(BaseUserController.getUserId()));
 		return jsp(jsp);
 	}
 
@@ -54,9 +54,9 @@ public class UserAddressController extends BaseController<UserAddress> {
 	}
 
 	@GET
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
+	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
 		editUI(mv, service.findById(id));
 		return jsp(jsp + "-info");
 	}
@@ -76,18 +76,18 @@ public class UserAddressController extends BaseController<UserAddress> {
 	}
 
 	@PUT
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
-	public String updateUserAddress(@PathParam(id) Long id, UserAddress bean) {
+	public String updateUserAddress(@PathParam(ID) Long id, UserAddress bean) {
 		return update(id, bean);
 	}
 
 	@DELETE
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam(id) Long id) {
+	public String delete(@PathParam(ID) Long id) {
 		return delete(id, new UserAddress());
 	}
 
@@ -101,7 +101,7 @@ public class UserAddressController extends BaseController<UserAddress> {
 	@GET
 	@Path("/admin/address/list")
 	@MvcFilter(filters = { DataBaseFilter.class, XslMaker.class })
-	public String adminList(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
+	public String adminList(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE, true), true);
 		return jsp(jsp + "-admin-list");
 	}
@@ -110,7 +110,7 @@ public class UserAddressController extends BaseController<UserAddress> {
 	@Path("/admin/address/{id}")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String deleteAdmin(@PathParam(id) Long id) {
+	public String deleteAdmin(@PathParam(ID) Long id) {
 		return delete(id);
 	}
 }

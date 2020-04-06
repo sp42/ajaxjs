@@ -106,7 +106,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 	@Path("profile/avatar/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = { LoginCheck.class, CurrentUserOnly.class, DataBaseFilter.class })
-	public String saveAvater(MvcRequest request, @PathParam(id) Long owenerUid) throws IOException {
+	public String saveAvater(MvcRequest request, @PathParam(ID) Long owenerUid) throws IOException {
 		Attachment_pictureController c = new Attachment_pictureController();
 		c.setService(new Attachment_pictureService());
 
@@ -150,7 +150,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 	@GET
 	@Path("info/{id}")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	public String info2(@PathParam(id) Long userId, ModelAndView mv) {
+	public String info2(@PathParam(ID) Long userId, ModelAndView mv) {
 		mv.put("info", getService().findById(userId));
 		return jsp("user/info");
 	}
@@ -192,10 +192,10 @@ public class UserCenterController extends AbstractAccountInfoController {
 //	}
 
 	@PUT
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Override
-	public String update(@PathParam(id) Long id, User entity) {
+	public String update(@PathParam(ID) Long id, User entity) {
 		return super.update(id, entity);
 	}
 

@@ -39,7 +39,7 @@ public class AttachmentController extends BaseController<Attachment> {
 
 	@GET
 	@MvcFilter(filters = { DataBaseFilter.class })
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId,
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId,
 			ModelAndView mv) {
 		LOGGER.info("附件列表-前台");
 		prepareData(mv);
@@ -59,7 +59,7 @@ public class AttachmentController extends BaseController<Attachment> {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam(id) Long id, Attachment entity) {
+	public String update(@PathParam(ID) Long id, Attachment entity) {
 		return super.update(id, entity);
 	}
 
@@ -67,7 +67,7 @@ public class AttachmentController extends BaseController<Attachment> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam(id) Long id) {
+	public String delete(@PathParam(ID) Long id) {
 		return delete(id, new Attachment());
 	}
 
@@ -81,7 +81,7 @@ public class AttachmentController extends BaseController<Attachment> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("upload/{id}/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String upload(MvcRequest request, @PathParam(id) Long owenerId, @QueryParam(catalogId) int catalogId)
+	public String upload(MvcRequest request, @PathParam(ID) Long owenerId, @QueryParam(CATALOG_ID) int catalogId)
 			throws IOException {
 		LOGGER.info("上传附件");
 		// TODO 文件类型限制
@@ -117,15 +117,15 @@ public class AttachmentController extends BaseController<Attachment> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("getListByOwnerUid/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getListByOwnerUid(@PathParam(id) Long uid) {
+	public String getListByOwnerUid(@PathParam(ID) Long uid) {
 		return toJson(service.findByOwner(uid));
 	}
 
 	@DELETE
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam(id) Long id, MvcRequest request) {
+	public String delete(@PathParam(ID) Long id, MvcRequest request) {
 		Attachment attachment = service.findById(id);
 		// TODO 删除物理文件
 //		attachment.setPath(request.mappath(attachment.getPath())); // 转换为绝对地址

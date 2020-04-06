@@ -70,7 +70,7 @@ public class LoginLogController extends BaseController<UserLoginLog> {
 
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
 		LOGGER.info("用户登录日志-后台列表");
 		mv.put("LoginType", UserDict.LOGIN_TYPE);
 		page(mv, service.findPagedList(start, limit), CommonConstant.UI_ADMIN);

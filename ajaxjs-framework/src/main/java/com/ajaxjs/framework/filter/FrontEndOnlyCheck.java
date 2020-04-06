@@ -29,7 +29,7 @@ public class FrontEndOnlyCheck implements FilterAction {
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean after(FilterAfterArgs args) {
-		Object info = args.model.get(Constant.info);
+		Object info = args.model.get(Constant.INFO);
 
 		if (info == null)
 			return true;

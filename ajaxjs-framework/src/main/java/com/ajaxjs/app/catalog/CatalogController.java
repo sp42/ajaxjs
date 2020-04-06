@@ -56,19 +56,19 @@ public class CatalogController extends BaseController<Catalog> {
 	}
 
 	@PUT
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam(id) Long id, Catalog entity) {
+	public String update(@PathParam(ID) Long id, Catalog entity) {
 		return super.update(id, entity);
 	}
 
 	@DELETE
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam(id) Long id) {
+	public String delete(@PathParam(ID) Long id) {
 		return delete(id, new Catalog());
 	}
 

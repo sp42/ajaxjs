@@ -52,7 +52,7 @@ public abstract class BaseController<T> implements IController, Constant {
 	 * @return JSP 模版路径
 	 */
 	public String editUI(ModelAndView mv, Object bean) {
-		mv.put(info, bean);// 读取单个记录或者编辑某个记录，保存到 ModelAndView 中（供视图渲染用）。
+		mv.put(INFO, bean);// 读取单个记录或者编辑某个记录，保存到 ModelAndView 中（供视图渲染用）。
 		return ui(mv, false, "修改");
 	}
 
@@ -161,7 +161,7 @@ public abstract class BaseController<T> implements IController, Constant {
 	 */
 	public String page(ModelAndView mv, PageResult<T> pageResult, boolean isAdmin) {
 		prepareData(mv);
-		mv.put(PageResult, pageResult);
+		mv.put(PAGE_RESULT, pageResult);
 
 		return list(isAdmin);
 	}

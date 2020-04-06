@@ -26,9 +26,9 @@ public class PrivilegeController extends BaseController<Privilege> {
 	private PrivilegeService service;
 
 	@GET
-	@Path(list)
+	@Path(LIST)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
 		return toJson(service.findList());
 	}
 
@@ -48,18 +48,18 @@ public class PrivilegeController extends BaseController<Privilege> {
 
 	@PUT
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam(id) Long id, Privilege entity) {
+	public String update(@PathParam(ID) Long id, Privilege entity) {
 		return super.update(id, entity);
 	}
 
 	@DELETE
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam(id) Long id) {
+	public String delete(@PathParam(ID) Long id) {
 		return delete(id, new Privilege());
 	}
 

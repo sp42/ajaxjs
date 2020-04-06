@@ -45,9 +45,9 @@ public class UserAdminController extends BaseController<User> {
 	private RoleService roleService;
 
 	@GET
-	@Path(list)
+	@Path(LIST)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
 		LOGGER.info("后台-会员列表");
 		
 		List<Map<String, Object>> userGroups = roleService.getDao().findList(null);
@@ -63,8 +63,8 @@ public class UserAdminController extends BaseController<User> {
 
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path(idInfo)
-	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
+	@Path(ID_INFO)
+	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
 		mv.put("UserGroupsJSON", toJson(roleService.getDao().findList(null), false).replaceAll("\"", "'"));
 		mv.put("SexGender", UserDict.SEX_GENDER);
 		editUI(mv, service.findById(id));
@@ -91,18 +91,18 @@ public class UserAdminController extends BaseController<User> {
 
 	@PUT
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam(id) Long id, User entity) {
+	public String update(@PathParam(ID) Long id, User entity) {
 		return super.update(id, entity);
 	}
 
 	@DELETE
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam(id) Long id) {
+	public String delete(@PathParam(ID) Long id) {
 		return delete(id, new User());
 	}
 	

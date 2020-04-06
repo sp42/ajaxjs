@@ -45,7 +45,7 @@ public class GlobalLogController extends BaseController<Map<String, Object>> {
 
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
 		LOGGER.info("全局操作日志");
 		
 		mv.put("LoginType", UserDict.LOGIN_TYPE);

@@ -33,7 +33,7 @@ public class RoleController extends BaseController<Map<String, Object>> {
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
 		return toJson(service.findList());
 	}
 
@@ -53,18 +53,18 @@ public class RoleController extends BaseController<Map<String, Object>> {
 
 	@PUT
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam(id) Long id, Map<String, Object> entity) {
+	public String update(@PathParam(ID) Long id, Map<String, Object> entity) {
 		return super.update(id, entity);
 	}
 
 	@DELETE
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam(id) Long id) {
+	public String delete(@PathParam(ID) Long id) {
 		return delete(id, new HashMap<>());
 	}
 
@@ -89,10 +89,10 @@ public class RoleController extends BaseController<Map<String, Object>> {
 	}
 
 	@GET
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getInfo(@PathParam(id) Long id) {
+	public String getInfo(@PathParam(ID) Long id) {
 		return toJson(service.getDao().findById(id));
 	}
 }

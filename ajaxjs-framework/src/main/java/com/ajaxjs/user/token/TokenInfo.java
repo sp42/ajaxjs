@@ -87,7 +87,7 @@ public class TokenInfo {
 	 */
 	public void setKeyByConfig(String config) {
 		String key = ConfigService.getValueAsString(config);
-		Objects.requireNonNull(key, "缺少 " + config + " 配置");
+		//Objects.requireNonNull(key, "缺少 " + config + " 配置");
 
 		setKey(key);
 	}

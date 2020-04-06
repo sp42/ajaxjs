@@ -47,7 +47,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@GET
 	@MvcFilter(filters = { DataBaseFilter.class })
 //	@Authority(filter = DataBaseFilter.class, value = 1)
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		LOGGER.info("图文列表-前台");
 		getService().showList(mv);
 		prepareData(mv);
@@ -58,19 +58,19 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@Path("listJson")
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String listJson(@QueryParam(start) int start, @QueryParam(limit) int limit,
-			@QueryParam(catalogId) int catalogId, ModelAndView mv) {
+	public String listJson(@QueryParam(START) int start, @QueryParam(LIMIT) int limit,
+			@QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		return toJson(getService().list(catalogId, start, limit, CommonConstant.ON_LINE));
 	}
 
 	@GET
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@MvcFilter(filters = { DataBaseFilter.class, FrontEndOnlyCheck.class })
-	public String getInfo(@PathParam(id) Long id, ModelAndView mv) {
+	public String getInfo(@PathParam(ID) Long id, ModelAndView mv) {
 		LOGGER.info("图文详情-前台");
 		Map<String, Object> map = getService().findById(id);
 		prepareData(mv);
-		mv.put(info, map);
+		mv.put(INFO, map);
 		BaseService.getNeighbor(mv, "entity_article", id);
 		getService().showInfo(mv, id);
 
@@ -91,8 +91,8 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@GET
 	@Path("/admin/{root}/list")
 	@MvcFilter(filters = { DataBaseFilter.class, XslMaker.class })
-	public String adminList(@QueryParam(start) int start, @QueryParam(limit) int limit,
-			@QueryParam(catalogId) int catalogId, ModelAndView mv) {
+	public String adminList(@QueryParam(START) int start, @QueryParam(LIMIT) int limit,
+			@QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		return autoOutput(mv, getService().list(catalogId, start, limit, CommonConstant.OFF_LINE), true);
 	}
 
@@ -116,7 +116,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("/admin/news/{id}")
-	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
+	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
 		return editUI(mv, getService().findById(id));
 	}
 
@@ -125,7 +125,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@Path("/admin/news/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam(id) Long id, Map<String, Object> entity) {
+	public String update(@PathParam(ID) Long id, Map<String, Object> entity) {
 		return super.update(id, entity);
 	}
 
@@ -133,7 +133,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@Path("/admin/news/{id}")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam(id) Long id) {
+	public String delete(@PathParam(ID) Long id) {
 		return delete(id, new HashMap<String, Object>());
 	}
 

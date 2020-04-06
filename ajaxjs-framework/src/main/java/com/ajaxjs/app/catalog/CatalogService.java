@@ -50,16 +50,16 @@ public class CatalogService extends BaseService<Catalog> {
 	/**
 	 * 根据父 id 获取所有的子id列表（可以不包含父节点），不管多少层
 	 * 
-	 * @param pId        父 id
+	 * @param pid        父 id
 	 * @param withParent 是否需要连同父节点一起返回
 	 * @return 所有的子 id 列表
 	 */
-	public List<Catalog> findAllListByParentId(int pId, boolean withParent) {
-		List<Catalog> list = dao.getAllListByParentId(pId);
+	public List<Catalog> findAllListByParentId(int pid, boolean withParent) {
+		List<Catalog> list = dao.getAllListByParentId(pid);
 
 		if (!withParent && list != null) {
 			for (int i = 0; i < list.size(); i++) {
-				if (list.get(i).getId() == new Integer(pId).longValue()) {
+				if (list.get(i).getId() == new Integer(pid).longValue()) {
 					list.remove(i);// 不要父节点
 					break;
 				}

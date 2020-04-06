@@ -45,10 +45,10 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	}
 
 	@GET
-	@Path(list)
+	@Path(LIST)
 	@MvcFilter(filters = { DataBaseFilter.class })
 //	@Authority(filter = DataBaseFilter.class, value = 1)
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		page(mv, service.findPagedList(start, limit, null));
 		mv.put("DICT", Attachment_pictureService.DICT);
 
@@ -59,7 +59,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("getListByOwnerUid/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getListByOwnerUid(@PathParam(id) Long owenrUid) {
+	public String getListByOwnerUid(@PathParam(ID) Long owenrUid) {
 		return toJson(service.findByOwner(owenrUid));
 	}
 
@@ -67,7 +67,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("getAttachmentPictureByOwner/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getAttachmentPictureByOwner(@PathParam(id) Long owenrUid) {
+	public String getAttachmentPictureByOwner(@PathParam(ID) Long owenrUid) {
 		return toJson(service.findAttachmentPictureByOwner(owenrUid));
 	}
 
@@ -83,7 +83,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("upload/{id}/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String imgUpload(MvcRequest request, @PathParam(id) Long owenerId, @QueryParam(catalogId) int catalogId) throws IOException {
+	public String imgUpload(MvcRequest request, @PathParam(ID) Long owenerId, @QueryParam(CATALOG_ID) int catalogId) throws IOException {
 		LOGGER.info("上传图片");
 		final UploadFileInfo info = uploadByConfig(request);
 
@@ -167,17 +167,17 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	}
 
 	@PUT
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@Override
-	public String update(@PathParam(id) Long id, Attachment_picture entity) {
+	public String update(@PathParam(ID) Long id, Attachment_picture entity) {
 		return show405;
 	}
 
 	@DELETE
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam(id) Long id, MvcRequest request) {
+	public String delete(@PathParam(ID) Long id, MvcRequest request) {
 		Attachment_picture pic = service.findById(id);
 		pic.setPath(request.mappath(pic.getPath())); // 转换为绝对地址
 
