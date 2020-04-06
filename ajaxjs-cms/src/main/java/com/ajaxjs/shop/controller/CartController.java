@@ -68,9 +68,9 @@ public class CartController extends BaseController<Cart> {
 
 	@POST
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Path("/shop/cart/updateGoodsNumber/" + idInfo)
+	@Path("/shop/cart/updateGoodsNumber/" + ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String updateGoodsNumber(@PathParam(id) Long id, @FormParam("goodsNumber") int goodsNumber) {
+	public String updateGoodsNumber(@PathParam(ID) Long id, @FormParam("goodsNumber") int goodsNumber) {
 		LOGGER.info("修改货品数量");
 
 		if (CartService.dao.updateGoodsNumber(goodsNumber, id, BaseUserController.getUserId()) >= 1)
@@ -82,9 +82,9 @@ public class CartController extends BaseController<Cart> {
 
 	@DELETE
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Path("/shop/cart/" + idInfo)
+	@Path("/shop/cart/" + ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String deleteMyCart(@PathParam(id) Long id) {
+	public String deleteMyCart(@PathParam(ID) Long id) {
 		LOGGER.info("删除用户的购物车");
 
 		if (CartService.dao.deleteMyCart(id, BaseUserController.getUserId()))
@@ -102,7 +102,7 @@ public class CartController extends BaseController<Cart> {
 	@GET
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam("userId") long userId,
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam("userId") long userId,
 			ModelAndView mv) {
 		LOGGER.info("后台-购物车-列表");
 		page(mv, service.findPagedList(start, limit, userId));
@@ -111,9 +111,9 @@ public class CartController extends BaseController<Cart> {
 
 	@DELETE
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam(id) Long id) {
+	public String delete(@PathParam(ID) Long id) {
 		return delete(id, new Cart());
 	}
 

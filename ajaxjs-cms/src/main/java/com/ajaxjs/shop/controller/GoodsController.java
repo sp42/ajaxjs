@@ -41,9 +41,9 @@ public class GoodsController extends BaseController<Goods> {
 	private GoodsService service;
 
 	@GET
-	@Path(list)
+	@Path(LIST)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(catalogId) int catalogId, @QueryParam(start) int start, @QueryParam(limit) int limit,
+	public String list(@QueryParam(CATALOG_ID) int catalogId, @QueryParam(START) int start, @QueryParam(LIMIT) int limit,
 			@QueryParam("sellerId") int sellerId, ModelAndView mv) {
 		LOGGER.info("商城-商品-后台列表");
 		page(mv, service.findPagedListByCatalogId(catalogId, start, limit, CommonConstant.OFF_LINE, sellerId),
@@ -55,14 +55,14 @@ public class GoodsController extends BaseController<Goods> {
 	@Path("/listJson_format")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String listJson(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+	public String listJson(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
 		return toJson(service.findGoods_Format(start, limit));
 	}
 
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path(idInfo)
-	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
+	@Path(ID_INFO)
+	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
 		LOGGER.info("商城-商品-后台详情");
 		editUI(mv, service.findById(id));
 
@@ -73,7 +73,7 @@ public class GoodsController extends BaseController<Goods> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("getJson/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getInfo(@PathParam(id) Long id) {
+	public String getInfo(@PathParam(ID) Long id) {
 		return "json::" + toJson(GoodsService.dao.findById(id), false);
 	}
 
@@ -95,26 +95,26 @@ public class GoodsController extends BaseController<Goods> {
 
 	@PUT
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam(id) Long id, Goods entity) {
+	public String update(@PathParam(ID) Long id, Goods entity) {
 		return super.update(id, entity);
 	}
 
 	@DELETE
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam(id) Long id) {
+	public String delete(@PathParam(ID) Long id) {
 		return delete(id, new Goods());
 	}
 
 	@GET
 	@Path("/shop/goods")
 	@MvcFilter(filters = { DataBaseFilter.class })
-	public String list(@QueryParam(catalogId) int catelogId, ModelAndView mv, @QueryParam(start) int start,
-			@QueryParam(limit) int limit, @QueryParam("sellerId") int sellerId) {
+	public String list(@QueryParam(CATALOG_ID) int catelogId, ModelAndView mv, @QueryParam(START) int start,
+			@QueryParam(LIMIT) int limit, @QueryParam("sellerId") int sellerId) {
 		LOGGER.info("浏览商品");
 
 		page(mv, service.findPagedListByCatalogId(catelogId, start, 9, CommonConstant.ON_LINE, sellerId),
@@ -125,10 +125,10 @@ public class GoodsController extends BaseController<Goods> {
 	@GET
 	@Path("/shop/goods/{id}/")
 	@MvcFilter(filters = { DataBaseFilter.class, FrontEndOnlyCheck.class })
-	public String showInfo(@PathParam(id) Long id, ModelAndView mv) {
+	public String showInfo(@PathParam(ID) Long id, ModelAndView mv) {
 		LOGGER.info("浏览商品 info");
 
-		mv.put(info, service.getGoodsDetail(id, BaseUserController.getUserId()));
+		mv.put(INFO, service.getGoodsDetail(id, BaseUserController.getUserId()));
 		return jsp("shop/goods-info");
 	}
 

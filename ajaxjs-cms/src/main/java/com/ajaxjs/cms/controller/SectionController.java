@@ -33,7 +33,7 @@ public class SectionController extends BaseController<SectionList> {
 	@GET
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam("sectionId") int sectionId, @QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+	public String list(@QueryParam("sectionId") int sectionId, @QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
 		
 		return toJson(service.findSectionListBySectionId(start, limit, sectionId));
 	}
@@ -64,19 +64,19 @@ public class SectionController extends BaseController<SectionList> {
 	}
 
 	@PUT
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam(id) Long id, SectionList entity) {
+	public String update(@PathParam(ID) Long id, SectionList entity) {
 		return super.update(id, entity);
 	}
 
 	@DELETE
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam(id) Long id) {
+	public String delete(@PathParam(ID) Long id) {
 		return delete(id, new SectionList());
 	}
 

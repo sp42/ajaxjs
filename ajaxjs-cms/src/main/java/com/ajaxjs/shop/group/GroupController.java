@@ -37,9 +37,9 @@ public class GroupController extends BaseController<Group> {
 	private GroupService service;
 
 	@GET
-	@Path(list)
+	@Path(LIST)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
 		page(mv, service.findPagedList(start, limit, null), CommonConstant.UI_ADMIN);
 		return jsp("shop/simple-group-admin-list");
 	}
@@ -48,14 +48,14 @@ public class GroupController extends BaseController<Group> {
 	@Path("/listJson")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String listJson(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+	public String listJson(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
 		return toJson(page(mv, service.findPagedList(start, limit, null), CommonConstant.UI_ADMIN));
 	}
 
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path(idInfo)
-	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
+	@Path(ID_INFO)
+	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
 		editUI(mv, service.findById(id));
 		return jsp("shop/simple-group-edit");
 	}
@@ -78,18 +78,18 @@ public class GroupController extends BaseController<Group> {
 
 	@PUT
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam(id) Long id, Group entity) {
+	public String update(@PathParam(ID) Long id, Group entity) {
 		return super.update(id, entity);
 	}
 
 	@DELETE
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam(id) Long id) {
+	public String delete(@PathParam(ID) Long id) {
 		return delete(id, new Group());
 	}
 

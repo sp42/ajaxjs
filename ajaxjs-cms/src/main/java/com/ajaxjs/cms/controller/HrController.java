@@ -31,9 +31,9 @@ public class HrController extends BaseController<Map<String, Object>> {
 	public static CommonEntityService service = new CommonEntityService("entity_hr", "data.hrCatalog_Id", "招聘", "hr");
 
 	@GET
-	@Path(list)
+	@Path(LIST)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(catalogId) int catalogId, @QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+	public String list(@QueryParam(CATALOG_ID) int catalogId, @QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
 		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.ON_LINE, true), false);
 	}
 
@@ -54,7 +54,7 @@ public class HrController extends BaseController<Map<String, Object>> {
 	@GET
 	@Path("/admin/hr/list")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String adminList(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
+	public String adminList(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		LOGGER.info("招聘后台列表");
 		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE, false), true);
 	}
@@ -79,7 +79,7 @@ public class HrController extends BaseController<Map<String, Object>> {
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("/admin/hr/{id}")
-	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
+	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
 		return editUI(mv, service.findById(id));
 	}
 
@@ -88,7 +88,7 @@ public class HrController extends BaseController<Map<String, Object>> {
 	@Path("/admin/hr/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam(id) Long id, Map<String, Object> entity) {
+	public String update(@PathParam(ID) Long id, Map<String, Object> entity) {
 		return super.update(id, entity);
 	}
 
@@ -96,7 +96,7 @@ public class HrController extends BaseController<Map<String, Object>> {
 	@Path("/admin/hr/{id}")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam(id) Long id) {
+	public String delete(@PathParam(ID) Long id) {
 		return delete(id, new HashMap<String, Object>());
 	}
 }

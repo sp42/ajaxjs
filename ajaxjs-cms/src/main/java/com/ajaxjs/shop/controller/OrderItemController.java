@@ -39,9 +39,9 @@ public class OrderItemController extends BaseController<OrderItem> {
 	private OrderItemService service;
 
 	@GET
-	@Path(list)
+	@Path(LIST)
 	@MvcFilter(filters = { DataBaseFilter.class, XslMaker.class })
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv,
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv,
 			HttpServletRequest r, HttpServletResponse response) {
 		HttpSession session = r.getSession();
 		long p = (long) session.getAttribute("privilegeTotal");
@@ -69,25 +69,25 @@ public class OrderItemController extends BaseController<OrderItem> {
 
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path(idInfo)
-	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
+	@Path(ID_INFO)
+	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
 		return editUI(mv, service.findById(id));
 	}
 
 	@PUT
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam(id) Long id, OrderItem entity) {
+	public String update(@PathParam(ID) Long id, OrderItem entity) {
 		return super.update(id, entity);
 	}
 
 	@DELETE
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam(id) Long id) {
+	public String delete(@PathParam(ID) Long id) {
 		return delete(id, new OrderItem());
 	}
 

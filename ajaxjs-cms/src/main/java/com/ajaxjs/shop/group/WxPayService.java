@@ -1,18 +1,24 @@
 package com.ajaxjs.shop.group;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
+import com.ajaxjs.shop.ShopConstant;
+import com.ajaxjs.shop.ShopHelper;
 import com.ajaxjs.shop.dao.OrderInfoDao;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.service.CartService;
+import com.ajaxjs.shop.service.OrderService;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.weixin.payment.PayConstant;
 import com.ajaxjs.weixin.payment.PaySignatures;
+import com.ajaxjs.weixin.payment.PaymentNotification;
 import com.ajaxjs.weixin.payment.PerpayInfo;
 import com.ajaxjs.weixin.payment.PerpayReturn;
 import com.ajaxjs.weixin.payment.WxPay;
@@ -35,6 +41,9 @@ public class WxPayService extends BaseService<OrderInfo> implements PayConstant 
 		setDao(dao);
 	}
 
+	@Resource("OrderService")
+	private OrderService orderService;
+
 	/**
 	 * 生成订单并支付
 	 * 
@@ -43,10 +52,10 @@ public class WxPayService extends BaseService<OrderInfo> implements PayConstant 
 	 * @param cartIds   订单明细由购物车的数据生成
 	 * @return
 	 */
-//	public Map<String, ?> createOrderAndPay(long userId, long addressId, String[] cartIds, String ip) {
-//		OrderInfo orderInfo = processOrder(userId, addressId, cartIds);
-//		return wxPay(userId, orderInfo, ip);
-//	}
+	public Map<String, ?> createOrderAndPay(long userId, long addressId, String[] cartIds, String ip) {
+		OrderInfo orderInfo = orderService.processOrder(userId, addressId, cartIds);
+		return wxPay(userId, orderInfo, ip);
+	}
 
 	public Map<String, ?> pay(long userId, long orderId, String ip) {
 		return wxPay(userId, dao.findById(orderId), ip);
@@ -98,7 +107,6 @@ public class WxPayService extends BaseService<OrderInfo> implements PayConstant 
 	@Resource("CartService")
 	private CartService cartService;
 
-
 	/**
 	 * 处理支付通知的异步回调，控制器必须提供一个接口调用该服务方法
 	 * 
@@ -106,44 +114,44 @@ public class WxPayService extends BaseService<OrderInfo> implements PayConstant 
 	 * @param responseResult
 	 * @return
 	 */
-//	public Map<String, String> payNotification(PaymentNotification perpayReturn, Map<String, String> responseResult) {
-//		LOGGER.info("处理支付通知的异步回调");
-//		boolean isOk = false;
-//		String msg = "UNKONW";
-//
-//		if (perpayReturn.isSuccess()) {
-//			// 验证签名是否正确
-//			String toCheck = PaySignatures.generateSignature(perpayReturn.getData(), PaySignatures.getMchSecretId());
-//
-//			if (perpayReturn.getSign().equals(toCheck)) {
-//				String totalFee = perpayReturn.getTotal_fee(), orderNo = perpayReturn.getOut_trade_no();
-//
-//				OrderInfo order = findByOrderNo(orderNo);
-//				Objects.requireNonNull(order, "订单 " + orderNo + " 不存在");
-//
-//				if (totalFee.endsWith(ShopHelper.toCent(order.getTotalPrice()))) {// 收到的金额和订单的金额是否吻合？
-//					OrderInfo updateBill = new OrderInfo();
-//					updateBill.setId(order.getId());
-//					updateBill.setTransactionId(perpayReturn.getTransaction_id());
-//					updateBill.setPayStatus(ShopConstant.PAYED);
-//					updateBill.setPayDate(new Date());
-//					update(updateBill);
-//					isOk = true;
-//					msg = "OK";
-//				} else {
-//					msg = "非法响应！交易金额不对，支付方返回 " + totalFee + "分，而订单记录是 " + (ShopHelper.toCent(order.getTotalPrice()))
-//							+ "分";
-//				}
-//			} else {
-//				msg = "非法响应！";
-//			}
-//		} else {
-//			msg = "交易失败";
-//		}
-//
-//		responseResult.put("return_code", isOk ? "SUCCESS" : "FAIL");
-//		responseResult.put("return_msg", msg);
-//
-//		return responseResult;
-//	}
+	public Map<String, String> payNotification(PaymentNotification perpayReturn, Map<String, String> responseResult) {
+		LOGGER.info("处理支付通知的异步回调");
+		boolean isOk = false;
+		String msg = "UNKONW";
+
+		if (perpayReturn.isSuccess()) {
+			// 验证签名是否正确
+			String toCheck = PaySignatures.generateSignature(perpayReturn.getData(), PaySignatures.getMchSecretId());
+
+			if (perpayReturn.getSign().equals(toCheck)) {
+				String totalFee = perpayReturn.getTotal_fee(), orderNo = perpayReturn.getOut_trade_no();
+
+				OrderInfo order = orderService.findByOrderNo(orderNo);
+				Objects.requireNonNull(order, "订单 " + orderNo + " 不存在");
+
+				if (totalFee.endsWith(ShopHelper.toCent(order.getTotalPrice()))) {// 收到的金额和订单的金额是否吻合？
+					OrderInfo updateBill = new OrderInfo();
+					updateBill.setId(order.getId());
+					updateBill.setTransactionId(perpayReturn.getTransaction_id());
+					updateBill.setPayStatus(ShopConstant.PAYED);
+					updateBill.setPayDate(new Date());
+					update(updateBill);
+					isOk = true;
+					msg = "OK";
+				} else {
+					msg = "非法响应！交易金额不对，支付方返回 " + totalFee + "分，而订单记录是 " + (ShopHelper.toCent(order.getTotalPrice()))
+							+ "分";
+				}
+			} else {
+				msg = "非法响应！";
+			}
+		} else {
+			msg = "交易失败";
+		}
+
+		responseResult.put("return_code", isOk ? "SUCCESS" : "FAIL");
+		responseResult.put("return_msg", msg);
+
+		return responseResult;
+	}
 }

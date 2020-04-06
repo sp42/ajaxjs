@@ -1,6 +1,8 @@
 package com.ajaxjs.shop.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 import com.ajaxjs.framework.BaseService;
@@ -78,6 +80,9 @@ public class CartService extends BaseService<Cart> {
 
 		return super.delete(bean);
 	}
+	
+	@Resource("OrderService")
+	OrderService orderService;
 
 	/**
 	 * 
@@ -85,9 +90,11 @@ public class CartService extends BaseService<Cart> {
 	 * @param cartIds
 	 * @return
 	 */
-//	public Map<String, Object> checkout(long addressId, String[] cartIds) {
-//		Map<String, Object> map = new HashMap<>();
-//
+	public Map<String, Object> checkout(long userId, long addressId, String[] cartIds) {
+		Map<String, Object> map = new HashMap<>();
+		
+		orderService.processOrder(userId, addressId, cartIds);
+
 //		cart2order(addressId, cartIds, (goodsList, address, actualPrice) -> {
 //			List<Group> g = groupService.checkCanGroup(goodsList);
 //
@@ -99,7 +106,7 @@ public class CartService extends BaseService<Cart> {
 //				map.put("noPassGroup", g);
 //			}
 //		});
-//
-//		return map;
-//	}
+
+		return map;
+	}
 }

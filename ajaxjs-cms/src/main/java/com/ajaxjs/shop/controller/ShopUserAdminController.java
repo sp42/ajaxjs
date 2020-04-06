@@ -37,7 +37,7 @@ public class ShopUserAdminController extends BaseController<User> {
 
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
 		LOGGER.info("后台-商城会员列表");
 		List<Map<String, Object>> userGroups = roleService.getDao().findList(null);
 		

@@ -51,9 +51,9 @@ public class SellerController extends BaseController<Seller> {
 	}
 
 	@GET
-	@Path(list)
+	@Path(LIST)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
 		LOGGER.info("获取" + getService().getUiName() + "分页列表 GET list");
 
 		page(mv, service.findPagedList(start, limit, null));
@@ -61,9 +61,9 @@ public class SellerController extends BaseController<Seller> {
 	}
 
 	@GET
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
+	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
 		editUI(mv, service.findById(id));
 		return jsp("shop/seller-edit");
 	}
@@ -85,19 +85,19 @@ public class SellerController extends BaseController<Seller> {
 	}
 
 	@PUT
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam(id) Long id, Seller entity) {
+	public String update(@PathParam(ID) Long id, Seller entity) {
 		return super.update(id, entity);
 	}
 
 	@DELETE
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam(id) Long id) {
+	public String delete(@PathParam(ID) Long id) {
 		return delete(id, new Seller());
 	}
 

@@ -51,22 +51,22 @@ public class OrderController extends BaseController<OrderInfo> {
 	@GET
 	@Path("/shop/order")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	public String account(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+	public String account(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
 		LOGGER.info("浏览我的订单");
 		
 		prepareData(mv);
-		mv.put(PageResult, service.findPagedList(start, limit, 0, 0, null, BaseUserController.getUserId()));
+		mv.put(PAGE_RESULT, service.findPagedList(start, limit, 0, 0, null, BaseUserController.getUserId()));
 		return jsp("shop/order");
 	}
 	
 	@GET
-	@Path("/shop/order/" + idInfo)
+	@Path("/shop/order/" + ID_INFO)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	public String orderDetail(@PathParam(id) Long id, ModelAndView mv) {
+	public String orderDetail(@PathParam(ID) Long id, ModelAndView mv) {
 		LOGGER.info("浏览我的订单明细");
 		
 		prepareData(mv);
-		mv.put(info, service.findById(id));
+		mv.put(INFO, service.findById(id));
 		// 订单明细
 		List<OrderItem> items = WxPayService.dao.findOrderItemListByOrderId(id);
 		mv.put("orderItems", items);
@@ -106,9 +106,9 @@ public class OrderController extends BaseController<OrderInfo> {
 	/////////// 后台 //////////////
 
 	@GET
-	@Path(list)
+	@Path(LIST)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv, @QueryParam("userId") long userId) {
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv, @QueryParam("userId") long userId) {
 		LOGGER.info("后台-订单列表");
 
 		page(mv, service.findPagedList(start, limit, 0, 0, null, userId), CommonConstant.UI_ADMIN);
@@ -127,9 +127,9 @@ public class OrderController extends BaseController<OrderInfo> {
 	private UserService userService;
 
 	@GET
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
+	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
 		editUI(mv, service.findById(id));
 
 		// 获取用户名
@@ -151,18 +151,18 @@ public class OrderController extends BaseController<OrderInfo> {
 
 	@PUT
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam(id) Long id, OrderInfo entity) {
+	public String update(@PathParam(ID) Long id, OrderInfo entity) {
 		return super.update(id, entity);
 	}
 
 	@DELETE
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam(id) Long id) {
+	public String delete(@PathParam(ID) Long id) {
 		return delete(id, new OrderInfo());
 	}
 

@@ -65,7 +65,7 @@ public class DataDictController extends BaseController<Map<String, Object>> {
 		/**
 		 * 把列表（Map结构）转换为 map，以 id 作为键值。
 		 * 
-		 * @param list 实体列表
+		 * @param LIST 实体列表
 		 * @return 以 id 作为键值的 map
 		 */
 		public static Map<Integer, Map<String, Object>> idAsKey(int id) {
@@ -91,7 +91,7 @@ public class DataDictController extends BaseController<Map<String, Object>> {
 	}
 
 	@GET
-	@Path(list)
+	@Path(LIST)
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list() {
@@ -102,7 +102,7 @@ public class DataDictController extends BaseController<Map<String, Object>> {
 	@Path("getDictListByParentId/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public List<Map<String, Object>> getDictListByParentId(@PathParam(id) long pId) {
+	public List<Map<String, Object>> getDictListByParentId(@PathParam(ID) long pId) {
 		return DataDictService.dao.findByParentId(pId);
 	}
 
@@ -116,18 +116,18 @@ public class DataDictController extends BaseController<Map<String, Object>> {
 
 	@PUT
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path(Constant.idInfo)
+	@Path(Constant.ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam(id) Long id, Map<String, Object> entity) {
+	public String update(@PathParam(ID) Long id, Map<String, Object> entity) {
 		return super.update(id, entity);
 	}
 
 	@DELETE
-	@Path(Constant.idInfo)
+	@Path(Constant.ID_INFO)
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam(id) Long id) {
+	public String delete(@PathParam(ID) Long id) {
 		return delete(id, new HashMap<String, Object>());
 	}
 

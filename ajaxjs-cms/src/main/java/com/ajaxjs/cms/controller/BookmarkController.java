@@ -26,9 +26,9 @@ public class BookmarkController extends BaseController<SectionList> {
 	private ShopBookmarkService service;
 
 	@GET
-	@Path(list)
+	@Path(LIST)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(start) int start, @QueryParam(limit) int limit, ModelAndView mv) {
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
 		mv.put("entryTypeIdNameMap", DataDictController.DataDictService.Entry_IdName);
 		page(mv, service.findSectionListBySectionId(start, limit));
 		
@@ -37,8 +37,8 @@ public class BookmarkController extends BaseController<SectionList> {
 	}
 
 	@GET
-	@Path(idInfo)
-	public String bookmark(@PathParam(id) Long userId, ModelAndView mv) {
+	@Path(ID_INFO)
+	public String bookmark(@PathParam(ID) Long userId, ModelAndView mv) {
 		mv.put("entryTypeIdNameMap", DataDictController.DataDictService.Entry_IdName);
 		mv.put("userId", userId);
 		
@@ -48,9 +48,9 @@ public class BookmarkController extends BaseController<SectionList> {
 
 	@DELETE
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam(id) Long id) {
+	public String delete(@PathParam(ID) Long id) {
 		return delete(id, new SectionList());
 	}
 	

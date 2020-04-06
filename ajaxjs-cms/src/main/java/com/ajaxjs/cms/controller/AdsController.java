@@ -35,9 +35,9 @@ public class AdsController extends BaseController<Ads> {
 	private CatalogService catalogService;
 	
 	@GET
-	@Path(list)
+	@Path(LIST)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String adminList(@QueryParam(start) int start, @QueryParam(limit) int limit, @QueryParam(catalogId) int catalogId, ModelAndView mv) {
+	public String adminList(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		LOGGER.info("广告列表");
 		
 		mv.put("catalogs", CatalogService.list_bean2map_id_as_key(catalogService.findAllListByParentId(service.getDomainCatalogId())));
@@ -45,9 +45,9 @@ public class AdsController extends BaseController<Ads> {
 	}
  
 	@GET
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String editUI(@PathParam(id) Long id, ModelAndView mv) {
+	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
 		return editUI(mv, service.findById(id));
 	}
 
@@ -68,18 +68,18 @@ public class AdsController extends BaseController<Ads> {
 
 	@PUT
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String update(@PathParam(id) Long id, Ads entity) {
+	public String update(@PathParam(ID) Long id, Ads entity) {
 		return super.update(id, entity);
 	}
 
 	@DELETE
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path(idInfo)
+	@Path(ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam(id) Long id) {
+	public String delete(@PathParam(ID) Long id) {
 		return delete(id, new Ads());
 	}
 
