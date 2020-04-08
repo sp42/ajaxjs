@@ -26,6 +26,9 @@ public class SectionService extends SectionListService {
 
 	private static ScanTable fn = (sqls, entityTypeId, entityIds, caseSql) -> {
 		switch (entityTypeId) {
+		case DataDictController.DataDictService.ENTRY_ARTICLE:
+			sqls.add(String.format(SELECT, entityTypeId, caseSql, "entity_article", entityIds));
+			break;
 		case DataDictController.DataDictService.ENTRY_TOPIC:
 			sqls.add(String.format(SELECT, entityTypeId, caseSql, "entity_topic", entityIds));
 			break;

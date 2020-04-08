@@ -26,26 +26,27 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 @Path("/admin/section")
 @Bean
 public class SectionController extends BaseController<SectionList> {
-	
+
 	@Resource("SectionService")
 	private SectionService service;
 
 	@GET
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam("sectionId") int sectionId, @QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
-		
+	public String list(@QueryParam("sectionId") int sectionId, @QueryParam(START) int start,
+			@QueryParam(LIMIT) int limit, ModelAndView mv) {
+
 		return toJson(service.findSectionListBySectionId(start, limit, sectionId));
 	}
 
 	@GET
 	public String jsp(ModelAndView mv) {
-		mv.put("entryIdNameMap",  DataDictController.DataDictService.Entry_IdName);
+		mv.put("entryIdNameMap", DataDictController.DataDictService.Entry_IdName);
 		mv.put("entryIdNameJson", toJson(DataDictController.DataDictService.Entry_IdName, false));
 		prepareData(mv);
 		return page("section-list");
 	}
-	
+
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("sections")
@@ -70,6 +71,21 @@ public class SectionController extends BaseController<SectionList> {
 	@Override
 	public String update(@PathParam(ID) Long id, SectionList entity) {
 		return super.update(id, entity);
+	}
+
+	@GET
+	@MvcFilter(filters = DataBaseFilter.class)
+	@Path("/section/{id}")
+	public String getSectionList(@PathParam(ID) int sectionId, @QueryParam(START) int start,
+			@QueryParam(LIMIT) int limit) {
+		return toJson(service.findSectionListBySectionId(sectionId, start, limit));
+	}
+
+	@GET
+	@MvcFilter(filters = DataBaseFilter.class)
+	@Path("/sub_section/{id}")
+	public String getSubSection(@PathParam(ID) Long sectionId) {
+		return "";
 	}
 
 	@DELETE
