@@ -1,7 +1,5 @@
 package com.ajaxjs.user.token;
 
-import java.util.Objects;
-
 import com.ajaxjs.config.ConfigService;
 
 /**
