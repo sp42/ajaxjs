@@ -17,20 +17,6 @@ import com.ajaxjs.web.mock.MockRequest;
 import com.ajaxjs.web.mock.MockServletInputStream;
 
 public class TestUpload {
-public Map<String, Object> addConfig(Map<String, Object> params) {
-	Map<String, Object> data = new HashMap<>();
-
-	try {
-		String name = (String) params.get("name");
-		String value = (String) params.get("value");
-		// 示例代码，省略其他代码
-	} catch (Exception e) {
-		// 捕获异常
-	}
-	
-	return data;
-}
-
 	@Test
 	public void testUpload() throws IOException {
 		UploadFileInfo uploadFileInfo = new UploadFileInfo();
