@@ -103,7 +103,7 @@
 			</c:choose>
 			</h4>
 			
-			${info.content.replaceAll('src="[^http]', 'src="../../')}
+			${info.content.replaceAll('src="[^http]', 'src="../../i')}
 		</article>
 		<jsp:doBody />
 		

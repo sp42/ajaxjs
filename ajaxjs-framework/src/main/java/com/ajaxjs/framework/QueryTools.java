@@ -55,14 +55,21 @@ public class QueryTools {
 	/**
 	 * 替换 1=1 为查询语句。这是基础的方法
 	 * 
-	 * @param sql
-	 * @param where
-	 * @return
+	 * @param sql   包含 1=1 的 SQL
+	 * @param where 条件语句
+	 * @return 新的 SQL
 	 */
 	public static String where(String sql, String where) {
 		return sql.replace(IBaseDao.WHERE_REMARK, "(" + where + ")" + IBaseDao.WHERE_REMARK_AND);
 	}
 
+	/**
+	 * 拼接 SQL 等于的语句，如果是字符串加上单引号
+	 * 
+	 * @param field 字段名
+	 * @param value 值，如果是字符串会自动加上单引号
+	 * @return 包含等号的 SQL 语句
+	 */
 	public static String equals(String field, Object value) {
 		if (value instanceof String)
 			value = "'" + value + "'";
@@ -71,11 +78,12 @@ public class QueryTools {
 	}
 
 	/**
+	 * 设置关系为 = 的条件查询语句
 	 * 
-	 * @param sql
-	 * @param field
-	 * @param value
-	 * @return
+	 * @param sql   包含 1=1 的 SQL
+	 * @param field 字段名
+	 * @param value 值，如果是字符串会自动加上单引号
+	 * @return 新的 SQL
 	 */
 	public static String where(String sql, String field, Object value) {
 		return where(sql, equals(field, value));
@@ -130,6 +138,12 @@ public class QueryTools {
 		return null;
 	}
 
+	/**
+	 * 
+	 * @param query
+	 * @param type
+	 * @return
+	 */
 	public static Object getValue(String query, Class<?> type) {
 		return getValue(MvcRequest.getHttpServletRequest(), query, type);
 	}
@@ -163,7 +177,7 @@ public class QueryTools {
 	/**
 	 * 按实体 userId 查找的高阶函数
 	 * 
-	 * @param uid userId
+	 * @param userId 用户 id
 	 * @return SQL 处理器
 	 */
 	public static Function<String, String> byUserId(long userId) {
