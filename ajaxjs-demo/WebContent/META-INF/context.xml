@@ -8,7 +8,7 @@
         auth="Container" 
         type="javax.sql.DataSource"
         maxActive="100" maxIdle="30" maxWait="10000" 
-        username="user2" password="password1" 
+        username="user2" password="" 
         driverClassName="org.sqlite.JDBC"
         url="jdbc:sqlite:E:\project\egdtv\gdzbt\WebContent\META-INF\gdzbt.sqlite" />
         
@@ -18,7 +18,7 @@
         auth="Container" 
         type="javax.sql.DataSource"
         maxActive="100" maxIdle="30" maxWait="10000" 
-        username="root" password="root123abc" 
+        username="root" password="" 
         driverClassName="com.mysql.jdbc.Driver"
-        url="jdbc:mysql://115.28.242.232/zyjf?useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false" />             
+        url="jdbc:mysql://115.28.242.230/zyjf?useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false" />             
 </Context>
