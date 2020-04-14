@@ -83,7 +83,7 @@ public class JdbcConnection {
 		try {
 			return source.getConnection();
 		} catch (SQLException e) {
-			LOGGER.warning("通过数据源对象获得数据库连接对象失败！", e);
+			LOGGER.warning(e, "通过数据源对象获得数据库连接对象失败！");
 			return null;
 		}
 	}
@@ -101,7 +101,6 @@ public class JdbcConnection {
 
 			Context context = (Context) obj; // 环境变量
 			Object result = context.lookup(jndi);
-
 			return (DataSource) result;
 		} catch (NamingException e) {
 			String msg = "读取数据源的配置文件失败，请检查 Tomcat 连接池配置！ path: " + jndi;

@@ -25,6 +25,20 @@ import java.util.Date;
  *
  */
 public class News {
+	private Long id;
+
+	private String name;
+
+	private String content;
+
+	private Date createDate;
+
+	private Date updateDate;
+
+	private String cover;
+
+	private BigDecimal price;
+
 	public Long getId() {
 		return id;
 	}
@@ -73,19 +87,6 @@ public class News {
 		this.cover = cover;
 	}
 
-	private Long id;
-
-	private String name;
-
-	private String content;
-
-	private Date createDate;
-
-	private Date updateDate;
-	private String cover;
-
-	private BigDecimal price;
-
 	public BigDecimal getPrice() {
 		return price;
 	}
@@ -93,7 +94,7 @@ public class News {
 	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
-	
+
 	private Long uid;
 
 	public Long getUid() {

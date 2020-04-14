@@ -123,12 +123,13 @@ public interface IBaseDao<T> {
 	 */
 	@Update
 	public int update(T bean);
-	
+
 	/**
+	 * 更新或是创建
 	 * 
-	 * @param bean
-	 * @param saveOrUpdate 返回的 Serializable 为 id 类型，可为 long/int
-	 * @return
+	 * @param bean         实体对象
+	 * @param saveOrUpdate 判断是否更新还是创建，
+	 * @return 返回的 Serializable 为 id 类型，可为 long/int
 	 */
 	public Serializable saveOrUpdate(T bean, Supplier<Serializable> saveOrUpdate);
 

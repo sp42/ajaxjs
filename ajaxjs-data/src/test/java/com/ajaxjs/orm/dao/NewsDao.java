@@ -37,7 +37,7 @@ import com.ajaxjs.orm.annotation.Update;
 public interface NewsDao extends IBaseDao<News> {
 	final static String tableName = "news";
 
-	@Select("SELECT * FROM " + tableName + " WHERE id = ?")
+	@Select("SELECT * FROM ${tableName} WHERE id = ?")
 	@Override
 	public News findById(Long id);
 

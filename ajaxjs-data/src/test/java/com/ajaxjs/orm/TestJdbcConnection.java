@@ -31,14 +31,14 @@ public class TestJdbcConnection {
 		conn.close();
 	}
 
-	@Test
+//	@Test
 	public void testGetMySqlConnection() throws SQLException {
 		Connection conn = getMySqlConnection("jdbc:mysql://xxx:yyy/test?useUnicode=true", "root", "xxxxx");
 		assertNotNull(conn);
 		conn.close();
 	}
 
-	@Test
+//	@Test
 	public void testThreadLocal() {
 		Connection conn = getTestSqliteConnection();
 		setConnection(conn);
