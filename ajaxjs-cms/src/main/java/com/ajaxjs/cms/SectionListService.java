@@ -59,7 +59,7 @@ public abstract class SectionListService extends BaseService<SectionList> {
 	 * @return 可分页的栏目的实体集合
 	 */
 	public PageResult<SectionList> getListByCatalogId(int start, int limit, int catalogId) {
-		return dao.findPagedList(start, limit, catalogId == 0 ? null : by("catelogId", catalogId));
+		return dao.findPagedList(start, limit, catalogId == 0 ? null : by("catalogId", catalogId));
 	}
 
 	/**
@@ -112,7 +112,7 @@ public abstract class SectionListService extends BaseService<SectionList> {
 		});
 
 		List<String> sqls = new ArrayList<>();
-		String sqlCase = " WHEN entry.id = %s THEN %s ", sqlCaseStr = " WHEN entry.id = %s THEN '%s' ";
+		String sqlCase = " WHEN e.id = %s THEN %s ", sqlCaseStr = " WHEN e.id = %s THEN '%s' ";
 
 		for (Integer typeId : map.keySet()) {
 			List<String> l = map.get(typeId);
