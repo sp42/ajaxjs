@@ -36,7 +36,6 @@ AJAXJS 很少第三方的库或包依赖，一方面也避免太复杂。关于�
 |ajaxjs-user|会员系统，[浏览项目 readme](ajaxjs-user)|ajaxjs-framework|jar|
 |ajaxjs-cms|整个各个子项目的网站发布系统，[浏览项目 readme](ajaxjs-cms)|ajaxjs-user|jar|
 |ajaxjs-book|一个包含前后台的网站，可方便学习或作为快速手脚架，[浏览项目 readme](ajaxjs-demo)|ajaxjs-cms|war|
-|ajaxjs-book|案例|N/A|N/A|
 |ajaxjs-tools|孵化室、测试代码、其他杂项工具|ajaxjs-web|war|
 
 
