@@ -1,4 +1,5 @@
-<%@page pageEncoding="UTF-8" import="demo.web.Student"%>
+<%@page pageEncoding="UTF-8" %>
+<%@taglib uri="/ajaxjs" prefix="c"%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -6,6 +7,6 @@
 		<title>Insert title here</title>
 	</head>
 	<body>
-		<%=((Student)request.getAttribute("student")).getName()%>
+
 	</body>
 </html>
