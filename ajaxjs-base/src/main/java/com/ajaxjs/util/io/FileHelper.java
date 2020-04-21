@@ -50,19 +50,29 @@ import com.ajaxjs.util.logger.LogHelper;
  */
 public class FileHelper extends IoHelper {
 	private static final LogHelper LOGGER = LogHelper.getLog(FileHelper.class);
-	// 当前系统的分隔符(linux、windows)
 
-	public static final String separator = File.separator;
+	/**
+	 * 当前系统的分隔符(linux、windows)
+	 */
+	public static final String SEPARATOR = File.separator;
 
 	/**
 	 * 创建目录
 	 * 
-	 * @param folder 目录
+	 * @param folder 目录字符串
 	 */
 	public static void mkDir(String folder) {
-		File f = new File(folder); // 先检查目录是否存在，若不存在建立
-		if (!f.exists())
-			f.mkdirs();
+		mkDir(new File(folder));
+	}
+
+	/**
+	 * 创建目录
+	 * 
+	 * @param folder 目录对象
+	 */
+	public static void mkDir(File folder) {
+		if (!folder.exists())// 先检查目录是否存在，若不存在建立
+			folder.mkdirs();
 	}
 
 	/**
@@ -87,10 +97,7 @@ public class FileHelper extends IoHelper {
 		if (file.isDirectory())
 			throw new IllegalArgumentException("参数必须是文件，不是目录");
 
-		File parentFolder = new File(file.getParent());
-		if (!parentFolder.exists())
-			parentFolder.mkdirs();
-
+		mkDir(file.getParent());
 	}
 
 	/**
@@ -113,7 +120,7 @@ public class FileHelper extends IoHelper {
 		LOGGER.info("正在新建文件 {0}", folder + fileName);
 
 		mkDir(folder);
-		return new File(folder + File.separator + fileName);
+		return new File(folder + SEPARATOR + fileName);
 	}
 
 	/**
@@ -152,6 +159,12 @@ public class FileHelper extends IoHelper {
 		save(file, text.getBytes(StandardCharsets.UTF_8), true, false);
 	}
 
+	/**
+	 * 
+	 * 
+	 * @param filePath 文件路径
+	 * @param text     文本内容
+	 */
 	public static void saveText(String filePath, String text) {
 		saveText(new File(filePath), text);
 	}
@@ -211,7 +224,7 @@ public class FileHelper extends IoHelper {
 	public static void saveTextOld(File file, String text) {
 		LOGGER.info("正在保存文件{0}， 保存内容：\n{1}", file.toString(), text);
 
-		// OutputStreramWriter将输出的字符流转化为字节流输出（字符流已带缓冲）
+		// OutputStreramWriter 将输出的字符流转化为字节流输出（字符流已带缓冲）
 		try (OutputStream out = new FileOutputStream(file);
 				OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);) {
 			writer.write(text);
@@ -264,7 +277,7 @@ public class FileHelper extends IoHelper {
 		String datatime = CommonUtil.now("yyyy-MM-dd");
 		String year = datatime.substring(0, 4), mouth = datatime.substring(5, 7), day = datatime.substring(8, 10);
 
-		return File.separator + year + File.separator + mouth + File.separator + day + File.separator;
+		return SEPARATOR + year + SEPARATOR + mouth + SEPARATOR + day + SEPARATOR;
 	}
 
 	/**
@@ -274,7 +287,7 @@ public class FileHelper extends IoHelper {
 	 * @return 文件名
 	 */
 	public static String getFileName(String str) {
-		String[] arr = str.split("/");
+		String[] arr = str.split("\\/|\\\\");// 取消文件名，让最后一个元素为空字符串
 
 		return arr[arr.length - 1];
 	}
@@ -370,6 +383,7 @@ public class FileHelper extends IoHelper {
 				// 此方法不适合读取很大的文件，因为可能存在内存空间不足的问题。
 				StringBuilder sb = new StringBuilder();
 				Files.lines(path, encode).forEach(str -> sb.append(str));
+
 				return sb.toString();
 			} catch (IOException e) {
 				LOGGER.warning(e);
@@ -428,6 +442,7 @@ public class FileHelper extends IoHelper {
 	public static void delete(File file) {
 		if (file.isDirectory()) {
 			File[] files = file.listFiles();
+
 			for (File f : files) {
 				delete(f);
 			}
