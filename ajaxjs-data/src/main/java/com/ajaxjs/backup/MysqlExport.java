@@ -207,7 +207,7 @@ public class MysqlExport {
 	 */
 	public String export() {
 		String fileName = "database-dump-" + CommonUtil.now("yyyy-MM-dd") + "-" + databaseName + ".sql",
-				sqlFile = saveFolder + FileHelper.separator + fileName;
+				sqlFile = saveFolder + FileHelper.SEPARATOR + fileName;
 
 		FileHelper.saveText(sqlFile, exportToSql());
 		// 压缩 zip
