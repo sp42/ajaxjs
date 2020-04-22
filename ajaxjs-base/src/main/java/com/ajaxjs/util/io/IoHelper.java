@@ -37,21 +37,6 @@ public class IoHelper {
 	private static final LogHelper LOGGER = LogHelper.getLog(IoHelper.class);
 
 	/**
-	 * 输出流写入字节数据
-	 * 
-	 * @param out  输出流
-	 * @param data 字节数据
-	 */
-	public static void outputWriteData(OutputStream out, byte[] data) {
-		try {
-			out.write(data); // 输出流写入字节数据
-			out.flush();
-		} catch (IOException e) {
-			LOGGER.warning(e);
-		}
-	}
-
-	/**
 	 * 读输入的字节流转换到字符流，将其转换为文本（多行）的字节流转换为字符串
 	 * 
 	 * @param in 输入流，无须手动关闭
