@@ -16,9 +16,12 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.app.attachment.AttachmentService;
+import com.ajaxjs.app.catalog.CatalogService;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseController;
+import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.BaseService;
+import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.framework.filter.FrontEndOnlyCheck;
 import com.ajaxjs.framework.filter.XslMaker;
@@ -47,7 +50,8 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@GET
 	@MvcFilter(filters = { DataBaseFilter.class })
 //	@Authority(filter = DataBaseFilter.class, value = 1)
-	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit,
+			@QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		LOGGER.info("图文列表-前台");
 		getService().showList(mv);
 		prepareData(mv);
@@ -76,13 +80,18 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 
 		if (ConfigService.getValueAsBool("domain.article.attachmentDownload"))
 			map.put("attachment", new AttachmentService().findByOwner((long) map.get("uid")));
-		
+
 		return info();
 	}
 
 	@Override
 	public void prepareData(ModelAndView mv) {
-		mv.put(domainCatalog_Id, getService().getDomainCatalogId());
+		int catalogId = getService().getDomainCatalogId();
+		Map<Long, BaseModel> map = CatalogService
+				.list_bean2map_id_as_key(new CatalogService().findAllListByParentId(catalogId));
+		mv.put("newsCatalogs", map);
+		mv.put(domainCatalog_Id, catalogId);
+
 		super.prepareData(mv);
 	}
 
@@ -93,11 +102,13 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@MvcFilter(filters = { DataBaseFilter.class, XslMaker.class })
 	public String adminList(@QueryParam(START) int start, @QueryParam(LIMIT) int limit,
 			@QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
-		return autoOutput(mv, getService().list(catalogId, start, limit, CommonConstant.OFF_LINE), true);
+		PageResult<Map<String, Object>> list = getService().list(catalogId, start, limit, CommonConstant.OFF_LINE);
+		
+		return autoOutput(mv, list, true);
 	}
 
 	@GET
-	@Path("/admin/news")
+	@Path("/admin/{root}")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
 	public String createUI(ModelAndView mv) {
@@ -105,7 +116,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	}
 
 	@POST
-	@Path("/admin/news")
+	@Path("/admin/{root}")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
@@ -115,14 +126,14 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("/admin/news/{id}")
+	@Path("/admin/{root}/{id}")
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
 		return editUI(mv, getService().findById(id));
 	}
 
 	@PUT
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("/admin/news/{id}")
+	@Path("/admin/{root}/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
 	public String update(@PathParam(ID) Long id, Map<String, Object> entity) {
@@ -130,7 +141,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	}
 
 	@DELETE
-	@Path("/admin/news/{id}")
+	@Path("/admin/{root}/{id}")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String delete(@PathParam(ID) Long id) {
@@ -139,7 +150,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 
 	// 下载远程图片到本地服务器
 	@POST
-	@Path("/admin/news/downAllPics")
+	@Path("/admin/{root}/downAllPics")
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String downAllPics(@NotNull @FormParam("pics") String pics, MvcRequest r) {
@@ -152,5 +163,4 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 			public String[] pics = arr;
 		});
 	}
-
 }

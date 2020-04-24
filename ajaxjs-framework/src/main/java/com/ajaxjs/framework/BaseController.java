@@ -175,13 +175,48 @@ public abstract class BaseController<T> implements IController, Constant {
 	 * @return
 	 */
 	public String autoOutput(ModelAndView mv, PageResult<T> pageResult, boolean isAdmin) {
-		String accept = MvcRequest.getHttpServletRequest().getHeader("Accept");
-		boolean isJson = accept != null && "application/json".equals(accept);
-
-		if (isJson) {
+		if (isJson()) {
 			return toJson(pageResult);
 		} else
 			return page(mv, pageResult, isAdmin);
+	}
+
+	public String autoOutput(ModelAndView mv, PageResult<T> pageResult, String jspPath) {
+		if (isJson()) {
+			return toJson(pageResult);
+		} else {
+			prepareData(mv);
+			mv.put(PAGE_RESULT, pageResult);
+
+			return jspPath;
+		}
+	}
+
+	public String autoOutput(ModelAndView mv, BaseModel bean, String jspPath) {
+		if (isJson()) {
+			return toJson(bean);
+		} else {
+			mv.put(INFO, bean);
+
+			return jspPath;
+		}
+	}
+
+	private static boolean isJson() {
+		String accept = MvcRequest.getHttpServletRequest().getHeader("Accept");
+		return accept != null && "application/json".equals(accept);
+
+	}
+
+	public String autoOutput(ModelAndView mv, Map<String, Object> bean, String jspPath) {
+
+		if (isJson()) {
+			return toJson(bean);
+		} else {
+			mv.put(INFO, bean);
+
+			return jspPath;
+		}
 	}
 
 	public String page(ModelAndView mv, PageResult<T> pageResult) {

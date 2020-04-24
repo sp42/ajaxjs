@@ -84,7 +84,7 @@
 						<td>
 							 <c:dateFormatter value="${current.updateDate}" format="yyyy-MM-dd" /> 
 						</td>
-						<td>
+						<td> 
 							<a href="?catalogId=${current.catalogId}">${newsCatalogs[current.catalogId].name}</a></td>
 						<td>
 							${(empty current.stat || current.stat == 1) ? '已上线': '已下线'}
