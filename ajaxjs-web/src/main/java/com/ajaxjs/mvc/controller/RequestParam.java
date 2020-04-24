@@ -46,13 +46,14 @@ public class RequestParam {
 
 	/**
 	 * 对控制器的方法进行分析，看需要哪些参数。将得到的参数签名和请求过来的参数相匹配，再传入到方法中去执行。
+	 * @param controller 
 	 * 
 	 * @param request 	请求对象
 	 * @param response	响应对象
 	 * @param method 	控制器方法对象
 	 * @return 参数列表
 	 */
-	public static Object[] getArgs(MvcRequest request, HttpServletResponse response, Method method) {
+	public static Object[] getArgs(IController controller, MvcRequest request, HttpServletResponse response, Method method) {
 		Annotation[][] annotation = method.getParameterAnnotations(); // 方法所有的注解，length 应该要和参数总数一样
 		Class<?>[] parmTypes = method.getParameterTypes();// 反射得到参数列表的各个类型，遍历之
 		ArrayList<Object> args = new ArrayList<>();// 参数列表
@@ -86,7 +87,7 @@ public class RequestParam {
 				args.add(request.getBean(clazz));
 			} else { // 适配注解
 				Annotation[] annotations = annotation[i];
-				getArgValue(clazz, annotations, request, args, method);
+				getArgValue(clazz, annotations, request, args, method, controller);
 			}
 		}
 
@@ -101,8 +102,9 @@ public class RequestParam {
 	 * @param request 		请求对象
 	 * @param args 			参数列表
 	 * @param method 		控制器方法对象
+	 * @param controller 
 	 */
-	private static void getArgValue(Class<?> clz, Annotation[] annotations, MvcRequest request, ArrayList<Object> args, Method method) {
+	private static void getArgValue(Class<?> clz, Annotation[] annotations, MvcRequest request, ArrayList<Object> args, Method method, IController controller) {
 		if (annotations.length > 0) {
 			boolean required = false; 	// 是否必填字段
 			String defaultValue = null; // 默认值
@@ -124,8 +126,8 @@ public class RequestParam {
 					Path path = method.getAnnotation(Path.class);
 					
 					if (path != null) {
-						String paramName = ((PathParam) a).value(), value = request.getValueFromPath(path.value(), paramName);
-
+						String paramName = ((PathParam) a).value();
+						String value = request.getValueFromPath(parseRoot(path, controller.getClass()), paramName);
 						getArgValue2(clz, args, value);
 					} else {
 						LOGGER.warning(new NullPointerException("控制器方法居然没有 PathParam 注解？？"));
@@ -139,6 +141,15 @@ public class RequestParam {
 		}
 	}
 
+	private static String parseRoot(Path path, Class<? extends IController> clz){
+		String pathValue = path.value();
+		if (pathValue.contains("{root}")) { // 顶部路径
+			String topPath = ControllerScanner.getRootPath(clz);
+			pathValue = pathValue.replaceAll("\\{root\\}", topPath);
+		} 
+			
+		return pathValue;
+	}
 	/**
 	 * 
 	 * @param a

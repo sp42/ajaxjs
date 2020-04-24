@@ -116,7 +116,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	/**
 	 * 去取 url 上的值
 	 * 
-	 * @param value     值
+	 * @param value     方法上的路径
 	 * @param paramName 参数名称
 	 * @return 值
 	 */
