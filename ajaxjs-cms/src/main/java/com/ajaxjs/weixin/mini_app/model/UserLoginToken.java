@@ -1,4 +1,4 @@
-package com.ajaxjs.weixin.mini_app;
+package com.ajaxjs.weixin.mini_app.model;
 
 /**
  * 小程序用户登录的凭证

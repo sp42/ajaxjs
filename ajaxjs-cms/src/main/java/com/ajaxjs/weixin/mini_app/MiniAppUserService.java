@@ -22,6 +22,7 @@ import com.ajaxjs.user.token.TokenInfo;
 import com.ajaxjs.user.token.TokenService;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
+import com.ajaxjs.weixin.mini_app.model.UserLoginToken;
 
 /**
  * 小程序用户开放能力
@@ -142,7 +143,7 @@ public class MiniAppUserService extends BaseService<User> {
 		String appId = MiniApp.getAppId(), appSecret = MiniApp.getAppSecret();
 		String url = String.format(code2Session, appId, appSecret, jsCode);
 		String json = NetUtil.simpleGET(url);
-
+		
 		Map<String, Object> map = JsonHelper.parseMap(json);
 
 		UserLoginToken token = new UserLoginToken();
