@@ -60,6 +60,10 @@ public class JsonHelper {
 		return (Map<String, Object>) parse(str);
 	}
 
+	public static <T> T parseMapAsBean(String str, Class<T> beanClz) {
+		return MapTool.map2Bean(parseMap(str), beanClz);
+	}
+
 	/**
 	 * 解析 JSON 字符串为 List
 	 * 
