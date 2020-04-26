@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.weixin.web.AccessToken;
 import com.ajaxjs.weixin.web.JsApiTicket;
 import com.ajaxjs.weixin.web.WxWebUtils;
@@ -14,6 +15,12 @@ public class TestWxUtils {
 
 //	@Test
 	public void testGetAccessToken() {
+		ConfigService.load("D:\\project\\leidong\\src\\main\\resources\\site_config.json");
+
+		String accessKey = ConfigService.getValueAsString("uploadFile.ObjectStorageService.QiuNiuYun.accessKey");
+		String secretKey = ConfigService.getValueAsString("uploadFile.ObjectStorageService.QiuNiuYun.secretKey");
+		String bucket = ConfigService.getValueAsString("uploadFile.ObjectStorageService.QiuNiuYun.bucket");
+		
 		AccessToken accessToken = WxWebUtils.getAccessToken("wx6f5129b94baba822", "3bdde43746c46f5b4200060e105dfabd");
 		assertNotNull(accessToken);
 	}
