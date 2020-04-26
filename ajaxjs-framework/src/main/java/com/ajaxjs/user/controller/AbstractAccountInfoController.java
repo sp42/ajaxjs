@@ -56,12 +56,13 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 		
 		mv.put("UserGroups", CatalogService.list2map_id_as_key(RoleService.dao.findList(null)));
 		
-		return jsp("user/user-center/account");
+		return user("account");
 	}
 
 	@GET
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Path("account/safe")
+	@Deprecated
 	public String safe() {
 		LOGGER.info("用户会员中心-帐号管理-帐号安全修改");
 		return jsp("user/user-center/safe");
@@ -139,7 +140,7 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 		
 		mv.put("list", userLoginLogService.findListByUserId(getUserId()));
 
-		return jsp("user/user-center/log-history");
+		return user("log-history");
 	}
 
 	@GET
@@ -147,16 +148,7 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 	@Path("account/oauth")
 	public String oauth() {
 		LOGGER.info("用户会员中心-账户绑定");
-		return jsp("user/user-center/oauth");
-	}
-
-	@GET
-	@MvcFilter(filters = { LoginCheck.class })
-	@Path("account/delete-account")
-	public String deleteAccount() {
-		LOGGER.info("用户会员中心-账户管理-删除帐号");
-
-		return jsp("user/user-center/delete-account");
+		return user("oauth");
 	}
 
 	@POST

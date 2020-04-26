@@ -1,6 +1,6 @@
-<%@tag pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
-<%@taglib uri="/ajaxjs" prefix="c" %>
+<%@tag pageEncoding="UTF-8" trimDirectiveWhitespaces="true" description="默认的用户登录、注册标签"%>
 <%@attribute name="type" required="true" type="String" description="标签类型"%>
+<%@taglib uri="/ajaxjs" prefix="c" %>
 <%@taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
 <%
 	request.setAttribute("CAPTCHA_CODE", com.ajaxjs.web.captcha.CaptchaController.CAPTCHA_CODE);

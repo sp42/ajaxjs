@@ -337,8 +337,13 @@ public class SiteStruService implements ServletContextListener {
 	private static void getSiteMap(List<Map<String, Object>> list, StringBuilder sb, String contextPath) {
 		for (Map<String, Object> map : list) {
 			if (map != null) {
+				Object isHidden = map.get("isHidden");
+				if (isHidden != null && ((boolean) isHidden) == true) // 隐藏的
+					continue;
+				
 				if (0 == (int) map.get(ListMap.LEVEL)) // 新的一列
 					sb.append(newCol);
+				
 				sb.append(String.format(a, contextPath + map.get(ListMap.PATH).toString(),
 						map.get(ListMap.LEVEL).toString(), map.get("name").toString()));
 

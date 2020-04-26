@@ -40,7 +40,7 @@ import com.ajaxjs.web.UploadFileInfo;;
  * @author sp42 frank@ajaxjs.com
  *
  */
-@Path("/user/user-center")
+@Path("/user")
 @Bean("PcUserInfoController")
 public class UserCenterController extends AbstractAccountInfoController {
 	private static final LogHelper LOGGER = LogHelper.getLog(UserCenterController.class);
@@ -55,7 +55,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 
 	@Resource("User_common_authService") // 指定 service id
 	private UserCommonAuthService passwordService;
-
+	
 	@GET
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String home(ModelAndView mv) throws ServiceException {
@@ -74,7 +74,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 					});
 		}
 
-		return jsp("user/user-center/home");
+		return user("user-center/home");
 	}
 
 	@GET
@@ -95,11 +95,11 @@ public class UserCenterController extends AbstractAccountInfoController {
 	}
 
 	@GET
-	@Path("profile/avater")
-	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
+	@Path("profile/avatar")
+	@MvcFilter(filters = { LoginCheck.class })
 	public String avater() {
 		LOGGER.info("用户会员中心-个人信息-修改头像");
-		return jsp("user/user-center/avater");
+		return user("avater");
 	}
 
 	@POST
@@ -129,7 +129,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String address() {
 		LOGGER.info("用户会员中心-我的地址");
-		return jsp("user/user-center/address");
+		return user("address");
 	}
 
 //	@GET

@@ -25,6 +25,7 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.user.filter.LoginCheck;
 import com.ajaxjs.user.model.UserAddress;
 import com.ajaxjs.user.service.UserAddressService;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 
@@ -33,6 +34,8 @@ import com.ajaxjs.user.service.UserAddressService;
 @Bean
 @Path("/user/address")
 public class UserAddressController extends BaseController<UserAddress> {
+	private static final LogHelper LOGGER = LogHelper.getLog(UserAddressController.class);
+
 	@Resource("UserAddressService")
 	private UserAddressService service;
 
@@ -41,7 +44,8 @@ public class UserAddressController extends BaseController<UserAddress> {
 	@GET
 	@Path(LIST)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv, HttpServletRequest r) {
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv,HttpServletRequest r) {
+		LOGGER.info("收货地址列表");
 		mv.put(LIST, service.findListByUserId(BaseUserController.getUserId()));
 		return jsp(jsp);
 	}
@@ -63,9 +67,12 @@ public class UserAddressController extends BaseController<UserAddress> {
 
 	/*
 	 * @POST
+	 * 
 	 * @MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	 * @Produces(MediaType.APPLICATION_JSON) public String createUserAddress(@NotNull @HeaderParam(USER_ID) long userId, UserAddress entity) {
-	 * entity.setUserId(userId); return create(entity, service); }
+	 * 
+	 * @Produces(MediaType.APPLICATION_JSON) public String
+	 * createUserAddress(@NotNull @HeaderParam(USER_ID) long userId, UserAddress
+	 * entity) { entity.setUserId(userId); return create(entity, service); }
 	 */
 	@POST
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
@@ -96,12 +103,13 @@ public class UserAddressController extends BaseController<UserAddress> {
 		return service;
 	}
 
-	////////////////////后台 ///////////////////
+	//////////////////// 后台 ///////////////////
 
 	@GET
 	@Path("/admin/address/list")
 	@MvcFilter(filters = { DataBaseFilter.class, XslMaker.class })
-	public String adminList(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
+	public String adminList(@QueryParam(START) int start, @QueryParam(LIMIT) int limit,
+			@QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE, true), true);
 		return jsp(jsp + "-admin-list");
 	}

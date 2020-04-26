@@ -143,7 +143,8 @@ public class SiteStruTag extends SimpleTagSupport {
 		}
 	}
 
-	private static String buildSubMenu(String showNavSubMenuUl, String showNavSubMenuLi, Map<String, Object> item, String ctx) {
+	private static String buildSubMenu(String showNavSubMenuUl, String showNavSubMenuLi, Map<String, Object> item,
+			String ctx) {
 		StringBuilder sb = new StringBuilder();
 		@SuppressWarnings("unchecked")
 		List<Map<String, Object>> menu = (List<Map<String, Object>>) item.get(ListMap.CHILDREN);
@@ -260,11 +261,21 @@ public class SiteStruTag extends SimpleTagSupport {
 		sb.append(String.format("<nav class=\"anchor\">您的位置 ：<a href=\"%s\">首 页 </a>", ctx));
 		// MVC模式下，url 路径还是按照 JSP 的而不是 Servlet 的，我们希望统一的路径是按照 Servlet 的，故所以这里 Servlet 优先
 
-		Map<String, Object> node = (Map<String, Object>) request.getAttribute("PAGE_Node");
+		Object obj = request.getAttribute("PAGE_Node");
+		if (obj == null) {
+			if (request.getRequestURI().indexOf(ctx + "/index") != -1) { // 重复了 TODO
+				// 首页
+			} else {
+				System.err.println("不能渲染导航定位，该页面可能：1、未引用 head.jsp 创建 NODE 节点；2、未定义该路径之说明。");
+				return "";
+			}
+		}
+
+		Map<String, Object> node = (Map<String, Object>) obj;
 		String tpl = " » <a href=\"%s\">%s</a>";
 
 		if (node == null && request.getRequestURI().indexOf(ctx + "/index") != -1) {
-			// 首页
+
 		} else if (node != null) {
 			if (node.get("supers") != null) {
 				String _supers = (String) node.get("supers");

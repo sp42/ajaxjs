@@ -1,5 +1,6 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
+	<div align="center">您的用户 ID：${userId}</div>
 	<ul class="safe">
 		<li>	
 		<c:if test="${aj_allConfig.user.login.canModiflyUserName}">
@@ -22,7 +23,7 @@
 			<div class="ok">设置密码</div><div>已设置</div>
 		</li>
 		<li class="log-history">	
-			<a href="${ctx}/user/user-center/account/log-history/">查看登录历史</a>
+			<a href="log-history/">查看登录历史</a>
 			<div style="padding-left:3%;">最近登录</div><div>
 				<c:dateFormatter value="${lastUserLoginedInfo.createDate}"></c:dateFormatter>
 			</div>
@@ -69,8 +70,7 @@
 				</dl>
 				<dl>
 					<dt></dt>
-					<dd>
-						<br />
+					<dd class="aj-btnsHolder" style="text-align: left;width:300px;">
 						<button>提 交</button> <button @click.prevent="closePopup($event);return false;">关 闭</button>
 					</dd>
 				</dl>
@@ -98,8 +98,7 @@
 				</dl>
 				<dl>
 					<dt></dt>
-					<dd>
-						<br />
+					<dd class="aj-btnsHolder" style="text-align: left;width:300px;"d>
 						<button>提 交</button> <button @click.prevent="closePopup($event);return false;">关 闭</button>
 					</dd>
 				</dl>
@@ -128,8 +127,7 @@
 				</dl>
 				<dl>
 					<dt></dt>
-					<dd>
-						<br />
+					<dd class="aj-btnsHolder" style="text-align: left;width:300px;">
 						<button>提 交</button>  <button @click.prevent="closePopup($event);">关 闭</button>
 					</dd>
 				</dl>
@@ -172,8 +170,7 @@
 				</dl>
 				<dl>
 					<dt></dt>
-					<dd>
-						<br />
+					<dd class="aj-btnsHolder" style="text-align: left;width:300px;">
 						<button>提 交</button> <button @click.prevent="closePopup($event);">返 回</button>
 					</dd>
 				</dl>
@@ -207,8 +204,7 @@
 				</dl>
 				<dl>
 					<dt></dt>
-					<dd>
-						<br />
+					<dd class="aj-btnsHolder" style="text-align: left;width:300px;">
 						<button>确 定</button> <button @click.prevent="closePopup($event);">返 回</button>
 					</dd>
 				</dl>

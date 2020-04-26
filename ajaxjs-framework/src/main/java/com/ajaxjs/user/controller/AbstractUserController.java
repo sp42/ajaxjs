@@ -50,7 +50,7 @@ public abstract class AbstractUserController extends BaseUserController {
 
 		return jsp("user/login");
 	}
-	
+
 	@GET
 	@Path("isLogin")
 	public String isLogin() {
@@ -62,7 +62,8 @@ public abstract class AbstractUserController extends BaseUserController {
 	@Path("login")
 	@MvcFilter(filters = { CaptchaFilter.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
-	public String loginByPassword(@NotNull @QueryParam("userID") String userID, @NotNull @QueryParam("password") String password, HttpServletRequest req) throws ServiceException {
+	public String loginByPassword(@NotNull @QueryParam("userID") String userID,
+			@NotNull @QueryParam("password") String password, HttpServletRequest req) throws ServiceException {
 		LOGGER.info("执行登录（按密码的）");
 		if (isLogined())
 			return jsonNoOk("你已经登录，无须重复登录！");
@@ -80,7 +81,7 @@ public abstract class AbstractUserController extends BaseUserController {
 
 			String msg = user.getName() == null ? user.getPhone() : user.getName();
 
-			return jsonOk("用户 " + msg + "登录成功！欢迎回来！ <a href=\"" + req.getContextPath() + "/user/user-center/\">点击进入“用户中心”</a>。");
+			return jsonOk("用户 " + msg + "登录成功！欢迎回来！ <a href=\"" + req.getContextPath() + "/user/\">点击进入“用户中心”</a>。");
 		} else {
 			return jsonNoOk("登录失败！");
 		}
@@ -102,8 +103,6 @@ public abstract class AbstractUserController extends BaseUserController {
 		return jsonOk("退出成功！");
 	}
 
-	
-
 	public abstract BiConsumer<User, HttpServletRequest> getAfterLoginCB();
 
 	@GET
@@ -118,12 +117,14 @@ public abstract class AbstractUserController extends BaseUserController {
 	@Path("register")
 	@MvcFilter(filters = { DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
-	public String doRegister(User user, @NotNull @QueryParam("password") String password, Map<String, Object> map) throws ServiceException {
+	public String doRegister(User user, @NotNull @QueryParam("password") String password, Map<String, Object> map)
+			throws ServiceException {
 		LOGGER.info("正在注册");
 
 		if (ConfigService.getValueAsString("user.customRegister") != null) {
 			String[] arr = ConfigService.getValueAsString("user.customRegister").split("#");
-			Method method = ReflectUtil.getMethod(ReflectUtil.getClassByName(arr[0]), arr[1], Map.class, AbstractUserController.class);
+			Method method = ReflectUtil.getMethod(ReflectUtil.getClassByName(arr[0]), arr[1], Map.class,
+					AbstractUserController.class);
 
 			try {
 				return (String) method.invoke(null, map, this);
@@ -137,11 +138,12 @@ public abstract class AbstractUserController extends BaseUserController {
 			return jsonOk("恭喜你，注册成功");
 		}
 	}
-	
-	public static Object ioc(String config, BiFunction<Class<?>, String, Method> getMethod, Function<Method, Object> execute) throws ServiceException {
+
+	public static Object ioc(String config, BiFunction<Class<?>, String, Method> getMethod,
+			Function<Method, Object> execute) throws ServiceException {
 		String[] arr = ConfigService.getValueAsString(config).split("#");
 		Method method = getMethod.apply(ReflectUtil.getClassByName(arr[0]), arr[1]);
-		
+
 		try {
 			return execute.apply(method);
 		} catch (Throwable e) {

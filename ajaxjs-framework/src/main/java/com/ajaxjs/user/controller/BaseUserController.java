@@ -131,4 +131,8 @@ public abstract class BaseUserController extends BaseController<User> {
 
 		return user;
 	}
+	
+	String user(String jsp) {
+		return jsp("user/" + jsp);
+	}
 }

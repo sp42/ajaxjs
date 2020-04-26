@@ -119,6 +119,7 @@
 			</ul>
 		</fieldset>		
 </c:if>		
+
 <c:if test="${ConfigService.getValueAsBool('domain.article.neighborRecord')}">
 		<!-- 相邻记录 -->
 		<div class="neighborRecord">
