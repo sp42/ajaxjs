@@ -30,20 +30,8 @@
 	</jsp-config>
 	<!-- // -->
 
-	<!-- 显示信息用-->
-<!-- 	<servlet>
-		<servlet-name>showMsg</servlet-name>
-		<jsp-file>/WEB-INF/jsp/msg.jsp</jsp-file>
-	</servlet>
-	
-	<servlet-mapping>
-		<servlet-name>showMsg</servlet-name>
-		<url-pattern>/showMsg</url-pattern>
-	</servlet-mapping> -->
-	<!-- // -->
-	
 	<!-- under_construction-->
-	<servlet>
+<!-- 	<servlet>
 		<servlet-name>under_construction</servlet-name>
 		<jsp-file>/WEB-INF/jsp/under_construction.jsp</jsp-file>
 	</servlet>
@@ -51,6 +39,6 @@
 	<servlet-mapping>
 		<servlet-name>under_construction</servlet-name>
 		<url-pattern>/under_construction</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping> -->
 	<!-- // -->
 </web-fragment>
