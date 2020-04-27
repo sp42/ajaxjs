@@ -46,14 +46,16 @@ public class RequestParam {
 
 	/**
 	 * 对控制器的方法进行分析，看需要哪些参数。将得到的参数签名和请求过来的参数相匹配，再传入到方法中去执行。
-	 * @param controller 
 	 * 
-	 * @param request 	请求对象
-	 * @param response	响应对象
-	 * @param method 	控制器方法对象
+	 * @param controller
+	 * 
+	 * @param request    请求对象
+	 * @param response   响应对象
+	 * @param method     控制器方法对象
 	 * @return 参数列表
 	 */
-	public static Object[] getArgs(IController controller, MvcRequest request, HttpServletResponse response, Method method) {
+	public static Object[] getArgs(IController controller, MvcRequest request, HttpServletResponse response,
+			Method method) {
 		Annotation[][] annotation = method.getParameterAnnotations(); // 方法所有的注解，length 应该要和参数总数一样
 		Class<?>[] parmTypes = method.getParameterTypes();// 反射得到参数列表的各个类型，遍历之
 		ArrayList<Object> args = new ArrayList<>();// 参数列表
@@ -68,7 +70,7 @@ public class RequestParam {
 				args.add(response);
 			} else if (clazz.equals(HttpSession.class)) {
 				args.add(request.getSession());
-			}else if (clazz.equals(Map.class)) { // map 参数，将请求参数转为 map
+			} else if (clazz.equals(Map.class)) { // map 参数，将请求参数转为 map
 				Map<String, Object> map;
 
 				if (request.getMethod() != null && request.getMethod().equals("PUT")) {
@@ -97,37 +99,42 @@ public class RequestParam {
 	/**
 	 * 根据注解和类型从 request 中取去参数值。 参数名字与 QueryParam 一致 或者 PathParam
 	 * 
-	 * @param clz 			参数类型
-	 * @param annotations 	参数的注解
-	 * @param request 		请求对象
-	 * @param args 			参数列表
-	 * @param method 		控制器方法对象
-	 * @param controller 
+	 * @param clz         参数类型
+	 * @param annotations 参数的注解
+	 * @param request     请求对象
+	 * @param args        参数列表
+	 * @param method      控制器方法对象
+	 * @param controller
 	 */
-	private static void getArgValue(Class<?> clz, Annotation[] annotations, MvcRequest request, ArrayList<Object> args, Method method, IController controller) {
+	private static void getArgValue(Class<?> clz, Annotation[] annotations, MvcRequest request, ArrayList<Object> args,
+			Method method, IController controller) {
 		if (annotations.length > 0) {
-			boolean required = false; 	// 是否必填字段
+			boolean required = false; // 是否必填字段
 			String defaultValue = null; // 默认值
 
 			for (Annotation a : annotations) {
 				if (a instanceof NotNull)
 					required = true;
-				
-				if (a instanceof DefaultValue) 
-					defaultValue = ((DefaultValue)a).value();
-			
 
-				if (a instanceof QueryParam || a instanceof FormParam || a instanceof HeaderParam) { // 找到匹配的参数，这是说控制器上的方法是期望得到一个 url query string
+				if (a instanceof DefaultValue)
+					defaultValue = ((DefaultValue) a).value();
+
+				if (a instanceof QueryParam || a instanceof FormParam || a instanceof HeaderParam) { // 找到匹配的参数，这是说控制器上的方法是期望得到一个
+																										// url query
+																										// string
 					// 参数的
-					getArgValue(clz, args, getArgValue(a, request, required), defaultValue); // 根据注解的名字，获取 QueryParam 参数实际值，此时是 String  类型，要转为到控制器方法期望的类型。
+					getArgValue(clz, args, getArgValue(a, request, required), defaultValue); // 根据注解的名字，获取 QueryParam
+																								// 参数实际值，此时是 String
+																								// 类型，要转为到控制器方法期望的类型。
 
 					break; // 只需要执行一次，参见调用的那个方法就知道了
 				} else if (a instanceof PathParam) { // URL 上面的参数
 					Path path = method.getAnnotation(Path.class);
-					
+
 					if (path != null) {
 						String paramName = ((PathParam) a).value();
-						String value = request.getValueFromPath(parseRoot(path, controller.getClass()), paramName);
+						String value = request.getValueFromPath(
+								parseRoot(path, controller == null ? null : controller.getClass()), paramName);
 						getArgValue2(clz, args, value);
 					} else {
 						LOGGER.warning(new NullPointerException("控制器方法居然没有 PathParam 注解？？"));
@@ -141,15 +148,23 @@ public class RequestParam {
 		}
 	}
 
-	private static String parseRoot(Path path, Class<? extends IController> clz){
+	/**
+	 * 
+	 * @param path
+	 * @param clz
+	 * @return
+	 */
+	private static String parseRoot(Path path, Class<? extends IController> clz) {
 		String pathValue = path.value();
-		if (pathValue.contains("{root}")) { // 顶部路径
+
+		if (clz != null && pathValue.contains("{root}")) { // 顶部路径
 			String topPath = ControllerScanner.getRootPath(clz);
 			pathValue = pathValue.replaceAll("\\{root\\}", topPath);
-		} 
-			
+		}
+
 		return pathValue;
 	}
+
 	/**
 	 * 
 	 * @param a
@@ -166,7 +181,7 @@ public class RequestParam {
 		} else if (a instanceof HeaderParam) {
 			key = ((HeaderParam) a).value();
 		}
-		
+
 		value = a instanceof HeaderParam ? request.getHeader(key) : request.getParameter(key);
 
 		if (required && value == null)
@@ -181,10 +196,10 @@ public class RequestParam {
 	/**
 	 * 开始转换为控制器方法上的类型，支持 String、int/Integer、boolean/Boolean
 	 * 
-	 * @param clz			方法目标类型
-	 * @param args			保存转换后值的列表容器
-	 * @param value			请求过来的原始值，都是字符串
-	 * @param defaultValue	默认值
+	 * @param clz          方法目标类型
+	 * @param args         保存转换后值的列表容器
+	 * @param value        请求过来的原始值，都是字符串
+	 * @param defaultValue 默认值
 	 */
 	private static void getArgValue(Class<?> clz, ArrayList<Object> args, String value, String defaultValue) {
 		if (clz == String.class) {
@@ -192,12 +207,12 @@ public class RequestParam {
 		} else if (clz == int.class || clz == Integer.class) {
 			boolean isNull = value == null || "".equals(value) || "null".equals(value);
 			int v = 0;
-			
-			if(isNull && defaultValue != null)
-				v =  Integer.parseInt(defaultValue);
-			else if(!isNull)
+
+			if (isNull && defaultValue != null)
+				v = Integer.parseInt(defaultValue);
+			else if (!isNull)
 				v = Integer.parseInt(value);
-		
+
 			args.add(v);
 		} else if (clz == long.class || clz == Long.class) {
 			args.add(value == null || "".equals(value) ? 0L : (Long.parseLong(value)));
