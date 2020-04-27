@@ -34,8 +34,8 @@
 		</dependency>
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
-			<artifactId>ajaxjs-cms</artifactId>
-			<version>1.0.4</version>
+			<artifactId>ajaxjs-framework</artifactId>
+			<version>1.0.2</version>
 		</dependency>
 	</dependencies>
 </project>
