@@ -14,9 +14,9 @@
 
 // -webkit-text-stroke: 1px rgba(255,255,255,0.5);
 .aj-btn, .ajaxjs-btn, .ajaxjs-btn-1 {
-	min-height: 28px;
+	min-height: 32px;
 	font-size: .8rem;
-	line-height: 18px;
+	line-height: 100%;
 	padding: .4em 2.3em;
 	margin: 10px auto;
 	color: #333;
@@ -169,134 +169,89 @@
 		dd {
 			float: left;
 			max-width:70%;
-			
-			input {
-				height: 36px;
+		}
+	}
+
+	input[type=text] , input[type=password] , textarea,input[type=time],input[type=url],input[type=week],
+	input[type=date],input[type=datetime-local],input[type=datetime],input[type=email],input[type=month],input[type=number],
+	input[type=range],input[type=search],input[type=tel],  {
+		font-size: .9rem;
+		box-sizing: border-box;
+	    padding: 8px 12px;
+	    border: 1px solid lightgray;
+	    background-color: #fff;
+	    border-radius: 4px;
+	    
+		&:focus {
+			border-color: gray;
+			//background-color: #e9e9e9;
+			outline:0;
+			box-shadow:0 5px 32px rgba(103,122,141,.17)
+		}
+	}
+
+	input[type=submit] , input[type=file] {
+		cursor: pointer;
+	}
+
+	input[type="checkbox"] , input[type="radio"], label {
+		vertical-align: middle;
+	}
+	
+	select {
+		.ajaxjs-select;
+	}
+	
+	.aj-china-area select {
+		width: 150px;
+	}
+
+	&.btns{
+		text-align:center;
+		width:100%;
+	}
+	
+	.tips , .state {
+		display: none;
+		margin-left: 10px;
+		border: 1px solid gray;
+		padding: 3px 3px;
+		position: relative;
+		strong {
+			border-style: solid;
+			height: 0;
+			line-height: 0;
+			width: 0;
+			font-size: 0;
+			position: absolute;
+			border-width: 5px;
+			&.arrow_1 {
+				left: -11px;
+				top: 7px;
+				border-color: white gray white white;
 			}
 
-			input[type=text] , input[type=password] , textarea,input[type=time],input[type=url],input[type=week],
-			input[type=date],input[type=datetime-local],input[type=datetime],input[type=email],input[type=month],input[type=number],
-			input[type=range],input[type=search],input[type=tel],  {
-				font-size: .9rem;
-				box-sizing: border-box;
-			    padding: 8px 12px;
-			    border: 1px solid lightgray;
-			    background-color: #fff;
-			    border-radius: 4px;
-			    
-				&:focus {
-					border-color: gray;
-					//background-color: #e9e9e9;
-					outline:0;
-					box-shadow:0 5px 32px rgba(103,122,141,.17)
-				}
-			}
-		
-			input[type=submit] , input[type=file] {
-				cursor: pointer;
-			}
-
-			input[type="checkbox"] , input[type="radio"], label {
-				vertical-align: middle;
-			}
-			
-			select {
-				.ajaxjs-select;
-			}
-			
-			.aj-china-area select {
-				width: 150px;
-			}
-
-			&.btns{
-				text-align:center;
-				width:100%;
-			}
-			
-			.tips , .state {
-				display: none;
-				margin-left: 10px;
-				border: 1px solid gray;
-				padding: 3px 3px;
-				position: relative;
-				strong {
-					border-style: solid;
-					height: 0;
-					line-height: 0;
-					width: 0;
-					font-size: 0;
-					position: absolute;
-					border-width: 5px;
-					&.arrow_1 {
-						left: -11px;
-						top: 7px;
-						border-color: white gray white white;
-					}
-
-					&.arrow_2 {
-						left: -9px;
-						top: 7px;
-						border-color: transparent white transparent transparent;
-					}
-				}
-			}
-
-			.state {
-				color: red;
-				font-weight: bold;
-			}
-
-			.errHighlight {
-				border-color: red ! important;
-				color: red;
+			&.arrow_2 {
+				left: -9px;
+				top: 7px;
+				border-color: transparent white transparent transparent;
 			}
 		}
+	}
+
+	.state {
+		color: red;
+		font-weight: bold;
+	}
+
+	.errHighlight {
+		border-color: red ! important;
+		color: red;
 	}
 	
 	input[type=submit] , button {
-		min-width: 120px;
-    	max-height: 40px;
-    	font-size: .95rem;
-	    font-weight: bold;
-	    letter-spacing: 2px;
-	    color: #333;
-		padding: 10px 20px;
-	    cursor: pointer;
-	    text-align: center;
-	    white-space: nowrap;
-	    border-radius: 4px;
-	    border: 1px solid #ccc;
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-		text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
-		background-color: lightgray;
-		background-repeat: repeat-x;
-		transition: background-image 0.5s linear 1s;
-		.gradient (top , rgba(255, 255, 255, 1) 0% , rgba(239, 239, 239, 1) 60% , rgba(225, 223, 226, 1) 100%);
-	
-		img {
-			vertical-align: middle;
-		}
-	
-		&:hover {
-			color: black;
-			border-color: lighten(black, 65%);
-		}
-	
-		&:active {
-			box-shadow: inset 0 3px 5px rgba(0, 0, 0, .2);
-			border-color: lighten(black, 55%);
-		}
-	
-		&:focus {
-			border-color: lighten(black, 60%);
-		}
-	
-		&:hover {
-			background-position: 0px -10px;
-		}
-    
+		.aj-btn;
 	}
-	
     
 	.error {
     	border-color: red!important;
@@ -381,10 +336,7 @@
 	}
 	
 	.ajaxjs-admin-info-btns {
-		text-align: center;
-		button {
-			.ajaxjs-btn;
-		}
+		.aj-btnsHolder;
 	}
 }
 
