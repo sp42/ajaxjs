@@ -30,7 +30,7 @@ td {
 </head>
 <body class="admin-entry-form">
 	<div>
-		<ajaxjs-admin-header> <template slot="title">备份</span></template>
+		<ajaxjs-admin-header> <template slot="title">备份</template>
 		</ajaxjs-admin-header>
 	</div>
 	<a href="#" download id="downLink"></a>

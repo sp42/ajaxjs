@@ -12,7 +12,7 @@
 	<div class="panel">
 		<!-- 后台头部导航 -->
 		<ajaxjs-admin-header>
-			<template slot="title">${uiName}一览：<span>你可以在这里添加、修改、删除${uiName}</template>
+			<template slot="title">${uiName}一览：<span>你可以在这里添加、修改、删除${uiName}</span></template>
 		</ajaxjs-admin-header>
 
 		<form class="createTopNode" action="." method="post">
