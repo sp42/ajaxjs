@@ -12,7 +12,7 @@
 	if("footer".equals(jspContext.getAttribute("type"))) {
 		if (request.getAttribute("requestTimeRecorder") != null) {
 			long requestTimeRecorder = (long) request.getAttribute("requestTimeRecorder");
-			long end = System.nanoTime() - requestTimeRecorder;
+			long end = System.currentTimeMillis() - requestTimeRecorder;
 			float _end = (float) end;
 			request.setAttribute("requestTimeRecorder", _end / 1000);
 		}
@@ -30,22 +30,22 @@
 		</div>
 	
 		<div class="copyright">
-		<div>
-			<div class="right">
-<%-- 				<a href="#"> <img src="${commonAsset}/images/gs.png" height="40" /></a> 
-				<a href="#"> <img src="${commonAsset}/images/kexin.png" hspace="20" width="90" style="margin-top: 15px;" /></a>  --%>
-				<a href="#"> <img src="${commonAsset}/images/360logo.gif" width="90" style="margin-top: 15px;" /></a> 
-			</div>
-			<a href="javascript:;" onclick="toSimpleChinese(this);" class="simpleChinese selected">简体中文</a> / <a href="javascript:;" class="Chinese" onclick="toChinese(this);">正体中文</a>
-			<script src="${ajaxjs_ui_output}/lib/Chinese.js"></script>
-			<br /> 
+			<div>
+				<div class="right">
+	<%-- 				<a href="#"> <img src="${commonAsset}/images/gs.png" height="40" /></a> 
+					<a href="#"> <img src="${commonAsset}/images/kexin.png" hspace="20" width="90" style="margin-top: 15px;" /></a>  --%>
+					<a href="#"> <img src="${commonAsset}/images/360logo.gif" width="90" style="margin-top: 15px;" /></a> 
+				</div>
+				<a href="javascript:;" onclick="toSimpleChinese(this);" class="simpleChinese selected">简体中文</a> / <a href="javascript:;" class="Chinese" onclick="toChinese(this);">正体中文</a>
+				<script src="${ajaxjs_ui_output}/lib/Chinese.js"></script>
+				<br /> 
+				
+				<a target="_blank" href="http://beian.miit.gov.cn">${empty aj_allConfig.site.site_icp ? '粤ICP备15007080号-2' : aj_allConfig.site.site_icp}</a>
+				<!-- Powered by <a target="_blank" href="http://framework.ajaxjs.com">AJAXJS</a> -->
+				<br />
 			
-			${empty aj_allConfig.site.site_icp ? '粤ICP备15007080号-2' : aj_allConfig.site.site_icp}
-			Powered by <a target="_blank" href="http://framework.ajaxjs.com">AJAXJS</a>
-			<br />
-		
-			©Copyright ${FOOTER_YEAR} 版权所有， ${aj_allConfig.clientFullName} &nbsp; ${empty requestTimeRecorder ? '' : '请求完成耗时：'.concat(requestTimeRecorder).concat('秒') }
-		</div>
+				©Copyright ${FOOTER_YEAR} 版权所有， ${aj_allConfig.clientFullName} &nbsp; ${empty requestTimeRecorder ? '' : '请求完成耗时：'.concat(requestTimeRecorder).concat('秒') }
+			</div>
 		</div>
 	</footer>
 <%}%>

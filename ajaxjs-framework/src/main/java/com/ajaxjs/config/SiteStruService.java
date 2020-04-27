@@ -294,9 +294,9 @@ public class SiteStruService implements ServletContextListener {
 		return request.getRequestURI().replace(request.getContextPath(), "").replaceFirst("/\\w+\\.\\w+$", "");
 	}
 
-	private static String table = "<table class=\"siteMap\"><tr><td>%s</td></tr></table>",
-			a = "<a href=\"%s\" class=\"indentBlock_%s\"><span class=\"dot\">·</span>%s</a>\n ",
-			newCol = "\n\t</td>\n\t<td>\n\t\t";
+	private static String TABLE = "<table class=\"siteMap\"><tr><td>%s</td></tr></table>",
+			A_LINK = "<a href=\"%s/\" class=\"indentBlock_%s\"><span class=\"dot\">·</span>%s</a>\n ",
+			NEW_COL = "\n\t</td>\n\t<td>\n\t\t";
 
 	private String siteMapCache;
 
@@ -323,7 +323,7 @@ public class SiteStruService implements ServletContextListener {
 		StringBuilder sb = new StringBuilder();
 		getSiteMap(list, sb, contextPath);
 
-		return String.format(table, sb.toString());
+		return String.format(TABLE, sb.toString());
 	}
 
 	/**
@@ -342,9 +342,9 @@ public class SiteStruService implements ServletContextListener {
 					continue;
 				
 				if (0 == (int) map.get(ListMap.LEVEL)) // 新的一列
-					sb.append(newCol);
+					sb.append(NEW_COL);
 				
-				sb.append(String.format(a, contextPath + map.get(ListMap.PATH).toString(),
+				sb.append(String.format(A_LINK, contextPath + map.get(ListMap.PATH).toString(),
 						map.get(ListMap.LEVEL).toString(), map.get("name").toString()));
 
 				if (map.get(ListMap.CHILDREN) != null && map.get(ListMap.CHILDREN) instanceof List)

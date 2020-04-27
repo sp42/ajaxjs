@@ -83,7 +83,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 	public String profile(ModelAndView mv) {
 		LOGGER.info("用户会员中心-个人信息");
 		mv.put("info", service.findById(getUserId()));
-		return jsp("user/user-center/profile");
+		return user("profile");
 	}
 
 	@PUT
