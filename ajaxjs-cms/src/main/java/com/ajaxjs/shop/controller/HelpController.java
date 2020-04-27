@@ -24,7 +24,7 @@ import com.ajaxjs.util.logger.LogHelper;
  * 控制器
  */
 @Bean
-@Path("/help")
+@Path("/wine/help")
 public class HelpController extends BaseController<Map<String, Object>> {
 	private static final LogHelper LOGGER = LogHelper.getLog(HelpController.class);
 
