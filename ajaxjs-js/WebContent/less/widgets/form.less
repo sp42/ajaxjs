@@ -1,0 +1,444 @@
+@import 'form/html-editor.less';
+@import 'form/calendar.less';
+
+// 禁止控件
+.ajaxjs-disable {
+	cursor: not-allowed;
+	opacity: .35;
+	box-shadow: none;
+	background-image: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+}
+
+// -webkit-text-stroke: 1px rgba(255,255,255,0.5);
+.aj-btn, .ajaxjs-btn, .ajaxjs-btn-1 {
+	min-height: 32px;
+	font-size: .8rem;
+	line-height: 100%;
+	padding: .4em 2.3em;
+	margin: 10px auto;
+	color: #333;
+	letter-spacing: .3em;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+	border-bottom-color: #B4B4B4;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+	background-color: lightgray;
+	background-repeat: repeat-x;
+	transition: background-image 0.5s linear 1s;
+	.gradient (top , rgba(255, 255, 255, 1) 0% , rgba(239, 239, 239, 1) 60% , rgba(225, 223, 226, 1) 100%);
+	
+	img {
+		vertical-align: middle;
+	}
+
+	&:hover {
+		color: black;
+		border-color: lighten(black, 65%);
+	}
+
+	&:active {
+		box-shadow: inset 0 3px 5px rgba(0, 0, 0, .2);
+		border-color: lighten(black, 55%);
+	}
+
+	&:focus {
+		border-color: lighten(black, 60%);
+	}
+
+	&:hover {
+		background-position: 0px -10px;
+	}
+}
+
+.ajaxjs-btn-1 {
+	background-position: 0px -15px;
+	transition: all 200ms linear 300ms;
+	&:hover {
+		background-position: 0px -12px;
+	}
+}
+
+.aj-input, .ajaxjs-input , .ajaxjs-inputField {
+	min-height: 26px;
+	padding: 4px;
+	box-shadow: 1px 2px 3px lighten(#999, 30) inset;
+	border-radius: 3px;
+	border: 1px solid #abadb3;
+	box-sizing: border-box;
+	vertical-align: middle;
+	color: #333;
+	font-size: .9rem;
+	letter-spacing: 1px;
+	transition: border-color ease-in-out 200ms;
+	&:hover, &:focus {
+		border-color: lighten(black, 45);
+	}
+}
+
+.aj-select, .ajaxjs-select {
+	min-height: 26px;
+	padding: 1px 4px;
+	box-shadow: 1px 2px 3px #e5e5e5 inset;
+	border-radius: 2px;
+	border: 1px solid #abadb3;
+	font-size: .9rem;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	background: url("data:image/gif;base64,R0lGODlhCwAGAIABAGBgYP///yH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjAgNjEuMTM0MzQyLCAyMDEwLzAxLzEwLTE4OjA2OjQzICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjc1MEE0M0UzRTU5RDExRTVBNjNDRDVBNzRBRkUxMjYxIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjc1MEE0M0U0RTU5RDExRTVBNjNDRDVBNzRBRkUxMjYxIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NzUwQTQzRTFFNTlEMTFFNUE2M0NENUE3NEFGRTEyNjEiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NzUwQTQzRTJFNTlEMTFFNUE2M0NENUE3NEFGRTEyNjEiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4B//79/Pv6+fj39vX08/Lx8O/u7ezr6uno5+bl5OPi4eDf3t3c29rZ2NfW1dTT0tHQz87NzMvKycjHxsXEw8LBwL++vby7urm4t7a1tLOysbCvrq2sq6qpqKempaSjoqGgn56dnJuamZiXlpWUk5KRkI+OjYyLiomIh4aFhIOCgYB/fn18e3p5eHd2dXRzcnFwb25tbGtqaWhnZmVkY2JhYF9eXVxbWllYV1ZVVFNSUVBPTk1MS0pJSEdGRURDQkFAPz49PDs6OTg3NjU0MzIxMC8uLSwrKikoJyYlJCMiISAfHh0cGxoZGBcWFRQTEhEQDw4NDAsKCQgHBgUEAwIBAAAh+QQBAAABACwAAAAACwAGAAACD0R+hqDB6B5radL1ILynAAA7") no-repeat right;
+	background-color: white;
+	&:hover , &:focus {
+		border-color: lighten(black, 45);
+	}
+}
+
+// 多选列表框的边框
+.ajaxjs-select[multiple] {
+	border: 1px solid #abadb3;
+	padding: 2px;
+	&:hover , &:focus {
+		border-color: lighten(black, 45);
+	}
+}
+
+
+.form-1 {
+	input[type=text] , input[type=password] , textarea {
+		.ajaxjs-inputField;
+	}
+
+	input[type=submit] , button {
+		.ajaxjs-btn;
+	}
+}
+
+.aj-page-captcha {
+	input {
+		width: 80%;
+	}
+
+	img {
+		cursor: pointer;
+		margin-left: 2%;
+		height: 26px;
+		width: 60px;
+		vertical-align: middle;
+	}
+}
+
+
+
+.aj-form, .ajaxjs-form {
+	margin: 5% auto;
+	max-width: 82%;
+	min-width: 400px;
+	overflow: hidden;
+	
+	@media screen and (max-width: 480px) {
+		dt {
+			width: 40% ! important;
+			float: initial ! important;
+		}
+	}
+	&.fixed-width {
+		width:460px;
+	}
+	dl {
+		float: left;
+		overflow: hidden;
+		box-sizing: border-box;
+		padding: 0 3%;
+		line-height: 36px;
+		width: 100%;
+		margin: 1em 0;
+		dt {
+			min-width: 110px;
+			max-width:30%;
+			float: left;
+			text-align: right;
+			box-sizing: border-box;
+			padding-right: 4%;
+			font-weight: bold;
+			letter-spacing: 1px;
+			min-height: 10px;
+		}
+
+		dd {
+			float: left;
+			max-width:70%;
+		}
+	}
+
+	input[type=text] , input[type=password] , textarea,input[type=time],input[type=url],input[type=week],
+	input[type=date],input[type=datetime-local],input[type=datetime],input[type=email],input[type=month],input[type=number],
+	input[type=range],input[type=search],input[type=tel],  {
+		font-size: .9rem;
+		box-sizing: border-box;
+	    padding: 8px 12px;
+	    border: 1px solid lightgray;
+	    background-color: #fff;
+	    border-radius: 4px;
+	    
+		&:focus {
+			border-color: gray;
+			//background-color: #e9e9e9;
+			outline:0;
+			box-shadow:0 5px 32px rgba(103,122,141,.17)
+		}
+	}
+
+	input[type=submit] , input[type=file] {
+		cursor: pointer;
+	}
+
+	input[type="checkbox"] , input[type="radio"], label {
+		vertical-align: middle;
+	}
+	
+	select {
+		.ajaxjs-select;
+	}
+	
+	.aj-china-area select {
+		width: 150px;
+	}
+
+	&.btns{
+		text-align:center;
+		width:100%;
+	}
+	
+	.tips , .state {
+		display: none;
+		margin-left: 10px;
+		border: 1px solid gray;
+		padding: 3px 3px;
+		position: relative;
+		strong {
+			border-style: solid;
+			height: 0;
+			line-height: 0;
+			width: 0;
+			font-size: 0;
+			position: absolute;
+			border-width: 5px;
+			&.arrow_1 {
+				left: -11px;
+				top: 7px;
+				border-color: white gray white white;
+			}
+
+			&.arrow_2 {
+				left: -9px;
+				top: 7px;
+				border-color: transparent white transparent transparent;
+			}
+		}
+	}
+
+	.state {
+		color: red;
+		font-weight: bold;
+	}
+
+	.errHighlight {
+		border-color: red ! important;
+		color: red;
+	}
+	
+	input[type=submit] , button {
+		.aj-btn;
+	}
+    
+	.error {
+    	border-color: red!important;
+	}
+	
+	.error-message {
+	    color: red;
+	}
+}
+
+.user-form input[type=text] , .user-form input[type=password] , .user-form textarea {
+	border-radius: 0 ! important;
+	padding: 8px 5px ! important;
+	&:focus {
+		border-color: @mainColor ! important;
+	}
+}
+
+.admin-entry-form {
+	& > form {
+		margin: 0 5%;
+		border: 1px solid #e3e3e3;
+		overflow: hidden;
+		& > div {
+			padding: 1% 2%;
+			border-bottom: 1px solid #e3e3e3;
+			&:last-child {
+				border-bottom: 0;
+			}
+		}
+
+		& > div:nth-child(even) {
+			border-top: 1px solid white;
+			background: #f5f5f5;
+		}
+
+		div.label {
+			display: inline-block;
+			min-width: 70px;
+			text-align: center;
+		}
+
+		input[type=text], input[type=email], input[type=number], textarea {
+			.ajaxjs-inputField;
+		}
+
+		textarea {
+			min-height: 90px;
+		}
+
+		.htmlEditor {
+			width: 90%;
+			margin: 0 auto;
+			display: inline-block;
+		}
+	}
+
+	.sub, .sub-2  {
+		color: gray;
+		font-size:.9rem;
+		transition: color linear 300ms;
+	}
+
+ 	.sub{
+		margin: 1% 0 0 15%;
+ 	}
+	
+	.sub-2{
+		display:inline-block;
+	}
+	
+	form>div:hover .sub, form>div:hover .sub-2 {
+		color: black;
+	}
+	
+	.buttons {
+		text-align: center;
+	}
+	.error-message {
+		padding-left:1%;
+		color:red;
+	}
+	
+	.ajaxjs-admin-info-btns {
+		.aj-btnsHolder;
+	}
+}
+
+
+.aj-json-form {
+	form {
+		margin:2% auto;
+		width:80%;
+		border: 1px solid #e3e3e3;
+		overflow: hidden;
+		
+		& > div {
+			padding: 1% 2%;
+			border-bottom: 1px solid #e3e3e3;
+			width:100%;
+			&:last-child {
+				border-bottom: 0;
+			}
+			
+			& > div{
+				display: inline-block;
+				
+				.sub  {
+					color: gray;
+					font-size:.8rem;
+					transition: color linear 300ms;
+					margin: 1% 0 0 0;
+				}
+
+				&:hover .sub {
+					color: black;
+				}
+			}
+			div.label {
+				display: inline-block;
+				width: 30%;
+				text-align: center;
+			}
+			div.input {
+				display: inline-block;
+				width: 68%;
+				vertical-align: middle;
+			}
+		}
+
+		& > div:nth-child(even) {
+			border-top: 1px solid white;
+			background: #f5f5f5;
+		}
+
+
+		input[type=text], input[type=email], input[type=number], textarea {
+			.ajaxjs-inputField;
+		}
+		
+		select{
+			.aj-select;
+			min-width: 200px;
+		}
+
+		textarea {
+			min-height: 90px;
+		}
+
+		.htmlEditor {
+			width: 90%;
+			margin: 0 auto;
+			display: inline-block;
+		}
+		.aj-form-html-editor .editorBody iframe, .aj-form-html-editor .editorBody textarea {
+			height:320px;
+		}
+		
+		.aj-form-html-editor ul.toolbar > li {
+			.cleanHTML, .bg-19 {
+			    display: none;
+			}
+		}
+
+		.required-note{
+			color:red;
+		}
+		.label {
+			width: 15%;
+		}
+	
+		input[type=text] , textarea {
+			//width:80%;
+		}
+		
+		&>div{
+			padding:2% 0!important;
+		}
+		
+	}
+}
+
+.aj-btnsHolder{
+	text-align: center;
+	padding:2% 0;
+	button{
+		.ajaxjs-btn;
+		margin-right:3%;
+	}
+}
