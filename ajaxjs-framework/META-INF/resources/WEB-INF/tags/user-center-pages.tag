@@ -12,7 +12,7 @@
 		    width: 60px;
 		}	
 	</style>
-	<form class="aj-form fixed-width" action="${ctx}/user/user-center/profile/" method="put">
+	<form class="aj-form fixed-width" action="${ctx}/user/profile/" method="put">
 		<input type="hidden" name="id" value="${info.id}" />
 		<dl>
 			<label>
@@ -91,7 +91,7 @@
 <c:if test="${type == 'avatar'}">
 	<script src="${ajaxjs_ui_output}/lib/exif.min.js"></script>
 	
-	<form method="put" action="${ctx}/user/user-center/profile/" class="avatar" style="width:400px;margin:0 auto;text-align: center;">
+	<form method="put" action="${ctx}/user/profile/" class="avatar" style="width:400px;margin:0 auto;text-align: center;">
 		<input type="hidden" name="id" value="${userId}" />
 		
 		<aj-xhr-upload action="${ctx}/user/profile/avatar/${userUid}/?id=${userId}" :is-img-upload="true" 
@@ -118,7 +118,7 @@
 		});
 		
 		aj.xhr.form('form.avatar', json => {
-			aj.xhr.get('${ctx}/user/user-center/profile/avatar/updateAvatar/', json=>{
+			aj.xhr.get('${ctx}/user/profile/avatar/updateAvatar/', json=>{
 				aj.msg.show("修改头像成功");
 				aj('.avatar img').src = "${ctx}/" + aj("input[name=avatar]").value;
 				
@@ -134,26 +134,26 @@
 	<ul class="safe">
 		<li>	
 		<c:if test="${aj_allConfig.user.login.canModiflyUserName}">
-			<a href="${ctx}/user/user-center/account/safe/?action=modiflyUserName">修改登录名</a>
+			<a href="${ctx}/user/account/safe/?action=modiflyUserName">修改登录名</a>
 		</c:if>
 			<div class="${empty userName ? 'fail' : 'ok' }">登录名</div>
 			<div>${empty userName ? '未绑定邮箱' : userName} 登录名即用户名</div>
 		</li>
 		<li>	
-			<a href="${ctx}/user/user-center/account/safe/?action=modiflyPhone">更换手机</a>
+			<a href="${ctx}/user/account/safe/?action=modiflyPhone">更换手机</a>
 			<div class="${empty userInfo.phone ? 'fail' : 'ok' }">绑定手机</div><div>${empty userPhone ? '未绑定手机' : userPhone}</div>
 		</li>
 		<li>	
-			<a href="${ctx}/user/user-center/account/safe/?action=modiflyEmail">设置邮箱</a>
+			<a href="${ctx}/user/account/safe/?action=modiflyEmail">设置邮箱</a>
 			<div class="${empty userInfo.email ? 'fail' : 'ok' }">绑定邮箱</div><div>${empty userInfo.email ? '未绑定邮箱' : userInfo.email} 
 				&nbsp;${empty userInfo.email ? '' : (isEmailVerified ? '已验证' :'未验证 &nbsp;<a href="#">点击验证</a>')}</div>
 		</li>
 		<li>	
-			<a href="${ctx}/user/user-center/account/safe/?action=resetPsw">修改密码</a>
+			<a href="${ctx}/user/account/safe/?action=resetPsw">修改密码</a>
 			<div class="ok">设置密码</div><div>已设置</div>
 		</li>
 		<li>	
-			<a href="${ctx}/user/user-center/account/log-history/">查看登录历史</a>
+			<a href="${ctx}/user/account/log-history/">查看登录历史</a>
 			<div style="padding-left:3%;">最近登录</div><div>
 				<c:dateFormatter value="${lastUserLoginedInfo.createDate}"></c:dateFormatter>
 			</div>

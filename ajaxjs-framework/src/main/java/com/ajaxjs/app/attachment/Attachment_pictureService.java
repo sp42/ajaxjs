@@ -60,7 +60,7 @@ public class Attachment_pictureService extends BaseService<Attachment_picture> {
 	 * @return 图片列表
 	 */
 	public List<Attachment_picture> findAttachmentPictureByOwner(Long owner) {
-		return dao.findList(by("owner", owner).andThen(by("catalog", Attachment_pictureService.ATTACHMENT)));
+		return dao.findList(by("owner", owner).andThen(by("catalogId", Attachment_pictureService.ATTACHMENT)));
 	}
 
 	/**

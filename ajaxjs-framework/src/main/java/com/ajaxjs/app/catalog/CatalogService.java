@@ -10,16 +10,16 @@ import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
+import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.util.CommonUtil;
 
 @Bean("CatalogService")
 public class CatalogService extends BaseService<Catalog> {
 	public static CatalogDao dao = new Repository().bind(CatalogDao.class);
- 
+
 	/**
-	 * IN 查询用，多用于分页统计总数
-	 * 用于 catelogId 查询的，通常放在 LEFT JOIN 后面还需要，WHERE e.catelog = c.id。 还需要预留一个
-	 * catelogId 的参数 另外也可以用 IN 查询
+	 * IN 查询用，多用于分页统计总数 用于 catelogId 查询的，通常放在 LEFT JOIN 后面还需要，WHERE e.catelog =
+	 * c.id。 还需要预留一个 catelogId 的参数 另外也可以用 IN 查询
 	 */
 	public final static String CATALOG_FIND = "e.catalogId IN ( " + CatalogDao.PATH_LIKE_MYSQL_ID + ")";
 
@@ -96,7 +96,7 @@ public class CatalogService extends BaseService<Catalog> {
 
 			String path = "";
 
-			if (parent.getPid() != -1) 
+			if (parent.getPid() != -1)
 				path += parent.getPath();
 
 			path += "/" + parent.getId() + "/";
@@ -178,6 +178,11 @@ public class CatalogService extends BaseService<Catalog> {
 
 		return map;
 	}
+
+	public static void getCatalogs(int id, ModelAndView mv, String viewId) {
+		Map<Long, BaseModel> catalogs = list_bean2map_id_as_key(new CatalogService().findByParentId(id));
+		mv.put(viewId, catalogs);
+	};
 
 	/**
 	 * 把列表（Map结构）转换为 map，以 id 作为键值。key 本来是 long，为照顾 el 转换为 int

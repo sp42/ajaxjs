@@ -63,7 +63,7 @@
 				ajaxjs.xhr.form(
 					this.$el, 
 					ajaxjs.xhr.defaultCallBack_cb.delegate(null, null, 
-						j => setTimeout("location.assign('${ctx}/${isAdminLogin ? 'admin' : 'user/user-center'}/')", 3000), j => this.$children[0].refreshCode()) ,
+						j => setTimeout("location.assign('${ctx}/${isAdminLogin ? 'admin' : 'user'}/')", 3000), j => this.$children[0].refreshCode()) ,
 					{
 						beforeSubmit(f, json) {
 							json.password =  md5(json.password);
@@ -287,13 +287,13 @@
 </c:if>
 
 <c:if test="${type == 'onNoLogin'}">
-	<fieldset class="onNoLogin">
+	<fieldset class="aj-fieldset onNoLogin" style="margin:5% auto;max-width:500px;">
 		<legend>尚未登录，没有权限操作 </legend>
-		<p>抱歉，您尚未登录，无法进行下一步操作。请先<a href="${ctx}/user/login/">【登录】</a>，三秒钟之后自动跳转。</p>
+		<p>抱歉，您尚未登录，无法进行下一步操作。<br />请先<a href="${ctx}/user/login/">【登录】</a>，五秒钟之后自动跳转。</p>
 		<script>
 			setTimeout(function() {
 				location.assign("${ctx}/user/login/");
-			}, 3000);
+			}, 5000);
 		</script>
 	</fieldset>
 </c:if>

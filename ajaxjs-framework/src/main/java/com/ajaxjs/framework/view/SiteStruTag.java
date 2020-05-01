@@ -33,8 +33,8 @@ public class SiteStruTag extends SimpleTagSupport {
 	/**
 	 * 列表标签
 	 */
-	private final static String li = "<li%s><a href=\"%s\">%s</a></li>";
-	private final static String liExt = "<li%s><a href=\"%s\">%s</a><ul>%s</ul></li></li>";
+	private final static String LI = "<li%s><a href=\"%s/\">%s</a></li>";
+	private final static String LI_EXT = "<li%s><a href=\"%s/\">%s</a><ul>%s</ul></li></li>";
 
 	@Override
 	public void doTag() throws JspException, IOException {
@@ -103,11 +103,11 @@ public class SiteStruTag extends SimpleTagSupport {
 
 				boolean isSelected = sitestru.isCurrentNode(item, request);
 
-				String url = ctx + "/" + item.get(ListMap.ID) + "/";
+				String url = ctx + "/" + item.get(ListMap.ID);
 				url = addParam(url, item);
 
 				if (_customNavLi == null)
-					sb.append(String.format(li, isSelected ? " class=\"selected\"" : "", url, item.get("name")));
+					sb.append(String.format(LI, isSelected ? " class=\"selected\"" : "", url, item.get("name")));
 				else {
 					String _li = _customNavLi.toString();
 					if (isSelected) {
@@ -130,7 +130,7 @@ public class SiteStruTag extends SimpleTagSupport {
 			}
 		}
 		if (_customNavLi == null) {
-			return String.format(li, !hasSelected ? " class=\"home selected\"" : " class=\"home\"",
+			return String.format(LI, !hasSelected ? " class=\"home selected\"" : " class=\"home\"",
 					"".equals(ctx) ? "/" : ctx, "首页") + sb.toString();
 		} else {
 			String _li = _customNavLi.toString();
@@ -197,7 +197,7 @@ public class SiteStruTag extends SimpleTagSupport {
 			url = addParam(url, item);
 
 			boolean isSelected = sitestru.isCurrentNode(item, request);
-			sb.append(String.format(li, isSelected ? " class=\"selected\"" : "", url, item.get("name")));
+			sb.append(String.format(LI, isSelected ? " class=\"selected\"" : "", url, item.get("name")));
 		}
 
 		return sb.toString();
@@ -234,13 +234,13 @@ public class SiteStruTag extends SimpleTagSupport {
 					if (!CommonUtil.isNull(menu))
 						for (Map<String, Object> m : menu) {
 							String _url = ctx + m.get("fullPath").toString();
-							subMenu.append(String.format(li, "", _url, "» " + m.get("name").toString()));
+							subMenu.append(String.format(LI, "", _url, "» " + m.get("name").toString()));
 						}
 
-					sb.append(String.format(liExt, isSelected ? " class=\"selected\"" : "", url, item.get("name"),
+					sb.append(String.format(LI_EXT, isSelected ? " class=\"selected\"" : "", url, item.get("name"),
 							subMenu.toString()));
 				} else
-					sb.append(String.format(li, isSelected ? " class=\"selected\"" : "", url, item.get("name")));
+					sb.append(String.format(LI, isSelected ? " class=\"selected\"" : "", url, item.get("name")));
 			}
 		}
 
@@ -256,14 +256,14 @@ public class SiteStruTag extends SimpleTagSupport {
 	 */
 	@SuppressWarnings("unchecked")
 	private static String buildBreadCrumb(SiteStruService sitestru, HttpServletRequest request) {
-		String ctx = request.getContextPath();
+		String ctx = request.getContextPath(), uri = request.getRequestURI();
 		StringBuilder sb = new StringBuilder();
 		sb.append(String.format("<nav class=\"anchor\">您的位置 ：<a href=\"%s\">首 页 </a>", ctx));
 		// MVC模式下，url 路径还是按照 JSP 的而不是 Servlet 的，我们希望统一的路径是按照 Servlet 的，故所以这里 Servlet 优先
 
 		Object obj = request.getAttribute("PAGE_Node");
 		if (obj == null) {
-			if (request.getRequestURI().indexOf(ctx + "/index") != -1) { // 重复了 TODO
+			if (uri.equals(request.getContextPath() +"/") || uri.indexOf(ctx + "/index") != -1) { // 重复了 TODO
 				// 首页
 			} else {
 				System.err.println("不能渲染导航定位，该页面可能：1、未引用 head.jsp 创建 NODE 节点；2、未定义该路径之说明。");
@@ -274,7 +274,7 @@ public class SiteStruTag extends SimpleTagSupport {
 		Map<String, Object> node = (Map<String, Object>) obj;
 		String tpl = " » <a href=\"%s\">%s</a>";
 
-		if (node == null && request.getRequestURI().indexOf(ctx + "/index") != -1) {
+		if (node == null && uri.indexOf(ctx + "/index") != -1) {
 
 		} else if (node != null) {
 			if (node.get("supers") != null) {

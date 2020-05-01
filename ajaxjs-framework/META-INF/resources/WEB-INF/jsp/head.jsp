@@ -53,8 +53,8 @@
 <% if(com.ajaxjs.Version.isDebug) { %>
 	<link rel="stylesheet/less" data-global-vars='{"assetFilePath": "\"${empty param.css ? ctx : ''}/asset\"" }' type="text/css" href="${ctx}${empty param.lessFile ? '/asset/less/main.less' : param.lessFile}" />
 
-	<script src="${ajaxjsui}/js/libs/less.min.js"></script>
-    <script src="${ajaxjsui}/js/libs/vue.js"></script>
+	<script src="https://lib.baomitu.com/less.js/3.0.4/less.min.js"></script>
+    <script src="https://lib.baomitu.com/vue/2.6.11/vue.js"></script>
     <script src="${ajaxjsui}/js/ajaxjs-base.js"></script>
     <script src="${ajaxjsui}/js/widgets/admin.js"></script>
     <script src="${ajaxjsui}/js/widgets/form.js"></script>

@@ -24,7 +24,7 @@ import com.ajaxjs.util.map.MapTool;
  *
  */
 @WebListener
-public class MySqlBackup extends TimerTask implements ServletContextListener {
+public class MySqlAutoBackup extends TimerTask implements ServletContextListener {
 	private Map<String, String> dbConfig;
 
 	@Override
@@ -37,12 +37,6 @@ public class MySqlBackup extends TimerTask implements ServletContextListener {
 
 	@Override
 	public void contextDestroyed(ServletContextEvent e) {
-	}
-
-	public static void main(String[] args) {
-//		MySqlBackup m = new MySqlBackup();
-//		Map<String, String> map = MySqlBackup.loadConfig("C:\\project\\register\\WebContent\\META-INF\\context.xml",
-//				"jdbc/mysql_deploy");
 	}
 
 	public void init(String configFile) {

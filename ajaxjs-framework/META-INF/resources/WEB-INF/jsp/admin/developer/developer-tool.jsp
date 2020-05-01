@@ -44,7 +44,7 @@
 <body class="admin-entry-form">
 	<div>
 		<ajaxjs-admin-header> 
-			<template slot="title">实用工具</span></template>
+			<template slot="title">实用工具</template>
 		</ajaxjs-admin-header>
 	</div>
 	

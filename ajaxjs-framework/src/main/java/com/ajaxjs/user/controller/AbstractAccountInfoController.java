@@ -59,15 +59,6 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 		return user("account");
 	}
 
-	@GET
-	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Path("account/safe")
-	@Deprecated
-	public String safe() {
-		LOGGER.info("用户会员中心-帐号管理-帐号安全修改");
-		return jsp("user/user-center/safe");
-	}
-
 	@POST
 	@Path("safe/modiflyUserName")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })

@@ -39,7 +39,7 @@ public interface CatalogDao extends IBaseDao<Catalog> {
 	 * @return
 	 */
 	@Delete(value = "DELETE FROM ${tableName} WHERE id in ( SELECT n.id FROM ("
-			+ "(SELECT id FROM ${tableName} WHERE `path` LIKE ( CONCAT ( (SELECT `path` FROM {tableName} WHERE id = ?) , '%')))) AS n)", 
+			+ "(SELECT id FROM ${tableName} WHERE `path` LIKE ( CONCAT ( (SELECT `path` FROM general_catalog WHERE id = ?) , '%')))) AS n)", 
 			sqliteValue = "DELETE FROM ${tableName} "
 					+ "WHERE id in (SELECT id FROM ${tableName} WHERE \"path\" LIKE (( SELECT \"path\" FROM {tableName} WHERE id = ?) || '%'));")
 	public boolean deleteAll(int id);
