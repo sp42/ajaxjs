@@ -108,12 +108,13 @@ public class ConfigService {
 	}
 
 	/**
+	 * 内部的获取方法
 	 * 
-	 * @param <T>
+	 * @param <T>         配置类型
 	 * @param key         配置键值
-	 * @param isNullValue
-	 * @param vType
-	 * @return
+	 * @param isNullValue 当配置为 null 时返回的值，相当于“默认值”
+	 * @param vType       配置类型的引用
+	 * @return 配置内容
 	 */
 	@SuppressWarnings("unchecked")
 	private static <T> T get(String key, T isNullValue, Class<T> vType) {
