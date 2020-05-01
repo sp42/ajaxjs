@@ -32,52 +32,6 @@ public class Attachment_picture extends Attachment {
 	}
 
 	/**
-	 * 图片名称
-	 */
-	private String name;
-
-	/**
-	 * 设置图片名称
-	 * 
-	 * @param name 图片名称
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * 获取图片名称
-	 * 
-	 * @return 图片名称
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * 图片简介
-	 */
-	private String content;
-
-	/**
-	 * 设置图片简介
-	 * 
-	 * @param content 图片简介
-	 */
-	public void setContent(String content) {
-		this.content = content;
-	}
-
-	/**
-	 * 获取图片简介
-	 * 
-	 * @return 图片简介
-	 */
-	public String getContent() {
-		return content;
-	}
-
-	/**
 	 * 图片路径
 	 */
 	private String path;
