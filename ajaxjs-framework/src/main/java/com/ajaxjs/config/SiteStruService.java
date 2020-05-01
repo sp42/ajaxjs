@@ -46,6 +46,9 @@ import com.ajaxjs.util.map.ListMapConfig;
 public class SiteStruService implements ServletContextListener {
 	private static final LogHelper LOGGER = LogHelper.getLog(SiteStruService.class);
 
+	/**
+	 * 保存网站结构的 Map
+	 */
 	public static SiteStru stru;
 
 	/**
@@ -126,6 +129,8 @@ public class SiteStruService implements ServletContextListener {
 		}
 
 		loadSiteStru(ctx);
+		if (stru.isLoaded())
+			ctx.setAttribute("SITE_STRU", this); // 所有网站结构保存在这里
 
 		String ctxPath = ctx.getContextPath();
 		String ajaxjsui = Version.isDebug ? "http://" + Tools.getIp() + ":8080/ajaxjs-js"
@@ -170,7 +175,7 @@ public class SiteStruService implements ServletContextListener {
 	 * 
 	 * @param cxt Servlet 上下文
 	 */
-	public void loadSiteStru(ServletContext cxt) {
+	public static void loadSiteStru(ServletContext cxt) {
 		load(cxt);
 		ListMap.buildPath(stru, true);
 //		t.travelList(stru);
@@ -180,18 +185,18 @@ public class SiteStruService implements ServletContextListener {
 	/**
 	 * 配置 json 文件的路径
 	 */
-	public static String jsonPath = Version.srcFolder + File.separator + "site_stru.json";
+	public static String JSON_PATH = Version.srcFolder + File.separator + "site_stru.json";
 
 	/**
 	 * 加载网站结构的配置
 	 * 
 	 * @param ctx Servlet 上下文
 	 */
-	public void load(ServletContext ctx) {
-		String json = jsonPath;
+	public static void load(ServletContext ctx) {
+		String json = JSON_PATH;
 
-		if (new File(jsonPath).exists())
-			json = jsonPath;
+		if (new File(JSON_PATH).exists())
+			json = JSON_PATH;
 		else
 			json = ctx.getRealPath("/META-INF/site_stru.json");
 
@@ -202,7 +207,6 @@ public class SiteStruService implements ServletContextListener {
 			stru.clear();
 			stru.addAll(db2menu(JsonHelper.parseList(stru.getJsonStr()), ctx));
 			stru.setLoaded(true);
-			ctx.setAttribute("SITE_STRU", this); // 所有网站结构保存在这里
 		} else
 			LOGGER.info("没有网站的结构文件");
 	}

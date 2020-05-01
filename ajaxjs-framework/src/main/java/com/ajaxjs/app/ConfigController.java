@@ -111,7 +111,7 @@ public class ConfigController implements IController {
 	@Path("siteStru")
 	public String siteStruUI(ModelAndView model) {
 		LOGGER.info("编辑网站结构");
-		model.put("siteStruJson", FileHelper.openAsText(SiteStruService.jsonPath));
+		model.put("siteStruJson", FileHelper.openAsText(SiteStruService.JSON_PATH));
 
 		return BaseController.admin("config-site-stru");
 	}
@@ -121,7 +121,7 @@ public class ConfigController implements IController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String saveSiteStru(@NotNull @FormParam("json") String json) {
 		LOGGER.info("保存网站结构");
-		FileHelper.saveText(SiteStruService.jsonPath, json);
+		FileHelper.saveText(SiteStruService.JSON_PATH, json);
 		SiteStruService.loadSiteStru(MvcRequest.getHttpServletRequest().getServletContext());
 
 		return BaseController.jsonOk("修改网站结构成功！");
