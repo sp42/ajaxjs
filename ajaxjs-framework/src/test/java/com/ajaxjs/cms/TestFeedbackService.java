@@ -9,6 +9,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.ajaxjs.app.service.FeedbackService;
 import com.ajaxjs.framework.MockTest;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.ioc.BeanContext;

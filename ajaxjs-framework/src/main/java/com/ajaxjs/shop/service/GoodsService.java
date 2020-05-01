@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import com.ajaxjs.app.DataDictController;
+import com.ajaxjs.app.TopicController;
 import com.ajaxjs.app.attachment.Attachment_pictureService;
 import com.ajaxjs.app.catalog.CatalogService;
-import com.ajaxjs.cms.controller.DataDictController;
-import com.ajaxjs.cms.controller.TopicController;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.PageResult;

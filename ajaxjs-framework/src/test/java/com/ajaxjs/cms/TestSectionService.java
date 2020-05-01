@@ -6,7 +6,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.cms.controller.DataDictController;
+import com.ajaxjs.app.DataDictController;
+import com.ajaxjs.app.service.SectionList;
+import com.ajaxjs.app.service.SectionService;
 import com.ajaxjs.framework.MockTest;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.orm.JdbcConnection;

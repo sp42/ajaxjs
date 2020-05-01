@@ -7,7 +7,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.utils.SmsMessage;
+import com.ajaxjs.app.utils.SmsMessage;
 import com.ajaxjs.framework.Services;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mvc.controller.MvcRequest;

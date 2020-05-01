@@ -8,6 +8,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.ajaxjs.app.service.Ads;
+import com.ajaxjs.app.service.AdsService;
 import com.ajaxjs.framework.MockTest;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mock.TestHelper;

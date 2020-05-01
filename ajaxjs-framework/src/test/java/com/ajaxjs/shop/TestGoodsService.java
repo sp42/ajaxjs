@@ -7,7 +7,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ajaxjs.app.CommonConstant;
-import com.ajaxjs.cms.ShopBookmarkService;
+import com.ajaxjs.app.service.ShopBookmarkService;
 import com.ajaxjs.framework.MockTest;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mock.TestHelper;

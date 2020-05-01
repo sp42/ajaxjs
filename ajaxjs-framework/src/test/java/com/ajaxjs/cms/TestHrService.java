@@ -9,7 +9,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.cms.controller.HrController;
+import com.ajaxjs.app.HrController;
 import com.ajaxjs.framework.MockTest;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.mock.TestHelper;

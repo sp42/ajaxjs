@@ -10,8 +10,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.cms.utils.MysqlExport;
-import com.ajaxjs.cms.utils.MySqlAutoBackup;
+import com.ajaxjs.app.utils.MySqlAutoBackup;
+import com.ajaxjs.app.utils.MysqlExport;
 import com.ajaxjs.orm.JdbcConnection;
 
 public class TestMySqlBackup {
