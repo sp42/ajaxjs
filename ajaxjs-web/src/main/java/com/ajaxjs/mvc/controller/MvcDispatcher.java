@@ -245,9 +245,8 @@ public class MvcDispatcher implements Filter {
 					method);
 		} else {
 			if (err instanceof IllegalAccessError && ConfigService.getValueAsString("page.onNoLogin") != null) {
-				response.resultHandler(
-						"redirect::" + r.getContextPath() + ConfigService.getValueAsString("page.onNoLogin"), r, model,
-						method);
+				// 没有权限时跳转的地方
+				response.resultHandler( "redirect::" + r.getContextPath() + ConfigService.getValueAsString("page.onNoLogin"), r, model, method);
 			} else {
 				r.setAttribute("javax.servlet.error.status_code", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 				r.setAttribute("javax.servlet.error.exception_type", err.getClass());

@@ -35,6 +35,8 @@ public interface Constant {
 
 	public static final String ID_INFO = "{id}";
 
+	public static final String CATALOGS = "catalogs";
+	
 	public static final String CATALOG_ID = "catalogId";
 
 	/**
