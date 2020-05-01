@@ -1,0 +1,228 @@
+@import '../../less/common_style.less';
+@import '../../less/widgets/form.less';
+@import '../../less/admin.less';
+@import 'codeColor.less';
+html , body {
+	height: 100%;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+h3.title {
+	padding: 2%;
+	border-top: 1px solid #e1e1e1;
+	border-bottom: 1px solid white;
+	color: #888;
+	background-image: linear-gradient(#f1f1f1, #e1e1e1);
+	font-size: .9rem;
+}
+
+body {
+	.components {
+		float: left;
+		width: 15%;
+		background-color: #fbfbfb;
+		height: 100%;
+		border-right: 2px solid #a7a7a7;
+		box-sizing: border-box;
+		li {
+			height: 30px;
+			line-height: 30px;
+			padding-left: 5%;
+			margin-top: 3%;
+			cursor: pointer;
+			user-select: none;
+			img {
+				vertical-align: middle;
+				margin-right: 8px;
+			}
+		}
+	}
+
+	> .center {
+		float: left;
+		width: 65%;
+		height: 100%;
+		header {
+			height: 10%;
+			background-color: #eaeaea;
+			border-bottom: 1px solid #a7a7a7;
+			box-sizing: border-box;
+			> div {
+				padding: 1% 0 0 2%;
+				button {
+					.aj-btn;
+					font-size: .9rem;
+					width: 10%;
+					padding-left: 0;
+					padding-right: 0;
+				}
+
+				span {
+					padding-top: 2%;
+					padding-right: 2%;
+					float: right;
+					.active {
+						font-weight: bold;
+					}
+				}
+			}
+		}
+
+		.codeEdit {
+			height: 100%;
+			padding: 5%;
+			pre , textarea {
+				.aj-input;
+				width: 100%;
+				height: 100%;
+				resize: none;
+				font-size: 1rem;
+			}
+		}
+	}
+
+	> .right {
+		float: left;
+		width: 20%;
+		height: 100%;
+		background-color: #eaeaea;
+		border-left: 2px solid #a7a7a7;
+		box-sizing: border-box;
+		position: relative;
+	}
+}
+
+.stage {
+	height: 90%;
+	padding: 3% 0;
+	background: url('asset/grid-noise-bg.jpg') repeat;
+}
+
+.admin-entry-form form {
+	background-color: white;
+	input[type=text]{
+		.aj-input;
+	}
+}
+
+.admin-entry-form > form > div {
+	transition: background-color 300ms ease-in;
+}
+
+.dataSource {
+	height: 60%;
+	label {
+		margin: 2%;
+		display: block;
+		select {
+			width: 80%;
+			height: 25px;
+		}
+	}
+
+	ul {
+		max-height: 100%;
+		background-color: #f1efef;
+		overflow-x: hidden;
+		overflow-y: auto;
+		li {
+			padding: 2%;
+			border-bottom: 1px solid lightgray;
+			border-top: 1px solid white;
+			overflow: hidden;
+			min-height: 40px;
+			line-height: 180%;
+			&:hover img {
+				display: initial;
+			}
+
+			div {
+				float: left;
+				width: 50%;
+				span {
+					color: gray;
+				}
+
+				img {
+					display: none;
+					cursor: pointer;
+					vertical-align: middle;
+				}
+
+				&.comment {
+					color: gray;
+					overflow: hidden;
+					font-size: .8rem;
+				}
+			}
+		}
+	}
+}
+
+.property {
+	border-left: 1px solid white;
+	box-sizing: border-box;
+	bottom: 0;
+	left: 0;
+	position: absolute;
+	width: 100%;
+	table {
+		width: 100%;
+		.ajaxjs-borderTable;
+	}
+
+	td {
+		&.key {
+			width: 45%;
+			padding-left: 8%;
+		}
+
+		input[type=text] {
+			border: 0;
+			width: 100%;
+			margin: 0;
+			background-color: transparent;
+		}
+
+		select {
+			width: 100%;
+			height: 25px;
+			option {
+				font-size: .9rem;
+			}
+		}
+	}
+
+	.bottom {
+		height: 20px;
+		width: 100%;
+		border-top: 1px solid white;
+		color: #888;
+		background-color: #f1f1f1;
+	}
+}
+
+.statusBar {
+	margin: 0 auto;
+	height: 30px;
+	line-height: 30px;
+	padding: 0 2%;
+	background-color: rgba(0, 0, 0, .3);
+	border-radius: 20px;
+	color: white;
+	position: absolute;
+	width: 40%;
+	left: 28%;
+	bottom: 2%;
+	box-shadow: 2px 2px 2px rgba(0, 0, 0, .5);
+	animation-name: fade-in;
+	animation-duration: 700ms;
+	animation-fill-mode: forwards;
+	&.hideMe {
+		animation-name: fade-out-hide;
+	}
+}
+
