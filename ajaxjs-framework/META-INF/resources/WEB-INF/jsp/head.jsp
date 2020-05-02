@@ -99,7 +99,7 @@
 	<link rel="stylesheet" type="text/css" href="${ctx}/asset/css/${empty param.lessFile ? 'main' : param.lessFile.replaceAll("(?:.*/)(\\w+).less", "$1")}.css" />
 	<script crossorigin="anonymous" integrity="sha384-8t+aLluUVnn5SPPG/NbeZCH6TWIvaXIm/gDbutRvtEeElzxxWaZN+G/ZIEdI/f+y" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
 <%--     <script src="${ajaxjs_ui_output}/lib/vue.min.js"></script>--%>
-    <script src="${ajaxjs_ui_output}/all.js"></script> 
+    <script src="${ctx}/asset/all.js"></script> 
 <%} %>
 	
    	<script>
