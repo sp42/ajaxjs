@@ -85,7 +85,7 @@ public class ConfigService {
 	 */
 	public static void load(String jsonPath) {
 		ConfigService.CONFIG_JSON_PATH = jsonPath; // 覆盖本地的
-
+System.out.println(jsonPath);
 		CONFIG = new Config();
 		CONFIG.setJsonPath(jsonPath);
 		CONFIG.setJsonStr(FileHelper.openAsText(jsonPath));

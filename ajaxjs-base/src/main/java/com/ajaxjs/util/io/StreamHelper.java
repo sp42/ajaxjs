@@ -54,6 +54,7 @@ public class StreamHelper {
 
 	public static final int BUFFER_SIZE = 1024; // 1K 的数据块
 
+	// TODO 重复了？
 	public static void write(InputStream in, OutputStream out, boolean isBuffer) {
 		int readSize; // 读取到的数据长度
 		byte[] buffer = new byte[BUFFER_SIZE]; // 通过 byte 作为数据中转，用于存放循环读取的临时数据
@@ -105,4 +106,17 @@ public class StreamHelper {
 		}
 	}
 
+	/**
+	 * 在字节数组中截取指定长度数组
+	 * 
+	 * @param src
+	 * @param begin
+	 * @param count
+	 * @return
+	 */
+	public static byte[] subBytes(byte[] src, int begin, int count) {
+		byte[] bs = new byte[count];
+		System.arraycopy(src, begin, bs, 0, count);
+		return bs;
+	}
 }

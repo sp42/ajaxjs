@@ -10,6 +10,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -53,6 +54,12 @@ public class ImageHelper {
 		width = arr[0];
 		height = arr[1];
 	}
+	
+	public ImageHelper(byte[] data) {
+		Integer[] arr = getBufferedImgSize.apply(getImg(data));
+		width = arr[0];
+		height = arr[1];
+	}
 
 	/**
 	 * 根据文件名获取图片对象
@@ -73,6 +80,21 @@ public class ImageHelper {
 	public static BufferedImage getImg(File file) {
 		try {
 			return ImageIO.read(file);
+		} catch (IOException e) {
+			LOGGER.warning(e);
+			return null;
+		}
+	}
+
+	/**
+	 * 根据字节获取图片对象
+	 * 
+	 * @param file 文件对象
+	 * @return 图片对象
+	 */
+	public static BufferedImage getImg(byte[] data) {
+		try (ByteArrayInputStream in = new ByteArrayInputStream(data);) {
+			return ImageIO.read(in);
 		} catch (IOException e) {
 			LOGGER.warning(e);
 			return null;
