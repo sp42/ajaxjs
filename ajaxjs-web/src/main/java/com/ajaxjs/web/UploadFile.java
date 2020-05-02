@@ -170,7 +170,7 @@ public class UploadFile extends HttpServletRequestWrapper {
 	 * @param length 文件长度
 	 * @return 上传结果
 	 */
-	private UploadFileInfo save(int offset, int length) {
+	public UploadFileInfo save(int offset, int length) {
 		if (uploadFileInfo.saveFileName == null)
 			uploadFileInfo.saveFileName = uploadFileInfo.oldFilename; // 如不指定 saveFileName 则默认上传的
 		else
@@ -201,6 +201,10 @@ public class UploadFile extends HttpServletRequestWrapper {
 
 	public void setUploadFileInfo(UploadFileInfo uploadFileInfo) {
 		this.uploadFileInfo = uploadFileInfo;
+	}
+
+	public byte[] getDataBytes() {
+		return dataBytes;
 	}
 
 	// 换行符的字节码
