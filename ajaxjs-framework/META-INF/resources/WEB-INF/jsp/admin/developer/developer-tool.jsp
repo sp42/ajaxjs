@@ -55,6 +55,7 @@
 					<li :class="{'selected': 1 === selected}" @click="selected = 1">代码生成器</li>
 					<li :class="{'selected': 2 === selected}" @click="selected = 2">后台日志浏览</li>
 					<li :class="{'selected': 3 === selected}" @click="selected = 3">统计代码行数</li>
+					<li :class="{'selected': 4 === selected}" @click="selected = 4">前端代码打包</li>
 				</ul>
 			<div class="content">
 				<div :class="{'selected': 0 === selected}">
@@ -149,6 +150,15 @@
 							<button>统计代码行数</button>
 						</div>
 					</form>
+				</div>
+				<div :class="{'selected': 4 === selected}">	
+					<p>仅在开发模式下，部署之前执行。</p>
+					<div>
+						<button class="aj-btn" onclick="window.open('/ajaxjs-js/JsController?output=${aj_allConfig.System.project_folder.replace('\\',  '/')}');;return false;">打包 JavaScript</button>
+					</div>
+					<div>
+						<button class="aj-btn" onclick="window.open('${ctx}/?css=true');return false;">打包 CSS</button>
+					</div>
 				</div>
 			</div>
 		</div>

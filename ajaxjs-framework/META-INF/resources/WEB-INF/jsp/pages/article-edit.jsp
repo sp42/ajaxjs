@@ -123,7 +123,7 @@
 						<aj-xhr-upload action="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catalog=1" :is-img-upload="true" 
 							hidden-field="cover" 
 							hidden-field-value="${info.cover}" 
-							img-place="${empty info.cover ? commonAsset.concat('/images/imgBg.png') : ctx.concat('/').concat(info.cover)}">
+							img-place="${empty info.cover ? commonAsset.concat('/images/imgBg.png') : aj_allConfig.uploadFile.imgPerfix.concat(info.cover)}">
 						</aj-xhr-upload>
 							
 							</td>

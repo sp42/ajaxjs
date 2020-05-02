@@ -91,9 +91,9 @@
 						</td>
 						<td>
 						<c:if test="${not empty current.cover}">
-							<a href="${current.cover.startsWith('http') ? current.cover : ctx.concat('/images/').concat(current.cover)}" target="_blank">
-								<img src="${current.cover.startsWith('http') ? current.cover : ctx.concat('/images/').concat(current.cover)}" style="max-width:50px;max-height:60px;vertical-align: middle;" 
-							 		onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${current.cover.startsWith('http') ? current.cover : ctx.concat('/images/').concat(current.cover)}';" 
+							<a href="${current.cover.startsWith('http') ? current.cover : aj_allConfig.uploadFile.imgPerfix.concat(current.cover)}" target="_blank">
+								<img src="${current.cover.startsWith('http') ? current.cover : aj_allConfig.uploadFile.imgPerfix.concat(current.cover)}" style="max-width:50px;max-height:60px;vertical-align: middle;" 
+							 		onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${current.cover.startsWith('http') ? current.cover : aj_allConfig.uploadFile.imgPerfix.concat(current.cover)}';" 
 							 		onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
 							</a>
 						</c:if>
