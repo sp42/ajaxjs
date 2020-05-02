@@ -340,7 +340,8 @@ Vue.component('aj-form-html-editor', {
 			if(file) {
 				var imgInsert = event.target, self = this;
 				event.preventDefault();
-				aj.img.changeBlobImageQuality(file, (newBlob)=> {					       
+				
+				aj.img.changeBlobImageQuality(file, newBlob => {					       
 					Vue.options.components["aj-xhr-upload"].extendOptions.methods.doUpload.call({
 						action: this.uploadImageActionUrl,
 						progress: 0,
@@ -368,10 +369,9 @@ Vue.component('aj-form-html-editor', {
 				if(window.isCreate)
 					aj.alert.show('请保存记录后再上传图片。');
 				else {
-					var self = this;
-					App.$refs.uploadLayer.show(function(imgUrl) {
+					App.$refs.uploadLayer.show(imgUrl => {
 						if(imgUrl)
-							self.format("insertImage", imgUrl);
+							this.format("insertImage", imgUrl);
 					});
 				}
 				

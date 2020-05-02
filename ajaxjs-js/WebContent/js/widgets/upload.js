@@ -264,7 +264,7 @@ Vue.component('ajaxjs-fileupload-iframe', {
 					aj.msg.show('上传成功！');
 					
 					if(this.uploadOk_callback && typeof this.uploadOk_callback == 'function') {
-						var imgUrl = json.imgUrl || json.visitPath;
+						var imgUrl = json.fullUrl || json.imgUrl || json.visitPath;
 						this.uploadOk_callback(imgUrl, json);
 					}
 				}
@@ -292,22 +292,22 @@ Vue.component('aj-popup-upload', {
 			text : {}
 		};
 	},
-	props : {
+	props: {
 		uploadUrl : {// 上传接口地址
 			type: String,
 			required: true
 		},
-		imgName : {
+		imgName: {
 			type: String,
 			required: false
 		},
-		imgId : {
+		imgId: {
 	      type: Number,
 	      required: false
 	    },
-		imgPlace : String // 图片占位符，用户没有选定图片时候使用的图片
+		imgPlace: String // 图片占位符，用户没有选定图片时候使用的图片
 	},
-	template : 
+	template: 
 		'<aj-layer>\
 			<h3>图片上传</h3>\
 			<ajaxjs-img-upload-perview style="width:420px;" :img-name="imgName" :img-id="imgId" :img-place="imgPlace" label-id="foo1" ref="uploadControl"></ajaxjs-img-upload-perview>\
@@ -318,7 +318,7 @@ Vue.component('aj-popup-upload', {
 		// todo 是否不需要对象，而是逐个列出
 		this.text = this.$refs.uploadControl.$options.props.limit.default();
 	},
-	methods : {
+	methods: {
 		/**
 		 * 显示上传控件
 		 * 
