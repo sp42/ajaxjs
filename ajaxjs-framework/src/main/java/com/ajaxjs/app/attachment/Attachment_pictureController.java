@@ -13,6 +13,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.ajaxjs.app.utils.QiNiuYunUploadFile;
+import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
@@ -21,6 +23,7 @@ import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.MvcFilter;
+import com.ajaxjs.orm.SnowflakeIdWorker;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.io.ImageHelper;
 import com.ajaxjs.util.logger.LogHelper;
@@ -36,7 +39,7 @@ import com.ajaxjs.web.UploadFileInfo;
 @Path("/admin/attachmentPicture")
 public class Attachment_pictureController extends BaseController<Attachment_picture> {
 	private static final LogHelper LOGGER = LogHelper.getLog(Attachment_pictureController.class);
-	
+
 	@Resource("Attachment_pictureService")
 	private Attachment_pictureService service;
 
@@ -48,7 +51,8 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	@Path(LIST)
 	@MvcFilter(filters = { DataBaseFilter.class })
 //	@Authority(filter = DataBaseFilter.class, value = 1)
-	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit,
+			@QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		page(mv, service.findPagedList(start, limit, null));
 		mv.put("DICT", Attachment_pictureService.DICT);
 
@@ -83,7 +87,52 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("upload/{id}/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String imgUpload(MvcRequest request, @PathParam(ID) Long owenerId, @QueryParam(CATALOG_ID) int catalogId) throws IOException {
+	public String imgUpload(MvcRequest request, @PathParam(ID) Long owenerId, @QueryParam(CATALOG_ID) int catalogId)
+			throws IOException {
+		LOGGER.info("上传图片");
+
+		UploadFileInfo info = new UploadFileInfo();
+		info.saveFileName = SnowflakeIdWorker.getId() + "";
+		QiNiuYunUploadFile u = new QiNiuYunUploadFile(request, info);
+		u.upload();
+		info.fullPath = ConfigService.getValueAsString("uploadFile.imgPerfix") + info.saveFileName;
+
+		if (info.isOk) {
+			// 获取图片信息
+			ImageHelper imgHelper = new ImageHelper(u.uploadBytes);
+
+			Attachment_picture pic = new Attachment_picture();
+			pic.setOwner(owenerId);
+			pic.setName(info.saveFileName);
+			pic.setPath(info.saveFileName);
+			pic.setPicWidth(imgHelper.width);
+			pic.setPicHeight(imgHelper.height);
+			pic.setFileSize(u.uploadBytes.length);
+
+			if (catalogId != 0)
+				pic.setCatalogId(catalogId);
+
+			final Long _newlyId = service.create(pic);
+
+			return "json::" + JsonHelper.toJson(new Object() {
+				@SuppressWarnings("unused")
+				public Boolean isOk = true;
+				@SuppressWarnings("unused")
+				public String msg = "上传成功！";
+				@SuppressWarnings("unused")
+				public String imgUrl = info.saveFileName;
+				@SuppressWarnings("unused")
+				public String fullUrl = info.fullPath;
+				@SuppressWarnings("unused")
+				public Long newlyId = _newlyId;
+			});
+
+		} else
+			return jsonNoOk("上传失败！");
+	}
+
+	public String imgUpload_Old(MvcRequest request, @PathParam(ID) Long owenerId, @QueryParam(CATALOG_ID) int catalogId)
+			throws IOException {
 		LOGGER.info("上传图片");
 		final UploadFileInfo info = uploadByConfig(request);
 
@@ -122,9 +171,9 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	@POST
 	@Path("upload/staticPageUsedImg/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String imgUpload(MvcRequest request, @QueryParam("url")String url) throws IOException {
+	public String imgUpload(MvcRequest request, @QueryParam("url") String url) throws IOException {
 		final UploadFileInfo info = uploadByConfig(request);
-		
+
 		url = url.replaceAll("^/|/$", "");
 		int folderDeep = url.split("/").length;
 		final String _imgUrl = CommonUtil.repeatStr("../", "", folderDeep) + info.path.replaceAll("^/", "");
@@ -159,7 +208,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	public String createUI(ModelAndView model) {
 		return show405;
 	}
-	
+
 	@POST
 	@Override
 	public String create(Attachment_picture entity) {

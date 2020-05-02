@@ -27,7 +27,8 @@ public class DefaultServices extends Services {
 			msg.setTemplateCode(ConfigService.getValueAsString("sms.aliyun.templateCode"));
 			msg.setTemplateParam(String.format("{\"code\":\"%s\"}", 3444));
 
-			return AliyunSMS.send(msg);
+//			return AliyunSMS.send(msg);
+			return false;
 		});
 
 		setSendEmail(mail -> {

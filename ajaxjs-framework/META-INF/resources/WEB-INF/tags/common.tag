@@ -34,7 +34,7 @@
 				<div class="right">
 	<%-- 				<a href="#"> <img src="${commonAsset}/images/gs.png" height="40" /></a> 
 					<a href="#"> <img src="${commonAsset}/images/kexin.png" hspace="20" width="90" style="margin-top: 15px;" /></a>  --%>
-					<a href="#"> <img src="${commonAsset}/images/360logo.gif" width="90" style="margin-top: 15px;" /></a> 
+					<a href="#"> <img src="${ajaxjs_ui_output}/360logo.gif" width="90" style="margin-top: 15px;" /></a> 
 				</div>
 				<a href="javascript:;" onclick="toSimpleChinese(this);" class="simpleChinese selected">简体中文</a> / <a href="javascript:;" class="Chinese" onclick="toChinese(this);">正体中文</a>
 				<script src="${ajaxjs_ui_output}/lib/Chinese.js"></script>
@@ -64,7 +64,7 @@
 						</h3>
 						<c:if test="${not empty item.cover}">
 							<a href="${item.id}/">
-								<img src="${item.cover.startsWith('http') ? item.cover : ctx.concat('/images/').concat(item.cover)}" />
+								<img src="${item.cover.startsWith('http') ? item.cover : aj_allConfig.uploadFile.imgPerfix.concat(item.cover)}" />
 							</a>
 						</c:if>
 						<p>${item.intro}……</p>

@@ -16,11 +16,11 @@ import com.ajaxjs.user.controller.BaseUserController;
 import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.logger.LogHelper;
 
+@Path("sendSMScode")
 public class CmsUserController extends BaseUserController {
 	private static final LogHelper LOGGER = LogHelper.getLog(CmsUserController.class);
 
 	@POST
-	@Path("sendSMScode")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String sendSMScode(@NotNull @QueryParam("phoneNo") String phoneNo) {
 		LOGGER.info("发送短信到::" + phoneNo);
@@ -42,8 +42,7 @@ public class CmsUserController extends BaseUserController {
 
 				if (services.getSendSms().apply(phoneNo, "")) {
 					LOGGER.info("发送手机 " + phoneNo + " 验证码成功");
-					MvcRequest.getHttpServletRequest().getSession().setAttribute(SimpleSMSFilter.SMS_KEY_NAME,
-							randomCode + "");
+					MvcRequest.getHttpServletRequest().getSession().setAttribute(SimpleSMSFilter.SMS_KEY_NAME, randomCode + "");
 					return jsonOk("发送手机 " + phoneNo + " 验证码成功");
 				} else {
 					return jsonNoOk("发送手机 " + phoneNo + " 验证码失敗");

@@ -1,8 +1,23 @@
 package com.ajaxjs;
 
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.when;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.junit.Test;
 
+import com.ajaxjs.app.utils.QiNiuYunUploadFile;
 import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.net.http.NetUtil;
+import com.ajaxjs.web.UploadFileInfo;
+import com.ajaxjs.web.mock.MockRequest;
+import com.ajaxjs.web.mock.MockServletInputStream;
 import com.google.gson.Gson;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
@@ -13,9 +28,9 @@ import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
 
 public class TestQiuNiuYun {
-	@Test
+//	@Test
 	public void test() {
-		ConfigService.load("D:\\project\\leidong\\src\\main\\resources\\site_config.json");
+		ConfigService.load("D:\\project\\leidong\\WebContent\\META-INF\\site_config.json");
 
 		String accessKey = ConfigService.getValueAsString("uploadFile.ObjectStorageService.QiuNiuYun.accessKey");
 		String secretKey = ConfigService.getValueAsString("uploadFile.ObjectStorageService.QiuNiuYun.secretKey");
@@ -48,5 +63,33 @@ public class TestQiuNiuYun {
 				// ignore
 			}
 		}
+	}
+	
+	@Test
+	public void testUpload() throws IOException {
+		ConfigService.load("D:\\project\\leidong\\WebContent\\META-INF\\site_config.json");
+		
+		UploadFileInfo uploadFileInfo = new UploadFileInfo();
+		uploadFileInfo.maxSingleFileSize = 1024 * 50000; // 50 MB;
+		uploadFileInfo.allowExtFilenames = new String[] { "txt", "png" };
+		uploadFileInfo.isFileOverwrite = true;
+		uploadFileInfo.saveFolder = "c:\\t2\\";
+
+		HttpServletRequest request = MockRequest.mockRequest("foo", "upload");
+		when(request.getMethod()).thenReturn("POST");
+		when(request.getContentType()).thenReturn("multipart/form-data; boundary=" + NetUtil.BOUNDARY);
+
+		Map<String, Object> map = new HashMap<>();
+		map.put("name", "foo");
+		map.put("file23", new File("C:\\temp\\l.png"));
+
+		byte[] b = NetUtil.toFromData(map);
+		when(request.getContentLength()).thenReturn(b.length);
+		when(request.getInputStream()).thenReturn(new MockServletInputStream(b));
+
+		QiNiuYunUploadFile uploadRequest = new QiNiuYunUploadFile(request, uploadFileInfo);
+		assertNotNull(uploadRequest);
+
+		uploadRequest.upload();
 	}
 }

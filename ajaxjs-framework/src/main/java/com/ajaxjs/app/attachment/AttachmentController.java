@@ -63,14 +63,6 @@ public class AttachmentController extends BaseController<Attachment> {
 		return super.update(id, entity);
 	}
 
-	@DELETE
-	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("{id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam(ID) Long id) {
-		return delete(id, new Attachment());
-	}
-
 	@Override
 	public IBaseService<Attachment> getService() {
 		return service;
