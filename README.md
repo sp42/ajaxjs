@@ -30,12 +30,12 @@ AJAXJS 很少第三方的库或包依赖，一方面也避免太复杂。关于�
 |------|-----|----|------|
 |ajaxjs-base|基础库，包含大量工具函数实用方法和类似 Apache DBUtils 的 JDBC 封装，[浏览项目 readme](ajaxjs-base)|javassist|jar|
 |ajaxjs-web|MVC 框架，类似 Spring MVC 的精简实现，[浏览项目 readme](ajaxjs-web)|ajaxjs-base|jar|
-|ajaxjs-web-js|独立的前端框架，基于 vue.js 2.x，并包含官网静态页[浏览项目 readme](ajaxjs-web-js) \| [DEMO](https://framework.ajaxjs.com/framework/ui-doc/)|vue.js/less.js|war|
-|ajaxjs-framework|框架基础设施，是一个完整后台程序[浏览项目 readme](ajaxjs-framework)|ajaxjs-data+ajaxjs-web|jar|
-|ajaxjs-demo|一个包含前后台的网站，可方便学习或作为快速手脚架，[浏览项目 readme](ajaxjs-demo)|ajaxjs-cms|war|
+|ajaxjs-js|独立的前端框架，基于 vue.js 2.x/less.js，并包含官网静态页[浏览项目 readme](ajaxjs-js) \| [DEMO](https://framework.ajaxjs.com/framework/ui-doc/)|vue.js/less.js|war|
+|ajaxjs-framework|框架基础设施，是一个完整后台程序[浏览项目 readme](ajaxjs-framework)|ajaxjs-base 和 ajaxjs-web|jar|
+|ajaxjs-demo|一个包含前后台的网站，可方便学习或作为快速手脚架，[浏览项目 readme](ajaxjs-demo)|ajaxjs-framework|war|
 
 
-虽然 Maven 依赖的都是 jar 包，但实际里面包含了相当的前端资源，JSP/HTML/CSS/JS，我们的前端框架 javascript 代码也包含在内。
+虽然 Maven 依赖的都是 JAR 包，但实际里面包含了相当的前端资源，JSP/HTML/CSS/JS，我们的前端框架 javascript 代码也包含在内。
 达成这一项技术的是 Servlet 3.0 的 “Web 模块部署描述符片段”功能，也就是说，前端资源通过 Servlet 3.0 WebFragment 特性打包到 jar 里面。片段可以指页面文件或 JSP 文件、png/jpg 图片文件、*.tld 标签定义文件甚至 web.xml 配置文件也可以作为片段引入，即 web-fragment.xml。
 
 前端库快速浏览 [DEMO](https://framework.ajaxjs.com/framework/ui-doc/)。
