@@ -20,7 +20,29 @@ AJAXJS Base 是一个小型的、快速可用的工具库，除了 Javassist 基
 - net/http，发送 HTTP 的客户端。[文 档](https://gitee.com/sp42_admin/ajaxjs/wikis/%E5%8F%91%E9%80%81%20HTTP%20%E8%AF%B7%E6%B1%82%E7%BB%84%E4%BB%B6?sort_id=1558524)
 - keyvalue，键对值转换的助手类 。[文 档](https://gitee.com/sp42_admin/ajaxjs/wikis/MapTools?sort_id=1324340)
 
-要求 Java 1.8+，Jar 直接下载：[130kb](https://search.maven.org/remotecontent?filepath=com/ajaxjs/ajaxjs-base/1.1.7/ajaxjs-base-1.1.7.jar)
+
+
+# AJAXJS-Data 简介
+
+AJAJX-Data 类似于 DBUtils 的数据库工具程序，但更为简单和干净，核心的类只有两个：JdbcHelper（不超过 600 行）和 DaoHandler（不超过 250 行）。
+
+AJAXJS-Data 主要实现了以下功能：
+
+- 基于 JDBC 对象 Connection、PreparedSatatement、ResultSet 的 CRUD 封装，应用了 Java 8 函数式的风格；
+- 半 ORM 实现，需要开发者手写 SQL，然后返回结果，结果类型兼容 Java Bean 和 Map 的两种实体；
+- 提供基于 接口+注解 DAO 的服务，类似于 MyBatis 接口方式的 SQL 陈述，基于 Java 动态代理的实现；
+- 内置分页服务，提供基于 List 扩展的 PageList 容器；
+- 其他 SQL 工具函数，例如格式化 SQL、打印真实 SQL 语句。
+
+尚不支持的特性
+----------
+- 仅支持两种数据库： MySQL 和 SQLite
+- 两张表之间的关联要手写 SQL
+
+
+安装
+---------
+要求 Java 1.8+，Jar 直接下载：[200kb](https://search.maven.org/remotecontent?filepath=com/ajaxjs/ajaxjs-base/1.1.7/ajaxjs-base-1.1.7.jar)
 
 Maven 坐标：
 
@@ -36,6 +58,12 @@ Maven 坐标：
 -----
 [wiki 教程](https://gitee.com/sp42_admin/ajaxjs/wikis) | [JavaDoc](https://framework.ajaxjs.com/framework/javadoc/ajaxjs-base/)
 
+最后是我之前的尝试，记录在博客上了。
+
+- http://blog.csdn.net/zhangxin09/article/details/17403211
+- http://blog.csdn.net/zhangxin09/article/details/7899525
+- http://blog.csdn.net/zhangxin09/article/details/55805849
+- http://blog.csdn.net/zhangxin09/article/details/70187712
 
 单元测试覆盖率
 ---------
@@ -46,4 +74,17 @@ Maven 坐标：
 
 鸣谢
 ---------
-本人水平有限，日志组件引用了 Tomcat 的 FileHandler 源码。
+本人水平有限，特别引用了下面的源码。
+- 日志组件引用了 Tomcat 的 FileHandler 源码。
+- 使用了 Twitter 的分布式自增 ID 算法 Snowflake:雪花生成器。
+- 数据层参考了开源项目：https://gitee.com/bitprince/memory
+
+
+官网
+---------
+点击进入 [framework.ajaxjs.com](https://framework.ajaxjs.com]) 了解更多信息。
+
+
+版权声明 LICENSE
+---------
+作者版权所有，开源许可：Apache License, Version 2.0
