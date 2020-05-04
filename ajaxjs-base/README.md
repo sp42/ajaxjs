@@ -22,9 +22,9 @@ AJAXJS Base 是一个小型的、快速可用的工具库，除了 Javassist 基
 
 
 
-# AJAXJS-Data 简介
+# AJAXJS Framework Data 数据层
 
-AJAJX-Data 类似于 DBUtils 的数据库工具程序，但更为简单和干净，核心的类只有两个：JdbcHelper（不超过 600 行）和 DaoHandler（不超过 250 行）。
+AJAXJS Base 包括了 AJAXJS Data。AJAJX-Data 类似于 DBUtils 的数据库工具程序，但更为简单和干净，核心的类只有两个：JdbcHelper（不超过 600 行）和 DaoHandler（不超过 250 行）。
 
 AJAXJS-Data 主要实现了以下功能：
 
@@ -33,16 +33,13 @@ AJAXJS-Data 主要实现了以下功能：
 - 提供基于 接口+注解 DAO 的服务，类似于 MyBatis 接口方式的 SQL 陈述，基于 Java 动态代理的实现；
 - 内置分页服务，提供基于 List 扩展的 PageList 容器；
 - 其他 SQL 工具函数，例如格式化 SQL、打印真实 SQL 语句。
-
-尚不支持的特性
-----------
 - 仅支持两种数据库： MySQL 和 SQLite
 - 两张表之间的关联要手写 SQL
 
 
 安装
 ---------
-要求 Java 1.8+，Jar 直接下载：[200kb](https://search.maven.org/remotecontent?filepath=com/ajaxjs/ajaxjs-base/1.1.7/ajaxjs-base-1.1.7.jar)
+要求 Java 1.8+，Jar 直接下载：[200kb](https://search.maven.org/remotecontent?filepath=com/ajaxjs/ajaxjs-base/1.2.3/ajaxjs-base-1.2.3.jar)
 
 Maven 坐标：
 
@@ -56,7 +53,7 @@ Maven 坐标：
 
 参见
 -----
-[wiki 教程](https://gitee.com/sp42_admin/ajaxjs/wikis) | [JavaDoc](https://framework.ajaxjs.com/framework/javadoc/ajaxjs-base/)
+[Wiki 教程](https://gitee.com/sp42_admin/ajaxjs/wikis) | [JavaDoc](https://framework.ajaxjs.com/framework/javadoc/ajaxjs-base/)
 
 最后是我之前的尝试，记录在博客上了。
 
