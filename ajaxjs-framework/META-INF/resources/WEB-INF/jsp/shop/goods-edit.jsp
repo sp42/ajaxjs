@@ -56,7 +56,7 @@
 						<input placeholder="品牌" size="10" name="brand" value="${info.brand}" type="text" />
 					</label> 
 					<label>
-						<div class="label">品牌：</div>
+						<div class="label">店家：</div>
 						<!-- 选择商家 -->
 						<select class="ajaxjs-select" name="sellerId">
 							<c:foreach items="${sellers}" var="item">
@@ -80,6 +80,7 @@
 				<div class="goodsFormat">
  			<c:choose>
 				<c:when test="${isCreate}">
+				
 					<span>请保存记录后再编辑规格。</span>
 				</c:when>
 				<c:otherwise> 
@@ -115,7 +116,7 @@
 					<div class="label" style="vertical-align: top;">正 文：</div>
 						<div style="display: inline-block; width: 90%;">
 							<!-- HTML 在线编辑器，需要 textarea 包裹着内容 -->
-							<aj-form-html-editor field-name="content" base-path="${ctx}" ref="htmleditor">
+							<aj-form-html-editor field-name="content" upload-image-action-url="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catalogId=4" base-path="${ctx}" ref="htmleditor">
 								<textarea class="hide" name="content">${info.content}</textarea>
 							</aj-form-html-editor>
 						</div>
@@ -136,13 +137,13 @@
 						<aj-xhr-upload action="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catalog=1" :is-img-upload="true" 
 							hidden-field="cover" 
 							hidden-field-value="${info.cover}" 
-							img-place="${isCreate || empty info.cover ? commonAsset.concat('/images/imgBg.png') : ctx.concat('/').concat(info.cover)}">
+							img-place="${isCreate || empty info.cover ? commonAsset.concat('/images/imgBg.png') : aj_allConfig.uploadFile.imgPerfix.concat(info.cover)}">
 						</aj-xhr-upload>
 							</td>
 							
 							<td width="50"></td>
 							<td>
-								<attachment-picture-list pic-ctx="${ctx}"
+								<attachment-picture-list pic-ctx="${aj_allConfig.uploadFile.imgPerfix}"
 									upload-url="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catalogId=4" 
 									blank-bg="${commonAsset.concat('/images/imgBg.png')}" 
 									load-list-url="${ctx}/admin/attachmentPicture/getAttachmentPictureByOwner/${info.uid}" 
@@ -202,9 +203,11 @@
 						return false;
 					},
 					delGoodsFormat (id) {
-						aj.xhr.dele('${ctx}/admin/goodsFormat/' +id, ajaxjs.xhr.defaultCallBack.after(() => {
-							this.loadGoodsFormatItemList();
-						}));
+						aj.showConfirm('确定删除吗？', () => 
+							aj.xhr.dele('${ctx}/admin/goodsFormat/' +id, ajaxjs.xhr.defaultCallBack.after(() => {
+								this.loadGoodsFormatItemList();
+							}))
+						);
 					}
 				}
 			});

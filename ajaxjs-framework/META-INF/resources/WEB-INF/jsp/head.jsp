@@ -55,18 +55,18 @@
 
 	<script src="https://lib.baomitu.com/less.js/3.0.4/less.min.js"></script>
     <script src="https://lib.baomitu.com/vue/2.6.11/vue.js"></script>
-    <script src="${ajaxjsui}/js/ajaxjs-base.js"></script>
-    <script src="${ajaxjsui}/js/widgets/admin.js"></script>
-    <script src="${ajaxjsui}/js/widgets/form.js"></script>
-    <script src="${ajaxjsui}/js/widgets/list.js"></script>
-    <script src="${ajaxjsui}/js/widgets/menu.js"></script>
-    <script src="${ajaxjsui}/js/widgets/msg.js"></script>
-    <script src="${ajaxjsui}/js/widgets/page.js"></script>
-    <script src="${ajaxjsui}/js/widgets/tree.js"></script>
-    <script src="${ajaxjsui}/js/widgets/upload.js"></script>
-    <script src="${ajaxjsui}/js/widgets/carousel.js"></script>
-    <script src="${ajaxjsui}/js/widgets/marquee.js"></script>
-    <script src="${ajaxjsui}/js/widgets/img.js"></script>
+    <script src="${developing_js_url}/js/ajaxjs-base.js"></script>
+    <script src="${developing_js_url}/js/widgets/admin.js"></script>
+    <script src="${developing_js_url}/js/widgets/form.js"></script>
+    <script src="${developing_js_url}/js/widgets/list.js"></script>
+    <script src="${developing_js_url}/js/widgets/menu.js"></script>
+    <script src="${developing_js_url}/js/widgets/msg.js"></script>
+    <script src="${developing_js_url}/js/widgets/page.js"></script>
+    <script src="${developing_js_url}/js/widgets/tree.js"></script>
+    <script src="${developing_js_url}/js/widgets/upload.js"></script>
+    <script src="${developing_js_url}/js/widgets/carousel.js"></script>
+    <script src="${developing_js_url}/js/widgets/marquee.js"></script>
+    <script src="${developing_js_url}/js/widgets/img.js"></script>
     
     <% if(request.getParameter("css")  != null) { %> 
 		<script>
@@ -107,8 +107,8 @@
    		aj.Vue.install = function(Vue) {
    			Vue.prototype.ajResources = {
 	   			ctx : '${ctx}',
-	   			commonAsset : '${ctx}/asset/common',
-	   			libraryUse  : '${ctx}/asset/common/resources' // 庫使用的資源
+	   			imgPerfix : '${aj_allConfig.uploadFile.imgPerfix}', // 图片云存储前缀
+	   			commonAsset : '${commonAsset}'
    			};
    			
    			Vue.prototype.BUS = new Vue();

@@ -16,5 +16,5 @@ public interface Attachment_pictureDao extends IBaseDao<Attachment_picture> {
 	/**
 	 * 实体别名必须为 entry
 	 */
-	public final static String LINK_COVER = "(SELECT path FROM attachment_picture p1 WHERE entry.uid = p1.owner AND p1.catalog = 1 ORDER BY p1.id DESC LIMIT 0, 1)";
+	public final static String LINK_COVER = "(SELECT path FROM attachment_picture p1 WHERE entry.uid = p1.owner AND p1.catalogId = 1 ORDER BY p1.id DESC LIMIT 0, 1)";
 }

@@ -108,7 +108,7 @@ public class LoginService extends UserService {
 		sess.setAttribute("userUid", user.getUid());
 		sess.setAttribute("userName", user.getName());
 		sess.setAttribute("userPhone", user.getPhone());
-		sess.setAttribute("userAvatar", user.getAvatar() == null ? null : (request.getContextPath() + "/" + user.getAvatar()));
+		sess.setAttribute("userAvatar", user.getAvatar() == null ? null : (ConfigService.getValueAsString("uploadFile.imgPerfix") + "/" + user.getAvatar()));
 
 		// 获取资源权限总值
 		sess.setAttribute("userGroupId", user.getRoleId());

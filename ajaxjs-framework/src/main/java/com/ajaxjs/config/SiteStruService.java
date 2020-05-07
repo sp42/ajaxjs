@@ -27,7 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.Version;
 import com.ajaxjs.framework.BaseModel;
-import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.net.http.Tools;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
@@ -133,16 +132,17 @@ public class SiteStruService implements ServletContextListener {
 			ctx.setAttribute("SITE_STRU", this); // 所有网站结构保存在这里
 
 		String ctxPath = ctx.getContextPath();
-		String ajaxjsui = Version.isDebug ? "http://" + Tools.getIp() + ":8080/ajaxjs-js"
-				: ctxPath + "/" + Constant.ajajx_ui;
+
 
 		ctx.setAttribute("ctx", ctxPath);
-		ctx.setAttribute("ajaxjsui", ajaxjsui);
-		ctx.setAttribute("commonAsset", ctxPath + "/asset/common"); // 静态资源目录
-		ctx.setAttribute("commonAssetIcon", ctxPath + "/asset/common/icon"); // 静态资源目录
-		ctx.setAttribute("commonJsp", ctxPath + "/" + Constant.jsp_perfix);
 		ctx.setAttribute("isDebuging", Version.isDebug);
+		ctx.setAttribute("commonAsset", ctxPath + "/asset/common"); // 静态资源目录
+		ctx.setAttribute("commonAssetIcon", ctxPath + "/asset/common/icon"); // 静态资源图标目录
 		ctx.setAttribute("ajaxjs_ui_output", "http://static.ajaxjs.com/");
+		
+		// 开发阶段，ajaxjsui 指定了前端 js 所在的位置，通常是另外一个项目同时运行着，例如当前是本机 8080 端口的 ajaxjs-js。
+		if(Version.isDebug)
+			ctx.setAttribute("developing_js_url", "http://" + Tools.getIp() + ":8080/ajaxjs-js");
 	}
 
 	/**

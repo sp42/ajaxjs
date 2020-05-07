@@ -131,7 +131,7 @@ public class SiteStruTag extends SimpleTagSupport {
 		}
 		if (_customNavLi == null) {
 			return String.format(LI, !hasSelected ? " class=\"home selected\"" : " class=\"home\"",
-					"".equals(ctx) ? "/" : ctx, "首页") + sb.toString();
+					"".equals(ctx) ? "" : ctx, "首页") + sb.toString();
 		} else {
 			String _li = _customNavLi.toString();
 			if (showNavSubMenu)

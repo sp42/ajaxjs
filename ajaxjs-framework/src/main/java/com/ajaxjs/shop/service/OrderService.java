@@ -131,7 +131,7 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 	}
 
 	/**
-	 * 下面页面
+	 * 下单页面
 	 * 
 	 * @param mv ModelAndView 对象
 	 */

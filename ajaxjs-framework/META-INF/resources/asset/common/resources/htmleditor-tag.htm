@@ -60,18 +60,18 @@
 			<span title="增加图片" class="insertImage bg-19" ></span>
 		</li>
 		<li>
-			<span title="一键存图" class="saveRemoteImage2Local bg-19" ></span>
+			<i title="一键存图" class="saveRemoteImage2Local fa-hdd-o"></i>
 		</li>
 		<li>
 			<span title="清理冗余的 HTML" class="cleanHTML" ></span>
 		</li>
 		<li>
-			<span class="switchMode noBg">HTML</span>
+			<i class="switchMode fa-code"></i>
 		</li>
 	</ul>
 
 	<div class="editorBody">	
-		<iframe :src="ajResources.libraryUse + '/htmleditor_iframe.jsp?basePath=' + basePath"></iframe>
+		<iframe :src="ajResources.commonAsset + '/resources/htmleditor_iframe.jsp?basePath=' + basePath"></iframe>
 		<slot></slot>
 	</div>
 </div>

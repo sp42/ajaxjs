@@ -36,8 +36,8 @@
 		</c:foreach>
 	</table>
 	
-	<div style="text-align:center;padding:5%;">
-		<button onclick="history.back();" class="aj-btn">返回</button>
+	<div class="aj-btnsHolder">
+		<button onclick="history.back();">返 回</button>
 	</div>
 </c:if>
 

@@ -135,7 +135,7 @@ public class ConfigController implements IController {
 		String folder = r.mappath(path);
 		FileHelper.mkDir(folder);
 		String dest = folder + File.separator + "index.jsp";
-		FileHelper.copy(r.mappath(BaseController.jsp_perfix_webinf + File.separator + "common-page.jsp"), dest, true);
+		FileHelper.copy(r.mappath(BaseController.JSP_PERFIX_WEBINF + File.separator + "common-page.jsp"), dest, true);
 
 		return BaseController.jsonOk("初始化 JSP 页面成功！");
 	}

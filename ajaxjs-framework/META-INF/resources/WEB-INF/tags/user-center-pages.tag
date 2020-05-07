@@ -91,7 +91,7 @@
 <c:if test="${type == 'avatar'}">
 	<script src="${ajaxjs_ui_output}/lib/exif.min.js"></script>
 	
-	<form method="put" action="${ctx}/user/profile/" class="avatar" style="width:400px;margin:0 auto;text-align: center;">
+	<form method="put" action="${ctx}/user/profile/" class="avatar" style="width:600px;margin:0 auto;text-align: center;">
 		<input type="hidden" name="id" value="${userId}" />
 		
 		<aj-xhr-upload action="${ctx}/user/profile/avatar/${userUid}/?id=${userId}" :is-img-upload="true" 

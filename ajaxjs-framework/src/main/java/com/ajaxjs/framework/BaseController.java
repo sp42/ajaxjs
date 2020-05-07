@@ -316,7 +316,7 @@ public abstract class BaseController<T> implements IController, Constant {
 	 * @return
 	 */
 	public static String jsp(String jsp) {
-		return jsp_perfix_webinf + "/" + jsp;
+		return JSP_PERFIX_WEBINF + "/" + jsp;
 	}
 
 	/**

@@ -20,7 +20,7 @@
 		</dl>
 		<dl>
 			<label>
-				<dt><tags:i18n zh="登录密码" eng="Login Password" /></dt>
+				<dt><tags:i18n zh="登录密码" eng="Password" /></dt>
 				<dd>
 					<input type="password" name="password" placeholder="<tags:i18n zh="6~10位数字或英文字母" eng="6 to 10 digits or English letters" />" required
 					 pattern="[0-9A-Za-z]{6,10}" title="请输入6~10位数字或英文密码" />
@@ -30,7 +30,7 @@
 		</dl>
 		<dl>
 			<label>
-				<dt><tags:i18n zh="验证码" eng="CAPTCHA" /></dt>
+				<dt><tags:i18n zh="验证码" eng="Captcha" /></dt>
 				<dd class="captcha" style="font-size: .8rem;">
 					<aj-page-captcha field-name="${CAPTCHA_CODE}"></aj-page-captcha>
 				</dd>

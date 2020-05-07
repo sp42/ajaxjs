@@ -97,9 +97,9 @@ public class UserCenterController extends AbstractAccountInfoController {
 	@GET
 	@Path("profile/avatar")
 	@MvcFilter(filters = { LoginCheck.class })
-	public String avater() {
+	public String avatar() {
 		LOGGER.info("用户会员中心-个人信息-修改头像");
-		return user("avater");
+		return user("avatar");
 	}
 
 	@POST
