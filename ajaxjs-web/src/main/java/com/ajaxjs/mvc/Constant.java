@@ -45,7 +45,7 @@ public interface Constant {
 	public static final String KEYWORD = "keyword";
 
 	/**
-	 * 文档显示用
+	 * JSON 类型
 	 */
 	public static final String JSON_TYPE = "application/json";
 
@@ -56,24 +56,9 @@ public interface Constant {
 	public static final String domainCatalog_Id = "domainCatalog_Id";
 
 	/**
-	 * 前端庫的位置
-	 */
-	public static final String ajajx_ui = "asset/ajaxjs-ui";
-
-	/**
-	 * 常见静态资源
-	 */
-	public static final String commonAsset = "asset/common";
-
-	/**
-	 * 全局 json 模板路径 之前缀
-	 */
-	public static final String jsp_perfix = "/jsp";
-
-	/**
 	 * 全局 json 模板路径 之 WEB-INF前缀
 	 */
-	public static final String jsp_perfix_webinf = "/WEB-INF/jsp";
+	public static final String JSP_PERFIX_WEBINF = "/WEB-INF/jsp";
 
 	/**
 	 * 操作失败，返回 msg 信息
