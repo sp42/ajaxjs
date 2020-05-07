@@ -282,7 +282,7 @@ Vue.component('aj-form-html-editor', {
 	},
 	beforeCreate() {
 		var xhr = new XMLHttpRequest();
-		xhr.open("GET", this.ajResources.libraryUse + '/htmleditor-tag.htm', false);// 同步方式请求
+		xhr.open("GET", this.ajResources.commonAsset + '/resources/htmleditor-tag.htm', false);// 同步方式请求
 		xhr.send(null);
 		this.$options.template = xhr.responseText;
 	},
@@ -346,8 +346,7 @@ Vue.component('aj-form-html-editor', {
 						action: this.uploadImageActionUrl,
 						progress: 0,
 						uploadOk_callback(j) {
-// self.format("insertImage", self.basePath + '/' + j.imgUrl);
-							self.format("insertImage", j.imgUrl);
+							self.format("insertImage", self.ajResources.imgPerfix + j.imgUrl);
 						},
 						$blob: newBlob,
 						$fileName: 'foo.jpg'

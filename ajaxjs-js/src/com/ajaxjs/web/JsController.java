@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -24,18 +25,15 @@ import javax.servlet.http.HttpServletResponse;
 public class JsController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * 保存位置
-	 */
-	static String output = "c:\\project\\ajaxjs-framework\\META-INF\\resources\\ajaxjs-ui-output";
-
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String js = "// build date:" + new Date() + "\n";
 		js += JavaScriptCompressor.compress(read(mappath(request, "js/ajaxjs-base.js"))) + "\n";
 		js += JavaScriptCompressor.compress(read(mappath(request, "js/ajaxjs-list.js"))) + "\n";
 		js += action(mappath(request, "js/widgets/"), true) + "\n";
 
-		save(output + "\\all.js", js);
+		String output = request.getParameter("output"); //  保存位置
+		Objects.requireNonNull(output, "必填参数");
+		save(output + "\\WebContent\\asset\\js\\all.js", js);
 		response.getWriter().append("Pack js Okay.");
 	}
 

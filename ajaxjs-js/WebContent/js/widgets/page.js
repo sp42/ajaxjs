@@ -180,7 +180,7 @@ Vue.component('aj-chinese-switch', {
 // https://vuejs.org/v2/guide/components.html#Content-Distribution-with-Slots
 Vue.component('aj-tab', {
    	template: 
-   		'<div :class="isVertical ? \'aj-simple-tab-vertical\' : \'aj-simple-tab-horizontal\' ">\
+   		'<div :class="isVertical ? \'aj-simple-tab-vertical\' : \'aj-tab\' ">\
 	      <button v-for="tab in tabs" v-bind:key="tab.name"\
 	        v-bind:class="[\'tab-button\', { active: currentTab.name === tab.name }]"\
 	        v-on:click="currentTab = tab">{{tab.name}}\

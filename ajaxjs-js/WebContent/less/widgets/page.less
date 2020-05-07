@@ -60,8 +60,7 @@
 @tab-background-color: #e7e7e7;
 
 .aj-simple-tab-base {
-	& > ul {
-		& > li {
+	& > ul > li, & > button {
 			background-color: @tab-background-color;
 			-moz-box-sizing: border-box;
 			box-sizing: border-box;
@@ -70,10 +69,11 @@
 			list-style: none;
 			text-align: center;
 			height: 35px;
-			margin: 3px 0;
+			//margin: 3px 0;
 			padding: 8px;
 			border: 1px solid transparent;
-			&.selected {
+			border-bottom: 0;
+			&.active, &.selected {
 				background-color: white;
 				border-color: @tab-base-color;
 				z-index: 999999;
@@ -83,7 +83,7 @@
 				font-weight:bold;
 				//color: @tab-base-color;
 			}
-		}
+		
 	}
 
 	& > div {
@@ -142,3 +142,40 @@
 		min-height: 149px;
 	}
 }
+
+.aj-tab {
+	clear:both; 
+	& > button {
+		background-color: @tab-background-color;
+		box-sizing: border-box;
+		cursor: pointer;
+		position: relative;
+		text-align: center;
+		height: 35px;
+		//margin: 3px 0;
+		padding: 8px;
+		border: 1px solid transparent;
+		border-bottom: 0;
+		z-index: 0;
+		&.active {
+			background-color: white;
+			border-color: @tab-base-color;
+			z-index: 999999;
+		}
+
+		&:hover {
+			font-weight:bold;
+			//color: @tab-base-color;
+		}
+	}
+	
+	& > div {
+		position: relative;
+		margin-top: -1px;
+		border: 1px solid @tab-base-color;
+		box-sizing: border-box;
+		z-index: 99;
+		padding:2%;
+	}
+}
+

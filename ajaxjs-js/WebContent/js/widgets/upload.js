@@ -408,7 +408,7 @@ Vue.component('aj-xhr-upload', {
 			<input type="file" :name="fieldName" class="hide" :id="\'uploadInput_\' + radomId" @change="onUploadInputChange($event)" :accept="isImgUpload ? \'image/*\' : accpectFileType" />\
 			<div v-if="!isFileSize || !isExtName">{{errMsg}}</div>\
 			<div v-if="isFileSize && isExtName">\
-				{{fileName}}\
+				{{fileName}}<br />\
 				<button @click.prevent="doUpload();" style="min-width:110px;">{{progress && progress !== 100 ? \'上传中 \' + progress + \'%\': \'上传\'}}</button>\
 			</div>\
 		</div>',
@@ -656,7 +656,7 @@ Vue.component('attachment-picture-list', {
 				<div class="label">相册图：</div>\
 				<ul>\
 					<li v-for="pic in pics" style="float:left;margin-right:1%;text-align:center;">\
-						<a href="picCtx + pic.path" target="_blank"><img :src="picCtx + pic.path" style="max-width: 180px;max-height: 160px;" /></a><br />\
+						<a :href="picCtx + pic.path" target="_blank"><img :src="picCtx + pic.path" style="max-width: 100px;max-height: 100px;" /></a><br />\
 						<a href="###" @click="delPic(pic.id);">删 除</a>\
 					</li>\
 				</ul>\
@@ -672,13 +672,15 @@ Vue.component('attachment-picture-list', {
 			aj.xhr.get(this.loadListUrl, json => this.pics = json.result);
 		},
 		delPic(picId) {
-			aj.xhr.dele(this.delImgUrl + picId + "/", json => {
-				if(json.isOk) {
-					this.loadAttachmentPictures();
-				} else {
-					
-				}
-			});
+			aj.showConfirm("确定删除相册图片？", () => {
+				aj.xhr.dele(this.delImgUrl + picId + "/", json => {
+					if(json.isOk) {
+						this.loadAttachmentPictures();
+					} else {
+						
+					}
+				});
+			}); 
 		}
 	}
 });
