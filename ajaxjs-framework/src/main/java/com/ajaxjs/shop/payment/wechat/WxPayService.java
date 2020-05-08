@@ -1,4 +1,4 @@
-package com.ajaxjs.shop.group;
+package com.ajaxjs.shop.payment.wechat;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,10 +9,8 @@ import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.shop.dao.OrderInfoDao;
 import com.ajaxjs.shop.model.OrderInfo;
-import com.ajaxjs.shop.payment.wechat.MiniAppPay;
 import com.ajaxjs.shop.payment.wechat.model.PerpayInfo;
 import com.ajaxjs.shop.payment.wechat.model.PerpayReturn;
-import com.ajaxjs.shop.service.CartService;
 import com.ajaxjs.shop.service.OrderService;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.weixin.payment.PayConstant;
@@ -63,7 +61,7 @@ public class WxPayService extends BaseService<OrderInfo> implements PayConstant 
 	 * @param ip
 	 * @return
 	 */
-	static Map<String, ?> wxPay(long userId, OrderInfo orderInfo, String ip) {
+	public static Map<String, ?> wxPay(long userId, OrderInfo orderInfo, String ip) {
 		String openId = dao.findUserOpenId(userId); // 小程序内调用登录接口，获取到用户的 openid
 
 		// 预付单
@@ -81,15 +79,17 @@ public class WxPayService extends BaseService<OrderInfo> implements PayConstant 
 			LOGGER.info("获取 perpayid 成功！{0}", result.getPrepay_id());
 //			Map<String, String> r = PaySignatures.getPayParam(result.getPrepay_id(), map.get("nonce_str")); // 商户 server 调用再次签名
 			Map<String, String> r = MiniAppPay.getPayParam(result.getPrepay_id(), result.getNonce_str()); // 商户
-																												// server
-																												// 调用再次签名
+																											// server
+																											// 调用再次签名
 			r.put("orderInfoId", orderInfo.getId() + ""); // 新订单 id
 
 			return r; // 将此 map 返回给小程序客户端，让它来调起支付界面
 		} else {
 			LOGGER.warning("获取 perpayid 失败！错误代码：{0}，错误信息：{1}。", result.getError_code(), result.getReturn_msg());
+
 			return new HashMap<String, Object>() {
 				private static final long serialVersionUID = 1L;
+
 				{
 					put("isOk", false);
 					put("msg", result.getReturn_msg());
@@ -97,8 +97,5 @@ public class WxPayService extends BaseService<OrderInfo> implements PayConstant 
 			};
 		}
 	}
-
-	@Resource("CartService")
-	private CartService cartService;
 
 }
