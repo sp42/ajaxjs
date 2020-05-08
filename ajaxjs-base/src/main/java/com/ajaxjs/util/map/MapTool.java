@@ -234,7 +234,10 @@ public class MapTool {
 						if (isTransform && t != value.getClass()) { // 类型相同，直接传入；类型不相同，开始转换
 							value = MappingValue.objectCast(value, t);
 						}
+						
+//						LOGGER.info("t:" + t);
 //						LOGGER.info("v:" + value + " type: " + value.getClass());
+						
 						property.getWriteMethod().invoke(bean, value);
 					}
 				}

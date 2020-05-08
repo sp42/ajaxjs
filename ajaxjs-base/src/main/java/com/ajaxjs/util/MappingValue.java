@@ -149,6 +149,8 @@ public class MappingValue {
 				b.setScale(2, BigDecimal.ROUND_DOWN);
 
 				value = b;
+			} else if (value instanceof Double) {
+				value = new BigDecimal(Double.toString((Double) value));
 			}
 		}
 
