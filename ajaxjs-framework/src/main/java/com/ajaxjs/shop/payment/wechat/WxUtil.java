@@ -61,7 +61,7 @@ public class WxUtil {
 	/**
 	 * 统一下单接口
 	 */
-	public static final String UNIFIED_ORDER_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+	private static final String UNIFIED_ORDER_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 
 	/**
 	 * 执行统一下单的请求

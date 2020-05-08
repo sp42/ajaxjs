@@ -41,7 +41,7 @@ public class AliPayController extends BaseController<Map<String, Object>> {
 	@POST
 	public String alipay(@FormParam("out_trade_no") String out_trade_no, @FormParam("subject") String subject,
 			@FormParam("total_amount") String total_amount, @FormParam("body") String body) throws AlipayApiException {
-		LOGGER.info("进行支付");
+		LOGGER.info("下单进行支付");
 
 		Alipay alipay = new Alipay();
 		alipay.setOut_trade_no(out_trade_no);

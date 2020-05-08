@@ -28,11 +28,6 @@ public interface PayConstant {
 	public static final String refundquery = "https://api.mch.weixin.qq.com/pay/refundquery";
 
 	/**
-	 * 异步接收微信支付结果通知的回调地址，通知url必须为外网可访问的url，不能携带参数。
-	 */
-	public static String NOTIFY_URL = "https://xxx.com/v1/weixin/pay/wxnotify";
-
-	/**
 	 * 异步接收微信支付退款结果通知的回调地址，通知URL必须为外网可访问的url，不允许带参数，如果参数中传了notify_url，则商户平台上配置的回调地址将不会生效。
 	 */
 	public static String NOTIFY_URL_REFUND = "https://xxx.com/v1/weixin/pay/refund";
@@ -43,20 +38,6 @@ public interface PayConstant {
 	public enum SignType {
 		MD5, HMACSHA256, SHA1
 	}
-
-	/**
-	 * 证书路径
-	 */
-	public static String APICLIENT_CERT = "/data/ops/cert/apiclient_cert.p12"; // 真实
-	public static String APICLIENT_CERT_XXX = "/data/ops/cert_xxx/apiclient_cert.p12"; // 真实
-
-	/**
-	 * 交易类型 JSAPI--公众号支付、NATIVE--原生扫码支付、APP--app支付，统一下单接口trade_type的传参可参考这里
-	 * MICROPAY--刷卡支付，刷卡支付有单独的支付接口，不调用统一下单接口
-	 */
-	public static final String TRADE_TYPE = "JSAPI";
-	public static final String TRADE_TYPE_APP = "APP";
-	public static final String TRADE_TYPE_NATIVE = "NATIVE";
 
 	/**
 	 * 微信 - API域名地址 域名管理实现主备域名自动切换
@@ -88,17 +69,6 @@ public interface PayConstant {
 	 */
 	public static final String HMACSHA256 = "HMAC-SHA256";
 	public static final String MD5 = "MD5";
-
-	/**
-	 * 标价币种：fee_type 符合ISO 4217标准的三位字母代码，默认人民币：CNY，详细列表请参见货币类型
-	 */
-	public static final String FEE_TYPE_CNY = "CNY";
-
-	/**
-	 * 微信签名：通过签名算法计算得出的签名值
-	 */
-	public static final String FIELD_SIGN = "sign";
-	public static final String FIELD_SIGN_TYPE = "sign_type";
 
 	/**
 	 * 微信支付版本

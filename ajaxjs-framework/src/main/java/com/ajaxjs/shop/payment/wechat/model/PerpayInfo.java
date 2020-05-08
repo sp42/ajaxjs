@@ -1,4 +1,4 @@
-package com.ajaxjs.weixin.payment;
+package com.ajaxjs.shop.payment.wechat.model;
 
 import java.util.Date;
 

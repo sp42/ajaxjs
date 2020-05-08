@@ -103,7 +103,7 @@ public class PcPay {
 			OutputStream outputStream = response.getOutputStream();
 			// 关流
 			try {
-				ImageIO.write(image, "jpg", outputStream);
+				ImageIO.write(image, "JPEG", outputStream);
 			} finally {
 				outputStream.close();
 			}

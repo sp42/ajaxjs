@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
@@ -13,16 +14,15 @@ import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.ShopHelper;
 import com.ajaxjs.shop.dao.OrderInfoDao;
 import com.ajaxjs.shop.model.OrderInfo;
+import com.ajaxjs.shop.payment.wechat.MiniAppPay;
 import com.ajaxjs.shop.payment.wechat.WxUtil;
+import com.ajaxjs.shop.payment.wechat.model.PaymentNotification;
+import com.ajaxjs.shop.payment.wechat.model.PerpayInfo;
 import com.ajaxjs.shop.payment.wechat.model.PerpayReturn;
 import com.ajaxjs.shop.service.CartService;
 import com.ajaxjs.shop.service.OrderService;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.weixin.payment.PayConstant;
-import com.ajaxjs.weixin.payment.PaySignatures;
-import com.ajaxjs.weixin.payment.PaymentNotification;
-import com.ajaxjs.weixin.payment.PerpayInfo;
-import com.ajaxjs.weixin.payment.MiniAppPay;
 
 /**
  * 订单核心业务
@@ -122,7 +122,7 @@ public class WxPayService extends BaseService<OrderInfo> implements PayConstant 
 
 		if (perpayReturn.isSuccess()) {
 			// 验证签名是否正确
-			String toCheck = WxUtil.generateSignature(perpayReturn.getData(), PaySignatures.getMchSecretId());
+			String toCheck = WxUtil.generateSignature(perpayReturn.getData(), ConfigService.getValueAsString("mini_program.MchSecretId"));
 
 			if (perpayReturn.getSign().equals(toCheck)) {
 				String totalFee = perpayReturn.getTotal_fee(), orderNo = perpayReturn.getOut_trade_no();
