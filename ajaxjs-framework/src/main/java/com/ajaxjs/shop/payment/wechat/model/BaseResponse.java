@@ -1,4 +1,4 @@
-package com.ajaxjs.weixin.payment;
+package com.ajaxjs.shop.payment.wechat.model;
 
 /**
  * 响应内容基类
@@ -73,6 +73,11 @@ public class BaseResponse {
 		this.error_code_desc = error_code_desc;
 	}
 
+	/**
+	 * 统一下单响应是否成功
+	 * 
+	 * @return true 表示成功
+	 */
 	public boolean isSuccess() {
 		return "SUCCESS".equals(return_code) && "SUCCESS".equals(result_code);
 	}

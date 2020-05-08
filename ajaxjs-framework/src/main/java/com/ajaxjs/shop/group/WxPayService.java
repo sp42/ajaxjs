@@ -13,6 +13,8 @@ import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.ShopHelper;
 import com.ajaxjs.shop.dao.OrderInfoDao;
 import com.ajaxjs.shop.model.OrderInfo;
+import com.ajaxjs.shop.payment.wechat.WxUtil;
+import com.ajaxjs.shop.payment.wechat.model.PerpayReturn;
 import com.ajaxjs.shop.service.CartService;
 import com.ajaxjs.shop.service.OrderService;
 import com.ajaxjs.util.logger.LogHelper;
@@ -20,8 +22,7 @@ import com.ajaxjs.weixin.payment.PayConstant;
 import com.ajaxjs.weixin.payment.PaySignatures;
 import com.ajaxjs.weixin.payment.PaymentNotification;
 import com.ajaxjs.weixin.payment.PerpayInfo;
-import com.ajaxjs.weixin.payment.PerpayReturn;
-import com.ajaxjs.weixin.payment.WxPay;
+import com.ajaxjs.weixin.payment.MiniAppPay;
 
 /**
  * 订单核心业务
@@ -81,12 +82,12 @@ public class WxPayService extends BaseService<OrderInfo> implements PayConstant 
 //		Map<String, String> map = WxPay.unifiedOrder(orderInfo, perpayInfo);
 //		PerpayReturn result = WxPay.sendUnifiedOrder(map); 
 
-		PerpayReturn result = WxPay.sendUnifiedOrder(orderInfo, perpayInfo);// 商户 server 调用支付统一下单
+		PerpayReturn result = MiniAppPay.sendUnifiedOrder(orderInfo, perpayInfo);// 商户 server 调用支付统一下单
 
 		if (result.isSuccess()) {
 			LOGGER.info("获取 perpayid 成功！{0}", result.getPrepay_id());
 //			Map<String, String> r = PaySignatures.getPayParam(result.getPrepay_id(), map.get("nonce_str")); // 商户 server 调用再次签名
-			Map<String, String> r = PaySignatures.getPayParam(result.getPrepay_id(), result.getNonce_str()); // 商户
+			Map<String, String> r = MiniAppPay.getPayParam(result.getPrepay_id(), result.getNonce_str()); // 商户
 																												// server
 																												// 调用再次签名
 			r.put("orderInfoId", orderInfo.getId() + ""); // 新订单 id
@@ -121,7 +122,7 @@ public class WxPayService extends BaseService<OrderInfo> implements PayConstant 
 
 		if (perpayReturn.isSuccess()) {
 			// 验证签名是否正确
-			String toCheck = PaySignatures.generateSignature(perpayReturn.getData(), PaySignatures.getMchSecretId());
+			String toCheck = WxUtil.generateSignature(perpayReturn.getData(), PaySignatures.getMchSecretId());
 
 			if (perpayReturn.getSign().equals(toCheck)) {
 				String totalFee = perpayReturn.getTotal_fee(), orderNo = perpayReturn.getOut_trade_no();

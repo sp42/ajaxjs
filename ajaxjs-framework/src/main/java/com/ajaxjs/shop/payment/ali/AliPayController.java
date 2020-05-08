@@ -64,6 +64,11 @@ public class AliPayController extends BaseController<Map<String, Object>> {
 			String trade_no = params.get("trade_no").toString();// 支付宝交易号
 			String total_amount = params.get("total_amount").toString();// 付款金额
 
+			// TODO total_amount 金额判断
+			if (total_amount != null) {
+
+			}
+
 			// 查询当前订单信息
 			OrderInfo info = service.findByOrderNo(outerTradeNo);
 			OrderInfo uInfo = new OrderInfo(); // 用于更新的 bean

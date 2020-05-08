@@ -1,6 +1,6 @@
 package com.ajaxjs.weixin.payment;
 
-import com.ajaxjs.weixin.payment.BaseResponse;
+import com.ajaxjs.shop.payment.wechat.model.BaseResponse;
 
 /**
  * @borball on 5/17/2016.

@@ -2,6 +2,8 @@ package com.ajaxjs.weixin.payment;
 
 import java.util.Map;
 
+import com.ajaxjs.shop.payment.wechat.model.BaseResponse;
+
 /**
  * 异步支付通知
  * 

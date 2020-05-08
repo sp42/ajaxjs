@@ -1,7 +1,7 @@
-package com.ajaxjs.weixin.payment;
+package com.ajaxjs.shop.payment.wechat.model;
 
 /**
- * 预付返回结果
+ * 统一下单后返回的结果
  * 
  * @author sp42 frank@ajaxjs.com
  *
@@ -13,6 +13,7 @@ public class PerpayReturn extends BaseResponse {
 	private String sign;
 	private String prepay_id;
 	private String trade_type;
+	private String code_url;
 
 	public String getAppid() {
 		return appid;
@@ -60,5 +61,13 @@ public class PerpayReturn extends BaseResponse {
 
 	public void setTrade_type(String trade_type) {
 		this.trade_type = trade_type;
+	}
+
+	public String getCode_url() {
+		return code_url;
+	}
+
+	public void setCode_url(String code_url) {
+		this.code_url = code_url;
 	}
 }

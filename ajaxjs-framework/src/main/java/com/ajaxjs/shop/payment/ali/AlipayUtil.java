@@ -16,19 +16,19 @@ public class AlipayUtil {
 
 	public static String connect(Alipay alipay) throws AlipayApiException {
 		// 获取配置文件中应用ID
-		String appId = ConfigService.getValueAsString("Alipay.app_id");
+		String appId = ConfigService.getValueAsString("shop.payment.Alipay.app_id");
 
 		// 获取配置文件中商户私钥
-		String merchant_private_key = ConfigService.getValueAsString("Alipay.merchant_private_key");
+		String merchant_private_key = ConfigService.getValueAsString("shop.payment.Alipay.merchant_private_key");
 
 		// 获取配置文件中支付宝公钥
-		String alipay_public_key = ConfigService.getValueAsString("Alipay.merchant_public_key");
+		String alipay_public_key = ConfigService.getValueAsString("shop.payment.Alipay.merchant_public_key");
 
 		// 获取配置文件中服务器异步通知页面路径
-		String notifyUrl = ConfigService.getValueAsString("Alipay.notify_url");
+		String notifyUrl = ConfigService.getValueAsString("shop.payment.Alipay.notify_url");
 
 		// 获取配置文件中页面跳转同步通知页面路径
-		String returnUrl = ConfigService.getValueAsString("Alipay.return_url");
+		String returnUrl = ConfigService.getValueAsString("shop.payment.Alipay.return_url");
 
 		// 1、获得初始化的AlipayClient
 		AlipayClient alipayClient = new DefaultAlipayClient(GATEWAY_URL, appId, merchant_private_key, "json", "utf-8",
