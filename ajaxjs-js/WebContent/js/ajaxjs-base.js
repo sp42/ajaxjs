@@ -396,14 +396,14 @@ ajaxjs.xhr.defaultCallBack_cb = function(json, xhr, onOK, onFail) {
 	if (json) {
 		if (json.isOk) {
 			!!onOK && onOK(json);
-			ajaxjs.alert.show(json.msg || '操作成功！');
+			aj.msg.show(json.msg || '操作成功！');
 		} else {
 			!!onFail && onFail(json);
-			ajaxjs.alert.show(json.msg || '执行失败！原因未知！');
+			aj.msg.show(json.msg || '执行失败！原因未知！');
 		}
 	} else {
 		onFail && onFail(json);
-		ajaxjs.alert.show('ServerSide Error!');
+		aj.msg.show('ServerSide Error!');
 	}
 }
 
