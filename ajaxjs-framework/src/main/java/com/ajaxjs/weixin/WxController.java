@@ -1,4 +1,4 @@
-package com.ajaxjs.weixin.controller;
+package com.ajaxjs.weixin;
 
 import java.util.HashMap;
 import java.util.Map;

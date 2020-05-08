@@ -1,7 +1,10 @@
 package com.ajaxjs.shop;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.ajaxjs.orm.SnowflakeIdWorker;
 
 public interface ShopConstant {
 	public static final int ENTRY_GOODS = 56;
@@ -68,4 +71,13 @@ public interface ShopConstant {
 			put(CANCELLED, "未团成");
 		}
 	};
+
+	/**
+	 * 生成外显的订单号
+	 * 
+	 * @return 外显的订单号
+	 */
+	static String getOutterOrderNo() {
+		return Calendar.getInstance().get(Calendar.YEAR) + "" + SnowflakeIdWorker.idWorker.nextId();
+	}
 }

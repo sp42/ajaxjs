@@ -13,7 +13,6 @@ import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.shop.ShopConstant;
-import com.ajaxjs.shop.ShopHelper;
 import com.ajaxjs.shop.dao.OrderInfoDao;
 import com.ajaxjs.shop.model.Cart;
 import com.ajaxjs.shop.model.OrderInfo;
@@ -163,7 +162,7 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 
 		getAddress(order, addressId);
 
-		order.setOrderNo(ShopHelper.getOutterOrderNo()); // 生成外显的订单号
+		order.setOrderNo(ShopConstant.getOutterOrderNo()); // 生成外显的订单号
 
 		create(order); // 保存订单
 

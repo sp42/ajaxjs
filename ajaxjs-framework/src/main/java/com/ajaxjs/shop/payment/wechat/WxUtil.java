@@ -1,11 +1,11 @@
 package com.ajaxjs.shop.payment.wechat;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 
 import com.ajaxjs.net.http.HttpBasicRequest;
-import com.ajaxjs.shop.ShopHelper;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.payment.wechat.model.PerpayReturn;
 import com.ajaxjs.user.token.TokenService;
@@ -23,7 +23,7 @@ public class WxUtil {
 	 */
 	public static void commonSetUnifiedOrder(OrderInfo order, Map<String, String> data) {
 		data.put("out_trade_no", order.getOrderNo());
-		data.put("total_fee", ShopHelper.toCent(order.getTotalPrice()));
+		data.put("total_fee", WxUtil.toCent(order.getTotalPrice()));
 
 		data.put("fee_type", "CNY");
 		data.put("nonce_str", TokenService.getRandomString(10));
@@ -81,5 +81,15 @@ public class WxUtil {
 		PerpayReturn perpayReturn = MapTool.map2Bean(MapTool.as(resultMap, v -> v == null ? null : (Object) v),
 				PerpayReturn.class);
 		return perpayReturn;
+	}
+
+	/**
+	 * 转换为分的字符串
+	 * 
+	 * @param price 单位是元
+	 * @return 分的字符串
+	 */
+	public static String toCent(BigDecimal price) {
+		return String.valueOf(price.multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP).intValue());
 	}
 }
