@@ -27,6 +27,8 @@ import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.group.WxPayService;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.model.OrderItem;
+import com.ajaxjs.shop.payment.ali.Alipay;
+import com.ajaxjs.shop.payment.ali.AlipayUtil;
 import com.ajaxjs.shop.service.OrderService;
 import com.ajaxjs.user.controller.BaseUserController;
 import com.ajaxjs.user.filter.LoginCheck;
@@ -34,6 +36,7 @@ import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.service.UserAddressService;
 import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.logger.LogHelper;
+import com.alipay.api.AlipayApiException;
 
 /**
  * 
@@ -53,33 +56,34 @@ public class OrderController extends BaseController<OrderInfo> {
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String account(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
 		LOGGER.info("浏览我的订单");
-		
+
 		prepareData(mv);
 		mv.put(PAGE_RESULT, service.findPagedList(start, limit, 0, 0, null, BaseUserController.getUserId()));
 		return jsp("shop/order");
 	}
-	
+
 	@GET
 	@Path("/shop/order/" + ID_INFO)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String orderDetail(@PathParam(ID) Long id, ModelAndView mv) {
 		LOGGER.info("浏览我的订单明细");
-		
+
 		prepareData(mv);
 		mv.put(INFO, service.findById(id));
+
 		// 订单明细
 		List<OrderItem> items = WxPayService.dao.findOrderItemListByOrderId(id);
 		mv.put("orderItems", items);
-		
+
 		return jsp("shop/order-info");
 	}
 
 	@Path("/shop/order/checkout")
 	@GET
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	public String checkout(ModelAndView mv) {
+	public String checkout(ModelAndView mv, @QueryParam("goodsId") long goodsId) {
 		LOGGER.info("下单");
-		
+
 		service.showCheckout(mv);
 		return jsp("shop/checkout");
 	}
@@ -87,20 +91,35 @@ public class OrderController extends BaseController<OrderInfo> {
 	@POST
 	@Path("/shop/order")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Produces(MediaType.APPLICATION_JSON)
-	public String processOrder(@FormParam("addressId") @NotNull long addressId, @FormParam("cartIds") @NotNull String _cartIds, ModelAndView mv, HttpServletRequest r) {
+//	@Produces(MediaType.APPLICATION_JSON)
+	public String processOrder(@FormParam("addressId") @NotNull long addressId, @FormParam("payType") int payType,
+			@FormParam("cartIds") @NotNull String _cartIds, ModelAndView mv, HttpServletRequest r) throws AlipayApiException {
 		LOGGER.info("处理订单 结账");
-		
+
 		UserAddressService.initData(r);
 		String[] cartIds = _cartIds.split(",");
-		OrderInfo order = service.processOrder(BaseUserController.getUserId(), addressId, cartIds);
+		OrderInfo order = service.processOrder(BaseUserController.getUserId(), addressId, cartIds, payType);
 		service.onProcessOrderDone(order);
-		
-		if(order != null) {
-			return jsonOk("交易成功！");
-		} 
 
-		return jsonNoOk("交易不成功！");
+		if (payType != 0) {
+			switch (payType) {
+			case ShopConstant.ALI_PAY:
+				order.setPayType(ShopConstant.ALI_PAY);
+				LOGGER.info("进行支付");
+
+				System.out.println(order.getOuterTradeNo());
+				System.out.println(order.getTotalPrice().toString());
+				Alipay alipay = new Alipay();
+				alipay.setSubject("支付我们的产品");
+				alipay.setBody("");
+				alipay.setOut_trade_no(order.getOrderNo());
+				alipay.setTotal_amount(order.getTotalPrice().toString());
+
+				return "html::" + AlipayUtil.connect(alipay);
+			}
+		}
+
+		return order != null ? jsonOk("交易成功！") : jsonNoOk("交易不成功！");
 	}
 
 	/////////// 后台 //////////////
@@ -108,7 +127,8 @@ public class OrderController extends BaseController<OrderInfo> {
 	@GET
 	@Path(LIST)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv, @QueryParam("userId") long userId) {
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv,
+			@QueryParam("userId") long userId) {
 		LOGGER.info("后台-订单列表");
 
 		page(mv, service.findPagedList(start, limit, 0, 0, null, userId), CommonConstant.UI_ADMIN);
@@ -119,7 +139,7 @@ public class OrderController extends BaseController<OrderInfo> {
 	public void prepareData(ModelAndView mv) {
 		super.prepareData(mv);
 		mv.put("TradeStatusDict", ShopConstant.TradeStatus);
-		mv.put("PayTypeDict", ShopConstant.PayType);
+		mv.put("PayTypeDict", ShopConstant.PAY_TYPE);
 		mv.put("PayStatusDict", ShopConstant.PayStatus);
 	}
 

@@ -29,7 +29,7 @@ public interface ShopConstant {
 	public static final int ALI_PAY = 2;
 	public static final int OFFLINE_PAY = 3;
 
-	public static final Map<Integer, String> PayType = new HashMap<Integer, String>() {
+	public static final Map<Integer, String> PAY_TYPE = new HashMap<Integer, String>() {
 		private static final long serialVersionUID = -1L;
 
 		{

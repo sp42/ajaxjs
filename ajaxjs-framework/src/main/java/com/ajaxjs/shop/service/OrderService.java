@@ -112,7 +112,7 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 		Map<String, Object> map = new HashMap<>();
 		map.put("info", info);
 		map.put("TradeStatusDict", ShopConstant.TradeStatus); // UI 也要显示数据字典
-		map.put("PayTypeDict", ShopConstant.PayType);
+		map.put("PayTypeDict", ShopConstant.PAY_TYPE);
 		map.put("PayStatusDict", ShopConstant.PayStatus);
 
 		return map;
@@ -148,7 +148,7 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 	 * @param cartIds   订单明细由购物车的数据生成
 	 * @return 订单
 	 */
-	public OrderInfo processOrder(long userId, long addressId, String[] cartIds) {
+	public OrderInfo processOrder(long userId, long addressId, String[] cartIds, int payType) {
 		LOGGER.info("生成订单信息");
 
 		// 购物车转为订单
@@ -159,6 +159,7 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 		order.setBuyerId(userId);
 		order.setTotalPrice(actualPrice);
 		order.setOrderPrice(actualPrice); // 当前没有优惠券
+		order.setPayType(payType);
 
 		getAddress(order, addressId);
 
@@ -168,6 +169,7 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 
 		OrderItem[] orderItems = new OrderItem[carts.size()];
 		int i = 0; // TODO: why no i++?
+		
 		// 生成明细
 		for (Cart cart : carts) {
 			OrderItem orderItem = new OrderItem();

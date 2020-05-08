@@ -62,7 +62,7 @@
 			<thead>
 				<tr>
 					<th>#</th>
-					<th>订单号</th>
+					<th>订单号/交易号</th>
 					<th>支付类型</th>
 					<th>订单金额</th>
 					<th>最终金额</th>
@@ -94,7 +94,7 @@
 				<c:foreach var="current" items="${PageResult}">
 					<tr>
 						<td>${current.id}</td>
-						<td>${current.orderNo}<br/>${current.outerTradeNo}</td>
+						<td>${current.orderNo}<br/><span style="color:gray">${current.outerTradeNo}</span></td>
 						<td>${PayTypeDict[current.payType]}</td>
 						<td>￥${current.orderPrice}</td>
 						<td>￥${current.totalPrice}</td>
@@ -102,6 +102,7 @@
 						<td>${PayStatusDict[current.payStatus]}</td>
 						<td>
 							<c:dateFormatter value="${current.createDate}" />
+							${empty current.payDate ? '' : '<br />'}
 							<c:dateFormatter value="${current.payDate}" />
 						</td>
 						<td>

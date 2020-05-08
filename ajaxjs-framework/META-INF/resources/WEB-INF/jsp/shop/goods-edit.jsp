@@ -188,7 +188,7 @@
 					attachmentPictures:[]
 				},
 				methods: {
-					loadGoodsFormatItemList(){
+					loadGoodsFormatItemList() {
 			 			${!isCreate} && aj.xhr.get('${ctx}/admin/goodsFormat', json => {
 							this.goodsFormatItemList = json.result;
 						}, {
@@ -204,7 +204,7 @@
 					},
 					delGoodsFormat (id) {
 						aj.showConfirm('确定删除吗？', () => 
-							aj.xhr.dele('${ctx}/admin/goodsFormat/' +id, ajaxjs.xhr.defaultCallBack.after(() => {
+							aj.xhr.dele('${ctx}/admin/goodsFormat/' + id, ajaxjs.xhr.defaultCallBack.after(() => {
 								this.loadGoodsFormatItemList();
 							}))
 						);

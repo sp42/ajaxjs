@@ -19,10 +19,7 @@ public class OrderInfo extends BaseModel {
 	 */
 	private String orderNo;
 	
-	
 	private String transactionId;
-	
-
 
 	/**
 	 * 设置唯一订单号

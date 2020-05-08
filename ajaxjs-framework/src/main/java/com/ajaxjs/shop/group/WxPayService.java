@@ -53,7 +53,7 @@ public class WxPayService extends BaseService<OrderInfo> implements PayConstant 
 	 * @return
 	 */
 	public Map<String, ?> createOrderAndPay(long userId, long addressId, String[] cartIds, String ip) {
-		OrderInfo orderInfo = orderService.processOrder(userId, addressId, cartIds);
+		OrderInfo orderInfo = orderService.processOrder(userId, addressId, cartIds, 0);
 		return wxPay(userId, orderInfo, ip);
 	}
 

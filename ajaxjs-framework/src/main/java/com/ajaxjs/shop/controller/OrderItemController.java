@@ -63,7 +63,7 @@ public class OrderItemController extends BaseController<OrderItem> {
 
 		mv.put("sellers", map);
 		mv.put("TradeStatusDict", ShopConstant.TradeStatus);
-		mv.put("PayTypeDict", ShopConstant.PayType);
+		mv.put("PayTypeDict", ShopConstant.PAY_TYPE);
 		mv.put("PayStatusDict", ShopConstant.PayStatus);
 	}
 

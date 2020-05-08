@@ -38,8 +38,9 @@ public class GoodsFormatController extends BaseController<GoodsFormat> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
-	public String create(GoodsFormat entity) {
-		return super.create(entity);
+	public String create(GoodsFormat bean) {
+		System.out.println("::::" + bean.getPrice());
+		return super.create(bean);
 	}
 
 	@DELETE
