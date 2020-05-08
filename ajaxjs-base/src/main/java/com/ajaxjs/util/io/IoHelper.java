@@ -71,6 +71,7 @@ public class IoHelper {
 				result.append(line);
 				result.append('\n');
 			}
+			
 			inReader.close();
 		} catch (IOException e) {
 			LOGGER.warning(e);
