@@ -46,7 +46,7 @@ public class TokenMgr {
 	}
 
 	/**
-	 * 通过的解析过程，可判断错误和记录超时
+	 * 通用的解析过程，可判断错误和记录超时
 	 * 
 	 * @param <T>     实体类
 	 * @param jsonStr 服务端响应的 JSON 字符串
