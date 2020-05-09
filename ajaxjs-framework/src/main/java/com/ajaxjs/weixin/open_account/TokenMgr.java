@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import com.ajaxjs.net.http.NetUtil;
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.weixin.open_account.model.AccessToken;
 import com.ajaxjs.weixin.open_account.model.BaseModel;
@@ -16,6 +17,10 @@ import com.ajaxjs.weixin.open_account.model.JsApiTicket;
  *
  */
 public class TokenMgr {
+	private static final LogHelper LOGGER = LogHelper.getLog(TokenMgr.class);
+	
+	public static TokenMgr instance;
+	
 	private String appId;
 
 	private String appSecret;
@@ -58,6 +63,7 @@ public class TokenMgr {
 			T token = JsonHelper.parseMapAsBean(jsonStr, beanClz);
 
 			if (token.getErrcode() != 0) {
+				LOGGER.warning("错误：" + token.getErrmsg());
 				throw new NullPointerException(token.getErrmsg());
 			} else {
 				long e = System.currentTimeMillis() + (token.getExpires_in() * 1000); // 设置过期时间
@@ -78,6 +84,7 @@ public class TokenMgr {
 	 * 获取 AccessToken
 	 */
 	public void initAccessToken() {
+		LOGGER.info("获取 AccessToken");
 		String jsonStr = NetUtil.simpleGET(String.format(ACCESS_TOKEN_API, appId, appSecret));
 		token = init(jsonStr, AccessToken.class);
 	}
@@ -88,6 +95,7 @@ public class TokenMgr {
 	 * 生成 JS-SDK 使用权限签名。
 	 */
 	public void initTicket() {
+		LOGGER.info("获取 JSAPI Ticket");
 		String jsonStr = NetUtil.simpleGET(String.format(TICKET_API, getToken()));
 		jsApiTicket = init(jsonStr, JsApiTicket.class);
 	}
