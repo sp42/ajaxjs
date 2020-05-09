@@ -14,7 +14,7 @@ import com.ajaxjs.weixin.mini_app.MiniApp;
 import com.ajaxjs.weixin.payment.PayConstant;
 
 /**
- * 支付方法
+ * 小程序的微信支付方法
  * 
  * @author sp42 frank@ajaxjs.com
  *
