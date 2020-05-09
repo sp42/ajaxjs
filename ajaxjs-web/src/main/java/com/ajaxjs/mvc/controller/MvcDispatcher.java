@@ -164,6 +164,9 @@ public class MvcDispatcher implements Filter {
 			}
 
 			if (isDoFilter) {
+				if (model == null) // 如果方法没参数则不会出现 mv。这里补一个
+					model = new ModelAndView();
+				
 				for (FilterAction filterAction : filterActions) {
 					isbeforeSkip = !filterAction.before(model, request, response, method, args); // 相当于 AOP 前置
 					if (isbeforeSkip)
@@ -246,7 +249,9 @@ public class MvcDispatcher implements Filter {
 		} else {
 			if (err instanceof IllegalAccessError && ConfigService.getValueAsString("page.onNoLogin") != null) {
 				// 没有权限时跳转的地方
-				response.resultHandler( "redirect::" + r.getContextPath() + ConfigService.getValueAsString("page.onNoLogin"), r, model, method);
+				response.resultHandler(
+						"redirect::" + r.getContextPath() + ConfigService.getValueAsString("page.onNoLogin"), r, model,
+						method);
 			} else {
 				r.setAttribute("javax.servlet.error.status_code", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 				r.setAttribute("javax.servlet.error.exception_type", err.getClass());
