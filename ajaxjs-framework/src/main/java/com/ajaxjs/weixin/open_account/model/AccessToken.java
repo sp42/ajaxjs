@@ -6,44 +6,17 @@ package com.ajaxjs.weixin.open_account.model;
  * @author sp42 frank@ajaxjs.com
  *
  */
-public class AccessToken {
+public class AccessToken extends BaseModel {
 	/**
 	 * 获取到的凭证
 	 */
-	private String token;
+	private String access_token;
 
-	/**
-	 * JS API 凭证
-	 */
-	private String jsApiTicket;
-
-	/**
-	 * 凭证有效时间，单位：秒
-	 */
-	private int expiresIn;
-
-	public String getToken() {
-		return token;
+	public String getAccess_token() {
+		return access_token;
 	}
 
-	public void setToken(String token) {
-		this.token = token;
+	public void setAccess_token(String access_token) {
+		this.access_token = access_token;
 	}
-
-	public int getExpiresIn() {
-		return expiresIn;
-	}
-
-	public void setExpiresIn(int expiresIn) {
-		this.expiresIn = expiresIn;
-	}
-
-	public String getJsApiTicket() {
-		return jsApiTicket;
-	}
-
-	public void setJsApiTicket(String jsApiTicket) {
-		this.jsApiTicket = jsApiTicket;
-	}
-
 }

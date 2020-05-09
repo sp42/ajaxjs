@@ -1,106 +1,14 @@
 package com.ajaxjs.weixin.open_account;
 
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.ajaxjs.net.http.NetUtil;
 import com.ajaxjs.user.token.TokenService;
-import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
-import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.weixin.open_account.model.AccessToken;
-import com.ajaxjs.weixin.web.model.JsApiTicket;
 
 public class WxWebUtils {
-	private final static String ACCESS_TOKEN_API = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s";
-
-	/**
-	 * Access_token 是公众号的全局唯一票据，公众号调用各接口时都需使用access_token。
-	 * 1、access_token的存储至少要保留512个字符空间 2、access_token的有效期目前为2个小时，需定时刷新
-	 * 3、重复获取将导致上次获取的access_token失效
-	 * 
-	 * https://mp.weixin.qq.com/wiki?action=doc&id=mp1421140183
-	 * 
-	 * {"errcode":40164,"errmsg":"invalid ip 119.33.28.152, not in whitelist hint:
-	 * [g_G8404063055]"}
-	 * 
-	 * @param appId
-	 * @param appSecret
-	 * @return
-	 */
-	public static AccessToken getAccessToken(String appId, String appSecret) {
-		AccessToken accessToken = null;
-		String jsonStr = NetUtil.simpleGET(String.format(ACCESS_TOKEN_API, appId, appSecret));
-
-		if (jsonStr != null) {
-			Map<String, Object> result = JsonHelper.parseMap(jsonStr);
-
-			if (result.get("errmsg") != null) {
-				throw new NullPointerException(result.get("errmsg").toString());
-			} else {
-				accessToken = new AccessToken();
-				accessToken.setToken(result.get("access_token").toString());
-				accessToken.setExpiresIn((int) result.get("expires_in"));
-			}
-		} else {
-			throw new NullPointerException("通讯腾讯  AccessToken API 接口失败");
-		}
-
-		return accessToken;
-	}
-
-	public final static String ticketApi = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi";
-
-	public static JsApiTicket getJsApiTicket(String accessToken) {
-		JsApiTicket ticket = null;
-		String jsonStr = NetUtil.simpleGET(String.format(ticketApi, accessToken));
-
-		if (jsonStr != null) {
-			@SuppressWarnings("unchecked")
-			Map<String, Object> result = (Map<String, Object>) JsonHelper.parse(jsonStr);
-
-			if (!"ok".equals(result.get("errmsg").toString())) {
-				throw new NullPointerException(result.get("errmsg").toString());
-			} else {
-				ticket = new JsApiTicket();
-				ticket.setTicket(result.get("ticket").toString());
-				ticket.setExpiresIn((int) result.get("expires_in"));
-
-				long e = System.currentTimeMillis() + (ticket.getExpiresIn() * 1000); // 设置过期时间
-				Calendar ever = Calendar.getInstance();
-				ever.setTime(CommonUtil.Objet2Date(e));
-				ticket.setExpiresDate(ever);
-			}
-		} else {
-			throw new NullPointerException("通讯腾讯 JsApiTicket API 接口失败");
-		}
-
-		return ticket;
-	}
-
-	// 创建缓存
-	private static JsApiTicket jsApiTicket;
-
-	private static AccessToken accessToken;
-
-	public static JsApiTicket getJsApiTicket(String appId, String appSecret) {
-		if (jsApiTicket == null) {
-			accessToken = getAccessToken(appId, appSecret);
-			jsApiTicket = getJsApiTicket(accessToken.getToken());
-			// 第一次获取
-		} else {
-			// 重新获取
-			if (!jsApiTicket.getExpiresDate().after(Calendar.getInstance())) {
-				accessToken = getAccessToken(appId, appSecret);
-				jsApiTicket = getJsApiTicket(accessToken.getToken());
-			}
-		}
-
-		return jsApiTicket;
-	}
 
 	public static Map<String, String> generateSignature(String url, String jsApiTicket) {
 		Map<String, String> map = new HashMap<>();
