@@ -3,9 +3,7 @@ package com.ajaxjs.shop.payment.ali;
 import java.util.Date;
 import java.util.Map;
 
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
 import com.ajaxjs.config.ConfigService;
@@ -32,25 +30,6 @@ public class AliPayController extends BaseController<Map<String, Object>> {
 
 	@Resource("autoWire:ioc.OrderService|OrderService")
 	private OrderService service;
-
-	@GET
-	public String login() {
-		return jsp("alipay/login");
-	}
-
-	@POST
-	public String alipay(@FormParam("out_trade_no") String out_trade_no, @FormParam("subject") String subject,
-			@FormParam("total_amount") String total_amount, @FormParam("body") String body) throws AlipayApiException {
-		LOGGER.info("下单进行支付");
-
-		Alipay alipay = new Alipay();
-		alipay.setOut_trade_no(out_trade_no);
-		alipay.setBody(body);
-		alipay.setTotal_amount(total_amount);
-		alipay.setSubject(subject);
-
-		return "html::" + AlipayUtil.connect(alipay);
-	}
 
 	@GET
 	@Path("result")
