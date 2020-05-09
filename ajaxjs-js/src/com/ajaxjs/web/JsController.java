@@ -25,13 +25,14 @@ import javax.servlet.http.HttpServletResponse;
 public class JsController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		String js = "// build date:" + new Date() + "\n";
 		js += JavaScriptCompressor.compress(read(mappath(request, "js/ajaxjs-base.js"))) + "\n";
 		js += JavaScriptCompressor.compress(read(mappath(request, "js/ajaxjs-list.js"))) + "\n";
 		js += action(mappath(request, "js/widgets/"), true) + "\n";
 
-		String output = request.getParameter("output"); //  保存位置
+		String output = request.getParameter("output"); // 保存位置
 		Objects.requireNonNull(output, "必填参数");
 		save(output + "\\WebContent\\asset\\js\\all.js", js);
 		response.getWriter().append("Pack js Okay.");
@@ -42,16 +43,17 @@ public class JsController extends HttpServlet {
 	/**
 	 * 压缩 CSS 并将其保存到一个地方
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		String css = request.getParameter("css");
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String css = request.getParameter("css"),
+				file = request.getParameter("file") == null ? "main" : request.getParameter("file");
 		String output = "";
 		String saveFolder = request.getParameter("saveFolder") == null ? frontEnd : request.getParameter("saveFolder");
-		
+
 		Logger.getGlobal().info(request.getParameter("saveFolder"));
-		
+
 		try {
-			save(saveFolder + "\\main.css", css);
+			save(saveFolder + "\\" + file, css);
 
 			output = "{\"isOk\":true}";
 		} catch (Throwable e) {
@@ -94,7 +96,7 @@ public class JsController extends HttpServlet {
 	/**
 	 * 获取磁盘真實地址
 	 * 
-	 * @param cxt Web 上下文
+	 * @param cxt          Web 上下文
 	 * @param relativePath 相对地址
 	 * @return 绝对地址
 	 */
