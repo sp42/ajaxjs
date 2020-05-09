@@ -1,4 +1,4 @@
-package com.ajaxjs.weixin.web;
+package com.ajaxjs.weixin.open_account;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -11,9 +11,11 @@ import com.ajaxjs.user.token.TokenService;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.map.JsonHelper;
+import com.ajaxjs.weixin.open_account.model.AccessToken;
+import com.ajaxjs.weixin.web.model.JsApiTicket;
 
 public class WxWebUtils {
-	public final static String accessTokenApi = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s";
+	private final static String ACCESS_TOKEN_API = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s";
 
 	/**
 	 * Access_token 是公众号的全局唯一票据，公众号调用各接口时都需使用access_token。
@@ -31,17 +33,17 @@ public class WxWebUtils {
 	 */
 	public static AccessToken getAccessToken(String appId, String appSecret) {
 		AccessToken accessToken = null;
-		String jsonStr = NetUtil.simpleGET(String.format(accessTokenApi, appId, appSecret));
+		String jsonStr = NetUtil.simpleGET(String.format(ACCESS_TOKEN_API, appId, appSecret));
 
 		if (jsonStr != null) {
-			@SuppressWarnings("unchecked")
-			Map<String, Object> result = (Map<String, Object>) JsonHelper.parse(jsonStr);
+			Map<String, Object> result = JsonHelper.parseMap(jsonStr);
 
 			if (result.get("errmsg") != null) {
 				throw new NullPointerException(result.get("errmsg").toString());
 			} else {
-//				accessToken.setToken(result.get("access_token").toString());
-//				accessToken.setExpiresIn((int) result.get("expires_in"));
+				accessToken = new AccessToken();
+				accessToken.setToken(result.get("access_token").toString());
+				accessToken.setExpiresIn((int) result.get("expires_in"));
 			}
 		} else {
 			throw new NullPointerException("通讯腾讯  AccessToken API 接口失败");
@@ -106,9 +108,9 @@ public class WxWebUtils {
 		map.put("jsapi_ticket", jsApiTicket);
 		map.put("noncestr", TokenService.getRandomString(10));
 		map.put("timestamp", System.currentTimeMillis() / 1000 + "");
-		
+
 		String raw = generateSignature(map);
-		
+
 		map.put("signature", Encode.getSHA1(raw));
 
 		return map; // 因为签名用的 noncestr 和 timestamp 必须与 wx.config中的nonceStr 和 timestamp

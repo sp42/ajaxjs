@@ -1,4 +1,4 @@
-package com.ajaxjs.weixin.open.model;
+package com.ajaxjs.weixin.open_account.model.menu;
 
 /**
  * 网页类型

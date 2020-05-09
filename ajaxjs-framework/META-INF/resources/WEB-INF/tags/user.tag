@@ -62,8 +62,13 @@
 			mounted() {
 				ajaxjs.xhr.form(
 					this.$el, 
-					ajaxjs.xhr.defaultCallBack_cb.delegate(null, null, 
-						j => setTimeout("location.assign('${ctx}/${isAdminLogin ? 'admin' : 'user'}/')", 3000), j => this.$children[0].refreshCode()) ,
+					json => {
+						if (json && json.isOk) {
+							aj.alert.show(json.msg || '操作成功！');
+							setTimeout("location.assign('${ctx}/${isAdminLogin ? 'admin' : 'user'}/')", 3000);
+						} else 
+							aj.alert.show(json ? json.msg : '执行失败！原因未知！');
+					},
 					{
 						beforeSubmit(f, json) {
 							json.password =  md5(json.password);

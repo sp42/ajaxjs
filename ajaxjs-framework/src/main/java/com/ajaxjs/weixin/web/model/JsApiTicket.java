@@ -1,9 +1,14 @@
-package com.ajaxjs.weixin.web;
+package com.ajaxjs.weixin.web.model;
 
 import java.util.Calendar;
 
+/**
+ * 
+ * @author sp42 frank@ajaxjs.com
+ *
+ */
 public class JsApiTicket {
-	private String ticket; // 票据
+	private String jsApiTicket; // 票据
 
 	private int expiresIn; // 凭证有效时间，单位：秒
 

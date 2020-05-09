@@ -7,21 +7,19 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.ajaxjs.config.ConfigService;
-import com.ajaxjs.weixin.web.AccessToken;
-import com.ajaxjs.weixin.web.JsApiTicket;
-import com.ajaxjs.weixin.web.WxWebUtils;
+import com.ajaxjs.weixin.open_account.WxWebUtils;
+import com.ajaxjs.weixin.open_account.model.AccessToken;
+import com.ajaxjs.weixin.web.model.JsApiTicket;
 
 public class TestWxUtils {
-
-//	@Test
+	@Test
 	public void testGetAccessToken() {
-		ConfigService.load("D:\\project\\leidong\\src\\main\\resources\\site_config.json");
+		ConfigService.load("D:\\project\\leidong\\WebContent\\META-INF\\site_config.json");
 
-		String accessKey = ConfigService.getValueAsString("uploadFile.ObjectStorageService.QiuNiuYun.accessKey");
-		String secretKey = ConfigService.getValueAsString("uploadFile.ObjectStorageService.QiuNiuYun.secretKey");
-		String bucket = ConfigService.getValueAsString("uploadFile.ObjectStorageService.QiuNiuYun.bucket");
+		String appId = ConfigService.getValueAsString("wx_open.appId");
+		String appSecret = ConfigService.getValueAsString("wx_open.appSecret");
 		
-		AccessToken accessToken = WxWebUtils.getAccessToken("wx6f5129b94baba822", "3bdde43746c46f5b4200060e105dfabd");
+		AccessToken accessToken = WxWebUtils.getAccessToken(appId, appSecret);
 		assertNotNull(accessToken);
 	}
 	
@@ -35,9 +33,10 @@ public class TestWxUtils {
 		// HoagFKDcsGMVCIY2vOjf9nSGJAqc4xRTTYaX8D3rjxRPy1g5m948YqxgTOjp9zzFud6uwIwZIyQS14Ut-NcHLQ
 	}
 
-	@Test
+//	@Test
 	public void testGenerateSignature() {
 		 Map<String, String> map = WxWebUtils.generateSignature("http://qq.com", "HoagFKDcsGMVCIY2vOjf9nSGJAqc4xRTTYaX8D3rjxRPy1g5m948YqxgTOjp9zzFud6uwIwZIyQS14Ut-NcHLQ");
 		 assertNotNull(map);
 	}
 }
+ 

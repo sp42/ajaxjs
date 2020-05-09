@@ -152,12 +152,18 @@
 					</form>
 				</div>
 				<div :class="{'selected': 4 === selected}">	
-					<p>仅在开发模式下，部署之前执行。</p>
+					<p>1、仅在开发模式下（Windows）执行，且在部署之前执行。2、按实际情况改为你的工程目录。</p>
 					<div>
-						<button class="aj-btn" onclick="window.open('/ajaxjs-js/JsController?output=${aj_allConfig.System.project_folder.replace('\\',  '/')}');;return false;">打包 JavaScript</button>
+						<input class="jsSave aj-input" style="height:32px;width:400px;margin-right:30px;" value="${aj_allConfig.System.project_folder.replace('\\',  '/')}" /> <button class="aj-btn" onclick="window.open('/ajaxjs-js/JsController?output=' + aj('.jsSave').value);return false;">打包 JavaScript</button>
+						<div>最终保存在 /asset/js/all.js 中。 </div>
 					</div>
 					<div>
-						<button class="aj-btn" onclick="window.open('${ctx}/?css=true');return false;">打包 CSS</button>
+						<input class="cssSave aj-input" style="height:32px;width:400px;margin-right:30px;" value="${aj_allConfig.System.project_folder.replace('\\',  '/')}" /> <button class="aj-btn" onclick="window.open('${ctx}/?css=true&output=' + aj('.cssSave').value);return false;">打包网站 CSS</button>
+						<div>最终保存在 /asset/css/main.css 中。 </div>
+					</div>
+					<div>
+						<input class="adminSave aj-input" style="height:32px;width:400px;margin-right:30px;" value="${aj_allConfig.System.project_folder.replace('\\',  '/')}" /> <button class="aj-btn" onclick="window.open('${ctx}/admin/?css=true&file=admin.css&output=' + aj('.adminSave').value);return false;">打包后台 CSS</button>
+						<div>最终保存在 /asset/css/admin.css 中。 </div>
 					</div>
 				</div>
 			</div>

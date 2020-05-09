@@ -1,4 +1,4 @@
-package com.ajaxjs.weixin.web;
+package com.ajaxjs.weixin.open_account;
 
 import java.util.Calendar;
 import java.util.Map;
@@ -14,7 +14,7 @@ import com.ajaxjs.weixin.mini_app.MiniApp;
  * @author sp42 frank@ajaxjs.com
  *
  */
-public class AccessToken {
+public class AccessTokenService {
 
 	/**
 	 * Access_token 是公众号的全局唯一票据，公众号调用各接口时都需使用access_token。
@@ -30,7 +30,7 @@ public class AccessToken {
 	 * @param appSecret
 	 * @return
 	 */
-	public AccessToken(String appId, String appSecret) {
+	public AccessTokenService(String appId, String appSecret) {
 		setAppId(appId);
 		setAppSecret(appSecret);
 
@@ -65,9 +65,9 @@ public class AccessToken {
 	 * 
 	 * @return
 	 */
-	public static AccessToken miniP_factory() {
+	public static AccessTokenService miniP_factory() {
 		String appId = MiniApp.getAppId(), appSecret = MiniApp.getAppSecret();
-		return new AccessToken(appId, appSecret);
+		return new AccessTokenService(appId, appSecret);
 	}
 
 	/**

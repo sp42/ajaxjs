@@ -27,7 +27,6 @@ import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.model.OrderItem;
 import com.ajaxjs.shop.payment.ali.Alipay;
-import com.ajaxjs.shop.payment.ali.AlipayUtil;
 import com.ajaxjs.shop.payment.wechat.WxPayService;
 import com.ajaxjs.shop.service.OrderService;
 import com.ajaxjs.user.controller.BaseUserController;
@@ -115,7 +114,7 @@ public class OrderController extends BaseController<OrderInfo> {
 				alipay.setOut_trade_no(order.getOrderNo());
 				alipay.setTotal_amount(order.getTotalPrice().toString());
 
-				return "html::" + AlipayUtil.connect(alipay);
+				return "html::" + Alipay.connect(alipay);
 			}
 		}
 

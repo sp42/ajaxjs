@@ -71,10 +71,10 @@ public class GoodsController extends BaseController<Goods> {
 
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("getJson/{id}")
+	@Path("/shop/goods/getJson/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getInfo(@PathParam(ID) Long id) {
-		return "json::" + toJson(GoodsService.dao.findById(id), false);
+		return toJson(GoodsService.dao.findById(id));
 	}
 
 	@GET

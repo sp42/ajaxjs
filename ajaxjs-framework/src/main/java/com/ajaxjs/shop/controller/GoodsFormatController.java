@@ -39,8 +39,15 @@ public class GoodsFormatController extends BaseController<GoodsFormat> {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
 	public String create(GoodsFormat bean) {
-		System.out.println("::::" + bean.getPrice());
 		return super.create(bean);
+	}
+
+	@GET
+	@MvcFilter(filters = DataBaseFilter.class)
+	@Path("/shop/gooodsFormat/" + ID_INFO)
+	@Produces(MediaType.APPLICATION_JSON)
+	public String info(@PathParam(ID) Long id) {
+		return toJson(service.findById(id));
 	}
 
 	@DELETE

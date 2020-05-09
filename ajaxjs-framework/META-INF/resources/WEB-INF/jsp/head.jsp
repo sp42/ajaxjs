@@ -89,7 +89,8 @@
 				}, {
 					type : '${param.css}',
 					css: encodeURIComponent(cssCode),
-					saveFolder : '${aj_allConfig.System.project_folder.replace('\\', '\\\\')}\\WebContent\\asset\\css' 
+					file: '${empty param.file ? 'main.css' : param.file}',
+					saveFolder: '${empty param.output ? aj_allConfig.System.project_folder.replace('\\', '\\\\') : param.output}\\WebContent\\asset\\css' 
 				});
 				
 			}, 2000);
