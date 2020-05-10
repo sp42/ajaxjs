@@ -60,6 +60,14 @@ public class JsonHelper {
 		return (Map<String, Object>) parse(str);
 	}
 
+	/**
+	 * 解析 JSON 字符串为 Bean
+	 * 
+	 * @param <T>     Bean 类型
+	 * @param str     JSON 字符串
+	 * @param beanClz Bean 类引用
+	 * @return Bean
+	 */
 	public static <T> T parseMapAsBean(String str, Class<T> beanClz) {
 		return MapTool.map2Bean(parseMap(str), beanClz);
 	}

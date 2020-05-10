@@ -557,4 +557,33 @@ public class FileHelper extends IoHelper {
 
 		return result;
 	}
+
+	/**
+	 * 文件格式只有utf8和gbk两种格式，而一般的utf8格式文件一般是带着BOM信息的，这样的文件刚开始的三个字节永远是一样的，
+	 * 所以如果能根据这个规律探测文件编码格式，那似乎问题就解决拉
+	 * 但是很可惜，我们的文件是不带BOM信息的，所以只好统计整个文件的字节流，看符合utf格式的字节多还是非utf8格式的字节多，
+	 * 如果是前者，那这个文件就很可能是utf8格式，根据这个规律，我们发现，探测的准确度还是比较高的
+	 * 
+	 * @param data
+	 * @return
+	 */
+	public static boolean isUTF8(byte[] data) {
+		int countGoodUtf = 0, countBadUtf = 0;
+		byte currentByte = 0x00, previousByte = 0x00;
+
+		for (int i = 1; i < data.length; i++) {
+			currentByte = data[i];
+			previousByte = data[i - 1];
+
+			if ((currentByte & 0xC0) == 0x80) {
+				if ((previousByte & 0xC0) == 0xC0)
+					countGoodUtf++;
+				else if ((previousByte & 0x80) == 0x00)
+					countBadUtf++;
+			} else if ((previousByte & 0xC0) == 0xC0)
+				countBadUtf++;
+		}
+
+		return countGoodUtf > countBadUtf;
+	}
 }
