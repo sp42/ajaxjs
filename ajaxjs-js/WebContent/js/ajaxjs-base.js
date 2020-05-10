@@ -486,6 +486,42 @@ ajaxjs.throttle.onEl_in_viewport = function(el, fn) {
 
 ajaxjs.throttle.onEl_in_viewport.actions = [];
 
+//并行和串行任务 https://segmentfault.com/a/1190000013265925
+aj.parallel = function(arr, finnaly) {
+  let fn, index = 0;
+  let statusArr = Array(arr.length).fill().map(() => ({
+      isActive: false,
+      data: null
+   }));
+  
+  let isFinished = function() {
+    return statusArr.every(item => {
+      return item.isActive === true;
+    });
+  };
+  
+  let resolve = function(index) {
+    return function(data) {
+      statusArr[index].data = data;
+      statusArr[index].isActive = true;
+      let isFinish = isFinished();
+      
+      if (isFinish) {
+        let datas = statusArr.map(item => {
+          return item.data;
+        });
+        
+        finnaly(datas);
+      }
+    };
+  };
+  
+  while ((fn = arr.shift())) {
+    // 给resolve函数追加参数,可以使用bind函数实现,这里使用了柯里化
+    fn(resolve(index));
+    index++;
+  }
+};
 
 // https://github.com/jojoin/tppl/blob/gh-pages/tppl.js
 tppl = function(tpl, data){

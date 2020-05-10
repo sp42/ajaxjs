@@ -3,8 +3,6 @@ package com.ajaxjs.web;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,6 +16,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.javascript.jscomp.CompilationLevel;
+import com.google.javascript.jscomp.Compiler;
+import com.google.javascript.jscomp.CompilerOptions;
+import com.google.javascript.jscomp.JSError;
+import com.google.javascript.jscomp.SourceFile;
+
 /**
  * 打包 js
  */
@@ -28,14 +32,53 @@ public class JsController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String js = "// build date:" + new Date() + "\n";
-		js += JavaScriptCompressor.compress(read(mappath(request, "js/ajaxjs-base.js"))) + "\n";
-		js += JavaScriptCompressor.compress(read(mappath(request, "js/ajaxjs-list.js"))) + "\n";
-		js += action(mappath(request, "js/widgets/"), true) + "\n";
+
+		js += compileJs(mappath(request, "js/ajaxjs-base.js")) + "\n";
+		js += compileJs(mappath(request, "js/ajaxjs-list.js")) + "\n";
+		js += action(mappath(request, "js/widgets/")) + "\n";
 
 		String output = request.getParameter("output"); // 保存位置
 		Objects.requireNonNull(output, "必填参数");
-		save(output + "\\WebContent\\asset\\js\\all.js", js);
+		save(output + "\\WebContent\\asset\\js\\all.js", js.replaceAll("'use strict';", ""));
 		response.getWriter().append("Pack js Okay.");
+	}
+
+	/**
+	 * 校验js语法、压缩js
+	 * 
+	 * @param code
+	 * @return
+	 */
+	public static String compileJs(String code) {
+		CompilerOptions options = new CompilerOptions();
+		// Simple mode is used here, but additional options could be set, too.
+		CompilationLevel.WHITESPACE_ONLY.setOptionsForCompilationLevel(options);
+
+		// To get the complete set of externs, the logic in
+		// CompilerRunner.getDefaultExterns() should be used here.
+		SourceFile extern = SourceFile.fromCode("externs.js", "function alert(x) {}");
+
+		// The dummy input name "input.js" is used here so that any warnings or
+		// errors will cite line numbers in terms of input.js.
+//		SourceFile input = SourceFile.fromCode("input.js", code);
+
+		SourceFile jsFile = SourceFile.fromFile(code);
+
+		Compiler compiler = new Compiler();
+		compiler.compile(extern, jsFile, options);
+
+		// The compiler is responsible for generating the compiled code; it is not
+		// accessible via the Result.
+		if (compiler.getErrorCount() > 0) {
+			StringBuilder sb = new StringBuilder();
+			for (JSError jsError : compiler.getErrors()) {
+				sb.append(jsError.toString());
+			}
+
+			// System.out.println(sb.toString());
+		}
+
+		return compiler.toSource();
 	}
 
 	static String frontEnd = "C:\\project\\wstsq\\WebContent\\asset\\css";
@@ -71,7 +114,7 @@ public class JsController extends HttpServlet {
 	 * @param isCompress
 	 * @return
 	 */
-	public static String action(String _folder, boolean isCompress) {
+	public static String action(String _folder) {
 		StringBuilder sb = new StringBuilder();
 		File folder = new File(_folder);
 		File[] files = folder.listFiles();
@@ -79,14 +122,8 @@ public class JsController extends HttpServlet {
 		if (files != null)
 			for (File file : files) {
 				if (file.isFile()) {
-					String jsCode = null;
-					try {
-						jsCode = read(file.toPath());
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
 					sb.append("\n");
-					sb.append(isCompress ? JavaScriptCompressor.compress(jsCode) : jsCode);
+					sb.append(compileJs(file.toPath().toString()));
 				}
 			}
 
@@ -108,29 +145,6 @@ public class JsController extends HttpServlet {
 		return absolute;
 	}
 
-	public static String read(Path path, Charset encode) throws IOException {
-		if (Files.isDirectory(path))
-			throw new IOException("参数 fullpath：" + path.toString() + " 不能是目录，请指定文件");
-
-		if (!Files.exists(path))
-			throw new IOException(path.toString() + "　不存在");
-
-		return new String(Files.readAllBytes(path), encode);
-	}
-
-	public static String read(String fullpath, Charset encode) throws IOException {
-		Path path = Paths.get(fullpath);
-		return read(path, encode);
-	}
-
-	public static String read(Path path) throws IOException {
-		return read(path, StandardCharsets.UTF_8);
-	}
-
-	public static String read(String fullpath) throws IOException {
-		return read(fullpath, StandardCharsets.UTF_8);
-	}
-
 	public static void saveClassic(String fullpath, String content) throws IOException {
 		File file = new File(fullpath);
 		if (file.isDirectory())
@@ -145,11 +159,6 @@ public class JsController extends HttpServlet {
 		}
 	}
 
-	public void test() throws IOException {
-		String content = read("c://temp//newfile.txt");
-		save("c://temp//newfile2.txt", content);
-	}
-
 	public static void save(String fullpath, String content) throws IOException {
 		Path path = Paths.get(fullpath);
 
@@ -161,6 +170,5 @@ public class JsController extends HttpServlet {
 
 		Logger.getGlobal().info(path.toString());
 		Files.write(path, content.getBytes());
-
 	}
 }
