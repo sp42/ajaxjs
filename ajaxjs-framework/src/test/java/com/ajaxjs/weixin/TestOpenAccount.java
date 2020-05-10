@@ -2,13 +2,10 @@ package com.ajaxjs.weixin;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.util.Map;
-
 import org.junit.Test;
 
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.weixin.open_account.TokenMgr;
-import com.ajaxjs.weixin.open_account.JsSdkApi;
 
 public class TestOpenAccount {		
 	@Test
@@ -26,10 +23,5 @@ public class TestOpenAccount {
 		assertNotNull(s.getTicket());
 	}	
 
-//	@Test
-	public void testGenerateSignature() {
-		 Map<String, String> map = JsSdkApi.generateSignature("http://qq.com", "HoagFKDcsGMVCIY2vOjf9nSGJAqc4xRTTYaX8D3rjxRPy1g5m948YqxgTOjp9zzFud6uwIwZIyQS14Ut-NcHLQ");
-		 assertNotNull(map);
-	}
 }
  

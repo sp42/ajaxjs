@@ -9,8 +9,16 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.user.token.TokenService;
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
 
+/**
+ * 
+ * 文档 https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/JS-SDK.html
+ * 
+ * @author sp42 frank@ajaxjs.com
+ *
+ */
 public class JsSdkApi {
 	public static void init(HttpServletRequest request) {
 		if (TokenMgr.instance == null) {
@@ -28,16 +36,19 @@ public class JsSdkApi {
 		request.setAttribute("map", map);
 	}
 
-	public static Map<String, String> generateSignature(String url, String jsApiTicket) {
+	/**
+	 * 
+	 * @param url         页面地址
+	 * @param jsApiTicket 凭证
+	 * @return 页面用的数据
+	 */
+	private static Map<String, String> generateSignature(String url, String jsApiTicket) {
 		Map<String, String> map = new HashMap<>();
 		map.put("url", url);
 		map.put("jsapi_ticket", jsApiTicket);
 		map.put("noncestr", TokenService.getRandomString(10));
 		map.put("timestamp", System.currentTimeMillis() / 1000 + "");
-
-		String raw = generateSignature(map);
-
-		map.put("signature", Encode.getSHA1(raw));
+		map.put("signature", generateSignature(map));
 
 		return map; // 因为签名用的 noncestr 和 timestamp 必须与 wx.config中的nonceStr 和 timestamp
 					// 相同，所以还需要使用这两个参数
@@ -47,9 +58,9 @@ public class JsSdkApi {
 	 * 字段名的ASCII 码从小到大排序（字典序）后，使用URL键值对的格式（即key1=value1&key2=value2…）拼接成字符串
 	 * 
 	 * @param data
-	 * @return
+	 * @return 签名
 	 */
-	public static String generateSignature(Map<String, String> data) {
+	private static String generateSignature(Map<String, String> data) {
 		Set<String> keySet = data.keySet();
 		String[] keyArray = keySet.toArray(new String[keySet.size()]);
 		Arrays.sort(keyArray);
@@ -57,10 +68,11 @@ public class JsSdkApi {
 
 		int i = 0;
 		for (String k : keyArray) {
-			if (data.get(k) != null && data.get(k).trim().length() > 0) // 参数值为空，则不参与签名
-				sb.append(k).append("=").append(data.get(k).trim()).append(++i < data.size() ? "&" : "");
+			String v = data.get(k);
+			if (!CommonUtil.isEmptyString(v)) // 参数值为空，则不参与签名
+				sb.append(k).append("=").append(v.trim()).append(++i < data.size() ? "&" : "");
 		}
 
-		return sb.toString();
+		return Encode.getSHA1(sb.toString());
 	}
 }
