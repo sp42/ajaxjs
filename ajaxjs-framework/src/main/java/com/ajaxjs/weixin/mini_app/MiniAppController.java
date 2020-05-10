@@ -1,4 +1,4 @@
-package com.ajaxjs.weixin;
+package com.ajaxjs.weixin.mini_app;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,12 +14,10 @@ import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.weixin.mini_app.MiniAppUserService;
-import com.ajaxjs.weixin.mini_app.model.UserLoginToken;
 
 @Path("/api/wx")
-public class WxController implements IController {
-	private static final LogHelper LOGGER = LogHelper.getLog(WxController.class);
+public class MiniAppController implements IController {
+	private static final LogHelper LOGGER = LogHelper.getLog(MiniAppController.class);
 	MiniAppUserService service = new MiniAppUserService();
 
 	@POST

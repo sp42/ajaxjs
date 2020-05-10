@@ -282,6 +282,34 @@ public interface ConfigScheme {
 "			\"tip\": \"超时视为非法请求，单位毫秒\"\r\n" + 
 "		}\r\n" + 
 "	},\r\n" + 
+"	\"wx_open\": {\r\n" + 
+"		\"appId\": {\r\n" + 
+"			\"name\": \"APP ID\",\r\n" + 
+"			\"tip\": \"wx 开头的\"\r\n" + 
+"		},\r\n" + 
+"		\"appSecret\": {\r\n" + 
+"			\"name\": \"APP 密钥\",\r\n" + 
+"			\"tip\": \"注意保密切勿外泄\"\r\n" + 
+"		},\r\n" + 
+"		\"token\": {\r\n" + 
+"			\"name\": \"凭证\",\r\n" + 
+"			\"tip\": \"凭证\"\r\n" + 
+"		}\r\n" + 
+"	},\r\n" + 
+"	\"mini_program\": {\r\n" + 
+"		\"appId\": {\r\n" + 
+"			\"name\": \"APP ID\",\r\n" + 
+"			\"tip\": \"wx 开头的\"\r\n" + 
+"		},\r\n" + 
+"		\"appSecret\": {\r\n" + 
+"			\"name\": \"APP 密钥\",\r\n" + 
+"			\"tip\": \"注意保密切勿外泄\"\r\n" + 
+"		},\r\n" + 
+"		\"SessionId_AesKey\": {\r\n" + 
+"			\"name\": \"凭证\",\r\n" + 
+"			\"tip\": \"凭证\"\r\n" + 
+"		}\r\n" + 
+"	},\r\n" + 
 "	\"security\": {\r\n" + 
 "		\"isEnableSecurityIO\": {\r\n" + 
 "			\"name\": \"是否使用安全请求响应\",\r\n" + 

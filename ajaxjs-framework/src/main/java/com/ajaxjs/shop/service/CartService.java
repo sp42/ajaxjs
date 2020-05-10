@@ -93,7 +93,7 @@ public class CartService extends BaseService<Cart> {
 	public Map<String, Object> checkout(long userId, long addressId, String[] cartIds) {
 		Map<String, Object> map = new HashMap<>();
 		
-		orderService.processOrder(userId, addressId, cartIds, 0);
+		orderService.processOrder(userId, addressId, cartIds);
 
 //		cart2order(addressId, cartIds, (goodsList, address, actualPrice) -> {
 //			List<Group> g = groupService.checkCanGroup(goodsList);

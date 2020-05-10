@@ -1,5 +1,11 @@
 package com.ajaxjs.weixin.open_account.model;
 
+/**
+ * JS API 凭证
+ * 
+ * @author sp42 frank@ajaxjs.com
+ *
+ */
 public class JsApiTicket extends BaseModel {
 	/**
 	 * JS API 凭证

@@ -99,11 +99,23 @@
 					<div><aj-json-form :scheme="scheme" :config="config" path="data"></aj-json-form></div>
 					<div><aj-json-form :scheme="scheme" :config="config" path="entity"></aj-json-form></div>
 					<div><aj-json-form :scheme="scheme" :config="config" path="domain.article"></aj-json-form></div>
-					<div><aj-json-form :scheme="scheme" :config="config" path="domain.shop"></aj-json-form></div>
+					<div>
+						<aj-json-form :scheme="scheme" :config="config" path="domain.shop"></aj-json-form>
+						<h3>微信公众号</h3>
+						<aj-json-form :scheme="scheme" :config="config" path="wx_open"></aj-json-form>
+						<h3>小程序</h3>
+						<aj-json-form :scheme="scheme" :config="config" path="mini_program"></aj-json-form>
+					</div>
 				</div>
 			</div>	
 		</div>
 		
+		<style>
+			h3{
+			    margin: 2% auto;
+    			width: 80%;
+			}
+		</style>
 		<script src="${ctx}/asset/admin/config-parser.js"></script>
 		<script>
 			new Vue({

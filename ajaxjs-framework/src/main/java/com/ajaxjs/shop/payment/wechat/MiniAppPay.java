@@ -10,7 +10,6 @@ import com.ajaxjs.shop.payment.wechat.model.PerpayReturn;
 import com.ajaxjs.user.token.TokenService;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.weixin.mini_app.MiniApp;
 import com.ajaxjs.weixin.payment.PayConstant;
 
 /**
@@ -56,9 +55,8 @@ public class MiniAppPay implements PayConstant {
 			data.put("version", "1.0");
 		}
 
-		/** 以下五个参数，在 this.fillRequestData 方法中会自动赋值 **/
-		// 小程序ID appid 是 String(32) wxd678efh567hg6787 微信分配的小程序ID
-		data.put("appid", MiniApp.getAppId());
+
+		data.put("appid", ConfigService.getValueAsString("mini_program.appId"));
 		// 商户号 mch_id 是 String(32) 1230000109 微信支付分配的商户号
 		data.put("mch_id", ConfigService.getValueAsString("mini_program.MchId"));
 		data.put("sign", WxUtil.generateSignature(data, ConfigService.getValueAsString("mini_program.MchSecretId")));
@@ -85,7 +83,7 @@ public class MiniAppPay implements PayConstant {
 	 */
 	public static Map<String, String> getPayParam(String perpayId, String nonceStr) {
 		Map<String, String> map = new HashMap<>();
-		map.put("appId", MiniApp.getAppId());
+		map.put("appId", ConfigService.getValueAsString("mini_program.appId"));
 		map.put("timeStamp", System.currentTimeMillis() / 1000 + "");
 		map.put("nonceStr", TokenService.getRandomString(10));
 		map.put("package", "prepay_id=" + perpayId);

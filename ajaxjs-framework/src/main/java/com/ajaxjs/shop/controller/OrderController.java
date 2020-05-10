@@ -42,7 +42,7 @@ import com.alipay.api.AlipayApiException;
  * 控制器
  */
 @Bean
-@Path("/admin/order")
+@Path("/shop/order")
 public class OrderController extends BaseController<OrderInfo> {
 	private static final LogHelper LOGGER = LogHelper.getLog(OrderController.class);
 
@@ -51,7 +51,6 @@ public class OrderController extends BaseController<OrderInfo> {
 
 	/////////// 前台 //////////////
 	@GET
-	@Path("/shop/order")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String account(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
 		LOGGER.info("浏览我的订单");
@@ -62,7 +61,7 @@ public class OrderController extends BaseController<OrderInfo> {
 	}
 
 	@GET
-	@Path("/shop/order/" + ID_INFO)
+	@Path(ID_INFO)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String orderDetail(@PathParam(ID) Long id, ModelAndView mv) {
 		LOGGER.info("浏览我的订单明细");
@@ -77,7 +76,7 @@ public class OrderController extends BaseController<OrderInfo> {
 		return jsp("shop/order-info");
 	}
 
-	@Path("/shop/order/checkout")
+	@Path("checkout")
 	@GET
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String checkout(ModelAndView mv, @QueryParam("goodsId") long goodsId) {
@@ -88,16 +87,15 @@ public class OrderController extends BaseController<OrderInfo> {
 	}
 
 	@POST
-	@Path("/shop/order")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 //	@Produces(MediaType.APPLICATION_JSON)
 	public String processOrder(@FormParam("addressId") @NotNull long addressId, @FormParam("payType") int payType,
-			@FormParam("cartIds") @NotNull String _cartIds, ModelAndView mv, HttpServletRequest r) throws AlipayApiException {
+			@FormParam("cartIds") @NotNull String _cartIds, HttpServletRequest r) throws AlipayApiException {
 		LOGGER.info("处理订单 结账");
 
 		UserAddressService.initData(r);
 		String[] cartIds = _cartIds.split(",");
-		OrderInfo order = service.processOrder(BaseUserController.getUserId(), addressId, cartIds, payType);
+		OrderInfo order = service.processOrder(BaseUserController.getUserId(), addressId, cartIds);
 		service.onProcessOrderDone(order);
 
 		if (payType != 0) {
@@ -106,8 +104,6 @@ public class OrderController extends BaseController<OrderInfo> {
 				order.setPayType(ShopConstant.ALI_PAY);
 				LOGGER.info("进行支付");
 
-				System.out.println(order.getOuterTradeNo());
-				System.out.println(order.getTotalPrice().toString());
 				Alipay alipay = new Alipay();
 				alipay.setSubject("支付我们的产品");
 				alipay.setBody("");
@@ -121,68 +117,19 @@ public class OrderController extends BaseController<OrderInfo> {
 		return order != null ? jsonOk("交易成功！") : jsonNoOk("交易不成功！");
 	}
 
-	/////////// 后台 //////////////
-
-	@GET
-	@Path(LIST)
+	@POST
+	@Path("directOrder")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv,
-			@QueryParam("userId") long userId) {
-		LOGGER.info("后台-订单列表");
+	public String directProcessOrder(@FormParam("addressId") @NotNull long addressId, @FormParam("payType") int payType,
+			@FormParam("goodsId") long goodsId, @FormParam("formatId") long formatId,
+			@FormParam("goodsNumber") int goodsNumber, HttpServletRequest r) {
+		LOGGER.info("处理订单 结账-直接单个商品");
 
-		page(mv, service.findPagedList(start, limit, 0, 0, null, userId), CommonConstant.UI_ADMIN);
-		return jsp("shop/order-admin-list");
-	}
+		UserAddressService.initData(r);
 
-	@Override
-	public void prepareData(ModelAndView mv) {
-		super.prepareData(mv);
-		mv.put("TradeStatusDict", ShopConstant.TradeStatus);
-		mv.put("PayTypeDict", ShopConstant.PAY_TYPE);
-		mv.put("PayStatusDict", ShopConstant.PayStatus);
-	}
+		service.onProcessOrderDone(order);
 
-	@Resource("UserService")
-	private UserService userService;
-
-	@GET
-	@Path(ID_INFO)
-	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
-		editUI(mv, service.findById(id));
-
-		// 获取用户名
-		OrderInfo order = (OrderInfo) mv.get("info");
-		User buyer = userService.findById(order.getBuyerId());
-		if (buyer == null) {
-			// 用户已经注销或删除
-			mv.put("userName", null);
-		} else {
-			mv.put("userName", buyer.getUsername() == null ? buyer.getName() : buyer.getUsername());
-		}
-
-		// 订单明细
-		List<OrderItem> items = WxPayService.dao.findOrderItemListByOrderId(id);
-		mv.put("orderItems", items);
-
-		return jsp("shop/order-edit");
-	}
-
-	@PUT
-	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Path(ID_INFO)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Override
-	public String update(@PathParam(ID) Long id, OrderInfo entity) {
-		return super.update(id, entity);
-	}
-
-	@DELETE
-	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Path(ID_INFO)
-	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam(ID) Long id) {
-		return delete(id, new OrderInfo());
+		return order != null ? jsonOk("交易成功！") : jsonNoOk("交易不成功！");
 	}
 
 	@Override

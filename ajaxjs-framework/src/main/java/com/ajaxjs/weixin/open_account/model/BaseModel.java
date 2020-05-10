@@ -2,6 +2,12 @@ package com.ajaxjs.weixin.open_account.model;
 
 import java.util.Calendar;
 
+/**
+ * 腾讯凭证通用的属性
+ * 
+ * @author sp42 frank@ajaxjs.com
+ *
+ */
 public abstract class BaseModel {
 	/**
 	 * 错误代码

@@ -18,11 +18,19 @@ import com.ajaxjs.weixin.open_account.model.JsApiTicket;
  */
 public class TokenMgr {
 	private static final LogHelper LOGGER = LogHelper.getLog(TokenMgr.class);
-	
+	/**
+	 * 单例对象
+	 */
 	public static TokenMgr instance;
-	
+
+	/**
+	 * APP ID
+	 */
 	private String appId;
 
+	/**
+	 * APP 密钥
+	 */
 	private String appSecret;
 
 	/**
@@ -108,9 +116,8 @@ public class TokenMgr {
 	 * @return AccessToken
 	 */
 	public String getToken() {
-		if (token == null || Calendar.getInstance().after(token.getExpiresDate())) {
+		if (token == null || Calendar.getInstance().after(token.getExpiresDate())) 
 			initAccessToken();// 超时了，重新获取
-		}
 
 		return token.getAccess_token();
 	}
@@ -121,9 +128,8 @@ public class TokenMgr {
 	 * @return JsApiTicket
 	 */
 	public String getTicket() {
-		if (jsApiTicket == null || Calendar.getInstance().after(jsApiTicket.getExpiresDate())) {
+		if (jsApiTicket == null || Calendar.getInstance().after(jsApiTicket.getExpiresDate())) 
 			initTicket();
-		}
 
 		return jsApiTicket.getTicket();
 	}

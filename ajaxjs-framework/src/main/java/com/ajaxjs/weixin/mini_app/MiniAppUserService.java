@@ -3,6 +3,7 @@ package com.ajaxjs.weixin.mini_app;
 import java.util.Map;
 import java.util.Objects;
 
+import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.Repository;
@@ -22,7 +23,6 @@ import com.ajaxjs.user.token.TokenInfo;
 import com.ajaxjs.user.token.TokenService;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.weixin.mini_app.model.UserLoginToken;
 
 /**
  * 小程序用户开放能力
@@ -55,7 +55,7 @@ public class MiniAppUserService extends BaseService<User> {
 	/**
 	 * 登录凭证校验， 获取 session_key 和 openid 等
 	 */
-	private final static String code2Session = "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code";
+	private final static String CODE2SESSION = "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code";
 
 //	@Resource("UserService")
 //	private UserService userService;
@@ -101,7 +101,6 @@ public class MiniAppUserService extends BaseService<User> {
 		user.setUsername(map.get("nickName").toString());
 		user.setSex((int) map.get("gender"));
 		user.setAvatar(map.get("avatarUrl").toString());
-		user.setAvatar(map.get("avatarUrl").toString());
 		user.setLocation(map.get("country").toString() + " " + map.get("province").toString() + " "
 				+ map.get("city").toString());
 //		Long userId = userService.create(user);
@@ -133,17 +132,17 @@ public class MiniAppUserService extends BaseService<User> {
 	}
 
 	/**
-	 * 获取 session_key 和 openid。临时登录凭证 code 只能使用一次 会话密钥 session_key
-	 * 是对用户数据进行加密签名的密钥。为了应用自身的数据安全，开发者服务器不应该把会话密钥下发到小程序，也不应该对外提供这个密钥
+	 * 获取 session_key 和 openid。临时登录凭证 code 只能使用一次 会话密钥 session_key 是对用户数据进行加密签名的密钥。
+	 * 为了应用自身的数据安全，开发者服务器不应该把会话密钥下发到小程序，也不应该对外提供这个密钥
 	 * 
 	 * @param jsCode 小程序调用 wx.login() 获取“临时登录凭证”的密钥
 	 * @return 小程序用户登录的凭证
 	 */
 	private static UserLoginToken intiToken(String jsCode) {
-		String appId = MiniApp.getAppId(), appSecret = MiniApp.getAppSecret();
-		String url = String.format(code2Session, appId, appSecret, jsCode);
+		String url = String.format(CODE2SESSION, ConfigService.getValueAsString("mini_program.appId"),
+				ConfigService.getValueAsString("mini_program.appSecret"), jsCode);
 		String json = NetUtil.simpleGET(url);
-		
+
 		Map<String, Object> map = JsonHelper.parseMap(json);
 
 		UserLoginToken token = new UserLoginToken();
