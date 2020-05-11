@@ -73,7 +73,7 @@ public class SiteStruService implements ServletContextListener {
 					List<Map<String, Object>> list = new ArrayList<>();
 					for (Long id : data.keySet()) {
 						Map<String, Object> cMap = new HashMap<>();
-						cMap.put("id", "?catelogId=" + id);
+						cMap.put("id", "?catalogId=" + id);
 						cMap.put("name", data.get(id).getName());
 						list.add(cMap);
 					}
@@ -95,53 +95,30 @@ public class SiteStruService implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent e) {
 		ServletContext ctx = e.getServletContext();
 		Version.tomcatVersionDetect(ctx.getServerInfo());
+
+		// 加载配置
 		ConfigService.SCHEME_JSON = ConfigScheme.JSON;
-
-		String configJson = ConfigService.CONFIG_JSON_PATH;
-
-		if (configJson == null) {
-			configJson = ctx.getRealPath("/META-INF/site_config.json");
-			ConfigService.CONFIG_JSON_PATH = configJson;
+		ConfigService.load(ctx.getRealPath("/META-INF/site_config.json"));
+		if (ConfigService.CONFIG.isLoaded()) {
+			ctx.setAttribute("aj_allConfig", ConfigService.CONFIG); // 所有配置保存在这里
+			onStartUp(ctx);
 		}
 
-		if (!new File(configJson).exists())
-			LOGGER.info("没有项目配置文件");
-		else {
-			ConfigService.load(configJson);
-
-			if (ConfigService.CONFIG.isLoaded()) {
-				ctx.setAttribute("aj_allConfig", ConfigService.CONFIG); // 所有配置保存在这里
-
-				// String configJson =
-				// JsonHelper.format(JsonHelper.stringifyMap(ConfigService.config));
-				LOGGER.infoGreen("加载 " + ConfigService.getValueAsString("clientFullName") + " " + ctx.getContextPath()
-						+ " 项目配置成功！All config loaded.");
-
-				if (ConfigService.getValueAsBool("isForceProductEnv")) {
-					LOGGER.infoGreen("强制为生产环境模式 isDebug=false");
-					Version.isDebug = false;
-				}
-
-				onStartUp(ctx);
-			} else
-				LOGGER.warning("加载配置失败！");
-		}
-
+		// 加载网站结构
 		loadSiteStru(ctx);
 		if (stru.isLoaded())
 			ctx.setAttribute("SITE_STRU", this); // 所有网站结构保存在这里
 
+		// 设置全局环境变量
 		String ctxPath = ctx.getContextPath();
-
-
 		ctx.setAttribute("ctx", ctxPath);
 		ctx.setAttribute("isDebuging", Version.isDebug);
 		ctx.setAttribute("commonAsset", ctxPath + "/asset/common"); // 静态资源目录
 		ctx.setAttribute("commonAssetIcon", ctxPath + "/asset/common/icon"); // 静态资源图标目录
 		ctx.setAttribute("ajaxjs_ui_output", "http://static.ajaxjs.com/");
-		
+
 		// 开发阶段，ajaxjsui 指定了前端 js 所在的位置，通常是另外一个项目同时运行着，例如当前是本机 8080 端口的 ajaxjs-js。
-		if(Version.isDebug)
+		if (Version.isDebug)
 			ctx.setAttribute("developing_js_url", "http://" + Tools.getIp() + ":8080/ajaxjs-js");
 	}
 
@@ -153,8 +130,10 @@ public class SiteStruService implements ServletContextListener {
 
 		if (!CommonUtil.isEmptyString(startUp_Class)) {
 			LOGGER.info("执行 Servlet 启动回调");
+
 			try {
 				Class<ServletStartUp> clz = ReflectUtil.getClassByName(startUp_Class, ServletStartUp.class);
+
 				if (clz != null) {
 					ServletStartUp startUp = ReflectUtil.newInstance(clz);
 					startUp.onStartUp(cxt);

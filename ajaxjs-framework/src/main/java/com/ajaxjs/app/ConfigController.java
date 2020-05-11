@@ -65,7 +65,7 @@ public class ConfigController implements IController {
 
 	// TODO
 	private static void loadJson(ModelAndView model) {
-		model.put("configJson", FileHelper.openAsText(ConfigService.CONFIG_JSON_PATH));
+		model.put("configJson", FileHelper.openAsText(ConfigService.CONFIG.getJsonPath()));
 		model.put("schemeJson", ConfigService.getSchemeJson());
 	}
 
@@ -73,7 +73,7 @@ public class ConfigController implements IController {
 	public String allConfig(ModelAndView model) {
 		LOGGER.info("编辑全部配置");
 
-		model.put("configJson", FileHelper.openAsText(ConfigService.CONFIG_JSON_PATH));
+		model.put("configJson", FileHelper.openAsText(ConfigService.CONFIG.getJsonPath()));
 		model.put("jsonSchemePath", ConfigService.getSchemeJson());
 
 		return BaseController.admin("config-all");
@@ -84,7 +84,7 @@ public class ConfigController implements IController {
 	public String saveAllconfig(Map<String, Object> map, HttpServletRequest request) {
 		LOGGER.info("保存配置并且刷新配置");
 		ConfigService.loadJSON_in_JS(map);
-		ConfigService.load(); // 刷新配置
+		ConfigService.load(ConfigService.CONFIG.getJsonPath()); // 刷新配置
 
 		if (request.getServletContext().getAttribute("aj_allConfig") != null)
 			request.getServletContext().setAttribute("aj_allConfig", ConfigService.CONFIG);
