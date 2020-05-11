@@ -1,8 +1,5 @@
 package com.ajaxjs.weixin.mini_app;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -26,12 +23,6 @@ public class MiniAppController implements IController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String miniappLogin(@FormParam("code") String jsCode, @FormParam("userInfo") String userInfoJson) {
 		LOGGER.info("小程序登录");
-		UserLoginToken token = service.wxLogin(jsCode, userInfoJson);
-		
-		Map<String, Object> map = new HashMap<>();
-		map.put("sessionId", token.getSessionId());
-		map.put("userId", token.getUserId());
-
-		return BaseController.toJson(map);
+		return BaseController.toJson(service.wxLogin(jsCode, userInfoJson));
 	}
 }

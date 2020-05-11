@@ -94,7 +94,8 @@ public class LoginLogController extends BaseController<UserLoginLog> {
 			return;
 
 		String ip = ((MvcRequest) request).getIp();
-		if ("0:0:0:0:0:0:0:1".equals(ip)) {
+		
+		if ("127.0.0.1".equals(ip) || "0:0:0:0:0:0:0:1".equals(ip)) {
 			ip = "localhost";
 			bean.setIpLocation("本机");
 		} else {

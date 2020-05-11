@@ -60,4 +60,14 @@ public abstract class BaseModel {
 	public void setExpiresDate(Calendar expiresDate) {
 		this.expiresDate = expiresDate;
 	}
+
+	/**
+	 * 检查是否有错误返回
+	 */
+	public void check() {
+		if (getErrcode() != 0) {
+			System.err.println("错误：" + getErrmsg());
+			throw new NullPointerException(getErrmsg());
+		}
+	}
 }
