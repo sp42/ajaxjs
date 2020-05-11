@@ -15,11 +15,13 @@
  */
 package com.ajaxjs.config;
 
+import java.io.File;
 import java.util.Map;
 import java.util.Objects;
 
 import javax.script.ScriptException;
 
+import com.ajaxjs.Version;
 import com.ajaxjs.jsonparser.JsEngineWrapper;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.logger.LogHelper;
@@ -46,11 +48,6 @@ public class ConfigService {
 	public static Map<String, Object> FLAT_CONFIG;
 
 	/**
-	 * 配置 json 文件的路径
-	 */
-	public static String CONFIG_JSON_PATH = AbstractScanner.getResourcesFromClasspath("site_config.json");
-
-	/**
 	 * 配置 json 说明文件的路径
 	 */
 	public static final String SCHEME_JSON_PATH = AbstractScanner.getResourcesFromClasspath("site_config_scheme.json");
@@ -72,30 +69,30 @@ public class ConfigService {
 	}
 
 	/**
-	 * 加载 JSON 配置（默认路径）
-	 */
-	public static void load() {
-		load(CONFIG_JSON_PATH);
-	}
-
-	/**
 	 * 加载 JSON 配置
 	 * 
 	 * @param jsonPath JSON 配置文件所在路径
 	 */
 	public static void load(String jsonPath) {
-		ConfigService.CONFIG_JSON_PATH = jsonPath; // 覆盖本地的
-System.out.println(jsonPath);
+		if (!new File(jsonPath).exists()) {
+			LOGGER.info("没有项目配置文件");
+			return;
+		}
+
 		CONFIG = new Config();
 		CONFIG.setJsonPath(jsonPath);
 		CONFIG.setJsonStr(FileHelper.openAsText(jsonPath));
 		CONFIG.putAll(JsonHelper.parseMap(CONFIG.getJsonStr()));
 		CONFIG.setLoaded(true);
 
-//		if(config.get("isDebug") != null) 
-//			Version.isDebug = (boolean)config.get("isDebug");
-
 		FLAT_CONFIG = ListMap.flatMap(CONFIG);
+
+		if (getValueAsBool("isForceProductEnv")) {
+			LOGGER.infoGreen("强制为生产环境模式 isDebug=false");
+			Version.isDebug = false;
+		}
+
+		LOGGER.infoGreen("加载 " + getValueAsString("clientShortName") + " 项目配置成功！All config loaded.");
 	}
 
 	/**
@@ -199,7 +196,7 @@ System.out.println(jsonPath);
 	 */
 	public static void loadJSON_in_JS(Map<String, Object> map) {
 		JsEngineWrapper js = new JsEngineWrapper();
-		js.eval("allConfig = " + FileHelper.openAsText(ConfigService.CONFIG_JSON_PATH));
+		js.eval("allConfig = " + FileHelper.openAsText(CONFIG.getJsonPath()));
 
 		map.forEach((k, v) -> {
 			String jsKey = transform(k);
@@ -251,7 +248,7 @@ System.out.println(jsonPath);
 		});
 
 		String json = js.eval("JSON.stringify(allConfig, null, 2);", String.class);
-		FileHelper.saveText(ConfigService.CONFIG_JSON_PATH, json);
+		FileHelper.saveText(CONFIG.getJsonPath(), json);
 	}
 
 	/**

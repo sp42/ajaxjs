@@ -361,7 +361,7 @@ public class FileHelper extends IoHelper {
 	 * @return 文件内容
 	 */
 	public static String openAsText(String filePath, Charset encode, boolean isOldWay) {
-		LOGGER.info("正在读取文件 {0}", filePath);
+		LOGGER.info("读取文件 {0}", filePath);
 
 		Path path = Paths.get(filePath);
 
