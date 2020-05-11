@@ -34,8 +34,6 @@ public abstract class SessionValueFilter implements FilterAction {
 	public String getServerSideValue(HttpServletRequest request, String sessionKey) {
 		HttpSession session = request.getSession();
 		Object value = session.getAttribute(sessionKey);
-		
-		System.out.println(">>>>>>>>>>>>"+session.getAttribute("CAPTCHA_CODE"));
 
 		if (value == null) {
 			throw new NullPointerException("Session 中找不到 对应的 key 的值， key： " + sessionKey);
