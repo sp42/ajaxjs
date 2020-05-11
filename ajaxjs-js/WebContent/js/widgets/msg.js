@@ -5,7 +5,8 @@ document.addEventListener("DOMContentLoaded", function() {
 	document.body.appendChild(document.createElement('div')).className = 'alertHolder';
 	
 	// 全屏幕弹窗，居中显示文字。
-	aj.alert = new Vue({
+	// 不应直接使用该组件，而是执行 aj.showOk
+	aj.msgbox = new Vue({
 		el : '.alertHolder',
 		data : {
 			showText : '', 		// 显示的内容
@@ -66,11 +67,11 @@ document.addEventListener("DOMContentLoaded", function() {
 	 * @param {Function} callback 回调函数
 	 */
 	aj.showOk = function(text, callback) {
-		var alertObj = aj.alert.show(text, {
+		var alertObj = aj.msgbox.show(text, {
 			showYes : false,
-			showNo :false,
-			showOk :true,
-			onOkClk(e) { // 在box里面触发关闭，不能直接用 alertObj.close(e);
+			showNo : false,
+			showOk : true,
+			onOkClk(e) { // 在box里面触发关闭，不能直接用 msgbox.close(e);
 				alertObj.$el.classList.add('hide');
 				callback && callback();
 			}
@@ -83,21 +84,24 @@ document.addEventListener("DOMContentLoaded", function() {
 	 * @param {Function} callback 回调函数
 	 */
 	aj.showConfirm = function(text, callback, showSave) {
-		var alertObj = aj.alert.show(text, {
+		var alertObj = aj.msgbox.show(text, {
 			showYes : true,
-			showNo :true,
-			showOk :false,
+			showNo : true,
+			showOk : false,
 			showSave: showSave,
 			onYesClk(e) {
 				alertObj.$el.classList.add('hide');
 				callback && callback(alertObj.$el, e);
 			},
-			onNoClk(e) { // 在box里面触发关闭，不能直接用 alertObj.close(e);
+			onNoClk(e) { // 在box里面触发关闭，不能直接用 msgbox.close(e);
 				alertObj.$el.classList.add('hide');
 			}
 		});
 	}
 	
+	aj.alert = aj.showOk;
+	aj.alert.show = aj.showOk;
+
 	document.body.appendChild(document.createElement('div')).className = 'msgHolder';
 
 	// 顶部出现，用于后台提示信息多
@@ -143,12 +147,12 @@ Vue.component('aj-layer', {
 		},
 		close(e) { // isForceClose = 强制关闭
 			if(!e) {
-				aj.alert.$options.methods.close.call(this, {
+				aj.msgbox.$options.methods.close.call(this, {
 					target : aj('.aj-modal')
 				});
 			}else{
 				if(e.isForceClose || !this.notCloseWhenTap)
-					aj.alert.$options.methods.close.apply(this, arguments);
+					aj.msgbox.$options.methods.close.apply(this, arguments);
 			}
 		}
 	}
