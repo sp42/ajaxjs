@@ -114,6 +114,7 @@ public class CaptchaController extends HttpServlet {
 		String code = getRandom();
 		MvcOutput re = response instanceof MvcOutput ? (MvcOutput) response : new MvcOutput(response);
 		re.noCache().setContent_Type("image/jpeg").go(getCaptcha(60, 20, code));
+
 		session.setAttribute(CAPTCHA_CODE, code);
 	}
 
