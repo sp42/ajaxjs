@@ -363,6 +363,9 @@ public class FileHelper extends IoHelper {
 	public static String openAsText(String filePath, Charset encode, boolean isOldWay) {
 		LOGGER.info("读取文件 {0}", filePath);
 
+		if (isOldWay)
+			return byteStream2string(path2FileIn(filePath));
+
 		Path path = Paths.get(filePath);
 
 		try {
@@ -376,21 +379,18 @@ public class FileHelper extends IoHelper {
 			return null;
 		}
 
-		if (isOldWay)
-			return byteStream2string(path2FileIn(filePath));
-		else {
-			try {
-				// 此方法不适合读取很大的文件，因为可能存在内存空间不足的问题。
-				StringBuilder sb = new StringBuilder();
-				Files.lines(path, encode).forEach(str -> sb.append(str));
+		try {
+			// 此方法不适合读取很大的文件，因为可能存在内存空间不足的问题。
+			StringBuilder sb = new StringBuilder();
+			Files.lines(path, encode).forEach(str -> sb.append(str));
 
-				return sb.toString();
-			} catch (IOException e) {
-				LOGGER.warning(e);
-			}
-
-			return null;
+			return sb.toString();
+		} catch (IOException e) {
+			LOGGER.warning(e);
 		}
+
+		return null;
+
 	}
 
 	/**

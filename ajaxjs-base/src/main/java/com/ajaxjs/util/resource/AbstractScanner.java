@@ -245,10 +245,17 @@ public abstract class AbstractScanner<T> {
 		if (url == null)
 			return null;
 
+		System.out.println("::::::::::::::;;"+isDecode);
+		String path;
 		if (isDecode) {
-			return Encode.urlDecode(new File(url.getPath()).toString());
+			path = Encode.urlDecode(new File(url.getPath()).toString());
 		} else {
-			return url.getPath();
+			path = url.getPath();
+			path = path.startsWith("/") ? path.substring(1) : path;
 		}
+
+		//path = path.replaceAll("file:\\", "");
+		System.out.println(">>>>>>>>>>>>>>>>>>>>" + path);
+		return path;
 	}
 }

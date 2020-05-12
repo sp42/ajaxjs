@@ -16,18 +16,19 @@
 package com.ajaxjs.config;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
-import java.util.Objects;
 
 import javax.script.ScriptException;
 
 import com.ajaxjs.Version;
 import com.ajaxjs.jsonparser.JsEngineWrapper;
 import com.ajaxjs.util.io.FileHelper;
+import com.ajaxjs.util.io.IoHelper;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.map.ListMap;
-import com.ajaxjs.util.resource.AbstractScanner;
 
 /**
  * 以 JSON 为存储格式的配置系统，在 JVM 中以 Map/List 结构保存 该类是单例。
@@ -46,27 +47,6 @@ public class ConfigService {
 	 * 所有的配置保存在这个 config 中（扁平化处理过的）
 	 */
 	public static Map<String, Object> FLAT_CONFIG;
-
-	/**
-	 * 配置 json 说明文件的路径
-	 */
-	public static final String SCHEME_JSON_PATH = AbstractScanner.getResourcesFromClasspath("site_config_scheme.json");
-
-	public static String SCHEME_JSON;
-
-	/**
-	 * 获取配置 JSON 说明文件
-	 * 
-	 * @return 配置 JSON 说明文件
-	 */
-	public static String getSchemeJson() {
-		if (SCHEME_JSON_PATH == null) {
-			Objects.requireNonNull(SCHEME_JSON, "请提供配置 JSON 说明文件。");
-
-			return SCHEME_JSON;
-		} else
-			return FileHelper.openAsText(SCHEME_JSON_PATH);
-	}
 
 	/**
 	 * 加载 JSON 配置
@@ -186,6 +166,22 @@ public class ConfigService {
 			arr2[i] = "[\"" + arr[i] + "\"]";
 
 		return String.join("", arr2);
+	}
+
+	/**
+	 * 获取配置 JSON 说明文件。 该 json 不保存在 ajaxjs-base，因此单独运行 ajaxjs-base getSchemeJson()
+	 * 会报错。 ConfigScheme.json 是放在 ajaxjs-framework 中保存的
+	 * 
+	 * @return 配置 JSON 说明文件
+	 */
+	public static String getSchemeJson() {
+		try (InputStream in = ConfigService.class.getResourceAsStream("ConfigScheme.json");) {
+
+			return IoHelper.byteStream2string(in);
+		} catch (IOException e) {
+			LOGGER.warning(e);
+			return null;
+		}
 	}
 
 	/**
