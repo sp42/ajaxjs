@@ -114,9 +114,8 @@ Vue.component('aj-form-calendar', {
 							if (this.isSameDay(on, this.date)) {
 								cell.classList.add('onToday');
 								this.onToday && this.onToday(cell);
-							}
-//							
-// // 判断是否选择日期
+							}					
+// 判断是否选择日期
 // this.selectDay && this.onSelectDay && this.isSameDay(on, this.selectDay) &&
 // this.onSelectDay(cell);
 						}
@@ -158,7 +157,7 @@ Vue.component('aj-form-calendar', {
 					break;
 			}
 		},
-		setMonth(e){
+		setMonth(e) {
 			this.getDate('setMonth', Number(e.target.selectedOptions[0].value));
 		},
 		// 获取空白的非上月天数 + 当月天数

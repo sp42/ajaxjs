@@ -68,13 +68,6 @@ Element.prototype.insertAfter = function(newElement) {
 		parent.insertBefore(newElement, targetElement.nextSibling);
 }
 
-ajaxjs.apply = function(a, b) {
-	for ( var i in b)
-		a[i] = b[i];
-	
-	return a;
-}
-
 /*
  * @Dep
  * -------------------------------------------------------- 
@@ -110,10 +103,8 @@ Function.prototype.delegate = function() {
 /**
  * 设置一个后置函数。
  * 
- * @param {Function}
- *            composeFn
- * @param {Boolean}
- *            isForceCall 是否强行执行 call 方法。设置为 true 在数组作为单独对象的时候有用。
+ * @param {Function} composeFn
+ * @param {Boolean} isForceCall 是否强行执行 call 方法。设置为 true 在数组作为单独对象的时候有用。
  * @return {Function}
  */
 Function.prototype.after = function(composeFn, isForceCall, scope) {
@@ -130,12 +121,22 @@ Function.prototype.after = function(composeFn, isForceCall, scope) {
     };
 }
 
-// 获取浏览器 url 参数
-ajaxjs.params = {
-	/**
-	 * 
-	 */
-	json2url : function(json, appendUrl) {
+aj.apply = function(a, b) {
+	for ( var i in b)
+		a[i] = b[i];
+	
+	return a;
+}
+
+/*
+ * -------------------------------------------------------- 
+ * 封装 XHR，支持
+ * GET/POST/PUT/DELETE/JSONP/FormData
+ * http://blog.csdn.net/zhangxin09/article/details/78879244
+ * --------------------------------------------------------
+ */
+ajaxjs.xhr = {
+	json2url(json, appendUrl) {
 		var params = [];
 		for ( var i in json)
 			params.push(i + '=' + json[i]);
@@ -147,47 +148,6 @@ ajaxjs.params = {
 
 		return params;
 	},
-
-	/**
-	 * 读取 search 和 hash 的参数 location.params().hash['appinstall'];
-	 * location.params().search['isappinstalled'];
-	 */
-	get : function(search, hash) {
-		search = search || window.location.search;
-		hash = hash || window.location.hash;
-
-		var fn = function(str, reg) {
-			if (str) {
-				var data = {};
-				str.replace(reg, function($0, $1, $2, $3) {
-					data[$1] = $3;
-				});
-
-				return data;
-			}
-		};
-
-		return {
-			search : fn(search, new RegExp("([^?=&]+)(=([^&]*))?", "g")) || {},
-			hash : fn(hash, new RegExp("([^#=&]+)(=([^&]*))?", "g")) || {}
-		};
-	}
-};
-
-if (!window.URLSearchParams) { // polyfill
-	URLSearchParams = function() {
-	}
-}
-
-/*
- * -------------------------------------------------------- 
- * 封装 XHR，支持
- * GET/POST/PUT/DELETE/JSONP/FormData
- * http://blog.csdn.net/zhangxin09/article/details/78879244
- * --------------------------------------------------------
- */
-ajaxjs.xhr = {
-	json2url : ajaxjs.params.json2url,
 
 	// 注意 url 部分带有 # 的话则不能传参数过来
 	request(url, cb, args, cfg, method) {
@@ -253,37 +213,6 @@ ajaxjs.xhr = {
 			alert('服务端 500 错误！');
 	},
 
-	/**
-	 * e.g XMLHttpRequest.jsonp(
-	 * 'http://u1.3gtv.net:2080/pms-service/section/content_list', { start:0,
-	 * limit:10, sort:0, portalId:45, id:3290 }, function(json){
-	 * console.log(json); } );
-	 * 
-	 * @param url
-	 *            请求远程路径
-	 * @param params
-	 *            参数
-	 * @param cb
-	 *            回调函数
-	 * @param cfg
-	 *            该次请求的配置
-	 */
-	jsonp(url, params, cb, cfg) {
-		var globalMethod_Token = 'globalMethod_' + parseInt(Math.random() * (200000 - 10000 + 1) + 10000);
-
-		if (!window.$$_jsonp)
-			window.$$_jsonp = {};
-		// Map<String, Function>
-		window.$$_jsonp[globalMethod_Token] = cb;
-
-		params = params || {};
-		params[cfg && cfg.callBackField || 'callBack'] = '$$_jsonp.' + globalMethod_Token;
-
-		var scriptTag = document.createElement('script');
-		scriptTag.src = this.json2url(params, url);
-		document.getElementsByTagName('head')[0].appendChild(scriptTag);
-	},
-
 	form(form, cb, cfg) {
 		cb = cb || ajaxjs.xhr.defaultCallBack;
 		cfg = cfg || {};
@@ -347,52 +276,15 @@ ajaxjs.xhr.dele = (url, cb, args, cfg) => {
 /**
  * 表单序列化，兼容旧浏览器和 H5 FormData，返回 JSON
  * 
- * @param {Element}
- *            form
- * @param {Object}
- *            cfg
+ * @param {Element} form
+ * @param {Object}  cfg
  */
 ajaxjs.xhr.serializeForm = function(form, cfg) {
-	var json = {};
-	
-	if (window.FormData && FormData.prototype.forEach) { // 奇葩魅族浏览器，有
-		// FormData 却只有append 一个方法
-		var formData = new FormData(form);
-		formData.forEach((value, name) => {
-			if (cfg && cfg.ignoreField != name) // 忽略的字段
-				json[name] = encodeURIComponent(value);
-		});
-
-	} else {
-		for (var i = 0, len = form.elements.length; i < len; i++) {
-			var formElement = form.elements[i], name = formElement.name, value = formElement.value;
-
-			if (formElement.name === '' || formElement.disabled || (cfg && cfg.ignoreField == name))
-				continue;
-
-			switch (formElement.nodeName.toLowerCase()) {
-			case 'input':
-				switch (formElement.type) {
-				case 'number':
-				case 'text':
-				case 'hidden':
-				case 'password':
-					json[name] = encodeURIComponent(value);
-					break;
-				case 'checkbox':
-				case 'radio':
-					if (formElement.checked)
-						json[name] = encodeURIComponent(value);
-					break;
-				}
-				break;
-			case 'textarea':
-			case 'select':
-				json[name] = encodeURIComponent(value);
-				break;
-			}
-		}
-	}
+	var json = {}, formData = new FormData(form);
+	formData.forEach((value, name) => {
+		if (cfg && cfg.ignoreField != name) // 忽略的字段
+			json[name] = encodeURIComponent(value);
+	});
 	
 	return json;
 }
@@ -465,6 +357,30 @@ ajaxjs.throttle = {
 			obj.fn.call(obj);
 		}
 	}
+};
+
+//函数节流 https://www.cnblogs.com/moqiutao/p/6875955.html
+aj.throttleV2 = function(fn, delay, mustRunDelay) {
+ 	var timer = null;
+ 	var t_start;
+ 	
+ 	return function() {
+ 		var t_curr = +new Date();
+ 		window.clearTimeout(timer);
+ 		
+ 		if(!t_start) 
+ 			t_start = t_curr;
+ 		
+ 		if(t_curr - t_start >= mustRunDelay) {
+ 			fn.apply(this, arguments);
+ 			t_start = t_curr;
+ 		} else {
+ 			var args = arguments;
+ 			timer = window.setTimeout(() => {
+ 				fn.apply(this, args);
+ 			}, delay);
+ 		}
+ 	};
 };
 
 ajaxjs.throttle.onEl_in_viewport = function(el, fn) {
@@ -557,3 +473,177 @@ tppl = function(tpl, data){
     }
     return data ? fn(data) : fn;
 }
+
+
+/**
+ * 消息框、弹窗、对话框组件
+ */
+document.addEventListener("DOMContentLoaded", () => {
+	document.body.appendChild(document.createElement('div')).className = 'alertHolder';
+	
+	// 全屏幕弹窗，居中显示文字。
+	// 不应直接使用该组件，而是执行 aj.showOk
+	aj.msgbox = new Vue({
+		el : '.alertHolder',
+		data : {
+			showText : '', 		// 显示的内容
+			afterClose : null,	// 关闭弹窗后的回调
+			showOk : false,
+			showYes : false,
+			showNo : false,
+			showSave : false
+		},
+		template : 
+			'<div class="aj-modal hide" @click="close($event);">\
+				<div><div v-html="showText"></div>\
+					<div class="aj-btnsHolder">\
+						<button v-show="showOk"  @click="onBtnClk($event)" class="ok">确定</button> \
+						<button v-show="showYes" @click="onBtnClk($event)" class="yes">{{showSave? \'保存\': \'是\'}}</button> \
+						<button v-show="showNo"  @click="onBtnClk($event)" class="no">{{showSave? \'否\': \'否\'}}</button>\
+					</div>\
+				</div>\
+			</div>',
+		methods : {
+			show(text, cfg) {
+				this.showText = text;
+				this.$el.classList.remove('hide');
+				aj.apply(this, cfg);
+				
+				return this;
+			},
+			close(e) {
+				var div = e.target; // check if in the box
+				if (div && div.className.indexOf('modal') != -1) {
+					this.$el.classList.add('hide');
+					
+					this.afterClose && this.afterClose(div, this);
+				}
+			},
+			onBtnClk(e) {
+				var el = e.target;
+				switch(el.className) {
+					case 'ok':
+						this.onOkClk && this.onOkClk(e, this);
+					break;
+					case 'no':
+						this.onNoClk && this.onNoClk(e, this);
+						break;
+					case 'yes':
+						this.onYesClk && this.onYesClk(e, this);
+						break;
+				}
+			},
+			
+		}
+		
+	});
+	
+	/**
+	 * 顯示確定的對話框
+	 * @param {String} text 显示的文本
+	 * @param {Function} callback 回调函数
+	 */
+	aj.showOk = (text, callback) => {
+		var alertObj = aj.msgbox.show(text, {
+			showYes : false,
+			showNo : false,
+			showOk : true,
+			onOkClk(e) { // 在box里面触发关闭，不能直接用 msgbox.close(e);
+				alertObj.$el.classList.add('hide');
+				callback && callback();
+			}
+		});
+	}
+	
+	/**
+	 * 顯示“是否”選擇的對話框
+	 * @param {String} text 显示的文本
+	 * @param {Function} callback 回调函数
+	 */
+	aj.showConfirm = (text, callback, showSave) => {
+		var alertObj = aj.msgbox.show(text, {
+			showYes : true,
+			showNo : true,
+			showOk : false,
+			showSave: showSave,
+			onYesClk(e) {
+				alertObj.$el.classList.add('hide');
+				callback && callback(alertObj.$el, e);
+			},
+			onNoClk(e) { // 在box里面触发关闭，不能直接用 msgbox.close(e);
+				alertObj.$el.classList.add('hide');
+			}
+		});
+	}
+	
+	aj.simpleOk = (text, callback) => {
+		var alertObj = aj.msgbox.show(text, {
+			showYes : false,
+			showNo : false,
+			showOk : false,
+			onOkClk(e) { // 在box里面触发关闭，不能直接用 msgbox.close(e);
+				alertObj.$el.classList.add('hide');
+				callback && callback();
+			}
+		});
+	}
+	
+	aj.alert = aj.showOk;
+	aj.alert.show = aj.simpleOk;
+
+	document.body.appendChild(document.createElement('div')).className = 'msgHolder';
+
+	// 顶部出现，用于后台提示信息多
+	aj.msg = new Vue({
+		el : '.msgHolder',
+		data : {
+			showText : '' // 显示的内容
+		},
+		template : '<div class="aj-topMsg" v-html="showText"></div>',
+		methods : {
+			show (text, cfg) {
+				this.showText = text;
+				var el = this.$el;
+				
+				setTimeout(()=> {
+					el.classList.remove('fadeOut');
+					el.classList.add('fadeIn');
+				}, 0);
+				
+				setTimeout(() => { // 自动隐藏，无须 close
+					el.classList.remove('fadeIn');
+					el.classList.add('fadeOut');
+					cfg && cfg.afterClose && cfg.afterClose(div, this);
+				}, cfg && cfg.showTime || 3000);
+			}
+		}
+	});
+});
+
+// 浮層組件，通常要復用這個組件
+Vue.component('aj-layer', {
+	template: '<div class="aj-modal hide" @click="close($event);"><div><slot></slot></div></div>',
+	props: {
+		// 默认点击窗体关闭，当 notCloseWhenTap = true 时禁止关闭
+		notCloseWhenTap: Boolean
+	},
+	methods: {
+		show (cfg) {
+			this.$el.classList.remove('hide');
+//			this.BUS.emit('aj-layer-closed', this);
+			if(cfg && cfg.afterClose)
+				this.afterClose = cfg.afterClose;
+		},
+		close(e) { // isForceClose = 强制关闭
+			if(!e) {
+				aj.msgbox.$options.methods.close.call(this, {
+					target : aj('.aj-modal')
+				});
+			}else{
+				if(e.isForceClose || !this.notCloseWhenTap)
+					aj.msgbox.$options.methods.close.apply(this, arguments);
+			}
+		}
+	}
+});
+
