@@ -1,5 +1,8 @@
 package com.ajaxjs.config;
 
+import com.ajaxjs.util.io.FileHelper;
+import com.ajaxjs.util.resource.AbstractScanner;
+
 /**
  * 配置 JSON 的说明文件。
  * 开始的时候写成普通 json 文件通过文件读取，但跨多个项目的时候不能同步，要不断复制比较麻烦。
@@ -375,4 +378,12 @@ public interface ConfigScheme {
 "		}\r\n" + 
 "	}\r\n" + 
 "}";
+	
+	public static final String SCHEME_JSON_PATH2 = AbstractScanner.getResourcesFromClass(Config.class, "ConfigScheme.json");
+	public static void main(String[] args) {
+
+
+			System.out.println(FileHelper.openAsText(SCHEME_JSON_PATH2));
+		
+	}
 }

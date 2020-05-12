@@ -97,7 +97,6 @@ public class SiteStruService implements ServletContextListener {
 		Version.tomcatVersionDetect(ctx.getServerInfo());
 
 		// 加载配置
-		ConfigService.SCHEME_JSON = ConfigScheme.JSON;
 		ConfigService.load(ctx.getRealPath("/META-INF/site_config.json"));
 		if (ConfigService.CONFIG.isLoaded()) {
 			ctx.setAttribute("aj_allConfig", ConfigService.CONFIG); // 所有配置保存在这里

@@ -119,7 +119,7 @@ public class AliPayController extends BaseController<Map<String, Object>> {
 		Map<String, String> params = MapTool.as(_params, v -> v != null ? v.toString() : null);
 
 		try {
-			return AlipaySignature.rsaCheckV1(params, ConfigService.getValueAsString("Alipay.alipay_public_key"),
+			return AlipaySignature.rsaCheckV1(params, ConfigService.getValueAsString("shop.payment.Alipay.alipay_public_key"),
 					"utf-8", "RSA2");
 		} catch (AlipayApiException e) {
 			LOGGER.warning(e);
