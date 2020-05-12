@@ -1,7 +1,7 @@
 /**
  * 消息框、弹窗、对话框组件
  */
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", () => {
 	document.body.appendChild(document.createElement('div')).className = 'alertHolder';
 	
 	// 全屏幕弹窗，居中显示文字。
@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	 * @param {String} text 显示的文本
 	 * @param {Function} callback 回调函数
 	 */
-	aj.showOk = function(text, callback) {
+	aj.showOk = (text, callback) => {
 		var alertObj = aj.msgbox.show(text, {
 			showYes : false,
 			showNo : false,
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	 * @param {String} text 显示的文本
 	 * @param {Function} callback 回调函数
 	 */
-	aj.showConfirm = function(text, callback, showSave) {
+	aj.showConfirm = (text, callback, showSave) => {
 		var alertObj = aj.msgbox.show(text, {
 			showYes : true,
 			showNo : true,
@@ -99,8 +99,20 @@ document.addEventListener("DOMContentLoaded", function() {
 		});
 	}
 	
+	aj.simpleOk = (text, callback) => {
+		var alertObj = aj.msgbox.show(text, {
+			showYes : false,
+			showNo : false,
+			showOk : false,
+			onOkClk(e) { // 在box里面触发关闭，不能直接用 msgbox.close(e);
+				alertObj.$el.classList.add('hide');
+				callback && callback();
+			}
+		});
+	}
+	
 	aj.alert = aj.showOk;
-	aj.alert.show = aj.showOk;
+	aj.alert.show = aj.simpleOk;
 
 	document.body.appendChild(document.createElement('div')).className = 'msgHolder';
 

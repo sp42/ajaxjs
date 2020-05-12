@@ -27,7 +27,6 @@ aj._list = {
 // 简单列表
 Vue.component('aj-simple-list', {
 	mixins: [aj._list],
-	
 	template : '<ul class="aj-simple-list"><li v-for="(item, index) in result">\
 				<slot v-bind="item">\
 					<a :href="(hrefStr || \'\').replace(\'{id}\', item.id)" @click="show(item.id, index, $event)" :id="item.id">{{item.name}}</a>\
@@ -47,10 +46,9 @@ Vue.component('aj-simple-list', {
 // 分页
 Vue.component('aj-page-list', {
 	mixins: [aj._list],
-	
 	data() {
 		return {
-			pageSize : this.initPageSize,
+			pageSize: this.initPageSize,
 			total : 0,
 			totalPage :0,
 			pageStart: 0,
@@ -69,9 +67,9 @@ Vue.component('aj-page-list', {
 		},
 		autoLoadWhenReachedBottom : {	// 到底部是否自动加载下一页，通常在 移动端使用，这个应该是元素的 CSS Selector
 			type : String,
-			default : ''
+			default: ''
 		},
-		isDataAppend : {
+		isDataAppend: {
 			type : Boolean, 	// 数据分页是否追加模式，默认不追加 = false。 App 一般采用追加模式
 			default : false
 		}

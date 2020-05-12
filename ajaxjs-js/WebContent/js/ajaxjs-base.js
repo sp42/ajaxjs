@@ -76,6 +76,7 @@ ajaxjs.apply = function(a, b) {
 }
 
 /*
+ * @Dep
  * -------------------------------------------------------- 
  *  函数委托 参见 http://blog.csdn.net/zhangxin09/article/details/8508128 
  *  @return {Function}
@@ -189,7 +190,7 @@ ajaxjs.xhr = {
 	json2url : ajaxjs.params.json2url,
 
 	// 注意 url 部分带有 # 的话则不能传参数过来
-	request : function(url, cb, args, cfg, method) {
+	request(url, cb, args, cfg, method) {
 		var params = this.json2url(args), xhr = new XMLHttpRequest();
 
 		method = method.toUpperCase();
@@ -200,7 +201,6 @@ ajaxjs.xhr = {
 			xhr.open(method, url + (params ? '?' + params : ''));
 
 		cb.url = url; // 保存 url 以便记录请求路径，可用于调试
-
 		xhr.onreadystatechange = this.callback.delegate(null, cb, cfg && cfg.parseContentType);
 		xhr.setRequestHeader('Accept', 'application/json');
 		
@@ -212,10 +212,9 @@ ajaxjs.xhr = {
 		}
 	},
 
-	callback : function(event, cb, parseContentType) {
+	callback(event, cb, parseContentType) {
 		if (this.readyState === 4 && this.status === 200) {
 			var responseText = this.responseText.trim();
-
 			try {
 				if (!responseText)
 					throw '服务端返回空的字符串!';
@@ -269,7 +268,7 @@ ajaxjs.xhr = {
 	 * @param cfg
 	 *            该次请求的配置
 	 */
-	jsonp : function(url, params, cb, cfg) {
+	jsonp(url, params, cb, cfg) {
 		var globalMethod_Token = 'globalMethod_' + parseInt(Math.random() * (200000 - 10000 + 1) + 10000);
 
 		if (!window.$$_jsonp)
@@ -285,7 +284,7 @@ ajaxjs.xhr = {
 		document.getElementsByTagName('head')[0].appendChild(scriptTag);
 	},
 
-	form : function(form, cb, cfg) {
+	form(form, cb, cfg) {
 		cb = cb || ajaxjs.xhr.defaultCallBack;
 		cfg = cfg || {};
 
@@ -332,11 +331,18 @@ ajaxjs.xhr = {
 	}
 };
 
-// GET 请求
-ajaxjs.xhr.get = ajaxjs.xhr.request.delegate(null, null, null, null, 'GET');
-ajaxjs.xhr.post = ajaxjs.xhr.request.delegate(null, null, null, null, 'POST');
-ajaxjs.xhr.put = ajaxjs.xhr.request.delegate(null, null, null, null, 'PUT');
-ajaxjs.xhr.dele = ajaxjs.xhr.request.delegate(null, null, null, null, 'DELETE');
+ajaxjs.xhr.get = (url, cb, args, cfg) => {
+	ajaxjs.xhr.request(url, cb, args, cfg, 'GET');
+}
+ajaxjs.xhr.post = (url, cb, args, cfg) => {
+	ajaxjs.xhr.request(url, cb, args, cfg, 'POST');
+}
+ajaxjs.xhr.put = (url, cb, args, cfg) => {
+	ajaxjs.xhr.request(url, cb, args, cfg, 'PUT');
+}
+ajaxjs.xhr.dele = (url, cb, args, cfg) => {
+	ajaxjs.xhr.request(url, cb, args, cfg, 'DELETE');
+}
 
 /**
  * 表单序列化，兼容旧浏览器和 H5 FormData，返回 JSON
@@ -352,7 +358,7 @@ ajaxjs.xhr.serializeForm = function(form, cfg) {
 	if (window.FormData && FormData.prototype.forEach) { // 奇葩魅族浏览器，有
 		// FormData 却只有append 一个方法
 		var formData = new FormData(form);
-		formData.forEach(function(value, name) {
+		formData.forEach((value, name) => {
 			if (cfg && cfg.ignoreField != name) // 忽略的字段
 				json[name] = encodeURIComponent(value);
 		});
@@ -415,9 +421,9 @@ ajaxjs.xhr.defaultCallBack = ajaxjs.xhr.defaultCallBack_cb.delegate(null);
 // http://i.ifeng.com/ent/ylch/news?ch=ifengweb_2014&aid=91654101&mid=5e7Mzq&vt=5
 // --------------------------------------------------------
 ajaxjs.throttle = {
-	event : {},
-	handler : [],
-	init : function(fn, eventType) {
+	event: {},
+	handler: [],
+	init (fn, eventType) {
 		eventType = eventType || 'resize'; // resize|scroll
 
 		this.handler.push(fn);

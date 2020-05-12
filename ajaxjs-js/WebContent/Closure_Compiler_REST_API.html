@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>Insert title here</title>
+	<script src="js/ajaxjs-base.js"></script>
+</head>
+<body>
+	<form method="POST"
+		action="https://closure-compiler.appspot.com/compile">
+		<textarea name="js_code" cols="50" rows="5">
+		    function hello(name) {
+		      // Greets the user
+		      alert('Hello, ' + name);
+		    }
+		    hello('New user');
+	    </textarea>
+		<input type="hidden" name="compilation_level" value="WHITESPACE_ONLY">
+		<input type="hidden" name="output_format" value="text"> 
+		<input type="hidden" name="output_info" value="compiled_code">
+		<button>go</button>
+	</form>
+
+	<script>
+	aj.xhr.get("/ajaxjs-js/JsController", js => {
+		console.log(js);
+		aj.xhr.post('https://closure-compiler.appspot.com/compile', j => {
+			console.log(j);
+		}, {
+			js_code: encodeURIComponent(js),
+			compilation_level: 'WHITESPACE_ONLY',
+			'output_format': 'text',
+		    'output_info': 'compiled_code'
+		}, {
+			parseContentType: 'text'
+		});
+	}, null, {
+		parseContentType: 'text'
+	});
+	</script>
+</body>
+</html>

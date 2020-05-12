@@ -234,16 +234,16 @@ Vue.component('ajaxjs-fileupload-iframe', {
 		};
 	},
 	props : {
-		uploadUrl : {
+		uploadUrl: {
 			type: String,
 			required: true
 		},
-	    labelId : {
+	    labelId: {
 	    	type : String,
 	    	required : false,
 	    	default : 'input_file_molding'
 	    },
-	    accpectFileType : { // 可以上传类型
+	    accpectFileType: { // 可以上传类型
 	    	type : String
 	    }
 	},

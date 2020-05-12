@@ -240,7 +240,7 @@ Vue.component('aj-tree-catelog-select', {
 		aj.xhr.get(this.ajResources.ctx + "/admin/catelog/getListAndSubByParentId", this.load.bind(this), {parentId : this.catalogId});
 	},
 	
-	methods : {
+	methods: {
 		load(json) {
 			var catalogArr = json.result;
 			var selectUI = new ajaxjs.tree.selectUI();

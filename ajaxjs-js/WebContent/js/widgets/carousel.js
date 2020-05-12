@@ -390,6 +390,7 @@ Vue.component('aj-opacity-banner', {
 		animate(params) {
 			var el = this.list[this.active], getOpacity = this.getOpacity, fps = 1000 / this.fps;
 			window.clearTimeout(el.timer);
+			
 			window.setTimeout(function() {
 				var i = getOpacity(el), speed = (params - i) / 8;
 				speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);

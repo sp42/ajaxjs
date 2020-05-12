@@ -49,10 +49,10 @@ Vue.component('aj-form-calendar', {
 			day   : 1
 		};
 	},
-	props : {
+	props: {
 		showTime: false
 	},
-	template : 
+	template: 
 		'<div class="aj-form-calendar">\
 			<div class="selectYearMonth">\
 				<a href="###" @click="getDate(\'preYear\')" class="preYear" title="上一年">&lt;</a> \
@@ -102,6 +102,7 @@ Vue.component('aj-form-calendar', {
 					var cell = document.createElement("td");
 					if (arr.length) {
 						var d = arr.shift();
+						
 						if (d) {
 							cell.innerHTML = d;
 							var text = this.year + '-' + this.month + '-' + d;

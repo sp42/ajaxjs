@@ -1,8 +1,8 @@
 // 折叠菜单
 Vue.component('aj-accordion-menu', {
-	template : '<ul class="aj-accordion-menu" @click="onClk($event);"><slot></slot></ul>',
-	methods : {
-		onClk : function (e) {
+	template: '<ul class="aj-accordion-menu" @click="onClk($event);"><slot></slot></ul>',
+	methods: {
+		onClk(e) {
 			this.children = this.$el.children;
 			
 			this.highlightSubItem(e);
@@ -37,11 +37,11 @@ Vue.component('aj-accordion-menu', {
 	    },
 	    
 	    // 内部子菜单的高亮
-	    highlightSubItem : function (e) {
+	    highlightSubItem(e) {
 	        var li, el = e.target;
 	        if (el.tagName == 'A' && el.getAttribute('target')) {
 	            li = el.parentNode;
-	            li.parentNode.$('li', function(_el) {
+	            li.parentNode.$('li', _el => {
 	                if (_el == li)
 	                    _el.classList.add('selected');
 	                else
@@ -54,24 +54,24 @@ Vue.component('aj-accordion-menu', {
 
 // 展开闭合器
 Vue.component('aj-expander', {
-	data : function () {
+	data() {
 	    return {
-	    	expended : false
+	    	expended: false
 	    }
 	},
 	
-	props : {
-		openHeight : { 		// 展开状态的高度
+	props: {
+		openHeight: { 		// 展开状态的高度
 			type : Number,
 			default : 200
 		},
-		closeHeight : {		// 闭合状态的高度
+		closeHeight: {		// 闭合状态的高度
 			type : Number,
 			default : 50
 		}
 	},
 	
-	template : 
+	template: 
 		'<div class="aj-expander" :style="\'height:\' + (expended ? openHeight : closeHeight) + \'px;\'">\
 			<div :class="expended ? \'closeBtn\' : \'openBtn\'" @click="expended = !expended;"></div>\
 			<slot></slot>\
@@ -89,8 +89,8 @@ Vue.component('aj-menu-moblie-scroll', {
 	},
 	data() {
 		return {
-			selected : 0,
-			items : this.initItems
+			selected: 0,
+			items: this.initItems
 		}
 	},
 	template: 
