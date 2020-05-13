@@ -223,7 +223,7 @@ Vue.component('aj-tree-catelog-select', {
 			type: Number,
 			required: true
 		},
-		selectedCatalogId : {	// 已选中的分类 id
+		selectedCatalogId: {	// 已选中的分类 id
 			type: Number,
 			required: false
 		},
