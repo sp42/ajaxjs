@@ -45,7 +45,7 @@ public class WxPayService extends BaseService<OrderInfo> implements PayConstant 
 	 * @return
 	 */
 	public Map<String, ?> createOrderAndPay(long userId, long addressId, String[] cartIds, String ip) {
-		OrderInfo orderInfo = orderService.processOrder(userId, addressId, cartIds);
+		OrderInfo orderInfo = orderService.processOrder(userId, addressId, cartIds, 0);
 		return wxPay(userId, orderInfo, ip);
 	}
 
@@ -73,12 +73,12 @@ public class WxPayService extends BaseService<OrderInfo> implements PayConstant 
 //		Map<String, String> map = WxPay.unifiedOrder(orderInfo, perpayInfo);
 //		PerpayReturn result = WxPay.sendUnifiedOrder(map); 
 
-		PerpayReturn result = MiniAppPay.sendUnifiedOrder(orderInfo, perpayInfo);// 商户 server 调用支付统一下单
+		PerpayReturn result = WxPay.sendUnifiedOrder(orderInfo, perpayInfo);// 商户 server 调用支付统一下单
 
 		if (result.isSuccess()) {
 			LOGGER.info("获取 perpayid 成功！{0}", result.getPrepay_id());
 //			Map<String, String> r = PaySignatures.getPayParam(result.getPrepay_id(), map.get("nonce_str")); // 商户 server 调用再次签名
-			Map<String, String> r = MiniAppPay.getPayParam(result.getPrepay_id(), result.getNonce_str()); // 商户
+			Map<String, String> r = WxPay.getPayParam(result.getPrepay_id(), result.getNonce_str()); // 商户
 																											// server
 																											// 调用再次签名
 			r.put("orderInfoId", orderInfo.getId() + ""); // 新订单 id

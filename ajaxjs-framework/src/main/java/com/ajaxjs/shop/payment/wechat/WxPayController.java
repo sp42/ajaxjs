@@ -2,7 +2,6 @@ package com.ajaxjs.shop.payment.wechat;
 
 import java.io.InputStream;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -20,6 +19,7 @@ import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.model.OrderInfo;
+import com.ajaxjs.shop.payment.wechat.model.PayNodifyResult;
 import com.ajaxjs.shop.payment.wechat.model.PaymentNotification;
 import com.ajaxjs.shop.service.OrderService;
 import com.ajaxjs.util.CommonUtil;
@@ -41,35 +41,22 @@ public class WxPayController extends BaseController<Map<String, Object>> {
 	public String result(HttpServletRequest request) throws ServiceException {
 		LOGGER.info("微信服务器同步通知");
 
-		Map<String, String> responseResult = new HashMap<>();
+		PayNodifyResult result;
 
-		try {
-			InputStream in = null;
-			String xml = null;
-
-			try {
-				in = request.getInputStream();
-				xml = IoHelper.byteStream2string(in);// 读取参数
-			} finally {
-				in.close();
-			}
+		try (InputStream in = request.getInputStream();) {
+			String xml = IoHelper.byteStream2string(in);// 读取参数
 
 			if (CommonUtil.isEmptyString(xml))
 				throw new NullPointerException("没返回任何报文");
 
-			Map<String, String> r = MapTool.xmlToMap(xml);
-			PaymentNotification perpayReturn = MapTool.map2Bean(MapTool.as(r, v -> v == null ? null : (Object) v),
-					PaymentNotification.class);
-			Objects.requireNonNull(perpayReturn, "报文序列化XML为空");
-
-			perpayReturn.setData(r);
-			payNotification(perpayReturn, responseResult);
+			result = payNotification(xml);
 		} catch (Throwable e) {
-			responseResult.put("return_code", "FAIL");
-			responseResult.put("return_msg", e.getMessage() != null ? e.getMessage() : e.toString());
+			result = new PayNodifyResult();
+			result.setReturn_code("FAIL");
+			result.setReturn_msg(e.getMessage() != null ? e.getMessage() : e.toString());
 		}
 
-		String xml = MapTool.mapToXml(responseResult);
+		String xml = MapTool.beanToXml(result);
 		LOGGER.info("xml::" + xml);
 		return "xml::" + xml;
 	}
@@ -80,21 +67,25 @@ public class WxPayController extends BaseController<Map<String, Object>> {
 	/**
 	 * 处理支付通知的异步回调，控制器必须提供一个接口调用该服务方法
 	 * 
-	 * @param perpayReturn
-	 * @param responseResult
+	 * @param xml
 	 * @return
 	 */
-	public Map<String, String> payNotification(PaymentNotification perpayReturn, Map<String, String> responseResult) {
+	public PayNodifyResult payNotification(String xml) {
 		LOGGER.info("处理支付通知的异步回调");
+
+		Map<String, String> r = MapTool.xmlToMap(xml);
+		PaymentNotification perpayReturn = MapTool.map2Bean(MapTool.as(r, v -> v == null ? null : (Object) v),
+				PaymentNotification.class);
+		Objects.requireNonNull(perpayReturn, "报文序列化XML为空");
+
 		boolean isOk = false;
 		String msg = "UNKONW";
 
 		if (perpayReturn.isSuccess()) {
 			// 验证签名是否正确
-			String toCheck = WxUtil.generateSignature(perpayReturn.getData(),
-					ConfigService.getValueAsString("mini_program.MchSecretId"));
+			String toCheck = WxUtil.generateSignature(r, ConfigService.getValueAsString("shop.payment.wx.apiSecret"));
 
-			if (perpayReturn.getSign().equals(toCheck)) {
+			if (perpayReturn.getSign().equalsIgnoreCase(toCheck)) {
 				String totalFee = perpayReturn.getTotal_fee(), orderNo = perpayReturn.getOut_trade_no();
 
 				OrderInfo order = orderService.findByOrderNo(orderNo);
@@ -111,20 +102,20 @@ public class WxPayController extends BaseController<Map<String, Object>> {
 					isOk = true;
 					msg = "OK";
 				} else {
-					msg = "非法响应！交易金额不对，支付方返回 " + totalFee + "分，而订单记录是 " + (WxUtil.toCent(order.getTotalPrice()))
-							+ "分";
+					msg = "非法响应！交易金额不对，支付方返回 " + totalFee + "分，而订单记录是 " + (WxUtil.toCent(order.getTotalPrice())) + "分";
 				}
 			} else {
-				msg = "非法响应！";
+				msg = "非法响应！签名不通过";
 			}
 		} else {
 			msg = "交易失败";
 		}
 
-		responseResult.put("return_code", isOk ? "SUCCESS" : "FAIL");
-		responseResult.put("return_msg", msg);
+		PayNodifyResult result = new PayNodifyResult();
+		result.setReturn_code(isOk ? "SUCCESS" : "FAIL");
+		result.setReturn_msg(msg);
 
-		return responseResult;
+		return result;
 	}
 
 	@Override

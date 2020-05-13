@@ -42,7 +42,7 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 
 	@Resource("CartService")
 	private CartService cartService = new CartService();
-	
+
 	@Resource("GoodsFormatService")
 	private GoodsFormatService goodsFormatService;
 
@@ -150,21 +150,17 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 	 * @param cartIds   订单明细由购物车的数据生成
 	 * @return 订单
 	 */
-	public OrderInfo processOrder(long userId, long addressId, String[] cartIds) {
+	public OrderInfo processOrder(long userId, long addressId, String[] cartIds, int payType) {
 		LOGGER.info("生成订单信息");
 
 		// 购物车转为订单
 		List<Cart> carts = cartService.findCartListIn(cartIds);
-		BigDecimal actualPrice = getActualPrice(carts);
 
-		OrderInfo order = new OrderInfo();
-		order.setBuyerId(userId);
+		OrderInfo order = initOrder(userId, addressId, payType);
+
+		BigDecimal actualPrice = getActualPrice(carts);
 		order.setTotalPrice(actualPrice);
 		order.setOrderPrice(actualPrice); // 当前没有优惠券
-
-		getAddress(order, addressId);
-
-		order.setOrderNo(ShopConstant.getOutterOrderNo()); // 生成外显的订单号
 
 		create(order); // 保存订单
 
@@ -202,20 +198,16 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 		return order;
 	}
 
-	public OrderInfo processOrder(long userId, long addressId, long goodsId, long formatId, int goodsNumber) {
+	public OrderInfo processOrder(long userId, long addressId, long goodsId, long formatId, int goodsNumber,
+			int payType) {
 		LOGGER.info("生成订单信息");
-		
 		BigDecimal actualPrice = goodsFormatService.findById(formatId).getPrice();
 
-		OrderInfo order = new OrderInfo();
-		order.setBuyerId(userId);
+		OrderInfo order = initOrder(userId, addressId, payType);
 		order.setTotalPrice(actualPrice);
 		order.setOrderPrice(actualPrice); // 当前没有优惠券
-		order.setOrderNo(ShopConstant.getOutterOrderNo()); // 生成外显的订单号
-		
-		getAddress(order, addressId);
 		create(order); // 保存订单
-		
+
 		OrderItem orderItem = new OrderItem();
 		orderItem.setGoodsId(goodsId);
 		orderItem.setGoodsFormatId(formatId);
@@ -224,8 +216,9 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 		orderItem.setGoodsAmount(actualPrice);
 		orderItem.setOrderId(order.getId());
 		orderItem.setBuyerId(userId);
-		order.setOrderItems(new OrderItem[] { orderItem });
+		orderItemService.create(orderItem);
 		
+		order.setOrderItems(new OrderItem[] { orderItem });
 		return order;
 	}
 
@@ -237,6 +230,16 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 	public void onProcessOrderDone(OrderInfo order) {
 	}
 
+	private OrderInfo initOrder(long userId, long addressId, int payType) {
+		OrderInfo order = new OrderInfo();
+		order.setBuyerId(userId);
+		order.setPayType(payType);
+		order.setOrderNo(ShopConstant.getOutterOrderNo()); // 生成外显的订单号
+		getAddress(order, addressId);
+
+		return order;
+	}
+
 	/**
 	 * 复制地址
 	 * 
@@ -244,8 +247,8 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 	 * @param addressId
 	 */
 	private void getAddress(OrderInfo order, long addressId) {
-		System.out.println(UserAddressService.AREA_DATA.get("China_AREA", "86", "210000"));
-		System.out.println(UserAddressService.AREA_DATA.get("China_AREA", "210000", "210100"));
+//		System.out.println(UserAddressService.AREA_DATA.get("China_AREA", "86", "210000"));
+//		System.out.println(UserAddressService.AREA_DATA.get("China_AREA", "210000", "210100"));
 
 		UserAddress address = addService.findById(addressId);
 		order.setShippingTarget(address.getName());

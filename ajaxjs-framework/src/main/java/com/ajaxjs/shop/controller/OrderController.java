@@ -3,6 +3,7 @@ package com.ajaxjs.shop.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -22,7 +23,9 @@ import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.model.OrderItem;
 import com.ajaxjs.shop.payment.ali.Alipay;
+import com.ajaxjs.shop.payment.wechat.WxPay;
 import com.ajaxjs.shop.payment.wechat.WxPayService;
+import com.ajaxjs.shop.payment.wechat.model.PerpayReturn;
 import com.ajaxjs.shop.service.OrderService;
 import com.ajaxjs.user.controller.BaseUserController;
 import com.ajaxjs.user.filter.LoginCheck;
@@ -69,6 +72,14 @@ public class OrderController extends BaseController<OrderInfo> {
 		return jsp("shop/order-info");
 	}
 
+	@Override
+	public void prepareData(ModelAndView mv) {
+		super.prepareData(mv);
+		mv.put("TradeStatusDict", ShopConstant.TradeStatus);
+		mv.put("PayTypeDict", ShopConstant.PAY_TYPE);
+		mv.put("PayStatusDict", ShopConstant.PayStatus);
+	}
+
 	@Path("checkout")
 	@GET
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
@@ -88,7 +99,7 @@ public class OrderController extends BaseController<OrderInfo> {
 
 		UserAddressService.initData(r);
 		String[] cartIds = _cartIds.split(",");
-		OrderInfo order = service.processOrder(BaseUserController.getUserId(), addressId, cartIds);
+		OrderInfo order = service.processOrder(BaseUserController.getUserId(), addressId, cartIds, payType);
 		service.onProcessOrderDone(order);
 
 		if (payType != 0) {
@@ -114,13 +125,39 @@ public class OrderController extends BaseController<OrderInfo> {
 	@Path("directOrder")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String directProcessOrder(@FormParam("addressId") @NotNull long addressId, @FormParam("payType") int payType,
-			@FormParam("goodsId") long goodsId, @FormParam("formatId") long formatId,
-			@FormParam("goodsNumber") int goodsNumber, HttpServletRequest r) {
+			@NotNull @FormParam("goodsId") long goodsId, @NotNull @FormParam("formatId") long formatId,
+			@NotNull @FormParam("goodsNumber") int goodsNumber, HttpServletRequest r, HttpServletResponse response,
+			ModelAndView mv) throws AlipayApiException {
 		LOGGER.info("处理订单 结账-直接单个商品");
 
 		UserAddressService.initData(r);
-		OrderInfo order = service.processOrder(BaseUserController.getUserId(), addressId, goodsId, formatId, goodsNumber);
+		OrderInfo order = service.processOrder(BaseUserController.getUserId(), addressId, goodsId, formatId,
+				goodsNumber, payType);
 		service.onProcessOrderDone(order);
+
+		LOGGER.info("进行支付");
+		if (payType != 0) {
+			switch (payType) {
+			case ShopConstant.ALI_PAY:
+				order.setPayType(ShopConstant.ALI_PAY);
+
+				Alipay alipay = new Alipay();
+				alipay.setSubject("支付我们的产品");
+				alipay.setBody("");
+				alipay.setOut_trade_no(order.getOrderNo());
+				alipay.setTotal_amount(order.getTotalPrice().toString());
+
+				return "html::" + Alipay.connect(alipay);
+			case ShopConstant.WX_PAY:
+				order.setPayType(ShopConstant.WX_PAY);
+				PerpayReturn p = WxPay.pcUnifiedOrder(order);
+
+				mv.put("totalPrice", order.getTotalPrice());
+				mv.put("codeUrl", p.getCode_url());
+
+				return jsp("/shop/wxpay");
+			}
+		}
 
 		return order != null ? jsonOk("交易成功！") : jsonNoOk("交易不成功！");
 	}

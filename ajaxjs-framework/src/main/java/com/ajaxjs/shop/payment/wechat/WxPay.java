@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.net.http.Tools;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.payment.wechat.model.PerpayInfo;
 import com.ajaxjs.shop.payment.wechat.model.PerpayReturn;
@@ -18,8 +19,35 @@ import com.ajaxjs.weixin.payment.PayConstant;
  * @author sp42 frank@ajaxjs.com
  *
  */
-public class MiniAppPay implements PayConstant {
-	private static final LogHelper LOGGER = LogHelper.getLog(MiniAppPay.class);
+public class WxPay implements PayConstant {
+	private static final LogHelper LOGGER = LogHelper.getLog(WxPay.class);
+
+	/**
+	 * PC 版支付微信下单接口
+	 * 
+	 * @param order
+	 * @return
+	 */
+	public static PerpayReturn pcUnifiedOrder(OrderInfo order) {
+		LOGGER.info("PC 微信下单请求交易开始");
+
+		Map<String, String> data = new HashMap<>();
+		WxUtil.commonSetUnifiedOrder(order, data);
+
+		data.put("body", "TESTTEST");
+		data.put("product_id", order.getId() + ""); // 商品 id，但一个订单可能包含多个商品，所以填入订单数据库 id
+		data.put("notify_url", ConfigService.getValueAsString("shop.payment.wx.notifyUrl"));
+		data.put("appid", ConfigService.getValueAsString("shop.payment.wx.appId"));
+		data.put("mch_id", ConfigService.getValueAsString("shop.payment.wx.mchId"));
+
+		data.put("trade_type", "NATIVE");
+		data.put("device_info", "web");
+		data.put("spbill_create_ip", Tools.getIp());
+
+		data.put("sign", WxUtil.generateSignature(data, ConfigService.getValueAsString("shop.payment.wx.apiSecret")));
+
+		return WxUtil.sendUnifiedOrder(data);
+	}
 
 	/**
 	 * 生成统一下单用的信息
@@ -55,7 +83,6 @@ public class MiniAppPay implements PayConstant {
 			data.put("version", "1.0");
 		}
 
-
 		data.put("appid", ConfigService.getValueAsString("mini_program.appId"));
 		// 商户号 mch_id 是 String(32) 1230000109 微信支付分配的商户号
 		data.put("mch_id", ConfigService.getValueAsString("mini_program.MchId"));
@@ -88,10 +115,10 @@ public class MiniAppPay implements PayConstant {
 		map.put("nonceStr", TokenService.getRandomString(10));
 		map.put("package", "prepay_id=" + perpayId);
 		map.put("signType", "MD5");
-	
+
 		String paySign = WxUtil.generateSignature(map, ConfigService.getValueAsString("mini_program.MchSecretId"));
 		map.put("paySign", paySign);
-	
+
 		return map;
 	}
 }

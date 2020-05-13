@@ -1,7 +1,5 @@
 package com.ajaxjs.shop.payment.wechat.model;
 
-import java.util.Map;
-
 /**
  * 异步支付通知
  * 
@@ -227,14 +225,4 @@ public class PaymentNotification extends BaseResponse {
 	public void setTime_end(String time_end) {
 		this.time_end = time_end;
 	}
-
-	public Map<String, String> getData() {
-		return data;
-	}
-
-	public void setData(Map<String, String> data) {
-		this.data = data;
-	}
-
-	private Map<String, String> data;
 }

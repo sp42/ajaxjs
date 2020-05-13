@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.shop.model.OrderInfo;
-import com.ajaxjs.shop.payment.wechat.PcPay;
+import com.ajaxjs.shop.payment.wechat.WxPay;
 
 public class TestPayment {
 	@BeforeClass
@@ -19,9 +19,9 @@ public class TestPayment {
 	public void testWxPc() {
 		OrderInfo order = new OrderInfo();
 		order.setId(1L);
-		order.setOrderNo("202011122220333");
+		order.setOrderNo("202011122220332");
 		order.setTotalPrice(new BigDecimal("0.01"));
 		
-		PcPay.unifiedOrder(order);
+		WxPay.pcUnifiedOrder(order);
 	}
 }

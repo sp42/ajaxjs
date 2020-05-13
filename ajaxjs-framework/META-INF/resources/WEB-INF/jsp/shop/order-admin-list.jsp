@@ -95,7 +95,7 @@
 					<tr>
 						<td>${current.id}</td>
 						<td>${current.orderNo}<br/><span style="color:gray">${current.outerTradeNo}</span></td>
-						<td>${PayTypeDict[current.payType]}</td>
+						<td>${PayTypeDict[current.payType]}${current.payType }</td>
 						<td>￥${current.orderPrice}</td>
 						<td>￥${current.totalPrice}</td>
 						<td>${TradeStatusDict[current.tradeStatus]}</td>
