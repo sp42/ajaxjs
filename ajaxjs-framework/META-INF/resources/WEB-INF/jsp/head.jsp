@@ -59,14 +59,10 @@
     <script src="${developing_js_url}/js/widgets/admin.js"></script>
     <script src="${developing_js_url}/js/widgets/form.js"></script>
     <script src="${developing_js_url}/js/widgets/list.js"></script>
-    <script src="${developing_js_url}/js/widgets/menu.js"></script>
-    <script src="${developing_js_url}/js/widgets/msg.js"></script>
-    <script src="${developing_js_url}/js/widgets/page.js"></script>
+    <script src="${developing_js_url}/js/widgets/widget.js"></script>
     <script src="${developing_js_url}/js/widgets/tree.js"></script>
     <script src="${developing_js_url}/js/widgets/upload.js"></script>
     <script src="${developing_js_url}/js/widgets/carousel.js"></script>
-    <script src="${developing_js_url}/js/widgets/marquee.js"></script>
-    <script src="${developing_js_url}/js/widgets/img.js"></script>
     
     <% if(request.getParameter("css")  != null) { %> 
 		<script>

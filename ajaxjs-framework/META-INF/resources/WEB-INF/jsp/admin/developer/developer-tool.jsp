@@ -154,9 +154,13 @@
 				<div :class="{'selected': 4 === selected}">	
 					<p>1、仅在开发模式下（Windows）执行，且在部署之前执行。2、按实际情况改为你的工程目录。</p>
 					<div>
-						<input class="jsSave aj-input" style="height:32px;width:400px;margin-right:30px;" value="${aj_allConfig.System.project_folder.replace('\\',  '/')}" /> <button class="aj-btn" onclick="window.open('/ajaxjs-js/JsController?output=' + aj('.jsSave').value);return false;">打包 JavaScript</button>
+						<input class="jsSave aj-input" style="height:32px;width:400px;margin-right:30px;" value="${aj_allConfig.System.project_folder.replace('\\',  '/')}" /> <button class="aj-btn" onclick="packageJs();return false;">打包 JavaScript</button>
 						<div>最终保存在 /asset/js/all.js 中。 </div>
 					</div>
+<%-- 					<div>
+						<input class="jsSave aj-input" style="height:32px;width:400px;margin-right:30px;" value="${aj_allConfig.System.project_folder.replace('\\',  '/')}" /> <button class="aj-btn" onclick="window.open('/ajaxjs-js/JsController?output=' + aj('.jsSave').value);return false;">打包 JavaScript</button>
+						<div>最终保存在 /asset/js/all.js 中。 </div>
+					</div> --%>
 					<div>
 						<input class="cssSave aj-input" style="height:32px;width:400px;margin-right:30px;" value="${aj_allConfig.System.project_folder.replace('\\',  '/')}" /> <button class="aj-btn" onclick="window.open('${ctx}/?css=true&output=' + aj('.cssSave').value);return false;">打包网站 CSS</button>
 						<div>最终保存在 /asset/css/main.css 中。 </div>
@@ -215,6 +219,29 @@
 		backupDB = () => {
 			aj.xhr.get('${ctx}/admin/backup/db/', json => {
 				down(json.zipFile);
+			});
+		}
+		
+		function packageJs() {
+			aj.xhr.get("/ajaxjs-js/JsController", js => {
+				aj.xhr.post('https://closure-compiler.appspot.com/compile', compressedJs => {
+					aj.xhr.post("/ajaxjs-js/JsController", j => {
+						console.log(j)
+						aj.alert(JSON.parse(j).isOk ? '打包 js 成功！' : '打包 js 失败！')
+					}, {
+						js: encodeURIComponent(compressedJs),
+						saveFolder: aj('.jsSave').value
+					});
+				}, {
+					js_code: encodeURIComponent(js),
+					compilation_level: 'WHITESPACE_ONLY',
+					output_format: 'text',
+				    output_info: 'compiled_code'
+				}, {
+					  
+				});
+			}, null, {
+				parseContentType: 'text'
 			});
 		}
 	</script>

@@ -159,8 +159,6 @@
 					<ajaxjs-admin-info-btns :is-create="${isCreate}"></ajaxjs-admin-info-btns>
 				</div>
 			</form>
-	<!-- 图片上传（iframe 辅助） -->
-<%-- 	<ajaxjs-fileupload-iframe upload-url="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catelog=2" ref="uploadIframe"></ajaxjs-fileupload-iframe>
 			 --%>
 	<!-- 弹出层上传对话框 -->
 	<aj-popup-upload ref="uploadLayer" upload-url="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catelog=1" img-place="${commonAsset.concat('/images/imgBg.png')}"></aj-popup-upload>
