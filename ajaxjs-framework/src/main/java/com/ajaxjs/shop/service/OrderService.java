@@ -42,6 +42,9 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 
 	@Resource("CartService")
 	private CartService cartService = new CartService();
+	
+	@Resource("GoodsFormatService")
+	private GoodsFormatService goodsFormatService;
 
 	@Resource("OrderItemService")
 	private OrderItemService orderItemService = new OrderItemService();
@@ -201,6 +204,8 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 
 	public OrderInfo processOrder(long userId, long addressId, long goodsId, long formatId, int goodsNumber) {
 		LOGGER.info("生成订单信息");
+		
+		BigDecimal actualPrice = goodsFormatService.findById(formatId).getPrice();
 
 		OrderInfo order = new OrderInfo();
 		order.setBuyerId(userId);
@@ -214,7 +219,7 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 		OrderItem orderItem = new OrderItem();
 		orderItem.setGoodsId(goodsId);
 		orderItem.setGoodsFormatId(formatId);
-		orderItem.setGoodsPrice(cart.getPrice());
+		orderItem.setGoodsPrice(actualPrice);
 		orderItem.setGoodsNumber(goodsNumber);
 		orderItem.setGoodsAmount(actualPrice);
 		orderItem.setOrderId(order.getId());

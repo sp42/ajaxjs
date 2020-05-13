@@ -4,18 +4,13 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.app.CommonConstant;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
@@ -31,9 +26,7 @@ import com.ajaxjs.shop.payment.wechat.WxPayService;
 import com.ajaxjs.shop.service.OrderService;
 import com.ajaxjs.user.controller.BaseUserController;
 import com.ajaxjs.user.filter.LoginCheck;
-import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.service.UserAddressService;
-import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.logger.LogHelper;
 import com.alipay.api.AlipayApiException;
 
@@ -126,7 +119,7 @@ public class OrderController extends BaseController<OrderInfo> {
 		LOGGER.info("处理订单 结账-直接单个商品");
 
 		UserAddressService.initData(r);
-
+		OrderInfo order = service.processOrder(BaseUserController.getUserId(), addressId, goodsId, formatId, goodsNumber);
 		service.onProcessOrderDone(order);
 
 		return order != null ? jsonOk("交易成功！") : jsonNoOk("交易不成功！");
