@@ -3,7 +3,6 @@ package com.ajaxjs.shop.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -22,9 +21,8 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.model.OrderItem;
-import com.ajaxjs.shop.payment.ali.Alipay;
+import com.ajaxjs.shop.payment.Pay;
 import com.ajaxjs.shop.payment.wechat.WxPay;
-import com.ajaxjs.shop.payment.wechat.model.PerpayReturn;
 import com.ajaxjs.shop.service.OrderService;
 import com.ajaxjs.user.controller.BaseUserController;
 import com.ajaxjs.user.filter.LoginCheck;
@@ -91,9 +89,9 @@ public class OrderController extends BaseController<OrderInfo> {
 
 	@POST
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-//	@Produces(MediaType.APPLICATION_JSON)
-	public String processOrder(@FormParam("addressId") @NotNull long addressId, @FormParam("payType") int payType,
-			@FormParam("cartIds") @NotNull String _cartIds, HttpServletRequest r) throws AlipayApiException {
+	public String processOrder(@FormParam("addressId") @NotNull long addressId,
+			@NotNull @FormParam("payType") int payType, @FormParam("cartIds") @NotNull String _cartIds,
+			HttpServletRequest r, ModelAndView mv) throws AlipayApiException {
 		LOGGER.info("处理订单 结账");
 
 		UserAddressService.initData(r);
@@ -101,32 +99,16 @@ public class OrderController extends BaseController<OrderInfo> {
 		OrderInfo order = service.processOrder(BaseUserController.getUserId(), addressId, cartIds, payType);
 		service.onProcessOrderDone(order);
 
-		if (payType != 0) {
-			switch (payType) {
-			case ShopConstant.ALI_PAY:
-				order.setPayType(ShopConstant.ALI_PAY);
-				LOGGER.info("进行支付");
-
-				Alipay alipay = new Alipay();
-				alipay.setSubject("支付我们的产品");
-				alipay.setBody("");
-				alipay.setOut_trade_no(order.getOrderNo());
-				alipay.setTotal_amount(order.getTotalPrice().toString());
-
-				return "html::" + Alipay.connect(alipay);
-			}
-		}
-
-		return order != null ? jsonOk("交易成功！") : jsonNoOk("交易不成功！");
+		return Pay.doPay(order, payType, mv);
 	}
 
 	@POST
 	@Path("directOrder")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	public String directProcessOrder(@FormParam("addressId") @NotNull long addressId, @FormParam("payType") int payType,
-			@NotNull @FormParam("goodsId") long goodsId, @NotNull @FormParam("formatId") long formatId,
-			@NotNull @FormParam("goodsNumber") int goodsNumber, HttpServletRequest r, HttpServletResponse response,
-			ModelAndView mv) throws AlipayApiException {
+	public String directProcessOrder(@FormParam("addressId") @NotNull long addressId,
+			@NotNull @FormParam("payType") int payType, @NotNull @FormParam("goodsId") long goodsId,
+			@NotNull @FormParam("formatId") long formatId, @NotNull @FormParam("goodsNumber") int goodsNumber,
+			HttpServletRequest r, ModelAndView mv) throws AlipayApiException {
 		LOGGER.info("处理订单 结账-直接单个商品");
 
 		UserAddressService.initData(r);
@@ -134,31 +116,7 @@ public class OrderController extends BaseController<OrderInfo> {
 				goodsNumber, payType);
 		service.onProcessOrderDone(order);
 
-		LOGGER.info("进行支付");
-		if (payType != 0) {
-			switch (payType) {
-			case ShopConstant.ALI_PAY:
-				order.setPayType(ShopConstant.ALI_PAY);
-
-				Alipay alipay = new Alipay();
-				alipay.setSubject("支付我们的产品");
-				alipay.setBody("");
-				alipay.setOut_trade_no(order.getOrderNo());
-				alipay.setTotal_amount(order.getTotalPrice().toString());
-
-				return "html::" + Alipay.connect(alipay);
-			case ShopConstant.WX_PAY:
-				order.setPayType(ShopConstant.WX_PAY);
-				PerpayReturn p = WxPay.pcUnifiedOrder(order);
-
-				mv.put("totalPrice", order.getTotalPrice());
-				mv.put("codeUrl", p.getCode_url());
-
-				return jsp("/shop/wxpay");
-			}
-		}
-
-		return order != null ? jsonOk("交易成功！") : jsonNoOk("交易不成功！");
+		return Pay.doPay(order, payType, mv);
 	}
 
 	@Override
