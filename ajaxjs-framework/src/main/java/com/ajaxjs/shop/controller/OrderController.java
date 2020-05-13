@@ -24,7 +24,6 @@ import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.model.OrderItem;
 import com.ajaxjs.shop.payment.ali.Alipay;
 import com.ajaxjs.shop.payment.wechat.WxPay;
-import com.ajaxjs.shop.payment.wechat.WxPayService;
 import com.ajaxjs.shop.payment.wechat.model.PerpayReturn;
 import com.ajaxjs.shop.service.OrderService;
 import com.ajaxjs.user.controller.BaseUserController;
@@ -66,7 +65,7 @@ public class OrderController extends BaseController<OrderInfo> {
 		mv.put(INFO, service.findById(id));
 
 		// 订单明细
-		List<OrderItem> items = WxPayService.dao.findOrderItemListByOrderId(id);
+		List<OrderItem> items = WxPay.dao.findOrderItemListByOrderId(id);
 		mv.put("orderItems", items);
 
 		return jsp("shop/order-info");

@@ -70,7 +70,7 @@ public class WxPayController extends BaseController<Map<String, Object>> {
 	 * @param xml
 	 * @return
 	 */
-	public PayNodifyResult payNotification(String xml) {
+	private PayNodifyResult payNotification(String xml) {
 		LOGGER.info("处理支付通知的异步回调");
 
 		Map<String, String> r = MapTool.xmlToMap(xml);

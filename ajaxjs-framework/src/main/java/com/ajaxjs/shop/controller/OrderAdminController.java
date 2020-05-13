@@ -22,7 +22,7 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.model.OrderItem;
-import com.ajaxjs.shop.payment.wechat.WxPayService;
+import com.ajaxjs.shop.payment.wechat.WxPay;
 import com.ajaxjs.shop.service.OrderService;
 import com.ajaxjs.user.filter.LoginCheck;
 import com.ajaxjs.user.model.User;
@@ -80,7 +80,7 @@ public class OrderAdminController extends BaseController<OrderInfo> {
 		}
 
 		// 订单明细
-		List<OrderItem> items = WxPayService.dao.findOrderItemListByOrderId(id);
+		List<OrderItem> items = WxPay.dao.findOrderItemListByOrderId(id);
 		mv.put("orderItems", items);
 
 		return jsp("shop/order-edit");
