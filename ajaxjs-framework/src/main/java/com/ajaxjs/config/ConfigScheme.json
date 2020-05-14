@@ -90,13 +90,19 @@
 				"ui": "radio",
 				"type": "boolean"
 			},
-			"attachmentDownload": {				"name": "附件下载",				"tip": "是否开放图文的附件下载在详情页",				"ui": "radio",				"type": "boolean"			}		},
+			"attachmentDownload": {
+				"name": "附件下载",
+				"tip": "是否开放图文的附件下载在详情页",
+				"ui": "radio",
+				"type": "boolean"
+			}
+		},
 		"shop": {
-		
+			
 		}
 	},
 	"entity": {
-		"physicalDeletion" : {
+		"physicalDeletion": {
 			"name": "是否物理删除实体",
 			"tip": "是=执行数据库 DELETE 删除命令；否=标记字段为已删除",
 			"ui": "radio",
@@ -166,6 +172,29 @@
 				"name": "相对目录",
 				"tip": "外界通过 Web 可以访问的路径"
 			}
+		},
+		"imgPerfix": {
+			"name": "图片前缀",
+			"tip": "图片所在的服务器，通常是云存储地址。后面应以 / 结束",
+			"size": 50
+		},
+		"ObjectStorageService": {
+			"QiuNiuYun": {
+				"accessKey": {
+					"name": "七牛云 AccessKey",
+					"tip": "访问密钥",
+					"size": 50
+				},
+				"secretKey": {
+					"name": "七牛云 SecretKey",
+					"tip": "关键的密钥，注意保密",
+					"size": 50
+				},
+				"bucket": {
+					"name": "七牛云 Bucket",
+					"tip": "空间名称"
+				}
+			}
 		}
 	},
 	"user": {
@@ -209,7 +238,24 @@
 				"tip": "找回邮件的邮件",
 				"ui": "htmlEditor"
 			}
-		},		"oauthLogin": {			"weibo": {				"AppKey": {					"name": "微博登录 App Key",					"tip": "相当于 Client_ID"				},				"AppSecret": {					"name": "微博登录 App 密钥",					"tip": "相当于 Client_SERCRET，请不要泄漏密钥"				},				"callbackUrl": {					"name": "微博登录回调地址",					"tip": "授权回调页"				}			}		}	},
+		},
+		"oauthLogin": {
+			"weibo": {
+				"AppKey": {
+					"name": "微博登录 App Key",
+					"tip": "相当于 Client_ID"
+				},
+				"AppSecret": {
+					"name": "微博登录 App 密钥",
+					"tip": "相当于 Client_SERCRET，请不要泄漏密钥"
+				},
+				"callbackUrl": {
+					"name": "微博登录回调地址",
+					"tip": "授权回调页"
+				}
+			}
+		}
+	},
 	"mailServer": {
 		"server": {
 			"name": "SMTP 服务器地址",
@@ -224,7 +270,19 @@
 			"tip": "发送邮件的密码"
 		}
 	},
-	"sms": {		"aliyun": {			"signName": {				"name": "阿里云短信签名",				"tip": "短信签名-可在阿里云短信控制台中找到"			},			"templateCode": {				"name": "阿里云短信签名",				"tip": "短信模板-可在阿里云短信控制台中找到"			}		}	},	"Symmetric": {
+	"sms": {
+		"aliyun": {
+			"signName": {
+				"name": "阿里云短信签名",
+				"tip": "短信签名-可在阿里云短信控制台中找到"
+			},
+			"templateCode": {
+				"name": "阿里云短信签名",
+				"tip": "短信模板-可在阿里云短信控制台中找到"
+			}
+		}
+	},
+	"Symmetric": {
 		"AES_Key": {
 			"name": "AES 密钥",
 			"tip": "请注意保管，不能外泄"
@@ -325,6 +383,60 @@
 			"tip": "通过浏览器 WebSocket 技术查看服务端 Tomcat 输出日志",
 			"type": "boolean",
 			"ui": "radio"
+		}
+	},
+	"shop": {
+		"payment": {
+			"Alipay": {
+				"app_id": {
+					"name": "支付宝 APP ID",
+					"tip": "支付宝商家 ID"
+				},
+				"merchant_private_key": {
+					"name": "支付宝商家私钥",
+					"tip": "注意保密"
+				},
+				"merchant_public_key": {
+					"name": "支付宝应用公钥",
+					"tip": "注意保密",
+					"size": 30
+				},
+				"alipay_public_key": {
+					"name": "支付宝公钥",
+					"tip": "注意保密",
+					"size": 30
+				},
+				"return_url": {
+					"name": "支付宝回调地址",
+					"tip": "同步回调地址，可以是内网地址",
+					"size": 50
+				},
+				"notify_url": {
+					"name": "支付宝回调地址",
+					"tip": "异步回调地址，可以是内网地址",
+					"size": 50
+				}
+			},
+			"wx": {
+				"appId": {
+					"name": "微信 APP ID",
+					"tip": "wx 开头的"
+				},
+				"mchId": {
+					"name": "微信商户 ID",
+					"tip": "在微信商家平台中查找"
+				},
+				"apiSecret": {
+					"name": "微信支付密钥",
+					"tip": "在微信商家平台中查找；注意保密",
+					"size": 30
+				},
+				"notifyUrl": {
+					"name": "微信支付回调地址",
+					"tip": "支付后通知后台验证的公网地址",
+					"size": 50
+				}
+			}
 		}
 	}
 }

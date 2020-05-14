@@ -100,7 +100,7 @@
 					<div><aj-json-form :scheme="scheme" :config="config" path="entity"></aj-json-form></div>
 					<div><aj-json-form :scheme="scheme" :config="config" path="domain.article"></aj-json-form></div>
 					<div>
-						<aj-json-form :scheme="scheme" :config="config" path="domain.shop"></aj-json-form>
+						<aj-json-form :scheme="scheme" :config="config" path="shop"></aj-json-form>
 						<h3>微信公众号</h3>
 						<aj-json-form :scheme="scheme" :config="config" path="wx_open"></aj-json-form>
 						<h3>小程序</h3>
