@@ -112,7 +112,7 @@ Vue.component('aj-article-body', {
 		},
 		neighbor: { // 相邻的两笔记录
 			type: Object,
-			default: ()=>{
+			default: () => {
 				return {};
 			},
 			required: false
@@ -177,108 +177,9 @@ Vue.component('aj-chinese-switch', {
 	}
 });
 
-// https://vuejs.org/v2/guide/components.html#Content-Distribution-with-Slots
-Vue.component('aj-tab', {
-   	template: 
-   		'<div :class="isVertical ? \'aj-simple-tab-vertical\' : \'aj-tab\' ">\
-	      <button v-for="tab in tabs" v-bind:key="tab.name"\
-	        v-bind:class="[\'tab-button\', { active: currentTab.name === tab.name }]"\
-	        v-on:click="currentTab = tab">{{tab.name}}\
-	      </button>\
-	      <component v-bind:is="currentTab.component" class="tab"></component>\
-	    </div>',
-	props: {
-		isVertical : Boolean // 是否垂直方向的布局，默认 false,
-	},
-    data() {
-    	return {
-          tabs: [],
-          currentTab: {}
-        };
-    },
-    mounted() {
-		var arr =  this.$slots.default;
-		
-		for(var i = 0; i < arr.length; i++) {
-			var el = arr[i];
-			
-			if(el.tag === 'textarea') {
-				this.tabs.push({
-					name : el.data.attrs['data-title'],
-					component: {
-		 	            template: '<div>' + el.children[0].text + "</div>"
-		   	 	    }
-	    		});
-	    	}
-    	}
 
-    	this.currentTab = this.tabs[0];
-    }
-});
 
-aj.tabable = {
-	data() {
-		return {
-			selected: 0
-		};
-	},
-	mounted() {
-		var ul = this.$el.querySelector('.aj-simple-tab-horizontal > ul');
-		ul.onclick = e => {
-			var el = e.target;
-			var index = Array.prototype.indexOf.call(el.parentElement.children, el);
-			this.selected = index;
-		};
-		
-		this.$options.watch.selected.call(this, 1);
-	},
-	watch: {
-		selected(v) {
-			var headers  = this.$el.querySelectorAll('.aj-simple-tab-horizontal > ul > li');
-			var contents = this.$el.querySelectorAll('.aj-simple-tab-horizontal > div > div');
-			var each = arr => {							
-				for(var i = 0, j = arr.length; i < j; i++) {
-					if(v === i) {
-						arr[i].classList.add('selected');
-					} else {
-						arr[i].classList.remove('selected');
-					}
-				}
-			};
-			
-			each(headers);
-			each(contents);
-		}
-	}
-};
 
-// 回到顶部
-Vue.component('aj-back-top', {
-	template : 
-		'<a href="###" @click="go">回到顶部</a>',
-	methods : {
-		go() {
-//			 var b = 0;//作为标志位，判断滚动事件的触发原因，是定时器触发还是其它人为操作
-//			 UserEvent2.onWinResizeFree(function(e) {
-//				 if (b != 1) clearInterval(timer);
-//				 b = 2;
-//			 }, 'scroll');	
-			this.$timerId && window.clearInterval(this.$timerId);
-			var top = speed = 0;
-
-			this.$timerId = window.setInterval(function() {
-				top = document.documentElement.scrollTop || document.body.scrollTop;
-				speed = Math.floor((0 - top) / 8);
-
-				if (top === 0)
-					clearInterval(this.$timerId);
-				else
-					document.documentElement.scrollTop = document.body.scrollTop = top + speed;
-//				b = 1;
-			}.bind(this), 30);
-		}
-	}
-});
 
 
 // 进度条
@@ -434,85 +335,6 @@ aj.imageEnlarger = function() {
 	return vue;
 }
 
-//折叠菜单
-Vue.component('aj-accordion-menu', {
-	template: '<ul class="aj-accordion-menu" @click="onClk($event);"><slot></slot></ul>',
-	methods: {
-		onClk(e) {
-			this.children = this.$el.children;
-			
-			this.highlightSubItem(e);
-	        
-			var _btn = e.target;
-	        if (_btn.tagName == 'H3' && _btn.parentNode.tagName == 'LI') {
-	            _btn = _btn.parentNode;
-
-	            for (var btn, i = 0, j = this.children.length; i < j; i++) {
-	                btn = this.children[i];
-	                var ul = btn.querySelector('ul');
-
-	                if (btn == _btn) {
-	                    if (btn.className.indexOf('pressed') != -1) {
-	                        btn.classList.remove('pressed'); // 再次点击，隐藏！
-	                        if (ul)
-	                            ul.style.height = '0px';
-	                    } else {
-	                        if (ul)
-	                            ul.style.height = ul.scrollHeight + 'px';
-	                        btn.classList.add('pressed');
-	                    }
-	                } else {
-	                    btn.classList.remove('pressed');
-	                    if (ul)
-	                        ul.style.height = '0px';
-	                }
-	            }
-	        } else {
-	            return;
-	        }
-	    },
-	    
-	    // 内部子菜单的高亮
-	    highlightSubItem(e) {
-	        var li, el = e.target;
-	        if (el.tagName == 'A' && el.getAttribute('target')) {
-	            li = el.parentNode;
-	            li.parentNode.$('li', _el => {
-	                if (_el == li)
-	                    _el.classList.add('selected');
-	                else
-	                    _el.classList.remove('selected');
-	            });
-	        }
-	    }
-	}
-});
-
-// 展开闭合器
-Vue.component('aj-expander', {
-	data() {
-	    return {
-	    	expended: false
-	    }
-	},
-	
-	props: {
-		openHeight: { 		// 展开状态的高度
-			type : Number,
-			default : 200
-		},
-		closeHeight: {		// 闭合状态的高度
-			type : Number,
-			default : 50
-		}
-	},
-	
-	template: 
-		'<div class="aj-expander" :style="\'height:\' + (expended ? openHeight : closeHeight) + \'px;\'">\
-			<div :class="expended ? \'closeBtn\' : \'openBtn\'" @click="expended = !expended;"></div>\
-			<slot></slot>\
-		</div>'
-});
 
 Vue.component('aj-menu-moblie-scroll', {
 	props: {

@@ -1,10 +1,14 @@
 /*
  * AJAXJS UI Base
  * Vue.js + LESS.js
- * Homepage: https://framework.ajaxjs.com/
+ * Home page: https://framework.ajaxjs.com/
  */
 
-// 查找元素
+/**
+ * 查找元素
+ * @param String CSS 选择器
+ * @param Function 可选，当送入该参数的时候，表示使用 querySelectorAll 来查询多个 dom 元素，故 fn 是个遍历器函数，其参数列表如 item、index、array
+ */
 ajaxjs = aj = function(cssSelector, fn) {
 	return Element.prototype.$.apply(document, arguments);
 }
@@ -23,7 +27,7 @@ Element.prototype.$ = function(cssSelector, fn) {
 }
 
 /**
- * 删除自己
+ * 删除元素自己
  */
 Element.prototype.die = function() {
 	this.parentNode.removeChild(this);
@@ -121,6 +125,12 @@ Function.prototype.after = function(composeFn, isForceCall, scope) {
     };
 }
 
+/**
+ *  复制 b 对象到 a 对象身上
+ *  
+ *  @param {Object} 目标对象
+ *  @param {Object} 源对象
+ */
 aj.apply = function(a, b) {
 	for ( var i in b)
 		a[i] = b[i];
@@ -136,6 +146,12 @@ aj.apply = function(a, b) {
  * --------------------------------------------------------
  */
 ajaxjs.xhr = {
+	/**
+	 * JSON 转换为 URL
+	 * 
+	 * @param {Object} JSON
+	 * @param {String} 附加的地址
+	 */
 	json2url(json, appendUrl) {
 		var params = [];
 		for ( var i in json)
@@ -175,6 +191,7 @@ ajaxjs.xhr = {
 	callback(event, cb, parseContentType) {
 		if (this.readyState === 4 && this.status === 200) {
 			var responseText = this.responseText.trim();
+			
 			try {
 				if (!responseText)
 					throw '服务端返回空的字符串!';
@@ -252,6 +269,7 @@ ajaxjs.xhr = {
 		}.delegate(null, cb, cfg));
 		
 		var returnBtn = form.$('button.returnBtn'); // shorthand for back btn
+		
 		if (returnBtn)
 			returnBtn.onclick = e => {
 				e.preventDefault();
@@ -408,7 +426,7 @@ ajaxjs.throttle.onEl_in_viewport = function(el, fn) {
 
 ajaxjs.throttle.onEl_in_viewport.actions = [];
 
-//并行和串行任务 https://segmentfault.com/a/1190000013265925
+// 并行和串行任务 https://segmentfault.com/a/1190000013265925
 aj.parallel = function(arr, finnaly) {
   let fn, index = 0;
   let statusArr = Array(arr.length).fill().map(() => ({
@@ -444,36 +462,6 @@ aj.parallel = function(arr, finnaly) {
     index++;
   }
 };
-
-// https://github.com/jojoin/tppl/blob/gh-pages/tppl.js
-tppl = function(tpl, data){
-    var fn =  function(d) {
-        var i, k = [], v = [];
-        for (i in d) {
-            k.push(i);
-            v.push(d[i]);
-        };
-        return (new Function(k, fn.$)).apply(d, v);
-    };
-    if(!fn.$){
-        var tpls = tpl.split('[:');
-        fn.$ = "var $=''";
-        for(var t = 0;t < tpls.length;t++){
-            var p = tpls[t].split(':]');
-            if(t!=0){
-                fn.$ += '='==p[0].charAt(0)
-                  ? "+("+p[0].substr(1)+")"
-                  : ";"+p[0].replace(/\r\n/g, '')+"$=$"
-            }
-            // 支持 <pre> 和 [::] 包裹的 js 代码
-            fn.$ += "+'"+p[p.length-1].replace(/\'/g,"\\'").replace(/\r\n/g, '\\n').replace(/\n/g, '\\n').replace(/\r/g, '\\n')+"'";
-        }
-        fn.$ += ";return $;";
-        // log(fn.$);
-    }
-    return data ? fn(data) : fn;
-}
-
 
 /**
  * 消息框、弹窗、对话框组件
@@ -647,3 +635,185 @@ Vue.component('aj-layer', {
 	}
 });
 
+//https://vuejs.org/v2/guide/components.html#Content-Distribution-with-Slots
+Vue.component('aj-tab', {
+   	template: 
+   		'<div :class="isVertical ? \'aj-simple-tab-vertical\' : \'aj-tab\' ">\
+	      <button v-for="tab in tabs" v-bind:key="tab.name"\
+	        v-bind:class="[\'tab-button\', { active: currentTab.name === tab.name }]"\
+	        v-on:click="currentTab = tab">{{tab.name}}\
+	      </button>\
+	      <component v-bind:is="currentTab.component" class="tab"></component>\
+	    </div>',
+	props: {
+		isVertical : Boolean // 是否垂直方向的布局，默认 false,
+	},
+    data() {
+    	return {
+          tabs: [],
+          currentTab: {}
+        };
+    },
+    mounted() {
+		var arr =  this.$slots.default;
+		
+		for(var i = 0; i < arr.length; i++) {
+			var el = arr[i];
+			
+			if(el.tag === 'textarea') {
+				this.tabs.push({
+					name : el.data.attrs['data-title'],
+					component: {
+		 	            template: '<div>' + el.children[0].text + "</div>"
+		   	 	    }
+	    		});
+	    	}
+    	}
+
+    	this.currentTab = this.tabs[0];
+    }
+});
+
+aj.tabable = {
+	data() {
+		return {
+			selected: 0
+		};
+	},
+	mounted() {
+		var ul = this.$el.querySelector('.aj-simple-tab-horizontal > ul');
+		ul.onclick = e => {
+			var el = e.target;
+			var index = Array.prototype.indexOf.call(el.parentElement.children, el);
+			this.selected = index;
+		};
+		
+		this.$options.watch.selected.call(this, 1);
+	},
+	watch: {
+		selected(v) {
+			var headers  = this.$el.querySelectorAll('.aj-simple-tab-horizontal > ul > li');
+			var contents = this.$el.querySelectorAll('.aj-simple-tab-horizontal > div > div');
+			var each = arr => {							
+				for(var i = 0, j = arr.length; i < j; i++) {
+					if(v === i) {
+						arr[i].classList.add('selected');
+					} else {
+						arr[i].classList.remove('selected');
+					}
+				}
+			};
+			
+			each(headers);
+			each(contents);
+		}
+	}
+};
+
+//折叠菜单
+Vue.component('aj-accordion-menu', {
+	template: '<ul class="aj-accordion-menu" @click="onClk($event);"><slot></slot></ul>',
+	methods: {
+		onClk(e) {
+			this.children = this.$el.children;
+			
+			this.highlightSubItem(e);
+	        
+			var _btn = e.target;
+	        if (_btn.tagName == 'H3' && _btn.parentNode.tagName == 'LI') {
+	            _btn = _btn.parentNode;
+
+	            for (var btn, i = 0, j = this.children.length; i < j; i++) {
+	                btn = this.children[i];
+	                var ul = btn.querySelector('ul');
+
+	                if (btn == _btn) {
+	                    if (btn.className.indexOf('pressed') != -1) {
+	                        btn.classList.remove('pressed'); // 再次点击，隐藏！
+	                        if (ul)
+	                            ul.style.height = '0px';
+	                    } else {
+	                        if (ul)
+	                            ul.style.height = ul.scrollHeight + 'px';
+	                        btn.classList.add('pressed');
+	                    }
+	                } else {
+	                    btn.classList.remove('pressed');
+	                    if (ul)
+	                        ul.style.height = '0px';
+	                }
+	            }
+	        } else {
+	            return;
+	        }
+	    },
+	    
+	    // 内部子菜单的高亮
+	    highlightSubItem(e) {
+	        var li, el = e.target;
+	        if (el.tagName == 'A' && el.getAttribute('target')) {
+	            li = el.parentNode;
+	            li.parentNode.$('li', _el => {
+	                if (_el == li)
+	                    _el.classList.add('selected');
+	                else
+	                    _el.classList.remove('selected');
+	            });
+	        }
+	    }
+	}
+});
+
+// 展开闭合器
+Vue.component('aj-expander', {
+	data() {
+	    return {
+	    	expended: false
+	    }
+	},
+	
+	props: {
+		openHeight: { 		// 展开状态的高度
+			type : Number,
+			default : 200
+		},
+		closeHeight: {		// 闭合状态的高度
+			type : Number,
+			default : 50
+		}
+	},
+	
+	template: 
+		'<div class="aj-expander" :style="\'height:\' + (expended ? openHeight : closeHeight) + \'px;\'">\
+			<div :class="expended ? \'closeBtn\' : \'openBtn\'" @click="expended = !expended;"></div>\
+			<slot></slot>\
+		</div>'
+});
+
+//回到顶部
+Vue.component('aj-back-top', {
+	template : 
+		'<a href="###" @click="go">回到顶部</a>',
+	methods : {
+		go() {
+//			 var b = 0;//作为标志位，判断滚动事件的触发原因，是定时器触发还是其它人为操作
+//			 UserEvent2.onWinResizeFree(function(e) {
+//				 if (b != 1) clearInterval(timer);
+//				 b = 2;
+//			 }, 'scroll');	
+			this.$timerId && window.clearInterval(this.$timerId);
+			var top = speed = 0;
+
+			this.$timerId = window.setInterval(function() {
+				top = document.documentElement.scrollTop || document.body.scrollTop;
+				speed = Math.floor((0 - top) / 8);
+
+				if (top === 0)
+					clearInterval(this.$timerId);
+				else
+					document.documentElement.scrollTop = document.body.scrollTop = top + speed;
+//				b = 1;
+			}.bind(this), 30);
+		}
+	}
+});
