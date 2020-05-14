@@ -1,6 +1,6 @@
 aj._list = {
 	props: {
-		apiUrl : {		// JSON 接口地址
+		apiUrl: {		// JSON 接口地址
 			type : String,
 			required : true
 		},
@@ -9,7 +9,7 @@ aj._list = {
 			type : String,
 			required : false
 		},
-		isPage : {
+		isPage: {
 			type : Boolean, 	// 是否分页，false=读取所有数据
 			default : true
 		}

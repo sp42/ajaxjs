@@ -42,14 +42,10 @@
     <script src="${ajaxjsui}/js/ajaxjs-base.js"></script>
     <script src="${ajaxjsui}/js/widgets/admin.js"></script>
     <script src="${ajaxjsui}/js/widgets/form.js"></script>
-    <script src="${ajaxjsui}/js/widgets/list.js"></script>
-    <script src="${ajaxjsui}/js/widgets/menu.js"></script>
-    <script src="${ajaxjsui}/js/widgets/msg.js"></script>
-    <script src="${ajaxjsui}/js/widgets/page.js"></script>
+    <script src="${ajaxjsui}/js/widgets/widget.js"></script>
     <script src="${ajaxjsui}/js/widgets/tree.js"></script>
     <script src="${ajaxjsui}/js/widgets/upload.js"></script>
     <script src="${ajaxjsui}/js/widgets/carousel.js"></script>
-    <script src="${ajaxjsui}/js/widgets/marquee.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="index.css" />
 <!-- 	<link rel="stylesheet" type="text/css" href="less.css" /> -->
@@ -155,14 +151,6 @@
 	<%} %>	
 		</section>
 	</section>
-
-
-	<!-- CNZZ 统计 -->
-	<div style="display: none;">
-		<script
-			src="https://s11.cnzz.com/z_stat.php?id=1261173351&web_id=1261173351"></script>
-	</div>
-	<!-- // CNZZ 统计 -->
 	
 	<footer>
 		<div class="center" style="text-align:center;">

@@ -4,7 +4,6 @@ aj._carousel = {
 			type : Boolean,
 			default : false 
 		},
-		
 		// 推荐使用 百分比，px 的话要考虑滚动条，比较麻烦
 		// 要使用 px 推荐指定 stepWidth
 		// banner，要使用 px
@@ -13,12 +12,10 @@ aj._carousel = {
 			type : Boolean,
 			default : false 
 		},
-		
 		autoHeight :  {// 是否自动高度
 			type : Boolean,
 			default : false 
 		},
-		
 		disableTabHeaderJump : {// 是否禁止通过 tab 候选栏来跳转。一般 wizzard 向导式的时候不能跳转
 			type : Boolean,
 			default : false 
@@ -28,16 +25,13 @@ aj._carousel = {
 			type : Boolean,
 			default : true 
 		},
-		
 		initItems : Array // 输入的数据
 	},
-	
 	data() {
 		return {
 			selected : 0
 		};
 	},
-	
 	mounted() {
 		this.mover = this.$el.$('div.content'); 
 		var mover = this.mover, children = mover.children, len = children.length;
@@ -114,7 +108,6 @@ aj._carousel = {
 				return;
 			
 			var mover = this.mover, children = mover.children, len = children.length;
-			
 			this.doHeight(i);
 		
 			if(this.isMagic) {
@@ -172,8 +165,8 @@ aj._carousel = {
 				return;
 			
 	    	var len = this.mover.children.length;
-	    	
 	        this.selected++;
+	        
 	        if (this.selected == len)
 	        	this.selected = 0; // 循环
 	        this.go(this.selected);
@@ -258,31 +251,27 @@ Vue.component('aj-carousel', {
 
 Vue.component('aj-banner', {
 	mixins: [aj._carousel],
-	props : {
-		isUsePx :  {
+	props: {
+		isUsePx: {
 			default: true
 		},
-		
-		isGetCurrentHeight : {
+		isGetCurrentHeight: {
 			default: false
 		},
-		
-		autoLoop : { // autoLoop = 0 时不自动轮播
+		autoLoop: { // autoLoop = 0 时不自动轮播
 			type : Number,
 			default : 4000 
 		},
-		
-		showTitle : { 		// 是否显示下方的标题
+		showTitle: { 		// 是否显示下方的标题
 			type: Boolean,
 			default : false
 		},
-		
-		showDot : {			// 是否显示一点点，一般显示了标题就不显示点
+		showDot: {			// 是否显示一点点，一般显示了标题就不显示点
 			type : Boolean,
 			default : true
 		}
 	},
-	template : 
+	template: 
 		'<div class="aj-carousel aj-banner">\
 			<header><ul v-show="showTitle">\
 				<li v-for="(item, index) in items" :class="{\'hide\': index !== selected}">{{item.name}}</li>\
@@ -306,7 +295,7 @@ Vue.component('aj-banner', {
 	mounted() {
 		this.loop();
 	},
-	methods:{
+	methods: {
 	    loop() {
 	    	if(this.autoLoop)
 	    		this.loopTimer = window.setInterval(this.goNext.bind(this), this.autoLoop);
@@ -324,14 +313,13 @@ Vue.component('aj-banner', {
 Vue.component('aj-opacity-banner', {
 	template: '<ul class="aj-opacity-banner"><slot></slot></ul>',
 	props: {
-		delay:	{
+		delay: {
 			default: 3000 // 延时
 		},
-		fps:	{
+		fps: {
 			default: 25 // 帧速
 		}
 	},
-
 	data() {
 		return {
 			active:	0, // 当前索引
