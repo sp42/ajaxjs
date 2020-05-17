@@ -1,5 +1,6 @@
 package com.ajaxjs.shop.service;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,10 +62,10 @@ public class CartService extends BaseService<Cart> {
 
 	@Override
 	public Long create(Cart bean) {
-		Long groupId = bean.getGroupId();
-		if (groupId != null) {// 增加当前参团人数
-			groupService.addCurrentPerson(groupId);
-		}
+//		Long groupId = bean.getGroupId();
+//		if (groupId != null) {// 增加当前参团人数
+//			groupService.addCurrentPerson(groupId);
+//		}
 
 		return super.create(bean);
 	}
@@ -72,11 +73,11 @@ public class CartService extends BaseService<Cart> {
 	@Override
 	public boolean delete(Cart bean) {
 		bean = findById(bean.getId());
-		Long groupId = bean.getGroupId();
-
-		if (groupId != null) {// 增加当前参团人数
-			groupService.downCurrentPerson(groupId);
-		}
+//		Long groupId = bean.getGroupId();
+//
+//		if (groupId != null) {// 增加当前参团人数
+//			groupService.downCurrentPerson(groupId);
+//		}
 
 		return super.delete(bean);
 	}
@@ -91,22 +92,30 @@ public class CartService extends BaseService<Cart> {
 	 * @return
 	 */
 	public Map<String, Object> checkout(long userId, long addressId, String[] cartIds) {
+		List<Cart> carts = findCartListIn(cartIds);
+		BigDecimal actualPrice = getActualPrice(carts);
 		Map<String, Object> map = new HashMap<>();
+		map.put("actualPrice", actualPrice);
+		map.put("checkedAddress", "sssssssssssss"); // TODO
+		map.put("checkedGoodsList", null);
 		
-		orderService.processOrder(userId, addressId, cartIds, 0);
-
-//		cart2order(addressId, cartIds, (goodsList, address, actualPrice) -> {
-//			List<Group> g = groupService.checkCanGroup(goodsList);
-//
-//			if (CommonUtil.isNull(g)) {
-//				map.put("actualPrice", actualPrice);
-//				map.put("checkedAddress", address);
-//				map.put("checkedGoodsList", goodsList);
-//			} else {
-//				map.put("noPassGroup", g);
-//			}
-//		});
-
 		return map;
+	}
+	
+	/**
+	 * 计算总价
+	 * 
+	 * @param carts 要购买的购物车内容
+	 * @return 总价
+	 */
+	public static BigDecimal getActualPrice(List<Cart> carts) {
+		BigDecimal actualPrice = BigDecimal.valueOf(0);
+
+		for (Cart cart : carts) {
+			BigDecimal goodsAmount = cart.getPrice().multiply(BigDecimal.valueOf(cart.getGoodsNumber()));
+			actualPrice = actualPrice.add(goodsAmount);
+		}
+
+		return actualPrice;
 	}
 }

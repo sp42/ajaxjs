@@ -74,6 +74,7 @@ public class MiniAppUserService extends BaseService<User> {
 				ConfigService.getValueAsString("mini_program.appSecret"), jsCode);
 		String json = NetUtil.simpleGET(url);
 
+		LOGGER.info(json);
 		UserLoginToken token = JsonHelper.parseMapAsBean(json, UserLoginToken.class);
 		token.check();
 		

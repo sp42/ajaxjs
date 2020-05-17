@@ -56,13 +56,11 @@
 	<script src="https://lib.baomitu.com/less.js/3.0.4/less.min.js"></script>
     <script src="https://lib.baomitu.com/vue/2.6.11/vue.js"></script>
     <script src="${developing_js_url}/js/ajaxjs-base.js"></script>
-    <script src="${developing_js_url}/js/widgets/admin.js"></script>
     <script src="${developing_js_url}/js/widgets/form.js"></script>
     <script src="${developing_js_url}/js/widgets/list.js"></script>
-    <script src="${developing_js_url}/js/widgets/widget.js"></script>
     <script src="${developing_js_url}/js/widgets/tree.js"></script>
-    <script src="${developing_js_url}/js/widgets/upload.js"></script>
     <script src="${developing_js_url}/js/widgets/carousel.js"></script>
+    <script src="${developing_js_url}/js/widgets/admin.js"></script>
     
     <% if(request.getParameter("css")  != null) { %> 
 		<script>

@@ -202,6 +202,27 @@ public abstract class BaseController<T> implements IController, Constant {
 		}
 	}
 
+	public static String autoOutput(Object entity, ModelAndView mv, String jspPath) {
+		return autoOutput(entity, mv, jspPath, null);
+	}
+
+	public static String autoOutput(Object entity, ModelAndView mv, String jspPath, Function<Boolean, Boolean> fn) {
+		if (fn != null && fn.apply(isJson()) || (fn == null && isJson())) {
+			if (entity instanceof PageResult)
+				return toJson((PageResult<?>) entity);
+			else
+				return toJson(entity);
+		} else {
+			if (entity instanceof PageResult)
+				mv.put(PAGE_RESULT, entity);
+
+			if (entity instanceof Map || entity instanceof BaseModel)
+				mv.put(INFO, entity);
+
+			return jspPath;
+		}
+	}
+
 	private static boolean isJson() {
 		String accept = MvcRequest.getHttpServletRequest().getHeader("Accept");
 		return accept != null && "application/json".equals(accept);

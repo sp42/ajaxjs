@@ -86,9 +86,13 @@ public class GoodsService extends BaseService<Goods> {
 		return ConfigService.getValueAsInt("data.productCatalog_Id");
 	}
 
+	static Function<String, String> noContent = sql -> sql.replace("*", "id, name, cover, coverPrice");
+	
 	public PageResult<Goods> findPagedListByCatalogId(int catalogId, int start, int limit, int status, int sellerId) {
 		Function<String, String> sqlHander = CatalogService.setCatalog(catalogId, getDomainCatalogId())
-				.andThen(setStatus(status)).andThen(BaseService::searchQuery).andThen(BaseService::betweenCreateDate);
+				.andThen(setStatus(status)).andThen(BaseService::searchQuery).andThen(BaseService::betweenCreateDate).andThen(noContent);
+				
+//				.andThen(BaseService::betweenCreateDate);
 
 		if (sellerId != 0)
 			sqlHander.andThen(by("sellerId", sellerId));

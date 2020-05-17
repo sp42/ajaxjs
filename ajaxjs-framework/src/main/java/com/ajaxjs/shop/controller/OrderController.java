@@ -17,6 +17,7 @@ import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
+import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.model.OrderInfo;
@@ -88,10 +89,25 @@ public class OrderController extends BaseController<OrderInfo> {
 	}
 
 	@POST
+	@Path("miniApp")
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
+	public String processOrder_MiniApp(@FormParam("addressId") @NotNull long addressId,
+			@FormParam("cartIds") @NotNull String _cartIds, MvcRequest r, ModelAndView mv) {
+		LOGGER.info("处理订单 结账");
+
+		UserAddressService.initData(r);
+		String[] cartIds = _cartIds.split("_");
+		OrderInfo order = service.processOrder(BaseUserController.getUserId(), addressId, cartIds, ShopConstant.WX_PAY);
+		service.onProcessOrderDone(order);
+
+		return toJson(WxPay.wxPay(BaseUserController.getUserId(), order, r.getIp()));
+	}
+
+	@POST
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String processOrder(@FormParam("addressId") @NotNull long addressId,
 			@NotNull @FormParam("payType") int payType, @FormParam("cartIds") @NotNull String _cartIds,
-			HttpServletRequest r, ModelAndView mv) throws AlipayApiException {
+			HttpServletRequest r, ModelAndView mv) {
 		LOGGER.info("处理订单 结账");
 
 		UserAddressService.initData(r);
@@ -99,7 +115,7 @@ public class OrderController extends BaseController<OrderInfo> {
 		OrderInfo order = service.processOrder(BaseUserController.getUserId(), addressId, cartIds, payType);
 		service.onProcessOrderDone(order);
 
-		return Pay.doPay(order, payType, mv);
+		return Pay.doPay(order, mv);
 	}
 
 	@POST
@@ -108,7 +124,7 @@ public class OrderController extends BaseController<OrderInfo> {
 	public String directProcessOrder(@FormParam("addressId") @NotNull long addressId,
 			@NotNull @FormParam("payType") int payType, @NotNull @FormParam("goodsId") long goodsId,
 			@NotNull @FormParam("formatId") long formatId, @NotNull @FormParam("goodsNumber") int goodsNumber,
-			HttpServletRequest r, ModelAndView mv) throws AlipayApiException {
+			HttpServletRequest r, ModelAndView mv) {
 		LOGGER.info("处理订单 结账-直接单个商品");
 
 		UserAddressService.initData(r);
@@ -116,7 +132,7 @@ public class OrderController extends BaseController<OrderInfo> {
 				goodsNumber, payType);
 		service.onProcessOrderDone(order);
 
-		return Pay.doPay(order, payType, mv);
+		return Pay.doPay(order, mv);
 	}
 
 	@Override

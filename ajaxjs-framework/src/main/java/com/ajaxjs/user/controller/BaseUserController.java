@@ -58,6 +58,7 @@ public abstract class BaseUserController extends BaseController<User> {
 	public static Long getUserId(HttpServletRequest request) {
 		if (isLogined(request)) {
 			Object obj = request.getSession().getAttribute("userId");
+
 			if (obj instanceof Integer)
 				return ((Integer) obj).longValue();
 			else if (obj instanceof Long)
@@ -69,6 +70,8 @@ public abstract class BaseUserController extends BaseController<User> {
 
 		} else if (request.getParameter("userId") != null)
 			return Long.parseLong(request.getParameter("userId"));
+		else if (request.getHeader(USER_ID_HEADER) != null)
+			return Long.parseLong(request.getHeader(USER_ID_HEADER));
 		else
 			return 0L;
 //			throw new UnsupportedOperationException("Fail to access user id");
@@ -131,7 +134,7 @@ public abstract class BaseUserController extends BaseController<User> {
 
 		return user;
 	}
-	
+
 	String user(String jsp) {
 		return jsp("user/" + jsp);
 	}

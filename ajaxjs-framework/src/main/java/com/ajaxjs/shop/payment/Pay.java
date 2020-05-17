@@ -19,12 +19,11 @@ import com.alipay.api.AlipayApiException;
 public class Pay {
 	private static final LogHelper LOGGER = LogHelper.getLog(Pay.class);
 
-	public static String doPay(OrderInfo order, int payType, ModelAndView mv) {
+	public static String doPay(OrderInfo order, ModelAndView mv) {
 		LOGGER.info("进行支付");
 
-		switch (payType) {
+		switch (order.getPayType()) {
 		case ShopConstant.ALI_PAY:
-			order.setPayType(ShopConstant.ALI_PAY);
 
 			Alipay alipay = new Alipay();
 			alipay.setSubject("支付我们的产品");
@@ -39,7 +38,6 @@ public class Pay {
 				return "html::" + e;
 			}
 		case ShopConstant.WX_PAY:
-			order.setPayType(ShopConstant.WX_PAY);
 			PerpayReturn p = WxPay.pcUnifiedOrder(order);
 
 			mv.put("totalPrice", order.getTotalPrice());

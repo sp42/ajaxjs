@@ -158,7 +158,7 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 
 		OrderInfo order = initOrder(userId, addressId, payType);
 
-		BigDecimal actualPrice = getActualPrice(carts);
+		BigDecimal actualPrice = CartService.getActualPrice(carts);
 		order.setTotalPrice(actualPrice);
 		order.setOrderPrice(actualPrice); // 当前没有优惠券
 
@@ -262,22 +262,5 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 				+ UserAddressService.AREA_DATA.get("China_AREA", p, c)
 				+ UserAddressService.AREA_DATA.get("China_AREA", c, d) + address.getAddress());
 
-	}
-
-	/**
-	 * 计算总价
-	 * 
-	 * @param carts 要购买的购物车内容
-	 * @return 总价
-	 */
-	private static BigDecimal getActualPrice(List<Cart> carts) {
-		BigDecimal actualPrice = BigDecimal.valueOf(0);
-
-		for (Cart cart : carts) {
-			BigDecimal goodsAmount = cart.getPrice().multiply(BigDecimal.valueOf(cart.getGoodsNumber()));
-			actualPrice = actualPrice.add(goodsAmount);
-		}
-
-		return actualPrice;
 	}
 }

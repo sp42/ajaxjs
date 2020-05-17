@@ -1,6 +1,7 @@
 
 package com.ajaxjs.shop.controller;
 
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -55,6 +56,16 @@ public class CartController extends BaseController<Cart> {
 		create(cart);
 
 		return jsonOk("添加购物车");
+	}
+
+	@GET
+	@Path("/shop/cart/checkout")
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
+	@Produces(MediaType.APPLICATION_JSON)
+	public String checkoutForApi(@QueryParam("addressId") @NotNull long addressId,
+			@QueryParam("cartIds") @NotNull String cartIds) {
+		LOGGER.info("Checkout");
+		return toJson(service.checkout(BaseUserController.getUserId(), addressId, cartIds.split("_")));
 	}
 
 	@GET
