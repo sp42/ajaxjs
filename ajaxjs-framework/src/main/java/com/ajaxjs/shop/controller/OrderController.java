@@ -100,7 +100,7 @@ public class OrderController extends BaseController<OrderInfo> {
 		OrderInfo order = service.processOrder(BaseUserController.getUserId(), addressId, cartIds, ShopConstant.WX_PAY);
 		service.onProcessOrderDone(order);
 
-		return toJson(WxPay.wxPay(BaseUserController.getUserId(), order, r.getIp()));
+		return toJson(WxPay.miniAppPay(BaseUserController.getUserId(), order, r.getIp()));
 	}
 
 	@POST

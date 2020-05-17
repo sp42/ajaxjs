@@ -1,7 +1,6 @@
-package com.ajaxjs.weixin.payment;
+package com.ajaxjs.shop.payment.wechat;
 
 public interface PayConstant {
-	public static final String responseFAIL = "FAIL";
 	/**
 	 * 统一下单
 	 */
@@ -32,12 +31,6 @@ public interface PayConstant {
 	 */
 	public static String NOTIFY_URL_REFUND = "https://xxx.com/v1/weixin/pay/refund";
 
-	/**
-	 * 微信签名枚举类型
-	 */
-	public enum SignType {
-		MD5, HMACSHA256, SHA1
-	}
 
 	/**
 	 * 微信 - API域名地址 域名管理实现主备域名自动切换
@@ -64,11 +57,6 @@ public interface PayConstant {
 	public static final String ERR_CODE = "err_code";
 	public static final String ERR_CODE_DES = "err_code_des";
 
-	/**
-	 * 签名类型，默认为MD5，支持HMAC-SHA256和MD5。
-	 */
-	public static final String HMACSHA256 = "HMAC-SHA256";
-	public static final String MD5 = "MD5";
 
 	/**
 	 * 微信支付版本

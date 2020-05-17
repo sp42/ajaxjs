@@ -1,22 +1,23 @@
 package com.ajaxjs.shop.payment.wechat;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.Repository;
-import com.ajaxjs.ioc.Bean;
-import com.ajaxjs.ioc.Resource;
+import com.ajaxjs.net.http.HttpBasicRequest;
 import com.ajaxjs.net.http.Tools;
 import com.ajaxjs.shop.dao.OrderInfoDao;
 import com.ajaxjs.shop.model.OrderInfo;
-import com.ajaxjs.shop.payment.wechat.model.PerpayInfo;
 import com.ajaxjs.shop.payment.wechat.model.PerpayReturn;
-import com.ajaxjs.shop.service.OrderService;
 import com.ajaxjs.user.token.TokenService;
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.weixin.payment.PayConstant;
+import com.ajaxjs.util.map.MapTool;
 
 /**
  * 微信支付方法
@@ -24,77 +25,73 @@ import com.ajaxjs.weixin.payment.PayConstant;
  * @author sp42 frank@ajaxjs.com
  *
  */
-@Bean
-public class WxPay implements PayConstant {
+public class WxPay {
 	private static final LogHelper LOGGER = LogHelper.getLog(WxPay.class);
 
 	/**
 	 * PC 版支付微信下单接口
 	 * 
-	 * @param order
+	 * @param order 订单详情
 	 * @return
 	 */
 	public static PerpayReturn pcUnifiedOrder(OrderInfo order) {
 		LOGGER.info("PC 微信下单请求交易开始");
 
-		Map<String, String> data = new HashMap<>();
-		WxUtil.commonSetUnifiedOrder(order, data);
-
+		Map<String, String> data = commonSetUnifiedOrder(order);
 		data.put("body", "TESTTEST");
-		data.put("product_id", order.getId() + ""); // 商品 id，但一个订单可能包含多个商品，所以填入订单数据库 id
-		data.put("notify_url", ConfigService.getValueAsString("shop.payment.wx.notifyUrl"));
-		data.put("appid", ConfigService.getValueAsString("shop.payment.wx.appId"));
-		data.put("mch_id", ConfigService.getValueAsString("shop.payment.wx.mchId"));
-
 		data.put("trade_type", "NATIVE");
-		data.put("device_info", "web");
+		data.put("appid", ConfigService.getValueAsString("shop.payment.wx.appId"));
 		data.put("spbill_create_ip", Tools.getIp());
+		data.put("product_id", order.getId() + ""); // 商品 id，但一个订单可能包含多个商品，所以填入订单数据库 id
+		data.put("device_info", "web");
+		data.put("sign", generateSignature(data, ConfigService.getValueAsString("shop.payment.wx.apiSecret")));
 
-		data.put("sign", WxUtil.generateSignature(data, ConfigService.getValueAsString("shop.payment.wx.apiSecret")));
-
-		return WxUtil.sendUnifiedOrder(data);
+		return sendUnifiedOrder(data);
 	}
 
-	@Resource("OrderService")
-	private OrderService orderService;
-
 	public Map<String, ?> pay(long userId, long orderId, String ip) {
-		return wxPay(userId, dao.findById(orderId), ip);
+		return miniAppPay(userId, dao.findById(orderId), ip);
 	}
 
 	public static OrderInfoDao dao = new Repository().bind(OrderInfoDao.class);
 
 	/**
-	 * 核心支付方法
+	 * 小程序调起支付参数
 	 * 
 	 * @param userId
 	 * @param orderInfo
 	 * @param ip
 	 * @return
 	 */
-	public static Map<String, ?> wxPay(long userId, OrderInfo orderInfo, String ip) {
-		String openId = dao.findUserOpenId(userId); // 小程序内调用登录接口，获取到用户的 openid
+	public static Map<String, ?> miniAppPay(long userId, OrderInfo orderInfo, String ip) {
+		LOGGER.info("微信统一下单请求交易开始");
 
-		// 预付单
-		PerpayInfo perpayInfo = new PerpayInfo();
-		perpayInfo.setOpenid(openId);
-		perpayInfo.setBody("集结号-网超");
-		perpayInfo.setIp(ip);
+		Map<String, String> data = commonSetUnifiedOrder(orderInfo);
+		data.put("body", "集结号-网超");
+		data.put("trade_type", "JSAPI");
+		data.put("appid", ConfigService.getValueAsString("mini_program.appId"));
+		data.put("spbill_create_ip", ip);
+		data.put("openid", dao.findUserOpenId(userId)); // 小程序内调用登录接口，获取到用户的 openid
+		data.put("sign", generateSignature(data, ConfigService.getValueAsString("shop.payment.wx.apiSecret")));
 
-//		Map<String, String> map = WxPay.unifiedOrder(orderInfo, perpayInfo);
-//		PerpayReturn result = WxPay.sendUnifiedOrder(map); 
-
-		PerpayReturn result = WxUtil.sendUnifiedOrder(unifiedOrder(orderInfo, perpayInfo));// 商户 server 调用支付统一下单
+		PerpayReturn result = sendUnifiedOrder(data);// 商户 server 调用支付统一下单
 
 		if (result.isSuccess()) {
 			LOGGER.info("获取 perpayid 成功！{0}", result.getPrepay_id());
-//			Map<String, String> r = PaySignatures.getPayParam(result.getPrepay_id(), map.get("nonce_str")); // 商户 server 调用再次签名
-			Map<String, String> r = getPayParam(result.getPrepay_id(), result.getNonce_str()); // 商户
-																								// server
-																								// 调用再次签名
-			r.put("orderInfoId", orderInfo.getId() + ""); // 新订单 id
+			// 商户调用再次签名
 
-			return r; // 将此 map 返回给小程序客户端，让它来调起支付界面
+			Map<String, String> map = new HashMap<>();
+			map.put("appId", ConfigService.getValueAsString("mini_program.appId"));
+			map.put("timeStamp", System.currentTimeMillis() / 1000 + "");
+			map.put("nonceStr", TokenService.getRandomString(10)); // 可以是不同的随机字符串
+			map.put("package", "prepay_id=" + result.getPrepay_id());
+			map.put("signType", "MD5");
+
+			String paySign = generateSignature(map, ConfigService.getValueAsString("shop.payment.wx.apiSecret"));
+			map.put("paySign", paySign);
+			map.put("orderInfoId", orderInfo.getId() + ""); // 新订单 id
+
+			return map; // 将此 map 返回给小程序客户端，让它来调起支付界面
 		} else {
 			LOGGER.warning("获取 perpayid 失败！错误代码：{0}，错误信息：{1}。", result.getError_code(), result.getReturn_msg());
 
@@ -110,67 +107,85 @@ public class WxPay implements PayConstant {
 	}
 
 	/**
-	 * 小程序的生成统一下单用的信息
+	 * 对统一下单的信息进行公用的设置
 	 * 
-	 * @param order      订单对象
-	 * @param perpayInfo
-	 * @return 统一下单用的信息
+	 * @param data 下单信息
 	 */
-	private static Map<String, String> unifiedOrder(OrderInfo order, PerpayInfo perpayInfo) {
-		LOGGER.info("微信统一下单请求交易开始");
-
+	private static Map<String, String> commonSetUnifiedOrder(OrderInfo order) {
 		Map<String, String> data = new HashMap<>();
-		WxUtil.commonSetUnifiedOrder(order, data);
-
-		data.put("notify_url", notifyUrl);
-		data.put("trade_type", "JSAPI");
-		data.put("openid", perpayInfo.getOpenid());
-
-		// 商品描述 body 是 String(128) 腾讯充值中心-QQ会员充值 商品简单描述，该字段请按照规范传递，具体请见参数规定
-		data.put("body", perpayInfo.getBody());
-		data.put("spbill_create_ip", perpayInfo.getIp());
-
-		/** 以下参数为非必填参数 **/
-		// 订单优惠标记 goods_tag 否 String(32) WXG 订单优惠标记，使用代金券或立减优惠功能时需要的参数，说明详见代金券或立减优惠
-		if (!CommonUtil.isEmptyString(perpayInfo.getGoods_tag()))
-			data.put("goods_tag", perpayInfo.getGoods_tag());
-
-		// 商品详情 detail 否 String(6000) 商品详细描述，对于使用单品优惠的商户，改字段必须按照规范上传，详见“单品优惠参数说明”
-		if (!CommonUtil.isEmptyString(perpayInfo.getDetail())) {
-			data.put("detail", perpayInfo.getDetail());
-			// 接口版本号
-			// 新增字段，接口版本号，区分原接口，默认填写1.0。入参新增version后，则支付通知接口也将返回单品优惠信息字段promotion_detail，请确保支付通知的签名验证能通过。
-			data.put("version", "1.0");
-		}
-
-		System.out.println(">>>>>>>>>>......." + perpayInfo);
-		data.put("appid", ConfigService.getValueAsString("mini_program.appId"));
-//		data.put("appid", ConfigService.getValueAsString("shop.payment.wx.appId"));
-		// 商户号 mch_id 是 String(32) 1230000109 微信支付分配的商户号
+		data.put("out_trade_no", order.getOrderNo());
+		data.put("total_fee", toCent(order.getTotalPrice()));
+		data.put("fee_type", "CNY");
+		data.put("sign_type", "MD5");
+		data.put("nonce_str", TokenService.getRandomString(10));
 		data.put("mch_id", ConfigService.getValueAsString("shop.payment.wx.mchId"));
-		data.put("sign", WxUtil.generateSignature(data, ConfigService.getValueAsString("shop.payment.wx.apiSecret")));
+		data.put("notify_url", ConfigService.getValueAsString("shop.payment.wx.notifyUrl"));
 
 		return data;
 	}
 
 	/**
-	 * 小程序调起支付参数
-	 * 
-	 * @param perpayId
-	 * @param nonceStr
-	 * @return
+	 * 统一下单接口
 	 */
-	private static Map<String, String> getPayParam(String perpayId, String nonceStr) {
-		Map<String, String> map = new HashMap<>();
-		map.put("appId", ConfigService.getValueAsString("mini_program.appId"));
-		map.put("timeStamp", System.currentTimeMillis() / 1000 + "");
-		map.put("nonceStr", TokenService.getRandomString(10));
-		map.put("package", "prepay_id=" + perpayId);
-		map.put("signType", "MD5");
+	private static final String UNIFIED_ORDER_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 
-		String paySign = WxUtil.generateSignature(map, ConfigService.getValueAsString("mini_program.apiSecret"));
-		map.put("paySign", paySign);
+	/**
+	 * 执行统一下单的请求
+	 * 
+	 * @param data 下单信息
+	 * @return 响应的结果
+	 */
+	private static PerpayReturn sendUnifiedOrder(Map<String, String> data) {
+		String xml = MapTool.mapToXml(data);
+		LOGGER.info(" 请求 perpayid" + xml);
 
-		return map;
+		String result = HttpBasicRequest.post(UNIFIED_ORDER_URL, xml);
+		LOGGER.info(" 获取 perpayid 结果" + result);
+
+		Map<String, String> resultMap = MapTool.xmlToMap(result);
+
+		PerpayReturn perpayReturn = MapTool.map2Bean(MapTool.as(resultMap, v -> v == null ? null : (Object) v),
+				PerpayReturn.class);
+		return perpayReturn;
+	}
+
+	/**
+	 * 生成签名. 对 map 字典排序，然后 key/value 拼接，然后加上 key，最后 md5。 注意，若含有 sign_type 字段，必须和
+	 * signType 参数保持一致。
+	 * 
+	 * 参见：https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=4_3
+	 *
+	 * @param data 待签名数据
+	 * @param key  API 密钥，通常是商家的 API 密钥，而不是程序的密钥
+	 * @return 签名
+	 */
+	public static String generateSignature(Map<String, String> data, String key) {
+		Set<String> keySet = data.keySet();
+		String[] keyArray = keySet.toArray(new String[keySet.size()]);
+		Arrays.sort(keyArray);
+		StringBuilder sb = new StringBuilder();
+
+		for (String k : keyArray) {
+			if (k.equals("sign"))
+				continue;
+
+			String value = data.get(k);
+			if (!CommonUtil.isEmptyString(value)) // 参数值为空，则不参与签名
+				sb.append(k).append("=").append(value.trim()).append("&");
+		}
+
+		sb.append("key=").append(key);
+
+		return Encode.md5(sb.toString());
+	}
+
+	/**
+	 * 转换为分的字符串
+	 * 
+	 * @param price 单位是元
+	 * @return 分的字符串
+	 */
+	public static String toCent(BigDecimal price) {
+		return String.valueOf(price.multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP).intValue());
 	}
 }

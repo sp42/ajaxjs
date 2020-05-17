@@ -17,13 +17,13 @@ import com.ajaxjs.shop.dao.OrderInfoDao;
 import com.ajaxjs.shop.model.Cart;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.model.OrderItem;
+import com.ajaxjs.shop.payment.wechat.PayConstant;
 import com.ajaxjs.user.controller.BaseUserController;
 import com.ajaxjs.user.model.UserAddress;
 import com.ajaxjs.user.service.UserAddressService;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.weixin.payment.PayConstant;
 
 @Bean
 public class OrderService extends BaseService<OrderInfo> implements PayConstant {
