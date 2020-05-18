@@ -52,6 +52,7 @@ public interface Constant {
 	public static final String USER_SESSION_ID = "X-Ajaxjs-Token";
 
 	public static final String USER_ID = "X-Ajaxjs-UserId";
+	public static final String USER_ID_HEADER = "X-Ajaxjs-UserId";
 
 	public static final String domainCatalog_Id = "domainCatalog_Id";
 

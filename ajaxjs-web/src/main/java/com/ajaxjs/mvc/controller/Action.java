@@ -178,7 +178,7 @@ public class Action {
 				return true; // if the Action is empty, allow to add a new method object
 			else {
 				String[] arr = anClz.toString().split("\\.");
-				LOGGER.warning("控制器上的 {0} 的 {1} 方法业已登记，不接受重复登记！", path, arr[arr.length - 1]);
+				LOGGER.warning("控制器上的 {0} 的 {1} 方法已在 {2} 登记，不接受 {3} 的重复登记！", path, arr[arr.length - 1], method, existMethod);
 				return false;
 			}
 		} else {
