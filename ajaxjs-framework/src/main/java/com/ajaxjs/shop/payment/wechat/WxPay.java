@@ -7,12 +7,11 @@ import java.util.Map;
 import java.util.Set;
 
 import com.ajaxjs.config.ConfigService;
-import com.ajaxjs.framework.Repository;
 import com.ajaxjs.net.http.HttpBasicRequest;
 import com.ajaxjs.net.http.Tools;
-import com.ajaxjs.shop.dao.OrderInfoDao;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.payment.wechat.model.PerpayReturn;
+import com.ajaxjs.shop.service.OrderService;
 import com.ajaxjs.user.token.TokenService;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
@@ -49,19 +48,13 @@ public class WxPay {
 		return sendUnifiedOrder(data);
 	}
 
-	public Map<String, ?> pay(long userId, long orderId, String ip) {
-		return miniAppPay(userId, dao.findById(orderId), ip);
-	}
-
-	public static OrderInfoDao dao = new Repository().bind(OrderInfoDao.class);
-
 	/**
 	 * 小程序调起支付参数
 	 * 
-	 * @param userId
-	 * @param orderInfo
-	 * @param ip
-	 * @return
+	 * @param userId    用户 id
+	 * @param orderInfo 订单详情
+	 * @param ip        IP 地址
+	 * @return 小程序支付所需的参数
 	 */
 	public static Map<String, ?> miniAppPay(long userId, OrderInfo orderInfo, String ip) {
 		LOGGER.info("微信统一下单请求交易开始");
@@ -71,15 +64,15 @@ public class WxPay {
 		data.put("trade_type", "JSAPI");
 		data.put("appid", ConfigService.getValueAsString("mini_program.appId"));
 		data.put("spbill_create_ip", ip);
-		data.put("openid", dao.findUserOpenId(userId)); // 小程序内调用登录接口，获取到用户的 openid
+		data.put("openid", OrderService.dao.findUserOpenId(userId)); // 小程序内调用登录接口，获取到用户的 openid
 		data.put("sign", generateSignature(data, ConfigService.getValueAsString("shop.payment.wx.apiSecret")));
 
 		PerpayReturn result = sendUnifiedOrder(data);// 商户 server 调用支付统一下单
 
 		if (result.isSuccess()) {
 			LOGGER.info("获取 perpayid 成功！{0}", result.getPrepay_id());
-			// 商户调用再次签名
 
+			// 商户调用再次签名
 			Map<String, String> map = new HashMap<>();
 			map.put("appId", ConfigService.getValueAsString("mini_program.appId"));
 			map.put("timeStamp", System.currentTimeMillis() / 1000 + "");
@@ -105,11 +98,23 @@ public class WxPay {
 			};
 		}
 	}
+	
+	/**
+	 * 小程序调起支付参数
+	 * 
+	 * @param userId  用户 id
+	 * @param orderId 订单 id
+	 * @param ip      IP 地址
+	 * @return 小程序支付所需的参数
+	 */
+	public Map<String, ?> miniAppPay(long userId, long orderId, String ip) {
+		return miniAppPay(userId, OrderService.dao.findById(orderId), ip);
+	}
 
 	/**
 	 * 对统一下单的信息进行公用的设置
 	 * 
-	 * @param data 下单信息
+	 * @param order 订单详情
 	 */
 	private static Map<String, String> commonSetUnifiedOrder(OrderInfo order) {
 		Map<String, String> data = new HashMap<>();

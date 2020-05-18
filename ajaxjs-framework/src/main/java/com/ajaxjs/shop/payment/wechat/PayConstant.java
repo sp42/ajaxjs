@@ -1,10 +1,6 @@
 package com.ajaxjs.shop.payment.wechat;
 
 public interface PayConstant {
-	/**
-	 * 统一下单
-	 */
-	public static final String notifyUrl = "https://api.gdjjh.cn/shop/api/order/wxNotify";
 
 	/**
 	 * 查询订单
