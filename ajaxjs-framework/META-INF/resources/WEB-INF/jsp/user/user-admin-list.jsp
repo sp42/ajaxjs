@@ -75,13 +75,11 @@
 						<td>${current.id}</td>
 						<td>
 							<c:if test="${not empty current.avatar}">
-								<img src="${ctx}/${current.avatar}" style="max-width:50px;max-height:60px;vertical-align: middle;" 
-							 		onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${ctx}/${current.avatar}';" onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
+								<img src="${current.avatar.startsWith('http') ? current.avatar : aj_allConfig.uploadFile.imgPerfix.concat(current.avatar)}" style="max-width:50px;max-height:60px;vertical-align: middle;" 
+							 		onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${current.avatar.startsWith('http') ? current.avatar : aj_allConfig.uploadFile.imgPerfix.concat(current.avatar)}';" onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
 							</c:if>
 						</td>
-						<td>
-							${current.name}
-						</td>
+						<td>${current.name}</td>
 						<td>${current.username}</td>
 						<td>${SexGender[current.sex]}</td>
 						<td>${current.email}<br />${current.phone}</td>

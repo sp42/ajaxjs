@@ -57,9 +57,9 @@ function findParent(map, id) {
 	return null;
 }
 
-var stack = [];
 function output(map, cb) {
 	stack.push(map);
+	
 	for ( var i in map) {
 		map[i].level = stack.length;
 		cb(map[i], i);
@@ -70,6 +70,7 @@ function output(map, cb) {
 				output(c[q], cb);
 		}
 	}
+	
 	stack.pop();
 }
 
@@ -82,7 +83,7 @@ function render() {
 	m = {};
 	//select.onchange = onSelectChange;
 	
-	aj.xhr.get('list/?limit=99&randrom=' + Math.random(), function(json) {
+	aj.xhr.get('list/?limit=99&randrom=' + Math.random(), json => {
 		if(json.errorMsg) {
 			ajaxjs.modal(null, {text:json.errorMsg});
 			return;
@@ -94,6 +95,7 @@ function render() {
 			var n = json.result[i];
 			//console.log(n);
 			var parentNode = findParent(m, n.pid);
+			
 			if (parentNode == null) {
 				m[n.id] = n;				
 			} else {
@@ -122,7 +124,7 @@ function render() {
 	});
 }
 
-
+alert(9)
 function showCreate(a) {
 	var tr = a.up('tr');
 	var id = tr.dataset.id, name = tr.dataset.name;
@@ -169,6 +171,7 @@ function showForm(isCreate, id, name, content) {
 function showDelete(a) {
 	var tr = a.up('tr');
 	var id = tr.dataset.id, name = tr.dataset.name;
+	
 	aj.showConfirm('确定删除该数据字典{0}？'.replace('{0}', name), () => {
 		ajaxjs.xhr.dele(id + '/',  json => {
 			aj.showOk(json.msg);

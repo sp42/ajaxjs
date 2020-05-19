@@ -144,7 +144,7 @@ Vue.component("aj-json-form", {
 			</section>\
 		</form>',
 	props: {
-		scheme: {					// 输入 JSON 数据
+		scheme: {					// 输入 JSON 数据规则
 			required: true,
 			type: Object
 		},

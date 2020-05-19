@@ -10,6 +10,7 @@
 	<meta name="renderer"	 content="webkit" /> 
 	<meta name="robots" 	 content="index,follow" />
 	<meta http-equiv="X-UA-Compatible" content="edge,chrome=1" />
+	
 <%
 	if(ua.isPhone()) { // 是否为移动客户端，响应式输出宽度 320px
 %>   

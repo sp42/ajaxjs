@@ -9,12 +9,19 @@
 	</jsp:include>
 </head>
 <body class="pid">	
-	<div class="panel">
+	<div class="vue">
 		<!-- 后台头部导航 -->
 		<ajaxjs-admin-header>
 			<template slot="title">${uiName}一览：<span>你可以在这里添加、修改、删除${uiName}</template>
 		</ajaxjs-admin-header>
-
+		
+	</div>
+	
+	<script>
+		new Vue({el:'body > div'});
+	</script>
+	
+	<div class="panel">
 		<form class="createTopNode" action="." method="post">
 			<input type="hidden" name="pid" value="-1" />
 			
@@ -44,17 +51,7 @@
 	</div>
 	
 	<script>
-		// 新增顶级节点
-		ajaxjs.xhr.form(".createTopNode", function(json) {
-			if (json.isOk) {
-				aj.alert.show('创建成功！');
-				render();
-				aj(".createTopNode").$('input[name=name]').value = '';
-			} else {
-				alert(json.msg);
-			}
-		});
-	
+
 		var tdHtml = '<td class="id">[:=id:]</td><td class="name">[:=nameTd:]</td> <td class="content">[:=content||\'\':]</td><td width="120" style="text-align:center;">[:=accessKey:]</td><td class="createDate">[:=createDate:]</td>\
 		  <td class="action"><a href="#" onclick="showCreate(this);"><img src="${commonAssetIcon}/add.gif" /> 新 建</a> | <a href="#" onclick="showUpdate(this);"><img src="${commonAssetIcon}/update.gif" /> 修 改</a> | <a href="#" onclick="showDelete(this);"><img src="${commonAssetIcon}/delete.gif" /> 删 除</a> </td>';
 	</script>

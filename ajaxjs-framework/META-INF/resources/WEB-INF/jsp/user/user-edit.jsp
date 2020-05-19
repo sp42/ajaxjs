@@ -111,10 +111,10 @@
 				<div> 
 					<div class="label" style="vertical-align: top;">头像</div> 
 					<div style="display:inline-block;">
-						<!-- 图片上传 --> 
+						<!-- 图片上传 -->
 						<aj-xhr-upload action="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catalog=1" 
 							:is-img-upload="true" hidden-field="avatar" hidden-field-value="${info.avatar}"
-							img-place="${empty info.avatar ? commonAsset.concat('/images/imgBg.png') : ctx.concat('/').concat(info.avatar)}">
+							img-place="${empty info.avatar ? commonAsset.concat('/images/imgBg.png') : (info.avatar.startsWith('http') ? info.avatar : aj_allConfig.uploadFile.imgPerfix.concat(info.avatar))}">
 						</aj-xhr-upload>
 					</div>
 				</div>

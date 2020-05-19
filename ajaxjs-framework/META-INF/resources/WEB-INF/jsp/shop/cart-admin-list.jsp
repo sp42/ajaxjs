@@ -72,8 +72,8 @@
 						<td>${current.id}</td>
 						<td style="text-align:left;">
 						<c:if test="${not empty current.cover}">
-							<img src="${ctx}/${current.cover}" style="max-width:50px;max-height:60px;vertical-align: middle;" 
-						 		onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${ctx}/${current.cover}';" onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
+							<img src="${aj_allConfig.uploadFile.imgPerfix}${current.cover}" style="max-width:50px;max-height:60px;vertical-align: middle;" 
+						 		onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${aj_allConfig.uploadFile.imgPerfix}${current.cover}';" onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
 						</c:if>
 						<c:if test="${empty current.groupId}">
 							<a href="../../goods/${current.goodsId}">${current.goodsName}</a>
