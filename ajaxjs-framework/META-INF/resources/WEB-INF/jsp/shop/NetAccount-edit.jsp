@@ -43,7 +43,7 @@
 					<label>
 						<div class="label">选择银行：</div>
 						<!-- 选择商家 -->
-						<select class="ajaxjs-select" name="bankId" style="width:200px;">
+						<select class="aj-select" name="bankId" style="width:200px;">
 							<c:foreach items="${Banks}" var="item">
 								<option value="${item.key}" ${item.key == info.bankId ? 'selected' : ''}>${item.value.name}</option>
 							</c:foreach>
@@ -55,7 +55,7 @@
 					<label>
 						<div class="label">使用人：</div>
 						<!-- 选择商家 -->
-						<select class="ajaxjs-select" name="whoUse" style="width:100px;">
+						<select class="aj-select" name="whoUse" style="width:100px;">
 							<c:foreach items="${WhoUses}" var="item">
 								<option value="${item.key}" ${item.key == info.whoUse ? 'selected' : ''}>${item.value.name}</option>
 							</c:foreach>
@@ -82,7 +82,7 @@
 				<div>
 					<label>
 						<div class="label">备注：</div> 
-						<textarea rows="5" cols="80" name="content" class="ajaxjs-input">${info.content}</textarea>
+						<textarea rows="5" cols="80" name="content" class="aj-input">${info.content}</textarea>
 					</label>
 				</div>
 				<div>

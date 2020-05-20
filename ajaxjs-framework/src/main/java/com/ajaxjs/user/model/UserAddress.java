@@ -8,34 +8,47 @@ public class UserAddress extends BaseModel {
 	private String username;
 
 	private String userIdName;
-	
+
 	/**
 	 * 收货人手机
 	 */
 	private String mobile;
 
 	/**
-	 * 设置收货人手机
-	 * 
-	 * @param mobile
-	 */
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
-	}
-
-	/**
-	 * 获取收货人手机
-	 * 
-	 * @return 收货人手机
-	 */
-	public String getMobile() {
-		return mobile;
-	}
-
-	/**
 	 * 收货人固话
 	 */
 	private String phone;
+
+	private Long locationProvince;
+
+	private Long locationCity;
+
+	private Long locationDistrict;
+
+	/**
+	 * 收货地址
+	 */
+	private String address;
+
+	/**
+	 * 邮编
+	 */
+	private String zipCode;
+
+	/**
+	 * 创建者 id
+	 */
+	private Integer createByUser;
+
+	/**
+	 * 用户 id
+	 */
+	private Long userId;
+
+	/**
+	 * 分类 id
+	 */
+	private Integer catelogId;
 
 	/**
 	 * 设置收货人固话
@@ -55,13 +68,24 @@ public class UserAddress extends BaseModel {
 		return phone;
 	}
 
+	/**
+	 * 设置收货人手机
+	 * 
+	 * @param mobile
+	 */
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
 
-	
-	private Long locationProvince;
-	
-	private Long locationCity;
-	
-	private Long locationDistrict;
+	/**
+	 * 获取收货人手机
+	 * 
+	 * @return 收货人手机
+	 */
+	public String getMobile() {
+		return mobile;
+	}
+
 	public Long getLocationProvince() {
 		return locationProvince;
 	}
@@ -87,11 +111,6 @@ public class UserAddress extends BaseModel {
 	}
 
 	/**
-	 * 收货地址
-	 */
-	private String address;
-
-	/**
 	 * 设置收货地址
 	 * 
 	 * @param address
@@ -110,11 +129,6 @@ public class UserAddress extends BaseModel {
 	}
 
 	/**
-	 * 邮编
-	 */
-	private String zipCode;
-
-	/**
 	 * 设置邮编
 	 * 
 	 * @param zipCode
@@ -131,34 +145,6 @@ public class UserAddress extends BaseModel {
 	public String getZipCode() {
 		return zipCode;
 	}
-
-	/**
-	 * 数据字典：状态
-	 */
-	private Integer status;
-
-	/**
-	 * 设置数据字典：状态
-	 * 
-	 * @param status
-	 */
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
-
-	/**
-	 * 获取数据字典：状态
-	 * 
-	 * @return 数据字典：状态
-	 */
-	public Integer getStatus() {
-		return status;
-	}
-
-	/**
-	 * 创建者 id
-	 */
-	private Integer createByUser;
 
 	/**
 	 * 设置创建者 id
@@ -200,11 +186,6 @@ public class UserAddress extends BaseModel {
 	public Integer getDeleted() {
 		return deleted;
 	}
-
-	/**
-	 * 分类 id
-	 */
-	private Integer catelogId;
 
 	/**
 	 * 设置分类 id
@@ -271,5 +252,4 @@ public class UserAddress extends BaseModel {
 		this.userIdName = userIdName;
 	}
 
-	private Long userId;
 }

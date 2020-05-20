@@ -129,7 +129,7 @@ public abstract class BaseService<T> extends QueryTools implements IBaseService<
 
 		return dao.findPagedList(start, limit, fn);
 	}
-	
+
 	private IBaseDao<T> dao;
 
 	private String uiName;
@@ -193,6 +193,16 @@ public abstract class BaseService<T> extends QueryTools implements IBaseService<
 	 */
 	public static String searchQuery(String sql) {
 		return searchQuery(new String[] { "name", "content" }, MvcRequest.getHttpServletRequest()).apply(sql);
+	}
+
+	/**
+	 * 对 name 字段搜索
+	 * 
+	 * @param sql 输入的SQL
+	 * @return 修改后的 SQL
+	 */
+	public static String searchQuery_NameOnly(String sql) {
+		return searchQuery(new String[] { "name" }, MvcRequest.getHttpServletRequest()).apply(sql);
 	}
 
 	/**

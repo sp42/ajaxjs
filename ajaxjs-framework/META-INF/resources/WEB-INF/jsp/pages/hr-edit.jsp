@@ -47,7 +47,7 @@
 		
 				<div>
 					<div class="label" style="vertical-align: top;">工作要求：</div>
-					<textarea rows="15" cols="20" style="width: 90%; height: 50px;" class="ajaxjs-inputField" name="content">${info.content}</textarea>
+					<textarea rows="15" cols="20" style="width: 90%; height: 50px;" class="aj-input" name="content">${info.content}</textarea>
 				</div>
  
 				<div>

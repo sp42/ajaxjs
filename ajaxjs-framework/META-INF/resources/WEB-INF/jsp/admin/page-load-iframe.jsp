@@ -24,22 +24,28 @@
 		
 		button {
 			padding: 5px 20px;
+			margin-left: 1%!important;
+		}
+		
+		input{
+			width: 80%;
 		}
 	</style>
 </head>
 <body>
 	<div>
-		<button @click="clk" class="ajaxjs-btn">编辑此页面</button> <input type="text" :value="url" class="ajaxjs-input" style="width: 80%;" />
+		<button @click="clk" class="aj-btn">编辑此页面</button> 
+		<input type="text" :value="url" class="aj-input" />
 		<iframe src="${empty param.url ? '../../' :  param.url}" @load="onchange($event)"></iframe>
 	</div>
 
 	<script>
 		new Vue({
-			el : 'body > div',
-			data : {
+			el: 'body > div',
+			data: {
 				url : ""
 			},
-			methods : {
+			methods: {
 				onchange(e) {
 					var el = e.target;
 					this.url = location.origin + el.contentWindow.location.pathname;
@@ -49,6 +55,7 @@
 					// 去掉 dom 返回的前缀
 					url = url.replace(/http:\/\/[^\/]*/, '');
 					url = url.replace('${ctx}', '');
+					
 					window.location.assign('loadPage/?url=' + url);
 				}
 			}

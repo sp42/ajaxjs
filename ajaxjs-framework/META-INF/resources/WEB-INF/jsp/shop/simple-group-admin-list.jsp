@@ -19,7 +19,7 @@
 			<!-- 搜索、分类下拉 -->
 			<aj-admin-filter-panel :no-catalog="true">
 				<!-- 选择商家 -->
-				商家过滤器：<select class="ajaxjs-select" name="sellerId" onchange="location.assign('?filterField=sellerId&filterValue=' + this.selectedOptions[0].value);">
+				商家过滤器：<select class="aj-select" name="sellerId" onchange="location.assign('?filterField=sellerId&filterValue=' + this.selectedOptions[0].value);">
 						<option value="null">不指定商家</option>
 					<c:foreach items="${sellers}" var="item">
 						<option value="${item.key}" ${(param.filterValue != 'null') && (param.filterValue == item.key)  ? 'selected' : ''}>

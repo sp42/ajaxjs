@@ -22,7 +22,6 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.model.OrderItem;
-import com.ajaxjs.shop.payment.wechat.WxPay;
 import com.ajaxjs.shop.service.OrderService;
 import com.ajaxjs.user.filter.LoginCheck;
 import com.ajaxjs.user.model.User;
@@ -48,7 +47,7 @@ public class OrderAdminController extends BaseController<OrderInfo> {
 			@QueryParam("userId") long userId) {
 		LOGGER.info("后台-订单列表");
 
-		page(mv, service.findPagedList(start, limit, 0, 0, null, userId), CommonConstant.UI_ADMIN);
+		page(mv, service.findPagedList(start, limit, userId), CommonConstant.UI_ADMIN);
 		return jsp("shop/order-admin-list");
 	}
 
@@ -80,7 +79,7 @@ public class OrderAdminController extends BaseController<OrderInfo> {
 		}
 
 		// 订单明细
-		List<OrderItem> items = WxPay.dao.findOrderItemListByOrderId(id);
+		List<OrderItem> items = OrderService.dao.findOrderItemListByOrderId(id);
 		mv.put("orderItems", items);
 
 		return jsp("shop/order-edit");

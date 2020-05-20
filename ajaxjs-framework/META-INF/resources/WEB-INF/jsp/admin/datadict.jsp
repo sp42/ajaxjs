@@ -19,10 +19,10 @@
 			<input type="hidden" name="pid" value="-1" />
 			
 			<label>新增顶级${uiName}：
-			<input type="text" name="name" class="ajaxjs-inputField" required="required" /> </label>
+			<input type="text" name="name" class="aj-input" required="required" /> </label>
 			&nbsp;&nbsp;
-			<label> 描述： <input type="text" name="content" class="ajaxjs-inputField" style="width: 300px;" />  </label>
-			<button class="ajaxjs-btn">
+			<label> 描述： <input type="text" name="content" class="aj-input" style="width: 300px;" />  </label>
+			<button class="aj-btn">
 				<img src="${commonAssetIcon}/add.gif" /> 新建${uiName}
 			</button>
 		</form>

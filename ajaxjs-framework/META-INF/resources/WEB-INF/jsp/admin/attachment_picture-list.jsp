@@ -1,5 +1,6 @@
-<%@page pageEncoding="UTF-8" import="java.util.HashMap"%>
+<%@page pageEncoding="UTF-8"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
+<%@taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
 	<!DOCTYPE html>
 	<html>
 		<head>
@@ -58,12 +59,8 @@
 					<td>${current.owner}</td>
 					<td><c:dateFormatter value="${current.createDate}" /></td>
 					<td>
-						<a href="${ctx}${current.path}" target="_blank">
-							<img src="${ctx}${current.path}" style="max-width:100px; vertical-align: middle;" 
-							onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${ctx}${current.path}';" 
-							onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
-						</a>
-						<a href="javascript:entity.del('${current.id}', '${current.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>
+						<tags:common type="thumb" thumb="${current.path}" />
+						<a href="javascript:aj.admin.del('${current.id}', '${current.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>
 					</td>
 				</tr>
 			</c:foreach>

@@ -13,6 +13,7 @@ import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
+import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
@@ -64,7 +65,7 @@ public class OrderController extends BaseController<OrderInfo> {
 		mv.put(INFO, service.findById(id));
 
 		// 订单明细
-		List<OrderItem> items = WxPay.dao.findOrderItemListByOrderId(id);
+		List<OrderItem> items = OrderService.dao.findOrderItemListByOrderId(id);
 		mv.put("orderItems", items);
 
 		return jsp("shop/order-info");
@@ -107,7 +108,7 @@ public class OrderController extends BaseController<OrderInfo> {
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String processOrder(@FormParam("addressId") @NotNull long addressId,
 			@NotNull @FormParam("payType") int payType, @FormParam("cartIds") @NotNull String _cartIds,
-			HttpServletRequest r, ModelAndView mv) {
+			HttpServletRequest r, ModelAndView mv) throws ServiceException, AlipayApiException {
 		LOGGER.info("处理订单 结账");
 
 		UserAddressService.initData(r);
@@ -124,7 +125,7 @@ public class OrderController extends BaseController<OrderInfo> {
 	public String directProcessOrder(@FormParam("addressId") @NotNull long addressId,
 			@NotNull @FormParam("payType") int payType, @NotNull @FormParam("goodsId") long goodsId,
 			@NotNull @FormParam("formatId") long formatId, @NotNull @FormParam("goodsNumber") int goodsNumber,
-			HttpServletRequest r, ModelAndView mv) {
+			HttpServletRequest r, ModelAndView mv) throws ServiceException, AlipayApiException {
 		LOGGER.info("处理订单 结账-直接单个商品");
 
 		UserAddressService.initData(r);

@@ -25,6 +25,16 @@ public class Goods extends Product {
 	 */
 	private String cover;
 	
+	/**
+	 * 标签
+	 */
+	private String tags;
+	
+	/**
+	 * 产地 id
+	 */
+	private Integer areaId;
+	
 	public String getCover() {
 		return cover;
 	}
@@ -89,6 +99,22 @@ public class Goods extends Product {
 
 	public void setIntro(String intro) {
 		this.intro = intro;
+	}
+
+	public String getTags() {
+		return tags;
+	}
+
+	public void setTags(String tags) {
+		this.tags = tags;
+	}
+
+	public Integer getAreaId() {
+		return areaId;
+	}
+
+	public void setAreaId(Integer areaId) {
+		this.areaId = areaId;
 	}
 	
 }

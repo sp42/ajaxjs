@@ -71,16 +71,11 @@
 					<tr>
 						<td>${current.id}</td>
 						<td style="text-align:left;">
-						<c:if test="${not empty current.cover}">
-							<img src="${aj_allConfig.uploadFile.imgPerfix}${current.cover}" style="max-width:50px;max-height:60px;vertical-align: middle;" 
-						 		onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${aj_allConfig.uploadFile.imgPerfix}${current.cover}';" onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
-						</c:if>
-						<c:if test="${empty current.groupId}">
-							<a href="../../goods/${current.goodsId}">${current.goodsName}</a>
-						</c:if>
-						<c:if test="${not empty current.groupId}">
-							<a href="../../simple-group/${current.groupId}">${current.goodsName}</a>
-						</c:if>
+							<c:if test="${not empty current.cover}">
+								<img src="${aj_allConfig.uploadFile.imgPerfix}${current.cover}" style="max-width:50px;max-height:60px;vertical-align: middle;" 
+							 		onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${aj_allConfig.uploadFile.imgPerfix}${current.cover}';" onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
+							</c:if>
+							<a href="../../goods/${current.goodsId}/">${current.goodsName}</a>
 						</td>
 						<td>${current.goodsFormat}</td>
 						<td>￥${current.price}</td>
@@ -94,7 +89,7 @@
 						</td>
 						<td><c:dateFormatter value="${current.createDate}" /></td>
 						<td>
-							<a href="${ctx}/user/center/info/${current.userId}/">
+							<a href="${ctx}/admin/user/${current.userId}/">
 								<img src="${commonAssetIcon}/user.png" style="width:16px;vertical-align: sub;" />用户详情
 							</a> 
 							<a href="javascript:aj.admin.del('${current.id}', '${current.goodsName}');">

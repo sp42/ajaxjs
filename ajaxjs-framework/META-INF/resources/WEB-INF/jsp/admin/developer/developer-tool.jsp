@@ -98,7 +98,7 @@
 					<!-- TAB 内容 -->
 
 	<!-- http://localhost:8080/ajaxjs-tools/CodeGenerators?getTable=user_admin_reosurces&isMap=true&beanName=UserRoleResources -->
-	<form action="${ctx}/admin/CodeGenerators/" method="post" class="form-1">
+	<form action="${ctx}/admin/CodeGenerators/" method="post" class="aj-form">
 		<div>
 			<div>SQL表名：</div><input type="text" name="getTable" />
 		</div>
@@ -142,10 +142,13 @@
 					<!-- // TAB 内容 -->
 				</div>
 				<div :class="{'selected': 3 === selected}">
-					<form action="${ctx}/admin/CodeGenerators/CodeCount" method="get" class="form-1">
+					<form action="${ctx}/admin/CodeGenerators/CodeCount" method="get" class="aj-form">
 						<div>
-							<div>文件夹名：</div><input type="text" name="folder" size="100" />
+							<div>文件夹名：</div>
+							<br />
+							<input type="text" name="folder" size="100" />
 						</div>
+						<br />
 						<div>
 							<button>统计代码行数</button>
 						</div>

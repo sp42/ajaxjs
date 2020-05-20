@@ -26,7 +26,7 @@
 						name="limit"
 						value="${empty param.limit ? PageResult.getPageSize() : param.limit}"
 						style="text-align: center; width: 40px; height: 22px; float: none;"
-						class="ajaxjs-inputField" />
+						class="aj-input" />
 					<!-- 其他参数 -->
 					<c:foreach items="${PageUtil.getParams_without_asMap('limit', pageContext.request.queryString)}" var="current">
 						<input type="hidden" name="${current.key}" value="${current.value}" />
@@ -35,7 +35,7 @@
 				<%--分页数过多影响 HTML 加载，这里判断下 --%>
 				<c:if test="${PageResult.getTotalPage() < 1000}">
 				 	跳转：
-				 	<select onchange="jumpPage(this);" style="text-align: center; width: 40px; height: 22px;" class="ajaxjs-select">
+				 	<select onchange="jumpPage(this);" style="text-align: center; width: 40px; height: 22px;" class="aj-select">
 						<c:foreach items="${PageUtil.jumpPage(PageResult.getTotalPage())}" var="i">
 							<option value="${currentIndex * PageResult.getPageSize()}" ${(currentIndex + 1)==PageResult.getCurrentPage() ? ' selected' : ''}>${currentIndex + 1}</option>
 						</c:foreach>

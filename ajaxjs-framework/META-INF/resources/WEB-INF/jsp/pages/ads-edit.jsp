@@ -60,7 +60,7 @@
 								:is-img-upload="true" 
 								hidden-field="cover" 
 								hidden-field-value="${info.cover}" 
-								img-place="${empty info.cover ? commonAsset.concat('/images/imgBg.png') : ctx.concat('/').concat(info.cover)}">
+								img-place="${empty info.cover ? commonAsset.concat('/images/imgBg.png') : aj_allConfig.uploadFile.imgPerfix.concat(info.cover)}">
 							</aj-xhr-upload>
 					</c:otherwise>
 				</c:choose>

@@ -38,11 +38,17 @@
 						<span style="color:red;">*</span>
 					</label> 
 					<label> 
-						<div class="label">栏 目：</div>  
+						<div class="label">分 类：</div>  
 						<!-- 分类下拉 -->
 			 			<aj-tree-catelog-select field-name="catalogId" :catalog-id="${domainCatalog_Id}" :selected-catalog-id="${empty info || empty info.catalogId? 0 : info.catalogId}">
 						</aj-tree-catelog-select>
 						<span style="color:red;">*</span>
+					</label>
+					<label> 
+						<div class="label">产 地：</div>  
+						<!-- 分类下拉 -->
+			 			<aj-tree-catelog-select field-name="areaId" :catalog-id="${PRODUCT_AREA_ID}" :selected-catalog-id="${empty info || empty info.areaId ? 0 : info.areaId}">
+						</aj-tree-catelog-select>
 					</label>
 
 				</div>
@@ -58,7 +64,7 @@
 					<label>
 						<div class="label">店家：</div>
 						<!-- 选择商家 -->
-						<select class="ajaxjs-select" name="sellerId">
+						<select class="aj-select" name="sellerId">
 							<c:foreach items="${sellers}" var="item">
 								<option value="${item.key}" ${item.key == info.sellerId ? 'selected' : ''}>${item.value.name}</option>
 							</c:foreach>
@@ -69,12 +75,16 @@
 				<div>	
 					<label>
 						<div class="label">封面价格：</div> 
-						<input placeholder="通常为最低价" title="吸引用户显示，通常为最低价" size="10" name="coverPrice" value="${info.coverPrice}" type="text" required="required" />
+						<input placeholder="通常为最低价" title="吸引用户显示，通常为最低价" size="10" name="coverPrice" value="${info.coverPrice}" type="number" required="required" />
 						<span style="color:red;">*</span>
 					</label> 
 					<label>
 						<div class="label">标题价格：</div> 
-						<input placeholder="通常为较高的价格" title="通常为较高的价格" size="10" name="titlePrice" value="${info.titlePrice}" type="text" />
+						<input placeholder="通常为较高的价格" title="通常为较高的价格" size="10" name="titlePrice" value="${info.titlePrice}" type="number" />
+					</label> 
+					<label>
+						<div class="label">标签：</div> 
+						<input placeholder="用 , 分隔"  size="50" name="tags" value="${info.tags}" type="text" />
 					</label> 
 				</div>
 				<div class="goodsFormat">
@@ -103,7 +113,7 @@
 							</td>
 							<td width="10"></td>
 							<td valign="bottom">
-								<button @click="addGoodsFormatItems($event)" class="ajaxjs-btn">+</button>
+								<button @click="addGoodsFormatItems($event)">+</button>
 							</td>
 						</tr>
 					</table>
@@ -154,12 +164,24 @@
 				</c:otherwise>
 			</c:choose>
 				</div>
+				<div> 
+					<div class="label">状态：</div> 
+					<label>
+						<input name="stat" value="1" type="radio" ${info.stat == 1 ? 'checked' : ''} /> 上线中 
+					</label> 
+					<label>
+						<input name="stat" value="0" type="radio" ${info.stat == 0 ? 'checked' : ''} /> 已下线 
+					</label> 
+					<label>
+						<input name="stat" value="2" type="radio" ${info.stat == 2 ? 'checked' : ''}  /> 已删除
+					</label> 
+				</div>
 				<div>
 					<!--按钮 -->
 					<ajaxjs-admin-info-btns :is-create="${isCreate}"></ajaxjs-admin-info-btns>
 				</div>
 			</form>
-			 --%>
+			 
 	<!-- 弹出层上传对话框 -->
 	<aj-popup-upload ref="uploadLayer" upload-url="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catelog=1" img-place="${commonAsset.concat('/images/imgBg.png')}"></aj-popup-upload>
 		</div>
@@ -175,7 +197,7 @@
 						分类 <input type="text" form="goodsFormat" size="15" name="name"  required placeholder="规格/分类/型号" />\
 						价格 <input type="text" form="goodsFormat" size="10" name="price" required placeholder="最终实际交易金额" /> 元\
 					    规格详情 <input type="text" form="goodsFormat" size="40" name="content" />\
-						   <button form="goodsFormat" class="ajaxjs-btn">保存</button> </div>'
+						   <button form="goodsFormat" class="aj-btn">保存</button> </div>'
 			});
 			
 			App = new Vue({

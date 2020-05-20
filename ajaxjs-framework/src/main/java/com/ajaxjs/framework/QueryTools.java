@@ -73,7 +73,7 @@ public class QueryTools {
 	public static String equals(String field, Object value) {
 		if (value instanceof String)
 			value = "'" + value + "'";
-
+		
 		return field + " = " + value;
 	}
 
@@ -126,6 +126,7 @@ public class QueryTools {
 			if (type == String.class) {
 				if (!ServletHelper.preventSQLInject(_v)) // 防止 SQL 注入
 					return setWhere(null);
+				
 				v = _v;
 			} else if (type == Long.class || type == long.class)
 				v = Long.parseLong(_v);
@@ -236,7 +237,7 @@ public class QueryTools {
 	public static Function<String, String> byAny(HttpServletRequest r) {
 		String value = r.getParameter("filterValue");
 
-		if (value == null)
+		if (value == null || "null".equals(value))
 			return setWhere(null);
 
 		return by(r.getParameter("filterField"),

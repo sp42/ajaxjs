@@ -90,7 +90,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 		Map<Long, BaseModel> map = CatalogService
 				.list_bean2map_id_as_key(new CatalogService().findAllListByParentId(catalogId));
 		mv.put("newsCatalogs", map);
-		mv.put(domainCatalog_Id, catalogId);
+		mv.put(DOMAIN_CATALOG_ID, catalogId);
 
 		super.prepareData(mv);
 	}

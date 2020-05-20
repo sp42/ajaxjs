@@ -4,39 +4,15 @@
 	long privilegeTotal = request.getSession().getAttribute("privilegeTotal") == null ? 0 : (long)request.getSession().getAttribute("privilegeTotal");
 %>
 
-<%--
-<li>
-	<h3>内容管理</h3>
-	<ul>
-	<%if(RoleService.check(privilegeTotal, RightConstant.ARTICLE_ONLINE)){ %>
-		<li><a target="iframepage" href="${ctx}/admin/article/list/">文章管理</a></li> 
-	<%}%>
-	<%if(RoleService.check(privilegeTotal, RightConstant.ADS)){ %>
-		<li><a target="iframepage" href="${ctx}/admin/ads/list/">广告管理</a></li>
-	<%}%>
-	<%if(RoleService.check(privilegeTotal, RightConstant.TOPIC)){ %>
- 		<li><a target="iframepage" href="${ctx}/admin/hr/list/">招聘管理</a></li> 
-	<%}%>
-	<%if(RoleService.check(privilegeTotal, RightConstant.ARTICLE_ONLINE)){ %>
-		<li><a target="iframepage" href="${ctx}/admin/topic/list/">专题管理</a></li>
-	<%}%>
-	<%if(RoleService.check(privilegeTotal, RightConstant.FEEDBACK)){ %>
-		<li><a target="iframepage" href="${ctx}/admin/feedback/list/">留言反馈管理</a></li>
-	<%}%>
-	<%if(RoleService.check(privilegeTotal, RightConstant.SECTION)){ %>
-		<li><a target="iframepage" href="${ctx}/admin/section/">栏目管理</a></li>
-	<%}%>
-	</ul>
-</li>
---%>
+
 <%if(RoleService.check(privilegeTotal, RightConstant.SHOP) || RoleService.check(privilegeTotal, RightConstant.SHOP_SELLER)){ %>
 <li>
 	<h3 class="shop"><i></i> 商城管理</h3>
 	<ul>
 	<%if(RoleService.check(privilegeTotal, RightConstant.SHOP)){ %>
 		<li><a target="iframepage" href="${ctx}/admin/goods/list/">商品管理</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/simple-group/list/">团购管理</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/order/list/">用户订单</a></li>
+	<%-- 	<li><a target="iframepage" href="${ctx}/admin/simple-group/list/">团购管理</a></li> --%>
+		<li><a target="iframepage" href="${ctx}/admin/order/list/">订单一览</a></li> 
 	<%}%>
 	<%if(RoleService.check(privilegeTotal, RightConstant.SHOP) || RoleService.check(privilegeTotal, RightConstant.SHOP_SELLER)){ %>
 		<li><a target="iframepage" href="${ctx}/admin/orderItem/list/">订单明细</a></li>
@@ -50,12 +26,36 @@
 </li>
 <%}%>
 
+<li>
+	<h3 class="content"><i></i> 内容管理</h3>
+	<ul>
+		<%if(RoleService.check(privilegeTotal, RightConstant.ARTICLE_ONLINE)){ %>
+			<li><a target="iframepage" href="${ctx}/admin/article/list/">图文管理</a></li> 
+		<%}%>
+		<%if(RoleService.check(privilegeTotal, RightConstant.ADS)){ %>
+			<li><a target="iframepage" href="${ctx}/admin/ads/list/">广告管理</a></li>
+		<%}%>
+		<%if(RoleService.check(privilegeTotal, RightConstant.TOPIC)){ %>
+	 		<li><a target="iframepage" href="${ctx}/admin/hr/list/">招聘管理</a></li> 
+		<%}%>
+		<%if(RoleService.check(privilegeTotal, RightConstant.ARTICLE_ONLINE)){ %>
+			<li><a target="iframepage" href="${ctx}/admin/topic/list/">专题管理</a></li>
+		<%}%>
+		<%if(RoleService.check(privilegeTotal, RightConstant.FEEDBACK)){ %>
+			<li><a target="iframepage" href="${ctx}/admin/feedback/list/">留言反馈管理</a></li>
+		<%}%>
+		<%if(RoleService.check(privilegeTotal, RightConstant.SECTION)){ %>
+			<li><a target="iframepage" href="${ctx}/admin/section/">栏目管理</a></li>
+		<%}%>
+	</ul>
+</li>
+
 <%if(RoleService.check(privilegeTotal, RightConstant.USER)){ %>
 <li> 
 	<h3 class="user"><i></i> 用户管理</h3>
 	<ul>
 		<li><a target="iframepage" href="${ctx}/admin/user/list/">用户管理</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/address/list/">地址薄一览</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/address/list/">地址薄</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/bookmark/list/">收藏一览</a></li>
 		<li><a target="iframepage" href="${ctx}/under_construction">点赞一览</a></li>
 	<%if(RoleService.check(privilegeTotal, RightConstant.USER_PRIVILEGE)){ %>
@@ -71,25 +71,21 @@
 <li>
 	<h3 class="site"><i></i> 网站管理</h3>
 	<ul>
-		<li><a target="iframepage" href="${ctx}/admin/config/site/">网站信息</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/config/siteStru/">网站结构</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/page_editor/">页面管理</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/section/">栏目内容</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/config/site/">基本信息</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/config/siteStru/">层次结构</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/page_editor/">页面编辑</a></li>
 	</ul>
 </li>
 <%}%>
 
 <%if(RoleService.check(privilegeTotal, RightConstant.GLOBAL_SETTING)){ %>
+
 <li>
-	<h3 class="config"><i></i> 全局数据</h3>
+	<h3 class="config"><i></i> 通用数据</h3>
 	<ul>
-
-		<li><a target="iframepage" href="${ctx}/admin/article/list/">所有图文</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/catelog/">分类管理</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/attachment/">附件列表</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/attachmentPicture/list/">图片列表</a></li>
-		<li><a target="iframepage" href="${ctx}/admin/attachmentVideo/list/">视频列表</a></li>
-
+		<li><a target="iframepage" href="${ctx}/admin/attachment/">附件列表</a></li>
 	</ul>
 </li>
 <li>

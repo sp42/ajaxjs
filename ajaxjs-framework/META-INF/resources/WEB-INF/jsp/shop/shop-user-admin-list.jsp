@@ -1,5 +1,6 @@
 <%@page pageEncoding="UTF-8"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
+<%@taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -62,10 +63,7 @@
 					<tr>
 						<td>${current.id}</td>
 						<td>
-							<c:if test="${not empty current.avatar}">
-								<img src="${ctx}/${current.avatar}" style="max-width:50px;max-height:60px;vertical-align: middle;" 
-							 		onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${ctx}/${current.avatar}';" onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
-							</c:if>
+							<tags:common type="thumb" thumb="${current.avatar}" />
 						</td>
 						<td>${current.name}</td>
 						<td>${UserGroups[current.roleId].name}</td>

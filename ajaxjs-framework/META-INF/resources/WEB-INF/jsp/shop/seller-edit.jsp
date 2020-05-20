@@ -67,7 +67,7 @@
 				<div>
 					<label>
 						<div class="label">商家简介：</div> 
-						<textarea rows="5" cols="80" name="content" class="ajaxjs-input">${info.content}</textarea>
+						<textarea rows="5" cols="80" name="content" class="aj-input">${info.content}</textarea>
 					</label>
 				</div>
 				<div>

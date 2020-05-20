@@ -86,7 +86,7 @@ public class GoodsService extends BaseService<Goods> {
 		return ConfigService.getValueAsInt("data.productCatalog_Id");
 	}
 
-	static Function<String, String> noContent = sql -> sql.replace("*", "id, name, cover, coverPrice");
+	static Function<String, String> noContent = sql -> sql.replace("*", "id, name, cover, coverPrice, stat, titlePrice, createDate, catalogId, brand, sellerId");
 	
 	public PageResult<Goods> findPagedListByCatalogId(int catalogId, int start, int limit, int status, int sellerId) {
 		Function<String, String> sqlHander = CatalogService.setCatalog(catalogId, getDomainCatalogId())

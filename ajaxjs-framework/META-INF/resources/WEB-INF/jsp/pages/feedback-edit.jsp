@@ -45,7 +45,6 @@
 								匿名用户
 							</c:if>
 							<c:if test="${not empty info.userId}">
-								
 								<a href="${ctx}/user/center/info/${info.userId}/">
 									${ empty info.userName ? info.userNickName : info.userName}
 								</a>
@@ -61,14 +60,14 @@
 				<div>
 					<label>
 						<div class="label">留言内容：</div> 
-						<textarea rows="5" cols="80" name="content" class="ajaxjs-input">${info.content}</textarea>
+						<textarea rows="5" cols="80" name="content">${info.content}</textarea>
 					</label>
 				</div>
 				
 				<div>
 					<label>
 						<div class="label">回复内容：</div> 
-						<textarea rows="5" cols="80" name="feedback" class="ajaxjs-input">${info.feedback}</textarea>
+						<textarea rows="5" cols="80" name="feedback">${info.feedback}</textarea>
 					</label>
 				</div>
 		

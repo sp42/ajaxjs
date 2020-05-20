@@ -111,7 +111,7 @@
 				<dt>短信验证码:</dt>
 				<dd>
 					<input type="text" name="randomSmsCode" required placeholder="请输入手机验证码" style="width: 50%;" data-erruileft="200" />
-					<button style="margin: 0;" @click="sendSMScode($event);" :class="(!phoneNumberValid || !isAllowRegister) ?  'ajaxjs-disable' : ''">发送验证码</button>
+					<button style="margin: 0;" @click="sendSMScode($event);" :class="(!phoneNumberValid || !isAllowRegister) ?  'aj-disable' : ''">发送验证码</button>
 					
 					<div class="note">通过验证码识别你的手机，五分钟内有效</div>
 				</dd>

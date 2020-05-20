@@ -70,7 +70,7 @@
 				<div>
 					<label>
 						<div class="label">摘 要：</div> 
-						<textarea rows="10" cols="20" style="width: 90%; height: 30px;" class="ajaxjs-inputField" name="intro">${info.intro}</textarea>
+						<textarea rows="10" cols="20" style="width: 90%; height: 30px;" class="aj-input" name="intro">${info.intro}</textarea>
 					</label>
 				</div>
 		

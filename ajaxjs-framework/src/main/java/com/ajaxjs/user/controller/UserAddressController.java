@@ -53,6 +53,7 @@ public class UserAddressController extends BaseController<UserAddress> {
 	@GET
 	@MvcFilter(filters = { LoginCheck.class })
 	public String createUI(ModelAndView mv) {
+		LOGGER.info("用户会员中心-我的地址");
 		mv.put("isCreate", true);
 		return jsp(jsp + "-info");
 	}

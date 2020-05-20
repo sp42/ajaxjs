@@ -14,6 +14,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.app.CommonConstant;
+import com.ajaxjs.app.catalog.CatalogService;
+import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
@@ -43,11 +45,15 @@ public class GoodsController extends BaseController<Goods> {
 	@GET
 	@Path(LIST)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(CATALOG_ID) int catalogId, @QueryParam(START) int start, @QueryParam(LIMIT) int limit,
-			@QueryParam("sellerId") int sellerId, ModelAndView mv) {
+	public String list(@QueryParam(CATALOG_ID) int catalogId, @QueryParam(START) int start,
+			@QueryParam(LIMIT) int limit, @QueryParam("sellerId") int sellerId, ModelAndView mv) {
 		LOGGER.info("商城-商品-后台列表");
+		
+		prepareData(mv);
+		CatalogService.getCatalogs(service.getDomainCatalogId(), mv, "goodsCatalogs");
 		page(mv, service.findPagedListByCatalogId(catalogId, start, limit, CommonConstant.OFF_LINE, sellerId),
 				CommonConstant.UI_ADMIN);
+		
 		return jsp("shop/goods-admin-list");
 	}
 
@@ -143,7 +149,8 @@ public class GoodsController extends BaseController<Goods> {
 		Map<Long, Seller> map = new HashMap<>();
 		SellerController.SellerService.dao.findList(null).forEach(seller -> map.put(seller.getId(), seller));
 		mv.put("sellers", map);
-		mv.put(domainCatalog_Id, service.getDomainCatalogId());
+		mv.put("PRODUCT_AREA_ID", ConfigService.getValueAsInt("data.productArea_Id"));
+		mv.put(DOMAIN_CATALOG_ID, service.getDomainCatalogId());
 //		
 //		Map<Long, BaseModel> cMap = CatalogServiceImpl.list_bean2map_id_as_key(new CatalogServiceImpl().findAllListByParentId(service.getDomainCatalogId()));
 //		mv.put("goodsCatalogs", cMap);

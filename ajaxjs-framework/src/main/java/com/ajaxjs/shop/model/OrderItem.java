@@ -19,6 +19,11 @@ public class OrderItem extends BaseModel {
 	private Long groupId;
 	
 	/**
+	 * 付款时间
+	 */
+	private java.util.Date payDate;
+	
+	/**
 	 * 设置主订单号 id
 	 * @param orderId  
 	 */
@@ -182,6 +187,14 @@ public class OrderItem extends BaseModel {
 
 	public void setGroupId(Long groupId) {
 		this.groupId = groupId;
+	}
+
+	public java.util.Date getPayDate() {
+		return payDate;
+	}
+
+	public void setPayDate(java.util.Date payDate) {
+		this.payDate = payDate;
 	}
 	
 }

@@ -29,7 +29,7 @@
 						<div class="aj-json-form">
 							<form style="padding:2%;box-sizing: border-box;">
 								当前数据库连接：
-								<select class="ajaxjs-select" style="width: 200px;">
+								<select class="aj-select" style="width: 200px;">
 									<c:foreach items="${list}" var="current">
 										<c:choose>
 											<c:when test="${param.filterValue == current.id}">
@@ -42,7 +42,7 @@
 									</c:foreach>
 								</select>
 								
-								<button class="ajaxjs-btn">保存</button>
+								<button class="aj-btn">保存</button>
 							
 							</form>
 						</div>
@@ -86,7 +86,7 @@
 								<button>
 									<img src="${ctx}/asset/common/icon/save.gif" /> 修改
 								</button>
-								<button class="ajaxjs-btn" onclick="this.up(\'form\').reset();return false;">复 位</button>
+								<button class="aj-btn" onclick="this.up(\'form\').reset();return false;">复 位</button>
 							</section>
 						</div>
 					</form>

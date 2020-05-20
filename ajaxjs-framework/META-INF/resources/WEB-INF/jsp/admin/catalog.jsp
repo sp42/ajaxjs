@@ -20,8 +20,8 @@
 		<form class="createTopNode" action="." method="post">
 			<input type="hidden" name="pid" value="-1" />
 			
-			<label>新增顶级${uiName}：<input type="text" name="name" class="ajaxjs-inputField" required="required" /> </label>
-			<button class="ajaxjs-btn">
+			<label>新增顶级${uiName}：<input type="text" name="name" class="aj-input" required="required" /> </label>
+			<button class="aj-btn">
 				<img src="${commonAssetIcon}/add.gif" /> 新建${uiName}
 			</button>
 		</form>
@@ -30,24 +30,27 @@
 		<select multiple="multiple" style="width: 100%; margin: 2% 0;min-height:430px;"></select>
 		<br />
 		
-		<form style="background-color: #e3e3e3;" class="modifly_Name" action="." method="put">
+		<form class="modifly_Name" action="." method="put">
+			<p>请于上方的分类中点选目标的节点，成为选中的状态后，再进行下面的编辑。</p>
+			<br />
+			<br /> 
 			名称：
-			<input type="text" class="modiflyName ajaxjs-inputField" name="name" required="required" /> 
+			<input type="text" class="modiflyName aj-input" name="name" required="required" /> 
 			<input type="hidden" name="id" /> 
 
-			<button class="ajaxjs-btn">
+			<button class="aj-btn">
 				<img src="${commonAssetIcon}/update.gif" /> 更新名称
 			</button>
-			<button class="ajaxjs-btn" onclick="sendDelete(this);return false;">
+			<button class="aj-btn" onclick="sendDelete(this);return false;">
 				<img src="${commonAssetIcon}/delete.gif" /> 删除${uiName}
 			</button>
 		</form>
 		
 		<form class="createUnderNode" action="." method="post">
 			<span id="addNewText"></span>下添加${uiName}：
-			<input type="text" name="name" class="ajaxjs-inputField" required="required" /> 
+			<input type="text" name="name" class="aj-input" required="required" /> 
 			<input type="hidden" name="pid" />
-			<button class="ajaxjs-btn">
+			<button class="aj-btn">
 				<img src="${commonAssetIcon}/add.gif" /> 新建${uiName}
 			</button>
 		</form>

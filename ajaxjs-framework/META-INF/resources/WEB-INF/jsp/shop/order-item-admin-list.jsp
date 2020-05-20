@@ -19,7 +19,7 @@
 			<!-- 搜索、分类下拉 -->
 			<aj-admin-filter-panel :no-catalog="true">
 				<!-- 选择商家 -->
-				交易状态 <select class="ajaxjs-select" style="width:130px;"
+				交易状态 <select class="aj-select" style="width:130px;"
 				 onchange="location.assign('?filterField=tradeStatus&filterValue=' + this.selectedOptions[0].value);">
 						<option value="null">不指定交易状态</option>
 					<c:foreach items="${TradeStatusDict}" var="item">
@@ -30,7 +30,7 @@
 					</c:foreach>
 				</select>	
 
-				支付状态 <select class="ajaxjs-select" style="width:130px;"
+				支付状态 <select class="aj-select" style="width:130px;"
 				 onchange="location.assign('?filterField=payStatus&filterValue=' + this.selectedOptions[0].value);">
 						<option value="null">不指定支付状态</option>
 					<c:foreach items="${PayStatusDict}" var="item">
@@ -45,7 +45,7 @@
 		%>	
 		<%if(RoleService.check(privilegeTotal, RightConstant.SHOP)){ %>		
 				<!-- 选择商家 -->
-				商家过滤器 <select class="ajaxjs-select" onchange="location.assign('?filterField=i.sellerId&filterValue=' + this.selectedOptions[0].value);">
+				商家过滤器 <select class="aj-select" style="width:100px;" onchange="location.assign('?filterField=i.sellerId&filterValue=' + this.selectedOptions[0].value);">
 						<option value="null">不指定商家</option>
 					<c:foreach items="${sellers}" var="item">
 						<option value="${item.key}" ${(param.filterValue != 'null') && (param.filterField == 'i.sellerId') && (param.filterValue == item.key)  ? 'selected' : ''}>
@@ -128,7 +128,11 @@
 						<td>￥${current.goodsPrice} x ${current.goodsNumber} = ￥${current.goodsPrice * current.goodsNumber}</td>
 						<td class="totalPay"  data-order-id="${current.orderId}">订单金额：￥${current.extractData.orderPrice}<br />实付金额：￥${current.extractData.totalPrice}</td>
 						<td>${empty current.groupId ? '否' : '是' }</td>
-						<td><c:dateFormatter value="${current.createDate}" /></td>
+						<td>
+							<c:dateFormatter value="${current.createDate}" />
+							${empty current.payDate ? '' : '<br />'}
+							<c:dateFormatter value="${current.payDate}" />
+						</td>
 						<td><a href="?filterField=i.sellerId&filterValue=${current.sellerId}">${sellers[current.sellerId].name}</a></td>
 						<td><a href="?filterField=i.buyerId&filterValue=${current.buyerId}">#${current.buyerId}</a></td>
 						<td>

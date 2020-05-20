@@ -140,8 +140,8 @@ function showUpdate(a) {
 
 function showForm(isCreate, id, name, content) {
 	var html = '请输入数据字典 {0} 名称以及简介<br /> <br />\
-		<input type="text" class="ajaxjs-inputField" style="width:100%;" value="{1}" placeholder="请输入名称" /><br /><br />\
-		<textarea placeholder="请输入简介"　class="ajaxjs-inputField" style="width:400px;height:150px;">{2}</textarea>'.replace('{0}', name).replace("{1}", name).replace("{2}", content);
+		<input type="text" class="aj-input" style="width:100%;" value="{1}" placeholder="请输入名称" /><br /><br />\
+		<textarea placeholder="请输入简介" class="aj-input" style="width:400px;height:150px;">{2}</textarea>'.replace('{0}', name).replace("{1}", name).replace("{2}", content);
 	
 	var alertObj = aj.alert.show(html, {
 		showYes : true,

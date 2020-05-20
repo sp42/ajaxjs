@@ -80,7 +80,7 @@
 						</template>
 					</table>
 					<div align="center" v-if="!goodsSelectFormat.length">
-						<button class="ajaxjs-btn" onclick="openGoodsSelect();return false;">
+						<button class="aj-btn" onclick="openGoodsSelect();return false;">
 							<img class="icon" src="${commonAssetIcon}/add.gif" />选择商品
 						</button>
 					</div>

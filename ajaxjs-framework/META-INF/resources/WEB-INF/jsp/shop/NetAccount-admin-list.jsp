@@ -18,7 +18,7 @@
 			
 			<!-- 搜索、分类下拉 -->
 			<aj-admin-filter-panel :no-catalog="true">
-				使用人 <select class="ajaxjs-select" style="width:130px;"
+				使用人 <select class="aj-select" style="width:130px;"
 				 onchange="location.assign('?filterField=whoUse&filterValue=' + this.selectedOptions[0].value);">
 						<option value="null">不指定使用人</option>
 					<c:foreach items="${WhoUses}" var="item">

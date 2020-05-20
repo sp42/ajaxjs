@@ -21,7 +21,6 @@ import com.ajaxjs.shop.payment.wechat.PayConstant;
 import com.ajaxjs.user.controller.BaseUserController;
 import com.ajaxjs.user.model.UserAddress;
 import com.ajaxjs.user.service.UserAddressService;
-import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 
@@ -59,18 +58,8 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 	 * @param orderNo
 	 * @return
 	 */
-	public PageResult<OrderInfo> findPagedList(int start, int limit, int tradeStatus, int payStatus, String orderNo,
-			long userId) {
-		Function<String, String> sqlHander = BaseService::betweenCreateDate;
-
-		if (tradeStatus != 0)
-			sqlHander = sqlHander.andThen(by("tradeStatus", tradeStatus));
-
-		if (payStatus != 0)
-			sqlHander = sqlHander.andThen(by("tradeStatus", payStatus));
-
-		if (!CommonUtil.isEmptyString(orderNo))
-			sqlHander = sqlHander.andThen(by("orderNo", orderNo));
+	public PageResult<OrderInfo> findPagedList(int start, int limit, long userId) {
+		Function<String, String> sqlHander = byAny().andThen(BaseService::betweenCreateDate);
 
 		if (userId != 0)
 			sqlHander = sqlHander.andThen(by("buyerId", userId));
@@ -217,7 +206,7 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 		orderItem.setOrderId(order.getId());
 		orderItem.setBuyerId(userId);
 		orderItemService.create(orderItem);
-		
+
 		order.setOrderItems(new OrderItem[] { orderItem });
 		return order;
 	}

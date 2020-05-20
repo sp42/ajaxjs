@@ -40,7 +40,7 @@ public class AdsController extends BaseController<Ads> {
 		LOGGER.info("广告列表");
 		
 		mv.put("catalogs", CatalogService.list_bean2map_id_as_key(catalogService.findAllListByParentId(service.getDomainCatalogId())));
-		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE, false));
+		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE));
 	}
  
 	@GET
@@ -84,7 +84,7 @@ public class AdsController extends BaseController<Ads> {
 
 	@Override
 	public void prepareData(ModelAndView mv) {
-		mv.put(domainCatalog_Id, service.getDomainCatalogId());
+		mv.put(DOMAIN_CATALOG_ID, service.getDomainCatalogId());
 		super.prepareData(mv);
 	}
 

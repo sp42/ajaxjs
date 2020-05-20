@@ -3,10 +3,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<jsp:include page="/WEB-INF/jsp/head.jsp">
-	<jsp:param name="lessFile" value="/asset/less/admin.less" />
-	<jsp:param name="title" value="${uiName}管理" />
-</jsp:include>
+	<jsp:include page="/WEB-INF/jsp/head.jsp">
+		<jsp:param name="lessFile" value="/asset/less/admin.less" />
+		<jsp:param name="title" value="${uiName}管理" />
+	</jsp:include>
+	<script src="${ajaxjs_ui_output}/lib/China_AREA_full.js"></script>
 </head>
 <body>
 	<div class="vue">
@@ -57,7 +58,13 @@
 					<td>${current.id}</td>
 					<td>${current.name}</td>
 					<td>${current.mobile}<br />${current.phone}</td>
-					<td>${current.province}${current.city}${current.district}</td>
+					<td>
+						<script>
+							document.write(China_AREA[86][${current.locationProvince}]);
+							document.write(China_AREA[${current.locationProvince}][${current.locationCity}]);
+							document.write(China_AREA[${current.locationCity}][${current.locationDistrict}]);
+						</script>
+					</td>
 					<td>${current.address}</td>
 					<td>${current.isDefault ? '是' : '否'}</td>
 					<td>
@@ -66,7 +73,7 @@
 						</a>
 					</td>
 					<td>
-						<a href="${ctx}/user/center/info/${current.userId}/">
+						<a href="${ctx}/user/info/${current.userId}/">
 							<img src="${commonAssetIcon}/user.png" style="width:16px;vertical-align: sub;" />用户详情
 						</a> 
 						<a href="javascript:aj.admin.del('${current.id}', '${current.name}');">

@@ -1,5 +1,6 @@
 <%@page pageEncoding="UTF-8"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
+<%@taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -17,7 +18,8 @@
 			</ajaxjs-admin-header>
 	
 			<!-- 搜索、分类下拉 -->
-			<aj-admin-filter-panel :catalog-id="${domainCatalog_Id}" :selected-catalog-id="${empty param.catalogId ? 'null' : param.catalogId}"></aj-admin-filter-panel>
+			<aj-admin-filter-panel :catalog-id="${domainCatalog_Id}" :selected-catalog-id="${empty param.catalogId ? 'null' : param.catalogId}">
+			</aj-admin-filter-panel>
 		</div>
 		
 		<script>
@@ -64,10 +66,7 @@
 						</td>
 						
 						<td>
-						<c:if test="${not empty current.cover}">
-							<img src="${ctx}/${current.cover}" style="max-width:50px;max-height:60px;vertical-align: middle;" 
-						 		onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${ctx}/${current.cover}';" onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
-						</c:if>
+							<tags:common type="thumb" thumb="${current.cover}" />
 						</td>
 						<td>
 							<c:dateFormatter value="${current.createDate}" />

@@ -1,5 +1,6 @@
 <%@page pageEncoding="UTF-8"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
+<%@taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -74,10 +75,7 @@
 					<tr>
 						<td>${current.id}</td>
 						<td>
-							<c:if test="${not empty current.avatar}">
-								<img src="${current.avatar.startsWith('http') ? current.avatar : aj_allConfig.uploadFile.imgPerfix.concat(current.avatar)}" style="max-width:50px;max-height:60px;vertical-align: middle;" 
-							 		onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${current.avatar.startsWith('http') ? current.avatar : aj_allConfig.uploadFile.imgPerfix.concat(current.avatar)}';" onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
-							</c:if>
+							<tags:common type="thumb" thumb="${current.avatar}" />
 						</td>
 						<td>${current.name}</td>
 						<td>${current.username}</td>

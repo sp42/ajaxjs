@@ -54,11 +54,11 @@
 				</label>
 			</div>
 	
-			<section style="text-align: center;padding:2% 0;">
-				<button class="ajaxjs-btn">
+			<section class="aj-btnsHolder">
+				<button class="aj-btn">
 					<img src="${commonAssetIcon}/save.gif" /> 修改
 				</button>
-				<button class="ajaxjs-btn" onclick="this.up('form').reset();return false;">复 位</button>
+				<button class="aj-btn" onclick="this.up('form').reset();return false;">复 位</button>
 			</section>
 		</form>
 	</div>

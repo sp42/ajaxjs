@@ -26,7 +26,7 @@
 				:selected-catalog-id="${empty param.catalogId ? 'null' : param.catalogId}">
 				
 				<!-- 选择商家 -->
-				商家过滤器：<select class="ajaxjs-select" 
+				商家过滤器：<select class="aj-select" 
 	onchange="this.selectedOptions[0].value == 'null' ? location.assign('?') : location.assign('?sellerId=' + this.selectedOptions[0].value);">
 						<option value="null">不指定商家</option>
 					<c:foreach items="${sellers}" var="item">

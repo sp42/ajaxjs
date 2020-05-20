@@ -124,14 +124,6 @@ public class UserCenterController extends AbstractAccountInfoController {
 		return jsonOk("ok");
 	}
 
-	@GET
-	@Path("address")
-	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	public String address() {
-		LOGGER.info("用户会员中心-我的地址");
-		return user("address");
-	}
-
 //	@GET
 //	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 //	@Path("/home")

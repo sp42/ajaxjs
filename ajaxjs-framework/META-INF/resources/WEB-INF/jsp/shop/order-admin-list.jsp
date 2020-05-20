@@ -18,7 +18,7 @@
 	
 			<!-- 搜索、分类下拉 -->
 			<aj-admin-filter-panel :no-catalog="true">
-				交易状态 <select class="ajaxjs-select" style="width:130px;"
+				交易状态 <select class="aj-select" style="width:130px;"
 				 onchange="location.assign('?filterField=tradeStatus&filterValue=' + this.selectedOptions[0].value);">
 						<option value="null">不指定交易状态</option>
 					<c:foreach items="${TradeStatusDict}" var="item">
@@ -29,7 +29,7 @@
 					</c:foreach>
 				</select>	
 
-				支付状态 <select class="ajaxjs-select" style="width:130px;"
+				支付状态 <select class="aj-select" style="width:130px;"
 				 onchange="location.assign('?filterField=payStatus&filterValue=' + this.selectedOptions[0].value);">
 						<option value="null">不指定支付状态</option>
 					<c:foreach items="${PayStatusDict}" var="item">
@@ -95,7 +95,7 @@
 					<tr>
 						<td>${current.id}</td>
 						<td>${current.orderNo}<br/><span style="color:gray">${current.outerTradeNo}</span></td>
-						<td>${PayTypeDict[current.payType]}${current.payType }</td>
+						<td>${PayTypeDict[current.payType]}</td>
 						<td>￥${current.orderPrice}</td>
 						<td>￥${current.totalPrice}</td>
 						<td>${TradeStatusDict[current.tradeStatus]}</td>

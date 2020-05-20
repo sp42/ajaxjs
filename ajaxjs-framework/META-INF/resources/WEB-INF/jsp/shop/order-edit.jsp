@@ -65,7 +65,7 @@
 				<div>
 					<label>支付类型：${PayTypeDict[info.payType]}</label>
 					<label>交易状态：
-						<select class="ajaxjs-select" name="tradeStatus" style="width:60%;">
+						<select class="aj-select" name="tradeStatus" style="width:60%;">
 							<c:foreach items="${TradeStatusDict}" var="item">
 								<option value="${item.key}" ${item.key == info.tradeStatus ? 'selected' : ''}>${item.value}</option>
 							</c:foreach>
@@ -102,13 +102,13 @@
 						<input placeholder="" size="20" name="shippingCode" value="${info.shippingCode}" type="text" />
 					</label>
 					<label>快递运费：
-						￥<input placeholder="" size="5" name="shippingFee" value="${info.shippingFee}" type="text" />元
+						￥<input placeholder="" size="5" name="shippingFee" value="${info.shippingFee}" type="text" /> 元
 					</label>
 				</div>		
 				
  				<div>
 					<label style="width:60%">备注：
-						<textarea style="vertical-align: top;width:70%" class="ajaxjs-inputField" name="content">${info.content}</textarea>
+						<textarea style="vertical-align: top;width:70%" class="aj-input" name="content">${info.content}</textarea>
 					</label>
 				</div>
 				

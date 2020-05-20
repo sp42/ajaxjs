@@ -30,7 +30,8 @@ public interface ShopConstant {
 
 	public static final int WX_PAY = 1;
 	public static final int ALI_PAY = 2;
-	public static final int OFFLINE_PAY = 3;
+	public static final int OFFLINE_PAY = 4;
+	public static final int POINTS_PAY = 8;
 
 	public static final Map<Integer, String> PAY_TYPE = new HashMap<Integer, String>() {
 		private static final long serialVersionUID = -1L;
@@ -39,6 +40,7 @@ public interface ShopConstant {
 			put(WX_PAY, "微信支付");
 			put(ALI_PAY, "支付宝支付");
 			put(OFFLINE_PAY, "货到付款");
+			put(POINTS_PAY, "积分付款");
 		}
 	};
 

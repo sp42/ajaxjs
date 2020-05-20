@@ -53,7 +53,7 @@
 					<label>
 						<div class="label">品牌：</div>
 						<!-- 选择商家 -->
-						<select class="ajaxjs-select" name="sellerId">
+						<select class="aj-select" name="sellerId">
 							<c:foreach items="${sellers}" var="item">
 								<option value="${item.key}" ${item.key == info.sellerId ? 'selected' : ''}>${item.value.name}</option>
 							</c:foreach>
@@ -96,7 +96,7 @@
 				</ul>
 							</td>
 							<td valign="bottom">
-								<button @click="addGoodsFormatItems($event)" class="ajaxjs-btn">+</button>
+								<button @click="addGoodsFormatItems($event)" class="aj-btn">+</button>
 							
 							</td>
 						</tr>
@@ -181,7 +181,7 @@
 						分类 <input type="text" form="goodsFormat" size="15" name="name"  required="required" placeholder="规格/分类/型号" />\
 						价格 <input type="text" form="goodsFormat" size="10" name="price" required="required" /> 元\
 					    规格详情 <input type="text" form="goodsFormat" size="40" name="content" />\
-					<button form="goodsFormat" class="ajaxjs-btn">保存</button></div>',
+					<button form="goodsFormat" class="aj-btn">保存</button></div>',
 				methods : {
 					onClk : function(e) {
 						var img = e.target;

@@ -1,11 +1,11 @@
-var tree = aj('.tree');
+var tree = aj('.config-site-stru');
 var tpl = aj('.tpl').value;
 var stack = [], indexs = [], ids =[];
 
 function it(json, fn, parentEl) {
 	stack.push(json);
 	var ul = document.createElement('ul');
-	ul.style.paddingLeft = (stack.length * 10) + "px";
+	ul.style.paddingLeft = ((stack.length - 1) * 10) + "px";
 
 	// 折叠
 	if (stack.length != 1) {

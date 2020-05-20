@@ -6,6 +6,7 @@ import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.service.UserService;
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -70,7 +71,7 @@ public abstract class BaseUserController extends BaseController<User> {
 
 		} else if (request.getParameter("userId") != null)
 			return Long.parseLong(request.getParameter("userId"));
-		else if (request.getHeader(USER_ID_HEADER) != null)
+		else if (!CommonUtil.isEmptyString(request.getHeader(USER_ID_HEADER)))
 			return Long.parseLong(request.getHeader(USER_ID_HEADER));
 		else
 			return 0L;

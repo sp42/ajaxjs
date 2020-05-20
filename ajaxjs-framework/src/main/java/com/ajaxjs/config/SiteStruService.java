@@ -48,7 +48,7 @@ public class SiteStruService implements ServletContextListener {
 	/**
 	 * 保存网站结构的 Map
 	 */
-	public static SiteStru stru;
+	public static SiteStru STRU;
 
 	/**
 	 * 数据库的数据转换为菜单显示。需要 Servlet 启动时从数据库拉取数据并静态保存
@@ -105,7 +105,7 @@ public class SiteStruService implements ServletContextListener {
 
 		// 加载网站结构
 		loadSiteStru(ctx);
-		if (stru.isLoaded())
+		if (STRU.isLoaded())
 			ctx.setAttribute("SITE_STRU", this); // 所有网站结构保存在这里
 
 		// 设置全局环境变量
@@ -155,15 +155,10 @@ public class SiteStruService implements ServletContextListener {
 	 */
 	public static void loadSiteStru(ServletContext cxt) {
 		load(cxt);
-		ListMap.buildPath(stru, true);
+		ListMap.buildPath(STRU, true);
 //		t.travelList(stru);
 		LOGGER.infoGreen("加载网站的结构文件成功 Site Structure Config Loaded.");
 	}
-
-	/**
-	 * 配置 json 文件的路径
-	 */
-	public static String JSON_PATH = Version.srcFolder + File.separator + "site_stru.json";
 
 	/**
 	 * 加载网站结构的配置
@@ -171,20 +166,15 @@ public class SiteStruService implements ServletContextListener {
 	 * @param ctx Servlet 上下文
 	 */
 	public static void load(ServletContext ctx) {
-		String json = JSON_PATH;
-
-		if (new File(JSON_PATH).exists())
-			json = JSON_PATH;
-		else
-			json = ctx.getRealPath("/META-INF/site_stru.json");
+		String json = ctx.getRealPath("/META-INF/site_stru.json");
 
 		if (new File(json).exists()) {
-			stru = new SiteStru();
-			stru.setJsonPath(json);
-			stru.setJsonStr(FileHelper.openAsText(json));
-			stru.clear();
-			stru.addAll(db2menu(JsonHelper.parseList(stru.getJsonStr()), ctx));
-			stru.setLoaded(true);
+			STRU = new SiteStru();
+			STRU.setJsonPath(json);
+			STRU.setJsonStr(FileHelper.openAsText(json));
+			STRU.clear();
+			STRU.addAll(db2menu(JsonHelper.parseList(STRU.getJsonStr()), ctx));
+			STRU.setLoaded(true);
 		} else
 			LOGGER.info("没有网站的结构文件");
 	}
@@ -195,7 +185,7 @@ public class SiteStruService implements ServletContextListener {
 	 * @return 导航数据
 	 */
 	public List<Map<String, Object>> getNavBar() {
-		return stru;
+		return STRU;
 	}
 
 	/**
@@ -209,8 +199,8 @@ public class SiteStruService implements ServletContextListener {
 		// 获取资源 URI，忽略项目前缀和最后的文件名（如 index.jsp） 分析 URL 目标资源
 		String path = uri.replace(contextPath, "").replaceAll("/\\d+", "").replaceFirst("/\\w+\\.\\w+$", "");
 
-		if (stru != null && stru.isLoaded()) {
-			Map<String, Object> map = ListMap.findByPath(path, stru);
+		if (STRU != null && STRU.isLoaded()) {
+			Map<String, Object> map = ListMap.findByPath(path, STRU);
 			return map;
 		} else
 			return null;
@@ -259,7 +249,7 @@ public class SiteStruService implements ServletContextListener {
 
 			path = path.substring(1, path.length());
 			String second = path.split("/")[0];
-			Map<String, Object> map = ListMap.findByPath(second, stru);
+			Map<String, Object> map = ListMap.findByPath(second, STRU);
 			request.setAttribute("secondLevel_Node", map); // 保存二级栏目节点之数据
 
 			return map;
@@ -304,7 +294,7 @@ public class SiteStruService implements ServletContextListener {
 	 */
 	public String getSiteMap(HttpServletRequest request) {
 		if (siteMapCache == null)
-			siteMapCache = getSiteMap(stru, request.getContextPath());
+			siteMapCache = getSiteMap(STRU, request.getContextPath());
 
 		return siteMapCache;
 	}

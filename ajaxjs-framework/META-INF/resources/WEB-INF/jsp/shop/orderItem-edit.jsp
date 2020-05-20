@@ -68,7 +68,7 @@
 				<div>
 					<label>支付类型：${PayTypeDict[info.extractData.payType]}</label>
 					<label>交易状态：
-						<select class="ajaxjs-select" name="tradeStatus" style="width:60%;">
+						<select class="aj-select" name="tradeStatus" style="width:60%;">
 							<c:foreach items="${TradeStatusDict}" var="item">
 								<option value="${item.key}" ${item.key == info.extractData.tradeStatus ? 'selected' : ''}>${item.value}</option>
 							</c:foreach>
@@ -108,7 +108,7 @@
 				</div>		
  				<div>
 					<label style="width:60%">备注：
-						<textarea style="vertical-align: top;width:70%" class="ajaxjs-inputField" name="content">${info.content}</textarea>
+						<textarea style="vertical-align: top;width:70%" class="aj-input" name="content">${info.content}</textarea>
 					</label>
 				</div>
 				

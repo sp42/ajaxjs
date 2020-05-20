@@ -140,7 +140,7 @@ Vue.component("aj-json-form", {
 				<button>\
 					<img :src="ajResources.commonAsset + \'/icon/save.gif\'" /> 修改\
 				</button>\
-				<button class="ajaxjs-btn" onclick="this.up(\'form\').reset();return false;">复 位</button>\
+				<button onclick="this.up(\'form\').reset();return false;">复 位</button>\
 			</section>\
 		</form>',
 	props: {

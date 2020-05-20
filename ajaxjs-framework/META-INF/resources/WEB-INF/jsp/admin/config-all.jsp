@@ -6,29 +6,34 @@
 			<jsp:param name="lessFile" value="/asset/less/admin.less" />
 			<jsp:param name="title" value="全局配置" />
 		</jsp:include>
+		<style>
+			form.aj-form{
+			
+			}
+		</style>
 	</head>
-<body class="admin-entry-form">
+<body>
 	<div>	
 		<ajaxjs-admin-header>
 			<template slot="title">全局配置：<span>请点击有+号菜单项以展开下一级的内容</span></template>
 		</ajaxjs-admin-header>
 	</div>
 	
+	<p class="aj-note">不推荐在该界面中修改配置。小白用户请谨慎修改配置参数！</p>
 	<form>
-		<button onclick="save();return false;" class="ajaxjs-btn" style="margin-left: 30px;">保存</button>
-		<div class="tree">
+		<button onclick="save();return false;" class="aj-btn" style="margin-left: 30px;">保存</button>
+		
+		<div class="all-config-classic">
 			<div class="tipsNote hide">
 				<div class="aj-arrow toLeft"></div>
 				<span></span>
 			</div>
 		</div>
-		<br />
-		<br />
-		<p>小白用户请谨慎修改配置参数！</p>
+	
 	</form>
 	
 	<script>
-		new Vue({el : 'body>div'});
+		new Vue({el: 'body>div'});
 		var configJson = ${configJson};
 		var jsonScheme = ${jsonSchemePath};
 	</script>
@@ -64,7 +69,7 @@ tppl = function(tpl, data) {
 }
 
 
-var tree = aj('.tree');
+var tree = aj('.all-config-classic');
 
 function isMap(v) {
 	return typeof v == 'object' && v != null;
@@ -74,9 +79,9 @@ var stack = [];
 function it(json, fn, parentEl) {
 	stack.push(json);
 	var ul = document.createElement('ul');
-	ul.style.paddingLeft = (stack.length * 10) + "px";
+	ul.style.paddingLeft = ((stack.length - 1) * 10) + "px";
 
-	// 折叠
+	// 折叠 
 	if (stack.length != 1) {
 		ul.className = 'subTree';
 		ul.style.height = '0';

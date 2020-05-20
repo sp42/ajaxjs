@@ -85,7 +85,7 @@ public class Attachment_pictureService extends BaseService<Attachment_picture> {
 
 	@Override
 	public boolean delete(Attachment_picture bean) {
-		FileHelper.delete(bean.getPath()); // 删除文件
+//		FileHelper.delete(bean.getPath()); // 删除文件
 		return dao.delete(bean);
 	}
 
