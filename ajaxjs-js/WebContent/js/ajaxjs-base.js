@@ -610,7 +610,7 @@ aj.tabable = {
 			this.selected = index;
 		};
 		
-		this.$options.watch.selected.call(this, 1);
+		this.$options.watch.selected.call(this, 0);
 	},
 	watch: {
 		selected(v) {

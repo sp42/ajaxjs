@@ -91,7 +91,7 @@ aj.admin = {
 		if (confirm('请确定删除记录：\n' + title + ' ？')) {
 			ajaxjs.xhr.dele('../' + id + '/', json=> {
 				if (json.isOk) {
-					alert('删除成功！');
+					aj.alert('删除成功！');
 					location.reload();
 				}
 			});
