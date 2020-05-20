@@ -22,7 +22,7 @@ aj.alert.close();                        // 关闭</pre>
 
 
 <p>演示：</p>
-<button class="ajaxjs-btn" onclick="aj.alert.show(aj('#alert').innerHTML);">Modal 对话框</button>
+<button class="aj-btn" onclick="aj.alert.show(aj('#alert').innerHTML);">Modal 对话框</button>
 
 <p>例子：</p>
 <pre class="prettyprint">aj.alert.show('Hello World!');
@@ -32,8 +32,8 @@ aj.showConfirm("Hello World!", () => {alert('点击了 yes 按钮')}); // 显示
 <p>所有回调函数执行之后都会关闭弹出的窗体。</p>
 
 <p>演示：</p>
-<button class="ajaxjs-btn" onclick="aj.showOk('Hello World!', () => { alert('点击了确定按钮');});">回调测试</button>
-<button class="ajaxjs-btn" onclick="aj.showConfirm('Hello World!', (v) => {alert('点击了 yes 按钮' + v)});">选择按钮</button>
+<button class="aj-btn" onclick="aj.showOk('Hello World!', () => { alert('点击了确定按钮');});">回调测试</button>
+<button class="aj-btn" onclick="aj.showConfirm('Hello World!', (v) => {alert('点击了 yes 按钮' + v)});">选择按钮</button>
 
 
 
@@ -45,7 +45,7 @@ aj.showConfirm("Hello World!", () => {alert('点击了 yes 按钮')}); // 显示
 <p>该方法无须使用标签，而是 JS 方法调用。</p>
 
 <p>演示：</p>
-<button class="ajaxjs-btn" onclick="aj.msg.show('暮從碧山下，山月随人歸。<br>卻顧所來徑，蒼蒼橫翠微。');">顶部消息提示框 </button>
+<button class="aj-btn" onclick="aj.msg.show('暮從碧山下，山月随人歸。<br>卻顧所來徑，蒼蒼橫翠微。');">顶部消息提示框 </button>
 
 <p>例子：</p>
 <pre class="prettyprint">aj.msg.show('暮從碧山下，山月随人歸。&lt;br /&gt; 卻顧所來徑，蒼蒼橫翠微。');// 定时器隐藏，无须手动 close</pre>

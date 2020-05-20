@@ -1,22 +1,12 @@
 @import 'form/html-editor.less';
 @import 'form/calendar.less';
 
-// 禁止控件
-.ajaxjs-disable {
-	cursor: not-allowed;
-	opacity: .35;
-	box-shadow: none;
-	background-image: none;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	user-select: none;
-}
-
 // -webkit-text-stroke: 1px rgba(255,255,255,0.5);
-.aj-btn, .ajaxjs-btn, .ajaxjs-btn-1 {
+
+.aj-btn {
 	min-height: 30px;
 	font-size: .8rem;
-	line-height: 100%;
+	//line-height: 100%;
 	padding: .4em 2.3em;
 	margin: 10px auto;
 	color: #333;
@@ -55,15 +45,7 @@
 	}
 }
 
-.ajaxjs-btn-1 {
-	background-position: 0px -15px;
-	transition: all 200ms linear 300ms;
-	&:hover {
-		background-position: 0px -12px;
-	}
-}
-
-.aj-input, .ajaxjs-input, .ajaxjs-inputField, .aj-select, .ajaxjs-select {
+.aj-input, .aj-select {
 	min-height: 29px;
 	font-size: .9rem;
 	border: 1px solid #abadb3;
@@ -78,14 +60,25 @@
 	}
 }
 
-.aj-input, .ajaxjs-input, .ajaxjs-inputField {
+.aj-input {
 	padding: 4px;
 	vertical-align: middle;
 	color: #333;
 	letter-spacing: 1px;
 }
 
-.aj-select, .ajaxjs-select {
+// 禁止控件
+.aj-disable {
+	cursor: not-allowed;
+	opacity: .35;
+	box-shadow: none;
+	background-image: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+}
+
+.aj-select {
 	padding: 1px 4px;
 	-moz-appearance: none;
 	-webkit-appearance: none;
@@ -93,22 +86,12 @@
 }
 
 // 多选列表框的边框
-.ajaxjs-select[multiple] {
+.aj-select[multiple] {
 	border: 1px solid #abadb3;
 	padding: 2px;
+	
 	&:hover , &:focus {
 		border-color: lighten(black, 45);
-	}
-}
-
-
-.form-1 {
-	input[type=text] , input[type=password] , textarea {
-		.ajaxjs-inputField;
-	}
-
-	input[type=submit] , button {
-		.ajaxjs-btn;
 	}
 }
 
@@ -126,11 +109,9 @@
 	}
 }
 
-
-
-.aj-form, .ajaxjs-form {
-	margin: 5% auto;
-	max-width: 82%;
+.aj-form {
+	// margin: 5% auto;
+	// max-width: 82%;
 	min-width: 400px;
 	overflow: hidden;
 	
@@ -140,9 +121,11 @@
 			float: initial ! important;
 		}
 	}
+	
 	&.fixed-width {
 		width:460px;
 	}
+	
 	dl {
 		float: left;
 		overflow: hidden;
@@ -169,34 +152,33 @@
 		}
 	}
 
-	input[type=text] , input[type=password] , textarea,input[type=time],input[type=url],input[type=week],
-	input[type=date],input[type=datetime-local],input[type=datetime],input[type=email],input[type=month],input[type=number],
-	input[type=range],input[type=search],input[type=tel],  {
-		font-size: .9rem;
-		box-sizing: border-box;
-	    padding: 8px 12px;
-	    border: 1px solid lightgray;
-	    background-color: #fff;
-	    border-radius: 4px;
+	input[type=text], input[type=password], textarea,input[type=time], input[type=url], 
+	input[type=date], input[type=datetime], input[type=email], input[type=number],
+	input[type=range], input[type=search] {
+		.aj-input;
 	    
 		&:focus {
 			border-color: gray;
 			//background-color: #e9e9e9;
 			outline:0;
-			box-shadow:0 5px 32px rgba(103,122,141,.17)
+			box-shadow:0 5px 16px rgba(103, 122, 141, .2)
 		}
 	}
-
-	input[type=submit] , input[type=file] {
+	
+	input[type=submit] , button {
+		.aj-btn;
+	}
+    
+	input[type=submit], input[type=file] {
 		cursor: pointer;
 	}
 
-	input[type="checkbox"] , input[type="radio"], label {
+	input[type="checkbox"], input[type="radio"], label {
 		vertical-align: middle;
 	}
 	
 	select {
-		.ajaxjs-select;
+		.aj-select;
 	}
 	
 	.aj-china-area select {
@@ -208,7 +190,7 @@
 		width:100%;
 	}
 	
-	.tips , .state {
+	.tips, .state {
 		display: none;
 		margin-left: 10px;
 		border: 1px solid gray;
@@ -246,16 +228,21 @@
 		color: red;
 	}
 	
-	input[type=submit] , button {
-		.aj-btn;
-	}
-    
 	.error {
     	border-color: red!important;
 	}
 	
 	.error-message {
 	    color: red;
+	}
+}
+
+.aj-btnsHolder{
+	text-align: center;
+	padding: 2% 0;
+	button {
+		.aj-btn;
+		margin-right: 3%;
 	}
 }
 
@@ -292,7 +279,7 @@
 		}
 
 		input[type=text], input[type=email], input[type=number], textarea {
-			.ajaxjs-inputField;
+			.aj-input;
 		}
 
 		textarea {
@@ -386,7 +373,7 @@
 
 
 		input[type=text], input[type=email], input[type=number], textarea {
-			.ajaxjs-inputField;
+			.aj-input;
 		}
 		
 		select{
@@ -427,15 +414,5 @@
 		&>div{
 			padding:2% 0!important;
 		}
-		
-	}
-}
-
-.aj-btnsHolder{
-	text-align: center;
-	padding:2% 0;
-	button{
-		.ajaxjs-btn;
-		margin-right:3%;
 	}
 }

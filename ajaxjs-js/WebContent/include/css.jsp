@@ -81,7 +81,7 @@
 	
 	<p>一般该 div 放在 document.body下一层，且 body 有高度 100%。</p>
 	<p>
-		<button class="ajaxjs-btn"
+		<button class="aj-btn"
 			onclick="document.querySelector('.fullScreenMask').classList.toggle('hide');">点击演示</button>
 	</p>
 	<div class="fullScreenMask hide"

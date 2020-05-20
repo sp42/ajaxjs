@@ -1,53 +1,53 @@
 <%@page pageEncoding="UTF-8"%>
 <h4>按钮 Button</h4>
-	<pre class="prettyprint"><xmp><button class="ajaxjs-btn">按钮</button>
-<button class="ajaxjs-btn-1">按钮</button>
-<button class="ajaxjs-btn-1 ajaxjs-disable">按钮（禁止状态）</button></xmp></pre>
+	<pre class="prettyprint"><xmp><button class="aj-btn">按钮</button>
+<button class="aj-btn">按钮</button>
+<button class="aj-btn aj-disable">按钮（禁止状态）</button></xmp></pre>
 
 <p>演示：</p>
 	<div class="center">
-		<button class="ajaxjs-btn">按钮</button>
-		<button class="ajaxjs-btn-1">按钮</button>
+		<button class="aj-btn">按钮</button>
+		<button class="aj-btn">按钮</button>
 		<br />
-		<button class="ajaxjs-btn-1 ajaxjs-disable">按钮（禁止状态）</button>
+		<button class="aj-btn aj-disable">按钮（禁止状态）</button>
 	</div>
 
 	<h4>输入框 Input Field</h4>
-	<pre class="prettyprint"><xmp><input class="ajaxjs-inputField" type="text" value="文本输入框" /> 
-<input class="ajaxjs-inputField ajaxjs-disable" type="text" value="文本输入框（禁止状态）" /></xmp></pre>
+	<pre class="prettyprint"><xmp><input class="aj-input" type="text" value="文本输入框" /> 
+<input class="aj-input aj-disable" type="text" value="文本输入框（禁止状态）" /></xmp></pre>
 
 	
 	<p>演示：</p>
 	<div class="center">
-		<input class="ajaxjs-inputField" type="text" value="文本输入框" /> 
+		<input class="aj-input" type="text" value="文本输入框" /> 
 		<br />
 		<br /> 
-		<input class="ajaxjs-inputField ajaxjs-disable" type="text" value="文本输入框（禁止状态）" />
+		<input class="aj-input aj-disable" type="text" value="文本输入框（禁止状态）" />
 	</div>
 
 	<h4>文本框 Textarea</h4>
-	<pre class="prettyprint"><xmp><textarea class="ajaxjs-inputField" rows="15" cols="20">……</textarea></xmp></pre>
+	<pre class="prettyprint"><xmp><textarea class="aj-input" rows="15" cols="20">……</textarea></xmp></pre>
 
 	<p>演示：</p>
 	<div class="center">
-		<textarea class="ajaxjs-inputField" rows="15" cols="20"
+		<textarea class="aj-input" rows="15" cols="20"
 			style="resize: none; padding-top: 5px; height: 100px; width: 400px;-webkit-overflow-scrolling : touch"
 			name="intro">“北上广深同比涨幅高达20%，26个主要城市涨幅超10%，69个城市房价上涨……”2013年全国房价涨声一片，这与年初各地制定的房价控制目标相差甚远。 经济学者马光远[微博]表示，房价调控目标是政府对于百姓的“承诺”，没有完成目标而“爽约”，蒙混过关只会丧失公信力。这与年初各地制定的房价控制目标相差甚远。 经济学者马光远[微博]表示，房价调控目标是政府对于百姓的“承诺”，没有完成目标而“爽约”，蒙混过关只会丧失公信力。</textarea>
 	</div>
 
 	<h4>下拉列表 DropdownList</h4>
-	<pre class="prettyprint"><xmp><select name="catalog" class="ajaxjs-select" style="width:250px;">……</select></xmp></pre>
+	<pre class="prettyprint"><xmp><select name="catalog" class="aj-select" style="width:250px;">……</select></xmp></pre>
 	
 	<p>演示：</p>
 	<div class="center">
-		<select name="catalog" class="ajaxjs-select" style="width:250px;">
+		<select name="catalog" class="aj-select" style="width:250px;">
 			<option value="1">公司新闻</option>
 			<option value="2" selected="selected">行业动态</option>
 			<option value="3">媒体报道</option>
 		</select>
 		<br/>
 		<br/>
-		<select class="ajaxjs-select center" multiple style="width:250px;height:100px;">
+		<select class="aj-select center" multiple style="width:250px;height:100px;">
 			<option>多项选择</option>
 			<option>1</option>
 			<option>2</option>
@@ -71,7 +71,7 @@
 	
 <h4>Form Validator</h4>
 
-<form action="?" method="POST" class="form-1 center">
+<form action="?" method="POST" class="center">
 	<dl>
 		<label>
 			<dt>

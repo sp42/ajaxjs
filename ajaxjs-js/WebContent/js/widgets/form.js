@@ -72,8 +72,8 @@ Vue.component('aj-form-calendar', {
 				<tbody @click="pickDay($event);"></tbody>\
 			</table>\
 			<div v-if="showTime">\
-				时 <select class="hour ajaxjs-select"><option v-for="n in 24">{{n}}</option></select> \
-				分 <select class="minute ajaxjs-select"><option v-for="n in 61">{{n - 1}}</option></select>\
+				时 <select class="hour aj-select"><option v-for="n in 24">{{n}}</option></select> \
+				分 <select class="minute aj-select"><option v-for="n in 61">{{n - 1}}</option></select>\
 				<a href="#" @click="pickupTime($event)">选择时间</a>\
 			</div>\
 		</div>',

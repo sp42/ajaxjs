@@ -80,7 +80,7 @@
 	    				<td>键/索引</td><td><input type="text" v-model="key" class="aj-input" /></td>
 	    			</tr>
 	    			<tr>
-	    				<td>值</td><td><input type="text" v-model="value" class="aj-input" v-bind:class="{'ajaxjs-disable': !canEditValue}" /></td>
+	    				<td>值</td><td><input type="text" v-model="value" class="aj-input" v-bind:class="{'aj-disable': !canEditValue}" /></td>
 	    			</tr>
 	    			<tr>
 	    				<td>值类型</td><td>{{valueTypeText}}</td>

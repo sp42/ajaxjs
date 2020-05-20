@@ -78,8 +78,8 @@ Vue.component('aj-admin-filter-panel', {
 		'<div class="aj-admin-filter-panel">\
 			<form action="?" method="GET">\
 				<input type="hidden" name="searchField" :value="searchFieldValue" />\
-				<input type="text" name="keyword" placeholder="请输入搜索之关键字" style="float: inherit;" class="ajaxjs-inputField" />\
-				<button style="margin-top: 0;" class="ajaxjs-btn">搜索</button> &nbsp;\
+				<input type="text" name="keyword" placeholder="请输入搜索之关键字" style="float: inherit;" class="aj-input" />\
+				<button style="margin-top: 0;" class="aj-btn">搜索</button> &nbsp;\
 			</form><slot></slot>\
 			<span v-if="!noCatalog">{{label||\'分类\'}}：\
 				<aj-tree-catelog-select :is-auto-jump="true" :catalog-id="catalogId" :selected-catalog-id="selectedCatalogId"></aj-tree-catelog-select></span>\
@@ -88,17 +88,19 @@ Vue.component('aj-admin-filter-panel', {
 
 aj.admin = {
 	del(id, title) {
-		if (confirm('请确定删除记录：\n' + title + ' ？')) {
-			ajaxjs.xhr.dele('../' + id + '/', json=> {
+		aj.showConfirm('请确定删除记录：\n' + title + ' ？', () => {
+			aj.xhr.dele('../' + id + '/', json => {
 				if (json.isOk) {
-					aj.alert('删除成功！');
-					location.reload();
+					aj.msg.show('删除成功！');
+					setTimeout(() => location.reload(), 1500);
+				} else {
+					aj.alert('删除失败！');
 				}
 			});
-		}
+		});
 	},
 	setStatus(id, status) {
-		ajaxjs.xhr.post('../setStatus/' + id + '/', json => {
+		aj.xhr.post('../setStatus/' + id + '/', json => {
 			if (json.isOk) {
 
 			}

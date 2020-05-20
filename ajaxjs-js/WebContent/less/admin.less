@@ -80,14 +80,17 @@ body.admin-shell {
 	.user i::before {
 		content: "\f2c0";
 	}
+	.content i::before {
+		content: "\f1c0";
+	}
 	.site i::before {
 		content: "\f26b";
 	}
 	.config i::before {
-		content: "\f013";
+		content: "\f108";
 	}
 	.system i::before {
-		content: "\f108";
+		content: "\f013";
 	}
 	.tools i::before {
 		content: "\f233";
@@ -214,11 +217,21 @@ header.ajaxjs-admin-header {
 	
 }
 
+.all-config-classic {
+	ul{
+	    box-sizing: border-box;
+	}
+}
 
-.tree {
-	width: 1200px;
+.config-site-stru, .all-config-classic {
+	.aj-form;
+	border: 1px solid lightgray;
+	min-width: 1200px;
+	width: 96%;
 	position: relative;
-	.form-1;
+	margin: 0 auto;
+	
+
 	li {
 		overflow: hidden;
 		background-color: #f3f3f3;
@@ -246,6 +259,7 @@ header.ajaxjs-admin-header {
 		button {
 			width: 100px;
 			padding: .4em .5em;
+			margin-right: 2%;
 		}
 	}
 
@@ -261,7 +275,7 @@ header.ajaxjs-admin-header {
 	}
 
 	.valueHolder {
-		width: 800px;
+		width: 900px;
 		float: right;
 	}
 
@@ -277,7 +291,7 @@ header.ajaxjs-admin-header {
 
 	span.name {
 		display: inline-block;
-		width: 100px;
+		width: 200px;
 	}
 
 	select {
@@ -331,6 +345,7 @@ header.ajaxjs-admin-header {
 
 	.panel {
 		width: 90%;
+		max-width: 1000px;
 		margin: 0 auto;
 	}
 
