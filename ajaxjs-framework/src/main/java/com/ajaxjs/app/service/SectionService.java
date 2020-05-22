@@ -1,6 +1,7 @@
 package com.ajaxjs.app.service;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.ajaxjs.app.DataDictController;
 import com.ajaxjs.app.catalog.Catalog;
@@ -78,10 +79,12 @@ public class SectionService extends SectionListService {
 	 * @return
 	 */
 	public List<Catalog> findSectionCatalog() {
-		List<Catalog> c = catalogService
-				.findAllListByParentId(ConfigService.getValueAsInt("data.section.masterCatalogId"), false);
+		int sectionCatalog_Id = ConfigService.getValueAsInt("data.sectionCatalog_Id");
+		Objects.requireNonNull(sectionCatalog_Id, "配置中没有 sectionCatalog_Id 参数");
+
+		List<Catalog> c = catalogService.findAllListByParentId(sectionCatalog_Id, false);
 		Catalog parent = new Catalog();
-		parent.setId(Long.parseLong(ConfigService.getValueAsInt("data.section.masterCatalogId") + ""));
+		parent.setId(Long.parseLong(sectionCatalog_Id + ""));
 		parent.setName("栏目");
 		parent.setPid(-1);
 		c.add(parent);

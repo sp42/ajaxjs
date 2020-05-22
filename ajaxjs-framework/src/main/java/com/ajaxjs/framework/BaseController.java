@@ -174,13 +174,14 @@ public abstract class BaseController<T> implements IController, Constant {
 	 * @param isAdmin    是否后台列表
 	 * @return
 	 */
+	@Deprecated
 	public String autoOutput(ModelAndView mv, PageResult<T> pageResult, boolean isAdmin) {
 		if (isJson()) {
 			return toJson(pageResult);
 		} else
 			return page(mv, pageResult, isAdmin);
 	}
-
+	@Deprecated
 	public String autoOutput(ModelAndView mv, PageResult<T> pageResult, String jspPath) {
 		if (isJson()) {
 			return toJson(pageResult);
@@ -192,6 +193,7 @@ public abstract class BaseController<T> implements IController, Constant {
 		}
 	}
 
+	@Deprecated
 	public String autoOutput(ModelAndView mv, BaseModel bean, String jspPath) {
 		if (isJson()) {
 			return toJson(bean);

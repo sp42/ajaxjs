@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import com.ajaxjs.app.ArticleService;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
@@ -13,6 +14,7 @@ import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
+import com.ajaxjs.shop.service.GoodsService;
 import com.ajaxjs.util.CommonUtil;
 
 /**
@@ -174,4 +176,22 @@ public abstract class SectionListService extends BaseService<SectionList> {
 	public PageResult<SectionList> findListBySectionId(int start, int limit, int sectionId, ScanTable fn) {
 		return (PageResult<SectionList>) union(getListByCatalogId(start, limit, sectionId), fn);
 	}
+
+	/**
+	 * 实体在系统中的类型
+	 */
+	public static final int TYPE_ARTICLE = 52;
+	public static final int TYPE_GOODS = 53;
+	public static final int TYPE_TOPIC = 54;
+	public static final int TYPE_ADS = 55;
+
+	public static final Map<Integer, String> TYPE_NAME = new HashMap<Integer, String>() {
+		private static final long serialVersionUID = -1L;
+
+		{
+			put(TYPE_ARTICLE, new ArticleService().getUiName());
+			put(TYPE_GOODS, new GoodsService().getUiName());
+			put(TYPE_ADS, new AdsService().getUiName());
+		}
+	};
 }

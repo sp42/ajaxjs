@@ -48,13 +48,12 @@ public class GoodsController extends BaseController<Goods> {
 	public String list(@QueryParam(CATALOG_ID) int catalogId, @QueryParam(START) int start,
 			@QueryParam(LIMIT) int limit, @QueryParam("sellerId") int sellerId, ModelAndView mv) {
 		LOGGER.info("商城-商品-后台列表");
-		
+
 		prepareData(mv);
 		CatalogService.getCatalogs(service.getDomainCatalogId(), mv, "goodsCatalogs");
-		page(mv, service.findPagedListByCatalogId(catalogId, start, limit, CommonConstant.OFF_LINE, sellerId),
-				CommonConstant.UI_ADMIN);
-		
-		return jsp("shop/goods-admin-list");
+
+		return autoOutput(service.findPagedListByCatalogId(catalogId, start, limit, CommonConstant.OFF_LINE, sellerId),
+				mv, jsp("shop/goods-admin-list"));
 	}
 
 	@GET
