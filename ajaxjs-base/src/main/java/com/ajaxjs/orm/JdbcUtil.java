@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -42,6 +43,9 @@ public class JdbcUtil {
 	 * @return 实际 sql 语句
 	 */
 	public static String printRealSql(String sql, Object[] params) {
+		if (CommonUtil.isEmptyString(sql))
+			throw new IllegalArgumentException("SQL 语句不能为空！");
+
 		if (isClosePrintRealSql)
 			return null;
 

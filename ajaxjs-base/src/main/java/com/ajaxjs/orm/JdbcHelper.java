@@ -61,7 +61,7 @@ public class JdbcHelper extends JdbcReader {
 	static <T> T initAndExe(BiFunction<Connection, String, PreparedStatement> initPs,
 			Function<PreparedStatement, T> exe, Connection conn, String sql, Object... params) {
 		String _sql = JdbcUtil.printRealSql(sql, params);
-		LOGGER.infoYellow("The SQL is---->" + _sql);
+		LOGGER.infoYellow("SQL-->" + _sql);
 		JdbcConnection.addSql(_sql); // 用来保存日志
 
 		try (PreparedStatement ps = initPs.apply(conn, sql);) {
@@ -151,7 +151,7 @@ public class JdbcHelper extends JdbcReader {
 	private static StringBuilder initSB(String tableName, boolean isInsert) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(isInsert ? "INSERT INTO " : "UPDATE ");
-		sb.append(tableName + " ");
+		sb.append("`" + tableName + "`" + " ");
 
 		if (!isInsert)
 			sb.append("SET");
