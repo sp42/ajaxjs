@@ -24,7 +24,7 @@ import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.model.OrderItem;
 import com.ajaxjs.shop.payment.Pay;
-import com.ajaxjs.shop.payment.wechat.WxPay;
+import com.ajaxjs.shop.payment.WxPay;
 import com.ajaxjs.shop.service.OrderService;
 import com.ajaxjs.user.controller.BaseUserController;
 import com.ajaxjs.user.filter.LoginCheck;

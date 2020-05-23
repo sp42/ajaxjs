@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.shop.model.OrderInfo;
-import com.ajaxjs.shop.payment.wechat.WxPay;
+import com.ajaxjs.shop.payment.WxPay;
 
 public class TestPayment {
 	@BeforeClass

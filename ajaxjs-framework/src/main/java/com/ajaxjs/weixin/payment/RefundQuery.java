@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.shop.payment.wechat.model.BaseResponse;
+import com.ajaxjs.payment.wxpay.BaseResponse;
 
 /**
  * @borball on 5/17/2016.

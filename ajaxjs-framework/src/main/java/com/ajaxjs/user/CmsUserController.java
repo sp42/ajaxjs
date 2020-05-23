@@ -7,11 +7,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.app.utils.SmsMessage;
 import com.ajaxjs.framework.Services;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.SimpleSMSFilter;
+import com.ajaxjs.sms.SmsMessage;
 import com.ajaxjs.user.controller.BaseUserController;
 import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.logger.LogHelper;
