@@ -8,7 +8,7 @@
  * KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package com.ajaxjs.object_storage.qiu_niu_yun;
+package com.ajaxjs.object_storage;
 
 import java.util.Map;
 
