@@ -11,7 +11,7 @@
 	<fieldset>
 		<legend>图片验证码演示 </legend>
 		<form action="../CheckCaptcha-MVC" method="POST">
-			名  &nbsp;&nbsp;  称：<input type="text" name="username" size="20" class="ajaxjs-input" placeholder="请输入名称" required="required" />
+			名  &nbsp;&nbsp;  称：<input type="text" name="username" size="20" class="aj-input" placeholder="请输入名称" required="required" />
 			<br />
 			<br />
 			<aj-page-captcha field-name="${CaptchaController.CAPTCHA_CODE}"></aj-page-captcha>
@@ -22,7 +22,7 @@
 			<br />
 			<br />
 			
-			<button class="ajaxjs-btn">提交</button>
+			<button class="aj-btn">提交</button>
 		</form>
 	</fieldset>
 	

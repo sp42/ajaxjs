@@ -52,7 +52,7 @@ World
 </c:foreach>
 
 
-<select class="ajaxjs-select" name="sellerId">
+<select class="aj-select" name="sellerId">
   <c:foreach items="${sellers}" var="item">
 <option value="${item.key}" ${item.key==info.sellerId?'selected':''}>${item.value.name}</option>
   </c:foreach>

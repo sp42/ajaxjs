@@ -13,7 +13,7 @@
 			文件上传演示
 		</legend>
 			请选择文件: <input type="file" name="myfile" /><br /> <br />
-			<button class="ajaxjs-btn">上传文件</button>
+			<button class="aj-btn">上传文件</button>
 	</fieldset>
 	
 	<footer>

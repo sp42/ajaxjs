@@ -823,7 +823,7 @@ form.feedback button:hover {
 	background-position: 0px -10px;
 }
 
-.ajaxjs-disable {
+.aj-disable {
 	cursor: not-allowed;
 	opacity: .65;
 	box-shadow: none;

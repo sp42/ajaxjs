@@ -10,10 +10,10 @@
 	<fieldset>
 		<legend>图片验证码演示 </legend>
 		<form action="../../FileUpload" enctype="multipart/form-data" method="POST">
-			名  &nbsp;&nbsp;  称：<input type="text" name="username" size="20" class="ajaxjs-input" placeholder="请输入名称" required="required" />
+			名  &nbsp;&nbsp;  称：<input type="text" name="username" size="20" class="aj-input" placeholder="请输入名称" required="required" />
 			<br />
 			<br />
-			验证码：<input type="text" name="your-email" size="20" class="ajaxjs-input" placeholder="请输入右侧验证码" required="required" />
+			验证码：<input type="text" name="your-email" size="20" class="aj-input" placeholder="请输入右侧验证码" required="required" />
 			<img src="../Captcha?d=888" style="cursor: pointer;" onclick="this.src=this.src.replace(/d=\d+/, 'd=' + new Date().valueOf());" />
 			<br />
 			<br />
@@ -22,7 +22,7 @@
 			<br />
 			<br />
 			<center>
-				<button class="ajaxjs-btn">提交</button>
+				<button class="aj-btn">提交</button>
 			</center>
 		</form>
 	</fieldset>
