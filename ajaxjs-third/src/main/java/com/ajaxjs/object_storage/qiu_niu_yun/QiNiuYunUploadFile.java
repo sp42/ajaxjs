@@ -10,6 +10,8 @@
  */
 package com.ajaxjs.object_storage.qiu_niu_yun;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.config.ConfigService;
@@ -73,7 +75,10 @@ public class QiNiuYunUploadFile extends UploadFile {
 			Response response = uploadManager.put(uploadBytes, uploadFileInfo.saveFileName, upToken);
 			// 解析上传成功的结果
 //			DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
-			DefaultPutRet putRet = JsonHelper.json2bean(response.bodyString(), DefaultPutRet.class);
+			Map<String, Object> map = JsonHelper.parseMap(response.bodyString());
+			DefaultPutRet putRet = new DefaultPutRet();
+			putRet.hash = map.get("hash").toString();
+			putRet.key = map.get("key").toString();
 
 			if (putRet.key != null)
 				uploadFileInfo.isOk = true;
