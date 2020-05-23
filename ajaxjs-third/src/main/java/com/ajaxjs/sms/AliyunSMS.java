@@ -3,6 +3,7 @@ package com.ajaxjs.sms;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.util.logger.LogHelper;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
@@ -23,18 +24,9 @@ import com.aliyuncs.profile.IClientProfile;
 public class AliyunSMS {
 	private static final LogHelper LOGGER = LogHelper.getLog(AliyunSMS.class);
 
-	/**
-	 * 产品名称:云通信短信API产品,开发者无需替换
-	 */
-	private static final String product = "Dysmsapi";
+	private static final String PRODUCT = "Dysmsapi";
 
-	/**
-	 * 产品域名,开发者无需替换
-	 */
-	private static final String domain = "dysmsapi.aliyuncs.com";
-
-	private static final String accessKeyId = "xxx";
-	private static final String accessKeySecret = "xxx";
+	private static final String DOMAIN = "dysmsapi.aliyuncs.com";
 
 	static {
 		// 可自助调整超时时间
@@ -43,7 +35,9 @@ public class AliyunSMS {
 	}
 
 	public static SendSmsResponse sendSms(SmsMessage message) {
-		IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId, accessKeySecret);
+		IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou",
+				ConfigService.getValueAsString("sms.aliyun.accessKeyId"),
+				ConfigService.getValueAsString("sms.aliyun.accessKeySecret"));
 		IAcsClient acsClient = new DefaultAcsClient(profile);
 
 		// 组装请求对象-具体描述见控制台-文档部分内容
@@ -59,11 +53,10 @@ public class AliyunSMS {
 
 		/*
 		 * 选填-上行短信扩展码(无特殊需求用户请忽略此字段) request.setSmsUpExtendCode("90997");
-		 * 
-		 * //可选:outId为提供给业务方扩展字段,最终在短信回执消息中将此值带回给调用者 request.setOutId("yourOutId");
+		 * 可选:outId为提供给业务方扩展字段,最终在短信回执消息中将此值带回给调用者 request.setOutId("yourOutId");
 		 */
 		try {
-			DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", product, domain);
+			DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", PRODUCT, DOMAIN);
 			SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
 
 			return sendSmsResponse;
@@ -91,10 +84,12 @@ public class AliyunSMS {
 		request.setPageSize(10L);// 必填-页大小
 		request.setCurrentPage(1L);// 必填-当前页码从1开始计数
 
-		IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId, accessKeySecret);
+		IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou",
+				ConfigService.getValueAsString("sms.aliyun.accessKeyId"),
+				ConfigService.getValueAsString("sms.aliyun.accessKeySecret"));
 
 		try {
-			DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", product, domain);
+			DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", PRODUCT, DOMAIN);
 			IAcsClient acsClient = new DefaultAcsClient(profile);
 			querySendDetailsResponse = acsClient.getAcsResponse(request);
 		} catch (ClientException e) {
@@ -104,11 +99,22 @@ public class AliyunSMS {
 		return querySendDetailsResponse;
 	}
 
+	/**
+	 * 发送短信
+	 * 
+	 * @param message
+	 * @return
+	 */
 	public static boolean send(SmsMessage message) {
 		SendSmsResponse response = sendSms(message);
 		if (response == null)
 			return false;
 
-		return response.getCode().equals("OK");
+		boolean isOk = response.getCode().equals("OK");
+
+		if (!isOk)
+			LOGGER.warning(response.getCode() + " : " + response.getMessage());
+
+		return isOk;
 	}
 }
