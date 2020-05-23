@@ -14,7 +14,6 @@ import org.junit.Test;
 
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.net.http.NetUtil;
-import com.ajaxjs.object_storage.qiu_niu_yun.QiNiuYunUploadFile;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.web.UploadFileInfo;
 import com.ajaxjs.web.mock.MockRequest;
