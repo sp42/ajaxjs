@@ -1,4 +1,4 @@
-package com.ajaxjs.shop.payment.wechat;
+package com.ajaxjs.shop.payment;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -9,8 +9,8 @@ import java.util.Set;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.net.http.HttpBasicRequest;
 import com.ajaxjs.net.http.Tools;
+import com.ajaxjs.payment.wxpay.PerpayReturn;
 import com.ajaxjs.shop.model.OrderInfo;
-import com.ajaxjs.shop.payment.wechat.model.PerpayReturn;
 import com.ajaxjs.shop.service.OrderService;
 import com.ajaxjs.user.token.TokenService;
 import com.ajaxjs.util.CommonUtil;

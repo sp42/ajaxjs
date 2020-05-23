@@ -5,11 +5,10 @@ import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.payment.Alipay;
+import com.ajaxjs.payment.wxpay.PerpayReturn;
 import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.ShopHelper;
 import com.ajaxjs.shop.model.OrderInfo;
-import com.ajaxjs.shop.payment.wechat.WxPay;
-import com.ajaxjs.shop.payment.wechat.model.PerpayReturn;
 import com.ajaxjs.util.logger.LogHelper;
 import com.alipay.api.AlipayApiException;
 
