@@ -1,4 +1,4 @@
-package com.ajaxjs.shop.payment.ali;
+package com.ajaxjs.shop.controller;
 
 import java.util.Date;
 import java.util.Map;
@@ -25,8 +25,8 @@ import com.alipay.api.internal.util.AlipaySignature;
 
 @Bean
 @Path("/shop/pay/alipay")
-public class AliPayController extends BaseController<Map<String, Object>> {
-	private static final LogHelper LOGGER = LogHelper.getLog(AliPayController.class);
+public class PayAliController extends BaseController<Map<String, Object>> {
+	private static final LogHelper LOGGER = LogHelper.getLog(PayAliController.class);
 
 	@Resource("autoWire:ioc.OrderService|OrderService")
 	private OrderService service;

@@ -1,6 +1,7 @@
 package com.ajaxjs.app;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -15,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import com.ajaxjs.app.catalog.Catalog;
 import com.ajaxjs.app.service.SectionList;
 import com.ajaxjs.app.service.SectionService;
+import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
@@ -33,16 +35,33 @@ public class SectionController extends BaseController<SectionList> {
 	@GET
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam("sectionId") int sectionId, @QueryParam(START) int start,
-			@QueryParam(LIMIT) int limit, ModelAndView mv) {
+	public String list(@QueryParam("sectionId") int sectionId, @QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
+		return toJson(service.findListBySectionId(start, limit, sectionId));
+	}
 
-		return toJson(service.findSectionListBySectionId(start, limit, sectionId));
+	/**
+	 * 把配置还原为 JSON 输出给前端
+	 * 
+	 * @param mv
+	 * @return
+	 */
+	public static String getEntityProfile(ModelAndView mv) {
+		@SuppressWarnings("unchecked")
+		Map<String, Object> map = (Map<String, Object>) ConfigService.CONFIG.get("data");
+		String json = toJson(map.get("entityProfile"), false);
+
+		if (mv != null)
+			mv.put("ENTITY_PROFILE", json);
+
+		return json;
 	}
 
 	@GET
 	public String jsp(ModelAndView mv) {
-		mv.put("entryIdNameMap", SectionService.TYPE_NAME);
+		getEntityProfile(mv);
+
 		mv.put("entryIdNameJson", toJson(SectionService.TYPE_NAME, false));
+
 		prepareData(mv);
 		return page("section-list");
 	}
@@ -78,7 +97,7 @@ public class SectionController extends BaseController<SectionList> {
 	@Path("/section/{id}")
 	public String getSectionList(@PathParam(ID) int sectionId, @QueryParam(START) int start,
 			@QueryParam(LIMIT) int limit) {
-		return toJson(service.findSectionListBySectionId(sectionId, start, limit));
+		return toJson(service.findListBySectionId(start, limit, sectionId));
 	}
 
 	@GET

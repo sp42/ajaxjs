@@ -47,6 +47,7 @@ public class MockTest {
 	 * @param configFile JSON 配置文件路径
 	 * @param packages   一个或多个搜索的包名
 	 */
+	@Deprecated
 	public static void initTestDbAndIoc(String configFile, String... packages) {
 		initTestConnection(configFile);
 		BeanContext.init(packages);
@@ -84,7 +85,7 @@ public class MockTest {
 	 * @param packages      一个或多个搜索的包名
 	 */
 	public static void init2(String projectFolder, String... packages) {
-		init(projectFolder + "\\src\\main\\resources\\site_config.json",
+		init(projectFolder + "\\WebContent\\META-INF\\site_config.json",
 				projectFolder + "\\WebContent\\META-INF\\context.xml", packages);
 	}
 

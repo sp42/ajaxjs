@@ -13,7 +13,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.app.utils.QiNiuYunUploadFile;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
@@ -23,6 +22,7 @@ import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.MvcFilter;
+import com.ajaxjs.object_storage.QiNiuYunUploadFile;
 import com.ajaxjs.orm.SnowflakeIdWorker;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.io.ImageHelper;

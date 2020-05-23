@@ -7,8 +7,8 @@ import com.ajaxjs.app.DataDictController;
 import com.ajaxjs.app.catalog.Catalog;
 import com.ajaxjs.app.catalog.CatalogService;
 import com.ajaxjs.config.ConfigService;
-import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.ioc.Bean;
+import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.shop.ShopConstant;
 
 /**
@@ -24,14 +24,17 @@ public class SectionService extends SectionListService {
 	}
 
 	public static final String SELECT_GROUPS = "SELECT g.id AS entryId, entry.name, %s AS entryTypeId, %s FROM shop.shop_goods entry INNER JOIN shop_group g ON g.goodsId = entry.id WHERE g.id in (%s)\n";
-
-	private static ScanTable fn = (sqls, entityTypeId, entityIds, caseSql) -> {
+	
+	static ScanTable fn = (sqls, entityTypeId, entityIds, caseSql) -> {
 		switch (entityTypeId) {
-		case DataDictController.DataDictService.ENTRY_ARTICLE:
-			sqls.add(String.format(SELECT, entityTypeId, caseSql, "entity_article", entityIds));
+		case 1:
+			sqls.add(String.format(SELECT, 1, caseSql, "entity_article", entityIds));
+			break;
+		case 2:
+			sqls.add(String.format(SELECT, 2, caseSql, "shop_goods", entityIds));
 			break;
 		case DataDictController.DataDictService.ENTRY_TOPIC:
-			sqls.add(String.format(SELECT, entityTypeId, caseSql, "entity_topic", entityIds));
+			sqls.add(String.format(SELECT, entityTypeId, caseSql, "shop_topic", entityIds));
 			break;
 		case DataDictController.DataDictService.ENTRY_ADS:
 			sqls.add(String.format(SELECT, entityTypeId, caseSql, "entity_ads", entityIds));
@@ -45,38 +48,19 @@ public class SectionService extends SectionListService {
 			break;
 		}
 	};
-
-	/**
-	 * Find all bookmarks, For admin use
-	 * 
-	 * @return
-	 */
-	public List<SectionList> findAds() {
-		return findSectionListBySectionId(ConfigService.getValueAsInt("data.section.ads_Catalog_Id"));
+	
+	@Override
+	ScanTable getScanTable() {
+		return fn;
 	}
 
-	public List<SectionList> findSectionListBySectionId(int sectionId) {
-		return findListBySectionId(sectionId, fn);
-	}
-
-	/**
-	 * 可分页的
-	 * 
-	 * @param start
-	 * @param limit
-	 * @param sectionId
-	 * @return
-	 */
-	public PageResult<SectionList> findSectionListBySectionId(int start, int limit, int sectionId) {
-		return findListBySectionId(start, limit, sectionId, fn);
-	}
-
-	private CatalogService catalogService = new CatalogService();
+	@Resource("CatalogService")
+	private CatalogService catalogService;
 
 	/**
 	 * SectionInfo 是一棵树。为简约起见，SectionInfo 没有独立弄成一张表放进去，而是放进 catalog 表。一般在后台里调用该方法
 	 * 
-	 * @return
+	 * @return 所有栏目对象，一般用于树状结构的 UI 显示用
 	 */
 	public List<Catalog> findSectionCatalog() {
 		int sectionCatalog_Id = ConfigService.getValueAsInt("data.sectionCatalog_Id");

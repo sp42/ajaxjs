@@ -7,6 +7,7 @@ import com.ajaxjs.framework.Services;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.net.mail.MailException;
 import com.ajaxjs.net.mail.Sender;
+import com.ajaxjs.sms.SmsMessage;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**

@@ -22,7 +22,7 @@ public class ShopBookmarkService extends SectionListService {
 		setShortName("bookmark");
 	}
 
-	private ScanTable fn = (sqls, entryTypeId, entryIds, caseSql) -> {
+	private static ScanTable fn = (sqls, entryTypeId, entryIds, caseSql) -> {
 		switch (entryTypeId) {
 		case ShopConstant.ENTRY_GOODS:
 			sqls.add(String.format(SELECT, entryTypeId, caseSql, "shop_goods", entryIds));
@@ -32,6 +32,11 @@ public class ShopBookmarkService extends SectionListService {
 			break;
 		}
 	};
+	
+	@Override
+	ScanTable getScanTable() {
+		return fn;
+	}
 
 	/**
 	 * 
@@ -53,7 +58,7 @@ public class ShopBookmarkService extends SectionListService {
 	 * @return
 	 */
 	public List<SectionList> findBookmarks(Long userId) {
-		return union(getListByUserId(userId), fn);
+		return union(getListByUserId(userId));
 	}
 
 	/**
@@ -62,7 +67,7 @@ public class ShopBookmarkService extends SectionListService {
 	 * @return
 	 */
 	public List<SectionList> findBookmarks() {
-		return union(getListByCatalogId(ConfigService.getValueAsInt("data.section.useBookmark_Catalog_Id")), fn);
+		return union(getListByCatalogId(ConfigService.getValueAsInt("data.section.useBookmark_Catalog_Id")));
 	}
 	
 	/**
@@ -74,7 +79,7 @@ public class ShopBookmarkService extends SectionListService {
 	 * @return
 	 */
 	public PageResult<SectionList> findSectionListBySectionId(int start, int limit) {
-		return super.findListBySectionId(start, limit, ConfigService.getValueAsInt("data.section.useBookmark_Catelog_Id"), fn);
+		return super.findListBySectionId(start, limit, ConfigService.getValueAsInt("data.section.useBookmark_Catelog_Id"));
 	}
 
 	@Override

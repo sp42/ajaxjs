@@ -1,4 +1,4 @@
-package com.ajaxjs.shop.payment.wechat;
+package com.ajaxjs.shop.controller;
 
 import java.io.InputStream;
 import java.util.Date;
@@ -19,6 +19,7 @@ import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.model.OrderInfo;
+import com.ajaxjs.shop.payment.wechat.WxPay;
 import com.ajaxjs.shop.payment.wechat.model.PayNodifyResult;
 import com.ajaxjs.shop.payment.wechat.model.PaymentNotification;
 import com.ajaxjs.shop.service.OrderService;
@@ -29,8 +30,8 @@ import com.ajaxjs.util.map.MapTool;
 
 @Bean
 @Path("/shop/pay/wxpay")
-public class WxPayController extends BaseController<Map<String, Object>> {
-	private static final LogHelper LOGGER = LogHelper.getLog(WxPayController.class);
+public class PayWxController extends BaseController<Map<String, Object>> {
+	private static final LogHelper LOGGER = LogHelper.getLog(PayWxController.class);
 
 	@Resource("autoWire:ioc.OrderService|OrderService")
 	private OrderService service;
