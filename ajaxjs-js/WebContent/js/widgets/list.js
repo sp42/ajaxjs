@@ -39,20 +39,19 @@ Vue.component('aj-simple-list', {
 	}
 });
 
-/**
- * 列表控件
- */
 
-// 分页
-Vue.component('aj-page-list', {
-	mixins: [aj._list],
+aj._pager = {
 	data() {
 		return {
+			api: null, // 接口地址
+			result : [],		// 展示的数据
+			baseParam: {},		// 每次请求都附带的参数
+			
 			pageSize: this.initPageSize,
-			total : 0,
-			totalPage :0,
+			total: 0,
+			totalPage: 0,
 			pageStart: 0,
-			currentPage : 0
+			currentPage: 0
 		};
 	},
 	props: {
@@ -60,7 +59,91 @@ Vue.component('aj-page-list', {
 			type : Number,
 			required : false,
 			default : 5
+		}
+	},
+	methods: {
+		// 分页，跳到第几页，下拉控件传入指定的页码
+		jumpPageBySelect(e) {
+			var selectEl = e.target;
+			var currentPage = selectEl.options[selectEl.selectedIndex].value;
+			this.pageStart = (Number(currentPage) - 1) * this.pageSize;
+			this.ajaxGet();
 		},
+		onPageSizeChange(e) {
+			this.pageSize = Number(e.target.value);
+			this.count();
+			this.ajaxGet();
+		},
+		count() {
+			var totalPage = this.total / this.pageSize, yushu = this.total % this.pageSize;
+			this.totalPage = parseInt(yushu == 0 ? totalPage : totalPage + 1);
+			this.currentPage = (this.pageStart / this.pageSize) + 1;
+		},
+		previousPage() {
+			this.pageStart -= this.pageSize;
+			this.currentPage = (this.pageStart / this.pageSize) + 1;
+			
+			this.ajaxGet();
+		},
+		nextPage() {
+			this.pageStart += this.pageSize;
+			this.currentPage = (this.pageStart / this.pageSize) + 1;
+
+			this.ajaxGet();
+		},
+	}
+};
+
+
+Vue.component('aj-pager', {
+	template: '<footer>\
+				<a v-if="pageStart > 0" href="#" @click="previousPage()">上一页</a> \
+				<a v-if="(pageStart > 0 ) && (pageStart + pageSize < total)" style="text-decoration: none;">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>\
+				<a v-if="pageStart + pageSize < total" href="#" @click="nextPage()">下一页</a>\
+				<div class="info">\
+					<input type="hidden" name="start" :value="pageStart" />\
+					页数：{{currentPage}}/{{totalPage}} 记录数：{{pageStart}}/{{total}}\
+					每页记录数： <input size="2" title="输入一个数字确定每页记录数" type="text" class="aj-input" :value="pageSize" @change="onPageSizeChange($event)" />\
+					跳转： <select @change="jumpPageBySelect($event);" class="aj-select" style="width:50px;">\
+						<option :value="n" v-for="n in totalPage">{{n}}</option>\
+					</select>\
+				</div>\
+			</footer>',
+	mixins: [aj._pager],
+	methods: {
+		get() {
+			aj.apply(this.baseParam, { start : this.pageStart, limit : this.pageSize });
+			
+			aj.xhr.get(this.api, json => {
+				if(json.result) {
+					this.result = json.result;
+					this.total = json.total;
+					this.count();
+				}
+				
+				this.$emit('onDataLoad', this.result);	
+			}, this.baseParam);
+		},
+		ajaxGet() {
+			this.get();
+		},
+		// 复位
+		reset() {
+			this.total = this.totalPage = this.pageStart = this.currentPage = 0;
+			this.pageSize = this.initPageSize;
+		}
+	}
+});
+
+
+/**
+ * 列表控件
+ */
+
+// 分页
+Vue.component('aj-page-list', {
+	mixins: [aj._pager, aj._list],
+	props: {
 		isShowFooter: {
 			type : Boolean,
 			default : true
@@ -96,7 +179,6 @@ Vue.component('aj-page-list', {
 			</footer><div v-show="!!autoLoadWhenReachedBottom" class="buttom"></div>\
 		</div>',
 	mounted() {
-//		ajaxjs.xhr.get(this.$props.apiUrl, this.doAjaxGet, {
 		ajaxjs.xhr.get(this.realApiUrl, this.doAjaxGet, {
 			limit : this.pageSize
 		});
@@ -118,29 +200,6 @@ Vue.component('aj-page-list', {
 	},
 	
 	methods : {
-		count() {
-			var totalPage = this.total / this.pageSize, yushu = this.total % this.pageSize;
-			this.totalPage = parseInt(yushu == 0 ? totalPage : totalPage + 1);
-			this.currentPage = (this.pageStart / this.pageSize) + 1;
-		},
-		previousPage() {
-			this.pageStart -= this.pageSize;
-			this.currentPage = (this.pageStart / this.pageSize) + 1;
-			
-			this.ajaxGet();
-		},
-		nextPage() {
-			this.pageStart += this.pageSize;
-			this.currentPage = (this.pageStart / this.pageSize) + 1;
-			
-			this.ajaxGet();
-		},
-		onPageSizeChange(e) {
-			this.pageSize = Number(e.target.value);
-			this.count();
-			this.ajaxGet();
-		},
-		
 		doAjaxGet(json) {
 			if(this.isPage) {
 				this.total = json.total;
@@ -157,12 +216,6 @@ Vue.component('aj-page-list', {
 //			ajaxjs.xhr.get(this.$props.apiUrl, this.doAjaxGet, params);
 			ajaxjs.xhr.get(this.realApiUrl, this.doAjaxGet, params);
 		},
-		// 分页，跳到第几页，下拉控件传入指定的页码
-		jumpPageBySelect(e) {
-			var selectEl = e.target;
-			this.currentPage = selectEl.options[selectEl.selectedIndex].value;
-		},
-		
 		onBaseParamChange(params) {
 			aj.apply(this.baseParam, params);
 			
@@ -175,6 +228,78 @@ Vue.component('aj-page-list', {
 			this.ajaxGet();
 		}
 	}
+});
+
+//register the grid component
+Vue.component('aj-grid', {
+    template:
+		'<div><form action="?" method="GET" style="float:right;">\
+			<input type="hidden" name="searchField" value="content" />\
+			<input type="text" name="searchValue" placeholder="请输入搜索之关键字" class="aj-input" />\
+			<button style="margin-top: 0;" class="aj-btn">搜索</button>\
+		</form>\
+        <table class="aj-grid ajaxjs-borderTable"><thead><tr>\
+          <th v-for="key in columns" @click="sortBy(key)" :class="{ active: sortKey == key }">\
+            {{ key | capitalize }}\
+            <span class="arrow" :class="sortOrders[key] > 0 ? \'asc\' : \'dsc\'"></span>\
+          </th></tr></thead>\
+          <tbody>\
+                <tr v-for="entry in filteredData">\
+                  <td v-for="key in columns" v-html="entry[key]"></td>\
+            </tr></tbody></table></div>',
+    props: {
+        data: Array,
+        columns: Array,
+        filterKey: String
+    },
+    data() {
+        var sortOrders = {};
+        this.columns.forEach(key => {
+            sortOrders[key] = 1;
+        });
+        
+        return {
+            sortKey: '',
+            sortOrders: sortOrders
+        };
+    },
+    computed: {
+        filteredData() {
+            var sortKey = this.sortKey;
+            var filterKey = this.filterKey && this.filterKey.toLowerCase();
+            var order = this.sortOrders[sortKey] || 1;
+            var data = this.data;
+
+            if (filterKey) {
+                data = data.filter(row => {
+                    return Object.keys(row).some(key => {
+                        return String(row[key]).toLowerCase().indexOf(filterKey) > -1;
+                    })
+                });
+            }
+
+            if (sortKey) {
+                data = data.slice().sort((a, b) => {
+                    a = a[sortKey];
+                    b = b[sortKey];
+                    return (a === b ? 0 : a > b ? 1 : -1) * order;
+                });
+            }
+
+            return data;
+        }
+    },
+    filters: {
+        capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+    },
+    methods: {
+        sortBy(key) {
+            this.sortKey = key;
+            this.sortOrders[key] = this.sortOrders[key] * -1;
+        }
+    }
 });
 
 /**
@@ -245,3 +370,5 @@ aj.scrollSpy = function(cfg) {
         return pos;
     }
 }
+
+

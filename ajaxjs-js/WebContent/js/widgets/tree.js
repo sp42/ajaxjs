@@ -424,6 +424,7 @@ Vue.component('aj-tree', {
 			// 父id 必须在子 id 之前，不然下面 findParent() 找不到后面的父节点，故先排序
 			for (var i = 0, j = jsonArray.length; i < j; i++) {
 				var n = jsonArray[i];
+				
 				if(n.pid === -1) {
 					arr.push(n);
 				} else {
@@ -438,7 +439,6 @@ Vue.component('aj-tree', {
 				}
 				
 			}
-			
 			return arr;
 		},
 

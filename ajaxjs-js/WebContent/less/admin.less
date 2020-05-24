@@ -506,12 +506,10 @@ table.aj-grid {
 		-moz-user-select: none;
 		-ms-user-select: none;
 		user-select: none;
-		min-width: 120px;
-		padding: 10px 20px;
 	}
 
 	td {
-		min-width: 120px;
+		//min-width: 120px;
 		padding: 10px 20px;
 	}
 
@@ -604,6 +602,100 @@ table.aj-grid {
 		a {
 			float: right;
 			font-weight: bold;
+		}
+	}
+}
+
+.sectionMgr {
+	margin:0 auto;
+	width:96%;
+	
+	.btns {
+		text-align: right;
+		margin: 1%;
+		img {
+			width: 16px;
+			vertical-align: sub;
+		}
+	}
+	
+	.left {
+		float:left;
+		width:20%;
+		height:500px; 
+		border:1px solid lightgray;
+		border-right:none;
+		box-sizing: border-box;
+	}
+	
+	.left .title {
+		background-color:#f7f8fa;
+		height:37px;
+		text-align:center;
+		line-height:37px;
+		font-weight:bold;
+		margin-bottom:5%;
+	}
+	
+	.aj-tableList {
+		height: 660px;
+		width:80%;
+		border:1px solid lightgray;
+	    float: right;
+	    box-sizing: border-box;
+	}
+	
+}
+
+.pickup-entity {
+	width: 900px;
+	min-height: 600px;
+	
+	.type {
+		float: left;
+		width: 20%;
+		margin-top: 4%;
+		   
+		h4 {
+			font-size: .9rem;
+		}
+		
+		li{
+			background-color: #f7f8fa;
+			margin-bottom: 2%;
+			padding: 2%;
+			cursor: pointer;
+		}
+	}
+	
+	.grid {
+		float: right;
+		width: 80%;
+		
+		&>form {
+			float: left;
+		}
+		
+		table {
+			width: 100%;
+			border: 0;
+			td, th {
+				border: 0;
+			}
+			img{
+				max-width:80px;
+				max-height:80px;
+			}
+			a{
+				text-decoration: underline;
+			}
+			td{
+				height:80px;
+			}
+		}
+		
+		footer{
+			 margin-top: 5%;
 		}
 	}
 }
