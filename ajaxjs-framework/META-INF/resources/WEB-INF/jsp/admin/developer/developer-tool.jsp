@@ -158,7 +158,7 @@
 					<p>1、仅在开发模式下（Windows）执行，且在部署之前执行。2、按实际情况改为你的工程目录。</p>
 					<div>
 						<input class="jsSave aj-input" style="height:32px;width:400px;margin-right:30px;" value="${aj_allConfig.System.project_folder.replace('\\',  '/')}" /> <button class="aj-btn" onclick="packageJs();return false;">打包 JavaScript</button>
-						<div>最终保存在 /asset/js/all.js 中。 </div>
+						<div>最终保存在 /asset/js/all.js 中。<br />**请确保浏览器可以访问谷歌 GAE 站点，原因是压缩 JS 采用了谷歌的接口。推荐 GHelper 浏览器插件。** </div>
 					</div>
 <%-- 					<div>
 						<input class="jsSave aj-input" style="height:32px;width:400px;margin-right:30px;" value="${aj_allConfig.System.project_folder.replace('\\',  '/')}" /> <button class="aj-btn" onclick="window.open('/ajaxjs-js/JsController?output=' + aj('.jsSave').value);return false;">打包 JavaScript</button>

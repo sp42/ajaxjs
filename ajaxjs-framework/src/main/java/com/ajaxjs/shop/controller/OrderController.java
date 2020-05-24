@@ -51,7 +51,7 @@ public class OrderController extends BaseController<OrderInfo> {
 		LOGGER.info("浏览我的订单");
 
 		prepareData(mv);
-		mv.put(PAGE_RESULT, service.findPagedList(start, limit, 0, 0, null, BaseUserController.getUserId()));
+		mv.put(PAGE_RESULT, service.findPagedList(start, limit, BaseUserController.getUserId()));
 		return jsp("shop/order");
 	}
 

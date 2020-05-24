@@ -7,7 +7,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.ThirdServices;
+import com.ajaxjs.app.ThirdPartyService;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.SimpleSMSFilter;
@@ -38,11 +38,9 @@ public class CmsUserController extends BaseUserController {
 				message.setSignName("我是zyjf");
 				message.setTemplateParam(String.format("{\"code\":\"%s\"}", randomCode));
 
-				ThirdServices services = BeanContext.getByClass(ThirdServices.
-						
-						class);
+				ThirdPartyService services = BeanContext.getByClass(ThirdPartyService.class);
 
-				if (services.getSendSms().apply(phoneNo, "")) {
+				if (services.sendSms(phoneNo, "", "")) {
 					LOGGER.info("发送手机 " + phoneNo + " 验证码成功");
 					MvcRequest.getHttpServletRequest().getSession().setAttribute(SimpleSMSFilter.SMS_KEY_NAME, randomCode + "");
 					

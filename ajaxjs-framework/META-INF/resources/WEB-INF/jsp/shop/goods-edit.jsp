@@ -113,7 +113,7 @@
 							</td>
 							<td width="10"></td>
 							<td valign="bottom">
-								<button @click="addGoodsFormatItems($event)">+</button>
+								<button class="aj-btn" @click="addGoodsFormatItems($event)">+</button>
 							</td>
 						</tr>
 					</table>
