@@ -78,6 +78,7 @@ public class ExpireCache extends ConcurrentHashMap<String, ExpireCacheData<Objec
 	}
 
 	/**
+	 * 设置 key 与 cache
 	 * 
 	 * @param key    缓存 KEY
 	 * @param data   要缓存的数据
@@ -88,6 +89,7 @@ public class ExpireCache extends ConcurrentHashMap<String, ExpireCacheData<Objec
 	}
 
 	/**
+	 * 设置 key 与 cache
 	 * 
 	 * @param key    缓存 KEY
 	 * @param data   要缓存的数据
