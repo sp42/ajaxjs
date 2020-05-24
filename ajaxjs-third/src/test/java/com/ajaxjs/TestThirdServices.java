@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.ThirdServices;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.net.mail.Mail;
