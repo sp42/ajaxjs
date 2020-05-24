@@ -24,6 +24,7 @@ import java.net.UnknownHostException;
 
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 简易邮件发送器
@@ -31,6 +32,8 @@ import com.ajaxjs.util.Encode;
  * @author sp42 frank@ajaxjs.com
  */
 public class Sender extends Socket {
+	private static final LogHelper LOGGER = LogHelper.getLog(Sender.class);
+
 	/**
 	 * 发送一封邮件
 	 * 
@@ -43,11 +46,11 @@ public class Sender extends Socket {
 		this.bean = bean;
 	}
 
-	public static final String lineFeet = "\r\n"; // 换行符常量
+	public static final String LINEFEET = "\r\n"; // 换行符常量
+
+	private static final int OK_250_CODE = 250;// 成功标识
 
 	private Mail bean; // 邮件信息
-
-	private static final int ok_250_Code = 250;// 成功标识
 
 	private BufferedReader in; // 接受指令用的缓冲区
 
@@ -60,6 +63,8 @@ public class Sender extends Socket {
 	 * @throws MailException 邮件异常
 	 */
 	public boolean sendMail() throws MailException {
+		LOGGER.info("发送邮件:" + bean.getSubject());
+		
 		try (BufferedReader in = new BufferedReader(new InputStreamReader(getInputStream()));
 				DataOutputStream os = new DataOutputStream(getOutputStream());) {
 			this.in = in;
@@ -71,8 +76,8 @@ public class Sender extends Socket {
 
 			// 进行握手
 			result = sendCommand("HELO %s", bean.getMailServer());
-			if (!isOkCode(result, ok_250_Code))
-				throw new MailException("握手失败：" + result, ok_250_Code);
+			if (!isOkCode(result, OK_250_CODE))
+				throw new MailException("握手失败：" + result, OK_250_CODE);
 
 			// 验证发信人信息
 			result = sendCommand("AUTH LOGIN");
@@ -89,37 +94,38 @@ public class Sender extends Socket {
 
 			// 发送指令
 			result = sendCommand("Mail From:<%s>", bean.getFrom());
-			if (!isOkCode(result, ok_250_Code))
-				throw new MailException("发送指令 From 不成功" + result, ok_250_Code);// 235?
+			if (!isOkCode(result, OK_250_CODE))
+				throw new MailException("发送指令 From 不成功" + result, OK_250_CODE);// 235?
 
 			result = sendCommand("RCPT TO:<%s>", bean.getTo());
-			if (!isOkCode(result, ok_250_Code))
-				throw new MailException("发送指令 To 不成功" + result, ok_250_Code);
+			if (!isOkCode(result, OK_250_CODE))
+				throw new MailException("发送指令 To 不成功" + result, OK_250_CODE);
 
 			result = sendCommand("DATA");
 			if (!isOkCode(result, 354))
 				throw new MailException("認証不成功" + result, 354);
 
 			result = sendCommand(data());
-			if (!isOkCode(result, ok_250_Code))
-				throw new MailException("发送邮件失败：" + result, ok_250_Code);
+			if (!isOkCode(result, OK_250_CODE))
+				throw new MailException("发送邮件失败：" + result, OK_250_CODE);
 
 			result = sendCommand("QUIT");// quit
 			if (!isOkCode(result, 221))
 				throw new MailException("QUIT 失败：" + result, 221);
+			
 		} catch (UnknownHostException e) {
 			System.err.println("初始化 失败！建立连接失败！");
-			e.printStackTrace();
+			LOGGER.warning(e);
 			return false;
 		} catch (IOException e) {
 			System.err.println("初始化 失败！读取流失败！");
-			e.printStackTrace();
+			LOGGER.warning(e);
 			return false;
 		} finally {
 			try {
 				close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				LOGGER.warning(e);
 			}
 		}
 
@@ -133,17 +139,17 @@ public class Sender extends Socket {
 	 */
 	private String data() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("From:<" + bean.getFrom() + ">" + lineFeet);
-		sb.append("To:<" + bean.getTo() + ">" + lineFeet);
-		sb.append("Subject:=?UTF-8?B?" + toBase64(bean.getSubject()) + "?=" + lineFeet);
-		sb.append("Date:2016/10/27 17:30" + lineFeet);
+		sb.append("From:<" + bean.getFrom() + ">" + LINEFEET);
+		sb.append("To:<" + bean.getTo() + ">" + LINEFEET);
+		sb.append("Subject:=?UTF-8?B?" + toBase64(bean.getSubject()) + "?=" + LINEFEET);
+		sb.append("Date:2016/10/27 17:30" + LINEFEET);
 		// sb.append("MIME-Version: 1.0" + lineFeet);
 		sb.append((bean.isHTML_body() ? "Content-Type:text/html;charset=\"utf-8\""
-				: "Content-Type:text/plain;charset=\"utf-8\"") + lineFeet);
-		sb.append("Content-Transfer-Encoding: base64" + lineFeet);
-		sb.append(lineFeet);
+				: "Content-Type:text/plain;charset=\"utf-8\"") + LINEFEET);
+		sb.append("Content-Transfer-Encoding: base64" + LINEFEET);
+		sb.append(LINEFEET);
 		sb.append(toBase64(bean.getContent()));
-		sb.append(lineFeet + ".");
+		sb.append(LINEFEET + ".");
 
 		return sb.toString();
 	}
@@ -167,11 +173,11 @@ public class Sender extends Socket {
 	 */
 	private String sendCommand(String msg) {
 		try {
-			os.writeBytes(msg + lineFeet);
+			os.writeBytes(msg + LINEFEET);
 			os.flush();
 			return in.readLine(); // 读取服务器端响应信息
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 			return null;
 		}
 	}
@@ -209,7 +215,7 @@ public class Sender extends Socket {
 		try (Sender sender = new Sender(mail)) {
 			return sender.sendMail();
 		} catch (IOException | MailException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 			return false;
 		}
 	}
