@@ -32,6 +32,7 @@ public class MockTest {
 	 * 
 	 * @param configFile JSON 配置文件路径
 	 */
+	@Deprecated
 	public static void initTestConnection(String configFile) {
 		ConfigService.load(configFile);
 		JdbcConnection
@@ -89,6 +90,11 @@ public class MockTest {
 				projectFolder + "\\WebContent\\META-INF\\context.xml", packages);
 	}
 
+	/**
+	 * 加载 SQLite 数据库
+	 * 
+	 * @param db
+	 */
 	public static void loadSQLiteTest(String db) {
 		JdbcConnection.setConnection(JdbcConnection.getSqliteConnection(db));
 	}
