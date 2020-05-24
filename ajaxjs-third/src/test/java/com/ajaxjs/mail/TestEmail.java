@@ -10,7 +10,7 @@ import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.net.mail.Mail;
 
-public class TestThirdServices {
+public class TestEmail {
 
 	@Test
 	public void testEmail() {
@@ -19,15 +19,14 @@ public class TestThirdServices {
 		BeanContext.injectBeans();
 
 		Mail mail = new Mail();
-		mail.setFrom("admin@bgdiving.com");
-		mail.setTo("frank@ajaxjs.com");
-		mail.setSubject("hihi你好");
+		mail.setTo("sp42@qq.com");
+		mail.setSubject("你好容祯");
 		mail.setHTML_body(true);
-		mail.setContent("dsfds放到沙发dfsfd<a href=\"http://qq.com\">fdsfds</a>");
+		mail.setContent("我希望可以跟你做朋友 <a target=\"_blank\" href=\"http://www.qq.com\">QQ</a> 34354344");
+
 
 		ThirdPartyService services = BeanContext.getByClass(ThirdPartyService.class);
 		assertNotNull(services);
-
 		assertTrue(services.sendEmail(mail));
 	}
 }
