@@ -82,7 +82,7 @@ public class ExpireCache extends ConcurrentHashMap<String, ExpireCacheData<Objec
 	 * 
 	 * @param key    缓存 KEY
 	 * @param data   要缓存的数据
-	 * @param expire 过期时间
+	 * @param expire 过期时间，单位是秒
 	 */
 	public void put(String key, Object data, int expire) {
 		put(key, new ExpireCacheData<>(data, expire));
@@ -93,7 +93,7 @@ public class ExpireCache extends ConcurrentHashMap<String, ExpireCacheData<Objec
 	 * 
 	 * @param key    缓存 KEY
 	 * @param data   要缓存的数据
-	 * @param expire 过期时间
+	 * @param expire 过期时间，单位是秒
 	 * @param load   数据装载器，如果缓存中没有数据或者已经过期，则调用数据装载器加载最新的数据并且加入缓存，并返回
 	 */
 	public void put(String key, Object data, int expire, Supplier<Object> load) {
