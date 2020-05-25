@@ -15,8 +15,14 @@ package com.ajaxjs.config;
 import java.util.List;
 import java.util.Random;
 
+import org.w3c.dom.NamedNodeMap;
+
+import com.ajaxjs.ioc.BeanContext;
+import com.ajaxjs.orm.JdbcConnection;
+import com.ajaxjs.util.XMLHelper;
+
 /**
- * 假数据生成器
+ * 测试辅助类，假数据生成器
  * 
  * @author sp42 frank@ajaxjs.com
  *
@@ -209,5 +215,73 @@ public class TestHelper {
 
 	public static String getItem(String[] items) {
 		return items[random.nextInt(items.length)];
+	}
+
+	/**
+	 * 为方便单测，设一个开关
+	 */
+	public static boolean IS_DB_CONNECTION_AUTOCLOSE = true;
+
+	/**
+	 * 
+	 * @param configFile JSON 配置文件路径
+	 * @param packages   一个或多个搜索的包名
+	 */
+	@Deprecated
+	public static void initTestDbAndIoc(String configFile, String... packages) {
+		ConfigService.load(configFile);
+		JdbcConnection
+				.setConnection(JdbcConnection.getMySqlConnection(ConfigService.getValueAsString("testServer.mysql.url"),
+						ConfigService.getValueAsString("testServer.mysql.user"),
+						ConfigService.getValueAsString("testServer.mysql.password")));
+
+		IS_DB_CONNECTION_AUTOCLOSE = false;
+		BeanContext.init(packages);
+		BeanContext.injectBeans();
+	}
+
+	/**
+	 * 方便写单测时用的初始化方法
+	 * 
+	 * @param configFile JSON 配置文件路径
+	 * @param dbXmlCfg   数据库配置文件
+	 * @param packages   一个或多个搜索的包名
+	 */
+	public static void init(String configFile, String dbXmlCfg, String... packages) {
+		ConfigService.load(configFile);
+
+		XMLHelper.xPath(dbXmlCfg, "//Resource[@name='" + ConfigService.getValueAsString("data.database_node") + "']",
+				node -> {
+					NamedNodeMap map = node.getAttributes();
+
+					String url = map.getNamedItem("url").getNodeValue(),
+							user = map.getNamedItem("username").getNodeValue(),
+							password = map.getNamedItem("password").getNodeValue();
+
+					JdbcConnection.setConnection(JdbcConnection.getMySqlConnection(url, user, password));
+					IS_DB_CONNECTION_AUTOCLOSE = false;
+					BeanContext.init(packages);
+					BeanContext.injectBeans();
+				});
+	}
+
+	/**
+	 * 方便写单测时用的初始化方法
+	 * 
+	 * @param projectFolder 项目目录，用于读取配置文件
+	 * @param packages      一个或多个搜索的包名
+	 */
+	public static void initAll(String projectFolder, String... packages) {
+		init(projectFolder + "\\WebContent\\META-INF\\site_config.json",
+				projectFolder + "\\WebContent\\META-INF\\context.xml", packages);
+	}
+
+	/**
+	 * 加载 SQLite 数据库
+	 * 
+	 * @param db SQLite 数据库的 JDBC 连接字符串
+	 */
+	public static void loadSQLiteTest(String db) {
+		JdbcConnection.setConnection(JdbcConnection.getSqliteConnection(db));
 	}
 }
