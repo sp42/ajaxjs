@@ -8,7 +8,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.config.ConfigService;
-import com.ajaxjs.user.token.TokenService;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
 
@@ -46,7 +45,7 @@ public class JsSdkApi {
 		Map<String, String> map = new HashMap<>();
 		map.put("url", url);
 		map.put("jsapi_ticket", jsApiTicket);
-		map.put("noncestr", TokenService.getRandomString(10));
+		map.put("noncestr", CommonUtil.getRandomString(10));
 		map.put("timestamp", System.currentTimeMillis() / 1000 + "");
 		map.put("signature", generateSignature(map));
 

@@ -16,7 +16,17 @@
 		<li>	
 			<a href="javascript:openPopupTpl('modiflyEmail');">设置邮箱</a>
 			<div class="${empty userInfo.email ? 'fail' : 'ok' }">绑定邮箱</div><div>${empty userInfo.email ? '未绑定邮箱' : userInfo.email} 
-				&nbsp;${empty userInfo.email ? '' : (isEmailVerified ? '已验证' :'未验证 &nbsp;<a href="#">点击验证</a>')}</div>
+				&nbsp;${empty userInfo.email ? '' : (isEmailVerified ? '已验证' :'未验证 &nbsp;<a href="javascript:emailVerify();">点击验证</a>')}</div>
+				
+			<div>
+			
+			
+			</div>
+			<script>
+				function emailVerify() {
+					alert(9)
+				}
+			</script>
 		</li>
 		<li>	
 			<a href="javascript:openPopupTpl('resetPsw');">修改密码</a>
@@ -84,15 +94,15 @@
 		<aj-layer ref="layer">
 			<h2>更换手机</h2>
 			<div class="test-pl">
-				<aj-process-line ref="processLine" :items="['填写新邮箱', '邮箱审核', '完成']"></aj-process-line>
+				<aj-process-line ref="processLine" :items="['填写手机号码', '输入验证码', '完成']"></aj-process-line>
 			</div>
 			
-			<form class="aj-form fixed-width" action="${ctx}/user/info/modiflyEmail" method="POST">
+			<form class="aj-form fixed-width" action="${ctx}/user/account/modiflyPhone" method="POST">
 				<dl>
 					<label>
-						<dt>邮箱</dt>
+						<dt>手机号码</dt>
 						<dd>
-							<input type="email" name="email" value="${user.email}" placeholder="请输入邮箱" required pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}" /> 
+							<input type="number" name="phone" value="${user.phone}" placeholder="请输入中国大陆手机号码" required pattern="" /> 
 						</dd>
 					</label>
 				</dl>

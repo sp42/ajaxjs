@@ -21,6 +21,7 @@ import java.sql.SQLException;
 
 import com.ajaxjs.Version;
 import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.config.TestHelper;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
@@ -39,11 +40,7 @@ import com.ajaxjs.util.logger.LogHelper;
  */
 public class DataBaseFilter extends JdbcConnection implements FilterAction {
 	private static final LogHelper LOGGER = LogHelper.getLog(DataBaseFilter.class);
-	/**
-	 * 为方便单测，设一个开关
-	 */
-	public static boolean isAutoClose = true;
-
+	
 	@Override
 	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args) {
 		initDb();
@@ -72,7 +69,7 @@ public class DataBaseFilter extends JdbcConnection implements FilterAction {
 		} catch (Throwable e) {
 			throw new RuntimeException(e.getMessage());
 		} finally {
-			if (isAutoClose) // 保证一定关闭，哪怕有异常
+			if (TestHelper.IS_DB_CONNECTION_AUTOCLOSE) // 保证一定关闭，哪怕有异常
 				closeDb();
 		}
 
@@ -111,11 +108,11 @@ public class DataBaseFilter extends JdbcConnection implements FilterAction {
 
 		conn.setAutoCommit(true);
 	}
-	
+
 	private static void saveSql() {
 		for (String sql : getSqls()) {
 			System.out.println(sql);
 		}
 	}
-	
+
 }

@@ -130,6 +130,13 @@ public class RoleService extends BaseService<Map<String, Object>> {
 		return (num & pos) == pos;
 	}
 
+	public static boolean simple8421(Integer total, int spec) {
+		if (total == null)
+			return false;
+
+		return (total & spec) == spec;
+	}
+
 	/**
 	 * 
 	 * @param pos
@@ -146,7 +153,7 @@ public class RoleService extends BaseService<Map<String, Object>> {
 		Object _privilegeTotal = s.getAttribute("privilegeTotal");
 		if (_privilegeTotal == null)
 			return false;
-		
+
 		long privilegeTotal = (long) _privilegeTotal;
 
 		return check(privilegeTotal, pos);

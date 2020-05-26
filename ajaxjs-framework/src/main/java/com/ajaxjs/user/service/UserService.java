@@ -108,7 +108,7 @@ public class UserService extends BaseService<User> {
 	 * @return true=值重复
 	 * @throws ServiceException
 	 */
-	private static boolean checkIfRepeated(String field, String value, String type) throws ServiceException {
+	public static boolean checkIfRepeated(String field, String value, String type) throws ServiceException {
 		if (value != null && checkIfRepeated(field, value))
 			throw new ServiceException(type + " " + value + " 已注册");
 

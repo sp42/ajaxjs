@@ -10,10 +10,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ajaxjs.app.service.FeedbackService;
-import com.ajaxjs.framework.MockTest;
+import com.ajaxjs.config.TestHelper;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.ioc.BeanContext;
-import com.ajaxjs.mock.TestHelper;
 import com.ajaxjs.orm.JdbcConnection;
 
 public class TestFeedbackService {
@@ -21,7 +20,7 @@ public class TestFeedbackService {
 
 	@BeforeClass
 	public static void initDb() {
-		MockTest.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
+		TestHelper.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
 		service = (FeedbackService) BeanContext.getBean("FeedbackService");
 	}
 

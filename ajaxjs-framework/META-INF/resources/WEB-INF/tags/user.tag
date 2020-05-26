@@ -176,7 +176,7 @@
 			},
 			
 			mounted() {
-				ajaxjs.xhr.form(
+ 				ajaxjs.xhr.form(
 					this.$el, 
 					ajaxjs.xhr.defaultCallBack_cb.delegate(null, null, 
 						j => {
@@ -199,7 +199,7 @@
 							delete json.password2;
 						}
 					}
-				);
+				); 
 			},
 		 
 			methods : {
@@ -285,10 +285,7 @@
 				}
 			}
 		});
-		
-		aj.xhr.form('form');
 	</script>
-	
 </c:if>
 
 <c:if test="${type == 'onNoLogin'}">

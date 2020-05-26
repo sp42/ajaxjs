@@ -2,14 +2,16 @@ package com.ajaxjs.user.filter;
 
 import java.lang.reflect.Method;
 import java.util.Objects;
+import java.util.function.Function;
 
+import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.FilterAction;
 import com.ajaxjs.mvc.filter.FilterAfterArgs;
-import com.ajaxjs.user.token.TokenInfo;
-import com.ajaxjs.user.token.TokenService;
+import com.ajaxjs.user.service.TokenMaker;
+import com.ajaxjs.util.cryptography.Symmetri_Cipher;
 
 /**
  * 简单的接口合法性校验，基于 AES
@@ -19,24 +21,20 @@ import com.ajaxjs.user.token.TokenService;
  */
 public class ApiAllowRequestCheck implements FilterAction {
 	/**
-	 * 凭证验证服务
+	 * 参数名称
 	 */
-	private final static TokenService service = new TokenService(new TokenInfo());
-
-	static {
-		service.getInfo().setUsingTimeout(true);
-		service.getInfo().setKeyByConfig("System.api.AES_Key");
-		service.getInfo().setTimeoutByConfig("System.api.timeout");
-	}
+	public static final String TOKEN = "token";
 
 	@Override
 	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args) {
-		String token = request.getHeader(TokenInfo.TOKEN);
+		String token = request.getHeader(TOKEN);
 		if (token == null)
-			token = request.getParameter(TokenInfo.TOKEN);
+			token = request.getParameter(TOKEN);
 		Objects.requireNonNull(token, "缺少 token 参数，请放置 HTTP Header 请求中或 QueryString 中");
 
-		return service.verify(token);
+		String decrypted = Symmetri_Cipher.AES_Decrypt(token, ConfigService.getValueAsString("System.api.AES_Key"));
+
+		return TokenMaker.checkTimespam(ConfigService.getValueAsInt("System.api.timeout"), null).test(decrypted);
 	}
 
 	@Override
@@ -51,6 +49,8 @@ public class ApiAllowRequestCheck implements FilterAction {
 	 * @return 时间戳 Token
 	 */
 	public static String getTimeStampToken() {
-		return service.getToken();
+		Function<String, String> fn = TokenMaker::addTimespam;
+		fn = fn.andThen(TokenMaker.encryptAES(ConfigService.getValueAsString("System.api.AES_Key")));
+		return fn.apply("{timeStamp}");
 	}
 }

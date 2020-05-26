@@ -12,7 +12,6 @@ import com.ajaxjs.net.http.Tools;
 import com.ajaxjs.payment.wxpay.PerpayReturn;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.service.OrderService;
-import com.ajaxjs.user.token.TokenService;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.logger.LogHelper;
@@ -76,7 +75,7 @@ public class WxPay {
 			Map<String, String> map = new HashMap<>();
 			map.put("appId", ConfigService.getValueAsString("mini_program.appId"));
 			map.put("timeStamp", System.currentTimeMillis() / 1000 + "");
-			map.put("nonceStr", TokenService.getRandomString(10)); // 可以是不同的随机字符串
+			map.put("nonceStr", CommonUtil.getRandomString(10)); // 可以是不同的随机字符串
 			map.put("package", "prepay_id=" + result.getPrepay_id());
 			map.put("signType", "MD5");
 
@@ -122,7 +121,7 @@ public class WxPay {
 		data.put("total_fee", toCent(order.getTotalPrice()));
 		data.put("fee_type", "CNY");
 		data.put("sign_type", "MD5");
-		data.put("nonce_str", TokenService.getRandomString(10));
+		data.put("nonce_str", CommonUtil.getRandomString(10));
 		data.put("mch_id", ConfigService.getValueAsString("shop.payment.wx.mchId"));
 		data.put("notify_url", ConfigService.getValueAsString("shop.payment.wx.notifyUrl"));
 

@@ -8,9 +8,8 @@ import org.junit.Test;
 
 import com.ajaxjs.app.CommonConstant;
 import com.ajaxjs.app.service.ShopBookmarkService;
-import com.ajaxjs.framework.MockTest;
+import com.ajaxjs.config.TestHelper;
 import com.ajaxjs.ioc.BeanContext;
-import com.ajaxjs.mock.TestHelper;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.SnowflakeIdWorker;
 import com.ajaxjs.shop.model.Goods;
@@ -25,7 +24,7 @@ public class TestGoodsService {
 
 	@BeforeClass
 	public static void initDb() {
-		MockTest.init2("c:\\project\\bgdiving", "com.ajaxjs.cms", "com.ajaxjs.user", "com.ajaxjs.shop");
+		TestHelper.initAll("c:\\project\\bgdiving", "com.ajaxjs.cms", "com.ajaxjs.user", "com.ajaxjs.shop");
 
 //		goodsBookmarkService = (ShopBookmarkService) BeanContext.getBean("GoodsBookmarkService");
 	}

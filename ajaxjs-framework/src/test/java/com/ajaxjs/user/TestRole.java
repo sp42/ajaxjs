@@ -14,7 +14,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.framework.MockTest;
+import com.ajaxjs.config.TestHelper;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.user.role.RightConstant;
 import com.ajaxjs.user.role.RoleService;
@@ -25,7 +25,7 @@ public class TestRole {
 
 	@BeforeClass
 	public static void initDb() {
-		MockTest.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
+		TestHelper.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
 //		service = (AdsService) BeanContext.getBean("AdsService");
 	}
 

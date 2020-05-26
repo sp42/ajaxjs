@@ -1,7 +1,8 @@
-package com.ajaxjs.user.token;
+package com.ajaxjs.user.service;
 
 import java.util.Date;
 
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.cryptography.Symmetri_Cipher;
 
@@ -31,7 +32,7 @@ public class Token {
 	 */
 	public static String getToken(String realPassword, String aesKey) {
 		String hashedPassword = Encode.getSHA1(realPassword);
-		return Symmetri_Cipher.AES_Encrypt(TokenService.getRandomString(saltSize) + hashedPassword, aesKey);
+		return Symmetri_Cipher.AES_Encrypt(CommonUtil.getRandomString(saltSize) + hashedPassword, aesKey);
 	}
 
 	/**
@@ -44,7 +45,7 @@ public class Token {
 	 */
 	public static String getStoreToken(String clientToken, String aesKey, String serverAESkey) {
 		String hashedPassword = removeSalt(clientToken, aesKey);
-		return Symmetri_Cipher.AES_Encrypt(TokenService.getRandomString(saltSize) + hashedPassword, serverAESkey);
+		return Symmetri_Cipher.AES_Encrypt(CommonUtil.getRandomString(saltSize) + hashedPassword, serverAESkey);
 	}
 
 	/**
@@ -82,7 +83,7 @@ public class Token {
 	 */
 	public static String[] getAutoLoginToken(String storeToken, String serverAESkey) {
 		String hashedPassword = removeSalt(storeToken, serverAESkey);
-		String slat = TokenService.getRandomString(saltSize);
+		String slat = CommonUtil.getRandomString(saltSize);
 		
 		return new String[] { slat, Symmetri_Cipher.AES_Encrypt(slat + hashedPassword, serverAESkey) };
 	}

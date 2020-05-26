@@ -6,8 +6,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.config.ConfigService;
-import com.ajaxjs.framework.MockTest;
+import com.ajaxjs.config.TestHelper;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.orm.JdbcConnection;
@@ -21,25 +20,22 @@ public class TestUser {
 	static UserService service;
 	static UserCommonAuthService passwordService;
 
+	String userName = TestHelper.getUserName(), psw = "dfdsfsd";
+
 	@BeforeClass
 	public static void initDb() {
-		MockTest.loadSQLiteTest("C:\\project\\new_gz88\\WebContent\\META-INF\\gz88.sqlite");
+		TestHelper.initAll();
 
-		BeanContext.init("com.ajaxjs.cms", "com.ajaxjs.user");
-		BeanContext.injectBeans();
-
-		ConfigService.load("C:\\project\\new_gz88\\src\\site_config.json");
-
-		service = (UserService) BeanContext.getBean("UserService");
-		passwordService = (UserCommonAuthService) BeanContext.getBean("User_common_authService");
+		service = BeanContext.getBean(UserService.class);
+		passwordService = BeanContext.getBean(UserCommonAuthService.class);
 	}
 
-	// @Test
+	@Test
 	public void testRegister() {
 		User user = new User();
-		user.setName("testUserName");
+		user.setName(userName);
 		UserCommonAuth password = new UserCommonAuth();
-		password.setPassword("dfdsfsd");
+		password.setPassword(psw);
 
 		try {
 			service.register(user, password);
@@ -50,9 +46,8 @@ public class TestUser {
 
 	@Test
 	public void testLogin() {
-
 		try {
-			assertTrue(new UserController().loginByPassword("testUserName", "dfdsfsd", null) != null);
+			assertTrue(new UserController().loginByPassword(userName, psw, null) != null);
 		} catch (ServiceException e) {
 			e.printStackTrace();
 		}

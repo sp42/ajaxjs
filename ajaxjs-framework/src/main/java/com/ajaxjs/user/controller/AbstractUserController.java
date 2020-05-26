@@ -123,8 +123,7 @@ public abstract class AbstractUserController extends BaseUserController {
 
 		if (ConfigService.getValueAsString("user.customRegister") != null) {
 			String[] arr = ConfigService.getValueAsString("user.customRegister").split("#");
-			Method method = ReflectUtil.getMethod(ReflectUtil.getClassByName(arr[0]), arr[1], Map.class,
-					AbstractUserController.class);
+			Method method = ReflectUtil.getMethod(ReflectUtil.getClassByName(arr[0]), arr[1], Map.class, AbstractUserController.class);
 
 			try {
 				return (String) method.invoke(null, map, this);

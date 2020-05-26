@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.framework.MockTest;
+import com.ajaxjs.config.TestHelper;
 import com.ajaxjs.web.mock.BaseControllerTest;
 import com.ajaxjs.web.mock.MockRequest;
 import com.ajaxjs.web.mock.MockResponse;
@@ -22,7 +22,7 @@ public class TestTransaction extends BaseControllerTest {
 	@BeforeClass
 	public static void init() throws ServletException {
 //		System.out.println(AbstractScanner.getResourcesFromClasspath("\\test.db"));
-		MockTest.loadSQLiteTest("D:\\project\\ajaxjs-framework\\src\\test\\test.db");
+		TestHelper.loadSQLiteTest("D:\\project\\ajaxjs-framework\\src\\test\\test.db");
 		init("com.ajaxjs.cms.filter");
 		
 	}

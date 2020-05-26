@@ -2,8 +2,9 @@ package com.ajaxjs.weixin.mini_app.model;
 
 import java.util.Objects;
 
-import com.ajaxjs.user.token.TokenInfo;
-import com.ajaxjs.user.token.TokenService;
+import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.user.service.TokenMaker;
+import com.ajaxjs.util.cryptography.Symmetri_Cipher;
 import com.ajaxjs.weixin.open_account.model.BaseModel;
 
 /**
@@ -12,7 +13,7 @@ import com.ajaxjs.weixin.open_account.model.BaseModel;
  * @author sp42 frank@ajaxjs.com
  *
  */
-public class UserLoginToken extends BaseModel{
+public class UserLoginToken extends BaseModel {
 	/**
 	 * 用户 id
 	 */
@@ -26,15 +27,6 @@ public class UserLoginToken extends BaseModel{
 	private String session_key;
 
 	/**
-	 * 凭证验证服务
-	 */
-	private final static TokenService service = new TokenService(new TokenInfo());
-
-	static {
-		service.getInfo().setKeyByConfig("mini_program.SessionId_AesKey");
-	}
-
-	/**
 	 * 客户端密钥（业务登录凭证）
 	 * 
 	 * @param token
@@ -43,7 +35,8 @@ public class UserLoginToken extends BaseModel{
 	public UserSession getSessionId() {
 		Objects.requireNonNull(openid, "没有 open id");
 
-		String sessionId = service.getToken(openid + userId);
+		String sessionId = TokenMaker.encryptAES(ConfigService.getValueAsString("mini_program.SessionId_AesKey"))
+				.apply(openid + userId);
 
 		UserSession session = new UserSession();
 		session.setUserId(userId);
@@ -59,7 +52,7 @@ public class UserLoginToken extends BaseModel{
 	 * @return 0=openid,1 = userid
 	 */
 	public static Object[] decodeSessionId(String str) {
-		String s = service.decrypt(str);
+		String s = Symmetri_Cipher.AES_Decrypt(str, ConfigService.getValueAsString("mini_program.SessionId_AesKey"));
 		Object[] r = new Object[2];
 
 		try {

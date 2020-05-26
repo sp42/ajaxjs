@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import com.ajaxjs.app.catalog.Catalog;
 import com.ajaxjs.app.catalog.CatalogService;
-import com.ajaxjs.framework.MockTest;
+import com.ajaxjs.config.TestHelper;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.orm.JdbcConnection;
@@ -21,7 +21,7 @@ public class TestCatalogService {
 
 	@BeforeClass
 	public static void initDb() {
-		MockTest.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
+		TestHelper.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
 		catalogService = (CatalogService) BeanContext.getBean("闪亮杯国际少儿音乐大赛");
 	}
 

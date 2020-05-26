@@ -1,5 +1,7 @@
 package com.ajaxjs.user;
 
+import java.util.Random;
+
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -31,7 +33,8 @@ public class CmsUserController extends BaseUserController {
 			if (UserUtil.isVaildPhone(phoneNo)) {
 				return jsonNoOk(phoneNo + " 为非法手机号码");
 			} else {
-				int randomCode = (int) ((Math.random() * 9 + 1) * 100000);
+//				int randomCode = (int) ((Math.random() * 9 + 1) * 100000);
+				int randomCode = new Random().nextInt(900000) + 100000;
 
 				SmsMessage message = new SmsMessage();
 				message.setPhoneNo(phoneNo);
@@ -39,6 +42,7 @@ public class CmsUserController extends BaseUserController {
 				message.setTemplateParam(String.format("{\"code\":\"%s\"}", randomCode));
 
 				ThirdPartyService services = BeanContext.getByClass(ThirdPartyService.class);
+				
 
 				if (services.sendSms(phoneNo, "", "")) {
 					LOGGER.info("发送手机 " + phoneNo + " 验证码成功");

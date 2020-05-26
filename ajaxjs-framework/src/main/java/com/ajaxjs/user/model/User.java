@@ -275,7 +275,7 @@ public class User extends BaseModel {
 	/**
 	 * 验证项
 	 */
-	private int verify;
+	private Integer verify;
 	
 	public static String getSexText(int sex) {
 		if(sex == 1)
@@ -286,11 +286,11 @@ public class User extends BaseModel {
 			return "未知";
 	}
 
-	public int getVerify() {
+	public Integer getVerify() {
 		return verify;
 	}
 
-	public void setVerify(int verify) {
+	public void setVerify(Integer verify) {
 		this.verify = verify;
 	}
 

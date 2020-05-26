@@ -17,6 +17,7 @@ public interface UserDict {
 	public static final int PSW_LOGIN_PHONE = 4;
 	
 	public static final int VERIFIED_EMAIL = 1;
+	public static final int VERIFIED_PHONE = 2;
 
 	
 	public static final int WECHAT = 1;

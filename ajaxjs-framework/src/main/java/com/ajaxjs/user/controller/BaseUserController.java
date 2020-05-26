@@ -45,7 +45,8 @@ public abstract class BaseUserController extends BaseController<User> {
 		HttpServletRequest request = MvcRequest.getHttpServletRequest();
 
 		if (request == null)
-			throw new NullPointerException("ThreadLocal 未定义 HttpServletRequest。请先保存 HttpServletRequest");
+			return false;
+//			throw new NullPointerException("ThreadLocal 未定义 HttpServletRequest。请先保存 HttpServletRequest");
 
 		return isLogined(request);
 	}

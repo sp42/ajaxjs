@@ -10,16 +10,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ajaxjs.app.HrController;
-import com.ajaxjs.framework.MockTest;
+import com.ajaxjs.config.TestHelper;
 import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.mock.TestHelper;
 import com.ajaxjs.orm.JdbcConnection;
 
 public class TestHrService {
 
 	@BeforeClass
 	public static void initDb() {
-		MockTest.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
+		TestHelper.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
 	}
 
 	static String[] names = new String[] { "招聘文员两名", "招聘会计一名" };

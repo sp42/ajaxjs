@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import com.ajaxjs.app.service.Column;
 import com.ajaxjs.app.service.ColumnService;
-import com.ajaxjs.framework.MockTest;
+import com.ajaxjs.config.TestHelper;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.orm.JdbcConnection;
 
@@ -20,7 +20,7 @@ public class TestColumnService {
 
 	@BeforeClass
 	public static void initDb() {
-		MockTest.init2("D:\\project\\leidong", "com.ajaxjs.app");
+		TestHelper.initAll("D:\\project\\leidong", "com.ajaxjs.app");
 		service = BeanContext.getBean(ColumnService.class);
 	}
 
