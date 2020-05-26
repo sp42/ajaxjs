@@ -277,6 +277,19 @@ public class TestHelper {
 	}
 
 	/**
+	 * 写死的
+	 * 
+	 * @param packages
+	 */
+	public static void initAll() {
+		String projectFolder = "D:\\project\\leidong\\";
+		String[] packages = new String[] { "com.ajaxjs.app", "com.ajaxjs.user" };
+
+		init(projectFolder + "\\WebContent\\META-INF\\site_config.json",
+				projectFolder + "\\WebContent\\META-INF\\context.xml", packages);
+	}
+
+	/**
 	 * 加载 SQLite 数据库
 	 * 
 	 * @param db SQLite 数据库的 JDBC 连接字符串

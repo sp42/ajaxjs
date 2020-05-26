@@ -97,8 +97,7 @@ public class JdbcReader {
 	 * @param params       插入到 SQL 中的参数，可单个可多个可不填
 	 * @return RS 转换后的目标结果
 	 */
-	public static <T> T select(Connection conn, String sql, HasZeroResult hasZeoResult, ResultSetProcessor<T> processor,
-			Object... params) {
+	public static <T> T select(Connection conn, String sql, HasZeroResult hasZeoResult, ResultSetProcessor<T> processor, Object... params) {
 		LOGGER.infoYellow("SQL-->" + JdbcUtil.printRealSql(sql, params));
 
 		try (PreparedStatement ps = conn.prepareStatement(sql)) {
