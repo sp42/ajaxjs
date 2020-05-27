@@ -41,8 +41,7 @@ public class Symmetri_Cipher {
 	 */
 	public static String AES_Encrypt(String str, String key) {
 		// (这里要设置为 utf-8)不然内容中如果有中文和英文混合中文就会解密为乱码
-		return Encode
-				.base64Encode(CipherInfo.doCipher(AES, Cipher.ENCRYPT_MODE, key, str.getBytes(StandardCharsets.UTF_8)));
+		return Encode.base64Encode(CipherInfo.doCipher(AES, Cipher.ENCRYPT_MODE, key, str.getBytes(StandardCharsets.UTF_8)));
 
 	}
 
@@ -57,6 +56,7 @@ public class Symmetri_Cipher {
 		byte[] b = CipherInfo.doCipher(AES, Cipher.DECRYPT_MODE, key, Encode.base64DecodeAsByte(str));
 		if (b == null || b.length == 0)
 			return null;
+		
 		return Encode.byte2String(b);
 	}
 
