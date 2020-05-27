@@ -23,26 +23,18 @@ public class TokenMaker {
 	}
 
 	public static Function<String, String> value(String value) {
-		return str -> {
-			System.out.println(str);
-			System.out.println(str.contains("{value}"));
-			return str.replace("{value}", value);
-		};
+		return str -> str.replace("{value}", value);
 	}
 
-	public static String TOKEN_TPL = "email-{value}-{salt}-{timeStamp}";
+	public static String TOKEN_TPL = "TOKEN-{value}-{salt}-{timeStamp}";
 
-	public static Predicate<String[]> checkEmail(String email, List<Throwable> ex) {
-		return arr -> {
-			if (email.equals(arr[1])) {
-				return true;
-			} else {
-				ex.add(new IllegalAccessError("邮件地址不匹配！"));
-				return false;
-			}
-		};
-	}
-
+	/**
+	 * 时间戳校验
+	 * 
+	 * @param min
+	 * @param ex
+	 * @return
+	 */
 	public static Predicate<String> checkTimespam(int min, List<Throwable> ex) {
 		return v -> {
 			long timespam = Long.parseLong(v);
@@ -54,6 +46,17 @@ public class TokenMaker {
 				return false;
 			} else {
 				return true;
+			}
+		};
+	}
+
+	public static Predicate<String[]> checkEmail(String email, List<Throwable> ex) {
+		return arr -> {
+			if (email.equals(arr[1])) {
+				return true;
+			} else {
+				ex.add(new IllegalAccessError("邮件地址不匹配！"));
+				return false;
 			}
 		};
 	}

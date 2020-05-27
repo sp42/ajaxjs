@@ -1,9 +1,11 @@
 package com.ajaxjs.user.controller;
 
+import java.util.Objects;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -17,8 +19,8 @@ import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mvc.ModelAndView;
+import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.net.mail.Mail;
 import com.ajaxjs.user.UserDict;
 import com.ajaxjs.user.UserUtil;
 import com.ajaxjs.user.controller.LoginLogController.UserLoginLogService;
@@ -27,6 +29,7 @@ import com.ajaxjs.user.filter.UserPasswordFilter;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.model.UserCommonAuth;
 import com.ajaxjs.user.role.RoleService;
+import com.ajaxjs.user.service.AccountService;
 import com.ajaxjs.user.service.UserCommonAuthService;
 import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.cache.ExpireCache;
@@ -58,12 +61,9 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 		LOGGER.info("用户会员中心-帐号管理-首页");
 
 		User user = getService().findById(getUserId());
-		System.out.println(user.getVerify());
-		System.out.println(user.getVerify());
 		mv.put("userInfo", user);
 		mv.put("isEmailVerified", RoleService.simple8421(user.getVerify(), UserDict.VERIFIED_EMAIL));
 		mv.put("lastUserLoginedInfo", LoginLogController.service.dao.getLastUserLoginedInfo(getUserId()));
-
 		mv.put("UserGroups", CatalogService.list2map_id_as_key(RoleService.dao.findList(null)));
 
 		return user("account");
@@ -86,56 +86,75 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 		} else
 			return jsonNoOk("修改用户名失败！");
 	}
-
+	
+	private final static String EMAIL_VERIFY = "/user/account/emailVerify/";
+	
 	@POST
 	@Path("account/emailVerify")
-	@MvcFilter(filters = { LoginCheck.class })
+	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
-	public String emailVerify_sendLink(@NotNull @QueryParam("email") String email) {
+	public String emailVerify_sendLink(@NotNull @FormParam("email") String email, @FormParam("isUpdate") boolean isUpdate, MvcRequest req) {
 		LOGGER.info("邮箱-发送审核链接 " + email);
 
-		String url = "http://www.qq.com";
+		if (isUpdate) {// 修改邮箱，所以要写入数据库，但设置状态为未审核的邮箱
+			long userId = getUserId();
+			User targetUser = getService().findById(userId);
+			Objects.requireNonNull(targetUser, "程序异常，没有找到对应的用户，用户 id 为 " + userId);
 
-		Mail mail = new Mail();
-		mail.setTo("sp42@qq.com");
-		mail.setSubject("邮箱审核");
-		mail.setHTML_body(true);
-		mail.setContent(
-				"您好：请点击下面链接审核邮箱 <a target=\"_blank\" href=\"" + url + "\">审核邮箱</a>。 <br /> 如不能打开，请复制该链接到浏览器 " + url);
+			User saveEmail = new User(); // 复制一个新的用户，保存部分相关字段
+			saveEmail.setId(userId);
+			saveEmail.setEmail(email);
+			int v = targetUser.getVerify();
+			if (RoleService.simple8421(v, AccountService.EMAIL))
+				saveEmail.setVerify(v - AccountService.EMAIL);
+			getService().update(saveEmail);
+		}
 
-		ThirdPartyService services = BeanContext.getByClass(ThirdPartyService.class);
-		return services.sendEmail(mail) ? jsonOk("修改邮箱成功") : jsonNoOk("修改邮箱失败！");
+//		String value = email + "_" + getUserId(req);
+//		Function<String, String> fn = TokenMaker::addSalt;
+//		fn = fn.andThen(TokenMaker.value(value).andThen(TokenMaker::addTimespam).andThen(TokenMaker.encryptAES(ConfigService.getValueAsString("System.api.AES_Key"))));
+//
+//		String url = req.getBasePath() + "/user/account/emailVerify/";
+//		url += "?email=" + Encode.urlEncode(email);
+//		url += "&token=" + Encode.urlEncode(fn.apply(TokenMaker.TOKEN_TPL));
+//
+//		Mail mail = new Mail();
+//		mail.setTo(email);
+//		mail.setSubject("邮箱审核");
+//		mail.setHTML_body(true);
+//		mail.setContent("您好：请点击下面链接审核邮箱 <a target=\"_blank\" href=\"" + url + "\">审核邮箱</a>。 <br /> 如不能打开，请复制该链接到浏览器 " + url);
+//
+//		ThirdPartyService services = BeanContext.getByClass(ThirdPartyService.class);
+		return AccountService.sendTokenMail(email, "邮箱审核", req.getBasePath() + EMAIL_VERIFY) ? jsonOk("修改邮箱成功") : jsonNoOk("修改邮箱失败！");
 	}
 
 	@GET
 	@Path("account/emailVerify")
-	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Produces(MediaType.APPLICATION_JSON)
-	public String emailVerif(@NotNull @QueryParam("token") String token) {
+	@MvcFilter(filters = { DataBaseFilter.class })
+	public String emailVerif(@NotNull @QueryParam("token") String token, @NotNull @QueryParam("email") String email, ModelAndView mv) {
 		LOGGER.info("邮箱-审核链接 " + token);
 
-		Mail mail = new Mail();
-		mail.setTo("sp42@qq.com");
-		mail.setSubject("邮箱审核");
-		mail.setHTML_body(true);
-		mail.setContent("我希望可以跟你做朋友 <a target=\"_blank\" href=\"http://www.qq.com\">QQ</a> 34354344");
+		long userId = AccountService.checkEmail_VerifyToken(token, email);
 
-		ThirdPartyService services = BeanContext.getByClass(ThirdPartyService.class);
-		return services.sendEmail(mail) ? jsonOk("修改邮箱成功") : jsonNoOk("修改邮箱失败！");
-	}
+		User targetUser = getService().findById(userId);
+		Objects.requireNonNull(targetUser, "程序异常，没有找到对应的用户，用户 id 为 " + userId);
 
-	@POST
-	@Path("account/modiflyEmail")
-	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Produces(MediaType.APPLICATION_JSON)
-	public String modiflyEmail(@NotNull @QueryParam("email") String email) {
-		LOGGER.info("修改邮箱");
+		int v = targetUser.getVerify();
+		if (RoleService.simple8421(v, AccountService.EMAIL))
+			throw new IllegalArgumentException("用户之前已经验证邮件，这次校验无效。");
 
-		User user = new User();
-		user.setId(getUserId());
-		user.setEmail(email);
+		User saveEmail = new User(); // 复制一个新的用户，保存部分相关字段
+		saveEmail.setId(userId);
+		saveEmail.setEmail(email);
+		saveEmail.setVerify(v + AccountService.EMAIL);
+		getService().update(saveEmail);
 
-		return getService().update(user) != 0 ? jsonOk("修改邮箱成功") : jsonNoOk("修改邮箱失败！");
+		mv.put("title", email + " 已通过审核！");
+		mv.put("msg", email + " 已通过审核！");
+		mv.put("redirect", "../../login/");
+
+		return page("msg");
+
 	}
 
 	private final static int SMS_EXPIRE_SECONDS = 5 * 60;
@@ -227,12 +246,10 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 	@Path("account/safe/resetPassword")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class, UserPasswordFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
-	public String resetPassword(@NotNull @QueryParam("new_password") String new_password, HttpServletRequest request)
-			throws ServiceException {
+	public String resetPassword(@NotNull @QueryParam("new_password") String new_password, HttpServletRequest request) throws ServiceException {
 		LOGGER.info("重置密码");
 
-		if (getPasswordService() != null && getPasswordService()
-				.updatePwd((UserCommonAuth) request.getAttribute("UserCommonAuthId"), new_password))
+		if (getPasswordService() != null && getPasswordService().updatePwd((UserCommonAuth) request.getAttribute("UserCommonAuthId"), new_password))
 			return jsonOk("重置密码成功");
 		else
 			return jsonNoOk("重置密码失败！");

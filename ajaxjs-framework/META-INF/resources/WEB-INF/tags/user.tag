@@ -45,6 +45,7 @@
 
 		
 			<c:if test="${aj_allConfig.user.login.thridOauth}">
+				<br />
 				<a href="#" onClick="loginWeibo();"><img src="http://www.sinaimg.cn/blog/developer/wiki/240.png" /></a>
 				<br />
 			</c:if>

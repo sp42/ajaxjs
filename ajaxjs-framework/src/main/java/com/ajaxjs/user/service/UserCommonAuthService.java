@@ -45,7 +45,7 @@ public class UserCommonAuthService extends BaseService<UserCommonAuth> {
 	/**
 	 * 默认的加盐字符串
 	 */
-	public static final String salt = "dasdsad312";
+	public static final String SALT = "dasdsad312";
 
 	@Override
 	public Long create(UserCommonAuth bean) {
@@ -61,8 +61,9 @@ public class UserCommonAuthService extends BaseService<UserCommonAuth> {
 	}
 
 	public static String encode(String p) {
-//		LOGGER.info("encode:::::::::::::::::::::::::" + Encode.md5(p.toLowerCase() + salt));
-		return Encode.md5(p.toLowerCase() + salt);
+//		LOGGER.info("提交密码:::::::::::::::::::::::::" + p.toLowerCase());
+//		LOGGER.info("保存密码:::::::::::::::::::::::::" + Encode.md5(p.toLowerCase() + SALT));
+		return Encode.md5(p.toLowerCase() + SALT);
 	}
 
 	@Override

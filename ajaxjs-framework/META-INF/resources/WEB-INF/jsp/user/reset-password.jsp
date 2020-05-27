@@ -6,7 +6,7 @@
 <tags:content bannerImg="${ctx}/images/memberBanner.jpg">
 	<fieldset class="user">
 		<legend>重置密码 </legend>
-		<form class="aj-form" action="${ctx}/user/reset_password/" method="POST">
+		<form class="aj-form" action="${ctx}/user/reset_password/findByEmail/" method="POST">
 			<dl>
 				<label>
 					<dt>邮 &nbsp;&nbsp;箱</dt>
