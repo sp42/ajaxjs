@@ -149,6 +149,12 @@ public class TestJsonHelper {
 			 "}"};
 			
 	public static Map<String, Object> map = parseMap(String.join("", _map));
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testParsrMap() {
+		assertEquals("dsds", ((Map<String, Object>)map.get("site")).get("footCopyright"));
+	}
 
 	@Test
 	public void testParseMap() {
