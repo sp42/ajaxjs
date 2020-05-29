@@ -6,6 +6,8 @@ import java.util.Set;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.junit.Test;
 
@@ -15,11 +17,24 @@ import com.ajaxjs.framework.filter.BeanValidator;
 public class TestValidator {
 	public static class News extends BaseModel {
 		private static final long serialVersionUID = 1L;
+
+		@NotNull(message = "名称不能为空")
+		@Size(min = 2, max = 255, message = "长度应该介于3和255之间")
+		private String name;
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
 	}
 
 	@Test
 	public void TestValidation() {
 		Validator v = BeanValidator.AVF.getValidator();
+
 		News news = new News();
 		news.setName("标题");
 		Set<ConstraintViolation<News>> result = v.validate(news);

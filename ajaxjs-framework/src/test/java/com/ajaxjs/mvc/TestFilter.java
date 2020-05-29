@@ -15,8 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.config.ConfigService;
-import com.ajaxjs.user.token.TokenService;
+import com.ajaxjs.config.ConfigService; 
 import com.ajaxjs.web.captcha.CaptchaController;
 import com.ajaxjs.web.mock.MockRequest;
 import com.ajaxjs.web.mock.MockResponse;

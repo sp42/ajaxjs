@@ -110,21 +110,6 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 			getService().update(saveEmail);
 		}
 
-//		String value = email + "_" + getUserId(req);
-//		Function<String, String> fn = TokenMaker::addSalt;
-//		fn = fn.andThen(TokenMaker.value(value).andThen(TokenMaker::addTimespam).andThen(TokenMaker.encryptAES(ConfigService.getValueAsString("System.api.AES_Key"))));
-//
-//		String url = req.getBasePath() + "/user/account/emailVerify/";
-//		url += "?email=" + Encode.urlEncode(email);
-//		url += "&token=" + Encode.urlEncode(fn.apply(TokenMaker.TOKEN_TPL));
-//
-//		Mail mail = new Mail();
-//		mail.setTo(email);
-//		mail.setSubject("邮箱审核");
-//		mail.setHTML_body(true);
-//		mail.setContent("您好：请点击下面链接审核邮箱 <a target=\"_blank\" href=\"" + url + "\">审核邮箱</a>。 <br /> 如不能打开，请复制该链接到浏览器 " + url);
-//
-//		ThirdPartyService services = BeanContext.getByClass(ThirdPartyService.class);
 		return AccountService.sendTokenMail(email, "邮箱审核", req.getBasePath() + EMAIL_VERIFY) ? jsonOk("修改邮箱成功") : jsonNoOk("修改邮箱失败！");
 	}
 

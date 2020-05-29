@@ -54,8 +54,25 @@ public class ResetPasswordController extends BaseController<Map<String, Object>>
 	}
 
 	@GET
+	@Path("findBySms")
 	@MvcFilter(filters = { DataBaseFilter.class })
+	public String findBySms(@NotNull @QueryParam("token") String token, @NotNull @QueryParam("email") String email, ModelAndView mv) {
+		LOGGER.info("重置密码-输入新密码");
+
+		Long userId = AccountService.checkEmail_VerifyToken(token, email);
+
+		if (userId != null && userId != 0) {
+			mv.put("token", token);
+			mv.put("email", email);
+			return jsp("user/reset-password-findByEmail");
+		} else {
+			throw new IllegalAccessError("非法访问");
+		}
+	}
+	
+	@GET
 	@Path("findByEmail")
+	@MvcFilter(filters = { DataBaseFilter.class })
 	public String findByEmailJSP(@NotNull @QueryParam("token") String token, @NotNull @QueryParam("email") String email, ModelAndView mv) {
 		LOGGER.info("重置密码-输入新密码");
 

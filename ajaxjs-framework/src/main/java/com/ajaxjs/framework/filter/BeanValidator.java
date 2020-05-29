@@ -40,7 +40,7 @@ public class BeanValidator implements FilterAction {
 
 					for (ConstraintViolation<Object> r : result) {
 						// 哪个字段错？ 什么错？
-						msg += "提交的字段错误 " + r.getPropertyPath() + ":" + r.getMessage();
+						msg += "提交的字段错误： " + r.getPropertyPath() + ":" + r.getMessage() + "<br />";
 					}
 
 					model.put(NOT_LOG_EXCEPTION, true);

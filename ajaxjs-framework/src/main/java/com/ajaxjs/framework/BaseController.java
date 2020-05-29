@@ -326,12 +326,12 @@ public abstract class BaseController<T> implements IController, Constant {
 	/**
 	 * 显示 HTTP 405 禁止操作
 	 */
-	public static final String show405 = jsonNoOk("405， Request method not supported 禁止操作");
+	public static final String SHOW_405 = jsonNoOk("405， Request method not supported 禁止操作");
 
 	/**
 	 * 显示 HTTP 401 没有权限
 	 */
-	public static final String show401 = jsonNoOk("401， Request method not supported 没有权限");
+	public static final String SHOW_401 = jsonNoOk("401， Request method not supported 没有权限");
 
 	/**
 	 * 

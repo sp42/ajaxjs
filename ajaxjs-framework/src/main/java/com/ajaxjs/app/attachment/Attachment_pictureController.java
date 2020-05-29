@@ -206,20 +206,20 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	@GET
 	@Override
 	public String createUI(ModelAndView model) {
-		return show405;
+		return SHOW_405;
 	}
 
 	@POST
 	@Override
 	public String create(Attachment_picture entity) {
-		return show405;
+		return SHOW_405;
 	}
 
 	@PUT
 	@Path(ID_INFO)
 	@Override
 	public String update(@PathParam(ID) Long id, Attachment_picture entity) {
-		return show405;
+		return SHOW_405;
 	}
 
 	@DELETE
