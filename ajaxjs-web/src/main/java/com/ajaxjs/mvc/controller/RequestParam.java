@@ -190,7 +190,7 @@ public class RequestParam {
 		if (required && CommonUtil.isEmptyString(value))
 			throw new NullPointerException("客户端缺少提交的参数 " + key);
 
-		return value;
+		return value != null ? value.trim() : value; // 去掉空格
 	}
 
 	/**

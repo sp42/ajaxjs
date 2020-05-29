@@ -54,7 +54,7 @@ public interface Constant {
 	public static final String USER_ID = "X-Ajaxjs-UserId";
 	public static final String USER_ID_HEADER = "X-Ajaxjs-UserId";
 
-	public static final String domainCatalog_Id = "domainCatalog_Id";
+	public static final String DOMAIN_CATALOG_ID = "domainCatalog_Id";
 
 	/**
 	 * 全局 json 模板路径 之 WEB-INF前缀

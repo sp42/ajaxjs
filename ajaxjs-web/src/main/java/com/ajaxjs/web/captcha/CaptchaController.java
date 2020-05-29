@@ -76,13 +76,7 @@ public class CaptchaController extends HttpServlet {
 	 * @return 四位验证码
 	 */
 	private static String getRandom() {
-		StringBuilder sb = new StringBuilder();
-		Random random = new Random();
-
-		for (int i = 0; i < 4; i++)
-			sb.append(String.valueOf(random.nextInt(10)));
-
-		return sb.toString();
+		return (new Random().nextInt(9000) + 1000) + "";
 	}
 
 	/**
