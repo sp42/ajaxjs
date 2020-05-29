@@ -915,11 +915,6 @@ Vue.component('aj-chinese-switch', {
 	}
 });
 
-
-
-
-
-
 // 进度条
 Vue.component('aj-process-line', {
 	template:

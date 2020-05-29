@@ -110,8 +110,6 @@
 }
 
 .aj-form {
-	// margin: 5% auto;
-	// max-width: 82%;
 	min-width: 400px;
 	overflow: hidden;
 	
@@ -123,6 +121,8 @@
 	}
 	
 	&.fixed-width {
+		margin: 5% auto;
+		max-width: 82%;
 		width:460px;
 	}
 	
@@ -149,6 +149,7 @@
 		dd {
 			float: left;
 			max-width:70%;
+			position: relative;
 		}
 	}
 
@@ -234,6 +235,10 @@
 	
 	.error-message {
 	    color: red;
+		padding-left: 1%;
+		position: absolute;
+	    right: -100px;
+	    top: 0;
 	}
 }
 
