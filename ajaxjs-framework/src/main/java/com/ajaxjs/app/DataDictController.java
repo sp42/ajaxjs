@@ -13,7 +13,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.app.service.AdsService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
@@ -29,6 +28,7 @@ import com.ajaxjs.orm.annotation.TableName;
 import com.ajaxjs.util.logger.LogHelper;
 
 @Bean
+@Deprecated
 @Path("/admin/DataDict")
 public class DataDictController extends BaseController<Map<String, Object>> {
 	private static final LogHelper LOGGER = LogHelper.getLog(DataDictController.class);

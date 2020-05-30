@@ -1,4 +1,4 @@
-package com.ajaxjs.app.service.section;
+package com.ajaxjs.app.section;
 
 import com.ajaxjs.framework.BaseModel;
 

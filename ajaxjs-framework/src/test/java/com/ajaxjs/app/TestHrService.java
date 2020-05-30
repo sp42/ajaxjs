@@ -1,26 +1,24 @@
-package com.ajaxjs.cms;
+package com.ajaxjs.app;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.app.service.Ads;
-import com.ajaxjs.app.service.AdsService;
+import com.ajaxjs.app.HrController;
 import com.ajaxjs.config.TestHelper;
-import com.ajaxjs.ioc.BeanContext;
+import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.orm.JdbcConnection;
 
-public class TestAdsService {
-	static AdsService service;
+public class TestHrService {
 
 	@BeforeClass
 	public static void initDb() {
 		TestHelper.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
-		service = (AdsService) BeanContext.getBean("AdsService");
 	}
 
 	static String[] names = new String[] { "招聘文员两名", "招聘会计一名" };
@@ -30,19 +28,18 @@ public class TestAdsService {
 	@Test
 	public void testCreate() {
 		for (int i = 0; i < 10; i++) {
-			Ads entity = new Ads();
-			entity.setName(TestHelper.getItem(names));
-			assertNotNull(service.create(entity));
+			Map<String, Object> entity = new HashMap<>();
+			entity.put("name", TestHelper.getItem(names));
+			entity.put("content", TestHelper.getItem(content));
+			entity.put("intro", TestHelper.getItem(expr));
+			assertNotNull(HrController.service.create(entity));
 		}
 	}
 
-
 	@Test
-	public void testListByCatelogId() {
-		List<Ads> entities;
-		entities = service.findListByCatalogId(122);
-		assertNotNull(entities.size());
-		assertNotNull(service.findPagedList(122, 0, 5, 1, true).size());
+	public void testPageList() {
+		PageResult<Map<String, Object>> page = HrController.service.findPagedList(0, 10);
+		assertNotNull(page.getTotalCount());
 	}
 
 	@AfterClass

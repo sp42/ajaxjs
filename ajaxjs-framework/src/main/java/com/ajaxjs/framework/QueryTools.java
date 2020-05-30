@@ -6,7 +6,6 @@ import java.util.function.Function;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.ajaxjs.app.CommonConstant;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.JdbcHelper;

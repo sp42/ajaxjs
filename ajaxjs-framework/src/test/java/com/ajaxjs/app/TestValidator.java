@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.filter;
+package com.ajaxjs.app;
 
 import static org.junit.Assert.assertTrue;
 

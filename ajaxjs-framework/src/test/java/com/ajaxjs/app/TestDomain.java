@@ -1,4 +1,4 @@
-package com.ajaxjs.cms;
+package com.ajaxjs.app;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -14,7 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.ajaxjs.app.ArticleService;
-import com.ajaxjs.app.service.CommonEntityService.CommonEntityyDao;
+import com.ajaxjs.app.CommonEntityService.CommonEntityyDao;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.orm.JdbcConnection;

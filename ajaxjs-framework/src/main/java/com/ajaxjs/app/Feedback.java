@@ -1,10 +1,16 @@
-package com.ajaxjs.app.service;
+package com.ajaxjs.app;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import com.ajaxjs.framework.BaseModel;
 
+/**
+ * 留言反馈
+ * 
+ * @author sp42 frank@ajaxjs.com
+ *
+ */
 public class Feedback extends BaseModel {
 	private static final long serialVersionUID = 4609146659455376973L;
 
@@ -31,5 +37,4 @@ public class Feedback extends BaseModel {
 	public void setContent(String content) {
 		this.content = content;
 	}
-
 }

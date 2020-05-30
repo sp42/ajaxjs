@@ -1,4 +1,4 @@
-package com.ajaxjs.app.service.section;
+package com.ajaxjs.app.section;
 
 import java.util.ArrayList;
 import java.util.HashMap;

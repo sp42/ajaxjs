@@ -1,4 +1,4 @@
-package com.ajaxjs.cms;
+package com.ajaxjs.app;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -10,8 +10,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.app.utils.MySqlAutoBackup;
-import com.ajaxjs.app.utils.MysqlExport;
+import com.ajaxjs.app.developer.MySqlAutoBackup;
+import com.ajaxjs.app.developer.MysqlExport;
 import com.ajaxjs.orm.JdbcConnection;
 
 public class TestMySqlBackup {

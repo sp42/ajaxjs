@@ -1,4 +1,4 @@
-package com.ajaxjs.app.utils;
+package com.ajaxjs.app.developer;
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -6,9 +6,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.app.CommonConstant;
-import com.ajaxjs.app.service.ShopBookmarkService;
 import com.ajaxjs.config.TestHelper;
+import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.SnowflakeIdWorker;
@@ -20,7 +19,6 @@ import com.ajaxjs.user.service.UserAddressService;
 
 public class TestGoodsService {
 //	static GoodsService service;
-	static ShopBookmarkService goodsBookmarkService;
 
 	@BeforeClass
 	public static void initDb() {

@@ -4,8 +4,8 @@ package com.ajaxjs.framework.filter;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import com.ajaxjs.app.CommonConstant;
 import com.ajaxjs.framework.BaseModel;
+import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcOutput;

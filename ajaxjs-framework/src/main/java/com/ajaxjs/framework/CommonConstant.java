@@ -1,4 +1,4 @@
-package com.ajaxjs.app;
+package com.ajaxjs.framework;
 
 public interface CommonConstant {
 	/**

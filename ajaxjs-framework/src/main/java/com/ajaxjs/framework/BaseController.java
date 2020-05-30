@@ -10,7 +10,6 @@ import java.util.function.Function;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.ajaxjs.app.CommonConstant;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
