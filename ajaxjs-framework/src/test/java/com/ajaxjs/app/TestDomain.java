@@ -13,10 +13,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.app.ArticleService;
+import com.ajaxjs.framework.MapCRUDService.CommonEntityyDao;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
-import com.ajaxjs.framework.MapCRUDService.CommonEntityyDao;
 import com.ajaxjs.orm.JdbcConnection;
 
 public class TestDomain {
