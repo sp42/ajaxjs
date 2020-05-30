@@ -26,73 +26,48 @@
 				</ul>
 				<div>
 					<div>
-						<div class="aj-json-form">
-							<form style="padding:2%;box-sizing: border-box;">
-								当前数据库连接：
-								<select class="aj-select" style="width: 200px;">
-									<c:foreach items="${list}" var="current">
-										<c:choose>
-											<c:when test="${param.filterValue == current.id}">
-												<option value="${current.name}" selected>${current.name}</option>
-											</c:when>
-											<c:otherwise>
-												<option value="${current.name}">${current.name}</option>
-											</c:otherwise>
-										</c:choose>
-									</c:foreach>
-								</select>
-								
-								<button class="aj-btn">保存</button>
-							
-							</form>
-						</div>
-		<ul>
-			<c:foreach items="${list}" var="item">
-				<li class="aj-json-form">
-					<form>
-						<div>
-							<table width="100%">
-								<tr>
-									<td width="50%">
-							<div class="label">名称：</div><div class="input"><input type="text" value="${item.name}" /></div>
-									</td>
-									<td></td>
-								</tr>
-							</table>
-						</div>
-						<div>
-							<table width="100%">
-								<tr>
-									<td>
-										<div class="label">账号：</div>
-										<div class="input"><input type="text" value="${item.username}" /></div>
-									</td>
-									<td>
-										<div class="label">密码：</div>
-										<div class="input"><input type="text" value="${item.password}" /></div>
-									
-									</td>
-								</tr>
-							</table>
-						</div>
-						<div>
-							<div class="label" style="width:16%;">URL：</div><div class="input"><input type="text" value="${item.url}" size="68" /></div>
-						</div>
-						<div>
-							&nbsp;&nbsp;&nbsp;Notes:数据库 url 注意相关字符串要转义，如：&amp;
-						</div>
-						<div>
-							<section class="aj-btnsHolder">
-								<button>
-									<img src="${ctx}/asset/common/icon/save.gif" /> 修改
-								</button>
-								<button class="aj-btn" onclick="this.up(\'form\').reset();return false;">复 位</button>
-							</section>
-						</div>
-					</form>
-				</li>
-			</c:foreach>
-		</ul>
+						<form>
+							<div>
+								<table width="100%">
+									<tr>
+										<td width="50%">
+											<div class="label">名称：</div><div class="input"><input type="text" value="${conn.name}" /></div>
+										</td>
+										<td></td>
+									</tr>
+								</table>
+							</div>
+							<div>
+								<table width="100%">
+									<tr>
+										<td>
+											<div class="label">账号：</div>
+											<div class="input"><input type="text" value="${conn.username}" /></div>
+										</td>
+										<td>
+											<div class="label">密码：</div>
+											<div class="input"><input type="password" value="${conn.password}" /></div>
+										
+										</td>
+									</tr>
+								</table>
+							</div>
+							<div>
+								<div class="label" style="width:16%;">URL：</div><div class="input"><input type="text" value="${conn.url}" size="68" /></div>
+							</div>
+							<div>
+								&nbsp;&nbsp;&nbsp;Notes:数据库 url 注意相关字符串要转义，如：&amp;
+							</div>
+							<%-- <div>
+								<section class="aj-btnsHolder">
+									<button>
+										<img src="${ctx}/asset/common/icon/save.gif" /> 修改
+									</button>
+									<button class="aj-btn" onclick="this.up(\'form\').reset();return false;">复 位</button>
+								</section>
+							</div> --%>
+						</form>
+		
 		
 		
 					</div>

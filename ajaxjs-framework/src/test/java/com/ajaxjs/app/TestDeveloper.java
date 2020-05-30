@@ -1,10 +1,32 @@
 package com.ajaxjs.app;
 
+import static org.junit.Assert.assertNotNull;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.ajaxjs.app.developer.MySqExportAutoBackup;
+import com.ajaxjs.app.developer.MySqExportAutoBackup.MysqlExport;
 import com.ajaxjs.app.developer.TomcatLogController.LogFileTailer;
+import com.ajaxjs.framework.config.TestHelper;
+import com.ajaxjs.orm.JdbcConnection;
 
 public class TestDeveloper {
+	@BeforeClass
+	public static void initDb() {
+		TestHelper.initAll();
+	}
+
+	@Test
+	public void testMySqlBackup() {
+		MysqlExport m = new MysqlExport(JdbcConnection.getConnection(), "c:/temp");
+		m.export();
+
+		MySqExportAutoBackup timer = new MySqExportAutoBackup();
+		assertNotNull(timer);
+	}
+
 	@Test
 	public void testBackup() {
 		String d = "C:/sp42/dev/eclipse-workspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/ajaxjs-demo/WEB-INF/lib";
@@ -17,5 +39,10 @@ public class TestDeveloper {
 		tailer.setTailing(true);
 		tailer.addListener(System.out::println);
 		tailer.start();
+	}
+
+	@AfterClass
+	public static void closeDb() {
+		JdbcConnection.closeDb();
 	}
 }

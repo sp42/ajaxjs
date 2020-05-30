@@ -46,7 +46,6 @@ public class CodeGenerators implements IController {
 	@POST
 	public String doGet(MvcRequest req, HttpServletResponse resp) {
 		req.setAttribute("packageName", req.getParameter("packageName"));
-
 		Connection conn = JdbcConnection.getMySqlConnection(req.getParameter("dbUrl"), req.getParameter("dbUser", "root"), req.getParameter("dbPassword"));
 
 		if (req.getParameter("getTable") != null) {
@@ -63,7 +62,6 @@ public class CodeGenerators implements IController {
 
 			for (String tableName : tables) {
 				CodeGeneratorsInfo info = new CodeGeneratorsInfo(tableName, req.getParameter("saveFolder", "C:\\temp"));
-
 				pareperRender(info, infos.get(tableName), tablesComment.get(tableName), req, resp);
 			}
 		}

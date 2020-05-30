@@ -1,7 +1,5 @@
 package com.ajaxjs.app.developer;
 
-import java.util.Map;
-
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -10,6 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.ajaxjs.app.developer.MySqExportAutoBackup.MysqlExport;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
@@ -32,13 +31,9 @@ import com.ajaxjs.util.io.ZipHelper;
 public class DeveloperTools implements IController {
 	@GET
 	public String deve(ModelAndView mv, MvcRequest r) {
-		// 数据库管理
-		mv.put("list", DataBaseStruController.getConnectionConfig(r.mappath("/META-INF/context.xml")));
-
 		// 代码生成器
-		Map<String, String> map = XMLHelper.nodeAsMap(r.mappath("/META-INF/context.xml"), "//Resource[@name='" + ConfigService.getValueAsString("data.database_node") + "']");
 		mv.put("saveFolder", ConfigService.getValueAsString("System.project_folder") + "\\src"); // 臨時保存
-		mv.put("conn", map);
+		mv.put("conn", XMLHelper.nodeAsMap(r.mappath("/META-INF/context.xml"), "//Resource[@name='" + ConfigService.get("data.database_node") + "']"));
 
 		return BaseController.admin("developer/developer-tool");
 	}

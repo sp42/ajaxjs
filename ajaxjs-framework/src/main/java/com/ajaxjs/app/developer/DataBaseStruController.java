@@ -1,6 +1,5 @@
 package com.ajaxjs.app.developer;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,14 +15,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.filter.DataBaseFilter;
@@ -31,7 +22,6 @@ import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.JdbcHelper;
-import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 @Path("/admin/DataBaseShowStru")
@@ -212,42 +202,6 @@ public class DataBaseStruController implements IController {
 			}
 		} catch (SQLException e) {
 			LOGGER.warning(e);
-		}
-	}
-
-	/**
-	 * 读取配置文件，转为为 map
-	 * 
-	 * @param file 配置文件路径
-	 * @return 配置 map
-	 */
-	@Deprecated
-	public static List<Map<String, String>> getConnectionConfig(String file) {
-		try {
-			Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
-			NodeList resource = document.getElementsByTagName("Resource");
-
-			List<Map<String, String>> list = new ArrayList<>();
-			for (int i = 0; i < resource.getLength(); i++) {
-				Node r = resource.item(i);
-
-				NamedNodeMap attrs = r.getAttributes();
-				Map<String, String> map = new HashMap<>();
-
-				for (int j = 0; j < attrs.getLength(); j++) {
-					Node attr = attrs.item(j);
-
-					if (CommonUtil.regMatch("name|username|password|driverClassName|url", attr.getNodeName()) != null) 
-						map.put(attr.getNodeName(), attr.getNodeValue());
-				}
-
-				list.add(map);
-			}
-
-			return list;
-		} catch (SAXException | IOException | ParserConfigurationException e) {
-			LOGGER.warning(e);
-			return null;
 		}
 	}
 }

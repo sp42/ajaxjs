@@ -24,13 +24,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.app.developer.DataBaseStruController;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.framework.config.SiteStruService;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
+import com.ajaxjs.util.XMLHelper;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -54,12 +54,12 @@ public class ConfigController implements IController {
 
 	@GET
 	@Path("data-config")
-	public String dataConfig(ModelAndView model, MvcRequest r) {
+	public String dataConfig(ModelAndView mv, MvcRequest r) {
 		LOGGER.info("数据配置");
-		// 数据库管理
-		model.put("list", DataBaseStruController.getConnectionConfig(r.mappath("/META-INF/context.xml")));
 
-		loadJson(model);
+		mv.put("conn", XMLHelper.nodeAsMap(r.mappath("/META-INF/context.xml"), "//Resource[@name='" + ConfigService.get("data.database_node") + "']"));
+		loadJson(mv);
+
 		return BaseController.admin("config/data-config");
 	}
 
