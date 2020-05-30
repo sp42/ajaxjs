@@ -168,45 +168,24 @@ public abstract class BaseController<T> implements IController, Constant {
 	/**
 	 * 自动根据客户端 HTTP 头传入的 Accept 字段决定是否输出 JSON 格式
 	 * 
-	 * @param mv         Model 模型
-	 * @param pageResult 分页数据
-	 * @param isAdmin    是否后台列表
-	 * @return
+	 * @param entity  实体，可以是单个实体或者列表、分页列表
+	 * @param mv      Model 模型
+	 * @param jspPath JSP 模板路径
+	 * @return 结果，可能是页面，也可能是 JSON
 	 */
-	@Deprecated
-	public String autoOutput(ModelAndView mv, PageResult<T> pageResult, boolean isAdmin) {
-		if (isJson()) {
-			return toJson(pageResult);
-		} else
-			return page(mv, pageResult, isAdmin);
-	}
-	@Deprecated
-	public String autoOutput(ModelAndView mv, PageResult<T> pageResult, String jspPath) {
-		if (isJson()) {
-			return toJson(pageResult);
-		} else {
-			prepareData(mv);
-			mv.put(PAGE_RESULT, pageResult);
-
-			return jspPath;
-		}
-	}
-
-	@Deprecated
-	public String autoOutput(ModelAndView mv, BaseModel bean, String jspPath) {
-		if (isJson()) {
-			return toJson(bean);
-		} else {
-			mv.put(INFO, bean);
-
-			return jspPath;
-		}
-	}
-
 	public static String autoOutput(Object entity, ModelAndView mv, String jspPath) {
 		return autoOutput(entity, mv, jspPath, null);
 	}
 
+	/**
+	 * 自动根据客户端 HTTP 头传入的 Accept 字段决定是否输出 JSON 格式
+	 * 
+	 * @param entity  实体，可以是单个实体或者列表、分页列表
+	 * @param mv      Model 模型
+	 * @param jspPath JSP 模板路径
+	 * @param fn      输入<是否期望 JSON, 是否期望 JSON> 的 lambda
+	 * @return 结果，可能是页面，也可能是 JSON
+	 */
 	public static String autoOutput(Object entity, ModelAndView mv, String jspPath, Function<Boolean, Boolean> fn) {
 		if (fn != null && fn.apply(isJson()) || (fn == null && isJson())) {
 			if (entity instanceof PageResult)
@@ -224,6 +203,11 @@ public abstract class BaseController<T> implements IController, Constant {
 		}
 	}
 
+	/**
+	 * 判断是否期望 JSON 的结果
+	 * 
+	 * @return true 表示为希望是 JSON
+	 */
 	private static boolean isJson() {
 		String accept = MvcRequest.getHttpServletRequest().getHeader("Accept");
 		return accept != null && "application/json".equals(accept);

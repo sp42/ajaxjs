@@ -51,8 +51,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@GET
 	@MvcFilter(filters = { DataBaseFilter.class })
 //	@Authority(filter = DataBaseFilter.class, value = 1)
-	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit,
-			@QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		LOGGER.info("图文列表-前台");
 		getService().showList(mv);
 		prepareData(mv);
@@ -63,8 +62,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@Path("listJson")
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String listJson(@QueryParam(START) int start, @QueryParam(LIMIT) int limit,
-			@QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
+	public String listJson(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		return toJson(getService().list(catalogId, start, limit, CommonConstant.ON_LINE));
 	}
 
@@ -88,8 +86,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@Override
 	public void prepareData(ModelAndView mv) {
 		int catalogId = getService().getDomainCatalogId();
-		Map<Long, BaseModel> map = CatalogService
-				.list_bean2map_id_as_key(new CatalogService().findAllListByParentId(catalogId));
+		Map<Long, BaseModel> map = CatalogService.list_bean2map_id_as_key(new CatalogService().findAllListByParentId(catalogId));
 		mv.put("newsCatalogs", map);
 		mv.put(DOMAIN_CATALOG_ID, catalogId);
 
@@ -101,11 +98,10 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@GET
 	@Path("/admin/{root}/list")
 	@MvcFilter(filters = { DataBaseFilter.class, XslMaker.class })
-	public String adminList(@QueryParam(START) int start, @QueryParam(LIMIT) int limit,
-			@QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
+	public String adminList(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		PageResult<Map<String, Object>> list = getService().list(catalogId, start, limit, CommonConstant.OFF_LINE);
-		
-		return autoOutput(mv, list, true);
+
+		return autoOutput(list, mv, page("article"));
 	}
 
 	@GET
