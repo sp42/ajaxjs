@@ -23,9 +23,8 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.model.OrderItem;
-import com.ajaxjs.shop.payment.Pay;
-import com.ajaxjs.shop.payment.WxPay;
 import com.ajaxjs.shop.service.OrderService;
+import com.ajaxjs.shop.service.Pay;
 import com.ajaxjs.user.controller.BaseUserController;
 import com.ajaxjs.user.filter.LoginCheck;
 import com.ajaxjs.user.service.UserAddressService;
@@ -101,7 +100,7 @@ public class OrderController extends BaseController<OrderInfo> {
 		OrderInfo order = service.processOrder(BaseUserController.getUserId(), addressId, cartIds, ShopConstant.WX_PAY);
 		service.onProcessOrderDone(order);
 
-		return toJson(WxPay.miniAppPay(BaseUserController.getUserId(), order, r.getIp()));
+		return toJson(Pay.miniAppPay(BaseUserController.getUserId(), order, r.getIp()));
 	}
 
 	@POST

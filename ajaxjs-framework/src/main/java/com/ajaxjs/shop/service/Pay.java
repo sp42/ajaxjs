@@ -1,4 +1,4 @@
-package com.ajaxjs.shop.payment;
+package com.ajaxjs.shop.service;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -6,16 +6,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.config.ConfigService;
+import com.ajaxjs.mvc.ModelAndView;
+import com.ajaxjs.mvc.MvcConstant;
 import com.ajaxjs.net.http.HttpBasicRequest;
 import com.ajaxjs.net.http.Tools;
+import com.ajaxjs.payment.Alipay;
 import com.ajaxjs.payment.wxpay.PerpayReturn;
+import com.ajaxjs.shop.ShopConstant;
+import com.ajaxjs.shop.ShopHelper;
 import com.ajaxjs.shop.model.OrderInfo;
-import com.ajaxjs.shop.service.OrderService;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.MapTool;
+import com.alipay.api.AlipayApiException;
 
 /**
  * 微信支付方法
@@ -23,8 +29,8 @@ import com.ajaxjs.util.map.MapTool;
  * @author sp42 frank@ajaxjs.com
  *
  */
-public class WxPay {
-	private static final LogHelper LOGGER = LogHelper.getLog(WxPay.class);
+public class Pay {
+	private static final LogHelper LOGGER = LogHelper.getLog(Pay.class);
 
 	/**
 	 * PC 版支付微信下单接口
@@ -97,7 +103,7 @@ public class WxPay {
 			};
 		}
 	}
-	
+
 	/**
 	 * 小程序调起支付参数
 	 * 
@@ -108,6 +114,44 @@ public class WxPay {
 	 */
 	public Map<String, ?> miniAppPay(long userId, long orderId, String ip) {
 		return miniAppPay(userId, OrderService.dao.findById(orderId), ip);
+	}
+
+	/**
+	 * 
+	 * @param order
+	 * @param mv
+	 * @return
+	 * @throws ServiceException
+	 * @throws AlipayApiException
+	 */
+	public static String doPay(OrderInfo order, ModelAndView mv) throws ServiceException, AlipayApiException {
+		LOGGER.info("进行支付");
+
+		switch (order.getPayType()) {
+		case ShopConstant.ALI_PAY:
+			if (!ShopHelper.hasState(ConfigService.getValueAsInt("shop.AllowPayType"), ShopHelper.ALI_PAY))
+				throw new ServiceException("不支持支付宝支付");
+
+			Alipay alipay = new Alipay();
+			alipay.setSubject("支付我们的产品");
+			alipay.setBody("");
+			alipay.setOut_trade_no(order.getOrderNo());
+			alipay.setTotal_amount(order.getTotalPrice().toString());
+
+			return "html::" + Alipay.connect(alipay);
+		case ShopConstant.WX_PAY:
+			if (!ShopHelper.hasState(ConfigService.getValueAsInt("shop.AllowPayType"), ShopHelper.WX_PAY))
+				throw new ServiceException("不支持微信支付");
+
+			PerpayReturn p = pcUnifiedOrder(order);
+
+			mv.put("totalPrice", order.getTotalPrice());
+			mv.put("codeUrl", p.getCode_url());
+
+			return MvcConstant.JSP_PERFIX_WEBINF + "/shop/wxpay";
+		}
+
+		return "html:: ERROR Can't pay!";
 	}
 
 	/**
@@ -148,8 +192,7 @@ public class WxPay {
 
 		Map<String, String> resultMap = MapTool.xmlToMap(result);
 
-		PerpayReturn perpayReturn = MapTool.map2Bean(MapTool.as(resultMap, v -> v == null ? null : (Object) v),
-				PerpayReturn.class);
+		PerpayReturn perpayReturn = MapTool.map2Bean(MapTool.as(resultMap, v -> v == null ? null : (Object) v), PerpayReturn.class);
 		return perpayReturn;
 	}
 

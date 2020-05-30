@@ -22,8 +22,7 @@ public class CalculateRows {
 	static long allLines = 0; // 代码行
 
 	public static void main(String[] args) {
-		File f = new File(
-				"D:\\project\\ajaxjs-web\\src\\main\\java\\com\\ajaxjs\\web\\captcha\\CaptchaController.java"); // 目录
+		File f = new File("D:\\project\\ajaxjs-web\\src\\main\\java\\com\\ajaxjs\\web\\captcha\\CaptchaController.java"); // 目录
 		String type = ".java";// 查找什么类型的代码，如".java"就是查找以java开发的代码量，".php"就是查找以PHP开发的代码量
 //		treeFile(f, type);
 		countFile(f);
@@ -33,11 +32,10 @@ public class CalculateRows {
 		Logger.getGlobal().info("注释数量：" + commentLines);
 		Logger.getGlobal().info("空行数量：" + normalLines);
 
-		if (classcount == 0) {
+		if (classcount == 0)
 			Logger.getGlobal().info("代码平均数量:" + 0);
-		} else {
+		else
 			Logger.getGlobal().info("代码平均数量:" + writeLines / classcount);
-		}
 
 		Logger.getGlobal().info("总 行数量：" + allLines);
 	}

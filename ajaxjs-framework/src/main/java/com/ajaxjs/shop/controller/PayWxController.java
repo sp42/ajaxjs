@@ -21,8 +21,8 @@ import com.ajaxjs.payment.wxpay.PayNodifyResult;
 import com.ajaxjs.payment.wxpay.PaymentNotification;
 import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.model.OrderInfo;
-import com.ajaxjs.shop.payment.WxPay;
 import com.ajaxjs.shop.service.OrderService;
+import com.ajaxjs.shop.service.Pay;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.io.IoHelper;
 import com.ajaxjs.util.logger.LogHelper;
@@ -84,7 +84,7 @@ public class PayWxController extends BaseController<Map<String, Object>> {
 
 		if (perpayReturn.isSuccess()) {
 			// 验证签名是否正确
-			String toCheck = WxPay.generateSignature(r, ConfigService.getValueAsString("shop.payment.wx.apiSecret"));
+			String toCheck = Pay.generateSignature(r, ConfigService.getValueAsString("shop.payment.wx.apiSecret"));
 
 			if (perpayReturn.getSign().equalsIgnoreCase(toCheck)) {
 				String totalFee = perpayReturn.getTotal_fee(), orderNo = perpayReturn.getOut_trade_no();
@@ -92,7 +92,7 @@ public class PayWxController extends BaseController<Map<String, Object>> {
 				OrderInfo order = orderService.findByOrderNo(orderNo);
 				Objects.requireNonNull(order, "订单 " + orderNo + " 不存在");
 
-				if (totalFee.endsWith(WxPay.toCent(order.getTotalPrice()))) {// 收到的金额和订单的金额是否吻合？
+				if (totalFee.endsWith(Pay.toCent(order.getTotalPrice()))) {// 收到的金额和订单的金额是否吻合？
 					OrderInfo updateBill = new OrderInfo();
 					updateBill.setId(order.getId());
 					updateBill.setTransactionId(perpayReturn.getTransaction_id());
@@ -103,7 +103,7 @@ public class PayWxController extends BaseController<Map<String, Object>> {
 					isOk = true;
 					msg = "OK";
 				} else {
-					msg = "非法响应！交易金额不对，支付方返回 " + totalFee + "分，而订单记录是 " + (WxPay.toCent(order.getTotalPrice())) + "分";
+					msg = "非法响应！交易金额不对，支付方返回 " + totalFee + "分，而订单记录是 " + (Pay.toCent(order.getTotalPrice())) + "分";
 				}
 			} else {
 				msg = "非法响应！签名不通过";

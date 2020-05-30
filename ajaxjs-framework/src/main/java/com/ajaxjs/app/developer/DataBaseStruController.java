@@ -221,6 +221,7 @@ public class DataBaseStruController implements IController {
 	 * @param file 配置文件路径
 	 * @return 配置 map
 	 */
+	@Deprecated
 	public static List<Map<String, String>> getConnectionConfig(String file) {
 		try {
 			Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
@@ -236,9 +237,8 @@ public class DataBaseStruController implements IController {
 				for (int j = 0; j < attrs.getLength(); j++) {
 					Node attr = attrs.item(j);
 
-					if (CommonUtil.regMatch("name|username|password|driverClassName|url", attr.getNodeName()) != null) {
+					if (CommonUtil.regMatch("name|username|password|driverClassName|url", attr.getNodeName()) != null) 
 						map.put(attr.getNodeName(), attr.getNodeValue());
-					}
 				}
 
 				list.add(map);

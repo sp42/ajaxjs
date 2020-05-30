@@ -10,7 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.app.developer.MySqlAutoBackup;
+import com.ajaxjs.app.developer.MySqExportAutoBackup;
 import com.ajaxjs.app.developer.MysqlExport;
 import com.ajaxjs.orm.JdbcConnection;
 
@@ -30,8 +30,8 @@ public class TestMySqlBackup {
 
 	@Test
 	public void testAutoBackup(String[] args) {
-		MySqlAutoBackup m = new MySqlAutoBackup();
-		Map<String, String> map = MySqlAutoBackup.loadConfig("C:\\project\\register\\WebContent\\META-INF\\context.xml",
+		MySqExportAutoBackup m = new MySqExportAutoBackup();
+		Map<String, String> map = MySqExportAutoBackup.loadConfig("C:\\project\\register\\WebContent\\META-INF\\context.xml",
 				"jdbc/mysql_deploy");
 		assertNotNull(m);
 		assertNotNull(map);

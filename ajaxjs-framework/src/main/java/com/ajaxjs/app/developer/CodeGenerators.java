@@ -47,7 +47,7 @@ public class CodeGenerators implements IController {
 				request.getParameter("dbUser", "root"), request.getParameter("dbPassword"));
 	
 		if (request.getParameter("getTable") != null) {
-			Info info = new Info(request.getParameter("getTable"), request.getParameter("saveFolder", "C:\\temp"));
+			CodeGeneratorsInfo info = new CodeGeneratorsInfo(request.getParameter("getTable"), request.getParameter("saveFolder", "C:\\temp"));
 	
 			if (request.getParameter("beanName") != null)
 				info.setBeanName(request.getParameter("beanName"));
@@ -61,7 +61,7 @@ public class CodeGenerators implements IController {
 					tables);
 	
 			for (String tableName : tables) {
-				Info info = new Info(tableName, request.getParameter("saveFolder", "C:\\temp"));
+				CodeGeneratorsInfo info = new CodeGeneratorsInfo(tableName, request.getParameter("saveFolder", "C:\\temp"));
 	
 				pareperRender(info, infos.get(tableName), tablesComment.get(tableName), request, response);
 			}
@@ -76,7 +76,7 @@ public class CodeGenerators implements IController {
 		return "html::Done!<a href=\"" + request.getContextPath() + zipSave + "\" download>download</a>";
 	}
 
-	private static void pareperRender(Info info, List<Map<String, String>> fields, String tableComment, MvcRequest request,
+	private static void pareperRender(CodeGeneratorsInfo info, List<Map<String, String>> fields, String tableComment, MvcRequest request,
 			HttpServletResponse response) {
 		request.setAttribute("fields", fields);
 		request.setAttribute("tableName", info.getTableName());
@@ -101,7 +101,7 @@ public class CodeGenerators implements IController {
 	 * @param request
 	 * @param response
 	 */
-	private static void render(Info info, HttpServletRequest request, HttpServletResponse response) {
+	private static void render(CodeGeneratorsInfo info, HttpServletRequest request, HttpServletResponse response) {
 	//		MvcRequest r = new MvcRequest(request);
 	//		ZipHelper.toZip(saveFolder, r.mappath(zipSave));
 	

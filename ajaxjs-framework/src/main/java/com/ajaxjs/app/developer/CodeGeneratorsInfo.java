@@ -3,9 +3,15 @@ package com.ajaxjs.app.developer;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.util.ReflectUtil;
 
-public class Info {
+/**
+ * 代码生成器信息
+ * 
+ * @author sp42 frank@ajaxjs.com
+ *
+ */
+public class CodeGeneratorsInfo {
 
-	public Info(String tableName, String saveFolder) {
+	public CodeGeneratorsInfo(String tableName, String saveFolder) {
 		this.setTableName(tableName);
 		this.saveFolder = saveFolder;
 	}
@@ -16,6 +22,7 @@ public class Info {
 	private static final String tplSave = BaseController.admin("developer/code-generator");
 
 	private String type;
+
 	private String tableName;
 
 	private String beanName;
@@ -56,7 +63,7 @@ public class Info {
 		return type;
 	}
 
-	public Info setType(String type) {
+	public CodeGeneratorsInfo setType(String type) {
 		this.type = type;
 		return this;
 	}

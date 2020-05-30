@@ -12,6 +12,7 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 import javax.ws.rs.Path;
 
+import com.ajaxjs.Version;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.util.logger.FileHandler;
@@ -23,41 +24,46 @@ import com.ajaxjs.util.logger.LogHelper;
  * @author sp42 frank@ajaxjs.com
  *
  */
-@ServerEndpoint("/tomcat_log")
 @Path("/admin/tomcat-log")
+@ServerEndpoint("/tomcat_log")
 public class TomcatLogController implements IController {
 	private static final LogHelper LOGGER = LogHelper.getLog(TomcatLogController.class);
 
+	/**
+	 * 日志跟踪器
+	 */
 	private LogFileTailer tailer;
 
 	/**
-	 * 新的WebSocket请求开启
+	 * 新的 WebSocket 请求开启
 	 */
 	@OnOpen
 	public void onOpen(Session session) {
-		if (ConfigService.getValueAsBool("forDelevelopers.enableWebSocketLogOutput")) {
-//			tailer = new LogFileTailer("C:\\temp\\bar.txt", 1000, true);
-			tailer = new LogFileTailer(FileHandler.LOG_PATH, 1000, true);
-			tailer.setTailing(true);
-			tailer.addListener(log -> {
-				try {
-					session.getBasicRemote().sendText(log + "<br />");
-				} catch (IOException e) {
-					LOGGER.warning(e);
-				}
-			});
-			tailer.start();
-		} else {
+		if (Version.isDebug || !ConfigService.getValueAsBool("forDelevelopers.enableWebSocketLogOutput")) {
 			try {
 				session.getBasicRemote().sendText("未开启实时浏览 Tomcat 日志，请修改配置。");
 			} catch (IOException e) {
 				LOGGER.warning(e);
 			}
+
+			return;
 		}
+//			tailer = new LogFileTailer("C:\\temp\\bar.txt", 1000, true);
+		tailer = new LogFileTailer(FileHandler.LOG_PATH, 1000, true);
+		tailer.setTailing(true);
+		tailer.addListener(log -> {
+			try {
+				session.getBasicRemote().sendText(log + "<br />");
+			} catch (IOException e) {
+				LOGGER.warning(e);
+			}
+		});
+		tailer.start();
+
 	}
 
 	/**
-	 * WebSocket请求关闭
+	 * WebSocket 请求关闭
 	 */
 	@OnClose
 	public void onClose() {
@@ -82,12 +88,24 @@ public class TomcatLogController implements IController {
 	 *
 	 */
 	public static class LogFileTailer extends Thread {
+		/**
+		 * 要监视的文本文件
+		 */
 		private long sampleInterval = 2000;
 
+		/**
+		 * 读取时间间隔
+		 */
 		private File logfile;
 
+		/**
+		 * 是否显示文件头？还是说只显示后面变化的部分
+		 */
 		private boolean startAtBeginning;
 
+		/**
+		 * 自定义的回调事件
+		 */
 		private Consumer<String> callback;
 
 		/**
@@ -110,7 +128,7 @@ public class TomcatLogController implements IController {
 		/**
 		 * 设置回调事件
 		 * 
-		 * @param callback 回调事件
+		 * @param callback 自定义的回调事件
 		 */
 		public void addListener(Consumer<String> callback) {
 			this.callback = callback;

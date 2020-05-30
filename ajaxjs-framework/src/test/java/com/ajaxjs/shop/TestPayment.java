@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.shop.model.OrderInfo;
-import com.ajaxjs.shop.payment.WxPay;
+import com.ajaxjs.shop.service.Pay;
 
 public class TestPayment {
 	@BeforeClass
@@ -22,6 +22,6 @@ public class TestPayment {
 		order.setOrderNo("202011122220332");
 		order.setTotalPrice(new BigDecimal("0.01"));
 		
-		WxPay.pcUnifiedOrder(order);
+		Pay.pcUnifiedOrder(order);
 	}
 }

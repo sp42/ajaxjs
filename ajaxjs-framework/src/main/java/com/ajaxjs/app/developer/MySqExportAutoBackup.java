@@ -1,6 +1,5 @@
 package com.ajaxjs.app.developer;
 
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,45 +11,38 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+import com.ajaxjs.Version;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.io.FileHelper;
-import com.ajaxjs.util.io.IoHelper;
 import com.ajaxjs.util.map.MapTool;
 
 /**
- * MySQL 数据库定时自动备份，仅支持 Centos
+ * MySQL 数据库定时自动备份，仅支持 CentOS
  *
  */
 @WebListener
-public class MySqlAutoBackup extends TimerTask implements ServletContextListener {
+public class MySqExportAutoBackup extends TimerTask implements ServletContextListener {
+	/**
+	 * 数据库配置信息
+	 */
 	private Map<String, String> dbConfig;
 
 	@Override
 	public void contextInitialized(ServletContextEvent e) {
-		if (ConfigService.getValueAsBool("isEnableMySqlBackup")) {
-			String configFile = MvcRequest.mappath(e.getServletContext(), "/META-INF/context.xml");
-			init(configFile);
-		}
-	}
+		if (Version.isDebug || !ConfigService.getValueAsBool("isEnableMySqlBackup"))
+			return;
 
-	@Override
-	public void contextDestroyed(ServletContextEvent e) {
-	}
-
-	public void init(String configFile) {
+		String configFile = MvcRequest.mappath(e.getServletContext(), "/META-INF/context.xml");
 		dbConfig = loadConfig(configFile, "jdbc/mysql_deploy");
 
 		// 获取并处理配置文件中的时间
 		String backuptime = "";
 		String[] time = backuptime.split(":");
-		int hours = Integer.parseInt(time[0]);
-		int minute = Integer.parseInt(time[1]);
-		int second = Integer.parseInt(time[2]);
+		int hours = Integer.parseInt(time[0]), minute = Integer.parseInt(time[1]), second = Integer.parseInt(time[2]);
 
 		Calendar calendar = Calendar.getInstance();
-
 		/*** 定制每日2:00执行方法 ***/
 		calendar.set(Calendar.HOUR_OF_DAY, hours);
 		calendar.set(Calendar.MINUTE, minute);
@@ -67,6 +59,11 @@ public class MySqlAutoBackup extends TimerTask implements ServletContextListener
 		new Timer().schedule(this, date, PERIOD_DAY);
 	}
 
+	@Override
+	public void contextDestroyed(ServletContextEvent e) {
+	}
+
+	@Deprecated
 	public static Map<String, String> loadConfig(String configFile, String name) {
 		String xml = FileHelper.openAsText(configFile);
 		// 多个 resources 节点组成
@@ -110,16 +107,9 @@ public class MySqlAutoBackup extends TimerTask implements ServletContextListener
 
 	@Override
 	public void run() {
-		String hostIP = dbConfig.get("host").toString(), userName = dbConfig.get("user").toString(),
-				password = dbConfig.get("password").toString(), databaseName = dbConfig.get("databaseName").toString();
+		String ip = dbConfig.get("host").toString(), userName = dbConfig.get("user").toString(), psw = dbConfig.get("password").toString(),
+				databaseName = dbConfig.get("databaseName").toString();
 
-		try {
-			Process process = Runtime.getRuntime().exec("C:\\Program Files\\MySQL\\MySQL Workbench 6.3 CE\\mysqldump -h"
-					+ hostIP + " -u" + userName + " -p" + password + " --set-charset=UTF8 " + databaseName);
-			String sql = IoHelper.byteStream2string(process.getInputStream());
-			FileHelper.saveText("c:/temp/" + CommonUtil.now("yyyy-MM-dd_HH-mm-ss") + ".sql", sql);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		MysqlExport.exec(ip, userName, psw, databaseName);
 	}
 }
