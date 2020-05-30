@@ -1,4 +1,4 @@
-package com.ajaxjs.config;
+package com.ajaxjs.framework.config;
 
 import javax.servlet.ServletContext;
 

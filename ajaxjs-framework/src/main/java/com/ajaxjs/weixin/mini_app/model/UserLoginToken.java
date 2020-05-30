@@ -2,7 +2,7 @@ package com.ajaxjs.weixin.mini_app.model;
 
 import java.util.Objects;
 
-import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.user.service.TokenMaker;
 import com.ajaxjs.util.cryptography.Symmetri_Cipher;
 import com.ajaxjs.weixin.open_account.model.BaseModel;

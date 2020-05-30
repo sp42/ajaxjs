@@ -20,8 +20,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import com.ajaxjs.Version;
-import com.ajaxjs.config.ConfigService;
-import com.ajaxjs.config.TestHelper;
+import com.ajaxjs.framework.config.ConfigService;
+import com.ajaxjs.framework.config.TestHelper;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;

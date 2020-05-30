@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.net.http.HttpBasicRequest;
 import com.ajaxjs.net.http.Tools;
 import com.ajaxjs.payment.wxpay.PerpayReturn;

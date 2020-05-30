@@ -6,8 +6,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.ServiceException;
+import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.user.UserHelper;

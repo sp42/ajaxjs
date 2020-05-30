@@ -1,9 +1,9 @@
 package com.ajaxjs.weixin.mini_app;
 
-import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.Repository;
+import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.net.http.NetUtil;

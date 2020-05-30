@@ -14,7 +14,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.config.TestHelper;
+import com.ajaxjs.framework.config.TestHelper;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.user.role.RightConstant;
 import com.ajaxjs.user.role.RoleService;

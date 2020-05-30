@@ -10,8 +10,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ajaxjs.app.HrController;
-import com.ajaxjs.config.TestHelper;
 import com.ajaxjs.framework.PageResult;
+import com.ajaxjs.framework.config.TestHelper;
 import com.ajaxjs.orm.JdbcConnection;
 
 public class TestHrService {

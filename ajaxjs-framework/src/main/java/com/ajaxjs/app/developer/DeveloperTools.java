@@ -5,8 +5,8 @@ import java.util.Map;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
-import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseController;
+import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;

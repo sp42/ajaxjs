@@ -3,11 +3,11 @@ package com.ajaxjs.app;
 import java.util.Map;
 
 import com.ajaxjs.app.catalog.CatalogService;
-import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
+import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.orm.annotation.TableName;
 
 public class CommonEntityService extends BaseService<Map<String, Object>> {

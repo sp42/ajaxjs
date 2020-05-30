@@ -25,9 +25,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.app.developer.DataBaseStruController;
-import com.ajaxjs.config.ConfigService;
-import com.ajaxjs.config.SiteStruService;
 import com.ajaxjs.framework.BaseController;
+import com.ajaxjs.framework.config.ConfigService;
+import com.ajaxjs.framework.config.SiteStruService;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;

@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.payment.WxPay;
 

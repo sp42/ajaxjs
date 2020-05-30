@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import com.ajaxjs.app.Ads;
 import com.ajaxjs.app.AdsService;
-import com.ajaxjs.config.TestHelper;
+import com.ajaxjs.framework.config.TestHelper;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.orm.JdbcConnection;
 

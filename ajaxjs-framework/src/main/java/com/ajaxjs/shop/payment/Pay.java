@@ -1,7 +1,7 @@
 package com.ajaxjs.shop.payment;
 
-import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.ServiceException;
+import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.mvc.Constant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.payment.Alipay;

@@ -12,7 +12,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
-import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.io.FileHelper;

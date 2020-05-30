@@ -7,7 +7,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
 

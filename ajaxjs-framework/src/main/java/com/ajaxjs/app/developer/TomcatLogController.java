@@ -12,7 +12,7 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 import javax.ws.rs.Path;
 
-import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.util.logger.FileHandler;
 import com.ajaxjs.util.logger.LogHelper;

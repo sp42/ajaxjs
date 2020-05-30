@@ -14,10 +14,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.app.catalog.CatalogService;
-import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.framework.IBaseService;
+import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.framework.filter.FrontEndOnlyCheck;
 import com.ajaxjs.ioc.Bean;

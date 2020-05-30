@@ -10,7 +10,7 @@
  * 除非因适用法律需要或书面同意，根据许可证分发的软件是基于"按原样"基础提供，
  * 无任何明示的或暗示的保证或条件。详见根据许可证许可下，特定语言的管辖权限和限制。
  */
-package com.ajaxjs.config;
+package com.ajaxjs.framework.config;
 
 import java.io.File;
 import java.lang.reflect.UndeclaredThrowableException;
@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.Version;
 import com.ajaxjs.framework.BaseModel;
+import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.net.http.Tools;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;

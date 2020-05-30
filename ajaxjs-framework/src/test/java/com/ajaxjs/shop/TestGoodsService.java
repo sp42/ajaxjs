@@ -6,8 +6,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.config.TestHelper;
 import com.ajaxjs.framework.CommonConstant;
+import com.ajaxjs.framework.config.TestHelper;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.SnowflakeIdWorker;

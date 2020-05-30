@@ -6,13 +6,13 @@ import java.util.Map;
 import java.util.function.Function;
 
 import com.ajaxjs.app.catalog.CatalogService;
-import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.framework.ViewObjectService;
+import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.orm.annotation.Select;

@@ -13,8 +13,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ajaxjs.app.catalog.CatalogService;
-import com.ajaxjs.config.TestHelper;
 import com.ajaxjs.framework.PageResult;
+import com.ajaxjs.framework.config.TestHelper;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.orm.JdbcConnection;

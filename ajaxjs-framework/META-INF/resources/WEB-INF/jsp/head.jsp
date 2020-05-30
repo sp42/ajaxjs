@@ -1,7 +1,5 @@
-<%
-	request.setAttribute("PAGE_Node", com.ajaxjs.config.SiteStruService.getPageNode(request));
-	com.ajaxjs.web.UserAgent ua = new com.ajaxjs.web.UserAgent(request);
-%>
+<%request.setAttribute("PAGE_Node", com.ajaxjs.framework.config.SiteStruService.getPageNode(request));
+	com.ajaxjs.web.UserAgent ua = new com.ajaxjs.web.UserAgent(request);%>
 	<meta charset="utf-8" />
     <meta name="keywords"    content="${aj_allConfig.site.keywords}" />
     <meta name="description" content="${aj_allConfig.site.description}" />

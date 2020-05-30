@@ -6,10 +6,10 @@ import java.util.Map;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
-import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.framework.ServiceException;
+import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
