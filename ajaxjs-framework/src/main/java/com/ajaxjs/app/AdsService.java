@@ -30,10 +30,23 @@ public class AdsService extends BaseService<Ads> {
 		return ConfigService.getValueAsInt("data.adsCatalog_Id");
 	}
 
+	/**
+	 * 
+	 * @param catalogId 分类 id
+	 * @return
+	 */
 	public List<Ads> findListByCatalogId(int catalogId) {
 		return dao.findList(CatalogService.byCatalogId(catalogId));
 	}
 
+	/**
+	 * 
+	 * @param catalogId 分类 id
+	 * @param start
+	 * @param limit
+	 * @param status
+	 * @return
+	 */
 	public PageResult<Ads> findPagedList(int catalogId, int start, int limit, int status) {
 		Function<String, String> fn = setStatus(status).andThen(BaseService::searchQuery_NameOnly);
 

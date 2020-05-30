@@ -50,7 +50,7 @@ public interface UserDao extends IBaseDao<User> {
 	/**
 	 * 获取用户的名称，读取两个值，用户 id 即 user.name 和 用户昵称 user.username user 表名缩写必须为 u
 	 */
-	public static final String getUserName = " u.name AS userName, u.username AS userNickName ";
+	public static final String GET_USERNAME = " u.name AS userName, u.username AS userNickName ";
 	
 	public static final String LEFT_JOIN_USER = " LEFT JOIN user ON user.id = e.userId ";
 	

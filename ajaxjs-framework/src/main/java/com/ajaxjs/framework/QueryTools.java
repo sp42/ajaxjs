@@ -72,7 +72,7 @@ public class QueryTools {
 	public static String equals(String field, Object value) {
 		if (value instanceof String)
 			value = "'" + value + "'";
-		
+		System.out.println(">>>>>>>>>>>>>>:::"+field + " = " + value);
 		return field + " = " + value;
 	}
 
@@ -236,6 +236,7 @@ public class QueryTools {
 	public static Function<String, String> byAny(HttpServletRequest r) {
 		String value = r.getParameter("filterValue");
 
+	
 		if (value == null || "null".equals(value))
 			return setWhere(null);
 

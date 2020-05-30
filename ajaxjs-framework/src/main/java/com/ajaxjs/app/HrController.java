@@ -27,7 +27,7 @@ import com.ajaxjs.util.logger.LogHelper;
 @Path("/hr")
 public class HrController extends BaseController<Map<String, Object>> {
 	private static final LogHelper LOGGER = LogHelper.getLog(TopicController.class);
-	
+
 	public static MapCRUDService service = new MapCRUDService("entity_hr", "data.hrCatalog_Id", "招聘", "hr");
 
 	@GET
@@ -47,7 +47,6 @@ public class HrController extends BaseController<Map<String, Object>> {
 	public IBaseService<Map<String, Object>> getService() {
 		return service;
 	}
-	
 
 	//////////////////// 后台 ///////////////////
 

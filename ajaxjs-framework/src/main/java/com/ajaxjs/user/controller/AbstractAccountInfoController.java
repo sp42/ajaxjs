@@ -64,7 +64,7 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 		mv.put("userInfo", user);
 		mv.put("isEmailVerified", RoleService.simple8421(user.getVerify(), UserConstant.VERIFIED_EMAIL));
 		mv.put("lastUserLoginedInfo", LoginLogController.service.dao.getLastUserLoginedInfo(getUserId()));
-		mv.put("UserGroups", CatalogService.list2map_id_as_key(RoleService.dao.findList(null)));
+		mv.put("UserGroups", CatalogService.idAsKey(RoleService.dao.findList(null)));
 
 		return user("account");
 	}

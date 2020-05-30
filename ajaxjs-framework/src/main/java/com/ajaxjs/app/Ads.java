@@ -1,41 +1,35 @@
 package com.ajaxjs.app;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 import com.ajaxjs.framework.BaseModel;
 
+/**
+ * 广告
+ * 
+ * @author sp42 frank@ajaxjs.com
+ *
+ */
 public class Ads extends BaseModel {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 676703531602780709L;
 
-	/**
-	 * 创建者 id
-	 */
-	private Integer createByUser;
-
-	/**
-	 * 设置创建者 id
-	 * 
-	 * @param createByUser 创建者 id
-	 */
-	public void setCreateByUser(Integer createByUser) {
-		this.createByUser = createByUser;
-	}
-
-	/**
-	 * 获取创建者 id
-	 * 
-	 * @return 创建者 id
-	 */
-	public Integer getCreateByUser() {
-		return createByUser;
-	}
-
-
-
-	private String catalogName;
+	@NotBlank(message = "名称不能为空")
+	@Size(min = 2, max = 255, message = "长度应该介于3和255之间")
+	private String name;
 
 	/**
 	 * 分类 id
 	 */
 	private Long catalogId;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	/**
 	 * 设置分类 id
@@ -58,6 +52,8 @@ public class Ads extends BaseModel {
 	/**
 	 * 链接
 	 */
+	@NotBlank(message = "链接不能为空")
+	@Size(min = 10, max = 255, message = "长度应该介于3和255之间")
 	private String link;
 
 	/**
@@ -77,26 +73,4 @@ public class Ads extends BaseModel {
 	public String getLink() {
 		return link;
 	}
-
-	public String getCatalogName() {
-		return catalogName;
-	}
-
-	public void setCatalogName(String catalogName) {
-		this.catalogName = catalogName;
-	}
-
-	/**
-	 * 广告图片
-	 */
-	private String cover;
-
-	public String getCover() {
-		return cover;
-	}
-
-	public void setCover(String cover) {
-		this.cover = cover;
-	}
-	
 }

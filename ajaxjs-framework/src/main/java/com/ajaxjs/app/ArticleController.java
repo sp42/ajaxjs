@@ -86,7 +86,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@Override
 	public void prepareData(ModelAndView mv) {
 		int catalogId = getService().getDomainCatalogId();
-		Map<Long, BaseModel> map = CatalogService.list_bean2map_id_as_key(new CatalogService().findAllListByParentId(catalogId));
+		Map<Long, BaseModel> map = CatalogService.idAskey(new CatalogService().findAllListByParentId(catalogId));
 		mv.put("newsCatalogs", map);
 		mv.put(DOMAIN_CATALOG_ID, catalogId);
 

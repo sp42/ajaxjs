@@ -41,7 +41,7 @@ public class ShopUserAdminController extends BaseController<User> {
 		LOGGER.info("后台-商城会员列表");
 		List<Map<String, Object>> userGroups = roleService.getDao().findList(null);
 		
-		mv.put("UserGroups", CatalogService.list2map_id_as_key(userGroups));
+		mv.put("UserGroups", CatalogService.idAsKey(userGroups));
 		mv.put("UserGroupsJSON", toJson(userGroups, false).replaceAll("\"", "'"));
 		
 		page(mv, service.findPagedList(start, limit), CommonConstant.UI_ADMIN);

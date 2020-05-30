@@ -19,13 +19,13 @@ public class MapCRUDService extends BaseService<Map<String, Object>> {
 	private int domainCatalogId;
 
 	@TableName(beanClass = Map.class)
-	public static interface CommonEntityyDao extends IBaseDao<Map<String, Object>> {
+	public static interface MapCRUDDao extends IBaseDao<Map<String, Object>> {
 	}
 
-	public CommonEntityyDao dao;
+	public MapCRUDDao dao;
 
 	public MapCRUDService(String tableName) {
-		dao = new Repository().bind(CommonEntityyDao.class, tableName);
+		dao = new Repository().bind(MapCRUDDao.class, tableName);
 		setDao(dao);
 	}
 

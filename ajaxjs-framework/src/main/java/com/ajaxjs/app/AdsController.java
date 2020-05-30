@@ -14,6 +14,7 @@ import com.ajaxjs.app.catalog.CatalogService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.framework.IBaseService;
+import com.ajaxjs.framework.filter.BeanValidator;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
@@ -25,23 +26,19 @@ import com.ajaxjs.util.logger.LogHelper;
 @Bean
 public class AdsController extends BaseController<Ads> {
 	private static final LogHelper LOGGER = LogHelper.getLog(AdsController.class);
-	
+
 	@Resource("AdsService")
 	private AdsService service;
-	
-	@Resource("CatalogService")
-	private CatalogService catalogService;
-	
+
 	@GET
 	@Path(LIST)
-	@MvcFilter(filters = DataBaseFilter.class)
+	@MvcFilter(filters = { DataBaseFilter.class })
 	public String adminList(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		LOGGER.info("广告列表");
-		
-		mv.put("catalogs", CatalogService.list_bean2map_id_as_key(catalogService.findAllListByParentId(service.getDomainCatalogId())));
+		CatalogService.idAsKey(service.getDomainCatalogId(), mv);
 		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE));
 	}
- 
+
 	@GET
 	@Path(ID_INFO)
 	@MvcFilter(filters = DataBaseFilter.class)
@@ -57,7 +54,7 @@ public class AdsController extends BaseController<Ads> {
 	}
 
 	@POST
-	@MvcFilter(filters = DataBaseFilter.class)
+	@MvcFilter(filters = { BeanValidator.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
 	public String create(Ads entity) {
@@ -65,7 +62,7 @@ public class AdsController extends BaseController<Ads> {
 	}
 
 	@PUT
-	@MvcFilter(filters = DataBaseFilter.class)
+	@MvcFilter(filters = { BeanValidator.class, DataBaseFilter.class })
 	@Path(ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override

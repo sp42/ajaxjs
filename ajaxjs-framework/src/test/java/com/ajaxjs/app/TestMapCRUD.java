@@ -13,12 +13,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.framework.MapCRUDService.CommonEntityyDao;
+import com.ajaxjs.framework.MapCRUDService.MapCRUDDao;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.orm.JdbcConnection;
 
-public class TestDomain {
+public class TestMapCRUD {
 	@Before
 	public void setUp() {
 		JdbcConnection.setConnection(JdbcConnection.getSqliteConnection("C:\\project\\wstsq\\WebContent\\META-INF\\database.sqlite"));
@@ -31,7 +31,7 @@ public class TestDomain {
 
 	@Test
 	public void testDao() {
-		CommonEntityyDao dao = new Repository().bind(CommonEntityyDao.class, "entity_article");
+		MapCRUDDao dao = new Repository().bind(MapCRUDDao.class, "entity_article");
 
 		Map<String, Object> domain = dao.findById(1L);
 		assertNotNull(domain);

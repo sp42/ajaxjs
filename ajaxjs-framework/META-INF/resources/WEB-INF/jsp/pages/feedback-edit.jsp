@@ -19,39 +19,33 @@
 			<ajaxjs-admin-header>
 				<template slot="title">${uiName}</template>
 				<template slot="btns">
-					<a :href="ajResources.ctx + '/admin/${tableName}/list/'">${uiName}列表</a> | 
+					<a :href="ajResources.ctx + '/admin/${shortName}/list/'">${uiName}列表</a> | 
 				</template>
 			</ajaxjs-admin-header>
 
 			<form action="." method="${isCreate ? 'POST' : 'PUT'}" class="entityEdit">
-			
-			
-			<c:if test="${!isCreate}">
-				<input type="hidden" name="id" value="${info.id}" /><!-- 传送 id 参数 -->
-			</c:if>
-			
+				<c:if test="${!isCreate}">
+					<input type="hidden" name="id" value="${info.id}" /><!-- 传送 id 参数 -->
+				</c:if>
 				<div>
 					<label>
-						<div class="label">名 称：</div> 
-						<input placeholder="请填写${uiName}名称" size="60" required="required" name="name" value="${info.name}" type="text" />
-					</label> 
-
-				</div>
-				<div>
-					<label>
-						<div class="label">用户：
+						<div class="label">留言者名称：${info.name} 
+							用户身份：
 							<!-- 读取用户标识 -->
-							<c:if test="${empty info.userId}">
+							<c:if test="${empty info.userId || info.userId == 0}">
 								匿名用户
 							</c:if>
-							<c:if test="${not empty info.userId}">
-								<a href="${ctx}/user/center/info/${info.userId}/">
-									${ empty info.userName ? info.userNickName : info.userName}
+							
+							<c:if test="${info.userId > 0}">
+								<a target="_blank" href="${ctx}/admin/user/${info.userId}/">
+									${empty info.extractData.userName ? info.extractData.userNickName : info.extractData.userName}
 								</a>
 							</c:if>
 						</div>
-						<div class="label">
-							联系手机：${info.phone}</div>  <div class="label">联系邮箱：<a href="mailto:${info.email}">${info.email}</a>
+						<br />
+						<div class="label">联系方式：${info.contact}</div> 
+						<div class="label">联系手机：${info.phone}</div> 
+						<div class="label">联系邮箱：<a href="mailto:${info.email}">${info.email}</a>
 							留言时间：<c:dateFormatter value="${info.createDate}" />
 						</div>
 					</label>

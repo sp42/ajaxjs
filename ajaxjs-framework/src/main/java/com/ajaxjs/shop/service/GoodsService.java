@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.ajaxjs.app.DataDictController;
-import com.ajaxjs.app.TopicController;
 import com.ajaxjs.app.attachment.Attachment_pictureService;
 import com.ajaxjs.app.catalog.CatalogService;
 import com.ajaxjs.framework.BaseService;
@@ -14,7 +12,6 @@ import com.ajaxjs.framework.Repository;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
-import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.dao.GoodsDao;
 import com.ajaxjs.shop.model.Goods;
 
@@ -42,12 +39,6 @@ public class GoodsService extends BaseService<Goods> {
 
 	@Resource("CartService")
 	private CartService shopCartService;
-
-	static {
-		DataDictController.DataDictService.Entry_IdName.put(ShopConstant.ENTRY_GOODS, new GoodsService().getUiName());
-		DataDictController.DataDictService.Entry_IdName.put(DataDictController.DataDictService.ENTRY_TOPIC,
-				TopicController.service.getUiName());
-	}
 
 	/**
 	 * 

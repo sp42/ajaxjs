@@ -25,7 +25,7 @@
 
 			<div>
 				<label>
-					<div class="label">广告标题：</div> <input placeholder="请填写${uiName}名称" size="40" required="required" name="name" type="text" value="${info.name}" />
+					<div class="label">广告标题：</div> <input placeholder="请填写${uiName}名称" size="40" name="name" type="text" value="${info.name}" />
 					<span style="color:red;">*</span>
 				</label>
 			</div>

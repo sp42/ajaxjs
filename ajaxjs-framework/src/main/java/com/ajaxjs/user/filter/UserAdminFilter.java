@@ -1,4 +1,4 @@
-package com.ajaxjs.user.common;
+package com.ajaxjs.user.filter;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -17,7 +17,7 @@ import com.ajaxjs.user.role.RightConstant;
 import com.ajaxjs.user.role.RoleService;
 
 /**
- * 进入后台一切资源的拦截器
+ * 进入后台一切资源的拦截器。这是一个标准的 Servlet 过滤器
  */
 public class UserAdminFilter implements Filter {
 	@SuppressWarnings("deprecation")
@@ -34,14 +34,13 @@ public class UserAdminFilter implements Filter {
 			response.setStatus(401, "Authentication Required");
 			response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
 			response.setContentType("text/html");
-			response.getWriter().append(String.format(noAccess, request.getContextPath()));
-		} else {
+			response.getWriter().append(String.format(NO_ACCESS, request.getContextPath()));
+		} else
 			chain.doFilter(request, response);
-		}
 
 	}
 
-	static final String noAccess = "<title>禁止访问，非法权限</title><meta charset=\"utf-8\" /> 禁止访问，非法权限。Authentication Required <a href=\"%s/admin/login/\">登 录</a>";
+	private static final String NO_ACCESS = "<title>禁止访问，非法权限</title><meta charset=\"utf-8\" /> 禁止访问，非法权限。Authentication Required <a href=\"%s/admin/login/\">登 录</a>";
 
 	@Override
 	public void destroy() {

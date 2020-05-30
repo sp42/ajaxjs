@@ -24,7 +24,7 @@ public class TestArticleService {
 
 	@BeforeClass
 	public static void initDb() {
-		TestHelper.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
+		TestHelper.initAll();
 	}
 
 	@Test

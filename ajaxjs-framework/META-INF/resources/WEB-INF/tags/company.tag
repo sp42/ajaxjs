@@ -19,7 +19,9 @@
 			<table width="80%" align="center">
 				<tr>
 					<td width="10%"><tags:i18n zh="名字" eng="Your Name" /></td>
-					<td><input type="text" name="name" required /></td>
+					<td><input type="text" name="name" required value="${userName}" />
+						<input type="hidden" name="userId" value="${userId}" />
+					</td>
 					
 					<td rowspan="6" valign="top" width="65%" style="padding-left:8%;">
 						<tags:i18n zh="留言信息" eng="Message" /><br /><br />
@@ -28,7 +30,7 @@
 				</tr>
 				<tr>
 					<td><tags:i18n zh="联系方式" eng="Contact" /></td>
-					<td><input type="text" name="contact" placeholder="请输入你的手机或电子邮箱" required /></td>
+					<td><input type="text" name="contact" placeholder="请输入你的手机或电子邮箱"  value="${userPhone}" required /></td>
 				</tr>
 				<tr>
 					<td><tags:i18n zh="验证码" eng="Captcha code" /></td>

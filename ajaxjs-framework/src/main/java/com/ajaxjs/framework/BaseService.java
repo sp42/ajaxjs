@@ -122,7 +122,7 @@ public abstract class BaseService<T> extends QueryTools implements IBaseService<
 	 * @return
 	 */
 	public PageResult<T> findPagedList(int catalogId, int start, int limit, int status, boolean isSimpleCatalog) {
-		Function<String, String> fn = setStatus(status).andThen(BaseService::searchQuery);
+		Function<String, String> fn = setStatus(status).andThen(BaseService::searchQuery).andThen(byAny());
 
 		if (catalogId != 0)
 			fn = fn.andThen(isSimpleCatalog ? by("catalogId", catalogId) : CatalogService.setCatalog(catalogId));

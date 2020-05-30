@@ -50,7 +50,7 @@ public class GoodsController extends BaseController<Goods> {
 		LOGGER.info("商城-商品-后台列表");
 
 		prepareData(mv);
-		CatalogService.getCatalogs(service.getDomainCatalogId(), mv, "goodsCatalogs");
+		CatalogService.idAsKey(service.getDomainCatalogId(), mv, "goodsCatalogs");
 
 		return autoOutput(service.findPagedListByCatalogId(catalogId, start, limit, CommonConstant.OFF_LINE, sellerId),
 				mv, jsp("shop/goods-admin-list"));

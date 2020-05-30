@@ -160,29 +160,41 @@ public class CatalogService extends BaseService<Catalog> {
 	}
 
 	/**
+	 * 
+	 * @param id
+	 * @param mv
+	 * @param viewId
+	 */
+	public static void idAsKey(int id, ModelAndView mv, String viewId) {
+		Map<Long, BaseModel> catalogs = idAskey(new CatalogService().findAllListByParentId(id));
+//		Map<Long, BaseModel> catalogs = idAskey(new CatalogService().findByParentId(id));
+		mv.put(viewId, catalogs);
+	}
+
+	/**
+	 * 
+	 * @param id
+	 * @param mv
+	 */
+	public static void idAsKey(int id, ModelAndView mv) {
+		idAsKey(id, mv, "catalogs");
+	}
+
+	/**
 	 * 把列表（BaseModel 结构）转换为 map，以 id 作为键值。key 本来是 long，为照顾 el 转换为 int
 	 * 
 	 * @param bean 实体列表
 	 * @return 以 id 作为键值的 map
 	 */
-	public static Map<Long, BaseModel> list_bean2map_id_as_key(List<? extends BaseModel> bean) {
-		if (CommonUtil.isNull(bean))
+	public static Map<Long, BaseModel> idAskey(List<? extends BaseModel> list) {
+		if (CommonUtil.isNull(list))
 			return null;
 
 		Map<Long, BaseModel> map = new HashMap<>();
-
-		for (BaseModel item : bean) {
-//			map.put(new Long(item.getId()).intValue(), item);
-			map.put(item.getId(), item);
-		}
+		list.forEach(item -> map.put(item.getId(), item));
 
 		return map;
 	}
-
-	public static void getCatalogs(int id, ModelAndView mv, String viewId) {
-		Map<Long, BaseModel> catalogs = list_bean2map_id_as_key(new CatalogService().findByParentId(id));
-		mv.put(viewId, catalogs);
-	};
 
 	/**
 	 * 把列表（Map结构）转换为 map，以 id 作为键值。key 本来是 long，为照顾 el 转换为 int
@@ -190,14 +202,12 @@ public class CatalogService extends BaseService<Catalog> {
 	 * @param list 实体列表
 	 * @return 以 id 作为键值的 map
 	 */
-	public static Map<Integer, Object> list2map_id_as_key(List<Map<String, Object>> list) {
+	public static Map<Integer, Object> idAsKey(List<Map<String, Object>> list) {
 		if (CommonUtil.isNull(list))
 			return null;
 
 		Map<Integer, Object> map = new HashMap<>();
-
-		for (Map<String, Object> item : list)
-			map.put(new Long(item.get("id").toString()).intValue(), item);
+		list.forEach(item -> map.put(new Integer(item.get("id").toString()), item));
 
 		return map;
 	}
