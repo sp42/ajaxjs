@@ -46,7 +46,7 @@
 		
 			<c:if test="${aj_allConfig.user.login.thridOauth}">
 				<br />
-				<a href="#" onClick="loginWeibo();"><img src="http://www.sinaimg.cn/blog/developer/wiki/240.png" /></a>
+				<aj-oauth-login client-id="360568732" redirect-uri="http://www.palate-movement.com/user/oauth/weibo/callback/"></aj-oauth-login>
 				<br />
 			</c:if>
 			
@@ -203,7 +203,7 @@
 				); 
 			},
 		 
-			methods : {
+			methods: {
 				checkUserId(e) {
 					var el = e.target, userId = el.value;
 				

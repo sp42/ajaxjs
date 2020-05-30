@@ -2,32 +2,31 @@ package com.ajaxjs.app;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.app.service.Column;
-import com.ajaxjs.app.service.ColumnService;
+import com.ajaxjs.app.service.section.Section;
+import com.ajaxjs.app.service.section.SectionService;
 import com.ajaxjs.config.TestHelper;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.orm.JdbcConnection;
 
-public class TestColumnService {
-	static ColumnService service;
+public class TestSectionService {
+	static SectionService service;
 
 	@BeforeClass
 	public static void initDb() {
 		TestHelper.initAll("D:\\project\\leidong", "com.ajaxjs.app");
-		service = BeanContext.getBean(ColumnService.class);
+		service = BeanContext.getBean(SectionService.class);
 	}
 
 	@Test
 	public void test() {
-		List<Column> list = service.getListByCatalogId(30);
-		
+		List<Section> list = service.getListByCatalogId(30);
+
 		System.out.println(list);
 		assertNotNull(list);
 	}
@@ -35,7 +34,7 @@ public class TestColumnService {
 //	@Test
 	public void testCreate() {
 		assertNotNull(service);
-		Column c = new Column();
+		Section c = new Section();
 		c.setCatalogId(30);
 		c.setEntityUid(709360213836169216L);
 		c.setTypeId(2);
@@ -49,11 +48,6 @@ public class TestColumnService {
 
 	@AfterClass
 	public static void closeDb() {
-		try {
-			JdbcConnection.getConnection().close();
-		} catch (SQLException e) {
-		}
-
-		JdbcConnection.clean();
+		JdbcConnection.closeDb();
 	}
 }

@@ -16,7 +16,6 @@ import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.dao.GoodsDao;
-import com.ajaxjs.shop.group.GroupService;
 import com.ajaxjs.shop.model.Goods;
 
 /**
@@ -46,7 +45,6 @@ public class GoodsService extends BaseService<Goods> {
 
 	static {
 		DataDictController.DataDictService.Entry_IdName.put(ShopConstant.ENTRY_GOODS, new GoodsService().getUiName());
-		DataDictController.DataDictService.Entry_IdName.put(ShopConstant.ENTRY_GROUP, new GroupService().getUiName());
 		DataDictController.DataDictService.Entry_IdName.put(DataDictController.DataDictService.ENTRY_TOPIC,
 				TopicController.service.getUiName());
 	}

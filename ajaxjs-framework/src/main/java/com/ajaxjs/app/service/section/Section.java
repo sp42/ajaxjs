@@ -1,8 +1,14 @@
-package com.ajaxjs.app.service;
+package com.ajaxjs.app.service.section;
 
 import com.ajaxjs.framework.BaseModel;
 
-public class Column extends BaseModel {
+/**
+ * 栏目实体，多对多表中的实体
+ * 
+ * @author sp42 frank@ajaxjs.com
+ *
+ */
+public class Section extends BaseModel {
 	private static final long serialVersionUID = 2730165882935237248L;
 
 	/**
@@ -11,11 +17,11 @@ public class Column extends BaseModel {
 	private Integer catalogId;
 
 	private Long entityUid;
-	
+
 	private Long entityId;
 
 	private Integer typeId;
-	
+
 	public Integer getCatalogId() {
 		return catalogId;
 	}

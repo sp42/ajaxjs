@@ -2,7 +2,6 @@ package com.ajaxjs.app;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.sql.SQLException;
 import java.util.Map;
 
 import org.junit.AfterClass;
@@ -71,11 +70,6 @@ public class TestCatalogService {
 
 	@AfterClass
 	public static void closeDb() {
-		try {
-			JdbcConnection.getConnection().close();
-		} catch (SQLException e) {
-		}
-
-		JdbcConnection.clean();
+		JdbcConnection.closeDb();
 	}
 }

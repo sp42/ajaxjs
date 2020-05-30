@@ -61,6 +61,7 @@
     <script src="${developing_js_url}/js/widgets/list.js"></script>
     <script src="${developing_js_url}/js/widgets/tree.js"></script>
     <script src="${developing_js_url}/js/widgets/carousel.js"></script>
+    <script src="${developing_js_url}/js/widgets/user.js"></script>
     <script src="${developing_js_url}/js/widgets/admin.js"></script>
     
     <% if(request.getParameter("css")  != null) { %> 

@@ -80,8 +80,8 @@
 		</table>
 		<%
 			}
+		
 			JdbcConnection.closeDb();
-			JdbcConnection.clean();
 		%>
 	</div>
 </body>

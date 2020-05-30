@@ -33,6 +33,5 @@ public class TestAttachment_picture{
 	@AfterClass
 	public static void closeDb() {
 		JdbcConnection.closeDb();
-		JdbcConnection.clean();
 	}
 }

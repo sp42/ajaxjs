@@ -27,7 +27,7 @@ public class TestDomain {
 
 	@After
 	public void setEnd() throws SQLException {
-		JdbcConnection.clean();
+		JdbcConnection.closeDb();
 	}
 
 	@Test

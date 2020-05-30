@@ -3,7 +3,6 @@ package com.ajaxjs.app;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,21 +34,19 @@ public class TestArticleService {
 
 		ArticleService articleService = (ArticleService) BeanContext.getBean("ArticleService");
 		PageResult<Map<String, Object>> r = articleService.list(15, 0, 5, 1);
-		
-		
 
 		assertNotNull(r.size());
-		
+
 		HttpServletRequest request = MockRequest.mockRequest("/test", "/foo?searchField=name&searchValue=店长");
-		
+
 		Map<String, String[]> inputMap = new HashMap<>();
 		{
 			inputMap.put("searchField", new String[] { "name", "content" });
 			inputMap.put("searchValue", new String[] { "name", "jj" });
 		}
-		
+
 		when(request.getParameterMap()).thenReturn(inputMap);
-		
+
 		MvcRequest.setHttpServletRequest(request);
 		r = articleService.list(15, 0, 5, 1);
 		assertNotNull(r.size());
@@ -63,12 +60,6 @@ public class TestArticleService {
 
 	@AfterClass
 	public static void closeDb() {
-		try {
-			JdbcConnection.getConnection().close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		JdbcConnection.clean();
+		JdbcConnection.closeDb();
 	}
 }
