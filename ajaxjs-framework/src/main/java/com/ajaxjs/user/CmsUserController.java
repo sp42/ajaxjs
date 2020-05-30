@@ -30,7 +30,7 @@ public class CmsUserController extends BaseUserController {
 		if (phoneNo.length() != 11) {
 			return jsonNoOk(phoneNo + " 中国大陆手机号应为11位数");
 		} else {
-			if (UserUtil.isVaildPhone(phoneNo)) {
+			if (UserHelper.isVaildPhone(phoneNo)) {
 				return jsonNoOk(phoneNo + " 为非法手机号码");
 			} else {
 //				int randomCode = (int) ((Math.random() * 9 + 1) * 100000);

@@ -21,8 +21,8 @@ import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.user.UserDict;
-import com.ajaxjs.user.UserUtil;
+import com.ajaxjs.user.UserConstant;
+import com.ajaxjs.user.UserHelper;
 import com.ajaxjs.user.controller.LoginLogController.UserLoginLogService;
 import com.ajaxjs.user.filter.LoginCheck;
 import com.ajaxjs.user.filter.UserPasswordFilter;
@@ -62,7 +62,7 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 
 		User user = getService().findById(getUserId());
 		mv.put("userInfo", user);
-		mv.put("isEmailVerified", RoleService.simple8421(user.getVerify(), UserDict.VERIFIED_EMAIL));
+		mv.put("isEmailVerified", RoleService.simple8421(user.getVerify(), UserConstant.VERIFIED_EMAIL));
 		mv.put("lastUserLoginedInfo", LoginLogController.service.dao.getLastUserLoginedInfo(getUserId()));
 		mv.put("UserGroups", CatalogService.list2map_id_as_key(RoleService.dao.findList(null)));
 
@@ -151,7 +151,7 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 	public String modiflyPhone(@NotNull @QueryParam("phone") String phone) throws ServiceException {
 		LOGGER.info("修改手机-发送验证码");
 
-		if (!UserUtil.isVaildPhone(phone))
+		if (!UserHelper.isVaildPhone(phone))
 			throw new IllegalArgumentException(phone + " 不是有效的手机号码");
 
 		UserService.checkIfRepeated("phone", phone, "手机号码");
@@ -191,7 +191,7 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 		String phone = ExpireCache.CACHE.get("sms_userId_" + userId, String.class);
 		phone = phone.replace("sms_userId_", "");
 
-		if (!UserUtil.isVaildPhone(phone))
+		if (!UserHelper.isVaildPhone(phone))
 			throw new IllegalArgumentException(phone + " 不是有效的手机号码");
 
 		Integer rad = ExpireCache.CACHE.get("sms_" + phone, Integer.class);
@@ -213,10 +213,10 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 		User _user = getService().findById(userId);
 		int verify = _user.getVerify();
 
-		if ((UserDict.VERIFIED_PHONE & verify) == UserDict.VERIFIED_PHONE) {
+		if ((UserConstant.VERIFIED_PHONE & verify) == UserConstant.VERIFIED_PHONE) {
 			// 原来已经是通过验证的状态，无须修改
 		} else {
-			verify += UserDict.VERIFIED_PHONE;
+			verify += UserConstant.VERIFIED_PHONE;
 			user.setVerify(verify);
 		}
 

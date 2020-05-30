@@ -9,7 +9,7 @@ import java.util.Map;
  * @author sp42 frank@ajaxjs.com
  *
  */
-public interface UserDict {
+public interface UserConstant {
 	public static final String LOGIN_PASSED = "PASSED";
 	
 	public static final int PSW_LOGIN_ID = 1;

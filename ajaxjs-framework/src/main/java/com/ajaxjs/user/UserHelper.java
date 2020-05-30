@@ -15,7 +15,7 @@ import com.ajaxjs.util.CommonUtil;
  * @author sp42 frank@ajaxjs.com
  *
  */
-public class UserUtil {
+public class UserHelper {
 	public static Function<String, String> whereByuserId(long userId) {
 		return BaseService.setWhere("userId = " + userId);
 	}

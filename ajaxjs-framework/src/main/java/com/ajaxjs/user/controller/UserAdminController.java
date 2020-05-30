@@ -23,7 +23,7 @@ import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.user.UserDict;
+import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.user.filter.LoginCheck;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.role.RoleService;
@@ -52,7 +52,7 @@ public class UserAdminController extends BaseController<User> {
 		
 		List<Map<String, Object>> userGroups = roleService.getDao().findList(null);
 		
-		mv.put("SexGender", UserDict.SEX_GENDER);
+		mv.put("SexGender", UserConstant.SEX_GENDER);
 		mv.put("UserGroups", CatalogService.list2map_id_as_key(userGroups));
 		mv.put("UserGroupsJSON", toJson(userGroups, false).replaceAll("\"", "'"));
 
@@ -66,7 +66,7 @@ public class UserAdminController extends BaseController<User> {
 	@Path(ID_INFO)
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
 		mv.put("UserGroupsJSON", toJson(roleService.getDao().findList(null), false).replaceAll("\"", "'"));
-		mv.put("SexGender", UserDict.SEX_GENDER);
+		mv.put("SexGender", UserConstant.SEX_GENDER);
 		editUI(mv, service.findById(id));
 
 		return jsp("user/user-edit");
@@ -75,7 +75,7 @@ public class UserAdminController extends BaseController<User> {
 	@GET
 	@Override
 	public String createUI(ModelAndView mv) {
-		mv.put("SexGender", UserDict.SEX_GENDER);
+		mv.put("SexGender", UserConstant.SEX_GENDER);
 		super.createUI(mv);
 
 		return editUI();

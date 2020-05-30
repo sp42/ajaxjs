@@ -10,7 +10,7 @@ import com.ajaxjs.app.ThirdPartyService;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.net.mail.Mail;
-import com.ajaxjs.user.UserUtil;
+import com.ajaxjs.user.UserHelper;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.cryptography.Symmetri_Cipher;
@@ -104,7 +104,7 @@ public class AccountService {
 	 * @return 邮件是否发送成功
 	 */
 	public static boolean sendTokenMail(String email, String title, String URL) {
-		if (!UserUtil.isVaildEmail(email))
+		if (!UserHelper.isVaildEmail(email))
 			throw new IllegalArgumentException(email + "不是合法的邮件地址");
 
 		User user = UserService.dao.findByEmail(email);

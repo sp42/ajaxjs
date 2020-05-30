@@ -10,7 +10,7 @@ import com.ajaxjs.net.http.NetUtil;
 import com.ajaxjs.orm.annotation.Insert;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
-import com.ajaxjs.user.UserDict;
+import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.user.controller.LoginLogController;
 import com.ajaxjs.user.login.UserLoginLog;
 import com.ajaxjs.user.login.UserOauth;
@@ -119,7 +119,7 @@ public class MiniAppUserService extends BaseService<User> {
 		UserOauth oauth = new UserOauth();
 		oauth.setUserId(userId);
 		oauth.setOauthId(openId);
-		oauth.setLoginType(UserDict.WECHAT_MINI);
+		oauth.setLoginType(UserConstant.WECHAT_MINI);
 		userOauthService.create(oauth);
 
 		return user;
@@ -152,7 +152,7 @@ public class MiniAppUserService extends BaseService<User> {
 	private static void doLog(User user) {
 		UserLoginLog userLoginLog = new UserLoginLog();
 		userLoginLog.setUserId(user.getId());
-		userLoginLog.setLoginType(UserDict.WECHAT_MINI);
+		userLoginLog.setLoginType(UserConstant.WECHAT_MINI);
 		LoginLogController.initBean(userLoginLog, MvcRequest.getMvcRequest());
 		LoginLogController.service.create(userLoginLog);
 

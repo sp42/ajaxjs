@@ -16,7 +16,7 @@ import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.orm.annotation.TableName;
-import com.ajaxjs.user.UserDict;
+import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -48,7 +48,7 @@ public class GlobalLogController extends BaseController<Map<String, Object>> {
 	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
 		LOGGER.info("全局操作日志");
 		
-		mv.put("LoginType", UserDict.LOGIN_TYPE);
+		mv.put("LoginType", UserConstant.LOGIN_TYPE);
 		page(mv, service.findPagedList(start, limit, BaseService::betweenCreateDate), CommonConstant.UI_ADMIN);
 
 		return jsp("user/global-log-list");

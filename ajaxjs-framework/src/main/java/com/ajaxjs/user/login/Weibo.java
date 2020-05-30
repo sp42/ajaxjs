@@ -3,7 +3,7 @@ package com.ajaxjs.user.login;
 import java.util.Map;
 
 import com.ajaxjs.net.http.NetUtil;
-import com.ajaxjs.user.UserDict;
+import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
@@ -161,7 +161,7 @@ public class Weibo {
 		User user = new User();
 		user.setName((String) map.get("screen_name"));
 		user.setAvatar((String) map.get("profile_image_url"));
-		user.setSex("f".equals(map.get("gender")) ? UserDict.FEMALE : UserDict.MALE);
+		user.setSex("f".equals(map.get("gender")) ? UserConstant.FEMALE : UserConstant.MALE);
 
 		return user;
 	}

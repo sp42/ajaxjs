@@ -9,8 +9,8 @@ import javax.servlet.http.HttpSession;
 import com.ajaxjs.config.ConfigService;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.user.UserDict;
-import com.ajaxjs.user.UserUtil;
+import com.ajaxjs.user.UserConstant;
+import com.ajaxjs.user.UserHelper;
 import com.ajaxjs.user.controller.LoginLogController;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.model.UserCommonAuth;
@@ -26,18 +26,18 @@ public class LoginService extends UserService {
 
 		int passWordLoginType = ConfigService.getValueAsInt("user.login.passWordLoginType");
 		// 密码支持帐号、邮件、帐号作为身份凭证
-		if (UserUtil.isVaildEmail(userID)) {
-			if (!UserUtil.testBCD(UserDict.PSW_LOGIN_EMAIL, passWordLoginType))
+		if (UserHelper.isVaildEmail(userID)) {
+			if (!UserHelper.testBCD(UserConstant.PSW_LOGIN_EMAIL, passWordLoginType))
 				throw new ServiceException("禁止使用邮件登录");
 
 			user = dao.findByEmail(userID);
-		} else if (UserUtil.isVaildPhone(userID)) {
-			if (!UserUtil.testBCD(UserDict.PSW_LOGIN_PHONE, passWordLoginType))
+		} else if (UserHelper.isVaildPhone(userID)) {
+			if (!UserHelper.testBCD(UserConstant.PSW_LOGIN_PHONE, passWordLoginType))
 				throw new ServiceException("禁止使用手机登录");
 
 			user = dao.findByPhone(userID);
 		} else {
-			if (!UserUtil.testBCD(UserDict.PSW_LOGIN_ID, passWordLoginType))
+			if (!UserHelper.testBCD(UserConstant.PSW_LOGIN_ID, passWordLoginType))
 				throw new ServiceException("禁止使用用户名登录");
 
 			// 用户名
@@ -85,7 +85,7 @@ public class LoginService extends UserService {
 	public static void saveLoginLog(User user, HttpServletRequest req) {
 		UserLoginLog userLoginLog = new UserLoginLog();
 		userLoginLog.setUserId(user.getId());
-		userLoginLog.setLoginType(UserDict.PASSWORD);
+		userLoginLog.setLoginType(UserConstant.PASSWORD);
 		LoginLogController.initBean(userLoginLog, req);
 
 		if (LoginLogController.service.create(userLoginLog) <= 0)
@@ -136,11 +136,11 @@ public class LoginService extends UserService {
 
 		int passWordLoginType = ConfigService.getValueAsInt("user.login.passWordLoginType");
 
-		if (UserUtil.testBCD(UserDict.PSW_LOGIN_ID, passWordLoginType))
+		if (UserHelper.testBCD(UserConstant.PSW_LOGIN_ID, passWordLoginType))
 			userID.add("用户名");
-		if (UserUtil.testBCD(UserDict.PSW_LOGIN_EMAIL, passWordLoginType))
+		if (UserHelper.testBCD(UserConstant.PSW_LOGIN_EMAIL, passWordLoginType))
 			userID.add("邮件");
-		if (UserUtil.testBCD(UserDict.PSW_LOGIN_PHONE, passWordLoginType))
+		if (UserHelper.testBCD(UserConstant.PSW_LOGIN_PHONE, passWordLoginType))
 			userID.add("手机");
 
 		mv.put("userID", String.join("/", userID));

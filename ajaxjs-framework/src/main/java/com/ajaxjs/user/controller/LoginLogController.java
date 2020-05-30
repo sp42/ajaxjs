@@ -23,7 +23,7 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.net.http.Tools;
 import com.ajaxjs.orm.annotation.Select;
 import com.ajaxjs.orm.annotation.TableName;
-import com.ajaxjs.user.UserDict;
+import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.user.login.UserLoginLog;
 import com.ajaxjs.user.service.UserDao;
 import com.ajaxjs.user.service.UserService;
@@ -72,7 +72,7 @@ public class LoginLogController extends BaseController<UserLoginLog> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
 		LOGGER.info("用户登录日志-后台列表");
-		mv.put("LoginType", UserDict.LOGIN_TYPE);
+		mv.put("LoginType", UserConstant.LOGIN_TYPE);
 		page(mv, service.findPagedList(start, limit), CommonConstant.UI_ADMIN);
 
 		return jsp("user/login-log-list");
