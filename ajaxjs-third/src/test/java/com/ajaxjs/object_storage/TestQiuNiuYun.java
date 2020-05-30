@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Test;
 
-import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.net.http.NetUtil;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.web.UploadFileInfo;

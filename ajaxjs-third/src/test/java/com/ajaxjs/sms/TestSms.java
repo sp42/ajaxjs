@@ -8,7 +8,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import com.ajaxjs.app.ThirdPartyService;
-import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.ioc.BeanContext;
 
 public class TestSms {

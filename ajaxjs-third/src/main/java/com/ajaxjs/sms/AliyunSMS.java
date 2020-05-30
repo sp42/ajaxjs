@@ -3,7 +3,7 @@ package com.ajaxjs.sms;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.util.logger.LogHelper;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;

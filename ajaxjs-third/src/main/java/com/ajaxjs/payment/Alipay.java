@@ -1,6 +1,6 @@
 package com.ajaxjs.payment;
 
-import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.util.map.JsonHelper;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;

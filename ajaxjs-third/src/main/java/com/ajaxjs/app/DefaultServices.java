@@ -1,6 +1,6 @@
 package com.ajaxjs.app;
 
-import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.net.mail.Mail;
 import com.ajaxjs.net.mail.Sender;

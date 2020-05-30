@@ -14,7 +14,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
