@@ -27,7 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.Version;
 import com.ajaxjs.framework.BaseModel;
-import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.net.http.Tools;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;

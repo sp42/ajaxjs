@@ -17,7 +17,7 @@ public class TestUserRight {
 
 	@BeforeClass
 	public static void initDb() {
-		TestHelper.initTestDbAndIoc("c:\\project\\wyzx-pc\\src\\resources\\site_config.json", "com.ajaxjs.cms");
+		TestHelper.initAll();
 		service = (RoleService) BeanContext.getBean("UserRoleService");
 	}
 
