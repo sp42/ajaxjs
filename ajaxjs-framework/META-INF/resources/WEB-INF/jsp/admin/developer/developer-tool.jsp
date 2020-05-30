@@ -47,19 +47,17 @@
 			<template slot="title">实用工具</template>
 		</ajaxjs-admin-header>
 	</div>
-	
 
-		<div class="aj-simple-tab-horizontal tab" style="padding: 1% 5%;">
-				<ul>
-					<li :class="{'selected': 0 === selected}" @click="selected = 0">备份数据</li>
-					<li :class="{'selected': 1 === selected}" @click="selected = 1">代码生成器</li>
-					<li :class="{'selected': 2 === selected}" @click="selected = 2">后台日志浏览</li>
-					<li :class="{'selected': 3 === selected}" @click="selected = 3">统计代码行数</li>
-					<li :class="{'selected': 4 === selected}" @click="selected = 4">前端代码打包</li>
-				</ul>
-			<div class="content">
-				<div :class="{'selected': 0 === selected}">
-				
+	<div class="aj-simple-tab-horizontal tab" style="padding: 1% 5%;">
+		<ul>
+			<li :class="{'selected': 0 === selected}" @click="selected = 0">备份数据</li>
+			<li :class="{'selected': 1 === selected}" @click="selected = 1">代码生成器</li>
+			<li :class="{'selected': 2 === selected}" @click="selected = 2">后台日志浏览</li>
+			<li :class="{'selected': 3 === selected}" @click="selected = 3">统计代码行数</li>
+			<li :class="{'selected': 4 === selected}" @click="selected = 4">前端代码打包</li>
+		</ul>
+		<div class="content">
+			<div :class="{'selected': 0 === selected}">			
 <a href="#" download id="downLink"></a>
 <table style="width: 629px;" border="0" class="backup">
 	<tbody>
@@ -87,14 +85,13 @@
 		</tr>
 		<tr>
 			<td>清空下载目录。 <span>注意下载后请一定要清理，否则公众可以下载重要数据。</span></td>
-			<td><button class="aj-btn" onclick="aj.xhr.dele('${ctx}/admin/backup/', j=>{aj.msg.show(j.msg)})">清理</button></td>
+			<td><button class="aj-btn" onclick="aj.xhr.dele('backup/', j => aj.msg.show(j.msg));">清理</button></td>
 		</tr>
 	</tbody>
 </table>
-				</div>
-				
-
-				<div :class="{'selected': 1 === selected, codeGen:true}">
+	</div>
+			
+	<div :class="{'selected': 1 === selected, codeGen:true}">
 					<!-- TAB 内容 -->
 
 	<!-- http://localhost:8080/ajaxjs-tools/CodeGenerators?getTable=user_admin_reosurces&isMap=true&beanName=UserRoleResources -->
@@ -109,7 +106,7 @@
 			<div>isMap: </div><input type="radio" name="isMap" value="true"> true <input type="radio" name="isMap" value="false" checked /> false   当 isMap=false 时不生成 Bean 类，id使用 int
 		</div>
 		<div> 
-			<div>saveFolder: </div><input type="text" name="saveFolder" placeholder="C:\project\temp\CodeGenerators\" value="C:\\temp" size="80" /> 保存目录6565
+			<div>saveFolder: </div><input type="text" name="saveFolder" placeholder="C:\project\temp\CodeGenerators\" value="C:\\temp" size="80" /> 保存目录
 		</div>
 		<div>
 			<div>packageName: </div><input type="text" name="packageName" value="com.ajaxjs.user.role"  size="80" /> 包名
@@ -128,11 +125,11 @@
 		</div>
 	</form>
 	<br />
-					<!-- // TAB 内容 -->
-				</div>
-				<div :class="{'selected': 2 === selected}">
-					<!-- TAB 内容 -->
-					<p>在这里可以实时浏览 Tomcat 日志</p>
+		<!-- // TAB 内容 -->
+		</div>
+		<div :class="{'selected': 2 === selected}">
+			<!-- TAB 内容 -->
+			<p>在这里可以实时浏览 Tomcat 日志</p>
 					<br />
 <div id="log-container" style="height: 450px; overflow-y: scroll; background: #333; color: #aaa; padding: 10px; margin: 0 auto;">
 	<div></div>
@@ -183,44 +180,43 @@
 				selected:0
 			}
 		});
-	</script>
-	
 
-	<script>
 		new Vue({
 			el : 'body>div'
 		});
 		
-		down = (file) =>{			
+		down = file => {			
 			var link = aj('#downLink');
 			link.href = '${ctx}/temp/' + file;
 			// 前端实现文件自动下载 不知为何第一次下载不行，要等好久，其实文件已经在服务端上了
-			setTimeout(()=>{
+			setTimeout(() => {
 				link.click();
 			}, 5500);
 		}
 		
 		backupImages = () => {
-			aj.xhr.get('${ctx}/admin/backup/images/', () => {
+			aj.xhr.get('backup/images/', () => {
 				down('images.zip');
 			});
 		}
 		
 		backupSite = () => {
 			var i = 0;
+			
 			if(aj('.isWithImage').checked)
-				i+=1;
+				i += 1;
 			if(aj('.isWithClasses').checked)
-				i+=2;
+				i += 2;
 			if(aj('.isWithLib').checked)
-				i+=4;
-			aj.xhr.get('${ctx}/admin/backup/site/?i=' + i, () => {
+				i += 4;
+			
+			aj.xhr.get('backup/site/?i=' + i, () => {
 				down('site.zip');
 			});
 		}
 		
 		backupDB = () => {
-			aj.xhr.get('${ctx}/admin/backup/db/', json => {
+			aj.xhr.get('backup/db/', json => {
 				down(json.zipFile);
 			});
 		}

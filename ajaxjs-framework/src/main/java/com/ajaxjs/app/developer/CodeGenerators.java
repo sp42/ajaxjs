@@ -1,7 +1,6 @@
 package com.ajaxjs.app.developer;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -21,9 +20,11 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
+import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.orm.JdbcConnection;
+import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.ByteArrayServletOutputStream;
 
@@ -37,99 +38,167 @@ import com.ajaxjs.web.ByteArrayServletOutputStream;
 public class CodeGenerators implements IController {
 	private static final LogHelper LOGGER = LogHelper.getLog(CodeGenerators.class);
 
-	static private String zipSave = "/download/code.zip";
-	
+	/**
+	 * 打包文件保存位置
+	 */
+	private final static String ZIP_SAVE = "/download/code.zip";
+
 	@POST
-	public String doGet(MvcRequest request, HttpServletResponse response) throws FileNotFoundException {
-		request.setAttribute("packageName", request.getParameter("packageName"));
-	
-		Connection conn = JdbcConnection.getMySqlConnection(request.getParameter("dbUrl"),
-				request.getParameter("dbUser", "root"), request.getParameter("dbPassword"));
-	
-		if (request.getParameter("getTable") != null) {
-			CodeGeneratorsInfo info = new CodeGeneratorsInfo(request.getParameter("getTable"), request.getParameter("saveFolder", "C:\\temp"));
-	
-			if (request.getParameter("beanName") != null)
-				info.setBeanName(request.getParameter("beanName"));
-	
-			pareperRender(info, DataBaseStruController.getColumnComment(conn, info.getTableName()),
-					DataBaseStruController.getTableComment(conn, info.getTableName()), request, response);
+	public String doGet(MvcRequest req, HttpServletResponse resp) {
+		req.setAttribute("packageName", req.getParameter("packageName"));
+
+		Connection conn = JdbcConnection.getMySqlConnection(req.getParameter("dbUrl"), req.getParameter("dbUser", "root"), req.getParameter("dbPassword"));
+
+		if (req.getParameter("getTable") != null) {
+			CodeGeneratorsInfo info = new CodeGeneratorsInfo(req.getParameter("getTable"), req.getParameter("saveFolder", "C:\\temp"));
+
+			if (req.getParameter("beanName") != null)
+				info.setBeanName(req.getParameter("beanName"));
+
+			pareperRender(info, DataBaseStruController.getColumnComment(conn, info.getTableName()), DataBaseStruController.getTableComment(conn, info.getTableName()), req, resp);
 		} else {
 			List<String> tables = DataBaseStruController.getAllTableName(conn);
 			Map<String, String> tablesComment = DataBaseStruController.getTableComment(conn, tables);
-			Map<String, List<Map<String, String>>> infos = DataBaseStruController.getColumnComment(conn,
-					tables);
-	
+			Map<String, List<Map<String, String>>> infos = DataBaseStruController.getColumnComment(conn, tables);
+
 			for (String tableName : tables) {
-				CodeGeneratorsInfo info = new CodeGeneratorsInfo(tableName, request.getParameter("saveFolder", "C:\\temp"));
-	
-				pareperRender(info, infos.get(tableName), tablesComment.get(tableName), request, response);
+				CodeGeneratorsInfo info = new CodeGeneratorsInfo(tableName, req.getParameter("saveFolder", "C:\\temp"));
+
+				pareperRender(info, infos.get(tableName), tablesComment.get(tableName), req, resp);
 			}
 		}
-	
+
 		try {
 			conn.close();
 		} catch (SQLException e) {
 			LOGGER.warning(e);
 		}
-	
-		return "html::Done!<a href=\"" + request.getContextPath() + zipSave + "\" download>download</a>";
+
+		return "html::Done!<a href=\"" + req.getContextPath() + ZIP_SAVE + "\" download>download</a>";
 	}
 
-	private static void pareperRender(CodeGeneratorsInfo info, List<Map<String, String>> fields, String tableComment, MvcRequest request,
-			HttpServletResponse response) {
-		request.setAttribute("fields", fields);
-		request.setAttribute("tableName", info.getTableName());
-		request.setAttribute("beanName", info.getBeanName());
-		request.setAttribute("tablesComment", tableComment);
-		request.setAttribute("tablesCommentShortName", getName(tableComment));
-	
+	/**
+	 * 
+	 * @param info
+	 * @param fields
+	 * @param tableComment
+	 * @param req
+	 * @param resp
+	 */
+	private static void pareperRender(CodeGeneratorsInfo info, List<Map<String, String>> fields, String tableComment, MvcRequest req, HttpServletResponse resp) {
+		req.setAttribute("fields", fields);
+		req.setAttribute("tableName", info.getTableName());
+		req.setAttribute("beanName", info.getBeanName());
+		req.setAttribute("tablesComment", tableComment);
+		req.setAttribute("tablesCommentShortName", getName(tableComment));
+
 		// 是否生成 model
-		if (!request.hasParameter("isMap"))
-			render(info.setType("pojo"), request, response);
-	
-		render(info.setType("dao"), request, response);
-		render(info.setType("service"), request, response);
-		render(info.setType("serviceImpl"), request, response);
-		render(info.setType("controller"), request, response);
+		if (!req.hasParameter("isMap"))
+			render(info.setType("pojo"), req, resp);
+
+		render(info.setType("dao"), req, resp);
+		render(info.setType("service"), req, resp);
+		render(info.setType("serviceImpl"), req, resp);
+		render(info.setType("controller"), req, resp);
 	}
-	
+
 	/**
 	 * 替换为实际内容
 	 * 
-	 * @param info      请求页面地址，如 /sqlDoc.jsp  保存地址，如 c:\\sp42\\d.htm
-	 * @param request
-	 * @param response
+	 * @param info 请求页面地址，如 /sqlDoc.jsp 保存地址，如 c:\\sp42\\d.htm
+	 * @param req
+	 * @param resp
 	 */
-	private static void render(CodeGeneratorsInfo info, HttpServletRequest request, HttpServletResponse response) {
-	//		MvcRequest r = new MvcRequest(request);
-	//		ZipHelper.toZip(saveFolder, r.mappath(zipSave));
-	
+	private static void render(CodeGeneratorsInfo info, HttpServletRequest req, HttpServletResponse resp) {
 		File save = new File(info.getSaveTarget());
 		mkdir(save);
-		RequestDispatcher rd = request.getServletContext().getRequestDispatcher(info.getJsp());
-	
+		RequestDispatcher rd = req.getServletContext().getRequestDispatcher(info.getJsp());
+
 		try (ByteArrayServletOutputStream stream = new ByteArrayServletOutputStream();
 				PrintWriter pw = new PrintWriter(new OutputStreamWriter(stream.getOut(), "UTF-8"));
 				OutputStream out = new FileOutputStream(save);) {
-			HttpServletResponse rep = new HttpServletResponseWrapper(response) {
+			rd.include(req, new HttpServletResponseWrapper(resp) {
 				@Override
 				public ServletOutputStream getOutputStream() {
 					return stream;
 				}
-	
+
 				@Override
 				public PrintWriter getWriter() {
 					return pw;
 				}
-			};
-	
-			rd.include(request, rep);
+			});
 			pw.flush();
-	
+
 			stream.writeTo(out);
 		} catch (IOException | ServletException e) {
 			LOGGER.warning(e);
+		}
+	}
+	
+	/**
+	 * 代码生成器信息
+	 * 
+	 * @author sp42 frank@ajaxjs.com
+	 *
+	 */
+	static class CodeGeneratorsInfo {
+
+		public CodeGeneratorsInfo(String tableName, String saveFolder) {
+			this.setTableName(tableName);
+			this.saveFolder = saveFolder;
+		}
+
+		/**
+		 * 模板保存位置
+		 */
+		private static final String TPL_SAVE = BaseController.admin("developer/code-generator");
+
+		private String type;
+
+		private String tableName;
+
+		private String beanName;
+
+		private String saveFolder;
+
+		/**
+		 * 请求页面地址，如 /sqlDoc.jsp
+		 */
+		public String getJsp() {
+			return TPL_SAVE + "/" + type + ".jsp";
+		}
+
+		/**
+		 * 保存地址，如 c:\\sp42\\d.htm
+		 */
+		public String getSaveTarget() {
+			return saveFolder + "/" + type + "/" + getBeanName() + ReflectUtil.firstLetterUpper(type) + ".java";
+		}
+
+		public String getTableName() {
+			return tableName;
+		}
+
+		public void setTableName(String tableName) {
+			this.tableName = tableName;
+		}
+
+		public String getBeanName() {
+			return beanName == null ? ReflectUtil.firstLetterUpper(tableName) : beanName;
+		}
+
+		public void setBeanName(String beanName) {
+			this.beanName = beanName;
+		}
+
+		public String getType() {
+			return type;
+		}
+
+		public CodeGeneratorsInfo setType(String type) {
+			this.type = type;
+			return this;
 		}
 	}
 

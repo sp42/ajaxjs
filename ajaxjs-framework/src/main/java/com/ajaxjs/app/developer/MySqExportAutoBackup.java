@@ -2,7 +2,6 @@ package com.ajaxjs.app.developer;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -14,9 +13,7 @@ import javax.servlet.annotation.WebListener;
 import com.ajaxjs.Version;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.util.io.FileHelper;
-import com.ajaxjs.util.map.MapTool;
+import com.ajaxjs.util.XMLHelper;
 
 /**
  * MySQL 数据库定时自动备份，仅支持 CentOS
@@ -34,8 +31,9 @@ public class MySqExportAutoBackup extends TimerTask implements ServletContextLis
 		if (Version.isDebug || !ConfigService.getValueAsBool("isEnableMySqlBackup"))
 			return;
 
+		// 获取数据库配置
 		String configFile = MvcRequest.mappath(e.getServletContext(), "/META-INF/context.xml");
-		dbConfig = loadConfig(configFile, "jdbc/mysql_deploy");
+		dbConfig = XMLHelper.nodeAsMap(configFile, "//Resource[@name='" + ConfigService.getValueAsString("data.database_node") + "']");
 
 		// 获取并处理配置文件中的时间
 		String backuptime = "";
@@ -61,30 +59,6 @@ public class MySqExportAutoBackup extends TimerTask implements ServletContextLis
 
 	@Override
 	public void contextDestroyed(ServletContextEvent e) {
-	}
-
-	@Deprecated
-	public static Map<String, String> loadConfig(String configFile, String name) {
-		String xml = FileHelper.openAsText(configFile);
-		// 多个 resources 节点组成
-		String[] results = CommonUtil.regMatchAll("(?<=<Resource)[^>]+(?<!/)", xml);
-
-		if (results != null) {
-			for (String result : results) {
-				Map<String, Object> map = MapTool.toMap(result.trim().split("\\s+"), null);
-
-				if (("\"" + name + "\"").equals(map.get("name").toString())) {
-					Map<String, String> _map = new HashMap<>();
-					_map = MapTool.as(map, v -> v == null ? null : v.toString().replaceAll("^\"|\"$", ""));
-					_map.put("host", CommonUtil.regMatch("(?<=mysql://)[^/]+", _map.get("url")));
-					_map.put("databaseName", CommonUtil.regMatch("\\w+(?=\\?)", _map.get("url")));
-
-					return _map;
-				}
-			}
-		}
-
-		return null;
 	}
 
 	// 时间间隔 一天时间

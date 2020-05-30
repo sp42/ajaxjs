@@ -1,13 +1,7 @@
 package com.ajaxjs.app;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.List;
-import java.util.Map;
-
 import org.junit.Test;
 
-import com.ajaxjs.app.developer.DataBaseStruController;
 import com.ajaxjs.app.developer.TomcatLogController.LogFileTailer;
 
 public class TestDeveloper {
@@ -23,12 +17,5 @@ public class TestDeveloper {
 		tailer.setTailing(true);
 		tailer.addListener(System.out::println);
 		tailer.start();
-	}
-	
-	@Test
-	public void testService() {
-		List<Map<String, String>> list = DataBaseStruController.getConnectionConfig("C:\\project\\zyjf_admin\\WebContent\\META-INF\\context.xml");
-		
-		assertEquals("jdbc/mysql", list.get(0).get("name"));
 	}
 }

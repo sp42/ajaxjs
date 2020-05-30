@@ -46,7 +46,7 @@ public class MysqlExport {
 	}
 
 	private static final String SQL_START_PATTERN = "-- start";
-	
+
 	private static final String SQL_END_PATTERN = "-- end";
 
 	/**
@@ -239,7 +239,6 @@ public class MysqlExport {
 	 * @param databaseName
 	 */
 	public static void exec(String ip, String userName, String psw, String databaseName) {
-
 		try {
 			Process process = Runtime.getRuntime().exec(String.format(CMD, ip, userName, psw, databaseName));
 			try (InputStream in = process.getInputStream();) {

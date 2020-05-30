@@ -4,7 +4,6 @@ import static org.junit.Assert.assertNotNull;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
@@ -31,10 +30,7 @@ public class TestMySqlBackup {
 	@Test
 	public void testAutoBackup(String[] args) {
 		MySqExportAutoBackup m = new MySqExportAutoBackup();
-		Map<String, String> map = MySqExportAutoBackup.loadConfig("C:\\project\\register\\WebContent\\META-INF\\context.xml",
-				"jdbc/mysql_deploy");
 		assertNotNull(m);
-		assertNotNull(map);
 	}
 
 	@After
