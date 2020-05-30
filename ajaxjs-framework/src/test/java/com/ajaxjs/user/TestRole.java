@@ -5,8 +5,6 @@ import static com.ajaxjs.user.role.RoleUtil.getSingleKeyLock;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Set;
 
@@ -16,7 +14,6 @@ import org.junit.Test;
 
 import com.ajaxjs.framework.config.TestHelper;
 import com.ajaxjs.orm.JdbcConnection;
-import com.ajaxjs.user.role.RightConstant;
 import com.ajaxjs.user.role.RoleService;
 import com.ajaxjs.user.role.RoleUtil;
 
@@ -65,23 +62,5 @@ public class TestRole {
 	@AfterClass
 	public static void closeDb() {
 		JdbcConnection.closeDb();
-	}
-
-	public static void main(String[] args) {
-		Class<?> clz = RightConstant.class;
-
-		try {
-			for (Field field : clz.getDeclaredFields()) {
-				// 确保你要取的,是常量.否则,就不用进去这个获取操作了
-				if (Modifier.isFinal(field.getModifiers())) {
-					String name = field.getName();
-					int value = (int) field.get(null);
-				 
-					assertNotNull(name + ":" + value);
-				}
-			}
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			e.printStackTrace();
-		}
 	}
 }

@@ -36,7 +36,7 @@ import com.ajaxjs.util.logger.LogHelper;
  *
  */
 @WebListener
-public class MySqExportAutoBackup extends TimerTask implements ServletContextListener {
+public class MysqlAutoBackup extends TimerTask implements ServletContextListener {
 	/**
 	 * 数据库配置信息
 	 */

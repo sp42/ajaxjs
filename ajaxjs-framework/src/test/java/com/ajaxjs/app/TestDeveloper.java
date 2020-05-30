@@ -6,8 +6,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.app.developer.MySqExportAutoBackup;
-import com.ajaxjs.app.developer.MySqExportAutoBackup.MysqlExport;
+import com.ajaxjs.app.developer.MysqlAutoBackup;
+import com.ajaxjs.app.developer.MysqlAutoBackup.MysqlExport;
 import com.ajaxjs.app.developer.TomcatLogController.LogFileTailer;
 import com.ajaxjs.framework.config.TestHelper;
 import com.ajaxjs.orm.JdbcConnection;
@@ -23,7 +23,7 @@ public class TestDeveloper {
 		MysqlExport m = new MysqlExport(JdbcConnection.getConnection(), "c:/temp");
 		m.export();
 
-		MySqExportAutoBackup timer = new MySqExportAutoBackup();
+		MysqlAutoBackup timer = new MysqlAutoBackup();
 		assertNotNull(timer);
 	}
 

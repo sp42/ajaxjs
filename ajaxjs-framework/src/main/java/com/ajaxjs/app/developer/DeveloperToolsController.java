@@ -8,7 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.app.developer.MySqExportAutoBackup.MysqlExport;
+import com.ajaxjs.app.developer.MysqlAutoBackup.MysqlExport;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
@@ -28,7 +28,7 @@ import com.ajaxjs.util.io.ZipHelper;
  *
  */
 @Path("/admin/developer-tool")
-public class DeveloperTools implements IController {
+public class DeveloperToolsController implements IController {
 	@GET
 	public String deve(ModelAndView mv, MvcRequest r) {
 		// 代码生成器
