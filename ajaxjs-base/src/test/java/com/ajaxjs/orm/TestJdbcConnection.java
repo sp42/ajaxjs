@@ -1,7 +1,6 @@
 package com.ajaxjs.orm;
 
 import static com.ajaxjs.orm.JdbcConnection.addSql;
-import static com.ajaxjs.orm.JdbcConnection.clean;
 import static com.ajaxjs.orm.JdbcConnection.getConnection;
 import static com.ajaxjs.orm.JdbcConnection.getMySqlConnection;
 import static com.ajaxjs.orm.JdbcConnection.setConnection;
@@ -43,7 +42,7 @@ public class TestJdbcConnection {
 		Connection conn = getTestSqliteConnection();
 		setConnection(conn);
 		assertNotNull(getConnection());
-		clean();
+		JdbcConnection.closeDb();
 		addSql("SELECT * FROM news");
 	}
 }

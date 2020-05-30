@@ -218,21 +218,15 @@ public class JdbcConnection {
 	}
 
 	/**
-	 * 清除 sql 内容
-	 */
-	public static void cleanSql() {
-		if (getSqls() != null)
-			getSqls().clear();
-
-		sqls.set(null);
-	}
-
-	/**
 	 * 清除内容
 	 */
-	public static void clean() {
+	private static void clean() {
 		connection.set(null);
-		cleanSql();
+
+		if (getSqls() != null) {
+			getSqls().clear();
+			sqls.set(null);
+		}
 	}
 
 	/**
@@ -267,5 +261,5 @@ public class JdbcConnection {
 			jdbcUrl = "jdbc:sqlite:" + jdbcUrl;
 
 		return getConnection(jdbcUrl);
-	} 
+	}
 }

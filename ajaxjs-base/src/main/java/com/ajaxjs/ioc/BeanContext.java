@@ -30,7 +30,7 @@ import java.util.function.Function;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.ioc.aop.Aop;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;

@@ -3,8 +3,6 @@ package com.ajaxjs.orm;
 import static com.ajaxjs.orm.JdbcUtil.printRealSql;
 import static org.junit.Assert.assertNotNull;
 
-import java.sql.SQLException;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,14 +14,14 @@ public class TestJdbcHelperUtil {
 	NewsDao dao;
 
 	@Before
-	public void setUp() throws SQLException {
+	public void setUp() {
 		JdbcConnection.setConnection(TestJdbcConnection.getTestSqliteConnection());
 		dao = new Repository().bind(NewsDao.class);
 	}
 
 	@After
-	public void setEnd() throws SQLException {
-		JdbcConnection.clean();
+	public void setEnd() {
+		JdbcConnection.closeDb();
 	}
 
 	@Test
