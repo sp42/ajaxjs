@@ -149,6 +149,36 @@ public class ConfigService {
 	}
 
 	/**
+	 * 简化版本
+	 * 
+	 * @param key 配置键值
+	 * @return 配置内容
+	 */
+	public static String get(String key) {
+		return getValueAsString(key);
+	}
+
+	/**
+	 * 简化版本
+	 * 
+	 * @param key 配置键值
+	 * @return 配置内容
+	 */
+	public static int getInt(String key) {
+		return getValueAsInt(key);
+	}
+	
+	/**
+	 * 简化版本
+	 * 
+	 * @param key 配置键值
+	 * @return 配置内容
+	 */
+	public static boolean getBol(String key) {
+		return getValueAsBool(key);
+	}
+
+	/**
 	 * 扁平化 JSON 的 key
 	 * 
 	 * @param namespace JSON 命名空间
