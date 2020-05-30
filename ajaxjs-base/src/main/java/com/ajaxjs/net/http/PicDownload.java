@@ -26,40 +26,55 @@ import java.util.function.Supplier;
  *
  */
 public class PicDownload {
-	public CountDownLatch latch;
+	/**
+	 * 闭锁。另外可参考栅栏 CyclicBarrier
+	 */
+	private CountDownLatch latch;
+
+	/**
+	 * 下载列表
+	 */
 	private String[] arr;
+
+	/**
+	 * 保存目录
+	 */
 	private String saveFolder;
+
+	/**
+	 * 如何命名文件名的函数。若为 null 则使用原文件名
+	 */
 	private Supplier<String> newFileNameFn;
 
 	/**
+	 * 创建图片批量下载
 	 * 
-	 * @param arr
-	 * @param saveFolder
-	 * @param newFileNameFn How to specify a new file name, if it is null then use
-	 *                      old name
+	 * @param arr           下载列表
+	 * @param saveFolder    保存目录
+	 * @param newFileNameFn 如何命名文件名的函数。若为 null 则使用原文件名
 	 */
 	public PicDownload(String[] arr, String saveFolder, Supplier<String> newFileNameFn) {
 		latch = new CountDownLatch(arr.length);
+
 		this.arr = arr;
 		this.saveFolder = saveFolder;
 		this.newFileNameFn = newFileNameFn;
 	}
 
 	/**
-	 * Download
+	 * 单个下载
 	 * 
-	 * @param url
-	 * @param i
+	 * @param url 下载地址
+	 * @param i   索引
 	 */
-	public void exec(String url, int i) {
+	private void exec(String url, int i) {
 		String newFileName;
 
 		try {
-			if (newFileNameFn == null) {
+			if (newFileNameFn == null)
 				newFileName = NetUtil.download(url, saveFolder);
-			} else {
+			else
 				newFileName = NetUtil.download(url, saveFolder, newFileNameFn.get());
-			}
 
 			String[] _arr = newFileName.split("\\\\");
 			String f = _arr[_arr.length - 1];
@@ -69,6 +84,9 @@ public class PicDownload {
 		}
 	}
 
+	/**
+	 * 开始下载
+	 */
 	public void start() {
 		for (int i = 0; i < arr.length; i++) {
 			final int j = i;
@@ -80,13 +98,5 @@ public class PicDownload {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public static void main(String[] args) throws InterruptedException {
-		String[] testArr = { "https://bbsimage.res.meizu.com/forum/2019/01/23/153122zrz85kuvubbiibbs.jpg",
-				"http://531.yishu1000.com/201906/004/1.jpg", "http://531.yishu1000.com/201906/004/2.jpg",
-				"http://531.yishu1000.com/201906/004/3.jpg" };
-
-		new PicDownload(testArr, "c:/temp", null).start();
 	}
 }
