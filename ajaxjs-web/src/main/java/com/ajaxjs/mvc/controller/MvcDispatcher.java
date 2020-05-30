@@ -31,9 +31,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.ioc.BeanContext;
-import com.ajaxjs.mvc.Constant;
+import com.ajaxjs.mvc.MvcConstant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.Authority;
 import com.ajaxjs.mvc.filter.FilterAction;
@@ -244,7 +244,7 @@ public class MvcDispatcher implements Filter {
 		Produces a = method.getAnnotation(Produces.class);
 
 		if (a != null && MediaType.APPLICATION_JSON.equals(a.value()[0])) {// 返回 json
-			response.resultHandler(String.format(Constant.JSON_NOT_OK, JsonHelper.jsonString_covernt(errMsg)), r, model,
+			response.resultHandler(String.format(MvcConstant.JSON_NOT_OK, JsonHelper.jsonString_covernt(errMsg)), r, model,
 					method);
 		} else {
 			if (err instanceof IllegalAccessError && ConfigService.getValueAsString("page.onNoLogin") != null) {

@@ -17,7 +17,7 @@ package com.ajaxjs.mvc;
  * @author sp42 frank@ajaxjs.com
  *
  */
-public interface Constant {
+public interface MvcConstant {
 	/**
 	 * MV 用的 key
 	 */
@@ -52,6 +52,7 @@ public interface Constant {
 	public static final String USER_SESSION_ID = "X-Ajaxjs-Token";
 
 	public static final String USER_ID = "X-Ajaxjs-UserId";
+	
 	public static final String USER_ID_HEADER = "X-Ajaxjs-UserId";
 
 	public static final String DOMAIN_CATALOG_ID = "domainCatalog_Id";
