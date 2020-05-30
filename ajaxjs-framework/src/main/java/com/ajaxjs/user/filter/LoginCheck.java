@@ -2,7 +2,7 @@ package com.ajaxjs.user.filter;
 
 import java.lang.reflect.Method;
 
-import com.ajaxjs.mvc.Constant;
+import com.ajaxjs.mvc.MvcConstant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
@@ -25,7 +25,7 @@ public class LoginCheck implements FilterAction {
 			return true;
 
 		// Token 检测，适用于 App 或 小程序
-		String token = req.getHeader(Constant.USER_SESSION_ID), id = req.getHeader(Constant.USER_ID);
+		String token = req.getHeader(MvcConstant.USER_SESSION_ID), id = req.getHeader(MvcConstant.USER_ID);
 
 		if (!CommonUtil.isEmptyString(token) && !CommonUtil.isEmptyString(id)) {
 			// TODO 鉴权！

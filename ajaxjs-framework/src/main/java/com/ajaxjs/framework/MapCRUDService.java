@@ -1,16 +1,18 @@
-package com.ajaxjs.app;
+package com.ajaxjs.framework;
 
 import java.util.Map;
 
 import com.ajaxjs.app.catalog.CatalogService;
-import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.framework.IBaseDao;
-import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.framework.Repository;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.orm.annotation.TableName;
 
-public class CommonEntityService extends BaseService<Map<String, Object>> {
+/**
+ * Map 的 CRUD 服务。期望一个实体的快速增删改查
+ * 
+ * @author sp42 frank@ajaxjs.com
+ *
+ */
+public class MapCRUDService extends BaseService<Map<String, Object>> {
 	/**
 	 * 该域下面的分类id
 	 */
@@ -22,27 +24,27 @@ public class CommonEntityService extends BaseService<Map<String, Object>> {
 
 	public CommonEntityyDao dao;
 
-	public CommonEntityService(String tableName) {
+	public MapCRUDService(String tableName) {
 		dao = new Repository().bind(CommonEntityyDao.class, tableName);
 		setDao(dao);
 	}
 
-	public CommonEntityService(String tableName, int domainCatalogId) {
+	public MapCRUDService(String tableName, int domainCatalogId) {
 		this(tableName);
 		setDomainCatalogId(domainCatalogId);
 	}
 
-	public CommonEntityService(String tableName, int domainCatelogId, String uiName) {
+	public MapCRUDService(String tableName, int domainCatelogId, String uiName) {
 		this(tableName, domainCatelogId);
 		setUiName(uiName);
 	}
 
-	public CommonEntityService(String tableName, int domainCatelogId, String uiName, String shortName) {
+	public MapCRUDService(String tableName, int domainCatelogId, String uiName, String shortName) {
 		this(tableName, domainCatelogId, uiName);
 		setShortName(shortName);
 	}
 
-	public CommonEntityService(String tableName, String configNodeName, String uiName, String shortName) {
+	public MapCRUDService(String tableName, String configNodeName, String uiName, String shortName) {
 		this(tableName, ConfigService.getValueAsInt(configNodeName), uiName, shortName);
 	}
 
@@ -53,7 +55,7 @@ public class CommonEntityService extends BaseService<Map<String, Object>> {
 	 * @param uiName
 	 * @param shortName
 	 */
-	public CommonEntityService(String tableName, String uiName, String shortName) {
+	public MapCRUDService(String tableName, String uiName, String shortName) {
 		this(tableName);
 		setUiName(uiName);
 		setShortName(shortName);

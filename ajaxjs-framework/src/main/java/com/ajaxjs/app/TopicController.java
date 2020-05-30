@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.framework.IBaseService;
+import com.ajaxjs.framework.MapCRUDService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.mvc.ModelAndView;
@@ -27,7 +28,7 @@ import com.ajaxjs.util.logger.LogHelper;
 public class TopicController extends BaseController<Map<String, Object>> {
 	private static final LogHelper LOGGER = LogHelper.getLog(TopicController.class);
 	
-	public static CommonEntityService service = new CommonEntityService("entity_topic", "data.topicCatalog_Id", "专题", "topic");
+	public static MapCRUDService service = new MapCRUDService("entity_topic", "data.topicCatalog_Id", "专题", "topic");
 
 	@GET
 	@Path(LIST)

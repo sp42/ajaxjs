@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.CommonConstant;
-import com.ajaxjs.mvc.Constant;
+import com.ajaxjs.mvc.MvcConstant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
@@ -29,7 +29,7 @@ public class FrontEndOnlyCheck implements FilterAction {
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean after(FilterAfterArgs args) {
-		Object info = args.model.get(Constant.INFO);
+		Object info = args.model.get(MvcConstant.INFO);
 
 		if (info == null)
 			return true;

@@ -11,7 +11,7 @@ import java.util.function.Function;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ajaxjs.framework.config.ConfigService;
-import com.ajaxjs.mvc.Constant;
+import com.ajaxjs.mvc.MvcConstant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
@@ -28,7 +28,7 @@ import com.ajaxjs.web.UploadFileInfo;
  *
  * @param <T> 实体类型，可以为 Map 或 Java Bean
  */
-public abstract class BaseController<T> implements IController, Constant {
+public abstract class BaseController<T> implements IController, MvcConstant {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseController.class);
 
 	public abstract IBaseService<T> getService();

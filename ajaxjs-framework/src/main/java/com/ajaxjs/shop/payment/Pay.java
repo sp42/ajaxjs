@@ -2,7 +2,7 @@ package com.ajaxjs.shop.payment;
 
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.config.ConfigService;
-import com.ajaxjs.mvc.Constant;
+import com.ajaxjs.mvc.MvcConstant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.payment.Alipay;
 import com.ajaxjs.payment.wxpay.PerpayReturn;
@@ -45,7 +45,7 @@ public class Pay {
 			mv.put("totalPrice", order.getTotalPrice());
 			mv.put("codeUrl", p.getCode_url());
 
-			return Constant.JSP_PERFIX_WEBINF + "/shop/wxpay";
+			return MvcConstant.JSP_PERFIX_WEBINF + "/shop/wxpay";
 		}
 
 		return "html:: ERROR Can't pay!";

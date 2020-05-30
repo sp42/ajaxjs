@@ -20,7 +20,7 @@ import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.framework.Repository;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.ioc.Bean;
-import com.ajaxjs.mvc.Constant;
+import com.ajaxjs.mvc.MvcConstant;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.orm.annotation.Select;
@@ -115,7 +115,7 @@ public class DataDictController extends BaseController<Map<String, Object>> {
 
 	@PUT
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path(Constant.ID_INFO)
+	@Path(MvcConstant.ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
 	public String update(@PathParam(ID) Long id, Map<String, Object> entity) {
@@ -123,7 +123,7 @@ public class DataDictController extends BaseController<Map<String, Object>> {
 	}
 
 	@DELETE
-	@Path(Constant.ID_INFO)
+	@Path(MvcConstant.ID_INFO)
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String delete(@PathParam(ID) Long id) {

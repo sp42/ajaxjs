@@ -4,7 +4,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.mvc.Constant;
+import com.ajaxjs.mvc.MvcConstant;
 import com.ajaxjs.mvc.controller.IController;
 
 /**
@@ -14,7 +14,7 @@ import com.ajaxjs.mvc.controller.IController;
  *
  */
 @Path("/admin")
-public class AdminUIController implements IController, Constant {
+public class AdminUIController implements IController, MvcConstant {
 	@GET
 	@Path("login")
 	public String login() {
