@@ -2,10 +2,14 @@ package com.ajaxjs.app;
 
 import static org.junit.Assert.assertNotNull;
 
+import java.io.File;
+import java.util.logging.Logger;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.ajaxjs.app.developer.CalculateRows;
 import com.ajaxjs.app.developer.MysqlAutoBackup;
 import com.ajaxjs.app.developer.MysqlAutoBackup.MysqlExport;
 import com.ajaxjs.app.developer.TomcatLogController.LogFileTailer;
@@ -31,6 +35,26 @@ public class TestDeveloper {
 	public void testBackup() {
 		String d = "C:/sp42/dev/eclipse-workspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/ajaxjs-demo/WEB-INF/lib";
 		System.out.println(d.replaceAll("/", "\\\\"));
+	}
+
+	@Test
+	public void testCalculateRows() {
+		File f = new File("D:\\project\\ajaxjs-web\\src\\main\\java\\com\\ajaxjs\\web\\captcha\\CaptchaController.java"); // 目录
+		String type = ".java";// 查找什么类型的代码，如".java"就是查找以java开发的代码量，".php"就是查找以PHP开发的代码量
+//		treeFile(f, type);
+		CalculateRows.countFile(f);
+		Logger.getGlobal().info("路径：" + f.getPath());
+		Logger.getGlobal().info(type + "类数量：" + CalculateRows.classcount);
+		Logger.getGlobal().info("代码数量：" + CalculateRows.writeLines);
+		Logger.getGlobal().info("注释数量：" + CalculateRows.commentLines);
+		Logger.getGlobal().info("空行数量：" + CalculateRows.normalLines);
+
+		if (CalculateRows.classcount == 0)
+			Logger.getGlobal().info("代码平均数量:" + 0);
+		else
+			Logger.getGlobal().info("代码平均数量:" + CalculateRows.writeLines / CalculateRows.classcount);
+
+		Logger.getGlobal().info("总 行数量：" + CalculateRows.allLines);
 	}
 
 	@Test

@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.logging.Logger;
 
 import com.ajaxjs.util.CommonUtil;
 
@@ -15,33 +14,17 @@ import com.ajaxjs.util.CommonUtil;
  *
  */
 public class CalculateRows {
-	static long classcount = 0; // Java类的数量
-	static long normalLines = 0; // 空行
-	static long commentLines = 0; // 注释行
-	static long writeLines = 0; // 代码行
-	static long allLines = 0; // 代码行
-
-	public static void main(String[] args) {
-		File f = new File("D:\\project\\ajaxjs-web\\src\\main\\java\\com\\ajaxjs\\web\\captcha\\CaptchaController.java"); // 目录
-		String type = ".java";// 查找什么类型的代码，如".java"就是查找以java开发的代码量，".php"就是查找以PHP开发的代码量
-//		treeFile(f, type);
-		countFile(f);
-		Logger.getGlobal().info("路径：" + f.getPath());
-		Logger.getGlobal().info(type + "类数量：" + classcount);
-		Logger.getGlobal().info("代码数量：" + writeLines);
-		Logger.getGlobal().info("注释数量：" + commentLines);
-		Logger.getGlobal().info("空行数量：" + normalLines);
-
-		if (classcount == 0)
-			Logger.getGlobal().info("代码平均数量:" + 0);
-		else
-			Logger.getGlobal().info("代码平均数量:" + writeLines / classcount);
-
-		Logger.getGlobal().info("总 行数量：" + allLines);
-	}
+	public static long classcount = 0; // Java类的数量
+	public static long normalLines = 0; // 空行
+	public static long commentLines = 0; // 注释行
+	public static long writeLines = 0; // 代码行
+	public static long allLines = 0; // 代码行
 
 	/**
 	 * 查找出一个目录下所有的.java文件
+	 * 
+	 * @param f    指定的文件目录
+	 * @param type
 	 */
 	public static void treeFile(File f, String type) {
 		File[] childs = f.listFiles();
@@ -58,6 +41,10 @@ public class CalculateRows {
 		}
 	}
 
+	/**
+	 * 
+	 * @param file
+	 */
 	public static void countFile(File file) {
 		classcount++;
 		boolean comment = false;
