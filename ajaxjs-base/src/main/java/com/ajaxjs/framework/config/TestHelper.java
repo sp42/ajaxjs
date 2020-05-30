@@ -28,8 +28,7 @@ import com.ajaxjs.util.XMLHelper;
  *
  */
 public class TestHelper {
-	private final static String[] nouns = { "男孩", "女孩", "小狗", "城镇", "小汽车" },
-			articles = { "这个", "有一个", "一个", "一些", "任何" }, verbs = { "驾驶", "冲", "跑", "走", "越" },
+	private final static String[] nouns = { "男孩", "女孩", "小狗", "城镇", "小汽车" }, articles = { "这个", "有一个", "一个", "一些", "任何" }, verbs = { "驾驶", "冲", "跑", "走", "越" },
 			prepositions = { "向", "来", "过", "下", "上" };
 
 	/**
@@ -47,8 +46,7 @@ public class TestHelper {
 		int rNoun2nd = (int) (Math.random() * 5);
 		int rArticle2nd = (int) (Math.random() * 5);
 
-		return articles[rArticle1st] + nouns[rNoun1st] + verbs[rVerb] + prepositions[rPrepostion]
-				+ articles[rArticle2nd] + nouns[rNoun2nd] + "。";
+		return articles[rArticle1st] + nouns[rNoun1st] + verbs[rVerb] + prepositions[rPrepostion] + articles[rArticle2nd] + nouns[rNoun2nd] + "。";
 	}
 
 	/**
@@ -74,10 +72,9 @@ public class TestHelper {
 	private static final String[] email_suffix = "@gmail.com,@yahoo.com,@msn.com,@hotmail.com,@aol.com,@ask.com,@live.com,@qq.com,@0355.net,@163.com,@163.net,@263.net,@3721.net,@yeah.net,@googlemail.com,@126.com,@sina.com,@sohu.com,@yahoo.com.cn"
 			.split(",");
 
-	public final static String[] provinces = new String[] { "广东", "广西", "46", " 海南", "重庆 ", "四川", "贵州" };
-	public final static String[] cites = new String[] { "北京", "上海", "天津", "重庆", "河北", "石家庄", "沧州", "承德", "秦皇岛" };
-	public final static String[] districts = new String[] { "锦江区", "青羊区", "金牛区", "武侯区", "成华区", "龙泉驿区", "青白江区", "新都区",
-			"温江区" };
+	public final static String[] provinces = { "广东", "广西", "46", " 海南", "重庆 ", "四川", "贵州" };
+	public final static String[] cites = { "北京", "上海", "天津", "重庆", "河北", "石家庄", "沧州", "承德", "秦皇岛" };
+	public final static String[] districts = { "锦江区", "青羊区", "金牛区", "武侯区", "成华区", "龙泉驿区", "青白江区", "新都区", "温江区" };
 
 	public static int getNum(int start, int end) {
 		return (int) (Math.random() * (end - start + 1) + start);
@@ -161,8 +158,7 @@ public class TestHelper {
 		return getEmail(2, 4);
 	}
 
-	private static String[] telFirst = "134,135,136,137,138,139,150,151,152,157,158,159,130,131,132,155,156,133,153"
-			.split(",");
+	private static String[] telFirst = "134,135,136,137,138,139,150,151,152,157,158,159,130,131,132,155,156,133,153".split(",");
 
 	/**
 	 * 生成手机号码
@@ -178,8 +174,7 @@ public class TestHelper {
 		return first + second + thrid;
 	}
 
-	private static String[] englishNames = new String[] { "Johannet", "Jellyan", "Julian", "Joan", "Katheryn", "Mike",
-			"Jack", "Katheron", "Catherine", "Kusteris", "Luce", "Mabell" };
+	private static String[] englishNames = { "Johannet", "Jellyan", "Julian", "Joan", "Katheryn", "Mike", "Jack", "Katheron", "Catherine", "Kusteris", "Luce", "Mabell" };
 
 	/**
 	 * 生成用户名
@@ -223,24 +218,6 @@ public class TestHelper {
 	public static boolean IS_DB_CONNECTION_AUTOCLOSE = true;
 
 	/**
-	 * 
-	 * @param configFile JSON 配置文件路径
-	 * @param packages   一个或多个搜索的包名
-	 */
-	@Deprecated
-	public static void initTestDbAndIoc(String configFile, String... packages) {
-		ConfigService.load(configFile);
-		JdbcConnection
-				.setConnection(JdbcConnection.getMySqlConnection(ConfigService.getValueAsString("testServer.mysql.url"),
-						ConfigService.getValueAsString("testServer.mysql.user"),
-						ConfigService.getValueAsString("testServer.mysql.password")));
-
-		IS_DB_CONNECTION_AUTOCLOSE = false;
-		BeanContext.init(packages);
-		BeanContext.injectBeans();
-	}
-
-	/**
 	 * 方便写单测时用的初始化方法
 	 * 
 	 * @param configFile JSON 配置文件路径
@@ -250,19 +227,16 @@ public class TestHelper {
 	public static void init(String configFile, String dbXmlCfg, String... packages) {
 		ConfigService.load(configFile);
 
-		XMLHelper.xPath(dbXmlCfg, "//Resource[@name='" + ConfigService.getValueAsString("data.database_node") + "']",
-				node -> {
-					NamedNodeMap map = node.getAttributes();
+		XMLHelper.xPath(dbXmlCfg, "//Resource[@name='" + ConfigService.getValueAsString("data.database_node") + "']", node -> {
+			NamedNodeMap map = node.getAttributes();
 
-					String url = map.getNamedItem("url").getNodeValue(),
-							user = map.getNamedItem("username").getNodeValue(),
-							password = map.getNamedItem("password").getNodeValue();
+			String url = map.getNamedItem("url").getNodeValue(), user = map.getNamedItem("username").getNodeValue(), password = map.getNamedItem("password").getNodeValue();
 
-					JdbcConnection.setConnection(JdbcConnection.getMySqlConnection(url, user, password));
-					IS_DB_CONNECTION_AUTOCLOSE = false;
-					BeanContext.init(packages);
-					BeanContext.injectBeans();
-				});
+			JdbcConnection.setConnection(JdbcConnection.getMySqlConnection(url, user, password));
+			IS_DB_CONNECTION_AUTOCLOSE = false;
+			BeanContext.init(packages);
+			BeanContext.injectBeans();
+		});
 	}
 
 	/**
@@ -272,8 +246,7 @@ public class TestHelper {
 	 * @param packages      一个或多个搜索的包名
 	 */
 	public static void initAll(String projectFolder, String... packages) {
-		init(projectFolder + "\\WebContent\\META-INF\\site_config.json",
-				projectFolder + "\\WebContent\\META-INF\\context.xml", packages);
+		init(projectFolder + "\\WebContent\\META-INF\\site_config.json", projectFolder + "\\WebContent\\META-INF\\context.xml", packages);
 	}
 
 	/**
@@ -283,10 +256,9 @@ public class TestHelper {
 	 */
 	public static void initAll() {
 		String projectFolder = "D:\\project\\leidong\\";
-		String[] packages = new String[] { "com.ajaxjs.app", "com.ajaxjs.user" };
+		String[] packages = { "com.ajaxjs.app", "com.ajaxjs.user" };
 
-		init(projectFolder + "\\WebContent\\META-INF\\site_config.json",
-				projectFolder + "\\WebContent\\META-INF\\context.xml", packages);
+		init(projectFolder + "\\WebContent\\META-INF\\site_config.json", projectFolder + "\\WebContent\\META-INF\\context.xml", packages);
 	}
 
 	/**

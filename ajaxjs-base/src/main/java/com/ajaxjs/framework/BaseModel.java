@@ -58,7 +58,7 @@ public class BaseModel implements Serializable {
 		return stat;
 	}
 
-	// @NotNull(message="名称不能为空")
+	// @NotBlank(message="名称不能为空")
 	// @Size(min = 2, max = 255, message = "长度应该介于3和255之间")
 	private String name;
 

@@ -114,6 +114,7 @@ public class RepositoryReadOnly extends RepositoryBase {
 	 * @throws DaoException
 	 */
 	Object select(Method method, Object[] args) throws DaoException {
+		
 		Select select = method.getAnnotation(Select.class);
 		String sql = isSqlite(select.sqliteValue(), conn) ? select.sqliteValue() : select.value();
 
