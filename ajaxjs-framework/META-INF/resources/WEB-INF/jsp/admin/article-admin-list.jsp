@@ -1,5 +1,6 @@
 <%@page pageEncoding="UTF-8"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
+<%@taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -20,7 +21,6 @@
 			<aj-admin-filter-panel :catalog-id="${domainCatalog_Id}" search-field-value="entry.name" 
 				:selected-catalog-id="${empty param.catalogId ? 'null' : param.catalogId}">
 			</aj-admin-filter-panel>
-	
 		</div>
 		
 		<script>
@@ -74,34 +74,19 @@
 				</tr>
 			</tfoot>
 			<tbody>
-				<c:foreach var="current" items="${PageResult}">
+				<c:foreach items="${PageResult}">
 					<tr>
-						<td>${current.id}</td>
-						<td title="${current.intro}">${current.name}</td>
+						<td>${item.id}</td>
+						<td title="${item.intro}">${item.name}</td>
+						<td><c:dateFormatter value="${item.createDate}" format="yyyy-MM-dd" /></td>
+						<td><c:dateFormatter value="${item.updateDate}" format="yyyy-MM-dd" /></td>
+						<td><a href="?catalogId=${item.catalogId}">${newsCatalogs[item.catalogId].name}</a></td>
+						<td>${(empty item.stat || item.stat == 1) ? '已上线': '已下线'}</td>
+						<td><tags:common type="thumb" thumb="${item.cover}" /></td>
 						<td>
-							<c:dateFormatter value="${current.createDate}" format="yyyy-MM-dd" />
-						</td>
-						<td>
-							 <c:dateFormatter value="${current.updateDate}" format="yyyy-MM-dd" /> 
-						</td>
-						<td> 
-							<a href="?catalogId=${current.catalogId}">${newsCatalogs[current.catalogId].name}</a></td>
-						<td>
-							${(empty current.stat || current.stat == 1) ? '已上线': '已下线'}
-						</td>
-						<td>
-						<c:if test="${not empty current.cover}">
-							<a href="${current.cover.startsWith('http') ? current.cover : aj_allConfig.uploadFile.imgPerfix.concat(current.cover)}" target="_blank">
-								<img src="${current.cover.startsWith('http') ? current.cover : aj_allConfig.uploadFile.imgPerfix.concat(current.cover)}" style="max-width:50px;max-height:60px;vertical-align: middle;" 
-							 		onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${current.cover.startsWith('http') ? current.cover : aj_allConfig.uploadFile.imgPerfix.concat(current.cover)}';" 
-							 		onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
-							</a>
-						</c:if>
-						</td>
-						<td>
-							<a href="../../../${shortName}/${current.id}/" target="_blank">浏览</a>
-							<a href="../${current.id}/"><img src="${commonAssetIcon}/update.gif" style="vertical-align: sub;" />编辑</a>
-							<a href="javascript:aj.admin.del('${current.id}', '${current.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>
+							<a href="../../../${shortName}/${item.id}/" target="_blank">浏览</a> 
+							<a href="../${item.id}/"><img src="${commonAssetIcon}/update.gif" style="vertical-align: sub;" />编辑</a> 
+							<a href="javascript:aj.admin.del('${item.id}', '${item.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" /> 删除</a>
 						</td>
 					</tr>
 				</c:foreach>

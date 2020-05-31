@@ -1,5 +1,6 @@
 <%@page pageEncoding="UTF-8"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
+<%@taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -92,27 +93,22 @@
 				</tr>
 			</tfoot>
 			<tbody>
-				<c:foreach var="current" items="${PageResult}">
+				<c:foreach items="${PageResult}">
 					<tr>
-						<td>${current.id}</td>
-						<td title="${current.subTitle}" style="text-align:left;">
-						<c:if test="${not empty current.cover}">
-							<img src="${aj_allConfig.uploadFile.imgPerfix.concat(current.cover)}" style="max-width:50px;max-height:60px;vertical-align: middle;" 
-						 		onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${aj_allConfig.uploadFile.imgPerfix.concat(current.cover)}';" onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
-						</c:if>
-							${current.name}
+						<td>${item.id}</td>
+						<td title="${item.subTitle}" style="text-align:left;">
+							<tags:common type="thumb" thumb="${item.cover}" />
+							${item.name}
 						</td>
+						<td><c:dateFormatter value="${item.createDate}" /></td>
+						<td>${item.brand}</td>
+						<td>￥${item.coverPrice}/￥${item.titlePrice}</td>
+						<td>${goodsCatalogs[item.catalogId].name}</td>
+						<td><a href="?filterField=sellerId&filterValue=${item.sellerId}">${sellers[item.sellerId].name}</a></td>
+						<td>${(empty item.stat || item.stat == 1) ? '已上线': '已下线'}</td>
 						<td>
-							<c:dateFormatter value="${current.createDate}" />
-						</td>
-						<td>${current.brand}</td>
-						<td>￥${current.coverPrice}/￥${current.titlePrice}</td>
-						<td>${goodsCatalogs[current.catalogId].name}</td>
-						<td><a href="?filterField=sellerId&filterValue=${current.sellerId}">${sellers[current.sellerId].name}</a></td>
-						<td>${(empty current.stat || current.stat == 1) ? '已上线': '已下线'}</td>
-						<td>
-							<a href="${ctx}/admin/${shortName}/${current.id}/"><img src="${commonAssetIcon}/update.gif" style="vertical-align: sub;" />编辑</a>
-							<a href="javascript:aj.admin.del('${current.id}', '${current.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>
+							<a href="${ctx}/admin/${shortName}/${item.id}/"><img src="${commonAssetIcon}/update.gif" style="vertical-align: sub;" />编辑</a>
+							<a href="javascript:aj.admin.del('${item.id}', '${item.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>
 						</td>
 					</tr>
 				</c:foreach>

@@ -100,8 +100,8 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@MvcFilter(filters = { DataBaseFilter.class, XslMaker.class })
 	public String adminList(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		PageResult<Map<String, Object>> list = getService().list(catalogId, start, limit, CommonConstant.OFF_LINE);
-
-		return autoOutput(list, mv, page("article"));
+		prepareData(mv);
+		return autoOutput(list, mv, admin("article-admin-list"));
 	}
 
 	@GET
@@ -109,7 +109,8 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
 	public String createUI(ModelAndView mv) {
-		return super.createUI(mv);
+		super.createUI(mv);
+		return admin("article-edit");
 	}
 
 	@POST
@@ -125,7 +126,8 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("/admin/{root}/{id}")
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
-		return editUI(mv, getService().findById(id));
+		editUI(mv, getService().findById(id));
+		return admin("article-edit");
 	}
 
 	@PUT
