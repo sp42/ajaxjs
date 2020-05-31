@@ -43,6 +43,7 @@ public class AttachmentController extends BaseController<Attachment> {
 			ModelAndView mv) {
 		LOGGER.info("附件列表-前台");
 		prepareData(mv);
+		
 		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.ON_LINE, true));
 	}
 

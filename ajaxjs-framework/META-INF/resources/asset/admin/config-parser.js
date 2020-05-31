@@ -63,9 +63,12 @@ Vue.component("aj-json-form-input-radio", {
 	mixins: [aj.baseFormControl, aj.formGetOptions],
 	methods: {
 		getChecked(key) {
+/*			if(this.configObj.id =='forDelevelopers.enableWebSocketLogOutput')
+			debugger;*/
+			//console.log(":::::::::::"+this.configObj.value)
 			if(this.configObj.value === true && key === 'true')
 				return true;
-			if(this.configObj.value === false && key === 'false')
+			if(!this.configObj.value && key === 'false')
 				return true;
 			
 			return false;

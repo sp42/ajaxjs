@@ -1,3 +1,4 @@
+
 <%@tag pageEncoding="UTF-8" import="com.ajaxjs.framework.config.ConfigService" trimDirectiveWhitespaces="true" %>
 <%@taglib uri="/ajaxjs" 		prefix="c" %>
 <%@taglib uri="/ajaxjs_config"	prefix="config"%>

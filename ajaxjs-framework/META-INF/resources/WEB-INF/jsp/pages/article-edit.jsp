@@ -94,9 +94,8 @@
 						</div>
 				</div>
 				<div> 
-						<div class="label">状态：</div> 
+					<div class="label">状态：</div> 
 					<label>
-					
 						<input name="stat" value="1" type="radio" ${info.stat == 1 ? 'checked' : ''} /> 上线中 
 					</label> 
 					<label>

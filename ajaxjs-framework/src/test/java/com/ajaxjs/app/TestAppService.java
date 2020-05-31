@@ -30,7 +30,7 @@ public class TestAppService {
 	static String[] feedbacks = { "这是我的电话 1333", "谢谢你的评价", "这是我的电话 1333" };
 	static long[] userIds = { 4, 6, 7, 8 };
 
-	@Test
+//	@Test
 	public void testFeedbackServicee() {
 		for (int i = 0; i < 10; i++) {
 			Feedback feedback = new Feedback();
@@ -55,7 +55,7 @@ public class TestAppService {
 
 	static String[] adsNames = { "首页广告", "内页广告" };
 
-	@Test
+//	@Test
 	public void testAdsService() {
 		for (int i = 0; i < 10; i++) {
 			Ads ads = new Ads();
@@ -82,7 +82,7 @@ public class TestAppService {
 			Map<String, Object> entity = new HashMap<>();
 			entity.put("name", TestHelper.getItem(names));
 			entity.put("content", TestHelper.getItem(content));
-			entity.put("intro", TestHelper.getItem(expr));
+//			entity.put("intro", TestHelper.getItem(expr));
 			assertNotNull(HrController.service.create(entity));
 		}
 

@@ -118,7 +118,7 @@
 			<div>dbUser: </div><input type="text" name="dbUser" value="${conn.username}" /> 
 		</div>
 		<div>
-			<div>dbPassword: </div><input type="text" name="dbPassword" value="${conn.password}" /> 
+			<div>dbPassword: </div><input type="password" name="dbPassword" value="${conn.password}" /> 
 		</div>
 		<div>
 			<button>生 成 单 表</button> &nbsp;&nbsp;&nbsp; <button>生成所有表的（速度较慢）</button><br>注意：仅支持 MySQL 数据库  

@@ -23,7 +23,7 @@ public class MapCRUDService extends BaseService<Map<String, Object>> {
 	}
 
 	public MapCRUDDao dao;
-
+	
 	public MapCRUDService(String tableName) {
 		dao = new Repository().bind(MapCRUDDao.class, tableName);
 		setDao(dao);

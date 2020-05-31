@@ -35,6 +35,7 @@
 			<tr>
 				<th>#</th>
 				<th class="name">${uiName}名称</th>
+				<th>分类</th>
 				<th>${uiName}文件大小</th>
 				<th>上传者</th>
 				<th>上传时间</th>
@@ -56,6 +57,7 @@
 					<td>${current.owner}</td>
 					<td><c:dateFormatter value="${current.createDate}" /></td>
 					<td>
+						<a href="${aj_allConfig.uploadFile.imgPerfix}${current.name}" download>下载</a> 
 						<a href="javascript:entity.del('${current.id}', '${current.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>
 					</td>
 				</tr>

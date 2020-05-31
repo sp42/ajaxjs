@@ -26,21 +26,18 @@ import com.ajaxjs.util.logger.LogHelper;
 @Bean
 @Path("/hr")
 public class HrController extends BaseController<Map<String, Object>> {
-	private static final LogHelper LOGGER = LogHelper.getLog(TopicController.class);
+	private static final LogHelper LOGGER = LogHelper.getLog(HrController.class);
 
-	public static MapCRUDService service = new MapCRUDService("entity_hr", "data.hrCatalog_Id", "招聘", "hr");
+	public static MapCRUDService service = new MapCRUDService("entity_hr", "招聘", "hr");
 
 	@GET
 	@Path(LIST)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(CATALOG_ID) int catalogId, @QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
-		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.ON_LINE, true), false);
-	}
-
-	@Override
-	public void prepareData(ModelAndView mv) {
-		mv.put("domainCatalog_Id", service.getDomainCatalogId());
-		super.prepareData(mv);
+		LOGGER.info("招聘后台");
+		mv.put(PAGE_RESULT, service.findPagedList(catalogId, start, limit, CommonConstant.ON_LINE, true));
+		
+		return admin("hr-admin-list");
 	}
 
 	@Override
@@ -55,7 +52,10 @@ public class HrController extends BaseController<Map<String, Object>> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String adminList(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		LOGGER.info("招聘后台列表");
-		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE, false), true);
+		mv.put(PAGE_RESULT, service.findPagedList(0, start, limit, CommonConstant.OFF_LINE, false));
+		prepareData(mv);
+		
+		return admin("hr-admin-list");
 	}
 
 	@GET
@@ -63,7 +63,9 @@ public class HrController extends BaseController<Map<String, Object>> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
 	public String createUI(ModelAndView mv) {
-		return super.createUI(mv);
+		super.createUI(mv);
+		
+		return admin("hr-edit");
 	}
 
 	@POST
@@ -79,7 +81,9 @@ public class HrController extends BaseController<Map<String, Object>> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("/admin/hr/{id}")
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
-		return editUI(mv, service.findById(id));
+		editUI(mv, service.findById(id));
+		
+		return admin("hr-edit");
 	}
 
 	@PUT

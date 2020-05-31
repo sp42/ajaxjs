@@ -42,7 +42,8 @@
 			<li><a target="iframepage" href="${ctx}/admin/topic/list/">专题管理</a></li>
 		<%}%>
 		<%if(RoleService.check(privilegeTotal, RightConstant.FEEDBACK)){ %>
-			<li><a target="iframepage" href="${ctx}/admin/feedback/list/">留言反馈管理</a></li>
+			<li><a target="iframepage" href="${ctx}/admin/hr/list/">招聘管理</a></li>
+			<li><a target="iframepage" href="${ctx}/admin/feedback/list/">留言管理</a></li>
 		<%}%>
 		<%if(RoleService.check(privilegeTotal, RightConstant.SECTION)){ %>
 			<li><a target="iframepage" href="${ctx}/admin/section/">栏目管理</a></li>

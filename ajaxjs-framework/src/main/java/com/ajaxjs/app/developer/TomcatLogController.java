@@ -41,7 +41,7 @@ public class TomcatLogController implements IController {
 	public void onOpen(Session session) {
 		if (Version.isDebug || !ConfigService.getValueAsBool("forDelevelopers.enableWebSocketLogOutput")) {
 			try {
-				session.getBasicRemote().sendText("未开启实时浏览 Tomcat 日志，请修改配置。");
+				session.getBasicRemote().sendText("配置未开启实时浏览 Tomcat 日志，或者正在调试模式中。");
 			} catch (IOException e) {
 				LOGGER.warning(e);
 			}
