@@ -45,15 +45,13 @@ public class GoodsController extends BaseController<Goods> {
 	@GET
 	@Path(LIST)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(CATALOG_ID) int catalogId, @QueryParam(START) int start,
-			@QueryParam(LIMIT) int limit, @QueryParam("sellerId") int sellerId, ModelAndView mv) {
+	public String list(@QueryParam(CATALOG_ID) int catalogId, @QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam("sellerId") int sellerId, ModelAndView mv) {
 		LOGGER.info("商城-商品-后台列表");
 
 		prepareData(mv);
 		CatalogService.idAsKey(service.getDomainCatalogId(), mv, "goodsCatalogs");
 
-		return autoOutput(service.findPagedListByCatalogId(catalogId, start, limit, CommonConstant.OFF_LINE, sellerId),
-				mv, jsp("shop/goods-admin-list"));
+		return autoOutput(service.findPagedListByCatalogId(catalogId, start, limit, CommonConstant.OFF_LINE, sellerId), mv, jsp("shop/goods-admin-list"));
 	}
 
 	@GET
@@ -118,12 +116,10 @@ public class GoodsController extends BaseController<Goods> {
 	@GET
 	@Path("/shop/goods")
 	@MvcFilter(filters = { DataBaseFilter.class })
-	public String list(@QueryParam(CATALOG_ID) int catelogId, ModelAndView mv, @QueryParam(START) int start,
-			@QueryParam(LIMIT) int limit, @QueryParam("sellerId") int sellerId) {
+	public String list(@QueryParam(CATALOG_ID) int catelogId, ModelAndView mv, @QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam("sellerId") int sellerId) {
 		LOGGER.info("浏览商品");
 
-		page(mv, service.findPagedListByCatalogId(catelogId, start, 9, CommonConstant.ON_LINE, sellerId),
-				CommonConstant.UI_FRONTEND);
+		page(mv, service.findPagedListByCatalogId(catelogId, start, 9, CommonConstant.ON_LINE, sellerId), CommonConstant.UI_FRONTEND);
 		return jsp("shop/goods");
 	}
 

@@ -46,10 +46,8 @@
 		
  					<label>
  						<div class="label">创建日期：</div>  
-						<aj-form-calendar-input field-name="createDate" field-value="<c:dateFormatter value="${info.createDate}" />">
-						</aj-form-calendar-input> 
+						<aj-form-calendar-input field-name="createDate" field-value="<c:dateFormatter value="${info.createDate}" />"></aj-form-calendar-input> 
  					</label> 
-
 				</div>
 		
 				<div>
@@ -84,14 +82,14 @@
 						<input type="text" placeholder="整数" size="20" name="keywords" value="${info.hot}" />
 					</label> 
 				</div>
-				<div>
-					<div class="label" style="vertical-align: top;">正 文：</div>
-						<div style="display: inline-block; width: 90%;">
-							<!-- HTML 在线编辑器，需要 textarea 包裹着内容 -->
-							<aj-form-html-editor field-name="content" base-path="${ctx}" ref="htmleditor" upload-image-action-url="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catelog=2">
-								<textarea class="hide" name="content">${info.content}</textarea>
-							</aj-form-html-editor>
-						</div>
+				<div class="htmlEditor-row">
+					<div class="label">正 文：</div>
+					<div>
+						<!-- HTML 在线编辑器，需要 textarea 包裹着内容 -->
+						<aj-form-html-editor field-name="content" base-path="${ctx}" ref="htmleditor" upload-image-action-url="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catelog=2">
+							<textarea class="hide" name="content">${info.content}</textarea>
+						</aj-form-html-editor>
+					</div>
 				</div>
 				
 				<aj-admin-state :checked="${empty info.stat ? 9 : info.stat}"></aj-admin-state>
@@ -129,7 +127,7 @@
 			</form>
 			
 			<!-- 弹出层上传对话框 -->
-			<aj-popup-upload ref="uploadLayer" upload-url="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catelog=1" img-place="${commonAsset.concat('/images/imgBg.png')}"></aj-popup-upload>
+			<aj-popup-upload ref="uploadLayer" upload-url="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catelog=1"></aj-popup-upload>
 		</div>
 		<script>
 			App = new Vue({el: '.admin-entry-form'});

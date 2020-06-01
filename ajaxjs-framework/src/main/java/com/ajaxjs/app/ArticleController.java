@@ -101,6 +101,8 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	public String adminList(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		PageResult<Map<String, Object>> list = getService().list(catalogId, start, limit, CommonConstant.OFF_LINE);
 		prepareData(mv);
+		mv.put(XslMaker.XSL_TEMPLATE_PATH, admin("article-xsl"));
+
 		return autoOutput(list, mv, admin("article-admin-list"));
 	}
 

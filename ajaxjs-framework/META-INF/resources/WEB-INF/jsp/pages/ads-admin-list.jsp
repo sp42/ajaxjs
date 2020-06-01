@@ -35,6 +35,7 @@
 				<col />
 				<col />
 				<col />
+				<col />
 				<col style="text-align: center;" align="center" />
 			</colgroup>
 			<thead>
@@ -45,36 +46,26 @@
 					<th>广告链接</th>
 					<th>广告图片</th>
 					<th>创建时间</th>
+					<th>是否上线</th>
 					<th class="control">控 制</th>
 				</tr>
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="7"></td>
+					<td colspan="8"></td>
 				</tr>
 			</tfoot>
 			<tbody>
-				<c:foreach var="current" items="${PageResult}">
+				<c:foreach items="${PageResult}">
 					<tr>
-						<td>${current.id}</td>
-						<td>
-						
-						${current.name}</td>
-						<td>${catalogs[current.catalogId].name}</td>
-						<td>
-							<a href="${current.link}" target="_blank">${current.link}</a>
-						</td>
-						
-						<td>
-							<tags:common type="thumb" thumb="${current.cover}" />
-						</td>
-						<td>
-							<c:dateFormatter value="${current.createDate}" />
-						</td>
-						<td>
-							<a href="${ctx}/admin/${shortName}/${current.id}/"><img src="${commonAssetIcon}/update.gif" style="vertical-align: sub;" />编辑</a>
-							<a href="javascript:aj.admin.del('${current.id}', '${current.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>
-						</td>
+						<td>${item.id}</td>
+						<td>${item.name}</td>
+						<td>${catalogs[item.catalogId].name}</td>
+						<td><a href="${item.link}" target="_blank">${item.link}</a></td>
+						<td><tags:common type="thumb" thumb="${item.cover}" /></td>
+						<td><c:dateFormatter value="${item.createDate}" /></td>
+						<td>${(empty item.stat || item.stat == 1) ? '已上线': '已下线'}</td>
+						<td is="aj-admin-control" id="${item.id}" name="${item.name}"></td>	
 					</tr>
 				</c:foreach>
 			</tbody>
@@ -83,6 +74,7 @@
 			<%@include file="/WEB-INF/jsp/pager.jsp" %>
 		</div>
 		<script>
+			new Vue({el: '.listTable'});
 			aj.imageEnlarger();// 鼠标移动大图
 		</script>
 	</body>

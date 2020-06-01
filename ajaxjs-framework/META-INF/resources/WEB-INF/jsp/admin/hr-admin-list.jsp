@@ -34,8 +34,8 @@
 				<tr>
 					<th>#</th>
 					<th class="name">${uiName}标题</th>
-					<th>状态</th>
 					<th>创建时间</th>
+					<th>状态</th>
 					<th class="control">控 制</th>
 				</tr>
 			</thead>
@@ -49,13 +49,9 @@
 					<tr>
 						<td>${item.id}</td>
 						<td width="500">${item.name}</td>
-						<td>${(empty item.stat || item.stat == 1) ? '已上线': '已下线'}</td>
 						<td><c:dateFormatter value="${item.createDate}" /></td>
-						<td>
-							<a href="../../../${tableName}/${item.id}/" target="_blank">浏览</a> 
-							<a href="../${item.id}/"><img src="${commonAssetIcon}/update.gif" style="vertical-align: sub;" />编辑</a> 
-							<a href="javascript:aj.admin.del('${item.id}', '${item.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>
-						</td>
+						<td>${(empty item.stat || item.stat == 1) ? '已上线': '已下线'}</td>
+						<td is="aj-admin-control" id="${item.id}" name="${item.name}" preview="${aj_allConfig.data.entityProfile.hr.previewUrl}"></td>
 					</tr>
 				</c:foreach>
 			</tbody>
@@ -64,6 +60,7 @@
 			<%@include file="/WEB-INF/jsp/pager.jsp" %>
 		</div>
 		<script>
+			new Vue({el: '.listTable'});
 			aj.imageEnlarger();// 鼠标移动大图
 		</script>
 	</body>

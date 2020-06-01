@@ -31,6 +31,10 @@
 						<div class="label">名 称：</div> 
 						<input placeholder="请填写${uiName}名称" size="60" required name="name" value="${info.name}" type="text" />
 					</label> 
+					<label>
+ 						<div class="label">创建日期：</div>  
+						<aj-form-calendar-input field-name="createDate" field-value="<c:dateFormatter value="${info.createDate}" />"></aj-form-calendar-input> 
+ 					</label> 
 				</div>
 				<div>
 					<div class="label" style="vertical-align: top;">工作要求：</div>

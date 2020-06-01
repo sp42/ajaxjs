@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
@@ -23,11 +24,12 @@ public class XslMaker implements FilterAction {
 
 	@Override
 	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args) {
-		if (request.hasParameter("downloadXSL") && request.hasParameter("allRows")) {
-			// 通常是第一和第二的分页参数
-			args[0] = 0;
-			args[1] = 999999;
-		}
+		if (request.hasParameter("downloadXSL"))
+			if (request.hasParameter("allRows") || ConfigService.getInt("entity.exportXslPage") == 2) {
+				// 通常是第一和第二的分页参数
+				args[0] = 0;
+				args[1] = 999999;
+			}
 
 		return true;
 	}
@@ -40,9 +42,10 @@ public class XslMaker implements FilterAction {
 	@Override
 	public boolean after(FilterAfterArgs args) {
 		if (args.request.hasParameter("downloadXSL")) {
+
 			String xsl = (String) args.model.get(XSL_TEMPLATE_PATH);
 			Objects.requireNonNull(xsl, "必须在控制器里面设置 XSL_TEMPLATE_PATH 模板路径");
-			String fileName = "xsl-" + LocalDate.now().toString();
+			String fileName = args.model.get("shortName") + "_" + LocalDate.now().toString();
 
 			try {
 				fileName = new String(fileName.getBytes(), "iso8859-1");
@@ -50,16 +53,12 @@ public class XslMaker implements FilterAction {
 				LOGGER.warning(e);
 			}
 
-			// <base href="<%=basePath%>">
-			// String basePath = request.getScheme() + "://" + request.getServerName() + ":"
-			// + request.getServerPort() + request.getContextPath() + "/";
-			// <%@ page pageEncoding="utf-8" contentType="application/msexcel"%>
-			// response.setHeader("Content-disposition","inline; filename=videos.xls");
-			// 以上这行设定传送到前端浏览器时的档名为test.xls 就是靠这一行，让前端浏览器以为接收到一个excel档
+			xsl += ".jsp";
+			LOGGER.info(fileName + "导出 Excel 中 " + xsl);
 
+			// 拦截正常流程，自己控制 repsonse 输出
 			args.response.setContentType("application/vnd.ms-excel;charset=UTF-8");
 			args.response.setHeader("Content-Disposition", String.format("attachment; filename=%s.xls", fileName));
-
 			args.response.setTemplate(xsl);
 			args.response.go(args.request);
 

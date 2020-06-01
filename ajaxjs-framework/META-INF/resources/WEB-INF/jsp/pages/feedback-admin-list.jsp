@@ -66,14 +66,13 @@
 						</td>
 						<td>${item.contact}</td>
 						<td>${empty item.feedback ? '未回复': '已回复'}</td>
-						<td>
+						
+						<td is="aj-admin-control" id="${item.id}" name="${item.name}">
 							<c:if test="${item.userId > 0}">
 								<a target="_blank" href="${ctx}/admin/user/${item.userId}/">
 									<img src="${commonAssetIcon}/user.png" style="width:16px;vertical-align: sub;" />用户详情
 								</a>
 							</c:if>
-							<a href="${ctx}/admin/${shortName}/${item.id}/"><img src="${commonAssetIcon}/update.gif" style="vertical-align: sub;" /> 编辑</a>
-							<a href="javascript:aj.admin.del('${item.id}', '${item.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" /> 删除</a>
 						</td>
 					</tr>
 				</c:foreach>
@@ -82,5 +81,9 @@
 		<div class="listTable pager">
 			<%@include file="/WEB-INF/jsp/pager.jsp" %>
 		</div>
+		<script>
+			new Vue({el: '.listTable'});
+		</script>
+		
 	</body>
 </html>
