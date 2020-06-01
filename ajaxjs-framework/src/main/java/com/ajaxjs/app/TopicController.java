@@ -27,22 +27,17 @@ import com.ajaxjs.util.logger.LogHelper;
 @Path("/topic")
 public class TopicController extends BaseController<Map<String, Object>> {
 	private static final LogHelper LOGGER = LogHelper.getLog(TopicController.class);
-	
+
 	public static MapCRUDService service = new MapCRUDService("entity_topic", "data.topicCatalog_Id", "专题", "topic");
 
 	@GET
 	@Path(LIST)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(CATALOG_ID) int catalogId, @QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
-		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.ON_LINE, true));
-	}
+		LOGGER.info("专题前台");
+		mv.put(PAGE_RESULT, service.findPagedList(catalogId, start, limit, CommonConstant.ON_LINE, true));
 
-	@GET
-	@Path("listJson")
-	@Produces(MediaType.APPLICATION_JSON)
-	@MvcFilter(filters = DataBaseFilter.class)
-	public String listJson(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
-		return toJson(list(catalogId, start, limit, mv));
+		return admin("topic-admin-list");
 	}
 
 	@Override
@@ -63,7 +58,11 @@ public class TopicController extends BaseController<Map<String, Object>> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String adminList(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		LOGGER.info("专题后台列表");
-		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE, false), true);
+
+		mv.put(PAGE_RESULT, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE, false));
+		prepareData(mv);
+
+		return admin("topic-admin-list");
 	}
 
 	@GET
@@ -87,7 +86,8 @@ public class TopicController extends BaseController<Map<String, Object>> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("/admin/topic/{id}")
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
-		return editUI(mv, service.findById(id));
+		setInfo(mv, id);
+		return admin("topic-edit");
 	}
 
 	@PUT

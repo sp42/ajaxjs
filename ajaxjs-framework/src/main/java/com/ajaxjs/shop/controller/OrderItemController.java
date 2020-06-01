@@ -71,7 +71,7 @@ public class OrderItemController extends BaseController<OrderItem> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path(ID_INFO)
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
-		editUI(mv, service.findById(id));
+		setInfo(mv, service.findById(id));
 		return jsp("shop/orderItem-edit");
 	}
 

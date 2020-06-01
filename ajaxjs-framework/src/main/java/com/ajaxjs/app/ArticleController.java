@@ -54,8 +54,9 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		LOGGER.info("图文列表-前台");
 		getService().showList(mv);
-		prepareData(mv);
-		return page(mv, getService().list(catalogId, start, limit, CommonConstant.ON_LINE), false);
+		page(mv, getService().list(catalogId, start, limit, CommonConstant.ON_LINE));
+
+		return page("article-list");
 	}
 
 	@GET
@@ -72,15 +73,14 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	public String getInfo(@PathParam(ID) Long id, ModelAndView mv) {
 		LOGGER.info("图文详情-前台");
 		Map<String, Object> map = getService().findById(id);
-		prepareData(mv);
-		mv.put(INFO, map);
+		setInfo(mv, map);
 		BaseService.getNeighbor(mv, "entity_article", id);
 		getService().showInfo(mv, id);
 
 		if (ConfigService.getValueAsBool("domain.article.attachmentDownload"))
 			map.put("attachment", new AttachmentService().findByOwner((long) map.get("uid")));
 
-		return info();
+		return page("article-info");
 	}
 
 	@Override
@@ -128,7 +128,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("/admin/{root}/{id}")
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
-		editUI(mv, getService().findById(id));
+		setInfo(mv, getService().findById(id));
 		return admin("article-edit");
 	}
 

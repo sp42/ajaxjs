@@ -11,7 +11,6 @@ import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.framework.PageResult;
@@ -57,8 +56,7 @@ public class LoginLogController extends BaseController<UserLoginLog> {
 		}
 
 		public PageResult<UserLoginLog> findPagedList(int start, int limit) {
-			return findPagedList(start, limit,
-					byAny().andThen(BaseService::betweenCreateDate).andThen(UserService.byUserId));
+			return findPagedList(start, limit, byAny().andThen(BaseService::betweenCreateDate).andThen(UserService.byUserId));
 		}
 
 		public List<UserLoginLog> findListByUserId(long userId) {
@@ -73,9 +71,8 @@ public class LoginLogController extends BaseController<UserLoginLog> {
 	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
 		LOGGER.info("用户登录日志-后台列表");
 		mv.put("LoginType", UserConstant.LOGIN_TYPE);
-		page(mv, service.findPagedList(start, limit), CommonConstant.UI_ADMIN);
 
-		return jsp("user/login-log-list");
+		return page(mv, service.findPagedList(start, limit), "user/login-log-list");
 	}
 
 	@Override
@@ -94,7 +91,7 @@ public class LoginLogController extends BaseController<UserLoginLog> {
 			return;
 
 		String ip = ((MvcRequest) request).getIp();
-		
+
 		if ("127.0.0.1".equals(ip) || "0:0:0:0:0:0:0:1".equals(ip)) {
 			ip = "localhost";
 			bean.setIpLocation("本机");

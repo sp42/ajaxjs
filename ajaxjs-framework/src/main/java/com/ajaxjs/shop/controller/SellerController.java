@@ -64,7 +64,7 @@ public class SellerController extends BaseController<Seller> {
 	@Path(ID_INFO)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
-		editUI(mv, service.findById(id));
+		setInfo(mv, service.findById(id));
 		return jsp("shop/seller-edit");
 	}
 

@@ -8,7 +8,6 @@ import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.framework.IBaseDao;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.framework.Repository;
@@ -49,7 +48,7 @@ public class GlobalLogController extends BaseController<Map<String, Object>> {
 		LOGGER.info("全局操作日志");
 		
 		mv.put("LoginType", UserConstant.LOGIN_TYPE);
-		page(mv, service.findPagedList(start, limit, BaseService::betweenCreateDate), CommonConstant.UI_ADMIN);
+		page(mv, service.findPagedList(start, limit, BaseService::betweenCreateDate));
 
 		return jsp("user/global-log-list");
 	}

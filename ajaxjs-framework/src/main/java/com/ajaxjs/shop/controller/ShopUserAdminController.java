@@ -9,7 +9,6 @@ import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.app.catalog.CatalogService;
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.ioc.Bean;
@@ -43,8 +42,7 @@ public class ShopUserAdminController extends BaseController<User> {
 		
 		mv.put("UserGroups", CatalogService.idAsKey(userGroups));
 		mv.put("UserGroupsJSON", toJson(userGroups, false).replaceAll("\"", "'"));
-		
-		page(mv, service.findPagedList(start, limit), CommonConstant.UI_ADMIN);
+		page(mv, service.findPagedList(start, limit));
 
 		return jsp("shop/shop-user-admin-list");
 	}

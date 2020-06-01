@@ -42,7 +42,8 @@ public class FeedbackController extends BaseController<Feedback> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path(ID_INFO)
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
-		return editUI(mv, service.findById(id));
+		setInfo(mv, id);
+		return admin("feedback-edit");
 	}
 
 	@PUT

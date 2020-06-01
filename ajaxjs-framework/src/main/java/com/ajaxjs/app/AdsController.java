@@ -35,22 +35,27 @@ public class AdsController extends BaseController<Ads> {
 	@MvcFilter(filters = { DataBaseFilter.class })
 	public String adminList(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		LOGGER.info("广告列表");
+
 		CatalogService.idAsKey(service.getDomainCatalogId(), mv);
-		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE));
+		mv.put(PAGE_RESULT, service.findPagedList(catalogId, start, limit, CommonConstant.ON_LINE, true));
+
+		return admin("topic-admin-list");
 	}
 
 	@GET
 	@Path(ID_INFO)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
-		return editUI(mv, service.findById(id));
+		setInfo(mv, id);
+		
+		return admin("ads-edit");
 	}
 
 	@GET
 	@Override
 	public String createUI(ModelAndView mv) {
 		super.createUI(mv);
-		return editUI();
+		return admin("ads-edit");
 	}
 
 	@POST

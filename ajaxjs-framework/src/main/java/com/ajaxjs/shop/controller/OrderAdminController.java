@@ -12,7 +12,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.ioc.Bean;
@@ -47,7 +46,7 @@ public class OrderAdminController extends BaseController<OrderInfo> {
 			@QueryParam("userId") long userId) {
 		LOGGER.info("后台-订单列表");
 
-		page(mv, service.findPagedList(start, limit, userId), CommonConstant.UI_ADMIN);
+		page(mv, service.findPagedList(start, limit, userId));
 		return jsp("shop/order-admin-list");
 	}
 
@@ -66,7 +65,7 @@ public class OrderAdminController extends BaseController<OrderInfo> {
 	@Path(ID_INFO)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
-		editUI(mv, service.findById(id));
+		setInfo(mv, service.findById(id));
 
 		// 获取用户名
 		OrderInfo order = (OrderInfo) mv.get("info");

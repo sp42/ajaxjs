@@ -44,7 +44,7 @@ public class UserAddressController extends BaseController<UserAddress> {
 	@GET
 	@Path(LIST)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv,HttpServletRequest r) {
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv, HttpServletRequest r) {
 		LOGGER.info("收货地址列表");
 		mv.put(LIST, service.findListByUserId(BaseUserController.getUserId()));
 		return jsp(jsp);
@@ -62,7 +62,7 @@ public class UserAddressController extends BaseController<UserAddress> {
 	@Path(ID_INFO)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
-		editUI(mv, service.findById(id));
+		setInfo(mv, service.findById(id));
 		return jsp(jsp + "-info");
 	}
 
@@ -109,10 +109,8 @@ public class UserAddressController extends BaseController<UserAddress> {
 	@GET
 	@Path("/admin/address/list")
 	@MvcFilter(filters = { DataBaseFilter.class, XslMaker.class })
-	public String adminList(@QueryParam(START) int start, @QueryParam(LIMIT) int limit,
-			@QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
-		page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE, true), true);
-		return jsp(jsp + "-admin-list");
+	public String adminList(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
+		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE, true), jsp + "-admin-list");
 	}
 
 	@DELETE

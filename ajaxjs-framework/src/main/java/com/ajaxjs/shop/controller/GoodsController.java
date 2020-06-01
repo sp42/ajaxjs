@@ -67,7 +67,7 @@ public class GoodsController extends BaseController<Goods> {
 	@Path(ID_INFO)
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
 		LOGGER.info("商城-商品-后台详情");
-		editUI(mv, service.findById(id));
+		setInfo(mv, service.findById(id));
 
 		return jsp("shop/goods-edit");
 	}
@@ -119,7 +119,7 @@ public class GoodsController extends BaseController<Goods> {
 	public String list(@QueryParam(CATALOG_ID) int catelogId, ModelAndView mv, @QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam("sellerId") int sellerId) {
 		LOGGER.info("浏览商品");
 
-		page(mv, service.findPagedListByCatalogId(catelogId, start, 9, CommonConstant.ON_LINE, sellerId), CommonConstant.UI_FRONTEND);
+		page(mv, service.findPagedListByCatalogId(catelogId, start, 9, CommonConstant.ON_LINE, sellerId));
 		return jsp("shop/goods");
 	}
 

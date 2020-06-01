@@ -2,17 +2,13 @@ package com.ajaxjs.framework;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.time.LocalDate;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import javax.servlet.http.HttpServletResponse;
-
 import com.ajaxjs.framework.config.ConfigService;
-import com.ajaxjs.mvc.MvcConstant;
 import com.ajaxjs.mvc.ModelAndView;
+import com.ajaxjs.mvc.MvcConstant;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.orm.SnowflakeIdWorker;
@@ -31,56 +27,128 @@ import com.ajaxjs.web.UploadFileInfo;
 public abstract class BaseController<T> implements IController, MvcConstant {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseController.class);
 
+	/**
+	 * JSP 都保存在 /WEB-IMF/jsp/ 下面。再不断地分类
+	 * 
+	 * @param jsp 模板位置
+	 * @return JSP 文件路径
+	 */
+	public static String jsp(String jsp) {
+		return JSP_PERFIX_WEBINF + "/" + jsp;
+	}
+
+	/**
+	 * 普通页面模板目录
+	 * 
+	 * @param jsp 模板位置
+	 * @return JSP 文件路径
+	 */
+	public static String page(String jsp) {
+		return jsp("pages/" + jsp);
+	}
+
+	/**
+	 * 后台用页面模板目录
+	 * 
+	 * @param jsp 模板位置
+	 * @return JSP 文件路径
+	 */
+	public static String admin(String jsp) {
+		return jsp("admin/" + jsp);
+	}
+
+	/**
+	 * 服务对象
+	 * 
+	 * @return 服务对象
+	 */
 	public abstract IBaseService<T> getService();
 
 	/**
-	 * 指向新建记录的页面
+	 * 新建记录的页面，必定是 MVC 而不是 JSON 的
 	 * 
 	 * @param mv 页面 Model 模型
-	 * @return 新建记录 UI JSP 模版路径
+	 * @return JSP 文件标识，通常是如 news-edit
 	 */
 	public String createUI(ModelAndView mv) {
-		return ui(mv, true, "新建");
+		mv.put("isCreate", true);// 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate = true 标识为创建，以便与 update 区分开来。
+		prepareData(mv);
+
+		return getService().getShortName();
+	}
+
+	public String setInfo(ModelAndView mv, long id, String jsp) {
+		setInfo(mv, id);
+		return jsp(jsp);
+	}
+	
+	public String setInfo(ModelAndView mv, Object bean, String jsp) {
+		setInfo(mv, bean);
+		return jsp(jsp);
+	}
+
+	/**
+	 * 保存记录，必定是 MVC 而不是 JSON 的
+	 * 
+	 * @param mv   页面 Model 模型
+	 * @param bean 实体
+	 * @return JSP 文件标识，通常是如 news-edit
+	 */
+	public void setInfo(ModelAndView mv, Object bean) {
+		mv.put(INFO, bean);// 读取单个记录或者编辑某个记录，保存到 ModelAndView 中（供视图渲染用）。
+		prepareData(mv);
 	}
 
 	/**
 	 * 指向编辑记录的页面
 	 * 
-	 * @param mv   页面 Model 模型
-	 * @param bean 实体
-	 * @return JSP 模版路径
+	 * @param mv 页面 Model 模型
+	 * @param id 实体 id
+	 * @return JSP 文件标识，通常是如 news-edit
 	 */
-	public String editUI(ModelAndView mv, Object bean) {
-		mv.put(INFO, bean);// 读取单个记录或者编辑某个记录，保存到 ModelAndView 中（供视图渲染用）。
-		return ui(mv, false, "修改");
+	public void setInfo(ModelAndView mv, long id) {
+		setInfo(mv, getService().findById(id));
+	}
+
+	/**
+	 * 可覆盖的模版方法，用于装备其他数据，如分类这些外联的表。
+	 * 
+	 * @param mv Model 模型
+	 */
+	public void prepareData(ModelAndView mv) {
+		if (mv != null && getService() != null) {
+			mv.put("uiName", getService().getUiName());
+			mv.put("shortName", getService().getShortName());
+			mv.put("tableName", getService().getTableName());
+		}
 	}
 
 	/**
 	 * 
-	 * @param mv       页面 Model 模型
-	 * @param isCreate 因为新建/编辑（update）为同一套 jsp 模版，所以用 isCreate = true 标识为创建，以便与
-	 *                 update 区分开来。
-	 * @param text
-	 * @return JSP 模版路径
+	 * @param mv         Model 模型
+	 * @param pageResult 分页数据
+	 * @return JSP 文件标识，通常是如 news-list
 	 */
-	private String ui(ModelAndView mv, boolean isCreate, String text) {
-		LOGGER.info(text + "记录 UI");
+	public String page(ModelAndView mv, PageResult<T> pageResult) {
+		return page(mv, pageResult, getService().getShortName() + "-list");
+	}
 
+	public String page(ModelAndView mv, PageResult<T> pageResult, String jsp) {
 		prepareData(mv);
-		mv.put("isCreate", isCreate);
-		mv.put("actionName", text);
+		mv.put(PAGE_RESULT, pageResult);
 
-		return editUI();
+		return jsp(jsp);
 	}
 
 	/**
 	 * 创建实体
 	 * 
 	 * @param bean 实体
-	 * @return 新建实体之 id
+	 * @return JSON 结果，包含新建实体之 id
 	 */
 	public String create(T bean) {
 		Long newlyId = getService().create(bean);
+
 		if (newlyId == null)
 			throw new Error("创建失败！");
 
@@ -98,7 +166,7 @@ public abstract class BaseController<T> implements IController, MvcConstant {
 		if (bean instanceof BaseModel)
 			((BaseModel) bean).setId(id);
 		else if (bean instanceof Map)
-			((Map<String, Object>) bean).put("id", id);
+			((Map<String, Object>) bean).put(ID, id);
 		else
 			LOGGER.warning("未知实体类型 " + bean.getClass().getName());
 	}
@@ -131,38 +199,10 @@ public abstract class BaseController<T> implements IController, MvcConstant {
 		LOGGER.info("删除 id:{0}，数据库将执行 DELETE 操作", bean);
 
 		setId(id, bean);
-
 		if (!getService().delete(bean))
 			throw new Error("删除失败！");
 
 		return jsonOk("删除成功");
-	}
-
-	/**
-	 * 可覆盖的模版方法，用于装备其他数据，如分类这些外联的表。
-	 * 
-	 * @param mv Model 模型
-	 */
-	public void prepareData(ModelAndView mv) {
-		if (mv != null && getService() != null) {
-			mv.put("uiName", getService().getUiName());
-			mv.put("shortName", getService().getShortName());
-			mv.put("tableName", getService().getTableName());
-		}
-	}
-
-	/**
-	 * 
-	 * @param mv         Model 模型
-	 * @param pageResult 分页数据
-	 * @param isAdmin    是否后台列表
-	 * @return
-	 */
-	public String page(ModelAndView mv, PageResult<T> pageResult, boolean isAdmin) {
-		prepareData(mv);
-		mv.put(PAGE_RESULT, pageResult);
-
-		return list(isAdmin);
 	}
 
 	/**
@@ -211,27 +251,6 @@ public abstract class BaseController<T> implements IController, MvcConstant {
 	private static boolean isJson() {
 		String accept = MvcRequest.getHttpServletRequest().getHeader("Accept");
 		return accept != null && "application/json".equals(accept);
-
-	}
-
-	public String autoOutput(ModelAndView mv, Map<String, Object> bean, String jspPath) {
-
-		if (isJson()) {
-			return toJson(bean);
-		} else {
-			mv.put(INFO, bean);
-
-			return jspPath;
-		}
-	}
-
-	public String page(ModelAndView mv, PageResult<T> pageResult) {
-		return page(mv, pageResult, CommonConstant.UI_ADMIN);
-	}
-
-	@FunctionalInterface
-	static public interface PagedDao<T> {
-		public PageResult<T> apply(Integer s, Integer l, Function<String, String> sqlHandler);
 	}
 
 	/**
@@ -261,7 +280,7 @@ public abstract class BaseController<T> implements IController, MvcConstant {
 	 * 分页转为 JSON
 	 * 
 	 * @param pageResult
-	 * @return
+	 * @return JSON 字符串
 	 */
 	public static String toJson(PageResult<?> pageResult) {
 		String jsonStr = toJson(pageResult, false);
@@ -284,10 +303,20 @@ public abstract class BaseController<T> implements IController, MvcConstant {
 		return String.format(JSON_OK, JsonHelper.javaValue2jsonValue(msg));
 	}
 
+	/**
+	 * 、
+	 * 
+	 * @return
+	 */
 	public static String jsonOk() {
 		return jsonOk("操作成功！");
 	}
 
+	/**
+	 * 
+	 * @param msg
+	 * @return
+	 */
 	public static String jsonOk_Extension(Object... msg) {
 		return String.format(JSON_OK_EXTENSION, msg);
 	}
@@ -318,89 +347,19 @@ public abstract class BaseController<T> implements IController, MvcConstant {
 
 	/**
 	 * 
-	 * @param jsp
+	 * @param request
+	 * @param fn
 	 * @return
+	 * @throws IOException
 	 */
-	public static String jsp(String jsp) {
-		return JSP_PERFIX_WEBINF + "/" + jsp;
-	}
-
-	/**
-	 * 普通页面模板目录
-	 * 
-	 * @param jsp
-	 * @return
-	 */
-	public static String page(String jsp) {
-		return jsp("pages/" + jsp);
-	}
-
-	/**
-	 * 后台用页面模板目录
-	 * 
-	 * @param jsp
-	 * @return
-	 */
-	public static String admin(String jsp) {
-		return jsp("admin/" + jsp);
-	}
-
-	/**
-	 * 
-	 * @param isAdmin 是否后台列表
-	 * @return
-	 */
-	public String list(boolean isAdmin) {
-		return page(getService().getShortName() + (isAdmin ? "-admin-list" : "-list"));
-	}
-
-	public String info() {
-		return page(getService().getShortName() + "-info");
-	}
-
-	public String editUI() {
-		return page(getService().getShortName() + "-edit");
-	}
-
-	/**
-	 * 输出 Excel XSL 格式文件
-	 * 
-	 * @param response 响应对象
-	 * @param fileName 文件名
-	 * @return
-	 */
-	public String adminList_Excel(HttpServletResponse response, String fileName) {
-		String now = fileName + "-" + LocalDate.now().toString();
-
-		try {
-			now = new String(now.getBytes(), "iso8859-1");
-		} catch (UnsupportedEncodingException e) {
-			LOGGER.warning(e);
-		}
-		// <base href="<%=basePath%>">
-		// String basePath = request.getScheme() + "://" + request.getServerName() + ":"
-		// + request.getServerPort() + request.getContextPath() + "/";
-
-		// <%@ page pageEncoding="utf-8" contentType="application/msexcel"%>
-		response.setContentType("application/vnd.ms-excel;charset=UTF-8");
-
-		response.setHeader("Content-Disposition", String.format("attachment; filename=%s.xls", now));
-		// response.setHeader("Content-disposition","inline; filename=videos.xls");
-
-		// 以上这行设定传送到前端浏览器时的档名为test.xls
-		// 就是靠这一行，让前端浏览器以为接收到一个excel档
-
-		return page(getService().getShortName() + "-admin-list-xsl");
-	}
-
 	public static UploadFileInfo uploadByConfig(MvcRequest request, Consumer<UploadFileInfo> fn) throws IOException {
 		UploadFileInfo info = new UploadFileInfo();
-		info.isFileOverwrite = ConfigService.getValueAsBool("uploadFile.isFileOverwrite");
-		info.saveFolder = ConfigService.getValueAsBool("uploadFile.saveFolder.isUsingRelativePath")
-				? request.mappath(ConfigService.getValueAsString("uploadFile.saveFolder.relativePath")) + File.separator
-				: ConfigService.getValueAsString("uploadFile.saveFolder.absolutePath");
+		info.isFileOverwrite = ConfigService.getBol("uploadFile.isFileOverwrite");
+		info.saveFolder = ConfigService.getBol("uploadFile.saveFolder.isUsingRelativePath")
+				? request.mappath(ConfigService.get("uploadFile.saveFolder.relativePath")) + File.separator
+				: ConfigService.get("uploadFile.saveFolder.absolutePath");
 
-		if (ConfigService.getValueAsBool("uploadFile.isAutoNewFileName"))
+		if (ConfigService.getBol("uploadFile.isAutoNewFileName"))
 			info.saveFileName = new SnowflakeIdWorker(0, 0).nextId() + "";
 
 		if (fn != null)
@@ -408,7 +367,7 @@ public abstract class BaseController<T> implements IController, MvcConstant {
 
 		new UploadFile(request, info).upload();
 
-		info.path = ConfigService.getValueAsString("uploadFile.saveFolder.relativePath") + "/" + info.saveFileName;
+		info.path = ConfigService.get("uploadFile.saveFolder.relativePath") + "/" + info.saveFileName;
 		info.visitPath = request.getContextPath() + info.path;
 
 		return info;
