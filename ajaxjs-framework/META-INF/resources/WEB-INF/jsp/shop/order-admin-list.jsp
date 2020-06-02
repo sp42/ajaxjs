@@ -77,42 +77,34 @@
 					<td colspan="10">
 						一张订单可以包含多个商品，每个商品对应一张子订单，于是一张订单包含多张子订单。
 						
-						<form action="." method="GET" class="dateRange" @submit="valid($event)">
-							起始时间：
-							<aj-form-calendar-input field-name="startDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
-							截至时间：
-							<aj-form-calendar-input field-name="endDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
-							<button class="aj-btn">查询</button>
-						</form>
-						<script>
-							aj.form.betweenDate('.dateRange');
-						</script>
+						<aj-admin-xsl params="<%=com.ajaxjs.web.ServletHelper.getAllQueryParameters(request) %>"></aj-admin-xsl>					
+						<aj-form-betweenDate></aj-form-betweenDate>
 					</td>
 				</tr>
 			</tfoot>
 			<tbody>
-				<c:foreach var="current" items="${PageResult}">
+				<c:foreach items="${PageResult}">
 					<tr>
-						<td>${current.id}</td>
-						<td>${current.orderNo}<br/><span style="color:gray">${current.outerTradeNo}</span></td>
-						<td>${PayTypeDict[current.payType]}</td>
-						<td>￥${current.orderPrice}</td>
-						<td>￥${current.totalPrice}</td>
-						<td>${TradeStatusDict[current.tradeStatus]}</td>
-						<td>${PayStatusDict[current.payStatus]}</td>
+						<td>${item.id}</td>
+						<td>${item.orderNo}<br/><span style="color:gray">${item.outerTradeNo}</span></td>
+						<td>${PayTypeDict[item.payType]}</td>
+						<td>￥${item.orderPrice}</td>
+						<td>￥${item.totalPrice}</td>
+						<td>${TradeStatusDict[item.tradeStatus]}</td>
+						<td>${PayStatusDict[item.payStatus]}</td>
 						<td>
-							<c:dateFormatter value="${current.createDate}" />
-							${empty current.payDate ? '' : '<br />'}
-							<c:dateFormatter value="${current.payDate}" />
+							<c:dateFormatter value="${item.createDate}" />
+							${empty item.payDate ? '' : '<br />'}
+							<c:dateFormatter value="${item.payDate}" />
 						</td>
 						<td>
-							<a href="${ctx}/admin/user/${current.buyerId}/">
+							<a href="${ctx}/admin/user/${item.buyerId}/">
 								<img src="${commonAssetIcon}/user.png" style="width:16px;vertical-align: sub;" />用户详情
 							</a> | 
-							<a href="?userId=${current.buyerId}">
+							<a href="?userId=${item.buyerId}">
 								该用户订单
 							</a> | 
-							<a href="../${current.id}/">订单详情</a>
+							<a href="../${item.id}/">订单详情</a>
 						</td>
 					</tr>
 				</c:foreach>
@@ -122,6 +114,7 @@
 			<%@include file="/WEB-INF/jsp/pager.jsp" %>
 		</div>
 		<script>
+			new Vue({el: '.listTable'});
 			aj.imageEnlarger();// 鼠标移动大图
 		</script>
 	</body>

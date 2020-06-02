@@ -77,11 +77,11 @@ public abstract class BaseController<T> implements IController, MvcConstant {
 		return getService().getShortName();
 	}
 
-	public String setInfo(ModelAndView mv, long id, String jsp) {
-		setInfo(mv, id);
+	public String setInfo(long id, ModelAndView mv, String jsp) {
+		setInfo(id, mv);
 		return jsp(jsp);
 	}
-	
+
 	public String setInfo(ModelAndView mv, Object bean, String jsp) {
 		setInfo(mv, bean);
 		return jsp(jsp);
@@ -95,6 +95,7 @@ public abstract class BaseController<T> implements IController, MvcConstant {
 	 * @return JSP 文件标识，通常是如 news-edit
 	 */
 	public void setInfo(ModelAndView mv, Object bean) {
+		mv.put("isCreate", false);
 		mv.put(INFO, bean);// 读取单个记录或者编辑某个记录，保存到 ModelAndView 中（供视图渲染用）。
 		prepareData(mv);
 	}
@@ -102,11 +103,11 @@ public abstract class BaseController<T> implements IController, MvcConstant {
 	/**
 	 * 指向编辑记录的页面
 	 * 
-	 * @param mv 页面 Model 模型
 	 * @param id 实体 id
+	 * @param mv 页面 Model 模型
 	 * @return JSP 文件标识，通常是如 news-edit
 	 */
-	public void setInfo(ModelAndView mv, long id) {
+	public void setInfo(long id, ModelAndView mv) {
 		setInfo(mv, getService().findById(id));
 	}
 
@@ -121,23 +122,6 @@ public abstract class BaseController<T> implements IController, MvcConstant {
 			mv.put("shortName", getService().getShortName());
 			mv.put("tableName", getService().getTableName());
 		}
-	}
-
-	/**
-	 * 
-	 * @param mv         Model 模型
-	 * @param pageResult 分页数据
-	 * @return JSP 文件标识，通常是如 news-list
-	 */
-	public String page(ModelAndView mv, PageResult<T> pageResult) {
-		return page(mv, pageResult, getService().getShortName() + "-list");
-	}
-
-	public String page(ModelAndView mv, PageResult<T> pageResult, String jsp) {
-		prepareData(mv);
-		mv.put(PAGE_RESULT, pageResult);
-
-		return jsp(jsp);
 	}
 
 	/**
@@ -203,6 +187,23 @@ public abstract class BaseController<T> implements IController, MvcConstant {
 			throw new Error("删除失败！");
 
 		return jsonOk("删除成功");
+	}
+
+	/**
+	 * 
+	 * @param mv         Model 模型
+	 * @param pageResult 分页数据
+	 * @return JSP 文件标识，通常是如 news-list
+	 */
+	public String page(ModelAndView mv, PageResult<T> pageResult) {
+		return page(mv, pageResult, getService().getShortName() + "-list");
+	}
+
+	public String page(ModelAndView mv, PageResult<T> pageResult, String jsp) {
+		prepareData(mv);
+		mv.put(PAGE_RESULT, pageResult);
+
+		return jsp(jsp);
 	}
 
 	/**

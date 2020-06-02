@@ -57,37 +57,22 @@
 			<tfoot>
 				<tr>
 					<td colspan="9">
-						<form action="." method="GET" class="dateRange" @submit="valid($event)">
-							起始时间：
-							<aj-form-calendar-input field-name="startDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
-							截至时间：
-							<aj-form-calendar-input field-name="endDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
-							<button class="aj-btn">查询</button>
-						</form>
-						<script>
-							aj.form.betweenDate('.dateRange');
-						</script>
+						<aj-form-betweenDate></aj-form-betweenDate>
 					</td>
 				</tr>
 			</tfoot>
 			<tbody>
-				<c:foreach var="current" items="${PageResult}">
+				<c:foreach items="${PageResult}">
 					<tr>
-						<td>${current.id}</td>
-						<td>
-							<tags:common type="thumb" thumb="${current.avatar}" />
-						</td>
-						<td>${current.name}</td>
-						<td>${current.username}</td>
-						<td>${SexGender[current.sex]}</td>
-						<td>${current.email}<br />${current.phone}</td>
-						<td><c:dateFormatter value="${current.createDate}" /></td>
-						<td>${UserGroups[current.roleId].name}</td>
-						<td>
-							<a href="${ctx}/admin/userLoginLog/?userId=${current.id}">登录日志</a> | 
-							<a href="../${current.id}/">详情</a> | 
-							<a href="javascript:aj.admin.del('${current.id}', '${current.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>
-						</td> 
+						<td>${item.id}</td>
+						<td><tags:common type="thumb" thumb="${item.avatar}" /></td>
+						<td>${item.name}</td>
+						<td>${item.username}</td>
+						<td>${SexGender[item.sex]}</td>
+						<td>${item.email}<br />${item.phone}</td>
+						<td><c:dateFormatter value="${item.createDate}" /></td>
+						<td>${UserGroups[item.roleId].name}</td>
+						<td is="aj-admin-control" id="${item.id}" name="${item.name}"></td>		
 					</tr>
 				</c:foreach>
 			</tbody>
@@ -96,6 +81,7 @@
 			<%@include file="/WEB-INF/jsp/pager.jsp" %>
 		</div>
 		<script>
+			new Vue({el: '.listTable'});
 			aj.imageEnlarger();// 鼠标移动大图
 		</script>
 	</body>

@@ -1,5 +1,6 @@
 <%@page pageEncoding="UTF-8"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
+<%@taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -15,9 +16,6 @@
 				<template slot="title">${uiName}一览</template>
 				<template slot="btns"><a :href="ajResources.ctx + '/admin/${shortName}/'">新建</a> | </template>
 			</ajaxjs-admin-header>
-	
-			<!-- 搜索、分类下拉 -->
-			<aj-admin-filter-panel :catalog-id="${domainCatalog_Id}" :selected-catalog-id="${empty param.catalogId ? 'null' : param.catalogId}"></aj-admin-filter-panel>
 		</div>
 		
 		<script>
@@ -38,45 +36,29 @@
 			<thead>
 				<tr>
 					<th>#</th>
+					<th>封面</th>
 					<th class="name">${uiName}标题</th>
-					<th>广告类型</th>
-					<th>广告链接</th>
-					<th>广告图片</th>
+					<th>分类</th>
 					<th>创建时间</th>
+					<th>状态</th>
 					<th class="control">控 制</th>
 				</tr>
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="7"></td>
+					<td colspan="76"></td>
 				</tr>
 			</tfoot>
 			<tbody>
-				<c:foreach var="current" items="${PageResult}">
+				<c:foreach items="${PageResult}">
 					<tr>
-						<td>${current.id}</td>
-						<td>
-						
-						${current.name}</td>
-						<td>${current.catelogName}</td>
-						<td>
-							<a href="${current.link}" target="_blank">${current.link}</a>
-						</td>
-						
-						<td>
-						<c:if test="${not empty current.cover}">
-							<img src="${ctx}${current.cover}" style="max-width:50px;max-height:60px;vertical-align: middle;" 
-						 		onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${ctx}${current.cover}';" onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
-						</c:if>
-						</td>
-						<td>
-							<c:dateFormatter value="${current.createDate}" />
-						</td>
-						<td>
-							<a href="../../../${tableName}/${current.id}/" target="_blank">浏览</a>
-							<a href="${ctx}/admin/${shortName}/${current.id}/"><img src="${commonAssetIcon}/update.gif" style="vertical-align: sub;" />编辑</a>
-							<a href="javascript:aj.admin.del('${current.id}', '${current.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>
-						</td>
+						<td>${item.id}</td>
+						<td><tags:common type="thumb" thumb="${item.cover}" /></td>
+						<td width="500">${item.name}</td>
+						<td><c:dateFormatter value="${item.createDate}" /></td>
+						<td><c:dateFormatter value="${item.createDate}" /></td>
+						<td>${(empty item.stat || item.stat == 1) ? '已上线': '已下线'}</td>
+						<td is="aj-admin-control" id="${item.id}" name="${item.name}" preview="${aj_allConfig.data.entityProfile.topic.previewUrl}"></td>	
 					</tr>
 				</c:foreach>
 			</tbody>
@@ -85,6 +67,7 @@
 			<%@include file="/WEB-INF/jsp/pager.jsp" %>
 		</div>
 		<script>
+			new Vue({el: '.listTable'});
 			aj.imageEnlarger();// 鼠标移动大图
 		</script>
 	</body>

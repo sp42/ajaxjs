@@ -59,20 +59,20 @@
 				</tr>
 			</tfoot>
 			<tbody>
-				<c:foreach var="current" items="${PageResult}">
+				<c:foreach items="${PageResult}">
 					<tr>
-						<td>${current.id}</td>
+						<td>${item.id}</td>
 						<td>
-							<tags:common type="thumb" thumb="${current.avatar}" />
+							<tags:common type="thumb" thumb="${item.avatar}" />
 						</td>
-						<td>${current.name}</td>
-						<td>${UserGroups[current.roleId].name}</td>
-						<td><a href="${ctx}/admin/order/list/?userId=${current.id}">查看订单</a></td>
-						<td><a href="${ctx}/admin/cart/list/?userId=${current.id}">查看购物车</a></td>
-						<td><a href="${ctx}/admin/address/?userId=${current.id}">查看地址簿</a></td>
-						<td><a href="${ctx}/admin/like/list/?userId=${current.id}">查看点赞</a></td>
-						<td><a href="${ctx}/admin/bookmark/?userId=${current.id}">查看收藏</a></td>
-						<td><a href="${ctx}/admin/user/${current.id}/">用户详情</a></td> 
+						<td>${item.name}</td>
+						<td>${UserGroups[item.roleId].name}</td>
+						<td><a href="${ctx}/admin/order/list/?userId=${item.id}">查看订单</a></td>
+						<td><a href="${ctx}/admin/cart/list/?userId=${item.id}">查看购物车</a></td>
+						<td><a href="${ctx}/admin/address/?userId=${item.id}">查看地址簿</a></td>
+						<td><a href="${ctx}/admin/like/list/?userId=${item.id}">查看点赞</a></td>
+						<td><a href="${ctx}/admin/bookmark/?userId=${item.id}">查看收藏</a></td>
+						<td><a href="${ctx}/admin/user/${item.id}/">用户详情</a></td> 
 					</tr>
 				</c:foreach>
 			</tbody>

@@ -20,7 +20,7 @@
 			new Vue({el:' body > div'});
 		</script>
 		
-		<table class="ajaxjs-niceTable" align="center" width="90%">
+		<table class="ajaxjs-niceTable listTable">
 			<colgroup>
 				<col />
 				<col />
@@ -44,38 +44,30 @@
 			<tfoot>
 				<tr>
 					<td colspan="7">
-						<form action="." method="GET" class="dateRange" @submit="valid($event)">
-							起始时间：
-							<aj-form-calendar-input field-name="startDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
-							截至时间：
-							<aj-form-calendar-input field-name="endDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
-							<button class="aj-btn">查询</button>
-						</form>
-						<script type="text/javascript">
-							aj.form.betweenDate('.dateRange');
-						</script>
+						<aj-form-betweenDate></aj-form-betweenDate>
 					</td>
 				</tr>
 			</tfoot>
 			<tbody>
-				<c:foreach var="current" items="${PageResult}">
+				<c:foreach items="${PageResult}">
 					<tr>
-						<td>${current.id}</td>
-						<td>${current.name}</td>
-						<td title="${current.content}">${current.content}</td>
-						<td>
-							<c:dateFormatter value="${current.createDate}" />
-						</td>
-						<td>${current.userId}</td>
-						<td>${current.ip}</td>
-						<td>${Encode.base64Decode(current._sql)}</td>
+						<td>${item.id}</td>
+						<td>${item.name}</td>
+						<td title="${item.content}">${item.content}</td>
+						<td><c:dateFormatter value="${item.createDate}" /></td>
+						<td>${item.userId}</td>
+						<td>${item.ip}</td>
+						<td>${Encode.base64Decode(item._sql)}</td>
 					</tr>
 				</c:foreach>
 			</tbody>
 		</table>
 		
-		<div style="text-align:center;margin:2%;">
+		<div class="listTable pager">
 			<%@include file="/WEB-INF/jsp/pager.jsp" %>
 		</div>
+		<script>
+			new Vue({el: '.listTable'});
+		</script>
 	</body>
 </html>

@@ -37,6 +37,12 @@
 						<input placeholder="请填写${uiName}名称" size="60" required="required" name="name" value="${info.name}" type="text" />
 						<span style="color:red;">*</span>
 					</label> 
+ 					<label>
+ 						<div class="label">创建日期：</div>  
+						<aj-form-calendar-input field-name="createDate" field-value="<c:dateFormatter value="${info.createDate}" />"></aj-form-calendar-input> 
+ 					</label> 
+				</div>
+				<div>
 					<label> 
 						<div class="label">分 类：</div>  
 						<!-- 分类下拉 -->

@@ -32,6 +32,10 @@
 						<input placeholder="请填写${uiName}名称" size="20" required="required" name="name" value="${info.name}" type="text" />
 						<span style="color:red;">*</span>
 					</label> 
+					<label>
+ 						<div class="label">创建日期：</div>  
+						<aj-form-calendar-input field-name="createDate" field-value="<c:dateFormatter value="${info.createDate}" />"></aj-form-calendar-input> 
+ 					</label> 
 				</div>
 				
 				<div>
@@ -70,6 +74,30 @@
 						<textarea rows="5" cols="80" name="content" class="aj-input">${info.content}</textarea>
 					</label>
 				</div>
+				<div>
+					<table >
+						<tr>
+							<td><div class="label" style="float: left;">${uiName} LOGO：</div></td>
+							<td>
+								<c:choose>
+									<c:when test="${isCreate}">
+											<span>请保存记录后再上传图片。</span>
+									</c:when>
+									<c:otherwise>
+											<!-- 图片上传 -->
+											<aj-xhr-upload action="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catalog=2" 
+												:is-img-upload="true" 
+												hidden-field="cover" 
+												hidden-field-value="${info.cover}" 
+												img-place="${empty info.cover ? commonAsset.concat('/images/imgBg.png') : aj_allConfig.uploadFile.imgPerfix.concat(info.cover)}">
+											</aj-xhr-upload>
+									</c:otherwise>
+								</c:choose>		
+							</td>	
+						</tr>
+					</table>
+				</div>
+				<aj-admin-state :checked="${empty info.stat ? 9 : info.stat}"></aj-admin-state>
 				<div>
 					<!--按钮 -->
 					<ajaxjs-admin-info-btns :is-create="${isCreate}"></ajaxjs-admin-info-btns>

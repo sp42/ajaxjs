@@ -1,5 +1,6 @@
 <%@page pageEncoding="UTF-8"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
+<%@taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -53,46 +54,34 @@
 			<tfoot>
 				<tr>
 					<td colspan="11">
-						<form action="." method="GET" class="dateRange" @submit="valid($event)">
-							起始时间：
-							<aj-form-calendar-input field-name="startDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
-							截至时间：
-							<aj-form-calendar-input field-name="endDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
-							<button class="aj-btn">查询</button>
-						</form>
-						<script>
-							aj.form.betweenDate('.dateRange');
-						</script>
+						<aj-form-betweenDate></aj-form-betweenDate>
 					</td>
 				</tr>
 			</tfoot>
 			<tbody>
-				<c:foreach var="current" items="${PageResult}">
+				<c:foreach items="${PageResult}">
 					<tr>
-						<td>${current.id}</td>
+						<td>${item.id}</td>
 						<td style="text-align:left;">
-							<c:if test="${not empty current.cover}">
-								<img src="${aj_allConfig.uploadFile.imgPerfix}${current.cover}" style="max-width:50px;max-height:60px;vertical-align: middle;" 
-							 		onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${aj_allConfig.uploadFile.imgPerfix}${current.cover}';" onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
-							</c:if>
-							<a href="../../goods/${current.goodsId}/">${current.goodsName}</a>
+							<tags:common type="thumb" thumb="${item.cover}" />
+							<a href="../../goods/${item.goodsId}/">${item.goodsName}</a>
 						</td>
-						<td>${current.goodsFormat}</td>
-						<td>￥${current.price}</td>
-						<td>${current.goodsNumber}</td>
-						<td>￥${current.goodsNumber * current.price}</td>
-						<td>${empty current.groupId ? '否' : '是'}</td>
+						<td>${item.goodsFormat}</td>
+						<td>￥${item.price}</td>
+						<td>${item.goodsNumber}</td>
+						<td>￥${item.goodsNumber * item.price}</td>
+						<td>${empty item.groupId ? '否' : '是'}</td>
 						<td title="过滤此用户购物车">
-							<a href="?userId=${current.userId}">
-								#${current.userId}
+							<a href="?userId=${item.userId}">
+								#${item.userId}
 							</a>
 						</td>
-						<td><c:dateFormatter value="${current.createDate}" /></td>
+						<td><c:dateFormatter value="${item.createDate}" /></td>
 						<td>
-							<a href="${ctx}/admin/user/${current.userId}/">
+							<a href="${ctx}/admin/user/${item.userId}/">
 								<img src="${commonAssetIcon}/user.png" style="width:16px;vertical-align: sub;" />用户详情
 							</a> 
-							<a href="javascript:aj.admin.del('${current.id}', '${current.goodsName}');">
+							<a href="javascript:aj.admin.del('${item.id}', '${item.goodsName}');">
 								<img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>
 						</td>
 					</tr>
@@ -103,6 +92,7 @@
 			<%@include file="/WEB-INF/jsp/pager.jsp" %>
 		</div>
 		<script>
+			new Vue({el: '.listTable'});
 			aj.imageEnlarger();// 鼠标移动大图
 		</script>
 	</body>

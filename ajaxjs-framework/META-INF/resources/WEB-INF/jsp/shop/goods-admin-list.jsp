@@ -37,7 +37,6 @@
 					</c:foreach>
 				</select>			
 			</aj-admin-filter-panel>
-				
 		</div>
 		
 		<script>
@@ -74,21 +73,8 @@
 				<tr>
 					<td colspan="10">
 						<!-- 表格底部菜单 -->
-						<div style="float:left;margin-top: .5%;">
-							<a href="?downloadXSL=true&<%=com.ajaxjs.web.ServletHelper.getAllQueryParameters(request) %>" target="_blank">
-								<img src="${commonAssetIcon}/excel.png" width="16" style="vertical-align: middle;" /> 下载 Excel 格式
-							</a>
-						</div>
-						<form action="." method="GET" class="dateRange" @submit="valid($event)">
-							起始时间：
-							<aj-form-calendar-input field-name="startDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
-							截至时间：
-							<aj-form-calendar-input field-name="endDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
-							<button class="aj-btn">查询</button>
-						</form>
-						<script>
-							aj.form.betweenDate('.dateRange');
-						</script>
+						<aj-admin-xsl params="<%=com.ajaxjs.web.ServletHelper.getAllQueryParameters(request) %>"></aj-admin-xsl>					
+						<aj-form-betweenDate></aj-form-betweenDate>
 					</td>
 				</tr>
 			</tfoot>
@@ -106,10 +92,7 @@
 						<td>${goodsCatalogs[item.catalogId].name}</td>
 						<td><a href="?filterField=sellerId&filterValue=${item.sellerId}">${sellers[item.sellerId].name}</a></td>
 						<td>${(empty item.stat || item.stat == 1) ? '已上线': '已下线'}</td>
-						<td>
-							<a href="${ctx}/admin/${shortName}/${item.id}/"><img src="${commonAssetIcon}/update.gif" style="vertical-align: sub;" />编辑</a>
-							<a href="javascript:aj.admin.del('${item.id}', '${item.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>
-						</td>
+						<td is="aj-admin-control" id="${item.id}" name="${item.name}" preview="${aj_allConfig.data.entityProfile.goods.previewUrl}"></td>			
 					</tr>
 				</c:foreach>
 			</tbody>
@@ -118,6 +101,7 @@
 			<%@include file="/WEB-INF/jsp/pager.jsp" %>
 		</div>
 		<script>
+			new Vue({el: '.listTable'});
 			aj.imageEnlarger();// 鼠标移动大图
 		</script>
 	</body>

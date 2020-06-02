@@ -55,21 +55,21 @@
 					<tr>
 						<td><div class="label" style="float: left;">封面图：</div></td>
 						<td>
-				<c:choose>
-					<c:when test="${isCreate}">
-							<span>请保存记录后再上传图片。</span>
-					</c:when>
-					<c:otherwise>
-							<!-- 图片上传 -->
-							<aj-xhr-upload action="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catalog=2" 
-								:is-img-upload="true" 
-								hidden-field="cover" 
-								hidden-field-value="${info.cover}" 
-								img-place="${empty info.cover ? commonAsset.concat('/images/imgBg.png') : aj_allConfig.uploadFile.imgPerfix.concat(info.cover)}">
-							</aj-xhr-upload>
-					</c:otherwise>
-				</c:choose>
-						
+							<c:choose>
+								<c:when test="${isCreate}">
+										<span>请保存记录后再上传图片。</span>
+								</c:when>
+								<c:otherwise>
+										<!-- 图片上传 -->
+										<aj-xhr-upload action="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catalog=2" 
+											:is-img-upload="true" 
+											hidden-field="cover" 
+											hidden-field-value="${info.cover}" 
+											img-place="${empty info.cover ? commonAsset.concat('/images/imgBg.png') : aj_allConfig.uploadFile.imgPerfix.concat(info.cover)}">
+										</aj-xhr-upload>
+								</c:otherwise>
+							</c:choose>		
+						</td>	
 					</tr>
 				</table>
 			</div>

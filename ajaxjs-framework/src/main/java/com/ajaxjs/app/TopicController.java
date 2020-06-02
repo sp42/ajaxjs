@@ -72,6 +72,14 @@ public class TopicController extends BaseController<Map<String, Object>> {
 	public String createUI(ModelAndView mv) {
 		return super.createUI(mv);
 	}
+	
+	@GET
+	@MvcFilter(filters = DataBaseFilter.class)
+	@Path("/admin/topic/{id}")
+	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
+		setInfo(id, mv);
+		return admin("topic-edit");
+	}
 
 	@POST
 	@Path("/admin/topic")
@@ -80,14 +88,6 @@ public class TopicController extends BaseController<Map<String, Object>> {
 	@Override
 	public String create(Map<String, Object> entity) {
 		return super.create(entity);
-	}
-
-	@GET
-	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("/admin/topic/{id}")
-	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
-		setInfo(mv, id);
-		return admin("topic-edit");
 	}
 
 	@PUT

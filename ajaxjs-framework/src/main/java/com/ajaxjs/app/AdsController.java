@@ -46,7 +46,7 @@ public class AdsController extends BaseController<Ads> {
 	@Path(ID_INFO)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
-		setInfo(mv, id);
+		setInfo(id, mv);
 		
 		return admin("ads-edit");
 	}

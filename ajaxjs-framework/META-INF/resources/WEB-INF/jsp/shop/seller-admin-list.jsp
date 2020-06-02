@@ -54,19 +54,16 @@
 				</tr>
 			</tfoot>
 			<tbody>
-				<c:foreach var="current" items="${PageResult}">
+				<c:foreach items="${PageResult}">
 					<tr>
-						<td>${current.id}</td>
-						<td>${current.name}</td>
-						<td>${current.sellerMaster}</td>
-						<td>${current.tel}</td>
-						<td><c:dateFormatter value="${current.createDate}" /></td>
-						<td><c:dateFormatter value="${current.updateDate}" /></td>
-						<td>${(empty current.stat || current.stat == 1) ? '已上线': '已下线'}</td>
-						<td>
-							<a href="${ctx}/admin/${shortName}/${current.id}/"><img src="${commonAssetIcon}/update.gif" style="vertical-align: sub;" />编辑</a>
-							<a href="javascript:aj.admin.del('${current.id}', '${current.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>
-						</td>
+						<td>${item.id}</td>
+						<td>${item.name}</td>
+						<td>${item.sellerMaster}</td>
+						<td>${item.tel}</td>
+						<td><c:dateFormatter value="${item.createDate}" /></td>
+						<td><c:dateFormatter value="${item.updateDate}" /></td>
+						<td>${(empty item.stat || item.stat == 1) ? '已上线': '已下线'}</td>
+						<td is="aj-admin-control" id="${item.id}" name="${item.name}"></td>		
 					</tr>
 				</c:foreach>
 			</tbody>
@@ -75,6 +72,7 @@
 			<%@include file="/WEB-INF/jsp/pager.jsp" %>
 		</div>
 		<script>
+			new Vue({el: '.listTable'});			
 			aj.imageEnlarger();// 鼠标移动大图
 		</script>
 	</body>

@@ -48,30 +48,21 @@
 			<tfoot>
 				<tr>
 					<td colspan="8">
-						<form action="." method="GET" class="dateRange" @submit="valid($event)">
-							起始时间：
-							<aj-form-calendar-input field-name="startDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
-							截至时间：
-							<aj-form-calendar-input field-name="endDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
-							<button class="aj-btn">查询</button>
-						</form>
-						<script type="text/javascript">
-							aj.form.betweenDate('.dateRange');
-						</script>
+						<aj-form-betweenDate></aj-form-betweenDate>
 					</td>
 				</tr>
 			</tfoot>
 			<tbody>
-				<c:foreach var="current" items="${PageResult}">
+				<c:foreach items="${PageResult}">
 					<tr>
-						<td>${current.id}</td>
-						<td><a href="${ctx}/admin/user/${current.userId}/">${current.userName}</a></td>
-						<td>${LoginType[current.loginType]}</td>
-						<td>${current.ip}</td>
-						<td>${current.ipLocation}</td>
-						<td style="width:430px;">${current.userAgent}</td>
-						<td>${current.adminLogin ? '是' : '否'}</td>
-						<td><c:dateFormatter value="${current.createDate}" /></td>
+						<td>${item.id}</td>
+						<td><a href="${ctx}/admin/user/${item.userId}/">${item.userName}</a></td>
+						<td>${LoginType[item.loginType]}</td>
+						<td>${item.ip}</td>
+						<td>${item.ipLocation}</td>
+						<td style="width:430px;">${item.userAgent}</td>
+						<td>${item.adminLogin ? '是' : '否'}</td>
+						<td><c:dateFormatter value="${item.createDate}" /></td>
 					</tr>
 				</c:foreach>
 			</tbody>
@@ -79,6 +70,9 @@
 		<div class="listTable pager">
 			<%@include file="/WEB-INF/jsp/pager.jsp" %>
 		</div>
+		<script>
+			new Vue({el: '.listTable'});
+		</script>
 	</body>
 </html>
 
