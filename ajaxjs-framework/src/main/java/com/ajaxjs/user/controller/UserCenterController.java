@@ -74,7 +74,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 					});
 		}
 
-		return user("user-center/home");
+		return user("home");
 	}
 
 	@GET

@@ -3,7 +3,7 @@
 
 <tags:content bannerImg="${ctx}/images/banner.jpg">
 	<br />
-	<fieldset class="user">
+	<fieldset class="user aj-fieldset">
 		<legend>
 			<tags:i18n zh="用户注册" eng="Register" />
 		</legend>

@@ -36,6 +36,11 @@ public abstract class BaseService<T> extends QueryTools implements IBaseService<
 
 	@Override
 	public Long create(T bean) {
+		initCreate(bean);
+		return dao.create(bean);
+	}
+
+	public static void initCreate(Object bean) {
 		Objects.requireNonNull(bean, "Bean 实体不能为空");
 
 		if (bean instanceof BaseModel) {
@@ -64,12 +69,20 @@ public abstract class BaseService<T> extends QueryTools implements IBaseService<
 			if (map.get("updateDate") == null)
 				map.put("updateDate", now);
 		}
-
-		return dao.create(bean);
 	}
 
 	@Override
 	public int update(T bean) {
+		initUpdate(bean);
+		return dao.update(bean);
+	}
+
+	/**
+	 * 通用的更新操作
+	 * 
+	 * @param bean
+	 */
+	public static void initUpdate(Object bean) {
 		Date now = new Date();
 		if (bean instanceof BaseModel) {
 			BaseModel model = (BaseModel) bean;
@@ -82,8 +95,6 @@ public abstract class BaseService<T> extends QueryTools implements IBaseService<
 			if (map.get("updateDate") == null)
 				map.put("updateDate", now);
 		}
-
-		return dao.update(bean);
 	}
 
 	@Override

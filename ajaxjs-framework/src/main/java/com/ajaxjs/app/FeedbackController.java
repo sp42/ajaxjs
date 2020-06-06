@@ -35,14 +35,15 @@ public class FeedbackController extends BaseController<Feedback> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String adminList(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		LOGGER.info("留言反馈列表");
-		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE, true));
+		page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE, true));
+		return admin("feedback-admin-list");
 	}
 
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path(ID_INFO)
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
-		setInfo(mv, id);
+		setInfo(id, mv);
 		return admin("feedback-edit");
 	}
 

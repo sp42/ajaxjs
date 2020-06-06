@@ -98,14 +98,14 @@ public class SiteStruService implements ServletContextListener {
 
 		// 加载配置
 		ConfigService.load(ctx.getRealPath("/META-INF/site_config.json"));
-		if (ConfigService.CONFIG.isLoaded()) {
+		if (ConfigService.CONFIG != null && ConfigService.CONFIG.isLoaded()) {
 			ctx.setAttribute("aj_allConfig", ConfigService.CONFIG); // 所有配置保存在这里
 			onStartUp(ctx);
 		}
 
 		// 加载网站结构
 		loadSiteStru(ctx);
-		if (STRU.isLoaded())
+		if (STRU != null && STRU.isLoaded())
 			ctx.setAttribute("SITE_STRU", this); // 所有网站结构保存在这里
 
 		// 设置全局环境变量
@@ -114,7 +114,7 @@ public class SiteStruService implements ServletContextListener {
 		ctx.setAttribute("isDebuging", Version.isDebug);
 		ctx.setAttribute("commonAsset", ctxPath + "/asset/common"); // 静态资源目录
 		ctx.setAttribute("commonAssetIcon", ctxPath + "/asset/common/icon"); // 静态资源图标目录
-		ctx.setAttribute("ajaxjs_ui_output", "http://static.ajaxjs.com/");
+		ctx.setAttribute("ajaxjs_ui_output", "https://ajaxjs.nos-eastchina1.126.net");
 
 		// 开发阶段，ajaxjsui 指定了前端 js 所在的位置，通常是另外一个项目同时运行着，例如当前是本机 8080 端口的 ajaxjs-js。
 		if (Version.isDebug)
@@ -155,7 +155,8 @@ public class SiteStruService implements ServletContextListener {
 	 */
 	public static void loadSiteStru(ServletContext cxt) {
 		load(cxt);
-		ListMap.buildPath(STRU, true);
+		if (STRU != null)
+			ListMap.buildPath(STRU, true);
 //		t.travelList(stru);
 		LOGGER.infoGreen("加载网站的结构文件成功 Site Structure Config Loaded.");
 	}
@@ -267,8 +268,7 @@ public class SiteStruService implements ServletContextListener {
 	@SuppressWarnings({ "unchecked" })
 	public List<Map<String, Object>> getMenu(HttpServletRequest request) {
 		Map<String, Object> map = getSecondLevelNode(request);
-		return map != null && map.get(ListMap.CHILDREN) != null ? (List<Map<String, Object>>) map.get(ListMap.CHILDREN)
-				: null;
+		return map != null && map.get(ListMap.CHILDREN) != null ? (List<Map<String, Object>>) map.get(ListMap.CHILDREN) : null;
 	}
 
 	/**
@@ -282,8 +282,7 @@ public class SiteStruService implements ServletContextListener {
 	}
 
 	private static String TABLE = "<table class=\"siteMap\"><tr><td>%s</td></tr></table>",
-			A_LINK = "<a href=\"%s/\" class=\"indentBlock_%s\"><span class=\"dot\">·</span>%s</a>\n ",
-			NEW_COL = "\n\t</td>\n\t<td>\n\t\t";
+			A_LINK = "<a href=\"%s/\" class=\"indentBlock_%s\"><span class=\"dot\">·</span>%s</a>\n ", NEW_COL = "\n\t</td>\n\t<td>\n\t\t";
 
 	private String siteMapCache;
 
@@ -331,8 +330,7 @@ public class SiteStruService implements ServletContextListener {
 				if (0 == (int) map.get(ListMap.LEVEL)) // 新的一列
 					sb.append(NEW_COL);
 
-				sb.append(String.format(A_LINK, contextPath + map.get(ListMap.PATH).toString(),
-						map.get(ListMap.LEVEL).toString(), map.get("name").toString()));
+				sb.append(String.format(A_LINK, contextPath + map.get(ListMap.PATH).toString(), map.get(ListMap.LEVEL).toString(), map.get("name").toString()));
 
 				if (map.get(ListMap.CHILDREN) != null && map.get(ListMap.CHILDREN) instanceof List)
 					getSiteMap((List<Map<String, Object>>) map.get(ListMap.CHILDREN), sb, contextPath);

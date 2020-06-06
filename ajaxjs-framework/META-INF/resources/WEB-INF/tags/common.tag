@@ -35,7 +35,7 @@
 				<div class="right">
 	<%-- 				<a href="#"> <img src="${commonAsset}/images/gs.png" height="40" /></a> 
 					<a href="#"> <img src="${commonAsset}/images/kexin.png" hspace="20" width="90" style="margin-top: 15px;" /></a>  --%>
-					<a href="#"> <img src="${ajaxjs_ui_output}/360logo.gif" width="90" style="margin-top: 15px;" /></a> 
+					<a href="#"> <img src="${ajaxjs_ui_output}/images/360logo.gif" width="90" style="margin-top: 15px;" /></a> 
 				</div>
 				<a href="javascript:;" onclick="toSimpleChinese(this);" class="simpleChinese selected">简体中文</a> / <a href="javascript:;" class="Chinese" onclick="toChinese(this);">正体中文</a>
 				<script src="${ajaxjs_ui_output}/lib/Chinese.js"></script>

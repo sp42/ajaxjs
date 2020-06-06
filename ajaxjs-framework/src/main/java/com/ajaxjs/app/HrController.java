@@ -68,7 +68,7 @@ public class HrController extends BaseController<Map<String, Object>> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("/admin/hr/{id}")
 	public String editUI(ModelAndView mv, @PathParam(ID) Long id) {
-		setInfo(mv, id);
+		setInfo(id, mv);
 		return admin("hr-edit");
 	}
 

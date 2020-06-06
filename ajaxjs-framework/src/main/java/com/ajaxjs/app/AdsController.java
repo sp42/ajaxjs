@@ -37,7 +37,7 @@ public class AdsController extends BaseController<Ads> {
 		LOGGER.info("广告列表");
 
 		CatalogService.idAsKey(service.getDomainCatalogId(), mv);
-		mv.put(PAGE_RESULT, service.findPagedList(catalogId, start, limit, CommonConstant.ON_LINE, true));
+		page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.ON_LINE, true));
 
 		return admin("topic-admin-list");
 	}

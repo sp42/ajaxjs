@@ -45,7 +45,7 @@
 				</tr>
 			</tfoot>
 			<tbody>
-				<c:foreach items="${PageResult}">
+				<c:foreach items="${LIST}">
 					<tr>
 						<td>${item.id}</td>
 						<td width="500">${item.name}</td>
