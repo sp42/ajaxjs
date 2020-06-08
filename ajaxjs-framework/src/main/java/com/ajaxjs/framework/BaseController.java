@@ -249,7 +249,7 @@ public abstract class BaseController<T> implements IController, MvcConstant {
 	 * 
 	 * @return true 表示为希望是 JSON
 	 */
-	private static boolean isJson() {
+	public static boolean isJson() {
 		String accept = MvcRequest.getHttpServletRequest().getHeader("Accept");
 		return accept != null && "application/json".equals(accept);
 	}

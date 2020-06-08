@@ -86,9 +86,9 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 		} else
 			return jsonNoOk("修改用户名失败！");
 	}
-	
+
 	private final static String EMAIL_VERIFY = "/user/account/emailVerify/";
-	
+
 	@POST
 	@Path("account/emailVerify")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
@@ -149,12 +149,26 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
 	public String modiflyPhone(@NotNull @QueryParam("phone") String phone) throws ServiceException {
-		LOGGER.info("修改手机-发送验证码");
-
 		if (!UserHelper.isVaildPhone(phone))
 			throw new IllegalArgumentException(phone + " 不是有效的手机号码");
 
 		UserService.checkIfRepeated("phone", phone, "手机号码");
+
+		if (sendSms(phone, getUserId())) {
+			return jsonOk("发送验证码成功，五分钟内有效！");
+		} else
+			return jsonNoOk("发送验证码失败！");
+	}
+
+	/**
+	 * 
+	 * @param phone
+	 * @param userId
+	 * @return
+	 * @throws ServiceException
+	 */
+	public static boolean sendSms(String phone, long userId) {
+		LOGGER.info("修改手机-发送验证码");
 
 		String key = "sms_" + phone;
 		int rad;
@@ -165,7 +179,8 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 			rad = new Random().nextInt(900000) + 100000; // 6 位随机码
 
 			ExpireCache.CACHE.put(key, rad, SMS_EXPIRE_SECONDS);
-			ExpireCache.CACHE.put("sms_userId_" + getUserId(), phone, SMS_EXPIRE_SECONDS);
+			ExpireCache.CACHE.put("sms_userId_" + userId, phone, SMS_EXPIRE_SECONDS);
+			LOGGER.info("保存用户[{0}] 手机 {1} 验证码 {2} 缓存成功", "sms_userId_" + userId, phone, rad + "");
 			/*
 			 * 服务端暂存手机号码，那么客户端就不用重复提供了。 验证验证码的时候，根据 userId 查找 手机号码，再得到验证码
 			 */
@@ -173,11 +188,13 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 
 		ThirdPartyService services = BeanContext.getByClass(ThirdPartyService.class);
 
-		if (services.sendSms(phone, "SMS_138067918", String.format("{\"code\":\"%s\"}", rad))) {
+		boolean isOk = services.sendSms(phone, "SMS_138067918", String.format("{\"code\":\"%s\"}", rad));
+
+		if (isOk) {
 			LOGGER.info("发送手机 {0} 验证码 {1} 成功", phone, rad + "");
-			return jsonOk("发送验证码成功，五分钟内有效！");
+			return true;
 		} else
-			return jsonNoOk("发送验证码失败！");
+			return false;
 	}
 
 	@POST
@@ -188,22 +205,7 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 		LOGGER.info("修改手机-保存");
 
 		long userId = getUserId();
-		String phone = ExpireCache.CACHE.get("sms_userId_" + userId, String.class);
-		phone = phone.replace("sms_userId_", "");
-
-		if (!UserHelper.isVaildPhone(phone))
-			throw new IllegalArgumentException(phone + " 不是有效的手机号码");
-
-		Integer rad = ExpireCache.CACHE.get("sms_" + phone, Integer.class);
-		if (rad == null)
-			throw new IllegalArgumentException(phone + " 验证码已经失效或非法手机号码");
-
-		if (rad != Integer.parseInt(v_code))
-			throw new IllegalArgumentException("验证码不正确");
-
-		// 验证码正确，删除缓存
-		ExpireCache.CACHE.remove("sms_" + phone);
-		ExpireCache.CACHE.remove("sms_userId_" + userId);
+		String phone = checkSmsCode(userId, v_code);
 
 		User user = new User();
 		user.setId(userId);
@@ -225,6 +227,28 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 			return jsonOk("修改手机成功");
 		} else
 			return jsonNoOk("修改手机失败！");
+	}
+
+	public static String checkSmsCode(long userId, String v_code) {
+		String phone = ExpireCache.CACHE.get("sms_userId_" + userId, String.class);
+		Objects.requireNonNull(phone, "找不到该用户[" + userId + "]验证码的缓存");
+		phone = phone.replace("sms_userId_", "");
+
+		if (!UserHelper.isVaildPhone(phone))
+			throw new IllegalArgumentException(phone + " 不是有效的手机号码");
+
+		Integer rad = ExpireCache.CACHE.get("sms_" + phone, Integer.class);
+		if (rad == null)
+			throw new IllegalArgumentException(phone + " 验证码已经失效或非法手机号码");
+
+		if (rad != Integer.parseInt(v_code))
+			throw new IllegalArgumentException("验证码不正确");
+
+		// 验证码正确，删除缓存
+		ExpireCache.CACHE.remove("sms_" + phone);
+		ExpireCache.CACHE.remove("sms_userId_" + userId);
+
+		return phone;
 	}
 
 	@POST

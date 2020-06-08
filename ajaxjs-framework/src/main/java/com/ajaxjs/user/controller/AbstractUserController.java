@@ -62,8 +62,7 @@ public abstract class AbstractUserController extends BaseUserController {
 	@Path("login")
 	@MvcFilter(filters = { CaptchaFilter.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
-	public String loginByPassword(@NotNull @QueryParam("userID") String userID,
-			@NotNull @QueryParam("password") String password, HttpServletRequest req) throws ServiceException {
+	public String loginByPassword(@NotNull @QueryParam("userID") String userID, @NotNull @QueryParam("password") String password, HttpServletRequest req) throws ServiceException {
 		LOGGER.info("执行登录（按密码的）");
 		if (isLogined())
 			return jsonNoOk("你已经登录，无须重复登录！");
@@ -117,8 +116,7 @@ public abstract class AbstractUserController extends BaseUserController {
 	@Path("register")
 	@MvcFilter(filters = { DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
-	public String doRegister(User user, @NotNull @QueryParam("password") String password, Map<String, Object> map)
-			throws ServiceException {
+	public String doRegister(User user, @NotNull @QueryParam("password") String password, Map<String, Object> map) throws ServiceException {
 		LOGGER.info("正在注册");
 
 		if (ConfigService.getValueAsString("user.customRegister") != null) {
@@ -138,8 +136,7 @@ public abstract class AbstractUserController extends BaseUserController {
 		}
 	}
 
-	public static Object ioc(String config, BiFunction<Class<?>, String, Method> getMethod,
-			Function<Method, Object> execute) throws ServiceException {
+	public static Object ioc(String config, BiFunction<Class<?>, String, Method> getMethod, Function<Method, Object> execute) throws ServiceException {
 		String[] arr = ConfigService.getValueAsString(config).split("#");
 		Method method = getMethod.apply(ReflectUtil.getClassByName(arr[0]), arr[1]);
 
@@ -183,9 +180,9 @@ public abstract class AbstractUserController extends BaseUserController {
 	}
 
 	/**
-	 * 检查是否重复的手机号码
+	 * 检查是否重复的邮件
 	 * 
-	 * @param phone 手机号码
+	 * @param email 邮件
 	 * @return true=已存在
 	 */
 	@GET

@@ -72,7 +72,7 @@ public class QueryTools {
 	public static String equals(String field, Object value) {
 		if (value instanceof String)
 			value = "'" + value + "'";
-		System.out.println(">>>>>>>>>>>>>>:::"+field + " = " + value);
+//		System.out.println(">>>>>>>>>>>>>>:::"+field + " = " + value);
 		return field + " = " + value;
 	}
 

@@ -20,9 +20,11 @@ import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.MvcFilter;
+import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.model.UserCommonAuth;
 import com.ajaxjs.user.service.AccountService;
 import com.ajaxjs.user.service.UserCommonAuthService;
+import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.captcha.CaptchaFilter;
 
@@ -43,7 +45,53 @@ public class ResetPasswordController extends BaseController<Map<String, Object>>
 
 	private final static String FIND_BY_EMAIL = "/user/reset_password/findByEmail/";
 
-	@POST()
+	@Resource
+	private UserService userService;
+
+	@POST
+	@Path("findBySms")
+	@MvcFilter(filters = { CaptchaFilter.class, DataBaseFilter.class })
+	public String findBySms(@NotNull @FormParam("phone") String phone, ModelAndView mv) {
+		LOGGER.info("重置密码-输入新密码 by SMS");
+
+		User user = UserService.dao.findByPhone(phone);
+		if (user == null)
+			throw new IllegalArgumentException("找不到该手机 " + phone + "的用户");
+
+		if (AbstractAccountInfoController.sendSms(phone, user.getId())) {
+			// 适应 api 和 页面
+			if (isJson())
+				return jsonOk("发送手机 " + phone + " 验证码成功");
+			else {
+				mv.put("phone", phone);
+				mv.put("userId", user.getId());
+				mv.put("showMode", 3);
+
+				return jsp("user/reset-password-findBySMS");
+			}
+		}
+
+		throw new IllegalArgumentException("发送短信失败");
+	}
+
+	@POST
+	@Path("findBySms/verify")
+	@MvcFilter(filters = { DataBaseFilter.class })
+	@Produces(MediaType.APPLICATION_JSON)
+	public String updatePwdBySMS(@NotNull @FormParam("userId") long userId, @NotNull @FormParam("v_code") String v_code, @NotNull @FormParam("password") String password)
+			throws ServiceException {
+		LOGGER.info("重置密码-保存新密码 by SMS");
+
+		AbstractAccountInfoController.checkSmsCode(userId, v_code);
+		UserCommonAuth auth = UserCommonAuthService.dao.findByUserId(userId);
+
+		if (auth != null && passwordService.updatePwd(auth, password))
+			return jsonOk("重置密码成功");
+		else
+			return jsonNoOk("重置密码失败！");
+	}
+
+	@POST
 	@Path("findByEmail")
 	@MvcFilter(filters = { CaptchaFilter.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
@@ -53,23 +101,6 @@ public class ResetPasswordController extends BaseController<Map<String, Object>>
 		return AccountService.sendTokenMail(email, "重置密码", req.getBasePath() + FIND_BY_EMAIL) ? jsonOk("发送邮件成功") : jsonNoOk("发送邮件失败！");
 	}
 
-	@GET
-	@Path("findBySms")
-	@MvcFilter(filters = { DataBaseFilter.class })
-	public String findBySms(@NotNull @QueryParam("token") String token, @NotNull @QueryParam("email") String email, ModelAndView mv) {
-		LOGGER.info("重置密码-输入新密码");
-
-		Long userId = AccountService.checkEmail_VerifyToken(token, email);
-
-		if (userId != null && userId != 0) {
-			mv.put("token", token);
-			mv.put("email", email);
-			return jsp("user/reset-password-findByEmail");
-		} else {
-			throw new IllegalAccessError("非法访问");
-		}
-	}
-	
 	@GET
 	@Path("findByEmail")
 	@MvcFilter(filters = { DataBaseFilter.class })
@@ -94,7 +125,8 @@ public class ResetPasswordController extends BaseController<Map<String, Object>>
 	@Path("findByEmail/verify")
 	@MvcFilter(filters = { DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
-	public String updatePwd(@NotNull @QueryParam("token") String token, @NotNull @QueryParam("email") String email, @NotNull @QueryParam("password") String password) throws ServiceException {
+	public String updatePwd(@NotNull @QueryParam("token") String token, @NotNull @QueryParam("email") String email, @NotNull @QueryParam("password") String password)
+			throws ServiceException {
 		LOGGER.info("重置密码-保存新密码");
 
 		Long userId = AccountService.checkEmail_VerifyToken(token, email);
