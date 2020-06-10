@@ -13,6 +13,7 @@
 package com.ajaxjs.framework.config;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import org.w3c.dom.NamedNodeMap;
@@ -226,14 +227,17 @@ public class TestHelper {
 	 */
 	public static void init(String configFile, String dbXmlCfg, String... packages) {
 		ConfigService.load(configFile);
+		String databaseNode = ConfigService.get("data.database_node");
+		Objects.requireNonNull(databaseNode, "请配置 data.database_node");
 
-		XMLHelper.xPath(dbXmlCfg, "//Resource[@name='" + ConfigService.getValueAsString("data.database_node") + "']", node -> {
+		XMLHelper.xPath(dbXmlCfg, "//Resource[@name='" + databaseNode + "']", node -> {
 			NamedNodeMap map = node.getAttributes();
 
 			String url = map.getNamedItem("url").getNodeValue(), user = map.getNamedItem("username").getNodeValue(), password = map.getNamedItem("password").getNodeValue();
 
 			JdbcConnection.setConnection(JdbcConnection.getMySqlConnection(url, user, password));
 			IS_DB_CONNECTION_AUTOCLOSE = false;
+			
 			BeanContext.init(packages);
 			BeanContext.injectBeans();
 		});
@@ -255,7 +259,7 @@ public class TestHelper {
 	 * @param packages
 	 */
 	public static void initAll() {
-		String projectFolder = "D:\\project\\leidong\\";
+		String projectFolder = "E:\\project\\aj-website\\";
 		String[] packages = { "com.ajaxjs.app", "com.ajaxjs.user" };
 
 		init(projectFolder + "\\WebContent\\META-INF\\site_config.json", projectFolder + "\\WebContent\\META-INF\\context.xml", packages);

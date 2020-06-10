@@ -52,7 +52,7 @@ public class ExpireCache extends ConcurrentHashMap<String, ExpireCacheData<Objec
 
 		if (data != null && (data.expire <= 0 || data.saveTime >= now))
 			return data.data;
-		else if (data.load != null) {
+		else if (data != null && data.load != null) {
 			Object value = data.load.get();
 			data.data = value;
 			data.saveTime = now + data.expire; // 重新算过存活时间

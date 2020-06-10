@@ -265,10 +265,10 @@ public class BeanContext {
 
 			Object bean = beans.get(split[0]), argBean = beans.get(v);
 
-			Objects.requireNonNull(bean, split[0] + "执行：" + split[1] + " 未发现类");
+			Objects.requireNonNull(bean, split[0] + "执行[" + split[1] + "]未发现类");
 
 			if (argBean == null) {
-				LOGGER.warning("容器中找不到实例 {0}。请确定是否为组件添加 @Bean 注解?", v);
+				LOGGER.warning("容器中找不到实例[{0}]。请确定是否为组件添加 @Bean 注解?", v);
 			} else {
 				ReflectUtil.setProperty(bean, split[1], argBean);
 			}

@@ -95,7 +95,7 @@ public abstract class AbstractScanner<T> {
 			}
 		}
 
-		LOGGER.info("正在扫描包名：{0}，结果数量：{1}", packageDir, result.size());
+		LOGGER.info("正在扫描包名[{0}]，结果数量[{1}]", packageDir, result.size());
 
 		return result;
 	}

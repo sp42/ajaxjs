@@ -72,7 +72,7 @@ public class ConfigService {
 			Version.isDebug = false;
 		}
 
-		LOGGER.infoGreen("加载 " + getValueAsString("clientShortName") + " 项目配置成功！All config loaded.");
+		LOGGER.infoGreen("加载[" + getValueAsString("clientShortName") + "]项目配置成功！All config loaded.");
 	}
 
 	/**
@@ -101,7 +101,7 @@ public class ConfigService {
 		Object v = FLAT_CONFIG.get(key);
 
 		if (v == null) {
-			LOGGER.warning("没发现配置 " + key);
+			LOGGER.warning("没发现[{0}]配置", key);
 			return isNullValue;
 		}
 

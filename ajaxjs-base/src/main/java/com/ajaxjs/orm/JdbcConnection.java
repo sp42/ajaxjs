@@ -128,7 +128,7 @@ public class JdbcConnection {
 	 */
 	public static void initDbByJNDI(String jndi) {
 		Objects.requireNonNull(jndi, "缺少 jndiPath 参数！");
-		LOGGER.info("启动数据库 JNDI 连接……" + jndi);
+		LOGGER.info("启动[{0}]数据库 JNDI 连接", jndi);
 
 		try {
 			if (getConnection() == null || getConnection().isClosed()) {

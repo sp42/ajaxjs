@@ -1,7 +1,7 @@
 package com.ajaxjs.util.cache;
 
 /**
- * 缓存管理器接口，该接口提供具体的cache实现
+ * 缓存管理器接口，该接口提供具体的 cache 实现
  * 
  */
 public interface CacheManager {
@@ -12,11 +12,18 @@ public interface CacheManager {
 	 * @return Cache
 	 */
 	public <K, V> Cache<K, V> getCache(String name);
-	
+
+	/**
+	 * 
+	 * @param <V>
+	 * @param name
+	 * @param clz
+	 * @return
+	 */
 	public <V> Cache<String, V> getCache(String name, Class<V> clz);
 
 	/**
-	 * 销毁cache
+	 * 销毁 cache
 	 */
 	public void destroy();
 }
