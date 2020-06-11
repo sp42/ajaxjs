@@ -23,8 +23,7 @@ import com.ajaxjs.util.CommonUtil;
 public class ArticleService extends BaseService<Map<String, Object>> implements ViewObjectService {
 	@TableName(value = "entity_article", beanClass = Map.class)
 	public interface ArticleDao extends IBaseDao<Map<String, Object>> {
-		@Select("SELECT e.id, e.name, e.createDate, e.updateDate, e.catalogId, e.intro, e.cover, e.stat FROM ${tableName} e "
-				+ WHERE_REMARK_ORDER)
+		@Select("SELECT e.id, e.name, e.createDate, e.updateDate, e.catalogId, e.intro, e.cover, e.stat FROM ${tableName} e " + WHERE_REMARK_ORDER)
 		public PageResult<Map<String, Object>> list(int start, int limit, Function<String, String> sqlHandler);
 
 		@Select("SELECT e.id, e.name, e.createDate, e.cover, e.intro FROM ${tableName} e " + WHERE_REMARK_ORDER)
@@ -44,8 +43,16 @@ public class ArticleService extends BaseService<Map<String, Object>> implements 
 	}
 
 	public PageResult<Map<String, Object>> list(int catalogId, int start, int limit, int status) {
-		return dao.list(start, limit, CatalogService.setCatalog(catalogId, getDomainCatalogId())
-				.andThen(setStatus(status)).andThen(BaseService::searchQuery).andThen(BaseService::betweenCreateDate));
+		return list(catalogId, start, limit, status, false);
+	}
+
+	public PageResult<Map<String, Object>> list(int catalogId, int start, int limit, int status, boolean isOrderByCreateDate) {
+		Function<String, String> handler = CatalogService.setCatalog(catalogId, getDomainCatalogId()).andThen(setStatus(status)).andThen(BaseService::searchQuery)
+				.andThen(BaseService::betweenCreateDate);
+		if (isOrderByCreateDate)
+			handler = handler.andThen(sql -> sql.replace("ORDER BY id", "ORDER BY createDate"));
+
+		return dao.list(start, limit, handler);
 	}
 
 	public int getDomainCatalogId() {

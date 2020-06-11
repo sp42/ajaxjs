@@ -3,7 +3,6 @@ package com.ajaxjs.user.controller;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -55,23 +54,22 @@ public class UserCenterController extends AbstractAccountInfoController {
 
 	@Resource("User_common_authService") // 指定 service id
 	private UserCommonAuthService passwordService;
-	
+
 	@GET
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String home(ModelAndView mv) throws ServiceException {
 		LOGGER.info("用户会员中心（前台）");
 
 		if (ConfigService.getValueAsString("user.customUserCenterHome") != null) {
-			AbstractUserController.ioc("user.customUserCenterHome",
-					(clz, method) -> ReflectUtil.getMethod(clz, method, mv), method -> {
-						try {
-							return method.invoke(null, mv);
-						} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-							Throwable _e = ReflectUtil.getUnderLayerErr(e);
-							LOGGER.warning(_e);
-							return null;
-						}
-					});
+			AbstractUserController.ioc("user.customUserCenterHome", (clz, method) -> ReflectUtil.getMethod(clz, method, mv), method -> {
+				try {
+					return method.invoke(null, mv);
+				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+					Throwable _e = ReflectUtil.getUnderLayerErr(e);
+					LOGGER.warning(_e);
+					return null;
+				}
+			});
 		}
 
 		return user("home");
@@ -118,8 +116,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String updateAvatar(MvcRequest request, @NotNull @QueryParam("avatar") String avatar) throws IOException {
-		HttpSession sess = request.getSession();
-		sess.setAttribute("userAvatar", request.getContextPath() + "/" + avatar);
+		request.getSession().setAttribute("userAvatar", ConfigService.get("uploadFile.imgPerfix") +  avatar);
 
 		return jsonOk("ok");
 	}

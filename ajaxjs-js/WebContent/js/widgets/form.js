@@ -305,8 +305,6 @@ Vue.component('aj-form-html-editor', {
 			this.iframeDoc.addEventListener('paste', this.onImagePaste);
 		}.bind(this);
 	},
-	
-	
 	methods: {
 		/*
 		 * 富文本编辑器中粘贴图片时，chrome可以得到e.clipBoardData.items并从中获取二进制数据，以便ajax上传到后台，
@@ -367,9 +365,9 @@ Vue.component('aj-form-html-editor', {
 				if(window.isCreate)
 					aj.alert.show('请保存记录后再上传图片。');
 				else {
-					App.$refs.uploadLayer.show(imgUrl => {
-						if(imgUrl)
-							this.format("insertImage", imgUrl);
+					App.$refs.uploadLayer.show(json => {
+						if(json && json.isOk)
+							this.format("insertImage", json.fullUrl);
 					});
 				}
 				
@@ -419,11 +417,10 @@ Vue.component('aj-form-html-editor', {
 			}
 			
 			if(str.length)
-				aj.xhr.post('../downAllPics/', json=>{
+				aj.xhr.post('../downAllPics/', json => {
 					var _arr = json.result.pics;
-					for(var i = 0, j = _arr.length; i <j; i++) {
+					for(var i = 0, j = _arr.length; i <j; i++) 
 						remotePicArr[i].src = "images/" + _arr[i];
-					}
 					
 					aj.alert.show('所有图片下载完成。');
 				}, {pics: str.join('|')});
@@ -528,10 +525,9 @@ Vue.component('aj-form-html-editor', {
 			var cl = ['00', '33', '66', '99', 'CC', 'FF'], a, b, c, d, e, f, i, j, k, T;
 			// 创建head
 			var h = '<div class="colorhead"><span class="colortitle">颜色选择</span></div>\
-						<div class="colorbody"><table cellspaci="0" cellpadding="0"><tr>';// 创建body
-																							// [6 x
-																							// 6的色盘]
+						<div class="colorbody"><table cellspaci="0" cellpadding="0"><tr>';
 			
+			// 创建body  [6 x 6的色盘]
 			for (var i = 0; i < 6; ++i) {
 				h += '<td><table class="colorpanel" cellspacing="0" cellpadding="0">';
 				for (var j = 0, a = cl[i]; j < 6; ++j) {
@@ -829,7 +825,8 @@ var HtmlSanitizer = new (function () {
 
 if(!aj.form)
 	aj.form = {};
-
+	
+// dep
 aj.form.betweenDate = function(el) {	
 	new Vue({
 		el : el,
@@ -851,6 +848,32 @@ aj.form.betweenDate = function(el) {
 	});
 }
 
+Vue.component('aj-form-betweendate', {
+	template: '<form action="." method="GET" class="dateRange" @submit="valid($event)">\
+		起始时间：<aj-form-calendar-input field-name="startDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>\
+		截至时间：<aj-form-calendar-input field-name="endDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>\
+		<button class="aj-btn">查询</button>\
+	</form>',
+	methods: {
+		valid(e) {
+			var start = this.$el.$('input[name=startDate]').value, end = this.$el.$('input[name=endDate]').value;
+			
+			if(!start||!end) {
+				aj.showOk("输入数据不能为空");					
+				e.preventDefault();
+			}
+			
+			if(new Date(start) > new Date(end)) {
+				aj.showOk("起始日期不能晚于结束日期");					
+				e.preventDefault();
+			}
+		}
+	}
+});
+
+/**
+ * 上传组件
+ */
 Vue.component('aj-xhr-upload', {
 	data () {
 		return {
@@ -875,13 +898,13 @@ Vue.component('aj-xhr-upload', {
 		};
 	},
 	props : {
-		action : {
-			type : String, // 上传路径
+		action: {
+			type: String, // 上传路径
 			required: true
 		}, 		
-		fieldName : String, 	// input name 字段名
-	    limitSize : Number,
-	    hiddenField:{			// 上传后的文件名保存在这个隐藏域之中
+		fieldName: String, 	// input name 字段名
+	    limitSize: Number,
+	    hiddenField: {			// 上传后的文件名保存在这个隐藏域之中
 	    	type: String,
 	    	default: null
 	    },
@@ -912,7 +935,7 @@ Vue.component('aj-xhr-upload', {
 				<button @click.prevent="doUpload();" style="min-width:110px;">{{progress && progress !== 100 ? \'上传中 \' + progress + \'%\': \'上传\'}}</button>\
 			</div>\
 		</div>',
-	methods : {
+	methods: {
 		getFileName() {
 			var v = this.$el.$('input[type=file]').value;
 			var arr = v.split('\\');
@@ -921,14 +944,11 @@ Vue.component('aj-xhr-upload', {
 		onUploadInputChange(e) {
 			var fileInput = e.target;
 			var ext = fileInput.value.split('.').pop(); // 扩展名
-			
 			if(!fileInput.files || !fileInput.files[0]) return;
 			
 			this.$fileObj = fileInput.files[0]; // 保留引用
-			
 			this.$fileName = this.$fileObj.name;
 			this.$fileType = this.$fileObj.type;
-			
 			var size = this.$fileObj.size;
 			
 			if(this.limitSize) {
@@ -960,7 +980,6 @@ Vue.component('aj-xhr-upload', {
 			
 			this.getFileName();
 		},
-
 		readBase64(file) {
 			var reader = new FileReader(), self = this;
 			
@@ -971,21 +990,17 @@ Vue.component('aj-xhr-upload', {
 				if(self.isImgUpload) {
 					var imgEl = new Image();
 					imgEl.onload = function() {
-						if(file.size > 300 * 1024) { // 大于 300k 才压缩
+						if(file.size > 300 * 1024)  // 大于 300k 才压缩
 							self.compressImg(imgEl);
-						}
 						
 						if (imgEl.width > self.maxWidth || imgEl.height > self.maxHeight) {
 							self.isImgSize = false;
 							self.errMsg = '图片大小尺寸不符合要求哦，请重新图片吧~';
-						} else {
+						} else 
 							self.isImgSize = true;
-						}
 					}
 					
 					imgEl.src = imgBase64Str;
-					
-					
 					// 文件头判别，看看是否为图片
 					var imgHeader = {
 						"jpeg" : "/9j/4",
@@ -1010,9 +1025,9 @@ Vue.component('aj-xhr-upload', {
 		doUpload() {
 			var fd = new FormData();
 			
-			if(this.$blob){
+			if(this.$blob)
 				fd.append("file", this.$blob, this.$fileName);
-			} else 
+			else 
 				fd.append("file", this.$fileObj);
 		
 			var xhr = new XMLHttpRequest(), self = this;
@@ -1132,7 +1147,6 @@ Vue.component('aj-xhr-upload', {
 			}
 
 			ctx.drawImage(img, 0, 0);
-			
 			return canvas.toDataURL('image/jpeg');
 		}
 	}
@@ -1140,11 +1154,11 @@ Vue.component('aj-xhr-upload', {
 
 // 相册列表
 Vue.component('attachment-picture-list', {
-	props : {
-		picCtx : String,
-		uploadUrl : String,
-		blankBg : String,
-		delImgUrl : String,
+	props: {
+		picCtx: String,
+		uploadUrl: String,
+		blankBg: String,
+		delImgUrl: String,
 		loadListUrl: String
 	},
 	data() {
@@ -1174,296 +1188,10 @@ Vue.component('attachment-picture-list', {
 		delPic(picId) {
 			aj.showConfirm("确定删除相册图片？", () => {
 				aj.xhr.dele(this.delImgUrl + picId + "/", json => {
-					if(json.isOk) {
+					if(json.isOk)
 						this.loadAttachmentPictures();
-					} else {
-						
-					}
 				});
 			}); 
-		}
-	}
-});
-
-/**
- * 上传组件
- */
-
-// 文件选择器和校验
-Vue.component('ajaxjs-file-upload', {
-	data() {
-		return {
-			isFileSize : false,			// 文件大小检查
-			isExtName : false,			// 文件扩展名检查
-			errMsg : null,				// 错误信息
-			newlyId : null				// 成功上传之后的文件 id
-		};
-	},
-	props: {
-		fieldName : {
-			type: String,
-			required: false
-		},
-		
-		filedId: {
-	      type: Number,
-	      required: false
-	    },
-	    
-	    limitSize: Number,
-	    
-	    limitFileType: String,
-	    labelId: {
-	    	type: String,
-	    	required: false,
-	    	default: 'input_file_molding'
-	    }
-	},
-	template: 
-		'<div class="ajaxjs-file-upload">\
-			<div class="pseudoFilePicker">\
-				<input type="hidden" v-if="fieldName" :name="fieldName" :value="newlyId || filedId" :id="labelId" />\
-				<label :for="labelId"><div><div>+</div>点击选择文件</div></label>\
-			</div>\
-			<div v-if="!isFileSize || !isExtName">{{errMsg}}</div>\
-			<div v-if="isFileSize && isExtName">\
-				<button @click.prevent="doUpload($event);">上传</button>\
-			</div>\
-		</div>',
-	methods: {
-		onUploadInputChange(e) {
-			var fileInput = e.target;
-			var ext = fileInput.value.split('.').pop(); // 扩展名
-			var size = fileInput.files[0].size;
-			
-			if(this.limitSize)
-				this.isFileSize = size < this.limitSize;
-			else
-				this.isFileSize = true;
-			
-			if(this.limitFileType)
-				this.isExtName = new RegExp(this.limitFileType, 'i').test(ext);
-			else
-				this.isExtName = true;
-		},
-		doUpload(e) {
-			// 先周围找下 form，没有的话找全局的
-			var form = this.$parent.$refs.uploadIframe && this.$parent.$refs.uploadIframe.$el;
-			if(!form) {
-				//form = aj('form[target=upframe]');
-				form = this.$parent.$el.$('form');
-			}
-			
-			form && form.submit();
-			
-			e.preventDefault();
-			return false;
-		}
-	}
-});
-
-//图片选择器、预览和校验
-//建议每次创建实例时声明 ref="uploadControl" 以便对应组件
-Vue.component('ajaxjs-img-upload-perview', {
-	data() {
-		return {
-			imgBase64Str : null, 		// 图片的 base64 形式，用于预览
-			isFileSize : false,			// 文件大小检查
-			isExtName : false,			// 文件扩展名检查
-			isImgSize : false, 			// 图片分辨率大小检查
-			isFileTypeCheck : false, 	// 图片二进制的类型检查
-			errMsg : null,				// 错误信息
-			imgNewlyId : null			// 成功上传之后的图片 id
-		};
-	},
-	
-	props: {
-		imgPlace : String, // 图片占位符，用户没有选定图片时候使用的图片
-		imgName : {
-			type: String,
-			required: false // false 表示不随表单设置值
-		},
-		imgId : {
-	      type: Number,
-	      required: false
-	    },
-	    limit : {
-	    	type : Object,
-	    	required : false,
-	    	default(){
-	    		return { // 上传限制
-					maxSize : 600,
-					fileExt: /png|gif|jpg|jpeg/i,
-					maxWidth: 1200,
-					maxHeight:1680
-				};
-	    	}
-	    },
-	    labelId: {
-	    	type: String,
-	    	required : false,
-	    	default : 'input_file_molding'
-	    }
-	},
-	template: 
-		'<div class="ajaxjs-img-upload-perview">\
-			<div>\
-				<img class="upload_img_perview" :src="(isFileSize && isExtName && isImgSize && isFileTypeCheck && imgBase64Str) ? imgBase64Str : imgPlace" />\
-				<input v-if="imgName" type="hidden" :name="imgName" :value="imgNewlyId || imgId" />\
-			</div>\
-			<div class="pseudoFilePicker">\
-				<label :for="labelId"><div><div>+</div>点击选择图片</div></label>\
-			</div>\
-			<div v-if="isShowErrMessage()">{{errMsg}}</div>\
-			<div v-if="isFileSize && isExtName && isImgSize && isFileTypeCheck && imgBase64Str">\
-				<button @click.prevent="doUpload($event);" style="padding: .4em 1.3em; width: 80px;">上传</button>\
-			</div>\
-		</div>',
-		
-	created() {
-		this.BUS.$on('upload-file-selected', this.onUploadInputChange);
-	},
-
-	methods: (function () {
-		// 文件头判别，看看是否为图片
-		var imgHeader = {
-			"jpeg" : "/9j/4",
-			"gif" : "R0lGOD",
-			"png" : "iVBORw"
-		};
-		
-		return {
-			onUploadInputChange(e) {
-				var fileInput = e.target;
-				
-				for(var i = 0, j = fileInput.files.length; i < j; i++) {
-					var reader = new FileReader(), fileObj = fileInput.files[i];
-					reader.onload = this.afterLoad.delegate(null, fileObj, this);
-					reader.readAsDataURL(fileObj);
-				}
-			},
-			afterLoad (e, fileObj, self) {
-				var imgBase64Str = e.target.result;
-				var isOk = self.checkFile(fileObj, imgBase64Str, self);
-				
-				self.imgBase64Str = imgBase64Str;
-			},
-			isShowErrMessage() {
-				return !this.isFileSize || !this.isExtName || !this.isImgSize || !this.isFileTypeCheck;
-			},
-			checkFile(fileObj, imgBase64Str, cfg) {
-				var defaultLimit = cfg.limit;
-				
-				if(fileObj.size > defaultLimit.maxSize * 1024) {  // 文件的大小，单位为字节B
-					cfg.isFileSize = false;
-					cfg.errMsg = "要上传的文件容量过大，请压缩到 " + defaultLimit.maxSize + "kb 以下";
-					return;
-				} else {
-					cfg.isFileSize = true;
-				}
-				
-				var ext = fileObj.name.split('.').pop();
-				if (!defaultLimit.fileExt.test(ext)) {
-					cfg.isExtName = false;
-					cfg.errMsg = '根据文件后缀名判断，此文件不是图片'; 
-					return;
-				} else {
-					cfg.isExtName = true;
-				}
-				
-				var imgEl = new Image();
-				imgEl.onload = function() {
-					if (imgEl.width > cfg.maxWidth || imgEl.height > cfg.maxHeight) {
-						cfg.isImgSize = false;
-						cfg.errMsg = '图片大小尺寸不符合要求哦，请重新图片吧~';
-					} else {
-						cfg.isImgSize = true;
-					}
-				}
-				
-				imgEl.src = imgBase64Str;
-				
-				cfg.isFileTypeCheck = false;
-				
-				for(var i in imgHeader) {
-					if (~imgBase64Str.indexOf(imgHeader[i])){
-						cfg.isFileTypeCheck = true;
-						return;
-					}
-				}
-				
-				cfg.errMsg = "亲，改了扩展名我还能认得你不是图片哦";
-			},
-			doUpload(e) {
-				// 先周围找下 form，没有的话找全局的
-				var form = this.$parent.$refs.uploadIframe && this.$parent.$refs.uploadIframe.$el;
-				if(!form) {
-					//form = aj('form[target=upframe]');
-					form = this.$parent.$el.$('form');
-				}
-				
-				form && form.submit();
-				
-				e.preventDefault();
-				return false;
-			}
-		};
-	})()
-});
-
-//通过 iframe 实现无刷新文件上传
-//这里包含一个 form元素，form元素不能嵌套在 form 里面，故独立出来一个组件
-Vue.component('ajaxjs-fileupload-iframe', {
-	data() {
-		return {
-			radomId : Math.round(Math.random() * 1000),
-			uploadOk_callback: function(){}
-		};
-	},
-	props : {
-		uploadUrl: {
-			type: String,
-			required: true
-		},
-	    labelId: {
-	    	type : String,
-	    	required : false,
-	    	default : 'input_file_molding'
-	    },
-	    accpectFileType: { // 可以上传类型
-	    	type : String
-	    }
-	},
-	template : // 隐藏的 input 上传控件为了无刷新上传，对应 form 的 target 
-		'<form :action="uploadUrl" method="POST" enctype="multipart/form-data" :target="\'upframe_\' + radomId">\
-			<input name="fileInput" :id="labelId" type="file" multiple="multiple" class="hide" @change="fireUploadFileSelected($event)" :accept="accpectFileType" />\
-			<iframe :name="\'upframe_\' + radomId" class="hide" @load="iframe_callback($event);"></iframe>\
-		</form>',
-	methods : {
-		// 上传后成功的提示
-		iframe_callback (e) { 
-			var json = e.target.contentDocument.body.innerText;
-			
-			if(json[0] == '{') {
-				json = JSON.parse(json);
-				
-				if(json.isOk) {
-					aj.msg.show('上传成功！');
-					
-					if(this.uploadOk_callback && typeof this.uploadOk_callback == 'function') {
-						var imgUrl = json.fullUrl || json.imgUrl || json.visitPath;
-						this.uploadOk_callback(imgUrl, json);
-					}
-				}
-			}
-		},
-		fireUploadFileSelected(e) {// 在附近查找 上传组件：就近原则
-			var p = this.$parent;
-			while(p && p.$refs && !p.$refs.uploadControl) {
-				p = p.$parent;
-			}
-			
-			p.$refs.uploadControl.onUploadInputChange(e);
 		}
 	}
 });
@@ -1478,15 +1206,15 @@ Vue.component('aj-popup-upload', {
 		};
 	},
 	props: {
-		uploadUrl : {// 上传接口地址
+		uploadUrl: {// 上传接口地址
 			type: String,
 			required: true
 		},
-		imgName: {
+		imgName: { // 貌似没用
 			type: String,
 			required: false
 		},
-		imgId: {
+		imgId: {// 貌似没用
 	      type: Number,
 	      required: false
 	    },
@@ -1495,23 +1223,29 @@ Vue.component('aj-popup-upload', {
 	template: 
 		'<aj-layer>\
 			<h3>图片上传</h3>\
-			<ajaxjs-img-upload-perview style="width:420px;" :img-name="imgName" :img-id="imgId" :img-place="imgPlace" label-id="foo1" ref="uploadControl"></ajaxjs-img-upload-perview>\
-			<ajaxjs-fileupload-iframe :upload-url="uploadUrl" label-id="foo1" ref="uploadIframe"></ajaxjs-fileupload-iframe>\
+			<aj-xhr-upload ref="uploadControl" :action="uploadUrl" :is-img-upload="true" :hidden-field="imgName"\
+				:img-place="ajResources.commonAsset + \'/images/imgBg.png\'">\
+			</aj-xhr-upload>\
 			<div>上传限制：{{text.maxSize}}kb 或以下，分辨率：{{text.maxHeight}}x{{text.maxWidth}}</div>\
 		</aj-layer>',
 	mounted() {
-		// todo 是否不需要对象，而是逐个列出
-		this.text = this.$refs.uploadControl.$options.props.limit.default();
+		var obj = this.$refs.uploadControl;
+		
+		this.text = {
+			maxSize: obj.limitSize || 600,
+			maxHeight: obj.imgMaxHeight,
+			maxWidth: obj.imgMaxWidth
+		};
 	},
 	methods: {
 		/**
 		 * 显示上传控件
 		 * 
-		 * @paran {Function} callback 上传成功之后的回调函数
+		 * @param {Function} callback 上传成功之后的回调函数
 		 */
 		show(callback) {
 			if(callback)
-				this.$refs.uploadIframe.uploadOk_callback = callback;
+				this.$refs.uploadControl.uploadOk_callback = callback;
 			
 			this.$children[0].show();
 		}

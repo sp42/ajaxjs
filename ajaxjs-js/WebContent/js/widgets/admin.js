@@ -86,6 +86,53 @@ Vue.component('aj-admin-filter-panel', {
 		 </div>'
 });
 
+Vue.component('aj-admin-state', {
+	template: '<div>\
+					<div class="label">状态：</div>\
+					<label>\
+						<input name="stat" value="1" type="radio" :checked="checked == 1"/> 上线中 \
+					</label> \
+					<label>\
+						<input name="stat" value="0" type="radio" :checked="checked == 0" /> 已下线 \
+					</label> \
+					<label>\
+						<input name="stat" value="2" type="radio" :checked="checked == 2" /> 已删除\
+					</label>\
+				</div>',
+	props: {
+		checked: Number// 哪个选中了？
+	}
+});
+
+Vue.component('aj-admin-xsl', {
+	template: '<div style="float:left;margin-top: .5%;">\
+			<a :href="\'?downloadXSL=true&\' + params" download>\
+				<img :src="ajResources.commonAsset + \'/icon/excel.png\'" width="16" style="vertical-align: middle;" /> 下载 Excel 格式\
+			</a>\
+		</div>',
+	props: {
+		params: String,// 参数
+	}
+});
+
+Vue.component('aj-admin-control', {
+	template: '<td> <slot></slot>\
+			<a v-if="preview" :href="ajResources.ctx + preview + id + \'/\'" target="_blank">浏览</a>\
+			<a :href="\'../\' + id +\'/\'"><img :src="ajResources.commonAsset + \'/icon/update.gif\'" style="vertical-align: sub;" /> 编辑</a>\
+			<a href="javascript:;" @click="del(id, name)"><img :src="ajResources.commonAsset + \'/icon/delete.gif\'" style="vertical-align: sub;" /> 删除</a>\
+		</td>',
+	props: {
+		id: String,// 
+		preview: String,// 浏览的链接 
+		name: String // 实体的名称
+	},
+	methods: {
+		del(id, name) {
+			aj.admin.del(id, name);
+		}
+	}
+});
+
 aj.admin = {
 	del(id, title) {
 		aj.showConfirm('请确定删除记录：\n' + title + ' ？', () => {
@@ -107,5 +154,13 @@ aj.admin = {
 		}, {
 			status : status
 		});
+	},
+	
+	// 创建之后转向编辑界面
+	defaultAfterCreate(json) {
+		if(json && json.msg)
+			aj.alert.show(json.msg);
+				
+		window.isCreate && json && json.isOk && setTimeout(() => location.assign(json.newlyId + "/"), 2000);
 	}
 };

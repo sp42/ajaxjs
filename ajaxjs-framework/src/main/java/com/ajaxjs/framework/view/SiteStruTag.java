@@ -34,6 +34,10 @@ public class SiteStruTag extends SimpleTagSupport {
 	 * 列表标签
 	 */
 	private final static String LI = "<li%s><a href=\"%s/\">%s</a></li>";
+	/**
+	 * 连接后面没有斜杠
+	 */
+	private final static String LI_NO_END = "<li%s><a href=\"%s\">%s</a></li>";
 	private final static String LI_EXT = "<li%s><a href=\"%s/\">%s</a><ul>%s</ul></li></li>";
 
 	@Override
@@ -80,8 +84,7 @@ public class SiteStruTag extends SimpleTagSupport {
 		StringBuilder sb = new StringBuilder();
 		boolean hasSelected = false;
 		Object _customNavLi = request.getAttribute("customNavLi");
-		boolean showNavSubMenu = request.getAttribute("showNavSubMenu") != null
-				&& (boolean) request.getAttribute("showNavSubMenu");
+		boolean showNavSubMenu = request.getAttribute("showNavSubMenu") != null && (boolean) request.getAttribute("showNavSubMenu");
 		boolean customSubMenu = false;
 		String showNavSubMenuUl = null, showNavSubMenuLi = null;
 
@@ -116,8 +119,7 @@ public class SiteStruTag extends SimpleTagSupport {
 
 					if (showNavSubMenu) {
 						if (customSubMenu)
-							sb.append(String.format(_li, url, item.get("name"),
-									buildSubMenu(showNavSubMenuUl, showNavSubMenuLi, item, ctx)));
+							sb.append(String.format(_li, url, item.get("name"), buildSubMenu(showNavSubMenuUl, showNavSubMenuLi, item, ctx)));
 						else {
 							// 默认标签的菜单
 						}
@@ -130,21 +132,17 @@ public class SiteStruTag extends SimpleTagSupport {
 			}
 		}
 		if (_customNavLi == null) {
-			return String.format(LI, !hasSelected ? " class=\"home selected\"" : " class=\"home\"",
-					"".equals(ctx) ? "" : ctx, "首页") + sb.toString();
+			return String.format(LI, !hasSelected ? " class=\"home selected\"" : " class=\"home\"", "".equals(ctx) ? "" : ctx, "首页") + sb.toString();
 		} else {
 			String _li = _customNavLi.toString();
 			if (showNavSubMenu)
-				return String.format(_li.replace("class=\"", "class=\"home "), "".equals(ctx) ? "/" : ctx, "首页", "")
-						+ sb.toString();
+				return String.format(_li.replace("class=\"", "class=\"home "), "".equals(ctx) ? "/" : ctx, "首页", "") + sb.toString();
 			else
-				return String.format(_li.replace("class=\"", "class=\"home "), "".equals(ctx) ? "/" : ctx, "首页")
-						+ sb.toString();
+				return String.format(_li.replace("class=\"", "class=\"home "), "".equals(ctx) ? "/" : ctx, "首页") + sb.toString();
 		}
 	}
 
-	private static String buildSubMenu(String showNavSubMenuUl, String showNavSubMenuLi, Map<String, Object> item,
-			String ctx) {
+	private static String buildSubMenu(String showNavSubMenuUl, String showNavSubMenuLi, Map<String, Object> item, String ctx) {
 		StringBuilder sb = new StringBuilder();
 		@SuppressWarnings("unchecked")
 		List<Map<String, Object>> menu = (List<Map<String, Object>>) item.get(ListMap.CHILDREN);
@@ -224,8 +222,8 @@ public class SiteStruTag extends SimpleTagSupport {
 
 				String url = ctx + item.get(ListMap.PATH);
 				url = addParam(url, item);
-
 				boolean isSelected = sitestru.isCurrentNode(item, request);
+
 				if (showSubMenu) {
 					StringBuilder subMenu = new StringBuilder();
 					@SuppressWarnings("unchecked")
@@ -237,10 +235,9 @@ public class SiteStruTag extends SimpleTagSupport {
 							subMenu.append(String.format(LI, "", _url, "» " + m.get("name").toString()));
 						}
 
-					sb.append(String.format(LI_EXT, isSelected ? " class=\"selected\"" : "", url, item.get("name"),
-							subMenu.toString()));
+					sb.append(String.format(LI_EXT, isSelected ? " class=\"selected\"" : "", url, item.get("name"), subMenu.toString()));
 				} else
-					sb.append(String.format(LI, isSelected ? " class=\"selected\"" : "", url, item.get("name")));
+					sb.append(String.format(url.indexOf("?") != -1 ? LI_NO_END : LI, isSelected ? " class=\"selected\"" : "", url, item.get("name")));
 			}
 		}
 
@@ -263,7 +260,7 @@ public class SiteStruTag extends SimpleTagSupport {
 
 		Object obj = request.getAttribute("PAGE_Node");
 		if (obj == null) {
-			if (uri.equals(request.getContextPath() +"/") || uri.indexOf(ctx + "/index") != -1) { // 重复了 TODO
+			if (uri.equals(request.getContextPath() + "/") || uri.indexOf(ctx + "/index") != -1) { // 重复了 TODO
 				// 首页
 			} else {
 				System.err.println("不能渲染导航定位，该页面可能：1、未引用 head.jsp 创建 NODE 节点；2、未定义该路径之说明。");

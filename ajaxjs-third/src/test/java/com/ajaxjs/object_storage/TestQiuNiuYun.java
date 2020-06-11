@@ -96,4 +96,5 @@ public class TestQiuNiuYun {
 
 		uploadRequest.upload();
 	}
+	
 }

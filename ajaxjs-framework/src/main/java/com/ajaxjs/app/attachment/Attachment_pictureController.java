@@ -22,7 +22,7 @@ import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.object_storage.QiNiuYunUploadFile;
+import com.ajaxjs.object_storage.NosUploadFile;
 import com.ajaxjs.orm.SnowflakeIdWorker;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.io.ImageHelper;
@@ -93,7 +93,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 
 		UploadFileInfo info = new UploadFileInfo();
 		info.saveFileName = SnowflakeIdWorker.getId() + "";
-		QiNiuYunUploadFile u = new QiNiuYunUploadFile(request, info);
+		NosUploadFile u = new NosUploadFile(request, info);
 		u.upload();
 		info.fullPath = ConfigService.getValueAsString("uploadFile.imgPerfix") + info.saveFileName;
 

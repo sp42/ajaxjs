@@ -107,6 +107,7 @@
 				</c:when>
 				<c:otherwise>
 					文/${empty info.author ? '佚名' : info.author}  
+					${not empty catalogs ? '<br />分类/': ''} ${not empty catalogs ? catalogs[info.catalogId].name : ''}
 					<c:if test="${not empty info.source}">出处/${info.source}</c:if>
 					<c:if test="${not empty info.sourceUrl}"><a href="${info.sourceUrl}" target="_blank"> 源网址 &#128279;</a></c:if>
 					<br />
@@ -170,10 +171,9 @@
 					</td>
 				</tr>
 			</table>
-			<script>
-				new Vue({ el : '.aj-pageHelper' });
-				
-				window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+			<script> 
+				new Vue({el : '.aj-pageHelper'});
+				window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://static-163yun.ajaxjs.com/bs/static/api/share.js?cdnversion='+~(-new Date()/36e5)];
 			</script>
 </c:if>
 
