@@ -182,11 +182,11 @@ aj.throttleV2 = function(fn, delay, mustRunDelay) {
  * @param {Object}
  *            源对象
  */
-aj.apply = function(a, b) {
+aj.apply = function(a, b, c) {
 	for ( var i in b)
 		a[i] = b[i];
 	
-	return a;
+	return c ? aj.apply(a, c) : a;
 }
 
 /*

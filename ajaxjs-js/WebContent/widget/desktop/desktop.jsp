@@ -30,11 +30,11 @@
 			}	
 		</style> 
 		
-		<link rel="stylesheet/less" data-global-vars='{"assetFilePath": "\"/myblog/asset\"" }' type="text/css" href="/ajaxjs-web-js/widget/desktop/desktop.less" />
+		<link rel="stylesheet/less" data-global-vars='{"assetFilePath": "\"/myblog/asset\"" }' type="text/css" href="/ajaxjs-js/widget/desktop/desktop.less" />
 	
-	    <script src="http://127.0.0.1:8080/ajaxjs-web-js/js/libs/vue.js"></script>
-	    <script src="http://127.0.0.1:8080/ajaxjs-web-js/js/libs/less.min.js"></script>
-	    <script src="http://127.0.0.1:8080/ajaxjs-web-js/js/ajaxjs-base.js"></script>
+		<script src="https://lib.baomitu.com/less.js/3.0.4/less.min.js"></script>
+	    <script src="https://lib.baomitu.com/vue/2.6.11/vue.js"></script>
+	    <script src="http://127.0.0.1:8080/ajaxjs-js/js/ajaxjs-base.js"></script>
 	    
 	    <script>
 	   		aj.Vue = {};
