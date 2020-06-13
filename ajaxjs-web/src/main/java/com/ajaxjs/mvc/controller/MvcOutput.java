@@ -200,9 +200,6 @@ public class MvcOutput extends HttpServletResponseWrapper {
 		if (isSet)
 			return;
 
-		if (model != null)
-			request.saveToReuqest(model);
-
 		if (result == null) { // 没数据
 			Class<?> reClz = method.getReturnType();
 
@@ -240,8 +237,9 @@ public class MvcOutput extends HttpServletResponseWrapper {
 					if (Version.isDebug) {
 						String m = method.toString().replaceAll("public java.lang.", "");
 						m = m.replaceAll("String ", "");
-						LOGGER.info("执行 {0} 逻辑完成，\n                 现输出页面模版 " + result, m);
+						LOGGER.info("执行[{0}]逻辑完成，\n               现输出页面模版[{1}]", m, result);
 					}
+					
 					setTemplate(str).go(request);
 				}
 			} else if (result instanceof Map) {

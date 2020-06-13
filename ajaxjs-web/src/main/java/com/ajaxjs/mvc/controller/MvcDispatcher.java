@@ -187,6 +187,9 @@ public class MvcDispatcher implements Filter {
 				LOGGER.warning("异常可能的原因：@Bean注解的名称重复，请检查 IOC 中的是否重名");
 		}
 
+		if (model != null)
+			request.saveToReuqest(model);
+		
 		boolean isDoOldReturn = true; // 是否执行默认的处理 response 方法
 
 		if (isDoFilter) {

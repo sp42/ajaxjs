@@ -86,7 +86,7 @@ public class ControllerScanner extends ScanClass<IController> {
 		Path path = clz.getAnnotation(Path.class); // 总路径
 
 		if (path == null && !Modifier.isAbstract(clz.getModifiers())) {
-			LOGGER.warning("{0} 不存在任何 Path 信息！No Path info!", clz.toString());
+			LOGGER.warning("[{0}]不存在任何 Path 信息！No Path info!", clz.toString());
 			return false;
 		}
 
@@ -101,7 +101,7 @@ public class ControllerScanner extends ScanClass<IController> {
 	 */
 	public static String getRootPath(Class<? extends IController> clz) {
 		Path a = clz.getAnnotation(Path.class);
-		Objects.requireNonNull(a, "控制器类应该至少设置一个 Path 注解。");
+		Objects.requireNonNull(a, clz + "控制器类应该至少设置一个 Path 注解。");
 		String rootPath = a.value();// 控制器类上定义的 Path 注解总是从根目录开始的。 the path in class always starts from top 1
 
 		return rootPath.replaceAll("^/", ""); // remove the first / so that the array would be right length
