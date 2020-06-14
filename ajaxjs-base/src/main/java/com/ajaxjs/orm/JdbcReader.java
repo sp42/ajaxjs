@@ -98,7 +98,7 @@ public class JdbcReader {
 	 * @return RS 转换后的目标结果
 	 */
 	public static <T> T select(Connection conn, String sql, HasZeroResult hasZeoResult, ResultSetProcessor<T> processor, Object... params) {
-		LOGGER.infoYellow("SQL-->" + JdbcUtil.printRealSql(sql, params));
+		LOGGER.infoYellow("执行 SQL-->[" + JdbcUtil.printRealSql(sql, params) + "]");
 
 		try (PreparedStatement ps = conn.prepareStatement(sql)) {
 			if (params != null && params.length > 0) {

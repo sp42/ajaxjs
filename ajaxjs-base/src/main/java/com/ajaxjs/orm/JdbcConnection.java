@@ -134,7 +134,7 @@ public class JdbcConnection {
 			if (getConnection() == null || getConnection().isClosed()) {
 				Connection conn = getConnectionByJNDI(jndi);
 				setConnection(conn);
-				LOGGER.info("数据库连接详情：" + conn);
+				LOGGER.info("成功连接数据库[{0}]", conn);
 			}
 		} catch (SQLException e) {
 			LOGGER.warning(e);
