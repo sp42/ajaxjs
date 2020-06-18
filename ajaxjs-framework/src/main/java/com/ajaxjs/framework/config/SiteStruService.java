@@ -128,7 +128,7 @@ public class SiteStruService implements ServletContextListener {
 		String startUp_Class = ConfigService.getValueAsString("startUp_Class");
 
 		if (!CommonUtil.isEmptyString(startUp_Class)) {
-			LOGGER.info("执行 Servlet 启动回调");
+			LOGGER.info("执行 Servlet 启动回调[{0}]", startUp_Class);
 
 			try {
 				Class<ServletStartUp> clz = ReflectUtil.getClassByName(startUp_Class, ServletStartUp.class);

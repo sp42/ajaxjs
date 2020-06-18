@@ -3,6 +3,7 @@ package com.ajaxjs.user.service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 import javax.servlet.http.HttpServletRequest;
@@ -77,24 +78,23 @@ public class UserAddressService extends BaseService<UserAddress> {
 	/**
 	 * 初始化一个 js 引擎并缓存之
 	 * 
-	 * @param r 请求对象，用来获取 
+	 * @param r 请求对象，用来获取
 	 */
 	public static void initData(HttpServletRequest r) {
 		if (UserAddressService.AREA_DATA == null) {
 			InputStream in = r.getServletContext().getResourceAsStream("/asset/js/China_AREA_full.js");
+			Objects.requireNonNull(in, "未准备好地址 JSON 文件");
+			
+			JsEngineWrapper js = new JsEngineWrapper();
+			js.eval(IoHelper.byteStream2string(in));
 
-			if (in != null) {
-				JsEngineWrapper js = new JsEngineWrapper();
-				js.eval(IoHelper.byteStream2string(in));
-				
-				try {
-					in.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				UserAddressService.AREA_DATA = js;
+			try {
+				in.close();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
+
+			UserAddressService.AREA_DATA = js;
 		}
 	}
 }

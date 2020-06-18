@@ -91,8 +91,7 @@ public class OrderController extends BaseController<OrderInfo> {
 	@POST
 	@Path("miniApp")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	public String processOrder_MiniApp(@FormParam("addressId") @NotNull long addressId,
-			@FormParam("cartIds") @NotNull String _cartIds, MvcRequest r, ModelAndView mv) {
+	public String processOrder_MiniApp(@FormParam("addressId") @NotNull long addressId, @FormParam("cartIds") @NotNull String _cartIds, MvcRequest r, ModelAndView mv) {
 		LOGGER.info("处理订单 结账");
 
 		UserAddressService.initData(r);
@@ -105,8 +104,7 @@ public class OrderController extends BaseController<OrderInfo> {
 
 	@POST
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	public String processOrder(@FormParam("addressId") @NotNull long addressId,
-			@NotNull @FormParam("payType") int payType, @FormParam("cartIds") @NotNull String _cartIds,
+	public String processOrder(@FormParam("addressId") @NotNull long addressId, @NotNull @FormParam("payType") int payType, @FormParam("cartIds") @NotNull String _cartIds,
 			HttpServletRequest r, ModelAndView mv) throws ServiceException, AlipayApiException {
 		LOGGER.info("处理订单 结账");
 
@@ -121,15 +119,13 @@ public class OrderController extends BaseController<OrderInfo> {
 	@POST
 	@Path("directOrder")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	public String directProcessOrder(@FormParam("addressId") @NotNull long addressId,
-			@NotNull @FormParam("payType") int payType, @NotNull @FormParam("goodsId") long goodsId,
-			@NotNull @FormParam("formatId") long formatId, @NotNull @FormParam("goodsNumber") int goodsNumber,
-			HttpServletRequest r, ModelAndView mv) throws ServiceException, AlipayApiException {
+	public String directProcessOrder(@FormParam("addressId") @NotNull long addressId, @NotNull @FormParam("payType") int payType, @NotNull @FormParam("goodsId") long goodsId,
+			@NotNull @FormParam("formatId") long formatId, @NotNull @FormParam("goodsNumber") int goodsNumber, HttpServletRequest r, ModelAndView mv)
+			throws ServiceException, AlipayApiException {
 		LOGGER.info("处理订单 结账-直接单个商品");
 
 		UserAddressService.initData(r);
-		OrderInfo order = service.processOrder(BaseUserController.getUserId(), addressId, goodsId, formatId,
-				goodsNumber, payType);
+		OrderInfo order = service.processOrder(BaseUserController.getUserId(), addressId, goodsId, formatId, goodsNumber, payType);
 		service.onProcessOrderDone(order);
 
 		return Pay.doPay(order, mv);

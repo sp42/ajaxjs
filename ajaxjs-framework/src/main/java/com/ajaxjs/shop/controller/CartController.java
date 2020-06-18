@@ -62,8 +62,7 @@ public class CartController extends BaseController<Cart> {
 	@Path("/shop/cart/checkout")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
-	public String checkoutForApi(@QueryParam("addressId") @NotNull long addressId,
-			@QueryParam("cartIds") @NotNull String cartIds) {
+	public String checkoutForApi(@QueryParam("addressId") @NotNull long addressId, @QueryParam("cartIds") @NotNull String cartIds) {
 		LOGGER.info("Checkout");
 		return toJson(service.checkout(BaseUserController.getUserId(), addressId, cartIds.split("_")));
 	}
@@ -113,8 +112,7 @@ public class CartController extends BaseController<Cart> {
 	@GET
 	@Path("list")
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam("userId") long userId,
-			ModelAndView mv) {
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam("userId") long userId, ModelAndView mv) {
 		LOGGER.info("后台-购物车-列表");
 		page(mv, service.findPagedList(start, limit, userId));
 		return jsp("shop/cart-admin-list");

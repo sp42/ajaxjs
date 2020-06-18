@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import javax.servlet.ServletContext;
+
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.PageResult;
@@ -169,6 +171,12 @@ public class CatalogService extends BaseService<Catalog> {
 		Map<Long, BaseModel> catalogs = idAskey(new CatalogService().findAllListByParentId(id));
 //		Map<Long, BaseModel> catalogs = idAskey(new CatalogService().findByParentId(id));
 		mv.put(viewId, catalogs);
+	}
+	
+	public static void idAsKey(int id, ServletContext cxt, String viewId) {
+		Map<Long, BaseModel> catalogs = idAskey(new CatalogService().findAllListByParentId(id));
+//		Map<Long, BaseModel> catalogs = idAskey(new CatalogService().findByParentId(id));
+		cxt.setAttribute(viewId, catalogs);
 	}
 
 	/**

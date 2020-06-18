@@ -9,11 +9,13 @@ import java.util.function.Function;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
+import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.shop.dao.CartDao;
 import com.ajaxjs.shop.model.Cart;
+import com.ajaxjs.util.CommonUtil;
 
 /**
  * 
@@ -76,7 +78,7 @@ public class CartService extends BaseService<Cart> {
 
 		return super.delete(bean);
 	}
-	
+
 	@Resource("OrderService")
 	OrderService orderService;
 
@@ -93,10 +95,10 @@ public class CartService extends BaseService<Cart> {
 		map.put("actualPrice", actualPrice);
 		map.put("checkedAddress", "sssssssssssss"); // TODO
 		map.put("checkedGoodsList", null);
-		
+
 		return map;
 	}
-	
+
 	/**
 	 * 计算总价
 	 * 
@@ -105,6 +107,9 @@ public class CartService extends BaseService<Cart> {
 	 */
 	public static BigDecimal getActualPrice(List<Cart> carts) {
 		BigDecimal actualPrice = BigDecimal.valueOf(0);
+
+		if (CommonUtil.isNull(carts))
+			throw new IllegalArgumentException("没有任何购物车或者已支付");
 
 		for (Cart cart : carts) {
 			BigDecimal goodsAmount = cart.getPrice().multiply(BigDecimal.valueOf(cart.getGoodsNumber()));
