@@ -235,11 +235,14 @@ public class MvcOutput extends HttpServletResponseWrapper {
 						str += ".jsp";
 
 					if (Version.isDebug) {
-						String m = method.toString().replaceAll("public java.lang.", "");
+						String m = method.toString().replaceAll("public java.lang.", "").replaceAll("\\([\\w\\.\\s,]+\\)", "()");
 						m = m.replaceAll("String ", "");
-						LOGGER.info("执行[{0}]逻辑完成，\n               现输出页面模版[{1}]", m, result);
+						String[] arr = m.split("\\.");
+						m = arr[arr.length - 2] + "." + arr[arr.length - 1];
+						
+						LOGGER.info("执行[{0}]控制器，转到[{1}]视图", m, result);
 					}
-					
+
 					setTemplate(str).go(request);
 				}
 			} else if (result instanceof Map) {
