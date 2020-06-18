@@ -1,41 +1,367 @@
-
-.info-tab{
-	clear:both;
-}
-.goods-info{
+// 商城模块
+.goods-info {
 	.gallery {
-		float:left;
-		width:40%;
+		float: left;
+		width: 40%;
 	}
-	
-	.info-main{
-		float:left;
-		width:60%;
-		text-align:left;
-		h3{
+	.info-main {
+		float: left;
+		width: 60%;
+		text-align: left;
+		h3 {
 			font-weight: 500;
 			font-size: 2.4rem;
 		}
-		.price{
-			color:@mainColor;
+		.price {
+			color: @mainColor;
 			font-size: 1.5rem;
-			font-weight:bold;
+			font-weight: bold;
 		}
 		button {
 			.aj-btn;
 		}
-		
-		
-       	li{
-       		border:1px solid lightgray;
-       		margin:15px 0;
-       		padding:0 8px 0 0;
-       		width: fit-content;
-       		border-radius:5px;
-       		cursor: pointer;
-	       	&.active{
-	       		border-color:gray;
-	       	}
-       	}
+		li {
+			border: 1px solid lightgray;
+			margin: 15px 0;
+			padding: 0 8px 0 0;
+			width: fit-content;
+			border-radius: 5px;
+			cursor: pointer;
+			&.active {
+				border-color: gray;
+			}
+		}
 	}
+	section {
+		overflow: hidden;
+		.gallery {
+			float: left;
+			width: 40%;
+			height: 300px;
+			a {
+				height: 300px;
+				width: 480px;
+				text-align: center;
+				img {
+					max-height: 100%;
+					width: initial;
+				}
+			}
+		}
+		.info {
+			float: right;
+			width: 57%;
+			padding-left: 3%;
+			h3 {
+				font-weight: 500;
+				font-size: 2.4rem;
+			}
+			.subTitle {
+				font-size: 1.1rem;
+				color: gray;
+				letter-spacing: 3px;
+				margin: 2% 0;
+			}
+			.price {
+				color: @mainColor;
+				font-size: 1.5rem;
+				font-weight: bold;
+				span {
+					font-size: .9rem;
+					color: gray;
+				}
+			}
+			li {
+				border: 1px solid lightgray;
+				margin: 15px 0;
+				padding: 5px 8px;
+				width: fit-content;
+				border-radius: 5px;
+				cursor: pointer;
+				&.active {
+					border-color: gray;
+				}
+			}
+			input[type=number] {
+				padding: 14px 10px;
+				font-family: poppins, -apple-system, BlinkMacSystemFont, segoe ui, Roboto, helvetica neue, Arial, sans-serif;
+				font-size: 20px;
+				font-weight: 500;
+				color: #151515;
+				text-align: center;
+				width: 60px;
+				height: 40px;
+				line-height: 1.6;
+				letter-spacing: .025em;
+				border: 0;
+				outline: 0;
+				border-radius: 6px;
+				-webkit-appearance: none;
+				-moz-appearance: textfield;
+				background-color: #f5f5f5;
+				transition: .3s ease-in-out;
+				margin-right: 10px;
+			}
+			.stepper {
+				span {
+					display: block;
+					float: right;
+					width: 32px;
+					height: 32px;
+					font-size: 24px;
+					font-weight: 400;
+					font-family: material design icons;
+					line-height: 32px;
+					border-radius: 6px;
+					background-color: #f5f5f5;
+					text-align: center;
+					cursor: pointer;
+					color: gray;
+					&:hover {
+						color: black;
+					}
+				}
+			}
+			button {
+				.aj-btn;
+			}
+		}
+	}
+	.info-tab {
+		margin: 2% 0;
+		clear: both;
+		li {
+			list-style: disc;
+			list-style-position: inside;
+		}
+		p {
+			text-indent: 2em;
+			.aj-p;
+		}
+	}
+}
+
+.goods-list {
+	.ajaxjs-ul-list-2cols;
+	margin-bottom:5%;
+		
+ 	li{
+		height:270px;
+		position: relative;
+		text-align: center;
+		margin:6% 2% 0% 0;
+		width: 32%;
+		padding-top:2%;
+		border:1px solid lightgray;
+		
+		&:nth-child(3),&:nth-child(6), &:nth-child(9) {
+			margin-right:0;
+		}
+		&:hover {
+			border-color:@mainColor;
+		}
+	}
+	
+	h5 {
+		position: absolute;
+		bottom: 50px;
+		left:0;
+		font-size:1rem;
+		width: 100%;
+	}
+	div{
+		position: absolute;
+		bottom: 20px;
+		left:0;
+		font-size:1rem;
+		width: 100%;
+	}
+}
+
+.shop-cart {
+	.empty {
+		margin: 5% auto;
+		width: 400px;
+		img {
+			width: 160px;
+			vertical-align: middle;
+		}
+	}
+	.checkout {
+		float: right;
+		width: 42%;
+		margin: 2% 0;
+		&>div {
+			width: 32%;
+			display: inline-block;
+			text-align: center;
+		}
+		.txt {
+			color: gray;
+		}
+		.price {
+			font-size: 1.3rem;
+		}
+	}
+	table {
+		margin: 0 auto;
+		border: 1px solid lightgray;
+		width: 98%;
+		border-spacing: 0;
+		thead th {
+			border-bottom: 1px solid lightgray;
+		}
+		td,
+		th {
+			padding: 2% 0;
+			text-align: center;
+			min-width: 100px;
+		}
+		th {
+			font-weight: 500;
+			color: #777;
+			font-size: 1.1rem;
+			letter-spacing: 2px;
+		}
+		.price {
+			font-size: 1.1rem;
+			letter-spacing: .075em;
+			font-family: poppins, -apple-system, BlinkMacSystemFont, segoe ui, Roboto, helvetica neue, Arial, sans-serif;
+		}
+		input[type=number] {
+			text-align: center;
+			border-radius: 5px;
+			outline: none;
+			border: 1px solid lightgray;
+			height: 40px;
+			font-size: 1.1rem;
+		}
+	}
+	.info {
+		img {
+			vertical-align: middle;
+			margin-right: 5%;
+			min-height: 80px;
+		}
+		h3 {
+			font-size: 1rem;
+			font-weight: bold;
+			color: @mainColor;
+			max-width: 180px;
+		}
+		div {
+			display: inline-block;
+			vertical-align: middle;
+		}
+	}
+}
+
+.shop-checkout {
+	section {
+		clear: both;
+		overflow: hidden;
+	}
+	.payment {
+		table {
+			width: 680px;
+			margin: 0 auto;
+			font-size: 1.1rem;
+			td {
+				padding: 0 1%;
+			}
+		}
+		img {
+			width: 200px;
+		}
+		td {
+			text-align: center;
+			label {
+				cursor: pointer;
+			}
+		}
+	}
+	.cart {
+		table.list {
+			width: 100%;
+			border-spacing: 0;
+			td,
+			th {
+				padding: 2%;
+				text-align: center;
+				color: gray;
+			}
+			th {
+				font-size: 1rem;
+				letter-spacing: 3px;
+				border-bottom: 2px gray solid;
+			}
+			td {
+				border-bottom: 1px lightgray solid;
+			}
+			.info {
+				text-align: left;
+				img {
+					vertical-align: middle;
+					margin-right: 5%;
+					width: 80px;
+					//min-height:80px;
+				}
+				h3 {
+					font-size: 1rem;
+					font-weight: bold;
+					color: @mainColor;
+					margin-bottom: 3%;
+					//max-width: 180px;
+				}
+				div {
+					display: inline-block;
+					vertical-align: middle;
+				}
+			}
+		}
+	}
+	h4 {
+		text-align: left;
+		margin: 3% 0;
+		font-size: 1.1rem;
+		font-weight: 700;
+		letter-spacing: .5em;
+	}
+	.total {
+		font-weight: bold;
+		margin: 2%;
+	}
+	.numbers {
+		margin: 2%;
+		text-align: left;
+		float: left;
+	}
+	.address table {
+		width: 900px;
+	}
+	.cart {
+		.list {
+			margin: 0 auto;
+		}
+	}
+	.total {
+		font-size: 1rem;
+		width: 200px;
+		td {
+			padding: 2%;
+		}
+	}
+	.btn {
+		clear: both;
+		margin-bottom: 12%;
+		button {
+			.aj-btn;
+			float: right;
+			margin: 2%;
+		}
+	}
+}
+
+.info-tab {
+	clear: both;
 }
