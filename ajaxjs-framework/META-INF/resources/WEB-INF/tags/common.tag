@@ -1,14 +1,10 @@
-
 <%@tag pageEncoding="UTF-8" import="com.ajaxjs.framework.config.ConfigService" trimDirectiveWhitespaces="true" %>
 <%@taglib uri="/ajaxjs" 		prefix="c" %>
 <%@taglib uri="/ajaxjs_config"	prefix="config"%>
 <%@taglib tagdir="/WEB-INF/tags/" prefix="tagfile"%>
-
 <%@attribute name="type" required="true" type="String" description="标签类型"%>
 
-
 <%
-
 	// 要写 java 所以不用 jstl tag
 	if("footer".equals(jspContext.getAttribute("type"))) {
 		if (request.getAttribute("requestTimeRecorder") != null) {
@@ -65,7 +61,9 @@
 						</h3>
 						<c:if test="${not empty item.cover}">
 							<a href="${item.id}/">
-								<img src="${item.cover.startsWith('http') ? item.cover : aj_allConfig.uploadFile.imgPerfix.concat(item.cover)}" />
+								<div class="thumb">
+									<img src="${item.cover.startsWith('http') ? item.cover : aj_allConfig.uploadFile.imgPerfix.concat(item.cover)}" />
+								</div>
 							</a>
 						</c:if>
 						<p>${item.intro}……</p>

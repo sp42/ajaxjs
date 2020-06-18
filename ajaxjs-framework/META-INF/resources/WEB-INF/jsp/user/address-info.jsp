@@ -10,32 +10,55 @@
 			padding:2% 0;
 		}
 	</style>
-	<form class="aj-form" action="." method="post">
 	
-		<table width="100%">
-			<tr>
-				<td>收货人</td><td><input type="text" name="name" value="${info.name}" placeholder="请输入您的真实姓名" required="required" /></td>
-				<td>联系电话</td><td><input type="text" name="phone" value="${info.phone}" placeholder="请输入手机或固话" required="required" /></td>
-			</tr>
-			<tr>
-				<td>地区</td><td colspan="3" class="area"><aj-china-area></aj-china-area></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td colspan="3">
-					<input type="text" name="name" value="${info.address}" placeholder="请输入地址，注意不要再输入省市区" required size="50" />
-				</td>
-			</tr>
-			<tr>
-				<td>默认地址</td><td>
-					<label><input type="radio" name="isDefault" checked="checked" /> 是</label> 
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<label><input type="radio" name="isDefault" /> 否</label> 
-				</td>
-				<td>备注</td><td><input type="text" name="content" /></td>
-			</tr>
-		</table>
-	
+	<style>
+		.aj-form select{
+		    width: 130px!important;
+		}
+		button{
+		    line-height: 100%;
+		}
+	</style>
+	<form class="aj-form" action="." method="post" style="width:800px;">
+		<dl style="width: 50%;">
+			<label>
+				<dt>收货人</dt>
+				<dd>
+					<input type="text" name="name" value="${info.name}" placeholder="请输入您的真实姓名" required />
+				</dd>
+			</label>
+		</dl>
+		<dl style="width: 50%;">
+			<label>
+				<dt>联系电话</dt>
+				<dd>
+					<input type="text" name="phone" value="${info.phone}" placeholder="请输入手机或固话" required />
+				</dd>
+			</label>
+		</dl>
+		<dl>
+			<dt>地区</dt>
+			<dd class="area">
+				<aj-china-area province-code="${info.locationProvince}" city-code="${info.locationCity}" district-code="${info.locationDistrict}">
+				</aj-china-area>
+				<br /> 
+				<input type="text" size="70" name="address" value="${info.address}" required placeholder="请输入详细地址" />
+			</dd>
+		</dl>
+		<dl>
+			<dt>默认地址</dt>
+			<dd>
+				<label><input type="radio" name="isDefault" checked="checked" /> 是</label> 
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<label><input type="radio" name="isDefault" /> 否</label> 
+			</dd>
+		</dl>
+		<dl>
+			<dt>备注</dt>
+			<dd>
+				<input type="text" name="content" size="70" />
+			</dd>
+		</dl>
 		<dl>
 			<dt></dt>
 			<dd class="btns">

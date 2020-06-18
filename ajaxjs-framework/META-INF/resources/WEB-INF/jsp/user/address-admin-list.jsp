@@ -73,7 +73,7 @@
 						</a>
 					</td>
 					<td>
-						<a href="${ctx}/user/info/${current.userId}/">
+						<a href="${ctx}/admin/user/${current.userId}/">
 							<img src="${commonAssetIcon}/user.png" style="width:16px;vertical-align: sub;" />用户详情
 						</a> 
 						<a href="javascript:aj.admin.del('${current.id}', '${current.name}');">
