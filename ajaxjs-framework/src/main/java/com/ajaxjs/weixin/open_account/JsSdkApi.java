@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
+import com.ajaxjs.web.UserAgent;
 
 /**
  * 
@@ -19,20 +20,30 @@ import com.ajaxjs.util.Encode;
  *
  */
 public class JsSdkApi {
-	public static void init(HttpServletRequest request) {
-		if (TokenMgr.instance == null) {
-			String appId = ConfigService.getValueAsString("wx_open.appId");
-			String appSecret = ConfigService.getValueAsString("wx_open.appSecret");
-			TokenMgr.instance = new TokenMgr(appId, appSecret);
-		}
+	public static boolean init(HttpServletRequest request) {
+		boolean isWeixin = new UserAgent(request).isWeixin();
+		if (isWeixin) {
+			try {
+				if (TokenMgr.instance == null) {
+					String appId = ConfigService.getValueAsString("wx_open.appId");
+					String appSecret = ConfigService.getValueAsString("wx_open.appSecret");
+					TokenMgr.instance = new TokenMgr(appId, appSecret);
+				}
 
-		// 获取当前页面的 url
-		String url = request.getScheme() + "://" + request.getServerName() + request.getRequestURI();
-		if (request.getQueryString() != null)
-			url += "?" + request.getQueryString();
+				// 获取当前页面的 url
+				String url = (request.getRemotePort() != 80 ? "https" : request.getScheme()) + "://" + request.getServerName() + request.getRequestURI();
+				if (request.getQueryString() != null)
+					url += "?" + request.getQueryString();
 
-		Map<String, String> map = generateSignature(url, TokenMgr.instance.getTicket());
-		request.setAttribute("map", map);
+				Map<String, String> map = generateSignature(url, TokenMgr.instance.getTicket());
+				request.setAttribute("map", map);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			return true;
+		} else
+			return false;
 	}
 
 	/**
