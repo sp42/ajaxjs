@@ -159,4 +159,13 @@ public class UserAgent {
 	public boolean isPhone() {
 		return isAndroid() || isIOS();
 	}
+
+	/**
+	 * 是否微信内置浏览器
+	 * 
+	 * @return
+	 */
+	public boolean isWeixin() {
+		return ua.contains("micromessenger");
+	}
 }

@@ -172,6 +172,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	 * 里面存东西就是向它里面的Map存东西的，然后 ThreadLocal 把这个 Map 挂到当前的线程底下，这样 Map 就只属于这个线程了
 	 */
 	private static ThreadLocal<HttpServletRequest> threadLocalRequest = new ThreadLocal<>();
+	
 	private static ThreadLocal<HttpServletResponse> threadLocalResponse = new ThreadLocal<>();
 
 	/**
