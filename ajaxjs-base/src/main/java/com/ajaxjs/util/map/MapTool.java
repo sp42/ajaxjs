@@ -176,6 +176,10 @@ public class MapTool {
 		return _map;
 	}
 
+	public static Map<String, Object> as(Map<String, String[]> map) {
+		return as(map, arr -> MappingValue.toJavaValue(arr[0]));
+	}
+
 	// --------------------------------------------------------------------------------------------------
 	// -----------------------------------------------Bean-----------------------------------------------
 	// --------------------------------------------------------------------------------------------------
@@ -204,8 +208,7 @@ public class MapTool {
 
 				fn.item(key, value, property);
 			}
-		} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
+		} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			LOGGER.warning(e);
 		}
 	}

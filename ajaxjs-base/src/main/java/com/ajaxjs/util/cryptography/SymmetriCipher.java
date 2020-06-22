@@ -27,7 +27,7 @@ import com.ajaxjs.util.Encode;
  * @author sp42 frank@ajaxjs.com
  *
  */
-public class Symmetri_Cipher {
+public class SymmetriCipher {
 	private final static CipherInfo AES = new CipherInfo("AES", 128);
 
 	private final static CipherInfo DES = new CipherInfo("DES", 56);
