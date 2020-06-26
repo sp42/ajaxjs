@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.user.service.TokenMaker;
-import com.ajaxjs.util.cryptography.Symmetri_Cipher;
+import com.ajaxjs.util.cryptography.SymmetriCipher;
 import com.ajaxjs.weixin.open_account.model.BaseModel;
 
 /**
@@ -52,7 +52,7 @@ public class UserLoginToken extends BaseModel {
 	 * @return 0=openid,1 = userid
 	 */
 	public static Object[] decodeSessionId(String str) {
-		String s = Symmetri_Cipher.AES_Decrypt(str, ConfigService.getValueAsString("mini_program.SessionId_AesKey"));
+		String s = SymmetriCipher.AES_Decrypt(str, ConfigService.getValueAsString("mini_program.SessionId_AesKey"));
 		Object[] r = new Object[2];
 
 		try {

@@ -11,7 +11,7 @@ import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.FilterAction;
 import com.ajaxjs.mvc.filter.FilterAfterArgs;
 import com.ajaxjs.user.service.TokenMaker;
-import com.ajaxjs.util.cryptography.Symmetri_Cipher;
+import com.ajaxjs.util.cryptography.SymmetriCipher;
 
 /**
  * 简单的接口合法性校验，基于 AES
@@ -32,7 +32,7 @@ public class ApiAllowRequestCheck implements FilterAction {
 			token = request.getParameter(TOKEN);
 		Objects.requireNonNull(token, "缺少 token 参数，请放置 HTTP Header 请求中或 QueryString 中");
 
-		String decrypted = Symmetri_Cipher.AES_Decrypt(token, ConfigService.getValueAsString("System.api.AES_Key"));
+		String decrypted = SymmetriCipher.AES_Decrypt(token, ConfigService.getValueAsString("System.api.AES_Key"));
 
 		return TokenMaker.checkTimespam(ConfigService.getValueAsInt("System.api.timeout"), null).test(decrypted);
 	}

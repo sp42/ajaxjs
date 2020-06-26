@@ -6,11 +6,11 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.util.cryptography.Symmetri_Cipher;
+import com.ajaxjs.util.cryptography.SymmetriCipher;
 
 public class TokenMaker {
 	public static Function<String, String> encryptAES(String key) {
-		return str -> Symmetri_Cipher.AES_Encrypt(str, key);
+		return str -> SymmetriCipher.AES_Encrypt(str, key);
 	}
 
 	public static String addSalt(String str) {
@@ -70,7 +70,7 @@ public class TokenMaker {
 		String encrypted = fn.apply(TOKEN_TPL);
 		System.out.println(encrypted);
 
-		String decrypted = Symmetri_Cipher.AES_Decrypt(encrypted, "abc");
+		String decrypted = SymmetriCipher.AES_Decrypt(encrypted, "abc");
 
 		if (decrypted != null) {
 			String[] arr = decrypted.split("-");

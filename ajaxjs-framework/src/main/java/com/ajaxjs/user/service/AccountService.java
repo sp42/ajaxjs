@@ -13,7 +13,7 @@ import com.ajaxjs.net.mail.Mail;
 import com.ajaxjs.user.UserHelper;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.util.Encode;
-import com.ajaxjs.util.cryptography.Symmetri_Cipher;
+import com.ajaxjs.util.cryptography.SymmetriCipher;
 
 /**
  * 账号服务
@@ -68,7 +68,7 @@ public class AccountService {
 	 * @return 用户 id
 	 */
 	public static Long checkEmail_VerifyToken(String token, String email) {
-		String decrypted = Symmetri_Cipher.AES_Decrypt(token, ConfigService.getValueAsString("System.api.AES_Key"));
+		String decrypted = SymmetriCipher.AES_Decrypt(token, ConfigService.getValueAsString("System.api.AES_Key"));
 
 		if (decrypted != null) {
 			String[] arr = decrypted.split("-");
