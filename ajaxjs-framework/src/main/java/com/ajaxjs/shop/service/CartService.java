@@ -9,7 +9,6 @@ import java.util.function.Function;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.Repository;
-import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.controller.MvcRequest;

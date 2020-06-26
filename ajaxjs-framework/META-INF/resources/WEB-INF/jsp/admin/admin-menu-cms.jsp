@@ -75,6 +75,7 @@
 		<li><a target="iframepage" href="${ctx}/admin/config/site/">基本信息</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/config/siteStru/">层次结构</a></li>
 		<li><a target="iframepage" href="${ctx}/admin/page_editor/">页面编辑</a></li>
+		<li><a target="iframepage" href="${ctx}/admin/website_tongji/">网站统计</a></li>
 	</ul>
 </li>
 <%}%>
