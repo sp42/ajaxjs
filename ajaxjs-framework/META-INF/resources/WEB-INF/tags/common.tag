@@ -44,6 +44,18 @@
 				©Copyright ${FOOTER_YEAR} 版权所有， ${aj_allConfig.clientFullName} &nbsp; ${empty requestTimeRecorder ? '' : '请求完成耗时：'.concat(requestTimeRecorder).concat('秒') }
 			</div>
 		</div>
+		<c:if test="${not empty aj_allConfig.baidu_tongji.scriptId}">
+			<!-- 百度网站统计 -->
+			<script>
+				var _hmt = _hmt || [];
+				(function() {
+				  var hm = document.createElement("script");
+				  hm.src = "https://hm.baidu.com/hm.js?${aj_allConfig.baidu_tongji.scriptId}";
+				  var s = document.getElementsByTagName("script")[0]; 
+				  s.parentNode.insertBefore(hm, s);
+				})();
+			</script>
+		</c:if>
 	</footer>
 <%}%>
 
