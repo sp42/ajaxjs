@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.framework;
+package com.ajaxjs.sql.orm;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-import com.ajaxjs.framework.model.ArgsInfo;
-import com.ajaxjs.orm.annotation.SqlFactory;
+import com.ajaxjs.sql.annotation.SqlFactory;
+import com.ajaxjs.sql.orm.model.ArgsInfo;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
 

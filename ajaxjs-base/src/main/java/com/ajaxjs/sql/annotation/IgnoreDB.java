@@ -10,7 +10,7 @@
  * 除非因适用法律需要或书面同意，根据许可证分发的软件是基于"按原样"基础提供，
  * 无任何明示的或暗示的保证或条件。详见根据许可证许可下，特定语言的管辖权限和限制。
  */
-package com.ajaxjs.orm.annotation;
+package com.ajaxjs.sql.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -19,7 +19,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 表示一个 SELECT SQL 语句
+ * 是否不参与数据库的操作
  * 
  * @author sp42 frank@ajaxjs.com
  *
@@ -27,47 +27,5 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Select {
-	/**
-	 * SELECT SQL 语句
-	 * 
-	 * @return SELECT SQL 语句
-	 */
-	String value() default "";
-
-	/**
-	 * 转为 Sqlite 的 SELECT SQL 语句
-	 * 
-	 * @return SELECT SQL 语句
-	 */
-	String sqliteValue() default "";
-
-	/**
-	 * 统计总行数的 SQL，以便分页
-	 * 
-	 * @return 统计总行数的 SQL
-	 */
-	String countSql() default "";
-
-	/**
-	 * 转为 Sqlite 的统计总行数的 SQL，以便分页
-	 * 
-	 * @return 转为 Sqlite 的统计总行数的 SQL
-	 */
-	String sqliteCountSql() default "";
-
-
-	/**
-	 * 是否分页
-	 * 
-	 * @return 是否分页
-	 */
-	boolean isPageList() default false;
-
-	/**
-	 * 是否需要条件查询
-	 * 
-	 * @return 是否需要条件查询
-	 */
-	boolean isQuerySupport() default false;
+public @interface IgnoreDB {
 }

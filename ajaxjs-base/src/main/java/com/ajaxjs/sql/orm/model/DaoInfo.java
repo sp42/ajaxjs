@@ -13,31 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.framework.model;
-
-import java.lang.reflect.Method;
-import java.util.function.Function;
+package com.ajaxjs.sql.orm.model;
 
 /**
- * 修改后的信息
+ * Writer Info
  * 
  * @author sp42 frank@ajaxjs.com
  *
  */
-public class ArgsInfo {
-	public String sql;
-	
-	public Object[] args;
-	
-	/**
-	 * 传入一个匿名函数，转化 sql
-	 */
-	public Function<String, String> sqlHandler;
-	
-	public Method method;
-	
-	/**
-	 * 是否停止执行 SQL
-	 */
-	public boolean isStop;
+public class DaoInfo {
+	public String tableName; 	// 表名
+	public String sql;			// 执行的 SQL 语句
+	public Object bean;		// Bean
+	public boolean isMap;		// true = map, false = bean
 }

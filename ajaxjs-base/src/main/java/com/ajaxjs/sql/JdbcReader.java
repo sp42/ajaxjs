@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.orm;
+package com.ajaxjs.sql;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
@@ -32,8 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import com.ajaxjs.orm.JdbcHelperLambda.HasZeroResult;
-import com.ajaxjs.orm.JdbcHelperLambda.ResultSetProcessor;
+import com.ajaxjs.sql.JdbcHelperLambda.HasZeroResult;
+import com.ajaxjs.sql.JdbcHelperLambda.ResultSetProcessor;
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;

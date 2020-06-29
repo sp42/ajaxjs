@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.framework;
+package com.ajaxjs.sql.orm;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -21,10 +21,10 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import com.ajaxjs.framework.model.DaoInfo;
-import com.ajaxjs.orm.annotation.Delete;
-import com.ajaxjs.orm.annotation.Insert;
-import com.ajaxjs.orm.annotation.Update;
+import com.ajaxjs.sql.annotation.Delete;
+import com.ajaxjs.sql.annotation.Insert;
+import com.ajaxjs.sql.annotation.Update;
+import com.ajaxjs.sql.orm.model.DaoInfo;
 import com.ajaxjs.util.CommonUtil;
 
 /**

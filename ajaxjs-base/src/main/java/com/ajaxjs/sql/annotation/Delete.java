@@ -10,7 +10,7 @@
  * 除非因适用法律需要或书面同意，根据许可证分发的软件是基于"按原样"基础提供，
  * 无任何明示的或暗示的保证或条件。详见根据许可证许可下，特定语言的管辖权限和限制。
  */
-package com.ajaxjs.orm.annotation;
+package com.ajaxjs.sql.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -19,7 +19,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 表示一个 UPDATE SQL 语句
+ * 表示一个 DELETE SQL 语句
  * 
  * @author sp42 frank@ajaxjs.com
  *
@@ -27,13 +27,15 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Update {
+public @interface Delete {
 	/**
-	 * UPDATE SQL 语句。参考格式：UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
+	 * DELETE SQL 语句。参考格式：DELETE FROM 表名称 WHERE 列名称 = 值
 	 * 
-	 * @return UPDATE SQL 语句
+	 * @return DELETE SQL 语句
 	 */
 	String value() default "";
+	
+	String sqliteValue() default "";
 
 	/**
 	 * 表名

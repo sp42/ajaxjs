@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.framework;
+package com.ajaxjs.sql.orm;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import com.ajaxjs.orm.annotation.Delete;
-import com.ajaxjs.orm.annotation.Insert;
-import com.ajaxjs.orm.annotation.Select;
-import com.ajaxjs.orm.annotation.Update;
+import com.ajaxjs.sql.annotation.Delete;
+import com.ajaxjs.sql.annotation.Insert;
+import com.ajaxjs.sql.annotation.Select;
+import com.ajaxjs.sql.annotation.Update;
 
 /**
  * DAO 基类，包含大量常用的 SQL。

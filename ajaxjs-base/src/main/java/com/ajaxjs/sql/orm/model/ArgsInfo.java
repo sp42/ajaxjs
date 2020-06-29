@@ -13,22 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.framework.model;
+package com.ajaxjs.sql.orm.model;
+
+import java.lang.reflect.Method;
+import java.util.function.Function;
 
 /**
- * 分页信息
+ * 修改后的信息
  * 
  * @author sp42 frank@ajaxjs.com
  *
  */
-public class PageParams {
-	/**
-	 * 分页参数
-	 */
-	public int[] pageParams;
-
-	/**
-	 * 不包含分页参数的参数列表
-	 */
+public class ArgsInfo {
+	public String sql;
+	
 	public Object[] args;
+	
+	/**
+	 * 传入一个匿名函数，转化 sql
+	 */
+	public Function<String, String> sqlHandler;
+	
+	public Method method;
+	
+	/**
+	 * 是否停止执行 SQL
+	 */
+	public boolean isStop;
 }

@@ -12,10 +12,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.framework.Repository;
-import com.ajaxjs.orm.JdbcConnection;
 import com.ajaxjs.orm.TestJdbcConnection;
+import com.ajaxjs.sql.JdbcConnection;
+import com.ajaxjs.sql.orm.PageResult;
+import com.ajaxjs.sql.orm.Repository;
 
 public class TestDao {
 	NewsDao dao;

@@ -8,7 +8,7 @@
  * KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package com.ajaxjs.framework;
+package com.ajaxjs.sql.orm;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
@@ -18,14 +18,14 @@ import java.sql.Connection;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import com.ajaxjs.orm.JdbcConnection;
-import com.ajaxjs.orm.JdbcHelper;
-import com.ajaxjs.orm.JdbcUtil;
-import com.ajaxjs.orm.annotation.Delete;
-import com.ajaxjs.orm.annotation.Insert;
-import com.ajaxjs.orm.annotation.Select;
-import com.ajaxjs.orm.annotation.TableName;
-import com.ajaxjs.orm.annotation.Update;
+import com.ajaxjs.sql.JdbcConnection;
+import com.ajaxjs.sql.JdbcHelper;
+import com.ajaxjs.sql.JdbcUtil;
+import com.ajaxjs.sql.annotation.Delete;
+import com.ajaxjs.sql.annotation.Insert;
+import com.ajaxjs.sql.annotation.Select;
+import com.ajaxjs.sql.annotation.TableName;
+import com.ajaxjs.sql.annotation.Update;
 import com.ajaxjs.util.CommonUtil;
 
 /**

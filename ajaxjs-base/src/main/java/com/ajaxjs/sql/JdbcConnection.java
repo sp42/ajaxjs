@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.orm;
+package com.ajaxjs.sql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

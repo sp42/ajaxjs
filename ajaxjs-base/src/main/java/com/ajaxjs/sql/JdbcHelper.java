@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.orm;
+package com.ajaxjs.sql;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -34,7 +34,7 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import com.ajaxjs.orm.annotation.IgnoreDB;
+import com.ajaxjs.sql.annotation.IgnoreDB;
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;

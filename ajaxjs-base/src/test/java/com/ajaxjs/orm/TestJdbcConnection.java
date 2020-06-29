@@ -1,9 +1,9 @@
 package com.ajaxjs.orm;
 
-import static com.ajaxjs.orm.JdbcConnection.addSql;
-import static com.ajaxjs.orm.JdbcConnection.getConnection;
-import static com.ajaxjs.orm.JdbcConnection.getMySqlConnection;
-import static com.ajaxjs.orm.JdbcConnection.setConnection;
+import static com.ajaxjs.sql.JdbcConnection.addSql;
+import static com.ajaxjs.sql.JdbcConnection.getConnection;
+import static com.ajaxjs.sql.JdbcConnection.getMySqlConnection;
+import static com.ajaxjs.sql.JdbcConnection.setConnection;
 import static org.junit.Assert.assertNotNull;
 
 import java.sql.Connection;
@@ -11,6 +11,7 @@ import java.sql.SQLException;
 
 import org.junit.Test;
 
+import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.util.resource.ScanClass;
 
 public class TestJdbcConnection {

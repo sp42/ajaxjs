@@ -4,8 +4,8 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-import com.ajaxjs.orm.annotation.Select;
-import com.ajaxjs.orm.annotation.Update;
+import com.ajaxjs.sql.annotation.Select;
+import com.ajaxjs.sql.annotation.Update;
 
 public class TestDynamicProxy {
 	// 可以创建实例的接口，但不用写实现的类

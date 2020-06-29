@@ -13,17 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.framework.model;
+package com.ajaxjs.sql.orm.model;
 
 /**
- * Writer Info
+ * 分页信息
  * 
  * @author sp42 frank@ajaxjs.com
  *
  */
-public class DaoInfo {
-	public String tableName; 	// 表名
-	public String sql;			// 执行的 SQL 语句
-	public Object bean;		// Bean
-	public boolean isMap;		// true = map, false = bean
+public class PageParams {
+	/**
+	 * 分页参数
+	 */
+	public int[] pageParams;
+
+	/**
+	 * 不包含分页参数的参数列表
+	 */
+	public Object[] args;
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.framework;
+package com.ajaxjs.sql.orm;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -24,12 +24,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.ajaxjs.framework.model.ArgsInfo;
-import com.ajaxjs.framework.model.PageParams;
-import com.ajaxjs.orm.JdbcUtil;
-import com.ajaxjs.orm.annotation.Select;
-import com.ajaxjs.orm.annotation.SqlFactory;
-import com.ajaxjs.orm.annotation.TableName;
+import com.ajaxjs.sql.JdbcUtil;
+import com.ajaxjs.sql.annotation.Select;
+import com.ajaxjs.sql.annotation.SqlFactory;
+import com.ajaxjs.sql.annotation.TableName;
+import com.ajaxjs.sql.orm.model.ArgsInfo;
+import com.ajaxjs.sql.orm.model.PageParams;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 

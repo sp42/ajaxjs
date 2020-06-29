@@ -18,14 +18,14 @@ package com.ajaxjs.orm.dao;
 import java.util.List;
 import java.util.function.Function;
 
-import com.ajaxjs.framework.IBaseDao;
-import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.orm.annotation.Delete;
-import com.ajaxjs.orm.annotation.Insert;
-import com.ajaxjs.orm.annotation.Select;
-import com.ajaxjs.orm.annotation.SqlFactory;
-import com.ajaxjs.orm.annotation.TableName;
-import com.ajaxjs.orm.annotation.Update;
+import com.ajaxjs.sql.annotation.Delete;
+import com.ajaxjs.sql.annotation.Insert;
+import com.ajaxjs.sql.annotation.Select;
+import com.ajaxjs.sql.annotation.SqlFactory;
+import com.ajaxjs.sql.annotation.TableName;
+import com.ajaxjs.sql.annotation.Update;
+import com.ajaxjs.sql.orm.IBaseDao;
+import com.ajaxjs.sql.orm.PageResult;
 
 /**
  * Data Acccess Object for testing.

@@ -4,6 +4,8 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
+import com.ajaxjs.sql.orm.BaseModel;
+
 public class TestBaseModel {
 
 	@Test

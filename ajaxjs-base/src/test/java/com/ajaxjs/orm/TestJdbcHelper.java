@@ -1,19 +1,20 @@
 package com.ajaxjs.orm;
 
-import static com.ajaxjs.orm.JdbcHelper.create;
-import static com.ajaxjs.orm.JdbcHelper.createBean;
-import static com.ajaxjs.orm.JdbcHelper.createMap;
-import static com.ajaxjs.orm.JdbcHelper.delete;
-import static com.ajaxjs.orm.JdbcHelper.deleteById;
-import static com.ajaxjs.orm.JdbcHelper.getBeanInfo;
-import static com.ajaxjs.orm.JdbcHelper.queryAsBean;
-import static com.ajaxjs.orm.JdbcHelper.queryAsBeanList;
-import static com.ajaxjs.orm.JdbcHelper.queryAsMap;
-import static com.ajaxjs.orm.JdbcHelper.queryAsMapList;
-import static com.ajaxjs.orm.JdbcHelper.queryOne;
-import static com.ajaxjs.orm.JdbcHelper.update;
-import static com.ajaxjs.orm.JdbcHelper.updateBean;
-import static com.ajaxjs.orm.JdbcHelper.updateMap;
+
+import static com.ajaxjs.sql.JdbcHelper.create;
+import static com.ajaxjs.sql.JdbcHelper.createBean;
+import static com.ajaxjs.sql.JdbcHelper.createMap;
+import static com.ajaxjs.sql.JdbcHelper.delete;
+import static com.ajaxjs.sql.JdbcHelper.deleteById;
+import static com.ajaxjs.sql.JdbcHelper.getBeanInfo;
+import static com.ajaxjs.sql.JdbcHelper.update;
+import static com.ajaxjs.sql.JdbcHelper.updateBean;
+import static com.ajaxjs.sql.JdbcHelper.updateMap;
+import static com.ajaxjs.sql.JdbcReader.queryAsBean;
+import static com.ajaxjs.sql.JdbcReader.queryAsBeanList;
+import static com.ajaxjs.sql.JdbcReader.queryAsMap;
+import static com.ajaxjs.sql.JdbcReader.queryAsMapList;
+import static com.ajaxjs.sql.JdbcReader.queryOne;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -30,8 +31,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.orm.JdbcHelper.BeanMethod;
 import com.ajaxjs.orm.dao.News;
+import com.ajaxjs.sql.JdbcHelper;
+import com.ajaxjs.sql.JdbcHelper.BeanMethod;
 
 public class TestJdbcHelper {
 	Connection conn;

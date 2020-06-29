@@ -10,7 +10,7 @@
  * 除非因适用法律需要或书面同意，根据许可证分发的软件是基于"按原样"基础提供，
  * 无任何明示的或暗示的保证或条件。详见根据许可证许可下，特定语言的管辖权限和限制。
  */
-package com.ajaxjs.orm.annotation;
+package com.ajaxjs.sql.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -19,26 +19,26 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * DAO 中表示表名
+ * SQL 语句的工厂
  * 
  * @author sp42 frank@ajaxjs.com
  *
  */
 @Documented
-@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface TableName {
+@Target(ElementType.METHOD)
+public @interface SqlFactory {
 	/**
-	 * 可以在 DAO 上指定 SQL 表名是什么
+	 * 必须为一个静态方法的名称，该方法输入一个 String 参数，返回一个 String 结果
 	 * 
-	 * @return SQL 表名
+	 * @return 静态方法名称
 	 */
 	String value() default "";
 
 	/**
-	 * 可以在 DAO 上指定 Bean 实体类是什么
+	 * 方法所在的类。若为 Object.class 则指本类身上的
 	 * 
-	 * @return 实体类
+	 * @return 方法所在的类
 	 */
-	Class<?> beanClass() default Object.class;
+	Class<?> clz() default Object.class;
 }
