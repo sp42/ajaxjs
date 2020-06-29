@@ -58,8 +58,7 @@ public class JdbcHelper extends JdbcReader {
 	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
 	 * @return PreparedStatement 对象
 	 */
-	static <T> T initAndExe(BiFunction<Connection, String, PreparedStatement> initPs,
-			Function<PreparedStatement, T> exe, Connection conn, String sql, Object... params) {
+	static <T> T initAndExe(BiFunction<Connection, String, PreparedStatement> initPs, Function<PreparedStatement, T> exe, Connection conn, String sql, Object... params) {
 		String _sql = JdbcUtil.printRealSql(sql, params);
 		LOGGER.infoYellow("SQL-->" + _sql);
 		JdbcConnection.addSql(_sql); // 用来保存日志
@@ -138,6 +137,7 @@ public class JdbcHelper extends JdbcReader {
 			} catch (SQLException e) {
 				LOGGER.warning(e);
 			}
+
 			return null;
 		}, conn, sql, params);
 	}
@@ -394,11 +394,10 @@ public class JdbcHelper extends JdbcReader {
 		try {
 			Class<?> idClz = bean.getClass().getMethod("getId").getReturnType();// 根据 getter 推断 id 类型
 
-			if (Long.class == idClz && newlyId instanceof Integer) {
+			if (Long.class == idClz && newlyId instanceof Integer)
 				ReflectUtil.executeMethod(bean, "setId", new Long((int) newlyId));
-			} else {
+			else
 				ReflectUtil.executeMethod(bean, "setId", newlyId); // 直接保存
-			}
 		} catch (Throwable e) {
 			LOGGER.warning(e);
 		}
@@ -416,8 +415,7 @@ public class JdbcHelper extends JdbcReader {
 	 */
 	public static int updateBean(Connection conn, Object bean, String tableName) {
 		try {
-			LOGGER.info("更新记录 id:{0}, name:{1}！", ReflectUtil.executeMethod(bean, "getId"),
-					ReflectUtil.executeMethod(bean, "getName"));
+			LOGGER.info("更新记录 id:{0}, name:{1}！", ReflectUtil.executeMethod(bean, "getId"), ReflectUtil.executeMethod(bean, "getName"));
 		} catch (Throwable e) {
 		}
 

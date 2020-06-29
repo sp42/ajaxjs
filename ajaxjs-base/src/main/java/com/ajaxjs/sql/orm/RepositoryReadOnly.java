@@ -70,9 +70,8 @@ public class RepositoryReadOnly extends RepositoryBase {
 	Class<?> getReturnType(Method method) throws DaoException {
 		Class<?> clz = method.getReturnType();
 
-		if (clz == Map.class || clz == List.class || clz == PageResult.class || clz == int.class || clz == Integer.class
-				|| clz == long.class || clz == Long.class || clz == String.class || clz == Boolean.class
-				|| clz == boolean.class || clz.isArray())
+		if (clz == Map.class || clz == List.class || clz == PageResult.class || clz == int.class || clz == Integer.class || clz == long.class || clz == Long.class
+				|| clz == String.class || clz == Boolean.class || clz == boolean.class || clz.isArray())
 			return clz;
 
 		TableName t = getClz().getAnnotation(TableName.class);
@@ -114,7 +113,7 @@ public class RepositoryReadOnly extends RepositoryBase {
 	 * @throws DaoException
 	 */
 	Object select(Method method, Object[] args) throws DaoException {
-		
+
 		Select select = method.getAnnotation(Select.class);
 		String sql = isSqlite(select.sqliteValue(), conn) ? select.sqliteValue() : select.value();
 
@@ -142,8 +141,7 @@ public class RepositoryReadOnly extends RepositoryBase {
 			Class<?> entryType = getEntryContainerType(method);// 实体类型的类引用，通常是 Map 或 Bean
 
 			if (returnType == List.class)
-				result = entryType == Map.class ? queryAsMapList(conn, sql, args)
-						: queryAsBeanList(entryType, conn, sql, args);
+				result = entryType == Map.class ? queryAsMapList(conn, sql, args) : queryAsBeanList(entryType, conn, sql, args);
 			if (returnType == PageResult.class) // 分页
 				result = doPage(entryType, select, info);
 		} else if (returnType == Map.class) {
@@ -301,8 +299,7 @@ public class RepositoryReadOnly extends RepositoryBase {
 			Parameter param = parameters[i];
 
 			if ("arg0".equals(param.getName()) || "arg1".equals(param.getName()))
-				throw new Error(
-						" Java 8 支持反射获取 参数 具体名称，但要打开编译开关。例如 Eclipse 须在 Store information about method parameters (usable via reflection) 打勾，或者编译时加入参数 -parameters。");
+				throw new Error(" Java 8 支持反射获取 参数 具体名称，但要打开编译开关。例如 Eclipse 须在 Store information about method parameters (usable via reflection) 打勾，或者编译时加入参数 -parameters。");
 
 			if (param.getName().equalsIgnoreCase("start")) {
 				pageParams[0] = (int) args[i];

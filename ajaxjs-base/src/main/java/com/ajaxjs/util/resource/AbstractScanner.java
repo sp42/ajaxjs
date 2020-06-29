@@ -245,7 +245,7 @@ public abstract class AbstractScanner<T> {
 		if (url == null)
 			return null;
 
-		System.out.println("::::::::::::::;;"+isDecode);
+		System.out.println("::::::::::::::;;" + isDecode);
 		String path;
 		if (isDecode) {
 			path = Encode.urlDecode(new File(url.getPath()).toString());
@@ -254,7 +254,7 @@ public abstract class AbstractScanner<T> {
 			path = path.startsWith("/") ? path.substring(1) : path;
 		}
 
-		//path = path.replaceAll("file:\\", "");
+		// path = path.replaceAll("file:\\", "");
 		System.out.println(">>>>>>>>>>>>>>>>>>>>" + path);
 		return path;
 	}

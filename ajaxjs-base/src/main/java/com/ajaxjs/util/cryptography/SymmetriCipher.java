@@ -56,7 +56,7 @@ public class SymmetriCipher {
 		byte[] b = CipherInfo.doCipher(AES, Cipher.DECRYPT_MODE, key, Encode.base64DecodeAsByte(str));
 		if (b == null || b.length == 0)
 			return null;
-		
+
 		return Encode.byte2String(b);
 	}
 
@@ -68,8 +68,7 @@ public class SymmetriCipher {
 	 * @return 密文，加密后的内容
 	 */
 	public static String DES_Encrypt(String str, String key) {
-		return Encode
-				.base64Encode(CipherInfo.doCipher(DES, Cipher.ENCRYPT_MODE, key, str.getBytes(StandardCharsets.UTF_8)));
+		return Encode.base64Encode(CipherInfo.doCipher(DES, Cipher.ENCRYPT_MODE, key, str.getBytes(StandardCharsets.UTF_8)));
 
 	}
 

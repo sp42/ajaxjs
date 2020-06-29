@@ -48,7 +48,7 @@ import org.xml.sax.SAXException;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.ReflectUtil;
-import com.ajaxjs.util.XMLHelper;
+import com.ajaxjs.util.XmlHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -336,7 +336,7 @@ public class MapTool {
 	 * @return XML 格式的字符串
 	 */
 	public static String mapToXml(Map<String, ?> data) {
-		Document doc = XMLHelper.initBuilder().newDocument();
+		Document doc = XmlHelper.initBuilder().newDocument();
 		Element root = doc.createElement("xml");
 		doc.appendChild(root);
 
@@ -380,7 +380,7 @@ public class MapTool {
 		Map<String, String> data = new HashMap<>();
 
 		try (InputStream stream = new ByteArrayInputStream(strXML.getBytes("UTF-8"));) {
-			Document doc = XMLHelper.initBuilder().parse(stream);
+			Document doc = XmlHelper.initBuilder().parse(stream);
 			doc.getDocumentElement().normalize();
 			NodeList nodeList = doc.getDocumentElement().getChildNodes();
 

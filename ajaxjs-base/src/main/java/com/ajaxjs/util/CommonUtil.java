@@ -229,8 +229,7 @@ public class CommonUtil {
 	/**
 	 * 一般日期判断的正则
 	 */
-	private final static Pattern DATE_PATTERN = Pattern
-			.compile(DATE_YEAR + " ([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]");
+	private final static Pattern DATE_PATTERN = Pattern.compile(DATE_YEAR + " ([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]");
 
 	/**
 	 * 支持任意对象转换为日期类型
@@ -309,5 +308,4 @@ public class CommonUtil {
 
 		return sb.toString();
 	}
-
 }

@@ -64,9 +64,8 @@ public class Sender extends Socket {
 	 */
 	public boolean sendMail() throws MailException {
 		LOGGER.info("发送邮件:" + bean.getSubject());
-		
-		try (BufferedReader in = new BufferedReader(new InputStreamReader(getInputStream()));
-				DataOutputStream os = new DataOutputStream(getOutputStream());) {
+
+		try (BufferedReader in = new BufferedReader(new InputStreamReader(getInputStream())); DataOutputStream os = new DataOutputStream(getOutputStream());) {
 			this.in = in;
 			this.os = os;
 
@@ -112,7 +111,7 @@ public class Sender extends Socket {
 			result = sendCommand("QUIT");// quit
 			if (!isOkCode(result, 221))
 				throw new MailException("QUIT 失败：" + result, 221);
-			
+
 		} catch (UnknownHostException e) {
 			System.err.println("初始化 失败！建立连接失败！");
 			LOGGER.warning(e);
@@ -144,8 +143,7 @@ public class Sender extends Socket {
 		sb.append("Subject:=?UTF-8?B?" + toBase64(bean.getSubject()) + "?=" + LINEFEET);
 		sb.append("Date:2016/10/27 17:30" + LINEFEET);
 		// sb.append("MIME-Version: 1.0" + lineFeet);
-		sb.append((bean.isHTML_body() ? "Content-Type:text/html;charset=\"utf-8\""
-				: "Content-Type:text/plain;charset=\"utf-8\"") + LINEFEET);
+		sb.append((bean.isHTML_body() ? "Content-Type:text/html;charset=\"utf-8\"" : "Content-Type:text/plain;charset=\"utf-8\"") + LINEFEET);
 		sb.append("Content-Transfer-Encoding: base64" + LINEFEET);
 		sb.append(LINEFEET);
 		sb.append(toBase64(bean.getContent()));

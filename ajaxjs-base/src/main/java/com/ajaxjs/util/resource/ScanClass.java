@@ -93,7 +93,7 @@ public class ScanClass<T> extends AbstractScanner<Class<T>> {
 	 */
 	public static String getClassName(File file, String packageName) {
 		String clzName = file.getName().substring(0, file.getName().length() - 6);
-		
-		return  packageName + '.' + clzName;
+
+		return packageName + '.' + clzName;
 	}
 }

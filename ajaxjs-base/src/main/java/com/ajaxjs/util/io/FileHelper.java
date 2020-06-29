@@ -225,8 +225,7 @@ public class FileHelper extends IoHelper {
 		LOGGER.info("正在保存文件{0}， 保存内容：\n{1}", file.toString(), text);
 
 		// OutputStreramWriter 将输出的字符流转化为字节流输出（字符流已带缓冲）
-		try (OutputStream out = new FileOutputStream(file);
-				OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);) {
+		try (OutputStream out = new FileOutputStream(file); OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);) {
 			writer.write(text);
 		} catch (IOException e) {
 			LOGGER.warning(e);

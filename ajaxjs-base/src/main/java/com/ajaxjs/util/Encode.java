@@ -151,7 +151,7 @@ public class Encode {
 	 * @return MD5 摘要，返回32位大写的字符串
 	 */
 	public static String md5(String str) {
-		return hash	("MD5", str);
+		return hash("MD5", str);
 	}
 
 	/**

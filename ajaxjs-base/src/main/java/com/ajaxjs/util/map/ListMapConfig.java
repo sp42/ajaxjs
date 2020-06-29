@@ -54,8 +54,7 @@ public class ListMapConfig {
 		 * @param level    深度
 		 * @return true 表示为跳出遍历
 		 */
-		public boolean execute(String key, Object obj, Map<String, Object> map, Map<String, Object> superMap,
-				int level);
+		public boolean execute(String key, Object obj, Map<String, Object> map, Map<String, Object> superMap, int level);
 	}
 
 	/**

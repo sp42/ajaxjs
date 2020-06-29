@@ -95,8 +95,7 @@ public class JsonHelper {
 		} else if (obj instanceof Boolean || obj instanceof Number) {
 			return obj.toString();
 		} else if (obj instanceof String) {
-			return '\"' + obj.toString().replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r",
-					"\\r") + '\"';
+			return '\"' + obj.toString().replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r") + '\"';
 		} else if (obj instanceof String[]) {
 			return jsonArr((String[]) obj, v -> "\"" + v + "\"");
 		} else if (obj.getClass() == Integer[].class) {

@@ -151,8 +151,7 @@ public class Tools {
 	 * @throws IOException
 	 */
 	public static Map<String, String> getWhois(String domain) throws IOException {
-		String url = "http://api.k780.com/?app=domain.whois&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=xml&domain="
-				+ domain;
+		String url = "http://api.k780.com/?app=domain.whois&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=xml&domain=" + domain;
 		String xml = NetUtil.simpleGET(url);
 		Map<String, String> map = MapTool.xmlToMap(xml);
 
@@ -186,7 +185,7 @@ public class Tools {
 	public static String getIpLocation2(String ip) throws IOException {
 		String url = "http://ip-api.com/json/" + ip + "?lang=zh-CN";
 		String jsonStr = NetUtil.get(url);
-		
+
 		Map<String, Object> map = JsonHelper.parseMap(jsonStr);
 
 		if (jsonStr != null && map != null && map.get("status").toString().equals("success")) {

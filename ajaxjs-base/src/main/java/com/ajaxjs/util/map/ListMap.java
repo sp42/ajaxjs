@@ -52,8 +52,7 @@ public class ListMap {
 	 * @param config   关于回调函数的配置
 	 */
 	@SuppressWarnings("unchecked")
-	public static void traveler(Map<String, Object> map, Context fristCtx, Map<String, Object> superMap, int level,
-			ListMapConfig config) {
+	public static void traveler(Map<String, Object> map, Context fristCtx, Map<String, Object> superMap, int level, ListMapConfig config) {
 		if (config != null && config.mapHandler != null && !config.mapHandler.execute(map, superMap, level))
 			return;
 
@@ -63,8 +62,7 @@ public class ListMap {
 
 			Object value = map.get(key);
 
-			if (config != null && config.mapEntryHandler != null
-					&& !config.mapEntryHandler.execute(key, value, map, superMap, level)) {
+			if (config != null && config.mapEntryHandler != null && !config.mapEntryHandler.execute(key, value, map, superMap, level)) {
 				fristCtx.setStop(true);
 				return;
 			}
@@ -103,8 +101,7 @@ public class ListMap {
 	 * @param level    深度
 	 * @param config   关于回调函数的配置
 	 */
-	public static void traveler(List<Map<String, Object>> list, Context fristCtx, Map<String, Object> superMap,
-			int level, ListMapConfig config) {
+	public static void traveler(List<Map<String, Object>> list, Context fristCtx, Map<String, Object> superMap, int level, ListMapConfig config) {
 		for (Map<String, Object> map : list) {
 			if (map == null)
 				continue;
@@ -135,8 +132,7 @@ public class ListMap {
 	 * @param path  map 的路径字段
 	 * @param level map 的深度
 	 */
-	public static void buildPath(List<Map<String, Object>> list, String id, String path, String level,
-			boolean saveSupers) {
+	public static void buildPath(List<Map<String, Object>> list, String id, String path, String level, boolean saveSupers) {
 		ListMapConfig config = new ListMapConfig();
 
 		config.mapHandler = (map, superMap, _level) -> {
@@ -219,8 +215,7 @@ public class ListMap {
 	 * @return Map
 	 */
 	@SuppressWarnings("unchecked")
-	private static Map<String, Object> findByPath(Queue<String> queue, 
-			List<Map<String, Object>> list) {
+	private static Map<String, Object> findByPath(Queue<String> queue, List<Map<String, Object>> list) {
 		Map<String, Object> map = null;
 
 		while (!queue.isEmpty()) {

@@ -30,8 +30,8 @@ import com.ajaxjs.util.logger.LogHelper;
  * @author sp42 frank@ajaxjs.com
  *
  */
-public class XMLHelper {
-	private static final LogHelper LOGGER = LogHelper.getLog(XMLHelper.class);
+public class XmlHelper {
+	private static final LogHelper LOGGER = LogHelper.getLog(XmlHelper.class);
 
 	/**
 	 * 创建 DocumentBuilderFactory 实例
@@ -81,11 +81,11 @@ public class XMLHelper {
 	/**
 	 * 解析 XML
 	 * 
-	 * @param xmlContent XML 内容
-	 * @param fn         处理节点的函数，传入 Element 类型节点和 NodeList 类型子元素列表
+	 * @param xml XML 内容
+	 * @param fn  处理节点的函数，传入 Element 类型节点和 NodeList 类型子元素列表
 	 */
-	public static void parseXML(String xmlContent, BiConsumer<Element, NodeList> fn) {
-		try (InputStream in = new ByteArrayInputStream(xmlContent.getBytes("UTF-8"))) {
+	public static void parseXML(String xml, BiConsumer<Element, NodeList> fn) {
+		try (InputStream in = new ByteArrayInputStream(xml.getBytes("UTF-8"))) {
 			Element el = initBuilder().parse(in).getDocumentElement();
 			NodeList nodeList = el.getChildNodes();
 
@@ -105,7 +105,7 @@ public class XMLHelper {
 	public static Map<String, String> nodeAsMap(String xml, String xpath) {
 		Map<String, String> map = new HashMap<>();
 
-		XMLHelper.xPath(xml, xpath, node -> {
+		XmlHelper.xPath(xml, xpath, node -> {
 			NamedNodeMap _map = node.getAttributes();
 
 			if (_map != null) {

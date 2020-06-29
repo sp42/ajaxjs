@@ -175,8 +175,7 @@ public class NetUtil extends HttpBasicRequest {
 	 */
 	public static String postDownload(String url, Map<String, Object> data, String saveDir, String fileName) {
 		if (data != null && data.size() > 0) {
-			return post(url, "{\"path\":\"pages/index/index\"}".getBytes(), null,
-					initDownload2disk_Callback(saveDir, fileName));
+			return post(url, "{\"path\":\"pages/index/index\"}".getBytes(), null, initDownload2disk_Callback(saveDir, fileName));
 		} else {
 			return null;
 		}
@@ -192,8 +191,7 @@ public class NetUtil extends HttpBasicRequest {
 	private static final String boundaryPrefix = "--";
 	// 定义数据分隔线
 	public static String BOUNDARY = "------------7d4a6d158c9";
-	private static String str = boundaryPrefix + BOUNDARY + newLine
-			+ "Content-Disposition: form-data;name=\"%s\";filename=\"%s\"" + newLine + "Content-Type:%s" + newLine
+	private static String str = boundaryPrefix + BOUNDARY + newLine + "Content-Disposition: form-data;name=\"%s\";filename=\"%s\"" + newLine + "Content-Type:%s" + newLine
 			+ newLine;
 
 	// 定义最后数据分隔线，即--加上BOUNDARY再加上--。
@@ -239,8 +237,7 @@ public class NetUtil extends HttpBasicRequest {
 	 * @return 请求之后的响应的内容
 	 */
 	public static String multiPOST(String url, Map<String, Object> data) {
-		return post(url, toFromData(data),
-				conn -> conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY));
+		return post(url, toFromData(data), conn -> conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY));
 	}
 
 }

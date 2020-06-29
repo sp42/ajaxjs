@@ -94,15 +94,14 @@ public class Repository extends RepositoryReadOnly {
 	 * @return
 	 * @throws DaoException
 	 */
-	private <T> T getFn(Supplier<String> getSql, Supplier<String> getTableName, Object[] args, Method method,
-			Function<DaoInfo, T> writeSql, Function<DaoInfo, T> writeBean) throws DaoException {
+	private <T> T getFn(Supplier<String> getSql, Supplier<String> getTableName, Object[] args, Method method, Function<DaoInfo, T> writeSql, Function<DaoInfo, T> writeBean)
+			throws DaoException {
 		Object bean = args[0];
 
 		DaoInfo daoInfo = new DaoInfo();
 		daoInfo.sql = getSql == null ? "" : getSql.get();
 		// 表名可以通过注解获取（类），也可以直接 insert.tableName() 获取
-		daoInfo.tableName = (getTableName == null || CommonUtil.isEmptyString(getTableName.get())) ? getTableName()
-				: getTableName.get();
+		daoInfo.tableName = (getTableName == null || CommonUtil.isEmptyString(getTableName.get())) ? getTableName() : getTableName.get();
 		daoInfo.isMap = bean instanceof Map;
 		daoInfo.bean = bean;
 
@@ -117,13 +116,11 @@ public class Repository extends RepositoryReadOnly {
 	}
 
 	@SuppressWarnings("unchecked")
-	private Function<DaoInfo, Serializable> createEntity = daoInfo -> daoInfo.isMap
-			? createMap(conn, (Map<String, Object>) daoInfo.bean, daoInfo.tableName)
+	private Function<DaoInfo, Serializable> createEntity = daoInfo -> daoInfo.isMap ? createMap(conn, (Map<String, Object>) daoInfo.bean, daoInfo.tableName)
 			: createBean(conn, daoInfo.bean, daoInfo.tableName);
 
 	@SuppressWarnings("unchecked")
-	private Function<DaoInfo, Integer> updateEntity = daoInfo -> daoInfo.isMap
-			? updateMap(conn, (Map<String, Object>) daoInfo.bean, daoInfo.tableName)
+	private Function<DaoInfo, Integer> updateEntity = daoInfo -> daoInfo.isMap ? updateMap(conn, (Map<String, Object>) daoInfo.bean, daoInfo.tableName)
 			: updateBean(conn, daoInfo.bean, daoInfo.tableName);
 
 	/**
@@ -140,8 +137,7 @@ public class Repository extends RepositoryReadOnly {
 		Function<DaoInfo, Serializable> writeSql = daoInfo -> create(conn, daoInfo.sql, args);
 
 		// INSERT 返回新建的 id
-		Serializable id = insert == null ? getFn(null, null, args, method, writeSql, createEntity)
-				: getFn(insert::value, insert::tableName, args, method, writeSql, createEntity);
+		Serializable id = insert == null ? getFn(null, null, args, method, writeSql, createEntity) : getFn(insert::value, insert::tableName, args, method, writeSql, createEntity);
 
 		if (id == null)
 			return null;
@@ -166,8 +162,7 @@ public class Repository extends RepositoryReadOnly {
 		Update update = method.getAnnotation(Update.class);
 		Function<DaoInfo, Integer> writeSql = daoInfo -> update(conn, daoInfo.sql, args);
 
-		return update == null ? getFn(null, null, args, method, writeSql, updateEntity)
-				: getFn(update::value, update::tableName, args, method, writeSql, updateEntity);
+		return update == null ? getFn(null, null, args, method, writeSql, updateEntity) : getFn(update::value, update::tableName, args, method, writeSql, updateEntity);
 	}
 
 	/**
@@ -183,7 +178,6 @@ public class Repository extends RepositoryReadOnly {
 		Supplier<String> getSql = isSqlite(delete.sqliteValue(), conn) ? delete::sqliteValue : delete::value;
 
 		/* DELETESQL 也是用 update方法 */
-		return getFn(getSql, delete::tableName, args, method, daoInfo -> update(conn, daoInfo.sql, args) >= 1,
-				daoInfo -> delete(conn, daoInfo.bean, daoInfo.tableName));
+		return getFn(getSql, delete::tableName, args, method, daoInfo -> update(conn, daoInfo.sql, args) >= 1, daoInfo -> delete(conn, daoInfo.bean, daoInfo.tableName));
 	}
 }

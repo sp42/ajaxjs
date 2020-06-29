@@ -78,8 +78,7 @@ public class CipherInfo {
 			 * multiple of 8 when decrypting with padded cipher 异常， 不能把加密后的字节数组直接转换成字符串
 			 */
 			return cipher.doFinal(s);
-		} catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException
-				| BadPaddingException e) {
+		} catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
 			LOGGER.warning(e);
 			return null;
 		}

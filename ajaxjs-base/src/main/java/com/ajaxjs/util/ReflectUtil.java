@@ -67,8 +67,7 @@ public class ReflectUtil {
 	public static <T> T newInstance(Constructor<T> constructor, Object... args) {
 		try {
 			return constructor.newInstance(args); // 实例化
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			LOGGER.warning(e, "实例化对象失败：" + constructor.getDeclaringClass());
 			return null;
 		}
@@ -117,13 +116,13 @@ public class ReflectUtil {
 	/**
 	 * 获取类的构造器，可以支持重载的构造器（不同参数的构造器）
 	 * 
-	 * @param clz        类对象
-	 * @param argClasses 指定构造函数的参数类型，这里传入我们想调用的构造函数所需的参数类型
+	 * @param clz    类对象
+	 * @param argClz 指定构造函数的参数类型，这里传入我们想调用的构造函数所需的参数类型
 	 * @return 类的构造器
 	 */
-	public static <T> Constructor<T> getConstructor(Class<T> clz, Class<?>... argClasses) {
+	public static <T> Constructor<T> getConstructor(Class<T> clz, Class<?>... argClz) {
 		try {
-			return argClasses != null ? clz.getConstructor(argClasses) : clz.getConstructor();
+			return argClz != null ? clz.getConstructor(argClz) : clz.getConstructor();
 		} catch (NoSuchMethodException e) {
 			LOGGER.warning(e, "找不到这个 {0} 类的构造器。", clz.getName());
 		} catch (SecurityException e) {
@@ -136,14 +135,14 @@ public class ReflectUtil {
 	/**
 	 * 根据类名字符串获取类对象
 	 * 
-	 * @param className 类全称
+	 * @param clzName 类全称
 	 * @return 类对象
 	 */
-	public static Class<?> getClassByName(String className) {
+	public static Class<?> getClassByName(String clzName) {
 		try {
-			return Class.forName(className);
+			return Class.forName(clzName);
 		} catch (ClassNotFoundException e) {
-			LOGGER.warning(e, "找不到这个类：{0}。", className);
+			LOGGER.warning(e, "找不到这个类：{0}。", clzName);
 		}
 
 		return null;
@@ -152,14 +151,14 @@ public class ReflectUtil {
 	/**
 	 * 根据类名字符串获取类对象，可强类型转换类型
 	 * 
-	 * @param className 类全称
-	 * @param clz       要转换的目标类型
+	 * @param clzName 类全称
+	 * @param clz     要转换的目标类型
 	 * @return 类对象
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> Class<T> getClassByName(String className, Class<T> clz) {
-		Class<?> c = getClassByName(className);
-		return c == null ? null : (Class<T>) getClassByName(className);
+	public static <T> Class<T> getClassByName(String clzName, Class<T> clz) {
+		Class<?> c = getClassByName(clzName);
+		return c == null ? null : (Class<T>) getClassByName(clzName);
 	}
 
 	/**
@@ -381,8 +380,7 @@ public class ReflectUtil {
 	 * @return 实际异常对象
 	 */
 	public static Throwable getUnderLayerErr(Throwable e) {
-		while (e.getClass().equals(InvocationTargetException.class)
-				|| e.getClass().equals(UndeclaredThrowableException.class)) {
+		while (e.getClass().equals(InvocationTargetException.class) || e.getClass().equals(UndeclaredThrowableException.class)) {
 			e = e.getCause();
 		}
 
@@ -482,9 +480,9 @@ public class ReflectUtil {
 		return Modifier.isStatic(method.getModifiers());
 	}
 
-	// --------------------------------------------------------------------------------------------------
-	// -----------------------------------------------BeanUtils------------------------------------------
-	// --------------------------------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------------
+	// --------------------------------------BeanUtils------------------------------------------
+	// -----------------------------------------------------------------------------------------
 
 	/**
 	 * 将第一个字母大写

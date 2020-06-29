@@ -29,7 +29,8 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 图片助手类
  * 
- * BufferedImage是Image的一个子类，BufferedImage生成的图片在内存里有一个图像缓冲区，利用这个缓冲区我们可以很方便的操作这个图片，通常用来做图片修改操作如大小变换、图片变灰、设置图片透明或不透明等
+ * BufferedImage是Image的一个子类，BufferedImage生成的图片在内存里有一个图像缓冲区，利用这个缓冲区我们可以很方便的操作这个图片，
+ * 通常用来做图片修改操作如大小变换、图片变灰、设置图片透明或不透明等
  * 
  * @author sp42 frank@ajaxjs.com
  *
@@ -54,7 +55,7 @@ public class ImageHelper {
 		width = arr[0];
 		height = arr[1];
 	}
-	
+
 	public ImageHelper(byte[] data) {
 		Integer[] arr = getBufferedImgSize.apply(getImg(data));
 		width = arr[0];
@@ -124,20 +125,17 @@ public class ImageHelper {
 	/**
 	 * 缓冲图片对象工厂函数
 	 */
-	public static final BiFunction<Integer, Integer, BufferedImage> getBufferedImg = (width,
-			height) -> new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+	public static final BiFunction<Integer, Integer, BufferedImage> getBufferedImg = (width, height) -> new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
 	/**
 	 * 获取图片对象分辨率大小。 数组中 0 = width 1 = height
 	 */
-	public static final Function<Image, Integer[]> getImgSize = img -> new Integer[] { img.getWidth(null),
-			img.getHeight(null) };
+	public static final Function<Image, Integer[]> getImgSize = img -> new Integer[] { img.getWidth(null), img.getHeight(null) };
 
 	/**
 	 * 获取缓冲图片对象分辨率大小。 数组中 0 = width 1 = height
 	 */
-	public static final Function<BufferedImage, Integer[]> getBufferedImgSize = img -> new Integer[] { img.getWidth(),
-			img.getHeight() };
+	public static final Function<BufferedImage, Integer[]> getBufferedImgSize = img -> new Integer[] { img.getWidth(), img.getHeight() };
 
 	/**
 	 * 按照一定范围控制图片的高宽
@@ -234,8 +232,7 @@ public class ImageHelper {
 		int w = arr[0], h = arr[1];
 
 		Graphics2D g = bImg.createGraphics();
-		BufferedImage imageNew = g.getDeviceConfiguration().createCompatibleImage(w + borderWidth * 2,
-				h + borderWidth * 2);// 最终高宽
+		BufferedImage imageNew = g.getDeviceConfiguration().createCompatibleImage(w + borderWidth * 2, h + borderWidth * 2);// 最终高宽
 		g.dispose();
 		g = imageNew.createGraphics();
 		g.setBackground(borderColor);

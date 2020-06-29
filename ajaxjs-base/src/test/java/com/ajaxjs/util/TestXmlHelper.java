@@ -11,7 +11,7 @@ public class TestXmlHelper {
 	@Test
 	public void test() {
 		String xml = "C:\\project\\doctor\\WebContent\\META-INF\\context.xml";
-		Map<String, String> map = XMLHelper.nodeAsMap(xml, "//Resource[@name='jdbc/mys2ql']");
+		Map<String, String> map = XmlHelper.nodeAsMap(xml, "//Resource[@name='jdbc/mys2ql']");
 		assertNotNull(map);
 	}
 }

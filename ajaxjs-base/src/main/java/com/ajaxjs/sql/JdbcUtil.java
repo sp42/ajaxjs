@@ -52,9 +52,8 @@ public class JdbcUtil {
 		if (params == null || params.length == 0) // 完整的 SQL 无须填充
 			return sql;
 
-		if (!match(sql, params)) {
+		if (!match(sql, params))
 			LOGGER.info("SQL 语句中的占位符与值参数（个数上）不匹配。SQL：{0}，\nparams:{1}", sql, Arrays.toString(params));
-		}
 
 		if (sql.endsWith("?"))
 			sql += " ";
@@ -65,16 +64,14 @@ public class JdbcUtil {
 			Object value = params[i];
 			String inSql;
 
-			if (value instanceof Date) {// 只考虑了字符串、布尔、数字和日期类型的转换
+			if (value instanceof Date) // 只考虑了字符串、布尔、数字和日期类型的转换
 				inSql = "'" + value + "'";
-			} else if (value instanceof String) {
+			else if (value instanceof String)
 				inSql = "'" + value + "'";
-			} else if (value instanceof Boolean) {
+			else if (value instanceof Boolean)
 				inSql = (Boolean) value ? "1" : "0";
-			} else {
-				// number
-				inSql = value.toString();
-			}
+			else
+				inSql = value.toString();// number
 
 			arr[i] = arr[i] + inSql;
 		}

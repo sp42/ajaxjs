@@ -76,7 +76,8 @@ public class HttpBasicRequest extends IoHelper {
 	/**
 	 * 默认的客户端识别
 	 */
-	public final static Consumer<HttpURLConnection> setUserAgentDefault = conn -> setUserAgent.accept(conn, "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+	public final static Consumer<HttpURLConnection> setUserAgentDefault = conn -> setUserAgent.accept(conn,
+			"Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
 
 	/**
 	 * HttpURLConnection 工厂函数，对输入的网址进行初始化
@@ -238,7 +239,7 @@ public class HttpBasicRequest extends IoHelper {
 	public static String post(String url, byte[] b, Consumer<HttpURLConnection> fn) {
 		return post(url, b, fn, null);
 	}
-	
+
 	public static String post(String url, String params, Consumer<HttpURLConnection> fn) {
 		return post(url, params.getBytes(), fn);
 	}

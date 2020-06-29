@@ -54,7 +54,7 @@ public class SnowflakeIdWorker {
 	/**
 	 * 构造函数
 	 * 
-	 * @param workerId 工作ID (0~31)
+	 * @param workerId     工作ID (0~31)
 	 * @param datacenterId 数据中心ID (0~31)
 	 */
 	public SnowflakeIdWorker(long workerId, long datacenterId) {
