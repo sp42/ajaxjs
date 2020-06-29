@@ -1,4 +1,4 @@
-package com.ajaxjs.orm;
+package com.ajaxjs.sql;
 
 import static com.ajaxjs.sql.JdbcConnection.addSql;
 import static com.ajaxjs.sql.JdbcConnection.getConnection;

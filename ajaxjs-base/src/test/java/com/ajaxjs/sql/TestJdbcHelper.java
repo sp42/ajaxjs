@@ -1,4 +1,4 @@
-package com.ajaxjs.orm;
+package com.ajaxjs.sql;
 
 
 import static com.ajaxjs.sql.JdbcHelper.create;
@@ -31,9 +31,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.orm.dao.News;
 import com.ajaxjs.sql.JdbcHelper;
 import com.ajaxjs.sql.JdbcHelper.BeanMethod;
+import com.ajaxjs.sql.dao.News;
 
 public class TestJdbcHelper {
 	Connection conn;

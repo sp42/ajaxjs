@@ -13,72 +13,63 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.orm.dao;
+package com.ajaxjs.sql.dao;
 
 import java.util.List;
-import java.util.function.Function;
+import java.util.Map;
 
 import com.ajaxjs.sql.annotation.Delete;
 import com.ajaxjs.sql.annotation.Insert;
 import com.ajaxjs.sql.annotation.Select;
 import com.ajaxjs.sql.annotation.SqlFactory;
-import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.annotation.Update;
 import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.PageResult;
 
 /**
- * Data Acccess Object for testing.
+ * Data Access Object for testing.
  * 
  * @author sp42 frank@ajaxjs.com
  *
  */
-@TableName(value = "news", beanClass = News.class)
-public interface NewsDao extends IBaseDao<News> {
+public interface NewsDaoMap extends IBaseDao<Map<String, Object>> {
 	final static String tableName = "news";
 
-	@Select("SELECT * FROM ${tableName} WHERE id = ?")
+	@Select("SELECT * FROM " + tableName + " WHERE id = ?")
 	@Override
-	public News findById(Long id);
+	public Map<String, Object> findById(Long id);
 
 	@Select("SELECT COUNT(*) AS Total FROM " + tableName)
-	public Integer count();
-	
-	@Select("SELECT id FROM " + tableName)
-	public Integer[] findAllIds();
+	public int count();
 
-	@Select("SELECT * FROM news LIMIT ?, ?")
 	@SqlFactory("getInstance")
 	public int count2();
 
-	@Select("SELECT * FROM news LIMIT ?, ?")
-	public int count3(int t, Function<String, String> doSql);
-
-	public static String getInstance(String sql) {
-		return "SELECT COUNT(*) FROM news";
+	public static String getInstance() {
+		return "SELECT * FROM " + tableName;
 	}
 
-	@Select("SELECT * FROM news LIMIT ?, ?")
-	public List<News> findList(int start, int limit);
+	@Select("SELECT * FROM " + tableName + " LIMIT ?, ?")
+	public List<Map<String, Object>> findList(int start, int limit);
 
-	@Select(value = "SELECT * FROM news")
-	public PageResult<News> findPagedList(int start, int limit);
+	@Select(value = "SELECT * FROM " + tableName)
+	public PageResult<Map<String, Object>> findPagedList(int start, int limit);
 
-	@Select("SELECT * FROM news ORDER BY createDate LIMIT 0, 10")
-	public List<News> findTop10News();
+	@Select("SELECT * FROM " + tableName + " ORDER BY createDate LIMIT 0, 10")
+	public List<Map<String, Object>> findTop10News();
 
-	@Insert("INSERT INTO news (status, name) VALUES (?, ?)")
+	@Insert("INSERT INTO " + tableName + " (status, name) VALUES (?, ?)")
 	public Long createBySql(int status, String name);
 
 	@Insert(tableName = tableName)
 	@Override
-	public Long create(News bean);
+	public Long create(Map<String, Object> bean);
 
 	@Update(tableName = tableName)
 	@Override
-	public int update(News bean);
+	public int update(Map<String, Object> bean);
 
 	@Delete(tableName = tableName)
 	@Override
-	public boolean delete(News bean);
+	public boolean delete(Map<String, Object> bean);
 }

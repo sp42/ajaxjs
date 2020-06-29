@@ -1,4 +1,4 @@
-package com.ajaxjs.orm.dao;
+package com.ajaxjs.sql.dao;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;

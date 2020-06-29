@@ -1,4 +1,4 @@
-package com.ajaxjs.orm;
+package com.ajaxjs.sql;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

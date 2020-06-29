@@ -1,4 +1,4 @@
-package com.ajaxjs.orm.dao;
+package com.ajaxjs.sql.dao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -12,8 +12,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.orm.TestJdbcConnection;
 import com.ajaxjs.sql.JdbcConnection;
+import com.ajaxjs.sql.TestJdbcConnection;
 import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.sql.orm.Repository;
 

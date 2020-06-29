@@ -1,4 +1,4 @@
-package com.ajaxjs.orm;
+package com.ajaxjs.sql;
 
 import static com.ajaxjs.sql.JdbcUtil.printRealSql;
 import static org.junit.Assert.assertNotNull;
@@ -7,8 +7,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.orm.dao.NewsDao;
 import com.ajaxjs.sql.JdbcConnection;
+import com.ajaxjs.sql.dao.NewsDao;
 import com.ajaxjs.sql.orm.Repository;
 
 public class TestJdbcHelperUtil {
