@@ -30,7 +30,6 @@ import java.util.function.Function;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.ioc.aop.Aop;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
@@ -172,7 +171,8 @@ public class BeanContext {
 		if (dependenciObj_id.startsWith("autoWire:")) {
 			String str = dependenciObj_id.replaceFirst("autoWire:", "");
 			String[] arr = str.split("\\|");
-			String extendedId = ConfigService.getValueAsString(arr[0]);
+//			String extendedId = ConfigService.getValueAsString(arr[0]);
+			String extendedId = "";
 
 			// 没有扩展，读取默认的
 			return extendedId == null ? arr[1] : extendedId;

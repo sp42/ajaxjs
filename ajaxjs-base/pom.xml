@@ -29,6 +29,7 @@
 			<artifactId>javassist</artifactId>
 			<version>3.22.0-GA</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>

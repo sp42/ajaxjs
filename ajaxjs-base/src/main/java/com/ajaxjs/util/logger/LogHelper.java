@@ -23,7 +23,6 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import com.ajaxjs.Version;
-import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.util.CommonUtil;
 
 /**
@@ -43,15 +42,17 @@ public class LogHelper {
 		logger = Logger.getLogger(className);
 		logger.setFilter(filter);
 
-		if (!Version.isDebug && ConfigService.getValueAsBool("forDelevelopers.logAsFile")) {
-			String logFolder = ConfigService.getValueAsString("forDelevelopers.logAsFileFolder");
-			
+		if (!Version.isDebug /* && ConfigService.getValueAsBool("forDelevelopers.logAsFile") */) {
+			// String logFolder =
+			// ConfigService.getValueAsString("forDelevelopers.logAsFileFolder");
+			String logFolder = null;
+
 			if (CommonUtil.isEmptyString(logFolder)) {
 				logFolder = LogHelper.class.getClassLoader().getResource("").getPath();
 				logFolder = new File(logFolder).toString();
 				logFolder = logFolder.replace("classes", "LogHelper");
 			}
-			
+
 			logger.addHandler(new FileHandler(logFolder, null, ".log"));// 初始化保存到磁盤的處理器
 		}
 	}
