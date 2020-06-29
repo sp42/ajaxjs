@@ -247,6 +247,9 @@ public class SiteStruService implements ServletContextListener {
 	public Map<String, Object> getSecondLevelNode(HttpServletRequest request) {
 		if (request.getAttribute("secondLevel_Node") == null) {
 			String path = getPath(request);
+			
+			if(CommonUtil.isEmptyString(path))
+				return null;
 
 			path = path.substring(1, path.length());
 			String second = path.split("/")[0];

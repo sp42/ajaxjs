@@ -29,9 +29,10 @@ public class ArticleService extends BaseService<Map<String, Object>> implements 
 		@Select("SELECT e.id, e.name, e.createDate, e.cover, e.intro FROM ${tableName} e " + WHERE_REMARK_ORDER)
 		public List<Map<String, Object>> simpleList(Function<String, String> sqlHandler);
 
-		@Select("SELECT YEAR(`createDate`) year , MONTH(`createDate`) month FROM ${tableName} "
+		@Select("SELECT YEAR(`createDate`) year , MONTH(`createDate`) month FROM ${tableName} e "
+				+ "WHERE (e.catalogId IN ( SELECT id FROM general_catalog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catalog WHERE id = ? ) , '%')))) "
 				+ "GROUP BY YEAR(`createDate`), MONTH(`createDate`) ORDER BY YEAR(`createDate`) DESC, MONTH(`createDate`) DESC LIMIT 0, ?")
-		public List<Map<String, Object>> groupByMonth(int maxMonth);
+		public List<Map<String, Object>> groupByMonth(int catalogId, int maxMonth);
 	}
 
 	public static ArticleDao dao = new Repository().bind(ArticleDao.class);
@@ -71,7 +72,7 @@ public class ArticleService extends BaseService<Map<String, Object>> implements 
 	 * @return
 	 */
 	public List<Map<String, Object>> groupByMonth(int maxMonth) {
-		List<Map<String, Object>> list = dao.groupByMonth(maxMonth);
+		List<Map<String, Object>> list = dao.groupByMonth(getDomainCatalogId(), maxMonth);
 
 		for (Map<String, Object> map : list) {
 			int year = (int) map.get("year"), month = (int) map.get("month");
