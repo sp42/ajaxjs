@@ -25,7 +25,7 @@ import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.sql.JdbcReader;
 import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.util.XMLHelper;
+import com.ajaxjs.util.XmlHelper;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.IoHelper;
 import com.ajaxjs.util.io.ZipHelper;
@@ -49,7 +49,7 @@ public class MysqlAutoBackup extends TimerTask implements ServletContextListener
 
 		// 获取数据库配置
 		String configFile = MvcRequest.mappath(e.getServletContext(), "/META-INF/context.xml");
-		dbConfig = XMLHelper.nodeAsMap(configFile, "//Resource[@name='" + ConfigService.getValueAsString("data.database_node") + "']");
+		dbConfig = XmlHelper.nodeAsMap(configFile, "//Resource[@name='" + ConfigService.getValueAsString("data.database_node") + "']");
 
 		// 获取并处理配置文件中的时间
 		String backuptime = "";

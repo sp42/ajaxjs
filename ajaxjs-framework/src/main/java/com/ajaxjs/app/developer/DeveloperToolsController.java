@@ -17,7 +17,7 @@ import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.sql.JdbcConnection;
-import com.ajaxjs.util.XMLHelper;
+import com.ajaxjs.util.XmlHelper;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.ZipHelper;
 
@@ -33,7 +33,7 @@ public class DeveloperToolsController implements IController {
 	public String deve(ModelAndView mv, MvcRequest r) {
 		// 代码生成器
 		mv.put("saveFolder", ConfigService.getValueAsString("System.project_folder") + "\\src"); // 臨時保存
-		mv.put("conn", XMLHelper.nodeAsMap(r.mappath("/META-INF/context.xml"), "//Resource[@name='" + ConfigService.get("data.database_node") + "']"));
+		mv.put("conn", XmlHelper.nodeAsMap(r.mappath("/META-INF/context.xml"), "//Resource[@name='" + ConfigService.get("data.database_node") + "']"));
 
 		return BaseController.admin("developer/developer-tool");
 	}

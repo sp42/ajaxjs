@@ -30,7 +30,7 @@ import com.ajaxjs.framework.config.SiteStruService;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.util.XMLHelper;
+import com.ajaxjs.util.XmlHelper;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -58,7 +58,7 @@ public class ConfigController implements IController {
 	public String dataConfig(ModelAndView mv, MvcRequest r) {
 		LOGGER.info("数据配置");
 
-		mv.put("conn", XMLHelper.nodeAsMap(r.mappath("/META-INF/context.xml"), "//Resource[@name='" + ConfigService.get("data.database_node") + "']"));
+		mv.put("conn", XmlHelper.nodeAsMap(r.mappath("/META-INF/context.xml"), "//Resource[@name='" + ConfigService.get("data.database_node") + "']"));
 		loadJson(mv);
 
 		return BaseController.admin("config/data-config");
