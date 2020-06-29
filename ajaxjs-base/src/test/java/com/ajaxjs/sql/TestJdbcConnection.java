@@ -11,7 +11,6 @@ import java.sql.SQLException;
 
 import org.junit.Test;
 
-import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.util.resource.ScanClass;
 
 public class TestJdbcConnection {

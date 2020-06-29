@@ -31,7 +31,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.sql.JdbcHelper;
 import com.ajaxjs.sql.JdbcHelper.BeanMethod;
 import com.ajaxjs.sql.dao.News;
 

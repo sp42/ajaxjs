@@ -7,7 +7,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.dao.NewsDao;
 import com.ajaxjs.sql.orm.Repository;
 
