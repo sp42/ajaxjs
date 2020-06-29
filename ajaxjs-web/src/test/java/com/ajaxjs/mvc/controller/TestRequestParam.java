@@ -22,8 +22,8 @@ import javax.ws.rs.QueryParam;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.mvc.ModelAndView;
+import com.ajaxjs.sql.orm.BaseModel;
 import com.ajaxjs.web.mock.MockRequest;
 import com.ajaxjs.web.mock.MockResponse;
 

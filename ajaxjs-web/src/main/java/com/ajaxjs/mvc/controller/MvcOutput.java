@@ -33,8 +33,8 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.jsp.PageContext;
 
 import com.ajaxjs.Version;
-import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.mvc.ModelAndView;
+import com.ajaxjs.sql.orm.BaseModel;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
