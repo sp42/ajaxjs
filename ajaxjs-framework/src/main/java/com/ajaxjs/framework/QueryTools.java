@@ -7,8 +7,9 @@ import java.util.function.Function;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.orm.JdbcConnection;
-import com.ajaxjs.orm.JdbcHelper;
+import com.ajaxjs.sql.JdbcConnection;
+import com.ajaxjs.sql.JdbcHelper;
+import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.web.ServletHelper;

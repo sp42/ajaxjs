@@ -5,8 +5,8 @@ import javax.ws.rs.Path;
 
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.orm.JdbcConnection;
-import com.ajaxjs.orm.JdbcHelper;
+import com.ajaxjs.sql.JdbcConnection;
+import com.ajaxjs.sql.JdbcHelper;
 
 @Path("/foo")
 public class TransactionController implements IController {

@@ -3,9 +3,9 @@ package com.ajaxjs.user.service;
 import java.util.Map;
 
 import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.framework.IBaseDao;
-import com.ajaxjs.framework.Repository;
-import com.ajaxjs.orm.annotation.TableName;
+import com.ajaxjs.sql.annotation.TableName;
+import com.ajaxjs.sql.orm.IBaseDao;
+import com.ajaxjs.sql.orm.Repository;
 
 public class GlobalLogService extends BaseService<Map<String, Object>> {
 	@TableName(value = "general_log", beanClass = Map.class)

@@ -1,15 +1,15 @@
 package com.ajaxjs.weixin.mini_app;
 
 import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.framework.IBaseDao;
-import com.ajaxjs.framework.Repository;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.net.http.NetUtil;
-import com.ajaxjs.orm.annotation.Insert;
-import com.ajaxjs.orm.annotation.Select;
-import com.ajaxjs.orm.annotation.TableName;
+import com.ajaxjs.sql.annotation.Insert;
+import com.ajaxjs.sql.annotation.Select;
+import com.ajaxjs.sql.annotation.TableName;
+import com.ajaxjs.sql.orm.IBaseDao;
+import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.user.controller.LoginLogController;
 import com.ajaxjs.user.login.UserLoginLog;

@@ -1,6 +1,6 @@
 package com.ajaxjs.app;
 
-import com.ajaxjs.framework.BaseModel;
+import com.ajaxjs.sql.orm.BaseModel;
 
 /**
  * 产品

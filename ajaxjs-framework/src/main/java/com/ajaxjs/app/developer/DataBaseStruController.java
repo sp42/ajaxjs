@@ -20,8 +20,8 @@ import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.orm.JdbcConnection;
-import com.ajaxjs.orm.JdbcHelper;
+import com.ajaxjs.sql.JdbcConnection;
+import com.ajaxjs.sql.JdbcHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
 @Path("/admin/DataBaseShowStru")

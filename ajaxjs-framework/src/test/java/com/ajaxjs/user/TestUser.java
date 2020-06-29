@@ -9,7 +9,7 @@ import org.junit.Test;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.config.TestHelper;
 import com.ajaxjs.ioc.BeanContext;
-import com.ajaxjs.orm.JdbcConnection;
+import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.user.controller.UserController;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.model.UserCommonAuth;

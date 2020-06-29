@@ -4,12 +4,12 @@ import java.util.List;
 import java.util.function.Function;
 
 import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.framework.IBaseDao;
-import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
-import com.ajaxjs.orm.annotation.Select;
-import com.ajaxjs.orm.annotation.TableName;
+import com.ajaxjs.sql.annotation.Select;
+import com.ajaxjs.sql.annotation.TableName;
+import com.ajaxjs.sql.orm.IBaseDao;
+import com.ajaxjs.sql.orm.PageResult;
+import com.ajaxjs.sql.orm.Repository;
 
 @Bean("FeedbackService")
 public class FeedbackService extends BaseService<Feedback> {

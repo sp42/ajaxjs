@@ -1,6 +1,6 @@
 package com.ajaxjs.shop.model;
 
-import com.ajaxjs.framework.BaseModel;
+import com.ajaxjs.sql.orm.BaseModel;
 
 /**
  * 店家

@@ -7,12 +7,12 @@ import java.util.function.Function;
 
 import javax.servlet.ServletContext;
 
-import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.mvc.ModelAndView;
+import com.ajaxjs.sql.orm.BaseModel;
+import com.ajaxjs.sql.orm.PageResult;
+import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.util.CommonUtil;
 
 @Bean("CatalogService")

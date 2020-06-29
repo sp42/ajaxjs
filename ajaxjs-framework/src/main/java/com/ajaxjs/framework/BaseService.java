@@ -8,7 +8,11 @@ import java.util.function.Function;
 
 import com.ajaxjs.app.catalog.CatalogService;
 import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.orm.SnowflakeIdWorker;
+import com.ajaxjs.sql.SnowflakeIdWorker;
+import com.ajaxjs.sql.orm.BaseModel;
+import com.ajaxjs.sql.orm.IBaseDao;
+import com.ajaxjs.sql.orm.IBaseService;
+import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.util.CommonUtil;
 
 /**

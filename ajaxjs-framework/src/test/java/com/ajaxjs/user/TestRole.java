@@ -13,7 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ajaxjs.framework.config.TestHelper;
-import com.ajaxjs.orm.JdbcConnection;
+import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.user.role.RoleService;
 import com.ajaxjs.user.role.RoleUtil;
 

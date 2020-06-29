@@ -23,7 +23,7 @@ import javax.ws.rs.Path;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.orm.JdbcConnection;
+import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.ByteArrayServletOutputStream;

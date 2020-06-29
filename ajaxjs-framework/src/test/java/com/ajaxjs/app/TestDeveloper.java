@@ -14,7 +14,7 @@ import com.ajaxjs.app.developer.MysqlAutoBackup;
 import com.ajaxjs.app.developer.MysqlAutoBackup.MysqlExport;
 import com.ajaxjs.app.developer.TomcatLogController.LogFileTailer;
 import com.ajaxjs.framework.config.TestHelper;
-import com.ajaxjs.orm.JdbcConnection;
+import com.ajaxjs.sql.JdbcConnection;
 
 public class TestDeveloper {
 	@BeforeClass

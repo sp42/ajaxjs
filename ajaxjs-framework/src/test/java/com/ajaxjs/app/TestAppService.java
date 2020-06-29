@@ -10,10 +10,10 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.config.TestHelper;
 import com.ajaxjs.ioc.BeanContext;
-import com.ajaxjs.orm.JdbcConnection;
+import com.ajaxjs.sql.JdbcConnection;
+import com.ajaxjs.sql.orm.PageResult;
 
 public class TestAppService {
 	static FeedbackService FeedbackServicee;

@@ -23,7 +23,7 @@ import javax.servlet.annotation.WebListener;
 import com.ajaxjs.Version;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.orm.JdbcReader;
+import com.ajaxjs.sql.JdbcReader;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.XMLHelper;
 import com.ajaxjs.util.io.FileHelper;

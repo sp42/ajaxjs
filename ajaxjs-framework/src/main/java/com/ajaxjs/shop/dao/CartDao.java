@@ -3,13 +3,13 @@ package com.ajaxjs.shop.dao;
 import java.util.List;
 import java.util.function.Function;
 
-import com.ajaxjs.framework.IBaseDao;
-import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.orm.annotation.Delete;
-import com.ajaxjs.orm.annotation.Select;
-import com.ajaxjs.orm.annotation.TableName;
-import com.ajaxjs.orm.annotation.Update;
 import com.ajaxjs.shop.model.Cart;
+import com.ajaxjs.sql.annotation.Delete;
+import com.ajaxjs.sql.annotation.Select;
+import com.ajaxjs.sql.annotation.TableName;
+import com.ajaxjs.sql.annotation.Update;
+import com.ajaxjs.sql.orm.IBaseDao;
+import com.ajaxjs.sql.orm.PageResult;
 
 @TableName(value = "shop_cart", beanClass = Cart.class)
 public interface CartDao extends IBaseDao<Cart> {

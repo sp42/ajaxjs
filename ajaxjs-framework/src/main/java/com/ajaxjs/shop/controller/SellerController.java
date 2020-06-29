@@ -12,15 +12,15 @@ import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.framework.IBaseDao;
-import com.ajaxjs.framework.IBaseService;
-import com.ajaxjs.framework.Repository;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.orm.annotation.TableName;
 import com.ajaxjs.shop.model.Seller;
+import com.ajaxjs.sql.annotation.TableName;
+import com.ajaxjs.sql.orm.IBaseDao;
+import com.ajaxjs.sql.orm.IBaseService;
+import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.user.filter.LoginCheck;
 import com.ajaxjs.util.logger.LogHelper;
 

@@ -2,7 +2,7 @@ package com.ajaxjs.shop.model;
 
 import java.math.BigDecimal;
 
-import com.ajaxjs.framework.BaseModel;
+import com.ajaxjs.sql.orm.BaseModel;
 
 /**
  * 购物车

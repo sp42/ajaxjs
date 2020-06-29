@@ -4,7 +4,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.ajaxjs.orm.SnowflakeIdWorker;
+import com.ajaxjs.sql.SnowflakeIdWorker;
 
 public interface ShopConstant {
 	public static final int ENTRY_GOODS = 56;

@@ -7,13 +7,13 @@ import java.util.function.Function;
 import com.ajaxjs.app.attachment.Attachment_pictureService;
 import com.ajaxjs.app.catalog.CatalogService;
 import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.framework.Repository;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.shop.dao.GoodsDao;
 import com.ajaxjs.shop.model.Goods;
+import com.ajaxjs.sql.orm.PageResult;
+import com.ajaxjs.sql.orm.Repository;
 
 /**
  * 商品

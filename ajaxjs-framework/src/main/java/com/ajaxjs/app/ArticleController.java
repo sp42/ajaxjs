@@ -18,10 +18,8 @@ import javax.ws.rs.core.MediaType;
 import com.ajaxjs.app.attachment.AttachmentService;
 import com.ajaxjs.app.catalog.CatalogService;
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.CommonConstant;
-import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.framework.filter.FrontEndOnlyCheck;
@@ -32,7 +30,9 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.net.http.PicDownload;
-import com.ajaxjs.orm.SnowflakeIdWorker;
+import com.ajaxjs.sql.SnowflakeIdWorker;
+import com.ajaxjs.sql.orm.BaseModel;
+import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.util.logger.LogHelper;
 
 @Bean

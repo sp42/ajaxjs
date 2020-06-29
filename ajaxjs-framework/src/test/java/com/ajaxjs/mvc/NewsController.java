@@ -8,8 +8,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
-import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.mvc.controller.IController;
+import com.ajaxjs.sql.orm.BaseModel;
 
 @Path("/news")
 public class NewsController implements IController {

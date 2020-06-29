@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.app.catalog.CatalogDao;
-import com.ajaxjs.framework.IBaseDao;
-import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.orm.annotation.Select;
-import com.ajaxjs.orm.annotation.TableName;
 import com.ajaxjs.shop.model.Goods;
+import com.ajaxjs.sql.annotation.Select;
+import com.ajaxjs.sql.annotation.TableName;
+import com.ajaxjs.sql.orm.IBaseDao;
+import com.ajaxjs.sql.orm.PageResult;
 
 @TableName(value = "shop_goods", beanClass = Goods.class)
 public interface GoodsDao extends IBaseDao<Goods> {

@@ -1,9 +1,9 @@
 package com.ajaxjs.app.attachment;
 
-import com.ajaxjs.framework.IBaseDao;
-import com.ajaxjs.orm.annotation.Delete;
-import com.ajaxjs.orm.annotation.TableName;
-import com.ajaxjs.orm.annotation.Update;
+import com.ajaxjs.sql.annotation.Delete;
+import com.ajaxjs.sql.annotation.TableName;
+import com.ajaxjs.sql.annotation.Update;
+import com.ajaxjs.sql.orm.IBaseDao;
 
 @TableName(value = "attachment_picture", beanClass = Attachment_picture.class)
 public interface Attachment_pictureDao extends IBaseDao<Attachment_picture> {

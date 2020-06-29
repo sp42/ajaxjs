@@ -11,8 +11,8 @@ import javax.validation.constraints.Size;
 
 import org.junit.Test;
 
-import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.filter.BeanValidator;
+import com.ajaxjs.sql.orm.BaseModel;
 
 public class TestValidator {
 	public static class News extends BaseModel {

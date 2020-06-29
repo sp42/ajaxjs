@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
+import com.ajaxjs.sql.orm.Repository;
 
 @Bean
 public class Attachment_pictureService extends BaseService<Attachment_picture> {

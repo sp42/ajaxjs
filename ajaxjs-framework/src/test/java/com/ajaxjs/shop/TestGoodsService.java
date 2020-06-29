@@ -9,11 +9,11 @@ import org.junit.Test;
 import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.framework.config.TestHelper;
 import com.ajaxjs.ioc.BeanContext;
-import com.ajaxjs.orm.JdbcConnection;
-import com.ajaxjs.orm.SnowflakeIdWorker;
 import com.ajaxjs.shop.model.Goods;
 import com.ajaxjs.shop.service.CartService;
 import com.ajaxjs.shop.service.GoodsService;
+import com.ajaxjs.sql.JdbcConnection;
+import com.ajaxjs.sql.SnowflakeIdWorker;
 import com.ajaxjs.user.model.UserAddress;
 import com.ajaxjs.user.service.UserAddressService;
 

@@ -29,8 +29,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.mvc.controller.MvcRequest;
+import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.logger.LogHelper;
 

@@ -3,11 +3,11 @@ package com.ajaxjs.shop.dao;
 import java.util.List;
 
 import com.ajaxjs.app.attachment.Attachment_pictureDao;
-import com.ajaxjs.framework.IBaseDao;
-import com.ajaxjs.orm.annotation.Select;
-import com.ajaxjs.orm.annotation.TableName;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.model.OrderItem;
+import com.ajaxjs.sql.annotation.Select;
+import com.ajaxjs.sql.annotation.TableName;
+import com.ajaxjs.sql.orm.IBaseDao;
 
 @TableName(value = "shop_order_info", beanClass = OrderInfo.class)
 public interface OrderInfoDao extends IBaseDao<OrderInfo> {

@@ -2,7 +2,7 @@ package com.ajaxjs.shop.model;
 
 import java.math.BigDecimal;
 
-import com.ajaxjs.framework.BaseModel;
+import com.ajaxjs.sql.orm.BaseModel;
 
 public class OrderItem extends BaseModel {
 	private static final long serialVersionUID = 1L;

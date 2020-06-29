@@ -4,7 +4,10 @@ import java.util.Map;
 
 import com.ajaxjs.app.catalog.CatalogService;
 import com.ajaxjs.framework.config.ConfigService;
-import com.ajaxjs.orm.annotation.TableName;
+import com.ajaxjs.sql.annotation.TableName;
+import com.ajaxjs.sql.orm.IBaseDao;
+import com.ajaxjs.sql.orm.PageResult;
+import com.ajaxjs.sql.orm.Repository;
 
 /**
  * Map 的 CRUD 服务。期望一个实体的快速增删改查

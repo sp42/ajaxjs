@@ -1,4 +1,4 @@
-<%@page import="com.ajaxjs.orm.JdbcConnection"%>
+<%@page import="com.ajaxjs.sql.JdbcConnection"%>
 <%@page pageEncoding="UTF-8"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
 <!DOCTYPE html>

@@ -3,11 +3,11 @@ package com.ajaxjs.shop.service;
 import java.util.List;
 
 import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.framework.IBaseDao;
-import com.ajaxjs.framework.Repository;
 import com.ajaxjs.ioc.Bean;
-import com.ajaxjs.orm.annotation.TableName;
 import com.ajaxjs.shop.model.GoodsFormat;
+import com.ajaxjs.sql.annotation.TableName;
+import com.ajaxjs.sql.orm.IBaseDao;
+import com.ajaxjs.sql.orm.Repository;
 
 /**
  * 商品规格

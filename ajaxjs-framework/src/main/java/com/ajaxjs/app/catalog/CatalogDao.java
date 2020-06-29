@@ -3,10 +3,10 @@ package com.ajaxjs.app.catalog;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.framework.IBaseDao;
-import com.ajaxjs.orm.annotation.Delete;
-import com.ajaxjs.orm.annotation.Select;
-import com.ajaxjs.orm.annotation.TableName;
+import com.ajaxjs.sql.annotation.Delete;
+import com.ajaxjs.sql.annotation.Select;
+import com.ajaxjs.sql.annotation.TableName;
+import com.ajaxjs.sql.orm.IBaseDao;
 
 @TableName(value = "general_catalog", beanClass = Catalog.class)
 public interface CatalogDao extends IBaseDao<Catalog> {

@@ -10,7 +10,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.framework.IBaseService;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
@@ -23,6 +22,7 @@ import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.service.OrderService;
 import com.ajaxjs.shop.service.Pay;
+import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.io.IoHelper;
 import com.ajaxjs.util.logger.LogHelper;
