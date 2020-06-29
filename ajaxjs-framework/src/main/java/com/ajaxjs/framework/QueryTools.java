@@ -125,7 +125,7 @@ public class QueryTools {
 			if (type == String.class) {
 				if (!ServletHelper.preventSQLInject(_v)) // 防止 SQL 注入
 					return setWhere(null);
-				
+
 				v = _v;
 			} else if (type == Long.class || type == long.class)
 				v = Long.parseLong(_v);
@@ -236,12 +236,10 @@ public class QueryTools {
 	public static Function<String, String> byAny(HttpServletRequest r) {
 		String value = r.getParameter("filterValue");
 
-	
 		if (value == null || "null".equals(value))
 			return setWhere(null);
 
-		return by(r.getParameter("filterField"),
-				CommonUtil.regTest("\\d+", value) ? MappingValue.toJavaValue(value) : value);
+		return by(r.getParameter("filterField"), CommonUtil.regTest("\\d+", value) ? MappingValue.toJavaValue(value) : value);
 	}
 
 	/**
@@ -302,10 +300,8 @@ public class QueryTools {
 	 */
 	public static void getNeighbor(Map<String, Object> map, String tableName, Serializable id) {
 		Map<String, Object> perv, next;
-		perv = JdbcHelper.queryAsMap(JdbcConnection.getConnection(),
-				"SELECT id, name FROM " + tableName + " WHERE id < ? ORDER BY id DESC LIMIT 1", id);
-		next = JdbcHelper.queryAsMap(JdbcConnection.getConnection(),
-				"SELECT id, name FROM " + tableName + " WHERE id > ? LIMIT 1", id);
+		perv = JdbcHelper.queryAsMap(JdbcConnection.getConnection(), "SELECT id, name FROM " + tableName + " WHERE id < ? ORDER BY id DESC LIMIT 1", id);
+		next = JdbcHelper.queryAsMap(JdbcConnection.getConnection(), "SELECT id, name FROM " + tableName + " WHERE id > ? LIMIT 1", id);
 
 		map.put("neighbor_pervInfo", perv);
 		map.put("neighbor_nextInfo", next);

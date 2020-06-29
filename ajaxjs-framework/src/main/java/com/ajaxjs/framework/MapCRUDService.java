@@ -23,7 +23,7 @@ public class MapCRUDService extends BaseService<Map<String, Object>> {
 	}
 
 	public MapCRUDDao dao;
-	
+
 	public MapCRUDService(String tableName) {
 		dao = new Repository().bind(MapCRUDDao.class, tableName);
 		setDao(dao);
@@ -68,7 +68,6 @@ public class MapCRUDService extends BaseService<Map<String, Object>> {
 	public void setDomainCatalogId(int domainCatalogId) {
 		this.domainCatalogId = domainCatalogId;
 	}
-
 
 	/**
 	 * 关联类别表的
