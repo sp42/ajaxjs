@@ -131,29 +131,28 @@ public class MvcOutput extends HttpServletResponseWrapper {
 			return;
 		}
 
-		if (getOutputMap() != null) { // Map 的话转变为 json 输出
+		if (getOutputMap() != null) // Map 的话转变为 json 输出
 			setJson(true).setOutput(JsonHelper.toJson(getOutputMap()));
-		} else if (getOutputList() != null) {
+		else if (getOutputList() != null) {
 			if (getOutputList() == null || getOutputList().size() == 0)
 				setJson(true).setOutput("[]");
 			else
 				setJson(true).setOutput(JsonHelper.toJson(getOutputList()));
-		} else if (getBean() != null) {
+		} else if (getBean() != null)
 			setJson(true).setOutput(JsonHelper.toJson(getBean()));
-		} else if (getOutputObj() != null) {// map or object 二选其一
+		else if (getOutputObj() != null) {// map or object 二选其一
 			// setJson(true).setOutput(JsonHelper.stringify_object(getOutput_Obj()));
 		}
 
-		if (isJson()) {
+		if (isJson())
 			setContent_Type("application/json");
-		} else if (getJsonpToken() != null) {
+		else if (getJsonpToken() != null) {
 			setContent_Type("application/javascript");
 			setOutput(String.format("%s(%s);", getJsonpToken(), getOutput()));
-		} else if (xmlContent) {
+		} else if (xmlContent)
 			setContent_Type("application/xml");
-		} else if (isSimpleHTML()) {
+		else if (isSimpleHTML())
 			setOutput(String.format("<html><meta charset=\"utf-8\" /><body>%s</body></html>", getOutput()));
-		}
 
 		output(getOutput());
 	}
@@ -213,24 +212,24 @@ public class MvcOutput extends HttpServletResponseWrapper {
 			if (result instanceof String) {
 				String str = (String) result;
 
-				if (str.startsWith(HTML)) {
+				if (str.startsWith(HTML))
 					setSimpleHTML(true).setOutput(str.replace(HTML, "")).go();
-				} else if (str.startsWith(xml)) {
+				else if (str.startsWith(xml)) {
 					xmlContent = true;
 					setOutput(str.replace(xml, "")).go();
-				} else if (str.startsWith(REDIRECT_PREFIX)) {
+				} else if (str.startsWith(REDIRECT_PREFIX))
 					setRedirect(str.replace(REDIRECT_PREFIX, "")).go();
-				} else if (str.startsWith(JSON_PREFIX)) {
+				else if (str.startsWith(JSON_PREFIX)) {
 					String jsonpToken = request.getParameter(MvcRequest.CALLBACK_PARAM); // 由参数决定是否使用 jsonp
 
-					if (CommonUtil.isEmptyString(jsonpToken)) {
+					if (CommonUtil.isEmptyString(jsonpToken))
 						setJson(true).setOutput(str.replace(JSON_PREFIX, "")).go();
-					} else {
+					else
 						setJsonpToken(jsonpToken).setOutput(str.replace(JSON_PREFIX, "")).go();
-					}
-				} else if (str.startsWith("js::")) {
+
+				} else if (str.startsWith("js::"))
 					setContent_Type("application/javascript").setOutput(str.replace("js::", "")).go();
-				} else { // JSP
+				else { // JSP
 					if (!str.contains(".jsp") && !str.endsWith(".jsp")) // 自动补充 .jsp 扩展名
 						str += ".jsp";
 
@@ -239,19 +238,18 @@ public class MvcOutput extends HttpServletResponseWrapper {
 						m = m.replaceAll("String ", "");
 						String[] arr = m.split("\\.");
 						m = arr[arr.length - 2] + "." + arr[arr.length - 1];
-						
+
 						LOGGER.info("执行[{0}]控制器，转到[{1}]视图", m, result);
 					}
 
 					setTemplate(str).go(request);
 				}
-			} else if (result instanceof Map) {
+			} else if (result instanceof Map)
 				setOutputMap((Map<String, ?>) result).go();
-			} else if (result instanceof List) {
+			else if (result instanceof List)
 				setOutputList((List<?>) result).go();
-			} else if (result instanceof BaseModel) {
+			else if (result instanceof BaseModel)
 				setBean((BaseModel) result).go();
-			}
 		}
 	}
 

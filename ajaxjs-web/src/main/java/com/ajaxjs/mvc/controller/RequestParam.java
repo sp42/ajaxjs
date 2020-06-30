@@ -54,8 +54,7 @@ public class RequestParam {
 	 * @param method     控制器方法对象
 	 * @return 参数列表
 	 */
-	public static Object[] getArgs(IController controller, MvcRequest request, HttpServletResponse response,
-			Method method) {
+	public static Object[] getArgs(IController controller, MvcRequest request, HttpServletResponse response, Method method) {
 		Annotation[][] annotation = method.getParameterAnnotations(); // 方法所有的注解，length 应该要和参数总数一样
 		Class<?>[] parmTypes = method.getParameterTypes();// 反射得到参数列表的各个类型，遍历之
 		ArrayList<Object> args = new ArrayList<>();// 参数列表
@@ -106,8 +105,7 @@ public class RequestParam {
 	 * @param method      控制器方法对象
 	 * @param controller
 	 */
-	private static void getArgValue(Class<?> clz, Annotation[] annotations, MvcRequest request, ArrayList<Object> args,
-			Method method, IController controller) {
+	private static void getArgValue(Class<?> clz, Annotation[] annotations, MvcRequest request, ArrayList<Object> args, Method method, IController controller) {
 		if (annotations.length > 0) {
 			boolean required = false; // 是否必填字段
 			String defaultValue = null; // 默认值
@@ -133,8 +131,7 @@ public class RequestParam {
 
 					if (path != null) {
 						String paramName = ((PathParam) a).value();
-						String value = request.getValueFromPath(
-								parseRoot(path, controller == null ? null : controller.getClass()), paramName);
+						String value = request.getValueFromPath(parseRoot(path, controller == null ? null : controller.getClass()), paramName);
 						getArgValue2(clz, args, value);
 					} else {
 						LOGGER.warning(new NullPointerException("控制器方法居然没有 PathParam 注解？？"));
@@ -143,9 +140,8 @@ public class RequestParam {
 					break;
 				}
 			}
-		} else {
+		} else
 			args.add("Nothing to add args"); // 不知道传什么，就空字符串吧
-		}
 	}
 
 	/**
@@ -174,13 +170,12 @@ public class RequestParam {
 	 */
 	private static String getArgValue(Annotation a, HttpServletRequest request, boolean required) {
 		String key = null, value;
-		if (a instanceof QueryParam) {
+		if (a instanceof QueryParam)
 			key = ((QueryParam) a).value();
-		} else if (a instanceof FormParam) {
+		else if (a instanceof FormParam)
 			key = ((FormParam) a).value();
-		} else if (a instanceof HeaderParam) {
+		else if (a instanceof HeaderParam)
 			key = ((HeaderParam) a).value();
-		}
 
 		value = a instanceof HeaderParam ? request.getHeader(key) : request.getParameter(key);
 

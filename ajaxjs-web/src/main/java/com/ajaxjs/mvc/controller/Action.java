@@ -87,14 +87,11 @@ public class Action {
 	public void createControllerInstance(Class<? extends IController> clz) {
 		if (clz.getAnnotation(Bean.class) != null) { // 如果有 ioc，则从容器中查找
 			controller = ComponentMgr.get(clz);
-			
+
 			if (controller == null)
-				LOGGER.warning(
-						"在 IOC 资源库中找不到该类 {0} 的实例，请检查该类是否已经加入了 IOC 扫描？  The IOC library not found that Controller, plz check if it added to the IOC scan.",
-						clz.getName());
-		} else {
+				LOGGER.warning("在 IOC 资源库中找不到该类 {0} 的实例，请检查该类是否已经加入了 IOC 扫描？  The IOC library not found that Controller, plz check if it added to the IOC scan.", clz.getName());
+		} else
 			controller = ReflectUtil.newInstance(clz);// 保存的是 控制器 实例。
-		}
 	}
 
 	/**
@@ -182,9 +179,8 @@ public class Action {
 				LOGGER.warning("控制器上的 {0} 的 {1} 方法已在 {2} 登记，不接受 {3} 的重复登记！", path, arr[arr.length - 1], method, existMethod);
 				return false;
 			}
-		} else {
+		} else
 			return false;
-		}
 	}
 
 	/**

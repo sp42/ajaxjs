@@ -15,17 +15,12 @@
  */
 package com.ajaxjs.mvc.controller;
 
-import java.io.File;
 import java.lang.reflect.Modifier;
-import java.util.Objects;
-import java.util.Set;
 
 import javax.ws.rs.Path;
 
-import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.util.ReflectUtil;
+import com.ajaxjs.util.ioc.ComponentMgr;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.resource.ScanClass;
 
 /**
  * Servlet 启动时进行控制器扫描，解析控制器 Path 路径，然后将其登记起来。Scanner controllers at Servlet
@@ -33,22 +28,15 @@ import com.ajaxjs.util.resource.ScanClass;
  * 
  * @author sp42 frank@ajaxjs.com
  */
-public class ControllerScanner extends ScanClass<IController> {
+public class ControllerScanner {
 	private static final LogHelper LOGGER = LogHelper.getLog(ControllerScanner.class);
 
-	@Override
-	public void onFileAdding(Set<Class<IController>> target, File resourceFile, String packageJavaName) {
-		String className = getClassName(resourceFile, packageJavaName);
-		onJarAdding(target, className);
-	}
-
 	@SuppressWarnings("unchecked")
-	@Override
-	public void onJarAdding(Set<Class<IController>> target, String resourcePath) {
-		Class<?> clazz = ReflectUtil.getClassByName(resourcePath);
-
-		if (IController.class.isAssignableFrom(clazz)) {
-			target.add((Class<IController>) clazz);// 添加到集合中去
+	public void init() {
+		for (Class<?> clz : ComponentMgr.clzs) {
+			if (IController.class.isAssignableFrom(clz)) {
+				add((Class<? extends IController>) clz);// 添加到集合中去
+			}
 		}
 	}
 
@@ -58,7 +46,7 @@ public class ControllerScanner extends ScanClass<IController> {
 	 * @param clz 控制器类 a Controller class
 	 */
 	public static void add(Class<? extends IController> clz) {
-		if (!testClass(clz))
+		if (Modifier.isAbstract(clz.getModifiers())) // 忽略抽象类
 			return;
 
 		String topPath = getRootPath(clz);
@@ -69,28 +57,7 @@ public class ControllerScanner extends ScanClass<IController> {
 		action.parseMethod();
 
 		// 会打印控制器的总路径信息，不会打印各个方法的路径，那太细了，日志也会相应地多
-//		LOGGER.info("控制器已登记成功！The controller \"{0}\" (\"/{1}\") was parsed and registered",
-//				clz.toString().replaceAll("class\\s", ""), topPath); // 控制器 {0} 所有路径（包括子路径）注册成功！
-	}
-
-	/**
-	 * 检查控制器类是否有 Path 注解。Test a class if it can be parsed.
-	 * 
-	 * @param clz 应该是一个控制器类 Should be a IController.
-	 * @return true 表示为是一个控制器类。 true if it's ok.
-	 */
-	private static boolean testClass(Class<? extends IController> clz) {
-		if (Modifier.isAbstract(clz.getModifiers())) // 忽略抽象类
-			return false;
-
-		Path path = clz.getAnnotation(Path.class); // 总路径
-
-		if (path == null && !Modifier.isAbstract(clz.getModifiers())) {
-			LOGGER.warning("[{0}]不存在任何 Path 信息！No Path info!", clz.toString());
-			return false;
-		}
-
-		return true;
+		LOGGER.info("控制器已登记成功！The controller \"{0}\" (\"/{1}\") was parsed and registered", clz.toString().replaceAll("class\\s", ""), topPath); // 控制器 {0} 所有路径（包括子路径）注册成功！
 	}
 
 	/**
@@ -100,27 +67,14 @@ public class ControllerScanner extends ScanClass<IController> {
 	 * @return 根目录
 	 */
 	public static String getRootPath(Class<? extends IController> clz) {
-		Path a = clz.getAnnotation(Path.class);
-		Objects.requireNonNull(a, clz + "控制器类应该至少设置一个 Path 注解。");
-		String rootPath = a.value();// 控制器类上定义的 Path 注解总是从根目录开始的。 the path in class always starts from top 1
+		Path path = clz.getAnnotation(Path.class); // 总路径
 
-		return rootPath.replaceAll("^/", ""); // remove the first / so that the array would be right length
-	}
-
-	/**
-	 * 扫描控制器
-	 * @deprecated
-	 * @param config web.xml 中的配置，已经转为 Map
-	 */
-	public static void scannController(String config) {
-		ControllerScanner scanner;// 定义一个扫描器，专门扫描 IController
-
-		for (String packageName : CommonUtil.split(config)) {
-			scanner = new ControllerScanner();
-			Set<Class<IController>> IControllers = scanner.scan(packageName);
-
-			for (Class<IController> clz : IControllers)
-				add(clz);
+		if (path == null && !Modifier.isAbstract(clz.getModifiers())) { // 检查控制器类是否有 Path
+			LOGGER.warning("控制器[{0}]不存在任何 Path 信息，控制器类应该至少设置一个 Path 注解。", clz.toString());
+			return null;
 		}
+
+		String rootPath = path.value();// 控制器类上定义的 Path 注解总是从根目录开始的。 the path in class always starts from top 1
+		return rootPath.replaceAll("^/", ""); // remove the first / so that the array would be right length
 	}
 }

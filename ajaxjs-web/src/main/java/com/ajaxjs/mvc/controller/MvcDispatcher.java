@@ -12,6 +12,7 @@
  */
 package com.ajaxjs.mvc.controller;
 
+import java.beans.beancontext.BeanContext;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -35,7 +36,6 @@ import javax.ws.rs.core.MediaType;
 import com.ajaxjs.framework.Application;
 import com.ajaxjs.framework.Component;
 import com.ajaxjs.framework.config.ConfigService;
-import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.MvcConstant;
 import com.ajaxjs.mvc.filter.Authority;

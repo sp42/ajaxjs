@@ -70,7 +70,6 @@ public class TestController {
 		when(request.getRequestURI()).thenReturn("/ajaxjs-web/news/12");// 配置请求路径
 		dispatcher.doFilter(request, response, chain);
 		
-		
         assertEquals("home.jsp", MockResponse.getRequestDispatcheResult(request));
 	}
 }
