@@ -2,7 +2,7 @@ package com.ajaxjs.ioc.testcase;
 
 import java.util.logging.Logger;
 
-import com.ajaxjs.ioc.Bean;
+import com.ajaxjs.util.ioc.Bean;
 
 @Bean
 public class CaptchaServiceImpl_B implements CaptchaService {

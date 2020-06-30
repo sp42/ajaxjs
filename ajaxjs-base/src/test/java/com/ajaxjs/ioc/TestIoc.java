@@ -8,9 +8,10 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.ajaxjs.ioc.testcase.Hi;
 import com.ajaxjs.ioc.testcase.LoginAction;
-import com.ajaxjs.ioc.testcase.Person;
+import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Hi;
+import com.ajaxjs.util.ioc.Person;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;

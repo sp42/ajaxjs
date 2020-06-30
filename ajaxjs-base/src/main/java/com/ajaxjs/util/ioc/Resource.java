@@ -1,4 +1,5 @@
 /**
+ * Copyright 2015 Sp42 frank@ajaxjs.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,35 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.ioc;
+package com.ajaxjs.util.ioc;
 
-import java.lang.annotation.ElementType;
+import static java.lang.annotation.ElementType.*;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.ajaxjs.ioc.aop.Aop;
-
 /**
- * 表示可纳入在 IOC 里面管理的对象
+ * 表示可注入的资源
  * 
  * @author sp42 frank@ajaxjs.com
  */
-@Target({ ElementType.TYPE })
+@Target({ FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Bean {
+public @interface Resource {
 	/**
-	 * 对象的标识，即 id
+	 * 依赖进来对象的标识，即 id
 	 * 
 	 * @return 对象的标识
 	 */
 	String value() default "";
 
 	/**
-	 * 关联 AOP 类
+	 * 是否创建新实例
 	 * 
-	 * @return AOP 类列表
+	 * @return 是否创建新实例
 	 */
-	@SuppressWarnings("rawtypes")
-	Class<? extends Aop>[] aop() default {};
+	boolean isNewInstance() default false;
 }

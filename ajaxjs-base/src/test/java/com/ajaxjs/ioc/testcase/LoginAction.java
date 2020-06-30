@@ -1,7 +1,7 @@
 package com.ajaxjs.ioc.testcase;
 
-import com.ajaxjs.ioc.Bean;
-import com.ajaxjs.ioc.Resource;
+import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Resource;
 
 @Bean
 public class LoginAction {

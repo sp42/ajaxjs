@@ -23,6 +23,7 @@ import com.ajaxjs.ioc.aop.After;
 import com.ajaxjs.ioc.aop.Before;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
+import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.resource.AbstractScanner;
 import com.ajaxjs.util.resource.ScanClass;
 

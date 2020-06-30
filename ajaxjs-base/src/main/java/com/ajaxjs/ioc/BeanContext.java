@@ -17,7 +17,6 @@ package com.ajaxjs.ioc;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +32,8 @@ import javax.inject.Named;
 import com.ajaxjs.ioc.aop.Aop;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
+import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -153,9 +154,7 @@ public class BeanContext {
 					// LOGGER.info("IOC 创建成功！ " + item);
 
 					String setMethodName = "set" + ReflectUtil.firstLetterUpper(field.getName());
-					Method setter = ReflectUtil.getMethod(item, setMethodName, field.getType());
-					if (setter == null) {
-					}
+					ReflectUtil.getMethod(item, setMethodName, field.getType());
 				}
 			}
 		}
@@ -280,6 +279,7 @@ public class BeanContext {
 	 * @param annotationToAlter 注解类
 	 * @param annotationValue   注解的实例，注解也是接口的一种，所以需要接口的实例
 	 */
+	@Deprecated
 	@SuppressWarnings("unchecked")
 	public static void alterAnnotationOn(Class<?> clazzToLookFor, Class<? extends Annotation> annotationToAlter, Annotation annotationValue) {
 		Map<Class<? extends Annotation>, Annotation> map = null;

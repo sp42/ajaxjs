@@ -1,11 +1,8 @@
-package com.ajaxjs.ioc.testcase;
-
-import com.ajaxjs.ioc.Bean;
-import com.ajaxjs.ioc.Resource;
+package com.ajaxjs.util.ioc;
 
 @Bean("hi")
 public class Hi {
-	@Resource("person")
+	@Resource("Person")
 	private Person person;
 
 	public String sayHello() {
