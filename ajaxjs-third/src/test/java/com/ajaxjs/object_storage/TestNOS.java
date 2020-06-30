@@ -60,7 +60,7 @@ public class TestNOS {
 		String accessKey = ConfigService.get("uploadFile.ObjectStorageService.NOS.accessKey");
 		String secretKey = ConfigService.get("uploadFile.ObjectStorageService.NOS.secretKey");
 		String bucket = ConfigService.get("uploadFile.ObjectStorageService.NOS.bucket");
-		String folder = ConfigService.get("uploadFile.ObjectStorageService.NOS.folder");
+//		String folder = ConfigService.get("uploadFile.ObjectStorageService.NOS.folder");
 
 		ClientConfiguration conf = new ClientConfiguration();
 		// 设置 NosClient 使用的最大连接数
@@ -98,7 +98,7 @@ public class TestNOS {
 			System.out.println(s.getKey());
 
 		}
-		
+
 		download(nosClient, bucket, listResult.get(1));
 	}
 
@@ -108,6 +108,7 @@ public class TestNOS {
 		objectName = Encode.urlDecode(objectName);
 		File destinationFile = new File("c:\\temp\\" + objectName);
 		ObjectMetadata m = nosClient.getObject(new GetObjectRequest(bucket, objectName), destinationFile);
+		System.out.println(m);
 	}
 
 }

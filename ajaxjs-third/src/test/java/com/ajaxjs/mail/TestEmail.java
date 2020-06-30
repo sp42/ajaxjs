@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.ajaxjs.app.ThirdPartyService;
-import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.framework.config.TestHelper;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.net.mail.Mail;
