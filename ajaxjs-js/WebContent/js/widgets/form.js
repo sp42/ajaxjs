@@ -243,7 +243,6 @@ Vue.component('aj-form-calendar-input', {
 			this.time = time;
 		},
 		recEvent(date) {
-		
 			this.date = date.trim();
 		},
 		onMouseOver(e) {
@@ -848,7 +847,7 @@ aj.form.betweenDate = function(el) {
 	});
 }
 
-Vue.component('aj-form-betweendate', {
+Vue.component('aj-form-betweenDate', {
 	template: '<form action="." method="GET" class="dateRange" @submit="valid($event)">\
 		起始时间：<aj-form-calendar-input field-name="startDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>\
 		截至时间：<aj-form-calendar-input field-name="endDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>\
