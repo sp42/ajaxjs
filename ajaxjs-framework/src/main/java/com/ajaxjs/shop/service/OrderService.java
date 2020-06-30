@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.function.Function;
 
 import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.ioc.Bean;
-import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.payment.wxpay.PayConstant;
 import com.ajaxjs.shop.ShopConstant;
@@ -21,6 +19,8 @@ import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.user.controller.BaseUserController;
 import com.ajaxjs.user.model.UserAddress;
 import com.ajaxjs.user.service.UserAddressService;
+import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 

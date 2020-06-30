@@ -13,8 +13,6 @@ import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.filter.DataBaseFilter;
-import com.ajaxjs.ioc.Bean;
-import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.shop.ShopConstant;
@@ -25,6 +23,8 @@ import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.user.filter.LoginCheck;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.service.UserService;
+import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**

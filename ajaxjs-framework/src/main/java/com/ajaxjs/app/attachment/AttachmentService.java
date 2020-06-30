@@ -3,10 +3,10 @@ package com.ajaxjs.app.attachment;
 import java.util.List;
 
 import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.Repository;
+import com.ajaxjs.util.ioc.Bean;
 
 @Bean
 public class AttachmentService extends BaseService<Attachment> {

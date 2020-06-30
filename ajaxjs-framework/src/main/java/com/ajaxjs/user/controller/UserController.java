@@ -5,11 +5,11 @@ import java.util.function.BiConsumer;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Path;
 
-import com.ajaxjs.ioc.Bean;
-import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.service.UserCommonAuthService;
 import com.ajaxjs.user.service.UserService;
+import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Resource;
 
 /**
  * 用户总的控制器

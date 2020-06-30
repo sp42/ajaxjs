@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.ServiceException;
-import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.sql.annotation.Delete;
 import com.ajaxjs.sql.annotation.Select;
@@ -14,6 +13,7 @@ import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.user.model.UserCommonAuth;
 import com.ajaxjs.util.Encode;
+import com.ajaxjs.util.ioc.Bean;
 import com.ajaxjs.util.logger.LogHelper;
 
 @Bean("User_common_authService")

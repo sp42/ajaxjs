@@ -8,9 +8,9 @@ import org.junit.Test;
 
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.config.TestHelper;
-import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.user.role.RoleService;
+import com.ajaxjs.util.ioc.ComponentMgr;
 
 public class TestUserRight {
 	static RoleService service;
@@ -18,7 +18,7 @@ public class TestUserRight {
 	@BeforeClass
 	public static void initDb() {
 		TestHelper.initAll();
-		service = (RoleService) BeanContext.getBean("UserRoleService");
+		service = (RoleService) ComponentMgr.get("UserRoleService");
 	}
 
 	@AfterClass

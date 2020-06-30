@@ -1,10 +1,10 @@
 package com.ajaxjs.user.role;
 
 import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.Repository;
+import com.ajaxjs.util.ioc.Bean;
 
 @Bean("UserRolePrivilegeService")
 public class PrivilegeService extends BaseService<Privilege> {

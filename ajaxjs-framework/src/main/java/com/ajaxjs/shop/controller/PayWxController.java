@@ -13,8 +13,6 @@ import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
-import com.ajaxjs.ioc.Bean;
-import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.payment.wxpay.PayNodifyResult;
 import com.ajaxjs.payment.wxpay.PaymentNotification;
@@ -25,6 +23,8 @@ import com.ajaxjs.shop.service.Pay;
 import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.io.IoHelper;
+import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.MapTool;
 

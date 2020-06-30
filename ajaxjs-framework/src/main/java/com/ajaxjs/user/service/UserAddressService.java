@@ -9,7 +9,6 @@ import java.util.function.Function;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.jsonparser.JsEngineWrapper;
 import com.ajaxjs.sql.annotation.Select;
 import com.ajaxjs.sql.annotation.TableName;
@@ -18,6 +17,7 @@ import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.user.model.UserAddress;
 import com.ajaxjs.util.io.IoHelper;
+import com.ajaxjs.util.ioc.Bean;
 
 @Bean
 public class UserAddressService extends BaseService<UserAddress> {

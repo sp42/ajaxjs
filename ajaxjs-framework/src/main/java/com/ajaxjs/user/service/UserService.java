@@ -7,8 +7,6 @@ import com.ajaxjs.app.attachment.Attachment_picture;
 import com.ajaxjs.app.attachment.Attachment_pictureService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.ServiceException;
-import com.ajaxjs.ioc.Bean;
-import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.JdbcReader;
 import com.ajaxjs.sql.orm.PageResult;
@@ -18,6 +16,8 @@ import com.ajaxjs.user.model.UserCommonAuth;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.cryptography.SymmetriCipher;
 import com.ajaxjs.util.io.ImageHelper;
+import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.UploadFileInfo;
 

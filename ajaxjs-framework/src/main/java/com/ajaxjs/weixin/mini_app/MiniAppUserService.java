@@ -2,7 +2,6 @@ package com.ajaxjs.weixin.mini_app;
 
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.config.ConfigService;
-import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.net.http.NetUtil;
 import com.ajaxjs.sql.annotation.Insert;
@@ -16,6 +15,7 @@ import com.ajaxjs.user.login.UserLoginLog;
 import com.ajaxjs.user.login.UserOauth;
 import com.ajaxjs.user.login.UserOauthService;
 import com.ajaxjs.user.model.User;
+import com.ajaxjs.util.ioc.Bean;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.weixin.mini_app.model.UserInfo;

@@ -8,7 +8,6 @@ import org.junit.Test;
 
 import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.framework.config.TestHelper;
-import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.shop.model.Goods;
 import com.ajaxjs.shop.service.CartService;
 import com.ajaxjs.shop.service.GoodsService;
@@ -16,6 +15,7 @@ import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.SnowflakeIdWorker;
 import com.ajaxjs.user.model.UserAddress;
 import com.ajaxjs.user.service.UserAddressService;
+import com.ajaxjs.util.ioc.ComponentMgr;
 
 public class TestGoodsService {
 //	static GoodsService service;
@@ -24,7 +24,7 @@ public class TestGoodsService {
 	public static void initDb() {
 		TestHelper.initAll("c:\\project\\bgdiving", "com.ajaxjs.cms", "com.ajaxjs.user", "com.ajaxjs.shop");
 
-//		goodsBookmarkService = (ShopBookmarkService) BeanContext.getBean("GoodsBookmarkService");
+//		goodsBookmarkService = (ShopBookmarkService) ComponentMgr.get("GoodsBookmarkService");
 	}
 
 	static String[] names = new String[] { "Apple iPhone X", "华为 HUAWEI P20", "小米8SE", "联想Z5" };
@@ -51,7 +51,7 @@ public class TestGoodsService {
 
 //	@Test
 	public void testGoodsAddress() {
-		UserAddressService userAddressService = (UserAddressService) BeanContext.getBean("UserAddressService");
+		UserAddressService userAddressService = (UserAddressService) ComponentMgr.get("UserAddressService");
 
 		for (int i = 0; i < 10; i++) {
 			UserAddress bean = new UserAddress();
@@ -72,7 +72,7 @@ public class TestGoodsService {
 
 	@Test
 	public void testPageList() {
-		GoodsService service = BeanContext.getBean(GoodsService.class);
+		GoodsService service = ComponentMgr.get(GoodsService.class);
 		assertNotNull(service.findPagedList(0, 10));
 		assertNotNull(service.findPagedListByCatalogId(145, 0, 10, 0, CommonConstant.ON_LINE));
 		
@@ -89,7 +89,7 @@ public class TestGoodsService {
 
 	@Test
 	public void testCartPageList() {
-		CartService cartService = BeanContext.getBean(CartService.class);
+		CartService cartService = ComponentMgr.get(CartService.class);
 		assertNotNull(cartService.findPagedList(0, 10).get(0));
 		assertNotNull(cartService.findList().get(0));
 		assertNotNull(cartService.findListByUserId(1133L).get(0));

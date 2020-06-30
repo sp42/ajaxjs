@@ -17,7 +17,6 @@ import com.ajaxjs.app.ThirdPartyService;
 import com.ajaxjs.app.catalog.CatalogService;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.filter.DataBaseFilter;
-import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.MvcFilter;
@@ -33,6 +32,7 @@ import com.ajaxjs.user.service.AccountService;
 import com.ajaxjs.user.service.UserCommonAuthService;
 import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.cache.ExpireCache;
+import com.ajaxjs.util.ioc.ComponentMgr;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -186,7 +186,7 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 			 */
 		}
 
-		ThirdPartyService services = BeanContext.getByClass(ThirdPartyService.class);
+		ThirdPartyService services = ComponentMgr.get(ThirdPartyService.class);
 
 		boolean isOk = services.sendSms(phone, "SMS_138067918", String.format("{\"code\":\"%s\"}", rad));
 

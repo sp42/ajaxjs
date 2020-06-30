@@ -11,9 +11,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ajaxjs.framework.config.TestHelper;
-import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.orm.PageResult;
+import com.ajaxjs.util.ioc.ComponentMgr;
 
 public class TestAppService {
 	static FeedbackService FeedbackServicee;
@@ -22,8 +22,8 @@ public class TestAppService {
 	@BeforeClass
 	public static void initDb() {
 		TestHelper.initAll();
-		FeedbackServicee = BeanContext.getBean(FeedbackService.class);
-		AdsService = BeanContext.getBean(AdsService.class);
+		FeedbackServicee = ComponentMgr.get(FeedbackService.class);
+		AdsService = ComponentMgr.get(AdsService.class);
 	}
 
 	static String[] feedbackContent = { "非常喜欢在京东购物，有时候上午下单，下午就到货了。快递小哥的整体素质也很高，这么热的天也送货上门。专业工具书看着不错，最近没活动，价格小贵！", "看了一眼蛮好的，京东贼快贼给力，快递小哥也很棒", "整体还不错，包装也不错，就是运输过程外包装有点受影响。" };

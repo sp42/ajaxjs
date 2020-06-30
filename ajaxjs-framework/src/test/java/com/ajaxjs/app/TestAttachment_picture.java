@@ -11,8 +11,8 @@ import org.junit.Test;
 import com.ajaxjs.app.attachment.Attachment_picture;
 import com.ajaxjs.app.attachment.Attachment_pictureService;
 import com.ajaxjs.framework.config.TestHelper;
-import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.sql.JdbcConnection;
+import com.ajaxjs.util.ioc.ComponentMgr;
 
 public class TestAttachment_picture {
 	@BeforeClass
@@ -23,7 +23,7 @@ public class TestAttachment_picture {
 	@Test
 	public void testOwner() {
 		long sz = 469557228827836416L;
-		Attachment_pictureService owner = BeanContext.getBean(Attachment_pictureService.class);
+		Attachment_pictureService owner = ComponentMgr.get(Attachment_pictureService.class);
 		List<Attachment_picture> oo = owner.findByOwner(sz);
 		for (Attachment_picture aa : oo) {
 			assertNotNull(aa.getPath());

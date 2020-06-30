@@ -11,9 +11,9 @@ import org.junit.Test;
 import com.ajaxjs.app.catalog.Catalog;
 import com.ajaxjs.app.catalog.CatalogService;
 import com.ajaxjs.framework.config.TestHelper;
-import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.orm.PageResult;
+import com.ajaxjs.util.ioc.ComponentMgr;
 
 public class TestCatalogService {
 	static CatalogService catalogService;
@@ -21,7 +21,7 @@ public class TestCatalogService {
 	@BeforeClass
 	public static void initDb() {
 		TestHelper.initAll();
-		catalogService = (CatalogService) BeanContext.getBean("闪亮杯国际少儿音乐大赛");
+		catalogService = (CatalogService) ComponentMgr.get("闪亮杯国际少儿音乐大赛");
 	}
 
 	// @Test
@@ -59,10 +59,10 @@ public class TestCatalogService {
 
 	@Test
 	public void testGetAllListByParentId() {
-		CatalogService catalogService = (CatalogService) BeanContext.getBean("闪亮杯国际少儿音乐大赛");
+		CatalogService catalogService = (CatalogService) ComponentMgr.get("闪亮杯国际少儿音乐大赛");
 		catalogService.findAllListByParentId(12);
 
-		ArticleService articleService = (ArticleService) BeanContext.getBean("ArticleService");
+		ArticleService articleService = (ArticleService) ComponentMgr.get("ArticleService");
 		PageResult<Map<String, Object>> r = articleService.list(15, 0, 5, 1);
 
 		assertNotNull(r.size());

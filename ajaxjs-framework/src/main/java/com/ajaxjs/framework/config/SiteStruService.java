@@ -26,7 +26,6 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.Version;
-import com.ajaxjs.net.http.Tools;
 import com.ajaxjs.sql.orm.BaseModel;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
@@ -107,18 +106,6 @@ public class SiteStruService implements ServletContextListener {
 		loadSiteStru(ctx);
 		if (STRU != null && STRU.isLoaded())
 			ctx.setAttribute("SITE_STRU", this); // 所有网站结构保存在这里
-
-		// 设置全局环境变量
-		String ctxPath = ctx.getContextPath();
-		ctx.setAttribute("ctx", ctxPath);
-		ctx.setAttribute("isDebuging", Version.isDebug);
-		ctx.setAttribute("commonAsset", ctxPath + "/asset/common"); // 静态资源目录
-		ctx.setAttribute("commonAssetIcon", ctxPath + "/asset/common/icon"); // 静态资源图标目录
-		ctx.setAttribute("ajaxjs_ui_output", "https://ajaxjs.nos-eastchina1.126.net");
-
-		// 开发阶段，ajaxjsui 指定了前端 js 所在的位置，通常是另外一个项目同时运行着，例如当前是本机 8080 端口的 ajaxjs-js。
-		if (Version.isDebug)
-			ctx.setAttribute("developing_js_url", "http://" + Tools.getIp() + ":8080/ajaxjs-js");
 	}
 
 	/**

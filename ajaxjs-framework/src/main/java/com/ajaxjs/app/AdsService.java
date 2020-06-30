@@ -6,11 +6,11 @@ import java.util.function.Function;
 import com.ajaxjs.app.catalog.CatalogService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.config.ConfigService;
-import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.sql.orm.Repository;
+import com.ajaxjs.util.ioc.Bean;
 
 @Bean
 public class AdsService extends BaseService<Ads> {

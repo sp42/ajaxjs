@@ -23,7 +23,7 @@ public class TestRole {
 	@BeforeClass
 	public static void initDb() {
 		TestHelper.initAll();
-//		service = (AdsService) BeanContext.getBean("AdsService");
+//		service = (AdsService) ComponentMgr.get("AdsService");
 	}
 
 	@Test

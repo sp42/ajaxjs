@@ -24,8 +24,6 @@ import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.framework.filter.FrontEndOnlyCheck;
 import com.ajaxjs.framework.filter.XslMaker;
-import com.ajaxjs.ioc.Bean;
-import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.MvcFilter;
@@ -33,6 +31,8 @@ import com.ajaxjs.net.http.PicDownload;
 import com.ajaxjs.sql.SnowflakeIdWorker;
 import com.ajaxjs.sql.orm.BaseModel;
 import com.ajaxjs.sql.orm.PageResult;
+import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 
 @Bean

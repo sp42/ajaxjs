@@ -8,13 +8,13 @@ import org.junit.Test;
 
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.config.TestHelper;
-import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.user.controller.UserController;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.model.UserCommonAuth;
 import com.ajaxjs.user.service.UserCommonAuthService;
 import com.ajaxjs.user.service.UserService;
+import com.ajaxjs.util.ioc.ComponentMgr;
 
 public class TestUser {
 	static UserService service;
@@ -26,8 +26,8 @@ public class TestUser {
 	public static void initDb() {
 		TestHelper.initAll();
 
-		service = BeanContext.getBean(UserService.class);
-		passwordService = BeanContext.getBean(UserCommonAuthService.class);
+		service = ComponentMgr.get(UserService.class);
+		passwordService = ComponentMgr.get(UserCommonAuthService.class);
 	}
 
 	@Test

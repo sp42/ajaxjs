@@ -12,12 +12,12 @@ import javax.servlet.http.HttpSession;
 
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.ServiceException;
-import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.sql.annotation.Select;
 import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.Repository;
+import com.ajaxjs.util.ioc.Bean;
 
 @Bean("UserRoleService")
 public class RoleService extends BaseService<Map<String, Object>> {

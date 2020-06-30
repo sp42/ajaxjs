@@ -8,12 +8,12 @@ import java.util.function.Predicate;
 
 import com.ajaxjs.app.ThirdPartyService;
 import com.ajaxjs.framework.config.ConfigService;
-import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.net.mail.Mail;
 import com.ajaxjs.user.UserHelper;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.cryptography.SymmetriCipher;
+import com.ajaxjs.util.ioc.ComponentMgr;
 
 /**
  * 账号服务
@@ -122,7 +122,7 @@ public class AccountService {
 		mail.setHTML_body(true);
 		mail.setContent(String.format(HTML, email, title, url, url, title));
 
-		ThirdPartyService services = BeanContext.getByClass(ThirdPartyService.class);
+		ThirdPartyService services = ComponentMgr.get(ThirdPartyService.class);
 
 		return services.sendEmail(mail);
 	}

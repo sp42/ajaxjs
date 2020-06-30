@@ -14,10 +14,10 @@ import org.junit.Test;
 
 import com.ajaxjs.app.catalog.CatalogService;
 import com.ajaxjs.framework.config.TestHelper;
-import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.orm.PageResult;
+import com.ajaxjs.util.ioc.ComponentMgr;
 import com.ajaxjs.web.mock.MockRequest;
 
 public class TestArticleService {
@@ -29,10 +29,10 @@ public class TestArticleService {
 
 	@Test
 	public void testGetAllListByParentId() {
-		CatalogService catalogService = (CatalogService) BeanContext.getBean("闪亮杯国际少儿音乐大赛");
+		CatalogService catalogService = (CatalogService) ComponentMgr.get("闪亮杯国际少儿音乐大赛");
 		catalogService.findAllListByParentId(12);
 
-		ArticleService articleService = (ArticleService) BeanContext.getBean("ArticleService");
+		ArticleService articleService = (ArticleService) ComponentMgr.get("ArticleService");
 		PageResult<Map<String, Object>> r = articleService.list(15, 0, 5, 1);
 
 		assertNotNull(r.size());
@@ -54,7 +54,7 @@ public class TestArticleService {
 
 	@Test
 	public void getInfo() {
-		ArticleService articleService = (ArticleService) BeanContext.getBean("ArticleService");
+		ArticleService articleService = (ArticleService) ComponentMgr.get("ArticleService");
 		articleService.findById(3L);
 	}
 

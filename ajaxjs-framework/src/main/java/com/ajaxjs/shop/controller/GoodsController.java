@@ -19,8 +19,6 @@ import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.framework.filter.FrontEndOnlyCheck;
-import com.ajaxjs.ioc.Bean;
-import com.ajaxjs.ioc.Resource;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.shop.model.Goods;
@@ -28,6 +26,8 @@ import com.ajaxjs.shop.model.Seller;
 import com.ajaxjs.shop.service.GoodsService;
 import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.user.controller.BaseUserController;
+import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
