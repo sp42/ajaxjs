@@ -1,8 +1,10 @@
 package com.ajaxjs.util.ioc;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -232,6 +234,43 @@ public class ComponentMgr {
 		}
 
 		return null;
+	}
+
+	/**
+	 * 根据接口查找目标对象
+	 * 
+	 * @param interfaceClz 接口类
+	 * @return 目标对象的集合
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> List<T> getAllByInterface(Class<T> interfaceClz) {
+		List<T> list = new ArrayList<>();
+
+		components.forEach((alias, compInfo) -> {
+			if (interfaceClz.isAssignableFrom(compInfo.instance.getClass()))
+				list.add((T) compInfo.instance);
+		});
+
+		return list;
+	}
+
+	/**
+	 * 根据类查找实例列表
+	 * 
+	 * @param <T> 目标类型
+	 * @param clz 类引用
+	 * @return 实例对象列表
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> List<T> getAll(Class<T> clz) {
+		List<T> list = new ArrayList<>();
+
+		components.forEach((alias, compInfo) -> {
+			if (clz.isInstance(compInfo.instance))
+				list.add((T) compInfo.instance);
+		});
+
+		return list;
 	}
 
 	public static void register(String alias, Class<?> clz, boolean isSingleton) {

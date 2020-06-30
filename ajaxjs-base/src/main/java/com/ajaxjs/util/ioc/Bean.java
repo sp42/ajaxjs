@@ -19,8 +19,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.ajaxjs.ioc.aop.Aop;
-
 /**
  * 表示可纳入在 IOC 里面管理的对象
  * 
@@ -35,12 +33,4 @@ public @interface Bean {
 	 * @return 对象的标识
 	 */
 	String value() default "";
-
-	/**
-	 * 关联 AOP 类
-	 * 
-	 * @return AOP 类列表
-	 */
-	@SuppressWarnings("rawtypes")
-	Class<? extends Aop>[] aop() default {};
 }

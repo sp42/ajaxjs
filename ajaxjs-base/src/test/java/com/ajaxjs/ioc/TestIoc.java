@@ -42,46 +42,19 @@ public class TestIoc {
 		}
 	}
 
-//	@Test
-	public void test() {
-		BeanContext.init("com.ajaxjs.ioc");
-		BeanContext.injectBeans();
-
-		Hi hi = (Hi) BeanContext.getBean("hi");
-
-		assertNotNull(hi);
-
-		Person person = (Person) BeanContext.getBean("person");
-		assertNotNull(person);
-		assertEquals("Hello Rose", hi.sayHello());
-	}
 
 	@Test
 	public void test2() {
 		BeanContext.init("com.ajaxjs.ioc.testcase");
 		BeanContext.injectBeans();
 
-		LoginAction loginAction = (LoginAction) BeanContext.getBean("LoginAction");
+		LoginAction loginAction = (LoginAction) ComponentMgr.get("LoginAction");
 		loginAction.getCaptchaService().showImage();
 		loginAction.captchaService2.showImage();
 
 		assertNotNull(loginAction);
 	}
 	
-//	@Test
-	public void testFindBeanById() {
-		BeanContext.init("com.ajaxjs.ioc");
-		Object bean = BeanContext.getBean("foo");
-
-		assertTrue(bean instanceof AA);
-	}
-
-	public static interface AA {
-	}
-
-	@Bean("foo")
-	public static class AObj implements AA {
-	}
 
 	@Test
 	public void testFindClassByInterface() {
