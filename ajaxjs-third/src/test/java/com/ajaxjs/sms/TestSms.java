@@ -8,13 +8,13 @@ import java.io.IOException;
 import org.junit.Test;
 
 import com.ajaxjs.app.ThirdPartyService;
-import com.ajaxjs.framework.config.ConfigService;
+import com.ajaxjs.framework.config.TestHelper;
 import com.ajaxjs.ioc.BeanContext;
 
 public class TestSms {
 //	@Test
 	public void testAli() throws IOException {
-		ConfigService.load("D:\\project\\leidong\\WebContent\\META-INF\\site_config.json");
+		TestHelper.initAll();
 
 		SmsMessage message = new SmsMessage();
 		message.setPhoneNo("13711228150");
@@ -24,16 +24,14 @@ public class TestSms {
 
 		assertTrue(AliyunSMS.send(message));
 	}
-	
+
 	@Test
 	public void byService() {
-		ConfigService.load("D:\\project\\leidong\\WebContent\\META-INF\\site_config.json");
-		BeanContext.init("com.ajaxjs.app");
-		BeanContext.injectBeans();
+		TestHelper.initAll();
 
 		ThirdPartyService services = BeanContext.getByClass(ThirdPartyService.class);
 		assertNotNull(services);
-		
+
 		assertTrue(services.sendSms("13711228150", "SMS_138067918", String.format("{\"code\":\"%s\"}", 3444)));
 	}
 }

@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import com.ajaxjs.app.ThirdPartyService;
 import com.ajaxjs.framework.config.ConfigService;
+import com.ajaxjs.framework.config.TestHelper;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.net.mail.Mail;
 
@@ -14,9 +15,7 @@ public class TestEmail {
 
 	@Test
 	public void testEmail() {
-		ConfigService.load("D:\\project\\leidong\\WebContent\\META-INF\\site_config.json");
-		BeanContext.init("com.ajaxjs.app");
-		BeanContext.injectBeans();
+		TestHelper.initAll();
 
 		Mail mail = new Mail();
 		mail.setTo("sp42@qq.com");

@@ -1,11 +1,11 @@
 package com.ajaxjs.app;
 
 import com.ajaxjs.framework.config.ConfigService;
-import com.ajaxjs.ioc.Bean;
 import com.ajaxjs.net.mail.Mail;
 import com.ajaxjs.net.mail.Sender;
 import com.ajaxjs.sms.AliyunSMS;
 import com.ajaxjs.sms.SmsMessage;
+import com.ajaxjs.util.ioc.Bean;
 
 /**
  * 默认的服务供应器
