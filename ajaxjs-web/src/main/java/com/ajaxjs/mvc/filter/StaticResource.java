@@ -7,7 +7,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.framework.Application;
-import com.ajaxjs.util.ioc.Component;
+import com.ajaxjs.framework.Component;
 
 /**
  * 检查是否静态资源。Check the url if there is static asset.

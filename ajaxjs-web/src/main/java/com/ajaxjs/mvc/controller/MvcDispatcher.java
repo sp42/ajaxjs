@@ -33,6 +33,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.framework.Application;
+import com.ajaxjs.framework.Component;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.mvc.ModelAndView;
@@ -43,7 +44,6 @@ import com.ajaxjs.mvc.filter.FilterAfterArgs;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
-import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.web.secuity.SecurityRequest;

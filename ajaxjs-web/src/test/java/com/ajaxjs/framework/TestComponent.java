@@ -7,7 +7,6 @@ import javax.servlet.ServletContextEvent;
 import org.junit.Test;
 
 import com.ajaxjs.util.ReflectUtil;
-import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.EveryClass;
 
 public class TestComponent {
