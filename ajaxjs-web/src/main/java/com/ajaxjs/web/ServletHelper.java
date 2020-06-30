@@ -34,7 +34,7 @@ import com.ajaxjs.util.map.MapTool;
 public class ServletHelper {
 	/**
 	 * 将过滤器的配置转换为 Map
-	 * 
+	 * @deprecated
 	 * @param config 过滤器配置
 	 * @return 过滤器配置的 Map 结构
 	 */

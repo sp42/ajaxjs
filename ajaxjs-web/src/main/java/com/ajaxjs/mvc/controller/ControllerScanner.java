@@ -109,7 +109,7 @@ public class ControllerScanner extends ScanClass<IController> {
 
 	/**
 	 * 扫描控制器
-	 * 
+	 * @deprecated
 	 * @param config web.xml 中的配置，已经转为 Map
 	 */
 	public static void scannController(String config) {

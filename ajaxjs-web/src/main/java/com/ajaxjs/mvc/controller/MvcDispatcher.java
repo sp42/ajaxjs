@@ -17,12 +17,13 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
-import javax.servlet.Filter;
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -31,20 +32,20 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.ajaxjs.framework.Application;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.ioc.BeanContext;
-import com.ajaxjs.mvc.MvcConstant;
 import com.ajaxjs.mvc.ModelAndView;
+import com.ajaxjs.mvc.MvcConstant;
 import com.ajaxjs.mvc.filter.Authority;
 import com.ajaxjs.mvc.filter.FilterAction;
 import com.ajaxjs.mvc.filter.FilterAfterArgs;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.util.map.MapTool;
-import com.ajaxjs.web.ServletHelper;
 import com.ajaxjs.web.secuity.SecurityRequest;
 import com.ajaxjs.web.secuity.SecurityResponse;
 
@@ -53,63 +54,104 @@ import com.ajaxjs.web.secuity.SecurityResponse;
  * 
  * @author sp42 frank@ajaxjs.com
  */
-public class MvcDispatcher implements Filter {
+public class MvcDispatcher implements Component {
 	private static final LogHelper LOGGER = LogHelper.getLog(MvcDispatcher.class);
 
-	private static final String t = "     ___       _       ___  __    __      _   _____        _          __  _____   _____  \n"
-			+ "     /   |     | |     /   | \\ \\  / /     | | /  ___/      | |        / / | ____| |  _  \\ \n"
-			+ "    / /| |     | |    / /| |  \\ \\/ /      | | | |___       | |  __   / /  | |__   | |_| |  \n"
-			+ "   / / | |  _  | |   / / | |   }  {    _  | | \\___  \\      | | /  | / /   |  __|  |  _  {  \n"
-			+ "  / /  | | | |_| |  / /  | |  / /\\ \\  | |_| |  ___| |      | |/   |/ /    | |___  | |_| |  \n"
-			+ " /_/   |_| \\_____/ /_/   |_| /_/  \\_\\ \\_____/ /_____/      |___/|___/     |_____| |_____/ \n";
-
 	{
-		LOGGER.infoYellow("\n" + t);
+		LOGGER.infoYellow("\n     ___       _       ___  __    __      _   _____        _          __  _____   _____  \n"
+				+ "     /   |     | |     /   | \\ \\  / /     | | /  ___/      | |        / / | ____| |  _  \\ \n"
+				+ "    / /| |     | |    / /| |  \\ \\/ /      | | | |___       | |  __   / /  | |__   | |_| |  \n"
+				+ "   / / | |  _  | |   / / | |   }  {    _  | | \\___  \\      | | /  | / /   |  __|  |  _  {  \n"
+				+ "  / /  | | | |_| |  / /  | |  / /\\ \\  | |_| |  ___| |      | |/   |/ /    | |___  | |_| |  \n"
+				+ " /_/   |_| \\_____/ /_/   |_| /_/  \\_\\ \\_____/ /_____/      |___/|___/     |_____| |_____/ \n");
 	}
 
 	/**
 	 * 初始化这个过滤器
 	 * 
-	 * @param _config 过滤器配置，web.xml 中定义
+	 *
 	 */
-	@Override
-	public void init(FilterConfig _config) {
-		// 读取 web.xml 配置，如果有 controller 那一项就获取指定包里面的内容，看是否有属于 IController 接口的控制器，有就加入到
-		// AnnotationUtils.controllers 集合中
-		Map<String, String> config = ServletHelper.initFilterConfig2Map(_config);
+	private static final Consumer<ServletContext> init = ctx -> {
+		String[] packageNames = { "com.ajaxjs", "com.ibm" };
+//		String[] packageNames = { "com.ajaxjs.user", "com.ajaxjs.shop", "com.ajaxjs.website", "com.ajaxjs.app", "com.ajaxjs.weixin", "com.ibm" };
 
-		MapTool.getValue(config, "doIoc", (String doIoc) -> {
-			for (String packageName : CommonUtil.split(doIoc))
-				BeanContext.init(packageName);
+		for (String packageName : packageNames)
+			BeanContext.init(packageName);
 
-			BeanContext.injectBeans(); // 依赖注射扫描
-		});
+		BeanContext.injectBeans(); // 依赖注射扫描
 
-		MapTool.getValue(config, "controller", ControllerScanner::scannController);
+		ControllerScanner scanner;// 定义一个扫描器，专门扫描 IController
+		for (String packageName : packageNames) {
+			scanner = new ControllerScanner();
+			Set<Class<IController>> IControllers = scanner.scan(packageName);
 
-		if (config != null && config.get("controller") == null)
-			LOGGER.info("web.xml 没有配置 MVC 过滤器或者 配置没有定义 controller");
+			for (Class<IController> clz : IControllers)
+				ControllerScanner.add(clz);
+		}
+
+//		if (config != null && config.get("controller") == null)
+//			LOGGER.info("web.xml 没有配置 MVC 过滤器或者 配置没有定义 controller");
+	};
+
+	private static Boolean isEnableSecurityIO;
+
+	private static final BiFunction<HttpServletRequest, HttpServletResponse, Boolean> dispatcher = (req, resp) -> {
+		req.setAttribute("requestTimeRecorder", System.currentTimeMillis()); // 每次 servlet 都会执行的记录时间
+
+		if (isEnableSecurityIO == null)
+			isEnableSecurityIO = ConfigService.getValueAsBool("security.isEnableSecurityIO");
+
+		MvcRequest request = new MvcRequest(isEnableSecurityIO ? new SecurityRequest(req) : req);
+		MvcOutput response = new MvcOutput(isEnableSecurityIO ? new SecurityResponse(resp) : resp);
+
+		String uri = request.getFolder(), httpMethod = request.getMethod();
+		Action action = null;
+
+		try {
+			action = IController.findTreeByPath(uri);
+		} catch (Throwable e) {
+			LOGGER.warning(e);
+		}
+
+		if (action != null) {
+			Method method = action.getMethod(httpMethod);// 要执行的方法
+			IController controller = action.getController(httpMethod);
+			LOGGER.info("uri: {0}, action: {1}, method: {2}", uri, action, method);
+
+			if (method != null && controller != null) {
+				execute(request, response, controller, method);
+				return false; // 终止当前 servlet 请求
+			} else {
+//				LOGGER.info("{0} {1} 控制器没有这个方法！", httpMethod, request.getRequestURI());
+			}
+		}
+
+		return true;
+	};
+
+	static {
+		Application.onServletStartUp.add(init);
+		Application.onRequest.add(1, dispatcher);
 	}
 
 	/**
 	 * 虽然 REST 风格的 URL 一般不含后缀，我们只能将 DispatcherServlet 映射到“/”，使之变为一个默认的 Servlet， 在处理
 	 * js/css 等静态文件有后缀，这样的话我们需要区分对待。
 	 */
-	@Override
-	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
-			throws IOException, ServletException {
+	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest _request = (HttpServletRequest) req;
 		HttpServletResponse _response = (HttpServletResponse) resp;
 
-		if (ServletHelper.isStaticAsset(_request.getRequestURI())) {
-			chain.doFilter(req, resp);
-			return;
-		}
+//		if (ServletHelper.isStaticAsset(_request.getRequestURI())) {
+//			chain.doFilter(req, resp);
+//			return;
+//		}
 
 		_request.setAttribute("requestTimeRecorder", System.currentTimeMillis()); // 每次 servlet 都会执行的记录时间
 		boolean isEnableSecurityIO = ConfigService.getValueAsBool("security.isEnableSecurityIO");
 		MvcRequest request = new MvcRequest(isEnableSecurityIO ? new SecurityRequest(_request) : _request);
 		MvcOutput response = new MvcOutput(isEnableSecurityIO ? new SecurityResponse(_response) : _response);
+
 		String uri = request.getFolder(), httpMethod = request.getMethod();
 		Action action = null;
 
@@ -175,21 +217,19 @@ public class MvcDispatcher implements Filter {
 			}
 
 			if (!isbeforeSkip) {
-				result = hasArgs ? ReflectUtil.executeMethod_Throwable(controller, method, args)
-						: ReflectUtil.executeMethod_Throwable(controller, method);
+				result = hasArgs ? ReflectUtil.executeMethod_Throwable(controller, method, args) : ReflectUtil.executeMethod_Throwable(controller, method);
 			}
 
 		} catch (Throwable e) {
 			err = e;
 
-			if (e instanceof IllegalArgumentException
-					&& e.getMessage().contains("object is not an instance of declaring class"))
+			if (e instanceof IllegalArgumentException && e.getMessage().contains("object is not an instance of declaring class"))
 				LOGGER.warning("异常可能的原因：@Bean注解的名称重复，请检查 IOC 中的是否重名");
 		}
 
 		if (model != null)
 			request.saveToReuqest(model);
-		
+
 		boolean isDoOldReturn = true; // 是否执行默认的处理 response 方法
 
 		if (isDoFilter) {
@@ -237,8 +277,7 @@ public class MvcDispatcher implements Filter {
 	private static void handleErr(Throwable err, Method method, MvcRequest r, MvcOutput response, ModelAndView model) {
 		Throwable _err = ReflectUtil.getUnderLayerErr(err);
 
-		if (model != null && model.containsKey(FilterAction.NOT_LOG_EXCEPTION)
-				&& ((boolean) model.get(FilterAction.NOT_LOG_EXCEPTION))) {
+		if (model != null && model.containsKey(FilterAction.NOT_LOG_EXCEPTION) && ((boolean) model.get(FilterAction.NOT_LOG_EXCEPTION))) {
 			_err.printStackTrace(); // 打印异常
 		} else
 			LOGGER.warning(_err);
@@ -247,8 +286,7 @@ public class MvcDispatcher implements Filter {
 		Produces a = method.getAnnotation(Produces.class);
 
 		if (a != null && MediaType.APPLICATION_JSON.equals(a.value()[0])) {// 返回 json
-			response.resultHandler(String.format(MvcConstant.JSON_NOT_OK, JsonHelper.jsonString_covernt(errMsg)), r, model,
-					method);
+			response.resultHandler(String.format(MvcConstant.JSON_NOT_OK, JsonHelper.jsonString_covernt(errMsg)), r, model, method);
 		} else {
 			if (err instanceof IllegalAccessError && ConfigService.getValueAsString("page.onNoLogin") != null) {
 				// 没有权限时跳转的地方
@@ -302,9 +340,5 @@ public class MvcDispatcher implements Filter {
 	private static ModelAndView findModel(Object[] args) {
 		Optional<Object> mv = Arrays.stream(args).filter(obj -> obj instanceof ModelAndView).findAny();
 		return mv.isPresent() ? (ModelAndView) mv.get() : null;
-	}
-
-	@Override
-	public void destroy() {
 	}
 }
