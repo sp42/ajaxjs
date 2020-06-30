@@ -1,4 +1,4 @@
-package com.ajaxjs.ioc.testcase;
+package com.ajaxjs.util.ioc.testcase;
 
 // 图片验证码服务
 public interface CaptchaService {

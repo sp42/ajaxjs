@@ -5,13 +5,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
+import java.util.function.Function;
 
 import org.junit.Test;
 
-import com.ajaxjs.ioc.testcase.LoginAction;
 import com.ajaxjs.util.ioc.Bean;
 import com.ajaxjs.util.ioc.Hi;
 import com.ajaxjs.util.ioc.Person;
+import com.ajaxjs.util.ioc.testcase.LoginAction;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -20,7 +21,7 @@ import javassist.CtField;
 import javassist.CtNewMethod;
 import javassist.NotFoundException;
 
-public class TestIoc {
+public class TestIoc2 {
 //	@BeforeClass
 	public static void init() {
 		ClassPool pool = ClassPool.getDefault();
@@ -42,6 +43,15 @@ public class TestIoc {
 		}
 	}
 
+	Function<Class<?>, String> giveName = clz -> {
+		String[] arr = clz.getName().split("\\.");
+		return arr[arr.length - 1];
+	};
+
+	@Test
+	public void test() {
+		BeanContext.simplePut("com.ajaxjs.ioc", giveName);
+	}
 
 	@Test
 	public void test2() {

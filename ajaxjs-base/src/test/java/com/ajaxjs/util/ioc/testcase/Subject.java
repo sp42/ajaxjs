@@ -1,4 +1,4 @@
-package com.ajaxjs.ioc.testcase;
+package com.ajaxjs.util.ioc.testcase;
 
 public interface Subject {
 	void doIt();

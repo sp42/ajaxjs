@@ -1,4 +1,4 @@
-package com.ajaxjs.ioc.testcase;
+package com.ajaxjs.util.ioc.testcase;
 
 import com.ajaxjs.util.ioc.Bean;
 import com.ajaxjs.util.ioc.Resource;
