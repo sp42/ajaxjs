@@ -1,6 +1,7 @@
 package com.ajaxjs.util.ioc;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -33,6 +34,9 @@ import javassist.NotFoundException;
 public class ComponentMgr {
 	private static final LogHelper LOGGER = LogHelper.getLog(ComponentMgr.class);
 
+	/**
+	 * 保存所有的组件
+	 */
 	public static Map<String, ComponentInfo> components = new HashMap<>();
 
 	/**
@@ -40,18 +44,25 @@ public class ComponentMgr {
 	 */
 	private static Map<String, String> dependencies = new HashMap<>();
 
-	@SuppressWarnings("unchecked")
-	public static void scan() {
-		Set<Class<Object>> clzs = new LinkedHashSet<>();
+	/**
+	 * 不重复的每一个类，经过 Javaassit 初始化过的
+	 */
+	public static Set<Class<Object>> clzs = new LinkedHashSet<>();
 
-		new EveryClass().scan((resource, packageName) -> {
+	/**
+	 * 扫描指定的包
+	 * 
+	 * @param _packageName 包名，会递归这个包下面所有的类
+	 */
+	@SuppressWarnings("unchecked")
+	public static void scan(String _packageName) {
+		new EveryClass().scan(_packageName, resource -> {
 //			System.out.println(resource);
 			ClassPool cp = ClassPool.getDefault();
 
 			// 类加载并添加 setter
 			try {
 				CtClass cc = cp.get(resource);
-
 				CtField[] fields = cc.getDeclaredFields();
 
 				for (CtField field : fields) {
@@ -79,15 +90,18 @@ public class ComponentMgr {
 //					cc.addMethod(CtNewMethod.setter("setPerson", f1));
 //				}
 
-				Class<Object> clazz = (Class<Object>) cc.toClass();
-				clzs.add(clazz);
+				Class<Object> clz = (Class<Object>) cc.toClass();
+
+				if (clz.isPrimitive() || Modifier.isAbstract(clz.getModifiers()) || clz.isAnnotation() || clz.isInterface() || clz.isArray() || clz.getName().indexOf("$") != -1) {
+				} else
+					clzs.add(clz);
 			} catch (CannotCompileException e) {
 				Class<Object> clazz = (Class<Object>) ReflectUtil.getClassByName(resource);
 				clzs.add(clazz);
 			} catch (NotFoundException | ClassNotFoundException e) {
 				LOGGER.warning(e);
 			}
-		}, "com.ajaxjs");
+		});
 
 		for (Class<Object> item : clzs) {
 			Bean annotation = item.getAnnotation(Bean.class); // 查找匹配的注解
@@ -181,101 +195,157 @@ public class ComponentMgr {
 		return dependenciObj_id;
 	}
 
-	public static Object get(String alias) {
-		ComponentInfo compInfo = components.get(alias);
-		Objects.requireNonNull(compInfo, "找不到组件 [" + alias + "]");
-		return compInfo.instance;
-	}
+	// -------------------------------------------------------------------------------------------------
 
+	/**
+	 * 根据类、接口查找组件
+	 * 
+	 * @param <T> 目标类型
+	 * @param clz 组件类型、接口
+	 * @return 目标组件
+	 */
 	public static <T> T get(Class<T> clz) {
+		if (clz.isInterface())
+			return getByInterface(clz);
+
 		ComponentInfo compInfo = null;
 
 		for (String alias : components.keySet()) { // 查询目标组件
 			ComponentInfo _compInfo = components.get(alias);
-			if (_compInfo.clazz == clz) {
+
+			if (clz == _compInfo.clazz || (_compInfo.instance != null && clz.isInstance(_compInfo.instance)))
 				compInfo = _compInfo;
-			}
 		}
 
-		return getInstance(compInfo, clz);
-	}
-
-	@SuppressWarnings("unchecked")
-	private static <T> T getInstance(ComponentInfo compInfo, Class<T> clz) {
-		Objects.requireNonNull(compInfo, "找不到目标组件");
-
-		if (compInfo.instance == null)
-			return (T) ReflectUtil.newInstance(compInfo.clazz);
-		else
-			return (T) compInfo.instance;
+		return getInstance(compInfo, clz, clz);
 	}
 
 	/**
+	 * 根据类、接口查找组件列表
 	 * 
-	 * @param aliasOrClz
-	 * @param clz
-	 * @return
+	 * @param <T> 目标类型
+	 * @param clz 组件类型、接口
+	 * @return 实例对象列表
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> List<T> getAll(Class<T> clz) {
+		if (clz.isInterface())
+			return getAllByInterface(clz);
+
+		List<T> list = new ArrayList<>();
+
+		components.forEach((alias, compInfo) -> {
+			if (clz == compInfo.clazz || (compInfo.instance != null && clz.isInstance(compInfo.instance)))
+				list.add((T) compInfo.instance);
+		});
+
+		return list;
+	}
+
+	/**
+	 * 根据命名空间、别名查找组件
+	 * 
+	 * @param aliasOrClz 命名空间或别名
+	 * @return 目标组件
+	 */
+	public static Object get(String aliasOrClz) {
+		return get(aliasOrClz, Object.class);
+	}
+
+	/**
+	 * 根据命名空间、别名查找组件
+	 * 
+	 * @param aliasOrClz 命名空间或别名
+	 * @param clz        为避免强类型转换，特意传入一个类型
+	 * @return 目标组件
 	 */
 	public static Object get(String aliasOrClz, Class<?> clz) {
-		if (!aliasOrClz.contains(".")) // 别名
-			for (String alias : components.keySet()) { // 查询目标组件
-				if (alias == aliasOrClz) {
-					ComponentInfo compInfo = components.get(alias);
-					return getInstance(compInfo, clz);
-				}
-			}
-		else { // 命名空间
+		if (aliasOrClz.contains(".")) // 命名空间
 			for (String alias : components.keySet()) { // 查询目标组件
 				ComponentInfo compInfo = components.get(alias);
-				if (compInfo.namespace == aliasOrClz) {
-					return getInstance(compInfo, clz);
-				}
+
+				if (aliasOrClz.equals(compInfo.namespace))
+					return getInstance(compInfo, clz, aliasOrClz);
 			}
+		else { // 别名
+			ComponentInfo compInfo = components.get(aliasOrClz);
+			return getInstance(compInfo, clz, aliasOrClz);
 		}
 
 		return null;
 	}
 
 	/**
-	 * 根据接口查找目标对象
+	 * 返回组件。如果是非单例组件，则创建新的实例（无构造器的实例化）
 	 * 
+	 * @param <T>
+	 * @param compInfo 组件信息
+	 * @param clz      为避免强类型转换，特意传入一个类型
+	 * @param info     便于调试的相关信息
+	 * @return 目标组件
+	 */
+	@SuppressWarnings("unchecked")
+	private static <T> T getInstance(ComponentInfo compInfo, Class<T> clz, Object info) {
+		Objects.requireNonNull(compInfo, "找不到[" + info + "]目标组件");
+
+		if (compInfo.instance == null) // 不是单例，每次都创建新的实例
+			return (T) ReflectUtil.newInstance(compInfo.clazz);
+		else
+			return (T) compInfo.instance;
+	}
+
+	// -------------------------------------------------------------------------------------------------
+
+	/**
+	 * 根据接口查找单个目标组件
+	 * 
+	 * @param <T>
 	 * @param interfaceClz 接口类
-	 * @return 目标对象的集合
+	 * @return 目标组件
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T getByInterface(Class<T> interfaceClz) {
+		for (String alias : components.keySet()) {
+			Object instance = components.get(alias).instance;
+			if (instance != null && interfaceClz.isAssignableFrom(instance.getClass()))
+				return (T) instance;
+		}
+
+		return null;
+	}
+
+	/**
+	 * 根据接口查找多个目标组件
+	 * 
+	 * @param <T>
+	 * @param interfaceClz 接口类
+	 * @return 目标组件的集合
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> List<T> getAllByInterface(Class<T> interfaceClz) {
 		List<T> list = new ArrayList<>();
 
 		components.forEach((alias, compInfo) -> {
-			if (interfaceClz.isAssignableFrom(compInfo.instance.getClass()))
-				list.add((T) compInfo.instance);
+			Object instance = components.get(alias).instance;
+			if (instance != null && interfaceClz.isAssignableFrom(instance.getClass()))
+				list.add((T) instance);
 		});
 
 		return list;
 	}
+
+	// -------------------------------------------------------------------------------------------------
 
 	/**
-	 * 根据类查找实例列表
 	 * 
-	 * @param <T> 目标类型
-	 * @param clz 类引用
-	 * @return 实例对象列表
+	 * @param alias
+	 * @param clz
+	 * @param isSingleton 是否单例，如果是马上创建实例
 	 */
-	@SuppressWarnings("unchecked")
-	public static <T> List<T> getAll(Class<T> clz) {
-		List<T> list = new ArrayList<>();
-
-		components.forEach((alias, compInfo) -> {
-			if (clz.isInstance(compInfo.instance))
-				list.add((T) compInfo.instance);
-		});
-
-		return list;
-	}
-
 	public static void register(String alias, Class<?> clz, boolean isSingleton) {
 		ComponentInfo compInfo = new ComponentInfo();
 		compInfo.clazz = clz;
+		compInfo.namespace = clz.getCanonicalName();
 
 		if (isSingleton)
 			compInfo.instance = ReflectUtil.newInstance(clz);

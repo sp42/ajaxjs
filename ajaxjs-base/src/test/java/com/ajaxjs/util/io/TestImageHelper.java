@@ -4,10 +4,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import java.io.File;
 import org.junit.Test;
-import com.ajaxjs.util.resource.AbstractScanner;
+
+import com.ajaxjs.util.ioc.EveryClass;
 
 public class TestImageHelper {
-	String img = AbstractScanner.getResourcesFromClass(TestIoHelper.class, "test.jpg");
+	String img = EveryClass.getResourcesFromClass(TestIoHelper.class, "test.jpg");
 
 	@Test
 	public void 获取图片大小() {

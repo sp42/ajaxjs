@@ -1,7 +1,9 @@
 package com.ajaxjs.util.ioc;
 
+import com.ajaxjs.util.ioc.testcase.Subject;
+
 @Bean("hi")
-public class Hi {
+public class Hi implements Subject {
 	@Resource("Person")
 	private Person person;
 
@@ -12,4 +14,9 @@ public class Hi {
 //	public void setPerson(Person person) {
 //		this.person = person;
 //	}
+
+	@Override
+	public void doIt() {
+		System.out.println("Hi do it!");
+	}
 }

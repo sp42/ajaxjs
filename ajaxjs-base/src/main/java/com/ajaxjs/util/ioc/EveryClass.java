@@ -6,19 +6,18 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Objects;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import com.ajaxjs.Version;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.resource.ScanClass;
 
 public class EveryClass {
 	private static final LogHelper LOGGER = LogHelper.getLog(EveryClass.class);
 
-	private BiConsumer<String, String> addResult;
+	private Consumer<String> addResult;
 
 	/**
 	 * 用于查找 class 文件的过滤器
@@ -31,7 +30,7 @@ public class EveryClass {
 	 * @param packageName Java 包名
 	 * @return 扫描结果
 	 */
-	public void scan(BiConsumer<String, String> addResult, String packageName) {
+	public void scan(String packageName, Consumer<String> addResult) {
 		this.addResult = addResult;
 		packageName = packageName.trim();
 
@@ -93,7 +92,7 @@ public class EveryClass {
 			if (file.isDirectory()) // 如果是目录 则递归继续扫描
 				findInFile(file.getAbsolutePath(), packageName + "." + file.getName());
 			else
-				addResult.accept(ScanClass.getClassName(file, packageName), packageName);
+				addResult.accept(getClassName(file, packageName));
 		}
 	}
 
@@ -135,10 +134,91 @@ public class EveryClass {
 					if (name.endsWith(".class") && !entry.isDirectory()) {
 						String className = name.substring(packageName.length() + 1, name.length() - 6);// 去掉后面的".class"
 																										// 获取真正的类名
-						addResult.accept(packageName + '.' + className, packageName);
+						addResult.accept(packageName + '.' + className);
 					}
 				}
 			}
 		}
+	}
+
+	/**
+	 * 获取 Classpath 根目录下的资源文件
+	 * 
+	 * @param resource 文件名称，输入空字符串这返回 Classpath 根目录
+	 * @param isDecode 是否解码
+	 * @return 所在工程路径+资源路径，找不到文件则返回 null
+	 */
+	public static String getResourcesFromClasspath(String resource, boolean isDecode) {
+		URL url = EveryClass.class.getClassLoader().getResource(resource);
+		return url2path(url, isDecode);
+	}
+
+	/**
+	 * 获取当前类目录下的资源文件
+	 * 
+	 * @param clz      类引用
+	 * @param resource 资源文件名
+	 * @return 当前类的绝对路径，找不到文件则返回 null
+	 */
+	public static String getResourcesFromClass(Class<?> clz, String resource) {
+		return getResourcesFromClass(clz, resource, true);
+	}
+
+	/**
+	 * 获取当前类目录下的资源文件
+	 * 
+	 * @param clz      类引用
+	 * @param resource 资源文件名
+	 * @param isDecode 是否解码
+	 * @return 当前类的绝对路径，找不到文件则返回 null
+	 */
+	public static String getResourcesFromClass(Class<?> clz, String resource, boolean isDecode) {
+		return url2path(clz.getResource(resource), isDecode);
+	}
+
+	/**
+	 * 获取 Classpath 根目录下的资源文件
+	 * 
+	 * @param resource 文件名称，输入空字符串这返回 Classpath 根目录
+	 * @return 所在工程路径+资源路径，找不到文件则返回 null
+	 */
+	public static String getResourcesFromClasspath(String resource) {
+		return getResourcesFromClasspath(resource, true);
+	}
+
+	/**
+	 * url.getPath() 返回 /D:/project/a，需要转换一下
+	 * 
+	 * @param url
+	 * @param isDecode 是否解码
+	 * @return
+	 */
+	private static String url2path(URL url, boolean isDecode) {
+		if (url == null)
+			return null;
+
+		String path;
+		if (isDecode) {
+			path = Encode.urlDecode(new File(url.getPath()).toString());
+		} else {
+			path = url.getPath();
+			path = path.startsWith("/") ? path.substring(1) : path;
+		}
+
+		// path = path.replaceAll("file:\\", "");
+		return path;
+	}
+
+	/**
+	 * Java 类文件 去掉后面的 .class 只留下类名
+	 * 
+	 * @param file        Java 类文件
+	 * @param packageName 包名称
+	 * @return 类名
+	 */
+	public static String getClassName(File file, String packageName) {
+		String clzName = file.getName().substring(0, file.getName().length() - 6);
+
+		return packageName + '.' + clzName;
 	}
 }

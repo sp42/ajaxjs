@@ -6,10 +6,10 @@ import java.io.File;
 
 import org.junit.Test;
 
-import com.ajaxjs.util.resource.AbstractScanner;
+import com.ajaxjs.util.ioc.EveryClass;
 
 public class TestIoHelper {
-	String dir = AbstractScanner.getResourcesFromClass(TestIoHelper.class, "");
+	String dir = EveryClass.getResourcesFromClass(TestIoHelper.class, "");
 	String fullpath = dir + File.separator + "bar.txt";
 	
 	@Test

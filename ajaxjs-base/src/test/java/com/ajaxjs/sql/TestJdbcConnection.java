@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 import org.junit.Test;
 
-import com.ajaxjs.util.resource.ScanClass;
+import com.ajaxjs.util.ioc.EveryClass;
 
 public class TestJdbcConnection {
 	/**
@@ -20,7 +20,7 @@ public class TestJdbcConnection {
 	 * @return 数据库连接对象
 	 */
 	public static Connection getTestSqliteConnection() {
-		return JdbcConnection.getSqliteConnection(ScanClass.getResourcesFromClasspath("test_used_database.sqlite"));
+		return JdbcConnection.getSqliteConnection(EveryClass.getResourcesFromClasspath("test_used_database.sqlite"));
 	}
 
 	@Test

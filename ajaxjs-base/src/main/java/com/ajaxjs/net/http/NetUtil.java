@@ -112,7 +112,7 @@ public class NetUtil extends HttpBasicRequest {
 
 			try (OutputStream out = new FileOutputStream(file);) {
 				write(in, out, true);
-				LOGGER.info("文件 {0} 写入成功", file.toString());
+				LOGGER.info("文件 [{0}]写入成功", file.toString());
 
 				return file.toString();
 			} catch (IOException e) {

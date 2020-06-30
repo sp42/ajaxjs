@@ -91,13 +91,13 @@ public class HttpBasicRequest extends IoHelper {
 		try {
 			httpUrl = new URL(url);
 		} catch (MalformedURLException e) {
-			LOGGER.warning(e, "初始化连接出错！URL {0} 格式不对！", url);
+			LOGGER.warning(e, "初始化连接出错！URL[{0}]格式不对！", url);
 		}
 
 		try {
 			return (HttpURLConnection) httpUrl.openConnection();
 		} catch (IOException e) {
-			LOGGER.warning(e, "初始化连接出错！URL {0}。", url);
+			LOGGER.warning(e, "初始化连接出错！URL[{0}]。", url);
 		}
 
 		return null;
@@ -267,7 +267,7 @@ public class HttpBasicRequest extends IoHelper {
 			out.write(b); // 输出流写入字节数据
 			out.flush();
 		} catch (IOException e) {
-			LOGGER.warning("写入 post 数据时失败！{0}", e);
+			LOGGER.warning("写入 post 数据时失败！[{0}]", e);
 		}
 
 		return getResponse(conn, false, responseHandler == null ? IoHelper::byteStream2string : responseHandler);

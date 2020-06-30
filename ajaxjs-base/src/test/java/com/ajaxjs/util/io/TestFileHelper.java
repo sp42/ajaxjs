@@ -10,10 +10,10 @@ import java.util.Calendar;
 
 import org.junit.Test;
 
-import com.ajaxjs.util.resource.AbstractScanner;
+import com.ajaxjs.util.ioc.EveryClass;
 
 public class TestFileHelper {
-	String dir = AbstractScanner.getResourcesFromClass(TestFileHelper.class, "");
+	String dir = EveryClass.getResourcesFromClass(TestFileHelper.class, "");
 	String fullpath = dir + File.separator + "bar.txt";
 
 	@Test
