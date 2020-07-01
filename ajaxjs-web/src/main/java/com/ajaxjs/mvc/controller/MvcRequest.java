@@ -45,10 +45,11 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	/**
 	 * 创建一个 MVC 请求对象。构造方法会自动加入 UTF-8 编码。
 	 * 
-	 * @param request 原始请求对象
+	 * @param req 原始请求对象
 	 */
-	public MvcRequest(HttpServletRequest request) {
-		super(request);
+	public MvcRequest(HttpServletRequest req) {
+		super(req);
+		req.setAttribute("requestTimeRecorder", System.currentTimeMillis()); // 记录执行的时间
 
 		try {
 			// 为防止中文乱码，统一设置 UTF-8，设置请求编码方式
@@ -172,7 +173,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	 * 里面存东西就是向它里面的Map存东西的，然后 ThreadLocal 把这个 Map 挂到当前的线程底下，这样 Map 就只属于这个线程了
 	 */
 	private static ThreadLocal<HttpServletRequest> threadLocalRequest = new ThreadLocal<>();
-	
+
 	private static ThreadLocal<HttpServletResponse> threadLocalResponse = new ThreadLocal<>();
 
 	/**
@@ -322,7 +323,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 		} else {
 			if (!MappingValue.toBoolean(v))
 				return false;
-			
+
 			return true;
 		}
 	}

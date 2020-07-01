@@ -12,22 +12,16 @@
  */
 package com.ajaxjs.mvc.controller;
 
-import java.beans.beancontext.BeanContext;
-import java.io.IOException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
-import javax.servlet.FilterChain;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Produces;
@@ -44,6 +38,7 @@ import com.ajaxjs.mvc.filter.FilterAfterArgs;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
+import com.ajaxjs.util.ioc.ComponentMgr;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.web.secuity.SecurityRequest;
@@ -68,36 +63,19 @@ public class MvcDispatcher implements Component {
 
 	/**
 	 * 初始化这个过滤器
-	 * 
-	 *
 	 */
+	@SuppressWarnings("unchecked")
 	private static final Consumer<ServletContext> init = ctx -> {
-		String[] packageNames = { "com.ajaxjs", "com.ibm" };
-//		String[] packageNames = { "com.ajaxjs.user", "com.ajaxjs.shop", "com.ajaxjs.website", "com.ajaxjs.app", "com.ajaxjs.weixin", "com.ibm" };
-
-		for (String packageName : packageNames)
-			BeanContext.init(packageName);
-
-		BeanContext.injectBeans(); // 依赖注射扫描
-
-		ControllerScanner scanner;// 定义一个扫描器，专门扫描 IController
-		for (String packageName : packageNames) {
-			scanner = new ControllerScanner();
-			Set<Class<IController>> IControllers = scanner.scan(packageName);
-
-			for (Class<IController> clz : IControllers)
-				ControllerScanner.add(clz);
+		for (Class<?> clz : ComponentMgr.clzs) {
+			if (IController.class.isAssignableFrom(clz)) {
+				add((Class<? extends IController>) clz);// 添加到集合中去
+			}
 		}
-
-//		if (config != null && config.get("controller") == null)
-//			LOGGER.info("web.xml 没有配置 MVC 过滤器或者 配置没有定义 controller");
 	};
 
 	private static Boolean isEnableSecurityIO;
 
 	private static final BiFunction<HttpServletRequest, HttpServletResponse, Boolean> dispatcher = (req, resp) -> {
-		req.setAttribute("requestTimeRecorder", System.currentTimeMillis()); // 每次 servlet 都会执行的记录时间
-
 		if (isEnableSecurityIO == null)
 			isEnableSecurityIO = ConfigService.getValueAsBool("security.isEnableSecurityIO");
 
@@ -106,7 +84,6 @@ public class MvcDispatcher implements Component {
 
 		String uri = request.getFolder(), httpMethod = request.getMethod();
 		Action action = null;
-
 		try {
 			action = IController.findTreeByPath(uri);
 		} catch (Throwable e) {
@@ -138,43 +115,29 @@ public class MvcDispatcher implements Component {
 	 * 虽然 REST 风格的 URL 一般不含后缀，我们只能将 DispatcherServlet 映射到“/”，使之变为一个默认的 Servlet， 在处理
 	 * js/css 等静态文件有后缀，这样的话我们需要区分对待。
 	 */
-	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
-		HttpServletRequest _request = (HttpServletRequest) req;
-		HttpServletResponse _response = (HttpServletResponse) resp;
 
-//		if (ServletHelper.isStaticAsset(_request.getRequestURI())) {
-//			chain.doFilter(req, resp);
-//			return;
-//		}
+	/**
+	 * 解析一个控制器。Parsing a Controller class.
+	 * 
+	 * @param clz 控制器类 a Controller class
+	 */
+	public static void add(Class<? extends IController> clz) {
+		if (Modifier.isAbstract(clz.getModifiers())) // 忽略抽象类
+			return;
 
-		_request.setAttribute("requestTimeRecorder", System.currentTimeMillis()); // 每次 servlet 都会执行的记录时间
-		boolean isEnableSecurityIO = ConfigService.getValueAsBool("security.isEnableSecurityIO");
-		MvcRequest request = new MvcRequest(isEnableSecurityIO ? new SecurityRequest(_request) : _request);
-		MvcOutput response = new MvcOutput(isEnableSecurityIO ? new SecurityResponse(_response) : _response);
+		String topPath = Action.getRootPath(clz);
+		if (CommonUtil.isEmptyString(topPath))
+			return;
 
-		String uri = request.getFolder(), httpMethod = request.getMethod();
-		Action action = null;
+//		LOGGER.info("正在解析 [{0}]控制器", topPath);
+		Action action = IController.findTreeByPath(IController.urlMappingTree, topPath, "", true);
+		action.createControllerInstance(clz);
+		action.parseMethod();
 
-		try {
-			action = IController.findTreeByPath(uri);
-		} catch (Throwable e) {
-			LOGGER.warning(e);
-		}
-
-		if (action != null) {
-			Method method = action.getMethod(httpMethod);// 要执行的方法
-			IController controller = action.getController(httpMethod);
-//			LOGGER.info("uri: {0}, action: {1}, method: {2}", uri, action, method);
-
-			if (method != null && controller != null) {
-				execute(request, response, controller, method);
-				return; // 终止当前 servlet 请求
-			} else {
-//				LOGGER.info("{0} {1} 控制器没有这个方法！", httpMethod, request.getRequestURI());
-			}
-		}
-
-		chain.doFilter(req, resp);// 不用传 MvcRequest，以免入侵其他框架
+		// 会打印控制器的总路径信息，不会打印各个方法的路径，那太细了，日志也会相应地多
+		// LOGGER.info("控制器已登记成功！The controller [{0}] (\"/{1}\") was parsed and
+		// registered", clz.toString().replaceAll("class\\s", ""), topPath); // 控制器 {0}
+		// 所有路径（包括子路径）注册成功！
 	}
 
 	/**
@@ -259,9 +222,8 @@ public class MvcDispatcher implements Component {
 		} else if (!isbeforeSkip) {// 前置既然不执行了，后续的当然也不执行
 			if (isDoOldReturn)
 				response.resultHandler(result, request, model, method);
-		} else {
+		} else 
 			LOGGER.warning("一般情况下不应执行到这一步。Should not be executed in this step.");
-		}
 
 		MvcRequest.clean();
 	}

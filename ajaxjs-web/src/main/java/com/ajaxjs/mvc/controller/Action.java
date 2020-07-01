@@ -12,6 +12,7 @@ package com.ajaxjs.mvc.controller;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,7 +51,7 @@ public class Action {
 	 */
 	public IController controller;
 
-	// 下面是不同HTTP方法的控制器
+	// 下面是不同 HTTP 方法的控制器
 	public IController getMethodController;
 
 	public IController postMethodController;
@@ -113,7 +114,7 @@ public class Action {
 
 					if (subPathValue.contains("{root}")) { // 顶部路径
 						if (topPath == null)
-							topPath = ControllerScanner.getRootPath(clz);
+							topPath = getRootPath(clz);
 
 						subPathValue = subPathValue.replaceAll("\\{root\\}", topPath);
 					}
@@ -176,7 +177,7 @@ public class Action {
 				return true; // if the Action is empty, allow to add a new method object
 			else {
 				String[] arr = anClz.toString().split("\\.");
-				LOGGER.warning("控制器上的 {0} 的 {1} 方法已在 {2} 登记，不接受 {3} 的重复登记！", path, arr[arr.length - 1], method, existMethod);
+				LOGGER.warning("控制器上的[{0}]的 [{1}]方法已在[{2}]登记，不接受[{3}]的重复登记。", path, arr[arr.length - 1], method, existMethod);
 				return false;
 			}
 		} else
@@ -223,5 +224,23 @@ public class Action {
 		default:
 			return controller;
 		}
+	}
+
+	/**
+	 * 获取控制器类的根目录设置
+	 * 
+	 * @param clz 控制器类
+	 * @return 根目录
+	 */
+	public static String getRootPath(Class<? extends IController> clz) {
+		Path path = clz.getAnnotation(Path.class); // 总路径
+
+		if (path == null && !Modifier.isAbstract(clz.getModifiers())) { // 检查控制器类是否有 Path
+			LOGGER.warning("控制器[{0}]不存在任何 Path 信息，控制器类应该至少设置一个 Path 注解。", clz.toString());
+			return null;
+		}
+
+		String rootPath = path.value();// 控制器类上定义的 Path 注解总是从根目录开始的。 the path in class always starts from top 1
+		return rootPath.replaceAll("^/", ""); // remove the first / so that the array would be right length
 	}
 }
