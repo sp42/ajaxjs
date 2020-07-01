@@ -129,7 +129,7 @@ public class FileHelper extends IoHelper {
 	 * @param filePath    文件完整路径，最后一个元素是文件名
 	 * @param isOverwrite 是否覆盖文件
 	 * @return 文件对象
-	 * @throws IOException
+	 * @throws IOException 文件已经存在
 	 */
 	public static File createFile(String filePath, boolean isOverwrite) throws IOException {
 		LOGGER.info("正在新建文件 {0}", filePath);
@@ -457,7 +457,6 @@ public class FileHelper extends IoHelper {
 	 * @param target 源文件
 	 * @param dest   目的文件/目录，如果最后一个为目录，则不改名，如果最后一个为文件名，则改名
 	 * @return 是否操作成功
-	 * @throws IOException IO 异常
 	 */
 	public static boolean copy(String target, String dest) {
 		return copy(target, dest, false);
@@ -491,7 +490,6 @@ public class FileHelper extends IoHelper {
 	 * @param target 源文件
 	 * @param dest   目的文件/目录，如果最后一个为目录，则不改名，如果最后一个为文件名，则改名
 	 * @return 是否操作成功
-	 * @throws IOException IO 异常
 	 */
 	public static boolean move(String target, String dest) {
 		try {
@@ -510,13 +508,13 @@ public class FileHelper extends IoHelper {
 	 * @param _dir   指定的目录
 	 * @param method 搜索函数
 	 * @return 搜索结果
-	 * @throws IOException
+	 * @throws IOException 参数不是目录
 	 */
 	public static List<Path> walkFileTree(String _dir, Predicate<Path> method) throws IOException {
 		Path dir = Paths.get(_dir);
 
 		if (!Files.isDirectory(dir))
-			throw new IOException("参数 ：" + _dir + " 不是目录，请指定目录");
+			throw new IOException("参数 [" + _dir + "]不是目录，请指定目录");
 
 		List<Path> result = new LinkedList<>();
 		Files.walkFileTree(dir, new SimpleFileVisitor<Path>() {
@@ -538,7 +536,7 @@ public class FileHelper extends IoHelper {
 	 * @param _dir   指定的目录
 	 * @param method 搜索函数
 	 * @return 搜索结果
-	 * @throws IOException
+	 * @throws IOException 参数不是目录
 	 */
 	public static List<Path> walkFile(String _dir, Predicate<Path> method) throws IOException {
 		Path dir = Paths.get(_dir);
@@ -564,7 +562,7 @@ public class FileHelper extends IoHelper {
 	 * 如果是前者，那这个文件就很可能是utf8格式，根据这个规律，我们发现，探测的准确度还是比较高的
 	 * 
 	 * @param data
-	 * @return
+	 * @return true 表示为 UTF-8 编码
 	 */
 	public static boolean isUTF8(byte[] data) {
 		int countGoodUtf = 0, countBadUtf = 0;

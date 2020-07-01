@@ -121,7 +121,7 @@ public class Tools {
 	 * 
 	 * @param domain 域名
 	 * @return true=可以注册
-	 * @throws IOException
+	 * @throws IOException 访问异常
 	 */
 	public static boolean isDomianRegisterAvailable(String domain) throws IOException {
 		String url = "http://panda.www.net.cn/cgi-bin/check.cgi?area_domain=" + domain;
@@ -129,18 +129,16 @@ public class Tools {
 		Map<String, String> map = MapTool.xmlToMap(xml);
 
 		if ("200".equals(map.get("returncode"))) {
-			if (map.get("original").startsWith("210")) {
+			if (map.get("original").startsWith("210"))
 				return true; // original=210 : Domain name is available 表示域名可以注册
-			} else if (map.get("original").startsWith("211")) {
+			else if (map.get("original").startsWith("211"))
 				return false;// original=211 : Domain name is not available 表示域名已经注册
-			} else if (map.get("original").startsWith("212")) {
+			else if (map.get("original").startsWith("212"))
 				throw new IOException("域名参数传输错误");
-			} else {
+			else
 				throw new IOException("未知错误！ " + map);
-			}
-		} else {
+		} else
 			throw new IOException("接口返回不成功 " + map);
-		}
 	}
 
 	/**
@@ -148,18 +146,18 @@ public class Tools {
 	 * 
 	 * @param domain 域名
 	 * @return 域名详情
-	 * @throws IOException
+	 * @throws IOException 访问异常
 	 */
 	public static Map<String, String> getWhois(String domain) throws IOException {
 		String url = "http://api.k780.com/?app=domain.whois&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=xml&domain=" + domain;
 		String xml = NetUtil.simpleGET(url);
 		Map<String, String> map = MapTool.xmlToMap(xml);
 
-		if ("1".equals(map.get("success"))) {
+		if ("1".equals(map.get("success")))
 			return map;
-		} else {
+		else
 			throw new IOException("接口返回不成功 " + map);
-		}
+
 	}
 
 	/**
@@ -177,9 +175,9 @@ public class Tools {
 			Object obj = map.get("data");
 
 			return (Map<String, Object>) obj;
-		} else {
+		} else
 			throw new IOException("接口返回不成功 " + map);
-		}
+
 	}
 
 	public static String getIpLocation2(String ip) throws IOException {
@@ -190,8 +188,7 @@ public class Tools {
 
 		if (jsonStr != null && map != null && map.get("status").toString().equals("success")) {
 			return "" + map.get("country") + map.get("regionName") + map.get("city");
-		} else {
+		} else
 			throw new IOException("接口返回不成功 " + jsonStr);
-		}
 	}
 }

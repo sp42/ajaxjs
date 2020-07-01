@@ -95,11 +95,12 @@ public class PageResult<T> extends ArrayList<T> {
 	/**
 	 * 列表不分页，转换为 PageResult
 	 * 
-	 * @param list
+	 * @param <T>  实体类型
+	 * @param list 普通列表
 	 * @return 分页结果
 	 */
-	public static <X> PageResult<X> list2PageList(List<X> list) {
-		PageResult<X> result = new PageResult<>();
+	public static <T> PageResult<T> list2PageList(List<T> list) {
+		PageResult<T> result = new PageResult<>();
 		result.addAll(list);
 		result.setPageSize(list.size());
 		result.setTotalCount(list.size());

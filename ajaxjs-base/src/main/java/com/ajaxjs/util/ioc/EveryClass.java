@@ -28,7 +28,7 @@ public class EveryClass {
 	 * 扫描
 	 * 
 	 * @param packageName Java 包名
-	 * @return 扫描结果
+	 * @param addResult
 	 */
 	public void scan(String packageName, Consumer<String> addResult) {
 		this.addResult = addResult;

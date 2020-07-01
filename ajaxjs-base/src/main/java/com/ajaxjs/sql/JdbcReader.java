@@ -90,6 +90,7 @@ public class JdbcReader {
 	/**
 	 * 执行查询
 	 * 
+	 * @param <T>
 	 * @param conn         数据库连接对象 数据库连接对象
 	 * @param sql          SQL 语句，可以带有 ? 的占位符
 	 * @param hasZeoResult SQL 查询是否有数据返回，没有返回 true
@@ -126,12 +127,12 @@ public class JdbcReader {
 	}
 
 	/**
-	 * 查询单行记录(单个结果)，保存为 Map<String, Object> 结构。如果查询不到任何数据返回 null。
+	 * 查询单行记录(单个结果)，保存为Map&lt;String, Object&gt; 结构。如果查询不到任何数据返回 null。
 	 * 
 	 * @param conn   数据库连接对象
 	 * @param sql    SQL 语句，可以带有 ? 的占位符
 	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
-	 * @return Map<String, Object> 结构的结果。如果查询不到任何数据返回 null。
+	 * @return Map&lt;String, Object&gt; 结构的结果。如果查询不到任何数据返回 null。
 	 */
 	public static Map<String, Object> queryAsMap(Connection conn, String sql, Object... params) {
 		return select(conn, sql, JdbcHelper::hasZeoResult, JdbcHelper::getResultMap, params);
@@ -140,6 +141,7 @@ public class JdbcReader {
 	/**
 	 * 查询单行记录(单个结果)，保存为 Bean。如果查询不到任何数据返回 null。
 	 * 
+	 * @param <T>        实体类型
 	 * @param beanClz    Bean 实体的类
 	 * @param connection 数据库连接对象
 	 * @param sql        SQL 语句，可以带有 ? 的占位符
@@ -262,13 +264,13 @@ public class JdbcReader {
 	}
 
 	/**
-	 * 查询一组结果，保存为 List<Bean> 结构。如果查询不到任何数据返回 null。
+	 * 查询一组结果，保存为 List&lt;Bean&gt; 结构。如果查询不到任何数据返回 null。
 	 * 
 	 * @param beanClz Bean 实体的类
 	 * @param conn    数据库连接对象
 	 * @param sql     SQL 语句，可以带有 ? 的占位符
 	 * @param params  插入到 SQL 中的参数，可单个可多个可不填
-	 * @return List<Bean> 结构的结果。如果查询不到任何数据返回 null。
+	 * @return List&lt;Bean&gt; 结构的结果。如果查询不到任何数据返回 null。
 	 */
 	public static <T> List<T> queryAsBeanList(Class<T> beanClz, Connection conn, String sql, Object... params) {
 		return select(conn, sql, null, rs -> forEachRs(rs, getResultBean(beanClz)), params);

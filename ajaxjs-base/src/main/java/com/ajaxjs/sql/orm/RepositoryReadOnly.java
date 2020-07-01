@@ -91,7 +91,7 @@ public class RepositoryReadOnly extends RepositoryBase {
 	 * @param method DAO 方法对象
 	 * @param args   DAO 方法的参数
 	 * @return 处理过的 SQL 语句
-	 * @throws DaoException
+	 * @throws DaoException DAO 异常
 	 */
 	public ArgsInfo handleSql(String sql, Method method, Object[] args) throws DaoException {
 		if (method != null && method.getAnnotation(SqlFactory.class) != null)
@@ -110,7 +110,7 @@ public class RepositoryReadOnly extends RepositoryBase {
 	 * @param args       DAO 方法的参数
 	 * @param returnType DAO 方法返回的目标类型
 	 * @return 查询结果
-	 * @throws DaoException
+	 * @throws DaoException DAO 异常
 	 */
 	Object select(Method method, Object[] args) throws DaoException {
 
@@ -158,7 +158,7 @@ public class RepositoryReadOnly extends RepositoryBase {
 	 * 
 	 * @param method 实体 Getter 方法
 	 * @return 实体类型的类引用
-	 * @throws DaoException
+	 * @throws DaoException DAO 异常
 	 */
 	private Class<?> getEntryContainerType(Method method) throws DaoException {
 		Class<?> type = method.getReturnType();
@@ -200,19 +200,20 @@ public class RepositoryReadOnly extends RepositoryBase {
 	/**
 	 * 分页操作：一、先查询有没有记录（不用查 列 column）；二、实际分页查询（加入 LIMIT ?, ? 语句，拼凑参数）
 	 * 
+	 * @param <T>        实体类型
 	 * @param entityType 实体类型
 	 * @param select     业务逻辑 SQL 所在的注解
-	 * @param info
+	 * @param info       参数信息
 	 * @return 分页列表，如果找不到数据，仍返回一个空的 PageList，但可以通过 getZero() 得知是否为空
-	 * @throws DaoException
+	 * @throws DaoException DAO 异常
 	 */
 	@SuppressWarnings("unchecked")
-	public <B> PageResult<B> doPage(Class<B> entityType, Select select, ArgsInfo info) throws DaoException {
+	public <T> PageResult<T> doPage(Class<T> entityType, Select select, ArgsInfo info) throws DaoException {
 		PageParams p = getPageParameters(info.method, info.args);
 
 		int total = countTotal(select, info.sql, p.args, info);
 
-		PageResult<B> result = new PageResult<>();
+		PageResult<T> result = new PageResult<>();
 
 		if (total <= 0) {
 			LogHelper.p(info.sql + "查询完毕，没有符合条件的记录");
@@ -221,10 +222,10 @@ public class RepositoryReadOnly extends RepositoryBase {
 			int start = p.pageParams[0];
 			int limit = p.pageParams[1];
 
-			List<B> list;
+			List<T> list;
 
 			if (entityType == Map.class)
-				list = (List<B>) queryAsMapList(conn, info.sql + " LIMIT ?, ?", info.args);
+				list = (List<T>) queryAsMapList(conn, info.sql + " LIMIT ?, ?", info.args);
 			else
 				list = queryAsBeanList(entityType, conn, info.sql + " LIMIT ?, ?", info.args);
 
@@ -248,7 +249,7 @@ public class RepositoryReadOnly extends RepositoryBase {
 	 * @param args   DAO 方法参数，不要包含 start/limit 参数
 	 * @param info   连接对象，判断是否 MySQL or SQLite
 	 * @return 统计行数
-	 * @throws DaoException
+	 * @throws DaoException DAO 异常
 	 */
 	private int countTotal(Select select, String sql, Object[] args, ArgsInfo info) throws DaoException {
 		String countSql = select.countSql(), sqliteCountSql = select.sqliteCountSql();
@@ -324,7 +325,6 @@ public class RepositoryReadOnly extends RepositoryBase {
 
 		for (Integer i = 0; i < args.length; i++) {
 			if (i.equals(removeStartIndex) || i.equals(removeLimitIndex) || i.equals(sqlHandlerIndex)) {
-
 			} else
 				list.add(args[i]);
 		}

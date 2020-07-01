@@ -303,7 +303,7 @@ public class MapTool {
 	/**
 	 * 遍历注解的配置，需要什么类，收集起来，放到一个 hash 之中， Servlet 或 Filter 通用
 	 * 
-	 * @param getInitParameterNames
+	 * @param emu
 	 * @param getValue
 	 * @return Map
 	 */

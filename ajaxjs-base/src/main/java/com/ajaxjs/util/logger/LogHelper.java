@@ -220,7 +220,7 @@ public class LogHelper {
 	/**
 	 * 打印一个日志（警告级别）
 	 * 
-	 * @param ex 任意异常信息
+	 * @param e 任意异常信息
 	 */
 	public void warning(Throwable e) {
 		warning(e, e.getMessage());

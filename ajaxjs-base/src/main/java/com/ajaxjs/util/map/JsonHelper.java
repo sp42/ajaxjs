@@ -28,8 +28,8 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.function.Function;
 
+import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.jsonparser.syntax.FMS;
-import com.ajaxjs.sql.orm.BaseModel;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.MappingValue;
 

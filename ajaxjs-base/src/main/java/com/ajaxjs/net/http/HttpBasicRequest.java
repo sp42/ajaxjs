@@ -206,7 +206,12 @@ public class HttpBasicRequest extends IoHelper {
 	 * POST 请求
 	 * 
 	 * @param url  请求目标地址
-	 * @param data 表单数据 KeyValue的请求数据，注意要进行 ? & 编码，使用 URLEncoder.encode()
+	 * @param data 表单数据 KeyValue的请求数据，注意要进行 ? &amp; 编码，使用
+	 * 
+	 *             <pre>
+	 *             URLEncoder.encode()
+	 *             </pre>
+	 * 
 	 * @return 携带请求信息的 Bean
 	 */
 	public static String post(String url, Map<String, Object> data) {
@@ -221,7 +226,12 @@ public class HttpBasicRequest extends IoHelper {
 	 * POST 请求
 	 * 
 	 * @param url    请求目标地址
-	 * @param params 字符串类型的请求数据，例如 ip=35.220.250.107&verifycode=
+	 * @param params 字符串类型的请求数据，例如
+	 * 
+	 *               <pre>
+	 * ip=35.220.250.107&amp;verifycode=
+	 *               </pre>
+	 * 
 	 * @return 请求之后的响应的内容
 	 */
 	public static String post(String url, String params) {
@@ -233,7 +243,7 @@ public class HttpBasicRequest extends IoHelper {
 	 * 
 	 * @param url 请求目标地址
 	 * @param b   请求数据
-	 * @param fn  对 Conn 进行配置
+	 * @param fn  对 Conn 进行配置的函数
 	 * @return 请求之后的响应的内容
 	 */
 	public static String post(String url, byte[] b, Consumer<HttpURLConnection> fn) {
@@ -249,7 +259,7 @@ public class HttpBasicRequest extends IoHelper {
 	 * 
 	 * @param url 请求目标地址
 	 * @param b   字节格式的请求数据
-	 * @param fn  对 Conn 进行配置
+	 * @param fn  对 Conn 进行配置的函数
 	 * @return 请求之后的响应的内容
 	 */
 	public static String post(String url, byte[] b, Consumer<HttpURLConnection> fn, Function<InputStream, String> responseHandler) {
@@ -273,6 +283,9 @@ public class HttpBasicRequest extends IoHelper {
 		return getResponse(conn, false, responseHandler == null ? IoHelper::byteStream2string : responseHandler);
 	}
 
+	/**
+	 * 设置 POST 方式
+	 */
 	public final static Consumer<HttpURLConnection> setFormPost = conn -> conn.setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
 }

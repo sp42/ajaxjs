@@ -99,6 +99,7 @@ public abstract class RepositoryBase extends JdbcHelper implements InvocationHan
 	/**
 	 * 绑定 DAO 的类，实例化该接口，返回实例
 	 * 
+	 * @param <T> 实体类型
 	 * @param clz DAO 实际类引用，必须为接口
 	 * @return DAO 实例
 	 */

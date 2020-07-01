@@ -90,7 +90,7 @@ public class ImageHelper {
 	/**
 	 * 根据字节获取图片对象
 	 * 
-	 * @param file 文件对象
+	 * @param data 文件数据
 	 * @return 图片对象
 	 */
 	public static BufferedImage getImg(byte[] data) {
@@ -169,8 +169,8 @@ public class ImageHelper {
 	 * 缩放比例
 	 * 
 	 * @param img    图片对象
-	 * @param height
-	 * @param width
+	 * @param height 高
+	 * @param width  宽
 	 * @return 缩放比例之后的高宽
 	 */
 	public int[] resize(Image img, int height, int width) {
@@ -391,10 +391,11 @@ public class ImageHelper {
 	/**
 	 * 图片裁切
 	 * 
-	 * @param x      选择区域左上角的x坐标
-	 * @param y      选择区域左上角的y坐标
-	 * @param width  选择区域的宽度
-	 * @param height 选择区域的高度
+	 * @param filePath 图片路径
+	 * @param x        选择区域左上角的x坐标
+	 * @param y        选择区域左上角的y坐标
+	 * @param width    选择区域的宽度
+	 * @param height   选择区域的高度
 	 * @return 缓冲图片对象
 	 */
 	public static BufferedImage cut(String filePath, int x, int y, int width, int height) {

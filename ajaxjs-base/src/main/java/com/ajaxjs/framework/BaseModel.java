@@ -5,7 +5,7 @@
  * 除非因适用法律需要或书面同意，根据许可证分发的软件是基于"按原样"基础提供，
  * 无任何明示的或暗示的保证或条件。详见根据许可证许可下，特定语言的管辖权限和限制。
  */
-package com.ajaxjs.sql.orm;
+package com.ajaxjs.framework;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -43,7 +43,7 @@ public class BaseModel implements Serializable {
 	/**
 	 * 设置数据字典：状态
 	 * 
-	 * @param stat
+	 * @param stat 状态
 	 */
 	public void setStat(Integer stat) {
 		this.stat = stat;

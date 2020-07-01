@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.sql.annotation.Delete;
 import com.ajaxjs.sql.annotation.Insert;
 import com.ajaxjs.sql.annotation.Update;

@@ -121,7 +121,6 @@ public class JdbcHelper extends JdbcReader {
 	 * @param sql    SQL 语句，可以带有 ? 的占位符
 	 * @param params 插入到 SQL 中的参数，可单个可多个可不填
 	 * @return 成功修改的行数
-	 * @throws SQLException
 	 */
 	public static int update(Connection conn, String sql, Object... params) {
 		return initAndExe((_conn, _sql) -> {

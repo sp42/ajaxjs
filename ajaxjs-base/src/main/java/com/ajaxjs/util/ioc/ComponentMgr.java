@@ -13,6 +13,7 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.ajaxjs.framework.Component;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
@@ -40,14 +41,14 @@ public class ComponentMgr {
 	public static Map<String, ComponentInfo> components = new HashMap<>();
 
 	/**
-	 * 记录依赖关系
-	 */
-	private static Map<String, String> dependencies = new HashMap<>();
-
-	/**
 	 * 不重复的每一个类，经过 Javaassit 初始化过的
 	 */
-	public static Set<Class<Object>> clzs = new LinkedHashSet<>();
+	public static Set<Class<?>> clzs = new LinkedHashSet<>();
+
+	public static void scan(String... packageNames) {
+		for (String packageName : packageNames)
+			scan(packageName);
+	}
 
 	/**
 	 * 扫描指定的包
@@ -56,6 +57,10 @@ public class ComponentMgr {
 	 */
 	@SuppressWarnings("unchecked")
 	public static void scan(String _packageName) {
+//		LOGGER.info("扫描 [{0}] 包下面所有的类", _packageName);
+
+		Set<Class<?>> clzs = new LinkedHashSet<>();
+
 		new EveryClass().scan(_packageName, resource -> {
 //			System.out.println(resource);
 			ClassPool cp = ClassPool.getDefault();
@@ -90,11 +95,17 @@ public class ComponentMgr {
 //					cc.addMethod(CtNewMethod.setter("setPerson", f1));
 //				}
 
-				Class<Object> clz = (Class<Object>) cc.toClass();
+				Class<?> clz = (Class<?>) cc.toClass();
 
 				if (clz.isPrimitive() || Modifier.isAbstract(clz.getModifiers()) || clz.isAnnotation() || clz.isInterface() || clz.isArray() || clz.getName().indexOf("$") != -1) {
-				} else
+				} else {
+					// 组件才享有优先类加载的权利
+					if (Component.class.isAssignableFrom(clz)) {
+						ReflectUtil.getClassByName(clz.getCanonicalName());
+					}
+
 					clzs.add(clz);
+				}
 			} catch (CannotCompileException e) {
 				Class<Object> clazz = (Class<Object>) ReflectUtil.getClassByName(resource);
 				clzs.add(clazz);
@@ -103,7 +114,12 @@ public class ComponentMgr {
 			}
 		});
 
-		for (Class<Object> item : clzs) {
+		ComponentMgr.clzs.addAll(clzs);
+
+		// 记录依赖关系
+		Map<String, String> dependencies = new HashMap<>();
+
+		for (Class<?> item : clzs) {
 			Bean annotation = item.getAnnotation(Bean.class); // 查找匹配的注解
 			Named namedAnno = item.getAnnotation(Named.class);
 
@@ -149,9 +165,8 @@ public class ComponentMgr {
 
 		// 扫描依赖关系并注入 bean.
 		dependencies.forEach((k, v) -> {
-//			String value = dependencies.get(key);// 依赖对象的值
 			String[] split = k.split("\\.");// 数组第一个值表示 bean 对象名称，第二个值为字段属性名称
-
+//			LOGGER.info(k + ":::"+ v);
 			Object bean = get(split[0]), argBean = get(v);
 
 			Objects.requireNonNull(bean, split[0] + "执行[" + split[1] + "]未发现类");
@@ -164,7 +179,7 @@ public class ComponentMgr {
 	}
 
 	// TODO: remove Bean
-	private static String getAlias(Bean annotation, Named namedAnno, Class<Object> clz) {
+	private static String getAlias(Bean annotation, Named namedAnno, Class<?> clz) {
 		String value = null;
 
 		if (annotation != null) // 获取 Bean 的名称，如果没有则取类 SimpleName
@@ -186,7 +201,7 @@ public class ComponentMgr {
 			String str = dependenciObj_id.replaceFirst("autoWire:", "");
 			String[] arr = str.split("\\|");
 //			String extendedId = ConfigService.getValueAsString(arr[0]);
-			String extendedId = "";
+			String extendedId = null;
 
 			// 没有扩展，读取默认的
 			return extendedId == null ? arr[1] : extendedId;

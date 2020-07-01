@@ -26,8 +26,7 @@ public class StringToken extends Token {
 	/**
 	 * 创建字符串 Token
 	 * 
-	 * @param value
-	 *            这是 JSON 字符串上的那个原始值。
+	 * @param value 这是 JSON 字符串上的那个原始值。
 	 */
 	public StringToken(String value) {
 		super(0, "STR", "字符串", null, value);
@@ -36,7 +35,7 @@ public class StringToken extends Token {
 	/**
 	 * 转义
 	 * 
-	 * @param str
+	 * @param str 输入的字符
 	 * @return 转义后的结果
 	 */
 	public static String unescape(String str) {
