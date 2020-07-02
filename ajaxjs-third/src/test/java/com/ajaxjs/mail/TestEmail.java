@@ -7,8 +7,8 @@ import org.junit.Test;
 
 import com.ajaxjs.app.ThirdPartyService;
 import com.ajaxjs.framework.config.TestHelper;
-import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.net.mail.Mail;
+import com.ajaxjs.util.ioc.ComponentMgr;
 
 public class TestEmail {
 
@@ -23,7 +23,7 @@ public class TestEmail {
 		mail.setContent("我希望可以跟你做朋友 <a target=\"_blank\" href=\"http://www.qq.com\">QQ</a> 34354344");
 
 
-		ThirdPartyService services = BeanContext.getByClass(ThirdPartyService.class);
+		ThirdPartyService services = ComponentMgr.get(ThirdPartyService.class);
 		assertNotNull(services);
 		assertTrue(services.sendEmail(mail));
 	}

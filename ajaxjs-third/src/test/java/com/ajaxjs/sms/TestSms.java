@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import com.ajaxjs.app.ThirdPartyService;
 import com.ajaxjs.framework.config.TestHelper;
-import com.ajaxjs.ioc.BeanContext;
+import com.ajaxjs.util.ioc.ComponentMgr;
 
 public class TestSms {
 //	@Test
@@ -29,7 +29,7 @@ public class TestSms {
 	public void byService() {
 		TestHelper.initAll();
 
-		ThirdPartyService services = BeanContext.getByClass(ThirdPartyService.class);
+		ThirdPartyService services = ComponentMgr.get(ThirdPartyService.class);
 		assertNotNull(services);
 
 		assertTrue(services.sendSms("13711228150", "SMS_138067918", String.format("{\"code\":\"%s\"}", 3444)));

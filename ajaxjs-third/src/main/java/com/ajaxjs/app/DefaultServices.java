@@ -5,7 +5,7 @@ import com.ajaxjs.net.mail.Mail;
 import com.ajaxjs.net.mail.Sender;
 import com.ajaxjs.sms.AliyunSMS;
 import com.ajaxjs.sms.SmsMessage;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 
 /**
  * 默认的服务供应器
@@ -13,7 +13,7 @@ import com.ajaxjs.util.ioc.Bean;
  * @author sp42 frank@ajaxjs.com
  *
  */
-@Bean
+@Component
 public class DefaultServices implements ThirdPartyService {
 
 	@Override
