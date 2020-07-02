@@ -23,7 +23,7 @@ import com.ajaxjs.user.model.UserCommonAuth;
 import com.ajaxjs.user.service.AccountService;
 import com.ajaxjs.user.service.UserCommonAuthService;
 import com.ajaxjs.user.service.UserService;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.captcha.CaptchaFilter;
@@ -33,7 +33,7 @@ import com.ajaxjs.web.captcha.CaptchaFilter;
  * 重置密码
  */
 @Path("/user/reset_password")
-@Bean
+@Component
 public class ResetPasswordController extends BaseController<Map<String, Object>> {
 	private static final LogHelper LOGGER = LogHelper.getLog(ResetPasswordController.class);
 
@@ -45,7 +45,7 @@ public class ResetPasswordController extends BaseController<Map<String, Object>>
 
 	private final static String FIND_BY_EMAIL = "/user/reset_password/findByEmail/";
 
-	@Resource
+	@Resource("UserService")
 	private UserService userService;
 
 	@POST

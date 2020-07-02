@@ -1,6 +1,6 @@
 package com.ajaxjs.user.login;
 
-import com.ajaxjs.sql.orm.BaseModel;
+import com.ajaxjs.framework.BaseModel;
 
 public class UserLoginLog extends BaseModel {
 	private static final long serialVersionUID = 1L;

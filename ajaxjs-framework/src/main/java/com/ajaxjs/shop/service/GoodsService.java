@@ -12,7 +12,7 @@ import com.ajaxjs.shop.dao.GoodsDao;
 import com.ajaxjs.shop.model.Goods;
 import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.sql.orm.Repository;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 
 /**
@@ -21,7 +21,7 @@ import com.ajaxjs.util.ioc.Resource;
  * @author sp42 frank@ajaxjs.com
  *
  */
-@Bean
+@Component
 public class GoodsService extends BaseService<Goods> {
 	public static GoodsDao dao = new Repository().bind(GoodsDao.class);
 

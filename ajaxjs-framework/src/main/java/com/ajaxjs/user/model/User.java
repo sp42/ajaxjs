@@ -2,7 +2,7 @@ package com.ajaxjs.user.model;
 
 import java.util.Date;
 
-import com.ajaxjs.sql.orm.BaseModel;
+import com.ajaxjs.framework.BaseModel;
 
 public class User extends BaseModel {
 	private static final long serialVersionUID = 1L;

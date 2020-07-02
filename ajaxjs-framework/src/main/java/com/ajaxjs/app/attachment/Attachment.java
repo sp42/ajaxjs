@@ -1,6 +1,6 @@
 package com.ajaxjs.app.attachment;
 
-import com.ajaxjs.sql.orm.BaseModel;
+import com.ajaxjs.framework.BaseModel;
 
 /**
  * 通用附件

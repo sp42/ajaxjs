@@ -13,7 +13,7 @@ import com.ajaxjs.shop.model.Cart;
 import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 
 /**
@@ -21,7 +21,7 @@ import com.ajaxjs.util.ioc.Resource;
  * @author sp42 frank@ajaxjs.com
  *
  */
-@Bean
+@Component
 public class CartService extends BaseService<Cart> {
 	public static CartDao dao = new Repository().bind(CartDao.class);
 

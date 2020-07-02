@@ -16,12 +16,12 @@ import com.ajaxjs.user.model.UserCommonAuth;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.cryptography.SymmetriCipher;
 import com.ajaxjs.util.io.ImageHelper;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.UploadFileInfo;
 
-@Bean("UserService")
+@Component("UserService")
 public class UserService extends BaseService<User> {
 	private static final LogHelper LOGGER = LogHelper.getLog(UserService.class);
 

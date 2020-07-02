@@ -26,7 +26,7 @@ import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.user.controller.BaseUserController;
 import com.ajaxjs.user.filter.LoginCheck;
 import com.ajaxjs.user.service.UserAddressService;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 import com.alipay.api.AlipayApiException;
@@ -35,7 +35,7 @@ import com.alipay.api.AlipayApiException;
  * 
  * 控制器
  */
-@Bean
+@Component
 @Path("/shop/order")
 public class OrderController extends BaseController<OrderInfo> {
 	private static final LogHelper LOGGER = LogHelper.getLog(OrderController.class);

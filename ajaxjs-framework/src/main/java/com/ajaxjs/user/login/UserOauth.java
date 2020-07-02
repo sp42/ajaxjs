@@ -1,6 +1,6 @@
 package com.ajaxjs.user.login;
 
-import com.ajaxjs.sql.orm.BaseModel;
+import com.ajaxjs.framework.BaseModel;
 
 /**
  * 第三方登录服务

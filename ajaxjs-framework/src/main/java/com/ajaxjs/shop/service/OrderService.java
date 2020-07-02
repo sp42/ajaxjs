@@ -19,12 +19,12 @@ import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.user.controller.BaseUserController;
 import com.ajaxjs.user.model.UserAddress;
 import com.ajaxjs.user.service.UserAddressService;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 
-@Bean
+@Component
 public class OrderService extends BaseService<OrderInfo> implements PayConstant {
 	private static final LogHelper LOGGER = LogHelper.getLog(OrderService.class);
 
@@ -187,8 +187,7 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 		return order;
 	}
 
-	public OrderInfo processOrder(long userId, long addressId, long goodsId, long formatId, int goodsNumber,
-			int payType) {
+	public OrderInfo processOrder(long userId, long addressId, long goodsId, long formatId, int goodsNumber, int payType) {
 		LOGGER.info("生成订单信息");
 		BigDecimal actualPrice = goodsFormatService.findById(formatId).getPrice();
 
@@ -244,15 +243,13 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 		order.setShippingPhone(address.getPhone());
 		order.setShippingCode(address.getZipCode());
 
-		String p = address.getLocationProvince() + "", c = address.getLocationCity() + "",
-				d = address.getLocationDistrict() + "";
+		String p = address.getLocationProvince() + "", c = address.getLocationCity() + "", d = address.getLocationDistrict() + "";
 
 		System.out.println(">>>" + p);
 		System.out.println("::>>>" + UserAddressService.AREA_DATA);
-		System.out.println("::::::" +UserAddressService.AREA_DATA.get("China_AREA", "86", p));
-		
-		order.setShippingAddress(UserAddressService.AREA_DATA.get("China_AREA", "86", p).toString()
-				+ UserAddressService.AREA_DATA.get("China_AREA", p, c)
+		System.out.println("::::::" + UserAddressService.AREA_DATA.get("China_AREA", "86", p));
+
+		order.setShippingAddress(UserAddressService.AREA_DATA.get("China_AREA", "86", p).toString() + UserAddressService.AREA_DATA.get("China_AREA", p, c)
 				+ UserAddressService.AREA_DATA.get("China_AREA", c, d) + address.getAddress());
 
 	}

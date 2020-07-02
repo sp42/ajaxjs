@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.ajaxjs.framework.Application;
-import com.ajaxjs.framework.Component;
+import com.ajaxjs.framework.IComponent;
 import com.ajaxjs.user.role.RightConstant;
 import com.ajaxjs.user.role.RoleService;
 
@@ -19,7 +19,7 @@ import com.ajaxjs.user.role.RoleService;
  * @author sp42 frank@ajaxjs.com
  *
  */
-public class UserAdminFilter implements Component {
+public class UserAdminFilter implements IComponent {
 	private static final String NO_ACCESS = "<title>禁止访问，非法权限</title><meta charset=\"utf-8\" /> 禁止访问，非法权限。Authentication Required <a href=\"%s/admin/login/\">登 录</a>";
 
 	private static final BiFunction<HttpServletRequest, HttpServletResponse, Boolean> checkAdmin = (req, resp) -> {

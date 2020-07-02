@@ -15,12 +15,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.function.Consumer;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
+import javax.servlet.ServletContext;
 
 import com.ajaxjs.Version;
+import com.ajaxjs.framework.Application;
+import com.ajaxjs.framework.IComponent;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.sql.JdbcReader;
@@ -35,20 +36,22 @@ import com.ajaxjs.util.logger.LogHelper;
  * MySQL 数据库定时自动备份，仅支持 CentOS
  *
  */
-@WebListener
-public class MysqlAutoBackup extends TimerTask implements ServletContextListener {
+
+public class MysqlAutoBackup extends TimerTask implements IComponent {
 	/**
 	 * 数据库配置信息
 	 */
-	private Map<String, String> dbConfig;
+	private static Map<String, String> dbConfig;
 
-	@Override
-	public void contextInitialized(ServletContextEvent e) {
+	// 时间间隔 一天时间
+	private static final long PERIOD_DAY = 24 * 60 * 60 * 1000;
+
+	private final static Consumer<ServletContext> initialized = ctx -> {
 		if (Version.isDebug || !ConfigService.getValueAsBool("isEnableMySqlBackup"))
 			return;
 
 		// 获取数据库配置
-		String configFile = MvcRequest.mappath(e.getServletContext(), "/META-INF/context.xml");
+		String configFile = MvcRequest.mappath(ctx, "/META-INF/context.xml");
 		dbConfig = XmlHelper.nodeAsMap(configFile, "//Resource[@name='" + ConfigService.getValueAsString("data.database_node") + "']");
 
 		// 获取并处理配置文件中的时间
@@ -70,15 +73,12 @@ public class MysqlAutoBackup extends TimerTask implements ServletContextListener
 			date = addDay(date, 1);
 
 		// 安排指定的任务在指定的时间开始进行重复的固定延迟执行。
-		new Timer().schedule(this, date, PERIOD_DAY);
+		new Timer().schedule(new MysqlAutoBackup(), date, PERIOD_DAY);
+	};
+	
+	static {
+		Application.onServletStartUp.add(initialized);
 	}
-
-	@Override
-	public void contextDestroyed(ServletContextEvent e) {
-	}
-
-	// 时间间隔 一天时间
-	private static final long PERIOD_DAY = 24 * 60 * 60 * 1000;
 
 	/**
 	 * 增加或减少天数

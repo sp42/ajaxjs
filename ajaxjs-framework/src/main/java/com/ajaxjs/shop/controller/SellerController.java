@@ -21,10 +21,10 @@ import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.user.filter.LoginCheck;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.logger.LogHelper;
 
-@Bean
+@Component
 @Path("/admin/seller")
 public class SellerController extends BaseController<Seller> {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseController.class);

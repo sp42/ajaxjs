@@ -19,7 +19,7 @@ import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.sql.orm.IBaseService;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
@@ -29,7 +29,7 @@ import com.ajaxjs.web.UploadFileInfo;
  * 
  * 控制器
  */
-@Bean
+@Component
 @Path("/admin/attachment")
 public class AttachmentController extends BaseController<Attachment> {
 	private static final LogHelper LOGGER = LogHelper.getLog(AttachmentController.class);

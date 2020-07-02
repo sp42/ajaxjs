@@ -25,14 +25,14 @@ import com.ajaxjs.user.filter.LoginCheck;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.role.RoleService;
 import com.ajaxjs.user.service.UserService;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 用户系统后台部分的控制器
  */
-@Bean
+@Component
 @Path("/admin/user")
 public class UserAdminController extends BaseController<User> {
 	private static final LogHelper LOGGER = LogHelper.getLog(UserAdminController.class);

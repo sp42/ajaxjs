@@ -17,9 +17,9 @@ import com.ajaxjs.sql.annotation.Select;
 import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.Repository;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 
-@Bean("UserRoleService")
+@Component("UserRoleService")
 public class RoleService extends BaseService<Map<String, Object>> {
 	public static RoleDao dao = new Repository().bind(RoleDao.class);
 

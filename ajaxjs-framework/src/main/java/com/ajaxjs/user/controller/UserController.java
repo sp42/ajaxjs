@@ -8,7 +8,7 @@ import javax.ws.rs.Path;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.service.UserCommonAuthService;
 import com.ajaxjs.user.service.UserService;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 
 /**
@@ -18,7 +18,7 @@ import com.ajaxjs.util.ioc.Resource;
  *
  */
 @Path("/user")
-@Bean
+@Component
 public class UserController extends AbstractUserController {
 	@Resource("User_common_authService")
 	private UserCommonAuthService authService;

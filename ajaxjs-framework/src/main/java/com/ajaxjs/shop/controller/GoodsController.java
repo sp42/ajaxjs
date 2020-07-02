@@ -26,7 +26,7 @@ import com.ajaxjs.shop.model.Seller;
 import com.ajaxjs.shop.service.GoodsService;
 import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.user.controller.BaseUserController;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -34,7 +34,7 @@ import com.ajaxjs.util.logger.LogHelper;
  * 
  * 控制器
  */
-@Bean
+@Component
 @Path("/admin/goods")
 public class GoodsController extends BaseController<Goods> {
 	private static final LogHelper LOGGER = LogHelper.getLog(GoodsController.class);

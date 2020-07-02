@@ -13,10 +13,10 @@ import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.user.model.UserCommonAuth;
 import com.ajaxjs.util.Encode;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.logger.LogHelper;
 
-@Bean("User_common_authService")
+@Component("User_common_authService")
 public class UserCommonAuthService extends BaseService<UserCommonAuth> {
 	private static final LogHelper LOGGER = LogHelper.getLog(UserCommonAuthService.class);
 	

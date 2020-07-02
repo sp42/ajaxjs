@@ -10,9 +10,9 @@ import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.sql.orm.Repository;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 
-@Bean
+@Component
 public class AdsService extends BaseService<Ads> {
 	@TableName(value = "entity_ads", beanClass = Ads.class)
 	public interface AdsDao extends IBaseDao<Ads> {

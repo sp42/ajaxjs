@@ -20,10 +20,10 @@ import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.sql.orm.IBaseService;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.logger.LogHelper;
 
-@Bean
+@Component
 @Path("/hr")
 public class HrController extends BaseController<Map<String, Object>> {
 	private static final LogHelper LOGGER = LogHelper.getLog(HrController.class);

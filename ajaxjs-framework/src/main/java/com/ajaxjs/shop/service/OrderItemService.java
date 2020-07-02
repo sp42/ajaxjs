@@ -12,9 +12,9 @@ import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.user.role.RightConstant;
 import com.ajaxjs.user.role.RoleService;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 
-@Bean
+@Component
 public class OrderItemService extends BaseService<OrderItem> {
 	@TableName(value = "shop_order_item", beanClass = OrderItem.class)
 	public static interface OrderItemDao extends IBaseDao<OrderItem> {

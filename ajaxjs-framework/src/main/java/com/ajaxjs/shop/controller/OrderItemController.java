@@ -25,14 +25,14 @@ import com.ajaxjs.shop.model.OrderItem;
 import com.ajaxjs.shop.model.Seller;
 import com.ajaxjs.shop.service.OrderItemService;
 import com.ajaxjs.sql.orm.IBaseService;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 
 /**
  * 
  * 控制器
  */
-@Bean
+@Component
 @Path("/admin/orderItem")
 public class OrderItemController extends BaseController<OrderItem> {
 	@Resource("OrderItemService")

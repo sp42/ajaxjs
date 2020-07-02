@@ -6,9 +6,9 @@ import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.Repository;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 
-@Bean
+@Component
 public class AttachmentService extends BaseService<Attachment> {
 	@TableName(value = "attachment", beanClass = Attachment.class)
 	public static interface AttachmentDao extends IBaseDao<Attachment> {

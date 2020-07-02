@@ -17,9 +17,9 @@ import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.user.model.UserAddress;
 import com.ajaxjs.util.io.IoHelper;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 
-@Bean
+@Component
 public class UserAddressService extends BaseService<UserAddress> {
 
 	@TableName(value = "user_address", beanClass = UserAddress.class)

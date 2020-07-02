@@ -7,15 +7,15 @@ import java.util.function.Function;
 
 import javax.servlet.ServletContext;
 
+import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.sql.orm.BaseModel;
 import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 
-@Bean("CatalogService")
+@Component("CatalogService")
 public class CatalogService extends BaseService<Catalog> {
 	public static CatalogDao dao = new Repository().bind(CatalogDao.class);
 

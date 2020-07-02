@@ -3,7 +3,7 @@ package com.ajaxjs.app;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import com.ajaxjs.sql.orm.BaseModel;
+import com.ajaxjs.framework.BaseModel;
 
 /**
  * 广告

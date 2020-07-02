@@ -10,7 +10,7 @@ import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.sql.orm.Repository;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 
 /**
  * 栏目
@@ -20,7 +20,7 @@ import com.ajaxjs.util.ioc.Bean;
  * @author sp42 frank@ajaxjs.com
  *
  */
-@Bean
+@Component
 public class SectionService extends BaseService<Section> {
 	@TableName(value = "column_list", beanClass = Section.class)
 	public interface ColumnDao extends IBaseDao<Section> {

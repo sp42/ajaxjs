@@ -28,7 +28,7 @@ import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.service.UserCommonAuthService;
 import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.ReflectUtil;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.UploadFileInfo;;
@@ -40,7 +40,7 @@ import com.ajaxjs.web.UploadFileInfo;;
  *
  */
 @Path("/user")
-@Bean("PcUserInfoController")
+@Component("PcUserInfoController")
 public class UserCenterController extends AbstractAccountInfoController {
 	private static final LogHelper LOGGER = LogHelper.getLog(UserCenterController.class);
 

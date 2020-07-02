@@ -23,12 +23,12 @@ import com.ajaxjs.shop.service.Pay;
 import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.io.IoHelper;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.MapTool;
 
-@Bean
+@Component
 @Path("/shop/pay/wxpay")
 public class PayWxController extends BaseController<Map<String, Object>> {
 	private static final LogHelper LOGGER = LogHelper.getLog(PayWxController.class);

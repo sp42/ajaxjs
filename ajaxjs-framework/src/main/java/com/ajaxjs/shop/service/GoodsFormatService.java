@@ -7,7 +7,7 @@ import com.ajaxjs.shop.model.GoodsFormat;
 import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.Repository;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 
 /**
  * 商品规格
@@ -15,7 +15,7 @@ import com.ajaxjs.util.ioc.Bean;
  * @author sp42 frank@ajaxjs.com
  *
  */
-@Bean
+@Component
 public class GoodsFormatService extends BaseService<GoodsFormat> {
 	@TableName(value = "shop_goods_format", beanClass = GoodsFormat.class)
 	public static interface GoodsFormatDao extends IBaseDao<GoodsFormat> {

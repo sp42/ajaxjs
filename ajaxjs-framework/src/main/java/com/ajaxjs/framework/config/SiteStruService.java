@@ -13,22 +13,19 @@
 package com.ajaxjs.framework.config;
 
 import java.io.File;
-import java.lang.reflect.UndeclaredThrowableException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.function.Consumer;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpServletRequest;
 
-import com.ajaxjs.Version;
-import com.ajaxjs.sql.orm.BaseModel;
+import com.ajaxjs.framework.Application;
+import com.ajaxjs.framework.BaseModel;
+import com.ajaxjs.framework.IComponent;
 import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
@@ -40,8 +37,7 @@ import com.ajaxjs.util.map.ListMapConfig;
  * 
  * @author sp42 frank@ajaxjs.com
  */
-@javax.servlet.annotation.WebListener
-public class SiteStruService implements ServletContextListener {
+public class SiteStruService implements IComponent {
 	private static final LogHelper LOGGER = LogHelper.getLog(SiteStruService.class);
 
 	/**
@@ -64,7 +60,10 @@ public class SiteStruService implements ServletContextListener {
 			public boolean execute(Map<String, Object> map, Map<String, Object> superMap, int level) {
 				if (map.containsKey("dbNode")) {
 					Object _map = cxt.getAttribute(map.get("dbNode").toString());
-					Objects.requireNonNull(_map, "Servlet 初始化数据未准备好，依赖数据：" + map.get("dbNode").toString());
+					if(_map == null) {
+						LOGGER.warning("Servlet 初始化数据未准备好，依赖数据：" + map.get("dbNode").toString());
+						return false;
+					}
 
 					@SuppressWarnings("unchecked")
 					Map<Long, BaseModel> data = (Map<Long, BaseModel>) _map;
@@ -90,49 +89,17 @@ public class SiteStruService implements ServletContextListener {
 		return list;
 	}
 
-	@Override
-	public void contextInitialized(ServletContextEvent e) {
-		ServletContext ctx = e.getServletContext();
-		Version.tomcatVersionDetect(ctx.getServerInfo());
+	private final static Consumer<ServletContext> initialized = ctx -> {
 
-		// 加载配置
-		ConfigService.load(ctx.getRealPath("/META-INF/site_config.json"));
-		if (ConfigService.CONFIG != null && ConfigService.CONFIG.isLoaded()) {
-			ctx.setAttribute("aj_allConfig", ConfigService.CONFIG); // 所有配置保存在这里
-			onStartUp(ctx);
-		}
 
 		// 加载网站结构
 		loadSiteStru(ctx);
 		if (STRU != null && STRU.isLoaded())
-			ctx.setAttribute("SITE_STRU", this); // 所有网站结构保存在这里
-	}
+			ctx.setAttribute("SITE_STRU", new SiteStruService()); // 所有网站结构保存在这里
+	};
 
-	/**
-	 * Startup callback，外界可调用改方法进行刷新
-	 */
-	private static void onStartUp(ServletContext cxt) {
-		String startUp_Class = ConfigService.getValueAsString("startUp_Class");
-
-		if (!CommonUtil.isEmptyString(startUp_Class)) {
-			LOGGER.info("执行 Servlet 启动回调[{0}]", startUp_Class);
-
-			try {
-				Class<ServletStartUp> clz = ReflectUtil.getClassByName(startUp_Class, ServletStartUp.class);
-
-				if (clz != null) {
-					ServletStartUp startUp = ReflectUtil.newInstance(clz);
-					startUp.onStartUp(cxt);
-				}
-			} catch (Throwable e) {
-				if (e instanceof UndeclaredThrowableException) {
-					Throwable _e = ReflectUtil.getUnderLayerErr(e);
-					LOGGER.warning(_e);
-				}
-
-				throw e;
-			}
-		}
+	static {
+		Application.onServletStartUp.add(initialized);
 	}
 
 	/**
@@ -244,9 +211,8 @@ public class SiteStruService implements ServletContextListener {
 			request.setAttribute("secondLevel_Node", map); // 保存二级栏目节点之数据
 
 			return map;
-		} else {
+		} else
 			return (Map<String, Object>) request.getAttribute("secondLevel_Node");
-		}
 	}
 
 	/**
@@ -291,13 +257,13 @@ public class SiteStruService implements ServletContextListener {
 	/**
 	 * 获取页脚的网站地图
 	 * 
-	 * @param list        可指定数据
-	 * @param contextPath
+	 * @param list    可指定数据
+	 * @param cxtPath
 	 * @return 页脚的网站地图
 	 */
-	public static String getSiteMap(List<Map<String, Object>> list, String contextPath) {
+	public static String getSiteMap(List<Map<String, Object>> list, String cxtPath) {
 		StringBuilder sb = new StringBuilder();
-		getSiteMap(list, sb, contextPath);
+		getSiteMap(list, sb, cxtPath);
 
 		return String.format(TABLE, sb.toString());
 	}
@@ -307,10 +273,10 @@ public class SiteStruService implements ServletContextListener {
 	 * 
 	 * @param list
 	 * @param sb
-	 * @param contextPath
+	 * @param cxtPath
 	 */
 	@SuppressWarnings("unchecked")
-	private static void getSiteMap(List<Map<String, Object>> list, StringBuilder sb, String contextPath) {
+	private static void getSiteMap(List<Map<String, Object>> list, StringBuilder sb, String cxtPath) {
 		for (Map<String, Object> map : list) {
 			if (map != null) {
 				Object isHidden = map.get("isHidden");
@@ -320,15 +286,11 @@ public class SiteStruService implements ServletContextListener {
 				if (0 == (int) map.get(ListMap.LEVEL)) // 新的一列
 					sb.append(NEW_COL);
 
-				sb.append(String.format(A_LINK, contextPath + map.get(ListMap.PATH).toString(), map.get(ListMap.LEVEL).toString(), map.get("name").toString()));
+				sb.append(String.format(A_LINK, cxtPath + map.get(ListMap.PATH).toString(), map.get(ListMap.LEVEL).toString(), map.get("name").toString()));
 
 				if (map.get(ListMap.CHILDREN) != null && map.get(ListMap.CHILDREN) instanceof List)
-					getSiteMap((List<Map<String, Object>>) map.get(ListMap.CHILDREN), sb, contextPath);
+					getSiteMap((List<Map<String, Object>>) map.get(ListMap.CHILDREN), sb, cxtPath);
 			}
 		}
-	}
-
-	@Override
-	public void contextDestroyed(ServletContextEvent arg0) {
 	}
 }

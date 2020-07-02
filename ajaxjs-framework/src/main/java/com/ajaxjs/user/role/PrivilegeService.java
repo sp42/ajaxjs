@@ -4,9 +4,9 @@ import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.Repository;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 
-@Bean("UserRolePrivilegeService")
+@Component("UserRolePrivilegeService")
 public class PrivilegeService extends BaseService<Privilege> {
 
 	UserRolePrivilegeDao dao = new Repository().bind(UserRolePrivilegeDao.class);

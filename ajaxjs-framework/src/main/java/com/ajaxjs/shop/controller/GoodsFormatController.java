@@ -15,14 +15,14 @@ import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.shop.model.GoodsFormat;
 import com.ajaxjs.shop.service.GoodsFormatService;
 import com.ajaxjs.sql.orm.IBaseService;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 
 /**
  * 
  * 控制器
  */
-@Bean
+@Component
 @Path("/admin/goodsFormat")
 public class GoodsFormatController extends BaseController<GoodsFormat> {
 	@Resource("GoodsFormatService")

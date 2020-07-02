@@ -15,7 +15,7 @@ import com.ajaxjs.user.login.UserLoginLog;
 import com.ajaxjs.user.login.UserOauth;
 import com.ajaxjs.user.login.UserOauthService;
 import com.ajaxjs.user.model.User;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.weixin.mini_app.model.UserInfo;
@@ -29,7 +29,7 @@ import com.ajaxjs.weixin.mini_app.model.UserSession;
  * @author sp42 frank@ajaxjs.com
  *
  */
-@Bean
+@Component
 public class MiniAppUserService extends BaseService<User> {
 	private static final LogHelper LOGGER = LogHelper.getLog(MiniAppUserService.class);
 

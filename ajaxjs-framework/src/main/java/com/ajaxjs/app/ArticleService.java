@@ -17,9 +17,9 @@ import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 
-@Bean
+@Component
 public class ArticleService extends BaseService<Map<String, Object>> implements ViewObjectService {
 	@TableName(value = "entity_article", beanClass = Map.class)
 	public interface ArticleDao extends IBaseDao<Map<String, Object>> {

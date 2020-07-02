@@ -12,7 +12,6 @@ import com.ajaxjs.mvc.MvcConstant;
 import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.sql.SnowflakeIdWorker;
-import com.ajaxjs.sql.orm.BaseModel;
 import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.util.logger.LogHelper;

@@ -16,14 +16,14 @@ import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.service.OrderService;
 import com.ajaxjs.sql.orm.IBaseService;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.MapTool;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
 
-@Bean
+@Component
 @Path("/shop/pay/alipay")
 public class PayAliController extends BaseController<Map<String, Object>> {
 	private static final LogHelper LOGGER = LogHelper.getLog(PayAliController.class);

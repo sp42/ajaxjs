@@ -24,7 +24,7 @@ import com.ajaxjs.sql.SnowflakeIdWorker;
 import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.io.ImageHelper;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
@@ -35,7 +35,7 @@ import com.ajaxjs.web.UploadFileInfo;
  * @author sp42 frank@ajaxjs.com
  *
  */
-@Bean
+@Component
 @Path("/admin/attachmentPicture")
 public class Attachment_pictureController extends BaseController<Attachment_picture> {
 	private static final LogHelper LOGGER = LogHelper.getLog(Attachment_pictureController.class);

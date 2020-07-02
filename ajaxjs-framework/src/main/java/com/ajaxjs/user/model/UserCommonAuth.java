@@ -1,6 +1,6 @@
 package com.ajaxjs.user.model;
 
-import com.ajaxjs.sql.orm.BaseModel;
+import com.ajaxjs.framework.BaseModel;
 
 /**
  * 对应数据库口令表，普通密码登录

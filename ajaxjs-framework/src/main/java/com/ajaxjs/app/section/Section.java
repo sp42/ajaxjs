@@ -1,6 +1,6 @@
 package com.ajaxjs.app.section;
 
-import com.ajaxjs.sql.orm.BaseModel;
+import com.ajaxjs.framework.BaseModel;
 
 /**
  * 栏目实体，多对多表中的实体

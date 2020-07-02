@@ -1,6 +1,6 @@
 package com.ajaxjs.user.model;
 
-import com.ajaxjs.sql.orm.BaseModel;
+import com.ajaxjs.framework.BaseModel;
 
 public class UserAddress extends BaseModel {
 	private static final long serialVersionUID = 1L;

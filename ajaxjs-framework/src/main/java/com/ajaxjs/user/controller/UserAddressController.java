@@ -23,7 +23,7 @@ import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.user.filter.LoginCheck;
 import com.ajaxjs.user.model.UserAddress;
 import com.ajaxjs.user.service.UserAddressService;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -31,7 +31,7 @@ import com.ajaxjs.util.logger.LogHelper;
  * 
  * 控制器
  */
-@Bean
+@Component
 @Path("/user/address")
 public class UserAddressController extends BaseController<UserAddress> {
 	private static final LogHelper LOGGER = LogHelper.getLog(UserAddressController.class);

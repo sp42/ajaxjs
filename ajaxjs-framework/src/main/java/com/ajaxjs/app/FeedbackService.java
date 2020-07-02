@@ -9,9 +9,9 @@ import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.sql.orm.Repository;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 
-@Bean("FeedbackService")
+@Component("FeedbackService")
 public class FeedbackService extends BaseService<Feedback> {
 	@TableName(value = "entity_feedback", beanClass = Feedback.class)
 	public static interface FeedbackDao extends IBaseDao<Feedback> {

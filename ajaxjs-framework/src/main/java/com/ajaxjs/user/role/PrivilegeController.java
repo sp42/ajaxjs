@@ -15,11 +15,11 @@ import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.sql.orm.IBaseService;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 
 @Path("/admin/user/privilege")
-@Bean
+@Component
 public class PrivilegeController extends BaseController<Privilege> {
 
 	@Resource("UserRolePrivilegeService")

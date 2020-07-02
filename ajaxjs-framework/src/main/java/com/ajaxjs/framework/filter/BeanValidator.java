@@ -10,12 +10,12 @@ import javax.validation.ValidatorFactory;
 
 import org.apache.bval.jsr.ApacheValidationProvider;
 
+import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcOutput;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.FilterAction;
 import com.ajaxjs.mvc.filter.FilterAfterArgs;
-import com.ajaxjs.sql.orm.BaseModel;
 
 /**
  * 后台 Bean 的数据校验 https://blog.csdn.net/zhangxin09/article/details/50600575
