@@ -18,9 +18,10 @@ import java.util.Random;
 
 import org.w3c.dom.NamedNodeMap;
 
-import com.ajaxjs.ioc.BeanContext;
 import com.ajaxjs.sql.JdbcConnection;
+import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.XmlHelper;
+import com.ajaxjs.util.ioc.ComponentMgr;
 
 /**
  * 测试辅助类，假数据生成器
@@ -238,8 +239,7 @@ public class TestHelper {
 			JdbcConnection.setConnection(JdbcConnection.getMySqlConnection(url, user, password));
 			IS_DB_CONNECTION_AUTOCLOSE = false;
 			
-			BeanContext.init(packages);
-			BeanContext.injectBeans();
+			ComponentMgr.scan(CommonUtil.split(ConfigService.get("System.scanPackage")));
 		});
 	}
 

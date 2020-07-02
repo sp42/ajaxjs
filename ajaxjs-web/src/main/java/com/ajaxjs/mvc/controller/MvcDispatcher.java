@@ -28,7 +28,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.framework.Application;
-import com.ajaxjs.framework.Component;
+import com.ajaxjs.framework.IComponent;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.MvcConstant;
@@ -49,7 +49,7 @@ import com.ajaxjs.web.secuity.SecurityResponse;
  * 
  * @author sp42 frank@ajaxjs.com
  */
-public class MvcDispatcher implements Component {
+public class MvcDispatcher implements IComponent {
 	private static final LogHelper LOGGER = LogHelper.getLog(MvcDispatcher.class);
 
 	{

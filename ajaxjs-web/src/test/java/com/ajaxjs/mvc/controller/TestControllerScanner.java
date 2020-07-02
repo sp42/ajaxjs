@@ -44,21 +44,21 @@ public class TestControllerScanner {
 
 	@Test
 	public void testAdd() {
-		ControllerScanner.add(c1.class);
+		MvcDispatcher.add(c1.class);
 		assertEquals("foo", IController.urlMappingTree.get("foo").path);
 
-		ControllerScanner.add(c2.class);
+		MvcDispatcher.add(c2.class);
 
 		assertEquals("foo/bar", IController.urlMappingTree.get("foo").children.get("bar").path);
 		assertEquals("foo/bar/zxzx", IController.urlMappingTree.get("foo").children.get("bar").children.get("zxzx").path);
 
-		ControllerScanner.add(c3.class);
+		MvcDispatcher.add(c3.class);
 		assertEquals("foo/bar2", IController.urlMappingTree.get("foo").children.get("bar2").path);
 
-		ControllerScanner.add(c4.class);
+		MvcDispatcher.add(c4.class);
 		assertEquals("foo/bar2/id", IController.urlMappingTree.get("foo").children.get("bar2").children.get("id").path);
 
-		ControllerScanner.add(c5.class);
+		MvcDispatcher.add(c5.class);
 		assertEquals("foo/bar3/id/info", IController.urlMappingTree.get("foo").children.get("bar3").children.get("id").children.get("info").path);
 
 		assertNotNull(IController.urlMappingTree.get("foo").children.get("bar").children.get("zxzx"));
@@ -80,10 +80,10 @@ public class TestControllerScanner {
 
 	@Test
 	public void testGetMethod() {
-		ControllerScanner.add(c1.class);
-		ControllerScanner.add(c2.class);
+		MvcDispatcher.add(c1.class);
+		MvcDispatcher.add(c2.class);
 
-		ControllerScanner.add(c6.class);
+		MvcDispatcher.add(c6.class);
 		assertNotNull(IController.urlMappingTree.get("foo").getMethod);
 		assertNotNull(IController.urlMappingTree.get("foo").children.get("bar").children.get("info").getMethod);
 
@@ -123,7 +123,7 @@ public class TestControllerScanner {
 
 	@Test
 	public void testTestIfEmpty() {
-		ControllerScanner.add(c6.class);
+		MvcDispatcher.add(c6.class);
 
 		assertNotNull(IController.urlMappingTree.get("foo").controller);
 		assertEquals("get", ReflectUtil.executeMethod(IController.urlMappingTree.get("foo").controller,
@@ -131,7 +131,7 @@ public class TestControllerScanner {
 
 		assertEquals("foo/bar/info", IController.findTreeByPath("foo/bar/info").path);
 
-		ControllerScanner.add(c7.class);
+		MvcDispatcher.add(c7.class);
 		Action action = IController.findTreeByPath("foo/bar/info");
 		assertEquals("getInfo2", ReflectUtil.executeMethod(action.controller, action.postMethod));
 

@@ -33,10 +33,10 @@ public class ByteArrayServletOutputStream extends ServletOutputStream {
 	 * 
 	 * 创建一个 ByteArrayServletOutputStream 对象
 	 * 
-	 * @param os 输出流
+	 * @param out 输出流
 	 */
-	public ByteArrayServletOutputStream(ByteArrayOutputStream os) {
-		this.out = os;
+	public ByteArrayServletOutputStream(ByteArrayOutputStream out) {
+		this.out = out;
 	}
 
 	@Override

@@ -21,8 +21,6 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -59,17 +57,16 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * 获取原请求的 uri，而非模版所在的 uri
+	 * 绑定 JSP 时候，获取原请求的 uri，而非模版所在的 uri
 	 */
 	@Override
 	public String getRequestURI() {
 		Object obj = getAttribute("javax.servlet.forward.request_uri");
 
-		if (obj != null && !CommonUtil.isEmptyString((String) obj)) {
+		if (obj != null && !CommonUtil.isEmptyString((String) obj))
 			return (String) obj;
-		} else {
-			return super.getRequestURI();// 直接 jsp 的
-		}
+		else
+			return super.getRequestURI();
 	}
 
 	/**
@@ -78,7 +75,6 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	 * @return 请求路径
 	 */
 	public String getRoute() {
-//		String route = getRequestURI().replace(getContextPath(), "");
 		String route = getRequestURI().replaceAll("^" + getContextPath(), "");
 		return route.replaceFirst("/\\w+\\.\\w+$", ""); // 删除最后的 index.jsp
 	}
@@ -105,51 +101,51 @@ public class MvcRequest extends HttpServletRequestWrapper {
 			try (InputStream in = getInputStream()) {
 				String params = IoHelper.byteStream2string(in);
 				putRequestData = MapTool.toMap(params.split("&"), v -> MappingValue.toJavaValue(Encode.urlDecode(v)));
-				return putRequestData;
 			} catch (IOException e) {
 				e.printStackTrace();
 				return null;
 			}
-		else
-			return putRequestData;
+
+		return putRequestData;
 	}
 
 	/**
 	 * 去取 url 上的值
 	 * 
-	 * @param value     方法上的路径
-	 * @param paramName 参数名称
+	 * @param value 方法上的路径
+	 * @param param 参数名称
 	 * @return 值
 	 */
-	public String getValueFromPath(String value, String paramName) {
+	public String getValueFromPath(String value, String param) {
 		/* 如果 context path 上有数字那就bug，所以先去掉 */
-		String url = getRoute(), regExp = "(" + value.replace("{" + paramName + "}", ")(\\d+)");/* 获取正则 暂时写死 数字 TODO */
+		String url = getRoute(), regExp = "(" + value.replace("{" + param + "}", ")(\\d+)");/* 获取正则 暂时写死 数字 TODO */
 
-		Matcher m = Pattern.compile(regExp).matcher(url);
-		String result = m.find() ? m.group(m.groupCount()) : null;
-
-		return Objects.requireNonNull(result, "在 " + url + " 不能获取 " + paramName + " 参数");
+//		Matcher m = Pattern.compile(regExp).matcher(url);
+//		String result = m.find() ? m.group(m.groupCount()) : null;
+		String result = CommonUtil.regMatch(regExp, url, -1);
+		return Objects.requireNonNull(result, "在[ " + url + "]不能获取[ " + param + "]参数");
 	}
 
 	/**
-	 * 支持自动获取请求参数并封装到 bean 内
+	 * 支持自动获取请求参数并封装到 Bean 内
 	 * 
-	 * @param clazz Bean 的类引用
+	 * @param <T> Bean 类型
+	 * @param clz Bean 的类引用
 	 * @return Java Bean
 	 */
-	public <T> T getBean(Class<T> clazz) {
+	public <T> T getBean(Class<T> clz) {
 		Map<String, Object> map;
 
-		if (getMethod() != null && getMethod().toUpperCase().equals("PUT")) {
+		if (getMethod() != null && getMethod().toUpperCase().equals("PUT"))
 			map = getPutRequestData(); // Servlet 没有 PUT 获取表单，要自己处理
-		} else {
+		else
 			map = MapTool.as(getParameterMap(), arr -> MappingValue.toJavaValue(arr[0]));
-		}
 
-		// 抛出 IllegalArgumentException 这个异常 有可能是参数类型不一致造成的，要求的是 string 因为 map 从 request
-		// 转换时已经变为 int（例如纯数字的时候）
-		// 所以最后一个参数为 true
-		return MapTool.map2Bean(map, clazz, true);
+		/*
+		 * 抛出 IllegalArgumentException 这个异常 有可能是参数类型不一致造成的， 要求的是 string 因为 map 从 request
+		 * 所以最后一个参数为 true
+		 */
+		return MapTool.map2Bean(map, clz, true);
 	}
 
 	/**
@@ -179,10 +175,10 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	/**
 	 * 保存一个 request 对象
 	 * 
-	 * @param request 请求对象
+	 * @param req 请求对象
 	 */
-	public static void setHttpServletRequest(HttpServletRequest request) {
-		threadLocalRequest.set(request);
+	public static void setHttpServletRequest(HttpServletRequest req) {
+		threadLocalRequest.set(req);
 	}
 
 	/**
@@ -200,20 +196,20 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	 * @return 请求对象
 	 */
 	public static MvcRequest getMvcRequest() {
-		HttpServletRequest request = getHttpServletRequest();
-		if (!(request instanceof MvcRequest))
+		HttpServletRequest req = getHttpServletRequest();
+		if (!(req instanceof MvcRequest))
 			throw new RuntimeException("非法 MvcRequest 类型");
 
-		return (MvcRequest) request;
+		return (MvcRequest) req;
 	}
 
 	/**
 	 * 保存一个 response 对象
 	 * 
-	 * @param response 响应对象
+	 * @param resp 响应对象
 	 */
-	public static void setHttpServletResponse(HttpServletResponse response) {
-		threadLocalResponse.set(response);
+	public static void setHttpServletResponse(HttpServletResponse resp) {
+		threadLocalResponse.set(resp);
 	}
 
 	/**
@@ -351,7 +347,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 		String p = getParameter(key);
 
 		if (!CommonUtil.regTest("\\d+", p))
-			throw new IllegalArgumentException("参数 " + key + " 必须为数字");
+			throw new IllegalArgumentException("参数 [" + key + "[必须为数字");
 
 		return p;
 	}

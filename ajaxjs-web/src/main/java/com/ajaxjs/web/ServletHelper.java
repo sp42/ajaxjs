@@ -15,14 +15,17 @@
  */
 package com.ajaxjs.web;
 
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 
+import com.ajaxjs.mvc.controller.MvcRequest;
+import com.ajaxjs.net.http.Tools;
+import com.ajaxjs.util.cache.LRUCache;
 import com.ajaxjs.util.map.MapTool;
 
 /**
@@ -34,6 +37,7 @@ import com.ajaxjs.util.map.MapTool;
 public class ServletHelper {
 	/**
 	 * 将过滤器的配置转换为 Map
+	 * 
 	 * @deprecated
 	 * @param config 过滤器配置
 	 * @return 过滤器配置的 Map 结构
@@ -50,19 +54,6 @@ public class ServletHelper {
 	 */
 	public static Map<String, String> initServletConfig2Map(ServletConfig config) {
 		return MapTool.emu2map(config.getInitParameterNames(), key -> config.getInitParameter(key));
-	}
-
-	private static final Pattern p = Pattern
-			.compile("\\.jpg|\\.png|\\.gif|\\.js|\\.css|\\.less|\\.ico|\\.jpeg|\\.htm|\\.swf|\\.txt|\\.mp4|\\.flv");
-
-	/**
-	 * 检查是否静态资源。Check the url if there is static asset.
-	 * 
-	 * @param url URL 地址
-	 * @return true 表示为静态资源
-	 */
-	public static boolean isStaticAsset(String url) {
-		return p.matcher(url).find();
 	}
 
 	/**
@@ -103,11 +94,9 @@ public class ServletHelper {
 	public static boolean preventSQLInject(String str) {
 		str = str.toUpperCase();
 
-		if (str.indexOf("DELETE") >= 0 || str.indexOf("ASCII") >= 0 || str.indexOf("UPDATE") >= 0
-				|| str.indexOf("SELECT") >= 0 || str.indexOf("'") >= 0 || str.indexOf("SUBSTR(") >= 0
-				|| str.indexOf("COUNT(") >= 0 || str.indexOf(" OR ") >= 0 || str.indexOf(" AND ") >= 0
-				|| str.indexOf("DROP") >= 0 || str.indexOf("EXECUTE") >= 0 || str.indexOf("EXEC") >= 0
-				|| str.indexOf("TRUNCATE") >= 0 || str.indexOf("INTO") >= 0 || str.indexOf("DECLARE") >= 0
+		if (str.indexOf("DELETE") >= 0 || str.indexOf("ASCII") >= 0 || str.indexOf("UPDATE") >= 0 || str.indexOf("SELECT") >= 0 || str.indexOf("'") >= 0
+				|| str.indexOf("SUBSTR(") >= 0 || str.indexOf("COUNT(") >= 0 || str.indexOf(" OR ") >= 0 || str.indexOf(" AND ") >= 0 || str.indexOf("DROP") >= 0
+				|| str.indexOf("EXECUTE") >= 0 || str.indexOf("EXEC") >= 0 || str.indexOf("TRUNCATE") >= 0 || str.indexOf("INTO") >= 0 || str.indexOf("DECLARE") >= 0
 				|| str.indexOf("MASTER") >= 0) {
 
 			return false;
@@ -132,5 +121,48 @@ public class ServletHelper {
 		str = str.replace("\\x1a", "\\Z");
 
 		return str;
+	}
+
+	// --------------IP 拦截----------------
+
+	static LRUCache<String, Boolean> cache = new LRUCache<>(20);
+
+	public static boolean isChinaMainlandIp(String ip) {
+		try {
+			Map<String, Object> map = Tools.getIpLocation(ip);
+			Object c = map.get("country");
+
+			if (c != null && "中国".equals(c.toString())) {
+				Object r = map.get("region");
+
+				if (r != null && ("香港".equals(r.toString()) || "澳门".equals(r.toString()) || "台湾".equals(r.toString()))) {
+					return false;
+				}
+
+				return true;
+			} else {
+				return false;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return true;
+	}
+
+	public static boolean isChinaMainlandIp_Cache(String ip) {
+		Boolean isChinaMainlandIp = cache.get(ip);
+
+		if (isChinaMainlandIp == null) {
+			isChinaMainlandIp = isChinaMainlandIp(ip);
+			cache.put(ip, isChinaMainlandIp);
+		}
+
+		return isChinaMainlandIp;
+	}
+
+	public static boolean isChinaMainlandIp_Cache(HttpServletRequest req) {
+		String ip = req instanceof MvcRequest ? ((MvcRequest) req).getIp() : new MvcRequest(req).getIp();
+		return isChinaMainlandIp_Cache(ip);
 	}
 }

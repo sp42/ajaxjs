@@ -2,19 +2,24 @@ package com.ajaxjs.framework.config;
 
 import com.ajaxjs.Version;
 import com.ajaxjs.framework.Application;
+import com.ajaxjs.framework.IComponent;
 import com.ajaxjs.net.http.Tools;
 import com.ajaxjs.util.logger.LogHelper;
 
-public class SetStartupCtx {
+/**
+ * 设置环境变量
+ * 
+ * @author sp42 frank@ajaxjs.com
+ *
+ */
+public class SetStartupCtx implements IComponent {
 	private static final LogHelper LOGGER = LogHelper.getLog(SetStartupCtx.class);
 
 	static {
-		System.out.println("------------------------");
 		// 可不用注册组件，仅仅是登记事件
 		Application.onServletStartUp.add(ctx -> {
 			LOGGER.info("设置环境变量");
 
-			// 设置全局环境变量
 			String ctxPath = ctx.getContextPath();
 			ctx.setAttribute("ctx", ctxPath);
 			ctx.setAttribute("isDebuging", Version.isDebug);

@@ -23,7 +23,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 
 import com.ajaxjs.util.ReflectUtil;
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.ComponentMgr;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -86,7 +86,7 @@ public class Action {
 	 * @param clz 控制器类
 	 */
 	public void createControllerInstance(Class<? extends IController> clz) {
-		if (clz.getAnnotation(Bean.class) != null) { // 如果有 ioc，则从容器中查找
+		if (clz.getAnnotation(Component.class) != null) { // 如果有 ioc，则从容器中查找
 			controller = ComponentMgr.get(clz);
 
 			if (controller == null)

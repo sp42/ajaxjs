@@ -22,8 +22,8 @@ import javax.ws.rs.QueryParam;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.sql.orm.BaseModel;
 import com.ajaxjs.web.mock.MockRequest;
 import com.ajaxjs.web.mock.MockResponse;
 
@@ -67,7 +67,7 @@ public class TestRequestParam {
 
 	@Test
 	public void testGetArgs() {
-		ControllerScanner.add(c1.class);
+		MvcDispatcher.add(c1.class);
 
 		HttpServletRequest request = MockRequest.mockRequest("/ajaxjs-web", "/combo/person");
 
@@ -102,7 +102,7 @@ public class TestRequestParam {
 		when(request.getParameter("name")).thenReturn("foo");
 		when(request.getParameter("sex")).thenReturn("bar");
 
-		ControllerScanner.add(c1.class);
+		MvcDispatcher.add(c1.class);
 		Object[] args = RequestParam.getArgs(null, new MvcRequest(request), response,
 				IController.urlMappingTree.get("foo").children.get("bar").getMethod);
 		assertEquals("foo", args[0]);

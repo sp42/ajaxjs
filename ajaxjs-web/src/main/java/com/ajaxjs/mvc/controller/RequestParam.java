@@ -36,7 +36,7 @@ import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.MapTool;
 
 /**
- * 处理请求参数
+ * 处理请求参数，多为静态的工具方法
  * 
  * @author sp42 frank@ajaxjs.com
  *

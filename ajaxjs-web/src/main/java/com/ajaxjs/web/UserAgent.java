@@ -29,10 +29,10 @@ public class UserAgent {
 	/**
 	 * 送入一个请求，得到 UA 标识字符串
 	 * 
-	 * @param request 请求对象
+	 * @param req 请求对象
 	 */
-	public UserAgent(HttpServletRequest request) {
-		String ua = request.getHeader("User-Agent");
+	public UserAgent(HttpServletRequest req) {
+		String ua = req.getHeader("User-Agent");
 		if (ua != null)
 			this.ua = ua.toLowerCase();// 强制转换为小写字母
 	}

@@ -36,12 +36,12 @@ public class UploadFile extends HttpServletRequestWrapper {
 	/**
 	 * 创建一个上传请求对象
 	 * 
-	 * @param request        请求对象
-	 * @param uploadFileInfo 上传的配置信息
+	 * @param req  请求对象
+	 * @param info 上传的配置信息
 	 */
-	public UploadFile(HttpServletRequest request, UploadFileInfo uploadFileInfo) {
-		super(request);
-		setUploadFileInfo(uploadFileInfo);
+	public UploadFile(HttpServletRequest req, UploadFileInfo info) {
+		super(req);
+		setUploadFileInfo(info);
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class UploadFile extends HttpServletRequestWrapper {
 	/**
 	 * 预检查
 	 * 
-	 * @throws IOException
+	 * @throws IOException 检查不通过的信息
 	 */
 	private void check() throws IOException {
 		Objects.requireNonNull(uploadFileInfo, "缺少配置对象");
@@ -84,9 +84,8 @@ public class UploadFile extends HttpServletRequestWrapper {
 	 * @throws IOException
 	 */
 	public UploadFileInfo upload() throws IOException {
-		if (uploadFileInfo.beforeUpload != null && !uploadFileInfo.beforeUpload.apply(uploadFileInfo)) {
+		if (uploadFileInfo.beforeUpload != null && !uploadFileInfo.beforeUpload.apply(uploadFileInfo))
 			return null;
-		}
 
 		check();
 

@@ -10,7 +10,7 @@ import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.ioc.EveryClass;
 
 public class TestComponent {
-	public class Foo implements Component {
+	public class Foo implements IComponent {
 		Consumer<ServletContextEvent> onServletStartUp = e -> {
 
 		};
@@ -19,9 +19,9 @@ public class TestComponent {
 	@Test
 	public void test() {
 		EveryClass scan = new EveryClass();
-		scan.scan((resource, packageName) -> {
+		scan.scan("com", resource -> {
 			if (resource.contains("SetStartupCtx"))
 				ReflectUtil.getClassByName(resource);
-		}, "com");
+		});
 	}
 }
