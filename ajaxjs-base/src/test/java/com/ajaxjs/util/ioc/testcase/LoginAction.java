@@ -1,9 +1,9 @@
 package com.ajaxjs.util.ioc.testcase;
 
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 
-@Bean
+@Component
 public class LoginAction {
 	@Resource("CaptchaServiceImpl_A")
 	private CaptchaService captchaService;

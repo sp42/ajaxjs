@@ -112,12 +112,12 @@ public class CommonUtil {
 	 * 
 	 * @param regexp     正则
 	 * @param str        测试的字符串
-	 * @param groupIndex 分组 id
+	 * @param groupIndex 分组 id，若为 -1 则取最后一个分组
 	 * @return 匹配结果
 	 */
 	public static String regMatch(String regexp, String str, int groupIndex) {
 		Matcher m = getMatcher(regexp, str);
-		return m.find() ? m.group(groupIndex) : null;
+		return m.find() ? m.group(groupIndex == -1 ? m.groupCount() : groupIndex) : null;
 	}
 
 	/**

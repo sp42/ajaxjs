@@ -2,9 +2,9 @@ package com.ajaxjs.util.ioc.testcase;
 
 import java.util.logging.Logger;
 
-import com.ajaxjs.util.ioc.Bean;
+import com.ajaxjs.util.ioc.Component;
 
-@Bean
+@Component
 public class CaptchaServiceImpl_A implements CaptchaService {
 
 	@Override

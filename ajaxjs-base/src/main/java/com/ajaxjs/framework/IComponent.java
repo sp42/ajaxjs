@@ -6,6 +6,6 @@ package com.ajaxjs.framework;
  * @author sp42 frank@ajaxjs.com
  *
  */
-public interface Component {
+public interface IComponent {
 	//public void 
 }

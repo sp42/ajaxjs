@@ -13,7 +13,7 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.ajaxjs.framework.Component;
+import com.ajaxjs.framework.IComponent;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
@@ -51,7 +51,7 @@ public class ComponentMgr {
 	}
 
 	/**
-	 * 扫描指定的包
+	 * 扫描指定的包。具体流程是 Javassist 添加 setter、类加载、依赖注射
 	 * 
 	 * @param _packageName 包名，会递归这个包下面所有的类
 	 */
@@ -100,7 +100,7 @@ public class ComponentMgr {
 				if (clz.isPrimitive() || Modifier.isAbstract(clz.getModifiers()) || clz.isAnnotation() || clz.isInterface() || clz.isArray() || clz.getName().indexOf("$") != -1) {
 				} else {
 					// 组件才享有优先类加载的权利
-					if (Component.class.isAssignableFrom(clz)) {
+					if (IComponent.class.isAssignableFrom(clz)) {
 						ReflectUtil.getClassByName(clz.getCanonicalName());
 					}
 
@@ -120,7 +120,7 @@ public class ComponentMgr {
 		Map<String, String> dependencies = new HashMap<>();
 
 		for (Class<?> item : clzs) {
-			Bean annotation = item.getAnnotation(Bean.class); // 查找匹配的注解
+			Component annotation = item.getAnnotation(Component.class); // 查找匹配的注解
 			Named namedAnno = item.getAnnotation(Named.class);
 
 			if (annotation == null && namedAnno == null)
@@ -179,7 +179,7 @@ public class ComponentMgr {
 	}
 
 	// TODO: remove Bean
-	private static String getAlias(Bean annotation, Named namedAnno, Class<?> clz) {
+	private static String getAlias(Component annotation, Named namedAnno, Class<?> clz) {
 		String value = null;
 
 		if (annotation != null) // 获取 Bean 的名称，如果没有则取类 SimpleName

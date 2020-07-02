@@ -2,7 +2,7 @@ package com.ajaxjs.util.ioc;
 
 import com.ajaxjs.util.ioc.testcase.Subject;
 
-@Bean("hi")
+@Component("hi")
 public class Hi implements Subject {
 	@Resource("Person")
 	private Person person;

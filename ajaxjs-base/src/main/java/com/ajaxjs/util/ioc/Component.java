@@ -26,7 +26,7 @@ import java.lang.annotation.Target;
  */
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Bean {
+public @interface Component {
 	/**
 	 * 对象的标识，即 id
 	 * 
