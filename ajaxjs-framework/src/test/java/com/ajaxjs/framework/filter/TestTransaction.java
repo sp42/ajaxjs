@@ -24,9 +24,8 @@ public class TestTransaction extends BaseControllerTest {
 //		System.out.println(AbstractScanner.getResourcesFromClasspath("\\test.db"));
 		TestHelper.loadSQLiteTest("D:\\project\\ajaxjs-framework\\src\\test\\test.db");
 		init("com.ajaxjs.cms.filter");
-		
 	}
-	
+
 	@Before
 	public void load() throws ServletException {
 		response = mock(HttpServletResponse.class);
@@ -36,15 +35,16 @@ public class TestTransaction extends BaseControllerTest {
 //	@Test
 	public void testFoo1() throws ServletException, IOException {
 		request = MockRequest.mockRequest("/ajaxjs-web", "/foo");
-		
+
 		when(request.getMethod()).thenReturn("GET");
 		dispatcher.doFilter(request, response, chain);
 		assertEquals("<html><meta charset=\"utf-8\" /><body>Foo</body></html>", writer.toString());
 	}
+
 	@Test
 	public void testFoo2() throws ServletException, IOException {
 		request = MockRequest.mockRequest("/ajaxjs-web", "/foo/bar");
-		
+
 		when(request.getMethod()).thenReturn("GET");
 		dispatcher.doFilter(request, response, chain);
 		assertEquals("", writer.toString());

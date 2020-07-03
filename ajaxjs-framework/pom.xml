@@ -76,7 +76,7 @@
 			<version>1.1</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
@@ -87,6 +87,15 @@
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-third</artifactId>
 			<version>0.0.1</version>
+		</dependency>
+
+		<!-- 跨项目共享单测 -->
+		<dependency>
+			<groupId>com.ajaxjs</groupId>
+			<artifactId>ajaxjs-web</artifactId>
+			<version>1.1.9</version>
+			<type>test-jar</type>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<description>基础服务框架</description>
