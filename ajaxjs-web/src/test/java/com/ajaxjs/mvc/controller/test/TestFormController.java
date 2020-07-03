@@ -16,13 +16,16 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.ajaxjs.mvc.controller.MvcDispatcher;
+import com.ajaxjs.web.mock.BaseControllerTest;
 import com.ajaxjs.web.mock.MockRequest;
 import com.ajaxjs.web.mock.MockResponse;
 
-public class TestFormController extends BaseTest {
+public class TestFormController extends BaseControllerTest {
 	// 单测技巧，每个 url 对应一个 request、一个 response
 	@Before
-	public void load() throws ServletException {
+	public void load() {
+		init("com.ajaxjs.mvc.controller.testcase");
 		request = MockRequest.mockRequest("/ajaxjs-web", "/form");
 		response = mock(HttpServletResponse.class);
 		writer = MockResponse.writerFactory(response);
@@ -30,46 +33,50 @@ public class TestFormController extends BaseTest {
 
 	@Test
 	public void testPost() throws ServletException, IOException {
-		
 		when(request.getMethod()).thenReturn("POST");
 		when(request.getParameter("username")).thenReturn("Jack");
-		dispatcher.doFilter(request, response, chain);
+
+		MvcDispatcher.dispatcher.apply(request, response);
+		chain.doFilter(request, response);
+
 		assertEquals("<html><meta charset=\"utf-8\" /><body>Jack</body></html>", writer.toString());
 	}
-	
+
 	static Map<String, String[]> map = new HashMap<>();
-	
+
 	@Test
 	public void testMap() throws ServletException, IOException {
 		HttpServletRequest request = MockRequest.mockRequest("/ajaxjs-web", "/form/map");
 		HttpServletResponse response = mock(HttpServletResponse.class);
 		StringWriter writer = MockResponse.writerFactory(response);
-		
+
 		map.put("username", new String[] { "Jack" });
 		map.put("age", new String[] { "28" });
 		when(request.getParameterMap()).thenReturn(map);
-		
+
 		when(request.getMethod()).thenReturn("POST");
 		when(request.getParameter("username")).thenReturn("Jack");
 		when(request.getParameter("age")).thenReturn("28");
-		
-		dispatcher.doFilter(request, response, chain);
+
+		MvcDispatcher.dispatcher.apply(request, response);
+		chain.doFilter(request, response);
+
 		assertEquals("<html><meta charset=\"utf-8\" /><body>Jack</body></html>", writer.toString());
 	}
-	
+
 	@Test
 	public void testBean() throws ServletException, IOException {
 		HttpServletRequest request = MockRequest.mockRequest("/ajaxjs-web", "/form/bean");
 		HttpServletResponse response = mock(HttpServletResponse.class);
 		StringWriter writer = MockResponse.writerFactory(response);
-		
+
 		when(request.getMethod()).thenReturn("POST");
 		map.put("name", new String[] { "Jack" });
 		when(request.getParameterMap()).thenReturn(map);
-		
 
-		
-		dispatcher.doFilter(request, response, chain);
+		MvcDispatcher.dispatcher.apply(request, response);
+		chain.doFilter(request, response);
+
 		assertEquals("<html><meta charset=\"utf-8\" /><body>Jack</body></html>", writer.toString());
 	}
 

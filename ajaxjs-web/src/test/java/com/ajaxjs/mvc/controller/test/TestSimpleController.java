@@ -13,13 +13,16 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.ajaxjs.mvc.controller.MvcDispatcher;
+import com.ajaxjs.web.mock.BaseControllerTest;
 import com.ajaxjs.web.mock.MockRequest;
 import com.ajaxjs.web.mock.MockResponse;
 
-public class TestSimpleController extends BaseTest {
+public class TestSimpleController extends BaseControllerTest {
 	// 单测技巧，每个 url 对应一个 request、一个 response
 	@Before
 	public void load() throws ServletException {
+		init("com.ajaxjs.mvc.controller.testcase");
 		request = MockRequest.mockRequest("/ajaxjs-web", "/simple");
 		response = mock(HttpServletResponse.class);
 		writer = MockResponse.writerFactory(response);
@@ -29,8 +32,9 @@ public class TestSimpleController extends BaseTest {
 	public void testGet() throws ServletException, IOException {
 		when(request.getMethod()).thenReturn("GET");
 
-		dispatcher.doFilter(request, response, chain);
-		
+		MvcDispatcher.dispatcher.apply(request, response);
+		chain.doFilter(request, response);
+
 		assertEquals("<html><meta charset=\"utf-8\" /><body>Hello World!</body></html>", writer.toString());
 	}
 
@@ -38,8 +42,9 @@ public class TestSimpleController extends BaseTest {
 	public void testPost() throws ServletException, IOException {
 		when(request.getMethod()).thenReturn("POST");
 
-		dispatcher.doFilter(request, response, chain);
-		
+		MvcDispatcher.dispatcher.apply(request, response);
+		chain.doFilter(request, response);
+
 		assertEquals("/index.jsp", MockResponse.getRequestDispatcheResult(request));
 	}
 
@@ -49,7 +54,9 @@ public class TestSimpleController extends BaseTest {
 		when(request.getMethod()).thenReturn("PUT");
 		os = MockResponse.streamFactory(response);
 
-		dispatcher.doFilter(request, response, chain);
+		MvcDispatcher.dispatcher.apply(request, response);
+		chain.doFilter(request, response);
+
 		assertNotNull("servletOutputStream.getContent：" + os.toString());
 		assertNotNull(writer.toString());
 	}
@@ -58,7 +65,9 @@ public class TestSimpleController extends BaseTest {
 	public void testDelete() throws ServletException, IOException {
 		when(request.getMethod()).thenReturn("DELETE");
 
-		dispatcher.doFilter(request, response, chain);
+		MvcDispatcher.dispatcher.apply(request, response);
+		chain.doFilter(request, response);
+
 		assertEquals("{\"name\":\"Jack\"}", writer.toString());
 	}
 }

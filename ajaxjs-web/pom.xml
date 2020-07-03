@@ -54,7 +54,28 @@
 		<!-- </excludes> -->
 		<!-- </testResource> -->
 		<!-- </testResources> -->
+		
+		
+		<!-- 跨项目共享单测 -->
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.0</version>
+				<executions>
+					<execution>
+						<id>Jar Tests Package</id>
+						<phase>package</phase>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 	</build>
+
+
 
 	<dependencies>
 		<dependency>
@@ -77,7 +98,7 @@
 			<version>1.1</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>javax.ws.rs</groupId>
 			<artifactId>javax.ws.rs-api</artifactId>

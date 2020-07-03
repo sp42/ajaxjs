@@ -25,8 +25,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
@@ -35,7 +33,6 @@ import javax.servlet.http.HttpSession;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import com.ajaxjs.mvc.controller.MvcDispatcher;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.map.MapTool;
 
@@ -111,14 +108,6 @@ public class MockRequest extends HttpServletRequestWrapper {
 		when(getParameter(key)).thenReturn(value);
 
 		return this;
-	}
-
-	public void sendTest(MvcDispatcher dispatcher, FilterChain chain) {
-		try {
-			dispatcher.doFilter(this, testInstance.response, chain);
-		} catch (IOException | ServletException e) {
-			e.printStackTrace();
-		}
 	}
 
 	/**

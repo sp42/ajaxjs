@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.junit.*;
 
+import com.ajaxjs.mvc.controller.MvcDispatcher;
 import com.ajaxjs.web.mock.MockRequest;
 import com.ajaxjs.web.mock.MockResponse;
 
@@ -18,6 +19,7 @@ public class TestOverrideController extends TestSimpleController {
 	@Before
 	@Override
 	public void load() throws ServletException {
+		init("com.ajaxjs.mvc.controller.testcase");
 		request = MockRequest.mockRequest("/ajaxjs-web", "/OverrideTest");
 
 		response = mock(HttpServletResponse.class);
@@ -29,7 +31,8 @@ public class TestOverrideController extends TestSimpleController {
 	public void testGet() throws ServletException, IOException {
 		when(request.getMethod()).thenReturn("GET");
 
-		dispatcher.doFilter(request, response, chain);
+		MvcDispatcher.dispatcher.apply(request, response);
+		chain.doFilter(request, response);
 		
 		assertEquals("<html><meta charset=\"utf-8\" /><body>Hello World!(@Override)</body></html>", writer.toString());
 	}
@@ -40,7 +43,8 @@ public class TestOverrideController extends TestSimpleController {
 	public void testPost() throws ServletException, IOException {
 		when(request.getMethod()).thenReturn("POST");
 		
-		dispatcher.doFilter(request, response, chain);
+		MvcDispatcher.dispatcher.apply(request, response);
+		chain.doFilter(request, response);
 		
 //		assertEquals("hihi", writer.toString());
 	} 

@@ -19,14 +19,11 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Map;
 
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.net.http.Tools;
 import com.ajaxjs.util.cache.LRUCache;
-import com.ajaxjs.util.map.MapTool;
 
 /**
  * Servlet 辅助工具类
@@ -35,27 +32,6 @@ import com.ajaxjs.util.map.MapTool;
  *
  */
 public class ServletHelper {
-	/**
-	 * 将过滤器的配置转换为 Map
-	 * 
-	 * @deprecated
-	 * @param config 过滤器配置
-	 * @return 过滤器配置的 Map 结构
-	 */
-	public static Map<String, String> initFilterConfig2Map(FilterConfig config) {
-		return MapTool.emu2map(config.getInitParameterNames(), key -> config.getInitParameter(key));
-	}
-
-	/**
-	 * 将 Servlet 的配置转换为 Map
-	 * 
-	 * @param config Servlet 配置
-	 * @return Servlet 配置的 Map 结构
-	 */
-	public static Map<String, String> initServletConfig2Map(ServletConfig config) {
-		return MapTool.emu2map(config.getInitParameterNames(), key -> config.getInitParameter(key));
-	}
-
 	/**
 	 * 获取所有 URL 上的参数
 	 * 

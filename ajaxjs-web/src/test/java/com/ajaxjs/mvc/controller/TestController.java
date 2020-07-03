@@ -7,11 +7,8 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.Enumeration;
-import java.util.Vector;
 
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -20,54 +17,45 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Test;
 import org.mockito.Mock;
 
+import com.ajaxjs.mvc.controller.test.NewsController;
+import com.ajaxjs.util.ioc.ComponentMgr;
 import com.ajaxjs.web.mock.MockResponse;
 
 public class TestController {
 	@Mock
-    private RequestDispatcher _dispatcher;
- 
+	private RequestDispatcher dispatcher;
+
 	@Test
 	public void testNews() throws ServletException, IOException {
-		FilterConfig filterConfig = mock(FilterConfig.class);
-
-		// 模拟 web.xml
-		Vector<String> v = new Vector<>();
-		v.addElement("controller");
-		when(filterConfig.getInitParameter("controller")).thenReturn("com.ajaxjs.framework.controller.NewsController");
-
-		Enumeration<String> e = v.elements();
-		when(filterConfig.getInitParameterNames()).thenReturn(e);
-
-		MvcDispatcher dispatcher = new MvcDispatcher();
-		dispatcher.init(filterConfig);
+		ComponentMgr.clzs.add(NewsController.class);
+		MvcDispatcher.init.accept(null);
 
 		FilterChain chain = mock(FilterChain.class);
 
 		// 请求对象
-		HttpServletRequest request = mock(HttpServletRequest.class);
-		when(request.getRequestDispatcher(anyString())).thenReturn(_dispatcher);
-		when(request.getContextPath()).thenReturn("/ajaxjs-web");
-		when(request.getRequestURI()).thenReturn("/ajaxjs-web/news/list/34");// 配置请求路径
-		when(request.getParameter("start")).thenReturn("0");
-		when(request.getParameter("limit")).thenReturn("10");
+		HttpServletRequest req = mock(HttpServletRequest.class);
+		when(req.getRequestDispatcher(anyString())).thenReturn(dispatcher);
+		when(req.getContextPath()).thenReturn("/ajaxjs-web");
+		when(req.getRequestURI()).thenReturn("/ajaxjs-web/news/");// 配置请求路径
+		when(req.getParameter("start")).thenReturn("0");
+		when(req.getParameter("limit")).thenReturn("10");
 
 		// 响应对象
-		HttpServletResponse response = mock(HttpServletResponse.class);
-		StringWriter writer;
-//		StubResponseResult os;
+		HttpServletResponse resp = mock(HttpServletResponse.class);
+		StringWriter writer = MockResponse.writerFactory(resp);
 
 		// GET List
-		when(request.getMethod()).thenReturn("GET");
-		writer = MockResponse.writerFactory(response);
-		
-		dispatcher.doFilter(request, response, chain);
-		assertEquals("hihi", writer.toString());
-		
+		when(req.getMethod()).thenReturn("GET");
+
+		MvcDispatcher.dispatcher.apply(req, resp);
+		chain.doFilter(req, resp);
+		assertEquals("<html><meta charset=\"utf-8\" /><body>hihi</body></html>", writer.toString());
+
 		// GET Info
-		when(request.getRequestURI()).thenReturn("/ajaxjs-web/news/12");// 配置请求路径
-		dispatcher.doFilter(request, response, chain);
-		
-		
-        assertEquals("home.jsp", MockResponse.getRequestDispatcheResult(request));
+		when(req.getRequestURI()).thenReturn("/ajaxjs-web/news/12");// 配置请求路径
+		MvcDispatcher.dispatcher.apply(req, resp);
+		chain.doFilter(req, resp);
+
+		assertEquals("home.jsp", MockResponse.getRequestDispatcheResult(req));
 	}
 }

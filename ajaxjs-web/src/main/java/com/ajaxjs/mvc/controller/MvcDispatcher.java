@@ -65,7 +65,7 @@ public class MvcDispatcher implements IComponent {
 	 * 初始化这个过滤器
 	 */
 	@SuppressWarnings("unchecked")
-	private static final Consumer<ServletContext> init = ctx -> {
+	public static final Consumer<ServletContext> init = ctx -> {
 		for (Class<?> clz : ComponentMgr.clzs) {
 			if (IController.class.isAssignableFrom(clz)) {
 				add((Class<? extends IController>) clz);// 添加到集合中去
@@ -75,7 +75,7 @@ public class MvcDispatcher implements IComponent {
 
 	private static Boolean isEnableSecurityIO;
 
-	private static final BiFunction<HttpServletRequest, HttpServletResponse, Boolean> dispatcher = (req, resp) -> {
+	public static final BiFunction<HttpServletRequest, HttpServletResponse, Boolean> dispatcher = (req, resp) -> {
 		if (isEnableSecurityIO == null)
 			isEnableSecurityIO = ConfigService.getValueAsBool("security.isEnableSecurityIO");
 
@@ -108,7 +108,9 @@ public class MvcDispatcher implements IComponent {
 
 	static {
 		Application.onServletStartUp.add(init);
-		Application.onRequest.add(1, dispatcher);
+
+		if (Application.onRequest.size() == 1)
+			Application.onRequest.add(1, dispatcher);
 	}
 
 	/**
@@ -222,7 +224,7 @@ public class MvcDispatcher implements IComponent {
 		} else if (!isbeforeSkip) {// 前置既然不执行了，后续的当然也不执行
 			if (isDoOldReturn)
 				response.resultHandler(result, request, model, method);
-		} else 
+		} else
 			LOGGER.warning("一般情况下不应执行到这一步。Should not be executed in this step.");
 
 		MvcRequest.clean();

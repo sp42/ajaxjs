@@ -69,24 +69,23 @@ public class TestRequestParam {
 	public void testGetArgs() {
 		MvcDispatcher.add(c1.class);
 
-		HttpServletRequest request = MockRequest.mockRequest("/ajaxjs-web", "/combo/person");
+		HttpServletRequest req = MockRequest.mockRequest("/ajaxjs-web", "/combo/person");
 
 		map.put("foo", new String[] { "bar" });
 		map.put("price", new String[] { "2000.65" });
-		when(request.getParameterMap()).thenReturn(map);
+		when(req.getParameterMap()).thenReturn(map);
 
 		HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
 		StringWriter writer = MockResponse.writerFactory(response);
 
-		Object[] args = RequestParam.getArgs(null, new MvcRequest(request), response,
-				IController.urlMappingTree.get("foo").getMethod);
+		Object[] args = RequestParam.getArgs(null, new MvcRequest(req), response, IController.urlMappingTree.get("foo").getMethod);
 		assertNotNull(writer.toString());
 
 		assertTrue(args[0] instanceof Map);
 		assertTrue(args[1] instanceof HttpServletRequest);
 		assertTrue(args[2] instanceof HttpServletResponse);
 
-		args = RequestParam.getArgs(null, new MvcRequest(request), response, IController.urlMappingTree.get("foo").postMethod);
+		args = RequestParam.getArgs(null, new MvcRequest(req), response, IController.urlMappingTree.get("foo").postMethod);
 		assertTrue(args[0] instanceof ModelAndView);
 		assertTrue(args[1] instanceof News);
 
@@ -96,24 +95,21 @@ public class TestRequestParam {
 
 	@Test
 	public void testGetArgsValue() {
-		HttpServletRequest request = MockRequest.mockRequest("/ajaxjs-web", "/foo/12888/");
-		HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
+		HttpServletRequest req = MockRequest.mockRequest("/ajaxjs-web", "/foo/12888/");
+		HttpServletResponse resp = Mockito.mock(HttpServletResponse.class);
 
-		when(request.getParameter("name")).thenReturn("foo");
-		when(request.getParameter("sex")).thenReturn("bar");
+		when(req.getParameter("name")).thenReturn("foo");
+		when(req.getParameter("sex")).thenReturn("bar");
 
 		MvcDispatcher.add(c1.class);
-		Object[] args = RequestParam.getArgs(null, new MvcRequest(request), response,
-				IController.urlMappingTree.get("foo").children.get("bar").getMethod);
+		Object[] args = RequestParam.getArgs(null, new MvcRequest(req), resp, IController.urlMappingTree.get("foo").children.get("bar").getMethod);
 		assertEquals("foo", args[0]);
 		assertEquals("bar", args[1]);
 
-		args = RequestParam.getArgs(null, new MvcRequest(request), response,
-				IController.urlMappingTree.get("foo").children.get("bar").postMethod);
+		args = RequestParam.getArgs(null, new MvcRequest(req), resp, IController.urlMappingTree.get("foo").children.get("bar").postMethod);
 		assertEquals("bar", args[0]);
 
-		args = RequestParam.getArgs(null, new MvcRequest(request), response,
-				IController.urlMappingTree.get("foo").children.get("{id}").putMethod);
+		args = RequestParam.getArgs(null, new MvcRequest(req), resp, IController.urlMappingTree.get("foo").children.get("{id}").putMethod);
 		assertEquals("12888", args[0]);
 	}
 

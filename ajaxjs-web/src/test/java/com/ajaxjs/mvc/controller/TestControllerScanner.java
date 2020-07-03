@@ -12,7 +12,6 @@ import org.junit.Test;
 import com.ajaxjs.util.ReflectUtil;
 
 public class TestControllerScanner {
-	ControllerScanner scanner = new ControllerScanner();
 
 	@Path("/foo/")
 	public static class c1 implements IController {

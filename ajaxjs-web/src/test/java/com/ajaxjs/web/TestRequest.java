@@ -10,8 +10,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ajaxjs.util.MappingValue;
@@ -19,13 +17,6 @@ import com.ajaxjs.web.mock.MockFilter;
 import com.ajaxjs.web.mock.MockRequest;
 
 public class TestRequest extends MockFilter {
-	@BeforeClass
-	public static void init() {
-	}
-
-	@Before
-	public void setUp() {
-	}
 
 	@Test
 	public void testRequestHelper() throws IOException {
