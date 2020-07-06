@@ -2,9 +2,9 @@ package com.ajaxjs.util.ioc;
 
 import com.ajaxjs.util.ioc.testcase.Subject;
 
-@Component("hi")
+@Component("Hi")
 public class Hi implements Subject {
-	@Resource("Person")
+	@Resource
 	private Person person;
 
 	public String sayHello() {

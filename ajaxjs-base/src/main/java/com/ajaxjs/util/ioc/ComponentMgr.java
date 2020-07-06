@@ -10,9 +10,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import com.ajaxjs.framework.IComponent;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
@@ -53,15 +50,15 @@ public class ComponentMgr {
 	/**
 	 * 扫描指定的包。具体流程是 Javassist 添加 setter、类加载、依赖注射
 	 * 
-	 * @param _packageName 包名，会递归这个包下面所有的类
+	 * @param packageName 包名，会递归这个包下面所有的类
 	 */
 	@SuppressWarnings("unchecked")
-	public static void scan(String _packageName) {
+	public static void scan(String packageName) {
 //		LOGGER.info("扫描 [{0}] 包下面所有的类", _packageName);
 
 		Set<Class<?>> clzs = new LinkedHashSet<>();
 
-		new EveryClass().scan(_packageName, resource -> {
+		new EveryClass().scan(packageName, resource -> {
 //			System.out.println(resource);
 			ClassPool cp = ClassPool.getDefault();
 
@@ -100,9 +97,8 @@ public class ComponentMgr {
 				if (clz.isPrimitive() || Modifier.isAbstract(clz.getModifiers()) || clz.isAnnotation() || clz.isInterface() || clz.isArray() || clz.getName().indexOf("$") != -1) {
 				} else {
 					// 组件才享有优先类加载的权利
-					if (IComponent.class.isAssignableFrom(clz)) {
+					if (IComponent.class.isAssignableFrom(clz))
 						ReflectUtil.getClassByName(clz.getCanonicalName());
-					}
 
 					clzs.add(clz);
 				}
@@ -119,41 +115,37 @@ public class ComponentMgr {
 		// 记录依赖关系
 		Map<String, String> dependencies = new HashMap<>();
 
-		for (Class<?> item : clzs) {
-			Component annotation = item.getAnnotation(Component.class); // 查找匹配的注解
-			Named namedAnno = item.getAnnotation(Named.class);
+		for (Class<?> clz : clzs) {
+			Component annotation = clz.getAnnotation(Component.class); // 查找匹配的注解
 
-			if (annotation == null && namedAnno == null)
+			if (annotation == null)
 				continue; // 不是 bean 啥都不用做
 
-			String alias = getAlias(annotation, namedAnno, item);
+			// 获取 Bean 的名称，如果没有则取类 SimpleName
+			String alias = annotation.value();
+			if (CommonUtil.isEmptyString(alias))
+				alias = clz.getSimpleName();
 
 			if (components.containsKey(alias))
-				LOGGER.warning("相同的 bean name 已经存在" + alias);
+				LOGGER.warning("相同的 组件名称（Alias）[{0}] 已经存在", alias);
 
-			register(alias, item, true);
+			register(alias, clz, true);
 
 			// 记录依赖关系
-			for (Field field : item.getDeclaredFields()) {
+			for (Field field : clz.getDeclaredFields()) {
 				Resource res = field.getAnnotation(Resource.class);
-				Inject inject = field.getAnnotation(Inject.class);
 
-				if (inject == null && res == null)
+				if (res == null)
 					continue; // 没有要注入的字段，跳过
 				else {
 					/*
 					 * 要查找哪一个 bean？就是说依赖啥对象？以什么为依据？我们说是那个 bean 的 id。首先你可以在 Resource
 					 * 注解中指定，如果这觉得麻烦，可以不在注解指定，直接指定变量名即可（就算不通过注解指定，都可以利用 反射 获取字段名，作为依赖的凭据，效果一样）
 					 */
-					// 获取依赖的 bean 的名称,如果为 null, 则使用字段名称
-					String dependenciObj_id = res == null ? field.getAnnotation(Named.class).value() : res.value();
-					dependenciObj_id = parseId(dependenciObj_id);
-
-					if (CommonUtil.isEmptyString(dependenciObj_id))
-						dependenciObj_id = field.getName(); // 此时 bean 的 id 一定要与 fieldName 一致
+					String dependenciObj_id = parseId(res, field);
+//					LOGGER.info(alias + "." + field.getName() + ":::" + dependenciObj_id);
 
 					// bean id ＋ 变量名称 ＝ 依赖关系的 key。
-
 					dependencies.put(alias + "." + field.getName(), dependenciObj_id);
 
 					// 不能马上执行 setter 注入，因为有可能相关组件还未实例化
@@ -178,27 +170,19 @@ public class ComponentMgr {
 		});
 	}
 
-	// TODO: remove Bean
-	private static String getAlias(Component annotation, Named namedAnno, Class<?> clz) {
-		String value = null;
-
-		if (annotation != null) // 获取 Bean 的名称，如果没有则取类 SimpleName
-			value = annotation.value();
-		else if (namedAnno != null) // 如果有 Named 注解则读取它的值
-			value = namedAnno.value();
-
-		return CommonUtil.isEmptyString(value) ? clz.getSimpleName() : value;
-	}
-
 	/**
 	 * 可以从 JSON 配置文件读取依赖对象。这时以 autoWire: 开头指向配置内容，内容即具体 Bean 的 id。
 	 * 
-	 * @param dependenciObj_id
+	 * @param res
+	 * @param field
 	 * @return
 	 */
-	private static String parseId(String dependenciObj_id) {
-		if (dependenciObj_id.startsWith("autoWire:")) {
-			String str = dependenciObj_id.replaceFirst("autoWire:", "");
+	private static String parseId(Resource res, Field field) {
+		// 获取依赖的 bean 的名称,如果为 null, 则使用字段名称
+		String resource = res.value();
+
+		if (resource.startsWith("autoWire:")) {
+			String str = resource.replaceFirst("autoWire:", "");
 			String[] arr = str.split("\\|");
 //			String extendedId = ConfigService.getValueAsString(arr[0]);
 			String extendedId = null;
@@ -207,7 +191,10 @@ public class ComponentMgr {
 			return extendedId == null ? arr[1] : extendedId;
 		}
 
-		return dependenciObj_id;
+		if (CommonUtil.isEmptyString(resource))
+			resource = field.getType().getSimpleName(); // 此时 bean 的 id 一定要与 fieldName 一致
+
+		return resource;
 	}
 
 	// -------------------------------------------------------------------------------------------------

@@ -1,10 +1,8 @@
 package com.ajaxjs.util.ioc;
 
-import javax.inject.Named;
-
 import com.ajaxjs.util.ioc.testcase.Subject;
 
-@Named
+@Component
 public class Person extends Base implements Subject {
 	private String name = "Rose";
 

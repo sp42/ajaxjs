@@ -17,11 +17,11 @@
 
 	<dependencies>
 		<!-- 依赖注射的标准注解 -->
-		<dependency>
+<!-- 		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
 			<version>1</version>
-		</dependency>
+		</dependency> -->
 
 		<!-- 动态生成 getter/setter -->
 		<dependency>

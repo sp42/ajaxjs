@@ -25,7 +25,6 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -296,26 +295,6 @@ public class MapTool {
 			if (!k.equals("class")) // 过滤 class 属性
 				map.put(k, v);
 		});
-
-		return map;
-	}
-
-	/**
-	 * 遍历注解的配置，需要什么类，收集起来，放到一个 hash 之中， Servlet 或 Filter 通用
-	 * 
-	 * @param emu
-	 * @param getValue
-	 * @return Map
-	 */
-	public static Map<String, String> emu2map(Enumeration<String> emu, Function<String, String> getValue) {
-		Map<String, String> map = new HashMap<>();
-
-		while (emu.hasMoreElements()) {
-			String key = emu.nextElement();
-			String value = getValue.apply(key);
-
-			map.put(key, value);
-		}
 
 		return map;
 	}
