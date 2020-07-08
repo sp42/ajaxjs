@@ -39,9 +39,24 @@ public class ConfigService {
 	private static final LogHelper LOGGER = LogHelper.getLog(ConfigService.class);
 
 	/**
+	 * json 文件路径
+	 */
+	public static String jsonPath;
+
+	/**
+	 * json 字符串内容
+	 */
+	public static String jsonStr;
+
+	/**
+	 * 是否加载成功
+	 */
+	public static boolean isLoaded;
+
+	/**
 	 * 所有的配置保存在这个 config 中
 	 */
-	public static Config CONFIG;
+	public static Map<String, Object> CONFIG;
 
 	/**
 	 * 所有的配置保存在这个 config 中（扁平化处理过的）
@@ -59,11 +74,10 @@ public class ConfigService {
 			return;
 		}
 
-		CONFIG = new Config();
-		CONFIG.setJsonPath(jsonPath);
-		CONFIG.setJsonStr(FileHelper.openAsText(jsonPath));
-		CONFIG.putAll(JsonHelper.parseMap(CONFIG.getJsonStr()));
-		CONFIG.setLoaded(true);
+		ConfigService.jsonPath = jsonPath;
+		ConfigService.jsonStr = FileHelper.openAsText(jsonPath);
+		CONFIG = JsonHelper.parseMap(ConfigService.jsonStr);
+		ConfigService.isLoaded = true;
 
 		FLAT_CONFIG = ListMap.flatMap(CONFIG);
 
@@ -79,9 +93,8 @@ public class ConfigService {
 	 * 保存 JSON 配置
 	 */
 	public static void save() {
-		String jsonStr = JsonHelper.toJson(CONFIG);
-		CONFIG.setJsonStr(jsonStr);
-		FileHelper.saveText(CONFIG.getJsonPath(), jsonStr);
+		jsonStr = JsonHelper.toJson(CONFIG);
+		FileHelper.saveText(jsonPath, jsonStr);
 	}
 
 	/**
@@ -95,7 +108,7 @@ public class ConfigService {
 	 */
 	@SuppressWarnings("unchecked")
 	private static <T> T get(String key, T isNullValue, Class<T> vType) {
-		if (FLAT_CONFIG == null || !CONFIG.isLoaded())
+		if (FLAT_CONFIG == null || !isLoaded)
 			return isNullValue;
 
 		Object v = FLAT_CONFIG.get(key);
@@ -167,7 +180,7 @@ public class ConfigService {
 	public static int getInt(String key) {
 		return getValueAsInt(key);
 	}
-	
+
 	/**
 	 * 简化版本
 	 * 
@@ -222,7 +235,7 @@ public class ConfigService {
 	 */
 	public static void loadJSON_in_JS(Map<String, Object> map) {
 		JsEngineWrapper js = new JsEngineWrapper();
-		js.eval("allConfig = " + FileHelper.openAsText(CONFIG.getJsonPath()));
+		js.eval("allConfig = " + FileHelper.openAsText(jsonPath));
 
 		map.forEach((k, v) -> {
 			String jsKey = transform(k);
@@ -274,7 +287,7 @@ public class ConfigService {
 		});
 
 		String json = js.eval("JSON.stringify(allConfig, null, 2);", String.class);
-		FileHelper.saveText(CONFIG.getJsonPath(), json);
+		FileHelper.saveText(jsonPath, json);
 	}
 
 	/**

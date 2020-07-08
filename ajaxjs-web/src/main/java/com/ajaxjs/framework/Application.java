@@ -44,7 +44,7 @@ public class Application implements ServletContextListener, Filter {
 		// 加载配置
 		ConfigService.load(ctx.getRealPath("/META-INF/site_config.json"));
 
-		if (ConfigService.CONFIG != null && ConfigService.CONFIG.isLoaded())
+		if (ConfigService.CONFIG != null && ConfigService.isLoaded)
 			ctx.setAttribute("aj_allConfig", ConfigService.CONFIG); // 所有配置保存在这里
 
 		onStartUp(ctx);

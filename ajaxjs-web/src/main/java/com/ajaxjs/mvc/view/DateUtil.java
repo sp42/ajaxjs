@@ -27,7 +27,6 @@ import com.ajaxjs.util.CommonUtil;
  * 格式化日期的标签
  * 
  * @author sp42 frank@ajaxjs.com
- * @version 2017年7月8日 下午10:58:17
  */
 public class DateUtil extends SimpleTagSupport {
 	/**
@@ -50,8 +49,7 @@ public class DateUtil extends SimpleTagSupport {
 		if (date == null)
 			return;
 
-		String format = this.format == null ? CommonUtil.formatDateShorter(date)
-				: CommonUtil.simpleDateFormatFactory(this.format).format(date);
+		String format = this.format == null ? CommonUtil.formatDateShorter(date) : CommonUtil.simpleDateFormatFactory(this.format).format(date);
 
 		getJspContext().getOut().write(format);
 	}
