@@ -35,7 +35,7 @@ public class WeiboOauthController implements IController {
 	public String callback(@NotNull @QueryParam("code") String code, @NotNull @QueryParam("state") String state) {
 		LOGGER.info("code::::::::::" + code);
 		LOGGER.info("state::::::::::" + state);
-		// code = Authorization Code 
+		// code = Authorization Code
 
 		if ("register".equals(state)) {
 			// 获取token
@@ -75,7 +75,7 @@ public class WeiboOauthController implements IController {
 	 * @param uid         查询的用户ID
 	 * @return 用户信息
 	 */
-	private static Map<String, Object> getUserInfo(String accessToken, String uid) {
+	static Map<String, Object> getUserInfo(String accessToken, String uid) {
 		LOGGER.info("获取用户信息 uid:" + uid);
 
 		String result = NetUtil.simpleGET(String.format(GET_USER_INFO, accessToken, uid));
