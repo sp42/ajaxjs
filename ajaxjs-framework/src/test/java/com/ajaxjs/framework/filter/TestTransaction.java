@@ -14,13 +14,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ajaxjs.framework.config.TestHelper;
+import com.ajaxjs.mvc.controller.MvcDispatcher;
 import com.ajaxjs.web.mock.BaseControllerTest;
 import com.ajaxjs.web.mock.MockRequest;
 import com.ajaxjs.web.mock.MockResponse;
 
 public class TestTransaction extends BaseControllerTest {
 	@BeforeClass
-	public static void init() throws ServletException {
+	public void init() throws ServletException {
 //		System.out.println(AbstractScanner.getResourcesFromClasspath("\\test.db"));
 		TestHelper.loadSQLiteTest("D:\\project\\ajaxjs-framework\\src\\test\\test.db");
 		init("com.ajaxjs.cms.filter");
@@ -37,7 +38,10 @@ public class TestTransaction extends BaseControllerTest {
 		request = MockRequest.mockRequest("/ajaxjs-web", "/foo");
 
 		when(request.getMethod()).thenReturn("GET");
-		dispatcher.doFilter(request, response, chain);
+		
+		MvcDispatcher.dispatcher.apply(request, response);
+		chain.doFilter(request, response);
+		
 		assertEquals("<html><meta charset=\"utf-8\" /><body>Foo</body></html>", writer.toString());
 	}
 
@@ -46,8 +50,10 @@ public class TestTransaction extends BaseControllerTest {
 		request = MockRequest.mockRequest("/ajaxjs-web", "/foo/bar");
 
 		when(request.getMethod()).thenReturn("GET");
-		dispatcher.doFilter(request, response, chain);
+		
+		MvcDispatcher.dispatcher.apply(request, response);
+		chain.doFilter(request, response);
+		
 		assertEquals("", writer.toString());
 	}
-
 }

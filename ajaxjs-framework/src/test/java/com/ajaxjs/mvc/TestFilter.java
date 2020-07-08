@@ -15,12 +15,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.ajaxjs.mvc.controller.MvcDispatcher;
 import com.ajaxjs.web.captcha.CaptchaController;
+import com.ajaxjs.web.mock.BaseControllerTest;
 import com.ajaxjs.web.mock.MockRequest;
 import com.ajaxjs.web.mock.MockResponse;
 
-
-public class TestFilter extends BaseTest {
+public class TestFilter extends BaseControllerTest {
 
 	// 单测技巧，每个 url 对应一个 request、一个 response
 	@Before
@@ -33,7 +34,10 @@ public class TestFilter extends BaseTest {
 	@Test
 	public void testFilter() throws IOException, ServletException {
 		when(request.getMethod()).thenReturn("GET");
-		dispatcher.doFilter(request, response, chain);
+		
+		MvcDispatcher.dispatcher.apply(request, response);
+		chain.doFilter(request, response);
+		
 		assertNotNull(writer.toString());
 	}
 
@@ -47,7 +51,9 @@ public class TestFilter extends BaseTest {
 
 		when(request.getMethod()).thenReturn("GET");
 		when(request.getParameter(CaptchaController.CAPTCHA_CODE)).thenReturn("12313");
-		dispatcher.doFilter(request, response, chain);
+		MvcDispatcher.dispatcher.apply(request, response);
+		chain.doFilter(request, response);
+		
 
 		assertEquals("{\"isOk\": false, \"msg\" : \"验证码不正确\"}", writer.toString());
 		//		assertNotNull(writer.toString());
@@ -59,7 +65,9 @@ public class TestFilter extends BaseTest {
 		when(request.getMethod()).thenReturn("GET");
 //		when(request.getParameter("token")).thenReturn(TokenService.getTimeStampToken(ConfigService.getValueAsString("System.api.AES_Key")));
 
-		dispatcher.doFilter(request, response, chain);
+		MvcDispatcher.dispatcher.apply(request, response);
+		chain.doFilter(request, response);
+		
 		assertNotNull(writer.toString());
 	}
 }
