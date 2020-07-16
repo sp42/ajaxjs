@@ -11,6 +11,7 @@
 package com.ajaxjs.util;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -18,7 +19,9 @@ import java.lang.reflect.Type;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import com.ajaxjs.util.logger.LogHelper;
@@ -538,5 +541,25 @@ public class ReflectUtil {
 		Objects.requireNonNull(method, clazz.getName() + " 找不到目标方法！" + setMethodName);
 
 		executeMethod(bean, method, value);
-	};
+	}
+
+	public static Map<String, Integer> getConstantsInt(Class<?> clz) {
+		Map<String, Integer> map = new HashMap<>();
+
+		Field[] fields = clz.getDeclaredFields();
+		Object instance = newInstance(clz);
+
+		for (Field field : fields) {
+			String descriptor = Modifier.toString(field.getModifiers());// 获得其属性的修饰
+			if (descriptor.equals("public static final")) {
+				try {
+					map.put(field.getName(), (int) field.get(instance));
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					LOGGER.warning(e);
+				}
+			}
+		}
+
+		return map;
+	}
 }

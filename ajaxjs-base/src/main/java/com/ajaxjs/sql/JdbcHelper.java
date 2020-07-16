@@ -174,7 +174,7 @@ public class JdbcHelper extends JdbcReader {
 			if ("id".equals(field))
 				continue; // 忽略 id 字段
 
-			onField.accept(field, map.get(field));
+			onField.accept("`" + field + "`", map.get(field));
 		}
 	}
 
@@ -223,7 +223,7 @@ public class JdbcHelper extends JdbcReader {
 		List<Object> values = new ArrayList<>();
 
 		everyMap(map, (field, value) -> {
-			fields.add("`" + field + "` = ?");
+			fields.add(field + " = ?");
 			values.add(value);
 		});
 
