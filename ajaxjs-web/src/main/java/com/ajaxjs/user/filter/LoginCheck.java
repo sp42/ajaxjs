@@ -2,14 +2,14 @@ package com.ajaxjs.user.filter;
 
 import java.lang.reflect.Method;
 
-import com.ajaxjs.mvc.MvcConstant;
-import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.mvc.controller.MvcOutput;
-import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.mvc.filter.FilterAction;
-import com.ajaxjs.mvc.filter.FilterAfterArgs;
 import com.ajaxjs.user.controller.BaseUserController;
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.web.mvc.ModelAndView;
+import com.ajaxjs.web.mvc.MvcConstant;
+import com.ajaxjs.web.mvc.controller.MvcOutput;
+import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.filter.FilterAction;
+import com.ajaxjs.web.mvc.filter.FilterAfterArgs;
 
 /**
  * 是否已经登录的拦截器

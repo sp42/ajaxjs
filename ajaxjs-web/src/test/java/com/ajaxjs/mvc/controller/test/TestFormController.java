@@ -16,10 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.mvc.controller.MvcDispatcher;
 import com.ajaxjs.web.mock.BaseControllerTest;
 import com.ajaxjs.web.mock.MockRequest;
 import com.ajaxjs.web.mock.MockResponse;
+import com.ajaxjs.web.mvc.controller.MvcDispatcher;
 
 public class TestFormController extends BaseControllerTest {
 	// 单测技巧，每个 url 对应一个 request、一个 response

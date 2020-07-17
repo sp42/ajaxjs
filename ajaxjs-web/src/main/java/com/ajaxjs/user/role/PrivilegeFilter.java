@@ -4,11 +4,11 @@ import java.lang.reflect.Method;
 
 import javax.servlet.http.HttpSession;
 
-import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.mvc.controller.MvcOutput;
-import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.mvc.filter.FilterAction;
-import com.ajaxjs.mvc.filter.FilterAfterArgs;
+import com.ajaxjs.web.mvc.ModelAndView;
+import com.ajaxjs.web.mvc.controller.MvcOutput;
+import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.filter.FilterAction;
+import com.ajaxjs.web.mvc.filter.FilterAfterArgs;
 
 public class PrivilegeFilter implements FilterAction {
 	private int value;

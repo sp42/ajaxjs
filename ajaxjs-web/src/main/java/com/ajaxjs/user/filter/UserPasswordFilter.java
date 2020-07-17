@@ -18,15 +18,15 @@ package com.ajaxjs.user.filter;
 import java.lang.reflect.Method;
 
 import com.ajaxjs.framework.ServiceException;
-import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.mvc.controller.MvcOutput;
-import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.mvc.filter.FilterAction;
-import com.ajaxjs.mvc.filter.FilterAfterArgs;
 import com.ajaxjs.user.controller.BaseUserController;
 import com.ajaxjs.user.login.LoginService;
 import com.ajaxjs.user.model.UserCommonAuth;
 import com.ajaxjs.user.service.UserCommonAuthService;
+import com.ajaxjs.web.mvc.ModelAndView;
+import com.ajaxjs.web.mvc.controller.MvcOutput;
+import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.filter.FilterAction;
+import com.ajaxjs.web.mvc.filter.FilterAfterArgs;
 
 /**
  * 需要输入用户密码之后才能下一步的拦截器

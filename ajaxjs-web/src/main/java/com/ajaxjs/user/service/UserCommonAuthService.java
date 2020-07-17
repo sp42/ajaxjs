@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.ServiceException;
-import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.sql.annotation.Delete;
 import com.ajaxjs.sql.annotation.Select;
 import com.ajaxjs.sql.annotation.TableName;
@@ -15,6 +14,7 @@ import com.ajaxjs.user.model.UserCommonAuth;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.web.mvc.controller.MvcRequest;
 
 @Component("User_common_authService")
 public class UserCommonAuthService extends BaseService<UserCommonAuth> {

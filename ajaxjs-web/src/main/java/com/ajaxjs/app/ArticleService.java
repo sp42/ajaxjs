@@ -9,7 +9,6 @@ import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.framework.ViewObjectService;
 import com.ajaxjs.framework.config.ConfigService;
-import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.sql.annotation.Select;
 import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;
@@ -17,6 +16,7 @@ import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ioc.Component;
+import com.ajaxjs.web.mvc.ModelAndView;
 
 @Component
 public class ArticleService extends BaseService<Map<String, Object>> implements ViewObjectService {

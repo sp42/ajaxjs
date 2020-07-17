@@ -6,13 +6,13 @@ import java.util.function.Function;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.JdbcHelper;
 import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.web.ServletHelper;
+import com.ajaxjs.web.mvc.controller.MvcRequest;
 
 /**
  * 为方便查询的工具类

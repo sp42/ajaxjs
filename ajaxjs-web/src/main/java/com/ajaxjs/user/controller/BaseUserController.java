@@ -3,11 +3,11 @@ package com.ajaxjs.user.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.web.mvc.controller.MvcRequest;
 
 /**
  * 基础的用户控制器，通用的會員操作，放在這裏

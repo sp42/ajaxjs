@@ -14,10 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ajaxjs.mvc.controller.MvcDispatcher;
 import com.ajaxjs.web.mock.BaseControllerTest;
 import com.ajaxjs.web.mock.MockRequest;
 import com.ajaxjs.web.mock.MockResponse;
+import com.ajaxjs.web.mvc.controller.MvcDispatcher;
 
 public class TestSubPath_Id_Controller extends BaseControllerTest {
 	@Before

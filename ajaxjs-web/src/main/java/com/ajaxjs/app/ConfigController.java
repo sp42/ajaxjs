@@ -27,12 +27,12 @@ import javax.ws.rs.core.MediaType;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.framework.config.SiteStruService;
-import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.mvc.controller.IController;
-import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.util.XmlHelper;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.web.mvc.ModelAndView;
+import com.ajaxjs.web.mvc.controller.IController;
+import com.ajaxjs.web.mvc.controller.MvcRequest;
 
 /**
  * 编辑配置的控制器

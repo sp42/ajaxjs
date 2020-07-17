@@ -7,10 +7,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import com.ajaxjs.framework.config.ConfigService;
-import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.mvc.MvcConstant;
-import com.ajaxjs.mvc.controller.IController;
-import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.sql.SnowflakeIdWorker;
 import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.sql.orm.PageResult;
@@ -18,6 +14,10 @@ import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.web.UploadFile;
 import com.ajaxjs.web.UploadFileInfo;
+import com.ajaxjs.web.mvc.ModelAndView;
+import com.ajaxjs.web.mvc.MvcConstant;
+import com.ajaxjs.web.mvc.controller.IController;
+import com.ajaxjs.web.mvc.controller.MvcRequest;
 
 /**
  * 通用控制器

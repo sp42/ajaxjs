@@ -17,9 +17,6 @@ import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.framework.filter.DataBaseFilter;
-import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.IBaseService;
@@ -28,6 +25,9 @@ import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.web.UploadFileInfo;
+import com.ajaxjs.web.mvc.ModelAndView;
+import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.filter.MvcFilter;
 
 /**
  * 

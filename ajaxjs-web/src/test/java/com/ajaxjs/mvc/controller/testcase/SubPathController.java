@@ -11,9 +11,9 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
-import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.mvc.controller.IController;
-import com.ajaxjs.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.ModelAndView;
+import com.ajaxjs.web.mvc.controller.IController;
+import com.ajaxjs.web.mvc.controller.MvcRequest;
 
 @Path("/MyTopPath_And_SubPath")
 public class SubPathController implements IController {

@@ -8,7 +8,6 @@ import javax.servlet.http.HttpSession;
 
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.config.ConfigService;
-import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.user.UserHelper;
 import com.ajaxjs.user.controller.LoginLogController;
@@ -17,6 +16,7 @@ import com.ajaxjs.user.model.UserCommonAuth;
 import com.ajaxjs.user.service.UserCommonAuthService;
 import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.web.mvc.ModelAndView;
 
 public class LoginService extends UserService {
 	private static final LogHelper LOGGER = LogHelper.getLog(LoginService.class);

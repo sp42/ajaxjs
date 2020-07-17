@@ -4,8 +4,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.mvc.MvcConstant;
-import com.ajaxjs.mvc.controller.IController;
+import com.ajaxjs.web.mvc.MvcConstant;
+import com.ajaxjs.web.mvc.controller.IController;
 
 /**
  * 后台界面

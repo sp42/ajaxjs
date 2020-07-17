@@ -20,9 +20,6 @@ import javax.ws.rs.core.MediaType;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
-import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.user.login.LoginService;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.service.UserService;
@@ -30,6 +27,9 @@ import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.captcha.CaptchaController;
 import com.ajaxjs.web.captcha.CaptchaFilter;
+import com.ajaxjs.web.mvc.ModelAndView;
+import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.filter.MvcFilter;
 
 /**
  * 注册控制器。为方便使用，它继承与登录控制器，但它们的关系的平等的。只是为了 Java的单根继承

@@ -23,7 +23,6 @@ import com.ajaxjs.Version;
 import com.ajaxjs.framework.Application;
 import com.ajaxjs.framework.IComponent;
 import com.ajaxjs.framework.config.ConfigService;
-import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.sql.JdbcReader;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.XmlHelper;
@@ -31,6 +30,7 @@ import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.IoHelper;
 import com.ajaxjs.util.io.ZipHelper;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.web.mvc.controller.MvcRequest;
 
 /**
  * MySQL 数据库定时自动备份，仅支持 CentOS

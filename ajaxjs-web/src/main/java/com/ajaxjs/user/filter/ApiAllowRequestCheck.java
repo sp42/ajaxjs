@@ -5,13 +5,13 @@ import java.util.Objects;
 import java.util.function.Function;
 
 import com.ajaxjs.framework.config.ConfigService;
-import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.mvc.controller.MvcOutput;
-import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.mvc.filter.FilterAction;
-import com.ajaxjs.mvc.filter.FilterAfterArgs;
 import com.ajaxjs.user.service.TokenMaker;
 import com.ajaxjs.util.cryptography.SymmetriCipher;
+import com.ajaxjs.web.mvc.ModelAndView;
+import com.ajaxjs.web.mvc.controller.MvcOutput;
+import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.filter.FilterAction;
+import com.ajaxjs.web.mvc.filter.FilterAfterArgs;
 
 /**
  * 简单的接口合法性校验，基于 AES

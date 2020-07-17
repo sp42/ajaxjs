@@ -17,9 +17,6 @@ import com.ajaxjs.app.ThirdPartyService;
 import com.ajaxjs.app.TreeLikeService;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.filter.DataBaseFilter;
-import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.user.UserHelper;
 import com.ajaxjs.user.controller.LoginLogController.UserLoginLogService;
@@ -34,6 +31,9 @@ import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.cache.ExpireCache;
 import com.ajaxjs.util.ioc.ComponentMgr;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.web.mvc.ModelAndView;
+import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.filter.MvcFilter;
 
 /**
  * 帐号管理控制器

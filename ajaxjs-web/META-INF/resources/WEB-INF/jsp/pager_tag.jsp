@@ -1,4 +1,4 @@
-<%@tag pageEncoding="UTF-8" import="com.ajaxjs.mvc.MvcConstant"%>
+<%@tag pageEncoding="UTF-8" import="com.ajaxjs.web.mvc.MvcConstant"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
 <%-- <%@attribute name="PageResult" type="com.ajaxjs.jdbc.PageResult" required="false" description="分页对象"%> --%>
 <jsp:useBean id="PageUtil" class="com.ajaxjs.framework.view.PageTag" />

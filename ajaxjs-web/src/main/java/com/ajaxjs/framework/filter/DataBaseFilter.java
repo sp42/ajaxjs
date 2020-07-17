@@ -22,13 +22,13 @@ import java.sql.SQLException;
 import com.ajaxjs.Version;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.framework.config.TestHelper;
-import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.mvc.controller.MvcOutput;
-import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.mvc.filter.FilterAction;
-import com.ajaxjs.mvc.filter.FilterAfterArgs;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.web.mvc.ModelAndView;
+import com.ajaxjs.web.mvc.controller.MvcOutput;
+import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.filter.FilterAction;
+import com.ajaxjs.web.mvc.filter.FilterAfterArgs;
 
 /**
  * 1、数据库连接、关闭连接；2、数据库事务

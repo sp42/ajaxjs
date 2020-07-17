@@ -25,8 +25,8 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ajaxjs.mvc.controller.MvcDispatcher;
 import com.ajaxjs.util.ioc.ComponentMgr;
+import com.ajaxjs.web.mvc.controller.MvcDispatcher;
 
 /**
  * 方便测试的基础类

@@ -1,6 +1,6 @@
 package com.ajaxjs.framework;
 
-import com.ajaxjs.mvc.ModelAndView;
+import com.ajaxjs.web.mvc.ModelAndView;
 
 public interface ViewObjectService {
 	/**

@@ -9,9 +9,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.user.login.Weibo;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.web.mvc.controller.IController;
 
 @Path("/user/thirdpartrybinding")
 public class ThirdLogin implements IController {

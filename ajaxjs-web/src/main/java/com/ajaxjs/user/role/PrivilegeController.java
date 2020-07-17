@@ -12,11 +12,11 @@ import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.filter.DataBaseFilter;
-import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
+import com.ajaxjs.web.mvc.ModelAndView;
+import com.ajaxjs.web.mvc.filter.MvcFilter;
 
 @Path("/admin/user/privilege")
 @Component
