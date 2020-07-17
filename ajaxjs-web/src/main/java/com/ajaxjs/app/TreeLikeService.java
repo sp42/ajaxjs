@@ -3,6 +3,7 @@ package com.ajaxjs.app;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.ajaxjs.app.catalog.Catalog;
 import com.ajaxjs.framework.BaseModel;
@@ -95,6 +96,22 @@ public class TreeLikeService extends BaseService<Catalog> {
 		return map;
 	}
 
+	/**
+	 * 把列表（Map结构）转换为 map，以 id 作为键值。key 本来是 long，为照顾 el 转换为 int
+	 * 
+	 * @param list 实体列表
+	 * @return 以 id 作为键值的 map
+	 */
+	public static Map<Integer, Object> idAsKey(List<Map<String, Object>> list) {
+		if (CommonUtil.isNull(list))
+			return null;
+
+		Map<Integer, Object> map = new HashMap<>();
+		list.forEach(item -> map.put(new Integer(item.get("id").toString()), item));
+
+		return map;
+	}
+
 	@Override
 	public Long create(Catalog bean) {
 		if (bean.getPid() != -1) { // 非根节点
@@ -125,5 +142,49 @@ public class TreeLikeService extends BaseService<Catalog> {
 	@Override
 	public boolean delete(Catalog bean) {
 		return dao.deleteAll(bean.getId().intValue());
+	}
+
+	/**
+	 * 供其它实体关联时候用，可以获取下级所有子分类
+	 */
+	public final static String PATH_LIKE_MYSQL_ID = "SELECT id FROM general_catalog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catalog WHERE id = %d ) , '%%'))";
+
+	/**
+	 * IN 查询用，多用于分页统计总数 用于 catelogId 查询的，通常放在 LEFT JOIN 后面还需要，WHERE e.catelog =
+	 * c.id。 还需要预留一个 catelogId 的参数 另外也可以用 IN 查询
+	 */
+	public final static String CATALOG_FIND = "e.catalogId IN ( " + PATH_LIKE_MYSQL_ID + ")";
+
+	/**
+	 * 直接查询 catalogId，不进行递归
+	 * 
+	 * @param catalogId
+	 * @return
+	 */
+	public static Function<String, String> byCatalogId(int catalogId) {
+		return by("catalogId", catalogId);
+	}
+
+	/**
+	 * 
+	 * @param catalogId
+	 * @param service
+	 * @return
+	 */
+	public static Function<String, String> setCatalog(int catalogId, int domainCatalogId) {
+		if (catalogId == 0)
+			catalogId = domainCatalogId;
+
+		return setCatalog(catalogId);
+	}
+
+	public static Function<String, String> setCatalog(int catalogId) {
+		return setWhere(catalogId == 0 ? null : String.format(CATALOG_FIND, catalogId));
+	}
+
+	public static Function<String, String> setCatalog() {
+		Object v = getValue("catalogId", int.class);
+
+		return v == null ? setWhere(null) : setCatalog((int) v);
 	}
 }

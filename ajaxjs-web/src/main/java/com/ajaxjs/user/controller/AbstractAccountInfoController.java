@@ -14,7 +14,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.app.ThirdPartyService;
-import com.ajaxjs.app.catalog.CatalogService;
+import com.ajaxjs.app.TreeLikeService;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.mvc.ModelAndView;
@@ -64,7 +64,7 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 		mv.put("userInfo", user);
 		mv.put("isEmailVerified", RoleService.simple8421(user.getVerify(), UserConstant.VERIFIED_EMAIL));
 		mv.put("lastUserLoginedInfo", LoginLogController.service.dao.getLastUserLoginedInfo(getUserId()));
-		mv.put("UserGroups", CatalogService.idAsKey(RoleService.dao.findList(null)));
+		mv.put("UserGroups", TreeLikeService.idAsKey(RoleService.dao.findList(null)));
 
 		return user("account");
 	}

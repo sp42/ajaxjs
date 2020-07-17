@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 
-import com.ajaxjs.app.catalog.CatalogService;
+import com.ajaxjs.app.TreeLikeService;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.sql.SnowflakeIdWorker;
 import com.ajaxjs.sql.orm.IBaseDao;
@@ -140,7 +140,7 @@ public abstract class BaseService<T> extends QueryTools implements IBaseService<
 		Function<String, String> fn = setStatus(status).andThen(BaseService::searchQuery).andThen(byAny());
 
 		if (catalogId != 0)
-			fn = fn.andThen(isSimpleCatalog ? by("catalogId", catalogId) : CatalogService.setCatalog(catalogId));
+			fn = fn.andThen(isSimpleCatalog ? by("catalogId", catalogId) : TreeLikeService.setCatalog(catalogId));
 
 		return dao.findPagedList(start, limit, fn);
 	}

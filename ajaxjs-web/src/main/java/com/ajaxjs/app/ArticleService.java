@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.ajaxjs.app.catalog.CatalogService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.framework.ViewObjectService;
@@ -48,7 +47,7 @@ public class ArticleService extends BaseService<Map<String, Object>> implements 
 	}
 
 	public PageResult<Map<String, Object>> list(int catalogId, int start, int limit, int status, boolean isOrderByCreateDate) {
-		Function<String, String> handler = CatalogService.setCatalog(catalogId, getDomainCatalogId()).andThen(setStatus(status)).andThen(BaseService::searchQuery)
+		Function<String, String> handler = TreeLikeService.setCatalog(catalogId, getDomainCatalogId()).andThen(setStatus(status)).andThen(BaseService::searchQuery)
 				.andThen(BaseService::betweenCreateDate);
 		if (isOrderByCreateDate)
 			handler = handler.andThen(sql -> sql.replace("ORDER BY id", "ORDER BY createDate"));
@@ -61,7 +60,7 @@ public class ArticleService extends BaseService<Map<String, Object>> implements 
 	}
 
 	public List<Map<String, Object>> findListTop(int top) {
-		return dao.simpleList(CatalogService.setCatalog(getDomainCatalogId(), getDomainCatalogId())
+		return dao.simpleList(TreeLikeService.setCatalog(getDomainCatalogId(), getDomainCatalogId())
 				.andThen(BaseService.setStatus(CommonConstant.ON_LINE).andThen(sql -> sql + " LIMIT 0, " + top)));
 	}
 

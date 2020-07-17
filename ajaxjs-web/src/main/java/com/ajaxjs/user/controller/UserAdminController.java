@@ -14,7 +14,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.app.catalog.CatalogService;
+import com.ajaxjs.app.TreeLikeService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.mvc.ModelAndView;
@@ -52,8 +52,8 @@ public class UserAdminController extends BaseController<User> {
 		List<Map<String, Object>> userGroups = roleService.getDao().findList(null);
 
 		mv.put("SexGender", UserConstant.SEX_GENDER);
-		mv.put("UserGroups", CatalogService.idAsKey(userGroups));
-		mv.put("UserGroupsJson", toJson(CatalogService.idAsKey(userGroups), false));
+		mv.put("UserGroups", TreeLikeService.idAsKey(userGroups));
+		mv.put("UserGroupsJson", toJson(TreeLikeService.idAsKey(userGroups), false));
 		mv.put("UserGroupsJSON", toJson(userGroups, false).replaceAll("\"", "'"));
 
 		return page(mv, service.findPagedList(start, limit), "user/user-admin-list");
@@ -118,7 +118,7 @@ public class UserAdminController extends BaseController<User> {
 	public String accountCenter(ModelAndView mv, HttpServletRequest r) {
 		LOGGER.info("后台-账号中心");
 
-		mv.put("UserGroups", CatalogService.idAsKey(RoleService.dao.findList(null)));
+		mv.put("UserGroups", TreeLikeService.idAsKey(RoleService.dao.findList(null)));
 		mv.put("info", service.findById(BaseUserController.getUserId(r)));
 
 		return jsp("admin/account-center");

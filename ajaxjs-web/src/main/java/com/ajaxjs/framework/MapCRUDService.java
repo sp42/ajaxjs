@@ -2,7 +2,7 @@ package com.ajaxjs.framework;
 
 import java.util.Map;
 
-import com.ajaxjs.app.catalog.CatalogService;
+import com.ajaxjs.app.TreeLikeService;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;
@@ -82,6 +82,6 @@ public class MapCRUDService extends BaseService<Map<String, Object>> {
 	 * @return
 	 */
 	public PageResult<Map<String, Object>> findPagedListJoinCatalog(int catelogId, int start, int limit, int status) {
-		return dao.findPagedList(0, 10, CatalogService.setCatalog(catelogId, getDomainCatalogId()).andThen(setStatus(status)).andThen(BaseService::searchQuery));
+		return dao.findPagedList(0, 10, TreeLikeService.setCatalog(catelogId, getDomainCatalogId()).andThen(setStatus(status)).andThen(BaseService::searchQuery));
 	}
 }
