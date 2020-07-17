@@ -29,4 +29,9 @@
 		</jsp-property-group>
 	</jsp-config>
 	<!-- // -->
+	
+	 <!-- 配置 Session 失效时间 -->  
+	<session-config>  
+	        <session-timeout>90</session-timeout>  
+	</session-config> 
 </web-fragment>
