@@ -21,9 +21,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.net.http.Tools;
 import com.ajaxjs.util.cache.LRUCache;
+import com.ajaxjs.web.mvc.controller.MvcRequest;
 
 /**
  * Servlet 辅助工具类

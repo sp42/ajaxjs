@@ -12,11 +12,11 @@ package com.ajaxjs.web.captcha;
 
 import java.lang.reflect.Method;
 
-import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.mvc.controller.MvcOutput;
-import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.mvc.filter.FilterAfterArgs;
-import com.ajaxjs.mvc.filter.SessionValueFilter;
+import com.ajaxjs.web.mvc.ModelAndView;
+import com.ajaxjs.web.mvc.controller.MvcOutput;
+import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.filter.FilterAfterArgs;
+import com.ajaxjs.web.mvc.filter.SessionValueFilter;
 
 /**
  * 图形验证码的拦截器
