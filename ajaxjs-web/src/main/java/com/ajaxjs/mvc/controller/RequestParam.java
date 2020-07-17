@@ -175,7 +175,7 @@ public class RequestParam {
 		value = a instanceof HeaderParam ? request.getHeader(key) : request.getParameter(key);
 
 		if (required && CommonUtil.isEmptyString(value))
-			throw new NullPointerException("客户端缺少提交的参数 " + key);
+			throw new NullPointerException("客户端缺少提交的参数[ " + key + "]");
 
 		return value != null ? value.trim() : value; // 去掉空格
 	}

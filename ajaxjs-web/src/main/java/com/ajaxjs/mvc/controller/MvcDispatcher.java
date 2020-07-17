@@ -76,6 +76,7 @@ public class MvcDispatcher implements IComponent {
 	private static Boolean isEnableSecurityIO;
 
 	public static final BiFunction<HttpServletRequest, HttpServletResponse, Boolean> dispatcher = (req, resp) -> {
+		
 		if (isEnableSecurityIO == null)
 			isEnableSecurityIO = ConfigService.getValueAsBool("security.isEnableSecurityIO");
 
@@ -84,6 +85,8 @@ public class MvcDispatcher implements IComponent {
 
 		String uri = request.getFolder(), httpMethod = request.getMethod();
 		Action action = null;
+		
+		LOGGER.info("uri: {0}", uri);
 		try {
 			action = IController.findTreeByPath(uri);
 		} catch (Throwable e) {
@@ -93,7 +96,7 @@ public class MvcDispatcher implements IComponent {
 		if (action != null) {
 			Method method = action.getMethod(httpMethod);// 要执行的方法
 			IController controller = action.getController(httpMethod);
-			LOGGER.info("uri: {0}, action: {1}, method: {2}", uri, action, method);
+//			LOGGER.info("uri: {0}, action: {1}, method: {2}", uri, action, method);
 
 			if (method != null && controller != null) {
 				execute(request, response, controller, method);
