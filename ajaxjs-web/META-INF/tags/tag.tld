@@ -11,7 +11,7 @@
 
 	<tag>
 		<name>if</name>
-		<tag-class>com.ajaxjs.mvc.view.If</tag-class>
+		<tag-class>com.ajaxjs.web.view.If</tag-class>
 		<body-content>scriptless</body-content>
 		<attribute>
 			<name>test</name>
@@ -22,12 +22,12 @@
 
 	<tag>
 		<name>choose</name>
-		<tag-class>com.ajaxjs.mvc.view.Choose</tag-class>
+		<tag-class>com.ajaxjs.web.view.Choose</tag-class>
 		<body-content>scriptless</body-content>
 	</tag>
 	<tag>
 		<name>when</name>
-		<tag-class>com.ajaxjs.mvc.view.When</tag-class>
+		<tag-class>com.ajaxjs.web.view.When</tag-class>
 		<body-content>scriptless</body-content>
 		<attribute>
 			<name>test</name>
@@ -39,13 +39,13 @@
 
 	<tag>
 		<name>otherwise</name>
-		<tag-class>com.ajaxjs.mvc.view.OtherWise</tag-class>
+		<tag-class>com.ajaxjs.web.view.OtherWise</tag-class>
 		<body-content>scriptless</body-content>
 	</tag>
 
 	<tag>
 		<name>foreach</name>
-		<tag-class>com.ajaxjs.mvc.view.Foreach</tag-class>
+		<tag-class>com.ajaxjs.web.view.Foreach</tag-class>
 		<body-content>scriptless</body-content>
 		<attribute>
 			<name>var</name>
@@ -63,7 +63,7 @@
 
 	<tag>
 		<name>loop</name>
-		<tag-class>com.ajaxjs.mvc.view.Loop</tag-class>
+		<tag-class>com.ajaxjs.web.view.Loop</tag-class>
 		<body-content>scriptless</body-content>
 		<attribute>
 			<name>cnt</name>
@@ -74,7 +74,7 @@
 
 	<tag>
 		<name>dateFormatter</name>
-		<tag-class>com.ajaxjs.mvc.view.DateUtil</tag-class>
+		<tag-class>com.ajaxjs.web.view.DateUtil</tag-class>
 		<body-content>scriptless</body-content>
 		<attribute>
 			<name>format</name>

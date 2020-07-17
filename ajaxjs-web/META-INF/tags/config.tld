@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE xml>
+<taglib>
+	<!-- 使用前，将该文件复制在项目 WEB-INF 目录下 -->
+	<tlib-version>1.2</tlib-version>
+	<jsp-version>2.1</jsp-version>
+	<short-name>utility</short-name>
+	<uri>/ajaxjs_config</uri>
+	<info>配置</info>
+	<description>自定义标签库</description>
+
+	<tag>
+		<name>siteStru</name>
+		<tag-class>com.ajaxjs.framework.view.SiteStruTag</tag-class>
+		<description>网站页面结构标签</description>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>type</name>
+			<required>true</required>
+			<description>标签类型</description>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>pageUtil</name>
+		<tag-class>com.ajaxjs.framework.view.PageTag</tag-class>
+		<description>分页辅助标签</description>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>queryString</name>
+			<description>URL 参数</description>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>totalPage</name>
+			<required>true</required>
+			<description>总页数</description>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+</taglib>
