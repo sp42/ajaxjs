@@ -50,8 +50,7 @@ public class SecurityResponse extends HttpServletResponseWrapper {
 			throw new SecurityException("Cookie 名称不能包含 CLRF 字符，该 cookie 是 ：" + name);
 
 		// 重新创建 cookie
-		Cookie newCookie = new Cookie(name, isCRLF_Filter ? filterCLRF(value) : value);// 已经过滤好的 Cookie
-																						// value
+		Cookie newCookie = new Cookie(name, isCRLF_Filter ? filterCLRF(value) : value);// 已经过滤好的 Cookie value
 		newCookie.setComment(cookie.getComment());
 
 		if (cookie.getDomain() != null)
@@ -66,8 +65,7 @@ public class SecurityResponse extends HttpServletResponseWrapper {
 		/*
 		 * 检查 Cookie 容量大小和是否在白名单中。
 		 */
-		if (ConfigService.getValueAsBool("security.isCookiesSizeCheck")
-				&& (cookie.getValue().length() > MAX_COOKIE_SIZE))
+		if (ConfigService.getValueAsBool("security.isCookiesSizeCheck") && (cookie.getValue().length() > MAX_COOKIE_SIZE))
 			throw new SecurityException("超出 Cookie 允许容量：" + MAX_COOKIE_SIZE);
 
 		if (!delegate.isInWhiteList(cookie.getName()))
