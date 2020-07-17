@@ -10,7 +10,7 @@ import com.ajaxjs.framework.BaseModel;
  */
 public class UserCommonAuth extends BaseModel {
 	private static final long serialVersionUID = 8721396380768799894L;
-	
+
 	/**
 	 * 用户id
 	 */
@@ -19,8 +19,7 @@ public class UserCommonAuth extends BaseModel {
 	/**
 	 * 设置用户id
 	 * 
-	 * @param userId
-	 *            用户id
+	 * @param userId 用户id
 	 */
 	public void setUserId(Long userId) {
 		this.userId = userId;
@@ -43,8 +42,7 @@ public class UserCommonAuth extends BaseModel {
 	/**
 	 * 设置密码
 	 * 
-	 * @param password
-	 *            密码
+	 * @param password 密码
 	 */
 	public void setPassword(String password) {
 		this.password = password;
@@ -67,8 +65,7 @@ public class UserCommonAuth extends BaseModel {
 	/**
 	 * 设置数据字典：登录类型
 	 * 
-	 * @param loginType
-	 *            数据字典：登录类型
+	 * @param loginType 数据字典：登录类型
 	 */
 	public void setLoginType(Integer loginType) {
 		this.loginType = loginType;
@@ -91,8 +88,7 @@ public class UserCommonAuth extends BaseModel {
 	/**
 	 * 设置手机号码是否已验证
 	 * 
-	 * @param phone_verified
-	 *            手机号码是否已验证
+	 * @param phone_verified 手机号码是否已验证
 	 */
 	public void setPhone_verified(Integer phone_verified) {
 		this.phone_verified = phone_verified;
@@ -115,8 +111,7 @@ public class UserCommonAuth extends BaseModel {
 	/**
 	 * 设置身份证是否已验证（是否实名认证）
 	 * 
-	 * @param idCardNo_verified
-	 *            身份证是否已验证（是否实名认证）
+	 * @param idCardNo_verified 身份证是否已验证（是否实名认证）
 	 */
 	public void setIdCardNo_verified(String idCardNo_verified) {
 		this.idCardNo_verified = idCardNo_verified;
@@ -139,8 +134,7 @@ public class UserCommonAuth extends BaseModel {
 	/**
 	 * 设置邮箱是否已验证
 	 * 
-	 * @param email_verified
-	 *            邮箱是否已验证
+	 * @param email_verified 邮箱是否已验证
 	 */
 	public void setEmail_verified(Integer email_verified) {
 		this.email_verified = email_verified;
@@ -163,8 +157,7 @@ public class UserCommonAuth extends BaseModel {
 	/**
 	 * 设置注册ip
 	 * 
-	 * @param registerIp
-	 *            注册ip
+	 * @param registerIp 注册ip
 	 */
 	public void setRegisterIp(String registerIp) {
 		this.registerIp = registerIp;
@@ -187,8 +180,7 @@ public class UserCommonAuth extends BaseModel {
 	/**
 	 * 设置数据字典：注册时的登录类型
 	 * 
-	 * @param registerType
-	 *            数据字典：注册时的登录类型
+	 * @param registerType 数据字典：注册时的登录类型
 	 */
 	public void setRegisterType(String registerType) {
 		this.registerType = registerType;
@@ -211,8 +203,7 @@ public class UserCommonAuth extends BaseModel {
 	/**
 	 * 设置修改密码时间
 	 * 
-	 * @param updatePasswordDate
-	 *            修改密码时间
+	 * @param updatePasswordDate 修改密码时间
 	 */
 	public void setUpdatePasswordDate(java.util.Date updatePasswordDate) {
 		this.updatePasswordDate = updatePasswordDate;
@@ -235,8 +226,7 @@ public class UserCommonAuth extends BaseModel {
 	/**
 	 * 设置口令状态
 	 * 
-	 * @param status
-	 *            口令状态
+	 * @param status 口令状态
 	 */
 	public void setStatus(Integer status) {
 		this.status = status;
@@ -259,8 +249,7 @@ public class UserCommonAuth extends BaseModel {
 	/**
 	 * 设置唯一 id
 	 * 
-	 * @param uid
-	 *            唯一 id，通过“雪花算法”生成不重复 id
+	 * @param uid 唯一 id，通过“雪花算法”生成不重复 id
 	 */
 	public void setUid(Long uid) {
 		this.uid = uid;
@@ -283,8 +272,7 @@ public class UserCommonAuth extends BaseModel {
 	/**
 	 * 设置是否已删除
 	 * 
-	 * @param deleted
-	 *            是否已删除
+	 * @param deleted 是否已删除
 	 */
 	public void setDeleted(Integer deleted) {
 		this.deleted = deleted;

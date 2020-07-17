@@ -39,7 +39,10 @@ import com.ajaxjs.util.logger.LogHelper;
 public class ArticleController extends BaseController<Map<String, Object>> {
 	private static final LogHelper LOGGER = LogHelper.getLog(ArticleController.class);
 
-	@Resource("ArticleService")
+	@Resource
+	private TreeLikeService treeLikeService;
+	
+	@Resource
 	private ArticleService service;
 
 	@Override
@@ -85,7 +88,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@Override
 	public void prepareData(ModelAndView mv) {
 		int catalogId = getService().getDomainCatalogId();
-		Map<Long, BaseModel> map = CatalogService.idAskey(new CatalogService().findAllListByParentId(catalogId));
+		Map<Long, BaseModel> map = TreeLikeService.idAskey(treeLikeService.getAllChildren(catalogId));
 		mv.put("newsCatalogs", map);
 		mv.put(DOMAIN_CATALOG_ID, catalogId);
 

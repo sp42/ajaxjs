@@ -49,7 +49,7 @@ public class SecurityFilter implements FilterAction {
 		boolean isIn = isInList(str, blackList);
 
 		if (!isIn)
-			throw new SecurityException(String.format("地址 %s 已列入黑名单！", str));
+			throw new SecurityException(String.format("地址[%s]已列入黑名单！", str));
 
 		return isIn;
 	}
@@ -102,9 +102,8 @@ public class SecurityFilter implements FilterAction {
 			if (CommonUtil.isEmptyString(referer))
 				throw new SecurityException("请求没有 referer 字段不通过");
 
-			if (!referer.startsWith(request.getServerName())) {
+			if (!referer.startsWith(request.getServerName()))
 				throw new SecurityException("Referer:" + referer + " 来路检测不通过");
-			}
 		}
 	}
 
