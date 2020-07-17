@@ -21,11 +21,11 @@
 				padding:2% 3%;
 			}
 			.box{
-				margin:1% 0;
 				padding:1%;
 				background-color:#f9f9f9;
 				border: 1px solid lightgray;
 				box-sizing: border-box;
+				border-top-color: white;
 			}
 			.box h3{
 				margin:1% 0;
@@ -54,9 +54,9 @@
 		<script src=//unpkg.com/laue></script>
 	</head>
 	<body>
-		<div class="box main">
+		<div class="box main" style="border-top-color: lightgray;">
 			<div class="link">
-				<a href="https://tongji.baidu.com" target="_blank">访问百度统计网站</a> | <a href="javascript:showSetting();" >统计参数设定</a>
+				<a href="https://tongji.baidu.com" target="_blank">访问百度统计网站99</a> | <a href="javascript:showSetting();" >统计参数设定</a>
 			</div>
 			<h3>流量概要</h3>		
 			<table>
@@ -70,7 +70,7 @@
 			</table>
 		</div> 
 		
-		<div class="box chart" style="float:left; width: 67%;">
+		<div class="box chart" style="float:left; width: 70%;border-right-color: white;">
 			<h3>趋势分析</h3>		
 			起始时间：<aj-form-calendar-input field-name="startDate" :field-value="startDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
 			截至时间：<aj-form-calendar-input field-name="endDate" :field-value="endDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>
@@ -93,7 +93,7 @@
 			</div>
 		</div>
 		
-		<div class="box word" style="float:right; width: 30%;">
+		<div class="box word" style="float:left; width: 30%;">
 			<h3>Top10搜索词</h3>	
 
 			<table class="t-1">
@@ -121,7 +121,7 @@
 		
 		<div style="clear:both;"></div>
 		
-		<div class="box landingPage" style="float:left; width: 49%;">
+		<div class="box landingPage" style="float:left; width: 50%;border-right-color: white;">
 			<h3>Top10入口页面</h3>	
 
 			<table class="t-1">
@@ -134,7 +134,7 @@
 			</table>
 		</div>
 		
-		<div class="box visitPage" style="float:right; width: 49%;">
+		<div class="box visitPage" style="float:left; width: 50%;">
 			<h3>Top10受访页面</h3>	
 
 			<table class="t-1">

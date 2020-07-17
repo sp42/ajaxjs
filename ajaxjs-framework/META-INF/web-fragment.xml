@@ -30,8 +30,5 @@
 	</servlet-mapping>
 	<!-- // -->
 	
-	 <!-- 配置Session失效时间 -->  
-	<session-config>  
-	        <session-timeout>90</session-timeout>  
-	</session-config> 
+
 </web-fragment>

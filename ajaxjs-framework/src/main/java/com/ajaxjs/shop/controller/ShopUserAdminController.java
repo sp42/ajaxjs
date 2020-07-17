@@ -7,7 +7,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
-import com.ajaxjs.app.catalog.CatalogService;
+import com.ajaxjs.app.TreeLikeService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.mvc.ModelAndView;
@@ -40,7 +40,7 @@ public class ShopUserAdminController extends BaseController<User> {
 		LOGGER.info("后台-商城会员列表");
 		List<Map<String, Object>> userGroups = roleService.getDao().findList(null);
 		
-		mv.put("UserGroups", CatalogService.idAsKey(userGroups));
+		mv.put("UserGroups", TreeLikeService.idAsKey(userGroups));
 		mv.put("UserGroupsJSON", toJson(userGroups, false).replaceAll("\"", "'"));
 		page(mv, service.findPagedList(start, limit));
 

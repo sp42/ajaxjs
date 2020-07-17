@@ -27,7 +27,7 @@
 			</span>
 		</section>
 		<section class="iframe">
-			<iframe src="${ctx}/admin/home" name="iframepage"></iframe>
+			<iframe src="${ctx}/admin/home/" name="iframepage"></iframe>
 		</section>
 	    <script>
 	    

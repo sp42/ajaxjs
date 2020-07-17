@@ -204,20 +204,5 @@ public class CatalogService extends BaseService<Catalog> {
 		return map;
 	}
 
-	/**
-	 * 把列表（Map结构）转换为 map，以 id 作为键值。key 本来是 long，为照顾 el 转换为 int
-	 * 
-	 * @param list 实体列表
-	 * @return 以 id 作为键值的 map
-	 */
-	public static Map<Integer, Object> idAsKey(List<Map<String, Object>> list) {
-		if (CommonUtil.isNull(list))
-			return null;
-
-		Map<Integer, Object> map = new HashMap<>();
-		list.forEach(item -> map.put(new Integer(item.get("id").toString()), item));
-
-		return map;
-	}
 
 }
