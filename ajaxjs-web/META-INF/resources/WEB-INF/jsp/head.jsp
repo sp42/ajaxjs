@@ -41,7 +41,7 @@
 			* {
 				-webkit-tap-highlight-color: transparent; /* 很多 Android 浏览器的 a 链接有边框，这里取消它  */
 				-webkit-touch-callout: none; /* 在 iOS 浏览器里面，假如用户长按 a 标签，都会出现默认的弹出菜单事件 */
-				/* -webkit-user-select:none; */ /* !!! */
+				/* -webkit-user-select:none; */
 			}
 		}	
 	</style> 
@@ -87,7 +87,7 @@
 					saveFolder: '${empty param.output ? aj_allConfig.System.project_folder.replace('\\', '\\\\') : param.output}\\WebContent\\asset\\css' 
 				});
 				
-			}, 2000);
+			}, 1000);
 		</script> 
 	<%}%>
 <%}else { %>
@@ -105,10 +105,8 @@
 	   			imgPerfix : '${aj_allConfig.uploadFile.imgPerfix}', // 图片云存储前缀
 	   			commonAsset : '${commonAsset}'
    			};
-   			
    			Vue.prototype.BUS = new Vue();
    		}
-   		
    		Vue.use(aj.Vue);
    		
    		window.addEventListener('load', function() { // 页面渐显效果
@@ -117,5 +115,5 @@
    	</script>
 	<link rel="icon"		  type="image/x-icon" href="${ctx}/asset/images/favicon.ico" />
 	<link rel="shortcut icon" type="image/x-icon" href="${ctx}/asset/images/favicon.ico" />
-	<noscript><div align="center">如要享受本网站之服务请勿禁用浏览器 JavaScript 支持</div></noscript>
+	<noscript><div>如要享受本网站之服务请勿禁用浏览器 JavaScript 支持</div></noscript>
 	<%@ include file="vuejs-tag.jsp" %>

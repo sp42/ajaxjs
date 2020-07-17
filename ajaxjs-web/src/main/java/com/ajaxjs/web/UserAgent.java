@@ -95,36 +95,6 @@ public class UserAgent {
 	}
 
 	/**
-	 * 是否为安卓 56.x
-	 * 
-	 * @return true 表示为 Android 6.x 浏览器
-	 */
-	public boolean isAndroid_6() {
-		boolean is6 = Pattern.compile("Android\\s6", Pattern.CASE_INSENSITIVE).matcher(ua).find();
-		return isAndroid() && is6;
-	}
-
-	/**
-	 * 是否为安卓 5.x
-	 * 
-	 * @return true 表示为 Android 5.x 浏览器
-	 */
-	public boolean isAndroid_5() {
-		boolean is5 = Pattern.compile("Android\\s5", Pattern.CASE_INSENSITIVE).matcher(ua).find();
-		return isAndroid() && is5;
-	}
-
-	/**
-	 * 是否为安卓 4.x
-	 * 
-	 * @return true 表示为 Android 4.x 浏览器
-	 */
-	public boolean isAndroid_4() {
-		boolean is4 = Pattern.compile("Android\\s4", Pattern.CASE_INSENSITIVE).matcher(ua).find();
-		return isAndroid() && is4;
-	}
-
-	/**
 	 * 是否为 iPhone
 	 * 
 	 * @return true 表示为 iPhone Safari 浏览器

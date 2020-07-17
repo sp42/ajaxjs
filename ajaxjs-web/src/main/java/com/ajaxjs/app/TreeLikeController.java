@@ -61,7 +61,7 @@ public class TreeLikeController extends BaseController<Catalog> {
 
 	@PUT
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("{id}")
+	@Path(ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
 	public String update(@PathParam(ID) Long id, Catalog entity) {
@@ -70,7 +70,7 @@ public class TreeLikeController extends BaseController<Catalog> {
 
 	@DELETE
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("{id}")
+	@Path(ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String delete(@PathParam(ID) Long id) {
 		return delete(id, new Catalog());

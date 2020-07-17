@@ -51,8 +51,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	@Path(LIST)
 	@MvcFilter(filters = { DataBaseFilter.class })
 //	@Authority(filter = DataBaseFilter.class, value = 1)
-	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit,
-			@QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		page(mv, service.findPagedList(start, limit, null));
 		mv.put("DICT", Attachment_pictureService.DICT);
 
@@ -87,8 +86,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("upload/{id}/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String imgUpload(MvcRequest request, @PathParam(ID) Long owenerId, @QueryParam(CATALOG_ID) int catalogId)
-			throws IOException {
+	public String imgUpload(MvcRequest request, @PathParam(ID) Long owenerId, @QueryParam(CATALOG_ID) int catalogId) throws IOException {
 		LOGGER.info("上传图片");
 
 		UploadFileInfo info = new UploadFileInfo();
@@ -131,8 +129,7 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 			return jsonNoOk("上传失败！");
 	}
 
-	public String imgUpload_Old(MvcRequest request, @PathParam(ID) Long owenerId, @QueryParam(CATALOG_ID) int catalogId)
-			throws IOException {
+	public String imgUpload_Old(MvcRequest request, @PathParam(ID) Long owenerId, @QueryParam(CATALOG_ID) int catalogId) throws IOException {
 		LOGGER.info("上传图片");
 		final UploadFileInfo info = uploadByConfig(request);
 

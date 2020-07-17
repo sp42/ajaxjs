@@ -148,7 +148,7 @@ public class UploadFile extends HttpServletRequestWrapper {
 	 * @return 文件长度
 	 */
 	private int getLength(int start) {
-		// 取得数据分割字符串，数据分割线开始位置boundary=---------------------------
+		// 取得数据分割字符串，数据分割线开始位置 boundary=---------------------------
 		String boundary = CommonUtil.regMatch("boundary=((?:-|\\w)+)$", getContentType(), 1);
 		int found = IoHelper.byteIndexOf(dataBytes, boundary.getBytes(), start);
 

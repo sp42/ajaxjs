@@ -23,8 +23,6 @@ public interface MvcConstant {
 	 */
 	public static final String PAGE_RESULT = "PageResult";
 
-	public static final String PAGE = "page";
-	
 	public static final String START = "start";
 
 	public static final String LIMIT = "limit";

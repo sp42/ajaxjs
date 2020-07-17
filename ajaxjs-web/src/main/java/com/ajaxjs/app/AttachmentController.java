@@ -1,6 +1,7 @@
-package com.ajaxjs.app.attachment;
+package com.ajaxjs.app;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -13,14 +14,17 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.framework.BaseController;
+import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.mvc.filter.MvcFilter;
+import com.ajaxjs.sql.annotation.TableName;
+import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.IBaseService;
+import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.util.ioc.Component;
-import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.web.UploadFileInfo;
@@ -34,16 +38,38 @@ import com.ajaxjs.web.UploadFileInfo;
 public class AttachmentController extends BaseController<Attachment> {
 	private static final LogHelper LOGGER = LogHelper.getLog(AttachmentController.class);
 
-	@Resource("AttachmentService")
-	private AttachmentService service;
+	@TableName(value = "attachment", beanClass = Attachment.class)
+	public static interface AttachmentDao extends IBaseDao<Attachment> {
+	}
+
+	public static AttachmentDao dao = new Repository().bind(AttachmentDao.class);
+
+	public static class AttachmentService extends BaseService<Attachment> {
+		{
+			setUiName("通用附件");
+			setShortName("attachment");
+			setDao(dao);
+		}
+
+		/**
+		 * 根据实体 uid 找到其所拥有的图片
+		 * 
+		 * @param owner 实体 uid
+		 * @return 图片列表
+		 */
+		public List<Attachment> findByOwner(Long uid) {
+			return dao.findList(by("owner", uid));
+		}
+	}
+
+	private AttachmentService service = new AttachmentService();
 
 	@GET
 	@MvcFilter(filters = { DataBaseFilter.class })
-	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId,
-			ModelAndView mv) {
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		LOGGER.info("附件列表-前台");
 		prepareData(mv);
-		
+
 		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.ON_LINE, true));
 	}
 
@@ -74,8 +100,7 @@ public class AttachmentController extends BaseController<Attachment> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("upload/{id}/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String upload(MvcRequest request, @PathParam(ID) Long owenerId, @QueryParam(CATALOG_ID) int catalogId)
-			throws IOException {
+	public String upload(MvcRequest request, @PathParam(ID) Long owenerId, @QueryParam(CATALOG_ID) int catalogId) throws IOException {
 		LOGGER.info("上传附件");
 		// TODO 文件类型限制
 		final UploadFileInfo info = uploadByConfig(request);
@@ -101,11 +126,10 @@ public class AttachmentController extends BaseController<Attachment> {
 				@SuppressWarnings("unused")
 				public Long newlyId = _newlyId;
 			});
-
 		} else
 			return jsonNoOk("上传失败！");
 	}
-	
+
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("getListByOwnerUid/{id}")
