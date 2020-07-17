@@ -70,7 +70,7 @@ public class Pay {
 		data.put("appid", ConfigService.getValueAsString("mini_program.appId"));
 		data.put("spbill_create_ip", ip);
 		data.put("openid", OrderService.dao.findUserOpenId(userId)); // 小程序内调用登录接口，获取到用户的 openid
-		data.put("sign", generateSignature(data, ConfigService.getValueAsString("shop.payment.wx.apiSecret")));
+		data.put("sign", generateSignature(data, ConfigService.get("shop.payment.wx.apiSecret")));
 
 		PerpayReturn result = sendUnifiedOrder(data);// 商户 server 调用支付统一下单
 
@@ -85,7 +85,7 @@ public class Pay {
 			map.put("package", "prepay_id=" + result.getPrepay_id());
 			map.put("signType", "MD5");
 
-			String paySign = generateSignature(map, ConfigService.getValueAsString("shop.payment.wx.apiSecret"));
+			String paySign = generateSignature(map, ConfigService.get("shop.payment.wx.apiSecret"));
 			map.put("paySign", paySign);
 			map.put("orderInfoId", orderInfo.getId() + ""); // 新订单 id
 

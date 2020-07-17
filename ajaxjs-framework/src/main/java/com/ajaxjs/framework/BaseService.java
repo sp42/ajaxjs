@@ -40,6 +40,7 @@ public abstract class BaseService<T> extends QueryTools implements IBaseService<
 	@Override
 	public Long create(T bean) {
 		initCreate(bean);
+		System.out.println(dao);
 		return dao.create(bean);
 	}
 
@@ -227,5 +228,14 @@ public abstract class BaseService<T> extends QueryTools implements IBaseService<
 	 */
 	public static String betweenCreateDate(String sql) {
 		return betweenCreateDate("createDate", MvcRequest.getHttpServletRequest()).apply(sql);
+	}
+	/**
+	 * 时间范围的查询
+	 * 
+	 * @param sql 输入的SQL
+	 * @return 修改后的 SQL
+	 */
+	public static String betweenCreateDateWithE(String sql) {
+		return betweenCreateDate("e.createDate", MvcRequest.getHttpServletRequest()).apply(sql);
 	}
 }

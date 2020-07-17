@@ -48,7 +48,7 @@
 			<tfoot>
 				<tr>
 					<td colspan="8">
-						<aj-form-betweenDate></aj-form-betweenDate>
+						<aj-form-between-date :is-ajax="false"></aj-form-between-date>
 					</td>
 				</tr>
 			</tfoot>

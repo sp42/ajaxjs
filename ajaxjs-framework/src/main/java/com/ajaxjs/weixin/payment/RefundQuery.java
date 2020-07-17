@@ -129,30 +129,31 @@ public class RefundQuery extends BaseResponse {
 				if (others.containsKey("coupon_refund_fee_" + i)) {
 					refund.setCouponRefundFee(Integer.valueOf(others.get("coupon_refund_fee_" + i).toString()));
 				}
+				
 				if (others.containsKey("coupon_refund_count_" + i)) {
 					int count = Integer.valueOf(others.get("coupon_refund_count_" + i).toString());
 					refund.setCouponRefundCount(count);
 					List<CouponRefund> couponRefunds = new ArrayList<>();
+
 					for (int j = 0; j < count; j++) {
 						CouponRefund couponRefund = new CouponRefund();
-						if (others.containsKey("coupon_refund_id_" + i + "_" + j)) {
+						if (others.containsKey("coupon_refund_id_" + i + "_" + j))
 							couponRefund.setCouponRefundId((String) others.get("coupon_refund_id_" + i + "_" + j));
-						}
-						if (others.containsKey("coupon_refund_fee_" + i + "_" + j)) {
+
+						if (others.containsKey("coupon_refund_fee_" + i + "_" + j))
 							couponRefund.setCouponRefundFee(Integer.valueOf(others.get("coupon_refund_fee_" + i + "_" + j).toString()));
-						}
 
 						couponRefunds.add(couponRefund);
 					}
 
 					refund.setCouponRefunds(couponRefunds);
 				}
-				if (others.containsKey("refund_status_" + i)) {
+				
+				if (others.containsKey("refund_status_" + i))
 					refund.setRefundStatus((String) others.get("refund_status_" + i));
-				}
-				if (others.containsKey("refund_recv_accout_" + i)) {
+
+				if (others.containsKey("refund_recv_accout_" + i))
 					refund.setRefundReceiveAccount((String) others.get("refund_recv_accout_" + i));
-				}
 
 				refunds.add(refund);
 			}
@@ -161,7 +162,6 @@ public class RefundQuery extends BaseResponse {
 	}
 
 	public class Refund {
-
 		private String outRefundNo;
 		private String refundId;
 		private String refundChannel;

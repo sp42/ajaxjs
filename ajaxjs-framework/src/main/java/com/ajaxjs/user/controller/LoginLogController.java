@@ -56,7 +56,7 @@ public class LoginLogController extends BaseController<UserLoginLog> {
 		}
 
 		public PageResult<UserLoginLog> findPagedList(int start, int limit) {
-			return findPagedList(start, limit, byAny().andThen(BaseService::betweenCreateDate).andThen(UserService.byUserId));
+			return findPagedList(start, limit, byAny().andThen(BaseService::betweenCreateDateWithE).andThen(UserService.byUserId));
 		}
 
 		public List<UserLoginLog> findListByUserId(long userId) {

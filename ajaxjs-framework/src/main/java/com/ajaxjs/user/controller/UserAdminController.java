@@ -53,9 +53,20 @@ public class UserAdminController extends BaseController<User> {
 
 		mv.put("SexGender", UserConstant.SEX_GENDER);
 		mv.put("UserGroups", CatalogService.idAsKey(userGroups));
+		mv.put("UserGroupsJson", toJson(CatalogService.idAsKey(userGroups), false));
 		mv.put("UserGroupsJSON", toJson(userGroups, false).replaceAll("\"", "'"));
 
 		return page(mv, service.findPagedList(start, limit), "user/user-admin-list");
+	}
+
+	@GET
+	@Path("listJson")
+	@Produces(MediaType.APPLICATION_JSON)
+	@MvcFilter(filters = DataBaseFilter.class)
+	public String listJson(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
+		LOGGER.info("后台-会员列表-json");
+
+		return toJson(service.findPagedList(start, limit));
 	}
 
 	@GET

@@ -10,7 +10,7 @@ import com.ajaxjs.sql.orm.IBaseDao;
 
 @TableName(value = "general_catalog", beanClass = Catalog.class)
 public interface CatalogDao extends IBaseDao<Catalog> {
-	public final static String PATH_LIKE_MYSQL	  = "SELECT *  FROM general_catalog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catalog WHERE id = ?  ) , '%'))";
+	public final static String PATH_LIKE_MYSQL = "SELECT * FROM general_catalog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catalog WHERE id = ?  ) , '%'))";
 	/**
 	 * 供其它实体关联时候用，可以获取下级所有子分类
 	 */
@@ -27,8 +27,7 @@ public interface CatalogDao extends IBaseDao<Catalog> {
 	 * @param pId
 	 * @return
 	 */
-	@Select("SELECT c.id, c.name, c.path, "
-			+ " (SELECT GROUP_CONCAT(id, '|', name ,'|' ,`path`) FROM ${tableName} WHERE `path` REGEXP CONCAT(c.path, '/[0-9]+$')) AS sub\n "
+	@Select("SELECT c.id, c.name, c.path, " + " (SELECT GROUP_CONCAT(id, '|', name ,'|' ,`path`) FROM ${tableName} WHERE `path` REGEXP CONCAT(c.path, '/[0-9]+$')) AS sub\n "
 			+ "FROM ${tableName} c WHERE pid = ?;")
 	public List<Map<String, Object>> getListAndSubByParentId(int pId);
 
@@ -39,8 +38,7 @@ public interface CatalogDao extends IBaseDao<Catalog> {
 	 * @return
 	 */
 	@Delete(value = "DELETE FROM ${tableName} WHERE id in ( SELECT n.id FROM ("
-			+ "(SELECT id FROM ${tableName} WHERE `path` LIKE ( CONCAT ( (SELECT `path` FROM general_catalog WHERE id = ?) , '%')))) AS n)", 
-			sqliteValue = "DELETE FROM ${tableName} "
+			+ "(SELECT id FROM ${tableName} WHERE `path` LIKE ( CONCAT ( (SELECT `path` FROM general_catalog WHERE id = ?) , '%')))) AS n)", sqliteValue = "DELETE FROM ${tableName} "
 					+ "WHERE id in (SELECT id FROM ${tableName} WHERE \"path\" LIKE (( SELECT \"path\" FROM {tableName} WHERE id = ?) || '%'));")
 	public boolean deleteAll(int id);
 
@@ -52,6 +50,5 @@ public interface CatalogDao extends IBaseDao<Catalog> {
 	/**
 	 * 关联分类表以获取分类名称，即增加了 catalogName 字段。另外如果前台不需要显示的话，只是后台的话，可以用 map 显示
 	 */
-	public final static String SELECT_CATALOGNAME = "SELECT e.*, gc.name catalogName FROM ${tableName} e"
-			+ LEFT_JOIN_CATALOG + WHERE_REMARK_ORDER;
+	public final static String SELECT_CATALOGNAME = "SELECT e.*, gc.name catalogName FROM ${tableName} e" + LEFT_JOIN_CATALOG + WHERE_REMARK_ORDER;
 }
