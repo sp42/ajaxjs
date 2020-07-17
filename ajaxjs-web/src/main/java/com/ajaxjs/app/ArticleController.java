@@ -15,7 +15,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-
+import com.ajaxjs.app.attachment.AttachmentService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.BaseService;

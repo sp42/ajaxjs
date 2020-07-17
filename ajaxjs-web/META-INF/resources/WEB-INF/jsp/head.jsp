@@ -118,4 +118,4 @@
 	<link rel="icon"		  type="image/x-icon" href="${ctx}/asset/images/favicon.ico" />
 	<link rel="shortcut icon" type="image/x-icon" href="${ctx}/asset/images/favicon.ico" />
 	<noscript><div align="center">如要享受本网站之服务请勿禁用浏览器 JavaScript 支持</div></noscript>
-	<%@ include file="/vuejs-tag.jsp" %>
+	<%@ include file="vuejs-tag.jsp" %>
