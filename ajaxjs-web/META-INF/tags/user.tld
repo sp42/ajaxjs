@@ -8,18 +8,17 @@
 	<uri>/ajaxjs_user</uri>
 	<info>配置</info>
 	<description>用户自定义标签库</description>
-	 
 
 	<tag>
 		<name>logined</name>
-		<tag-class>com.ajaxjs.framework.view.UserLogined</tag-class>
+		<tag-class>com.ajaxjs.user.view.UserLogined</tag-class>
 		<description>會員已经登录时</description>
 		<body-content>scriptless</body-content>
 	</tag>
-	
+
 	<tag>
 		<name>notLogined</name>
-		<tag-class>com.ajaxjs.framework.view.UserNotLogined</tag-class>
+		<tag-class>com.ajaxjs.user.view.UserNotLogined</tag-class>
 		<description>會員没有登录时</description>
 		<body-content>scriptless</body-content>
 	</tag>

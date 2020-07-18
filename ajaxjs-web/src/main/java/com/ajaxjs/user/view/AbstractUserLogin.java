@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.view;
+package com.ajaxjs.user.view;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspContext;

@@ -13,18 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.framework.view;
+package com.ajaxjs.web.view;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.JspContext;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.SimpleTagSupport;
-
+import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.map.MapTool;
 
@@ -33,19 +26,7 @@ import com.ajaxjs.util.map.MapTool;
  * 
  * @author sp42 frank@ajaxjs.com
  */
-public class PageTag extends SimpleTagSupport {
-	private String queryString;
-
-	private int totalPage;
-
-	@Override
-	public void doTag() throws JspException, IOException {
-		JspContext cxt = getJspContext();
-		cxt.setAttribute("getParams_without_start", getParams_without("start", queryString));
-		cxt.setAttribute("getParams_without_asMap", getParams_without_asMap("limit", queryString));
-		cxt.setAttribute("page_jumpTo", jumpPage(totalPage));
-	}
-
+public class PageTag  {
 	/**
 	 * 对某段 URL 参数剔除其中的一个。
 	 * 
@@ -68,7 +49,7 @@ public class PageTag extends SimpleTagSupport {
 	}
 
 	/**
-	 * 对某段 URL 参数剔除其中的一个。但是返回 map。
+	 * 保持状态，对当前的参数记录，不受分页的影响.对某段 URL 参数剔除其中的一个。但是返回 map。
 	 * 
 	 * @param withoutParam 不需要的那个参数
 	 * @param queryString  通常由 request.getQueryString() 或
@@ -83,74 +64,10 @@ public class PageTag extends SimpleTagSupport {
 
 		// if(queryString.startsWith("&"))
 		queryString = queryString.replaceFirst("&", "");// 去掉第一个无用的 &
+
 		return MapTool.toMap(queryString.split("&"), v -> v);
 	}
 
-	/**
-	 * 保持状态，对当前的参数记录，不受分页的影响
-	 * 
-	 * @deprecated
-	 * @param request
-	 * @param params
-	 * @return URL 地址
-	 */
-	public static String appendParams(HttpServletRequest request, Map<String, String> params) {
-		Map<String, String[]> map = request.getParameterMap();
-
-		List<String> list = new ArrayList<>();
-
-		for (String name : map.keySet()) {
-			String[] values = map.get(name); // 即使是 key 都变成 value 了
-
-			// 如果要重新指定参数
-			if (params != null && params.size() > 0) {
-				for (int i = 0; i < values.length; i++) {
-					String v = values[i];
-					if (params.containsKey(v)) {
-						values[i] = params.get(v);
-					}
-				}
-			}
-
-			String aa;
-			if (name.equals("start")) {
-				continue;
-			} else if (values.length == 1) {
-				aa = String.join(name + "=", values);
-			} else {
-				aa = name + "=" + String.join("&" + name + "=", values);
-			}
-
-			list.add(aa);
-		}
-
-		String s = String.join("&", list);
-		return s;
-	}
-
-	public int[] jumpPage(int totalPage) {
-		return new int[totalPage];
-	}
-
-	public static String arrayJoin(String[] arr) {
-		return String.join(",", arr);
-	}
-
-	public String getQueryString() {
-		return queryString;
-	}
-
-	public void setQueryString(String queryString) {
-		this.queryString = queryString;
-	}
-
-	public int getTotalPage() {
-		return totalPage;
-	}
-
-	public void setTotalPage(int totalPage) {
-		this.totalPage = totalPage;
-	}
 
 	/**
 	 * 
@@ -171,5 +88,30 @@ public class PageTag extends SimpleTagSupport {
 		args[0] = start;
 
 		return args;
+	}
+
+	static String a = "<a href=\"?start=%s\">%s</a>";
+
+	public static String rendererBtns(PageResult<?> result) {
+		String[] html = new String[2];
+
+		if (result.getStart() > 0)
+			html[0] = String.format(a, result.getStart() - result.getPageSize(), "上一页");
+
+		if (result.getStart() + result.getPageSize() < result.getTotalCount())
+			html[1] = String.format(a, result.getStart() + result.getPageSize(), "下一页");
+
+		boolean is0 = !CommonUtil.isEmptyString(html[0]), is1 = !CommonUtil.isEmptyString(html[1]);
+		
+		if (is0 && is1)
+			return String.join("&nbsp;&nbsp; | &nbsp;&nbsp;", html);
+		
+		if (is0)
+			return html[0];
+		
+		if (is1)
+			return html[1];
+
+		return "ERROR";
 	}
 }

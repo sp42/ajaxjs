@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.view;
+package com.ajaxjs.framework.config;
 
 import java.io.IOException;
 import java.util.List;
@@ -9,7 +9,6 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-import com.ajaxjs.framework.config.SiteStruService;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.map.ListMap;
 
@@ -34,10 +33,12 @@ public class SiteStruTag extends SimpleTagSupport {
 	 * 列表标签
 	 */
 	private final static String LI = "<li%s><a href=\"%s/\">%s</a></li>";
+
 	/**
 	 * 连接后面没有斜杠
 	 */
 	private final static String LI_NO_END = "<li%s><a href=\"%s\">%s</a></li>";
+
 	private final static String LI_EXT = "<li%s><a href=\"%s/\">%s</a><ul>%s</ul></li></li>";
 
 	@Override

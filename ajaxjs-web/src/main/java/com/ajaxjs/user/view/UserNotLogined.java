@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.view;
+package com.ajaxjs.user.view;
 
 import java.io.IOException;
 

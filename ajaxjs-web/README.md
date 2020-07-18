@@ -37,33 +37,9 @@ Maven 坐标：
 
 一引用 ajaxjs-web.jar 包，将为您的项目呈现如下特性。
 
-自定义 404/500 页
----------------------
-通过 Servlet 3.0 的 web-fragment 静态资源打包功能实现美化 404、500 页面。默认效果如下：
 
-![输入图片说明](https://images.gitee.com/uploads/images/2019/0615/221036_09ca6c0a_784269.png)
 
-JAR 包里面的 META-INF/resources/ 为约定好的固定目录，web-fragment.xml 也是约定好的固定文件名，顾名思义 web.xml 的碎片（一部分）。 META-INF/resources/ 即 Web 虚拟目录的根目录。
 
-![](https://images.gitee.com/uploads/images/2019/0615/221447_99fb7075_784269.png)
-
-自定义标签库
-----------------
-学过 JSTL 都会熟悉这个，纯粹“轮子”一个但只有 7 个 SimpleTagSupport 类和一个 tld 配置文件。源码在 com.ajaxjs.mvc.view。提供下列标签：
-
-- if 条件判断逻辑
-- choose 条件判断逻辑，类似 if……else……逻辑的判断
-- foreach 迭代逻辑
-- 日期格式化标签
-
-例子：
-
-```
-Hello,
-<c:if test="${bar > 10}">
-    World
-</c:if>
-```
 
 MVC
 ----------

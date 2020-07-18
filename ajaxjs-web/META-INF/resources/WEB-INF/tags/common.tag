@@ -87,7 +87,6 @@
 					</li>
 				</c:foreach>
 			</ul>
-			<%@include file="/WEB-INF/jsp/pager_tag.jsp"%>
 		</div>
 	</c:if> 
 </c:if>

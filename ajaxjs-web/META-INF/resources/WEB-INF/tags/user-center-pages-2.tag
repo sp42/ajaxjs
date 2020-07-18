@@ -40,9 +40,3 @@
 		<button onclick="history.back();">返 回</button>
 	</div>
 </c:if>
-
-<c:if test="${type == 'profile'}">	
-</c:if>
-
-<c:if test="${type == 'profile'}">	
-</c:if>
