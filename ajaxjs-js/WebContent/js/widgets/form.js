@@ -3,7 +3,6 @@
  * 表單控件
  */
 
-
 // 图片验证码
 Vue.component('aj-page-captcha', {
 	props: {
@@ -11,23 +10,14 @@ Vue.component('aj-page-captcha', {
 			type: String, // 生成图片验证码地址
 			required: false,
 		},
-		
 		fieldName: {	// 提交的字段名
-			type: String,
-			required: false,
-			default : 'captcha'
+			type: String, required: false, default : 'captcha'
 		}
 	},
-	template: 
-		'<table class="aj-page-captcha"><tr>\
-			<td><input type="text" :name="fieldName" placeholder="输入右侧验证码" data-regexp="integer" required autocomplete="off" size="10" /></td>\
-			<td style="vertical-align: top;">\
-				<img :src="imgSrc || ajResources.ctx + \'/Captcha\'" @click="onClk($event);" title="点击刷新图片" />\
-			</td>\
-		</tr></table>',
+	template: '#aj-page-captcha',
 	methods: {
-		onClk(e) {
-			var img = e.target;
+		onClk($event) {
+			var img = $event.target;
 			img.src = img.src.replace(/\?\d+$/, '') + '?' + new Date().valueOf();
 		},
 		refreshCode(){
@@ -51,32 +41,7 @@ Vue.component('aj-form-calendar', {
 	props: {
 		showTime: false
 	},
-	template: 
-		'<div class="aj-form-calendar">\
-			<div class="selectYearMonth">\
-				<a href="###" @click="getDate(\'preYear\')" class="preYear" title="上一年">&lt;</a> \
-				<select @change="setMonth($event)" v-model="month">\
-					<option value="1">一月</option><option value="2">二月</option><option value="3">三月</option><option value="4">四月</option>\
-					<option value="5">五月</option><option value="6">六月</option><option value="7">七月</option><option value="8">八月</option>\
-					<option value="9">九月</option><option value="10">十月</option><option value="11">十一月</option><option value="12">十二月</option>\
-				</select>\
-				<a href="###" @click="getDate(\'nextYear\')" class="nextYear" title="下一年">&gt;</a>\
-			</div>\
-			<div class="showCurrentYearMonth">\
-				<span class="showYear">{{year}}</span>/<span class="showMonth">{{month}}</span>\
-			</div>\
-			<table>\
-				<thead>\
-					<tr><td>日</td><td>一</td><td>二</td><td>三</td><td>四</td><td>五</td><td>六</td></tr>\
-				</thead>\
-				<tbody @click="pickDay($event);"></tbody>\
-			</table>\
-			<div v-if="showTime">\
-				时 <select class="hour aj-select"><option v-for="n in 24">{{n}}</option></select> \
-				分 <select class="minute aj-select"><option v-for="n in 61">{{n - 1}}</option></select>\
-				<a href="#" @click="pickupTime($event)">选择时间</a>\
-			</div>\
-		</div>',
+	template: '#aj-form-calendar',
 	mounted () {
 		 this.$options.watch.date.call(this);
 	},
@@ -87,7 +52,6 @@ Vue.component('aj-form-calendar', {
 			this.render();
 		}
 	},
-
 	methods : {
 		// 画日历
 		render () {
@@ -156,8 +120,8 @@ Vue.component('aj-form-calendar', {
 					break;
 			}
 		},
-		setMonth(e) {
-			this.getDate('setMonth', Number(e.target.selectedOptions[0].value));
+		setMonth($event) {
+			this.getDate('setMonth', Number($event.target.selectedOptions[0].value));
 		},
 		// 获取空白的非上月天数 + 当月天数
 		getDateArr() {
@@ -173,12 +137,12 @@ Vue.component('aj-form-calendar', {
 			return arr;
 		},
 		// 获取日期
-		pickDay(e) {
-			var el = e.target, date = el.title;
+		pickDay($event) {
+			var el = $event.target, date = el.title;
 			this.$emit('pick-date', date);
 			return date;
 		},
-		pickupTime(e) {
+		pickupTime($event) {
 			var time = this.$el.$('.hour').selectedOptions[0].value + ':' + this.$el.$('.minute').selectedOptions[0].value;
 			this.$emit('pick-time', time);
 		},
@@ -202,32 +166,26 @@ Vue.component('aj-form-calendar-input', {
 	},
 	props: {
 		fieldName: { // 表单 name，字段名
-			type: String,
-			required: true
+			type: String, required: true
 		},
 		fieldValue: {
 			type: String,// 表单值，可选的
-			required: false,
-			default : ''
+			required: false, default : ''
 		},
 		dateOnly: { // 是否只处理日期，不考虑时间
 			type: Boolean,// 表单值，可选的
-			required: false,
-			default: true
+			required: false, default: true
 		},
 		showTime: false,
-		positionFixed : Boolean // 是否采用固定定位
+		positionFixed: Boolean, // 是否采用固定定位
+		placeholder: {// 提示文字
+			type: String, default: '请输入日期'
+		}
 	},
-	template: 
-		'<div class="aj-form-calendar-input" @mouseover="onMouseOver($event)">\
-			<div class="icon fa fa-calendar"></div>\
-			<input placeholder="请输入日期" :name="fieldName" :value="date + (dateOnly ? \'\' : \' \' + time)" type="text" autocomplete="off" class="aj-input" />\
-			<aj-form-calendar ref="calendar" :show-time="showTime" @pick-date="recEvent" @pick-time="recTimeEvent"></aj-form-calendar>\
-		</div>',
+	template: '#aj-form-calendar-input',
 	mounted() {
 		if(this.positionFixed) 
 			this.$el.$('.aj-form-calendar').classList.add('positionFixed');
-		
 	    // 2012-07-08
 	    // firefox中解析 new Date('2012/12-23') 不兼容，提示invalid date 无效的日期
 		// Chrome下可以直接将其格式化成日期格式，且时分秒默认为零
@@ -245,13 +203,48 @@ Vue.component('aj-form-calendar-input', {
 		recEvent(date) {
 			this.date = date.trim();
 		},
-		onMouseOver(e) {
+		onMouseOver($event) {
 			if(this.positionFixed) {
-				var el = e.currentTarget;
+				var el = $event.currentTarget;
 				var b = el.getBoundingClientRect();
 				var c = this.$el.$('.aj-form-calendar');
 					c.style.top  = (b.top + el.clientHeight - 0) + 'px';
 					c.style.left = ((b.left - 0) + 0) +  'px';
+			}
+		}
+	}
+});
+
+Vue.component('aj-form-between-date', {
+	template: '#aj-form-between-date',
+	props: {
+		isAjax:{ // 是否 AJAX 模式
+			type: Boolean, default: true
+		}
+	},
+	methods: {
+		valid(e) {
+			var start = this.$el.$('input[name=startDate]').value, end = this.$el.$('input[name=endDate]').value;
+			
+			if(!start||!end) {
+				aj.showOk("输入数据不能为空");					
+				e.preventDefault();
+				return;
+			}
+			
+			if(new Date(start) > new Date(end)) {
+				aj.showOk("起始日期不能晚于结束日期");					
+				e.preventDefault();
+				return;
+			}
+			
+			if(this.isAjax) {
+				e.preventDefault();
+				var grid = this.$parent.$parent;
+				aj.apply(grid.$refs.pager.baseParam, {
+					startDate: start, endDate: end
+				});
+				grid.reload();
 			}
 		}
 	}
@@ -847,29 +840,6 @@ aj.form.betweenDate = function(el) {
 	});
 }
 
-Vue.component('aj-form-betweenDate', {
-	template: '<form action="." method="GET" class="dateRange" @submit="valid($event)">\
-		起始时间：<aj-form-calendar-input field-name="startDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>\
-		截至时间：<aj-form-calendar-input field-name="endDate" :date-only="true" :position-fixed="true"></aj-form-calendar-input>\
-		<button class="aj-btn">查询</button>\
-	</form>',
-	methods: {
-		valid(e) {
-			var start = this.$el.$('input[name=startDate]').value, end = this.$el.$('input[name=endDate]').value;
-			
-			if(!start||!end) {
-				aj.showOk("输入数据不能为空");					
-				e.preventDefault();
-			}
-			
-			if(new Date(start) > new Date(end)) {
-				aj.showOk("起始日期不能晚于结束日期");					
-				e.preventDefault();
-			}
-		}
-	}
-});
-
 /**
  * 上传组件
  */
@@ -897,15 +867,13 @@ Vue.component('aj-xhr-upload', {
 		};
 	},
 	props : {
-		action: {
-			type: String, // 上传路径
-			required: true
+		action: {			// 上传路径
+			type: String,  required: true
 		}, 		
 		fieldName: String, 	// input name 字段名
 	    limitSize: Number,
-	    hiddenField: {			// 上传后的文件名保存在这个隐藏域之中
-	    	type: String,
-	    	default: null
+	    hiddenField: {		// 上传后的文件名保存在这个隐藏域之中
+	    	type: String, default: null
 	    },
 	    hiddenFieldValue: String,
 	    limitFileType: String,
@@ -916,32 +884,15 @@ Vue.component('aj-xhr-upload', {
 	    imgMaxHeight: {type : Number, default : 1680},
 	    buttonBottom: Boolean  // 上传按钮是否位于下方
 	},
-	template : 
-		'<div class="aj-xhr-upload" :style="{display: buttonBottom ? \'inherit\': \'flex\'}">\
-			<input v-if="hiddenField" type="hidden" :name="hiddenField" :value="hiddenFieldValue" />\
-			<div v-if="isImgUpload">\
-				<a :href="imgPlace" target="_blank">\
-					<img class="upload_img_perview" :src="(isFileSize && isExtName && imgBase64Str) ? imgBase64Str : imgPlace" />\
-				</a>\
-			</div>\
-			<div class="pseudoFilePicker">\
-				<label :for="\'uploadInput_\' + radomId"><div><div>+</div>点击选择{{isImgUpload ? \'图片\': \'文件\'}}</div></label>\
-			</div>\
-			<input type="file" :name="fieldName" class="hide" :id="\'uploadInput_\' + radomId" @change="onUploadInputChange($event)" :accept="isImgUpload ? \'image/*\' : accpectFileType" />\
-			<div v-if="!isFileSize || !isExtName">{{errMsg}}</div>\
-			<div v-if="isFileSize && isExtName">\
-				{{fileName}}<br />\
-				<button @click.prevent="doUpload();" style="min-width:110px;">{{progress && progress !== 100 ? \'上传中 \' + progress + \'%\': \'上传\'}}</button>\
-			</div>\
-		</div>',
+	template: '#aj-xhr-upload',
 	methods: {
 		getFileName() {
 			var v = this.$el.$('input[type=file]').value;
 			var arr = v.split('\\');
 			this.fileName = arr.pop().trim();
 		},
-		onUploadInputChange(e) {
-			var fileInput = e.target;
+		onUploadInputChange($event) {
+			var fileInput = $event.target;
 			var ext = fileInput.value.split('.').pop(); // 扩展名
 			if(!fileInput.files || !fileInput.files[0]) return;
 			
@@ -1093,9 +1044,7 @@ Vue.component('aj-xhr-upload', {
 		        }
 		    }
 		    
-		    return {
-		    	targetWidth : targetWidth, targetHeight : targetHeight
-		    };
+		    return {targetWidth : targetWidth, targetHeight : targetHeight};
 		},
 		getPhotoOrientation(img) {
 		    var orient;
@@ -1165,17 +1114,7 @@ Vue.component('attachment-picture-list', {
 			pics: []
 		};
 	},
-	template: '<table width="100%"><tr><td>\
-				<div class="label">相册图：</div>\
-				<ul>\
-					<li v-for="pic in pics" style="float:left;margin-right:1%;text-align:center;">\
-						<a :href="picCtx + pic.path" target="_blank"><img :src="picCtx + pic.path" style="max-width: 100px;max-height: 100px;" /></a><br />\
-						<a href="###" @click="delPic(pic.id);">删 除</a>\
-					</li>\
-				</ul>\
-			</td><td>\
-			<aj-xhr-upload ref="attachmentPictureUpload" :action="uploadUrl" :is-img-upload="true" :img-place="blankBg"></aj-xhr-upload>\
-			</td></tr></table>',
+	template: '#attachment-picture-list',
 	mounted() {
 		this.loadAttachmentPictures();
 		this.$refs.attachmentPictureUpload.uploadOk_callback = this.loadAttachmentPictures;
@@ -1206,35 +1145,21 @@ Vue.component('aj-popup-upload', {
 	},
 	props: {
 		uploadUrl: {// 上传接口地址
-			type: String,
-			required: true
+			type: String, required: true
 		},
 		imgName: { // 貌似没用
-			type: String,
-			required: false
+			type: String, required: false
 		},
 		imgId: {// 貌似没用
-	      type: Number,
-	      required: false
+	      type: Number, required: false
 	    },
 		imgPlace: String // 图片占位符，用户没有选定图片时候使用的图片
 	},
-	template: 
-		'<aj-layer>\
-			<h3>图片上传</h3>\
-			<aj-xhr-upload ref="uploadControl" :action="uploadUrl" :is-img-upload="true" :hidden-field="imgName"\
-				:img-place="ajResources.commonAsset + \'/images/imgBg.png\'">\
-			</aj-xhr-upload>\
-			<div>上传限制：{{text.maxSize}}kb 或以下，分辨率：{{text.maxHeight}}x{{text.maxWidth}}</div>\
-		</aj-layer>',
+	template: '#aj-popup-upload',
 	mounted() {
 		var obj = this.$refs.uploadControl;
 		
-		this.text = {
-			maxSize: obj.limitSize || 600,
-			maxHeight: obj.imgMaxHeight,
-			maxWidth: obj.imgMaxWidth
-		};
+		this.text = {maxSize: obj.limitSize || 600, maxHeight: obj.imgMaxHeight, maxWidth: obj.imgMaxWidth};
 	},
 	methods: {
 		/**

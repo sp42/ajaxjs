@@ -1,20 +1,16 @@
 aj._list = {
 	props: {
 		apiUrl: {		// JSON 接口地址
-			type : String,
-			required : true
+			type : String, required : true
 		},
 		
 		hrefStr: {
-			type : String,
-			required : false
+			type : String, required : false
 		},
-		isPage: {
-			type : Boolean, 	// 是否分页，false=读取所有数据
-			default : true
+		isPage: {// 是否分页，false=读取所有数据
+			type : Boolean, default : true
 		}
 	},
-	
 	data() {
 		return {
 			result : [],		// 展示的数据
@@ -27,15 +23,13 @@ aj._list = {
 // 简单列表
 Vue.component('aj-simple-list', {
 	mixins: [aj._list],
-	template : '<ul class="aj-simple-list"><li v-for="(item, index) in result">\
-				<slot v-bind="item">\
-					<a :href="(hrefStr || \'\').replace(\'{id}\', item.id)" @click="show(item.id, index, $event)" :id="item.id">{{item.name}}</a>\
-				</slot>\
-			</li></ul>',
+	template : `<ul class="aj-simple-list"><li v-for="(item, index) in result">
+				<slot v-bind="item">
+					<a :href="(hrefStr || '').replace('{id}', item.id)" @click="show(item.id, index, $event)" :id="item.id">{{item.name}}</a>
+				</slot>
+			</li></ul>`,
 	mounted() {
-		ajaxjs.xhr.get(this.realApiUrl, json => {
-			aj.apply(this, json);
-		}, this.baseParam);
+		aj.xhr.get(this.realApiUrl, j => aj.apply(this, j), this.baseParam);
 	}
 });
 
@@ -43,10 +37,9 @@ Vue.component('aj-simple-list', {
 aj._pager = {
 	data() {
 		return {
-			api: null, // 接口地址
-			result : [],		// 展示的数据
+			api: this.apiUrl, 	// 接口地址
+			result: [],			// 展示的数据
 			baseParam: {},		// 每次请求都附带的参数
-			
 			pageSize: this.initPageSize,
 			total: 0,
 			totalPage: 0,
@@ -56,20 +49,25 @@ aj._pager = {
 	},
 	props: {
 		initPageSize: {
-			type : Number,
-			required : false,
-			default : 5
+			type: Number, required: false, default: 9
+		},
+		apiUrl: String,
+		autoLoad: { // 是否自动加载
+			type: Boolean, default: true
+		},
+		isPage: {// 是否分页，false=读取所有数据
+			type : Boolean, default : true
 		}
 	},
 	methods: {
 		// 分页，跳到第几页，下拉控件传入指定的页码
-		jumpPageBySelect(e) {
+		jumpPageBySelect($event) {
 			var selectEl = e.target;
 			var currentPage = selectEl.options[selectEl.selectedIndex].value;
 			this.pageStart = (Number(currentPage) - 1) * this.pageSize;
 			this.ajaxGet();
 		},
-		onPageSizeChange(e) {
+		onPageSizeChange($event) {
 			this.pageSize = Number(e.target.value);
 			this.count();
 			this.ajaxGet();
@@ -94,21 +92,8 @@ aj._pager = {
 	}
 };
 
-
 Vue.component('aj-pager', {
-	template: '<footer>\
-				<a v-if="pageStart > 0" href="#" @click="previousPage()">上一页</a> \
-				<a v-if="(pageStart > 0 ) && (pageStart + pageSize < total)" style="text-decoration: none;">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>\
-				<a v-if="pageStart + pageSize < total" href="#" @click="nextPage()">下一页</a>\
-				<div class="info">\
-					<input type="hidden" name="start" :value="pageStart" />\
-					页数：{{currentPage}}/{{totalPage}} 记录数：{{pageStart}}/{{total}}\
-					每页记录数： <input size="2" title="输入一个数字确定每页记录数" type="text" class="aj-input" :value="pageSize" @change="onPageSizeChange($event)" />\
-					跳转： <select @change="jumpPageBySelect($event);" class="aj-select" style="width:50px;">\
-						<option :value="n" v-for="n in totalPage">{{n}}</option>\
-					</select>\
-				</div>\
-			</footer>',
+	template: '#aj-pager',
 	mixins: [aj._pager],
 	methods: {
 		get() {
@@ -117,11 +102,14 @@ Vue.component('aj-pager', {
 			aj.xhr.get(this.api, json => {
 				if(json.result) {
 					this.result = json.result;
-					this.total = json.total;
-					this.count();
+					if(this.isPage) {
+						this.total = json.total;
+						this.count();
+					}
 				}
 				
 				this.$emit('onDataLoad', this.result);	
+				this.$emit('pager-result', this.result);
 			}, this.baseParam);
 		},
 		ajaxGet() {
@@ -135,7 +123,6 @@ Vue.component('aj-pager', {
 	}
 });
 
-
 /**
  * 列表控件
  */
@@ -145,16 +132,13 @@ Vue.component('aj-page-list', {
 	mixins: [aj._pager, aj._list],
 	props: {
 		isShowFooter: {
-			type : Boolean,
-			default : true
+			type : Boolean, default : true
 		},
 		autoLoadWhenReachedBottom : {	// 到底部是否自动加载下一页，通常在 移动端使用，这个应该是元素的 CSS Selector
-			type : String,
-			default: ''
+			type : String, default: ''
 		},
-		isDataAppend: {
-			type : Boolean, 	// 数据分页是否追加模式，默认不追加 = false。 App 一般采用追加模式
-			default : false
+		isDataAppend: {// 数据分页是否追加模式，默认不追加 = false。 App 一般采用追加模式
+			type : Boolean, default : false
 		}
 	},
 	template: 
@@ -179,19 +163,11 @@ Vue.component('aj-page-list', {
 			</footer><div v-show="!!autoLoadWhenReachedBottom" class="buttom"></div>\
 		</div>',
 	mounted() {
-		ajaxjs.xhr.get(this.realApiUrl, this.doAjaxGet, {
-			limit : this.pageSize
-		});
+		aj.xhr.get(this.realApiUrl, this.doAjaxGet, { limit: this.pageSize});
 		
 		if(!!this.autoLoadWhenReachedBottom) {
-			var scrollSpy = new aj.scrollSpy({
-				scrollInElement : aj(this.autoLoadWhenReachedBottom),
-				spyOn : thish.$el.$('.buttom')
-			});
-			
-			scrollSpy.onScrollSpyBackInSight = e => {
-				this.nextPage();
-			};
+			var scrollSpy = new aj.scrollSpy({scrollInElement: aj(this.autoLoadWhenReachedBottom), spyOn: thish.$el.$('.buttom')});
+			scrollSpy.onScrollSpyBackInSight = e => this.nextPage();
 		}
 	},
 	
@@ -254,14 +230,9 @@ Vue.component('aj-grid', {
     },
     data() {
         var sortOrders = {};
-        this.columns.forEach(key => {
-            sortOrders[key] = 1;
-        });
+        this.columns.forEach(key => sortOrders[key] = 1);
         
-        return {
-            sortKey: '',
-            sortOrders: sortOrders
-        };
+        return {sortKey: '', sortOrders: sortOrders};
     },
     computed: {
         filteredData() {
@@ -272,9 +243,7 @@ Vue.component('aj-grid', {
 
             if (filterKey) {
                 data = data.filter(row => {
-                    return Object.keys(row).some(key => {
-                        return String(row[key]).toLowerCase().indexOf(filterKey) > -1;
-                    })
+                    return Object.keys(row).some(key => String(row[key]).toLowerCase().indexOf(filterKey) > -1);
                 });
             }
 
@@ -305,20 +274,18 @@ Vue.component('aj-grid', {
 /**
  * Thx to ScrollSpy
  * 
- * @param {Elment}
- *            如果是在区域内滚动的话，则要传入滚动面板的元素，移动端会适用
+ * @param {Elment} 如果是在区域内滚动的话，则要传入滚动面板的元素，移动端会适用
  */
 aj.scrollSpy = function(cfg) {
     var isScrollInElement = !!(cfg && cfg.scrollInElement);
     
-    var handleScroll = function () {
+    var handleScroll = function() {
         var currentViewPosition;
         
-        if(isScrollInElement) {
+        if(isScrollInElement) 
         	currentViewPosition = cfg.scrollInElement.scrollTop + window.innerHeight;
-        }else {
+        else 
         	currentViewPosition = document.documentElement.scrollTop ? document.documentElement.scrollTop: document.body.scrollTop;
-        }
         
         for (var i in elements) {
             var element = elements[i], 
@@ -343,9 +310,8 @@ aj.scrollSpy = function(cfg) {
     if (document.addEventListener) {
     	(cfg && cfg.scrollInElement || document).addEventListener("touchmove", handleScroll, false);
     	(cfg && cfg.scrollInElement || document).addEventListener("scroll", handleScroll, false);
-    } else if (window.attachEvent) {
+    } else if (window.attachEvent) 
         window.attachEvent("onscroll", handleScroll);
-    }
     
     var elements = {};
     
@@ -370,5 +336,3 @@ aj.scrollSpy = function(cfg) {
         return pos;
     }
 }
-
-

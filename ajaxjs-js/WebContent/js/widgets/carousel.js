@@ -1,29 +1,24 @@
 aj._carousel = {
 	props : {
 		isMagic : {			// 是否无缝模式
-			type : Boolean,
-			default : false 
+			type : Boolean, default : false 
 		},
 		// 推荐使用 百分比，px 的话要考虑滚动条，比较麻烦
 		// 要使用 px 推荐指定 stepWidth
 		// banner，要使用 px
 		// 如果要跟手移动，要使用 px
 		isUsePx :  {
-			type : Boolean,
-			default : false 
+			type : Boolean, default : false 
 		},
 		autoHeight :  {// 是否自动高度
-			type : Boolean,
-			default : false 
+			type : Boolean, default : false 
 		},
 		disableTabHeaderJump : {// 是否禁止通过 tab 候选栏来跳转。一般 wizzard 向导式的时候不能跳转
-			type : Boolean,
-			default : false 
+			type : Boolean, default : false 
 		}, 
 		
 		isGetCurrentHeight : {// 自动当前项最高，忽略其他高度，这个用在 tab很好，比 autoHeight 的好，可视作autoHeight 2.-
-			type : Boolean,
-			default : true 
+			type : Boolean, default : true 
 		},
 		initItems : Array // 输入的数据
 	},
@@ -259,16 +254,13 @@ Vue.component('aj-banner', {
 			default: false
 		},
 		autoLoop: { // autoLoop = 0 时不自动轮播
-			type : Number,
-			default : 4000 
+			type : Number, default : 4000 
 		},
 		showTitle: { 		// 是否显示下方的标题
-			type: Boolean,
-			default : false
+			type: Boolean, default : false
 		},
 		showDot: {			// 是否显示一点点，一般显示了标题就不显示点
-			type : Boolean,
-			default : true
+			type : Boolean, default : true
 		}
 	},
 	template: 
@@ -288,7 +280,6 @@ Vue.component('aj-banner', {
 				{name : '资质证照',  content : '<img src="../images/20150906125934797.jpg" />', href : 'javascript:alert(9);'},
 				{name : '资质证照',   content : '<img src="../images/20150906113629683.jpg" />', href: '#'}
 			]
-	
 		}; 
 	},
 	

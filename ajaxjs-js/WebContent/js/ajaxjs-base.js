@@ -17,6 +17,25 @@ ajaxjs = aj = function(cssSelector, fn) {
 	return Element.prototype.$.apply(document, arguments);
 }
 
+Date.prototype.format = function(fmt)   
+{ //author: meizz   
+  var o = {   
+    "M+" : this.getMonth()+1,                 //月份   
+    "d+" : this.getDate(),                    //日   
+    "h+" : this.getHours(),                   //小时   
+    "m+" : this.getMinutes(),                 //分   
+    "s+" : this.getSeconds(),                 //秒   
+    "q+" : Math.floor((this.getMonth()+3)/3), //季度   
+    "S"  : this.getMilliseconds()             //毫秒   
+  };   
+  if(/(y+)/.test(fmt))   
+    fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));   
+  for(var k in o)   
+    if(new RegExp("("+ k +")").test(fmt))   
+  fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));   
+  return fmt;   
+}
+
 // shorthand
 Element.prototype.$ = function(cssSelector, fn) {
 	if (typeof fn == 'function') {
@@ -297,16 +316,17 @@ ajaxjs.xhr = {
 		
 		!cfg.noFormValid && aj.formValidator(form);
 
-		// form.method always GET, so form.getAttribute('method') instead
-		var method;
-		if(form.getAttribute('method'))
-			method = form.getAttribute('method').toLowerCase();
-		
-		cfg.method = method || cfg.method || 'post';
 
 		form.addEventListener('submit', function(e, cb, cfg) {
 			e.preventDefault();// 禁止 form 默认提交
 			var form = e.target;
+
+			// form.method always GET, so form.getAttribute('method') instead
+			var method;
+			if(form.getAttribute('method'))
+				method = form.getAttribute('method').toLowerCase();
+			
+			cfg.method = method || cfg.method || 'post';
 			
 			if(!cfg.noFormValid && !aj.formValidator.onSubmit(form))
 				return;
@@ -634,13 +654,13 @@ aj.tabable = {
 
 // 折叠菜单
 Vue.component('aj-accordion-menu', {
-	template: '<ul class="aj-accordion-menu" @click="onClk($event);"><slot></slot></ul>',
+	template: '<ul class="aj-accordion-menu" @click="onClk"><slot></slot></ul>',
 	methods: {
-		onClk(e) {
+		onClk($event) {
 			this.children = this.$el.children;
-			this.highlightSubItem(e);
+			this.highlightSubItem($event);
 	        
-			var _btn = e.target;
+			var _btn = $event.target;
 	        if (_btn.tagName == 'H3' && _btn.parentNode.tagName == 'LI') {
 	            _btn = _btn.parentNode;
 
@@ -670,8 +690,8 @@ Vue.component('aj-accordion-menu', {
 	    },
 	    
 	    // 内部子菜单的高亮
-	    highlightSubItem(e) {
-	        var li, el = e.target;
+	    highlightSubItem($event) {
+	        var li, el = $event.target;
 	        if (el.tagName == 'A' && el.getAttribute('target')) {
 	            li = el.parentNode;
 	            li.parentNode.$('li', _el => {
@@ -928,7 +948,7 @@ Vue.component('aj-process-line', {
 	props: {
 		items: {
 			type: Array,
-			default: function() { 
+			default() { 
 				return ['Step 1', 'Step 2', 'Step 3']; 
 			}
 		}
@@ -1005,7 +1025,7 @@ aj.img = (function() {
 		 * @param format  目标格式，mime格式
 		 * @param quality 介于0-1之间的数字，用于控制输出图片质量，仅当格式为jpg和webp时才支持质量，png时quality参数无效
 		 */
-		changeBlobImageQuality (blob, callback, format, quality) {
+		changeBlobImageQuality(blob, callback, format, quality) {
 			format = format || 'image/jpeg';
 			quality = quality || 0.9; // 经测试0.9最合适
 			var fr = new FileReader();
@@ -1065,6 +1085,7 @@ aj.imageEnlarger = function() {
 	});
 	
 	aj.imageEnlarger.singleInstance = vue; // 单例
+	
 	return vue;
 }
 

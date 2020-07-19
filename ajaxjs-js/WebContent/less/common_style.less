@@ -5,7 +5,12 @@
 常见样式类
 -------------------------
 */
-
+.left{
+	float:left;
+}
+.right{
+	float:right;
+}
 .centerBody (@defaultWidth: 1300px) {
 	max-width: @defaultWidth;
 	margin: 0 auto;
@@ -31,7 +36,7 @@
 }
 
 // 快速制作1px 表格边框，为需要设置的table元素加上border的class即可
-.ajaxjs-borderTable {
+.ajaxjs-borderTable, .aj-table {
 	border: 1px lightgray solid;
 	border-collapse: collapse;
 	border-spacing: 0;
@@ -49,15 +54,15 @@
 
 	tr {
 		.transition (background-color 400ms ease-out);
+		&:nth-child(even) {
+			background: #f5f5f5;
+			box-shadow: 0 1px 0 rgba(255, 255, 255, .8) inset;
+		}
 		&:hover {
-			background-color: #fbf8e9 ! important;
+			background-color: #fbf8e9;
 		}
 	}
 
-	tr:nth-child(even) {
-		background: #f5f5f5;
-		box-shadow: 0 1px 0 rgba(255, 255, 255, .8) inset;
-	}
 }
 
 .ajaxjs-niceTable {
@@ -71,23 +76,32 @@
 		padding: 10px;
 		text-align: center;
 	}
+	
+	tbody {
+		tr {
+			.transition (background-color 700ms ease-in-out);
 
-	tr {
-		.transition (background-color 400ms ease-out);
-		&:hover {
-			background-color: #fbf8e9 ! important;
-		}
-
-		&:last-child {
-			td:first-child {
-				border-radius: 0 0 0 6px;
+			&:nth-child(even) {
+				background: #f5f5f5;
+				box-shadow: 0 1px 0 rgba(255, 255, 255, .8) inset;
 			}
-
-			td:last-child {
-				border-radius: 0 0 6px 0;
+			
+			&:last-child {
+				td:first-child {
+					border-radius: 0 0 0 6px;
+				}
+	
+				td:last-child {
+					border-radius: 0 0 6px 0;
+				}
+			}
+			
+			&:hover {
+				background-color: #faf2c8;
 			}
 		}
 	}
+
 
 	th {
 		background-color: #dce9f9;
@@ -112,13 +126,6 @@
 
 	td:first-child , th:first-child {
 		border-left: none;
-	}
-
-	tbody {
-		tr:nth-child(even) {
-			background: #f5f5f5;
-			box-shadow: 0 1px 0 rgba(255, 255, 255, .8) inset;
-		}
 	}
 
 	tfoot td {
@@ -722,5 +729,27 @@ fieldset.aj-fieldset {
 	li {
 		list-style: disc;
     	list-style-position: inside;
+	}
+}
+
+.aj-pager{
+	&.in-one-line .info{
+		display: inline-block;
+	}
+	form {
+		display: inline-block; vertical-align: bottom;
+	}
+	input{
+		.aj-input;
+		text-align: center; 
+		width: 40px; 
+		height: 22px; 
+		float: none;
+	}
+	select{
+		.aj-select;
+		width:50px;
+		text-align: center;
+		height: 22px;
 	}
 }
