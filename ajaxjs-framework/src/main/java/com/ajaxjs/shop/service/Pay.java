@@ -8,8 +8,6 @@ import java.util.Set;
 
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.config.ConfigService;
-import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.mvc.MvcConstant;
 import com.ajaxjs.net.http.HttpBasicRequest;
 import com.ajaxjs.net.http.Tools;
 import com.ajaxjs.payment.Alipay;
@@ -21,6 +19,8 @@ import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.MapTool;
+import com.ajaxjs.web.mvc.ModelAndView;
+import com.ajaxjs.web.mvc.MvcConstant;
 import com.alipay.api.AlipayApiException;
 
 /**

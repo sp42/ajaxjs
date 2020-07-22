@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.function.Function;
 
 import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.payment.wxpay.PayConstant;
 import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.dao.OrderInfoDao;
@@ -23,6 +22,7 @@ import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
+import com.ajaxjs.web.mvc.ModelAndView;
 
 @Component
 public class OrderService extends BaseService<OrderInfo> implements PayConstant {

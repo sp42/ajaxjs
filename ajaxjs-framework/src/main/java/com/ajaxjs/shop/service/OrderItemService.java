@@ -3,7 +3,6 @@ package com.ajaxjs.shop.service;
 import java.util.function.Function;
 
 import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.shop.model.OrderItem;
 import com.ajaxjs.sql.annotation.Select;
 import com.ajaxjs.sql.annotation.TableName;
@@ -13,6 +12,7 @@ import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.user.role.RightConstant;
 import com.ajaxjs.user.role.RoleService;
 import com.ajaxjs.util.ioc.Component;
+import com.ajaxjs.web.mvc.controller.MvcRequest;
 
 @Component
 public class OrderItemService extends BaseService<OrderItem> {

@@ -2,7 +2,7 @@ package com.ajaxjs.shop.dao;
 
 import java.util.List;
 
-import com.ajaxjs.app.attachment.Attachment_pictureDao;
+import com.ajaxjs.app.attachment.Attachment_pictureService.Attachment_pictureDao;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.model.OrderItem;
 import com.ajaxjs.sql.annotation.Select;

@@ -1,4 +1,4 @@
-package com.ajaxjs.app;
+package com.ajaxjs.cms;
 
 import java.util.List;
 import java.util.function.Function;

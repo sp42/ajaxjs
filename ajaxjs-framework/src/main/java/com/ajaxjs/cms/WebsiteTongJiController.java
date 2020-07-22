@@ -1,4 +1,4 @@
-package com.ajaxjs.app;
+package com.ajaxjs.cms;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -14,10 +14,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.framework.config.ConfigService;
-import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.net.http.HttpBasicRequest;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.map.JsonHelper;
+import com.ajaxjs.web.mvc.controller.IController;
 
 /**
  * 网站统计

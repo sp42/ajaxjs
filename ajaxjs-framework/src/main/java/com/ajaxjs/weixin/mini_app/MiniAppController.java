@@ -8,9 +8,9 @@ import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.filter.DataBaseFilter;
-import com.ajaxjs.mvc.controller.IController;
-import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.web.mvc.controller.IController;
+import com.ajaxjs.web.mvc.filter.MvcFilter;
 
 @Path("/api/wx")
 public class MiniAppController implements IController {

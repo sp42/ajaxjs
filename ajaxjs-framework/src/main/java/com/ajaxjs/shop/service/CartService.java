@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.function.Function;
 
 import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.shop.dao.CartDao;
 import com.ajaxjs.shop.model.Cart;
 import com.ajaxjs.sql.orm.PageResult;
@@ -15,6 +14,7 @@ import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
+import com.ajaxjs.web.mvc.controller.MvcRequest;
 
 /**
  * 

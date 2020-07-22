@@ -10,8 +10,6 @@ import javax.ws.rs.QueryParam;
 import com.ajaxjs.app.TreeLikeService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.filter.DataBaseFilter;
-import com.ajaxjs.mvc.ModelAndView;
-import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.role.RoleService;
@@ -19,6 +17,8 @@ import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.web.mvc.ModelAndView;
+import com.ajaxjs.web.mvc.filter.MvcFilter;
 
 /**
  * 用户系统后台部分的控制器

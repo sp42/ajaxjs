@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.app;
+package com.ajaxjs.cms;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,10 +29,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.web.mvc.controller.MvcRequest;
 
 /**
  * 默认的页面编辑器

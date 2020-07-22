@@ -9,11 +9,11 @@ import javax.servlet.ServletContext;
 
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.mvc.ModelAndView;
 import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ioc.Component;
+import com.ajaxjs.web.mvc.ModelAndView;
 
 @Component("CatalogService")
 public class CatalogService extends BaseService<Catalog> {
