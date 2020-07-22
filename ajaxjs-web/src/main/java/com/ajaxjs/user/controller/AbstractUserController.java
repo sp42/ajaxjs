@@ -19,14 +19,13 @@ import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.config.ConfigService;
+import com.ajaxjs.framework.filter.CaptchaFilter;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.user.login.LoginService;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.web.captcha.CaptchaController;
-import com.ajaxjs.web.captcha.CaptchaFilter;
 import com.ajaxjs.web.mvc.ModelAndView;
 import com.ajaxjs.web.mvc.controller.MvcRequest;
 import com.ajaxjs.web.mvc.filter.MvcFilter;
@@ -46,7 +45,6 @@ public abstract class AbstractUserController extends BaseUserController {
 		LOGGER.info("用户登录页");
 
 		LoginService.setUserId(mv);
-		mv.put(CaptchaController.CAPTCHA_CODE, CaptchaController.CAPTCHA_CODE);
 
 		return jsp("user/login");
 	}

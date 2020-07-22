@@ -45,39 +45,19 @@ public class ConfigController implements IController {
 	private static final LogHelper LOGGER = LogHelper.getLog(ConfigController.class);
 
 	@GET
-	@Path("config")
-	public String config(ModelAndView model) {
+	public String config(ModelAndView mv, MvcRequest r) {
 		LOGGER.info("参数配置");
-
-		loadJson(model);
-		return BaseController.admin("config/config");
-	}
-
-	@GET
-	@Path("data-config")
-	public String dataConfig(ModelAndView mv, MvcRequest r) {
-		LOGGER.info("数据配置");
 
 		mv.put("conn", XmlHelper.nodeAsMap(r.mappath("/META-INF/context.xml"), "//Resource[@name='" + ConfigService.get("data.database_node") + "']"));
 		loadJson(mv);
 
-		return BaseController.admin("config/data-config");
+		return BaseController.jsp("app/config/config");
 	}
 
 	// TODO
 	private static void loadJson(ModelAndView model) {
 		model.put("configJson", FileHelper.openAsText(ConfigService.jsonPath));
 		model.put("schemeJson", ConfigService.getSchemeJson());
-	}
-
-	@GET
-	public String allConfig(ModelAndView model) {
-		LOGGER.info("编辑全部配置");
-
-		model.put("configJson", FileHelper.openAsText(ConfigService.jsonPath));
-		model.put("jsonSchemePath", ConfigService.getSchemeJson());
-
-		return BaseController.admin("config/config-all");
 	}
 
 	@POST

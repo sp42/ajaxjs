@@ -108,7 +108,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 		Attachment_pictureController c = new Attachment_pictureController();
 		c.setService(new Attachment_pictureService());
 
-		return c.imgUpload(request, owenerUid, Attachment_pictureService.AVATAR);
+		return ""; // c.imgUpload(request, owenerUid, Attachment_pictureService.AVATAR);
 	}
 
 	@GET

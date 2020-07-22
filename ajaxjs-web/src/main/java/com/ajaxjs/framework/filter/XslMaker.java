@@ -1,17 +1,14 @@
 package com.ajaxjs.framework.filter;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.util.Objects;
 
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.web.mvc.ModelAndView;
-import com.ajaxjs.web.mvc.controller.MvcOutput;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
 import com.ajaxjs.web.mvc.filter.FilterAction;
 import com.ajaxjs.web.mvc.filter.FilterAfterArgs;
+import com.ajaxjs.web.mvc.filter.FilterContext;
 
 /**
  * 输出 Excel XSL 格式文件
@@ -23,12 +20,12 @@ public class XslMaker implements FilterAction {
 	private static final LogHelper LOGGER = LogHelper.getLog(XslMaker.class);
 
 	@Override
-	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args) {
-		if (request.hasParameter("downloadXSL"))
-			if (request.hasParameter("allRows") || ConfigService.getInt("entity.exportXslPage") == 2) {
+	public boolean before(FilterContext ctx) {
+		if (ctx.request.hasParameter("downloadXSL"))
+			if (ctx.request.hasParameter("allRows") || ConfigService.getInt("entity.exportXslPage") == 2) {
 				// 通常是第一和第二的分页参数
-				args[0] = 0;
-				args[1] = 999999;
+				ctx.args[0] = 0;
+				ctx.args[1] = 999999;
 			}
 
 		return true;

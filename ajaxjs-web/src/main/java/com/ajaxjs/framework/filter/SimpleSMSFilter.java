@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.web.mvc.filter;
+package com.ajaxjs.framework.filter;
 
-import java.lang.reflect.Method;
-
-import com.ajaxjs.web.mvc.ModelAndView;
-import com.ajaxjs.web.mvc.controller.MvcOutput;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.filter.FilterAfterArgs;
+import com.ajaxjs.web.mvc.filter.FilterContext;
+import com.ajaxjs.web.mvc.filter.SessionValueFilter;
 
 /**
  * 简易的短信驗證碼存儲，存儲在 Session 中
@@ -31,11 +29,11 @@ public class SimpleSMSFilter extends SessionValueFilter {
 	public static final String SMS_KEY_NAME = "randomSmsCode";
 
 	@Override
-	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args) {
-		String client = getClientSideArgs(request, SMS_KEY_NAME), server = getServerSideValue(request, SMS_KEY_NAME);
+	public boolean before(FilterContext ctx) {
+		String client = getClientSideArgs(ctx.request, SMS_KEY_NAME), server = getServerSideValue(ctx.request, SMS_KEY_NAME);
 
 		if (client.equals(server)) {
-			request.getSession().removeAttribute(SMS_KEY_NAME);
+			ctx.request.getSession().removeAttribute(SMS_KEY_NAME);
 			return true;
 		} else
 			throw new IllegalAccessError("手机验证码不通过");

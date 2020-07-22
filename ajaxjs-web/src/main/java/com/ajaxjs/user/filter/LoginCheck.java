@@ -1,15 +1,11 @@
 package com.ajaxjs.user.filter;
 
-import java.lang.reflect.Method;
-
 import com.ajaxjs.user.controller.BaseUserController;
 import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.web.mvc.ModelAndView;
 import com.ajaxjs.web.mvc.MvcConstant;
-import com.ajaxjs.web.mvc.controller.MvcOutput;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
 import com.ajaxjs.web.mvc.filter.FilterAction;
 import com.ajaxjs.web.mvc.filter.FilterAfterArgs;
+import com.ajaxjs.web.mvc.filter.FilterContext;
 
 /**
  * 是否已经登录的拦截器
@@ -19,13 +15,13 @@ import com.ajaxjs.web.mvc.filter.FilterAfterArgs;
  */
 public class LoginCheck implements FilterAction {
 	@Override
-	public boolean before(ModelAndView model, MvcRequest req, MvcOutput response, Method method, Object[] args) {
-		boolean sessionBase = BaseUserController.isLogined(req);
+	public boolean before(FilterContext ctx) {
+		boolean sessionBase = BaseUserController.isLogined(ctx.request);
 		if (sessionBase)
 			return true;
 
 		// Token 检测，适用于 App 或 小程序
-		String token = req.getHeader(MvcConstant.USER_SESSION_ID), id = req.getHeader(MvcConstant.USER_ID);
+		String token = ctx.request.getHeader(MvcConstant.USER_SESSION_ID), id = ctx.request.getHeader(MvcConstant.USER_ID);
 
 		if (!CommonUtil.isEmptyString(token) && !CommonUtil.isEmptyString(id)) {
 			// TODO 鉴权！

@@ -30,6 +30,7 @@ import javax.ws.rs.core.MediaType;
 import com.ajaxjs.framework.Application;
 import com.ajaxjs.framework.IComponent;
 import com.ajaxjs.framework.config.ConfigService;
+import com.ajaxjs.user.filter.Authority;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.ioc.ComponentMgr;
@@ -37,9 +38,9 @@ import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.web.mvc.ModelAndView;
 import com.ajaxjs.web.mvc.MvcConstant;
-import com.ajaxjs.web.mvc.filter.Authority;
 import com.ajaxjs.web.mvc.filter.FilterAction;
 import com.ajaxjs.web.mvc.filter.FilterAfterArgs;
+import com.ajaxjs.web.mvc.filter.FilterContext;
 import com.ajaxjs.web.mvc.filter.MvcFilter;
 import com.ajaxjs.web.secuity.SecurityRequest;
 import com.ajaxjs.web.secuity.SecurityResponse;
@@ -76,7 +77,7 @@ public class MvcDispatcher implements IComponent {
 	private static Boolean isEnableSecurityIO;
 
 	public static final BiFunction<HttpServletRequest, HttpServletResponse, Boolean> dispatcher = (req, resp) -> {
-		
+
 		if (isEnableSecurityIO == null)
 			isEnableSecurityIO = ConfigService.getValueAsBool("security.isEnableSecurityIO");
 
@@ -85,7 +86,7 @@ public class MvcDispatcher implements IComponent {
 
 		String uri = request.getFolder(), httpMethod = request.getMethod();
 		Action action = null;
-		
+
 		LOGGER.info("uri: {0}", uri);
 		try {
 			action = IController.findTreeByPath(uri);
@@ -177,8 +178,15 @@ public class MvcDispatcher implements IComponent {
 				if (model == null) // 如果方法没参数则不会出现 mv。这里补一个
 					model = new ModelAndView();
 
+				FilterContext ctx = new FilterContext();
+				ctx.model = model;
+				ctx.request = request;
+				ctx.response = response;
+				ctx.method = method;
+				ctx.args = args;
+
 				for (FilterAction filterAction : filterActions) {
-					isbeforeSkip = !filterAction.before(model, request, response, method, args); // 相当于 AOP 前置
+					isbeforeSkip = !filterAction.before(ctx); // 相当于 AOP 前置
 					if (isbeforeSkip)
 						break;
 				}

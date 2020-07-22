@@ -8,49 +8,47 @@
 	</jsp:include>
 </head>
 
-<body class="catalogMgr">
-	<div class="vue">
+<body>
+	<div class="tree-like">
 		<!-- 后台头部导航 -->
 		<ajaxjs-admin-header>
 			<template slot="title">${uiName}一览</template>
 		</ajaxjs-admin-header>
-	</div>
-	
-	<!-- 顶部面板 -->
-	<div class="top-panel">
-		<div class="whiteLine"></div>
-		<p>你可以在这里添加、修改、删除${uiName}。请于分类中点选目标的节点，成为选中的状态后，再进行下面的编辑。</p>
-	</div>
-
-	<div class="admin-panel">
-		<!-- 菜单工具栏-->
-		<div class="toolbar">
-			<ul>
-				<li @click="rename"><i class="fa fa-pencil-square-o" style="color:#0a90f0;"></i> 修改分类名称</li>
-				<li @click="dele"><i class="fa fa-trash-o" aria-hidden="true" style="color:red;"></i> 删除</li>
-				<li>
-					<form action="../" method="post" class="createUnderNode">
-						<input type="hidden" name="pid" :value="selectedId" />
-						<input type="text" name="name" required size="12" /> 
-						<button><i class="fa fa-plus" aria-hidden="true" style="color:#ffaf0a;"></i> 新建子分类</button>	
-					</form>
-				</li>
-				<li>
-					<form action="../" method="post" class="createTopNode">
-						<input type="hidden" name="pid" value="-1" />
-						<input type="text" name="name" size="12" required /> 
-						<button><i class="fa fa-plus" aria-hidden="true" style="color:#ffaf0a;"></i> 新增顶级${uiName}</button>	
-					</form>
-				</li>
-			</ul>
+		
+		<div class="soft-container">
+			<div class="box padding">你可以在这里添加、修改、删除${uiName}。请于分类中点选目标的节点，成为选中的状态后，再进行下面的编辑。</div>
+			<div class="box">
+				<!-- 菜单工具栏-->
+				<div class="toolbar">
+					<ul>
+						<li @click="rename"><i class="fa fa-pencil-square-o" style="color:#0a90f0;"></i> 修改分类名称</li>
+						<li @click="dele"><i class="fa fa-trash-o" aria-hidden="true" style="color:red;"></i> 删除</li>
+						<li>
+							<form action="../" method="post" class="createUnderNode">
+								<input type="hidden" name="pid" :value="selectedId" />
+								<input type="text" name="name" required size="12" /> 
+								<button><i class="fa fa-plus" aria-hidden="true" style="color:#ffaf0a;"></i> 新建子分类</button>	
+							</form>
+						</li>
+						<li>
+							<form action="../" method="post" class="createTopNode">
+								<input type="hidden" name="pid" value="-1" />
+								<input type="text" name="name" size="12" required /> 
+								<button><i class="fa fa-plus" aria-hidden="true" style="color:#ffaf0a;"></i> 新增顶级${uiName}</button>	
+							</form>
+						</li>
+					</ul>
+				</div>
+			</div>
+			
+			<div class="main-panel">
+				<select multiple @change="onChange"></select>
+			</div>
+		
+			<div class="box bottom-bar padding">
+				<b v-show="selectedId != 0">已选择# {{selectedId}}-{{selectedName}}</b>
+			</div> 
 		</div>
-		
-		<select multiple @change="onChange"></select>
-		
-		<div class="toolbar bottom">
-			<b v-show="selectedId != 0">已选择# {{selectedId}}-{{selectedName}}</b>
-		</div>
-		
 		<aj-layer ref="layer">
 			<form class="rename" :action="'../' + selectedId + '/'" method="put">
 				<br />
@@ -67,14 +65,12 @@
 	</div>
 
 	<script>
-		new Vue({el : ".vue"});
-
 		new Vue({
-			el: '.admin-panel',
+			el: '.tree-like',
+			mixins: [aj.treeLike],
 			data: {
 				selectedId: 0,
-				selectedName: '',
-				selectUI : new ajaxjs.tree.selectUI()
+				selectedName: ''
 			},
 			mounted(){
 				// 新增顶级${uiName}
@@ -134,9 +130,8 @@
 				
 				render() {
 					var select = this.$el.$('select');
-					this.selectUI.initData();
 					select.innerHTML = '';
-					aj.xhr.get('../all/', json => this.selectUI.renderer(json.result, select));
+					aj.xhr.get('.', j => this.rendererOption(j.result, select));
 				}
 			}
 		});

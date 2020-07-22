@@ -15,18 +15,14 @@
  */
 package com.ajaxjs.user.filter;
 
-import java.lang.reflect.Method;
-
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.user.controller.BaseUserController;
 import com.ajaxjs.user.login.LoginService;
 import com.ajaxjs.user.model.UserCommonAuth;
 import com.ajaxjs.user.service.UserCommonAuthService;
-import com.ajaxjs.web.mvc.ModelAndView;
-import com.ajaxjs.web.mvc.controller.MvcOutput;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
 import com.ajaxjs.web.mvc.filter.FilterAction;
 import com.ajaxjs.web.mvc.filter.FilterAfterArgs;
+import com.ajaxjs.web.mvc.filter.FilterContext;
 
 /**
  * 需要输入用户密码之后才能下一步的拦截器
@@ -37,10 +33,10 @@ import com.ajaxjs.web.mvc.filter.FilterAfterArgs;
 public class UserPasswordFilter implements FilterAction {
 
 	@Override
-	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args) {
-		String password = request.getParameter("password");
+	public boolean before(FilterContext ctx) {
+		String password = ctx.request.getParameter("password");
 		UserCommonAuth auth = UserCommonAuthService.dao.findByUserId(BaseUserController.getUserId());
-		request.setAttribute("UserCommonAuthId", auth);
+		ctx.request.setAttribute("UserCommonAuthId", auth);
 		
 		try {
 			return LoginService.checkUserLogin(auth.getPassword(), password);

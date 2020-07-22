@@ -68,7 +68,10 @@ public class PageTag  {
 		return MapTool.toMap(queryString.split("&"), v -> v);
 	}
 
-
+	public int[] jumpPage(int totalPage) {
+		return new int[totalPage];
+	}
+	
 	/**
 	 * 
 	 * @param args

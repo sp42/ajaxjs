@@ -15,12 +15,6 @@
  */
 package com.ajaxjs.web.mvc.filter;
 
-import java.lang.reflect.Method;
-
-import com.ajaxjs.web.mvc.ModelAndView;
-import com.ajaxjs.web.mvc.controller.MvcOutput;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
-
 /**
  * 过滤器动作
  * 
@@ -35,14 +29,9 @@ public interface FilterAction {
 	/**
 	 * 在 MVC 方法之前调用
 	 * 
-	 * @param model    页面数据中间件
-	 * @param request  请求对象
-	 * @param response 响应对象
-	 * @param method   方法对象
-	 * @param args     执行的参数
 	 * @return 是否要中止控制器方法的执行，true 表示为不中断
 	 */
-	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args);
+	public boolean before(FilterContext ctx);
 
 	/**
 	 * 在 MVC 方法之后调用

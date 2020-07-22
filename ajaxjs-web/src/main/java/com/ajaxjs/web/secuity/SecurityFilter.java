@@ -1,16 +1,14 @@
 package com.ajaxjs.web.secuity;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.web.mvc.ModelAndView;
-import com.ajaxjs.web.mvc.controller.MvcOutput;
 import com.ajaxjs.web.mvc.controller.MvcRequest;
 import com.ajaxjs.web.mvc.filter.FilterAction;
 import com.ajaxjs.web.mvc.filter.FilterAfterArgs;
+import com.ajaxjs.web.mvc.filter.FilterContext;
 
 /**
  * HTTP 中的 POST、PUT、DELETE 都是写入的方法，这里对其检测
@@ -74,13 +72,13 @@ public class SecurityFilter implements FilterAction {
 	}
 
 	@Override
-	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args) {
-		refererCheck(request);
+	public boolean before(FilterContext ctx) {
+		refererCheck(ctx.request);
 
-		if (!"GET".equalsIgnoreCase(request.getMethod()))
+		if (!"GET".equalsIgnoreCase(ctx.request.getMethod()))
 			return true;
 
-		String uri = request.getRequestURI();
+		String uri = ctx.request.getRequestURI();
 
 		if (isInWhiteList(uri))
 			return true;

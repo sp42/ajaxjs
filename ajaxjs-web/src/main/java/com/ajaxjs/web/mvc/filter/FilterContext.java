@@ -1,23 +1,17 @@
 package com.ajaxjs.web.mvc.filter;
 
-import java.lang.reflect.Method;
-
-import com.ajaxjs.web.mvc.ModelAndView;
-import com.ajaxjs.web.mvc.controller.MvcOutput;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
-
 /**
- * 过滤器上下文
+ * 前置过滤器参数
  * 
- * 试想象下，如果一个方法带有 n 个参数，会很麻烦，于是用一个类承载这些参数。
+ * @param model    页面数据中间件
+ * @param request  请求对象
+ * @param response 响应对象
+ * @param method   方法对象
+ * @param args     执行的参数
  * 
  * @author sp42 frank@ajaxjs.com
  *
  */
-public class FilterContext {
-	public ModelAndView model;
-	public MvcRequest request;
-	public MvcOutput response;
-	public Method method;
+public class FilterContext extends BaseArgs {
 	public Object[] args;
 }

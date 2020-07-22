@@ -1,8 +1,5 @@
 ﻿<%@page pageEncoding="UTF-8"%>
 <%@taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
-<%
-	request.setAttribute("CAPTCHA_CODE", com.ajaxjs.web.captcha.CaptchaController.CAPTCHA_CODE);
-%>
 <tags:content bannerImg="${ctx}/images/memberBanner.jpg">
 	<fieldset class="user">
 		<legend>重置密码 </legend>
@@ -18,13 +15,6 @@
 					<dt>邮 &nbsp;&nbsp;箱</dt>
 					<dd>
 						<input type="text" name="email" placeholder="请填写注册的邮箱 " required="required" />
-					</dd>
-				</label>
-			</dl><dl>
-				<label>
-					<dt>验证码</dt>
-					<dd class="captcha" style="font-size: .8rem;">
-						<aj-page-captcha ref="c1"  field-name="${CAPTCHA_CODE}"></aj-page-captcha>
 					</dd>
 				</label>
 			</dl>
@@ -47,13 +37,6 @@
 						<input type="text" name="phone" placeholder="请填写注册的手机号码" required="required" />
 					</dd>
 				</label>
-			</dl><dl>
-				<label>
-					<dt>验证码</dt>
-					<dd class="captcha" style="font-size: .8rem;">
-						<aj-page-captcha ref="c2" field-name="${CAPTCHA_CODE}"></aj-page-captcha>
-					</dd>
-				</label>
 			</dl>
 			<dl>
 				<dt></dt>
@@ -74,12 +57,14 @@
 				mode: 1,
 			},
 			mounted() {
-		 		ajaxjs.xhr.form('.f1', json => {
+		 		aj.xhr.form('.f1', json => {
 		 			if (json && json.msg) {
 		 				alert(json.msg)
 		 			} else {
 		 				alert("未知异常！");
 					}
+		 		}, {
+		 			googleReCAPTCHA: '${aj_allConfig.security.GoogleReCAPTCHA.siteId}'
 		 		});
 /* 		 		ajaxjs.xhr.form('.f2', json => {
 		 			if (json && json.msg) {

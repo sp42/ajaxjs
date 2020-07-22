@@ -10,15 +10,17 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.ajaxjs.web.mvc.filter;
+package com.ajaxjs.user.filter;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.ajaxjs.web.mvc.filter.FilterAction;
+
 /**
- * MVC 的拦截器
+ * 权限拦截器
  * 
  * @author sp42 frank@ajaxjs.com
  *
@@ -34,4 +36,6 @@ public @interface Authority {
 	Class<? extends FilterAction> filter();
 	
 	int value();
+	
+	int value2();
 }

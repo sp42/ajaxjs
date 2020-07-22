@@ -1,4 +1,4 @@
-<%@page pageEncoding="UTF-8" import="com.ajaxjs.user.role.RoleService, com.ajaxjs.user.role.RightConstantDummy"%>
+<%@page pageEncoding="UTF-8" import="com.ajaxjs.user.role.RoleService, com.ajaxjs.user.role.RightConstant"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
 <!DOCTYPE html>
 <html>
@@ -118,7 +118,7 @@
 						</aj-xhr-upload>
 					</div>
 				</div>
-				<c:if test="${RoleService.check(RightConstantDummy.USER_PRIVILEGE)}">
+				<c:if test="${RoleService.check(RightConstant.USER_PRIVILEGE)}">
 				<div>
 					<div class="label">用户组</div> 
 					<!-- 分类下拉 -->

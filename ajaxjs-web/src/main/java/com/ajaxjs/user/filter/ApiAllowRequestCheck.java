@@ -1,17 +1,14 @@
 package com.ajaxjs.user.filter;
 
-import java.lang.reflect.Method;
 import java.util.Objects;
 import java.util.function.Function;
 
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.user.service.TokenMaker;
 import com.ajaxjs.util.cryptography.SymmetriCipher;
-import com.ajaxjs.web.mvc.ModelAndView;
-import com.ajaxjs.web.mvc.controller.MvcOutput;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
 import com.ajaxjs.web.mvc.filter.FilterAction;
 import com.ajaxjs.web.mvc.filter.FilterAfterArgs;
+import com.ajaxjs.web.mvc.filter.FilterContext;
 
 /**
  * 简单的接口合法性校验，基于 AES
@@ -26,10 +23,10 @@ public class ApiAllowRequestCheck implements FilterAction {
 	public static final String TOKEN = "token";
 
 	@Override
-	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args) {
-		String token = request.getHeader(TOKEN);
+	public boolean before(FilterContext ctx) {
+		String token = ctx.request.getHeader(TOKEN);
 		if (token == null)
-			token = request.getParameter(TOKEN);
+			token = ctx.request.getParameter(TOKEN);
 		Objects.requireNonNull(token, "缺少 token 参数，请放置 HTTP Header 请求中或 QueryString 中");
 
 		String decrypted = SymmetriCipher.AES_Decrypt(token, ConfigService.getValueAsString("System.api.AES_Key"));

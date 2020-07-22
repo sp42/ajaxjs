@@ -1,17 +1,14 @@
 
 package com.ajaxjs.framework.filter;
 
-import java.lang.reflect.Method;
 import java.util.Map;
 
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.CommonConstant;
-import com.ajaxjs.web.mvc.ModelAndView;
 import com.ajaxjs.web.mvc.MvcConstant;
-import com.ajaxjs.web.mvc.controller.MvcOutput;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
 import com.ajaxjs.web.mvc.filter.FilterAction;
 import com.ajaxjs.web.mvc.filter.FilterAfterArgs;
+import com.ajaxjs.web.mvc.filter.FilterContext;
 
 /**
  * 检查实体是否可以公开给前端展示
@@ -22,7 +19,7 @@ import com.ajaxjs.web.mvc.filter.FilterAfterArgs;
 public class FrontEndOnlyCheck implements FilterAction {
 
 	@Override
-	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args) {
+	public boolean before(FilterContext ctx) {
 		return true;
 	}
 

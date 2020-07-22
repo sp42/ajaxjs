@@ -27,6 +27,9 @@ import com.ajaxjs.framework.filter.XslMaker;
 import com.ajaxjs.net.http.PicDownload;
 import com.ajaxjs.sql.SnowflakeIdWorker;
 import com.ajaxjs.sql.orm.PageResult;
+import com.ajaxjs.user.filter.Authority;
+import com.ajaxjs.user.filter.PrivilegeFilter;
+import com.ajaxjs.user.role.RightConstant;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
@@ -52,7 +55,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 
 	@GET
 	@MvcFilter(filters = { DataBaseFilter.class })
-//	@Authority(filter = DataBaseFilter.class, value = 1)
+	@Authority(filter = PrivilegeFilter.class, value = RightConstant.ARTICLE_ONLINE)
 	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		LOGGER.info("图文列表-前台");
 		getService().showList(mv);
@@ -103,9 +106,9 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	public String adminList(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		PageResult<Map<String, Object>> list = getService().list(catalogId, start, limit, CommonConstant.OFF_LINE);
 		prepareData(mv);
-		mv.put(XslMaker.XSL_TEMPLATE_PATH, admin("article-xsl"));
+		mv.put(XslMaker.XSL_TEMPLATE_PATH, jsp("app/article-xsl"));
 
-		return autoOutput(list, mv, admin("article-admin-list"));
+		return autoOutput(list, mv, jsp("app/article-admin-list"));
 	}
 
 	@GET
@@ -114,7 +117,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@Override
 	public String createUI(ModelAndView mv) {
 		super.createUI(mv);
-		return admin("article-edit");
+		return jsp("app/article-edit");
 	}
 
 	@POST
@@ -131,7 +134,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@Path("/admin/{root}/{id}")
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
 		setInfo(mv, getService().findById(id));
-		return admin("article-edit");
+		return jsp("app/article-edit");
 	}
 
 	@PUT

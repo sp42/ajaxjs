@@ -54,15 +54,6 @@
 	</td></tr></table>
 </template>
 
-<template id="aj-page-captcha">
-	<table class="aj-page-captcha"><tr>
-		<td><input type="text" :name="fieldName" placeholder="输入右侧验证码" data-regexp="integer" required autocomplete="off" size="10" /></td>
-		<td style="vertical-align: top;">
-			<img :src="imgSrc || ajResources.ctx + '/Captcha'" @click="onClk" title="点击刷新图片" />
-		</td>
-	</tr></table>
-</template>
-
 <template id="aj-xhr-upload">
 	<div class="aj-xhr-upload" :style="{display: buttonBottom ? 'inherit': 'flex'}">
 		<input v-if="hiddenField" type="hidden" :name="hiddenField" :value="hiddenFieldValue" />

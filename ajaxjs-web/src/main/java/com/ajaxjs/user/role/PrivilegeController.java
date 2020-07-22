@@ -11,19 +11,34 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.framework.BaseController;
+import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
+import com.ajaxjs.sql.annotation.TableName;
+import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.IBaseService;
+import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.util.ioc.Component;
-import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.web.mvc.ModelAndView;
 import com.ajaxjs.web.mvc.filter.MvcFilter;
 
 @Path("/admin/user/privilege")
 @Component
 public class PrivilegeController extends BaseController<Privilege> {
+	@TableName(value = "user_privilege", beanClass = Privilege.class)
+	public static interface UserRolePrivilegeDao extends IBaseDao<Privilege> {
+	}
 
-	@Resource("UserRolePrivilegeService")
-	private PrivilegeService service;
+	public static class PrivilegeService extends BaseService<Privilege> {
+		UserRolePrivilegeDao dao = new Repository().bind(UserRolePrivilegeDao.class);
+
+		{
+			setUiName("权限");
+			setShortName("user_privilege");
+			setDao(dao);
+		}
+	}
+
+	private PrivilegeService service = new PrivilegeService();
 
 	@GET
 	@Path(LIST)

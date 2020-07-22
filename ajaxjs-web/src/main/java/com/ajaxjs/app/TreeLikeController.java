@@ -29,17 +29,14 @@ public class TreeLikeController extends BaseController<Catalog> {
 	private TreeLikeService service;
 
 	@GET
-	public String page(ModelAndView mv) {
-		prepareData(mv);
-		return admin("tree-like");
-	}
-
-	@GET
-	@Path("all")
-	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String listAll() {
-		return toJson(service.getAllChildren());
+	public String page(ModelAndView mv) {
+		if (isJson()) {
+			return toJson(service.getAllChildren());
+		} else {
+			prepareData(mv);
+			return jsp("app/tree-like");
+		}
 	}
 
 	@GET

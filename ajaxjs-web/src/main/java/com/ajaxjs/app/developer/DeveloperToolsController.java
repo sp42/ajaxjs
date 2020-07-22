@@ -35,13 +35,13 @@ public class DeveloperToolsController implements IController {
 		mv.put("saveFolder", ConfigService.getValueAsString("System.project_folder") + "\\src"); // 臨時保存
 		mv.put("conn", XmlHelper.nodeAsMap(r.mappath("/META-INF/context.xml"), "//Resource[@name='" + ConfigService.get("data.database_node") + "']"));
 
-		return BaseController.admin("developer/developer-tool");
+		return BaseController.jsp("app/developer/developer-tool");
 	}
 
 	@Path("docs")
 	@GET
 	public String docs() {
-		return BaseController.admin("developer/developer-doc");
+		return BaseController.jsp("app/developer/developer-doc");
 	}
 
 	@Path("backup/images")

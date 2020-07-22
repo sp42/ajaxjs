@@ -36,13 +36,7 @@ public class RoleController extends BaseController<Map<String, Object>> {
 	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
 		return toJson(service.findList());
 	}
-
-	@GET
-	public String jsp(ModelAndView mv) {
-		prepareData(mv);
-		return jsp("user/role/user-group");
-	}
-
+ 
 	@POST
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)

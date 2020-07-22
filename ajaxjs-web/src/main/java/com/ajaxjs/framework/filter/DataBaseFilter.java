@@ -15,7 +15,6 @@
  */
 package com.ajaxjs.framework.filter;
 
-import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -24,11 +23,9 @@ import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.framework.config.TestHelper;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.web.mvc.ModelAndView;
-import com.ajaxjs.web.mvc.controller.MvcOutput;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
 import com.ajaxjs.web.mvc.filter.FilterAction;
 import com.ajaxjs.web.mvc.filter.FilterAfterArgs;
+import com.ajaxjs.web.mvc.filter.FilterContext;
 
 /**
  * 1、数据库连接、关闭连接；2、数据库事务
@@ -42,10 +39,10 @@ public class DataBaseFilter extends JdbcConnection implements FilterAction {
 	private static final LogHelper LOGGER = LogHelper.getLog(DataBaseFilter.class);
 	
 	@Override
-	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args) {
+	public boolean before(FilterContext ctx) {
 		initDb();
 
-		if (method.getAnnotation(EnableTransaction.class) != null) {
+		if (ctx.method.getAnnotation(EnableTransaction.class) != null) {
 			try {
 				getConnection().setAutoCommit(false);
 			} catch (SQLException e) {

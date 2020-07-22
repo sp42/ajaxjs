@@ -1,6 +1,8 @@
 package com.ajaxjs.app;
 
 import com.ajaxjs.net.mail.Mail;
+import com.ajaxjs.web.UploadFileInfo;
+import com.ajaxjs.web.mvc.controller.MvcRequest;
 
 /**
  * 
@@ -25,4 +27,6 @@ public interface ThirdPartyService {
 	 * @return 是否发送成功
 	 */
 	public boolean sendSms(String phoneNo, String template, String param);
+
+	public void uploadFile(MvcRequest request, UploadFileInfo info);
 }

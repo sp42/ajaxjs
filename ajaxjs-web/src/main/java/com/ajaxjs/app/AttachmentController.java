@@ -16,12 +16,15 @@ import javax.ws.rs.core.MediaType;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.CommonConstant;
+import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
+import com.ajaxjs.sql.SnowflakeIdWorker;
 import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.util.ioc.Component;
+import com.ajaxjs.util.ioc.ComponentMgr;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.web.UploadFileInfo;
@@ -136,6 +139,32 @@ public class AttachmentController extends BaseController<Attachment> {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getListByOwnerUid(@PathParam(ID) Long uid) {
 		return toJson(service.findByOwner(uid));
+	}
+
+	@POST
+	@MvcFilter(filters = DataBaseFilter.class)
+	@Path("imgUpload")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String imgUpload(MvcRequest request, @PathParam(ID) long owenerId) {
+		LOGGER.info("上传图片");
+
+		UploadFileInfo info = new UploadFileInfo();
+		info.saveFileName = SnowflakeIdWorker.getId() + "";
+
+		ThirdPartyService storageService = ComponentMgr.get(ThirdPartyService.class);
+		storageService.uploadFile(request, info);
+		info.fullPath = ConfigService.get("uploadFile.imgPerfix") + info.saveFileName;
+
+		return "json::" + JsonHelper.toJson(new Object() {
+			@SuppressWarnings("unused")
+			public Boolean isOk = true;
+			@SuppressWarnings("unused")
+			public String msg = "上传成功！";
+			@SuppressWarnings("unused")
+			public String imgUrl = info.saveFileName;
+			@SuppressWarnings("unused")
+			public String fullUrl = info.fullPath;
+		});
 	}
 
 	@DELETE

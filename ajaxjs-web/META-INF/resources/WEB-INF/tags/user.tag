@@ -2,9 +2,6 @@
 <%@attribute name="type" required="true" type="String" description="标签类型"%>
 <%@taglib uri="/ajaxjs" prefix="c" %>
 <%@taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
-<%
-	request.setAttribute("CAPTCHA_CODE", com.ajaxjs.web.captcha.CaptchaController.CAPTCHA_CODE);
-%>
 
 <c:if test="${type == 'login'}">
 	<%@attribute name="isAdminLogin" required="false" type="Boolean" description="是否后台的登录"%>
@@ -29,15 +26,6 @@
 			</label>
 		</dl>
 		<dl>
-			<label>
-				<dt><tags:i18n zh="验证码" eng="Captcha" /></dt>
-				<dd class="captcha" style="font-size: .8rem;">
-					<aj-page-captcha field-name="${CAPTCHA_CODE}"></aj-page-captcha>
-				</dd>
-			</label>
-			
-		</dl>
-		<dl>
 			<dt></dt>
 			<dd style="font-size: .8rem;;text-align: left">
 				<button><tags:i18n zh="登录" eng="Login" /></button>
@@ -59,10 +47,9 @@
 	<script src="${ajaxjs_ui_output}/lib/md5.min.js"></script>
 	<script>
 		new Vue({
-			el : 'form.aj-form',
+			el: 'form.aj-form',
 			mounted() {
-				ajaxjs.xhr.form(
-					this.$el, 
+				aj.xhr.form(this.$el, 
 					json => {
 						if (json && json.isOk) {
 							aj.alert.show(json.msg || '操作成功！');
@@ -76,12 +63,12 @@
 						<c:if test="${isAdminLogin}">
 							json.isAdminLogin = true;
 						</c:if>
-						}
+						},
+						googleReCAPTCHA: '${aj_allConfig.security.GoogleReCAPTCHA.siteId}'
 					}
 				);
 			}
 		});
-	
 	</script>
 
 </c:if>
@@ -135,14 +122,6 @@
 				</dd>
 			</label>
 		</dl>
-		<dl>		
-			<label>
-				<dt>验证码</dt>
-				<dd class="captcha">
-					<aj-page-captcha field-name="captchaImgCode"></aj-page-captcha>
-				</dd>
-			</label>
-		</dl>
 		<dl>
 			<dt style="text-align: right;padding-right: 4%;"><input type="checkbox" class="privacy" id="agreement" /></dt>
 			<dd>
@@ -177,9 +156,8 @@
 			},
 			
 			mounted() {
- 				ajaxjs.xhr.form(
-					this.$el, 
-					ajaxjs.xhr.defaultCallBack_cb.delegate(null, null, 
+ 				aj.xhr.form(this.$el, 
+					aj.xhr.defaultCallBack_cb.delegate(null, null, 
 						j => {
 							setTimeout("location.assign('${ctx}/user/login/')", 2000)
 						}, 
@@ -198,7 +176,8 @@
 							
 							json.password = md5(json.password);
 							delete json.password2;
-						}
+						},
+						googleReCAPTCHA: '${aj_allConfig.security.GoogleReCAPTCHA.siteId}'
 					}
 				); 
 			},

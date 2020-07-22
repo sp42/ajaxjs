@@ -1,14 +1,11 @@
-package com.ajaxjs.user.role;
-
-import java.lang.reflect.Method;
+package com.ajaxjs.user.filter;
 
 import javax.servlet.http.HttpSession;
 
-import com.ajaxjs.web.mvc.ModelAndView;
-import com.ajaxjs.web.mvc.controller.MvcOutput;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.user.role.RoleService;
 import com.ajaxjs.web.mvc.filter.FilterAction;
 import com.ajaxjs.web.mvc.filter.FilterAfterArgs;
+import com.ajaxjs.web.mvc.filter.FilterContext;
 
 public class PrivilegeFilter implements FilterAction {
 	private int value;
@@ -18,14 +15,14 @@ public class PrivilegeFilter implements FilterAction {
 	}
 
 	@Override
-	public boolean before(ModelAndView model, MvcRequest request, MvcOutput response, Method method, Object[] args) {
-		HttpSession session = request.getSession();
+	public boolean before(FilterContext ctx) {
+		HttpSession session = ctx.request.getSession();
 		Object privilegeTotal = session.getAttribute("privilegeTotal");
 
 		if (privilegeTotal == null)
 			return false;
 
-		return RoleService.check((long) privilegeTotal, value);
+		return RoleService.check(ctx.request.getSession(), value);
 	}
 
 	@Override
