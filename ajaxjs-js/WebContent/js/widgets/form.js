@@ -1158,7 +1158,6 @@ Vue.component('aj-popup-upload', {
 	template: '#aj-popup-upload',
 	mounted() {
 		var obj = this.$refs.uploadControl;
-		
 		this.text = {maxSize: obj.limitSize || 600, maxHeight: obj.imgMaxHeight, maxWidth: obj.imgMaxWidth};
 	},
 	methods: {
@@ -1174,6 +1173,53 @@ Vue.component('aj-popup-upload', {
 			this.$children[0].show();
 		}
 	}
+});
+
+//全国省市区 写死属性
+Vue.component('aj-china-area', {
+	template: '#aj-china-area',
+    props: {
+        provinceCode: String,
+        cityCode: String,
+        districtCode: String
+    },
+   data() {
+		if(!China_AREA)
+			throw '中国行政区域数据 脚本没导入';
+	   
+        return {
+        	province: this.provinceCode || '',
+        	city: this.cityCode || '',
+        	district: this.districtCode || '',
+            addressData: China_AREA
+        };
+    },
+    watch:{ // 令下一级修改
+        province(val, oldval) {
+//            if(val !== oldval) 
+//                this.city = '';
+            
+        },
+//        city(val, oldval) {
+//            if(val !== oldval)
+//                this.district = '';
+//        }
+    },
+   
+    computed: {
+        citys() {
+            if(!this.province)
+                return;
+
+            return this.addressData[this.province];
+        },
+        districts() {
+            if(!this.city)
+                return;
+
+            return this.addressData[this.city];
+        }
+    }
 });
 
 //polyfill JavaScript-Canvas-to-Blob 解决了 HTMLCanvasElement.toBlob 的兼容性

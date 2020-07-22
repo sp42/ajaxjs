@@ -1,48 +1,4 @@
-<%@page pageEncoding="UTF-8"%>
-
-
-	<h4>图片验证码</h4>
-	<p>点击刷新图片，并发送时间戳参数请求图片（不缓存图片）。</p>
-
-	<p>属性说明：</p>
-	<table class="ajaxjs-borderTable">
-		<thead>
-			<tr>
-				<th>属性</th>
-				<th>含义</th>
-				<th>类型</th>
-				<th>是否必填，默认值</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>imgSrc</td>
-				<td>生成图片验证码地址</td>
-				<td>String</td>
-				<td>y</td>
-			</tr>
-			<tr>
-				<td>fieldName</td>
-				<td>提交的字段名</td>
-				<td>String</td>
-				<td>n，captcha</td>
-			</tr>
-		</tbody>
-	</table>
-	<p>例子：</p>
-	<pre class="prettyprint"><xmp><aj-page-captcha img-src="${pageContext.request.contextPath}/Captcha/"></aj-page-captcha></xmp></pre>
-	
-	<p>演示：</p>
-	
-	<div class="captcha center">
-		<aj-page-captcha img-src="${pageContext.request.contextPath}/Captcha/"></aj-page-captcha>
-	</div>
-	<script>
-		new Vue({el:'.captcha'});
-	</script>
-	
-	
-	
+<%@page pageEncoding="UTF-8"%>	
 	<h4>HTML 在綫編輯器</h4>
 	<p>小巧的HTML 在綫編輯器。</p>
 	<ul class="center list">

@@ -208,8 +208,20 @@ aj.apply = function(a, b, c) {
 	return c ? aj.apply(a, c) : a;
 }
 
+// 加载脚本
+aj.loadScript = (url, id) => {
+	var script = document.createElement("script");
+	script.src = url;
+	
+	if(id) 
+		script.id = id;
+	
+	document.getElementsByTagName("head")[0].appendChild(script);	
+}
+
 /*
- * -------------------------------------------------------- 封装 XHR，支持
+ * -------------------------------------------------------- 
+ * 封装 XHR，支持
  * GET/POST/PUT/DELETE/JSONP/FormData
  * http://blog.csdn.net/zhangxin09/article/details/78879244
  * --------------------------------------------------------
@@ -218,10 +230,8 @@ ajaxjs.xhr = {
 	/**
 	 * JSON 转换为 URL
 	 * 
-	 * @param {Object}
-	 *            JSON
-	 * @param {String}
-	 *            附加的地址
+	 * @param {Object} JSON
+	 * @param {String}  附加的地址
 	 */
 	json2url(json, appendUrl) {
 		var params = [];
@@ -281,9 +291,7 @@ ajaxjs.xhr = {
 						data = JSON.parse(responseText);						
 					} catch(e) {
 						try{
-							data = eval("TEMP_VAR = " + responseText);  // for
-																		// {ok:
-																		// true}
+							data = eval("TEMP_VAR = " + responseText);  // for {ok: true}
 						} catch(e) {
 							throw e;
 						}
@@ -316,6 +324,15 @@ ajaxjs.xhr = {
 		
 		!cfg.noFormValid && aj.formValidator(form);
 
+		if(cfg.googleReCAPTCHA) {// 加载脚本
+			var script = aj("#googleReCAPTCHA");
+			
+			if(!script) {
+				var src = 'https://www.recaptcha.net/recaptcha/api.js?render=';
+				src += 	cfg.googleReCAPTCHA;		
+				aj.loadScript(src, 'googleReCAPTCHA');
+			}
+		}
 
 		form.addEventListener('submit', function(e, cb, cfg) {
 			e.preventDefault();// 禁止 form 默认提交
@@ -335,11 +352,26 @@ ajaxjs.xhr = {
 
 			if (cfg && cfg.beforeSubmit && cfg.beforeSubmit(form, json) === false)
 				return;
+				
+			if(cfg.googleReCAPTCHA) {
+				grecaptcha.ready(() => {
+		        	grecaptcha.execute(cfg.googleReCAPTCHA, {action: 'submit'}).then(token => {
+			        	// Add your logic to submit to your backend server here.
+						json.grecaptchaToken = token;
 
-			if (cfg && cfg.method == 'put')
-				ajaxjs.xhr.put(form.action, cb, json);
-			else
-				ajaxjs.xhr.post(form.action, cb, json);
+						if (cfg.method == 'put')
+							ajaxjs.xhr.put(form.action, cb, json);
+						else
+							ajaxjs.xhr.post(form.action, cb, json);
+		        	});
+		        });
+			} else {
+				if (cfg && cfg.method == 'put')
+					ajaxjs.xhr.put(form.action, cb, json);
+				else
+					ajaxjs.xhr.post(form.action, cb, json);
+			}
+
 		}.delegate(null, cb, cfg));
 		
 		var returnBtn = form.$('button.returnBtn'); // shorthand for back btn
