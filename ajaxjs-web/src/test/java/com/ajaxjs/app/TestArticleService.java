@@ -12,7 +12,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.app.catalog.CatalogService;
 import com.ajaxjs.framework.config.TestHelper;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.orm.PageResult;
@@ -29,9 +28,6 @@ public class TestArticleService {
 
 	@Test
 	public void testGetAllListByParentId() {
-		CatalogService catalogService = (CatalogService) ComponentMgr.get("闪亮杯国际少儿音乐大赛");
-		catalogService.findAllListByParentId(12);
-
 		ArticleService articleService = (ArticleService) ComponentMgr.get("ArticleService");
 		PageResult<Map<String, Object>> r = articleService.list(15, 0, 5, 1);
 

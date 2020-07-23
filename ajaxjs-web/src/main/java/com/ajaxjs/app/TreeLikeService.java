@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.ajaxjs.app.catalog.Catalog;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.sql.annotation.Delete;
@@ -69,6 +68,7 @@ public class TreeLikeService extends BaseService<Catalog> {
 	}
 
 	/**
+	 * 获取全部的分类
 	 * 
 	 * @return
 	 */
