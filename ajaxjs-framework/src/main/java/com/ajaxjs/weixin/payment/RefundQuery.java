@@ -8,7 +8,6 @@ import java.util.Map;
 import com.ajaxjs.shop.payment.wxpay.BaseResponse;
 
 /**
- * @borball on 5/17/2016.
  */
 public class RefundQuery extends BaseResponse {
 

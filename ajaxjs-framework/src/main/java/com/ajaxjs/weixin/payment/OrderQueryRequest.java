@@ -1,7 +1,6 @@
 package com.ajaxjs.weixin.payment;
 
 /**
- * @borball on 5/15/2016.
  */
 public class OrderQueryRequest {
 

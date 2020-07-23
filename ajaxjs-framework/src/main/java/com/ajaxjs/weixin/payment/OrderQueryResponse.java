@@ -5,7 +5,6 @@ import java.util.Date;
 import com.ajaxjs.shop.payment.wxpay.BaseResponse;
 
 /**
- * @borball on 5/15/2016.
  */
 public class OrderQueryResponse extends BaseResponse {
 

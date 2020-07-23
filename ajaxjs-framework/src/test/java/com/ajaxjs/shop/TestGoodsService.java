@@ -7,7 +7,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ajaxjs.framework.CommonConstant;
-import com.ajaxjs.framework.config.TestHelper;
+import com.ajaxjs.framework.TestHelper;
 import com.ajaxjs.shop.model.Goods;
 import com.ajaxjs.shop.service.CartService;
 import com.ajaxjs.shop.service.GoodsService;
