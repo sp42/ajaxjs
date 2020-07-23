@@ -9,19 +9,18 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ajaxjs.app.catalog.Catalog;
-import com.ajaxjs.app.catalog.CatalogService;
 import com.ajaxjs.framework.config.TestHelper;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.util.ioc.ComponentMgr;
 
 public class TestCatalogService {
-	static CatalogService catalogService;
+	static TreeLikeService catalogService;
 
 	@BeforeClass
 	public static void initDb() {
 		TestHelper.initAll();
-		catalogService = (CatalogService) ComponentMgr.get("闪亮杯国际少儿音乐大赛");
+		catalogService = (TreeLikeService) ComponentMgr.get("闪亮杯国际少儿音乐大赛");
 	}
 
 	// @Test
@@ -59,7 +58,7 @@ public class TestCatalogService {
 
 	@Test
 	public void testGetAllListByParentId() {
-		CatalogService catalogService = (CatalogService) ComponentMgr.get("闪亮杯国际少儿音乐大赛");
+		TreeLikeService catalogService = (TreeLikeService) ComponentMgr.get("闪亮杯国际少儿音乐大赛");
 		catalogService.findAllListByParentId(12);
 
 		ArticleService articleService = (ArticleService) ComponentMgr.get("ArticleService");
