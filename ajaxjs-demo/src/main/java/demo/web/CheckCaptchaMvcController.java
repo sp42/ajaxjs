@@ -6,9 +6,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.mvc.controller.IController;
-import com.ajaxjs.mvc.filter.MvcFilter;
-import com.ajaxjs.web.captcha.CaptchaFilter;
+import com.ajaxjs.framework.filter.CaptchaFilter;
+import com.ajaxjs.web.mvc.controller.IController;
+import com.ajaxjs.web.mvc.filter.MvcFilter;
 
 @Path("/CheckCaptcha-MVC")
 public class CheckCaptchaMvcController implements IController {

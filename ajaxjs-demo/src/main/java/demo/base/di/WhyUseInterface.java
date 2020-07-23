@@ -1,6 +1,6 @@
 package demo.base.di;
 
-import com.ajaxjs.ioc.Resource;
+import com.ajaxjs.util.ioc.Resource;
 
 public class WhyUseInterface {
 	interface 能说汉语的人 {

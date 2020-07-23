@@ -8,18 +8,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ajaxjs.mvc.controller.MvcOutput;
-import com.ajaxjs.mvc.controller.MvcRequest;
-import com.ajaxjs.web.captcha.CaptchaFilter;
+import com.ajaxjs.framework.filter.CaptchaFilter;
+import com.ajaxjs.web.mvc.controller.MvcOutput;
+import com.ajaxjs.web.mvc.controller.MvcRequest;
 
 @WebServlet("/CheckCaptcha")
 public class CheckCaptchaController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		MvcOutput resp = new MvcOutput(response);
+		
 		try {
 			if (new CaptchaFilter().before(null, new MvcRequest(request), resp, null, null)) {
 				resp.output("验证码通过！");

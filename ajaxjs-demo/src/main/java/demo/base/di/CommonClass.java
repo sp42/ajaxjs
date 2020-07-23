@@ -1,6 +1,6 @@
 package demo.base.di;
 
-import com.ajaxjs.ioc.Resource;
+import com.ajaxjs.util.ioc.Resource;
 
 public class CommonClass {
 	class 父类 {

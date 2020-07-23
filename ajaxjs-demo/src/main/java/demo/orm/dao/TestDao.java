@@ -2,8 +2,8 @@ package demo.orm.dao;
 
 import java.sql.Connection;
 
-import com.ajaxjs.framework.Repository;
-import com.ajaxjs.orm.JdbcConnection;
+import com.ajaxjs.sql.JdbcConnection;
+import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.util.resource.ScanClass;
 
 public class TestDao {
