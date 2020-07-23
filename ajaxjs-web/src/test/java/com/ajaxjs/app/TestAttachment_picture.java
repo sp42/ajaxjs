@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import com.ajaxjs.app.attachment.Attachment_picture;
 import com.ajaxjs.app.attachment.Attachment_pictureService;
-import com.ajaxjs.framework.config.TestHelper;
+import com.ajaxjs.framework.TestHelper;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.util.ioc.ComponentMgr;
 

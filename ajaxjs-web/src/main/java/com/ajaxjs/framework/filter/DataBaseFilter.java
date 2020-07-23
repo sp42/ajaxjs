@@ -19,8 +19,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import com.ajaxjs.Version;
+import com.ajaxjs.framework.TestHelper;
 import com.ajaxjs.framework.config.ConfigService;
-import com.ajaxjs.framework.config.TestHelper;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.mvc.filter.FilterAction;

@@ -65,5 +65,4 @@ public class DateUtil extends SimpleTagSupport {
 	public void setFormat(String format) {
 		this.format = format;
 	}
-
 }

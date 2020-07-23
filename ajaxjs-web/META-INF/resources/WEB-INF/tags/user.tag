@@ -50,8 +50,8 @@
 			el: 'form.aj-form',
 			mounted() {
 				aj.xhr.form(this.$el, 
-					json => {
-						if (json && json.isOk) {
+					j => {
+						if (j && j.isOk) {
 							aj.alert.show(json.msg || '操作成功！');
 							setTimeout("location.assign('${ctx}/${isAdminLogin ? 'admin' : 'user'}/')", 3000);
 						} else 
@@ -70,7 +70,6 @@
 			}
 		});
 	</script>
-
 </c:if>
 
 <c:if test="${type == 'register'}">
@@ -157,20 +156,17 @@
 			
 			mounted() {
  				aj.xhr.form(this.$el, 
-					aj.xhr.defaultCallBack_cb.delegate(null, null, 
-						j => {
-							setTimeout("location.assign('${ctx}/user/login/')", 2000)
-						}, 
-						j => this.$children[0].refreshCode()) ,
+					aj.xhr.defaultCallBack_cb.delegate(null, null, j => setTimeout("location.assign('${ctx}/user/login/')", 2000), 
+						j => this.$children[0].refreshCode()),
 					{
 						beforeSubmit: (f, json) => {
 							if (!this.$el.$('.privacy').checked) {
-								ajaxjs.alert.show('请同意用户注册协议和隐私政策');
+								aj.alert.show('请同意用户注册协议和隐私政策');
 								return false;
 							}
 
 							if (json.passowrd != json.passowrd2) {
-								ajaxjs.alert.show('两次密码输入不一致！');
+								aj.alert.show('两次密码输入不一致！');
 								return false;
 							}
 							
@@ -187,10 +183,10 @@
 					var el = e.target, userId = el.value;
 				
 					if(aj.formValidator.hasError(el) === undefined)
-						aj.xhr.get('${ctx}/user/checkIfUserNameRepeat/', json => {
-							this.isAllowRegister = !json.result.isRepeat;
+						aj.xhr.get('${ctx}/user/checkIfUserNameRepeat/', j => {
+							this.isAllowRegister = !j.result.isRepeat;
 							
-							if (json.result.isRepeat)
+							if (j.result.isRepeat)
 								this.checkUserIdMsg = userId + "已经注册";
 							else 
 								this.checkUserIdMsg = userId + "可以注册";

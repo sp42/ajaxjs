@@ -1,4 +1,4 @@
-﻿<%@ page pageEncoding="UTF-8" import="com.ajaxjs.user.role.RoleService, com.ajaxjs.user.role.RightConstant"%>
+﻿<%@ page pageEncoding="UTF-8" import="com.ajaxjs.user.role.RoleService"%>
 <%@taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
 
@@ -39,7 +39,7 @@
 	<hr style="width:95%;" class="aj-hr" />
 	<div style="padding:0 3% 5% 3%;">
 		<div style="float:right;"><a href="${ctx}/user/profile/">修改个人资料</a>
-	<c:if test="${RoleService.check(RightConstant.ADMIN_SYSTEM_ALLOW_ENTNER)}">
+	<c:if test="${RoleService.check(RoleService.ADMIN_SYSTEM_ALLOW_ENTNER)}">
 		 | <a href="${ctx}/admin/">进入后台</a> 
 	</c:if>
 		<br />

@@ -7,7 +7,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ajaxjs.framework.ServiceException;
-import com.ajaxjs.framework.config.TestHelper;
+import com.ajaxjs.framework.TestHelper;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.user.controller.UserController;
 import com.ajaxjs.user.model.User;

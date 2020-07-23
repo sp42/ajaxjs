@@ -18,7 +18,7 @@ import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.web.mvc.controller.MvcRequest;
 
 @Component("UserRoleService")
-public class RoleService extends BaseService<Map<String, Object>> {
+public class RoleService extends BaseService<Map<String, Object>> implements RightConstant {
 	public static RoleDao dao = new Repository().bind(RoleDao.class);
 
 	{
