@@ -10,7 +10,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.app.catalog.CatalogService;
+import com.ajaxjs.app.TreeLikeService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.framework.filter.BeanValidator;
@@ -30,13 +30,17 @@ public class AdsController extends BaseController<Ads> {
 	@Resource("AdsService")
 	private AdsService service;
 
+	@Resource
+	private TreeLikeService treeLikeService;
+
 	@GET
 	@Path(LIST)
 	@MvcFilter(filters = { DataBaseFilter.class })
 	public String adminList(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		LOGGER.info("广告列表");
 
-		CatalogService.idAsKey(service.getDomainCatalogId(), mv);
+		mv.put("catalogs", treeLikeService.getAllChildrenAsMap(service.getDomainCatalogId()));
+
 		page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.ON_LINE, true));
 
 		return admin("topic-admin-list");
@@ -47,7 +51,7 @@ public class AdsController extends BaseController<Ads> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
 		setInfo(id, mv);
-		
+
 		return admin("ads-edit");
 	}
 

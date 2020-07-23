@@ -13,7 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.app.catalog.CatalogService;
+import com.ajaxjs.app.TreeLikeService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.framework.config.ConfigService;
@@ -39,8 +39,11 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
 public class GoodsController extends BaseController<Goods> {
 	private static final LogHelper LOGGER = LogHelper.getLog(GoodsController.class);
 
-	@Resource("GoodsService")
+	@Resource
 	private GoodsService service;
+
+	@Resource
+	private TreeLikeService treeLikeService;
 
 	@GET
 	@Path(LIST)
@@ -49,7 +52,7 @@ public class GoodsController extends BaseController<Goods> {
 		LOGGER.info("商城-商品-后台列表");
 
 		prepareData(mv);
-		CatalogService.idAsKey(service.getDomainCatalogId(), mv, "goodsCatalogs");
+		mv.put("goodsCatalogs", treeLikeService.getAllChildrenAsMap(service.getDomainCatalogId()));
 
 		return autoOutput(service.findPagedListByCatalogId(catalogId, start, limit, CommonConstant.OFF_LINE, sellerId), mv, jsp("shop/goods-admin-list"));
 	}

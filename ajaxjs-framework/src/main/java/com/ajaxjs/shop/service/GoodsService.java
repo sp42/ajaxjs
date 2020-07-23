@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import com.ajaxjs.app.TreeLikeService;
 import com.ajaxjs.app.attachment.Attachment_pictureService;
-import com.ajaxjs.app.catalog.CatalogService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.shop.dao.GoodsDao;
@@ -78,7 +78,7 @@ public class GoodsService extends BaseService<Goods> {
 	static Function<String, String> noContent = sql -> sql.replace("*", "id, name, cover, coverPrice, stat, titlePrice, createDate, catalogId, brand, sellerId");
 	
 	public PageResult<Goods> findPagedListByCatalogId(int catalogId, int start, int limit, int status, int sellerId) {
-		Function<String, String> sqlHander = CatalogService.setCatalog(catalogId, getDomainCatalogId())
+		Function<String, String> sqlHander = TreeLikeService.setCatalog(catalogId, getDomainCatalogId())
 				.andThen(setStatus(status)).andThen(BaseService::searchQuery).andThen(BaseService::betweenCreateDate).andThen(noContent);
 				
 //				.andThen(BaseService::betweenCreateDate);

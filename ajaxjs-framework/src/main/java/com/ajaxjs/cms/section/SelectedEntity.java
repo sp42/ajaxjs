@@ -1,4 +1,4 @@
-package com.ajaxjs.app.section;
+package com.ajaxjs.cms.section;
 
 import java.util.ArrayList;
 import java.util.List;

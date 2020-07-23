@@ -3,7 +3,7 @@ package com.ajaxjs.cms;
 import java.util.List;
 import java.util.function.Function;
 
-import com.ajaxjs.app.catalog.CatalogService;
+import com.ajaxjs.app.TreeLikeService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.sql.annotation.TableName;
@@ -36,7 +36,7 @@ public class AdsService extends BaseService<Ads> {
 	 * @return
 	 */
 	public List<Ads> findListByCatalogId(int catalogId) {
-		return dao.findList(CatalogService.byCatalogId(catalogId));
+		return dao.findList(TreeLikeService.byCatalogId(catalogId));
 	}
 
 	/**
@@ -51,7 +51,7 @@ public class AdsService extends BaseService<Ads> {
 		Function<String, String> fn = setStatus(status).andThen(BaseService::searchQuery_NameOnly);
 
 		if (catalogId != 0)
-			fn = fn.andThen(CatalogService.setCatalog(catalogId));
+			fn = fn.andThen(TreeLikeService.setCatalog(catalogId));
 
 		return dao.findPagedList(start, limit, fn);
 	}

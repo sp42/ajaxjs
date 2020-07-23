@@ -9,7 +9,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.framework.BaseModel;
-import com.ajaxjs.mvc.controller.IController;
+import com.ajaxjs.web.mvc.ModelAndView;
+import com.ajaxjs.web.mvc.controller.IController;
 
 @Path("/news")
 public class NewsController implements IController {

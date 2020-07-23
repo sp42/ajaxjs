@@ -3,10 +3,10 @@ package com.ajaxjs.framework.filter;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
-import com.ajaxjs.mvc.controller.IController;
-import com.ajaxjs.mvc.filter.MvcFilter;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.JdbcHelper;
+import com.ajaxjs.web.mvc.controller.IController;
+import com.ajaxjs.web.mvc.filter.MvcFilter;
 
 @Path("/foo")
 public class TransactionController implements IController {

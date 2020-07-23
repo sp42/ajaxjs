@@ -1,3 +1,4 @@
+package com.ajaxjs.cms.section;
 //package com.ajaxjs.app.section;
 //
 //import java.util.List;

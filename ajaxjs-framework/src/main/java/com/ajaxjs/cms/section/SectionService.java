@@ -1,4 +1,4 @@
-package com.ajaxjs.app.section;
+package com.ajaxjs.cms.section;
 
 import java.util.List;
 import java.util.Map;

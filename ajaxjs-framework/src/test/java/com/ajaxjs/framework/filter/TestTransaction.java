@@ -14,10 +14,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ajaxjs.framework.config.TestHelper;
-import com.ajaxjs.mvc.controller.MvcDispatcher;
 import com.ajaxjs.web.mock.BaseControllerTest;
 import com.ajaxjs.web.mock.MockRequest;
 import com.ajaxjs.web.mock.MockResponse;
+import com.ajaxjs.web.mvc.controller.MvcDispatcher;
 
 public class TestTransaction extends BaseControllerTest {
 	@BeforeClass

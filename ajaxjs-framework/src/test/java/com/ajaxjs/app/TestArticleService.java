@@ -14,11 +14,11 @@ import org.junit.Test;
 
 import com.ajaxjs.app.catalog.CatalogService;
 import com.ajaxjs.framework.config.TestHelper;
-import com.ajaxjs.mvc.controller.MvcRequest;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.util.ioc.ComponentMgr;
 import com.ajaxjs.web.mock.MockRequest;
+import com.ajaxjs.web.mvc.controller.MvcRequest;
 
 public class TestArticleService {
 
