@@ -1,4 +1,4 @@
-package com.ajaxjs.mvc.controller.testcase;
+package com.ajaxjs.web.mvc.testcase;
 
 import java.util.Map;
 
@@ -11,7 +11,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 
-import com.ajaxjs.mvc.controller.TestRequestParam.News;
+import com.ajaxjs.web.mvc.TestRequestParam.News;
 import com.ajaxjs.web.mvc.controller.IController;
 
 // 测试基本的 HTTP 四个方法已经自定义流程控制

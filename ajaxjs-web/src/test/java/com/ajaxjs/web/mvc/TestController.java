@@ -1,4 +1,4 @@
-package com.ajaxjs.mvc.controller;
+package com.ajaxjs.web.mvc;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyString;
@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import com.ajaxjs.mvc.controller.test.NewsController;
 import com.ajaxjs.util.ioc.ComponentMgr;
 import com.ajaxjs.web.mock.MockResponse;
 import com.ajaxjs.web.mvc.controller.MvcDispatcher;

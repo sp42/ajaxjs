@@ -1,4 +1,4 @@
-package com.ajaxjs.mvc.controller.testcase;
+package com.ajaxjs.web.mvc.testcase;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;

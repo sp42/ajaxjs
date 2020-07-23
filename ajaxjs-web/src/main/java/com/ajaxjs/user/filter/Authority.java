@@ -37,5 +37,5 @@ public @interface Authority {
 	
 	int value();
 	
-	int value2();
+	int value2() default 0;
 }

@@ -19,7 +19,17 @@ import com.ajaxjs.util.ioc.Component;
 @Component
 public class TreeLikeService extends BaseService<Catalog> {
 	@TableName(value = "general_catalog", beanClass = Catalog.class)
-	public interface TreeLikeoDao extends IBaseDao<Catalog> {
+	public static interface TreeLikeoDao extends IBaseDao<Catalog> {
+		/**
+		 * 左连接分类表，实体简写必须为 e
+		 */
+		public final static String LEFT_JOIN_CATALOG = " LEFT JOIN general_catalog gc ON gc.id = e.catalogId ";
+
+		/**
+		 * 关联分类表以获取分类名称，即增加了 catalogName 字段。另外如果前台不需要显示的话，只是后台的话，可以用 map 显示
+		 */
+		public final static String SELECT_CATALOGNAME = "SELECT e.*, gc.name catalogName FROM ${tableName} e" + LEFT_JOIN_CATALOG + WHERE_REMARK_ORDER;
+
 		/**
 		 * 获取 pid 下面的所有子节点，无论下面有多少级
 		 * 
@@ -187,4 +197,5 @@ public class TreeLikeService extends BaseService<Catalog> {
 
 		return v == null ? setWhere(null) : setCatalog((int) v);
 	}
+
 }

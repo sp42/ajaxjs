@@ -1,4 +1,4 @@
-package com.ajaxjs.mvc.controller;
+package com.ajaxjs.web.mvc;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

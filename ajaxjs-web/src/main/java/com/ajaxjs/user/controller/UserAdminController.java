@@ -56,7 +56,7 @@ public class UserAdminController extends BaseController<User> {
 		mv.put("UserGroupsJson", toJson(TreeLikeService.idAsKey(userGroups), false));
 		mv.put("UserGroupsJSON", toJson(userGroups, false).replaceAll("\"", "'"));
 
-		return page(mv, service.findPagedList(start, limit), "user/user-admin-list");
+		return page(mv, service.findPagedList(start, limit), "user/admin/user-admin-list");
 	}
 
 	@GET
