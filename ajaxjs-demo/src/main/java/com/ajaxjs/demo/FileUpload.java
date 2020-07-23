@@ -7,9 +7,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
-import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.web.UploadFile;
 import com.ajaxjs.web.UploadFileInfo;
+import com.ajaxjs.web.mvc.controller.IController;
 
 /**
  * 接收文件上传
