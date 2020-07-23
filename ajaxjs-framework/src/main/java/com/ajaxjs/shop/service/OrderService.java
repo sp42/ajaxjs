@@ -7,12 +7,12 @@ import java.util.Map;
 import java.util.function.Function;
 
 import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.payment.wxpay.PayConstant;
 import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.dao.OrderInfoDao;
 import com.ajaxjs.shop.model.Cart;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.model.OrderItem;
+import com.ajaxjs.shop.payment.wxpay.PayConstant;
 import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.user.controller.BaseUserController;

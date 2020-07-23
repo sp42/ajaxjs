@@ -2,7 +2,7 @@ package com.ajaxjs.weixin.payment;
 
 import java.util.Date;
 
-import com.ajaxjs.payment.wxpay.BaseResponse;
+import com.ajaxjs.shop.payment.wxpay.BaseResponse;
 
 /**
  * @borball on 5/15/2016.
