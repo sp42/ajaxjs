@@ -29,6 +29,4 @@
 		<url-pattern>/global_search/</url-pattern>
 	</servlet-mapping>
 	<!-- // -->
-	
-
 </web-fragment>
