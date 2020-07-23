@@ -1,4 +1,4 @@
-<%@tag pageEncoding="UTF-8" import="com.ajaxjs.web.captcha.CaptchaController" description="公司网站用的组件" trimDirectiveWhitespaces="true" %>
+<%@tag pageEncoding="UTF-8"  description="公司网站用的组件" trimDirectiveWhitespaces="true" %>
 <%@taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
 <%@attribute name="type" required="true" type="String" description="标签类型"%>
 
@@ -32,12 +32,6 @@
 					<td><tags:i18n zh="联系方式" eng="Contact" /></td>
 					<td><input type="text" name="contact" placeholder="请输入你的手机或电子邮箱"  value="${userPhone}" required /></td>
 				</tr>
-				<tr>
-					<td><tags:i18n zh="验证码" eng="Captcha code" /></td>
-					<td class="captcha">
-						<aj-page-captcha field-name="${CaptchaController.CAPTCHA_CODE}"></aj-page-captcha>
-					</td>
-				</tr>
 			</table>
 	
 			<div class="aj-btnsHolder">
@@ -52,6 +46,8 @@
 					aj.alert('留言成功！');
 				} else
 					aj.alert(j.msg)
+			}, {
+				googleReCAPTCHA: '${aj_allConfig.security.GoogleReCAPTCHA.siteId}'
 			});
 			
 			new Vue({el: '.captcha'});
