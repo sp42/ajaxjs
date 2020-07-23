@@ -14,9 +14,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
-import com.ajaxjs.sql.SnowflakeIdWorker;
 import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.io.ImageHelper;
