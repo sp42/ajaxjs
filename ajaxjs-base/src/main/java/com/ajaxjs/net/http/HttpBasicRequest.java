@@ -282,6 +282,27 @@ public class HttpBasicRequest extends IoHelper {
 
 		return getResponse(conn, false, responseHandler == null ? IoHelper::byteStream2string : responseHandler);
 	}
+	
+	public static String put(String url, byte[] b, Consumer<HttpURLConnection> fn, Function<InputStream, String> responseHandler) {
+		HttpURLConnection conn = initHttpConnection(url);
+		setMedthod.accept(conn, "PUT");
+		conn.setDoOutput(true); // for conn.getOutputStream().write(someBytes);
+		conn.setDoInput(true);
+		
+		if (fn != null)
+			fn.accept(conn);
+		else
+			setFormPost.accept(conn);
+		
+		try (OutputStream out = conn.getOutputStream();) {
+			out.write(b); // 输出流写入字节数据
+			out.flush();
+		} catch (IOException e) {
+			LOGGER.warning("写入 post 数据时失败！[{0}]", e);
+		}
+		
+		return getResponse(conn, false, responseHandler == null ? IoHelper::byteStream2string : responseHandler);
+	}
 
 	/**
 	 * 设置 POST 方式

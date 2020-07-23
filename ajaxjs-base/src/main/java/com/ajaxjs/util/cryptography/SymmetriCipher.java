@@ -18,6 +18,8 @@ package com.ajaxjs.util.cryptography;
 import java.nio.charset.StandardCharsets;
 
 import javax.crypto.Cipher;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 
 import com.ajaxjs.util.Encode;
 
@@ -81,5 +83,18 @@ public class SymmetriCipher {
 	 */
 	public static String DES_Decrypt(String str, String key) {
 		return Encode.byte2String(CipherInfo.doCipher(DES, Cipher.DECRYPT_MODE, key, Encode.base64DecodeAsByte(str)));
+	}
+
+	public static byte[] HMACSHA256(String data, String key) {
+		try {
+			Mac mac = Mac.getInstance("HmacSHA256");
+			mac.init(new SecretKeySpec(key.getBytes("UTF-8"), "HmacSHA256"));
+
+			return mac.doFinal(data.getBytes("UTF-8"));
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			return null;
+		}
 	}
 }
