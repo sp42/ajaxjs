@@ -506,7 +506,9 @@ Vue.component('aj-tree-user-role-select', {
 
 // 注意递归组件的使用
 Vue.component('aj-tree-item', {
-    template: '#aj-tree-item',
+	beforeCreate() {	
+		aj.getTemplate('list', 'aj-tree-item', this);
+	},
     props: {
         model: Object,
         allowAddNode: { // 是否允许添加新节点
@@ -604,6 +606,45 @@ Vue.component('aj-tree', {
 			}
 
 			return null;
+		}
+	}
+});
+
+// 进度条
+Vue.component('aj-process-line', {
+	beforeCreate() {	
+		aj.getTemplate('list', 'aj-process-line', this);
+	},
+	props: {
+		items: {
+			type: Array,
+			default() { 
+				return ['Step 1', 'Step 2', 'Step 3']; 
+			}
+		}
+	},
+	data() {
+		return {
+			current: 0
+		};
+	},
+	methods: {
+		go(i) {
+			this.current = i;
+		},
+		perv() {
+			var perv = this.current - 1;
+			if (perv < 0)
+				perv = this.items.length - 1;
+			
+		    this.go(perv); 
+		},
+		next() {
+	    	var next = this.current + 1;
+	        if (this.items.length == next)
+	        	next = 0; // 循环
+	        	
+	        this.go(next);
 		}
 	}
 });

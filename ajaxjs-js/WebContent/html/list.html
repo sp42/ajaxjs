@@ -180,3 +180,13 @@
 	    </ul>
 	</li>
 </template>
+
+<template id="aj-process-line">
+	<div class="aj-process-line">
+		<div class="process-line">
+			<div v-for="(item, index) in items" :class="{current: index == current, done: index < current}">
+				<span>{{index + 1}}</span><p>{{item}}</p>
+			</div>
+		</div>
+	</div>
+</template>
