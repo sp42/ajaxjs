@@ -3,30 +3,6 @@
  * 表單控件
  */
 
-// 图片验证码
-Vue.component('aj-page-captcha', {
-	props: {
-		imgSrc: {
-			type: String, // 生成图片验证码地址
-			required: false,
-		},
-		fieldName: {	// 提交的字段名
-			type: String, required: false, default : 'captcha'
-		}
-	},
-	template: '#aj-page-captcha',
-	methods: {
-		onClk($event) {
-			var img = $event.target;
-			img.src = img.src.replace(/\?\d+$/, '') + '?' + new Date().valueOf();
-		},
-		refreshCode(){
-			var img = this.$el.querySelector('img');
-			img.src = img.src.replace(/\?\d+$/, '') + '?' + new Date().valueOf();
-		}
-	}
-});
-
 // 日期选择器
 Vue.component('aj-form-calendar', {
 	data() {
@@ -41,7 +17,9 @@ Vue.component('aj-form-calendar', {
 	props: {
 		showTime: false
 	},
-	template: '#aj-form-calendar',
+	beforeCreate() {	
+		aj.getTemplate('form', 'aj-form-calendar', this);
+	},
 	mounted () {
 		 this.$options.watch.date.call(this);
 	},
@@ -54,7 +32,7 @@ Vue.component('aj-form-calendar', {
 	},
 	methods : {
 		// 画日历
-		render () {
+		render() {
 			var arr = this.getDateArr();// 用来保存日期列表
 			var frag = document.createDocumentFragment();// 插入日期
 
@@ -182,7 +160,9 @@ Vue.component('aj-form-calendar-input', {
 			type: String, default: '请输入日期'
 		}
 	},
-	template: '#aj-form-calendar-input',
+	beforeCreate() {	
+		aj.getTemplate('form', 'aj-form-calendar-input', this);
+	},
 	mounted() {
 		if(this.positionFixed) 
 			this.$el.$('.aj-form-calendar').classList.add('positionFixed');
@@ -216,7 +196,9 @@ Vue.component('aj-form-calendar-input', {
 });
 
 Vue.component('aj-form-between-date', {
-	template: '#aj-form-between-date',
+	beforeCreate() {	
+		aj.getTemplate('form', 'aj-form-between-date', this);
+	},
 	props: {
 		isAjax:{ // 是否 AJAX 模式
 			type: Boolean, default: true
@@ -254,28 +236,25 @@ Vue.component('aj-form-between-date', {
 // 注意：必须提供一个 <slot> 包含有 <textarea class="hide"
 // name="content">${info.content}</textarea>
 Vue.component('aj-form-html-editor', {
-	template: '',
 	props: {
 		fieldName: { // 表单 name，字段名
-			type: String,
-			required: true
+			type: String, required: true
 		},
 		content: { // 内容
-			type: String,
-			required: false
+			type: String, required: false
 		},
 		basePath: { // iframe 的 <base href="${param.basePath}/" />路徑
-			type: String,
-			required: false,
-			default: ''
+			type: String, required: false, default: ''
 		},
 		uploadImageActionUrl: String
 	},
 	beforeCreate() {
-		var xhr = new XMLHttpRequest();
+/*		var xhr = new XMLHttpRequest();
 		xhr.open("GET", this.ajResources.commonAsset + '/resources/htmleditor-tag.htm', false);// 同步方式请求
 		xhr.send(null);
-		this.$options.template = xhr.responseText;
+		this.$options.template = xhr.responseText;*/
+		
+		aj.getTemplate('form', 'aj-form-html-editor', this)
 	},
 	mounted() {
 		var el = this.$el;
@@ -884,7 +863,9 @@ Vue.component('aj-xhr-upload', {
 	    imgMaxHeight: {type : Number, default : 1680},
 	    buttonBottom: Boolean  // 上传按钮是否位于下方
 	},
-	template: '#aj-xhr-upload',
+	beforeCreate() {	
+		aj.getTemplate('form', 'aj-xhr-upload', this);
+	},
 	methods: {
 		getFileName() {
 			var v = this.$el.$('input[type=file]').value;
@@ -1114,19 +1095,21 @@ Vue.component('attachment-picture-list', {
 			pics: []
 		};
 	},
-	template: '#attachment-picture-list',
+	beforeCreate() {	
+		aj.getTemplate('form', 'attachment-picture-list', this);
+	},
 	mounted() {
 		this.loadAttachmentPictures();
 		this.$refs.attachmentPictureUpload.uploadOk_callback = this.loadAttachmentPictures;
 	},
 	methods: {
 		loadAttachmentPictures() {
-			aj.xhr.get(this.loadListUrl, json => this.pics = json.result);
+			aj.xhr.get(this.loadListUrl, j => this.pics = j.result);
 		},
 		delPic(picId) {
 			aj.showConfirm("确定删除相册图片？", () => {
-				aj.xhr.dele(this.delImgUrl + picId + "/", json => {
-					if(json.isOk)
+				aj.xhr.dele(this.delImgUrl + picId + "/", j => {
+					if(j.isOk)
 						this.loadAttachmentPictures();
 				});
 			}); 
@@ -1155,7 +1138,9 @@ Vue.component('aj-popup-upload', {
 	    },
 		imgPlace: String // 图片占位符，用户没有选定图片时候使用的图片
 	},
-	template: '#aj-popup-upload',
+	beforeCreate() {	
+		aj.getTemplate('form', 'aj-popup-upload', this);
+	},
 	mounted() {
 		var obj = this.$refs.uploadControl;
 		this.text = {maxSize: obj.limitSize || 600, maxHeight: obj.imgMaxHeight, maxWidth: obj.imgMaxWidth};
@@ -1177,7 +1162,9 @@ Vue.component('aj-popup-upload', {
 
 //全国省市区 写死属性
 Vue.component('aj-china-area', {
-	template: '#aj-china-area',
+	beforeCreate() {	
+		aj.getTemplate('form', 'aj-china-area', this);
+	},
     props: {
         provinceCode: String,
         cityCode: String,

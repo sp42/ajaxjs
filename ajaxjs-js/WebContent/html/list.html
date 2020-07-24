@@ -1,0 +1,182 @@
+<!-- 
+	=========LIST========= 
+-->
+<template id="aj-pager">
+	<footer class="aj-pager">
+		<a v-if="pageStart > 0" href="#" @click="previousPage">上一页</a>
+		<a v-if="(pageStart > 0 ) && (pageStart + pageSize < total)" style="text-decoration: none;">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>
+		<a v-if="pageStart + pageSize < total" href="#" @click="nextPage">下一页</a>
+		<div class="info">
+			<input type="hidden" name="start" :value="pageStart" />
+			页数：{{currentPage}}/{{totalPage}} 记录数：{{pageStart}}/{{total}}
+			每页记录数： <input size="2" title="输入一个数字确定每页记录数" type="text" :value="pageSize" @change="onPageSizeChange" />
+			跳转： <select @change="jumpPageBySelect;">
+				<option :value="n" v-for="n in totalPage">{{n}}</option>
+			</select>
+		</div>
+	</footer>
+</template>
+
+<template id="aj-simple-list">
+	<ul class="aj-simple-list">
+		<li v-for="(item, index) in result">
+			<slot v-bind="item">
+				<a :href="(hrefStr || '').replace('{id}', item.id)" @click="show(item.id, index, $event)" :id="item.id">{{item.name}}</a>
+			</slot>
+		</li>
+	</ul>
+</template>
+
+<template id="aj-page-list">
+	<div class="aj-page-list">
+		<ul>
+			<li v-for="(item, index) in result">
+				<slot v-bind="item">
+					<a href="#" @click="show(item.id, index, $event)" :id="item.id">{{item.name}}</a>
+				</slot>
+			</li>
+		</ul>
+		<footer v-show="isShowFooter">
+			<a v-if="pageStart > 0" href="#" @click="previousPage()">上一页</a>
+			<a v-if="(pageStart > 0 ) && (pageStart + pageSize < total)" style="text-decoration: none;">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>
+			<a v-if="pageStart + pageSize < total" href="#" @click="nextPage()">下一页</a>
+			<div class="info">
+				<input type="hidden" name="start" :value="pageStart" />
+				页数：{{currentPage}}/{{totalPage}} 记录数：{{pageStart}}/{{total}}
+				每页记录数： <input size="2" title="输入一个数字确定每页记录数" type="text" :value="pageSize" @change="onPageSizeChange($event)" />
+				跳转： <select @change="jumpPageBySelect($event);">
+					<option :value="n" v-for="n in totalPage">{{n}}</option>
+				</select>
+			</div>
+		</footer><div v-show="!!autoLoadWhenReachedBottom" class="buttom"></div>
+	</div>
+</template>
+
+<template id="aj-grid">
+	<div>
+		<form action="?" method="GET" style="float:right;">
+			<input type="hidden" name="searchField" value="content" />
+			<input type="text" name="searchValue" placeholder="请输入搜索之关键字" class="aj-input" />
+			<button style="margin-top: 0;" class="aj-btn">搜索</button>
+		</form>
+	    <table class="aj-grid ajaxjs-borderTable">
+		    <thead>
+		    	<tr>
+					<th v-for="key in columns" @click="sortBy(key)" :class="{ active: sortKey == key }">
+						{{ key | capitalize }}
+						<span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"></span>
+					</th>
+			     </tr>
+		      </thead>
+		    <tbody>
+		    	<tr v-for="entry in filteredData">
+		              <td v-for="key in columns" v-html="entry[key]"></td>
+		        </tr>
+		    </tbody>
+	    </table>
+	</div>
+</template>
+
+<template id="aj-grid-inline-edit-row">
+	<tr class="aj-grid-inline-edit-row" :class="{editing: isEditMode}">
+		<td v-if="showCheckboxCol" class="selectCheckbox">
+			<input type="checkbox" @change="selectCheckboxChange" :data-id="id" />
+		</td>
+		<td v-if="showIdCol">{{id}}</td>
+		<td v-for="key in columns" :style="styleModifly" class="cell" @dblclick="dbEdit">
+			<aj-cell-renderer v-if="isFixedField(key) || !isEditMode" :html="renderCell(data, key)"></aj-cell-renderer>
+			<input type="text" v-if="canEdit(key)" size="0" v-model="data[key]" /> 
+		</td>
+		<td class="control">
+			<span @click="onEditClk"><img :src="ajResources.commonAsset + '/icon/update.gif'" /> 
+			{{!isEditMode ? "编辑" : "确定"}}</span>
+			<span @click="dele(id)"><img :src="ajResources.commonAsset + '/icon/delete.gif'" /> 删除</span> 
+		</td>
+	</tr>
+</template> 
+
+<template id="aj-grid-inline-edit-row-create">
+	<tr class="aj-grid-inline-edit-row isEditMode"> 
+		<td><input type="checkbox" /></td>
+		<td></td>
+		<td v-for="key in columns" style="padding:0" class="cell" @dblclick="dbEdit">
+			<input v-if="key != null" type="text" size="0" :name="key" /> 
+		</td>
+		<td class="control">
+			<span @click="addNew"><img :src="ajResources.commonAsset + '/icon/update.gif'" />新增</span>
+			<span @click="$parent.showAddNew = false"><img :src="ajResources.commonAsset + '/icon/delete.gif'" /> 撤销</span>
+		</td>
+	</tr>
+</template>
+
+<template id="aj-edit-form">
+	<form class="aj-table-form" :action="getInfoApi + (isCreate ? '' : info.id + '/')" :method="isCreate ? 'POST' : 'PUT'">
+		<h3>{{isCreate ? "新建" : "编辑" }}{{uiName}}</h3>
+		<!-- 传送 id 参数 -->
+		<input v-if="!isCreate" type="hidden" name="id" :value="info.id" />
+		<slot v-bind:info="info"></slot>
+		<div class="aj-btnsHolder">
+			<button><img :src="ajResources.commonAsset + '/icon/save.gif'" /> {{isCreate ? "新建":"保存"}}</button>
+			<button onclick="this.up(\'form\').reset();return false;">复 位</button>
+			<button v-if="!isCreate" v-on:click.prevent="del()">
+				<img :src="ajResources.commonAsset + '/icon/delete.gif'" /> 删 除
+			</button>
+			<button @click.prevent="close">关闭</button>
+		</div>
+	</form>
+</template>
+
+<template id="aj-entity-toolbar">
+	<div class="toolbar">
+		<form v-if="search" class="right">
+			<input type="text" name="keyword" placeholder="请输入关键字" size="12" />
+			<button @click="doSearch"><i class="fa fa-search" style="color:#417BB5;"></i>搜索</button>
+		</form>
+		
+		<aj-form-between-date v-if="betweenDate" class="right"></aj-form-between-date>
+		
+		<ul>
+			<li v-if="create" @click="$emit('on-create-btn-clk')"><i class="fa fa-plus" style="color:#0a90f0;"></i> 新建</li>
+			<li v-if="save" @click="$parent.onDirtySaveClk ? parent.onDirtySaveClk: parent.onDirtySaveClk"><i class="fa fa-floppy-o" style="color:rgb(205, 162, 4);"></i> 保存</li>
+			<li v-if="deleBtn"><i class="fa fa-trash-o" style="color:red;"></i> 删除</li>
+			<li v-if="excel"><i class="fa fa-file-excel-o" style="color:green;"></i> 导出</li>
+			<slot></slot>
+		</ul>
+	</div>
+</template>
+
+
+
+<template id="aj-china-area">
+	<div class="aj-china-area">
+		<span>省份</span> 
+		<select v-model="province" class="aj-select" name="locationProvince">
+            <option value="">请选择</option>
+            <option v-for="(v, k) in addressData[86]" :value="k">{{v}}</option>
+        </select>
+		<span>市 </span>
+		<select v-model="city" class="aj-select" name="locationCity">
+            <option value="">请选择</option>
+            <option v-for="(v, k) in citys" :value="k">{{v}}</option>
+        </select>
+		<span>区/县</span>  
+		<select v-model="district" class="aj-select" name="locationDistrict">
+            <option value="">请选择</option>
+            <option v-for="(v, k) in districts" :value="k">{{v}}</option>
+        </select>
+    </div>
+</template>
+
+<template id="aj-tree-item">
+	<li>
+		<div :class="{bold: isFolder, node: true}" @click="toggle">
+			<span>········</span>{{model.name}}
+		    <span v-if="isFolder">[{{open ? '-' : '+'}}]</span>
+	    </div>
+	    <ul v-show="open" v-if="isFolder" :class="{show: open}">
+		    <aj-tree-item class="item" v-for="(model, index) in model.children" :key="index" :model="model">
+		    </aj-tree-item>
+		    <li v-if="allowAddNode" class="add" @click="addChild">+</li>
+	    </ul>
+	</li>
+</template>

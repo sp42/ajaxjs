@@ -23,7 +23,7 @@ Vue.component('ajaxjs-admin-header', {
 // 后台增加、编辑、复位、删除按钮
 Vue.component('ajaxjs-admin-info-btns', {
 	props: {
-		isCreate : {
+		isCreate: {
 			type: Boolean, // true=新建/fasle=编辑
 			default:false
 		}
@@ -32,7 +32,7 @@ Vue.component('ajaxjs-admin-info-btns', {
 		'<div class="ajaxjs-admin-info-btns">\
 			<button><img :src="ajResources.commonAsset + \'/icon/save.gif\'" /> {{isCreate ? "新建":"保存"}}</button>\
 			<button onclick="this.up(\'form\').reset();return false;">复 位</button>\
-			<button v-if="!isCreate" v-on:click.prevent="del()">\
+			<button v-if="!isCreate" v-on:click.prevent="del">\
 				<img :src="ajResources.commonAsset + \'/icon/delete.gif\'" /> 删 除\
 			</button>\
 			<button onclick="history.back();return false;">返回</button><slot></slot>\
@@ -40,9 +40,8 @@ Vue.component('ajaxjs-admin-info-btns', {
 	methods: {
 		del() {
 			if (confirm('确定删除？'))
-				ajaxjs.xhr.dele('.', json => {
-					if (json && json.isOk) {
-						alert(json.msg);
+				aj.xhr.dele('.', j => {
+					if (j && j.isOk) {
 						location.assign('../list/');
 					}
 				});
@@ -53,25 +52,20 @@ Vue.component('ajaxjs-admin-info-btns', {
 // 搜索、分类下拉
 Vue.component('aj-admin-filter-panel', {
 	props: {
-		label : {
-			type: String,
-			required : false
+		label: {
+			type: String, required : false
 		},
-		catalogId :{		//
-			type: Number,
-			required: false
+		catalogId:{		//
+			type: Number, required: false
 		},
-		selectedCatalogId :{ // 已选中的分类 id
-			type: Number,
-			required: false
+		selectedCatalogId: { // 已选中的分类 id
+			type: Number, required: false
 		},
-		noCatalog : {
-			type: Boolean, // 是否不需要 分类下拉
-			default : false
+		noCatalog: {// 是否不需要 分类下拉
+			type: Boolean,  default : false
 		},
-		searchFieldValue : { // 搜索哪个字段？默认为 name
-			required: false,
-			default : 'name'
+		searchFieldValue: { // 搜索哪个字段？默认为 name
+			required: false, default: 'name'
 		}
 	},
 	template: 
@@ -111,7 +105,7 @@ Vue.component('aj-admin-xsl', {
 			</a>\
 		</div>',
 	props: {
-		params: String,// 参数
+		params: String // 参数
 	}
 });
 
@@ -136,8 +130,8 @@ Vue.component('aj-admin-control', {
 aj.admin = {
 	del(id, title) {
 		aj.showConfirm('请确定删除记录：\n' + title + ' ？', () => {
-			aj.xhr.dele('../' + id + '/', json => {
-				if (json.isOk) {
+			aj.xhr.dele('../' + id + '/', j => {
+				if (j.isOk) {
 					aj.msg.show('删除成功！');
 					setTimeout(() => location.reload(), 1500);
 				} else {
@@ -147,8 +141,8 @@ aj.admin = {
 		});
 	},
 	setStatus(id, status) {
-		aj.xhr.post('../setStatus/' + id + '/', json => {
-			if (json.isOk) {
+		aj.xhr.post('../setStatus/' + id + '/', j => {
+			if (j.isOk) {
 
 			}
 		}, {
@@ -157,10 +151,10 @@ aj.admin = {
 	},
 	
 	// 创建之后转向编辑界面
-	defaultAfterCreate(json) {
-		if(json && json.msg)
-			aj.alert.show(json.msg);
+	defaultAfterCreate(j) {
+		if(j && j.msg)
+			aj.alert.show(j.msg);
 				
-		window.isCreate && json && json.isOk && setTimeout(() => location.assign(json.newlyId + "/"), 2000);
+		window.isCreate && j && j.isOk && setTimeout(() => location.assign(j.newlyId + "/"), 2000);
 	}
 };

@@ -7,10 +7,8 @@
 /**
  * 查找元素
  * 
- * @param String
- *            CSS 选择器
- * @param Function
- *            可选，当送入该参数的时候，表示使用 querySelectorAll 来查询多个 dom 元素，故 fn
+ * @param String CSS 选择器
+ * @param Function  可选，当送入该参数的时候，表示使用 querySelectorAll 来查询多个 dom 元素，故 fn
  *            是个遍历器函数，其参数列表如 item、index、array
  */
 ajaxjs = aj = function(cssSelector, fn) {
@@ -99,7 +97,8 @@ Element.prototype.insertAfter = function(newElement) {
 }
 
 /*
- * @Dep -------------------------------------------------------- 函数委托 参见
+ * @Dep -------------------------------------------------------- 
+  函数委托 参见
  * http://blog.csdn.net/zhangxin09/article/details/8508128 @return {Function}
  * --------------------------------------------------------
  */
@@ -139,9 +138,7 @@ aj.parallel = function(arr, finnaly) {
    }));
   
   let isFinished = function() {
-    return statusArr.every(item => {
-      return item.isActive === true;
-    });
+    return statusArr.every(item => item.isActive === true);
   };
   
   let resolve = function(index) {
@@ -151,9 +148,7 @@ aj.parallel = function(arr, finnaly) {
       let isFinish = isFinished();
       
       if (isFinish) {
-        let datas = statusArr.map(item => {
-          return item.data;
-        });
+        let datas = statusArr.map(item => item.data);
         
         finnaly(datas);
       }
@@ -452,12 +447,12 @@ document.addEventListener("DOMContentLoaded", () => {
 			showSave : false
 		},
 		template : 
-			'<div class="aj-modal hide" @click="close($event);">\
+			'<div class="aj-modal hide" @click="close">\
 				<div><div v-html="showText"></div>\
 					<div class="aj-btnsHolder">\
-						<button v-show="showOk"  @click="onBtnClk($event)" class="ok">确定</button> \
-						<button v-show="showYes" @click="onBtnClk($event)" class="yes">{{showSave? \'保存\': \'是\'}}</button> \
-						<button v-show="showNo"  @click="onBtnClk($event)" class="no">{{showSave? \'否\': \'否\'}}</button>\
+						<button v-show="showOk"  @click="onBtnClk" class="ok">确定</button> \
+						<button v-show="showYes" @click="onBtnClk" class="yes">{{showSave? \'保存\': \'是\'}}</button> \
+						<button v-show="showNo"  @click="onBtnClk" class="no">{{showSave? \'否\': \'否\'}}</button>\
 					</div>\
 				</div>\
 			</div>',
@@ -524,9 +519,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	 */
 	aj.showConfirm = (text, callback, showSave) => {
 		var alertObj = aj.msgbox.show(text, {
-			showYes : true,
-			showNo : true,
-			showOk : false,
+			showYes: true,
+			showNo: true,
+			showOk: false,
 			showSave: showSave,
 			onYesClk(e) {
 				alertObj.$el.classList.add('hide');
@@ -540,9 +535,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	
 	aj.simpleOk = (text, callback) => {
 		var alertObj = aj.msgbox.show(text, {
-			showYes : false,
-			showNo : false,
-			showOk : false,
+			showYes: false,
+			showNo: false,
+			showOk: false,
 			onOkClk(e) { // 在box里面触发关闭，不能直接用 msgbox.close(e);
 				alertObj.$el.classList.add('hide');
 				callback && callback();
@@ -558,11 +553,11 @@ document.addEventListener("DOMContentLoaded", () => {
 	// 顶部出现，用于后台提示信息多
 	aj.msg = new Vue({
 		el : '.msgHolder',
-		data : {
-			showText : '' // 显示的内容
+		data: {
+			showText: '' // 显示的内容
 		},
-		template : '<div class="aj-topMsg" v-html="showText"></div>',
-		methods : {
+		template: '<div class="aj-topMsg" v-html="showText"></div>',
+		methods: {
 			show (text, cfg) {
 				this.showText = text;
 				var el = this.$el;
@@ -584,7 +579,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // 浮層組件，通常要復用這個組件
 Vue.component('aj-layer', {
-	template: '<div class="aj-modal hide" @click="close($event);"><div><slot></slot></div></div>',
+	template: '<div class="aj-modal hide" @click="close"><div><slot></slot></div></div>',
 	props: {
 		// 默认点击窗体关闭，当 notCloseWhenTap = true 时禁止关闭
 		notCloseWhenTap: Boolean
@@ -599,7 +594,7 @@ Vue.component('aj-layer', {
 		close(e) { // isForceClose = 强制关闭
 			if(!e) {
 				aj.msgbox.$options.methods.close.call(this, {
-					target : aj('.aj-modal')
+					target: aj('.aj-modal')
 				});
 			}else{
 				if(e.isForceClose || !this.notCloseWhenTap)
@@ -629,7 +624,7 @@ Vue.component('aj-tab', {
         };
     },
     mounted() {
-		var arr =  this.$slots.default;
+		var arr = this.$slots.default;
 		
 		for(var i = 0; i < arr.length; i++) {
 			var el = arr[i];
@@ -655,7 +650,7 @@ aj.tabable = {
 		};
 	},
 	mounted() {
-		var ul = this.$el.querySelector('.aj-simple-tab-horizontal > ul');
+		var ul = this.$el.$('.aj-simple-tab-horizontal > ul');
 		ul.onclick = e => {
 			var el = e.target;
 			var index = Array.prototype.indexOf.call(el.parentElement.children, el);
@@ -670,11 +665,10 @@ aj.tabable = {
 			var contents = this.$el.querySelectorAll('.aj-simple-tab-horizontal > div > div');
 			var each = arr => {							
 				for(var i = 0, j = arr.length; i < j; i++) {
-					if(v === i) {
+					if(v === i) 
 						arr[i].classList.add('selected');
-					} else {
+					 else 
 						arr[i].classList.remove('selected');
-					}
 				}
 			};
 			
@@ -716,9 +710,8 @@ Vue.component('aj-accordion-menu', {
 	                        ul.style.height = '0px';
 	                }
 	            }
-	        } else {
+	        } else 
 	            return;
-	        }
 	    },
 	    
 	    // 内部子菜单的高亮
@@ -811,11 +804,11 @@ Vue.component('aj-adjust-font-size', {
 		articleTarget: { // 正文所在的位置，通过 CSS Selector 定位
 			type: String,
 			required: false,
-			default : 'article p'
+			default: 'article p'
 		}
 	},
 	template: 
-		'<div class="aj-adjust-font-size" @click="onClk($event);">\
+		'<div class="aj-adjust-font-size" @click="onClk">\
 			<span>字体大小</span>\
 			<ul>\
 				<li><label><input type="radio" name="fontSize" /> 小</label></li>\
@@ -839,9 +832,7 @@ Vue.component('aj-adjust-font-size', {
 		},
 
 		setFontSize(fontSize) {
-			aj(this.$props.articleTarget, function(p){
-				p.style.fontSize = fontSize;
-			});
+			aj(this.$props.articleTarget, p => p.style.fontSize = fontSize);
 		}
 	}
 });
@@ -888,24 +879,20 @@ Vue.component('aj-misc-function', {
 Vue.component('aj-article-body', {
 	props: {
 		title: { // 标题
-			type: String,
-			required: true
+			type: String, required: true
 		},
 		initCreateDate: String,
 		initContent: { // 正文，还可以通过 slot 添加额外内容
-			type: String,
-			required: false
+			type: String, required: false
 		},
 		isShowTools: { // 是否显示扩展工具栏
-			type: Boolean,
-			required: false
+			type: Boolean, required: false
 		},
 		neighbor: { // 相邻的两笔记录
 			type: Object,
 			default: () => {
 				return {};
-			},
-			required: false
+			}, required: false
 		}
 	},
 	data(){
@@ -942,7 +929,7 @@ Vue.component('aj-baidu-search', {
 		     <input name="si" :value="getSiteDomainName" type="hidden" />\
 		 	<div class="searchBtn" onclick="this.parentNode.submit();"></div>\
 		 </form></div>',
-	computed : {
+	computed: {
 		getSiteDomainName() {
 			return this.$props.siteDomainName || location.host || document.domain;
 		}
@@ -951,10 +938,9 @@ Vue.component('aj-baidu-search', {
 
 // 正体中文
 Vue.component('aj-chinese-switch', {
-	props : {
+	props: {
 		jsurl: { // js字库文件较大，外部引入
-			type: String,
-			required: true
+			type: String, required: true
 		}
 	},
 	template: 
@@ -1013,13 +999,12 @@ Vue.component('aj-process-line', {
  
 aj.img = (function() {
 	function dataURLtoBlob(dataurl) {
-		var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]), len = bstr.length, u8arr = new Uint8Array(len);
+		var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]), 
+			len = bstr.length, u8arr = new Uint8Array(len);
 		while (len--)
 			u8arr[len] = bstr.charCodeAt(len);
 		
-		return new Blob([ u8arr ], {
-			type : mime
-		});
+		return new Blob([ u8arr ], {type: mime});
 	}
 	
 	return {	
@@ -1044,9 +1029,7 @@ aj.img = (function() {
 		},
 		
 		imageElToBlob(imgUrl, cb) {
-			this.imageToCanvas(imgUrl, (canvas) => {
-				cb(dataURLtoBlob(canvas));
-			}, true)
+			this.imageToCanvas(imgUrl, canvas => cb(dataURLtoBlob(canvas)), true);
 		},
 
 		/**
@@ -1078,7 +1061,7 @@ aj.img = (function() {
 				};
 				
 				img.src = dataURL;
-			};
+			}
 			
 			fr.readAsDataURL(blob); // blob 转 dataURL
 		}
@@ -1154,4 +1137,20 @@ Vue.component('aj-menu-moblie-scroll', {
 		}
 	}
 });
+// 在 vue 组件中的 beforeCreate() 执行
+aj.getTemplate = (type, id, comp) => {
+	var el = aj('#vue-tag-' + type);
+	
+	if(!el) { // 加载模板
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", '/ajaxjs-js/html/' + type + '.html', false);// 同步方式请求
+		xhr.send(null);
+		
+		var div = document.createElement('div');
+		div.id = 'vue-tag-' + type;
+		div.innerHTML = xhr.responseText;
+		document.body.appendChild(div);
+	}
 
+	comp.$options.template = document.getElementById(id).innerHTML;
+}

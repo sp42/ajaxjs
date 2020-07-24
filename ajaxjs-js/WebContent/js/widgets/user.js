@@ -40,6 +40,5 @@ Vue.component('aj-oauth-login', {
 				console.log("请求返回值为空");
 			}
 		}
-		
 	}
 });

@@ -1,19 +1,19 @@
 aj._list = {
 	props: {
 		apiUrl: {		// JSON 接口地址
-			type : String, required : true
+			type: String, required : true
 		},
 		
 		hrefStr: {
-			type : String, required : false
+			type: String, required : false
 		},
 		isPage: {// 是否分页，false=读取所有数据
-			type : Boolean, default : true
+			type: Boolean, default : true
 		}
 	},
 	data() {
 		return {
-			result : [],		// 展示的数据
+			result: [],		// 展示的数据
 			baseParam: {},		// 每次请求都附带的参数
 			realApiUrl: this.apiUrl
 		};
@@ -23,11 +23,9 @@ aj._list = {
 // 简单列表
 Vue.component('aj-simple-list', {
 	mixins: [aj._list],
-	template : `<ul class="aj-simple-list"><li v-for="(item, index) in result">
-				<slot v-bind="item">
-					<a :href="(hrefStr || '').replace('{id}', item.id)" @click="show(item.id, index, $event)" :id="item.id">{{item.name}}</a>
-				</slot>
-			</li></ul>`,
+	beforeCreate() {	
+		aj.getTemplate('list', 'aj-simple-list', this);
+	},
 	mounted() {
 		aj.xhr.get(this.realApiUrl, j => aj.apply(this, j), this.baseParam);
 	}
@@ -92,8 +90,10 @@ aj._pager = {
 	}
 };
 
-Vue.component('aj-pager', {
-	template: '#aj-pager',
+Vue.component('aj-pager', {	
+	beforeCreate() {	
+		aj.getTemplate('list', 'aj-pager', this);
+	},
 	mixins: [aj._pager],
 	methods: {
 		get() {
@@ -141,27 +141,9 @@ Vue.component('aj-page-list', {
 			type : Boolean, default : false
 		}
 	},
-	template: 
-		'<div class="aj-page-list">\
-			<ul><li v-for="(item, index) in result">\
-				<slot v-bind="item">\
-					<a href="#" @click="show(item.id, index, $event)" :id="item.id">{{item.name}}</a>\
-				</slot>\
-			</li></ul>\
-			<footer v-show="isShowFooter">\
-				<a v-if="pageStart > 0" href="#" @click="previousPage()">上一页</a> \
-				<a v-if="(pageStart > 0 ) && (pageStart + pageSize < total)" style="text-decoration: none;">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>\
-				<a v-if="pageStart + pageSize < total" href="#" @click="nextPage()">下一页</a>\
-				<div class="info">\
-					<input type="hidden" name="start" :value="pageStart" />\
-					页数：{{currentPage}}/{{totalPage}} 记录数：{{pageStart}}/{{total}}\
-					每页记录数： <input size="2" title="输入一个数字确定每页记录数" type="text" :value="pageSize" @change="onPageSizeChange($event)" />\
-					跳转： <select @change="jumpPageBySelect($event);">\
-						<option :value="n" v-for="n in totalPage">{{n}}</option>\
-					</select>\
-				</div>\
-			</footer><div v-show="!!autoLoadWhenReachedBottom" class="buttom"></div>\
-		</div>',
+	beforeCreate() {	
+		aj.getTemplate('list', 'aj-page-list', this);
+	},
 	mounted() {
 		aj.xhr.get(this.realApiUrl, this.doAjaxGet, { limit: this.pageSize});
 		
@@ -208,21 +190,9 @@ Vue.component('aj-page-list', {
 
 //register the grid component
 Vue.component('aj-grid', {
-    template:
-		'<div><form action="?" method="GET" style="float:right;">\
-			<input type="hidden" name="searchField" value="content" />\
-			<input type="text" name="searchValue" placeholder="请输入搜索之关键字" class="aj-input" />\
-			<button style="margin-top: 0;" class="aj-btn">搜索</button>\
-		</form>\
-        <table class="aj-grid ajaxjs-borderTable"><thead><tr>\
-          <th v-for="key in columns" @click="sortBy(key)" :class="{ active: sortKey == key }">\
-            {{ key | capitalize }}\
-            <span class="arrow" :class="sortOrders[key] > 0 ? \'asc\' : \'dsc\'"></span>\
-          </th></tr></thead>\
-          <tbody>\
-                <tr v-for="entry in filteredData">\
-                  <td v-for="key in columns" v-html="entry[key]"></td>\
-            </tr></tbody></table></div>',
+	beforeCreate() {	
+		aj.getTemplate('list', 'aj-grid', this);
+	},
     props: {
         data: Array,
         columns: Array,
@@ -336,3 +306,304 @@ aj.scrollSpy = function(cfg) {
         return pos;
     }
 }
+
+
+// Tree-like option control
+
+/*
+ * 参考结构
+	var map = {
+		a : 1,
+		b : 2,
+		c : {
+			children : [ {
+				d : 3
+			} ]
+		}
+	};
+*/
+aj.treeLike = {
+	methods: {
+		// 遍历各个元素，输出
+		output: (() => {
+			var stack = [];
+			
+			return function(map, cb) {
+				stack.push(map);
+				
+				for ( var i in map) {
+					map[i].level = stack.length;// 层数，也表示缩进多少个字符
+					cb(map[i], i);
+					
+					var c = map[i].children;
+					if (c) {
+						for (var q = 0, p = c.length; q < p; q++) 
+							this.output(c[q], cb);
+					}
+				}
+				
+				stack.pop();
+			};
+		})(),
+		// 递归查找父亲节点，根据传入 id
+		findParent (map, id) {
+			for ( var i in map) {
+				if (i == id)
+					return map[i];
+					
+				var c = map[i].children;
+				
+				if (c) {
+					for (var q = 0, p = c.length; q < p; q++) {
+						var result = this.findParent(c[q], id);
+						if (result != null)
+							return result;
+					}
+				}
+			}
+		
+			return null;
+		},
+		// 生成树，将扁平化的结构 还原为树状的结构
+		// 父id 必须在子id之前，不然下面 findParent() 找不到后面的父节点，故这个数组必须先排序
+		toTree(jsonArr) {
+			if(!jsonArr)
+				return;
+				
+			var m = {};
+			
+			for (var i = 0, j = jsonArr.length; i < j; i++) {
+				var n = jsonArr[i];
+				var parentNode = this.findParent(m, n.pid);
+				
+				if (parentNode == null) {	// 没有父节点，那就表示这是根节点，保存之
+					m[n.id] = n;			// id 是key，value 新建一对象
+				} else { 					// 有父亲节点，作为孩子节点保存
+					var obj = {};
+					obj[n.id] = n;
+					
+					if (!parentNode.children)
+						parentNode.children = [];
+	
+					parentNode.children.push(obj);
+				}
+			}
+			
+			return m;
+		},
+		/**
+		 * 渲染 Option 标签的 DOM
+		 */
+		rendererOption(json, select, selectedId, cfg) {
+			if(cfg && cfg.makeAllOption) {
+				var option = document.createElement('option');
+				option.value = option.innerHTML = "全部分类";
+				select.appendChild(option);
+			}
+			
+			// 生成 option
+			var temp = document.createDocumentFragment();
+			
+			this.output(this.toTree(json), (node, nodeId) => {
+				var option = document.createElement('option'); // 节点
+				option.value = nodeId;
+				
+				if(selectedId && selectedId == nodeId) // 选中的
+					option.selected = true;
+				
+				option.dataset['pid'] = node.pid;
+				//option.style= "padding-left:" + (node.level - 1) +"rem;";
+				option.innerHTML = new Array(node.level * 5).join('&nbsp;') + (node.level == 1 ? '' : '└─') + node.name;
+				temp.appendChild(option);
+			});
+			
+			select.appendChild(temp);
+		}
+	}
+};
+
+// 下拉分类选择器，异步请求远端获取分类数据
+Vue.component('aj-tree-catelog-select', {
+	mixins: [aj.treeLike],
+	template: '<select :name="fieldName" @change="onSelected" class="aj-tree-catelog-select aj-select" style="width: 200px;"></select>',
+	props: {
+		catalogId: { 			// 请求远端的分类 id，必填
+			type: Number, required: true
+		},
+		selectedCatalogId: {	// 已选中的分类 id
+			type: Number, required: false
+		},
+		fieldName: { // 表单 name，字段名
+			type: String, default:'catalogId'
+		},
+		isAutoJump: Boolean // 是否自动跳转 catalogId
+	},
+	mounted() {
+		var fn = j => this.rendererOption(j.result, this.$el, this.selectedCatalogId, {makeAllOption : false});
+		aj.xhr.get(this.ajResources.ctx + "/admin/catelog/getListAndSubByParentId", fn, {parentId : this.catalogId});
+	},
+	
+	methods: {	
+		onSelected($event) {
+			if(this.isAutoJump) {
+				var el = e.target, catalogId = el.selectedOptions[0].value;
+				location.assign('?' + this.fieldName + '=' + catalogId);
+			} else 
+				this.BUS.$emit('aj-tree-catelog-select-change', e, this);
+		}
+	}
+});
+
+Vue.component('aj-tree-like-select', {
+	mixins: [aj.treeLike],
+	template: '<select :name="name" class="aj-select" @change="onSelected"></select>',
+	props: {
+		catalogId: { 			// 请求远端的分类 id，必填
+			type: Number, required: true
+		},
+		selectedId: {	// 已选中的分类 id
+			type: Number, required: false
+		},
+		name: { // 表单 name，字段名
+			type: String, required: false, default:'catalogId'
+		},
+		api: {
+			type: String, default: '/admin/tree-like/'
+		}
+	},
+	mounted() {
+		var url = this.ajResources.ctx + this.api + this.catalogId + "/";
+		var fn = j => this.rendererOption(j.result, this.$el, this.selectedCatalogId, {makeAllOption : false});
+		aj.xhr.get(url, fn);
+	},
+	methods: {	
+		onSelected($event) {
+			var el = $event.target, catalogId = el.selectedOptions[0].value;
+			this.$emit('selected', Number(catalogId));
+		}
+	}
+});
+
+Vue.component('aj-tree-user-role-select', {
+	mixins: [aj.treeLike],
+	props: {
+		value: { 			// 请求远端的分类 id，必填
+			type: Number, required: false
+		},
+		json: Array,
+		noJump: {		// 是否自动跳转
+			type: Boolean, defualt: false
+		}
+	},
+	template: '<select name="roleId" class="aj-select"></select>',
+	mounted() {
+		this.rendererOption(this.json, this.$el, this.value, {makeAllOption : false});
+		
+		if(!this.noJump)
+			this.$el.onchange = () => location.assign("?roleId=" + this.$el.options[this.$el.selectedIndex].value);
+	}
+});
+
+// 注意递归组件的使用
+Vue.component('aj-tree-item', {
+    template: '#aj-tree-item',
+    props: {
+        model: Object,
+        allowAddNode: { // 是否允许添加新节点
+        	type: Boolean, default: false
+        }
+    },
+    data() {
+        return {open: false};
+    },
+    computed: {
+        isFolder() {
+            return this.model.children && this.model.children.length;
+        }
+    },
+    methods: {
+		// 点击节点时的方法
+        toggle() {
+            if (this.isFolder)
+                this.open = !this.open;
+            
+			this.BUS.$emit('tree-node-click', this.model);
+        },
+        // 变为文件夹
+        changeType() {
+            if (!this.isFolder) {
+                Vue.set(this.model, 'children', []);
+                this.addChild();
+                this.open = true;
+            }
+        },
+        addChild() {
+            this.model.children.push({
+                name: 'new stuff'
+            });
+        }
+    }
+});
+
+Vue.component('aj-tree', {
+	template: '<ul class="aj-tree"><aj-tree-item :model="treeData"></aj-tree-item></ul>',
+	props: {
+		url: String, topNodeName: String // 根节点显示名称
+	},
+	data() {
+		return {
+			treeData: { 
+				name: this.topNodeName || 'TOP', children: null 
+			}
+		};
+	},
+	mounted() {
+		aj.xhr.get(this.ajResources.ctx + this.url, j => this.treeData.children = this.makeTree(j.result));
+		// 递归组件怎么事件上报呢？通过事件 bus
+		// this.BUS.$on('treenodeclick', data => this.$emit('treenodeclick', data));
+	},
+	methods: {
+		makeTree(jsonArray) {
+			var arr = [];
+			// 父id 必须在子 id 之前，不然下面 findParent() 找不到后面的父节点，故先排序
+			for (var i = 0, j = jsonArray.length; i < j; i++) {
+				var n = jsonArray[i];
+				
+				if(n.pid === -1) 
+					arr.push(n);
+				else {
+					var parentNode = this.findParent(arr, n.pid);
+					
+					if (parentNode) {
+						if (!parentNode.children)
+							parentNode.children = [];
+							
+						parentNode.children.push(n);
+					} else
+						console.log('parent not found!');
+				}
+			}
+			
+			return arr;
+		},
+
+		// 递归查找父亲节点，根据传入 id
+		findParent(jsonArray, id) {
+			for (var i = 0, j = jsonArray.length; i < j; i++) {
+				var map = jsonArray[i];
+				
+				if (map.id == id)
+					return map;
+				
+				if (map.children) {
+					var result = arguments.callee(map.children, id);
+					
+					if (result != null)
+						return result;
+				}
+			}
+
+			return null;
+		}
+	}
+});

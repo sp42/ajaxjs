@@ -1,0 +1,173 @@
+<!-- 
+	=========表单 FORM========= 
+-->
+<template id="aj-popup-upload">
+	<aj-layer>
+		<h3>图片上传</h3>
+		<aj-xhr-upload ref="uploadControl" :action="uploadUrl" :is-img-upload="true" :hidden-field="imgName"
+			:img-place="ajResources.commonAsset + '/images/imgBg.png'">\
+		</aj-xhr-upload>
+		<div>上传限制：{{text.maxSize}}kb 或以下，分辨率：{{text.maxHeight}}x{{text.maxWidth}}</div>
+	</aj-layer>
+</template>
+
+<template id="attachment-picture-list">
+	<table><tr><td>
+		<div class="label">相册图：</div>
+		<ul>
+			<li v-for="pic in pics" style="float:left;margin-right:1%;text-align:center;">
+				<a :href="picCtx + pic.path" target="_blank"><img :src="picCtx + pic.path" style="max-width: 100px;max-height: 100px;" /></a><br />
+				<a href="###" @click="delPic(pic.id);">删 除</a>
+			</li>
+		</ul>
+	</td><td>
+	<aj-xhr-upload ref="attachmentPictureUpload" :action="uploadUrl" :is-img-upload="true" :img-place="blankBg"></aj-xhr-upload>
+	</td></tr></table>
+</template>
+
+<template id="aj-xhr-upload">
+	<div class="aj-xhr-upload" :style="{display: buttonBottom ? 'inherit': 'flex'}">
+		<input v-if="hiddenField" type="hidden" :name="hiddenField" :value="hiddenFieldValue" />
+		<div v-if="isImgUpload">
+			<a :href="imgPlace" target="_blank">
+				<img class="upload_img_perview" :src="(isFileSize && isExtName && imgBase64Str) ? imgBase64Str : imgPlace" />
+			</a>
+		</div>
+		<div class="pseudoFilePicker">
+			<label :for="'uploadInput_' + radomId"><div><div>+</div>点击选择{{isImgUpload ? '图片': '文件'}}</div></label>
+		</div>
+		<input type="file" :name="fieldName" class="hide" :id="'uploadInput_' + radomId" 
+			@change="onUploadInputChange" :accept="isImgUpload ? 'image/*' : accpectFileType" />
+		<div v-if="!isFileSize || !isExtName">{{errMsg}}</div>
+		<div v-if="isFileSize && isExtName">
+			{{fileName}}<br />
+			<button @click.prevent="doUpload();" style="min-width:110px;">{{progress && progress !== 100 ? '上传中 ' + progress + '%': '上传'}}</button>
+		</div>
+	</div>
+</template>
+
+<template id="aj-form-calendar-input">
+	<div class="aj-form-calendar-input" @mouseover="onMouseOver">
+		<div class="icon fa fa-calendar"></div>
+		<input :placeholder="placeholder" size="12" :name="fieldName" 
+			:value="date + (dateOnly ? '' : ' ' + time)" type="text" autocomplete="off" class="aj-input" />
+		<aj-form-calendar ref="calendar" :show-time="showTime" @pick-date="recEvent" @pick-time="recTimeEvent">
+		</aj-form-calendar>
+	</div>
+</template>
+
+<template id="aj-form-calendar">
+	<div class="aj-form-calendar">
+		<div class="selectYearMonth">
+			<a href="###" @click="getDate('preYear')" class="preYear" title="上一年">&lt;</a> 
+			<select @change="setMonth" v-model="month">
+				<option value="1">一月</option><option value="2">二月</option><option value="3">三月</option><option value="4">四月</option>
+				<option value="5">五月</option><option value="6">六月</option><option value="7">七月</option><option value="8">八月</option>
+				<option value="9">九月</option><option value="10">十月</option><option value="11">十一月</option><option value="12">十二月</option>
+			</select>
+			<a href="###" @click="getDate('nextYear')" class="nextYear" title="下一年">&gt;</a>
+		</div>
+		<div class="showCurrentYearMonth">
+			<span class="showYear">{{year}}</span>/<span class="showMonth">{{month}}</span>
+		</div>
+		<table>
+			<thead>
+				<tr><td>日</td><td>一</td><td>二</td><td>三</td><td>四</td><td>五</td><td>六</td></tr>
+			</thead>
+			<tbody @click="pickDay"></tbody>
+		</table>
+		<div v-if="showTime">
+			时 <select class="hour aj-select"><option v-for="n in 24">{{n}}</option></select>
+			分 <select class="minute aj-select"><option v-for="n in 61">{{n - 1}}</option></select>
+			<a href="#" @click="pickupTime">选择时间</a>
+		</div>
+	</div>
+</template>
+
+<template id="aj-form-between-date">
+	<form action="." method="GET" class="dateRange" @submit="valid">
+		  <aj-form-calendar-input :date-only="true" :position-fixed="true" placeholder="起始时间" field-name="startDate" ></aj-form-calendar-input>
+		- <aj-form-calendar-input :date-only="true" :position-fixed="true" placeholder="截至时间" field-name="endDate"></aj-form-calendar-input>
+		<button class="aj-btn">按时间筛选</button>
+	</form>	
+</template>
+
+<template id="aj-form-html-editor">
+	<div class="aj-form-html-editor">
+		<ul class="toolbar" @click="onToolBarClk($event)">
+			<li class="dorpdown">
+				<span title="字体" class="bg-4"></span>
+				<div class="fontfamilyChoser" @click="onFontfamilyChoserClk($event);">
+					<a href="javascript:;" style="font-family: '宋体'">宋体</a>
+					<a href="javascript:;" style="font-family: '黑体'">黑体</a>
+					<a href="javascript:;" style="font-family: '楷体'">楷体</a>
+					<a href="javascript:;" style="font-family: '隶书'">隶书</a>
+					<a href="javascript:;" style="font-family: '幼圆'">幼圆</a>
+					<a href="javascript:;" style="font-family: 'Microsoft YaHei'">Microsoft YaHei</a>
+					<a href="javascript:;" style="font-family: Arial">Arial</a>
+					<a href="javascript:;" style="font-family: 'Arial Narrow'">Arial Narrow</a>
+					<a href="javascript:;" style="font-family: 'Arial Black'">Arial Black</a>
+					<a href="javascript:;" style="font-family: 'Comic Sans MS'">Comic Sans MS</a>
+					<a href="javascript:;" style="font-family: Courier">Courier</a>
+					<a href="javascript:;" style="font-family: System">System</a>
+					<a href="javascript:;" style="font-family: 'Times New Roman'">Times New Roman</a>
+					<a href="javascript:;" style="font-family: Verdana">Verdana</a>
+				</div>
+			</li>		
+			<li class="dorpdown">
+			<span title="字号" class="bg-5" ></span>
+				<div class="fontsizeChoser" @click="onFontsizeChoserClk($event);">
+					<a href="javascript:;" style="font-size: xx-small; line-height: 120%">极小</a>
+					<a href="javascript:;" style="font-size: x-small;  line-height: 120%">特小</a>
+					<a href="javascript:;" style="font-size: small;    line-height: 120%">小</a>
+					<a href="javascript:;" style="font-size: medium;   line-height: 120%">中</a>
+					<a href="javascript:;" style="font-size: large;    line-height: 120%">大</a>
+					<a href="javascript:;" style="font-size: x-large;  line-height: 120%">特大</a>
+					<a href="javascript:;" style="font-size: xx-large; line-height: 140%">极大</a>
+				</div>
+			</li>		
+		
+			<li><span title="加粗"    class="bold bg-6"></span></li>		
+			<li><span title="斜体"    class="italic bg-7"></span></li>		
+			<li><span title="下划线"   class="underline bg-8"></span></li>
+			<li><span title="左对齐"   class="justifyleft bg-9"></span></li>
+			<li><span title="中间对齐" class="justifycenter bg-10"></span></li>
+			<li><span title="右对齐"   class="justifyright bg-11"></span></li>
+			<li><span title="数字编号" class="insertorderedlist bg-12"></span></li>
+			<li><span title="项目编号" class="insertunorderedlist bg-13"></span></li>
+			<li><span title="增加缩进" class="outdent bg-14"></span></li>
+			<li><span title="减少缩进" class="indent bg-15"></span></li>
+	
+			<li class="dorpdown">
+				<span title="字体颜色" class="bg-16"></span>
+				<div class="fontColor colorPicker" v-html="createColorPickerHTML()" @click="onFontColorPicker($event);">
+				</div>
+			</li>
+			<li class="dorpdown">
+				<span title="背景颜色" class="backColor bg-17" ></span>
+				<div class="bgColor colorPicker" v-html="createColorPickerHTML()" @click="onFontBgColorPicker($event);">
+				</div>
+			</li>
+			<li>
+				<span title="增加链接" class="createLink bg-18" ></span>
+			</li>
+			<li>
+				<span title="增加图片" class="insertImage bg-19" ></span>
+			</li>
+			<li>
+				<i title="一键存图" class="saveRemoteImage2Local fa-hdd-o"></i>
+			</li>
+			<li>
+				<span title="清理冗余的 HTML" class="cleanHTML" ></span>
+			</li>
+			<li>
+				<i class="switchMode fa-code"></i>
+			</li>
+		</ul>
+	
+		<div class="editorBody">	
+			<iframe :src="ajResources.commonAsset + '/resources/htmleditor_iframe.jsp?basePath=' + basePath"></iframe>
+			<slot></slot>
+		</div>
+	</div>
+</template>
