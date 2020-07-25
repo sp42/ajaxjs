@@ -31,7 +31,7 @@ AJAXJS 很少第三方的库或包依赖，一方面也避免太复杂。关于�
 |ajaxjs-base|基础库，包含大量工具函数实用方法和类似 Apache DBUtils 的 JDBC 封装，[浏览项目 readme](ajaxjs-base)|javassist|jar|
 |ajaxjs-web|MVC 框架，类似 Spring MVC 的精简实现，[浏览项目 readme](ajaxjs-web)|ajaxjs-base|jar|
 |ajaxjs-js|独立的前端框架，基于 vue.js 2.x/less.js，并包含官网静态页[浏览项目 readme](ajaxjs-js) \| [DEMO](https://framework.ajaxjs.com/framework/ui-doc/)|vue.js/less.js|war|
-|ajaxjs-framework|框架基础设施，是一个完整后台程序[浏览项目 readme](ajaxjs-framework)|ajaxjs-base 和 ajaxjs-web|jar|
+|ajaxjs-framework|框架基础设施，是一个完整后台程序[浏览项目 readme](ajaxjs-framework)|ajaxjs-base 和 ajaxjs-web|web-fragment jar|
 |ajaxjs-demo|一个包含前后台的网站，可方便学习或作为快速手脚架，[浏览项目 readme](ajaxjs-demo)|ajaxjs-framework|war|
 
 
