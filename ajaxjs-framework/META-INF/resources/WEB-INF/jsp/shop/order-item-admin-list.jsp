@@ -106,7 +106,7 @@
 						<td>
 							<c:if test="${not empty current.cover}">
 							<img src="${ctx}${current.cover}" style="max-width:50px;max-height:60px;vertical-align: middle;" 
-						 		onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${ctx}${current.cover}';" onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
+						 		onmouseenter="aj.widget.imageEnlarger.singleInstance.imgUrl = '${ctx}${current.cover}';" onmouseleave="aj.widget.imageEnlarger.singleInstance.imgUrl = null;" />
 							</c:if>
 							${current.extractData.goodsName}
 						</td>
@@ -132,6 +132,13 @@
 		</div>
 		<script>
 			new Vue({el: '.listTable'});
+			
+			/**
+			 * 删除元素自己
+			 */
+			Element.prototype.die = function() {
+				this.parentNode.removeChild(this);
+			}
 			
 			// 合并单元格
 			function megeCell(columnClass) {
@@ -175,18 +182,14 @@
 					} 
 				}
 				
-				[].forEach.call(document.querySelectorAll('.firtstOne'), i => {
-					i.setAttribute('rowspan', i.dataset.rowSpan);
-				});
-				[].forEach.call(document.querySelectorAll('.die'), i => {
-					i.die();
-				});
+				[].forEach.call(document.querySelectorAll('.firtstOne'), i => i.setAttribute('rowspan', i.dataset.rowSpan));
+				[].forEach.call(document.querySelectorAll('.die'), i => i.die());
 			}
 			
 			megeCell('.order');
 			megeCell('.totalPay');
 			
-			aj.imageEnlarger();// 鼠标移动大图
+			aj.widget.imageEnlarger();// 鼠标移动大图
 		</script>
 	</body>
 </html>

@@ -83,14 +83,14 @@
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-web</artifactId>
-			<version>1.1.9</version>
+			<version>1.2.0</version>
 		</dependency>
 		
 		<!-- 跨项目共享单测 -->
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-web</artifactId>
-			<version>1.1.9</version>
+			<version>1.2.0</version>
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>

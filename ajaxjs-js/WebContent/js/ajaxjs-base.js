@@ -504,37 +504,6 @@ Vue.component('aj-layer', {
 	}
 });
 
-
-aj.tabable = (()=>{	
-	// 按次序选中目标
-	var select = (_new) => {
-		var oldSelected = _new.parentNode.$('.selected');
-		
-		if(_new === oldSelected) // 没变化
-			return;
-			
-		oldSelected && oldSelected.classList.remove('selected');
-		_new.classList.add('selected');
-	}
-	
-	return {
-		mounted() {
-			var ul = this.$el.$('.aj-simple-tab-horizontal > ul');
-			ul.onclick = e => {
-				var el = e.target;
-				select(el);
-		
-				var index = Array.prototype.indexOf.call(el.parentElement.children, el);
-				var _new = this.$el.$('.aj-simple-tab-horizontal > div').children[index];
-				select(_new);
-			};
-			
-			ul.onclick({target: ul.children[0]});
-			//this.$options.watch.selected.call(this, 0);
-		}
-	};
-})();
-
 // https://vuejs.org/v2/guide/components.html#Content-Distribution-with-Slots
 Vue.component('aj-tab', {
    	template: 
@@ -579,22 +548,52 @@ Vue.component('aj-tab', {
  */
 aj.widget = {};
 
+aj.widget.tabable = (()=>{	
+	// 按次序选中目标
+	var select = (_new) => {
+		var oldSelected = _new.parentNode.$('.selected');
+		
+		if(_new === oldSelected) // 没变化
+			return;
+			
+		oldSelected && oldSelected.classList.remove('selected');
+		_new.classList.add('selected');
+	}
+	
+	return {
+		mounted() {
+			var ul = this.$el.$('.aj-simple-tab-horizontal > ul');
+			ul.onclick = e => {
+				var el = e.target;
+				select(el);
+		
+				var index = Array.prototype.indexOf.call(el.parentElement.children, el);
+				var _new = this.$el.$('.aj-simple-tab-horizontal > div').children[index];
+				select(_new);
+			};
+			
+			ul.onclick({target: ul.children[0]});
+			//this.$options.watch.selected.call(this, 0);
+		}
+	};
+})();
+
 // 回到顶部  <a href="###" @click="go">回到顶部</a>
 aj.widget.back2top = () => {
-	var timerId = aj.widget.back2top.timerId;
+	var back2top = aj.widget.back2top;
 	var top = speed = 0;
 	
-	timerId && window.clearInterval(timerId);
+	back2top.timerId && window.clearInterval(back2top.timerId);
 	
-	aj.back2top.timerId = window.setInterval(() => {
+	back2top.timerId = window.setInterval(() => {
 		top = document.documentElement.scrollTop || document.body.scrollTop;
 		speed = Math.floor((0 - top) / 8);
 	
 		if (top === 0)
-			clearInterval(aj.widget.back2top.timerId);
+			clearInterval(back2top.timerId);
 		else
 			document.documentElement.scrollTop = document.body.scrollTop = top + speed;
-	}, 30);
+	}, 20);
 }
 
 // 悬浮显示大图。工厂方法
@@ -813,6 +812,27 @@ aj.img = (function() {
 	};
 })();
 
+Date.prototype.format = function(fmt) { //author: meizz   
+  var o = {   
+    "M+" : this.getMonth()+1,                 //月份   
+    "d+" : this.getDate(),                    //日   
+    "h+" : this.getHours(),                   //小时   
+    "m+" : this.getMinutes(),                 //分   
+    "s+" : this.getSeconds(),                 //秒   
+    "q+" : Math.floor((this.getMonth()+3)/3), //季度   
+    "S"  : this.getMilliseconds()             //毫秒   
+  };   
+
+  if(/(y+)/.test(fmt))   
+    fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));  
+ 
+  for(var k in o)   
+    if(new RegExp("("+ k +")").test(fmt))   
+  		fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+   
+  return fmt;   
+}
+
 /**
  * 并行和串行任务 作者 https://segmentfault.com/a/1190000013265925
  */
@@ -845,27 +865,6 @@ aj.parallel = function(arr, finnaly) {
     fn(resolve(index));// 给 resolve 函数追加参数,可以使用 bind 函数实现,这里使用了柯里化
     index++;
   }
-}
-
-Date.prototype.format = function(fmt) { //author: meizz   
-  var o = {   
-    "M+" : this.getMonth()+1,                 //月份   
-    "d+" : this.getDate(),                    //日   
-    "h+" : this.getHours(),                   //小时   
-    "m+" : this.getMinutes(),                 //分   
-    "s+" : this.getSeconds(),                 //秒   
-    "q+" : Math.floor((this.getMonth()+3)/3), //季度   
-    "S"  : this.getMilliseconds()             //毫秒   
-  };   
-
-  if(/(y+)/.test(fmt))   
-    fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));  
- 
-  for(var k in o)   
-    if(new RegExp("("+ k +")").test(fmt))   
-  		fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
-   
-  return fmt;   
 }
 
 /**

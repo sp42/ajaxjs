@@ -93,7 +93,7 @@
 		</div>
 		<script>
 			new Vue({el: '.listTable'});
-			aj.imageEnlarger();// 鼠标移动大图
+			aj.widget.imageEnlarger();// 鼠标移动大图
 		</script>
 	</body>
 </html>

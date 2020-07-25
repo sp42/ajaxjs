@@ -94,10 +94,10 @@
 
 <template id="aj-form-html-editor">
 	<div class="aj-form-html-editor">
-		<ul class="toolbar" @click="onToolBarClk($event)">
+		<ul class="toolbar" @click="onToolBarClk">
 			<li class="dorpdown">
 				<span title="字体" class="bg-4"></span>
-				<div class="fontfamilyChoser" @click="onFontfamilyChoserClk($event);">
+				<div class="fontfamilyChoser" @click="onFontfamilyChoserClk">
 					<a href="javascript:;" style="font-family: '宋体'">宋体</a>
 					<a href="javascript:;" style="font-family: '黑体'">黑体</a>
 					<a href="javascript:;" style="font-family: '楷体'">楷体</a>
@@ -116,7 +116,7 @@
 			</li>		
 			<li class="dorpdown">
 			<span title="字号" class="bg-5" ></span>
-				<div class="fontsizeChoser" @click="onFontsizeChoserClk($event);">
+				<div class="fontsizeChoser" @click="onFontsizeChoserClk">
 					<a href="javascript:;" style="font-size: xx-small; line-height: 120%">极小</a>
 					<a href="javascript:;" style="font-size: x-small;  line-height: 120%">特小</a>
 					<a href="javascript:;" style="font-size: small;    line-height: 120%">小</a>
@@ -140,12 +140,12 @@
 	
 			<li class="dorpdown">
 				<span title="字体颜色" class="bg-16"></span>
-				<div class="fontColor colorPicker" v-html="createColorPickerHTML()" @click="onFontColorPicker($event);">
+				<div class="fontColor colorPicker" v-html="createColorPickerHTML()" @click="onFontColorPicker">
 				</div>
 			</li>
 			<li class="dorpdown">
 				<span title="背景颜色" class="backColor bg-17" ></span>
-				<div class="bgColor colorPicker" v-html="createColorPickerHTML()" @click="onFontBgColorPicker($event);">
+				<div class="bgColor colorPicker" v-html="createColorPickerHTML()" @click="onFontBgColorPicker">
 				</div>
 			</li>
 			<li>

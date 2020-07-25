@@ -53,3 +53,11 @@ aj.showConfirm("Hello World!", () => {alert('点击了 yes 按钮')}); // 显示
 <p>浮層組件，通常要復用這個組件</p>
 <p>例子：</p>
 <pre class="prettyprint"><xmp><aj-layer></aj-layer></xmp></pre>
+
+<h4>回到顶部</h4>
+<xmp class="prettyprint"><a href="javascript:aj.widget.back2top();">点击回到顶部</a>
+</xmp>
+
+<div class="qrCode">
+	<a href="javascript:aj.widget.back2top();">点击回到顶部</a>
+</div>

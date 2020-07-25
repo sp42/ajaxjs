@@ -42,9 +42,8 @@
     <script src="${ajaxjsui}/js/ajaxjs-base.js"></script>
     <script src="${ajaxjsui}/js/widgets/admin.js"></script>
     <script src="${ajaxjsui}/js/widgets/form.js"></script>
-    <script src="${ajaxjsui}/js/widgets/widget.js"></script>
-    <script src="${ajaxjsui}/js/widgets/tree.js"></script>
-    <script src="${ajaxjsui}/js/widgets/upload.js"></script>
+    <script src="${ajaxjsui}/js/widgets/list.js"></script>
+    <script src="${ajaxjsui}/js/widgets/gird.js"></script>
     <script src="${ajaxjsui}/js/widgets/carousel.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="index.css" />
