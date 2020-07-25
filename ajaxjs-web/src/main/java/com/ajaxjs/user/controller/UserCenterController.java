@@ -44,7 +44,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;;
 public class UserCenterController extends AbstractAccountInfoController {
 	private static final LogHelper LOGGER = LogHelper.getLog(UserCenterController.class);
 
-	@Resource("UserService")
+	@Resource
 	private UserService service;
 
 	@Override
@@ -116,7 +116,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String updateAvatar(MvcRequest request, @NotNull @QueryParam("avatar") String avatar) throws IOException {
-		request.getSession().setAttribute("userAvatar", ConfigService.get("uploadFile.imgPerfix") +  avatar);
+		request.getSession().setAttribute("userAvatar", ConfigService.get("uploadFile.imgPerfix") + avatar);
 
 		return jsonOk("ok");
 	}

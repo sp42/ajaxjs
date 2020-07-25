@@ -97,7 +97,7 @@
 	<c:if test="${not empty thumb}">
 		<a href="${aj_allConfig.uploadFile.imgPerfix}${thumb}" target="_blank">
 			<img src="${thumb.startsWith('http') ? thumb : aj_allConfig.uploadFile.imgPerfix.concat(thumb)}" style="max-width:50px;max-height:60px;vertical-align: middle;" 
-		 		onmouseenter="aj.imageEnlarger.singleInstance.imgUrl = '${thumb.startsWith('http') ? thumb : aj_allConfig.uploadFile.imgPerfix.concat(thumb)}';" onmouseleave="aj.imageEnlarger.singleInstance.imgUrl = null;" />
+		 		onmouseenter="aj.widget.imageEnlarger.singleInstance.imgUrl = '${thumb.startsWith('http') ? thumb : aj_allConfig.uploadFile.imgPerfix.concat(thumb)}';" onmouseleave="aj.widget.imageEnlarger.singleInstance.imgUrl = null;" />
 		</a>
 	</c:if>
 </c:if>

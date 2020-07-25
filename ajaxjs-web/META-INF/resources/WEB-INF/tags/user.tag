@@ -55,7 +55,7 @@
 							aj.alert.show(json.msg || '操作成功！');
 							setTimeout("location.assign('${ctx}/${isAdminLogin ? 'admin' : 'user'}/')", 3000);
 						} else 
-							aj.alert.show(json ? json.msg : '执行失败！原因未知！');
+							aj.alert.show(j ? j.msg : '执行失败！原因未知！');
 					},
 					{
 						beforeSubmit(f, json) {

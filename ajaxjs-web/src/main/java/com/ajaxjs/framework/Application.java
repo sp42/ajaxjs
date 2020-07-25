@@ -48,7 +48,14 @@ public class Application implements ServletContextListener, Filter {
 			ctx.setAttribute("aj_allConfig", ConfigService.CONFIG); // 所有配置保存在这里
 
 		onStartUp(ctx);
-		ComponentMgr.scan(CommonUtil.split(ConfigService.get("System.scanPackage")));
+
+		String scanPackage = ConfigService.get("System.scanPackage");
+
+		if (!CommonUtil.isEmptyString(scanPackage))
+			ComponentMgr.scan(CommonUtil.split(ConfigService.get("System.scanPackage")));
+		else
+			LOGGER.warning("配置文件中每发现任何要扫描的包名，请检查配置文件");
+
 		onServletStartUp.forEach(action -> action.accept(ctx));
 	}
 

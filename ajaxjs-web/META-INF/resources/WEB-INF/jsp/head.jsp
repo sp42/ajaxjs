@@ -57,9 +57,9 @@
     <script src="${developing_js_url}/js/ajaxjs-base.js"></script>
     <script src="${developing_js_url}/js/widgets/form.js"></script>
     <script src="${developing_js_url}/js/widgets/list.js"></script>
-    <script src="${developing_js_url}/js/widgets/tree.js"></script>
     <script src="${developing_js_url}/js/widgets/carousel.js"></script>
     <script src="${developing_js_url}/js/widgets/user.js"></script>
+    <script src="${developing_js_url}/js/widgets/grid.js"></script>
     <script src="${developing_js_url}/js/widgets/admin.js"></script>
     
     <% if(request.getParameter("css")  != null) { %> 
@@ -98,12 +98,13 @@
 <%} %>
 	
    	<script>
+   		aj.isDebug = <%=com.ajaxjs.Version.isDebug%>;
    		aj.Vue = {};
    		aj.Vue.install = function(Vue) {
    			Vue.prototype.ajResources = {
-	   			ctx : '${ctx}',
-	   			imgPerfix : '${aj_allConfig.uploadFile.imgPerfix}', // 图片云存储前缀
-	   			commonAsset : '${commonAsset}'
+	   			ctx: '${ctx}',
+	   			imgPerfix: '${aj_allConfig.uploadFile.imgPerfix}', // 图片云存储前缀
+	   			commonAsset: '${commonAsset}'
    			};
    			Vue.prototype.BUS = new Vue();
    		}
@@ -116,4 +117,3 @@
 	<link rel="icon"		  type="image/x-icon" href="${ctx}/asset/images/favicon.ico" />
 	<link rel="shortcut icon" type="image/x-icon" href="${ctx}/asset/images/favicon.ico" />
 	<noscript><div>如要享受本网站之服务请勿禁用浏览器 JavaScript 支持</div></noscript>
-	<%@ include file="vuejs-tag.jsp" %>

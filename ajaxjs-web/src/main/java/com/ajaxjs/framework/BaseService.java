@@ -70,6 +70,7 @@ public abstract class BaseService<T> extends QueryTools implements IBaseService<
 
 			if (createDate == null || (createDate != null && CommonUtil.isEmptyString(createDate.toString())))
 				map.put("createDate", now);
+			
 			if (map.get("updateDate") == null)
 				map.put("updateDate", now);
 		}

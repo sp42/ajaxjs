@@ -139,18 +139,19 @@
 		new Vue({
 			el:'.config-tab-0',
 			data: {
-				scheme : ${schemeJson},
-				config : ${configJson}
+				scheme: ${schemeJson},
+				config: ${configJson}
 			},
-			mixins: [aj.tabable]
+			mixins: [aj.widget.tabable]
 		});
+		
 		new Vue({
 			el:'.config-tab-1',
 			data: {
-				scheme : ${schemeJson},
-				config : ${configJson}
+				scheme: ${schemeJson},
+				config: ${configJson}
 			},
-			mixins: [aj.tabable]
+			mixins: [aj.widget.tabable]
 		});
 		
 		changeTab = function(e) {
