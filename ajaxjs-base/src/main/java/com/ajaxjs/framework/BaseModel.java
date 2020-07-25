@@ -23,11 +23,6 @@ import java.util.Map;
 public class BaseModel implements Serializable {
 	private static final long serialVersionUID = -5313880199638314543L;
 
-	/**
-	 * 扩展字段
-	 */
-	public Map<String, Object> extractData;
-
 	private Long id;
 
 	/**
@@ -128,6 +123,11 @@ public class BaseModel implements Serializable {
 		this.uid = uid;
 	}
 
+	/**
+	 * 扩展字段
+	 */
+	public Map<String, Object> extractData;
+	
 	public Map<String, Object> getExtractData() {
 		return extractData;
 	}
