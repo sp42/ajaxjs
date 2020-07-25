@@ -57,13 +57,19 @@
 			"maxSize": 1000
 		}
 	},
-	"mailServer": {
-		"server": "smtp.163.com",
-		"user": "pacoweb",
-		"password": "1120"
-	},
 	"Symmetric": {
 		"AES_Key": "DFD342#@!A",
 		"apiTimeout": 300000
+	},
+	
+	"System": {
+		"name":"后台管理软件",
+		"tomcat_log": "/home/apache-tomcat-8.0.53/logs/",
+		"project_folder": "e:\\project\\aj-website",
+		"scanPackage": "com.ajaxjs, cn.nike",
+		"api": {
+			"AES_Key": "dFSD4324",
+			"timeout": 15
+		}
 	}
 }

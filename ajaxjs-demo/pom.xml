@@ -32,10 +32,17 @@
 			<version>2.0.2-beta</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.30</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
-			<artifactId>ajaxjs-framework</artifactId>
-			<version>1.0.2</version>
+			<artifactId>ajaxjs-web</artifactId>
+			<version>1.1.9</version>
 		</dependency>
 	</dependencies>
 </project>

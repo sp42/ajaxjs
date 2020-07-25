@@ -14,5 +14,12 @@
 			<li>代码简洁清爽，思路清晰，逻辑简单</li>
 		</ul>
 		……
+		
+		<div class="foo">
+			<aj-baidu-search site-domain-name="ajaxjs.com"></aj-baidu-search>
+		</div>
+		<script>
+			new Vue({el: '.foo'})
+		</script>
 	</article>
 </tags:content>
