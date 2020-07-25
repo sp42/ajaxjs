@@ -217,15 +217,9 @@ aj._carousel = {
 
 Vue.component('aj-carousel', {
 	mixins: [aj._carousel],
-	template : 
-		'<div class="aj-carousel aj-carousel-tab">\
-			<header><ul>\
-				<li v-for="(item, index) in items" :class="{\'active\': index === selected}" @click="changeTab(index);">{{item.name}}</li>\
-			</ul></header>\
-			<div>\
-				<div v-for="(item, index) in items" :class="{\'active\': index === selected}" v-html="item.content"></div>\
-			</div>\
-		</div>',
+	beforeCreate() {	
+		aj.getTemplate('list', 'aj-carousel', this);
+	},
 	data() {
 		return {
 			items : this.initItems || [
@@ -243,6 +237,9 @@ Vue.component('aj-carousel', {
 
 Vue.component('aj-banner', {
 	mixins: [aj._carousel],
+	beforeCreate() {	
+		aj.getTemplate('list', 'aj-banner', this);
+	},
 	props: {
 		isUsePx: {
 			default: true
@@ -260,16 +257,6 @@ Vue.component('aj-banner', {
 			type : Boolean, default : true
 		}
 	},
-	template: 
-		'<div class="aj-carousel aj-banner">\
-			<header><ul v-show="showTitle">\
-				<li v-for="(item, index) in items" :class="{\'hide\': index !== selected}">{{item.name}}</li>\
-			</ul><ol v-show="showDot">\
-					<li v-for="n in items.length" :class="{\'active\': (n - 1) === selected}" @click="changeTab(n - 1);"></li></ol></header>\
-			<div class="content">\
-				<div v-for="(item, index) in items" :class="{\'active\': index === selected}" v-html="getContent(item.content, item.href)"></div>\
-			</div>\
-		</div>',
 	data() {
 		return {
 			items : this.initItems || [
@@ -279,7 +266,6 @@ Vue.component('aj-banner', {
 			]
 		}; 
 	},
-	
 	mounted() {
 		this.loop();
 	},

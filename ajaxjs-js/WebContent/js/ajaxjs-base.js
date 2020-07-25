@@ -504,40 +504,36 @@ Vue.component('aj-layer', {
 	}
 });
 
-aj.tabable = {
-	data() {
-		return {
-			selected: 0
-		};
-	},
-	mounted() {
-		var ul = this.$el.$('.aj-simple-tab-horizontal > ul');
-		ul.onclick = e => {
-			var el = e.target;
-			var index = Array.prototype.indexOf.call(el.parentElement.children, el);
-			this.selected = index;
-		};
+
+aj.tabable = (()=>{	
+	// 按次序选中目标
+	var select = (_new) => {
+		var oldSelected = _new.parentNode.$('.selected');
 		
-		this.$options.watch.selected.call(this, 0);
-	},
-	watch: {
-		selected(v) {
-			var headers  = this.$el.querySelectorAll('.aj-simple-tab-horizontal > ul > li');
-			var contents = this.$el.querySelectorAll('.aj-simple-tab-horizontal > div > div');
-			var each = arr => {							
-				for(var i = 0, j = arr.length; i < j; i++) {
-					if(v === i) 
-						arr[i].classList.add('selected');
-					 else 
-						arr[i].classList.remove('selected');
-				}
+		if(_new === oldSelected) // 没变化
+			return;
+			
+		oldSelected && oldSelected.classList.remove('selected');
+		_new.classList.add('selected');
+	}
+	
+	return {
+		mounted() {
+			var ul = this.$el.$('.aj-simple-tab-horizontal > ul');
+			ul.onclick = e => {
+				var el = e.target;
+				select(el);
+		
+				var index = Array.prototype.indexOf.call(el.parentElement.children, el);
+				var _new = this.$el.$('.aj-simple-tab-horizontal > div').children[index];
+				select(_new);
 			};
 			
-			each(headers);
-			each(contents);
+			ul.onclick({target: ul.children[0]});
+			//this.$options.watch.selected.call(this, 0);
 		}
-	}
-};
+	};
+})();
 
 // https://vuejs.org/v2/guide/components.html#Content-Distribution-with-Slots
 Vue.component('aj-tab', {

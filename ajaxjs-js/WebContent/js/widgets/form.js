@@ -638,6 +638,11 @@ var HtmlSanitizer = new (function () {
 	
 	// 验证字段
 	function hasError (field) {
+		return
+		if(!field || !field.getAttribute){
+			console.log(field)
+		};
+		
 		if (field.getAttribute('form') != null || field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') 
 			return;
 		
@@ -694,6 +699,7 @@ var HtmlSanitizer = new (function () {
 	}
 	
 	function showError(field, error, isNewLine) {
+		return
 	    // 将错误类添加到字段
 	    field.classList.add('error');
 
@@ -725,6 +731,7 @@ var HtmlSanitizer = new (function () {
 	
 	// 移除所有的错误信息
 	function removeError(field) {
+		return
 	    // 删除字段的错误类
 	    field.classList.remove('error');
 
