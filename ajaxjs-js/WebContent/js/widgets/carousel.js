@@ -1,30 +1,30 @@
 aj._carousel = {
-	props : {
-		isMagic : {			// 是否无缝模式
-			type : Boolean, default : false 
+	props: {
+		isMagic: {			// 是否无缝模式
+			type: Boolean, default : false 
 		},
 		// 推荐使用 百分比，px 的话要考虑滚动条，比较麻烦
 		// 要使用 px 推荐指定 stepWidth
 		// banner，要使用 px
 		// 如果要跟手移动，要使用 px
-		isUsePx :  {
-			type : Boolean, default : false 
+		isUsePx:  {
+			type: Boolean, default: false 
 		},
 		autoHeight :  {// 是否自动高度
-			type : Boolean, default : false 
+			type: Boolean, default: false 
 		},
 		disableTabHeaderJump : {// 是否禁止通过 tab 候选栏来跳转。一般 wizzard 向导式的时候不能跳转
-			type : Boolean, default : false 
+			type: Boolean, default: false 
 		}, 
 		
 		isGetCurrentHeight : {// 自动当前项最高，忽略其他高度，这个用在 tab很好，比 autoHeight 的好，可视作autoHeight 2.-
-			type : Boolean, default : true 
+			type: Boolean, default: true 
 		},
-		initItems : Array // 输入的数据
+		initItems: Array // 输入的数据
 	},
 	data() {
 		return {
-			selected : 0
+			selected: 0
 		};
 	},
 	mounted() {

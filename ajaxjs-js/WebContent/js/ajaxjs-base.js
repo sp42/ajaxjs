@@ -566,7 +566,7 @@ Vue.component('aj-tab', {
 			
 			if(el.tag === 'textarea') {
 				this.tabs.push({
-					name : el.data.attrs['data-title'],
+					name: el.data.attrs['data-title'],
 					component: {
 		 	            template: '<div>' + el.children[0].text + "</div>"
 		   	 	    }
