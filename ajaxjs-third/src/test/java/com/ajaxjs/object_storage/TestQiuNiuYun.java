@@ -29,7 +29,7 @@ import com.qiniu.util.Auth;
 public class TestQiuNiuYun {
 //	@Test
 	public void test() {
-		ConfigService.load("D:\\project\\leidong\\WebContent\\META-INF\\site_config.json");
+		ConfigService.load("c:\\project\\leidong\\WebContent\\META-INF\\site_config.json");
 
 		String accessKey = ConfigService.getValueAsString("uploadFile.ObjectStorageService.QiuNiuYun.accessKey");
 		String secretKey = ConfigService.getValueAsString("uploadFile.ObjectStorageService.QiuNiuYun.secretKey");

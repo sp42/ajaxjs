@@ -6,6 +6,8 @@ import com.ajaxjs.net.mail.Sender;
 import com.ajaxjs.sms.AliyunSMS;
 import com.ajaxjs.sms.SmsMessage;
 import com.ajaxjs.util.ioc.Component;
+import com.ajaxjs.web.UploadFileInfo;
+import com.ajaxjs.web.mvc.controller.MvcRequest;
 
 /**
  * 默认的服务供应器
@@ -35,5 +37,11 @@ public class DefaultServices implements ThirdPartyService {
 		msg.setTemplateParam(param);
 
 		return AliyunSMS.send(msg);
+	}
+
+	@Override
+	public void uploadFile(MvcRequest request, UploadFileInfo info) {
+		// TODO Auto-generated method stub
+		
 	}
 }

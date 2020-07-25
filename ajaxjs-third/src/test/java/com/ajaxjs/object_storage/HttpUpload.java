@@ -9,54 +9,29 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.TimeZone;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-
-import org.apache.commons.codec.binary.Base64;
+import org.junit.Test;
 
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.net.http.HttpBasicRequest;
-import com.ajaxjs.net.http.NetUtil;
 import com.ajaxjs.util.Encode;
-import com.netease.cloud.auth.SigningAlgorithm;
-import com.netease.cloud.services.nos.internal.NosSigner;
-import com.netease.cloud.services.nos.internal.ServiceUtils;
+import com.ajaxjs.util.cryptography.SymmetriCipher;
+import com.ajaxjs.util.io.FileHelper;
 
 public class HttpUpload {
-	public static void main(String[] args) {
+//	@Test
+	public void listBuk() {
 		ConfigService.load("c:\\project\\aj-website\\WebContent\\META-INF\\site_config.json");
 
-		String accessKey = ConfigService.getValueAsString("uploadFile.ObjectStorageService.NOS.accessKey");
-		String secretKey = ConfigService.getValueAsString("uploadFile.ObjectStorageService.NOS.secretKey");
-		String bucket = ConfigService.getValueAsString("uploadFile.ObjectStorageService.NOS.bucket");
-
-		String md5 = "", contentType = "";
-		System.out.println(accessKey);
-		System.out.println(secretKey);
-
-		// 正确， 推荐使用.
-		SimpleDateFormat sdf3 = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
-		sdf3.setTimeZone(TimeZone.getTimeZone("GMT"));
-		String now = ServiceUtils.formatRfc822DateShangHai(new Date());
-		System.out.println("rfc1123_3 = " + now);
-
+		String now = getDate();
 		String canonicalizedHeaders = "";
 		String canonicalizedResource = "/";
 
 		String data = "GET\n" + "\n" + "\n" + now + "\n" + canonicalizedHeaders + canonicalizedResource;
-		System.out.println(data);
 
-		X sg = new X();
-		String signature = sg.signAndBase64Encode(data, secretKey, SigningAlgorithm.HmacSHA256);
-//		String signature = Encode.base64Encode(HMACSHA256(data, secretKey));
-		System.out.println(signature);
-
-		String authorization = "NOS " + accessKey + ":" + signature;
+		String authorization = getAuthorization(data);
 		System.out.println(authorization);
 
 		String result = HttpBasicRequest.get("http://nos-eastchina1.126.net", false, conn -> {
@@ -68,80 +43,89 @@ public class HttpUpload {
 		System.out.println(result);
 	}
 
-	public static void main2(String[] args) {
-		ConfigService.load("d:\\project\\leidong\\WebContent\\META-INF\\site_config.json");
-
-		String accessKey = ConfigService.getValueAsString("uploadFile.ObjectStorageService.QiuNiuYun.accessKey");
-		String secretKey = ConfigService.getValueAsString("uploadFile.ObjectStorageService.QiuNiuYun.secretKey");
-		String bucket = ConfigService.getValueAsString("uploadFile.ObjectStorageService.QiuNiuYun.bucket");
-
-		System.out.println(accessKey);
-
-		long beginTime = System.currentTimeMillis();
-		File file = new File("C:\\project\\ajaxjs-maven-global.xml");
-
-		String md5 = calcMD5(file);
-		long endTime = System.currentTimeMillis();
-		System.out.println("MD5:" + md5 + "\n 耗时:" + ((endTime - beginTime) / 1000) + "s");
-
-		Map<String, Object> map = new HashMap<>();
-		map.put("name", "foo");
-		map.put("file23", file);
-
-		byte[] b = NetUtil.toFromData(map);
-
-		String contentType = "text/xml";
-		// 正确， 推荐使用.
+	/**
+	 * 请求的时间戳，格式必须符合 RFC1123 的日期格式
+	 * 
+	 * @return 当前日期
+	 */
+	private static String getDate() {
 		SimpleDateFormat sdf3 = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
 		sdf3.setTimeZone(TimeZone.getTimeZone("GMT"));
 		String now = sdf3.format(new Date());
-		System.out.println("rfc1123_3 = " + now);
 
-		String canonicalizedHeaders = "";
-		String canonicalizedResource = "/leidong/";
+		return now;
+	}
 
-		md5 = "";
-		contentType = "";
-		String data = "GET\n" + md5 + "\n" + contentType + "\n" + now + "\n" + canonicalizedHeaders + canonicalizedResource;
-		String signature = Encode.base64Encode(HMACSHA256(data, secretKey));
+	private static String getAuthorization(String data) {
+		String accessKey = ConfigService.get("uploadFile.ObjectStorageService.NOS.accessKey");
+		String secretKey = ConfigService.get("uploadFile.ObjectStorageService.NOS.secretKey");
+
+		String signature = Encode.base64Encode(SymmetriCipher.HMACSHA256(data, secretKey));
 		String authorization = "NOS " + accessKey + ":" + signature;
+
+		return authorization;
+	}
+
+//	@Test
+	public void createEmptyFile() {
+		ConfigService.load("c:\\project\\aj-website\\WebContent\\META-INF\\site_config.json");
+		String bucket = ConfigService.getValueAsString("uploadFile.ObjectStorageService.NOS.bucket");
+
+		System.out.println(bucket);
+
+		String now = getDate();
+		String canonicalizedHeaders = "";
+		String canonicalizedResource = "/" + bucket + "/foo.xml";
+		String data = "PUT\n" + "\n" + "\n" + now + "\n" + canonicalizedHeaders + canonicalizedResource;
+		System.out.println(data);
+
+		String authorization = getAuthorization(data);
 		System.out.println(authorization);
 
-		String result = HttpBasicRequest.put("https://leidong.nos-eastchina1.126.net", b, conn -> {
+		String result = HttpBasicRequest.put("https://ajaxjs.nos-eastchina1.126.net/foo.xml", new byte[0], conn -> {
 			conn.addRequestProperty("Authorization", authorization);
-			conn.addRequestProperty("Content-Length", file.length() + "");
-			conn.addRequestProperty("Content-Type", "");
-			conn.addRequestProperty("Content-MD5", "");
+			conn.addRequestProperty("Content-Length", "0");
+//			conn.addRequestProperty("Content-Type", "");
+//			conn.addRequestProperty("Content-MD5", "");
 			conn.addRequestProperty("Date", now);
-			conn.addRequestProperty("Host", "leidong.nos-eastchina1.126.net");
+			conn.addRequestProperty("Host", "ajaxjs.nos-eastchina1.126.net");
 			// conn.addRequestProperty("x-nos-entity-type", "json");
 		}, null);
 
 		System.out.println(result);
 	}
 
-	public static String HMACSHA256(String data, String key) {
+	@Test
+	public void uploadFile() {
+		ConfigService.load("c:\\project\\aj-website\\WebContent\\META-INF\\site_config.json");
+		String bucket = ConfigService.getValueAsString("uploadFile.ObjectStorageService.NOS.bucket");
 
-		try {
-			Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
-			SecretKeySpec secret_key = new SecretKeySpec(key.getBytes("UTF-8"), "HmacSHA256");
-			sha256_HMAC.init(secret_key);
-			byte[] array = sha256_HMAC.doFinal(data.getBytes("UTF-8"));
-			StringBuilder sb = new StringBuilder();
+		File file = new File("C:\\project\\ajaxjs-maven-global.xml");
+		String md5 = calcMD5(file);
+		System.out.println(bucket);
 
-			for (byte item : array) {
-				sb.append(Integer.toHexString((item & 0xFF) | 0x100).substring(1, 3));
+		String now = getDate();
+		String canonicalizedHeaders = "";
+		String canonicalizedResource = "/" + bucket + "/foo.xml";
+		String data = "PUT\n" + md5 + "\n" + "\n" + now + "\n" + canonicalizedHeaders + canonicalizedResource;
+		System.out.println(data);
 
-			}
+		String authorization = getAuthorization(data);
+		System.out.println(authorization);
 
-			return sb.toString().toUpperCase();
-		} catch (Throwable e) {
+		byte[] b = FileHelper.openAsByte(file);
 
-			e.printStackTrace();
+		String result = HttpBasicRequest.put("https://ajaxjs.nos-eastchina1.126.net/foo.xml", b, conn -> {
+			conn.addRequestProperty("Authorization", authorization);
+			conn.addRequestProperty("Content-Length", file.length() + "");
+//			conn.addRequestProperty("Content-Type", "");
+			conn.addRequestProperty("Content-MD5", md5);
+			conn.addRequestProperty("Date", now);
+			conn.addRequestProperty("Host", "ajaxjs.nos-eastchina1.126.net");
+			// conn.addRequestProperty("x-nos-entity-type", "json");
+		}, null);
 
-			return null;
-		}
-
+		System.out.println(result);
 	}
 
 	/**

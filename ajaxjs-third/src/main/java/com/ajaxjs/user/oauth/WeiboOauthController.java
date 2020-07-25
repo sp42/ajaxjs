@@ -10,11 +10,11 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.framework.config.ConfigService;
-import com.ajaxjs.mvc.controller.IController;
 import com.ajaxjs.net.http.NetUtil;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
+import com.ajaxjs.web.mvc.controller.IController;
 
 public class WeiboOauthController implements IController {
 	private static final LogHelper LOGGER = LogHelper.getLog(WeiboOauthController.class);
