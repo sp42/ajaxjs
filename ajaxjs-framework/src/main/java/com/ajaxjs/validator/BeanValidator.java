@@ -15,12 +15,16 @@ import com.ajaxjs.util.logger.LogHelper;
 public class BeanValidator {
 	private static final LogHelper LOGGER = LogHelper.getLog(BeanValidator.class);
 
+	/**
+	 * 构成注解与验证器一一对应的关系
+	 */
 	private static final Map<Class<?>, Validator> cache = new HashMap<>();
 
 	/**
+	 * 注册一个验证器
 	 * 
-	 * @param clzs
-	 * @param validator
+	 * @param clzs      注解类
+	 * @param validator 验证器 lambda
 	 */
 	public static void register(Class<?> clzs, Validator validator) {
 		cache.put(clzs, validator);

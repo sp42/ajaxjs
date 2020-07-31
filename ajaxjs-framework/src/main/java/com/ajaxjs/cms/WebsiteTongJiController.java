@@ -111,7 +111,7 @@ public class WebsiteTongJiController implements IController {
 	 * @return
 	 */
 	private static String getData(Map<String, Object> body) {
-		String req = String.format(JSON, getHeader(), JsonHelper.stringifyMap(body));
+		String req = String.format(JSON, getHeader(), JsonHelper.toJson(body));
 		String json = HttpBasicRequest.post("https://api.baidu.com/json/tongji/v1/ReportService/getData", req, conn -> {
 			conn.addRequestProperty("Content-type", "application/json");
 		});
@@ -135,6 +135,6 @@ public class WebsiteTongJiController implements IController {
 			}
 		};
 
-		return JsonHelper.stringifyMap(header);
+		return JsonHelper.toJson(header);
 	}
 }

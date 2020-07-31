@@ -15,6 +15,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
 @Path("/api/wx")
 public class MiniAppController implements IController {
 	private static final LogHelper LOGGER = LogHelper.getLog(MiniAppController.class);
+	
 	MiniAppUserService service = new MiniAppUserService();
 
 	@POST

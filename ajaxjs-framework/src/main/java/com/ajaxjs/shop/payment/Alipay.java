@@ -106,7 +106,7 @@ public class Alipay {
 		AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();
 		alipayRequest.setReturnUrl(returnUrl);// 页面跳转同步通知页面路径
 		alipayRequest.setNotifyUrl(notifyUrl);// 服务器异步通知页面路径
-		alipayRequest.setBizContent(JsonHelper.beanToJson(alipay));// 封装参数
+		alipayRequest.setBizContent(JsonHelper.toJson(alipay));// 封装参数
 
 		// 3、请求支付宝进行付款，并获取支付结果
 		String result = alipayClient.pageExecute(alipayRequest).getBody();
