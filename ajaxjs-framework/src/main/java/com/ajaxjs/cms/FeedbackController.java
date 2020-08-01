@@ -12,13 +12,13 @@ import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.CommonConstant;
-import com.ajaxjs.framework.filter.BeanValidator;
 import com.ajaxjs.framework.filter.CaptchaFilter;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.validator.BeanValidatorFitler;
 import com.ajaxjs.web.mvc.ModelAndView;
 import com.ajaxjs.web.mvc.filter.MvcFilter;
 
@@ -67,7 +67,7 @@ public class FeedbackController extends BaseController<Feedback> {
 	//////////////////// 前台 ///////////////////
 	@POST
 	@Path("/feedback")
-	@MvcFilter(filters = { CaptchaFilter.class, DataBaseFilter.class, BeanValidator.class })
+	@MvcFilter(filters = { CaptchaFilter.class, DataBaseFilter.class, BeanValidatorFitler.class })
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
 	public String create(Feedback entity) {

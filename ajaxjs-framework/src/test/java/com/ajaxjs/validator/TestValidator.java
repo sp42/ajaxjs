@@ -2,8 +2,8 @@ package com.ajaxjs.validator;
 
 import static org.junit.Assert.assertNotNull;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.junit.Test;
 
@@ -12,7 +12,8 @@ public class TestValidator {
 		@NotNull
 		private long id;
 
-		@NotBlank(message = "请输入名称")
+		@NotNull(message = "名称不能为空")
+		@Size(min = 2, max = 255, message = "长度应该介于3和255之间")
 		private String name;
 
 		public long getId() {
