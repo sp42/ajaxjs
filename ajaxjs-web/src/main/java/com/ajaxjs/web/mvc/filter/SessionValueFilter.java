@@ -35,10 +35,9 @@ public abstract class SessionValueFilter implements FilterAction {
 		HttpSession session = request.getSession();
 		Object value = session.getAttribute(sessionKey);
 
-		if (value == null) {
+		if (value == null) 
 			throw new NullPointerException("Session 中找不到 对应的 key 的值， key： " + sessionKey);
-		} else {
+		 else 
 			return (String) value;
-		}
 	}
 }

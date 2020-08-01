@@ -22,7 +22,8 @@ package com.ajaxjs.web.mvc.filter;
  */
 public interface FilterAction {
 	/**
-	 * 是异常但不记录到 FileHandler，例如密码错误之类的。放在 ModelAndView 中传递，例如 model.put(NOT_LOG_EXCEPTION, true);
+	 * 是异常但不记录到 FileHandler，例如密码错误之类的。放在 ModelAndView 中传递，例如
+	 * model.put(NOT_LOG_EXCEPTION, true);
 	 */
 	public static final String NOT_LOG_EXCEPTION = "NOT_LOG_EXCEPTION";
 
@@ -43,5 +44,5 @@ public interface FilterAction {
 	 * @param isSkip   是否已经中止控制器方法的执行，也就是 before() 返回的值
 	 * @return 是否要中止控制器方法默认返回的执行，一般返回 true 表示按原来的执行（大多数情况）
 	 */
-	public boolean after(FilterAfterArgs argsHolder);
+	public boolean after(FilterAfterArgs ctx);
 }

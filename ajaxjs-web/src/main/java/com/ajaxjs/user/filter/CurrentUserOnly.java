@@ -8,6 +8,12 @@ import com.ajaxjs.web.mvc.filter.FilterAction;
 import com.ajaxjs.web.mvc.filter.FilterAfterArgs;
 import com.ajaxjs.web.mvc.filter.FilterContext;
 
+/**
+ * 是否当前用户访问校验
+ * 
+ * @author sp42 frank@ajaxjs.com
+ *
+ */
 public class CurrentUserOnly implements FilterAction {
 
 	@Override

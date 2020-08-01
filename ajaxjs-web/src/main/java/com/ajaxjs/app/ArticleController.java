@@ -53,16 +53,12 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 		return service;
 	}
 
-	@GET
-	@MvcFilter(filters = { DataBaseFilter.class })
-	@Authority(filter = PrivilegeFilter.class, value = RightConstant.ARTICLE_ONLINE)
-	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
-		LOGGER.info("图文列表-前台");
-		getService().showList(mv);
-		page(mv, getService().list(catalogId, start, limit, CommonConstant.ON_LINE));
-
-		return page("article-list");
-	}
+@GET
+@MvcFilter(filters = { DataBaseFilter.class })
+@Authority(filter = PrivilegeFilter.class, value = RightConstant.ARTICLE_ONLINE)
+public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit) {
+	return page("article-list");
+}
 
 	@GET
 	@Path("listJson")

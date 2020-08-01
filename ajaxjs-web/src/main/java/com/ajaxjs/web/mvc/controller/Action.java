@@ -104,7 +104,15 @@ public class Action {
 		String topPath = null;
 
 		for (Method method : clz.getMethods()) {
-			Path subPath = method.getAnnotation(Path.class); // 看看这个控制器方法有木有 URL 路径的信息，若有，要处理
+			Path subPath = null;
+			try {
+
+				subPath = method.getAnnotation(Path.class); // 看看这个控制器方法有木有 URL 路径的信息，若有，要处理
+			} catch (Throwable e) {
+				LOGGER.info(":::"+method + "");
+				System.out.println(method);
+				e.printStackTrace();
+			}
 
 			if (subPath != null) {
 				String subPathValue = subPath.value();
