@@ -61,15 +61,15 @@ public class JsonHelper {
 	}
 
 	/**
-	 * 解析 JSON 字符串为 Bean
+	 * 解析 JSON 字符串转换为 Bean 对象
 	 * 
-	 * @param <T>     Bean 类型
-	 * @param str     JSON 字符串
-	 * @param beanClz Bean 类引用
-	 * @return Bean
+	 * @param json JSON 字符串
+	 * @param clz  Bean 对象类引用
+	 * @return Bean 对象
 	 */
-	public static <T> T parseMapAsBean(String str, Class<T> beanClz) {
-		return MapTool.map2Bean(parseMap(str), beanClz);
+	public static <T> T parseMapAsBean(String json, Class<T> clz) {
+		Map<String, Object> map = parseMap(json);
+		return MapTool.map2Bean(map, clz, true); // 应该为 false
 	}
 
 	/**
@@ -208,7 +208,7 @@ public class JsonHelper {
 	 * @param map 输入数据
 	 * @return JSON 字符串
 	 */
-	public static String stringifyMap(Map<?, ?> map) {
+	private static String stringifyMap(Map<?, ?> map) {
 		if (map == null)
 			return null;
 
@@ -230,7 +230,7 @@ public class JsonHelper {
 	 * @param bean bean对象
 	 * @return String "{}"
 	 */
-	public static String beanToJson(Object bean) {
+	private static String beanToJson(Object bean) {
 		StringBuilder json = new StringBuilder();
 		json.append("{");
 		PropertyDescriptor[] props = null;
@@ -257,23 +257,10 @@ public class JsonHelper {
 			}
 
 			json.setCharAt(json.length() - 1, '}');
-		} else {
+		} else 
 			json.append("}");
-		}
 
 		return json.toString();
-	}
-
-	/**
-	 * JSON 字符串转换为 Bean 对象
-	 * 
-	 * @param json JSON 字符串
-	 * @param clz  Bean 对象类引用
-	 * @return Bean 对象
-	 */
-	public static <T> T json2bean(String json, Class<T> clz) {
-		Map<String, Object> map = parseMap(json);
-		return MapTool.map2Bean(map, clz, true);
 	}
 
 	/**
@@ -385,6 +372,7 @@ public class JsonHelper {
 
 			if (c == ' ') // 忽略空格
 				continue;
+			
 
 			if (hasQuoataion) {
 				if (hasQuoataion(cs[i]))

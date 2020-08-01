@@ -7,5 +7,4 @@ package com.ajaxjs.framework;
  *
  */
 public interface IComponent {
-	//public void 
 }

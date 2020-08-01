@@ -101,8 +101,8 @@ public class TestJsonHelper {
 		list.add(2);
 		list.add(3);
 		assertEquals("[1, 2, 3]", JsonHelper.toJson(list));
-		assertEquals("[1, 2, 3]", JsonHelper.toJson(new Integer[] { 1, 2, 3 }));
-		assertEquals("[1, 2, 3]", JsonHelper.toJson(new int[] { 1, 2, 3 }));
+assertEquals("[1, 2, 3]", JsonHelper.toJson(new Integer[] { 1, 2, 3 }));
+assertEquals("[1, 2, 3]", JsonHelper.toJson(new int[] { 1, 2, 3 }));
 	
 		List<String> list2 = new ArrayList<>();
 		list2.add("1");
@@ -118,11 +118,12 @@ public class TestJsonHelper {
 		map.put("bar", 1);
 		assertEquals("{\"bar\":1,\"foo\":\"bar\"}", JsonHelper.toJson(map));
 	
-		List<Map<String, Object>> list3 = new ArrayList<>();
-		assertEquals("[]", JsonHelper.toJson(list3));
-		list3.add(map);
-		list3.add(map);
-		assertEquals("[{\"bar\":1,\"foo\":\"bar\"}, {\"bar\":1,\"foo\":\"bar\"}]", JsonHelper.toJson(list3));
+List<Map<String, Object>> list3 = new ArrayList<>();
+assertEquals("[]", JsonHelper.toJson(list3));
+list3.add(map);
+list3.add(map);
+assertEquals("[{\"bar\":1,\"foo\":\"bar\"}, {\"bar\":1,\"foo\":\"bar\"}]", JsonHelper.toJson(list3));
+
 	}
 	
 	static String[] _map = {"{",

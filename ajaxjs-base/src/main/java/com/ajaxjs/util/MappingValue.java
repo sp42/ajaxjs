@@ -157,7 +157,7 @@ public class MappingValue {
 	/**
 	 * 用于数组的分隔符
 	 */
-	static char diver = ',';
+	static final char diver = ',';
 
 	/**
 	 * Integer[] 不能直接转 int[]
