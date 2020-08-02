@@ -3,6 +3,8 @@ package com.ajaxjs.util.ioc;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -42,6 +44,11 @@ public class ComponentMgr {
 	 */
 	public static Set<Class<?>> clzs = new LinkedHashSet<>();
 
+	/**
+	 * 扫描指定的包。具体流程是 Javassist 添加 setter、类加载、依赖注射
+	 * 
+	 * @param packageNames 包名数组，会递归这个包下面所有的类
+	 */
 	public static void scan(String... packageNames) {
 		for (String packageName : packageNames)
 			scan(packageName);
@@ -54,12 +61,11 @@ public class ComponentMgr {
 	 */
 	@SuppressWarnings("unchecked")
 	public static void scan(String packageName) {
-//		LOGGER.info("扫描 [{0}] 包下面所有的类", _packageName);
+		LOGGER.debug("扫描 [{0}] 包下面所有的类", packageName);
 
 		Set<Class<?>> clzs = new LinkedHashSet<>();
 
 		new EveryClass().scan(packageName, resource -> {
-//			System.out.println(resource);
 			ClassPool cp = ClassPool.getDefault();
 
 			// 类加载并添加 setter
@@ -158,7 +164,6 @@ public class ComponentMgr {
 		// 扫描依赖关系并注入 bean.
 		dependencies.forEach((k, v) -> {
 			String[] split = k.split("\\.");// 数组第一个值表示 bean 对象名称，第二个值为字段属性名称
-//			LOGGER.info(k + ":::"+ v);
 			Object bean = get(split[0]), argBean = get(v);
 
 			Objects.requireNonNull(bean, split[0] + "执行[" + split[1] + "]未发现类");
@@ -225,8 +230,8 @@ public class ComponentMgr {
 	/**
 	 * 根据类、接口查找组件列表
 	 * 
-	 * @param <T> 目标类型
-	 * @param clz 组件类型、接口
+	 * @param <T> 目标组件类型
+	 * @param clz 组件类型或接口
 	 * @return 实例对象列表
 	 */
 	@SuppressWarnings("unchecked")
@@ -248,7 +253,7 @@ public class ComponentMgr {
 	 * 根据命名空间、别名查找组件
 	 * 
 	 * @param aliasOrClz 命名空间或别名
-	 * @return 目标组件
+	 * @return 目标组件，如果找不到返回 null
 	 */
 	public static Object get(String aliasOrClz) {
 		return get(aliasOrClz, Object.class);
@@ -259,7 +264,7 @@ public class ComponentMgr {
 	 * 
 	 * @param aliasOrClz 命名空间或别名
 	 * @param clz        为避免强类型转换，特意传入一个类型
-	 * @return 目标组件
+	 * @return 目标组件，如果找不到返回 null
 	 */
 	public static Object get(String aliasOrClz, Class<?> clz) {
 		if (aliasOrClz.contains(".")) // 命名空间
@@ -280,7 +285,7 @@ public class ComponentMgr {
 	/**
 	 * 返回组件。如果是非单例组件，则创建新的实例（无构造器的实例化）
 	 * 
-	 * @param <T>
+	 * @param <T>	   目标组件类型
 	 * @param compInfo 组件信息
 	 * @param clz      为避免强类型转换，特意传入一个类型
 	 * @param info     便于调试的相关信息
@@ -299,16 +304,17 @@ public class ComponentMgr {
 	// -------------------------------------------------------------------------------------------------
 
 	/**
-	 * 根据接口查找单个目标组件
+	 * 根据接口查找单个目标组件。该方法只会找到第一个匹配的结果。如果确定该接口之实例是唯一，可以使用这个方法。
 	 * 
-	 * @param <T>
+	 * @param <T> 		   目标组件接口类型
 	 * @param interfaceClz 接口类
-	 * @return 目标组件
+	 * @return 目标组件，如果找不到返回 null
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T getByInterface(Class<T> interfaceClz) {
 		for (String alias : components.keySet()) {
 			Object instance = components.get(alias).instance;
+			
 			if (instance != null && interfaceClz.isAssignableFrom(instance.getClass()))
 				return (T) instance;
 		}
@@ -319,9 +325,9 @@ public class ComponentMgr {
 	/**
 	 * 根据接口查找多个目标组件
 	 * 
-	 * @param <T>
-	 * @param interfaceClz 接口类
-	 * @return 目标组件的集合
+	 * @param <T> 			目标组件类型
+	 * @param interfaceClz  接口类
+	 * @return 目标组件的集合，如果找不到返回一个空的 list
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> List<T> getAllByInterface(Class<T> interfaceClz) {
@@ -329,19 +335,21 @@ public class ComponentMgr {
 
 		components.forEach((alias, compInfo) -> {
 			Object instance = components.get(alias).instance;
+			
 			if (instance != null && interfaceClz.isAssignableFrom(instance.getClass()))
 				list.add((T) instance);
 		});
-
+		
 		return list;
 	}
 
 	// -------------------------------------------------------------------------------------------------
 
 	/**
+	 * 注册一个组件
 	 * 
-	 * @param alias
-	 * @param clz
+	 * @param alias 组件索引
+	 * @param clz	组件类引用
 	 * @param isSingleton 是否单例，如果是马上创建实例
 	 */
 	public static void register(String alias, Class<?> clz, boolean isSingleton) {

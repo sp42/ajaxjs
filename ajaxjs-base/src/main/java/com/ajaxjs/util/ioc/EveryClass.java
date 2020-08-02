@@ -14,6 +14,11 @@ import com.ajaxjs.Version;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.logger.LogHelper;
 
+/**
+ * 
+ * @author xinzhang
+ *
+ */
 public class EveryClass {
 	private static final LogHelper LOGGER = LogHelper.getLog(EveryClass.class);
 
@@ -31,8 +36,8 @@ public class EveryClass {
 	 * @param addResult
 	 */
 	public void scan(String packageName, Consumer<String> addResult) {
-		this.addResult = addResult;
 		packageName = packageName.trim();
+		this.addResult = addResult;
 
 		String packageDir = packageName.replace('.', '/');
 		Enumeration<URL> resources = getResources(packageDir);
@@ -99,17 +104,17 @@ public class EveryClass {
 	/**
 	 * 扫描 jar 包里面的类
 	 * 
-	 * @param classes
-	 * @param url
-	 * @param packageDir
-	 * @param packageName
+	 * @param url 资源 url
+	 * @param packageDir 包目录
+	 * @param packageName 包名
 	 */
 	private void findInJar(URL url, String packageDir, String packageName) {
-		JarFile jar = null;
 		String fileUrl = url.getFile().replace("!/" + packageDir, "").replace("file:/", "");
+		fileUrl = Version.isWindows ? fileUrl : "/" + fileUrl;
+		JarFile jar = null;
 
 		try {
-			jar = new JarFile(new File(Version.isWindows ? fileUrl : "/" + fileUrl));
+			jar = new JarFile(new File(fileUrl));
 		} catch (IOException e) {
 			LOGGER.warning(e);
 		}
@@ -117,17 +122,16 @@ public class EveryClass {
 		Enumeration<JarEntry> entries = jar.entries();
 
 		while (entries.hasMoreElements()) {
-			// 获取 jar 里的一个实体 可以是目录 和一些 jar包里的其他文件 如META-INF等文件
+			// 获取 jar 里的一个实体 可以是目录 和一些 jar 包里的其他文件 如 META-INF 等文件
 			JarEntry entry = entries.nextElement();
 			String name = entry.getName();
 
-			// 如果是以/开头的的话获取后面的字符串
-			if (name.charAt(0) == '/')
+			if (name.charAt(0) == '/') // 如果是以 / 开头的的话获取后面的字符串
 				name = name.substring(1);
 
-			// 如果前半部分和定义的包名相同
-			if (name.startsWith(packageDir)) {
+			if (name.startsWith(packageDir)) {// 如果前半部分和定义的包名相同
 				int idx = name.lastIndexOf('/');
+				
 				if (idx != -1) {
 					packageName = name.substring(0, idx).replace('/', '.'); // 如果以"/"结尾 是一个包，获取包名 把"/"替换成"."
 

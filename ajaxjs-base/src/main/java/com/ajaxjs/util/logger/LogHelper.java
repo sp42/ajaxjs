@@ -143,6 +143,27 @@ public class LogHelper {
 	}
 
 	/**
+	 * 打印一个日志。这是调试级别的。
+	 * 
+	 * @param msg 日志信息
+	 */
+	public void debug(String msg) {
+		if(Version.isDebug)
+			info(msg);
+	}
+
+	/**
+	 * 打印一个日志，支持 {0}、{1}...的占位符。这是调试级别的。
+	 * 
+	 * @param msgTpl 信息语句之模板
+	 * @param params 信息参数
+	 */
+	public void debug(String msgTpl, Object... params) {
+		if(Version.isDebug)
+			info(msgTpl, params);
+	}	
+	
+	/**
 	 * 打印一个日志
 	 * 
 	 * @param msg 日志信息
