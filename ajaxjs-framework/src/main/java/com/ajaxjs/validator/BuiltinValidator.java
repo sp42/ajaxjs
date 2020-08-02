@@ -14,7 +14,7 @@ import com.ajaxjs.util.CommonUtil;
 public class BuiltinValidator {
 	public static final Validator NOT_NULL_VALIDATOR = (value, field, ann) -> {
 		if (value == null) {
-			NotBlank n = (NotBlank) ann;
+			NotNull n = (NotNull) ann;
 			return n.message() != null ? n.message() : field.getName() + " 不能为 null";
 		} else if (value != null && value instanceof Number) {
 			Number num = (Number) value;
