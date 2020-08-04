@@ -33,6 +33,7 @@ public class BeanValidator {
 	static {
 		register(NotNull.class, BuiltinValidator.NOT_NULL_VALIDATOR);
 		register(NotBlank.class, BuiltinValidator.NOT_BLANK_VALIDATOR);
+		register(NotEmail.class, BuiltinValidator.NOT_EMAIL_VALIDATOR);
 	}
 
 	/**

@@ -31,15 +31,29 @@ public class TestValidator {
 		public void setName(String name) {
 			this.name = name;
 		}
+
+		public String getEmail() {
+			return email;
+		}
+
+		public void setEmail(String email) {
+			this.email = email;
+		}
+
+		@NotEmail(message = "请注意规范")
+		private String email;
 	}
 
 	@Test
 	public void test() {
 		News news = new News();
+		news.setEmail("dffsd");
+		
 		String result[] = BeanValidator.validate(news);
 		assertNotNull(result);
 
 		System.out.println(result[0]);
 		System.out.println(result[1]);
+		System.out.println(result[2]);
 	}
 }

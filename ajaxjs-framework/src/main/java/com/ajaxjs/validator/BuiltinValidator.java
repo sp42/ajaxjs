@@ -1,5 +1,8 @@
 package com.ajaxjs.validator;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -34,5 +37,15 @@ public class BuiltinValidator {
 			return n.message() != null ? n.message() : field.getName() + " 不能为 为空";
 		} else
 			return null;
+	};
+
+	public static final Validator NOT_EMAIL_VALIDATOR = (Object value, Field field, Annotation ann) -> {
+		String result = "^([a-z0-9A-Z]+[-|_|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+		if (!value.toString().matches(result)) {
+			NotEmail n = (NotEmail) ann;
+			return n.message() != null ? n.message() : field.getName() + n.message();
+		} else {
+			return null;
+		}
 	};
 }
