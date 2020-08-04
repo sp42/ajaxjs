@@ -84,17 +84,17 @@ public class CommonUtil {
 	private static Matcher getMatcher(String regexp, String str) {
 		return Pattern.compile(regexp).matcher(str);
 	}
-
-	/**
-	 * 测试字符串是否正则
-	 * 
-	 * @param regexp 正则
-	 * @param str    测试的字符串
-	 * @return true 表示匹配
-	 */
-	public static boolean regTest(String regexp, String str) {
-		return getMatcher(regexp, str).find();
-	}
+//
+//	/**
+//	 * 测试字符串是否正则
+//	 * 
+//	 * @param regexp 正则
+//	 * @param str    测试的字符串
+//	 * @return true 表示匹配
+//	 */
+//	public static boolean regTest(String regexp, String str) {
+//		return getMatcher(regexp, str).find();
+//	}
 
 	/**
 	 * 使用正则的快捷方式
@@ -254,11 +254,11 @@ public class CommonUtil {
 				return null;
 
 			try {
-				if (DATE_PATTERN.matcher(str).matches()) {
+				if (DATE_PATTERN.matcher(str).matches()) 
 					return simpleDateFormatFactory(DATE_FORMAT).parse(str);
-				} else if (DATE_YEAR_PATTERN.matcher(str).matches()) {
+				 else if (DATE_YEAR_PATTERN.matcher(str).matches()) 
 					return simpleDateFormatFactory(DATE_FORMAT_SHORTER).parse(str);
-				} else
+				 else
 					return simpleDateFormatFactory(DATE_FORMAT_SHORT).parse(str);
 			} catch (ParseException e) {
 				e.printStackTrace();

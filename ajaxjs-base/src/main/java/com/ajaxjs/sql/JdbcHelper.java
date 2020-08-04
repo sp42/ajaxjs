@@ -27,6 +27,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,6 +84,8 @@ public class JdbcHelper extends JdbcReader {
 	 * @return 新增主键，为兼顾主键类型，返回的类型设为同时兼容 int/long/string 的 Serializable
 	 */
 	public static Serializable create(Connection conn, String sql, Object... params) {
+		SQLException[] sqlE = new SQLException[1]; // lambda 不能直接获取异常，于是用个数组装
+
 		Object newlyId = initAndExe((_conn, _sql) -> {
 			try {
 				return conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -100,11 +103,19 @@ public class JdbcHelper extends JdbcReader {
 						return rs.getObject(1);
 				}
 			} catch (SQLException e) {
+				sqlE[0] = e;
+				System.out.println("11111111111111");
 				LOGGER.warning(e);
 			}
 
 			return null;
 		}, conn, sql, params);
+
+		System.out.println("222222222222");
+		if (sqlE.length == 1 && sqlE[0] != null) {
+			System.out.println(Arrays.toString(sqlE));
+			throw new RuntimeException(sqlE[0] + "");
+		}
 
 		if (newlyId != null && !(newlyId instanceof Serializable)) {
 			LOGGER.warning(String.format("返回 id :{0} 类型:{1}", newlyId, newlyId.getClass().getName()));

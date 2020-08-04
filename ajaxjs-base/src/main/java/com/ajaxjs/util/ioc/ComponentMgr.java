@@ -3,8 +3,6 @@ package com.ajaxjs.util.ioc;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -12,6 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import com.ajaxjs.framework.GetConfig;
 import com.ajaxjs.framework.IComponent;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
@@ -186,14 +185,12 @@ public class ComponentMgr {
 		// 获取依赖的 bean 的名称,如果为 null, 则使用字段名称
 		String resource = res.value();
 
-		if (resource.startsWith("autoWire:")) {
-			String str = resource.replaceFirst("autoWire:", "");
-			String[] arr = str.split("\\|");
-//			String extendedId = ConfigService.getValueAsString(arr[0]);
-			String extendedId = null;
+		if (resource.startsWith("autoWire:") && getByInterface(GetConfig.class) != null) {
+			String target = resource.replaceFirst("autoWire:", "");
+			String extendedId = getByInterface(GetConfig.class).getString(target);
 
 			// 没有扩展，读取默认的
-			return extendedId == null ? arr[1] : extendedId;
+			return extendedId == null ? field.getType().getSimpleName() : extendedId;
 		}
 
 		if (CommonUtil.isEmptyString(resource))
@@ -285,7 +282,7 @@ public class ComponentMgr {
 	/**
 	 * 返回组件。如果是非单例组件，则创建新的实例（无构造器的实例化）
 	 * 
-	 * @param <T>	   目标组件类型
+	 * @param <T>      目标组件类型
 	 * @param compInfo 组件信息
 	 * @param clz      为避免强类型转换，特意传入一个类型
 	 * @param info     便于调试的相关信息
@@ -306,7 +303,7 @@ public class ComponentMgr {
 	/**
 	 * 根据接口查找单个目标组件。该方法只会找到第一个匹配的结果。如果确定该接口之实例是唯一，可以使用这个方法。
 	 * 
-	 * @param <T> 		   目标组件接口类型
+	 * @param <T>          目标组件接口类型
 	 * @param interfaceClz 接口类
 	 * @return 目标组件，如果找不到返回 null
 	 */
@@ -314,7 +311,7 @@ public class ComponentMgr {
 	public static <T> T getByInterface(Class<T> interfaceClz) {
 		for (String alias : components.keySet()) {
 			Object instance = components.get(alias).instance;
-			
+
 			if (instance != null && interfaceClz.isAssignableFrom(instance.getClass()))
 				return (T) instance;
 		}
@@ -325,8 +322,8 @@ public class ComponentMgr {
 	/**
 	 * 根据接口查找多个目标组件
 	 * 
-	 * @param <T> 			目标组件类型
-	 * @param interfaceClz  接口类
+	 * @param <T>          目标组件类型
+	 * @param interfaceClz 接口类
 	 * @return 目标组件的集合，如果找不到返回一个空的 list
 	 */
 	@SuppressWarnings("unchecked")
@@ -335,11 +332,11 @@ public class ComponentMgr {
 
 		components.forEach((alias, compInfo) -> {
 			Object instance = components.get(alias).instance;
-			
+
 			if (instance != null && interfaceClz.isAssignableFrom(instance.getClass()))
 				list.add((T) instance);
 		});
-		
+
 		return list;
 	}
 
@@ -348,8 +345,8 @@ public class ComponentMgr {
 	/**
 	 * 注册一个组件
 	 * 
-	 * @param alias 组件索引
-	 * @param clz	组件类引用
+	 * @param alias       组件索引
+	 * @param clz         组件类引用
 	 * @param isSingleton 是否单例，如果是马上创建实例
 	 */
 	public static void register(String alias, Class<?> clz, boolean isSingleton) {
