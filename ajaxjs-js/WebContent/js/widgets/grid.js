@@ -22,14 +22,14 @@ Vue.component('aj-avatar', {
 Vue.component('aj-cell-renderer', {
     props: {
         html: {type: String, default: ''},
-        form: Object,
+        form: Object
     },
     render(h) {
-		if(this.html.indexOf('aj')!= -1){
+		if(this.html.indexOf('<aj-')!= -1) {
 	        var com = Vue.extend({
 	            template: this.html,
 	            props: {
-	                form: Object,
+	                form: Object
 	            }
 	        });
 	
@@ -124,7 +124,7 @@ Vue.component('aj-entity-toolbar', {
 		save: {type: Boolean, default: true},
 		excel: {type: Boolean, default: false},
 		deleBtn: {type: Boolean, default: true},
-		search: {type: Boolean, default: true},
+		search: {type: Boolean, default: true}
 	},
 	methods: {
 		valid(e) {
@@ -162,22 +162,19 @@ Vue.component('aj-grid-inline-edit-row', {
 	},
 	props: {
 		rowData: { // 输入的数据
-			type: Object,
-			required: true,
+			type: Object, required: true,
 		},
 		showIdCol: { // 是否显示 id 列
-			type: Boolean,
-			default: true
+			type: Boolean, default: true
 		},
 		columns: Array, // 列
 		showCheckboxCol: { // 是否显示 selectCheckbox 列
-			type: Boolean,
-			default: true
+			type: Boolean, default: true
 		},
+		showControl: {type: Boolean, default: true},
 		filterField: Array, // 不要显示的字段,
 		enableInlineEdit: { // 是否可以 inline-edit
-			type: Boolean,
-			default: false
+			type: Boolean, default: false
 		},
 		deleApi: String // 删除路径
 	},
@@ -235,6 +232,7 @@ Vue.component('aj-grid-inline-edit-row', {
 				return '';
 				
 			var v = data[key];
+			
 			return (v === null ? '' : v) + '';
 		},
 		// 编辑按钮事件
@@ -306,6 +304,15 @@ Vue.component('aj-grid-inline-edit-row', {
 	}
 });
 
+Vue.component('aj-grid-select-row', {
+	template: '<a href="#" @click="fireSelect">选 择</a>'	,
+	methods: {
+		fireSelect() {
+			this.BUS.$emit('on-select', this.$parent.form);
+		}
+	}
+});
+
 Vue.component('aj-grid-inline-edit-row-create', {
 	beforeCreate() {	
 		aj.getTemplate('grid', 'aj-grid-inline-edit-row-create', this);
@@ -315,7 +322,7 @@ Vue.component('aj-grid-inline-edit-row-create', {
 			type: Array, required: true
 		},
 		createApi: {
-			type: String, required: true
+			type: String, required: false, default: '.'
 		}
 	},
 	methods: {
@@ -325,6 +332,8 @@ Vue.component('aj-grid-inline-edit-row-create', {
 			this.$el.$('input[name]', i => {
 				map[i.name] = i.value;
 			});
+			
+			this.BUS.$emit('before-add-new', map);
 			
 			aj.xhr.post(this.createApi, j => {
 				if(j && j.isOk) {
@@ -336,6 +345,8 @@ Vue.component('aj-grid-inline-edit-row-create', {
 					
 					this.$parent.reload();
 					this.$parent.showAddNew = false;
+				} else if(j && j.msg){
+					aj.msg.show(j.msg);
 				}
 			}, map);
 		},

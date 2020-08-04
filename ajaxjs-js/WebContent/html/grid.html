@@ -31,10 +31,10 @@
 		</td>
 		<td v-if="showIdCol">{{id}}</td>
 		<td v-for="key in columns" :style="styleModifly" class="cell" @dblclick="dbEdit">
-			<aj-cell-renderer v-if="isFixedField(key) || !isEditMode" :html="renderCell(data, key)"></aj-cell-renderer>
+			<aj-cell-renderer v-if="isFixedField(key) || !isEditMode" :html="renderCell(data, key)" :form="data"></aj-cell-renderer>
 			<input type="text" v-if="canEdit(key)" size="0" v-model="data[key]" /> 
 		</td>
-		<td class="control">
+		<td v-if="showControl" class="control">
 			<span @click="onEditClk"><img :src="ajResources.commonAsset + '/icon/update.gif'" /> 
 			{{!isEditMode ? "编辑" : "确定"}}</span>
 			<span @click="dele(id)"><img :src="ajResources.commonAsset + '/icon/delete.gif'" /> 删除</span> 
@@ -84,7 +84,7 @@
 		
 		<ul>
 			<li v-if="create" @click="$emit('on-create-btn-clk')"><i class="fa fa-plus" style="color:#0a90f0;"></i> 新建</li>
-			<li v-if="save" @click="$parent.onDirtySaveClk ? parent.onDirtySaveClk: parent.onDirtySaveClk"><i class="fa fa-floppy-o" style="color:rgb(205, 162, 4);"></i> 保存</li>
+			<li v-if="save" @click="$emit('on-save-btn-clk')"><i class="fa fa-floppy-o" style="color:rgb(205, 162, 4);"></i> 保存</li>
 			<li v-if="deleBtn"><i class="fa fa-trash-o" style="color:red;"></i> 删除</li>
 			<li v-if="excel"><i class="fa fa-file-excel-o" style="color:green;"></i> 导出</li>
 			<slot></slot>

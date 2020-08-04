@@ -486,7 +486,7 @@ Vue.component('aj-layer', {
 	methods: {
 		show(cfg) {
 			this.$el.classList.remove('hide');
-			this.BUS.emit('aj-layer-closed', this);
+			this.BUS.$emit('aj-layer-closed', this);
 			
 			if(cfg && cfg.afterClose)
 				this.afterClose = cfg.afterClose;

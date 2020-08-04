@@ -101,7 +101,12 @@ Vue.component('aj-pager', {
 			
 			aj.xhr.get(this.api, json => {
 				if(json.result) {
+					if(json.total == 0 || json.result.length == 0) {
+						aj.alert('没有找到任何记录');						
+					}
+					
 					this.result = json.result;
+					
 					if(this.isPage) {
 						this.total = json.total;
 						this.count();
