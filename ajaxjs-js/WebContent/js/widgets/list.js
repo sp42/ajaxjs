@@ -14,7 +14,8 @@ aj._list = {
 	data() {
 		return {
 			result: [],		// 展示的数据
-			baseParam: {},		// 每次请求都附带的参数
+			baseParam: {},	// 每次请求都附带的参数，不可修改的
+			extraParam: {},	// 与 baseParam 合并后每次请求可发送的，可以修改的
 			realApiUrl: this.apiUrl
 		};
 	}
@@ -37,7 +38,8 @@ aj._pager = {
 		return {
 			api: this.apiUrl, 	// 接口地址
 			result: [],			// 展示的数据
-			baseParam: {},		// 每次请求都附带的参数
+			baseParam: this.initBaseParam,	// 每次请求都附带的参数，不可修改的
+			extraParam: {},		// 与 baseParam 合并后每次请求可发送的，可以修改的
 			pageSize: this.initPageSize,
 			total: 0,
 			totalPage: 0,
@@ -54,7 +56,10 @@ aj._pager = {
 			type: Boolean, default: true
 		},
 		isPage: {// 是否分页，false=读取所有数据
-			type : Boolean, default : true
+			type: Boolean, default : true
+		},
+		initBaseParam: {
+			type: Object, default(){ return {};}
 		}
 	},
 	methods: {
@@ -97,25 +102,26 @@ Vue.component('aj-pager', {
 	mixins: [aj._pager],
 	methods: {
 		get() {
-			aj.apply(this.baseParam, { start : this.pageStart, limit : this.pageSize });
+			var param = aj.apply({}, this.baseParam);
+			aj.apply(param, this.extraParam);
+			aj.apply(param, { start : this.pageStart, limit : this.pageSize });
 			
-			aj.xhr.get(this.api, json => {
-				if(json.result) {
-					if(json.total == 0 || json.result.length == 0) {
+			aj.xhr.get(this.api, j => {
+				if(j.result) {
+					if(j.total == 0 || j.result.length == 0)
 						aj.alert('没有找到任何记录');						
-					}
 					
-					this.result = json.result;
+					this.result = j.result;
 					
 					if(this.isPage) {
-						this.total = json.total;
+						this.total = j.total;
 						this.count();
 					}
 				}
 				
 				this.$emit('onDataLoad', this.result);	
 				this.$emit('pager-result', this.result);
-			}, this.baseParam);
+			}, param);
 		},
 		ajaxGet() {
 			this.get();

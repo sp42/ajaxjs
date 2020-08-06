@@ -52,19 +52,16 @@ Vue.component('aj-edit-form', {
 		aj.getTemplate('grid', 'aj-edit-form', this);
 	},
 	props: {
-		initIsCreate: { // 是否新建模式
-			type: Boolean, default: true
-		},
 		uiName: String,
-		id: String,
 		getInfoApi: {// 获取实体详情的接口地址 
 			type: String, required: true
 		}
 	},
 	data(){
 		return {
-			isCreate: this.initIsCreate,
-			info: {}
+			isCreate: true,// 是否新建模式
+			id: 0,
+			info: {}	// 实体
 		}
 	},
 	mounted() {		
@@ -86,11 +83,10 @@ Vue.component('aj-edit-form', {
 	},
 	methods: {
 		load(id) { // 加载数据，获取实体详情
+			this.id = id;
 			this.isCreate = false;
 			
-			aj.xhr.get(this.$el.action + id + "/", j => {
-				this.info = j.result;
-			});
+			aj.xhr.get(this.getInfoApi + id + "/", j => this.info = j.result);
 		},
 		close(){
 			if(this.$parent.$options._componentTag === 'aj-layer') {
@@ -110,6 +106,13 @@ Vue.component('aj-edit-form', {
 						aj.alert('删除失败！');
 				})
 			);
+		},
+		// 新建记录
+		create() {
+			this.isCreate = true;
+			this.id = 0;
+			this.info = {};
+			this.$parent.show();
 		}
 	}
 });
@@ -142,7 +145,7 @@ Vue.component('aj-entity-toolbar', {
 		},
 		doSearch(e) {
 			e.preventDefault();
-			aj.apply(this.$parent.$refs.pager.baseParam, {
+			aj.apply(this.$parent.$refs.pager.extraParam, {
 				keyword: this.$el.$('input[name=keyword]').value
 			});
 			this.$parent.reload();

@@ -61,7 +61,9 @@
 		<h3>{{isCreate ? "新建" : "编辑" }}{{uiName}}</h3>
 		<!-- 传送 id 参数 -->
 		<input v-if="!isCreate" type="hidden" name="id" :value="info.id" />
+		
 		<slot v-bind:info="info"></slot>
+		
 		<div class="aj-btnsHolder">
 			<button><img :src="ajResources.commonAsset + '/icon/save.gif'" /> {{isCreate ? "新建":"保存"}}</button>
 			<button onclick="this.up(\'form\').reset();return false;">复 位</button>

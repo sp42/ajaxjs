@@ -223,7 +223,7 @@ Vue.component('aj-form-between-date', {
 			if(this.isAjax) {
 				e.preventDefault();
 				var grid = this.$parent.$parent;
-				aj.apply(grid.$refs.pager.baseParam, {
+				aj.apply(grid.$refs.pager.extraParam, {
 					startDate: start, endDate: end
 				});
 				grid.reload();
@@ -1246,7 +1246,7 @@ aj.searchPanel = {
 				return;
 			}
 			
-			aj.apply(this.$refs.pager.baseParam, param);
+			aj.apply(this.$refs.pager.extraParam, param);
 			this.reload();
 		},
 		// 选择任意字段
@@ -1260,12 +1260,12 @@ aj.searchPanel = {
 				return;
 			}
 			
-			aj.apply(this.$refs.pager.baseParam, param);
+			aj.apply(this.$refs.pager.extraParam, param);
 			this.reload();
 		},
 		// 清空查询参数
 		clearSearch() {
-			this.$refs.pager.baseParam = {};
+			this.$refs.pager.extraParam = {};
 			this.reload();
 		}
 	}
