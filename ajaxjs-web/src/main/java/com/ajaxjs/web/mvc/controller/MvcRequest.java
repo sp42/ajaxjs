@@ -346,7 +346,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	public String getIdOnly(String key) {
 		String p = getParameter(key);
 
-		if (!CommonUtil.regTest("\\d+", p))
+		if (!p.matches("\\d+"))
 			throw new IllegalArgumentException("参数 [" + key + "[必须为数字");
 
 		return p;

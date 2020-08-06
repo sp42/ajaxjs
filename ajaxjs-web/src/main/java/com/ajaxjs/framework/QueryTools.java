@@ -240,7 +240,8 @@ public class QueryTools {
 		if (value == null || "null".equals(value))
 			return setWhere(null);
 
-		return by(r.getParameter("filterField"), CommonUtil.regTest("\\d+", value) ? MappingValue.toJavaValue(value) : value);
+//		return by(r.getParameter("filterField"), CommonUtil.regTest("\\d+", value) ? MappingValue.toJavaValue(value) : value);
+		return by(r.getParameter("filterField"), value.matches("\\d+") ? MappingValue.toJavaValue(value) : value);
 	}
 
 	/**

@@ -23,6 +23,8 @@ import java.util.Map;
 import javax.script.ScriptException;
 
 import com.ajaxjs.Version;
+import com.ajaxjs.framework.GetConfig;
+import com.ajaxjs.framework.IComponent;
 import com.ajaxjs.jsonparser.JsEngineWrapper;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.IoHelper;
@@ -35,7 +37,7 @@ import com.ajaxjs.util.map.ListMap;
  * 
  * @author sp42 frank@ajaxjs.com
  */
-public class ConfigService {
+public class ConfigService implements GetConfig, IComponent {
 	private static final LogHelper LOGGER = LogHelper.getLog(ConfigService.class);
 
 	/**
@@ -159,6 +161,16 @@ public class ConfigService {
 	 */
 	public static String getValueAsString(String key) {
 		return get(key, null, String.class);
+	}
+
+	/**
+	 * 读取配置并转换其为字符串类型。仅对扁平化后的配置有效，所以参数必须是扁平化的 aaa.bbb.ccc 格式。
+	 * 
+	 * @param key 配置键值
+	 * @return 配置内容
+	 */
+	public String getString(String key) {
+		return getValueAsString(key);
 	}
 
 	/**

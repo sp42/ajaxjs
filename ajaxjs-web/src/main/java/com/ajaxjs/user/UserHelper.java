@@ -7,7 +7,6 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.function.Function;
 
 import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.util.CommonUtil;
 
 /**
  * 用户工具类
@@ -23,7 +22,7 @@ public class UserHelper {
 	/**
 	 * 验证 email 是否合法正确
 	 */
-	private final static String emailRegexp = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+	private final static String EMAIL_REGEXP = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
 
 	/**
 	 * 是否合法的邮件
@@ -32,13 +31,13 @@ public class UserHelper {
 	 * @return true 表示为合法邮件
 	 */
 	public static boolean isVaildEmail(String email) {
-		return CommonUtil.regTest(emailRegexp, email);
+		return email.matches(EMAIL_REGEXP);
 	}
 
 	/**
 	 * 验证手机号码是否合法正确
 	 */
-	private static final String phoneRegexp = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(17[013678])|(18[0,5-9]))\\d{8}$";
+	private static final String PHONE_REGEXP = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(17[013678])|(18[0,5-9]))\\d{8}$";
 
 	/**
 	 * 是否合法的手机号码，仅限中国大陆号码
@@ -47,7 +46,7 @@ public class UserHelper {
 	 * @return true 表示为手机号码
 	 */
 	public static boolean isVaildPhone(String phoneNo) {
-		return CommonUtil.regTest(phoneRegexp, phoneNo);
+		return phoneNo.matches(PHONE_REGEXP);
 	}
 
 	/**

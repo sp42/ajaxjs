@@ -50,10 +50,11 @@
 			</div> 
 		</div>
 		<aj-layer ref="layer">
-			<form class="rename" :action="'../' + selectedId + '/'" method="put">
-				<br />
+			<form class="rename" :action="'../' + selectedId + '/'" method="put" style="text-align:center;">
+				<h5>修改${uiName}名称</h5>
 				<br />
 				名称： <input type="text" class="aj-input" name="name" :value="selectedName" required /> 
+				<br />
 				<br />
 				<button class="aj-btn">
 					<img src="${commonAssetIcon}/update.gif" /> 更新名称
