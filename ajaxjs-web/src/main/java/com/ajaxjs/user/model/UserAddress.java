@@ -43,7 +43,7 @@ public class UserAddress extends BaseModel {
 	/**
 	 * 用户 id
 	 */
-	private Long userId;
+	private Long owner;
 
 	/**
 	 * 分类 id
@@ -228,12 +228,12 @@ public class UserAddress extends BaseModel {
 		return isDefault;
 	}
 
-	public Long getUserId() {
-		return userId;
+	public Long getOwner() {
+		return owner;
 	}
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setOwner(Long owner) {
+		this.owner = owner;
 	}
 
 	public String getUsername() {

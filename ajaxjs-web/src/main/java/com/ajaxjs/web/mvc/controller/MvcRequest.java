@@ -126,6 +126,13 @@ public class MvcRequest extends HttpServletRequestWrapper {
 		return Objects.requireNonNull(result, "在[ " + url + "]不能获取[ " + param + "]参数");
 	}
 
+	public Map<String, Object> getMap() {
+		if (getMethod() != null && getMethod().toUpperCase().equals("PUT"))
+			return getPutRequestData(); // Servlet 没有 PUT 获取表单，要自己处理
+		else
+			return MapTool.as(getParameterMap(), arr -> MappingValue.toJavaValue(arr[0]));
+	}
+
 	/**
 	 * 支持自动获取请求参数并封装到 Bean 内
 	 * 
@@ -134,12 +141,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	 * @return Java Bean
 	 */
 	public <T> T getBean(Class<T> clz) {
-		Map<String, Object> map;
-
-		if (getMethod() != null && getMethod().toUpperCase().equals("PUT"))
-			map = getPutRequestData(); // Servlet 没有 PUT 获取表单，要自己处理
-		else
-			map = MapTool.as(getParameterMap(), arr -> MappingValue.toJavaValue(arr[0]));
+		Map<String, Object> map = getMap();
 
 		/*
 		 * 抛出 IllegalArgumentException 这个异常 有可能是参数类型不一致造成的， 要求的是 string 因为 map 从 request

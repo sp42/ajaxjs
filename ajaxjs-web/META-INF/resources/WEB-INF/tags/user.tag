@@ -64,7 +64,7 @@
 							json.isAdminLogin = true;
 						</c:if>
 						},
-						googleReCAPTCHA: '${aj_allConfig.security.GoogleReCAPTCHA.siteId}'
+						googleReCAPTCHA: '${aj_allConfig.security.disableCaptcha ? '' : aj_allConfig.security.GoogleReCAPTCHA.siteId}'
 					}
 				);
 			}
@@ -173,7 +173,7 @@
 							json.password = md5(json.password);
 							delete json.password2;
 						},
-						googleReCAPTCHA: '${aj_allConfig.security.GoogleReCAPTCHA.siteId}'
+						googleReCAPTCHA: '${aj_allConfig.security.disableCaptcha ? '' : aj_allConfig.security.GoogleReCAPTCHA.siteId}'
 					}
 				); 
 			},

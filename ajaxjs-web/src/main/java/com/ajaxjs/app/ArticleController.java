@@ -44,7 +44,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 
 	@Resource
 	private TreeLikeService treeLikeService;
-	
+
 	@Resource
 	private ArticleService service;
 
@@ -53,12 +53,12 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 		return service;
 	}
 
-@GET
-@MvcFilter(filters = { DataBaseFilter.class })
-@Authority(filter = PrivilegeFilter.class, value = RightConstant.ARTICLE_ONLINE)
-public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit) {
-	return page("article-list");
-}
+	@GET
+	@MvcFilter(filters = { DataBaseFilter.class })
+	@Authority(filter = PrivilegeFilter.class, value = RightConstant.ARTICLE_ONLINE)
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit) {
+		return page("article-list");
+	}
 
 	@GET
 	@Path("listJson")
@@ -74,14 +74,14 @@ public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit) {
 	public String getInfo(@PathParam(ID) Long id, ModelAndView mv) {
 		LOGGER.info("图文详情-前台");
 		Map<String, Object> map = getService().findById(id);
-		setInfo(mv, map);
+
 		BaseService.getNeighbor(mv, "entity_article", id);
 		getService().showInfo(mv, id);
 
 		if (ConfigService.getValueAsBool("domain.article.attachmentDownload"))
 			map.put("attachment", new AttachmentService().findByOwner((long) map.get("uid")));
 
-		return page("article-info");
+		return output(mv, map, "jsp::article-info");
 	}
 
 	@Override
@@ -129,8 +129,7 @@ public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit) {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("/admin/{root}/{id}")
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
-		setInfo(mv, getService().findById(id));
-		return jsp("app/article-edit");
+		return output(mv, id, "jsp::app/article-edit");
 	}
 
 	@PUT

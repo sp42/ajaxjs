@@ -49,10 +49,9 @@ public class Attachment_pictureController extends BaseController<Attachment_pict
 	@MvcFilter(filters = { DataBaseFilter.class })
 //	@Authority(filter = DataBaseFilter.class, value = 1)
 	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
-		page(mv, service.findPagedList(start, limit, null));
 		mv.put("DICT", Attachment_pictureService.DICT);
 
-		return jsp("admin/" + service.getShortName() + "-list");
+		return output(mv, service.findPagedList(start, limit, null), "jsp::admin/" + service.getShortName() + "-list");
 	}
 
 	@GET

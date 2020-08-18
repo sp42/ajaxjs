@@ -2,6 +2,7 @@ package com.ajaxjs.user.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
@@ -16,6 +17,8 @@ import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.app.TreeLikeService;
 import com.ajaxjs.framework.BaseController;
+import com.ajaxjs.framework.BaseService;
+import com.ajaxjs.framework.QueryTools;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.user.UserConstant;
@@ -56,17 +59,19 @@ public class UserAdminController extends BaseController<User> {
 		mv.put("UserGroupsJson", toJson(TreeLikeService.idAsKey(userGroups), false));
 		mv.put("UserGroupsJSON", toJson(userGroups, false).replaceAll("\"", "'"));
 
-		return page(mv, service.findPagedList(start, limit), "user/admin/user-admin-list");
+		return output(mv, service.findPagedList(start, limit), "jsp::user/admin/user-admin-list");
 	}
 
 	@GET
 	@Path("listJson")
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String listJson(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
+	public String listJson(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv, HttpServletRequest r) {
 		LOGGER.info("后台-会员列表-json");
+		String[] fields = { "id", "name", "username" };
 
-		return toJson(service.findPagedList(start, limit));
+		Function<String, String> fn = QueryTools.searchQuery(fields, r).andThen(BaseService::betweenCreateDate);
+		return toJson(service.findPagedList(start, limit, fn));
 	}
 
 	@GET
@@ -75,9 +80,8 @@ public class UserAdminController extends BaseController<User> {
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
 		mv.put("UserGroupsJSON", toJson(roleService.getDao().findList(null), false).replaceAll("\"", "'"));
 		mv.put("SexGender", UserConstant.SEX_GENDER);
-		setInfo(mv, service.findById(id));
 
-		return jsp("user/user-edit");
+		return output(mv, id, "jsp::user/user-edit");
 	}
 
 	@GET

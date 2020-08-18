@@ -22,7 +22,7 @@ import com.ajaxjs.util.ioc.Component;
 @Component
 public class UserAddressService extends BaseService<UserAddress> {
 
-	@TableName(value = "user_address", beanClass = UserAddress.class)
+	@TableName(value = "entity_address", beanClass = UserAddress.class)
 	public static interface UserAddressDao extends IBaseDao<UserAddress> {
 		@Select("SELECT a.*, u.name AS userIdName, u.username FROM ${tableName} a LEFT JOIN user u ON u.id = a.userId WHERE 1 = 1 ORDER BY id DESC")
 		public PageResult<UserAddress> findPagedList(int start, int limit, Function<String, String> doSql);
@@ -45,7 +45,7 @@ public class UserAddressService extends BaseService<UserAddress> {
 	 * @param bean
 	 */
 	private static void checkIfExist(UserAddress bean) {
-		if (bean.getIsDefault()) {
+		if (bean.getIsDefault() != null && bean.getIsDefault()) {
 			Long defaultId = dao.getDefaultAddressId();
 
 			if (defaultId != null && defaultId != bean.getId()) { // 已经有默认地址

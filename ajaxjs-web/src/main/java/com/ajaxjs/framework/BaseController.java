@@ -30,6 +30,13 @@ public abstract class BaseController<T> implements IController, MvcConstant {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseController.class);
 
 	/**
+	 * 服务对象
+	 * 
+	 * @return 服务对象
+	 */
+	public abstract IBaseService<T> getService();
+
+	/**
 	 * JSP 都保存在 /WEB-IMF/jsp/ 下面。再不断地分类
 	 * 
 	 * @param jsp 模板位置
@@ -60,11 +67,19 @@ public abstract class BaseController<T> implements IController, MvcConstant {
 	}
 
 	/**
-	 * 服务对象
+	 * 可覆盖的模版方法，用于装备其他数据，如分类这些外联的表。
 	 * 
-	 * @return 服务对象
+	 * @param mv Model 模型
 	 */
-	public abstract IBaseService<T> getService();
+	public void prepareData(ModelAndView mv) {
+		IBaseService<T> service = getService();
+
+		if (mv != null && service != null) {
+			mv.put("uiName", service.getUiName());
+			mv.put("shortName", service.getShortName());
+			mv.put("tableName", service.getTableName());
+		}
+	}
 
 	/**
 	 * 新建记录的页面，必定是 MVC 而不是 JSON 的
@@ -77,53 +92,6 @@ public abstract class BaseController<T> implements IController, MvcConstant {
 		prepareData(mv);
 
 		return getService().getShortName();
-	}
-
-	public String setInfo(long id, ModelAndView mv, String jsp) {
-		setInfo(id, mv);
-		return jsp(jsp);
-	}
-
-	public String setInfo(ModelAndView mv, Object bean, String jsp) {
-		setInfo(mv, bean);
-		return jsp(jsp);
-	}
-
-	/**
-	 * 保存记录，必定是 MVC 而不是 JSON 的
-	 * 
-	 * @param mv   页面 Model 模型
-	 * @param bean 实体
-	 * @return JSP 文件标识，通常是如 news-edit
-	 */
-	public void setInfo(ModelAndView mv, Object bean) {
-		mv.put("isCreate", false);
-		mv.put(INFO, bean);// 读取单个记录或者编辑某个记录，保存到 ModelAndView 中（供视图渲染用）。
-		prepareData(mv);
-	}
-
-	/**
-	 * 指向编辑记录的页面
-	 * 
-	 * @param id 实体 id
-	 * @param mv 页面 Model 模型
-	 * @return JSP 文件标识，通常是如 news-edit
-	 */
-	public void setInfo(long id, ModelAndView mv) {
-		setInfo(mv, getService().findById(id));
-	}
-
-	/**
-	 * 可覆盖的模版方法，用于装备其他数据，如分类这些外联的表。
-	 * 
-	 * @param mv Model 模型
-	 */
-	public void prepareData(ModelAndView mv) {
-		if (mv != null && getService() != null) {
-			mv.put("uiName", getService().getUiName());
-			mv.put("shortName", getService().getShortName());
-			mv.put("tableName", getService().getTableName());
-		}
 	}
 
 	/**
@@ -192,23 +160,6 @@ public abstract class BaseController<T> implements IController, MvcConstant {
 	}
 
 	/**
-	 * 
-	 * @param mv         Model 模型
-	 * @param pageResult 分页数据
-	 * @return JSP 文件标识，通常是如 news-list
-	 */
-	public String page(ModelAndView mv, PageResult<T> pageResult) {
-		return page(mv, pageResult, getService().getShortName() + "-list");
-	}
-
-	public String page(ModelAndView mv, PageResult<T> pageResult, String jsp) {
-		prepareData(mv);
-		mv.put(PAGE_RESULT, pageResult);
-
-		return jsp(jsp);
-	}
-
-	/**
 	 * 自动根据客户端 HTTP 头传入的 Accept 字段决定是否输出 JSON 格式
 	 * 
 	 * @param entity  实体，可以是单个实体或者列表、分页列表
@@ -237,13 +188,36 @@ public abstract class BaseController<T> implements IController, MvcConstant {
 				return toJson(entity);
 		} else {
 			if (entity instanceof PageResult)
-				mv.put(PAGE_RESULT, entity);
+				mv.put(PAGE_RESULT, entity);// 读取单个记录或者编辑某个记录，保存到 ModelAndView 中（供视图渲染用）。
 
 			if (entity instanceof Map || entity instanceof BaseModel)
 				mv.put(INFO, entity);
 
-			return jspPath;
+			if (jspPath.startsWith("jsp::"))
+				return jsp(jspPath.replace("jsp::", ""));
+			if (jspPath.startsWith("page::"))
+				return page(jspPath.replace("page::", ""));
+			if (jspPath.startsWith("admin::"))
+				return admin(jspPath.replace("admin::", ""));
+			else
+				return jspPath;
 		}
+	}
+
+	public String output(ModelAndView mv, Object entityOrId) {
+		String name = getService().getShortName();
+		String jspPath = entityOrId instanceof PageResult ? name + "-list" : name;
+
+		return output(mv, entityOrId, jspPath);
+	}
+
+	public String output(ModelAndView mv, Object entityOrId, String jspPath) {
+		if (entityOrId instanceof Long)
+			entityOrId = getService().findById((long) entityOrId);
+
+		prepareData(mv);
+
+		return autoOutput(entityOrId, mv, jspPath);
 	}
 
 	/**

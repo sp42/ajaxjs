@@ -72,7 +72,7 @@ public class LoginLogController extends BaseController<UserLoginLog> {
 		LOGGER.info("用户登录日志-后台列表");
 		mv.put("LoginType", UserConstant.LOGIN_TYPE);
 
-		return page(mv, service.findPagedList(start, limit), "user/login-log-list");
+		return output(mv, service.findPagedList(start, limit), "jsp::user/login-log-list");
 	}
 
 	@Override

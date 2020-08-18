@@ -33,6 +33,9 @@ public class CaptchaFilter implements FilterAction {
 
 	@Override
 	public boolean before(FilterContext ctx) {
+		if (ConfigService.getBol("security.disableCaptcha"))
+			return true;
+
 		String token = ctx.request.getParameter(PARAM_NAME);
 
 		if (CommonUtil.isEmptyString(token))

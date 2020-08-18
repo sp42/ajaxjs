@@ -24,14 +24,14 @@
 						<li @click="rename"><i class="fa fa-pencil-square-o" style="color:#0a90f0;"></i> 修改分类名称</li>
 						<li @click="dele"><i class="fa fa-trash-o" aria-hidden="true" style="color:red;"></i> 删除</li>
 						<li>
-							<form action="../" method="post" class="createUnderNode">
+							<form action="." method="post" class="createUnderNode">
 								<input type="hidden" name="pid" :value="selectedId" />
 								<input type="text" name="name" required size="12" /> 
 								<button><i class="fa fa-plus" aria-hidden="true" style="color:#ffaf0a;"></i> 新建子分类</button>	
 							</form>
 						</li>
 						<li>
-							<form action="../" method="post" class="createTopNode">
+							<form action="." method="post" class="createTopNode">
 								<input type="hidden" name="pid" value="-1" />
 								<input type="text" name="name" size="12" required /> 
 								<button><i class="fa fa-plus" aria-hidden="true" style="color:#ffaf0a;"></i> 新增顶级${uiName}</button>	
@@ -50,7 +50,7 @@
 			</div> 
 		</div>
 		<aj-layer ref="layer">
-			<form class="rename" :action="'../' + selectedId + '/'" method="put" style="text-align:center;">
+			<form class="rename" :action="selectedId + '/'" method="put" style="text-align:center;">
 				<h5>修改${uiName}名称</h5>
 				<br />
 				名称： <input type="text" class="aj-input" name="name" :value="selectedName" required /> 
@@ -118,7 +118,7 @@
 					} 
 					
 					aj.showConfirm('确定删除该${uiName}[{0}]？<br />[{0}]下所有的子节点也会随着一并全部删除。'.replace(/\{0\}/g, this.selectedName), 
-						() => aj.xhr.dele("../" + this.selectedId + "/", this.refresh)
+						() => aj.xhr.dele("" + this.selectedId + "/", this.refresh)
 					);
 				},
 				refresh(json) {

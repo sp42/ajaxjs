@@ -71,9 +71,7 @@ public class AttachmentController extends BaseController<Attachment> {
 	@MvcFilter(filters = { DataBaseFilter.class })
 	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		LOGGER.info("附件列表-前台");
-		prepareData(mv);
-
-		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.ON_LINE, true));
+		return output(mv, service.findPagedList(catalogId, start, limit, CommonConstant.ON_LINE, true));
 	}
 
 	@POST

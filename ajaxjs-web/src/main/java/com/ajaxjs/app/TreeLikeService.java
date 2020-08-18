@@ -86,6 +86,12 @@ public class TreeLikeService extends BaseService<Catalog> {
 		return dao.getAllChildren(pid);
 	}
 
+	/**
+	 * 转换为适合前端显示的 map
+	 * 
+	 * @param pid
+	 * @return
+	 */
 	public Map<Long, BaseModel> getAllChildrenAsMap(int pid) {
 		return idAskey(getAllChildren(pid));
 	}

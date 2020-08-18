@@ -15,6 +15,8 @@ package com.ajaxjs.web.mvc.controller;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -82,9 +84,31 @@ public class RequestParam {
 					LOGGER.info("没有任何请求数据，但控制器方法期望至少一个参数来构成 map。");
 			} else if (clazz.equals(ModelAndView.class))
 				args.add(new ModelAndView()); // 新建 ModeView 对象
-			else if (BaseModel.class.isAssignableFrom(clazz)) // 实体类参数
-				args.add(req.getBean(clazz));
-			else { // 适配注解
+			else if (BaseModel.class.isAssignableFrom(clazz)) {// 实体类参数
+				Annotation[] annotations = annot[i];
+
+				// 写死第一个的注解
+				if (annotations != null && annotations.length >= 1 && annotations[0] instanceof SubBean) {
+					Map<String, Object> map = req.getMap(), _map = new HashMap<>();
+
+					SubBean s = (SubBean) annotations[0];
+					String perfix = s.value() + ".";
+
+					map.forEach((key, v) -> {
+						if (key.startsWith(perfix)) {
+							_map.put(key.replace(perfix, ""), v);
+						}
+					});
+
+					System.out.println(map.get("ContactAddress.locationProvince"));
+					System.out.println(_map.get("locationProvince"));
+					Object bean = MapTool.map2Bean(_map, clazz, true);
+
+					args.add(bean);
+				} else
+					args.add(req.getBean(clazz));
+
+			} else { // 适配注解
 				Annotation[] annotations = annot[i];
 				getArgValue(clazz, annotations, req, args, method, controller);
 			}
@@ -107,6 +131,8 @@ public class RequestParam {
 		if (annots.length > 0) {
 			boolean required = false; // 是否必填字段
 			String defaultValue = null; // 默认值
+
+			System.out.println(Arrays.toString(annots));
 
 			for (Annotation annot : annots) {
 				if (annot instanceof NotNull)
@@ -133,6 +159,9 @@ public class RequestParam {
 						LOGGER.warning(new NullPointerException("控制器方法居然没有 PathParam 注解？？"));
 
 					break;
+				} else if (annot instanceof SubBean) {// 子实体
+					String name = ((SubBean) annot).value();
+					System.out.println(":LLLLLLLLLLLLL" + name);
 				}
 			}
 		} else
@@ -165,6 +194,7 @@ public class RequestParam {
 	 */
 	private static String getArgValue(Annotation a, HttpServletRequest request, boolean required) {
 		String key = null, value;
+
 		if (a instanceof QueryParam)
 			key = ((QueryParam) a).value();
 		else if (a instanceof FormParam)
