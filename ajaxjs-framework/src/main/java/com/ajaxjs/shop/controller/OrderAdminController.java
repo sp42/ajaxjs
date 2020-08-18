@@ -42,12 +42,10 @@ public class OrderAdminController extends BaseController<OrderInfo> {
 	@GET
 	@Path(LIST)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv,
-			@QueryParam("userId") long userId) {
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv, @QueryParam("userId") long userId) {
 		LOGGER.info("后台-订单列表");
 
-		page(mv, service.findPagedList(start, limit, userId));
-		return jsp("shop/order-admin-list");
+		return output(mv, service.findPagedList(start, limit, userId), jsp("shop/order-admin-list"));
 	}
 
 	@Override
@@ -65,7 +63,7 @@ public class OrderAdminController extends BaseController<OrderInfo> {
 	@Path(ID_INFO)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
-		setInfo(mv, service.findById(id));
+		OrderInfo orderInfo = service.findById(id);
 
 		// 获取用户名
 		OrderInfo order = (OrderInfo) mv.get("info");
@@ -81,7 +79,7 @@ public class OrderAdminController extends BaseController<OrderInfo> {
 		List<OrderItem> items = OrderService.dao.findOrderItemListByOrderId(id);
 		mv.put("orderItems", items);
 
-		return jsp("shop/order-edit");
+		return output(mv, orderInfo, "jsp::shop/order-edit");
 	}
 
 	@PUT

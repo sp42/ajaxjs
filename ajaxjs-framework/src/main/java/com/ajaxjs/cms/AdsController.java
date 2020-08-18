@@ -40,19 +40,14 @@ public class AdsController extends BaseController<Ads> {
 		LOGGER.info("广告列表");
 
 		mv.put("catalogs", treeLikeService.getAllChildrenAsMap(service.getDomainCatalogId()));
-
-		page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.ON_LINE, true));
-
-		return admin("topic-admin-list");
+		return output(mv, service.findPagedList(catalogId, start, limit, CommonConstant.ON_LINE, true), "admin::topic-admin-list");
 	}
 
 	@GET
 	@Path(ID_INFO)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
-		setInfo(id, mv);
-
-		return admin("ads-edit");
+		return output(mv, id, "ads-edit");
 	}
 
 	@GET

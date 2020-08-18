@@ -63,8 +63,7 @@ public class AddressController extends BaseController<UserAddress> {
 	@Path(ID_INFO)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
-		setInfo(mv, service.findById(id));
-		return jsp(jsp + "-info");
+		return toJson(service.findById(id));
 	}
 
 	/*
@@ -80,7 +79,7 @@ public class AddressController extends BaseController<UserAddress> {
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
 	public String createUserAddress(@NotNull @BeanParam UserAddress bean) {
-		bean.setUserId(BaseUserController.getUserId());
+		bean.setOwner(BaseUserController.getUserId());
 		return create(bean);
 	}
 
@@ -111,7 +110,7 @@ public class AddressController extends BaseController<UserAddress> {
 	@Path("/admin/address/list")
 	@MvcFilter(filters = { DataBaseFilter.class, XslMaker.class })
 	public String adminList(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
-		return page(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE, true), jsp + "-admin-list");
+		return output(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE, true), jsp + "-admin-list");
 	}
 
 	@DELETE

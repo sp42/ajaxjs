@@ -52,8 +52,7 @@ public class HrController extends BaseController<Map<String, Object>> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String adminList(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
 		LOGGER.info("招聘后台列表");
-		page(mv, service.findPagedList(0, start, limit, CommonConstant.OFF_LINE, false));
-		return admin("hr-admin-list");
+		return output(mv, service.findPagedList(0, start, limit, CommonConstant.OFF_LINE, false), "jsp::hr-admin-list");
 	}
 
 	@GET
@@ -68,8 +67,7 @@ public class HrController extends BaseController<Map<String, Object>> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("/admin/hr/{id}")
 	public String editUI(ModelAndView mv, @PathParam(ID) Long id) {
-		setInfo(id, mv);
-		return admin("hr-edit");
+		return output(mv, id, "hr-edit");
 	}
 
 	@POST

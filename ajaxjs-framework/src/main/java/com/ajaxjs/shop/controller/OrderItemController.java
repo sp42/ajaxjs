@@ -41,17 +41,14 @@ public class OrderItemController extends BaseController<OrderItem> {
 	@GET
 	@Path(LIST)
 	@MvcFilter(filters = { DataBaseFilter.class, XslMaker.class })
-	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv,
-			HttpServletRequest r, HttpServletResponse response) {
+	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv, HttpServletRequest r, HttpServletResponse response) {
 		HttpSession session = r.getSession();
 		long p = (long) session.getAttribute("privilegeTotal");
 		long sellerId = session.getAttribute("sellerId") == null ? 0 : (long) session.getAttribute("sellerId");
 
-		page(mv, service.findPagedList(start, limit, p, sellerId));
-
 		mv.put(XslMaker.XSL_TEMPLATE_PATH, service.getUiName());
 
-		return jsp("shop/order-item-admin-list");
+		return output(mv, service.findPagedList(start, limit, p, sellerId), "jsp::shop/order-item-admin-list");
 	}
 
 	@Override
@@ -71,8 +68,7 @@ public class OrderItemController extends BaseController<OrderItem> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path(ID_INFO)
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
-		setInfo(mv, service.findById(id));
-		return jsp("shop/orderItem-edit");
+		return output(mv, service.findById(id), "jsp::shop/orderItem-edit");
 	}
 
 	@PUT

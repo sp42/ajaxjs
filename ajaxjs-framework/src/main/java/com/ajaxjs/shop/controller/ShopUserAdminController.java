@@ -42,9 +42,8 @@ public class ShopUserAdminController extends BaseController<User> {
 		
 		mv.put("UserGroups", TreeLikeService.idAsKey(userGroups));
 		mv.put("UserGroupsJSON", toJson(userGroups, false).replaceAll("\"", "'"));
-		page(mv, service.findPagedList(start, limit));
 
-		return jsp("shop/shop-user-admin-list");
+		return output(mv, service.findPagedList(start, limit), "jsp::shop/shop-user-admin-list");
 	}
 
 

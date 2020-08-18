@@ -60,7 +60,7 @@ public class TestGoodsService {
 			bean.setPhone(TestHelper.getTel());
 
 			bean.setAddress(TestHelper.getRoad());
-			bean.setUserId(10000L);
+			bean.setOwner(10000L);
 			userAddressService.create(bean);
 		}
 

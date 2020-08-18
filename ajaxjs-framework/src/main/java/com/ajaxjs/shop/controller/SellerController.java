@@ -56,16 +56,14 @@ public class SellerController extends BaseController<Seller> {
 	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
 		LOGGER.info("获取" + getService().getUiName() + "分页列表 GET list");
 
-		page(mv, service.findPagedList(start, limit, null));
-		return jsp("shop/seller-admin-list");
+		return output(mv, service.findPagedList(start, limit, null), "jsp::shop/seller-admin-list");
 	}
 
 	@GET
 	@Path(ID_INFO)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
-		setInfo(mv, service.findById(id));
-		return jsp("shop/seller-edit");
+		return output(mv, service.findById(id), "jsp://shop/seller-edit");
 	}
 
 	@GET

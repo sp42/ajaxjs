@@ -114,8 +114,7 @@ public class CartController extends BaseController<Cart> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam("userId") long userId, ModelAndView mv) {
 		LOGGER.info("后台-购物车-列表");
-		page(mv, service.findPagedList(start, limit, userId));
-		return jsp("shop/cart-admin-list");
+		return output(mv, service.findPagedList(start, limit, userId), "jsp::shop/cart-admin-list");
 	}
 
 	@DELETE

@@ -77,8 +77,7 @@ public class TopicController extends BaseController<Map<String, Object>> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("/admin/topic/{id}")
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
-		setInfo(id, mv);
-		return admin("topic-edit");
+		return output(mv, id, "topic-edit");
 	}
 
 	@POST

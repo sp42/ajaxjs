@@ -25,7 +25,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
 @Path("/admin/userGlobalLog")
 public class GlobalLogController extends BaseController<Map<String, Object>> {
 	private static final LogHelper LOGGER = LogHelper.getLog(GlobalLogController.class);
-	
+
 	@TableName(value = "general_log", beanClass = Map.class)
 	public static interface GlobalLogDao extends IBaseDao<Map<String, Object>> {
 	}
@@ -46,11 +46,10 @@ public class GlobalLogController extends BaseController<Map<String, Object>> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
 		LOGGER.info("全局操作日志");
-		
-		mv.put("LoginType", UserConstant.LOGIN_TYPE);
-		page(mv, service.findPagedList(start, limit, BaseService::betweenCreateDate));
 
-		return jsp("user/global-log-list");
+		mv.put("LoginType", UserConstant.LOGIN_TYPE);
+
+		return output(mv, service.findPagedList(start, limit, BaseService::betweenCreateDate), "jsp::user/global-log-list");
 	}
 
 	@Override
