@@ -56,25 +56,6 @@
 	</tr>
 </template>
 
-<template id="aj-edit-form">
-	<form class="aj-table-form" :action="getInfoApi + (isCreate ? '' : info.id + '/')" :method="isCreate ? 'POST' : 'PUT'">
-		<h3>{{isCreate ? "新建" : "编辑" }}{{uiName}}</h3>
-		<!-- 传送 id 参数 -->
-		<input v-if="!isCreate" type="hidden" name="id" :value="info.id" />
-		
-		<slot v-bind:info="info"></slot>
-		
-		<div class="aj-btnsHolder">
-			<button><img :src="ajResources.commonAsset + '/icon/save.gif'" /> {{isCreate ? "新建":"保存"}}</button>
-			<button onclick="this.up(\'form\').reset();return false;">复 位</button>
-			<button v-if="!isCreate" v-on:click.prevent="del()">
-				<img :src="ajResources.commonAsset + '/icon/delete.gif'" /> 删 除
-			</button>
-			<button @click.prevent="close">关闭</button>
-		</div>
-	</form>
-</template>
-
 <template id="aj-entity-toolbar">
 	<div class="toolbar">
 		<form v-if="search" class="right">

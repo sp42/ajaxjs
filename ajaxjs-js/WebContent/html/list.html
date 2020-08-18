@@ -6,15 +6,13 @@
 		<a v-if="pageStart > 0" href="#" @click="previousPage">上一页</a>
 		<a v-if="(pageStart > 0 ) && (pageStart + pageSize < total)" style="text-decoration: none;">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>
 		<a v-if="pageStart + pageSize < total" href="#" @click="nextPage">下一页</a>
-		<div class="info">
 		<a href="javascript:;" @click="get"><i class="fa fa-refresh" aria-hidden="true"></i> 刷新</a>
-			<input type="hidden" name="start" :value="pageStart" />
-			页数：{{currentPage}}/{{totalPage}} 记录数：{{pageStart}}/{{total}}
-			每页记录数： <input size="2" title="输入一个数字确定每页记录数" type="text" :value="pageSize" @change="onPageSizeChange" />
-			跳转： <select @change="jumpPageBySelect;">
-				<option :value="n" v-for="n in totalPage">{{n}}</option>
-			</select>
-		</div>
+		<input type="hidden" name="start" :value="pageStart" />
+		页数：{{currentPage}}/{{totalPage}} 记录数：{{pageStart}}/{{total}}
+		每页记录数： <input size="2" title="输入一个数字确定每页记录数" type="text" :value="pageSize" @change="onPageSizeChange" />
+		跳转： <select @change="jumpPageBySelect;">
+			<option :value="n" v-for="n in totalPage">{{n}}</option>
+		</select>
 	</footer>
 </template>
 
@@ -41,36 +39,15 @@
 			<a v-if="pageStart > 0" href="#" @click="previousPage()">上一页</a>
 			<a v-if="(pageStart > 0 ) && (pageStart + pageSize < total)" style="text-decoration: none;">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>
 			<a v-if="pageStart + pageSize < total" href="#" @click="nextPage()">下一页</a>
-			<div class="info">
-				<input type="hidden" name="start" :value="pageStart" />
-				页数：{{currentPage}}/{{totalPage}} 记录数：{{pageStart}}/{{total}}
-				每页记录数： <input size="2" title="输入一个数字确定每页记录数" type="text" :value="pageSize" @change="onPageSizeChange($event)" />
-				跳转： <select @change="jumpPageBySelect($event);">
-					<option :value="n" v-for="n in totalPage">{{n}}</option>
-				</select>
-			</div>
+			
+			<input type="hidden" name="start" :value="pageStart" />
+			页数：{{currentPage}}/{{totalPage}} 记录数：{{pageStart}}/{{total}}
+			每页记录数： <input size="2" title="输入一个数字确定每页记录数" type="text" :value="pageSize" @change="onPageSizeChange($event)" />
+			跳转： <select @change="jumpPageBySelect($event);">
+				<option :value="n" v-for="n in totalPage">{{n}}</option>
+			</select>
 		</footer><div v-show="!!autoLoadWhenReachedBottom" class="buttom"></div>
 	</div>
-</template>
-
-<template id="aj-china-area">
-	<div class="aj-china-area">
-		<span>省份</span> 
-		<select v-model="province" class="aj-select" name="locationProvince">
-            <option value="">请选择</option>
-            <option v-for="(v, k) in addressData[86]" :value="k">{{v}}</option>
-        </select>
-		<span>市 </span>
-		<select v-model="city" class="aj-select" name="locationCity">
-            <option value="">请选择</option>
-            <option v-for="(v, k) in citys" :value="k">{{v}}</option>
-        </select>
-		<span>区/县</span>  
-		<select v-model="district" class="aj-select" name="locationDistrict">
-            <option value="">请选择</option>
-            <option v-for="(v, k) in districts" :value="k">{{v}}</option>
-        </select>
-    </div>
 </template>
 
 <template id="aj-tree-item">

@@ -163,6 +163,12 @@ Vue.component('aj-form-calendar-input', {
 	beforeCreate() {	
 		aj.getTemplate('form', 'aj-form-calendar-input', this);
 	},
+	watch:{
+		fieldValue(n) {
+			this.date = n;
+		}
+	},
+	
 	mounted() {
 		if(this.positionFixed) 
 			this.$el.$('.aj-form-calendar').classList.add('positionFixed');
@@ -1175,12 +1181,14 @@ Vue.component('aj-china-area', {
     props: {
         provinceCode: String,
         cityCode: String,
-        districtCode: String
+        districtCode: String,
+		provinceName: String,
+		cityName: String,
+		districtName: String
     },
    data() {
 		if(!China_AREA)
 			throw '中国行政区域数据 脚本没导入';
-	   
         return {
         	province: this.provinceCode || '',
         	city: this.cityCode || '',
@@ -1270,3 +1278,70 @@ aj.searchPanel = {
 		}
 	}
 };
+
+/**
+	新建、编辑都同一表单
+ */
+Vue.component('aj-edit-form', {
+	beforeCreate() {	
+		aj.getTemplate('form', 'aj-edit-form', this);
+	},
+	props: {
+		isCreate: Boolean,// 是否新建模式
+		uiName: String,
+		getInfoApi: {// 获取实体详情的接口地址 
+			type: String, required: true
+		}
+	},
+	data(){
+		return {
+			id: 0,
+			info: {},		// 实体
+		}
+	},
+	mounted() {
+		aj.xhr.form(this.$el, j => {
+			if(j) {
+				if(j.isOk) {
+					var msg = (this.isCreate ? "新建":"保存") + this.uiName + "成功";
+					aj.alert.show(msg);
+					this.$parent.close();
+				} else 
+					aj.alert.show(j.msg);
+			}
+		}, {
+			beforeSubmit(form, json) {
+				//json.content = App.$refs.htmleditor.getValue({cleanWord : eval('${aj_allConfig.article.cleanWordTag}'), encode : true});
+			}
+		});
+	},
+	methods: {
+		load(id, cb) { // 加载数据，获取实体详情
+			this.id = id;
+			
+			aj.xhr.get(this.getInfoApi + id + "/", j => {
+				this.info = j.result;
+				cb && cb(j);
+			});
+		},
+		close(){
+			if(this.$parent.$options._componentTag === 'aj-layer') {
+				this.$parent.close();
+			} else 
+				history.back();
+		},
+		del() {
+			var id = this.$el.$('input[name=id]').value, title = this.$el.$('input[name=name]').value;
+			
+			aj.showConfirm('请确定删除记录：\n' + title + ' ？', () => 
+				aj.xhr.dele('../' + id + '/', j => {
+					if (j.isOk) {
+						aj.msg.show('删除成功！');
+						//setTimeout(() => location.reload(), 1500);
+					} else 
+						aj.alert('删除失败！');
+				})
+			);
+		}
+	}
+});

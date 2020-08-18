@@ -465,6 +465,14 @@ Vue.component('aj-tree-catelog-select', {
 	}
 });
 
+// 指定 id 的那个 option 选中
+aj.selectOption = function(id) {
+	this.$el.$('option', i => {
+		if(i.value == id) 
+			i.selected = true;
+	});
+}
+
 Vue.component('aj-tree-like-select', {
 	mixins: [aj.treeLike],
 	template: '<select :name="name" class="aj-select" @change="onSelected"></select>',
@@ -491,7 +499,8 @@ Vue.component('aj-tree-like-select', {
 		onSelected($event) {
 			var el = $event.target, catalogId = el.selectedOptions[0].value;
 			this.$emit('selected', Number(catalogId));
-		}
+		},
+		select: aj.selectOption
 	}
 });
 

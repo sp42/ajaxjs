@@ -171,3 +171,42 @@
 		</div>
 	</div>
 </template>
+
+<template id="aj-china-area">
+	<div class="aj-china-area">
+		<span>省</span> 
+		<select v-model="province" class="aj-select" style="width:120px;" :name="provinceName || 'locationProvince'">
+            <option value="">请选择</option>
+            <option v-for="(v, k) in addressData[86]" :value="k">{{v}}</option>
+        </select>
+		<span>市 </span>
+		<select v-model="city" class="aj-select" style="width:120px;" :name="cityName || 'locationCity'">
+            <option value="">请选择</option>
+            <option v-for="(v, k) in citys" :value="k">{{v}}</option>
+        </select>
+		<span>区</span>  
+		<select v-model="district" class="aj-select" style="width:120px;" :name="districtName || 'locationDistrict'">
+            <option value="">请选择</option>
+            <option v-for="(v, k) in districts" :value="k">{{v}}</option>
+        </select>
+    </div>
+</template>
+
+<template id="aj-edit-form">
+	<form class="aj-table-form" :action="getInfoApi + (isCreate ? '' : info.id + '/')" :method="isCreate ? 'POST' : 'PUT'">
+		<h3>{{isCreate ? "新建" : "编辑" }}{{uiName}}</h3>
+		<!-- 传送 id 参数 -->
+		<input v-if="!isCreate" type="hidden" name="id" :value="info.id" />
+		
+		<slot v-bind:info="info"></slot>
+		
+		<div class="aj-btnsHolder">
+			<button><img :src="ajResources.commonAsset + '/icon/save.gif'" /> {{isCreate ? "新建":"保存"}}</button>
+			<button onclick="this.up(\'form\').reset();return false;">复 位</button>
+			<button v-if="!isCreate" v-on:click.prevent="del()">
+				<img :src="ajResources.commonAsset + '/icon/delete.gif'" /> 删 除
+			</button>
+			<button @click.prevent="close">关闭</button>
+		</div>
+	</form>
+</template>

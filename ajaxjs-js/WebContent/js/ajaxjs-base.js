@@ -372,6 +372,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				if (div && div.className.indexOf('modal') != -1) {
 					this.$el.classList.add('hide');
 					this.afterClose && this.afterClose(div, this);
+					return true;
 				}
 			},
 			onBtnClk(e) {
@@ -481,10 +482,21 @@ document.addEventListener("DOMContentLoaded", () => {
 Vue.component('aj-layer', {
 	template: '<div class="aj-modal hide" @click="close"><div><slot></slot></div></div>',
 	props: {
-		notCloseWhenTap: Boolean // 默认点击窗体关闭，当 notCloseWhenTap = true 时禁止关闭
+		notCloseWhenTap: Boolean, // 默认点击窗体关闭，当 notCloseWhenTap = true 时禁止关闭
+		cleanAfterClose: Boolean // 关闭是否清除
 	},
 	methods: {
 		show(cfg) {
+			var my = getComputedStyle(this.$el).zIndex; // 保证最后显示的总在最前面
+			
+			aj('.aj-modal', i => {
+				if(i != this.$el) {
+					var o = getComputedStyle(i).zIndex;
+					if (o >= my) 
+						this.$el.style.zIndex = o + 1;
+				}
+			});
+			
 			this.$el.classList.remove('hide');
 			this.BUS.$emit('aj-layer-closed', this);
 			
@@ -492,13 +504,19 @@ Vue.component('aj-layer', {
 				this.afterClose = cfg.afterClose;
 		},
 		close(e) { // isForceClose = 强制关闭
+			var isClosed;
 			if(!e) {
-				aj.msgbox.$options.methods.close.call(this, {
+				isClosed = aj.msgbox.$options.methods.close.call(this, {
 					target: aj('.aj-modal')
 				});
 			}else{
 				if(e.isForceClose || !this.notCloseWhenTap)
-					aj.msgbox.$options.methods.close.apply(this, arguments);
+					isClosed = aj.msgbox.$options.methods.close.apply(this, arguments);
+			}
+			
+			if(isClosed && this.cleanAfterClose) {
+				this.$el.parentNode && this.$el.parentNode.removeChild(this.$el);
+				this.$destroy();
 			}
 		}
 	}

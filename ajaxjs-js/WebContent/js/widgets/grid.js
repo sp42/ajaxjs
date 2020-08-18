@@ -2,16 +2,21 @@
  * 显示头像
  */
 Vue.component('aj-avatar', {
-	template: '	a :href="avatar" target="_blank">\
+	template: '<a :href="avatar" target="_blank">\
 		<img :src="avatar" style="max-width:50px;max-height:60px;vertical-align: middle;" \
-	 		@mouseenter="mouseEnter" onmouseleave="aj.widget.imageEnlarger.singleInstance.imgUrl = null;" />\
+	 		@mouseenter="mouseEnter" @mouseleave="mouseLeave" />\
 	</a>',
 	props: {
 		avatar: {type: String, required: true}
 	},
 	methods: {
 		mouseEnter() {
-			aj.widget.imageEnlarger.singleInstance.imgUrl = this.avatar;
+			if(aj.widget.imageEnlarger.singleInstance)
+				aj.widget.imageEnlarger.singleInstance.imgUrl = this.avatar;
+		},
+		mouseLeave() {
+			if(aj.widget.imageEnlarger.singleInstance)
+				aj.widget.imageEnlarger.singleInstance.imgUrl = null;
 		}
 	}
 });
@@ -42,79 +47,6 @@ Vue.component('aj-cell-renderer', {
 			return this._v(this.html); // html
 		}
     }
-});
-
-/**
-	新建、编辑都同一表单
- */
-Vue.component('aj-edit-form', {
-	beforeCreate() {	
-		aj.getTemplate('grid', 'aj-edit-form', this);
-	},
-	props: {
-		uiName: String,
-		getInfoApi: {// 获取实体详情的接口地址 
-			type: String, required: true
-		}
-	},
-	data(){
-		return {
-			isCreate: true,// 是否新建模式
-			id: 0,
-			info: {}	// 实体
-		}
-	},
-	mounted() {		
-		aj.xhr.form(this.$el, j => {
-			if(j) {
-				if(j.isOk) {
-					var msg = (this.isCreate ? "新建":"保存") + this.uiName + "成功";
-					aj.alert.show(msg);
-					
-					this.isCreate = false; // 切换编辑模式
-				} else 
-					aj.alert.show(j.msg);
-			}
-		}, {
-			beforeSubmit(form, json) {
-				//json.content = App.$refs.htmleditor.getValue({cleanWord : eval('${aj_allConfig.article.cleanWordTag}'), encode : true});
-			}
-		});
-	},
-	methods: {
-		load(id) { // 加载数据，获取实体详情
-			this.id = id;
-			this.isCreate = false;
-			
-			aj.xhr.get(this.getInfoApi + id + "/", j => this.info = j.result);
-		},
-		close(){
-			if(this.$parent.$options._componentTag === 'aj-layer') {
-				this.$parent.close();
-			} else 
-				history.back();
-		},
-		del() {
-			var id = this.$el.$('input[name=id]').value, title = this.$el.$('input[name=name]').value;
-			
-			aj.showConfirm('请确定删除记录：\n' + title + ' ？', () => 
-				aj.xhr.dele('../' + id + '/', j => {
-					if (j.isOk) {
-						aj.msg.show('删除成功！');
-						//setTimeout(() => location.reload(), 1500);
-					} else 
-						aj.alert('删除失败！');
-				})
-			);
-		},
-		// 新建记录
-		create() {
-			this.isCreate = true;
-			this.id = 0;
-			this.info = {};
-			this.$parent.show();
-		}
-	}
 });
 
 Vue.component('aj-entity-toolbar', {
@@ -214,6 +146,7 @@ Vue.component('aj-grid-inline-edit-row', {
 		}
 	},
 	methods: {
+		// 是否固定的字段，不能被编辑
 		isFixedField(field) {
 			if(this.filterField && this.filterField.length) {
 				for(var i = 0, j = this.filterField.length; i < j; i++) {
@@ -225,7 +158,7 @@ Vue.component('aj-grid-inline-edit-row', {
 			return false;
 		},
 		canEdit(key) {		
-			return !this.isFixedField(key) && this.isEditMode;
+			return this.isEditMode && !this.isFixedField(key);
 		},
 		renderCell(data, key) {
 			if(typeof key == 'function') 
@@ -242,8 +175,11 @@ Vue.component('aj-grid-inline-edit-row', {
 		onEditClk() {
 			if(this.enableInlineEdit)
 				this.isEditMode = !this.isEditMode;
-			else
+			else if(this.$parent.onEditClk)
 				this.$parent.onEditClk(this.id);
+			else {
+			
+			}
 		},
 		makeWatch(field) {
 			return function(_new) {
@@ -308,10 +244,19 @@ Vue.component('aj-grid-inline-edit-row', {
 });
 
 Vue.component('aj-grid-select-row', {
-	template: '<a href="#" @click="fireSelect">选 择</a>'	,
+	template: '<a href="#" @click="fireSelect">选择</a>',
+	props: {type:{type: String, required: true}},
 	methods: {
 		fireSelect() {
-			this.BUS.$emit('on-select', this.$parent.form);
+			this.BUS.$emit('on-' + this.type + '-select', this.$parent.form);
+		}
+	}
+});
+Vue.component('aj-grid-open-link', {
+	template: '<a href="#" @click="fireSelect"><i class="fa fa-external-link"></i> 详情</a>',
+	methods: {
+		fireSelect() {
+			this.BUS.$emit('on-open-link-clk', this.$parent.form);
 		}
 	}
 });
