@@ -264,6 +264,10 @@ public class MapTool {
 					}
 				}
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				if(e instanceof IllegalArgumentException) {
+					LOGGER.warning("[{0}]参数类型不匹配，输入值是[{1}]", key, v);
+				}
+				
 				LOGGER.warning(e);
 			}
 		});

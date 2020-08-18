@@ -111,7 +111,7 @@ public class MappingValue {
 		else if (t == boolean.class || t == Boolean.class) {// 布尔型
 			value = toBoolean(value);
 		} else if (t == int.class || t == Integer.class) { // 整形
-			value = Integer.parseInt(value.toString());
+			value = CommonUtil.isEmptyString(value.toString()) ? 0: Integer.parseInt(value.toString());
 		} else if (t == int[].class || t == Integer[].class) {
 			// 复数
 			if (value instanceof String)
