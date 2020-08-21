@@ -104,14 +104,12 @@ public class JdbcHelper extends JdbcReader {
 				}
 			} catch (SQLException e) {
 				sqlE[0] = e;
-				System.out.println("11111111111111");
 				LOGGER.warning(e);
 			}
 
 			return null;
 		}, conn, sql, params);
 
-		System.out.println("222222222222");
 		if (sqlE.length == 1 && sqlE[0] != null) {
 			System.out.println(Arrays.toString(sqlE));
 			throw new RuntimeException(sqlE[0] + "");
@@ -212,7 +210,6 @@ public class JdbcHelper extends JdbcReader {
 		StringBuilder sb = initSB(tableName, true);
 		sb.append("(" + String.join(", ", fields) + ")");
 		sb.append(" VALUES (" + String.join(", ", placeholders) + ")");
-
 		Serializable newlyId = create(conn, sb.toString(), values.toArray());
 
 		map.put("id", newlyId); // id 一开始是没有的，保存之后才有，现在增加到实体
