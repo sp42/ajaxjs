@@ -68,7 +68,7 @@
 		<ul>
 			<li v-if="create" @click="$emit('on-create-btn-clk')"><i class="fa fa-plus" style="color:#0a90f0;"></i> 新建</li>
 			<li v-if="save" @click="$emit('on-save-btn-clk')"><i class="fa fa-floppy-o" style="color:rgb(205, 162, 4);"></i> 保存</li>
-			<li v-if="deleBtn"><i class="fa fa-trash-o" style="color:red;"></i> 删除</li>
+			<li v-if="deleBtn" @click="BUS.$emit('on-delete-btn-clk')"><i class="fa fa-trash-o" style="color:red;"></i> 删除</li>
 			<li v-if="excel"><i class="fa fa-file-excel-o" style="color:green;"></i> 导出</li>
 			<slot></slot>
 		</ul>

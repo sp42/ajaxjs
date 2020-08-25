@@ -82,7 +82,6 @@ Vue.component('aj-entity-toolbar', {
 			});
 			this.$parent.reload();
 		}
-		
 	}
 });
 
@@ -381,7 +380,24 @@ aj.SectionModel = {
 			maxRows: 0			// 最多的行数，用于判断是否全选
 		}
 	},
+	mounted() {
+		this.BUS.$on('on-delete-btn-clk', this.batchDelete);	
+	},
+	
 	methods:{
+		// 批量删除
+		batchDelete() {		
+			if(this.selectedTotal > 0) {
+					aj.showConfirm('确定批量删除记录?', () => {
+						for(var id in this.selected) {							
+							aj.xhr.dele(this.deleteApi + '/' + id + '/', j => {
+								console.log(j)
+							});
+						}
+					});
+			} else
+				aj.alert('未选择记录');
+		},
 		// 全选
 		selectAll() {
 			var checkAll = item => {
