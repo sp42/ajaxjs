@@ -318,7 +318,9 @@ aj.getTemplate = (type, id, comp) => {
 	
 	if(!el) { // 加载模板
 		var xhr = new XMLHttpRequest();
-		xhr.open("GET", '/ajaxjs-js/html/' + type + '.html', false);// 同步方式请求
+		var url = aj.isDebug ? '/ajaxjs-js/html/' : '/asset/js/';
+		url += type + '.html';
+		xhr.open("GET", url, false);
 		xhr.send(null);
 		
 		var div = document.createElement('div');

@@ -101,7 +101,7 @@ Vue.component('aj-admin-state', {
 Vue.component('aj-admin-xsl', {
 	template: '<div style="float:left;margin-top: .5%;">\
 			<a :href="\'?downloadXSL=true&\' + params" download>\
-				<img :src="ajResources.commonAsset + \'/icon/excel.png\'" width="16" style="vertical-align: middle;" /> 下载 Excel 格式\
+				<i class="fa fa-file-excel-o" aria-hidden="true" style="color:#0bac00;"></i> 下载 Excel 格式\
 			</a>\
 		</div>',
 	props: {

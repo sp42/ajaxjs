@@ -450,17 +450,20 @@ Vue.component('aj-tree-catelog-select', {
 		isAutoJump: Boolean // 是否自动跳转 catalogId
 	},
 	mounted() {
-		var fn = j => this.rendererOption(j.result, this.$el, this.selectedCatalogId, {makeAllOption : false});
-		aj.xhr.get(this.ajResources.ctx + "/admin/catelog/getListAndSubByParentId", fn, {parentId : this.catalogId});
+		var fn = j => {
+			var arr = [{id: 0, name: "请选择分类"}];
+			this.rendererOption(arr.concat(j.result), this.$el, this.selectedCatalogId, {makeAllOption : false});
+		}
+		aj.xhr.get(this.ajResources.ctx + "/admin/tree-like/getListAndSubByParentId/" + this.catalogId + "/", fn);
 	},
 	
 	methods: {	
 		onSelected($event) {
 			if(this.isAutoJump) {
-				var el = e.target, catalogId = el.selectedOptions[0].value;
+				var el = $event.target, catalogId = el.selectedOptions[0].value;
 				location.assign('?' + this.fieldName + '=' + catalogId);
 			} else 
-				this.BUS.$emit('aj-tree-catelog-select-change', e, this);
+				this.BUS.$emit('aj-tree-catelog-select-change', $event, this);
 		}
 	}
 });

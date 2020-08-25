@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Date;
 import java.util.logging.Logger;
 
@@ -26,8 +27,7 @@ public class JsController extends HttpServlet {
 	 * 收集所有的 js
 	 */
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setCharacterEncoding("UTF-8");
 		response.setHeader("Content-type", "text/html;charset=UTF-8");
 		if (request.getParameter("saveFolder") != null) {
@@ -56,7 +56,9 @@ public class JsController extends HttpServlet {
 		String js = request.getParameter("js");
 		if (js != null) {
 			try {
+				mkDir(saveFolder + "\\WebContent\\asset\\js\\");
 				save(saveFolder + "\\WebContent\\asset\\js\\all.js", js);
+				copyHTML(saveFolder + "\\WebContent\\asset\\js\\");
 
 				output = "{\"isOk\":true}";
 			} catch (Throwable e) {
@@ -65,12 +67,12 @@ public class JsController extends HttpServlet {
 			}
 		} else {
 
-			String css = request.getParameter("css"),
-					file = request.getParameter("file") == null ? "main" : request.getParameter("file");
+			String css = request.getParameter("css"), file = request.getParameter("file") == null ? "main" : request.getParameter("file");
 
 			Logger.getGlobal().info(request.getParameter("saveFolder"));
 
 			try {
+				mkDir(saveFolder);
 				save(saveFolder + "\\" + file, css);
 
 				output = "{\"isOk\":true}";
@@ -81,6 +83,28 @@ public class JsController extends HttpServlet {
 		}
 
 		response.getWriter().append(output);
+	}
+
+	private final static String source = "C:\\project\\ajaxjs-js\\WebContent\\html\\";
+
+	private static void copyHTML(String dest) {
+		copy(source + "form.html", dest + "form.html", true);
+		copy(source + "grid.html", dest + "grid.html", true);
+		copy(source + "list.html", dest + "list.html", true);
+	}
+
+	public static boolean copy(String target, String dest, boolean isREPLACE_EXISTING) {
+		try {
+			if (isREPLACE_EXISTING)
+				Files.copy(Paths.get(target), Paths.get(dest), StandardCopyOption.REPLACE_EXISTING);
+			else
+				Files.copy(Paths.get(target), Paths.get(dest));
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -145,7 +169,27 @@ public class JsController extends HttpServlet {
 		if (!Files.exists(path))
 			Files.createFile(path);
 
+		System.out.println(content);
 		Logger.getGlobal().info(path.toString());
 		Files.write(path, content.getBytes());
+	}
+
+	/**
+	 * 创建目录
+	 * 
+	 * @param folder 目录字符串
+	 */
+	public static void mkDir(String folder) {
+		mkDir(new File(folder));
+	}
+
+	/**
+	 * 创建目录
+	 * 
+	 * @param folder 目录对象
+	 */
+	public static void mkDir(File folder) {
+		if (!folder.exists())// 先检查目录是否存在，若不存在建立
+			folder.mkdirs();
 	}
 }
