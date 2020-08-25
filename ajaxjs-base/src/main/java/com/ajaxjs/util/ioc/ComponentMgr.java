@@ -60,7 +60,7 @@ public class ComponentMgr {
 	 */
 	@SuppressWarnings("unchecked")
 	public static void scan(String packageName) {
-		LOGGER.debug("扫描 [{0}] 包下面所有的类", packageName);
+		LOGGER.debug("扫描[{0}]包下面所有的类", packageName);
 
 		Set<Class<?>> clzs = new LinkedHashSet<>();
 
@@ -263,7 +263,7 @@ public class ComponentMgr {
 	 * @param clz        为避免强类型转换，特意传入一个类型
 	 * @return 目标组件，如果找不到返回 null
 	 */
-	public static Object get(String aliasOrClz, Class<?> clz) {
+	public static <T> T get(String aliasOrClz, Class<T> clz) {
 		if (aliasOrClz.contains(".")) // 命名空间
 			for (String alias : components.keySet()) { // 查询目标组件
 				ComponentInfo compInfo = components.get(alias);
