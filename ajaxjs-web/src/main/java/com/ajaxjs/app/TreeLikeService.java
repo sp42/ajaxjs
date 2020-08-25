@@ -35,7 +35,7 @@ public class TreeLikeService extends BaseService<Catalog> {
 		 * @param pid
 		 * @return
 		 */
-		@Select("SELECT * FROM general_catalog WHERE `path` LIKE (CONCAT ((SELECT `path` FROM general_catalog WHERE id = ?) , '%'))")
+		@Select("SELECT * FROM general_catalog WHERE `path` LIKE (CONCAT ((SELECT `path` FROM general_catalog WHERE id = ?) , '/%'))")
 		List<Catalog> getAllChildren(int pid);
 
 		/**

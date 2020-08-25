@@ -15,7 +15,6 @@ package com.ajaxjs.web.mvc.controller;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -100,10 +99,7 @@ public class RequestParam {
 						}
 					});
 
-					System.out.println(map.get("ContactAddress.locationProvince"));
-					System.out.println(_map.get("locationProvince"));
 					Object bean = MapTool.map2Bean(_map, clazz, true);
-
 					args.add(bean);
 				} else
 					args.add(req.getBean(clazz));
@@ -132,8 +128,6 @@ public class RequestParam {
 			boolean required = false; // 是否必填字段
 			String defaultValue = null; // 默认值
 
-			System.out.println(Arrays.toString(annots));
-
 			for (Annotation annot : annots) {
 				if (annot instanceof NotNull)
 					required = true;
@@ -160,8 +154,7 @@ public class RequestParam {
 
 					break;
 				} else if (annot instanceof SubBean) {// 子实体
-					String name = ((SubBean) annot).value();
-					System.out.println(":LLLLLLLLLLLLL" + name);
+					//String name = ((SubBean) annot).value();
 				}
 			}
 		} else

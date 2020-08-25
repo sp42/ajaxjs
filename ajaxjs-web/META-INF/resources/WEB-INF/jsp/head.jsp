@@ -99,6 +99,7 @@
 	
    	<script>
    		aj.isDebug = <%=com.ajaxjs.Version.isDebug%>;
+   		aj.ctx = '${ctx}';
    		aj.Vue = {};
    		aj.Vue.install = function(Vue) {
    			Vue.prototype.ajResources = {
@@ -108,6 +109,7 @@
    			};
    			Vue.prototype.BUS = new Vue();
    		}
+   		
    		Vue.use(aj.Vue);
    		
    		window.addEventListener('load', function() { // 页面渐显效果

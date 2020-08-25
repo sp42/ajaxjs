@@ -1,5 +1,6 @@
-<%@page pageEncoding="UTF-8" import="java.util.HashMap"%>
+<%@page pageEncoding="UTF-8"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
+<%@taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
 	<!DOCTYPE html>
 	<html>
 		<head>
@@ -35,6 +36,7 @@
 			<tr>
 				<th>#</th>
 				<th class="name">${uiName}名称</th>
+				<th>图片预览</th>
 				<th>分类</th>
 				<th>${uiName}文件大小</th>
 				<th>上传者</th>
@@ -44,7 +46,7 @@
 		</thead>
 		<tfoot>
 			<tr>
-				<td colspan="7"></td>
+				<td colspan="87"></td>
 			</tr>
 		</tfoot>
 		<tbody>
@@ -52,6 +54,7 @@
 				<tr>
 					<td>${current.id}</td>
 					<td>${current.name}</td>
+					<td><tags:common type="thumb" thumb="${current.name}" /></td>
 					<td>${DICT[current.catalogId]}</td>
 					<td>${current.fileSize}KB</td>
 					<td>${current.owner}</td>

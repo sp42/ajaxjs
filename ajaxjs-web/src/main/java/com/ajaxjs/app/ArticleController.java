@@ -129,6 +129,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("/admin/{root}/{id}")
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
+		mv.put("isCreate", false);
 		return output(mv, id, "jsp::app/article-edit");
 	}
 

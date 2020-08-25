@@ -122,7 +122,7 @@
 				
 				<div>
 					<!--按钮 -->
-					<ajaxjs-admin-info-btns :is-create="${isCreate}"></ajaxjs-admin-info-btns>
+					<ajaxjs-admin-info-btns :is-create="${isCreate}"></ajaxjs-admin-info-btns> 
 				</div>
 			</form>
 			

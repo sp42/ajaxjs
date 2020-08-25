@@ -45,6 +45,14 @@ public class TreeLikeController extends BaseController<Catalog> {
 	public String list(@PathParam(ID) int pid) {
 		return toJson(service.getAllChildren(pid));
 	}
+	
+	@GET
+	@Path("getListAndSubByParentId/" + ID_INFO)
+	@Produces(MediaType.APPLICATION_JSON)
+	@MvcFilter(filters = DataBaseFilter.class)
+	public String getListAndSubByParentId(@PathParam(ID) int pid) {
+		return toJson(service.getAllChildren(pid));
+	}
 
 	@POST
 	@MvcFilter(filters = DataBaseFilter.class)
