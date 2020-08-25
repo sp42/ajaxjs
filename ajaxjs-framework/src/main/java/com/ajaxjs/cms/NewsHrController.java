@@ -28,7 +28,7 @@ public class NewsHrController extends BaseController<Map<String, Object>> {
 	private NewsService service = new NewsService();
 
 	@Resource
-	private TreeLikeService treeLikeService;
+	private TreeLikeService treeLikeService = new TreeLikeService();
 
 	@GET
 	public String redirect() {
@@ -57,7 +57,7 @@ public class NewsHrController extends BaseController<Map<String, Object>> {
 		if (ConfigService.getValueAsBool("domain.article.attachmentDownload"))
 			map.put("attachment", new AttachmentService().findByOwner((long) map.get("uid")));
 
-		return output(mv, map, "news-info");
+		return output(mv, map, page("news-info"));
 	}
 
 	@GET
