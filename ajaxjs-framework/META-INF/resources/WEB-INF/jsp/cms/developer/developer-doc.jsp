@@ -44,7 +44,7 @@
 				<div :class="{'selected': 1 === selected}">
 					<!-- TAB 内容 -->
 
-					<iframe src="${ctx}/admin/DataBaseShowStru"  frameborder="no" width="100%" height="96%"></iframe>
+					<iframe src="${ctx}/admin/DataBaseShowStru/"  frameborder="no" width="100%" height="96%"></iframe>
 					<!-- // TAB 内容 -->
 				</div>
 				

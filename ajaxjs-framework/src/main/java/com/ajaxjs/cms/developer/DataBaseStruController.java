@@ -32,7 +32,7 @@ public class DataBaseStruController implements IController {
 	public String show() {
 		LOGGER.info("表字段浏览");
 
-		return BaseController.jsp("app/developer/developer-database-stru");
+		return BaseController.jsp("cms/developer/developer-database-stru");
 	}
 
 	@GET

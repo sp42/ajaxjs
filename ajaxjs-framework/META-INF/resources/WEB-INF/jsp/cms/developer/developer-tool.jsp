@@ -226,7 +226,7 @@
 				aj.xhr.post('https://closure-compiler.appspot.com/compile', compressedJs => {
 					aj.xhr.post("/ajaxjs-js/JsController", j => {
 						console.log(j)
-						aj.alert(JSON.parse(j).isOk ? '打包 js 成功！' : '打包 js 失败！')
+						alert(j.isOk ? '打包 js 成功！' : '打包 js 失败！');
 					}, {
 						js: encodeURIComponent(compressedJs),
 						saveFolder: aj('.jsSave').value
@@ -237,7 +237,7 @@
 					output_format: 'text',
 				    output_info: 'compiled_code'
 				}, {
-					  
+					parseContentType: 'text'
 				});
 			}, null, {
 				parseContentType: 'text'
