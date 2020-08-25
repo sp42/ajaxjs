@@ -60,6 +60,7 @@ public class SiteStruService implements IComponent {
 			public boolean execute(Map<String, Object> map, Map<String, Object> superMap, int level) {
 				if (map.containsKey("dbNode")) {
 					Object _map = cxt.getAttribute(map.get("dbNode").toString());
+					
 					if(_map == null) {
 						LOGGER.warning("Servlet 初始化数据未准备好，依赖数据：" + map.get("dbNode").toString());
 						return false;

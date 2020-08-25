@@ -50,7 +50,7 @@ public class SiteStruTag extends SimpleTagSupport {
 
 		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 		String output = "Error Type for tag : ";
-
+		
 		switch (type) {
 		case "navBar":
 			output = buildNavBar(sitestru, request);
