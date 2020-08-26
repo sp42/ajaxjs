@@ -88,9 +88,8 @@ public abstract class BaseUserController extends BaseController<User> {
 
 			if (obj == null)
 				throw new UnsupportedOperationException("Fail to access user id");
-			else {
+			else 
 				return (Long) obj;
-			}
 		}
 
 		return uid;

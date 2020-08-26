@@ -10,7 +10,6 @@ import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.user.UserHelper;
-import com.ajaxjs.user.controller.LoginLogController;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.model.UserCommonAuth;
 import com.ajaxjs.user.service.UserCommonAuthService;
@@ -25,6 +24,7 @@ public class LoginService extends UserService {
 		User user;
 
 		int passWordLoginType = ConfigService.getValueAsInt("user.login.passWordLoginType");
+		
 		// 密码支持帐号、邮件、帐号作为身份凭证
 		if (UserHelper.isVaildEmail(userID)) {
 			if (!UserHelper.testBCD(UserConstant.PSW_LOGIN_EMAIL, passWordLoginType))
@@ -83,7 +83,7 @@ public class LoginService extends UserService {
 	 * @param req
 	 */
 	public static void saveLoginLog(User user, HttpServletRequest req) {
-		UserLoginLog userLoginLog = new UserLoginLog();
+		LoginLog userLoginLog = new LoginLog();
 		userLoginLog.setUserId(user.getId());
 		userLoginLog.setLoginType(UserConstant.PASSWORD);
 		LoginLogController.initBean(userLoginLog, req);

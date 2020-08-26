@@ -104,6 +104,7 @@ public class UserCommonAuthService extends BaseService<UserCommonAuth> {
 
 		if (update(newAuth) != 0) {
 			LOGGER.info("密码修改成功");
+			
 			return true;
 		}
 

@@ -8,24 +8,52 @@ import java.util.function.Predicate;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.cryptography.SymmetriCipher;
 
+/**
+ * 
+ * @author xinzhang
+ *
+ */
 public class TokenMaker {
+	/**
+	 * 
+	 * @param key
+	 * @return
+	 */
 	public static Function<String, String> encryptAES(String key) {
 		return str -> SymmetriCipher.AES_Encrypt(str, key);
 	}
 
+	/**
+	 * 
+	 * @param str
+	 * @return
+	 */
 	public static String addSalt(String str) {
 		return str.replace("{salt}", CommonUtil.getRandomString(6));
 	}
 
+	/**
+	 * 
+	 * @param str
+	 * @return
+	 */
 	public static String addTimespam(String str) {
 		long timeStamp = System.currentTimeMillis() / 1000;
 		return str.replace("{timeStamp}", timeStamp + "");
 	}
 
+	/**
+	 * 
+	 * @param value
+	 * @return
+	 */
 	public static Function<String, String> value(String value) {
 		return str -> str.replace("{value}", value);
 	}
 
+	/**
+	 * 
+	 */
 	public static String TOKEN_TPL = "TOKEN-{value}-{salt}-{timeStamp}";
 
 	/**
@@ -50,6 +78,12 @@ public class TokenMaker {
 		};
 	}
 
+	/**
+	 * 
+	 * @param email
+	 * @param ex
+	 * @return
+	 */
 	public static Predicate<String[]> checkEmail(String email, List<Throwable> ex) {
 		return arr -> {
 			if (email.equals(arr[1])) {

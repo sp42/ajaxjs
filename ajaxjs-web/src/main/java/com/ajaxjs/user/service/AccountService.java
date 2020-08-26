@@ -47,6 +47,7 @@ public class AccountService {
 
 			if (email.equals(_arr[0])) {
 				userIdHolder[0] = _arr[1];
+				
 				return true;
 			} else {
 				ex.add(new IllegalAccessError("邮件地址不匹配！"));
@@ -75,11 +76,10 @@ public class AccountService {
 
 			List<Throwable> ex = new ArrayList<>();
 			Predicate<String[]> checkTimespam_arr = _arr -> TokenMaker.checkTimespam(EMAIL_TIMEOUT, ex).test(_arr[3]);
-
 			String[] userIdHolder = new String[1];
+			
 			if (checkEmail(email, userIdHolder, ex).and(checkTimespam_arr).test(arr)) {
-				// 审核通过
-				Long userId = Long.parseLong(userIdHolder[0]);
+				Long userId = Long.parseLong(userIdHolder[0]);// 审核通过
 
 				return userId;
 			} else
