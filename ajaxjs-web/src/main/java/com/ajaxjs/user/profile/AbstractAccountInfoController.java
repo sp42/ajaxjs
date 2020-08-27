@@ -1,4 +1,4 @@
-package com.ajaxjs.user.controller;
+package com.ajaxjs.user.profile;
 
 import java.util.Objects;
 import java.util.Random;
@@ -19,15 +19,16 @@ import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.user.UserHelper;
+import com.ajaxjs.user.controller.BaseUserController;
 import com.ajaxjs.user.filter.LoginCheck;
 import com.ajaxjs.user.filter.UserPasswordFilter;
-import com.ajaxjs.user.login.LoginLogController;
-import com.ajaxjs.user.login.LoginLogController.UserLoginLogService;
+import com.ajaxjs.user.login.LogLoginController;
+import com.ajaxjs.user.login.LogLoginController.UserLoginLogService;
 import com.ajaxjs.user.model.User;
-import com.ajaxjs.user.model.UserCommonAuth;
+import com.ajaxjs.user.password.UserCommonAuth;
+import com.ajaxjs.user.password.UserCommonAuthService;
 import com.ajaxjs.user.role.RoleService;
 import com.ajaxjs.user.service.AccountService;
-import com.ajaxjs.user.service.UserCommonAuthService;
 import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.cache.ExpireCache;
 import com.ajaxjs.util.ioc.ComponentMgr;
@@ -64,7 +65,7 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 		User user = getService().findById(getUserId());
 		mv.put("userInfo", user);
 		mv.put("isEmailVerified", RoleService.simple8421(user.getVerify(), UserConstant.VERIFIED_EMAIL));
-		mv.put("lastUserLoginedInfo", LoginLogController.service.dao.getLastUserLoginedInfo(getUserId()));
+		mv.put("lastUserLoginedInfo", LogLoginController.service.dao.getLastUserLoginedInfo(getUserId()));
 		mv.put("UserGroups", TreeLikeService.idAsKey(RoleService.dao.findList(null)));
 
 		return user("account");

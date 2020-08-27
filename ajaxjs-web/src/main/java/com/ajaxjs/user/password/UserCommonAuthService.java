@@ -1,16 +1,13 @@
-package com.ajaxjs.user.service;
+package com.ajaxjs.user.password;
 
-import java.util.List;
+
 
 import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.sql.annotation.Delete;
 import com.ajaxjs.sql.annotation.Select;
 import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;
-import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.sql.orm.Repository;
-import com.ajaxjs.user.model.UserCommonAuth;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.logger.LogHelper;
@@ -35,11 +32,6 @@ public class UserCommonAuthService extends BaseService<UserCommonAuth> {
 		setUiName("用户口令");
 		setShortName("UserCommonAuth");
 		setDao(dao);
-	}
-
-	@Override
-	public UserCommonAuth findById(Long id) {
-		return dao.findById(id);
 	}
 
 	/**
@@ -70,16 +62,7 @@ public class UserCommonAuthService extends BaseService<UserCommonAuth> {
 	public int update(UserCommonAuth bean) {
 		return dao.update(bean);
 	}
-
-	@Override
-	public boolean delete(UserCommonAuth bean) {
-		return dao.delete(bean);
-	}
-
-	@Override
-	public PageResult<UserCommonAuth> findPagedList(int start, int limit) {
-		return dao.findPagedList(start, limit, null);
-	}
+ 
 
 	@Override
 	public String getTableName() {
@@ -91,29 +74,24 @@ public class UserCommonAuthService extends BaseService<UserCommonAuth> {
 	 * 
 	 * @param userId
 	 * @param password
-	 * @param new_password
+	 * @param newPassword
 	 * @return 是否修改成功
 	 */
-	public boolean updatePwd(UserCommonAuth auth, String new_password) throws ServiceException {
+	public boolean updatePwd(UserCommonAuth auth, String newPassword)  {
 		UserCommonAuth newAuth = new UserCommonAuth();
 		newAuth.setId(auth.getId());
-		newAuth.setPassword(encode(new_password));
+		newAuth.setPassword(encode(newPassword));
 
 		if (auth.getPassword().equalsIgnoreCase(newAuth.getPassword()))
-			throw new ServiceException("新密码与旧密码一致，没有修改");
+			throw new UnsupportedOperationException("新密码与旧密码一致，没有修改");
 
 		if (update(newAuth) != 0) {
-			LOGGER.info("密码修改成功");
+			LOGGER.debug("密码修改成功");
 			
 			return true;
 		}
 
-		LOGGER.info("密码修改失败");
+		LOGGER.debug("密码修改失败");
 		return false;
-	}
-
-	@Override
-	public List<UserCommonAuth> findList() {
-		return null;
 	}
 }

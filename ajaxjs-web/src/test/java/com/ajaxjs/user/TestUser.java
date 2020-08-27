@@ -11,8 +11,8 @@ import com.ajaxjs.framework.TestHelper;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.user.controller.UserController;
 import com.ajaxjs.user.model.User;
-import com.ajaxjs.user.model.UserCommonAuth;
-import com.ajaxjs.user.service.UserCommonAuthService;
+import com.ajaxjs.user.password.UserCommonAuth;
+import com.ajaxjs.user.password.UserCommonAuthService;
 import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.ioc.ComponentMgr;
 

@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Path;
 
 import com.ajaxjs.user.model.User;
-import com.ajaxjs.user.service.UserCommonAuthService;
+import com.ajaxjs.user.password.UserCommonAuthService;
 import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;

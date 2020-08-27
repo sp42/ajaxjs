@@ -32,20 +32,20 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
  * 后台查看登录日志
  */
 @Path("/admin/userLoginLog")
-public class LoginLogController extends BaseController<LoginLog> {
-	private static final LogHelper LOGGER = LogHelper.getLog(LoginLogController.class);
+public class LogLoginController extends BaseController<LogLogin> {
+	private static final LogHelper LOGGER = LogHelper.getLog(LogLoginController.class);
 
-	@TableName(value = "user_login_log", beanClass = LoginLog.class)
-	public static interface UserLoginLogDao extends IBaseDao<LoginLog> {
+	@TableName(value = "user_login_log", beanClass = LogLogin.class)
+	public static interface UserLoginLogDao extends IBaseDao<LogLogin> {
 		@Select(UserDao.LEFT_JOIN_USER_SELECT)
 		@Override
-		public PageResult<LoginLog> findPagedList(int start, int limit, Function<String, String> sqlHandler);
+		public PageResult<LogLogin> findPagedList(int start, int limit, Function<String, String> sqlHandler);
 
 		@Select("SELECT * FROM ${tableName} WHERE userId = ? ORDER BY createDate LIMIT 1")
-		public LoginLog getLastUserLoginedInfo(long userId);
+		public LogLogin getLastUserLoginedInfo(long userId);
 	}
 
-	public static class UserLoginLogService extends BaseService<LoginLog> {
+	public static class UserLoginLogService extends BaseService<LogLogin> {
 		public UserLoginLogDao dao = new Repository().bind(UserLoginLogDao.class);
 
 		{
@@ -61,7 +61,7 @@ public class LoginLogController extends BaseController<LoginLog> {
 		 * @param limit 分页结束
 		 * @return 登录日志的列表
 		 */
-		public PageResult<LoginLog> findPagedList(int start, int limit) {
+		public PageResult<LogLogin> findPagedList(int start, int limit) {
 			return findPagedList(start, limit, byAny().andThen(BaseService::betweenCreateDateWithE).andThen(UserService.byUserId));
 		}
 		
@@ -71,7 +71,7 @@ public class LoginLogController extends BaseController<LoginLog> {
 		 * @param userId 用户 id
 		 * @return 登录日志的列表
 		 */
-		public List<LoginLog> findListByUserId(long userId) {
+		public List<LogLogin> findListByUserId(long userId) {
 			return findList(by("userId", userId).andThen(BaseService::orderById_DESC).andThen(top(10)));
 		}
 	}
@@ -88,7 +88,7 @@ public class LoginLogController extends BaseController<LoginLog> {
 	}
 
 	@Override
-	public IBaseService<LoginLog> getService() {
+	public IBaseService<LogLogin> getService() {
 		return service;
 	}
 
@@ -98,7 +98,7 @@ public class LoginLogController extends BaseController<LoginLog> {
 	 * @param bean
 	 * @param request
 	 */
-	public static void initBean(LoginLog bean, HttpServletRequest request) {
+	public static void initBean(LogLogin bean, HttpServletRequest request) {
 		if (request == null)
 			return;
 

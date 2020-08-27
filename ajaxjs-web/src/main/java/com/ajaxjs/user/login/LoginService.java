@@ -11,8 +11,8 @@ import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.user.UserHelper;
 import com.ajaxjs.user.model.User;
-import com.ajaxjs.user.model.UserCommonAuth;
-import com.ajaxjs.user.service.UserCommonAuthService;
+import com.ajaxjs.user.password.UserCommonAuth;
+import com.ajaxjs.user.password.UserCommonAuthService;
 import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.mvc.ModelAndView;
@@ -83,12 +83,12 @@ public class LoginService extends UserService {
 	 * @param req
 	 */
 	public static void saveLoginLog(User user, HttpServletRequest req) {
-		LoginLog userLoginLog = new LoginLog();
+		LogLogin userLoginLog = new LogLogin();
 		userLoginLog.setUserId(user.getId());
 		userLoginLog.setLoginType(UserConstant.PASSWORD);
-		LoginLogController.initBean(userLoginLog, req);
+		LogLoginController.initBean(userLoginLog, req);
 
-		if (LoginLogController.service.create(userLoginLog) <= 0)
+		if (LogLoginController.service.create(userLoginLog) <= 0)
 			LOGGER.warning("更新会员登录日志出错");
 	}
 

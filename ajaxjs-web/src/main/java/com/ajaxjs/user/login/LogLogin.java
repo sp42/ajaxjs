@@ -2,7 +2,7 @@ package com.ajaxjs.user.login;
 
 import com.ajaxjs.framework.BaseModel;
 
-public class LoginLog extends BaseModel {
+public class LogLogin extends BaseModel {
 	private static final long serialVersionUID = 1L;
 
 	/**

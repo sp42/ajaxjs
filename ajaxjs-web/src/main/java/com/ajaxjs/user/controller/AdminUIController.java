@@ -4,7 +4,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.web.mvc.MvcConstant;
 import com.ajaxjs.web.mvc.controller.IController;
 
 /**
@@ -14,7 +13,12 @@ import com.ajaxjs.web.mvc.controller.IController;
  *
  */
 @Path("/admin")
-public class AdminUIController implements IController, MvcConstant {
+public class AdminUIController implements IController {
+	@GET
+	public String admin() {
+		return BaseController.jsp("admin/admin");
+	}
+
 	@GET
 	@Path("login")
 	public String login() {
@@ -22,19 +26,8 @@ public class AdminUIController implements IController, MvcConstant {
 	}
 
 	@GET
-	public String admin() {
-		return BaseController.jsp("admin/admin");
-	}
-
-	/**
-	 * 后台首页
-	 * 
-	 * @return
-	 */
-	@GET
 	@Path("home")
 	public String home() {
 		return BaseController.jsp("admin/home");
 	}
-
 }

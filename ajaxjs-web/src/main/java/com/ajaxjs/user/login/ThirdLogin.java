@@ -1,4 +1,4 @@
-package com.ajaxjs.user.controller;
+package com.ajaxjs.user.login;
 
 import java.util.Map;
 
@@ -9,7 +9,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.user.login.Weibo;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.mvc.controller.IController;
 
@@ -38,10 +37,8 @@ public class ThirdLogin implements IController {
 
 		Map<String, Object> userInfoMap = Weibo.getUserInfo(accessToken, uid);
 		LOGGER.info("userInfoMap::::::::::" + userInfoMap);
-		
-		String msg = "";
-		msg = "登录成功";
-		
+		String msg  = "登录成功";
+
 		return "html::" + String.format(html, msg, msg);
 	}
 

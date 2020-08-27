@@ -62,6 +62,7 @@ public abstract class AbstractUserController extends BaseUserController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String loginByPassword(@NotNull @QueryParam("userID") String userID, @NotNull @QueryParam("password") String password, HttpServletRequest req) throws ServiceException {
 		LOGGER.info("执行登录（按密码的）");
+		
 		if (isLogined())
 			return jsonNoOk("你已经登录，无须重复登录！");
 
@@ -79,24 +80,17 @@ public abstract class AbstractUserController extends BaseUserController {
 			String msg = user.getName() == null ? user.getPhone() : user.getName();
 
 			return jsonOk("用户 " + msg + "登录成功！欢迎回来！ <a href=\"" + req.getContextPath() + "/user/\">点击进入“用户中心”</a>。");
-		} else {
+		} else 
 			return jsonNoOk("登录失败！");
-		}
 	}
 
-	/**
-	 * 用户登出
-	 * 
-	 * @return
-	 */
 	@GET
 	@Path("logout")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String doLogout() {
+	public String doLogout(HttpServletRequest req) {
 		LOGGER.info("用户登出");
 
-		MvcRequest.getHttpServletRequest().getSession().invalidate();
-
+		req.getSession().invalidate();
 		return jsonOk("退出成功！");
 	}
 
