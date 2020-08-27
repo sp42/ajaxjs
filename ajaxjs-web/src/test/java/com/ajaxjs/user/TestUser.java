@@ -13,38 +13,37 @@ import com.ajaxjs.user.controller.UserController;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.password.UserCommonAuth;
 import com.ajaxjs.user.password.UserCommonAuthService;
+import com.ajaxjs.user.register.RegisterService;
 import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.ioc.ComponentMgr;
 
 public class TestUser {
-	static UserService service;
-	static UserCommonAuthService passwordService;
 
 	String userName = TestHelper.getUserName(), psw = "dfdsfsd";
 
 	@BeforeClass
 	public static void initDb() {
 		TestHelper.initAll();
-
-		service = ComponentMgr.get(UserService.class);
-		passwordService = ComponentMgr.get(UserCommonAuthService.class);
 	}
 
 	@Test
 	public void testRegister() {
+		RegisterService service = ComponentMgr.get(RegisterService.class);
+		UserCommonAuthService passwordService = ComponentMgr.get(UserCommonAuthService.class);
 		User user = new User();
 		user.setName(userName);
-		UserCommonAuth password = new UserCommonAuth();
-		password.setPassword(psw);
+		
+//		UserCommonAuth password = new UserCommonAuth();
+//		password.setPassword(psw);
 
 		try {
-			service.register(user, password);
+			service.registerByPsw(user, psw);
 		} catch (ServiceException e) {
 			e.printStackTrace();
 		}
 	}
 
-	@Test
+	//@Test
 	public void testLogin() {
 		try {
 			assertTrue(new UserController().loginByPassword(userName, psw, null) != null);
