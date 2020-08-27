@@ -241,6 +241,7 @@ public class TestHelper {
 			IS_DB_CONNECTION_AUTOCLOSE = false;
 			
 			ComponentMgr.scan(CommonUtil.split(ConfigService.get("System.scanPackage")));
+			ComponentMgr.inject();
 		});
 	}
 
@@ -260,10 +261,12 @@ public class TestHelper {
 	 * @param packages
 	 */
 	public static void initAll() {
-		String projectFolder = "/Users/xinzhang/dev/project/doctor";
-		String[] packages = { "com.ajaxjs.app", "com.ajaxjs.user" };
+//		String projectFolder = "/Users/xinzhang/dev/project/doctor";
+		String projectFolder = "C:\\project\\doctor";
+		String[] packages = { "com.ajaxjs.app", "com.ajaxjs.user", "org.gdhdc" };
 
-		init(projectFolder + "/WebContent/META-INF/site_config.json", projectFolder + "/WebContent/META-INF/context.xml", packages);
+//		init(projectFolder + "/WebContent/META-INF/site_config.json", projectFolder + "/WebContent/META-INF/context.xml", packages);
+		init(projectFolder + "\\WebContent\\META-INF\\site_config.json", projectFolder + "\\WebContent\\META-INF\\context.xml", packages);
 	}
 
 	/**

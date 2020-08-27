@@ -183,7 +183,7 @@
 					var el = e.target, userId = el.value;
 				
 					if(aj.formValidator.hasError(el) === undefined)
-						aj.xhr.get('${ctx}/user/checkIfUserNameRepeat/', j => {
+						aj.xhr.get('${ctx}/user/register/checkIfRepeat/', j => {
 							this.isAllowRegister = !j.result.isRepeat;
 							
 							if (j.result.isRepeat)
@@ -198,7 +198,7 @@
 					var el = e.target, email = el.value;
 					
 					if(aj.formValidator.hasError(el) === undefined) {
-						aj.xhr.get('${ctx}/user/checkIfUserEmailRepeat', json => {
+						aj.xhr.get('${ctx}/user/register/checkIfRepeat/', json => {
 							this.isAllowRegister = !json.result.isRepeat;
 							
 							if (json.result.isRepeat)
@@ -215,7 +215,7 @@
 					this.phoneNumberValid = phoneNumber(phone);
 					
 					if(this.phoneNumberValid) {
-						aj.xhr.get('${ctx}/user/register/checkIfUserPhoneRepeat', json => {
+						aj.xhr.get('${ctx}/user/register/checkIfRepeat/', json => {
 							this.isAllowRegister = !json.result.isRepeat;
 							
 							if (json.result.isRepeat)

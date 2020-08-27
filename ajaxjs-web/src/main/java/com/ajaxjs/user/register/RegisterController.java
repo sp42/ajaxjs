@@ -88,5 +88,4 @@ public class RegisterController extends BaseController<User> {
 	public RegisterService getService() {
 		return service;
 	}
-
 }
