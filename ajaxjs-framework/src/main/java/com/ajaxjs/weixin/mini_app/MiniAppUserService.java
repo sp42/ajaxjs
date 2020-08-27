@@ -9,8 +9,8 @@ import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.user.UserConstant;
-import com.ajaxjs.user.controller.LoginLogController;
-import com.ajaxjs.user.login.UserLoginLog;
+import com.ajaxjs.user.login.LogLoginController;
+import com.ajaxjs.user.login.LogLogin;
 import com.ajaxjs.user.login.UserOauth;
 import com.ajaxjs.user.login.UserOauthService;
 import com.ajaxjs.user.model.User;
@@ -150,13 +150,13 @@ public class MiniAppUserService extends BaseService<User> {
 	 * @param user 用户对象
 	 */
 	private static void doLog(User user) {
-		UserLoginLog userLoginLog = new UserLoginLog();
+		LogLogin userLoginLog = new LogLogin();
 		userLoginLog.setUserId(user.getId());
 		userLoginLog.setLoginType(UserConstant.WECHAT_MINI);
-		LoginLogController.initBean(userLoginLog, MvcRequest.getMvcRequest());
-		LoginLogController.service.create(userLoginLog);
+		LogLoginController.initBean(userLoginLog, MvcRequest.getMvcRequest());
+		LogLoginController.service.create(userLoginLog);
 
-		if (LoginLogController.service.create(userLoginLog) <= 0)
+		if (LogLoginController.service.create(userLoginLog) <= 0)
 			LOGGER.warning("更新会员登录日志出错");
 	}
 }
