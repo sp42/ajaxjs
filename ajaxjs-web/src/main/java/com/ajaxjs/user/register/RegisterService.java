@@ -9,7 +9,6 @@ import com.ajaxjs.user.BaseUserService;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.password.UserCommonAuth;
 import com.ajaxjs.user.password.UserCommonAuthService;
-import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
@@ -29,8 +28,8 @@ public class RegisterService extends BaseUserService {
 	private UserCommonAuthService passwordService;
 
 	/**
-	 * 普通口令注册
-	 * ˙
+	 * 普通口令注册 ˙
+	 * 
 	 * @param user   用户对象
 	 * @param params 密码对象
 	 * @return 新注册用户
@@ -38,9 +37,9 @@ public class RegisterService extends BaseUserService {
 	 */
 	public User registerByPsw(User user, Map<String, Object> params) throws ServiceException {
 		LOGGER.info("用户普通口令注册");
-		
+
 		String password = (String) params.get("password");
-		
+
 		if (CommonUtil.isEmptyString(password))
 			throw new ServiceException("注册密码不能为空");
 
@@ -52,7 +51,7 @@ public class RegisterService extends BaseUserService {
 		UserCommonAuth passwordModel = new UserCommonAuth(); // 保存密码
 		passwordModel.setPassword(password);
 		passwordModel.setUserId(userId);
-		
+
 		System.out.println(passwordService);
 		passwordService.create(passwordModel);
 

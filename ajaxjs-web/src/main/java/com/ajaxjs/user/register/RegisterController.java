@@ -3,7 +3,6 @@ package com.ajaxjs.user.register;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -40,7 +39,6 @@ public class RegisterController extends BaseController<User> {
 	@GET
 	public String regsiter() {
 		LOGGER.info("用户注册页");
-
 		return jsp("user/register");
 	}
 
@@ -61,58 +59,27 @@ public class RegisterController extends BaseController<User> {
 	 * @return true=已存在
 	 */
 	@GET
-	@Path("checkIfUserNameRepeat")
+	@Path("checkIfRepeat")
 	@MvcFilter(filters = { DataBaseFilter.class })
-	public String checkIfUserNamePhoneRepeat(@NotNull @QueryParam("name") String name) {
-		LOGGER.info("检查是否重复的用户名：" + name);
+	public String checkIfRepeat(@QueryParam("name") String name, @QueryParam("email") String email, @QueryParam("phone") String phone) {
+		LOGGER.info("检查是否重复的" + name);
+		final boolean checkIfRepeated;
+
+		if (name != null)
+			checkIfRepeated = UserService.checkIfRepeated("name", name);
+		else if (email != null)
+			checkIfRepeated = UserService.checkIfRepeated("email", email);
+		else if (phone != null)
+			checkIfRepeated = UserService.checkIfRepeated("phone", phone);
+		else
+			checkIfRepeated = true;
 
 		return toJson(new HashMap<String, Boolean>() {
 			private static final long serialVersionUID = -5033049204280154615L;
+
 			{
 				getService();
-				put("isRepeat", UserService.checkIfRepeated("name", name));
-			}
-		});
-	}
-
-	/**
-	 * 检查是否重复的邮件
-	 * 
-	 * @param email 邮件
-	 * @return true=已存在
-	 */
-	@GET
-	@Path("checkIfUserEmailRepeat")
-	@MvcFilter(filters = { DataBaseFilter.class })
-	public String checkIfUserEmailRepeat(@NotNull @QueryParam("email") String email) {
-		LOGGER.info("检查是否重复的邮件：" + email);
-
-		return toJson(new HashMap<String, Boolean>() {
-			private static final long serialVersionUID = -5033049204280154615L;
-			{
-				getService();
-				put("isRepeat", UserService.checkIfRepeated("email", email));
-			}
-		});
-	}
-
-	/**
-	 * 检查是否重复的手机号码
-	 * 
-	 * @param phone 手机号码
-	 * @return true=已存在
-	 */
-	@GET
-	@Path("checkIfUserPhoneRepeat")
-	@MvcFilter(filters = { DataBaseFilter.class })
-	public String checkIfUserPhoneRepeat(@NotNull @QueryParam("phone") String phone) {
-		LOGGER.info("检查是否重复的手机号码：" + phone);
-
-		return toJson(new HashMap<String, Boolean>() {
-			private static final long serialVersionUID = -5033049204280154615L;
-			{
-				getService();
-				put("isRepeat", UserService.checkIfRepeated("phone", phone));
+				put("isRepeat", checkIfRepeated);
 			}
 		});
 	}
