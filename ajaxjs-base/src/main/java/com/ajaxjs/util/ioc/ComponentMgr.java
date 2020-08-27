@@ -63,24 +63,20 @@ public class ComponentMgr {
 		LOGGER.debug("扫描[{0}]包下面所有的类", packageName);
 
 		Set<Class<?>> clzs = new LinkedHashSet<>();
-		
-		new EveryClass().scan(packageName, resource -> {
-			if ("com.ajaxjs.user.register.RegisterService".equals(resource)) 
-				LOGGER.debug("8888");
 
+		new EveryClass().scan(packageName, resource -> {
 			ClassPool cp = ClassPool.getDefault();
-			
+
 			// 类加载并添加 setter
 			try {
-				CtClass cc = cp.get(resource); 
+				CtClass cc = cp.get(resource);
 				CtField[] fields = cc.getDeclaredFields();
-				
+
 				for (CtField field : fields) {
 					if (field.getAnnotation(Resource.class) != null) {
-						
-						if ("com.ajaxjs.user.register.RegisterService".equals(resource)) 
-							LOGGER.debug(field.toString());
-						
+//						if ("com.ajaxjs.user.register.RegisterService".equals(resource))
+//							LOGGER.debug(field.toString());
+
 						String setMethodName = "set" + ReflectUtil.firstLetterUpper(field.getName());
 						CtMethod setter;
 
@@ -92,10 +88,10 @@ public class ComponentMgr {
 //							String m = String.format(tpl, setMethodName, field.getType().getName(), field.getName(), field.getName(), field.getName());
 //							setter = CtNewMethod.make(m, cc);
 //							e.printStackTrace();
-							
+
 							CtField f1 = new CtField(field.getType(), field.getName(), cc);
 							setter = CtNewMethod.setter(setMethodName, f1);
-							
+
 							cc.addMethod(setter);
 						}
 					}
@@ -105,14 +101,14 @@ public class ComponentMgr {
 //					CtField f1 = new CtField(cp.get("com.ajaxjs.ioc.Person"), "person", cc);
 //					cc.addMethod(CtNewMethod.setter("setPerson", f1));
 //				}
-		
+
 				Class<?> clz = (Class<?>) cc.toClass();
 				if (clz.isPrimitive() || Modifier.isAbstract(clz.getModifiers()) || clz.isAnnotation() || clz.isInterface() || clz.isArray() || clz.getName().indexOf("$") != -1) {
 				} else {
 					// 组件才享有优先类加载的权利
 					if (IComponent.class.isAssignableFrom(clz))
 						ReflectUtil.getClassByName(clz.getCanonicalName());
-					
+
 					clzs.add(clz);
 				}
 			} catch (CannotCompileException e) {
@@ -120,12 +116,12 @@ public class ComponentMgr {
 				clzs.add(clazz);
 			} catch (NotFoundException | ClassNotFoundException e) {
 				LOGGER.warning(e);
-			} 
+			}
 		});
 
 		ComponentMgr.clzs.addAll(clzs);
 	}
-	
+
 	public static void inject() {
 		// 记录依赖关系
 		Map<String, String> dependencies = new HashMap<>();
@@ -144,19 +140,26 @@ public class ComponentMgr {
 			if (components.containsKey(alias))
 				LOGGER.warning("相同的 组件名称（Alias）[{0}] 已经存在", alias);
 
-			
-			if(clz.toString().contains("RegisterService")) {
-				LOGGER.debug(clz.toString()+":::::::::");
-			}
+//			if (clz.toString().contains("org.gdhdc.service.MyRegisterService")) {
+//				LOGGER.info(clz.toString() + ":::::::::");
+//			}
+
 			register(alias, clz, true);
 
 			// 记录依赖关系
-			for (Field field : clz.getDeclaredFields()) {
-				Resource res = field.getAnnotation(Resource.class);
+			Class<?> superClz = clz;// 如果有继承的，查找其父类
 
-				if (res == null)
-					continue; // 没有要注入的字段，跳过
-				else {
+			for (; superClz != Object.class; superClz = superClz.getSuperclass()) {
+//				if (clz.toString().contains("org.gdhdc.service.MyRegisterService")) {
+//					LOGGER.info(superClz.toString() + ":::::::::");
+//				}
+
+				for (Field field : superClz.getDeclaredFields()) {
+					Resource res = field.getAnnotation(Resource.class);
+
+					if (res == null)
+						continue; // 没有要注入的字段，跳过
+
 					/*
 					 * 要查找哪一个 bean？就是说依赖啥对象？以什么为依据？我们说是那个 bean 的 id。首先你可以在 Resource
 					 * 注解中指定，如果这觉得麻烦，可以不在注解指定，直接指定变量名即可（就算不通过注解指定，都可以利用 反射 获取字段名，作为依赖的凭据，效果一样）
@@ -166,10 +169,6 @@ public class ComponentMgr {
 
 					// bean id ＋ 变量名称 ＝ 依赖关系的 key。
 					dependencies.put(alias + "." + field.getName(), dependenciObj_id);
-
-					// 不能马上执行 setter 注入，因为有可能相关组件还未实例化
-//					String setMethodName = "set" + ReflectUtil.firstLetterUpper(field.getName());
-//					ReflectUtil.getMethod(item, setMethodName, field.getType());
 				}
 			}
 		}
@@ -178,22 +177,13 @@ public class ComponentMgr {
 		dependencies.forEach((k, v) -> {
 			String[] split = k.split("\\.");// 数组第一个值表示 bean 对象名称，第二个值为字段属性名称
 			Object bean = get(split[0]), argBean = get(v);
-			
-			if(bean.toString().contains("com.ajaxjs.user.register.RegisterService")) {
-				Class clz = ReflectUtil.getClassByName("com.ajaxjs.user.register.RegisterService");
-				List all = getAll(clz);
-				LOGGER.debug(all.size()+"");
-				LOGGER.debug(all.get(0).toString());
-				LOGGER.debug(all.get(1).toString());
-			}
-			
 			Objects.requireNonNull(bean, split[0] + "执行[" + split[1] + "]未发现类");
-			
+
 			if (argBean == null)
 				LOGGER.warning("容器中找不到实例[{0}]。请确定是否为组件添加 @Bean 注解?", v);
 			else
 				ReflectUtil.setProperty(bean, split[1], argBean);
-		});		
+		});
 	}
 
 	/**
@@ -209,12 +199,12 @@ public class ComponentMgr {
 
 		if (resource.startsWith("autoWire:") && ReflectUtil.getClassByName("com.ajaxjs.framework.config.ConfigService") != null) {
 			GetConfig cfg = getByInterface(GetConfig.class);
-			
-			if(cfg == null) { // 强制加载配置
+
+			if (cfg == null) { // 强制加载配置
 				ComponentMgr.register("ConfigService", ReflectUtil.getClassByName("com.ajaxjs.framework.config.ConfigService"), true);
 				cfg = getByInterface(GetConfig.class);
 			}
-			
+
 			String target = resource.replaceFirst("autoWire:", "");
 			String extendedId = cfg.getString(target);
 
