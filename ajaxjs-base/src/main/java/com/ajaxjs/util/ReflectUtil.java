@@ -367,7 +367,8 @@ public class ReflectUtil {
 
 			if (e1 instanceof InvocationTargetException) {
 				e = ((InvocationTargetException) e1).getTargetException();
-				System.err.println("反射执行方法异常！所在类：" + instance.getClass().getName() + "方法：" + method.getName());
+				LOGGER.warning("反射执行方法异常！所在类[{0}] 方法：[{1}]", instance.getClass().getName(), method.getName());
+				
 				throw e;
 			}
 
@@ -533,12 +534,11 @@ public class ReflectUtil {
 			method = getDeclaredMethodByInterface(clazz, setMethodName, value);
 
 		// 如果没找到，那忽略参数类型，只要匹配方法名称即可。这会发生在：由于被注入的对象有可能经过了 AOP 的动态代理，所以不能通过上述逻辑找到正确的方法
-		if (method == null) {
+		if (method == null)
 			method = getSuperClassDeclaredMethod(clazz, setMethodName);
-		}
-
+		
 		// 最终还是找不到
-		Objects.requireNonNull(method, clazz.getName() + " 找不到目标方法！" + setMethodName);
+		Objects.requireNonNull(method, "找不到目标方法[" + clazz.getSimpleName() + "." + setMethodName + "(" + value.getClass().getSimpleName() +")]");
 
 		executeMethod(bean, method, value);
 	}
