@@ -89,7 +89,7 @@ public class DataBaseFilter extends JdbcConnection implements FilterAction {
 	}
 
 	private static void doTransaction(FilterAfterArgs argsHolder) throws SQLException {
-		LOGGER.info("正在提交事务中……");
+		LOGGER.info("正在处理数据库事务……");
 		Connection conn = getConnection();
 
 		if (conn.isClosed())

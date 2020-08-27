@@ -53,7 +53,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 		return service;
 	}
 
-	@Resource("User_common_authService") // 指定 service id
+	@Resource
 	private UserCommonAuthService passwordService;
 
 	@GET
@@ -62,15 +62,15 @@ public class UserCenterController extends AbstractAccountInfoController {
 		LOGGER.info("用户会员中心（前台）");
 
 		if (ConfigService.getValueAsString("user.customUserCenterHome") != null) {
-			AbstractUserController.ioc("user.customUserCenterHome", (clz, method) -> ReflectUtil.getMethod(clz, method, mv), method -> {
-				try {
-					return method.invoke(null, mv);
-				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					Throwable _e = ReflectUtil.getUnderLayerErr(e);
-					LOGGER.warning(_e);
-					return null;
-				}
-			});
+//			AbstractUserController.ioc("user.customUserCenterHome", (clz, method) -> ReflectUtil.getMethod(clz, method, mv), method -> {
+//				try {
+//					return method.invoke(null, mv);
+//				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+//					Throwable _e = ReflectUtil.getUnderLayerErr(e);
+//					LOGGER.warning(_e);
+//					return null;
+//				}
+//			});
 		}
 
 		return user("home");

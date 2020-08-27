@@ -40,7 +40,6 @@ public abstract class BaseService<T> extends QueryTools implements IBaseService<
 	@Override
 	public Long create(T bean) {
 		initCreate(bean);
-		System.out.println(dao);
 		return dao.create(bean);
 	}
 

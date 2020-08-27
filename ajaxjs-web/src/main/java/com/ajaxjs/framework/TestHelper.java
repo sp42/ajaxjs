@@ -260,10 +260,10 @@ public class TestHelper {
 	 * @param packages
 	 */
 	public static void initAll() {
-		String projectFolder = "E:\\project\\aj-website\\";
+		String projectFolder = "/Users/xinzhang/dev/project/doctor";
 		String[] packages = { "com.ajaxjs.app", "com.ajaxjs.user" };
 
-		init(projectFolder + "\\WebContent\\META-INF\\site_config.json", projectFolder + "\\WebContent\\META-INF\\context.xml", packages);
+		init(projectFolder + "/WebContent/META-INF/site_config.json", projectFolder + "/WebContent/META-INF/context.xml", packages);
 	}
 
 	/**

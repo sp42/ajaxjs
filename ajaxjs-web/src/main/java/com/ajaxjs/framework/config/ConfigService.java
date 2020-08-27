@@ -72,7 +72,7 @@ public class ConfigService implements GetConfig, IComponent {
 	 */
 	public static void load(String jsonPath) {
 		if (!new File(jsonPath).exists()) {
-			LOGGER.info("没有项目配置文件");
+			LOGGER.info("没有[{0}]项目配置文件", jsonPath);
 			return;
 		}
 

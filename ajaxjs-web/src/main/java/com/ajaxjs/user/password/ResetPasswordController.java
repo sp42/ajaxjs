@@ -1,4 +1,4 @@
-package com.ajaxjs.user.controller;
+package com.ajaxjs.user.password;
 
 import java.util.Map;
 
@@ -17,8 +17,6 @@ import com.ajaxjs.framework.filter.CaptchaFilter;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.user.model.User;
-import com.ajaxjs.user.password.UserCommonAuth;
-import com.ajaxjs.user.password.UserCommonAuthService;
 import com.ajaxjs.user.profile.AbstractAccountInfoController;
 import com.ajaxjs.user.service.AccountService;
 import com.ajaxjs.user.service.UserService;
@@ -119,7 +117,7 @@ public class ResetPasswordController extends BaseController<Map<String, Object>>
 		}
 	}
 
-	@Resource("User_common_authService")
+	@Resource
 	private UserCommonAuthService passwordService;
 
 	@POST

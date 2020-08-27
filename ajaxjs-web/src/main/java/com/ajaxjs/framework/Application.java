@@ -56,6 +56,7 @@ public class Application implements ServletContextListener, Filter {
 		else
 			LOGGER.warning("配置文件中每发现任何要扫描的包名，请检查配置文件");
 
+		ComponentMgr.inject();
 		onServletStartUp.forEach(action -> action.accept(ctx));
 	}
 

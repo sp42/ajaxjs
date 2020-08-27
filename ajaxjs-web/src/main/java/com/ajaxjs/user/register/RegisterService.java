@@ -1,13 +1,17 @@
-package com.ajaxjs.user.service;
+package com.ajaxjs.user.register;
 
-import com.ajaxjs.framework.BaseService;
+import java.util.Map;
+
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.JdbcReader;
+import com.ajaxjs.user.BaseUserService;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.password.UserCommonAuth;
 import com.ajaxjs.user.password.UserCommonAuthService;
+import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.CommonUtil;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -17,23 +21,26 @@ import com.ajaxjs.util.logger.LogHelper;
  * @author xinzhang
  *
  */
-public class RegisterService extends BaseService<User> {
+@Component
+public class RegisterService extends BaseUserService {
 	private static final LogHelper LOGGER = LogHelper.getLog(RegisterService.class);
 
-	@Resource("User_common_authService")
+	@Resource("UserCommonAuthService")
 	private UserCommonAuthService passwordService;
 
 	/**
 	 * 普通口令注册
-	 * 
-	 * @param user     用户对象
-	 * @param password 密码对象
+	 * ˙
+	 * @param user   用户对象
+	 * @param params 密码对象
 	 * @return 新注册用户
 	 * @throws ServiceException
 	 */
-	public User registerByPsw(User user, String password) throws ServiceException {
+	public User registerByPsw(User user, Map<String, Object> params) throws ServiceException {
 		LOGGER.info("用户普通口令注册");
-
+		
+		String password = (String) params.get("password");
+		
 		if (CommonUtil.isEmptyString(password))
 			throw new ServiceException("注册密码不能为空");
 
@@ -45,6 +52,8 @@ public class RegisterService extends BaseService<User> {
 		UserCommonAuth passwordModel = new UserCommonAuth(); // 保存密码
 		passwordModel.setPassword(password);
 		passwordModel.setUserId(userId);
+		
+		System.out.println(passwordService);
 		passwordService.create(passwordModel);
 
 		return user;

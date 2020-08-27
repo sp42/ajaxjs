@@ -34,7 +34,7 @@ public class UserService extends BaseService<User> {
 		setDao(dao);
 	}
 
-	@Resource("User_common_authService")
+	@Resource
 	private UserCommonAuthService passwordService;
 
 	public UserCommonAuthService getPasswordService() {

@@ -13,7 +13,7 @@ import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.mvc.controller.MvcRequest;
 
-@Component("User_common_authService")
+@Component
 public class UserCommonAuthService extends BaseService<UserCommonAuth> {
 	private static final LogHelper LOGGER = LogHelper.getLog(UserCommonAuthService.class);
 	
