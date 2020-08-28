@@ -9,11 +9,13 @@ import java.util.function.Predicate;
 import com.ajaxjs.app.ThirdPartyService;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.net.mail.Mail;
+import com.ajaxjs.user.BaseUserService;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserHelper;
 import com.ajaxjs.user.password.TokenMaker;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.cryptography.SymmetriCipher;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.ComponentMgr;
 
 /**
@@ -22,7 +24,8 @@ import com.ajaxjs.util.ioc.ComponentMgr;
  * @author sp42 frank@ajaxjs.com
  *
  */
-public class AccountService {
+@Component
+public class AccountService extends BaseUserService {
 	/**
 	 * 验证邮件
 	 */
@@ -48,7 +51,7 @@ public class AccountService {
 
 			if (email.equals(_arr[0])) {
 				userIdHolder[0] = _arr[1];
-				
+
 				return true;
 			} else {
 				ex.add(new IllegalAccessError("邮件地址不匹配！"));
@@ -78,7 +81,7 @@ public class AccountService {
 			List<Throwable> ex = new ArrayList<>();
 			Predicate<String[]> checkTimespam_arr = _arr -> TokenMaker.checkTimespam(EMAIL_TIMEOUT, ex).test(_arr[3]);
 			String[] userIdHolder = new String[1];
-			
+
 			if (checkEmail(email, userIdHolder, ex).and(checkTimespam_arr).test(arr)) {
 				Long userId = Long.parseLong(userIdHolder[0]);// 审核通过
 
@@ -93,8 +96,9 @@ public class AccountService {
 	/**
 	 * 邮件模板
 	 */
-	private final static String HTML = "用户 %s 您好：<br />&nbsp;&nbsp;&nbsp;&nbsp;请点击下面的链接进行%s：<br />" + "&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"%s\" target=\"_blank\">%s</a>。"
-			+ "<br /> &nbsp;&nbsp;&nbsp;&nbsp;提示：1）请勿回复本邮件；2）本邮件超过 " + EMAIL_TIMEOUT + " 分钟链接将会失效，需要重新申请%s；3）如不能打开，请复制该链接到浏览器。";
+	private final static String HTML = "用户 %s 您好：<br />&nbsp;&nbsp;&nbsp;&nbsp;请点击下面的链接进行%s：<br />"
+			+ "&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"%s\" target=\"_blank\">%s</a>。" + "<br /> &nbsp;&nbsp;&nbsp;&nbsp;提示：1）请勿回复本邮件；2）本邮件超过 " + EMAIL_TIMEOUT
+			+ " 分钟链接将会失效，需要重新申请%s；3）如不能打开，请复制该链接到浏览器。";
 
 	/**
 	 * 发送 Token 邮件
@@ -108,12 +112,13 @@ public class AccountService {
 		if (!UserHelper.isVaildEmail(email))
 			throw new IllegalArgumentException(email + "不是合法的邮件地址");
 
-		User user = ProfileService.dao.findByEmail(email);
+		User user = ProfileService.DAO.findByEmail(email);
 		Objects.requireNonNull(user, "没有该邮件的用户，目标邮件是： " + email);
 
 		String value = email + "_" + user.getId();
 		Function<String, String> fn = TokenMaker::addSalt;
-		fn = fn.andThen(TokenMaker.value(value).andThen(TokenMaker::addTimespam).andThen(TokenMaker.encryptAES(ConfigService.getValueAsString("System.api.AES_Key"))));
+		fn = fn.andThen(
+				TokenMaker.value(value).andThen(TokenMaker::addTimespam).andThen(TokenMaker.encryptAES(ConfigService.getValueAsString("System.api.AES_Key"))));
 
 		String url = String.format(URL + "?email=%s&token=%s", Encode.urlEncode(email), Encode.urlEncode(fn.apply(TokenMaker.TOKEN_TPL)));
 

@@ -1,47 +1,49 @@
 package com.ajaxjs.user.login;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.config.ConfigService;
+import com.ajaxjs.user.BaseUserService;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.user.UserHelper;
 import com.ajaxjs.user.password.UserCommonAuth;
 import com.ajaxjs.user.password.UserCommonAuthService;
-import com.ajaxjs.user.profile.ProfileService;
+import com.ajaxjs.util.ioc.Component;
+import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.web.mvc.ModelAndView;
 
-public class LoginService extends ProfileService {
+@Component
+public class LoginService extends BaseUserService {
 	private static final LogHelper LOGGER = LogHelper.getLog(LoginService.class);
+	
+	@Resource
+	private LogLoginService logLoginService;
 
-	public static User loginByPassword(String userID, String password) throws ServiceException {
+	public User loginByPassword(String userID, String password, HttpServletRequest req) throws ServiceException {
 		User user;
-
+		userID = userID.trim();
 		int passWordLoginType = ConfigService.getValueAsInt("user.login.passWordLoginType");
-		
+
 		// 密码支持帐号、邮件、帐号作为身份凭证
 		if (UserHelper.isVaildEmail(userID)) {
 			if (!UserHelper.testBCD(UserConstant.PSW_LOGIN_EMAIL, passWordLoginType))
 				throw new ServiceException("禁止使用邮件登录");
 
-			user = dao.findByEmail(userID);
+			user = DAO.findByEmail(userID);
 		} else if (UserHelper.isVaildPhone(userID)) {
 			if (!UserHelper.testBCD(UserConstant.PSW_LOGIN_PHONE, passWordLoginType))
 				throw new ServiceException("禁止使用手机登录");
 
-			user = dao.findByPhone(userID);
+			user = DAO.findByPhone(userID);
 		} else {
 			if (!UserHelper.testBCD(UserConstant.PSW_LOGIN_ID, passWordLoginType))
 				throw new ServiceException("禁止使用用户名登录");
 
 			// 用户名
-			user = dao.findByUserName(userID);
+			user = DAO.findByUserName(userID);
 		}
 
 		if (user == null || user.getId() == null || user.getId() == 0)
@@ -49,6 +51,9 @@ public class LoginService extends ProfileService {
 
 		if (checkUserLogin(user, password))
 			LOGGER.info(user.getName() + " 登录成功！");
+
+		saveLoginLog(user, req);
+		afterLogin(user, req);
 
 		return user;
 	}
@@ -82,23 +87,23 @@ public class LoginService extends ProfileService {
 	 * @param user
 	 * @param req
 	 */
-	public static void saveLoginLog(User user, HttpServletRequest req) {
+	private void saveLoginLog(User user, HttpServletRequest req) {
 		LogLogin userLoginLog = new LogLogin();
 		userLoginLog.setUserId(user.getId());
 		userLoginLog.setLoginType(UserConstant.PASSWORD);
 		LogLoginController.initBean(userLoginLog, req);
 
-		if (LogLoginController.service.create(userLoginLog) <= 0)
+		if (logLoginService.create(userLoginLog) <= 0)
 			LOGGER.warning("更新会员登录日志出错");
 	}
 
 	/**
 	 * 会员登录之后的动作，会保存 userId 和 userName 在 Session中
 	 * 
-	 * @param user 		用户
-	 * @param request 	请求对象
+	 * @param user    用户
+	 * @param request 请求对象
 	 */
-	public static void afterLogin(User user, HttpServletRequest request) {
+	private static void afterLogin(User user, HttpServletRequest request) {
 		if (request == null)
 			return;
 
@@ -108,7 +113,8 @@ public class LoginService extends ProfileService {
 		sess.setAttribute("userUid", user.getUid());
 		sess.setAttribute("userName", user.getName());
 		sess.setAttribute("userPhone", user.getPhone());
-		sess.setAttribute("userAvatar", user.getAvatar() == null ? null : (ConfigService.get("uploadFile.imgPerfix") + user.getAvatar()));
+		sess.setAttribute("userAvatar",
+				user.getAvatar() == null ? null : (ConfigService.get("uploadFile.imgPerfix") + user.getAvatar()));
 
 		// 获取资源权限总值
 		sess.setAttribute("userGroupId", user.getRoleId());
@@ -116,7 +122,7 @@ public class LoginService extends ProfileService {
 		if (user.getRoleId() == null || user.getRoleId() == 0L) {
 			// 未设置用户权限
 		} else {
-			long privilegeTotal = dao.getPrivilegeByUserGroupId(user.getRoleId());
+			long privilegeTotal = DAO.getPrivilegeByUserGroupId(user.getRoleId());
 			LOGGER.info("获取用户权限 privilegeTotal:" + privilegeTotal);
 			sess.setAttribute("privilegeTotal", privilegeTotal);
 		}
@@ -124,25 +130,5 @@ public class LoginService extends ProfileService {
 //		Attachment_picture avatar = dao.findAvaterByUserId(user.getUid());
 //
 //		if (avatar != null)
-	}
-
-	/**
-	 * 设置用户显示可选择的帐号
-	 * 
-	 * @param mv
-	 */
-	public static void setUserId(ModelAndView mv) {
-		List<String> userID = new ArrayList<>();
-
-		int passWordLoginType = ConfigService.getValueAsInt("user.login.passWordLoginType");
-
-		if (UserHelper.testBCD(UserConstant.PSW_LOGIN_ID, passWordLoginType))
-			userID.add("用户名");
-		if (UserHelper.testBCD(UserConstant.PSW_LOGIN_EMAIL, passWordLoginType))
-			userID.add("邮件");
-		if (UserHelper.testBCD(UserConstant.PSW_LOGIN_PHONE, passWordLoginType))
-			userID.add("手机");
-
-		mv.put("userID", String.join("/", userID));
 	}
 }

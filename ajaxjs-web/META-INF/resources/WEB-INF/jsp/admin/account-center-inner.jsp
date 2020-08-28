@@ -17,9 +17,7 @@
 			<a href="javascript:openPopupTpl('modiflyEmail');">设置邮箱</a>
 			<div class="${empty userInfo.email ? 'fail' : 'ok' }">绑定邮箱</div><div>${empty userInfo.email ? '未绑定邮箱' : userInfo.email} 
 				&nbsp;${empty userInfo.email ? '' : (isEmailVerified ? '已验证' :'未验证 &nbsp;<a href="javascript:emailVerify();">点击验证</a>')}</div>
-				
 			<div>
-			
 			
 			</div>
 			<script>
@@ -68,7 +66,7 @@
 				<aj-process-line ref="processLine" :items="['填写登录名信息', '检查是否可用', '完成']"></aj-process-line>
 			</div>
 			
-			<form class="aj-form fixed-width" action="${ctx}/user/info/modiflyUserName" method="POST">
+			<form class="aj-form fixed-width" action="modiflyUserName/" method="POST">
 				<dl>
 					<label>
 						<dt>用户名</dt>
@@ -81,7 +79,7 @@
 				<dl>
 					<dt></dt>
 					<dd class="aj-btnsHolder" style="text-align: left;width:300px;">
-						<button>提 交</button> <button @click.prevent="closePopup($event);return false;">关 闭</button>
+						<button>提 交</button> <button @click.prevent="closePopup">关 闭</button>
 					</dd>
 				</dl>
 			</form>
@@ -97,7 +95,7 @@
 				<aj-process-line ref="processLine" :items="['填写手机号码', '输入验证码', '完成']"></aj-process-line>
 			</div>
 			
-			<form class="aj-form fixed-width" action="${ctx}/user/account/modiflyPhone" method="POST">
+			<form class="aj-form fixed-width" action="modiflyPhone/" method="POST">
 				<dl>
 					<label>
 						<dt>手机号码</dt>
@@ -109,7 +107,7 @@
 				<dl>
 					<dt></dt>
 					<dd class="aj-btnsHolder" style="text-align: left;width:300px;"d>
-						<button>提 交</button> <button @click.prevent="closePopup($event);return false;">关 闭</button>
+						<button>提 交</button> <button @click.prevent="closePopup">关 闭</button>
 					</dd>
 				</dl>
 			</form>
@@ -126,7 +124,7 @@
 				<aj-process-line ref="processLine" :items="['填写新邮箱', '邮箱审核', '完成']"></aj-process-line>
 			</div>
 			
-			<form class="aj-form fixed-width" action="${ctx}/user/info/modiflyEmail" method="POST">
+			<form class="aj-form fixed-width" action="modiflyEmail/" method="POST">
 				<dl>
 					<label>
 						<dt>邮箱</dt>
@@ -138,7 +136,7 @@
 				<dl>
 					<dt></dt>
 					<dd class="aj-btnsHolder" style="text-align: left;width:300px;">
-						<button>提 交</button>  <button @click.prevent="closePopup($event);">关 闭</button>
+						<button>提 交</button>  <button @click.prevent="closePopup">关 闭</button>
 					</dd>
 				</dl>
 			</form>
@@ -153,7 +151,7 @@
 				<aj-process-line ref="processLine" :items="['填写信息', '重置密码', '完成']"></aj-process-line>
 			</div>
 			
-			<form class="aj-form fixed-width" action="resetPassword" method="POST">
+			<form class="aj-form fixed-width" action="resetPassword/" method="POST">
 				<dl>
 					<label>
 						<dt>原密码</dt>
@@ -181,7 +179,7 @@
 				<dl>
 					<dt></dt>
 					<dd class="aj-btnsHolder" style="text-align: left;width:300px;">
-						<button>提 交</button> <button @click.prevent="closePopup($event);">返 回</button>
+						<button>提 交</button> <button @click.prevent="closePopup">返 回</button>
 					</dd>
 				</dl>
 			</form>
@@ -215,7 +213,7 @@
 				<dl>
 					<dt></dt>
 					<dd class="aj-btnsHolder" style="text-align: left;width:300px;">
-						<button>确 定</button> <button @click.prevent="closePopup($event);">返 回</button>
+						<button>确 定</button> <button @click.prevent="closePopup">返 回</button>
 					</dd>
 				</dl>
 			</form>
@@ -230,10 +228,10 @@
 			
 			if (!obj) {
 				obj = new Vue({
-					el : '.' + type + '-holder',
-					template : aj('.' + type).value,
-					methods : {
-						closePopup(e){
+					el: '.' + type + '-holder',
+					template: aj('.' + type).value,
+					methods: {
+						closePopup() {
 							this.$el.classList.add('hide');
 						}
 					}
@@ -248,31 +246,28 @@
 				case 'modiflyUserId':	
 					aj.xhr.form(obj.$el.$('.aj-form'), json => {				
 						if (json.isOk) {
-							ajaxjs.alert.show(json.msg || '操作成功！');
+							aj.alert(json.msg || '操作成功！');
 							obj.$refs.processLine.go(1);
-						} else {
-							ajaxjs.alert.show(json.msg || '执行失败！原因未知！');
-						}
+						} else
+							aj.alert(json.msg || '执行失败！原因未知！');
 					});
 				break;
 				case 'modiflyPhone':					
 					aj.xhr.form(obj.$el.$('.aj-form'), json => {				
 						if (json.isOk) {
-							ajaxjs.alert.show(json.msg || '操作成功！');
+							aj.alert(json.msg || '操作成功！');
 							obj.$refs.processLine.go(1);
-						} else {
-							ajaxjs.alert.show(json.msg || '执行失败！原因未知！');
-						}
+						} else
+							aj.alert(json.msg || '执行失败！原因未知！');
 					});
 				break;
 				case 'modiflyEmail':		
 					aj.xhr.form(obj.$el.$('.aj-form'), json => {				
 						if (json.isOk) {
-							ajaxjs.alert.show(json.msg || '操作成功！');
+							aj.alert(json.msg || '操作成功！');
 							obj.$refs.processLine.go(1);
-						} else {
-							ajaxjs.alert.show(json.msg || '执行失败！原因未知！');
-						}
+						} else
+							aj.alert(json.msg || '执行失败！原因未知！');
 					});
 				break;
 				case 'resetPsw':					
@@ -280,17 +275,15 @@
 					
 					aj.xhr.form('.aj-form', json => {
 						if (json.isOk) {
-							ajaxjs.alert.show(json.msg || '操作成功！');
+							aj.alert(json.msg || '操作成功！');
 							ProcessLine.$refs.processLine.go(2);
-						} else {
-							ajaxjs.alert.show(json.msg || '执行失败！原因未知！');
-						}
+						} else
+							aj.alert(json.msg || '执行失败！原因未知！');
 					}, {
 			 			beforeSubmit (form, json) {
 			 				ProcessLine.$refs.processLine.go(1);
 								json.password = md5(json.password);
 								json.new_password = md5(json.new_password);
-								
 								delete json.new_password2;
 							}
 					});
@@ -298,22 +291,20 @@
 				case 'deleteAccount':		
 					aj.xhr.form('.aj-form', json => {
 						if (json.isOk) {
-							ajaxjs.alert.show(json.msg || '操作成功！');
+							aj.alert(json.msg || '操作成功！');
 							ProcessLine.$refs.processLine.go(1);
 							
 							// logout
-							setTimeout(()=>{
+							setTimeout( ()=> {
 								ProcessLine.$refs.processLine.go(2);
-								aj.xhr.get('${ctx}/user/logout/');
+								aj.xhr.get('${ctx}/user/login/logout/');
 							}, 2000);
-						} else {
-							ajaxjs.alert.show(json.msg || '执行失败！原因未知！');
-						}
+						} else 
+							aj.alert(json.msg || '执行失败！原因未知！');
 					}, {
-			 			beforeSubmit (form, json) {
-			 				debugger;
-								json.password = md5(json.password);
-							}
+			 			beforeSubmit(form, json) {
+							json.password = md5(json.password);
+						}
 					});
 				break;
 			}

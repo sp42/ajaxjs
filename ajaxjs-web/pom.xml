@@ -118,7 +118,13 @@
 			<version>2.0.2-beta</version>
 			<scope>provided</scope> 
 		</dependency>
-
+		
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.30</version>
+			<scope>test</scope>
+		</dependency>
 		<!-- <dependency> -->
 		<!-- <groupId>junit</groupId> -->
 		<!-- <artifactId>junit</artifactId> -->

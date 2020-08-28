@@ -33,7 +33,7 @@
 		
 	    <script>
 	    	function logout() {
-	    		confirm('确定退出吗？') && aj.xhr.get('${ctx}/user/logout/', j => {
+	    		confirm('确定退出吗？') && aj.xhr.get('${ctx}/user/login/logout/', j => {
 	  				if(j.isOk) {
 	  					aj.msg.show(j.msg);
 	  					setTimeout(()=>location.assign('${ctx}/admin/login/'), 1000);

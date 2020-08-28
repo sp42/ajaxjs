@@ -2,6 +2,9 @@ package com.ajaxjs.user;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -9,12 +12,8 @@ import org.junit.Test;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.TestHelper;
 import com.ajaxjs.sql.JdbcConnection;
-import com.ajaxjs.user.controller.UserController;
-import com.ajaxjs.user.model.User;
-import com.ajaxjs.user.password.UserCommonAuth;
-import com.ajaxjs.user.password.UserCommonAuthService;
+import com.ajaxjs.user.login.LoginService;
 import com.ajaxjs.user.register.RegisterService;
-import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.ioc.ComponentMgr;
 
 public class TestUser {
@@ -29,24 +28,25 @@ public class TestUser {
 	@Test
 	public void testRegister() {
 		RegisterService service = ComponentMgr.get(RegisterService.class);
-		UserCommonAuthService passwordService = ComponentMgr.get(UserCommonAuthService.class);
 		User user = new User();
 		user.setName(userName);
-		
-//		UserCommonAuth password = new UserCommonAuth();
-//		password.setPassword(psw);
+
+		Map<String, Object> map = new HashMap<>();
+		map.put("password", psw);
 
 		try {
-			service.registerByPsw(user, psw);
+			service.registerByPsw(user, map);
 		} catch (ServiceException e) {
 			e.printStackTrace();
 		}
 	}
 
-	//@Test
+	@Test
 	public void testLogin() {
+		LoginService service = ComponentMgr.get(LoginService.class);
+
 		try {
-			assertTrue(new UserController().loginByPassword(userName, psw, null) != null);
+			assertTrue(service.loginByPassword(userName, psw, null) != null);
 		} catch (ServiceException e) {
 			e.printStackTrace();
 		}

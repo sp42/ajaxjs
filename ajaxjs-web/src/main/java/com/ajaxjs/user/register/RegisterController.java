@@ -16,7 +16,6 @@ import com.ajaxjs.framework.filter.CaptchaFilter;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.framework.filter.EnableTransaction;
 import com.ajaxjs.user.User;
-import com.ajaxjs.user.profile.ProfileService;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
@@ -57,28 +56,18 @@ public class RegisterController extends BaseController<User> {
 	 * 
 	 * @param phone 手机号码
 	 * @return true=已存在
+	 * @throws ServiceException
 	 */
 	@GET
 	@Path("checkIfRepeat")
 	@MvcFilter(filters = { DataBaseFilter.class })
 	public String checkIfRepeat(@QueryParam("name") String name, @QueryParam("email") String email, @QueryParam("phone") String phone) {
 		LOGGER.info("检查是否重复的" + name);
-		final boolean checkIfRepeated;
-
-		if (name != null)
-			checkIfRepeated = ProfileService.checkIfRepeated("name", name);
-		else if (email != null)
-			checkIfRepeated = ProfileService.checkIfRepeated("email", email);
-		else if (phone != null)
-			checkIfRepeated = ProfileService.checkIfRepeated("phone", phone);
-		else
-			checkIfRepeated = true;
+		boolean checkIfRepeated = service.checkIfRepeated_(name, email, phone);
 
 		return toJson(new HashMap<String, Boolean>() {
 			private static final long serialVersionUID = -5033049204280154615L;
-
 			{
-				getService();
 				put("isRepeat", checkIfRepeated);
 			}
 		});

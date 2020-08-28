@@ -1,7 +1,5 @@
 package com.ajaxjs.user.password;
 
-import java.util.Map;
-
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -16,10 +14,10 @@ import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.filter.CaptchaFilter;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.sql.orm.IBaseService;
+import com.ajaxjs.user.BaseUserService;
 import com.ajaxjs.user.User;
-import com.ajaxjs.user.profile.AbstractAccountInfoController;
+import com.ajaxjs.user.profile.AccountController;
 import com.ajaxjs.user.profile.AccountService;
-import com.ajaxjs.user.profile.ProfileService;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
@@ -33,7 +31,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
  */
 @Path("/user/reset_password")
 @Component
-public class ResetPasswordController extends BaseController<Map<String, Object>> {
+public class ResetPasswordController extends BaseController<User> {
 	private static final LogHelper LOGGER = LogHelper.getLog(ResetPasswordController.class);
 
 	@GET
@@ -44,20 +42,17 @@ public class ResetPasswordController extends BaseController<Map<String, Object>>
 
 	private final static String FIND_BY_EMAIL = "/user/reset_password/findByEmail/";
 
-	@Resource("UserService")
-	private ProfileService userService;
-
 	@POST
 	@Path("findBySms")
 	@MvcFilter(filters = { CaptchaFilter.class, DataBaseFilter.class })
 	public String findBySms(@NotNull @FormParam("phone") String phone, ModelAndView mv) {
 		LOGGER.info("重置密码-输入新密码 by SMS");
 
-		User user = ProfileService.dao.findByPhone(phone);
+		User user = BaseUserService.DAO.findByPhone(phone);
 		if (user == null)
 			throw new IllegalArgumentException("找不到该手机 " + phone + "的用户");
 
-		if (AbstractAccountInfoController.sendSms(phone, user.getId())) {
+		if (AccountController.sendSms(phone, user.getId())) {
 			// 适应 api 和 页面
 			if (isJson())
 				return jsonOk("发送手机 " + phone + " 验证码成功");
@@ -77,11 +72,11 @@ public class ResetPasswordController extends BaseController<Map<String, Object>>
 	@Path("findBySms/verify")
 	@MvcFilter(filters = { DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
-	public String updatePwdBySMS(@NotNull @FormParam("userId") long userId, @NotNull @FormParam("v_code") String v_code, @NotNull @FormParam("password") String password)
-			throws ServiceException {
+	public String updatePwdBySMS(@NotNull @FormParam("userId") long userId, @NotNull @FormParam("v_code") String v_code,
+			@NotNull @FormParam("password") String password) throws ServiceException {
 		LOGGER.info("重置密码-保存新密码 by SMS");
 
-		AbstractAccountInfoController.checkSmsCode(userId, v_code);
+		AccountController.checkSmsCode(userId, v_code);
 		UserCommonAuth auth = UserCommonAuthService.dao.findByUserId(userId);
 
 		if (auth != null && passwordService.updatePwd(auth, password))
@@ -112,9 +107,8 @@ public class ResetPasswordController extends BaseController<Map<String, Object>>
 			mv.put("token", token);
 			mv.put("email", email);
 			return jsp("user/reset-password-findByEmail");
-		} else {
+		} else
 			throw new IllegalAccessError("非法访问");
-		}
 	}
 
 	@Resource
@@ -124,8 +118,8 @@ public class ResetPasswordController extends BaseController<Map<String, Object>>
 	@Path("findByEmail/verify")
 	@MvcFilter(filters = { DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
-	public String updatePwd(@NotNull @QueryParam("token") String token, @NotNull @QueryParam("email") String email, @NotNull @QueryParam("password") String password)
-			throws ServiceException {
+	public String updatePwd(@NotNull @QueryParam("token") String token, @NotNull @QueryParam("email") String email,
+			@NotNull @QueryParam("password") String password) throws ServiceException {
 		LOGGER.info("重置密码-保存新密码");
 
 		Long userId = AccountService.checkEmail_VerifyToken(token, email);
@@ -136,13 +130,12 @@ public class ResetPasswordController extends BaseController<Map<String, Object>>
 				return jsonOk("重置密码成功");
 			else
 				return jsonNoOk("重置密码失败！");
-		} else {
+		} else
 			throw new IllegalAccessError("非法访问");
-		}
 	}
 
 	@Override
-	public IBaseService<Map<String, Object>> getService() {
+	public IBaseService<User> getService() {
 		return null;
 	}
 }

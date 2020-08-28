@@ -40,7 +40,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
 public class UserAdminController extends BaseController<User> {
 	private static final LogHelper LOGGER = LogHelper.getLog(UserAdminController.class);
 
-	@Resource("UserService")
+	@Resource
 	private ProfileService service;
 
 	@Resource("UserRoleService")

@@ -17,7 +17,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 用户注册业务
  * 
- * @author xinzhang
+ * @author sp42 frank@ajaxjs.com
  *
  */
 @Component
@@ -52,15 +52,15 @@ public class RegisterService extends BaseUserService {
 		passwordModel.setPassword(password);
 		passwordModel.setUserId(userId);
 
-		System.out.println(passwordService);
 		passwordService.create(passwordModel);
 
 		return user;
 	}
 
 	/**
+	 * 检查某个值是否已经存在一样的值
 	 * 
-	 * @param user
+	 * @param user 用户对象
 	 * @throws ServiceException
 	 */
 	private static void checkIfRepeated(User user) throws ServiceException {
@@ -89,7 +89,7 @@ public class RegisterService extends BaseUserService {
 	 * @return true=值重复
 	 * @throws ServiceException
 	 */
-	private static boolean checkIfRepeated(String field, String value, String type) throws ServiceException {
+	public static boolean checkIfRepeated(String field, String value, String type) throws ServiceException {
 		if (value != null) {
 			value = value.trim();
 			String sql = "SELECT * FROM user WHERE " + field + " = ? LIMIT 1";
@@ -101,5 +101,34 @@ public class RegisterService extends BaseUserService {
 		}
 
 		return false;
+	}
+
+	/**
+	 * 检查某个值是否已经存在一样的值
+	 * 
+	 * @param field 数据库里面的字段名称
+	 * @param value 欲检查的值
+	 * @return true=值重复
+	 */
+	private static boolean checkIfRepeated(String field, String value) {
+		value = value.trim();
+
+		return value != null && JdbcReader.queryOne(JdbcConnection.getConnection(),
+				"SELECT * FROM user WHERE " + field + " = ? LIMIT 1", Object.class, value) != null;
+	}
+
+	public boolean checkIfRepeated_(String name, String email, String phone) {
+		boolean checkIfRepeated;
+
+		if (name != null)
+			checkIfRepeated = checkIfRepeated("name", name);
+		else if (email != null)
+			checkIfRepeated = checkIfRepeated("email", email);
+		else if (phone != null)
+			checkIfRepeated = checkIfRepeated("phone", phone);
+		else
+			checkIfRepeated = true;
+		
+		return checkIfRepeated;
 	}
 }

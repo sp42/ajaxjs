@@ -18,10 +18,10 @@ import com.ajaxjs.app.attachment.Attachment_pictureService;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
+import com.ajaxjs.user.BaseUserController;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.filter.CurrentUserOnly;
 import com.ajaxjs.user.filter.LoginCheck;
-import com.ajaxjs.user.password.UserCommonAuthService;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
@@ -36,10 +36,10 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;;
  * @author sp42 frank@ajaxjs.com
  *
  */
-@Path("/user")
-@Component("PcUserInfoController")
-public class UserCenterController extends AbstractAccountInfoController {
-	private static final LogHelper LOGGER = LogHelper.getLog(UserCenterController.class);
+@Path("/user/profile")
+@Component
+public class ProfileController extends BaseUserController {
+	private static final LogHelper LOGGER = LogHelper.getLog(ProfileController.class);
 
 	@Resource
 	private ProfileService service;
@@ -49,31 +49,16 @@ public class UserCenterController extends AbstractAccountInfoController {
 		return service;
 	}
 
-	@Resource
-	private UserCommonAuthService passwordService;
-
 	@GET
+	@Path("/user")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String home(ModelAndView mv) throws ServiceException {
 		LOGGER.info("用户会员中心（前台）");
-
-		if (ConfigService.getValueAsString("user.customUserCenterHome") != null) {
-//			AbstractUserController.ioc("user.customUserCenterHome", (clz, method) -> ReflectUtil.getMethod(clz, method, mv), method -> {
-//				try {
-//					return method.invoke(null, mv);
-//				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-//					Throwable _e = ReflectUtil.getUnderLayerErr(e);
-//					LOGGER.warning(_e);
-//					return null;
-//				}
-//			});
-		}
 
 		return user("home");
 	}
 
 	@GET
-	@Path("profile")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String profile(ModelAndView mv) {
 		LOGGER.info("用户会员中心-个人信息");
@@ -82,26 +67,27 @@ public class UserCenterController extends AbstractAccountInfoController {
 	}
 
 	@PUT
-	@Path("profile")
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = { LoginCheck.class, CurrentUserOnly.class, DataBaseFilter.class })
 	public String saveProfile(User user) {
+		LOGGER.info("用户会员中心-修改个人信息");
 		return update(user.getId(), user);
 	}
 
 	@GET
-	@Path("profile/avatar")
+	@Path("avatar")
 	@MvcFilter(filters = { LoginCheck.class })
 	public String avatar() {
-		LOGGER.info("用户会员中心-个人信息-修改头像");
+		LOGGER.info("用户会员中心-个人信息-修改头像页面");
 		return user("avatar");
 	}
 
 	@POST
-	@Path("profile/avatar/{id}")
+	@Path("avatar/" + ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = { LoginCheck.class, CurrentUserOnly.class, DataBaseFilter.class })
 	public String saveAvater(MvcRequest request, @PathParam(ID) Long owenerUid) throws IOException {
+		LOGGER.info("用户会员中心-个人信息-修改头像");
 		Attachment_pictureController c = new Attachment_pictureController();
 		c.setService(new Attachment_pictureService());
 
@@ -109,7 +95,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 	}
 
 	@GET
-	@Path("profile/avatar/updateAvatar")
+	@Path("avatar/updateAvatar")
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String updateAvatar(MvcRequest request, @NotNull @QueryParam("avatar") String avatar) throws IOException {
@@ -118,15 +104,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 		return jsonOk("ok");
 	}
 
-//	@GET
-//	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-//	@Path("/home")
-//	public String home(ModelAndView mv) {
-//		return jsp("user/home");
-//	}
-
 	@GET
-
 	@Path("info")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String info() {
@@ -152,8 +130,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Path("info/avatar")
 	public String avatar(ModelAndView mv) {
-
-		Attachment_picture avatar = ProfileService.dao.findAvaterByUserId(getUserUid());
+		Attachment_picture avatar = ProfileService.DAO.findAvaterByUserId(getUserUid());
 		mv.put("avatar", avatar);
 		return jsp("user/avater");
 	}
@@ -162,7 +139,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Path("loginInfo")
 	public String changePassword(ModelAndView mv) {
-		mv.put("email", ProfileService.dao.findById(getUserId()).getEmail());
+		mv.put("email", ProfileService.DAO.findById(getUserId()).getEmail());
 		return jsp("user/loginInfo");
 	}
 
@@ -206,5 +183,4 @@ public class UserCenterController extends AbstractAccountInfoController {
 			public String imgUrl = avatar.getPath();
 		});
 	}
-
 }

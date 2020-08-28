@@ -17,19 +17,21 @@ import com.ajaxjs.app.ThirdPartyService;
 import com.ajaxjs.app.TreeLikeService;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.filter.DataBaseFilter;
+import com.ajaxjs.sql.orm.IBaseService;
+import com.ajaxjs.user.BaseUserController;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.user.UserHelper;
 import com.ajaxjs.user.filter.LoginCheck;
 import com.ajaxjs.user.filter.UserPasswordFilter;
-import com.ajaxjs.user.login.LoginController;
-import com.ajaxjs.user.login.LogLoginController;
-import com.ajaxjs.user.login.LogLoginController.UserLoginLogService;
+import com.ajaxjs.user.login.LogLoginService;
 import com.ajaxjs.user.password.UserCommonAuth;
 import com.ajaxjs.user.password.UserCommonAuthService;
 import com.ajaxjs.user.role.RoleService;
 import com.ajaxjs.util.cache.ExpireCache;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.ComponentMgr;
+import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.mvc.ModelAndView;
 import com.ajaxjs.web.mvc.controller.MvcRequest;
@@ -41,47 +43,47 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
  * @author sp42 frank@ajaxjs.com
  *
  */
-public abstract class AbstractAccountInfoController extends LoginController {
-	private static final LogHelper LOGGER = LogHelper.getLog(AbstractAccountInfoController.class);
+@Path("/user/account")
+@Component
+public class AccountController extends BaseUserController {
+	private static final LogHelper LOGGER = LogHelper.getLog(AccountController.class);
+	
+	@Resource
+	private AccountService service;
 
-	private UserCommonAuthService passwordService = new UserCommonAuthService();
+	@Resource
+	private UserCommonAuthService passwordService;
 
-	public UserCommonAuthService getPasswordService() {
-		return passwordService;
-	}
-
-	public void setPasswordService(UserCommonAuthService passwordService) {
-		this.passwordService = passwordService;
-	}
+	@Resource
+	private LogLoginService logLoginService;
 
 	@GET
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Path("account")
 	public String account(ModelAndView mv) {
 		LOGGER.info("用户会员中心-帐号管理-首页");
 
 		User user = getService().findById(getUserId());
 		mv.put("userInfo", user);
 		mv.put("isEmailVerified", RoleService.simple8421(user.getVerify(), UserConstant.VERIFIED_EMAIL));
-		mv.put("lastUserLoginedInfo", LogLoginController.service.dao.getLastUserLoginedInfo(getUserId()));
+		mv.put("lastUserLoginedInfo", logLoginService.getLastUserLoginedInfo(getUserId()));
 		mv.put("UserGroups", TreeLikeService.idAsKey(RoleService.dao.findList(null)));
 
 		return user("account");
 	}
 
 	@POST
-	@Path("safe/modiflyUserName")
+	@Path("modiflyUserName")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
-	public String modiflyUserName(@NotNull @QueryParam("userName") String userName, HttpServletRequest request) {
+	public String modiflyUserName(@NotNull @QueryParam("userName") String userName, HttpServletRequest req) {
 		LOGGER.info("修改用户名");
 
 		User user = new User();
-		user.setId(getUserId(request));
+		user.setId(getUserId(req));
 		user.setName(userName);
 
 		if (getService().update(user) != 0) {
-			request.getSession().setAttribute("userName", user.getName());
+			req.getSession().setAttribute("userName", user.getName());
 			return jsonOk("修改用户名成功");
 		} else
 			return jsonNoOk("修改用户名失败！");
@@ -90,7 +92,7 @@ public abstract class AbstractAccountInfoController extends LoginController {
 	private final static String EMAIL_VERIFY = "/user/account/emailVerify/";
 
 	@POST
-	@Path("account/emailVerify")
+	@Path("emailVerify")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
 	public String emailVerify_sendLink(@NotNull @FormParam("email") String email, @FormParam("isUpdate") boolean isUpdate, MvcRequest req) {
@@ -114,7 +116,7 @@ public abstract class AbstractAccountInfoController extends LoginController {
 	}
 
 	@GET
-	@Path("account/emailVerify")
+	@Path("emailVerify")
 	@MvcFilter(filters = { DataBaseFilter.class })
 	public String emailVerif(@NotNull @QueryParam("token") String token, @NotNull @QueryParam("email") String email, ModelAndView mv) {
 		LOGGER.info("邮箱-审核链接 " + token);
@@ -145,7 +147,7 @@ public abstract class AbstractAccountInfoController extends LoginController {
 	private final static int SMS_EXPIRE_SECONDS = 5 * 60;
 
 	@POST
-	@Path("account/modiflyPhone")
+	@Path("modiflyPhone")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
 	public String modiflyPhone(@NotNull @QueryParam("phone") String phone) throws ServiceException {
@@ -198,7 +200,7 @@ public abstract class AbstractAccountInfoController extends LoginController {
 	}
 
 	@POST
-	@Path("account/modiflyPhone_Save")
+	@Path("modiflyPhone_Save")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
 	public String modiflyPhone_Save(@NotNull @QueryParam("v_code") String v_code) {
@@ -252,46 +254,48 @@ public abstract class AbstractAccountInfoController extends LoginController {
 	}
 
 	@POST
-	@Path("account/safe/resetPassword")
+	@Path("resetPassword")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class, UserPasswordFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
 	public String resetPassword(@NotNull @QueryParam("new_password") String new_password, HttpServletRequest request) throws ServiceException {
 		LOGGER.info("重置密码");
 
-		if (getPasswordService() != null && getPasswordService().updatePwd((UserCommonAuth) request.getAttribute("UserCommonAuthId"), new_password))
+		if (passwordService.updatePwd((UserCommonAuth) request.getAttribute("UserCommonAuthId"), new_password))
 			return jsonOk("重置密码成功");
 		else
 			return jsonNoOk("重置密码失败！");
 	}
 
-	public static UserLoginLogService userLoginLogService = new UserLoginLogService();
-
 	@GET
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Path("account/log-history")
+	@Path("log-history")
 	public String logHistory(ModelAndView mv) {
 		LOGGER.info("用户会员中心-登录历史");
 
-		mv.put("list", userLoginLogService.findListByUserId(getUserId()));
-
+		mv.put("list", logLoginService.findListByUserId(getUserId()));
 		return user("log-history");
 	}
 
 	@GET
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Path("account/oauth")
+	@Path("oauth")
 	public String oauth() {
 		LOGGER.info("用户会员中心-账户绑定");
 		return user("oauth");
 	}
 
 	@POST
-	@Path("account/delete-account")
+	@Path("delete-account")
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class, UserPasswordFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
 	public String doDeleteAccount() {
 		LOGGER.info("用户会员中心-账户管理-删除帐号");
 
 		return jsonOk("删除帐号成功");
+	}
+
+	@Override
+	public IBaseService<User> getService() {
+		return service;
 	}
 }
