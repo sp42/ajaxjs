@@ -17,19 +17,17 @@ import com.ajaxjs.app.ThirdPartyService;
 import com.ajaxjs.app.TreeLikeService;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.filter.DataBaseFilter;
+import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.user.UserHelper;
-import com.ajaxjs.user.controller.BaseUserController;
 import com.ajaxjs.user.filter.LoginCheck;
 import com.ajaxjs.user.filter.UserPasswordFilter;
+import com.ajaxjs.user.login.LoginController;
 import com.ajaxjs.user.login.LogLoginController;
 import com.ajaxjs.user.login.LogLoginController.UserLoginLogService;
-import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.password.UserCommonAuth;
 import com.ajaxjs.user.password.UserCommonAuthService;
 import com.ajaxjs.user.role.RoleService;
-import com.ajaxjs.user.service.AccountService;
-import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.cache.ExpireCache;
 import com.ajaxjs.util.ioc.ComponentMgr;
 import com.ajaxjs.util.logger.LogHelper;
@@ -43,7 +41,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
  * @author sp42 frank@ajaxjs.com
  *
  */
-public abstract class AbstractAccountInfoController extends BaseUserController {
+public abstract class AbstractAccountInfoController extends LoginController {
 	private static final LogHelper LOGGER = LogHelper.getLog(AbstractAccountInfoController.class);
 
 	private UserCommonAuthService passwordService = new UserCommonAuthService();
@@ -154,7 +152,7 @@ public abstract class AbstractAccountInfoController extends BaseUserController {
 		if (!UserHelper.isVaildPhone(phone))
 			throw new IllegalArgumentException(phone + " 不是有效的手机号码");
 
-		UserService.checkIfRepeated("phone", phone, "手机号码");
+		ProfileService.checkIfRepeated("phone", phone, "手机号码");
 
 		if (sendSms(phone, getUserId())) {
 			return jsonOk("发送验证码成功，五分钟内有效！");

@@ -20,8 +20,8 @@ import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.user.UserConstant;
-import com.ajaxjs.user.service.UserDao;
-import com.ajaxjs.user.service.UserService;
+import com.ajaxjs.user.UserDao;
+import com.ajaxjs.user.profile.ProfileService;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.mvc.ModelAndView;
 import com.ajaxjs.web.mvc.controller.MvcRequest;
@@ -62,7 +62,7 @@ public class LogLoginController extends BaseController<LogLogin> {
 		 * @return 登录日志的列表
 		 */
 		public PageResult<LogLogin> findPagedList(int start, int limit) {
-			return findPagedList(start, limit, byAny().andThen(BaseService::betweenCreateDateWithE).andThen(UserService.byUserId));
+			return findPagedList(start, limit, byAny().andThen(BaseService::betweenCreateDateWithE).andThen(ProfileService.byUserId));
 		}
 		
 		/**

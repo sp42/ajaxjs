@@ -1,7 +1,6 @@
-package com.ajaxjs.user.controller;
+package com.ajaxjs.user.profile;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.GET;
@@ -19,13 +18,10 @@ import com.ajaxjs.app.attachment.Attachment_pictureService;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
+import com.ajaxjs.user.User;
 import com.ajaxjs.user.filter.CurrentUserOnly;
 import com.ajaxjs.user.filter.LoginCheck;
-import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.password.UserCommonAuthService;
-import com.ajaxjs.user.profile.AbstractAccountInfoController;
-import com.ajaxjs.user.service.UserService;
-import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
@@ -46,10 +42,10 @@ public class UserCenterController extends AbstractAccountInfoController {
 	private static final LogHelper LOGGER = LogHelper.getLog(UserCenterController.class);
 
 	@Resource
-	private UserService service;
+	private ProfileService service;
 
 	@Override
-	public UserService getService() {
+	public ProfileService getService() {
 		return service;
 	}
 
@@ -157,7 +153,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 	@Path("info/avatar")
 	public String avatar(ModelAndView mv) {
 
-		Attachment_picture avatar = UserService.dao.findAvaterByUserId(getUserUid());
+		Attachment_picture avatar = ProfileService.dao.findAvaterByUserId(getUserUid());
 		mv.put("avatar", avatar);
 		return jsp("user/avater");
 	}
@@ -166,7 +162,7 @@ public class UserCenterController extends AbstractAccountInfoController {
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Path("loginInfo")
 	public String changePassword(ModelAndView mv) {
-		mv.put("email", UserService.dao.findById(getUserId()).getEmail());
+		mv.put("email", ProfileService.dao.findById(getUserId()).getEmail());
 		return jsp("user/loginInfo");
 	}
 

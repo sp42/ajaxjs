@@ -1,4 +1,4 @@
-package com.ajaxjs.user.model;
+package com.ajaxjs.user;
 
 import java.util.Date;
 

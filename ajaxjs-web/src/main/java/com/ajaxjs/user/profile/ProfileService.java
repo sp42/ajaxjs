@@ -1,4 +1,4 @@
-package com.ajaxjs.user.service;
+package com.ajaxjs.user.profile;
 
 import java.util.Date;
 import java.util.function.Function;
@@ -11,7 +11,8 @@ import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.JdbcReader;
 import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.sql.orm.Repository;
-import com.ajaxjs.user.model.User;
+import com.ajaxjs.user.User;
+import com.ajaxjs.user.UserDao;
 import com.ajaxjs.user.password.UserCommonAuth;
 import com.ajaxjs.user.password.UserCommonAuthService;
 import com.ajaxjs.util.Encode;
@@ -23,8 +24,8 @@ import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.UploadFileInfo;
 
 @Component("UserService")
-public class UserService extends BaseService<User> {
-	private static final LogHelper LOGGER = LogHelper.getLog(UserService.class);
+public class ProfileService extends BaseService<User> {
+	private static final LogHelper LOGGER = LogHelper.getLog(ProfileService.class);
 
 	public static UserDao dao = new Repository().bind(UserDao.class);
 
@@ -45,60 +46,6 @@ public class UserService extends BaseService<User> {
 		this.passwordService = passwordService;
 	}
 
-	/**
-	 * 普通口令注册
-	 * 
-	 * @param user     用户对象
-	 * @param password 密码对象
-	 * @return 新用户之 id
-	 * @throws ServiceException
-	 */
-	public Long register(User user, UserCommonAuth password) throws ServiceException {
-		LOGGER.info("用户注册");
-
-		if (user.getPhone() != null) {
-			user.setPhone(user.getPhone().trim()); // 消除空格
-			checkIfRepeated("phone", user.getPhone(), "手机号码");
-		}
-
-		if (user.getName() != null) {
-			user.setName(user.getName().trim());
-			checkIfRepeated("name", user.getName(), "用户名");
-		}
-
-		if (user.getEmail() != null) {
-			user.setEmail(user.getEmail().trim());
-			checkIfRepeated("email", user.getEmail(), "邮箱");
-		}
-
-		Long userId = create(user);
-		user.setId(userId);
-
-		password.setUserId(userId);
-		passwordService.create(password);
-
-		return userId;
-	}
-
-	/**
-	 * 
-	 * @param user
-	 * @param password
-	 * @throws ServiceException
-	 */
-	public void register(User user, String password) throws ServiceException {
-		LOGGER.info("执行用户注册");
-
-		if (password == null)
-			throw new IllegalArgumentException("注册密码不能为空");
-
-		UserCommonAuth passwordModel = new UserCommonAuth();
-		passwordModel.setPhone_verified(1); // 已验证
-		passwordModel.setPassword(password);
-
-		long id = register(user, passwordModel);
-		LOGGER.info("创建用户成功，id：" + id);
-	}
 
 	/**
 	 * 检查某个值是否已经存在一样的值

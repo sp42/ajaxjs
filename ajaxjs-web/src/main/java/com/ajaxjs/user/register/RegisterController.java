@@ -15,8 +15,8 @@ import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.filter.CaptchaFilter;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.framework.filter.EnableTransaction;
-import com.ajaxjs.user.model.User;
-import com.ajaxjs.user.service.UserService;
+import com.ajaxjs.user.User;
+import com.ajaxjs.user.profile.ProfileService;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
@@ -66,11 +66,11 @@ public class RegisterController extends BaseController<User> {
 		final boolean checkIfRepeated;
 
 		if (name != null)
-			checkIfRepeated = UserService.checkIfRepeated("name", name);
+			checkIfRepeated = ProfileService.checkIfRepeated("name", name);
 		else if (email != null)
-			checkIfRepeated = UserService.checkIfRepeated("email", email);
+			checkIfRepeated = ProfileService.checkIfRepeated("email", email);
 		else if (phone != null)
-			checkIfRepeated = UserService.checkIfRepeated("phone", phone);
+			checkIfRepeated = ProfileService.checkIfRepeated("phone", phone);
 		else
 			checkIfRepeated = true;
 

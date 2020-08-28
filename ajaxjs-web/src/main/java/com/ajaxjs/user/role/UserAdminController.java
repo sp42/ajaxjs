@@ -1,4 +1,4 @@
-package com.ajaxjs.user.controller;
+package com.ajaxjs.user.role;
 
 import java.util.List;
 import java.util.Map;
@@ -21,11 +21,11 @@ import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.QueryTools;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.sql.orm.IBaseService;
+import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.user.filter.LoginCheck;
-import com.ajaxjs.user.model.User;
-import com.ajaxjs.user.role.RoleService;
-import com.ajaxjs.user.service.UserService;
+import com.ajaxjs.user.login.LoginController;
+import com.ajaxjs.user.profile.ProfileService;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
@@ -41,7 +41,7 @@ public class UserAdminController extends BaseController<User> {
 	private static final LogHelper LOGGER = LogHelper.getLog(UserAdminController.class);
 
 	@Resource("UserService")
-	private UserService service;
+	private ProfileService service;
 
 	@Resource("UserRoleService")
 	private RoleService roleService;
@@ -123,7 +123,7 @@ public class UserAdminController extends BaseController<User> {
 		LOGGER.info("后台-账号中心");
 
 		mv.put("UserGroups", TreeLikeService.idAsKey(RoleService.dao.findList(null)));
-		mv.put("info", service.findById(BaseUserController.getUserId(r)));
+		mv.put("info", service.findById(LoginController.getUserId(r)));
 
 		return jsp("admin/account-center");
 	}
@@ -134,7 +134,7 @@ public class UserAdminController extends BaseController<User> {
 	public String profile(ModelAndView mv, HttpServletRequest r) {
 		LOGGER.info("后台-个人信息");
 
-		mv.put("info", service.findById(BaseUserController.getUserId(r)));
+		mv.put("info", service.findById(LoginController.getUserId(r)));
 		return jsp("admin/user-profile");
 	}
 

@@ -1,6 +1,6 @@
 package com.ajaxjs.user.filter;
 
-import com.ajaxjs.user.controller.BaseUserController;
+import com.ajaxjs.user.login.LoginController;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.web.mvc.MvcConstant;
 import com.ajaxjs.web.mvc.filter.FilterAction;
@@ -16,7 +16,7 @@ import com.ajaxjs.web.mvc.filter.FilterContext;
 public class LoginCheck implements FilterAction {
 	@Override
 	public boolean before(FilterContext ctx) {
-		boolean sessionBase = BaseUserController.isLogined(ctx.request);
+		boolean sessionBase = LoginController.isLogined(ctx.request);
 		if (sessionBase)
 			return true;
 

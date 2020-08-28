@@ -1,4 +1,4 @@
-package com.ajaxjs.user.service;
+package com.ajaxjs.user.profile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +9,9 @@ import java.util.function.Predicate;
 import com.ajaxjs.app.ThirdPartyService;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.net.mail.Mail;
+import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserHelper;
-import com.ajaxjs.user.model.User;
+import com.ajaxjs.user.password.TokenMaker;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.cryptography.SymmetriCipher;
 import com.ajaxjs.util.ioc.ComponentMgr;
@@ -107,7 +108,7 @@ public class AccountService {
 		if (!UserHelper.isVaildEmail(email))
 			throw new IllegalArgumentException(email + "不是合法的邮件地址");
 
-		User user = UserService.dao.findByEmail(email);
+		User user = ProfileService.dao.findByEmail(email);
 		Objects.requireNonNull(user, "没有该邮件的用户，目标邮件是： " + email);
 
 		String value = email + "_" + user.getId();

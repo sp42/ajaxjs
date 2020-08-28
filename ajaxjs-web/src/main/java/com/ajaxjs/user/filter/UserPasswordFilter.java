@@ -16,7 +16,7 @@
 package com.ajaxjs.user.filter;
 
 import com.ajaxjs.framework.ServiceException;
-import com.ajaxjs.user.controller.BaseUserController;
+import com.ajaxjs.user.login.LoginController;
 import com.ajaxjs.user.login.LoginService;
 import com.ajaxjs.user.password.UserCommonAuth;
 import com.ajaxjs.user.password.UserCommonAuthService;
@@ -35,7 +35,7 @@ public class UserPasswordFilter implements FilterAction {
 	@Override
 	public boolean before(FilterContext ctx) {
 		String password = ctx.request.getParameter("password");
-		UserCommonAuth auth = UserCommonAuthService.dao.findByUserId(BaseUserController.getUserId());
+		UserCommonAuth auth = UserCommonAuthService.dao.findByUserId(LoginController.getUserId());
 		ctx.request.setAttribute("UserCommonAuthId", auth);
 		
 		try {

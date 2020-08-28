@@ -6,7 +6,7 @@ import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.JdbcReader;
 import com.ajaxjs.user.BaseUserService;
-import com.ajaxjs.user.model.User;
+import com.ajaxjs.user.User;
 import com.ajaxjs.user.password.UserCommonAuth;
 import com.ajaxjs.user.password.UserCommonAuthService;
 import com.ajaxjs.util.CommonUtil;

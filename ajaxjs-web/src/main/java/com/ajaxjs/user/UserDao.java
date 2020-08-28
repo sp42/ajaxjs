@@ -1,10 +1,9 @@
-package com.ajaxjs.user.service;
+package com.ajaxjs.user;
 
 import com.ajaxjs.app.attachment.Attachment_picture;
 import com.ajaxjs.sql.annotation.Select;
 import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;
-import com.ajaxjs.user.model.User;
 
 @TableName(value = "user", beanClass = User.class)
 public interface UserDao extends IBaseDao<User> {

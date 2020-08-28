@@ -3,7 +3,7 @@ package com.ajaxjs.user.filter;
 import java.util.Map;
 import java.util.Objects;
 
-import com.ajaxjs.user.controller.BaseUserController;
+import com.ajaxjs.user.login.LoginController;
 import com.ajaxjs.web.mvc.filter.FilterAction;
 import com.ajaxjs.web.mvc.filter.FilterAfterArgs;
 import com.ajaxjs.web.mvc.filter.FilterContext;
@@ -28,7 +28,7 @@ public class CurrentUserOnly implements FilterAction {
 		}
 
 		Objects.requireNonNull(id);
-		long userId = BaseUserController.getUserId(ctx.request);
+		long userId = LoginController.getUserId(ctx.request);
 
 		if (userId != Long.parseLong(id))
 			throw new IllegalAccessError("用户 id 错误，非法访问！");

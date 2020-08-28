@@ -1,4 +1,4 @@
-package com.ajaxjs.user.service;
+package com.ajaxjs.user.password;
 
 import java.util.ArrayList;
 import java.util.List;

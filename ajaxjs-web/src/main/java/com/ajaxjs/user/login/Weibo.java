@@ -3,8 +3,8 @@ package com.ajaxjs.user.login;
 import java.util.Map;
 
 import com.ajaxjs.net.http.NetUtil;
+import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserConstant;
-import com.ajaxjs.user.model.User;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;

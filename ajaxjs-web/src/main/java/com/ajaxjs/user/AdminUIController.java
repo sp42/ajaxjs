@@ -1,4 +1,4 @@
-package com.ajaxjs.user.controller;
+package com.ajaxjs.user;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

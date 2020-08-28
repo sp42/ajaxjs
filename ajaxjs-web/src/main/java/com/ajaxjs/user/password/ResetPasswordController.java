@@ -16,10 +16,10 @@ import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.filter.CaptchaFilter;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.sql.orm.IBaseService;
-import com.ajaxjs.user.model.User;
+import com.ajaxjs.user.User;
 import com.ajaxjs.user.profile.AbstractAccountInfoController;
-import com.ajaxjs.user.service.AccountService;
-import com.ajaxjs.user.service.UserService;
+import com.ajaxjs.user.profile.AccountService;
+import com.ajaxjs.user.profile.ProfileService;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
@@ -45,7 +45,7 @@ public class ResetPasswordController extends BaseController<Map<String, Object>>
 	private final static String FIND_BY_EMAIL = "/user/reset_password/findByEmail/";
 
 	@Resource("UserService")
-	private UserService userService;
+	private ProfileService userService;
 
 	@POST
 	@Path("findBySms")
@@ -53,7 +53,7 @@ public class ResetPasswordController extends BaseController<Map<String, Object>>
 	public String findBySms(@NotNull @FormParam("phone") String phone, ModelAndView mv) {
 		LOGGER.info("重置密码-输入新密码 by SMS");
 
-		User user = UserService.dao.findByPhone(phone);
+		User user = ProfileService.dao.findByPhone(phone);
 		if (user == null)
 			throw new IllegalArgumentException("找不到该手机 " + phone + "的用户");
 

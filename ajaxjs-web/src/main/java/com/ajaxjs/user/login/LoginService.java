@@ -8,16 +8,16 @@ import javax.servlet.http.HttpSession;
 
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.config.ConfigService;
+import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.user.UserHelper;
-import com.ajaxjs.user.model.User;
 import com.ajaxjs.user.password.UserCommonAuth;
 import com.ajaxjs.user.password.UserCommonAuthService;
-import com.ajaxjs.user.service.UserService;
+import com.ajaxjs.user.profile.ProfileService;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.mvc.ModelAndView;
 
-public class LoginService extends UserService {
+public class LoginService extends ProfileService {
 	private static final LogHelper LOGGER = LogHelper.getLog(LoginService.class);
 
 	public static User loginByPassword(String userID, String password) throws ServiceException {
