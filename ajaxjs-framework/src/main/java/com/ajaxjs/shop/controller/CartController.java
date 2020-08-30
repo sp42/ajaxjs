@@ -17,8 +17,8 @@ import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.shop.model.Cart;
 import com.ajaxjs.shop.service.CartService;
 import com.ajaxjs.sql.orm.IBaseService;
-import com.ajaxjs.user.controller.BaseUserController;
 import com.ajaxjs.user.filter.LoginCheck;
+import com.ajaxjs.user.login.LoginController;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
@@ -52,7 +52,7 @@ public class CartController extends BaseController<Cart> {
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String add(Cart cart) {
 		LOGGER.info("添加购物车");
-		cart.setUserId(BaseUserController.getUserId());
+		cart.setUserId(LoginController.getUserId());
 		create(cart);
 
 		return jsonOk("添加购物车");
@@ -64,7 +64,7 @@ public class CartController extends BaseController<Cart> {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String checkoutForApi(@QueryParam("addressId") @NotNull long addressId, @QueryParam("cartIds") @NotNull String cartIds) {
 		LOGGER.info("Checkout");
-		return toJson(service.checkout(BaseUserController.getUserId(), addressId, cartIds.split("_")));
+		return toJson(service.checkout(LoginController.getUserId(), addressId, cartIds.split("_")));
 	}
 
 	@GET
@@ -73,7 +73,7 @@ public class CartController extends BaseController<Cart> {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String findMyCartList() {
 		LOGGER.info("列出用户的购物车列表");
-		return toJson(service.findListByUserId(BaseUserController.getUserId()));
+		return toJson(service.findListByUserId(LoginController.getUserId()));
 	}
 
 	@POST
@@ -83,7 +83,7 @@ public class CartController extends BaseController<Cart> {
 	public String updateGoodsNumber(@PathParam(ID) Long id, @FormParam("goodsNumber") int goodsNumber) {
 		LOGGER.info("修改货品数量");
 
-		if (CartService.dao.updateGoodsNumber(goodsNumber, id, BaseUserController.getUserId()) >= 1)
+		if (CartService.dao.updateGoodsNumber(goodsNumber, id, LoginController.getUserId()) >= 1)
 			return jsonOk("修改货品数量成功");
 		else
 			return jsonNoOk("修改货品数量失败！");
@@ -97,7 +97,7 @@ public class CartController extends BaseController<Cart> {
 	public String deleteMyCart(@PathParam(ID) Long id) {
 		LOGGER.info("删除用户的购物车");
 
-		if (CartService.dao.deleteMyCart(id, BaseUserController.getUserId()))
+		if (CartService.dao.deleteMyCart(id, LoginController.getUserId()))
 			return jsonOk("删除成功");
 		else
 			return jsonNoOk("删除失败！");

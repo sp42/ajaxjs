@@ -18,10 +18,8 @@ import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.framework.filter.XslMaker;
 import com.ajaxjs.sql.orm.IBaseService;
-import com.ajaxjs.user.controller.BaseUserController;
 import com.ajaxjs.user.filter.LoginCheck;
-import com.ajaxjs.user.model.UserAddress;
-import com.ajaxjs.user.service.UserAddressService;
+import com.ajaxjs.user.login.LoginController;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
@@ -34,7 +32,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
  */
 @Component
 @Path("/user/address")
-public class AddressController extends BaseController<UserAddress> {
+public class AddressController extends BaseController<Address> {
 	private static final LogHelper LOGGER = LogHelper.getLog(AddressController.class);
 
 	@Resource("UserAddressService")
@@ -47,7 +45,7 @@ public class AddressController extends BaseController<UserAddress> {
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv, HttpServletRequest r) {
 		LOGGER.info("收货地址列表");
-		mv.put(LIST, service.findListByUserId(BaseUserController.getUserId()));
+		mv.put(LIST, service.findListByUserId(LoginController.getUserId()));
 		return jsp(jsp);
 	}
 
@@ -78,8 +76,8 @@ public class AddressController extends BaseController<UserAddress> {
 	@POST
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
-	public String createUserAddress(@NotNull @BeanParam UserAddress bean) {
-		bean.setOwner(BaseUserController.getUserId());
+	public String createUserAddress(@NotNull @BeanParam Address bean) {
+		bean.setOwner(LoginController.getUserId());
 		return create(bean);
 	}
 
@@ -87,7 +85,7 @@ public class AddressController extends BaseController<UserAddress> {
 	@Path(ID_INFO)
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Produces(MediaType.APPLICATION_JSON)
-	public String updateUserAddress(@PathParam(ID) Long id, UserAddress bean) {
+	public String updateUserAddress(@PathParam(ID) Long id, Address bean) {
 		return update(id, bean);
 	}
 
@@ -96,11 +94,11 @@ public class AddressController extends BaseController<UserAddress> {
 	@Path(ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String delete(@PathParam(ID) Long id) {
-		return delete(id, new UserAddress());
+		return delete(id, new Address());
 	}
 
 	@Override
-	public IBaseService<UserAddress> getService() {
+	public IBaseService<Address> getService() {
 		return service;
 	}
 

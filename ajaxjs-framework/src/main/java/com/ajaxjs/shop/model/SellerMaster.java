@@ -1,6 +1,6 @@
 package com.ajaxjs.shop.model;
 
-import com.ajaxjs.user.model.User;
+import com.ajaxjs.user.User;
 
 /**
  * 

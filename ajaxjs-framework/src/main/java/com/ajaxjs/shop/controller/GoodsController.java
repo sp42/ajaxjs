@@ -23,7 +23,7 @@ import com.ajaxjs.shop.model.Goods;
 import com.ajaxjs.shop.model.Seller;
 import com.ajaxjs.shop.service.GoodsService;
 import com.ajaxjs.sql.orm.IBaseService;
-import com.ajaxjs.user.controller.BaseUserController;
+import com.ajaxjs.user.login.LoginController;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
@@ -129,7 +129,7 @@ public class GoodsController extends BaseController<Goods> {
 	public String showInfo(@PathParam(ID) Long id, ModelAndView mv) {
 		LOGGER.info("浏览商品 info");
 
-		mv.put(INFO, service.getGoodsDetail(id, BaseUserController.getUserId()));
+		mv.put(INFO, service.getGoodsDetail(id, LoginController.getUserId()));
 		return jsp("shop/goods-info");
 	}
 

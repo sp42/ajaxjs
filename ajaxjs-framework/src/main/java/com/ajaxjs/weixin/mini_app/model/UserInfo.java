@@ -1,6 +1,6 @@
 package com.ajaxjs.weixin.mini_app.model;
 
-import com.ajaxjs.user.model.User;
+import com.ajaxjs.user.User;
 
 /**
  * 小程序执行 wx.getUserInfo() 返回的用户信息

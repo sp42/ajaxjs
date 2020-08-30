@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import com.ajaxjs.cms.Address;
+import com.ajaxjs.cms.UserAddressService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.dao.OrderInfoDao;
@@ -15,9 +17,7 @@ import com.ajaxjs.shop.model.OrderItem;
 import com.ajaxjs.shop.payment.wxpay.PayConstant;
 import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.sql.orm.Repository;
-import com.ajaxjs.user.controller.BaseUserController;
-import com.ajaxjs.user.model.UserAddress;
-import com.ajaxjs.user.service.UserAddressService;
+import com.ajaxjs.user.login.LoginController;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
@@ -128,7 +128,7 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 	 */
 	public void showCheckout(ModelAndView mv) {
 		// 查询地址列表 放在这里，可节省一次数据库连接
-		mv.put("addressList", JsonHelper.toJson(addService.findListByUserId(BaseUserController.getUserId())));
+		mv.put("addressList", JsonHelper.toJson(addService.findListByUserId(LoginController.getUserId())));
 	}
 
 	/**
@@ -238,7 +238,7 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 //		System.out.println(UserAddressService.AREA_DATA.get("China_AREA", "86", "210000"));
 //		System.out.println(UserAddressService.AREA_DATA.get("China_AREA", "210000", "210100"));
 
-		UserAddress address = addService.findById(addressId);
+		Address address = addService.findById(addressId);
 		order.setShippingTarget(address.getName());
 		order.setShippingPhone(address.getPhone());
 		order.setShippingCode(address.getZipCode());

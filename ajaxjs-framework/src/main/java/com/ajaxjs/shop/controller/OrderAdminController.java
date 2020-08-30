@@ -18,9 +18,9 @@ import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.model.OrderItem;
 import com.ajaxjs.shop.service.OrderService;
 import com.ajaxjs.sql.orm.IBaseService;
+import com.ajaxjs.user.User;
 import com.ajaxjs.user.filter.LoginCheck;
-import com.ajaxjs.user.model.User;
-import com.ajaxjs.user.service.UserService;
+import com.ajaxjs.user.profile.ProfileService;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
@@ -56,8 +56,8 @@ public class OrderAdminController extends BaseController<OrderInfo> {
 		mv.put("PayStatusDict", ShopConstant.PayStatus);
 	}
 
-	@Resource("UserService")
-	private UserService userService;
+	@Resource
+	private ProfileService userService;
 
 	@GET
 	@Path(ID_INFO)

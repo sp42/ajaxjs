@@ -11,9 +11,9 @@ import com.ajaxjs.app.TreeLikeService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.sql.orm.IBaseService;
-import com.ajaxjs.user.model.User;
+import com.ajaxjs.user.User;
+import com.ajaxjs.user.profile.ProfileService;
 import com.ajaxjs.user.role.RoleService;
-import com.ajaxjs.user.service.UserService;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
@@ -28,8 +28,8 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
 public class ShopUserAdminController extends BaseController<User> {
 	private static final LogHelper LOGGER = LogHelper.getLog(ShopUserAdminController.class);
 	
-	@Resource("UserService")
-	private UserService service;
+	@Resource
+	private ProfileService service;
 	
 	@Resource("UserRoleService")
 	private RoleService roleService;

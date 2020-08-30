@@ -11,6 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
+import com.ajaxjs.cms.UserAddressService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.filter.DataBaseFilter;
@@ -20,9 +21,8 @@ import com.ajaxjs.shop.model.OrderItem;
 import com.ajaxjs.shop.service.OrderService;
 import com.ajaxjs.shop.service.Pay;
 import com.ajaxjs.sql.orm.IBaseService;
-import com.ajaxjs.user.controller.BaseUserController;
 import com.ajaxjs.user.filter.LoginCheck;
-import com.ajaxjs.user.service.UserAddressService;
+import com.ajaxjs.user.login.LoginController;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
@@ -50,7 +50,7 @@ public class OrderController extends BaseController<OrderInfo> {
 		LOGGER.info("浏览我的订单");
 
 		prepareData(mv);
-		mv.put(PAGE_RESULT, service.findPagedList(start, limit, BaseUserController.getUserId()));
+		mv.put(PAGE_RESULT, service.findPagedList(start, limit, LoginController.getUserId()));
 		return jsp("shop/order");
 	}
 
@@ -96,10 +96,10 @@ public class OrderController extends BaseController<OrderInfo> {
 
 		UserAddressService.initData(r);
 		String[] cartIds = _cartIds.split("_");
-		OrderInfo order = service.processOrder(BaseUserController.getUserId(), addressId, cartIds, ShopConstant.WX_PAY);
+		OrderInfo order = service.processOrder(LoginController.getUserId(), addressId, cartIds, ShopConstant.WX_PAY);
 		service.onProcessOrderDone(order);
 
-		return toJson(Pay.miniAppPay(BaseUserController.getUserId(), order, r.getIp()));
+		return toJson(Pay.miniAppPay(LoginController.getUserId(), order, r.getIp()));
 	}
 
 	@POST
@@ -110,7 +110,7 @@ public class OrderController extends BaseController<OrderInfo> {
 
 		UserAddressService.initData(r);
 		String[] cartIds = _cartIds.split(",");
-		OrderInfo order = service.processOrder(BaseUserController.getUserId(), addressId, cartIds, payType);
+		OrderInfo order = service.processOrder(LoginController.getUserId(), addressId, cartIds, payType);
 		service.onProcessOrderDone(order);
 
 		return Pay.doPay(order, mv);
@@ -125,7 +125,7 @@ public class OrderController extends BaseController<OrderInfo> {
 		LOGGER.info("处理订单 结账-直接单个商品");
 
 		UserAddressService.initData(r);
-		OrderInfo order = service.processOrder(BaseUserController.getUserId(), addressId, goodsId, formatId, goodsNumber, payType);
+		OrderInfo order = service.processOrder(LoginController.getUserId(), addressId, goodsId, formatId, goodsNumber, payType);
 		service.onProcessOrderDone(order);
 
 		return Pay.doPay(order, mv);

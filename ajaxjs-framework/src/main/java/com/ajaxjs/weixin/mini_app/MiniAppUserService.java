@@ -8,12 +8,12 @@ import com.ajaxjs.sql.annotation.Select;
 import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.Repository;
+import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.user.login.LogLoginController;
 import com.ajaxjs.user.login.LogLogin;
 import com.ajaxjs.user.login.UserOauth;
 import com.ajaxjs.user.login.UserOauthService;
-import com.ajaxjs.user.model.User;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
@@ -51,8 +51,6 @@ public class MiniAppUserService extends BaseService<User> {
 	}
 
 
-//	@Resource("UserService")
-//	private UserService userService;
 
 //	@Resource("UserOauthService")
 	private UserOauthService userOauthService = new UserOauthService();

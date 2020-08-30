@@ -6,6 +6,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.ajaxjs.cms.Address;
+import com.ajaxjs.cms.UserAddressService;
 import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.framework.TestHelper;
 import com.ajaxjs.shop.model.Goods;
@@ -13,8 +15,6 @@ import com.ajaxjs.shop.service.CartService;
 import com.ajaxjs.shop.service.GoodsService;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.SnowflakeIdWorker;
-import com.ajaxjs.user.model.UserAddress;
-import com.ajaxjs.user.service.UserAddressService;
 import com.ajaxjs.util.ioc.ComponentMgr;
 
 public class TestGoodsService {
@@ -54,7 +54,7 @@ public class TestGoodsService {
 		UserAddressService userAddressService = (UserAddressService) ComponentMgr.get("UserAddressService");
 
 		for (int i = 0; i < 10; i++) {
-			UserAddress bean = new UserAddress();
+			Address bean = new Address();
 			bean.setName(TestHelper.getChineseName());
 			bean.setMobile(TestHelper.getTel());
 			bean.setPhone(TestHelper.getTel());

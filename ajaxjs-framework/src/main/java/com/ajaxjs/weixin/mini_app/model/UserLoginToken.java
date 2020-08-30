@@ -3,7 +3,7 @@ package com.ajaxjs.weixin.mini_app.model;
 import java.util.Objects;
 
 import com.ajaxjs.framework.config.ConfigService;
-import com.ajaxjs.user.service.TokenMaker;
+import com.ajaxjs.user.password.TokenMaker;
 import com.ajaxjs.util.cryptography.SymmetriCipher;
 import com.ajaxjs.weixin.open_account.model.BaseModel;
 
