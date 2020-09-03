@@ -68,7 +68,7 @@ public class AccountController extends BaseUserController {
 		mv.put("lastUserLoginedInfo", logLoginService.getLastUserLoginedInfo(getUserId()));
 		mv.put("UserGroups", TreeLikeService.idAsKey(RoleService.dao.findList(null)));
 
-		return user("account");
+		return user("account/account");
 	}
 
 	@POST
@@ -273,7 +273,7 @@ public class AccountController extends BaseUserController {
 		LOGGER.info("用户会员中心-登录历史");
 
 		mv.put("list", logLoginService.findListByUserId(getUserId()));
-		return user("log-history");
+		return user("account/log-history");
 	}
 
 	@GET

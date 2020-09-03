@@ -21,7 +21,7 @@ public class LogLoginService extends BaseService<LogLogin> {
 		@Override
 		public PageResult<LogLogin> findPagedList(int start, int limit, Function<String, String> sqlHandler);
 
-		@Select("SELECT * FROM ${tableName} WHERE userId = ? ORDER BY createDate LIMIT 1")
+		@Select("SELECT * FROM ${tableName} WHERE userId = ? ORDER BY createDate DESC LIMIT 1")
 		public LogLogin getLastUserLoginedInfo(long userId);
 	}
 

@@ -55,7 +55,7 @@ public class ProfileController extends BaseUserController {
 	public String home(ModelAndView mv) throws ServiceException {
 		LOGGER.info("用户会员中心（前台）");
 
-		return user("home");
+		return user("profile/home");
 	}
 
 	@GET
@@ -63,7 +63,7 @@ public class ProfileController extends BaseUserController {
 	public String profile(ModelAndView mv) {
 		LOGGER.info("用户会员中心-个人信息");
 		mv.put("info", service.findById(getUserId()));
-		return user("profile");
+		return user("profile/profile");
 	}
 
 	@PUT
@@ -79,7 +79,7 @@ public class ProfileController extends BaseUserController {
 	@MvcFilter(filters = { LoginCheck.class })
 	public String avatar() {
 		LOGGER.info("用户会员中心-个人信息-修改头像页面");
-		return user("avatar");
+		return user("profile/avatar");
 	}
 
 	@POST
