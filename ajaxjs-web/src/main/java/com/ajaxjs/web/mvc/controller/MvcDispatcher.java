@@ -245,11 +245,11 @@ public class MvcDispatcher implements IComponent {
 	 * 
 	 * @param err
 	 * @param method
-	 * @param r
+	 * @param req
 	 * @param response
 	 * @param model
 	 */
-	private static void handleErr(Throwable err, Method method, MvcRequest r, MvcOutput response, ModelAndView model) {
+	private static void handleErr(Throwable err, Method method, MvcRequest req, MvcOutput response, ModelAndView model) {
 		Throwable _err = ReflectUtil.getUnderLayerErr(err);
 
 		if (model != null && model.containsKey(FilterAction.NOT_LOG_EXCEPTION) && ((boolean) model.get(FilterAction.NOT_LOG_EXCEPTION))) {
@@ -261,20 +261,22 @@ public class MvcDispatcher implements IComponent {
 		Produces a = method.getAnnotation(Produces.class);
 
 		if (a != null && MediaType.APPLICATION_JSON.equals(a.value()[0])) {// 返回 json
-			response.resultHandler(String.format(MvcConstant.JSON_NOT_OK, JsonHelper.jsonString_covernt(errMsg)), r, model, method);
+			response.resultHandler(String.format(MvcConstant.JSON_NOT_OK, JsonHelper.jsonString_covernt(errMsg)), req, model, method);
 		} else {
 			if (err instanceof IllegalAccessError && ConfigService.getValueAsString("page.onNoLogin") != null) {
 				// 没有权限时跳转的地方
 				model.put("title", "非法请求");
 				model.put("msg", errMsg);
-				response.resultHandler("/WEB-INF/jsp/pages/msg.jsp", r, model, method);
+				model.put("redirect", req.getContextPath() + "/user/login/");
+				req.saveToReuqest(model);
+				response.resultHandler("/WEB-INF/jsp/pages/msg.jsp", req, model, method);
 //				response.resultHandler("redirect::" + r.getContextPath() + ConfigService.getValueAsString("page.onNoLogin"), r, model,
 //						method);
 			} else {
-				r.setAttribute("javax.servlet.error.status_code", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-				r.setAttribute("javax.servlet.error.exception_type", err.getClass());
-				r.setAttribute("javax.servlet.error.exception", err);
-				response.resultHandler("/WEB-INF/jsp/error.jsp", r, model, method);
+				req.setAttribute("javax.servlet.error.status_code", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				req.setAttribute("javax.servlet.error.exception_type", err.getClass());
+				req.setAttribute("javax.servlet.error.exception", err);
+				response.resultHandler("/WEB-INF/jsp/error.jsp", req, model, method);
 			}
 //			response.resultHandler(String.format("redirect::%s/showMsg?msg=%s", request.getContextPath(), Encode.urlEncode(errMsg)), request, model, method);
 		}
