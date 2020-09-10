@@ -3,6 +3,19 @@
  * 表單控件
  */
 
+Vue.component('aj-select', {
+	template: '<select :name="name"><template v-for="value, key, index in options">'+
+				'<option v-if="index === selectedIndex" selected :value="value" >{{key}}</option>'+
+				'<option v-else :value="value" >{{key}}</option>'+
+			   '</template></select>',
+	props: {
+		name: { type: String, required: true }, 	// name for form
+		options: { type: Object, required: true},	// JSON input data 
+		selectedIndex: { type: Number}				// starts form 0
+	},
+	mounted() {}
+})
+
 // 日期选择器
 Vue.component('aj-form-calendar', {
 	data() {
