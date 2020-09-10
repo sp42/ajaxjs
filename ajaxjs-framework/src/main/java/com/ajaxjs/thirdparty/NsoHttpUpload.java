@@ -18,7 +18,7 @@ import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.cryptography.SymmetriCipher;
 import com.ajaxjs.util.io.FileHelper;
 
-public class HttpUpload {
+public class NsoHttpUpload {
 	/**
 	 * 列出所有的桶
 	 * 
@@ -40,7 +40,7 @@ public class HttpUpload {
 
 //	public static void main(String[] args) {
 //		ConfigService.load("c:\\project\\aj-website-site_config.json");
-////		System.out.println(listBuk());
+//		System.out.println(listBuk());
 //		createEmptyFile("test.jpg");
 //		uploadFile("C:\\project\\ajaxjs-maven-global.xml");
 //	}
@@ -78,7 +78,7 @@ public class HttpUpload {
 	 * @param filename 文件名
 	 */
 	public static void createEmptyFile(String filename) {
-		String bucket = ConfigService.getValueAsString("uploadFile.ObjectStorageService.NOS.bucket");
+		String bucket = ConfigService.get("uploadFile.ObjectStorageService.NOS.bucket");
 		String now = getDate();
 		String canonicalizedHeaders = "", canonicalizedResource = "/" + bucket + "/" + filename;
 		String data = "PUT\n" + "\n\n" + now + "\n" + canonicalizedHeaders + canonicalizedResource;
@@ -101,34 +101,34 @@ public class HttpUpload {
 		uploadFile(filePath, null);
 	}
 
-	/**
-	 * 上传文件
-	 * 
-	 * @param filePath 文件路径
-	 * @param filename 文件名，若不指定则按原来的文件名
-	 */
-	public static void uploadFile(String filePath, String filename) {
-		String bucket = ConfigService.getValueAsString("uploadFile.ObjectStorageService.NOS.bucket");
+/**
+ * 上传文件
+ * 
+ * @param filePath 文件路径
+ * @param filename 文件名，若不指定则按原来的文件名
+ */
+public static void uploadFile(String filePath, String filename) {
+	String bucket = ConfigService.getValueAsString("uploadFile.ObjectStorageService.NOS.bucket");
 
-		File file = new File(filePath);
-		if (filename == null)
-			filename = file.getName();
+	File file = new File(filePath);
+	if (filename == null)
+		filename = file.getName();
 
-		String md5 = calcMD5(file);
-		String now = getDate();
-		String canonicalizedHeaders = "", canonicalizedResource = "/" + bucket + "/" + filename;
-		String data = "PUT\n" + md5 + "\n\n" + now + "\n" + canonicalizedHeaders + canonicalizedResource;
-		String authorization = getAuthorization(data);
-		HttpBasicRequest.put("https://ajaxjs.nos-eastchina1.126.net/" + filename, FileHelper.openAsByte(file), conn -> {
-			conn.addRequestProperty("Authorization", authorization);
-			conn.addRequestProperty("Content-Length", file.length() + "");
+	String md5 = calcMD5(file);
+	String now = getDate();
+	String canonicalizedHeaders = "", canonicalizedResource = "/" + bucket + "/" + filename;
+	String data = "PUT\n" + md5 + "\n\n" + now + "\n" + canonicalizedHeaders + canonicalizedResource;
+	String authorization = getAuthorization(data);
+	HttpBasicRequest.put("https://ajaxjs.nos-eastchina1.126.net/" + filename, FileHelper.openAsByte(file), conn -> {
+		conn.addRequestProperty("Authorization", authorization);
+		conn.addRequestProperty("Content-Length", file.length() + "");
 //			conn.addRequestProperty("Content-Type", "");
-			conn.addRequestProperty("Content-MD5", md5);
-			conn.addRequestProperty("Date", now);
-			// conn.addRequestProperty("Host", "ajaxjs.nos-eastchina1.126.net");
-			// conn.addRequestProperty("x-nos-entity-type", "json");
-		}, null);
-	}
+		conn.addRequestProperty("Content-MD5", md5);
+		conn.addRequestProperty("Date", now);
+		// conn.addRequestProperty("Host", "ajaxjs.nos-eastchina1.126.net");
+		// conn.addRequestProperty("x-nos-entity-type", "json");
+	}, null);
+}
 
 	/**
 	 * 计算文件 MD5
