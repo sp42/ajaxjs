@@ -18,6 +18,12 @@ import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.cryptography.SymmetriCipher;
 import com.ajaxjs.util.io.FileHelper;
 
+/**
+ * 网易云对象存储 HTTP 文件上传
+ * 
+ * @author sp42 frank@ajaxjs.com
+ *
+ */
 public class NsoHttpUpload {
 	/**
 	 * 列出所有的桶
