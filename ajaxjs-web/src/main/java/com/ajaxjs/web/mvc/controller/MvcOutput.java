@@ -235,7 +235,7 @@ public class MvcOutput extends HttpServletResponseWrapper {
 
 					if (Version.isDebug) {
 						String m = method.toString().replaceAll("public java.lang.", "").replaceAll("\\([\\w\\.\\s,]+\\)", "()");
-						m = m.replaceAll("String ", "");
+						m = m.replaceAll("String ", "").replaceAll("\\s+throws\\s+.*$", "");
 						String[] arr = m.split("\\.");
 						m = arr[arr.length - 2] + "." + arr[arr.length - 1];
 

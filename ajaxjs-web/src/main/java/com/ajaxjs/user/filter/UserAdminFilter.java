@@ -26,12 +26,12 @@ public class UserAdminFilter implements IComponent {
 		String ctxPath = req.getContextPath(), uri = req.getRequestURI();
 
 		if (uri.startsWith(ctxPath + "/admin")) {
-			HttpSession s = req.getSession();
+			HttpSession session = req.getSession();
 
 			if (uri.equals(ctxPath + "/admin/login/")) {
-				// 后台登录
+				// 后台登录，允许直接访问
 				return true;
-			} else if (!RoleService.check(s, RightConstant.ADMIN_SYSTEM_ALLOW_ENTNER)) {
+			} else if (!RoleService.check(session, RightConstant.ADMIN_SYSTEM_ALLOW_ENTNER)) {
 				try {
 					resp.setStatus(401);
 					resp.setCharacterEncoding(StandardCharsets.UTF_8.toString());

@@ -41,7 +41,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;;
 public class ProfileController extends BaseUserController {
 	private static final LogHelper LOGGER = LogHelper.getLog(ProfileController.class);
 
-	@Resource
+	@Resource("autoWire:ioc.ProfileService")
 	private ProfileService service;
 
 	@Override
@@ -54,7 +54,7 @@ public class ProfileController extends BaseUserController {
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String home(ModelAndView mv) throws ServiceException {
 		LOGGER.info("用户会员中心（前台）");
-
+		service.onUserCenterHome(mv);
 		return user("profile/home");
 	}
 

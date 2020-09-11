@@ -17,6 +17,7 @@ import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.UploadFileInfo;
+import com.ajaxjs.web.mvc.ModelAndView;
 
 @Component
 public class ProfileService extends BaseUserService {
@@ -51,7 +52,8 @@ public class ProfileService extends BaseUserService {
 	public static boolean checkIfRepeated(String field, String value) {
 		value = value.trim();
 
-		return value != null && JdbcReader.queryOne(JdbcConnection.getConnection(), "SELECT * FROM user WHERE " + field + " = ? LIMIT 1", Object.class, value) != null;
+		return value != null
+				&& JdbcReader.queryOne(JdbcConnection.getConnection(), "SELECT * FROM user WHERE " + field + " = ? LIMIT 1", Object.class, value) != null;
 	}
 
 	public final static String CATALOG_FIND = "e.catalogId IN ( SELECT id FROM user_role WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM user_role WHERE id = %d ) , '%%')) )";
@@ -136,5 +138,12 @@ public class ProfileService extends BaseUserService {
 		}
 	}
 
+	/**
+	 * 当访问用户会员中心（前台）的时候
+	 * 
+	 * @param mv
+	 */
+	public void onUserCenterHome(ModelAndView mv) {
+	}
 
 }
