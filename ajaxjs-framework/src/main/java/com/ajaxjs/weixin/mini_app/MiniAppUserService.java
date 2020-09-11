@@ -11,10 +11,12 @@ import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.user.login.LogLoginController;
+import com.ajaxjs.user.login.LogLoginService;
 import com.ajaxjs.user.login.LogLogin;
 import com.ajaxjs.user.login.UserOauth;
 import com.ajaxjs.user.login.UserOauthService;
 import com.ajaxjs.util.ioc.Component;
+import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.web.mvc.controller.MvcRequest;
@@ -50,8 +52,6 @@ public class MiniAppUserService extends BaseService<User> {
 		setDao(dao);
 	}
 
-
-
 //	@Resource("UserOauthService")
 	private UserOauthService userOauthService = new UserOauthService();
 
@@ -68,14 +68,14 @@ public class MiniAppUserService extends BaseService<User> {
 	 * @return 小程序用户登录的凭证
 	 */
 	public UserSession wxLogin(String jsCode, String userInfoJson) {
-		String url = String.format(CODE2SESSION, ConfigService.getValueAsString("mini_program.appId"),
-				ConfigService.getValueAsString("mini_program.appSecret"), jsCode);
+		String url = String.format(CODE2SESSION, ConfigService.getValueAsString("mini_program.appId"), ConfigService.getValueAsString("mini_program.appSecret"),
+				jsCode);
 		String json = NetUtil.simpleGET(url);
 
 		LOGGER.info(json);
 		UserLoginToken token = JsonHelper.parseMapAsBean(json, UserLoginToken.class);
 		token.check();
-		
+
 		User user = dao.findUserByOauthId(token.getOpenid());
 
 		if (user == null) {
@@ -91,7 +91,6 @@ public class MiniAppUserService extends BaseService<User> {
 		return token.getSessionId();
 	}
 
-
 	/**
 	 * 获取 session_key 和 openid。临时登录凭证 code 只能使用一次 会话密钥 session_key 是对用户数据进行加密签名的密钥。
 	 * 为了应用自身的数据安全，开发者服务器不应该把会话密钥下发到小程序，也不应该对外提供这个密钥
@@ -99,7 +98,6 @@ public class MiniAppUserService extends BaseService<User> {
 	 * @param jsCode 小程序调用 wx.login() 获取“临时登录凭证”的密钥
 	 * @return 小程序用户登录的凭证
 	 */
-	
 
 	/**
 	 * 注册新用户
@@ -142,19 +140,22 @@ public class MiniAppUserService extends BaseService<User> {
 //		return user;
 //	}
 
+	@Resource
+	private LogLoginService logLoginService;
+
 	/**
 	 * 记录用户的登录日志
 	 * 
 	 * @param user 用户对象
 	 */
-	private static void doLog(User user) {
+	private void doLog(User user) {
 		LogLogin userLoginLog = new LogLogin();
 		userLoginLog.setUserId(user.getId());
 		userLoginLog.setLoginType(UserConstant.WECHAT_MINI);
 		LogLoginController.initBean(userLoginLog, MvcRequest.getMvcRequest());
-		LogLoginController.service.create(userLoginLog);
+		logLoginService.create(userLoginLog);
 
-		if (LogLoginController.service.create(userLoginLog) <= 0)
+		if (logLoginService.create(userLoginLog) <= 0)
 			LOGGER.warning("更新会员登录日志出错");
 	}
 }
