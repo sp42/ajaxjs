@@ -31,7 +31,8 @@
 		</td>
 		<td v-if="showIdCol">{{id}}</td>
 		<td v-for="key in columns" :style="styleModifly" class="cell" @dblclick="dbEdit">
-			<aj-cell-renderer v-if="isFixedField(key) || !isEditMode" :html="renderCell(data, key)" :form="data"></aj-cell-renderer>
+			<template v-if="!isEditMode">{{renderCell(data, key)}}</template>
+			<aj-cell-renderer v-if="isEditMode && key && key.editMode" :html="rendererEditMode(data, key)" :form="data"></aj-cell-renderer>
 			<input type="text" v-if="canEdit(key)" size="0" v-model="data[key]" /> 
 		</td>
 		<td v-if="showControl" class="control">

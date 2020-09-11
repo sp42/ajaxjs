@@ -21,34 +21,6 @@ Vue.component('aj-avatar', {
 	}
 });
 
-/**
- * 动态组件，可否换为  component？
- */
-Vue.component('aj-cell-renderer', {
-    props: {
-        html: {type: String, default: ''},
-        form: Object
-    },
-    render(h) {
-		if(this.html.indexOf('<aj-')!= -1) {
-	        var com = Vue.extend({
-	            template: this.html,
-	            props: {
-	                form: Object
-	            }
-	        });
-	
-	        return h(com, {
-	            props: {
-	                form: this.form
-	            }
-	        });
-		} else {
-			return this._v(this.html); // html
-		}
-    }
-});
-
 Vue.component('aj-entity-toolbar', {
 	beforeCreate() {	
 		aj.getTemplate('grid', 'aj-entity-toolbar', this);
@@ -83,6 +55,34 @@ Vue.component('aj-entity-toolbar', {
 			this.$parent.reload();
 		}
 	}
+});
+
+/**
+ * 动态组件，可否换为  component？
+ */
+Vue.component('aj-cell-renderer', {
+    props: {
+        html: {type: String, default: ''},
+        form: Object
+    },
+    render(h) {
+		if(this.html.indexOf('<aj-')!= -1) {
+	        var com = Vue.extend({
+	            template: this.html,
+	            props: {
+	                form: Object
+	            }
+	        });
+	
+	        return h(com, {
+	            props: {
+	                form: this.form
+	            }
+	        });
+		} else {
+			return this._v(this.html); // html
+		}
+    }
 });
 
 /**
@@ -156,8 +156,9 @@ Vue.component('aj-grid-inline-edit-row', {
 			
 			return false;
 		},
+		// 没有指定编辑器的情况下，使用 input 作为编辑器
 		canEdit(key) {		
-			return this.isEditMode && !this.isFixedField(key);
+			return this.isEditMode && !this.isFixedField(key) && !key.editMode;
 		},
 		renderCell(data, key) {
 			if(typeof key == 'function') 
@@ -165,9 +166,16 @@ Vue.component('aj-grid-inline-edit-row', {
 			
 			if(key === '')
 				return '';
-				
-			var v = data[key];
 			
+			if(typeof key == 'object' && key.showMode) {
+				if(typeof key.showMode === 'function')
+					return key.showMode(data);
+					
+				if(typeof key.showMode === 'string')
+					return data[key.showMode];
+			} 
+			
+			var v = data[key];
 			return (v === null ? '' : v) + '';
 		},
 		// 编辑按钮事件
@@ -179,6 +187,14 @@ Vue.component('aj-grid-inline-edit-row', {
 			else {
 			
 			}
+		},
+		rendererEditMode(data, cfg) {
+			if(typeof cfg === 'string')
+				return cfg;
+			if(cfg.editMode && typeof cfg.editMode === 'function')
+				return cfg.editMode(data);
+			
+			return "NULL";
 		},
 		makeWatch(field) {
 			return function(_new) {
