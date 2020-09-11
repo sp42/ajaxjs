@@ -47,7 +47,7 @@
 		<td><input type="checkbox" /></td>
 		<td></td>
 		<td v-for="key in columns" style="padding:0" class="cell" @dblclick="dbEdit">
-			<aj-select v-if="key != null && key.type == 'select'" name="test" :options="{a:1, b: 2}" :selected-index="1"></aj-select>
+			<aj-select v-if="key != null && key.type == 'select'" :name="key.name" :options="key.data" style="width: 200px;"></aj-select>
 			<input  v-if="key != null && !key.type" type="text" size="0" :name="key" /> 
 		</td>
 		<td class="control">

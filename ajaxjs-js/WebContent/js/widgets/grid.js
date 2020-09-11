@@ -276,7 +276,7 @@ Vue.component('aj-grid-inline-edit-row-create', {
 		// 编辑按钮事件
 		addNew() {
 			var map = {};
-			this.$el.$('input[name]', i => {
+			this.$el.$('*[name]', i => {
 				map[i.name] = i.value;
 			});
 			

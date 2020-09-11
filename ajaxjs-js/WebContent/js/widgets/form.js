@@ -4,7 +4,7 @@
  */
 
 Vue.component('aj-select', {
-	template: '<select :name="name"><template v-for="value, key, index in options">'+
+	template: '<select :name="name" class="aj-select"><template v-for="value, key, index in options">'+
 				'<option v-if="index === selectedIndex" selected :value="value" >{{key}}</option>'+
 				'<option v-else :value="value" >{{key}}</option>'+
 			   '</template></select>',
