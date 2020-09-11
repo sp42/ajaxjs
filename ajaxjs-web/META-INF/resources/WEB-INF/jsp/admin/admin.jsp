@@ -11,8 +11,10 @@
 		<header>
 			<h1>${aj_allConfig.site.titlePrefix} ${aj_allConfig.System.name}</h1>
 			<menu>
-				${userName} 已登录 | <a href="${ctx}/" target="_blank">首页</a> | <a href="${ctx}/user/center/home/" target="iframepage">后台首页</a> 
-				| <a href="javascript:logout();">退出</a> 
+				${userName} 已登录 &nbsp;&nbsp;
+				|&nbsp;&nbsp;<a href="${ctx}/" target="_blank">首页</a>&nbsp;&nbsp; 
+				|&nbsp;&nbsp;<a href="${ctx}/admin/home/" target="iframepage">后台首页</a>&nbsp;&nbsp;
+				|&nbsp;&nbsp;<a href="javascript:logout();">退出</a> 
 			</menu>
 		</header>
 		
