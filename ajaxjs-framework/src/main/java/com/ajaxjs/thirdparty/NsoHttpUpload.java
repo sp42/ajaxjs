@@ -1,8 +1,10 @@
 package com.ajaxjs.thirdparty;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.security.MessageDigest;
@@ -44,13 +46,6 @@ public class NsoHttpUpload {
 		return xmlResult;
 	}
 
-//	public static void main(String[] args) {
-//		ConfigService.load("c:\\project\\aj-website-site_config.json");
-//		System.out.println(listBuk());
-//		createEmptyFile("test.jpg");
-//		uploadFile("C:\\project\\ajaxjs-maven-global.xml");
-//	}
-
 	/**
 	 * 请求的时间戳，格式必须符合 RFC1123 的日期格式
 	 * 
@@ -89,13 +84,30 @@ public class NsoHttpUpload {
 		String canonicalizedHeaders = "", canonicalizedResource = "/" + bucket + "/" + filename;
 		String data = "PUT\n" + "\n\n" + now + "\n" + canonicalizedHeaders + canonicalizedResource;
 		String authorization = getAuthorization(data);
+		String api = ConfigService.getValueAsString("uploadFile.ObjectStorageService.NOS.api");
 
-		HttpBasicRequest.put("https://ajaxjs.nos-eastchina1.126.net/" + filename, new byte[0], conn -> {
+		HttpBasicRequest.put(api + filename, new byte[0], conn -> {
 			conn.addRequestProperty("Authorization", authorization);
 			conn.addRequestProperty("Content-Length", "0");
 			conn.addRequestProperty("Date", now);
-			conn.addRequestProperty("Host", "ajaxjs.nos-eastchina1.126.net");
+//			conn.addRequestProperty("Host", "ajaxjs.nos-eastchina1.126.net");
 		}, null);
+	}
+	
+	public static boolean delete(String filename) {
+		String bucket = ConfigService.get("uploadFile.ObjectStorageService.NOS.bucket");
+		String now = getDate();
+		String canonicalizedHeaders = "", canonicalizedResource = "/" + bucket + "/" + filename;
+		String data = "DELETE\n" + "\n\n" + now + "\n" + canonicalizedHeaders + canonicalizedResource;
+		String authorization = getAuthorization(data);
+		String api = ConfigService.getValueAsString("uploadFile.ObjectStorageService.NOS.api");
+
+		HttpBasicRequest.delete(api + filename, conn -> {
+			conn.addRequestProperty("Authorization", authorization);
+			conn.addRequestProperty("Date", now);
+		}, null);
+		
+		return false;
 	}
 
 	/**
@@ -103,38 +115,77 @@ public class NsoHttpUpload {
 	 * 
 	 * @param filePath 文件路径
 	 */
-	public static void uploadFile(String filePath) {
-		uploadFile(filePath, null);
+	public static boolean uploadFile(String filePath) {
+		return uploadFile(filePath, null);
 	}
 
-/**
- * 上传文件
- * 
- * @param filePath 文件路径
- * @param filename 文件名，若不指定则按原来的文件名
- */
-public static void uploadFile(String filePath, String filename) {
-	String bucket = ConfigService.getValueAsString("uploadFile.ObjectStorageService.NOS.bucket");
+	/**
+	 * 上传文件
+	 * 
+	 * @param filePath 文件路径
+	 * @param filename 文件名，若不指定则按原来的文件名
+	 */
+	public static boolean uploadFile(String filePath, String filename) {
 
-	File file = new File(filePath);
-	if (filename == null)
-		filename = file.getName();
+		File file = new File(filePath);
+		if (filename == null)
+			filename = file.getName();
 
-	String md5 = calcMD5(file);
-	String now = getDate();
-	String canonicalizedHeaders = "", canonicalizedResource = "/" + bucket + "/" + filename;
-	String data = "PUT\n" + md5 + "\n\n" + now + "\n" + canonicalizedHeaders + canonicalizedResource;
-	String authorization = getAuthorization(data);
-	HttpBasicRequest.put("https://ajaxjs.nos-eastchina1.126.net/" + filename, FileHelper.openAsByte(file), conn -> {
-		conn.addRequestProperty("Authorization", authorization);
-		conn.addRequestProperty("Content-Length", file.length() + "");
+		return uploadFile(FileHelper.openAsByte(file), filename, calcMD5(file, null));
+	}
+
+	/**
+	 * 
+	 * @param bytes
+	 * @param filename
+	 * @param md5
+	 */
+	public static boolean uploadFile(byte[] bytes, String filename, String md5) {
+		String bucket = ConfigService.getValueAsString("uploadFile.ObjectStorageService.NOS.bucket");
+
+		String now = getDate();
+		String canonicalizedHeaders = "", canonicalizedResource = "/" + bucket + "/" + filename;
+		String data = "PUT\n" + md5 + "\n\n" + now + "\n" + canonicalizedHeaders + canonicalizedResource;
+		String authorization = getAuthorization(data);
+		String api = ConfigService.getValueAsString("uploadFile.ObjectStorageService.NOS.api");
+		// "https://ajaxjs.nos-eastchina1.126.net/"
+
+		final TempClz clz = new TempClz();
+		HttpBasicRequest.put(api + filename, bytes, conn -> {
+			conn.addRequestProperty("Authorization", authorization);
+			conn.addRequestProperty("Content-Length", bytes.length + "");
 //			conn.addRequestProperty("Content-Type", "");
-		conn.addRequestProperty("Content-MD5", md5);
-		conn.addRequestProperty("Date", now);
-		// conn.addRequestProperty("Host", "ajaxjs.nos-eastchina1.126.net");
-		// conn.addRequestProperty("x-nos-entity-type", "json");
-	}, null);
-}
+			conn.addRequestProperty("Content-MD5", md5);
+			conn.addRequestProperty("Date", now);
+//			conn.addRequestProperty("HOST", "gdhdc-org.nos-eastchina1.126.net/cover");
+			// conn.addRequestProperty("x-nos-entity-type", "json");
+			clz.conn = conn;
+		}, null);
+
+		// 判定是否上传成功
+		try {
+			String ETag = clz.conn.getHeaderField("ETag");
+			if (ETag == null)
+				return false;
+
+			if (clz.conn.getResponseCode() == 200 && ETag.equalsIgnoreCase("\"" + md5 + "\""))
+				return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+
+	/**
+	 * 解决 lambda final var
+	 * 
+	 * @author sp42 frank@ajaxjs.com
+	 *
+	 */
+	private static class TempClz {
+		HttpURLConnection conn;
+	}
 
 	/**
 	 * 计算文件 MD5
@@ -142,8 +193,8 @@ public static void uploadFile(String filePath, String filename) {
 	 * @param file
 	 * @return 返回文件的md5字符串，如果计算过程中任务的状态变为取消或暂停，返回null， 如果有其他异常，返回空字符串
 	 */
-	protected static String calcMD5(File file) {
-		try (InputStream stream = Files.newInputStream(file.toPath(), StandardOpenOption.READ)) {
+	public static String calcMD5(File file, byte[] bytes) {
+		try (InputStream stream = file != null ? Files.newInputStream(file.toPath(), StandardOpenOption.READ) : new ByteArrayInputStream(bytes)) {
 			byte[] buf = new byte[8192];
 			int len;
 			MessageDigest digest = MessageDigest.getInstance("MD5");

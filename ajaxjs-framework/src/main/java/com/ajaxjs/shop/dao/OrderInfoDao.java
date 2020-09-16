@@ -2,7 +2,6 @@ package com.ajaxjs.shop.dao;
 
 import java.util.List;
 
-import com.ajaxjs.app.attachment.Attachment_pictureService.Attachment_pictureDao;
 import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.model.OrderItem;
 import com.ajaxjs.sql.annotation.Select;
@@ -18,10 +17,10 @@ public interface OrderInfoDao extends IBaseDao<OrderInfo> {
 //	@Select("SELECT oInfo.* FROM ${tableName} oInfo WHERE orderNo = ?")
 //	OrderInfo getOrderByOrderNo(String orderNo);
 	
-	public static final String list = "SELECT o.*, entry.name, o.goodsNumber, o.goodsPrice, o.goodsAmount, f.name AS formatName, (" 
-+ Attachment_pictureDao.LINK_COVER + ") AS cover FROM shop_order_item o INNER JOIN shop_goods entry ON entry.id = o.goodsId INNER JOIN shop_goods_format f ON f.id = o.goodsFormatId ";
-	
-	@Select(list + " WHERE o.orderId = ?")
+//	public static final String list = "SELECT o.*, entry.name, o.goodsNumber, o.goodsPrice, o.goodsAmount, f.name AS formatName, (" 
+//+ Attachment_pictureDao.LINK_COVER + ") AS cover FROM shop_order_item o INNER JOIN shop_goods entry ON entry.id = o.goodsId INNER JOIN shop_goods_format f ON f.id = o.goodsFormatId ";
+//	
+//	@Select(list + " WHERE o.orderId = ?")
 	List<OrderItem> findOrderItemListByOrderId(long orderId);
 	
 	
