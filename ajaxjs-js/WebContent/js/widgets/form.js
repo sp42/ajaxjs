@@ -333,6 +333,8 @@ Vue.component('aj-form-html-editor', {
 						action: this.uploadImageActionUrl,
 						progress: 0,
 						uploadOk_callback(j) {
+							if(j.result)
+								j = j.result;
 							self.format("insertImage", self.ajResources.imgPerfix + j.imgUrl);
 						},
 						$blob: newBlob,
@@ -356,6 +358,8 @@ Vue.component('aj-form-html-editor', {
 					aj.alert.show('请保存记录后再上传图片。');
 				else {
 					App.$refs.uploadLayer.show(json => {
+						if(json.result)
+							json = json.result;
 						if(json && json.isOk)
 							this.format("insertImage", json.fullUrl);
 					});
@@ -859,6 +863,8 @@ Vue.component('aj-xhr-upload', {
 			radomId : Math.round(Math.random() * 1000),		// 不重复的 id
 			uplodedFileUrl: null,
 			uploadOk_callback: json => {// 回调函数
+				if(json.result)
+					json = json.result;
 				this.uplodedFileUrl = json.imgUrl;
 				
 				if(this.hiddenField)

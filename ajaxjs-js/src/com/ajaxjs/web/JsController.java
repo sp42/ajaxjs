@@ -169,7 +169,6 @@ public class JsController extends HttpServlet {
 		if (!Files.exists(path))
 			Files.createFile(path);
 
-		System.out.println(content);
 		Logger.getGlobal().info(path.toString());
 		Files.write(path, content.getBytes());
 	}

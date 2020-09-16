@@ -296,6 +296,9 @@ aj.xhr.dele = (url, cb, args, cfg) => aj.xhr.request(url, cb, args, cfg, 'DELETE
 // 默认的回调，有专属的字段并呼叫专属的控件
 aj.xhr.defaultCallBack_cb = function(j, xhr, onOK, onFail) {
 	if (j) {
+		if(j.result)
+			j = j.result;
+			
 		if (j.isOk) {
 			!!onOK && onOK(j);
 			aj.msg.show(j.msg || '操作成功！');
@@ -304,6 +307,8 @@ aj.xhr.defaultCallBack_cb = function(j, xhr, onOK, onFail) {
 			aj.msg.show(j.msg || '执行失败！原因未知！');
 		}
 	} else {
+		if(j.result)
+			j = j.result;
 		onFail && onFail(j);
 		aj.msg.show('ServerSide Error!');
 	}
