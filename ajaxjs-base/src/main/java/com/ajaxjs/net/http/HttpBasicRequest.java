@@ -123,6 +123,7 @@ public class HttpBasicRequest extends IoHelper {
 				in = new GZIPInputStream(in);
 
 			int responseCode = conn.getResponseCode();
+
 			if (responseCode >= 400) {// 如果返回的结果是400以上，那么就说明出问题了
 				RuntimeException e = new RuntimeException(responseCode < 500 ? responseCode + "：客户端请求参数错误！" : responseCode + "：抱歉！我们服务端出错了！");
 				LOGGER.warning(e);
@@ -301,6 +302,19 @@ public class HttpBasicRequest extends IoHelper {
 			LOGGER.warning("写入 post 数据时失败！[{0}]", e);
 		}
 		
+		return getResponse(conn, false, responseHandler == null ? IoHelper::byteStream2string : responseHandler);
+	}
+	
+	
+	public static String delete(String url, Consumer<HttpURLConnection> fn, Function<InputStream, String> responseHandler) {
+		HttpURLConnection conn = initHttpConnection(url);
+		setMedthod.accept(conn, "DELETE");
+		conn.setDoOutput(true); // for conn.getOutputStream().write(someBytes);
+		conn.setDoInput(true);
+		
+		if (fn != null)
+			fn.accept(conn);
+
 		return getResponse(conn, false, responseHandler == null ? IoHelper::byteStream2string : responseHandler);
 	}
 
