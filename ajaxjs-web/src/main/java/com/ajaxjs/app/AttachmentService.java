@@ -1,4 +1,4 @@
-package com.ajaxjs.app.attachment;
+package com.ajaxjs.app;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -15,22 +15,22 @@ import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.util.ioc.Component;
 
 @Component
-public class Attachment_pictureService extends BaseService<Attachment_picture> {
-	@TableName(value = "attachment_picture", beanClass = Attachment_picture.class)
-	public interface Attachment_pictureDao extends IBaseDao<Attachment_picture> {
+public class AttachmentService extends BaseService<Attachment> {
+	@TableName(value = "attachment_picture", beanClass = Attachment.class)
+	public interface AttachmentDao extends IBaseDao<Attachment> {
 		@Delete("DELETE FROM ${tableName} WHERE `owner` = ?")
 		boolean deleteByOwnerId(Long ownerUid);
 
 		@Update("UPDATE ${tableName} SET `index` = ? WHERE id = ?")
 		public int saveImgIndex(int index, Long imgId);
-		
+
 		/**
 		 * 实体别名必须为 entry
 		 */
 		public final static String LINK_COVER = "(SELECT path FROM attachment_picture p1 WHERE entry.uid = p1.owner AND p1.catalogId = 1 ORDER BY p1.id DESC LIMIT 0, 1)";
 	}
-	
-	public Attachment_pictureDao dao = new Repository().bind(Attachment_pictureDao.class);
+
+	public static AttachmentDao dao = new Repository().bind(AttachmentDao.class);
 
 	{
 		setUiName("图片");
@@ -44,13 +44,13 @@ public class Attachment_pictureService extends BaseService<Attachment_picture> {
 	 * @param owner 实体 uid
 	 * @return 图片列表
 	 */
-	public List<Attachment_picture> findByOwner(Long owner) {
-		List<Attachment_picture> list = dao.findList(by("owner", owner));
+	public List<Attachment> findByOwner(Long owner) {
+		List<Attachment> list = dao.findList(by("owner", owner));
 
 		if (null != list) {
-			Collections.sort(list, new Comparator<Attachment_picture>() {
+			Collections.sort(list, new Comparator<Attachment>() {
 				@Override
-				public int compare(Attachment_picture pic1, Attachment_picture pic2) {
+				public int compare(Attachment pic1, Attachment pic2) {
 					if (pic1.getIndex() == null)
 						return -1;
 					if (pic2.getIndex() == null)
@@ -76,8 +76,8 @@ public class Attachment_pictureService extends BaseService<Attachment_picture> {
 	 * @param owner 实体 uid
 	 * @return 图片列表
 	 */
-	public List<Attachment_picture> findAttachmentPictureByOwner(Long owner) {
-		return dao.findList(by("owner", owner).andThen(by("catalogId", Attachment_pictureService.ATTACHMENT)));
+	public List<Attachment> findAttachmentByOwner(Long owner) {
+		return dao.findList(by("owner", owner).andThen(by("catalogId", AttachmentService.ATTACHMENT)));
 	}
 
 	/**
@@ -101,7 +101,7 @@ public class Attachment_pictureService extends BaseService<Attachment_picture> {
 	}
 
 	@Override
-	public boolean delete(Attachment_picture bean) {
+	public boolean delete(Attachment bean) {
 //		FileHelper.delete(bean.getPath()); // 删除文件
 		return dao.delete(bean);
 	}

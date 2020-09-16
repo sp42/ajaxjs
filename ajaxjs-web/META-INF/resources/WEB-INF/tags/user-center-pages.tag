@@ -111,7 +111,6 @@
 			<button>保存</button> <button onclick="history.back();" class="aj-btn">返回</button>
 		</div>
 	</form>
-
 	<script>
 		new Vue({
 			el : 'form.avatar'

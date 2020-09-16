@@ -29,4 +29,6 @@ public interface ThirdPartyService {
 	public boolean sendSms(String phoneNo, String template, String param);
 
 	public void uploadFile(MvcRequest request, UploadFileInfo info);
+
+	public boolean deleteFile(String objectKey);
 }

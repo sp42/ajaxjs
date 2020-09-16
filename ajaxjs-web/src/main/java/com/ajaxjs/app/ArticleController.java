@@ -33,6 +33,7 @@ import com.ajaxjs.user.role.RightConstant;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.web.UploadFileInfo;
 import com.ajaxjs.web.mvc.ModelAndView;
 import com.ajaxjs.web.mvc.controller.MvcRequest;
 import com.ajaxjs.web.mvc.filter.MvcFilter;
@@ -78,6 +79,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 		BaseService.getNeighbor(mv, "entity_article", id);
 		getService().showInfo(mv, id);
 
+		System.out.println(new AttachmentService().findByOwner((long) map.get("uid")));
 		if (ConfigService.getValueAsBool("domain.article.attachmentDownload"))
 			map.put("attachment", new AttachmentService().findByOwner((long) map.get("uid")));
 
@@ -148,6 +150,49 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String delete(@PathParam(ID) Long id) {
 		return delete(id, new HashMap<String, Object>());
+	}
+
+	@POST
+	@Path("/admin/{root}/{id}/uploadCover/")
+	@MvcFilter(filters = DataBaseFilter.class)
+	@Produces(MediaType.APPLICATION_JSON)
+	public String uploadCover(MvcRequest req, @PathParam(ID) Long id) {
+		LOGGER.info("上传封面图片");
+
+		// 必须先有实体才能上传其图片
+		if (service.findById(id) == null)
+			throw new NullPointerException("请保存记录后再上传图片");
+
+		UploadFileInfo info = new UploadFileInfo();
+
+		// 约束上传
+		info.maxSingleFileSize = 512 * 1000;
+		info.allowExtFilenames = new String[] { "jpeg", "jpg", "png", "gif" };
+
+		String filename = "cover/" + SnowflakeIdWorker.getId();
+
+		return AttachmentController.upload(req, _filename -> {
+			Map<String, Object> article = new HashMap<>(); // 保存字段
+			article.put("id", id);
+			article.put("cover", info.saveFileName);
+			service.update(article);
+		}, info, filename);
+	}
+	
+	@POST
+	@Path("/admin/{root}/{id}/uploadContentImg/")
+	@MvcFilter(filters = DataBaseFilter.class)
+	@Produces(MediaType.APPLICATION_JSON)
+	public String uploadContentImg(MvcRequest req, @PathParam(ID) Long id) {
+		LOGGER.info("上传正文图片");
+		
+		UploadFileInfo info = new UploadFileInfo();
+		// 约束上传
+		info.maxSingleFileSize = 512 * 1000;
+		info.allowExtFilenames = new String[] { "jpeg", "jpg", "png", "gif" };
+		
+		String filename = "contentImg/" + SnowflakeIdWorker.getId();
+		return AttachmentController.upload(req, null, info, filename);
 	}
 
 	// 下载远程图片到本地服务器

@@ -122,4 +122,14 @@ public class Attachment extends BaseModel {
 	public Long getOwner() {
 		return owner;
 	}
+	
+	public Integer getIndex() {
+		return index;
+	}
+
+	public void setIndex(Integer index) {
+		this.index = index;
+	}
+
+	private Integer index;
 }

@@ -212,8 +212,16 @@ public abstract class BaseController<T> implements IController, MvcConstant {
 	}
 
 	public String output(ModelAndView mv, Object entityOrId, String jspPath) {
+		return output(mv, entityOrId, jspPath, null);
+	}
+
+	@SuppressWarnings("unchecked")
+	public String output(ModelAndView mv, Object entityOrId, String jspPath, Consumer<T> onGetInfo) {
 		if (entityOrId instanceof Long)
 			entityOrId = getService().findById((long) entityOrId);
+
+		if (onGetInfo != null)
+			onGetInfo.accept((T) entityOrId);
 
 		prepareData(mv);
 

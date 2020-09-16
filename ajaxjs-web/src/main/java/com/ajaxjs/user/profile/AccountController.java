@@ -189,7 +189,6 @@ public class AccountController extends BaseUserController {
 		}
 
 		ThirdPartyService services = ComponentMgr.get(ThirdPartyService.class);
-
 		boolean isOk = services.sendSms(phone, "SMS_138067918", String.format("{\"code\":\"%s\"}", rad));
 
 		if (isOk) {

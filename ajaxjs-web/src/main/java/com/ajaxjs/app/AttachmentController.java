@@ -2,6 +2,7 @@ package com.ajaxjs.app;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.function.Consumer;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -23,6 +24,7 @@ import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.sql.orm.Repository;
+import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.ComponentMgr;
 import com.ajaxjs.util.logger.LogHelper;
@@ -101,7 +103,45 @@ public class AttachmentController extends BaseController<Attachment> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path("upload/{id}/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String upload(MvcRequest request, @PathParam(ID) Long owenerId, @QueryParam(CATALOG_ID) int catalogId) throws IOException {
+	@SuppressWarnings("unused")
+	public String upload(MvcRequest req, @PathParam(ID) Long owenerId, @QueryParam(CATALOG_ID) int catalogId) throws IOException {
+		LOGGER.info("上传附件");
+
+		UploadFileInfo info = new UploadFileInfo();
+		// 约束上传
+		info.maxSingleFileSize = 1024 * 10000; // 10m
+		info.allowExtFilenames = null;
+
+		ThirdPartyService storageService = ComponentMgr.get(ThirdPartyService.class);
+		storageService.uploadFile(req, info);
+
+		final Long _newlyId;
+		if (info.isOk) {
+
+			info.fullPath = ConfigService.get("uploadFile.imgPerfix") + info.saveFileName;
+
+			Attachment pic = new Attachment();
+			pic.setOwner(owenerId);
+			pic.setName(info.saveFileName);
+			pic.setFileSize((int) (info.contentLength / 1024));
+
+			if (catalogId != 0)
+				pic.setCatalogId(catalogId);
+
+			_newlyId = service.create(pic);
+		} else
+			_newlyId = 0L;
+
+		return info.isOk ? toJson(new Object() {
+			public Boolean isOk = true;
+			public String msg = "上传附件成功！";
+			public String imgUrl = info.saveFileName;
+			public String fullUrl = info.fullPath;
+			public Long newlyId = _newlyId;
+		}) : jsonNoOk("上传失败！");
+	}
+
+	public String classUpload(MvcRequest request, @PathParam(ID) Long owenerId, @QueryParam(CATALOG_ID) int catalogId) throws IOException {
 		LOGGER.info("上传附件");
 		// TODO 文件类型限制
 		final UploadFileInfo info = uploadByConfig(request);
@@ -171,9 +211,42 @@ public class AttachmentController extends BaseController<Attachment> {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String delete(@PathParam(ID) Long id, MvcRequest request) {
 		Attachment attachment = service.findById(id);
-		// TODO 删除物理文件
-//		attachment.setPath(request.mappath(attachment.getPath())); // 转换为绝对地址
+
+		// 删除物理文件
+		String objectKey = attachment.getName();
+		ThirdPartyService storageService = ComponentMgr.get(ThirdPartyService.class);
+		storageService.deleteFile(objectKey);
 
 		return delete(id, attachment);
+	}
+
+	/**
+	 * 调用文件上传
+	 * 
+	 * @param req
+	 * @param saveFilename
+	 * @param info
+	 * @param filename
+	 * @return 返回 JSON 结果
+	 */
+	@SuppressWarnings("unused")
+	public static String upload(MvcRequest req, Consumer<String> saveFilename, UploadFileInfo info, String filename) {
+		info.saveFileName = Encode.urlEncode(filename); // 适应 OSS 的上传路径，文件夹路径要转移 / -> 2%F
+
+		ThirdPartyService storageService = ComponentMgr.get(ThirdPartyService.class);
+		storageService.uploadFile(req, info);
+
+		filename = Encode.urlDecode(info.saveFileName);
+		info.fullPath = ConfigService.get("uploadFile.imgPerfix") + filename;
+
+		if (info.isOk && saveFilename != null)
+			saveFilename.accept(filename);
+
+		return info.isOk ? toJson(new Object() {
+			public Boolean isOk = true;
+			public String msg = "上传成功！";
+			public String imgUrl = Encode.urlDecode(info.saveFileName);
+			public String fullUrl = info.fullPath;
+		}) : jsonNoOk("上传失败！");
 	}
 }

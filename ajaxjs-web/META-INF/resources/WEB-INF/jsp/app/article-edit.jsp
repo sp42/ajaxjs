@@ -86,7 +86,7 @@
 					<div class="label">正 文：</div>
 					<div>
 						<!-- HTML 在线编辑器，需要 textarea 包裹着内容 -->
-						<aj-form-html-editor field-name="content" base-path="${ctx}" ref="htmleditor" upload-image-action-url="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catelog=2">
+						<aj-form-html-editor field-name="content" base-path="${ctx}" ref="htmleditor" upload-image-action-url="uploadContentImg/">
 							<textarea class="hide" name="content">${info.content}</textarea>
 						</aj-form-html-editor>
 					</div>
@@ -96,28 +96,28 @@
 				
 				<!-- 图片上传 -->
 				<div>
-					<div class="label" style="float:left;">封面图：</div> 
-					<c:choose>
-						<c:when test="${isCreate}">
-							<span>请保存记录后再上传图片。</span>
-						</c:when>
-						<c:otherwise>
-							<table>
-								<tr>
-									<td>
+					<table>
+						<tr>
+							<td>
+								<div class="label" style="float:left;">封面图：</div> 
+							</td>
+							<td>
+								<c:choose>
+									<c:when test="${isCreate}">
+										<span>请保存记录后再上传图片。</span>
+									</c:when>
+									<c:otherwise>
 										<!-- 图片上传 --> 
-										<aj-xhr-upload action="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catalog=1" :is-img-upload="true" 
-											hidden-field="cover" 
-											hidden-field-value="${info.cover}" 
+										<aj-xhr-upload action="uploadCover/" :is-img-upload="true" hidden-field="cover" hidden-field-value="${info.cover}" 
 											img-place="${empty info.cover ? commonAsset.concat('/images/imgBg.png') : aj_allConfig.uploadFile.imgPerfix.concat(info.cover)}">
 										</aj-xhr-upload>
-									</td>
-									<td style="width：20px;"></td>
-									<td> <a href="#">上传附件</a></td> 
-								</tr>
-							</table>
-						</c:otherwise>
-					</c:choose>
+									</c:otherwise>
+								</c:choose>
+							</td>
+							<td style="width:50px;"></td>
+							<td> <a href="javascript:attchementMgr.$refs.layer.show();">点击上传附件</a></td> 
+						</tr>
+					</table>
 				</div>
 				
 				<div>
@@ -127,7 +127,7 @@
 			</form>
 			
 			<!-- 弹出层上传对话框 -->
-			<aj-popup-upload ref="uploadLayer" upload-url="${ctx}/admin/attachmentPicture/upload/${info.uid}/?catelog=1"></aj-popup-upload>
+			<aj-popup-upload ref="uploadLayer" upload-url="uploadContentImg/"></aj-popup-upload>
 		</div>
 		<script>
 			App = new Vue({el: '.admin-entry-form'});
@@ -137,6 +137,75 @@
 				}
 			});
 			${isCreate ? 'window.isCreate = true;' : ''}
+		</script>
+		
+		<!-- 弹窗浮层 -->
+		<div class="attchementMgrHolder">
+			<aj-layer ref="layer">
+				<table class="attchementMgr">
+					<tr>
+					<td class="aj-tableList">
+						<h3>已上传附件列表<span> 点击文件名下载</span></h3>
+						<header style="width:600px;">
+							<div style="width:5%">id</div><div style="width:30%">文件名</div>
+							<div style="width:20%">文件大小</div>
+							<div style="width:30%">上传时间</div>
+							<div style="width:10%">控制</div>
+						</header>
+						<aj-page-list ref="list" :is-page="false" api-url="${ctx}/admin/attachment/getListByOwnerUid/${info.uid}/" :is-show-footer="false">
+							<template slot-scope="item" :onclick="'location.assign(\'' + item.id + '/\');'">
+								<div style="width: 5%">{{item.id}}</div>
+								<div style="width:35%"><a :href="'${ctx}/images/' + item.name" download>{{item.name}}</a></div>
+								<div style="width:15%">{{item.fileSize}}kb</div>
+								<div style="width:30%">{{item.createDate}}</div>
+								<div style="width:10%;"><a href="javascript:void(0);" @click="del(item.id)">删除</a>
+									
+								</div>
+							</template>
+						</aj-page-list>
+					</td>
+					<td>
+						<!-- 图片上传 --> 
+						<aj-xhr-upload ref="upload" action="${ctx}/admin/attachment/upload/${info.uid}/?catalog=1" :is-img-upload="false" 
+							hidden-field="cover" hidden-field-value="${info.cover}" :button-bottom="true">
+						</aj-xhr-upload>
+					</td>
+					</tr>
+					<tr>
+						<td>
+							<h3>上传注意事项</h3>
+							<ol>
+								<li>附件不仅文件格式上传</li>
+								<li>单个文件最大为 20000kb</li>
+								<li>查看所有上传附件请到“<a href="${ctx}/admin/attachment/">全部附件列表</a>”</li>
+							</ol>
+						</td><td></td>
+					</tr>
+				</table>
+			</aj-layer>
+		</div>
+		
+		<script>
+			attchementMgr = new Vue({
+				el: '.attchementMgrHolder',
+				methods: {
+					del(id) {
+						aj.xhr.dele('${ctx}/admin/attachment/' + id + '/', j => {
+							if(j.result)
+								j = j.result;
+							aj.msg.show(j.msg);
+							
+							this.$refs.list.ajaxGet();
+						});
+					}
+				}
+			});
+			attchementMgr.$refs.upload.uploadOk_callback = j => {
+				if(j.result)
+					j = j.result;
+				aj.msg.show(j.msg)
+				attchementMgr.$refs.list.ajaxGet();
+			}
 		</script>
 	</body>
 </html>

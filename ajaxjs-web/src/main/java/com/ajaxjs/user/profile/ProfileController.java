@@ -12,16 +12,16 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.app.attachment.Attachment_picture;
-import com.ajaxjs.app.attachment.Attachment_pictureController;
-import com.ajaxjs.app.attachment.Attachment_pictureService;
+import com.ajaxjs.app.AttachmentController;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
+import com.ajaxjs.sql.SnowflakeIdWorker;
 import com.ajaxjs.user.BaseUserController;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.filter.CurrentUserOnly;
 import com.ajaxjs.user.filter.LoginCheck;
+import com.ajaxjs.user.login.LoginController;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
@@ -86,12 +86,19 @@ public class ProfileController extends BaseUserController {
 	@Path("avatar/" + ID_INFO)
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = { LoginCheck.class, CurrentUserOnly.class, DataBaseFilter.class })
-	public String saveAvater(MvcRequest request, @PathParam(ID) Long owenerUid) throws IOException {
+	public String saveAvater(MvcRequest req, @PathParam(ID) Long owenerUid) throws IOException {
 		LOGGER.info("用户会员中心-个人信息-修改头像");
-		Attachment_pictureController c = new Attachment_pictureController();
-		c.setService(new Attachment_pictureService());
 
-		return ""; // c.imgUpload(request, owenerUid, Attachment_pictureService.AVATAR);
+		UploadFileInfo info = new UploadFileInfo();
+		String filename = "user_avater/" + SnowflakeIdWorker.getId();
+
+		return AttachmentController.upload(req, _filename -> {
+			// 修改 user avater 字段，保存图片文件名
+			User user = new User();
+			user.setId(LoginController.getUserId());
+			user.setAvatar(_filename);
+			service.update(user);
+		}, info, filename);
 	}
 
 	@GET
@@ -128,15 +135,6 @@ public class ProfileController extends BaseUserController {
 
 	@GET
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Path("info/avatar")
-	public String avatar(ModelAndView mv) {
-		Attachment_picture avatar = ProfileService.DAO.findAvaterByUserId(getUserUid());
-		mv.put("avatar", avatar);
-		return jsp("user/avater");
-	}
-
-	@GET
-	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	@Path("loginInfo")
 	public String changePassword(ModelAndView mv) {
 		mv.put("email", ProfileService.DAO.findById(getUserId()).getEmail());
@@ -162,25 +160,4 @@ public class ProfileController extends BaseUserController {
 		return super.update(id, entity);
 	}
 
-	@POST
-	@Path("avatar")
-	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
-	@Produces(MediaType.APPLICATION_JSON)
-	public String updateOrCreateAvatar(MvcRequest request) throws Exception {
-		LOGGER.info("更新头像,uid:" + getUserUid());
-		UploadFileInfo info;
-
-		info = Attachment_pictureController.uploadByConfig(request);
-
-		final Attachment_picture avatar = getService().updateOrCreateAvatar(getUserUid(), info);
-
-		return toJson(new Object() {
-			@SuppressWarnings("unused")
-			public Boolean isOk = true;
-			@SuppressWarnings("unused")
-			public String msg = "修改头像成功！";
-			@SuppressWarnings("unused")
-			public String imgUrl = avatar.getPath();
-		});
-	}
 }

@@ -1,6 +1,6 @@
 package com.ajaxjs.user;
 
-import com.ajaxjs.app.attachment.Attachment_picture;
+
 import com.ajaxjs.sql.annotation.Select;
 import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;
@@ -33,15 +33,6 @@ public interface UserDao extends IBaseDao<User> {
 	 */
 	@Select("SELECT * FROM user WHERE email = ? LIMIT 1")
 	public User findByEmail(String email);
-
-	/**
-	 * 查找用户头像
-	 * 
-	 * @param userId
-	 * @return
-	 */
-	@Select("SELECT * FROM attachment_picture WHERE catelog = 2 AND owner = ? ORDER BY id DESC LIMIT 1")
-	public Attachment_picture findAvaterByUserId(long userId);
 
 	/**
 	 * 

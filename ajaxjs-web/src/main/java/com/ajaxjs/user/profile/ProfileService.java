@@ -2,8 +2,6 @@ package com.ajaxjs.user.profile;
 
 import java.util.function.Function;
 
-import com.ajaxjs.app.attachment.Attachment_picture;
-import com.ajaxjs.app.attachment.Attachment_pictureService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.sql.JdbcConnection;
@@ -12,11 +10,9 @@ import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.user.BaseUserService;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.password.UserCommonAuthService;
-import com.ajaxjs.util.io.ImageHelper;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.web.UploadFileInfo;
 import com.ajaxjs.web.mvc.ModelAndView;
 
 @Component
@@ -98,44 +94,6 @@ public class ProfileService extends BaseUserService {
 	public boolean delete(User bean) {
 		UserCommonAuthService.dao.deleteByUserId(bean.getId());
 		return DAO.delete(bean);
-	}
-
-	public Attachment_picture updateOrCreateAvatar(long userUId, UploadFileInfo info) throws Exception {
-		if (!info.isOk)
-			throw new ServiceException("图片上传失败");
-
-		Attachment_pictureService avatarService = new Attachment_pictureService();
-
-		Attachment_picture avatar = DAO.findAvaterByUserId(userUId);
-		boolean isCreate = avatar == null;
-
-		if (isCreate)
-			avatar = new Attachment_picture();
-
-		// 获取图片信息
-		ImageHelper imgHelper = new ImageHelper(info.fullPath);
-
-		avatar.setOwner(userUId);
-		avatar.setName(info.saveFileName);
-		avatar.setPath(info.path);
-		avatar.setPicWidth(imgHelper.width);
-		avatar.setPicHeight(imgHelper.height);
-		avatar.setFileSize((int) (imgHelper.file.length() / 1024));
-		avatar.setCatalogId(Attachment_pictureService.AVATAR);
-
-		if (isCreate) {
-			if (avatarService.create(avatar) != null) {
-				return avatar;
-			} else {
-				throw new ServiceException("创建图片记录失败");
-			}
-		} else {
-			if (avatarService.update(avatar) != 0) {
-				return avatar;
-			} else {
-				throw new ServiceException("修改图片记录失败");
-			}
-		}
 	}
 
 	/**
