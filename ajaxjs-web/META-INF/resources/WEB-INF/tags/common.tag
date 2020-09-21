@@ -135,7 +135,7 @@
 			<ul>
 				<c:foreach items="${info.attachment}">
 					<li style="padding:1%;">
-						<a href="${ctx}/images/${item.name}" download>${item.name}</a> | ${item.fileSize}kb
+						<a href="${aj_allConfig.uploadFile.perfix}${item.name}" download>${item.name}</a> | ${item.fileSize}kb
 					</li>
 				</c:foreach>
 			</ul>

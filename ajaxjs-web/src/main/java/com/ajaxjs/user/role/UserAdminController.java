@@ -27,6 +27,7 @@ import com.ajaxjs.user.filter.LoginCheck;
 import com.ajaxjs.user.login.LoginController;
 import com.ajaxjs.user.profile.ProfileService;
 import com.ajaxjs.util.ioc.Component;
+import com.ajaxjs.util.ioc.ComponentMgr;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.mvc.ModelAndView;
@@ -58,6 +59,11 @@ public class UserAdminController extends BaseController<User> {
 		mv.put("UserGroups", TreeLikeService.idAsKey(userGroups));
 		mv.put("UserGroupsJson", toJson(TreeLikeService.idAsKey(userGroups), false));
 		mv.put("UserGroupsJSON", toJson(userGroups, false).replaceAll("\"", "'"));
+
+		// 扩展权限
+		ExtendedRight extendedRight = ComponentMgr.getByInterface(ExtendedRight.class);
+		if (extendedRight != null)
+			mv.put("ExtendedRight", extendedRight.getRightInfos());
 
 		return output(mv, service.findPagedList(start, limit), "jsp::user/admin/user-admin-list");
 	}

@@ -188,6 +188,8 @@ public class AttachmentController extends BaseController<Attachment> {
 
 		UploadFileInfo info = new UploadFileInfo();
 		info.saveFileName = SnowflakeIdWorker.getId() + "";
+		
+		// TODO 删除原图片
 
 		ThirdPartyService storageService = ComponentMgr.get(ThirdPartyService.class);
 		storageService.uploadFile(request, info);

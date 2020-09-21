@@ -46,7 +46,7 @@
 		
  					<label>
  						<div class="label">创建日期：</div>  
-						<aj-form-calendar-input field-name="createDate" field-value="<c:dateFormatter value="${info.createDate}" />"></aj-form-calendar-input> 
+						<aj-form-calendar-input field-name="createDate" field-value="<c:dateFormatter value="${info.createDate}" />" :show-time="true"></aj-form-calendar-input> 
  					</label> 
 				</div>
 		
@@ -155,7 +155,7 @@
 						<aj-page-list ref="list" :is-page="false" api-url="${ctx}/admin/attachment/getListByOwnerUid/${info.uid}/" :is-show-footer="false">
 							<template slot-scope="item" :onclick="'location.assign(\'' + item.id + '/\');'">
 								<div style="width: 5%">{{item.id}}</div>
-								<div style="width:35%"><a :href="'${ctx}/images/' + item.name" download>{{item.name}}</a></div>
+								<div style="width:35%"><a :href="'${aj_allConfig.uploadFile.perfix}' + item.name" target="_blank" download="w3logo">{{item.name}}</a></div>
 								<div style="width:15%">{{item.fileSize}}kb</div>
 								<div style="width:30%">{{item.createDate}}</div>
 								<div style="width:10%;"><a href="javascript:void(0);" @click="del(item.id)">删除</a>

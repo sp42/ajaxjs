@@ -156,8 +156,7 @@
 			
 			mounted() {
  				aj.xhr.form(this.$el, 
-					aj.xhr.defaultCallBack_cb.delegate(null, null, j => setTimeout("location.assign('${ctx}/user/login/')", 2000), 
-						j => this.$children[0].refreshCode()),
+					aj.xhr.defaultCallBack_cb.delegate(null, null, j => setTimeout("location.assign('${ctx}/user/login/')", 2000)),
 					{
 						beforeSubmit: (f, json) => {
 							if (!this.$el.$('.privacy').checked) {
@@ -165,7 +164,7 @@
 								return false;
 							}
 
-							if (json.passowrd != json.passowrd2) {
+							if (json.password != json.password2) {
 								aj.alert.show('两次密码输入不一致！');
 								return false;
 							}

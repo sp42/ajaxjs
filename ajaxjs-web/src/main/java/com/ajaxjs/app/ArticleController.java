@@ -30,6 +30,7 @@ import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.user.filter.Authority;
 import com.ajaxjs.user.filter.PrivilegeFilter;
 import com.ajaxjs.user.role.RightConstant;
+import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
@@ -174,7 +175,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 		return AttachmentController.upload(req, _filename -> {
 			Map<String, Object> article = new HashMap<>(); // 保存字段
 			article.put("id", id);
-			article.put("cover", info.saveFileName);
+			article.put("cover", Encode.urlDecode(info.saveFileName));
 			service.update(article);
 		}, info, filename);
 	}

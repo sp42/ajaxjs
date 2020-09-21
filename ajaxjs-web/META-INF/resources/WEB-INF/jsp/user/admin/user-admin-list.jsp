@@ -63,8 +63,6 @@
 			</div>
 		</div>
 		
-		<script src="${ctx}/inline-edit.js"></script>
-		
 		<%@include file="user-group.jsp" %>
 		<%@include file="assign-right.jsp" %>
 		
@@ -88,7 +86,7 @@ BAR = new Vue({
 	methods: {
 		gridCols: (()=>{
 			var sex = data => {
-				switch(data['sex']){
+				switch(data['sex']) {
 					case 1:
 						return '男';
 					case 2:
@@ -104,7 +102,16 @@ BAR = new Vue({
 				return email || phone;
 			};
 			
-			var UserGroupsJson = ${UserGroupsJson}, group = data => UserGroupsJson[data['roleId']].name;
+			var UserGroupsJson = ${UserGroupsJson}, group = data => {
+				if(!data['roleId'])
+					return "";
+				
+				var role = UserGroupsJson[data['roleId']];
+				if(!role)
+					return "";
+				
+				return role.name;
+			}
 			
 			var avatar = data => {
 				var prefix = '${aj_allConfig.uploadFile.imgPerfix}';

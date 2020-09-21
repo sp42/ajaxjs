@@ -24,7 +24,7 @@ import com.ajaxjs.util.logger.LogHelper;
 public class RegisterService extends BaseUserService {
 	private static final LogHelper LOGGER = LogHelper.getLog(RegisterService.class);
 
-	@Resource("UserCommonAuthService")
+	@Resource
 	private UserCommonAuthService passwordService;
 
 	/**
@@ -52,6 +52,7 @@ public class RegisterService extends BaseUserService {
 		passwordModel.setPassword(password);
 		passwordModel.setUserId(userId);
 
+		System.out.println(passwordService);
 		passwordService.create(passwordModel);
 
 		return user;
@@ -113,8 +114,8 @@ public class RegisterService extends BaseUserService {
 	private static boolean checkIfRepeated(String field, String value) {
 		value = value.trim();
 
-		return value != null && JdbcReader.queryOne(JdbcConnection.getConnection(),
-				"SELECT * FROM user WHERE " + field + " = ? LIMIT 1", Object.class, value) != null;
+		return value != null
+				&& JdbcReader.queryOne(JdbcConnection.getConnection(), "SELECT * FROM user WHERE " + field + " = ? LIMIT 1", Object.class, value) != null;
 	}
 
 	public boolean checkIfRepeated_(String name, String email, String phone) {
@@ -128,7 +129,7 @@ public class RegisterService extends BaseUserService {
 			checkIfRepeated = checkIfRepeated("phone", phone);
 		else
 			checkIfRepeated = true;
-		
+
 		return checkIfRepeated;
 	}
 }

@@ -80,7 +80,6 @@
 					j && aj.msg.show(j.msg);
 					this.load();
 				});
-				
 			},
 			methods: {
 				load(){
@@ -101,7 +100,7 @@
 						});
 					});
 				},
-				mofidly(id, name, content){
+				mofidly(id, name, content) {
 					this.createOrUpdate.isCreate = false;
 					this.createOrUpdate.id = id;
 					this.createOrUpdate.name = name;
@@ -116,7 +115,7 @@
 					this.createOrUpdate.action = '../user_group/';
 					this.$refs.createOrUpdate.show();
 				},
-				dele(id, title){
+				dele(id, title) {
 					aj.showConfirm('请确定删除用户组【' + title + '】 ？', () => 
 						aj.xhr.dele('../user_group/' + id + '/', j => {
 							if (j.isOk) {

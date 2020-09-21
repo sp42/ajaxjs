@@ -61,10 +61,9 @@ public class AccountController extends BaseUserController {
 	@MvcFilter(filters = { LoginCheck.class, DataBaseFilter.class })
 	public String account(ModelAndView mv) {
 		LOGGER.info("用户会员中心-帐号管理-首页");
-
 		User user = getService().findById(getUserId());
 		mv.put("userInfo", user);
-		mv.put("isEmailVerified", RoleService.simple8421(user.getVerify(), UserConstant.VERIFIED_EMAIL));
+		mv.put("isEmailVerified", RoleService.simple8421(user.getVerify() == null ? 0 : user.getVerify(), UserConstant.VERIFIED_EMAIL));
 		mv.put("lastUserLoginedInfo", logLoginService.getLastUserLoginedInfo(getUserId()));
 		mv.put("UserGroups", TreeLikeService.idAsKey(RoleService.dao.findList(null)));
 
