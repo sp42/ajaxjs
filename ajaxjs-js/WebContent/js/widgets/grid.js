@@ -223,7 +223,7 @@ Vue.component('aj-grid-inline-edit-row', {
 			
 			this.isEditMode = !this.isEditMode;
 			
-			if(this.isEditMode){
+			if(this.isEditMode) {
 				var el = $event.target;
 					
 				setTimeout(()=> {

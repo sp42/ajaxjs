@@ -48,10 +48,10 @@
 </template>
 
 <template id="aj-form-calendar-input">
-	<div class="aj-form-calendar-input" @mouseover="onMouseOver">
+	<div class="aj-form-calendar-input" :class="{'show-time': showTime}" @mouseover="onMouseOver">
 		<div class="icon fa fa-calendar"></div>
 		<input :placeholder="placeholder" size="12" :name="fieldName" 
-			:value="date + (dateOnly ? '' : ' ' + time)" type="text" autocomplete="off" class="aj-input" />
+			:value="date + (dateOnly ? '' : ' ' + time)" type="text" autocomplete="off"/>
 		<aj-form-calendar ref="calendar" :show-time="showTime" @pick-date="recEvent" @pick-time="recTimeEvent">
 		</aj-form-calendar>
 	</div>
