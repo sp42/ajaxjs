@@ -27,7 +27,7 @@
 		</dl>
 		<dl>
 			<dt></dt>
-			<dd style="font-size: .8rem;;text-align: left">
+			<dd style="font-size: .8rem;width: 40%;text-align: left;">
 				<button><tags:i18n zh="登录" eng="Login" /></button>
 				<br />
 
@@ -78,7 +78,7 @@
 			<label>
 				<dt>用户名</dt>
 				<dd>
-					<input type="text" name="name" placeholder="4-15位英文/数字/下划线/中划线" @blur="checkUserId($event)" pattern="^[a-zA-Z0-9_-]{4,20}$" required />
+					<input type="text" name="name" placeholder="4-15位英文/数字/下划线/中划线" @blur="checkUserId" autofocus="false" pattern="^[a-zA-Z0-9_-]{4,20}$" required />
 					<span>{{checkUserIdMsg}}</span>
 				</dd>
 			</label>
@@ -127,7 +127,7 @@
 				<label style="font-size: .9rem;" for="agreement">  同意《<a href="${ctx}/about/service">用户注册协议</a>、<a href="${ctx}/about/privacy">隐私政策》</a></label>
 				<br />
 				<br />
-				<button>注册</button> &nbsp;&nbsp;&nbsp;&nbsp;<a href="${ctx}/user/login/" style="font-size: .9rem;">我已是会员，点此登录</a>
+				<button>注册</button> &nbsp;&nbsp;&nbsp;&nbsp;<a href="${ctx}/user/login/" style="font-size: .9rem;">我已经注册，点此登录</a>
 			</dd>
 		</dl>
 		<!-- 注册用户组 -->

@@ -7,6 +7,11 @@ package com.ajaxjs.user.role;
  *
  */
 public interface ExtendedRight {
+	/**
+	 * 获取权限列表
+	 * 
+	 * @return
+	 */
 	public RightInfo[] getRightInfos();
 
 	/**
