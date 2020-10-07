@@ -90,7 +90,7 @@ public class PageResult<T> extends ArrayList<T> {
 	/**
 	 * 默认分页大小
 	 */
-	static final int defaultPageSize = 8;
+	static final int DEFAULT_PAGE_SIZE = 8;
 
 	/**
 	 * 列表不分页，转换为 PageResult

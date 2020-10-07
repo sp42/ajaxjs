@@ -128,14 +128,15 @@ public abstract class RepositoryBase extends JdbcHelper implements InvocationHan
 		return bind(clz);
 	}
 
+	/**
+	 * 方法对象是否带有特定的注解
+	 */
 	private static BiFunction<Method, Class<? extends Annotation>, Boolean> isNull = (method, a) -> method.getAnnotation(a) != null;
 
-	private static Function<Class<? extends Annotation>, Function<Method, Boolean>> higherOrderFn = a -> {
-		return method -> isNull.apply(method, a);
-	};
+	private static Function<Class<? extends Annotation>, Function<Method, Boolean>> higherOrderFn = a -> method -> isNull.apply(method, a);
 
-	static Function<Method, Boolean> isRead = higherOrderFn.apply(Select.class), isCreate = higherOrderFn.apply(Insert.class), isUpdate = higherOrderFn.apply(Update.class),
-			isDelete = higherOrderFn.apply(Delete.class);
+	static Function<Method, Boolean> isRead = higherOrderFn.apply(Select.class), isCreate = higherOrderFn.apply(Insert.class),
+			isUpdate = higherOrderFn.apply(Update.class), isDelete = higherOrderFn.apply(Delete.class);
 
 	static boolean isRead(Method method) {
 		return isNull.apply(method, Select.class);

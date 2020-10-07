@@ -69,8 +69,8 @@ public class RepositoryReadOnly extends RepositoryBase {
 	Class<?> getReturnType(Method method) throws DaoException {
 		Class<?> clz = method.getReturnType();
 
-		if (clz == Map.class || clz == List.class || clz == PageResult.class || clz == int.class || clz == Integer.class || clz == long.class || clz == Long.class
-				|| clz == String.class || clz == Boolean.class || clz == boolean.class || clz.isArray())
+		if (clz == Map.class || clz == List.class || clz == PageResult.class || clz == int.class || clz == Integer.class || clz == long.class
+				|| clz == Long.class || clz == String.class || clz == Boolean.class || clz == boolean.class || clz.isArray())
 			return clz;
 
 		TableName t = getClz().getAnnotation(TableName.class);
@@ -112,7 +112,6 @@ public class RepositoryReadOnly extends RepositoryBase {
 	 * @throws DaoException DAO 异常
 	 */
 	Object select(Method method, Object[] args) throws DaoException {
-
 		Select select = method.getAnnotation(Select.class);
 		String sql = isSqlite(select.sqliteValue(), conn) ? select.sqliteValue() : select.value();
 
@@ -209,9 +208,7 @@ public class RepositoryReadOnly extends RepositoryBase {
 	@SuppressWarnings("unchecked")
 	public <T> PageResult<T> doPage(Class<T> entityType, Select select, ArgsInfo info) throws DaoException {
 		PageParams p = getPageParameters(info.method, info.args);
-
 		int total = countTotal(select, info.sql, p.args, info);
-
 		PageResult<T> result = new PageResult<>();
 
 		if (total <= 0) {
@@ -259,9 +256,8 @@ public class RepositoryReadOnly extends RepositoryBase {
 			// 这是默认的实现，你可以通过增加 sqlCount 注解给出特定的 统计行数 之 SQL
 			_sql = "SELECT COUNT(*) AS count FROM (" + sql + ") AS t;";
 			// countSql = sql.replaceAll("SELECT.*FROM", "SELECT COUNT(\\*) AS count FROM");
-		} else {
+		} else
 			_sql = countSql;
-		}
 
 		if (isSqlite(sqliteCountSql, conn))
 			_sql = sqliteCountSql;
@@ -269,7 +265,7 @@ public class RepositoryReadOnly extends RepositoryBase {
 		if (JdbcUtil.isSqlite(conn)) {
 			_sql = handleSql(_sql, info.method, args).sql;
 			return queryOne(conn, _sql, Integer.class, args);
-		} else {// mysql 返回 long，转换一下
+		} else { // mysql 返回 long，转换一下
 			_sql = handleSql(_sql, info.method, args).sql;
 			Long total = queryOne(conn, _sql, Long.class, args);
 			return total == null ? 0 : total.intValue();
@@ -277,7 +273,7 @@ public class RepositoryReadOnly extends RepositoryBase {
 	}
 
 	/**
-	 * 获取分页参数，利用反射 DAO 方法参数列表来定位分页的 start/limit
+	 * 获取分页参数，利用反射 DAO 方法参数列表来定位分页的 start/limit TODO 考虑创建cache优化
 	 * 
 	 * @param method 方法对象
 	 * @param args   包含分页参数 start/limit 的参数列表
@@ -288,48 +284,49 @@ public class RepositoryReadOnly extends RepositoryBase {
 		int[] pageParams = new int[2];
 		Parameter[] parameters = method.getParameters();
 
-		if (CommonUtil.isNull(parameters)) {
+		if (CommonUtil.isNull(parameters)) { // 若为空的参数，采用默认分页
 			pageParams[0] = 0;
-			pageParams[1] = PageResult.defaultPageSize;
+			pageParams[1] = PageResult.DEFAULT_PAGE_SIZE;
 		}
 
+		// 标记特殊的分页参数和 SqlHandler，要删除，其余的则是 SQL 参数
 		Integer removeStartIndex = null, removeLimitIndex = null, sqlHandlerIndex = null;
 
 		for (int i = 0; i < parameters.length; i++) {
-			Parameter param = parameters[i];
+			Parameter _param = parameters[i];
+			String param = _param.getName();
 
-			if ("arg0".equals(param.getName()) || "arg1".equals(param.getName()))
-				throw new Error(" Java 8 支持反射获取 参数 具体名称，但要打开编译开关。例如 Eclipse 须在 Store information about method parameters (usable via reflection) 打勾，或者编译时加入参数 -parameters。");
+			if ("arg0".equals(param) || "arg1".equals(param))
+				throw new Error(" Java 8 支持反射获取 参数 具体名称，但要打开编译开关。"
+						+ "例如 Eclipse 须在 Store information about method parameters (usable via reflection) 打勾，或者编译时加入参数 -parameters。");
 
-			if (param.getName().equalsIgnoreCase("start")) {
+			if (param.equalsIgnoreCase("start")) { // 反射获得变量名，java 8+支持
 				pageParams[0] = (int) args[i];
 				removeStartIndex = i;
-			} else if (param.getName().equalsIgnoreCase("limit")) {
+			} else if (param.equalsIgnoreCase("limit")) {
 				int l = (int) args[i];
 
 				if (l == 0) {// limit 不能为 0
-					pageParams[1] = PageResult.defaultPageSize;
-					args[i] = PageResult.defaultPageSize;
-				} else {
+					pageParams[1] = PageResult.DEFAULT_PAGE_SIZE;
+					args[i] = PageResult.DEFAULT_PAGE_SIZE;
+				} else
 					pageParams[1] = l;
-				}
 
 				removeLimitIndex = i;
-			} else if (Function.class.equals(param.getType())) {
+			} else if (Function.class.equals(_param.getType()))
 				sqlHandlerIndex = i;
-			}
 		}
 
-		List<Object> list = new ArrayList<>(); // 移除分页参数，形成新的参数列表
+		List<Object> sqlArgs = new ArrayList<>(); // 移除分页参数，形成新的参数列表
 
 		for (Integer i = 0; i < args.length; i++) {
 			if (i.equals(removeStartIndex) || i.equals(removeLimitIndex) || i.equals(sqlHandlerIndex)) {
 			} else
-				list.add(args[i]);
+				sqlArgs.add(args[i]);
 		}
 
 		p.pageParams = pageParams;
-		p.args = list.toArray();
+		p.args = sqlArgs.toArray(); // 纯 SQL 参数
 
 		return p;
 	}
