@@ -19,24 +19,17 @@
 			<!-- 后台头部导航 -->
 			<ajaxjs-admin-header>
 				<template slot="title">
-					${isCreate?'新建':'编辑'}${uiName}
+					编辑${uiName}
 					
-					<c:if test="${!isCreate}">
 						#${info.id} <!-- 外显 id -->
-					</c:if>
 				</template>
 				<template slot="btns">
-				<c:if test="${!isCreate}">
-					<a :href="ajResources.ctx + '/admin/${shortName}/'">新建</a> | 
-				</c:if>
 					<a :href="ajResources.ctx + '/admin/${shortName}/list/'">${uiName}列表</a> | 
 				</template>
 			</ajaxjs-admin-header>
 
-			<form action="." method="${isCreate ? 'POST' : 'PUT'}">
-			<c:if test="${!isCreate}">
+			<form action="." method="PUT">
 				<input type="hidden" name="id" value="${info.id}" /><!-- 传送 id 参数 -->
-			</c:if>
 			
 				<div>
 					<label>
@@ -47,7 +40,7 @@
 		
  					<label>
  						<div class="label">注册日期</div>  
-						<aj-form-calendar-input field-name="createDate" field-value="<c:dateFormatter value="${info.createDate}" />">
+						<aj-form-calendar-input field-name="createDate" :show-time="true" field-value="<c:dateFormatter value="${info.createDate}" />">
 						</aj-form-calendar-input> 
  					</label> 
 
@@ -140,7 +133,7 @@
 				</div>
 				<div>
 					<!--按钮 -->
-					<ajaxjs-admin-info-btns :is-create="${isCreate}"></ajaxjs-admin-info-btns>
+					<ajaxjs-admin-info-btns :is-create="fasle"></ajaxjs-admin-info-btns>
 				</div>
 			</form>
 		</div>
