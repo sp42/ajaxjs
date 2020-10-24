@@ -36,16 +36,12 @@ public class OrderService extends BaseService<OrderInfo> implements PayConstant 
 		setDao(dao);
 	}
 
-	@Resource("UserAddressService")
 	private UserAddressService addService = new UserAddressService();
 
-	@Resource("CartService")
 	private CartService cartService = new CartService();
 
-	@Resource("GoodsFormatService")
-	private GoodsFormatService goodsFormatService;
+	private GoodsFormatService goodsFormatService = new GoodsFormatService();
 
-	@Resource("OrderItemService")
 	private OrderItemService orderItemService = new OrderItemService();
 
 	/**
