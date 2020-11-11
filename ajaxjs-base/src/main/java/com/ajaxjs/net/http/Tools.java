@@ -23,6 +23,8 @@ import java.net.NetworkInterface;
 import java.net.Socket;
 import java.util.Enumeration;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
@@ -190,5 +192,19 @@ public class Tools {
 			return "" + map.get("country") + map.get("regionName") + map.get("city");
 		} else
 			throw new IOException("接口返回不成功 " + jsonStr);
+	}
+
+	/**
+	 * 判断IP是否内网
+	 * 
+	 * @param ip
+	 * @return
+	 */
+	public static boolean innerIP(String ip) {
+		Pattern reg = Pattern.compile(
+				"^(127\\.0\\.0\\.1)|(localhost)|(10\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})|(172\\.((1[6-9])|(2\\d)|(3[01]))\\.\\d{1,3}\\.\\d{1,3})|(192\\.168\\.\\d{1,3}\\.\\d{1,3})$");
+		Matcher match = reg.matcher(ip);
+
+		return match.find();
 	}
 }

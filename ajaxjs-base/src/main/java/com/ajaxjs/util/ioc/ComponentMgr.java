@@ -66,7 +66,6 @@ public class ComponentMgr {
 
 		new EveryClass().scan(packageName, resource -> {
 			ClassPool cp = ClassPool.getDefault();
-
 			// 类加载并添加 setter
 			try {
 				CtClass cc = cp.get(resource);

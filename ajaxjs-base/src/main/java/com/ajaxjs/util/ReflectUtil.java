@@ -138,7 +138,7 @@ public class ReflectUtil {
 	/**
 	 * 根据类名字符串获取类对象
 	 * 
-	 * @param clzName 类全称
+	 * @param clzName 类全称。如果是内部类请注意用法
 	 * @return 类对象
 	 */
 	public static Class<?> getClassByName(String clzName) {

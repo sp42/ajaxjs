@@ -212,7 +212,7 @@ public class RepositoryReadOnly extends RepositoryBase {
 		PageResult<T> result = new PageResult<>();
 
 		if (total <= 0) {
-			LogHelper.p(info.sql + "查询完毕，没有符合条件的记录");
+			LogHelper.p(info.sql + " 查询完毕，没有符合条件的记录");
 			result.setZero(true); // 查询完毕，没有符合条件的记录
 		} else {
 			int start = p.pageParams[0];
