@@ -24,7 +24,7 @@ import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.web.ByteArrayServletOutputStream;
+import com.ajaxjs.web.ByteArrayOutput;
 import com.ajaxjs.web.mvc.controller.IController;
 import com.ajaxjs.web.mvc.controller.MvcRequest;
 
@@ -112,7 +112,7 @@ public class CodeGenerators implements IController {
 		mkdir(save);
 		RequestDispatcher rd = req.getServletContext().getRequestDispatcher(info.getJsp());
 
-		try (ByteArrayServletOutputStream stream = new ByteArrayServletOutputStream();
+		try (ByteArrayOutput stream = new ByteArrayOutput();
 				PrintWriter pw = new PrintWriter(new OutputStreamWriter(stream.getOut(), "UTF-8"));
 				OutputStream out = new FileOutputStream(save);) {
 			rd.include(req, new HttpServletResponseWrapper(resp) {
