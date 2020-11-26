@@ -3,8 +3,7 @@
  */
 Vue.component('aj-avatar', {
 	template: '<a :href="avatar" target="_blank">\
-		<img :src="avatar" style="max-width:50px;max-height:60px;vertical-align: middle;" \
-	 		@mouseenter="mouseEnter" @mouseleave="mouseLeave" />\
+		<img :src="avatar" style="max-width:50px;max-height:60px;vertical-align: middle;" @mouseenter="mouseEnter" @mouseleave="mouseLeave" />\
 	</a>',
 	props: {
 		avatar: {type: String, required: true}
@@ -67,6 +66,7 @@ Vue.component('aj-cell-renderer', {
     },
     render(h) {
 		if(this.html.indexOf('<aj-')!= -1) {
+		
 	        var com = Vue.extend({
 	            template: this.html,
 	            props: {
@@ -95,22 +95,15 @@ Vue.component('aj-grid-inline-edit-row', {
 		aj.getTemplate('grid', 'aj-grid-inline-edit-row', this);
 	},
 	props: {
-		rowData: { // 输入的数据
-			type: Object, required: true,
-		},
-		showIdCol: { // 是否显示 id 列
-			type: Boolean, default: true
-		},
+		rowData: {type: Object, required: true},			// 输入的数据
+		showIdCol: { type: Boolean, default: true},			// 是否显示 id 列
 		columns: Array, // 列
-		showCheckboxCol: { // 是否显示 selectCheckbox 列
-			type: Boolean, default: true
-		},
+		showCheckboxCol: {type: Boolean, default: true},	// 是否显示 selectCheckbox 列
 		showControl: {type: Boolean, default: true},
-		filterField: Array, // 不要显示的字段,
-		enableInlineEdit: { // 是否可以 inline-edit
-			type: Boolean, default: false
-		},
-		deleApi: String // 删除路径
+		filterField: Array, 								// 不要显示的字段,
+		enableInlineEdit: {type: Boolean, default: false},	// 是否可以 inline-edit
+		deleApi: String, 									// 删除路径
+		controlUi: String									// 自定义“操作”按钮，这里填组件的名字
 	},
 	data() {
      	return {
@@ -124,22 +117,21 @@ Vue.component('aj-grid-inline-edit-row', {
 			this.$watch('data.' + i, this.makeWatch(i));
 		}
 	},
-	computed:{
+	computed: {
     	filterData() {// dep
 			var data = JSON.parse(JSON.stringify(this.data));// 剔除不要的字段
 			delete data.id;
 			delete data.dirty;
 			
-			if(this.filterField && this.filterField.length) {
+			if(this.filterField && this.filterField.length) 
 				this.filterField.forEach(i => delete data[i]);
-			}
 			
 	        return data;
 	    },
 
 		styleModifly() {
 			return {
-				padding:  this.isEditMode ? 0 : '',
+				padding: this.isEditMode ? 0 : '',
 				//fontSize: this.isEditMode ? 0 : ''
 			};
 		}
@@ -161,8 +153,11 @@ Vue.component('aj-grid-inline-edit-row', {
 			return this.isEditMode && !this.isFixedField(key) && !key.editMode;
 		},
 		renderCell(data, key) {
-			if(typeof key == 'function') 
-				return key(data);	
+			var v;
+			if(typeof key == 'function') {
+				v = key(data);
+				return v;	
+			}
 			
 			if(key === '')
 				return '';
@@ -175,7 +170,7 @@ Vue.component('aj-grid-inline-edit-row', {
 					return data[key.showMode];
 			} 
 			
-			var v = data[key];
+			v = data[key];
 			return (v === null ? '' : v) + '';
 		},
 		// 编辑按钮事件
@@ -184,9 +179,6 @@ Vue.component('aj-grid-inline-edit-row', {
 				this.isEditMode = !this.isEditMode;
 			else if(this.$parent.onEditClk)
 				this.$parent.onEditClk(this.id);
-			else {
-			
-			}
 		},
 		rendererEditMode(data, cfg) {
 			if(typeof cfg === 'string')
@@ -217,7 +209,7 @@ Vue.component('aj-grid-inline-edit-row', {
 				data.dirty[field] = _new; // 保存新的值，key 是字段名
 			}
 		},
-		dbEdit($event){
+		dbEdit($event) {
 			if(!this.enableInlineEdit)
 				return;
 			
@@ -226,7 +218,7 @@ Vue.component('aj-grid-inline-edit-row', {
 			if(this.isEditMode) {
 				var el = $event.target;
 					
-				setTimeout(()=> {
+				setTimeout(() => {
 					if(el.tagName !== 'INPUT')
 						el = el.$('input');
 
@@ -234,7 +226,7 @@ Vue.component('aj-grid-inline-edit-row', {
 				}, 200);
 			}
 		},
-		selectCheckboxChange($event){
+		selectCheckboxChange($event) {
 			var checkbox = $event.target;
 			var parent = this.$parent;
 			
@@ -245,8 +237,8 @@ Vue.component('aj-grid-inline-edit-row', {
 				parent.$set(parent.selected, this.id, false);
 		},
 		// 删除记录
-		dele(id){
-			aj.showConfirm('确定删除记录id:[' + id + ']', ()=>
+		dele(id) {
+			aj.showConfirm('确定删除记录id:[' + id + ']', () =>
 				aj.xhr.dele(this.deleApi + '/' + id + '/', j => {
 					if(j.isOk) {
 						aj.msg.show('删除成功');
@@ -281,21 +273,14 @@ Vue.component('aj-grid-inline-edit-row-create', {
 		aj.getTemplate('grid', 'aj-grid-inline-edit-row-create', this);
 	},
 	props: {
-		columns: {
-			type: Array, required: true
-		},
-		createApi: {
-			type: String, required: false, default: '.'
-		}
+		columns: {type: Array, required: true},
+		createApi: {type: String, required: false, default: '.'}
 	},
 	methods: {
 		// 编辑按钮事件
 		addNew() {
 			var map = {};
-			this.$el.$('*[name]', i => {
-				map[i.name] = i.value;
-			});
-			
+			this.$el.$('*[name]', i => map[i.name] = i.value);
 			this.BUS.$emit('before-add-new', map);
 			
 			aj.xhr.post(this.createApi, j => {
@@ -308,7 +293,7 @@ Vue.component('aj-grid-inline-edit-row-create', {
 					
 					this.$parent.reload();
 					this.$parent.showAddNew = false;
-				} else if(j && j.msg){
+				} else if(j && j.msg) {
 					aj.msg.show(j.msg);
 				}
 			}, map);
@@ -346,7 +331,7 @@ aj.Grid.common = {
 	},
 	methods: {
 		// 按下【新建】按钮时候触发的事件，你可以覆盖这个方法提供新的事件
-		onCreateClk(){
+		onCreateClk() {
 			this.showAddNew = true; 
 		},
 		getDirty() {

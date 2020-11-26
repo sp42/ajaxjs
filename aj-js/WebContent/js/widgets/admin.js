@@ -23,10 +23,8 @@ Vue.component('ajaxjs-admin-header', {
 // 后台增加、编辑、复位、删除按钮
 Vue.component('ajaxjs-admin-info-btns', {
 	props: {
-		isCreate: {
-			type: Boolean, // true=新建/fasle=编辑
-			default:false
-		}
+		isCreate: {type: Boolean, default: false},// true=新建/fasle=编辑
+		listUrl:  {type: String,  default: '../list/'} // 成功删除后跳转的地址
 	},
 	template: 
 		'<div class="ajaxjs-admin-info-btns">\
@@ -41,9 +39,8 @@ Vue.component('ajaxjs-admin-info-btns', {
 		del() {
 			if (confirm('确定删除？'))
 				aj.xhr.dele('.', j => {
-					if (j && j.isOk) {
-						location.assign('../list/');
-					}
+					if (j && j.isOk) 
+						location.assign(this.listUrl);
 				});
 		}
 	}
