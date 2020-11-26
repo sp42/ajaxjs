@@ -1,0 +1,64 @@
+[
+	{
+		"name": "活映产品",
+		"id": "product",
+		"children": [
+			{
+				"name": "工作流",
+				"id": "workflow"
+			},{
+				"name": "电子商务",
+				"id": "ebusiness"
+			},{
+				"name": "服务中心",
+				"id": "service"
+			}
+		]
+	},
+	{
+		"name": "客户案例",
+		"id": "works",
+		"dbNode":"worksCatalogs"
+	},
+	{
+		"name": "最新动态",
+		"id": "news",
+		"children": [
+			{
+				"name": "最新新闻",
+				"id": "news"
+			},
+			{
+				"name": "招聘",
+				"id": "hr"
+			}
+		]
+	},
+	{
+		"name": "关于活映",
+		"id": "about",
+		"children": [
+			{
+				"name": "公司简介",
+				"id": "intro"
+			},
+			{
+				"name": "联系我们",
+				"id": "contact"
+			},
+			{
+				"name": "网站服务条款",
+				"id": "service"
+			},
+			{
+				"name": "隐私政策",
+				"id": "privacy"
+			}
+		]
+	},
+	{
+		"name": "全局搜索",
+		"id": "global_search",
+		"isHidden": true
+	}
+]

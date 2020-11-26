@@ -1,0 +1,212 @@
+{
+	"site" : {
+		"titlePrefix" : "活映信息科技官方网站",
+		"keywords" : "广州活映, 活映, CMS,J2EE CMS,内容管理,内容管理系统,网站内容管理系统,品牌,网站建设,网站设计, APP 开发",
+		"description" : "品牌 App、网站建设与设计案例-来自活映不畏惧的创新力",
+		"footCopyright":"版权所有",
+		"domainName" : "www.ajaxjs.com",
+		"site_icp" : "粤ICP备18053388号"
+	},
+	"clientFullName":"广州活映信息技术有限公司",
+	"clientShortName":"活映信息科技",
+	"isDebug": false,
+	"data": {
+		"articleCatalog_Id": 1,
+		"newsCatalog_Id": 2,
+		"hrCatalog_Id": 112,
+		"bankCatelog_Id": 90,
+		"loanCatalog_Id": 60,
+		"adsCatalog_Id": 23,
+		"workCatalog_Id": 60,
+		"productCatalog_Id": 54,
+		"sectionCatalog_Id": 27,
+		"productArea_Id": 38,
+		"database_node": "jdbc/mysql", 
+		"entityProfile": {
+			"article": {
+				"id": 1,
+				"catalogId": 1,
+				"name": "图文",
+				"previewUrl": "/news/",
+				"adminInfoUrl": "/admin/article/"
+			},
+			"goods": {
+				"id": 2,
+				"catalogId": 1,
+				"name": "商品",
+				"previewUrl": "",
+				"adminInfoUrl": "/admin/goods/"
+			},
+			"ads": {
+				"id": 3,
+				"catalogId": 1,
+				"name": "广告",
+				"previewUrl": "",
+				"adminInfoUrl": "/admin/ads/"
+			},
+			"topic": {
+				"id": 4,
+				"catalogId": 1,
+				"name": "专题",
+				"previewUrl": "",
+				"adminInfoUrl": "/admin/topic/"
+			}
+		}
+	},
+	"entity": {
+		"exportXslPage": 2
+	},
+	"news_Id": {
+		"company_news_North": 48,
+		"company_news_south": 49,
+		"company_news_east": 50,
+		"company_news_west": 51,
+		"Annual_news_eighteen": 45,
+		"Annual_news_nineteen": 46
+	},
+	"page": {
+		"onNoLogin": "/guest/"
+	},
+	"uploadFile": {
+		"imgPerfix": "https://static-163yun.ajaxjs.com/",
+		"MaxTotalFileSize": 1024000,
+		"MaxSingleFileSize": 1024000,
+		"isFileOverwrite": true,
+		"isAutoNewFileName": true,
+		"saveFolder": {
+			"isUsingRelativePath": true,
+			"absolutePath": "C://temp//",
+			"relativePath": "/images"
+		},
+		"ObjectStorageService": {
+			"QiuNiuYun": {
+				"accessKey": "gLstU3RFYpGeSGlta6oiDRcIPuxCXqLzteM2eBXb",
+				"secretKey": "CMqwwslxW6ch7oi_cXT0qjjl_zQ8QV6bo48mhrRD",
+				"bucket": "leidong-static"
+			},
+			"NOS": {
+				"accessKey": "4c2396f706744a74ba6b8319e1099b60",
+				"secretKey": "67f070468939410491c54d6979614980",
+				"bucket": "ajaxjs",
+				"folder": "gz88"
+			}
+		}
+	},
+	"domain": {
+		"article": {
+			"attachmentDownload": true,
+			"share": true,
+			"neighborRecord": true,
+			"comment": true,
+			"pageHelper": true
+		}
+	},
+	"security": {
+		"isEnableSecurityIO": true,
+		"isXXS_Filter": true,
+		"disableCaptcha": true,
+		"GoogleReCAPTCHA": {
+			"siteId": "6LclfLMZAAAAAKC3YUTP4E3Ylc0PSvfnpneRePAH",
+			"secret": "6LclfLMZAAAAAD6XcxnUpBL0qHKYWijay7-lGpOf"
+		}
+	},
+	"forDelevelopers": {
+		"logAsFile": true,
+		"logAsFileFolder": "",
+		"enableWebSocketLogOutput": false
+	},
+	"testServer": {
+		"mysql": {
+			"url": "jdbc:mysql://test.ajaxjs.com/devDB?useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false",
+			"password": "root123abc",
+			"user": "root"
+		}
+	},
+	"baidu_tongji": {
+		"siteId": "13836594",
+		"api_username": "sp42",
+		"api_password": "a123123",
+		"api_token": "ced63a94f7e764d9d30cb92ceda67627",
+		"scriptId": "9af0b72c88478e11218173baceb24c5c"
+	},
+	"baidu_site_seach_id": "1253001271484243495",
+	"user": {
+		"login": {
+			"loginType": 7,
+			"passWordLoginType": 3,
+			"canModiflyUserName": true,
+			"thridOauth": true
+		},
+		"resetPassword": {
+			"mailBody": "<p>hihihi</p>"
+		},
+		"avatar": {
+			"maxWidth": 500,
+			"maxHeight": 500,
+			"maxSize": 1000
+		},
+		"oauth": {
+			"weibo": {
+				"clientId": "360568732",
+				"clientSercret": "f6b37692f8efbdda5496fd6b18b9e534",
+				"callback": "https://www.ajaxjs.com/user/oauth/weibo/callback/"
+			}
+		}
+	},
+	"mailServer": {
+		"server": "smtpdm.aliyun.com",
+		"user": "mail@palate-movement.com",
+		"password": "LeiDong12388"
+	},
+	"Symmetric": {
+		"AES_Key": "DFD342#@!A",
+		"apiTimeout": 300000
+	},
+	"System": {
+		"name":"进销存管理软件",
+		"tomcat_log": "/home/apache-tomcat-8.0.53/logs/",
+		"project_folder": "e:\\project\\aj-website",
+		"scanPackage": "com.ajaxjs",
+		"api": {
+			"AES_Key": "dFSD4324",
+			"timeout": 15
+		}
+	},
+	"wx_open": {
+		"appId": "wx6f5129b94baba822",
+		"appSecret": "d8ff89e9725ea480931dda409620cd8d",
+		"token": "ZoPnzkreQxVWehpMeawmJm2li1lGLPWK"
+	},
+	"mini_program": {
+		"appId": "wx9b32cc6efd1f45b8",
+		"appSecret": "82f70a7275395cb12564f37c320c7626",
+		"SessionId_AesKey": ""
+	},
+	"shop": {
+		"payment": {
+			"Alipay": {
+				"app_id": "2021001160631867",
+				"merchant_private_key": "MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDXBk5zgsOvbE7EQkpcEwU5G8NfD2py9eKQqF35OQ0n/alJa3fppnCj4TZfBB2bQQFn38A81pexLaKNMziPcT8Oa7osDu+wcCygl1lnVLDF2k640dbhdxyAVU0UwYvFtX2SJA5xFODyiUt3l0/LbTsWEQylRiFgy2dv/E3vbEXZcRdm/YMwoBBfgZ8WcXfph29fEm/7YMKhzhTjKizdqeLCbJA7asVWqTZ4bApH0F1FNjClDEFvAtNuWsq3KbY+LrM4+nmTSAgKHAo81xJzcLcUanNwd4p9xWTOSLeYchTC2Ms+hOWCUClDP87uAVtsiWps+QFCxPQoo+pnDW41tC1XAgMBAAECggEAC4NN7gdhXOIqsX1vJ9Do5a7j3hIgO/mIYQByz6ZLWwnM5552dC8yNsQXOi0pPKfVYG9thpRi2Ny9qFvGun9wxd/kvvkpwkOvUAXqhorVUDKpJmIt5DKRdxmaH/Ng/XwDNjDyCQH6LWJGhSe34Qd/M2ZETBEeNmWNq0RSE/CzKLo5RvSCVjG8pbhh9ckU9MdNknadMek/maOdy0zTAnRvVW1XiKD5GKPGbzvTyYK7VZZU5n9PZGv5jqCQuWchGwpVtM5R11t002/duonHPknwtMjz10CjXQaQwZtmUIgz2ZoFasswqIC80Jtwc5+ykt7rNWqRwvmgEi5m2bTZPhVhcQKBgQDzyRYjlU2vxY7D6K34GNLGH2pr96rVRgGqMgGsVDQpE4Sjz/kUxZpxGCYYMmHEEe5Eh8nMxJlUMJYxDCxnigEtFqN/p5gXO+/0mC9ZtB5snc3ohCDTtT3qxHZNPE6YEaeod41SFifhaUmn0RKLuSjnsJ59yfa21qNtE5GbGzU6fwKBgQDhzFGl4l/1ZZCJKi+Qmus0wZN3nDpNvZ2e7yAERhb4zLIDLxK41r1GSZCmejfkr4xRm4egF/bQGtA/WgUTmQGfldN2sp1S3XE76kpa2VpjpybR93dHsm3P95Jd0QxVF3wPPRw9SOQeBdyv5kdKqWtNYYpb9qAONJEC+OUs/USxKQKBgH8cGwIEqBP9Axpc6NCSSNvqp3eSFC3NqbKPDlZHNUcxmRg8qRfOjF9pgvtc0aME4mIzFuJAo93E05rRSRnXWBOlWSyHOwLqSowTCaVRCAgEI8eXlPIt7xHIzBIrXqNlmTB63WGuka6zUidBGNVnfs+HRKw7sPrWYTHPYT0pa5CLAoGAOKmLO7OJHQ21rZYWhZU6vOxu0y8zOlsA+OdNA4WLMjg726yuaBALQ14mnIBDEnIzJi9/Y19gImz4IU23xGk7DQ8OF9VOwYKsbbqnmhC9LBDAHySYnDdccznPUxeonpncGf7d3UszY41ZChMhhMzrDmoRzG4hUC9EzJgk+ps757ECgYBgNw37bntWZA0+Ourl1L5eM8WAZamZKPqw9w46hmWABwDWcLXdw30LTukijblyf1dFlYPr6CIWoe3jzEzOCUhxHiXJUi9/NyJ+YPPe0LtI05Q1pDxBScg7QOAwfo7gX5ms1VmXdoX7+mGSw5IJCmD11QqhxVQi9/6JbQDc1hX1uA==",
+				"merchant_public_key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1wZOc4LDr2xOxEJKXBMFORvDXw9qcvXikKhd+TkNJ/2pSWt36aZwo+E2XwQdm0EBZ9/APNaXsS2ijTM4j3E/Dmu6LA7vsHAsoJdZZ1SwxdpOuNHW4XccgFVNFMGLxbV9kiQOcRTg8olLd5dPy207FhEMpUYhYMtnb/xN72xF2XEXZv2DMKAQX4GfFnF36YdvXxJv+2DCoc4U4yos3aniwmyQO2rFVqk2eGwKR9BdRTYwpQxBbwLTblrKtym2Pi6zOPp5k0gIChwKPNcSc3C3FGpzcHeKfcVkzki3mHIUwtjLPoTlglApQz/O7gFbbIlqbPkBQsT0KKPqZw1uNbQtVwIDAQAB",
+				"alipay_public_key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArJS6ur3uqhpv6z3ismnmGv4P2p5r3aJ/jOG6KiY9HoFQGvScBVdirsoKsdiliCbaF4uHP03/rFxdsB2jESzXNJFNT6SU9RFs5uqWLMBVzu9SJRkNteBL6+aXPeIdhN0Jn/9zsRk2kJA7LwP9mt7cIACKvGcllll5R3VUZS/X/Lbmnu0Kr06kqegrrVDMq8hASaqZggiwyia/3eDn70M6VAo9dWb92pkKj/JKVZ8CzxFTr6eORaJPsTo2o9ChnlGwB5S6+KR+jLwI5hFgtqfFm5Ktj85nwZH3aEmEtEMVw32hiXLQrpI3C/+uoqVc82X4SyQC97AQxOc7Sh65ogCNawIDAQAB",
+				"return_url": "https://www.ajaxjs.com/shop/pay/alipay/result/",
+				"notify_url": "https://www.ajaxjs.com/shop/pay/alipay/notify/"
+			},
+			"wx": {
+				"appId": "wx6f5129b94baba822",
+				"mchId": "1553461861",
+				"apiSecret": "6F09rC7r5vdQtupI7ESgdWEhTVDJ0qeb",
+				"notifyUrl": "https://www.ajaxjs.com/shop/pay/wxpay/notify/"
+			}
+		},
+		"AllowPayType": 7
+	},
+	"sms": {
+		"aliyun": {
+			"accessKeyId": "LTAI4GHLzR6FdEDH6Xfw4Pd7",
+			"accessKeySecret": "yrkmvUV4Viy41e2zwE80onUqpKb3md",
+			"signName": "我是zyjf",
+			"templateCode": "SMS_128495105"
+		}
+	}
+}

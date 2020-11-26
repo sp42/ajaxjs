@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE Context>
+<Context>
+	<!--开发环境使用的配置 -->
+<!--     <Resource 
+        name="jdbc/mysql" 
+        auth="Container" 
+        type="javax.sql.DataSource"
+        maxActive="100" maxIdle="30" maxWait="10000" 
+        username="root" password="root123abc"
+        driverClassName="com.mysql.jdbc.Driver"
+        url="jdbc:mysql://35.220.228.5/test?useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false" />   -->
+    <Resource 
+        name="jdbc/mysql" 
+        auth="Container" 
+        type="javax.sql.DataSource" 
+        username="root" password="hi*569#"
+        driverClassName="com.mysql.jdbc.Driver"
+        url="jdbc:mysql://120.77.149.76:13308/jxc?useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false" />  
+       
+	<!--生产环境使用的配置 -->
+    <Resource 
+        name="jdbc/mysql_deploy" 
+        auth="Container" 
+        type="javax.sql.DataSource" 
+        username="root" password="hi*569#"
+        driverClassName="com.mysql.jdbc.Driver"
+        url="jdbc:mysql://120.77.149.76:13308/jxc?useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false" />  
+</Context>
