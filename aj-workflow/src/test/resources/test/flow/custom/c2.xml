@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE Context>
+<process displayName="custom2" name="custom2">
+	<start displayName="start1" layout="70,121,-1,-1" name="start1">
+		<transition g="" name="transition1" offset="0,0" to="CustomClass" />
+	</start>
+	<custom displayName="测试自定义节点2" layout="222,119,-1,-1" name="CustomClass" 
+		clazz="com.ajaxjs.workflow.flow.TestCustom$CustomClass" 
+		methodName="execute" var="returnValue" args="msg">
+		<transition g="" name="transition2" offset="0,0" to="end1" />
+	</custom>
+	<end displayName="end1" layout="421,121,-1,-1" name="end1" />
+</process>
