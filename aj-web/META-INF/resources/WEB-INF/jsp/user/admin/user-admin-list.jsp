@@ -84,7 +84,7 @@ BAR = new Vue({
 		this.$refs.pager.get();
 	},
 	methods: {
-		gridCols: (()=>{
+		gridCols: (() => {
 			var sex = data => {
 				switch(data['sex']) {
 					case 1:
@@ -94,7 +94,8 @@ BAR = new Vue({
 					default:
 						return '未知';
 				}
-			}, date = data => new Date(data.createDate).format("yyyy-MM-dd hh:mm"),
+			}, 
+			date = data => new Date(data.createDate).format("yyyy-MM-dd hh:mm"),
 			telOrMail = data => {
 				var　email = data['email'], phone = data['phone'];
 				if(email && phone)

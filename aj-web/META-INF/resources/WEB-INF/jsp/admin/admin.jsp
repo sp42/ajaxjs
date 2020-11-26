@@ -1,4 +1,5 @@
-<%@page pageEncoding="UTF-8"%>
+<%@page pageEncoding="UTF-8" import="com.ajaxjs.user.role.RoleService"%>
+<%@taglib uri="/ajaxjs" prefix="c"%>
 <!DOCTYPE html>
 <html style="height: 100%;">
 	<head>
@@ -25,6 +26,45 @@
 			<span class="menu">
 				<aj-accordion-menu>
 			    	<%@include file="/WEB-INF/jsp/admin/admin-menu.jsp" %>
+					<!-- 通用菜单	 -->		    
+					<li>
+						<h3 class="tools"><i></i> 通用模块</h3>
+						<ul>
+							<li><a target="iframepage" href="${ctx}/admin/article/list/">图文管理</a></li>
+							<li><a target="iframepage" href="${ctx}/admin/tree-like/">分类管理</a></li>
+							<li><a target="iframepage" href="${ctx}/admin/datadict/">数据字典</a></li>
+							<li><a target="iframepage" href="${ctx}/admin/attachment/">附件列表</a></li>
+							
+					<c:if test="${RoleService.check(privilegeTotal, RoleService.USER_PRIVILEGE)}">
+							<li><a target="iframepage" href="${ctx}/admin/user/list/">用户管理</a></li>
+					</c:if>
+						</ul>
+					</li>
+					
+					<li>
+						<h3 class="system"><i></i> 系统维护</h3>
+						<ul>
+					<c:if test="${RoleService.check(privilegeTotal, RoleService.GLOBAL_SETTING)}">
+							<li><a target="iframepage" href="${ctx}/admin/config/">配置参数</a></li>
+					</c:if>
+							<li><a target="iframepage" href="${ctx}/admin/userLoginLog/">登录日志</a></li>
+							<li><a target="iframepage" href="${ctx}/admin/userGlobalLog/">操作日志</a></li>
+					<c:if test="${RoleService.check(privilegeTotal, RoleService.DEVELOPER_TOOL)}">
+							<li><a target="iframepage" href="${ctx}/admin/developer-tool/">实用工具</a></li>
+							<li><a target="iframepage" href="${ctx}/admin/developer-tool/docs">文档</a></li>
+					</c:if>
+						</ul>
+					</li>
+					
+					<li>
+						<h3 class="accountCenter"><i></i> 账号中心</h3>
+						<ul>
+							<li><a target="iframepage" href="${ctx}/admin/user/account-center/">账号中心</a></li>
+							<li><a target="iframepage" href="${ctx}/admin/user/profile">个人信息</a></li>
+							<li><a href="javascript:logout();">退出登录</a></li>
+						</ul>
+					</li>
+					<!-- // 通用菜单	 -->
 			    </aj-accordion-menu>
 			</span>
 		</section>

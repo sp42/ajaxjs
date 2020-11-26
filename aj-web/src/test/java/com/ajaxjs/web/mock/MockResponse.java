@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.mockito.ArgumentCaptor;
 
-import com.ajaxjs.web.ByteArrayServletOutputStream;
+import com.ajaxjs.web.ByteArrayOutput;
 
 /**
  * 模拟一个 Response 对象
@@ -44,7 +44,7 @@ public class MockResponse {
 	 * @return 流对象以便获取信息
 	 */
 	public static ServletOutputStream streamFactory(HttpServletResponse response) {
-		ServletOutputStream out = new ByteArrayServletOutputStream();
+		ServletOutputStream out = new ByteArrayOutput();
 
 		/*
 		 * ServletOutputStream out = new ServletOutputStream() { private OutputStream os

@@ -12,6 +12,7 @@ import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.net.http.Tools;
 import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.user.UserConstant;
+import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.mvc.ModelAndView;
@@ -23,6 +24,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
  * 后台查看登录日志
  */
 @Path("/admin/userLoginLog")
+@Component
 public class LogLoginController extends BaseController<LogLogin> {
 	private static final LogHelper LOGGER = LogHelper.getLog(LogLoginController.class);
 
@@ -35,7 +37,7 @@ public class LogLoginController extends BaseController<LogLogin> {
 		LOGGER.info("用户登录日志-后台列表");
 		mv.put("LoginType", UserConstant.LOGIN_TYPE);
 
-		return output(mv, service.findPagedList(start, limit), "jsp::user/login-log-list");
+		return output(mv, getService().findPagedList(start, limit), "jsp::user/login-log-list");
 	}
 
 	@Override

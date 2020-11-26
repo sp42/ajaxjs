@@ -30,7 +30,7 @@
 			new Vue({el:' body > div'});
 		</script>
  
-		<%@include file="account-center-inner.jsp" %>
+		<%@include file="../user/account/account-inner.jsp" %>
 	</body>
 </html>
 

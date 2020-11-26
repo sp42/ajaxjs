@@ -103,7 +103,7 @@ public interface IController {
 	 */
 	public static Action findTreeByPath(String path) {
 		Matcher match = idRegexp.matcher(path); // 处理Path上的参数
-
+		
 		if (match.find())
 			path = match.replaceAll("/{id}");
 

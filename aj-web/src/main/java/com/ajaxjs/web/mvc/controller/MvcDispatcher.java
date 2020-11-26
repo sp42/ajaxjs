@@ -105,6 +105,7 @@ public class MvcDispatcher implements IComponent {
 			} else {
 //				LOGGER.info("{0} {1} 控制器没有这个方法！", httpMethod, request.getRequestURI());
 			}
+		} else {
 		}
 
 		return true;
