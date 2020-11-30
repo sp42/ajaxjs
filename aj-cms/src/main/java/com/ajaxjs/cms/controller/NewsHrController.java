@@ -1,4 +1,4 @@
-package com.ajaxjs.cms;
+package com.ajaxjs.cms.controller;
 
 import java.util.Map;
 
@@ -8,8 +8,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
-import com.ajaxjs.app.AttachmentController.AttachmentService;
-import com.ajaxjs.app.TreeLikeService;
+import com.ajaxjs.cms.controller.AttachmentController.AttachmentService;
+import com.ajaxjs.cms.service.NewsService;
+import com.ajaxjs.cms.service.TreeLikeService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.CommonConstant;

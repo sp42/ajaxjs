@@ -1,4 +1,4 @@
-package com.ajaxjs.cms;
+package com.ajaxjs.cms.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
@@ -13,6 +13,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.ajaxjs.cms.model.Address;
+import com.ajaxjs.cms.service.UserAddressService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.framework.filter.DataBaseFilter;

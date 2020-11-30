@@ -1,4 +1,4 @@
-package com.ajaxjs.cms;
+package com.ajaxjs.cms.model;
 
 import com.ajaxjs.framework.BaseModel;
 

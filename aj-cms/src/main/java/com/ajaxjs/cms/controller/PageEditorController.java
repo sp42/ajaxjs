@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.cms;
+package com.ajaxjs.cms.controller;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,8 +41,8 @@ import com.ajaxjs.web.mvc.controller.MvcRequest;
  *
  */
 @Path("/admin/page_editor")
-public class PageEditor extends BaseController<Object> {
-	private static final LogHelper LOGGER = LogHelper.getLog(PageEditor.class);
+public class PageEditorController extends BaseController<Object> {
+	private static final LogHelper LOGGER = LogHelper.getLog(PageEditorController.class);
 
 	/**
 	 * 浏览页面，加载一个含有 iframe 元素的页面。 对该页面你可以传入 url 参数指定 root 地址，否则就是 ../../，即 ${empty

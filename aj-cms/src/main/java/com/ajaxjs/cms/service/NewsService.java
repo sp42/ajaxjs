@@ -1,6 +1,5 @@
-package com.ajaxjs.cms;
+package com.ajaxjs.cms.service;
 
-import com.ajaxjs.app.ArticleService;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.util.ioc.Component;
 

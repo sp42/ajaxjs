@@ -1,4 +1,4 @@
-package com.ajaxjs.cms;
+package com.ajaxjs.cms.model;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

@@ -1,4 +1,4 @@
-package com.ajaxjs.cms;
+package com.ajaxjs.cms.controller;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -10,7 +10,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.app.TreeLikeService;
+import com.ajaxjs.cms.model.Ads;
+import com.ajaxjs.cms.service.AdsService;
+import com.ajaxjs.cms.service.TreeLikeService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.framework.filter.DataBaseFilter;
