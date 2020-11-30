@@ -2,9 +2,16 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>aj-jxc</groupId>
-	<artifactId>aj-jxc</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<parent>
+		<groupId>com.ajaxjs</groupId>
+		<artifactId>ajaxjs-parent</artifactId>
+		<version>1.0</version>
+		<relativePath>../ajaxjs-maven-global.xml</relativePath>
+	</parent>
+
+	<artifactId>ajaxjs-framework</artifactId>
+	<version>1.0.3</version>
+	
 	<packaging>war</packaging>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
@@ -37,8 +44,8 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
-			<artifactId>ajaxjs-framework</artifactId>
-			<version>1.0.2</version>
+			<artifactId>ajaxjs-workflow</artifactId>
+			<version>1.0.0</version>
 		</dependency>
 
 		<dependency>
