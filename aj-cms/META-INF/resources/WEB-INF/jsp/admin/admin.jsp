@@ -40,46 +40,46 @@
 					<c:if test="${RoleService.check(privilegeTotal, RoleService.TOPIC)}">
 							<li><a target="iframepage" href="${ctx}/admin/topic/list/">专题管理</a></li>
 					</c:if>
-					<c:if test="${RoleService.check(privilegeTotal, RoleService.FEEDBACK)}">
-							<li><a target="iframepage" href="${ctx}/admin/cms/feedback/list/">留言管理</a></li>
-					</c:if>
-					<c:if test="${RoleService.check(privilegeTotal, RoleService.WEBSITE)}">
-							<li><a target="iframepage" href="${ctx}/admin/page_editor/">页面内容</a></li>
-					</c:if>
 					<c:if test="${RoleService.check(privilegeTotal, RoleService.SECTION)}">
 							<li><a target="iframepage" href="${ctx}/admin/cms/section/">栏目管理</a></li>
 					</c:if>
 						</ul>
 					</li>	    
+					<c:if test="${RoleService.check(privilegeTotal, RoleService.WEBSITE)}">
 					<li>
-						<h3 class="tools"><i></i> 通用模块</h3>
+						<h3 class="tools"><i></i> 网站配置</h3>
 						<ul>
-							<li><a target="iframepage" href="${ctx}/admin/tree-like/">分类管理</a></li>
-							<li><a target="iframepage" href="${ctx}/admin/datadict/">数据字典</a></li>
-							<li><a target="iframepage" href="${ctx}/admin/attachment/">附件列表</a></li>
-							
-					<c:if test="${RoleService.check(privilegeTotal, RoleService.USER_PRIVILEGE)}">
-							<li><a target="iframepage" href="${ctx}/admin/user/list/">用户管理</a></li>
+							<li><a target="iframepage" href="${ctx}/admin/website/site/">网站信息</a></li>
+							<li><a target="iframepage" href="${ctx}/admin/website/siteStru/">网站结构</a></li>
+							<li><a target="iframepage" href="${ctx}/admin/website/page_editor/">页面内容</a></li>
+					<c:if test="${RoleService.check(privilegeTotal, RoleService.FEEDBACK)}">
+							<li><a target="iframepage" href="${ctx}/admin/website/feedback/list/">留言管理</a></li>
 					</c:if>
+							<li><a target="iframepage" href="${ctx}/admin/website/tongji/">网站统计</a></li>
 						</ul>
 					</li>
+					</c:if>
 					
 					<li>
 						<h3 class="system"><i></i> 系统维护</h3>
 						<ul>
 					<c:if test="${RoleService.check(privilegeTotal, RoleService.GLOBAL_SETTING)}">
-							<li><a target="iframepage" href="${ctx}/admin/config/">配置参数</a></li>
+							<li><a target="iframepage" href="${ctx}/admin/common/config/">配置参数</a></li>
+							<li><a target="iframepage" href="${ctx}/admin/common/tree-like/">分类管理</a></li>
+							<li><a target="iframepage" href="${ctx}/admin/common/datadict/">数据字典</a></li>
+							<li><a target="iframepage" href="${ctx}/admin/common/attachment/">附件列表</a></li>
 							
 					</c:if>
-					<c:if test="${RoleService.check(privilegeTotal, RoleService.WEBSITE)}">
-						<li><a target="iframepage" href="${ctx}/admin/config/site/">网站信息</a></li>
-						<li><a target="iframepage" href="${ctx}/admin/config/siteStru/">网站结构</a></li>
+					
+					<c:if test="${RoleService.check(privilegeTotal, RoleService.USER_PRIVILEGE)}">
+							<li><a target="iframepage" href="${ctx}/admin/user/list/">用户管理</a></li>
 					</c:if>
-							<li><a target="iframepage" href="${ctx}/admin/userLoginLog/">登录日志</a></li>
-							<li><a target="iframepage" href="${ctx}/admin/userGlobalLog/">操作日志</a></li>
+					
+							<li><a target="iframepage" href="${ctx}/admin/common/userLoginLog/">登录日志</a></li>
+							<li><a target="iframepage" href="${ctx}/admin/common/userGlobalLog/">操作日志</a></li>
 					<c:if test="${RoleService.check(privilegeTotal, RoleService.DEVELOPER_TOOL)}">
-							<li><a target="iframepage" href="${ctx}/admin/developer-tool/">实用工具</a></li>
-							<li><a target="iframepage" href="${ctx}/admin/developer-tool/docs">文档</a></li>
+							<li><a target="iframepage" href="${ctx}/admin/common/developer-tool/">实用工具</a></li>
+							<li><a target="iframepage" href="${ctx}/admin/common/developer-tool/docs">文档</a></li>
 					</c:if>
 						</ul>
 					</li>
