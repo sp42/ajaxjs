@@ -22,7 +22,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
  * 
  * 全局操作日志
  */
-@Path("/admin/userGlobalLog")
+@Path("/admin/common/userGlobalLog")
 public class GlobalLogController extends BaseController<Map<String, Object>> {
 	private static final LogHelper LOGGER = LogHelper.getLog(GlobalLogController.class);
 
@@ -49,7 +49,7 @@ public class GlobalLogController extends BaseController<Map<String, Object>> {
 
 		mv.put("LoginType", UserConstant.LOGIN_TYPE);
 
-		return output(mv, service.findPagedList(start, limit, BaseService::betweenCreateDate), "jsp::user/global-log-list");
+		return output(mv, service.findPagedList(start, limit, BaseService::betweenCreateDate), "jsp::common/global-log-list");
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.developer;
+package com.ajaxjs.cms.common.developer;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.DELETE;
@@ -8,7 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.developer.MysqlAutoBackup.MysqlExport;
+import com.ajaxjs.cms.common.developer.MysqlAutoBackup.MysqlExport;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
@@ -27,7 +27,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
  * @author sp42 frank@ajaxjs.com
  *
  */
-@Path("/admin/developer-tool")
+@Path("/admin/common/developer-tool")
 public class DeveloperToolsController implements IController {
 	@GET
 	public String deve(ModelAndView mv, MvcRequest r) {
@@ -35,13 +35,13 @@ public class DeveloperToolsController implements IController {
 		mv.put("saveFolder", ConfigService.getValueAsString("System.project_folder") + "\\src"); // 臨時保存
 		mv.put("conn", XmlHelper.nodeAsMap(r.mappath("/META-INF/context.xml"), "//Resource[@name='" + ConfigService.get("data.database_node") + "']"));
 
-		return BaseController.jsp("cms/developer/developer-tool");
+		return BaseController.jsp("common/developer/developer-tool");
 	}
 
 	@Path("docs")
 	@GET
 	public String docs() {
-		return BaseController.jsp("cms/developer/developer-doc");
+		return BaseController.jsp("common/developer/developer-doc");
 	}
 
 	@Path("backup/images")

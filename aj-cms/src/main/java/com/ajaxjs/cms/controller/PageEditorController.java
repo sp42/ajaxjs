@@ -40,7 +40,7 @@ import com.ajaxjs.web.mvc.controller.MvcRequest;
  * @author sp42 frank@ajaxjs.com
  *
  */
-@Path("/admin/page_editor")
+@Path("/admin/website/page_editor")
 public class PageEditorController extends BaseController<Object> {
 	private static final LogHelper LOGGER = LogHelper.getLog(PageEditorController.class);
 
@@ -53,7 +53,7 @@ public class PageEditorController extends BaseController<Object> {
 	@GET
 	public String show() {
 		LOGGER.info("浏览页面");
-		return admin("page-load-iframe");
+		return jsp("website/page-load-iframe");
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class PageEditorController extends BaseController<Object> {
 		LOGGER.info("编辑页面" + path);
 		r.setAttribute("contentBody", readContent(path));
 
-		return admin("page-editor");
+		return jsp("website/page-editor");
 	}
 
 	/**

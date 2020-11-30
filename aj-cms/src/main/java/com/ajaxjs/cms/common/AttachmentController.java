@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.controller;
+package com.ajaxjs.cms.common;
 
 import java.io.IOException;
 import java.util.List;
@@ -41,7 +41,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
  * 控制器
  */
 @Component
-@Path("/admin/attachment")
+@Path("/admin/common/attachment")
 public class AttachmentController extends BaseController<Attachment> {
 	private static final LogHelper LOGGER = LogHelper.getLog(AttachmentController.class);
 
@@ -75,7 +75,7 @@ public class AttachmentController extends BaseController<Attachment> {
 	@MvcFilter(filters = { DataBaseFilter.class })
 	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		LOGGER.info("附件列表-前台");
-		return output(mv, service.findPagedList(catalogId, start, limit, CommonConstant.ON_LINE, true), "jsp::app/attachment-admin-list");
+		return output(mv, service.findPagedList(catalogId, start, limit, CommonConstant.ON_LINE, true), "jsp::common/attachment-admin-list");
 	}
 
 	@POST

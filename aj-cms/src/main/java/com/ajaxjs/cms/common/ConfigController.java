@@ -10,7 +10,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.ajaxjs.cms.controller;
+package com.ajaxjs.cms.common;
 
 import java.io.File;
 import java.util.Map;
@@ -40,7 +40,7 @@ import com.ajaxjs.web.mvc.controller.MvcRequest;
  * @author sp42 frank@ajaxjs.com
  *
  */
-@Path("/admin/config")
+@Path("/admin/common/config")
 public class ConfigController implements IController {
 	private static final LogHelper LOGGER = LogHelper.getLog(ConfigController.class);
 
@@ -51,7 +51,7 @@ public class ConfigController implements IController {
 		mv.put("conn", XmlHelper.nodeAsMap(r.mappath("/META-INF/context.xml"), "//Resource[@name='" + ConfigService.get("data.database_node") + "']"));
 		loadJson(mv);
 
-		return BaseController.jsp("app/config/config");
+		return BaseController.jsp("common/config");
 	}
 
 	// TODO
@@ -75,14 +75,14 @@ public class ConfigController implements IController {
 	}
 
 	@GET
-	@Path("site")
+	@Path("/admin/website/site")
 	public String siteUI() {
 		LOGGER.info("编辑网站信息");
-		return BaseController.admin("config/config-site-form");
+		return BaseController.jsp("website/config-site-form");
 	}
 
 	@POST
-	@Path("site")
+	@Path("/admin/website/site")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String saveSite(Map<String, Object> map, HttpServletRequest request) {
 		LOGGER.info("保存网站信息");
@@ -90,17 +90,17 @@ public class ConfigController implements IController {
 	}
 
 	@GET
-	@Path("siteStru")
+	@Path("/admin/website/siteStru")
 	public String siteStruUI(ModelAndView model) {
 		LOGGER.info("编辑网站结构");
 
 		model.put("siteStruJson", FileHelper.openAsText(SiteStruService.STRU.getJsonPath()));
 
-		return BaseController.admin("config/config-site-stru");
+		return BaseController.jsp("website/config-site-stru");
 	}
 
 	@POST
-	@Path("siteStru")
+	@Path("/admin/website/siteStru")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String saveSiteStru(@NotNull @FormParam("json") String json) {
 		LOGGER.info("保存网站结构");
@@ -112,7 +112,7 @@ public class ConfigController implements IController {
 	}
 
 	@POST
-	@Path("siteStru/initJSP")
+	@Path("/admin/website/siteStru/initJSP")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String siteStruUI_initJSP(@FormParam("path") String path, MvcRequest r) {
 		LOGGER.info("初始化 JSP 页面");

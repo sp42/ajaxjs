@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.developer;
+package com.ajaxjs.cms.common.developer;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +24,7 @@ import com.ajaxjs.web.mvc.controller.IController;
  * @author sp42 frank@ajaxjs.com
  *
  */
-@Path("/admin/tomcat-log")
+@Path("/admin/common/tomcat-log")
 @ServerEndpoint("/tomcat_log")
 public class TomcatLogController implements IController {
 	private static final LogHelper LOGGER = LogHelper.getLog(TomcatLogController.class);

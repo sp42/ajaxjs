@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.developer;
+package com.ajaxjs.cms.common.developer;
 
 import java.io.BufferedReader;
 import java.io.File;

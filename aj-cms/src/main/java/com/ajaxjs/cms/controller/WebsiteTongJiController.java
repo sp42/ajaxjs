@@ -13,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.net.http.HttpBasicRequest;
 import com.ajaxjs.util.CommonUtil;
@@ -25,12 +26,12 @@ import com.ajaxjs.web.mvc.controller.IController;
  * @author sp42 frank@ajaxjs.com
  *
  */
-@Path("admin/website_tongji")
+@Path("admin/website/tongji")
 public class WebsiteTongJiController implements IController {
 
 	@GET
 	public String get() {
-		return "/WEB-INF/jsp/admin/website_tongji";
+		return BaseController.jsp("/website/website_tongji");
 	}
 
 	private final static SimpleDateFormat formater = CommonUtil.simpleDateFormatFactory("yyyyMMdd");
@@ -68,7 +69,7 @@ public class WebsiteTongJiController implements IController {
 		calendar.setTime(now);
 		calendar.add(Calendar.DAY_OF_MONTH, -1);// 昨天
 		String today = formater.format(now), yesterday = formater.format(calendar.getTime());
-		
+
 		Map<String, Object> body = new HashMap<String, Object>() {
 			private static final long serialVersionUID = 1L;
 			{

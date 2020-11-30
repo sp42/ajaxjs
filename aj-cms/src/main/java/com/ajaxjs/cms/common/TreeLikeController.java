@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.controller;
+package com.ajaxjs.cms.common;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -24,7 +24,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
  * 控制器
  */
 @Component
-@Path("/admin/tree-like")
+@Path("/admin/common/tree-like")
 public class TreeLikeController extends BaseController<Catalog> {
 	@Resource
 	private TreeLikeService service;
@@ -36,7 +36,7 @@ public class TreeLikeController extends BaseController<Catalog> {
 			return toJson(service.getAllChildren());
 		} else {
 			prepareData(mv);
-			return jsp("app/tree-like");
+			return jsp("common/tree-like");
 		}
 	}
 

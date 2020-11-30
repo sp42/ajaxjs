@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.controller;
+package com.ajaxjs.cms.common;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +33,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
  *         收货信息： 姓名：黎志坚 邮寄地址：广东省 广州市 越秀区白云路45号之四602 邮政编码：510200 移动电话：13533476582
  * 
  */
-@Path("/admin/datadict/")
+@Path("/admin/common/datadict/")
 @Component
 public class DataDictController extends BaseController<Map<String, Object>> {
 	@Resource
@@ -60,7 +60,7 @@ public class DataDictController extends BaseController<Map<String, Object>> {
 
 			prepareData(mv);
 
-			return jsp("/app/data-dict");
+			return jsp("common/data-dict");
 		}
 	}
 

@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.developer;
+package com.ajaxjs.cms.common.developer;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -24,7 +24,7 @@ import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.mvc.controller.IController;
 import com.ajaxjs.web.mvc.filter.MvcFilter;
 
-@Path("/admin/DataBaseShowStru")
+@Path("/admin/common/DataBaseShowStru")
 public class DataBaseStruController implements IController {
 	private static final LogHelper LOGGER = LogHelper.getLog(DataBaseStruController.class);
 
@@ -32,7 +32,7 @@ public class DataBaseStruController implements IController {
 	public String show() {
 		LOGGER.info("表字段浏览");
 
-		return BaseController.jsp("cms/developer/developer-database-stru");
+		return BaseController.jsp("common/developer/developer-database-stru");
 	}
 
 	@GET
