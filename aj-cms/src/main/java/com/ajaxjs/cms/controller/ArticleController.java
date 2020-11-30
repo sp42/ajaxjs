@@ -16,9 +16,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.cms.common.AttachmentController;
+import com.ajaxjs.cms.common.TreeLikeService;
 import com.ajaxjs.cms.common.AttachmentController.AttachmentService;
 import com.ajaxjs.cms.service.ArticleService;
-import com.ajaxjs.cms.service.TreeLikeService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.BaseService;
@@ -43,7 +43,7 @@ import com.ajaxjs.web.mvc.controller.MvcRequest;
 import com.ajaxjs.web.mvc.filter.MvcFilter;
 
 @Component
-@Path("/article")
+@Path("/cms/article")
 public class ArticleController extends BaseController<Map<String, Object>> {
 	private static final LogHelper LOGGER = LogHelper.getLog(ArticleController.class);
 

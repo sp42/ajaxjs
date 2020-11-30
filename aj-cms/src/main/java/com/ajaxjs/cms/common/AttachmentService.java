@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.service;
+package com.ajaxjs.cms.common;
 
 import java.util.Collections;
 import java.util.Comparator;

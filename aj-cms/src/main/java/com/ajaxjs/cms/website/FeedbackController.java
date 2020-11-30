@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.controller;
+package com.ajaxjs.cms.website;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -10,8 +10,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.model.Feedback;
-import com.ajaxjs.cms.service.FeedbackService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.framework.filter.CaptchaFilter;

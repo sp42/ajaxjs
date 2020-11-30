@@ -30,7 +30,7 @@
 					<li>
 						<h3><i class="fa fa-sitemap"></i> 内容管理</h3>
 						<ul>
-							<li><a target="iframepage" href="${ctx}/admin/article/list/">图文管理</a></li>
+							<li><a target="iframepage" href="${ctx}/admin/cms/article/list/">图文管理</a></li>
 					<c:if test="${RoleService.check(privilegeTotal, RoleService.ADS)}">
 							<li><a target="iframepage" href="${ctx}/admin/cms/ads/list/">广告管理</a></li>
 					</c:if>
@@ -38,7 +38,7 @@
 						 	<li><a target="iframepage" href="${ctx}/admin/cms/hr/list/">招聘管理</a></li> 
 					</c:if>
 					<c:if test="${RoleService.check(privilegeTotal, RoleService.TOPIC)}">
-							<li><a target="iframepage" href="${ctx}/admin/topic/list/">专题管理</a></li>
+							<li><a target="iframepage" href="${ctx}/admin/cms/topic/list/">专题管理</a></li>
 					</c:if>
 					<c:if test="${RoleService.check(privilegeTotal, RoleService.SECTION)}">
 							<li><a target="iframepage" href="${ctx}/admin/cms/section/">栏目管理</a></li>
@@ -73,10 +73,10 @@
 					
 					<c:if test="${RoleService.check(privilegeTotal, RoleService.USER_PRIVILEGE)}">
 							<li><a target="iframepage" href="${ctx}/admin/user/list/">用户管理</a></li>
+							<li><a target="iframepage" href="${ctx}/admin/user/userLoginLog/">登录日志</a></li>
+							<li><a target="iframepage" href="${ctx}/admin/user/userGlobalLog/">操作日志</a></li>
 					</c:if>
 					
-							<li><a target="iframepage" href="${ctx}/admin/common/userLoginLog/">登录日志</a></li>
-							<li><a target="iframepage" href="${ctx}/admin/common/userGlobalLog/">操作日志</a></li>
 					<c:if test="${RoleService.check(privilegeTotal, RoleService.DEVELOPER_TOOL)}">
 							<li><a target="iframepage" href="${ctx}/admin/common/developer-tool/">实用工具</a></li>
 							<li><a target="iframepage" href="${ctx}/admin/common/developer-tool/docs">文档</a></li>

@@ -9,8 +9,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.model.Catalog;
-import com.ajaxjs.cms.service.TreeLikeService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.sql.orm.IBaseService;

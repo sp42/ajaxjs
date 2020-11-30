@@ -23,7 +23,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
  * 
  * 后台查看登录日志
  */
-@Path("/admin/common/userLoginLog")
+@Path("/admin/user/userLoginLog")
 @Component
 public class LogLoginController extends BaseController<LogLogin> {
 	private static final LogHelper LOGGER = LogHelper.getLog(LogLoginController.class);
@@ -37,7 +37,7 @@ public class LogLoginController extends BaseController<LogLogin> {
 		LOGGER.info("用户登录日志-后台列表");
 		mv.put("LoginType", UserConstant.LOGIN_TYPE);
 
-		return output(mv, getService().findPagedList(start, limit), "jsp::common//login-log-list");
+		return output(mv, getService().findPagedList(start, limit), "jsp::user/login-log-list");
 	}
 
 	@Override

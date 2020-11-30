@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.controller;
+package com.ajaxjs.cms.website;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

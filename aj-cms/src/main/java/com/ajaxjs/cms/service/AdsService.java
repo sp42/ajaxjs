@@ -3,6 +3,7 @@ package com.ajaxjs.cms.service;
 import java.util.List;
 import java.util.function.Function;
 
+import com.ajaxjs.cms.common.TreeLikeService;
 import com.ajaxjs.cms.model.Ads;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.config.ConfigService;

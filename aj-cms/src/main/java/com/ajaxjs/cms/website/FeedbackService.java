@@ -1,9 +1,8 @@
-package com.ajaxjs.cms.service;
+package com.ajaxjs.cms.website;
 
 import java.util.List;
 import java.util.function.Function;
 
-import com.ajaxjs.cms.model.Feedback;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.sql.annotation.Select;
 import com.ajaxjs.sql.annotation.TableName;

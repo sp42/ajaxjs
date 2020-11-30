@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.service;
+package com.ajaxjs.cms.common;
 
 import java.util.HashMap;
 import java.util.List;

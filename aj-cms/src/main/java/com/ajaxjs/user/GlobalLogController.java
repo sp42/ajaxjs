@@ -1,4 +1,4 @@
-package com.ajaxjs.cms.controller;
+package com.ajaxjs.user;
 
 import java.util.Map;
 
@@ -13,7 +13,6 @@ import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.sql.orm.Repository;
-import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.mvc.ModelAndView;
 import com.ajaxjs.web.mvc.filter.MvcFilter;
@@ -22,7 +21,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
  * 
  * 全局操作日志
  */
-@Path("/admin/common/userGlobalLog")
+@Path("/admin/user/userGlobalLog")
 public class GlobalLogController extends BaseController<Map<String, Object>> {
 	private static final LogHelper LOGGER = LogHelper.getLog(GlobalLogController.class);
 
@@ -49,7 +48,7 @@ public class GlobalLogController extends BaseController<Map<String, Object>> {
 
 		mv.put("LoginType", UserConstant.LOGIN_TYPE);
 
-		return output(mv, service.findPagedList(start, limit, BaseService::betweenCreateDate), "jsp::common/global-log-list");
+		return output(mv, service.findPagedList(start, limit, BaseService::betweenCreateDate), "jsp::user/global-log-list");
 	}
 
 	@Override

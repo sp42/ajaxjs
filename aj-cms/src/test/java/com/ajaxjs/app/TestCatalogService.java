@@ -8,9 +8,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.cms.model.Catalog;
+import com.ajaxjs.cms.common.Catalog;
+import com.ajaxjs.cms.common.TreeLikeService;
 import com.ajaxjs.cms.service.ArticleService;
-import com.ajaxjs.cms.service.TreeLikeService;
 import com.ajaxjs.framework.TestHelper;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.orm.PageResult;

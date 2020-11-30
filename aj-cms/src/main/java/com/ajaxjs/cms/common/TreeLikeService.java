@@ -1,11 +1,10 @@
-package com.ajaxjs.cms.service;
+package com.ajaxjs.cms.common;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.ajaxjs.cms.model.Catalog;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.sql.annotation.Delete;
