@@ -40,8 +40,8 @@
 
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
-			<artifactId>ajaxjs-framework</artifactId>
-			<version>1.0.2</version>
+			<artifactId>ajaxjs-cms</artifactId>
+			<version>1.0.4</version>
 		</dependency>
 
 		<dependency>
