@@ -1,0 +1,168 @@
+package com.ajaxjs.shop.payment.wxpay;
+
+public interface PayConstant {
+
+	/**
+	 * 查询订单
+	 */
+	public static final String orderQuery = "https://api.mch.weixin.qq.com/pay/orderquery";
+
+	/**
+	 * 关闭订单
+	 */
+	public static final String closeOrder = "https://api.mch.weixin.qq.com/pay/closeorder";
+
+	/**
+	 * 
+	 */
+	public static final String refund = "https://api.mch.weixin.qq.com/secapi/pay/refund";
+
+	/**
+	 * 查询退款
+	 */
+	public static final String refundquery = "https://api.mch.weixin.qq.com/pay/refundquery";
+
+	/**
+	 * 异步接收微信支付退款结果通知的回调地址，通知URL必须为外网可访问的url，不允许带参数，如果参数中传了notify_url，则商户平台上配置的回调地址将不会生效。
+	 */
+	public static String NOTIFY_URL_REFUND = "https://xxx.com/v1/weixin/pay/refund";
+
+	/**
+	 * 微信 - API域名地址 域名管理实现主备域名自动切换
+	 */
+	public static final String DOMAIN_API = "api.mch.weixin.qq.com";
+	public static final String DOMAIN_API2 = "api2.mch.weixin.qq.com";
+	public static final String DOMAIN_APIHK = "apihk.mch.weixin.qq.com";
+	public static final String DOMAIN_APIUS = "apius.mch.weixin.qq.com";
+
+	/**
+	 * 微信 - 默认接口返回状态码 SUCCESS/FAIL 此字段是通信标识，非交易标识，交易是否成功需要查看result_code来判断
+	 */
+	public static final String RESULT_CODE = "result_code";
+	public static final String FAIL = "FAIL";
+	public static final String SUCCESS = "SUCCESS";
+
+	/**
+	 * 返回状态码 return_code SUCCESS/FAIL 此字段是通信标识，非交易标识，交易是否成功需要查看result_code来判断 返回信息
+	 * return_msg 当return_code为FAIL时返回信息为错误原因 错误代码 err_code
+	 * 当result_code为FAIL时返回错误代码，详细参见下文错误列表 错误代码描述 err_code_des
+	 * 当result_code为FAIL时返回错误描述，详细参见下文错误列表
+	 */
+	public static final String RETURN_CODE = "return_code";
+	public static final String RETURN_MSG = "return_msg";
+	public static final String ERR_CODE = "err_code";
+	public static final String ERR_CODE_DES = "err_code_des";
+
+	/**
+	 * 微信支付版本
+	 */
+	public static final String WXPAYSDK_VERSION = "WXPaySDK/3.0.9";
+
+//    public static final String USER_AGENT = WXPAYSDK_VERSION +
+//            " (" + System.getProperty("os.arch") + " " + System.getProperty("os.name") + " " + System.getProperty("os.version") +
+//            ") Java/" + System.getProperty("java.version") + " HttpClient/" + HttpClient.class.getPackage().getImplementationVersion();
+
+	/**
+	 * 作用：企业付款到零钱资金使用商户号余额资金<br>
+	 * 场景：用于企业向微信用户个人付款
+	 */
+	public static final String TRANSFERS_URL_SUFFIX = "/mmpaymkttransfers/promotion/transfers";
+	/**
+	 * 作用：商户平台-现金红包-发放普通红包<br>
+	 * 场景：现金红包发放后会以公众号消息的形式触达用户 其他：需要证书
+	 */
+	public static final String SENDREDPACK_URL_SUFFIX = "/mmpaymkttransfers/sendredpack";
+	/**
+	 * 作用：商户平台-现金红包-查询红包记录<br>
+	 * 场景：用于商户对已发放的红包进行查询红包的具体信息，可支持普通红包和裂变包。 其他：需要证书
+	 */
+	public static final String GETHBINFO_URL_SUFFIX = "/mmpaymkttransfers/gethbinfo";
+
+	/**
+	 * 作用：商户平台-代金券或立减优惠-发放代金券<br>
+	 * 场景：用于商户主动调用接口给用户发放代金券的场景，已做防小号处理，给小号发放代金券将返回错误码。 注意：通过接口发放的代金券不会进入微信卡包
+	 * 其他：请求需要双向证书
+	 */
+	public static final String SEND_COUPON_URL_SUFFIX = "/mmpaymkttransfers/send_coupon";
+
+	/**
+	 * 作用：商户平台-代金券或立减优惠-查询代金券信息<br>
+	 * 场景：查询代金券信息。
+	 */
+	public static final String QUERYCOUPONSINFO_URL_SUFFIX = "/mmpaymkttransfers/querycouponsinfo";
+
+	/**
+	 * 作用：商户平台-代金券或立减优惠-查询代金券批次<br>
+	 * 场景：查询代金券批次信息。
+	 */
+	public static final String QUERY_COUPON_STOCK_URL_SUFFIX = "/mmpaymkttransfers/query_coupon_stock";
+
+	/**
+	 * 作用：提交刷卡支付<br>
+	 * 场景：刷卡支付
+	 */
+	public static final String MICROPAY_URL_SUFFIX = "/pay/micropay";
+
+	/**
+	 * 作用：统一下单<br>
+	 * 场景：公共号支付、扫码支付、APP支付
+	 */
+	public static final String UNIFIEDORDER_URL_SUFFIX = "/pay/unifiedorder";
+	/**
+	 * 作用：查询订单<br>
+	 * 场景：刷卡支付、公共号支付、扫码支付、APP支付
+	 */
+	public static final String ORDERQUERY_URL_SUFFIX = "/pay/orderquery";
+
+	/**
+	 * 作用：撤销订单<br>
+	 * 场景：刷卡支付<br>
+	 * 其他：需要证书
+	 */
+	public static final String REVERSE_URL_SUFFIX = "/secapi/pay/reverse";
+
+	/**
+	 * 作用：关闭订单<br>
+	 * 场景：公共号支付、扫码支付、APP支付
+	 */
+	public static final String CLOSEORDER_URL_SUFFIX = "/pay/closeorder";
+
+	/**
+	 * 作用：申请退款<br>
+	 * 场景：刷卡支付、公共号支付、扫码支付、APP支付<br>
+	 * 其他：需要证书
+	 */
+	public static final String REFUND_URL_SUFFIX = "/secapi/pay/refund";
+
+	/**
+	 * 作用：退款查询<br>
+	 * 场景：刷卡支付、公共号支付、扫码支付、APP支付
+	 */
+	public static final String REFUNDQUERY_URL_SUFFIX = "/pay/refundquery";
+
+	/**
+	 * 作用：对账单下载<br>
+	 * 场景：刷卡支付、公共号支付、扫码支付、APP支付<br>
+	 * 其他：无论是否成功都返回Map。若成功，返回的Map中含有return_code、return_msg、data，
+	 * 其中return_code为`SUCCESS`，data为对账单数据。
+	 */
+	public static final String DOWNLOADBILL_URL_SUFFIX = "/pay/downloadbill";
+
+	/**
+	 * 作用：交易保障<br>
+	 * 场景：刷卡支付、公共号支付、扫码支付、APP支付
+	 */
+	public static final String REPORT_URL_SUFFIX = "/payitil/report";
+
+	/**
+	 * 作用：转换短链接<br>
+	 * 场景：刷卡支付、扫码支付
+	 */
+	public static final String SHORTURL_URL_SUFFIX = "/tools/shorturl";
+
+	/**
+	 * 作用：授权码查询OPENID接口<br>
+	 * 场景：刷卡支付
+	 */
+	public static final String AUTHCODETOOPENID_URL_SUFFIX = "/tools/authcodetoopenid";
+}

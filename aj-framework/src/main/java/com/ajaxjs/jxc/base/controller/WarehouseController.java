@@ -13,8 +13,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.Address;
-import com.ajaxjs.cms.UserAddressService;
+import com.ajaxjs.cms.model.Address;
+import com.ajaxjs.cms.service.UserAddressService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.CommonConstant;

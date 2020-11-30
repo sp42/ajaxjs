@@ -11,7 +11,7 @@
 
 	<artifactId>ajaxjs-framework</artifactId>
 	<version>1.0.3</version>
-	
+
 	<packaging>war</packaging>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
@@ -42,6 +42,12 @@
 		</plugins>
 	</build>
 	<dependencies>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.30</version>
+		</dependency>
+
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-workflow</artifactId>

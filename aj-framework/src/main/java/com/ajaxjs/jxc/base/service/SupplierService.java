@@ -2,7 +2,7 @@ package com.ajaxjs.jxc.base.service;
 
 import java.util.function.Function;
 
-import com.ajaxjs.app.TreeLikeService;
+import com.ajaxjs.cms.service.TreeLikeService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.jxc.base.model.Supplier;
 import com.ajaxjs.sql.annotation.Select;
