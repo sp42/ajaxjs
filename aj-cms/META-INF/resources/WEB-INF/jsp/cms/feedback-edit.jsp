@@ -19,7 +19,7 @@
 			<ajaxjs-admin-header>
 				<template slot="title">${uiName}</template>
 				<template slot="btns">
-					<a :href="ajResources.ctx + '/admin/${shortName}/list/'">${uiName}列表</a> | 
+					<a href="../list/">${uiName}列表</a> | 
 				</template>
 			</ajaxjs-admin-header>
 

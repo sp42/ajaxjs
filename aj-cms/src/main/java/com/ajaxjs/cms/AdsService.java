@@ -14,7 +14,7 @@ import com.ajaxjs.util.ioc.Component;
 
 @Component
 public class AdsService extends BaseService<Ads> {
-	@TableName(value = "entity_ads", beanClass = Ads.class)
+	@TableName(value = "cms_ads", beanClass = Ads.class)
 	public interface AdsDao extends IBaseDao<Ads> {
 	}
 

@@ -23,7 +23,7 @@ import com.ajaxjs.web.mvc.ModelAndView;
 import com.ajaxjs.web.mvc.filter.MvcFilter;
 
 @Component
-@Path("/admin/feedback")
+@Path("/admin/cms/feedback")
 public class FeedbackController extends BaseController<Feedback> {
 	private static final LogHelper LOGGER = LogHelper.getLog(FeedbackController.class);
 
@@ -35,14 +35,14 @@ public class FeedbackController extends BaseController<Feedback> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String adminList(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		LOGGER.info("留言反馈列表");
-		return output(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE, true), "admin::feedback-admin-list");
+		return output(mv, service.findPagedList(catalogId, start, limit, CommonConstant.OFF_LINE, true), jsp("cms/feedback-admin-list"));
 	}
 
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path(ID_INFO)
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
-		return output(mv, id, "feedback-edit");
+		return output(mv, id, jsp("cms/feedback-edit"));
 	}
 
 	@PUT

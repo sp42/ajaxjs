@@ -22,7 +22,7 @@ import com.ajaxjs.validator.BeanValidatorFitler;
 import com.ajaxjs.web.mvc.ModelAndView;
 import com.ajaxjs.web.mvc.filter.MvcFilter;
 
-@Path("/admin/ads")
+@Path("/admin/cms/ads")
 @Component
 public class AdsController extends BaseController<Ads> {
 	private static final LogHelper LOGGER = LogHelper.getLog(AdsController.class);
@@ -40,21 +40,22 @@ public class AdsController extends BaseController<Ads> {
 		LOGGER.info("广告列表");
 
 		mv.put("catalogs", treeLikeService.getAllChildrenAsMap(service.getDomainCatalogId()));
-		return output(mv, service.findPagedList(catalogId, start, limit, CommonConstant.ON_LINE, true), "admin::topic-admin-list");
+		return output(mv, service.findPagedList(catalogId, start, limit, CommonConstant.ON_LINE, true), jsp("cms/ads-admin-list"));
 	}
 
 	@GET
 	@Path(ID_INFO)
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
-		return output(mv, id, "ads-edit");
+		mv.put("isCreate", false);
+		return output(mv, id, jsp("cms/ads-edit"));
 	}
 
 	@GET
 	@Override
 	public String createUI(ModelAndView mv) {
 		super.createUI(mv);
-		return admin("ads-edit");
+		return jsp("cms/ads-edit");
 	}
 
 	@POST

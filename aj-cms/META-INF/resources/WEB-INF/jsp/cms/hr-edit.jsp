@@ -15,9 +15,9 @@
 				<template slot="title">${isCreate?'新建':'编辑'}${uiName}</template>
 				<template slot="btns">
 				<c:if test="${!isCreate}">
-					<a :href="ajResources.ctx + '/admin/${shortName}/'">新建</a> | 
+					<a href="..">新建</a> | 
 				</c:if>
-					<a :href="ajResources.ctx + '/admin/${shortName}/list/'">${uiName}列表</a> | 
+					<a :href="ajResources.ctx + '/admin/cms/hr/list/'">${uiName}列表</a> | 
 				</template>
 			</ajaxjs-admin-header>
 
@@ -33,12 +33,13 @@
 					</label> 
 					<label>
  						<div class="label">创建日期：</div>  
-						<aj-form-calendar-input field-name="createDate" field-value="<c:dateFormatter value="${info.createDate}" />"></aj-form-calendar-input> 
+						<aj-form-calendar-input field-name="createDate" field-value="<c:dateFormatter value="${info.createDate}" />" :show-time="true">
+						</aj-form-calendar-input> 
  					</label> 
 				</div>
 				<div>
 					<div class="label" style="vertical-align: top;">工作要求：</div>
-					<textarea rows="15" cols="20" style="width: 80%; height: 50px;" name="content" required>${info.content}</textarea>
+					<textarea rows="15" cols="20" style="width: 50%; height: 230px;" name="content" required>${info.content}</textarea>
 				</div>
 				<aj-admin-state :checked="${empty info.stat ? 9 : info.stat}"></aj-admin-state>
 				<div>

@@ -13,7 +13,7 @@ import com.ajaxjs.util.ioc.Component;
 
 @Component("FeedbackService")
 public class FeedbackService extends BaseService<Feedback> {
-	@TableName(value = "entity_feedback", beanClass = Feedback.class)
+	@TableName(value = "cms_feedback", beanClass = Feedback.class)
 	public static interface FeedbackDao extends IBaseDao<Feedback> {
 		public static final String SQL = "SELECT *, (SELECT name FROM user WHERE id = e.userId) AS userName FROM ${tableName} e WHERE " + WHERE_REMARK;
 

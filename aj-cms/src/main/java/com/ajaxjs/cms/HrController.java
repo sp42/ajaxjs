@@ -28,7 +28,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
 public class HrController extends BaseController<Map<String, Object>> {
 	private static final LogHelper LOGGER = LogHelper.getLog(HrController.class);
 
-	public static MapCRUDService service = new MapCRUDService("entity_hr", "招聘", "hr");
+	public static MapCRUDService service = new MapCRUDService("cms_hr", "招聘", "hr");
 
 	@GET
 	@Path(LIST)
@@ -48,30 +48,31 @@ public class HrController extends BaseController<Map<String, Object>> {
 	//////////////////// 后台 ///////////////////
 
 	@GET
-	@Path("/admin/hr/list")
+	@Path("/admin/cms/hr/list")
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String adminList(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv) {
 		LOGGER.info("招聘后台列表");
-		return output(mv, service.findPagedList(0, start, limit, CommonConstant.OFF_LINE, false), "jsp::hr-admin-list");
+		return output(mv, service.findPagedList(0, start, limit, CommonConstant.OFF_LINE, false), "jsp::cms/hr-admin-list");
 	}
 
 	@GET
-	@Path("/admin/hr")
+	@Path("/admin/cms/hr")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Override
 	public String createUI(ModelAndView mv) {
-		return admin(super.createUI(mv) + "-edit");
+		return jsp("cms/" + super.createUI(mv) + "-edit");
 	}
 
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("/admin/hr/{id}")
+	@Path("/admin/cms/hr/{id}")
 	public String editUI(ModelAndView mv, @PathParam(ID) Long id) {
-		return output(mv, id, "hr-edit");
+		mv.put("isCreate", false);
+		return output(mv, id, jsp("cms/hr-edit"));
 	}
 
 	@POST
-	@Path("/admin/hr")
+	@Path("/admin/cms/hr")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
@@ -81,7 +82,7 @@ public class HrController extends BaseController<Map<String, Object>> {
 
 	@PUT
 	@MvcFilter(filters = DataBaseFilter.class)
-	@Path("/admin/hr/{id}")
+	@Path("/admin/cms/hr/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Override
 	public String update(@PathParam(ID) Long id, Map<String, Object> entity) {
@@ -89,7 +90,7 @@ public class HrController extends BaseController<Map<String, Object>> {
 	}
 
 	@DELETE
-	@Path("/admin/hr/{id}")
+	@Path("/admin/cms/hr/{id}")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String delete(@PathParam(ID) Long id) {

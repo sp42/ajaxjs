@@ -13,7 +13,7 @@
 			<!-- 后台头部导航 -->
 			<ajaxjs-admin-header>
 				<template slot="title">${uiName}一览</template>
-				<template slot="btns"><a :href="ajResources.ctx + '/admin/${shortName}/'">新建</a> | </template>
+				<template slot="btns"><a href="../">新建</a> | </template>
 			</ajaxjs-admin-header>
 		</div>
 		
