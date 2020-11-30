@@ -2,7 +2,7 @@ package com.ajaxjs.framework;
 
 import java.util.Map;
 
-import com.ajaxjs.app.TreeLikeService;
+import com.ajaxjs.cms.service.TreeLikeService;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;

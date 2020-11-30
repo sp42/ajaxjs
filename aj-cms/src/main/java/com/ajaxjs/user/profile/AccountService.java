@@ -6,7 +6,7 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import com.ajaxjs.app.ThirdPartyService;
+import com.ajaxjs.cms.service.ThirdPartyService;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.net.mail.Mail;
 import com.ajaxjs.user.BaseUserService;

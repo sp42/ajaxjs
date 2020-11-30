@@ -2,8 +2,8 @@ package com.ajaxjs.thirdparty;
 
 import java.io.IOException;
 
-import com.ajaxjs.app.ThirdPartyService;
-import com.ajaxjs.cms.SmsMessage;
+import com.ajaxjs.cms.model.SmsMessage;
+import com.ajaxjs.cms.service.ThirdPartyService;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.net.mail.Mail;
 import com.ajaxjs.net.mail.Sender;

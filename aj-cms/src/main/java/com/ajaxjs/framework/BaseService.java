@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 
-import com.ajaxjs.app.TreeLikeService;
+import com.ajaxjs.cms.service.TreeLikeService;
 import com.ajaxjs.sql.SimpleSnowflakeId;
 import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.IBaseService;
