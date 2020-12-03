@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>SVG Test</title>
+	<script src="https://lib.baomitu.com/less.js/3.0.4/less.min.js"></script>
+    <script src="https://lib.baomitu.com/vue/2.6.11/vue.js"></script>
+    <script src="/ajaxjs-js/js/ajaxjs-base.js"></script>
+    <script src="../js/workflow.component.js"></script>
+    <script src="../js/svg.js"></script>
+</head>
+<body>
+	<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1000" height="800" viewBox="0 0 1000 800">
+		<rect id="svgRect" class="text-holder" x="100" y="100" width="400" height="300" style="stroke:black; stroke-width:2px; fill:none;"/>
+		
+		<image href="http://localhost:8080/aj-wf-designer/asset/images/start.png" />
+	</svg>
+	
+	
+	<script> 
+		var text1 = aj.svg.createTextNode('Hello World!', 30, 20);
+		console.assert(text1, 'SVG Text Node');
+		var text2 = aj.svg.createTextNode('Nice Day!', 30, 50);
+		console.assert(text2, 'SVG Text Node');
+		
+		text2.setXY(60, 50); // 设置文字坐标
+		text2.text = "Nice Day, isn't?"; // 改变文字内容
+		
+		// 在 svg 容器居中定位
+		var text3 = aj.svg.createTextNode('Welcome!', 0, 0);
+		text3.setXY_vBox(aj('.text-holder').getBoundingClientRect());
+	</script>
+</body>
+</html>
