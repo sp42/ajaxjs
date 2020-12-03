@@ -3,7 +3,7 @@ package com.ajaxjs.shop.dao;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.cms.service.TreeLikeService;
+import com.ajaxjs.cms.common.TreeLikeService;
 import com.ajaxjs.shop.model.Goods;
 import com.ajaxjs.sql.annotation.Select;
 import com.ajaxjs.sql.annotation.TableName;
