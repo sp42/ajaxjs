@@ -12,7 +12,7 @@ import com.ajaxjs.util.ioc.Component;
 
 @Component
 public class BankService extends BaseService<Bank> {
-	@TableName(value = "entity_bank", beanClass = Bank.class)
+	@TableName(value = "jxc_bank", beanClass = Bank.class)
 	public static interface SupplierDao extends IBaseDao<Bank> {
 	}
 

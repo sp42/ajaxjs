@@ -41,7 +41,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
 @Component
 @Path("/warehouse")
 public class WarehouseController extends BaseController<Warehouse> {
-	@TableName(value = "仓库_仓库主文件", beanClass = Warehouse.class)
+	@TableName(value = "jxc_仓库_仓库主文件", beanClass = Warehouse.class)
 	public static interface WarehouseDao extends IBaseDao<Warehouse> {
 		@Select("SELECT e.*, a.name AS contact, a.phone, a.locationProvince, a.locationCity, a.locationDistrict, a.address"
 				+ " FROM ${tableName} e LEFT JOIN entity_address a ON e.addressId = a.id " + WHERE_REMARK_ORDER)

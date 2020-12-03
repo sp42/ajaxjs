@@ -142,7 +142,7 @@ public class GoodsController extends BaseController<Goods> {
 	public void prepareData(ModelAndView mv) {
 		// 商家数据，记录不多，可以这样做
 		Map<Long, Seller> map = new HashMap<>();
-		SellerController.SellerService.dao.findList(null).forEach(seller -> map.put(seller.getId(), seller));
+//		SellerController.SellerService.dao.findList(null).forEach(seller -> map.put(seller.getId(), seller));
 		mv.put("sellers", map);
 		mv.put("PRODUCT_AREA_ID", ConfigService.getValueAsInt("data.productArea_Id"));
 		mv.put(DOMAIN_CATALOG_ID, service.getDomainCatalogId());

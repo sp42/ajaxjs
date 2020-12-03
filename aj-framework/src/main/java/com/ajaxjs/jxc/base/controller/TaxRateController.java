@@ -31,7 +31,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
 @Component
 @Path("/base/tax_rate")
 public class TaxRateController extends BaseController<TaxRate> {
-	@TableName(value = "基础_税率", beanClass = TaxRate.class)
+	@TableName(value = "jxc_基础_税率", beanClass = TaxRate.class)
 	public static interface TaxRateDao extends IBaseDao<TaxRate> {
 	}
 

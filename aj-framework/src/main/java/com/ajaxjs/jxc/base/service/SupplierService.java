@@ -14,7 +14,7 @@ import com.ajaxjs.util.ioc.Component;
 
 @Component
 public class SupplierService extends BaseService<Supplier> {
-	@TableName(value = "基础_供应商主文件", beanClass = Supplier.class)
+	@TableName(value = "jxc_基础_供应商主文件", beanClass = Supplier.class)
 	public static interface SupplierDao extends IBaseDao<Supplier> {
 		@Select("SELECT e.*, b.name AS 银行名称, b.account AS 银行账号,  u.name AS 采购员name, u2.name AS 供应商会员name FROM ${tableName} e"
 				+ " LEFT JOIN entity_bank b ON e.银行码  = b.id LEFT JOIN user u ON e.`采购员` = u.id " + "LEFT JOIN user u2 ON e.userId = u2.id WHERE e.id = ?")
