@@ -17,7 +17,7 @@ import com.ajaxjs.util.ioc.Component;
 
 @Component
 public class AttachmentService extends BaseService<Attachment> {
-	@TableName(value = "attachment_picture", beanClass = Attachment.class)
+	@TableName(value = "common_attachment", beanClass = Attachment.class)
 	public interface AttachmentDao extends IBaseDao<Attachment> {
 		@Delete("DELETE FROM ${tableName} WHERE `owner` = ?")
 		boolean deleteByOwnerId(Long ownerUid);
@@ -28,17 +28,18 @@ public class AttachmentService extends BaseService<Attachment> {
 		/**
 		 * 实体别名必须为 entry
 		 */
-		public final static String LINK_COVER = "(SELECT path FROM attachment_picture p1 WHERE entry.uid = p1.owner AND p1.catalogId = 1 ORDER BY p1.id DESC LIMIT 0, 1)";
+		public final static String LINK_COVER = "(SELECT path FROM ${tableName} p1 WHERE entry.uid = p1.owner AND p1.catalogId = 1 ORDER BY p1.id DESC LIMIT 0, 1)";
 	}
 
 	public static AttachmentDao dao = new Repository().bind(AttachmentDao.class);
 
 	{
-		setUiName("图片");
-		setShortName("attachment_picture");
+		setUiName("通用附件");
+		setShortName("attachment");
 		setDao(dao);
 	}
-
+	
+	
 	/**
 	 * 根据实体 uid 找到其所拥有的图片
 	 * 

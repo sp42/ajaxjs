@@ -147,7 +147,7 @@ public class RoleService extends BaseService<Map<String, Object>> implements Rig
 
 		return check((long) privilegeTotal, pos);
 	}
-	
+
 	public static boolean simple8421(int total, int pos) {
 		if (total == 0)
 			return false;

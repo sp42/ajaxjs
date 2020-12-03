@@ -16,8 +16,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.cms.common.AttachmentController;
+import com.ajaxjs.cms.common.AttachmentService;
 import com.ajaxjs.cms.common.TreeLikeService;
-import com.ajaxjs.cms.common.AttachmentController.AttachmentService;
 import com.ajaxjs.cms.service.ArticleService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.BaseModel;
@@ -108,9 +108,9 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	public String adminList(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		PageResult<Map<String, Object>> list = getService().list(catalogId, start, limit, CommonConstant.OFF_LINE);
 		prepareData(mv);
-		mv.put(XslMaker.XSL_TEMPLATE_PATH, jsp("app/article-xsl"));
+		mv.put(XslMaker.XSL_TEMPLATE_PATH, jsp("cms/article-xsl"));
 
-		return autoOutput(list, mv, jsp("app/article-admin-list"));
+		return autoOutput(list, mv, jsp("cms/article-admin-list"));
 	}
 
 	@GET
@@ -119,7 +119,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@Override
 	public String createUI(ModelAndView mv) {
 		super.createUI(mv);
-		return jsp("app/article-edit");
+		return jsp("cms/article-edit");
 	}
 
 	@POST
@@ -136,7 +136,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@Path("/admin/{root}/{id}")
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
 		mv.put("isCreate", false);
-		return output(mv, id, "jsp::app/article-edit");
+		return output(mv, id, "jsp::cms/article-edit");
 	}
 
 	@PUT

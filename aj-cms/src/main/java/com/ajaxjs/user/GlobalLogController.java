@@ -25,7 +25,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
 public class GlobalLogController extends BaseController<Map<String, Object>> {
 	private static final LogHelper LOGGER = LogHelper.getLog(GlobalLogController.class);
 
-	@TableName(value = "general_log", beanClass = Map.class)
+	@TableName(value = "user_general_log", beanClass = Map.class)
 	public static interface GlobalLogDao extends IBaseDao<Map<String, Object>> {
 	}
 

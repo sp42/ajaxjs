@@ -8,8 +8,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
+import com.ajaxjs.cms.common.AttachmentService;
 import com.ajaxjs.cms.common.TreeLikeService;
-import com.ajaxjs.cms.common.AttachmentController.AttachmentService;
 import com.ajaxjs.cms.service.NewsService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.BaseService;

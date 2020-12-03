@@ -17,12 +17,12 @@ import com.ajaxjs.util.ioc.Component;
 
 @Component
 public class TreeLikeService extends BaseService<Catalog> {
-	@TableName(value = "general_catalog", beanClass = Catalog.class)
+	@TableName(value = "common_catalog", beanClass = Catalog.class)
 	public static interface TreeLikeoDao extends IBaseDao<Catalog> {
 		/**
 		 * 左连接分类表，实体简写必须为 e
 		 */
-		public final static String LEFT_JOIN_CATALOG = " LEFT JOIN general_catalog gc ON gc.id = e.catalogId ";
+		public final static String LEFT_JOIN_CATALOG = " LEFT JOIN common_catalog gc ON gc.id = e.catalogId ";
 
 		/**
 		 * 关联分类表以获取分类名称，即增加了 catalogName 字段。另外如果前台不需要显示的话，只是后台的话，可以用 map 显示
@@ -35,7 +35,7 @@ public class TreeLikeService extends BaseService<Catalog> {
 		 * @param pid
 		 * @return
 		 */
-		@Select("SELECT * FROM general_catalog WHERE `path` LIKE (CONCAT ((SELECT `path` FROM general_catalog WHERE id = ?) , '/%'))")
+		@Select("SELECT * FROM common_catalog WHERE `path` LIKE (CONCAT ((SELECT `path` FROM common_catalog WHERE id = ?) , '/%'))")
 		List<Catalog> getAllChildren(int pid);
 
 		/**
@@ -45,7 +45,7 @@ public class TreeLikeService extends BaseService<Catalog> {
 		 * @return
 		 */
 		@Delete("DELETE FROM ${tableName} WHERE id in ( SELECT n.id FROM ("
-				+ "(SELECT id FROM ${tableName} WHERE `path` LIKE ( CONCAT ( (SELECT `path` FROM general_catalog WHERE id = ?) , '%')))) AS n)")
+				+ "(SELECT id FROM ${tableName} WHERE `path` LIKE ( CONCAT ( (SELECT `path` FROM common_catalog WHERE id = ?) , '%')))) AS n)")
 		public boolean deleteAll(int id);
 	}
 
@@ -163,7 +163,7 @@ public class TreeLikeService extends BaseService<Catalog> {
 	/**
 	 * 供其它实体关联时候用，可以获取下级所有子分类
 	 */
-	public final static String PATH_LIKE_MYSQL_ID = "SELECT id FROM general_catalog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catalog WHERE id = %d ) , '%%'))";
+	public final static String PATH_LIKE_MYSQL_ID = "SELECT id FROM common_catalog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM common_catalog WHERE id = %d ) , '%%'))";
 
 	/**
 	 * IN 查询用，多用于分页统计总数 用于 catelogId 查询的，通常放在 LEFT JOIN 后面还需要，WHERE e.catelog =

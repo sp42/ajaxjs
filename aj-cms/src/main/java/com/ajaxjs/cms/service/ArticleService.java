@@ -21,7 +21,7 @@ import com.ajaxjs.web.mvc.ModelAndView;
 
 @Component
 public class ArticleService extends BaseService<Map<String, Object>> implements ViewObjectService {
-	@TableName(value = "entity_article", beanClass = Map.class)
+	@TableName(value = "cms_article", beanClass = Map.class)
 	public interface ArticleDao extends IBaseDao<Map<String, Object>> {
 		@Select("SELECT e.id, e.name, e.createDate, e.updateDate, e.catalogId, e.intro, e.cover, e.stat FROM ${tableName} e " + WHERE_REMARK_ORDER)
 		public PageResult<Map<String, Object>> list(int start, int limit, Function<String, String> sqlHandler);
@@ -30,7 +30,7 @@ public class ArticleService extends BaseService<Map<String, Object>> implements 
 		public List<Map<String, Object>> simpleList(Function<String, String> sqlHandler);
 
 		@Select("SELECT YEAR(`createDate`) year , MONTH(`createDate`) month FROM ${tableName} e "
-				+ "WHERE (e.catalogId IN ( SELECT id FROM general_catalog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM general_catalog WHERE id = ? ) , '%')))) "
+				+ "WHERE (e.catalogId IN ( SELECT id FROM common_catalog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM common_catalog WHERE id = ? ) , '%')))) "
 				+ "GROUP BY YEAR(`createDate`), MONTH(`createDate`) ORDER BY YEAR(`createDate`) DESC, MONTH(`createDate`) DESC LIMIT 0, ?")
 		public List<Map<String, Object>> groupByMonth(int catalogId, int maxMonth);
 	}

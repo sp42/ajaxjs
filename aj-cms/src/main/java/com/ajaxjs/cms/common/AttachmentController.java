@@ -1,7 +1,6 @@
 package com.ajaxjs.cms.common;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.function.Consumer;
 
 import javax.ws.rs.DELETE;
@@ -17,18 +16,15 @@ import javax.ws.rs.core.MediaType;
 import com.ajaxjs.cms.model.Attachment;
 import com.ajaxjs.cms.service.ThirdPartyService;
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.sql.SnowflakeIdWorker;
-import com.ajaxjs.sql.annotation.TableName;
-import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.IBaseService;
-import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.ComponentMgr;
+import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.web.UploadFileInfo;
@@ -45,31 +41,8 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
 public class AttachmentController extends BaseController<Attachment> {
 	private static final LogHelper LOGGER = LogHelper.getLog(AttachmentController.class);
 
-	@TableName(value = "attachment", beanClass = Attachment.class)
-	public static interface AttachmentDao extends IBaseDao<Attachment> {
-	}
-
-	public static AttachmentDao dao = new Repository().bind(AttachmentDao.class);
-
-	public static class AttachmentService extends BaseService<Attachment> {
-		{
-			setUiName("通用附件");
-			setShortName("attachment");
-			setDao(dao);
-		}
-
-		/**
-		 * 根据实体 uid 找到其所拥有的图片
-		 * 
-		 * @param owner 实体 uid
-		 * @return 图片列表
-		 */
-		public List<Attachment> findByOwner(Long uid) {
-			return dao.findList(by("owner", uid));
-		}
-	}
-
-	private AttachmentService service = new AttachmentService();
+	@Resource
+	private AttachmentService service;
 
 	@GET
 	@MvcFilter(filters = { DataBaseFilter.class })

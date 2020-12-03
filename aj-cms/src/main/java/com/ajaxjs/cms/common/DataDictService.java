@@ -14,7 +14,7 @@ import com.ajaxjs.util.ioc.Component;
 
 @Component
 public class DataDictService extends BaseService<Map<String, Object>> {
-	@TableName(value = "general_data_dict", beanClass = Map.class)
+	@TableName(value = "common_data_dict", beanClass = Map.class)
 	public interface DataDictDao extends IBaseDao<Map<String, Object>> {
 
 		@Insert("INSERT INTO `${tableName}` (`key`, `value`) VALUES (?, ?)")

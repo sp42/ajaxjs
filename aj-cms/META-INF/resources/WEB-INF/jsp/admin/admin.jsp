@@ -34,7 +34,7 @@
 					<c:if test="${RoleService.check(privilegeTotal, RoleService.ADS)}">
 							<li><a target="iframepage" href="${ctx}/admin/cms/ads/list/">广告管理</a></li>
 					</c:if>
-					<c:if test="${RoleService.check(privilegeTotal, RoleService.ADS)}">
+					<c:if test="${RoleService.check(privilegeTotal, RoleService.HR_ONLINE)}">
 						 	<li><a target="iframepage" href="${ctx}/admin/cms/hr/list/">招聘管理</a></li> 
 					</c:if>
 					<c:if test="${RoleService.check(privilegeTotal, RoleService.TOPIC)}">
