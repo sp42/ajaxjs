@@ -35,7 +35,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
  * 控制器
  */
 @Component
-@Path("/admin/goods")
+@Path("/admin/shop/goods")
 public class GoodsController extends BaseController<Goods> {
 	private static final LogHelper LOGGER = LogHelper.getLog(GoodsController.class);
 

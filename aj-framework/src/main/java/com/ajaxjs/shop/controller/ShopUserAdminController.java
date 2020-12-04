@@ -24,7 +24,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
  * 用户系统后台部分的控制器
  */
 @Component
-@Path("/admin/shop-user")
+@Path("/admin/shop/shop-user")
 public class ShopUserAdminController extends BaseController<User> {
 	private static final LogHelper LOGGER = LogHelper.getLog(ShopUserAdminController.class);
 	

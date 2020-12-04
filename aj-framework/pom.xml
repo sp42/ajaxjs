@@ -15,6 +15,17 @@
 	<description>AJAXJS 中台框架</description>
 
 	<build>
+		<!-- 复制静态资源 -->
+		<resources>
+			<resource>
+				<directory>META-INF</directory>
+				<targetPath>META-INF</targetPath>
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+			</resource>
+		</resources>
+
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -30,10 +41,16 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
+			<artifactId>ajaxjs-cms</artifactId>
+			<version>1.0.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-workflow</artifactId>
 			<version>1.0.0</version>
 		</dependency>
-		
+
 		<!-- 模拟对象 -->
 		<dependency>
 			<groupId>org.mockito</groupId>

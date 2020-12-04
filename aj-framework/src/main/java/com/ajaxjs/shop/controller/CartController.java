@@ -30,7 +30,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
  * 控制器
  */
 @Component
-@Path("/admin/cart")
+@Path("/admin/shop/cart")
 public class CartController extends BaseController<Cart> {
 	private static final LogHelper LOGGER = LogHelper.getLog(CartController.class);
 

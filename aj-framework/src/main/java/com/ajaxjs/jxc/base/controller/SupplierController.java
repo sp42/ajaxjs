@@ -31,7 +31,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
  * 控制器
  */
 @Component
-@Path("/base/supplier")
+@Path("/admin/jxc/base/supplier")
 public class SupplierController extends BaseController<Supplier> {
 	@Resource
 	private SupplierService service;
@@ -57,7 +57,7 @@ public class SupplierController extends BaseController<Supplier> {
 			mv.put("货币主文件", dataDictService.getMap(Constant.DataDict.货币主文件));
 			prepareData(mv);
 
-			return page("/base/supplier");
+			return jsp("jxc/base/supplier");
 		}
 	}
 

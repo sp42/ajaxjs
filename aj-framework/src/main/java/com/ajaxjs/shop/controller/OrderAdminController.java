@@ -32,7 +32,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
  * 控制器
  */
 @Component
-@Path("/admin/order")
+@Path("/admin/shop/order")
 public class OrderAdminController extends BaseController<OrderInfo> {
 	private static final LogHelper LOGGER = LogHelper.getLog(OrderAdminController.class);
 

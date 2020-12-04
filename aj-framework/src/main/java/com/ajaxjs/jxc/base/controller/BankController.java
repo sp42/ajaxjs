@@ -30,7 +30,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
  * 控制器
  */
 @Component
-@Path("/base/bank")
+@Path("/admin/jxc/base/bank")
 public class BankController extends BaseController<Bank> {
 	@Resource
 	private BankService service;
@@ -49,7 +49,7 @@ public class BankController extends BaseController<Bank> {
 		} else {
 			prepareData(mv);
 
-			return page("/base/bank");
+			return jsp("jxc/base/bank");
 		}
 	}
 

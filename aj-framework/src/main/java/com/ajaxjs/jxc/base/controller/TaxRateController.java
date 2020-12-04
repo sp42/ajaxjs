@@ -29,7 +29,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
  * 税率控制器
  */
 @Component
-@Path("/base/tax_rate")
+@Path("/admin/jxc/base/tax_rate")
 public class TaxRateController extends BaseController<TaxRate> {
 	@TableName(value = "jxc_基础_税率", beanClass = TaxRate.class)
 	public static interface TaxRateDao extends IBaseDao<TaxRate> {
@@ -57,7 +57,7 @@ public class TaxRateController extends BaseController<TaxRate> {
 			return toJson(service.findPagedList(start, limit, handler));
 		} else {
 			prepareData(mv);
-			return page("/base/tax_rate");
+			return jsp("jxc/base/tax_rate");
 		}
 	}
 

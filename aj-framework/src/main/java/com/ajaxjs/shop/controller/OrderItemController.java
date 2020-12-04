@@ -33,7 +33,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
  * 控制器
  */
 @Component
-@Path("/admin/orderItem")
+@Path("/admin/shop/orderItem")
 public class OrderItemController extends BaseController<OrderItem> {
 	@Resource("OrderItemService")
 	private OrderItemService service;

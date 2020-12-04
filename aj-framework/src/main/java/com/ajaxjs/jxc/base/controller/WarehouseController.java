@@ -39,7 +39,7 @@ import com.ajaxjs.web.mvc.filter.MvcFilter;
  * 仓库控制器
  */
 @Component
-@Path("/warehouse")
+@Path("/admin/jxc/warehouse")
 public class WarehouseController extends BaseController<Warehouse> {
 	@TableName(value = "jxc_仓库_仓库主文件", beanClass = Warehouse.class)
 	public static interface WarehouseDao extends IBaseDao<Warehouse> {
@@ -86,7 +86,7 @@ public class WarehouseController extends BaseController<Warehouse> {
 			mv.put("StatusDicts", ReflectUtil.getConstantsInt(CommonConstant.实体状态.class));
 			prepareData(mv);
 
-			return page("/warehouse/warehouse");
+			return jsp("jxc/warehouse/warehouse");
 		}
 	}
 
