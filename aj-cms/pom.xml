@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>ajaxjs-cms</artifactId>
-	<version>1.0.4</version>
+	<version>1.0.5</version>
 	<description>基础服务框架</description>
 
 	<build>
@@ -83,7 +83,7 @@
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-base</artifactId>
-			<version>1.2.7</version>
+			<version>1.2.6</version>
 		</dependency>
 
 
