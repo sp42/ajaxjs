@@ -18,7 +18,7 @@ import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.net.http.HttpBasicRequest;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.web.mvc.controller.IController;
+import com.ajaxjs.web.mvc.IController;
 
 /**
  * 网站统计

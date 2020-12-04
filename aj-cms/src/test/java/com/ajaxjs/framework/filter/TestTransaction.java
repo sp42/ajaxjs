@@ -17,7 +17,7 @@ import com.ajaxjs.framework.TestHelper;
 import com.ajaxjs.web.mock.BaseControllerTest;
 import com.ajaxjs.web.mock.MockRequest;
 import com.ajaxjs.web.mock.MockResponse;
-import com.ajaxjs.web.mvc.controller.MvcDispatcher;
+import com.ajaxjs.web.mvc.MvcDispatcher;
 
 public class TestTransaction extends BaseControllerTest {
 	@BeforeClass

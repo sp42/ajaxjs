@@ -7,7 +7,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
-import com.ajaxjs.web.mvc.controller.IController;
+import com.ajaxjs.web.mvc.IController;
 
 @Path("/OverrideTest")
 public class OverrideController extends SimpleController implements IController {

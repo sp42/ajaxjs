@@ -11,7 +11,7 @@ import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.MvcRequest;
 
 @Component
 public class UserCommonAuthService extends BaseService<UserCommonAuth> {

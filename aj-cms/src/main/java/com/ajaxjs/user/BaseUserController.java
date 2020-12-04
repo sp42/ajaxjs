@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.MvcRequest;
 
 /**
  * 用户通用控制器

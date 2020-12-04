@@ -11,7 +11,7 @@ import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.MvcRequest;
 
 /**
  * 基础业务类

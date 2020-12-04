@@ -16,7 +16,7 @@ import com.ajaxjs.Version;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.util.logger.FileHandler;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.web.mvc.controller.IController;
+import com.ajaxjs.web.mvc.IController;
 
 /**
  * 通过浏览器 WebSocket 技术查看服务端 Tomcat 输出日志

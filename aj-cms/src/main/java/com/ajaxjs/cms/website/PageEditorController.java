@@ -32,7 +32,7 @@ import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.MvcRequest;
 
 /**
  * 默认的页面编辑器

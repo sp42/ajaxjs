@@ -7,7 +7,6 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 
 import com.ajaxjs.framework.filter.CaptchaFilter;
-import com.ajaxjs.web.mvc.controller.IController;
 import com.ajaxjs.web.mvc.filter.MvcFilter;
 
 

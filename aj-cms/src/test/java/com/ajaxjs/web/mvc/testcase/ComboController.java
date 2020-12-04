@@ -14,8 +14,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
-import com.ajaxjs.web.mvc.controller.IController;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.IController;
+import com.ajaxjs.web.mvc.MvcRequest;
 
 /**
  * 整合所有控制器的测试

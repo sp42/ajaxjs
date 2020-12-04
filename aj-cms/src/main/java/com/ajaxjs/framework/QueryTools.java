@@ -12,7 +12,7 @@ import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.web.ServletHelper;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.MvcRequest;
 
 /**
  * 为方便查询的工具类

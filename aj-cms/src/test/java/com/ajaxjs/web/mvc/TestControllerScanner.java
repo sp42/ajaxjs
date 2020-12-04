@@ -10,9 +10,6 @@ import javax.ws.rs.Path;
 import org.junit.Test;
 
 import com.ajaxjs.util.ReflectUtil;
-import com.ajaxjs.web.mvc.controller.Action;
-import com.ajaxjs.web.mvc.controller.IController;
-import com.ajaxjs.web.mvc.controller.MvcDispatcher;
 
 public class TestControllerScanner {
 

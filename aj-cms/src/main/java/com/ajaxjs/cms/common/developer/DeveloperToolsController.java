@@ -16,9 +16,9 @@ import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.util.XmlHelper;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.ZipHelper;
+import com.ajaxjs.web.mvc.IController;
 import com.ajaxjs.web.mvc.ModelAndView;
-import com.ajaxjs.web.mvc.controller.IController;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.MvcRequest;
 import com.ajaxjs.web.mvc.filter.MvcFilter;
 
 /**

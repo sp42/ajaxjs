@@ -5,7 +5,7 @@ import javax.ws.rs.Path;
 
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.JdbcHelper;
-import com.ajaxjs.web.mvc.controller.IController;
+import com.ajaxjs.web.mvc.IController;
 import com.ajaxjs.web.mvc.filter.MvcFilter;
 
 @Path("/foo")

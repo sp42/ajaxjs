@@ -18,7 +18,7 @@ import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.util.ioc.ComponentMgr;
 import com.ajaxjs.web.mock.MockRequest;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.MvcRequest;
 
 public class TestArticleService {
 

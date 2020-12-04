@@ -19,7 +19,7 @@ import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.MvcRequest;
 import com.ajaxjs.weixin.mini_app.model.UserInfo;
 import com.ajaxjs.weixin.mini_app.model.UserLoginToken;
 import com.ajaxjs.weixin.mini_app.model.UserSession;

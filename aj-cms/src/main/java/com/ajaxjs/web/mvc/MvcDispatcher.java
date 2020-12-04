@@ -10,7 +10,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.ajaxjs.web.mvc.controller;
+package com.ajaxjs.web.mvc;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -35,8 +35,6 @@ import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.ioc.ComponentMgr;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.web.mvc.ModelAndView;
-import com.ajaxjs.web.mvc.MvcConstant;
 import com.ajaxjs.web.mvc.filter.Authority;
 import com.ajaxjs.web.mvc.filter.FilterAction;
 import com.ajaxjs.web.mvc.filter.FilterAfterArgs;

@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.junit.Test;
 
 import com.ajaxjs.web.mock.MockRequest;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
 
 public class TestMvcRequest {
 	@Test

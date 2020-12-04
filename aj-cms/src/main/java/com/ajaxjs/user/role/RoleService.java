@@ -15,7 +15,7 @@ import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.util.ioc.Component;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.MvcRequest;
 
 @Component("UserRoleService")
 public class RoleService extends BaseService<Map<String, Object>> implements RightConstant {

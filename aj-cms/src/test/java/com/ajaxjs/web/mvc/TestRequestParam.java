@@ -25,10 +25,6 @@ import org.mockito.Mockito;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.web.mock.MockRequest;
 import com.ajaxjs.web.mock.MockResponse;
-import com.ajaxjs.web.mvc.controller.IController;
-import com.ajaxjs.web.mvc.controller.MvcDispatcher;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
-import com.ajaxjs.web.mvc.controller.RequestParam;
 
 public class TestRequestParam {
 	public static class News extends BaseModel {

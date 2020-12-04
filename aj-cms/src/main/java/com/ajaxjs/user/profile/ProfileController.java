@@ -27,7 +27,7 @@ import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.UploadFileInfo;
 import com.ajaxjs.web.mvc.ModelAndView;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.MvcRequest;
 import com.ajaxjs.web.mvc.filter.MvcFilter;;
 
 /**

@@ -30,7 +30,7 @@ import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.IoHelper;
 import com.ajaxjs.util.io.ZipHelper;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.MvcRequest;
 
 /**
  * MySQL 数据库定时自动备份，仅支持 CentOS

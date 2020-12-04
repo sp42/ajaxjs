@@ -25,8 +25,8 @@ import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.ByteArrayOutput;
-import com.ajaxjs.web.mvc.controller.IController;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.IController;
+import com.ajaxjs.web.mvc.MvcRequest;
 
 /**
  * 代码生成器

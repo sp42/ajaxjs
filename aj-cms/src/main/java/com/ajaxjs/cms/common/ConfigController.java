@@ -30,9 +30,9 @@ import com.ajaxjs.framework.config.SiteStruService;
 import com.ajaxjs.util.XmlHelper;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.web.mvc.IController;
 import com.ajaxjs.web.mvc.ModelAndView;
-import com.ajaxjs.web.mvc.controller.IController;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.MvcRequest;
 
 /**
  * 编辑配置的控制器

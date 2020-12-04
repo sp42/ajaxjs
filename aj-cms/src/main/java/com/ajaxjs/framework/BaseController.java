@@ -14,10 +14,10 @@ import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.web.UploadFile;
 import com.ajaxjs.web.UploadFileInfo;
+import com.ajaxjs.web.mvc.IController;
 import com.ajaxjs.web.mvc.ModelAndView;
 import com.ajaxjs.web.mvc.MvcConstant;
-import com.ajaxjs.web.mvc.controller.IController;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.MvcRequest;
 
 /**
  * 通用控制器

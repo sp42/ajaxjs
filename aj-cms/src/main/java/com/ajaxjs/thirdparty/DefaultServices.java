@@ -9,7 +9,7 @@ import com.ajaxjs.net.mail.Mail;
 import com.ajaxjs.net.mail.Sender;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.web.UploadFileInfo;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.MvcRequest;
 
 /**
  * 默认的服务供应器

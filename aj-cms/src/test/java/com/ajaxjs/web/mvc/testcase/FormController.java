@@ -11,8 +11,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 
+import com.ajaxjs.web.mvc.IController;
 import com.ajaxjs.web.mvc.TestRequestParam.News;
-import com.ajaxjs.web.mvc.controller.IController;
 
 // 测试基本的 HTTP 四个方法已经自定义流程控制
 @Path("/form")
