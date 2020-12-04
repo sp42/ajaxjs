@@ -11,6 +11,7 @@
 
 	<artifactId>ajaxjs-cms</artifactId>
 	<version>1.0.4</version>
+	<description>基础服务框架</description>
 
 	<build>
 		<!-- 复制静态资源 -->
@@ -26,13 +27,11 @@
 	</build>
 
 	<dependencies>
-
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.30</version>
 		</dependency>
-
 
 		<!-- 后端验证 -->
 		<dependency>
@@ -75,8 +74,6 @@
 		<!-- <dependency> <groupId>com.google.code.gson</groupId> <artifactId>gson</artifactId> 
 			<version>2.8.5</version> </dependency> -->
 
- 
-
 		<dependency>
 			<groupId>javax.ws.rs</groupId>
 			<artifactId>javax.ws.rs-api</artifactId>
@@ -86,7 +83,7 @@
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-base</artifactId>
-			<version>1.2.6</version>
+			<version>1.2.7</version>
 		</dependency>
 
 
@@ -148,5 +145,5 @@
 			<scope>test</scope>
 		</dependency> -->
 	</dependencies>
-	<description>基础服务框架</description>
+	
 </project>
