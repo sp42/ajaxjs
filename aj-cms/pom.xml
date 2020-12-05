@@ -1,0 +1,145 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.ajaxjs</groupId>
+		<artifactId>ajaxjs-parent</artifactId>
+		<version>1.0</version>
+		<relativePath>../ajaxjs-maven-global.xml</relativePath>
+	</parent>
+
+	<artifactId>ajaxjs-cms</artifactId>
+	<version>1.0.4</version>
+
+	<build>
+		<!-- 复制静态资源 -->
+		<resources>
+			<resource>
+				<directory>META-INF</directory>
+				<targetPath>META-INF</targetPath>
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.30</version>
+		</dependency>
+
+
+		<!-- 后端验证 -->
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>2.0.1.Final</version>
+		</dependency>
+
+		<!-- <dependency> <groupId>io.swagger.core.v3</groupId> <artifactId>swagger-jaxrs2</artifactId> 
+			<scope>compile</scope> <version>2.0.6</version> </dependency> -->
+
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>2.0.2-beta</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>javax.servlet.jsp-api</artifactId>
+			<version>2.2.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.websocket</groupId>
+			<artifactId>javax.websocket-api</artifactId>
+			<version>1.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- <dependency> <groupId>com.google.code.gson</groupId> <artifactId>gson</artifactId> 
+			<version>2.8.5</version> </dependency> -->
+
+
+		<dependency>
+			<groupId>com.ajaxjs</groupId>
+			<artifactId>ajaxjs-base</artifactId>
+			<version>1.2.6</version>
+		</dependency>
+
+
+		<!-- 模拟对象 -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>2.0.2-beta</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.30</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>junit</groupId> -->
+		<!-- <artifactId>junit</artifactId> -->
+		<!-- <version>4.12</version> -->
+		<!-- <scope>test</scope> -->
+		<!-- </dependency> -->
+
+
+		<!-- <dependency> -->
+		<!-- <groupId>de.odysseus.juel</groupId> -->
+		<!-- <artifactId>juel-impl</artifactId> -->
+		<!-- <version>2.2.7</version> -->
+		<!-- </dependency> -->
+
+		<!-- <dependency> -->
+		<!-- <groupId>org.fluttercode.datafactory</groupId> -->
+		<!-- <artifactId>datafactory</artifactId> -->
+		<!-- <version>0.8</version> -->
+		<!-- <type>jar</type> -->
+		<!-- </dependency> -->
+
+		<!-- 支付宝支付 -->
+
+		<dependency>
+			<groupId>com.alipay.sdk</groupId>
+			<artifactId>alipay-sdk-java</artifactId>
+			<version>3.7.110.ALL</version>
+		</dependency>
+
+<!-- 		<dependency>
+			<groupId>com.ajaxjs</groupId>
+			<artifactId>ajaxjs-web</artifactId>
+			<version>1.2.0</version>
+		</dependency>
+ -->
+		<!-- 跨项目共享单测 -->
+<!-- 		<dependency>
+			<groupId>com.ajaxjs</groupId>
+			<artifactId>ajaxjs-web</artifactId>
+			<version>1.2.0</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency> -->
+	</dependencies>
+	<description>基础服务框架</description>
+</project>
