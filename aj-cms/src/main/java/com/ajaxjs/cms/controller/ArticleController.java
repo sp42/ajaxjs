@@ -30,7 +30,6 @@ import com.ajaxjs.framework.filter.XslMaker;
 import com.ajaxjs.net.http.PicDownload;
 import com.ajaxjs.sql.SnowflakeIdWorker;
 import com.ajaxjs.sql.orm.PageResult;
-import com.ajaxjs.user.filter.Authority;
 import com.ajaxjs.user.filter.PrivilegeFilter;
 import com.ajaxjs.user.role.RightConstant;
 import com.ajaxjs.util.Encode;
@@ -40,6 +39,7 @@ import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.UploadFileInfo;
 import com.ajaxjs.web.mvc.ModelAndView;
 import com.ajaxjs.web.mvc.MvcRequest;
+import com.ajaxjs.web.mvc.filter.Authority;
 import com.ajaxjs.web.mvc.filter.MvcFilter;
 
 @Component
