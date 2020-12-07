@@ -11,15 +11,13 @@
 
 	<artifactId>ajaxjs-base</artifactId>
 	<name>AJAXJS-Base</name>
-	<description>A pure Java library that provides many tools, utils, and functions.</description>
+	<description>AJAXJS aims to full-stack, not only the server-side framework, 
+	but also integrates the front-end library. It's written in HTML5 + Java, a successor to the JVM platform, efficient, secure, stable, cross-platform and many other advantages, but it abandoned the traditional enterprise architecture brought about by the large and bloated, 
+	emphasizing the lightweight, and fast, very suitable for the Internet fast application.</description>
 
 	<version>1.2.6</version>
 
 	<dependencies>
-		<!-- 依赖注射的标准注解 -->
-		<!-- <dependency> <groupId>javax.inject</groupId> <artifactId>javax.inject</artifactId> 
-			<version>1</version> </dependency> -->
-
 		<!-- 动态生成 getter/setter -->
 		<dependency>
 			<groupId>org.javassist</groupId>
@@ -27,6 +25,7 @@
 			<version>3.22.0-GA</version>
 		</dependency>
 
+		<!-- MVC 框架用的注解 -->
 		<dependency>
 			<groupId>javax.ws.rs</groupId>
 			<artifactId>javax.ws.rs-api</artifactId>
@@ -54,6 +53,7 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- 测试用的数据库驱动 -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -78,9 +78,10 @@
 		</dependency>
 
 		<!-- <dependency> -->
-		<!-- <groupId>com.github.jsqlparser</groupId> -->
-		<!-- <artifactId>jsqlparser</artifactId> -->
-		<!-- <version>1.2</version> -->
+		<!-- <groupId>junit</groupId> -->
+		<!-- <artifactId>junit</artifactId> -->
+		<!-- <version>4.12</version> -->
+		<!-- <scope>test</scope> -->
 		<!-- </dependency> -->
 	</dependencies>
 </project>
