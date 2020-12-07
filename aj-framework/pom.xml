@@ -51,6 +51,13 @@
 			<version>1.0.0</version>
 		</dependency>
 
+		<!-- 支付宝支付 SDK -->
+		<dependency>
+			<groupId>com.alipay.sdk</groupId>
+			<artifactId>alipay-sdk-java</artifactId>
+			<version>3.7.110.ALL</version>
+		</dependency>
+
 		<!-- 模拟对象 -->
 		<dependency>
 			<groupId>org.mockito</groupId>

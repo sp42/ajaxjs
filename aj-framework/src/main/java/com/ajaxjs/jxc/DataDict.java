@@ -20,8 +20,8 @@ import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.util.ReflectUtil;
+import com.ajaxjs.web.mvc.IController;
 import com.ajaxjs.web.mvc.ModelAndView;
-import com.ajaxjs.web.mvc.controller.IController;
 import com.ajaxjs.web.mvc.filter.MvcFilter;
 
 /**

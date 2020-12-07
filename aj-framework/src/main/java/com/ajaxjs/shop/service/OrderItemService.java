@@ -12,7 +12,7 @@ import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.user.role.RightConstant;
 import com.ajaxjs.user.role.RoleService;
 import com.ajaxjs.util.ioc.Component;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.MvcRequest;
 
 @Component
 public class OrderItemService extends BaseService<OrderItem> {

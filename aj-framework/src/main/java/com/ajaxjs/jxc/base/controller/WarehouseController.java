@@ -31,7 +31,7 @@ import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.web.mvc.ModelAndView;
-import com.ajaxjs.web.mvc.controller.SubBean;
+import com.ajaxjs.web.mvc.SubBean;
 import com.ajaxjs.web.mvc.filter.MvcFilter;
 
 /**

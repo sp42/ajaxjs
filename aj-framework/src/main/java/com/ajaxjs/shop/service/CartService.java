@@ -14,7 +14,7 @@ import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.MvcRequest;
 
 /**
  * 
