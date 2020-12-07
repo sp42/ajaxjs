@@ -17,7 +17,7 @@ import com.ajaxjs.framework.TestHelper;
 import com.ajaxjs.web.mock.BaseControllerTest;
 import com.ajaxjs.web.mock.MockRequest;
 import com.ajaxjs.web.mock.MockResponse;
-import com.ajaxjs.web.mvc.MvcDispatcher;
+import com.ajaxjs.web.mvc.MvcDispatcherBase;
 
 public class TestTransaction extends BaseControllerTest {
 	@BeforeClass
@@ -39,7 +39,7 @@ public class TestTransaction extends BaseControllerTest {
 
 		when(request.getMethod()).thenReturn("GET");
 		
-		MvcDispatcher.dispatcher.apply(request, response);
+		MvcDispatcherBase.dispatcher.apply(request, response);
 		chain.doFilter(request, response);
 		
 		assertEquals("<html><meta charset=\"utf-8\" /><body>Foo</body></html>", writer.toString());
@@ -51,7 +51,7 @@ public class TestTransaction extends BaseControllerTest {
 
 		when(request.getMethod()).thenReturn("GET");
 		
-		MvcDispatcher.dispatcher.apply(request, response);
+		MvcDispatcherBase.dispatcher.apply(request, response);
 		chain.doFilter(request, response);
 		
 		assertEquals("", writer.toString());
