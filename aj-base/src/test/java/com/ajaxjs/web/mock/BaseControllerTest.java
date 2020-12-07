@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ajaxjs.util.ioc.ComponentMgr;
-import com.ajaxjs.web.mvc.MvcDispatcher;
+import com.ajaxjs.web.mvc.MvcDispatcherBase;
 
 /**
  * 方便测试的基础类
@@ -55,6 +55,6 @@ public abstract class BaseControllerTest {
 	public void init(String packageName) {
 		chain = mock(FilterChain.class);
 		ComponentMgr.scan(packageName);
-		MvcDispatcher.init(null);
+		MvcDispatcherBase.init(null);
 	}
 }
