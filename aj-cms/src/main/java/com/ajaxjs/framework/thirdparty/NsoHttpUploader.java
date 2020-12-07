@@ -1,4 +1,4 @@
-package com.ajaxjs.thirdparty;
+package com.ajaxjs.framework.thirdparty;
 
 import javax.servlet.http.HttpServletRequest;
 

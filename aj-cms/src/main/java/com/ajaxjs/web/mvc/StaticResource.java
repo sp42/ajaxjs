@@ -1,4 +1,4 @@
-package com.ajaxjs.web.mvc.filter;
+package com.ajaxjs.web.mvc;
 
 import java.util.function.BiFunction;
 import java.util.regex.Pattern;

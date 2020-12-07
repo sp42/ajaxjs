@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.junit.Test;
 
 import com.ajaxjs.framework.config.ConfigService;
+import com.ajaxjs.framework.thirdparty.NsoHttpUpload;
+import com.ajaxjs.framework.thirdparty.NsoHttpUploader;
 import com.ajaxjs.net.http.NetUtil;
 import com.ajaxjs.web.UploadFileInfo;
 import com.ajaxjs.web.mock.MockRequest;
