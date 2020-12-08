@@ -41,10 +41,18 @@
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-base</artifactId>
-			<version>1.2.7</version>
+			<version>1.2.6</version>
 		</dependency>
 
-
+		<!-- 跨项目共享单测 -->
+		<dependency>
+			<groupId>com.ajaxjs</groupId>
+			<artifactId>ajaxjs-base</artifactId>
+			<version>1.2.6</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		
 		<dependency>
 			<groupId>javax.transaction</groupId>
 			<artifactId>jta</artifactId>

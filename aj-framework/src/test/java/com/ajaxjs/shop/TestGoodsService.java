@@ -6,10 +6,10 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.ajaxjs.TestHelper;
 import com.ajaxjs.cms.model.Address;
 import com.ajaxjs.cms.service.UserAddressService;
 import com.ajaxjs.framework.CommonConstant;
-import com.ajaxjs.framework.TestHelper;
 import com.ajaxjs.shop.model.Goods;
 import com.ajaxjs.shop.service.CartService;
 import com.ajaxjs.shop.service.GoodsService;

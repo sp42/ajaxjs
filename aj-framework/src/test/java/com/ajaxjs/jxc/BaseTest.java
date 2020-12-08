@@ -3,7 +3,7 @@ package com.ajaxjs.jxc;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-import com.ajaxjs.framework.TestHelper;
+import com.ajaxjs.TestHelper;
 import com.ajaxjs.sql.JdbcConnection;
 
 public abstract class BaseTest {

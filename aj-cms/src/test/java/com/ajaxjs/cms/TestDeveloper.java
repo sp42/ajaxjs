@@ -9,11 +9,11 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.ajaxjs.TestHelper;
 import com.ajaxjs.cms.common.developer.CalculateRows;
 import com.ajaxjs.cms.common.developer.MysqlAutoBackup;
 import com.ajaxjs.cms.common.developer.MysqlAutoBackup.MysqlExport;
 import com.ajaxjs.cms.common.developer.TomcatLogController.LogFileTailer;
-import com.ajaxjs.framework.TestHelper;
 import com.ajaxjs.sql.JdbcConnection;
 
 public class TestDeveloper {

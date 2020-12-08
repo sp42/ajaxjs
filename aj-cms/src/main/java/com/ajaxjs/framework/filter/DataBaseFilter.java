@@ -19,9 +19,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import com.ajaxjs.Version;
-import com.ajaxjs.framework.TestHelper;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.sql.JdbcConnection;
+import com.ajaxjs.sql.JdbcUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.mvc.filter.FilterAction;
 import com.ajaxjs.web.mvc.filter.FilterAfterArgs;
@@ -66,7 +66,7 @@ public class DataBaseFilter extends JdbcConnection implements FilterAction {
 		} catch (Throwable e) {
 			throw new RuntimeException(e.getMessage());
 		} finally {
-			if (TestHelper.IS_DB_CONNECTION_AUTOCLOSE) // 保证一定关闭，哪怕有异常
+			if (JdbcUtil.IS_DB_CONNECTION_AUTOCLOSE) // 保证一定关闭，哪怕有异常
 				closeDb();
 		}
 

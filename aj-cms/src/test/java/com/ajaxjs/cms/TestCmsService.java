@@ -10,12 +10,12 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.ajaxjs.TestHelper;
 import com.ajaxjs.cms.controller.HrController;
 import com.ajaxjs.cms.model.Ads;
 import com.ajaxjs.cms.service.AdsService;
 import com.ajaxjs.cms.website.Feedback;
 import com.ajaxjs.cms.website.FeedbackService;
-import com.ajaxjs.framework.TestHelper;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.util.ioc.ComponentMgr;

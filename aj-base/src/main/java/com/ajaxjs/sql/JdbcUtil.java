@@ -31,6 +31,11 @@ public class JdbcUtil {
 	private static final LogHelper LOGGER = LogHelper.getLog(JdbcUtil.class);
 
 	/**
+	 * 为方便单测，设一个开关
+	 */
+	public static boolean IS_DB_CONNECTION_AUTOCLOSE = true;
+
+	/**
 	 * 是否关闭日志打印以便提高性能
 	 */
 	public static boolean isClosePrintRealSql = false;
@@ -128,4 +133,5 @@ public class JdbcUtil {
 	public static boolean isSqlite(Connection conn) {
 		return conn.toString().contains("sqlite");
 	}
+
 }

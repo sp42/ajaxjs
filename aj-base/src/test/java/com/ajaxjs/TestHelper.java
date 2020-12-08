@@ -10,7 +10,7 @@
  * 除非因适用法律需要或书面同意，根据许可证分发的软件是基于"按原样"基础提供，
  * 无任何明示的或暗示的保证或条件。详见根据许可证许可下，特定语言的管辖权限和限制。
  */
-package com.ajaxjs.framework;
+package com.ajaxjs;
 
 import java.util.List;
 import java.util.Objects;
@@ -20,6 +20,7 @@ import org.w3c.dom.NamedNodeMap;
 
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.sql.JdbcConnection;
+import com.ajaxjs.sql.JdbcUtil;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.XmlHelper;
 import com.ajaxjs.util.ioc.ComponentMgr;
@@ -216,11 +217,6 @@ public class TestHelper {
 	}
 
 	/**
-	 * 为方便单测，设一个开关
-	 */
-	public static boolean IS_DB_CONNECTION_AUTOCLOSE = true;
-
-	/**
 	 * 方便写单测时用的初始化方法
 	 * 
 	 * @param configFile JSON 配置文件路径
@@ -238,7 +234,7 @@ public class TestHelper {
 			String url = map.getNamedItem("url").getNodeValue(), user = map.getNamedItem("username").getNodeValue(), password = map.getNamedItem("password").getNodeValue();
 
 			JdbcConnection.setConnection(JdbcConnection.getMySqlConnection(url, user, password));
-			IS_DB_CONNECTION_AUTOCLOSE = false;
+			JdbcUtil.IS_DB_CONNECTION_AUTOCLOSE = false;
 			
 			ComponentMgr.scan(CommonUtil.split(ConfigService.get("System.scanPackage")));
 			ComponentMgr.inject();
