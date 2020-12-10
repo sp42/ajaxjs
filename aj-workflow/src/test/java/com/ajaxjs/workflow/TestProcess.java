@@ -12,7 +12,7 @@ import com.ajaxjs.util.ioc.ComponentMgr;
 import com.ajaxjs.workflow.process.ProcessActive;
 
 public class TestProcess extends BaseTest {
-	@Test
+//	@Test
 	public void testDeploy() {
 		String processXml = IoHelper.byteStream2string(WorkflowUtils.getStreamFromClasspath("test/task/simple.xml"));
 		long id = service.deploy(processXml, 1000L);
@@ -21,7 +21,7 @@ public class TestProcess extends BaseTest {
 		service.undeploy(id);
 	}
 
-//	@Test
+	@Test
 	public void testRead() {
 		assertNotNull(service.findById(1L));
 		assertNotNull(service.findById(2L));
