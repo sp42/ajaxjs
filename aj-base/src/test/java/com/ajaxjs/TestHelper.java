@@ -232,7 +232,6 @@ public class TestHelper {
 			NamedNodeMap map = node.getAttributes();
 
 			String url = map.getNamedItem("url").getNodeValue(), user = map.getNamedItem("username").getNodeValue(), password = map.getNamedItem("password").getNodeValue();
-
 			JdbcConnection.setConnection(JdbcConnection.getMySqlConnection(url, user, password));
 			JdbcUtil.IS_DB_CONNECTION_AUTOCLOSE = false;
 			

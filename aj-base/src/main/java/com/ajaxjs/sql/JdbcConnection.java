@@ -243,6 +243,7 @@ public class JdbcConnection {
 
 		if (!jdbcUrl.contains("?"))
 			jdbcUrl += "?";
+		
 		return getConnection(jdbcUrl + "&user=" + username + "&password=" + password);
 	}
 
