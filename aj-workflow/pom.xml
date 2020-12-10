@@ -59,5 +59,21 @@
 			<version>1.1</version>
 			<scope>provided</scope>
 		</dependency>
+		
+		<!-- 模拟对象 -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>2.0.2-beta</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- 测试用的数据库驱动 -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.30</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>
