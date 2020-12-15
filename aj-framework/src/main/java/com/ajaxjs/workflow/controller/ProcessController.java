@@ -25,6 +25,7 @@ import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.web.mvc.ModelAndView;
 import com.ajaxjs.web.mvc.filter.MvcFilter;
 import com.ajaxjs.workflow.example.MyActiveProcessDao;
+import com.ajaxjs.workflow.model.ToJsonHelper;
 import com.ajaxjs.workflow.process.ProcessDefinition;
 import com.ajaxjs.workflow.process.service.ProcessActiveService;
 import com.ajaxjs.workflow.process.service.ProcessDefinitionService;
@@ -45,7 +46,7 @@ public class ProcessController extends BaseController<ProcessDefinition> {
 			return toJson(service.findPagedList(start, limit, handler));
 		} else {
 			prepareData(mv);
-			return page("workflow/process-def");
+			return jsp("workflow/process-def");
 		}
 	}
 
@@ -54,7 +55,17 @@ public class ProcessController extends BaseController<ProcessDefinition> {
 	@MvcFilter(filters = { DataBaseFilter.class })
 	public String info(@PathParam(ID) Long id, ModelAndView mv) {
 		service.setCacheManager(new MemoryCacheManager()); // 后台读取不需要缓存
-		return output(mv, service.findById(id), "jsp::pages/workflow/process-info");
+		return output(mv, service.findById(id), "jsp::workflow/process-info");
+	}
+	
+	@GET
+	@Path("getJson/" + ID_INFO)
+	@MvcFilter(filters = { DataBaseFilter.class })
+	public String getJson(@PathParam(ID) Long id, ModelAndView mv) {
+		service.setCacheManager(new MemoryCacheManager()); // 后台读取不需要缓存
+		ProcessDefinition def = service.findById(id);
+		
+		return "json::" + ToJsonHelper.getModelJson(def.getModel());
 	}
 
 	@PUT

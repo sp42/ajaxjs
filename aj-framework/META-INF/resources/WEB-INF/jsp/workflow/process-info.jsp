@@ -25,7 +25,7 @@
 				
 				<div>
 					<label>
-						<div class="label">名 称：</div> ${info.name}
+						<div class="label">id：</div> ${info.name}
 					</label> 
 					&nbsp;&nbsp;&nbsp;
 					<label>
@@ -39,7 +39,7 @@
 		
 				<div>
 					<label>
-						<div class="label">说明：</div> 
+						<div class="label">名称：</div> 
 						<input type="text" placeholder="说明" size="60" name="displayName" value="${info.displayName}" />
 					</label> 
 					<label> 
