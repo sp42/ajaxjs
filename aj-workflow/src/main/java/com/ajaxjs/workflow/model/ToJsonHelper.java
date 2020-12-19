@@ -37,7 +37,7 @@ public class ToJsonHelper {
 	public static String getStateJson(ProcessModel model, List<Task> activeTasks, List<TaskHistory> historyTasks) {
 		StringBuffer buffer = new StringBuffer();
 
-		buffer.append("{'activeRects':{'rects':[");
+		buffer.append("{'activeRects':{'rects':["); // seems it doesn't need
 		if (activeTasks != null && activeTasks.size() > 0) {
 			for (Task task : activeTasks) {
 				buffer.append("{'paths':[],'name':'");
@@ -134,7 +134,7 @@ public class ToJsonHelper {
 				buffer.deleteCharAt(buffer.length() - 1);
 			}
 
-			buffer.append("],\"text\":{\"text\":'");
+			buffer.append("],\"text\":{\"text\":'"); // text and displayName are the same
 			buffer.append(tm.getDisplayName());
 			buffer.append("'},\"textPos\":{");
 
