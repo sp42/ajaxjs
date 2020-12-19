@@ -48,19 +48,11 @@ aj._pager = {
 		};
 	},
 	props: {
-		initPageSize: {
-			type: Number, required: false, default: 9
-		},
+		initPageSize: {type: Number, required: false, default: 9},
 		apiUrl: String,
-		autoLoad: { // 是否自动加载
-			type: Boolean, default: true
-		},
-		isPage: {// 是否分页，false=读取所有数据
-			type: Boolean, default : true
-		},
-		initBaseParam: {
-			type: Object, default(){ return {};}
-		}
+		autoLoad: {type: Boolean, default: true},	// 是否自动加载
+		isPage: {type: Boolean, default : true},	// 是否分页，false=读取所有数据
+		initBaseParam: {type: Object, default(){ return {};}}
 	},
 	methods: {
 		// 分页，跳到第几页，下拉控件传入指定的页码
@@ -142,21 +134,17 @@ Vue.component('aj-pager', {
 Vue.component('aj-page-list', {
 	mixins: [aj._pager, aj._list],
 	props: {
-		isShowFooter: {
-			type : Boolean, default : true
-		},
-		autoLoadWhenReachedBottom : {	// 到底部是否自动加载下一页，通常在 移动端使用，这个应该是元素的 CSS Selector
-			type : String, default: ''
-		},
-		isDataAppend: {// 数据分页是否追加模式，默认不追加 = false。 App 一般采用追加模式
-			type : Boolean, default : false
-		}
+		isShowFooter: {type: Boolean, default: true},
+		// 到底部是否自动加载下一页，通常在 移动端使用，这个应该是元素的 CSS Selector
+		autoLoadWhenReachedBottom : {type: String, default: ''},
+		// 数据分页是否追加模式，默认不追加 = false。 App 一般采用追加模式
+		isDataAppend: {type: Boolean, default: false}
 	},
 	beforeCreate() {	
 		aj.getTemplate('list', 'aj-page-list', this);
 	},
 	mounted() {
-		aj.xhr.get(this.realApiUrl, this.doAjaxGet, { limit: this.pageSize});
+		this.autoLoad && aj.xhr.get(this.realApiUrl, this.doAjaxGet, { limit: this.pageSize});
 		
 		if(!!this.autoLoadWhenReachedBottom) {
 			var scrollSpy = new aj.scrollSpy({scrollInElement: aj(this.autoLoadWhenReachedBottom), spyOn: thish.$el.$('.buttom')});
@@ -181,9 +169,7 @@ Vue.component('aj-page-list', {
 			var params = {};
 			aj.apply(params, { start : this.pageStart, limit : this.pageSize });
 			this.baseParam && aj.apply(params, this.baseParam);
-			
-//			ajaxjs.xhr.get(this.$props.apiUrl, this.doAjaxGet, params);
-			ajaxjs.xhr.get(this.realApiUrl, this.doAjaxGet, params);
+			aj.xhr.get(this.realApiUrl, this.doAjaxGet, params);
 		},
 		onBaseParamChange(params) {
 			aj.apply(this.baseParam, params);
