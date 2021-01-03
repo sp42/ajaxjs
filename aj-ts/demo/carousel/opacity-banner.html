@@ -1,0 +1,52 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>AJAXJS Web UI Demo</title>
+    <link rel="stylesheet" type="text/css" href="../common/demo.css" />
+    <link rel="stylesheet" type="text/css" href="../common/main.css" />
+    <script src="https://lib.baomitu.com/vue/2.6.11/vue.js"></script>
+</head>
+
+<body>
+    <div class="box">
+        <h1>Welcome to AJAXJS Web UI</h1>
+        <div>
+            <menu>
+                <span></span>
+            </menu>
+            <div class="content">
+                <h2>渐现 Banner</h2>
+                <p>原理上讲，就是为每张图片准备好定时器 timer，使其控制图片的透明度。当图片从透明度 0 到 100，就是渐现的过程； 与此同时，另外一张图片由透明度 100 下降到 0。这两个过程是同时发生的，一个渐现一个渐隐，便会造成如此的目标效果。</p>
+                <p>教程：
+                    <a href="https://zhangxin.blog.csdn.net/article/details/112055111" target="_blank">https://zhangxin.blog.csdn.net/article/details/112055111</a>
+                </p>
+                <div class="opacity-banner">
+                    <aj-opacity-banner>
+                        <li>
+                            <a href="#"> <img src="images/1.jpg" /></a>
+                        </li>
+                        <li>
+                            <a href="#"> <img src="images/2.jpg" /></a>
+                        </li>
+                        <li>
+                            <a href="#"> <img src="images/3.jpg" /></a>
+                        </li>
+                    </aj-opacity-banner>
+                </div>
+            </div>
+            <div class="copyright">
+                <div></div>
+            </div>
+        </div>
+    </div>
+    <script src="../common/demo.js"></script>
+    <script src="../../dist/carousel/opacity-banner.js"></script>
+    <script>
+        new Vue({
+            el: '.opacity-banner'
+        });
+    </script>
+</body>
+
+</html>

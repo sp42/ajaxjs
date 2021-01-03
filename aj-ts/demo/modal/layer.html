@@ -1,0 +1,41 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>AJAXJS Web UI Demo</title>
+    <link rel="stylesheet" type="text/css" href="../common/demo.css" />
+    <link rel="stylesheet" type="text/css" href="../common/main.css" />
+    <script src="https://lib.baomitu.com/vue/2.6.11/vue.js"></script>
+</head>
+
+<body>
+    <div class="box">
+        <h1>Welcome to AJAXJS Web UI</h1>
+        <div>
+            <menu>
+                <span></span>
+            </menu>
+            <div class="content">
+                <h2>透明浮层 Layer</h2>
+                <p>全覆盖页面的透明浮层</p>
+                <button class="aj-btn" onclick="new Vue({el:'.layer'}).$children[0].show();">Click to demo</button>
+                <div class="layer">
+                    <aj-layer></aj-layer>
+                </div>
+            </div>
+            <div class="copyright">
+                <div></div>
+            </div>
+        </div>
+    </div>
+    <script src="../common/demo.js"></script>
+    <script src="../../dist/base/prototype.js"></script>
+    <script src="../../dist/widget/layer.js"></script>
+    <script>
+        function open() {
+
+        }
+    </script>
+</body>
+
+</html>
