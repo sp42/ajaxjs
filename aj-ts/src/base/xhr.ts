@@ -48,7 +48,7 @@ namespace aj.xhr {
         /**
          * 保存 url 以便记录请求路径，可用于调试
          */
-        url: string;
+        url?: string;
     }
 
     /**
