@@ -1,3 +1,12 @@
+function loadScript(url ) {
+    var script  = document.createElement("script");
+    script.src = url;
+
+    document.getElementsByTagName("head")[0].appendChild(script);
+}
+
+loadScript("https://ajaxjs.nos-eastchina1.126.net/lib/code-prettify.min.js");
+
 new Vue({
     el: '.copyright div',
     template: '<span>©AJAXJS CopyRight</span>'

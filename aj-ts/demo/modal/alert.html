@@ -18,17 +18,17 @@
             <div class="content">
                 <h2>警告 alert、确认 confirm</h2>
                 <p>全屏幕弹窗，居中显示文字。其中 cfg.afterClose : Function 为关闭弹窗后的回调，可选的。 该方法无须使用标签，而是 JS 方法调用。</p>
-                <xmp class="code">aj.alert(text:String, cfg:Object);  // 弹窗  
-aj.widget.msgbox.close();           // 关闭</xmp>
+                <pre class="prettyprint"><xmp>aj.alert(text:String, cfg:Object);  // 弹窗  
+aj.widget.msgbox.close();           // 关闭</xmp></pre>
                 <button class="aj-btn" onclick="aj.alert('操作<b>成功</b>！');">Click to alert</button> &nbsp;&nbsp;&nbsp;
                 <button class="aj-btn" onclick="aj.showConfirm('操作<b>成功</b>！');">Click to confirm</button>&nbsp;&nbsp;&nbsp;
                 <button class="aj-btn" onclick="aj.simpleOk('操作<b>成功</b>！');">SimpleOk</button>
                 <p>例子：</p>
-                <xmp class="code">aj.alert('Hello World!');
+                <pre class="prettyprint"><xmp>aj.alert('Hello World!');
 // 显示“确定”按钮，第二个参数为回调，可选
 aj.showOk('Hello World!', ()=>alert('点击了确定按钮')); 
 // 显示“是、否”的选择按钮，第二个参数为点击“是”时候的回调，可选
-aj.showConfirm("Hello World!", ()=>alert('点击了 yes 按钮')); </xmp>
+aj.showConfirm("Hello World!", ()=>alert('点击了 yes 按钮')); </xmp></pre>
                 <p>所有回调函数执行之后都会关闭弹出的窗体。</p>
             </div>
             <div class="copyright">
