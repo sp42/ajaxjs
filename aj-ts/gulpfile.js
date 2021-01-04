@@ -1,14 +1,11 @@
 const { src, dest, watch, series } = require('gulp');
 const concat = require('gulp-concat');
-const uglify = require('gulp-uglify');
 const rename = require('gulp-rename');
-const sourcemaps = require('gulp-sourcemaps');
-const ts = require('gulp-typescript');
-const tsProject = ts.createProject('tsconfig.json');
+
 const del = require('del');
 
 const config = {
-    isDev: false,
+    isCompress: false,      // 是否压缩 js
     serverPort: 8888,
     srcFolder: 'dist/svg/',
     jsFiles: ['Utils.js', 'BaseComponent.js', 'wire/Dot.js'],
@@ -23,20 +20,26 @@ function clean() {
     return del(['./dist', './sourcemap']);
 }
 
+const ts = require('gulp-typescript');
+const uglify = require('gulp-uglify');
+const sourcemaps = require('gulp-sourcemaps');
+const tsProject = ts.createProject('tsconfig.json');
+
 // 编译 ts
-function compile() {
+function jsCompile() {
     return tsProject.src()
         .pipe(tsProject())
         .on('error', () => { /* Ignore compiler errors */ })
         .js.pipe(dest("dist"));
 }
 
-function js(cb) {
+// 打包 js
+function jsBuild(cb) {
     let obj = src(config.jsFiles)
         .pipe(concat(config.allJsName))// 合并所有js到all.js
         .pipe(dest('./dist'));
 
-    if (!config.isDev) {
+    if (!config.isCompress) {
         obj.pipe(rename({ suffix: '.min' }))            // rename压缩后的文件名
             .pipe(sourcemaps.init())                    // Source Map 
             .pipe(uglify())                             // 压缩 js
@@ -47,9 +50,26 @@ function js(cb) {
     cb();
 }
 
-const vueify = require('gulp-vueify2');
+const less = require('gulp-less'), cssSourcemaps = require('gulp-sourcemaps');
 
+// css when developing
+function cssCompile() {
+    return src('src/less/**/*.less')
+        .pipe(less())
+        .pipe(dest('dist/css'));
+}
 
-exports.default = () => {
-    watch('src/**/*.ts', series(clean, compile, js));// /**/* 就是任意层级下的文件。
+function cssBuild() {
+    return src('src/less/**/*.less')
+        .pipe(cssSourcemaps.init())
+        .pipe(less())
+        .pipe(cssSourcemaps.write('../../sourcemap/css/'))
+        .pipe(dest('dist/css'));
+}
+
+dev = () => {
+    watch('src/**/*.ts', series(jsCompile));// /**/* 就是任意层级下的文件。
+    watch('src/less/**/*.less', series(cssCompile));
 };
+
+exports.default = dev;

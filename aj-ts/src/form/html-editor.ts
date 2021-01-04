@@ -7,7 +7,6 @@
     interface HTMLEditor extends Vue, FormFieldElementComponent {
         uploadImageActionUrl: string;
         iframeEl: HTMLIFrameElement;
-        iframeBody: HTMLBodyElement;
         sourceEditor: HTMLTextAreaElement;
         iframeWin: Window;
         iframeDoc: Document;
@@ -30,34 +29,34 @@
             <div class="aj-form-html-editor">
                 <ul class="toolbar" @click="onToolBarClk">
                     <li class="dorpdown">
-                        <i title="字体" class="switchMode fa-font"></i>
+                        <i title="字体"         class="fa-font"></i>
                         <div class="fontfamilyChoser" @click="onFontfamilyChoserClk">
-                            <a href="javascript:;" style="font-family: '宋体'">宋体</a>
-                            <a href="javascript:;" style="font-family: '黑体'">黑体</a>
-                            <a href="javascript:;" style="font-family: '楷体'">楷体</a>
-                            <a href="javascript:;" style="font-family: '隶书'">隶书</a>
-                            <a href="javascript:;" style="font-family: '幼圆'">幼圆</a>
-                            <a href="javascript:;" style="font-family: 'Microsoft YaHei'">Microsoft YaHei</a>
-                            <a href="javascript:;" style="font-family: Arial">Arial</a>
-                            <a href="javascript:;" style="font-family: 'Arial Narrow'">Arial Narrow</a>
-                            <a href="javascript:;" style="font-family: 'Arial Black'">Arial Black</a>
-                            <a href="javascript:;" style="font-family: 'Comic Sans MS'">Comic Sans MS</a>
-                            <a href="javascript:;" style="font-family: Courier">Courier</a>
-                            <a href="javascript:;" style="font-family: System">System</a>
-                            <a href="javascript:;" style="font-family: 'Times New Roman'">Times New Roman</a>
-                            <a href="javascript:;" style="font-family: Verdana">Verdana</a>
+                            <a style="font-family: '宋体'">宋体</a>
+                            <a style="font-family: '黑体'">黑体</a>
+                            <a style="font-family: '楷体'">楷体</a>
+                            <a style="font-family: '隶书'">隶书</a>
+                            <a style="font-family: '幼圆'">幼圆</a>
+                            <a style="font-family: 'Microsoft YaHei'">Microsoft YaHei</a>
+                            <a style="font-family: Arial">Arial</a>
+                            <a style="font-family: 'Arial Narrow'">Arial Narrow</a>
+                            <a style="font-family: 'Arial Black'">Arial Black</a>
+                            <a style="font-family: 'Comic Sans MS'">Comic Sans MS</a>
+                            <a style="font-family: Courier">Courier</a>
+                            <a style="font-family: System">System</a>
+                            <a style="font-family: 'Times New Roman'">Times New Roman</a>
+                            <a style="font-family: Verdana">Verdana</a>
                         </div>
                     </li>		
                     <li class="dorpdown">
-                        <i title="字号" class="switchMode fa-header"></i>
+                        <i title="字号"         class="fa-header"></i>
                         <div class="fontsizeChoser" @click="onFontsizeChoserClk">
-                            <a href="javascript:;" style="font-size: xx-small; line-height: 120%">极小</a>
-                            <a href="javascript:;" style="font-size: x-small;  line-height: 120%">特小</a>
-                            <a href="javascript:;" style="font-size: small;    line-height: 120%">小</a>
-                            <a href="javascript:;" style="font-size: medium;   line-height: 120%">中</a>
-                            <a href="javascript:;" style="font-size: large;    line-height: 120%">大</a>
-                            <a href="javascript:;" style="font-size: x-large;  line-height: 120%">特大</a>
-                            <a href="javascript:;" style="font-size: xx-large; line-height: 140%">极大</a>
+                            <a style="font-size: xx-small; ">极小</a>
+                            <a style="font-size: x-small;  ">特小</a>
+                            <a style="font-size: small;    ">小</a>
+                            <a style="font-size: medium;   ">中</a>
+                            <a style="font-size: large;    ">大</a>
+                            <a style="font-size: x-large;  ">特大</a>
+                            <a style="font-size: xx-large; line-height: 140%">极大</a>
                         </div>
                     </li>		
                     <li><i title="加粗"         class="bold fa-bold"></i></li>		
@@ -71,11 +70,11 @@
                     <li><i title="增加缩进"     class="outdent fa-outdent"></i></li>
                     <li><i title="减少缩进"     class="indent fa-indent"></i></li>
                     <li class="dorpdown">
-                        <i title="字体颜色" class="fa-paint-brush"></i>
+                        <i title="字体颜色"     class="fa-paint-brush"></i>
                         <div class="fontColor colorPicker" v-html="createColorPickerHTML()" @click="onFontColorPicker"></div>
                     </li>
                     <li class="dorpdown">
-                        <i title="背景颜色" class="fa-pencil" ></i>
+                        <i title="背景颜色"     class="fa-pencil" ></i>
                         <div class="bgColor colorPicker" v-html="createColorPickerHTML()" @click="onFontBgColorPicker"></div>
                     </li>
                     <li><i title="增加链接"     class="createLink fa-link" ></i></li>
@@ -86,11 +85,12 @@
                 </ul>
 
                 <div class="editorBody">	
-                    <iframe :src="ajResources.commonAsset + '/resources/htmleditor_iframe.jsp?basePath=' + basePath"></iframe>
+                    <iframe srcdoc="<html><body></body></html>"></iframe>   
                     <slot></slot>
                 </div>
             </div>
         `,
+        // <iframe :src="ajResources.commonAsset + '/resources/htmleditor_iframe.jsp?basePath=' + basePath"></iframe>
         props: {
             fieldName: { type: String, required: true },    // 表单 name，字段名
             content: { type: String, required: false },     // 内容
@@ -192,7 +192,7 @@
              * @param encode 
              */
             getValue(this: HTMLEditor, cleanWord: boolean, encode: boolean): string {
-                let result: string = this.iframeBody.innerHTML;
+                let result: string = this.iframeDoc.body.innerHTML;
 
                 if (cleanWord)
                     result = cleanPaste(result);
@@ -212,13 +212,13 @@
                 if (this.mode == 'iframe') {
                     this.iframeEl.classList.add('hide');
                     this.sourceEditor.classList.remove('hide');
-                    this.sourceEditor.value = this.iframeBody.innerHTML;
+                    this.sourceEditor.value = this.iframeDoc.body.innerHTML;
                     this.mode = 'textarea';
                     grayImg.call(this, true);
                 } else {
                     this.iframeEl.classList.remove('hide');
                     this.sourceEditor.classList.add('hide');
-                    this.iframeBody.innerHTML = this.sourceEditor.value;
+                    this.iframeDoc.body.innerHTML = this.sourceEditor.value;
                     this.mode = 'iframe';
                     grayImg.call(this, false);
                 }
@@ -310,11 +310,14 @@
      * @param isGray 
      */
     function grayImg(this: HTMLEditor, isGray: boolean): void {
-        this.toolbarEl.$('span', (item: HTMLElement) => {
+        this.toolbarEl.$('i', (item: HTMLElement) => {
             if (item.className.indexOf('switchMode') != -1)
-                item.style.color = isGray ? 'red' : '';
-            else
-                item.style.filter = isGray ? 'grayscale(100%)' : '';
+                return;
+            item.style.color = isGray ? 'lightgray' : '';
+            // if (item.className.indexOf('switchMode') != -1)
+            //     item.style.color = isGray ? 'lightgray' : '';
+            // else
+            //     item.style.filter = isGray ? 'grayscale(100%)' : '';
         });
     }
 
