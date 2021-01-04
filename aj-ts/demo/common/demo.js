@@ -26,29 +26,22 @@ new Vue({
                 <a href="/demo/modal/index.html">Modal</a>
             </li>
             <li>
-                <a href="?g=pages">Widget</a>
+                <a href="/demo/widget/index.html">Widget</a>
             </li>
             <li>
-                <a href="?g=tab">Tab</a>
+                <a href="/demo/tab/index.html">Tab</a>
             </li>
             <li>
                 <a href="/demo/form/index.html">Form</a>
             </li>
             <li>
-                <a href="?g=list">List</a>
+                <a href="/demo/list/index.html">List</a>
             </li>
             <li>
-                <a href="?g=tree">Tree</a>
+                <a href="/demo/tree/index.html">Tree</a>
             </li>
             <li>
                 <a href="/demo/carousel/index.html">Carousel</a>
-            </li>
-            <li>
-                <a href="?g=navmenu">Menu</a>
-            </li>
-
-            <li>
-                <a href="?g=css">CSS Layout</a>
             </li>
         </ul>
     `

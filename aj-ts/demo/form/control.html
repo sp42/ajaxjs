@@ -3,8 +3,10 @@
 <head>
     <meta charset="utf-8" />
     <title>AJAXJS Web UI Demo</title>
+    <link rel="stylesheet" type="text/css" href="../../dist/css/base.css" />
     <link rel="stylesheet" type="text/css" href="../common/demo.css" />
-    <link rel="stylesheet" type="text/css" href="../common/main.css" />
+    <link rel="stylesheet" type="text/css" href="../../dist/css/form/control.css" />
+
     <link crossorigin="anonymous" integrity="sha384-FckWOBo7yuyMS7In0aXZ0aoVvnInlnFMwCv77x9sZpFgOonQgnBj1uLwenWVtsEj"
         href="https://lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
     <script src="https://lib.baomitu.com/vue/2.6.11/vue.js"></script>
@@ -19,32 +21,38 @@
             </menu>
             <div class="content">
                 <h2>按钮 Button</h2>
-                <pre class="prettyprint"><xmp><button class="ajaxjs-btn">按钮</button>
-            <button class="ajaxjs-btn-1">按钮</button>
-            <button class="ajaxjs-btn-1 ajaxjs-disable">按钮（禁止状态）</button></xmp></pre>
+                <pre class="prettyprint"><xmp><button class="aj-btn">按钮</button>
+<button class="aj-btn aj-disable">按钮（禁止状态）</button></xmp></pre>
 
                 <p>演示：</p>
                 <div class="center">
-                    <button class="ajaxjs-btn">按钮</button>
-                    <button class="ajaxjs-btn-1">按钮</button> <button class="ajaxjs-btn-1 ajaxjs-disable">按钮（禁止状态）</button>
+                    <button class="aj-btn">按钮</button> &nbsp;&nbsp;<button class="aj-btn aj-disable">按钮（禁止状态）</button>
                 </div>
 
                 <h2>输入框 Input Field</h2>
-                <pre class="prettyprint"><xmp><input class="ajaxjs-inputField" type="text" value="文本输入框" /> 
-            <input class="ajaxjs-inputField ajaxjs-disable" type="text" value="文本输入框（禁止状态）" /></xmp></pre>
-
-
+                <pre class="prettyprint"><xmp><input class="aj-input" type="text" value="文本输入框" /> 
+<input class="aj-input aj-disable" type="text" value="文本输入框（禁止状态）" /></xmp></pre>
                 <p>演示：</p>
                 <div class="center">
-                    <input class="ajaxjs-inputField" type="text" value="文本输入框" />
-                    <br />
-                    <br />
-                    <input class="ajaxjs-inputField ajaxjs-disable" type="text" value="文本输入框（禁止状态）" />
+                    <input class="aj-input" type="text" value="文本输入框" />
+                    &nbsp;&nbsp;
+                    <input class="aj-input aj-disable" type="text" value="文本输入框（禁止状态）" />
                 </div>
 
                 <h2>文本框 Textarea</h2>
                 <pre
-                    class="prettyprint"><xmp><textarea class="ajaxjs-inputField" rows="15" cols="20">……</textarea></xmp></pre>
+                    class="prettyprint"><xmp><textarea class="aj-inputField" rows="15" cols="20">……</textarea></xmp></pre>
+                <p>演示：</p>
+                <textarea class="aj-input" rows="15" cols="20"
+                    style="resize: none; padding-top: 5px; height: 100px; width: 400px;-webkit-overflow-scrolling : touch"
+                    name="intro">
+Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
+It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
+It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
+and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</textarea>
+
 
             </div>
             <div class="copyright">
@@ -53,11 +61,6 @@
         </div>
     </div>
     <script src="../common/demo.js"></script>
-    <script src="../../dist/base/prototype.js"></script>
-    <script src="../../dist/form/html-editor.js"></script>
-    <script>
-
-    </script>
 </body>
 
 </html>

@@ -1,20 +1,4 @@
-// 渐变
-.gradient (@direction , @startColor , @endColor) {
-    background-image: -webkit-linear-gradient(@direction, @startColor, @endColor);
-    background-image: -moz-linear-gradient(@direction, @startColor, @endColor);
-    background-image: -ms-linear-gradient(@direction, @startColor, @endColor);
-    background-image: -o-linear-gradient(@direction, @startColor, @endColor);
-    background-image: linear-gradient(@direction, @startColor, @endColor);
-}
-
-// 渐变
-.gradient (@direction , @startColor , @midColor , @endColor) {
-    background-image: -webkit-linear-gradient(@direction, @startColor, @midColor, @endColor);
-    background-image: -moz-linear-gradient(@direction, @startColor, @midColor, @endColor);
-    background-image: -ms-linear-gradient(@direction, @startColor, @midColor, @endColor);
-    background-image: -o-linear-gradient(@direction, @startColor, @midColor, @endColor);
-    background-image: linear-gradient(@direction, @startColor, @midColor, @endColor);
-}
+@import '../common-functions.less';
 
 .aj-btn {
     min-height         : 30px;
@@ -117,7 +101,6 @@
 .aj-btnsHolder {
     text-align: center;
     padding   : 2% 0;
-
     button {
         .aj-btn;
         margin-right: 3% !important;

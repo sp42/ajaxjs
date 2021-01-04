@@ -1,0 +1,138 @@
+.aj-form-calendar {
+  font-family: Verdana;
+  font-size: 0.8rem;
+  background-color: white;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 320px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  padding: 10px;
+  line-height: 1.5em;
+}
+.aj-form-calendar a {
+  color: #1e5494;
+}
+.aj-form-calendar .selectYearMonth {
+  float: right;
+  width: 100px;
+}
+.aj-form-calendar .selectYearMonth div {
+  display: inline-block;
+}
+.aj-form-calendar .showCurrentYearMonth {
+  text-align: left;
+  color: lightgray;
+  font-size: 1.6rem;
+  padding: 5% 0;
+}
+.aj-form-calendar table {
+  width: 100%;
+  border: 0;
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+.aj-form-calendar table thead tr {
+  color: #acacac;
+  border-bottom: 1px solid lightgray;
+  margin-bottom: 15px;
+}
+.aj-form-calendar table td {
+  font-size: 0.8rem;
+  padding: 0.4rem;
+  letter-spacing: 1px;
+  border: 0;
+  background-color: white;
+  text-align: center;
+}
+.aj-form-calendar table td.day {
+  cursor: pointer;
+  transition: background-color 190ms ease-in-out;
+}
+.aj-form-calendar table td.onToday {
+  font-weight: bold;
+  color: #C60;
+}
+.aj-form-calendar table td.onSelect {
+  font-weight: bold;
+}
+.aj-form-calendar table td.day:hover {
+  color: #236ab7;
+  background-color: #e9e9e9;
+}
+.aj-form-calendar .idCalendarPre,
+.aj-form-calendar .idCalendarNext {
+  cursor: pointer;
+  font-size: 1.2rem;
+  text-align: center;
+  border-radius: 3px;
+  padding: 2px 5px;
+}
+.aj-form-calendar .idCalendarPre:hover,
+.aj-form-calendar .idCalendarNext:hover {
+  background-color: #e9e9e9;
+}
+.aj-form-calendar .idCalendarPre {
+  float: left;
+}
+.aj-form-calendar .idCalendarNext {
+  float: right;
+}
+.aj-form-calendar .btns {
+  position: absolute;
+  left: 15px;
+  bottom: 5px;
+}
+.aj-form-calendar .btns input[type=button] {
+  font-size: 0.8rem;
+  padding: 2px 4px;
+  margin: 1px;
+}
+.aj-form-calendar-input {
+  position: relative;
+  width: 125px;
+  display: inline-block;
+}
+.aj-form-calendar-input.show-time {
+  width: 170px;
+}
+.aj-form-calendar-input input[type=text] {
+  max-width: 100% ! important;
+  width: 100% ! important;
+}
+.aj-form-calendar-input .icon {
+  position: absolute;
+  width: 17px;
+  height: 16px;
+  right: 5px;
+  top: 10px;
+  opacity: 0.6;
+  cursor: pointer;
+}
+.aj-form-calendar-input .aj-form-calendar {
+  z-index: 999999999;
+  display: none;
+  position: absolute;
+  right: -3px;
+  top: 25px;
+}
+.aj-form-calendar-input .aj-form-calendar.positionFixed {
+  position: fixed;
+}
+.aj-form-calendar-input:hover .aj-form-calendar,
+.aj-form-calendar-input .aj-form-calendar:hover {
+  display: block;
+}
+.aj-form-calendar-input:hover .aj-form-calendar .icon,
+.aj-form-calendar-input .aj-form-calendar:hover .icon {
+  opacity: 0.5;
+}
+.aj-form-calendar-input:hover .icon {
+  opacity: 1;
+}
+.aj-form-calendar-input .selectYearMonth select {
+  min-width: 65px;
+}

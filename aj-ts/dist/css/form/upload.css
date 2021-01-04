@@ -1,0 +1,27 @@
+.aj-xhr-upload {
+  display: flex;
+  align-items: center;
+  word-break: break-all;
+}
+.aj-xhr-upload > div {
+  margin: 5% 1%;
+}
+.aj-xhr-upload .upload_img_perview {
+  margin: 10px;
+  max-width: 180px;
+  max-height: 160px;
+}
+.aj-xhr-upload .pseudoFilePicker label > div {
+  border: 1px solid lightgray;
+  border-radius: 3px;
+  text-align: center;
+  color: gray;
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 10px;
+  width: 100px;
+  height: 70px;
+}
+.aj-xhr-upload .pseudoFilePicker label > div > div {
+  font-size: 2rem;
+}
