@@ -1,0 +1,39 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>AJAXJS Web UI Demo</title>
+    <link rel="stylesheet" type="text/css" href="../../dist/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../common/demo.css" />
+    <link rel="stylesheet" type="text/css" href="../../dist/css/widget/process-line.css" />
+    <script src="https://lib.baomitu.com/vue/2.6.11/vue.js"></script>
+</head>
+
+<body>
+    <div class="box">
+        <h1>Welcome to AJAXJS Web UI</h1>
+        <div>
+            <menu>
+                <span></span>
+            </menu>
+            <div class="content">
+                <h2>进度条 Process Line</h2>
+                <p>演示：</p>
+                <div class="process-line" style="width: 70%;margin:5% auto;">
+                    <aj-process-line></aj-process-line>
+                </div>
+
+            </div>
+            <div class="copyright">
+                <div></div>
+            </div>
+        </div>
+    </div>
+    <script src="../common/demo.js"></script>
+    <script src="../../dist/widget/process-line.js"></script>
+    <script>
+       new Vue({ el: '.process-line' });
+    </script>
+</body>
+
+</html>

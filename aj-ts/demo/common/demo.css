@@ -286,3 +286,8 @@ projection {
         color: #060
     }
 }
+
+.aj-table td, .aj-table th {
+    text-align: center;
+    font-size: .9rem;
+}

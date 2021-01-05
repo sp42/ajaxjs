@@ -1,0 +1,100 @@
+// 下拉菜单
+// 父节点，通常是 li
+@import '../../common-functions.less';
+
+.aj-css-menu-parentNode () {
+    box-sizing: border-box;
+    position  : relative;
+    overflow  : hidden;
+
+    &:hover {
+        overflow: inherit;
+    }
+
+    .show () {
+        height : 13rem;
+        z-index: 9999999;
+    }
+
+    &:hover menu {
+        .show ();
+    }
+
+    menu {
+        margin    : 0;
+        z-index   : 99999;
+        box-sizing: border-box;
+        overflow  : hidden;
+        position  : absolute;
+        .heightFx;
+        height: 0;
+
+        &:hover {
+            .show;
+        }
+    }
+}
+
+.aj-css-menu {
+    margin: 0 auto;
+
+    &>li {
+        float  : left;
+        padding: 0 2%;
+        .aj-css-menu-parentNode();
+
+        menu {
+            line-height     : 25px;
+            padding         : 0 5px;
+            width           : 200px;
+            background-color: #eee;
+
+            div {
+                font-size  : .8rem;
+                color      : gray;
+                line-height: 15px;
+                margin     : 10px 0;
+            }
+        }
+    }
+}
+
+// display:none/block 版
+.aj-css-menu-2 {
+    margin: 0 auto;
+
+    &>li {
+        float     : left;
+        padding   : 0 2%;
+        box-sizing: border-box;
+        position  : relative;
+
+        &:hover menu {
+            display: block;
+        }
+
+        menu {
+            line-height     : 25px;
+            display         : none;
+            z-index         : 99999999;
+            padding         : 0 5px;
+            box-sizing      : border-box;
+            width           : 200px;
+            background-color: #eee;
+            overflow        : hidden;
+            margin          : 0;
+            position        : absolute;
+
+            div {
+                font-size  : .8rem;
+                color      : gray;
+                line-height: 15px;
+                margin     : 10px 0;
+            }
+
+            &:hover {
+                display: block;
+            }
+        }
+    }
+}

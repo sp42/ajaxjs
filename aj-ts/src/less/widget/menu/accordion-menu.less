@@ -1,0 +1,78 @@
+@import '../../common-functions.less';
+
+// 折叠菜单 Accordion Menu
+.aj-accordion {
+    &>li h3 {
+        cursor: pointer;
+    }
+
+    .pressed {
+        &>ul {}
+
+        & h3 {
+            color: black;
+        }
+    }
+
+    &>li>ul {
+        .transition (height .5s cubic-bezier(0, 1, 0.5, 1));
+        overflow: hidden;
+    }
+
+    ul {
+        height: 0;
+    }
+}
+
+.aj-accordion-menu {
+    .aj-accordion ();
+    overflow: hidden;
+
+    &>li {
+        border-top   : 1px solid white;
+        border-bottom: 1px solid lightgray;
+
+        &.pressed {
+            border-top   : 0;
+            border-bottom: 1px solid lightgray;
+            box-shadow   : inset 0px 10px 15px -15px gray;
+
+            h3 {
+                //	font-weight: bold;
+            }
+        }
+
+        ul {
+            li {
+                list-style-type: disc;
+                padding-left   : 15%;
+
+                a {
+                    width  : 100%;
+                    display: block;
+                }
+
+                &.selected {
+                    a {
+                        color      : black;
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+
+        h3,
+        li {
+            padding       : 5px 0 5px 15px;
+            letter-spacing: 2px;
+            line-height   : 20px;
+            color         : #939da8;
+            font-size     : 12px;
+
+            &:hover,
+            a:hover {
+                color: black;
+            }
+        }
+    }
+}

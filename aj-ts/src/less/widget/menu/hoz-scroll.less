@@ -1,0 +1,67 @@
+.aj-hoz-scroll {
+    position        : relative;
+    background-color: #eee;
+    height          : 43px;
+    border-bottom   : 2px solid lightgray;
+
+    ul {
+        height: 43px;
+    }
+
+    .indicator {
+        height          : 2px;
+        width           : 20px;
+        background-color: #a41d1e;
+        transition      : margin-left 200ms ease;
+    }
+
+    &>div {
+        position                  : absolute;
+        left                      : 0;
+        top                       : 0;
+        width                     : 100%;
+        white-space               : nowap;
+        overflow-x                : auto;
+        overflow-y                : hidden;
+        -webkit-overflow-scrolling: touch;
+
+        ul {
+            display  : flex;
+            flex-wrap: nowap;
+
+            li {
+                float         : none;
+                display       : inline-block;
+                text-align    : center;
+                padding       : 15px 10px;
+                padding-bottom: 5px;
+                cursor        : pointer;
+                letter-spacing: 2px;
+
+                &.selected {
+                    color: #a41d1e;
+                }
+            }
+        }
+    }
+
+    &::before {
+        position        : absolute;
+        content         : '';
+        left            : 0;
+        top             : 0;
+        width           : 20%;
+        height          : 100%;
+        background-image: -webkit-gradient(linear, left top, right top, color-stop(0, white), color-stop(1, rgba(255, 255, 255, 0)));
+    }
+
+    &::after {
+        position        : absolute;
+        content         : '';
+        right           : 0;
+        top             : 0;
+        width           : 20%;
+        height          : 100%;
+        background-image: -webkit-gradient(linear, right top, left top, color-stop(0, white), color-stop(1, rgba(255, 255, 255, 0)));
+    }
+}

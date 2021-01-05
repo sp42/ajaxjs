@@ -1,0 +1,79 @@
+.aj-css-menu {
+  margin: 0 auto;
+}
+.aj-css-menu > li {
+  float: left;
+  padding: 0 2%;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+.aj-css-menu > li:hover {
+  overflow: inherit;
+}
+.aj-css-menu > li:hover menu {
+  height: 13rem;
+  z-index: 9999999;
+}
+.aj-css-menu > li menu {
+  margin: 0;
+  z-index: 99999;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: absolute;
+  -webkit-transition: 300ms height ease-out;
+  -moz-transition: 300ms height ease-out;
+  -ms-transition: 300ms height ease-out;
+  -o-transition: 300ms height ease-out;
+  transition: 300ms height ease-out;
+  height: 0;
+}
+.aj-css-menu > li menu:hover {
+  height: 13rem;
+  z-index: 9999999;
+}
+.aj-css-menu > li menu {
+  line-height: 25px;
+  padding: 0 5px;
+  width: 200px;
+  background-color: #eee;
+}
+.aj-css-menu > li menu div {
+  font-size: 0.8rem;
+  color: gray;
+  line-height: 15px;
+  margin: 10px 0;
+}
+.aj-css-menu-2 {
+  margin: 0 auto;
+}
+.aj-css-menu-2 > li {
+  float: left;
+  padding: 0 2%;
+  box-sizing: border-box;
+  position: relative;
+}
+.aj-css-menu-2 > li:hover menu {
+  display: block;
+}
+.aj-css-menu-2 > li menu {
+  line-height: 25px;
+  display: none;
+  z-index: 99999999;
+  padding: 0 5px;
+  box-sizing: border-box;
+  width: 200px;
+  background-color: #eee;
+  overflow: hidden;
+  margin: 0;
+  position: absolute;
+}
+.aj-css-menu-2 > li menu div {
+  font-size: 0.8rem;
+  color: gray;
+  line-height: 15px;
+  margin: 10px 0;
+}
+.aj-css-menu-2 > li menu:hover {
+  display: block;
+}

@@ -1,0 +1,96 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>AJAXJS Web UI Demo</title>
+    <link rel="stylesheet" type="text/css" href="../../dist/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../common/demo.css" />
+    <link rel="stylesheet" type="text/css" href="../../dist/css/widget/menu/accordion-menu.css" />
+    <script src="https://lib.baomitu.com/vue/2.6.11/vue.js"></script>
+</head>
+
+<body>
+    <div class="box">
+        <h1>Welcome to AJAXJS Web UI</h1>
+        <div>
+            <menu>
+                <span></span>
+            </menu>
+            <div class="content">
+                <h2>折叠菜单 Accordion Menu</h2>
+                <p>折叠菜单的特点是同一时间只展开一个区域，其他区域则处于闭合状态。</p>
+
+                <p>属性说明：</p>
+                <table class="aj-table" align="center" width="70%">
+                    <thead>
+                        <tr>
+                            <th>属性</th>
+                            <th>含义</th>
+                            <th>类型</th>
+                            <th>是否必填，默认值</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>&lt;slot&gt;</code></td>
+                            <td>菜单内容</td>
+                            <td>String</td>
+                            <td>y</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p>例子：</p>
+                <pre class="prettyprint"><xmp><aj-accordion-menu>……</aj-accordion-menu></xmp></pre>
+
+                <p>演示：</p>
+                <ul class="menu" style="width:80%;margin: 0 auto;">
+                    <aj-accordion-menu>
+                        <li class="siteMgr">
+                            <h3>网站管理</h3>
+                            <ul>
+                                <li><a target="iframepage" href="website/profile/changePassword.jsp">帐号信息</a></li>
+                                <li><a target="iframepage" href="website/profile/companyInfo.jsp">公司信息</a></li>
+                                <li><a target="iframepage" href="website/gallery/companyAlbum.jsp">相 册</a></li>
+                                <li><a target="iframepage" href="website/pageEditor/index.jsp">页面维护</a></li>
+                                <li><a target="iframepage" href="website/profile/global.jsp">全局信息</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="news">
+                            <h3>新闻中心管理</h3>
+                            <ul>
+                                <li><a target="iframepage" href="entry/list/news">新闻管理</a></li>
+                            </ul>
+                        </li>
+                        <li class="levelPoints">
+                            <h3>积分系统</h3>
+                            <ul>
+                                <li><a target="iframepage" href="levelPoints/memberTree.jsp">会员下线一览</a>
+                                </li>
+                                <li><a target="iframepage" href="levelPoints/showUserPoints.jsp">显示会员积分</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <h3>其他信息</h3>
+                            <ul>
+                                <li><a target="iframepage" href="../job/job.jsp">留言管理</a></li>
+                                <li><a target="iframepage" href="../job/job.jsp">招聘管理</a></li>
+                            </ul>
+                        </li>
+                    </aj-accordion-menu>
+                </ul>
+            </div>
+            <div class="copyright">
+                <div></div>
+            </div>
+        </div>
+    </div>
+    <script src="../common/demo.js"></script>
+    <script src="../../dist/widget/accordion-menu.js"></script>
+    <script>
+        new Vue({ el: '.menu' });
+    </script>
+</body>
+
+</html>

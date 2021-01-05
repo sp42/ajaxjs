@@ -1,0 +1,63 @@
+.aj-article-info {
+  margin: 0 0 3% 0;
+}
+.aj-article-info article h1 {
+  text-align: center;
+  font-size: 1.8rem;
+  padding: 3% 0;
+  letter-spacing: 3px;
+}
+.aj-article-info article h2 {
+  font-weight: bold;
+  text-align: left;
+  font-size: 1.1rem;
+  padding: 1% 0;
+}
+.aj-article-info article h4 {
+  text-align: right;
+  color: gray;
+  padding-bottom: 2%;
+  font-size: 0.95rem;
+}
+.aj-article-info article p {
+  color: #333;
+  line-height: 160%;
+  margin: 15px 0;
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  text-align: justify;
+  text-indent: 2em;
+}
+.aj-article-info article li {
+  color: #333;
+  line-height: 160%;
+  margin: 15px 0;
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  text-align: justify;
+  list-style-type: inherit;
+  margin-left: 3%;
+}
+.aj-article-info article pre {
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+.aj-article-info article img {
+  max-width: 80%;
+  margin: 2% auto;
+  display: block;
+}
+.aj-article-info article img.right {
+  float: right;
+  max-width: 38%;
+  margin: 2px 20px 0 10px;
+}
+.aj-article-info article img.left {
+  float: left;
+  max-width: 38%;
+  margin: 2px 20px 0 0;
+}
+.aj-article-info .neighborRecord {
+  clear: both;
+  padding: 5% 0;
+}
