@@ -79,7 +79,7 @@ textarea {
 }
 /*
 -------------------------
-常见样式类
+     常见样式类
 -------------------------
 */
 .left {
@@ -285,6 +285,16 @@ fieldset.aj-fieldset legend {
 fieldset.aj-fieldset li {
   list-style: disc;
   list-style-position: inside;
+}
+fieldset.aj-div {
+  border-bottom: 0;
+  border-left: 0;
+  border-right: 0;
+  border-top: 1px solid lightgray;
+  width: 90%;
+}
+fieldset.aj-div legend {
+  text-align: center;
 }
 .grecaptcha-badge {
   display: none;
