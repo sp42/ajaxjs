@@ -1,0 +1,133 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>AJAXJS Web UI Demo</title>
+    <link rel="stylesheet" type="text/css" href="../../dist/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../common/demo.css" />
+
+    <link crossorigin="anonymous" integrity="sha384-FckWOBo7yuyMS7In0aXZ0aoVvnInlnFMwCv77x9sZpFgOonQgnBj1uLwenWVtsEj"
+        href="https://lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
+    <script src="https://lib.baomitu.com/vue/2.6.11/vue.js"></script>
+</head>
+
+<body>
+    <div class="box">
+        <h1>Welcome to AJAXJS Web UI</h1>
+        <div>
+            <menu>
+                <span></span>
+            </menu>
+            <div class="content">
+                <h2>文章段落</h2>
+                <p>样式类为：.aj-p OR .aj-text。Demo:</p>
+                <p class="aj-p">
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                    when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                    It has survived not only five centuries, but also the leap into electronic typesetting, remaining
+                    essentially unchanged.
+                    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
+                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem
+                    Ipsum.
+                </p>
+                <p>提示文字段落，样式类为：.aj-note。Demo:</p>
+                <p class="aj-note">
+                    Lorem Ipsum，也称乱数假文或者哑元文本， 是印刷及排版领域所常用的虚拟文字。
+                    由于曾经一台匿名的打印机刻意打乱了一盒印刷字体从而造出一本字体样品书，
+                    Lorem Ipsum从西元15世纪起就被作为此领域的标准文本使用。
+                </p>
+                <p>文章段落（引用），样式类为：.aj-text-quotation。Demo:</p>
+                <p class="aj-text-quotation">
+                    Lorem Ipsum，也称乱数假文或者哑元文本， 是印刷及排版领域所常用的虚拟文字。
+                    由于曾经一台匿名的打印机刻意打乱了一盒印刷字体从而造出一本字体样品书，
+                    Lorem Ipsum从西元15世纪起就被作为此领域的标准文本使用。
+                </p>
+
+
+                <h2>全屏幕背景</h2>
+                <p>一般该 div 放在 document.body下一层，且 body 有高度 100%。</p>
+                <p>
+                    <button class="aj-btn"
+                        onclick="document.querySelector('.aj-mask').classList.toggle('hide');">点击演示</button>
+                </p>
+                <div class="aj-mask hide" onclick="document.querySelector('.aj-mask').classList.toggle('hide');"></div>
+
+                <h2>细线表格 Table</h2>
+                <p>快速制作 1px 表格边框，为需要设置的 table 元素 class 即可。 </p>
+                <pre class="prettyprint"><xmp><table class="aj-table" width="600" align="center">……</table></xmp></pre>
+                <br />
+                <div class="center">
+                    <table class="aj-table" width="600" align="center">
+                        <tr>
+                            <th>姓名</th>
+                            <td>Bill Gates</td>
+                        </tr>
+                        <tr>
+                            <th rowspan="2">电话</th>
+                            <td>555 77 854</td>
+                        </tr>
+                        <tr>
+                            <td>555 77 855</td>
+                        </tr>
+                    </table>
+                </div>
+                <br /><br />
+                <pre
+                    class="prettyprint"><xmp><table class="aj-niceTable" width="600" align="center">……</table></xmp></pre>
+                <br />
+                <div class="center">
+                    <table class="aj-niceTable" width="600" align="center">
+                        <thead>
+                            <tr>
+                                <th>Month</th>
+                                <th>Savings</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>January</td>
+                                <td>$100</td>
+                            </tr>
+                            <tr>
+                                <td>February</td>
+                                <td>$80</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>Sum</td>
+                                <td>$180</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+
+                <h2>&lt;fieldset&gt; 样式</h2>
+                <p>适合包围一个区域用。Demo:</p>
+                <fieldset class="aj-fieldset">
+                    <legend>我能从哪里获取？</legend>
+                    如今互联网提供各种各样版本的Lorem Ipsum段落，但是大多数都多多少少出于刻意幽默或者其他随机插入的荒谬单词而被篡改过了。
+                    如果你想取用一段Lorem Ipsum，请确保段落中不含有令人尴尬的不恰当内容。
+                    所有网上的Lorem Ipsum生成器都倾向于在必要时重复预先准备的部分，然而这个生成器则是互联网上首个确切的生成器。
+                </fieldset>
+
+                <br />
+
+                <p>利用 &lt;fieldset&gt; 制作分隔样式。Demo:</p>
+                <fieldset class="aj-div">
+                    <legend align="center">
+                        <img src="gs.png" />
+                    </legend>
+                </fieldset>
+            </div>
+            <div class="copyright">
+                <div></div>
+            </div>
+        </div>
+    </div>
+    <script src="../common/demo.js"></script>
+</body>
+
+</html>
