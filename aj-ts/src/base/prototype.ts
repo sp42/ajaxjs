@@ -4,6 +4,7 @@ interface Element {
      * 
      * @param cssSelector   CSS 选择器
      * @param fn            可选，当送入该参数的时候，表示使用 querySelectorAll 来查询多个 dom 元素，故 fn 是个遍历器函数，其参数列表如 item、index、array
+     * @returns 目标元素，如果没有找到返回 null
      */
     $(cssSelector: cssSelector, fn?: Function): Element | NodeListOf<Element> | null,
 
