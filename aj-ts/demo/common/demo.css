@@ -6,8 +6,14 @@ body {
     width     : 1200px;
     height    : 600px;
     margin    : 0 auto;
-    margin-top: 8%;
+    margin-top: 6%;
     position  : relative;
+}
+
+.box2 {
+    border: 1px solid lightgray;
+    padding: 1% 2%;
+    margin: 0 auto;
 }
 
 .box>h1 {
@@ -62,7 +68,7 @@ menu {
 menu li {
     list-style-type: disc;
     margin-bottom  : 15%;
-    
+
 }
 
 .copyright {

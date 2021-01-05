@@ -23,13 +23,7 @@ new Vue({
                 <a href="/demo/base/index.html">Base</a>
             </li>
             <li>
-                <a href="/demo/modal/index.html">Modal</a>
-            </li>
-            <li>
                 <a href="/demo/widget/index.html">Widget</a>
-            </li>
-            <li>
-                <a href="/demo/tab/index.html">Tab</a>
             </li>
             <li>
                 <a href="/demo/form/index.html">Form</a>
@@ -42,6 +36,12 @@ new Vue({
             </li>
             <li>
                 <a href="/demo/carousel/index.html">Carousel</a>
+            </li>
+            <li>
+                <a href="/demo/css/index.html">CSS</a>
+            </li>
+            <li>
+                <a href="/demo/misc/index.html">Misc.</a>
             </li>
         </ul>
     `
