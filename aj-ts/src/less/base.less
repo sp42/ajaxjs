@@ -3,7 +3,7 @@
 
 /*
 -------------------------
-常见样式类
+     常见样式类
 -------------------------
 */
 .left {
@@ -227,6 +227,7 @@ p.aj-note {
     }
 }
 
+// 适合包围一个区域用
 fieldset.aj-fieldset {
     border-radius: 5px;
     border       : 1px solid gray;
@@ -241,6 +242,19 @@ fieldset.aj-fieldset {
     li {
         list-style         : disc;
         list-style-position: inside;
+    }
+}
+
+// 分隔样式
+fieldset.aj-div {
+    border-bottom: 0;
+    border-left  : 0;
+    border-right : 0;
+    border-top   : 1px solid lightgray;
+    width        : 90%;
+
+    legend {
+        text-align: center;
     }
 }
 

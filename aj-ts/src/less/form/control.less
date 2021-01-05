@@ -79,7 +79,6 @@
     user-select        : none;
 }
 
-
 .aj-select {
     padding           : 1px 4px;
     -moz-appearance   : none;
@@ -101,8 +100,159 @@
 .aj-btnsHolder {
     text-align: center;
     padding   : 2% 0;
+
     button {
         .aj-btn;
         margin-right: 3% !important;
+    }
+}
+
+.aj-form {
+    min-width: 400px;
+    overflow : hidden;
+
+    @media screen and (max-width: 480px) {
+        dt {
+            width: 40% ! important;
+            float: initial ! important;
+        }
+    }
+
+    &.fixed-width {
+        margin   : 5% auto;
+        max-width: 82%;
+        width    : 460px;
+    }
+
+    dl {
+        float      : left;
+        overflow   : hidden;
+        box-sizing : border-box;
+        padding    : 0 3%;
+        line-height: 36px;
+        width      : 100%;
+        margin     : 1em 0;
+
+        dt {
+            min-width     : 110px;
+            max-width     : 30%;
+            float         : left;
+            text-align    : right;
+            box-sizing    : border-box;
+            padding-right : 4%;
+            font-weight   : bold;
+            letter-spacing: 1px;
+            min-height    : 10px;
+        }
+
+        dd {
+            float    : left;
+            max-width: 70%;
+            position : relative;
+        }
+    }
+
+    input[type=text],
+    input[type=password],
+    textarea,
+    input[type=time],
+    input[type=url],
+    input[type=date],
+    input[type=datetime],
+    input[type=email],
+    input[type=number],
+    input[type=range],
+    input[type=search] {
+        .aj-input;
+
+        &:focus {
+            border-color      : gray;
+            //background-color: #e9e9e9;
+            outline           : 0;
+            box-shadow        : 0 5px 16px rgba(103, 122, 141, .2)
+        }
+    }
+
+    input[type=submit],
+    button {
+        .aj-btn;
+    }
+
+    input[type=submit],
+    input[type=file] {
+        cursor: pointer;
+    }
+
+    input[type="checkbox"],
+    input[type="radio"],
+    label {
+        vertical-align: middle;
+    }
+
+    select {
+        .aj-select;
+        min-width: 100px;
+    }
+
+    .aj-china-area select {
+        width: 150px;
+    }
+
+    &.btns {
+        text-align: center;
+        width     : 100%;
+    }
+
+    .tips,
+    .state {
+        display    : none;
+        margin-left: 10px;
+        border     : 1px solid gray;
+        padding    : 3px 3px;
+        position   : relative;
+
+        strong {
+            border-style: solid;
+            height      : 0;
+            line-height : 0;
+            width       : 0;
+            font-size   : 0;
+            position    : absolute;
+            border-width: 5px;
+
+            &.arrow_1 {
+                left        : -11px;
+                top         : 7px;
+                border-color: white gray white white;
+            }
+
+            &.arrow_2 {
+                left        : -9px;
+                top         : 7px;
+                border-color: transparent white transparent transparent;
+            }
+        }
+    }
+
+    .state {
+        color      : red;
+        font-weight: bold;
+    }
+
+    .errHighlight {
+        border-color: red ! important;
+        color       : red;
+    }
+
+    .error {
+        border-color: red !important;
+    }
+
+    .error-message {
+        color       : red;
+        padding-left: 1%;
+        position    : absolute;
+        right       : -100px;
+        top         : 0;
     }
 }
