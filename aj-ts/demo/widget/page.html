@@ -6,6 +6,9 @@
     <link rel="stylesheet" type="text/css" href="../../dist/css/base.css" />
     <link rel="stylesheet" type="text/css" href="../common/demo.css" />
     <link rel="stylesheet" type="text/css" href="../../dist/css/widget/page/article-info.css" />
+    <link rel="stylesheet" type="text/css" href="../../dist/css/widget/page/back2top.css" />
+    <link rel="stylesheet" type="text/css" href="../../dist/css/widget/page/adjust-font-size.css" />
+    <link crossorigin="anonymous" integrity="sha384-FckWOBo7yuyMS7In0aXZ0aoVvnInlnFMwCv77x9sZpFgOonQgnBj1uLwenWVtsEj" href="https://lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />  
     <script src="https://lib.baomitu.com/vue/2.6.11/vue.js"></script>
 </head>
 
@@ -18,7 +21,38 @@
             </menu>
             <div class="content">
                 <h2>页面工具</h2>
-                <p>这是一个综合的演示，采用了 aj-article-info 样式。</p>
+                <p>这是一个综合的演示，包括下面几个组件。</p>
+
+                <h2>采用了 .aj-article-info 样式</h2>
+                
+                <h2>回到顶部</h2>
+                <pre class="prettyprint">
+aj.widget.back2top();     // 纯命令
+aj.widget.initBack2top(); // 有 UI</pre>
+
+                <h2>选择正文字体大小</h2>
+                <table class="aj-table" align="center">
+                    <thead>
+                        <tr>
+                            <th>属性</th>
+                            <th>含义</th>
+                            <th>类型</th>
+                            <th>是否必填，默认值</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>articleTarget</td>
+                            <td>正文所在的位置，通过 CSS Selector 定位</td>
+                            <td>String</td>
+                            <td>n, article p</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p>例子：</p>
+                <pre class="prettyprint"><xmp><aj-adjust-font-size></aj-adjust-font-size></xmp></pre>
+
                 <div class="aj-article-info" style="width: 80%;margin:5% 0;">
                     <article>
                         <h1>Lorem Ipsum</h1>
@@ -56,6 +90,7 @@
                             Ipsum。因此，生成出的结果无一例外免于重复，刻意的幽默，以及非典型的词汇等等。</p>
 
                     </article>
+                    <aj-adjust-font-size></aj-adjust-font-size>
                 </div>
 
             </div>
@@ -65,9 +100,14 @@
         </div>
     </div>
     <script src="../common/demo.js"></script>
-    <script src="../../dist/widget/process-line.js"></script>
+    <script src="../../dist/base/prototype.js"></script>
+    <script src="../../dist/base/aj.js"></script>
+    <script src="../../dist/widget/page/back2top.js"></script>
+    <script src="../../dist/widget/page/adjust-font-size.js"></script>
+    <script src="../../dist/widget/page/back2top.js"></script>
     <script>
-        // new Vue({ el: '.process-line' });
+        new Vue({ el: '.aj-article-info' });
+        aj.widget.initBack2top();
     </script>
 </body>
 

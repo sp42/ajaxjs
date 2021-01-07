@@ -17,7 +17,7 @@ Vue.component('aj-adjust-font-size', {
     },
     methods: {
         onClk(this: Vue, e: Event): void {
-            let el: Element = <Element>e.target, target = el.innerHTML;
+            let el: Element = <Element>e.target;
             let setFontSize = (fontSize: string): void => {
                 document.body.$(this.$props.articleTarget, (p: HTMLParagraphElement) => p.style.fontSize = fontSize);
             }

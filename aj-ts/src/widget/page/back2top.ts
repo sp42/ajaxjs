@@ -19,4 +19,26 @@ namespace aj.widget {
                 document.documentElement.scrollTop = document.body.scrollTop = top + speed;
         }, 20);
     }
+
+    /**
+     * 渲染浮动的按钮
+     */
+    export function initBack2top() {
+        let vue = new Vue({
+            el: document.body.appendChild(document.createElement('div')),
+            template: '<div @click="clk" class="aj-widget-back2top" title="回到顶部"><i class="fa fa-arrow-up" aria-hidden="true"></i> </div>',
+            methods: {
+                clk: back2top
+            }
+        });
+
+        let handler = aj.throttle(() => {
+            vue.$el.style.top = (document.body.scrollTop + 100) + "px";
+        }, 2000, 0);
+
+        // @ts-ignore
+        window.addEventListener('scroll', handler);
+        handler();
+    }
+
 }
