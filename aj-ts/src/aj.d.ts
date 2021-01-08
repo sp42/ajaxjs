@@ -45,6 +45,8 @@ declare class Vue {
 
     public $options: any;
 
+    public $children: any[];
+
     public static options: any;
 
     public ajResources = {
@@ -177,4 +179,34 @@ interface FileReaderEventTarget extends EventTarget {
 interface FileReaderEvent extends Event {
     target: FileReaderEventTarget;
     getMessage(): string;
+}
+
+/**
+ * 对象包含 RPC 请求
+ */
+declare interface Ajax {
+    /**
+     * 接口地址
+     */
+    apiUrl: string;
+
+    /**
+     * 真实发送的请求，可能包含 QueryString
+     */
+    realApiUrl: string;
+
+    /**
+     * 每次请求都附带的参数，一经修改就不可修改的
+     */
+    baseParam?: { [key: string]: string };
+
+    /**
+     *  与 baseParam 合并后每次请求可发送的，可以修改的
+     */
+    extraParam?: { [key: string]: string };
+
+    /**
+     * 请求 GET 数据
+     */
+    getData(): void;
 }

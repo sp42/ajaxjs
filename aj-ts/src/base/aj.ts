@@ -18,10 +18,13 @@ namespace aj {
      * 
      * @param url 
      * @param id 
+     * @param cb    回调函数
      */
-    export function loadScript(url: string, id: string): void {
+    export function loadScript(url: string, id?: string, cb?: (ev: Event) => any): void {
         var script: HTMLScriptElement = document.createElement("script");
         script.src = url;
+        if (cb)
+            script.onload = cb;
 
         if (id)
             script.id = id;
@@ -98,4 +101,6 @@ namespace aj {
         };
     };
 
+    export var SELECTED = "selected";
+    export var SELECTED_CSS = "." + SELECTED;
 }

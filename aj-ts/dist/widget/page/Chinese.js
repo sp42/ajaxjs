@@ -10,8 +10,8 @@ var aj;
                 /*
                     正体中文
                     <span>
-                        <a href="javascript:;" onclick="toSimpleChinese(this);" class="simpleChinese selected">简体中文</a>
-                        /<a href="javascript:;" onclick="toChinese(this); class="Chinese"">正体中文</a>
+                         <a href="javascript:;" onclick="aj.widget.page.TraditionalChinese.toSimpleChinese(this);" class="simpleChinese selected">简体中文</a>
+                        /<a href="javascript:;" onclick="aj.widget.page.TraditionalChinese.toChinese(this);" class="Chinese">正体中文</a>
                     </span>
                 */
                 var TraditionalChinese = 1, SimpleChinese = 2;
@@ -95,6 +95,53 @@ var aj;
                         str.push(charIndex != -1 ? result : char); // 匹配不到，用原来的字符
                     }
                     return str.join('');
+                }
+                var isLoaded = false;
+                function loadChars(cb, el) {
+                    var _a;
+                    if (isLoaded)
+                        cb();
+                    else
+                        aj.loadScript("https://framework.ajaxjs.com/src/widget/page/ChineseChars.js", "", function () {
+                            isLoaded = true;
+                            cb();
+                        });
+                    ((_a = el.up('span')) === null || _a === void 0 ? void 0 : _a.$(aj.SELECTED_CSS)).classList.remove(aj.SELECTED);
+                    el.classList.add(aj.SELECTED);
+                }
+                var self = aj.widget.page.TraditionalChinese;
+                var currentLanguageState; // 当前语言选择
+                var cookieName = 'ChineseType';
+                currentLanguageState = getClientLanguage();
+                function toSimpleChinese(el) {
+                    if (currentLanguageState === SimpleChinese) // 已经是，无须进行
+                        return;
+                    loadChars(function () {
+                        //@ts-ignore
+                        walk(document.body, translateText.delegate(null, self.正体中文, self.简化中文));
+                        currentLanguageState = SimpleChinese;
+                        Cookie.set(cookieName, currentLanguageState + "");
+                    }, el);
+                }
+                TraditionalChinese_1.toSimpleChinese = toSimpleChinese;
+                function toChinese(el) {
+                    if (currentLanguageState === TraditionalChinese) // 已经是，无须进行
+                        return;
+                    loadChars(function () {
+                        //@ts-ignore
+                        walk(document.body, translateText.delegate(null, self.简化中文, self.正体中文));
+                        currentLanguageState = TraditionalChinese;
+                        Cookie.set(cookieName, currentLanguageState + "");
+                    }, el);
+                }
+                TraditionalChinese_1.toChinese = toChinese;
+                var valueInCookie = Cookie.get(cookieName);
+                if (valueInCookie) {
+                    valueInCookie = Number(valueInCookie);
+                }
+                // 浏览器是繁体中文的，或者 Cookie 设置了是正体的，进行转换（当然默认文本是简体的）
+                if (currentLanguageState == TraditionalChinese || valueInCookie == TraditionalChinese) {
+                    toChinese(document.querySelector(".Chinese"));
                 }
             })(TraditionalChinese = page.TraditionalChinese || (page.TraditionalChinese = {}));
         })(page = widget.page || (widget.page = {}));

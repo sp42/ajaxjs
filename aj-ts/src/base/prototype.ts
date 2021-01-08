@@ -58,10 +58,10 @@ interface Function {
      *
      * @return {Function}
      */
-    delegate(): Function
+    delegate(..._args: any): Function
 }
 
-Function.prototype.delegate = function (this: any): Function {
+Function.prototype.delegate = function (this: any, ..._args: any): Function {
     var self = this, scope = this.scope, args = arguments, aLength: number = arguments.length, fnToken: string = 'function';
 
     return function (this: any) {

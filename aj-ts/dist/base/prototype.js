@@ -26,6 +26,10 @@ Element.prototype.up = function (tagName, className) {
     return null;
 };
 Function.prototype.delegate = function () {
+    var _args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        _args[_i] = arguments[_i];
+    }
     var self = this, scope = this.scope, args = arguments, aLength = arguments.length, fnToken = 'function';
     return function () {
         var bLength = arguments.length, Length = (aLength > bLength) ? aLength : bLength;

@@ -24,7 +24,7 @@
                 <p>这是一个综合的演示，包括下面几个组件。</p>
 
                 <h2>采用了 .aj-article-info 样式</h2>
-                
+
                 <h2>回到顶部</h2>
                 <pre class="prettyprint">
 aj.widget.back2top();     // 纯命令
@@ -49,9 +49,19 @@ aj.widget.initBack2top(); // 有 UI</pre>
                         </tr>
                     </tbody>
                 </table>
+
                 
                 <p>例子：</p>
                 <pre class="prettyprint"><xmp><aj-adjust-font-size></aj-adjust-font-size></xmp></pre>
+
+                <h2>切换正体中文、简体中文</h2>
+                <p>字库文件较大，外部引入 js。引入下面 HTML。原理详见我博客 <a href="https://blog.csdn.net/zhangxin09/article/details/5810868" target="_blank">《对JavaScript繁简字切换的小改进》、
+                    <a href="https://blog.csdn.net/zhangxin09/article/details/50814563" target="_blank">《对JavaScript繁简字切换的小改进》</a></p>
+
+                <pre class="prettyprint"><xmp><span>
+    <a href="javascript:;" onclick="aj.widget.page.TraditionalChinese.toSimpleChinese(this);" class="simpleChinese selected">简体中文</a>
+   /<a href="javascript:;" onclick="aj.widget.page.TraditionalChinese.toChinese(this);" class="Chinese">正体中文</a>
+</span></xmp></pre>
 
                 <div class="aj-article-info" style="width: 80%;margin:5% 0;">
                     <article>
@@ -91,6 +101,11 @@ aj.widget.initBack2top(); // 有 UI</pre>
 
                     </article>
                     <aj-adjust-font-size></aj-adjust-font-size>
+
+                    <span>
+                         <a href="javascript:;" onclick="aj.widget.page.TraditionalChinese.toSimpleChinese(this);" class="simpleChinese selected">简体中文</a>
+                        /<a href="javascript:;" onclick="aj.widget.page.TraditionalChinese.toChinese(this);" class="Chinese">正体中文</a>
+                    </span>
                 </div>
 
             </div>
@@ -105,6 +120,7 @@ aj.widget.initBack2top(); // 有 UI</pre>
     <script src="../../dist/widget/page/back2top.js"></script>
     <script src="../../dist/widget/page/adjust-font-size.js"></script>
     <script src="../../dist/widget/page/back2top.js"></script>
+    <script src="../../dist/widget/page/Chinese.js"></script>
     <script>
         new Vue({ el: '.aj-article-info' });
         aj.widget.initBack2top();

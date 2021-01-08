@@ -22,7 +22,7 @@ namespace aj {
 			aj.xhr.post('../setStatus/' + id + '/', (j: RepsonseResult) => {
 				if (j.isOk) {
 				}
-			}, { status: status });
+			}, { status: status + "" });
 		},
 
 		/**
@@ -32,7 +32,7 @@ namespace aj {
 		 */
 		defaultAfterCreate(j: RepsonseResult): void {
 			if (j && j.msg)
-				aj.alert.show(j.msg);
+				aj.alert(j.msg);
 
 			window.isCreate && j && j.isOk && setTimeout(() => location.assign(j.newlyId + "/"), 2000);
 		}

@@ -42,11 +42,7 @@ Vue.component('aj-tab', {
     }
 });
 
-/**
- * 页面常见组件
- */
-aj.widget = {};
-
+ 
 aj.widget.tabable = (() => {
     // 按次序选中目标
     var select = (_new) => {

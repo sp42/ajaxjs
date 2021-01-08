@@ -1,0 +1,166 @@
+.aj-pc-list-1 > ul {
+  padding: 2%;
+}
+.aj-pc-list-1 > ul li {
+  border: 1px solid #cececd;
+  border-bottom: 3px solid #cececd;
+  border-right: 1px solid #cececd;
+  margin: auto;
+  margin-bottom: 3%;
+  display: block;
+  overflow: hidden;
+  clear: both;
+  background-color: white;
+  padding: 2%;
+  box-sizing: border-box;
+}
+.aj-pc-list-1 > ul li .thumb {
+  min-height: 90px;
+  float: left;
+  margin-right: 20px;
+}
+.aj-pc-list-1 > ul li:nth-child(odd) {
+  background-color: #F5F5F5;
+}
+.aj-pc-list-1 > ul li h3 {
+  padding-bottom: 2%;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+.aj-pc-list-1 > ul li p {
+  font-size: 0.9rem;
+  text-align: justify;
+  line-height: 180%;
+  color: gray;
+}
+.aj-pc-list-1 > ul li img {
+  display: inline-block;
+  max-width: 200px;
+  float: left;
+  margin-right: 2%;
+}
+.aj-pc-list-1 > ul li div {
+  font-size: 0.9rem;
+  text-align: right;
+  color: gray;
+  margin-top: 1%;
+}
+.aj-pc-list-1 > ul li div a {
+  font-weight: bold;
+  color: gray;
+}
+.aj-pc-list-1 .pageInfo {
+  text-align: center;
+  font-size: 1rem;
+}
+.aj-pc-list-1 .pageInfo .info {
+  color: gray;
+}
+.aj-pc-list-2 > ul {
+  clear: both;
+  overflow: hidden;
+}
+.aj-pc-list-2 > ul li {
+  float: left;
+  width: 47%;
+  border: 1px solid #cececd;
+  border-bottom: 3px solid #cececd;
+  border-right: 1px solid #cececd;
+  margin: 3% 3% 0 0;
+  display: block;
+  overflow: hidden;
+  background-color: white;
+  padding: 2%;
+  box-sizing: border-box;
+  height: 230px;
+}
+.aj-pc-list-2 > ul li h3 {
+  padding-bottom: 2%;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+.aj-pc-list-2 > ul li p {
+  font-size: 0.9rem;
+  text-align: justify;
+  line-height: 180%;
+  color: gray;
+}
+.aj-pc-list-2 > ul li div {
+  font-size: 0.9rem;
+  text-align: right;
+  color: gray;
+  margin-top: 1%;
+}
+.aj-pc-list-2 > ul li div a {
+  font-weight: bold;
+  color: gray;
+}
+.aj-pc-list-2 .pageInfo {
+  text-align: center;
+  font-size: 1rem;
+}
+.aj-pc-list-2 .pageInfo .info {
+  color: gray;
+}
+.aj-page-list li {
+  clear: both;
+  overflow: hidden;
+  background-color: white;
+  padding-right: 1%;
+}
+.aj-page-list li .item {
+  border-bottom: 1px solid lightgray;
+  overflow: hidden;
+  padding: 3% 0;
+}
+.aj-page-list li .item h1 {
+  font-size: 1rem;
+  min-height: 3.1rem;
+  line-height: 140%;
+}
+.aj-page-list li .item h2 {
+  font-size: 0.9rem;
+  color: gray;
+  font-weight: normal;
+}
+.aj-page-list li .createTime {
+  font-size: 0.8rem;
+  text-align: right;
+  color: gray;
+  margin-right: 2%;
+}
+.aj-page-list footer {
+  text-align: center;
+  font-size: 0.95rem;
+  letter-spacing: 2px;
+  margin: 2%;
+}
+.aj-page-list footer input {
+  text-align: center;
+  height: 22px;
+}
+.aj-page-list footer .info {
+  margin-top: 1%;
+  margin-bottom: 3%;
+  font-size: 0.9rem;
+  color: gray;
+}
+.aj-page-list select {
+  text-align: center;
+  width: 40px;
+  height: 22px;
+  vertical-align: bottom;
+}
+.ajs-ul-list-2cols {
+  clear: both;
+  overflow: hidden;
+  padding-left: 1%;
+}
+.ajs-ul-list-2cols li {
+  float: left;
+  overflow: hidden;
+  box-sizing: border-box;
+  list-style: none;
+  width: 33.3%;
+  padding-right: 1%;
+}

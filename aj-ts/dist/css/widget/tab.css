@@ -1,0 +1,186 @@
+.aj-simple-tab-base > ul > li,
+.aj-simple-tab-base > button {
+  background-color: #e7e7e7;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  cursor: pointer;
+  position: relative;
+  list-style: none;
+  text-align: center;
+  height: 35px;
+  padding: 8px;
+  border: 1px solid transparent;
+  border-bottom: 0;
+}
+.aj-simple-tab-base > ul > li.active,
+.aj-simple-tab-base > button.active,
+.aj-simple-tab-base > ul > li.selected,
+.aj-simple-tab-base > button.selected {
+  background-color: white;
+  border-color: red;
+  z-index: 999999;
+}
+.aj-simple-tab-base > ul > li:hover,
+.aj-simple-tab-base > button:hover {
+  font-weight: bold;
+}
+.aj-simple-tab-base > div {
+  position: relative;
+  border: 1px solid red;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  z-index: 1;
+}
+.aj-simple-tab-base > div > div {
+  display: none;
+  padding: 10px;
+  font-size: 0.9rem;
+  text-align: justify;
+}
+.aj-simple-tab-base > div > div.selected {
+  display: block;
+}
+.aj-simple-tab-horizontal > ul > li,
+.aj-simple-tab-horizontal > button {
+  background-color: #e7e7e7;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  cursor: pointer;
+  position: relative;
+  list-style: none;
+  text-align: center;
+  height: 35px;
+  padding: 8px;
+  border: 1px solid transparent;
+  border-bottom: 0;
+}
+.aj-simple-tab-horizontal > ul > li.active,
+.aj-simple-tab-horizontal > button.active,
+.aj-simple-tab-horizontal > ul > li.selected,
+.aj-simple-tab-horizontal > button.selected {
+  background-color: white;
+  border-color: red;
+  z-index: 999999;
+}
+.aj-simple-tab-horizontal > ul > li:hover,
+.aj-simple-tab-horizontal > button:hover {
+  font-weight: bold;
+}
+.aj-simple-tab-horizontal > div {
+  position: relative;
+  border: 1px solid red;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  z-index: 1;
+}
+.aj-simple-tab-horizontal > div > div {
+  display: none;
+  padding: 10px;
+  font-size: 0.9rem;
+  text-align: justify;
+}
+.aj-simple-tab-horizontal > div > div.selected {
+  display: block;
+}
+.aj-simple-tab-horizontal > ul {
+  overflow: hidden;
+  zoom: 1;
+}
+.aj-simple-tab-horizontal > ul > li {
+  display: block;
+  float: left;
+  margin-bottom: 0;
+  margin-right: 1px;
+  border-bottom: 0;
+}
+.aj-simple-tab-horizontal > div {
+  margin-top: -1px;
+}
+.aj-simple-tab-vertical > ul > li,
+.aj-simple-tab-vertical > button {
+  background-color: #e7e7e7;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  cursor: pointer;
+  position: relative;
+  list-style: none;
+  text-align: center;
+  height: 35px;
+  padding: 8px;
+  border: 1px solid transparent;
+  border-bottom: 0;
+}
+.aj-simple-tab-vertical > ul > li.active,
+.aj-simple-tab-vertical > button.active,
+.aj-simple-tab-vertical > ul > li.selected,
+.aj-simple-tab-vertical > button.selected {
+  background-color: white;
+  border-color: red;
+  z-index: 999999;
+}
+.aj-simple-tab-vertical > ul > li:hover,
+.aj-simple-tab-vertical > button:hover {
+  font-weight: bold;
+}
+.aj-simple-tab-vertical > div {
+  position: relative;
+  border: 1px solid red;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  z-index: 1;
+}
+.aj-simple-tab-vertical > div > div {
+  display: none;
+  padding: 10px;
+  font-size: 0.9rem;
+  text-align: justify;
+}
+.aj-simple-tab-vertical > div > div.selected {
+  display: block;
+}
+.aj-simple-tab-vertical > ul {
+  width: 25%;
+  float: left;
+}
+.aj-simple-tab-vertical > ul > li {
+  margin-top: 0;
+  border-right: 0;
+}
+.aj-simple-tab-vertical > div {
+  width: 75%;
+  float: left;
+  margin-left: -1px;
+  min-height: 149px;
+}
+.aj-tab {
+  clear: both;
+}
+.aj-tab > button {
+  background-color: #e7e7e7;
+  box-sizing: border-box;
+  cursor: pointer;
+  position: relative;
+  text-align: center;
+  height: 35px;
+  padding: 8px;
+  border: 1px solid transparent;
+  border-bottom: 0;
+  z-index: 0;
+}
+.aj-tab > button.active {
+  background-color: white;
+  border-color: red;
+  z-index: 999999;
+}
+.aj-tab > button:hover {
+  font-weight: bold;
+}
+.aj-tab > div {
+  position: relative;
+  margin-top: -1px;
+  border: 1px solid red;
+  box-sizing: border-box;
+  z-index: 99;
+  padding: 2%;
+  overflow: hidden;
+}

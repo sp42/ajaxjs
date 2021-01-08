@@ -36,7 +36,8 @@ var aj;
          * @param cfg
          */
         function request(url, cb, args, method, cfg) {
-            var params = aj.xhr.json2url(args);
+            if (method === void 0) { method = "GET"; }
+            var params = args ? json2url(args) : "";
             var xhr = new XMLHttpRequest();
             method = method.toUpperCase();
             if (method == 'POST' || method == 'PUT')

@@ -5,9 +5,9 @@ interface BaiduSearch {
     siteDomainName: string;
 }
 
-Vue.component('aj-baidu-search', {
-    template:`
-        <div class="aj-baidu-search"><form method="GET" action="http://www.baidu.com/baidu" onsubmit="//return g(this);">
+Vue.component('aj-widget-baidu-search', {
+    template: `
+        <div class="aj-widget-baidu-search"><form method="GET" action="http://www.baidu.com/baidu" onsubmit="//return g(this);">
             <input type="text" name="word" placeholder="请输入搜索之关键字" />
             <input name="tn" value="bds" type="hidden" />
             <input name="cl" value="3" type="hidden" />

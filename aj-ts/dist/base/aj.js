@@ -18,10 +18,13 @@ var aj;
      *
      * @param url
      * @param id
+     * @param cb    回调函数
      */
-    function loadScript(url, id) {
+    function loadScript(url, id, cb) {
         var script = document.createElement("script");
         script.src = url;
+        if (cb)
+            script.onload = cb;
         if (id)
             script.id = id;
         document.getElementsByTagName("head")[0].appendChild(script);
@@ -92,4 +95,6 @@ var aj;
     }
     aj.throttle = throttle;
     ;
+    aj.SELECTED = "selected";
+    aj.SELECTED_CSS = "." + aj.SELECTED;
 })(aj || (aj = {}));
