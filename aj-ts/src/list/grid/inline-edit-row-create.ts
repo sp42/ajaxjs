@@ -40,7 +40,7 @@ Vue.component('aj-grid-inline-edit-row-create', {
             this.$el.$('*[name]', (i: HTMLInputElement) => map[i.name] = i.value);
             this.BUS.$emit('before-add-new', map);
 
-            aj.xhr.post(this.createApi, j => {
+            aj.xhr.post(this.createApi, (j: RepsonseResult) => {
                 if (j && j.isOk) {
                     aj.msg.show('新建实体成功');
 

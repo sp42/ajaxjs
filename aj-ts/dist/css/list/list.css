@@ -1,124 +1,79 @@
-.aj-pc-list-1 > ul {
+.aj-article-list > ul {
   padding: 2%;
 }
-.aj-pc-list-1 > ul li {
+.aj-article-list > ul li {
   border: 1px solid #cececd;
   border-bottom: 3px solid #cececd;
   border-right: 1px solid #cececd;
   margin: auto;
   margin-bottom: 3%;
-  display: block;
-  overflow: hidden;
   clear: both;
-  background-color: white;
+  display: block;
   padding: 2%;
-  box-sizing: border-box;
 }
-.aj-pc-list-1 > ul li .thumb {
+.aj-article-list > ul li:nth-child(odd) {
+  background-color: #F5F5F5;
+}
+.aj-article-list > ul li .thumb {
   min-height: 90px;
   float: left;
   margin-right: 20px;
 }
-.aj-pc-list-1 > ul li:nth-child(odd) {
-  background-color: #F5F5F5;
-}
-.aj-pc-list-1 > ul li h3 {
-  padding-bottom: 2%;
-  font-weight: bold;
-  letter-spacing: 2px;
-}
-.aj-pc-list-1 > ul li p {
-  font-size: 0.9rem;
-  text-align: justify;
-  line-height: 180%;
-  color: gray;
-}
-.aj-pc-list-1 > ul li img {
+.aj-article-list > ul li .thumb img {
   display: inline-block;
   max-width: 200px;
   float: left;
   margin-right: 2%;
 }
-.aj-pc-list-1 > ul li div {
-  font-size: 0.9rem;
-  text-align: right;
-  color: gray;
-  margin-top: 1%;
-}
-.aj-pc-list-1 > ul li div a {
-  font-weight: bold;
-  color: gray;
-}
-.aj-pc-list-1 .pageInfo {
-  text-align: center;
-  font-size: 1rem;
-}
-.aj-pc-list-1 .pageInfo .info {
-  color: gray;
-}
-.aj-pc-list-2 > ul {
-  clear: both;
-  overflow: hidden;
-}
-.aj-pc-list-2 > ul li {
-  float: left;
-  width: 47%;
-  border: 1px solid #cececd;
-  border-bottom: 3px solid #cececd;
-  border-right: 1px solid #cececd;
-  margin: 3% 3% 0 0;
-  display: block;
-  overflow: hidden;
-  background-color: white;
-  padding: 2%;
-  box-sizing: border-box;
-  height: 230px;
-}
-.aj-pc-list-2 > ul li h3 {
+.aj-article-list > ul li h3 {
   padding-bottom: 2%;
   font-weight: bold;
   letter-spacing: 2px;
 }
-.aj-pc-list-2 > ul li p {
+.aj-article-list > ul li p {
   font-size: 0.9rem;
   text-align: justify;
   line-height: 180%;
   color: gray;
 }
-.aj-pc-list-2 > ul li div {
+.aj-article-list > ul li div {
   font-size: 0.9rem;
   text-align: right;
   color: gray;
   margin-top: 1%;
 }
-.aj-pc-list-2 > ul li div a {
+.aj-article-list > ul li div a {
   font-weight: bold;
   color: gray;
 }
-.aj-pc-list-2 .pageInfo {
-  text-align: center;
-  font-size: 1rem;
-}
-.aj-pc-list-2 .pageInfo .info {
-  color: gray;
-}
-.aj-page-list li {
+.aj-list > ul {
   clear: both;
   overflow: hidden;
-  background-color: white;
-  padding-right: 1%;
 }
-.aj-page-list li .item {
-  border-bottom: 1px solid lightgray;
+.aj-list > ul li {
   overflow: hidden;
-  padding: 3% 0;
+  background-color: white;
+  box-sizing: border-box;
+  list-style: none;
 }
-.aj-page-list li .item h1 {
-  font-size: 1rem;
-  min-height: 3.1rem;
-  line-height: 140%;
+.aj-list footer {
+  text-align: center;
+  font-size: 0.95rem;
+  color: gray;
+  letter-spacing: 2px;
+  margin: 2%;
 }
-.aj-page-list li .item h2 {
+.aj-list footer input {
+  text-align: center;
+  height: 22px;
+}
+.aj-list footer select {
+  text-align: center;
+  width: 40px;
+  height: 22px;
+  vertical-align: bottom;
+}
+.aj-page-list li h2 {
   font-size: 0.9rem;
   color: gray;
   font-weight: normal;
@@ -129,38 +84,57 @@
   color: gray;
   margin-right: 2%;
 }
-.aj-page-list footer {
-  text-align: center;
-  font-size: 0.95rem;
-  letter-spacing: 2px;
-  margin: 2%;
+.aj-list-cols-2 li {
+  float: left;
+  width: 48%;
 }
-.aj-page-list footer input {
-  text-align: center;
-  height: 22px;
+.aj-list-cols-2 li .thumb img {
+  width: 100%;
+  max-height: 160px;
 }
-.aj-page-list footer .info {
-  margin-top: 1%;
-  margin-bottom: 3%;
-  font-size: 0.9rem;
-  color: gray;
+.aj-list-cols-2 li p {
+  display: none;
 }
-.aj-page-list select {
-  text-align: center;
-  width: 40px;
-  height: 22px;
-  vertical-align: bottom;
+.aj-list-cols-2 li:nth-of-type(odd) {
+  margin-left: 1.3%;
+  margin-right: 1.3%;
 }
-.ajs-ul-list-2cols {
-  clear: both;
-  overflow: hidden;
+.aj-list-cols-2 li:nth-of-type(even) {
+  margin-right: 1.4%;
+}
+.aj-list-cols-3 {
   padding-left: 1%;
 }
-.ajs-ul-list-2cols li {
+.aj-list-cols-3 li {
   float: left;
-  overflow: hidden;
-  box-sizing: border-box;
-  list-style: none;
   width: 33.3%;
   padding-right: 1%;
+}
+.aj-list-cols-3 li .thumb img {
+  width: 100%;
+  max-height: 160px;
+}
+.aj-list-cols-3 li p {
+  display: none;
+}
+.aj-text-below h3 {
+  font-size: 0.9rem;
+  min-height: 3.1rem;
+  margin: 5% 0;
+}
+.aj-text-inside li {
+  position: relative;
+  margin-top: 5%;
+}
+.aj-text-inside h3 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  font-size: 0.8rem;
+  min-height: 2.5rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+  width: 97%;
+  padding: 0 3%;
+  color: white;
 }

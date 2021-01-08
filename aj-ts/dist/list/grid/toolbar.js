@@ -24,11 +24,12 @@
             valid: function (e) {
                 var start = getValue.call(this, 'input[name=startDate]'), end = getValue.call(this, 'input[name=endDate]');
                 if (!start || !end) {
-                    aj.showOk("输入数据不能为空");
+                    aj.alert("输入数据不能为空");
                     e.preventDefault();
                 }
+                //@ts-ignore
                 if (new Date(start) > new Date(end)) {
-                    aj.showOk("起始日期不能晚于结束日期");
+                    aj.alert("起始日期不能晚于结束日期");
                     e.preventDefault();
                 }
             },

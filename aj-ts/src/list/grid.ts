@@ -1,14 +1,14 @@
 /**
- * 
+ * 简单的 GridGrid
  */
-interface Grid {
+interface SimpleGrid {
     sortKey: string;
     sortOrders: { [key: string]: number };
     filterKey: string;
     data: [];
 }
 
-Vue.component('aj-grid', {
+Vue.component('aj-simple-grid', {
     template: `
         <div>
             <form action="?" method="GET" style="float:right;">
@@ -48,7 +48,7 @@ Vue.component('aj-grid', {
         };
     },
     computed: {
-        filteredData(this: Grid) {
+        filteredData(this: SimpleGrid) {
             var sortKey: string = this.sortKey;
             var filterKey: string = this.filterKey && this.filterKey.toLowerCase();
             var order = this.sortOrders[sortKey] || 1;
@@ -78,7 +78,7 @@ Vue.component('aj-grid', {
         }
     },
     methods: {
-        sortBy(this: Grid, key: string): void {
+        sortBy(this: SimpleGrid, key: string): void {
             this.sortKey = key;
             this.sortOrders[key] = this.sortOrders[key] * -1;
         }

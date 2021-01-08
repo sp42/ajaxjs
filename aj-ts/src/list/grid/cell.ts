@@ -27,7 +27,6 @@ Vue.component('aj-cell-renderer', {
     }
 });
 
-
 Vue.component('aj-grid-select-row', {
 	template: '<a href="#" @click="fireSelect">选择</a>',
 	props: {type:{type: String, required: true}},
@@ -37,6 +36,7 @@ Vue.component('aj-grid-select-row', {
 		}
 	}
 });
+
 Vue.component('aj-grid-open-link', {
 	template: '<a href="#" @click="fireSelect"><i class="fa fa-external-link"></i> 详情</a>',
 	methods: {

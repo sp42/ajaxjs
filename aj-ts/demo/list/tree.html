@@ -1,0 +1,46 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>AJAXJS Web UI Demo</title>
+    <link rel="stylesheet" type="text/css" href="../../dist/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../common/demo.css" />
+    <link rel="stylesheet" type="text/css" href="../../dist/css/list/tree.css" />
+    <link crossorigin="anonymous" integrity="sha384-FckWOBo7yuyMS7In0aXZ0aoVvnInlnFMwCv77x9sZpFgOonQgnBj1uLwenWVtsEj"
+        href="https://lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
+    <script src="https://lib.baomitu.com/vue/2.6.11/vue.js"></script>
+</head>
+
+<body>
+    <div class="box">
+        <h1>Welcome to AJAXJS Web UI</h1>
+        <div>
+            <menu>
+                <span></span>
+            </menu>
+            <div class="content">
+                <h2>树状列表</h2>
+                <p>Vue 组件递归的应用。 </p>
+                <div class="tree">
+                    <aj-tree api-url="tree.json"></aj-tree>
+                </div>
+            </div>
+            <div class="copyright">
+                <div></div>
+            </div>
+        </div>
+    </div>
+    <script src="../common/demo.js"></script>
+    <script src="../../dist/base/prototype.js"></script>
+    <script src="../../dist/base/aj.js"></script>
+    <script src="../../dist/base/xhr.js"></script>
+    <script src="../../dist/list/tree.js"></script>
+    <script src="../../dist/list/tree-item.js"></script>
+    <script>
+        VUE = new Vue({
+            el: '.tree'
+        });
+    </script>
+</body>
+
+</html>

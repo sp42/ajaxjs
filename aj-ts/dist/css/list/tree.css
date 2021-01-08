@@ -1,0 +1,40 @@
+.aj-tree {
+  font-size: 0.9rem;
+  margin-left: 5px;
+}
+.aj-tree .item {
+  cursor: pointer;
+}
+.aj-tree .bold {
+  font-weight: bold;
+}
+.aj-tree ul {
+  line-height: 1.5em;
+  margin-left: 1.5rem;
+  border-left: 1px dotted lightgray;
+}
+.aj-tree .node > span {
+  font-weight: normal;
+  color: lightgray;
+}
+.aj-tree .bold:before {
+  content: 'o';
+  margin: -5px;
+  color: lightgray;
+}
+.aj-tree .show {
+  animation: hideIndex 0.3s;
+  -moz-animation: hideIndex 0.3s;
+  -webkit-animation: hideIndex 0.3s;
+  -o-animation: hideIndex 0.3s;
+}
+@keyframes hideIndex {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -10px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0px, 0);
+  }
+}

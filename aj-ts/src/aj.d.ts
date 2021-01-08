@@ -56,6 +56,8 @@ declare class Vue {
     constructor(cfg: any) {
     }
 
+    public $set(...any): void;
+    
     public $destroy() { }
 
     public $emit(e: string, ...obj: any) { }

@@ -1,5 +1,5 @@
 "use strict";
-Vue.component('aj-grid', {
+Vue.component('aj-simple-grid', {
     template: "\n        <div>\n            <form action=\"?\" method=\"GET\" style=\"float:right;\">\n                <input type=\"hidden\" name=\"searchField\" value=\"content\" />\n                <input type=\"text\" name=\"searchValue\" placeholder=\"\u8BF7\u8F93\u5165\u641C\u7D22\u4E4B\u5173\u952E\u5B57\" class=\"aj-input\" />\n                <button style=\"margin-top: 0;\" class=\"aj-btn\">\u641C\u7D22</button>\n            </form>\n            <table class=\"aj-grid ajaxjs-borderTable\">\n                <thead>\n                    <tr>\n                        <th v-for=\"key in columns\" @click=\"sortBy(key)\" :class=\"{ active: sortKey == key }\">\n                            {{ key | capitalize }}\n                            <span class=\"arrow\" :class=\"sortOrders[key] > 0 ? 'asc' : 'dsc'\"></span>\n                        </th>\n                    </tr>\n                </thead>\n                <tbody>\n                    <tr v-for=\"entry in filteredData\">\n                        <td v-for=\"key in columns\" v-html=\"entry[key]\"></td>\n                    </tr>\n                </tbody>\n            </table>\n        </div>\n    ",
     props: {
         data: Array,

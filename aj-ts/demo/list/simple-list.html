@@ -20,9 +20,22 @@
             </menu>
             <div class="content">
                 <h2>简单列表</h2>
-                <p>下面是简单不分页的列表。自定义了 onLoad 回调函数，并且提供自定义的 item HTML。</p>
+                <p>下面是简单不分页的列表。自定义了 onLoad 回调函数，指定了请求参数，并且提供自定义的 item HTML。</p>
                 <div class="list">
-                    <aj-list class="simpleList" ref="list" api-url="https://api.apiopen.top/getWangYiNews" :is-page="false" :on-load="onDataLoad">
+                    <aj-list class="aj-article-list" ref="list1" api-url="https://api.apiopen.top/getWangYiNews"
+                        :is-page="false" :on-load="onDataLoad" :init-base-param="{count:3}">
+                        <template slot-scope="item">
+                            <div class="thumb">
+                                <img :src="item.image" />
+                            </div>
+                            <a :href="item.path" target="_blank">
+                                <h3> {{item.title}}</h3>
+                            </a>
+                            <p>{{item.title}}{{item.title}}</p>
+                        </template>
+                    </aj-list>
+                    <p>下面是更简单的的列表。</p>
+                    <aj-list class="simpleList" ref="list2" api-url="https://api.apiopen.top/getWangYiNews" :is-page="false" :on-load="onDataLoad2">
                         <a slot-scope="item" :href="item.path" target="_blank">{{item.title}}</a>
                     </aj-list>
                 </div>
@@ -41,9 +54,13 @@
         VUE = new Vue({
             el: '.list',
             methods: {
-                onDataLoad(j) {
+                onDataLoad2(j) {
                    if(j.code === 200) 
-                    this.$refs.list.result = j.result;
+                    this.$refs.list1.result = j.result;
+                },
+                onDataLoad2(j) {
+                   if(j.code === 200) 
+                    this.$refs.list2.result = j.result;
                 }
             }
         });

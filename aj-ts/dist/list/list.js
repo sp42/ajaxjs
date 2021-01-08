@@ -11,6 +11,7 @@ var aj;
                 initPageSize: { type: Number, required: false, default: 9 },
                 autoLoad: { type: Boolean, default: true },
                 initBaseParam: { type: Object, default: function () { return {}; } },
+                pageParamNames: { type: Array, default: function () { return ['start', 'limit']; } },
                 onLoad: Function
             },
             data: function () {
@@ -53,7 +54,8 @@ var aj;
                 count: function () {
                     var totalPage = this.total / this.pageSize, yushu = this.total % this.pageSize;
                     this.totalPage = parseInt(String(yushu == 0 ? totalPage : totalPage + 1));
-                    this.currentPage = (this.pageStart / this.pageSize) + 1;
+                    //@ts-ignore
+                    this.currentPage = parseInt((this.pageStart / this.pageSize) + 1);
                 },
                 /**
                  * 前一页
@@ -62,7 +64,8 @@ var aj;
                  */
                 previousPage: function () {
                     this.pageStart -= this.pageSize;
-                    this.currentPage = (this.pageStart / this.pageSize) + 1;
+                    //@ts-ignore
+                    this.currentPage = parseInt((this.pageStart / this.pageSize) + 1);
                     this.getData();
                 },
                 /**
@@ -77,12 +80,16 @@ var aj;
                 },
             }
         };
+        var pageParams = {
+            start: 'start',
+            limit: 'limit'
+        };
         /**
          * 一般情况下不会单独使用这个组件
          */
         Vue.component('aj-list', {
             mixins: [list.datastore],
-            template: "\n\t\t\t<div class=\"aj-page-list\">\n\t\t\t\t<ul>\n\t\t\t\t\t<li v-for=\"(item, index) in result\">\n\t\t\t\t\t\t<slot v-bind=\"item\">\n\t\t\t\t\t\t\t<a href=\"#\" @click=\"show(item.id, index, $event)\" :id=\"item.id\">{{item.name}}</a>\n\t\t\t\t\t\t</slot>\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\t\t\t\t<footer v-show=\"isPage\" class=\"aj-pager\">\n\t\t\t\t\t<a v-if=\"pageStart > 0\" href=\"#\" @click=\"previousPage\">\u4E0A\u4E00\u9875</a>\n\t\t\t\t\t<a v-if=\"(pageStart > 0 ) && (pageStart + pageSize < total)\" style=\"text-decoration: none;\">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>\n\t\t\t\t\t<a v-if=\"pageStart + pageSize < total\" href=\"#\" @click=\"nextPage\">\u4E0B\u4E00\u9875</a>\n\t\t\t\t\t<a href=\"javascript:;\" @click=\"getData\"><i class=\"fa fa-refresh\" aria-hidden=\"true\"></i> \u5237\u65B0</a>\n\t\t\t\t\t<input type=\"hidden\" name=\"start\" :value=\"pageStart\" />\n\t\t\t\t\t\u9875\u6570\uFF1A{{currentPage}}/{{totalPage}} \u8BB0\u5F55\u6570\uFF1A{{pageStart}}/{{total}}\n\t\t\t\t\t\u6BCF\u9875\u8BB0\u5F55\u6570\uFF1A <input size=\"2\" title=\"\u8F93\u5165\u4E00\u4E2A\u6570\u5B57\u786E\u5B9A\u6BCF\u9875\u8BB0\u5F55\u6570\" type=\"text\" :value=\"pageSize\" @change=\"onPageSizeChange\" />\n\t\t\t\t\t\u8DF3\u8F6C\uFF1A \n\t\t\t\t\t<select @change=\"jumpPageBySelect;\">\n\t\t\t\t\t\t<option :value=\"n\" v-for=\"n in totalPage\">{{n}}</option>\n\t\t\t\t\t</select>\n\t\t\t\t</footer> \n\t\t\t\t<div v-show=\"!!autoLoadWhenReachedBottom\" class=\"buttom\"></div>\n\t\t\t</div>\n\t\t",
+            template: "\n\t\t\t<div class=\"aj-list\">\n\t\t\t\t<ul>\n\t\t\t\t\t<li v-for=\"(item, index) in result\">\n\t\t\t\t\t\t<slot v-bind=\"item\">\n\t\t\t\t\t\t\t<a href=\"#\" @click=\"show(item.id, index, $event)\" :id=\"item.id\">{{item.name}}</a>\n\t\t\t\t\t\t</slot>\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\t\t\t\t<footer v-if=\"isPage\" class=\"pager\">\n\t\t\t\t\t<a v-if=\"pageStart > 0\" href=\"#\" @click=\"previousPage\">\u4E0A\u4E00\u9875</a>\n\t\t\t\t\t<a v-if=\"(pageStart > 0 ) && (pageStart + pageSize < total)\" style=\"text-decoration: none;\">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>\n\t\t\t\t\t<a v-if=\"pageStart + pageSize < total\" href=\"#\" @click=\"nextPage\">\u4E0B\u4E00\u9875</a>\n\t\t\t\t\t<a href=\"javascript:;\" @click=\"getData\"><i class=\"fa fa-refresh\" aria-hidden=\"true\"></i> \u5237\u65B0</a>\n\t\t\t\t\t<input type=\"hidden\" name=\"start\" :value=\"pageStart\" />\n\t\t\t\t\t\u9875\u6570\uFF1A{{currentPage}}/{{totalPage}} \u8BB0\u5F55\u6570\uFF1A{{pageStart}}/{{total}}\n\t\t\t\t\t\u6BCF\u9875\u8BB0\u5F55\u6570\uFF1A <input size=\"2\" title=\"\u8F93\u5165\u4E00\u4E2A\u6570\u5B57\u786E\u5B9A\u6BCF\u9875\u8BB0\u5F55\u6570\" type=\"text\" :value=\"pageSize\" @change=\"onPageSizeChange\" />\n\t\t\t\t\t\u8DF3\u8F6C\uFF1A \n\t\t\t\t\t<select @change=\"jumpPageBySelect\">\n\t\t\t\t\t\t<option :value=\"n\" v-for=\"n in totalPage\">{{n}}</option>\n\t\t\t\t\t</select>\n\t\t\t\t</footer> \n\t\t\t\t<div v-show=\"!!autoLoadWhenReachedBottom\" class=\"buttom\"></div>\n\t\t\t</div>\n\t\t",
             props: {
                 isShowFooter: { type: Boolean, default: true },
                 autoLoadWhenReachedBottom: { type: String, default: '' },
@@ -97,12 +104,15 @@ var aj;
                 }
             },
             methods: {
+                foo: function () {
+                    window.alert(9);
+                },
                 getData: function () {
                     var _this = this;
                     this.lastRequestParam = {};
                     aj.apply(this.lastRequestParam, this.baseParam);
                     aj.apply(this.lastRequestParam, this.extraParam);
-                    this.isPage && aj.apply(this.lastRequestParam, { start: this.pageStart, limit: this.pageSize });
+                    initPageParams.call(this);
                     aj.xhr.get(this.apiUrl, this.onLoad || (function (j) {
                         if (j.result) {
                             if (j.total == 0 || j.result.length == 0)
@@ -129,6 +139,7 @@ var aj;
                 doAjaxGet: function (j) {
                     if (this.isPage) {
                         this.total = j.total;
+                        //@ts-ignore
                         this.result = this.isDataAppend ? this.result.concat(j.result) : j.result;
                         this.count();
                     }
@@ -147,5 +158,16 @@ var aj;
                 }
             }
         });
+        /**
+         * 生成分页参数的名字
+         *
+         * @param this
+         */
+        function initPageParams() {
+            var params = {};
+            params[this.pageParamNames[0]] = this.pageStart;
+            params[this.pageParamNames[1]] = this.pageSize;
+            this.isPage && aj.apply(this.lastRequestParam, params);
+        }
     })(list = aj.list || (aj.list = {}));
 })(aj || (aj = {}));

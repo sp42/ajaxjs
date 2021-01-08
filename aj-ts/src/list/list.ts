@@ -30,6 +30,11 @@ interface DataStore extends Ajax {
 	currentPage: number;
 
 	/**
+	 * 初始参数
+	 */
+	initBaseParam: JsonParam;
+
+	/**
 	 * 是否一渲染 UI 之后就自动加载数据
 	 */
 	autoLoad: boolean;
@@ -43,6 +48,11 @@ interface DataStore extends Ajax {
 	 * 请求结果
 	 */
 	result: PageListRepsonseResult;
+
+	/**
+	 * 默认的分页参数其名字
+	 */
+	pageParamNames: string[];
 
 	/**
 	 * 计算分页
@@ -66,6 +76,7 @@ namespace aj.list {
 			initPageSize: { type: Number, required: false, default: 9 },
 			autoLoad: { type: Boolean, default: true },	                    // 是否自动加载
 			initBaseParam: { type: Object, default() { return {}; } },
+			pageParamNames: { type: Array, default() { return ['start', 'limit']; } }, 	// 默认的分页参数其名字
 			onLoad: Function
 		},
 		data(this: DataStore) {
@@ -112,7 +123,8 @@ namespace aj.list {
 			count(this: DataStore): void {
 				let totalPage: number = this.total / this.pageSize, yushu: number = this.total % this.pageSize;
 				this.totalPage = parseInt(String(yushu == 0 ? totalPage : totalPage + 1));
-				this.currentPage = (this.pageStart / this.pageSize) + 1;
+				//@ts-ignore
+				this.currentPage = parseInt((this.pageStart / this.pageSize) + 1);
 			},
 
 			/**
@@ -122,7 +134,8 @@ namespace aj.list {
 			 */
 			previousPage(this: DataStore): void {
 				this.pageStart -= this.pageSize;
-				this.currentPage = (this.pageStart / this.pageSize) + 1;
+				//@ts-ignore
+				this.currentPage = parseInt((this.pageStart / this.pageSize) + 1);
 
 				this.getData();
 			},
@@ -141,13 +154,19 @@ namespace aj.list {
 		}
 	};
 
+
+	let pageParams = {
+		start: 'start',
+		limit: 'limit'
+	}
+
 	/**
 	 * 一般情况下不会单独使用这个组件
 	 */
 	Vue.component('aj-list', {
 		mixins: [datastore],
 		template: `
-			<div class="aj-page-list">
+			<div class="aj-list">
 				<ul>
 					<li v-for="(item, index) in result">
 						<slot v-bind="item">
@@ -155,7 +174,7 @@ namespace aj.list {
 						</slot>
 					</li>
 				</ul>
-				<footer v-show="isPage" class="aj-pager">
+				<footer v-if="isPage" class="pager">
 					<a v-if="pageStart > 0" href="#" @click="previousPage">上一页</a>
 					<a v-if="(pageStart > 0 ) && (pageStart + pageSize < total)" style="text-decoration: none;">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>
 					<a v-if="pageStart + pageSize < total" href="#" @click="nextPage">下一页</a>
@@ -164,7 +183,7 @@ namespace aj.list {
 					页数：{{currentPage}}/{{totalPage}} 记录数：{{pageStart}}/{{total}}
 					每页记录数： <input size="2" title="输入一个数字确定每页记录数" type="text" :value="pageSize" @change="onPageSizeChange" />
 					跳转： 
-					<select @change="jumpPageBySelect;">
+					<select @change="jumpPageBySelect">
 						<option :value="n" v-for="n in totalPage">{{n}}</option>
 					</select>
 				</footer> 
@@ -186,11 +205,14 @@ namespace aj.list {
 			}
 		},
 		methods: {
+			foo(){
+				window.alert(9)
+			},
 			getData(this: List): void {
 				this.lastRequestParam = {};
 				aj.apply(this.lastRequestParam, this.baseParam);
 				aj.apply(this.lastRequestParam, this.extraParam);
-				this.isPage && aj.apply(this.lastRequestParam, { start: this.pageStart, limit: this.pageSize });
+				initPageParams.call(this);
 
 				aj.xhr.get(this.apiUrl, this.onLoad || ((j: PageListRepsonseResult) => {
 					if (j.result) {
@@ -222,6 +244,7 @@ namespace aj.list {
 			doAjaxGet(this: List, j: PageListRepsonseResult): void {
 				if (this.isPage) {
 					this.total = j.total;
+					//@ts-ignore
 					this.result = this.isDataAppend ? this.result.concat(j.result) : j.result;
 					this.count();
 				} else
@@ -240,4 +263,17 @@ namespace aj.list {
 			}
 		}
 	});
+
+	/**
+	 * 生成分页参数的名字
+	 * 
+	 * @param this 
+	 */
+	function initPageParams(this: List) {
+		let params: { [key: string]: number } = {};
+		params[this.pageParamNames[0]] = this.pageStart;
+		params[this.pageParamNames[1]] = this.pageSize;
+
+		this.isPage && aj.apply(this.lastRequestParam, params);
+	}
 }
