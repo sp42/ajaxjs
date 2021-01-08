@@ -182,6 +182,11 @@ interface FileReaderEvent extends Event {
 }
 
 /**
+ * JSON 参数
+ */
+declare type JsonParam = { [key: string]: string | number | boolean };
+
+/**
  * 对象包含 RPC 请求
  */
 declare interface Ajax {
@@ -198,15 +203,30 @@ declare interface Ajax {
     /**
      * 每次请求都附带的参数，一经修改就不可修改的
      */
-    baseParam?: { [key: string]: string };
+    baseParam?: JsonParam;
 
     /**
      *  与 baseParam 合并后每次请求可发送的，可以修改的
      */
-    extraParam?: { [key: string]: string };
+    extraParam?: JsonParam;
+
+    /**
+     * 上次发送的请求
+     */
+    lastRequestParam?: JsonParam;
+
+    /**
+     * 请求结果
+     */
+    result: RepsonseResult;
 
     /**
      * 请求 GET 数据
      */
     getData(): void;
+
+    /**
+     * 得到数据后的回调
+     */
+    onLoad: (j: RepsonseResult) => void;
 }

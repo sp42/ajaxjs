@@ -80,7 +80,7 @@ namespace aj.xhr {
      * @param method 
      * @param cfg 
      */
-    export function request(url: string, cb: XHR_Callback, args?: { [key: string]: string }, method: string = "GET", cfg?: XHR_Config): void {
+    export function request(url: string, cb: XHR_Callback, args?: JsonParam, method: string = "GET", cfg?: XHR_Config): void {
         let params: string = args ? json2url(args) : "";
         let xhr: XMLHttpRequest = new XMLHttpRequest();
 
@@ -207,10 +207,10 @@ namespace aj.xhr {
         history.back();
     }
 
-    export var get = (url: string, cb: XHR_Callback, args?: { [key: string]: string }, cfg?: XHR_Config) => aj.xhr.request(url, cb, args, 'GET', cfg);
-    export var post = (url: string, cb: XHR_Callback, args?: { [key: string]: string }, cfg?: XHR_Config) => aj.xhr.request(url, cb, args, 'POST', cfg);
-    export var put = (url: string, cb: XHR_Callback, args?: { [key: string]: string }, cfg?: XHR_Config) => aj.xhr.request(url, cb, args, 'PUT', cfg);
-    export var dele = (url: string, cb: XHR_Callback, args?: { [key: string]: string }, cfg?: XHR_Config) => aj.xhr.request(url, cb, args, 'DELETE', cfg);
+    export var get = (url: string, cb: XHR_Callback, args?: JsonParam, cfg?: XHR_Config) => aj.xhr.request(url, cb, args, 'GET', cfg);
+    export var post = (url: string, cb: XHR_Callback, args?: JsonParam, cfg?: XHR_Config) => aj.xhr.request(url, cb, args, 'POST', cfg);
+    export var put = (url: string, cb: XHR_Callback, args?: JsonParam, cfg?: XHR_Config) => aj.xhr.request(url, cb, args, 'PUT', cfg);
+    export var dele = (url: string, cb: XHR_Callback, args?: JsonParam, cfg?: XHR_Config) => aj.xhr.request(url, cb, args, 'DELETE', cfg);
 
     /**
      *  默认的回调，有专属的字段并呼叫专属的控件
