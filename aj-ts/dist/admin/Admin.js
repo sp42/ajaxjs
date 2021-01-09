@@ -35,6 +35,7 @@ var aj;
         defaultAfterCreate: function (j) {
             if (j && j.msg)
                 aj.alert(j.msg);
+            //@ts-ignore
             window.isCreate && j && j.isOk && setTimeout(function () { return location.assign(j.newlyId + "/"); }, 2000);
         }
     };

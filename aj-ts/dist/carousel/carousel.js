@@ -52,7 +52,9 @@ var aj;
                 selected: function (index, oldIndex) {
                     if (this.$isStop) // 停止，不切换，在做向导式时有用
                         return;
+                    //@ts-ignore
                     var children = this.$el.$('header ul').children;
+                    //@ts-ignore
                     var contentChild = this.$el.$('div > div').children;
                     if (children && contentChild && children[oldIndex] && contentChild[oldIndex]) {
                         children[oldIndex].classList.remove('active');
@@ -184,7 +186,9 @@ var aj;
         function doAutoHeight(nextItem) {
             if (this.autoHeight) {
                 var tabHeaderHeight = 0;
+                // @ts-ignore
                 if (this.tabHeader)
+                    // @ts-ignore
                     tabHeaderHeight = this.tabHeader.scrollHeight;
                 this.$el.style.height = (nextItem.scrollHeight + tabHeaderHeight + 50) + 'px';
             }

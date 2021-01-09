@@ -11,6 +11,8 @@ interface Carousel extends Vue {
 
     stepWidth: number;
 
+    tabWidth: string;
+
     mover: HTMLElement;
 
     setItemWidth(): number;
@@ -64,16 +66,16 @@ namespace aj.carousel {
                 else
                     mover.style.width = this.isUsePx ? (stepWidth * len) + 'px' : len + '00%';
 
-                let tabWidth = this.isUsePx ? stepWidth + 'px' : (1 / len * 100).toFixed(5) + '%';// 分配  tab 宽度
+                let tabWidth: string = this.isUsePx ? stepWidth + 'px' : (1 / len * 100).toFixed(5) + '%';// 分配  tab 宽度
                 this.tabWidth = tabWidth;
 
                 for (var i = 0; i < len; i++)
                     (<HTMLElement>children[i]).style.width = this.isMagic ? '50%' : tabWidth;
 
-                let headerUl = this.$el.$('header ul');
+                let headerUl = <HTMLElement>this.$el.$('header ul');
                 if (headerUl)
                     for (var i = 0; i < len; i++)
-                        (headerUl.children[i]).style.width = tabWidth;
+                        (<HTMLElement>(headerUl.children[i])).style.width = tabWidth;
 
                 doHeight.call(this, this.selected);
             }, 400);
@@ -88,8 +90,10 @@ namespace aj.carousel {
                 if (this.$isStop) // 停止，不切换，在做向导式时有用
                     return;
 
-                let children = this.$el.$('header ul').children;
-                let contentChild = this.$el.$('div > div').children;
+                //@ts-ignore
+                let children: HTMLElement[] = this.$el.$('header ul').children;
+                //@ts-ignore
+                let contentChild: HTMLElement[] = this.$el.$('div > div').children;
 
                 if (children && contentChild && children[oldIndex] && contentChild[oldIndex]) {
                     children[oldIndex].classList.remove('active');
@@ -244,10 +248,12 @@ namespace aj.carousel {
         }
     }
 
-    function doAutoHeight(this: Carousel, nextItem): void {
+    function doAutoHeight(this: Carousel, nextItem: any): void {
         if (this.autoHeight) {
             var tabHeaderHeight = 0;
+            // @ts-ignore
             if (this.tabHeader)
+                // @ts-ignore
                 tabHeaderHeight = this.tabHeader.scrollHeight;
 
             this.$el.style.height = (nextItem.scrollHeight + tabHeaderHeight + 50) + 'px';

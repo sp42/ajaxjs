@@ -128,7 +128,7 @@ namespace aj.form {
 
         // 监听所有的失去焦点的事件
         document.addEventListener('blur', (event: Event) => {
-            let el = event.target, errMsg: string = hasError(el);
+            let el: HTMLFormElement = <HTMLFormElement>event.target, errMsg: string = hasError(el);
 
             if (errMsg) {// 如果有错误,就把它显示出来
                 showError(el, errMsg, isMsgNewLine);
@@ -154,7 +154,7 @@ namespace aj.form {
         let error: string, hasErrors: HTMLElement | null = null;
 
         for (let i = 0, j = fields.length; i < j; i++) {
-            let el: Element = fields[i];
+            let el: HTMLFormElement = <HTMLFormElement>fields[i];
             error = hasError(el);
 
             if (error) {

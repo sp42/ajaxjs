@@ -18,6 +18,7 @@ Vue.component('ajaxjs-admin-info-btns', {
             if (confirm('确定删除？'))
                 aj.xhr.dele('.', function (j) {
                     if (j && j.isOk)
+                        //@ts-ignore
                         location.assign(_this.listUrl);
                 });
         }

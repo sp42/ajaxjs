@@ -22,7 +22,7 @@
             </menu>
             <div class="content">
                 <h2>省市区联动</h2>
-                <p>输入框本身不美化，应伴随表单样式一起定义。</p>
+                <p>要预先加装数据 js：China_AREA_full.js。</p>
                 <p>演示：</p>
                 <div class="ChinaArea">
                     <aj-china-area></aj-china-area>
@@ -36,9 +36,10 @@
     <script src="../common/demo.js"></script>
     <script src="../../dist/base/prototype.js"></script>
     <script src="../../dist/base/aj.js"></script>
+    <script src="https://static-163yun.ajaxjs.com/lib/China_AREA_full.js"></script>
     <script src="../../dist/form/china-area.js"></script>
     <script>
-        new Vue({ el: '.ChinaArea' });
+       new Vue({ el: '.ChinaArea' });
     </script>
 </body>
 

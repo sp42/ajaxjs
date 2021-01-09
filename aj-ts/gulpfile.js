@@ -72,4 +72,22 @@ dev = () => {
     watch('src/less/**/*.less', series(cssCompile));
 };
 
-exports.default = dev;
+const minifyCss = require('gulp-minify-css');
+
+// 打包所有的 css 到一个文件
+packCss = (cb) => {
+    del.sync(['./dist/css/all.css']);
+
+    src(["./dist/css/**/*.css", "!./dist/css/reset'"])
+        .pipe(concat("all.css"))// 合并所有js到all.js
+        .pipe(dest('./dist/css'))
+        .pipe(cssSourcemaps.init())
+        .pipe(rename({ suffix: '.min' }))         //修改文件名
+        .pipe(minifyCss())                    //压缩文件
+        .pipe(cssSourcemaps.write('../../sourcemap/css/'))
+        .pipe(dest('./dist/css'));
+
+    cb();
+}
+
+exports.default = packCss;
