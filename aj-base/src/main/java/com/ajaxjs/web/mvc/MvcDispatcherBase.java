@@ -46,7 +46,6 @@ public class MvcDispatcherBase {
 	private static Boolean isEnableSecurityIO;
 
 	public static final BiFunction<HttpServletRequest, HttpServletResponse, Boolean> dispatcher = (req, resp) -> {
-
 		if (isEnableSecurityIO == null)
 			isEnableSecurityIO = ConfigService.getValueAsBool("security.isEnableSecurityIO");
 
@@ -56,7 +55,7 @@ public class MvcDispatcherBase {
 		String uri = request.getFolder(), httpMethod = request.getMethod();
 		Action action = null;
 
-		LOGGER.info("uri: {0}", uri);
+//		LOGGER.info("uri: {0}", uri);
 		try {
 			action = IController.findTreeByPath(uri);
 		} catch (Throwable e) {
