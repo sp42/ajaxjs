@@ -17,8 +17,8 @@ Vue.component('aj-attachment-picture-list', {
         };
     },
     mounted: function () {
-        this.loadAttachmentPictures();
-        this.$refs.attachmentPictureUpload.uploadOk_callback = this.loadAttachmentPictures;
+        this.getData();
+        this.$refs.attachmentPictureUpload.uploadOk_callback = this.getData;
     },
     methods: {
         getData: function () {

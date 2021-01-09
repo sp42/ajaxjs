@@ -1,0 +1,76 @@
+/**
+ * 样式变量
+ */
+.shop-cart .empty {
+  margin: 5% auto;
+  width: 400px;
+}
+.shop-cart .empty img {
+  width: 160px;
+  vertical-align: middle;
+}
+.shop-cart .checkout {
+  float: right;
+  width: 42%;
+  margin: 2% 0;
+}
+.shop-cart .checkout > div {
+  width: 32%;
+  display: inline-block;
+  text-align: center;
+}
+.shop-cart .checkout .txt {
+  color: gray;
+}
+.shop-cart .checkout .price {
+  font-size: 1.3rem;
+}
+.shop-cart table {
+  margin: 0 auto;
+  border: 1px solid lightgray;
+  width: 98%;
+  border-spacing: 0;
+}
+.shop-cart table thead th {
+  border-bottom: 1px solid lightgray;
+}
+.shop-cart table td,
+.shop-cart table th {
+  padding: 2% 0;
+  text-align: center;
+  min-width: 100px;
+}
+.shop-cart table th {
+  font-weight: 500;
+  color: #777;
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+}
+.shop-cart table .price {
+  font-size: 1.1rem;
+  letter-spacing: 0.075em;
+  font-family: poppins, -apple-system, BlinkMacSystemFont, segoe ui, Roboto, helvetica neue, Arial, sans-serif;
+}
+.shop-cart table input[type=number] {
+  text-align: center;
+  border-radius: 5px;
+  outline: none;
+  border: 1px solid lightgray;
+  height: 40px;
+  font-size: 1.1rem;
+}
+.shop-cart .info img {
+  vertical-align: middle;
+  margin-right: 5%;
+  min-height: 80px;
+}
+.shop-cart .info h3 {
+  font-size: 1rem;
+  font-weight: bold;
+  color: red;
+  max-width: 180px;
+}
+.shop-cart .info div {
+  display: inline-block;
+  vertical-align: middle;
+}

@@ -1,3 +1,7 @@
+@import '../../variables.less';
+@import '../../common-functions.less';
+@import '../../form/common-form-functions.less';
+
 .goods-info {
     .gallery {
         float: left;
@@ -21,7 +25,7 @@
         }
 
         button {
-            .aj-btn;
+            .aj-btn-base();
         }
 
         li {
@@ -143,7 +147,7 @@
             }
 
             button {
-                .aj-btn;
+                .aj-btn-base();
             }
         }
     }
@@ -159,7 +163,7 @@
 
         p {
             text-indent: 2em;
-            .aj-p;
+            .aj-text-function();
         }
     }
 }

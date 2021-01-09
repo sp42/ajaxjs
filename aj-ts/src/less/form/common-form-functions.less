@@ -1,4 +1,6 @@
-.aj-btn_base() {
+@import '../common-functions.less';
+
+.aj-btn-base() {
     min-height         : 30px;
     font-size          : .8rem;
     //line-height: 100%;
@@ -38,5 +40,15 @@
 
     &:hover {
         background-position: 0px -10px;
+    }
+}
+
+.aj-btnsHolder-base() {
+    text-align: center;
+    padding   : 2% 0;
+
+    button {
+        .aj-btn-base();
+        margin-right: 3% !important;
     }
 }
