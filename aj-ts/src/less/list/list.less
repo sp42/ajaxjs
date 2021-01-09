@@ -69,6 +69,7 @@
             background-color: white;
             box-sizing      : border-box;
             list-style      : none;
+           
         }
     }
 
@@ -95,28 +96,6 @@
     }
 }
 
-
-
-
-.aj-page-list {
-    li {
-        h2 {
-            font-size  : .9rem;
-            color      : gray;
-            font-weight: normal;
-        }
-
-        .createTime {
-            font-size      : .8rem;
-            text-align     : right;
-            color          : gray;
-            //			margin-top: 1%;
-            margin-right   : 2%;
-        }
-    }
-
-}
-
 // 宫格
 .aj-list-col-base (@columns) {
     & when (@columns=3) {
@@ -125,7 +104,8 @@
 
     li {
         float: left;
-
+        min-height      : 80px;
+        
         .thumb {
             img {
                 width     : 100%;
@@ -185,16 +165,16 @@
     }
 
     h3 {
-        position        : absolute;
-        bottom          : 0;
-        left            : 0;
-        font-size       : .8rem;
-        min-height      : 2.5rem; // 三倍字体的高度
+        position           : absolute;
+        bottom             : 0;
+        left               : 0;
+        font-size          : .8rem;
+        min-height         : 2.5rem; // 三倍字体的高度
         // line-height     : 140%;
-        background-color: rgba(0, 0, 0, .5);
-        box-sizing      : border-box;
-        width           : 97%;
-        padding         : 0 3%;
-        color           : white;
+        background-color   : rgba(0, 0, 0, .5);
+        box-sizing         : border-box;
+        width              : 97%;
+        padding            : 0 3%;
+        color              : white;
     }
 }

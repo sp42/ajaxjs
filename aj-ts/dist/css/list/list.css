@@ -73,19 +73,9 @@
   height: 22px;
   vertical-align: bottom;
 }
-.aj-page-list li h2 {
-  font-size: 0.9rem;
-  color: gray;
-  font-weight: normal;
-}
-.aj-page-list li .createTime {
-  font-size: 0.8rem;
-  text-align: right;
-  color: gray;
-  margin-right: 2%;
-}
 .aj-list-cols-2 li {
   float: left;
+  min-height: 80px;
   width: 48%;
 }
 .aj-list-cols-2 li .thumb img {
@@ -107,6 +97,7 @@
 }
 .aj-list-cols-3 li {
   float: left;
+  min-height: 80px;
   width: 33.3%;
   padding-right: 1%;
 }

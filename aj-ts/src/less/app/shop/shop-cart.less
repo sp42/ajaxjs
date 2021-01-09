@@ -1,0 +1,91 @@
+.shop-cart {
+	.empty {
+		margin: 5% auto;
+		width : 400px;
+
+		img {
+			width         : 160px;
+			vertical-align: middle;
+		}
+	}
+
+	.checkout {
+		float : right;
+		width : 42%;
+		margin: 2% 0;
+
+		&>div {
+			width     : 32%;
+			display   : inline-block;
+			text-align: center;
+		}
+
+		.txt {
+			color: gray;
+		}
+
+		.price {
+			font-size: 1.3rem;
+		}
+	}
+
+	table {
+		margin        : 0 auto;
+		border        : 1px solid lightgray;
+		width         : 98%;
+		border-spacing: 0;
+
+		thead th {
+			border-bottom: 1px solid lightgray;
+		}
+
+		td,
+		th {
+			padding   : 2% 0;
+			text-align: center;
+			min-width : 100px;
+		}
+
+		th {
+			font-weight   : 500;
+			color         : #777;
+			font-size     : 1.1rem;
+			letter-spacing: 2px;
+		}
+
+		.price {
+			font-size     : 1.1rem;
+			letter-spacing: .075em;
+			font-family   : poppins, -apple-system, BlinkMacSystemFont, segoe ui, Roboto, helvetica neue, Arial, sans-serif;
+		}
+
+		input[type=number] {
+			text-align   : center;
+			border-radius: 5px;
+			outline      : none;
+			border       : 1px solid lightgray;
+			height       : 40px;
+			font-size    : 1.1rem;
+		}
+	}
+
+	.info {
+		img {
+			vertical-align: middle;
+			margin-right  : 5%;
+			min-height    : 80px;
+		}
+
+		h3 {
+			font-size  : 1rem;
+			font-weight: bold;
+			color      : @mainColor;
+			max-width  : 180px;
+		}
+
+		div {
+			display       : inline-block;
+			vertical-align: middle;
+		}
+	}
+}
