@@ -45,7 +45,7 @@ interface Calendar extends Vue {
     onToday: Function;
 }
 
-Vue.component('aj-form-caVuelendar', {
+Vue.component('aj-form-calendar', {
     template: `
         <div class="aj-form-calendar">
             <div class="selectYearMonth">
@@ -66,7 +66,7 @@ Vue.component('aj-form-caVuelendar', {
                 </thead>
                 <tbody @click="pickDay"></tbody>
             </table>
-            <div v-if="showTime">
+            <div v-if="showTime" class="showTime">
                 时 <select class="hour aj-select"><option v-for="n in 24">{{n}}</option></select>
                 分 <select class="minute aj-select"><option v-for="n in 61">{{n - 1}}</option></select>
                 <a href="#" @click="pickupTime">选择时间</a>
@@ -95,8 +95,8 @@ Vue.component('aj-form-caVuelendar', {
     },
     methods: {
         render(this: Calendar): void {
-            var arr: number[] = this.getDateArr();// 用来保存日期列表
-            var frag: DocumentFragment = document.createDocumentFragment();// 插入日期
+            let arr: number[] = this.getDateArr();// 用来保存日期列表
+            let frag: DocumentFragment = document.createDocumentFragment();// 插入日期
 
             while (arr.length) {
                 var row: HTMLTableRowElement = document.createElement("tr"); // 每个星期插入一个 tr
@@ -136,7 +136,7 @@ Vue.component('aj-form-caVuelendar', {
             // while (el.hasChildNodes())
             // el.removeChild(el.firstChild);
 
-            var tbody = <HTMLElement>this.$el.$("table tbody");
+            let tbody = <HTMLElement>this.$el.$("table tbody");
             tbody.innerHTML = '';
             tbody.appendChild(frag);
         },
@@ -187,7 +187,7 @@ Vue.component('aj-form-caVuelendar', {
          * @param this 
          */
         getDateArr(this: Calendar): number[] {
-            var arr: number[] = [];
+            let arr: number[] = [];
             // 用 当月第一天 在一周中的日期值 作为 当月 离 第一天的天数
             for (var i = 1, firstDay = new Date(this.year, this.month - 1, 1).getDay(); i <= firstDay; i++)
                 arr.push(0);
@@ -206,7 +206,7 @@ Vue.component('aj-form-caVuelendar', {
          * @param $event 
          */
         pickDay(this: Calendar, $event: Event): string {
-            var el: HTMLElement = <HTMLElement>$event.target, date: string = el.title;
+            let el: HTMLElement = <HTMLElement>$event.target, date: string = el.title;
             this.$emit('pick-date', date);
 
             return date;
@@ -218,7 +218,7 @@ Vue.component('aj-form-caVuelendar', {
          * @param $event 
          */
         pickupTime(this: Calendar, $event: Event): void {
-            var time = this.$el.$('.hour').selectedOptions[0].value + ':' + this.$el.$('.minute').selectedOptions[0].value;
+            let time = this.$el.$('.hour').selectedOptions[0].value + ':' + this.$el.$('.minute').selectedOptions[0].value;
             this.$emit('pick-time', time);
         },
 
@@ -253,13 +253,13 @@ Vue.component('aj-form-between-date', {
             var start = this.$el.$('input[name=startDate]').value, end = this.$el.$('input[name=endDate]').value;
 
             if (!start || !end) {
-                aj.showOk("输入数据不能为空");
+                aj.alert("输入数据不能为空");
                 e.preventDefault();
                 return;
             }
 
             if (new Date(start) > new Date(end)) {
-                aj.showOk("起始日期不能晚于结束日期");
+                aj.alert("起始日期不能晚于结束日期");
                 e.preventDefault();
                 return;
             }

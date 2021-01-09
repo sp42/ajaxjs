@@ -91,6 +91,13 @@
   padding: 2px 4px;
   margin: 1px;
 }
+.aj-form-calendar .showTime {
+  margin-top: 5%;
+}
+.aj-form-calendar .showTime select {
+  min-width: 50px;
+  text-align: center;
+}
 .aj-form-calendar-input {
   position: relative;
   width: 125px;
@@ -100,15 +107,32 @@
   width: 170px;
 }
 .aj-form-calendar-input input[type=text] {
+  min-height: 29px;
+  font-size: 0.9rem;
+  border: 1px solid #abadb3;
+  border-radius: 3px;
+  box-shadow: 1px 2px 3px #e5e5e5 inset;
+  box-sizing: border-box;
+  background-color: white;
+  transition: border-color ease-in-out 200ms;
+  outline: 0;
+  padding: 4px;
+  vertical-align: middle;
+  color: #333;
+  letter-spacing: 1px;
   max-width: 100% ! important;
   width: 100% ! important;
+}
+.aj-form-calendar-input input[type=text]:hover,
+.aj-form-calendar-input input[type=text]:focus {
+  border-color: #737373;
 }
 .aj-form-calendar-input .icon {
   position: absolute;
   width: 17px;
   height: 16px;
   right: 5px;
-  top: 10px;
+  top: 6px;
   opacity: 0.6;
   cursor: pointer;
 }

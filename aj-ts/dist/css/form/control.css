@@ -49,18 +49,16 @@
   background-color: white;
   transition: border-color ease-in-out 200ms;
   outline: 0;
+  padding: 4px;
+  vertical-align: middle;
+  color: #333;
+  letter-spacing: 1px;
 }
 .aj-input:hover,
 .aj-select:hover,
 .aj-input:focus,
 .aj-select:focus {
   border-color: #737373;
-}
-.aj-input {
-  padding: 4px;
-  vertical-align: middle;
-  color: #333;
-  letter-spacing: 1px;
 }
 .aj-disable {
   cursor: not-allowed;
@@ -299,6 +297,10 @@
   background-color: white;
   transition: border-color ease-in-out 200ms;
   outline: 0;
+  padding: 4px;
+  vertical-align: middle;
+  color: #333;
+  letter-spacing: 1px;
   padding: 1px 4px;
   -moz-appearance: none;
   -webkit-appearance: none;
