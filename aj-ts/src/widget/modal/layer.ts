@@ -28,7 +28,7 @@ Vue.component('aj-layer', {
          * @param cfg 
          */
         show(this: Layer, cfg?: LayerConfig): void {
-            var my: number = Number(getComputedStyle(this.$el).zIndex); // 保证最后显示的总在最前面
+            let my: number = Number(getComputedStyle(this.$el).zIndex); // 保证最后显示的总在最前面
 
             document.body.$('.aj-modal', (i: Element) => {
                 if (i != this.$el) {

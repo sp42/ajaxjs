@@ -59,14 +59,6 @@ function cssCompile() {
         .pipe(dest('dist/css'));
 }
 
-function cssBuild() {
-    return src('src/less/**/*.less')
-        .pipe(cssSourcemaps.init())
-        .pipe(less())
-        .pipe(cssSourcemaps.write('../../sourcemap/css/'))
-        .pipe(dest('dist/css'));
-}
-
 dev = () => {
     watch('src/**/*.ts', series(jsCompile));// /**/* 就是任意层级下的文件。
     watch('src/less/**/*.less', series(cssCompile));
@@ -90,4 +82,29 @@ packCss = (cb) => {
     cb();
 }
 
-exports.default = packCss;
+function mod(arr, allJsName) {
+    let obj = src(arr)
+        .pipe(concat(allJsName))// 合并所有js到all.js
+        .pipe(dest('./dist'));
+
+    obj.pipe(rename({ suffix: '.min' }))            // rename压缩后的文件名
+        .pipe(sourcemaps.init())                    // Source Map 
+        .pipe(uglify())                             // 压缩 js
+        .pipe(sourcemaps.write('../sourcemap/'))    // Source Map 
+        .pipe(dest('./dist'));
+
+}
+
+// 打包所有的 css 到一个文件
+packJs = (cb) => {
+    del.sync(['./dist/base.js', './dist/widget.js', './dist/form.js', './dist/list.js']);
+
+    mod(['./dist/base/prototype.js', './dist/base/aj.js', './dist/base/xhr.js'], 'base.js');
+    mod(['./dist/widget/**/*.js', '!./dist/widget/page/ChineseChars.js'], 'widget.js');
+    mod(['./dist/form/**/*.js', '!./dist/widget/form/China_AREA.js', '!./dist/widget/form/China_AREA_full.js'], 'form.js');
+    mod(['./dist/list/**/*.js', '!./dist/widget/form/China_AREA.js', '!./dist/widget/form/China_AREA_full.js'], 'list.js');
+
+    cb();
+}
+
+exports.default = packJs;
