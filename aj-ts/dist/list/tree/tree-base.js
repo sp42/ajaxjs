@@ -43,7 +43,7 @@ var aj;
                     if (map.id == id)
                         return map;
                     if (map.children) {
-                        var result = findParent(map.children, id);
+                        var result = findParentInArray(map.children, id);
                         if (result != null)
                             return result;
                     }
@@ -59,7 +59,7 @@ var aj;
                     var c = map[i].children;
                     if (c) {
                         for (var q = 0, p = c.length; q < p; q++) {
-                            var result = findParent(c[q], id);
+                            var result = findParentInMap(c[q], id);
                             if (result != null)
                                 return result;
                         }

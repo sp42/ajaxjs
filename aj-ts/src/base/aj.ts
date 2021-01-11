@@ -103,19 +103,4 @@ namespace aj {
 
     export var SELECTED = "selected";
     export var SELECTED_CSS = "." + SELECTED;
-
-    /**
-     * 获取表单控件的值
-     * 
-     * @param el 
-     * @param cssSelector 
-     */
-    export function getFormFieldValue(_el: HTMLElement, cssSelector: cssSelector): string {
-        let el = _el.$(cssSelector);
-        if (el) {
-
-            return (<HTMLInputElement>el).value;
-        } else
-            throw `找不到${cssSelector}元素`;
-    }
 }

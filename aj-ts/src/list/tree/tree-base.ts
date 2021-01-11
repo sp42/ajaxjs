@@ -1,7 +1,3 @@
-interface Tree extends Ajax, Vue {
-    treeData: TreeNode
-}
-
 namespace aj.list.tree {
     /**
      * 排序
@@ -47,7 +43,7 @@ namespace aj.list.tree {
                 return map;
 
             if (map.children) {
-                let result = findParent(map.children, id);
+                let result = findParentInArray(map.children, id);
 
                 if (result != null)
                     return result;
@@ -67,7 +63,7 @@ namespace aj.list.tree {
 
             if (c) {
                 for (let q = 0, p = c.length; q < p; q++) {
-                    let result = findParent(c[q], id);
+                    let result = findParentInMap(c[q], id);
 
                     if (result != null)
                         return result;

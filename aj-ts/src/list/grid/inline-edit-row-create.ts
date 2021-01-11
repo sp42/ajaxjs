@@ -63,7 +63,7 @@ Vue.component('aj-grid-inline-edit-row-create', {
          * @param this 
          * @param $event 
          */
-        dbEdit(this: EditRowCreate, $event: Event) {
+        dbEdit(this: EditRowCreate, $event: Event) : void{
             this.isEditMode = !this.isEditMode;
             var el: HTMLElement = <HTMLElement>$event.target;
 

@@ -1,3 +1,10 @@
+
+
+
+interface Tree extends Ajax, Vue {
+    treeData: TreeNode
+}
+
 Vue.component('aj-tree', {
     template: '<ul class="aj-tree"><aj-tree-item :model="treeData"></aj-tree-item></ul>',
     props: {

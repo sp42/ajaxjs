@@ -1,3 +1,7 @@
+interface GridEditRow extends Vue {
+
+}
+
 /**
     总体就是一个普通的 HTML Table，程序是通过读取 JSON 数据（实际 JS 数组）里面的字段，
     然后通过动态添加表格的方法逐行添加 tr，td，在添加行的过程中根据需要设置样式，添加方法等。
@@ -41,10 +45,10 @@ Vue.component('aj-grid-inline-edit-row', {
             isEditMode: false
         };
     },
-    mounted() {
-        for (var i in this.data) { // 监视每个字段
+    mounted(): void {
+        for (var i in this.data) // 监视每个字段
             this.$watch('data.' + i, this.makeWatch(i));
-        }
+
     },
     computed: {
         filterData() {// dep
@@ -67,7 +71,7 @@ Vue.component('aj-grid-inline-edit-row', {
     },
     methods: {
         // 是否固定的字段，不能被编辑
-        isFixedField(field) {
+        isFixedField(field): boolean {
             if (this.filterField && this.filterField.length) {
                 for (var i = 0, j = this.filterField.length; i < j; i++) {
                     if (this.filterField[i] == field)
@@ -102,8 +106,9 @@ Vue.component('aj-grid-inline-edit-row', {
             v = data[key];
             return (v === null ? '' : v) + '';
         },
+
         // 编辑按钮事件
-        onEditClk() {
+        onEditClk(): void {
             if (this.enableInlineEdit)
                 this.isEditMode = !this.isEditMode;
             else if (this.$parent.onEditClk)
@@ -117,7 +122,7 @@ Vue.component('aj-grid-inline-edit-row', {
 
             return "NULL";
         },
-        makeWatch(field) {
+        makeWatch(field): void {
             return function (_new) {
                 var arr = this.$parent.list;
 
@@ -138,26 +143,36 @@ Vue.component('aj-grid-inline-edit-row', {
                 data.dirty[field] = _new; // 保存新的值，key 是字段名
             }
         },
-        dbEdit($event) {
+
+        /**
+         * 
+         * @param ev 
+         */
+        dbEdit(ev: Event): void {
             if (!this.enableInlineEdit)
                 return;
 
             this.isEditMode = !this.isEditMode;
 
             if (this.isEditMode) {
-                var el = $event.target;
+                let el: HTMLElement = <HTMLElement>ev.target;
 
                 setTimeout(() => {
                     if (el.tagName !== 'INPUT')
-                        el = el.$('input');
+                        el = <HTMLElement>el.$('input');
 
                     el && el.focus();
                 }, 200);
             }
         },
-        selectCheckboxChange($event) {
-            var checkbox = $event.target;
-            var parent = this.$parent;
+
+        /**
+         * 
+         * @param this 
+         * @param ev 
+         */
+        selectCheckboxChange(this: GridEditRow, ev: Event): void {
+            let checkbox: HTMLInputElement = <HTMLInputElement>ev.target, parent = this.$parent;
 
             if (checkbox.checked)
                 parent.$set(parent.selected, this.id, true);
@@ -165,12 +180,19 @@ Vue.component('aj-grid-inline-edit-row', {
             else
                 parent.$set(parent.selected, this.id, false);
         },
-        // 删除记录
-        dele(id) {
-            aj.showConfirm('确定删除记录id:[' + id + ']', () =>
-                aj.xhr.dele(this.deleApi + '/' + id + '/', j => {
+
+        /**
+         * 删除记录
+         * 
+         * @param this 
+         * @param id 
+         */
+        dele(this: GridEditRow, id): void {
+            aj.showConfirm(`确定删除记录id:[${id}]`, () =>
+                aj.xhr.dele(this.deleApi + '/' + id + '/', (j: RepsonseResult) => {
                     if (j.isOk) {
                         aj.msg.show('删除成功');
+                        //@ts-ignore
                         this.$parent.reload();
                     }
                 })

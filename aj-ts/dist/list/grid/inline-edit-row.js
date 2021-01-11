@@ -25,9 +25,8 @@ Vue.component('aj-grid-inline-edit-row', {
         };
     },
     mounted: function () {
-        for (var i in this.data) { // 监视每个字段
+        for (var i in this.data) // 监视每个字段
             this.$watch('data.' + i, this.makeWatch(i));
-        }
     },
     computed: {
         filterData: function () {
@@ -107,35 +106,49 @@ Vue.component('aj-grid-inline-edit-row', {
                 data.dirty[field] = _new; // 保存新的值，key 是字段名
             };
         },
-        dbEdit: function ($event) {
+        /**
+         *
+         * @param ev
+         */
+        dbEdit: function (ev) {
             if (!this.enableInlineEdit)
                 return;
             this.isEditMode = !this.isEditMode;
             if (this.isEditMode) {
-                var el = $event.target;
+                var el_1 = ev.target;
                 setTimeout(function () {
-                    if (el.tagName !== 'INPUT')
-                        el = el.$('input');
-                    el && el.focus();
+                    if (el_1.tagName !== 'INPUT')
+                        el_1 = el_1.$('input');
+                    el_1 && el_1.focus();
                 }, 200);
             }
         },
-        selectCheckboxChange: function ($event) {
-            var checkbox = $event.target;
-            var parent = this.$parent;
+        /**
+         *
+         * @param this
+         * @param ev
+         */
+        selectCheckboxChange: function (ev) {
+            var checkbox = ev.target, parent = this.$parent;
             if (checkbox.checked)
                 parent.$set(parent.selected, this.id, true);
             //this.$parent.selected[this.id] = true;
             else
                 parent.$set(parent.selected, this.id, false);
         },
-        // 删除记录
+        /**
+         * 删除记录
+         *
+         * @param this
+         * @param id
+         */
         dele: function (id) {
             var _this = this;
-            aj.showConfirm('确定删除记录id:[' + id + ']', function () {
+            aj.showConfirm("\u786E\u5B9A\u5220\u9664\u8BB0\u5F55id:[" + id + "]", function () {
                 return aj.xhr.dele(_this.deleApi + '/' + id + '/', function (j) {
                     if (j.isOk) {
                         aj.msg.show('删除成功');
+                        //@ts-ignore
                         _this.$parent.reload();
                     }
                 });
