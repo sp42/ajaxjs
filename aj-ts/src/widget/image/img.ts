@@ -99,6 +99,10 @@ namespace aj.img {
         fr.readAsDataURL(blob); // blob 转 dataURL
     }
 
+    // EXIF {
+    //     getTag(ob: any, ori: string):number;
+    // }
+
     /**
      * 获取图片的方向
      * 
@@ -168,17 +172,17 @@ namespace aj.img {
      * @param imgObj 
      */
     export function compress(imgObj: HTMLImageElement): void {
-        var maxWidth: number = 1000, maxHeight: number = 1500;
+        let maxWidth: number = 1000, maxHeight: number = 1500;
         let fitSizeObj = fitSize(imgObj.width, imgObj.height, maxWidth, maxHeight);
-        var targetWidth: number = fitSizeObj.targetWidth, targetHeight: number = fitSizeObj.targetHeight;
-        var orient: number = getPhotoOrientation(imgObj);// 获取照片的拍摄方向
+        let targetWidth: number = fitSizeObj.targetWidth, targetHeight: number = fitSizeObj.targetHeight;
+        let orient: number = getPhotoOrientation(imgObj);// 获取照片的拍摄方向
 
         if (orient == 6) {
             targetWidth = fitSizeObj.targetHeight;
             targetHeight = fitSizeObj.targetWidth;
         }
 
-        var comp: HTMLImageElement = new Image();
+        let comp: HTMLImageElement = new Image();
         comp.onload = () => {
             let canvas: HTMLCanvasElement = document.createElement('canvas');
             canvas.width = targetWidth;

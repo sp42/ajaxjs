@@ -37,7 +37,7 @@ var aj;
                     if (n.pid === -1)
                         arr.push(n);
                     else {
-                        var parentNode = findParent(arr, n.pid);
+                        var parentNode = findParentInArray(arr, n.pid);
                         if (parentNode) {
                             if (!parentNode.children)
                                 parentNode.children = [];
@@ -50,12 +50,12 @@ var aj;
                 return arr;
             }
             /**
-             * 递归查找父亲节点，根据传入 id
+             * 根据传入 id 在一个数组中查找父亲节点
              *
              * @param jsonArray
              * @param id
              */
-            function findParent(jsonArray, id) {
+            function findParentInArray(jsonArray, id) {
                 for (var i = 0, j = jsonArray.length; i < j; i++) {
                     var map = jsonArray[i];
                     if (map.id == id)
@@ -68,6 +68,24 @@ var aj;
                 }
                 return null;
             }
+            tree.findParentInArray = findParentInArray;
+            // 递归查找父亲节点，根据传入 id
+            function findParentInMap(map, id) {
+                for (var i in map) {
+                    if (i == id)
+                        return map[i];
+                    var c = map[i].children;
+                    if (c) {
+                        for (var q = 0, p = c.length; q < p; q++) {
+                            var result = findParent(c[q], id);
+                            if (result != null)
+                                return result;
+                        }
+                    }
+                }
+                return null;
+            }
+            tree.findParentInMap = findParentInMap;
         })(tree = list.tree || (list.tree = {}));
     })(list = aj.list || (aj.list = {}));
 })(aj || (aj = {}));

@@ -59,9 +59,17 @@ function cssCompile() {
         .pipe(dest('dist/css'));
 }
 
-dev = () => {
+
+const nodemon = require('gulp-nodemon');
+// 开发期间用的
+dev = (cb) => {
+    nodemon({
+        script: './src/nodejs/static-server/server.js'
+    });
     watch('src/**/*.ts', series(jsCompile));// /**/* 就是任意层级下的文件。
     watch('src/less/**/*.less', series(cssCompile));
+
+    cb();
 };
 
 const minifyCss = require('gulp-minify-css');
@@ -107,4 +115,4 @@ packJs = (cb) => {
     cb();
 }
 
-exports.default = packJs;
+exports.default = dev;

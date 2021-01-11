@@ -102,6 +102,9 @@ var aj;
             fr.readAsDataURL(blob); // blob 转 dataURL
         }
         img_1.changeBlobImageQuality = changeBlobImageQuality;
+        // EXIF {
+        //     getTag(ob: any, ori: string):number;
+        // }
         /**
          * 获取图片的方向
          *

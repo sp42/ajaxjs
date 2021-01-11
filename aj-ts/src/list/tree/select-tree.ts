@@ -1,5 +1,8 @@
 
 // Tree-like option control
+namespace aj.tree {
+
+}
 
 aj.treeLike = {
     methods: {
@@ -7,7 +10,7 @@ aj.treeLike = {
         output: (() => {
             var stack = [];
 
-            return function (map, cb) {
+            return function (map, cb): void {
                 stack.push(map);
 
                 for (var i in map) {
@@ -24,25 +27,7 @@ aj.treeLike = {
                 stack.pop();
             };
         })(),
-        // 递归查找父亲节点，根据传入 id
-        findParent(map, id) {
-            for (var i in map) {
-                if (i == id)
-                    return map[i];
-
-                var c = map[i].children;
-
-                if (c) {
-                    for (var q = 0, p = c.length; q < p; q++) {
-                        var result = this.findParent(c[q], id);
-                        if (result != null)
-                            return result;
-                    }
-                }
-            }
-
-            return null;
-        },
+        ,
         // 生成树，将扁平化的结构 还原为树状的结构
         // 父id 必须在子id之前，不然下面 findParent() 找不到后面的父节点，故这个数组必须先排序
         toTree(jsonArr) {
@@ -73,7 +58,7 @@ aj.treeLike = {
         /**
          * 渲染 Option 标签的 DOM
          */
-        rendererOption(json, select, selectedId, cfg) {
+        rendererOption(json, select, selectedId, cfg): void {
             if (cfg && cfg.makeAllOption) {
                 var option = document.createElement('option');
                 option.value = option.innerHTML = "全部分类";
@@ -117,7 +102,7 @@ Vue.component('aj-tree-catelog-select', {
         },
         isAutoJump: Boolean // 是否自动跳转 catalogId
     },
-    mounted() {
+    mounted(): void {
         var fn = j => {
             var arr = [{ id: 0, name: "请选择分类" }];
             this.rendererOption(arr.concat(j.result), this.$el, this.selectedCatalogId, { makeAllOption: false });
@@ -126,7 +111,7 @@ Vue.component('aj-tree-catelog-select', {
     },
 
     methods: {
-        onSelected($event) {
+        onSelected($event): void {
             if (this.isAutoJump) {
                 var el = $event.target, catalogId = el.selectedOptions[0].value;
                 location.assign('?' + this.fieldName + '=' + catalogId);
@@ -137,7 +122,7 @@ Vue.component('aj-tree-catelog-select', {
 });
 
 // 指定 id 的那个 option 选中
-aj.selectOption = function (id) {
+aj.selectOption = function (id): void {
     this.$el.$('option', i => {
         if (i.value == id)
             i.selected = true;
@@ -148,27 +133,19 @@ Vue.component('aj-tree-like-select', {
     mixins: [aj.treeLike],
     template: '<select :name="name" class="aj-select" @change="onSelected"></select>',
     props: {
-        catalogId: { 			// 请求远端的分类 id，必填
-            type: Number, required: true
-        },
-        selectedId: {	// 已选中的分类 id
-            type: Number, required: false
-        },
-        name: { // 表单 name，字段名
-            type: String, required: false, default: 'catalogId'
-        },
-        api: {
-            type: String, default: '/admin/tree-like/'
-        }
+        catalogId: {  type: Number, required: true },	// 请求远端的分类 id，必填
+        selectedId: {	type: Number, required: false  },// 已选中的分类 id
+        name: { type: String, required: false, default: 'catalogId' },// 表单 name，字段名
+        api: {type: String, default: '/admin/tree-like/'}
     },
-    mounted() {
+    mounted(): void {
         var url = this.ajResources.ctx + this.api + this.catalogId + "/";
         var fn = j => this.rendererOption(j.result, this.$el, this.selectedCatalogId, { makeAllOption: false });
         aj.xhr.get(url, fn);
     },
     methods: {
-        onSelected($event) {
-            var el = $event.target, catalogId = el.selectedOptions[0].value;
+        onSelected(this: Vue, ev: Event): void {
+            let el: HTMLSelectElement = <HTMLSelectElement>ev.target, catalogId = el.selectedOptions[0].value;
             this.$emit('selected', Number(catalogId));
         },
         select: aj.selectOption

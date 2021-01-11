@@ -218,7 +218,8 @@ Vue.component('aj-form-calendar', {
          * @param $event 
          */
         pickupTime(this: Calendar, $event: Event): void {
-            let time = this.$el.$('.hour').selectedOptions[0].value + ':' + this.$el.$('.minute').selectedOptions[0].value;
+            let hour: HTMLSelectElement = <HTMLSelectElement>this.$el.$('.hour'), minute: HTMLSelectElement = <HTMLSelectElement>this.$el.$('.minute');
+            let time = hour.selectedOptions[0].value + ':' + minute.selectedOptions[0].value;
             this.$emit('pick-time', time);
         },
 
@@ -250,7 +251,7 @@ Vue.component('aj-form-between-date', {
     },
     methods: {
         valid(this: Vue, e: Event): void {
-            var start = this.$el.$('input[name=startDate]').value, end = this.$el.$('input[name=endDate]').value;
+            let start = (<HTMLInputElement>this.$el.$('input[name=startDate]')).value, end = (<HTMLInputElement>this.$el.$('input[name=endDate]')).value;
 
             if (!start || !end) {
                 aj.alert("输入数据不能为空");
@@ -264,9 +265,10 @@ Vue.component('aj-form-between-date', {
                 return;
             }
 
+            //@ts-ignore
             if (this.isAjax) {
                 e.preventDefault();
-                var grid = this.$parent.$parent;
+                let grid: any = this.$parent.$parent;
                 aj.apply(grid.$refs.pager.extraParam, {
                     startDate: start, endDate: end
                 });

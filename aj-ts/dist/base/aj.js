@@ -97,4 +97,19 @@ var aj;
     ;
     aj.SELECTED = "selected";
     aj.SELECTED_CSS = "." + aj.SELECTED;
+    /**
+     * 获取表单控件的值
+     *
+     * @param el
+     * @param cssSelector
+     */
+    function getFormFieldValue(_el, cssSelector) {
+        var el = _el.$(cssSelector);
+        if (el) {
+            return el.value;
+        }
+        else
+            throw "\u627E\u4E0D\u5230" + cssSelector + "\u5143\u7D20";
+    }
+    aj.getFormFieldValue = getFormFieldValue;
 })(aj || (aj = {}));

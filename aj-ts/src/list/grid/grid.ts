@@ -103,17 +103,17 @@ namespace aj.list.grid {
              * 全选
              */
             selectAll(this: GridSectionModel): void {
-                var checkAll = (item) => {
+                let checkAll = (item: HTMLInputElement) => {
                     item.checked = true;
-                    var id = item.dataset.id;
+                    let id = item.dataset.id;
 
                     if (!id)
                         throw '需要提供 id 在 DOM 属性中';
 
                     this.$set(this.selected, Number(id), true);
-                }, diskCheckAll = (item) => {
+                }, diskCheckAll = (item: HTMLInputElement) => {
                     item.checked = false;
-                    var id = item.dataset.id;
+                    let id = item.dataset.id;
 
                     if (!id)
                         throw '需要提供 id 在 DOM 属性中';
@@ -141,9 +141,9 @@ namespace aj.list.grid {
                     this.selectedTotal = j;
 
                     if (j === this.maxRows)
-                        (this.$el.$('.top-checkbox')).checked = true;
+                        (<HTMLInputElement>this.$el.$('.top-checkbox')).checked = true;
                     else
-                        this.$el.$('.top-checkbox').checked = false;
+                        (<HTMLInputElement>this.$el.$('.top-checkbox')).checked = false;
                 },
                 deep: true
             }

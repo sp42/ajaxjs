@@ -124,7 +124,7 @@ var aj;
                             }
                             this.selectedTotal = j;
                             if (j === this.maxRows)
-                                (this.$el.$('.top-checkbox')).checked = true;
+                                this.$el.$('.top-checkbox').checked = true;
                             else
                                 this.$el.$('.top-checkbox').checked = false;
                         },

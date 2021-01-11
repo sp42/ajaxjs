@@ -13,6 +13,9 @@ namespace aj.widget {
         show(text: string, cfg?: TopMsgConfig): void;
     }
 
+    /**
+     * TopMsg 配置 
+     */
     interface TopMsgConfig extends Vue {
         /**
          * 消失之后触发的事件

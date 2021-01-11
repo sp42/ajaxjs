@@ -13,32 +13,32 @@ namespace aj.xhr {
         /**
          * HTTP 请求方法
          */
-        method: string;
+        method?: string;
 
         /**
          * true 表示为不进行表单验证
          */
-        noFormValid: boolean;
+        noFormValid?: boolean;
 
         /**
          * true 表示为启用 Google 验证
          */
-        googleReCAPTCHA: boolean;
+        googleReCAPTCHA?: boolean;
 
         /**
          * 提交之前的触发的事件
          */
-        beforeSubmit: Function;
+        beforeSubmit?: (form: HTMLFormElement, json: JsonParam) => boolean;
 
         /**
          * 表单中要忽略的字段
          */
-        ignoreField: String;
+        ignoreField?: String;
 
         /**
          * XHR 响应结果的类型
          */
-        parseContentType: 'text' | 'xml' | 'json';
+        parseContentType?: 'text' | 'xml' | 'json';
     }
 
     /**
@@ -109,7 +109,7 @@ namespace aj.xhr {
      * @param form 
      * @param cfg 
      */
-    export function serializeForm(form: HTMLFormElement, cfg: XHR_Config): { [key: string]: string } {
+    export function serializeForm(form: HTMLFormElement, cfg: XHR_Config): JsonParam {
         var json: { [key: string]: string } = {};
         let formData: FormData = new FormData(form);
 

@@ -127,7 +127,8 @@ Vue.component('aj-form-calendar', {
          * @param $event
          */
         pickupTime: function ($event) {
-            var time = this.$el.$('.hour').selectedOptions[0].value + ':' + this.$el.$('.minute').selectedOptions[0].value;
+            var hour = this.$el.$('.hour'), minute = this.$el.$('.minute');
+            var time = hour.selectedOptions[0].value + ':' + minute.selectedOptions[0].value;
             this.$emit('pick-time', time);
         },
         /**
@@ -162,6 +163,7 @@ Vue.component('aj-form-between-date', {
                 e.preventDefault();
                 return;
             }
+            //@ts-ignore
             if (this.isAjax) {
                 e.preventDefault();
                 var grid = this.$parent.$parent;

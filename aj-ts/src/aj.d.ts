@@ -57,7 +57,7 @@ declare class Vue {
     }
 
     public $set(...any): void;
-    
+
     public $destroy() { }
 
     public $emit(e: string, ...obj: any) { }
@@ -148,10 +148,21 @@ declare interface TreeNode extends BaseObject {
     pid: number;
 
     /**
+     * 所在的第几层
+     */
+    level: number;
+
+    /**
      * 子节点
      */
     children: TreeNode[];
 }
+
+/**
+ * 包裹 TreeNode 的 Map
+ * 
+ */
+declare type TreeMap = { [key: string]: TreeNode };
 
 /**
  * 表单里面字段控件
