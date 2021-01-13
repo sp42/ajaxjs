@@ -1,6 +1,10 @@
 "use strict";
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
 Vue.component('aj-form-calendar', {
-    template: "\n        <div class=\"aj-form-calendar\">\n            <div class=\"selectYearMonth\">\n                <a href=\"###\" @click=\"getDate('preYear')\" class=\"preYear\" title=\"\u4E0A\u4E00\u5E74\">&lt;</a> \n                <select @change=\"setMonth\" v-model=\"month\">\n                    <option value=\"1\">\u4E00\u6708</option><option value=\"2\">\u4E8C\u6708</option><option value=\"3\">\u4E09\u6708</option><option value=\"4\">\u56DB\u6708</option>\n                    <option value=\"5\">\u4E94\u6708</option><option value=\"6\">\u516D\u6708</option><option value=\"7\">\u4E03\u6708</option><option value=\"8\">\u516B\u6708</option>\n                    <option value=\"9\">\u4E5D\u6708</option><option value=\"10\">\u5341\u6708</option><option value=\"11\">\u5341\u4E00\u6708</option><option value=\"12\">\u5341\u4E8C\u6708</option>\n                </select>\n                <a href=\"###\" @click=\"getDate('nextYear')\" class=\"nextYear\" title=\"\u4E0B\u4E00\u5E74\">&gt;</a>\n            </div>\n            <div class=\"showCurrentYearMonth\">\n                <span class=\"showYear\">{{year}}</span>/<span class=\"showMonth\">{{month}}</span>\n            </div>\n            <table>\n                <thead>\n                    <tr><td>\u65E5</td><td>\u4E00</td><td>\u4E8C</td><td>\u4E09</td><td>\u56DB</td><td>\u4E94</td><td>\u516D</td></tr>\n                </thead>\n                <tbody @click=\"pickDay\"></tbody>\n            </table>\n            <div v-if=\"showTime\" class=\"showTime\">\n                \u65F6 <select class=\"hour aj-select\"><option v-for=\"n in 24\">{{n}}</option></select>\n                \u5206 <select class=\"minute aj-select\"><option v-for=\"n in 61\">{{n - 1}}</option></select>\n                <a href=\"#\" @click=\"pickupTime\">\u9009\u62E9\u65F6\u95F4</a>\n            </div>\n        </div>    \n    ",
+    template: html(__makeTemplateObject(["\n        <div class=\"aj-form-calendar\">\n            <div class=\"selectYearMonth\">\n                <a href=\"###\" @click=\"getDate('preYear')\" class=\"preYear\" title=\"\u4E0A\u4E00\u5E74\">&lt;</a> \n                <select @change=\"setMonth\" v-model=\"month\">\n                    <option value=\"1\">\u4E00\u6708</option><option value=\"2\">\u4E8C\u6708</option><option value=\"3\">\u4E09\u6708</option><option value=\"4\">\u56DB\u6708</option>\n                    <option value=\"5\">\u4E94\u6708</option><option value=\"6\">\u516D\u6708</option><option value=\"7\">\u4E03\u6708</option><option value=\"8\">\u516B\u6708</option>\n                    <option value=\"9\">\u4E5D\u6708</option><option value=\"10\">\u5341\u6708</option><option value=\"11\">\u5341\u4E00\u6708</option><option value=\"12\">\u5341\u4E8C\u6708</option>\n                </select>\n                <a href=\"###\" @click=\"getDate('nextYear')\" class=\"nextYear\" title=\"\u4E0B\u4E00\u5E74\">&gt;</a>\n            </div>\n            <div class=\"showCurrentYearMonth\">\n                <span class=\"showYear\">{{year}}</span>/<span class=\"showMonth\">{{month}}</span>\n            </div>\n            <table>\n                <thead>\n                    <tr><td>\u65E5</td><td>\u4E00</td><td>\u4E8C</td><td>\u4E09</td><td>\u56DB</td><td>\u4E94</td><td>\u516D</td></tr>\n                </thead>\n                <tbody @click=\"pickDay\"></tbody>\n            </table>\n            <div v-if=\"showTime\" class=\"showTime\">\n                \u65F6 <select class=\"hour aj-select\"><option v-for=\"n in 24\">{{n}}</option></select>\n                \u5206 <select class=\"minute aj-select\"><option v-for=\"n in 61\">{{n - 1}}</option></select>\n                <a href=\"#\" @click=\"pickupTime\">\u9009\u62E9\u65F6\u95F4</a>\n            </div>\n        </div>    \n    "], ["\n        <div class=\"aj-form-calendar\">\n            <div class=\"selectYearMonth\">\n                <a href=\"###\" @click=\"getDate('preYear')\" class=\"preYear\" title=\"\u4E0A\u4E00\u5E74\">&lt;</a> \n                <select @change=\"setMonth\" v-model=\"month\">\n                    <option value=\"1\">\u4E00\u6708</option><option value=\"2\">\u4E8C\u6708</option><option value=\"3\">\u4E09\u6708</option><option value=\"4\">\u56DB\u6708</option>\n                    <option value=\"5\">\u4E94\u6708</option><option value=\"6\">\u516D\u6708</option><option value=\"7\">\u4E03\u6708</option><option value=\"8\">\u516B\u6708</option>\n                    <option value=\"9\">\u4E5D\u6708</option><option value=\"10\">\u5341\u6708</option><option value=\"11\">\u5341\u4E00\u6708</option><option value=\"12\">\u5341\u4E8C\u6708</option>\n                </select>\n                <a href=\"###\" @click=\"getDate('nextYear')\" class=\"nextYear\" title=\"\u4E0B\u4E00\u5E74\">&gt;</a>\n            </div>\n            <div class=\"showCurrentYearMonth\">\n                <span class=\"showYear\">{{year}}</span>/<span class=\"showMonth\">{{month}}</span>\n            </div>\n            <table>\n                <thead>\n                    <tr><td>\u65E5</td><td>\u4E00</td><td>\u4E8C</td><td>\u4E09</td><td>\u56DB</td><td>\u4E94</td><td>\u516D</td></tr>\n                </thead>\n                <tbody @click=\"pickDay\"></tbody>\n            </table>\n            <div v-if=\"showTime\" class=\"showTime\">\n                \u65F6 <select class=\"hour aj-select\"><option v-for=\"n in 24\">{{n}}</option></select>\n                \u5206 <select class=\"minute aj-select\"><option v-for=\"n in 61\">{{n - 1}}</option></select>\n                <a href=\"#\" @click=\"pickupTime\">\u9009\u62E9\u65F6\u95F4</a>\n            </div>\n        </div>    \n    "])),
     data: function () {
         var date = new Date;
         return {
@@ -139,39 +143,6 @@ Vue.component('aj-form-calendar', {
          */
         isSameDay: function (d1, d2) {
             return (d1.getFullYear() == d2.getFullYear() && d1.getMonth() == d2.getMonth() && d1.getDate() == d2.getDate());
-        }
-    }
-});
-/**
- *
- */
-Vue.component('aj-form-between-date', {
-    template: "\n        <form action=\".\" method=\"GET\" class=\"dateRange\" @submit=\"valid\">\n            <aj-form-calendar-input :date-only=\"true\" :position-fixed=\"true\" placeholder=\"\u8D77\u59CB\u65F6\u95F4\" field-name=\"startDate\" ></aj-form-calendar-input>\n            - <aj-form-calendar-input :date-only=\"true\" :position-fixed=\"true\" placeholder=\"\u622A\u81F3\u65F6\u95F4\" field-name=\"endDate\"></aj-form-calendar-input>\n            <button class=\"aj-btn\">\u6309\u65F6\u95F4\u7B5B\u9009</button>\n        </form>    \n    ",
-    props: {
-        isAjax: { type: Boolean, default: true } // 是否 AJAX 模式
-    },
-    methods: {
-        valid: function (e) {
-            var start = this.$el.$('input[name=startDate]').value, end = this.$el.$('input[name=endDate]').value;
-            if (!start || !end) {
-                aj.alert("输入数据不能为空");
-                e.preventDefault();
-                return;
-            }
-            if (new Date(start) > new Date(end)) {
-                aj.alert("起始日期不能晚于结束日期");
-                e.preventDefault();
-                return;
-            }
-            //@ts-ignore
-            if (this.isAjax) {
-                e.preventDefault();
-                var grid = this.$parent.$parent;
-                aj.apply(grid.$refs.pager.extraParam, {
-                    startDate: start, endDate: end
-                });
-                grid.reload();
-            }
         }
     }
 });

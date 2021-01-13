@@ -47,7 +47,7 @@ interface DataStore extends Ajax {
 	/**
 	 * 请求结果
 	 */
-	result: PageListRepsonseResult;
+	result: BaseObject[];
 
 	/**
 	 * 默认的分页参数其名字
@@ -165,9 +165,9 @@ namespace aj.list {
 	 */
 	Vue.component('aj-list', {
 		mixins: [datastore],
-		template: `
+		template: html`
 			<div class="aj-list">
-				<ul>
+				<ul v-if="showDefaultUi">
 					<li v-for="(item, index) in result">
 						<slot v-bind="item">
 							<a href="#" @click="show(item.id, index, $event)" :id="item.id">{{item.name}}</a>
@@ -176,21 +176,23 @@ namespace aj.list {
 				</ul>
 				<footer v-if="isPage" class="pager">
 					<a v-if="pageStart > 0" href="#" @click="previousPage">上一页</a>
-					<a v-if="(pageStart > 0 ) && (pageStart + pageSize < total)" style="text-decoration: none;">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>
+					<a v-if="(pageStart > 0 ) && (pageStart + pageSize < total)"
+						style="text-decoration: none;">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>
 					<a v-if="pageStart + pageSize < total" href="#" @click="nextPage">下一页</a>
 					<a href="javascript:;" @click="getData"><i class="fa fa-refresh" aria-hidden="true"></i> 刷新</a>
 					<input type="hidden" name="start" :value="pageStart" />
 					页数：{{currentPage}}/{{totalPage}} 记录数：{{pageStart}}/{{total}}
 					每页记录数： <input size="2" title="输入一个数字确定每页记录数" type="text" :value="pageSize" @change="onPageSizeChange" />
-					跳转： 
+					跳转：
 					<select @change="jumpPageBySelect">
 						<option :value="n" v-for="n in totalPage">{{n}}</option>
 					</select>
-				</footer> 
+				</footer>
 				<div v-show="!!autoLoadWhenReachedBottom" class="buttom"></div>
 			</div>
 		`,
 		props: {
+			showDefaultUi: { type: Boolean, default: true },		// 如果只是单纯作为分页组件，那么则不需要 UIUI
 			isShowFooter: { type: Boolean, default: true },			 // 到底部是否自动加载下一页，通常在 移动端使用，这个应该是元素的 CSS Selector
 			autoLoadWhenReachedBottom: { type: String, default: '' },// 数据分页是否追加模式，默认不追加 = false。 App 一般采用追加模式
 			isDataAppend: { type: Boolean, default: false }
@@ -205,7 +207,7 @@ namespace aj.list {
 			}
 		},
 		methods: {
-			foo(){
+			foo() {
 				window.alert(9)
 			},
 			getData(this: List): void {
@@ -216,6 +218,9 @@ namespace aj.list {
 
 				aj.xhr.get(this.apiUrl, this.onLoad || ((j: PageListRepsonseResult) => {
 					if (j.result) {
+						if (j.total === undefined)
+							aj.alert('JSON 缺少 total 字段');
+
 						if (j.total == 0 || j.result.length == 0)
 							aj.alert('没有找到任何记录');
 
@@ -227,7 +232,6 @@ namespace aj.list {
 						}
 					}
 
-					this.$emit('onDataLoad', this.result);
 					this.$emit('pager-result', this.result);
 				}), this.lastRequestParam);
 			},

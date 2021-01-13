@@ -9,7 +9,7 @@ interface TreeItem extends Vue {
 }
 
 Vue.component('aj-tree-item', {
-    template: `
+    template: html`
         <li>
             <div :class="{bold: isFolder, node: true}" @click="toggle">
                 <span>········</span>{{model.name}}
@@ -44,7 +44,7 @@ Vue.component('aj-tree-item', {
             if (this.isFolder)
                 this.open = !this.open;
 
-            this.BUS.$emit('tree-node-click', this.model);
+            this.BUS && this.BUS.$emit('tree-node-click', this.model);
         },
 
         /**

@@ -31,9 +31,6 @@ new Vue({
                 <a href="/demo/list/index.html">List</a>\
             </li>\
             <li>\
-                <a href="/demo/grid/index.html">Grid</a>\
-            </li>\
-            <li>\
                 <a href="/demo/carousel/index.html">Carousel</a>\
             </li>\
             <li>\

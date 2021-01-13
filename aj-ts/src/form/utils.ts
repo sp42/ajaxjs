@@ -17,10 +17,15 @@ namespace aj.form.utils {
             throw `找不到${cssSelector}元素`;
     }
 
-
-    // 指定 id 的那个 option 选中
+    /**
+     * 指定 id 的那个 option 选中
+     * 
+     * @param this 
+     * @param id 
+     */
     export function selectOption(this: Vue, id: string): void {
         this.$el.$('option', (i: HTMLOptionElement) => {
+            console.log(i.value)
             if (i.value == id)
                 i.selected = true;
         });

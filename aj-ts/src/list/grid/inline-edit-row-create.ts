@@ -1,23 +1,12 @@
-interface EditRowCreate extends Vue {
-    /**
-     * 创建的 API 地址
-     */
-    createApi: string,
-
-    /**
-     * 是否处于编辑模式
-     */
-    isEditMode: boolean
-}
-
 Vue.component('aj-grid-inline-edit-row-create', {
-    template: `
-        <tr class="aj-grid-inline-edit-row isEditMode"> 
+    template: html`
+        <tr class="aj-grid-inline-edit-row isEditMode">
             <td><input type="checkbox" /></td>
             <td></td>
             <td v-for="key in columns" style="padding:0" class="cell" @dblclick="dbEdit">
-                <aj-select v-if="key != null && key.type == 'select'" :name="key.name" :options="key.data" style="width: 200px;"></aj-select>
-                <input  v-if="key != null && !key.type" type="text" size="0" :name="key" /> 
+                <aj-select v-if="key != null && key.type == 'select'" :name="key.name" :options="key.data"
+                    style="width: 200px;"></aj-select>
+                <input v-if="key != null && !key.type" type="text" size="0" :name="key" />
             </td>
             <td class="control">
                 <span @click="addNew"><img :src="ajResources.commonAsset + '/icon/update.gif'" />新增</span>
@@ -36,7 +25,7 @@ Vue.component('aj-grid-inline-edit-row-create', {
          * @param this 
          */
         addNew(this: EditRowCreate): void {
-            var map: { [key: string]: string } = {};
+            let map: { [key: string]: string } = {};
             this.$el.$('*[name]', (i: HTMLInputElement) => map[i.name] = i.value);
             this.BUS.$emit('before-add-new', map);
 
@@ -63,9 +52,9 @@ Vue.component('aj-grid-inline-edit-row-create', {
          * @param this 
          * @param $event 
          */
-        dbEdit(this: EditRowCreate, $event: Event) : void{
+        dbEdit(this: EditRowCreate, $event: Event): void {
             this.isEditMode = !this.isEditMode;
-            var el: HTMLElement = <HTMLElement>$event.target;
+            let el: HTMLElement = <HTMLElement>$event.target;
 
             if (el.tagName !== 'INPUT')
                 el = <HTMLElement>el.$('input');

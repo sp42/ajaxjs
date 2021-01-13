@@ -22,9 +22,15 @@ var aj;
                     throw "\u627E\u4E0D\u5230" + cssSelector + "\u5143\u7D20";
             }
             utils.getFormFieldValue = getFormFieldValue;
-            // 指定 id 的那个 option 选中
+            /**
+             * 指定 id 的那个 option 选中
+             *
+             * @param this
+             * @param id
+             */
             function selectOption(id) {
                 this.$el.$('option', function (i) {
+                    console.log(i.value);
                     if (i.value == id)
                         i.selected = true;
                 });

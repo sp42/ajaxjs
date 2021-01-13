@@ -18,6 +18,9 @@ interface Element {
     up(tagName: string, className?: string): Element | null
 }
 
+// VS Code 高亮 HTML 用
+const html = String;
+
 Element.prototype.$ = function (cssSelector: cssSelector, fn?: Function): Element | NodeListOf<Element> | null {
     if (typeof fn == 'function') {
         let children = this.querySelectorAll(cssSelector);

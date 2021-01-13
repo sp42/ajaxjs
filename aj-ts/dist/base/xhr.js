@@ -197,7 +197,7 @@ var aj;
                             }
                             catch (e) {
                                 try {
-                                    data = eval("TEMP_VAR = " + responseText); // for {ok: true}
+                                    data = eval("window.TEMP_VAR = " + responseText); // for {ok: true}
                                 }
                                 catch (e) {
                                     throw e;
@@ -206,7 +206,7 @@ var aj;
                     }
                 }
                 catch (e) {
-                    aj.alert('XHR 错误:\n' + e + '\nUrl is:' + cb.url); // 提示用户 异常
+                    window.alert('XHR 错误:\n' + e + '\nUrl is:' + cb.url); // 提示用户 异常
                 }
                 if (cb)
                     cb(data, this);
@@ -214,7 +214,7 @@ var aj;
                     throw '你未提供回调函数';
             }
             if (this.readyState === 4 && this.status == 500)
-                aj.alert('服务端 500 错误！');
+                window.alert('服务端 500 错误！');
         }
     })(xhr = aj.xhr || (aj.xhr = {}));
 })(aj || (aj = {}));

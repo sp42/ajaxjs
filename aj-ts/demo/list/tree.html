@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="../../dist/css/base.css" />
     <link rel="stylesheet" type="text/css" href="../common/demo.css" />
     <link rel="stylesheet" type="text/css" href="../../dist/css/list/tree.css" />
+    <link rel="stylesheet" type="text/css" href="../../dist/css/form/control.css" />
     <link crossorigin="anonymous" integrity="sha384-FckWOBo7yuyMS7In0aXZ0aoVvnInlnFMwCv77x9sZpFgOonQgnBj1uLwenWVtsEj"
         href="https://lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
     <script src="https://lib.baomitu.com/vue/2.6.11/vue.js"></script>
@@ -24,6 +25,12 @@
                 <div class="tree">
                     <aj-tree api-url="tree.json"></aj-tree>
                 </div>
+
+                <h2>树状下拉列表</h2>
+                <p></p>
+                <div class="tree-select">
+                    <aj-tree-like-select api-url="tree.json" init-field-value="2"></aj-tree-like-select>
+                </div>
             </div>
             <div class="copyright">
                 <div></div>
@@ -34,11 +41,19 @@
     <script src="../../dist/base/prototype.js"></script>
     <script src="../../dist/base/aj.js"></script>
     <script src="../../dist/base/xhr.js"></script>
-    <script src="../../dist/list/tree.js"></script>
-    <script src="../../dist/list/tree-item.js"></script>
+    <script src="../../dist/list/tree/tree.js"></script>
+    <script src="../../dist/list/tree/tree-item.js"></script>
+
+    <script src="../../dist/form/utils.js"></script>
+    <script src="../../dist/list/tree/tree-base.js"></script>
+    <script src="../../dist/list/tree/select.js"></script>
     <script>
         VUE = new Vue({
             el: '.tree'
+        });
+
+        new Vue({
+            el: '.tree-select'
         });
     </script>
 </body>

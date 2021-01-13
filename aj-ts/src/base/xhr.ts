@@ -265,14 +265,14 @@ namespace aj.xhr {
                             data = JSON.parse(responseText);
                         } catch (e) {
                             try {
-                                data = eval("TEMP_VAR = " + responseText);  // for {ok: true}
+                                data = eval("window.TEMP_VAR = " + responseText);  // for {ok: true}
                             } catch (e) {
                                 throw e;
                             }
                         }
                 }
             } catch (e) {
-                alert('XHR 错误:\n' + e + '\nUrl is:' + cb.url); // 提示用户 异常
+                window.alert('XHR 错误:\n' + e + '\nUrl is:' + cb.url); // 提示用户 异常
             }
 
             if (cb)
@@ -282,6 +282,6 @@ namespace aj.xhr {
         }
 
         if (this.readyState === 4 && this.status == 500)
-            alert('服务端 500 错误！');
+            window.alert('服务端 500 错误！');
     }
 }

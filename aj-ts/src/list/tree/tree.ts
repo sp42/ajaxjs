@@ -20,6 +20,6 @@ Vue.component('aj-tree', {
         // aj.xhr.get(this.ajResources.ctx + this.url, (j: RepsonseResult) => this.treeData.children = makeTree(j.result));
         aj.xhr.get(this.apiUrl, (j: RepsonseResult) => this.treeData.children = aj.list.tree.makeTree(j.result));
         // 递归组件怎么事件上报呢？通过事件 bus
-        this.BUS.$on('treenodeclick', (data: any) => this.$emit('treenodeclick', data));
+        this.BUS && this.BUS.$on('treenodeclick', (data: any) => this.$emit('treenodeclick', data));
     }
 });

@@ -1,4 +1,6 @@
 "use strict";
+// VS Code 高亮 HTML 用
+var html = String;
 Element.prototype.$ = function (cssSelector, fn) {
     if (typeof fn == 'function') {
         var children = this.querySelectorAll(cssSelector);

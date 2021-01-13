@@ -1,0 +1,67 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>AJAXJS Web UI Demo</title>
+    <link rel="stylesheet" type="text/css" href="../../dist/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../common/demo.css" />
+    <link rel="stylesheet" type="text/css" href="../../dist/css/list/list.css" />
+    <link crossorigin="anonymous" integrity="sha384-FckWOBo7yuyMS7In0aXZ0aoVvnInlnFMwCv77x9sZpFgOonQgnBj1uLwenWVtsEj"
+        href="https://lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
+    <script src="https://lib.baomitu.com/vue/2.6.11/vue.js"></script>
+</head>
+
+<body>
+    <div class="box">
+        <h1>Welcome to AJAXJS Web UI</h1>
+        <div>
+            <menu>
+                <span></span>
+            </menu>
+            <div class="content">
+                <h2>分页列表</h2>
+                <p>下面是简单不分页的列表。</p>
+                <div class="list">
+                    <aj-list class="aj-list-cols-3 aj-text-inside" style="width: 75%;margin: 0 auto;" ref="list" api-url="https://api.apiopen.top/getWangYiNews" 
+                        :on-load="onDataLoad" :init-page-size="9" :page-param-names="['page', 'count']">
+                        <template slot-scope="item">
+                            <div class="thumb">
+                                <a :href="item.path" target="_blank"><img :src="item.image" /></a>
+                            </div>
+                            <a :href="item.path" target="_blank">
+                                <h3> {{item.title}}</h3>
+                            </a>
+                            <p>{{item.title}}{{item.title}}</p>
+                        </template>
+                    </aj-list>
+                </div>
+            </div>
+            <div class="copyright">
+                <div></div>
+            </div>
+        </div>
+    </div>
+    <script src="../common/demo.js"></script>
+    <script src="../../dist/base/prototype.js"></script>
+    <script src="../../dist/base/aj.js"></script>
+    <script src="../../dist/base/xhr.js"></script>
+    <script src="../../dist/list/list.js"></script>
+    <script>
+        VUE = new Vue({
+            el: '.list',
+            methods: {
+                onDataLoad(j) {
+                    if (j.code === 200) {
+                        var list = this.$refs.list;
+                        list.result = j.result;
+                        list.total = 289; // 假设，API 并没有提供
+						list.count();
+                    }
+
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

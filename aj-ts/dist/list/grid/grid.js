@@ -5,61 +5,6 @@ var aj;
     (function (list) {
         var grid;
         (function (grid) {
-            grid.common = {
-                data: function () {
-                    return {
-                        list: [],
-                        updateApi: null,
-                        showAddNew: false
-                    };
-                },
-                mounted: function () {
-                    var _this = this;
-                    this.$refs.pager.$on("pager-result", function (result) {
-                        _this.list = result;
-                        _this.maxRows = result.length;
-                    });
-                    this.$refs.pager.autoLoad && this.$refs.pager.get();
-                },
-                methods: {
-                    // 按下【新建】按钮时候触发的事件，你可以覆盖这个方法提供新的事件
-                    onCreateClk: function () {
-                        this.showAddNew = true;
-                    },
-                    getDirty: function () {
-                        var dirties = [];
-                        this.list.forEach(function (item) {
-                            if (item.dirty) {
-                                item.dirty.id = item.id;
-                                dirties.push(item);
-                            }
-                        });
-                        return dirties;
-                    },
-                    reload: function () {
-                        this.$refs.pager.get();
-                    },
-                    onDirtySaveClk: function () {
-                        var _this = this;
-                        var dirties = this.getDirty();
-                        if (!dirties.length) {
-                            aj.msg.show('没有修改过的记录');
-                            return;
-                        }
-                        dirties.forEach(function (item) {
-                            aj.xhr.put(_this.updateApi + '/' + item.id + '/', function (j) {
-                                if (j.isOk) {
-                                    _this.list.forEach(function (item) {
-                                        if (item.dirty)
-                                            delete item.dirty;
-                                    });
-                                    aj.msg.show('修改记录成功');
-                                }
-                            }, item.dirty);
-                        });
-                    }
-                }
-            };
             grid.SectionModel = {
                 data: function () {
                     return {
@@ -70,7 +15,7 @@ var aj;
                     };
                 },
                 mounted: function () {
-                    this.BUS.$on('on-delete-btn-clk', this.batchDelete);
+                    this.BUS && this.BUS.$on('on-delete-btn-clk', this.batchDelete);
                 },
                 methods: {
                     /**
@@ -79,9 +24,9 @@ var aj;
                     batchDelete: function () {
                         var _this = this;
                         if (this.selectedTotal > 0) {
-                            aj.showConfirm('确定批量删除记录?', function () {
+                            aj.showConfirm('确定批量删除记录？', function () {
                                 for (var id in _this.selected) {
-                                    aj.xhr.dele(_this.deleteApi + '/' + id + '/', function (j) {
+                                    aj.xhr.dele(_this.apiUrl + "/" + id + "/", function (j) {
                                         console.log(j);
                                     });
                                 }
@@ -113,7 +58,7 @@ var aj;
                 },
                 watch: {
                     selected: {
-                        handler: function (n) {
+                        handler: function (_new) {
                             var j = 0;
                             // clear falses
                             for (var i in this.selected) {
@@ -132,6 +77,98 @@ var aj;
                     }
                 }
             };
+            Vue.component('aj-grid', {
+                mixins: [grid.SectionModel],
+                template: '<div class="aj-grid"><slot v-bind="this"></slot></div>',
+                props: {
+                    apiUrl: { type: String, required: true }
+                },
+                data: function () {
+                    return {
+                        list: [],
+                        updateApi: null,
+                        showAddNew: false
+                    };
+                },
+                mounted: function () {
+                    var _this = this;
+                    this.$children.forEach(function (child) {
+                        switch (child.$options._componentTag) {
+                            case 'aj-entity-toolbar':
+                                _this.$toolbar = child;
+                                break;
+                            case 'aj-grid-inline-edit-row':
+                                _this.$row = child;
+                                break;
+                            case 'aj-list':
+                                _this.$store = child;
+                                break;
+                        }
+                    });
+                    this.$store.$on("pager-result", function (result) {
+                        console.log(result);
+                        _this.list = result;
+                        _this.maxRows = result.length;
+                    });
+                    // this.$store.autoLoad && this.$store.getDataData();
+                },
+                methods: {
+                    /**
+                     * 按下【新建】按钮时候触发的事件，你可以覆盖这个方法提供新的事件
+                     *
+                     * @param this
+                     */
+                    onCreateClk: function () {
+                        this.showAddNew = true;
+                    },
+                    /**
+                     * 重新加载数据
+                     *
+                     * @param this
+                     */
+                    reload: function () {
+                        this.$store.getData();
+                    },
+                    /**
+                     *
+                     * @param this
+                     */
+                    onDirtySaveClk: function () {
+                        var _this = this;
+                        var dirties = getDirty.call(this);
+                        if (!dirties.length) {
+                            aj.msg.show('没有修改过的记录');
+                            return;
+                        }
+                        dirties.forEach(function (item) {
+                            aj.xhr.put(_this.apiUrl + "/" + item.id + "/", function (j) {
+                                if (j.isOk) {
+                                    _this.list.forEach(function (item) {
+                                        if (item.dirty)
+                                            delete item.dirty;
+                                    });
+                                    aj.msg.show('修改记录成功');
+                                }
+                            }, item.dirty);
+                        });
+                    }
+                }
+            });
+            /**
+             * 获取修改过的数据
+             *
+             * @param this
+             */
+            function getDirty() {
+                var dirties = [];
+                this.list.forEach(function (item) {
+                    if (item.dirty) { // 有这个 dirty 就表示修改过的
+                        // item.dirty.id = item.id;
+                        dirties.push(item);
+                    }
+                });
+                return dirties;
+            }
         })(grid = list.grid || (list.grid = {}));
     })(list = aj.list || (aj.list = {}));
 })(aj || (aj = {}));

@@ -1,0 +1,18 @@
+{
+    "isOk": true,
+    "total": 2,
+    "result": [
+        {
+            "id": 1,
+            "name": "增值税",
+            "rate": 0.03,
+            "createDate": "2021-1-10"
+        },
+        {
+            "id": 2,
+            "name": "所得税",
+            "rate": 0.5,
+            "createDate": "2021-1-10"
+        }
+    ]
+}

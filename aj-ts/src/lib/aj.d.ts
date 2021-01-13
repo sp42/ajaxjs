@@ -1,7 +1,6 @@
 
 // declare var aj: (cssSelector: cssSelector, fn?: Function) => Element | null;
 
-
 /**
  * AJAXJS
  */
@@ -23,6 +22,8 @@ declare namespace aj {
      * @param {Function} callback   回调函数
      */
     declare var showConfirm = (text: string, callback?: Function, showSave?: boolean): void => { };
+
+
     declare var simpleOk = (text: string, callback?: Function): void => { };
 
     namespace admin {
@@ -30,44 +31,9 @@ declare namespace aj {
     }
 }
 
+// declare const html = String;
+
 declare var Raphael: any;
-
-declare class Vue {
-    public $el: HTMLElement;
-
-    public $props: any;
-
-    public $refs: any;
-
-    public BUS: any;
-
-    public $parent: Vue;
-
-    public $options: any;
-
-    public $children: any[];
-
-    public static options: any;
-
-    public ajResources = {
-        imgPerfix: ""
-    };
-
-    constructor(cfg: any) {
-    }
-
-    public $set(...any): void;
-
-    public $destroy() { }
-
-    public $emit(e: string, ...obj: any) { }
-
-    public static component(string, Object): void {
-    }
-
-    public static set(...any): void {
-    }
-}
 
 declare interface BaseObject {
     /**
@@ -78,7 +44,7 @@ declare interface BaseObject {
     /**
      * 实体名称
      */
-    name: string; RepsonseResult
+    name: string;
 }
 
 /**
@@ -103,7 +69,7 @@ declare interface RepsonseResult {
     /**
      * 结果，实体，可以是任意类型
      */
-    result?: any;
+    result: BaseObject[];
 
     /**
      * 进行新建的时候返回的实体 id
@@ -160,7 +126,7 @@ declare interface TreeNode extends BaseObject {
 
 /**
  * 包裹 TreeNode 的 Map
- * 
+ * key 为 TreeNode.id
  */
 declare type TreeMap = { [key: string]: TreeNode };
 
@@ -231,7 +197,12 @@ declare interface Ajax {
     /**
      * 请求结果
      */
-    result: RepsonseResult;
+    result: any;
+
+    /**
+     * 是否自动加载数据
+     */
+    isAutoLoad: boolean;
 
     /**
      * 请求 GET 数据

@@ -1,0 +1,199 @@
+@import '../form/common-form-functions.less';
+
+// 让你的界面看上去更像软件
+.aj-grid {
+    border   : 1px solid lightgray;
+    margin   : 15px;
+    font-size: .84rem;
+
+    &>.box {
+        border-top      : 1px solid white;
+        border-bottom   : 1px solid lightgray;
+        background-color: #efefef;
+        overflow        : hidden;
+
+        &.padding {
+            padding   : 5px;
+            box-sizing: border-box;
+        }
+    }
+
+    .toolbar {
+        height          : 36px;
+        line-height     : 36px;
+        background-color: #efefef;
+
+        ul {
+            display       : inline-block;
+            font-size     : 0;
+            vertical-align: middle;
+
+            li {
+                vertical-align: middle;
+                font-size     : .8rem;
+                display       : inline-block;
+                height        : 28px;
+                line-height   : 28px;
+                text-align    : center;
+                min-width     : 80px;
+                padding       : 0 8px;
+                border-right  : 1px solid white;
+                border-left   : 1px solid lightgray;
+                cursor        : pointer;
+                color         : gray;
+                letter-spacing: 2px;
+
+                &:hover {
+                    color: black;
+                }
+
+                &:first-child {
+                    border-left: 0;
+                }
+
+                &:last-child {
+                    border-right: 0;
+                }
+            }
+        }
+
+        form {
+            margin : 0 10px;
+            display: inline-block;
+
+            input {
+                .aj-input-base();
+                min-height    : inherit;
+                height        : 25px;
+                vertical-align: baseline;
+            }
+
+            button {
+                .aj-btn-base();
+                margin     : 0;
+                min-height : 25px;
+                height     : 25px;
+                line-height: 25px;
+                padding    : .1em 1.3em;
+            }
+        }
+
+        &.bottom {
+            //margin-top:1px;
+            border-top: 1px solid lightgray;
+            padding   : 0 2%;
+
+            input {
+                min-height: 20px;
+                text-align: center;
+                padding   : 0;
+            }
+
+            select {
+                min-height: 22px;
+
+            }
+        }
+    }
+
+    .main-panel {
+        position     : relative;
+        min-height   : 500px;
+        border-bottom: 1px lightgray solid;
+        overflow     : auto;
+
+        .theader-bg {
+            position          : absolute;
+            top               : 0;
+            left              : 0;
+            height            : 38px;
+            min-width         : 400px;
+            width             : 100%;
+            //background-color: #efefef;
+            background-color  : #dce9f9;
+            background-image  : -webkit-gradient(linear, left top, left bottom, from(#ebf3fc), to(#dce9f9));
+            .gradient (top, #ebf3fc, #dce9f9);
+            text-align: center;
+            border-top: none;
+
+            z-index      : -1;
+            border-top   : 1px white solid;
+            border-bottom: 1px lightgray solid;
+        }
+
+        table {
+            table-layout  : fixed;
+            word-break    : break-all;
+            border-bottom : 1px solid #ccc;
+            border-spacing: 0;
+
+            &.in-layer {
+
+                th,
+                td {
+                    border-right: inherit;
+                }
+
+                th {
+                    border-top   : 1px solid white;
+                    border-bottom: 1px solid lightgray;
+                }
+
+                td {
+                    border-top: inherit;
+                }
+
+                width    :100%;
+                max-width:800px;
+            }
+
+            td,
+            th {
+                border-right: 1px solid #ccc;
+                font-size: .87rem;
+                padding   : 10px;
+                text-align: center;
+            }
+
+            tbody {
+                tr {
+                    .transition (background-color 700ms ease-in-out);
+
+                    &:nth-child(even) {
+                        background: #f5f5f5;
+                        box-shadow: 0 1px 0 rgba(255, 255, 255, .8) inset;
+                    }
+
+                    &:hover {
+                        background-color: #faf2c8;
+                    }
+                }
+            }
+
+            th {
+                text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
+            }
+
+            td {
+                border-top: 1px solid #ccc;
+            }
+        }
+    }
+
+    .control {
+        cursor: pointer;
+        .edit {
+            color: rgb(205, 162, 4);
+        }
+
+        .delete {
+
+            color: red;
+        }
+    }
+
+    &>.bottom-bar {
+        //	border-top: 1px lightgray solid;
+        border-bottom: 0;
+    }
+}

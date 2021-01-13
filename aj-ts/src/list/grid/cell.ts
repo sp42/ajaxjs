@@ -6,7 +6,7 @@ Vue.component('aj-cell-renderer', {
 		html: { type: String, default: '' },
 		form: Object
 	},
-	render(h) {
+	render(h:any) {
 		if (this.html.indexOf('<aj-') != -1) {
 
 			var com = Vue.extend({

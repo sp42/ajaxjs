@@ -51,7 +51,12 @@ var aj;
                 return null;
             }
             tree.findParentInArray = findParentInArray;
-            // 递归查找父亲节点，根据传入 id
+            /**
+             * 根据传入 id 查找父亲节点
+             *
+             * @param map
+             * @param id
+             */
             function findParentInMap(map, id) {
                 for (var i in map) {
                     if (i == id)
@@ -69,7 +74,12 @@ var aj;
             }
             tree.findParentInMap = findParentInMap;
             var stack = [];
-            // 遍历各个元素，输出
+            /**
+             * 遍历各个元素，输出
+             *
+             * @param map
+             * @param cb
+             */
             function output(map, cb) {
                 stack.push(map);
                 for (var i in map) {
@@ -84,15 +94,18 @@ var aj;
                 stack.pop();
             }
             tree.output = output;
-            // 生成树，将扁平化的结构 还原为树状的结构
-            // 父id 必须在子id之前，不然下面 findParent() 找不到后面的父节点，故这个数组必须先排序
+            /**
+             * 生成树，将扁平化的数组结构 还原为树状的结构
+             * 父id 必须在子id之前，不然下面 findParent() 找不到后面的父节点，故前提条件是，这个数组必须先排序
+             *
+             * @param jsonArray
+             */
             function toTree(jsonArray) {
                 if (!jsonArray)
-                    return;
+                    return {};
                 var m = {};
                 for (var i = 0, j = jsonArray.length; i < j; i++) {
-                    var n = jsonArray[i];
-                    var parentNode = findParentInMap(m, n.pid);
+                    var n = jsonArray[i], parentNode = findParentInMap(m, n.pid + "");
                     if (parentNode == null) { // 没有父节点，那就表示这是根节点，保存之
                         m[n.id] = n; // id 是key，value 新建一对象
                     }

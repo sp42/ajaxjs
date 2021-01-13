@@ -2,8 +2,8 @@
  * 工具条
  */
 Vue.component('aj-entity-toolbar', {
-    template: `
-        <div class="toolbar">
+    template: html `
+        <div class="toolbar"> 
             <form v-if="search" class="right">
                 <input type="text" name="keyword" placeholder="请输入关键字" size="12" />
                 <button @click="doSearch"><i class="fa fa-search" style="color:#417BB5;"></i>搜索</button>
@@ -12,9 +12,10 @@ Vue.component('aj-entity-toolbar', {
             <ul>
                 <li v-if="create" @click="$emit('on-create-btn-clk')"><i class="fa fa-plus" style="color:#0a90f0;"></i> 新建</li>
                 <li v-if="save" @click="$emit('on-save-btn-clk')"><i class="fa fa-floppy-o" style="color:rgb(205, 162, 4);"></i> 保存</li>
-                <li v-if="deleBtn" @click="BUS.$emit('on-delete-btn-clk')"><i class="fa fa-trash-o" style="color:red;"></i> 删除</li>
+                <li v-if="deleBtn" @click="$emit('on-delete-btn-clk')"><i class="fa fa-trash-o" style="color:red;"></i> 删除</li>
                 <li v-if="excel"><i class="fa fa-file-excel-o" style="color:green;"></i> 导出</li>
                 <slot></slot>
+                
             </ul>
         </div>
     `,
@@ -28,39 +29,16 @@ Vue.component('aj-entity-toolbar', {
     },
     methods: {
         /**
-         * 检查日期是否有效
-         * 
-         * @param this 
-         * @param e 
-         */
-        valid(this: Vue, e: Event): void {
-            let start: string | null = aj.form.utils.getFormFieldValue(this.$el, 'input[name=startDate]'),
-                end: string | null = aj.form.utils.getFormFieldValue(this.$el, 'input[name=endDate]');
-
-            if (!start || !end) {
-                aj.alert("输入数据不能为空");
-                e.preventDefault();
-            }
-
-            //@ts-ignore
-            if (new Date(start) > new Date(end)) {
-                aj.alert("起始日期不能晚于结束日期");
-                e.preventDefault();
-            }
-        },
-
-        /**
          * 获取关键字进行搜索
          * 
          * @param this 
          * @param e 
          */
-        doSearch(this: Vue, e: Event): void {
+        doSearch(this: GridToolbar, e: Event): void {
             e.preventDefault();
-            // @ts-ignore
-            aj.apply(this.$parent.$refs.pager.extraParam, { keyword: getValue.call(this, 'input[name=keyword]') });
-            // @ts-ignore
-            this.$parent.reload();
+
+            aj.apply(this.$parent.$store.extraParam, { keyword: aj.form.utils.getFormFieldValue(this.$el, 'input[name=keyword]') });
+            this.$parent.$store.reload();
         }
     }
 });
