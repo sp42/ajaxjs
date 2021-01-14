@@ -53,7 +53,7 @@ Vue.component('aj-edit-form', {
          * @param this
          */
         del: function () {
-            var id = aj.getFormFieldValue(this.$el, 'input[name=id]'), title = aj.getFormFieldValue(this.$el, 'input[name=name]');
+            var id = aj.form.utils.getFormFieldValue(this.$el, 'input[name=id]'), title = aj.form.utils.getFormFieldValue(this.$el, 'input[name=name]');
             aj.showConfirm("\u8BF7\u786E\u5B9A\u5220\u9664\u8BB0\u5F55\uFF1A\n" + title + "\uFF1F", function () {
                 return aj.xhr.dele("../" + id + "/", function (j) {
                     if (j.isOk) {

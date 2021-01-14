@@ -74,7 +74,7 @@ Vue.component('aj-edit-form', {
          * @param this 
          */
         del(this: EditForm): void {
-            let id: string = aj.getFormFieldValue(this.$el, 'input[name=id]'), title: string = aj.getFormFieldValue(this.$el, 'input[name=name]');
+            let id: string = aj.form.utils.getFormFieldValue(this.$el, 'input[name=id]'), title: string = aj.form.utils.getFormFieldValue(this.$el, 'input[name=name]');
 
             aj.showConfirm(`请确定删除记录：\n${title}？`, () =>
                 aj.xhr.dele(`../${id}/`, (j: RepsonseResult) => {

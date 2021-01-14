@@ -2,7 +2,7 @@
 ;
 (function () {
     Vue.component('aj-xhr-upload', {
-        template: "\n            <div class=\"aj-xhr-upload\" :style=\"{display: buttonBottom ? 'inherit': 'flex'}\">\n                <input v-if=\"hiddenField\" type=\"hidden\" :name=\"hiddenField\" :value=\"hiddenFieldValue\" />\n                <div v-if=\"isImgUpload\">\n                    <a :href=\"imgPlace\" target=\"_blank\">\n                        <img class=\"upload_img_perview\" :src=\"(isFileSize && isExtName && imgBase64Str) ? imgBase64Str : imgPlace\" />\n                    </a>\n                </div>\n                <div class=\"pseudoFilePicker\">\n                    <label :for=\"'uploadInput_' + radomId\"><div><div>+</div>\u70B9\u51FB\u9009\u62E9{{isImgUpload ? '\u56FE\u7247': '\u6587\u4EF6'}}</div></label>\n                </div>\n                <input type=\"file\" :name=\"fieldName\" class=\"hide\" :id=\"'uploadInput_' + radomId\" \n                    @change=\"onUploadInputChange\" :accept=\"isImgUpload ? 'image/*' : accpectFileType\" />\n                <div v-if=\"!isFileSize || !isExtName\">{{errMsg}}</div>\n                <div v-if=\"isFileSize && isExtName\">\n                    {{fileName}}<br />\n                    <button @click.prevent=\"doUpload();\" style=\"min-width:110px;\">{{progress && progress !== 100 ? '\u4E0A\u4F20\u4E2D ' + progress + '%': '\u4E0A\u4F20'}}</button>\n                </div>\n            </div>    \n        ",
+        template: "\n            <div class=\"aj-xhr-upload\" :style=\"{display: buttonBottom ? 'inherit': 'flex'}\">\n                <input v-if=\"hiddenField\" type=\"hidden\" :name=\"hiddenField\" :value=\"hiddenFieldValue\" />\n                <div v-if=\"isImgUpload\">\n                    <a :href=\"imgPlace\" target=\"_blank\">\n                        <img class=\"upload_img_perview\" :src=\"(isFileSize && isExtName && imgBase64Str) ? imgBase64Str : imgPlace\" />\n                    </a>\n                </div>\n                <div class=\"pseudoFilePicker\">\n                    <label :for=\"'uploadInput_' + radomId\"><div><div>+</div>\u70B9\u51FB\u9009\u62E9{{isImgUpload ? '\u56FE\u7247': '\u6587\u4EF6'}}</div></label>\n                </div>\n                <input type=\"file\" :name=\"fieldName\" class=\"hide\" :id=\"'uploadInput_' + radomId\" \n                    @change=\"onUploadInputChange\" :accept=\"isImgUpload ? 'image/*' : accpectFileType\" />\n                <div v-if=\"!isFileSize || !isExtName\">{{errMsg}}</div>\n                <div v-if=\"isFileSize && isExtName\">\n                    {{fileName}}<br />\n                    <button @click.prevent=\"doUpload\" style=\"min-width:110px;\">{{progress && progress !== 100 ? '\u4E0A\u4F20\u4E2D ' + progress + '%': '\u4E0A\u4F20'}}</button>\n                </div>\n            </div>    \n        ",
         props: {
             action: { type: String, required: true },
             fieldName: String,
@@ -28,11 +28,11 @@
                 radomId: Math.round(Math.random() * 1000),
                 uplodedFileUrl: null,
                 uploadOk_callback: function (json) {
-                    if (json.result)
-                        json = json.result;
-                    _this.uplodedFileUrl = json.imgUrl;
-                    if (_this.hiddenField)
-                        _this.$el.$('input[name=' + _this.hiddenField + ']').value = json.imgUrl;
+                    if (json.isOk) {
+                        _this.uplodedFileUrl = json.imgUrl;
+                        if (_this.hiddenField)
+                            _this.$el.$('input[name=' + _this.hiddenField + ']').value = json.imgUrl;
+                    }
                     aj.xhr.defaultCallBack(json);
                 },
                 imgBase64Str: null,
@@ -68,7 +68,7 @@
                 }
                 else
                     this.isExtName = true;
-                this.readBase64(fileInput.files[0]);
+                readBase64.call(this, fileInput.files[0]);
                 if (this.isImgUpload) {
                     var imgEl = new Image();
                     imgEl.onload = function () {
@@ -84,42 +84,6 @@
                 getFileName.call(this);
             },
             /**
-             *
-             * @param this
-             * @param file
-             */
-            readBase64: function (file) {
-                var _this = this;
-                var reader = new FileReader();
-                reader.onload = function (_e) {
-                    var e = _e;
-                    _this.imgBase64Str = e.target.result;
-                    if (_this.isImgUpload) {
-                        var imgEl = new Image();
-                        imgEl.onload = function () {
-                            if (file.size > 300 * 1024) // 大于 300k 才压缩
-                                aj.img.compress(imgEl);
-                            if (imgEl.width > _this.maxWidth || imgEl.height > _this.maxHeight) {
-                                _this.isImgSize = false;
-                                _this.errMsg = '图片大小尺寸不符合要求哦，请重新图片吧~';
-                            }
-                            else
-                                _this.isImgSize = true;
-                        };
-                        imgEl.src = _this.imgBase64Str;
-                        // 文件头判别，看看是否为图片
-                        for (var i in imgHeader) {
-                            if (~_this.imgBase64Str.indexOf(imgHeader[i])) {
-                                _this.isExtName = true;
-                                return;
-                            }
-                        }
-                        _this.errMsg = "亲，改了扩展名我还能认得你不是图片哦";
-                    }
-                };
-                reader.readAsDataURL(file);
-            },
-            /**
              * 执行上传
              *
              * @param this
@@ -132,7 +96,8 @@
                 else
                     fd.append("file", this.$fileObj);
                 var xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = aj.xhr.callback.delegate(null, this.uploadOk_callback, 'json');
+                //@ts-ignore
+                xhr.onreadystatechange = aj.xhr.requestCallback.delegate(null, this.uploadOk_callback, 'json');
                 xhr.open("POST", this.action, true);
                 xhr.onprogress = function (e) {
                     var progress = 0, p = ~~(e.loaded * 1000 / e.total);
@@ -157,5 +122,41 @@
         var v = this.$el.$('input[type=file]').value;
         var arr = v.split('\\');
         this.fileName = (_a = arr.pop()) === null || _a === void 0 ? void 0 : _a.trim();
+    }
+    /**
+     *
+     * @param this
+     * @param file
+     */
+    function readBase64(file) {
+        var _this = this;
+        var reader = new FileReader();
+        reader.onload = function (_e) {
+            var e = _e;
+            _this.imgBase64Str = e.target.result;
+            if (_this.isImgUpload) {
+                var imgEl = new Image();
+                imgEl.onload = function () {
+                    if (file.size > 300 * 1024) // 大于 300k 才压缩
+                        aj.img.compress(imgEl, _this);
+                    if (imgEl.width > _this.imgMaxWidth || imgEl.height > _this.imgMaxHeight) {
+                        _this.isImgSize = false;
+                        _this.errMsg = '图片大小尺寸不符合要求哦，请裁剪图片重新上传吧~';
+                    }
+                    else
+                        _this.isImgSize = true;
+                };
+                imgEl.src = _this.imgBase64Str;
+                // 文件头判别，看看是否为图片
+                for (var i in imgHeader) {
+                    if (~_this.imgBase64Str.indexOf(imgHeader[i])) {
+                        _this.isExtName = true;
+                        return;
+                    }
+                }
+                _this.errMsg = "亲，改了扩展名我还能认得你不是图片哦";
+            }
+        };
+        reader.readAsDataURL(file);
     }
 })();

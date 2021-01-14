@@ -111,9 +111,11 @@ namespace aj.img {
     export function getPhotoOrientation(img: HTMLImageElement): number {
         var orient: number;
         EXIF.getData(img, function () {
+            //@ts-ignore
             orient = EXIF.getTag(this, 'Orientation');
         });
 
+        //@ts-ignore
         return orient;
     }
 
@@ -171,7 +173,7 @@ namespace aj.img {
      * 
      * @param imgObj 
      */
-    export function compress(imgObj: HTMLImageElement): void {
+    export function compress(imgObj: HTMLImageElement, vueCmp: any): void {
         let maxWidth: number = 1000, maxHeight: number = 1500;
         let fitSizeObj = fitSize(imgObj.width, imgObj.height, maxWidth, maxHeight);
         let targetWidth: number = fitSizeObj.targetWidth, targetHeight: number = fitSizeObj.targetHeight;
@@ -187,10 +189,10 @@ namespace aj.img {
             let canvas: HTMLCanvasElement = document.createElement('canvas');
             canvas.width = targetWidth;
             canvas.height = targetHeight;
-            canvas.getContext('2d').drawImage(this, 0, 0, targetWidth, targetHeight); // 图片压缩
+            canvas.getContext('2d')?.drawImage(comp, 0, 0, targetWidth, targetHeight); // 图片压缩
             canvas.toBlob(function (blob) { // canvas转为blob并上传
-                self.$blob = blob;
-            }, self.$fileType || 'image/jpeg');
+                vueCmp.$blob = blob;
+            }, vueCmp.$fileType || 'image/jpeg');
         }
 
         comp.src = rotate(imgObj, orient);

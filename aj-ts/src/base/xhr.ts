@@ -220,7 +220,7 @@ namespace aj.xhr {
      * @param onOK 
      * @param onFail 
      */
-    export var defaultCallBack = function (j: RepsonseResult, xhr: XMLHttpRequest, onOK: Function, onFail: Function): void {
+    export var defaultCallBack = function (j: RepsonseResult, xhr?: XMLHttpRequest, onOK?: Function, onFail?: Function): void {
         if (j) {
             if (j.isOk) {
                 onOK && onOK(j);
@@ -243,7 +243,7 @@ namespace aj.xhr {
      * @param cb 
      * @param parseContentType 
      */
-    function requestCallback(this: XMLHttpRequest, event: XMLHttpRequestEventTarget, cb: XHR_Callback, parseContentType: 'text' | 'xml' | 'json'): void {
+    export function requestCallback(this: XMLHttpRequest, event: XMLHttpRequestEventTarget, cb: XHR_Callback, parseContentType: 'text' | 'xml' | 'json'): any {
         if (this.readyState === 4 && this.status === 200) {
             let responseText: string = this.responseText.trim();
             let data = null;

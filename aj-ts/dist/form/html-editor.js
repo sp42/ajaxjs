@@ -49,8 +49,8 @@
                         else {
                             // @ts-ignore
                             App.$refs.uploadLayer.show(function (json) {
-                                if (json.result)
-                                    json = json.result;
+                                // if (json.result)
+                                //     json = json.result;
                                 if (json && json.isOk)
                                     _this.format("insertImage", json.fullUrl);
                             });
@@ -224,7 +224,7 @@
         }
         if (str.length)
             aj.xhr.post('../downAllPics/', function (json) {
-                var _arr = json.result.pics;
+                var _arr = json.pics;
                 for (var i = 0, j = _arr.length; i < j; i++)
                     remotePicArr[i].src = "images/" + _arr[i];
                 aj.alert('所有图片下载完成。');
@@ -285,9 +285,8 @@
                     action: _this.uploadImageActionUrl,
                     progress: 0,
                     uploadOk_callback: function (j) {
-                        if (j.result)
-                            j = j.result;
-                        this.format("insertImage", this.ajResources.imgPerfix + j.imgUrl);
+                        if (j.isOk)
+                            this.format("insertImage", this.ajResources.imgPerfix + j.imgUrl);
                     },
                     $blob: newBlob,
                     $fileName: 'foo.jpg'

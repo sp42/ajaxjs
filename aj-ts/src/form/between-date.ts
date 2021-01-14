@@ -1,5 +1,5 @@
 /**
- * 
+ * 起始时间、截止时间的范围选择
  */
 Vue.component('aj-form-between-date', {
     template: `

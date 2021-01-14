@@ -113,8 +113,10 @@ var aj;
         function getPhotoOrientation(img) {
             var orient;
             EXIF.getData(img, function () {
+                //@ts-ignore
                 orient = EXIF.getTag(this, 'Orientation');
             });
+            //@ts-ignore
             return orient;
         }
         img_1.getPhotoOrientation = getPhotoOrientation;
@@ -170,8 +172,7 @@ var aj;
          *
          * @param imgObj
          */
-        function compress(imgObj) {
-            var _this = this;
+        function compress(imgObj, vueCmp) {
             var maxWidth = 1000, maxHeight = 1500;
             var fitSizeObj = fitSize(imgObj.width, imgObj.height, maxWidth, maxHeight);
             var targetWidth = fitSizeObj.targetWidth, targetHeight = fitSizeObj.targetHeight;
@@ -182,13 +183,14 @@ var aj;
             }
             var comp = new Image();
             comp.onload = function () {
+                var _a;
                 var canvas = document.createElement('canvas');
                 canvas.width = targetWidth;
                 canvas.height = targetHeight;
-                canvas.getContext('2d').drawImage(_this, 0, 0, targetWidth, targetHeight); // 图片压缩
+                (_a = canvas.getContext('2d')) === null || _a === void 0 ? void 0 : _a.drawImage(comp, 0, 0, targetWidth, targetHeight); // 图片压缩
                 canvas.toBlob(function (blob) {
-                    self.$blob = blob;
-                }, self.$fileType || 'image/jpeg');
+                    vueCmp.$blob = blob;
+                }, vueCmp.$fileType || 'image/jpeg');
             };
             comp.src = rotate(imgObj, orient);
         }

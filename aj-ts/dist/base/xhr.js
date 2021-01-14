@@ -216,5 +216,6 @@ var aj;
             if (this.readyState === 4 && this.status == 500)
                 window.alert('服务端 500 错误！');
         }
+        xhr_1.requestCallback = requestCallback;
     })(xhr = aj.xhr || (aj.xhr = {}));
 })(aj || (aj = {}));

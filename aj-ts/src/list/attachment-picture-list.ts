@@ -1,6 +1,6 @@
 interface AttachmentPictureList extends Ajax {
     delImgUrl: string;
-    pics: string[];
+    pics: BaseObject[];
 }
 
 /**

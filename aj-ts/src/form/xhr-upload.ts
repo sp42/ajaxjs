@@ -43,7 +43,7 @@
                 <div v-if="!isFileSize || !isExtName">{{errMsg}}</div>
                 <div v-if="isFileSize && isExtName">
                     {{fileName}}<br />
-                    <button @click.prevent="doUpload();" style="min-width:110px;">{{progress && progress !== 100 ? '上传中 ' + progress + '%': '上传'}}</button>
+                    <button @click.prevent="doUpload" style="min-width:110px;">{{progress && progress !== 100 ? '上传中 ' + progress + '%': '上传'}}</button>
                 </div>
             </div>    
         `,
@@ -72,13 +72,12 @@
                 radomId: Math.round(Math.random() * 1000),		// 不重复的 id
                 uplodedFileUrl: null,
                 uploadOk_callback: (json: ImgUploadRepsonseResult): void => {// 回调函数
-                    if (json.result)
-                        json = json.result;
+                    if (json.isOk) {
+                        this.uplodedFileUrl = json.imgUrl;
 
-                    this.uplodedFileUrl = json.imgUrl;
-
-                    if (this.hiddenField)
-                        (<HTMLInputElement>this.$el.$('input[name=' + this.hiddenField + ']')).value = json.imgUrl;
+                        if (this.hiddenField)
+                            (<HTMLInputElement>this.$el.$('input[name=' + this.hiddenField + ']')).value = json.imgUrl;
+                    }
 
                     aj.xhr.defaultCallBack(json);
                 },
@@ -118,7 +117,7 @@
                 } else
                     this.isExtName = true;
 
-                this.readBase64(fileInput.files[0]);
+                readBase64.call(this, fileInput.files[0]);
 
                 if (this.isImgUpload) {
                     var imgEl: HTMLImageElement = new Image();
@@ -137,47 +136,6 @@
             },
 
             /**
-             * 
-             * @param this 
-             * @param file 
-             */
-            readBase64(this: XHR_Upload, file: File): void {
-                let reader: FileReader = new FileReader();
-                reader.onload = (_e: Event) => {
-                    let e: FileReaderEvent = <FileReaderEvent>_e;
-                    this.imgBase64Str = e.target.result;
-
-                    if (this.isImgUpload) {
-                        var imgEl = new Image();
-                        imgEl.onload = () => {
-                            if (file.size > 300 * 1024)  // 大于 300k 才压缩
-                                aj.img.compress(imgEl);
-
-                            if (imgEl.width > this.maxWidth || imgEl.height > this.maxHeight) {
-                                this.isImgSize = false;
-                                this.errMsg = '图片大小尺寸不符合要求哦，请重新图片吧~';
-                            } else
-                                this.isImgSize = true;
-                        }
-
-                        imgEl.src = this.imgBase64Str;
-
-                        // 文件头判别，看看是否为图片
-                        for (var i in imgHeader) {
-                            if (~this.imgBase64Str.indexOf(imgHeader[i])) {
-                                this.isExtName = true;
-                                return;
-                            }
-                        }
-
-                        this.errMsg = "亲，改了扩展名我还能认得你不是图片哦";
-                    }
-                }
-
-                reader.readAsDataURL(file);
-            },
-
-            /**
              * 执行上传
              * 
              * @param this 
@@ -191,7 +149,8 @@
                     fd.append("file", this.$fileObj);
 
                 let xhr: XMLHttpRequest = new XMLHttpRequest();
-                xhr.onreadystatechange = aj.xhr.callback.delegate(null, this.uploadOk_callback, 'json');
+                //@ts-ignore
+                xhr.onreadystatechange = aj.xhr.requestCallback.delegate(null, this.uploadOk_callback, 'json');
                 xhr.open("POST", this.action, true);
                 xhr.onprogress = (e: ProgressEvent) => {
                     let progress: number = 0, p: number = ~~(e.loaded * 1000 / e.total);
@@ -221,5 +180,46 @@
         let arr: string[] = v.split('\\');
 
         this.fileName = <string>arr.pop()?.trim();
+    }
+
+    /**
+     * 
+     * @param this 
+     * @param file 
+     */
+    function readBase64(this: XHR_Upload, file: File): void {
+        let reader: FileReader = new FileReader();
+        reader.onload = (_e: Event) => {
+            let e: FileReaderEvent = <FileReaderEvent>_e;
+            this.imgBase64Str = e.target.result;
+
+            if (this.isImgUpload) {
+                var imgEl = new Image();
+                imgEl.onload = () => {
+                    if (file.size > 300 * 1024)  // 大于 300k 才压缩
+                        aj.img.compress(imgEl, this);
+
+                    if (imgEl.width > this.imgMaxWidth || imgEl.height > this.imgMaxHeight) {
+                        this.isImgSize = false;
+                        this.errMsg = '图片大小尺寸不符合要求哦，请裁剪图片重新上传吧~';
+                    } else
+                        this.isImgSize = true;
+                }
+
+                imgEl.src = this.imgBase64Str;
+
+                // 文件头判别，看看是否为图片
+                for (var i in imgHeader) {
+                    if (~this.imgBase64Str.indexOf(imgHeader[i])) {
+                        this.isExtName = true;
+                        return;
+                    }
+                }
+
+                this.errMsg = "亲，改了扩展名我还能认得你不是图片哦";
+            }
+        }
+
+        reader.readAsDataURL(file);
     }
 })();

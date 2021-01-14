@@ -31,9 +31,9 @@ declare namespace aj {
     }
 }
 
-// declare const html = String;
-
 declare var Raphael: any;
+
+declare var EXIF: any;
 
 declare interface BaseObject {
     /**
@@ -81,8 +81,20 @@ declare interface RepsonseResult {
  * 图片上传响应的消息
  */
 declare interface ImgUploadRepsonseResult extends RepsonseResult {
+    /**
+     * 相对地址
+     */
     imgUrl: string;
+
+    /**
+     * 图片绝对地址，http 开头的
+     */
     fullUrl: string;
+
+    /**
+     * 图片列表
+     */
+    pics: string[];
 }
 
 /**
