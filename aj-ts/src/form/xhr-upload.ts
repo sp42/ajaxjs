@@ -150,7 +150,7 @@
 
                 let xhr: XMLHttpRequest = new XMLHttpRequest();
                 //@ts-ignore
-                xhr.onreadystatechange = aj.xhr.requestCallback.delegate(null, this.uploadOk_callback, 'json');
+                xhr.onreadystatechange = aj.xhr.requestHandler.delegate(null, this.uploadOk_callback, 'json');
                 xhr.open("POST", this.action, true);
                 xhr.onprogress = (e: ProgressEvent) => {
                     let progress: number = 0, p: number = ~~(e.loaded * 1000 / e.total);

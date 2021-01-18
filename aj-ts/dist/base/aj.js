@@ -16,8 +16,8 @@ var aj;
     /**
      * 加载脚本
      *
-     * @param url
-     * @param id
+     * @param url   脚本地址
+     * @param id    脚本元素 id
      * @param cb    回调函数
      */
     function loadScript(url, id, cb) {
@@ -37,7 +37,7 @@ var aj;
       * @param arr
       * @param finnaly
       */
-    function parallel(arr, finnaly) {
+    function parallel(arr, _finally) {
         var fn, index = 0;
         // @ts-ignore
         var statusArr = Array(arr.length).fill().map(function () { return ({
@@ -54,7 +54,7 @@ var aj;
                 var isFinish = isFinished();
                 if (isFinish) {
                     var datas = statusArr.map(function (item) { return item.data; });
-                    finnaly(datas);
+                    _finally(datas);
                 }
             };
         };

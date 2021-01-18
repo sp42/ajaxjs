@@ -1,12 +1,12 @@
 interface Element {
     /**
-     * 查找元素
+     * 查找子元素
      * 
      * @param cssSelector   CSS 选择器
      * @param fn            可选，当送入该参数的时候，表示使用 querySelectorAll 来查询多个 dom 元素，故 fn 是个遍历器函数，其参数列表如 item、index、array
      * @returns 目标元素，如果没有找到返回 null
      */
-    $(cssSelector: cssSelector, fn?: Function): Element | NodeListOf<Element> | null,
+    $(cssSelector: cssSelector, fn?: (item: any, index?: number, array?: []) => void): Element | NodeListOf<Element> | null,
 
     /**
      * 查找父元素，支持 标签名称 或 样式名称，任选其一而不能同时传。
@@ -21,7 +21,7 @@ interface Element {
 // VS Code 高亮 HTML 用
 const html = String;
 
-Element.prototype.$ = function (cssSelector: cssSelector, fn?: Function): Element | NodeListOf<Element> | null {
+Element.prototype.$ = function (cssSelector: cssSelector, fn?: (item: any, index?: number, array?: []) => void): Element | NodeListOf<Element> | null {
     if (typeof fn == 'function') {
         let children = this.querySelectorAll(cssSelector);
 
@@ -57,9 +57,11 @@ Element.prototype.up = function (tagName: string, className: string): Element | 
 
 interface Function {
     /**
-     * 函数委托 参见 http://blog.csdn.net/zhangxin09/article/details/8508128
+     * 函数的委托，可以预先制定函数的参数具有什么，返回的就是不立刻执行的函数。
+     * 函数列表可以指定部分的，不指定的就用 null 传入。
+     * 也可以指定函数的 this 指向，在 这个函数 scope 字段上指定。
      *
-     * @return {Function}
+     * @return {Function} 不立刻执行的函数
      */
     delegate(..._args: any): Function
 }

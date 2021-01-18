@@ -16,8 +16,8 @@ namespace aj {
     /**
      * 加载脚本
      * 
-     * @param url 
-     * @param id 
+     * @param url   脚本地址
+     * @param id    脚本元素 id
      * @param cb    回调函数
      */
     export function loadScript(url: string, id?: string, cb?: (ev: Event) => any): void {
@@ -39,7 +39,7 @@ namespace aj {
       * @param arr 
       * @param finnaly 
       */
-    export function parallel(arr: [], finnaly: Function) {
+    export function parallel(arr: [], _finally: Function) {
         let fn: Function, index: number = 0;
         // @ts-ignore
         let statusArr = Array(arr.length).fill().map(() => ({
@@ -60,7 +60,7 @@ namespace aj {
                 if (isFinish) {
                     let datas = statusArr.map((item: any) => item.data);
 
-                    finnaly(datas);
+                    _finally(datas);
                 }
             };
         };

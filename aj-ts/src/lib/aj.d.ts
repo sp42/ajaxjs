@@ -2,7 +2,7 @@
 // declare var aj: (cssSelector: cssSelector, fn?: Function) => Element | null;
 
 /**
- * AJAXJS
+ * AJAXJS UI 库占据 aj 一个全局变量
  */
 declare namespace aj {
     declare var msg: TopMsg;
@@ -10,8 +10,8 @@ declare namespace aj {
     /**
       * 顯示確定的對話框
       * 
-      * @param {String} text 显示的文本
-      * @param {Function} callback 回调函数
+      * @param {String} text        显示的文本
+      * @param {Function} callback  回调函数，可选
       */
     declare var alert = (text: string, callback?: Function): void => { };
 
@@ -23,9 +23,9 @@ declare namespace aj {
      */
     declare var showConfirm = (text: string, callback?: Function, showSave?: boolean): void => { };
 
-
     declare var simpleOk = (text: string, callback?: Function): void => { };
 
+    // aj.admin
     namespace admin {
 
     }
@@ -35,6 +35,9 @@ declare var Raphael: any;
 
 declare var EXIF: any;
 
+/**
+ * 实体，一般至少有 id 和 name 字段
+ */
 declare interface BaseObject {
     /**
      * 实体 id
@@ -173,9 +176,14 @@ interface FileReaderEvent extends Event {
 }
 
 /**
- * JSON 参数
+ * JSON 实体
  */
 declare type JsonParam = { [key: string]: string | number | boolean };
+
+/**
+ * key 和 value 都是 string 类型的 JSON 实体
+ */
+declare type StringJsonParam = { [key: string]: string };
 
 /**
  * 对象包含 RPC 请求

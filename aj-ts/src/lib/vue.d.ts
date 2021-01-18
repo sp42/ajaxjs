@@ -15,11 +15,6 @@ declare class Vue {
 
     public static options: any;
 
-    public ajResources = {
-        imgPerfix: "",
-        ctx: ""
-    };
-
     constructor(cfg: any) {
     }
 
@@ -36,7 +31,12 @@ declare class Vue {
 
     public static set(...any): void {
     }
+
     public static extend(...any): any {
     }
     
+    public ajResources = { // 我自己扩展的，非 vue 官方 API
+        imgPerfix: "",
+        ctx: ""
+    };
 }
