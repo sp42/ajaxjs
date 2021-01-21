@@ -1,25 +1,43 @@
 /**
  * 消息框、弹窗、对话框组件
  */
-namespace aj.widget {
-    interface MsgBox extends Vue {
+namespace aj.widget.modal {
+
+    interface MsgBoxConfig {
+        /**
+         * 显示时间，单位是毫秒。默认是三秒
+         */
+        showTime?: number;
+
+        /**
+         * 消失之后触发的事件
+         */
+        afterClose?: (div: Element | null, msgBox: MsgBox) => void;
+
+        showYes?: boolean;
+        showNo?: boolean;
+        showOk?: boolean;
+        showSave?: boolean;
+
+        onOkClk?: Function;
+        onNoClk?: Function;
+        onYesClk?: Function;
+    }
+
+    interface MsgBox extends MsgBoxConfig, Vue {
+        /**
+         * 显示文字，支持 HTML 标签
+         */
         showText: string;
-        afterClose: Function;
 
         /**
          * 显示
          * 
          * @param this 
-         * @param text 
-         * @param cfg 
+         * @param text  显示的内容
+         * @param cfg   配置项，可选的
          */
-        show(text: string, cfg: MsgBoxConfig): MsgBox;
-        onOkClk: Function;
-        onNoClk: Function;
-        onYesClk: Function;
-    }
-
-    interface MsgBoxConfig {
+        show(text: string, cfg?: MsgBoxConfig): MsgBox;
     }
 
     export var msgbox: MsgBox;
@@ -56,44 +74,50 @@ namespace aj.widget {
                  * 显示
                  * 
                  * @param this 
-                 * @param text 
-                 * @param cfg 
+                 * @param text  显示文字，支持 HTML 标签
+                 * @param cfg   配置项，可选的
                  */
-                show(this: MsgBox, text: string, cfg: MsgBoxConfig): MsgBox {
+                show(this: MsgBox, text: string, cfg?: MsgBoxConfig): MsgBox {
                     this.showText = text;
                     this.$el.classList.remove('hide');
-                    aj.apply(this, cfg);
+                    cfg && aj.apply(this, cfg);
 
                     return this;
                 },
-                close(this: MsgBox, e: Event) {
-                    if(!e) { // 直接关闭
+
+                /**
+                 * 关闭窗体
+                 * 
+                 * @param this 
+                 * @param ev    事件对象，可选的
+                 */
+                close(this: MsgBox, ev?: Event): boolean {
+                    if (!ev) { // 直接关闭
                         this.$el.classList.add('hide');
-                        this.afterClose && this.afterClose(this);
-                        
+                        this.afterClose && this.afterClose(null, this);
                         return true;
                     }
 
-                    let div: Element = <Element>e.target; // check if in the box
+                    let div: Element = <Element>ev.target; // check if in the box
 
                     if (div && div.className.indexOf('modal') != -1) {
                         this.$el.classList.add('hide');
                         this.afterClose && this.afterClose(div, this);
                         return true;
                     }
-                },
-                onBtnClk(this: MsgBox, e: Event): void {
-                    let el: Element = <Element>e.target;
 
-                    switch (el.className) {
+                    return false;
+                },
+                onBtnClk(this: MsgBox, ev: Event): void {
+                    switch ((<Element>ev.target).className) {
                         case 'ok':
-                            this.onOkClk && this.onOkClk(e, this);
+                            this.onOkClk && this.onOkClk(ev, this);
                             break;
                         case 'no':
-                            this.onNoClk && this.onNoClk(e, this);
+                            this.onNoClk && this.onNoClk(ev, this);
                             break;
                         case 'yes':
-                            this.onYesClk && this.onYesClk(e, this);
+                            this.onYesClk && this.onYesClk(ev, this);
                             break;
                     }
                 }
@@ -104,15 +128,15 @@ namespace aj.widget {
     /**
      * 顯示確定的對話框
      * 
-     * @param {String} text 显示的文本
-     * @param {Function} callback 回调函数
+     * @param {String} text         显示的文本
+     * @param {Function} callback   回调函数
      */
     aj.alert = (text: string, callback?: Function): void => {
-        var alertObj = msgbox.show(text, {
+        let alertObj = msgbox.show(text, {
             showYes: false,
             showNo: false,
             showOk: true,
-            onOkClk(e: Event) { // 在 box 里面触发关闭，不能直接用 msgbox.close(e);
+            onOkClk() { // 在 box 里面触发关闭，不能直接用 msgbox.close(e);
                 alertObj.$el.classList.add('hide');
                 callback && callback();
             }
@@ -126,14 +150,14 @@ namespace aj.widget {
      * @param {Function} callback   回调函数
      */
     aj.showConfirm = (text: string, callback?: Function, showSave?: boolean): void => {
-        var alertObj = msgbox.show(text, {
+        let alertObj = msgbox.show(text, {
             showYes: true,
             showNo: true,
             showOk: false,
-            showSave: showSave,
-            onYesClk(e: Event) {
+            showSave: false,
+            onYesClk(ev: Event) {
                 alertObj.$el.classList.add('hide');
-                callback && callback(alertObj.$el, e);
+                callback && callback(alertObj.$el, ev);
             },
             onNoClk() { // 在box里面触发关闭，不能直接用 msgbox.close(e);
                 alertObj.$el.classList.add('hide');
@@ -141,15 +165,37 @@ namespace aj.widget {
         });
     }
 
-    aj.simpleOk = (text: string, callback?: Function) => {
-        var alertObj = msgbox.show(text, {
-            showYes: false,
-            showNo: false,
-            showOk: false,
-            onOkClk() { // 在box里面触发关闭，不能直接用 msgbox.close(e);
-                alertObj.$el.classList.add('hide');
-                callback && callback();
+    //----------------------------------------------------------------------------------------
+
+    /**
+    * 顶部出现，用于后台提示信息多
+    */
+    document.addEventListener("DOMContentLoaded", () => {
+        let msgEl: HTMLDivElement = document.createElement('div');
+        msgEl.className = 'aj-topMsg';
+        msgEl.setAttribute('v-html', "showText");
+        document.body.appendChild(msgEl);
+
+        aj.msg = new Vue({ 
+            el: msgEl,
+            data: { showText: '' }, // 显示的内容
+            methods: {
+                show(this: MsgBox, text: string, cfg?: MsgBoxConfig): void {
+                    this.showText = text;
+                    let el = this.$el;
+
+                    setTimeout(() => {
+                        el.classList.remove('fadeOut');
+                        el.classList.add('fadeIn');
+                    }, 0);
+
+                    setTimeout(() => { // 自动隐藏，无须 close
+                        el.classList.remove('fadeIn');
+                        el.classList.add('fadeOut');
+                        cfg && cfg.afterClose && cfg.afterClose(el, this);
+                    }, cfg && cfg.showTime || 3000);
+                }
             }
         });
-    }
+    });
 }

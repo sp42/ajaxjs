@@ -1,6 +1,3 @@
-
-// declare var aj: (cssSelector: cssSelector, fn?: Function) => Element | null;
-
 /**
  * AJAXJS UI 库占据 aj 一个全局变量
  */
@@ -23,13 +20,12 @@ declare namespace aj {
      */
     declare var showConfirm = (text: string, callback?: Function, showSave?: boolean): void => { };
 
-    declare var simpleOk = (text: string, callback?: Function): void => { };
-
     // aj.admin
     namespace admin {
-
     }
 }
+
+// declare var aj: (cssSelector: cssSelector, fn?: Function) => Element | null;
 
 declare var Raphael: any;
 
