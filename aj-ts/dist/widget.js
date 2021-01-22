@@ -221,33 +221,31 @@ Vue.component('aj-tab', {
         this.currentTab = this.tabs[0];
     }
 });
-aj.widget.tabable = (function () {
-    // 按次序选中目标
-    var select = function (_new) {
-        var oldSelected = _new.parentNode.$('.selected');
-        if (_new === oldSelected) // 没变化
-            return;
-        oldSelected && oldSelected.classList.remove('selected');
-        _new.classList.add('selected');
-    };
-    return {
-        mounted: function () {
-            var _this = this;
-            var ul = this.$el.$('.aj-simple-tab-horizontal > ul');
-            ul.onclick = function (e) {
-                var _a, _b;
-                var el = e.target;
-                select(el);
-                var index = Array.prototype.indexOf.call((_a = el.parentElement) === null || _a === void 0 ? void 0 : _a.children, el);
-                var _new = (_b = _this.$el.$('.aj-simple-tab-horizontal > div')) === null || _b === void 0 ? void 0 : _b.children[index];
-                select(_new);
-            };
-            // @ts-ignore
-            ul.onclick({ target: ul.children[0] });
-            //this.$options.watch.selected.call(this, 0);
-        }
-    };
-})();
+// aj.widget.tabable = (() => {
+//     // 按次序选中目标
+//     var select = (_new) => {
+//         var oldSelected = _new.parentNode.$('.selected');
+//         if (_new === oldSelected) // 没变化
+//             return;
+//         oldSelected && oldSelected.classList.remove('selected');
+//         _new.classList.add('selected');
+//     }
+//     return {
+//         mounted(this: Vue) {
+//             var ul = <HTMLElement>this.$el.$('.aj-simple-tab-horizontal > ul');
+//             ul.onclick = (e: Event) => {
+//                 let el = <HTMLElement>e.target;
+//                 select(el);
+//                 let index = Array.prototype.indexOf.call(el.parentElement?.children, el);
+//                 let _new = this.$el.$('.aj-simple-tab-horizontal > div')?.children[index];
+//                 select(_new);
+//             };
+//             // @ts-ignore
+//             ul.onclick({ target: ul.children[0] });
+//             //this.$options.watch.selected.call(this, 0);
+//         }
+//     };
+// })();
 
 "use strict";
 Vue.component('aj-avatar', {
@@ -404,6 +402,9 @@ var aj;
             fr.readAsDataURL(blob); // blob 转 dataURL
         }
         img_1.changeBlobImageQuality = changeBlobImageQuality;
+        // EXIF {
+        //     getTag(ob: any, ori: string):number;
+        // }
         /**
          * 获取图片的方向
          *
@@ -412,8 +413,10 @@ var aj;
         function getPhotoOrientation(img) {
             var orient;
             EXIF.getData(img, function () {
+                //@ts-ignore
                 orient = EXIF.getTag(this, 'Orientation');
             });
+            //@ts-ignore
             return orient;
         }
         img_1.getPhotoOrientation = getPhotoOrientation;
@@ -469,8 +472,7 @@ var aj;
          *
          * @param imgObj
          */
-        function compress(imgObj) {
-            var _this = this;
+        function compress(imgObj, vueCmp) {
             var maxWidth = 1000, maxHeight = 1500;
             var fitSizeObj = fitSize(imgObj.width, imgObj.height, maxWidth, maxHeight);
             var targetWidth = fitSizeObj.targetWidth, targetHeight = fitSizeObj.targetHeight;
@@ -481,13 +483,14 @@ var aj;
             }
             var comp = new Image();
             comp.onload = function () {
+                var _a;
                 var canvas = document.createElement('canvas');
                 canvas.width = targetWidth;
                 canvas.height = targetHeight;
-                canvas.getContext('2d').drawImage(_this, 0, 0, targetWidth, targetHeight); // 图片压缩
+                (_a = canvas.getContext('2d')) === null || _a === void 0 ? void 0 : _a.drawImage(comp, 0, 0, targetWidth, targetHeight); // 图片压缩
                 canvas.toBlob(function (blob) {
-                    self.$blob = blob;
-                }, self.$fileType || 'image/jpeg');
+                    vueCmp.$blob = blob;
+                }, vueCmp.$fileType || 'image/jpeg');
             };
             comp.src = rotate(imgObj, orient);
         }
@@ -505,6 +508,61 @@ var aj;
         }
     })(img = aj.img || (aj.img = {}));
 })(aj || (aj = {}));
+
+"use strict";
+Vue.component('aj-layer', {
+    template: '<div class="aj-modal hide" @click="close"><div><slot></slot></div></div>',
+    props: {
+        notCloseWhenTap: Boolean,
+        cleanAfterClose: Boolean // 关闭是否清除
+    },
+    methods: {
+        /**
+         * 显示浮层
+         *
+         * @param this
+         * @param cfg
+         */
+        show: function (cfg) {
+            var _this = this;
+            var my = Number(getComputedStyle(this.$el).zIndex); // 保证最后显示的总在最前面
+            document.body.$('.aj-modal', function (i) {
+                if (i != _this.$el) {
+                    var o = Number(getComputedStyle(i).zIndex);
+                    if (o >= my)
+                        _this.$el.style.zIndex = String(o + 1);
+                }
+            });
+            this.$el.classList.remove('hide');
+            this.BUS && this.BUS.$emit('aj-layer-closed', this);
+            if (cfg && cfg.afterClose)
+                this.afterClose = cfg && cfg.afterClose;
+        },
+        /**
+         * 关闭浮层
+         *
+         * @param this
+         * @param e
+         */
+        close: function (e) {
+            var isClosed = false;
+            if (!e) {
+                isClosed = aj.widget.msgbox.$options.methods.close.call(this, {
+                    target: document.body.$('.aj-modal')
+                });
+            }
+            else {
+                // @ts-ignore
+                if (e.isForceClose || !this.notCloseWhenTap)
+                    isClosed = aj.widget.msgbox.$options.methods.close.apply(this, arguments);
+            }
+            if (isClosed && this.cleanAfterClose) {
+                this.$el.parentNode && this.$el.parentNode.removeChild(this.$el);
+                this.$destroy();
+            }
+        }
+    }
+});
 
 "use strict";
 var aj;
@@ -550,114 +608,142 @@ var aj;
 (function (aj) {
     var widget;
     (function (widget) {
-        document.addEventListener("DOMContentLoaded", function () {
-            document.body.appendChild(document.createElement('div')).className = 'alertHolder';
-            // 全屏幕弹窗，居中显示文字。
-            // 不应直接使用该组件，而是执行 aj.showOk
-            widget.msgbox = new Vue({
-                el: '.alertHolder',
-                template: "\n                <div class=\"aj-modal hide\" @click=\"close\">\n                    <div>\n                        <div v-html=\"showText\"></div>\n                        <div class=\"aj-btnsHolder\">\n                            <button v-show=\"showOk\"  @click=\"onBtnClk\" class=\"ok\">\u786E\u5B9A</button>\n                            <button v-show=\"showYes\" @click=\"onBtnClk\" class=\"yes\">{{showSave? '\u4FDD\u5B58': '\u662F'}}</button>\n                            <button v-show=\"showNo\"  @click=\"onBtnClk\" class=\"no\">{{showSave? '\u5426': '\u5426'}}</button>\n                        </div>\n                    </div>\n                </div>\n            ",
-                data: {
-                    showText: '',
-                    afterClose: null,
-                    showOk: false,
-                    showYes: false,
-                    showNo: false,
-                    showSave: false // 是否显示“保存”按钮
-                },
-                methods: {
-                    /**
-                     * 显示
-                     *
-                     * @param this
-                     * @param text
-                     * @param cfg
-                     */
-                    show: function (text, cfg) {
-                        this.showText = text;
-                        this.$el.classList.remove('hide');
-                        aj.apply(this, cfg);
-                        return this;
+        var modal;
+        (function (modal) {
+            document.addEventListener("DOMContentLoaded", function () {
+                document.body.appendChild(document.createElement('div')).className = 'alertHolder';
+                // 全屏幕弹窗，居中显示文字。
+                // 不应直接使用该组件，而是执行 aj.showOk
+                modal.msgbox = new Vue({
+                    el: '.alertHolder',
+                    template: "\n                <div class=\"aj-modal hide\" @click=\"close\">\n                    <div>\n                        <div v-html=\"showText\"></div>\n                        <div class=\"aj-btnsHolder\">\n                            <button v-show=\"showOk\"  @click=\"onBtnClk\" class=\"ok\">\u786E\u5B9A</button>\n                            <button v-show=\"showYes\" @click=\"onBtnClk\" class=\"yes\">{{showSave? '\u4FDD\u5B58': '\u662F'}}</button>\n                            <button v-show=\"showNo\"  @click=\"onBtnClk\" class=\"no\">{{showSave? '\u5426': '\u5426'}}</button>\n                        </div>\n                    </div>\n                </div>\n            ",
+                    data: {
+                        showText: '',
+                        afterClose: null,
+                        showOk: false,
+                        showYes: false,
+                        showNo: false,
+                        showSave: false // 是否显示“保存”按钮
                     },
-                    close: function (e) {
-                        if (!e) { // 直接关闭
-                            this.$el.classList.add('hide');
-                            this.afterClose && this.afterClose(this);
-                            return true;
-                        }
-                        var div = e.target; // check if in the box
-                        if (div && div.className.indexOf('modal') != -1) {
-                            this.$el.classList.add('hide');
-                            this.afterClose && this.afterClose(div, this);
-                            return true;
-                        }
-                    },
-                    onBtnClk: function (e) {
-                        var el = e.target;
-                        switch (el.className) {
-                            case 'ok':
-                                this.onOkClk && this.onOkClk(e, this);
-                                break;
-                            case 'no':
-                                this.onNoClk && this.onNoClk(e, this);
-                                break;
-                            case 'yes':
-                                this.onYesClk && this.onYesClk(e, this);
-                                break;
+                    methods: {
+                        /**
+                         * 显示
+                         *
+                         * @param this
+                         * @param text  显示文字，支持 HTML 标签
+                         * @param cfg   配置项，可选的
+                         */
+                        show: function (text, cfg) {
+                            this.showText = text;
+                            this.$el.classList.remove('hide');
+                            cfg && aj.apply(this, cfg);
+                            return this;
+                        },
+                        /**
+                         * 关闭窗体
+                         *
+                         * @param this
+                         * @param ev    事件对象，可选的
+                         */
+                        close: function (ev) {
+                            if (!ev) { // 直接关闭
+                                this.$el.classList.add('hide');
+                                this.afterClose && this.afterClose(null, this);
+                                return true;
+                            }
+                            var div = ev.target; // check if in the box
+                            if (div && div.className.indexOf('modal') != -1) {
+                                this.$el.classList.add('hide');
+                                this.afterClose && this.afterClose(div, this);
+                                return true;
+                            }
+                            return false;
+                        },
+                        onBtnClk: function (ev) {
+                            switch (ev.target.className) {
+                                case 'ok':
+                                    this.onOkClk && this.onOkClk(ev, this);
+                                    break;
+                                case 'no':
+                                    this.onNoClk && this.onNoClk(ev, this);
+                                    break;
+                                case 'yes':
+                                    this.onYesClk && this.onYesClk(ev, this);
+                                    break;
+                            }
                         }
                     }
-                }
+                });
             });
-        });
-        /**
-         * 顯示確定的對話框
-         *
-         * @param {String} text 显示的文本
-         * @param {Function} callback 回调函数
-         */
-        aj.alert = function (text, callback) {
-            var alertObj = widget.msgbox.show(text, {
-                showYes: false,
-                showNo: false,
-                showOk: true,
-                onOkClk: function (e) {
-                    alertObj.$el.classList.add('hide');
-                    callback && callback();
-                }
+            /**
+             * 顯示確定的對話框
+             *
+             * @param {String} text         显示的文本
+             * @param {Function} callback   回调函数
+             */
+            aj.alert = function (text, callback) {
+                var alertObj = modal.msgbox.show(text, {
+                    showYes: false,
+                    showNo: false,
+                    showOk: true,
+                    onOkClk: function () {
+                        alertObj.$el.classList.add('hide');
+                        callback && callback();
+                    }
+                });
+            };
+            /**
+             * 顯示“是否”選擇的對話框
+             *
+             * @param {String} text         显示的文本
+             * @param {Function} callback   回调函数
+             */
+            aj.showConfirm = function (text, callback, showSave) {
+                var alertObj = modal.msgbox.show(text, {
+                    showYes: true,
+                    showNo: true,
+                    showOk: false,
+                    showSave: false,
+                    onYesClk: function (ev) {
+                        alertObj.$el.classList.add('hide');
+                        callback && callback(alertObj.$el, ev);
+                    },
+                    onNoClk: function () {
+                        alertObj.$el.classList.add('hide');
+                    }
+                });
+            };
+            //----------------------------------------------------------------------------------------
+            /**
+            * 顶部出现，用于后台提示信息多
+            */
+            document.addEventListener("DOMContentLoaded", function () {
+                var msgEl = document.createElement('div');
+                msgEl.className = 'aj-topMsg';
+                msgEl.setAttribute('v-html', "showText");
+                document.body.appendChild(msgEl);
+                aj.msg = new Vue({
+                    el: msgEl,
+                    data: { showText: '' },
+                    methods: {
+                        show: function (text, cfg) {
+                            var _this = this;
+                            this.showText = text;
+                            var el = this.$el;
+                            setTimeout(function () {
+                                el.classList.remove('fadeOut');
+                                el.classList.add('fadeIn');
+                            }, 0);
+                            setTimeout(function () {
+                                el.classList.remove('fadeIn');
+                                el.classList.add('fadeOut');
+                                cfg && cfg.afterClose && cfg.afterClose(el, _this);
+                            }, cfg && cfg.showTime || 3000);
+                        }
+                    }
+                });
             });
-        };
-        /**
-         * 顯示“是否”選擇的對話框
-         *
-         * @param {String} text         显示的文本
-         * @param {Function} callback   回调函数
-         */
-        aj.showConfirm = function (text, callback, showSave) {
-            var alertObj = widget.msgbox.show(text, {
-                showYes: true,
-                showNo: true,
-                showOk: false,
-                showSave: showSave,
-                onYesClk: function (e) {
-                    alertObj.$el.classList.add('hide');
-                    callback && callback(alertObj.$el, e);
-                },
-                onNoClk: function () {
-                    alertObj.$el.classList.add('hide');
-                }
-            });
-        };
-        aj.simpleOk = function (text, callback) {
-            var alertObj = widget.msgbox.show(text, {
-                showYes: false,
-                showNo: false,
-                showOk: false,
-                onOkClk: function () {
-                    alertObj.$el.classList.add('hide');
-                    callback && callback();
-                }
-            });
-        };
+        })(modal = widget.modal || (widget.modal = {}));
     })(widget = aj.widget || (aj.widget = {}));
 })(aj || (aj = {}));
 
@@ -666,7 +752,7 @@ var aj;
  * 调整正文字体大小
  */
 Vue.component('aj-adjust-font-size', {
-    template: "\n        <div class=\"aj-adjust-font-size\" @click=\"onClk\">\n            <span>\u5B57\u4F53\u5927\u5C0F</span>\n            <ul>\n                <li><label><input type=\"radio\" name=\"fontSize\" /> \u5C0F</label></li>\n                <li><label><input type=\"radio\" name=\"fontSize\" /> \u4E2D</label></li>\n                <li><label><input type=\"radio\" name=\"fontSize\" /> \u5927</label></li>\n            </ul>\n        </div>\n    ",
+    template: "\n        <div class=\"aj-adjust-font-size\">\n            <span>\u5B57\u4F53\u5927\u5C0F</span>\n            <ul @click=\"onClk\">\n                <li><label><input type=\"radio\" name=\"fontSize\" /> \u5C0F</label></li>\n                <li><label><input type=\"radio\" name=\"fontSize\" /> \u4E2D</label></li>\n                <li><label><input type=\"radio\" name=\"fontSize\" /> \u5927</label></li>\n            </ul>\n        </div>\n    ",
     props: {
         articleTarget: { type: String, default: 'article p' } // 正文所在的位置，通过 CSS Selector 定位
     },
@@ -677,14 +763,16 @@ Vue.component('aj-adjust-font-size', {
             var setFontSize = function (fontSize) {
                 document.body.$(_this.$props.articleTarget, function (p) { return p.style.fontSize = fontSize; });
             };
-            if (el.tagName != 'LABEL')
-                el = el.up('label');
-            if (el.innerHTML.indexOf('大') != -1)
-                setFontSize('12pt');
-            else if (el.innerHTML.indexOf('中') != -1)
-                setFontSize('10.5pt');
-            else if (el.innerHTML.indexOf('小') != -1)
-                setFontSize('9pt');
+            if (el.tagName == 'LABEL' || el.tagName == 'input') {
+                if (el.tagName != 'LABEL')
+                    el = el.up('label');
+                if (el.innerHTML.indexOf('大') != -1)
+                    setFontSize('12pt');
+                else if (el.innerHTML.indexOf('中') != -1)
+                    setFontSize('10.5pt');
+                else if (el.innerHTML.indexOf('小') != -1)
+                    setFontSize('9pt');
+            }
         }
     }
 });
@@ -871,14 +959,18 @@ var aj;
                     }, el);
                 }
                 TraditionalChinese_1.toChinese = toChinese;
-                var valueInCookie = Cookie.get(cookieName);
-                if (valueInCookie) {
-                    valueInCookie = Number(valueInCookie);
+                /**
+                 * 初始化
+                 */
+                function init() {
+                    var valueInCookie = Cookie.get(cookieName);
+                    if (valueInCookie)
+                        valueInCookie = Number(valueInCookie);
+                    // 浏览器是繁体中文的，或者 Cookie 设置了是正体的，进行转换（当然默认文本是简体的）
+                    if (currentLanguageState == TraditionalChinese || valueInCookie == TraditionalChinese)
+                        toChinese(document.querySelector(".Chinese"));
                 }
-                // 浏览器是繁体中文的，或者 Cookie 设置了是正体的，进行转换（当然默认文本是简体的）
-                if (currentLanguageState == TraditionalChinese || valueInCookie == TraditionalChinese) {
-                    toChinese(document.querySelector(".Chinese"));
-                }
+                TraditionalChinese_1.init = init;
             })(TraditionalChinese = page.TraditionalChinese || (page.TraditionalChinese = {}));
         })(page = widget.page || (widget.page = {}));
     })(widget = aj.widget || (aj.widget = {}));

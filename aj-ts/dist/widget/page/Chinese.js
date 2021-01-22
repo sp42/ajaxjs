@@ -135,14 +135,18 @@ var aj;
                     }, el);
                 }
                 TraditionalChinese_1.toChinese = toChinese;
-                var valueInCookie = Cookie.get(cookieName);
-                if (valueInCookie) {
-                    valueInCookie = Number(valueInCookie);
+                /**
+                 * 初始化
+                 */
+                function init() {
+                    var valueInCookie = Cookie.get(cookieName);
+                    if (valueInCookie)
+                        valueInCookie = Number(valueInCookie);
+                    // 浏览器是繁体中文的，或者 Cookie 设置了是正体的，进行转换（当然默认文本是简体的）
+                    if (currentLanguageState == TraditionalChinese || valueInCookie == TraditionalChinese)
+                        toChinese(document.querySelector(".Chinese"));
                 }
-                // 浏览器是繁体中文的，或者 Cookie 设置了是正体的，进行转换（当然默认文本是简体的）
-                if (currentLanguageState == TraditionalChinese || valueInCookie == TraditionalChinese) {
-                    toChinese(document.querySelector(".Chinese"));
-                }
+                TraditionalChinese_1.init = init;
             })(TraditionalChinese = page.TraditionalChinese || (page.TraditionalChinese = {}));
         })(page = widget.page || (widget.page = {}));
     })(widget = aj.widget || (aj.widget = {}));

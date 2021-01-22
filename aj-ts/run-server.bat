@@ -1,1 +1,0 @@
-node src/nodejs/static-server/server.js

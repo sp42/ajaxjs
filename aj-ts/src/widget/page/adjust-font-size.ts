@@ -3,9 +3,9 @@
  */
 Vue.component('aj-adjust-font-size', {
     template: `
-        <div class="aj-adjust-font-size" @click="onClk">
+        <div class="aj-adjust-font-size">
             <span>字体大小</span>
-            <ul>
+            <ul @click="onClk">
                 <li><label><input type="radio" name="fontSize" /> 小</label></li>
                 <li><label><input type="radio" name="fontSize" /> 中</label></li>
                 <li><label><input type="radio" name="fontSize" /> 大</label></li>
@@ -22,15 +22,17 @@ Vue.component('aj-adjust-font-size', {
                 document.body.$(this.$props.articleTarget, (p: HTMLParagraphElement) => p.style.fontSize = fontSize);
             }
 
-            if (el.tagName != 'LABEL')
-                el = <Element>el.up('label');
+            if (el.tagName == 'LABEL' || el.tagName == 'input') {
+                if (el.tagName != 'LABEL')
+                    el = <Element>el.up('label');
 
-            if (el.innerHTML.indexOf('大') != -1)
-                setFontSize('12pt');
-            else if (el.innerHTML.indexOf('中') != -1)
-                setFontSize('10.5pt');
-            else if (el.innerHTML.indexOf('小') != -1)
-                setFontSize('9pt');
+                if (el.innerHTML.indexOf('大') != -1)
+                    setFontSize('12pt');
+                else if (el.innerHTML.indexOf('中') != -1)
+                    setFontSize('10.5pt');
+                else if (el.innerHTML.indexOf('小') != -1)
+                    setFontSize('9pt');
+            }
         }
     }
 });

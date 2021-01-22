@@ -146,14 +146,17 @@ namespace aj.widget.page.TraditionalChinese {
         }, el);
     }
 
-    let valueInCookie: string | Chinese = Cookie.get(cookieName);
+    /**
+     * 初始化
+     */
+    export function init(): void {
+        let valueInCookie: string | Chinese = Cookie.get(cookieName);
 
-    if (valueInCookie) {
-        valueInCookie = Number(valueInCookie);
-    }
+        if (valueInCookie)
+            valueInCookie = Number(valueInCookie);
 
-    // 浏览器是繁体中文的，或者 Cookie 设置了是正体的，进行转换（当然默认文本是简体的）
-    if (currentLanguageState == TraditionalChinese || valueInCookie == TraditionalChinese) {
-        toChinese(<HTMLElement>document.querySelector(".Chinese"));
+        // 浏览器是繁体中文的，或者 Cookie 设置了是正体的，进行转换（当然默认文本是简体的）
+        if (currentLanguageState == TraditionalChinese || valueInCookie == TraditionalChinese)
+            toChinese(<HTMLElement>document.querySelector(".Chinese"));
     }
 }

@@ -1,4 +1,39 @@
 "use strict";
+/**
+ * 起始时间、截止时间的范围选择
+ */
+Vue.component('aj-form-between-date', {
+    template: "\n        <form action=\".\" method=\"GET\" class=\"dateRange\" @submit=\"valid\">\n            <aj-form-calendar-input :date-only=\"true\" :position-fixed=\"true\" placeholder=\"\u8D77\u59CB\u65F6\u95F4\" field-name=\"startDate\" ></aj-form-calendar-input>\n            - <aj-form-calendar-input :date-only=\"true\" :position-fixed=\"true\" placeholder=\"\u622A\u81F3\u65F6\u95F4\" field-name=\"endDate\"></aj-form-calendar-input>\n            <button class=\"aj-btn\">\u6309\u65F6\u95F4\u7B5B\u9009</button>\n        </form>    \n    ",
+    props: {
+        isAjax: { type: Boolean, default: true } // 是否 AJAX 模式
+    },
+    methods: {
+        valid: function (e) {
+            var start = this.$el.$('input[name=startDate]').value, end = this.$el.$('input[name=endDate]').value;
+            if (!start || !end) {
+                aj.alert("输入数据不能为空");
+                e.preventDefault();
+                return;
+            }
+            if (new Date(start) > new Date(end)) {
+                aj.alert("起始日期不能晚于结束日期");
+                e.preventDefault();
+                return;
+            }
+            //@ts-ignore
+            if (this.isAjax) {
+                e.preventDefault();
+                var grid = this.$parent.$parent;
+                aj.apply(grid.$refs.pager.extraParam, {
+                    startDate: start, endDate: end
+                });
+                grid.reload();
+            }
+        }
+    }
+});
+
+"use strict";
 Vue.component('aj-form-calendar-input', {
     template: "\n        <div class=\"aj-form-calendar-input\" :class=\"{'show-time': showTime}\" @mouseover=\"onMouseOver\">\n            <div class=\"icon fa fa-calendar\"></div>\n            <input :placeholder=\"placeholder\" size=\"12\" :name=\"fieldName\" :value=\"date + (dateOnly ? '' : ' ' + time)\" type=\"text\" autocomplete=\"off\"/>\n            <aj-form-calendar ref=\"calendar\" :show-time=\"showTime\" @pick-date=\"recEvent\" @pick-time=\"recTimeEvent\">\n            </aj-form-calendar>\n        </div>\n    ",
     data: function () {
@@ -57,8 +92,12 @@ Vue.component('aj-form-calendar-input', {
 });
 
 "use strict";
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
 Vue.component('aj-form-calendar', {
-    template: "\n        <div class=\"aj-form-calendar\">\n            <div class=\"selectYearMonth\">\n                <a href=\"###\" @click=\"getDate('preYear')\" class=\"preYear\" title=\"\u4E0A\u4E00\u5E74\">&lt;</a> \n                <select @change=\"setMonth\" v-model=\"month\">\n                    <option value=\"1\">\u4E00\u6708</option><option value=\"2\">\u4E8C\u6708</option><option value=\"3\">\u4E09\u6708</option><option value=\"4\">\u56DB\u6708</option>\n                    <option value=\"5\">\u4E94\u6708</option><option value=\"6\">\u516D\u6708</option><option value=\"7\">\u4E03\u6708</option><option value=\"8\">\u516B\u6708</option>\n                    <option value=\"9\">\u4E5D\u6708</option><option value=\"10\">\u5341\u6708</option><option value=\"11\">\u5341\u4E00\u6708</option><option value=\"12\">\u5341\u4E8C\u6708</option>\n                </select>\n                <a href=\"###\" @click=\"getDate('nextYear')\" class=\"nextYear\" title=\"\u4E0B\u4E00\u5E74\">&gt;</a>\n            </div>\n            <div class=\"showCurrentYearMonth\">\n                <span class=\"showYear\">{{year}}</span>/<span class=\"showMonth\">{{month}}</span>\n            </div>\n            <table>\n                <thead>\n                    <tr><td>\u65E5</td><td>\u4E00</td><td>\u4E8C</td><td>\u4E09</td><td>\u56DB</td><td>\u4E94</td><td>\u516D</td></tr>\n                </thead>\n                <tbody @click=\"pickDay\"></tbody>\n            </table>\n            <div v-if=\"showTime\" class=\"showTime\">\n                \u65F6 <select class=\"hour aj-select\"><option v-for=\"n in 24\">{{n}}</option></select>\n                \u5206 <select class=\"minute aj-select\"><option v-for=\"n in 61\">{{n - 1}}</option></select>\n                <a href=\"#\" @click=\"pickupTime\">\u9009\u62E9\u65F6\u95F4</a>\n            </div>\n        </div>    \n    ",
+    template: html(__makeTemplateObject(["\n        <div class=\"aj-form-calendar\">\n            <div class=\"selectYearMonth\">\n                <a href=\"###\" @click=\"getDate('preYear')\" class=\"preYear\" title=\"\u4E0A\u4E00\u5E74\">&lt;</a> \n                <select @change=\"setMonth\" v-model=\"month\">\n                    <option value=\"1\">\u4E00\u6708</option><option value=\"2\">\u4E8C\u6708</option><option value=\"3\">\u4E09\u6708</option><option value=\"4\">\u56DB\u6708</option>\n                    <option value=\"5\">\u4E94\u6708</option><option value=\"6\">\u516D\u6708</option><option value=\"7\">\u4E03\u6708</option><option value=\"8\">\u516B\u6708</option>\n                    <option value=\"9\">\u4E5D\u6708</option><option value=\"10\">\u5341\u6708</option><option value=\"11\">\u5341\u4E00\u6708</option><option value=\"12\">\u5341\u4E8C\u6708</option>\n                </select>\n                <a href=\"###\" @click=\"getDate('nextYear')\" class=\"nextYear\" title=\"\u4E0B\u4E00\u5E74\">&gt;</a>\n            </div>\n            <div class=\"showCurrentYearMonth\">\n                <span class=\"showYear\">{{year}}</span>/<span class=\"showMonth\">{{month}}</span>\n            </div>\n            <table>\n                <thead>\n                    <tr><td>\u65E5</td><td>\u4E00</td><td>\u4E8C</td><td>\u4E09</td><td>\u56DB</td><td>\u4E94</td><td>\u516D</td></tr>\n                </thead>\n                <tbody @click=\"pickDay\"></tbody>\n            </table>\n            <div v-if=\"showTime\" class=\"showTime\">\n                \u65F6 <select class=\"hour aj-select\"><option v-for=\"n in 24\">{{n}}</option></select>\n                \u5206 <select class=\"minute aj-select\"><option v-for=\"n in 61\">{{n - 1}}</option></select>\n                <a href=\"#\" @click=\"pickupTime\">\u9009\u62E9\u65F6\u95F4</a>\n            </div>\n        </div>    \n    "], ["\n        <div class=\"aj-form-calendar\">\n            <div class=\"selectYearMonth\">\n                <a href=\"###\" @click=\"getDate('preYear')\" class=\"preYear\" title=\"\u4E0A\u4E00\u5E74\">&lt;</a> \n                <select @change=\"setMonth\" v-model=\"month\">\n                    <option value=\"1\">\u4E00\u6708</option><option value=\"2\">\u4E8C\u6708</option><option value=\"3\">\u4E09\u6708</option><option value=\"4\">\u56DB\u6708</option>\n                    <option value=\"5\">\u4E94\u6708</option><option value=\"6\">\u516D\u6708</option><option value=\"7\">\u4E03\u6708</option><option value=\"8\">\u516B\u6708</option>\n                    <option value=\"9\">\u4E5D\u6708</option><option value=\"10\">\u5341\u6708</option><option value=\"11\">\u5341\u4E00\u6708</option><option value=\"12\">\u5341\u4E8C\u6708</option>\n                </select>\n                <a href=\"###\" @click=\"getDate('nextYear')\" class=\"nextYear\" title=\"\u4E0B\u4E00\u5E74\">&gt;</a>\n            </div>\n            <div class=\"showCurrentYearMonth\">\n                <span class=\"showYear\">{{year}}</span>/<span class=\"showMonth\">{{month}}</span>\n            </div>\n            <table>\n                <thead>\n                    <tr><td>\u65E5</td><td>\u4E00</td><td>\u4E8C</td><td>\u4E09</td><td>\u56DB</td><td>\u4E94</td><td>\u516D</td></tr>\n                </thead>\n                <tbody @click=\"pickDay\"></tbody>\n            </table>\n            <div v-if=\"showTime\" class=\"showTime\">\n                \u65F6 <select class=\"hour aj-select\"><option v-for=\"n in 24\">{{n}}</option></select>\n                \u5206 <select class=\"minute aj-select\"><option v-for=\"n in 61\">{{n - 1}}</option></select>\n                <a href=\"#\" @click=\"pickupTime\">\u9009\u62E9\u65F6\u95F4</a>\n            </div>\n        </div>    \n    "])),
     data: function () {
         var date = new Date;
         return {
@@ -185,7 +224,8 @@ Vue.component('aj-form-calendar', {
          * @param $event
          */
         pickupTime: function ($event) {
-            var time = this.$el.$('.hour').selectedOptions[0].value + ':' + this.$el.$('.minute').selectedOptions[0].value;
+            var hour = this.$el.$('.hour'), minute = this.$el.$('.minute');
+            var time = hour.selectedOptions[0].value + ':' + minute.selectedOptions[0].value;
             this.$emit('pick-time', time);
         },
         /**
@@ -196,38 +236,6 @@ Vue.component('aj-form-calendar', {
          */
         isSameDay: function (d1, d2) {
             return (d1.getFullYear() == d2.getFullYear() && d1.getMonth() == d2.getMonth() && d1.getDate() == d2.getDate());
-        }
-    }
-});
-/**
- *
- */
-Vue.component('aj-form-between-date', {
-    template: "\n        <form action=\".\" method=\"GET\" class=\"dateRange\" @submit=\"valid\">\n            <aj-form-calendar-input :date-only=\"true\" :position-fixed=\"true\" placeholder=\"\u8D77\u59CB\u65F6\u95F4\" field-name=\"startDate\" ></aj-form-calendar-input>\n            - <aj-form-calendar-input :date-only=\"true\" :position-fixed=\"true\" placeholder=\"\u622A\u81F3\u65F6\u95F4\" field-name=\"endDate\"></aj-form-calendar-input>\n            <button class=\"aj-btn\">\u6309\u65F6\u95F4\u7B5B\u9009</button>\n        </form>    \n    ",
-    props: {
-        isAjax: { type: Boolean, default: true } // 是否 AJAX 模式
-    },
-    methods: {
-        valid: function (e) {
-            var start = this.$el.$('input[name=startDate]').value, end = this.$el.$('input[name=endDate]').value;
-            if (!start || !end) {
-                aj.alert("输入数据不能为空");
-                e.preventDefault();
-                return;
-            }
-            if (new Date(start) > new Date(end)) {
-                aj.alert("起始日期不能晚于结束日期");
-                e.preventDefault();
-                return;
-            }
-            if (this.isAjax) {
-                e.preventDefault();
-                var grid = this.$parent.$parent;
-                aj.apply(grid.$refs.pager.extraParam, {
-                    startDate: start, endDate: end
-                });
-                grid.reload();
-            }
         }
     }
 });
@@ -280,71 +288,83 @@ Vue.component('aj-china-area', {
 });
 
 "use strict";
-/**
-    新建、编辑都同一表单
- */
-Vue.component('aj-edit-form', {
-    template: "\n        <form class=\"aj-table-form\" :action=\"getInfoApi + (isCreate ? '' : info.id + '/')\" :method=\"isCreate ? 'POST' : 'PUT'\">\n            <h3>{{isCreate ? \"\u65B0\u5EFA\" : \"\u7F16\u8F91\" }}{{uiName}}</h3>\n            <!-- \u4F20\u9001 id \u53C2\u6570 -->\n            <input v-if=\"!isCreate\" type=\"hidden\" name=\"id\" :value=\"info.id\" />\n            <slot v-bind:info=\"info\"></slot>\n            <div class=\"aj-btnsHolder\">\n                <button><img :src=\"ajResources.commonAsset + '/icon/save.gif'\" /> {{isCreate ? \"\u65B0\u5EFA\":\"\u4FDD\u5B58\"}}</button>\n                <button onclick=\"this.up('form').reset();return false;\">\u590D \u4F4D</button>\n                <button v-if=\"!isCreate\" v-on:click.prevent=\"del()\">\n                    <img :src=\"ajResources.commonAsset + '/icon/delete.gif'\" /> \u5220 \u9664\n                </button>\n                <button @click.prevent=\"close\">\u5173\u95ED</button>\n            </div>\n        </form>\n    ",
-    props: {
-        isCreate: Boolean,
-        uiName: String,
-        getInfoApi: { type: String, required: true } // 获取实体详情的接口地址 
-    },
-    data: function () {
-        return {
-            id: 0,
-            info: {},
-        };
-    },
-    mounted: function () {
-        var _this = this;
-        aj.xhr.form(this.$el, function (j) {
-            if (j) {
-                if (j.isOk) {
-                    var msg = (_this.isCreate ? "新建" : "保存") + _this.uiName + "成功";
-                    aj.alert.show(msg);
-                    _this.$parent.close();
-                }
-                else
-                    aj.alert.show(j.msg);
-            }
-        }, {
-            beforeSubmit: function (form, json) {
-                //json.content = App.$refs.htmleditor.getValue({cleanWord : eval('${aj_allConfig.article.cleanWordTag}'), encode : true});
-            }
-        });
-    },
-    methods: {
-        load: function (id, cb) {
-            var _this = this;
-            this.id = id;
-            aj.xhr.get(this.getInfoApi + id + "/", function (j) {
-                _this.info = j.result;
-                cb && cb(j);
-            });
-        },
-        close: function () {
-            if (this.$parent.$options._componentTag === 'aj-layer') {
-                this.$parent.close();
-            }
-            else
-                history.back();
-        },
-        del: function () {
-            var id = this.$el.$('input[name=id]').value, title = this.$el.$('input[name=name]').value;
-            aj.showConfirm('请确定删除记录：\n' + title + ' ？', function () {
-                return aj.xhr.dele('../' + id + '/', function (j) {
-                    if (j.isOk) {
-                        aj.msg.show('删除成功！');
-                        //setTimeout(() => location.reload(), 1500);
+var aj;
+(function (aj) {
+    var form;
+    (function (form_1) {
+        var EditForm;
+        (function (EditForm) {
+            Vue.component('aj-edit-form', {
+                template: "\n            <form class=\"aj-table-form\" :action=\"getInfoApi + (isCreate ? '' : info.id + '/')\" :method=\"isCreate ? 'POST' : 'PUT'\">\n                <h3>{{isCreate ? \"\u65B0\u5EFA\" : \"\u7F16\u8F91\" }}{{uiName}}</h3>\n                <!-- \u4F20\u9001 id \u53C2\u6570 -->\n                <input v-if=\"!isCreate\" type=\"hidden\" name=\"id\" :value=\"info.id\" />\n                <slot v-bind:info=\"info\"></slot>\n                <div class=\"aj-btnsHolder\">\n                    <button><img :src=\"ajResources.commonAsset + '/icon/save.gif'\" /> {{isCreate ? \"\u65B0\u5EFA\":\"\u4FDD\u5B58\"}}</button>\n                    <button onclick=\"this.up('form').reset();return false;\">\u590D \u4F4D</button>\n                    <button v-if=\"!isCreate\" v-on:click.prevent=\"del()\">\n                        <img :src=\"ajResources.commonAsset + '/icon/delete.gif'\" /> \u5220 \u9664\n                    </button>\n                    <button @click.prevent=\"close\">\u5173\u95ED</button>\n                </div>\n            </form>\n        ",
+                props: {
+                    isCreate: Boolean,
+                    uiName: String,
+                    apiUrl: { type: String, required: true } // 获取实体详情的接口地址 
+                },
+                data: function () {
+                    return {
+                        id: 0,
+                        info: {},
+                    };
+                },
+                mounted: function () {
+                    var _this = this;
+                    aj.xhr.form(this.$el, function (j) {
+                        if (j) {
+                            if (j.isOk) {
+                                var msg_1 = (_this.isCreate ? "新建" : "保存") + _this.uiName + "成功";
+                                aj.msg.show(msg_1);
+                                _this.$parent.close();
+                            }
+                            else
+                                aj.msg.show(j.msg);
+                        }
+                    }, {
+                        beforeSubmit: function (form, json) {
+                            //json.content = App.$refs.htmleditor.getValue({cleanWord : eval('${aj_allConfig.article.cleanWordTag}'), encode : true});
+                            return true;
+                        }
+                    });
+                },
+                methods: {
+                    load: function (id, cb) {
+                        var _this = this;
+                        this.id = id;
+                        aj.xhr.get(this.apiUrl + id + "/", function (j) {
+                            _this.info = j.result;
+                            cb && cb(j);
+                        });
+                    },
+                    close: function () {
+                        if (this.$parent.$options._componentTag === 'aj-layer')
+                            //@ts-ignore
+                            this.$parent.close();
+                        else
+                            history.back();
+                    },
+                    /**
+                     * 执行删除
+                     *
+                     * @param this
+                     */
+                    del: function () {
+                        var id = aj.form.utils.getFormFieldValue(this.$el, 'input[name=id]'), title = aj.form.utils.getFormFieldValue(this.$el, 'input[name=name]');
+                        aj.showConfirm("\u8BF7\u786E\u5B9A\u5220\u9664\u8BB0\u5F55\uFF1A\n" + title + "\uFF1F", function () {
+                            return aj.xhr.dele("../" + id + "/", function (j) {
+                                if (j.isOk) {
+                                    aj.msg.show('删除成功！');
+                                    //setTimeout(() => location.reload(), 1500);
+                                }
+                                else
+                                    aj.alert('删除失败！');
+                            });
+                        });
                     }
-                    else
-                        aj.alert('删除失败！');
-                });
+                }
             });
-        }
-    }
-});
+        })(EditForm = form_1.EditForm || (form_1.EditForm = {}));
+    })(form = aj.form || (aj.form = {}));
+})(aj || (aj = {}));
 
 "use strict";
 ;
@@ -397,8 +417,8 @@ Vue.component('aj-edit-form', {
                         else {
                             // @ts-ignore
                             App.$refs.uploadLayer.show(function (json) {
-                                if (json.result)
-                                    json = json.result;
+                                // if (json.result)
+                                //     json = json.result;
                                 if (json && json.isOk)
                                     _this.format("insertImage", json.fullUrl);
                             });
@@ -572,7 +592,7 @@ Vue.component('aj-edit-form', {
         }
         if (str.length)
             aj.xhr.post('../downAllPics/', function (json) {
-                var _arr = json.result.pics;
+                var _arr = json.pics;
                 for (var i = 0, j = _arr.length; i < j; i++)
                     remotePicArr[i].src = "images/" + _arr[i];
                 aj.alert('所有图片下载完成。');
@@ -633,9 +653,8 @@ Vue.component('aj-edit-form', {
                     action: _this.uploadImageActionUrl,
                     progress: 0,
                     uploadOk_callback: function (j) {
-                        if (j.result)
-                            j = j.result;
-                        this.format("insertImage", this.ajResources.imgPerfix + j.imgUrl);
+                        if (j.isOk)
+                            this.format("insertImage", this.ajResources.imgPerfix + j.imgUrl);
                     },
                     $blob: newBlob,
                     $fileName: 'foo.jpg'
@@ -714,7 +733,6 @@ Vue.component('aj-form-popup-upload', {
 // };
 
 "use strict";
-// Tree-like option control
 aj.treeLike = {
     methods: {
         // 遍历各个元素，输出
@@ -734,22 +752,6 @@ aj.treeLike = {
                 stack.pop();
             };
         })(),
-        // 递归查找父亲节点，根据传入 id
-        findParent: function (map, id) {
-            for (var i in map) {
-                if (i == id)
-                    return map[i];
-                var c = map[i].children;
-                if (c) {
-                    for (var q = 0, p = c.length; q < p; q++) {
-                        var result = this.findParent(c[q], id);
-                        if (result != null)
-                            return result;
-                    }
-                }
-            }
-            return null;
-        },
         // 生成树，将扁平化的结构 还原为树状的结构
         // 父id 必须在子id之前，不然下面 findParent() 找不到后面的父节点，故这个数组必须先排序
         toTree: function (jsonArr) {
@@ -843,18 +845,10 @@ Vue.component('aj-tree-like-select', {
     mixins: [aj.treeLike],
     template: '<select :name="name" class="aj-select" @change="onSelected"></select>',
     props: {
-        catalogId: {
-            type: Number, required: true
-        },
-        selectedId: {
-            type: Number, required: false
-        },
-        name: {
-            type: String, required: false, default: 'catalogId'
-        },
-        api: {
-            type: String, default: '/admin/tree-like/'
-        }
+        catalogId: { type: Number, required: true },
+        selectedId: { type: Number, required: false },
+        name: { type: String, required: false, default: 'catalogId' },
+        api: { type: String, default: '/admin/tree-like/' }
     },
     mounted: function () {
         var _this = this;
@@ -863,8 +857,8 @@ Vue.component('aj-tree-like-select', {
         aj.xhr.get(url, fn);
     },
     methods: {
-        onSelected: function ($event) {
-            var el = $event.target, catalogId = el.selectedOptions[0].value;
+        onSelected: function (ev) {
+            var el = ev.target, catalogId = el.selectedOptions[0].value;
             this.$emit('selected', Number(catalogId));
         },
         select: aj.selectOption
@@ -883,6 +877,50 @@ Vue.component('aj-form-select', {
         selectedIndex: { type: Number } // starts form 0
     }
 });
+
+"use strict";
+/**
+ * 表单工具函数
+ */
+var aj;
+(function (aj) {
+    var form;
+    (function (form) {
+        var utils;
+        (function (utils) {
+            /**
+             * 获取表单控件的值
+             *
+             * @param el
+             * @param cssSelector
+             */
+            function getFormFieldValue(_el, cssSelector) {
+                var el = _el.$(cssSelector);
+                if (el)
+                    return el.value;
+                else
+                    throw "\u627E\u4E0D\u5230" + cssSelector + "\u5143\u7D20";
+            }
+            utils.getFormFieldValue = getFormFieldValue;
+            /**
+             * 指定 id 的那个 option 选中
+             *
+             * @param this
+             * @param id
+             */
+            function selectOption(id) {
+                this.$el.$('option', function (i) {
+                    console.log(i.value);
+                    if (i.value == id)
+                        i.selected = true;
+                });
+            }
+            utils.selectOption = selectOption;
+        })(utils = form.utils || (form.utils = {}));
+    })(form = aj.form || (aj.form = {}));
+})(aj || (aj = {}));
+
+"use strict";
 
 "use strict";
 /**
@@ -1035,7 +1073,7 @@ var aj;
 ;
 (function () {
     Vue.component('aj-xhr-upload', {
-        template: "\n            <div class=\"aj-xhr-upload\" :style=\"{display: buttonBottom ? 'inherit': 'flex'}\">\n                <input v-if=\"hiddenField\" type=\"hidden\" :name=\"hiddenField\" :value=\"hiddenFieldValue\" />\n                <div v-if=\"isImgUpload\">\n                    <a :href=\"imgPlace\" target=\"_blank\">\n                        <img class=\"upload_img_perview\" :src=\"(isFileSize && isExtName && imgBase64Str) ? imgBase64Str : imgPlace\" />\n                    </a>\n                </div>\n                <div class=\"pseudoFilePicker\">\n                    <label :for=\"'uploadInput_' + radomId\"><div><div>+</div>\u70B9\u51FB\u9009\u62E9{{isImgUpload ? '\u56FE\u7247': '\u6587\u4EF6'}}</div></label>\n                </div>\n                <input type=\"file\" :name=\"fieldName\" class=\"hide\" :id=\"'uploadInput_' + radomId\" \n                    @change=\"onUploadInputChange\" :accept=\"isImgUpload ? 'image/*' : accpectFileType\" />\n                <div v-if=\"!isFileSize || !isExtName\">{{errMsg}}</div>\n                <div v-if=\"isFileSize && isExtName\">\n                    {{fileName}}<br />\n                    <button @click.prevent=\"doUpload();\" style=\"min-width:110px;\">{{progress && progress !== 100 ? '\u4E0A\u4F20\u4E2D ' + progress + '%': '\u4E0A\u4F20'}}</button>\n                </div>\n            </div>    \n        ",
+        template: "\n            <div class=\"aj-xhr-upload\" :style=\"{display: buttonBottom ? 'inherit': 'flex'}\">\n                <input v-if=\"hiddenField\" type=\"hidden\" :name=\"hiddenField\" :value=\"hiddenFieldValue\" />\n                <div v-if=\"isImgUpload\">\n                    <a :href=\"imgPlace\" target=\"_blank\">\n                        <img class=\"upload_img_perview\" :src=\"(isFileSize && isExtName && imgBase64Str) ? imgBase64Str : imgPlace\" />\n                    </a>\n                </div>\n                <div class=\"pseudoFilePicker\">\n                    <label :for=\"'uploadInput_' + radomId\"><div><div>+</div>\u70B9\u51FB\u9009\u62E9{{isImgUpload ? '\u56FE\u7247': '\u6587\u4EF6'}}</div></label>\n                </div>\n                <input type=\"file\" :name=\"fieldName\" class=\"hide\" :id=\"'uploadInput_' + radomId\" \n                    @change=\"onUploadInputChange\" :accept=\"isImgUpload ? 'image/*' : accpectFileType\" />\n                <div v-if=\"!isFileSize || !isExtName\">{{errMsg}}</div>\n                <div v-if=\"isFileSize && isExtName\">\n                    {{fileName}}<br />\n                    <button @click.prevent=\"doUpload\" style=\"min-width:110px;\">{{progress && progress !== 100 ? '\u4E0A\u4F20\u4E2D ' + progress + '%': '\u4E0A\u4F20'}}</button>\n                </div>\n            </div>    \n        ",
         props: {
             action: { type: String, required: true },
             fieldName: String,
@@ -1061,11 +1099,11 @@ var aj;
                 radomId: Math.round(Math.random() * 1000),
                 uplodedFileUrl: null,
                 uploadOk_callback: function (json) {
-                    if (json.result)
-                        json = json.result;
-                    _this.uplodedFileUrl = json.imgUrl;
-                    if (_this.hiddenField)
-                        _this.$el.$('input[name=' + _this.hiddenField + ']').value = json.imgUrl;
+                    if (json.isOk) {
+                        _this.uplodedFileUrl = json.imgUrl;
+                        if (_this.hiddenField)
+                            _this.$el.$('input[name=' + _this.hiddenField + ']').value = json.imgUrl;
+                    }
                     aj.xhr.defaultCallBack(json);
                 },
                 imgBase64Str: null,
@@ -1101,7 +1139,7 @@ var aj;
                 }
                 else
                     this.isExtName = true;
-                this.readBase64(fileInput.files[0]);
+                readBase64.call(this, fileInput.files[0]);
                 if (this.isImgUpload) {
                     var imgEl = new Image();
                     imgEl.onload = function () {
@@ -1117,42 +1155,6 @@ var aj;
                 getFileName.call(this);
             },
             /**
-             *
-             * @param this
-             * @param file
-             */
-            readBase64: function (file) {
-                var _this = this;
-                var reader = new FileReader();
-                reader.onload = function (_e) {
-                    var e = _e;
-                    _this.imgBase64Str = e.target.result;
-                    if (_this.isImgUpload) {
-                        var imgEl = new Image();
-                        imgEl.onload = function () {
-                            if (file.size > 300 * 1024) // 大于 300k 才压缩
-                                aj.img.compress(imgEl);
-                            if (imgEl.width > _this.maxWidth || imgEl.height > _this.maxHeight) {
-                                _this.isImgSize = false;
-                                _this.errMsg = '图片大小尺寸不符合要求哦，请重新图片吧~';
-                            }
-                            else
-                                _this.isImgSize = true;
-                        };
-                        imgEl.src = _this.imgBase64Str;
-                        // 文件头判别，看看是否为图片
-                        for (var i in imgHeader) {
-                            if (~_this.imgBase64Str.indexOf(imgHeader[i])) {
-                                _this.isExtName = true;
-                                return;
-                            }
-                        }
-                        _this.errMsg = "亲，改了扩展名我还能认得你不是图片哦";
-                    }
-                };
-                reader.readAsDataURL(file);
-            },
-            /**
              * 执行上传
              *
              * @param this
@@ -1165,7 +1167,8 @@ var aj;
                 else
                     fd.append("file", this.$fileObj);
                 var xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = aj.xhr.callback.delegate(null, this.uploadOk_callback, 'json');
+                //@ts-ignore
+                xhr.onreadystatechange = aj.xhr.requestHandler.delegate(null, this.uploadOk_callback, 'json');
                 xhr.open("POST", this.action, true);
                 xhr.onprogress = function (e) {
                     var progress = 0, p = ~~(e.loaded * 1000 / e.total);
@@ -1190,5 +1193,41 @@ var aj;
         var v = this.$el.$('input[type=file]').value;
         var arr = v.split('\\');
         this.fileName = (_a = arr.pop()) === null || _a === void 0 ? void 0 : _a.trim();
+    }
+    /**
+     *
+     * @param this
+     * @param file
+     */
+    function readBase64(file) {
+        var _this = this;
+        var reader = new FileReader();
+        reader.onload = function (_e) {
+            var e = _e;
+            _this.imgBase64Str = e.target.result;
+            if (_this.isImgUpload) {
+                var imgEl = new Image();
+                imgEl.onload = function () {
+                    if (file.size > 300 * 1024) // 大于 300k 才压缩
+                        aj.img.compress(imgEl, _this);
+                    if (imgEl.width > _this.imgMaxWidth || imgEl.height > _this.imgMaxHeight) {
+                        _this.isImgSize = false;
+                        _this.errMsg = '图片大小尺寸不符合要求哦，请裁剪图片重新上传吧~';
+                    }
+                    else
+                        _this.isImgSize = true;
+                };
+                imgEl.src = _this.imgBase64Str;
+                // 文件头判别，看看是否为图片
+                for (var i in imgHeader) {
+                    if (~_this.imgBase64Str.indexOf(imgHeader[i])) {
+                        _this.isExtName = true;
+                        return;
+                    }
+                }
+                _this.errMsg = "亲，改了扩展名我还能认得你不是图片哦";
+            }
+        };
+        reader.readAsDataURL(file);
     }
 })();
