@@ -33,7 +33,7 @@ var aj;
              */
             function Dot(type, _pos, _lt, _rt, path) {
                 var _this = _super.call(this) || this;
-                var svg = svg_1.PAPER.rect(_pos.x - diff, _pos.y - diff); // 形状实例
+                var svg = PAPER.rect(_pos.x - diff, _pos.y - diff); // 形状实例
                 svg.addClass('dot');
                 _this.svg = svg;
                 _this.type = type;

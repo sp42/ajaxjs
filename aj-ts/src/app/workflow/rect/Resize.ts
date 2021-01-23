@@ -8,7 +8,10 @@ namespace aj.svg {
          */
         private isBorder: boolean = true;
 
-        private rectComp: any;
+        /**
+         * 所服务的那个组件
+         */
+        private rectComp: SvgComp;
 
         /**
          * 虚拟的一个控制框
@@ -27,63 +30,84 @@ namespace aj.svg {
 
         private border: any;
 
-        constructor(rectComp) {
+        private dotX: number = 0;
+
+        private dotY: number = 0;
+
+        /**
+         * 创建一个 Resize 控制器
+         * 
+         * @param rectComp 所服务的那个组件
+         */
+        constructor(rectComp: SvgComp) {
             this.rectComp = rectComp;
             this.vBox = rectComp.vBox; // 虚拟的一个控制框
             rectComp.resizeController = this;
         }
 
-        // 该方法只执行一次
+        /**
+         * 该方法只执行一次
+         */
         renderer(): void {
-            var allDots: { [key: string]: any } = {}; // 保存所有控制点的 map
+            let allDots: { [key: string]: any } = {}; // 保存所有控制点的 map
             this.allDots = allDots;
 
-            var self = this;
+            let self = this;
             this.dotX = this.dotY = 0;
 
-            var bdragStart = function () {// 一定要用 fn，why？
-                self.dotX = this.attr('x'), self.dotY = this.attr('y');
+            let bdragStart = function (this: Raphael) {// 一定要用 fn，why？
+                self.dotX = Number(this.attr('x')), self.dotY = Number(this.attr('y'));
             }
 
-            var PAPER = this.rectComp.PAPER;
-            allDots['t'] = PAPER.rect().addClass('resizeDot').attr({ cursor: 's-resize' }).drag((dx, dy) => this.dotMove(dx, dy, 't'), bdragStart); // 上
-            allDots['lt'] = PAPER.rect().addClass('resizeDot').attr({ cursor: 'nw-resize' }).drag((dx, dy) => this.dotMove(dx, dy, 'lt'), bdragStart); // 左上
-            allDots['l'] = PAPER.rect().addClass('resizeDot').attr({ cursor: 'w-resize' }).drag((dx, dy) => this.dotMove(dx, dy, 'l'), bdragStart); // 左
-            allDots['lb'] = PAPER.rect().addClass('resizeDot').attr({ cursor: 'sw-resize' }).drag((dx, dy) => this.dotMove(dx, dy, 'lb'), bdragStart); // 左下
-            allDots['b'] = PAPER.rect().addClass('resizeDot').attr({ cursor: 's-resize' }).drag((dx, dy) => this.dotMove(dx, dy, 'b'), bdragStart); // 下
-            allDots['rb'] = PAPER.rect().addClass('resizeDot').attr({ cursor: 'se-resize' }).drag((dx, dy) => this.dotMove(dx, dy, 'rb'), bdragStart); // 右下
-            allDots['r'] = PAPER.rect().addClass('resizeDot').attr({ cursor: 'w-resize' }).drag((dx, dy) => this.dotMove(dx, dy, 'r'), bdragStart); // 右
-            allDots['rt'] = PAPER.rect().addClass('resizeDot').attr({ cursor: 'ne-resize' }).drag((dx, dy) => this.dotMove(dx, dy, 'rt'), bdragStart); // 右上
+            let PAPER = this.rectComp.PAPER;
+            allDots['t'] = PAPER.rect().addClass('resizeDot').attr({ cursor: 's-resize' }).drag((dx: number, dy: number) => this.dotMove(dx, dy, 't'), bdragStart);     // 上
+            allDots['lt'] = PAPER.rect().addClass('resizeDot').attr({ cursor: 'nw-resize' }).drag((dx: number, dy: number) => this.dotMove(dx, dy, 'lt'), bdragStart);  // 左上
+            allDots['l'] = PAPER.rect().addClass('resizeDot').attr({ cursor: 'w-resize' }).drag((dx: number, dy: number) => this.dotMove(dx, dy, 'l'), bdragStart);     // 左
+            allDots['lb'] = PAPER.rect().addClass('resizeDot').attr({ cursor: 'sw-resize' }).drag((dx: number, dy: number) => this.dotMove(dx, dy, 'lb'), bdragStart);  // 左下
+            allDots['b'] = PAPER.rect().addClass('resizeDot').attr({ cursor: 's-resize' }).drag((dx: number, dy: number) => this.dotMove(dx, dy, 'b'), bdragStart);     // 下
+            allDots['rb'] = PAPER.rect().addClass('resizeDot').attr({ cursor: 'se-resize' }).drag((dx: number, dy: number) => this.dotMove(dx, dy, 'rb'), bdragStart);  // 右下
+            allDots['r'] = PAPER.rect().addClass('resizeDot').attr({ cursor: 'w-resize' }).drag((dx: number, dy: number) => this.dotMove(dx, dy, 'r'), bdragStart);     // 右
+            allDots['rt'] = PAPER.rect().addClass('resizeDot').attr({ cursor: 'ne-resize' }).drag((dx: number, dy: number) => this.dotMove(dx, dy, 'rt'), bdragStart);  // 右上
 
             this.hideBox();
             this.setDotsPosition();
             this.resize();
         }
 
+        /**
+         * 
+         * @param isBorder 
+         */
         enableBorder(isBorder: boolean): void {
             this.isBorder = isBorder;
         }
 
+        /**
+         * 
+         */
         setDotsPosition(): void {
-            let _bw: number = 2.5;
-            let allDots = this.allDots, vBox = this.vBox;
-            var x: number = vBox.x - ResizeControl.margin, y: number = vBox.y - ResizeControl.margin,
-                width: number = vBox.width + ResizeControl.margin * 2, height: number = vBox.height + ResizeControl.margin * 2;
+            let vBox: VBox = this.vBox,
+                x: number = vBox.x - ResizeControl.margin,
+                y: number = vBox.y - ResizeControl.margin,
+                width: number = vBox.width + ResizeControl.margin * 2,
+                height: number = vBox.height + ResizeControl.margin * 2,
+                _bw: number = 2.5,
+                allDots: { [key: string]: any } = this.allDots;
 
-            allDots['t'].attr({ x: x + width / 2 - _bw, y: y - _bw }); 				// 上
-            allDots['lt'].attr({ x: x - _bw, y: y - _bw }); 				// 左上
-            allDots['l'].attr({ x: x - _bw, y: y - _bw + height / 2 }); 	// 左
-            allDots['lb'].attr({ x: x - _bw, y: y - _bw + height }); 	// 左下
-            allDots['b'].attr({ x: x - _bw + width / 2, y: y - _bw + height }); 	// 下
+            allDots['t'].attr({ x: x + width / 2 - _bw, y: y - _bw }); 			// 上
+            allDots['lt'].attr({ x: x - _bw, y: y - _bw }); 				    // 左上
+            allDots['l'].attr({ x: x - _bw, y: y - _bw + height / 2 }); 	    // 左
+            allDots['lb'].attr({ x: x - _bw, y: y - _bw + height }); 	        // 左下
+            allDots['b'].attr({ x: x - _bw + width / 2, y: y - _bw + height }); // 下
             allDots['rb'].attr({ x: x - _bw + width, y: y - _bw + height }); 	// 右下
-            allDots['r'].attr({ x: x - _bw + width, y: y - _bw + height / 2 }); 	// 右
-            allDots['rt'].attr({ x: x - _bw + width, y: y - _bw }); 				// 右上
+            allDots['r'].attr({ x: x - _bw + width, y: y - _bw + height / 2 }); // 右
+            allDots['rt'].attr({ x: x - _bw + width, y: y - _bw }); 			// 右上
         }
 
         /**
          * 定位各个点的坐标
          */
-        resize(): void {
+        private resize(): void {
             // this.setDotsPosition();
             this.rectComp.svg.attr(this.vBox);
             this.updateBorder();
@@ -95,7 +119,7 @@ namespace aj.svg {
         showBox(): void {
             this.border && this.border.show();  // 显示边框
 
-            for (var i in this.allDots) // 逐个点显示
+            for (let i in this.allDots) // 逐个点显示
                 this.allDots[i].show();
         }
 
@@ -105,7 +129,7 @@ namespace aj.svg {
         hideBox(): void {
             this.border && this.border.hide();
 
-            for (var i in this.allDots)
+            for (let i in this.allDots)
                 this.allDots[i].hide();
         }
 
@@ -115,9 +139,10 @@ namespace aj.svg {
          * @param dy 移动距离（移动高度）
          * @param type 类型
          */
-        dotMove(dx: number, dy: number, type: string): void {
-            var x = this.dotX + dx, y = this.dotY + dy;
-            var vBox = this.vBox;
+        private dotMove(dx: number, dy: number, type: string): void {
+            let x: number = this.dotX + dx,
+                y: number = this.dotY + dy,
+                vBox: VBox = this.vBox;
 
             // console.log('-----------------') console.log(this.dotY) console.log(dy)
             switch (type) {
@@ -165,12 +190,12 @@ namespace aj.svg {
             if (!this.border)
                 this.border = this.rectComp.PAPER.path('M0 0L1 1').hide(); // 边框
 
-            var vBox = this.vBox;
-            var x: number = vBox.x - ResizeControl.margin, y: number = vBox.y - ResizeControl.margin,
-                width: number = vBox.width + ResizeControl.margin * 2, height: number = vBox.height + ResizeControl.margin * 2;
-
-            var str = 'M' + x + ' ' + y + 'L' + x + ' ' + (y + height) + 'L' + (x + width) +
-                ' ' + (y + height) + 'L' + (x + width) + ' ' + y + 'L' + x + ' ' + y;
+            let vBox: VBox = this.vBox,
+                x: number = vBox.x - ResizeControl.margin,
+                y: number = vBox.y - ResizeControl.margin,
+                width: number = vBox.width + ResizeControl.margin * 2,
+                height: number = vBox.height + ResizeControl.margin * 2,
+                str = 'M' + x + ' ' + y + 'L' + x + ' ' + (y + height) + 'L' + (x + width) + ' ' + (y + height) + 'L' + (x + width) + ' ' + y + 'L' + x + ' ' + y;
 
             this.border.attr({ path: str });
         }

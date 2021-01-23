@@ -1,5 +1,5 @@
 setTimeout(() => {
-	window.PAPER = aj.svg.Mgr.initSVG(document.body.$(".canvas"));
+	aj.svg.PAPER = window.PAPER = aj.svg.Mgr.initSVG(document.body.$(".canvas"));
 	//MyBOX = PAPER.rect().attr( {x: 50, y: 20, width: 500, height: 200, fill: "90-#fff-#F6F7FF"} );
 	// vueObj1 = aj.svg.createBaseComponent(PAPER, {x: 50, y: 20, width: 500, height: 200, fill: "90-#fff-#F6F7FF"});
 	//vueObj1.isDrag = false;
@@ -20,31 +20,33 @@ setTimeout(() => {
 	
 		PATH2 = new aj.svg.Path(vueObj3.svg, vueObj1.svg);*/
 
-	aj.svg.startup.init(TEST_DATA);
+	// @ts-ignore
+	aj.wf.ui.init(TEST_DATA);
 }, 800);
 
 namespace aj.wf.ui {
-	export function init(data) {
-		// 生成 box
-		var imgBox = (img, size) => aj.apply({ src: "../../asset/images/workflow/" + img }, size);
-		var states = aj.wf.data.states, paths = aj.workflow.data.paths;
+	let imgBox = (img: string, size: VBox) => aj.apply({ src: "../../asset/images/workflow/" + img }, size);
 
-		for (var i in data.states) {
-			var state = data.states[i];
-			var box;
+	export function init(data: JsonParam) {
+		// 生成 box
+		let states = aj.wf.data.states, paths = aj.workflow.data.paths;
+
+		for (let i in data.states) {
+			let state = data.states[i];
+			let box: SvgVue;
 
 			switch (state.type) { // 
 				case 'start':
-					box = aj.svg.createRect(PAPER, imgBox('start.png', state.attr), 'img');
+					box = createRect(imgBox('start.png', state.attr), 'img');
 					break;
 				case 'decision':
-					box = aj.svg.createRect(PAPER, imgBox('decision.png', state.attr), 'img');
+					box = createRect(imgBox('decision.png', state.attr), 'img');
 					break;
 				case 'end':
-					box = aj.svg.createRect(PAPER, imgBox('end.png', state.attr), 'img');
+					box = createRect(imgBox('end.png', state.attr), 'img');
 					break;
 				default:
-					box = aj.svg.createRect(PAPER, state.attr);
+					box = createRect(state.attr);
 					box.text = state.props.displayName;
 			}
 
@@ -58,10 +60,10 @@ namespace aj.wf.ui {
 		}
 
 		// 连线
-		for (var i in data.paths) {
-			var pathCfg = data.paths[i];
-			var from = states[pathCfg.from], to = states[pathCfg.to];
-			var path = new aj.svg.Path(from.svg, to.svg, pathCfg.text.text);
+		for (let i in data.paths) {
+			let pathCfg = data.paths[i];
+			let from = states[pathCfg.from], to = states[pathCfg.to];
+			let path = new aj.svg.Path(from.svg, to.svg, pathCfg.text.text);
 			path.id = i;
 			path.rawData = pathCfg;
 			path.wfData = pathCfg.props;
@@ -71,15 +73,49 @@ namespace aj.wf.ui {
 				path.restore(pathCfg.dots);
 		}
 	}
+
+	/**
+	 * 创建图形基类的工厂函数
+	 * 
+	 * @param box 
+	 * @param type 
+	 */
+	function createRect(box: VBox, type: string): SvgVue {
+		let raphaelObj;
+
+		switch (type) {
+			case 'img':
+				raphaelObj = aj.svg.PAPER.image().attr(box).addClass('baseImg');
+				break;
+			default:
+				raphaelObj = aj.svg.PAPER.rect().attr(box).attr({ fill: "90-#fff-#F6F7FF" }).addClass('rectBaseStyle');
+		}
+
+		let vueObj: SvgVue = <SvgVue>new Vue({ mixins: [aj.svg.BaseRect], data: { vBox: box } });
+
+		vueObj.PAPER = aj.svg.PAPER;
+		vueObj.svg = raphaelObj;
+
+		// 登记注册
+		aj.svg.Mgr.register(vueObj);
+
+		if (type == 'img')
+			vueObj.resize = false; // 图片禁止放大缩小
+
+		if (aj.workflow.isREAD_ONLY)
+			vueObj.resize = vueObj.isDrag = false;
+
+		return vueObj;
+	}
 }
 
 
 // 菜单选中的
 document.body.$('.components ul li.selectable', li => {
 	li.onclick = e => {
-		var el = e.target;
+		let el = e.target;
 
-		var selected = el.parentNode.$('.selected');
+		let selected = el.parentNode.$('.selected');
 		if (selected)
 			selected.classList.remove('selected');
 
@@ -109,7 +145,7 @@ Vue.component('aj-wf-start-form', {
 Vue.component('aj-wf-end-form', {
 	template: document.body.$('.startEndForm'),
 	mixins: [aj.workflow.propertyForm]
-}); n
+});
 
 Vue.component('aj-wf-task-form', {
 	template: document.body.$('.taskForm'),

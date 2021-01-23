@@ -1,6 +1,6 @@
 "use strict";
 setTimeout(function () {
-    aj.svg.PAPER = window.PAPER = aj.svg.Mgr.initSVG(document.body.$(".canvas"));
+    window.PAPER = aj.svg.Mgr.initSVG(document.body.$(".canvas"));
     //MyBOX = PAPER.rect().attr( {x: 50, y: 20, width: 500, height: 200, fill: "90-#fff-#F6F7FF"} );
     // vueObj1 = aj.svg.createBaseComponent(PAPER, {x: 50, y: 20, width: 500, height: 200, fill: "90-#fff-#F6F7FF"});
     //vueObj1.isDrag = false;
@@ -20,8 +20,7 @@ setTimeout(function () {
         vueObj3.init();
     
         PATH2 = new aj.svg.Path(vueObj3.svg, vueObj1.svg);*/
-    // @ts-ignore
-    aj.wf.ui.init(TEST_DATA);
+    aj.svg.startup.init(TEST_DATA);
 }, 800);
 var aj;
 (function (aj) {
@@ -29,25 +28,25 @@ var aj;
     (function (wf) {
         var ui;
         (function (ui) {
-            var imgBox = function (img, size) { return aj.apply({ src: "../../asset/images/workflow/" + img }, size); };
             function init(data) {
                 // 生成 box
+                var imgBox = function (img, size) { return aj.apply({ src: "../../asset/images/workflow/" + img }, size); };
                 var states = aj.wf.data.states, paths = aj.workflow.data.paths;
                 for (var i in data.states) {
                     var state = data.states[i];
-                    var box = void 0;
+                    var box;
                     switch (state.type) { // 
                         case 'start':
-                            box = createRect(imgBox('start.png', state.attr), 'img');
+                            box = aj.svg.createRect(PAPER, imgBox('start.png', state.attr), 'img');
                             break;
                         case 'decision':
-                            box = createRect(imgBox('decision.png', state.attr), 'img');
+                            box = aj.svg.createRect(PAPER, imgBox('decision.png', state.attr), 'img');
                             break;
                         case 'end':
-                            box = createRect(imgBox('end.png', state.attr), 'img');
+                            box = aj.svg.createRect(PAPER, imgBox('end.png', state.attr), 'img');
                             break;
                         default:
-                            box = createRect(state.attr);
+                            box = aj.svg.createRect(PAPER, state.attr);
                             box.text = state.props.displayName;
                     }
                     box.type = state.type;
@@ -71,32 +70,6 @@ var aj;
                 }
             }
             ui.init = init;
-            /**
-             * 创建图形基类的工厂函数
-             *
-             * @param box
-             * @param type
-             */
-            function createRect(box, type) {
-                var raphaelObj;
-                switch (type) {
-                    case 'img':
-                        raphaelObj = aj.svg.PAPER.image().attr(box).addClass('baseImg');
-                        break;
-                    default:
-                        raphaelObj = aj.svg.PAPER.rect().attr(box).attr({ fill: "90-#fff-#F6F7FF" }).addClass('rectBaseStyle');
-                }
-                var vueObj = new Vue({ mixins: [aj.svg.BaseRect], data: { vBox: box } });
-                vueObj.PAPER = aj.svg.PAPER;
-                vueObj.svg = raphaelObj;
-                // 登记注册
-                aj.svg.Mgr.register(vueObj);
-                if (type == 'img')
-                    vueObj.resize = false; // 图片禁止放大缩小
-                if (aj.workflow.isREAD_ONLY)
-                    vueObj.resize = vueObj.isDrag = false;
-                return vueObj;
-            }
         })(ui = wf.ui || (wf.ui = {}));
     })(wf = aj.wf || (aj.wf = {}));
 })(aj || (aj = {}));
@@ -129,6 +102,7 @@ Vue.component('aj-wf-end-form', {
     template: document.body.$('.startEndForm'),
     mixins: [aj.workflow.propertyForm]
 });
+n;
 Vue.component('aj-wf-task-form', {
     template: document.body.$('.taskForm'),
     mixins: [aj.workflow.propertyForm]

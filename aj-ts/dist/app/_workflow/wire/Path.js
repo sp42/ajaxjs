@@ -28,8 +28,8 @@ var aj;
                 _this._from = from;
                 _this._to = to;
                 _this.type = 'transition'; // 默认 path 就是 Transition 类型
-                _this.svg = svg.PAPER.path().addClass('path');
-                _this.arrow = svg.PAPER.path().addClass('arrow');
+                _this.svg = PAPER.path().addClass('path');
+                _this.arrow = PAPER.path().addClass('arrow');
                 // aj.svg.DotList.call(this, from, to);
                 // aj.apply(this, aj.svg.DotList.prototype);
                 aj.svg.Mgr.register(_this);

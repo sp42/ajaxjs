@@ -30,7 +30,7 @@ aj.svg.Mgr = (function() {
 			currentMode: aj.workflow.POINT_MODE,	// 当前选中的选择模式
 		},
 		watch: {
-			selectedComponent(newCop, old) {
+			selectedComponent(newCop:SvgComp, old:SvgComp) {
 				newCop && newCop.resizeController && newCop.resizeController.showBox();
 				old && old.resizeController && old.resizeController.hideBox();
 

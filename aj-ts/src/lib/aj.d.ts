@@ -26,9 +26,6 @@ declare namespace aj {
 }
 
 // declare var aj: (cssSelector: cssSelector, fn?: Function) => Element | null;
-
-declare var Raphael: any;
-
 declare var EXIF: any;
 
 /**

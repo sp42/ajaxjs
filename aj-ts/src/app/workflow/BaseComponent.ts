@@ -1,19 +1,5 @@
 namespace aj.svg {
     /**
-     * 定义一个点的 x、y 坐标
-     */
-    export interface Point {
-        x: number, y: number
-    }
-
-    /**
-     * 箱子规格，有高宽和 xy 坐标四个元素
-     */
-    export interface VBox extends Point {
-        width: number, height: number
-    }
-
-    /**
      * 基础图形组件
      */
     export abstract class BaseComponent {

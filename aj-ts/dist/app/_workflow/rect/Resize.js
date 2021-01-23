@@ -7,11 +7,6 @@ var aj;
          * 改变大小的边框
          */
         var ResizeControl = /** @class */ (function () {
-            /**
-             * 创建一个 Resize 控制器
-             *
-             * @param rectComp 所服务的那个组件
-             */
             function ResizeControl(rectComp) {
                 /**
                  * 是否显示边框
@@ -21,15 +16,11 @@ var aj;
                  * 保存所有控制点的 map
                  */
                 this.allDots = {};
-                this.dotX = 0;
-                this.dotY = 0;
                 this.rectComp = rectComp;
                 this.vBox = rectComp.vBox; // 虚拟的一个控制框
                 rectComp.resizeController = this;
             }
-            /**
-             * 该方法只执行一次
-             */
+            // 该方法只执行一次
             ResizeControl.prototype.renderer = function () {
                 var _this = this;
                 var allDots = {}; // 保存所有控制点的 map
@@ -37,7 +28,7 @@ var aj;
                 var self = this;
                 this.dotX = this.dotY = 0;
                 var bdragStart = function () {
-                    self.dotX = Number(this.attr('x')), self.dotY = Number(this.attr('y'));
+                    self.dotX = this.attr('x'), self.dotY = this.attr('y');
                 };
                 var PAPER = this.rectComp.PAPER;
                 allDots['t'] = PAPER.rect().addClass('resizeDot').attr({ cursor: 's-resize' }).drag(function (dx, dy) { return _this.dotMove(dx, dy, 't'); }, bdragStart); // 上
@@ -52,18 +43,13 @@ var aj;
                 this.setDotsPosition();
                 this.resize();
             };
-            /**
-             *
-             * @param isBorder
-             */
             ResizeControl.prototype.enableBorder = function (isBorder) {
                 this.isBorder = isBorder;
             };
-            /**
-             *
-             */
             ResizeControl.prototype.setDotsPosition = function () {
-                var vBox = this.vBox, x = vBox.x - ResizeControl.margin, y = vBox.y - ResizeControl.margin, width = vBox.width + ResizeControl.margin * 2, height = vBox.height + ResizeControl.margin * 2, _bw = 2.5, allDots = this.allDots;
+                var _bw = 2.5;
+                var allDots = this.allDots, vBox = this.vBox;
+                var x = vBox.x - ResizeControl.margin, y = vBox.y - ResizeControl.margin, width = vBox.width + ResizeControl.margin * 2, height = vBox.height + ResizeControl.margin * 2;
                 allDots['t'].attr({ x: x + width / 2 - _bw, y: y - _bw }); // 上
                 allDots['lt'].attr({ x: x - _bw, y: y - _bw }); // 左上
                 allDots['l'].attr({ x: x - _bw, y: y - _bw + height / 2 }); // 左
@@ -104,7 +90,8 @@ var aj;
              * @param type 类型
              */
             ResizeControl.prototype.dotMove = function (dx, dy, type) {
-                var x = this.dotX + dx, y = this.dotY + dy, vBox = this.vBox;
+                var x = this.dotX + dx, y = this.dotY + dy;
+                var vBox = this.vBox;
                 // console.log('-----------------') console.log(this.dotY) console.log(dy)
                 switch (type) {
                     case 't':
@@ -153,7 +140,10 @@ var aj;
                     return;
                 if (!this.border)
                     this.border = this.rectComp.PAPER.path('M0 0L1 1').hide(); // 边框
-                var vBox = this.vBox, x = vBox.x - ResizeControl.margin, y = vBox.y - ResizeControl.margin, width = vBox.width + ResizeControl.margin * 2, height = vBox.height + ResizeControl.margin * 2, str = 'M' + x + ' ' + y + 'L' + x + ' ' + (y + height) + 'L' + (x + width) + ' ' + (y + height) + 'L' + (x + width) + ' ' + y + 'L' + x + ' ' + y;
+                var vBox = this.vBox;
+                var x = vBox.x - ResizeControl.margin, y = vBox.y - ResizeControl.margin, width = vBox.width + ResizeControl.margin * 2, height = vBox.height + ResizeControl.margin * 2;
+                var str = 'M' + x + ' ' + y + 'L' + x + ' ' + (y + height) + 'L' + (x + width) +
+                    ' ' + (y + height) + 'L' + (x + width) + ' ' + y + 'L' + x + ' ' + y;
                 this.border.attr({ path: str });
             };
             /**
