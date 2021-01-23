@@ -19,8 +19,8 @@ aj.svg.Mgr = (function() {
 	var name = {start: '开始节点', end: '结束节点', task: '任务节点', decision: '抉择节点', transition: '变迁路径'};
 
 	function setTypeName(cop) {
-		aj.workflow.propertyEditor.cop = cop;
-		aj.workflow.propertyEditor.selected = name[cop.type];
+		aj.wf.ui.PropertyForm.cop = cop;
+		aj.wf.ui.PropertyForm.selected = name[cop.type];
 	}
 
 	return new Vue({

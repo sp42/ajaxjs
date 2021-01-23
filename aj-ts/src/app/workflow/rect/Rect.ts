@@ -99,7 +99,7 @@ namespace aj.svg {
      * 开始拖动
      */
     function onDragStart(this: Raphael): void {
-        let x = this.attr('x'), y = this.attr('y');
+        let x = Number(this.attr('x')), y = Number(this.attr('y'));
         this.movingX = x, this.movingY = y;
 
         this.attr({ opacity: .3 }); // 拖动时半透明效果
@@ -116,8 +116,8 @@ namespace aj.svg {
         let _x: number = this.movingX + x, _y: number = this.movingY + y;
 
         this.attr({ x: _x, y: _y });
-        let vBox: VBox = this.vue.vBox;
-        vBox.x = _x, vBox.y = _y;
+        this.vue.vBox.x = _x;
+        this.vue.vBox.y = _y;
 
         this.vue.onDragMove && this.vue.onDragMove(this.vue, _x, _y);
     }

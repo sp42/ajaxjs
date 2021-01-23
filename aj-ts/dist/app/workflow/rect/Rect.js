@@ -87,7 +87,7 @@ var aj;
          * 开始拖动
          */
         function onDragStart() {
-            var x = this.attr('x'), y = this.attr('y');
+            var x = Number(this.attr('x')), y = Number(this.attr('y'));
             this.movingX = x, this.movingY = y;
             this.attr({ opacity: .3 }); // 拖动时半透明效果
             this.vue.onDragStart && this.vue.onDragStart(this.vue, x, y);
@@ -101,8 +101,8 @@ var aj;
         function onDragMove(x, y) {
             var _x = this.movingX + x, _y = this.movingY + y;
             this.attr({ x: _x, y: _y });
-            var vBox = this.vue.vBox;
-            vBox.x = _x, vBox.y = _y;
+            this.vue.vBox.x = _x;
+            this.vue.vBox.y = _y;
             this.vue.onDragMove && this.vue.onDragMove(this.vue, _x, _y);
         }
         /**

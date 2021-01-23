@@ -37,6 +37,16 @@ declare interface Raphael {
     remove(): void;
 
     drag(...fu: function): void;
+
+    /**
+     * 自定义的，拖放用的 x 坐标
+     */
+    movingX: number;
+
+    /**
+     * 自定义的，拖放用的 y 坐标
+     */
+    movingY: number;
 }
 
 /**
@@ -59,6 +69,13 @@ declare interface VBox extends Point {
  * 图形组件
  */
 declare interface SvgComp {
+    id: string;
+
+    /**
+     * 组件类型
+     */
+    type: string;
+
     /**
      * 高宽大小
      */
@@ -116,6 +133,23 @@ declare interface SvgComp {
      * 组件所在的桌布
      */
     PAPER: any;
+
+    /**
+     * 显示的文字
+     */
+    text: string;
+
+    /**
+     * 文字 svg 节点
+     */
+    textNode: TextSvgComp;
+
+    /**
+     * 拖放时的事件
+     */
+    onDragStart: function;
+    onDragMove: function;
+    onDragEnd: function;
 }
 
 /**

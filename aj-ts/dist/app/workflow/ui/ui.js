@@ -1,28 +1,4 @@
 "use strict";
-setTimeout(function () {
-    aj.svg.PAPER = window.PAPER = aj.svg.Mgr.initSVG(document.body.$(".canvas"));
-    //MyBOX = PAPER.rect().attr( {x: 50, y: 20, width: 500, height: 200, fill: "90-#fff-#F6F7FF"} );
-    // vueObj1 = aj.svg.createBaseComponent(PAPER, {x: 50, y: 20, width: 500, height: 200, fill: "90-#fff-#F6F7FF"});
-    //vueObj1.isDrag = false;
-    /*	vueObj1.init();
-        
-        console.assert(vueObj1.id);
-    
-        vueObj2 = aj.svg.createBaseComponent(PAPER, {x: 50, y: 590, width: 300, height: 100, fill: "90-#fff-#F6F7FF"});
-        vueObj2.text = "Hello World!";
-        vueObj2.init();
-        setTimeout(()=>vueObj2.pos(100, 600), 1000);
-        
-        PATH = new aj.svg.Path(vueObj1.svg, vueObj2.svg, 'text');
-        PATH.restore([{x:306,y:363},{x:450,y:442}]);
-    
-        vueObj3 = aj.svg.createBaseComponent(PAPER, {x: 110, y: 369, width: 48, height: 48, src: "../asset/images/workflow/start.png"}, 'img');
-        vueObj3.init();
-    
-        PATH2 = new aj.svg.Path(vueObj3.svg, vueObj1.svg);*/
-    // @ts-ignore
-    aj.wf.ui.init(TEST_DATA);
-}, 800);
 var aj;
 (function (aj) {
     var wf;
@@ -97,21 +73,45 @@ var aj;
                     vueObj.resize = vueObj.isDrag = false;
                 return vueObj;
             }
+            setTimeout(function () {
+                aj.svg.PAPER = window.PAPER = aj.svg.Mgr.initSVG(document.body.$(".canvas"));
+                //MyBOX = PAPER.rect().attr( {x: 50, y: 20, width: 500, height: 200, fill: "90-#fff-#F6F7FF"} );
+                // vueObj1 = aj.svg.createBaseComponent(PAPER, {x: 50, y: 20, width: 500, height: 200, fill: "90-#fff-#F6F7FF"});
+                //vueObj1.isDrag = false;
+                /*	vueObj1.init();
+                    
+                    console.assert(vueObj1.id);
+                
+                    vueObj2 = aj.svg.createBaseComponent(PAPER, {x: 50, y: 590, width: 300, height: 100, fill: "90-#fff-#F6F7FF"});
+                    vueObj2.text = "Hello World!";
+                    vueObj2.init();
+                    setTimeout(()=>vueObj2.pos(100, 600), 1000);
+                    
+                    PATH = new aj.svg.Path(vueObj1.svg, vueObj2.svg, 'text');
+                    PATH.restore([{x:306,y:363},{x:450,y:442}]);
+                
+                    vueObj3 = aj.svg.createBaseComponent(PAPER, {x: 110, y: 369, width: 48, height: 48, src: "../asset/images/workflow/start.png"}, 'img');
+                    vueObj3.init();
+                
+                    PATH2 = new aj.svg.Path(vueObj3.svg, vueObj1.svg);*/
+                // @ts-ignore
+                init(TEST_DATA);
+            }, 800);
+            // 菜单选中的
+            document.body.$('.components ul li.selectable', function (li) {
+                li.onclick = function (e) {
+                    var el = e.target;
+                    var selected = el.parentNode.$('.selected');
+                    if (selected)
+                        selected.classList.remove('selected');
+                    el.classList.add('selected');
+                    // 切换模式
+                    if (el.classList.contains('pointer'))
+                        aj.svg.Mgr.currentMode = aj.workflow.POINT_MODE;
+                    if (el.classList.contains('path'))
+                        aj.svg.Mgr.currentMode = aj.workflow.PATH_MODE;
+                };
+            });
         })(ui = wf.ui || (wf.ui = {}));
     })(wf = aj.wf || (aj.wf = {}));
 })(aj || (aj = {}));
-// 菜单选中的
-document.body.$('.components ul li.selectable', function (li) {
-    li.onclick = function (e) {
-        var el = e.target;
-        var selected = el.parentNode.$('.selected');
-        if (selected)
-            selected.classList.remove('selected');
-        el.classList.add('selected');
-        // 切换模式
-        if (el.classList.contains('pointer'))
-            aj.svg.Mgr.currentMode = aj.workflow.POINT_MODE;
-        if (el.classList.contains('path'))
-            aj.svg.Mgr.currentMode = aj.workflow.PATH_MODE;
-    };
-});
