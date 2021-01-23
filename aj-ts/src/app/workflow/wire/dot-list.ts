@@ -94,7 +94,7 @@ namespace aj.svg {
         }
 
         toJson() {
-            return aj.svg.serialize.dotList.toJson(this.fromDot);
+            return serialize.dotList.toJson(this.fromDot);
         }
 
         /**

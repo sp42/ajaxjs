@@ -1,5 +1,5 @@
 namespace aj.wf {
-	let imgBox = (img: string, size: VBox) => aj.apply({ src: "../../asset/images/workflow/" + img }, size);
+	let imgBox = (img: string, size: VBox) => aj.apply({ src: `../../asset/images/workflow/${img}` }, size);
 
 	/**
 	 * JSON 渲染为图形
@@ -8,7 +8,7 @@ namespace aj.wf {
 	 */
 	export function init(data: JsonParam) {
 		// 生成 box
-		let states = aj.wf.data.states, paths = aj.workflow.data.paths;
+		let states = DATA.states, paths = DATA.paths;
 
 		for (let i in data.states) {
 			let state = data.states[i];
@@ -42,7 +42,7 @@ namespace aj.wf {
 		for (let i in data.paths) {
 			let pathCfg = data.paths[i];
 			let from = states[pathCfg.from], to = states[pathCfg.to];
-			let path = new aj.svg.Path(from.svg, to.svg, pathCfg.text.text);
+			let path = new svg.Path(from.svg, to.svg, pathCfg.text.text);
 			path.id = i;
 			path.rawData = pathCfg;
 			path.wfData = pathCfg.props;
@@ -64,32 +64,36 @@ namespace aj.wf {
 
 		switch (type) {
 			case 'img':
-				raphaelObj = aj.svg.PAPER.image().attr(box).addClass('baseImg');
+				raphaelObj = svg.PAPER.image().attr(box).addClass('baseImg');
 				break;
 			default:
-				raphaelObj = aj.svg.PAPER.rect().attr(box).attr({ fill: "90-#fff-#F6F7FF" }).addClass('rectBaseStyle');
+				raphaelObj = svg.PAPER.rect().attr(box).attr({ fill: "90-#fff-#F6F7FF" }).addClass('rectBaseStyle');
 		}
 
-		let vueObj: SvgVue = <SvgVue>new Vue({ mixins: [aj.svg.BaseRect], data: { vBox: box } });
+		let vueObj: SvgVue = <SvgVue>new Vue({
+			mixins: [svg.BaseRect],
+			data: { vBox: box }
+		});
 
-		vueObj.PAPER = aj.svg.PAPER;
+		vueObj.PAPER = svg.PAPER;
 		vueObj.svg = raphaelObj;
 
 		// 登记注册
-		aj.svg.Mgr.register(vueObj);
+		Mgr.register(vueObj);
 
 		if (type == 'img')
 			vueObj.resize = false; // 图片禁止放大缩小
 
-		if (aj.workflow.isREAD_ONLY)
+		if (isREAD_ONLY)
 			vueObj.resize = vueObj.isDrag = false;
 
 		return vueObj;
 	}
 
 	setTimeout(() => {
-		let el = document.body.$(".canvas");
-		aj.svg.PAPER = window.PAPER = Raphael(el, el.clientWidth, el.clientHeight);
+		let el = <HTMLElement>document.body.$(".canvas");
+		//@ts-ignore
+		svg.PAPER = window.PAPER = Raphael(el, el.clientWidth, el.clientHeight);
 		// @ts-ignore
 		init(TEST_DATA);
 		//MyBOX = PAPER.rect().attr( {x: 50, y: 20, width: 500, height: 200, fill: "90-#fff-#F6F7FF"} );
@@ -116,8 +120,8 @@ namespace aj.wf {
 	// 菜单选中的
 	document.body.$('.components ul li.selectable', li => {
 		li.onclick = (e: Event) => {
-			let el: Element = <Element>e.target;
-			let selected = (<Element>el.parentNode).$(SELECTED_CSS);
+			let el: Element = <Element>e.target,
+				selected = (<Element>el.parentNode).$(SELECTED_CSS);
 
 			if (selected)
 				(<HTMLElement>selected).classList.remove(SELECTED);
@@ -126,27 +130,26 @@ namespace aj.wf {
 
 			// 切换模式
 			if (el.classList.contains('pointer'))
-				aj.svg.Mgr.currentMode = SELECT_MODE.POINT_MODE;
+				Mgr.currentMode = SELECT_MODE.POINT_MODE;
 
 			if (el.classList.contains('path'))
-				aj.svg.Mgr.currentMode = SELECT_MODE.PATH_MODE;
+				Mgr.currentMode = SELECT_MODE.PATH_MODE;
 		}
 	});
 
 	document.addEventListener('click', (e: Event) => {
-		let el: HTMLElement = <HTMLElement>e.target;
-		// @ts-ignore
-		let isSVGAElement = !!el.ownerSVGElement; // 点击页面任何一个元素，若为 SVG
-		// 且是组件，使其选中的状态
+		let el: HTMLElement = <HTMLElement>e.target,
+			// @ts-ignore
+			isSVGAElement = !!el.ownerSVGElement; // 点击页面任何一个元素，若为 SVG 且是组件，使其选中的状态
 
 		if (isSVGAElement && el.id.indexOf('ajSVG') != -1) {
 			//@ts-ignore
-			let component = aj.svg.Mgr.allComps[el.id];
+			let component = Mgr.allComps[el.id];
 
 			if (!component)
 				throw '未登记组件 ' + el.id;
 
-			aj.svg.Mgr.setSelectedComponent(component);
+			Mgr.setSelectedComponent(component);
 		}
 	});
 
@@ -155,13 +158,13 @@ namespace aj.wf {
 	 * 删除路径时，触发removepath事件
 	 */
 	document.addEventListener('keydown', (e: KeyboardEvent) => {
-		if (aj.wf.isREAD_ONLY)
+		if (isREAD_ONLY)
 			return;
 
 		// 键盘删除节点
-		if (e.keyCode == 46 && aj.svg.Mgr.selectedComponent) {
-			aj.svg.Mgr.selectedComponent.remove();
-			aj.svg.Mgr.selectedComponent = null;
+		if (e.keyCode == 46 && Mgr.selectedComponent) {
+			Mgr.selectedComponent.remove();
+			Mgr.selectedComponent = null;
 		}
 	});
 }

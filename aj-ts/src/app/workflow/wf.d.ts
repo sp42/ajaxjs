@@ -84,7 +84,7 @@ declare interface SvgComp {
     /**
      * 每个图形对象赋予一个 id
      */
-    id: string;
+    id: number;
 
     /**
      * 组件类型

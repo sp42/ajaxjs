@@ -7,7 +7,7 @@ namespace aj.wf.ui {
     /**
      * 流程定义
      */
-    export var DefInfo: DefInfo = <DefInfo>new Vue({
+    export let DefInfo: DefInfo = <DefInfo>new Vue({
         el: '.defInfo',
         data: {
             info: {},
@@ -15,49 +15,55 @@ namespace aj.wf.ui {
         },
         methods: {
             saveOrUpdate() {
-                this.toXML();
+                // this.toXML();
             },
-            toXML(this: DefInfo) {
-                let xml = ["<process "];
-                let clearInfo = { name: this.info.name, displayName: this.info.displayName, instanceUrl: this.info.instanceUrl, expireTime: this.info.expireTime };
+            toXML(this: DefInfo): string {
+                let xml: string[] = ["<process "],
+                    clearInfo: JsonParam = {
+                        name: this.info.name, displayName: this.info.displayName, instanceUrl: this.info.instanceUrl, expireTime: this.info.expireTime
+                    };
 
                 // 流程定义的属性
-                for (var attrib in clearInfo) {
-                    var value = clearInfo[attrib];
+                for (let attrib in clearInfo) {
+                    let value = clearInfo[attrib];
 
                     if ((attrib == "name" || attrib == "displayName") && !value) {
                         aj.alert("流程定义名称、显示名称不能为空");
-                        return;
+                        return "";
                     }
 
                     if (value)
-                        xml.push(' ' + attrib + '="' + value + '"');
+                        xml.push(` ${attrib}="${value}"`);
                 }
 
                 xml.push(">\n");
 
-                let arr = [], node, states = aj.workflow.data.states, paths = aj.workflow.data.paths, pathToXml = aj.svg.serialize.path.toXml;
+                let arr: string[] = [], // 用来检查是否重复
+                    node,
+                    states = DATA.states,
+                    paths = DATA.paths,
+                    pathToXml = aj.svg.serialize.path.toXml;
 
                 for (let i in states) {
                     node = states[i];
 
                     if (!node)
-                        continute;
+                        continue;
 
                     xml.push(aj.svg.serialize.rect.toBeforeXml(node));
 
                     for (let i2 in paths) {
-                        var transition = paths[i2];
+                        let transition = paths[i2];
 
                         if (!transition)
-                            continute;
+                            continue;
 
                         if (node.id == transition.from().vue.id) {
-                            var transitionXml = pathToXml(transition);
+                            let transitionXml = pathToXml(transition);
 
                             if (!transitionXml) {
                                 aj.alert("连接线名称不能为空");
-                                return;
+                                return "";
                             } else {
                                 arr.push(transition.id); // arr 用于判别是否重复
                                 xml.push("\n" + transitionXml);
@@ -69,17 +75,17 @@ namespace aj.wf.ui {
                 }
 
                 arr = arr.sort();
-                for (var i = 0; i < arr.length; i++) {
+                for (let i = 0; i < arr.length; i++) {
                     if (arr[i] == arr[i + 1]) {
                         aj.alert("连接线名称不能重复[" + arr[i] + "]");
-                        return;
+                        return "";
                     }
                 }
 
                 xml.push("</process>");
+                window.alert(xml.join(''));
 
-                console.log(xml.join(''))
-                alert(xml.join(''));
+                return xml.join('');
             }
         }
     });

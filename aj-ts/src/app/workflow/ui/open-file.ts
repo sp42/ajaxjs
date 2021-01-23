@@ -10,18 +10,19 @@ namespace aj.wf.ui {
                 this.$refs.layer.$children[0].ajaxGet();
             },
             open(this: Vue, id: number): void {
-                aj.svg.Mgr.clearStage();
+                Mgr.clearStage();
 
                 // 定义实体
-                aj.xhr.get(this.ajResources.ctx + '/admin/workflow/process/' + id + '/', (j: RepsonseResult) => {
+                xhr.get(this.ajResources.ctx + '/admin/workflow/process/' + id + '/', (j: RepsonseResult) => {
                     DefInfo.info = j.result;
                     DefInfo.isCreate = false;
+                    // @ts-ignore
                     (<HTMLElement>document.body.$('.defName')).innerHTML = j.result.displayName;
                 });
 
                 // 定义 json
-                aj.xhr.get(this.ajResources.ctx + '/admin/workflow/process/getJson/' + id + '/', j => {
-                    aj.wf.data.JSON_DATA = j;
+                xhr.get(this.ajResources.ctx + '/admin/workflow/process/getJson/' + id + '/', j => {
+                    DATA.JSON_DATA = j;
                     init(j);
                 });
 

@@ -154,7 +154,10 @@ namespace aj.svg {
                  * @param this 
                  */
                 getXY(this: TextSvgComp): Point {
-                    return { x: Number(this.$el.getAttribute('x')), y: Number(this.$el.getAttribute('y')) };
+                    return {
+                        x: Number(this.$el.getAttribute('x')),
+                        y: Number(this.$el.getAttribute('y'))
+                    };
                 },
 
                 /**
@@ -163,8 +166,10 @@ namespace aj.svg {
                  * @param vBox 
                  */
                 setXY_vBox(this: TextSvgComp, vBox: VBox): void {
-                    let w: number = vBox.x + vBox.width / 2, h: number = vBox.y + vBox.height / 2;
-                    let textBox: DOMRect = this.$el.getBoundingClientRect();
+                    let w: number = vBox.x + vBox.width / 2,
+                        h: number = vBox.y + vBox.height / 2,
+                        textBox: DOMRect = this.$el.getBoundingClientRect();
+                        
                     this.setXY(w - textBox.width / 2, h + 5);
                 }
             }

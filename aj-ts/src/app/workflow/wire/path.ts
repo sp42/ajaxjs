@@ -27,7 +27,7 @@ namespace aj.svg {
             // aj.svg.DotList.call(this, from, to);
             // aj.apply(this, aj.svg.DotList.prototype);
 
-            aj.svg.Mgr.register(this);
+            wf.Mgr.register(this);
             this.hide();
 
             this.moveFn = this.rectResizeHandler.bind(this);

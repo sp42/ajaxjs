@@ -76,16 +76,16 @@ namespace aj.wf.ui {
             cop: null		// 组件
         },
         methods: {
-            show() {
-                return aj.svg.Mgr.selectedComponent != null;
+            show(): boolean {
+                return Mgr.selectedComponent != null;
             }
         },
         computed: {
-            currentForm(this: PropertyForm) {
+            currentForm(this: PropertyForm): string {
                 if (!this.cop)
                     return '';
-
-                return 'aj-wf-' + this.cop.type + '-form';
+                    
+                return `aj-wf-${this.cop.type}-form`;
             }
         }
     });

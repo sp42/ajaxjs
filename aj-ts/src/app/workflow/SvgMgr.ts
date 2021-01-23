@@ -1,17 +1,5 @@
-/**
- * 定义常量、工具方法等
- */
-aj.workflow = {
-	data: {
-		states: {},		// 所有的状态，通常是 key= box 的 name，value 是 box 的 vue 实例
-		paths: {},		// 所有的路径
-		JSON_DATA: {}	// 流程定义 JSON 数据
-	}
-};
-
-aj.wf = aj.workflow; // shorthand
-
 namespace aj.wf {
+	// 定义常量
 	export enum SELECT_MODE {
 		/**
 		 * 选中的模式，点选类型
@@ -28,9 +16,27 @@ namespace aj.wf {
 	 * 只读模式不可编辑
 	 */
 	export var isREAD_ONLY: boolean = false;
-}
 
-namespace aj.svg {
+	/**
+	 * 全局数据
+	 */
+	export var DATA: JsonParam = {
+		/**
+		 * 所有的状态，通常是 key= box 的 name，value 是 box 的 vue 实例
+		 */
+		states: {},
+
+		/**
+		 * 所有的路径
+		 */
+		paths: {},
+
+		/**
+		 * 流程定义 JSON 数据
+		 */
+		JSON_DATA: {}
+	};
+
 	let name: StringJsonParam = { start: '开始节点', end: '结束节点', task: '任务节点', decision: '抉择节点', transition: '变迁路径' };
 
 	/**
@@ -38,8 +44,8 @@ namespace aj.svg {
 	 * @param cop 
 	 */
 	function setTypeName(cop: SvgComp): void {
-		aj.wf.ui.PropertyForm.cop = cop;
-		aj.wf.ui.PropertyForm.selected = name[cop.type];
+		ui.PropertyForm.cop = cop;
+		ui.PropertyForm.selected = name[cop.type];
 	}
 
 	interface Mgr extends Vue {
@@ -51,7 +57,7 @@ namespace aj.svg {
 		/**
 		 * 当前选中的选择模式
 		 */
-		currentMode: aj.wf.SELECT_MODE;
+		currentMode: SELECT_MODE;
 
 		/**
 		 * 所有的组件
@@ -86,6 +92,11 @@ namespace aj.svg {
 		 * @param id 
 		 */
 		unregister(this: Mgr, id: number): void;
+
+		/**
+		 * 清除桌布
+		 */
+		clearStage(): void;
 	}
 
 	let uid: number = 0;
@@ -94,17 +105,17 @@ namespace aj.svg {
 		data: {
 			selectedComponent: null,			 	// 选中的 SVG 图形对象
 			currentNode: null,						// 当前选中的节点
-			currentMode: aj.wf.SELECT_MODE.POINT_MODE,	// 当前选中的选择模式
+			currentMode: SELECT_MODE.POINT_MODE,	// 当前选中的选择模式
 		},
 		watch: {
 			selectedComponent(newCop: SvgComp, old: SvgComp): void {
 				newCop && newCop.resizeController && newCop.resizeController.showBox();
 				old && old.resizeController && old.resizeController.hideBox();
 
-				if (newCop instanceof aj.svg.Path)
+				if (newCop instanceof svg.Path)
 					newCop.show();
 
-				if (old instanceof aj.svg.Path)
+				if (old instanceof svg.Path)
 					old.hide();
 
 				if (newCop && newCop.wfData) {
@@ -139,6 +150,7 @@ namespace aj.svg {
 			register(this: Mgr, vueObj): void {
 				vueObj.id = this.nextId();
 				vueObj.svg.node.id = "ajSVG-" + vueObj.id;
+
 				this.allComps[vueObj.svg.node.id] = vueObj;
 			},
 
@@ -150,10 +162,10 @@ namespace aj.svg {
 			// 清除桌布
 			clearStage(this: Mgr): void {
 				this.setSelectedComponent(null);
-				aj.svg.PAPER.clear();
+				svg.PAPER.clear();
 
-				for (var i in aj.wf.data)
-					aj.wf.data[i] = {};
+				for (var i in DATA)
+					DATA[i] = {};
 			}
 		}
 	});

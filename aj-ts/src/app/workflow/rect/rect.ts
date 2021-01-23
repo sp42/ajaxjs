@@ -14,7 +14,7 @@ namespace aj.svg {
         methods: {
             show(this: SvgVue): void {
                 this.svg.show();
-            },
+            }, 
 
             hide(this: SvgVue): void {
                 this.svg.hide();
@@ -44,7 +44,7 @@ namespace aj.svg {
             remove(this: SvgVue): void {
                 this.svg.remove();
                 this.updateHandlers = [];
-                aj.svg.Mgr.unregister(this.id);
+                wf.Mgr.unregister(this.id);
             },
 
             addUpdateHandler(this: SvgVue, fn: updateVBoxHandler): void {
