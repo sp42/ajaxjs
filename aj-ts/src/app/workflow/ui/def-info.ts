@@ -1,8 +1,13 @@
 namespace aj.wf.ui {
+    interface DefInfo extends Vue {
+        info: any;
+        isCreate: boolean;
+    }
+
     /**
      * 流程定义
      */
-    export var defInfo: Vue = new Vue({
+    export var DefInfo: DefInfo = <DefInfo>new Vue({
         el: '.defInfo',
         data: {
             info: {},
@@ -12,7 +17,7 @@ namespace aj.wf.ui {
             saveOrUpdate() {
                 this.toXML();
             },
-            toXML(this: Vue) {
+            toXML(this: DefInfo) {
                 let xml = ["<process "];
                 let clearInfo = { name: this.info.name, displayName: this.info.displayName, instanceUrl: this.info.instanceUrl, expireTime: this.info.expireTime };
 

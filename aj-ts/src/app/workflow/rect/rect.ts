@@ -1,6 +1,6 @@
 namespace aj.svg {
     /**
-     * 桌布
+     * Raphael.js 桌布
      */
     export let PAPER: any;
 
@@ -47,17 +47,18 @@ namespace aj.svg {
                 aj.svg.Mgr.unregister(this.id);
             },
 
-            addUpdateHandler(this: SvgVue, fn): void {
+            addUpdateHandler(this: SvgVue, fn: updateVBoxHandler): void {
                 this.updateHandlers.push(fn);
             },
-            removeUpdateHandler(this: SvgVue, fn): void {
-                let index;
+            removeUpdateHandler(this: SvgVue, fn: updateVBoxHandler): void {
+                let index: number | null = null;
+
                 for (let i = 0, j = this.updateHandlers.length; i < j; i++) {
                     if (this.updateHandlers[i] == fn)
                         index = i;
                 }
-
-                this.updateHandlers.splice(index, 1);
+                if (index != null)
+                    this.updateHandlers.splice(index, 1);
             }
         },
         created(this: SvgVue): void {
@@ -79,8 +80,8 @@ namespace aj.svg {
         },
         watch: {
             vBox: {
-                handler(this: SvgVue, val): void {
-                    this.updateHandlers.forEach(fn => fn.call(this, val));
+                handler(this: SvgVue, val: VBox): void {
+                    this.updateHandlers.forEach((fn: updateVBoxHandler) => fn.call(this, val));
 
                     if (this.resize) {
                         this.resizeController.setDotsPosition();

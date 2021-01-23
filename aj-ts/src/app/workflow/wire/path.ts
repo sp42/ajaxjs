@@ -1,4 +1,4 @@
-namespace aj.svg { 
+namespace aj.svg {
     /**
      * 连线路径
      */
@@ -7,6 +7,11 @@ namespace aj.svg {
         _to: any;
 
         private moveFn: Function;
+
+        /**
+         * 箭头图形
+         */
+        private arrow: Raphael;
 
         constructor(from, to, text) {
             // 继承
@@ -33,17 +38,17 @@ namespace aj.svg {
         }
 
         // 矩形移动时处理器
-        rectResizeHandler() {
-            var o, dot;
+        rectResizeHandler(): void {
+            let o, dot;
 
             //            if (from && from.node.id == event.target.id) {
             dot = this.fromDot.right().right();
-            if (dot.type == Dot.TO)
+            if (dot.type == DOT_TYPE.TO)
                 o = { x: this._to.getBBox().x + this._to.getBBox().width / 2, y: this._to.getBBox().y + this._to.getBBox().height / 2 };
             else
                 o = dot.pos();
 
-            var r = Utils.connPoint(this._from.getBBox(), o);
+            let r = Utils.connPoint(this._from.getBBox(), o);
             this.fromDot.moveTo(r.x, r.y);
 
             this.refreshPath();
@@ -51,12 +56,12 @@ namespace aj.svg {
 
             //            if (to && to.node.id == event.target.id) {
             dot = this.toDot.left().left();
-            if (dot.type == Dot.FROM)
+            if (dot.type == DOT_TYPE.FROM)
                 o = { x: this._from.getBBox().x + this._from.getBBox().width / 2, y: this._from.getBBox().y + this._from.getBBox().height / 2 };
             else
                 o = dot.pos();
 
-            var r = Utils.connPoint(this._to.getBBox(), o);
+            let r = Utils.connPoint(this._to.getBBox(), o);
             this.toDot.moveTo(r.x, r.y);
 
             this.refreshPath();
@@ -71,7 +76,7 @@ namespace aj.svg {
             return this._to;
         }
 
-        remove() {
+        remove(): void {
             aj.svg.DotList.prototype.remove.call(this);
             this.svg.remove();
             this.arrow.remove();
@@ -86,19 +91,19 @@ namespace aj.svg {
         };
 
         // 刷新路径
-        refreshPath() {
-            var r = this.toPathString(), mid = this.midDot().pos();
+        refreshPath(): void {
+            let r = this.toPathString(), mid = this.midDot().pos();
 
             this.svg.attr({ path: r[0] });
             this.arrow.attr({ path: r[1] });
 
             if (this.textObj) {
-                var textPos = this.textObj.getXY();// 定位文字
+                let textPos = this.textObj.getXY();// 定位文字
                 this.textObj.setXY(mid.x + 30, mid.y + 10);
             }
         }
 
-        attr(o) {
+        attr(o): void {
             o && o.path && this.svg.attr(o.path);
             o && o.arrow && this.arrow.attr(o.arrow);
         }

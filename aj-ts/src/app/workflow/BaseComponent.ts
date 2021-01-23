@@ -8,7 +8,7 @@ namespace aj.svg {
         /**
          * 组件类型
          */
-        public type: string | undefined;
+        public type: any;
 
         /**
          * Raphael SVG 实例

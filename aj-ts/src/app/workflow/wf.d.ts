@@ -3,6 +3,13 @@
  */
 declare interface Raphael {
     /**
+     * 添加样式
+     * 
+     * @param css 
+     */
+    addClass(css:string):Raphael;
+
+    /**
      * 获取属性
      * 
      * @param name 
@@ -47,6 +54,11 @@ declare interface Raphael {
      * 自定义的，拖放用的 y 坐标
      */
     movingY: number;
+
+    /**
+     * 返回坐标和大小
+     */
+    getBBox():VBox;
 }
 
 /**
@@ -69,6 +81,9 @@ declare interface VBox extends Point {
  * 图形组件
  */
 declare interface SvgComp {
+    /**
+     * 每个图形对象赋予一个 id
+     */
     id: string;
 
     /**
@@ -145,12 +160,19 @@ declare interface SvgComp {
     textNode: TextSvgComp;
 
     /**
+     * 当组件 VBox 修改时候要执行的事件
+     */
+    updateHandlers: updateVBoxHandler[];
+
+    /**
      * 拖放时的事件
      */
     onDragStart: function;
     onDragMove: function;
     onDragEnd: function;
 }
+
+type updateVBoxHandler = (newVbox: VBox) => void;
 
 /**
  * Vue 组件包装的 

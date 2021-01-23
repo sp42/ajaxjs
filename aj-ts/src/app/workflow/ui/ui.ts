@@ -1,6 +1,11 @@
-namespace aj.wf.ui {
+namespace aj.wf {
 	let imgBox = (img: string, size: VBox) => aj.apply({ src: "../../asset/images/workflow/" + img }, size);
 
+	/**
+	 * JSON 渲染为图形
+	 * 
+	 * @param data 
+	 */
 	export function init(data: JsonParam) {
 		// 生成 box
 		let states = aj.wf.data.states, paths = aj.workflow.data.paths;
@@ -54,7 +59,7 @@ namespace aj.wf.ui {
 	 * @param box 
 	 * @param type 
 	 */
-	function createRect(box: VBox, type: string): SvgVue {
+	function createRect(box: VBox, type?: string): SvgVue {
 		let raphaelObj;
 
 		switch (type) {
@@ -82,8 +87,11 @@ namespace aj.wf.ui {
 		return vueObj;
 	}
 
-	setTimeout(() => { 
-		aj.svg.PAPER = window.PAPER = aj.svg.Mgr.initSVG(document.body.$(".canvas"));
+	setTimeout(() => {
+		let el = document.body.$(".canvas");
+		aj.svg.PAPER = window.PAPER = Raphael(el, el.clientWidth, el.clientHeight);
+		// @ts-ignore
+		init(TEST_DATA);
 		//MyBOX = PAPER.rect().attr( {x: 50, y: 20, width: 500, height: 200, fill: "90-#fff-#F6F7FF"} );
 		// vueObj1 = aj.svg.createBaseComponent(PAPER, {x: 50, y: 20, width: 500, height: 200, fill: "90-#fff-#F6F7FF"});
 		//vueObj1.isDrag = false;
@@ -103,28 +111,57 @@ namespace aj.wf.ui {
 			vueObj3.init(); 
 		
 			PATH2 = new aj.svg.Path(vueObj3.svg, vueObj1.svg);*/
-	
-		// @ts-ignore
-		init(TEST_DATA);
 	}, 800);
 
 	// 菜单选中的
 	document.body.$('.components ul li.selectable', li => {
-		li.onclick = e => {
-			let el = e.target;
-	
-			let selected = el.parentNode.$('.selected');
+		li.onclick = (e: Event) => {
+			let el: Element = <Element>e.target;
+			let selected = (<Element>el.parentNode).$(SELECTED_CSS);
+
 			if (selected)
-				selected.classList.remove('selected');
-	
-			el.classList.add('selected');
-	
+				(<HTMLElement>selected).classList.remove(SELECTED);
+
+			el.classList.add(SELECTED);
+
 			// 切换模式
 			if (el.classList.contains('pointer'))
-				aj.svg.Mgr.currentMode = aj.workflow.POINT_MODE;
-	
+				aj.svg.Mgr.currentMode = SELECT_MODE.POINT_MODE;
+
 			if (el.classList.contains('path'))
-				aj.svg.Mgr.currentMode = aj.workflow.PATH_MODE;
+				aj.svg.Mgr.currentMode = SELECT_MODE.PATH_MODE;
+		}
+	});
+
+	document.addEventListener('click', (e: Event) => {
+		let el: HTMLElement = <HTMLElement>e.target;
+		// @ts-ignore
+		let isSVGAElement = !!el.ownerSVGElement; // 点击页面任何一个元素，若为 SVG
+		// 且是组件，使其选中的状态
+
+		if (isSVGAElement && el.id.indexOf('ajSVG') != -1) {
+			//@ts-ignore
+			let component = aj.svg.Mgr.allComps[el.id];
+
+			if (!component)
+				throw '未登记组件 ' + el.id;
+
+			aj.svg.Mgr.setSelectedComponent(component);
+		}
+	});
+
+	/**
+	 * 删除： 删除状态时，触发removerect事件，连接在这个状态上当路径监听到这个事件，触发removepath删除自身；
+	 * 删除路径时，触发removepath事件
+	 */
+	document.addEventListener('keydown', (e: KeyboardEvent) => {
+		if (aj.wf.isREAD_ONLY)
+			return;
+
+		// 键盘删除节点
+		if (e.keyCode == 46 && aj.svg.Mgr.selectedComponent) {
+			aj.svg.Mgr.selectedComponent.remove();
+			aj.svg.Mgr.selectedComponent = null;
 		}
 	});
 }
