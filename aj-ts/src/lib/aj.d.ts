@@ -171,7 +171,7 @@ interface FileReaderEvent extends Event {
 /**
  * JSON 实体
  */
-declare type JsonParam = { [key: string]: string | number | boolean };
+declare type JsonParam = { [key: string]: string | number | boolean | JsonParam };
 
 /**
  * key 和 value 都是 string 类型的 JSON 实体

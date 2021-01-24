@@ -77,8 +77,7 @@ Function.prototype.delegate = function (this: any, ..._args: any): Function {
             if (arguments[i])
                 args[i] = arguments[i]; // 拷贝参数
 
-        args.length = Length; // 在
-        // MSjscript下面，arguments作为数字来使用还是有问题，就是length不能自动更新。修正如左:
+        args.length = Length; // 在 MS JScript 下面，arguments 作为数字来使用还是有问题，就是 length 不能自动更新。修正如左:
 
         // mission two:
         for (var i = 0, j = args.length; i < j; i++) {
@@ -136,7 +135,9 @@ Date.prototype.format = function (fmt: string): string {
 if (!HTMLCanvasElement.prototype.toBlob) {
     Object.defineProperty(HTMLCanvasElement.prototype, 'toBlob', {
         value(callback: Function, type: string, quality: string) {
-            let binStr = atob(this.toDataURL(type, quality).split(',')[1]), len: number = binStr.length, arr: Uint8Array = new Uint8Array(len);
+            let binStr = atob(this.toDataURL(type, quality).split(',')[1]), 
+                len: number = binStr.length, 
+                arr: Uint8Array = new Uint8Array(len);
 
             for (var i = 0; i < len; i++)
                 arr[i] = binStr.charCodeAt(i);

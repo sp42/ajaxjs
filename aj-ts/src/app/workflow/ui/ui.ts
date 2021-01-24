@@ -1,5 +1,5 @@
 namespace aj.wf {
-	let imgBox = (img: string, size: VBox) => aj.apply({ src: `../../asset/images/workflow/${img}` }, size);
+	let imgBox = (img: string, size: VBox) => aj.apply({ src: `../asset/images/workflow/${img}` }, size);
 
 	/**
 	 * JSON 渲染为图形
@@ -96,6 +96,8 @@ namespace aj.wf {
 		svg.PAPER = window.PAPER = Raphael(el, el.clientWidth, el.clientHeight);
 		// @ts-ignore
 		init(TEST_DATA);
+
+		wysiwyg.statusBar.showMsg('欢迎来到 工作流流程设计器');
 		//MyBOX = PAPER.rect().attr( {x: 50, y: 20, width: 500, height: 200, fill: "90-#fff-#F6F7FF"} );
 		// vueObj1 = aj.svg.createBaseComponent(PAPER, {x: 50, y: 20, width: 500, height: 200, fill: "90-#fff-#F6F7FF"});
 		//vueObj1.isDrag = false;
