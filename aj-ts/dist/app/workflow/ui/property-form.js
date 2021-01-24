@@ -61,14 +61,14 @@ var aj;
                 },
                 methods: {
                     show: function () {
-                        return aj.svg.Mgr.selectedComponent != null;
+                        return wf.Mgr.selectedComponent != null;
                     }
                 },
                 computed: {
                     currentForm: function () {
                         if (!this.cop)
                             return '';
-                        return 'aj-wf-' + this.cop.type + '-form';
+                        return "aj-wf-" + this.cop.type + "-form";
                     }
                 }
             });

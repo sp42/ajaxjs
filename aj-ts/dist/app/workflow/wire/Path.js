@@ -32,7 +32,7 @@ var aj;
                 _this.arrow = svg.PAPER.path().addClass('arrow');
                 // aj.svg.DotList.call(this, from, to);
                 // aj.apply(this, aj.svg.DotList.prototype);
-                aj.svg.Mgr.register(_this);
+                aj.wf.Mgr.register(_this);
                 _this.hide();
                 _this.moveFn = _this.rectResizeHandler.bind(_this);
                 from.vue.addUpdateHandler(_this.moveFn);
@@ -45,7 +45,7 @@ var aj;
                 var o, dot;
                 //            if (from && from.node.id == event.target.id) {
                 dot = this.fromDot.right().right();
-                if (dot.type == svg.Dot.TO)
+                if (dot.type == svg.DOT_TYPE.TO)
                     o = { x: this._to.getBBox().x + this._to.getBBox().width / 2, y: this._to.getBBox().y + this._to.getBBox().height / 2 };
                 else
                     o = dot.pos();
@@ -55,7 +55,7 @@ var aj;
                 //            }
                 //            if (to && to.node.id == event.target.id) {
                 dot = this.toDot.left().left();
-                if (dot.type == svg.Dot.FROM)
+                if (dot.type == svg.DOT_TYPE.FROM)
                     o = { x: this._from.getBBox().x + this._from.getBBox().width / 2, y: this._from.getBBox().y + this._from.getBBox().height / 2 };
                 else
                     o = dot.pos();

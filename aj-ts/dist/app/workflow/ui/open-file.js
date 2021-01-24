@@ -16,18 +16,18 @@ var aj;
                         this.$refs.layer.$children[0].ajaxGet();
                     },
                     open: function (id) {
-                        aj.svg.Mgr.clearStage();
+                        wf.Mgr.clearStage();
                         // 定义实体
                         aj.xhr.get(this.ajResources.ctx + '/admin/workflow/process/' + id + '/', function (j) {
-                            var result = j.result;
-                            aj.workflow.defInfo.info = result;
-                            aj.workflow.defInfo.isCreate = false;
-                            document.body.$('.defName').innerHTML = result.displayName;
+                            ui.DefInfo.info = j.result;
+                            ui.DefInfo.isCreate = false;
+                            // @ts-ignore
+                            document.body.$('.defName').innerHTML = j.result.displayName;
                         });
                         // 定义 json
                         aj.xhr.get(this.ajResources.ctx + '/admin/workflow/process/getJson/' + id + '/', function (j) {
-                            aj.wf.data.JSON_DATA = j;
-                            aj.svg.startup.init(j);
+                            wf.DATA.JSON_DATA = j;
+                            wf.init(j);
                         });
                         this.$refs.layer.close();
                         FB.statusBar.showMsg("打开工作流流程成功，读取流程定义成功");

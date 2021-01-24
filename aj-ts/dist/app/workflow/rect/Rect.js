@@ -37,18 +37,19 @@ var aj;
                 remove: function () {
                     this.svg.remove();
                     this.updateHandlers = [];
-                    aj.svg.Mgr.unregister(this.id);
+                    aj.wf.Mgr.unregister(this.id);
                 },
                 addUpdateHandler: function (fn) {
                     this.updateHandlers.push(fn);
                 },
                 removeUpdateHandler: function (fn) {
-                    var index;
+                    var index = null;
                     for (var i = 0, j = this.updateHandlers.length; i < j; i++) {
                         if (this.updateHandlers[i] == fn)
                             index = i;
                     }
-                    this.updateHandlers.splice(index, 1);
+                    if (index != null)
+                        this.updateHandlers.splice(index, 1);
                 }
             },
             created: function () {

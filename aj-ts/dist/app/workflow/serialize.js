@@ -31,9 +31,9 @@ var aj;
                 },
                 toBeforeXml: function (comp) {
                     var str = [" <", comp.type, ' layout="' +
-                            (Math.round(comp.svg.attr("x")) - 180), ",", Math.round(comp.svg.attr("y")), ",",
+                            (Math.round(Number(comp.svg.attr("x"))) - 180), ",", Math.round(comp.svg.attr("y")), ",",
                         Math.round(comp.svg.attr("width")), ",", Math.round(comp.svg.attr("height")), '"'];
-                    var value, keyValue = aj.svg.serialize.keyValue;
+                    var value, keyValue = svg.serialize.keyValue;
                     for (var i in comp.wfData) {
                         value = comp.wfData[i].value;
                         if (i == "name" && !value) {
@@ -62,10 +62,10 @@ var aj;
                 toXml: function (path, _textPos) {
                     //	let str = ['<transition offset="', Math.round(_textPos.x) + "," + Math.round(_textPos.y), '" to="', path.to().getName(), '" '];
                     var str = ['<transition offset="" to="', path.to().vue.id, '" '];
-                    var dots = aj.svg.serialize.dotList.toXml(path.fromDot);
+                    var dots = svg.serialize.dotList.toXml(path.fromDot);
                     if (dots != "")
                         str.push(' g="' + dots + '" ');
-                    var value, keyValue = aj.svg.serialize.keyValue;
+                    var value, keyValue = svg.serialize.keyValue;
                     for (var i in path.wfData) {
                         value = path.wfData[i].value;
                         if (i === "name" && value == "") { // name 为空，使用 id 作为 name
@@ -82,7 +82,7 @@ var aj;
                 toJson: function (_fromDot) {
                     var data = "[", d = _fromDot;
                     while (d) {
-                        if (d.type === aj.svg.Dot.BIG)
+                        if (d.type === svg.DOT_TYPE.BIG)
                             data += "{x:" + Math.round(d.pos().x) + ",y:" + Math.round(d.pos().y) + "},";
                         d = d.right();
                     }
@@ -94,7 +94,7 @@ var aj;
                 toXml: function (_fromDot) {
                     var data = "", d = _fromDot;
                     while (d) {
-                        if (d.type === aj.svg.Dot.BIG)
+                        if (d.type === svg.DOT_TYPE.BIG)
                             data += (Math.round(d.pos().x) - 180) + "," + Math.round(d.pos().y) + ";";
                         d = d.right();
                     }

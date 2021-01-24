@@ -18,6 +18,16 @@ var aj;
     (function (svg_1) {
         var diff = 3;
         /**
+         * 点类型的常量
+         */
+        var DOT_TYPE;
+        (function (DOT_TYPE) {
+            DOT_TYPE[DOT_TYPE["TO"] = 1] = "TO";
+            DOT_TYPE[DOT_TYPE["FROM"] = 2] = "FROM";
+            DOT_TYPE[DOT_TYPE["SMALL"] = 3] = "SMALL";
+            DOT_TYPE[DOT_TYPE["BIG"] = 4] = "BIG";
+        })(DOT_TYPE = svg_1.DOT_TYPE || (svg_1.DOT_TYPE = {}));
+        /**
          * 表示一个点。点只有坐标，没有大小。
          */
         var Dot = /** @class */ (function (_super) {
@@ -41,9 +51,12 @@ var aj;
                 _this._rightDot = _rt;
                 _this._pos = _pos;
                 _this.path = path;
-                if (type == Dot.BIG || type == Dot.SMALL) {
-                    var _ox, _oy; // 缓存移动前的位置
-                    svg.drag(function (dx, dy) { return _this.moveTo(_ox + dx, _oy + dy); }, function () { _ox = svg.attr("x") + diff, _oy = svg.attr("y") + diff; }); // 开始拖动
+                if (type == DOT_TYPE.BIG || type == DOT_TYPE.SMALL) {
+                    var _ox_1, _oy_1; // 缓存移动前的位置
+                    svg.drag(function (dx, dy) { return _this.moveTo(_ox_1 + dx, _oy_1 + dy); }, function () {
+                        _ox_1 = Number(svg.attr("x")) + diff;
+                        _oy_1 = Number(svg.attr("y")) + diff;
+                    }); // 开始拖动
                 }
                 return _this;
             }
@@ -68,6 +81,7 @@ var aj;
                 return this._rightDot;
             };
             Dot.prototype.remove = function () {
+                //@ts-ignore
                 this._leftDot = this._rightDot = null;
                 this.svg.remove();
             };
@@ -92,21 +106,18 @@ var aj;
              * @param y y 坐标
              */
             Dot.prototype.moveTo = function (x, y) {
-                var _pos = this.pos({ x: x, y: y });
-                var path = this.path;
-                var _lt = this.left(), _rt = this.right();
-                var right2x = _rt && _rt.right(), left2x = _lt && _lt.left();
+                var _pos = this.pos({ x: x, y: y }), path = this.path, _lt = this.left(), _rt = this.right(), right2x = _rt && _rt.right(), left2x = _lt && _lt.left();
                 switch (this.type) {
-                    case Dot.FROM:
-                        if (right2x && right2x.type == Dot.TO)
+                    case DOT_TYPE.FROM:
+                        if (right2x && right2x.type == DOT_TYPE.TO)
                             right2x.pos(svg_1.Utils.connPoint(path.to().getBBox(), _pos));
                         if (_rt && right2x)
                             _rt.pos(svg_1.Utils.center(_pos, right2x.pos()));
                         break;
-                    case Dot.BIG:
-                        if (right2x && right2x.type == Dot.TO)
+                    case DOT_TYPE.BIG:
+                        if (right2x && right2x.type == DOT_TYPE.TO)
                             right2x.pos(svg_1.Utils.connPoint(path.to().getBBox(), _pos));
-                        if (left2x && left2x.type == Dot.FROM)
+                        if (left2x && left2x.type == DOT_TYPE.FROM)
                             left2x.pos(svg_1.Utils.connPoint(path.from().getBBox(), _pos));
                         if (right2x)
                             _rt === null || _rt === void 0 ? void 0 : _rt.pos(svg_1.Utils.center(_pos, right2x.pos()));
@@ -114,7 +125,7 @@ var aj;
                             _lt === null || _lt === void 0 ? void 0 : _lt.pos(svg_1.Utils.center(_pos, left2x.pos()));
                         // 三个大点在一条线上，移除中间的小点
                         if (svg_1.Utils.isLine(left2x === null || left2x === void 0 ? void 0 : left2x.pos(), _pos, right2x === null || right2x === void 0 ? void 0 : right2x.pos())) {
-                            this.type = Dot.SMALL;
+                            this.type = DOT_TYPE.SMALL;
                             this.svg.attr({ width: 5, height: 5, stroke: "#fff", fill: "#000", cursor: "move", "stroke-width": 3 });
                             var P = _lt;
                             left2x.right(_lt.right());
@@ -126,20 +137,20 @@ var aj;
                             R.remove();
                         }
                         break;
-                    case Dot.SMALL: // 移动小点时，转变为大点，增加俩个小点
+                    case DOT_TYPE.SMALL: // 移动小点时，转变为大点，增加俩个小点
                         if (_lt && _rt && !svg_1.Utils.isLine(_lt.pos(), _pos, _rt.pos())) {
-                            this.type = Dot.BIG; // 变为 BIG 类型之后，只执行一次了
+                            this.type = DOT_TYPE.BIG; // 变为 BIG 类型之后，只执行一次了
                             this.svg.attr({ width: 5, height: 5, stroke: "#fff", fill: "#000", cursor: "move", "stroke-width": 2 });
-                            var P_1 = new Dot(Dot.SMALL, svg_1.Utils.center(_lt.pos(), _pos), _lt, _lt.right(), path);
-                            _lt.right(P_1);
-                            this._leftDot = _lt = P_1;
-                            var R_1 = new Dot(Dot.SMALL, svg_1.Utils.center(_rt.pos(), _pos), _rt.left(), _rt, path);
-                            _rt.left(R_1);
-                            this._rightDot = _rt = R_1;
+                            var P = new Dot(DOT_TYPE.SMALL, svg_1.Utils.center(_lt.pos(), _pos), _lt, _lt.right(), path);
+                            _lt.right(P);
+                            this._leftDot = _lt = P;
+                            var R = new Dot(DOT_TYPE.SMALL, svg_1.Utils.center(_rt.pos(), _pos), _rt.left(), _rt, path);
+                            _rt.left(R);
+                            this._rightDot = _rt = R;
                         }
                         break;
-                    case Dot.TO:
-                        if (left2x && left2x.type == Dot.FROM)
+                    case DOT_TYPE.TO:
+                        if (left2x && left2x.type == DOT_TYPE.FROM)
                             left2x.pos(svg_1.Utils.connPoint(path.from().getBBox(), _pos));
                         if (left2x)
                             _lt.pos(svg_1.Utils.center(_pos, left2x.pos()));
@@ -153,9 +164,5 @@ var aj;
             return Dot;
         }(svg_1.BaseComponent));
         svg_1.Dot = Dot;
-        Dot.TO = 1;
-        Dot.FROM = 2;
-        Dot.SMALL = 3;
-        Dot.BIG = 4;
     })(svg = aj.svg || (aj.svg = {}));
 })(aj || (aj = {}));
