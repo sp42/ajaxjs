@@ -36,7 +36,7 @@ namespace aj.wysiwyg {
 		 */
 		codeMode: boolean;
 
-		focusEl: any;
+		focusEl: Element;
 	}
 
 	// 舞台中央区域
