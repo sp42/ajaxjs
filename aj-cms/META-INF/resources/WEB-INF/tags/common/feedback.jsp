@@ -1,8 +1,3 @@
-<%@tag pageEncoding="UTF-8"  description="公司网站用的组件" trimDirectiveWhitespaces="true" %>
-<%@taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
-<%@attribute name="type" required="true" type="String" description="标签类型"%>
-
-<c:if test="${type == 'feedback'}">
 		<style>
 			.aj-form {
 				margin:0 auto;
@@ -39,7 +34,6 @@
 			</div>
 		</form>
 		
-		
 		<script>
 			aj.xhr.form('.aj-form', j => {
 				if(j && j.isOk) {
@@ -52,4 +46,3 @@
 			
 			new Vue({el: '.captcha'});
 		</script>
-</c:if>

@@ -2,10 +2,9 @@
 <%@attribute name="eng" 	required="true" 	type="String" 	description="英文输出"%>
 <%@attribute name="engHTML" required="false" 	fragment="true" description="英文 HTML输出"%>
 <%@attribute name="zh"  	required="true" 	type="String" 	description="简体中文输出"%>
-<%@attribute name="zhHTML" required="false" 	fragment="true" description="简体中文 HTML输出"%>
+<%@attribute name="zhHTML"  required="false" 	fragment="true" description="简体中文 HTML输出"%>
 <%
 	String targetLanguage = request.getParameter("i18n");
-
 
 	if (targetLanguage != null) {
 		session.setAttribute("i8n", targetLanguage);
