@@ -4,7 +4,6 @@
 <html>
 <head>
 	<jsp:include page="/WEB-INF/jsp/head.jsp">
-		<jsp:param name="lessFile" value="/asset/less/admin.less" />
 		<jsp:param name="title" value="全局配置" />
 	</jsp:include>
 	<style>

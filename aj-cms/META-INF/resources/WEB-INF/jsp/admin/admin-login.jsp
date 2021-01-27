@@ -1,5 +1,5 @@
 <%@page pageEncoding="UTF-8"%>
-<%@taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
+<%@taglib tagdir="/WEB-INF/tags/user" prefix="tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -60,8 +60,7 @@
 		<div class="box-title-login"></div>
 		<h2>${aj_allConfig.site.titlePrefix}<br/> ${aj_allConfig.System.name}</h2>
 
-		<tags:user type="login" isAdminLogin="true" />
-		
+		<tags:login isAdminLogin="true" />
 	</div>
 	<footer>
 		<div>版权所有：${aj_allConfig.clientFullName}</div>

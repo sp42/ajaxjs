@@ -3,9 +3,24 @@
 <html>
 <head>
 	<jsp:include page="/WEB-INF/jsp/head.jsp">
-		<jsp:param name="lessFile" value="/asset/less/admin.less" />
 		<jsp:param name="title" value="${uiName}管理" />
 	</jsp:include>
+	
+	<!-- Admin 公共前端资源 -->
+	<link rel="stylesheet" href="${aj_static_resource}/dist/css/admin/admin.css" />
+	<script src="${aj_static_resource}dist/admin/admin.js"></script>
+	
+	<style>
+		.tree-like select{
+			width:100%;
+			height:500px;
+			border:0;
+		}
+		
+		.tree-like.main-panel {
+			height:500px;
+		}
+	</style>
 </head>
 
 <body>
@@ -65,77 +80,6 @@
 		</aj-layer>
 	</div>
 
-	<script>
-		new Vue({
-			el: '.tree-like',
-			mixins: [aj.treeLike],
-			data: {
-				selectedId: 0,
-				selectedName: ''
-			},
-			mounted(){
-				// 新增顶级${uiName}
-				aj.xhr.form(".createTopNode", json => {
-					aj(".createTopNode input[name=name]").value = '';
-					this.refresh(json);
-				});
-
-				// 在${uiName}下添加子${uiName}
-				aj.xhr.form(".createUnderNode", json => {
-					aj(".createUnderNode input[name=name]").value = '';
-					this.refresh(json);
-				});
-				
-				// 修改名称
-				aj.xhr.form(this.$el.$('.rename'), json => {
-					this.$refs.layer.close();
-					this.refresh(json);
-				});
-
-				this.render();
-			},
-			methods: {
-				onChange($event) {
-					var selectEl = $event.target, option = selectEl.selectedOptions[0], 
-						id = option.value, pid = option.dataset['pid'], name = option.innerHTML.replace(/&nbsp;|└─/g, '');
-					
-					this.selectedId = id;
-					this.selectedName = name;
-				},
-				rename() {
-					if(!this.selectedId) {
-						aj.alert.show('未选择任何分类');
-						return;
-					}
-					
-					this.$refs.layer.show();
-				},
-				// 删除
-				dele() {
-					if(!this.selectedId) {
-						aj.alert.show('未选择任何分类');
-						return;
-					} 
-					
-					aj.showConfirm('确定删除该${uiName}[{0}]？<br />[{0}]下所有的子节点也会随着一并全部删除。'.replace(/\{0\}/g, this.selectedName), 
-						() => aj.xhr.dele("" + this.selectedId + "/", this.refresh)
-					);
-				},
-				refresh(json) {
-					if (json.isOk) {
-						aj.alert.show(json.msg);
-						this.render();
-					} else 
-						aj.alert.show(json.msg);
-				},
-				
-				render() {
-					var select = this.$el.$('select');
-					select.innerHTML = '';
-					aj.xhr.get('.', j => this.rendererOption(j.result, select));
-				}
-			}
-		});
-	</script>
+	<script src="${aj_static_resource}dist/admin/system/tree-like.js"></script>
 </body>
 </html>

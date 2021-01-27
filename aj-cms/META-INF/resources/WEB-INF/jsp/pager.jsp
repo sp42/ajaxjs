@@ -19,14 +19,14 @@
 			<div class="info" style="vertical-align: bottom;">
 				页数：${PageResult.getCurrentPage()}/${PageResult.getTotalPage()}
 				记录数：${PageResult.getStart()}/${PageResult.getTotalCount()}
-				<form method="GET">
+				<!-- <form method="GET"> -->
 					每页记录数： <input size="4" title="输入一个数字确定每页记录数" type="text"
 						name="limit" value="${empty param.limit ? PageResult.getPageSize() : param.limit}" />
 					<!-- 其他参数 -->
 					<c:foreach items="${PageUtil.getParams_without_asMap('limit', pageContext.request.queryString)}" var="current">
 						<input type="hidden" name="${current.key}" value="${current.value}" />
 					</c:foreach>
-				</form>
+				<!-- </form> -->
 				<%--分页数过多影响 HTML 加载，这里判断下 --%>
 				<c:if test="${PageResult.getTotalPage() < 1000}">
 				 	跳转：<select onchange="jumpPage(this);">

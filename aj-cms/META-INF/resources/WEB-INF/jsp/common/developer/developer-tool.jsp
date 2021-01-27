@@ -3,7 +3,6 @@
 <html>
 <head>
 	<jsp:include page="/WEB-INF/jsp/head.jsp">
-		<jsp:param name="lessFile" value="/asset/less/admin.less" />
 		<jsp:param name="title" value="实用工具" />
 	</jsp:include>
 	<style>
@@ -40,6 +39,10 @@
 			min-width:10%;
 		}
 	</style>
+	
+	<!-- Admin 公共前端资源 -->
+	<link rel="stylesheet" href="${aj_static_resource}/dist/css/admin/admin.css" />
+	<script src="${aj_static_resource}dist/admin/admin.js"></script>
 </head>
 <body class="admin-entry-form">
 	<div>
@@ -54,7 +57,6 @@
 			<li :class="{'selected': 1 === selected}" @click="selected = 1">代码生成器</li>
 			<li :class="{'selected': 2 === selected}" @click="selected = 2">后台日志浏览</li>
 			<li :class="{'selected': 3 === selected}" @click="selected = 3">统计代码行数</li>
-			<li :class="{'selected': 4 === selected}" @click="selected = 4">前端代码打包</li>
 		</ul>
 		<div class="content">
 			<div :class="{'selected': 0 === selected}">			
@@ -151,25 +153,6 @@
 						</div>
 					</form>
 				</div>
-				<div :class="{'selected': 4 === selected}">	
-					<p>1、仅在开发模式下（Windows）执行，且在部署之前执行。2、按实际情况改为你的工程目录。</p>
-					<div>
-						<input class="jsSave aj-input" style="height:32px;width:400px;margin-right:30px;" value="${aj_allConfig.System.project_folder.replace('\\',  '/')}" /> <button class="aj-btn" onclick="packageJs();return false;">打包 JavaScript</button>
-						<div>最终保存在 /asset/js/all.js 中。<br />**请确保浏览器可以访问谷歌 GAE 站点，原因是压缩 JS 采用了谷歌的接口。推荐 GHelper 浏览器插件。** </div>
-					</div>
-<%-- 					<div>
-						<input class="jsSave aj-input" style="height:32px;width:400px;margin-right:30px;" value="${aj_allConfig.System.project_folder.replace('\\',  '/')}" /> <button class="aj-btn" onclick="window.open('/ajaxjs-js/JsController?output=' + aj('.jsSave').value);return false;">打包 JavaScript</button>
-						<div>最终保存在 /asset/js/all.js 中。 </div>
-					</div> --%>
-					<div>
-						<input class="cssSave aj-input" style="height:32px;width:400px;margin-right:30px;" value="${aj_allConfig.System.project_folder.replace('\\',  '/')}" /> <button class="aj-btn" onclick="window.open('${ctx}/?css=true&output=' + aj('.cssSave').value);return false;">打包网站 CSS</button>
-						<div>最终保存在 /asset/css/main.css 中。 </div>
-					</div>
-					<div>
-						<input class="adminSave aj-input" style="height:32px;width:400px;margin-right:30px;" value="${aj_allConfig.System.project_folder.replace('\\',  '/')}" /> <button class="aj-btn" onclick="window.open('${ctx}/admin/?css=true&file=admin.css&output=' + aj('.adminSave').value);return false;">打包后台 CSS</button>
-						<div>最终保存在 /asset/css/admin.css 中。 </div>
-					</div>
-				</div>
 			</div>
 		</div>
 
@@ -220,31 +203,8 @@
 				down(json.zipFile);
 			});
 		}
-		
-		function packageJs() {
-			aj.xhr.get("/ajaxjs-js/JsController", js => {
-				aj.xhr.post('https://closure-compiler.appspot.com/compile', compressedJs => {
-					aj.xhr.post("/ajaxjs-js/JsController", j => {
-						console.log(j)
-						alert(j.isOk ? '打包 js 成功！' : '打包 js 失败！');
-					}, {
-						js: encodeURIComponent(compressedJs),
-						saveFolder: aj('.jsSave').value
-					});
-				}, {
-					js_code: encodeURIComponent(js),
-					compilation_level: 'WHITESPACE_ONLY',
-					output_format: 'text',
-				    output_info: 'compiled_code'
-				}, {
-					parseContentType: 'text'
-				});
-			}, null, {
-				parseContentType: 'text'
-			});
-		}
-	</script>
 	
+	</script>
 	<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.js"></script>
 	<script>
 		$(document).ready(function() {

@@ -3,11 +3,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-<jsp:include page="/WEB-INF/jsp/head.jsp">
-	<jsp:param name="lessFile" value="/asset/less/admin.less" />
-	<jsp:param name="title" value="${uiName}管理" />
-</jsp:include>
-		 
+	<jsp:include page="/WEB-INF/jsp/head.jsp">
+		<jsp:param name="title" value="${uiName}管理" />
+	</jsp:include>
+	
+	<!-- Admin 公共前端资源 -->
+	<link rel="stylesheet" href="${aj_static_resource}/dist/css/admin/admin.css" />
+	<script src="${aj_static_resource}dist/admin/admin.js"></script>
 </head>
 <body>
 	<div class="admin-entry-form">
@@ -94,7 +96,7 @@
 		// 表单提交
 		aj.xhr.form('.admin-entry-form form', json => {
 			if (json && json.msg)
-				aj.alert.show(json.msg);
+				aj.alert(json.msg);
 			${isCreate ? 'json && json.isOk && setTimeout(function(){location.assign(json.newlyId + "/");}, 2000);': ''}
 		});
 	</script>

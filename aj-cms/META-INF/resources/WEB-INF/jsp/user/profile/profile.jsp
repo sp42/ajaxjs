@@ -1,6 +1,7 @@
 <%@ page pageEncoding="UTF-8"%>
-<%@taglib prefix="tags" tagdir="/WEB-INF/tags/"%>
-<tags:user-center>
+<%@taglib prefix="page" tagdir="/WEB-INF/tags/"%>
+<%@taglib prefix="tags" tagdir="/WEB-INF/tags/user"%>
+<page:user-center>
 	<h3 class="aj-center-title">个人信息</h3>
 	
 	<div style="text-align: right;margin-right:2%;">
@@ -16,5 +17,5 @@
 		为提供更好的服务，请完善以下信息。我们保证不会外泄个人私隐信息。
 	</p>
 	
-	<tags:user-center-pages type="profile" />
-</tags:user-center>
+	<tags:profile />
+</page:user-center>

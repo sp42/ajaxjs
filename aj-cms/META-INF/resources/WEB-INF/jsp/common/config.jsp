@@ -2,11 +2,14 @@
 <!doctype html>
 <html>
 <head>
-<!-- 全局统一的 HTML 文件头 -->
-<jsp:include page="/WEB-INF/jsp/head.jsp">
-	<jsp:param name="lessFile" value="/asset/less/admin.less" />
-	<jsp:param name="title" value="网站结构" />
-</jsp:include>
+	<!-- 全局统一的 HTML 文件头 -->
+	<jsp:include page="/WEB-INF/jsp/head.jsp">
+		<jsp:param name="title" value="网站结构" />
+	</jsp:include>
+	
+	<!-- Admin 公共前端资源 -->
+	<link rel="stylesheet" href="${aj_static_resource}/dist/css/admin/admin.css" />
+	<script src="${aj_static_resource}dist/admin/admin.js"></script>
 </head>
 <body>
 	<div class="aj-json-form">
@@ -132,7 +135,7 @@
 			</div>
 		</div>
 	</div>
-	<script src="${ctx}/asset/admin/config-parser.js"></script>
+	<script src="${aj_static_resource}dist/admin/system/config-parser.js"></script>
 	<script>
 		new Vue({el:'.aj-json-form > span'});
 		
@@ -142,7 +145,7 @@
 				scheme: ${schemeJson},
 				config: ${configJson}
 			},
-			mixins: [aj.widget.tabable]
+			mixins: [aj.widget.tab.tabable]
 		});
 		
 		new Vue({
@@ -151,7 +154,7 @@
 				scheme: ${schemeJson},
 				config: ${configJson}
 			},
-			mixins: [aj.widget.tabable]
+			mixins: [aj.widget.tab.tabable]
 		});
 		
 		changeTab = function(e) {

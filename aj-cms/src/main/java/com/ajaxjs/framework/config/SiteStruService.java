@@ -60,8 +60,8 @@ public class SiteStruService implements IComponent {
 			public boolean execute(Map<String, Object> map, Map<String, Object> superMap, int level) {
 				if (map.containsKey("dbNode")) {
 					Object _map = cxt.getAttribute(map.get("dbNode").toString());
-					
-					if(_map == null) {
+
+					if (_map == null) {
 						LOGGER.warning("Servlet 初始化数据未准备好，依赖数据：" + map.get("dbNode").toString());
 						return false;
 					}
@@ -91,10 +91,9 @@ public class SiteStruService implements IComponent {
 	}
 
 	private final static Consumer<ServletContext> initialized = ctx -> {
-
-
 		// 加载网站结构
 		loadSiteStru(ctx);
+
 		if (STRU != null && STRU.isLoaded())
 			ctx.setAttribute("SITE_STRU", new SiteStruService()); // 所有网站结构保存在这里
 	};

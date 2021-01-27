@@ -2,14 +2,16 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<jsp:include page="/WEB-INF/jsp/head.jsp">
-			<jsp:param name="lessFile" value="/asset/less/admin.less" />
-		</jsp:include>
+		<jsp:include page="/WEB-INF/jsp/head.jsp"></jsp:include>
 		<style>
 			body {
 				padding: 2%;
 			}
 		</style>
+			
+		<!-- Admin 公共前端资源 -->
+		<link rel="stylesheet" href="${aj_static_resource}/dist/css/admin/admin.css" />
+		<script src="${aj_static_resource}dist/admin/admin.js"></script>
 	</head>
 	<body class="pageEditor">
 		<nav>
@@ -45,13 +47,13 @@
 			App = new Vue({el:'.edit'});
 			
 			// 返回
-			aj('.backBtn').onclick = function(e) {
+			document.querySelector('.backBtn').onclick = function(e) {
 				//window.history.go(-1);
 				window.location = document.referrer;
 			}
 	
 			// 提交数据
-			aj('.saveBtn').onclick = function(e) {
+			document.querySelector('.saveBtn').onclick = function(e) {
 				aj.xhr.post('../save.do', function(json) {
 					if (json.isOk)
 						aj.msg.show('修改页面成功！');
@@ -64,7 +66,7 @@
 			}
 	
 			// 提交数据
-			aj('.perviewBtn').onclick = function(e) {
+			document.querySelector('.perviewBtn').onclick = function(e) {
 				window.open('${pageContext.request.contextPath}${param.url}', '_blank');
 			}
 		</script>

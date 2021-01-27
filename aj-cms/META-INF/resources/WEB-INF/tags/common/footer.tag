@@ -29,6 +29,7 @@ request.setAttribute("FOOTER_YEAR", java.util.Calendar.getInstance().get(java.ut
 				<a href="#"> <img src="${commonAsset}/images/kexin.png" hspace="20" width="90" style="margin-top: 15px;" /></a>  --%>
 				<a href="#"> <img src="${ajaxjs_ui_output}/images/360logo.gif" width="90" style="margin-top: 15px;" /></a>
 			</div>
+			<jsp:doBody />
 			<span> 
 				<a href="javascript:;" onclick="aj.widget.page.TraditionalChinese.toSimpleChinese(this);" class="simpleChinese selected">简体中文</a> /
 				<a href="javascript:;" onclick="aj.widget.page.TraditionalChinese.toChinese(this);" class="Chinese">正体中文</a>

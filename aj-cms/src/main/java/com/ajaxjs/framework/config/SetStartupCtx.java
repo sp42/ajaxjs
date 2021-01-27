@@ -29,7 +29,9 @@ public class SetStartupCtx implements IComponent {
 
 			// 开发阶段，ajaxjsui 指定了前端 js 所在的位置，通常是另外一个项目同时运行着，例如当前是本机 8080 端口的 ajaxjs-js。
 			if (Version.isDebug)
-				ctx.setAttribute("developing_js_url", "http://" + Tools.getIp() + ":8080/ajaxjs-js");
+				ctx.setAttribute("developing_js_url", "http://" + Tools.getIp() + ":8888");
+
+			ctx.setAttribute("aj_static_resource", ctx.getAttribute(Version.isDebug ? "developing_js_url" : "ajaxjs_ui_output"));
 		});
 	}
 }

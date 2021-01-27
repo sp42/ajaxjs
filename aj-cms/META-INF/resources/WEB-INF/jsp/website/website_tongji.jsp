@@ -4,10 +4,9 @@
 <!DOCTYPE html>
 <html>
 	<head>
-	<jsp:include page="/WEB-INF/jsp/head.jsp">
-		<jsp:param name="lessFile" value="/asset/less/admin.less" />
-		<jsp:param name="title" value="${uiName}管理" />
-	</jsp:include>
+		<jsp:include page="/WEB-INF/jsp/head.jsp">
+			<jsp:param name="title" value="${uiName}管理" />
+		</jsp:include>
 		<style>
 			body{
 				padding:2%;
@@ -51,6 +50,10 @@
 				width: 300px!important;
 			}
 		</style>
+		
+		<!-- Admin 公共前端资源 -->
+		<link rel="stylesheet" href="${aj_static_resource}/dist/css/admin/admin.css" />
+		<script src="${aj_static_resource}dist/admin/admin.js"></script>
 		<script src=//unpkg.com/laue></script>
 	</head>
 	<body>
@@ -193,91 +196,6 @@
 				</div>
 			</aj-layer>
 		</div>
-		<script>
-			Date.prototype.format = function (fmt) {
-			    var o = {
-			        "M+": this.getMonth() + 1, //月份
-			        "d+": this.getDate(), //日
-			        "h+": this.getHours(), //小时
-			        "m+": this.getMinutes(), //分
-			        "s+": this.getSeconds(), //秒
-			        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-			        "S": this.getMilliseconds() //毫秒
-			    };
-			    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-			    for (var k in o)
-			        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-			    return fmt;
-			}
-		
-			new Vue({
-				el: aj('.main table'),
-				data: {
-					arr:[]
-				},
-				mounted() {
-					aj.xhr.get('getTimeTrendRpt/', json => {
-						this.arr = json.body.data[0].result.items[1];
-					});
-				}
-			});
-			
-			aj.xhr.get('getCommonTrackRpt/', json => {
-				var data = json.body.data[0].result;
-				
-				for(var i in data) {				
-					new Vue({
-						el: aj('.' + i),
-						data: { arr: data[i].items}
-					});
-				}
-			});
-			
-			var now = new Date(), last7days = new Date(), yesterday = new Date();
-			last7days.setDate(now.getDate() - 8);
-			yesterday.setDate(now.getDate() - 1);
-			
-			new Vue({
-				el: '.chart',
-				data: {
-					startDate: last7days.format("yyyy-MM-dd"),
-					endDate: yesterday.format("yyyy-MM-dd"),
-					values: [{ name: 'Page A', uv: 4000, pv: 2400, amt: 2400 }]
-				},
-				mounted(){ 
-					this.query();
-				},
-				methods: {
-					query() {
-						var startDate = this.$children[0].date, endDate = this.$children[1].date;
-						aj.xhr.get('getTrend', json => {
-							// 转换格式
-							var arr = json.body.data[0].result.items, days = arr[0].reverse(), value = arr[1].reverse();
-							var newArr = [];
-							
-							for(var i = 0, j = days.length; i < j; i++)
-								newArr.push({
-									name: days[i], pv: value[i][0], uv: value[i][1]
-								});
-							
-							this.values = newArr;
-						}, {
-							start_date: startDate,
-							end_date: endDate
-						});
-					}
-				}
-			});
-			
-			settings = new Vue({
-				el: '.settings',
-				mounted(){
-					ajaxjs.xhr.form(this.$el.$('form'));
-				}
-			});
-			function showSetting(){
-				settings.$children[0].show();
-			}
-		</script>
+		<script src="${aj_static_resource}dist/admin/Website/tongji.js"></script>
 	</body>
 </html>

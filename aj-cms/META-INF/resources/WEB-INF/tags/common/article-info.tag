@@ -1,42 +1,8 @@
 <%@tag pageEncoding="UTF-8" import="com.ajaxjs.framework.config.ConfigService" trimDirectiveWhitespaces="true" %>
 <%@taglib uri="/ajaxjs" 		prefix="c" %>
-<%@taglib uri="/ajaxjs_config"	prefix="config"%>
 <%@taglib tagdir="/WEB-INF/tags/" prefix="tagfile"%>
-<%@attribute name="type" required="true" type="String" description="标签类型"%>
-
-
-<c:if test="${type == 'list'}">
-	<%@attribute name="listClass" required="fasle" type="String" description="列表样式类"%>
-	<%@attribute name="catalogs"  required="fasle" type="java.util.Map" description="类别"%>
-	<c:if test="${not empty PageResult}">
-		<div class="${empty listClass ? 'aj-pc-list-1' : listClass}">
-			<ul>
-				<c:foreach items="${PageResult}" var="item">
-					<li>
-						<h3>
-							<a href="${item.id}/">${item.name}</a>
-						</h3>
-						<c:if test="${not empty item.cover}">
-							<a href="${item.id}/">
-								<div class="thumb">
-									<img src="${item.cover.startsWith('http') ? item.cover : aj_allConfig.uploadFile.imgPerfix.concat(item.cover)}" />
-								</div>
-							</a>
-						</c:if>
-						<p>${item.intro}……</p>
-						<div>
-							<c:dateFormatter value="${item.createDate}" format="YYYY-MM-dd" />
-							类别：<a href="?catalogId=${item.catalogId}">${catalogs[item.catalogId].name}</a>
-							| <a href="${item.id}/">阅读更多»</a>
-						</div>
-					</li>
-				</c:foreach>
-			</ul>
-		</div>
-	</c:if> 
-</c:if>
-
-<%-- 缩略图 --%>
+	
+<%-- 缩略图 
 <c:if test="${type == 'thumb'}">
 	<%@attribute name="thumb" required="false" type="String" description="缩略图"%>
 	<c:if test="${not empty thumb}">
@@ -46,8 +12,9 @@
 		</a>
 	</c:if>
 </c:if>
+--%>
 
-<c:if test="${type == 'info' && not empty info}">
+<c:if test="${not empty info}">
 	<%@attribute name="isOnlyCreateDate" required="false" type="Boolean" description="是否只显示创建日期"%>
 	
 	<div class="aj-article-info">
@@ -72,7 +39,7 @@
 			
 			${info.content.replaceAll('src="[^http]', 'src="../../i')}
 		</article>
-		<jsp:doBody />
+		
 		
 <c:if test="${ConfigService.getValueAsBool('domain.article.attachmentDownload') && not empty info.attachment}">
 		<fieldset class="aj-fieldset">

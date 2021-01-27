@@ -1,5 +1,5 @@
 <%@page pageEncoding="UTF-8"%>
-<%@taglib prefix="tags" tagdir="/WEB-INF/tags/"%>
+<%@taglib prefix="tags" tagdir="/WEB-INF/tags/user"%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -22,7 +22,7 @@
 			new Vue({el:' body > div'});
 		</script>
  
-		<tags:user-center-pages type="profile" />
+		<tags:profile />
 	</body>
 </html>
 

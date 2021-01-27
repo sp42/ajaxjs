@@ -5,9 +5,12 @@
 <html>
 	<head>
 		<jsp:include page="/WEB-INF/jsp/head.jsp">
-			<jsp:param name="lessFile" value="/asset/less/admin.less" />
 			<jsp:param name="title" value="${uiName}管理" />
 		</jsp:include>
+		
+		<!-- Admin 公共前端资源 -->
+		<link rel="stylesheet" href="${aj_static_resource}/dist/css/admin/admin.css" />
+		<script src="${aj_static_resource}dist/admin/admin.js"></script>
 	</head>
 	<body>
 		<div class="vue">
@@ -27,7 +30,7 @@
 		</script>
 
 		<!-- 列表渲染，采用传统后端 MVC 渲染 -->
-		<table class="ajaxjs-niceTable listTable">
+		<table class="aj-niceTable listTable">
 			<colgroup>
 				<col />
 				<col />

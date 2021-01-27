@@ -15,7 +15,93 @@
 <head>
 	<meta charset="UTF-8" />
 	<title>表设计文档</title>
-	<link rel="stylesheet" type="text/css" href="${ctx}/asset/admin/sqlDoc.css" />
+	<link rel="stylesheet" href="${aj_static_resource}/dist/css/all.css" />
+	<style type="text/css">
+		h3 {
+			padding-top: 4%;
+		}
+		
+		p {
+			padding: 1% 0;
+		}
+		
+		h3, table, p {
+			width: 90%;
+			margin: 0 auto;
+		}
+		
+		
+		
+		.leftSide {
+			float: left;
+			width: 18%;
+			height: 100%;
+			border-right: 1px solid lightgray;
+			box-sizing: border-box;
+			background-color: #e6e6e6;
+			overflow: auto;
+		}
+		
+		.rightSide {
+			float: right;
+			width: 82%;
+			height: 100%;
+		}
+		
+		h3 {
+			text-align: center;
+			font-size:20px;
+		}
+		
+		h4 {
+			letter-spacing: 2px;
+			margin: 4% 0;
+			font-size: .95rem;
+		}
+		
+		h5 {
+			text-align: center;
+			color: gray;
+			font-weight: normal;
+			margin-top: 0;
+		}
+		
+		iframe {
+			width: 100%;
+			height: 99.2%;
+			border: 0;
+		}
+		
+		ol.level_1 {
+			list-style-type: cjk-ideographic;
+		}
+		
+		ol.level_1 li {
+			
+		}
+		
+		ol.level_1 li li {
+			margin-bottom: 2%;
+			font-size: .9rem;
+		}
+		
+		ol ol {
+			padding-left: 5%;
+		}
+		
+		a {
+			color: black;
+			text-decoration: none;
+		}
+		
+		menu {
+			padding-left: 20px;
+		}
+		
+		.rightSide{
+			overflow: scroll;
+		}
+	</style>
 </head>
 <body>
 	<div class="leftSide">
@@ -55,7 +141,7 @@
 		<h3><%=tableName%></h3>
 		<p><%=tablesComment.get(tableName)%></p>
 
-		<table class="ajaxjs-niceTable">
+		<table class="aj-niceTable">
 			<thead>
 				<th>字段名</th>
 				<th>类型（长度）</th>

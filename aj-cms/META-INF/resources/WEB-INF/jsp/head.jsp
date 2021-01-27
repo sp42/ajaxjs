@@ -7,20 +7,20 @@
 	<%-- 360 优先使用 Google Chrome Frame 和最新版本 IE --%>
 	<meta name="renderer"	 content="webkit" /> 
 	<meta name="robots" 	 content="index,follow" />
-	<meta http-equiv="X-UA-Compatible" content="edge,chrome=1" />
 	
 <%
 	if(ua.isPhone()) { // 是否为移动客户端，响应式输出宽度 320px
 %>   
 		<meta name="viewport" content="width=320, user-scalable=0, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
 		<meta name="format-detection" content="telephone=no" />
-		<meta http-equiv="Cache-Control" content="no-siteapp" /><%-- 通过百度手机打开网页时，百度可能会对你的网页进行转码，脱下你的衣服，往你的身上贴狗皮膏药的广告 --%>
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<%-- 通过百度手机打开网页时，百度可能会对你的网页进行转码，脱下你的衣服，往你的身上贴狗皮膏药的广告 --%>
 <%	}
 	
 	if(ua.isOldIE()) {// 兼容旧版 ie
 		response.setHeader("X-UA-Compatible","IE=EmulateIE8");
 %>
-		<meta http-equiv="X-UA-Compatible" content="edge" />
+		<meta http-equiv="X-UA-Compatible" content="edge,chrome=1" />
 <%
 	}
 %>
@@ -45,58 +45,24 @@
 			}
 		}	
 	</style> 
-	<%-- 图标库  http://fontawesome.dashgame.com/ --%>
-	<%-- <link href="${ajaxjs_ui_output}/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet"> --%>
-    <link crossorigin="anonymous" integrity="sha384-FckWOBo7yuyMS7In0aXZ0aoVvnInlnFMwCv77x9sZpFgOonQgnBj1uLwenWVtsEj" href="https://lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />                 
+	
+	<link rel="stylesheet" href="${aj_static_resource}/dist/css/all.css" />
+	<link rel="stylesheet" href="${aj_static_resource}/dist/css/website/${aj_allConfig.site.appId}.css" /> 
+    <link href="https://lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
 	
 <% if(com.ajaxjs.Version.isDebug) { %>
-	<link rel="stylesheet/less" data-global-vars='{"assetFilePath": "\"${empty param.css ? ctx : ''}/asset\"" }' type="text/css" href="${ctx}${empty param.lessFile ? '/asset/less/main.less' : param.lessFile}" />
-
-	<script src="https://lib.baomitu.com/less.js/3.0.4/less.min.js"></script>
-    <script src="https://lib.baomitu.com/vue/2.6.11/vue.js"></script>
-    <script src="${developing_js_url}/js/ajaxjs-base.js"></script>
-    <script src="${developing_js_url}/js/widgets/form.js"></script>
-    <script src="${developing_js_url}/js/widgets/list.js"></script>
-    <script src="${developing_js_url}/js/widgets/carousel.js"></script>
-    <script src="${developing_js_url}/js/widgets/user.js"></script>
-    <script src="${developing_js_url}/js/widgets/grid.js"></script>
-    <script src="${developing_js_url}/js/widgets/admin.js"></script>
-    
-    <% if(request.getParameter("css")  != null) { %> 
-		<script>
-			setTimeout(() => {
-				function compress(code) {  
-				    code = code.replace(/\n/ig, '');            // 去掉换行  
-				    code = code.replace(/(\s){2,}/ig, '$1');    // 多空间（两个以上） 变 一个空格  
-				    code = code.replace(/\t/ig, '');            // 去掉tab  
-				    code = code.replace(/\n\}/ig, '\}');        // 换行+} 变 不换行  
-				    code = code.replace(/\n\{\s*/ig, '\{');     // {+换行 变 不换行  
-				    code = code.replace(/(\S)\s*\}/ig, '$1\}'); // 去掉 内容 与 } 之间的空格  
-				    code = code.replace(/(\S)\s*\{/ig, '$1\{'); // 去掉 内容 与 { 之间的空格  
-				    code = code.replace(/\{\s*(\S)/ig, '\{$1'); // 去掉 { 与 内容之间空格  
-				    return code;  
-				}  
-				
-				var cssCode = compress(aj('style[id]').innerHTML);
-				aj.xhr.post("/ajaxjs-js/JsController", json => {
-					json.isOk && alert('压缩 CSS 完成！');
-				}, {
-					type : '${param.css}',
-					css: encodeURIComponent(cssCode),
-					file: '${empty param.file ? 'main.css' : param.file}',
-					saveFolder: '${empty param.output ? aj_allConfig.System.project_folder.replace('\\', '\\\\') : param.output}\\WebContent\\asset\\css' 
-				});
-				
-			}, 1000);
-		</script> 
-	<%}%>
+	<script crossorigin="anonymous" integrity="sha512-YXLGLsQBiwHPHLCAA9npZWhADUsHECjkZ71D1uzT2Hpop82/eLnmFb6b0jo8pK4T0Au0g2FETrRJNblF/46ZzQ==" 
+		src="//lib.baomitu.com/vue/2.6.12/vue.js"></script>
+    <script src="http://localhost:8888/dist/base.js"></script>
+    <script src="http://localhost:8888/dist/widget.js"></script>
+    <script src="http://localhost:8888/dist/form.js"></script>
+    <script src="http://localhost:8888/dist/list.js"></script>
+    <script src="http://localhost:8888/dist/misc.js"></script> 
 <%}else { %>
-	<link rel="stylesheet" type="text/css" href="${ctx}/asset/css/${empty param.lessFile ? 'main' : param.lessFile.replaceAll("(?:.*/)(\\w+).less", "$1")}.css" />
-	<script crossorigin="anonymous" integrity="sha384-8t+aLluUVnn5SPPG/NbeZCH6TWIvaXIm/gDbutRvtEeElzxxWaZN+G/ZIEdI/f+y" src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
-<%--     <script src="${ajaxjs_ui_output}/lib/vue.min.js"></script>--%>
-    <script src="${ctx}/asset/js/all.js"></script> 
+	<script crossorigin="anonymous" integrity="sha512-BKbSR+cfyxLdMAsE0naLReFSLg8/pjbgfxHh/k/kUC82Hy7r6HtR5hLhobaln2gcTvzkyyehrdREdjpsQwy2Jw==" 
+		src="//lib.baomitu.com/vue/2.6.12/vue.min.js"></script>    
+	<script src="${aj_static_resource}/dist/all.min.js"></script>
 <%} %>
-	
    	<script>
    		aj.isDebug = <%=com.ajaxjs.Version.isDebug%>;
    		aj.ctx = '${ctx}';
