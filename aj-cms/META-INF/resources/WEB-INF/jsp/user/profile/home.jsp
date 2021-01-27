@@ -52,7 +52,7 @@
 				var now = new Date(), year = now.getFullYear(), month = now.getMonth() + 1, day = now.getDate();       
 				var newDay = year + "年" + month + "月" + day + "日 ";
 				
-				aj('.clock').innerHTML = newDay + now.toLocaleTimeString(); 
+				document.body.$('.clock').innerHTML = newDay + now.toLocaleTimeString(); 
 				setTimeout(arguments.callee, 1000); //在1秒后再次执行
 			}, null);
 		</script>

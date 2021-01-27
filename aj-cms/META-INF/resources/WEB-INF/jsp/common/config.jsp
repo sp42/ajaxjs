@@ -9,7 +9,7 @@
 	
 	<!-- Admin 公共前端资源 -->
 	<link rel="stylesheet" href="${aj_static_resource}/dist/css/admin/admin.css" />
-	<script src="${aj_static_resource}dist/admin/admin.js"></script>
+	<script src="${aj_static_resource}/dist/admin/admin.js"></script>
 </head>
 <body>
 	<div class="aj-json-form">
@@ -135,7 +135,7 @@
 			</div>
 		</div>
 	</div>
-	<script src="${aj_static_resource}dist/admin/system/config-parser.js"></script>
+	<script src="${aj_static_resource}/dist/admin/system/config-parser.js"></script>
 	<script>
 		new Vue({el:'.aj-json-form > span'});
 		
@@ -158,11 +158,11 @@
 		});
 		
 		changeTab = function(e) {
-			var old = aj('.show');
+			var old = document.body.$('.show');
 			old.classList.remove('show');
 			old.classList.add('hide');
 			
-			var el = aj('.config-tab-' + e.selectedIndex);
+			var el = document.body.$('.config-tab-' + e.selectedIndex);
 			el.classList.remove('hide');
 			el.classList.add('show');
 		}

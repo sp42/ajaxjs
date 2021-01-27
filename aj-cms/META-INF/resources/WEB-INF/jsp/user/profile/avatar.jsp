@@ -33,9 +33,9 @@
 		aj.xhr.form('form.avatar', json => {
 			aj.xhr.get('${ctx}/user/profile/avatar/updateAvatar/', json => {
 				aj.msg.show("修改头像成功");
-				aj('.avatar img').src = "${aj_allConfig.uploadFile.imgPerfix}" + aj("input[name=avatar]").value;
+				document.body.$('.avatar img').src = "${aj_allConfig.uploadFile.imgPerfix}" + document.body.$("input[name=avatar]").value;
 			}, {
-				avatar: aj("input[name=avatar]").value
+				avatar: document.body.$("input[name=avatar]").value
 			});
 		});
 	</script>

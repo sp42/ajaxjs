@@ -61,5 +61,5 @@
 		el : '.area'
 	});
 	
-	ajaxjs.xhr.form('.aj-form');
+	aj.xhr.form('.aj-form');
 </script>

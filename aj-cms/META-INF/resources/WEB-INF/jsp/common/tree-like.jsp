@@ -8,7 +8,7 @@
 	
 	<!-- Admin 公共前端资源 -->
 	<link rel="stylesheet" href="${aj_static_resource}/dist/css/admin/admin.css" />
-	<script src="${aj_static_resource}dist/admin/admin.js"></script>
+	<script src="${aj_static_resource}/dist/admin/admin.js"></script>
 	
 	<style>
 		.tree-like select{
@@ -80,6 +80,6 @@
 		</aj-layer>
 	</div>
 
-	<script src="${aj_static_resource}dist/admin/system/tree-like.js"></script>
+	<script src="${aj_static_resource}/dist/admin/system/tree-like.js"></script>
 </body>
 </html>

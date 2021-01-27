@@ -4,9 +4,9 @@
 <html style="height: 100%;">
 	<head>
 		<jsp:include page="/WEB-INF/jsp/head.jsp" flush="true">
-			<jsp:param name="css" value="" />
 			<jsp:param name="title" value="${uiName}管理" />
 		</jsp:include>
+		<!-- Admin 公共前端资源 -->
 		<link rel="stylesheet" href="${aj_static_resource}/dist/css/admin/shell.css" />
 	</head>
 	<body class="admin-shell">
@@ -102,16 +102,6 @@
 			<iframe src="${ctx}/admin/home/" name="iframepage"></iframe>
 		</section>
 		
-	    <script>
-	    	function logout() {
-	    		confirm('确定退出吗？') && aj.xhr.get('${ctx}/user/login/logout/', j => {
-	  				if(j.isOk) {
-	  					aj.msg.show(j.msg);
-	  					setTimeout(()=>location.assign('${ctx}/admin/login/'), 1000);
-	  				}
-	    		});
-	    	}
-	    </script>
-	    <script src="${aj_static_resource}dist/admin/shell.js"></script>
+	    <script src="${aj_static_resource}/dist/admin/shell.js"></script>
 	</body>
 </html>

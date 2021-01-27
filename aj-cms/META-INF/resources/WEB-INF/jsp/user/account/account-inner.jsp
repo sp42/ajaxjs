@@ -229,7 +229,7 @@
 			if (!obj) {
 				obj = new Vue({
 					el: '.' + type + '-holder',
-					template: aj('.' + type).value,
+					template: document.body.$('.' + type).value,
 					methods: {
 						closePopup() {
 							this.$el.classList.add('hide');

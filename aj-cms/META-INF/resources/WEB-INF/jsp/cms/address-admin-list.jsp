@@ -9,7 +9,7 @@
 	
 	<!-- Admin 公共前端资源 -->
 	<link rel="stylesheet" href="${aj_static_resource}/dist/css/admin/admin.css" />
-	<script src="${aj_static_resource}dist/admin/admin.js"></script>
+	<script src="${aj_static_resource}/dist/admin/admin.js"></script>
 	<script src="${ajaxjs_ui_output}/lib/China_AREA_full.js"></script>
 </head>
 <body>

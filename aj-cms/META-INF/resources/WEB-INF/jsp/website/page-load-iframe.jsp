@@ -50,7 +50,7 @@
 					this.url = location.origin + el.contentWindow.location.pathname;
 				},
 				clk() {
-					var url = aj('iframe').contentDocument.location.href;
+					var url = document.body.$('iframe').contentDocument.location.href;
 					// 去掉 dom 返回的前缀
 					url = url.replace(/http:\/\/[^\/]*/, '');
 					url = url.replace('${ctx}', '');

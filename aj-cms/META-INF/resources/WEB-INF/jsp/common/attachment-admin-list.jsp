@@ -9,8 +9,8 @@
 			</jsp:include>
 			
 			<!-- Admin 公共前端资源 -->
-			<link rel="stylesheet" href="${aj_static_resource}dist/css/admin/admin.css" />
-			<script src="${aj_static_resource}dist/admin/admin.js"></script>
+			<link rel="stylesheet" href="${aj_static_resource}/dist/css/admin/admin.css" />
+			<script src="${aj_static_resource}/dist/admin/admin.js"></script>
 		</head>
 	<body>
 		<div>

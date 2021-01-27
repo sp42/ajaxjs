@@ -42,7 +42,7 @@
 	
 	<!-- Admin 公共前端资源 -->
 	<link rel="stylesheet" href="${aj_static_resource}/dist/css/admin/admin.css" />
-	<script src="${aj_static_resource}dist/admin/admin.js"></script>
+	<script src="${aj_static_resource}/dist/admin/admin.js"></script>
 </head>
 <body class="admin-entry-form">
 	<div>
@@ -169,7 +169,7 @@
 		});
 		
 		down = file => {			
-			var link = aj('#downLink');
+			var link = document.body.$('#downLink');
 			link.href = '${ctx}/temp/' + file;
 			// 前端实现文件自动下载 不知为何第一次下载不行，要等好久，其实文件已经在服务端上了
 			setTimeout(() => {
@@ -186,11 +186,11 @@
 		backupSite = () => {
 			var i = 0;
 			
-			if(aj('.isWithImage').checked)
+			if(document.body.$('.isWithImage').checked)
 				i += 1;
-			if(aj('.isWithClasses').checked)
+			if(document.body.$('.isWithClasses').checked)
 				i += 2;
-			if(aj('.isWithLib').checked)
+			if(document.body.$('.isWithLib').checked)
 				i += 4;
 			
 			aj.xhr.get('backup/site/?i=' + i, () => {
