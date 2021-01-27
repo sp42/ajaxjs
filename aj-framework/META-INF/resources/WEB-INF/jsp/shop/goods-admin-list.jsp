@@ -13,6 +13,8 @@
 				min-width:120px;
 			}
 		</style>
+		<link rel="stylesheet" href="${aj_static_resource}/dist/css/admin/admin.css" />
+		<script src="${aj_static_resource}dist/admin/admin.js"></script>
 	</head>
 	<body>
 		<div class="vue">
@@ -44,7 +46,7 @@
 		</script>
 
 		<!-- 列表渲染，采用传统后端 MVC 渲染 -->
-		<table class="ajaxjs-niceTable listTable">
+		<table class="aj-niceTable listTable">
 			<colgroup>
 				<col />
 				<col />
@@ -74,7 +76,7 @@
 					<td colspan="10">
 						<!-- 表格底部菜单 -->
 						<aj-admin-xsl params="<%=com.ajaxjs.web.ServletHelper.getAllQueryParameters(request) %>"></aj-admin-xsl>					
-						<aj-form-betweenDate></aj-form-betweenDate>
+						<aj-form-between-date></aj-form-between-date>
 					</td>
 				</tr>
 			</tfoot>

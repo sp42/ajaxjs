@@ -35,7 +35,7 @@
 				
 				<div class="tableHolder">
 					<div class="theader-bg"></div>
-					<table class="ajaxjs-niceTable">
+					<table class="aj-niceTable">
 						<thead>
 							<tr><th><input type="checkbox" class="top-checkbox" @click="selectAll" /> </th>
 							<th>#</th><th>供应商名称</th><th>联系人</th><th>联系电话</th><th>供应商分类</th><th>创建日期</th><th>状态</th><th>操作</th></tr>

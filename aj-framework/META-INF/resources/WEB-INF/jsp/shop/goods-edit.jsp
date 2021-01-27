@@ -264,7 +264,7 @@
 			// 表单提交
 			aj.xhr.form('form.entityEdit', json => {
 					 if(json && json.msg)
-						 aj.alert.show(json.msg);
+						 aj.alert(json.msg);
 						${isCreate ? 'json && json.isOk && setTimeout(function(){location.assign(json.newlyId + "/");}, 2000);' : ''}
 				}, {beforeSubmit (form, json) {
 					json.content = App.$refs.htmleditor.getValue({cleanWord : eval('${aj_allConfig.article.cleanWordTag}'), encode : true});

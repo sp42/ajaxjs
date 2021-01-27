@@ -235,7 +235,7 @@
 					// 表单提交
 					aj.xhr.form('.admin-entry-form form', json => {
 						if(json && json.msg) {
-							aj.alert.show(json.msg);
+							aj.alert(json.msg);
 							${isCreate} && json && json.isOk && setTimeout(()=>location.assign(json.newlyId + "/"), 2000);
 						}
 					});

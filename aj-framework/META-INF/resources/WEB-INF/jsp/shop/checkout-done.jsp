@@ -171,7 +171,7 @@
 			methods: {
 				checkout(){
 					if(!ADDRESS.addressId) {
-						aj.alert.show("请选择送货地址");
+						aj.alert("请选择送货地址");
 						return 
 					}
 				}

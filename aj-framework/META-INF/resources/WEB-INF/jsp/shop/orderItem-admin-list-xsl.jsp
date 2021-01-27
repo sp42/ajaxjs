@@ -11,7 +11,7 @@
 </head>
 <body>
 	<!-- 列表渲染，采用传统后端 MVC 渲染 -->
-		<table class="ajaxjs-niceTable listTable" border="1">
+		<table class="aj-niceTable listTable" border="1">
 			<thead>
 				<tr>
 					<th>#</th>

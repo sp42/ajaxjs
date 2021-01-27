@@ -47,7 +47,7 @@
 		</script>
 
 		<!-- 列表渲染，采用传统后端 MVC 渲染 -->
-		<table class="ajaxjs-niceTable listTable">
+		<table class="aj-niceTable listTable">
 			<colgroup>
 				<col />
 				<col />

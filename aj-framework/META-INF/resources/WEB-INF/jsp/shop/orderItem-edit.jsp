@@ -125,7 +125,7 @@
 			// 表单提交
 			aj.xhr.form('form.entityEdit', json => {
 			 if(json && json.msg)
-				 aj.alert.show(json.msg);
+				 aj.alert(json.msg);
 			});
 		</script>
 	</body>
