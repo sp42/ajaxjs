@@ -33,29 +33,30 @@ public class Version {
 	 * 源码磁盘目录
 	 */
 	public static final String srcFolder = new File(Version.class.getClassLoader().getResource("").getPath()).toString();
-	
+
 //	public static final String srcFolder = AbstractScanner.getResourceFilePath(Version.class, "");
+
+	private static final String osName = System.getProperty("os.name").toLowerCase();
 
 	/**
 	 * 是否苹果操作系统
 	 */
-	public static final boolean isMac = System.getProperty("os.name").toLowerCase().contains("mac");
+	public static final boolean isMac = osName.contains("mac");
 
 	/**
 	 * 是否视窗操作系统
 	 */
-	public static final boolean isWindows = System.getProperty("os.name").toLowerCase().contains("window");
+	public static final boolean isWindows = osName.contains("window");
 
 	/**
 	 * 是否 Linux 操作系统
 	 */
-	public static final boolean isLinux = System.getProperty("os.name").toLowerCase().contains("linux");
+	public static final boolean isLinux = osName.contains("linux");
 
 	static {
 		System.setProperty("user.timezone", "GMT +08");// 设置中国时区
 
-		if (System.getProperty("java.vm.vendor").indexOf("Oracle") == -1
-				|| System.getProperty("java.vm.vendor").contains("openJDK")) {
+		if (System.getProperty("java.vm.vendor").indexOf("Oracle") == -1 || System.getProperty("java.vm.vendor").contains("openJDK")) {
 			LOGGER.warning("本框架不支持 OpenJDK!如果你是 Linux 系统，请把自带的 OpenJDK 卸载，改用 Oracle JVM");
 			System.exit(1);
 		}
@@ -71,17 +72,15 @@ public class Version {
 		 * 有两种模式：本地模式和远程模式（自动判断） 返回 true 表示是非 linux 环境，为开发调试的环境，即 isDebug = true； 返回
 		 * false 表示在部署的 linux 环境下。 Linux 的为远程模式
 		 */
-		final String OS = System.getProperty("os.name").toLowerCase();
-		isDebug = !(OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0);
+		isDebug = !(osName.indexOf("nix") >= 0 || osName.indexOf("nux") >= 0 || osName.indexOf("aix") > 0);
 
-		
 		LOGGER.infoYellow("\n     ___       _       ___  __    __      _   _____        _          __  _____   _____  \n"
 				+ "     /   |     | |     /   | \\ \\  / /     | | /  ___/      | |        / / | ____| |  _  \\ \n"
 				+ "    / /| |     | |    / /| |  \\ \\/ /      | | | |___       | |  __   / /  | |__   | |_| |  \n"
 				+ "   / / | |  _  | |   / / | |   }  {    _  | | \\___  \\      | | /  | / /   |  __|  |  _  {  \n"
 				+ "  / /  | | | |_| |  / /  | |  / /\\ \\  | |_| |  ___| |      | |/   |/ /    | |___  | |_| |  \n"
 				+ " /_/   |_| \\_____/ /_/   |_| /_/  \\_\\ \\_____/ /_____/      |___/|___/     |_____| |_____/ \n");
-		
+
 		LOGGER.infoGreen("AJAXJS-Base 加载完毕，当前是[" + (isDebug ? "调试" : "生产环境") + "]模式");
 	}
 
