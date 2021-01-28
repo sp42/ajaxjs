@@ -7,7 +7,7 @@
 	<jsp-version>2.1</jsp-version>
 	<short-name>utility</short-name>
 	<uri>/ajaxjs</uri>
-	<info> A simple tag library for ajaxjs </info>
+	<info>A simple tag library for ajaxjs</info>
 
 	<tag>
 		<name>if</name>
@@ -25,6 +25,7 @@
 		<tag-class>com.ajaxjs.web.view.Choose</tag-class>
 		<body-content>scriptless</body-content>
 	</tag>
+	
 	<tag>
 		<name>when</name>
 		<tag-class>com.ajaxjs.web.view.When</tag-class>
