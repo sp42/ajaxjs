@@ -11,10 +11,10 @@
 	<body>
 		<div class="vue">
 			<!-- 后台头部导航 -->
-			<ajaxjs-admin-header>
+			<aj-admin-header>
 				<template slot="title">${uiName}</template>
 				<template slot="btns"><a :href="ajResources.ctx + '/admin/${shortName}/'">新建</a> | </template>
-			</ajaxjs-admin-header>
+			</aj-admin-header>
 	
 			<!-- 搜索、分类下拉 -->
 			<aj-admin-filter-panel :no-catalog="true">

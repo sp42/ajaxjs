@@ -4,17 +4,20 @@
 <html>
 	<head>
 		<jsp:include page="/WEB-INF/jsp/head.jsp">
-			<jsp:param name="lessFile" value="/asset/less/admin.less" />
 			<jsp:param name="title" value="${uiName}管理" />
 		</jsp:include>
+		
+		<!-- Admin 公共前端资源 -->
+		<link rel="stylesheet" href="${aj_static_resource}/dist/css/admin/admin.css" />
+		<script src="${aj_static_resource}/dist/admin/admin.js"></script>
 	</head>
 	<body>
 		<div class="vue">
 			<!-- 后台头部导航 -->
-			<ajaxjs-admin-header>
+			<aj-admin-header>
 				<template slot="title">${uiName}一览</template>
 				<template slot="btns"><a :href="ajResources.ctx + '/admin/${shortName}/'">新建</a> | </template>
-			</ajaxjs-admin-header>
+			</aj-admin-header>
 		</div>
 		
 		<script>

@@ -28,12 +28,12 @@
 	<body>
 		<div class="admin-entry-form">
 			<!-- 后台头部导航 -->
-			<ajaxjs-admin-header>
+			<aj-admin-header>
 				<template slot="title">${uiName}</template>
 				<template slot="btns">
 					<a :href="ajResources.ctx + '/admin/order/list/'">${uiName}列表</a> | 
 				</template>
-			</ajaxjs-admin-header> 
+			</aj-admin-header> 
 
 			<form action="." method="PUT" class="entityEdit">
 				<input type="hidden" name="id" value="${info.id}" /><!-- 传送 id 参数 -->
@@ -114,7 +114,7 @@
 				
 				<div>
 					<!--按钮 -->
-					<ajaxjs-admin-info-btns :is-create="${isCreate}"></ajaxjs-admin-info-btns>
+					<aj-admin-info-btns :is-create="${isCreate}"></aj-admin-info-btns>
 				</div>
 			</form>
  		</div>

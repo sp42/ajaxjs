@@ -14,9 +14,9 @@
 		
 
 			<!-- 后台头部导航 -->
-			<ajaxjs-admin-header>
+			<aj-admin-header>
 				<template slot="title">${uiName}一览</template>
-			</ajaxjs-admin-header>
+			</aj-admin-header>
 			
 			<div class="soft-container">
 				<div class="box padding">用于创建、维护流程</div>

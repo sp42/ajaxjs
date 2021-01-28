@@ -16,9 +16,9 @@
 	<body>
 		<div class="DataDict">	
 			<!-- 后台头部导航 -->
-			<ajaxjs-admin-header>
+			<aj-admin-header>
 				<template slot="title">${uiName}一览</template>
-			</ajaxjs-admin-header>
+			</aj-admin-header>
 			
 			<!-- 搜索、分类下拉 -->
 			<div class="top-panel">

@@ -12,9 +12,9 @@
 	<body>
 		<div class="TaxRate">	
 			<!-- 后台头部导航 -->
-			<ajaxjs-admin-header>
+			<aj-admin-header>
 				<template slot="title">${uiName}一览</template>
-			</ajaxjs-admin-header>
+			</aj-admin-header>
 			
 			
 			<div class="soft-container">

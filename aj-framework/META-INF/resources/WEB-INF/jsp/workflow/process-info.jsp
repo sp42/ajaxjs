@@ -11,14 +11,14 @@
 	<body>
 		<div class="admin-entry-form infoForm">
 			<!-- 后台头部导航 -->
-			<ajaxjs-admin-header>
+			<aj-admin-header>
 				<template slot="title">
 					编辑${uiName} #${info.id} <!-- 外显 id -->
 				</template>
 				<template slot="btns">
 					<a href="..">${uiName}列表</a> | 
 				</template>
-			</ajaxjs-admin-header>
+			</aj-admin-header>
 
 			<form action="." method="PUT">
 				<input type="hidden" name="id" value="${info.id}" /><!-- 传送 id 参数 -->
@@ -57,7 +57,7 @@
 				<aj-admin-state :checked="${info.stat}"></aj-admin-state>
 				<div>
 					<!--按钮 -->
-					<ajaxjs-admin-info-btns :is-create="false" list-url="../"></ajaxjs-admin-info-btns> 
+					<aj-admin-info-btns :is-create="false" list-url="../"></aj-admin-info-btns> 
 				</div>
 			</form>
 		</div>

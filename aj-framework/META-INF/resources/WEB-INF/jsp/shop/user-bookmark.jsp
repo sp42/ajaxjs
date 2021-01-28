@@ -12,7 +12,7 @@
 <body>
 	<div class="vue">
 		<!-- 后台头部导航 -->
-		<ajaxjs-admin-header> <template slot="title">用户收藏一览</template></ajaxjs-admin-header>
+		<aj-admin-header> <template slot="title">用户收藏一览</template></aj-admin-header>
 	</div>
 
 	<script>
