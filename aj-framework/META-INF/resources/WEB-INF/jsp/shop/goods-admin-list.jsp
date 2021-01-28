@@ -1,6 +1,5 @@
 <%@page pageEncoding="UTF-8"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
-<%@taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -14,7 +13,7 @@
 			}
 		</style>
 		<link rel="stylesheet" href="${aj_static_resource}/dist/css/admin/admin.css" />
-		<script src="${aj_static_resource}dist/admin/admin.js"></script>
+		<script src="${aj_static_resource}/dist/admin/admin.js"></script>
 	</head>
 	<body>
 		<div class="vue">
@@ -85,7 +84,7 @@
 					<tr>
 						<td>${item.id}</td>
 						<td title="${item.subTitle}" style="text-align:left;">
-							<tags:common type="thumb" thumb="${item.cover}" />
+							<aj-img-thumb img-url="${item.cover}"></aj-img-thumb>
 							${item.name}
 						</td>
 						<td><c:dateFormatter value="${item.createDate}" /></td>
@@ -104,7 +103,7 @@
 		</div>
 		<script>
 			new Vue({el: '.listTable'});
-			aj.widget.imageEnlarger();// 鼠标移动大图
+			aj.widget.img.initImageEnlarger();// 鼠标移动大图
 		</script>
 	</body>
 </html>

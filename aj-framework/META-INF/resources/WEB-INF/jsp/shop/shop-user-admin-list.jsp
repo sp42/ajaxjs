@@ -1,6 +1,5 @@
 <%@page pageEncoding="UTF-8"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
-<%@taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -62,9 +61,7 @@
 				<c:foreach items="${PageResult}">
 					<tr>
 						<td>${item.id}</td>
-						<td>
-							<tags:common type="thumb" thumb="${item.avatar}" />
-						</td>
+						<td><aj-img-thumb img-url="${item.avatar}"></aj-img-thumb></td>
 						<td>${item.name}</td>
 						<td>${UserGroups[item.roleId].name}</td>
 						<td><a href="${ctx}/admin/order/list/?userId=${item.id}">查看订单</a></td>
@@ -81,7 +78,7 @@
 			<%@include file="/WEB-INF/jsp/pager.jsp" %>
 		</div>
 		<script>
-			aj.widget.imageEnlarger();// 鼠标移动大图
+			aj.widget.img.initImageEnlarger();// 鼠标移动大图
 		</script>
 	</body>
 </html>
