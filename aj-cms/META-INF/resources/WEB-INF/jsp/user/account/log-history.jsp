@@ -1,6 +1,5 @@
 ﻿<%@page pageEncoding="UTF-8"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
-<%@taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
 <tags:user-center>
 	<style>
 		.ajaxjs-borderTable td, .ajaxjs-borderTable th{

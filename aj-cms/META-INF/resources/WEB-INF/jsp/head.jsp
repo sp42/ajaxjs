@@ -1,5 +1,7 @@
-<%request.setAttribute("PAGE_Node", com.ajaxjs.framework.config.SiteStruService.getPageNode(request));
-	com.ajaxjs.web.UserAgent ua = new com.ajaxjs.web.UserAgent(request);%>
+<%
+	request.setAttribute("PAGE_Node", com.ajaxjs.framework.config.SiteStruService.getPageNode(request));
+	com.ajaxjs.web.UserAgent ua = new com.ajaxjs.web.UserAgent(request);
+%>
 	<meta charset="utf-8" />
     <meta name="keywords"    content="${aj_allConfig.site.keywords}" />
     <meta name="description" content="${aj_allConfig.site.description}" />
@@ -46,42 +48,42 @@
 		}	
 	</style> 
 	
-	<link rel="stylesheet" href="${aj_static_resource}/dist/css/all.css" />
-	<link rel="stylesheet" href="${aj_static_resource}/dist/css/website/${aj_allConfig.site.appId}.css" /> 
     <link href="https://lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
 	
 <% if(com.ajaxjs.Version.isDebug) { %>
-	<script crossorigin="anonymous" integrity="sha512-YXLGLsQBiwHPHLCAA9npZWhADUsHECjkZ71D1uzT2Hpop82/eLnmFb6b0jo8pK4T0Au0g2FETrRJNblF/46ZzQ==" 
-		src="//lib.baomitu.com/vue/2.6.12/vue.js"></script>
+	<link rel="stylesheet" href="${aj_static_resource}/dist/css/all.css" />
+	<link rel="stylesheet" href="${aj_static_resource}/dist/css/website/${aj_allConfig.site.appId}.css" /> 
+	<script crossorigin="anonymous" integrity="sha512-YXLGLsQBiwHPHLCAA9npZWhADUsHECjkZ71D1uzT2Hpop82/eLnmFb6b0jo8pK4T0Au0g2FETrRJNblF/46ZzQ==" src="//lib.baomitu.com/vue/2.6.12/vue.js"></script>
     <script src="http://localhost:8888/dist/base.js"></script>
     <script src="http://localhost:8888/dist/widget.js"></script>
     <script src="http://localhost:8888/dist/form.js"></script>
     <script src="http://localhost:8888/dist/list.js"></script>
     <script src="http://localhost:8888/dist/misc.js"></script> 
 <%}else { %>
-	<script crossorigin="anonymous" integrity="sha512-BKbSR+cfyxLdMAsE0naLReFSLg8/pjbgfxHh/k/kUC82Hy7r6HtR5hLhobaln2gcTvzkyyehrdREdjpsQwy2Jw==" 
-		src="//lib.baomitu.com/vue/2.6.12/vue.min.js"></script>    
+	<link rel="stylesheet" href="${aj_static_resource}/dist/css/all.min.css" />
+	<link rel="stylesheet" href="${aj_static_resource}/dist/css/website/${aj_allConfig.site.appId}.min.css" /> 
+	<script crossorigin="anonymous" integrity="sha512-BKbSR+cfyxLdMAsE0naLReFSLg8/pjbgfxHh/k/kUC82Hy7r6HtR5hLhobaln2gcTvzkyyehrdREdjpsQwy2Jw==" src="//lib.baomitu.com/vue/2.6.12/vue.min.js"></script>    
 	<script src="${aj_static_resource}/dist/all.min.js"></script>
 <%} %>
+
    	<script>
-   		aj.isDebug = <%=com.ajaxjs.Version.isDebug%>;
    		aj.ctx = '${ctx}';
-   		aj.Vue = {};
-   		aj.Vue.install = function(Vue) {
+ 
+   		Vue.use(function(Vue) {
    			Vue.prototype.ajResources = {
 	   			ctx: '${ctx}',
 	   			imgPerfix: '${aj_allConfig.uploadFile.imgPerfix}', // 图片云存储前缀
 	   			commonAsset: '${commonAsset}'
    			};
-   			Vue.prototype.BUS = new Vue();
-   		}
-   		
-   		Vue.use(aj.Vue);
+   			
+ 	   		Vue.prototype.BUS = new Vue();
+   	   	});
    		
    		window.addEventListener('load', function() { // 页面渐显效果
 			document.body.classList.add('active');
 		});
    	</script>
+   	
 	<link rel="icon"		  type="image/x-icon" href="${ctx}/asset/images/favicon.ico" />
 	<link rel="shortcut icon" type="image/x-icon" href="${ctx}/asset/images/favicon.ico" />
 	<noscript><div>如要享受本网站之服务请勿禁用浏览器 JavaScript 支持</div></noscript>

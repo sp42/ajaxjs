@@ -1,5 +1,4 @@
 ﻿<%@page pageEncoding="UTF-8"%>
-<%@taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
 <tags:content>
 	<fieldset class="aj-fieldset" style="margin:5% auto;max-width:500px;">
 		<legend>${empty title ? '提示' : title} </legend>

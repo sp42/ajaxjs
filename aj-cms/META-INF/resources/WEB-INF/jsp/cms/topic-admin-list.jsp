@@ -1,6 +1,5 @@
 <%@page pageEncoding="UTF-8"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
-<%@taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -56,7 +55,7 @@
 				<c:foreach items="${PageResult}">
 					<tr>
 						<td>${item.id}</td>
-						<td><tags:common type="thumb" thumb="${item.cover}" /></td>
+						<td><aj-img-thumb img-url="${item.cover}"></aj-img-thumb></td>
 						<td width="500">${item.name}</td>
 						<td><c:dateFormatter value="${item.createDate}" /></td>
 						<td><c:dateFormatter value="${item.createDate}" /></td>
@@ -71,7 +70,7 @@
 		</div>
 		<script>
 			new Vue({el: '.listTable'});
-			aj.widget.imageEnlarger();// 鼠标移动大图
+			aj.widget.img.initImageEnlarger();// 鼠标移动大图
 		</script>
 	</body>
 </html>

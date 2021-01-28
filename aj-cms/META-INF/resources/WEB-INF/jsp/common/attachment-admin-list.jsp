@@ -1,17 +1,16 @@
 <%@page pageEncoding="UTF-8"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
-<%@taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
-	<!DOCTYPE html>
-	<html>
-		<head>
-			<jsp:include page="/WEB-INF/jsp/head.jsp">
-				<jsp:param name="title" value="${uiName}管理" />
-			</jsp:include>
-			
-			<!-- Admin 公共前端资源 -->
-			<link rel="stylesheet" href="${aj_static_resource}/dist/css/admin/admin.css" />
-			<script src="${aj_static_resource}/dist/admin/admin.js"></script>
-		</head>
+<!DOCTYPE html>
+<html>
+	<head>
+		<jsp:include page="/WEB-INF/jsp/head.jsp">
+			<jsp:param name="title" value="${uiName}管理" />
+		</jsp:include>
+		
+		<!-- Admin 公共前端资源 -->
+		<link rel="stylesheet" href="${aj_static_resource}/dist/css/admin/admin.css" />
+		<script src="${aj_static_resource}/dist/admin/admin.js"></script>
+	</head>
 	<body>
 		<div>
 			<!-- 后台头部导航 -->
@@ -53,18 +52,20 @@
 			</tr>
 		</tfoot>
 		<tbody>
-			<c:foreach var="current" items="${PageResult}">
+			<c:foreach items="${PageResult}">
 				<tr>
-					<td>${current.id}</td>
-					<td>${current.name}</td>
-					<td><tags:common type="thumb" thumb="${current.name}" /></td>
-					<td>${DICT[current.catalogId]}</td>
-					<td>${current.fileSize}KB</td>
-					<td>${current.owner}</td>
-					<td><c:dateFormatter value="${current.createDate}" /></td>
+					<td>${item.id}</td>
+					<td>${item.name}</td>
+					<td><aj-img-thumb img-url="${item.name}"></aj-img-thumb></td>
+					<td>${DICT[item.catalogId]}</td>
+					<td>${item.fileSize}KB</td>
+					<td>${item.owner}</td>
+					<td><c:dateFormatter value="${item.createDate}" /></td>
 					<td>
-						<a href="${aj_allConfig.uploadFile.imgPerfix}${current.name}" download>下载</a> 
-						<a href="javascript:entity.del('${current.id}', '${current.name}');"><img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" />删除</a>
+						<a href="${aj_allConfig.uploadFile.imgPerfix}${item.name}" download>下载</a> 
+						<a href="javascript:aj.admin.helper.del('${item.id}', '${item.name}');">
+							<img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" /> 删除
+						</a>
 					</td>
 				</tr>
 			</c:foreach>
@@ -73,5 +74,10 @@
 		<div class="listTable pager">
 			<%@include file="/WEB-INF/jsp/pager.jsp" %>
 		</div>
+		
+		<script>
+			new Vue({el: '.listTable'});
+			aj.widget.img.initImageEnlarger();// 鼠标移动大图
+		</script>
 	</body>
 </html>

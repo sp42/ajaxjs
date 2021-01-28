@@ -1,6 +1,5 @@
 <%@page pageEncoding="UTF-8"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
-<%@taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -71,7 +70,7 @@
 						<td><c:dateFormatter value="${item.updateDate}" format="yyyy-MM-dd" /></td>
 						<td><a href="?catalogId=${item.catalogId}">${newsCatalogs[item.catalogId].name}</a></td>
 						<td>${(empty item.stat || item.stat == 1) ? '已上线': '已下线'}</td>
-						<td><tags:common type="thumb" thumb="${item.cover}" /></td>
+						<td><aj-img-thumb img-url="${item.cover}"></aj-img-thumb></td>
 						<td is="aj-admin-control" id="${item.id}" name="${item.name}" preview="${aj_allConfig.data.entityProfile.article.previewUrl}"></td>			
 					</tr>
 				</c:foreach>
@@ -82,7 +81,7 @@
 		</div>
 		<script>
 			new Vue({el: '.listTable'});
-			aj.widget.imageEnlarger();// 鼠标移动大图
+			aj.widget.img.initImageEnlarger();// 鼠标移动大图
 		</script>
 	</body>
 </html>
