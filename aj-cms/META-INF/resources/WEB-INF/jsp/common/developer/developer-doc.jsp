@@ -24,9 +24,9 @@
 </head>
 <body class="admin-entry-form">
 	<div>
-		<ajaxjs-admin-header> 
+		<aj-admin-header> 
 			<template slot="title">实用工具</span></template>
-		</ajaxjs-admin-header>
+		</aj-admin-header>
 	</div>
 		<div class="aj-simple-tab-vertical tab" style="padding: 1% 5%;">
 				<ul>
@@ -36,7 +36,7 @@
 			<div class="content">
 				<div :class="{'selected': 0 === selected}">
 					<!-- TAB 内容 -->
-						<iframe src="${ajaxjsui}/ui-doc"  frameborder="no" width="100%" height="96%"></iframe>
+						<iframe src="https://framework.ajaxjs.com/"  frameborder="no" width="100%" height="96%"></iframe>
 					<!-- // TAB 内容 -->
 				</div>
 				
@@ -46,8 +46,6 @@
 					<iframe src="${ctx}/admin/common/DataBaseShowStru/"  frameborder="no" width="100%" height="96%"></iframe>
 					<!-- // TAB 内容 -->
 				</div>
-				
-				
 			</div>
 		</div>
 

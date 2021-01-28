@@ -15,7 +15,7 @@
 <body>
 	<div class="vue">
 		<!-- 后台头部导航 -->
-		<ajaxjs-admin-header> <template slot="title">用户地址簿一览</template></ajaxjs-admin-header>
+		<aj-admin-header> <template slot="title">用户地址簿一览</template></aj-admin-header>
 		<!-- 搜索、分类下拉 -->
 		<aj-admin-filter-panel :no-catalog="true"></aj-admin-filter-panel>
 	</div>

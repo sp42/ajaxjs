@@ -19,12 +19,12 @@
 	<body>
 		<div class="admin-entry-form">
 			<!-- 后台头部导航 -->
-			<ajaxjs-admin-header>
+			<aj-admin-header>
 				<template slot="title">${uiName}</template>
 				<template slot="btns">
 					<a href="../list/">${uiName}列表</a> | 
 				</template>
-			</ajaxjs-admin-header>
+			</aj-admin-header>
 
 			<form action="." method="${isCreate ? 'POST' : 'PUT'}" class="entityEdit">
 				<c:if test="${!isCreate}">
@@ -70,7 +70,7 @@
 		
 				<div>
 					<!--按钮 -->
-					<ajaxjs-admin-info-btns :is-create="${isCreate ? true : false}"></ajaxjs-admin-info-btns>
+					<aj-admin-info-btns :is-create="${isCreate ? true : false}"></aj-admin-info-btns>
 				</div>
 			</form>
 		</div>

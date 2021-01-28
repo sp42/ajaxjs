@@ -21,7 +21,7 @@
 	<body>
 		<div class="admin-entry-form">
 			<!-- 后台头部导航 -->
-			<ajaxjs-admin-header>
+			<aj-admin-header>
 				<template slot="title">
 					编辑${uiName}
 					
@@ -30,7 +30,7 @@
 				<template slot="btns">
 					<a :href="ajResources.ctx + '/admin/${shortName}/list/'">${uiName}列表</a> | 
 				</template>
-			</ajaxjs-admin-header>
+			</aj-admin-header>
 
 			<form action="." method="PUT">
 				<input type="hidden" name="id" value="${info.id}" /><!-- 传送 id 参数 -->
@@ -137,7 +137,7 @@
 				</div>
 				<div>
 					<!--按钮 -->
-					<ajaxjs-admin-info-btns :is-create="fasle"></ajaxjs-admin-info-btns>
+					<aj-admin-info-btns :is-create="fasle"></aj-admin-info-btns>
 				</div>
 			</form>
 		</div>

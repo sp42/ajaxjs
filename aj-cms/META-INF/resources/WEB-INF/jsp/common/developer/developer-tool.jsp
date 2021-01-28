@@ -46,9 +46,9 @@
 </head>
 <body class="admin-entry-form">
 	<div>
-		<ajaxjs-admin-header> 
+		<aj-admin-header> 
 			<template slot="title">实用工具</template>
-		</ajaxjs-admin-header>
+		</aj-admin-header>
 	</div>
 
 	<div class="aj-simple-tab-horizontal tab" style="padding: 1% 5%;">

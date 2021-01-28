@@ -46,7 +46,7 @@
 				/* -webkit-user-select:none; */
 			}
 		}	
-	</style> 
+	</style>
 	
     <link href="https://lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
 	
@@ -73,7 +73,8 @@
    			Vue.prototype.ajResources = {
 	   			ctx: '${ctx}',
 	   			imgPerfix: '${aj_allConfig.uploadFile.imgPerfix}', // 图片云存储前缀
-	   			commonAsset: '${commonAsset}'
+	   			commonAsset: '${commonAsset}',  
+	   			commonAssetIcon: '${commonAssetIcon}'
    			};
    			
  	   		Vue.prototype.BUS = new Vue();

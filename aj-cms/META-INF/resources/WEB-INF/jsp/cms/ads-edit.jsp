@@ -14,13 +14,13 @@
 <body>
 	<div class="admin-entry-form">
 		<!-- 后台头部导航 -->
-		<ajaxjs-admin-header> <template slot="title">${isCreate?'新建':'编辑'}${uiName}</template>
+		<aj-admin-header> <template slot="title">${isCreate?'新建':'编辑'}${uiName}</template>
 		<template slot="btns"> 
 			<c:if test="${!isCreate}">
 				<a href="../">新建</a> | 
 			</c:if> 
 			<a :href="ajResources.ctx + '/admin/cms/ads/list/'">${uiName}列表</a> | </template>
-		</ajaxjs-admin-header>
+		</aj-admin-header>
 
 		<form action="." method="${isCreate ? 'POST' : 'PUT'}">
 			<c:if test="${!isCreate}">
@@ -80,7 +80,7 @@
 			</div>
 			<div>
 				<!--按钮 -->
-				<ajaxjs-admin-info-btns :is-create="${isCreate}"></ajaxjs-admin-info-btns>
+				<aj-admin-info-btns :is-create="${isCreate}"></aj-admin-info-btns>
 			</div>
 		</form>
 	</div>

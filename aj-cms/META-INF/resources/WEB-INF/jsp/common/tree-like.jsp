@@ -26,9 +26,9 @@
 <body>
 	<div class="tree-like">
 		<!-- 后台头部导航 -->
-		<ajaxjs-admin-header>
+		<aj-admin-header>
 			<template slot="title">${uiName}一览</template>
-		</ajaxjs-admin-header>
+		</aj-admin-header>
 		
 		<div class="soft-container">
 			<div class="box padding">你可以在这里添加、修改、删除${uiName}。请于分类中点选目标的节点，成为选中的状态后，再进行下面的编辑。</div>

@@ -14,9 +14,9 @@
 	<body>
 		<div>
 			<!-- 后台头部导航 -->
-			<ajaxjs-admin-header>
+			<aj-admin-header>
 				<template slot="title">个人信息</template>
-			</ajaxjs-admin-header>
+			</aj-admin-header>
 		</div>
 		<script>
 			new Vue({el:' body > div'});

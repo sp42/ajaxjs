@@ -15,9 +15,9 @@
 	<div class="aj-json-form">
 		<span>
 			<!-- 后台头部导航 -->
-			<ajaxjs-admin-header>
+			<aj-admin-header>
 				<template slot="title">配置参数</template>
-			</ajaxjs-admin-header>
+			</aj-admin-header>
 		</span>
 
 		<div class="soft-container">

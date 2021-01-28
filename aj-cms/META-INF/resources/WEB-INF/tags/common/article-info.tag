@@ -1,19 +1,5 @@
 <%@tag pageEncoding="UTF-8" import="com.ajaxjs.framework.config.ConfigService" trimDirectiveWhitespaces="true" %>
 <%@taglib uri="/ajaxjs" 		prefix="c" %>
-<%@taglib tagdir="/WEB-INF/tags/" prefix="tagfile"%>
-	
-<%-- 缩略图 
-<c:if test="${type == 'thumb'}">
-	<%@attribute name="thumb" required="false" type="String" description="缩略图"%>
-	<c:if test="${not empty thumb}">
-		<a href="${aj_allConfig.uploadFile.imgPerfix}${thumb}" target="_blank">
-			<img src="${thumb.startsWith('http') ? thumb : aj_allConfig.uploadFile.imgPerfix.concat(thumb)}" style="max-width:50px;max-height:60px;vertical-align: middle;" 
-		 		onmouseenter="aj.widget.imageEnlarger.singleInstance.imgUrl = '${thumb.startsWith('http') ? thumb : aj_allConfig.uploadFile.imgPerfix.concat(thumb)}';" onmouseleave="aj.widget.imageEnlarger.singleInstance.imgUrl = null;" />
-		</a>
-	</c:if>
-</c:if>
---%>
-
 <c:if test="${not empty info}">
 	<%@attribute name="isOnlyCreateDate" required="false" type="Boolean" description="是否只显示创建日期"%>
 	
