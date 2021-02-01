@@ -136,7 +136,7 @@ namespace aj.widget.modal {
             showYes: false,
             showNo: false,
             showOk: true,
-            onOkClk() { // 在 box 里面触发关闭，不能直接用 msgbox.close(e);
+            onOkClk(): void { // 在 box 里面触发关闭，不能直接用 msgbox.close(e);
                 alertObj.$el.classList.add('hide');
                 callback && callback();
             }
@@ -155,13 +155,22 @@ namespace aj.widget.modal {
             showNo: true,
             showOk: false,
             showSave: false,
-            onYesClk(ev: Event) {
+            onYesClk(ev: Event): void {
                 alertObj.$el.classList.add('hide');
                 callback && callback(alertObj.$el, ev);
             },
-            onNoClk() { // 在box里面触发关闭，不能直接用 msgbox.close(e);
+            onNoClk(): void { // 在box里面触发关闭，不能直接用 msgbox.close(e);
                 alertObj.$el.classList.add('hide');
             }
+        });
+    }
+
+    export var popup = (text: string, callback?: Function): void => {
+        msgbox.show(text, {
+            showYes: false,
+            showNo: false,
+            showOk: false,
+            showSave: false
         });
     }
 
@@ -176,7 +185,7 @@ namespace aj.widget.modal {
         msgEl.setAttribute('v-html', "showText");
         document.body.appendChild(msgEl);
 
-        aj.msg = new Vue({ 
+        aj.msg = new Vue({
             el: msgEl,
             data: { showText: '' }, // 显示的内容
             methods: {

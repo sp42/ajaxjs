@@ -103,7 +103,7 @@ namespace aj.widget.page.TraditionalChinese {
 
     let isLoaded = false;
 
-    function loadChars(cb: Function, el: HTMLElement) {
+    function loadChars(cb: Function, el: HTMLElement): void {
         if (isLoaded)
             cb();
         else

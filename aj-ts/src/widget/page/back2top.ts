@@ -1,12 +1,12 @@
 namespace aj.widget {
-    var back2topTimerId: number = 0;
+    let back2topTimerId: number = 0;
 
     /**
      *  回到顶部  <a href="###" @click="go">回到顶部</a>
      */
-    export function back2top() {
-        var top: number = 0;
-        var speed: number = 0;
+    export function back2top(): void {
+        let top: number = 0,
+            speed: number = 0;
 
         back2topTimerId && window.clearInterval(back2topTimerId);
         back2topTimerId = window.setInterval(() => {
@@ -23,7 +23,7 @@ namespace aj.widget {
     /**
      * 渲染浮动的按钮
      */
-    export function initBack2top() {
+    export function initBack2top(): void {
         let vue = new Vue({
             el: document.body.appendChild(document.createElement('div')),
             template: '<div @click="clk" class="aj-widget-back2top" title="回到顶部"><i class="fa fa-arrow-up" aria-hidden="true"></i> </div>',
@@ -40,5 +40,4 @@ namespace aj.widget {
         window.addEventListener('scroll', handler);
         handler();
     }
-
 }

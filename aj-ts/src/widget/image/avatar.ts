@@ -1,29 +1,37 @@
-/**
- * 显示头像
- */
-interface Avatar {
+
+namespace aj.widget.img {
     /**
-     * 头像图片地址
+     * 显示头像
      */
-    avatar: string;
-}
-Vue.component('aj-avatar', {
-    template: `
-        <a :href="avatar" target="_blank">
-            <img :src="avatar" style="max-width:50px;max-height:60px;vertical-align: middle;" @mouseenter="mouseEnter" @mouseleave="mouseLeave" />
-        </a>
-    `,
-    props: {
-        avatar: { type: String, required: true }
-    },
-    methods: {
+    export class Avatar extends VueComponent {
+        name = 'aj-avatar';
+
+        template = html`
+            <a :href="avatar" target="_blank">
+                <img :src="avatar" style="max-width:50px;max-height:60px;vertical-align: middle;" 
+                    @mouseenter="mouseEnter"
+                    @mouseleave="mouseLeave" />
+            </a>
+        `;
+
+        props = {
+            avatar: { type: String, required: true }
+        };
+
+        /**
+         * 头像图片地址
+         */
+        avatar: string = "";
+
         mouseEnter(this: Avatar): void {
-            if (aj.img.imageEnlarger)
-                aj.img.imageEnlarger.imgUrl = this.avatar;
-        },
+            if (imageEnlarger)
+                imageEnlarger.imgUrl = this.avatar;
+        }
         mouseLeave(): void {
-            if (aj.img.imageEnlarger)
-                aj.img.imageEnlarger.imgUrl = null;
+            if (imageEnlarger)
+                imageEnlarger.imgUrl = null;
         }
     }
-});
+
+    new Avatar().register();
+}

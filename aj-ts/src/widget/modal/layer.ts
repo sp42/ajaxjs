@@ -1,33 +1,36 @@
-interface LayerConfig {
+namespace aj.widget.modal {
+    interface LayerConfig {
+        /**
+         * 关闭层之后触发的事件
+         */
+        afterClose: Function
+    }
+
     /**
-     * 关闭层之后触发的事件
+     * 浮層組件，通常要復用這個組件
      */
-    afterClose: Function
-}
+    export class Layer extends VueComponent {
+        name = "aj-layer";
 
-/**
- * 浮層組件，通常要復用這個組件
- */
-interface Layer extends Vue {
-    afterClose: Function;
-    notCloseWhenTap: boolean;
-    cleanAfterClose: boolean;
-}
+        template = '<div class="aj-modal hide" @click="close"><div><slot></slot></div></div>';
 
-Vue.component('aj-layer', {
-    template: '<div class="aj-modal hide" @click="close"><div><slot></slot></div></div>',
-    props: {
-        notCloseWhenTap: Boolean, // 默认点击窗体关闭，当 notCloseWhenTap = true 时禁止关闭
-        cleanAfterClose: Boolean  // 关闭是否清除
-    },
-    methods: {
+        props = {
+            notCloseWhenTap: Boolean, // 默认点击窗体关闭，当 notCloseWhenTap = true 时禁止关闭
+            cleanAfterClose: Boolean  // 关闭是否清除
+        };
+
+        afterClose: Function = function () { }
+
+        notCloseWhenTap: boolean = false;
+
+        cleanAfterClose: boolean = false;
+
         /**
          * 显示浮层
          * 
-         * @param this 
          * @param cfg 
          */
-        show(this: Layer, cfg?: LayerConfig): void {
+        show(cfg?: LayerConfig): void {
             let my: number = Number(getComputedStyle(this.$el).zIndex); // 保证最后显示的总在最前面
 
             document.body.$('.aj-modal', (i: Element) => {
@@ -43,25 +46,24 @@ Vue.component('aj-layer', {
 
             if (cfg && cfg.afterClose)
                 this.afterClose = cfg && cfg.afterClose;
-        },
+        }
 
         /**
          * 关闭浮层
          * 
-         * @param this 
-         * @param e 
+         * @param ev 
          */
-        close(this: Layer, e: Event): void { // isForceClose = 强制关闭
+        close(ev: Event): void { // isForceClose = 强制关闭
             let isClosed: boolean = false;
 
-            if (!e) {
-                isClosed = aj.widget.msgbox.$options.methods.close.call(this, {
+            if (!ev) {
+                isClosed = aj.widget.modal.msgbox.$options.methods.close.call(this, {
                     target: document.body.$('.aj-modal')
                 });
             } else {
                 // @ts-ignore
                 if (e.isForceClose || !this.notCloseWhenTap)
-                    isClosed = aj.widget.msgbox.$options.methods.close.apply(this, arguments);
+                    isClosed = aj.widget.modal.msgbox.$options.methods.close.apply(this, arguments);
             }
 
             if (isClosed && this.cleanAfterClose) {
@@ -70,4 +72,6 @@ Vue.component('aj-layer', {
             }
         }
     }
-});
+
+    new Layer().register();
+}

@@ -1,23 +1,25 @@
 /**
  * 调整正文字体大小
  */
-Vue.component('aj-adjust-font-size', {
-    template: `
-        <div class="aj-adjust-font-size">
-            <span>字体大小</span>
-            <ul @click="onClk">
-                <li><label><input type="radio" name="fontSize" /> 小</label></li>
-                <li><label><input type="radio" name="fontSize" /> 中</label></li>
-                <li><label><input type="radio" name="fontSize" /> 大</label></li>
-            </ul>
-        </div>
-    `,
-    props: {
-        articleTarget: { type: String, default: 'article p' }// 正文所在的位置，通过 CSS Selector 定位
-    },
-    methods: {
-        onClk(this: Vue, e: Event): void {
-            let el: Element = <Element>e.target;
+namespace aj.widget.page {
+    export class AdjustFontSize extends VueComponent {
+        name = 'aj-adjust-font-size';
+
+        template = html`
+            <div class="aj-adjust-font-size">
+                <span>字体大小</span>
+                <ul @click="onClk">
+                    <li><label><input type="radio" name="fontSize" /> 小</label></li>
+                    <li><label><input type="radio" name="fontSize" /> 中</label></li>
+                    <li><label><input type="radio" name="fontSize" /> 大</label></li>
+                </ul>
+            </div>
+        `;
+
+        articleTarget = { type: String, default: 'article p' };// 正文所在的位置，通过 CSS Selector 定位
+
+        onClk(ev: Event): void {
+            let el: Element = <Element>ev.target;
             let setFontSize = (fontSize: string): void => {
                 document.body.$(this.$props.articleTarget, (p: HTMLParagraphElement) => p.style.fontSize = fontSize);
             }
@@ -35,4 +37,6 @@ Vue.component('aj-adjust-font-size', {
             }
         }
     }
-});
+
+    new AdjustFontSize().register();
+}

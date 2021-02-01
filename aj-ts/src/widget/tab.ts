@@ -31,7 +31,7 @@ Vue.component('aj-tab', {
             if (el.tag === 'textarea') {
                 this.tabs.push({
                     name: el.data.attrs['data-title'],
-                    component: { 
+                    component: {
                         template: '<div>' + el.children[0].text + "</div>"
                     }
                 });
@@ -40,35 +40,36 @@ Vue.component('aj-tab', {
 
         this.currentTab = this.tabs[0];
     }
-});  
+});
 
-// aj.widget.tabable = (() => {
-//     // 按次序选中目标
-//     var select = (_new) => {
-//         var oldSelected = _new.parentNode.$('.selected');
+namespace aj.widget.tab {
+    export var tabable = {
+        mounted(this: Vue): void {
+            let ul = <HTMLElement>this.$el.$('.aj-simple-tab-horizontal > ul');
+            ul.onclick = (e: Event) => {
+                let el = <HTMLElement>e.target;
+                select(el);
 
-//         if (_new === oldSelected) // 没变化
-//             return;
+                let index = Array.prototype.indexOf.call(el.parentElement?.children, el);
+                // @ts-ignore
+                let _new = this.$el.$('.aj-simple-tab-horizontal > div')?.children[index];
+                select(_new);
+            };
 
-//         oldSelected && oldSelected.classList.remove('selected');
-//         _new.classList.add('selected');
-//     }
+            // @ts-ignore
+            ul.onclick({ target: ul.children[0] });
+            //this.$options.watch.selected.call(this, 0);
+        }
+    };
 
-//     return {
-//         mounted(this: Vue) {
-//             var ul = <HTMLElement>this.$el.$('.aj-simple-tab-horizontal > ul');
-//             ul.onclick = (e: Event) => {
-//                 let el = <HTMLElement>e.target;
-//                 select(el);
+    // 按次序选中目标
+    var select = (_new: HTMLElement) => {
+        let oldSelected: HTMLElement = <HTMLElement>(<HTMLElement>_new.parentNode).$('.selected');
 
-//                 let index = Array.prototype.indexOf.call(el.parentElement?.children, el);
-//                 let _new = this.$el.$('.aj-simple-tab-horizontal > div')?.children[index];
-//                 select(_new);
-//             };
+        if (_new === oldSelected) // 没变化
+            return;
 
-//             // @ts-ignore
-//             ul.onclick({ target: ul.children[0] });
-//             //this.$options.watch.selected.call(this, 0);
-//         }
-//     };
-// })();
+        oldSelected && oldSelected.classList.remove('selected');
+        _new.classList.add('selected');
+    }
+}
