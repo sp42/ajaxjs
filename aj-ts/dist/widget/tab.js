@@ -31,28 +31,38 @@ Vue.component('aj-tab', {
         this.currentTab = this.tabs[0];
     }
 });
-// aj.widget.tabable = (() => {
-//     // 按次序选中目标
-//     var select = (_new) => {
-//         var oldSelected = _new.parentNode.$('.selected');
-//         if (_new === oldSelected) // 没变化
-//             return;
-//         oldSelected && oldSelected.classList.remove('selected');
-//         _new.classList.add('selected');
-//     }
-//     return {
-//         mounted(this: Vue) {
-//             var ul = <HTMLElement>this.$el.$('.aj-simple-tab-horizontal > ul');
-//             ul.onclick = (e: Event) => {
-//                 let el = <HTMLElement>e.target;
-//                 select(el);
-//                 let index = Array.prototype.indexOf.call(el.parentElement?.children, el);
-//                 let _new = this.$el.$('.aj-simple-tab-horizontal > div')?.children[index];
-//                 select(_new);
-//             };
-//             // @ts-ignore
-//             ul.onclick({ target: ul.children[0] });
-//             //this.$options.watch.selected.call(this, 0);
-//         }
-//     };
-// })();
+var aj;
+(function (aj) {
+    var widget;
+    (function (widget) {
+        var tab;
+        (function (tab) {
+            tab.tabable = {
+                mounted: function () {
+                    var _this = this;
+                    var ul = this.$el.$('.aj-simple-tab-horizontal > ul');
+                    ul.onclick = function (e) {
+                        var _a, _b;
+                        var el = e.target;
+                        select(el);
+                        var index = Array.prototype.indexOf.call((_a = el.parentElement) === null || _a === void 0 ? void 0 : _a.children, el);
+                        // @ts-ignore
+                        var _new = (_b = _this.$el.$('.aj-simple-tab-horizontal > div')) === null || _b === void 0 ? void 0 : _b.children[index];
+                        select(_new);
+                    };
+                    // @ts-ignore
+                    ul.onclick({ target: ul.children[0] });
+                    //this.$options.watch.selected.call(this, 0);
+                }
+            };
+            // 按次序选中目标
+            var select = function (_new) {
+                var oldSelected = _new.parentNode.$('.selected');
+                if (_new === oldSelected) // 没变化
+                    return;
+                oldSelected && oldSelected.classList.remove('selected');
+                _new.classList.add('selected');
+            };
+        })(tab = widget.tab || (widget.tab = {}));
+    })(widget = aj.widget || (aj.widget = {}));
+})(aj || (aj = {}));

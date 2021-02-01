@@ -8,8 +8,7 @@ var aj;
          *  回到顶部  <a href="###" @click="go">回到顶部</a>
          */
         function back2top() {
-            var top = 0;
-            var speed = 0;
+            var top = 0, speed = 0;
             back2topTimerId && window.clearInterval(back2topTimerId);
             back2topTimerId = window.setInterval(function () {
                 top = document.documentElement.scrollTop || document.body.scrollTop;

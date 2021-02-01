@@ -111,6 +111,14 @@ var aj;
                     }
                 });
             };
+            modal.popup = function (text, callback) {
+                modal.msgbox.show(text, {
+                    showYes: false,
+                    showNo: false,
+                    showOk: false,
+                    showSave: false
+                });
+            };
             //----------------------------------------------------------------------------------------
             /**
             * 顶部出现，用于后台提示信息多
