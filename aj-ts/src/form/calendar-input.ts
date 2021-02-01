@@ -8,10 +8,11 @@ interface CalendarInput extends Vue, FormFieldElementComponent {
 }
 
 Vue.component('aj-form-calendar-input', {
-    template: `
+    template: html`
         <div class="aj-form-calendar-input" :class="{'show-time': showTime}" @mouseover="onMouseOver">
             <div class="icon fa fa-calendar"></div>
-            <input :placeholder="placeholder" size="12" :name="fieldName" :value="date + (dateOnly ? '' : ' ' + time)" type="text" autocomplete="off"/>
+            <input :placeholder="placeholder" size="12" :name="fieldName" :value="date + (dateOnly ? '' : ' ' + time)"
+                type="text" autocomplete="off" />
             <aj-form-calendar ref="calendar" :show-time="showTime" @pick-date="recEvent" @pick-time="recTimeEvent">
             </aj-form-calendar>
         </div>
@@ -48,8 +49,8 @@ Vue.component('aj-form-calendar-input', {
         // var arr = date.split('-'), now = new Date(arr[0], arr[1] - 1, arr[2],
         // " ", "", " ");
         if (this.fieldValue) {
-            let arr: string = this.fieldValue.split(' ')[0];
-            let _arr = arr.split('-');
+            let arr: string = this.fieldValue.split(' ')[0],
+                _arr = arr.split('-');
             // @ts-ignore
             this.$refs.calendar.date = new Date(arr[0], arr[1] - 1, arr[2], " ", "", " ");
         }
@@ -61,11 +62,12 @@ Vue.component('aj-form-calendar-input', {
         recEvent(this: CalendarInput, date: string): void {
             this.date = date.trim();
         },
-        onMouseOver(this: CalendarInput, $event: Event): void {
+        onMouseOver(this: CalendarInput, ev: Event): void {
             if (this.positionFixed) {
-                var el: HTMLElement = <HTMLElement>$event.currentTarget;
-                var b: DOMRect = el.getBoundingClientRect();
-                var c: HTMLElement = <HTMLElement>this.$el.$('.aj-form-calendar');
+                let el: HTMLElement = <HTMLElement>ev.currentTarget,
+                    b: DOMRect = el.getBoundingClientRect(),
+                    c: HTMLElement = <HTMLElement>this.$el.$('.aj-form-calendar');
+
                 c.style.top = (b.top + el.clientHeight - 0) + 'px';
                 c.style.left = ((b.left - 0) + 0) + 'px';
             }

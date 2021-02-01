@@ -2,7 +2,7 @@
  * 下拉列表
  */
 Vue.component('aj-form-select', {
-    template: `
+    template: html `
         <select :name="name" class="aj-form-select">
             <template v-for="value, key, index in options">
                 <option v-if="index === selectedIndex" selected :value="value" >{{key}}</option>

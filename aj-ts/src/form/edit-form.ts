@@ -1,4 +1,4 @@
-namespace aj.form.EditForm {
+namespace aj.form {
     /**
         新建、编辑都同一表单
      */
@@ -7,9 +7,8 @@ namespace aj.form.EditForm {
         info: Object;
     }
 
-
     Vue.component('aj-edit-form', {
-        template: `
+        template: html`
             <form class="aj-table-form" :action="getInfoApi + (isCreate ? '' : info.id + '/')" :method="isCreate ? 'POST' : 'PUT'">
                 <h3>{{isCreate ? "新建" : "编辑" }}{{uiName}}</h3>
                 <!-- 传送 id 参数 -->
@@ -37,7 +36,7 @@ namespace aj.form.EditForm {
             }
         },
         mounted(): void {
-            aj.xhr.form(this.$el, (j: RepsonseResult) => {
+            xhr.form(this.$el, (j: RepsonseResult) => {
                 if (j) {
                     if (j.isOk) {
                         let msg = (this.isCreate ? "新建" : "保存") + this.uiName + "成功";
@@ -47,7 +46,7 @@ namespace aj.form.EditForm {
                         aj.msg.show(j.msg);
                 }
             }, {
-                beforeSubmit(form: HTMLFormElement, json: JsonParam) {
+                beforeSubmit(form: HTMLFormElement, json: JsonParam): boolean {
                     //json.content = App.$refs.htmleditor.getValue({cleanWord : eval('${aj_allConfig.article.cleanWordTag}'), encode : true});
                     return true;
                 }
@@ -57,7 +56,7 @@ namespace aj.form.EditForm {
             load(this: EditForm, id: string, cb: Function): void { // 加载数据，获取实体详情
                 this.id = id;
 
-                aj.xhr.get(this.apiUrl + id + "/", (j:  RepsonseResult) => {
+                xhr.get(this.apiUrl + id + "/", (j: RepsonseResult) => {
                     this.info = j.result;
                     cb && cb(j);
                 });
@@ -76,10 +75,11 @@ namespace aj.form.EditForm {
              * @param this 
              */
             del(this: EditForm): void {
-                let id: string = aj.form.utils.getFormFieldValue(this.$el, 'input[name=id]'), title: string = aj.form.utils.getFormFieldValue(this.$el, 'input[name=name]');
+                let id: string = utils.getFormFieldValue(this.$el, 'input[name=id]'),
+                    title: string = utils.getFormFieldValue(this.$el, 'input[name=name]');
 
                 aj.showConfirm(`请确定删除记录：\n${title}？`, () =>
-                    aj.xhr.dele(`../${id}/`, (j: RepsonseResult) => {
+                    xhr.dele(`../${id}/`, (j: RepsonseResult) => {
                         if (j.isOk) {
                             aj.msg.show('删除成功！');
                             //setTimeout(() => location.reload(), 1500);
