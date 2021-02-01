@@ -1,3 +1,5 @@
+@import '../form/common-form-functions.less';
+
 // 文章列表
 .aj-article-list {
     &>ul {
@@ -59,6 +61,33 @@
 
 }
 
+.aj-pager {
+    text-align    : center;
+    font-size     : .95rem;
+    color         : gray;
+    letter-spacing: 2px;
+    margin        : 2%;
+
+    input {
+        .aj-input-base();
+        text-align: center;
+        min-height: 22px;
+        height    : 22px;
+    }
+
+    select {
+        .aj-select-base();
+        text-align    : center;
+        width         : 40px;
+        height        : 22px;
+        vertical-align: bottom;
+    }
+
+    form {
+        display: inline-block;
+    }
+}
+
 .aj-list {
     &>ul {
         clear   : both;
@@ -74,27 +103,11 @@
     }
 
     footer {
-        text-align    : center;
-        font-size     : .95rem;
-        color         : gray;
-        letter-spacing: 2px;
-        margin        : 2%;
-
-        input {
-            // .aj-input;
-            text-align: center;
-            height    : 22px;
-        }
-
-        select {
-            //     .aj-select;
-            text-align    : center;
-            width         : 40px;
-            height        : 22px;
-            vertical-align: bottom;
-        }
+        .aj-pager();
     }
 }
+
+
 
 // 宫格
 .aj-list-col-base (@columns) {

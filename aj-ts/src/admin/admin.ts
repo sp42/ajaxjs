@@ -1,5 +1,5 @@
-namespace aj {
-	export var admin = {
+namespace aj.admin {
+	export var helper = {
 		/**
 		 * 删除
 		 * 
@@ -56,7 +56,6 @@ Vue.component('aj-admin-state', {
 		</div>
 	`,
 	props: { checked: Number }	// 哪个选中了？
-
 });
 
 Vue.component('aj-admin-xsl', {
@@ -75,10 +74,8 @@ Vue.component('aj-admin-control', {
 		<td>
 			<slot></slot>
 			<a v-if="preview" :href="ajResources.ctx + preview + id + '/'" target="_blank">浏览</a>
-			<a :href="'../' + id +'/'"><img :src="ajResources.commonAsset + '/icon/update.gif'" style="vertical-align: sub;" />
-				编辑</a>
-			<a href="javascript:;" @click="del(id, name)"><img :src="ajResources.commonAsset + '/icon/delete.gif'"
-					style="vertical-align: sub;" /> 删除</a>
+			<a :href="'../' + id +'/'"><img :src="ajResources.commonAssetIcon + '/update.gif'" style="vertical-align: sub;" /> 编辑</a>
+			<a href="javascript:;" @click="del(id, name)"><img :src="ajResources.commonAssetIcon + '/delete.gif'" style="vertical-align: sub;" /> 删除</a>
 		</td>
 	`,
 	props: {
@@ -88,7 +85,7 @@ Vue.component('aj-admin-control', {
 	},
 	methods: {
 		del(id: string, name: string): void {
-			aj.admin.del(id, name);
+			aj.admin.helper.del(id, name);
 		}
 	}
 });
@@ -96,9 +93,9 @@ Vue.component('aj-admin-control', {
 /**
  * 后台头部导航
  */
-Vue.component('ajaxjs-admin-header', {
+Vue.component('aj-admin-header', {
 	template: html`	
-		<header class="ajaxjs-admin-header">
+		<header class="aj-admin-header">
 			<div>
 				<slot name="btns"></slot>
 				<a href="#" target="_blank">
@@ -136,8 +133,8 @@ Vue.component('aj-admin-filter-panel', {
 			</form>
 			<slot></slot>
 			<span v-if="!noCatalog">{{label || '分类'}}：
-				<aj-tree-catelog-select :is-auto-jump="true" :catalog-id="catalogId" :selected-catalog-id="selectedCatalogId">
-				</aj-tree-catelog-select></span>
+				<aj-tree-like-select :is-auto-jump="true" :catalog-id="catalogId" :selected-catalog-id="selectedCatalogId"></aj-tree-like-select>
+			</span>
 		</div>
     `,
 	props: {
@@ -152,15 +149,15 @@ Vue.component('aj-admin-filter-panel', {
 /**
  * 后台增加、编辑、复位、删除按钮
  */
-Vue.component('ajaxjs-admin-info-btns', {
+Vue.component('aj-admin-info-btns', {
 	template: html`
-		<div class="ajaxjs-admin-info-btns">
-			<button><img :src="ajResources.commonAsset + '/icon/save.gif'" /> {{isCreate ? "新建":"保存"}}</button>
+		<div class="aj-admin-info-btns">
+			<button><img :src="ajResources.commonAssetIcon + '/save.gif'" /> {{isCreate ? "新 建":"保 存"}}</button>
 			<button onclick="this.up('form').reset();return false;">复 位</button>
 			<button v-if="!isCreate" v-on:click.prevent="del">
-				<img :src="ajResources.commonAsset + '/icon/delete.gif'" /> 删 除
+				<img :src="ajResources.commonAssetIcon + '/delete.gif'" /> 删 除
 			</button>
-			<button onclick="history.back();return false;">返回</button>
+			<button onclick="history.back();return false;">返 回</button>
 			<slot></slot>
 		</div>
 	`,

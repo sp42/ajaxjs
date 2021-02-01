@@ -145,7 +145,7 @@ namespace aj.list.tree {
      * @param selectedId 
      * @param cfg 
      */
-    export function rendererOption(jsonArray: TreeNode[], select: HTMLSelectElement, selectedId: string, cfg: TreeOption): void {
+    export function rendererOption(jsonArray: TreeNode[], select: HTMLSelectElement, selectedId?: string, cfg?: TreeOption): void {
         if (cfg && cfg.makeAllOption) {
             let option: HTMLOptionElement = document.createElement('option');
             option.value = option.innerHTML = "全部分类";

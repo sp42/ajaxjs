@@ -190,9 +190,11 @@ namespace aj.xhr {
         googleReCAPTCHA?: boolean;
 
         /**
-         * 提交之前的触发的事件
+         * 提交之前的触发的事件。
+         * 如果返回 fasle 表示阻止提交表单
          */
         beforeSubmit?: (form: HTMLFormElement, json: StringJsonParam) => boolean;
+        
     }
 
     /**

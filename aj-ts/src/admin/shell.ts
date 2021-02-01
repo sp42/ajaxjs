@@ -48,6 +48,15 @@ function highlightMenu(target: string): void {
     }
 }
 
+function logout(): void {
+    aj.showConfirm('确定退出吗？', () => aj.xhr.get(`${aj.ctx}/user/logout/`, (j: RepsonseResult) => {
+        if (j.isOk) {
+            aj.msg.show(j.msg);
+            setTimeout(() => location.assign(`${aj.ctx}/admin/login/`), 1000);
+        }
+    }));
+}
+
 let prefix: string = location.origin + "",
     iframepageName: string = 'iframepage',
     target = getTarget(),

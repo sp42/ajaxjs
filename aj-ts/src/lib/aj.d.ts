@@ -2,6 +2,11 @@
  * AJAXJS UI 库占据 aj 一个全局变量
  */
 declare namespace aj {
+    /**
+     * Web 虚拟目录
+     */
+    declare var ctx: string;
+
     declare var msg: TopMsg;
 
     /**
@@ -190,7 +195,7 @@ declare interface Ajax {
     /**
      * 真实发送的请求，可能包含 QueryString
      */
-    realApiUrl: string;
+    realApiUrl?: string;
 
     /**
      * 每次请求都附带的参数，一经修改就不可修改的
@@ -210,7 +215,7 @@ declare interface Ajax {
     /**
      * 请求结果
      */
-    result: any;
+    result?: any;
 
     /**
      * 是否自动加载数据
@@ -225,5 +230,5 @@ declare interface Ajax {
     /**
      * 得到数据后的回调
      */
-    onLoad: (j: RepsonseResult) => void;
+    onLoad?: (j: RepsonseResult) => void;
 }

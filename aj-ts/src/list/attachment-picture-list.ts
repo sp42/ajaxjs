@@ -7,7 +7,7 @@ interface AttachmentPictureList extends Ajax {
  * 相册列表
  */
 Vue.component('aj-attachment-picture-list', {
-    template: `
+    template: html `
         <table>
             <tr>
             <td>

@@ -1,154 +1,52 @@
 @import '../common-functions.less';
+@import '../form/common-form-functions.less';
 @import '../app/website.less';
 
-@mainColor: #1b4e2c;
+body>header {
+    .centerBody();
+    height: 130px;
 
-body {
-    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif, "Lantinghei SC", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif;
+    .logo {
+        float: left;
+    }
+
+    .right {
+        float: right;
+
+        .globalSearch {
+            margin-top: 6%;
+
+            input[type=text] {
+                .aj-input-base();
+            }
+
+            .searchBtn {
+                // background: url("@{assetFilePath}/common/images/search.png") no-repeat;
+                width      : 32px;
+                height     : 32px;
+                cursor     : pointer;
+                float      : right;
+                margin-left: 4px;
+            }
+        }
+    }
+
 }
 
 .centerWidth {
     .centerBody();
 }
 
-header.top {
-    .centerBody();
-    height     : 100px;
-    margin-top : 1%;
-    width      : 100%;
-    text-align : center;
-    line-height: 80px;
-    font-size  : 1.3rem;
-
-    .logo {
-        float: left;
-
-        img {
-            vertical-align: middle;
-            max-width     : 180px;
-        }
-    }
-
-    .right {
-        width: 1000px;
-
-        ul {
-            height : 50px;
-            display: block;
-            margin : 2% auto;
-            float  : right;
-
-            li {
-                float      : left;
-                width      : 115px;
-                line-height: 50px;
-                text-align : center;
-                font-size  : 1rem;
-
-                a {
-                    &:visited {}
-                }
-
-                &.selected a {
-                    color      : white;
-                    text-shadow: 0 1px black, 1px 0 black, -1px 0 black, 0 -1px black;
-                }
-            }
-        }
-
-        float: right;
-
-        .searchBtn {
-            vertical-align: middle;
-        }
-
-        &>div {
-            display: inline-block;
-        }
-    }
-}
-
-article {
-    h2 {
-        font-weight   : bold;
-        padding-bottom: 1%;
-        margin-top    : 5%;
-        margin-bottom : 2%;
-        box-sizing    : border-box;
-        font-size     : 1.2em;
-        letter-spacing: 2px;
-        border-bottom : 1px solid lightgray;
-
-    }
-
-    li {
-        //.ajaxjs-text-p;
-        margin-left: 3em;
-        list-style : disc;
-    }
-}
-
-section.banner {
-    width     : 100%;
-    min-height: 150px;
-
-    //background-color:#1087eb;
-    &>div {
-        .centerBody();
-        overflow : hidden;
-        min-width: 1200px;
-
-        img {
-            width: 100%;
-        }
-
-        .text {
-            color         : white;
-            vertical-align: middle;
-            line-height   : 300px;
-            height        : 300px;
-            float         : left;
-            font-size     : 3rem;
-        }
-
-        .img {
-            height: 320px;
-            width : 100%;
-
-        }
-    }
-
-    .aj-opacity-banner {
-        height: 360px;
-    }
-}
-
-section.banner2 {
-    width : 100%;
-    height: 50px;
-
-    &>div {
-        .centerBody();
-    }
-}
-
-.aj-baidu-search {
-    margin: 10% 0;
-
-    input[type=text] {
-        border-radius: 0;
-        height       : 30px;
-        width        : 260px;
-        margin       : 2%;
-    }
-
-    .searchBtn {
-        vertical-align: middle;
-    }
-}
-
 body {
-    font-size: 14px;
+    >header {
+        .logo img {
+            width: 120px;
+        }
+    }
+
+    >nav {
+        background-color: #48c4de;
+    }
 }
 
 .logoPic {
@@ -157,32 +55,13 @@ body {
 
 .top {
     background-color: white;
+    border-bottom   : 1px solid #ddd;
 
     header {
         .centerBody();
 
         &>div {}
 
-        .right {
-            float: right;
-
-            .globalSearch {
-                margin-top: 6%;
-
-                // input[type=text] {
-                //     //.aj-input;
-                // }
-
-                .searchBtn {
-                    // background : url("@{assetFilePath}/common/images/search.png") no-repeat;
-                    width      : 32px;
-                    height     : 32px;
-                    cursor     : pointer;
-                    float      : right;
-                    margin-left: 4px;
-                }
-            }
-        }
 
         nav {
             float: right;
@@ -204,6 +83,10 @@ body {
     }
 }
 
+.right>h2 {
+    padding: 2% 0;
+}
+
 h2 {
     letter-spacing: 3px;
 }
@@ -216,11 +99,11 @@ h2 {
         float       : left;
         border-right: 1px solid lightgray;
         min-height  : 500px;
-        width       : 26%;
+        width       : 23%;
 
         ul {
             li {
-                padding       : 5% 0;
+                padding       : 5% 2%;
                 border-bottom : 1px solid lightgray;
                 letter-spacing: 2px;
 
@@ -234,14 +117,28 @@ h2 {
 
     .right {
         float       : left;
-        width       : 70%;
+        width       : 73%;
         padding-left: 2%;
+
+        h1 {
+            text-align: center;
+            padding   : 6% 0;
+            clear     : both;
+        }
+
+   
+
+        table.vue {
+            float : right;
+            margin: 60px 0 80px 0;
+        }
     }
 }
 
 nav.anchor {
-    float : right;
-    margin: 1% 0;
+    float     : right;
+    margin    : 1% 0;
+    margin-top: 3%;
 }
 
 h2.title {
@@ -322,12 +219,18 @@ h2.title {
     .body .right {
         ul {
 
-            // .ajaxjs-ul-list (4);
+            // .ajaxjs-ul-list(4);
             li {
                 height: 300px;
             }
         }
     }
+}
+
+.pageInfo {
+    text-align : center;
+    margin     : 3%;
+    white-space: nowrap;
 }
 
 article {
@@ -340,20 +243,24 @@ article {
     h4 {
         text-align: right;
     }
-
-    p {
-        //.ajaxjs-text-p;
-    }
 }
 
 .bottom {
     border-top: 1px solid #ddd;
 }
 
-footer {
-    text-align: center;
-    color     : gray;
-    font-size : .8rem;
+.banner {
+    height    : 200px;
+    width     : 100%;
+    margin-top: 1px;
+    position  : relative;
+
+    h1 {
+        position: absolute;
+        left    : 10%;
+        top     : 30%;
+        color   : white;
+    }
 }
 
 .home {
@@ -385,6 +292,8 @@ footer {
         border    : 0;
         border-top: 1px solid lightgray;
     }
+
+
 }
 
 .user-loign,
@@ -410,11 +319,11 @@ footer {
         input[type=text],
         input[type=number],
         input[type=password] {
-            //	.aj-input;
+            .aj-input-base();
         }
 
         button {
-            //	.aj-btn;
+            .aj-btn-base();
         }
 
         &>div {
@@ -446,5 +355,56 @@ footer {
         padding         : 2%;
         margin          : 1%;
         background-color: lightgray;
+    }
+}
+
+.reg_login {
+    .header {
+        display: none;
+        .centerBody;
+        clear       : both;
+        padding     : 2%;
+        padding-left: 18%;
+
+        img {
+            vertical-align: middle;
+            font-size     : 1.3rem;
+            border-right  : 1px solid black;
+            padding-right : 1%;
+            margin-right  : 1%;
+        }
+    }
+
+    .bg {
+        height       : 34.5rem;
+        position     : relative;
+        margin-bottom: 10%;
+
+        >img {
+            height  : 100%;
+            width   : 100%;
+            position: absolute;
+            left    : 0;
+            top     : 0;
+        }
+
+        .box {
+            top             : 4rem;
+            right           : 12%;
+            position        : absolute;
+            width           : 30rem;
+            padding-bottom  : 2rem;
+            box-shadow      : 0px 0px 0.4rem rgba(0, 0, 0, 0.2);
+            border          : 1px solid #f0f0f0;
+            background-color: white;
+
+            h5 {
+                font-size  : 1.5rem;
+                color      : rgb(125, 160, 255);
+                border-left: 6px solid rgb(125, 160, 255);
+                text-indent: 14px;
+                margin     : 22px 0px 30px 30px;
+            }
+        }
     }
 }

@@ -1,4 +1,15 @@
-header.ajaxjs-admin-header {
+@import '../form/common-form-functions.less';
+
+// body {
+//     opacity   : 0;
+//     transition: opacity 0.3s;
+// }
+
+// body.active {
+//     opacity: 1;
+// }
+
+header.aj-admin-header {
     padding       : 2% 0;
     padding-bottom: 1.5%;
 
@@ -37,4 +48,17 @@ header.ajaxjs-admin-header {
     form {
         display: inline;
     }
+}
+
+table.listTable {
+    width : 96%;
+    margin: 0 auto;
+}
+
+.listTable.pager {
+    text-align: center;
+}
+
+.aj-admin-info-btns {
+    .aj-btnsHolder-base();
 }
