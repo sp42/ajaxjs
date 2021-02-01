@@ -19,6 +19,7 @@
   padding-bottom: 2%;
   font-size: 0.95rem;
 }
+.aj-article-info article > div,
 .aj-article-info article p {
   color: #333;
   line-height: 160%;

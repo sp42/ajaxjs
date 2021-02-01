@@ -101,6 +101,7 @@
 .aj-form-calendar-input {
   position: relative;
   width: 125px;
+  line-height: 19px;
   display: inline-block;
 }
 .aj-form-calendar-input.show-time {

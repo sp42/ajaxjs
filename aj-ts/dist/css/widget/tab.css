@@ -22,7 +22,7 @@
 }
 .aj-simple-tab-base > ul > li:hover,
 .aj-simple-tab-base > button:hover {
-  font-weight: bold;
+  color: red;
 }
 .aj-simple-tab-base > div {
   position: relative;
@@ -64,7 +64,7 @@
 }
 .aj-simple-tab-horizontal > ul > li:hover,
 .aj-simple-tab-horizontal > button:hover {
-  font-weight: bold;
+  color: red;
 }
 .aj-simple-tab-horizontal > div {
   position: relative;
@@ -120,7 +120,7 @@
 }
 .aj-simple-tab-vertical > ul > li:hover,
 .aj-simple-tab-vertical > button:hover {
-  font-weight: bold;
+  color: red;
 }
 .aj-simple-tab-vertical > div {
   position: relative;
