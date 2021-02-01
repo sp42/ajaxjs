@@ -1,6 +1,10 @@
 "use strict";
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
 Vue.component('aj-form-calendar-input', {
-    template: "\n        <div class=\"aj-form-calendar-input\" :class=\"{'show-time': showTime}\" @mouseover=\"onMouseOver\">\n            <div class=\"icon fa fa-calendar\"></div>\n            <input :placeholder=\"placeholder\" size=\"12\" :name=\"fieldName\" :value=\"date + (dateOnly ? '' : ' ' + time)\" type=\"text\" autocomplete=\"off\"/>\n            <aj-form-calendar ref=\"calendar\" :show-time=\"showTime\" @pick-date=\"recEvent\" @pick-time=\"recTimeEvent\">\n            </aj-form-calendar>\n        </div>\n    ",
+    template: html(__makeTemplateObject(["\n        <div class=\"aj-form-calendar-input\" :class=\"{'show-time': showTime}\" @mouseover=\"onMouseOver\">\n            <div class=\"icon fa fa-calendar\"></div>\n            <input :placeholder=\"placeholder\" size=\"12\" :name=\"fieldName\" :value=\"date + (dateOnly ? '' : ' ' + time)\"\n                type=\"text\" autocomplete=\"off\" />\n            <aj-form-calendar ref=\"calendar\" :show-time=\"showTime\" @pick-date=\"recEvent\" @pick-time=\"recTimeEvent\">\n            </aj-form-calendar>\n        </div>\n    "], ["\n        <div class=\"aj-form-calendar-input\" :class=\"{'show-time': showTime}\" @mouseover=\"onMouseOver\">\n            <div class=\"icon fa fa-calendar\"></div>\n            <input :placeholder=\"placeholder\" size=\"12\" :name=\"fieldName\" :value=\"date + (dateOnly ? '' : ' ' + time)\"\n                type=\"text\" autocomplete=\"off\" />\n            <aj-form-calendar ref=\"calendar\" :show-time=\"showTime\" @pick-date=\"recEvent\" @pick-time=\"recTimeEvent\">\n            </aj-form-calendar>\n        </div>\n    "])),
     data: function () {
         return {
             date: this.fieldValue,
@@ -31,8 +35,7 @@ Vue.component('aj-form-calendar-input', {
         // var arr = date.split('-'), now = new Date(arr[0], arr[1] - 1, arr[2],
         // " ", "", " ");
         if (this.fieldValue) {
-            var arr = this.fieldValue.split(' ')[0];
-            var _arr = arr.split('-');
+            var arr = this.fieldValue.split(' ')[0], _arr = arr.split('-');
             // @ts-ignore
             this.$refs.calendar.date = new Date(arr[0], arr[1] - 1, arr[2], " ", "", " ");
         }
@@ -44,11 +47,9 @@ Vue.component('aj-form-calendar-input', {
         recEvent: function (date) {
             this.date = date.trim();
         },
-        onMouseOver: function ($event) {
+        onMouseOver: function (ev) {
             if (this.positionFixed) {
-                var el = $event.currentTarget;
-                var b = el.getBoundingClientRect();
-                var c = this.$el.$('.aj-form-calendar');
+                var el = ev.currentTarget, b = el.getBoundingClientRect(), c = this.$el.$('.aj-form-calendar');
                 c.style.top = (b.top + el.clientHeight - 0) + 'px';
                 c.style.left = ((b.left - 0) + 0) + 'px';
             }
