@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="keywords" content="可视化表单设计器" />
+        <meta name="description" content="可视化表单设计器" />
+        <meta name="author" content="Frank Chueng, frank@ajaxjs.com" />
+        <meta name="renderer" content="webkit" />
+        <meta http-equiv="X-UA-Compatible" content="edge,chrome=1" />
+        <noscript>
+            <div>如要享受本网站之服务请勿禁用浏览器 JavaScript 支持</div>
+        </noscript>
+    
+        <title>Web 桌面</title>
+        <style type="text/css">
+            /* AJAXJS Base CSS */
+            body,dl,dt,dd,ul,li,pre,form,fieldset,input,p,blockquote,th,td,h1,h2,h3,h4,h5{margin:0;padding:0;}
+            h1,h2,h3,h4,h5{font-weight: normal;}img{border:0;}ul li{list-style-type:none}.hide{display:none}
+            body {-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing: grayscale;
+                font-family: "Lantinghei SC", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif;}
+            a{text-decoration:none;color:#666;transition:color .4s ease-in-out;}
+            a:hover{color:#000;}
+            button{border:none;outline:0;cursor:pointer;letter-spacing:2px;text-align:center;-webkit-user-select:none;-moz-user-select:none;user-select:none}
+            input[type=password],input[type=text],select,textarea{outline:0;-moz-appearance:none;}	
+        </style>
+    
+        <link rel="stylesheet" href="http://localhost:8888/dist/css/all.css" />
+        <link href="https://lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
+        <script src="https://lib.baomitu.com/vue/2.6.11/vue.js"></script>
+        <script src="http://localhost:8888/dist/base.js"></script>
+        <script src="http://localhost:8888/dist/widget.js"></script>
+        <script src="http://localhost:8888/dist/form.js"></script>
+        
+		
+		<link rel="stylesheet/less" data-global-vars='{"assetFilePath": "\"/myblog/asset\"" }' type="text/css" href="../../src/less/app/desktop.less" />
+		<script src="https://lib.baomitu.com/less.js/3.0.4/less.min.js"></script>
+
+
+	    
+	    <script>
+	   		aj.Vue = {};
+	   		aj.Vue.install = function(Vue) {
+	   			Vue.prototype.ajResources = {
+		   			ctx : '/myblog',
+		   			commonAsset : '/myblog/asset/common',
+		   			libraryUse  : '/myblog/asset/common/resources' // 庫使用的資源
+	   			};
+	   			
+	   			Vue.prototype.BUS = new Vue();
+	   		}
+	   		
+	   		Vue.use(aj.Vue);
+	   	</script>
+	</head>
+
+    <body>
+		<div class="stage">
+			<aj-window></aj-window>
+		</div>
+		<menu>
+			<div class="button"><div class="glare"></div>开始</div>
+			<ul>
+				<li></li>
+			</ul>
+		</menu>
+		
+		<div class="mask"></div>
+		
+		<script src="../../src/app/desktop/desktop.js"></script>
+    </body>
+</html>
