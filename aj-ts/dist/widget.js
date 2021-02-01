@@ -62,60 +62,6 @@
 })();
 
 "use strict";
-/**
- * 调整正文字体大小
- */
-Vue.component('aj-adjust-font-size', {
-    template: "\n        <div class=\"aj-adjust-font-size\" @click=\"onClk\">\n            <span>\u5B57\u4F53\u5927\u5C0F</span>\n            <ul>\n                <li><label><input type=\"radio\" name=\"fontSize\" /> \u5C0F</label></li>\n                <li><label><input type=\"radio\" name=\"fontSize\" /> \u4E2D</label></li>\n                <li><label><input type=\"radio\" name=\"fontSize\" /> \u5927</label></li>\n            </ul>\n        </div>\n    ",
-    props: {
-        articleTarget: { type: String, default: 'article p' } // 正文所在的位置，通过 CSS Selector 定位
-    },
-    methods: {
-        onClk: function (e) {
-            var _this = this;
-            var el = e.target, target = el.innerHTML;
-            var setFontSize = function (fontSize) {
-                document.body.$(_this.$props.articleTarget, function (p) { return p.style.fontSize = fontSize; });
-            };
-            if (el.tagName != 'LABEL')
-                el = el.up('label');
-            if (el.innerHTML.indexOf('大') != -1)
-                setFontSize('12pt');
-            else if (el.innerHTML.indexOf('中') != -1)
-                setFontSize('10.5pt');
-            else if (el.innerHTML.indexOf('小') != -1)
-                setFontSize('9pt');
-        }
-    }
-});
-
-"use strict";
-var aj;
-(function (aj) {
-    var widget;
-    (function (widget) {
-        var back2topTimerId = 0;
-        /**
-         *  回到顶部  <a href="###" @click="go">回到顶部</a>
-         */
-        function back2top() {
-            var top = 0;
-            var speed = 0;
-            back2topTimerId && window.clearInterval(back2topTimerId);
-            back2topTimerId = window.setInterval(function () {
-                top = document.documentElement.scrollTop || document.body.scrollTop;
-                speed = Math.floor((0 - top) / 8);
-                if (top === 0)
-                    clearInterval(back2topTimerId);
-                else
-                    document.documentElement.scrollTop = document.body.scrollTop = top + speed;
-            }, 20);
-        }
-        widget.back2top = back2top;
-    })(widget = aj.widget || (aj.widget = {}));
-})(aj || (aj = {}));
-
-"use strict";
 Vue.component('aj-widget-baidu-search', {
     template: "\n        <div class=\"aj-widget-baidu-search\"><form method=\"GET\" action=\"http://www.baidu.com/baidu\" onsubmit=\"//return g(this);\">\n            <input type=\"text\" name=\"word\" placeholder=\"\u8BF7\u8F93\u5165\u641C\u7D22\u4E4B\u5173\u952E\u5B57\" />\n            <input name=\"tn\" value=\"bds\" type=\"hidden\" />\n            <input name=\"cl\" value=\"3\" type=\"hidden\" />\n            <input name=\"ct\" value=\"2097152\" type=\"hidden\" />\n            <input name=\"si\" :value=\"getSiteDomainName\" type=\"hidden\" />\n            <div class=\"searchBtn\" onclick=\"this.parentNode.submit();\"></div>\n        </form></div>\n    ",
     props: ['siteDomainName'],
@@ -125,8 +71,6 @@ Vue.component('aj-widget-baidu-search', {
         }
     }
 });
-
-"use strict";
 
 "use strict";
 Vue.component("aj-expander", {
@@ -221,31 +165,41 @@ Vue.component('aj-tab', {
         this.currentTab = this.tabs[0];
     }
 });
-// aj.widget.tabable = (() => {
-//     // 按次序选中目标
-//     var select = (_new) => {
-//         var oldSelected = _new.parentNode.$('.selected');
-//         if (_new === oldSelected) // 没变化
-//             return;
-//         oldSelected && oldSelected.classList.remove('selected');
-//         _new.classList.add('selected');
-//     }
-//     return {
-//         mounted(this: Vue) {
-//             var ul = <HTMLElement>this.$el.$('.aj-simple-tab-horizontal > ul');
-//             ul.onclick = (e: Event) => {
-//                 let el = <HTMLElement>e.target;
-//                 select(el);
-//                 let index = Array.prototype.indexOf.call(el.parentElement?.children, el);
-//                 let _new = this.$el.$('.aj-simple-tab-horizontal > div')?.children[index];
-//                 select(_new);
-//             };
-//             // @ts-ignore
-//             ul.onclick({ target: ul.children[0] });
-//             //this.$options.watch.selected.call(this, 0);
-//         }
-//     };
-// })();
+var aj;
+(function (aj) {
+    var widget;
+    (function (widget) {
+        var tab;
+        (function (tab) {
+            tab.tabable = {
+                mounted: function () {
+                    var _this = this;
+                    var ul = this.$el.$('.aj-simple-tab-horizontal > ul');
+                    ul.onclick = function (e) {
+                        var _a, _b;
+                        var el = e.target;
+                        select(el);
+                        var index = Array.prototype.indexOf.call((_a = el.parentElement) === null || _a === void 0 ? void 0 : _a.children, el);
+                        // @ts-ignore
+                        var _new = (_b = _this.$el.$('.aj-simple-tab-horizontal > div')) === null || _b === void 0 ? void 0 : _b.children[index];
+                        select(_new);
+                    };
+                    // @ts-ignore
+                    ul.onclick({ target: ul.children[0] });
+                    //this.$options.watch.selected.call(this, 0);
+                }
+            };
+            // 按次序选中目标
+            var select = function (_new) {
+                var oldSelected = _new.parentNode.$('.selected');
+                if (_new === oldSelected) // 没变化
+                    return;
+                oldSelected && oldSelected.classList.remove('selected');
+                _new.classList.add('selected');
+            };
+        })(tab = widget.tab || (widget.tab = {}));
+    })(widget = aj.widget || (aj.widget = {}));
+})(aj || (aj = {}));
 
 "use strict";
 Vue.component('aj-avatar', {
@@ -268,34 +222,55 @@ Vue.component('aj-avatar', {
 "use strict";
 var aj;
 (function (aj) {
-    var img;
-    (function (img) {
-        function initImageEnlarger() {
-            img.imageEnlarger = new Vue({
-                el: document.body.appendChild(document.createElement('div')),
-                template: '<div class="aj-image-large-view"><div><img :src="imgUrl" /></div></div>',
-                data: {
-                    imgUrl: null
+    var widget;
+    (function (widget) {
+        var img;
+        (function (img) {
+            function initImageEnlarger() {
+                img.imageEnlarger = new Vue({
+                    el: document.body.appendChild(document.createElement('div')),
+                    template: '<div class="aj-image-large-view"><div><img :src="imgUrl" /></div></div>',
+                    data: {
+                        imgUrl: null
+                    },
+                    mounted: function () {
+                        var _this = this;
+                        // @ts-ignore
+                        document.addEventListener('mousemove', aj.throttle(function (e) {
+                            if (_this.imgUrl) {
+                                var w = 0, imgWidth = _this.$el.$('img').clientWidth;
+                                if (imgWidth > e.pageX)
+                                    w = imgWidth;
+                                var el = _this.$el.$('div');
+                                el.style.top = (e.pageY + 20) + 'px';
+                                el.style.left = (e.pageX - el.clientWidth + w) + 'px';
+                            }
+                        }, 50, 5000), false);
+                    }
+                });
+                return img.imageEnlarger;
+            }
+            img.initImageEnlarger = initImageEnlarger;
+            Vue.component('aj-img-thumb', {
+                template: "<a class=\"aj-img-thumb\" :href=\"getImgUrl\" v-if=\"imgUrl\" target=\"_blank\">\n                <img :src=\"getImgUrl\"\n                    :onmouseenter=\"'aj.widget.img.imageEnlarger.imgUrl = \\'' + getImgUrl + '\\';'\" \n                    onmouseleave=\"aj.widget.img.imageEnlarger.imgUrl = null;\" />\n            </a>",
+                props: {
+                    imgUrl: String
                 },
-                mounted: function () {
-                    var _this = this;
-                    // @ts-ignore
-                    document.addEventListener('mousemove', aj.throttle(function (e) {
-                        if (_this.imgUrl) {
-                            var w = 0, imgWidth = _this.$el.$('img').clientWidth;
-                            if (imgWidth > e.pageX)
-                                w = imgWidth;
-                            var el = _this.$el.$('div');
-                            el.style.top = (e.pageY + 20) + 'px';
-                            el.style.left = (e.pageX - el.clientWidth + w) + 'px';
-                        }
-                    }, 50, 5000), false);
+                computed: {
+                    getImgUrl: function () {
+                        if (!this.imgUrl)
+                            return "";
+                        if (this.imgUrl.indexOf('http') != -1) // 图片地址已经是完整的 http 地址，直接返回
+                            return this.imgUrl;
+                        // uploadFile.imgPerfix
+                        if (!this.ajResources.imgPerfix)
+                            throw "未提供图片前缀地址";
+                        return this.ajResources.imgPerfix + this.imgUrl;
+                    }
                 }
             });
-            return img.imageEnlarger;
-        }
-        img.initImageEnlarger = initImageEnlarger;
-    })(img = aj.img || (aj.img = {}));
+        })(img = widget.img || (widget.img = {}));
+    })(widget = aj.widget || (aj.widget = {}));
 })(aj || (aj = {}));
 
 "use strict";
@@ -565,42 +540,6 @@ Vue.component('aj-layer', {
 });
 
 "use strict";
-var aj;
-(function (aj) {
-    var widget;
-    (function (widget) {
-        document.addEventListener("DOMContentLoaded", function () {
-            var msgEl = document.createElement('div');
-            msgEl.className = 'aj-topMsg';
-            msgEl.setAttribute('v-html', "showText");
-            document.body.appendChild(msgEl);
-            aj.msg = new Vue({
-                el: msgEl,
-                data: {
-                    showText: '' // 显示的内容
-                },
-                methods: {
-                    show: function (text, cfg) {
-                        var _this = this;
-                        this.showText = text;
-                        var el = this.$el;
-                        setTimeout(function () {
-                            el.classList.remove('fadeOut');
-                            el.classList.add('fadeIn');
-                        }, 0);
-                        setTimeout(function () {
-                            el.classList.remove('fadeIn');
-                            el.classList.add('fadeOut');
-                            cfg && cfg.afterClose && cfg.afterClose(_this);
-                        }, cfg && cfg.showTime || 3000);
-                    }
-                }
-            });
-        });
-    })(widget = aj.widget || (aj.widget = {}));
-})(aj || (aj = {}));
-
-"use strict";
 /**
  * 消息框、弹窗、对话框组件
  */
@@ -711,6 +650,14 @@ var aj;
                     onNoClk: function () {
                         alertObj.$el.classList.add('hide');
                     }
+                });
+            };
+            modal.popup = function (text, callback) {
+                modal.msgbox.show(text, {
+                    showYes: false,
+                    showNo: false,
+                    showOk: false,
+                    showSave: false
                 });
             };
             //----------------------------------------------------------------------------------------

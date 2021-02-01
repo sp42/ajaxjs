@@ -39,8 +39,7 @@ Function.prototype.delegate = function () {
         for (var i = 0; i < Length; i++)
             if (arguments[i])
                 args[i] = arguments[i]; // 拷贝参数
-        args.length = Length; // 在
-        // MSjscript下面，arguments作为数字来使用还是有问题，就是length不能自动更新。修正如左:
+        args.length = Length; // 在 MS JScript 下面，arguments 作为数字来使用还是有问题，就是 length 不能自动更新。修正如左:
         // mission two:
         for (var i = 0, j = args.length; i < j; i++) {
             var _arg = args[i];
@@ -189,6 +188,22 @@ var aj;
     ;
     aj.SELECTED = "selected";
     aj.SELECTED_CSS = "." + aj.SELECTED;
+    /**
+     * 为让 Vue 组件使用 Class 风格，通过一个类似语法糖的转换器
+     * 这是实验性质的
+     */
+    var VueComponent = /** @class */ (function () {
+        function VueComponent() {
+        }
+        /**
+         * 转换为 ClassAPI
+         */
+        VueComponent.prototype.initComp = function () {
+            Vue.component(this.name, this);
+        };
+        return VueComponent;
+    }());
+    aj.VueComponent = VueComponent;
 })(aj || (aj = {}));
 
 "use strict";
