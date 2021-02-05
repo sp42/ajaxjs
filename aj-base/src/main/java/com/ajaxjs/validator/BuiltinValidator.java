@@ -41,6 +41,7 @@ public class BuiltinValidator {
 
 	public static final Validator NOT_EMAIL_VALIDATOR = (Object value, Field field, Annotation ann) -> {
 		String result = "^([a-z0-9A-Z]+[-|_|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+		
 		if (!value.toString().matches(result)) {
 			NotEmail n = (NotEmail) ann;
 			return n.message() != null ? n.message() : field.getName() + n.message();
