@@ -4,9 +4,13 @@
 <html>
 	<head>
 		<jsp:include page="/WEB-INF/jsp/head.jsp">
-			<jsp:param name="lessFile" value="/asset/less/admin.less" />
 			<jsp:param name="title" value="账号中心" />
 		</jsp:include>
+		
+		<!-- Admin 公共前端资源 -->
+		<link rel="stylesheet" href="${aj_static_resource}/dist/css/admin/admin.css" />
+		<script src="${aj_static_resource}/dist/admin/admin.js"></script>
+		
 		<style>
 			.safe {
 			    margin: 3% auto;
