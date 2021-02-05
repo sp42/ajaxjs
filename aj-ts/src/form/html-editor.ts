@@ -95,7 +95,7 @@ namespace aj.form {
         sourceEditor: HTMLTextAreaElement = <HTMLTextAreaElement>document.body;
 
         iframeWin: Window = window;
-        
+
         iframeDoc: Document = document;
 
         mode: 'iframe' | 'textarea' = "iframe";

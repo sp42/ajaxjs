@@ -1,9 +1,10 @@
 "use strict";
+
 /**
  * 相册列表
  */
 Vue.component('aj-attachment-picture-list', {
-    template: "\n        <table>\n            <tr>\n            <td>\n                <div class=\"label\">\u76F8\u518C\u56FE\uFF1A</div>\n                <ul>\n                    <li v-for=\"pic in pics\" style=\"float:left;margin-right:1%;text-align:center;\">\n                        <a :href=\"picCtx + pic.path\" target=\"_blank\"><img :src=\"picCtx + pic.path\" style=\"max-width: 100px;max-height: 100px;\" /></a><br />\n                        <a href=\"###\" @click=\"delPic(pic.id);\">\u5220 \u9664</a>\n                    </li>\n                </ul>\n            </td>\n            <td>\n                <aj-xhr-upload ref=\"attachmentPictureUpload\" :action=\"uploadUrl\" :is-img-upload=\"true\" :img-place=\"blankBg\"></aj-xhr-upload>\n            </td></tr>\n        </table>\n    ",
+    template: html(__makeTemplateObject(["\n        <table>\n            <tr>\n            <td>\n                <div class=\"label\">\u76F8\u518C\u56FE\uFF1A</div>\n                <ul>\n                    <li v-for=\"pic in pics\" style=\"float:left;margin-right:1%;text-align:center;\">\n                        <a :href=\"picCtx + pic.path\" target=\"_blank\"><img :src=\"picCtx + pic.path\" style=\"max-width: 100px;max-height: 100px;\" /></a><br />\n                        <a href=\"###\" @click=\"delPic(pic.id);\">\u5220 \u9664</a>\n                    </li>\n                </ul>\n            </td>\n            <td>\n                <aj-xhr-upload ref=\"attachmentPictureUpload\" :action=\"uploadUrl\" :is-img-upload=\"true\" :img-place=\"blankBg\"></aj-xhr-upload>\n            </td></tr>\n        </table>\n    "], ["\n        <table>\n            <tr>\n            <td>\n                <div class=\"label\">\u76F8\u518C\u56FE\uFF1A</div>\n                <ul>\n                    <li v-for=\"pic in pics\" style=\"float:left;margin-right:1%;text-align:center;\">\n                        <a :href=\"picCtx + pic.path\" target=\"_blank\"><img :src=\"picCtx + pic.path\" style=\"max-width: 100px;max-height: 100px;\" /></a><br />\n                        <a href=\"###\" @click=\"delPic(pic.id);\">\u5220 \u9664</a>\n                    </li>\n                </ul>\n            </td>\n            <td>\n                <aj-xhr-upload ref=\"attachmentPictureUpload\" :action=\"uploadUrl\" :is-img-upload=\"true\" :img-place=\"blankBg\"></aj-xhr-upload>\n            </td></tr>\n        </table>\n    "])),
     props: {
         picCtx: String,
         uploadUrl: String,
@@ -88,10 +89,7 @@ Vue.component('aj-simple-grid', {
 });
 
 "use strict";
-var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-    return cooked;
-};
+
 var aj;
 (function (aj) {
     var list;
@@ -493,10 +491,7 @@ var aj;
 })(aj || (aj = {}));
 
 "use strict";
-var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-    return cooked;
-};
+
 Vue.component('aj-grid-inline-edit-row-create', {
     template: html(__makeTemplateObject(["\n        <tr class=\"aj-grid-inline-edit-row isEditMode\">\n            <td><input type=\"checkbox\" /></td>\n            <td></td>\n            <td v-for=\"key in columns\" style=\"padding:0\" class=\"cell\" @dblclick=\"dbEdit\">\n                <aj-select v-if=\"key != null && key.type == 'select'\" :name=\"key.name\" :options=\"key.data\"\n                    style=\"width: 200px;\"></aj-select>\n                <input v-if=\"key != null && !key.type\" type=\"text\" size=\"0\" :name=\"key\" />\n            </td>\n            <td class=\"control\">\n                <span @click=\"addNew\"><img :src=\"ajResources.commonAsset + '/icon/update.gif'\" />\u65B0\u589E</span>\n                <span @click=\"$parent.showAddNew = false\"><img :src=\"ajResources.commonAsset + '/icon/delete.gif'\" /> \u64A4\u9500</span>\n            </td>\n        </tr>\n    "], ["\n        <tr class=\"aj-grid-inline-edit-row isEditMode\">\n            <td><input type=\"checkbox\" /></td>\n            <td></td>\n            <td v-for=\"key in columns\" style=\"padding:0\" class=\"cell\" @dblclick=\"dbEdit\">\n                <aj-select v-if=\"key != null && key.type == 'select'\" :name=\"key.name\" :options=\"key.data\"\n                    style=\"width: 200px;\"></aj-select>\n                <input v-if=\"key != null && !key.type\" type=\"text\" size=\"0\" :name=\"key\" />\n            </td>\n            <td class=\"control\">\n                <span @click=\"addNew\"><img :src=\"ajResources.commonAsset + '/icon/update.gif'\" />\u65B0\u589E</span>\n                <span @click=\"$parent.showAddNew = false\"><img :src=\"ajResources.commonAsset + '/icon/delete.gif'\" /> \u64A4\u9500</span>\n            </td>\n        </tr>\n    "])),
     props: {
@@ -546,10 +541,7 @@ Vue.component('aj-grid-inline-edit-row-create', {
 });
 
 "use strict";
-var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-    return cooked;
-};
+
 var aj;
 (function (aj) {
     var list;
@@ -766,10 +758,7 @@ var aj;
 })(aj || (aj = {}));
 
 "use strict";
-var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-    return cooked;
-};
+
 /**
  * 工具条
  */
@@ -799,47 +788,78 @@ Vue.component('aj-entity-toolbar', {
 });
 
 "use strict";
-Vue.component('aj-tree-like-select', {
-    template: '<select :name="fieldName" class="aj-select" @change="onSelected" style="min-width:180px;"></select>',
-    props: {
-        fieldName: { type: String, required: false, default: 'catalogId' },
-        apiUrl: { type: String, default: function () {
-                return aj.ctx + '/admin/tree-like/';
-            } },
-        isAutoLoad: { type: Boolean, default: true },
-        isAutoJump: Boolean,
-        initFieldValue: String
-    },
-    data: function () {
-        return {
-            fieldValue: this.initFieldValue
-        };
-    },
-    mounted: function () {
-        this.isAutoLoad && this.getData();
-    },
-    methods: {
-        onSelected: function (ev) {
-            var el = ev.target;
-            this.fieldValue = el.selectedOptions[0].value;
-            if (this.isAutoJump)
-                location.assign('?' + this.fieldName + '=' + this.fieldValue);
-            else
-                this.BUS && this.BUS.$emit('aj-tree-catelog-select-change', ev, this);
-        },
-        getData: function () {
-            var _this = this;
-            var fn = function (j) {
-                var arr = [{ id: 0, name: "请选择分类" }];
-                aj.list.tree.rendererOption(arr.concat(j.result), _this.$el, _this.fieldValue, { makeAllOption: false });
-                if (_this.fieldValue) // 有指定的选中值
-                    aj.form.utils.selectOption.call(_this, _this.fieldValue);
-            };
-            // aj.xhr.get(this.ajResources.ctx + this.apiUrl + "/admin/tree-like/getListAndSubByParentId/", fn);
-            aj.xhr.get(this.apiUrl, fn);
-        }
-    }
-});
+
+var aj;
+(function (aj) {
+    var list;
+    (function (list) {
+        var tree;
+        (function (tree) {
+            /**
+             * 下拉分类选择器，异步请求远端获取分类数据
+             */
+            var TreeLikeSelect = /** @class */ (function (_super) {
+                __extends(TreeLikeSelect, _super);
+                function TreeLikeSelect() {
+                    var _this = _super !== null && _super.apply(this, arguments) || this;
+                    _this.name = 'aj-tree-like-select';
+                    _this.template = '<select :name="fieldName" class="aj-select" @change="onSelected" style="min-width:180px;"></select>';
+                    _this.props = {
+                        fieldName: { type: String, required: false, default: 'catalogId' },
+                        apiUrl: { type: String, default: function () { return aj.ctx + '/admin/tree-like/'; } },
+                        isAutoLoad: { type: Boolean, default: true },
+                        isAutoJump: Boolean,
+                        initFieldValue: String
+                    };
+                    _this.apiUrl = "";
+                    /**
+                     * 是否自动跳转 catalogId
+                     */
+                    _this.isAutoJump = false;
+                    _this.isAutoLoad = false;
+                    _this.fieldName = "";
+                    _this.fieldValue = "";
+                    /**
+                     * 初始输入的字段值
+                     */
+                    _this.initFieldValue = "";
+                    return _this;
+                }
+                TreeLikeSelect.prototype.data = function () {
+                    return {
+                        fieldValue: this.initFieldValue
+                    };
+                };
+                TreeLikeSelect.prototype.mounted = function () {
+                    this.isAutoLoad && this.getData();
+                };
+                TreeLikeSelect.prototype.onSelected = function (ev) {
+                    var el = ev.target;
+                    this.fieldValue = el.selectedOptions[0].value;
+                    if (this.isAutoJump)
+                        location.assign('?' + this.fieldName + '=' + this.fieldValue);
+                    else
+                        this.BUS && this.BUS.$emit('aj-tree-catelog-select-change', ev, this);
+                };
+                TreeLikeSelect.prototype.getData = function () {
+                    var _this = this;
+                    var fn = function (j) {
+                        var arr = [{ id: 0, name: "请选择分类" }];
+                        tree.rendererOption(arr.concat(j.result), _this.$el, _this.fieldValue, { makeAllOption: false });
+                        if (_this.fieldValue) // 有指定的选中值
+                            //@ts-ignore
+                            aj.form.utils.selectOption.call(_this, _this.fieldValue);
+                    };
+                    // aj.xhr.get(this.ajResources.ctx + this.apiUrl + "/admin/tree-like/getListAndSubByParentId/", fn);
+                    aj.xhr.get(this.apiUrl, fn);
+                };
+                return TreeLikeSelect;
+            }(aj.VueComponent));
+            tree.TreeLikeSelect = TreeLikeSelect;
+            new TreeLikeSelect().register();
+        })(tree = list.tree || (list.tree = {}));
+    })(list = aj.list || (aj.list = {}));
+})(aj || (aj = {}));
 
 "use strict";
 var aj;
@@ -997,72 +1017,117 @@ var aj;
 })(aj || (aj = {}));
 
 "use strict";
-var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-    return cooked;
-};
-Vue.component('aj-tree-item', {
-    template: html(__makeTemplateObject(["\n        <li>\n            <div :class=\"{bold: isFolder, node: true}\" @click=\"toggle\">\n                <span>\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7</span>{{model.name}}\n                <span v-if=\"isFolder\">[{{open ? '-' : '+'}}]</span>\n            </div>\n            <ul v-show=\"open\" v-if=\"isFolder\" :class=\"{show: open}\">\n                <aj-tree-item class=\"item\" v-for=\"(model, index) in model.children\" :key=\"index\" :model=\"model\">\n                </aj-tree-item>\n                <li v-if=\"allowAddNode\" class=\"add\" @click=\"addChild\">+</li>\n            </ul>\n        </li>\n    "], ["\n        <li>\n            <div :class=\"{bold: isFolder, node: true}\" @click=\"toggle\">\n                <span>\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7</span>{{model.name}}\n                <span v-if=\"isFolder\">[{{open ? '-' : '+'}}]</span>\n            </div>\n            <ul v-show=\"open\" v-if=\"isFolder\" :class=\"{show: open}\">\n                <aj-tree-item class=\"item\" v-for=\"(model, index) in model.children\" :key=\"index\" :model=\"model\">\n                </aj-tree-item>\n                <li v-if=\"allowAddNode\" class=\"add\" @click=\"addChild\">+</li>\n            </ul>\n        </li>\n    "])),
-    props: {
-        model: Object,
-        allowAddNode: { type: Boolean, default: false } // 是否允许添加新节点
-    },
-    data: function () {
-        return { open: false };
-    },
-    computed: {
-        isFolder: function () {
-            return !!(this.model.children && this.model.children.length);
-        }
-    },
-    methods: {
-        /**
-         * 点击节点时的方法
-         *
-         * @param this
-         */
-        toggle: function () {
-            if (this.isFolder)
-                this.open = !this.open;
-            this.BUS && this.BUS.$emit('tree-node-click', this.model);
-        },
-        /**
-         * 变为文件夹
-         *
-         * @param this
-         */
-        changeType: function () {
-            if (!this.isFolder) {
-                Vue.set(this.model, 'children', []);
-                this.addChild();
-                this.open = true;
-            }
-        },
-        addChild: function () {
-            this.model.children.push({
-                name: 'new stuff'
-            });
-        }
-    }
-});
+
+
+var aj;
+(function (aj) {
+    var list;
+    (function (list) {
+        var tree;
+        (function (tree) {
+            /**
+             * 注意递归组件的使用
+             */
+            var TreeItem = /** @class */ (function (_super) {
+                __extends(TreeItem, _super);
+                function TreeItem() {
+                    var _this = _super !== null && _super.apply(this, arguments) || this;
+                    _this.name = 'aj-tree-item';
+                    _this.template = html(__makeTemplateObject(["\n            <li>\n                <div :class=\"{bold: isFolder, node: true}\" @click=\"toggle\">\n                    <span>\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7</span>{{model.name}}\n                    <span v-if=\"isFolder\">[{{open ? '-' : '+'}}]</span>\n                </div>\n                <ul v-show=\"open\" v-if=\"isFolder\" :class=\"{show: open}\">\n                    <aj-tree-item class=\"item\" v-for=\"(model, index) in model.children\" :key=\"index\" :model=\"model\">\n                    </aj-tree-item>\n                    <li v-if=\"allowAddNode\" class=\"add\" @click=\"addChild\">+</li>\n                </ul>\n            </li>\n        "], ["\n            <li>\n                <div :class=\"{bold: isFolder, node: true}\" @click=\"toggle\">\n                    <span>\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7</span>{{model.name}}\n                    <span v-if=\"isFolder\">[{{open ? '-' : '+'}}]</span>\n                </div>\n                <ul v-show=\"open\" v-if=\"isFolder\" :class=\"{show: open}\">\n                    <aj-tree-item class=\"item\" v-for=\"(model, index) in model.children\" :key=\"index\" :model=\"model\">\n                    </aj-tree-item>\n                    <li v-if=\"allowAddNode\" class=\"add\" @click=\"addChild\">+</li>\n                </ul>\n            </li>\n        "]));
+                    _this.props = {
+                        model: Object,
+                        allowAddNode: { type: Boolean, default: false } // 是否允许添加新节点
+                    };
+                    _this.model = { children: [] };
+                    _this.open = false;
+                    _this.allowAddNode = false;
+                    // isFolder = false;
+                    _this.computed = {
+                        isFolder: function () {
+                            return !!(this.model.children && this.model.children.length);
+                        }
+                    };
+                    return _this;
+                }
+                /**
+                 * 点击节点时的方法
+                 *
+                 * @param this
+                 */
+                TreeItem.prototype.toggle = function () {
+                    //@ts-ignore
+                    if (this.isFolder)
+                        this.open = !this.open;
+                    this.BUS && this.BUS.$emit('tree-node-click', this.model);
+                };
+                /**
+                 * 变为文件夹
+                 *
+                 * @param this
+                 */
+                TreeItem.prototype.changeType = function () {
+                    //@ts-ignore
+                    if (!this.isFolder) {
+                        Vue.set(this.model, 'children', []);
+                        this.addChild();
+                        this.open = true;
+                    }
+                };
+                TreeItem.prototype.addChild = function () {
+                    this.model.children.push({
+                        //@ts-ignore
+                        name: 'new stuff'
+                    });
+                };
+                return TreeItem;
+            }(aj.VueComponent));
+            tree.TreeItem = TreeItem;
+            new TreeItem().register();
+        })(tree = list.tree || (list.tree = {}));
+    })(list = aj.list || (aj.list = {}));
+})(aj || (aj = {}));
 
 "use strict";
-Vue.component('aj-tree', {
-    template: '<ul class="aj-tree"><aj-tree-item :model="treeData"></aj-tree-item></ul>',
-    props: {
-        apiUrl: String,
-        topNodeName: String // 根节点显示名称
-    },
-    data: function () {
-        return {
-            treeData: { name: this.topNodeName || 'TOP', children: null }
-        };
-    },
-    mounted: function () {
-        var _this = this;
-        // aj.xhr.get(this.ajResources.ctx + this.url, (j: RepsonseResult) => this.treeData.children = makeTree(j.result));
-        aj.xhr.get(this.apiUrl, function (j) { return _this.treeData.children = aj.list.tree.makeTree(j.result); });
-        // 递归组件怎么事件上报呢？通过事件 bus
-        this.BUS && this.BUS.$on('treenodeclick', function (data) { return _this.$emit('treenodeclick', data); });
-    }
-});
+
+var aj;
+(function (aj) {
+    var list;
+    (function (list) {
+        var tree;
+        (function (tree) {
+            var Tree = /** @class */ (function (_super) {
+                __extends(Tree, _super);
+                function Tree() {
+                    var _this = _super !== null && _super.apply(this, arguments) || this;
+                    _this.name = 'aj-tree';
+                    _this.template = '<ul class="aj-tree"><aj-tree-item :model="treeData"></aj-tree-item></ul>';
+                    _this.props = {
+                        apiUrl: String,
+                        topNodeName: String
+                    };
+                    /**
+                     * 根节点显示名称
+                     */
+                    _this.topNodeName = "";
+                    _this.apiUrl = "";
+                    _this.isAutoLoad = false;
+                    _this.treeData = { name: _this.topNodeName || 'TOP', children: null };
+                    return _this;
+                }
+                Tree.prototype.getData = function () {
+                    var _this = this;
+                    // @ts-ignore
+                    aj.xhr.get(this.apiUrl, function (j) { return _this.treeData.children = tree.makeTree(j.result); });
+                    // 递归组件怎么事件上报呢？通过事件 bus
+                    this.BUS && this.BUS.$on('treenodeclick', function (data) { return _this.$emit('treenodeclick', data); });
+                };
+                Tree.prototype.mounted = function () {
+                    this.getData();
+                };
+                return Tree;
+            }(aj.VueComponent));
+            tree.Tree = Tree;
+            new Tree().register();
+        })(tree = list.tree || (list.tree = {}));
+    })(list = aj.list || (aj.list = {}));
+})(aj || (aj = {}));

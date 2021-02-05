@@ -1,6 +1,4 @@
 "use strict";
-// VS Code 高亮 HTML 用
-var html = String;
 Element.prototype.$ = function (cssSelector, fn) {
     if (typeof fn == 'function') {
         var children = this.querySelectorAll(cssSelector);
@@ -189,22 +187,90 @@ var aj;
     aj.SELECTED = "selected";
     aj.SELECTED_CSS = "." + aj.SELECTED;
     /**
+     * 判断是否 Vue 配置字段
+     *
+     * @param name
+     */
+    function isVueCfg(name) {
+        return name == 'template' || name == 'data' || name == 'mixins' || name == 'computed' || name == 'mounted' || name == "watch";
+    }
+    /**
+     *
+     * @param name
+     * @param props
+     */
+    function isPropsField(name, props) {
+        if (props && props[name])
+            return true;
+        else
+            return false;
+    }
+    /**
+     * 判断是否 props 字段
+     *
+     * @param value
+     */
+    function isSimplePropsField(value) {
+        console.log(value);
+        if (value === String || value === Boolean || value === Number || value.type)
+            return true;
+        else
+            return false;
+    }
+    /**
      * 为让 Vue 组件使用 Class 风格，通过一个类似语法糖的转换器
      * 这是实验性质的
      */
     var VueComponent = /** @class */ (function () {
         function VueComponent() {
+            this.$el = document.body;
+            this.props = {};
         }
+        VueComponent.prototype.$destroy = function () { };
+        VueComponent.prototype.$emit = function (e) {
+            var obj = [];
+            for (var _i = 1; _i < arguments.length; _i++) {
+                obj[_i - 1] = arguments[_i];
+            }
+        };
         /**
          * 转换为 ClassAPI
          */
-        VueComponent.prototype.initComp = function () {
-            Vue.component(this.name, this);
+        VueComponent.prototype.register = function (instanceFields) {
+            var cfg = {
+                props: {},
+                methods: {}
+            };
+            var dataFields = {};
+            for (var i in this) {
+                if (i == 'constructor' || i == 'name' || i == 'register' || i == '$destroy' || i == "$emit" || i == "$options")
+                    continue;
+                var value = this[i];
+                if (isVueCfg(i))
+                    cfg[i] = value;
+                else if (isSimplePropsField(value))
+                    cfg.props[i] = value;
+                else if (typeof value == 'function')
+                    cfg.methods[i] = value;
+                else if (isPropsField(i, this.props))
+                    cfg.props[i] = this.props[i];
+                else // data fiels
+                    dataFields[i] = value;
+            }
+            // 注意如果 类有了 data(){}，那么 data 属性将会失效（仅作提示用），改读取 data() {} 的
+            if (!cfg.data)
+                cfg.data = function () {
+                    return dataFields;
+                };
+            console.log(cfg);
+            Vue.component(this.name, cfg);
         };
         return VueComponent;
     }());
     aj.VueComponent = VueComponent;
 })(aj || (aj = {}));
+// VS Code 高亮 HTML 用
+var html = String;
 
 "use strict";
 /*
@@ -436,24 +502,49 @@ var aj;
     })(xhr = aj.xhr || (aj.xhr = {}));
 })(aj || (aj = {}));
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
 "use strict";
+
 /**
  * 折叠菜单
  */
-;
-(function () {
-    Vue.component('aj-accordion-menu', {
-        template: '<ul class="aj-accordion-menu" @click="onClk"><slot></slot></ul>',
-        methods: {
-            onClk: function ($event) {
-                this.children = this.$el.children;
-                highlightSubItem($event);
-                var _btn = $event.target;
+var aj;
+(function (aj) {
+    var widget;
+    (function (widget) {
+        var AccordionMenu = /** @class */ (function (_super) {
+            __extends(AccordionMenu, _super);
+            function AccordionMenu() {
+                var _this = _super !== null && _super.apply(this, arguments) || this;
+                _this.name = "aj-accordion-menu";
+                _this.template = '<ul class="aj-accordion-menu" @click="onClk"><slot></slot></ul>';
+                return _this;
+            }
+            AccordionMenu.prototype.onClk = function (ev) {
+                var children = this.$el.children;
+                highlightSubItem(ev);
+                var _btn = ev.target;
                 if (_btn && _btn.tagName == 'H3' && _btn.parentNode.tagName == 'LI') {
-                    _btn = $event.target;
                     _btn = _btn.parentNode;
-                    for (var btn, i = 0, j = this.children.length; i < j; i++) {
-                        btn = this.children[i];
+                    for (var btn = void 0, i = 0, j = children.length; i < j; i++) {
+                        btn = children[i];
                         var ul = btn.querySelector('ul');
                         if (btn == _btn) {
                             if (btn.className.indexOf('pressed') != -1) {
@@ -476,99 +567,151 @@ var aj;
                 }
                 else
                     return;
+            };
+            return AccordionMenu;
+        }(aj.VueComponent));
+        widget.AccordionMenu = AccordionMenu;
+        new AccordionMenu().register();
+        /**
+         * 内部子菜单的高亮
+         *
+         * @param ev
+         */
+        function highlightSubItem(ev) {
+            var _a;
+            var li, el = ev.target;
+            if (el.tagName == 'A' && el.getAttribute('target')) {
+                li = el.parentNode;
+                (_a = li.parentNode) === null || _a === void 0 ? void 0 : _a.$('li', function (_el) {
+                    if (_el == li)
+                        _el.classList.add('selected');
+                    else
+                        _el.classList.remove('selected');
+                });
             }
         }
-    });
-    /**
-     * 内部子菜单的高亮
-     *
-     * @param $event
-     */
-    function highlightSubItem($event) {
-        var _a;
-        var li, el = $event.target;
-        if (el.tagName == 'A' && el.getAttribute('target')) {
-            li = el.parentNode;
-            (_a = li.parentNode) === null || _a === void 0 ? void 0 : _a.$('li', function (_el) {
-                if (_el == li)
-                    _el.classList.add('selected');
-                else
-                    _el.classList.remove('selected');
-            });
-        }
-    }
-})();
+    })(widget = aj.widget || (aj.widget = {}));
+})(aj || (aj = {}));
 
 "use strict";
-Vue.component('aj-widget-baidu-search', {
-    template: "\n        <div class=\"aj-widget-baidu-search\"><form method=\"GET\" action=\"http://www.baidu.com/baidu\" onsubmit=\"//return g(this);\">\n            <input type=\"text\" name=\"word\" placeholder=\"\u8BF7\u8F93\u5165\u641C\u7D22\u4E4B\u5173\u952E\u5B57\" />\n            <input name=\"tn\" value=\"bds\" type=\"hidden\" />\n            <input name=\"cl\" value=\"3\" type=\"hidden\" />\n            <input name=\"ct\" value=\"2097152\" type=\"hidden\" />\n            <input name=\"si\" :value=\"getSiteDomainName\" type=\"hidden\" />\n            <div class=\"searchBtn\" onclick=\"this.parentNode.submit();\"></div>\n        </form></div>\n    ",
-    props: ['siteDomainName'],
-    computed: {
-        getSiteDomainName: function () {
-            return this.siteDomainName || location.host || document.domain;
-        }
-    }
-});
 
-"use strict";
-Vue.component("aj-expander", {
-    template: "\n        <div class=\"aj-expander\" :style=\"'height:' + (expended ? openHeight : closeHeight) + 'px;'\">\n            <div :class=\"expended ? 'closeBtn' : 'openBtn'\" @click=\"expended = !expended;\"></div>\n            <slot></slot>\n        </div>\n    ",
-    data: function () {
-        return { expended: false };
-    },
-    props: {
-        openHeight: { type: Number, "default": 200 },
-        closeHeight: { type: Number, "default": 50 }
-    }
-});
 
-"use strict";
-Vue.component('aj-process-line', {
-    template: "\n        <div class=\"aj-process-line\">\n            <div class=\"process-line\">\n                <div v-for=\"(item, index) in items\" :class=\"{current: index == current, done: index < current}\">\n                    <span>{{index + 1}}</span><p>{{item}}</p>\n                </div>\n            </div>\n        </div>    \n    ",
-    props: {
-        items: {
-            type: Array,
-            default: function () {
-                return ['Step 1', 'Step 2', 'Step 3'];
+var aj;
+(function (aj) {
+    var widget;
+    (function (widget) {
+        /**
+         * Baidu 自定义搜索
+         */
+        var BaiduSearch = /** @class */ (function (_super) {
+            __extends(BaiduSearch, _super);
+            function BaiduSearch() {
+                var _this = _super !== null && _super.apply(this, arguments) || this;
+                _this.name = 'aj-widget-baidu-search';
+                _this.template = html(__makeTemplateObject(["\n            <div class=\"aj-widget-baidu-search\">\n                <form method=\"GET\" action=\"http://www.baidu.com/baidu\" onsubmit=\"//return g(this);\">\n                    <input type=\"text\" name=\"word\" placeholder=\"\u8BF7\u8F93\u5165\u641C\u7D22\u4E4B\u5173\u952E\u5B57\" />\n                    <input name=\"tn\" value=\"bds\" type=\"hidden\" />\n                    <input name=\"cl\" value=\"3\" type=\"hidden\" />\n                    <input name=\"ct\" value=\"2097152\" type=\"hidden\" />\n                    <input name=\"si\" :value=\"getSiteDomainName\" type=\"hidden\" />\n                    <div class=\"searchBtn\" onclick=\"this.parentNode.submit();\"></div>\n                </form>\n            </div>\n        "], ["\n            <div class=\"aj-widget-baidu-search\">\n                <form method=\"GET\" action=\"http://www.baidu.com/baidu\" onsubmit=\"//return g(this);\">\n                    <input type=\"text\" name=\"word\" placeholder=\"\u8BF7\u8F93\u5165\u641C\u7D22\u4E4B\u5173\u952E\u5B57\" />\n                    <input name=\"tn\" value=\"bds\" type=\"hidden\" />\n                    <input name=\"cl\" value=\"3\" type=\"hidden\" />\n                    <input name=\"ct\" value=\"2097152\" type=\"hidden\" />\n                    <input name=\"si\" :value=\"getSiteDomainName\" type=\"hidden\" />\n                    <div class=\"searchBtn\" onclick=\"this.parentNode.submit();\"></div>\n                </form>\n            </div>\n        "]));
+                _this.siteDomainName = String;
+                _this.computed = {
+                    getSiteDomainName: function () {
+                        //@ts-ignore
+                        return this.siteDomainName || location.host || document.domain;
+                    }
+                };
+                return _this;
             }
-        }
-    },
-    data: function () {
-        return {
-            current: 0
-        };
-    },
-    methods: {
+            return BaiduSearch;
+        }(aj.VueComponent));
+        widget.BaiduSearch = BaiduSearch;
+        new BaiduSearch().register();
+    })(widget = aj.widget || (aj.widget = {}));
+})(aj || (aj = {}));
+
+"use strict";
+
+
+var aj;
+(function (aj) {
+    var widget;
+    (function (widget) {
         /**
-         *
-         * @param this
-         * @param i
+         * 展开闭合器
          */
-        go: function (i) {
-            this.current = i;
-        },
+        var Expander = /** @class */ (function (_super) {
+            __extends(Expander, _super);
+            function Expander() {
+                var _this = _super !== null && _super.apply(this, arguments) || this;
+                _this.name = "aj-expander";
+                _this.template = html(__makeTemplateObject(["\n            <div class=\"aj-expander\" :style=\"'height:' + (expended ? openHeight : closeHeight) + 'px;'\">\n                <div :class=\"expended ? 'closeBtn' : 'openBtn'\" @click=\"expended = !expended;\"></div>\n                <slot></slot>\n            </div>\n        "], ["\n            <div class=\"aj-expander\" :style=\"'height:' + (expended ? openHeight : closeHeight) + 'px;'\">\n                <div :class=\"expended ? 'closeBtn' : 'openBtn'\" @click=\"expended = !expended;\"></div>\n                <slot></slot>\n            </div>\n        "]));
+                _this.expended = false;
+                _this.openHeight = { type: Number, "default": 200 };
+                _this.closeHeight = { type: Number, "default": 50 };
+                return _this;
+            }
+            return Expander;
+        }(aj.VueComponent));
+        widget.Expander = Expander;
+        new Expander().register();
+    })(widget = aj.widget || (aj.widget = {}));
+})(aj || (aj = {}));
+
+"use strict";
+
+
+var aj;
+(function (aj) {
+    var widget;
+    (function (widget) {
         /**
-         *
-         * @param this
+         * 进度条
          */
-        perv: function () {
-            var perv = this.current - 1;
-            if (perv < 0)
-                perv = this.items.length - 1;
-            this.go(perv);
-        },
-        /**
-         *
-         * @param this `
-         */
-        next: function () {
-            var next = this.current + 1;
-            if (this.items.length == next)
-                next = 0; // 循环
-            this.go(next);
-        }
-    }
-});
+        var ProcessLine = /** @class */ (function (_super) {
+            __extends(ProcessLine, _super);
+            function ProcessLine() {
+                var _this = _super !== null && _super.apply(this, arguments) || this;
+                _this.name = 'aj-process-line';
+                _this.template = html(__makeTemplateObject(["\n            <div class=\"aj-process-line\">\n                <div class=\"process-line\">\n                    <div v-for=\"(item, index) in items\" :class=\"{current: index == current, done: index < current}\">\n                        <span>{{index + 1}}</span>\n                        <p>{{item}}</p>\n                    </div>\n                </div>\n            </div>\n        "], ["\n            <div class=\"aj-process-line\">\n                <div class=\"process-line\">\n                    <div v-for=\"(item, index) in items\" :class=\"{current: index == current, done: index < current}\">\n                        <span>{{index + 1}}</span>\n                        <p>{{item}}</p>\n                    </div>\n                </div>\n            </div>\n        "]));
+                _this.props = {
+                    items: {
+                        type: Array,
+                        default: function () {
+                            return ['Step 1', 'Step 2', 'Step 3'];
+                        }
+                    }
+                };
+                _this.items = [];
+                _this.current = 0;
+                return _this;
+            }
+            /**
+             *
+             * @param i
+             */
+            ProcessLine.prototype.go = function (i) {
+                this.current = i;
+            };
+            /**
+             *
+             */
+            ProcessLine.prototype.perv = function () {
+                var perv = this.current - 1;
+                if (perv < 0)
+                    perv = this.items.length - 1;
+                this.go(perv);
+            };
+            /**
+             *
+             */
+            ProcessLine.prototype.next = function () {
+                var next = this.current + 1;
+                if (this.items.length == next)
+                    next = 0; // 循环
+                this.go(next);
+            };
+            return ProcessLine;
+        }(aj.VueComponent));
+        widget.ProcessLine = ProcessLine;
+        new ProcessLine().register();
+    })(widget = aj.widget || (aj.widget = {}));
+})(aj || (aj = {}));
 
 "use strict";
 /**
@@ -640,22 +783,47 @@ var aj;
 })(aj || (aj = {}));
 
 "use strict";
-Vue.component('aj-avatar', {
-    template: "\n        <a :href=\"avatar\" target=\"_blank\">\n            <img :src=\"avatar\" style=\"max-width:50px;max-height:60px;vertical-align: middle;\" @mouseenter=\"mouseEnter\" @mouseleave=\"mouseLeave\" />\n        </a>\n    ",
-    props: {
-        avatar: { type: String, required: true }
-    },
-    methods: {
-        mouseEnter: function () {
-            if (aj.img.imageEnlarger)
-                aj.img.imageEnlarger.imgUrl = this.avatar;
-        },
-        mouseLeave: function () {
-            if (aj.img.imageEnlarger)
-                aj.img.imageEnlarger.imgUrl = null;
-        }
-    }
-});
+
+
+var aj;
+(function (aj) {
+    var widget;
+    (function (widget) {
+        var img;
+        (function (img) {
+            /**
+             * 显示头像
+             */
+            var Avatar = /** @class */ (function (_super) {
+                __extends(Avatar, _super);
+                function Avatar() {
+                    var _this = _super !== null && _super.apply(this, arguments) || this;
+                    _this.name = 'aj-avatar';
+                    _this.template = html(__makeTemplateObject(["\n            <a :href=\"avatar\" target=\"_blank\">\n                <img :src=\"avatar\" style=\"max-width:50px;max-height:60px;vertical-align: middle;\" \n                    @mouseenter=\"mouseEnter\"\n                    @mouseleave=\"mouseLeave\" />\n            </a>\n        "], ["\n            <a :href=\"avatar\" target=\"_blank\">\n                <img :src=\"avatar\" style=\"max-width:50px;max-height:60px;vertical-align: middle;\" \n                    @mouseenter=\"mouseEnter\"\n                    @mouseleave=\"mouseLeave\" />\n            </a>\n        "]));
+                    _this.props = {
+                        avatar: { type: String, required: true }
+                    };
+                    /**
+                     * 头像图片地址
+                     */
+                    _this.avatar = "";
+                    return _this;
+                }
+                Avatar.prototype.mouseEnter = function () {
+                    if (img.imageEnlarger)
+                        img.imageEnlarger.imgUrl = this.avatar;
+                };
+                Avatar.prototype.mouseLeave = function () {
+                    if (img.imageEnlarger)
+                        img.imageEnlarger.imgUrl = null;
+                };
+                return Avatar;
+            }(aj.VueComponent));
+            img.Avatar = Avatar;
+            new Avatar().register();
+        })(img = widget.img || (widget.img = {}));
+    })(widget = aj.widget || (aj.widget = {}));
+})(aj || (aj = {}));
 
 "use strict";
 var aj;
@@ -923,59 +1091,80 @@ var aj;
 })(aj || (aj = {}));
 
 "use strict";
-Vue.component('aj-layer', {
-    template: '<div class="aj-modal hide" @click="close"><div><slot></slot></div></div>',
-    props: {
-        notCloseWhenTap: Boolean,
-        cleanAfterClose: Boolean // 关闭是否清除
-    },
-    methods: {
-        /**
-         * 显示浮层
-         *
-         * @param this
-         * @param cfg
-         */
-        show: function (cfg) {
-            var _this = this;
-            var my = Number(getComputedStyle(this.$el).zIndex); // 保证最后显示的总在最前面
-            document.body.$('.aj-modal', function (i) {
-                if (i != _this.$el) {
-                    var o = Number(getComputedStyle(i).zIndex);
-                    if (o >= my)
-                        _this.$el.style.zIndex = String(o + 1);
+
+var aj;
+(function (aj) {
+    var widget;
+    (function (widget) {
+        var modal;
+        (function (modal) {
+            /**
+             * 浮層組件，通常要復用這個組件
+             */
+            var Layer = /** @class */ (function (_super) {
+                __extends(Layer, _super);
+                function Layer() {
+                    var _this = _super !== null && _super.apply(this, arguments) || this;
+                    _this.name = "aj-layer";
+                    _this.template = '<div class="aj-modal hide" @click="close"><div><slot></slot></div></div>';
+                    _this.props = {
+                        notCloseWhenTap: Boolean,
+                        cleanAfterClose: Boolean // 关闭是否清除
+                    };
+                    _this.afterClose = function () { };
+                    _this.notCloseWhenTap = false;
+                    _this.cleanAfterClose = false;
+                    return _this;
                 }
-            });
-            this.$el.classList.remove('hide');
-            this.BUS && this.BUS.$emit('aj-layer-closed', this);
-            if (cfg && cfg.afterClose)
-                this.afterClose = cfg && cfg.afterClose;
-        },
-        /**
-         * 关闭浮层
-         *
-         * @param this
-         * @param e
-         */
-        close: function (e) {
-            var isClosed = false;
-            if (!e) {
-                isClosed = aj.widget.msgbox.$options.methods.close.call(this, {
-                    target: document.body.$('.aj-modal')
-                });
-            }
-            else {
-                // @ts-ignore
-                if (e.isForceClose || !this.notCloseWhenTap)
-                    isClosed = aj.widget.msgbox.$options.methods.close.apply(this, arguments);
-            }
-            if (isClosed && this.cleanAfterClose) {
-                this.$el.parentNode && this.$el.parentNode.removeChild(this.$el);
-                this.$destroy();
-            }
-        }
-    }
-});
+                /**
+                 * 显示浮层
+                 *
+                 * @param cfg
+                 */
+                Layer.prototype.show = function (cfg) {
+                    var _this = this;
+                    var my = Number(getComputedStyle(this.$el).zIndex); // 保证最后显示的总在最前面
+                    document.body.$('.aj-modal', function (i) {
+                        if (i != _this.$el) {
+                            var o = Number(getComputedStyle(i).zIndex);
+                            if (o >= my)
+                                _this.$el.style.zIndex = String(o + 1);
+                        }
+                    });
+                    this.$el.classList.remove('hide');
+                    this.BUS && this.BUS.$emit('aj-layer-closed', this);
+                    if (cfg && cfg.afterClose)
+                        this.afterClose = cfg && cfg.afterClose;
+                };
+                /**
+                 * 关闭浮层
+                 *
+                 * @param ev
+                 */
+                Layer.prototype.close = function (ev) {
+                    var isClosed = false;
+                    if (!ev) {
+                        isClosed = aj.widget.modal.msgbox.$options.methods.close.call(this, {
+                            target: document.body.$('.aj-modal')
+                        });
+                    }
+                    else {
+                        // @ts-ignore
+                        if (e.isForceClose || !this.notCloseWhenTap)
+                            isClosed = aj.widget.modal.msgbox.$options.methods.close.apply(this, arguments);
+                    }
+                    if (isClosed && this.cleanAfterClose) {
+                        this.$el.parentNode && this.$el.parentNode.removeChild(this.$el);
+                        this.$destroy();
+                    }
+                };
+                return Layer;
+            }(aj.VueComponent));
+            modal.Layer = Layer;
+            new Layer().register();
+        })(modal = widget.modal || (widget.modal = {}));
+    })(widget = aj.widget || (aj.widget = {}));
+})(aj || (aj = {}));
 
 "use strict";
 /**
@@ -1133,34 +1322,50 @@ var aj;
 })(aj || (aj = {}));
 
 "use strict";
+
+
 /**
  * 调整正文字体大小
  */
-Vue.component('aj-adjust-font-size', {
-    template: "\n        <div class=\"aj-adjust-font-size\">\n            <span>\u5B57\u4F53\u5927\u5C0F</span>\n            <ul @click=\"onClk\">\n                <li><label><input type=\"radio\" name=\"fontSize\" /> \u5C0F</label></li>\n                <li><label><input type=\"radio\" name=\"fontSize\" /> \u4E2D</label></li>\n                <li><label><input type=\"radio\" name=\"fontSize\" /> \u5927</label></li>\n            </ul>\n        </div>\n    ",
-    props: {
-        articleTarget: { type: String, default: 'article p' } // 正文所在的位置，通过 CSS Selector 定位
-    },
-    methods: {
-        onClk: function (e) {
-            var _this = this;
-            var el = e.target;
-            var setFontSize = function (fontSize) {
-                document.body.$(_this.$props.articleTarget, function (p) { return p.style.fontSize = fontSize; });
-            };
-            if (el.tagName == 'LABEL' || el.tagName == 'input') {
-                if (el.tagName != 'LABEL')
-                    el = el.up('label');
-                if (el.innerHTML.indexOf('大') != -1)
-                    setFontSize('12pt');
-                else if (el.innerHTML.indexOf('中') != -1)
-                    setFontSize('10.5pt');
-                else if (el.innerHTML.indexOf('小') != -1)
-                    setFontSize('9pt');
-            }
-        }
-    }
-});
+var aj;
+(function (aj) {
+    var widget;
+    (function (widget) {
+        var page;
+        (function (page) {
+            var AdjustFontSize = /** @class */ (function (_super) {
+                __extends(AdjustFontSize, _super);
+                function AdjustFontSize() {
+                    var _this = _super !== null && _super.apply(this, arguments) || this;
+                    _this.name = 'aj-adjust-font-size';
+                    _this.template = html(__makeTemplateObject(["\n            <div class=\"aj-adjust-font-size\">\n                <span>\u5B57\u4F53\u5927\u5C0F</span>\n                <ul @click=\"onClk\">\n                    <li><label><input type=\"radio\" name=\"fontSize\" /> \u5C0F</label></li>\n                    <li><label><input type=\"radio\" name=\"fontSize\" /> \u4E2D</label></li>\n                    <li><label><input type=\"radio\" name=\"fontSize\" /> \u5927</label></li>\n                </ul>\n            </div>\n        "], ["\n            <div class=\"aj-adjust-font-size\">\n                <span>\u5B57\u4F53\u5927\u5C0F</span>\n                <ul @click=\"onClk\">\n                    <li><label><input type=\"radio\" name=\"fontSize\" /> \u5C0F</label></li>\n                    <li><label><input type=\"radio\" name=\"fontSize\" /> \u4E2D</label></li>\n                    <li><label><input type=\"radio\" name=\"fontSize\" /> \u5927</label></li>\n                </ul>\n            </div>\n        "]));
+                    _this.articleTarget = { type: String, default: 'article p' }; // 正文所在的位置，通过 CSS Selector 定位
+                    return _this;
+                }
+                AdjustFontSize.prototype.onClk = function (ev) {
+                    var _this = this;
+                    var el = ev.target;
+                    var setFontSize = function (fontSize) {
+                        document.body.$(_this.$props.articleTarget, function (p) { return p.style.fontSize = fontSize; });
+                    };
+                    if (el.tagName == 'LABEL' || el.tagName == 'input') {
+                        if (el.tagName != 'LABEL')
+                            el = el.up('label');
+                        if (el.innerHTML.indexOf('大') != -1)
+                            setFontSize('12pt');
+                        else if (el.innerHTML.indexOf('中') != -1)
+                            setFontSize('10.5pt');
+                        else if (el.innerHTML.indexOf('小') != -1)
+                            setFontSize('9pt');
+                    }
+                };
+                return AdjustFontSize;
+            }(aj.VueComponent));
+            page.AdjustFontSize = AdjustFontSize;
+            new AdjustFontSize().register();
+        })(page = widget.page || (widget.page = {}));
+    })(widget = aj.widget || (aj.widget = {}));
+})(aj || (aj = {}));
 
 "use strict";
 var aj;
@@ -1172,8 +1377,7 @@ var aj;
          *  回到顶部  <a href="###" @click="go">回到顶部</a>
          */
         function back2top() {
-            var top = 0;
-            var speed = 0;
+            var top = 0, speed = 0;
             back2topTimerId && window.clearInterval(back2topTimerId);
             back2topTimerId = window.setInterval(function () {
                 top = document.documentElement.scrollTop || document.body.scrollTop;
@@ -1362,30 +1566,31 @@ var aj;
 })(aj || (aj = {}));
 
 "use strict";
+
 /**
  * 起始时间、截止时间的范围选择
  */
 Vue.component('aj-form-between-date', {
-    template: "\n        <form action=\".\" method=\"GET\" class=\"dateRange\" @submit=\"valid\">\n            <aj-form-calendar-input :date-only=\"true\" :position-fixed=\"true\" placeholder=\"\u8D77\u59CB\u65F6\u95F4\" field-name=\"startDate\" ></aj-form-calendar-input>\n            - <aj-form-calendar-input :date-only=\"true\" :position-fixed=\"true\" placeholder=\"\u622A\u81F3\u65F6\u95F4\" field-name=\"endDate\"></aj-form-calendar-input>\n            <button class=\"aj-btn\">\u6309\u65F6\u95F4\u7B5B\u9009</button>\n        </form>    \n    ",
+    template: html(__makeTemplateObject(["\n        <form action=\".\" method=\"GET\" class=\"dateRange\" @submit=\"valid\">\n            <aj-form-calendar-input :date-only=\"true\" :position-fixed=\"true\" placeholder=\"\u8D77\u59CB\u65F6\u95F4\" field-name=\"startDate\" ></aj-form-calendar-input>\n            - <aj-form-calendar-input :date-only=\"true\" :position-fixed=\"true\" placeholder=\"\u622A\u81F3\u65F6\u95F4\" field-name=\"endDate\"></aj-form-calendar-input>\n            <button class=\"aj-btn\">\u6309\u65F6\u95F4\u7B5B\u9009</button>\n        </form>    \n    "], ["\n        <form action=\".\" method=\"GET\" class=\"dateRange\" @submit=\"valid\">\n            <aj-form-calendar-input :date-only=\"true\" :position-fixed=\"true\" placeholder=\"\u8D77\u59CB\u65F6\u95F4\" field-name=\"startDate\" ></aj-form-calendar-input>\n            - <aj-form-calendar-input :date-only=\"true\" :position-fixed=\"true\" placeholder=\"\u622A\u81F3\u65F6\u95F4\" field-name=\"endDate\"></aj-form-calendar-input>\n            <button class=\"aj-btn\">\u6309\u65F6\u95F4\u7B5B\u9009</button>\n        </form>    \n    "])),
     props: {
         isAjax: { type: Boolean, default: true } // 是否 AJAX 模式
     },
     methods: {
-        valid: function (e) {
+        valid: function (ev) {
             var start = this.$el.$('input[name=startDate]').value, end = this.$el.$('input[name=endDate]').value;
             if (!start || !end) {
                 aj.alert("输入数据不能为空");
-                e.preventDefault();
+                ev.preventDefault();
                 return;
             }
             if (new Date(start) > new Date(end)) {
                 aj.alert("起始日期不能晚于结束日期");
-                e.preventDefault();
+                ev.preventDefault();
                 return;
             }
             //@ts-ignore
             if (this.isAjax) {
-                e.preventDefault();
+                ev.preventDefault();
                 var grid = this.$parent.$parent;
                 aj.apply(grid.$refs.pager.extraParam, {
                     startDate: start, endDate: end
@@ -1397,8 +1602,9 @@ Vue.component('aj-form-between-date', {
 });
 
 "use strict";
+
 Vue.component('aj-form-calendar-input', {
-    template: "\n        <div class=\"aj-form-calendar-input\" :class=\"{'show-time': showTime}\" @mouseover=\"onMouseOver\">\n            <div class=\"icon fa fa-calendar\"></div>\n            <input :placeholder=\"placeholder\" size=\"12\" :name=\"fieldName\" :value=\"date + (dateOnly ? '' : ' ' + time)\" type=\"text\" autocomplete=\"off\"/>\n            <aj-form-calendar ref=\"calendar\" :show-time=\"showTime\" @pick-date=\"recEvent\" @pick-time=\"recTimeEvent\">\n            </aj-form-calendar>\n        </div>\n    ",
+    template: html(__makeTemplateObject(["\n        <div class=\"aj-form-calendar-input\" :class=\"{'show-time': showTime}\" @mouseover=\"onMouseOver\">\n            <div class=\"icon fa fa-calendar\"></div>\n            <input :placeholder=\"placeholder\" size=\"12\" :name=\"fieldName\" :value=\"date + (dateOnly ? '' : ' ' + time)\"\n                type=\"text\" autocomplete=\"off\" />\n            <aj-form-calendar ref=\"calendar\" :show-time=\"showTime\" @pick-date=\"recEvent\" @pick-time=\"recTimeEvent\">\n            </aj-form-calendar>\n        </div>\n    "], ["\n        <div class=\"aj-form-calendar-input\" :class=\"{'show-time': showTime}\" @mouseover=\"onMouseOver\">\n            <div class=\"icon fa fa-calendar\"></div>\n            <input :placeholder=\"placeholder\" size=\"12\" :name=\"fieldName\" :value=\"date + (dateOnly ? '' : ' ' + time)\"\n                type=\"text\" autocomplete=\"off\" />\n            <aj-form-calendar ref=\"calendar\" :show-time=\"showTime\" @pick-date=\"recEvent\" @pick-time=\"recTimeEvent\">\n            </aj-form-calendar>\n        </div>\n    "])),
     data: function () {
         return {
             date: this.fieldValue,
@@ -1429,8 +1635,7 @@ Vue.component('aj-form-calendar-input', {
         // var arr = date.split('-'), now = new Date(arr[0], arr[1] - 1, arr[2],
         // " ", "", " ");
         if (this.fieldValue) {
-            var arr = this.fieldValue.split(' ')[0];
-            var _arr = arr.split('-');
+            var arr = this.fieldValue.split(' ')[0], _arr = arr.split('-');
             // @ts-ignore
             this.$refs.calendar.date = new Date(arr[0], arr[1] - 1, arr[2], " ", "", " ");
         }
@@ -1442,11 +1647,9 @@ Vue.component('aj-form-calendar-input', {
         recEvent: function (date) {
             this.date = date.trim();
         },
-        onMouseOver: function ($event) {
+        onMouseOver: function (ev) {
             if (this.positionFixed) {
-                var el = $event.currentTarget;
-                var b = el.getBoundingClientRect();
-                var c = this.$el.$('.aj-form-calendar');
+                var el = ev.currentTarget, b = el.getBoundingClientRect(), c = this.$el.$('.aj-form-calendar');
                 c.style.top = (b.top + el.clientHeight - 0) + 'px';
                 c.style.left = ((b.left - 0) + 0) + 'px';
             }
@@ -1455,318 +1658,378 @@ Vue.component('aj-form-calendar-input', {
 });
 
 "use strict";
-var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-    return cooked;
-};
-Vue.component('aj-form-calendar', {
-    template: html(__makeTemplateObject(["\n        <div class=\"aj-form-calendar\">\n            <div class=\"selectYearMonth\">\n                <a href=\"###\" @click=\"getDate('preYear')\" class=\"preYear\" title=\"\u4E0A\u4E00\u5E74\">&lt;</a> \n                <select @change=\"setMonth\" v-model=\"month\">\n                    <option value=\"1\">\u4E00\u6708</option><option value=\"2\">\u4E8C\u6708</option><option value=\"3\">\u4E09\u6708</option><option value=\"4\">\u56DB\u6708</option>\n                    <option value=\"5\">\u4E94\u6708</option><option value=\"6\">\u516D\u6708</option><option value=\"7\">\u4E03\u6708</option><option value=\"8\">\u516B\u6708</option>\n                    <option value=\"9\">\u4E5D\u6708</option><option value=\"10\">\u5341\u6708</option><option value=\"11\">\u5341\u4E00\u6708</option><option value=\"12\">\u5341\u4E8C\u6708</option>\n                </select>\n                <a href=\"###\" @click=\"getDate('nextYear')\" class=\"nextYear\" title=\"\u4E0B\u4E00\u5E74\">&gt;</a>\n            </div>\n            <div class=\"showCurrentYearMonth\">\n                <span class=\"showYear\">{{year}}</span>/<span class=\"showMonth\">{{month}}</span>\n            </div>\n            <table>\n                <thead>\n                    <tr><td>\u65E5</td><td>\u4E00</td><td>\u4E8C</td><td>\u4E09</td><td>\u56DB</td><td>\u4E94</td><td>\u516D</td></tr>\n                </thead>\n                <tbody @click=\"pickDay\"></tbody>\n            </table>\n            <div v-if=\"showTime\" class=\"showTime\">\n                \u65F6 <select class=\"hour aj-select\"><option v-for=\"n in 24\">{{n}}</option></select>\n                \u5206 <select class=\"minute aj-select\"><option v-for=\"n in 61\">{{n - 1}}</option></select>\n                <a href=\"#\" @click=\"pickupTime\">\u9009\u62E9\u65F6\u95F4</a>\n            </div>\n        </div>    \n    "], ["\n        <div class=\"aj-form-calendar\">\n            <div class=\"selectYearMonth\">\n                <a href=\"###\" @click=\"getDate('preYear')\" class=\"preYear\" title=\"\u4E0A\u4E00\u5E74\">&lt;</a> \n                <select @change=\"setMonth\" v-model=\"month\">\n                    <option value=\"1\">\u4E00\u6708</option><option value=\"2\">\u4E8C\u6708</option><option value=\"3\">\u4E09\u6708</option><option value=\"4\">\u56DB\u6708</option>\n                    <option value=\"5\">\u4E94\u6708</option><option value=\"6\">\u516D\u6708</option><option value=\"7\">\u4E03\u6708</option><option value=\"8\">\u516B\u6708</option>\n                    <option value=\"9\">\u4E5D\u6708</option><option value=\"10\">\u5341\u6708</option><option value=\"11\">\u5341\u4E00\u6708</option><option value=\"12\">\u5341\u4E8C\u6708</option>\n                </select>\n                <a href=\"###\" @click=\"getDate('nextYear')\" class=\"nextYear\" title=\"\u4E0B\u4E00\u5E74\">&gt;</a>\n            </div>\n            <div class=\"showCurrentYearMonth\">\n                <span class=\"showYear\">{{year}}</span>/<span class=\"showMonth\">{{month}}</span>\n            </div>\n            <table>\n                <thead>\n                    <tr><td>\u65E5</td><td>\u4E00</td><td>\u4E8C</td><td>\u4E09</td><td>\u56DB</td><td>\u4E94</td><td>\u516D</td></tr>\n                </thead>\n                <tbody @click=\"pickDay\"></tbody>\n            </table>\n            <div v-if=\"showTime\" class=\"showTime\">\n                \u65F6 <select class=\"hour aj-select\"><option v-for=\"n in 24\">{{n}}</option></select>\n                \u5206 <select class=\"minute aj-select\"><option v-for=\"n in 61\">{{n - 1}}</option></select>\n                <a href=\"#\" @click=\"pickupTime\">\u9009\u62E9\u65F6\u95F4</a>\n            </div>\n        </div>    \n    "])),
-    data: function () {
-        var date = new Date;
-        return {
-            date: date,
-            year: date.getFullYear(),
-            month: date.getMonth() + 1,
-            day: 1
-        };
-    },
-    props: { showTime: false },
-    mounted: function () {
-        this.$options.watch.date.call(this);
-    },
-    watch: {
-        date: function () {
-            this.year = this.date.getFullYear();
-            this.month = this.date.getMonth() + 1;
-            this.render();
-        }
-    },
-    methods: {
-        render: function () {
-            var arr = this.getDateArr(); // 用来保存日期列表
-            var frag = document.createDocumentFragment(); // 插入日期
-            while (arr.length) {
-                var row = document.createElement("tr"); // 每个星期插入一个 tr
-                for (var i = 1; i <= 7; i++) { // 每个星期有7天
-                    var cell = document.createElement("td");
-                    if (arr.length) {
-                        var d = arr.shift();
-                        if (d) {
-                            cell.innerHTML = d + "";
-                            var text = this.year + '-' + this.month + '-' + d;
-                            cell.className = 'day day_' + text;
-                            cell.title = text; // 保存日期在 title 属性
-                            var on = new Date(this.year, this.month - 1, d);
-                            // 判断是否今日
-                            if (this.isSameDay(on, this.date)) {
-                                cell.classList.add('onToday');
-                                this.onToday && this.onToday(cell);
-                            }
-                            // 判断是否选择日期
-                            // this.selectDay && this.onSelectDay && this.isSameDay(on, this.selectDay) &&
-                            // this.onSelectDay(cell);
-                        }
+
+
+var aj;
+(function (aj) {
+    var form;
+    (function (form) {
+        /**
+         * 日期选择器
+         */
+        var Calendar = /** @class */ (function (_super) {
+            __extends(Calendar, _super);
+            function Calendar() {
+                var _this = _super !== null && _super.apply(this, arguments) || this;
+                _this.name = "aj-form-calendar";
+                _this.template = html(__makeTemplateObject(["\n            <div class=\"aj-form-calendar\">\n                <div class=\"selectYearMonth\">\n                    <a href=\"###\" @click=\"getDate('preYear')\" class=\"preYear\" title=\"\u4E0A\u4E00\u5E74\">&lt;</a>\n                    <select @change=\"setMonth\" v-model=\"month\">\n                        <option value=\"1\">\u4E00\u6708</option>\n                        <option value=\"2\">\u4E8C\u6708</option>\n                        <option value=\"3\">\u4E09\u6708</option>\n                        <option value=\"4\">\u56DB\u6708</option>\n                        <option value=\"5\">\u4E94\u6708</option>\n                        <option value=\"6\">\u516D\u6708</option>\n                        <option value=\"7\">\u4E03\u6708</option>\n                        <option value=\"8\">\u516B\u6708</option>\n                        <option value=\"9\">\u4E5D\u6708</option>\n                        <option value=\"10\">\u5341\u6708</option>\n                        <option value=\"11\">\u5341\u4E00\u6708</option>\n                        <option value=\"12\">\u5341\u4E8C\u6708</option>\n                    </select>\n                    <a href=\"###\" @click=\"getDate('nextYear')\" class=\"nextYear\" title=\"\u4E0B\u4E00\u5E74\">&gt;</a>\n                </div>\n                <div class=\"showCurrentYearMonth\">\n                    <span class=\"showYear\">{{year}}</span>/<span class=\"showMonth\">{{month}}</span>\n                </div>\n                <table>\n                    <thead>\n                        <tr>\n                            <td>\u65E5</td>\n                            <td>\u4E00</td>\n                            <td>\u4E8C</td>\n                            <td>\u4E09</td>\n                            <td>\u56DB</td>\n                            <td>\u4E94</td>\n                            <td>\u516D</td>\n                        </tr>\n                    </thead>\n                    <tbody @click=\"pickDay\"></tbody>\n                </table>\n                <div v-if=\"showTime\" class=\"showTime\">\n                    \u65F6 <select class=\"hour aj-select\">\n                        <option v-for=\"n in 24\">{{n}}</option>\n                    </select>\n                    \u5206 <select class=\"minute aj-select\">\n                        <option v-for=\"n in 61\">{{n - 1}}</option>\n                    </select>\n                    <a href=\"#\" @click=\"pickupTime\">\u9009\u62E9\u65F6\u95F4</a>\n                </div>\n            </div>\n        "], ["\n            <div class=\"aj-form-calendar\">\n                <div class=\"selectYearMonth\">\n                    <a href=\"###\" @click=\"getDate('preYear')\" class=\"preYear\" title=\"\u4E0A\u4E00\u5E74\">&lt;</a>\n                    <select @change=\"setMonth\" v-model=\"month\">\n                        <option value=\"1\">\u4E00\u6708</option>\n                        <option value=\"2\">\u4E8C\u6708</option>\n                        <option value=\"3\">\u4E09\u6708</option>\n                        <option value=\"4\">\u56DB\u6708</option>\n                        <option value=\"5\">\u4E94\u6708</option>\n                        <option value=\"6\">\u516D\u6708</option>\n                        <option value=\"7\">\u4E03\u6708</option>\n                        <option value=\"8\">\u516B\u6708</option>\n                        <option value=\"9\">\u4E5D\u6708</option>\n                        <option value=\"10\">\u5341\u6708</option>\n                        <option value=\"11\">\u5341\u4E00\u6708</option>\n                        <option value=\"12\">\u5341\u4E8C\u6708</option>\n                    </select>\n                    <a href=\"###\" @click=\"getDate('nextYear')\" class=\"nextYear\" title=\"\u4E0B\u4E00\u5E74\">&gt;</a>\n                </div>\n                <div class=\"showCurrentYearMonth\">\n                    <span class=\"showYear\">{{year}}</span>/<span class=\"showMonth\">{{month}}</span>\n                </div>\n                <table>\n                    <thead>\n                        <tr>\n                            <td>\u65E5</td>\n                            <td>\u4E00</td>\n                            <td>\u4E8C</td>\n                            <td>\u4E09</td>\n                            <td>\u56DB</td>\n                            <td>\u4E94</td>\n                            <td>\u516D</td>\n                        </tr>\n                    </thead>\n                    <tbody @click=\"pickDay\"></tbody>\n                </table>\n                <div v-if=\"showTime\" class=\"showTime\">\n                    \u65F6 <select class=\"hour aj-select\">\n                        <option v-for=\"n in 24\">{{n}}</option>\n                    </select>\n                    \u5206 <select class=\"minute aj-select\">\n                        <option v-for=\"n in 61\">{{n - 1}}</option>\n                    </select>\n                    <a href=\"#\" @click=\"pickupTime\">\u9009\u62E9\u65F6\u95F4</a>\n                </div>\n            </div>\n        "]));
+                _this.watch = {
+                    date: function () {
+                        this.year = this.date.getFullYear();
+                        this.month = this.date.getMonth() + 1;
+                        this.render();
                     }
-                    row.appendChild(cell);
+                };
+                _this.showTime = Boolean; // 是否显示时间，即“时分秒”
+                _this.date = new Date();
+                _this.year = new Date().getFullYear();
+                _this.month = new Date().getMonth() + 1;
+                _this.day = 1;
+                return _this;
+            }
+            Calendar.prototype.data = function () {
+                var date = new Date;
+                return {
+                    date: date,
+                    year: date.getFullYear(),
+                    month: date.getMonth() + 1,
+                    day: 1
+                };
+            };
+            Calendar.prototype.mounted = function () {
+                this.$options.watch.date.call(this);
+            };
+            /**
+             * 画日历
+             */
+            Calendar.prototype.render = function () {
+                var arr = this.getDateArr(), // 用来保存日期列表
+                frag = document.createDocumentFragment(); // 插入日期
+                while (arr.length) {
+                    var row = document.createElement("tr"); // 每个星期插入一个 tr
+                    for (var i = 1; i <= 7; i++) { // 每个星期有7天
+                        var cell = document.createElement("td");
+                        if (arr.length) {
+                            var d = arr.shift();
+                            if (d) {
+                                cell.innerHTML = d + "";
+                                var text = this.year + '-' + this.month + '-' + d;
+                                cell.className = 'day day_' + text;
+                                cell.title = text; // 保存日期在 title 属性
+                                var on = new Date(this.year, this.month - 1, d);
+                                // 判断是否今日
+                                if (isSameDay(on, this.date)) {
+                                    cell.classList.add('onToday');
+                                    // this.onToday && this.onToday(cell);// 点击 今天 时候触发的事件
+                                }
+                                // 判断是否选择日期
+                                // this.selectDay && this.onSelectDay && this.isSameDay(on, this.selectDay) &&
+                                // this.onSelectDay(cell);
+                            }
+                        }
+                        row.appendChild(cell);
+                    }
+                    frag.appendChild(row);
                 }
-                frag.appendChild(row);
-            }
-            // 先清空内容再插入(ie的table不能用innerHTML)
-            // while (el.hasChildNodes())
-            // el.removeChild(el.firstChild);
-            var tbody = this.$el.$("table tbody");
-            tbody.innerHTML = '';
-            tbody.appendChild(frag);
-        },
-        /**
-         * 获取指定的日期
-         *
-         * @param this
-         * @param dateType
-         * @param month
-         */
-        getDate: function (dateType, month) {
-            var nowYear = this.date.getFullYear(), nowMonth = this.date.getMonth() + 1; // 当前日期
-            switch (dateType) {
-                case 'preMonth': // 上一月
-                    this.date = new Date(nowYear, nowMonth - 2, 1);
-                    break;
-                case 'nextMonth': // 下一月
-                    this.date = new Date(nowYear, nowMonth, 1);
-                    break;
-                case 'setMonth': // 指定月份
-                    this.date = new Date(nowYear, month - 1, 1);
-                    break;
-                case 'preYear': // 上一年
-                    this.date = new Date(nowYear - 1, nowMonth - 1, 1);
-                    break;
-                case 'nextYear': // 下一年
-                    this.date = new Date(nowYear + 1, nowMonth - 1, 1);
-                    break;
-            }
-        },
-        /**
-         *
-         *
-         * @param this
-         * @param $event
-         */
-        setMonth: function ($event) {
-            var el = $event.target;
-            this.getDate('setMonth', Number(el.selectedOptions[0].value));
-        },
-        /**
-         * 获取空白的非上月天数 + 当月天数
-         *
-         * @param this
-         */
-        getDateArr: function () {
-            var arr = [];
-            // 用 当月第一天 在一周中的日期值 作为 当月 离 第一天的天数
-            for (var i = 1, firstDay = new Date(this.year, this.month - 1, 1).getDay(); i <= firstDay; i++)
-                arr.push(0);
-            // 用 当月最后一天 在一个月中的 日期值 作为 当月的天数
-            for (var i = 1, monthDay = new Date(this.year, this.month, 0).getDate(); i <= monthDay; i++)
-                arr.push(i);
-            return arr;
-        },
-        /**
-         * 获取日期
-         *
-         * @param this
-         * @param $event
-         */
-        pickDay: function ($event) {
-            var el = $event.target, date = el.title;
-            this.$emit('pick-date', date);
-            return date;
-        },
-        /**
-         *
-         * @param this
-         * @param $event
-         */
-        pickupTime: function ($event) {
-            var hour = this.$el.$('.hour'), minute = this.$el.$('.minute');
-            var time = hour.selectedOptions[0].value + ':' + minute.selectedOptions[0].value;
-            this.$emit('pick-time', time);
-        },
+                // 先清空内容再插入(ie的table不能用innerHTML)
+                // while (el.hasChildNodes())
+                // el.removeChild(el.firstChild);
+                var tbody = this.$el.$("table tbody");
+                tbody.innerHTML = '';
+                tbody.appendChild(frag);
+            };
+            /**
+             * 获取指定的日期
+             *
+             * @param dateType
+             * @param month
+             */
+            Calendar.prototype.getDate = function (dateType, month) {
+                var nowYear = this.date.getFullYear(), nowMonth = this.date.getMonth() + 1; // 当前日期
+                switch (dateType) {
+                    case 'preMonth': // 上一月
+                        this.date = new Date(nowYear, nowMonth - 2, 1);
+                        break;
+                    case 'nextMonth': // 下一月
+                        this.date = new Date(nowYear, nowMonth, 1);
+                        break;
+                    case 'setMonth': // 指定月份
+                        this.date = new Date(nowYear, month - 1, 1);
+                        break;
+                    case 'preYear': // 上一年
+                        this.date = new Date(nowYear - 1, nowMonth - 1, 1);
+                        break;
+                    case 'nextYear': // 下一年
+                        this.date = new Date(nowYear + 1, nowMonth - 1, 1);
+                        break;
+                }
+            };
+            /**
+             *
+             *
+             * @param $event
+             */
+            Calendar.prototype.setMonth = function (ev) {
+                var el = ev.target;
+                this.getDate('setMonth', Number(el.selectedOptions[0].value));
+            };
+            /**
+             * 获取空白的非上月天数 + 当月天数
+             *
+             * @param this
+             */
+            Calendar.prototype.getDateArr = function () {
+                var arr = [];
+                // 用 当月第一天 在一周中的日期值 作为 当月 离 第一天的天数
+                for (var i = 1, firstDay = new Date(this.year, this.month - 1, 1).getDay(); i <= firstDay; i++)
+                    arr.push(0);
+                // 用 当月最后一天 在一个月中的 日期值 作为 当月的天数
+                for (var i = 1, monthDay = new Date(this.year, this.month, 0).getDate(); i <= monthDay; i++)
+                    arr.push(i);
+                return arr;
+            };
+            /**
+             * 获取日期
+             *
+             * @param $event
+             */
+            Calendar.prototype.pickDay = function (ev) {
+                var el = ev.target, date = el.title;
+                this.$emit('pick-date', date);
+                return date;
+            };
+            /**
+             *
+             * @param $event
+             */
+            Calendar.prototype.pickupTime = function ($event) {
+                var hour = this.$el.$('.hour'), minute = this.$el.$('.minute'), time = hour.selectedOptions[0].value + ':' + minute.selectedOptions[0].value;
+                this.$emit('pick-time', time);
+            };
+            return Calendar;
+        }(aj.VueComponent));
+        form.Calendar = Calendar;
         /**
          * 判断两个日期是否同一日
          *
          * @param d1
          * @param d2
          */
-        isSameDay: function (d1, d2) {
+        function isSameDay(d1, d2) {
             return (d1.getFullYear() == d2.getFullYear() && d1.getMonth() == d2.getMonth() && d1.getDate() == d2.getDate());
         }
-    }
-});
-
-"use strict";
-/**
- * 全国省市区
- * 写死属性
- */
-Vue.component('aj-china-area', {
-    template: "\n\t\t<div class=\"aj-china-area\">\n\t\t\t<span>\u7701</span> \n\t\t\t<select v-model=\"province\" class=\"aj-select\" style=\"width:120px;\" :name=\"provinceName || 'locationProvince'\">\n\t\t\t\t<option value=\"\">\u8BF7\u9009\u62E9</option>\n\t\t\t\t<option v-for=\"(v, k) in addressData[86]\" :value=\"k\">{{v}}</option>\n\t\t\t</select>\n\t\t\t<span>\u5E02 </span>\n\t\t\t<select v-model=\"city\" class=\"aj-select\" style=\"width:120px;\" :name=\"cityName || 'locationCity'\">\n\t\t\t\t<option value=\"\">\u8BF7\u9009\u62E9</option>\n\t\t\t\t<option v-for=\"(v, k) in citys\" :value=\"k\">{{v}}</option>\n\t\t\t</select>\n\t\t\t<span>\u533A</span>  \n\t\t\t<select v-model=\"district\" class=\"aj-select\" style=\"width:120px;\" :name=\"districtName || 'locationDistrict'\">\n\t\t\t\t<option value=\"\">\u8BF7\u9009\u62E9</option>\n\t\t\t\t<option v-for=\"(v, k) in districts\" :value=\"k\">{{v}}</option>\n\t\t\t</select>\n\t\t</div>\n\t",
-    props: {
-        provinceCode: String,
-        cityCode: String,
-        districtCode: String,
-        provinceName: String,
-        cityName: String,
-        districtName: String
-    },
-    data: function () {
-        //@ts-ignore
-        if (!window.China_AREA)
-            throw '中国行政区域数据 脚本没导入';
-        return {
-            province: this.provinceCode || '',
-            city: this.cityCode || '',
-            district: this.districtCode || '',
-            //@ts-ignore
-            addressData: window.China_AREA
-        };
-    },
-    watch: {
-        province: function (val, oldval) {
-            //            if(val !== oldval) 
-            //                this.city = '';
-        },
-    },
-    computed: {
-        citys: function () {
-            if (!this.province)
-                return;
-            return this.addressData[this.province];
-        },
-        districts: function () {
-            if (!this.city)
-                return;
-            return this.addressData[this.city];
-        }
-    }
-});
-
-"use strict";
-var aj;
-(function (aj) {
-    var form;
-    (function (form_1) {
-        var EditForm;
-        (function (EditForm) {
-            Vue.component('aj-edit-form', {
-                template: "\n            <form class=\"aj-table-form\" :action=\"getInfoApi + (isCreate ? '' : info.id + '/')\" :method=\"isCreate ? 'POST' : 'PUT'\">\n                <h3>{{isCreate ? \"\u65B0\u5EFA\" : \"\u7F16\u8F91\" }}{{uiName}}</h3>\n                <!-- \u4F20\u9001 id \u53C2\u6570 -->\n                <input v-if=\"!isCreate\" type=\"hidden\" name=\"id\" :value=\"info.id\" />\n                <slot v-bind:info=\"info\"></slot>\n                <div class=\"aj-btnsHolder\">\n                    <button><img :src=\"ajResources.commonAsset + '/icon/save.gif'\" /> {{isCreate ? \"\u65B0\u5EFA\":\"\u4FDD\u5B58\"}}</button>\n                    <button onclick=\"this.up('form').reset();return false;\">\u590D \u4F4D</button>\n                    <button v-if=\"!isCreate\" v-on:click.prevent=\"del()\">\n                        <img :src=\"ajResources.commonAsset + '/icon/delete.gif'\" /> \u5220 \u9664\n                    </button>\n                    <button @click.prevent=\"close\">\u5173\u95ED</button>\n                </div>\n            </form>\n        ",
-                props: {
-                    isCreate: Boolean,
-                    uiName: String,
-                    apiUrl: { type: String, required: true } // 获取实体详情的接口地址 
-                },
-                data: function () {
-                    return {
-                        id: 0,
-                        info: {},
-                    };
-                },
-                mounted: function () {
-                    var _this = this;
-                    aj.xhr.form(this.$el, function (j) {
-                        if (j) {
-                            if (j.isOk) {
-                                var msg_1 = (_this.isCreate ? "新建" : "保存") + _this.uiName + "成功";
-                                aj.msg.show(msg_1);
-                                _this.$parent.close();
-                            }
-                            else
-                                aj.msg.show(j.msg);
-                        }
-                    }, {
-                        beforeSubmit: function (form, json) {
-                            //json.content = App.$refs.htmleditor.getValue({cleanWord : eval('${aj_allConfig.article.cleanWordTag}'), encode : true});
-                            return true;
-                        }
-                    });
-                },
-                methods: {
-                    load: function (id, cb) {
-                        var _this = this;
-                        this.id = id;
-                        aj.xhr.get(this.apiUrl + id + "/", function (j) {
-                            _this.info = j.result;
-                            cb && cb(j);
-                        });
-                    },
-                    close: function () {
-                        if (this.$parent.$options._componentTag === 'aj-layer')
-                            //@ts-ignore
-                            this.$parent.close();
-                        else
-                            history.back();
-                    },
-                    /**
-                     * 执行删除
-                     *
-                     * @param this
-                     */
-                    del: function () {
-                        var id = aj.form.utils.getFormFieldValue(this.$el, 'input[name=id]'), title = aj.form.utils.getFormFieldValue(this.$el, 'input[name=name]');
-                        aj.showConfirm("\u8BF7\u786E\u5B9A\u5220\u9664\u8BB0\u5F55\uFF1A\n" + title + "\uFF1F", function () {
-                            return aj.xhr.dele("../" + id + "/", function (j) {
-                                if (j.isOk) {
-                                    aj.msg.show('删除成功！');
-                                    //setTimeout(() => location.reload(), 1500);
-                                }
-                                else
-                                    aj.alert('删除失败！');
-                            });
-                        });
-                    }
-                }
-            });
-        })(EditForm = form_1.EditForm || (form_1.EditForm = {}));
+        new Calendar().register();
     })(form = aj.form || (aj.form = {}));
 })(aj || (aj = {}));
 
 "use strict";
-;
-(function () {
-    Vue.component('aj-form-html-editor', {
-        template: "\n            <div class=\"aj-form-html-editor\">\n                <ul class=\"toolbar\" @click=\"onToolBarClk\">\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u4F53\"         class=\"fa-font\"></i>\n                        <div class=\"fontfamilyChoser\" @click=\"onFontfamilyChoserClk\">\n                            <a style=\"font-family: '\u5B8B\u4F53'\">\u5B8B\u4F53</a>\n                            <a style=\"font-family: '\u9ED1\u4F53'\">\u9ED1\u4F53</a>\n                            <a style=\"font-family: '\u6977\u4F53'\">\u6977\u4F53</a>\n                            <a style=\"font-family: '\u96B6\u4E66'\">\u96B6\u4E66</a>\n                            <a style=\"font-family: '\u5E7C\u5706'\">\u5E7C\u5706</a>\n                            <a style=\"font-family: 'Microsoft YaHei'\">Microsoft YaHei</a>\n                            <a style=\"font-family: Arial\">Arial</a>\n                            <a style=\"font-family: 'Arial Narrow'\">Arial Narrow</a>\n                            <a style=\"font-family: 'Arial Black'\">Arial Black</a>\n                            <a style=\"font-family: 'Comic Sans MS'\">Comic Sans MS</a>\n                            <a style=\"font-family: Courier\">Courier</a>\n                            <a style=\"font-family: System\">System</a>\n                            <a style=\"font-family: 'Times New Roman'\">Times New Roman</a>\n                            <a style=\"font-family: Verdana\">Verdana</a>\n                        </div>\n                    </li>\t\t\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u53F7\"         class=\"fa-header\"></i>\n                        <div class=\"fontsizeChoser\" @click=\"onFontsizeChoserClk\">\n                            <a style=\"font-size: xx-small; \">\u6781\u5C0F</a>\n                            <a style=\"font-size: x-small;  \">\u7279\u5C0F</a>\n                            <a style=\"font-size: small;    \">\u5C0F</a>\n                            <a style=\"font-size: medium;   \">\u4E2D</a>\n                            <a style=\"font-size: large;    \">\u5927</a>\n                            <a style=\"font-size: x-large;  \">\u7279\u5927</a>\n                            <a style=\"font-size: xx-large; line-height: 140%\">\u6781\u5927</a>\n                        </div>\n                    </li>\t\t\n                    <li><i title=\"\u52A0\u7C97\"         class=\"bold fa-bold\"></i></li>\t\t\n                    <li><i title=\"\u659C\u4F53\"         class=\"italic fa-italic\"></i></li>\t\t\n                    <li><i title=\"\u4E0B\u5212\u7EBF\"       class=\"underline fa-underline\"></i></li>\n                    <li><i title=\"\u5DE6\u5BF9\u9F50\"       class=\"justifyleft fa-align-left\"></i></li>\n                    <li><i title=\"\u4E2D\u95F4\u5BF9\u9F50\"     class=\"justifycenter fa-align-center\"></i></li>\n                    <li><i title=\"\u53F3\u5BF9\u9F50\"       class=\"justifyright fa-align-right\"></i></li>\n                    <li><i title=\"\u6570\u5B57\u7F16\u53F7\"     class=\"insertorderedlist fa-list-ol\"></i></li>\n                    <li><i title=\"\u9879\u76EE\u7F16\u53F7\"     class=\"insertunorderedlist fa-list-ul\"></i></li>\n                    <li><i title=\"\u589E\u52A0\u7F29\u8FDB\"     class=\"outdent fa-outdent\"></i></li>\n                    <li><i title=\"\u51CF\u5C11\u7F29\u8FDB\"     class=\"indent fa-indent\"></i></li>\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u4F53\u989C\u8272\"     class=\"fa-paint-brush\"></i>\n                        <div class=\"fontColor colorPicker\" v-html=\"createColorPickerHTML()\" @click=\"onFontColorPicker\"></div>\n                    </li>\n                    <li class=\"dorpdown\">\n                        <i title=\"\u80CC\u666F\u989C\u8272\"     class=\"fa-pencil\" ></i>\n                        <div class=\"bgColor colorPicker\" v-html=\"createColorPickerHTML()\" @click=\"onFontBgColorPicker\"></div>\n                    </li>\n                    <li><i title=\"\u589E\u52A0\u94FE\u63A5\"     class=\"createLink fa-link\" ></i></li>\n                    <li><i title=\"\u589E\u52A0\u56FE\u7247\"     class=\"insertImage fa-file-image-o\" ></i></li>\n                    <li><i title=\"\u4E00\u952E\u5B58\u56FE\"     class=\"saveRemoteImage2Local fa-hdd-o\"></i></li>\n                    <li><i title=\"\u6E05\u7406 HTML\"    class=\"cleanHTML fa-eraser\" ></i></li>\n                    <li><i title=\"\u5207\u6362\u5230\u4EE3\u7801\"   class=\"switchMode fa-code\"></i></li>\n                </ul>\n\n                <div class=\"editorBody\">\t\n                    <iframe srcdoc=\"<html><body></body></html>\"></iframe>   \n                    <slot></slot>\n                </div>\n            </div>\n        ",
-        // <iframe :src="ajResources.commonAsset + '/resources/htmleditor_iframe.jsp?basePath=' + basePath"></iframe>
-        props: {
-            fieldName: { type: String, required: true },
-            content: { type: String, required: false },
-            basePath: { type: String, required: false, default: '' },
-            uploadImageActionUrl: String // 图片上传路径
-        },
-        mounted: function () {
-            var _this = this;
-            var el = this.$el;
-            this.iframeEl = el.$('iframe');
-            this.sourceEditor = el.$('textarea');
-            this.iframeWin = this.iframeEl.contentWindow;
-            this.mode = 'iframe'; // 当前可视化编辑 iframe|textarea
-            this.toolbarEl = el.$('.toolbar');
-            // 这个方法只能写在 onload 事件里面， 不写 onload 里还不执行
-            this.iframeWin.onload = function (e) {
-                _this.iframeDoc = _this.iframeWin.document;
-                _this.iframeDoc.designMode = 'on';
-                _this.sourceEditor.value && _this.setValue(_this.sourceEditor.value); // 有内容
-                _this.iframeDoc.addEventListener('paste', onImagePaste.bind(_this)); // 直接剪切板粘贴上传图片
+
+
+var aj;
+(function (aj) {
+    var form;
+    (function (form) {
+        /**
+         * 全国省市区
+         * 写死属性
+         */
+        var ChinaArea = /** @class */ (function (_super) {
+            __extends(ChinaArea, _super);
+            function ChinaArea() {
+                var _this = _super !== null && _super.apply(this, arguments) || this;
+                _this.name = "aj-china-area";
+                _this.template = html(__makeTemplateObject(["\n\t\t\t<div class=\"aj-china-area\">\n\t\t\t\t<span>\u7701</span>\n\t\t\t\t<select v-model=\"province\" class=\"aj-select\" style=\"width:120px;\" :name=\"provinceName || 'locationProvince'\">\n\t\t\t\t\t<option value=\"\">\u8BF7\u9009\u62E9</option>\n\t\t\t\t\t<option v-for=\"(v, k) in addressData[86]\" :value=\"k\">{{v}}</option>\n\t\t\t\t</select>\n\t\t\t\t<span>\u5E02 </span>\n\t\t\t\t<select v-model=\"city\" class=\"aj-select\" style=\"width:120px;\" :name=\"cityName || 'locationCity'\">\n\t\t\t\t\t<option value=\"\">\u8BF7\u9009\u62E9</option>\n\t\t\t\t\t<option v-for=\"(v, k) in citys\" :value=\"k\">{{v}}</option>\n\t\t\t\t</select>\n\t\t\t\t<span>\u533A</span>\n\t\t\t\t<select v-model=\"district\" class=\"aj-select\" style=\"width:120px;\" :name=\"districtName || 'locationDistrict'\">\n\t\t\t\t\t<option value=\"\">\u8BF7\u9009\u62E9</option>\n\t\t\t\t\t<option v-for=\"(v, k) in districts\" :value=\"k\">{{v}}</option>\n\t\t\t\t</select>\n\t\t\t</div>\n\t\t"], ["\n\t\t\t<div class=\"aj-china-area\">\n\t\t\t\t<span>\u7701</span>\n\t\t\t\t<select v-model=\"province\" class=\"aj-select\" style=\"width:120px;\" :name=\"provinceName || 'locationProvince'\">\n\t\t\t\t\t<option value=\"\">\u8BF7\u9009\u62E9</option>\n\t\t\t\t\t<option v-for=\"(v, k) in addressData[86]\" :value=\"k\">{{v}}</option>\n\t\t\t\t</select>\n\t\t\t\t<span>\u5E02 </span>\n\t\t\t\t<select v-model=\"city\" class=\"aj-select\" style=\"width:120px;\" :name=\"cityName || 'locationCity'\">\n\t\t\t\t\t<option value=\"\">\u8BF7\u9009\u62E9</option>\n\t\t\t\t\t<option v-for=\"(v, k) in citys\" :value=\"k\">{{v}}</option>\n\t\t\t\t</select>\n\t\t\t\t<span>\u533A</span>\n\t\t\t\t<select v-model=\"district\" class=\"aj-select\" style=\"width:120px;\" :name=\"districtName || 'locationDistrict'\">\n\t\t\t\t\t<option value=\"\">\u8BF7\u9009\u62E9</option>\n\t\t\t\t\t<option v-for=\"(v, k) in districts\" :value=\"k\">{{v}}</option>\n\t\t\t\t</select>\n\t\t\t</div>\n\t\t"]));
+                _this.provinceCode = String;
+                _this.cityCode = String;
+                _this.districtCode = String;
+                _this.provinceName = String;
+                _this.cityName = String;
+                _this.districtName = String;
+                _this.computed = {
+                    citys: function () {
+                        if (!this.province)
+                            return {};
+                        return this.addressData[this.province];
+                    },
+                    districts: function () {
+                        if (!this.city)
+                            return {};
+                        return this.addressData[this.city];
+                    }
+                };
+                return _this;
+            }
+            ChinaArea.prototype.data = function () {
+                return {
+                    province: this.provinceCode || '',
+                    city: this.cityCode || '',
+                    district: this.districtCode || '',
+                    //@ts-ignore
+                    addressData: window.China_AREA
+                };
             };
-        },
-        methods: {
+            // watch = { // 令下一级修改
+            // 	province(val: any, oldval: any) {
+            // 		if (val !== oldval)
+            // 			this.city = '';
+            // 	},
+            // 	city(val: any, oldval: any) {
+            // 		if (val !== oldval)
+            // 			this.district = '';
+            // 	}
+            // };
+            ChinaArea.prototype.mounted = function () {
+                //@ts-ignore
+                if (!window.China_AREA)
+                    throw '中国行政区域数据 脚本没导入';
+            };
+            return ChinaArea;
+        }(aj.VueComponent));
+        form.ChinaArea = ChinaArea;
+        new ChinaArea().register();
+    })(form = aj.form || (aj.form = {}));
+})(aj || (aj = {}));
+
+"use strict";
+
+var aj;
+(function (aj) {
+    var form;
+    (function (form_1) {
+        Vue.component('aj-edit-form', {
+            template: html(__makeTemplateObject(["\n            <form class=\"aj-table-form\" :action=\"getInfoApi + (isCreate ? '' : info.id + '/')\" :method=\"isCreate ? 'POST' : 'PUT'\">\n                <h3>{{isCreate ? \"\u65B0\u5EFA\" : \"\u7F16\u8F91\" }}{{uiName}}</h3>\n                <!-- \u4F20\u9001 id \u53C2\u6570 -->\n                <input v-if=\"!isCreate\" type=\"hidden\" name=\"id\" :value=\"info.id\" />\n                <slot v-bind:info=\"info\"></slot>\n                <div class=\"aj-btnsHolder\">\n                    <button><img :src=\"ajResources.commonAsset + '/icon/save.gif'\" /> {{isCreate ? \"\u65B0\u5EFA\":\"\u4FDD\u5B58\"}}</button>\n                    <button onclick=\"this.up('form').reset();return false;\">\u590D \u4F4D</button>\n                    <button v-if=\"!isCreate\" v-on:click.prevent=\"del()\">\n                        <img :src=\"ajResources.commonAsset + '/icon/delete.gif'\" /> \u5220 \u9664\n                    </button>\n                    <button @click.prevent=\"close\">\u5173\u95ED</button>\n                </div>\n            </form>\n        "], ["\n            <form class=\"aj-table-form\" :action=\"getInfoApi + (isCreate ? '' : info.id + '/')\" :method=\"isCreate ? 'POST' : 'PUT'\">\n                <h3>{{isCreate ? \"\u65B0\u5EFA\" : \"\u7F16\u8F91\" }}{{uiName}}</h3>\n                <!-- \u4F20\u9001 id \u53C2\u6570 -->\n                <input v-if=\"!isCreate\" type=\"hidden\" name=\"id\" :value=\"info.id\" />\n                <slot v-bind:info=\"info\"></slot>\n                <div class=\"aj-btnsHolder\">\n                    <button><img :src=\"ajResources.commonAsset + '/icon/save.gif'\" /> {{isCreate ? \"\u65B0\u5EFA\":\"\u4FDD\u5B58\"}}</button>\n                    <button onclick=\"this.up(\\'form\\').reset();return false;\">\u590D \u4F4D</button>\n                    <button v-if=\"!isCreate\" v-on:click.prevent=\"del()\">\n                        <img :src=\"ajResources.commonAsset + '/icon/delete.gif'\" /> \u5220 \u9664\n                    </button>\n                    <button @click.prevent=\"close\">\u5173\u95ED</button>\n                </div>\n            </form>\n        "])),
+            props: {
+                isCreate: Boolean,
+                uiName: String,
+                apiUrl: { type: String, required: true } // 获取实体详情的接口地址 
+            },
+            data: function () {
+                return {
+                    id: 0,
+                    info: {},
+                };
+            },
+            mounted: function () {
+                var _this = this;
+                aj.xhr.form(this.$el, function (j) {
+                    if (j) {
+                        if (j.isOk) {
+                            var msg_1 = (_this.isCreate ? "新建" : "保存") + _this.uiName + "成功";
+                            aj.msg.show(msg_1);
+                            _this.$parent.close();
+                        }
+                        else
+                            aj.msg.show(j.msg);
+                    }
+                }, {
+                    beforeSubmit: function (form, json) {
+                        //json.content = App.$refs.htmleditor.getValue({cleanWord : eval('${aj_allConfig.article.cleanWordTag}'), encode : true});
+                        return true;
+                    }
+                });
+            },
+            methods: {
+                load: function (id, cb) {
+                    var _this = this;
+                    this.id = id;
+                    aj.xhr.get(this.apiUrl + id + "/", function (j) {
+                        _this.info = j.result;
+                        cb && cb(j);
+                    });
+                },
+                close: function () {
+                    if (this.$parent.$options._componentTag === 'aj-layer')
+                        //@ts-ignore
+                        this.$parent.close();
+                    else
+                        history.back();
+                },
+                /**
+                 * 执行删除
+                 *
+                 * @param this
+                 */
+                del: function () {
+                    var id = form_1.utils.getFormFieldValue(this.$el, 'input[name=id]'), title = form_1.utils.getFormFieldValue(this.$el, 'input[name=name]');
+                    aj.showConfirm("\u8BF7\u786E\u5B9A\u5220\u9664\u8BB0\u5F55\uFF1A\n" + title + "\uFF1F", function () {
+                        return aj.xhr.dele("../" + id + "/", function (j) {
+                            if (j.isOk) {
+                                aj.msg.show('删除成功！');
+                                //setTimeout(() => location.reload(), 1500);
+                            }
+                            else
+                                aj.alert('删除失败！');
+                        });
+                    });
+                }
+            }
+        });
+    })(form = aj.form || (aj.form = {}));
+})(aj || (aj = {}));
+
+"use strict";
+
+
+var aj;
+(function (aj) {
+    var form;
+    (function (form) {
+        /**
+         * HTML 在綫編輯器
+         *
+         * 注意：必须提供一个 <slot> 包含有 <textarea class="hide" name="content">${info.content}</textarea>
+         */
+        var HtmlEditor = /** @class */ (function (_super) {
+            __extends(HtmlEditor, _super);
+            function HtmlEditor() {
+                var _this = _super !== null && _super.apply(this, arguments) || this;
+                _this.name = "aj-form-html-editor";
+                _this.template = html(__makeTemplateObject(["\n            <div class=\"aj-form-html-editor\">\n                <ul class=\"toolbar\" @click=\"onToolBarClk\">\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u4F53\" class=\"fa-font\"></i>\n                        <div class=\"fontfamilyChoser\" @click=\"onFontfamilyChoserClk\">\n                            <a style=\"font-family: '\u5B8B\u4F53'\">\u5B8B\u4F53</a>\n                            <a style=\"font-family: '\u9ED1\u4F53'\">\u9ED1\u4F53</a>\n                            <a style=\"font-family: '\u6977\u4F53'\">\u6977\u4F53</a>\n                            <a style=\"font-family: '\u96B6\u4E66'\">\u96B6\u4E66</a>\n                            <a style=\"font-family: '\u5E7C\u5706'\">\u5E7C\u5706</a>\n                            <a style=\"font-family: 'Microsoft YaHei'\">Microsoft YaHei</a>\n                            <a style=\"font-family: Arial\">Arial</a>\n                            <a style=\"font-family: 'Arial Narrow'\">Arial Narrow</a>\n                            <a style=\"font-family: 'Arial Black'\">Arial Black</a>\n                            <a style=\"font-family: 'Comic Sans MS'\">Comic Sans MS</a>\n                            <a style=\"font-family: Courier\">Courier</a>\n                            <a style=\"font-family: System\">System</a>\n                            <a style=\"font-family: 'Times New Roman'\">Times New Roman</a>\n                            <a style=\"font-family: Verdana\">Verdana</a>\n                        </div>\n                    </li>\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u53F7\" class=\"fa-header\"></i>\n                        <div class=\"fontsizeChoser\" @click=\"onFontsizeChoserClk\">\n                            <a style=\"font-size: xx-small; \">\u6781\u5C0F</a>\n                            <a style=\"font-size: x-small;  \">\u7279\u5C0F</a>\n                            <a style=\"font-size: small;    \">\u5C0F</a>\n                            <a style=\"font-size: medium;   \">\u4E2D</a>\n                            <a style=\"font-size: large;    \">\u5927</a>\n                            <a style=\"font-size: x-large;  \">\u7279\u5927</a>\n                            <a style=\"font-size: xx-large; line-height: 140%\">\u6781\u5927</a>\n                        </div>\n                    </li>\n                    <li><i title=\"\u52A0\u7C97\" class=\"bold fa-bold\"></i></li>\n                    <li><i title=\"\u659C\u4F53\" class=\"italic fa-italic\"></i></li>\n                    <li><i title=\"\u4E0B\u5212\u7EBF\" class=\"underline fa-underline\"></i></li>\n                    <li><i title=\"\u5DE6\u5BF9\u9F50\" class=\"justifyleft fa-align-left\"></i></li>\n                    <li><i title=\"\u4E2D\u95F4\u5BF9\u9F50\" class=\"justifycenter fa-align-center\"></i></li>\n                    <li><i title=\"\u53F3\u5BF9\u9F50\" class=\"justifyright fa-align-right\"></i></li>\n                    <li><i title=\"\u6570\u5B57\u7F16\u53F7\" class=\"insertorderedlist fa-list-ol\"></i></li>\n                    <li><i title=\"\u9879\u76EE\u7F16\u53F7\" class=\"insertunorderedlist fa-list-ul\"></i></li>\n                    <li><i title=\"\u589E\u52A0\u7F29\u8FDB\" class=\"outdent fa-outdent\"></i></li>\n                    <li><i title=\"\u51CF\u5C11\u7F29\u8FDB\" class=\"indent fa-indent\"></i></li>\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u4F53\u989C\u8272\" class=\"fa-paint-brush\"></i>\n                        <div class=\"fontColor colorPicker\" v-html=\"createColorPickerHTML()\" @click=\"onFontColorPicker\"></div>\n                    </li>\n                    <li class=\"dorpdown\">\n                        <i title=\"\u80CC\u666F\u989C\u8272\" class=\"fa-pencil\"></i>\n                        <div class=\"bgColor colorPicker\" v-html=\"createColorPickerHTML()\" @click=\"onFontBgColorPicker\"></div>\n                    </li>\n                    <li><i title=\"\u589E\u52A0\u94FE\u63A5\" class=\"createLink fa-link\"></i></li>\n                    <li><i title=\"\u589E\u52A0\u56FE\u7247\" class=\"insertImage fa-file-image-o\"></i></li>\n                    <li><i title=\"\u4E00\u952E\u5B58\u56FE\" class=\"saveRemoteImage2Local fa-hdd-o\"></i></li>\n                    <li><i title=\"\u6E05\u7406 HTML\" class=\"cleanHTML fa-eraser\"></i></li>\n                    <li><i title=\"\u5207\u6362\u5230\u4EE3\u7801\" class=\"switchMode fa-code\"></i></li>\n                </ul>\n            \n                <div class=\"editorBody\">\n                    <iframe srcdoc=\"<html><body></body></html>\"></iframe>\n                    <slot></slot>\n                </div>\n            </div>\n        "], ["\n            <div class=\"aj-form-html-editor\">\n                <ul class=\"toolbar\" @click=\"onToolBarClk\">\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u4F53\" class=\"fa-font\"></i>\n                        <div class=\"fontfamilyChoser\" @click=\"onFontfamilyChoserClk\">\n                            <a style=\"font-family: '\u5B8B\u4F53'\">\u5B8B\u4F53</a>\n                            <a style=\"font-family: '\u9ED1\u4F53'\">\u9ED1\u4F53</a>\n                            <a style=\"font-family: '\u6977\u4F53'\">\u6977\u4F53</a>\n                            <a style=\"font-family: '\u96B6\u4E66'\">\u96B6\u4E66</a>\n                            <a style=\"font-family: '\u5E7C\u5706'\">\u5E7C\u5706</a>\n                            <a style=\"font-family: 'Microsoft YaHei'\">Microsoft YaHei</a>\n                            <a style=\"font-family: Arial\">Arial</a>\n                            <a style=\"font-family: 'Arial Narrow'\">Arial Narrow</a>\n                            <a style=\"font-family: 'Arial Black'\">Arial Black</a>\n                            <a style=\"font-family: 'Comic Sans MS'\">Comic Sans MS</a>\n                            <a style=\"font-family: Courier\">Courier</a>\n                            <a style=\"font-family: System\">System</a>\n                            <a style=\"font-family: 'Times New Roman'\">Times New Roman</a>\n                            <a style=\"font-family: Verdana\">Verdana</a>\n                        </div>\n                    </li>\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u53F7\" class=\"fa-header\"></i>\n                        <div class=\"fontsizeChoser\" @click=\"onFontsizeChoserClk\">\n                            <a style=\"font-size: xx-small; \">\u6781\u5C0F</a>\n                            <a style=\"font-size: x-small;  \">\u7279\u5C0F</a>\n                            <a style=\"font-size: small;    \">\u5C0F</a>\n                            <a style=\"font-size: medium;   \">\u4E2D</a>\n                            <a style=\"font-size: large;    \">\u5927</a>\n                            <a style=\"font-size: x-large;  \">\u7279\u5927</a>\n                            <a style=\"font-size: xx-large; line-height: 140%\">\u6781\u5927</a>\n                        </div>\n                    </li>\n                    <li><i title=\"\u52A0\u7C97\" class=\"bold fa-bold\"></i></li>\n                    <li><i title=\"\u659C\u4F53\" class=\"italic fa-italic\"></i></li>\n                    <li><i title=\"\u4E0B\u5212\u7EBF\" class=\"underline fa-underline\"></i></li>\n                    <li><i title=\"\u5DE6\u5BF9\u9F50\" class=\"justifyleft fa-align-left\"></i></li>\n                    <li><i title=\"\u4E2D\u95F4\u5BF9\u9F50\" class=\"justifycenter fa-align-center\"></i></li>\n                    <li><i title=\"\u53F3\u5BF9\u9F50\" class=\"justifyright fa-align-right\"></i></li>\n                    <li><i title=\"\u6570\u5B57\u7F16\u53F7\" class=\"insertorderedlist fa-list-ol\"></i></li>\n                    <li><i title=\"\u9879\u76EE\u7F16\u53F7\" class=\"insertunorderedlist fa-list-ul\"></i></li>\n                    <li><i title=\"\u589E\u52A0\u7F29\u8FDB\" class=\"outdent fa-outdent\"></i></li>\n                    <li><i title=\"\u51CF\u5C11\u7F29\u8FDB\" class=\"indent fa-indent\"></i></li>\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u4F53\u989C\u8272\" class=\"fa-paint-brush\"></i>\n                        <div class=\"fontColor colorPicker\" v-html=\"createColorPickerHTML()\" @click=\"onFontColorPicker\"></div>\n                    </li>\n                    <li class=\"dorpdown\">\n                        <i title=\"\u80CC\u666F\u989C\u8272\" class=\"fa-pencil\"></i>\n                        <div class=\"bgColor colorPicker\" v-html=\"createColorPickerHTML()\" @click=\"onFontBgColorPicker\"></div>\n                    </li>\n                    <li><i title=\"\u589E\u52A0\u94FE\u63A5\" class=\"createLink fa-link\"></i></li>\n                    <li><i title=\"\u589E\u52A0\u56FE\u7247\" class=\"insertImage fa-file-image-o\"></i></li>\n                    <li><i title=\"\u4E00\u952E\u5B58\u56FE\" class=\"saveRemoteImage2Local fa-hdd-o\"></i></li>\n                    <li><i title=\"\u6E05\u7406 HTML\" class=\"cleanHTML fa-eraser\"></i></li>\n                    <li><i title=\"\u5207\u6362\u5230\u4EE3\u7801\" class=\"switchMode fa-code\"></i></li>\n                </ul>\n            \n                <div class=\"editorBody\">\n                    <iframe srcdoc=\"<html><body></body></html>\"></iframe>\n                    <slot></slot>\n                </div>\n            </div>\n        "]));
+                // <iframe :src="ajResources.commonAsset + '/resources/htmleditor_iframe.jsp?basePath=' + basePath"></iframe>
+                _this.props = {
+                    fieldName: { type: String, required: true },
+                    content: { type: String, required: false },
+                    basePath: { type: String, required: false, default: '' },
+                    uploadImageActionUrl: String // 图片上传路径
+                };
+                _this.fieldName = "";
+                _this.fieldValue = "";
+                /**
+                 * 图片上传路径
+                 */
+                _this.uploadImageActionUrl = "";
+                _this.iframeEl = document.body;
+                _this.sourceEditor = document.body;
+                _this.iframeWin = window;
+                _this.iframeDoc = document;
+                _this.mode = "iframe";
+                _this.toolbarEl = document.body;
+                return _this;
+            }
+            HtmlEditor.prototype.mounted = function () {
+                var _this = this;
+                var el = this.$el;
+                this.iframeEl = el.$('iframe');
+                this.sourceEditor = el.$('textarea');
+                this.iframeWin = this.iframeEl.contentWindow;
+                this.mode = 'iframe'; // 当前可视化编辑 iframe|textarea
+                this.toolbarEl = el.$('.toolbar');
+                // 这个方法只能写在 onload 事件里面， 不写 onload 里还不执行
+                this.iframeWin.onload = function (ev) {
+                    _this.iframeDoc = _this.iframeWin.document;
+                    _this.iframeDoc.designMode = 'on';
+                    _this.sourceEditor.value && _this.setValue(_this.sourceEditor.value); // 有内容
+                    _this.iframeDoc.addEventListener('paste', onImagePaste.bind(_this)); // 直接剪切板粘贴上传图片
+                };
+            };
             /**
              * 当工具条点击的时候触发
              *
-             * @param this
-             * @param e
+             * @param ev
              */
-            onToolBarClk: function (e) {
+            HtmlEditor.prototype.onToolBarClk = function (ev) {
                 var _this = this;
-                var el = e.target, clsName = el.className.split(' ').shift();
+                var el = ev.target, clsName = el.className.split(' ').shift();
                 switch (clsName) {
                     case 'createLink':
                         var result = prompt("请输入 URL 地址");
@@ -1800,51 +2063,49 @@ var aj;
                     default:
                         this.format(clsName);
                 }
-            },
-            format: function (type, para) {
+            };
+            HtmlEditor.prototype.format = function (type, para) {
                 // this.iframeWin.focus();
                 if (para)
                     this.iframeDoc.execCommand(type, false, para);
                 else
                     this.iframeDoc.execCommand(type, false);
                 this.iframeWin.focus();
-            },
-            insertEl: function (html) {
+            };
+            HtmlEditor.prototype.insertEl = function (html) {
                 this.iframeDoc.body.innerHTML = html;
-            },
+            };
             /**
              * 設置 HTML
              *
              * @param v
              */
-            setValue: function (v) {
+            HtmlEditor.prototype.setValue = function (v) {
                 var _this = this;
                 setTimeout(function () {
                     _this.iframeWin.document.body.innerHTML = v;
                     // self.iframeBody.innerHTML = v;
                 }, 500);
-            },
+            };
             /**
              * 获取内容的 HTML
              *
-             * @param this
              * @param cleanWord
              * @param encode
              */
-            getValue: function (cleanWord, encode) {
+            HtmlEditor.prototype.getValue = function (cleanWord, encode) {
                 var result = this.iframeDoc.body.innerHTML;
                 if (cleanWord)
                     result = cleanPaste(result);
                 if (encode)
                     result = encodeURIComponent(result);
                 return result;
-            },
+            };
             /**
              * 切換 HTML 編輯 or 可視化編輯
              *
-             * @param this
              */
-            setMode: function () {
+            HtmlEditor.prototype.setMode = function () {
                 if (this.mode == 'iframe') {
                     this.iframeEl.classList.add('hide');
                     this.sourceEditor.classList.remove('hide');
@@ -1859,180 +2120,178 @@ var aj;
                     this.mode = 'iframe';
                     grayImg.call(this, false);
                 }
-            },
+            };
             /**
              * 选择字体
              *
-             * @param this
-             * @param e
+             * @param ev
              */
-            onFontfamilyChoserClk: function (e) {
-                var el = e.target;
+            HtmlEditor.prototype.onFontfamilyChoserClk = function (ev) {
+                var el = ev.target;
                 this.format('fontname', el.innerHTML);
                 /* 如何解决点击之后马上隐藏面板？由于 js（单击事件） 没有控制 CSS 的 :hover 伪类的方法，故所以必须使用以下技巧：*/
                 var menuPanel = el.parentNode;
                 menuPanel.style.display = 'none';
                 setTimeout(function () { return menuPanel.style.display = ''; }, 300);
-            },
+            };
             /**
              * 选择字号大小
              *
-             * @param this
-             * @param e
+             * @param ev
              */
-            onFontsizeChoserClk: function (e) {
-                var el = e.target;
-                var els = e.currentTarget.children;
+            HtmlEditor.prototype.onFontsizeChoserClk = function (ev) {
+                var el = ev.target, els = ev.currentTarget.children;
                 for (var i = 0, j = els.length; i < j; i++)
                     if (el == els[i])
                         break;
                 this.format('fontsize', i + "");
-            },
-            onFontColorPicker: function (e) {
-                this.format('foreColor', e.target.title);
-            },
-            onFontBgColorPicker: function (e) {
-                this.format('backColor', e.target.title);
-            },
+            };
+            HtmlEditor.prototype.onFontColorPicker = function (ev) {
+                this.format('foreColor', ev.target.title);
+            };
+            HtmlEditor.prototype.onFontBgColorPicker = function (ev) {
+                this.format('backColor', ev.target.title);
+            };
             /**
              * 创建颜色选择器
              */
-            createColorPickerHTML: function () {
-                // 定义变量
-                var cl = ['00', '33', '66', '99', 'CC', 'FF'], b, d, e, f, T;
-                // 创建 head
-                var h = '<div class="colorhead"><span class="colortitle">颜色选择</span></div><div class="colorbody"><table cellspaci="0" cellpadding="0"><tr>';
+            HtmlEditor.prototype.createColorPickerHTML = function () {
+                var cl = ['00', '33', '66', '99', 'CC', 'FF'], b, d, e, f, h = ['<div class="colorhead"><span class="colortitle">颜色选择</span></div><div class="colorbody"><table cellspaci="0" cellpadding="0"><tr>'];
                 // 创建 body  [6 x 6的色盘]
                 for (var i = 0; i < 6; ++i) {
-                    h += '<td><table class="colorpanel" cellspacing="0" cellpadding="0">';
+                    h.push('<td><table class="colorpanel" cellspacing="0" cellpadding="0">');
                     for (var j = 0, a = cl[i]; j < 6; ++j) {
-                        h += '<tr>';
+                        h.push('<tr>');
                         for (var k = 0, c = cl[j]; k < 6; ++k) {
                             b = cl[k];
-                            e = ((k == 5 && i != 2 && i != 5) ? ';border-right:none;' : '');
-                            f = ((j == 5 && i < 3) ? ';border-bottom:none' : '');
+                            e = (k == 5 && i != 2 && i != 5) ? ';border-right:none;' : '';
+                            f = (j == 5 && i < 3) ? ';border-bottom:none' : '';
                             d = '#' + a + b + c;
                             // T = document.all ? '&nbsp;' : '';
-                            h += '<td unselectable="on" style="background-color: ' + d + e + f + '" title="' + d + '"></td>';
+                            h.push('<td unselectable="on" style="background-color: ' + d + e + f + '" title="' + d + '"></td>');
                         }
-                        h += '</tr>';
+                        h.push('</tr>');
                     }
-                    h += '</table></td>';
+                    h.push('</table></td>');
                     if (cl[i] == '66')
-                        h += '</tr><tr>';
+                        h.push('</tr><tr>');
                 }
-                h += '</tr></table></div>';
-                return h;
-            }
-        }
-    });
-    /**
-     * 使图标变灰色
-     *
-     * @param this
-     * @param isGray
-     */
-    function grayImg(isGray) {
-        this.toolbarEl.$('i', function (item) {
-            if (item.className.indexOf('switchMode') != -1)
-                return;
-            item.style.color = isGray ? 'lightgray' : '';
-            // if (item.className.indexOf('switchMode') != -1)
-            //     item.style.color = isGray ? 'lightgray' : '';
-            // else
-            //     item.style.filter = isGray ? 'grayscale(100%)' : '';
-        });
-    }
-    function saveRemoteImage2Local() {
-        var str = [], remotePicArr = new Array();
-        var arr = this.iframeDoc.querySelectorAll('img');
-        for (var i = 0, j = arr.length; i < j; i++) {
-            var imgEl = arr[i], url = imgEl.getAttribute('src');
-            if (/^http/.test(url)) {
-                str.push(url);
-                remotePicArr.push(imgEl);
-            }
-        }
-        if (str.length)
-            aj.xhr.post('../downAllPics/', function (json) {
-                var _arr = json.pics;
-                for (var i = 0, j = _arr.length; i < j; i++)
-                    remotePicArr[i].src = "images/" + _arr[i];
-                aj.alert('所有图片下载完成。');
-            }, { pics: str.join('|') });
-        else
-            aj.alert('未发现有远程图片');
-    }
-    /**
-     * MSWordHtmlCleaners.js https://gist.github.com/ronanguilloux/2915995
-     *
-     * @param html
-     */
-    function cleanPaste(html) {
-        // Remove additional MS Word content
-        html = html.replace(/<(\/)*(\\?xml:|meta|link|span|font|del|ins|st1:|[ovwxp]:)((.|\s)*?)>/gi, ''); // Unwanted tags
-        html = html.replace(/(class|style|type|start)=("(.*?)"|(\w*))/gi, ''); // Unwanted sttributes
-        html = html.replace(/<style(.*?)style>/gi, ''); // Style tags
-        html = html.replace(/<script(.*?)script>/gi, ''); // Script tags
-        html = html.replace(/<!--(.*?)-->/gi, ''); // HTML comments
-        return html;
-    }
-    /*
-    * 富文本编辑器中粘贴图片时，chrome可以得到e.clipBoardData.items并从中获取二进制数据，以便ajax上传到后台，
-    * 实现粘贴图片的功能。firefox中items为undefined，可选的方案：1将base64原样上传到后台进行文件存储替换，2将内容清空，待粘贴完毕后取图片src，再恢复现场
-    * https://stackoverflow.com/questions/2176861/javascript-get-clipboard-data-on-paste-event-cross-browser
-    */
-    /**
-     *
-     * @param this
-     * @param event
-     */
-    function onImagePaste(event) {
-        var _this = this;
-        if (!this.uploadImageActionUrl) {
-            aj.alert('未提供图片上传地址');
-            return;
-        }
-        var items = event.clipboardData && event.clipboardData.items;
-        var file = null; // file就是剪切板中的图片文件
-        if (items && items.length) { // 检索剪切板items
-            for (var i = 0; i < items.length; i++) {
-                var item = items[i];
-                if (item.type.indexOf('image') !== -1) {
-                    // @ts-ignore
-                    if (window.isCreate) { // 有图片
-                        aj.alert('请保存记录后再上传图片。');
-                        return;
-                    }
-                    file = item.getAsFile();
-                    break;
-                }
-            }
-        }
-        if (file) {
-            event.preventDefault();
-            aj.img.changeBlobImageQuality(file, function (newBlob) {
-                Vue.options.components["aj-xhr-upload"].extendOptions.methods.doUpload.call({
-                    action: _this.uploadImageActionUrl,
-                    progress: 0,
-                    uploadOk_callback: function (j) {
-                        if (j.isOk)
-                            this.format("insertImage", this.ajResources.imgPerfix + j.imgUrl);
-                    },
-                    $blob: newBlob,
-                    $fileName: 'foo.jpg'
-                });
+                h.push('</tr></table></div>');
+                return h.join('');
+            };
+            return HtmlEditor;
+        }(aj.VueComponent));
+        form.HtmlEditor = HtmlEditor;
+        /**
+         * 使图标变灰色
+         *
+         * @param this
+         * @param isGray
+         */
+        function grayImg(isGray) {
+            this.toolbarEl.$('i', function (item) {
+                if (item.className.indexOf('switchMode') != -1)
+                    return;
+                item.style.color = isGray ? 'lightgray' : '';
+                // if (item.className.indexOf('switchMode') != -1)
+                //     item.style.color = isGray ? 'lightgray' : '';
+                // else
+                //     item.style.filter = isGray ? 'grayscale(100%)' : '';
             });
         }
-    }
-})();
+        function saveRemoteImage2Local() {
+            var str = [], remotePicArr = new Array();
+            var arr = this.iframeDoc.querySelectorAll('img');
+            for (var i = 0, j = arr.length; i < j; i++) {
+                var imgEl = arr[i], url = imgEl.getAttribute('src');
+                if (/^http/.test(url)) {
+                    str.push(url);
+                    remotePicArr.push(imgEl);
+                }
+            }
+            if (str.length)
+                aj.xhr.post('../downAllPics/', function (json) {
+                    var _arr = json.pics;
+                    for (var i = 0, j = _arr.length; i < j; i++)
+                        remotePicArr[i].src = "images/" + _arr[i];
+                    aj.alert('所有图片下载完成。');
+                }, { pics: str.join('|') });
+            else
+                aj.alert('未发现有远程图片');
+        }
+        /**
+         * Remove additional MS Word content
+         * MSWordHtmlCleaners.js https://gist.github.com/ronanguilloux/2915995
+         *
+         * @param html
+         */
+        function cleanPaste(html) {
+            html = html.replace(/<(\/)*(\\?xml:|meta|link|span|font|del|ins|st1:|[ovwxp]:)((.|\s)*?)>/gi, ''); // Unwanted tags
+            html = html.replace(/(class|style|type|start)=("(.*?)"|(\w*))/gi, ''); // Unwanted sttributes
+            html = html.replace(/<style(.*?)style>/gi, ''); // Style tags
+            html = html.replace(/<script(.*?)script>/gi, ''); // Script tags
+            html = html.replace(/<!--(.*?)-->/gi, ''); // HTML comments
+            return html;
+        }
+        /*
+        * 富文本编辑器中粘贴图片时，chrome可以得到e.clipBoardData.items并从中获取二进制数据，以便ajax上传到后台，
+        * 实现粘贴图片的功能。firefox中items为undefined，可选的方案：1将base64原样上传到后台进行文件存储替换，2将内容清空，待粘贴完毕后取图片src，再恢复现场
+        * https://stackoverflow.com/questions/2176861/javascript-get-clipboard-data-on-paste-event-cross-browser
+        */
+        /**
+         *
+         * @param this
+         * @param ev
+         */
+        function onImagePaste(ev) {
+            var _this = this;
+            if (!this.uploadImageActionUrl) {
+                aj.alert('未提供图片上传地址');
+                return;
+            }
+            var items = ev.clipboardData && ev.clipboardData.items;
+            var file = null; // file就是剪切板中的图片文件
+            if (items && items.length) { // 检索剪切板items
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    if (item.type.indexOf('image') !== -1) {
+                        // @ts-ignore
+                        if (window.isCreate) { // 有图片
+                            aj.alert('请保存记录后再上传图片。');
+                            return;
+                        }
+                        file = item.getAsFile();
+                        break;
+                    }
+                }
+            }
+            if (file) {
+                ev.preventDefault();
+                aj.img.changeBlobImageQuality(file, function (newBlob) {
+                    Vue.options.components["aj-xhr-upload"].extendOptions.methods.doUpload.call({
+                        action: _this.uploadImageActionUrl,
+                        progress: 0,
+                        uploadOk_callback: function (j) {
+                            if (j.isOk)
+                                this.format("insertImage", this.ajResources.imgPerfix + j.imgUrl);
+                        },
+                        $blob: newBlob,
+                        $fileName: 'foo.jpg'
+                    });
+                });
+            }
+        }
+        new HtmlEditor().register();
+    })(form = aj.form || (aj.form = {}));
+})(aj || (aj = {}));
 
 "use strict";
+
 /**
 * 将上传控件嵌入到一个浮出层中
 */
 Vue.component('aj-form-popup-upload', {
-    template: "\n        <aj-layer>\n            <h3>\u56FE\u7247\u4E0A\u4F20</h3>\n            <p>\u4E0A\u4F20\u6210\u529F\u540E\u81EA\u52A8\u63D2\u5165\u5230\u6B63\u6587</p>\n            <aj-xhr-upload ref=\"uploadControl\" :action=\"uploadUrl\" :is-img-upload=\"true\" :hidden-field=\"imgName\"\n                :img-place=\"ajResources.commonAsset + '/images/imgBg.png'\">\n            </aj-xhr-upload>\n            <div>\u4E0A\u4F20\u9650\u5236\uFF1A{{text.maxSize}}kb \u6216\u4EE5\u4E0B\uFF0C\u5206\u8FA8\u7387\uFF1A{{text.maxHeight}}x{{text.maxWidth}}</div>\n        </aj-layer>\n    ",
+    template: html(__makeTemplateObject(["\n        <aj-layer>\n            <h3>\u56FE\u7247\u4E0A\u4F20</h3>\n            <p>\u4E0A\u4F20\u6210\u529F\u540E\u81EA\u52A8\u63D2\u5165\u5230\u6B63\u6587</p>\n            <aj-xhr-upload ref=\"uploadControl\" :action=\"uploadUrl\" :is-img-upload=\"true\" :hidden-field=\"imgName\"\n                :img-place=\"ajResources.commonAsset + '/images/imgBg.png'\">\n            </aj-xhr-upload>\n            <div>\u4E0A\u4F20\u9650\u5236\uFF1A{{text.maxSize}}kb \u6216\u4EE5\u4E0B\uFF0C\u5206\u8FA8\u7387\uFF1A{{text.maxHeight}}x{{text.maxWidth}}</div>\n        </aj-layer>\n    "], ["\n        <aj-layer>\n            <h3>\u56FE\u7247\u4E0A\u4F20</h3>\n            <p>\u4E0A\u4F20\u6210\u529F\u540E\u81EA\u52A8\u63D2\u5165\u5230\u6B63\u6587</p>\n            <aj-xhr-upload ref=\"uploadControl\" :action=\"uploadUrl\" :is-img-upload=\"true\" :hidden-field=\"imgName\"\n                :img-place=\"ajResources.commonAsset + '/images/imgBg.png'\">\n            </aj-xhr-upload>\n            <div>\u4E0A\u4F20\u9650\u5236\uFF1A{{text.maxSize}}kb \u6216\u4EE5\u4E0B\uFF0C\u5206\u8FA8\u7387\uFF1A{{text.maxHeight}}x{{text.maxWidth}}</div>\n        </aj-layer>\n    "])),
     data: function () {
         return {
             text: {}
@@ -2096,11 +2355,12 @@ Vue.component('aj-form-popup-upload', {
 // };
 
 "use strict";
+
 /**
  * 下拉列表
  */
 Vue.component('aj-form-select', {
-    template: "\n        <select :name=\"name\" class=\"aj-form-select\">\n            <template v-for=\"value, key, index in options\">\n                <option v-if=\"index === selectedIndex\" selected :value=\"value\" >{{key}}</option>\n                <option v-else :value=\"value\" >{{key}}</option>\n            </template>\n        </select>\n    ",
+    template: html(__makeTemplateObject(["\n        <select :name=\"name\" class=\"aj-form-select\">\n            <template v-for=\"value, key, index in options\">\n                <option v-if=\"index === selectedIndex\" selected :value=\"value\" >{{key}}</option>\n                <option v-else :value=\"value\" >{{key}}</option>\n            </template>\n        </select>\n    "], ["\n        <select :name=\"name\" class=\"aj-form-select\">\n            <template v-for=\"value, key, index in options\">\n                <option v-if=\"index === selectedIndex\" selected :value=\"value\" >{{key}}</option>\n                <option v-else :value=\"value\" >{{key}}</option>\n            </template>\n        </select>\n    "])),
     props: {
         name: { type: String, required: true },
         options: { type: Object, required: true },
@@ -2298,10 +2558,11 @@ var aj;
 })(aj || (aj = {}));
 
 "use strict";
+
 ;
 (function () {
     Vue.component('aj-xhr-upload', {
-        template: "\n            <div class=\"aj-xhr-upload\" :style=\"{display: buttonBottom ? 'inherit': 'flex'}\">\n                <input v-if=\"hiddenField\" type=\"hidden\" :name=\"hiddenField\" :value=\"hiddenFieldValue\" />\n                <div v-if=\"isImgUpload\">\n                    <a :href=\"imgPlace\" target=\"_blank\">\n                        <img class=\"upload_img_perview\" :src=\"(isFileSize && isExtName && imgBase64Str) ? imgBase64Str : imgPlace\" />\n                    </a>\n                </div>\n                <div class=\"pseudoFilePicker\">\n                    <label :for=\"'uploadInput_' + radomId\"><div><div>+</div>\u70B9\u51FB\u9009\u62E9{{isImgUpload ? '\u56FE\u7247': '\u6587\u4EF6'}}</div></label>\n                </div>\n                <input type=\"file\" :name=\"fieldName\" class=\"hide\" :id=\"'uploadInput_' + radomId\" \n                    @change=\"onUploadInputChange\" :accept=\"isImgUpload ? 'image/*' : accpectFileType\" />\n                <div v-if=\"!isFileSize || !isExtName\">{{errMsg}}</div>\n                <div v-if=\"isFileSize && isExtName\">\n                    {{fileName}}<br />\n                    <button @click.prevent=\"doUpload\" style=\"min-width:110px;\">{{progress && progress !== 100 ? '\u4E0A\u4F20\u4E2D ' + progress + '%': '\u4E0A\u4F20'}}</button>\n                </div>\n            </div>    \n        ",
+        template: html(__makeTemplateObject(["\n            <div class=\"aj-xhr-upload\" :style=\"{display: buttonBottom ? 'inherit': 'flex'}\">\n                <input v-if=\"hiddenField\" type=\"hidden\" :name=\"hiddenField\" :value=\"hiddenFieldValue\" />\n                <div v-if=\"isImgUpload\">\n                    <a :href=\"imgPlace\" target=\"_blank\">\n                        <img class=\"upload_img_perview\"\n                            :src=\"(isFileSize && isExtName && imgBase64Str) ? imgBase64Str : imgPlace\" />\n                    </a>\n                </div>\n                <div class=\"pseudoFilePicker\">\n                    <label :for=\"'uploadInput_' + radomId\">\n                        <div>\n                            <div>+</div>\u70B9\u51FB\u9009\u62E9{{isImgUpload ? '\u56FE\u7247': '\u6587\u4EF6'}}\n                        </div>\n                    </label>\n                </div>\n                <input type=\"file\" :name=\"fieldName\" class=\"hide\" :id=\"'uploadInput_' + radomId\" @change=\"onUploadInputChange\"\n                    :accept=\"isImgUpload ? 'image/*' : accpectFileType\" />\n                <div v-if=\"!isFileSize || !isExtName\">{{errMsg}}</div>\n                <div v-if=\"isFileSize && isExtName\">\n                    {{fileName}}<br />\n                    <button @click.prevent=\"doUpload\"\n                        style=\"min-width:110px;\">{{progress && progress !== 100 ? '\u4E0A\u4F20\u4E2D ' + progress + '%': '\u4E0A\u4F20'}}</button>\n                </div>\n            </div>\n        "], ["\n            <div class=\"aj-xhr-upload\" :style=\"{display: buttonBottom ? 'inherit': 'flex'}\">\n                <input v-if=\"hiddenField\" type=\"hidden\" :name=\"hiddenField\" :value=\"hiddenFieldValue\" />\n                <div v-if=\"isImgUpload\">\n                    <a :href=\"imgPlace\" target=\"_blank\">\n                        <img class=\"upload_img_perview\"\n                            :src=\"(isFileSize && isExtName && imgBase64Str) ? imgBase64Str : imgPlace\" />\n                    </a>\n                </div>\n                <div class=\"pseudoFilePicker\">\n                    <label :for=\"'uploadInput_' + radomId\">\n                        <div>\n                            <div>+</div>\u70B9\u51FB\u9009\u62E9{{isImgUpload ? '\u56FE\u7247': '\u6587\u4EF6'}}\n                        </div>\n                    </label>\n                </div>\n                <input type=\"file\" :name=\"fieldName\" class=\"hide\" :id=\"'uploadInput_' + radomId\" @change=\"onUploadInputChange\"\n                    :accept=\"isImgUpload ? 'image/*' : accpectFileType\" />\n                <div v-if=\"!isFileSize || !isExtName\">{{errMsg}}</div>\n                <div v-if=\"isFileSize && isExtName\">\n                    {{fileName}}<br />\n                    <button @click.prevent=\"doUpload\"\n                        style=\"min-width:110px;\">{{progress && progress !== 100 ? '\u4E0A\u4F20\u4E2D ' + progress + '%': '\u4E0A\u4F20'}}</button>\n                </div>\n            </div>\n        "])),
         props: {
             action: { type: String, required: true },
             fieldName: String,
@@ -2418,8 +2679,7 @@ var aj;
      */
     function getFileName() {
         var _a;
-        var v = this.$el.$('input[type=file]').value;
-        var arr = v.split('\\');
+        var v = this.$el.$('input[type=file]').value, arr = v.split('\\');
         this.fileName = (_a = arr.pop()) === null || _a === void 0 ? void 0 : _a.trim();
     }
     /**
@@ -2461,11 +2721,12 @@ var aj;
 })();
 
 "use strict";
+
 /**
  * 相册列表
  */
 Vue.component('aj-attachment-picture-list', {
-    template: "\n        <table>\n            <tr>\n            <td>\n                <div class=\"label\">\u76F8\u518C\u56FE\uFF1A</div>\n                <ul>\n                    <li v-for=\"pic in pics\" style=\"float:left;margin-right:1%;text-align:center;\">\n                        <a :href=\"picCtx + pic.path\" target=\"_blank\"><img :src=\"picCtx + pic.path\" style=\"max-width: 100px;max-height: 100px;\" /></a><br />\n                        <a href=\"###\" @click=\"delPic(pic.id);\">\u5220 \u9664</a>\n                    </li>\n                </ul>\n            </td>\n            <td>\n                <aj-xhr-upload ref=\"attachmentPictureUpload\" :action=\"uploadUrl\" :is-img-upload=\"true\" :img-place=\"blankBg\"></aj-xhr-upload>\n            </td></tr>\n        </table>\n    ",
+    template: html(__makeTemplateObject(["\n        <table>\n            <tr>\n            <td>\n                <div class=\"label\">\u76F8\u518C\u56FE\uFF1A</div>\n                <ul>\n                    <li v-for=\"pic in pics\" style=\"float:left;margin-right:1%;text-align:center;\">\n                        <a :href=\"picCtx + pic.path\" target=\"_blank\"><img :src=\"picCtx + pic.path\" style=\"max-width: 100px;max-height: 100px;\" /></a><br />\n                        <a href=\"###\" @click=\"delPic(pic.id);\">\u5220 \u9664</a>\n                    </li>\n                </ul>\n            </td>\n            <td>\n                <aj-xhr-upload ref=\"attachmentPictureUpload\" :action=\"uploadUrl\" :is-img-upload=\"true\" :img-place=\"blankBg\"></aj-xhr-upload>\n            </td></tr>\n        </table>\n    "], ["\n        <table>\n            <tr>\n            <td>\n                <div class=\"label\">\u76F8\u518C\u56FE\uFF1A</div>\n                <ul>\n                    <li v-for=\"pic in pics\" style=\"float:left;margin-right:1%;text-align:center;\">\n                        <a :href=\"picCtx + pic.path\" target=\"_blank\"><img :src=\"picCtx + pic.path\" style=\"max-width: 100px;max-height: 100px;\" /></a><br />\n                        <a href=\"###\" @click=\"delPic(pic.id);\">\u5220 \u9664</a>\n                    </li>\n                </ul>\n            </td>\n            <td>\n                <aj-xhr-upload ref=\"attachmentPictureUpload\" :action=\"uploadUrl\" :is-img-upload=\"true\" :img-place=\"blankBg\"></aj-xhr-upload>\n            </td></tr>\n        </table>\n    "])),
     props: {
         picCtx: String,
         uploadUrl: String,
@@ -2550,10 +2811,7 @@ Vue.component('aj-simple-grid', {
 });
 
 "use strict";
-var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-    return cooked;
-};
+
 var aj;
 (function (aj) {
     var list;
@@ -2955,10 +3213,7 @@ var aj;
 })(aj || (aj = {}));
 
 "use strict";
-var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-    return cooked;
-};
+
 Vue.component('aj-grid-inline-edit-row-create', {
     template: html(__makeTemplateObject(["\n        <tr class=\"aj-grid-inline-edit-row isEditMode\">\n            <td><input type=\"checkbox\" /></td>\n            <td></td>\n            <td v-for=\"key in columns\" style=\"padding:0\" class=\"cell\" @dblclick=\"dbEdit\">\n                <aj-select v-if=\"key != null && key.type == 'select'\" :name=\"key.name\" :options=\"key.data\"\n                    style=\"width: 200px;\"></aj-select>\n                <input v-if=\"key != null && !key.type\" type=\"text\" size=\"0\" :name=\"key\" />\n            </td>\n            <td class=\"control\">\n                <span @click=\"addNew\"><img :src=\"ajResources.commonAsset + '/icon/update.gif'\" />\u65B0\u589E</span>\n                <span @click=\"$parent.showAddNew = false\"><img :src=\"ajResources.commonAsset + '/icon/delete.gif'\" /> \u64A4\u9500</span>\n            </td>\n        </tr>\n    "], ["\n        <tr class=\"aj-grid-inline-edit-row isEditMode\">\n            <td><input type=\"checkbox\" /></td>\n            <td></td>\n            <td v-for=\"key in columns\" style=\"padding:0\" class=\"cell\" @dblclick=\"dbEdit\">\n                <aj-select v-if=\"key != null && key.type == 'select'\" :name=\"key.name\" :options=\"key.data\"\n                    style=\"width: 200px;\"></aj-select>\n                <input v-if=\"key != null && !key.type\" type=\"text\" size=\"0\" :name=\"key\" />\n            </td>\n            <td class=\"control\">\n                <span @click=\"addNew\"><img :src=\"ajResources.commonAsset + '/icon/update.gif'\" />\u65B0\u589E</span>\n                <span @click=\"$parent.showAddNew = false\"><img :src=\"ajResources.commonAsset + '/icon/delete.gif'\" /> \u64A4\u9500</span>\n            </td>\n        </tr>\n    "])),
     props: {
@@ -3008,10 +3263,7 @@ Vue.component('aj-grid-inline-edit-row-create', {
 });
 
 "use strict";
-var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-    return cooked;
-};
+
 var aj;
 (function (aj) {
     var list;
@@ -3228,10 +3480,7 @@ var aj;
 })(aj || (aj = {}));
 
 "use strict";
-var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-    return cooked;
-};
+
 /**
  * 工具条
  */
@@ -3261,47 +3510,78 @@ Vue.component('aj-entity-toolbar', {
 });
 
 "use strict";
-Vue.component('aj-tree-like-select', {
-    template: '<select :name="fieldName" class="aj-select" @change="onSelected" style="min-width:180px;"></select>',
-    props: {
-        fieldName: { type: String, required: false, default: 'catalogId' },
-        apiUrl: { type: String, default: function () {
-                return aj.ctx + '/admin/tree-like/';
-            } },
-        isAutoLoad: { type: Boolean, default: true },
-        isAutoJump: Boolean,
-        initFieldValue: String
-    },
-    data: function () {
-        return {
-            fieldValue: this.initFieldValue
-        };
-    },
-    mounted: function () {
-        this.isAutoLoad && this.getData();
-    },
-    methods: {
-        onSelected: function (ev) {
-            var el = ev.target;
-            this.fieldValue = el.selectedOptions[0].value;
-            if (this.isAutoJump)
-                location.assign('?' + this.fieldName + '=' + this.fieldValue);
-            else
-                this.BUS && this.BUS.$emit('aj-tree-catelog-select-change', ev, this);
-        },
-        getData: function () {
-            var _this = this;
-            var fn = function (j) {
-                var arr = [{ id: 0, name: "请选择分类" }];
-                aj.list.tree.rendererOption(arr.concat(j.result), _this.$el, _this.fieldValue, { makeAllOption: false });
-                if (_this.fieldValue) // 有指定的选中值
-                    aj.form.utils.selectOption.call(_this, _this.fieldValue);
-            };
-            // aj.xhr.get(this.ajResources.ctx + this.apiUrl + "/admin/tree-like/getListAndSubByParentId/", fn);
-            aj.xhr.get(this.apiUrl, fn);
-        }
-    }
-});
+
+var aj;
+(function (aj) {
+    var list;
+    (function (list) {
+        var tree;
+        (function (tree) {
+            /**
+             * 下拉分类选择器，异步请求远端获取分类数据
+             */
+            var TreeLikeSelect = /** @class */ (function (_super) {
+                __extends(TreeLikeSelect, _super);
+                function TreeLikeSelect() {
+                    var _this = _super !== null && _super.apply(this, arguments) || this;
+                    _this.name = 'aj-tree-like-select';
+                    _this.template = '<select :name="fieldName" class="aj-select" @change="onSelected" style="min-width:180px;"></select>';
+                    _this.props = {
+                        fieldName: { type: String, required: false, default: 'catalogId' },
+                        apiUrl: { type: String, default: function () { return aj.ctx + '/admin/tree-like/'; } },
+                        isAutoLoad: { type: Boolean, default: true },
+                        isAutoJump: Boolean,
+                        initFieldValue: String
+                    };
+                    _this.apiUrl = "";
+                    /**
+                     * 是否自动跳转 catalogId
+                     */
+                    _this.isAutoJump = false;
+                    _this.isAutoLoad = false;
+                    _this.fieldName = "";
+                    _this.fieldValue = "";
+                    /**
+                     * 初始输入的字段值
+                     */
+                    _this.initFieldValue = "";
+                    return _this;
+                }
+                TreeLikeSelect.prototype.data = function () {
+                    return {
+                        fieldValue: this.initFieldValue
+                    };
+                };
+                TreeLikeSelect.prototype.mounted = function () {
+                    this.isAutoLoad && this.getData();
+                };
+                TreeLikeSelect.prototype.onSelected = function (ev) {
+                    var el = ev.target;
+                    this.fieldValue = el.selectedOptions[0].value;
+                    if (this.isAutoJump)
+                        location.assign('?' + this.fieldName + '=' + this.fieldValue);
+                    else
+                        this.BUS && this.BUS.$emit('aj-tree-catelog-select-change', ev, this);
+                };
+                TreeLikeSelect.prototype.getData = function () {
+                    var _this = this;
+                    var fn = function (j) {
+                        var arr = [{ id: 0, name: "请选择分类" }];
+                        tree.rendererOption(arr.concat(j.result), _this.$el, _this.fieldValue, { makeAllOption: false });
+                        if (_this.fieldValue) // 有指定的选中值
+                            //@ts-ignore
+                            aj.form.utils.selectOption.call(_this, _this.fieldValue);
+                    };
+                    // aj.xhr.get(this.ajResources.ctx + this.apiUrl + "/admin/tree-like/getListAndSubByParentId/", fn);
+                    aj.xhr.get(this.apiUrl, fn);
+                };
+                return TreeLikeSelect;
+            }(aj.VueComponent));
+            tree.TreeLikeSelect = TreeLikeSelect;
+            new TreeLikeSelect().register();
+        })(tree = list.tree || (list.tree = {}));
+    })(list = aj.list || (aj.list = {}));
+})(aj || (aj = {}));
 
 "use strict";
 var aj;
@@ -3459,75 +3739,120 @@ var aj;
 })(aj || (aj = {}));
 
 "use strict";
-var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-    return cooked;
-};
-Vue.component('aj-tree-item', {
-    template: html(__makeTemplateObject(["\n        <li>\n            <div :class=\"{bold: isFolder, node: true}\" @click=\"toggle\">\n                <span>\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7</span>{{model.name}}\n                <span v-if=\"isFolder\">[{{open ? '-' : '+'}}]</span>\n            </div>\n            <ul v-show=\"open\" v-if=\"isFolder\" :class=\"{show: open}\">\n                <aj-tree-item class=\"item\" v-for=\"(model, index) in model.children\" :key=\"index\" :model=\"model\">\n                </aj-tree-item>\n                <li v-if=\"allowAddNode\" class=\"add\" @click=\"addChild\">+</li>\n            </ul>\n        </li>\n    "], ["\n        <li>\n            <div :class=\"{bold: isFolder, node: true}\" @click=\"toggle\">\n                <span>\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7</span>{{model.name}}\n                <span v-if=\"isFolder\">[{{open ? '-' : '+'}}]</span>\n            </div>\n            <ul v-show=\"open\" v-if=\"isFolder\" :class=\"{show: open}\">\n                <aj-tree-item class=\"item\" v-for=\"(model, index) in model.children\" :key=\"index\" :model=\"model\">\n                </aj-tree-item>\n                <li v-if=\"allowAddNode\" class=\"add\" @click=\"addChild\">+</li>\n            </ul>\n        </li>\n    "])),
-    props: {
-        model: Object,
-        allowAddNode: { type: Boolean, default: false } // 是否允许添加新节点
-    },
-    data: function () {
-        return { open: false };
-    },
-    computed: {
-        isFolder: function () {
-            return !!(this.model.children && this.model.children.length);
-        }
-    },
-    methods: {
-        /**
-         * 点击节点时的方法
-         *
-         * @param this
-         */
-        toggle: function () {
-            if (this.isFolder)
-                this.open = !this.open;
-            this.BUS && this.BUS.$emit('tree-node-click', this.model);
-        },
-        /**
-         * 变为文件夹
-         *
-         * @param this
-         */
-        changeType: function () {
-            if (!this.isFolder) {
-                Vue.set(this.model, 'children', []);
-                this.addChild();
-                this.open = true;
-            }
-        },
-        addChild: function () {
-            this.model.children.push({
-                name: 'new stuff'
-            });
-        }
-    }
-});
+
+
+var aj;
+(function (aj) {
+    var list;
+    (function (list) {
+        var tree;
+        (function (tree) {
+            /**
+             * 注意递归组件的使用
+             */
+            var TreeItem = /** @class */ (function (_super) {
+                __extends(TreeItem, _super);
+                function TreeItem() {
+                    var _this = _super !== null && _super.apply(this, arguments) || this;
+                    _this.name = 'aj-tree-item';
+                    _this.template = html(__makeTemplateObject(["\n            <li>\n                <div :class=\"{bold: isFolder, node: true}\" @click=\"toggle\">\n                    <span>\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7</span>{{model.name}}\n                    <span v-if=\"isFolder\">[{{open ? '-' : '+'}}]</span>\n                </div>\n                <ul v-show=\"open\" v-if=\"isFolder\" :class=\"{show: open}\">\n                    <aj-tree-item class=\"item\" v-for=\"(model, index) in model.children\" :key=\"index\" :model=\"model\">\n                    </aj-tree-item>\n                    <li v-if=\"allowAddNode\" class=\"add\" @click=\"addChild\">+</li>\n                </ul>\n            </li>\n        "], ["\n            <li>\n                <div :class=\"{bold: isFolder, node: true}\" @click=\"toggle\">\n                    <span>\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7</span>{{model.name}}\n                    <span v-if=\"isFolder\">[{{open ? '-' : '+'}}]</span>\n                </div>\n                <ul v-show=\"open\" v-if=\"isFolder\" :class=\"{show: open}\">\n                    <aj-tree-item class=\"item\" v-for=\"(model, index) in model.children\" :key=\"index\" :model=\"model\">\n                    </aj-tree-item>\n                    <li v-if=\"allowAddNode\" class=\"add\" @click=\"addChild\">+</li>\n                </ul>\n            </li>\n        "]));
+                    _this.props = {
+                        model: Object,
+                        allowAddNode: { type: Boolean, default: false } // 是否允许添加新节点
+                    };
+                    _this.model = { children: [] };
+                    _this.open = false;
+                    _this.allowAddNode = false;
+                    // isFolder = false;
+                    _this.computed = {
+                        isFolder: function () {
+                            return !!(this.model.children && this.model.children.length);
+                        }
+                    };
+                    return _this;
+                }
+                /**
+                 * 点击节点时的方法
+                 *
+                 * @param this
+                 */
+                TreeItem.prototype.toggle = function () {
+                    //@ts-ignore
+                    if (this.isFolder)
+                        this.open = !this.open;
+                    this.BUS && this.BUS.$emit('tree-node-click', this.model);
+                };
+                /**
+                 * 变为文件夹
+                 *
+                 * @param this
+                 */
+                TreeItem.prototype.changeType = function () {
+                    //@ts-ignore
+                    if (!this.isFolder) {
+                        Vue.set(this.model, 'children', []);
+                        this.addChild();
+                        this.open = true;
+                    }
+                };
+                TreeItem.prototype.addChild = function () {
+                    this.model.children.push({
+                        //@ts-ignore
+                        name: 'new stuff'
+                    });
+                };
+                return TreeItem;
+            }(aj.VueComponent));
+            tree.TreeItem = TreeItem;
+            new TreeItem().register();
+        })(tree = list.tree || (list.tree = {}));
+    })(list = aj.list || (aj.list = {}));
+})(aj || (aj = {}));
 
 "use strict";
-Vue.component('aj-tree', {
-    template: '<ul class="aj-tree"><aj-tree-item :model="treeData"></aj-tree-item></ul>',
-    props: {
-        apiUrl: String,
-        topNodeName: String // 根节点显示名称
-    },
-    data: function () {
-        return {
-            treeData: { name: this.topNodeName || 'TOP', children: null }
-        };
-    },
-    mounted: function () {
-        var _this = this;
-        // aj.xhr.get(this.ajResources.ctx + this.url, (j: RepsonseResult) => this.treeData.children = makeTree(j.result));
-        aj.xhr.get(this.apiUrl, function (j) { return _this.treeData.children = aj.list.tree.makeTree(j.result); });
-        // 递归组件怎么事件上报呢？通过事件 bus
-        this.BUS && this.BUS.$on('treenodeclick', function (data) { return _this.$emit('treenodeclick', data); });
-    }
-});
+
+var aj;
+(function (aj) {
+    var list;
+    (function (list) {
+        var tree;
+        (function (tree) {
+            var Tree = /** @class */ (function (_super) {
+                __extends(Tree, _super);
+                function Tree() {
+                    var _this = _super !== null && _super.apply(this, arguments) || this;
+                    _this.name = 'aj-tree';
+                    _this.template = '<ul class="aj-tree"><aj-tree-item :model="treeData"></aj-tree-item></ul>';
+                    _this.props = {
+                        apiUrl: String,
+                        topNodeName: String
+                    };
+                    /**
+                     * 根节点显示名称
+                     */
+                    _this.topNodeName = "";
+                    _this.apiUrl = "";
+                    _this.isAutoLoad = false;
+                    _this.treeData = { name: _this.topNodeName || 'TOP', children: null };
+                    return _this;
+                }
+                Tree.prototype.getData = function () {
+                    var _this = this;
+                    // @ts-ignore
+                    aj.xhr.get(this.apiUrl, function (j) { return _this.treeData.children = tree.makeTree(j.result); });
+                    // 递归组件怎么事件上报呢？通过事件 bus
+                    this.BUS && this.BUS.$on('treenodeclick', function (data) { return _this.$emit('treenodeclick', data); });
+                };
+                Tree.prototype.mounted = function () {
+                    this.getData();
+                };
+                return Tree;
+            }(aj.VueComponent));
+            tree.Tree = Tree;
+            new Tree().register();
+        })(tree = list.tree || (list.tree = {}));
+    })(list = aj.list || (aj.list = {}));
+})(aj || (aj = {}));
 
 "use strict";
 // namespace aj.user.admin {

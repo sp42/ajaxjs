@@ -26,12 +26,15 @@
 aj.widget.msgbox.close();           // 关闭</xmp></pre>
                 <button class="aj-btn" onclick="aj.alert('操作<b>成功</b>！');">Click to alert</button> &nbsp;&nbsp;&nbsp;
                 <button class="aj-btn" onclick="aj.showConfirm('操作<b>成功</b>！');">Click to confirm</button>&nbsp;&nbsp;&nbsp;
+                <button class="aj-btn" onclick="aj.widget.modal.popup('操作<b>成功</b>！');">Click to popup</button>
                 <p>例子：</p>
                 <pre class="prettyprint"><xmp>aj.alert('Hello World!');
 // 显示“确定”按钮，第二个参数为回调，可选
 aj.alert('Hello World!', ()=>alert('点击了确定按钮')); 
 // 显示“是、否”的选择按钮，第二个参数为点击“是”时候的回调，可选
-aj.showConfirm("Hello World!", ()=>alert('点击了 yes 按钮')); </xmp></pre>
+aj.showConfirm("Hello World!", ()=>alert('点击了 yes 按钮'));
+// 最简单的弹出，什么按钮的没有
+aj.widget.modal.popup('操作<b>成功</b>！');"</xmp></pre>
                 <p>所有回调函数执行之后都会关闭弹出的窗体。</p>
             </div>
             <div class="copyright">

@@ -156,6 +156,10 @@ namespace aj {
 
         public BUS: any;
 
+        public $parent: any;
+
+        public $options: any;
+
         public $destroy() { }
 
         public $emit(e: string, ...obj: any) { }
@@ -172,7 +176,7 @@ namespace aj {
             let dataFields: { [key: string]: any } = {};
 
             for (var i in this) {
-                if (i == 'constructor' || i == 'name' || i == 'register' || i == '$destroy' || i == "$emit")
+                if (i == 'constructor' || i == 'name' || i == 'register' || i == '$destroy' || i == "$emit" || i == "$options")
                     continue;
 
                 let value: any = this[i];
@@ -189,7 +193,7 @@ namespace aj {
                     dataFields[i] = value;
             }
 
-            // 注意如果 类有了 data(){}，那么 data 属性将会失效，改读取 data() {} 的
+            // 注意如果 类有了 data(){}，那么 data 属性将会失效（仅作提示用），改读取 data() {} 的
             if (!cfg.data)
                 cfg.data = () => {
                     return dataFields;

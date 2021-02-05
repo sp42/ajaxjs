@@ -130,22 +130,21 @@ namespace aj.admin.system.configParser {
 	});
 
 	Vue.component("aj-json-form", {
-		template:
-			html`<form method="POST" action=".">
-	<div v-for="control in controls">
-		<div class="label">{{control.config.name}}</div>
-		<div class="input">
-			<component v-bind:is="control" :config-obj="control.config"></component>
-			<div class="sub">{{control.config.tip}}</div>
-		</div>
-	</div>
-	<section class="aj-btnsHolder">
-		<button>
-			<img :src="ajResources.commonAsset + '/icon/save.gif'" /> 修改
-		</button>
-		<button onclick="this.up('form').reset();return false;">复 位</button>
-	</section>
-</form>`,
+		template: html`<form method="POST" action=".">
+			<div v-for="control in controls">
+				<div class="label">{{control.config.name}}</div>
+				<div class="input">
+					<component v-bind:is="control" :config-obj="control.config"></component>
+					<div class="sub">{{control.config.tip}}</div>
+				</div>
+			</div>
+			<section class="aj-btnsHolder">
+				<button>
+					<img :src="ajResources.commonAsset + '/icon/save.gif'" /> 修改
+				</button>
+				<button onclick="this.up('form').reset();return false;">复 位</button>
+			</section>
+		</form>`,
 		props: {
 			scheme: {					// 输入 JSON 数据规则
 				required: true, type: Object

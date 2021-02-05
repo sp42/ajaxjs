@@ -49,7 +49,7 @@ namespace aj.widget.modal {
         // 不应直接使用该组件，而是执行 aj.showOk
         msgbox = <MsgBox>new Vue({
             el: '.alertHolder',
-            template: `
+            template: html `
                 <div class="aj-modal hide" @click="close">
                     <div>
                         <div v-html="showText"></div>

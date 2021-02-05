@@ -154,7 +154,7 @@ var aj;
             };
             var dataFields = {};
             for (var i in this) {
-                if (i == 'constructor' || i == 'name' || i == 'register' || i == '$destroy' || i == "$emit")
+                if (i == 'constructor' || i == 'name' || i == 'register' || i == '$destroy' || i == "$emit" || i == "$options")
                     continue;
                 var value = this[i];
                 if (isVueCfg(i))
@@ -168,7 +168,7 @@ var aj;
                 else // data fiels
                     dataFields[i] = value;
             }
-            // 注意如果 类有了 data(){}，那么 data 属性将会失效，改读取 data() {} 的
+            // 注意如果 类有了 data(){}，那么 data 属性将会失效（仅作提示用），改读取 data() {} 的
             if (!cfg.data)
                 cfg.data = function () {
                     return dataFields;

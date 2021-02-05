@@ -27,25 +27,31 @@
     }
 
     Vue.component('aj-xhr-upload', {
-        template: `
+        template: html`
             <div class="aj-xhr-upload" :style="{display: buttonBottom ? 'inherit': 'flex'}">
                 <input v-if="hiddenField" type="hidden" :name="hiddenField" :value="hiddenFieldValue" />
                 <div v-if="isImgUpload">
                     <a :href="imgPlace" target="_blank">
-                        <img class="upload_img_perview" :src="(isFileSize && isExtName && imgBase64Str) ? imgBase64Str : imgPlace" />
+                        <img class="upload_img_perview"
+                            :src="(isFileSize && isExtName && imgBase64Str) ? imgBase64Str : imgPlace" />
                     </a>
                 </div>
                 <div class="pseudoFilePicker">
-                    <label :for="'uploadInput_' + radomId"><div><div>+</div>点击选择{{isImgUpload ? '图片': '文件'}}</div></label>
+                    <label :for="'uploadInput_' + radomId">
+                        <div>
+                            <div>+</div>点击选择{{isImgUpload ? '图片': '文件'}}
+                        </div>
+                    </label>
                 </div>
-                <input type="file" :name="fieldName" class="hide" :id="'uploadInput_' + radomId" 
-                    @change="onUploadInputChange" :accept="isImgUpload ? 'image/*' : accpectFileType" />
+                <input type="file" :name="fieldName" class="hide" :id="'uploadInput_' + radomId" @change="onUploadInputChange"
+                    :accept="isImgUpload ? 'image/*' : accpectFileType" />
                 <div v-if="!isFileSize || !isExtName">{{errMsg}}</div>
                 <div v-if="isFileSize && isExtName">
                     {{fileName}}<br />
-                    <button @click.prevent="doUpload" style="min-width:110px;">{{progress && progress !== 100 ? '上传中 ' + progress + '%': '上传'}}</button>
+                    <button @click.prevent="doUpload"
+                        style="min-width:110px;">{{progress && progress !== 100 ? '上传中 ' + progress + '%': '上传'}}</button>
                 </div>
-            </div>    
+            </div>
         `,
         props: {
             action: { type: String, required: true },       // 上传路径
@@ -168,7 +174,7 @@
     });
 
     // 文件头判别，看看是否为图片
-    const imgHeader: { [key: string]: string } = { "jpeg": "/9j/4", "gif": "R0lGOD", "png": "iVBORw" };
+    const imgHeader: StringJsonParam = { "jpeg": "/9j/4", "gif": "R0lGOD", "png": "iVBORw" };
 
     /**
      * 获取文件名称，只能是名称，不能获取完整的文件目录
@@ -176,8 +182,8 @@
      * @param this 
      */
     function getFileName(this: XHR_Upload): void {
-        let v: string = (<HTMLInputElement>this.$el.$('input[type=file]')).value;
-        let arr: string[] = v.split('\\');
+        let v: string = (<HTMLInputElement>this.$el.$('input[type=file]')).value,
+            arr: string[] = v.split('\\');
 
         this.fileName = <string>arr.pop()?.trim();
     }

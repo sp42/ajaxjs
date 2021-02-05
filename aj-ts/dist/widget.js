@@ -1,21 +1,28 @@
 "use strict";
+
 /**
  * 折叠菜单
  */
-;
-(function () {
-    Vue.component('aj-accordion-menu', {
-        template: '<ul class="aj-accordion-menu" @click="onClk"><slot></slot></ul>',
-        methods: {
-            onClk: function ($event) {
-                this.children = this.$el.children;
-                highlightSubItem($event);
-                var _btn = $event.target;
+var aj;
+(function (aj) {
+    var widget;
+    (function (widget) {
+        var AccordionMenu = /** @class */ (function (_super) {
+            __extends(AccordionMenu, _super);
+            function AccordionMenu() {
+                var _this = _super !== null && _super.apply(this, arguments) || this;
+                _this.name = "aj-accordion-menu";
+                _this.template = '<ul class="aj-accordion-menu" @click="onClk"><slot></slot></ul>';
+                return _this;
+            }
+            AccordionMenu.prototype.onClk = function (ev) {
+                var children = this.$el.children;
+                highlightSubItem(ev);
+                var _btn = ev.target;
                 if (_btn && _btn.tagName == 'H3' && _btn.parentNode.tagName == 'LI') {
-                    _btn = $event.target;
                     _btn = _btn.parentNode;
-                    for (var btn, i = 0, j = this.children.length; i < j; i++) {
-                        btn = this.children[i];
+                    for (var btn = void 0, i = 0, j = children.length; i < j; i++) {
+                        btn = children[i];
                         var ul = btn.querySelector('ul');
                         if (btn == _btn) {
                             if (btn.className.indexOf('pressed') != -1) {
@@ -38,99 +45,151 @@
                 }
                 else
                     return;
+            };
+            return AccordionMenu;
+        }(aj.VueComponent));
+        widget.AccordionMenu = AccordionMenu;
+        new AccordionMenu().register();
+        /**
+         * 内部子菜单的高亮
+         *
+         * @param ev
+         */
+        function highlightSubItem(ev) {
+            var _a;
+            var li, el = ev.target;
+            if (el.tagName == 'A' && el.getAttribute('target')) {
+                li = el.parentNode;
+                (_a = li.parentNode) === null || _a === void 0 ? void 0 : _a.$('li', function (_el) {
+                    if (_el == li)
+                        _el.classList.add('selected');
+                    else
+                        _el.classList.remove('selected');
+                });
             }
         }
-    });
-    /**
-     * 内部子菜单的高亮
-     *
-     * @param $event
-     */
-    function highlightSubItem($event) {
-        var _a;
-        var li, el = $event.target;
-        if (el.tagName == 'A' && el.getAttribute('target')) {
-            li = el.parentNode;
-            (_a = li.parentNode) === null || _a === void 0 ? void 0 : _a.$('li', function (_el) {
-                if (_el == li)
-                    _el.classList.add('selected');
-                else
-                    _el.classList.remove('selected');
-            });
-        }
-    }
-})();
+    })(widget = aj.widget || (aj.widget = {}));
+})(aj || (aj = {}));
 
 "use strict";
-Vue.component('aj-widget-baidu-search', {
-    template: "\n        <div class=\"aj-widget-baidu-search\"><form method=\"GET\" action=\"http://www.baidu.com/baidu\" onsubmit=\"//return g(this);\">\n            <input type=\"text\" name=\"word\" placeholder=\"\u8BF7\u8F93\u5165\u641C\u7D22\u4E4B\u5173\u952E\u5B57\" />\n            <input name=\"tn\" value=\"bds\" type=\"hidden\" />\n            <input name=\"cl\" value=\"3\" type=\"hidden\" />\n            <input name=\"ct\" value=\"2097152\" type=\"hidden\" />\n            <input name=\"si\" :value=\"getSiteDomainName\" type=\"hidden\" />\n            <div class=\"searchBtn\" onclick=\"this.parentNode.submit();\"></div>\n        </form></div>\n    ",
-    props: ['siteDomainName'],
-    computed: {
-        getSiteDomainName: function () {
-            return this.siteDomainName || location.host || document.domain;
-        }
-    }
-});
 
-"use strict";
-Vue.component("aj-expander", {
-    template: "\n        <div class=\"aj-expander\" :style=\"'height:' + (expended ? openHeight : closeHeight) + 'px;'\">\n            <div :class=\"expended ? 'closeBtn' : 'openBtn'\" @click=\"expended = !expended;\"></div>\n            <slot></slot>\n        </div>\n    ",
-    data: function () {
-        return { expended: false };
-    },
-    props: {
-        openHeight: { type: Number, "default": 200 },
-        closeHeight: { type: Number, "default": 50 }
-    }
-});
 
-"use strict";
-Vue.component('aj-process-line', {
-    template: "\n        <div class=\"aj-process-line\">\n            <div class=\"process-line\">\n                <div v-for=\"(item, index) in items\" :class=\"{current: index == current, done: index < current}\">\n                    <span>{{index + 1}}</span><p>{{item}}</p>\n                </div>\n            </div>\n        </div>    \n    ",
-    props: {
-        items: {
-            type: Array,
-            default: function () {
-                return ['Step 1', 'Step 2', 'Step 3'];
+var aj;
+(function (aj) {
+    var widget;
+    (function (widget) {
+        /**
+         * Baidu 自定义搜索
+         */
+        var BaiduSearch = /** @class */ (function (_super) {
+            __extends(BaiduSearch, _super);
+            function BaiduSearch() {
+                var _this = _super !== null && _super.apply(this, arguments) || this;
+                _this.name = 'aj-widget-baidu-search';
+                _this.template = html(__makeTemplateObject(["\n            <div class=\"aj-widget-baidu-search\">\n                <form method=\"GET\" action=\"http://www.baidu.com/baidu\" onsubmit=\"//return g(this);\">\n                    <input type=\"text\" name=\"word\" placeholder=\"\u8BF7\u8F93\u5165\u641C\u7D22\u4E4B\u5173\u952E\u5B57\" />\n                    <input name=\"tn\" value=\"bds\" type=\"hidden\" />\n                    <input name=\"cl\" value=\"3\" type=\"hidden\" />\n                    <input name=\"ct\" value=\"2097152\" type=\"hidden\" />\n                    <input name=\"si\" :value=\"getSiteDomainName\" type=\"hidden\" />\n                    <div class=\"searchBtn\" onclick=\"this.parentNode.submit();\"></div>\n                </form>\n            </div>\n        "], ["\n            <div class=\"aj-widget-baidu-search\">\n                <form method=\"GET\" action=\"http://www.baidu.com/baidu\" onsubmit=\"//return g(this);\">\n                    <input type=\"text\" name=\"word\" placeholder=\"\u8BF7\u8F93\u5165\u641C\u7D22\u4E4B\u5173\u952E\u5B57\" />\n                    <input name=\"tn\" value=\"bds\" type=\"hidden\" />\n                    <input name=\"cl\" value=\"3\" type=\"hidden\" />\n                    <input name=\"ct\" value=\"2097152\" type=\"hidden\" />\n                    <input name=\"si\" :value=\"getSiteDomainName\" type=\"hidden\" />\n                    <div class=\"searchBtn\" onclick=\"this.parentNode.submit();\"></div>\n                </form>\n            </div>\n        "]));
+                _this.siteDomainName = String;
+                _this.computed = {
+                    getSiteDomainName: function () {
+                        //@ts-ignore
+                        return this.siteDomainName || location.host || document.domain;
+                    }
+                };
+                return _this;
             }
-        }
-    },
-    data: function () {
-        return {
-            current: 0
-        };
-    },
-    methods: {
+            return BaiduSearch;
+        }(aj.VueComponent));
+        widget.BaiduSearch = BaiduSearch;
+        new BaiduSearch().register();
+    })(widget = aj.widget || (aj.widget = {}));
+})(aj || (aj = {}));
+
+"use strict";
+
+
+var aj;
+(function (aj) {
+    var widget;
+    (function (widget) {
         /**
-         *
-         * @param this
-         * @param i
+         * 展开闭合器
          */
-        go: function (i) {
-            this.current = i;
-        },
+        var Expander = /** @class */ (function (_super) {
+            __extends(Expander, _super);
+            function Expander() {
+                var _this = _super !== null && _super.apply(this, arguments) || this;
+                _this.name = "aj-expander";
+                _this.template = html(__makeTemplateObject(["\n            <div class=\"aj-expander\" :style=\"'height:' + (expended ? openHeight : closeHeight) + 'px;'\">\n                <div :class=\"expended ? 'closeBtn' : 'openBtn'\" @click=\"expended = !expended;\"></div>\n                <slot></slot>\n            </div>\n        "], ["\n            <div class=\"aj-expander\" :style=\"'height:' + (expended ? openHeight : closeHeight) + 'px;'\">\n                <div :class=\"expended ? 'closeBtn' : 'openBtn'\" @click=\"expended = !expended;\"></div>\n                <slot></slot>\n            </div>\n        "]));
+                _this.expended = false;
+                _this.openHeight = { type: Number, "default": 200 };
+                _this.closeHeight = { type: Number, "default": 50 };
+                return _this;
+            }
+            return Expander;
+        }(aj.VueComponent));
+        widget.Expander = Expander;
+        new Expander().register();
+    })(widget = aj.widget || (aj.widget = {}));
+})(aj || (aj = {}));
+
+"use strict";
+
+
+var aj;
+(function (aj) {
+    var widget;
+    (function (widget) {
         /**
-         *
-         * @param this
+         * 进度条
          */
-        perv: function () {
-            var perv = this.current - 1;
-            if (perv < 0)
-                perv = this.items.length - 1;
-            this.go(perv);
-        },
-        /**
-         *
-         * @param this `
-         */
-        next: function () {
-            var next = this.current + 1;
-            if (this.items.length == next)
-                next = 0; // 循环
-            this.go(next);
-        }
-    }
-});
+        var ProcessLine = /** @class */ (function (_super) {
+            __extends(ProcessLine, _super);
+            function ProcessLine() {
+                var _this = _super !== null && _super.apply(this, arguments) || this;
+                _this.name = 'aj-process-line';
+                _this.template = html(__makeTemplateObject(["\n            <div class=\"aj-process-line\">\n                <div class=\"process-line\">\n                    <div v-for=\"(item, index) in items\" :class=\"{current: index == current, done: index < current}\">\n                        <span>{{index + 1}}</span>\n                        <p>{{item}}</p>\n                    </div>\n                </div>\n            </div>\n        "], ["\n            <div class=\"aj-process-line\">\n                <div class=\"process-line\">\n                    <div v-for=\"(item, index) in items\" :class=\"{current: index == current, done: index < current}\">\n                        <span>{{index + 1}}</span>\n                        <p>{{item}}</p>\n                    </div>\n                </div>\n            </div>\n        "]));
+                _this.props = {
+                    items: {
+                        type: Array,
+                        default: function () {
+                            return ['Step 1', 'Step 2', 'Step 3'];
+                        }
+                    }
+                };
+                _this.items = [];
+                _this.current = 0;
+                return _this;
+            }
+            /**
+             *
+             * @param i
+             */
+            ProcessLine.prototype.go = function (i) {
+                this.current = i;
+            };
+            /**
+             *
+             */
+            ProcessLine.prototype.perv = function () {
+                var perv = this.current - 1;
+                if (perv < 0)
+                    perv = this.items.length - 1;
+                this.go(perv);
+            };
+            /**
+             *
+             */
+            ProcessLine.prototype.next = function () {
+                var next = this.current + 1;
+                if (this.items.length == next)
+                    next = 0; // 循环
+                this.go(next);
+            };
+            return ProcessLine;
+        }(aj.VueComponent));
+        widget.ProcessLine = ProcessLine;
+        new ProcessLine().register();
+    })(widget = aj.widget || (aj.widget = {}));
+})(aj || (aj = {}));
 
 "use strict";
 /**
@@ -202,22 +261,47 @@ var aj;
 })(aj || (aj = {}));
 
 "use strict";
-Vue.component('aj-avatar', {
-    template: "\n        <a :href=\"avatar\" target=\"_blank\">\n            <img :src=\"avatar\" style=\"max-width:50px;max-height:60px;vertical-align: middle;\" @mouseenter=\"mouseEnter\" @mouseleave=\"mouseLeave\" />\n        </a>\n    ",
-    props: {
-        avatar: { type: String, required: true }
-    },
-    methods: {
-        mouseEnter: function () {
-            if (aj.img.imageEnlarger)
-                aj.img.imageEnlarger.imgUrl = this.avatar;
-        },
-        mouseLeave: function () {
-            if (aj.img.imageEnlarger)
-                aj.img.imageEnlarger.imgUrl = null;
-        }
-    }
-});
+
+
+var aj;
+(function (aj) {
+    var widget;
+    (function (widget) {
+        var img;
+        (function (img) {
+            /**
+             * 显示头像
+             */
+            var Avatar = /** @class */ (function (_super) {
+                __extends(Avatar, _super);
+                function Avatar() {
+                    var _this = _super !== null && _super.apply(this, arguments) || this;
+                    _this.name = 'aj-avatar';
+                    _this.template = html(__makeTemplateObject(["\n            <a :href=\"avatar\" target=\"_blank\">\n                <img :src=\"avatar\" style=\"max-width:50px;max-height:60px;vertical-align: middle;\" \n                    @mouseenter=\"mouseEnter\"\n                    @mouseleave=\"mouseLeave\" />\n            </a>\n        "], ["\n            <a :href=\"avatar\" target=\"_blank\">\n                <img :src=\"avatar\" style=\"max-width:50px;max-height:60px;vertical-align: middle;\" \n                    @mouseenter=\"mouseEnter\"\n                    @mouseleave=\"mouseLeave\" />\n            </a>\n        "]));
+                    _this.props = {
+                        avatar: { type: String, required: true }
+                    };
+                    /**
+                     * 头像图片地址
+                     */
+                    _this.avatar = "";
+                    return _this;
+                }
+                Avatar.prototype.mouseEnter = function () {
+                    if (img.imageEnlarger)
+                        img.imageEnlarger.imgUrl = this.avatar;
+                };
+                Avatar.prototype.mouseLeave = function () {
+                    if (img.imageEnlarger)
+                        img.imageEnlarger.imgUrl = null;
+                };
+                return Avatar;
+            }(aj.VueComponent));
+            img.Avatar = Avatar;
+            new Avatar().register();
+        })(img = widget.img || (widget.img = {}));
+    })(widget = aj.widget || (aj.widget = {}));
+})(aj || (aj = {}));
 
 "use strict";
 var aj;
@@ -485,59 +569,80 @@ var aj;
 })(aj || (aj = {}));
 
 "use strict";
-Vue.component('aj-layer', {
-    template: '<div class="aj-modal hide" @click="close"><div><slot></slot></div></div>',
-    props: {
-        notCloseWhenTap: Boolean,
-        cleanAfterClose: Boolean // 关闭是否清除
-    },
-    methods: {
-        /**
-         * 显示浮层
-         *
-         * @param this
-         * @param cfg
-         */
-        show: function (cfg) {
-            var _this = this;
-            var my = Number(getComputedStyle(this.$el).zIndex); // 保证最后显示的总在最前面
-            document.body.$('.aj-modal', function (i) {
-                if (i != _this.$el) {
-                    var o = Number(getComputedStyle(i).zIndex);
-                    if (o >= my)
-                        _this.$el.style.zIndex = String(o + 1);
+
+var aj;
+(function (aj) {
+    var widget;
+    (function (widget) {
+        var modal;
+        (function (modal) {
+            /**
+             * 浮層組件，通常要復用這個組件
+             */
+            var Layer = /** @class */ (function (_super) {
+                __extends(Layer, _super);
+                function Layer() {
+                    var _this = _super !== null && _super.apply(this, arguments) || this;
+                    _this.name = "aj-layer";
+                    _this.template = '<div class="aj-modal hide" @click="close"><div><slot></slot></div></div>';
+                    _this.props = {
+                        notCloseWhenTap: Boolean,
+                        cleanAfterClose: Boolean // 关闭是否清除
+                    };
+                    _this.afterClose = function () { };
+                    _this.notCloseWhenTap = false;
+                    _this.cleanAfterClose = false;
+                    return _this;
                 }
-            });
-            this.$el.classList.remove('hide');
-            this.BUS && this.BUS.$emit('aj-layer-closed', this);
-            if (cfg && cfg.afterClose)
-                this.afterClose = cfg && cfg.afterClose;
-        },
-        /**
-         * 关闭浮层
-         *
-         * @param this
-         * @param e
-         */
-        close: function (e) {
-            var isClosed = false;
-            if (!e) {
-                isClosed = aj.widget.msgbox.$options.methods.close.call(this, {
-                    target: document.body.$('.aj-modal')
-                });
-            }
-            else {
-                // @ts-ignore
-                if (e.isForceClose || !this.notCloseWhenTap)
-                    isClosed = aj.widget.msgbox.$options.methods.close.apply(this, arguments);
-            }
-            if (isClosed && this.cleanAfterClose) {
-                this.$el.parentNode && this.$el.parentNode.removeChild(this.$el);
-                this.$destroy();
-            }
-        }
-    }
-});
+                /**
+                 * 显示浮层
+                 *
+                 * @param cfg
+                 */
+                Layer.prototype.show = function (cfg) {
+                    var _this = this;
+                    var my = Number(getComputedStyle(this.$el).zIndex); // 保证最后显示的总在最前面
+                    document.body.$('.aj-modal', function (i) {
+                        if (i != _this.$el) {
+                            var o = Number(getComputedStyle(i).zIndex);
+                            if (o >= my)
+                                _this.$el.style.zIndex = String(o + 1);
+                        }
+                    });
+                    this.$el.classList.remove('hide');
+                    this.BUS && this.BUS.$emit('aj-layer-closed', this);
+                    if (cfg && cfg.afterClose)
+                        this.afterClose = cfg && cfg.afterClose;
+                };
+                /**
+                 * 关闭浮层
+                 *
+                 * @param ev
+                 */
+                Layer.prototype.close = function (ev) {
+                    var isClosed = false;
+                    if (!ev) {
+                        isClosed = aj.widget.modal.msgbox.$options.methods.close.call(this, {
+                            target: document.body.$('.aj-modal')
+                        });
+                    }
+                    else {
+                        // @ts-ignore
+                        if (e.isForceClose || !this.notCloseWhenTap)
+                            isClosed = aj.widget.modal.msgbox.$options.methods.close.apply(this, arguments);
+                    }
+                    if (isClosed && this.cleanAfterClose) {
+                        this.$el.parentNode && this.$el.parentNode.removeChild(this.$el);
+                        this.$destroy();
+                    }
+                };
+                return Layer;
+            }(aj.VueComponent));
+            modal.Layer = Layer;
+            new Layer().register();
+        })(modal = widget.modal || (widget.modal = {}));
+    })(widget = aj.widget || (aj.widget = {}));
+})(aj || (aj = {}));
 
 "use strict";
 /**
@@ -695,34 +800,50 @@ var aj;
 })(aj || (aj = {}));
 
 "use strict";
+
+
 /**
  * 调整正文字体大小
  */
-Vue.component('aj-adjust-font-size', {
-    template: "\n        <div class=\"aj-adjust-font-size\">\n            <span>\u5B57\u4F53\u5927\u5C0F</span>\n            <ul @click=\"onClk\">\n                <li><label><input type=\"radio\" name=\"fontSize\" /> \u5C0F</label></li>\n                <li><label><input type=\"radio\" name=\"fontSize\" /> \u4E2D</label></li>\n                <li><label><input type=\"radio\" name=\"fontSize\" /> \u5927</label></li>\n            </ul>\n        </div>\n    ",
-    props: {
-        articleTarget: { type: String, default: 'article p' } // 正文所在的位置，通过 CSS Selector 定位
-    },
-    methods: {
-        onClk: function (e) {
-            var _this = this;
-            var el = e.target;
-            var setFontSize = function (fontSize) {
-                document.body.$(_this.$props.articleTarget, function (p) { return p.style.fontSize = fontSize; });
-            };
-            if (el.tagName == 'LABEL' || el.tagName == 'input') {
-                if (el.tagName != 'LABEL')
-                    el = el.up('label');
-                if (el.innerHTML.indexOf('大') != -1)
-                    setFontSize('12pt');
-                else if (el.innerHTML.indexOf('中') != -1)
-                    setFontSize('10.5pt');
-                else if (el.innerHTML.indexOf('小') != -1)
-                    setFontSize('9pt');
-            }
-        }
-    }
-});
+var aj;
+(function (aj) {
+    var widget;
+    (function (widget) {
+        var page;
+        (function (page) {
+            var AdjustFontSize = /** @class */ (function (_super) {
+                __extends(AdjustFontSize, _super);
+                function AdjustFontSize() {
+                    var _this = _super !== null && _super.apply(this, arguments) || this;
+                    _this.name = 'aj-adjust-font-size';
+                    _this.template = html(__makeTemplateObject(["\n            <div class=\"aj-adjust-font-size\">\n                <span>\u5B57\u4F53\u5927\u5C0F</span>\n                <ul @click=\"onClk\">\n                    <li><label><input type=\"radio\" name=\"fontSize\" /> \u5C0F</label></li>\n                    <li><label><input type=\"radio\" name=\"fontSize\" /> \u4E2D</label></li>\n                    <li><label><input type=\"radio\" name=\"fontSize\" /> \u5927</label></li>\n                </ul>\n            </div>\n        "], ["\n            <div class=\"aj-adjust-font-size\">\n                <span>\u5B57\u4F53\u5927\u5C0F</span>\n                <ul @click=\"onClk\">\n                    <li><label><input type=\"radio\" name=\"fontSize\" /> \u5C0F</label></li>\n                    <li><label><input type=\"radio\" name=\"fontSize\" /> \u4E2D</label></li>\n                    <li><label><input type=\"radio\" name=\"fontSize\" /> \u5927</label></li>\n                </ul>\n            </div>\n        "]));
+                    _this.articleTarget = { type: String, default: 'article p' }; // 正文所在的位置，通过 CSS Selector 定位
+                    return _this;
+                }
+                AdjustFontSize.prototype.onClk = function (ev) {
+                    var _this = this;
+                    var el = ev.target;
+                    var setFontSize = function (fontSize) {
+                        document.body.$(_this.$props.articleTarget, function (p) { return p.style.fontSize = fontSize; });
+                    };
+                    if (el.tagName == 'LABEL' || el.tagName == 'input') {
+                        if (el.tagName != 'LABEL')
+                            el = el.up('label');
+                        if (el.innerHTML.indexOf('大') != -1)
+                            setFontSize('12pt');
+                        else if (el.innerHTML.indexOf('中') != -1)
+                            setFontSize('10.5pt');
+                        else if (el.innerHTML.indexOf('小') != -1)
+                            setFontSize('9pt');
+                    }
+                };
+                return AdjustFontSize;
+            }(aj.VueComponent));
+            page.AdjustFontSize = AdjustFontSize;
+            new AdjustFontSize().register();
+        })(page = widget.page || (widget.page = {}));
+    })(widget = aj.widget || (aj.widget = {}));
+})(aj || (aj = {}));
 
 "use strict";
 var aj;
@@ -734,8 +855,7 @@ var aj;
          *  回到顶部  <a href="###" @click="go">回到顶部</a>
          */
         function back2top() {
-            var top = 0;
-            var speed = 0;
+            var top = 0, speed = 0;
             back2topTimerId && window.clearInterval(back2topTimerId);
             back2topTimerId = window.setInterval(function () {
                 top = document.documentElement.scrollTop || document.body.scrollTop;

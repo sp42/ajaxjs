@@ -12,8 +12,8 @@ namespace aj.fb {
 			//aj.xhr.get('/test-shop/admin/DataBaseShowStru/showTables/', json => this.tables = json.result);
 		},
 		methods: {
-			tableSelect(e): void {
-				if (e.target.selectedIndex === 0)
+			tableSelect(ev:Event): void {
+				if (ev.target.selectedIndex === 0)
 					return;
 
 				var tableName = e.target.selectedOptions[0].innerHTML;

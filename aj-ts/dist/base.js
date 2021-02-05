@@ -1,6 +1,4 @@
 "use strict";
-// VS Code 高亮 HTML 用
-var html = String;
 Element.prototype.$ = function (cssSelector, fn) {
     if (typeof fn == 'function') {
         var children = this.querySelectorAll(cssSelector);
@@ -189,22 +187,90 @@ var aj;
     aj.SELECTED = "selected";
     aj.SELECTED_CSS = "." + aj.SELECTED;
     /**
+     * 判断是否 Vue 配置字段
+     *
+     * @param name
+     */
+    function isVueCfg(name) {
+        return name == 'template' || name == 'data' || name == 'mixins' || name == 'computed' || name == 'mounted' || name == "watch";
+    }
+    /**
+     *
+     * @param name
+     * @param props
+     */
+    function isPropsField(name, props) {
+        if (props && props[name])
+            return true;
+        else
+            return false;
+    }
+    /**
+     * 判断是否 props 字段
+     *
+     * @param value
+     */
+    function isSimplePropsField(value) {
+        console.log(value);
+        if (value === String || value === Boolean || value === Number || value.type)
+            return true;
+        else
+            return false;
+    }
+    /**
      * 为让 Vue 组件使用 Class 风格，通过一个类似语法糖的转换器
      * 这是实验性质的
      */
     var VueComponent = /** @class */ (function () {
         function VueComponent() {
+            this.$el = document.body;
+            this.props = {};
         }
+        VueComponent.prototype.$destroy = function () { };
+        VueComponent.prototype.$emit = function (e) {
+            var obj = [];
+            for (var _i = 1; _i < arguments.length; _i++) {
+                obj[_i - 1] = arguments[_i];
+            }
+        };
         /**
          * 转换为 ClassAPI
          */
-        VueComponent.prototype.initComp = function () {
-            Vue.component(this.name, this);
+        VueComponent.prototype.register = function (instanceFields) {
+            var cfg = {
+                props: {},
+                methods: {}
+            };
+            var dataFields = {};
+            for (var i in this) {
+                if (i == 'constructor' || i == 'name' || i == 'register' || i == '$destroy' || i == "$emit" || i == "$options")
+                    continue;
+                var value = this[i];
+                if (isVueCfg(i))
+                    cfg[i] = value;
+                else if (isSimplePropsField(value))
+                    cfg.props[i] = value;
+                else if (typeof value == 'function')
+                    cfg.methods[i] = value;
+                else if (isPropsField(i, this.props))
+                    cfg.props[i] = this.props[i];
+                else // data fiels
+                    dataFields[i] = value;
+            }
+            // 注意如果 类有了 data(){}，那么 data 属性将会失效（仅作提示用），改读取 data() {} 的
+            if (!cfg.data)
+                cfg.data = function () {
+                    return dataFields;
+                };
+            console.log(cfg);
+            Vue.component(this.name, cfg);
         };
         return VueComponent;
     }());
     aj.VueComponent = VueComponent;
 })(aj || (aj = {}));
+// VS Code 高亮 HTML 用
+var html = String;
 
 "use strict";
 /*
@@ -435,3 +501,22 @@ var aj;
         }
     })(xhr = aj.xhr || (aj.xhr = {}));
 })(aj || (aj = {}));
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
