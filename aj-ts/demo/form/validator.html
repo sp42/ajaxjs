@@ -50,7 +50,7 @@
                                 电子邮件：<span class="required-note">*</span>
                             </dt>
                             <dd>
-                                <input type="text" name="username" placeholder="请输入电子邮件" data-regexp="email"
+                                <input type="email" name="username" placeholder="请输入电子邮件" required
                                     data-note="邮件可用于登录和查找密码等；不能与现有的邮件相同；注册后可以修改；" data-note2="推荐使用国内邮箱，如 QQ、163 等的邮箱" />
                             </dd>
                         </label>
@@ -158,6 +158,12 @@
         </div>
     </div>
     <script src="../common/demo.js"></script>
+    <script src="../../dist/base/aj.js"></script>
+    <script src="../../dist/base/prototype.js"></script>
+    <script src="../../dist/form/validator.js"></script>
+    <script>
+        new aj.form.Validator(document.querySelector("form"));
+    </script>
 </body>
 
 </html>

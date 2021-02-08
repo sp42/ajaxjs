@@ -132,7 +132,7 @@ namespace aj {
      */
     function isSimplePropsField(value: any): boolean {
         console.log(value)
-        if (value === String || value === Boolean || value === Number || value.type)
+        if (value === String || value === Boolean || value === Number || value && value.type)
             return true;
         else
             return false;
@@ -148,11 +148,11 @@ namespace aj {
          */
         abstract name: string;
 
-        $el: HTMLElement = document.body;
+        public $el: HTMLElement = document.body;
 
         public $props: any;
 
-        props: { [key: string]: any } = {};
+        public props: { [key: string]: any } = {};
 
         public BUS: any;
 
@@ -176,7 +176,7 @@ namespace aj {
             let dataFields: { [key: string]: any } = {};
 
             for (var i in this) {
-                if (i == 'constructor' || i == 'name' || i == 'register' || i == '$destroy' || i == "$emit" || i == "$options")
+                if (i == 'constructor' || i == 'name' || i == 'register' || i == '$destroy' ||  i == "$el" ||i == "$emit" || i == "$options")
                     continue;
 
                 let value: any = this[i];

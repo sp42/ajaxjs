@@ -301,10 +301,6 @@
 }
 .aj-form .error-message {
   color: red;
-  padding-left: 1%;
-  position: absolute;
-  right: -100px;
-  top: 0;
 }
 @media screen and (max-width: 480px) {
   .aj-form dt {
@@ -544,10 +540,6 @@
 }
 .admin-entry-form > form .error-message {
   color: red;
-  padding-left: 1%;
-  position: absolute;
-  right: -100px;
-  top: 0;
 }
 .admin-entry-form > form > div {
   padding: 1% 2%;

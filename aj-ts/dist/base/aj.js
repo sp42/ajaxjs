@@ -123,7 +123,7 @@ var aj;
      */
     function isSimplePropsField(value) {
         console.log(value);
-        if (value === String || value === Boolean || value === Number || value.type)
+        if (value === String || value === Boolean || value === Number || value && value.type)
             return true;
         else
             return false;
@@ -154,7 +154,7 @@ var aj;
             };
             var dataFields = {};
             for (var i in this) {
-                if (i == 'constructor' || i == 'name' || i == 'register' || i == '$destroy' || i == "$emit" || i == "$options")
+                if (i == 'constructor' || i == 'name' || i == 'register' || i == '$destroy' || i == "$el" || i == "$emit" || i == "$options")
                     continue;
                 var value = this[i];
                 if (isVueCfg(i))

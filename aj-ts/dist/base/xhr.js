@@ -134,8 +134,8 @@ var aj;
         /**
          * 初始化 AJAX 表单
          *
-         * @param form  表单元素，可以是 CSS 选择符，或者是 HTML元素
-         * @param cb    回调函数
+         * @param form  表单元素，可以是 CSS 选择符，或者是 HTML 元素
+         * @param cb    回调函数，可选的
          * @param cfg   表单请求的配置参数，可选的
          */
         function form(form, cb, cfg) {
@@ -147,12 +147,10 @@ var aj;
                 form = document.body.$(form);
             if (!form.action)
                 throw '请在 form 表单中指定 action 属性。Please fill the url in ACTION attribute.';
-            !cfg.noFormValid && aj.form.Validator(form);
-            if (cfg.googleReCAPTCHA) { // 加载脚本
-                var script = document.body.$("#googleReCAPTCHA");
-                if (!script)
-                    aj.loadScript("https://www.recaptcha.net/recaptcha/api.js?render=" + cfg.googleReCAPTCHA, 'googleReCAPTCHA');
-            }
+            if (!cfg.noFormValid)
+                new aj.form.Validator(form);
+            if (cfg.googleReCAPTCHA && !document.body.$("#googleReCAPTCHA")) // 加载脚本
+                aj.loadScript("https://www.recaptcha.net/recaptcha/api.js?render=" + cfg.googleReCAPTCHA, 'googleReCAPTCHA');
             // @ts-ignore
             form.addEventListener('submit', formSubmit.delegate(null, cb, cfg));
             var returnBtn = form.$('button.returnBtn'); // shorthand for back btn
@@ -163,15 +161,13 @@ var aj;
         /**
          * 执行表单的 XHR 请求
          * 通过拦截表单的 submit 事件触发。
-         *
          * @param ev    事件对象
          * @param cb    回调函数
          * @param cfg   表单请求的配置参数
          */
         function formSubmit(ev, cb, cfg) {
             ev.preventDefault(); // 禁止 form 默认提交
-            var form = ev.target;
-            var method = form.getAttribute('method'); // form.method always GET, so form.getAttribute('method') instead
+            var form = ev.target, method = form.getAttribute('method'); // form.method always GET, so form.getAttribute('method') instead
             if (method)
                 method = method.toLowerCase();
             cfg.method = method || cfg.method || 'post';
@@ -211,7 +207,7 @@ var aj;
             history.back();
         }
         /**
-         * 表单序列化，兼容旧浏览器和 H5 FormData，返回 JSON
+         * 表单序列化，返回 JSON
          *
          * @param form  表单元素
          * @param cfg   是否有忽略的字段
