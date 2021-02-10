@@ -120,7 +120,7 @@
                                 <span class="required-note">*</span>确认密码 :
                             </dt>
                             <dd>
-                                <input type="password" name="password" />
+                                <input type="password" name="password" minlength="6" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" />
                             </dd>
                         </label>
                     </dl>
@@ -131,7 +131,7 @@
                                 <span class="required-note">*</span>验证码：
                             </dt>
                             <dd>
-                                <input type="text" data-regexp="integer" required />
+                                <input type="number" pattern="[-+]?[0-9]" required />
                             </dd>
                         </label>
                     </dl>
