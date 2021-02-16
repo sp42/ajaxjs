@@ -6,7 +6,7 @@ const resMime = require('./resMime.js'); //引入自定义模块，模块主要�
 
 const config = {
     port: 8888,
-    webRoot: 'C:\\project\\aj-ts'
+    webRoot: require('os').type() == 'Darwin' ? '/Users/xinzhang/dev/project/aj-ts/' : 'C:\\project\\aj-ts'
 };
 const server = http.createServer((req, res) => {    // http.createServer()创建服务器
     let pathName = url.parse(req.url).pathname;     // 获取req.url,并且转换请求的路径
