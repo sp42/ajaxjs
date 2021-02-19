@@ -13,6 +13,7 @@ body.admin-shell .memberNav {
   display: none;
 }
 body.admin-shell header {
+  max-width: inherit;
   width: 100%;
   height: 5%;
   border-top: 1px solid white;
