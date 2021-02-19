@@ -131,7 +131,7 @@ namespace aj {
      * @param value 
      */
     function isSimplePropsField(value: any): boolean {
-        console.log(value)
+        // console.log(value)
         if (value === String || value === Boolean || value === Number || value && value.type)
             return true;
         else
@@ -199,7 +199,7 @@ namespace aj {
                     return dataFields;
                 }
 
-            console.log(cfg)
+            // console.log(cfg)
 
             Vue.component(this.name, cfg);
         }

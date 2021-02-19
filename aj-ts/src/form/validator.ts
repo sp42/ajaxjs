@@ -75,7 +75,7 @@ namespace aj.form {
             err.el.classList.add('error'); // 将错误类添加到字段
 
             // 检查错误消息字段是否已经存在 如果没有, 就创建一个
-            let message = err.el.form.$('.error-message#error-for-' + id);
+            let message = err.el.form.$(`.error-message#error-for-${id}`);
             if (!message) {
                 message = document.createElement('div');
                 message.className = 'error-message';
@@ -105,7 +105,7 @@ namespace aj.form {
             el.classList.remove('error');            // 删除字段的错误类
             el.removeAttribute('aria-describedby');  // 移除字段的 ARIA role
 
-            let message: HTMLElement | null = <HTMLElement | null>el.form.$('.error-message#error-for-' + id + ''); // 检查 DOM 中是否有错误消息
+            let message: HTMLElement | null = <HTMLElement | null>el.form.$(`.error-message#error-for-${id}`); // 检查 DOM 中是否有错误消息
             if (message) {
                 message.innerHTML = ''; // 如果有错误消息就隐藏它
                 message.classList.add('hide');

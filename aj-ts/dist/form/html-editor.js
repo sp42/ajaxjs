@@ -31,7 +31,6 @@ var aj;
                 var _this = _super !== null && _super.apply(this, arguments) || this;
                 _this.name = "aj-form-html-editor";
                 _this.template = html(__makeTemplateObject(["\n            <div class=\"aj-form-html-editor\">\n                <ul class=\"toolbar\" @click=\"onToolBarClk\">\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u4F53\" class=\"fa-font\"></i>\n                        <div class=\"fontfamilyChoser\" @click=\"onFontfamilyChoserClk\">\n                            <a style=\"font-family: '\u5B8B\u4F53'\">\u5B8B\u4F53</a>\n                            <a style=\"font-family: '\u9ED1\u4F53'\">\u9ED1\u4F53</a>\n                            <a style=\"font-family: '\u6977\u4F53'\">\u6977\u4F53</a>\n                            <a style=\"font-family: '\u96B6\u4E66'\">\u96B6\u4E66</a>\n                            <a style=\"font-family: '\u5E7C\u5706'\">\u5E7C\u5706</a>\n                            <a style=\"font-family: 'Microsoft YaHei'\">Microsoft YaHei</a>\n                            <a style=\"font-family: Arial\">Arial</a>\n                            <a style=\"font-family: 'Arial Narrow'\">Arial Narrow</a>\n                            <a style=\"font-family: 'Arial Black'\">Arial Black</a>\n                            <a style=\"font-family: 'Comic Sans MS'\">Comic Sans MS</a>\n                            <a style=\"font-family: Courier\">Courier</a>\n                            <a style=\"font-family: System\">System</a>\n                            <a style=\"font-family: 'Times New Roman'\">Times New Roman</a>\n                            <a style=\"font-family: Verdana\">Verdana</a>\n                        </div>\n                    </li>\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u53F7\" class=\"fa-header\"></i>\n                        <div class=\"fontsizeChoser\" @click=\"onFontsizeChoserClk\">\n                            <a style=\"font-size: xx-small; \">\u6781\u5C0F</a>\n                            <a style=\"font-size: x-small;  \">\u7279\u5C0F</a>\n                            <a style=\"font-size: small;    \">\u5C0F</a>\n                            <a style=\"font-size: medium;   \">\u4E2D</a>\n                            <a style=\"font-size: large;    \">\u5927</a>\n                            <a style=\"font-size: x-large;  \">\u7279\u5927</a>\n                            <a style=\"font-size: xx-large; line-height: 140%\">\u6781\u5927</a>\n                        </div>\n                    </li>\n                    <li><i title=\"\u52A0\u7C97\" class=\"bold fa-bold\"></i></li>\n                    <li><i title=\"\u659C\u4F53\" class=\"italic fa-italic\"></i></li>\n                    <li><i title=\"\u4E0B\u5212\u7EBF\" class=\"underline fa-underline\"></i></li>\n                    <li><i title=\"\u5DE6\u5BF9\u9F50\" class=\"justifyleft fa-align-left\"></i></li>\n                    <li><i title=\"\u4E2D\u95F4\u5BF9\u9F50\" class=\"justifycenter fa-align-center\"></i></li>\n                    <li><i title=\"\u53F3\u5BF9\u9F50\" class=\"justifyright fa-align-right\"></i></li>\n                    <li><i title=\"\u6570\u5B57\u7F16\u53F7\" class=\"insertorderedlist fa-list-ol\"></i></li>\n                    <li><i title=\"\u9879\u76EE\u7F16\u53F7\" class=\"insertunorderedlist fa-list-ul\"></i></li>\n                    <li><i title=\"\u589E\u52A0\u7F29\u8FDB\" class=\"outdent fa-outdent\"></i></li>\n                    <li><i title=\"\u51CF\u5C11\u7F29\u8FDB\" class=\"indent fa-indent\"></i></li>\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u4F53\u989C\u8272\" class=\"fa-paint-brush\"></i>\n                        <div class=\"fontColor colorPicker\" v-html=\"createColorPickerHTML()\" @click=\"onFontColorPicker\"></div>\n                    </li>\n                    <li class=\"dorpdown\">\n                        <i title=\"\u80CC\u666F\u989C\u8272\" class=\"fa-pencil\"></i>\n                        <div class=\"bgColor colorPicker\" v-html=\"createColorPickerHTML()\" @click=\"onFontBgColorPicker\"></div>\n                    </li>\n                    <li><i title=\"\u589E\u52A0\u94FE\u63A5\" class=\"createLink fa-link\"></i></li>\n                    <li><i title=\"\u589E\u52A0\u56FE\u7247\" class=\"insertImage fa-file-image-o\"></i></li>\n                    <li><i title=\"\u4E00\u952E\u5B58\u56FE\" class=\"saveRemoteImage2Local fa-hdd-o\"></i></li>\n                    <li><i title=\"\u6E05\u7406 HTML\" class=\"cleanHTML fa-eraser\"></i></li>\n                    <li><i title=\"\u5207\u6362\u5230\u4EE3\u7801\" class=\"switchMode fa-code\"></i></li>\n                </ul>\n            \n                <div class=\"editorBody\">\n                    <iframe srcdoc=\"<html><body></body></html>\"></iframe>\n                    <slot></slot>\n                </div>\n            </div>\n        "], ["\n            <div class=\"aj-form-html-editor\">\n                <ul class=\"toolbar\" @click=\"onToolBarClk\">\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u4F53\" class=\"fa-font\"></i>\n                        <div class=\"fontfamilyChoser\" @click=\"onFontfamilyChoserClk\">\n                            <a style=\"font-family: '\u5B8B\u4F53'\">\u5B8B\u4F53</a>\n                            <a style=\"font-family: '\u9ED1\u4F53'\">\u9ED1\u4F53</a>\n                            <a style=\"font-family: '\u6977\u4F53'\">\u6977\u4F53</a>\n                            <a style=\"font-family: '\u96B6\u4E66'\">\u96B6\u4E66</a>\n                            <a style=\"font-family: '\u5E7C\u5706'\">\u5E7C\u5706</a>\n                            <a style=\"font-family: 'Microsoft YaHei'\">Microsoft YaHei</a>\n                            <a style=\"font-family: Arial\">Arial</a>\n                            <a style=\"font-family: 'Arial Narrow'\">Arial Narrow</a>\n                            <a style=\"font-family: 'Arial Black'\">Arial Black</a>\n                            <a style=\"font-family: 'Comic Sans MS'\">Comic Sans MS</a>\n                            <a style=\"font-family: Courier\">Courier</a>\n                            <a style=\"font-family: System\">System</a>\n                            <a style=\"font-family: 'Times New Roman'\">Times New Roman</a>\n                            <a style=\"font-family: Verdana\">Verdana</a>\n                        </div>\n                    </li>\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u53F7\" class=\"fa-header\"></i>\n                        <div class=\"fontsizeChoser\" @click=\"onFontsizeChoserClk\">\n                            <a style=\"font-size: xx-small; \">\u6781\u5C0F</a>\n                            <a style=\"font-size: x-small;  \">\u7279\u5C0F</a>\n                            <a style=\"font-size: small;    \">\u5C0F</a>\n                            <a style=\"font-size: medium;   \">\u4E2D</a>\n                            <a style=\"font-size: large;    \">\u5927</a>\n                            <a style=\"font-size: x-large;  \">\u7279\u5927</a>\n                            <a style=\"font-size: xx-large; line-height: 140%\">\u6781\u5927</a>\n                        </div>\n                    </li>\n                    <li><i title=\"\u52A0\u7C97\" class=\"bold fa-bold\"></i></li>\n                    <li><i title=\"\u659C\u4F53\" class=\"italic fa-italic\"></i></li>\n                    <li><i title=\"\u4E0B\u5212\u7EBF\" class=\"underline fa-underline\"></i></li>\n                    <li><i title=\"\u5DE6\u5BF9\u9F50\" class=\"justifyleft fa-align-left\"></i></li>\n                    <li><i title=\"\u4E2D\u95F4\u5BF9\u9F50\" class=\"justifycenter fa-align-center\"></i></li>\n                    <li><i title=\"\u53F3\u5BF9\u9F50\" class=\"justifyright fa-align-right\"></i></li>\n                    <li><i title=\"\u6570\u5B57\u7F16\u53F7\" class=\"insertorderedlist fa-list-ol\"></i></li>\n                    <li><i title=\"\u9879\u76EE\u7F16\u53F7\" class=\"insertunorderedlist fa-list-ul\"></i></li>\n                    <li><i title=\"\u589E\u52A0\u7F29\u8FDB\" class=\"outdent fa-outdent\"></i></li>\n                    <li><i title=\"\u51CF\u5C11\u7F29\u8FDB\" class=\"indent fa-indent\"></i></li>\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u4F53\u989C\u8272\" class=\"fa-paint-brush\"></i>\n                        <div class=\"fontColor colorPicker\" v-html=\"createColorPickerHTML()\" @click=\"onFontColorPicker\"></div>\n                    </li>\n                    <li class=\"dorpdown\">\n                        <i title=\"\u80CC\u666F\u989C\u8272\" class=\"fa-pencil\"></i>\n                        <div class=\"bgColor colorPicker\" v-html=\"createColorPickerHTML()\" @click=\"onFontBgColorPicker\"></div>\n                    </li>\n                    <li><i title=\"\u589E\u52A0\u94FE\u63A5\" class=\"createLink fa-link\"></i></li>\n                    <li><i title=\"\u589E\u52A0\u56FE\u7247\" class=\"insertImage fa-file-image-o\"></i></li>\n                    <li><i title=\"\u4E00\u952E\u5B58\u56FE\" class=\"saveRemoteImage2Local fa-hdd-o\"></i></li>\n                    <li><i title=\"\u6E05\u7406 HTML\" class=\"cleanHTML fa-eraser\"></i></li>\n                    <li><i title=\"\u5207\u6362\u5230\u4EE3\u7801\" class=\"switchMode fa-code\"></i></li>\n                </ul>\n            \n                <div class=\"editorBody\">\n                    <iframe srcdoc=\"<html><body></body></html>\"></iframe>\n                    <slot></slot>\n                </div>\n            </div>\n        "]));
-                // <iframe :src="ajResources.commonAsset + '/resources/htmleditor_iframe.jsp?basePath=' + basePath"></iframe>
                 _this.props = {
                     fieldName: { type: String, required: true },
                     content: { type: String, required: false },
@@ -44,29 +43,78 @@ var aj;
                  * 图片上传路径
                  */
                 _this.uploadImageActionUrl = "";
-                _this.iframeEl = document.body;
-                _this.sourceEditor = document.body;
-                _this.iframeWin = window;
-                _this.iframeDoc = document;
-                _this.mode = "iframe";
                 _this.toolbarEl = document.body;
+                _this.iframeEl = document.body;
+                _this.iframeDoc = document;
+                _this.sourceEditor = document.body;
+                _this.mode = "iframe";
                 return _this;
             }
             HtmlEditor.prototype.mounted = function () {
                 var _this = this;
                 var el = this.$el;
-                this.iframeEl = el.$('iframe');
-                this.sourceEditor = el.$('textarea');
-                this.iframeWin = this.iframeEl.contentWindow;
                 this.mode = 'iframe'; // 当前可视化编辑 iframe|textarea
                 this.toolbarEl = el.$('.toolbar');
+                this.iframeEl = el.$('iframe');
                 // 这个方法只能写在 onload 事件里面， 不写 onload 里还不执行
-                this.iframeWin.onload = function (ev) {
-                    _this.iframeDoc = _this.iframeWin.document;
-                    _this.iframeDoc.designMode = 'on';
-                    _this.sourceEditor.value && _this.setValue(_this.sourceEditor.value); // 有内容
-                    _this.iframeDoc.addEventListener('paste', onImagePaste.bind(_this)); // 直接剪切板粘贴上传图片
+                this.iframeEl.contentWindow.onload = function (ev) {
+                    var iframeDoc = _this.iframeEl.contentWindow.document;
+                    iframeDoc.designMode = 'on';
+                    iframeDoc.addEventListener('paste', onImagePaste.bind(_this)); // 直接剪切板粘贴上传图片
+                    _this.iframeDoc = iframeDoc;
+                    new MutationObserver(function (mutationsList, observer) {
+                        if (_this.mode === 'iframe')
+                            _this.sourceEditor.value = _this.iframeDoc.body.innerHTML;
+                    }).observe(iframeDoc.body, { attributes: true, childList: true, subtree: true, characterData: true });
+                    _this.sourceEditor.value && _this.setIframeBody(_this.sourceEditor.value); // 有内容
                 };
+                this.sourceEditor = el.$('textarea');
+                this.sourceEditor.classList.add("hide");
+                this.sourceEditor.name = this.fieldName;
+                this.sourceEditor.oninput = function (ev) {
+                    if (_this.mode === 'textarea')
+                        _this.setIframeBody(_this.sourceEditor.value);
+                };
+            };
+            /**
+            * 输入 HTML 内容
+            *
+            * @param html
+            */
+            HtmlEditor.prototype.setIframeBody = function (html) {
+                this.iframeDoc.body.innerHTML = html;
+            };
+            /**
+             * 获取内容的 HTML
+             *
+             * @param cleanWord
+             * @param encode
+             */
+            HtmlEditor.prototype.getValue = function (cleanWord, encode) {
+                var result = this.iframeDoc.body.innerHTML;
+                if (cleanWord)
+                    result = cleanPaste(result);
+                if (encode)
+                    result = encodeURIComponent(result);
+                return result;
+            };
+            /**
+             * 切換 HTML 編輯 or 可視化編輯
+             *
+             */
+            HtmlEditor.prototype.setMode = function () {
+                if (this.mode == 'iframe') {
+                    this.iframeEl.classList.add('hide');
+                    this.sourceEditor.classList.remove('hide');
+                    this.mode = 'textarea';
+                    grayImg.call(this, true);
+                }
+                else {
+                    this.iframeEl.classList.remove('hide');
+                    this.sourceEditor.classList.add('hide');
+                    this.mode = 'iframe';
+                    grayImg.call(this, false);
+                }
             };
             /**
              * 当工具条点击的时候触发
@@ -101,7 +149,7 @@ var aj;
                         break;
                     case 'cleanHTML':
                         // @ts-ignore
-                        this.iframeDoc.body.innerHTML = HtmlSanitizer.SanitizeHtml(this.iframeDoc.body.innerHTML); // 清理冗余 HTML
+                        this.setIframeBody(HtmlSanitizer.SanitizeHtml(this.iframeDoc.body.innerHTML)); // 清理冗余 HTML
                         break;
                     case 'saveRemoteImage2Local':
                         saveRemoteImage2Local.call(this);
@@ -111,61 +159,11 @@ var aj;
                 }
             };
             HtmlEditor.prototype.format = function (type, para) {
-                // this.iframeWin.focus();
                 if (para)
                     this.iframeDoc.execCommand(type, false, para);
                 else
                     this.iframeDoc.execCommand(type, false);
-                this.iframeWin.focus();
-            };
-            HtmlEditor.prototype.insertEl = function (html) {
-                this.iframeDoc.body.innerHTML = html;
-            };
-            /**
-             * 設置 HTML
-             *
-             * @param v
-             */
-            HtmlEditor.prototype.setValue = function (v) {
-                var _this = this;
-                setTimeout(function () {
-                    _this.iframeWin.document.body.innerHTML = v;
-                    // self.iframeBody.innerHTML = v;
-                }, 500);
-            };
-            /**
-             * 获取内容的 HTML
-             *
-             * @param cleanWord
-             * @param encode
-             */
-            HtmlEditor.prototype.getValue = function (cleanWord, encode) {
-                var result = this.iframeDoc.body.innerHTML;
-                if (cleanWord)
-                    result = cleanPaste(result);
-                if (encode)
-                    result = encodeURIComponent(result);
-                return result;
-            };
-            /**
-             * 切換 HTML 編輯 or 可視化編輯
-             *
-             */
-            HtmlEditor.prototype.setMode = function () {
-                if (this.mode == 'iframe') {
-                    this.iframeEl.classList.add('hide');
-                    this.sourceEditor.classList.remove('hide');
-                    this.sourceEditor.value = this.iframeDoc.body.innerHTML;
-                    this.mode = 'textarea';
-                    grayImg.call(this, true);
-                }
-                else {
-                    this.iframeEl.classList.remove('hide');
-                    this.sourceEditor.classList.add('hide');
-                    this.iframeDoc.body.innerHTML = this.sourceEditor.value;
-                    this.mode = 'iframe';
-                    grayImg.call(this, false);
-                }
+                this.iframeEl.contentWindow.focus();
             };
             /**
              * 选择字体
@@ -246,8 +244,7 @@ var aj;
             });
         }
         function saveRemoteImage2Local() {
-            var str = [], remotePicArr = new Array();
-            var arr = this.iframeDoc.querySelectorAll('img');
+            var str = [], remotePicArr = new Array(), arr = this.iframeDoc.querySelectorAll('img');
             for (var i = 0, j = arr.length; i < j; i++) {
                 var imgEl = arr[i], url = imgEl.getAttribute('src');
                 if (/^http/.test(url)) {

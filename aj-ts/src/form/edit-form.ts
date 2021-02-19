@@ -45,11 +45,6 @@ namespace aj.form {
                     } else
                         aj.msg.show(j.msg);
                 }
-            }, {
-                beforeSubmit(form: HTMLFormElement, json: JsonParam): boolean {
-                    //json.content = App.$refs.htmleditor.getValue({cleanWord : eval('${aj_allConfig.article.cleanWordTag}'), encode : true});
-                    return true;
-                }
             });
         },
         methods: {

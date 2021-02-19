@@ -1,10 +1,32 @@
 namespace aj.form {
     /**
+     * HTML 编辑器的 DOM 元素引用
+     */
+    interface IHtmlEditorDomRef {
+        /**
+         * 工具条元素
+         */
+        toolbarEl: HTMLElement;
+
+        /**
+         * iframe 元素对象
+         */
+        iframeEl: HTMLIFrameElement;
+
+        /**
+         * iframe 下的 contentWindow.document 对象
+         */
+        iframeDoc: Document;
+
+        sourceEditor: HTMLTextAreaElement;
+    }
+
+    /**
      * HTML 在綫編輯器
      * 
      * 注意：必须提供一个 <slot> 包含有 <textarea class="hide" name="content">${info.content}</textarea>
      */
-    export class HtmlEditor extends VueComponent implements FormFieldElementComponent {
+    export class HtmlEditor extends VueComponent implements FormFieldElementComponent, IHtmlEditorDomRef {
         name = "aj-form-html-editor";
 
         template = html`
@@ -73,7 +95,6 @@ namespace aj.form {
             </div>
         `;
 
-        // <iframe :src="ajResources.commonAsset + '/resources/htmleditor_iframe.jsp?basePath=' + basePath"></iframe>
         props = {
             fieldName: { type: String, required: true },    // 表单 name，字段名
             content: { type: String, required: false },     // 内容
@@ -90,32 +111,89 @@ namespace aj.form {
          */
         uploadImageActionUrl = "";
 
+        toolbarEl: HTMLElement = document.body;
+
         iframeEl: HTMLIFrameElement = <HTMLIFrameElement>document.body;
-
-        sourceEditor: HTMLTextAreaElement = <HTMLTextAreaElement>document.body;
-
-        iframeWin: Window = window;
 
         iframeDoc: Document = document;
 
-        mode: 'iframe' | 'textarea' = "iframe";
+        sourceEditor: HTMLTextAreaElement = <HTMLTextAreaElement>document.body;
 
-        toolbarEl: HTMLElement = document.body;
+        mode: 'iframe' | 'textarea' = "iframe";
 
         mounted(): void {
             let el = this.$el;
-            this.iframeEl = <HTMLIFrameElement>el.$('iframe');
-            this.sourceEditor = <HTMLTextAreaElement>el.$('textarea');
-            this.iframeWin = <Window>this.iframeEl.contentWindow;
             this.mode = 'iframe';                               // 当前可视化编辑 iframe|textarea
             this.toolbarEl = <HTMLElement>el.$('.toolbar');
 
+            this.iframeEl = <HTMLIFrameElement>el.$('iframe');
             // 这个方法只能写在 onload 事件里面， 不写 onload 里还不执行
-            this.iframeWin.onload = (ev: Event) => {
-                this.iframeDoc = this.iframeWin.document;
-                this.iframeDoc.designMode = 'on';
-                this.sourceEditor.value && this.setValue(this.sourceEditor.value);// 有内容
-                this.iframeDoc.addEventListener('paste', onImagePaste.bind(this));// 直接剪切板粘贴上传图片
+            (<Window>this.iframeEl.contentWindow).onload = (ev: Event) => {
+                let iframeDoc = (<Window>this.iframeEl.contentWindow).document;
+                iframeDoc.designMode = 'on';
+                iframeDoc.addEventListener('paste', onImagePaste.bind(this));// 直接剪切板粘贴上传图片
+
+                this.iframeDoc = iframeDoc;
+
+                new MutationObserver((mutationsList: MutationRecord[], observer: MutationObserver) => {
+                    if (this.mode === 'iframe')
+                        this.sourceEditor.value = this.iframeDoc.body.innerHTML;
+                }).observe(iframeDoc.body, { attributes: true, childList: true, subtree: true, characterData: true });
+
+                this.sourceEditor.value && this.setIframeBody(this.sourceEditor.value);// 有内容
+            }
+
+            this.sourceEditor = <HTMLTextAreaElement>el.$('textarea');
+            this.sourceEditor.classList.add("hide");
+            this.sourceEditor.name = this.fieldName;
+            this.sourceEditor.oninput = (ev: Event) => {
+                if (this.mode === 'textarea')
+                    this.setIframeBody(this.sourceEditor.value);
+            }
+        }
+
+        /**
+        * 输入 HTML 内容
+        * 
+        * @param html 
+        */
+        setIframeBody(html: string): void {
+            this.iframeDoc.body.innerHTML = html;
+        }
+
+        /**
+         * 获取内容的 HTML
+         * 
+         * @param cleanWord 
+         * @param encode 
+         */
+        getValue(cleanWord: boolean, encode: boolean): string {
+            let result: string = this.iframeDoc.body.innerHTML;
+
+            if (cleanWord)
+                result = cleanPaste(result);
+
+            if (encode)
+                result = encodeURIComponent(result);
+
+            return result;
+        }
+
+        /**
+         * 切換 HTML 編輯 or 可視化編輯
+         * 
+         */
+        setMode(): void {
+            if (this.mode == 'iframe') {
+                this.iframeEl.classList.add('hide');
+                this.sourceEditor.classList.remove('hide');
+                this.mode = 'textarea';
+                grayImg.call(this, true);
+            } else {
+                this.iframeEl.classList.remove('hide');
+                this.sourceEditor.classList.add('hide');
+                this.mode = 'iframe';
+                grayImg.call(this, false);
             }
         }
 
@@ -154,7 +232,7 @@ namespace aj.form {
                     break;
                 case 'cleanHTML':
                     // @ts-ignore
-                    this.iframeDoc.body.innerHTML = HtmlSanitizer.SanitizeHtml(this.iframeDoc.body.innerHTML); // 清理冗余 HTML
+                    this.setIframeBody(HtmlSanitizer.SanitizeHtml(this.iframeDoc.body.innerHTML)); // 清理冗余 HTML
                     break;
                 case 'saveRemoteImage2Local':
                     saveRemoteImage2Local.call(this);
@@ -165,66 +243,12 @@ namespace aj.form {
         }
 
         format(type: string, para?: string): void {
-            // this.iframeWin.focus();
             if (para)
                 this.iframeDoc.execCommand(type, false, para);
             else
                 this.iframeDoc.execCommand(type, false);
-            this.iframeWin.focus();
-        }
 
-        insertEl(html: string): void {// 重複？
-            this.iframeDoc.body.innerHTML = html;
-        }
-
-        /**
-         * 設置 HTML
-         * 
-         * @param v 
-         */
-        setValue(v: string): void {
-            setTimeout(() => {
-                this.iframeWin.document.body.innerHTML = v;
-                // self.iframeBody.innerHTML = v;
-            }, 500);
-        }
-
-        /**
-         * 获取内容的 HTML
-         * 
-         * @param cleanWord 
-         * @param encode 
-         */
-        getValue(cleanWord: boolean, encode: boolean): string {
-            let result: string = this.iframeDoc.body.innerHTML;
-
-            if (cleanWord)
-                result = cleanPaste(result);
-
-            if (encode)
-                result = encodeURIComponent(result);
-
-            return result;
-        }
-
-        /**
-         * 切換 HTML 編輯 or 可視化編輯
-         * 
-         */
-        setMode(): void {
-            if (this.mode == 'iframe') {
-                this.iframeEl.classList.add('hide');
-                this.sourceEditor.classList.remove('hide');
-                this.sourceEditor.value = this.iframeDoc.body.innerHTML;
-                this.mode = 'textarea';
-                grayImg.call(this, true);
-            } else {
-                this.iframeEl.classList.remove('hide');
-                this.sourceEditor.classList.add('hide');
-                this.iframeDoc.body.innerHTML = this.sourceEditor.value;
-                this.mode = 'iframe';
-                grayImg.call(this, false);
-            }
+            (<Window>this.iframeEl.contentWindow).focus();
         }
 
         /**
@@ -324,8 +348,9 @@ namespace aj.form {
     }
 
     function saveRemoteImage2Local(this: HtmlEditor): void {
-        let str: string[] = [], remotePicArr: HTMLImageElement[] = new Array<HTMLImageElement>();
-        let arr: NodeListOf<HTMLImageElement> = this.iframeDoc.querySelectorAll('img');
+        let str: string[] = [],
+            remotePicArr: HTMLImageElement[] = new Array<HTMLImageElement>(),
+            arr: NodeListOf<HTMLImageElement> = this.iframeDoc.querySelectorAll('img');
 
         for (var i = 0, j = arr.length; i < j; i++) {
             let imgEl: HTMLImageElement = arr[i], url: string = <string>imgEl.getAttribute('src');
@@ -337,7 +362,7 @@ namespace aj.form {
         }
 
         if (str.length)
-            aj.xhr.post('../downAllPics/', (json: ImgUploadRepsonseResult) => {
+            xhr.post('../downAllPics/', (json: ImgUploadRepsonseResult) => {
                 let _arr: string[] = json.pics;
                 for (var i = 0, j = _arr.length; i < j; i++)
                     remotePicArr[i].src = "images/" + _arr[i];

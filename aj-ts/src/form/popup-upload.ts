@@ -23,7 +23,7 @@ Vue.component('aj-form-popup-upload', {
         imgId: { type: Number, required: false },// 貌似没用
         imgPlace: String // 图片占位符，用户没有选定图片时候使用的图片
     },
-    mounted() {
+    mounted(): void {
         let obj = this.$refs.uploadControl;
         this.text = { maxSize: obj.limitSize || 600, maxHeight: obj.imgMaxHeight, maxWidth: obj.imgMaxWidth };
     },

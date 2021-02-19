@@ -169,10 +169,10 @@ body > .right {
   width: 100%;
   height: 100%;
 }
-.admin-entry-form form {
+.aj-form-row-holder form {
   background-color: white;
 }
-.admin-entry-form form input[type=text] {
+.aj-form-row-holder form input[type=text] {
   min-height: 29px;
   font-size: 0.9rem;
   border: 1px solid #abadb3;
@@ -187,11 +187,11 @@ body > .right {
   color: #333;
   letter-spacing: 1px;
 }
-.admin-entry-form form input[type=text]:hover,
-.admin-entry-form form input[type=text]:focus {
+.aj-form-row-holder form input[type=text]:hover,
+.aj-form-row-holder form input[type=text]:focus {
   border-color: #737373;
 }
-.admin-entry-form > form > div {
+.aj-form-row-holder > form > div {
   transition: background-color 300ms ease-in;
 }
 .dataSource {

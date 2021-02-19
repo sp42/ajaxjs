@@ -122,7 +122,7 @@ var aj;
      * @param value
      */
     function isSimplePropsField(value) {
-        console.log(value);
+        // console.log(value)
         if (value === String || value === Boolean || value === Number || value && value.type)
             return true;
         else
@@ -173,7 +173,7 @@ var aj;
                 cfg.data = function () {
                     return dataFields;
                 };
-            console.log(cfg);
+            // console.log(cfg)
             Vue.component(this.name, cfg);
         };
         return VueComponent;
