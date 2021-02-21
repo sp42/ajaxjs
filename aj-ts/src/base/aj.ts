@@ -160,6 +160,10 @@ namespace aj {
 
         public $options: any;
 
+        // public propsFactory: any;
+
+        // public propsFactory(): { [key: string]: any };
+
         public $destroy() { }
 
         public $emit(e: string, ...obj: any) { }
@@ -175,8 +179,18 @@ namespace aj {
 
             let dataFields: { [key: string]: any } = {};
 
+            let props: { [key: string]: any };
+
+            //@ts-ignore
+            if (typeof this.propsFactory == 'function') // fn 用于继承时候的复制
+                //@ts-ignore
+                props = this.propsFactory();
+            else
+                props = this.props;
+
             for (var i in this) {
-                if (i == 'constructor' || i == 'name' || i == 'register' || i == '$destroy' ||  i == "$el" ||i == "$emit" || i == "$options")
+                if (i == 'constructor' || i == 'name' || i == 'register' || i == 'propsFactory' || i == 'watchFactory' ||
+                    i == 'props' || i == '$destroy' || i == "$el" || i == "$emit" || i == "$options")
                     continue;
 
                 let value: any = this[i];
@@ -187,19 +201,27 @@ namespace aj {
                     cfg.props[i] = value;
                 else if (typeof value == 'function')
                     cfg.methods[i] = value;
-                else if (isPropsField(i, this.props))
-                    cfg.props[i] = this.props[i];
-                else // data fiels
+                else if (isPropsField(i, props))
+                    cfg.props[i] = props[i];
+                else if (i[0] != '$')// 如果不是 $ 开头的，就是 data fields，$xxx 表示实例变量，不参与数据驱动，节省资源
                     dataFields[i] = value;
             }
+
+            if (this.name == 'aj-img-uploder')
+                console.log(cfg.props);
 
             // 注意如果 类有了 data(){}，那么 data 属性将会失效（仅作提示用），改读取 data() {} 的
             if (!cfg.data)
                 cfg.data = () => {
-                    return dataFields;
+                    return JSON.parse(JSON.stringify(dataFields)); // 深度 Clone 对象
                 }
 
             // console.log(cfg)
+
+            // @ts-ignore
+            if (cfg.watch && this.watchFactory)
+                // @ts-ignore
+                aj.apply(cfg.watch, this.watchFactory());
 
             Vue.component(this.name, cfg);
         }

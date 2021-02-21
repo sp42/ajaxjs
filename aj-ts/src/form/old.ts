@@ -1,8 +1,9 @@
-; (() => {
+namespace aj.xhr_upload {
+
     /**
      * 上传组件
      */
-    interface XHR_Upload extends Vue {
+    interface XHR_Upload extends Vue, FormFieldElementComponent {
         fileName: string;
         $fileObj: File;
         $fileName: string;
@@ -29,13 +30,9 @@
     Vue.component('aj-xhr-upload', {
         template: html`
             <div class="aj-xhr-upload" :style="{display: buttonBottom ? 'inherit': 'flex'}">
-                <input v-if="hiddenField" type="hidden" :name="hiddenField" :value="hiddenFieldValue" />
-                <div v-if="isImgUpload">
-                    <a :href="imgPlace" target="_blank">
-                        <img class="upload_img_perview"
-                            :src="(isFileSize && isExtName && imgBase64Str) ? imgBase64Str : imgPlace" />
-                    </a>
-                </div>
+            
+                <img class="upload_img_perview" v-if="isImgUpload"
+                    :src="(isFileSize && isExtName && imgBase64Str) ? imgBase64Str : imgPlace" />
                 <div class="pseudoFilePicker">
                     <label :for="'uploadInput_' + radomId">
                         <div>
@@ -43,26 +40,28 @@
                         </div>
                     </label>
                 </div>
-                <input type="file" :name="fieldName" class="hide" :id="'uploadInput_' + radomId" @change="onUploadInputChange"
+                <input type="file" :name="fieldName" :id="'uploadInput_' + radomId" @change="onUploadInputChange"
                     :accept="isImgUpload ? 'image/*' : accpectFileType" />
                 <div v-if="!isFileSize || !isExtName">{{errMsg}}</div>
                 <div v-if="isFileSize && isExtName">
                     {{fileName}}<br />
-                    <button @click.prevent="doUpload"
-                        style="min-width:110px;">{{progress && progress !== 100 ? '上传中 ' + progress + '%': '上传'}}</button>
+                    <button @click.prevent="doUpload">{{progress && progress !== 100 ? '上传中 ' + progress + '%': '上传'}}</button>
                 </div>
             </div>
         `,
         props: {
             action: { type: String, required: true },       // 上传路径
             fieldName: String, 	                            // input name 字段名
+            fieldValue: String,
             limitSize: Number,                              // 文件大小限制
-            hiddenField: { type: String, default: null },   // 上传后的文件名保存在这个隐藏域之中
-            hiddenFieldValue: String,
             limitFileType: String,
             accpectFileType: String,                        // 可以上传类型
             isImgUpload: Boolean, 	                        // 是否只是图片上传
-            imgPlace: String,		                        // 图片占位符，用户没有选定图片时候使用的图片
+            imgPlace: {
+                type: String, default: "data:image/svg+xml,%3Csvg class='icon' viewBox='0 0 1024 1024' xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cpath d='M304.128 456.192c48.64 0 88.064-39.424 88.064-88.064s-39.424-88.064-88.064-88.064-88.064 39.424-88.064 88.064 39.424 88.064 88.064 88.064zm0-116.224c15.36 0 28.16 12.288 28.16 28.16s-12.288 28.16-28.16 28.16-28.16-12.288-28.16-28.16 12.288-28.16 28.16-28.16z' " +
+                    "fill='%23e6e6e6'/%3E%3Cpath d='M887.296 159.744H136.704C96.768 159.744 64 192 64 232.448v559.104c0 39.936 32.256 72.704 72.704 72.704h198.144L500.224 688.64l-36.352-222.72 162.304-130.56-61.44 143.872 92.672 214.016-105.472 171.008h335.36C927.232 864.256 960 832 960 791.552V232.448c0-39.936-32.256-72.704-72.704-72.704zm-138.752 71.68v.512H857.6c16.384 0 30.208 13.312 30.208 30.208v399.872L673.28 408.064l75.264-176.64zM304.64 " +
+                    "792.064H165.888c-16.384 0-30.208-13.312-30.208-30.208v-9.728l138.752-164.352 104.96 124.416-74.752 79.872zm81.92-355.84l37.376 228.864-.512.512-142.848-169.984c-3.072-3.584-9.216-3.584-12.288 0L135.68 652.8V262.144c0-16.384 13.312-30.208 30.208-30.208h474.624L386.56 436.224zm501.248 325.632c0 16.896-13.312 30.208-29.696 30.208H680.96l57.344-93.184-87.552-202.24 7.168-7.68 229.888 272.896z' fill='%23e6e6e6'/%3E%3C/svg%3E"
+            },		                        // 图片占位符，用户没有选定图片时候使用的图片
             imgMaxWidth: { type: Number, default: 1920 },
             imgMaxHeight: { type: Number, default: 1680 },
             buttonBottom: Boolean                           // 上传按钮是否位于下方
@@ -82,10 +81,10 @@
                         this.uplodedFileUrl = json.imgUrl;
 
                         if (this.hiddenField)
-                            (<HTMLInputElement>this.$el.$('input[name=' + this.hiddenField + ']')).value = json.imgUrl;
+                            (<HTMLInputElement>this.$el.$(`input[name=${this.hiddenField}]`)).value = json.imgUrl;
                     }
 
-                    aj.xhr.defaultCallBack(json);
+                    xhr.defaultCallBack(json);
                 },
                 imgBase64Str: null,			// 图片的 base64 形式，用于预览
                 progress: 0,                // 上传进度
@@ -97,14 +96,14 @@
             /**
              * 
              * @param this 
-             * @param $event 
+             * @param ev 
              */
-            onUploadInputChange(this: XHR_Upload, $event: Event): void {
-                var fileInput: HTMLInputElement = <HTMLInputElement>$event.target;
+            onUploadInputChange(this: XHR_Upload, ev: Event): void {
+                let fileInput: HTMLInputElement = <HTMLInputElement>ev.target;
                 if (!fileInput.files || !fileInput.files[0])
                     return;
 
-                var ext: string = <string>fileInput.value.split('.').pop(); // 扩展名
+                let ext: string = <string>fileInput.value.split('.').pop(); // 扩展名
 
                 this.$fileObj = fileInput.files[0]; // 保留引用
                 this.$fileName = this.$fileObj.name;
@@ -156,10 +155,11 @@
 
                 let xhr: XMLHttpRequest = new XMLHttpRequest();
                 //@ts-ignore
-                xhr.onreadystatechange = aj.xhr.requestHandler.delegate(null, this.uploadOk_callback, 'json');
+                xhr.onreadystatechange = xhr.requestHandler.delegate(null, this.uploadOk_callback, 'json');
                 xhr.open("POST", this.action, true);
-                xhr.onprogress = (e: ProgressEvent) => {
-                    let progress: number = 0, p: number = ~~(e.loaded * 1000 / e.total);
+                xhr.onprogress = (ev: ProgressEvent) => {
+                    let progress: number = 0,
+                        p: number = ~~(ev.loaded * 1000 / ev.total);
                     p = p / 10;
 
                     if (progress !== p)
@@ -172,9 +172,6 @@
             }
         }
     });
-
-    // 文件头判别，看看是否为图片
-    const imgHeader: StringJsonParam = { "jpeg": "/9j/4", "gif": "R0lGOD", "png": "iVBORw" };
 
     /**
      * 获取文件名称，只能是名称，不能获取完整的文件目录
@@ -213,19 +210,9 @@
                 }
 
                 imgEl.src = this.imgBase64Str;
-
-                // 文件头判别，看看是否为图片
-                for (var i in imgHeader) {
-                    if (~this.imgBase64Str.indexOf(imgHeader[i])) {
-                        this.isExtName = true;
-                        return;
-                    }
-                }
-
-                this.errMsg = "亲，改了扩展名我还能认得你不是图片哦";
             }
         }
 
         reader.readAsDataURL(file);
     }
-})();
+}

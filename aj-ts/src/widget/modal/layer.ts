@@ -57,13 +57,13 @@ namespace aj.widget.modal {
             let isClosed: boolean = false;
 
             if (!ev) {
-                isClosed = aj.widget.modal.msgbox.$options.methods.close.call(this, {
+                isClosed = msgbox.$options.methods.close.call(this, {
                     target: document.body.$('.aj-modal')
                 });
             } else {
                 // @ts-ignore
-                if (e.isForceClose || !this.notCloseWhenTap)
-                    isClosed = aj.widget.modal.msgbox.$options.methods.close.apply(this, arguments);
+                if (ev.isForceClose || !this.notCloseWhenTap)
+                    isClosed = msgbox.$options.methods.close.apply(this, arguments);
             }
 
             if (isClosed && this.cleanAfterClose) {

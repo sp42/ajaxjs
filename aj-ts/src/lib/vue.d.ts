@@ -19,7 +19,7 @@ declare class Vue {
     }
 
     public $watch(...any): void;
-    
+
     public $set(...any): void;
 
     public $destroy() { }
@@ -34,9 +34,11 @@ declare class Vue {
 
     public static extend(...any): any {
     }
-    
+
     public ajResources = { // 我自己扩展的，非 vue 官方 API
         imgPerfix: "",
         ctx: ""
     };
+
+
 }

@@ -64,14 +64,14 @@ var aj;
                 Layer.prototype.close = function (ev) {
                     var isClosed = false;
                     if (!ev) {
-                        isClosed = aj.widget.modal.msgbox.$options.methods.close.call(this, {
+                        isClosed = modal.msgbox.$options.methods.close.call(this, {
                             target: document.body.$('.aj-modal')
                         });
                     }
                     else {
                         // @ts-ignore
-                        if (e.isForceClose || !this.notCloseWhenTap)
-                            isClosed = aj.widget.modal.msgbox.$options.methods.close.apply(this, arguments);
+                        if (ev.isForceClose || !this.notCloseWhenTap)
+                            isClosed = modal.msgbox.$options.methods.close.apply(this, arguments);
                     }
                     if (isClosed && this.cleanAfterClose) {
                         this.$el.parentNode && this.$el.parentNode.removeChild(this.$el);

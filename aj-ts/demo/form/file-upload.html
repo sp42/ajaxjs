@@ -7,6 +7,8 @@
     <link rel="stylesheet" type="text/css" href="../common/demo.css" />
     <link rel="stylesheet" type="text/css" href="../../dist/css/form/control.css" />
     <link rel="stylesheet" type="text/css" href="../../dist/css/form/upload.css" />
+    <link rel="stylesheet" type="text/css" href="../../dist/css/widget/modal/alert.css" />
+    <link rel="stylesheet" type="text/css" href="../../dist/css/widget/modal/top-msg.css" />
 
     <link crossorigin="anonymous" integrity="sha384-FckWOBo7yuyMS7In0aXZ0aoVvnInlnFMwCv77x9sZpFgOonQgnBj1uLwenWVtsEj"
         href="https://lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
@@ -24,14 +26,14 @@
                 <h2>文件上传 File Upload</h2>
                 <p>通过 label 标签 for 属性关联具体的 input[type=file] 触发本地 file picker。input[type=file] 本身隐藏。</p>
                 <pre class="prettyprint"><xmp></xmp></pre>
-                <p>File upload Demo:</p>  
+                <p>File upload Demo:</p>
                 <div class="fileUpload">
-                    <aj-xhr-upload></aj-xhr-upload>
-                </div>   
-                <p>Image upload Demo:</p>  
+                    <aj-file-uploader action="foo" limit-file-type="txt|pdf|doc"></aj-file-uploader>
+                </div>
+                <p>Image upload Demo:</p>
                 <div class="imgUpload">
-                    <aj-xhr-upload></aj-xhr-upload>
-                </div>    
+                    <aj-img-uploder action="fooImg"></aj-img-uploder>
+                </div>
             </div>
             <div class="copyright">
                 <div></div>
@@ -41,10 +43,20 @@
     <script src="../common/demo.js"></script>
     <script src="../../dist/base/prototype.js"></script>
     <script src="../../dist/base/aj.js"></script>
-    <script src="../../dist/form/xhr-upload.js"></script>
+    <script src="../../dist/base/xhr.js"></script>
+    <script src="../../dist/widget/modal/msgbox.js"></script>
+    <script src="../../dist/form/file-uploader.js"></script>
+    <script src="../../dist/form/img-uploader.js"></script>
     <script>
-        new Vue({el: '.fileUpload'});
-        new Vue({el: '.imgUpload'});
+        var f = new Vue({ el: '.fileUpload' });
+
+        // 自定义上传后的回调函数
+        f.$children[0].$uploadOk_callback = function (j) { 
+            // 你可以复用父类的方法
+            aj.xhr_upload.fileUploader.$uploadOk_callback.call(this, j);
+            alert(j.msg);
+        }
+        var f2 = new Vue({ el: '.imgUpload' });
     </script>
 </body>
 

@@ -18,6 +18,9 @@ namespace aj.form {
          */
         iframeDoc: Document;
 
+        /**
+         * textrea 控件对象，保存着 HTML 代码，表单提交时就读取这个 textarea.value
+         */
         sourceEditor: HTMLTextAreaElement;
     }
 
@@ -97,8 +100,6 @@ namespace aj.form {
 
         props = {
             fieldName: { type: String, required: true },    // 表单 name，字段名
-            content: { type: String, required: false },     // 内容
-            basePath: { type: String, required: false, default: '' },// iframe 的 <base href="${param.basePath}/" />路徑
             uploadImageActionUrl: String                    // 图片上传路径
         };
 
@@ -123,7 +124,7 @@ namespace aj.form {
 
         mounted(): void {
             let el = this.$el;
-            this.mode = 'iframe';                               // 当前可视化编辑 iframe|textarea
+            this.mode = 'iframe';  // 当前可视化编辑 iframe|textarea
             this.toolbarEl = <HTMLElement>el.$('.toolbar');
 
             this.iframeEl = <HTMLIFrameElement>el.$('iframe');
@@ -150,6 +151,18 @@ namespace aj.form {
                 if (this.mode === 'textarea')
                     this.setIframeBody(this.sourceEditor.value);
             }
+
+            this.initImgMgr();
+        }
+
+        private uploadImgMgr: any;
+
+        private initImgMgr(): void {
+            let div: HTMLDivElement = document.body.appendChild(document.createElement('div'));
+            div.innerHTML = `<aj-form-popup-upload ref="uploadLayer" upload-url="${this.uploadImageActionUrl}"></aj-form-popup-upload>`;
+            this.uploadImgMgr = new Vue({
+                el: div
+            }).$refs.uploadLayer;
         }
 
         /**
@@ -217,10 +230,7 @@ namespace aj.form {
                     if (window.isCreate)
                         aj.alert('请保存记录后再上传图片。');
                     else {
-                        // @ts-ignore
-                        App.$refs.uploadLayer.show((json: ImgUploadRepsonseResult) => {
-                            // if (json.result)
-                            //     json = json.result;
+                        this.uploadImgMgr.show((json: ImgUploadRepsonseResult) => {
                             if (json && json.isOk)
                                 this.format("insertImage", json.fullUrl);
                         });
@@ -242,7 +252,13 @@ namespace aj.form {
             }
         }
 
-        format(type: string, para?: string): void {
+        /**
+         * 通过 document.execCommand() 来操纵可编辑内容区域的元素
+         * 
+         * @param type 命令的名称
+         * @param para 一些命令（例如 insertImage）需要额外的参数（insertImage 需要提供插入 image 的 url），默认为 null
+         */
+        private format(type: string, para?: string): void {
             if (para)
                 this.iframeDoc.execCommand(type, false, para);
             else
@@ -252,26 +268,11 @@ namespace aj.form {
         }
 
         /**
-         * 选择字体
-         * 
-         * @param ev
-         */
-        onFontfamilyChoserClk(ev: Event): void {
-            let el: HTMLElement = <HTMLElement>ev.target;
-            this.format('fontname', el.innerHTML);
-
-            /* 如何解决点击之后马上隐藏面板？由于 js（单击事件） 没有控制 CSS 的 :hover 伪类的方法，故所以必须使用以下技巧：*/
-            let menuPanel: HTMLElement = <HTMLElement>el.parentNode;
-            menuPanel.style.display = 'none';
-            setTimeout(() => menuPanel.style.display = '', 300);
-        }
-
-        /**
          * 选择字号大小
          * 
          * @param ev
          */
-        onFontsizeChoserClk(ev: Event): void {
+        private onFontsizeChoserClk(ev: Event): void {
             let el: HTMLElement = <HTMLElement>ev.target,
                 els = (<HTMLElement>ev.currentTarget).children;
 
@@ -282,18 +283,33 @@ namespace aj.form {
             this.format('fontsize', i + "");
         }
 
-        onFontColorPicker(ev: Event): void {
+        private onFontColorPicker(ev: Event): void {
             this.format('foreColor', (<HTMLElement>ev.target).title);
         }
 
-        onFontBgColorPicker(ev: Event): void {
+        private onFontBgColorPicker(ev: Event): void {
             this.format('backColor', (<HTMLElement>ev.target).title);
+        }
+
+        /**
+         * 选择字体
+         * 
+         * @param ev
+         */
+        private onFontfamilyChoserClk(ev: Event): void {
+            let el: HTMLElement = <HTMLElement>ev.target;
+            this.format('fontname', el.innerHTML);
+
+            /* 如何解决点击之后马上隐藏面板？由于 js（单击事件） 没有控制 CSS 的 :hover 伪类的方法，故所以必须使用以下技巧：*/
+            let menuPanel: HTMLElement = <HTMLElement>el.parentNode;
+            menuPanel.style.display = 'none';
+            setTimeout(() => menuPanel.style.display = '', 300);
         }
 
         /**
          * 创建颜色选择器
          */
-        createColorPickerHTML(): string {
+        private createColorPickerHTML(): string {
             let cl: string[] = ['00', '33', '66', '99', 'CC', 'FF'],
                 b: string, d: string, e: string, f: string,
                 h: string[] = ['<div class="colorhead"><span class="colortitle">颜色选择</span></div><div class="colorbody"><table cellspaci="0" cellpadding="0"><tr>'];
