@@ -131,7 +131,6 @@ namespace aj.xhr_upload {
             let fileInput: HTMLInputElement = <HTMLInputElement>ev.target;
             if (!fileInput.files || !fileInput.files[0])
                 return;
-
             // let ext: string = <string>fileInput.value.split('.').pop(); // 扩展名
 
             let file: File = fileInput.files[0],
@@ -141,12 +140,6 @@ namespace aj.xhr_upload {
             this.fileName = file.name;
             this.fileSize = file.size;
             this.errStatus = [];
-
-            // if (this.limitFileType) {
-            //     this.isExtName = new RegExp(this.limitFileType, 'i').test(ext);
-            //     this.errMsg = '根据文件后缀名判断，此文件不能上传';
-            // } else
-            //     this.isExtName = true;
         }
 
         watch = {
@@ -219,7 +212,7 @@ namespace aj.xhr_upload {
          */
         doUpload(): void {
             this.$uploadOk_callback({ isOk: true, msg: "ok!", imgUrl: "fdfdf" });
-            return;
+            // return;
 
             let fd: FormData = new FormData();
 

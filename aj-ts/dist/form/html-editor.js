@@ -246,44 +246,31 @@ var aj;
                 if (item.className.indexOf('switchMode') != -1)
                     return;
                 item.style.color = isGray ? 'lightgray' : '';
-                // if (item.className.indexOf('switchMode') != -1)
-                //     item.style.color = isGray ? 'lightgray' : '';
-                // else
-                //     item.style.filter = isGray ? 'grayscale(100%)' : '';
             });
         }
+        /**
+         * 一键存图
+         *
+         * @param this
+         */
         function saveRemoteImage2Local() {
-            var str = [], remotePicArr = new Array(), arr = this.iframeDoc.querySelectorAll('img');
+            var arr = this.iframeDoc.querySelectorAll('img'), remotePicArr = new Array(), srcs = [];
             for (var i = 0, j = arr.length; i < j; i++) {
-                var imgEl = arr[i], url = imgEl.getAttribute('src');
-                if (/^http/.test(url)) {
-                    str.push(url);
+                var imgEl = arr[i], src = imgEl.getAttribute('src');
+                if (/^http/.test(src)) {
                     remotePicArr.push(imgEl);
+                    srcs.push(src);
                 }
             }
-            if (str.length)
+            if (srcs.length)
                 aj.xhr.post('../downAllPics/', function (json) {
                     var _arr = json.pics;
                     for (var i = 0, j = _arr.length; i < j; i++)
-                        remotePicArr[i].src = "images/" + _arr[i];
+                        remotePicArr[i].src = "images/" + _arr[i]; // 改变 DOM 的旧图片地址为新的
                     aj.alert('所有图片下载完成。');
-                }, { pics: str.join('|') });
+                }, { pics: srcs.join('|') });
             else
                 aj.alert('未发现有远程图片');
-        }
-        /**
-         * Remove additional MS Word content
-         * MSWordHtmlCleaners.js https://gist.github.com/ronanguilloux/2915995
-         *
-         * @param html
-         */
-        function cleanPaste(html) {
-            html = html.replace(/<(\/)*(\\?xml:|meta|link|span|font|del|ins|st1:|[ovwxp]:)((.|\s)*?)>/gi, ''); // Unwanted tags
-            html = html.replace(/(class|style|type|start)=("(.*?)"|(\w*))/gi, ''); // Unwanted sttributes
-            html = html.replace(/<style(.*?)style>/gi, ''); // Style tags
-            html = html.replace(/<script(.*?)script>/gi, ''); // Script tags
-            html = html.replace(/<!--(.*?)-->/gi, ''); // HTML comments
-            return html;
         }
         /*
         * 富文本编辑器中粘贴图片时，chrome可以得到e.clipBoardData.items并从中获取二进制数据，以便ajax上传到后台，
@@ -301,9 +288,8 @@ var aj;
                 aj.alert('未提供图片上传地址');
                 return;
             }
-            var items = ev.clipboardData && ev.clipboardData.items;
-            var file = null; // file就是剪切板中的图片文件
-            if (items && items.length) { // 检索剪切板items
+            var items = ev.clipboardData && ev.clipboardData.items, file = null; // file 就是剪切板中的图片文件
+            if (items && items.length) { // 检索剪切板 items
                 for (var i = 0; i < items.length; i++) {
                     var item = items[i];
                     if (item.type.indexOf('image') !== -1) {
@@ -320,18 +306,36 @@ var aj;
             if (file) {
                 ev.preventDefault();
                 aj.img.changeBlobImageQuality(file, function (newBlob) {
-                    Vue.options.components["aj-xhr-upload"].extendOptions.methods.doUpload.call({
-                        action: _this.uploadImageActionUrl,
-                        progress: 0,
-                        uploadOk_callback: function (j) {
-                            if (j.isOk)
-                                this.format("insertImage", this.ajResources.imgPerfix + j.imgUrl);
-                        },
-                        $blob: newBlob,
-                        $fileName: 'foo.jpg'
-                    });
+                    var img = document.body.$('.test');
+                    img.src = URL.createObjectURL(newBlob);
+                    console.log('got blob');
+                    _this.format("insertImage", URL.createObjectURL(newBlob));
+                    // Vue.options.components["aj-xhr-upload"].extendOptions.methods.doUpload.call({
+                    //     action: this.uploadImageActionUrl,
+                    //     progress: 0,
+                    //     uploadOk_callback(j: ImgUploadRepsonseResult) {
+                    //         if (j.isOk)
+                    //             this.format("insertImage", this.ajResources.imgPerfix + j.imgUrl);
+                    //     },
+                    //     $blob: newBlob,
+                    //     $fileName: 'foo.jpg'
+                    // });
                 });
             }
+        }
+        /**
+         * Remove additional MS Word content
+         * MSWordHtmlCleaners.js https://gist.github.com/ronanguilloux/2915995
+         *
+         * @param html
+         */
+        function cleanPaste(html) {
+            html = html.replace(/<(\/)*(\\?xml:|meta|link|span|font|del|ins|st1:|[ovwxp]:)((.|\s)*?)>/gi, ''); // Unwanted tags
+            html = html.replace(/(class|style|type|start)=("(.*?)"|(\w*))/gi, ''); // Unwanted sttributes
+            html = html.replace(/<style(.*?)style>/gi, ''); // Style tags
+            html = html.replace(/<script(.*?)script>/gi, ''); // Script tags
+            html = html.replace(/<!--(.*?)-->/gi, ''); // HTML comments
+            return html;
         }
         new HtmlEditor().register();
     })(form = aj.form || (aj.form = {}));

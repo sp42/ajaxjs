@@ -258,7 +258,7 @@ namespace aj.form {
          * @param type 命令的名称
          * @param para 一些命令（例如 insertImage）需要额外的参数（insertImage 需要提供插入 image 的 url），默认为 null
          */
-        private format(type: string, para?: string): void {
+        format(type: string, para?: string): void {
             if (para)
                 this.iframeDoc.execCommand(type, false, para);
             else
@@ -356,53 +356,40 @@ namespace aj.form {
             if (item.className.indexOf('switchMode') != -1)
                 return;
             item.style.color = isGray ? 'lightgray' : '';
-            // if (item.className.indexOf('switchMode') != -1)
-            //     item.style.color = isGray ? 'lightgray' : '';
-            // else
-            //     item.style.filter = isGray ? 'grayscale(100%)' : '';
         });
     }
 
+    /**
+     * 一键存图
+     * 
+     * @param this 
+     */
     function saveRemoteImage2Local(this: HtmlEditor): void {
-        let str: string[] = [],
+        let arr: NodeListOf<HTMLImageElement> = this.iframeDoc.querySelectorAll('img'),
             remotePicArr: HTMLImageElement[] = new Array<HTMLImageElement>(),
-            arr: NodeListOf<HTMLImageElement> = this.iframeDoc.querySelectorAll('img');
+            srcs: string[] = [];
 
         for (var i = 0, j = arr.length; i < j; i++) {
-            let imgEl: HTMLImageElement = arr[i], url: string = <string>imgEl.getAttribute('src');
+            let imgEl: HTMLImageElement = arr[i],
+                src: string = <string>imgEl.getAttribute('src');
 
-            if (/^http/.test(url)) {
-                str.push(url);
+            if (/^http/.test(src)) {
                 remotePicArr.push(imgEl);
+                srcs.push(src);
             }
         }
 
-        if (str.length)
+        if (srcs.length)
             xhr.post('../downAllPics/', (json: ImgUploadRepsonseResult) => {
                 let _arr: string[] = json.pics;
+
                 for (var i = 0, j = _arr.length; i < j; i++)
-                    remotePicArr[i].src = "images/" + _arr[i];
+                    remotePicArr[i].src = "images/" + _arr[i]; // 改变 DOM 的旧图片地址为新的
 
                 aj.alert('所有图片下载完成。');
-            }, { pics: str.join('|') });
+            }, { pics: srcs.join('|') });
         else
             aj.alert('未发现有远程图片');
-    }
-
-    /**
-     * Remove additional MS Word content
-     * MSWordHtmlCleaners.js https://gist.github.com/ronanguilloux/2915995
-     * 
-     * @param html 
-     */
-    function cleanPaste(html: string): string {
-        html = html.replace(/<(\/)*(\\?xml:|meta|link|span|font|del|ins|st1:|[ovwxp]:)((.|\s)*?)>/gi, ''); // Unwanted tags
-        html = html.replace(/(class|style|type|start)=("(.*?)"|(\w*))/gi, ''); // Unwanted sttributes
-        html = html.replace(/<style(.*?)style>/gi, '');   // Style tags
-        html = html.replace(/<script(.*?)script>/gi, ''); // Script tags
-        html = html.replace(/<!--(.*?)-->/gi, '');        // HTML comments
-
-        return html;
     }
 
     /*
@@ -422,11 +409,11 @@ namespace aj.form {
             return;
         }
 
-        var items: DataTransferItemList | null = ev.clipboardData && ev.clipboardData.items;
-        var file: File | null = null; // file就是剪切板中的图片文件
+        let items: DataTransferItemList | null = ev.clipboardData && ev.clipboardData.items,
+            file: File | null = null; // file 就是剪切板中的图片文件
 
-        if (items && items.length) {// 检索剪切板items
-            for (var i = 0; i < items.length; i++) {
+        if (items && items.length) {// 检索剪切板 items
+            for (let i = 0; i < items.length; i++) {
                 let item: DataTransferItem = items[i];
 
                 if (item.type.indexOf('image') !== -1) {
@@ -446,18 +433,39 @@ namespace aj.form {
             ev.preventDefault();
 
             img.changeBlobImageQuality(file, (newBlob: Blob) => {
-                Vue.options.components["aj-xhr-upload"].extendOptions.methods.doUpload.call({
-                    action: this.uploadImageActionUrl,
-                    progress: 0,
-                    uploadOk_callback(j: ImgUploadRepsonseResult) {
-                        if (j.isOk)
-                            this.format("insertImage", this.ajResources.imgPerfix + j.imgUrl);
-                    },
-                    $blob: newBlob,
-                    $fileName: 'foo.jpg'
-                });
+                let img = <HTMLImageElement>document.body.$('.test');
+                img.src = URL.createObjectURL(newBlob);
+                console.log('got blob');
+
+                this.format("insertImage", URL.createObjectURL(newBlob));
+                // Vue.options.components["aj-xhr-upload"].extendOptions.methods.doUpload.call({
+                //     action: this.uploadImageActionUrl,
+                //     progress: 0,
+                //     uploadOk_callback(j: ImgUploadRepsonseResult) {
+                //         if (j.isOk)
+                //             this.format("insertImage", this.ajResources.imgPerfix + j.imgUrl);
+                //     },
+                //     $blob: newBlob,
+                //     $fileName: 'foo.jpg'
+                // });
             });
         }
+    }
+
+    /**
+     * Remove additional MS Word content
+     * MSWordHtmlCleaners.js https://gist.github.com/ronanguilloux/2915995
+     * 
+     * @param html 
+     */
+    function cleanPaste(html: string): string {
+        html = html.replace(/<(\/)*(\\?xml:|meta|link|span|font|del|ins|st1:|[ovwxp]:)((.|\s)*?)>/gi, ''); // Unwanted tags
+        html = html.replace(/(class|style|type|start)=("(.*?)"|(\w*))/gi, ''); // Unwanted sttributes
+        html = html.replace(/<style(.*?)style>/gi, '');   // Style tags
+        html = html.replace(/<script(.*?)script>/gi, ''); // Script tags
+        html = html.replace(/<!--(.*?)-->/gi, '');        // HTML comments
+
+        return html;
     }
 
     new HtmlEditor().register();

@@ -165,11 +165,6 @@ var aj;
                 this.fileName = file.name;
                 this.fileSize = file.size;
                 this.errStatus = [];
-                // if (this.limitFileType) {
-                //     this.isExtName = new RegExp(this.limitFileType, 'i').test(ext);
-                //     this.errMsg = '根据文件后缀名判断，此文件不能上传';
-                // } else
-                //     this.isExtName = true;
             };
             /**
              * 字节 Byte 转化成 KB，MB，GB
@@ -204,7 +199,7 @@ var aj;
             FileUploader.prototype.doUpload = function () {
                 var _this = this;
                 this.$uploadOk_callback({ isOk: true, msg: "ok!", imgUrl: "fdfdf" });
-                return;
+                // return;
                 var fd = new FormData();
                 if (this.$blob)
                     fd.append("file", this.$blob, this.fileName);

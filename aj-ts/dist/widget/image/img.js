@@ -7,7 +7,10 @@ var aj;
     var img;
     (function (img_1) {
         /**
-         * 限制图片大小
+         * 为了避免压缩图片变形，一般采用等比缩放，
+         * 首先要计算出原始图片宽高比 aspectRatio，
+         * 用户设置的高乘以 aspectRatio，得出等比缩放后的宽，
+         * 若比用户设置宽的小，则用户设置的高为为基准缩放，否则以宽为基准缩放。
          *
          * @param originWidth
          * @param originHeight
@@ -17,7 +20,7 @@ var aj;
         function fitSize(originWidth, originHeight, maxWidth, maxHeight) {
             // 目标尺寸
             var targetWidth = originWidth, targetHeight = originHeight;
-            // 图片尺寸超过400x400的限制
+            // 图片尺寸超过的限制
             if (originWidth > maxWidth || originHeight > maxHeight) {
                 if (originWidth / originHeight > maxWidth / maxHeight) {
                     // 更宽，按照宽度限定尺寸
@@ -36,70 +39,80 @@ var aj;
          * 图片对象转换为 Canvas
          *
          * @param img
+         * @param targetWidth
+         * @param targetHeigh
          */
-        function imgObj2Canvas(img) {
+        function imgObj2Canvas(img, targetWidth, targetHeigh) {
             var _a;
             var canvas = document.createElement('canvas');
-            canvas.width = img.width;
-            canvas.height = img.height;
+            canvas.width = targetWidth || img.width;
+            canvas.height = targetHeigh || img.height;
             (_a = canvas.getContext('2d')) === null || _a === void 0 ? void 0 : _a.drawImage(img, 0, 0);
             return canvas;
         }
         img_1.imgObj2Canvas = imgObj2Canvas;
         /**
-         * 输入图片远程地址，获取成功之后将其转换为 Canvas。
-         * 在回调中得到 Canvas Base64 结果
-         *
-         * @param imgUrl
-         * @param cb
-         * @param format
-         * @param quality
-         */
-        function imageToCanvas(imgUrl, cb, format, quality) {
+        * Canvas.toDataURL() 也能调整图片大小（压缩图片），但不推荐
+        * 参见：https://www.zhihu.com/question/59267048
+        * 除了作为转换图片的 base64 编码的时候
+        *
+        * 推荐使用 reszieAsBlob()
+        *
+        * @param img
+        * @param targetWidth
+        * @param targetHeight
+        * @param format         目标格式，mime 格式
+        * @param quality        介于 0-1 之间的数字，用于控制输出图片质量，仅当格式为 jpg 和 webp 时才支持质量，png 时 quality 参数无效
+        */
+        function reszieCompressCompressAsDataURL(img, targetWidth, targetHeight, format, quality) {
             if (format === void 0) { format = 'image/jpeg'; }
             if (quality === void 0) { quality = .9; }
+            return imgObj2Canvas(img, targetWidth, targetHeight).toDataURL(format, quality);
+        }
+        img_1.reszieCompressCompressAsDataURL = reszieCompressCompressAsDataURL;
+        /**
+         * 转换图片为 base64 编码
+         * 如果你要展示 blob 图片，更推荐用 img.src = URL.createObjectURL(newBlob); 方法，这个 base64 性能耗损比较大
+         *
+         * @param img
+         */
+        function img2base64(img) {
+            return reszieCompressCompressAsDataURL(img, img.width, img.height);
+        }
+        img_1.img2base64 = img2base64;
+        /**
+         * 调整图片大小（压缩图片）异步方法
+         *
+         * @param img
+         * @param targetWidth
+         * @param targetHeight
+         * @param cb
+         * @param format         目标格式，mime 格式
+         * @param quality        介于 0-1 之间的数字，用于控制输出图片质量，仅当格式为 jpg 和 webp 时才支持质量，png 时 quality 参数无效
+         */
+        function reszieCompressAsBlob(img, targetWidth, targetHeight, cb, format, quality) {
+            if (format === void 0) { format = 'image/jpeg'; }
+            if (quality === void 0) { quality = .9; }
+            imgObj2Canvas(img, targetWidth, targetHeight).toBlob(function (blob) { return blob && cb(blob); }, format, quality);
+        }
+        img_1.reszieCompressAsBlob = reszieCompressAsBlob;
+        function compressAsBlob(img, cb, format, quality) {
+            if (format === void 0) { format = 'image/jpeg'; }
+            if (quality === void 0) { quality = .9; }
+            return reszieCompressAsBlob(img, img.width, img.height, cb, format, quality);
+        }
+        img_1.compressAsBlob = compressAsBlob;
+        /**
+         * 对粘贴板的图片，都是原始 bitmap 比较大，压缩一下
+         *
+         * @param blob  图片对象
+         * @param cb    转换成功回调，接收一个新的 blob 对象作为参数
+         */
+        function changeBlobImageQuality(blob, cb) {
             var img = new Image();
-            img.onload = function () {
-                var canvas = imgObj2Canvas(img);
-                cb(canvas.toDataURL(format, quality));
-            };
-            img.src = imgUrl;
-        }
-        img_1.imageToCanvas = imageToCanvas;
-        /**
-         * 输入图片远程地址，获取成功之后将其转换为 Blob。
-         * 在回调中得到 Blob 结果
-         *
-         * @param imgUrl
-         * @param cb
-         */
-        function imageElToBlob(imgUrl, cb) {
-            imageToCanvas(imgUrl, function (canvas) { return cb(dataURLtoBlob(canvas)); });
-        }
-        img_1.imageElToBlob = imageElToBlob;
-        /**
-         * 改变 blob 图片的质量，为考虑兼容性
-         *
-         * @param blob 图片对象
-         * @param callback 转换成功回调，接收一个新的blob对象作为参数
-         * @param format  目标格式，mime格式
-         * @param quality 介于0-1之间的数字，用于控制输出图片质量，仅当格式为jpg和webp时才支持质量，png时quality参数无效
-         */
-        function changeBlobImageQuality(blob, cb, format, quality) {
-            if (format === void 0) { format = 'image/jpeg'; }
-            if (quality === void 0) { quality = .9; }
-            var fr = new FileReader();
-            fr.onload = function (_e) {
-                var e = _e;
-                var dataURL = e.target.result;
-                var img = new Image();
-                img.onload = function () {
-                    var canvas = imgObj2Canvas(img);
-                    cb && cb(dataURLtoBlob(canvas.toDataURL(format, quality)));
-                };
-                img.src = dataURL;
-            };
-            fr.readAsDataURL(blob); // blob 转 dataURL
+            img.onload = function () { return compressAsBlob(img, cb); };
+            // 也可以用 FileReader 转 base64，但 img 实际支持 blob 加载的
+            img.src = URL.createObjectURL(blob);
         }
         img_1.changeBlobImageQuality = changeBlobImageQuality;
         // EXIF {
@@ -111,12 +124,11 @@ var aj;
          * @param img
          */
         function getPhotoOrientation(img) {
-            var orient;
+            var orient = 0;
             EXIF.getData(img, function () {
                 //@ts-ignore
                 orient = EXIF.getTag(this, 'Orientation');
             });
-            //@ts-ignore
             return orient;
         }
         img_1.getPhotoOrientation = getPhotoOrientation;
@@ -127,8 +139,7 @@ var aj;
          * @param orient
          */
         function rotate(img, orient) {
-            var width = img.width, height = img.height;
-            var canvas = document.createElement('canvas'), ctx = canvas.getContext("2d");
+            var width = img.width, height = img.height, canvas = document.createElement('canvas'), ctx = canvas.getContext("2d");
             // set proper canvas dimensions before transform & export
             if ([5, 6, 7, 8].indexOf(orient) > -1) {
                 canvas.width = height;
@@ -173,9 +184,7 @@ var aj;
          * @param imgObj
          */
         function compress(imgObj, vueCmp) {
-            var maxWidth = 1000, maxHeight = 1500;
-            var fitSizeObj = fitSize(imgObj.width, imgObj.height, maxWidth, maxHeight);
-            var targetWidth = fitSizeObj.targetWidth, targetHeight = fitSizeObj.targetHeight;
+            var maxWidth = 1000, maxHeight = 1500, fitSizeObj = fitSize(imgObj.width, imgObj.height, maxWidth, maxHeight), targetWidth = fitSizeObj.targetWidth, targetHeight = fitSizeObj.targetHeight;
             var orient = getPhotoOrientation(imgObj); // 获取照片的拍摄方向
             if (orient == 6) {
                 targetWidth = fitSizeObj.targetHeight;
@@ -206,5 +215,6 @@ var aj;
                 u8arr[len] = bstr.charCodeAt(len);
             return new Blob([u8arr], { type: mime });
         }
+        img_1.dataURLtoBlob = dataURLtoBlob;
     })(img = aj.img || (aj.img = {}));
 })(aj || (aj = {}));

@@ -60,7 +60,9 @@ var aj;
                         _this.errMsg = '图片大小尺寸不符合要求哦，请裁剪图片重新上传吧~';
                     }
                     if (_this.fileSize > 300 * 1024) // 大于 300k 才压缩
-                        aj.img.compress(imgEl, _this);
+                        aj.img.compressAsBlob(imgEl, function (blob) {
+                            _this.$blob = blob;
+                        });
                 };
             };
             ImgFileUploader.prototype.watchFactory = function () {
@@ -90,11 +92,6 @@ var aj;
                 reader.onload = function (ev) {
                     var fileReader = ev.target;
                     _this.imgBase64Str = fileReader.result;
-                    // if (this.isImgUpload) {
-                    //     var imgEl = new Image();
-                    //     imgEl.onload = () => {
-                    //     }
-                    //     imgEl.src = this.imgBase64Str;
                 };
                 this.$fileObj && reader.readAsDataURL(this.$fileObj);
             };
