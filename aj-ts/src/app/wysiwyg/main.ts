@@ -90,7 +90,7 @@ namespace aj.wysiwyg {
 			}
 		},
 		watch: {
-			focusEl(el, old): void {
+			focusEl(el: HTMLInputElement, old: HTMLElement): void {
 				fb.PropertyEditor.name = el.name;
 				fb.PropertyEditor.placeHolder = el.placeholder;
 				el.style.borderColor = 'red';

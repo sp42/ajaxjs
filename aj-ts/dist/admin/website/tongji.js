@@ -15,7 +15,7 @@ aj.xhr.get('getCommonTrackRpt/', function (json) {
     var data = json.body.data[0].result;
     for (var i in data) {
         new Vue({
-            el: aj('.' + i),
+            el: document.body.$('.' + i),
             data: { arr: data[i].items }
         });
     }
@@ -39,12 +39,14 @@ new Vue({
             var startDate = this.$children[0].date, endDate = this.$children[1].date;
             aj.xhr.get('getTrend', function (json) {
                 // 转换格式
-                var arr = json.body.data[0].result.items, days = arr[0].reverse(), value = arr[1].reverse();
-                var newArr = [];
+                var arr = json.body.data[0].result.items, days = arr[0].reverse(), value = arr[1].reverse(), newArr = [];
                 for (var i = 0, j = days.length; i < j; i++)
                     newArr.push({
-                        name: days[i], pv: value[i][0], uv: value[i][1]
+                        name: days[i],
+                        pv: value[i][0],
+                        uv: value[i][1]
                     });
+                //@ts-ignore
                 _this.values = newArr;
             }, {
                 start_date: startDate,
@@ -53,7 +55,7 @@ new Vue({
         }
     }
 });
-settings = new Vue({
+var settings = new Vue({
     el: '.settings',
     mounted: function () {
         aj.xhr.form(this.$el.$('form'));

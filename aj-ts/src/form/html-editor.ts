@@ -392,13 +392,8 @@ namespace aj.form {
             aj.alert('未发现有远程图片');
     }
 
-    /*
-    * 富文本编辑器中粘贴图片时，chrome可以得到e.clipBoardData.items并从中获取二进制数据，以便ajax上传到后台，
-    * 实现粘贴图片的功能。firefox中items为undefined，可选的方案：1将base64原样上传到后台进行文件存储替换，2将内容清空，待粘贴完毕后取图片src，再恢复现场
-    * https://stackoverflow.com/questions/2176861/javascript-get-clipboard-data-on-paste-event-cross-browser
-    */
-
     /**
+     * 粘贴图片
      * 
      * @param this 
      * @param ev 
@@ -432,22 +427,18 @@ namespace aj.form {
         if (file) {
             ev.preventDefault();
 
-            img.changeBlobImageQuality(file, (newBlob: Blob) => {
-                let img = <HTMLImageElement>document.body.$('.test');
-                img.src = URL.createObjectURL(newBlob);
-                console.log('got blob');
-
-                this.format("insertImage", URL.createObjectURL(newBlob));
-                // Vue.options.components["aj-xhr-upload"].extendOptions.methods.doUpload.call({
-                //     action: this.uploadImageActionUrl,
-                //     progress: 0,
-                //     uploadOk_callback(j: ImgUploadRepsonseResult) {
-                //         if (j.isOk)
-                //             this.format("insertImage", this.ajResources.imgPerfix + j.imgUrl);
-                //     },
-                //     $blob: newBlob,
-                //     $fileName: 'foo.jpg'
-                // });
+            img.changeBlobImageQuality(file, (newBlob: Blob): void => {
+                // 复用上传的方法
+                Vue.options.components["aj-xhr-upload"].extendOptions.methods.doUpload.call({
+                    action: this.uploadImageActionUrl,
+                    progress: 0,
+                    uploadOk_callback(j: ImgUploadRepsonseResult) {
+                        if (j.isOk)
+                            this.format("insertImage", this.ajResources.imgPerfix + j.imgUrl);
+                    },
+                    $blob: newBlob,
+                    $fileName: 'foo.jpg' // 文件名不重要，反正上传到云空间会重命名
+                });
             });
         }
     }

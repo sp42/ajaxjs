@@ -1,5 +1,10 @@
 namespace aj.xhr_upload {
     /**
+     * 定义错误状态，可以为 boolean = true 表示通过，没有错误； string 的时候表示有错误，为具体的异常信息
+     */
+    type ErrStatus = boolean | string;
+
+    /**
      * 属性较多，设一个抽象类
      */
     abstract class BaseFileUploader extends VueComponent implements FormFieldElementComponent {
@@ -23,6 +28,7 @@ namespace aj.xhr_upload {
 
         /**
          * 限制的文件扩展名，这是一个正则。如无限制，不设置或者空字符串
+         * 正则如：txt|pdf|doc
          */
         limitFileType: string = "";
 
@@ -69,9 +75,9 @@ namespace aj.xhr_upload {
 
         /**
          * 固定的错误结构，元素[0]为文件大小，[1]为文件类型。
-         * 如果非空，表示不允许上传。
+         * 如果元素非 true，表示不允许上传。
          */
-        errStatus: string[] = ["", "", ""];
+        errStatus: ErrStatus[] = [false, false];
 
         /**
          * 成功上传之后的文件 id
@@ -115,10 +121,10 @@ namespace aj.xhr_upload {
         props = {
             action: { type: String, required: true },       // 上传路径
             fieldName: String, 	                            // input name 字段名
-            limitSize: { type: Number, default: 20000 },       // 文件大小限制
+            limitSize: { type: Number, default: 20000 },    // 文件大小限制
             limitFileType: String,
             accpectFileType: String,                        // 可以上传类型
-            buttonBottom: Boolean,                         // 上传按钮是否位于下方
+            buttonBottom: Boolean,                          // 上传按钮是否位于下方
             radomId: { type: Number, default() { return Math.round(Math.random() * 1000) } }
         };
 
@@ -131,50 +137,71 @@ namespace aj.xhr_upload {
             let fileInput: HTMLInputElement = <HTMLInputElement>ev.target;
             if (!fileInput.files || !fileInput.files[0])
                 return;
-            // let ext: string = <string>fileInput.value.split('.').pop(); // 扩展名
 
+            // this.errStatus = [false, false, false];
             let file: File = fileInput.files[0],
                 fileType: string = file.type;
 
             this.$fileObj = file;
             this.fileName = file.name;
             this.fileSize = file.size;
-            this.errStatus = [];
         }
 
         watch = {
             fileName(this: FileUploader, newV: string): void {
+                if (!this.limitFileType) {   // 无限制，也不用检查，永远是 true
+                    Vue.set(this.errStatus, 0, true);
+                    return;
+                }
+
                 if (newV && this.limitFileType) {
-                    let ext = <string>newV.split('.').pop(); // 扩展名
+                    let ext = <string>newV.split('.').pop(); // 扩展名，fileInput.value.split('.').pop(); 也可以获取
 
                     if (!new RegExp(this.limitFileType, 'i').test(ext)) {
                         let msg: string = `上传文件为 ${newV}，<br />抱歉，不支持上传 *.${ext} 类型文件`;
-                        // Vue.set(this.errStatus, 0, msg);
-                        alert(msg);
-                    }
+                        Vue.set(this.errStatus, 0, msg);
+                    } else
+                        Vue.set(this.errStatus, 0, true); // 检查通过
                 }
             },
 
             fileSize(this: FileUploader, newV: number): void {
+                if (!this.limitSize) {   // 无限制，也不用检查，永远是 true
+                    Vue.set(this.errStatus, 1, true);
+                    return;
+                }
+
                 if (this.limitSize && newV > this.limitSize * 1024) {
                     let msg: string = `要上传的文件容量过大(${this.changeByte(newV)})，请压缩到 ${this.changeByte(this.limitSize * 1024)} 以下`;
-                    Vue.set(this.errStatus, 0, msg);
-                    alert(msg);
+                    Vue.set(this.errStatus, 1, msg);
                 } else
-                    Vue.set(this.errStatus, 0, "");
+                    Vue.set(this.errStatus, 1, true);
             },
 
-            errStatus(this: FileUploader, newV: string[]): void {
-                if (!newV.length)
+            errStatus(this: FileUploader, newV: ErrStatus[]): void {
+                let j = newV.length;
+                if (!j)
                     return;
 
-                let str: string = "";
-                newV.forEach((msg: string) => {
-                    if (msg)
-                        str += msg + "<br />";
-                });
+                let msg: string = "";
 
-                this.errMsg = str;
+                for (let i = 0; i < j; i++) {
+                    let err: ErrStatus = newV[i];
+                    if (err === false)
+                        return; // 未检查完，退出
+
+                    if (typeof err == 'string')
+                        msg += err + '；<br/>';
+                }
+
+                // 到这步，所有检查完毕
+                if (msg) {       // 有错误
+                    alert(msg);
+                    this.errMsg = msg;
+                } else {         // 全部通过，复位
+                    this.errMsg = "";
+                    this.errStatus = [false, false];
+                }
             }
         };
 
@@ -184,22 +211,20 @@ namespace aj.xhr_upload {
          * @param limit 
          */
         private changeByte(limit: number): string {
-            let size = "";
+            let size: string = "";
 
-            if (limit < 0.1 * 1024) {                            //小于0.1KB，则转化成B
-                size = limit.toFixed(2) + "B"
-            } else if (limit < 0.1 * 1024 * 1024) {            //小于0.1MB，则转化成KB
-                size = (limit / 1024).toFixed(2) + "KB"
-            } else if (limit < 0.1 * 1024 * 1024 * 1024) {        //小于0.1GB，则转化成MB
-                size = (limit / (1024 * 1024)).toFixed(2) + "MB"
-            } else {                                            //其他转化成GB
-                size = (limit / (1024 * 1024 * 1024)).toFixed(2) + "GB"
-            }
+            if (limit < 0.1 * 1024)                             // 小于 0.1KB，则转化成 B
+                size = limit.toFixed(2) + "B";
+            else if (limit < 0.1 * 1024 * 1024)                 // 小于 0.1MB，则转化成 KB
+                size = (limit / 1024).toFixed(2) + "KB";
+            else if (limit < 0.1 * 1024 * 1024 * 1024)          // 小于 0.1GB，则转化成 MB
+                size = (limit / (1024 * 1024)).toFixed(2) + "MB";
+            else                                                // 其他转化成 GB
+                size = (limit / (1024 * 1024 * 1024)).toFixed(2) + "GB";
 
-            let index = size.indexOf("."),                   //获取小数点处的索引
-                dou = size.substr(index + 1, 2);            //获取小数点后两位的值
+            let index = size.indexOf(".");                      // 获取小数点处的索引
 
-            if (dou == "00")                                //判断后两位是否为00，如果是则删除00                
+            if (size.substr(index + 1, 2) == "00")              // 获取小数点后两位的值，判断后两位是否为 00，如果是则删除 00                
                 return size.substring(0, index) + size.substr(index + 3, 2)
 
             return size;
@@ -211,7 +236,7 @@ namespace aj.xhr_upload {
          * @param this 
          */
         doUpload(): void {
-            this.$uploadOk_callback({ isOk: true, msg: "ok!", imgUrl: "fdfdf" });
+            // this.$uploadOk_callback({ isOk: true, msg: "ok!", imgUrl: "fdfdf" });
             // return;
 
             let fd: FormData = new FormData();

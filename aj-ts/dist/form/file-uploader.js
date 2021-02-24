@@ -43,6 +43,7 @@ var aj;
                 _this.accpectFileType = "";
                 /**
                  * 限制的文件扩展名，这是一个正则。如无限制，不设置或者空字符串
+                 * 正则如：txt|pdf|doc
                  */
                 _this.limitFileType = "";
                 /**
@@ -80,9 +81,9 @@ var aj;
                 _this.errMsg = "init";
                 /**
                  * 固定的错误结构，元素[0]为文件大小，[1]为文件类型。
-                 * 如果非空，表示不允许上传。
+                 * 如果元素非 true，表示不允许上传。
                  */
-                _this.errStatus = ["", "", ""];
+                _this.errStatus = [false, false];
                 /**
                  * 成功上传之后的文件 id
                  */
@@ -119,33 +120,53 @@ var aj;
                 };
                 _this.watch = {
                     fileName: function (newV) {
+                        if (!this.limitFileType) { // 无限制，也不用检查，永远是 true
+                            Vue.set(this.errStatus, 0, true);
+                            return;
+                        }
                         if (newV && this.limitFileType) {
-                            var ext = newV.split('.').pop(); // 扩展名
+                            var ext = newV.split('.').pop(); // 扩展名，fileInput.value.split('.').pop(); 也可以获取
                             if (!new RegExp(this.limitFileType, 'i').test(ext)) {
                                 var msg_1 = "\u4E0A\u4F20\u6587\u4EF6\u4E3A " + newV + "\uFF0C<br />\u62B1\u6B49\uFF0C\u4E0D\u652F\u6301\u4E0A\u4F20 *." + ext + " \u7C7B\u578B\u6587\u4EF6";
-                                // Vue.set(this.errStatus, 0, msg);
-                                aj.alert(msg_1);
+                                Vue.set(this.errStatus, 0, msg_1);
                             }
+                            else
+                                Vue.set(this.errStatus, 0, true); // 检查通过
                         }
                     },
                     fileSize: function (newV) {
+                        if (!this.limitSize) { // 无限制，也不用检查，永远是 true
+                            Vue.set(this.errStatus, 1, true);
+                            return;
+                        }
                         if (this.limitSize && newV > this.limitSize * 1024) {
                             var msg_2 = "\u8981\u4E0A\u4F20\u7684\u6587\u4EF6\u5BB9\u91CF\u8FC7\u5927(" + this.changeByte(newV) + ")\uFF0C\u8BF7\u538B\u7F29\u5230 " + this.changeByte(this.limitSize * 1024) + " \u4EE5\u4E0B";
-                            Vue.set(this.errStatus, 0, msg_2);
-                            aj.alert(msg_2);
+                            Vue.set(this.errStatus, 1, msg_2);
                         }
                         else
-                            Vue.set(this.errStatus, 0, "");
+                            Vue.set(this.errStatus, 1, true);
                     },
                     errStatus: function (newV) {
-                        if (!newV.length)
+                        var j = newV.length;
+                        if (!j)
                             return;
-                        var str = "";
-                        newV.forEach(function (msg) {
-                            if (msg)
-                                str += msg + "<br />";
-                        });
-                        this.errMsg = str;
+                        var msg = "";
+                        for (var i = 0; i < j; i++) {
+                            var err = newV[i];
+                            if (err === false)
+                                return; // 未检查完，退出
+                            if (typeof err == 'string')
+                                msg += err + '；<br/>';
+                        }
+                        // 到这步，所有检查完毕
+                        if (msg) { // 有错误
+                            aj.alert(msg);
+                            this.errMsg = msg;
+                        }
+                        else { // 全部通过，复位
+                            this.errMsg = "";
+                            this.errStatus = [false, false];
+                        }
                     }
                 };
                 return _this;
@@ -159,12 +180,11 @@ var aj;
                 var fileInput = ev.target;
                 if (!fileInput.files || !fileInput.files[0])
                     return;
-                // let ext: string = <string>fileInput.value.split('.').pop(); // 扩展名
+                // this.errStatus = [false, false, false];
                 var file = fileInput.files[0], fileType = file.type;
                 this.$fileObj = file;
                 this.fileName = file.name;
                 this.fileSize = file.size;
-                this.errStatus = [];
             };
             /**
              * 字节 Byte 转化成 KB，MB，GB
@@ -173,21 +193,16 @@ var aj;
              */
             FileUploader.prototype.changeByte = function (limit) {
                 var size = "";
-                if (limit < 0.1 * 1024) { //小于0.1KB，则转化成B
+                if (limit < 0.1 * 1024) // 小于 0.1KB，则转化成 B
                     size = limit.toFixed(2) + "B";
-                }
-                else if (limit < 0.1 * 1024 * 1024) { //小于0.1MB，则转化成KB
+                else if (limit < 0.1 * 1024 * 1024) // 小于 0.1MB，则转化成 KB
                     size = (limit / 1024).toFixed(2) + "KB";
-                }
-                else if (limit < 0.1 * 1024 * 1024 * 1024) { //小于0.1GB，则转化成MB
+                else if (limit < 0.1 * 1024 * 1024 * 1024) // 小于 0.1GB，则转化成 MB
                     size = (limit / (1024 * 1024)).toFixed(2) + "MB";
-                }
-                else { //其他转化成GB
+                else // 其他转化成 GB
                     size = (limit / (1024 * 1024 * 1024)).toFixed(2) + "GB";
-                }
-                var index = size.indexOf("."), //获取小数点处的索引
-                dou = size.substr(index + 1, 2); //获取小数点后两位的值
-                if (dou == "00") //判断后两位是否为00，如果是则删除00                
+                var index = size.indexOf("."); // 获取小数点处的索引
+                if (size.substr(index + 1, 2) == "00") // 获取小数点后两位的值，判断后两位是否为 00，如果是则删除 00                
                     return size.substring(0, index) + size.substr(index + 3, 2);
                 return size;
             };
@@ -197,9 +212,9 @@ var aj;
              * @param this
              */
             FileUploader.prototype.doUpload = function () {
-                var _this = this;
-                this.$uploadOk_callback({ isOk: true, msg: "ok!", imgUrl: "fdfdf" });
+                // this.$uploadOk_callback({ isOk: true, msg: "ok!", imgUrl: "fdfdf" });
                 // return;
+                var _this = this;
                 var fd = new FormData();
                 if (this.$blob)
                     fd.append("file", this.$blob, this.fileName);

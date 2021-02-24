@@ -6,53 +6,52 @@ namespace aj.form {
         name = "aj-form-calendar";
 
         template = html`
-            <div class="aj-form-calendar">
-                <div class="selectYearMonth">
-                    <a href="###" @click="getDate('preYear')" class="preYear" title="上一年">&lt;</a>
-                    <select @change="setMonth" v-model="month">
-                        <option value="1">一月</option>
-                        <option value="2">二月</option>
-                        <option value="3">三月</option>
-                        <option value="4">四月</option>
-                        <option value="5">五月</option>
-                        <option value="6">六月</option>
-                        <option value="7">七月</option>
-                        <option value="8">八月</option>
-                        <option value="9">九月</option>
-                        <option value="10">十月</option>
-                        <option value="11">十一月</option>
-                        <option value="12">十二月</option>
-                    </select>
-                    <a href="###" @click="getDate('nextYear')" class="nextYear" title="下一年">&gt;</a>
-                </div>
-                <div class="showCurrentYearMonth">
-                    <span class="showYear">{{year}}</span>/<span class="showMonth">{{month}}</span>
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <td>日</td>
-                            <td>一</td>
-                            <td>二</td>
-                            <td>三</td>
-                            <td>四</td>
-                            <td>五</td>
-                            <td>六</td>
-                        </tr>
-                    </thead>
-                    <tbody @click="pickDay"></tbody>
-                </table>
-                <div v-if="showTime" class="showTime">
-                    时 <select class="hour aj-select">
-                        <option v-for="n in 24">{{n}}</option>
-                    </select>
-                    分 <select class="minute aj-select">
-                        <option v-for="n in 61">{{n - 1}}</option>
-                    </select>
-                    <a href="#" @click="pickupTime">选择时间</a>
-                </div>
+        <div class="aj-form-calendar">
+            <div class="selectYearMonth">
+                <a href="###" @click="getDate('preYear')" class="preYear" title="上一年">&lt;</a>
+                <select @change="setMonth" v-model="month">
+                    <option value="1">一月</option>
+                    <option value="2">二月</option>
+                    <option value="3">三月</option>
+                    <option value="4">四月</option>
+                    <option value="5">五月</option>
+                    <option value="6">六月</option>
+                    <option value="7">七月</option>
+                    <option value="8">八月</option>
+                    <option value="9">九月</option>
+                    <option value="10">十月</option>
+                    <option value="11">十一月</option>
+                    <option value="12">十二月</option>
+                </select>
+                <a href="###" @click="getDate('nextYear')" class="nextYear" title="下一年">&gt;</a>
             </div>
-        `;
+            <div class="showCurrentYearMonth">
+                <span class="showYear">{{year}}</span>/<span class="showMonth">{{month}}</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <td>日</td>
+                        <td>一</td>
+                        <td>二</td>
+                        <td>三</td>
+                        <td>四</td>
+                        <td>五</td>
+                        <td>六</td>
+                    </tr>
+                </thead>
+                <tbody @click="pickDay"></tbody>
+            </table>
+            <div v-if="showTime" class="showTime">
+                时 <select class="hour aj-select">
+                    <option v-for="n in 24">{{n}}</option>
+                </select>
+                分 <select class="minute aj-select">
+                    <option v-for="n in 61">{{n - 1}}</option>
+                </select>
+                <a href="#" @click="pickupTime">选择时间</a>
+            </div>
+        </div>`;
 
         watch = {
             date(this: Calendar): void {
@@ -100,10 +99,10 @@ namespace aj.form {
                         let d: number | undefined = arr.shift();
 
                         if (d) {
-                            cell.innerHTML = d + "";
                             let text: string = this.year + '-' + this.month + '-' + d;
-                            cell.className = 'day day_' + text;
                             cell.title = text;  // 保存日期在 title 属性
+                            cell.className = 'day day_' + text;
+                            cell.innerHTML = d + "";
 
                             let on: Date = new Date(this.year, this.month - 1, d);
 
@@ -113,8 +112,7 @@ namespace aj.form {
                                 // this.onToday && this.onToday(cell);// 点击 今天 时候触发的事件
                             }
                             // 判断是否选择日期
-                            // this.selectDay && this.onSelectDay && this.isSameDay(on, this.selectDay) &&
-                            // this.onSelectDay(cell);
+                            // this.selectDay && this.onSelectDay && this.isSameDay(on, this.selectDay) && this.onSelectDay(cell);
                         }
                     }
 
@@ -124,10 +122,7 @@ namespace aj.form {
                 frag.appendChild(row);
             }
 
-            // 先清空内容再插入(ie的table不能用innerHTML)
-            // while (el.hasChildNodes())
-            // el.removeChild(el.firstChild);
-
+            // 先清空内容再插入
             let tbody = <HTMLElement>this.$el.$("table tbody");
             tbody.innerHTML = '';
             tbody.appendChild(frag);
@@ -165,7 +160,7 @@ namespace aj.form {
         /**
          * 
          * 
-         * @param $event 
+         * @param $even
          */
         setMonth(ev: Event): void {
             let el: HTMLSelectElement = <HTMLSelectElement>ev.target;
@@ -177,16 +172,17 @@ namespace aj.form {
          * 
          * @param this 
          */
-        getDateArr(): number[] {
+        private getDateArr(): number[] {
             let arr: number[] = [];
 
-            // 用 当月第一天 在一周中的日期值 作为 当月 离 第一天的天数
-            for (let i = 1, firstDay = new Date(this.year, this.month - 1, 1).getDay(); i <= firstDay; i++)
+            // 算出这个月1号距离前面的星期天有多少天
+            for (let i = 1, firstDay: number = new Date(this.year, this.month - 1, 1).getDay(); i <= firstDay; i++)
                 arr.push(0);
 
-            // 用 当月最后一天 在一个月中的 日期值 作为 当月的天数
-            for (let i = 1, monthDay = new Date(this.year, this.month, 0).getDate(); i <= monthDay; i++)
+            // 这个月有多少天。用上个月然后设置日子参数为 0，就可以得到本月有多天
+            for (let i = 1, monthDay: number = new Date(this.year, this.month, 0).getDate(); i <= monthDay; i++)
                 arr.push(i);
+
 
             return arr;
         }
