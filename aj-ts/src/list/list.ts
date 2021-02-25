@@ -216,7 +216,7 @@ namespace aj.list {
 				aj.apply(this.lastRequestParam, this.extraParam);
 				initPageParams.call(this);
 
-				aj.xhr.get(this.apiUrl, this.onLoad || ((j: PageListRepsonseResult) => {
+				xhr.get(this.apiUrl, this.onLoad || ((j: PageListRepsonseResult) => {
 					if (j.result) {
 						if (j.total === undefined)
 							aj.alert('JSON 缺少 total 字段');
