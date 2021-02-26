@@ -31,6 +31,7 @@ namespace aj.xhr_upload {
             }, this.props);
 
             p.accpectFileType = { type: String, default: "image/*" };
+            p.limitFileType = { type: String, default: 'jpg|png|gif|jpeg' };
 
             return p
         }
@@ -38,10 +39,14 @@ namespace aj.xhr_upload {
         imgMaxWidth: number = 0;
         imgMaxHeight: number = 0;
 
-        onUploadInputChange(ev: Event): void {
-            super.onUploadInputChange(ev);
-            // fileUploader.onUploadInputChange.call(this, ev);
-            this.readBase64();
+        // onUploadInputChange(ev: Event): void {
+        //     super.onUploadInputChange(ev);
+        //     // fileUploader.onUploadInputChange.call(this, ev);
+        //     this.readBase64();
+        // }
+
+        beforeCreate() {
+            console.log(this)
         }
 
         mounted() {
@@ -51,10 +56,10 @@ namespace aj.xhr_upload {
                     this.errMsg = '图片大小尺寸不符合要求哦，请裁剪图片重新上传吧~';
                 }
 
-                if (this.fileSize > 300 * 1024)  // 大于 300k 才压缩
-                    img.compressAsBlob(imgEl, (blob: Blob): void => {
-                        this.$blob = blob;
-                    });
+                // if (this.fileSize > 300 * 1024)  // 大于 300k 才压缩
+                //     img.compressAsBlob(imgEl, (blob: Blob): void => {
+                //         this.$blob = blob;
+                //     });
             }
         }
 
@@ -77,6 +82,10 @@ namespace aj.xhr_upload {
                         aj.alert(msg);
                     } else
                         Vue.set(this.errStatus, 2, "");
+                },
+                errMsg(this: ImgFileUploader, newV: string): void {
+                    if (!newV)
+                        this.readBase64();
                 }
             }
         }

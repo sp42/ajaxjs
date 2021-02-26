@@ -1,0 +1,60 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>AJAXJS Web UI Demo</title>
+    <link rel="stylesheet" type="text/css" href="../../dist/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../common/demo.css" />
+
+    <link crossorigin="anonymous" integrity="sha384-FckWOBo7yuyMS7In0aXZ0aoVvnInlnFMwCv77x9sZpFgOonQgnBj1uLwenWVtsEj"
+        href="https://lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
+    <script src="https://lib.baomitu.com/vue/2.6.11/vue.js"></script>
+    <style>
+        .bar {
+            height: 20px;
+            width: 300px;
+            background-color: #f5f5f5;
+            margin: 5px 0 10px;
+        }
+
+        .bar::before {
+            counter-reset: progress var(--percent);
+            content: counter(progress) '%\2002';
+            display: block;
+            width: calc(300px * var(--percent) / 100);
+            font-size: 12px;
+            color: #fff;
+            background-color: #2486ff;
+            text-align: right;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <h1>Welcome to AJAXJS Web UI</h1>
+        <div>
+            <menu>
+                <span></span>
+            </menu>
+            <div class="content">
+                <h2>CSS百分比变量与进度条demo</h2>
+                <p>https://www.zhangxinxu.com/wordpress/2019/05/content-css-var/ https://www.zhangxinxu.com/wordpress/2019/01/css-var-%e5%8f%98%e9%87%8f-%e5%b1%80%e9%83%a8/</p>
+                <label>图片1：</label>
+                <div class="bar" style="--percent: 60;"></div>
+                <label>图片2：</label>
+                <div class="bar" style="--percent: 40;"></div>
+                <label>图片3：</label>
+                <div class="bar" style="--percent: 20;"></div>
+            </div>
+            <div class="copyright">
+                <div></div>
+            </div>
+        </div>
+    </div>
+    <script src="../common/demo.js"></script>
+</body>
+
+</html>

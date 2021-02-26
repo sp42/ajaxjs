@@ -6,9 +6,7 @@ Vue.component('aj-form-popup-upload', {
         <aj-layer>
             <h3>图片上传</h3>
             <p>上传成功后自动插入到正文</p>
-            <aj-xhr-upload ref="uploadControl" :action="uploadUrl" :is-img-upload="true" :hidden-field="imgName"
-                :img-place="'/images/imgBg.png'">
-            </aj-xhr-upload>
+            <aj-img-uploder ref="uploadControl" :action="uploadUrl"></aj-img-uploder>
             <div>上传限制：{{text.maxSize}}kb 或以下，分辨率：{{text.maxHeight}}x{{text.maxWidth}}</div>
         </aj-layer>
     `,

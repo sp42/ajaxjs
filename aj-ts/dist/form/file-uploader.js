@@ -108,7 +108,7 @@ var aj;
             function FileUploader() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
                 _this.name = "aj-file-uploader";
-                _this.template = html(__makeTemplateObject(["\n            <div class=\"aj-file-uploader\">\n                <input type=\"hidden\" :name=\"fieldName\" :value=\"fieldValue\" />\n                <input type=\"file\" :id=\"'uploadInput_' + radomId\" @change=\"onUploadInputChange\" :accept=\"accpectFileType\" />\n            \n                <label class=\"pseudoFilePicker\" :for=\"'uploadInput_' + radomId\">\n                    <div>\n                        <div>+</div>\u70B9\u51FB\u9009\u62E9\u6587\u4EF6\n                    </div>\n                </label>\n            \n                <div class=\"msg\" v-if=\"errMsg == ''\">\n                    {{fileName}}<div v-if=\"fileSize\">{{changeByte(fileSize)}}</div>\n                    <button @click.prevent=\"doUpload\">{{progress && progress !== 100 ? '\u4E0A\u4F20\u4E2D ' + progress + '%': '\u4E0A\u4F20'}}</button>\n                </div>\n            </div>\n        "], ["\n            <div class=\"aj-file-uploader\">\n                <input type=\"hidden\" :name=\"fieldName\" :value=\"fieldValue\" />\n                <input type=\"file\" :id=\"'uploadInput_' + radomId\" @change=\"onUploadInputChange\" :accept=\"accpectFileType\" />\n            \n                <label class=\"pseudoFilePicker\" :for=\"'uploadInput_' + radomId\">\n                    <div>\n                        <div>+</div>\u70B9\u51FB\u9009\u62E9\u6587\u4EF6\n                    </div>\n                </label>\n            \n                <div class=\"msg\" v-if=\"errMsg == ''\">\n                    {{fileName}}<div v-if=\"fileSize\">{{changeByte(fileSize)}}</div>\n                    <button @click.prevent=\"doUpload\">{{progress && progress !== 100 ? '\u4E0A\u4F20\u4E2D ' + progress + '%': '\u4E0A\u4F20'}}</button>\n                </div>\n            </div>\n        "]));
+                _this.template = html(__makeTemplateObject(["\n            <div class=\"aj-file-uploader\">\n                <input type=\"hidden\" :name=\"fieldName\" :value=\"fieldValue\" />\n                <input type=\"file\" :id=\"'uploadInput_' + radomId\" @change=\"onUploadInputChange\" :accept=\"accpectFileType\" />\n            \n                <label class=\"pseudoFilePicker\" :for=\"'uploadInput_' + radomId\">\n                    <div @drop=\"onDrop\" ondragover=\"event.preventDefault();\">\n                        <div>+</div>\u70B9\u51FB\u9009\u62E9\u6587\u4EF6<br />\u6216\u62D6\u653E\u5230\u6B64\n                    </div>\n                </label>\n            \n                <div class=\"msg\" v-if=\"errMsg != ''\">\n                    \u5141\u8BB8\u7C7B\u578B\uFF1A{{limitFileType || '\u65E0\u9650\u5236'}}\n                    <br />\n                    \u5141\u8BB8\u5927\u5C0F\uFF1A{{limitSize ? changeByte(limitSize * 1024) : '\u65E0\u9650\u5236'}}\n                </div>\n                <div class=\"msg\" v-if=\"errMsg == ''\">\n                    {{fileName}}<div v-if=\"fileSize\">{{changeByte(fileSize)}}</div>\n                    <button @click.prevent=\"doUpload\">{{progress && progress !== 100 ? '\u4E0A\u4F20\u4E2D ' + progress + '%': '\u4E0A\u4F20'}}</button>\n                </div>\n            </div>\n        "], ["\n            <div class=\"aj-file-uploader\">\n                <input type=\"hidden\" :name=\"fieldName\" :value=\"fieldValue\" />\n                <input type=\"file\" :id=\"'uploadInput_' + radomId\" @change=\"onUploadInputChange\" :accept=\"accpectFileType\" />\n            \n                <label class=\"pseudoFilePicker\" :for=\"'uploadInput_' + radomId\">\n                    <div @drop=\"onDrop\" ondragover=\"event.preventDefault();\">\n                        <div>+</div>\u70B9\u51FB\u9009\u62E9\u6587\u4EF6<br />\u6216\u62D6\u653E\u5230\u6B64\n                    </div>\n                </label>\n            \n                <div class=\"msg\" v-if=\"errMsg != ''\">\n                    \u5141\u8BB8\u7C7B\u578B\uFF1A{{limitFileType || '\u65E0\u9650\u5236'}}\n                    <br />\n                    \u5141\u8BB8\u5927\u5C0F\uFF1A{{limitSize ? changeByte(limitSize * 1024) : '\u65E0\u9650\u5236'}}\n                </div>\n                <div class=\"msg\" v-if=\"errMsg == ''\">\n                    {{fileName}}<div v-if=\"fileSize\">{{changeByte(fileSize)}}</div>\n                    <button @click.prevent=\"doUpload\">{{progress && progress !== 100 ? '\u4E0A\u4F20\u4E2D ' + progress + '%': '\u4E0A\u4F20'}}</button>\n                </div>\n            </div>\n        "]));
                 _this.props = {
                     action: { type: String, required: true },
                     fieldName: String,
@@ -155,7 +155,7 @@ var aj;
                             var err = newV[i];
                             if (err === false)
                                 return; // 未检查完，退出
-                            if (typeof err == 'string')
+                            if (err && typeof err == 'string')
                                 msg += err + '；<br/>';
                         }
                         // 到这步，所有检查完毕
@@ -181,7 +181,16 @@ var aj;
                 if (!fileInput.files || !fileInput.files[0])
                     return;
                 // this.errStatus = [false, false, false];
-                var file = fileInput.files[0], fileType = file.type;
+                this.onFileGet(fileInput.files);
+            };
+            FileUploader.prototype.onDrop = function (ev) {
+                var _a;
+                ev.preventDefault(); // 阻止进行拖拽时浏览器的默认行为，即自动打开图片
+                if ((_a = ev.dataTransfer) === null || _a === void 0 ? void 0 : _a.files)
+                    this.onFileGet(ev.dataTransfer.files);
+            };
+            FileUploader.prototype.onFileGet = function (files) {
+                var file = files[0], fileType = file.type;
                 this.$fileObj = file;
                 this.fileName = file.name;
                 this.fileSize = file.size;

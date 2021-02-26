@@ -103,7 +103,8 @@ var aj;
      * @param name
      */
     function isVueCfg(name) {
-        return name == 'template' || name == 'data' || name == 'mixins' || name == 'computed' || name == 'mounted' || name == "watch";
+        return name == 'template' || name == 'data' || name == 'mixins'
+            || name == 'computed' || name == 'mounted' || name == 'beforeCreate' || name == "watch";
     }
     /**
      *

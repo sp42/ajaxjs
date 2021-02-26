@@ -1,24 +1,27 @@
 @import './common-form-functions.less';
 
 .aj-file-uploader {
+    width:300px;
     &>* {
-        display: inline-block;
+        display       : inline-block;
+        vertical-align: middle;
     }
 
     label {
         margin-right: 2%;
 
         &>div {
-            border       : 1px solid lightgray;
-            border-radius: 5px;
-            text-align   : center;
-            color        : gray;
-            cursor       : pointer;
-            font-size    : .8rem;
-            padding      : 10px;
-            width        : 100px;
-            height       : 70px;
-            transition   : border-color linear 300ms, color linear 300ms;
+            border        : 1px solid lightgray;
+            border-radius : 5px;
+            text-align    : center;
+            color         : gray;
+            cursor        : pointer;
+            font-size     : .8rem;
+            padding       : 10px;
+            padding-bottom: 25px;
+            width         : 100px;
+            height        : 70px;
+            transition    : border-color linear 300ms, color linear 300ms;
 
             &:hover {
                 border-color: gray;
@@ -40,9 +43,15 @@
         display: none;
     }
 
-    .msg>div {
-        color    : gray;
+    .msg {
         font-size: .8rem;
+        color    : gray;
+        max-width: 50%;
+        word-break: break-word;
+        text-overflow: ellipsis;
+        &>div {
+            font-size: .75rem;
+        }
     }
 }
 

@@ -45,12 +45,16 @@ var aj;
                     imgMaxHeight: { type: Number, default: 1680 },
                 }, this.props);
                 p.accpectFileType = { type: String, default: "image/*" };
+                p.limitFileType = { type: String, default: 'jpg|png|gif|jpeg' };
                 return p;
             };
-            ImgFileUploader.prototype.onUploadInputChange = function (ev) {
-                _super.prototype.onUploadInputChange.call(this, ev);
-                // fileUploader.onUploadInputChange.call(this, ev);
-                this.readBase64();
+            // onUploadInputChange(ev: Event): void {
+            //     super.onUploadInputChange(ev);
+            //     // fileUploader.onUploadInputChange.call(this, ev);
+            //     this.readBase64();
+            // }
+            ImgFileUploader.prototype.beforeCreate = function () {
+                console.log(this);
             };
             ImgFileUploader.prototype.mounted = function () {
                 var _this = this;
@@ -59,10 +63,10 @@ var aj;
                     if (imgEl.width > _this.imgMaxWidth || imgEl.height > _this.imgMaxHeight) {
                         _this.errMsg = '图片大小尺寸不符合要求哦，请裁剪图片重新上传吧~';
                     }
-                    if (_this.fileSize > 300 * 1024) // 大于 300k 才压缩
-                        aj.img.compressAsBlob(imgEl, function (blob) {
-                            _this.$blob = blob;
-                        });
+                    // if (this.fileSize > 300 * 1024)  // 大于 300k 才压缩
+                    //     img.compressAsBlob(imgEl, (blob: Blob): void => {
+                    //         this.$blob = blob;
+                    //     });
                 };
             };
             ImgFileUploader.prototype.watchFactory = function () {
@@ -83,6 +87,10 @@ var aj;
                         }
                         else
                             Vue.set(this.errStatus, 2, "");
+                    },
+                    errMsg: function (newV) {
+                        if (!newV)
+                            this.readBase64();
                     }
                 };
             };

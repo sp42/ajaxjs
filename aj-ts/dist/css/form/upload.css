@@ -1,5 +1,9 @@
+.aj-file-uploader {
+  width: 300px;
+}
 .aj-file-uploader > * {
   display: inline-block;
+  vertical-align: middle;
 }
 .aj-file-uploader label {
   margin-right: 2%;
@@ -12,6 +16,7 @@
   cursor: pointer;
   font-size: 0.8rem;
   padding: 10px;
+  padding-bottom: 25px;
   width: 100px;
   height: 70px;
   transition: border-color linear 300ms, color linear 300ms;
@@ -67,9 +72,15 @@
 .aj-file-uploader input[type=file] {
   display: none;
 }
-.aj-file-uploader .msg > div {
-  color: gray;
+.aj-file-uploader .msg {
   font-size: 0.8rem;
+  color: gray;
+  max-width: 50%;
+  word-break: break-word;
+  text-overflow: ellipsis;
+}
+.aj-file-uploader .msg > div {
+  font-size: 0.75rem;
 }
 .aj-img-uploader img {
   margin-right: 10px;

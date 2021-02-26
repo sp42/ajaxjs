@@ -107,11 +107,16 @@ namespace aj.xhr_upload {
                 <input type="file" :id="'uploadInput_' + radomId" @change="onUploadInputChange" :accept="accpectFileType" />
             
                 <label class="pseudoFilePicker" :for="'uploadInput_' + radomId">
-                    <div>
-                        <div>+</div>点击选择文件
+                    <div @drop="onDrop" ondragover="event.preventDefault();">
+                        <div>+</div>点击选择文件<br />或拖放到此
                     </div>
                 </label>
             
+                <div class="msg" v-if="errMsg != ''">
+                    允许类型：{{limitFileType || '无限制'}}
+                    <br />
+                    允许大小：{{limitSize ? changeByte(limitSize * 1024) : '无限制'}}
+                </div>
                 <div class="msg" v-if="errMsg == ''">
                     {{fileName}}<div v-if="fileSize">{{changeByte(fileSize)}}</div>
                     <button @click.prevent="doUpload">{{progress && progress !== 100 ? '上传中 ' + progress + '%': '上传'}}</button>
@@ -139,7 +144,18 @@ namespace aj.xhr_upload {
                 return;
 
             // this.errStatus = [false, false, false];
-            let file: File = fileInput.files[0],
+            this.onFileGet(fileInput.files);
+        }
+
+        onDrop(ev: DragEvent): void {
+            ev.preventDefault();// 阻止进行拖拽时浏览器的默认行为，即自动打开图片
+
+            if (ev.dataTransfer?.files)
+                this.onFileGet(ev.dataTransfer.files);
+        }
+
+        onFileGet(files: FileList): void {
+            let file: File = files[0],
                 fileType: string = file.type;
 
             this.$fileObj = file;
@@ -190,7 +206,7 @@ namespace aj.xhr_upload {
                     if (err === false)
                         return; // 未检查完，退出
 
-                    if (typeof err == 'string')
+                    if (err && typeof err == 'string')
                         msg += err + '；<br/>';
                 }
 

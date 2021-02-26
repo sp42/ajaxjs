@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title> Vue-Table-Demo </title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            margin-bottom: 20px
+        }
+
+        table th,
+        td {
+            border: 1px solid #999;
+        }
+
+        thead {
+            border: 2px solid #999;
+        }
+
+        thead th {
+            height: 40px;
+        }
+    </style>
+    <!--1.引入VUE.JS ---->
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.12/vue.min.js"></script>
+</head>
+
+<body>
+    <div class="div-table" style="width:1200px">
+        <table id="table1">
+            <thead>
+                <tr>
+                    <th>派工单号</th>
+                    <th>派工日期</th>
+                    <th>本单费用小计</th>
+                    <th>路径</th>
+                    <th>公里数</th>
+                    <th>费用</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <template v-for="(item,index) in table1">
+                    <tr>
+                        <td :rowspan="item.table2.length == 0 ? 1 : item.table2.length">{{item.order}}</td>
+                        <td :rowspan="item.table2.length == 0 ? 1 : item.table2.length">{{item.date}}</td>
+                        <td :rowspan="item.table2.length == 0 ? 1 : item.table2.length">{{item.total}}</td>
+
+                        <td v-if="item.table2[0]">{{item.table2[0].path}}</td>
+                        <td v-else></td>
+                        <td v-if="item.table2[0]">{{item.table2[0].mileage}}</td>
+                        <td v-else></td>
+                        <td v-if="item.table2[0]">{{item.table2[0].fee}}</td>
+                        <td v-else></td>
+                    </tr>
+
+                    <template v-for="(ele,inx) in item.table2" v-if="inx > 0">
+                        <tr>
+                            <td>{{ele.path}}</td>
+                            <td>{{ele.mileage}}</td>
+                            <td>{{ele.fee}}</td>
+                        </tr>
+                    </template>
+                </template>
+
+            </tbody>
+        </table>
+
+        <table id="table2">
+            <thead>
+                <tr>
+                    <th>派工单号</th>
+                    <th>派工日期</th>
+                    <th>本单费用小计</th>
+                    <th>路径</th>
+                    <th>公里数</th>
+                    <th>费用</th>
+                    <th>费用名称</th>
+                    <th>金额</th>
+                    <th>备注</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <template v-for="(item,index) in table2">
+                    <tr>
+                        <td :rowspan="item|objlength1()">{{item.order}}</td>
+                        <td :rowspan="item|objlength1()">{{item.date}}</td>
+                        <td :rowspan="item|objlength1()">{{item.total}}</td>
+
+                        <td :rowspan="item.table2[0].table3.length == 0 ? 1 : item.table2[0].table3.length">
+                            {{item.table2[0].path}}</td>
+                        <td :rowspan="item.table2[0].table3.length == 0 ? 1 : item.table2[0].table3.length">
+                            {{item.table2[0].mileage}}</td>
+                        <td :rowspan="item.table2[0].table3.length == 0 ? 1 : item.table2[0].table3.length">
+                            {{item.table2[0].fee}}</td>
+
+                        <td v-if="item.table2[0].table3[0]">{{item.table2[0].table3[0].feeType}}</td>
+                        <td v-else></td>
+                        <td v-if="item.table2[0].table3[0]">{{item.table2[0].table3[0].monye}}</td>
+                        <td v-else></td>
+                        <td v-if="item.table2[0].table3[0]">{{item.table2[0].table3[0].remarks}}</td>
+                        <td v-else></td>
+                    </tr>
+
+                    <template v-for="(m,n) in item.table2[0].table3" v-if="n > 0">
+                        <tr>
+                            <td>{{m.feeType}}</td>
+                            <td>{{m.monye}}</td>
+                            <td>{{m.remarks}}</td>
+                        </tr>
+                    </template>
+
+                    <template v-for="(ele,inx) in item.table2" v-if="inx > 0">
+                        <tr>
+                            <td :rowspan="ele.table3.length == 0 ? 1 : ele.table3.length">{{ele.path}}</td>
+                            <td :rowspan="ele.table3.length == 0 ? 1 : ele.table3.length">{{ele.mileage}}</td>
+                            <td :rowspan="ele.table3.length == 0 ? 1 : ele.table3.length">{{ele.fee}}</td>
+
+                            <td v-if="ele.table3[0]">{{ele.table3[0].feeType}}</td>
+                            <td v-else></td>
+                            <td v-if="ele.table3[0]">{{ele.table3[0].monye}}</td>
+                            <td v-else></td>
+                            <td v-if="ele.table3[0]">{{ele.table3[0].remarks}}</td>
+                            <td v-else></td>
+                        </tr>
+
+                        <template v-for="(e,i) in ele.table3" v-if="i > 0">
+                            <tr>
+                                <td>{{e.feeType}}</td>
+                                <td>{{e.monye}}</td>
+                                <td>{{e.remarks}}</td>
+                            </tr>
+                        </template>
+                    </template>
+                </template>
+
+            </tbody>
+        </table>
+
+        <table id="table3">
+            <thead>
+                <tr>
+                    <th>派工单号</th>
+                    <th>派工日期</th>
+                    <th>本单费用小计</th>
+                    <th>路径</th>
+                    <th>公里数</th>
+                    <th>费用</th>
+                    <th>费用名称</th>
+                    <th>金额</th>
+                    <th>备注</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item, index) in table3">
+                    <td>{{item.order}}</td>
+                    <td>{{item.date}}</td>
+                    <td>{{item.total}}</td>
+                    <td>{{item.path}}</td>
+                    <td>{{item.mileage}}</td>
+                    <td>{{item.fee}}</td>
+                    <td>{{item.feeType}}</td>
+                    <td>{{item.monye}}</td>
+                    <td>{{item.remarks}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</body>
+
+</html>
+<script type="text/javascript">
+    /*
+    https://fengkui.net/article/148
+    在之前的文章中介绍了php导出 excel 时进行单元格合并，
+    在这篇文章中，介绍一下 vue 数据循环时如何进行单元格合并，
+    这里主要介绍 二维 和 三维 数组循环时数组的合并。
+    */
+    //vm.data这里data从后端读取
+    new Vue({
+        el: ".div-table",
+        data: {
+            table1: [
+                {
+                    order: "ASPG20190427", date: "2019-04-27", total: "1200", table2: [
+                        { path: '苏州—北京', mileage: '7777km', fee: '1000' },
+                        { path: '上海—北京', mileage: '1000km', fee: '1000' },
+                        { path: '杭州—苏州', mileage: '1000km', fee: '1000' },
+                        { path: '成都—内蒙', mileage: '200km', fee: '200' },
+                        { path: '武汉—太原', mileage: '200km', fee: '200' }
+                    ]
+                },
+                {
+                    order: "ASPG20190428", date: "2019-04-28", total: "1200", table2: [
+                        { path: '上海—北京', mileage: '1000km', fee: '1000' },
+                        { path: '北京—天津', mileage: '200km', fee: '200' }
+                    ]
+                }
+            ],
+            table2: [
+                {
+                    order: "ASPG20190427", date: "2019-04-27", total: "1200", table2: [
+                        {
+                            path: '苏州—北京', mileage: '7777km', fee: '1000', table3: [
+                                // { feeType: '油费', monye: '300', remarks:'备注', },
+                                // { feeType: '路桥费', monye: '500', remarks:'备注', }
+                            ]
+                        },
+                        {
+                            path: '上海—北京', mileage: '1000km', fee: '1000', table3: [
+                                { feeType: '油费', monye: '300', remarks: '备注', },
+                                { feeType: '住宿费', monye: '200', remarks: '备注', },
+                                { feeType: '路桥费', monye: '500', remarks: '备注', }
+                            ]
+                        },
+                        {
+                            path: '杭州—苏州', mileage: '1000km', fee: '900', table3: [
+                                { feeType: '油费', monye: '300', remarks: '备注', },
+                            ]
+                        },
+                        {
+                            path: '成都—内蒙', mileage: '200km', fee: '200', table3: [
+                                // { feeType: '油费', monye: '100', remarks:'备注', },
+                                // { feeType: '路桥费', monye: '100', remarks:'备注', }
+                            ]
+                        },
+                        {
+                            path: '武汉—太原', mileage: '200km', fee: '200', table3: [
+                                { feeType: '油费', monye: '100', remarks: '备注', },
+                                { feeType: '路桥费', monye: '100', remarks: '备注', }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    order: "ASPG20190428", date: "2019-04-28", total: "1200", table2: [
+                        {
+                            path: '上海—北京', mileage: '1000km', fee: '1000', table3: [
+                                { feeType: '油费', monye: '300', remarks: '备注', },
+                                { feeType: '住宿费', monye: '200', remarks: '备注', },
+                                { feeType: '路桥费', monye: '500', remarks: '备注', }
+                            ]
+                        },
+                        {
+                            path: '北京—天津', mileage: '200km', fee: '200', table3: [
+                                { feeType: '油费', monye: '100', remarks: '备注', },
+                                { feeType: '路桥费', monye: '100', remarks: '备注', }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            table3: [
+                { order: "ASPG20190427", date: "2019-04-27", total: "1200", path: '苏州—北京', mileage: '7777km', fee: '1000', feeType: '油费', monye: '300', remarks: '备注' },
+                { order: "ASPG20190427", date: "2019-04-27", total: "1200", path: '苏州—北京', mileage: '7777km', fee: '1000', feeType: '路桥费', monye: '500', remarks: '备注' },
+                { order: "ASPG20190427", date: "2019-04-27", total: "1200", path: '上海—北京', mileage: '1000km', fee: '1000', feeType: '油费', monye: '300', remarks: '备注' },
+                { order: "ASPG20190427", date: "2019-04-27", total: "1200", path: '上海—北京', mileage: '1000km', fee: '1000', feeType: '住宿费', monye: '200', remarks: '备注' },
+                { order: "ASPG20190427", date: "2019-04-27", total: "1200", path: '上海—北京', mileage: '1000km', fee: '1000', feeType: '路桥费', monye: '500', remarks: '备注' },
+                { order: "ASPG20190427", date: "2019-04-27", total: "1200", path: '杭州—苏州', mileage: '1000km', fee: '900', feeType: '油费', monye: '300', remarks: '备注' },
+                { order: "ASPG20190427", date: "2019-04-27", total: "1200", path: '成都—内蒙', mileage: '200km', fee: '200', feeType: '油费', monye: '100', remarks: '备注' },
+                { order: "ASPG20190427", date: "2019-04-27", total: "1200", path: '成都—内蒙', mileage: '200km', fee: '200', feeType: '路桥费', monye: '100', remarks: '备注' },
+                { order: "ASPG20190428", date: "2019-04-28", total: "1200", path: '上海—北京', mileage: '1000km', fee: '1000', feeType: '油费', monye: '300', remarks: '备注' },
+                { order: "ASPG20190428", date: "2019-04-28", total: "1200", path: '上海—北京', mileage: '1000km', fee: '1000', feeType: '住宿费', monye: '200', remarks: '备注' },
+                { order: "ASPG20190428", date: "2019-04-28", total: "1200", path: '上海—北京', mileage: '1000km', fee: '1000', feeType: '路桥费', monye: '500', remarks: '备注' },
+                { order: "ASPG20190428", date: "2019-04-28", total: "1200", path: '北京—天津', mileage: '200km', fee: '200', feeType: '油费', monye: '100', remarks: '备注', },
+                { order: "ASPG20190428", date: "2019-04-28", total: "1200", path: '北京—天津', mileage: '200km', fee: '200', feeType: '路桥费', monye: '100', remarks: '备注' },
+            ]
+        },
+        mounted: function () {
+            mergeSameCell(document.getElementById('table3'), 1, 0, [0, 1, 2, 3, 4, 5]);
+        },
+        filters: {
+            objlength1: function (value) {
+                var length = 0;
+                for (var m = 0; m < value.table2.length; m++) {
+                    length += value.table2[m].table3.length == 0 ? 1 : value.table2[m].table3.length;
+                }
+                return length;
+            }
+        }
+    })
+
+    /**
+     * [mergeSameCell 单元格合并]
+     * @param  {[type]} tbl      [table对应的dom元素]
+     * @param  {[type]} beginRow [从第几行开始合并（从0开始）]
+     * @param  {[type]} endRow   [合并到哪一行，负数表示从底下数几行不合并]
+     * @param  {[type]} colIdxes [合并的列下标的数组，如[0,1]表示合并前两列，[0]表示只合并第一列]
+     * @return {[type]}          [description]
+     */
+    function mergeSameCell(tbl, beginRow, endRow, colIdxes) {
+        var colIdx = colIdxes[0];
+        var newColIdxes = colIdxes.concat();
+        newColIdxes.splice(0, 1)
+        var delRows = new Array();
+        var rs = tbl.rows;
+        //endRow为0的时候合并到最后一行，小于0时表示最后有-endRow行不合并
+        if (endRow === 0) {
+            endRow = rs.length - 1;
+        } else if (endRow < 0) {
+            endRow = rs.length - 1 + endRow;
+        }
+        var rowSpan = 1; // 要设置的rowSpan的值
+        var rowIdx = beginRow; // 要设置rowSpan的cell行下标
+        var cellValue; // 存储单元格里面的内容
+        for (var i = beginRow; i <= endRow + 1; i++) {
+            if (i === endRow + 1) { //过了最后一行的时候合并前面的单元格
+                if (newColIdxes.length > 0) {
+                    mergeSameCell(tbl, rowIdx, endRow, newColIdxes);
+                }
+                rs[rowIdx].cells[colIdx].rowSpan = rowSpan;
+            } else {
+                var cell = rs[i].cells[colIdx];
+                if (i === beginRow) { // 第一行的时候初始化各个参数
+                    cellValue = cell.innerHTML;
+                    rowSpan = 1;
+                    rowIdx = i;
+                } else if (cellValue != cell.innerHTML) { // 数据改变合并前面的单元格
+                    cellValue = cell.innerHTML;
+                    if (newColIdxes.length > 0) {
+                        mergeSameCell(tbl, rowIdx, i - 1, newColIdxes);
+                    }
+                    rs[rowIdx].cells[colIdx].rowSpan = rowSpan;
+                    rowSpan = 1;
+                    rowIdx = i;
+                } else if (cellValue === cell.innerHTML) { // 数据和前面的数据重复的时候删除单元格
+                    rowSpan++;
+                    delRows.push(i);
+                }
+            }
+        }
+        for (var j = 0; j < delRows.length; j++) {
+            rs[delRows[j]].deleteCell(colIdx);
+        }
+    }
+
+</script>

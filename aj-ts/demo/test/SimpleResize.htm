@@ -1,0 +1,241 @@
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>拖拉缩放效果</title>
+</head>
+
+<body>
+	<script>
+		// 思路来自 https://www.cnblogs.com/cloudgamer/archive/2008/12/03/1346386.html，程序略有简化
+		//缩放程序
+		function SimpleResize(obj, options) {
+			this.$el = document.getElementById(obj);
+			this.Resize = this.Resize.bind(this)
+			this.Stop = this.Stop.bind(this);
+		}
+
+		SimpleResize.prototype = {
+			// 设置触发对象
+			Set(resize, side) {
+				resize = document.getElementById(resize);
+
+				let fun;
+
+				switch (side.toLowerCase()) {
+					case "up":
+						fun = this.Up;
+						break;
+					case "down":
+						fun = this.Down;
+						break;
+					case "left":
+						fun = this.Left;
+						break;
+					case "right":
+						fun = this.Right;
+						break;
+					case "left-up":
+						fun = this.LeftUp;
+						break;
+					case "right-up":
+						fun = this.RightUp;
+						break;
+					case "left-down":
+						fun = this.LeftDown;
+						break;
+					case "right-down":
+					default:
+						fun = this.RightDown;
+				};
+
+				resize.addEventListener("mousedown", (ev) => this.Start(ev, fun));
+			},
+			// 准备缩放
+			Start(e, fun) {
+				this.fun = fun;
+
+				this._styleWidth = this.$el.clientWidth;
+				this._styleHeight = this.$el.clientHeight;
+				this._styleLeft = this.$el.offsetLeft;
+				this._styleTop = this.$el.offsetTop;
+
+				this._sideLeft = e.clientX - this._styleWidth;
+				this._sideRight = e.clientX + this._styleWidth;
+				this._sideUp = e.clientY - this._styleHeight;
+				this._sideDown = e.clientY + this._styleHeight;
+
+				this._fixLeft = this._styleWidth + this._styleLeft;
+				this._fixTop = this._styleHeight + this._styleTop;
+
+				document.addEventListener("mousemove", this.Resize);
+				document.addEventListener("mouseup", this.Stop);
+			},
+			// 缩放
+			Resize(ev) {
+				this.fun(ev);
+
+				let style = this.$el.style;
+				style.width = this._styleWidth + "px";
+				style.height = this._styleHeight + "px";
+				style.top = this._styleTop + "px";
+				style.left = this._styleLeft + "px";
+			},
+			// 缩放程序
+			// 上
+			Up(e) {
+				this._styleHeight = Math.max(this._sideDown - e.clientY, 0);
+				this._styleTop = this._fixTop - this._styleHeight;
+			},
+			// 下
+			Down(e) {
+				this._styleHeight = Math.max(e.clientY - this._sideUp, 0);
+			},
+			//右
+			Right(e) {
+				this._styleWidth = Math.max(e.clientX - this._sideLeft, 0);
+			},
+			//左
+			Left(e) {
+				this._styleWidth = Math.max(this._sideRight - e.clientX, 0);
+				this._styleLeft = this._fixLeft - this._styleWidth;
+			},
+			//右下
+			RightDown(e) {
+				this.Right(e); this.Down(e);
+			},
+			//右上
+			RightUp(e) {
+				this.Right(e); this.Up(e);
+			},
+			//左下
+			LeftDown(e) {
+				this.Left(e); this.Down(e);
+			},
+			//左上
+			LeftUp(e) {
+				this.Left(e);
+				this.Up(e);
+			},
+			//停止缩放
+			Stop() {
+				document.removeEventListener("mousemove", this.Resize);
+				document.removeEventListener("mouseup", this.Stop);
+			}
+		};
+	</script>
+	<style type="text/css">
+		#dragDiv {
+			border: 1px solid #000000;
+			width: 100px;
+			height: 60px;
+			top: 50px;
+			left: 50px;
+			background-color: #fff;
+			position: absolute;
+		}
+
+		#dragDiv>div {
+			position: absolute;
+			background: #C00;
+			width: 7px;
+			height: 7px;
+			z-index: 5;
+			font-size: 0;
+		}
+
+		#rLeftDown,
+		#rRightUp {
+			cursor: ne-resize;
+		}
+
+		#rRightDown,
+		#rLeftUp {
+			cursor: nw-resize;
+		}
+
+		#rRight,
+		#rLeft {
+			cursor: e-resize;
+		}
+
+		#rUp,
+		#rDown {
+			cursor: n-resize;
+		}
+
+		#rLeftDown {
+			left: -4px;
+			bottom: -4px;
+		}
+
+		#rRightUp {
+			right: -4px;
+			top: -4px;
+		}
+
+		#rRightDown {
+			right: -4px;
+			bottom: -4px;
+			background-color: #00F;
+		}
+
+		#rLeftUp {
+			left: -4px;
+			top: -4px;
+		}
+
+		#rRight {
+			right: -4px;
+			top: 50%;
+			margin-top: -4px;
+		}
+
+		#rLeft {
+			left: -4px;
+			top: 50%;
+			margin-top: -4px;
+		}
+
+		#rUp {
+			top: -4px;
+			left: 50%;
+			margin-left: -4px;
+		}
+
+		#rDown {
+			bottom: -4px;
+			left: 50%;
+			margin-left: -4px;
+		}
+	</style>
+	<div id="dragDiv">
+		<div id="rRightDown"> </div>
+		<div id="rLeftDown"> </div>
+		<div id="rRightUp"> </div>
+		<div id="rLeftUp"> </div>
+		<div id="rRight"> </div>
+		<div id="rLeft"> </div>
+		<div id="rUp"> </div>
+		<div id="rDown"></div>
+	</div>
+	<script>
+		let rs = new SimpleResize("dragDiv");
+
+		rs.Set("rRightDown", "right-down");
+		rs.Set("rLeftDown", "left-down");
+
+		rs.Set("rRightUp", "right-up");
+		rs.Set("rLeftUp", "left-up");
+
+		rs.Set("rRight", "right");
+		rs.Set("rLeft", "left");
+
+		rs.Set("rUp", "up");
+		rs.Set("rDown", "down");
+	</script>
+</body>
+
+</html>
