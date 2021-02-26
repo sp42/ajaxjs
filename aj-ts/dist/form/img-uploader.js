@@ -54,7 +54,7 @@ var aj;
             //     this.readBase64();
             // }
             ImgFileUploader.prototype.beforeCreate = function () {
-                console.log(this);
+                this.$options.template = this.$options.template.replace('<span class="slot"></span>', '<br />最大尺寸：{{imgMaxWidth}}x{{imgMaxHeight}}');
             };
             ImgFileUploader.prototype.mounted = function () {
                 var _this = this;
@@ -89,7 +89,7 @@ var aj;
                             Vue.set(this.errStatus, 2, "");
                     },
                     errMsg: function (newV) {
-                        if (!newV)
+                        if (!newV) // 没有任何错误才显示图片
                             this.readBase64();
                     }
                 };

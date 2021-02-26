@@ -46,7 +46,7 @@ namespace aj.xhr_upload {
         // }
 
         beforeCreate() {
-            console.log(this)
+            this.$options.template = this.$options.template.replace('<span class="slot"></span>', '<br />最大尺寸：{{imgMaxWidth}}x{{imgMaxHeight}}');
         }
 
         mounted() {
@@ -84,7 +84,7 @@ namespace aj.xhr_upload {
                         Vue.set(this.errStatus, 2, "");
                 },
                 errMsg(this: ImgFileUploader, newV: string): void {
-                    if (!newV)
+                    if (!newV) // 没有任何错误才显示图片
                         this.readBase64();
                 }
             }

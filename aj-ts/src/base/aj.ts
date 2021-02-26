@@ -160,6 +160,8 @@ namespace aj {
         public $parent: any;
 
         public $options: any;
+        
+        public $refs: any;
 
         // public propsFactory: any;
 

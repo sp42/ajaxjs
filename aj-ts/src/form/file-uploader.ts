@@ -116,6 +116,7 @@ namespace aj.xhr_upload {
                     允许类型：{{limitFileType || '无限制'}}
                     <br />
                     允许大小：{{limitSize ? changeByte(limitSize * 1024) : '无限制'}}
+                    <span class="slot"></span>
                 </div>
                 <div class="msg" v-if="errMsg == ''">
                     {{fileName}}<div v-if="fileSize">{{changeByte(fileSize)}}</div>

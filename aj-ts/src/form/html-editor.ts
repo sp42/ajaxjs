@@ -95,6 +95,7 @@ namespace aj.form {
                     <iframe srcdoc="<html><body></body></html>"></iframe>
                     <slot></slot>
                 </div>
+                <aj-form-popup-upload ref="uploadLayer" :upload-url="uploadImageActionUrl"></aj-form-popup-upload>
             </div>
         `;
 
@@ -152,18 +153,10 @@ namespace aj.form {
                     this.setIframeBody(this.sourceEditor.value);
             }
 
-            this.initImgMgr();
+            this.uploadImgMgr = this.$refs.uploadLayer;
         }
 
         private uploadImgMgr: any;
-
-        private initImgMgr(): void {
-            let div: HTMLDivElement = document.body.appendChild(document.createElement('div'));
-            div.innerHTML = `<aj-form-popup-upload ref="uploadLayer" upload-url="${this.uploadImageActionUrl}"></aj-form-popup-upload>`;
-            this.uploadImgMgr = new Vue({
-                el: div
-            }).$refs.uploadLayer;
-        }
 
         /**
         * 输入 HTML 内容
