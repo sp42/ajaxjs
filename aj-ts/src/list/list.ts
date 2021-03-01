@@ -1,73 +1,75 @@
-/**
- * 分页列表专用的结果数据
- */
-interface PageListRepsonseResult extends RepsonseResult {
-	/**
-	 * 结果总数
-	 */
-	total: number;
-}
 
-/**
- * 列表数据
- */
-interface DataStore extends Ajax {
-	/**
-	 * 是否分页，false=读取所有数据
-	 */
-	isPage: boolean;
-
-	initPageSize: number;
-
-	pageStart: number;
-
-	pageSize: number;
-
-	total: number;
-
-	totalPage: number;
-
-	currentPage: number;
-
-	/**
-	 * 初始参数
-	 */
-	initBaseParam: JsonParam;
-
-	/**
-	 * 是否一渲染 UI 之后就自动加载数据
-	 */
-	autoLoad: boolean;
-
-	/**
-	 * 数据分页是否追加模式，默认不追加 = false。 App 一般采用追加模式
-	 */
-	isDataAppend: boolean;
-
-	/**
-	 * 请求结果
-	 */
-	result: BaseObject[];
-
-	/**
-	 * 默认的分页参数其名字
-	 */
-	pageParamNames: string[];
-
-	/**
-	 * 计算分页
-	 */
-	count(): void;
-}
-
-/**
- * 列表控件
- */
-interface List extends DataStore, Vue {
-	autoLoadWhenReachedBottom: boolean;
-}
 
 namespace aj.list {
+	/**
+	 * 分页列表专用的结果数据
+	 */
+	interface PageListRepsonseResult extends RepsonseResult {
+		/**
+		 * 结果总数
+		 */
+		total: number;
+	}
+
+	/**
+	 * 列表数据
+	 */
+	interface DataStore extends Ajax {
+		/**
+		 * 是否分页，false=读取所有数据
+		 */
+		isPage: boolean;
+
+		initPageSize: number;
+
+		pageStart: number;
+
+		pageSize: number;
+
+		total: number;
+
+		totalPage: number;
+
+		currentPage: number;
+
+		/**
+		 * 初始参数
+		 */
+		initBaseParam: JsonParam;
+
+		/**
+		 * 是否一渲染 UI 之后就自动加载数据
+		 */
+		autoLoad: boolean;
+
+		/**
+		 * 数据分页是否追加模式，默认不追加 = false。 App 一般采用追加模式
+		 */
+		isDataAppend: boolean;
+
+		/**
+		 * 请求结果
+		 */
+		result: BaseObject[];
+
+		/**
+		 * 默认的分页参数其名字
+		 */
+		pageParamNames: string[];
+
+		/**
+		 * 计算分页
+		 */
+		count(): void;
+	}
+
+	/**
+	 * 列表控件
+	 */
+	interface List extends DataStore, Vue {
+		autoLoadWhenReachedBottom: boolean;
+	}
+
 	export var datastore = {
 		props: {
 			apiUrl: { type: String, required: true },                       // JSON 接口地址
