@@ -3,7 +3,8 @@ package com.demo.mvc;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
-import com.ajaxjs.web.mvc.controller.IController;
+import com.ajaxjs.web.mvc.IController;
+
 
 @Path("/SayHello") // 定义URL路径
 public class HelloWorldController implements IController {

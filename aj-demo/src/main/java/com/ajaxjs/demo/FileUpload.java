@@ -9,7 +9,7 @@ import javax.ws.rs.Path;
 
 import com.ajaxjs.web.UploadFile;
 import com.ajaxjs.web.UploadFileInfo;
-import com.ajaxjs.web.mvc.controller.IController;
+import com.ajaxjs.web.mvc.IController;
 
 /**
  * 接收文件上传

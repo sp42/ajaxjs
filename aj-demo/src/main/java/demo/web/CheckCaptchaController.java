@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ajaxjs.framework.filter.CaptchaFilter;
-import com.ajaxjs.web.mvc.controller.MvcOutput;
-import com.ajaxjs.web.mvc.controller.MvcRequest;
+import com.ajaxjs.web.mvc.MvcOutput;
+import com.ajaxjs.web.mvc.MvcRequest;
 import com.ajaxjs.web.mvc.filter.FilterContext;
 
 @WebServlet("/CheckCaptcha")

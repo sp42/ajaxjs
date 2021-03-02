@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.PageContext;
 
-import com.ajaxjs.web.mvc.controller.MvcOutput;
+import com.ajaxjs.web.mvc.MvcOutput;
 
 /**
  * 验证码的简单实现

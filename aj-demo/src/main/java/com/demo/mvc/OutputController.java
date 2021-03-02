@@ -7,8 +7,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
 import com.ajaxjs.framework.BaseController;
+import com.ajaxjs.web.mvc.IController;
 import com.ajaxjs.web.mvc.ModelAndView;
-import com.ajaxjs.web.mvc.controller.IController;
 
 import demo.orm.dao.News;
 
