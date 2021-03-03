@@ -1,4 +1,4 @@
-package demo.web;
+package com.demo.web;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
