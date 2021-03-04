@@ -1,4 +1,9 @@
+
 namespace aj.user.register {
+    interface md5 {
+        (str: string): string;
+    }
+
     function phoneNumber(p: string): boolean {
         return /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/.test(p);
     }
@@ -13,11 +18,9 @@ namespace aj.user.register {
         checkUserPhoneMsg: string;
         checkUserEmailMsg: string;
         isAllowRegister: boolean;
+        phoneNumberValid: boolean;
 
-    }
-
-    interface md5 {
-        (str: string): string;
+        phoneMsg: string;
     }
 
     new Vue({
@@ -31,7 +34,8 @@ namespace aj.user.register {
 
         mounted() {
             xhr.form(this.$el,
-                xhr.defaultCallBack_cb.delegate(null, null, j => setTimeout("location.assign('${ctx}/user/login/')", 2000)),
+                //@ts-ignore
+                xhr.defaultCallBack.delegate(null, null, (j: RepsonseResult) => setTimeout("location.assign('${ctx}/user/login/')", 2000)),
                 {
                     beforeSubmit: (form: HTMLFormElement, json: StringJsonParam) => {
                         if (!this.$el.$('.privacy').checked) {
@@ -44,20 +48,21 @@ namespace aj.user.register {
                             return false;
                         }
 
+                        //@ts-ignore
                         json.password = md5(json.password);
                         delete json.password2;
                     },
-                    googleReCAPTCHA: '${aj_allConfig.security.disableCaptcha ? '' : aj_allConfig.security.GoogleReCAPTCHA.siteId}'
-            }
+                    // googleReCAPTCHA: '${aj_allConfig.security.disableCaptcha ? '' : aj_allConfig.security.GoogleReCAPTCHA.siteId}'
+                }
             );
         },
 
         methods: {
             checkUserId(this: Register, ev: Event): void {
-                let el: HTMLInputElement = <HTMLInputElement>ev.target,
+                let el: form.HTMLFormControl = <form.HTMLFormControl>ev.target,
                     userId: string = el.value;
 
-                if (aj.formValidator.hasError(el) === undefined)
+                if (!form.Validator.check(el))
                     xhr.get('${ctx}/user/register/checkIfRepeat/', j => {
                         this.isAllowRegister = !j.result.isRepeat;
 
@@ -70,10 +75,10 @@ namespace aj.user.register {
                     });
             },
             checkEmailValid(this: Register, ev: Event): void {
-                let el: HTMLInputElement = <HTMLInputElement>ev.target,
+                let el: form.HTMLFormControl = <form.HTMLFormControl>ev.target,
                     email: string = el.value;
 
-                if (aj.formValidator.hasError(el) === undefined) {
+                if (!form.Validator.check(el)) {
                     xhr.get('${ctx}/user/register/checkIfRepeat/', json => {
                         this.isAllowRegister = !json.result.isRepeat;
 
@@ -112,7 +117,7 @@ namespace aj.user.register {
 
                 ev.preventDefault();
                 if (this.phoneNumberValid && this.isAllowRegister) {
-                    let value:string = document.body.$('form input[name=phone]').value;
+                    let value: string = (<HTMLInputElement>document.body.$('form input[name=phone]')).value;
 
                     if (phoneNumber(value)) {
                         xhr.post('${ctx}/user/register/sendSMScode', function (json) {
@@ -121,23 +126,25 @@ namespace aj.user.register {
                         }, {
                             phoneNo: value
                         });
-                    } else 
+                    } else
                         alert('手机格式不正确！');
                 }
             },
 
             onSubmit(this: Register) {
-                if (!this.$el.$('.privacy').checked) {
+                if (!(<HTMLInputElement>this.$el.$('.privacy')).checked) {
                     aj.alert('请同意用户注册协议和隐私政策');
+
                     return false;
                 }
 
-                let passowrd = this.$el.$('input[name=password]')
-                if (passowrd.value != this.$el.$('input[name=password2]').value) {
+                let passowrd = <HTMLInputElement>this.$el.$('input[name=password]')
+                if (passowrd.value != (<HTMLInputElement>this.$el.$('input[name=password2]')).value) {
                     aj.alert('两次密码输入不一致！');
                     return false;
                 }
 
+                //@ts-ignore
                 passowrd.value = md5(passowrd.value);
             }
         }

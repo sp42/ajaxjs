@@ -17,7 +17,7 @@ namespace aj.form {
     /**
      * 通常是表单里面的 input 元素，但是 ts 没有对应的类型
      */
-    interface HTMLFormControl extends HTMLElement {
+    export interface HTMLFormControl extends HTMLElement {
         type: string;
         disabled: boolean;
         validity: ValidityState;

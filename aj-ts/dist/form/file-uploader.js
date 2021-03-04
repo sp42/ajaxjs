@@ -38,7 +38,7 @@ var aj;
                  */
                 _this.action = "";
                 /**
-                 * 运行上传的类型
+                 * 允许文件选择器列出的文件类型
                  */
                 _this.accpectFileType = "";
                 /**

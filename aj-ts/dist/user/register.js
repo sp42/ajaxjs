@@ -22,7 +22,9 @@ var aj;
                 },
                 mounted: function () {
                     var _this = this;
-                    aj.xhr.form(this.$el, aj.xhr.defaultCallBack_cb.delegate(null, null, function (j) { return setTimeout("location.assign('${ctx}/user/login/')", 2000); }), {
+                    aj.xhr.form(this.$el, 
+                    //@ts-ignore
+                    aj.xhr.defaultCallBack.delegate(null, null, function (j) { return setTimeout("location.assign('${ctx}/user/login/')", 2000); }), {
                         beforeSubmit: function (form, json) {
                             if (!_this.$el.$('.privacy').checked) {
                                 aj.alert('请同意用户注册协议和隐私政策');
@@ -32,17 +34,17 @@ var aj;
                                 aj.alert('两次密码输入不一致！');
                                 return false;
                             }
+                            //@ts-ignore
                             json.password = md5(json.password);
                             delete json.password2;
                         },
-                        googleReCAPTCHA: '${aj_allConfig.security.disableCaptcha ? ', ' : aj_allConfig.security.GoogleReCAPTCHA.siteId}': 
                     });
                 },
                 methods: {
                     checkUserId: function (ev) {
                         var _this = this;
                         var el = ev.target, userId = el.value;
-                        if (aj.formValidator.hasError(el) === undefined)
+                        if (!aj.form.Validator.check(el))
                             aj.xhr.get('${ctx}/user/register/checkIfRepeat/', function (j) {
                                 _this.isAllowRegister = !j.result.isRepeat;
                                 if (j.result.isRepeat)
@@ -56,7 +58,7 @@ var aj;
                     checkEmailValid: function (ev) {
                         var _this = this;
                         var el = ev.target, email = el.value;
-                        if (aj.formValidator.hasError(el) === undefined) {
+                        if (!aj.form.Validator.check(el)) {
                             aj.xhr.get('${ctx}/user/register/checkIfRepeat/', function (json) {
                                 _this.isAllowRegister = !json.result.isRepeat;
                                 if (json.result.isRepeat)
@@ -111,6 +113,7 @@ var aj;
                             aj.alert('两次密码输入不一致！');
                             return false;
                         }
+                        //@ts-ignore
                         passowrd.value = md5(passowrd.value);
                     }
                 }

@@ -45,7 +45,7 @@ namespace aj.list {
 		/**
 		 * 数据分页是否追加模式，默认不追加 = false。 App 一般采用追加模式
 		 */
-		isDataAppend: boolean;
+		isDataAppend: boolean;  
 
 		/**
 		 * 请求结果
