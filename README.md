@@ -51,8 +51,8 @@ AJAXJS 很少第三方的库或包依赖，一方面也避免太复杂。关于�
 教程
 -----
 - [学习资源索引](https://zhangxin.blog.csdn.net/article/details/114283320)
--前端库快速浏览 DEMO [https://framework.ajaxjs.com/demo/index.html](https://framework.ajaxjs.com/demo/index.html)。
--[参见 wiki](https://gitee.com/sp42_admin/ajaxjs/wikis/pages)
+- 前端库快速浏览 DEMO [https://framework.ajaxjs.com/demo/index.html](https://framework.ajaxjs.com/demo/index.html)。
+- [后端文档参见 wiki](https://gitee.com/sp42_admin/ajaxjs/wikis/pages)
 
 
 联系方式
