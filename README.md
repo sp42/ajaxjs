@@ -1,9 +1,9 @@
-轻量级全栈框架：AJAXJS
+轻量级全栈框架：AJAXJS Web
 =============
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-green.svg?longCache=true&style=flat)](http://www.apache.org/licenses/LICENSE-2.0.txt)
 [![Email](https://img.shields.io/badge/Contact--me-Email-orange.svg)](mailto:support@ajaxjs.com)
-[![QQ群](https://framework.ajaxjs.com/framework/asset/qq.svg)](https://shang.qq.com/wpa/qunwpa?idkey=3877893a4ed3a5f0be01e809e7ac120e346102bd550deb6692239bb42de38e22)
+[![QQ群](https://framework.ajaxjs.com/demo/common/qq.svg)](https://shang.qq.com/wpa/qunwpa?idkey=3877893a4ed3a5f0be01e809e7ac120e346102bd550deb6692239bb42de38e22)
 
 
 
@@ -14,11 +14,10 @@
 - 免依赖或少依赖
 
 采用技术：
+- 前端：TypeScript + Vue.js 2.x + LESS.js + Gulp.js
+- 后端：Java 1.8 + Tomcat 8 + MySQL/SQLite
 
-- 前端：[Vue.js](https://cn.vuejs.org/)（MVVM+组件化） + [LESS.js](http://lesscss.org/)
-- 后端：Java 1.8 + Tomcat 8  + MySQL/SQLite
-
-AJAXJS 很少第三方的库或包依赖，一方面也避免太复杂。关于“轮子”一说，的确是，不过就是自己都理过一遍代码，不是随便粘贴人家的，而且务求清晰精炼平易近人，易懂易修改，避免晦涩的地方。文档、注释、单测等齐备。详见官网 [https://framework.ajaxjs.com/framework/](https://framework.ajaxjs.com/framework/) 介绍。 
+AJAXJS 很少第三方的库或包依赖，一方面也避免太复杂。关于“轮子”一说，的确是，不过就是自己都理过一遍代码，不是随便粘贴人家的，而且务求清晰精炼平易近人，易懂易修改，避免晦涩的地方。文档、注释、单测等齐备。 
 
 
 
@@ -48,19 +47,20 @@ AJAXJS 很少第三方的库或包依赖，一方面也避免太复杂。关于�
 虽然 Maven 依赖的都是 JAR 包，但实际里面包含了相当的前端资源，JSP/HTML/CSS/JS，我们的前端框架 javascript 代码也包含在内。
 达成这一项技术的是 Servlet 3.0 的 “Web 模块部署描述符片段”功能，也就是说，前端资源通过 Servlet 3.0 WebFragment 特性打包到 jar 里面。片段可以指页面文件或 JSP 文件、png/jpg 图片文件、*.tld 标签定义文件甚至 web.xml 配置文件也可以作为片段引入，即 web-fragment.xml。
 
-前端库快速浏览 [DEMO](https://framework.ajaxjs.com/framework/ui-doc/)。
 
 教程
 -----
-[参见 wiki](https://gitee.com/sp42_admin/ajaxjs/wikis/pages)
+- [学习资源索引](https://zhangxin.blog.csdn.net/article/details/114283320)
+-前端库快速浏览 DEMO [https://framework.ajaxjs.com/demo/index.html](https://framework.ajaxjs.com/demo/index.html)。
+-[参见 wiki](https://gitee.com/sp42_admin/ajaxjs/wikis/pages)
 
 
 联系方式
 ----------
 
-- 官网 [https://framework.ajaxjs.com/framework/](https://framework.ajaxjs.com/framework/) 
-- 源码 [开源中国 Gitee](https://gitee.com/sp42_admin/ajaxjs) | [GitHub](https://github.com/sp42/ajaxjs) 均支持 Git 或 SVN
-- 博客 [blog.csdn.net/zhangxin09](http://blog.csdn.net/zhangxin09/) 
+- 官网 [https://framework.ajaxjs.com/](https://framework.ajaxjs.com/) 
+- 源码 开源中国 [https://gitee.com/sp42_admin/ajaxjs](https://gitee.com/sp42_admin/ajaxjs) 支持 Git 或 SVN
+- 博客 [https://zhangxin.blog.csdn.net/](https://zhangxin.blog.csdn.net/) 
 - QQ 群 [3150067](//shang.qq.com/wpa/qunwpa?idkey=99415d164e2c776567c9370cc5b0bde26f4e2e7c5068978a24d1fe7c976ace93)
 - 邮箱 support@ajaxjs.com
 
