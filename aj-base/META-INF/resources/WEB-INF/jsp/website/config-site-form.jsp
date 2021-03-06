@@ -20,7 +20,7 @@
 	<script>
 		new Vue({el:' body > div'});
 	</script>
-	<div class="admin-entry-form">
+	<div class="aj-form-row-holder">
 		<form method="POST" action="." class="configForm">
 			<div>
 				<label>

@@ -25,7 +25,7 @@ public abstract class BaseUserService extends BaseService<User> {
 	/**
 	 * 按实体 userId 查找的高阶函数
 	 * 
-	 * @param uid userId
+	 * @param userId userId
 	 * @return SQL 处理器
 	 */
 	public static Function<String, String> byUserId(long userId) {

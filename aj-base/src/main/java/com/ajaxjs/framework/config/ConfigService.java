@@ -27,7 +27,7 @@ import com.ajaxjs.framework.GetConfig;
 import com.ajaxjs.framework.IComponent;
 import com.ajaxjs.jsonparser.JsEngineWrapper;
 import com.ajaxjs.util.io.FileHelper;
-import com.ajaxjs.util.io.IoHelper;
+import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.map.ListMap;
@@ -232,7 +232,7 @@ public class ConfigService implements GetConfig, IComponent {
 	public static String getSchemeJson() {
 		try (InputStream in = ConfigService.class.getResourceAsStream("ConfigScheme.json");) {
 
-			return IoHelper.byteStream2string(in);
+			return StreamHelper.byteStream2string(in);
 		} catch (IOException e) {
 			LOGGER.warning(e);
 			return null;

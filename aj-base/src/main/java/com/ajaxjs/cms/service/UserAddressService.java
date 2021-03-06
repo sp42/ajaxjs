@@ -16,7 +16,7 @@ import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.sql.orm.Repository;
-import com.ajaxjs.util.io.IoHelper;
+import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.util.ioc.Component;
 
 @Component
@@ -86,7 +86,7 @@ public class UserAddressService extends BaseService<Address> {
 			Objects.requireNonNull(in, "未准备好地址 JSON 文件");
 			
 			JsEngineWrapper js = new JsEngineWrapper();
-			js.eval(IoHelper.byteStream2string(in));
+			js.eval(StreamHelper.byteStream2string(in));
 
 			try {
 				in.close();

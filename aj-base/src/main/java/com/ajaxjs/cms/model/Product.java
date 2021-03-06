@@ -19,7 +19,7 @@ public class Product extends BaseModel {
 	/**
 	 * 设置分类 id
 	 * 
-	 * @param catelogId
+	 * @param catalogId
 	 */
 	public void setCatalogId(Long catalogId) {
 		this.catalogId = catalogId;
@@ -98,7 +98,7 @@ public class Product extends BaseModel {
 	/**
 	 * 设置副标题
 	 * 
-	 * @param subtitle
+	 * @param subTitle
 	 */
 	public void setSubTitle(String subTitle) {
 		this.subTitle = subTitle;

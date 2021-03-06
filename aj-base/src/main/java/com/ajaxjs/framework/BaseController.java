@@ -177,7 +177,7 @@ public abstract class BaseController<T> implements IController, MvcConstant {
 	 * @param entity  实体，可以是单个实体或者列表、分页列表
 	 * @param mv      Model 模型
 	 * @param jspPath JSP 模板路径
-	 * @param fn      输入<是否期望 JSON, 是否期望 JSON> 的 lambda
+	 * @param fn      输入是否期望 JSON, 是否期望 JSON 的 lambda
 	 * @return 结果，可能是页面，也可能是 JSON
 	 */
 	public static String autoOutput(Object entity, ModelAndView mv, String jspPath, Function<Boolean, Boolean> fn) {
@@ -241,7 +241,7 @@ public abstract class BaseController<T> implements IController, MvcConstant {
 	/**
 	 * 把 Bean/Map/List 转换为 JSON
 	 * 
-	 * @param result Map
+	 * @param obj Bean/Map/List
 	 * @return JSON 结果
 	 */
 	public static String toJson(Object obj) {

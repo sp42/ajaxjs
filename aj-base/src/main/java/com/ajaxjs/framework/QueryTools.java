@@ -152,10 +152,9 @@ public class QueryTools {
 	/**
 	 * 控制器和业务方法可以不用提供 value 的参数，由 HttpServletRequest 获取
 	 * 
-	 * @param r
 	 * @param query
-	 * @param field
 	 * @param type
+	 * @param field
 	 * @return
 	 */
 	public static Function<String, String> by(String query, Class<?> type, String field) {
@@ -232,6 +231,7 @@ public class QueryTools {
 	/**
 	 * 谨慎使用！这查询权力很大，可指定任意的字段
 	 * 
+	 * @param r
 	 * @return SQL 处理器
 	 */
 	public static Function<String, String> byAny(HttpServletRequest r) {
@@ -295,8 +295,9 @@ public class QueryTools {
 	/**
 	 * 相邻记录
 	 * 
-	 * @TODO 没权限的不要列出
-	 * @param mv
+	 * TODO 没权限的不要列出
+	 * 
+	 * @param map
 	 * @param tableName
 	 * @param id
 	 */

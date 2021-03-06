@@ -101,7 +101,7 @@ public class DeveloperToolsController implements IController {
 	@Path("backup")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String clear(MvcRequest r) {
-		FileHelper.deleteOldWay(r.mappath("/temp/"));
+		FileHelper.delete(r.mappath("/temp/"));
 		return BaseController.jsonOk("清理成功！");
 	}
 }

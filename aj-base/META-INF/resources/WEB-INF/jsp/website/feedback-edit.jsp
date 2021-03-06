@@ -11,13 +11,13 @@
 		<link rel="stylesheet" href="${aj_static_resource}/dist/css/admin/admin.css" />
 		<script src="${aj_static_resource}/dist/admin/admin.js"></script>
 		<style>
-			.admin-entry-form > form > div {
+			.aj-form-row-holder > form > div {
 			    text-align: center;
 			}
 		</style>
 	</head>
 	<body>
-		<div class="admin-entry-form">
+		<div class="aj-form-row-holder">
 			<!-- 后台头部导航 -->
 			<aj-admin-header>
 				<template slot="title">${uiName}</template>
@@ -75,7 +75,7 @@
 			</form>
 		</div>
 		<script>
-			App = new Vue({el: '.admin-entry-form'});
+			App = new Vue({el: '.aj-form-row-holder'});
 		
 			// 表单提交
 			aj.xhr.form('form.entityEdit', function(json) {

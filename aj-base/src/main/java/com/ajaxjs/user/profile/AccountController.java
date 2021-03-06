@@ -166,7 +166,6 @@ public class AccountController extends BaseUserController {
 	 * @param phone
 	 * @param userId
 	 * @return
-	 * @throws ServiceException
 	 */
 	public static boolean sendSms(String phone, long userId) {
 		LOGGER.info("修改手机-发送验证码");

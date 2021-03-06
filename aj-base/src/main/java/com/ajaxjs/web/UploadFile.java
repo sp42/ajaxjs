@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.io.FileHelper;
-import com.ajaxjs.util.io.IoHelper;
+import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -90,7 +90,7 @@ public class UploadFile extends HttpServletRequestWrapper {
 		check();
 
 		try (ServletInputStream in = getInputStream()) {
-			dataBytes = IoHelper.inputStream2Byte(in);
+			dataBytes = StreamHelper.inputStream2Byte(in);
 		} catch (IOException e) {
 			LOGGER.warning(e);
 			throw e;
@@ -150,7 +150,7 @@ public class UploadFile extends HttpServletRequestWrapper {
 	private int getLength(int start) {
 		// 取得数据分割字符串，数据分割线开始位置 boundary=---------------------------
 		String boundary = CommonUtil.regMatch("boundary=((?:-|\\w)+)$", getContentType(), 1);
-		int found = IoHelper.byteIndexOf(dataBytes, boundary.getBytes(), start);
+		int found = StreamHelper.byteIndexOf(dataBytes, boundary.getBytes(), start);
 
 		if (found == -1)
 			throw new IllegalArgumentException("找不到 Boundary");
@@ -180,7 +180,7 @@ public class UploadFile extends HttpServletRequestWrapper {
 		try {
 			File file = FileHelper.createFile(uploadFileInfo.fullPath, uploadFileInfo.isFileOverwrite);
 			// 写入文件
-			FileHelper.save(file, dataBytes, offset, length);
+			FileHelper.save(file, dataBytes, true);
 			uploadFileInfo.isOk = true;
 		} catch (IOException e) {
 			uploadFileInfo.isOk = false;

@@ -12,7 +12,7 @@
 		<script src="${aj_static_resource}/dist/admin/admin.js"></script>
 	</head>
 	<body>
-		<div class="admin-entry-form">
+		<div class="aj-form-row-holder">
 			<!-- 后台头部导航 -->
 			<aj-admin-header>
 				<template slot="title">
@@ -37,14 +37,14 @@
 			
 				<div>
 					<label>
-						<div class="label">名 称：</div> 
+						<div class="label">名 称<span class="required-note">*</span>：</div> 
 						<input type="text" placeholder="请填写${uiName}名称" required name="name" value="${info.name}" />
 					</label> 
 					<label> 
 						<div class="label">栏 目：</div>  
 						<!-- 分类下拉 -->
-						<aj-tree-catelog-select field-name="catalogId" :catalog-id="${domainCatalog_Id}" :selected-catalog-id="${empty info || empty info.catalogId? 0 : info.catalogId}">
-						</aj-tree-catelog-select>
+						<%-- <aj-tree-catelog-select field-name="catalogId" :catalog-id="${domainCatalog_Id}" :selected-catalog-id="${empty info || empty info.catalogId? 0 : info.catalogId}">
+						</aj-tree-catelog-select> --%>
 					</label>
 		
  					<label>
@@ -71,7 +71,7 @@
 				<div>
 					<label>
 						<div class="label">摘 要：</div> 
-						<textarea style="width: 90%; height: 30px;" name="intro">${info.intro}</textarea>
+						<textarea style="width: 90%;" name="intro">${info.intro}</textarea>
 					</label>
 				</div>
 		
@@ -86,11 +86,11 @@
 					</label> 
 				</div>
 				<div class="htmlEditor-row">
-					<div class="label">正 文：</div>
+					<div class="label">正 文<span class="required-note">*</span>：</div>
 					<div>
 						<!-- HTML 在线编辑器，需要 textarea 包裹着内容 -->
 						<aj-form-html-editor field-name="content" base-path="${ctx}" ref="htmleditor" upload-image-action-url="uploadContentImg/">
-							<textarea class="hide" name="content">${info.content}</textarea>
+							<textarea>${info.content}</textarea>
 						</aj-form-html-editor>
 					</div>
 				</div>
@@ -128,17 +128,10 @@
 					<aj-admin-info-btns :is-create="${isCreate}"></aj-admin-info-btns> 
 				</div>
 			</form>
-			
-			<!-- 弹出层上传对话框 -->
-			<aj-popup-upload ref="uploadLayer" upload-url="uploadContentImg/"></aj-popup-upload>
 		</div>
 		<script>
-			App = new Vue({el: '.admin-entry-form'});
-			aj.xhr.form('.admin-entry-form form', aj.admin.defaultAfterCreate, {
-				beforeSubmit(form, json) {
-					json.content = App.$refs.htmleditor.getValue({cleanWord : eval('${aj_allConfig.article.cleanWordTag}'), encode : true});
-				}
-			});
+			App = new Vue({el: '.aj-form-row-holder'});
+			aj.xhr.form('.aj-form-row-holder form', aj.admin.defaultAfterCreate);
 			${isCreate ? 'window.isCreate = true;' : ''}
 		</script>
 		
@@ -189,7 +182,7 @@
 		</div>
 		
 		<script>
-			attchementMgr = new Vue({
+/* 			attchementMgr = new Vue({
 				el: '.attchementMgrHolder',
 				methods: {
 					del(id) {
@@ -208,7 +201,7 @@
 					j = j.result;
 				aj.msg.show(j.msg)
 				attchementMgr.$refs.list.ajaxGet();
-			}
+			} */
 		</script>
 	</body>
 </html>

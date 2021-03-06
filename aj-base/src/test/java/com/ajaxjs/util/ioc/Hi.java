@@ -1,9 +1,7 @@
 package com.ajaxjs.util.ioc;
 
-import com.ajaxjs.util.ioc.testcase.Subject;
-
 @Component("Hi")
-public class Hi implements Subject {
+public class Hi  {
 	@Resource
 	private Person person;
 
@@ -14,9 +12,4 @@ public class Hi implements Subject {
 //	public void setPerson(Person person) {
 //		this.person = person;
 //	}
-
-	@Override
-	public void doIt() {
-		System.out.println("Hi do it!");
-	}
 }

@@ -15,7 +15,7 @@ public class TestIoHelper {
 	@Test
 	public void testFileConcat() {
 		byte[] ab = new byte[] {97, 98}, c = new byte[] {99};
-		byte[] abc = IoHelper.concat(ab, c);
+		byte[] abc = StreamHelper.concat(ab, c);
 		
 		assertEquals('a', abc[0]);
 		assertEquals('b', abc[1]);
@@ -26,7 +26,7 @@ public class TestIoHelper {
 	public void testByteIndexOf() {
 		byte[] abcd = new byte[] {97, 98, 99, 100}, bc = new byte[] {98, 99};
 		
-		assertEquals(1, IoHelper.byteIndexOf(abcd, bc, 0));
+		assertEquals(1, StreamHelper.byteIndexOf(abcd, bc, 0));
 	}
 	
 	@Test

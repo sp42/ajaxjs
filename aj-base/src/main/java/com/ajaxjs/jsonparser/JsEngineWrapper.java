@@ -23,7 +23,7 @@ import javax.script.ScriptException;
 
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.io.FileHelper;
-import com.ajaxjs.util.io.IoHelper;
+import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -80,8 +80,7 @@ public class JsEngineWrapper {
 	 * @return js 引擎
 	 */
 	public static ScriptEngine engineFactory() {
-		return new ScriptEngineManager()
-				.getEngineByName(System.getProperty("java.version").contains("1.8.") ? "nashorn" : "rhino");
+		return new ScriptEngineManager().getEngineByName(System.getProperty("java.version").contains("1.8.") ? "nashorn" : "rhino");
 	}
 
 	/**
@@ -108,7 +107,7 @@ public class JsEngineWrapper {
 		String code = null;
 
 		try (InputStream in = clazz.getResourceAsStream(fileName)) {
-			code = IoHelper.byteStream2string(in);
+			code = StreamHelper.byteStream2string(in);
 		} catch (IOException e) {
 			LOGGER.warning(e);
 		}
@@ -122,6 +121,7 @@ public class JsEngineWrapper {
 	/**
 	 * 调用脚本的方法
 	 * 
+	 * @param <T>     目标
 	 * @param method  js 脚本代码
 	 * @param clazz   目标类型
 	 * @param binding 可以为 null，则表示调用全局方法
@@ -179,6 +179,7 @@ public class JsEngineWrapper {
 	/**
 	 * 执行 js 代码
 	 * 
+	 * @param <T>   目标
 	 * @param code  任意 js 代码
 	 * @param clazz 返回的类型。当 clazz ＝ null 时永远返回 null，表示只是执行，不要求返回结果。可理解为 return
 	 *              void。如果想有返回值，至少有个 clazz = Object.class

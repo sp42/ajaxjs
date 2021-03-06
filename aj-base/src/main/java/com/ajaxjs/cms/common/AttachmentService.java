@@ -38,8 +38,7 @@ public class AttachmentService extends BaseService<Attachment> {
 		setShortName("attachment");
 		setDao(dao);
 	}
-	
-	
+
 	/**
 	 * 根据实体 uid 找到其所拥有的图片
 	 * 
@@ -109,13 +108,13 @@ public class AttachmentService extends BaseService<Attachment> {
 	}
 
 	/**
-	 * 根据实体Uid删除图片
+	 * 根据实体 uid 删除图片
 	 * 
-	 * @param owner 实体 uid
+	 * @param ownerId 实体 uid
 	 * @return
 	 */
-	public boolean deleteByOwnerId(Long OwnerId) {
-		return dao.deleteByOwnerId(OwnerId);
+	public boolean deleteByOwnerId(Long ownerId) {
+		return dao.deleteByOwnerId(ownerId);
 	}
 
 	/**

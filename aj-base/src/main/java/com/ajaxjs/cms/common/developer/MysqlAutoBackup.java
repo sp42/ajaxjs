@@ -27,7 +27,7 @@ import com.ajaxjs.sql.JdbcReader;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.XmlHelper;
 import com.ajaxjs.util.io.FileHelper;
-import com.ajaxjs.util.io.IoHelper;
+import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.util.io.ZipHelper;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.mvc.MvcRequest;
@@ -326,7 +326,7 @@ public class MysqlAutoBackup extends TimerTask implements IComponent {
 			try {
 				Process process = Runtime.getRuntime().exec(String.format(CMD, ip, userName, psw, databaseName));
 				try (InputStream in = process.getInputStream();) {
-					String sql = IoHelper.byteStream2string(in);
+					String sql = StreamHelper.byteStream2string(in);
 					FileHelper.saveText("c:/temp/" + CommonUtil.now("yyyy-MM-dd_HH-mm-ss") + ".sql", sql);
 				}
 			} catch (IOException e) {

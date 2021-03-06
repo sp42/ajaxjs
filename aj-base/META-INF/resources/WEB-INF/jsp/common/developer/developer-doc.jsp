@@ -22,7 +22,7 @@
 		}
 	</style>
 </head>
-<body class="admin-entry-form">
+<body class="aj-form-row-holder">
 	<div>
 		<aj-admin-header> 
 			<template slot="title">实用工具</span></template>

@@ -99,7 +99,7 @@ public class TreeLikeService extends BaseService<Catalog> {
 	/**
 	 * 把列表（BaseModel 结构）转换为 map，以 id 作为键值。key 本来是 long，为照顾 el 转换为 int
 	 * 
-	 * @param bean 实体列表
+	 * @param list 实体列表
 	 * @return 以 id 作为键值的 map
 	 */
 	public static Map<Long, BaseModel> idAskey(List<? extends BaseModel> list) {
@@ -184,7 +184,7 @@ public class TreeLikeService extends BaseService<Catalog> {
 	/**
 	 * 
 	 * @param catalogId
-	 * @param service
+	 * @param domainCatalogId
 	 * @return
 	 */
 	public static Function<String, String> setCatalog(int catalogId, int domainCatalogId) {

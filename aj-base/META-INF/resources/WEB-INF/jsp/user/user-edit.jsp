@@ -19,7 +19,7 @@
 		</style>
 	</head>
 	<body>
-		<div class="admin-entry-form">
+		<div class="aj-form-row-holder">
 			<!-- 后台头部导航 -->
 			<aj-admin-header>
 				<template slot="title">
@@ -142,10 +142,10 @@
 			</form>
 		</div>
 		<script>
-			App = new Vue({el: '.admin-entry-form'});
+			App = new Vue({el: '.aj-form-row-holder'});
 		
 			// 表单提交
-			aj.xhr.form('.admin-entry-form form', json => {
+			aj.xhr.form('.aj-form-row-holder form', json => {
 				 if(json && json.msg)
 					 aj.alert(json.msg);
 			});

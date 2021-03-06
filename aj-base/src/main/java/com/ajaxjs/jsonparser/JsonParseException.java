@@ -26,7 +26,7 @@ public class JsonParseException extends RuntimeException {
 	/**
 	 * 创建一个 JSON 解析异常对象
 	 * 
-	 * @param charNum
+	 * @param charNum charNum
 	 * @param lineNum 错误所在的行数
 	 * @param colNum  错误所在的列数
 	 * @param message 异常信息
@@ -41,7 +41,7 @@ public class JsonParseException extends RuntimeException {
 	/**
 	 * 创建一个 JSON 解析异常对象
 	 * 
-	 * @param charNum
+	 * @param charNum charNum
 	 * @param lineNum 错误所在的行数
 	 * @param colNum  错误所在的列数
 	 * @param message 异常信息
@@ -73,8 +73,7 @@ public class JsonParseException extends RuntimeException {
 
 	@Override
 	public String getMessage() {
-		return "JsonParseException[char: " + charNum + ", line: " + lineNum + ", column: " + colNum + "]" + desc
-				+ (cause == null ? "" : cause.toString());
+		return "JsonParseException[char: " + charNum + ", line: " + lineNum + ", column: " + colNum + "]" + desc + (cause == null ? "" : cause.toString());
 	}
 
 	@Override

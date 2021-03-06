@@ -44,11 +44,6 @@ public class TestFileHelper {
 	}
 
 	@Test
-	public void testGetMime() {
-		assertEquals("text/html", FileHelper.getMime("C:\\foo\\bar.htm"));
-	}
-
-	@Test
 	public void testGetDirNameByDate() {
 		assertTrue(FileHelper.getDirNameByDate().startsWith("\\" + Calendar.getInstance().get(Calendar.YEAR)));
 	}

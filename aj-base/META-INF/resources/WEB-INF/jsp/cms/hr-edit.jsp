@@ -12,7 +12,7 @@
 		<script src="${aj_static_resource}/dist/admin/admin.js"></script>
 	</head>
 	<body>
-		<div class="admin-entry-form">
+		<div class="aj-form-row-holder">
 			<!-- 后台头部导航 -->
 			<aj-admin-header>
 				<template slot="title">${isCreate?'新建':'编辑'}${uiName}</template>
@@ -52,8 +52,8 @@
 			</form>
 		</div>
 		<script>
-			new Vue({el: '.admin-entry-form'});
-			aj.xhr.form('.admin-entry-form form', aj.admin.defaultAfterCreate);
+			new Vue({el: '.aj-form-row-holder'});
+			aj.xhr.form('.aj-form-row-holder form', aj.admin.defaultAfterCreate);
 			${isCreate ? 'window.isCreate = true;' : ''}
 		</script>
 	</body>

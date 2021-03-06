@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.MappingValue;
-import com.ajaxjs.util.io.IoHelper;
+import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.util.map.MapTool;
 
 /**
@@ -99,7 +99,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
 	public Map<String, Object> getPutRequestData() {
 		if (putRequestData == null)
 			try (InputStream in = getInputStream()) {
-				String params = IoHelper.byteStream2string(in);
+				String params = StreamHelper.byteStream2string(in);
 				putRequestData = MapTool.toMap(params.split("&"), v -> MappingValue.toJavaValue(Encode.urlDecode(v)));
 			} catch (IOException e) {
 				e.printStackTrace();

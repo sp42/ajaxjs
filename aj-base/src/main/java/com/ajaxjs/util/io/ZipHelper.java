@@ -63,7 +63,7 @@ public class ZipHelper {
 //					new File(newFile.getParent()).mkdirs();
 					FileHelper.initFolder(newFile);
 					FileOutputStream fos = new FileOutputStream(newFile);
-					IoHelper.write(zis, fos, false);
+					StreamHelper.write(zis, fos, false);
 					fos.close();
 				}
 
@@ -141,7 +141,7 @@ public class ZipHelper {
 			zipOut.putNextEntry(new ZipEntry(fileName));
 
 			try (FileInputStream in = new FileInputStream(toZip);) {
-				IoHelper.write(in, zipOut, false);
+				StreamHelper.write(in, zipOut, false);
 			}
 		} catch (IOException e) {
 			LOGGER.warning(e);

@@ -43,10 +43,10 @@
 				height:780px;
 			}
 			
-			.admin-entry-form > form div.label {
+			.aj-form-row-holder > form div.label {
 				min-width: 140px;
 			}
-			.admin-entry-form > form input {
+			.aj-form-row-holder > form input {
 				width: 300px!important;
 			}
 		</style>
@@ -153,7 +153,7 @@
 		
 		<div class="settings">
 			<aj-layer>
-				<div class="admin-entry-form">
+				<div class="aj-form-row-holder">
 					<form method="POST" action="${ctx}/admin/config/site/" class="configForm" style="width:500px;">
 						<div>
 							<label>

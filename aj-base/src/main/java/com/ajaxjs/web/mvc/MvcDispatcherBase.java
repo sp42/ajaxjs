@@ -33,6 +33,8 @@ public class MvcDispatcherBase {
 
 	/**
 	 * 初始化这个过滤器
+	 * 
+	 * @param ctx
 	 */
 	@SuppressWarnings("unchecked")
 	public static void init(ServletContext ctx) {

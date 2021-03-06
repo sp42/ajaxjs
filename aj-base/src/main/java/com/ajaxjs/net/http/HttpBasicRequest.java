@@ -29,7 +29,7 @@ import java.util.function.Function;
 import java.util.zip.GZIPInputStream;
 
 import com.ajaxjs.util.Encode;
-import com.ajaxjs.util.io.IoHelper;
+import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.MapTool;
 
@@ -39,7 +39,7 @@ import com.ajaxjs.util.map.MapTool;
  * @author sp42 frank@ajaxjs.com
  *
  */
-public class HttpBasicRequest extends IoHelper {
+public class HttpBasicRequest extends StreamHelper {
 	private static final LogHelper LOGGER = LogHelper.getLog(HttpBasicRequest.class);
 
 	/**
@@ -198,7 +198,7 @@ public class HttpBasicRequest extends IoHelper {
 		if (fn != null)
 			fn.accept(conn);
 
-		return getResponse(conn, isGzip, IoHelper::byteStream2string);
+		return getResponse(conn, isGzip, StreamHelper::byteStream2string);
 	}
 
 	/////////////////////// --------- POST -------------///////////////////////
@@ -281,7 +281,7 @@ public class HttpBasicRequest extends IoHelper {
 			LOGGER.warning("写入 post 数据时失败！[{0}]", e);
 		}
 
-		return getResponse(conn, false, responseHandler == null ? IoHelper::byteStream2string : responseHandler);
+		return getResponse(conn, false, responseHandler == null ? StreamHelper::byteStream2string : responseHandler);
 	}
 	
 	public static String put(String url, byte[] b, Consumer<HttpURLConnection> fn, Function<InputStream, String> responseHandler) {
@@ -302,7 +302,7 @@ public class HttpBasicRequest extends IoHelper {
 			LOGGER.warning("写入 post 数据时失败！[{0}]", e);
 		}
 		
-		return getResponse(conn, false, responseHandler == null ? IoHelper::byteStream2string : responseHandler);
+		return getResponse(conn, false, responseHandler == null ? StreamHelper::byteStream2string : responseHandler);
 	}
 	
 	
@@ -315,7 +315,7 @@ public class HttpBasicRequest extends IoHelper {
 		if (fn != null)
 			fn.accept(conn);
 
-		return getResponse(conn, false, responseHandler == null ? IoHelper::byteStream2string : responseHandler);
+		return getResponse(conn, false, responseHandler == null ? StreamHelper::byteStream2string : responseHandler);
 	}
 
 	/**

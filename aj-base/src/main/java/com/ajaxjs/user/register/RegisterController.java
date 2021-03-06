@@ -56,7 +56,6 @@ public class RegisterController extends BaseController<User> {
 	 * 
 	 * @param phone 手机号码
 	 * @return true=已存在
-	 * @throws ServiceException
 	 */
 	@GET
 	@Path("checkIfRepeat")

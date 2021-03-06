@@ -18,25 +18,13 @@ package com.ajaxjs.util.io;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.DirectoryStream;
-import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.function.Predicate;
-
-import javax.activation.MimetypesFileTypeMap;
 
 import com.ajaxjs.Version;
 import com.ajaxjs.util.CommonUtil;
@@ -48,7 +36,7 @@ import com.ajaxjs.util.logger.LogHelper;
  * @author sp42 frank@ajaxjs.com
  *
  */
-public class FileHelper extends IoHelper {
+public class FileHelper extends StreamHelper {
 	private static final LogHelper LOGGER = LogHelper.getLog(FileHelper.class);
 
 	/**
@@ -57,22 +45,191 @@ public class FileHelper extends IoHelper {
 	public static final String SEPARATOR = File.separator;
 
 	/**
-	 * 创建目录
+	 * 复制文件
 	 * 
-	 * @param folder 目录字符串
+	 * @param target    源文件
+	 * @param dest      目的文件/目录，如果最后一个为目录，则不改名，如果最后一个为文件名，则改名
+	 * @param isReplace 是否替换已存在的文件，true = 覆盖
+	 * @return true 表示复制成功
 	 */
-	public static void mkDir(String folder) {
-		mkDir(new File(folder));
+	public static boolean copy(String target, String dest, boolean isReplace) {
+		try {
+			if (isReplace)
+				Files.copy(Paths.get(target), Paths.get(dest), StandardCopyOption.REPLACE_EXISTING);
+			else
+				Files.copy(Paths.get(target), Paths.get(dest));
+		} catch (IOException e) {
+			LOGGER.warning(e);
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * 移动文件
+	 * 
+	 * @param target 源文件
+	 * @param dest   目的文件/目录，如果最后一个为目录，则不改名，如果最后一个为文件名，则改名
+	 * @return 是否操作成功
+	 */
+	public static boolean move(String target, String dest) {
+		try {
+			Files.copy(Paths.get(target), Paths.get(dest));
+		} catch (IOException e) {
+			LOGGER.warning(e);
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * 删除文件或目录
+	 * 
+	 * @param file 文件对象
+	 */
+	public static void delete(File file) {
+		if (file.isDirectory()) {
+			File[] files = file.listFiles();
+
+			for (File f : files)
+				delete(f);
+		}
+
+		if (!file.delete())
+			LOGGER.warning("文件 {0} 删除失败！", file.toString());
+	}
+
+	/**
+	 * 删除文件或目录
+	 * 
+	 * @param filePath 文件的完全路径
+	 */
+	public static void delete(String filePath) {
+		delete(new File(filePath));
+	}
+
+	/**
+	 * 打开文件，返回其文本内容，可指定编码
+	 * 
+	 * @param filePath 文件的完全路径
+	 * @param encode   文件编码
+	 * @return 文件内容
+	 */
+	public static String openAsText(String filePath, Charset encode) {
+		LOGGER.info("读取文件[{0}]", filePath);
+
+		Path path = Paths.get(filePath);
+
+		try {
+			if (Files.isDirectory(path))
+				throw new IOException("参数 fullpath：" + filePath + " 不能是目录，请指定文件");
+		} catch (IOException e) {
+			LOGGER.warning(e);
+			return null;
+		}
+
+		try {
+			StringBuilder sb = new StringBuilder();
+			Files.lines(path, encode).forEach(str -> sb.append(str));
+
+			return sb.toString();
+		} catch (IOException e) {
+			LOGGER.warning(e);
+		}
+
+		return null;
+	}
+
+	/**
+	 * 打开文件，返回其文本内容。指定为 UTF-8 编码
+	 * 
+	 * @param filePath 文件的完全路径
+	 * @return 文件内容
+	 */
+	public static String openAsText(String filePath) {
+		return openAsText(filePath, StandardCharsets.UTF_8);
+	}
+
+	/**
+	 * 获得指定文件的 byte 数组
+	 * 
+	 * @param file 文件对象
+	 * @return 文件字节数组
+	 */
+	public static byte[] openAsByte(File file) {
+		try {
+			return inputStream2Byte(new FileInputStream(file));
+		} catch (FileNotFoundException e) {
+			LOGGER.warning(e);
+			return null;
+		}
+	}
+
+	/**
+	 * 保存文件数据
+	 * 
+	 * @param file        文件对象
+	 * @param data        文件数据
+	 * @param isOverwrite 是否覆盖文件，true = 允许覆盖
+	 */
+	public static void save(File file, byte[] data, boolean isOverwrite) {
+		LOGGER.info("正在保存文件" + file);
+
+		try {
+			if (!isOverwrite && file.exists())
+				throw new IOException(file + "文件已经存在，禁止覆盖！");
+
+			if (file.isDirectory())
+				throw new IOException(file + " 不能是目录，请指定文件");
+
+			if (!file.exists())
+				file.createNewFile();
+
+			Files.write(file.toPath(), data);
+		} catch (IOException e) {
+			LOGGER.warning(e);
+		}
+	}
+
+	/**
+	 * 保存文本内容
+	 * 
+	 * @param file 文件对象
+	 * @param text 文本内容
+	 */
+	public static void saveText(File file, String text) {
+		if (Version.isDebug) {
+			String _text = text.length() > 200 ? text.substring(0, 200) + "..." : text;
+			LOGGER.info("正在保存文件{0}， 保存内容：\n{1}", file.toString(), _text);
+		} else
+			LOGGER.info("正在保存文件{0}， 保存内容：\n{1}", file.toString());
+
+		save(file, text.getBytes(StandardCharsets.UTF_8), true);
+	}
+
+	/**
+	 * 保存文本内容
+	 * 
+	 * @param filePath 文件路径
+	 * @param text     文本内容
+	 */
+	public static void saveText(String filePath, String text) {
+		saveText(new File(filePath), text);
 	}
 
 	/**
 	 * 创建目录
 	 * 
-	 * @param folder 目录对象
+	 * @param folder 目录字符串
 	 */
-	public static void mkDir(File folder) {
-		if (!folder.exists())// 先检查目录是否存在，若不存在建立
-			folder.mkdirs();
+	public static void mkDir(String folder) {
+		File _folder = new File(folder);
+		if (!_folder.exists())// 先检查目录是否存在，若不存在建立
+			_folder.mkdirs();
+
+		_folder.mkdir();
 	}
 
 	/**
@@ -81,9 +238,9 @@ public class FileHelper extends IoHelper {
 	 * @param filePath 完整路径，最后一个元素为文件名
 	 */
 	public static void mkDirByFileName(String filePath) {
-		String arr[] = filePath.split("\\/|\\\\");
+		String[] arr = filePath.split("\\/|\\\\");
 		arr[arr.length - 1] = "";// 取消文件名，让最后一个元素为空字符串
-		String folder = String.join(File.separator, arr);
+		String folder = String.join(SEPARATOR, arr);
 
 		mkDir(folder);
 	}
@@ -117,7 +274,7 @@ public class FileHelper extends IoHelper {
 	 * @return 新建文件的 File 对象
 	 */
 	public static File createFile(String folder, String fileName) {
-		LOGGER.info("正在新建文件 {0}", folder + fileName);
+		LOGGER.info("正在新建文件 {0}", folder + SEPARATOR + fileName);
 
 		mkDir(folder);
 		return new File(folder + SEPARATOR + fileName);
@@ -144,137 +301,12 @@ public class FileHelper extends IoHelper {
 	}
 
 	/**
-	 * 保存文本文件 写文件不能用 FileWriter，原因是会中文乱码
-	 * 
-	 * @param file 文件对象
-	 * @param text 文本内容
-	 */
-	public static void saveText(File file, String text) {
-		if (Version.isDebug) {
-			String _text = text.length() > 200 ? text.substring(0, 200) + "..." : text;
-			LOGGER.info("正在保存文件{0}， 保存内容：\n{1}", file.toString(), _text);
-		} else
-			LOGGER.info("正在保存文件{0}， 保存内容：\n{1}", file.toString());
-
-		save(file, text.getBytes(StandardCharsets.UTF_8), true, false);
-	}
-
-	/**
-	 * 
-	 * 
-	 * @param filePath 文件路径
-	 * @param text     文本内容
-	 */
-	public static void saveText(String filePath, String text) {
-		saveText(new File(filePath), text);
-	}
-
-	/**
-	 * 旧方法保存文本内容
-	 * 
-	 * @param file        文件对象
-	 * @param data        文件内容
-	 * @param isOverwrite 是否覆盖文件
-	 * @param isOldWay    是否已旧的方式打开
-	 */
-	public static void save(File file, byte[] data, boolean isOverwrite, boolean isOldWay) {
-		LOGGER.info("正在保存文件" + file);
-
-		try {
-			if (!isOverwrite && file.exists())
-				throw new IOException(file + "文件已经存在，禁止覆盖！");
-
-			if (file.isDirectory())
-				throw new IOException(file + " 不能是目录，请指定文件");
-
-			if (!file.exists())
-				file.createNewFile();
-
-			if (isOldWay)
-				save(file, data, 0, data.length);
-			else
-				Files.write(file.toPath(), data);
-		} catch (IOException e) {
-			LOGGER.warning(e);
-		}
-	}
-
-	/**
-	 * 
-	 * @param file
-	 * @param data
-	 * @param off
-	 * @param len
-	 */
-	public static void save(File file, byte[] data, int off, int len) {
-		try (OutputStream out = new FileOutputStream(file)) {
-			out.write(data, off, len);
-			out.flush();
-		} catch (IOException e) {
-			LOGGER.warning(e);
-		}
-	}
-
-	/**
-	 * 保存文本文件 写文件不能用 FileWriter，原因是会中文乱码
-	 * 
-	 * @param file 文件对象
-	 * @param text 文本内容
-	 */
-	public static void saveTextOld(File file, String text) {
-		LOGGER.info("正在保存文件{0}， 保存内容：\n{1}", file.toString(), text);
-
-		// OutputStreramWriter 将输出的字符流转化为字节流输出（字符流已带缓冲）
-		try (OutputStream out = new FileOutputStream(file); OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);) {
-			writer.write(text);
-		} catch (IOException e) {
-			LOGGER.warning(e);
-		}
-	}
-
-	/**
-	 * 获取文件名的 MIME 类型。检测手段不会真正打开文件进行检查而是单纯文件名的字符串判断。
-	 * 
-	 * @param filename 文件名
-	 * @return MIME 类型
-	 */
-	public static String getMime(String filename) {
-		Path path = Paths.get(filename); // works on java7
-
-		try {
-			return Files.probeContentType(path);
-		} catch (IOException e) {
-			LOGGER.warning(e);
-			return null;
-		}
-	}
-
-	/**
-	 * 获取文件名的 MIME 类型
-	 * 
-	 * @param file 文件对象
-	 * @return MIME 类型
-	 */
-	public static String getMime(File file) {
-		String contentType = new MimetypesFileTypeMap().getContentType(file);
-
-		if (file.getName().endsWith(".png"))
-			contentType = "image/png"; // TODO needs?
-
-		if (contentType == null)
-			contentType = "application/octet-stream";
-
-		return contentType;
-	}
-
-	/**
 	 * 根据日期字符串得到目录名 格式: /2008/10/15/
 	 * 
 	 * @return 如 /2008/10/15/ 格式的字符串
 	 */
 	public static String getDirNameByDate() {
-		String datatime = CommonUtil.now("yyyy-MM-dd");
-		String year = datatime.substring(0, 4), mouth = datatime.substring(5, 7), day = datatime.substring(8, 10);
+		String datatime = CommonUtil.now("yyyy-MM-dd"), year = datatime.substring(0, 4), mouth = datatime.substring(5, 7), day = datatime.substring(8, 10);
 
 		return SEPARATOR + year + SEPARATOR + mouth + SEPARATOR + day + SEPARATOR;
 	}
@@ -309,278 +341,5 @@ public class FileHelper extends IoHelper {
 	 */
 	public static String getFileSuffix(String filename) {
 		return filename.substring(filename.lastIndexOf(".") + 1);
-	}
-
-	/**
-	 * 输入文件的完全路径，返回文件输入流 FileInputStream
-	 * 
-	 * @param filePath 文件的完全路径
-	 * @return 文件输入流
-	 */
-	public static FileInputStream path2FileIn(String filePath) {
-		return path2FileIn(new File(filePath));
-	}
-
-	/**
-	 * 输入文件对象，返回文件输入流 FileInputStream
-	 * 
-	 * @param file 文件对象
-	 * @return 文件输入流
-	 */
-	public static FileInputStream path2FileIn(File file) {
-		try {
-			if (!file.exists())
-				throw new FileNotFoundException(file.getPath() + " 不存在！");
-
-			return new FileInputStream(file);
-		} catch (FileNotFoundException e) {
-			LOGGER.warning(e);
-			return null;
-		}
-	}
-
-	/**
-	 * 打开文件，返回其文本内容
-	 * 
-	 * @param filePath 文件的完全路径
-	 * @return 文件内容
-	 */
-	public static String openAsText(String filePath) {
-		return openAsText(filePath, StandardCharsets.UTF_8, false);
-	}
-
-	/**
-	 * 打开文件，返回其文本内容，可指定编码
-	 * 
-	 * @param filePath 文件磁盘路径
-	 * @param encode   文件编码，默认是 UTF-8 编码。开发者还应该明确规定文件的字符编码，以避免任异常或解析错误。如果读入的文件的编码是
-	 *                 ANSI 编码，那么会报 java.nio.charset.MalformedInputException:Input
-	 *                 length = 1 错误
-	 * @param isOldWay 是否已旧的方式打开
-	 * @return 文件内容
-	 */
-	public static String openAsText(String filePath, Charset encode, boolean isOldWay) {
-		LOGGER.info("读取文件[{0}]", filePath);
-
-		if (isOldWay)
-			return byteStream2string(path2FileIn(filePath));
-
-		Path path = Paths.get(filePath);
-
-		try {
-			if (Files.isDirectory(path))
-				throw new IOException("参数 fullpath：" + filePath + " 不能是目录，请指定文件");
-
-			if (!Files.exists(path))
-				throw new FileNotFoundException(filePath + "　不存在");
-		} catch (IOException e) {
-			LOGGER.warning(e);
-			return null;
-		}
-
-		try {
-			// 此方法不适合读取很大的文件，因为可能存在内存空间不足的问题。
-			StringBuilder sb = new StringBuilder();
-			Files.lines(path, encode).forEach(str -> sb.append(str));
-
-			return sb.toString();
-		} catch (IOException e) {
-			LOGGER.warning(e);
-		}
-
-		return null;
-
-	}
-
-	/**
-	 * 获得指定文件的 byte 数组
-	 * 
-	 * @param file 文件对象
-	 * @return 文件字节数组
-	 */
-	public static byte[] openAsByte(File file) {
-		return inputStream2Byte(path2FileIn(file));
-	}
-
-	/**
-	 * 返回某个文件夹里面的所有文件
-	 * 
-	 * @return 文件名集合
-	 */
-	public static String[] getFiles(File file) {
-		return file.isDirectory() ? file.list() : null;
-	}
-
-	/**
-	 * 删除文件或目录
-	 * 
-	 * @param filePath 文件的完全路径
-	 */
-	public static void delete(String filePath) {
-		try {
-			Files.delete(Paths.get(filePath));
-		} catch (IOException e) {
-			LOGGER.warning(e);
-		}
-	}
-
-	/**
-	 * 删除文件
-	 * 
-	 * @param filePath 文件的完全路径
-	 */
-	public static void deleteOldWay(String filePath) {
-		delete(new File(filePath));
-	}
-
-	/**
-	 * 删除文件
-	 * 
-	 * @param file 文件对象
-	 */
-	public static void delete(File file) {
-		if (file.isDirectory()) {
-			File[] files = file.listFiles();
-
-			for (File f : files) {
-				delete(f);
-			}
-		}
-
-		if (!file.delete())
-			LOGGER.warning("文件 {0} 删除失败！", file.toString());
-	}
-
-	/**
-	 * 复制文件
-	 * 
-	 * @param target 源文件
-	 * @param dest   目的文件/目录，如果最后一个为目录，则不改名，如果最后一个为文件名，则改名
-	 * @return 是否操作成功
-	 */
-	public static boolean copy(String target, String dest) {
-		return copy(target, dest, false);
-	}
-
-	/**
-	 * 复制文件
-	 * 
-	 * @param target             源文件
-	 * @param dest               目的文件/目录，如果最后一个为目录，则不改名，如果最后一个为文件名，则改名
-	 * @param isREPLACE_EXISTING 是否替换已存在的文件
-	 * @return true 表示复制成功
-	 */
-	public static boolean copy(String target, String dest, boolean isREPLACE_EXISTING) {
-		try {
-			if (isREPLACE_EXISTING)
-				Files.copy(Paths.get(target), Paths.get(dest), StandardCopyOption.REPLACE_EXISTING);
-			else
-				Files.copy(Paths.get(target), Paths.get(dest));
-		} catch (IOException e) {
-			LOGGER.warning(e);
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
-	 * 移动文件
-	 * 
-	 * @param target 源文件
-	 * @param dest   目的文件/目录，如果最后一个为目录，则不改名，如果最后一个为文件名，则改名
-	 * @return 是否操作成功
-	 */
-	public static boolean move(String target, String dest) {
-		try {
-			Files.copy(Paths.get(target), Paths.get(dest));
-		} catch (IOException e) {
-			LOGGER.warning(e);
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
-	 * 遍历整个文件目录，递归的
-	 * 
-	 * @param _dir   指定的目录
-	 * @param method 搜索函数
-	 * @return 搜索结果
-	 * @throws IOException 参数不是目录
-	 */
-	public static List<Path> walkFileTree(String _dir, Predicate<Path> method) throws IOException {
-		Path dir = Paths.get(_dir);
-
-		if (!Files.isDirectory(dir))
-			throw new IOException("参数 [" + _dir + "]不是目录，请指定目录");
-
-		List<Path> result = new LinkedList<>();
-		Files.walkFileTree(dir, new SimpleFileVisitor<Path>() {
-			@Override
-			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
-				if (method.test(file))
-					result.add(file);
-
-				return FileVisitResult.CONTINUE;
-			}
-		});
-
-		return result;
-	}
-
-	/**
-	 * 遍历整个目录，非递归的
-	 * 
-	 * @param _dir   指定的目录
-	 * @param method 搜索函数
-	 * @return 搜索结果
-	 * @throws IOException 参数不是目录
-	 */
-	public static List<Path> walkFile(String _dir, Predicate<Path> method) throws IOException {
-		Path dir = Paths.get(_dir);
-
-		if (!Files.isDirectory(dir))
-			throw new IOException("参数 ：" + _dir + " 不是目录，请指定目录");
-
-		List<Path> result = new LinkedList<>();
-		try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
-			for (Path e : stream) {
-				if (method.test(e))
-					result.add(e);
-			}
-		}
-
-		return result;
-	}
-
-	/**
-	 * 文件格式只有utf8和gbk两种格式，而一般的utf8格式文件一般是带着BOM信息的，这样的文件刚开始的三个字节永远是一样的，
-	 * 所以如果能根据这个规律探测文件编码格式，那似乎问题就解决拉
-	 * 但是很可惜，我们的文件是不带BOM信息的，所以只好统计整个文件的字节流，看符合utf格式的字节多还是非utf8格式的字节多，
-	 * 如果是前者，那这个文件就很可能是utf8格式，根据这个规律，我们发现，探测的准确度还是比较高的
-	 * 
-	 * @param data
-	 * @return true 表示为 UTF-8 编码
-	 */
-	public static boolean isUTF8(byte[] data) {
-		int countGoodUtf = 0, countBadUtf = 0;
-		byte currentByte = 0x00, previousByte = 0x00;
-
-		for (int i = 1; i < data.length; i++) {
-			currentByte = data[i];
-			previousByte = data[i - 1];
-
-			if ((currentByte & 0xC0) == 0x80) {
-				if ((previousByte & 0xC0) == 0xC0)
-					countGoodUtf++;
-				else if ((previousByte & 0x80) == 0x00)
-					countBadUtf++;
-			} else if ((previousByte & 0xC0) == 0xC0)
-				countBadUtf++;
-		}
-
-		return countGoodUtf > countBadUtf;
 	}
 }

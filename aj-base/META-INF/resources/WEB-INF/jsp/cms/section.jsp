@@ -11,7 +11,7 @@
 	<script src="${aj_static_resource}/dist/admin/admin.js"></script>
 </head>
 <body>
-	<div class="admin-entry-form">
+	<div class="aj-form-row-holder">
 		<!-- 后台头部导航 -->
 		<aj-admin-header> <template slot="title">${isCreate?'新建':'编辑'}${uiName}</template>
 		<template slot="btns"> <c:if test="${!isCreate}">
@@ -94,7 +94,7 @@
 	<script src="${ctx}/test/test.js"></script>
 	<script>
 		App = new Vue({
-			el : '.admin-entry-form',
+			el : '.aj-form-row-holder',
 			data : {
 				adsLink : '${info.link}'
 			}

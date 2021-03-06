@@ -257,7 +257,7 @@ public class User extends BaseModel {
 	/**
 	 * 设置角色ID
 	 * 
-	 * @param role_id
+	 * @param roleId
 	 */
 	public void setRoleId(Integer roleId) {
 		this.roleId = roleId;

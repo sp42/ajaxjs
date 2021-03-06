@@ -28,7 +28,7 @@ import java.util.function.Function;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.Encode;
 import com.ajaxjs.util.io.FileHelper;
-import com.ajaxjs.util.io.IoHelper;
+import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -214,7 +214,7 @@ public class NetUtil extends HttpBasicRequest {
 				File file = (File) v;
 				String field = String.format(str, key, file.getName(), "application/octet-stream");
 
-				_bytes = IoHelper.concat(field.getBytes(), FileHelper.openAsByte(file));
+				_bytes = StreamHelper.concat(field.getBytes(), FileHelper.openAsByte(file));
 			} else { // 普通字段
 				String field = String.format(divField, BOUNDARY, key, v.toString());
 				_bytes = field.getBytes();
@@ -223,10 +223,10 @@ public class NetUtil extends HttpBasicRequest {
 			if (bytes == null) // 第一次时候为空
 				bytes = _bytes;
 			else
-				bytes = IoHelper.concat(bytes, _bytes);
+				bytes = StreamHelper.concat(bytes, _bytes);
 		}
 
-		return IoHelper.concat(bytes, endData);
+		return StreamHelper.concat(bytes, endData);
 	}
 
 	/**

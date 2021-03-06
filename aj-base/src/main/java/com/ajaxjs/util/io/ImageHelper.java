@@ -110,7 +110,7 @@ public class ImageHelper {
 	 * @return 图片字节码
 	 */
 	public static byte[] img2byte(BufferedImage bImg, String format) {
-		ByteArrayOutputStream out = new ByteArrayOutputStream(IoHelper.BUFFER_SIZE);// 1024 指定缓冲大小
+		ByteArrayOutputStream out = new ByteArrayOutputStream(StreamHelper.BUFFER_SIZE);// 1024 指定缓冲大小
 
 		try {
 			ImageIO.write(bImg, format, out);

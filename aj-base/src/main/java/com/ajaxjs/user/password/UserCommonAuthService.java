@@ -1,7 +1,5 @@
 package com.ajaxjs.user.password;
 
-
-
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.sql.annotation.Delete;
 import com.ajaxjs.sql.annotation.Select;
@@ -16,7 +14,7 @@ import com.ajaxjs.web.mvc.MvcRequest;
 @Component
 public class UserCommonAuthService extends BaseService<UserCommonAuth> {
 	private static final LogHelper LOGGER = LogHelper.getLog(UserCommonAuthService.class);
-	
+
 	@TableName(value = "user_common_auth", beanClass = UserCommonAuth.class)
 	public static interface UserCommonAuthDao extends IBaseDao<UserCommonAuth> {
 		@Select("SELECT * FROM ${tableName} WHERE userId = ?")
@@ -27,7 +25,7 @@ public class UserCommonAuthService extends BaseService<UserCommonAuth> {
 	}
 
 	public static UserCommonAuthDao dao = new Repository().bind(UserCommonAuthDao.class);
-	
+
 	{
 		setUiName("用户口令");
 		setShortName("UserCommonAuth");
@@ -42,7 +40,7 @@ public class UserCommonAuthService extends BaseService<UserCommonAuth> {
 	@Override
 	public Long create(UserCommonAuth bean) {
 		bean.setPassword(encode(bean.getPassword()));
-		
+
 		try {
 			bean.setRegisterIp(MvcRequest.getMvcRequest().getIp());
 		} catch (Exception e) {
@@ -62,7 +60,6 @@ public class UserCommonAuthService extends BaseService<UserCommonAuth> {
 	public int update(UserCommonAuth bean) {
 		return dao.update(bean);
 	}
- 
 
 	@Override
 	public String getTableName() {
@@ -72,12 +69,11 @@ public class UserCommonAuthService extends BaseService<UserCommonAuth> {
 	/**
 	 * 更新用户密码
 	 * 
-	 * @param userId
-	 * @param password
+	 * @param auth
 	 * @param newPassword
 	 * @return 是否修改成功
 	 */
-	public boolean updatePwd(UserCommonAuth auth, String newPassword)  {
+	public boolean updatePwd(UserCommonAuth auth, String newPassword) {
 		UserCommonAuth newAuth = new UserCommonAuth();
 		newAuth.setId(auth.getId());
 		newAuth.setPassword(encode(newPassword));
@@ -87,7 +83,7 @@ public class UserCommonAuthService extends BaseService<UserCommonAuth> {
 
 		if (update(newAuth) != 0) {
 			LOGGER.debug("密码修改成功");
-			
+
 			return true;
 		}
 
