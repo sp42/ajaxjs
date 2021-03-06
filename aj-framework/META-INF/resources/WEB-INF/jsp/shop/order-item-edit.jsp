@@ -9,7 +9,7 @@
 		</jsp:include>
 	</head>
 	<body>
-		<div class="admin-entry-form">
+		<div class="aj-form-row-holder">
 			<!-- 后台头部导航 -->
 			<aj-admin-header>
 				<template slot="title">${isCreate?'新建':'编辑'}${uiName}</template>
@@ -199,7 +199,7 @@
 	
 			
 			App = new Vue({
-				el: '.admin-entry-form',
+				el: '.aj-form-row-holder',
 				data : {
 					goodsFormatItemList:[],
 					goodsFormatItems:[],
@@ -234,12 +234,9 @@
 		
 			// 表单提交
 			aj.xhr.form('form.entityEdit', function(json) {
-					 if(json && json.msg)
-						 aj.alert(json.msg);
-						${isCreate ? 'json && json.isOk && setTimeout(function(){location.assign(json.newlyId + "/");}, 2000);' : ''}
-				}, {beforeSubmit : function(form, json) {
-					json.content = App.$refs.htmleditor.getValue({cleanWord : eval('${aj_allConfig.article.cleanWordTag}'), encode : true});
-				}
+				 if(json && json.msg)
+					 aj.alert(json.msg);
+					${isCreate ? 'json && json.isOk && setTimeout(function(){location.assign(json.newlyId + "/");}, 2000);' : ''}
 			});
 			
 		</script>

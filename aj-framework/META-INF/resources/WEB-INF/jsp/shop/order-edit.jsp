@@ -26,7 +26,7 @@
 		</style>
 	</head>
 	<body>
-		<div class="admin-entry-form">
+		<div class="aj-form-row-holder">
 			<!-- 后台头部导航 -->
 			<aj-admin-header>
 				<template slot="title">${uiName}</template>
@@ -120,7 +120,7 @@
  		</div>
  
 		<script>
-			App = new Vue({el: '.admin-entry-form'});
+			App = new Vue({el: '.aj-form-row-holder'});
 			
 			// 表单提交
 			aj.xhr.form('form.entityEdit', json => {

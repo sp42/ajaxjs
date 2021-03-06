@@ -9,7 +9,7 @@
 		</jsp:include>
 	</head>
 	<body>
-		<div class="admin-entry-form infoForm">
+		<div class="aj-form-row-holder infoForm">
 			<!-- 后台头部导航 -->
 			<aj-admin-header>
 				<template slot="title">

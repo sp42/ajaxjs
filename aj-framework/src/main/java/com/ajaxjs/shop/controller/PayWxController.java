@@ -21,7 +21,7 @@ import com.ajaxjs.shop.service.OrderService;
 import com.ajaxjs.shop.service.Pay;
 import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.util.CommonUtil;
-import com.ajaxjs.util.io.IoHelper;
+import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
@@ -45,7 +45,7 @@ public class PayWxController extends BaseController<Map<String, Object>> {
 		PayNodifyResult result;
 
 		try (InputStream in = request.getInputStream();) {
-			String xml = IoHelper.byteStream2string(in);// 读取参数
+			String xml = StreamHelper.byteStream2string(in);// 读取参数
 
 			if (CommonUtil.isEmptyString(xml))
 				throw new NullPointerException("没返回任何报文");
