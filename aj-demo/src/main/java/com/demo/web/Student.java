@@ -1,4 +1,4 @@
-package com.ajaxjs.demo.servlet;
+package com.demo.web;
 
 public class Student {
 	private String Name;

@@ -1,4 +1,4 @@
-package demo.base.di;
+package com.demo.base.di;
 
 public class MyInterface {
 	public interface PCI {

@@ -1,4 +1,4 @@
-package demo.datastru;
+package com.ajaxjs.util;
 
 /**
  * 二叉查找树 T 节点元素类型

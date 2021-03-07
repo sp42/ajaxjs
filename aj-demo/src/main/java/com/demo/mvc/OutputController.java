@@ -9,8 +9,7 @@ import javax.ws.rs.Path;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.web.mvc.IController;
 import com.ajaxjs.web.mvc.ModelAndView;
-
-import demo.orm.dao.News;
+import com.demo.orm.dao.News;
 
 @Path("/output")
 public class OutputController implements IController {

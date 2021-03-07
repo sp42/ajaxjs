@@ -1,4 +1,4 @@
-<%@page pageEncoding="UTF-8" import="demo.web.Student"%>
+<%@page pageEncoding="UTF-8" import="com.demo.web.Student"%>
 <!DOCTYPE html>
 <html>
 	<head>

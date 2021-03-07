@@ -1,4 +1,4 @@
-package com.ajaxjs.demo.servlet;
+package com.demo.web.servlet;
 
 import java.io.IOException;
 

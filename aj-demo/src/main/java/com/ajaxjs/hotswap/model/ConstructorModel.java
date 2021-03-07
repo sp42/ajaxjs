@@ -4,7 +4,7 @@ import com.ajaxjs.hotswap.SmcHelper;
 
 public class ConstructorModel {
 	private final ClassModel classModel;
-	private Class[] paramTypes;
+	private Class<?>[] paramTypes;
 	private String[] paramNames;
 	private String body;
 
@@ -28,11 +28,11 @@ public class ConstructorModel {
 		this.paramNames = paramNames;
 	}
 
-	public Class[] getParamTypes() {
+	public Class<?>[] getParamTypes() {
 		return paramTypes;
 	}
 
-	public void setParamTypes(Class... paramTypes) {
+	public void setParamTypes(Class<?>... paramTypes) {
 		this.paramTypes = paramTypes;
 	}
 

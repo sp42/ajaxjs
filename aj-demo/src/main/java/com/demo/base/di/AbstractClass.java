@@ -1,12 +1,10 @@
-package demo.base.di;
+package com.demo.base.di;
 
 import com.ajaxjs.util.ioc.Resource;
 
-public class CommonClass {
-	class 父类 {
-		public void foo() {
-			System.out.println("父类方法");
-		}
+public class AbstractClass {
+	abstract class 父类 {
+		abstract public void foo();
 	}
 
 	class 子类 extends 父类 {
@@ -24,6 +22,6 @@ public class CommonClass {
 	}
 
 	public static void main(String[] args) {
-		new CommonClass().bar();
+		new AbstractClass().bar();
 	}
 }

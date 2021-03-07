@@ -1,4 +1,4 @@
-package demo.web;
+package com.demo.web.servlet;
 
 public class Student {
 	private String Name;

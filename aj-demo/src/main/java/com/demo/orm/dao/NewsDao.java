@@ -1,4 +1,4 @@
-package demo.orm.dao;
+package com.demo.orm.dao;
 
 import java.util.List;
 

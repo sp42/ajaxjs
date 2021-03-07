@@ -1,4 +1,4 @@
-package demo.base.di;
+package com.demo.base.di;
 
 import com.ajaxjs.util.ioc.Resource;
 

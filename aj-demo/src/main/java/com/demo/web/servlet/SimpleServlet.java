@@ -1,4 +1,4 @@
-package com.ajaxjs.demo;
+package com.demo.web.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;

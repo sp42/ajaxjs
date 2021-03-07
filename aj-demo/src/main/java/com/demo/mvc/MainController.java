@@ -1,4 +1,4 @@
-package com.helloworld;
+package com.demo.mvc;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
