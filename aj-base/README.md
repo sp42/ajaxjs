@@ -31,17 +31,6 @@ Maven 坐标：
 </dependency>
 ```
 
-参见
------
-[Wiki 教程](https://gitee.com/sp42_admin/ajaxjs/wikis) 
-
-最后是我之前的尝试，记录在博客上了。
-
-- http://blog.csdn.net/zhangxin09/article/details/17403211
-- http://blog.csdn.net/zhangxin09/article/details/7899525
-- http://blog.csdn.net/zhangxin09/article/details/55805849
-- http://blog.csdn.net/zhangxin09/article/details/70187712
-
 # 单元测试覆盖率
 
 单元测试覆盖率工具：EclEmma
