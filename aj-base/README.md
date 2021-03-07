@@ -7,11 +7,19 @@
 
 
 
+# AJAXJS-Base 基础框架
+
+本框架由下面三大模块组成。
+
+- 工具库，包含大量实用的工具，参见[文档简介](https://gitee.com/sp42_admin/ajaxjs/wikis/%E5%B7%A5%E5%85%B7%E5%BA%93%E7%AE%80%E4%BB%8B?sort_id=2503467)；
+- 数据层，类似于 ORM 的数据库访问机制，参见[文档简介](https://gitee.com/sp42_admin/ajaxjs/wikis/%E6%95%B0%E6%8D%AE%E5%B1%82%E7%AE%80%E4%BB%8B?sort_id=992404)；
+- Web MVC 框架，关于网站页面和 MVC 的模块，参见[文档简介](https://gitee.com/sp42_admin/ajaxjs/wikis/%E7%AE%80%E4%BB%8B?sort_id=2480164)；
+- CMS，一个小型的网站内容管理系统，参见[https://gitee.com/sp42_admin/ajaxjs/wikis/%E7%AE%80%E4%BB%8B?sort_id=3665749)；
 
 
-安装
----------
-要求 Java 1.8+，Jar 直接下载：[200kb](https://search.maven.org/remotecontent?filepath=com/ajaxjs/ajaxjs-base/1.2.3/ajaxjs-base-1.2.3.jar)
+# 安装
+
+要求 Java 1.8+，Jar 直接下载：[约 200kb](https://search.maven.org/remotecontent?filepath=com/ajaxjs/ajaxjs-base/1.2.3/ajaxjs-base-1.2.3.jar)
 
 Maven 坐标：
 
@@ -25,7 +33,7 @@ Maven 坐标：
 
 参见
 -----
-[Wiki 教程](https://gitee.com/sp42_admin/ajaxjs/wikis) | [JavaDoc](https://framework.ajaxjs.com/framework/javadoc/ajaxjs-base/)
+[Wiki 教程](https://gitee.com/sp42_admin/ajaxjs/wikis) 
 
 最后是我之前的尝试，记录在博客上了。
 
@@ -34,22 +42,17 @@ Maven 坐标：
 - http://blog.csdn.net/zhangxin09/article/details/55805849
 - http://blog.csdn.net/zhangxin09/article/details/70187712
 
-单元测试覆盖率
----------
-工具：EclEmma
+# 单元测试覆盖率
+
+单元测试覆盖率工具：EclEmma
 
 ![输入图片说明](https://static.oschina.net/uploads/img/201802/20113259_XALo.jpg "在这里输入图片标题")
 
 
-鸣谢
----------
-本人水平有限，特别引用了下面的源码。
+# 鸣谢
+
+本人水平有限，该项目中引用了下面的源码。
 - 日志组件引用了 Tomcat 的 FileHandler 源码。
-- 使用了 Twitter 的分布式自增 ID 算法 Snowflake:雪花生成器。
+- 使用了 Twitter 的分布式自增 ID 算法 Snowflake：雪花生成器。
 - 数据层参考了开源项目：https://gitee.com/bitprince/memory
 
-
-
-版权声明 LICENSE
----------
-作者版权所有，开源许可：Apache License, Version 2.0
