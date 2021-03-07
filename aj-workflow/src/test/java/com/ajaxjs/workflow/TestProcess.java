@@ -7,14 +7,14 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.ajaxjs.util.io.IoHelper;
+import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.util.ioc.ComponentMgr;
 import com.ajaxjs.workflow.process.ProcessActive;
 
 public class TestProcess extends BaseTest {
 //	@Test
 	public void testDeploy() {
-		String processXml = IoHelper.byteStream2string(WorkflowUtils.getStreamFromClasspath("test/task/simple.xml"));
+		String processXml = StreamHelper.byteStream2string(WorkflowUtils.getStreamFromClasspath("test/task/simple.xml"));
 		long id = service.deploy(processXml, 1000L);
 		assertNotNull(id);
 
