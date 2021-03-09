@@ -3,12 +3,12 @@
 [![Email](https://img.shields.io/badge/Contact--me-Email-orange.svg)](mailto:support@ajaxjs.com)
 [![QQ群](https://framework.ajaxjs.com/demo/common/qq.svg)](https://shang.qq.com/wpa/qunwpa?idkey=3877893a4ed3a5f0be01e809e7ac120e346102bd550deb6692239bb42de38e22)
 
-# 特点
+### 特点
 - 全栈，包含前端、后端库
 - 轻量级，简单易学易用
 - 免依赖或少依赖
 
-# 采用技术栈
+### 采用技术栈
 - 前端：TypeScript + Vue.js 2.x + LESS.js + Gulp.js
 - 后端：Java 1.8 + Tomcat 8 + MySQL/SQLite + 整合工作流引擎
 
