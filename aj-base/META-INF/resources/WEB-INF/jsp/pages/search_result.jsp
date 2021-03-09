@@ -1,4 +1,4 @@
-<%@page import="com.ajaxjs.framework.config.ConfigService"%>
+<%-- <%@page import="com.ajaxjs.framework.config.ConfigService"%>
 <%@page pageEncoding="UTF-8" 
 import="java.util.*, java.io.*, com.ajaxjs.util.*, com.ajaxjs.util.map.MapTool, com.ajaxjs.util.io.*, com.ajaxjs.net.http.*"
 %>
@@ -32,4 +32,4 @@ import="java.util.*, java.io.*, com.ajaxjs.util.*, com.ajaxjs.util.map.MapTool, 
 	<h3 class="aj-center-title">搜索关键字：${param.q}</h3>
 	<div class="resultList">
 	${html}
-</tags:content>
+</tags:content> --%>
