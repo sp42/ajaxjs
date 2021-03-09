@@ -29,6 +29,12 @@ AJAXJS 很少第三方的库或包依赖，一方面也避免太复杂。关于�
       / /  | | | |_| |  / /  | |  / /\ \  | |_| |  ___| |      | |/   |/ /    | |___  | |_| |  
      /_/   |_| \_____/ /_/   |_| /_/  \_\ \_____/ /_____/      |___/|___/     |_____| |_____/ 
 
+API 设计特色：
+- 容易学习和记忆(Easy to learn and memorize)。采用公认的行为和命名，没有太多的冒进创新，保持与普遍认知一致的设计
+- 简洁清晰的语义，编写可读性强、平易近人的代码，就是说，不轻易采用那些“奇技淫巧”
+- 从个人风格上来讲，我倾向简单质朴的设计开发理念。
+设计和实现时不会引入不必要的抽象或分解，因为那也是一种复杂度。考虑扩展性也是确定会发生的需求才要考虑进来，否则就是引入不必要的复杂性。
+- 从代码实现上来讲，遵循“极简原则”：能一句代码实现的，就不用两句代码
 
 
 ### 各项目一览
@@ -39,8 +45,8 @@ AJAXJS 很少第三方的库或包依赖，一方面也避免太复杂。关于�
 |aj-base|基础库，包含工具库、ORM、MVC 和 CMS，[浏览项目 readme](aj-base)|javassist|web-fragment jar|
 |aj-framwork|其他业务的封装，[浏览项目 readme](aj-framework)|aj-base 和 ajaxjs-web|web-fragment jar|
 |aj-demo|一个包含前后台的网站，可方便学习或作为快速手脚架，[浏览项目 readme](aj-demo)|aj-framework|war|
-|aj-workflow|工作流引擎，[浏览项目 readme](aj--workflow)|aj-framwork|web-fragment jar|
-|aj-ts|独立的前端框架，并包含官网静态页[浏览项目 readme](aj-ts) \| [DEMO](https://framework.ajaxjs.com/demo/index.html)|vue.js/less.js|Node.js 项目|
+|aj-workflow|工作流引擎，[浏览项目 readme](aj-workflow)|aj-framwork|web-fragment jar|
+|aj-ts|独立的前端框架，并包含官网静态页[浏览项目 readme](aj-ts) \| [DEMO](https://framework.ajaxjs.com/demo/index.html)|vue.js/less.js|node.js 项目|
 
 最终打包为 JAR 包，但实际里面包含了相当多的前端资源 JSP/HTML/CSS/JS 在内。
 达成这一项技术的是 Servlet 3.0 的 “Web 模块部署描述符片段”功能，也就是说，前端资源通过 Servlet 3.0 WebFragment 特性打包到 JAR 里面。
