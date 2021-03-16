@@ -1,3 +1,12 @@
+.aj-list .no-data {
+  padding: 10%;
+  color: gray;
+}
+.aj-classic-list li {
+  list-style-type: disc;
+  text-align: left;
+  margin-bottom: 10px;
+}
 .aj-article-list > ul {
   padding: 2%;
 }

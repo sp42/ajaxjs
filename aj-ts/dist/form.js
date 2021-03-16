@@ -105,7 +105,7 @@ var aj;
             function Calendar() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
                 _this.name = "aj-form-calendar";
-                _this.template = html(__makeTemplateObject(["\n            <div class=\"aj-form-calendar\">\n                <div class=\"selectYearMonth\">\n                    <a href=\"###\" @click=\"getDate('preYear')\" class=\"preYear\" title=\"\u4E0A\u4E00\u5E74\">&lt;</a>\n                    <select @change=\"setMonth\" v-model=\"month\">\n                        <option value=\"1\">\u4E00\u6708</option>\n                        <option value=\"2\">\u4E8C\u6708</option>\n                        <option value=\"3\">\u4E09\u6708</option>\n                        <option value=\"4\">\u56DB\u6708</option>\n                        <option value=\"5\">\u4E94\u6708</option>\n                        <option value=\"6\">\u516D\u6708</option>\n                        <option value=\"7\">\u4E03\u6708</option>\n                        <option value=\"8\">\u516B\u6708</option>\n                        <option value=\"9\">\u4E5D\u6708</option>\n                        <option value=\"10\">\u5341\u6708</option>\n                        <option value=\"11\">\u5341\u4E00\u6708</option>\n                        <option value=\"12\">\u5341\u4E8C\u6708</option>\n                    </select>\n                    <a href=\"###\" @click=\"getDate('nextYear')\" class=\"nextYear\" title=\"\u4E0B\u4E00\u5E74\">&gt;</a>\n                </div>\n                <div class=\"showCurrentYearMonth\">\n                    <span class=\"showYear\">{{year}}</span>/<span class=\"showMonth\">{{month}}</span>\n                </div>\n                <table>\n                    <thead>\n                        <tr>\n                            <td>\u65E5</td>\n                            <td>\u4E00</td>\n                            <td>\u4E8C</td>\n                            <td>\u4E09</td>\n                            <td>\u56DB</td>\n                            <td>\u4E94</td>\n                            <td>\u516D</td>\n                        </tr>\n                    </thead>\n                    <tbody @click=\"pickDay\"></tbody>\n                </table>\n                <div v-if=\"showTime\" class=\"showTime\">\n                    \u65F6 <select class=\"hour aj-select\">\n                        <option v-for=\"n in 24\">{{n}}</option>\n                    </select>\n                    \u5206 <select class=\"minute aj-select\">\n                        <option v-for=\"n in 61\">{{n - 1}}</option>\n                    </select>\n                    <a href=\"#\" @click=\"pickupTime\">\u9009\u62E9\u65F6\u95F4</a>\n                </div>\n            </div>\n        "], ["\n            <div class=\"aj-form-calendar\">\n                <div class=\"selectYearMonth\">\n                    <a href=\"###\" @click=\"getDate('preYear')\" class=\"preYear\" title=\"\u4E0A\u4E00\u5E74\">&lt;</a>\n                    <select @change=\"setMonth\" v-model=\"month\">\n                        <option value=\"1\">\u4E00\u6708</option>\n                        <option value=\"2\">\u4E8C\u6708</option>\n                        <option value=\"3\">\u4E09\u6708</option>\n                        <option value=\"4\">\u56DB\u6708</option>\n                        <option value=\"5\">\u4E94\u6708</option>\n                        <option value=\"6\">\u516D\u6708</option>\n                        <option value=\"7\">\u4E03\u6708</option>\n                        <option value=\"8\">\u516B\u6708</option>\n                        <option value=\"9\">\u4E5D\u6708</option>\n                        <option value=\"10\">\u5341\u6708</option>\n                        <option value=\"11\">\u5341\u4E00\u6708</option>\n                        <option value=\"12\">\u5341\u4E8C\u6708</option>\n                    </select>\n                    <a href=\"###\" @click=\"getDate('nextYear')\" class=\"nextYear\" title=\"\u4E0B\u4E00\u5E74\">&gt;</a>\n                </div>\n                <div class=\"showCurrentYearMonth\">\n                    <span class=\"showYear\">{{year}}</span>/<span class=\"showMonth\">{{month}}</span>\n                </div>\n                <table>\n                    <thead>\n                        <tr>\n                            <td>\u65E5</td>\n                            <td>\u4E00</td>\n                            <td>\u4E8C</td>\n                            <td>\u4E09</td>\n                            <td>\u56DB</td>\n                            <td>\u4E94</td>\n                            <td>\u516D</td>\n                        </tr>\n                    </thead>\n                    <tbody @click=\"pickDay\"></tbody>\n                </table>\n                <div v-if=\"showTime\" class=\"showTime\">\n                    \u65F6 <select class=\"hour aj-select\">\n                        <option v-for=\"n in 24\">{{n}}</option>\n                    </select>\n                    \u5206 <select class=\"minute aj-select\">\n                        <option v-for=\"n in 61\">{{n - 1}}</option>\n                    </select>\n                    <a href=\"#\" @click=\"pickupTime\">\u9009\u62E9\u65F6\u95F4</a>\n                </div>\n            </div>\n        "]));
+                _this.template = html(__makeTemplateObject(["\n        <div class=\"aj-form-calendar\">\n            <div class=\"selectYearMonth\">\n                <a href=\"###\" @click=\"getDate('preYear')\" class=\"preYear\" title=\"\u4E0A\u4E00\u5E74\">&lt;</a>\n                <select @change=\"setMonth\" v-model=\"month\">\n                    <option value=\"1\">\u4E00\u6708</option>\n                    <option value=\"2\">\u4E8C\u6708</option>\n                    <option value=\"3\">\u4E09\u6708</option>\n                    <option value=\"4\">\u56DB\u6708</option>\n                    <option value=\"5\">\u4E94\u6708</option>\n                    <option value=\"6\">\u516D\u6708</option>\n                    <option value=\"7\">\u4E03\u6708</option>\n                    <option value=\"8\">\u516B\u6708</option>\n                    <option value=\"9\">\u4E5D\u6708</option>\n                    <option value=\"10\">\u5341\u6708</option>\n                    <option value=\"11\">\u5341\u4E00\u6708</option>\n                    <option value=\"12\">\u5341\u4E8C\u6708</option>\n                </select>\n                <a href=\"###\" @click=\"getDate('nextYear')\" class=\"nextYear\" title=\"\u4E0B\u4E00\u5E74\">&gt;</a>\n            </div>\n            <div class=\"showCurrentYearMonth\">\n                <span class=\"showYear\">{{year}}</span>/<span class=\"showMonth\">{{month}}</span>\n            </div>\n            <table>\n                <thead>\n                    <tr>\n                        <td>\u65E5</td>\n                        <td>\u4E00</td>\n                        <td>\u4E8C</td>\n                        <td>\u4E09</td>\n                        <td>\u56DB</td>\n                        <td>\u4E94</td>\n                        <td>\u516D</td>\n                    </tr>\n                </thead>\n                <tbody @click=\"pickDay\"></tbody>\n            </table>\n            <div v-if=\"showTime\" class=\"showTime\">\n                \u65F6 <select class=\"hour aj-select\">\n                    <option v-for=\"n in 24\">{{n}}</option>\n                </select>\n                \u5206 <select class=\"minute aj-select\">\n                    <option v-for=\"n in 61\">{{n - 1}}</option>\n                </select>\n                <a href=\"#\" @click=\"pickupTime\">\u9009\u62E9\u65F6\u95F4</a>\n            </div>\n        </div>"], ["\n        <div class=\"aj-form-calendar\">\n            <div class=\"selectYearMonth\">\n                <a href=\"###\" @click=\"getDate('preYear')\" class=\"preYear\" title=\"\u4E0A\u4E00\u5E74\">&lt;</a>\n                <select @change=\"setMonth\" v-model=\"month\">\n                    <option value=\"1\">\u4E00\u6708</option>\n                    <option value=\"2\">\u4E8C\u6708</option>\n                    <option value=\"3\">\u4E09\u6708</option>\n                    <option value=\"4\">\u56DB\u6708</option>\n                    <option value=\"5\">\u4E94\u6708</option>\n                    <option value=\"6\">\u516D\u6708</option>\n                    <option value=\"7\">\u4E03\u6708</option>\n                    <option value=\"8\">\u516B\u6708</option>\n                    <option value=\"9\">\u4E5D\u6708</option>\n                    <option value=\"10\">\u5341\u6708</option>\n                    <option value=\"11\">\u5341\u4E00\u6708</option>\n                    <option value=\"12\">\u5341\u4E8C\u6708</option>\n                </select>\n                <a href=\"###\" @click=\"getDate('nextYear')\" class=\"nextYear\" title=\"\u4E0B\u4E00\u5E74\">&gt;</a>\n            </div>\n            <div class=\"showCurrentYearMonth\">\n                <span class=\"showYear\">{{year}}</span>/<span class=\"showMonth\">{{month}}</span>\n            </div>\n            <table>\n                <thead>\n                    <tr>\n                        <td>\u65E5</td>\n                        <td>\u4E00</td>\n                        <td>\u4E8C</td>\n                        <td>\u4E09</td>\n                        <td>\u56DB</td>\n                        <td>\u4E94</td>\n                        <td>\u516D</td>\n                    </tr>\n                </thead>\n                <tbody @click=\"pickDay\"></tbody>\n            </table>\n            <div v-if=\"showTime\" class=\"showTime\">\n                \u65F6 <select class=\"hour aj-select\">\n                    <option v-for=\"n in 24\">{{n}}</option>\n                </select>\n                \u5206 <select class=\"minute aj-select\">\n                    <option v-for=\"n in 61\">{{n - 1}}</option>\n                </select>\n                <a href=\"#\" @click=\"pickupTime\">\u9009\u62E9\u65F6\u95F4</a>\n            </div>\n        </div>"]));
                 _this.watch = {
                     date: function () {
                         this.year = this.date.getFullYear();
@@ -145,10 +145,10 @@ var aj;
                         if (arr.length) {
                             var d = arr.shift();
                             if (d) {
-                                cell.innerHTML = d + "";
                                 var text = this.year + '-' + this.month + '-' + d;
-                                cell.className = 'day day_' + text;
                                 cell.title = text; // 保存日期在 title 属性
+                                cell.className = 'day day_' + text;
+                                cell.innerHTML = d + "";
                                 var on = new Date(this.year, this.month - 1, d);
                                 // 判断是否今日
                                 if (isSameDay(on, this.date)) {
@@ -156,17 +156,14 @@ var aj;
                                     // this.onToday && this.onToday(cell);// 点击 今天 时候触发的事件
                                 }
                                 // 判断是否选择日期
-                                // this.selectDay && this.onSelectDay && this.isSameDay(on, this.selectDay) &&
-                                // this.onSelectDay(cell);
+                                // this.selectDay && this.onSelectDay && this.isSameDay(on, this.selectDay) && this.onSelectDay(cell);
                             }
                         }
                         row.appendChild(cell);
                     }
                     frag.appendChild(row);
                 }
-                // 先清空内容再插入(ie的table不能用innerHTML)
-                // while (el.hasChildNodes())
-                // el.removeChild(el.firstChild);
+                // 先清空内容再插入
                 var tbody = this.$el.$("table tbody");
                 tbody.innerHTML = '';
                 tbody.appendChild(frag);
@@ -200,7 +197,7 @@ var aj;
             /**
              *
              *
-             * @param $event
+             * @param $even
              */
             Calendar.prototype.setMonth = function (ev) {
                 var el = ev.target;
@@ -213,10 +210,10 @@ var aj;
              */
             Calendar.prototype.getDateArr = function () {
                 var arr = [];
-                // 用 当月第一天 在一周中的日期值 作为 当月 离 第一天的天数
+                // 算出这个月1号距离前面的星期天有多少天
                 for (var i = 1, firstDay = new Date(this.year, this.month - 1, 1).getDay(); i <= firstDay; i++)
                     arr.push(0);
-                // 用 当月最后一天 在一个月中的 日期值 作为 当月的天数
+                // 这个月有多少天。用上个月然后设置日子参数为 0，就可以得到本月有多天
                 for (var i = 1, monthDay = new Date(this.year, this.month, 0).getDate(); i <= monthDay; i++)
                     arr.push(i);
                 return arr;
@@ -328,7 +325,7 @@ var aj;
 var aj;
 (function (aj) {
     var form;
-    (function (form_1) {
+    (function (form) {
         Vue.component('aj-edit-form', {
             template: html(__makeTemplateObject(["\n            <form class=\"aj-table-form\" :action=\"getInfoApi + (isCreate ? '' : info.id + '/')\" :method=\"isCreate ? 'POST' : 'PUT'\">\n                <h3>{{isCreate ? \"\u65B0\u5EFA\" : \"\u7F16\u8F91\" }}{{uiName}}</h3>\n                <!-- \u4F20\u9001 id \u53C2\u6570 -->\n                <input v-if=\"!isCreate\" type=\"hidden\" name=\"id\" :value=\"info.id\" />\n                <slot v-bind:info=\"info\"></slot>\n                <div class=\"aj-btnsHolder\">\n                    <button><img :src=\"ajResources.commonAsset + '/icon/save.gif'\" /> {{isCreate ? \"\u65B0\u5EFA\":\"\u4FDD\u5B58\"}}</button>\n                    <button onclick=\"this.up('form').reset();return false;\">\u590D \u4F4D</button>\n                    <button v-if=\"!isCreate\" v-on:click.prevent=\"del()\">\n                        <img :src=\"ajResources.commonAsset + '/icon/delete.gif'\" /> \u5220 \u9664\n                    </button>\n                    <button @click.prevent=\"close\">\u5173\u95ED</button>\n                </div>\n            </form>\n        "], ["\n            <form class=\"aj-table-form\" :action=\"getInfoApi + (isCreate ? '' : info.id + '/')\" :method=\"isCreate ? 'POST' : 'PUT'\">\n                <h3>{{isCreate ? \"\u65B0\u5EFA\" : \"\u7F16\u8F91\" }}{{uiName}}</h3>\n                <!-- \u4F20\u9001 id \u53C2\u6570 -->\n                <input v-if=\"!isCreate\" type=\"hidden\" name=\"id\" :value=\"info.id\" />\n                <slot v-bind:info=\"info\"></slot>\n                <div class=\"aj-btnsHolder\">\n                    <button><img :src=\"ajResources.commonAsset + '/icon/save.gif'\" /> {{isCreate ? \"\u65B0\u5EFA\":\"\u4FDD\u5B58\"}}</button>\n                    <button onclick=\"this.up(\\'form\\').reset();return false;\">\u590D \u4F4D</button>\n                    <button v-if=\"!isCreate\" v-on:click.prevent=\"del()\">\n                        <img :src=\"ajResources.commonAsset + '/icon/delete.gif'\" /> \u5220 \u9664\n                    </button>\n                    <button @click.prevent=\"close\">\u5173\u95ED</button>\n                </div>\n            </form>\n        "])),
             props: {
@@ -354,11 +351,6 @@ var aj;
                         else
                             aj.msg.show(j.msg);
                     }
-                }, {
-                    beforeSubmit: function (form, json) {
-                        //json.content = App.$refs.htmleditor.getValue({cleanWord : eval('${aj_allConfig.article.cleanWordTag}'), encode : true});
-                        return true;
-                    }
                 });
             },
             methods: {
@@ -383,7 +375,7 @@ var aj;
                  * @param this
                  */
                 del: function () {
-                    var id = form_1.utils.getFormFieldValue(this.$el, 'input[name=id]'), title = form_1.utils.getFormFieldValue(this.$el, 'input[name=name]');
+                    var id = form.utils.getFormFieldValue(this.$el, 'input[name=id]'), title = form.utils.getFormFieldValue(this.$el, 'input[name=name]');
                     aj.showConfirm("\u8BF7\u786E\u5B9A\u5220\u9664\u8BB0\u5F55\uFF1A\n" + title + "\uFF1F", function () {
                         return aj.xhr.dele("../" + id + "/", function (j) {
                             if (j.isOk) {
@@ -405,6 +397,246 @@ var aj;
 
 var aj;
 (function (aj) {
+    var xhr_upload;
+    (function (xhr_upload) {
+        /**
+         * 属性较多，设一个抽象类
+         */
+        var BaseFileUploader = /** @class */ (function (_super) {
+            __extends(BaseFileUploader, _super);
+            function BaseFileUploader() {
+                var _this = _super !== null && _super.apply(this, arguments) || this;
+                _this.fieldName = "";
+                _this.fieldValue = "";
+                /**
+                 * 不重复的 id，用关于关联 label 与 input[type=file]
+                 */
+                _this.radomId = 0;
+                /**
+                 * 上传路径，必填
+                 */
+                _this.action = "";
+                /**
+                 * 允许文件选择器列出的文件类型
+                 */
+                _this.accpectFileType = "";
+                /**
+                 * 限制的文件扩展名，这是一个正则。如无限制，不设置或者空字符串
+                 * 正则如：txt|pdf|doc
+                 */
+                _this.limitFileType = "";
+                /**
+                 * 文件大小
+                 */
+                _this.fileSize = 0;
+                /**
+                 * 获取文件名称，只能是名称，不能获取完整的文件目录
+                 */
+                _this.fileName = '';
+                /**
+                 * 文件对象，实例属性
+                 */
+                _this.$fileObj = null;
+                /**
+                 * 二进制数据，用于图片预览
+                 */
+                _this.$blob = null;
+                /**
+                 * 上传按钮是否位于下方
+                 */
+                _this.buttonBottom = false;
+                /**
+                 * 文件大小限制，单位：KB。
+                 * 若为 0 则不限制
+                 */
+                _this.limitSize = 0;
+                /**
+                 * 上传进度百分比
+                 */
+                _this.progress = 0;
+                /**
+                 * 错误信息。约定：只有为空字符串，才表示允许上传。
+                 */
+                _this.errMsg = "init";
+                /**
+                 * 固定的错误结构，元素[0]为文件大小，[1]为文件类型。
+                 * 如果元素非 true，表示不允许上传。
+                 */
+                _this.errStatus = [false, false];
+                /**
+                 * 成功上传之后的文件 id
+                 */
+                _this.newlyId = "";
+                /**
+                 * 上传之后的回调函数
+                 */
+                _this.$uploadOk_callback = function (json) {
+                    if (json.isOk)
+                        this.fieldValue = json.imgUrl;
+                    aj.xhr.defaultCallBack(json);
+                };
+                return _this;
+            }
+            return BaseFileUploader;
+        }(aj.VueComponent));
+        /**
+         * 文件上传器
+         */
+        var FileUploader = /** @class */ (function (_super) {
+            __extends(FileUploader, _super);
+            function FileUploader() {
+                var _this = _super !== null && _super.apply(this, arguments) || this;
+                _this.name = "aj-file-uploader";
+                _this.template = html(__makeTemplateObject(["\n            <div class=\"aj-file-uploader\">\n                <input type=\"hidden\" :name=\"fieldName\" :value=\"fieldValue\" />\n                <input type=\"file\" :id=\"'uploadInput_' + radomId\" @change=\"onUploadInputChange\" :accept=\"accpectFileType\" />\n            \n                <label class=\"pseudoFilePicker\" :for=\"'uploadInput_' + radomId\">\n                    <div @drop=\"onDrop\" ondragover=\"event.preventDefault();\">\n                        <div>+</div>\u70B9\u51FB\u9009\u62E9\u6587\u4EF6<br />\u6216\u62D6\u653E\u5230\u6B64\n                    </div>\n                </label>\n            \n                <div class=\"msg\" v-if=\"errMsg != ''\">\n                    \u5141\u8BB8\u7C7B\u578B\uFF1A{{limitFileType || '\u65E0\u9650\u5236'}}\n                    <br />\n                    \u5141\u8BB8\u5927\u5C0F\uFF1A{{limitSize ? changeByte(limitSize * 1024) : '\u65E0\u9650\u5236'}}\n                    <span class=\"slot\"></span>\n                </div>\n                <div class=\"msg\" v-if=\"errMsg == ''\">\n                    {{fileName}}<div v-if=\"fileSize\">{{changeByte(fileSize)}}</div>\n                    <button @click.prevent=\"doUpload\">{{progress && progress !== 100 ? '\u4E0A\u4F20\u4E2D ' + progress + '%': '\u4E0A\u4F20'}}</button>\n                </div>\n            </div>\n        "], ["\n            <div class=\"aj-file-uploader\">\n                <input type=\"hidden\" :name=\"fieldName\" :value=\"fieldValue\" />\n                <input type=\"file\" :id=\"'uploadInput_' + radomId\" @change=\"onUploadInputChange\" :accept=\"accpectFileType\" />\n            \n                <label class=\"pseudoFilePicker\" :for=\"'uploadInput_' + radomId\">\n                    <div @drop=\"onDrop\" ondragover=\"event.preventDefault();\">\n                        <div>+</div>\u70B9\u51FB\u9009\u62E9\u6587\u4EF6<br />\u6216\u62D6\u653E\u5230\u6B64\n                    </div>\n                </label>\n            \n                <div class=\"msg\" v-if=\"errMsg != ''\">\n                    \u5141\u8BB8\u7C7B\u578B\uFF1A{{limitFileType || '\u65E0\u9650\u5236'}}\n                    <br />\n                    \u5141\u8BB8\u5927\u5C0F\uFF1A{{limitSize ? changeByte(limitSize * 1024) : '\u65E0\u9650\u5236'}}\n                    <span class=\"slot\"></span>\n                </div>\n                <div class=\"msg\" v-if=\"errMsg == ''\">\n                    {{fileName}}<div v-if=\"fileSize\">{{changeByte(fileSize)}}</div>\n                    <button @click.prevent=\"doUpload\">{{progress && progress !== 100 ? '\u4E0A\u4F20\u4E2D ' + progress + '%': '\u4E0A\u4F20'}}</button>\n                </div>\n            </div>\n        "]));
+                _this.props = {
+                    action: { type: String, required: true },
+                    fieldName: String,
+                    limitSize: { type: Number, default: 20000 },
+                    limitFileType: String,
+                    accpectFileType: String,
+                    buttonBottom: Boolean,
+                    radomId: { type: Number, default: function () { return Math.round(Math.random() * 1000); } }
+                };
+                _this.watch = {
+                    fileName: function (newV) {
+                        if (!this.limitFileType) { // 无限制，也不用检查，永远是 true
+                            Vue.set(this.errStatus, 0, true);
+                            return;
+                        }
+                        if (newV && this.limitFileType) {
+                            var ext = newV.split('.').pop(); // 扩展名，fileInput.value.split('.').pop(); 也可以获取
+                            if (!new RegExp(this.limitFileType, 'i').test(ext)) {
+                                var msg_1 = "\u4E0A\u4F20\u6587\u4EF6\u4E3A " + newV + "\uFF0C<br />\u62B1\u6B49\uFF0C\u4E0D\u652F\u6301\u4E0A\u4F20 *." + ext + " \u7C7B\u578B\u6587\u4EF6";
+                                Vue.set(this.errStatus, 0, msg_1);
+                            }
+                            else
+                                Vue.set(this.errStatus, 0, true); // 检查通过
+                        }
+                    },
+                    fileSize: function (newV) {
+                        if (!this.limitSize) { // 无限制，也不用检查，永远是 true
+                            Vue.set(this.errStatus, 1, true);
+                            return;
+                        }
+                        if (this.limitSize && newV > this.limitSize * 1024) {
+                            var msg_2 = "\u8981\u4E0A\u4F20\u7684\u6587\u4EF6\u5BB9\u91CF\u8FC7\u5927(" + this.changeByte(newV) + ")\uFF0C\u8BF7\u538B\u7F29\u5230 " + this.changeByte(this.limitSize * 1024) + " \u4EE5\u4E0B";
+                            Vue.set(this.errStatus, 1, msg_2);
+                        }
+                        else
+                            Vue.set(this.errStatus, 1, true);
+                    },
+                    errStatus: function (newV) {
+                        var j = newV.length;
+                        if (!j)
+                            return;
+                        var msg = "";
+                        for (var i = 0; i < j; i++) {
+                            var err = newV[i];
+                            if (err === false)
+                                return; // 未检查完，退出
+                            if (err && typeof err == 'string')
+                                msg += err + '；<br/>';
+                        }
+                        // 到这步，所有检查完毕
+                        if (msg) { // 有错误
+                            aj.alert(msg);
+                            this.errMsg = msg;
+                        }
+                        else { // 全部通过，复位
+                            this.errMsg = "";
+                            this.errStatus = [false, false];
+                        }
+                    }
+                };
+                return _this;
+            }
+            /**
+             * 选择文件后触发的事件
+             *
+             * @param ev
+             */
+            FileUploader.prototype.onUploadInputChange = function (ev) {
+                var fileInput = ev.target;
+                if (!fileInput.files || !fileInput.files[0])
+                    return;
+                // this.errStatus = [false, false, false];
+                this.onFileGet(fileInput.files);
+            };
+            FileUploader.prototype.onDrop = function (ev) {
+                var _a;
+                ev.preventDefault(); // 阻止进行拖拽时浏览器的默认行为，即自动打开图片
+                if ((_a = ev.dataTransfer) === null || _a === void 0 ? void 0 : _a.files)
+                    this.onFileGet(ev.dataTransfer.files);
+            };
+            FileUploader.prototype.onFileGet = function (files) {
+                var file = files[0], fileType = file.type;
+                this.$fileObj = file;
+                this.fileName = file.name;
+                this.fileSize = file.size;
+            };
+            /**
+             * 字节 Byte 转化成 KB，MB，GB
+             *
+             * @param limit
+             */
+            FileUploader.prototype.changeByte = function (limit) {
+                var size = "";
+                if (limit < 0.1 * 1024) // 小于 0.1KB，则转化成 B
+                    size = limit.toFixed(2) + "B";
+                else if (limit < 0.1 * 1024 * 1024) // 小于 0.1MB，则转化成 KB
+                    size = (limit / 1024).toFixed(2) + "KB";
+                else if (limit < 0.1 * 1024 * 1024 * 1024) // 小于 0.1GB，则转化成 MB
+                    size = (limit / (1024 * 1024)).toFixed(2) + "MB";
+                else // 其他转化成 GB
+                    size = (limit / (1024 * 1024 * 1024)).toFixed(2) + "GB";
+                var index = size.indexOf("."); // 获取小数点处的索引
+                if (size.substr(index + 1, 2) == "00") // 获取小数点后两位的值，判断后两位是否为 00，如果是则删除 00                
+                    return size.substring(0, index) + size.substr(index + 3, 2);
+                return size;
+            };
+            /**
+             * 执行上传
+             *
+             * @param this
+             */
+            FileUploader.prototype.doUpload = function () {
+                // this.$uploadOk_callback({ isOk: true, msg: "ok!", imgUrl: "fdfdf" });
+                // return;
+                var _this = this;
+                var fd = new FormData();
+                if (this.$blob)
+                    fd.append("file", this.$blob, this.fileName);
+                else if (this.$fileObj)
+                    fd.append("file", this.$fileObj);
+                var xhr = new XMLHttpRequest();
+                //@ts-ignore
+                xhr.onreadystatechange = xhr.requestHandler.delegate(null, this.uploadOk_callback, 'json');
+                xhr.open("POST", this.action, true);
+                xhr.onprogress = function (ev) {
+                    var progress = 0, p = ~~(ev.loaded * 1000 / ev.total);
+                    p = p / 10;
+                    if (progress !== p)
+                        progress = p;
+                    _this.progress = progress;
+                };
+                xhr.send(fd);
+            };
+            return FileUploader;
+        }(BaseFileUploader));
+        xhr_upload.FileUploader = FileUploader;
+        /**
+         * 用于继承，获取方法句柄
+         */
+        xhr_upload.fileUploader = new FileUploader();
+        xhr_upload.fileUploader.register();
+    })(xhr_upload = aj.xhr_upload || (aj.xhr_upload = {}));
+})(aj || (aj = {}));
+
+"use strict";
+
+
+var aj;
+(function (aj) {
     var form;
     (function (form) {
         /**
@@ -417,11 +649,9 @@ var aj;
             function HtmlEditor() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
                 _this.name = "aj-form-html-editor";
-                _this.template = html(__makeTemplateObject(["\n            <div class=\"aj-form-html-editor\">\n                <ul class=\"toolbar\" @click=\"onToolBarClk\">\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u4F53\" class=\"fa-font\"></i>\n                        <div class=\"fontfamilyChoser\" @click=\"onFontfamilyChoserClk\">\n                            <a style=\"font-family: '\u5B8B\u4F53'\">\u5B8B\u4F53</a>\n                            <a style=\"font-family: '\u9ED1\u4F53'\">\u9ED1\u4F53</a>\n                            <a style=\"font-family: '\u6977\u4F53'\">\u6977\u4F53</a>\n                            <a style=\"font-family: '\u96B6\u4E66'\">\u96B6\u4E66</a>\n                            <a style=\"font-family: '\u5E7C\u5706'\">\u5E7C\u5706</a>\n                            <a style=\"font-family: 'Microsoft YaHei'\">Microsoft YaHei</a>\n                            <a style=\"font-family: Arial\">Arial</a>\n                            <a style=\"font-family: 'Arial Narrow'\">Arial Narrow</a>\n                            <a style=\"font-family: 'Arial Black'\">Arial Black</a>\n                            <a style=\"font-family: 'Comic Sans MS'\">Comic Sans MS</a>\n                            <a style=\"font-family: Courier\">Courier</a>\n                            <a style=\"font-family: System\">System</a>\n                            <a style=\"font-family: 'Times New Roman'\">Times New Roman</a>\n                            <a style=\"font-family: Verdana\">Verdana</a>\n                        </div>\n                    </li>\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u53F7\" class=\"fa-header\"></i>\n                        <div class=\"fontsizeChoser\" @click=\"onFontsizeChoserClk\">\n                            <a style=\"font-size: xx-small; \">\u6781\u5C0F</a>\n                            <a style=\"font-size: x-small;  \">\u7279\u5C0F</a>\n                            <a style=\"font-size: small;    \">\u5C0F</a>\n                            <a style=\"font-size: medium;   \">\u4E2D</a>\n                            <a style=\"font-size: large;    \">\u5927</a>\n                            <a style=\"font-size: x-large;  \">\u7279\u5927</a>\n                            <a style=\"font-size: xx-large; line-height: 140%\">\u6781\u5927</a>\n                        </div>\n                    </li>\n                    <li><i title=\"\u52A0\u7C97\" class=\"bold fa-bold\"></i></li>\n                    <li><i title=\"\u659C\u4F53\" class=\"italic fa-italic\"></i></li>\n                    <li><i title=\"\u4E0B\u5212\u7EBF\" class=\"underline fa-underline\"></i></li>\n                    <li><i title=\"\u5DE6\u5BF9\u9F50\" class=\"justifyleft fa-align-left\"></i></li>\n                    <li><i title=\"\u4E2D\u95F4\u5BF9\u9F50\" class=\"justifycenter fa-align-center\"></i></li>\n                    <li><i title=\"\u53F3\u5BF9\u9F50\" class=\"justifyright fa-align-right\"></i></li>\n                    <li><i title=\"\u6570\u5B57\u7F16\u53F7\" class=\"insertorderedlist fa-list-ol\"></i></li>\n                    <li><i title=\"\u9879\u76EE\u7F16\u53F7\" class=\"insertunorderedlist fa-list-ul\"></i></li>\n                    <li><i title=\"\u589E\u52A0\u7F29\u8FDB\" class=\"outdent fa-outdent\"></i></li>\n                    <li><i title=\"\u51CF\u5C11\u7F29\u8FDB\" class=\"indent fa-indent\"></i></li>\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u4F53\u989C\u8272\" class=\"fa-paint-brush\"></i>\n                        <div class=\"fontColor colorPicker\" v-html=\"createColorPickerHTML()\" @click=\"onFontColorPicker\"></div>\n                    </li>\n                    <li class=\"dorpdown\">\n                        <i title=\"\u80CC\u666F\u989C\u8272\" class=\"fa-pencil\"></i>\n                        <div class=\"bgColor colorPicker\" v-html=\"createColorPickerHTML()\" @click=\"onFontBgColorPicker\"></div>\n                    </li>\n                    <li><i title=\"\u589E\u52A0\u94FE\u63A5\" class=\"createLink fa-link\"></i></li>\n                    <li><i title=\"\u589E\u52A0\u56FE\u7247\" class=\"insertImage fa-file-image-o\"></i></li>\n                    <li><i title=\"\u4E00\u952E\u5B58\u56FE\" class=\"saveRemoteImage2Local fa-hdd-o\"></i></li>\n                    <li><i title=\"\u6E05\u7406 HTML\" class=\"cleanHTML fa-eraser\"></i></li>\n                    <li><i title=\"\u5207\u6362\u5230\u4EE3\u7801\" class=\"switchMode fa-code\"></i></li>\n                </ul>\n            \n                <div class=\"editorBody\">\n                    <iframe srcdoc=\"<html><body></body></html>\"></iframe>\n                    <slot></slot>\n                </div>\n            </div>\n        "], ["\n            <div class=\"aj-form-html-editor\">\n                <ul class=\"toolbar\" @click=\"onToolBarClk\">\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u4F53\" class=\"fa-font\"></i>\n                        <div class=\"fontfamilyChoser\" @click=\"onFontfamilyChoserClk\">\n                            <a style=\"font-family: '\u5B8B\u4F53'\">\u5B8B\u4F53</a>\n                            <a style=\"font-family: '\u9ED1\u4F53'\">\u9ED1\u4F53</a>\n                            <a style=\"font-family: '\u6977\u4F53'\">\u6977\u4F53</a>\n                            <a style=\"font-family: '\u96B6\u4E66'\">\u96B6\u4E66</a>\n                            <a style=\"font-family: '\u5E7C\u5706'\">\u5E7C\u5706</a>\n                            <a style=\"font-family: 'Microsoft YaHei'\">Microsoft YaHei</a>\n                            <a style=\"font-family: Arial\">Arial</a>\n                            <a style=\"font-family: 'Arial Narrow'\">Arial Narrow</a>\n                            <a style=\"font-family: 'Arial Black'\">Arial Black</a>\n                            <a style=\"font-family: 'Comic Sans MS'\">Comic Sans MS</a>\n                            <a style=\"font-family: Courier\">Courier</a>\n                            <a style=\"font-family: System\">System</a>\n                            <a style=\"font-family: 'Times New Roman'\">Times New Roman</a>\n                            <a style=\"font-family: Verdana\">Verdana</a>\n                        </div>\n                    </li>\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u53F7\" class=\"fa-header\"></i>\n                        <div class=\"fontsizeChoser\" @click=\"onFontsizeChoserClk\">\n                            <a style=\"font-size: xx-small; \">\u6781\u5C0F</a>\n                            <a style=\"font-size: x-small;  \">\u7279\u5C0F</a>\n                            <a style=\"font-size: small;    \">\u5C0F</a>\n                            <a style=\"font-size: medium;   \">\u4E2D</a>\n                            <a style=\"font-size: large;    \">\u5927</a>\n                            <a style=\"font-size: x-large;  \">\u7279\u5927</a>\n                            <a style=\"font-size: xx-large; line-height: 140%\">\u6781\u5927</a>\n                        </div>\n                    </li>\n                    <li><i title=\"\u52A0\u7C97\" class=\"bold fa-bold\"></i></li>\n                    <li><i title=\"\u659C\u4F53\" class=\"italic fa-italic\"></i></li>\n                    <li><i title=\"\u4E0B\u5212\u7EBF\" class=\"underline fa-underline\"></i></li>\n                    <li><i title=\"\u5DE6\u5BF9\u9F50\" class=\"justifyleft fa-align-left\"></i></li>\n                    <li><i title=\"\u4E2D\u95F4\u5BF9\u9F50\" class=\"justifycenter fa-align-center\"></i></li>\n                    <li><i title=\"\u53F3\u5BF9\u9F50\" class=\"justifyright fa-align-right\"></i></li>\n                    <li><i title=\"\u6570\u5B57\u7F16\u53F7\" class=\"insertorderedlist fa-list-ol\"></i></li>\n                    <li><i title=\"\u9879\u76EE\u7F16\u53F7\" class=\"insertunorderedlist fa-list-ul\"></i></li>\n                    <li><i title=\"\u589E\u52A0\u7F29\u8FDB\" class=\"outdent fa-outdent\"></i></li>\n                    <li><i title=\"\u51CF\u5C11\u7F29\u8FDB\" class=\"indent fa-indent\"></i></li>\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u4F53\u989C\u8272\" class=\"fa-paint-brush\"></i>\n                        <div class=\"fontColor colorPicker\" v-html=\"createColorPickerHTML()\" @click=\"onFontColorPicker\"></div>\n                    </li>\n                    <li class=\"dorpdown\">\n                        <i title=\"\u80CC\u666F\u989C\u8272\" class=\"fa-pencil\"></i>\n                        <div class=\"bgColor colorPicker\" v-html=\"createColorPickerHTML()\" @click=\"onFontBgColorPicker\"></div>\n                    </li>\n                    <li><i title=\"\u589E\u52A0\u94FE\u63A5\" class=\"createLink fa-link\"></i></li>\n                    <li><i title=\"\u589E\u52A0\u56FE\u7247\" class=\"insertImage fa-file-image-o\"></i></li>\n                    <li><i title=\"\u4E00\u952E\u5B58\u56FE\" class=\"saveRemoteImage2Local fa-hdd-o\"></i></li>\n                    <li><i title=\"\u6E05\u7406 HTML\" class=\"cleanHTML fa-eraser\"></i></li>\n                    <li><i title=\"\u5207\u6362\u5230\u4EE3\u7801\" class=\"switchMode fa-code\"></i></li>\n                </ul>\n            \n                <div class=\"editorBody\">\n                    <iframe srcdoc=\"<html><body></body></html>\"></iframe>\n                    <slot></slot>\n                </div>\n            </div>\n        "]));
+                _this.template = html(__makeTemplateObject(["\n            <div class=\"aj-form-html-editor\">\n                <ul class=\"toolbar\" @click=\"onToolBarClk\">\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u4F53\" class=\"fa-font\"></i>\n                        <div class=\"fontfamilyChoser\" @click=\"onFontfamilyChoserClk\">\n                            <a style=\"font-family: '\u5B8B\u4F53'\">\u5B8B\u4F53</a>\n                            <a style=\"font-family: '\u9ED1\u4F53'\">\u9ED1\u4F53</a>\n                            <a style=\"font-family: '\u6977\u4F53'\">\u6977\u4F53</a>\n                            <a style=\"font-family: '\u96B6\u4E66'\">\u96B6\u4E66</a>\n                            <a style=\"font-family: '\u5E7C\u5706'\">\u5E7C\u5706</a>\n                            <a style=\"font-family: 'Microsoft YaHei'\">Microsoft YaHei</a>\n                            <a style=\"font-family: Arial\">Arial</a>\n                            <a style=\"font-family: 'Arial Narrow'\">Arial Narrow</a>\n                            <a style=\"font-family: 'Arial Black'\">Arial Black</a>\n                            <a style=\"font-family: 'Comic Sans MS'\">Comic Sans MS</a>\n                            <a style=\"font-family: Courier\">Courier</a>\n                            <a style=\"font-family: System\">System</a>\n                            <a style=\"font-family: 'Times New Roman'\">Times New Roman</a>\n                            <a style=\"font-family: Verdana\">Verdana</a>\n                        </div>\n                    </li>\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u53F7\" class=\"fa-header\"></i>\n                        <div class=\"fontsizeChoser\" @click=\"onFontsizeChoserClk\">\n                            <a style=\"font-size: xx-small; \">\u6781\u5C0F</a>\n                            <a style=\"font-size: x-small;  \">\u7279\u5C0F</a>\n                            <a style=\"font-size: small;    \">\u5C0F</a>\n                            <a style=\"font-size: medium;   \">\u4E2D</a>\n                            <a style=\"font-size: large;    \">\u5927</a>\n                            <a style=\"font-size: x-large;  \">\u7279\u5927</a>\n                            <a style=\"font-size: xx-large; line-height: 140%\">\u6781\u5927</a>\n                        </div>\n                    </li>\n                    <li><i title=\"\u52A0\u7C97\" class=\"bold fa-bold\"></i></li>\n                    <li><i title=\"\u659C\u4F53\" class=\"italic fa-italic\"></i></li>\n                    <li><i title=\"\u4E0B\u5212\u7EBF\" class=\"underline fa-underline\"></i></li>\n                    <li><i title=\"\u5DE6\u5BF9\u9F50\" class=\"justifyleft fa-align-left\"></i></li>\n                    <li><i title=\"\u4E2D\u95F4\u5BF9\u9F50\" class=\"justifycenter fa-align-center\"></i></li>\n                    <li><i title=\"\u53F3\u5BF9\u9F50\" class=\"justifyright fa-align-right\"></i></li>\n                    <li><i title=\"\u6570\u5B57\u7F16\u53F7\" class=\"insertorderedlist fa-list-ol\"></i></li>\n                    <li><i title=\"\u9879\u76EE\u7F16\u53F7\" class=\"insertunorderedlist fa-list-ul\"></i></li>\n                    <li><i title=\"\u589E\u52A0\u7F29\u8FDB\" class=\"outdent fa-outdent\"></i></li>\n                    <li><i title=\"\u51CF\u5C11\u7F29\u8FDB\" class=\"indent fa-indent\"></i></li>\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u4F53\u989C\u8272\" class=\"fa-paint-brush\"></i>\n                        <div class=\"fontColor colorPicker\" v-html=\"createColorPickerHTML()\" @click=\"onFontColorPicker\"></div>\n                    </li>\n                    <li class=\"dorpdown\">\n                        <i title=\"\u80CC\u666F\u989C\u8272\" class=\"fa-pencil\"></i>\n                        <div class=\"bgColor colorPicker\" v-html=\"createColorPickerHTML()\" @click=\"onFontBgColorPicker\"></div>\n                    </li>\n                    <li><i title=\"\u589E\u52A0\u94FE\u63A5\" class=\"createLink fa-link\"></i></li>\n                    <li><i title=\"\u589E\u52A0\u56FE\u7247\" class=\"insertImage fa-file-image-o\"></i></li>\n                    <li><i title=\"\u4E00\u952E\u5B58\u56FE\" class=\"saveRemoteImage2Local fa-hdd-o\"></i></li>\n                    <li><i title=\"\u6E05\u7406 HTML\" class=\"cleanHTML fa-eraser\"></i></li>\n                    <li><i title=\"\u5207\u6362\u5230\u4EE3\u7801\" class=\"switchMode fa-code\"></i></li>\n                </ul>\n            \n                <div class=\"editorBody\">\n                    <iframe srcdoc=\"<html><body></body></html>\"></iframe>\n                    <slot></slot>\n                </div>\n                <aj-form-popup-upload ref=\"uploadLayer\" :upload-url=\"uploadImageActionUrl\"></aj-form-popup-upload>\n            </div>\n        "], ["\n            <div class=\"aj-form-html-editor\">\n                <ul class=\"toolbar\" @click=\"onToolBarClk\">\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u4F53\" class=\"fa-font\"></i>\n                        <div class=\"fontfamilyChoser\" @click=\"onFontfamilyChoserClk\">\n                            <a style=\"font-family: '\u5B8B\u4F53'\">\u5B8B\u4F53</a>\n                            <a style=\"font-family: '\u9ED1\u4F53'\">\u9ED1\u4F53</a>\n                            <a style=\"font-family: '\u6977\u4F53'\">\u6977\u4F53</a>\n                            <a style=\"font-family: '\u96B6\u4E66'\">\u96B6\u4E66</a>\n                            <a style=\"font-family: '\u5E7C\u5706'\">\u5E7C\u5706</a>\n                            <a style=\"font-family: 'Microsoft YaHei'\">Microsoft YaHei</a>\n                            <a style=\"font-family: Arial\">Arial</a>\n                            <a style=\"font-family: 'Arial Narrow'\">Arial Narrow</a>\n                            <a style=\"font-family: 'Arial Black'\">Arial Black</a>\n                            <a style=\"font-family: 'Comic Sans MS'\">Comic Sans MS</a>\n                            <a style=\"font-family: Courier\">Courier</a>\n                            <a style=\"font-family: System\">System</a>\n                            <a style=\"font-family: 'Times New Roman'\">Times New Roman</a>\n                            <a style=\"font-family: Verdana\">Verdana</a>\n                        </div>\n                    </li>\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u53F7\" class=\"fa-header\"></i>\n                        <div class=\"fontsizeChoser\" @click=\"onFontsizeChoserClk\">\n                            <a style=\"font-size: xx-small; \">\u6781\u5C0F</a>\n                            <a style=\"font-size: x-small;  \">\u7279\u5C0F</a>\n                            <a style=\"font-size: small;    \">\u5C0F</a>\n                            <a style=\"font-size: medium;   \">\u4E2D</a>\n                            <a style=\"font-size: large;    \">\u5927</a>\n                            <a style=\"font-size: x-large;  \">\u7279\u5927</a>\n                            <a style=\"font-size: xx-large; line-height: 140%\">\u6781\u5927</a>\n                        </div>\n                    </li>\n                    <li><i title=\"\u52A0\u7C97\" class=\"bold fa-bold\"></i></li>\n                    <li><i title=\"\u659C\u4F53\" class=\"italic fa-italic\"></i></li>\n                    <li><i title=\"\u4E0B\u5212\u7EBF\" class=\"underline fa-underline\"></i></li>\n                    <li><i title=\"\u5DE6\u5BF9\u9F50\" class=\"justifyleft fa-align-left\"></i></li>\n                    <li><i title=\"\u4E2D\u95F4\u5BF9\u9F50\" class=\"justifycenter fa-align-center\"></i></li>\n                    <li><i title=\"\u53F3\u5BF9\u9F50\" class=\"justifyright fa-align-right\"></i></li>\n                    <li><i title=\"\u6570\u5B57\u7F16\u53F7\" class=\"insertorderedlist fa-list-ol\"></i></li>\n                    <li><i title=\"\u9879\u76EE\u7F16\u53F7\" class=\"insertunorderedlist fa-list-ul\"></i></li>\n                    <li><i title=\"\u589E\u52A0\u7F29\u8FDB\" class=\"outdent fa-outdent\"></i></li>\n                    <li><i title=\"\u51CF\u5C11\u7F29\u8FDB\" class=\"indent fa-indent\"></i></li>\n                    <li class=\"dorpdown\">\n                        <i title=\"\u5B57\u4F53\u989C\u8272\" class=\"fa-paint-brush\"></i>\n                        <div class=\"fontColor colorPicker\" v-html=\"createColorPickerHTML()\" @click=\"onFontColorPicker\"></div>\n                    </li>\n                    <li class=\"dorpdown\">\n                        <i title=\"\u80CC\u666F\u989C\u8272\" class=\"fa-pencil\"></i>\n                        <div class=\"bgColor colorPicker\" v-html=\"createColorPickerHTML()\" @click=\"onFontBgColorPicker\"></div>\n                    </li>\n                    <li><i title=\"\u589E\u52A0\u94FE\u63A5\" class=\"createLink fa-link\"></i></li>\n                    <li><i title=\"\u589E\u52A0\u56FE\u7247\" class=\"insertImage fa-file-image-o\"></i></li>\n                    <li><i title=\"\u4E00\u952E\u5B58\u56FE\" class=\"saveRemoteImage2Local fa-hdd-o\"></i></li>\n                    <li><i title=\"\u6E05\u7406 HTML\" class=\"cleanHTML fa-eraser\"></i></li>\n                    <li><i title=\"\u5207\u6362\u5230\u4EE3\u7801\" class=\"switchMode fa-code\"></i></li>\n                </ul>\n            \n                <div class=\"editorBody\">\n                    <iframe srcdoc=\"<html><body></body></html>\"></iframe>\n                    <slot></slot>\n                </div>\n                <aj-form-popup-upload ref=\"uploadLayer\" :upload-url=\"uploadImageActionUrl\"></aj-form-popup-upload>\n            </div>\n        "]));
                 _this.props = {
                     fieldName: { type: String, required: true },
-                    content: { type: String, required: false },
-                    basePath: { type: String, required: false, default: '' },
                     uploadImageActionUrl: String // 图片上传路径
                 };
                 _this.fieldName = "";
@@ -462,67 +692,15 @@ var aj;
                     if (_this.mode === 'textarea')
                         _this.setIframeBody(_this.sourceEditor.value);
                 };
+                this.uploadImgMgr = this.$refs.uploadLayer;
             };
             /**
-             * 当工具条点击的时候触发
-             *
-             * @param ev
-             */
-            HtmlEditor.prototype.onToolBarClk = function (ev) {
-                var _this = this;
-                var el = ev.target, clsName = el.className.split(' ').shift();
-                switch (clsName) {
-                    case 'createLink':
-                        var result = prompt("请输入 URL 地址");
-                        if (result)
-                            this.format("createLink", result);
-                        break;
-                    case 'insertImage':
-                        // @ts-ignore
-                        if (window.isCreate)
-                            aj.alert('请保存记录后再上传图片。');
-                        else {
-                            // @ts-ignore
-                            App.$refs.uploadLayer.show(function (json) {
-                                // if (json.result)
-                                //     json = json.result;
-                                if (json && json.isOk)
-                                    _this.format("insertImage", json.fullUrl);
-                            });
-                        }
-                        break;
-                    case 'switchMode':
-                        this.setMode();
-                        break;
-                    case 'cleanHTML':
-                        // @ts-ignore
-                        this.setIframeBody(HtmlSanitizer.SanitizeHtml(this.iframeDoc.body.innerHTML)); // 清理冗余 HTML
-                        break;
-                    case 'saveRemoteImage2Local':
-                        saveRemoteImage2Local.call(this);
-                        break;
-                    default:
-                        this.format(clsName);
-                }
-            };
-            HtmlEditor.prototype.format = function (type, para) {
-                if (para)
-                    this.iframeDoc.execCommand(type, false, para);
-                else
-                    this.iframeDoc.execCommand(type, false);
-                this.iframeEl.contentWindow.focus();
-            };
+            * 输入 HTML 内容
+            *
+            * @param html
+            */
             HtmlEditor.prototype.setIframeBody = function (html) {
                 this.iframeDoc.body.innerHTML = html;
-            };
-            /**
-             * 設置 HTML
-             *
-             * @param v
-             */
-            HtmlEditor.prototype.setValue = function (v) {
-                var _this = this;
-                setTimeout(function () { return _this.setIframeBody(v); }, 500);
             };
             /**
              * 获取内容的 HTML
@@ -557,17 +735,56 @@ var aj;
                 }
             };
             /**
-             * 选择字体
+             * 当工具条点击的时候触发
              *
              * @param ev
              */
-            HtmlEditor.prototype.onFontfamilyChoserClk = function (ev) {
-                var el = ev.target;
-                this.format('fontname', el.innerHTML);
-                /* 如何解决点击之后马上隐藏面板？由于 js（单击事件） 没有控制 CSS 的 :hover 伪类的方法，故所以必须使用以下技巧：*/
-                var menuPanel = el.parentNode;
-                menuPanel.style.display = 'none';
-                setTimeout(function () { return menuPanel.style.display = ''; }, 300);
+            HtmlEditor.prototype.onToolBarClk = function (ev) {
+                var _this = this;
+                var el = ev.target, clsName = el.className.split(' ').shift();
+                switch (clsName) {
+                    case 'createLink':
+                        var result = prompt("请输入 URL 地址");
+                        if (result)
+                            this.format("createLink", result);
+                        break;
+                    case 'insertImage':
+                        // @ts-ignore
+                        if (window.isCreate)
+                            aj.alert('请保存记录后再上传图片。');
+                        else {
+                            this.uploadImgMgr.show(function (json) {
+                                if (json && json.isOk)
+                                    _this.format("insertImage", json.fullUrl);
+                            });
+                        }
+                        break;
+                    case 'switchMode':
+                        this.setMode();
+                        break;
+                    case 'cleanHTML':
+                        // @ts-ignore
+                        this.setIframeBody(HtmlSanitizer.SanitizeHtml(this.iframeDoc.body.innerHTML)); // 清理冗余 HTML
+                        break;
+                    case 'saveRemoteImage2Local':
+                        saveRemoteImage2Local.call(this);
+                        break;
+                    default:
+                        this.format(clsName);
+                }
+            };
+            /**
+             * 通过 document.execCommand() 来操纵可编辑内容区域的元素
+             *
+             * @param type 命令的名称
+             * @param para 一些命令（例如 insertImage）需要额外的参数（insertImage 需要提供插入 image 的 url），默认为 null
+             */
+            HtmlEditor.prototype.format = function (type, para) {
+                if (para)
+                    this.iframeDoc.execCommand(type, false, para);
+                else
+                    this.iframeDoc.execCommand(type, false);
+                this.iframeEl.contentWindow.focus();
             };
             /**
              * 选择字号大小
@@ -586,6 +803,19 @@ var aj;
             };
             HtmlEditor.prototype.onFontBgColorPicker = function (ev) {
                 this.format('backColor', ev.target.title);
+            };
+            /**
+             * 选择字体
+             *
+             * @param ev
+             */
+            HtmlEditor.prototype.onFontfamilyChoserClk = function (ev) {
+                var el = ev.target;
+                this.format('fontname', el.innerHTML);
+                /* 如何解决点击之后马上隐藏面板？由于 js（单击事件） 没有控制 CSS 的 :hover 伪类的方法，故所以必须使用以下技巧：*/
+                var menuPanel = el.parentNode;
+                menuPanel.style.display = 'none';
+                setTimeout(function () { return menuPanel.style.display = ''; }, 300);
             };
             /**
              * 创建颜色选择器
@@ -628,51 +858,34 @@ var aj;
                 if (item.className.indexOf('switchMode') != -1)
                     return;
                 item.style.color = isGray ? 'lightgray' : '';
-                // if (item.className.indexOf('switchMode') != -1)
-                //     item.style.color = isGray ? 'lightgray' : '';
-                // else
-                //     item.style.filter = isGray ? 'grayscale(100%)' : '';
             });
         }
+        /**
+         * 一键存图
+         *
+         * @param this
+         */
         function saveRemoteImage2Local() {
-            var str = [], remotePicArr = new Array(), arr = this.iframeDoc.querySelectorAll('img');
+            var arr = this.iframeDoc.querySelectorAll('img'), remotePicArr = new Array(), srcs = [];
             for (var i = 0, j = arr.length; i < j; i++) {
-                var imgEl = arr[i], url = imgEl.getAttribute('src');
-                if (/^http/.test(url)) {
-                    str.push(url);
+                var imgEl = arr[i], src = imgEl.getAttribute('src');
+                if (/^http/.test(src)) {
                     remotePicArr.push(imgEl);
+                    srcs.push(src);
                 }
             }
-            if (str.length)
+            if (srcs.length)
                 aj.xhr.post('../downAllPics/', function (json) {
                     var _arr = json.pics;
                     for (var i = 0, j = _arr.length; i < j; i++)
-                        remotePicArr[i].src = "images/" + _arr[i];
+                        remotePicArr[i].src = "images/" + _arr[i]; // 改变 DOM 的旧图片地址为新的
                     aj.alert('所有图片下载完成。');
-                }, { pics: str.join('|') });
+                }, { pics: srcs.join('|') });
             else
                 aj.alert('未发现有远程图片');
         }
         /**
-         * Remove additional MS Word content
-         * MSWordHtmlCleaners.js https://gist.github.com/ronanguilloux/2915995
-         *
-         * @param html
-         */
-        function cleanPaste(html) {
-            html = html.replace(/<(\/)*(\\?xml:|meta|link|span|font|del|ins|st1:|[ovwxp]:)((.|\s)*?)>/gi, ''); // Unwanted tags
-            html = html.replace(/(class|style|type|start)=("(.*?)"|(\w*))/gi, ''); // Unwanted sttributes
-            html = html.replace(/<style(.*?)style>/gi, ''); // Style tags
-            html = html.replace(/<script(.*?)script>/gi, ''); // Script tags
-            html = html.replace(/<!--(.*?)-->/gi, ''); // HTML comments
-            return html;
-        }
-        /*
-        * 富文本编辑器中粘贴图片时，chrome可以得到e.clipBoardData.items并从中获取二进制数据，以便ajax上传到后台，
-        * 实现粘贴图片的功能。firefox中items为undefined，可选的方案：1将base64原样上传到后台进行文件存储替换，2将内容清空，待粘贴完毕后取图片src，再恢复现场
-        * https://stackoverflow.com/questions/2176861/javascript-get-clipboard-data-on-paste-event-cross-browser
-        */
-        /**
+         * 粘贴图片
          *
          * @param this
          * @param ev
@@ -683,9 +896,8 @@ var aj;
                 aj.alert('未提供图片上传地址');
                 return;
             }
-            var items = ev.clipboardData && ev.clipboardData.items;
-            var file = null; // file就是剪切板中的图片文件
-            if (items && items.length) { // 检索剪切板items
+            var items = ev.clipboardData && ev.clipboardData.items, file = null; // file 就是剪切板中的图片文件
+            if (items && items.length) { // 检索剪切板 items
                 for (var i = 0; i < items.length; i++) {
                     var item = items[i];
                     if (item.type.indexOf('image') !== -1) {
@@ -702,6 +914,7 @@ var aj;
             if (file) {
                 ev.preventDefault();
                 aj.img.changeBlobImageQuality(file, function (newBlob) {
+                    // 复用上传的方法
                     Vue.options.components["aj-xhr-upload"].extendOptions.methods.doUpload.call({
                         action: _this.uploadImageActionUrl,
                         progress: 0,
@@ -710,13 +923,127 @@ var aj;
                                 this.format("insertImage", this.ajResources.imgPerfix + j.imgUrl);
                         },
                         $blob: newBlob,
-                        $fileName: 'foo.jpg'
+                        $fileName: 'foo.jpg' // 文件名不重要，反正上传到云空间会重命名
                     });
                 });
             }
         }
+        /**
+         * Remove additional MS Word content
+         * MSWordHtmlCleaners.js https://gist.github.com/ronanguilloux/2915995
+         *
+         * @param html
+         */
+        function cleanPaste(html) {
+            html = html.replace(/<(\/)*(\\?xml:|meta|link|span|font|del|ins|st1:|[ovwxp]:)((.|\s)*?)>/gi, ''); // Unwanted tags
+            html = html.replace(/(class|style|type|start)=("(.*?)"|(\w*))/gi, ''); // Unwanted sttributes
+            html = html.replace(/<style(.*?)style>/gi, ''); // Style tags
+            html = html.replace(/<script(.*?)script>/gi, ''); // Script tags
+            html = html.replace(/<!--(.*?)-->/gi, ''); // HTML comments
+            return html;
+        }
         new HtmlEditor().register();
     })(form = aj.form || (aj.form = {}));
+})(aj || (aj = {}));
+
+"use strict";
+
+var aj;
+(function (aj) {
+    var xhr_upload;
+    (function (xhr_upload) {
+        /**
+         * 图片占位符，用户没有选定图片时候使用的图片
+         */
+        var emptyImg = "data:image/svg+xml,%3Csvg class='icon' viewBox='0 0 1024 1024' xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cpath d='M304.128 456.192c48.64 0 88.064-39.424 88.064-88.064s-39.424-88.064-88.064-88.064-88.064 39.424-88.064 88.064 39.424 88.064 88.064 88.064zm0-116.224c15.36 0 28.16 12.288 28.16 28.16s-12.288 28.16-28.16 28.16-28.16-12.288-28.16-28.16 12.288-28.16 28.16-28.16z' " +
+            "fill='%23e6e6e6'/%3E%3Cpath d='M887.296 159.744H136.704C96.768 159.744 64 192 64 232.448v559.104c0 39.936 32.256 72.704 72.704 72.704h198.144L500.224 688.64l-36.352-222.72 162.304-130.56-61.44 143.872 92.672 214.016-105.472 171.008h335.36C927.232 864.256 960 832 960 791.552V232.448c0-39.936-32.256-72.704-72.704-72.704zm-138.752 71.68v.512H857.6c16.384 0 30.208 13.312 30.208 30.208v399.872L673.28 408.064l75.264-176.64zM304.64 " +
+            "792.064H165.888c-16.384 0-30.208-13.312-30.208-30.208v-9.728l138.752-164.352 104.96 124.416-74.752 79.872zm81.92-355.84l37.376 228.864-.512.512-142.848-169.984c-3.072-3.584-9.216-3.584-12.288 0L135.68 652.8V262.144c0-16.384 13.312-30.208 30.208-30.208h474.624L386.56 436.224zm501.248 325.632c0 16.896-13.312 30.208-29.696 30.208H680.96l57.344-93.184-87.552-202.24 7.168-7.68 229.888 272.896z' fill='%23e6e6e6'/%3E%3C/svg%3E";
+        var emptyImg2 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALMAAAB2CAYAAACDMaL0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA1xpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDM0MiwgMjAxMC8wMS8xMC0xODowNjo0MyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo5RkM5NjQxRDQxQUNFNDExOTcwMkU4MjNEOTc3MDU5RiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo4QTc3NDNFQkFDNDIxMUU0QTEzMkQyOUQzOTFFQkMzRCIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo4QTc3NDNFQUFDNDIxMUU0QTEzMkQyOUQzOTFFQkMzRCIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6OUZDOTY0MUQ0MUFDRTQxMTk3MDJFODIzRDk3NzA1OUYiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6OUZDOTY0MUQ0MUFDRTQxMTk3MDJFODIzRDk3NzA1OUYiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz77Tka5AAADFElEQVR42uzd0W3aUBiAUVNFlTqBO4VRn/scT1FvQaaAKWCK0hX6FKZghb44Rr2uLGqCL+AY7HMkqyitSHC+XP5riDoryzIZs91ulzAJ5SfngJGYiZnREDNiBjGDmEHMiBnEDGIGMYOYETOIGcQMYkbMIGYQM4gZxIyYQcwgZhAzYgYxg5hBzPDP0wQeYzmR7+Wf6vhdHd+tzDy6z9Xxzco8HZvq2I/sMaXVUYTbX8Q8DasQ8+vIHlcWfkAXNoDTsR9hyMlIH5OYETPjeNYRs1OAmEHM0I8np+BuHK4Xz8PtrdNhZX5UeXUsq+NndfwIt3Onxcr8iCvyIeD6Vbyi8XErtJX54Vbl4sTfFU6PlTlWFv58HfBzt4Xs+rGYo9XheGlYzA9tEebTe2RlNjNHbb6yls3XR/qV/H0337GNDaCYY1flonH7eYCvYRtW4GbQqzDyGHuMGZ3n5PTE1YWPXhFfGnP7vhE0Yu50BeG5Zayogxri6X0jR2PGpaty8c4cfYtX3/LEb3+IuecrA3mH0K+ZnbPG/J0mXvgwZvQ8XpxbMesIY5766xU9O7r/1UBzuJhHbB05huxDoF2u9ebv/JAsGlct+n7WMWbQatFxREg7rvbGDTEPqstmMO0Q8iKMH5lTKuYhV+dzm8E84r68R1nMgyvOrMwx+gg69S0Sc9cV9dSIEBvmMtzPreOzARRzVNBt4WZJ/Asjyws3g0YUMd/UrYJKIzeD9fXrwiZSzLewPArpmqgOq/k84t9n4fOvQ9hWaTHfdDM4D4H1vdLnJ36o7vmXCgbhN03iV+f67ZrXhrQO93WwPTOSLFu+jnrjZ/MXzMpy3P9Lwm63u/cH+JL8/+b841k55hlgZsxgyNW+nqOzDqsyxoy71nwT1NcwdvRxPVrMfPhMnlwwXojZKbjbsQMzM2IGMYOYQcwgZsQMYgYxg5gRMzy+0b+fGTGDmEHMIGYQM2IGMYOYQcyIGcQMYgYxg5gRM4gZxAxiRswgZhAziBnEjJhBzCBmEDNiBjGDmEHMIGbEDGIGMYOYmaY3AQYAXojZOq5J9RcAAAAASUVORK5CYII=";
+        // 文件头判别，看看是否为图片
+        var imgHeader = { "jpeg": "/9j/4", "gif": "R0lGOD", "png": "iVBORw" };
+        var ImgFileUploader = /** @class */ (function (_super) {
+            __extends(ImgFileUploader, _super);
+            function ImgFileUploader() {
+                var _this = _super !== null && _super.apply(this, arguments) || this;
+                _this.name = "aj-img-uploder";
+                _this.template = "<div class=\"aj-img-uploader\">\n                <img :src=\"imgBase64Str\" />" + xhr_upload.fileUploader.template + "\n            </div>";
+                /**
+                 * 图片的 base64 形式，用于预览
+                 */
+                _this.imgBase64Str = emptyImg2;
+                _this.imgMaxWidth = 0;
+                _this.imgMaxHeight = 0;
+                return _this;
+            }
+            ImgFileUploader.prototype.propsFactory = function () {
+                var p = aj.apply({
+                    imgMaxWidth: { type: Number, default: 1920 },
+                    imgMaxHeight: { type: Number, default: 1680 },
+                }, this.props);
+                p.accpectFileType = { type: String, default: "image/*" };
+                p.limitFileType = { type: String, default: 'jpg|png|gif|jpeg' };
+                return p;
+            };
+            // onUploadInputChange(ev: Event): void {
+            //     super.onUploadInputChange(ev);
+            //     // fileUploader.onUploadInputChange.call(this, ev);
+            //     this.readBase64();
+            // }
+            ImgFileUploader.prototype.beforeCreate = function () {
+                this.$options.template = this.$options.template.replace('<span class="slot"></span>', '<br />最大尺寸：{{imgMaxWidth}}x{{imgMaxHeight}}');
+            };
+            ImgFileUploader.prototype.mounted = function () {
+                var _this = this;
+                var imgEl = this.$el.$('img');
+                imgEl.onload = function () {
+                    if (imgEl.width > _this.imgMaxWidth || imgEl.height > _this.imgMaxHeight) {
+                        _this.errMsg = '图片大小尺寸不符合要求哦，请裁剪图片重新上传吧~';
+                    }
+                    // if (this.fileSize > 300 * 1024)  // 大于 300k 才压缩
+                    //     img.compressAsBlob(imgEl, (blob: Blob): void => {
+                    //         this.$blob = blob;
+                    //     });
+                };
+            };
+            ImgFileUploader.prototype.watchFactory = function () {
+                return {
+                    imgBase64Str: function (newV) {
+                        // 文件头判别，看看是否为图片
+                        var isPic = false;
+                        for (var i in imgHeader) {
+                            if (~newV.indexOf(imgHeader[i])) {
+                                isPic = true;
+                                break;
+                            }
+                        }
+                        if (!isPic) {
+                            var msg_1 = '亲，改了扩展名我还能认得你不是图片哦';
+                            Vue.set(this.errStatus, 2, msg_1);
+                            aj.alert(msg_1);
+                        }
+                        else
+                            Vue.set(this.errStatus, 2, "");
+                    },
+                    errMsg: function (newV) {
+                        if (!newV) // 没有任何错误才显示图片
+                            this.readBase64();
+                    }
+                };
+            };
+            ImgFileUploader.prototype.readBase64 = function () {
+                var _this = this;
+                var reader = new FileReader();
+                reader.onload = function (ev) {
+                    var fileReader = ev.target;
+                    _this.imgBase64Str = fileReader.result;
+                };
+                this.$fileObj && reader.readAsDataURL(this.$fileObj);
+            };
+            return ImgFileUploader;
+        }(xhr_upload.FileUploader));
+        xhr_upload.ImgFileUploader = ImgFileUploader;
+        new ImgFileUploader().register();
+    })(xhr_upload = aj.xhr_upload || (aj.xhr_upload = {}));
 })(aj || (aj = {}));
 
 "use strict";
@@ -725,7 +1052,7 @@ var aj;
 * 将上传控件嵌入到一个浮出层中
 */
 Vue.component('aj-form-popup-upload', {
-    template: html(__makeTemplateObject(["\n        <aj-layer>\n            <h3>\u56FE\u7247\u4E0A\u4F20</h3>\n            <p>\u4E0A\u4F20\u6210\u529F\u540E\u81EA\u52A8\u63D2\u5165\u5230\u6B63\u6587</p>\n            <aj-xhr-upload ref=\"uploadControl\" :action=\"uploadUrl\" :is-img-upload=\"true\" :hidden-field=\"imgName\"\n                :img-place=\"ajResources.commonAsset + '/images/imgBg.png'\">\n            </aj-xhr-upload>\n            <div>\u4E0A\u4F20\u9650\u5236\uFF1A{{text.maxSize}}kb \u6216\u4EE5\u4E0B\uFF0C\u5206\u8FA8\u7387\uFF1A{{text.maxHeight}}x{{text.maxWidth}}</div>\n        </aj-layer>\n    "], ["\n        <aj-layer>\n            <h3>\u56FE\u7247\u4E0A\u4F20</h3>\n            <p>\u4E0A\u4F20\u6210\u529F\u540E\u81EA\u52A8\u63D2\u5165\u5230\u6B63\u6587</p>\n            <aj-xhr-upload ref=\"uploadControl\" :action=\"uploadUrl\" :is-img-upload=\"true\" :hidden-field=\"imgName\"\n                :img-place=\"ajResources.commonAsset + '/images/imgBg.png'\">\n            </aj-xhr-upload>\n            <div>\u4E0A\u4F20\u9650\u5236\uFF1A{{text.maxSize}}kb \u6216\u4EE5\u4E0B\uFF0C\u5206\u8FA8\u7387\uFF1A{{text.maxHeight}}x{{text.maxWidth}}</div>\n        </aj-layer>\n    "])),
+    template: html(__makeTemplateObject(["\n        <aj-layer>\n            <h3>\u56FE\u7247\u4E0A\u4F20</h3>\n            <p>\u4E0A\u4F20\u6210\u529F\u540E\u81EA\u52A8\u63D2\u5165\u5230\u6B63\u6587</p>\n            <aj-img-uploder ref=\"uploadControl\" :action=\"uploadUrl\"></aj-img-uploder>\n        </aj-layer>\n    "], ["\n        <aj-layer>\n            <h3>\u56FE\u7247\u4E0A\u4F20</h3>\n            <p>\u4E0A\u4F20\u6210\u529F\u540E\u81EA\u52A8\u63D2\u5165\u5230\u6B63\u6587</p>\n            <aj-img-uploder ref=\"uploadControl\" :action=\"uploadUrl\"></aj-img-uploder>\n        </aj-layer>\n    "])),
     data: function () {
         return {
             text: {}
@@ -868,7 +1195,7 @@ var aj;
                 var _this = this;
                 document.addEventListener('blur', function (ev) {
                     var el = ev.target;
-                    if (Validator.isIgnoreEl(el)) // 忽略部分元素
+                    if (el.tagName == "A" || Validator.isIgnoreEl(el)) // 忽略部分元素；a 元素也有 blur 事件，忽略之
                         return;
                     var result = Validator.check(el);
                     if (result) { // 如果有错误,就把它显示出来
@@ -1065,166 +1392,3 @@ var aj;
 //         });
 //     }
 // })(window, document);
-
-"use strict";
-
-;
-(function () {
-    Vue.component('aj-xhr-upload', {
-        template: html(__makeTemplateObject(["\n            <div class=\"aj-xhr-upload\" :style=\"{display: buttonBottom ? 'inherit': 'flex'}\">\n                <input v-if=\"hiddenField\" type=\"hidden\" :name=\"hiddenField\" :value=\"hiddenFieldValue\" />\n                <div v-if=\"isImgUpload\">\n                    <a :href=\"imgPlace\" target=\"_blank\">\n                        <img class=\"upload_img_perview\"\n                            :src=\"(isFileSize && isExtName && imgBase64Str) ? imgBase64Str : imgPlace\" />\n                    </a>\n                </div>\n                <div class=\"pseudoFilePicker\">\n                    <label :for=\"'uploadInput_' + radomId\">\n                        <div>\n                            <div>+</div>\u70B9\u51FB\u9009\u62E9{{isImgUpload ? '\u56FE\u7247': '\u6587\u4EF6'}}\n                        </div>\n                    </label>\n                </div>\n                <input type=\"file\" :name=\"fieldName\" class=\"hide\" :id=\"'uploadInput_' + radomId\" @change=\"onUploadInputChange\"\n                    :accept=\"isImgUpload ? 'image/*' : accpectFileType\" />\n                <div v-if=\"!isFileSize || !isExtName\">{{errMsg}}</div>\n                <div v-if=\"isFileSize && isExtName\">\n                    {{fileName}}<br />\n                    <button @click.prevent=\"doUpload\"\n                        style=\"min-width:110px;\">{{progress && progress !== 100 ? '\u4E0A\u4F20\u4E2D ' + progress + '%': '\u4E0A\u4F20'}}</button>\n                </div>\n            </div>\n        "], ["\n            <div class=\"aj-xhr-upload\" :style=\"{display: buttonBottom ? 'inherit': 'flex'}\">\n                <input v-if=\"hiddenField\" type=\"hidden\" :name=\"hiddenField\" :value=\"hiddenFieldValue\" />\n                <div v-if=\"isImgUpload\">\n                    <a :href=\"imgPlace\" target=\"_blank\">\n                        <img class=\"upload_img_perview\"\n                            :src=\"(isFileSize && isExtName && imgBase64Str) ? imgBase64Str : imgPlace\" />\n                    </a>\n                </div>\n                <div class=\"pseudoFilePicker\">\n                    <label :for=\"'uploadInput_' + radomId\">\n                        <div>\n                            <div>+</div>\u70B9\u51FB\u9009\u62E9{{isImgUpload ? '\u56FE\u7247': '\u6587\u4EF6'}}\n                        </div>\n                    </label>\n                </div>\n                <input type=\"file\" :name=\"fieldName\" class=\"hide\" :id=\"'uploadInput_' + radomId\" @change=\"onUploadInputChange\"\n                    :accept=\"isImgUpload ? 'image/*' : accpectFileType\" />\n                <div v-if=\"!isFileSize || !isExtName\">{{errMsg}}</div>\n                <div v-if=\"isFileSize && isExtName\">\n                    {{fileName}}<br />\n                    <button @click.prevent=\"doUpload\"\n                        style=\"min-width:110px;\">{{progress && progress !== 100 ? '\u4E0A\u4F20\u4E2D ' + progress + '%': '\u4E0A\u4F20'}}</button>\n                </div>\n            </div>\n        "])),
-        props: {
-            action: { type: String, required: true },
-            fieldName: String,
-            limitSize: Number,
-            hiddenField: { type: String, default: null },
-            hiddenFieldValue: String,
-            limitFileType: String,
-            accpectFileType: String,
-            isImgUpload: Boolean,
-            imgPlace: String,
-            imgMaxWidth: { type: Number, default: 1920 },
-            imgMaxHeight: { type: Number, default: 1680 },
-            buttonBottom: Boolean // 上传按钮是否位于下方
-        },
-        data: function () {
-            var _this = this;
-            return {
-                isFileSize: false,
-                isExtName: false,
-                isImgSize: false,
-                errMsg: null,
-                newlyId: null,
-                radomId: Math.round(Math.random() * 1000),
-                uplodedFileUrl: null,
-                uploadOk_callback: function (json) {
-                    if (json.isOk) {
-                        _this.uplodedFileUrl = json.imgUrl;
-                        if (_this.hiddenField)
-                            _this.$el.$('input[name=' + _this.hiddenField + ']').value = json.imgUrl;
-                    }
-                    aj.xhr.defaultCallBack(json);
-                },
-                imgBase64Str: null,
-                progress: 0,
-                fileName: '' // 获取文件名称，只能是名称，不能获取完整的文件录
-            };
-        },
-        methods: {
-            /**
-             *
-             * @param this
-             * @param $event
-             */
-            onUploadInputChange: function ($event) {
-                var _this = this;
-                var fileInput = $event.target;
-                if (!fileInput.files || !fileInput.files[0])
-                    return;
-                var ext = fileInput.value.split('.').pop(); // 扩展名
-                this.$fileObj = fileInput.files[0]; // 保留引用
-                this.$fileName = this.$fileObj.name;
-                this.$fileType = this.$fileObj.type;
-                var size = this.$fileObj.size;
-                if (this.limitSize) {
-                    this.isFileSize = size < this.limitSize;
-                    this.errMsg = "要上传的文件容量过大，请压缩到 " + this.limitSize + "kb 以下";
-                }
-                else
-                    this.isFileSize = true;
-                if (this.limitFileType) {
-                    this.isExtName = new RegExp(this.limitFileType, 'i').test(ext);
-                    this.errMsg = '根据文件后缀名判断，此文件不能上传';
-                }
-                else
-                    this.isExtName = true;
-                readBase64.call(this, fileInput.files[0]);
-                if (this.isImgUpload) {
-                    var imgEl = new Image();
-                    imgEl.onload = function () {
-                        if (imgEl.width > _this.imgMaxWidth || imgEl.height > _this.imgMaxHeight) {
-                            _this.isImgSize = false;
-                            _this.errMsg = '图片大小尺寸不符合要求哦，请重新图片吧~';
-                        }
-                        else {
-                            _this.isImgSize = true;
-                        }
-                    };
-                }
-                getFileName.call(this);
-            },
-            /**
-             * 执行上传
-             *
-             * @param this
-             */
-            doUpload: function () {
-                var _this = this;
-                var fd = new FormData();
-                if (this.$blob)
-                    fd.append("file", this.$blob, this.$fileName);
-                else
-                    fd.append("file", this.$fileObj);
-                var xhr = new XMLHttpRequest();
-                //@ts-ignore
-                xhr.onreadystatechange = aj.xhr.requestHandler.delegate(null, this.uploadOk_callback, 'json');
-                xhr.open("POST", this.action, true);
-                xhr.onprogress = function (e) {
-                    var progress = 0, p = ~~(e.loaded * 1000 / e.total);
-                    p = p / 10;
-                    if (progress !== p)
-                        progress = p;
-                    _this.progress = progress;
-                };
-                xhr.send(fd);
-            }
-        }
-    });
-    // 文件头判别，看看是否为图片
-    var imgHeader = { "jpeg": "/9j/4", "gif": "R0lGOD", "png": "iVBORw" };
-    /**
-     * 获取文件名称，只能是名称，不能获取完整的文件目录
-     *
-     * @param this
-     */
-    function getFileName() {
-        var _a;
-        var v = this.$el.$('input[type=file]').value, arr = v.split('\\');
-        this.fileName = (_a = arr.pop()) === null || _a === void 0 ? void 0 : _a.trim();
-    }
-    /**
-     *
-     * @param this
-     * @param file
-     */
-    function readBase64(file) {
-        var _this = this;
-        var reader = new FileReader();
-        reader.onload = function (_e) {
-            var e = _e;
-            _this.imgBase64Str = e.target.result;
-            if (_this.isImgUpload) {
-                var imgEl = new Image();
-                imgEl.onload = function () {
-                    if (file.size > 300 * 1024) // 大于 300k 才压缩
-                        aj.img.compress(imgEl, _this);
-                    if (imgEl.width > _this.imgMaxWidth || imgEl.height > _this.imgMaxHeight) {
-                        _this.isImgSize = false;
-                        _this.errMsg = '图片大小尺寸不符合要求哦，请裁剪图片重新上传吧~';
-                    }
-                    else
-                        _this.isImgSize = true;
-                };
-                imgEl.src = _this.imgBase64Str;
-                // 文件头判别，看看是否为图片
-                for (var i in imgHeader) {
-                    if (~_this.imgBase64Str.indexOf(imgHeader[i])) {
-                        _this.isExtName = true;
-                        return;
-                    }
-                }
-                _this.errMsg = "亲，改了扩展名我还能认得你不是图片哦";
-            }
-        };
-        reader.readAsDataURL(file);
-    }
-})();

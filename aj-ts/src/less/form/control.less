@@ -44,6 +44,22 @@
     .aj-form-base();
 }
 
+/* 简单的表单布局，适合一列的 */
+.aj-form.sample {
+    &>div {
+        padding      : 1% 2%;
+        border-bottom: 1px solid #e3e3e3;
+
+        &>label {
+            .label {
+                width     : 100px;
+                display   : inline-block;
+                text-align: center;
+            }
+        }
+    }
+}
+
 .aj-form-row-holder {
     &>form {
         .aj-form-base();
@@ -51,8 +67,6 @@
         border: 1px solid #e3e3e3;
 
         &>div {
-            padding      : 1% 2%;
-            border-bottom: 1px solid #e3e3e3;
 
             &:last-child {
                 border-bottom: 0;
@@ -62,12 +76,6 @@
         &>div:nth-child(even) {
             border-top: 1px solid white;
             background: #f5f5f5;
-        }
-
-        div.label {
-            display   : inline-block;
-            min-width : 70px;
-            text-align: center;
         }
     }
 

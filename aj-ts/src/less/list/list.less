@@ -1,5 +1,18 @@
 @import '../form/common-form-functions.less';
 
+.aj-list {
+    .no-data {
+        padding: 10%;
+        color  : gray;
+    }
+}
+
+.aj-classic-list li {
+    list-style-type: disc;
+    text-align     : left;
+    margin-bottom  : 10px;
+}
+
 // 文章列表
 .aj-article-list {
     &>ul {
@@ -98,7 +111,7 @@
             background-color: white;
             box-sizing      : border-box;
             list-style      : none;
-           
+
         }
     }
 
@@ -116,9 +129,9 @@
     }
 
     li {
-        float: left;
-        min-height      : 80px;
-        
+        float     : left;
+        min-height: 80px;
+
         .thumb {
             img {
                 width     : 100%;

@@ -169,13 +169,15 @@ namespace aj.list {
 		mixins: [datastore],
 		template: html`
 			<div class="aj-list">
-				<ul v-if="showDefaultUi">
+				<slot name="header" v-if="total != 0"></slot>
+				<ul v-if="showDefaultUi && (total != 0)">
 					<li v-for="(item, index) in result">
 						<slot v-bind="item">
 							<a href="#" @click="show(item.id, index, $event)" :id="item.id">{{item.name}}</a>
 						</slot>
 					</li>
 				</ul>
+				<div class="no-data" v-show="total == 0">未有任何数据</div>
 				<footer v-if="isPage" class="pager">
 					<a v-if="pageStart > 0" href="#" @click="previousPage">上一页</a>
 					<a v-if="(pageStart > 0 ) && (pageStart + pageSize < total)"

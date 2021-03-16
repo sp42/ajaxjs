@@ -22,7 +22,7 @@ var aj;
                 var _this = this;
                 document.addEventListener('blur', function (ev) {
                     var el = ev.target;
-                    if (Validator.isIgnoreEl(el)) // 忽略部分元素
+                    if (el.tagName == "A" || Validator.isIgnoreEl(el)) // 忽略部分元素；a 元素也有 blur 事件，忽略之
                         return;
                     var result = Validator.check(el);
                     if (result) { // 如果有错误,就把它显示出来

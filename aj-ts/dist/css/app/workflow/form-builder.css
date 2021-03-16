@@ -763,6 +763,16 @@ body > .right {
   top: 7px;
   border-color: transparent white transparent transparent;
 }
+/* 简单的表单布局，适合一列的 */
+.aj-form.sample > div {
+  padding: 1% 2%;
+  border-bottom: 1px solid #e3e3e3;
+}
+.aj-form.sample > div > label .label {
+  width: 100px;
+  display: inline-block;
+  text-align: center;
+}
 .aj-form-row-holder > form {
   min-width: 400px;
   overflow: hidden;
@@ -1014,21 +1024,12 @@ body > .right {
   top: 7px;
   border-color: transparent white transparent transparent;
 }
-.aj-form-row-holder > form > div {
-  padding: 1% 2%;
-  border-bottom: 1px solid #e3e3e3;
-}
 .aj-form-row-holder > form > div:last-child {
   border-bottom: 0;
 }
 .aj-form-row-holder > form > div:nth-child(even) {
   border-top: 1px solid white;
   background: #f5f5f5;
-}
-.aj-form-row-holder > form div.label {
-  display: inline-block;
-  min-width: 70px;
-  text-align: center;
 }
 .aj-form-row-holder .sub,
 .aj-form-row-holder .sub-2 {

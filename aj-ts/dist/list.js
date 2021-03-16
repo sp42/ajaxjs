@@ -4,7 +4,7 @@
  * 相册列表
  */
 Vue.component('aj-attachment-picture-list', {
-    template: html(__makeTemplateObject(["\n        <table>\n            <tr>\n            <td>\n                <div class=\"label\">\u76F8\u518C\u56FE\uFF1A</div>\n                <ul>\n                    <li v-for=\"pic in pics\" style=\"float:left;margin-right:1%;text-align:center;\">\n                        <a :href=\"picCtx + pic.path\" target=\"_blank\"><img :src=\"picCtx + pic.path\" style=\"max-width: 100px;max-height: 100px;\" /></a><br />\n                        <a href=\"###\" @click=\"delPic(pic.id);\">\u5220 \u9664</a>\n                    </li>\n                </ul>\n            </td>\n            <td>\n                <aj-xhr-upload ref=\"attachmentPictureUpload\" :action=\"uploadUrl\" :is-img-upload=\"true\" :img-place=\"blankBg\"></aj-xhr-upload>\n            </td></tr>\n        </table>\n    "], ["\n        <table>\n            <tr>\n            <td>\n                <div class=\"label\">\u76F8\u518C\u56FE\uFF1A</div>\n                <ul>\n                    <li v-for=\"pic in pics\" style=\"float:left;margin-right:1%;text-align:center;\">\n                        <a :href=\"picCtx + pic.path\" target=\"_blank\"><img :src=\"picCtx + pic.path\" style=\"max-width: 100px;max-height: 100px;\" /></a><br />\n                        <a href=\"###\" @click=\"delPic(pic.id);\">\u5220 \u9664</a>\n                    </li>\n                </ul>\n            </td>\n            <td>\n                <aj-xhr-upload ref=\"attachmentPictureUpload\" :action=\"uploadUrl\" :is-img-upload=\"true\" :img-place=\"blankBg\"></aj-xhr-upload>\n            </td></tr>\n        </table>\n    "])),
+    template: html(__makeTemplateObject(["\n        <table>\n            <tr>\n                <td>\n                    <div class=\"label\">\u76F8\u518C\u56FE\uFF1A</div>\n                    <ul>\n                        <li v-for=\"pic in pics\" style=\"float:left;margin-right:1%;text-align:center;\">\n                            <a :href=\"picCtx + pic.path\" target=\"_blank\"><img :src=\"picCtx + pic.path\" style=\"max-width: 100px;max-height: 100px;\" /></a><br />\n                            <a href=\"###\" @click=\"delPic(pic.id);\">\u5220 \u9664</a>\n                        </li>\n                    </ul>\n                </td> \n                <td>\n                    <aj-xhr-upload ref=\"attachmentPictureUpload\" :action=\"uploadUrl\" :is-img-upload=\"true\" :img-place=\"blankBg\"></aj-xhr-upload>\n                </td>\n            </tr>\n        </table>\n    "], ["\n        <table>\n            <tr>\n                <td>\n                    <div class=\"label\">\u76F8\u518C\u56FE\uFF1A</div>\n                    <ul>\n                        <li v-for=\"pic in pics\" style=\"float:left;margin-right:1%;text-align:center;\">\n                            <a :href=\"picCtx + pic.path\" target=\"_blank\"><img :src=\"picCtx + pic.path\" style=\"max-width: 100px;max-height: 100px;\" /></a><br />\n                            <a href=\"###\" @click=\"delPic(pic.id);\">\u5220 \u9664</a>\n                        </li>\n                    </ul>\n                </td> \n                <td>\n                    <aj-xhr-upload ref=\"attachmentPictureUpload\" :action=\"uploadUrl\" :is-img-upload=\"true\" :img-place=\"blankBg\"></aj-xhr-upload>\n                </td>\n            </tr>\n        </table>\n    "])),
     props: {
         picCtx: String,
         uploadUrl: String,
@@ -39,54 +39,58 @@ Vue.component('aj-attachment-picture-list', {
 });
 
 "use strict";
-Vue.component('aj-simple-grid', {
-    template: "\n        <div>\n            <form action=\"?\" method=\"GET\" style=\"float:right;\">\n                <input type=\"hidden\" name=\"searchField\" value=\"content\" />\n                <input type=\"text\" name=\"searchValue\" placeholder=\"\u8BF7\u8F93\u5165\u641C\u7D22\u4E4B\u5173\u952E\u5B57\" class=\"aj-input\" />\n                <button style=\"margin-top: 0;\" class=\"aj-btn\">\u641C\u7D22</button>\n            </form>\n            <table class=\"aj-grid ajaxjs-borderTable\">\n                <thead>\n                    <tr>\n                        <th v-for=\"key in columns\" @click=\"sortBy(key)\" :class=\"{ active: sortKey == key }\">\n                            {{ key | capitalize }}\n                            <span class=\"arrow\" :class=\"sortOrders[key] > 0 ? 'asc' : 'dsc'\"></span>\n                        </th>\n                    </tr>\n                </thead>\n                <tbody>\n                    <tr v-for=\"entry in filteredData\">\n                        <td v-for=\"key in columns\" v-html=\"entry[key]\"></td>\n                    </tr>\n                </tbody>\n            </table>\n        </div>\n    ",
-    props: {
-        data: Array,
-        columns: Array,
-        filterKey: String
-    },
-    data: function () {
-        var sortOrders = {};
-        this.columns.forEach(function (key) { return sortOrders[key] = 1; });
-        return {
-            sortKey: '',
-            sortOrders: sortOrders
-        };
-    },
-    computed: {
-        filteredData: function () {
-            var sortKey = this.sortKey;
-            var filterKey = this.filterKey && this.filterKey.toLowerCase();
-            var order = this.sortOrders[sortKey] || 1;
-            var data = this.data;
-            if (filterKey) {
-                data = data.filter(function (row) {
-                    return Object.keys(row).some(function (key) { return String(row[key]).toLowerCase().indexOf(filterKey) > -1; });
-                });
+
+var aj;
+(function (aj) {
+    var grid;
+    (function (grid) {
+        Vue.component('aj-simple-grid', {
+            template: html(__makeTemplateObject(["\n            <div>\n                <form action=\"?\" method=\"GET\" style=\"float:right;\">\n                    <input type=\"hidden\" name=\"searchField\" value=\"content\" />\n                    <input type=\"text\" name=\"searchValue\" placeholder=\"\u8BF7\u8F93\u5165\u641C\u7D22\u4E4B\u5173\u952E\u5B57\" class=\"aj-input\" />\n                    <button style=\"margin-top: 0;\" class=\"aj-btn\">\u641C\u7D22</button>\n                </form>\n                <table class=\"aj-grid ajaxjs-borderTable\">\n                    <thead>\n                        <tr>\n                            <th v-for=\"key in columns\" @click=\"sortBy(key)\" :class=\"{ active: sortKey == key }\">\n                                {{ key | capitalize }}\n                                <span class=\"arrow\" :class=\"sortOrders[key] > 0 ? 'asc' : 'dsc'\"></span>\n                            </th>\n                        </tr>\n                    </thead>\n                    <tbody>\n                        <tr v-for=\"entry in filteredData\">\n                            <td v-for=\"key in columns\" v-html=\"entry[key]\"></td>\n                        </tr>\n                    </tbody>\n                </table>\n            </div>\n        "], ["\n            <div>\n                <form action=\"?\" method=\"GET\" style=\"float:right;\">\n                    <input type=\"hidden\" name=\"searchField\" value=\"content\" />\n                    <input type=\"text\" name=\"searchValue\" placeholder=\"\u8BF7\u8F93\u5165\u641C\u7D22\u4E4B\u5173\u952E\u5B57\" class=\"aj-input\" />\n                    <button style=\"margin-top: 0;\" class=\"aj-btn\">\u641C\u7D22</button>\n                </form>\n                <table class=\"aj-grid ajaxjs-borderTable\">\n                    <thead>\n                        <tr>\n                            <th v-for=\"key in columns\" @click=\"sortBy(key)\" :class=\"{ active: sortKey == key }\">\n                                {{ key | capitalize }}\n                                <span class=\"arrow\" :class=\"sortOrders[key] > 0 ? 'asc' : 'dsc'\"></span>\n                            </th>\n                        </tr>\n                    </thead>\n                    <tbody>\n                        <tr v-for=\"entry in filteredData\">\n                            <td v-for=\"key in columns\" v-html=\"entry[key]\"></td>\n                        </tr>\n                    </tbody>\n                </table>\n            </div>\n        "])),
+            props: {
+                data: Array,
+                columns: Array,
+                filterKey: String
+            },
+            data: function () {
+                var sortOrders = {};
+                this.columns.forEach(function (key) { return sortOrders[key] = 1; });
+                return {
+                    sortKey: '',
+                    sortOrders: sortOrders
+                };
+            },
+            computed: {
+                filteredData: function () {
+                    var sortKey = this.sortKey, filterKey = this.filterKey && this.filterKey.toLowerCase(), order = this.sortOrders[sortKey] || 1, data = this.data;
+                    if (filterKey) {
+                        data = data.filter(function (row) {
+                            return Object.keys(row).some(function (key) { return String(row[key]).toLowerCase().indexOf(filterKey) > -1; });
+                        });
+                    }
+                    if (sortKey) {
+                        data = data.slice().sort(function (a, b) {
+                            a = a[sortKey];
+                            b = b[sortKey];
+                            return (a === b ? 0 : a > b ? 1 : -1) * order;
+                        });
+                    }
+                    return data;
+                }
+            },
+            filters: {
+                capitalize: function (str) {
+                    return str.charAt(0).toUpperCase() + str.slice(1);
+                }
+            },
+            methods: {
+                sortBy: function (key) {
+                    this.sortKey = key;
+                    this.sortOrders[key] = this.sortOrders[key] * -1;
+                }
             }
-            if (sortKey) {
-                data = data.slice().sort(function (a, b) {
-                    a = a[sortKey];
-                    b = b[sortKey];
-                    return (a === b ? 0 : a > b ? 1 : -1) * order;
-                });
-            }
-            return data;
-        }
-    },
-    filters: {
-        capitalize: function (str) {
-            return str.charAt(0).toUpperCase() + str.slice(1);
-        }
-    },
-    methods: {
-        sortBy: function (key) {
-            this.sortKey = key;
-            this.sortOrders[key] = this.sortOrders[key] * -1;
-        }
-    }
-});
+        });
+    })(grid = aj.grid || (aj.grid = {}));
+})(aj || (aj = {}));
 
 "use strict";
 
@@ -180,7 +184,7 @@ var aj;
          */
         Vue.component('aj-list', {
             mixins: [list.datastore],
-            template: html(__makeTemplateObject(["\n\t\t\t<div class=\"aj-list\">\n\t\t\t\t<ul v-if=\"showDefaultUi\">\n\t\t\t\t\t<li v-for=\"(item, index) in result\">\n\t\t\t\t\t\t<slot v-bind=\"item\">\n\t\t\t\t\t\t\t<a href=\"#\" @click=\"show(item.id, index, $event)\" :id=\"item.id\">{{item.name}}</a>\n\t\t\t\t\t\t</slot>\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\t\t\t\t<footer v-if=\"isPage\" class=\"pager\">\n\t\t\t\t\t<a v-if=\"pageStart > 0\" href=\"#\" @click=\"previousPage\">\u4E0A\u4E00\u9875</a>\n\t\t\t\t\t<a v-if=\"(pageStart > 0 ) && (pageStart + pageSize < total)\"\n\t\t\t\t\t\tstyle=\"text-decoration: none;\">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>\n\t\t\t\t\t<a v-if=\"pageStart + pageSize < total\" href=\"#\" @click=\"nextPage\">\u4E0B\u4E00\u9875</a>\n\t\t\t\t\t<a href=\"javascript:;\" @click=\"getData\"><i class=\"fa fa-refresh\" aria-hidden=\"true\"></i> \u5237\u65B0</a>\n\t\t\t\t\t<input type=\"hidden\" name=\"start\" :value=\"pageStart\" />\n\t\t\t\t\t\u9875\u6570\uFF1A{{currentPage}}/{{totalPage}} \u8BB0\u5F55\u6570\uFF1A{{pageStart}}/{{total}}\n\t\t\t\t\t\u6BCF\u9875\u8BB0\u5F55\u6570\uFF1A <input size=\"2\" title=\"\u8F93\u5165\u4E00\u4E2A\u6570\u5B57\u786E\u5B9A\u6BCF\u9875\u8BB0\u5F55\u6570\" type=\"text\" :value=\"pageSize\" @change=\"onPageSizeChange\" />\n\t\t\t\t\t\u8DF3\u8F6C\uFF1A\n\t\t\t\t\t<select @change=\"jumpPageBySelect\">\n\t\t\t\t\t\t<option :value=\"n\" v-for=\"n in totalPage\">{{n}}</option>\n\t\t\t\t\t</select>\n\t\t\t\t</footer>\n\t\t\t\t<div v-show=\"!!autoLoadWhenReachedBottom\" class=\"buttom\"></div>\n\t\t\t</div>\n\t\t"], ["\n\t\t\t<div class=\"aj-list\">\n\t\t\t\t<ul v-if=\"showDefaultUi\">\n\t\t\t\t\t<li v-for=\"(item, index) in result\">\n\t\t\t\t\t\t<slot v-bind=\"item\">\n\t\t\t\t\t\t\t<a href=\"#\" @click=\"show(item.id, index, $event)\" :id=\"item.id\">{{item.name}}</a>\n\t\t\t\t\t\t</slot>\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\t\t\t\t<footer v-if=\"isPage\" class=\"pager\">\n\t\t\t\t\t<a v-if=\"pageStart > 0\" href=\"#\" @click=\"previousPage\">\u4E0A\u4E00\u9875</a>\n\t\t\t\t\t<a v-if=\"(pageStart > 0 ) && (pageStart + pageSize < total)\"\n\t\t\t\t\t\tstyle=\"text-decoration: none;\">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>\n\t\t\t\t\t<a v-if=\"pageStart + pageSize < total\" href=\"#\" @click=\"nextPage\">\u4E0B\u4E00\u9875</a>\n\t\t\t\t\t<a href=\"javascript:;\" @click=\"getData\"><i class=\"fa fa-refresh\" aria-hidden=\"true\"></i> \u5237\u65B0</a>\n\t\t\t\t\t<input type=\"hidden\" name=\"start\" :value=\"pageStart\" />\n\t\t\t\t\t\u9875\u6570\uFF1A{{currentPage}}/{{totalPage}} \u8BB0\u5F55\u6570\uFF1A{{pageStart}}/{{total}}\n\t\t\t\t\t\u6BCF\u9875\u8BB0\u5F55\u6570\uFF1A <input size=\"2\" title=\"\u8F93\u5165\u4E00\u4E2A\u6570\u5B57\u786E\u5B9A\u6BCF\u9875\u8BB0\u5F55\u6570\" type=\"text\" :value=\"pageSize\" @change=\"onPageSizeChange\" />\n\t\t\t\t\t\u8DF3\u8F6C\uFF1A\n\t\t\t\t\t<select @change=\"jumpPageBySelect\">\n\t\t\t\t\t\t<option :value=\"n\" v-for=\"n in totalPage\">{{n}}</option>\n\t\t\t\t\t</select>\n\t\t\t\t</footer>\n\t\t\t\t<div v-show=\"!!autoLoadWhenReachedBottom\" class=\"buttom\"></div>\n\t\t\t</div>\n\t\t"])),
+            template: html(__makeTemplateObject(["\n\t\t\t<div class=\"aj-list\">\n\t\t\t\t<slot name=\"header\" v-if=\"total != 0\"></slot>\n\t\t\t\t<ul v-if=\"showDefaultUi && (total != 0)\">\n\t\t\t\t\t<li v-for=\"(item, index) in result\">\n\t\t\t\t\t\t<slot v-bind=\"item\">\n\t\t\t\t\t\t\t<a href=\"#\" @click=\"show(item.id, index, $event)\" :id=\"item.id\">{{item.name}}</a>\n\t\t\t\t\t\t</slot>\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\t\t\t\t<div class=\"no-data\" v-show=\"total == 0\">\u672A\u6709\u4EFB\u4F55\u6570\u636E</div>\n\t\t\t\t<footer v-if=\"isPage\" class=\"pager\">\n\t\t\t\t\t<a v-if=\"pageStart > 0\" href=\"#\" @click=\"previousPage\">\u4E0A\u4E00\u9875</a>\n\t\t\t\t\t<a v-if=\"(pageStart > 0 ) && (pageStart + pageSize < total)\"\n\t\t\t\t\t\tstyle=\"text-decoration: none;\">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>\n\t\t\t\t\t<a v-if=\"pageStart + pageSize < total\" href=\"#\" @click=\"nextPage\">\u4E0B\u4E00\u9875</a>\n\t\t\t\t\t<a href=\"javascript:;\" @click=\"getData\"><i class=\"fa fa-refresh\" aria-hidden=\"true\"></i> \u5237\u65B0</a>\n\t\t\t\t\t<input type=\"hidden\" name=\"start\" :value=\"pageStart\" />\n\t\t\t\t\t\u9875\u6570\uFF1A{{currentPage}}/{{totalPage}} \u8BB0\u5F55\u6570\uFF1A{{pageStart}}/{{total}}\n\t\t\t\t\t\u6BCF\u9875\u8BB0\u5F55\u6570\uFF1A <input size=\"2\" title=\"\u8F93\u5165\u4E00\u4E2A\u6570\u5B57\u786E\u5B9A\u6BCF\u9875\u8BB0\u5F55\u6570\" type=\"text\" :value=\"pageSize\" @change=\"onPageSizeChange\" />\n\t\t\t\t\t\u8DF3\u8F6C\uFF1A\n\t\t\t\t\t<select @change=\"jumpPageBySelect\">\n\t\t\t\t\t\t<option :value=\"n\" v-for=\"n in totalPage\">{{n}}</option>\n\t\t\t\t\t</select>\n\t\t\t\t</footer>\n\t\t\t\t<div v-show=\"!!autoLoadWhenReachedBottom\" class=\"buttom\"></div>\n\t\t\t</div>\n\t\t"], ["\n\t\t\t<div class=\"aj-list\">\n\t\t\t\t<slot name=\"header\" v-if=\"total != 0\"></slot>\n\t\t\t\t<ul v-if=\"showDefaultUi && (total != 0)\">\n\t\t\t\t\t<li v-for=\"(item, index) in result\">\n\t\t\t\t\t\t<slot v-bind=\"item\">\n\t\t\t\t\t\t\t<a href=\"#\" @click=\"show(item.id, index, $event)\" :id=\"item.id\">{{item.name}}</a>\n\t\t\t\t\t\t</slot>\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\t\t\t\t<div class=\"no-data\" v-show=\"total == 0\">\u672A\u6709\u4EFB\u4F55\u6570\u636E</div>\n\t\t\t\t<footer v-if=\"isPage\" class=\"pager\">\n\t\t\t\t\t<a v-if=\"pageStart > 0\" href=\"#\" @click=\"previousPage\">\u4E0A\u4E00\u9875</a>\n\t\t\t\t\t<a v-if=\"(pageStart > 0 ) && (pageStart + pageSize < total)\"\n\t\t\t\t\t\tstyle=\"text-decoration: none;\">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>\n\t\t\t\t\t<a v-if=\"pageStart + pageSize < total\" href=\"#\" @click=\"nextPage\">\u4E0B\u4E00\u9875</a>\n\t\t\t\t\t<a href=\"javascript:;\" @click=\"getData\"><i class=\"fa fa-refresh\" aria-hidden=\"true\"></i> \u5237\u65B0</a>\n\t\t\t\t\t<input type=\"hidden\" name=\"start\" :value=\"pageStart\" />\n\t\t\t\t\t\u9875\u6570\uFF1A{{currentPage}}/{{totalPage}} \u8BB0\u5F55\u6570\uFF1A{{pageStart}}/{{total}}\n\t\t\t\t\t\u6BCF\u9875\u8BB0\u5F55\u6570\uFF1A <input size=\"2\" title=\"\u8F93\u5165\u4E00\u4E2A\u6570\u5B57\u786E\u5B9A\u6BCF\u9875\u8BB0\u5F55\u6570\" type=\"text\" :value=\"pageSize\" @change=\"onPageSizeChange\" />\n\t\t\t\t\t\u8DF3\u8F6C\uFF1A\n\t\t\t\t\t<select @change=\"jumpPageBySelect\">\n\t\t\t\t\t\t<option :value=\"n\" v-for=\"n in totalPage\">{{n}}</option>\n\t\t\t\t\t</select>\n\t\t\t\t</footer>\n\t\t\t\t<div v-show=\"!!autoLoadWhenReachedBottom\" class=\"buttom\"></div>\n\t\t\t</div>\n\t\t"])),
             props: {
                 showDefaultUi: { type: Boolean, default: true },
                 isShowFooter: { type: Boolean, default: true },

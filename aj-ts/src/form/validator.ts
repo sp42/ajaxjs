@@ -48,7 +48,7 @@ namespace aj.form {
             document.addEventListener('blur', (ev: Event) => {
                 let el: HTMLFormControl = <HTMLFormControl>ev.target;
 
-                if (Validator.isIgnoreEl(el))// 忽略部分元素
+                if (el.tagName == "A" || Validator.isIgnoreEl(el))// 忽略部分元素；a 元素也有 blur 事件，忽略之
                     return;
 
                 let result: ErrorElement | null = Validator.check(el);

@@ -47,7 +47,7 @@ function highlightMenu(target) {
     }
 }
 function logout() {
-    aj.showConfirm('确定退出吗？', function () { return aj.xhr.get(aj.ctx + "/user/login/logout/", function (j) {
+    aj.showConfirm('确定退出吗？', function () { return aj.xhr.get(aj.ctx + "/user/logout/", function (j) {
         if (j.isOk) {
             aj.msg.show(j.msg);
             setTimeout(function () { return location.assign(aj.ctx + "/admin/login/"); }, 1000);
