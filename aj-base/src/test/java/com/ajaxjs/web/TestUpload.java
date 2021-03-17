@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.junit.Test;
 
 import com.ajaxjs.net.http.NetUtil;
+import com.ajaxjs.util.ioc.EveryClass;
 import com.ajaxjs.web.mock.MockRequest;
 import com.ajaxjs.web.mock.MockServletInputStream;
 
@@ -23,7 +24,7 @@ public class TestUpload {
 		uploadFileInfo.maxSingleFileSize = 1024 * 50000; // 50 MB;
 		uploadFileInfo.allowExtFilenames = new String[] { "txt", "log" };
 		uploadFileInfo.isFileOverwrite = true;
-		uploadFileInfo.saveFolder = "c:\\t2\\";
+		uploadFileInfo.saveFolder = "c:\\temp\\";
 
 		HttpServletRequest request = MockRequest.mockRequest("foo", "upload");
 		when(request.getMethod()).thenReturn("POST");
@@ -31,7 +32,8 @@ public class TestUpload {
 
 		Map<String, Object> map = new HashMap<>();
 		map.put("name", "foo");
-		map.put("file23", new File("C:\\temp\\newfile.txt"));
+		String path = EveryClass.getResourcesFromClasspath("com\\ajaxjs\\web\\newfile.txt");
+		map.put("file23", new File(path));
 
 		byte[] b = NetUtil.toFromData(map);
 		when(request.getContentLength()).thenReturn(b.length);

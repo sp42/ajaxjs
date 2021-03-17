@@ -20,7 +20,7 @@ public class TestJdbcConnection {
 	 * @return 数据库连接对象
 	 */
 	public static Connection getTestSqliteConnection() {
-		return JdbcConnection.getSqliteConnection(EveryClass.getResourcesFromClasspath("test_used_database.sqlite"));
+		return JdbcConnection.getSqliteConnection(EveryClass.getResourcesFromClasspath("com\\ajaxjs\\sql\\test_used_database.sqlite"));
 	}
 
 	@Test
