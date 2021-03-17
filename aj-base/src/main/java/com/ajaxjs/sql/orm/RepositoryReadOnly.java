@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.ajaxjs.sql.JdbcUtil;
+import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.annotation.Select;
 import com.ajaxjs.sql.annotation.SqlFactory;
 import com.ajaxjs.sql.annotation.TableName;
@@ -114,7 +114,8 @@ public class RepositoryReadOnly extends RepositoryBase {
 	 */
 	Object select(Method method, Object[] args) throws DaoException {
 		Select select = method.getAnnotation(Select.class);
-		String sql = isSqlite(select.sqliteValue(), conn) ? select.sqliteValue() : select.value();
+		String sql = JdbcConnection.getDaoContext().getDbType() == DataBaseType.SQLITE && !CommonUtil.isEmptyString(select.sqliteValue()) ? select.sqliteValue()
+				: select.value();
 
 		ArgsInfo info = handleSql(sql, method, args);
 		if (info.isStop)
@@ -249,6 +250,9 @@ public class RepositoryReadOnly extends RepositoryBase {
 	 * @throws DaoException DAO 异常
 	 */
 	private int countTotal(Select select, String sql, Object[] args, ArgsInfo info) throws DaoException {
+		if (CommonUtil.isEmptyString(sql))
+			throw new NullPointerException("SQL 语句不能为空！");
+
 		String countSql = select.countSql(), sqliteCountSql = select.sqliteCountSql();
 		String _sql;
 
@@ -260,16 +264,20 @@ public class RepositoryReadOnly extends RepositoryBase {
 		} else
 			_sql = countSql;
 
-		if (isSqlite(sqliteCountSql, conn))
-			_sql = sqliteCountSql;
-
-		if (JdbcUtil.isSqlite(conn)) {
-			_sql = handleSql(_sql, info.method, args).sql;
-			return queryOne(conn, _sql, Integer.class, args);
-		} else { // mysql 返回 long，转换一下
+		switch (JdbcConnection.getDaoContext().getDbType()) {
+		case MYSQL:// mysql 返回 long，转换一下
 			_sql = handleSql(_sql, info.method, args).sql;
 			Long total = queryOne(conn, _sql, Long.class, args);
+
 			return total == null ? 0 : total.intValue();
+		case SQLITE:
+			if (!CommonUtil.isEmptyString(sqliteCountSql))
+				_sql = sqliteCountSql;
+
+			_sql = handleSql(_sql, info.method, args).sql;
+			return queryOne(conn, _sql, Integer.class, args);
+		default:
+			throw new UnsupportedOperationException("抱歉！不支持这种数据库");
 		}
 	}
 

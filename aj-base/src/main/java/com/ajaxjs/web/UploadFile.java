@@ -180,7 +180,7 @@ public class UploadFile extends HttpServletRequestWrapper {
 		try {
 			File file = FileHelper.createFile(uploadFileInfo.fullPath, uploadFileInfo.isFileOverwrite);
 			// 写入文件
-			FileHelper.save(file, dataBytes, true);
+			FileHelper.save(file, dataBytes, offset, length);
 			uploadFileInfo.isOk = true;
 		} catch (IOException e) {
 			uploadFileInfo.isOk = false;
@@ -188,7 +188,7 @@ public class UploadFile extends HttpServletRequestWrapper {
 			LOGGER.warning(e);
 		}
 
-		if (uploadFileInfo.afterUpload != null)
+		if (uploadFileInfo.afterUpload != null) // 上传后的回调
 			uploadFileInfo.afterUpload.accept(uploadFileInfo);
 
 		return uploadFileInfo;

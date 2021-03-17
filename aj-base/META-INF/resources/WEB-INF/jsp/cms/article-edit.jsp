@@ -38,7 +38,7 @@
 				<div>
 					<label>
 						<div class="label">名 称<span class="required-note">*</span>：</div> 
-						<input type="text" placeholder="请填写${uiName}名称" required name="name" value="${info.name}" />
+						<input type="text" placeholder="请填写${uiName}名称" required name="name" value="${info.name}" size="50" />
 					</label> 
 					<label> 
 						<div class="label">栏 目：</div>  
@@ -64,7 +64,7 @@
 					</label>
 					<label> 
 						<div class="label">源网址：</div>  
-						<input type="text" placeholder="如果是转载，请输入原网址" name="sourceUrl" value="${info.sourceUrl}" />
+						<input type="url" placeholder="如果是转载，请输入原网址" name="sourceUrl" value="${info.sourceUrl}" />
 					</label>
 				</div>
 				
@@ -82,7 +82,7 @@
 					</label> 
 					<label>
 						<div class="label">热度：</div> 
-						<input type="text" placeholder="整数" size="20" name="keywords" value="${info.hot}" />
+						<input type="number" placeholder="整数" size="20" name="keywords" value="${info.hot}" />
 					</label> 
 				</div>
 				<div class="htmlEditor-row">
@@ -111,9 +111,9 @@
 									</c:when>
 									<c:otherwise>
 										<!-- 图片上传 --> 
-										<aj-xhr-upload action="uploadCover/" :is-img-upload="true" hidden-field="cover" hidden-field-value="${info.cover}" 
+										<aj-img-uploder action="uploadCover/" field-name="cover" field-value="${info.cover}" 
 											img-place="${empty info.cover ? commonAsset.concat('/images/imgBg.png') : aj_allConfig.uploadFile.imgPerfix.concat(info.cover)}">
-										</aj-xhr-upload>
+										</aj-img-uploder>
 									</c:otherwise>
 								</c:choose>
 							</td>
@@ -140,49 +140,52 @@
 			<aj-layer ref="layer">
 				<table class="attchementMgr">
 					<tr>
-					<td class="aj-tableList">
-						<h3>已上传附件列表<span> 点击文件名下载</span></h3>
-						<header style="width:600px;">
-							<div style="width:5%">id</div><div style="width:30%">文件名</div>
-							<div style="width:20%">文件大小</div>
-							<div style="width:30%">上传时间</div>
-							<div style="width:10%">控制</div>
-						</header>
-						<aj-page-list ref="list" :is-page="false" api-url="${ctx}/admin/attachment/getListByOwnerUid/${info.uid}/" :is-show-footer="false">
-							<template slot-scope="item" :onclick="'location.assign(\'' + item.id + '/\');'">
-								<div style="width: 5%">{{item.id}}</div>
-								<div style="width:35%"><a :href="'${aj_allConfig.uploadFile.perfix}' + item.name" target="_blank" download="w3logo">{{item.name}}</a></div>
-								<div style="width:15%">{{item.fileSize}}kb</div>
-								<div style="width:30%">{{item.createDate}}</div>
-								<div style="width:10%;"><a href="javascript:void(0);" @click="del(item.id)">删除</a>
-									
-								</div>
-							</template>
-						</aj-page-list>
-					</td>
-					<td>
-						<!-- 图片上传 --> 
-						<aj-xhr-upload ref="upload" action="${ctx}/admin/attachment/upload/${info.uid}/?catalog=1" :is-img-upload="false" 
-							hidden-field="cover" hidden-field-value="${info.cover}" :button-bottom="true">
-						</aj-xhr-upload>
-					</td>
+						<td class="aj-tableList">
+							<h3>已上传附件列表</h3>
+							<aj-list ref="list" :is-page="false" api-url="${ctx}/admin/attachment/getListByOwnerUid/${info.uid}/" :is-pager="false">
+								 <template v-slot:header>
+									<header style="width:600px;">
+										<div style="width:5%">id</div><div style="width:30%">文件名</div>
+										<div style="width:20%">文件大小</div>
+										<div style="width:30%">上传时间</div>
+										<div style="width:10%">控制</div>
+									</header>
+								 </template>
+								<template slot-scope="item" :onclick="'location.assign(\'' + item.id + '/\');'">
+									<div style="width: 5%">{{item.id}}</div>
+									<div style="width:35%"><a :href="'${aj_allConfig.uploadFile.perfix}' + item.name" target="_blank" download="w3logo">{{item.name}}</a></div>
+									<div style="width:15%">{{item.fileSize}}kb</div>
+									<div style="width:30%">{{item.createDate}}</div>
+									<div style="width:10%;"><a href="javascript:void(0);" @click="del(item.id)">删除</a></div>
+								</template>
+							</aj-page-list>
+						</td>
+						<td>
+							<!-- 图片上传 --> 
+							<aj-file-uploader ref="upload" action="${ctx}/admin/attachment/upload/${info.uid}/?catalog=1" field-name="cover" field-value="${info.cover}" 
+								:button-bottom="true">
+							</aj-file-uploader>
+						</td>
 					</tr>
 					<tr>
 						<td>
-							<h3>上传注意事项</h3>
-							<ol>
-								<li>附件不仅文件格式上传</li>
-								<li>单个文件最大为 20000kb</li>
-								<li>查看所有上传附件请到“<a href="${ctx}/admin/attachment/">全部附件列表</a>”</li>
-							</ol>
-						</td><td></td>
+							<ul class="aj-classic-list">
+								<li>查看所有上传附件请到“<a href="${ctx}/admin/attachment/">全部附件列表”</a></li>
+								<li>点击文件名下载</li>
+							</ul>
+						</td>
+						<td></td>
 					</tr>
 				</table>
 			</aj-layer>
 		</div>
 		
+		<br />
+		<br />
+		<br />
+		
 		<script>
-/* 			attchementMgr = new Vue({
+ 			attchementMgr = new Vue({
 				el: '.attchementMgrHolder',
 				methods: {
 					del(id) {
@@ -201,7 +204,7 @@
 					j = j.result;
 				aj.msg.show(j.msg)
 				attchementMgr.$refs.list.ajaxGet();
-			} */
+			} 
 		</script>
 	</body>
 </html>

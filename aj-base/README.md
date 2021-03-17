@@ -13,8 +13,8 @@
 
 - 工具库，包含大量实用的工具，参见[文档简介](https://gitee.com/sp42_admin/ajaxjs/wikis/%E5%B7%A5%E5%85%B7%E5%BA%93%E7%AE%80%E4%BB%8B?sort_id=2503467)；
 - 数据层，类似于 ORM 的数据库访问机制，参见[文档简介](https://gitee.com/sp42_admin/ajaxjs/wikis/%E6%95%B0%E6%8D%AE%E5%B1%82%E7%AE%80%E4%BB%8B?sort_id=992404)；
-- Web MVC 框架，关于网站页面和 MVC 的模块，参见[文档简介](https://gitee.com/sp42_admin/ajaxjs/wikis/%E7%AE%80%E4%BB%8B?sort_id=2480164)；
-- CMS，一个小型的网站内容管理系统，参见[文档简介](https://gitee.com/sp42_admin/ajaxjs/wikis/%E7%AE%80%E4%BB%8B?sort_id=3665749)；
+- Web MVC 框架，关于网站页面和 MVC 的模块，参见[文档简介](https://gitee.com/sp42_admin/ajaxjs/wikis/Web%20%E5%BC%80%E5%8F%91%E7%BB%BC%E8%BF%B0?sort_id=3665749)；
+- CMS，一个小型的网站内容管理系统，参见[文档简介](https://gitee.com/sp42_admin/ajaxjs/wikis/%E7%AE%80%E4%BB%8B?sort_id=3672528)；
 
 
 # 安装

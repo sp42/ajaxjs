@@ -20,7 +20,6 @@ import java.util.function.Function;
 
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.JdbcHelper;
-import com.ajaxjs.sql.JdbcUtil;
 import com.ajaxjs.sql.annotation.Delete;
 import com.ajaxjs.sql.annotation.Insert;
 import com.ajaxjs.sql.annotation.Select;
@@ -152,16 +151,5 @@ public abstract class RepositoryBase extends JdbcHelper implements InvocationHan
 
 	static boolean isDelete(Method method) {
 		return isNull.apply(method, Delete.class);
-	}
-
-	/**
-	 * 判断是否有专属 SQLite 数据库的 SQL
-	 * 
-	 * @param sqliteValue SQLite 数据库专用的 SQL 语句
-	 * @param conn        数据库连接对象
-	 * @return true = 是 SQLite 数据库
-	 */
-	static boolean isSqlite(String sqliteValue, Connection conn) {
-		return !CommonUtil.isEmptyString(sqliteValue) && JdbcUtil.isSqlite(conn);
 	}
 }

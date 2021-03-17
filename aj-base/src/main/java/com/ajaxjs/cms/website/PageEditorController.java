@@ -83,8 +83,9 @@ public class PageEditorController extends BaseController<Object> {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	public String save(MvcRequest r, @NotNull @QueryParam("url") String url, @NotNull @QueryParam("contentBody") String contentBody) throws IOException {
-		String path = getUrl(r.mappath(url)); // 真实的磁盘文件路径
-		String content = FileHelper.openAsText(path), toDelContent = readContent(path);// 读取旧内容
+		String path = getUrl(r.mappath(url)), // 真实的磁盘文件路径
+				content = FileHelper.openAsText(path), toDelContent = readContent(path);// 读取旧内容
+
 		LOGGER.info("保存编辑后的内容" + path);
 
 		if (toDelContent != null) {
@@ -112,7 +113,7 @@ public class PageEditorController extends BaseController<Object> {
 	 * @return 可编辑内容
 	 * @throws IOException
 	 */
-	public static String readContent(String path) throws IOException {
+	private static String readContent(String path) throws IOException {
 		String content = FileHelper.openAsText(path);
 		int start = content.indexOf(START_TOKEN), end = content.indexOf(END_TOKEN);
 

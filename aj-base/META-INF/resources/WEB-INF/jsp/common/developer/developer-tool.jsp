@@ -44,7 +44,7 @@
 	<link rel="stylesheet" href="${aj_static_resource}/dist/css/admin/admin.css" />
 	<script src="${aj_static_resource}/dist/admin/admin.js"></script>
 </head>
-<body class="aj-form-row-holder">
+<body>
 	<div>
 		<aj-admin-header> 
 			<template slot="title">实用工具</template>

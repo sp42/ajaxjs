@@ -32,8 +32,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import com.ajaxjs.sql.JdbcHelperLambda.HasZeroResult;
-import com.ajaxjs.sql.JdbcHelperLambda.ResultSetProcessor;
+import com.ajaxjs.sql.Lambda.HasZeroResult;
+import com.ajaxjs.sql.Lambda.ResultSetProcessor;
+import com.ajaxjs.sql.orm.DataBaseType;
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
@@ -105,17 +106,13 @@ public class JdbcReader {
 			if (params != null && params.length > 0) {
 				// LogHelper.p(params);
 				int i = 0;
-				for (Object param : params) {
+				for (Object param : params)
 					ps.setObject(++i, param);
-				}
 			}
 
 			try (ResultSet rs = ps.executeQuery()) {
-				if (hasZeoResult != null) {
-					if (!hasZeoResult.test(conn, rs, sql)) {
-						return null;
-					}
-				}
+				if (hasZeoResult != null && !hasZeoResult.test(conn, rs, sql))
+					return null;
 
 				T r = processor.process(rs);
 				return r;
@@ -305,23 +302,19 @@ public class JdbcReader {
 	 * @throws SQLException
 	 */
 	static boolean hasZeoResult(Connection conn, ResultSet rs, String sql) throws SQLException {
-		if (isMySql(conn) ? rs.next() : rs.isBeforeFirst()) {
+		boolean hasNext;
+
+		if (JdbcConnection.getDaoContext().getDbType() == DataBaseType.SQLITE)
+			hasNext = rs.isBeforeFirst(); // SQLite 比较特殊，要用 isBeforeFirst() 方法判断
+		else
+			hasNext = rs.next();
+
+		if (hasNext)
 			return true;
-		} else {
+		else {
 			LOGGER.info("查询 SQL：{0} 没有符合的记录！", sql);
 			return false;
 		}
-	}
-
-	/**
-	 * 是否 mysql 数据库
-	 * 
-	 * @param conn 数据库连接对象
-	 * @return true 表示为 Mysql 数据库
-	 */
-	private static boolean isMySql(Connection conn) {
-		String connStr = conn.toString();
-		return connStr.indexOf("MySQL") != -1 || connStr.indexOf("mysql") != -1;
 	}
 
 	/**
@@ -340,6 +333,7 @@ public class JdbcReader {
 		if (map != null)
 			for (String key : map.keySet()) {// 有且只有一个记录
 				Object obj = map.get(key);
+
 				if (obj == null)
 					return null;
 				else {
@@ -379,9 +373,8 @@ public class JdbcReader {
 
 			Object array = Array.newInstance(clz, list.size());// List 转为数组
 
-			for (int i = 0; i < list.size(); i++) {
+			for (int i = 0; i < list.size(); i++)
 				Array.set(array, i, list.get(i));
-			}
 
 			return (T[]) array;
 		}, params);

@@ -1,5 +1,6 @@
 package com.ajaxjs.cms.common;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.function.Consumer;
 
@@ -27,6 +28,7 @@ import com.ajaxjs.util.ioc.ComponentMgr;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
+import com.ajaxjs.web.UploadFile;
 import com.ajaxjs.web.UploadFileInfo;
 import com.ajaxjs.web.mvc.ModelAndView;
 import com.ajaxjs.web.mvc.MvcRequest;
@@ -48,6 +50,7 @@ public class AttachmentController extends BaseController<Attachment> {
 	@MvcFilter(filters = { DataBaseFilter.class })
 	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		LOGGER.info("附件列表-前台");
+		mv.put("DICT", AttachmentService.DICT);
 		return output(mv, service.findPagedList(catalogId, start, limit, CommonConstant.ON_LINE, true), "jsp::common/attachment-admin-list");
 	}
 
@@ -163,7 +166,7 @@ public class AttachmentController extends BaseController<Attachment> {
 
 		UploadFileInfo info = new UploadFileInfo();
 		info.saveFileName = SnowflakeIdWorker.getId() + "";
-		
+
 		// TODO 删除原图片
 
 		ThirdPartyService storageService = ComponentMgr.get(ThirdPartyService.class);
@@ -201,20 +204,37 @@ public class AttachmentController extends BaseController<Attachment> {
 	 * 调用文件上传
 	 * 
 	 * @param req
-	 * @param saveFilename
+	 * @param saveFilename 得到最终文件名该如何处理的回调，典型地可以保存到数据库中去
 	 * @param info
 	 * @param filename
 	 * @return 返回 JSON 结果
+	 * @throws IOException
 	 */
 	@SuppressWarnings("unused")
 	public static String upload(MvcRequest req, Consumer<String> saveFilename, UploadFileInfo info, String filename) {
-		info.saveFileName = Encode.urlEncode(filename); // 适应 OSS 的上传路径，文件夹路径要转移 / -> 2%F
+		if (ConfigService.getBol("uploadFile.isLocalUpload")) { // 本地上传
+			info.isFileOverwrite = ConfigService.getBol("uploadFile.isFileOverwrite");
+			info.saveFolder = ConfigService.getBol("uploadFile.saveFolder.isUsingRelativePath")
+					? req.mappath(ConfigService.get("uploadFile.saveFolder.relativePath")) + File.separator
+					: ConfigService.get("uploadFile.saveFolder.absolutePath");
 
-		ThirdPartyService storageService = ComponentMgr.get(ThirdPartyService.class);
-		storageService.uploadFile(req, info);
+			try {
+				new UploadFile(req, info).upload();
+			} catch (IOException e) {
+				LOGGER.warning(e);
+				return jsonNoOk("上传失败！原因：" + e.toString());
+			}
 
-		filename = Encode.urlDecode(info.saveFileName);
-		info.fullPath = ConfigService.get("uploadFile.imgPerfix") + filename;
+			info.fullPath = ConfigService.get("uploadFile.saveFolder.relativePath") + "/" + info.saveFileName;
+		} else {
+			info.saveFileName = Encode.urlEncode(filename); // 适应 OSS 的上传路径，文件夹路径要转义 / -> 2%F
+
+			ThirdPartyService storageService = ComponentMgr.get(ThirdPartyService.class);
+			storageService.uploadFile(req, info);
+
+			filename = Encode.urlDecode(info.saveFileName);
+			info.fullPath = ConfigService.get("uploadFile.imgPerfix") + filename;
+		}
 
 		if (info.isOk && saveFilename != null)
 			saveFilename.accept(filename);

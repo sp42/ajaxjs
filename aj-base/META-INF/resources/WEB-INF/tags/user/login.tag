@@ -55,7 +55,14 @@
 				j => {
 					if (j && j.isOk) {
 						aj.widget.modal.popup(j.msg || '操作成功！');
-						setTimeout("location.assign('${ctx}/${isAdminLogin ? 'admin' : 'user'}/')", 3000);
+				<c:choose>
+				    <c:when test="${not empty param.lastUrl}">
+				    	setTimeout("location.assign('${param.lastUrl}');", 3000);
+				    </c:when>
+				    <c:otherwise>
+				    	setTimeout("location.assign('${ctx}/${isAdminLogin ? 'admin' : 'user'}/');", 3000);
+				    </c:otherwise>
+				</c:choose>
 					} else 
 						aj.alert(j ? j.msg : '执行失败！原因未知！');
 				},

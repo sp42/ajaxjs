@@ -31,7 +31,7 @@ public class WebsiteTongJiController implements IController {
 
 	@GET
 	public String get() {
-		return BaseController.jsp("/website/website_tongji");
+		return ConfigService.get("baidu_tongji.siteId") == null ? "err_msg::该网站没有使用网站统计功能" : BaseController.jsp("/website/website_tongji");
 	}
 
 	private final static SimpleDateFormat formater = CommonUtil.simpleDateFormatFactory("yyyyMMdd");

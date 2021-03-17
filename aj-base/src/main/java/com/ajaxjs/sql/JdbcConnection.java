@@ -28,6 +28,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import com.ajaxjs.sql.orm.DaoContext;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -133,6 +134,7 @@ public class JdbcConnection {
 		try {
 			if (getConnection() == null || getConnection().isClosed()) {
 				Connection conn = getConnectionByJNDI(jndi);
+				getDaoContext().setConnection(conn);
 				setConnection(conn);
 				LOGGER.info("成功连接数据库[{0}]", conn);
 			}
@@ -152,11 +154,41 @@ public class JdbcConnection {
 	private static ThreadLocal<List<String>> sqls = new ThreadLocal<>();
 
 	/**
+	 * 保存刚刚调用过的 SQL 语句
+	 */
+	private static ThreadLocal<DaoContext> ctxThread = new ThreadLocal<>();
+
+	/**
+	 * 
+	 * @param ctx
+	 */
+	public static void setDaoContext(DaoContext ctx) {
+		ctxThread.set(ctx);
+	}
+
+	/**
+	 * 获取一个 DAO 上下文对象
+	 * 
+	 * @return
+	 */
+	public static DaoContext getDaoContext() {
+		DaoContext cxt = ctxThread.get();
+
+		if (cxt == null) {
+			cxt = new DaoContext();
+			setDaoContext(cxt);
+		}
+
+		return cxt;
+	}
+
+	/**
 	 * 获取一个数据库连接
 	 * 
 	 * @return 数据库连接对象
 	 */
 	public static Connection getConnection() {
+
 		return connection.get();
 	}
 
@@ -243,7 +275,7 @@ public class JdbcConnection {
 
 		if (!jdbcUrl.contains("?"))
 			jdbcUrl += "?";
-		
+
 		return getConnection(jdbcUrl + "&user=" + username + "&password=" + password);
 	}
 

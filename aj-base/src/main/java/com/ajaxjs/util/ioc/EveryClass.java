@@ -104,8 +104,8 @@ public class EveryClass {
 	/**
 	 * 扫描 jar 包里面的类
 	 * 
-	 * @param url 资源 url
-	 * @param packageDir 包目录
+	 * @param url         资源 url
+	 * @param packageDir  包目录
 	 * @param packageName 包名
 	 */
 	private void findInJar(URL url, String packageDir, String packageName) {
@@ -131,7 +131,7 @@ public class EveryClass {
 
 			if (name.startsWith(packageDir)) {// 如果前半部分和定义的包名相同
 				int idx = name.lastIndexOf('/');
-				
+
 				if (idx != -1) {
 					packageName = name.substring(0, idx).replace('/', '.'); // 如果以"/"结尾 是一个包，获取包名 把"/"替换成"."
 
@@ -183,7 +183,7 @@ public class EveryClass {
 	/**
 	 * 获取 Classpath 根目录下的资源文件
 	 * 
-	 * @param resource 文件名称，输入空字符串这返回 Classpath 根目录
+	 * @param resource 文件名称，输入空字符串这返回 Classpath 根目录。可以支持包目录，例如 com\\ajaxjs\\newfile.txt
 	 * @return 所在工程路径+资源路径，找不到文件则返回 null
 	 */
 	public static String getResourcesFromClasspath(String resource) {

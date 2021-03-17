@@ -59,7 +59,7 @@
 	<body>
 		<div class="box main" style="border-top-color: lightgray;">
 			<div class="link">
-				<a href="https://tongji.baidu.com" target="_blank">访问百度统计网站99</a> | <a href="javascript:showSetting();" >统计参数设定</a>
+				<a href="https://tongji.baidu.com" target="_blank">访问百度统计网站</a> | <a href="javascript:showSetting();" >统计参数设定</a>
 			</div>
 			<h3>流量概要</h3>		
 			<table>
@@ -97,7 +97,7 @@
 		</div>
 		
 		<div class="box word" style="float:left; width: 30%;">
-			<h3>Top10搜索词</h3>	
+			<h3>Top10 搜索词</h3>	
 
 			<table class="t-1">
 			  <tr>
@@ -110,7 +110,7 @@
 		</div>
 		
 		<div class="box sourceSite" style="float:right; width: 30%;">
-			<h3>Top10来源网站</h3>	
+			<h3>Top10 来源网站</h3>	
 
 			<table class="t-1">
 			  <tr>
@@ -125,7 +125,7 @@
 		<div style="clear:both;"></div>
 		
 		<div class="box landingPage" style="float:left; width: 50%;border-right-color: white;">
-			<h3>Top10入口页面</h3>	
+			<h3>Top10 入口页面</h3>	
 
 			<table class="t-1">
 			  <tr>
@@ -138,7 +138,7 @@
 		</div>
 		
 		<div class="box visitPage" style="float:left; width: 50%;">
-			<h3>Top10受访页面</h3>	
+			<h3>Top10 受访页面</h3>	
 
 			<table class="t-1">
 			  <tr>
@@ -153,47 +153,45 @@
 		
 		<div class="settings">
 			<aj-layer>
-				<div class="aj-form-row-holder">
-					<form method="POST" action="${ctx}/admin/config/site/" class="configForm" style="width:500px;">
-						<div>
-							<label>
-								<div class="label">站点 id</div> 
-								<input type="text" name="baidu_tongji.siteId" value="${aj_allConfig.baidu_tongji.siteId}" />
-							</label> 
-						</div>
-						<div>
-							<label>
-								<div class="label">百度统计账号名</div> 
-								<input type="text" name="baidu_tongji.api_username" value="${aj_allConfig.baidu_tongji.api_username}" />
-							</label> 
-						</div>
-						<div>
-							<label>
-								<div class="label">百度统计账号密码</div> 
-								<input type="text" name="baidu_tongji.api_password" value="${aj_allConfig.baidu_tongji.api_password}" />
-							</label> 
-						</div>
-						<div>
-							<label>
-								<div class="label">API 密钥</div> 
-								<input type="text" name="baidu_tongji.api_token" value="${aj_allConfig.baidu_tongji.api_token}" />
-							</label> 
-						</div>
-						<div>
-							<label>
-								<div class="label">脚本 id</div> 
-								<input type="text" name="baidu_tongji.api_token" value="${aj_allConfig.baidu_tongji.scriptId}" />
-							</label> 
-						</div>
-				
-						<section class="aj-btnsHolder">
-							<button class="aj-btn">
-								<img src="${commonAssetIcon}/save.gif" /> 修改
-							</button>
-							<button class="aj-btn" onclick="this.up('form').reset();return false;">复 位</button>
-						</section>
-					</form>
-				</div>
+				<form method="POST" action="${ctx}/admin/config/site/" class="aj-form" style="width:500px;">
+					<div>
+						<label>
+							<div class="label">站点 id</div> 
+							<input type="text" name="baidu_tongji.siteId" value="${aj_allConfig.baidu_tongji.siteId}" />
+						</label> 
+					</div>
+					<div>
+						<label>
+							<div class="label">百度统计账号名</div> 
+							<input type="text" name="baidu_tongji.api_username" value="${aj_allConfig.baidu_tongji.api_username}" />
+						</label> 
+					</div>
+					<div>
+						<label>
+							<div class="label">百度统计账号密码</div> 
+							<input type="text" name="baidu_tongji.api_password" value="${aj_allConfig.baidu_tongji.api_password}" />
+						</label> 
+					</div>
+					<div>
+						<label>
+							<div class="label">API 密钥</div> 
+							<input type="text" name="baidu_tongji.api_token" value="${aj_allConfig.baidu_tongji.api_token}" />
+						</label> 
+					</div>
+					<div>
+						<label>
+							<div class="label">脚本 id</div> 
+							<input type="text" name="baidu_tongji.api_token" value="${aj_allConfig.baidu_tongji.scriptId}" />
+						</label> 
+					</div>
+			
+					<section class="aj-btnsHolder">
+						<button class="aj-btn">
+							<img src="${commonAssetIcon}/save.gif" /> 修改
+						</button>
+						<button class="aj-btn" onclick="this.up('form').reset();return false;">复 位</button>
+					</section>
+				</form>
 			</aj-layer>
 		</div>
 		<script src="${aj_static_resource}/dist/admin/Website/tongji.js"></script>

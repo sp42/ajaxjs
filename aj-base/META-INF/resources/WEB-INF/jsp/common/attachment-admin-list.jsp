@@ -62,7 +62,7 @@
 					<td>${item.owner}</td>
 					<td><c:dateFormatter value="${item.createDate}" /></td>
 					<td>
-						<a href="${aj_allConfig.uploadFile.imgPerfix}${item.name}" download>下载</a> 
+						<a href="${aj_allConfig.uploadFile.isLocalUpload ? ctx.concat(aj_allConfig.uploadFile.localImgFolder) : aj_allConfig.uploadFile.imgPerfix}${item.name}" download>下载</a> 
 						<a href="javascript:aj.admin.helper.del('${item.id}', '${item.name}');">
 							<img src="${commonAssetIcon}/delete.gif" style="vertical-align: sub;" /> 删除
 						</a>

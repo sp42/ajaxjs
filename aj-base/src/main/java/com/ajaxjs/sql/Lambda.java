@@ -25,7 +25,7 @@ import java.sql.SQLException;
  * @author sp42 frank@ajaxjs.com
  *
  */
-public class JdbcHelperLambda {
+public class Lambda {
 	/**
 	 * 
 	 * @param <T>
@@ -34,10 +34,10 @@ public class JdbcHelperLambda {
 	public interface ResultSetProcessor<T> {
 		/**
 		 * 
-		 * @param resultSet
+		 * @param rs
 		 * @throws SQLException SQL 异常
 		 */
-		public T process(ResultSet resultSet) throws SQLException;
+		public T process(ResultSet rs) throws SQLException;
 	}
 
 	/**

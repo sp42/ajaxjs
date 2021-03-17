@@ -21,7 +21,7 @@
 		new Vue({el:' body > div'});
 	</script>
 	<div class="aj-form-row-holder">
-		<form method="POST" action="." class="configForm">
+		<form method="POST" action="." class="simple">
 			<div>
 				<label>
 					<div class="label">公司全称<span class="required-note">*</span></div> 

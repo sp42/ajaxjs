@@ -98,7 +98,7 @@ public class LoginController extends BaseUserController {
 
 		if (user != null) {
 			String msg = user.getName() == null ? user.getPhone() : user.getName();
-			return jsonOk("用户 " + msg + "登录成功！欢迎回来！ <a href=\"" + req.getContextPath() + "/user/\">点击进入“用户中心”</a>。");
+			return jsonOk("用户 " + msg + "登录成功！欢迎回来！ 三秒钟之后自动跳转。");
 		} else
 			return jsonNoOk("登录失败！");
 	}

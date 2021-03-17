@@ -179,7 +179,19 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	/**
 	 * 各种前缀
 	 */
-	public static final String HTML = "html::", xml = "xml::", JSON_PREFIX = "json::", REDIRECT_PREFIX = "redirect::";
+	public static final String HTML = "html::", xml = "xml::", JSON_PREFIX = "json::", REDIRECT_PREFIX = "redirect::", ERR_MSG = "err_msg::";
+
+	// @formatter:off
+	public static final String ERR_MSG_TPL = "<title>操作错误</title>" + "<meta charset=\"utf-8\" />"
+			+ "<div style=\"height: 100%%; display: flex; justify-content: center; align-items: center;\"><table>"
+			+ "		<tr><td align=\"center\">" 
+			+ "			<svg width=\"150px\" viewBox=\"0 0 1000 1000\">"
+			+ "				<g><path fill=\"#ea8010\" d=\"M500,10c-46.7,0-84.5,38-84.5,84.9v573.7c0,46.9,37.8,84.9,84.5,84.9c46.7,0,84.5-38,84.5-84.9V94.9C584.5,"
+			+ "48,546.7,10,500,10z M500,821c-46.7,0-84.5,37.8-84.5,84.5c0,46.7,37.8,84.5,84.5,84.5c46.7,0,84.5-37.8,84.5-84.5C584.4,858.9,546.6,821,500,821z\" /></g>" 
+			+ "			</svg></td></tr>" 
+			+ "		<tr><td><br />%s</td>"
+			+ "</tr></table></div>";
+	// @formatter:on
 
 	private boolean isSet;
 
@@ -213,7 +225,11 @@ public class MvcOutput extends HttpServletResponseWrapper {
 
 				if (str.startsWith(HTML))
 					setSimpleHTML(true).setOutput(str.replace(HTML, "")).go();
-				else if (str.startsWith(xml)) {
+				else if (str.startsWith(ERR_MSG)) {
+					String h = str.replace(ERR_MSG, "");
+					h = String.format(ERR_MSG_TPL, h);
+					setSimpleHTML(true).setOutput(h).go();
+				} else if (str.startsWith(xml)) {
 					xmlContent = true;
 					setOutput(str.replace(xml, "")).go();
 				} else if (str.startsWith(REDIRECT_PREFIX))

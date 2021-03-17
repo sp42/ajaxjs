@@ -22,6 +22,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.ajaxjs.framework.BaseModel;
+import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.annotation.Delete;
 import com.ajaxjs.sql.annotation.Insert;
 import com.ajaxjs.sql.annotation.Update;
@@ -95,8 +96,8 @@ public class Repository extends RepositoryReadOnly {
 	 * @return
 	 * @throws DaoException
 	 */
-	private <T> T getFn(Supplier<String> getSql, Supplier<String> getTableName, Object[] args, Method method, Function<DaoInfo, T> writeSql, Function<DaoInfo, T> writeBean)
-			throws DaoException {
+	private <T> T getFn(Supplier<String> getSql, Supplier<String> getTableName, Object[] args, Method method, Function<DaoInfo, T> writeSql,
+			Function<DaoInfo, T> writeBean) throws DaoException {
 		Object bean = args[0];
 
 		DaoInfo daoInfo = new DaoInfo();
@@ -138,7 +139,8 @@ public class Repository extends RepositoryReadOnly {
 		Function<DaoInfo, Serializable> writeSql = daoInfo -> create(conn, daoInfo.sql, args);
 
 		// INSERT 返回新建的 id
-		Serializable id = insert == null ? getFn(null, null, args, method, writeSql, createEntity) : getFn(insert::value, insert::tableName, args, method, writeSql, createEntity);
+		Serializable id = insert == null ? getFn(null, null, args, method, writeSql, createEntity)
+				: getFn(insert::value, insert::tableName, args, method, writeSql, createEntity);
 
 		if (id == null)
 			return null;
@@ -146,9 +148,8 @@ public class Repository extends RepositoryReadOnly {
 			return Integer.parseInt("" + id);
 		} else if ((returnType == Long.class || returnType == long.class) && id.getClass() == Integer.class) {
 			return new Long((Integer) id);
-		} else {
+		} else
 			return id;
-		}
 	}
 
 	/**
@@ -163,7 +164,8 @@ public class Repository extends RepositoryReadOnly {
 		Update update = method.getAnnotation(Update.class);
 		Function<DaoInfo, Integer> writeSql = daoInfo -> update(conn, daoInfo.sql, args);
 
-		return update == null ? getFn(null, null, args, method, writeSql, updateEntity) : getFn(update::value, update::tableName, args, method, writeSql, updateEntity);
+		return update == null ? getFn(null, null, args, method, writeSql, updateEntity)
+				: getFn(update::value, update::tableName, args, method, writeSql, updateEntity);
 	}
 
 	/**
@@ -176,9 +178,10 @@ public class Repository extends RepositoryReadOnly {
 	 */
 	private Boolean delete(Method method, Object[] args) throws DaoException {
 		Delete delete = method.getAnnotation(Delete.class);
-		Supplier<String> getSql = isSqlite(delete.sqliteValue(), conn) ? delete::sqliteValue : delete::value;
+		Supplier<String> getSql = JdbcConnection.getDaoContext().getDbType() == DataBaseType.SQLITE ? delete::sqliteValue : delete::value;
 
 		/* DELETESQL 也是用 update方法 */
-		return getFn(getSql, delete::tableName, args, method, daoInfo -> update(conn, daoInfo.sql, args) >= 1, daoInfo -> delete(conn, daoInfo.bean, daoInfo.tableName));
+		return getFn(getSql, delete::tableName, args, method, daoInfo -> update(conn, daoInfo.sql, args) >= 1,
+				daoInfo -> delete(conn, daoInfo.bean, daoInfo.tableName));
 	}
 }

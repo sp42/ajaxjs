@@ -72,7 +72,7 @@
    		Vue.use(function(Vue) {
    			Vue.prototype.ajResources = {
 	   			ctx: '${ctx}',
-	   			imgPerfix: '${aj_allConfig.uploadFile.imgPerfix}', // 图片云存储前缀
+	   			imgPerfix: '${aj_allConfig.uploadFile.isLocalUpload ? ctx.concat(aj_allConfig.uploadFile.localImgFolder) : aj_allConfig.uploadFile.imgPerfix}', // 图片云存储前缀
 	   			commonAsset: '${commonAsset}',  
 	   			commonAssetIcon: '${commonAssetIcon}'
    			};

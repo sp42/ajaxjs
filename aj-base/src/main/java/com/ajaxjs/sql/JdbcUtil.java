@@ -12,7 +12,6 @@
  */
 package com.ajaxjs.sql;
 
-import java.sql.Connection;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -122,16 +121,6 @@ public class JdbcUtil {
 		sql = sql.replaceAll("\\s+(?i)ASC", " ASC");
 
 		return sql;
-	}
-
-	/**
-	 * 判断是否 SQLite 数据库
-	 * 
-	 * @param conn 数据库连接对象
-	 * @return true = 是 SQLite 数据库
-	 */
-	public static boolean isSqlite(Connection conn) {
-		return conn.toString().contains("sqlite");
 	}
 
 }

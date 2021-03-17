@@ -148,8 +148,22 @@ public class StreamHelper {
 	 * @param length 长度
 	 */
 	public static void bytes2output(OutputStream out, byte[] data, int off, int length) {
+		bytes2output(out, data, true, off, length);
+	}
+
+	/**
+	 * 送入的 byte[] 转换为输出流。可指定 byte[] 某一部分数据。 注意这函数不会关闭输出流，请记得在适当的时候将其关闭。
+	 * 
+	 * @param out        输出流
+	 * @param data       输入的数据
+	 * @param isBuffered 是否需要缓冲
+	 * @param off        偏移
+	 * @param length     长度
+	 */
+	public static void bytes2output(OutputStream out, byte[] data, boolean isBuffered, int off, int length) {
 		try {
-			out = new BufferedOutputStream(out, BUFFER_SIZE);
+			if (isBuffered)
+				out = new BufferedOutputStream(out, BUFFER_SIZE);
 
 			if (off == 0 && length == 0)
 				out.write(data);
@@ -160,6 +174,7 @@ public class StreamHelper {
 		} catch (IOException e) {
 			LOGGER.warning(e);
 		}
+
 	}
 
 	/**

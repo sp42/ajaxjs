@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 
-import com.ajaxjs.sql.SimpleSnowflakeId;
+import com.ajaxjs.sql.SnowflakeId;
 import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.sql.orm.PageResult;
@@ -55,7 +55,7 @@ public abstract class BaseService<T> extends QueryTools implements IBaseService<
 		if (bean instanceof BaseModel) {
 			BaseModel model = (BaseModel) bean;
 			if (model.getUid() == null)
-				model.setUid(SimpleSnowflakeId.get());
+				model.setUid(SnowflakeId.get());
 
 			Date now = new Date();
 
@@ -68,7 +68,7 @@ public abstract class BaseService<T> extends QueryTools implements IBaseService<
 			@SuppressWarnings("unchecked")
 			Map<String, Object> map = (Map<String, Object>) bean;
 			if (map.get("uid") == null)
-				map.put("uid", SimpleSnowflakeId.get());
+				map.put("uid", SnowflakeId.get());
 
 			Date now = new Date();
 			Object createDate = map.get("createDate");

@@ -7,6 +7,7 @@ import java.util.function.Function;
 
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.BaseService;
+import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.annotation.Delete;
 import com.ajaxjs.sql.annotation.Select;
 import com.ajaxjs.sql.annotation.TableName;
@@ -165,6 +166,8 @@ public class TreeLikeService extends BaseService<Catalog> {
 	 */
 	public final static String PATH_LIKE_MYSQL_ID = "SELECT id FROM common_catalog WHERE `path` LIKE ( CONCAT (( SELECT `path` FROM common_catalog WHERE id = %d ) , '%%'))";
 
+	public final static String PATH_LIKE_SQLITE_ID = "SELECT id FROM common_catalog WHERE `path` LIKE ( ( SELECT `path` FROM common_catalog WHERE id = %d ) || '%%')";
+
 	/**
 	 * IN 查询用，多用于分页统计总数 用于 catelogId 查询的，通常放在 LEFT JOIN 后面还需要，WHERE e.catelog =
 	 * c.id。 还需要预留一个 catelogId 的参数 另外也可以用 IN 查询
@@ -195,7 +198,18 @@ public class TreeLikeService extends BaseService<Catalog> {
 	}
 
 	public static Function<String, String> setCatalog(int catalogId) {
-		return setWhere(catalogId == 0 ? null : String.format(CATALOG_FIND, catalogId));
+		String find;
+		switch (JdbcConnection.getDaoContext().getDbType()) {
+		case SQLITE:
+			find = "e.catalogId IN ( " + PATH_LIKE_SQLITE_ID + ")";
+			break;
+		case MYSQL:
+		default:
+			find = CATALOG_FIND;
+			break;
+
+		}
+		return setWhere(catalogId == 0 ? null : String.format(find, catalogId));
 	}
 
 	public static Function<String, String> setCatalog() {

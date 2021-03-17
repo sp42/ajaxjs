@@ -18,7 +18,9 @@ package com.ajaxjs.util.io;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -188,6 +190,22 @@ public class FileHelper extends StreamHelper {
 				file.createNewFile();
 
 			Files.write(file.toPath(), data);
+		} catch (IOException e) {
+			LOGGER.warning(e);
+		}
+	}
+
+	/**
+	 * 保存文件数据
+	 * 
+	 * @param file 文件对象
+	 * @param data 文件数据
+	 * @param off  偏移
+	 * @param len  长度
+	 */
+	public static void save(File file, byte[] data, int off, int len) {
+		try (OutputStream out = new FileOutputStream(file)) {
+			bytes2output(out, data, false, off, len);
 		} catch (IOException e) {
 			LOGGER.warning(e);
 		}

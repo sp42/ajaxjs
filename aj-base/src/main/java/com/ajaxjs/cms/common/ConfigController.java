@@ -94,9 +94,11 @@ public class ConfigController implements IController {
 	public String siteStruUI(ModelAndView model) {
 		LOGGER.info("编辑网站结构");
 
-		model.put("siteStruJson", FileHelper.openAsText(SiteStruService.STRU.getJsonPath()));
-
-		return BaseController.jsp("website/config-site-stru");
+		if (SiteStruService.STRU != null && SiteStruService.STRU.isLoaded()) {
+			model.put("siteStruJson", FileHelper.openAsText(SiteStruService.STRU.getJsonPath()));
+			return BaseController.jsp("website/config-site-stru");
+		} else
+			return "err_msg::该网站没有使用目录定义功能";
 	}
 
 	@POST

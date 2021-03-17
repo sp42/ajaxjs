@@ -6,7 +6,7 @@ package com.ajaxjs.sql;
  * @author 
  *
  */
-public class SimpleSnowflakeId {
+public class SnowflakeId {
 
 	/**
 	 * 时间起始标记点，作为基准，一般取系统的最近时间 此处以2018-01-01为基准时间
@@ -40,7 +40,7 @@ public class SimpleSnowflakeId {
 	private long sequence = 0L;
 	private long lastTimestamp = -1L;
 
-	public SimpleSnowflakeId(long workerId) {
+	public SnowflakeId(long workerId) {
 		if (workerId > this.maxWorkerId || workerId < 0) 
 			throw new IllegalArgumentException(
 					String.format("worker Id can't be greater than %d or less than 0", this.maxWorkerId));
@@ -90,7 +90,7 @@ public class SimpleSnowflakeId {
 	 * @return
 	 */
 	public static long get() {
-		return new SimpleSnowflakeId(1L).nextId();
+		return new SnowflakeId(1L).nextId();
 	}
 
 }
