@@ -265,7 +265,7 @@ namespace aj.xhr_upload {
 
             let xhr: XMLHttpRequest = new XMLHttpRequest();
             //@ts-ignore
-            xhr.onreadystatechange = xhr.requestHandler.delegate(null, this.uploadOk_callback, 'json');
+            xhr.onreadystatechange = aj.xhr.requestHandler.delegate(null, this.$uploadOk_callback, 'json');
             xhr.open("POST", this.action, true);
             xhr.onprogress = (ev: ProgressEvent) => {
                 let progress: number = 0,

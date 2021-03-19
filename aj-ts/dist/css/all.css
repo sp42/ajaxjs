@@ -920,286 +920,39 @@ textarea {
 .aj-btnsHolder button:hover {
   background-position: 0px -10px;
 }
-.aj-form {
-  min-width: 400px;
-  overflow: hidden;
-}
-.aj-form.fixed-width {
-  margin: 5% auto;
-  max-width: 82%;
-  width: 460px;
-}
-.aj-form input[type=text],
-.aj-form input[type=password],
-.aj-form textarea,
-.aj-form input[type=time],
-.aj-form input[type=url],
-.aj-form input[type=date],
-.aj-form input[type=datetime],
-.aj-form input[type=email],
-.aj-form input[type=number],
-.aj-form input[type=range],
-.aj-form input[type=search] {
-  min-height: 29px;
-  font-size: 0.9rem;
-  border: 1px solid #abadb3;
-  border-radius: 3px;
-  box-shadow: 1px 2px 3px #e5e5e5 inset;
-  box-sizing: border-box;
-  background-color: white;
-  transition: border-color ease-in-out 200ms;
-  outline: 0;
-  padding: 4px;
-  vertical-align: middle;
-  color: #333;
-  letter-spacing: 1px;
-}
-.aj-form input[type=text]:hover,
-.aj-form input[type=password]:hover,
-.aj-form textarea:hover,
-.aj-form input[type=time]:hover,
-.aj-form input[type=url]:hover,
-.aj-form input[type=date]:hover,
-.aj-form input[type=datetime]:hover,
-.aj-form input[type=email]:hover,
-.aj-form input[type=number]:hover,
-.aj-form input[type=range]:hover,
-.aj-form input[type=search]:hover,
-.aj-form input[type=text]:focus,
-.aj-form input[type=password]:focus,
-.aj-form textarea:focus,
-.aj-form input[type=time]:focus,
-.aj-form input[type=url]:focus,
-.aj-form input[type=date]:focus,
-.aj-form input[type=datetime]:focus,
-.aj-form input[type=email]:focus,
-.aj-form input[type=number]:focus,
-.aj-form input[type=range]:focus,
-.aj-form input[type=search]:focus {
-  border-color: #737373;
-}
-.aj-form input[type=text]:focus,
-.aj-form input[type=password]:focus,
-.aj-form textarea:focus,
-.aj-form input[type=time]:focus,
-.aj-form input[type=url]:focus,
-.aj-form input[type=date]:focus,
-.aj-form input[type=datetime]:focus,
-.aj-form input[type=email]:focus,
-.aj-form input[type=number]:focus,
-.aj-form input[type=range]:focus,
-.aj-form input[type=search]:focus {
-  border-color: gray;
-  outline: 0;
-  box-shadow: 0 5px 16px rgba(103, 122, 141, 0.2);
-}
-.aj-form input[type=submit],
-.aj-form button {
-  min-height: 30px;
-  font-size: 0.8rem;
-  padding: 0.4em 2.3em;
-  margin: 10px auto;
-  color: #333;
-  letter-spacing: 0.3em;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  border-bottom-color: #B4B4B4;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
-  background-color: lightgray;
-  background-repeat: repeat-x;
-  transition: background-image 0.5s linear 1s;
-  cursor: pointer;
-  outline: 0;
-  background-image: -webkit-linear-gradient(top, #ffffff 0%, #efefef 60%, #e1dfe2 100%);
-  background-image: -moz-linear-gradient(top, #ffffff 0%, #efefef 60%, #e1dfe2 100%);
-  background-image: -ms-linear-gradient(top, #ffffff 0%, #efefef 60%, #e1dfe2 100%);
-  background-image: -o-linear-gradient(top, #ffffff 0%, #efefef 60%, #e1dfe2 100%);
-  background-image: linear-gradient(top, #ffffff 0%, #efefef 60%, #e1dfe2 100%);
-}
-.aj-form input[type=submit] img,
-.aj-form button img {
-  vertical-align: middle;
-}
-.aj-form input[type=submit]:hover,
-.aj-form button:hover {
-  color: black;
-  border-color: #a6a6a6;
-}
-.aj-form input[type=submit]:active,
-.aj-form button:active {
-  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.2);
-  border-color: #8c8c8c;
-}
-.aj-form input[type=submit]:focus,
-.aj-form button:focus {
-  border-color: #999999;
-}
-.aj-form input[type=submit]:hover,
-.aj-form button:hover {
-  background-position: 0px -10px;
-}
-.aj-form input[type=submit],
-.aj-form input[type=file] {
-  cursor: pointer;
-}
-.aj-form input[type="checkbox"],
-.aj-form input[type="radio"],
-.aj-form label {
-  vertical-align: middle;
-}
-.aj-form select {
-  min-height: 29px;
-  font-size: 0.9rem;
-  border: 1px solid #abadb3;
-  border-radius: 3px;
-  box-shadow: 1px 2px 3px #e5e5e5 inset;
-  box-sizing: border-box;
-  background-color: white;
-  transition: border-color ease-in-out 200ms;
-  outline: 0;
-  padding: 4px;
-  vertical-align: middle;
-  color: #333;
-  letter-spacing: 1px;
-  padding: 1px 4px;
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  border-color: #abadb3;
-  background: white url("data:image/gif;base64,R0lGODlhCwAGAIABAGBgYP///yH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjAgNjEuMTM0MzQyLCAyMDEwLzAxLzEwLTE4OjA2OjQzICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjc1MEE0M0UzRTU5RDExRTVBNjNDRDVBNzRBRkUxMjYxIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjc1MEE0M0U0RTU5RDExRTVBNjNDRDVBNzRBRkUxMjYxIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NzUwQTQzRTFFNTlEMTFFNUE2M0NENUE3NEFGRTEyNjEiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NzUwQTQzRTJFNTlEMTFFNUE2M0NENUE3NEFGRTEyNjEiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4B//79/Pv6+fj39vX08/Lx8O/u7ezr6uno5+bl5OPi4eDf3t3c29rZ2NfW1dTT0tHQz87NzMvKycjHxsXEw8LBwL++vby7urm4t7a1tLOysbCvrq2sq6qpqKempaSjoqGgn56dnJuamZiXlpWUk5KRkI+OjYyLiomIh4aFhIOCgYB/fn18e3p5eHd2dXRzcnFwb25tbGtqaWhnZmVkY2JhYF9eXVxbWllYV1ZVVFNSUVBPTk1MS0pJSEdGRURDQkFAPz49PDs6OTg3NjU0MzIxMC8uLSwrKikoJyYlJCMiISAfHh0cGxoZGBcWFRQTEhEQDw4NDAsKCQgHBgUEAwIBAAAh+QQBAAABACwAAAAACwAGAAACD0R+hqDB6B5radL1ILynAAA7") no-repeat right;
-  min-width: 100px;
-}
-.aj-form select:hover,
-.aj-form select:focus {
-  border-color: #737373;
-}
-.aj-form .aj-china-area select {
-  width: 150px;
-}
-.aj-form textarea {
-  min-height: 90px;
-}
-.aj-form .htmlEditor {
-  width: 90%;
-  margin: 0 auto;
-  display: inline-block;
-}
-.aj-form .htmlEditor-row > .label {
-  vertical-align: top;
-}
-.aj-form .htmlEditor-row > div:last-child {
-  display: inline-block;
-  width: 90%;
-}
-@media screen and (max-width: 480px) {
-  .aj-form dt {
-    width: 40% ! important;
-    float: initial ! important;
-  }
-}
-.aj-form dl {
-  float: left;
-  overflow: hidden;
-  box-sizing: border-box;
-  padding: 0 3%;
-  line-height: 36px;
-  width: 100%;
-  margin: 1em 0;
-}
-.aj-form dl dt {
-  min-width: 110px;
-  max-width: 30%;
-  float: left;
-  text-align: right;
-  box-sizing: border-box;
-  padding-right: 4%;
-  font-weight: bold;
-  letter-spacing: 1px;
-  min-height: 10px;
-}
-.aj-form dl dd {
-  float: left;
-  max-width: 70%;
-  position: relative;
-}
-.aj-form .required-note {
-  color: red;
-}
-.aj-form .state {
-  color: red;
-  font-weight: bold;
-}
-.aj-form .errHighlight {
-  border-color: red ! important;
-  color: red;
-}
-.aj-form .error {
-  border-color: red !important;
-}
-.aj-form .error-message {
-  color: red;
-}
-.aj-form .tips,
-.aj-form .state {
-  display: none;
-  margin-left: 10px;
-  border: 1px solid gray;
-  padding: 3px 3px;
-  position: relative;
-}
-.aj-form .tips strong,
-.aj-form .state strong {
-  border-style: solid;
-  height: 0;
-  line-height: 0;
-  width: 0;
-  font-size: 0;
-  position: absolute;
-  border-width: 5px;
-}
-.aj-form .tips strong.arrow_1,
-.aj-form .state strong.arrow_1 {
-  left: -11px;
-  top: 7px;
-  border-color: white gray white white;
-}
-.aj-form .tips strong.arrow_2,
-.aj-form .state strong.arrow_2 {
-  left: -9px;
-  top: 7px;
-  border-color: transparent white transparent transparent;
-}
-/* 简单的表单布局，适合一列的 */
-.aj-form.sample > div {
-  padding: 1% 2%;
-  border-bottom: 1px solid #e3e3e3;
-}
-.aj-form.sample > div > label .label {
-  width: 100px;
-  display: inline-block;
-  text-align: center;
-}
+.aj-form,
 .aj-form-row-holder > form {
   min-width: 400px;
   overflow: hidden;
-  margin: 0 2%;
-  border: 1px solid #e3e3e3;
+  /*支持两种元素来布局：div 和 dl/dt/dd */
 }
+.aj-form.fixed-width,
 .aj-form-row-holder > form.fixed-width {
   margin: 5% auto;
   max-width: 82%;
   width: 460px;
 }
+.aj-form input[type=text],
 .aj-form-row-holder > form input[type=text],
+.aj-form input[type=password],
 .aj-form-row-holder > form input[type=password],
+.aj-form textarea,
 .aj-form-row-holder > form textarea,
+.aj-form input[type=time],
 .aj-form-row-holder > form input[type=time],
+.aj-form input[type=url],
 .aj-form-row-holder > form input[type=url],
+.aj-form input[type=date],
 .aj-form-row-holder > form input[type=date],
+.aj-form input[type=datetime],
 .aj-form-row-holder > form input[type=datetime],
+.aj-form input[type=email],
 .aj-form-row-holder > form input[type=email],
+.aj-form input[type=number],
 .aj-form-row-holder > form input[type=number],
+.aj-form input[type=range],
 .aj-form-row-holder > form input[type=range],
+.aj-form input[type=search],
 .aj-form-row-holder > form input[type=search] {
   min-height: 29px;
   font-size: 0.9rem;
@@ -1215,46 +968,81 @@ textarea {
   color: #333;
   letter-spacing: 1px;
 }
+.aj-form input[type=text]:hover,
 .aj-form-row-holder > form input[type=text]:hover,
+.aj-form input[type=password]:hover,
 .aj-form-row-holder > form input[type=password]:hover,
+.aj-form textarea:hover,
 .aj-form-row-holder > form textarea:hover,
+.aj-form input[type=time]:hover,
 .aj-form-row-holder > form input[type=time]:hover,
+.aj-form input[type=url]:hover,
 .aj-form-row-holder > form input[type=url]:hover,
+.aj-form input[type=date]:hover,
 .aj-form-row-holder > form input[type=date]:hover,
+.aj-form input[type=datetime]:hover,
 .aj-form-row-holder > form input[type=datetime]:hover,
+.aj-form input[type=email]:hover,
 .aj-form-row-holder > form input[type=email]:hover,
+.aj-form input[type=number]:hover,
 .aj-form-row-holder > form input[type=number]:hover,
+.aj-form input[type=range]:hover,
 .aj-form-row-holder > form input[type=range]:hover,
+.aj-form input[type=search]:hover,
 .aj-form-row-holder > form input[type=search]:hover,
+.aj-form input[type=text]:focus,
 .aj-form-row-holder > form input[type=text]:focus,
+.aj-form input[type=password]:focus,
 .aj-form-row-holder > form input[type=password]:focus,
+.aj-form textarea:focus,
 .aj-form-row-holder > form textarea:focus,
+.aj-form input[type=time]:focus,
 .aj-form-row-holder > form input[type=time]:focus,
+.aj-form input[type=url]:focus,
 .aj-form-row-holder > form input[type=url]:focus,
+.aj-form input[type=date]:focus,
 .aj-form-row-holder > form input[type=date]:focus,
+.aj-form input[type=datetime]:focus,
 .aj-form-row-holder > form input[type=datetime]:focus,
+.aj-form input[type=email]:focus,
 .aj-form-row-holder > form input[type=email]:focus,
+.aj-form input[type=number]:focus,
 .aj-form-row-holder > form input[type=number]:focus,
+.aj-form input[type=range]:focus,
 .aj-form-row-holder > form input[type=range]:focus,
+.aj-form input[type=search]:focus,
 .aj-form-row-holder > form input[type=search]:focus {
   border-color: #737373;
 }
+.aj-form input[type=text]:focus,
 .aj-form-row-holder > form input[type=text]:focus,
+.aj-form input[type=password]:focus,
 .aj-form-row-holder > form input[type=password]:focus,
+.aj-form textarea:focus,
 .aj-form-row-holder > form textarea:focus,
+.aj-form input[type=time]:focus,
 .aj-form-row-holder > form input[type=time]:focus,
+.aj-form input[type=url]:focus,
 .aj-form-row-holder > form input[type=url]:focus,
+.aj-form input[type=date]:focus,
 .aj-form-row-holder > form input[type=date]:focus,
+.aj-form input[type=datetime]:focus,
 .aj-form-row-holder > form input[type=datetime]:focus,
+.aj-form input[type=email]:focus,
 .aj-form-row-holder > form input[type=email]:focus,
+.aj-form input[type=number]:focus,
 .aj-form-row-holder > form input[type=number]:focus,
+.aj-form input[type=range]:focus,
 .aj-form-row-holder > form input[type=range]:focus,
+.aj-form input[type=search]:focus,
 .aj-form-row-holder > form input[type=search]:focus {
   border-color: gray;
   outline: 0;
   box-shadow: 0 5px 16px rgba(103, 122, 141, 0.2);
 }
+.aj-form input[type=submit],
 .aj-form-row-holder > form input[type=submit],
+.aj-form button,
 .aj-form-row-holder > form button {
   min-height: 30px;
   font-size: 0.8rem;
@@ -1278,37 +1066,57 @@ textarea {
   background-image: -o-linear-gradient(top, #ffffff 0%, #efefef 60%, #e1dfe2 100%);
   background-image: linear-gradient(top, #ffffff 0%, #efefef 60%, #e1dfe2 100%);
 }
+.aj-form input[type=submit] img,
 .aj-form-row-holder > form input[type=submit] img,
+.aj-form button img,
 .aj-form-row-holder > form button img {
   vertical-align: middle;
 }
+.aj-form input[type=submit]:hover,
 .aj-form-row-holder > form input[type=submit]:hover,
+.aj-form button:hover,
 .aj-form-row-holder > form button:hover {
   color: black;
   border-color: #a6a6a6;
 }
+.aj-form input[type=submit]:active,
 .aj-form-row-holder > form input[type=submit]:active,
+.aj-form button:active,
 .aj-form-row-holder > form button:active {
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.2);
   border-color: #8c8c8c;
 }
+.aj-form input[type=submit]:focus,
 .aj-form-row-holder > form input[type=submit]:focus,
+.aj-form button:focus,
 .aj-form-row-holder > form button:focus {
   border-color: #999999;
 }
+.aj-form input[type=submit]:hover,
 .aj-form-row-holder > form input[type=submit]:hover,
+.aj-form button:hover,
 .aj-form-row-holder > form button:hover {
   background-position: 0px -10px;
 }
+.aj-form input[type=submit],
 .aj-form-row-holder > form input[type=submit],
+.aj-form input[type=file],
 .aj-form-row-holder > form input[type=file] {
   cursor: pointer;
 }
+.aj-form input[type="checkbox"],
 .aj-form-row-holder > form input[type="checkbox"],
+.aj-form input[type="radio"],
 .aj-form-row-holder > form input[type="radio"],
+.aj-form label,
 .aj-form-row-holder > form label {
   vertical-align: middle;
 }
+.aj-form textarea,
+.aj-form-row-holder > form textarea {
+  min-height: 90px;
+}
+.aj-form select,
 .aj-form-row-holder > form select {
   min-height: 29px;
   font-size: 0.9rem;
@@ -1330,43 +1138,81 @@ textarea {
   background: white url("data:image/gif;base64,R0lGODlhCwAGAIABAGBgYP///yH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjAgNjEuMTM0MzQyLCAyMDEwLzAxLzEwLTE4OjA2OjQzICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjc1MEE0M0UzRTU5RDExRTVBNjNDRDVBNzRBRkUxMjYxIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjc1MEE0M0U0RTU5RDExRTVBNjNDRDVBNzRBRkUxMjYxIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NzUwQTQzRTFFNTlEMTFFNUE2M0NENUE3NEFGRTEyNjEiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NzUwQTQzRTJFNTlEMTFFNUE2M0NENUE3NEFGRTEyNjEiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4B//79/Pv6+fj39vX08/Lx8O/u7ezr6uno5+bl5OPi4eDf3t3c29rZ2NfW1dTT0tHQz87NzMvKycjHxsXEw8LBwL++vby7urm4t7a1tLOysbCvrq2sq6qpqKempaSjoqGgn56dnJuamZiXlpWUk5KRkI+OjYyLiomIh4aFhIOCgYB/fn18e3p5eHd2dXRzcnFwb25tbGtqaWhnZmVkY2JhYF9eXVxbWllYV1ZVVFNSUVBPTk1MS0pJSEdGRURDQkFAPz49PDs6OTg3NjU0MzIxMC8uLSwrKikoJyYlJCMiISAfHh0cGxoZGBcWFRQTEhEQDw4NDAsKCQgHBgUEAwIBAAAh+QQBAAABACwAAAAACwAGAAACD0R+hqDB6B5radL1ILynAAA7") no-repeat right;
   min-width: 100px;
 }
+.aj-form select:hover,
 .aj-form-row-holder > form select:hover,
+.aj-form select:focus,
 .aj-form-row-holder > form select:focus {
   border-color: #737373;
 }
+.aj-form .aj-china-area select,
 .aj-form-row-holder > form .aj-china-area select {
   width: 150px;
 }
-.aj-form-row-holder > form textarea {
-  min-height: 90px;
-}
+.aj-form .htmlEditor,
 .aj-form-row-holder > form .htmlEditor {
   width: 90%;
   margin: 0 auto;
   display: inline-block;
 }
+.aj-form .htmlEditor-row > .label,
 .aj-form-row-holder > form .htmlEditor-row > .label {
   vertical-align: top;
 }
+.aj-form .htmlEditor-row > div:last-child,
 .aj-form-row-holder > form .htmlEditor-row > div:last-child {
   display: inline-block;
   width: 90%;
 }
+.aj-form > div,
+.aj-form-row-holder > form > div,
+.aj-form > dl,
+.aj-form-row-holder > form > dl {
+  padding: 1% 2%;
+}
+.aj-form > div .label,
+.aj-form-row-holder > form > div .label {
+  width: 130px;
+  display: inline-block;
+  text-align: center;
+}
+.aj-form > div .sub,
+.aj-form-row-holder > form > div .sub,
+.aj-form > div .sub-2,
+.aj-form-row-holder > form > div .sub-2 {
+  color: gray;
+  font-size: 0.9rem;
+  transition: color linear 300ms;
+}
+.aj-form > div .sub,
+.aj-form-row-holder > form > div .sub {
+  margin: 1% 0 0 130px;
+}
+.aj-form > div .sub-2,
+.aj-form-row-holder > form > div .sub-2 {
+  display: inline-block;
+}
+.aj-form > div:hover .sub,
+.aj-form-row-holder > form > div:hover .sub,
+.aj-form > div:hover .sub-2,
+.aj-form-row-holder > form > div:hover .sub-2 {
+  color: black;
+}
 @media screen and (max-width: 480px) {
+  .aj-form dt,
   .aj-form-row-holder > form dt {
     width: 40% ! important;
     float: initial ! important;
   }
 }
+.aj-form dl,
 .aj-form-row-holder > form dl {
   float: left;
   overflow: hidden;
   box-sizing: border-box;
-  padding: 0 3%;
   line-height: 36px;
   width: 100%;
-  margin: 1em 0;
 }
+.aj-form dl dt,
 .aj-form-row-holder > form dl dt {
   min-width: 110px;
   max-width: 30%;
@@ -1378,29 +1224,37 @@ textarea {
   letter-spacing: 1px;
   min-height: 10px;
 }
+.aj-form dl dd,
 .aj-form-row-holder > form dl dd {
   float: left;
   max-width: 70%;
   position: relative;
 }
+.aj-form .required-note,
 .aj-form-row-holder > form .required-note {
   color: red;
 }
+.aj-form .state,
 .aj-form-row-holder > form .state {
   color: red;
   font-weight: bold;
 }
+.aj-form .errHighlight,
 .aj-form-row-holder > form .errHighlight {
   border-color: red ! important;
   color: red;
 }
+.aj-form .error,
 .aj-form-row-holder > form .error {
   border-color: red !important;
 }
+.aj-form .error-message,
 .aj-form-row-holder > form .error-message {
   color: red;
 }
+.aj-form .tips,
 .aj-form-row-holder > form .tips,
+.aj-form .state,
 .aj-form-row-holder > form .state {
   display: none;
   margin-left: 10px;
@@ -1408,7 +1262,9 @@ textarea {
   padding: 3px 3px;
   position: relative;
 }
+.aj-form .tips strong,
 .aj-form-row-holder > form .tips strong,
+.aj-form .state strong,
 .aj-form-row-holder > form .state strong {
   border-style: solid;
   height: 0;
@@ -1418,40 +1274,41 @@ textarea {
   position: absolute;
   border-width: 5px;
 }
+.aj-form .tips strong.arrow_1,
 .aj-form-row-holder > form .tips strong.arrow_1,
+.aj-form .state strong.arrow_1,
 .aj-form-row-holder > form .state strong.arrow_1 {
   left: -11px;
   top: 7px;
   border-color: white gray white white;
 }
+.aj-form .tips strong.arrow_2,
 .aj-form-row-holder > form .tips strong.arrow_2,
+.aj-form .state strong.arrow_2,
 .aj-form-row-holder > form .state strong.arrow_2 {
   left: -9px;
   top: 7px;
   border-color: transparent white transparent transparent;
 }
+/* 简单的表单布局，适合一列的 */
+.aj-form-row-holder > form {
+  margin: 0 2%;
+  border: 1px solid #e3e3e3;
+}
+.aj-form-row-holder > form > div {
+  border-bottom: 1px solid #e3e3e3;
+}
 .aj-form-row-holder > form > div:last-child {
   border-bottom: 0;
 }
-.aj-form-row-holder > form > div:nth-child(even) {
+.aj-form-row-holder > form > div:nth-child(odd) {
   border-top: 1px solid white;
   background: #f5f5f5;
 }
-.aj-form-row-holder .sub,
-.aj-form-row-holder .sub-2 {
-  color: gray;
-  font-size: 0.9rem;
-  transition: color linear 300ms;
-}
-.aj-form-row-holder .sub {
-  margin: 1% 0 0 15%;
-}
-.aj-form-row-holder .sub-2 {
-  display: inline-block;
-}
-.aj-form-row-holder form > div:hover .sub,
-.aj-form-row-holder form > div:hover .sub-2 {
-  color: black;
+.aj-form-row-holder > form.simple input,
+.aj-form-row-holder > form.simple textarea {
+  width: 100%;
+  max-width: 600px;
 }
 
 .aj-form-html-editor ul.toolbar {

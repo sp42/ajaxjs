@@ -15,19 +15,19 @@ namespace aj.xhr_upload {
         name = "aj-img-uploder";
 
         template = `<div class="aj-img-uploader">
-                <img :src="imgBase64Str" />${fileUploader.template}
+                <img :src="imgSrc" />${fileUploader.template}
             </div>`;
 
         /**
-         * 图片的 base64 形式，用于预览
+         * 预览图像显示的内容，可以是图片的 url 也可以是图片的 base64 形式
          */
-        imgBase64Str: string = emptyImg2;
+        imgSrc: string = emptyImg2;
 
         propsFactory(): { [key: string]: any } {
             let p = aj.apply({
                 imgMaxWidth: { type: Number, default: 1920 },
                 imgMaxHeight: { type: Number, default: 1680 },
-
+                imgPerfix: { type: String }
             }, this.props);
 
             p.accpectFileType = { type: String, default: "image/*" };
@@ -38,6 +38,11 @@ namespace aj.xhr_upload {
 
         imgMaxWidth: number = 0;
         imgMaxHeight: number = 0;
+
+        /**
+         * 图片前缀
+         */
+        imgPerfix: string = "";
 
         // onUploadInputChange(ev: Event): void {
         //     super.onUploadInputChange(ev);
@@ -50,6 +55,9 @@ namespace aj.xhr_upload {
         }
 
         mounted() {
+            if (this.fieldValue)
+                this.imgSrc = this.imgPerfix + this.fieldValue;
+
             let imgEl = <HTMLImageElement>this.$el.$('img');
             imgEl.onload = () => {
                 if (imgEl.width > this.imgMaxWidth || imgEl.height > this.imgMaxHeight) {
@@ -94,7 +102,7 @@ namespace aj.xhr_upload {
             let reader: FileReader = new FileReader();
             reader.onload = (ev: ProgressEvent<FileReader>) => {
                 let fileReader: FileReader = <FileReader>ev.target;
-                this.imgBase64Str = <string>fileReader.result;
+                this.imgSrc = <string>fileReader.result;
             }
 
             this.$fileObj && reader.readAsDataURL(this.$fileObj);

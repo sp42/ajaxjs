@@ -231,7 +231,7 @@ var aj;
                     fd.append("file", this.$fileObj);
                 var xhr = new XMLHttpRequest();
                 //@ts-ignore
-                xhr.onreadystatechange = xhr.requestHandler.delegate(null, this.uploadOk_callback, 'json');
+                xhr.onreadystatechange = aj.xhr.requestHandler.delegate(null, this.$uploadOk_callback, 'json');
                 xhr.open("POST", this.action, true);
                 xhr.onprogress = function (ev) {
                     var progress = 0, p = ~~(ev.loaded * 1000 / ev.total);

@@ -35,9 +35,6 @@ namespace aj.list.tree {
 
         fieldValue: string = "";
 
-        /**
-         * 初始输入的字段值
-         */
         initFieldValue: string = "";
 
         data() {

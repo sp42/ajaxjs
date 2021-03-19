@@ -823,9 +823,6 @@ var aj;
                     _this.isAutoLoad = false;
                     _this.fieldName = "";
                     _this.fieldValue = "";
-                    /**
-                     * 初始输入的字段值
-                     */
                     _this.initFieldValue = "";
                     return _this;
                 }

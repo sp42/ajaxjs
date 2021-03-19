@@ -156,6 +156,11 @@ declare interface FormFieldElementComponent {
      * 字段的值
      */
     fieldValue: string;
+
+    /**
+     * 初始输入的字段值
+     */
+    initFieldValue: string;
 }
 
 /**

@@ -160,8 +160,10 @@ namespace aj {
         public $parent: any;
 
         public $options: any;
-        
+
         public $refs: any;
+
+        public $children: Vue[] = [];
 
         // public propsFactory: any;
 
@@ -210,8 +212,10 @@ namespace aj {
                     dataFields[i] = value;
             }
 
-            if (this.name == 'aj-img-uploder')
-                console.log(cfg.props);
+            for (let i in props) { // 补充缺少的 prop。这些 prop 只在 markup 中使用，故不需要在 class 中列出
+                if (!(i in cfg.props))
+                    cfg.props[i] = props[i];
+            }
 
             // 注意如果 类有了 data(){}，那么 data 属性将会失效（仅作提示用），改读取 data() {} 的
             if (!cfg.data)

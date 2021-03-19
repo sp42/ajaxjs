@@ -117,13 +117,16 @@ var aj;
          */
         xhr_1.defaultCallBack = function (j, xhr, onOK, onFail) {
             if (j) {
+                if (j.result)
+                    // @ts-ignore
+                    j = j.result;
                 if (j.isOk) {
                     onOK && onOK(j);
                     aj.msg.show(j.msg || '操作成功！');
                 }
                 else {
                     onFail && onFail(j);
-                    aj.msg(j.msg || '执行失败！原因未知！');
+                    aj.msg.show(j.msg || '执行失败！原因未知！');
                 }
             }
             else {

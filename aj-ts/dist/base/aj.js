@@ -137,6 +137,7 @@ var aj;
         function VueComponent() {
             this.$el = document.body;
             this.props = {};
+            this.$children = [];
         }
         // public propsFactory: any;
         // public propsFactory(): { [key: string]: any };
@@ -179,8 +180,10 @@ var aj;
                 else if (i[0] != '$') // 如果不是 $ 开头的，就是 data fields，$xxx 表示实例变量，不参与数据驱动，节省资源
                     dataFields[i] = value;
             }
-            if (this.name == 'aj-img-uploder')
-                console.log(cfg.props);
+            for (var i_1 in props) { // 补充缺少的 prop。这些 prop 只在 markup 中使用，故不需要在 class 中列出
+                if (!(i_1 in cfg.props))
+                    cfg.props[i_1] = props[i_1];
+            }
             // 注意如果 类有了 data(){}，那么 data 属性将会失效（仅作提示用），改读取 data() {} 的
             if (!cfg.data)
                 cfg.data = function () {

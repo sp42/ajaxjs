@@ -1,4 +1,17 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var aj;
 (function (aj) {
     var list;
@@ -26,6 +39,7 @@ var aj;
                         if (this.selectedTotal > 0) {
                             aj.showConfirm('确定批量删除记录？', function () {
                                 for (var id in _this.selected) {
+                                    // @ts-ignore
                                     aj.xhr.dele(_this.apiUrl + "/" + id + "/", function (j) {
                                         console.log(j);
                                     });
@@ -77,20 +91,51 @@ var aj;
                     }
                 }
             };
-            Vue.component('aj-grid', {
-                mixins: [grid.SectionModel],
-                template: '<div class="aj-grid"><slot v-bind="this"></slot></div>',
-                props: {
-                    apiUrl: { type: String, required: true }
-                },
-                data: function () {
+            /**
+             * 标准表格
+             */
+            var Grid = /** @class */ (function (_super) {
+                __extends(Grid, _super);
+                function Grid() {
+                    var _this = _super !== null && _super.apply(this, arguments) || this;
+                    _this.name = "aj-grid";
+                    _this.template = '<div class="aj-grid"><slot v-bind:grid="this"></slot></div>';
+                    _this.mixins = [grid.SectionModel];
+                    _this.props = {
+                        apiUrl: { type: String, required: true }
+                    };
+                    /**
+                     * 数据层，控制分页
+                     */
+                    _this.$store = null;
+                    /**
+                     * 工具条 UI
+                     */
+                    _this.$toolbar = null;
+                    /**
+                     * 行 UI
+                     */
+                    _this.$row = null;
+                    /**
+                     *
+                     */
+                    _this.showAddNew = false;
+                    /**
+                     *
+                     */
+                    _this.list = [];
+                    _this.apiUrl = "";
+                    _this.maxRows = 0;
+                    return _this;
+                }
+                Grid.prototype.data = function () {
                     return {
                         list: [],
                         updateApi: null,
                         showAddNew: false
                     };
-                },
-                mounted: function () {
+                };
+                Grid.prototype.mounted = function () {
                     var _this = this;
                     this.$children.forEach(function (child) {
                         switch (child.$options._componentTag) {
@@ -106,54 +151,50 @@ var aj;
                         }
                     });
                     this.$store.$on("pager-result", function (result) {
-                        console.log(result);
                         _this.list = result;
                         _this.maxRows = result.length;
                     });
                     // this.$store.autoLoad && this.$store.getDataData();
-                },
-                methods: {
-                    /**
-                     * 按下【新建】按钮时候触发的事件，你可以覆盖这个方法提供新的事件
-                     *
-                     * @param this
-                     */
-                    onCreateClk: function () {
-                        this.showAddNew = true;
-                    },
-                    /**
-                     * 重新加载数据
-                     *
-                     * @param this
-                     */
-                    reload: function () {
-                        this.$store.getData();
-                    },
-                    /**
-                     *
-                     * @param this
-                     */
-                    onDirtySaveClk: function () {
-                        var _this = this;
-                        var dirties = getDirty.call(this);
-                        if (!dirties.length) {
-                            aj.msg.show('没有修改过的记录');
-                            return;
-                        }
-                        dirties.forEach(function (item) {
-                            aj.xhr.put(_this.apiUrl + "/" + item.id + "/", function (j) {
-                                if (j.isOk) {
-                                    _this.list.forEach(function (item) {
-                                        if (item.dirty)
-                                            delete item.dirty;
-                                    });
-                                    aj.msg.show('修改记录成功');
-                                }
-                            }, item.dirty);
-                        });
+                };
+                /**
+                 * 按下【新建】按钮时候触发的事件，你可以覆盖这个方法提供新的事件
+                 */
+                Grid.prototype.onCreateClk = function () {
+                    aj.alert('dfd');
+                    this.showAddNew = true;
+                };
+                /**
+                 * 重新加载数据
+                 */
+                Grid.prototype.reload = function () {
+                    this.$store.getData();
+                };
+                /**
+                 *
+                 */
+                Grid.prototype.onDirtySaveClk = function () {
+                    var _this = this;
+                    var dirties = getDirty.call(this);
+                    if (!dirties.length) {
+                        aj.msg.show('没有修改过的记录');
+                        return;
                     }
-                }
-            });
+                    dirties.forEach(function (item) {
+                        aj.xhr.put(_this.apiUrl + "/" + item.id + "/", function (j) {
+                            if (j.isOk) {
+                                _this.list.forEach(function (item) {
+                                    if (item.dirty)
+                                        delete item.dirty;
+                                });
+                                aj.msg.show('修改记录成功');
+                            }
+                        }, item.dirty);
+                    });
+                };
+                return Grid;
+            }(aj.VueComponent));
+            grid.Grid = Grid;
+            new Grid().register();
             /**
              * 获取修改过的数据
              *

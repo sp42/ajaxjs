@@ -156,12 +156,16 @@ namespace aj.xhr {
      */
     export var defaultCallBack = function (j: RepsonseResult, xhr?: XMLHttpRequest, onOK?: XHR_Callback, onFail?: XHR_Callback): void {
         if (j) {
+            if (j.result)
+                // @ts-ignore
+                j = j.result;
+
             if (j.isOk) {
                 onOK && onOK(j);
                 aj.msg.show(j.msg || '操作成功！');
             } else {
                 onFail && onFail(j);
-                aj.msg(j.msg || '执行失败！原因未知！');
+                aj.msg.show(j.msg || '执行失败！原因未知！');
             }
         } else {
             onFail && onFail(j);

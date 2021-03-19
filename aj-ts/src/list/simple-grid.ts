@@ -14,10 +14,10 @@ namespace aj.grid {
             <div>
                 <form action="?" method="GET" style="float:right;">
                     <input type="hidden" name="searchField" value="content" />
-                    <input type="text" name="searchValue" placeholder="请输入搜索之关键字" class="aj-input" />
+                    <input type="text" name="searchclassValue" placeholder="请输入搜索之关键字" class="aj-input" />
                     <button style="margin-top: 0;" class="aj-btn">搜索</button>
                 </form>
-                <table class="aj-grid ajaxjs-borderTable">
+                <table class="aj-grid aj-table" style="clear: both;width:100%">
                     <thead>
                         <tr>
                             <th v-for="key in columns" @click="sortBy(key)" :class="{ active: sortKey == key }">

@@ -135,15 +135,14 @@ namespace aj.admin {
 			</form>
 			<slot></slot>
 			<span v-if="!noCatalog">{{label || '分类'}}：
-				<aj-tree-like-select :is-auto-jump="true" :catalog-id="catalogId" :selected-catalog-id="selectedCatalogId">
-				</aj-tree-like-select>
+				<aj-tree-like-select :api-url="getTreeUrl" :init-field-value="selectedCatalogId" :is-auto-jump="true"></aj-tree-like-select>
 			</span>
 		</div>
     `,
 		props: {
 			label: { type: String, required: false },
-			catalogId: { type: Number, required: false },
-			selectedCatalogId: { type: Number, required: false },   // 已选中的分类 id
+			getTreeUrl: { type: String, required: false },
+			selectedCatalogId: { type: String, required: false },   // 已选中的分类 id
 			noCatalog: { type: Boolean, default: false },           // 是否不需要 分类下拉
 			searchFieldValue: { required: false, default: 'name' }  // 搜索哪个字段？默认为 name
 		}

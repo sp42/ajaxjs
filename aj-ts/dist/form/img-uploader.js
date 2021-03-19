@@ -30,19 +30,24 @@ var aj;
             function ImgFileUploader() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
                 _this.name = "aj-img-uploder";
-                _this.template = "<div class=\"aj-img-uploader\">\n                <img :src=\"imgBase64Str\" />" + xhr_upload.fileUploader.template + "\n            </div>";
+                _this.template = "<div class=\"aj-img-uploader\">\n                <img :src=\"imgSrc\" />" + xhr_upload.fileUploader.template + "\n            </div>";
                 /**
-                 * 图片的 base64 形式，用于预览
+                 * 预览图像显示的内容，可以是图片的 url 也可以是图片的 base64 形式
                  */
-                _this.imgBase64Str = emptyImg2;
+                _this.imgSrc = emptyImg2;
                 _this.imgMaxWidth = 0;
                 _this.imgMaxHeight = 0;
+                /**
+                 * 图片前缀
+                 */
+                _this.imgPerfix = "";
                 return _this;
             }
             ImgFileUploader.prototype.propsFactory = function () {
                 var p = aj.apply({
                     imgMaxWidth: { type: Number, default: 1920 },
                     imgMaxHeight: { type: Number, default: 1680 },
+                    imgPerfix: { type: String }
                 }, this.props);
                 p.accpectFileType = { type: String, default: "image/*" };
                 p.limitFileType = { type: String, default: 'jpg|png|gif|jpeg' };
@@ -58,6 +63,8 @@ var aj;
             };
             ImgFileUploader.prototype.mounted = function () {
                 var _this = this;
+                if (this.fieldValue)
+                    this.imgSrc = this.imgPerfix + this.fieldValue;
                 var imgEl = this.$el.$('img');
                 imgEl.onload = function () {
                     if (imgEl.width > _this.imgMaxWidth || imgEl.height > _this.imgMaxHeight) {
@@ -99,7 +106,7 @@ var aj;
                 var reader = new FileReader();
                 reader.onload = function (ev) {
                     var fileReader = ev.target;
-                    _this.imgBase64Str = fileReader.result;
+                    _this.imgSrc = fileReader.result;
                 };
                 this.$fileObj && reader.readAsDataURL(this.$fileObj);
             };
