@@ -165,6 +165,10 @@ namespace aj {
 
         public $children: Vue[] = [];
 
+        public $watch(a: any, b: any) { }
+
+        public $set(a: any, b: any, c: any) { }
+
         // public propsFactory: any;
 
         // public propsFactory(): { [key: string]: any };
@@ -195,7 +199,7 @@ namespace aj {
 
             for (var i in this) {
                 if (i == 'constructor' || i == 'name' || i == 'register' || i == 'propsFactory' || i == 'watchFactory' ||
-                    i == 'props' || i == '$destroy' || i == "$el" || i == "$emit" || i == "$options")
+                    i == 'props' || i == '$destroy' || i == '$watch' || i == '$set' || i == "$el" || i == "$emit" || i == "$options")
                     continue;
 
                 let value: any = this[i];

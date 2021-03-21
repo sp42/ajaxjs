@@ -139,6 +139,8 @@ var aj;
             this.props = {};
             this.$children = [];
         }
+        VueComponent.prototype.$watch = function (a, b) { };
+        VueComponent.prototype.$set = function (a, b, c) { };
         // public propsFactory: any;
         // public propsFactory(): { [key: string]: any };
         VueComponent.prototype.$destroy = function () { };
@@ -166,7 +168,7 @@ var aj;
                 props = this.props;
             for (var i in this) {
                 if (i == 'constructor' || i == 'name' || i == 'register' || i == 'propsFactory' || i == 'watchFactory' ||
-                    i == 'props' || i == '$destroy' || i == "$el" || i == "$emit" || i == "$options")
+                    i == 'props' || i == '$destroy' || i == '$watch' || i == '$set' || i == "$el" || i == "$emit" || i == "$options")
                     continue;
                 var value = this[i];
                 if (isVueCfg(i))

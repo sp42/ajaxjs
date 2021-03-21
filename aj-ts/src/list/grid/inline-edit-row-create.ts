@@ -14,8 +14,8 @@ namespace aj.list.grid {
                     <input v-if="key != null && !key.type" type="text" size="0" :name="key" />
                 </td>
                 <td class="control">
-                    <span @click="addNew"> 新增</span>
-                    <span @click="$parent.showAddNew = false"> 撤销</span>
+                    <span @click="addNew"><i class="fa fa-plus" style="color:#080;"></i> 新增</span>
+                    <span @click="$parent.showAddNew = false"><i class="fa fa-undo" style="color:#bc49eb;"></i> 撤销</span>
                 </td>
             </tr>
         `;

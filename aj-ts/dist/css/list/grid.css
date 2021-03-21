@@ -213,8 +213,12 @@
 .soft-container .main-panel table th {
   border-right: 1px solid #ccc;
   font-size: 0.87rem;
-  padding: 10px;
   text-align: center;
+  height: 39px;
+  padding: 0 20px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .aj-grid .main-panel table tbody tr,
 .soft-container .main-panel table tbody tr {
@@ -256,4 +260,14 @@
 .aj-grid > .bottom-bar,
 .soft-container > .bottom-bar {
   border-bottom: 0;
+}
+.mainTable td {
+  height: 40px;
+}
+.aj-grid-inline-edit-row input[type=text] {
+  border: 0;
+  height: 38px;
+  background-color: transparent;
+  width: fit-content;
+  display: block;
 }

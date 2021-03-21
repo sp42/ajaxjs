@@ -24,7 +24,7 @@ var aj;
                         isSelectAll: false,
                         selected: {},
                         selectedTotal: 0,
-                        maxRows: 0 // 最多的行数，用于判断是否全选
+                        maxRows: 0
                     };
                 },
                 mounted: function () {
@@ -126,6 +126,7 @@ var aj;
                     _this.list = [];
                     _this.apiUrl = "";
                     _this.maxRows = 0;
+                    _this.selected = {};
                     return _this;
                 }
                 Grid.prototype.data = function () {

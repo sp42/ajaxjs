@@ -3,6 +3,9 @@ namespace aj.list.grid {
      * 选区模型
      */
     interface GridSectionModel extends Vue {
+        /**
+         * 顶部是否全选的状态
+         */
         isSelectAll: boolean;
 
         /**
@@ -11,8 +14,14 @@ namespace aj.list.grid {
          */
         selected: { [key: number]: boolean };
 
+        /**
+         * 已选择总数
+         */
         selectedTotal: number;
 
+        /**
+         * 最多的行数，用于判断是否全选
+         */
         maxRows: number;
 
         /**
@@ -24,12 +33,13 @@ namespace aj.list.grid {
     export var SectionModel = {
         data() {
             return {
-                isSelectAll: false,// TODO 顶部是否全选的状态
-                selected: {},		// 选择的行
-                selectedTotal: 0,	// 选中了多少？
-                maxRows: 0			// 最多的行数，用于判断是否全选
+                isSelectAll: false,
+                selected: {},		
+                selectedTotal: 0,	
+                maxRows: 0		
             }
         },
+
         mounted(this: GridSectionModel): void {
             this.BUS && this.BUS.$on('on-delete-btn-clk', this.batchDelete);
         },
@@ -150,7 +160,10 @@ namespace aj.list.grid {
         list: GridRecord[] = [];
 
         apiUrl = "";
+
         maxRows: number = 0;
+
+        selected: { [key: number]: boolean } = {};
 
         mounted(): void {
             this.$children.forEach((child: Vue) => { // 建立子组件访问的快捷方式

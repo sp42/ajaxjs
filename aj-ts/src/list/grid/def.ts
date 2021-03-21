@@ -54,4 +54,3 @@ interface GridRecord extends BaseObject {
      */
     dirty?: DirtyData;
 }
-

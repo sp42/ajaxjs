@@ -27,8 +27,7 @@ namespace aj.list.grid {
                         {{!isEditMode ? "编辑" : "确定"}}</span>
                     <span @click="dele(id)" class="delete"><i class="fa fa-times" aria-hidden="true"></i> 删除</span>
                 </td>
-            </tr>
-        `;
+            </tr>`;
 
         props = {
             initRowData: { type: Object, required: true },
