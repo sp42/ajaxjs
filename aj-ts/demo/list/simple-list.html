@@ -21,9 +21,13 @@
             <div class="content">
                 <h2>简单列表</h2>
                 <p>下面是简单不分页的列表。自定义了 onLoad 回调函数，指定了请求参数，并且提供自定义的 item HTML。</p>
+                <p>教程：
+                    <a href="https://zhangxin.blog.csdn.net/article/details/114268062"
+                        target="_blank">https://zhangxin.blog.csdn.net/article/details/114268062</a>
+                </p>
                 <div class="list">
                     <aj-list class="aj-article-list" ref="list1" api-url="https://api.apiopen.top/getWangYiNews"
-                        :is-page="false" :on-load="onDataLoad" :init-base-param="{count:3}">
+                        :is-page="false" :on-load="onDataLoad" :base-param="{count:3}">
                         <template slot-scope="item">
                             <div class="thumb">
                                 <img :src="item.image" />
@@ -35,7 +39,8 @@
                         </template>
                     </aj-list>
                     <p>下面是更简单的的列表。</p>
-                    <aj-list class="simpleList" ref="list2" api-url="https://api.apiopen.top/getWangYiNews" :is-page="false" :on-load="onDataLoad2">
+                    <aj-list class="simpleList" ref="list2" api-url="https://api.apiopen.top/getWangYiNews"
+                        :is-page="false" :on-load="onDataLoad2">
                         <a slot-scope="item" :href="item.path" target="_blank">{{item.title}}</a>
                     </aj-list>
                 </div>
@@ -54,13 +59,17 @@
         VUE = new Vue({
             el: '.list',
             methods: {
-                onDataLoad2(j) {
-                   if(j.code === 200) 
-                    this.$refs.list1.result = j.result;
+                onDataLoad(j) {
+                    if (j.code === 200) {
+                        this.$refs.list1.result = j.result;
+                        this.$refs.list1.total = j.result.length;// 假设，API 并没有提供
+                    }
                 },
                 onDataLoad2(j) {
-                   if(j.code === 200) 
-                    this.$refs.list2.result = j.result;
+                    if (j.code === 200) {
+                        this.$refs.list2.result = j.result;
+                        this.$refs.list2.total = j.result.length;// 假设，API 并没有提供
+                    }
                 }
             }
         });

@@ -68,7 +68,7 @@ declare interface RepsonseResult {
     msg: string;
 
     /**
-     * 结果，实体，可以是任意类型
+     * 结果，实体，
      */
     result: BaseObject[];
 
@@ -203,7 +203,7 @@ declare interface Ajax {
     realApiUrl?: string;
 
     /**
-     * 每次请求都附带的参数，一经修改就不可修改的
+     * 初始参数。每次请求都附带的参数，一经声明创建就不可修改的
      */
     baseParam?: JsonParam;
 
@@ -218,12 +218,12 @@ declare interface Ajax {
     lastRequestParam?: JsonParam;
 
     /**
-     * 请求结果
+     * 请求结果，可以是任意类型
      */
     result?: any;
 
     /**
-     * 是否自动加载数据
+     * 是否自动加载数据。是否一渲染 UI 之后就自动加载数据
      */
     isAutoLoad: boolean;
 

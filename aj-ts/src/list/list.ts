@@ -20,37 +20,22 @@ namespace aj.list {
 		 */
 		isPage: boolean;
 
-		initPageSize: number;
-
 		pageStart: number;
 
 		pageSize: number;
 
+		initPageSize: number;
+
 		total: number;
-
-		totalPage: number;
-
-		currentPage: number;
-
-		/**
-		 * 初始参数
-		 */
-		initBaseParam: JsonParam;
-
-		/**
-		 * 是否一渲染 UI 之后就自动加载数据
-		 */
-		autoLoad: boolean;
-
-		/**
-		 * 数据分页是否追加模式，默认不追加 = false。 App 一般采用追加模式
-		 */
-		isDataAppend: boolean;  
 
 		/**
 		 * 请求结果
 		 */
 		result: BaseObject[];
+
+		totalPage: number;
+
+		currentPage: number;
 
 		/**
 		 * 默认的分页参数其名字
@@ -64,29 +49,23 @@ namespace aj.list {
 	}
 
 	/**
-	 * 列表控件
+	 * 本地数据仓库
+	 * 一般情况下不会单独使用这个组件
 	 */
-	interface List extends DataStore, Vue {
-		autoLoadWhenReachedBottom: boolean;
-	}
-
 	export var datastore = {
 		props: {
 			apiUrl: { type: String, required: true },                       // JSON 接口地址
-			hrefStr: { type: String, required: false },
-			isPage: { type: Boolean, default: true },                       // 是否分页，false=读取所有数据
+			isPage: { type: Boolean, default: true },
 			initPageSize: { type: Number, required: false, default: 9 },
-			autoLoad: { type: Boolean, default: true },	                    // 是否自动加载
-			initBaseParam: { type: Object, default() { return {}; } },
+			isAutoLoad: { type: Boolean, default: true },
+			baseParam: { type: Object, default() { return {}; } },
 			pageParamNames: { type: Array, default() { return ['start', 'limit']; } }, 	// 默认的分页参数其名字
 			onLoad: Function
 		},
 		data(this: DataStore) {
 			return {
-				baseParam: this.initBaseParam,
-				result: [],		                // 展示的数据
+				result: [],
 				extraParam: {},	                // 与 baseParam 合并后每次请求可发送的，可以修改的
-				realApiUrl: this.apiUrl,        // 真实发送的请求，可能包含 QueryString
 				pageSize: this.initPageSize,
 				total: 0,
 				totalPage: 0,
@@ -152,19 +131,25 @@ namespace aj.list {
 				this.currentPage = (this.pageStart / this.pageSize) + 1;
 
 				this.getData();
-			},
+			}
 		}
 	};
 
+	/**
+	 * 列表控件
+	 */
+	interface List extends DataStore, Vue {
+		/**
+		 * 数据分页是否追加模式，默认不追加 = false。 App 一般采用追加模式
+		 */
+		isDataAppend: boolean;
 
-	let pageParams = {
-		start: 'start',
-		limit: 'limit'
+		/**
+		 * 到达底部是否自动加载下一页，通常在 移动端使用，这个应该是元素的 CSS Selector
+		 */
+		autoLoadWhenReachedBottom: boolean;
 	}
 
-	/**
-	 * 一般情况下不会单独使用这个组件
-	 */
 	Vue.component('aj-list', {
 		mixins: [datastore],
 		template: html`
@@ -196,24 +181,22 @@ namespace aj.list {
 			</div>
 		`,
 		props: {
-			showDefaultUi: { type: Boolean, default: true },		// 如果只是单纯作为分页组件，那么则不需要 UIUI
-			isShowFooter: { type: Boolean, default: true },			 // 到底部是否自动加载下一页，通常在 移动端使用，这个应该是元素的 CSS Selector
-			autoLoadWhenReachedBottom: { type: String, default: '' },// 数据分页是否追加模式，默认不追加 = false。 App 一般采用追加模式
+			showDefaultUi: { type: Boolean, default: true },		 // 如果只是单纯作为分页组件，那么则不需要 UI
+			isShowFooter: { type: Boolean, default: true },			 // 是否显示分页 UI
+			hrefStr: { type: String, required: false },
+			autoLoadWhenReachedBottom: { type: String, default: '' },
 			isDataAppend: { type: Boolean, default: false }
 		},
 		mounted(this: List): void {
-			this.autoLoad && this.getData();
+			this.isAutoLoad && this.getData();
 
-			// this.BUS.$on('base-param-change', this.onBaseParamChange.bind(this));
+			// this.BUS.$on('base-param-change', this.onExtraParamChange.bind(this));
 			if (!!this.autoLoadWhenReachedBottom) {
 				// var scrollSpy = new aj.scrollSpy({ scrollInElement: aj(this.autoLoadWhenReachedBottom), spyOn: thish.$el.$('.buttom') });
 				// scrollSpy.onScrollSpyBackInSight = e => this.nextPage();
 			}
 		},
 		methods: {
-			foo() {
-				window.alert(9)
-			},
 			getData(this: List): void {
 				this.lastRequestParam = {};
 				aj.apply(this.lastRequestParam, this.baseParam);
@@ -249,24 +232,16 @@ namespace aj.list {
 				this.total = this.totalPage = this.pageStart = this.currentPage = 0;
 				this.pageSize = this.initPageSize;
 			},
-			doAjaxGet(this: List, j: PageListRepsonseResult): void {
-				if (this.isPage) {
-					this.total = j.total;
-					//@ts-ignore
-					this.result = this.isDataAppend ? this.result.concat(j.result) : j.result;
-					this.count();
-				} else
-					this.result = j.result;
-			},
-			onBaseParamChange(this: List, params: JsonParam): void {
-				aj.apply(this.baseParam, params);
 
-				this.pageStart = 0; // 每次 baseParam 被改变，都是从第一笔开始
+			onExtraParamChange(this: List, params: JsonParam): void {
+				aj.apply(this.extraParam, params);
+
+				this.pageStart = 0; // 每次 extraParam 被改变，都是从第一笔开始
 				this.getData();
 			}
 		},
 		watch: {
-			baseParam(this: List): void {
+			extraParam(this: List): void {
 				this.getData();
 			}
 		}
