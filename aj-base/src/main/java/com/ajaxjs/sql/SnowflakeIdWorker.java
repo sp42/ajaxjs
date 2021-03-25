@@ -121,4 +121,13 @@ public class SnowflakeIdWorker {
 	public static long getId() {
 		return idWorker.nextId();
 	}
+
+	/**
+	 * 新的 id，这是常用的方法
+	 * 
+	 * @return 新的 id
+	 */
+	public static String getIdStr() {
+		return getId() + "";
+	}
 }

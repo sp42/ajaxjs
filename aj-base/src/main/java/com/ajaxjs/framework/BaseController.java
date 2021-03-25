@@ -265,7 +265,7 @@ public abstract class BaseController<T> implements IController, MvcConstant {
 	public static String toJson(Object obj, boolean isAdd) {
 		String jsonStr = JsonHelper.toJson(obj);
 
-		return isAdd ? "json::{\"result\":" + jsonStr + "}" : jsonStr;
+		return "json::" + (isAdd ? "{\"result\":" + jsonStr + "}" : jsonStr);
 	}
 
 	/**

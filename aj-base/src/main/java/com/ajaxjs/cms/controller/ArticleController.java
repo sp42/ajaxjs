@@ -95,6 +95,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 		int catalogId = getService().getDomainCatalogId();
 		Map<Long, BaseModel> map = TreeLikeService.idAskey(treeLikeService.getAllChildren(catalogId));
 		mv.put("newsCatalogs", map);
+//		System.out.println(map.get(""));
 		mv.put(DOMAIN_CATALOG_ID, catalogId);
 
 		super.prepareData(mv);
@@ -107,6 +108,13 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 	@MvcFilter(filters = { DataBaseFilter.class, XslMaker.class })
 	public String adminList(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, @QueryParam(CATALOG_ID) int catalogId, ModelAndView mv) {
 		PageResult<Map<String, Object>> list = getService().list(catalogId, start, limit, CommonConstant.OFF_LINE);
+
+		if (list.get(0).get("catalogId").getClass() == Integer.class) {
+			// SQLite 配合 Map 不会出现期望的 Long。还是建议不要使用 Map
+			for (Map<String, Object> map : list)
+				map.put("catalogId", Long.parseLong(map.get("catalogId").toString()));
+		}
+
 		prepareData(mv);
 		mv.put(XslMaker.XSL_TEMPLATE_PATH, jsp("cms/article-xsl"));
 
@@ -173,7 +181,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 		info.maxSingleFileSize = 512 * 1000;
 		info.allowExtFilenames = new String[] { "jpeg", "jpg", "png", "gif" };
 
-		String filename = "cover/" + SnowflakeIdWorker.getId();
+		String filename = "cover/" + SnowflakeIdWorker.getIdStr();
 
 		return AttachmentController.upload(req, _filename -> {
 			Map<String, Object> article = new HashMap<>(); // 保存字段
@@ -182,20 +190,20 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 			service.update(article);
 		}, info, filename);
 	}
-	
+
 	@POST
 	@Path("/admin/{root}/{id}/uploadContentImg/")
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String uploadContentImg(MvcRequest req, @PathParam(ID) Long id) {
 		LOGGER.info("上传正文图片");
-		
+
 		UploadFileInfo info = new UploadFileInfo();
 		// 约束上传
 		info.maxSingleFileSize = 512 * 1000;
 		info.allowExtFilenames = new String[] { "jpeg", "jpg", "png", "gif" };
-		
-		String filename = "contentImg/" + SnowflakeIdWorker.getId();
+
+		String filename = "contentImg/" + SnowflakeIdWorker.getIdStr();
 		return AttachmentController.upload(req, null, info, filename);
 	}
 

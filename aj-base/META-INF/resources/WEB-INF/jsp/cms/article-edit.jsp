@@ -43,8 +43,9 @@
 					<label> 
 						<div class="label">栏 目：</div>  
 						<!-- 分类下拉 -->
-						<%-- <aj-tree-catelog-select field-name="catalogId" :catalog-id="${domainCatalog_Id}" :selected-catalog-id="${empty info || empty info.catalogId? 0 : info.catalogId}">
-						</aj-tree-catelog-select> --%>
+						<aj-tree-like-select field-name="catalogId" api-url="${ctx}/admin/common/tree-like/getListAndSubByParentId/${domainCatalog_Id}/" 
+							init-field-value="${empty info || empty info.catalogId ? 0 : info.catalogId}">
+						</aj-tree-like-select> 
 					</label>
 		
  					<label>
@@ -112,7 +113,7 @@
 									<c:otherwise>
 										<!-- 图片上传 --> 
 										<aj-img-uploder action="uploadCover/" field-name="cover" field-value="${info.cover}" 
-											img-place="${empty info.cover ? commonAsset.concat('/images/imgBg.png') : aj_allConfig.uploadFile.imgPerfix.concat(info.cover)}">
+											img-perfix="${aj_allConfig.uploadFile.isLocalUpload ? ctx.concat(aj_allConfig.uploadFile.localImgFolder) : aj_allConfig.uploadFile.imgPerfix}${item.name}">
 										</aj-img-uploder>
 									</c:otherwise>
 								</c:choose>

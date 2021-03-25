@@ -20,8 +20,8 @@
 			</aj-admin-header>
 	
 			<!-- 搜索、分类下拉 -->
-			<aj-admin-filter-panel :catalog-id="${domainCatalog_Id}" search-field-value="entry.name" 
-				:selected-catalog-id="${empty param.catalogId ? 'null' : param.catalogId}">
+			<aj-admin-filter-panel search-field-value="entry.name" 
+				get-tree-url="${ctx}/admin/common/tree-like/getListAndSubByParentId/${domainCatalog_Id}/" selected-catalog-id="${param.catalogId}">
 			</aj-admin-filter-panel>
 		</div>
 		

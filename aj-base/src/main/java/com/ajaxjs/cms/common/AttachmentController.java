@@ -218,6 +218,9 @@ public class AttachmentController extends BaseController<Attachment> {
 					? req.mappath(ConfigService.get("uploadFile.saveFolder.relativePath")) + File.separator
 					: ConfigService.get("uploadFile.saveFolder.absolutePath");
 
+			if (ConfigService.getBol("uploadFile.isAutoNewFileName"))
+				info.saveFileName = SnowflakeIdWorker.getIdStr();
+
 			try {
 				new UploadFile(req, info).upload();
 			} catch (IOException e) {
@@ -244,6 +247,6 @@ public class AttachmentController extends BaseController<Attachment> {
 			public String msg = "上传成功！";
 			public String imgUrl = Encode.urlDecode(info.saveFileName);
 			public String fullUrl = info.fullPath;
-		}) : jsonNoOk("上传失败！");
+		}, false) : jsonNoOk("上传失败！");
 	}
 }

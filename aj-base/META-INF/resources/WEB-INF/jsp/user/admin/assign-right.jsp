@@ -2,17 +2,18 @@
 <div class="assign-right">
 	<aj-layer ref="assignRight">
 		<h3>权限管理系统</h3>
-		<div class="soft-container">
+		
+		<div class="aj-grid">
 			<div class="box padding">
 				<span v-show="currentUserGroup" class="right">已选择用户组：{{currentUserGroup}}</span>
 				修改权限后，用户退出当前帐号重新登录才有效。
 			</div>
+			
 			<div class="main-panel">
 				<!-- 树控件 --> 
 				<div class="tree-panel">
 					<h4>用户组</h4>
-					<aj-tree url="/admin/user/user_group/list/?limit=99" top-node-name="用户组">
-					</aj-tree>
+					<aj-tree url="/admin/user/user_group/list/?limit=99" top-node-name="用户组"></aj-tree>
 				</div>
 				<table>
 					<!-- <caption>权限管理系统</caption> -->
@@ -154,12 +155,14 @@
 					</c:foreach>
 				</table>
 			</div>
-		</div>
-		<div class="aj-btnsHolder" style="padding: 0">
-			<button @click="$refs.assignRight.close()">关闭</button>
+			
+			<div class="aj-btnsHolder" style="padding: 0;">
+				<button @click="$refs.assignRight.close()">关闭</button>
+			</div>
 		</div>
 	</aj-layer>
 </div>
+
 <template id="aj-admin-role-check-right">
 	<div>
 		<label>
@@ -173,93 +176,3 @@
 		</span>
 	</div>
 </template>
-
-<script>
-	// 功能权限控件
-	Vue.component("aj-admin-role-check-right", {
-		template: '#aj-admin-role-check-right',
-		props: {
-			resId: Number, 			// 资源权限值
-			setRightValue: Number,	// 操作权限值， 8421码
-		},
-		data() {
-			return {
-				enabled: true,
-				rightValue :  this.setRightValue,
-				allowRead  : (this.setRightValue & 1) === 1,
-				allowCreate: (this.setRightValue & 2) === 2,
-				allowUpdate: (this.setRightValue & 4) === 4,
-				allowDelete: (this.setRightValue & 8) === 8
-			};
-		},
-		mounted() {
-			/* 可以通过 props 单向绑定 resRightValue，但每个组件要设置一样属性。这里避免多处重复设置属性  */
-			this.$watch('$parent.$parent.resRightValue', v => this.enabled = this.check(v, this.resId));
-		},
-		methods: {
-			/**
-			 * 检查是否有权限
-			 
-			 * @return {Boolean} true =  有权限，反之无
-			 */
-			check(num, pos) {
-				console.log(num)
-				num = num >>> pos;
-				return (num & 1) === 1;
-			},
-			toggleRight(val, right) {
-				if(val === false && ((this.rightValue & right) === right)) // 有权限
-					this.rightValue -= right;
-				
-				if(val === true && ((this.rightValue & right) !== right)) 
-					this.rightValue += right;
-			},
-			userEnableClick(e) { // 用户点击事件，不是来自数据的变化，修改立刻被保存到服务端
-				var isEnable = e.target.checked, userGroupId = ASSIGN_RIGHT.userGroupId; // 全局变量
-				
-				if(userGroupId && this.resId) {				
-					aj.xhr.post('../user_group/updateResourceRightValue', j => aj.msg.show(j.msg), {
-						userGroupId: userGroupId, isEnable: isEnable, resId: this.resId
-					});
-				}
-			},
-			crudClick(){}
-		},
-		watch: {
-			enabled() {
-				this.$el.$('.crud input', input => input.disabled = !this.enabled);
-			},
-			allowRead(val) {
-				this.toggleRight(val, 1);
-			},
-			allowCreate(val) {
-				this.toggleRight(val, 2);
-			},
-			allowUpdate(val) {
-				this.toggleRight(val, 4);
-			},
-			allowDelete(val) {
-				this.toggleRight(val, 8);
-			}
-		}
-	});
-	
-	ASSIGN_RIGHT = new Vue({
-		el: '.assign-right', 
-		data: {
-			userGroupId: null,		// 用户组 id
-			resRightValue: 0,		// 用户组权限总值
-			currentUserGroup: ''	// UI 提示用
-		},
-		mounted() {
-			// 点击树节点时候，加载用户组的详情信息
-			this.BUS.$on('tree-node-click', data => {
-				if(data.id) {
-					this.userGroupId = data.id; 
-					this.currentUserGroup = data.name;
-					aj.xhr.get('../user_group/'+ data.id + '/', j => this.resRightValue = j.result.accessKey || 0);
-				}
-			});
-		}
-	});
-</script>
