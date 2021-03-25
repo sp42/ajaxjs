@@ -34,9 +34,9 @@ namespace aj.list.grid {
         data() {
             return {
                 isSelectAll: false,
-                selected: {},		
-                selectedTotal: 0,	
-                maxRows: 0		
+                selected: {},
+                selectedTotal: 0,
+                maxRows: 0
             }
         },
 
@@ -128,7 +128,7 @@ namespace aj.list.grid {
 
         data() {
             return {
-                list: [], 
+                list: [],
                 updateApi: null,
                 showAddNew: false
             };
@@ -192,7 +192,6 @@ namespace aj.list.grid {
          * 按下【新建】按钮时候触发的事件，你可以覆盖这个方法提供新的事件 
          */
         onCreateClk(): void {
-            alert('dfd')
             this.showAddNew = true;
         }
 
@@ -204,7 +203,7 @@ namespace aj.list.grid {
         }
 
         /**
-         * 
+         * 保存脏数据
          */
         onDirtySaveClk(): void {
             let dirties: GridRecord[] = getDirty.call(this);
@@ -248,4 +247,4 @@ namespace aj.list.grid {
 
         return dirties;
     }
-}
+} 

@@ -7,10 +7,11 @@ namespace aj.list.grid {
 
         template = html`
             <tr class="aj-grid-inline-edit-row isEditMode">
-                <td><input type="checkbox" /></td>
                 <td></td>
-                <td v-for="key in columns" style="padding:0" class="cell" @dblclick="dbEdit">
-                    <aj-select v-if="key != null && key.type == 'select'" :name="key.name" :options="key.data" style="width: 200px;"></aj-select>
+                <td></td>
+                <td v-for="key in columns" style="padding:0" class="cell">
+                    <aj-select v-if="key != null && key.type == 'select'" :name="key.name" :options="key.data"
+                        style="width: 200px;"></aj-select>
                     <input v-if="key != null && !key.type" type="text" size="0" :name="key" />
                 </td>
                 <td class="control">
@@ -25,21 +26,15 @@ namespace aj.list.grid {
             createApi: { type: String, required: false, default: '.' }
         };
 
-        columns = [];
-
         /**
          * 创建的 API 地址
          */
         createApi: string = "";
 
-        /**
-         * 是否处于编辑模式
-         */
-        isEditMode: boolean = false;
+        $parent: Grid | null = null;
 
         /**
          * 新增按钮事件
-         * 
          */
         addNew(): void {
             let map: { [key: string]: string } = {}; // 创建动作的表单数据
@@ -55,29 +50,14 @@ namespace aj.list.grid {
                         i.value = '';
                     });
 
-                    // @ts-ignore
-                    this.$parent.reload();
-                    // @ts-ignore
-                    this.$parent.showAddNew = false;
+                    if (this.$parent) {
+                        this.$parent.reload();
+                        this.$parent.showAddNew = false;
+                    }
                 } else if (j && j.msg) {
                     aj.msg.show(j.msg);
                 }
             }, map);
-        }
-
-        /**
-         * 编辑按钮事件
-         * 
-         * @param ev 
-         */
-        dbEdit(ev: Event): void {
-            this.isEditMode = !this.isEditMode;
-            let el: HTMLElement = <HTMLElement>ev.target;
-
-            if (el.tagName !== 'INPUT')
-                el = <HTMLElement>el.$('input');
-
-            setTimeout(() => el && el.focus(), 200);
         }
     }
 

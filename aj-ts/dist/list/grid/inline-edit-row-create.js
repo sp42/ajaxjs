@@ -30,25 +30,20 @@ var aj;
                 function EditRowCreate() {
                     var _this = _super !== null && _super.apply(this, arguments) || this;
                     _this.name = "aj-grid-inline-edit-row-create";
-                    _this.template = html(__makeTemplateObject(["\n            <tr class=\"aj-grid-inline-edit-row isEditMode\">\n                <td><input type=\"checkbox\" /></td>\n                <td></td>\n                <td v-for=\"key in columns\" style=\"padding:0\" class=\"cell\" @dblclick=\"dbEdit\">\n                    <aj-select v-if=\"key != null && key.type == 'select'\" :name=\"key.name\" :options=\"key.data\" style=\"width: 200px;\"></aj-select>\n                    <input v-if=\"key != null && !key.type\" type=\"text\" size=\"0\" :name=\"key\" />\n                </td>\n                <td class=\"control\">\n                    <span @click=\"addNew\"><i class=\"fa fa-plus\" style=\"color:#080;\"></i> \u65B0\u589E</span>\n                    <span @click=\"$parent.showAddNew = false\"><i class=\"fa fa-undo\" style=\"color:#bc49eb;\"></i> \u64A4\u9500</span>\n                </td>\n            </tr>\n        "], ["\n            <tr class=\"aj-grid-inline-edit-row isEditMode\">\n                <td><input type=\"checkbox\" /></td>\n                <td></td>\n                <td v-for=\"key in columns\" style=\"padding:0\" class=\"cell\" @dblclick=\"dbEdit\">\n                    <aj-select v-if=\"key != null && key.type == 'select'\" :name=\"key.name\" :options=\"key.data\" style=\"width: 200px;\"></aj-select>\n                    <input v-if=\"key != null && !key.type\" type=\"text\" size=\"0\" :name=\"key\" />\n                </td>\n                <td class=\"control\">\n                    <span @click=\"addNew\"><i class=\"fa fa-plus\" style=\"color:#080;\"></i> \u65B0\u589E</span>\n                    <span @click=\"$parent.showAddNew = false\"><i class=\"fa fa-undo\" style=\"color:#bc49eb;\"></i> \u64A4\u9500</span>\n                </td>\n            </tr>\n        "]));
+                    _this.template = html(__makeTemplateObject(["\n            <tr class=\"aj-grid-inline-edit-row isEditMode\">\n                <td></td>\n                <td></td>\n                <td v-for=\"key in columns\" style=\"padding:0\" class=\"cell\">\n                    <aj-select v-if=\"key != null && key.type == 'select'\" :name=\"key.name\" :options=\"key.data\"\n                        style=\"width: 200px;\"></aj-select>\n                    <input v-if=\"key != null && !key.type\" type=\"text\" size=\"0\" :name=\"key\" />\n                </td>\n                <td class=\"control\">\n                    <span @click=\"addNew\"><i class=\"fa fa-plus\" style=\"color:#080;\"></i> \u65B0\u589E</span>\n                    <span @click=\"$parent.showAddNew = false\"><i class=\"fa fa-undo\" style=\"color:#bc49eb;\"></i> \u64A4\u9500</span>\n                </td>\n            </tr>\n        "], ["\n            <tr class=\"aj-grid-inline-edit-row isEditMode\">\n                <td></td>\n                <td></td>\n                <td v-for=\"key in columns\" style=\"padding:0\" class=\"cell\">\n                    <aj-select v-if=\"key != null && key.type == 'select'\" :name=\"key.name\" :options=\"key.data\"\n                        style=\"width: 200px;\"></aj-select>\n                    <input v-if=\"key != null && !key.type\" type=\"text\" size=\"0\" :name=\"key\" />\n                </td>\n                <td class=\"control\">\n                    <span @click=\"addNew\"><i class=\"fa fa-plus\" style=\"color:#080;\"></i> \u65B0\u589E</span>\n                    <span @click=\"$parent.showAddNew = false\"><i class=\"fa fa-undo\" style=\"color:#bc49eb;\"></i> \u64A4\u9500</span>\n                </td>\n            </tr>\n        "]));
                     _this.props = {
                         columns: { type: Array, required: true },
                         createApi: { type: String, required: false, default: '.' }
                     };
-                    _this.columns = [];
                     /**
                      * 创建的 API 地址
                      */
                     _this.createApi = "";
-                    /**
-                     * 是否处于编辑模式
-                     */
-                    _this.isEditMode = false;
+                    _this.$parent = null;
                     return _this;
                 }
                 /**
                  * 新增按钮事件
-                 *
                  */
                 EditRowCreate.prototype.addNew = function () {
                     var _this = this;
@@ -61,27 +56,15 @@ var aj;
                             _this.$el.$('input[name]', function (i) {
                                 i.value = '';
                             });
-                            // @ts-ignore
-                            _this.$parent.reload();
-                            // @ts-ignore
-                            _this.$parent.showAddNew = false;
+                            if (_this.$parent) {
+                                _this.$parent.reload();
+                                _this.$parent.showAddNew = false;
+                            }
                         }
                         else if (j && j.msg) {
                             aj.msg.show(j.msg);
                         }
                     }, map);
-                };
-                /**
-                 * 编辑按钮事件
-                 *
-                 * @param ev
-                 */
-                EditRowCreate.prototype.dbEdit = function (ev) {
-                    this.isEditMode = !this.isEditMode;
-                    var el = ev.target;
-                    if (el.tagName !== 'INPUT')
-                        el = el.$('input');
-                    setTimeout(function () { return el && el.focus(); }, 200);
                 };
                 return EditRowCreate;
             }(aj.VueComponent));

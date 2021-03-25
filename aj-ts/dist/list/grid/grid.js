@@ -161,7 +161,6 @@ var aj;
                  * 按下【新建】按钮时候触发的事件，你可以覆盖这个方法提供新的事件
                  */
                 Grid.prototype.onCreateClk = function () {
-                    aj.alert('dfd');
                     this.showAddNew = true;
                 };
                 /**
@@ -171,7 +170,7 @@ var aj;
                     this.$store.getData();
                 };
                 /**
-                 *
+                 * 保存脏数据
                  */
                 Grid.prototype.onDirtySaveClk = function () {
                     var _this = this;

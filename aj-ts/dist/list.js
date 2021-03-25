@@ -98,23 +98,24 @@ var aj;
 (function (aj) {
     var list;
     (function (list) {
+        /**
+         * 本地数据仓库
+         * 一般情况下不会单独使用这个组件
+         */
         list.datastore = {
             props: {
                 apiUrl: { type: String, required: true },
-                hrefStr: { type: String, required: false },
                 isPage: { type: Boolean, default: true },
                 initPageSize: { type: Number, required: false, default: 9 },
-                autoLoad: { type: Boolean, default: true },
-                initBaseParam: { type: Object, default: function () { return {}; } },
+                isAutoLoad: { type: Boolean, default: true },
+                baseParam: { type: Object, default: function () { return {}; } },
                 pageParamNames: { type: Array, default: function () { return ['start', 'limit']; } },
                 onLoad: Function
             },
             data: function () {
                 return {
-                    baseParam: this.initBaseParam,
                     result: [],
                     extraParam: {},
-                    realApiUrl: this.apiUrl,
                     pageSize: this.initPageSize,
                     total: 0,
                     totalPage: 0,
@@ -172,37 +173,28 @@ var aj;
                     this.pageStart += this.pageSize;
                     this.currentPage = (this.pageStart / this.pageSize) + 1;
                     this.getData();
-                },
+                }
             }
         };
-        var pageParams = {
-            start: 'start',
-            limit: 'limit'
-        };
-        /**
-         * 一般情况下不会单独使用这个组件
-         */
         Vue.component('aj-list', {
             mixins: [list.datastore],
             template: html(__makeTemplateObject(["\n\t\t\t<div class=\"aj-list\">\n\t\t\t\t<slot name=\"header\" v-if=\"total != 0\"></slot>\n\t\t\t\t<ul v-if=\"showDefaultUi && (total != 0)\">\n\t\t\t\t\t<li v-for=\"(item, index) in result\">\n\t\t\t\t\t\t<slot v-bind=\"item\">\n\t\t\t\t\t\t\t<a href=\"#\" @click=\"show(item.id, index, $event)\" :id=\"item.id\">{{item.name}}</a>\n\t\t\t\t\t\t</slot>\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\t\t\t\t<div class=\"no-data\" v-show=\"total == 0\">\u672A\u6709\u4EFB\u4F55\u6570\u636E</div>\n\t\t\t\t<footer v-if=\"isPage\" class=\"pager\">\n\t\t\t\t\t<a v-if=\"pageStart > 0\" href=\"#\" @click=\"previousPage\">\u4E0A\u4E00\u9875</a>\n\t\t\t\t\t<a v-if=\"(pageStart > 0 ) && (pageStart + pageSize < total)\"\n\t\t\t\t\t\tstyle=\"text-decoration: none;\">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>\n\t\t\t\t\t<a v-if=\"pageStart + pageSize < total\" href=\"#\" @click=\"nextPage\">\u4E0B\u4E00\u9875</a>\n\t\t\t\t\t<a href=\"javascript:;\" @click=\"getData\"><i class=\"fa fa-refresh\" aria-hidden=\"true\"></i> \u5237\u65B0</a>\n\t\t\t\t\t<input type=\"hidden\" name=\"start\" :value=\"pageStart\" />\n\t\t\t\t\t\u9875\u6570\uFF1A{{currentPage}}/{{totalPage}} \u8BB0\u5F55\u6570\uFF1A{{pageStart}}/{{total}}\n\t\t\t\t\t\u6BCF\u9875\u8BB0\u5F55\u6570\uFF1A <input size=\"2\" title=\"\u8F93\u5165\u4E00\u4E2A\u6570\u5B57\u786E\u5B9A\u6BCF\u9875\u8BB0\u5F55\u6570\" type=\"text\" :value=\"pageSize\" @change=\"onPageSizeChange\" />\n\t\t\t\t\t\u8DF3\u8F6C\uFF1A\n\t\t\t\t\t<select @change=\"jumpPageBySelect\">\n\t\t\t\t\t\t<option :value=\"n\" v-for=\"n in totalPage\">{{n}}</option>\n\t\t\t\t\t</select>\n\t\t\t\t</footer>\n\t\t\t\t<div v-show=\"!!autoLoadWhenReachedBottom\" class=\"buttom\"></div>\n\t\t\t</div>\n\t\t"], ["\n\t\t\t<div class=\"aj-list\">\n\t\t\t\t<slot name=\"header\" v-if=\"total != 0\"></slot>\n\t\t\t\t<ul v-if=\"showDefaultUi && (total != 0)\">\n\t\t\t\t\t<li v-for=\"(item, index) in result\">\n\t\t\t\t\t\t<slot v-bind=\"item\">\n\t\t\t\t\t\t\t<a href=\"#\" @click=\"show(item.id, index, $event)\" :id=\"item.id\">{{item.name}}</a>\n\t\t\t\t\t\t</slot>\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\t\t\t\t<div class=\"no-data\" v-show=\"total == 0\">\u672A\u6709\u4EFB\u4F55\u6570\u636E</div>\n\t\t\t\t<footer v-if=\"isPage\" class=\"pager\">\n\t\t\t\t\t<a v-if=\"pageStart > 0\" href=\"#\" @click=\"previousPage\">\u4E0A\u4E00\u9875</a>\n\t\t\t\t\t<a v-if=\"(pageStart > 0 ) && (pageStart + pageSize < total)\"\n\t\t\t\t\t\tstyle=\"text-decoration: none;\">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>\n\t\t\t\t\t<a v-if=\"pageStart + pageSize < total\" href=\"#\" @click=\"nextPage\">\u4E0B\u4E00\u9875</a>\n\t\t\t\t\t<a href=\"javascript:;\" @click=\"getData\"><i class=\"fa fa-refresh\" aria-hidden=\"true\"></i> \u5237\u65B0</a>\n\t\t\t\t\t<input type=\"hidden\" name=\"start\" :value=\"pageStart\" />\n\t\t\t\t\t\u9875\u6570\uFF1A{{currentPage}}/{{totalPage}} \u8BB0\u5F55\u6570\uFF1A{{pageStart}}/{{total}}\n\t\t\t\t\t\u6BCF\u9875\u8BB0\u5F55\u6570\uFF1A <input size=\"2\" title=\"\u8F93\u5165\u4E00\u4E2A\u6570\u5B57\u786E\u5B9A\u6BCF\u9875\u8BB0\u5F55\u6570\" type=\"text\" :value=\"pageSize\" @change=\"onPageSizeChange\" />\n\t\t\t\t\t\u8DF3\u8F6C\uFF1A\n\t\t\t\t\t<select @change=\"jumpPageBySelect\">\n\t\t\t\t\t\t<option :value=\"n\" v-for=\"n in totalPage\">{{n}}</option>\n\t\t\t\t\t</select>\n\t\t\t\t</footer>\n\t\t\t\t<div v-show=\"!!autoLoadWhenReachedBottom\" class=\"buttom\"></div>\n\t\t\t</div>\n\t\t"])),
             props: {
                 showDefaultUi: { type: Boolean, default: true },
                 isShowFooter: { type: Boolean, default: true },
+                hrefStr: { type: String, required: false },
                 autoLoadWhenReachedBottom: { type: String, default: '' },
                 isDataAppend: { type: Boolean, default: false }
             },
             mounted: function () {
-                this.autoLoad && this.getData();
-                // this.BUS.$on('base-param-change', this.onBaseParamChange.bind(this));
+                this.isAutoLoad && this.getData();
+                // this.BUS.$on('base-param-change', this.onExtraParamChange.bind(this));
                 if (!!this.autoLoadWhenReachedBottom) {
                     // var scrollSpy = new aj.scrollSpy({ scrollInElement: aj(this.autoLoadWhenReachedBottom), spyOn: thish.$el.$('.buttom') });
                     // scrollSpy.onScrollSpyBackInSight = e => this.nextPage();
                 }
             },
             methods: {
-                foo: function () {
-                    window.alert(9);
-                },
                 getData: function () {
                     var _this = this;
                     this.lastRequestParam = {};
@@ -233,24 +225,14 @@ var aj;
                     this.total = this.totalPage = this.pageStart = this.currentPage = 0;
                     this.pageSize = this.initPageSize;
                 },
-                doAjaxGet: function (j) {
-                    if (this.isPage) {
-                        this.total = j.total;
-                        //@ts-ignore
-                        this.result = this.isDataAppend ? this.result.concat(j.result) : j.result;
-                        this.count();
-                    }
-                    else
-                        this.result = j.result;
-                },
-                onBaseParamChange: function (params) {
-                    aj.apply(this.baseParam, params);
-                    this.pageStart = 0; // 每次 baseParam 被改变，都是从第一笔开始
+                onExtraParamChange: function (params) {
+                    aj.apply(this.extraParam, params);
+                    this.pageStart = 0; // 每次 extraParam 被改变，都是从第一笔开始
                     this.getData();
                 }
             },
             watch: {
-                baseParam: function () {
+                extraParam: function () {
                     this.getData();
                 }
             }
@@ -267,6 +249,60 @@ var aj;
             this.isPage && aj.apply(this.lastRequestParam, params);
         }
     })(list = aj.list || (aj.list = {}));
+})(aj || (aj = {}));
+
+"use strict";
+
+var aj;
+(function (aj) {
+    var grid;
+    (function (grid) {
+        Vue.component('aj-simple-grid', {
+            template: html(__makeTemplateObject(["\n            <div>\n                <form action=\"?\" method=\"GET\" style=\"float:right;\">\n                    <input type=\"hidden\" name=\"searchField\" value=\"content\" />\n                    <input type=\"text\" name=\"searchclassValue\" placeholder=\"\u8BF7\u8F93\u5165\u641C\u7D22\u4E4B\u5173\u952E\u5B57\" class=\"aj-input\" />\n                    <button style=\"margin-top: 0;\" class=\"aj-btn\">\u641C\u7D22</button>\n                </form>\n                <table class=\"aj-grid aj-table\" style=\"clear: both;width:100%\">\n                    <thead>\n                        <tr>\n                            <th v-for=\"key in columns\" @click=\"sortBy(key)\" :class=\"{ active: sortKey == key }\">\n                                {{ key | capitalize }}\n                                <span class=\"arrow\" :class=\"sortOrders[key] > 0 ? 'asc' : 'dsc'\"></span>\n                            </th>\n                        </tr>\n                    </thead>\n                    <tbody>\n                        <tr v-for=\"entry in filteredData\">\n                            <td v-for=\"key in columns\" v-html=\"entry[key]\"></td>\n                        </tr>\n                    </tbody>\n                </table>\n            </div>\n        "], ["\n            <div>\n                <form action=\"?\" method=\"GET\" style=\"float:right;\">\n                    <input type=\"hidden\" name=\"searchField\" value=\"content\" />\n                    <input type=\"text\" name=\"searchclassValue\" placeholder=\"\u8BF7\u8F93\u5165\u641C\u7D22\u4E4B\u5173\u952E\u5B57\" class=\"aj-input\" />\n                    <button style=\"margin-top: 0;\" class=\"aj-btn\">\u641C\u7D22</button>\n                </form>\n                <table class=\"aj-grid aj-table\" style=\"clear: both;width:100%\">\n                    <thead>\n                        <tr>\n                            <th v-for=\"key in columns\" @click=\"sortBy(key)\" :class=\"{ active: sortKey == key }\">\n                                {{ key | capitalize }}\n                                <span class=\"arrow\" :class=\"sortOrders[key] > 0 ? 'asc' : 'dsc'\"></span>\n                            </th>\n                        </tr>\n                    </thead>\n                    <tbody>\n                        <tr v-for=\"entry in filteredData\">\n                            <td v-for=\"key in columns\" v-html=\"entry[key]\"></td>\n                        </tr>\n                    </tbody>\n                </table>\n            </div>\n        "])),
+            props: {
+                data: Array,
+                columns: Array,
+                filterKey: String
+            },
+            data: function () {
+                var sortOrders = {};
+                this.columns.forEach(function (key) { return sortOrders[key] = 1; });
+                return {
+                    sortKey: '',
+                    sortOrders: sortOrders
+                };
+            },
+            computed: {
+                filteredData: function () {
+                    var sortKey = this.sortKey, filterKey = this.filterKey && this.filterKey.toLowerCase(), order = this.sortOrders[sortKey] || 1, data = this.data;
+                    if (filterKey) {
+                        data = data.filter(function (row) {
+                            return Object.keys(row).some(function (key) { return String(row[key]).toLowerCase().indexOf(filterKey) > -1; });
+                        });
+                    }
+                    if (sortKey) {
+                        data = data.slice().sort(function (a, b) {
+                            a = a[sortKey];
+                            b = b[sortKey];
+                            return (a === b ? 0 : a > b ? 1 : -1) * order;
+                        });
+                    }
+                    return data;
+                }
+            },
+            filters: {
+                capitalize: function (str) {
+                    return str.charAt(0).toUpperCase() + str.slice(1);
+                }
+            },
+            methods: {
+                sortBy: function (key) {
+                    this.sortKey = key;
+                    this.sortOrders[key] = this.sortOrders[key] * -1;
+                }
+            }
+        });
+    })(grid = aj.grid || (aj.grid = {}));
 })(aj || (aj = {}));
 
 "use strict";
@@ -320,6 +356,7 @@ Vue.component('aj-grid-open-link', {
 "use strict";
 
 "use strict";
+
 var aj;
 (function (aj) {
     var list;
@@ -332,7 +369,7 @@ var aj;
                         isSelectAll: false,
                         selected: {},
                         selectedTotal: 0,
-                        maxRows: 0 // 最多的行数，用于判断是否全选
+                        maxRows: 0
                     };
                 },
                 mounted: function () {
@@ -347,6 +384,7 @@ var aj;
                         if (this.selectedTotal > 0) {
                             aj.showConfirm('确定批量删除记录？', function () {
                                 for (var id in _this.selected) {
+                                    // @ts-ignore
                                     aj.xhr.dele(_this.apiUrl + "/" + id + "/", function (j) {
                                         console.log(j);
                                     });
@@ -398,20 +436,52 @@ var aj;
                     }
                 }
             };
-            Vue.component('aj-grid', {
-                mixins: [grid.SectionModel],
-                template: '<div class="aj-grid"><slot v-bind="this"></slot></div>',
-                props: {
-                    apiUrl: { type: String, required: true }
-                },
-                data: function () {
+            /**
+             * 标准表格
+             */
+            var Grid = /** @class */ (function (_super) {
+                __extends(Grid, _super);
+                function Grid() {
+                    var _this = _super !== null && _super.apply(this, arguments) || this;
+                    _this.name = "aj-grid";
+                    _this.template = '<div class="aj-grid"><slot v-bind:grid="this"></slot></div>';
+                    _this.mixins = [grid.SectionModel];
+                    _this.props = {
+                        apiUrl: { type: String, required: true }
+                    };
+                    /**
+                     * 数据层，控制分页
+                     */
+                    _this.$store = null;
+                    /**
+                     * 工具条 UI
+                     */
+                    _this.$toolbar = null;
+                    /**
+                     * 行 UI
+                     */
+                    _this.$row = null;
+                    /**
+                     *
+                     */
+                    _this.showAddNew = false;
+                    /**
+                     *
+                     */
+                    _this.list = [];
+                    _this.apiUrl = "";
+                    _this.maxRows = 0;
+                    _this.selected = {};
+                    return _this;
+                }
+                Grid.prototype.data = function () {
                     return {
                         list: [],
                         updateApi: null,
                         showAddNew: false
                     };
-                },
-                mounted: function () {
+                };
+                Grid.prototype.mounted = function () {
                     var _this = this;
                     this.$children.forEach(function (child) {
                         switch (child.$options._componentTag) {
@@ -427,54 +497,49 @@ var aj;
                         }
                     });
                     this.$store.$on("pager-result", function (result) {
-                        console.log(result);
                         _this.list = result;
                         _this.maxRows = result.length;
                     });
                     // this.$store.autoLoad && this.$store.getDataData();
-                },
-                methods: {
-                    /**
-                     * 按下【新建】按钮时候触发的事件，你可以覆盖这个方法提供新的事件
-                     *
-                     * @param this
-                     */
-                    onCreateClk: function () {
-                        this.showAddNew = true;
-                    },
-                    /**
-                     * 重新加载数据
-                     *
-                     * @param this
-                     */
-                    reload: function () {
-                        this.$store.getData();
-                    },
-                    /**
-                     *
-                     * @param this
-                     */
-                    onDirtySaveClk: function () {
-                        var _this = this;
-                        var dirties = getDirty.call(this);
-                        if (!dirties.length) {
-                            aj.msg.show('没有修改过的记录');
-                            return;
-                        }
-                        dirties.forEach(function (item) {
-                            aj.xhr.put(_this.apiUrl + "/" + item.id + "/", function (j) {
-                                if (j.isOk) {
-                                    _this.list.forEach(function (item) {
-                                        if (item.dirty)
-                                            delete item.dirty;
-                                    });
-                                    aj.msg.show('修改记录成功');
-                                }
-                            }, item.dirty);
-                        });
+                };
+                /**
+                 * 按下【新建】按钮时候触发的事件，你可以覆盖这个方法提供新的事件
+                 */
+                Grid.prototype.onCreateClk = function () {
+                    this.showAddNew = true;
+                };
+                /**
+                 * 重新加载数据
+                 */
+                Grid.prototype.reload = function () {
+                    this.$store.getData();
+                };
+                /**
+                 * 保存脏数据
+                 */
+                Grid.prototype.onDirtySaveClk = function () {
+                    var _this = this;
+                    var dirties = getDirty.call(this);
+                    if (!dirties.length) {
+                        aj.msg.show('没有修改过的记录');
+                        return;
                     }
-                }
-            });
+                    dirties.forEach(function (item) {
+                        aj.xhr.put(_this.apiUrl + "/" + item.id + "/", function (j) {
+                            if (j.isOk) {
+                                _this.list.forEach(function (item) {
+                                    if (item.dirty)
+                                        delete item.dirty;
+                                });
+                                aj.msg.show('修改记录成功');
+                            }
+                        }, item.dirty);
+                    });
+                };
+                return Grid;
+            }(aj.VueComponent));
+            grid.Grid = Grid;
+            new Grid().register();
             /**
              * 获取修改过的数据
              *
@@ -496,55 +561,6 @@ var aj;
 
 "use strict";
 
-Vue.component('aj-grid-inline-edit-row-create', {
-    template: html(__makeTemplateObject(["\n        <tr class=\"aj-grid-inline-edit-row isEditMode\">\n            <td><input type=\"checkbox\" /></td>\n            <td></td>\n            <td v-for=\"key in columns\" style=\"padding:0\" class=\"cell\" @dblclick=\"dbEdit\">\n                <aj-select v-if=\"key != null && key.type == 'select'\" :name=\"key.name\" :options=\"key.data\"\n                    style=\"width: 200px;\"></aj-select>\n                <input v-if=\"key != null && !key.type\" type=\"text\" size=\"0\" :name=\"key\" />\n            </td>\n            <td class=\"control\">\n                <span @click=\"addNew\"><img :src=\"ajResources.commonAsset + '/icon/update.gif'\" />\u65B0\u589E</span>\n                <span @click=\"$parent.showAddNew = false\"><img :src=\"ajResources.commonAsset + '/icon/delete.gif'\" /> \u64A4\u9500</span>\n            </td>\n        </tr>\n    "], ["\n        <tr class=\"aj-grid-inline-edit-row isEditMode\">\n            <td><input type=\"checkbox\" /></td>\n            <td></td>\n            <td v-for=\"key in columns\" style=\"padding:0\" class=\"cell\" @dblclick=\"dbEdit\">\n                <aj-select v-if=\"key != null && key.type == 'select'\" :name=\"key.name\" :options=\"key.data\"\n                    style=\"width: 200px;\"></aj-select>\n                <input v-if=\"key != null && !key.type\" type=\"text\" size=\"0\" :name=\"key\" />\n            </td>\n            <td class=\"control\">\n                <span @click=\"addNew\"><img :src=\"ajResources.commonAsset + '/icon/update.gif'\" />\u65B0\u589E</span>\n                <span @click=\"$parent.showAddNew = false\"><img :src=\"ajResources.commonAsset + '/icon/delete.gif'\" /> \u64A4\u9500</span>\n            </td>\n        </tr>\n    "])),
-    props: {
-        columns: { type: Array, required: true },
-        createApi: { type: String, required: false, default: '.' }
-    },
-    methods: {
-        /**
-         * 编辑按钮事件
-         *
-         * @param this
-         */
-        addNew: function () {
-            var _this = this;
-            var map = {};
-            this.$el.$('*[name]', function (i) { return map[i.name] = i.value; });
-            this.BUS.$emit('before-add-new', map);
-            aj.xhr.post(this.createApi, function (j) {
-                if (j && j.isOk) {
-                    aj.msg.show('新建实体成功');
-                    _this.$el.$('input[name]', function (i) {
-                        i.value = '';
-                    });
-                    // @ts-ignore
-                    _this.$parent.reload();
-                    // @ts-ignore
-                    _this.$parent.showAddNew = false;
-                }
-                else if (j && j.msg) {
-                    aj.msg.show(j.msg);
-                }
-            }, map);
-        },
-        /**
-         *
-         * @param this
-         * @param $event
-         */
-        dbEdit: function ($event) {
-            this.isEditMode = !this.isEditMode;
-            var el = $event.target;
-            if (el.tagName !== 'INPUT')
-                el = el.$('input');
-            setTimeout(function () { return el && el.focus(); }, 200);
-        }
-    }
-});
-
-"use strict";
 
 var aj;
 (function (aj) {
@@ -553,171 +569,252 @@ var aj;
         var grid;
         (function (grid) {
             /**
-                总体就是一个普通的 HTML Table，程序是通过读取 JSON 数据（实际 JS 数组）里面的字段，
-                然后通过动态添加表格的方法逐行添加 tr，td，在添加行的过程中根据需要设置样式，添加方法等。
-                每一行数据（即 tr 的 DOM 对象）都有 id 属性，其值就等于数据中的idColumn对应的列的值
+             * 新建记录的行
              */
-            Vue.component('aj-grid-inline-edit-row', {
-                template: html(__makeTemplateObject(["\n            <tr class=\"aj-grid-inline-edit-row\" :class=\"{editing: isEditMode}\">\n                <td v-if=\"showCheckboxCol\" class=\"selectCheckbox\">\n                    <input type=\"checkbox\" @change=\"selectCheckboxChange\" :data-id=\"id\" />\n                </td>\n                <td v-if=\"showIdCol\">{{id}}</td>\n                <td v-for=\"cellRenderer in columns\" :style=\"styleModifly\" class=\"cell\" @dblclick=\"dbEdit\">\n                    <aj-cell-renderer v-if=\"!isEditMode\" :html=\"renderCell(data, cellRenderer)\" :form=\"data\"></aj-cell-renderer>\n                    <aj-cell-renderer v-if=\"isEditMode && cellRenderer && cellRenderer.editMode\"\n                        :html=\"rendererEditMode(data, cellRenderer)\" :form=\"data\">\n                    </aj-cell-renderer>\n                    <input type=\"text\" v-if=\"canEdit(cellRenderer)\" size=\"0\" v-model=\"data[cellRenderer]\" />\n                </td>\n                <td v-if=\"showControl\" class=\"control\">\n                    <aj-cell-renderer v-if=\"controlUi\" :html=\"controlUi\" :form=\"data\"></aj-cell-renderer>\n                    <span @click=\"onEditClk\" class=\"edit\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n                        {{!isEditMode ? \"\u7F16\u8F91\" : \"\u786E\u5B9A\"}}</span>\n                    <span @click=\"dele(id)\" class=\"delete\"><i class=\"fa fa-times\" aria-hidden=\"true\"></i> \u5220\u9664</span>\n                </td>\n            </tr>\n        "], ["\n            <tr class=\"aj-grid-inline-edit-row\" :class=\"{editing: isEditMode}\">\n                <td v-if=\"showCheckboxCol\" class=\"selectCheckbox\">\n                    <input type=\"checkbox\" @change=\"selectCheckboxChange\" :data-id=\"id\" />\n                </td>\n                <td v-if=\"showIdCol\">{{id}}</td>\n                <td v-for=\"cellRenderer in columns\" :style=\"styleModifly\" class=\"cell\" @dblclick=\"dbEdit\">\n                    <aj-cell-renderer v-if=\"!isEditMode\" :html=\"renderCell(data, cellRenderer)\" :form=\"data\"></aj-cell-renderer>\n                    <aj-cell-renderer v-if=\"isEditMode && cellRenderer && cellRenderer.editMode\"\n                        :html=\"rendererEditMode(data, cellRenderer)\" :form=\"data\">\n                    </aj-cell-renderer>\n                    <input type=\"text\" v-if=\"canEdit(cellRenderer)\" size=\"0\" v-model=\"data[cellRenderer]\" />\n                </td>\n                <td v-if=\"showControl\" class=\"control\">\n                    <aj-cell-renderer v-if=\"controlUi\" :html=\"controlUi\" :form=\"data\"></aj-cell-renderer>\n                    <span @click=\"onEditClk\" class=\"edit\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n                        {{!isEditMode ? \"\u7F16\u8F91\" : \"\u786E\u5B9A\"}}</span>\n                    <span @click=\"dele(id)\" class=\"delete\"><i class=\"fa fa-times\" aria-hidden=\"true\"></i> \u5220\u9664</span>\n                </td>\n            </tr>\n        "])),
-                props: {
-                    rowData: { type: Object, required: true },
-                    showIdCol: { type: Boolean, default: true },
-                    columns: Array,
-                    showCheckboxCol: { type: Boolean, default: true },
-                    showControl: { type: Boolean, default: true },
-                    filterField: Array,
-                    enableInlineEdit: { type: Boolean, default: false },
-                    deleApi: String,
-                    controlUi: String // 自定义“操作”按钮，这里填组件的名字
-                },
-                data: function () {
+            var EditRowCreate = /** @class */ (function (_super) {
+                __extends(EditRowCreate, _super);
+                function EditRowCreate() {
+                    var _this = _super !== null && _super.apply(this, arguments) || this;
+                    _this.name = "aj-grid-inline-edit-row-create";
+                    _this.template = html(__makeTemplateObject(["\n            <tr class=\"aj-grid-inline-edit-row isEditMode\">\n                <td></td>\n                <td></td>\n                <td v-for=\"key in columns\" style=\"padding:0\" class=\"cell\">\n                    <aj-select v-if=\"key != null && key.type == 'select'\" :name=\"key.name\" :options=\"key.data\"\n                        style=\"width: 200px;\"></aj-select>\n                    <input v-if=\"key != null && !key.type\" type=\"text\" size=\"0\" :name=\"key\" />\n                </td>\n                <td class=\"control\">\n                    <span @click=\"addNew\"><i class=\"fa fa-plus\" style=\"color:#080;\"></i> \u65B0\u589E</span>\n                    <span @click=\"$parent.showAddNew = false\"><i class=\"fa fa-undo\" style=\"color:#bc49eb;\"></i> \u64A4\u9500</span>\n                </td>\n            </tr>\n        "], ["\n            <tr class=\"aj-grid-inline-edit-row isEditMode\">\n                <td></td>\n                <td></td>\n                <td v-for=\"key in columns\" style=\"padding:0\" class=\"cell\">\n                    <aj-select v-if=\"key != null && key.type == 'select'\" :name=\"key.name\" :options=\"key.data\"\n                        style=\"width: 200px;\"></aj-select>\n                    <input v-if=\"key != null && !key.type\" type=\"text\" size=\"0\" :name=\"key\" />\n                </td>\n                <td class=\"control\">\n                    <span @click=\"addNew\"><i class=\"fa fa-plus\" style=\"color:#080;\"></i> \u65B0\u589E</span>\n                    <span @click=\"$parent.showAddNew = false\"><i class=\"fa fa-undo\" style=\"color:#bc49eb;\"></i> \u64A4\u9500</span>\n                </td>\n            </tr>\n        "]));
+                    _this.props = {
+                        columns: { type: Array, required: true },
+                        createApi: { type: String, required: false, default: '.' }
+                    };
+                    /**
+                     * 创建的 API 地址
+                     */
+                    _this.createApi = "";
+                    _this.$parent = null;
+                    return _this;
+                }
+                /**
+                 * 新增按钮事件
+                 */
+                EditRowCreate.prototype.addNew = function () {
+                    var _this = this;
+                    var map = {}; // 创建动作的表单数据
+                    this.$el.$('*[name]', function (i) { return map[i.name] = i.value; });
+                    this.BUS.$emit('before-add-new', map);
+                    aj.xhr.post(this.createApi, function (j) {
+                        if (j && j.isOk) {
+                            aj.msg.show('新建实体成功');
+                            _this.$el.$('input[name]', function (i) {
+                                i.value = '';
+                            });
+                            if (_this.$parent) {
+                                _this.$parent.reload();
+                                _this.$parent.showAddNew = false;
+                            }
+                        }
+                        else if (j && j.msg) {
+                            aj.msg.show(j.msg);
+                        }
+                    }, map);
+                };
+                return EditRowCreate;
+            }(aj.VueComponent));
+            new EditRowCreate().register();
+        })(grid = list.grid || (list.grid = {}));
+    })(list = aj.list || (aj.list = {}));
+})(aj || (aj = {}));
+
+"use strict";
+
+
+var aj;
+(function (aj) {
+    var list;
+    (function (list) {
+        var grid;
+        (function (grid) {
+            /**
+             * 行的 UI
+             */
+            var GridEditRow = /** @class */ (function (_super) {
+                __extends(GridEditRow, _super);
+                function GridEditRow() {
+                    var _this = _super !== null && _super.apply(this, arguments) || this;
+                    _this.name = "aj-grid-inline-edit-row";
+                    _this.template = html(__makeTemplateObject(["\n            <tr class=\"aj-grid-inline-edit-row\" :class=\"{editing: isEditMode}\">\n                <td v-if=\"showCheckboxCol\" class=\"selectCheckbox\">\n                    <input type=\"checkbox\" @change=\"selectCheckboxChange\" :data-id=\"id\" />\n                </td>\n                <td v-if=\"showIdCol\">{{id}}</td>\n                <td v-for=\"cellRenderer in columns\" :style=\"styleModifly\" class=\"cell\" @dblclick=\"dbEdit\">\n                    <span v-if=\"!isEditMode\" v-html=\"renderCell(rowData, cellRenderer)\"></span>\n                    <input v-if=\"canEdit(cellRenderer)\" v-model=\"rowData[cellRenderer]\" type=\"text\" size=\"0\" />\n                    <aj-cell-renderer v-if=\"isEditMode && cellRenderer && cellRenderer.editMode\"\n                        :html=\"rendererEditMode(rowData, cellRenderer)\" :form=\"rowData\">\n                    </aj-cell-renderer>\n                </td>\n                <td v-if=\"showControl\" class=\"control\">\n                    <aj-cell-renderer v-if=\"controlUi\" :html=\"controlUi\" :form=\"rowData\"></aj-cell-renderer>\n                    <span @click=\"onEditClk\" class=\"edit\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n                        {{!isEditMode ? \"\u7F16\u8F91\" : \"\u786E\u5B9A\"}}</span>\n                    <span @click=\"dele\" class=\"delete\"><i class=\"fa fa-times\" aria-hidden=\"true\"></i> \u5220\u9664</span>\n                </td>\n            </tr>"], ["\n            <tr class=\"aj-grid-inline-edit-row\" :class=\"{editing: isEditMode}\">\n                <td v-if=\"showCheckboxCol\" class=\"selectCheckbox\">\n                    <input type=\"checkbox\" @change=\"selectCheckboxChange\" :data-id=\"id\" />\n                </td>\n                <td v-if=\"showIdCol\">{{id}}</td>\n                <td v-for=\"cellRenderer in columns\" :style=\"styleModifly\" class=\"cell\" @dblclick=\"dbEdit\">\n                    <span v-if=\"!isEditMode\" v-html=\"renderCell(rowData, cellRenderer)\"></span>\n                    <input v-if=\"canEdit(cellRenderer)\" v-model=\"rowData[cellRenderer]\" type=\"text\" size=\"0\" />\n                    <aj-cell-renderer v-if=\"isEditMode && cellRenderer && cellRenderer.editMode\"\n                        :html=\"rendererEditMode(rowData, cellRenderer)\" :form=\"rowData\">\n                    </aj-cell-renderer>\n                </td>\n                <td v-if=\"showControl\" class=\"control\">\n                    <aj-cell-renderer v-if=\"controlUi\" :html=\"controlUi\" :form=\"rowData\"></aj-cell-renderer>\n                    <span @click=\"onEditClk\" class=\"edit\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n                        {{!isEditMode ? \"\u7F16\u8F91\" : \"\u786E\u5B9A\"}}</span>\n                    <span @click=\"dele\" class=\"delete\"><i class=\"fa fa-times\" aria-hidden=\"true\"></i> \u5220\u9664</span>\n                </td>\n            </tr>"]));
+                    _this.props = {
+                        initRowData: { type: Object, required: true },
+                        showIdCol: { type: Boolean, default: true },
+                        showCheckboxCol: { type: Boolean, default: true },
+                        showControl: { type: Boolean, default: true },
+                        enableInlineEdit: { type: Boolean, default: false },
+                        columns: Array,
+                        filterField: Array,
+                        deleApi: String,
+                        controlUi: String // 自定义“操作”按钮，这里填组件的名字
+                    };
+                    /**
+                     * 固定不可编辑的字段
+                     */
+                    _this.filterField = [];
+                    /**
+                     * 每行记录它的 id
+                     */
+                    _this.id = "";
+                    /**
+                     * 输入的数据
+                     */
+                    _this.initRowData = {};
+                    /**
+                     * 每行记录的数据
+                     */
+                    _this.rowData = {};
+                    /**
+                     * 是否处于编辑模式
+                     */
+                    _this.isEditMode = false;
+                    /**
+                     * 表格是否可以被编辑
+                     */
+                    _this.enableInlineEdit = false;
+                    /**
+                     * 单元格渲染器的类型，这是一个有序的数组
+                     */
+                    _this.columns = [];
+                    _this.$parent = null;
+                    _this.computed = {
+                        // filterData(this: GridEditRow) {// dep
+                        //     let data = JSON.parse(JSON.stringify(this.rowData));// 剔除不要的字段
+                        //     delete data.id;
+                        //     delete data.dirty;
+                        //     if (this.filterField && this.filterField.length)
+                        //         this.filterField.forEach(i => delete data[i]);
+                        //     return data;
+                        // },
+                        /**
+                         * 修改样式
+                         *
+                         * @param this
+                         */
+                        styleModifly: function () {
+                            return {
+                                padding: this.isEditMode ? 0 : '',
+                            };
+                        }
+                    };
+                    return _this;
+                }
+                GridEditRow.prototype.data = function () {
                     return {
-                        id: this.rowData.id,
-                        data: this.rowData,
+                        id: this.initRowData.id,
+                        rowData: this.initRowData,
                         isEditMode: false
                     };
-                },
-                mounted: function () {
-                    for (var i in this.data) // 监视每个字段
-                        this.$watch('data.' + i, makeWatch.call(this, i));
-                },
-                computed: {
-                    filterData: function () {
-                        var data = JSON.parse(JSON.stringify(this.data)); // 剔除不要的字段
-                        delete data.id;
-                        delete data.dirty;
-                        if (this.filterField && this.filterField.length)
-                            this.filterField.forEach(function (i) { return delete data[i]; });
-                        return data;
-                    },
-                    /**
-                     *
-                     *
-                     * @param this
-                     */
-                    styleModifly: function () {
-                        return {
-                            padding: this.isEditMode ? 0 : '',
-                        };
-                    }
-                },
-                methods: {
-                    /**
-                     * 没有指定编辑器的情况下，使用 input 作为编辑器
-                     *
-                     * @param this
-                     * @param cellRenderer
-                     */
-                    canEdit: function (cellRenderer) {
-                        return this.isEditMode && !isFixedField.call(this, cellRenderer) && !(cellRenderer.editMode);
-                    },
-                    /**
-                     * 渲染单元格
-                     *
-                     * @param this
-                     * @param data
-                     * @param cellRenderer
-                     */
-                    renderCell: function (data, cellRenderer) {
-                        var v;
-                        if (cellRenderer === '')
-                            return '';
-                        if (typeof cellRenderer == 'string') {
-                            v = data[cellRenderer];
-                            return v + "";
-                        }
-                        if (typeof cellRenderer == 'function') {
-                            v = cellRenderer(data);
-                            return v;
-                        }
-                        if (typeof cellRenderer == 'object') {
-                            var cfg = cellRenderer;
-                            if (!!cfg.renderer)
-                                v = cfg.renderer(data);
-                            // if (typeof key.showMode === 'function')
-                            //     return key.showMode(data);
-                            // if (typeof key.showMode === 'string')
-                            //     return data[key.showMode];
-                        }
-                        return (v === null ? '' : v) + '';
-                    },
-                    /**
-                     * 编辑按钮事件
-                     *
-                     * @param this
-                     */
-                    onEditClk: function () {
-                        if (this.enableInlineEdit)
-                            this.isEditMode = !this.isEditMode;
-                        //@ts-ignore    
-                        else if (this.$parent.onEditClk) // 打开另外的编辑界面
-                            //@ts-ignore    
-                            this.$parent.onEditClk(this.id);
-                    },
-                    /**
-                     * 渲染编辑模式下的行
-                     *
-                     * @param this
-                     * @param data
-                     * @param cfg
-                     */
-                    rendererEditMode: function (data, cellRenderer) {
-                        if (typeof cellRenderer === 'string')
-                            return cellRenderer.toString();
-                        if (cellRenderer.editMode && typeof cellRenderer.editRenderer === 'function')
-                            return cellRenderer.editRenderer(data);
-                        return "NULL";
-                    },
-                    /**
-                     * 双击单元格进入编辑
-                     *
-                     * @param ev
-                     */
-                    dbEdit: function (ev) {
-                        if (!this.enableInlineEdit)
-                            return;
-                        this.isEditMode = !this.isEditMode;
-                        if (this.isEditMode) {
-                            var el_1 = ev.target;
-                            setTimeout(function () {
-                                if (el_1.tagName !== 'INPUT')
-                                    el_1 = el_1.$('input');
-                                el_1 && el_1.focus();
-                            }, 200);
-                        }
-                    },
-                    /**
-                     *
-                     * @param this
-                     * @param ev
-                     */
-                    selectCheckboxChange: function (ev) {
-                        var checkbox = ev.target, parent = this.$parent;
+                };
+                GridEditRow.prototype.mounted = function () {
+                    for (var i in this.rowData) // 监视每个字段
+                        this.$watch('rowData.' + i, makeWatch.call(this, i));
+                };
+                /**
+                 * 选区模型的写入，记录哪一行被选中了
+                 *
+                 * @param ev 事件对象
+                 */
+                GridEditRow.prototype.selectCheckboxChange = function (ev) {
+                    var checkbox = ev.target, parent = this.$parent;
+                    if (parent) {
                         if (checkbox.checked)
                             parent.$set(parent.selected, this.id, true);
-                        //this.$parent.selected[this.id] = true;
                         else
                             parent.$set(parent.selected, this.id, false);
-                    },
-                    /**
-                     * 删除记录
-                     *
-                     * @param this
-                     * @param id
-                     */
-                    dele: function (id) {
-                        var _this = this;
-                        aj.showConfirm("\u786E\u5B9A\u5220\u9664\u8BB0\u5F55 id:[" + id + "] \u5417\uFF1F", function () {
-                            return aj.xhr.dele(_this.$parent.apiUrl + "/" + id + "/", function (j) {
+                    }
+                };
+                /**
+                 * 渲染单元格
+                 *
+                 * @param data
+                 * @param cellRenderer
+                 */
+                GridEditRow.prototype.renderCell = function (data, cellRenderer) {
+                    var v = "";
+                    if (cellRenderer === '')
+                        return v;
+                    if (typeof cellRenderer == 'string')
+                        v = data[cellRenderer] + "";
+                    if (typeof cellRenderer == 'function')
+                        v = cellRenderer(data);
+                    if (typeof cellRenderer == 'object') {
+                        var cfg = cellRenderer;
+                        if (!!cfg.renderer)
+                            v = cfg.renderer(data);
+                    }
+                    return v;
+                };
+                /**
+                 * 没有指定编辑器的情况下，使用 input 作为编辑器
+                 *
+                 * @param cellRenderer
+                 */
+                GridEditRow.prototype.canEdit = function (cellRenderer) {
+                    return this.isEditMode && !isFixedField.call(this, cellRenderer) && !(cellRenderer.editMode);
+                };
+                /**
+                 * 渲染编辑模式下的行
+                 *
+                 * @param data
+                 * @param cellRenderer
+                 */
+                GridEditRow.prototype.rendererEditMode = function (data, cellRenderer) {
+                    if (typeof cellRenderer === 'string')
+                        return cellRenderer.toString();
+                    var cfg = cellRenderer;
+                    if (cfg.editMode && typeof cfg.editRenderer === 'function')
+                        return cfg.editRenderer(data);
+                    return "NULL";
+                };
+                /**
+                 * 编辑按钮事件
+                 */
+                GridEditRow.prototype.onEditClk = function () {
+                    if (this.enableInlineEdit)
+                        this.isEditMode = !this.isEditMode;
+                    //@ts-ignore    
+                    else if (this.$parent.onEditClk) // 打开另外的编辑界面
+                        //@ts-ignore    
+                        this.$parent.onEditClk(this.id);
+                };
+                /**
+                 * 双击单元格进入编辑
+                 *
+                 * @param ev
+                 */
+                GridEditRow.prototype.dbEdit = function (ev) {
+                    this.onEditClk();
+                    if (this.enableInlineEdit && this.isEditMode) {
+                        var el_1 = ev.target;
+                        if (el_1.tagName !== 'TD')
+                            el_1 = el_1.up('td');
+                        setTimeout(function () {
+                            var _el;
+                            if (el_1.tagName !== 'INPUT')
+                                _el = el_1.$('input');
+                            _el && _el.focus();
+                        }, 200);
+                    }
+                };
+                /**
+                 * 删除记录
+                 */
+                GridEditRow.prototype.dele = function (id) {
+                    var _this = this;
+                    aj.showConfirm("\u786E\u5B9A\u5220\u9664\u8BB0\u5F55 id:[" + this.id + "] \u5417\uFF1F", function () {
+                        if (_this.$parent)
+                            aj.xhr.dele(_this.$parent.apiUrl + "/" + _this.id + "/", function (j) {
                                 if (j.isOk) {
                                     aj.msg.show('删除成功');
-                                    _this.$parent.reload();
+                                    _this.$parent && _this.$parent.reload();
                                 }
                             });
-                        });
-                    }
-                }
-            });
+                    });
+                };
+                return GridEditRow;
+            }(aj.VueComponent));
+            new GridEditRow().register();
             /**
              * 生成该字段的 watch 函数
              *
@@ -726,20 +823,20 @@ var aj;
              */
             function makeWatch(field) {
                 return function (_new) {
-                    var arr = this.$parent.list, data;
-                    for (var i = 0, j = arr.length; i < j; i++) { // 已知 id 找到原始数据
-                        if (this.id && (String(arr[i].id) == this.id)) {
-                            data = arr[i];
-                            break;
+                    if (this.$parent) {
+                        var arr = this.$parent.list, data = void 0;
+                        for (var i = 0, j = arr.length; i < j; i++) { // 已知 id 找到原始数据
+                            if (this.id && (String(arr[i].id) == this.id)) {
+                                data = arr[i];
+                                break;
+                            }
                         }
+                        if (!data)
+                            throw '找不到匹配的实体！目标 id: ' + this.id;
+                        if (!data.dirty)
+                            data.dirty = { id: this.id };
+                        data.dirty[field] = _new; // 保存新的值，key 是字段名
                     }
-                    if (!data)
-                        throw '找不到匹配的实体！目标 id: ' + this.id;
-                    if (!data.dirty)
-                        data.dirty = {
-                            id: this.id
-                        };
-                    data.dirty[field] = _new; // 保存新的值，key 是字段名
                 };
             }
             /**
@@ -763,33 +860,42 @@ var aj;
 
 "use strict";
 
-/**
- * 工具条
- */
-Vue.component('aj-entity-toolbar', {
-    template: html(__makeTemplateObject(["\n        <div class=\"toolbar\"> \n            <form v-if=\"search\" class=\"right\">\n                <input type=\"text\" name=\"keyword\" placeholder=\"\u8BF7\u8F93\u5165\u5173\u952E\u5B57\" size=\"12\" />\n                <button @click=\"doSearch\"><i class=\"fa fa-search\" style=\"color:#417BB5;\"></i>\u641C\u7D22</button>\n            </form>\n            <aj-form-between-date v-if=\"betweenDate\" class=\"right\"></aj-form-between-date>\n            <ul>\n                <li v-if=\"create\" @click=\"$emit('on-create-btn-clk')\"><i class=\"fa fa-plus\" style=\"color:#0a90f0;\"></i> \u65B0\u5EFA</li>\n                <li v-if=\"save\" @click=\"$emit('on-save-btn-clk')\"><i class=\"fa fa-floppy-o\" style=\"color:rgb(205, 162, 4);\"></i> \u4FDD\u5B58</li>\n                <li v-if=\"deleBtn\" @click=\"$emit('on-delete-btn-clk')\"><i class=\"fa fa-trash-o\" style=\"color:red;\"></i> \u5220\u9664</li>\n                <li v-if=\"excel\"><i class=\"fa fa-file-excel-o\" style=\"color:green;\"></i> \u5BFC\u51FA</li>\n                <slot></slot>\n                \n            </ul>\n        </div>\n    "], ["\n        <div class=\"toolbar\"> \n            <form v-if=\"search\" class=\"right\">\n                <input type=\"text\" name=\"keyword\" placeholder=\"\u8BF7\u8F93\u5165\u5173\u952E\u5B57\" size=\"12\" />\n                <button @click=\"doSearch\"><i class=\"fa fa-search\" style=\"color:#417BB5;\"></i>\u641C\u7D22</button>\n            </form>\n            <aj-form-between-date v-if=\"betweenDate\" class=\"right\"></aj-form-between-date>\n            <ul>\n                <li v-if=\"create\" @click=\"$emit('on-create-btn-clk')\"><i class=\"fa fa-plus\" style=\"color:#0a90f0;\"></i> \u65B0\u5EFA</li>\n                <li v-if=\"save\" @click=\"$emit('on-save-btn-clk')\"><i class=\"fa fa-floppy-o\" style=\"color:rgb(205, 162, 4);\"></i> \u4FDD\u5B58</li>\n                <li v-if=\"deleBtn\" @click=\"$emit('on-delete-btn-clk')\"><i class=\"fa fa-trash-o\" style=\"color:red;\"></i> \u5220\u9664</li>\n                <li v-if=\"excel\"><i class=\"fa fa-file-excel-o\" style=\"color:green;\"></i> \u5BFC\u51FA</li>\n                <slot></slot>\n                \n            </ul>\n        </div>\n    "])),
-    props: {
-        betweenDate: { type: Boolean, default: true },
-        create: { type: Boolean, default: true },
-        save: { type: Boolean, default: true },
-        excel: { type: Boolean, default: false },
-        deleBtn: { type: Boolean, default: true },
-        search: { type: Boolean, default: true }
-    },
-    methods: {
-        /**
-         * 获取关键字进行搜索
-         *
-         * @param this
-         * @param e
-         */
-        doSearch: function (e) {
-            e.preventDefault();
-            aj.apply(this.$parent.$store.extraParam, { keyword: aj.form.utils.getFormFieldValue(this.$el, 'input[name=keyword]') });
-            this.$parent.$store.reload();
-        }
-    }
-});
+var aj;
+(function (aj) {
+    var list;
+    (function (list) {
+        var grid;
+        (function (grid) {
+            /**
+             * 工具条
+             */
+            Vue.component('aj-entity-toolbar', {
+                template: html(__makeTemplateObject(["\n            <div class=\"toolbar\">\n                <form v-if=\"search\" class=\"right\">\n                    <input type=\"text\" name=\"keyword\" placeholder=\"\u8BF7\u8F93\u5165\u5173\u952E\u5B57\" size=\"12\" />\n                    <button @click=\"doSearch\"><i class=\"fa fa-search\" style=\"color:#417BB5;\"></i>\u641C\u7D22</button>\n                </form>\n                <aj-form-between-date v-if=\"betweenDate\" class=\"right\"></aj-form-between-date>\n                <ul>\n                    <li v-if=\"create\" @click=\"$emit('on-create-btn-clk')\"><i class=\"fa fa-plus\" style=\"color:#0a90f0;\"></i> \u65B0\u5EFA</li>\n                    <li v-if=\"save\" @click=\"$emit('on-save-btn-clk')\"><i class=\"fa fa-floppy-o\"\n                            style=\"color:rgb(205, 162, 4);\"></i>\u4FDD\u5B58</li>\n                    <li v-if=\"deleBtn\" @click=\"$emit('on-delete-btn-clk')\"><i class=\"fa fa-trash-o\" style=\"color:red;\"></i> \u5220\u9664</li>\n                    <li v-if=\"excel\"><i class=\"fa fa-file-excel-o\" style=\"color:green;\"></i> \u5BFC\u51FA</li>\n                    <slot></slot>\n                </ul>\n            </div>\n        "], ["\n            <div class=\"toolbar\">\n                <form v-if=\"search\" class=\"right\">\n                    <input type=\"text\" name=\"keyword\" placeholder=\"\u8BF7\u8F93\u5165\u5173\u952E\u5B57\" size=\"12\" />\n                    <button @click=\"doSearch\"><i class=\"fa fa-search\" style=\"color:#417BB5;\"></i>\u641C\u7D22</button>\n                </form>\n                <aj-form-between-date v-if=\"betweenDate\" class=\"right\"></aj-form-between-date>\n                <ul>\n                    <li v-if=\"create\" @click=\"$emit('on-create-btn-clk')\"><i class=\"fa fa-plus\" style=\"color:#0a90f0;\"></i> \u65B0\u5EFA</li>\n                    <li v-if=\"save\" @click=\"$emit('on-save-btn-clk')\"><i class=\"fa fa-floppy-o\"\n                            style=\"color:rgb(205, 162, 4);\"></i>\u4FDD\u5B58</li>\n                    <li v-if=\"deleBtn\" @click=\"$emit('on-delete-btn-clk')\"><i class=\"fa fa-trash-o\" style=\"color:red;\"></i> \u5220\u9664</li>\n                    <li v-if=\"excel\"><i class=\"fa fa-file-excel-o\" style=\"color:green;\"></i> \u5BFC\u51FA</li>\n                    <slot></slot>\n                </ul>\n            </div>\n        "])),
+                props: {
+                    betweenDate: { type: Boolean, default: true },
+                    create: { type: Boolean, default: true },
+                    save: { type: Boolean, default: true },
+                    excel: { type: Boolean, default: false },
+                    deleBtn: { type: Boolean, default: true },
+                    search: { type: Boolean, default: true }
+                },
+                methods: {
+                    /**
+                     * 获取关键字进行搜索
+                     *
+                     * @param this
+                     * @param ev
+                     */
+                    doSearch: function (ev) {
+                        ev.preventDefault();
+                        aj.apply(this.$parent.$store.extraParam, { keyword: aj.form.utils.getFormFieldValue(this.$el, 'input[name=keyword]') });
+                        this.$parent.$store.reload();
+                    }
+                }
+            });
+        })(grid = list.grid || (list.grid = {}));
+    })(list = aj.list || (aj.list = {}));
+})(aj || (aj = {}));
 
 "use strict";
 

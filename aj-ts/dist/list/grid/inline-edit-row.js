@@ -24,24 +24,21 @@ var aj;
         (function (grid) {
             /**
              * 行的 UI
-                总体就是一个普通的 HTML Table，程序是通过读取 JSON 数据（实际 JS 数组）里面的字段，
-                然后通过动态添加表格的方法逐行添加 tr，td，在添加行的过程中根据需要设置样式，添加方法等。
-                每一行数据（即 tr 的 DOM 对象）都有 id 属性，其值就等于数据中的 idColumn 对应的列的值
              */
             var GridEditRow = /** @class */ (function (_super) {
                 __extends(GridEditRow, _super);
                 function GridEditRow() {
                     var _this = _super !== null && _super.apply(this, arguments) || this;
                     _this.name = "aj-grid-inline-edit-row";
-                    _this.template = html(__makeTemplateObject(["\n            <tr class=\"aj-grid-inline-edit-row\" :class=\"{editing: isEditMode}\">\n                <td v-if=\"showCheckboxCol\" class=\"selectCheckbox\">\n                    <input type=\"checkbox\" @change=\"selectCheckboxChange\" :data-id=\"id\" />\n                </td>\n                <td v-if=\"showIdCol\">{{id}}</td>\n                <td v-for=\"cellRenderer in columns\" :style=\"styleModifly\" class=\"cell\" @dblclick=\"dbEdit\">\n                    <aj-cell-renderer v-if=\"!isEditMode\" :html=\"renderCell(rowData, cellRenderer)\" :form=\"rowData\"></aj-cell-renderer>\n                    <aj-cell-renderer v-if=\"isEditMode && cellRenderer && cellRenderer.editMode\"\n                        :html=\"rendererEditMode(rowData, cellRenderer)\" :form=\"rowData\">\n                    </aj-cell-renderer>\n                    <input type=\"text\" v-if=\"canEdit(cellRenderer)\" size=\"0\" v-model=\"rowData[cellRenderer]\" />\n                </td>\n                <td v-if=\"showControl\" class=\"control\">\n                    <aj-cell-renderer v-if=\"controlUi\" :html=\"controlUi\" :form=\"rowData\"></aj-cell-renderer>\n                    <span @click=\"onEditClk\" class=\"edit\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n                        {{!isEditMode ? \"\u7F16\u8F91\" : \"\u786E\u5B9A\"}}</span>\n                    <span @click=\"dele(id)\" class=\"delete\"><i class=\"fa fa-times\" aria-hidden=\"true\"></i> \u5220\u9664</span>\n                </td>\n            </tr>"], ["\n            <tr class=\"aj-grid-inline-edit-row\" :class=\"{editing: isEditMode}\">\n                <td v-if=\"showCheckboxCol\" class=\"selectCheckbox\">\n                    <input type=\"checkbox\" @change=\"selectCheckboxChange\" :data-id=\"id\" />\n                </td>\n                <td v-if=\"showIdCol\">{{id}}</td>\n                <td v-for=\"cellRenderer in columns\" :style=\"styleModifly\" class=\"cell\" @dblclick=\"dbEdit\">\n                    <aj-cell-renderer v-if=\"!isEditMode\" :html=\"renderCell(rowData, cellRenderer)\" :form=\"rowData\"></aj-cell-renderer>\n                    <aj-cell-renderer v-if=\"isEditMode && cellRenderer && cellRenderer.editMode\"\n                        :html=\"rendererEditMode(rowData, cellRenderer)\" :form=\"rowData\">\n                    </aj-cell-renderer>\n                    <input type=\"text\" v-if=\"canEdit(cellRenderer)\" size=\"0\" v-model=\"rowData[cellRenderer]\" />\n                </td>\n                <td v-if=\"showControl\" class=\"control\">\n                    <aj-cell-renderer v-if=\"controlUi\" :html=\"controlUi\" :form=\"rowData\"></aj-cell-renderer>\n                    <span @click=\"onEditClk\" class=\"edit\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n                        {{!isEditMode ? \"\u7F16\u8F91\" : \"\u786E\u5B9A\"}}</span>\n                    <span @click=\"dele(id)\" class=\"delete\"><i class=\"fa fa-times\" aria-hidden=\"true\"></i> \u5220\u9664</span>\n                </td>\n            </tr>"]));
+                    _this.template = html(__makeTemplateObject(["\n            <tr class=\"aj-grid-inline-edit-row\" :class=\"{editing: isEditMode}\">\n                <td v-if=\"showCheckboxCol\" class=\"selectCheckbox\">\n                    <input type=\"checkbox\" @change=\"selectCheckboxChange\" :data-id=\"id\" />\n                </td>\n                <td v-if=\"showIdCol\">{{id}}</td>\n                <td v-for=\"cellRenderer in columns\" :style=\"styleModifly\" class=\"cell\" @dblclick=\"dbEdit\">\n                    <span v-if=\"!isEditMode\" v-html=\"renderCell(rowData, cellRenderer)\"></span>\n                    <input v-if=\"canEdit(cellRenderer)\" v-model=\"rowData[cellRenderer]\" type=\"text\" size=\"0\" />\n                    <aj-cell-renderer v-if=\"isEditMode && cellRenderer && cellRenderer.editMode\"\n                        :html=\"rendererEditMode(rowData, cellRenderer)\" :form=\"rowData\">\n                    </aj-cell-renderer>\n                </td>\n                <td v-if=\"showControl\" class=\"control\">\n                    <aj-cell-renderer v-if=\"controlUi\" :html=\"controlUi\" :form=\"rowData\"></aj-cell-renderer>\n                    <span @click=\"onEditClk\" class=\"edit\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n                        {{!isEditMode ? \"\u7F16\u8F91\" : \"\u786E\u5B9A\"}}</span>\n                    <span @click=\"dele\" class=\"delete\"><i class=\"fa fa-times\" aria-hidden=\"true\"></i> \u5220\u9664</span>\n                </td>\n            </tr>"], ["\n            <tr class=\"aj-grid-inline-edit-row\" :class=\"{editing: isEditMode}\">\n                <td v-if=\"showCheckboxCol\" class=\"selectCheckbox\">\n                    <input type=\"checkbox\" @change=\"selectCheckboxChange\" :data-id=\"id\" />\n                </td>\n                <td v-if=\"showIdCol\">{{id}}</td>\n                <td v-for=\"cellRenderer in columns\" :style=\"styleModifly\" class=\"cell\" @dblclick=\"dbEdit\">\n                    <span v-if=\"!isEditMode\" v-html=\"renderCell(rowData, cellRenderer)\"></span>\n                    <input v-if=\"canEdit(cellRenderer)\" v-model=\"rowData[cellRenderer]\" type=\"text\" size=\"0\" />\n                    <aj-cell-renderer v-if=\"isEditMode && cellRenderer && cellRenderer.editMode\"\n                        :html=\"rendererEditMode(rowData, cellRenderer)\" :form=\"rowData\">\n                    </aj-cell-renderer>\n                </td>\n                <td v-if=\"showControl\" class=\"control\">\n                    <aj-cell-renderer v-if=\"controlUi\" :html=\"controlUi\" :form=\"rowData\"></aj-cell-renderer>\n                    <span @click=\"onEditClk\" class=\"edit\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n                        {{!isEditMode ? \"\u7F16\u8F91\" : \"\u786E\u5B9A\"}}</span>\n                    <span @click=\"dele\" class=\"delete\"><i class=\"fa fa-times\" aria-hidden=\"true\"></i> \u5220\u9664</span>\n                </td>\n            </tr>"]));
                     _this.props = {
                         initRowData: { type: Object, required: true },
                         showIdCol: { type: Boolean, default: true },
-                        columns: Array,
                         showCheckboxCol: { type: Boolean, default: true },
                         showControl: { type: Boolean, default: true },
-                        filterField: Array,
                         enableInlineEdit: { type: Boolean, default: false },
+                        columns: Array,
+                        filterField: Array,
                         deleApi: String,
                         controlUi: String // 自定义“操作”按钮，这里填组件的名字
                     };
@@ -73,19 +70,18 @@ var aj;
                      * 单元格渲染器的类型，这是一个有序的数组
                      */
                     _this.columns = [];
-                    //@ts-ignore
                     _this.$parent = null;
                     _this.computed = {
-                        filterData: function () {
-                            var data = JSON.parse(JSON.stringify(this.rowData)); // 剔除不要的字段
-                            delete data.id;
-                            delete data.dirty;
-                            if (this.filterField && this.filterField.length)
-                                this.filterField.forEach(function (i) { return delete data[i]; });
-                            return data;
-                        },
+                        // filterData(this: GridEditRow) {// dep
+                        //     let data = JSON.parse(JSON.stringify(this.rowData));// 剔除不要的字段
+                        //     delete data.id;
+                        //     delete data.dirty;
+                        //     if (this.filterField && this.filterField.length)
+                        //         this.filterField.forEach(i => delete data[i]);
+                        //     return data;
+                        // },
                         /**
-                         *
+                         * 修改样式
                          *
                          * @param this
                          */
@@ -109,12 +105,18 @@ var aj;
                         this.$watch('rowData.' + i, makeWatch.call(this, i));
                 };
                 /**
-                 * 没有指定编辑器的情况下，使用 input 作为编辑器
+                 * 选区模型的写入，记录哪一行被选中了
                  *
-                 * @param cellRenderer
+                 * @param ev 事件对象
                  */
-                GridEditRow.prototype.canEdit = function (cellRenderer) {
-                    return this.isEditMode && !isFixedField.call(this, cellRenderer) && !(cellRenderer.editMode);
+                GridEditRow.prototype.selectCheckboxChange = function (ev) {
+                    var checkbox = ev.target, parent = this.$parent;
+                    if (parent) {
+                        if (checkbox.checked)
+                            parent.$set(parent.selected, this.id, true);
+                        else
+                            parent.$set(parent.selected, this.id, false);
+                    }
                 };
                 /**
                  * 渲染单元格
@@ -123,39 +125,27 @@ var aj;
                  * @param cellRenderer
                  */
                 GridEditRow.prototype.renderCell = function (data, cellRenderer) {
-                    var v;
+                    var v = "";
                     if (cellRenderer === '')
-                        return '';
-                    if (typeof cellRenderer == 'string') {
-                        v = data[cellRenderer];
-                        return v + "";
-                    }
-                    if (typeof cellRenderer == 'function') {
-                        v = cellRenderer(data);
                         return v;
-                    }
+                    if (typeof cellRenderer == 'string')
+                        v = data[cellRenderer] + "";
+                    if (typeof cellRenderer == 'function')
+                        v = cellRenderer(data);
                     if (typeof cellRenderer == 'object') {
                         var cfg = cellRenderer;
                         if (!!cfg.renderer)
                             v = cfg.renderer(data);
-                        // if (typeof key.showMode === 'function')
-                        //     return key.showMode(data);
-                        // if (typeof key.showMode === 'string')
-                        //     return data[key.showMode];
                     }
-                    return (v === null ? '' : v) + '';
+                    return v;
                 };
                 /**
-                 * 编辑按钮事件
+                 * 没有指定编辑器的情况下，使用 input 作为编辑器
                  *
+                 * @param cellRenderer
                  */
-                GridEditRow.prototype.onEditClk = function () {
-                    if (this.enableInlineEdit)
-                        this.isEditMode = !this.isEditMode;
-                    //@ts-ignore    
-                    else if (this.$parent.onEditClk) // 打开另外的编辑界面
-                        //@ts-ignore    
-                        this.$parent.onEditClk(this.id);
+                GridEditRow.prototype.canEdit = function (cellRenderer) {
+                    return this.isEditMode && !isFixedField.call(this, cellRenderer) && !(cellRenderer.editMode);
                 };
                 /**
                  * 渲染编辑模式下的行
@@ -166,9 +156,21 @@ var aj;
                 GridEditRow.prototype.rendererEditMode = function (data, cellRenderer) {
                     if (typeof cellRenderer === 'string')
                         return cellRenderer.toString();
-                    if (cellRenderer.editMode && typeof cellRenderer.editRenderer === 'function')
-                        return cellRenderer.editRenderer(data);
+                    var cfg = cellRenderer;
+                    if (cfg.editMode && typeof cfg.editRenderer === 'function')
+                        return cfg.editRenderer(data);
                     return "NULL";
+                };
+                /**
+                 * 编辑按钮事件
+                 */
+                GridEditRow.prototype.onEditClk = function () {
+                    if (this.enableInlineEdit)
+                        this.isEditMode = !this.isEditMode;
+                    //@ts-ignore    
+                    else if (this.$parent.onEditClk) // 打开另外的编辑界面
+                        //@ts-ignore    
+                        this.$parent.onEditClk(this.id);
                 };
                 /**
                  * 双击单元格进入编辑
@@ -176,44 +178,32 @@ var aj;
                  * @param ev
                  */
                 GridEditRow.prototype.dbEdit = function (ev) {
-                    if (!this.enableInlineEdit)
-                        return;
-                    this.isEditMode = !this.isEditMode;
-                    if (this.isEditMode) {
+                    this.onEditClk();
+                    if (this.enableInlineEdit && this.isEditMode) {
                         var el_1 = ev.target;
+                        if (el_1.tagName !== 'TD')
+                            el_1 = el_1.up('td');
                         setTimeout(function () {
+                            var _el;
                             if (el_1.tagName !== 'INPUT')
-                                el_1 = el_1.$('input');
-                            el_1 && el_1.focus();
+                                _el = el_1.$('input');
+                            _el && _el.focus();
                         }, 200);
                     }
                 };
                 /**
-                 *
-                 * @param ev
-                 */
-                GridEditRow.prototype.selectCheckboxChange = function (ev) {
-                    var checkbox = ev.target, parent = this.$parent;
-                    if (checkbox.checked)
-                        parent.$set(parent.selected, this.id, true);
-                    //this.$parent.selected[this.id] = true;
-                    else
-                        parent.$set(parent.selected, this.id, false);
-                };
-                /**
                  * 删除记录
-                 *
-                 * @param id
                  */
                 GridEditRow.prototype.dele = function (id) {
                     var _this = this;
-                    aj.showConfirm("\u786E\u5B9A\u5220\u9664\u8BB0\u5F55 id:[" + id + "] \u5417\uFF1F", function () {
-                        return aj.xhr.dele(_this.$parent.apiUrl + "/" + id + "/", function (j) {
-                            if (j.isOk) {
-                                aj.msg.show('删除成功');
-                                _this.$parent.reload();
-                            }
-                        });
+                    aj.showConfirm("\u786E\u5B9A\u5220\u9664\u8BB0\u5F55 id:[" + this.id + "] \u5417\uFF1F", function () {
+                        if (_this.$parent)
+                            aj.xhr.dele(_this.$parent.apiUrl + "/" + _this.id + "/", function (j) {
+                                if (j.isOk) {
+                                    aj.msg.show('删除成功');
+                                    _this.$parent && _this.$parent.reload();
+                                }
+                            });
                     });
                 };
                 return GridEditRow;
@@ -227,20 +217,20 @@ var aj;
              */
             function makeWatch(field) {
                 return function (_new) {
-                    var arr = this.$parent.list, data;
-                    for (var i = 0, j = arr.length; i < j; i++) { // 已知 id 找到原始数据
-                        if (this.id && (String(arr[i].id) == this.id)) {
-                            data = arr[i];
-                            break;
+                    if (this.$parent) {
+                        var arr = this.$parent.list, data = void 0;
+                        for (var i = 0, j = arr.length; i < j; i++) { // 已知 id 找到原始数据
+                            if (this.id && (String(arr[i].id) == this.id)) {
+                                data = arr[i];
+                                break;
+                            }
                         }
+                        if (!data)
+                            throw '找不到匹配的实体！目标 id: ' + this.id;
+                        if (!data.dirty)
+                            data.dirty = { id: this.id };
+                        data.dirty[field] = _new; // 保存新的值，key 是字段名
                     }
-                    if (!data)
-                        throw '找不到匹配的实体！目标 id: ' + this.id;
-                    if (!data.dirty)
-                        data.dirty = {
-                            id: this.id
-                        };
-                    data.dirty[field] = _new; // 保存新的值，key 是字段名
                 };
             }
             /**
