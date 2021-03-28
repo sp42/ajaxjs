@@ -45,7 +45,7 @@
 								<th>#</th><th>键</th><th>值</th><th>操作</th></tr>
 							</thead>
 							<tr v-show="grid.showAddNew" is="aj-grid-inline-edit-row-create" :columns="['key', 'value']" create-api="."></tr>
-							<tr is="aj-grid-inline-edit-row" v-for="value in grid.list" v-bind:key="value.id" :row-data="value" 
+							<tr is="aj-grid-inline-edit-row" v-for="value in grid.list" v-bind:key="value.id" :init-row-data="value" 
 								:enable-inline-edit="true" :columns="['key', 'value']" dele-api="."
 								:filter-field="['tid', 'createDate', 'updateDate', 'uid']">
 							</tr>

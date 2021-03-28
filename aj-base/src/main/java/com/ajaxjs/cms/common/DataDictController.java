@@ -41,6 +41,7 @@ public class DataDictController extends BaseController<Map<String, Object>> {
 	@GET
 	@MvcFilter(filters = DataBaseFilter.class)
 	public String get(@QueryParam("tid") int tid, ModelAndView mv) {
+		System.out.println("dfdfdf");
 		if (isJson()) {
 			if (tid == 0)
 				throw new IllegalArgumentException("没有 tid 参数！");
@@ -49,11 +50,15 @@ public class DataDictController extends BaseController<Map<String, Object>> {
 		} else {
 			// Constant.DataDict.class
 			try {
+				// TODO
 				Class<?> clz = ComponentMgr.get("DataDictClass", Class.class);
+				System.out.println(clz);
+				System.out.println(ReflectUtil.getConstantsInt(clz));
 
 				if (clz != null)
 					mv.put("DataDicts", ReflectUtil.getConstantsInt(clz));
 			} catch (Throwable e) {
+				e.printStackTrace();
 				// 忽略
 			}
 
