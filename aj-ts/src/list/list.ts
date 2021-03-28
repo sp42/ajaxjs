@@ -162,11 +162,10 @@ namespace aj.list {
 						</slot>
 					</li>
 				</ul>
-				<div class="no-data" v-show="total == 0">未有任何数据</div>
+				<div class="no-data" v-show="isPage && total == 0">未有任何数据</div>
 				<footer v-if="isPage" class="pager">
 					<a v-if="pageStart > 0" href="#" @click="previousPage">上一页</a>
-					<a v-if="(pageStart > 0 ) && (pageStart + pageSize < total)"
-						style="text-decoration: none;">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>
+					<a v-if="(pageStart > 0 ) && (pageStart + pageSize < total)" style="text-decoration: none;">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</a>
 					<a v-if="pageStart + pageSize < total" href="#" @click="nextPage">下一页</a>
 					<a href="javascript:;" @click="getData"><i class="fa fa-refresh" aria-hidden="true"></i> 刷新</a>
 					<input type="hidden" name="start" :value="pageStart" />
@@ -205,7 +204,7 @@ namespace aj.list {
 
 				xhr.get(this.apiUrl, this.onLoad || ((j: PageListRepsonseResult) => {
 					if (j.result) {
-						if (j.total === undefined)
+						if (this.isPage && j.total === undefined)
 							aj.alert('JSON 缺少 total 字段');
 
 						if (j.total == 0 || j.result.length == 0)
