@@ -61,7 +61,7 @@
 						</table> 
 					</div>
 					<div class="box bottom-bar padding">
-						<aj-list class="right in-one-line" api-url="../listJson/" ref="pager"></aj-list>
+						<aj-list class="right in-one-line" api-url="../listJson/" ref="pager" :show-default-ui="false"></aj-list>
 						<div class="stateMsg" v-show="grid.selectedTotal != 0">已选择[{{grid.selectedTotal}}]笔记录</div>
 					</div>
                 </template>

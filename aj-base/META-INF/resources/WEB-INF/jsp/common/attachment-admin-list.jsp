@@ -58,7 +58,7 @@
 					<td>${item.name}</td>
 					<td><aj-img-thumb img-url="${item.name}"></aj-img-thumb></td>
 					<td>${DICT[item.catalogId]}</td>
-					<td>${item.fileSize}KB</td>
+					<td><c:toFix value="${item.fileSize/1024}" />KB</td>
 					<td>${item.owner}</td>
 					<td><c:dateFormatter value="${item.createDate}" /></td>
 					<td>

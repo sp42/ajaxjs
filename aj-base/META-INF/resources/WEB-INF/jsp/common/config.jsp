@@ -9,12 +9,34 @@
 	
 	<!-- Admin 公共前端资源 -->
 	<link rel="stylesheet" href="${aj_static_resource}/dist/css/admin/admin.css" />
-	<link rel="stylesheet" href="${aj_static_resource}/dist/css/admin/config.css" />
 	<script src="${aj_static_resource}/dist/admin/admin.js"></script>
+	
+	<style>
+		.aj-json-form form {
+		  margin: 2% auto;
+		  width: 80%;
+		}
+		.aj-json-form form > div .sub {
+		  margin: 1% 0 0 0;
+		}
+		.aj-json-form form > div div.label {
+		  width: 30%;
+		}
+		.aj-json-form form > div div.input {
+		  display: inline-block;
+		  width: 68%;
+		  vertical-align: middle;
+		}
+
+	    .aj-form-html-editor .editorBody iframe,
+        .aj-form-html-editor .editorBody textarea {
+            height: 320px;
+        }
+	</style>
 </head>
 <body>
-	<div class="aj-json-form">
-		<span>
+	<div>
+		<span class="header">
 			<!-- 后台头部导航 -->
 			<aj-admin-header>
 				<template slot="title">配置参数</template>
@@ -29,7 +51,7 @@
 				</select>
 				小白用户请谨慎修改配置参数
 			</div> 
-			<div>
+			<div class="aj-json-form">
 <!-- 常规参数  -->
 <div class="config-tab-0 show">
 	<div class="aj-simple-tab-horizontal tab" style="padding: 1% 5%;">
@@ -38,27 +60,26 @@
 			<li>加密配置</li><li>短信服务配置</li><li>网络安全防控</li><li>开发者参数</li>
 		</ul>
 		<div>
-			<div>
+			<div class="aj-form-row-holder">
 				<aj-json-form :scheme="scheme" :config="config" path="uploadFile"></aj-json-form>
 			</div>
-			<div>
+			<div class="aj-form-row-holder">
 				<aj-json-form :scheme="scheme" :config="config" path="user"></aj-json-form>
 			</div>
-			<div>
+			<div class="aj-form-row-holder">
 				<aj-json-form :scheme="scheme" :config="config" path="mailServer"></aj-json-form>
 			</div>
-			<div>
+			<div class="aj-form-row-holder">
 				<aj-json-form :scheme="scheme" :config="config" path="Symmetric"></aj-json-form>
 			</div>
-			<div>
+			<div class="aj-form-row-holder">
 				<aj-json-form :scheme="scheme" :config="config" path="sms"></aj-json-form>
 			</div>
-			<div>
+			<div class="aj-form-row-holder">
 				<aj-json-form :scheme="scheme" :config="config" path="security"></aj-json-form>
 			</div>
-			<div>
-				<aj-json-form :scheme="scheme" :config="config"
-					path="forDelevelopers"></aj-json-form>
+			<div class="aj-form-row-holder">
+				<aj-json-form :scheme="scheme" :config="config" path="forDelevelopers"></aj-json-form>
 			</div>
 		</div>
 	</div>
@@ -119,9 +140,9 @@
 					</div> --%>
 				</form>
 			</div>
-			<div><aj-json-form :scheme="scheme" :config="config" path="data"></aj-json-form></div>
-			<div><aj-json-form :scheme="scheme" :config="config" path="entity"></aj-json-form></div>
-			<div><aj-json-form :scheme="scheme" :config="config" path="domain.article"></aj-json-form></div>
+			<div class="aj-form-row-holder"><aj-json-form :scheme="scheme" :config="config" path="data"></aj-json-form></div>
+			<div class="aj-form-row-holder"><aj-json-form :scheme="scheme" :config="config" path="entity"></aj-json-form></div>
+			<div class="aj-form-row-holder"><aj-json-form :scheme="scheme" :config="config" path="domain.article"></aj-json-form></div>
 			<div>
 				<aj-json-form :scheme="scheme" :config="config" path="shop"></aj-json-form>
 				<h3>微信公众号</h3>
@@ -138,7 +159,7 @@
 	</div>
 	<script src="${aj_static_resource}/dist/admin/system/config-parser.js"></script>
 	<script>
-		new Vue({el:'.aj-json-form > span'});
+		new Vue({el:'.header'});
 		
 		new Vue({
 			el:'.config-tab-0',

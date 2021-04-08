@@ -41,8 +41,8 @@
 						<li>
 							<form action="." method="post" class="createUnderNode">
 								<input type="hidden" name="pid" :value="selectedId" />
-								<input type="text" name="name" required size="12" /> 
-								<button><i class="fa fa-plus" aria-hidden="true" style="color:#ffaf0a;"></i> 新建子分类</button>	
+								<input type="text" name="name" required size="12" :class="{'aj-disable': selectedId == 0}" /> 
+								<button :class="{'aj-disable': selectedId == 0}"><i class="fa fa-plus" aria-hidden="true" style="color:#ffaf0a;"></i> 新建子分类</button>	
 							</form>
 						</li>
 						<li>
@@ -71,9 +71,7 @@
 				名称： <input type="text" class="aj-input" name="name" :value="selectedName" required /> 
 				<br />
 				<br />
-				<button class="aj-btn">
-					<img src="${commonAssetIcon}/update.gif" /> 更新名称
-				</button>
+				<button class="aj-btn"><img src="${commonAssetIcon}/update.gif" /> 更新名称</button>
 				<br />
 				<br />
 			</form>

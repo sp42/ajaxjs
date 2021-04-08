@@ -31,18 +31,23 @@
 		<div class="aj-simple-tab-vertical tab" style="padding: 1% 5%;">
 				<ul>
 					<li :class="{'selected': 0 === selected}" @click="selected = 0">前端文档</li>
-					<li :class="{'selected': 1 === selected}" @click="selected = 1">数据库文档</li>
+					<li :class="{'selected': 1 === selected}" @click="selected = 1">后端文档</li>
+					<li :class="{'selected': 2 === selected}" @click="selected = 2">数据库文档</li>
 				</ul>
 			<div class="content">
 				<div :class="{'selected': 0 === selected}">
 					<!-- TAB 内容 -->
-						<iframe src="https://framework.ajaxjs.com/"  frameborder="no" width="100%" height="96%"></iframe>
+						<iframe src="https://framework.ajaxjs.com/demo/index.html"  frameborder="no" width="100%" height="96%"></iframe>
 					<!-- // TAB 内容 -->
 				</div>
 				
 				<div :class="{'selected': 1 === selected}">
 					<!-- TAB 内容 -->
-
+					<iframe src="https://zhangxin.blog.csdn.net/article/details/114283320"  frameborder="no" width="100%" height="96%"></iframe>
+					<!-- // TAB 内容 -->
+				</div>
+				<div :class="{'selected': 2 === selected}">
+					<!-- TAB 内容 -->
 					<iframe src="${ctx}/admin/common/DataBaseShowStru/"  frameborder="no" width="100%" height="96%"></iframe>
 					<!-- // TAB 内容 -->
 				</div>

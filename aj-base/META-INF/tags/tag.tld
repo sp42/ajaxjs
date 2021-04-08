@@ -25,7 +25,7 @@
 		<tag-class>com.ajaxjs.web.view.Choose</tag-class>
 		<body-content>scriptless</body-content>
 	</tag>
-	
+
 	<tag>
 		<name>when</name>
 		<tag-class>com.ajaxjs.web.view.When</tag-class>
@@ -89,5 +89,19 @@
 			<required>true</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+	</tag>
+
+	<tag>
+		<name>toFix</name>
+		<tag-class>com.ajaxjs.web.view.ToFix</tag-class>
+		<body-content>scriptless</body-content>
+		<description>取整数</description>
+		<attribute>
+			<name>value</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>输入数值</description>
+		</attribute>
+
 	</tag>
 </taglib>
