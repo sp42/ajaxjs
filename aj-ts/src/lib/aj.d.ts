@@ -99,51 +99,6 @@ declare interface ImgUploadRepsonseResult extends RepsonseResult {
 }
 
 /**
- * 树列表
- */
-declare interface TreeList {
-
-}
-
-/**
- * 树节点
- * 
- *  参考结构
- * `
-    var map = {
-        a : 1,
-        b : 2,
-        c : {
-            children : [ {
-                d : 3
-            } ]
-        }
-    };`
- */
-declare interface TreeNode extends BaseObject {
-    /**
-     * 父节点的 id
-     */
-    pid: number;
-
-    /**
-     * 所在的第几层
-     */
-    level: number;
-
-    /**
-     * 子节点
-     */
-    children: TreeNode[];
-}
-
-/**
- * 包裹 TreeNode 的 Map
- * key 为 TreeNode.id
- */
-declare type TreeMap = { [key: string]: TreeNode };
-
-/**
  * 表单里面字段控件
  */
 declare interface FormFieldElementComponent {
@@ -181,7 +136,7 @@ interface FileReaderEvent extends Event {
 /**
  * JSON 实体
  */
-declare type JsonParam = { [key: string]: string | number | boolean | JsonParam };
+declare type JsonParam = { [key: string]: string | number | boolean | JsonParam | any[] };
 
 /**
  * key 和 value 都是 string 类型的 JSON 实体

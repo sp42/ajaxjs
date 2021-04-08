@@ -52,9 +52,15 @@ namespace aj.user.admin {
         return email || phone;
     }
 
-    function avatar(data: JsonParam): string {
-        let prefix = '',//'${aj_allConfig.uploadFile.imgPerfix}';
-            avatar = <string>data.avatar;
+let avatar: CellRendererConfig = {
+    isComponent: true,
+    editMode: false,
+    renderer(data: JsonParam): string {
+
+        let avatar = <string>data.avatar,
+            prefix = '';//'${aj_allConfig.uploadFile.imgPerfix}'
+
+        // avatar = "https://static001.geekbang.org/account/avatar/00/10/10/51/9fedfd70.jpg?x-oss-process=image/resize,w_200,h_200";
 
         if (!avatar)
             return "";
@@ -64,6 +70,7 @@ namespace aj.user.admin {
 
         return '<aj-avatar avatar="' + avatar + '"></aj-avatar>';
     }
+};
 
     let date = (data: any) => new Date(data.createDate).format("yyyy-MM-dd hh:mm");
 
@@ -79,7 +86,8 @@ namespace aj.user.admin {
         return role.name;
     }
 
-    // aj.widget.imageEnlarger();// 鼠标移动大图
+    aj.widget.img.initImageEnlarger();// 鼠标移动大图
+
     interface USER_GROUP {
         list: [];
         createOrUpdate: any;
@@ -255,7 +263,7 @@ namespace aj.user.admin {
     });
 
     // USER_GROUP.$refs.layer.show();
-    ASSIGN_RIGHT.$refs.assignRight.show();
+    // ASSIGN_RIGHT.$refs.assignRight.show();
     //BAR.$refs.createUI.show();
     //BAR.$refs.form.load(1);
 }

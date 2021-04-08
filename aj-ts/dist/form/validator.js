@@ -13,6 +13,7 @@ var aj;
                 this.errorElements = [];
                 // let isMsgNewLine: boolean = el.dataset.msgNewline === "true";
                 el.setAttribute('novalidate', 'true'); // 禁止浏览器原生的错误提示
+                this.el = el;
                 this.checkEveryField();
             }
             /**
@@ -20,18 +21,20 @@ var aj;
              */
             Validator.prototype.checkEveryField = function () {
                 var _this = this;
-                document.addEventListener('blur', function (ev) {
-                    var el = ev.target;
-                    if (el.tagName == "A" || Validator.isIgnoreEl(el)) // 忽略部分元素；a 元素也有 blur 事件，忽略之
-                        return;
-                    var result = Validator.check(el);
-                    if (result) { // 如果有错误,就把它显示出来
-                        _this.errorElements.push(result);
-                        _this.showError(result);
-                    }
-                    else
-                        _this.removeError(el); // 否则, 移除所有存在的错误信息
-                }, true);
+                this.el.$('input', function (input) {
+                    input.addEventListener('blur', function (ev) {
+                        var el = ev.target;
+                        if (el.tagName == "A" || Validator.isIgnoreEl(el)) // 忽略部分元素；a 元素也有 blur 事件，忽略之
+                            return;
+                        var result = Validator.check(el);
+                        if (result) { // 如果有错误,就把它显示出来
+                            _this.errorElements.push(result);
+                            _this.showError(result);
+                        }
+                        else
+                            _this.removeError(el); // 否则, 移除所有存在的错误信息
+                    }, true);
+                });
             };
             /**
              *

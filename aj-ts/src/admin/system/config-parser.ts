@@ -2,6 +2,68 @@
  * 读取 json scheme 文件，解析它，渲染成为表单的 UI 
  */
 namespace aj.admin.system.configParser {
+	/**
+	 * 说明配置的节点
+	 */
+	interface ConfigScheme {
+		/**
+		 * 完整 JSONPath 路径
+		 */
+		id: string;
+
+		/**
+		 * 配置名称
+		 */
+		name: string;
+
+		/**
+		 * 配置说明
+		 */
+		tip?: string;
+
+		/**
+		 * 配置值的类型
+		 */
+		type?: "boolean" | "string" | "number";
+
+		/**
+		 * 渲染的控件类型
+		 */
+		ui?: "text" | "input_text" | "textarea" | "radio" | "htmlEditor";
+
+		value: any;
+	}
+
+
+	/**
+	 * 总体的控件
+	 */
+	interface JsonForm extends Vue {
+		/**
+		 *  输入的配置规则，配置说明的 JSON Tree
+		 */
+		scheme: tree.JsonMap<ConfigScheme>;
+
+		/**
+		 * 输入的配置数据
+		 */
+		config: JsonParam;
+
+		/**
+		 * 访问节点的路径
+		 */
+		path: string;
+
+		/**
+		 * 渲染
+		 * 
+		 * @param path 
+		 */
+		doRender(path: string): void;
+
+		controls: [];
+	}
+
 	interface Editor {
 		configObj: JsonParam;
 	}
@@ -34,7 +96,7 @@ namespace aj.admin.system.configParser {
 		}
 	};
 
-	let shortHandsMap = {
+	let shortHandsMap: JsonParam = {
 		text: '<aj-json-form-input-text  :config-obj="configObj" type="text"></aj-json-form-input-text>',
 		number: '<aj-json-form-input-text  :config-obj="configObj" type="number"></aj-json-form-input-text>',
 		radio: '<aj-json-form-input-radio :config-obj="configObj"></aj-json-form-input-radio>',
@@ -44,18 +106,21 @@ namespace aj.admin.system.configParser {
 	};
 
 	Vue.component("aj-json-form-input-text", {
-		template: '<input :type="type" :name="configObj.id" :value="configObj.value" :placeholder="configObj.placeholder" :size="configObj.size" />',
+		template: html`
+			<input :type="type" :name="configObj.id" :value="configObj.value" :placeholder="configObj.placeholder"
+				:size="configObj.size" />`,
 		mixins: [baseFormControl],
 		props: {
-			type: { default: "text", type: String }
+			type: { type: String, default: "text" }
 		}
 	});
 
 	Vue.component("aj-json-form-input-radio", {
-		template: `<span>
+		template: html`
+			<span>
 				<label v-for="(value, key) in options">
-					<input type="radio" :name="configObj.id" :value="key" :checked="getChecked(key)" /> {{value}} 
-				</label> 
+					<input type="radio" :name="configObj.id" :value="key" :checked="getChecked(key)" /> {{value}}
+				</label>
 			</span>`,
 		mixins: [baseFormControl, formGetOptions],
 		methods: {
@@ -74,40 +139,38 @@ namespace aj.admin.system.configParser {
 	});
 
 	Vue.component("aj-json-form-input-checkbox", {
-		template:
-			html`<span>
-	<input type="hidden" :name="configObj.id" :value="configObj.value" />
-	<label v-for="(value, key) in options">
-		<input type="checkbox" :value="key" v-model="checked" /> {{value}}
-	</label>
-</span>`,
+		template: html`
+			<span>
+				<input type="hidden" :name="configObj.id" :value="configObj.value" />
+				<label v-for="(value, key) in options">
+					<input type="checkbox" :value="key" v-model="checked" /> {{value}}
+				</label>
+			</span>`,
 		mixins: [baseFormControl, formGetOptions],
 		data() {
 			return { checked: [] };
 		},
 		mounted(): void {
-			this.configObj.option.forEach(i => {
-				let arr = i.split("="), key = arr[0];
+			this.configObj.option.forEach((i: string) => {
+				let arr: string[] = i.split("="),
+					key: string = arr[0];
 
 				if (this.getChecked(key))
 					this.checked.push(key)
 			});
-
 		},
 		methods: {
-			getChecked(this: Editor, key): boolean {
-				let v = this.configObj.value;
-				key = Number(key);
+			getChecked(this: Editor, _key: string): boolean {
+				let v = this.configObj.value,
+					key: number = Number(_key);
 
 				return (key & v) === key;
 			}
 		},
 		watch: {
 			checked(this: Editor, checked): void {
-				let i = 0;
-				checked.forEach(v => {
-					i += Number(v);
-				});
+				let i: number = 0;
+				checked.forEach((v: string) => i += Number(v));
 
 				this.configObj.value = i;
 			}
@@ -115,10 +178,13 @@ namespace aj.admin.system.configParser {
 	});
 
 	Vue.component("aj-json-form-select", {
-		template: '<select :name="configObj.id"><option v-for="(value, key) in options" :value="key" :selected="getChecked(key)">{{value}}</option></select>',
+		template: html`
+			<select :name="configObj.id">
+				<option v-for="(value, key) in options" :value="key" :selected="getChecked(key)">{{value}}</option>
+			</select>`,
 		mixins: [baseFormControl, formGetOptions],
 		methods: {
-			getChecked(this: Editor, key) {
+			getChecked(this: Editor, key: string): boolean {
 				if (this.configObj.value === true && key === 'true')
 					return true;
 				if (this.configObj.value === false && key === 'false')
@@ -130,39 +196,34 @@ namespace aj.admin.system.configParser {
 	});
 
 	Vue.component("aj-json-form", {
-		template: html`<form method="POST" action=".">
-			<div v-for="control in controls">
-				<div class="label">{{control.config.name}}</div>
-				<div class="input">
-					<component v-bind:is="control" :config-obj="control.config"></component>
-					<div class="sub">{{control.config.tip}}</div>
+		template: html`
+			<form method="POST" action=".">
+				<div v-for="control in controls">
+					<div class="label">{{control.config.name}}</div>
+					<div class="input">
+						<component v-bind:is="control" :config-obj="control.config"></component>
+						<div class="sub">{{control.config.tip}}</div>
+					</div>
 				</div>
-			</div>
-			<section class="aj-btnsHolder">
-				<button>
-					<img :src="ajResources.commonAsset + '/icon/save.gif'" /> 修改
-				</button>
-				<button onclick="this.up('form').reset();return false;">复 位</button>
-			</section>
-		</form>`,
+				<section class="aj-btnsHolder">
+					<button> 修改 </button>
+					<button onclick="this.up('form').reset();return false;">复 位</button>
+				</section>
+			</form>`,
 		props: {
-			scheme: {					// 输入 JSON 数据规则
-				required: true, type: Object
-			},
-			config: {					// 输入 JSON 数据
-				required: true, type: Object
-			},
+			scheme: { required: true, type: Object },// 输入 JSON 数据规则
+			config: { required: true, type: Object },// 输入 JSON 数据
 			path: { required: true, type: String }
 		},
 		data() {
 			return { controls: [] };
 		},
-		mounted(): void {
+		mounted(this: JsonForm): void {
 			this.doRender(this.path);
-			let self = this;
+			let self: JsonForm = this;
 
-			xhr.form(this.$el, undefined, {
-				beforeSubmit(form: HTMLFormElement, json: StringJsonParam) {
+			xhr.form(<HTMLFormElement>this.$el, undefined, {
+				beforeSubmit(form: HTMLFormElement, json: StringJsonParam): boolean {
 					// 同步 html editor
 					self.$children.forEach(i => {
 						let editor = i.$refs.htmlEditor;
@@ -180,50 +241,35 @@ namespace aj.admin.system.configParser {
 			});
 		},
 		methods: {
-			doRender(path): void {
-				let node = findNode(this.scheme, path.split("."));
+			doRender(this: JsonForm, path: string): void {
+				let node: tree.JsonMap<ConfigScheme> = <tree.JsonMap<ConfigScheme>>tree.findNodesHolder(this.scheme, path.split("."));
 
-				for (let i in node) {
-					let control = node[i];
+				if (node) {
+					// console.log(path)
+					// console.log(node)
+					for (let i in node) {
+						let control: ConfigScheme = <ConfigScheme>node[i];
 
-					if (!control.name) { // 如果没有 name 表示这是一个父亲节点
-						this.doRender(path + "." + i);
-						continue;
+						if (!control.name) { // 如果没有 name 表示这是一个父亲节点
+							this.doRender(path + "." + i);
+							continue;
+						}
+
+						control.id = path + "." + i;
+
+						let value: any = tree.findNodesHolder(this.config, path.split(".")) || {}; // 找到配置值
+						control.value = value[i] || "";
+
+						let ui = control.ui || control.type || 'text',
+							template: string = <string>shortHandsMap[ui] || `<div>找不到对应的 ${ui} 组件</div>`;
+
+						if (typeof (template) === 'function')
+							template = (<Function>template)(control);
+
+						this.controls.push({ config: control, mixins: [baseFormControl], template: template });
 					}
-
-					control.id = path + "." + i;
-
-					let value = findNode(this.config, path.split(".")) || {};
-					control.value = value[i] || "";
-
-					let ui = control.ui || control.type || 'text';
-					let template = shortHandsMap[ui] || '<div>找不到对应的 ' + ui + ' 组件</div>';
-
-					if (typeof (template) === 'function')
-						template = template(control);
-
-					this.controls.push({ config: control, mixins: [baseFormControl], template: template });
 				}
 			}
-
 		}
 	});
-
-	function findNode(obj, queen) {
-		if (!queen.shift)
-			return null;
-
-		let first = queen.shift();
-
-		for (let i in obj) {
-			if (i === first) {
-				let target = obj[i];
-
-				if (queen.length == 0) // 找到了
-					return target;
-				else
-					return findNode(obj[i], queen);
-			}
-		}
-	}
 }

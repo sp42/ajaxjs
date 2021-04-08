@@ -36,8 +36,14 @@ namespace aj.form {
         constructor(el: HTMLFormElement) {
             // let isMsgNewLine: boolean = el.dataset.msgNewline === "true";
             el.setAttribute('novalidate', 'true');// 禁止浏览器原生的错误提示
+            this.el = el;
             this.checkEveryField();
         }
+
+        /**
+         * 表单元素
+         */
+        private el: HTMLFormElement;
 
         private errorElements: ErrorElement[] = [];
 
@@ -45,20 +51,22 @@ namespace aj.form {
          * 对每一个表单元素监听事件，一失去焦点就触发表单验证
          */
         private checkEveryField(): void {
-            document.addEventListener('blur', (ev: Event) => {
-                let el: HTMLFormControl = <HTMLFormControl>ev.target;
+            this.el.$('input', (input: HTMLInputElement) => {
+                input.addEventListener('blur', (ev: Event) => {
+                    let el: HTMLFormControl = <HTMLFormControl>ev.target;
 
-                if (el.tagName == "A" || Validator.isIgnoreEl(el))// 忽略部分元素；a 元素也有 blur 事件，忽略之
-                    return;
+                    if (el.tagName == "A" || Validator.isIgnoreEl(el))// 忽略部分元素；a 元素也有 blur 事件，忽略之
+                        return;
 
-                let result: ErrorElement | null = Validator.check(el);
+                    let result: ErrorElement | null = Validator.check(el);
 
-                if (result) { // 如果有错误,就把它显示出来
-                    this.errorElements.push(result);
-                    this.showError(result);
-                } else
-                    this.removeError(el); // 否则, 移除所有存在的错误信息
-            }, true);
+                    if (result) { // 如果有错误,就把它显示出来
+                        this.errorElements.push(result);
+                        this.showError(result);
+                    } else
+                        this.removeError(el); // 否则, 移除所有存在的错误信息
+                }, true);
+            });
         }
 
         /**

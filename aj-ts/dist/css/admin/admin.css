@@ -1,3 +1,6 @@
+:root {
+  --admin-main-color: #1e6bb8;
+}
 header.aj-admin-header {
   padding: 2% 0;
   padding-bottom: 1.5%;

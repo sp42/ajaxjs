@@ -25,7 +25,6 @@ namespace aj.form.utils {
      */
     export function selectOption(this: Vue, id: string): void {
         this.$el.$('option', (i: HTMLOptionElement) => {
-            console.log(i.value)
             if (i.value == id)
                 i.selected = true;
         });

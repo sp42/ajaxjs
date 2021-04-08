@@ -1,3 +1,6 @@
+:root {
+  --admin-main-color: #1e6bb8;
+}
 .aj-simple-tab-base > ul > li,
 .aj-simple-tab-base > button {
   background-color: #e7e7e7;
@@ -10,23 +13,22 @@
   height: 35px;
   padding: 8px;
   border: 1px solid transparent;
-  border-bottom: 0;
 }
 .aj-simple-tab-base > ul > li.active,
 .aj-simple-tab-base > button.active,
 .aj-simple-tab-base > ul > li.selected,
 .aj-simple-tab-base > button.selected {
   background-color: white;
-  border-color: red;
+  border-color: var(--admin-main-color);
   z-index: 999999;
 }
 .aj-simple-tab-base > ul > li:hover,
 .aj-simple-tab-base > button:hover {
-  color: red;
+  color: var(--admin-main-color);
 }
 .aj-simple-tab-base > div {
   position: relative;
-  border: 1px solid red;
+  border: 1px solid var(--admin-main-color);
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   z-index: 1;
@@ -52,23 +54,22 @@
   height: 35px;
   padding: 8px;
   border: 1px solid transparent;
-  border-bottom: 0;
 }
 .aj-simple-tab-horizontal > ul > li.active,
 .aj-simple-tab-horizontal > button.active,
 .aj-simple-tab-horizontal > ul > li.selected,
 .aj-simple-tab-horizontal > button.selected {
   background-color: white;
-  border-color: red;
+  border-color: var(--admin-main-color);
   z-index: 999999;
 }
 .aj-simple-tab-horizontal > ul > li:hover,
 .aj-simple-tab-horizontal > button:hover {
-  color: red;
+  color: var(--admin-main-color);
 }
 .aj-simple-tab-horizontal > div {
   position: relative;
-  border: 1px solid red;
+  border: 1px solid var(--admin-main-color);
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   z-index: 1;
@@ -108,23 +109,22 @@
   height: 35px;
   padding: 8px;
   border: 1px solid transparent;
-  border-bottom: 0;
 }
 .aj-simple-tab-vertical > ul > li.active,
 .aj-simple-tab-vertical > button.active,
 .aj-simple-tab-vertical > ul > li.selected,
 .aj-simple-tab-vertical > button.selected {
   background-color: white;
-  border-color: red;
+  border-color: var(--admin-main-color);
   z-index: 999999;
 }
 .aj-simple-tab-vertical > ul > li:hover,
 .aj-simple-tab-vertical > button:hover {
-  color: red;
+  color: var(--admin-main-color);
 }
 .aj-simple-tab-vertical > div {
   position: relative;
-  border: 1px solid red;
+  border: 1px solid var(--admin-main-color);
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   z-index: 1;
@@ -145,6 +145,7 @@
 .aj-simple-tab-vertical > ul > li {
   margin-top: 0;
   border-right: 0;
+  margin-bottom: 2px;
 }
 .aj-simple-tab-vertical > div {
   width: 75%;

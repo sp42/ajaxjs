@@ -41,15 +41,19 @@ var aj;
                     return email + '<br /> ' + phone;
                 return email || phone;
             }
-            function avatar(data) {
-                var prefix = '', //'${aj_allConfig.uploadFile.imgPerfix}';
-                avatar = data.avatar;
-                if (!avatar)
-                    return "";
-                if (avatar.indexOf('http') === -1)
-                    avatar = prefix + avatar;
-                return '<aj-avatar avatar="' + avatar + '"></aj-avatar>';
-            }
+            var avatar = {
+                isComponent: true,
+                editMode: false,
+                renderer: function (data) {
+                    var avatar = data.avatar, prefix = ''; //'${aj_allConfig.uploadFile.imgPerfix}'
+                    // avatar = "https://static001.geekbang.org/account/avatar/00/10/10/51/9fedfd70.jpg?x-oss-process=image/resize,w_200,h_200";
+                    if (!avatar)
+                        return "";
+                    if (avatar.indexOf('http') === -1)
+                        avatar = prefix + avatar;
+                    return '<aj-avatar avatar="' + avatar + '"></aj-avatar>';
+                }
+            };
             var date = function (data) { return new Date(data.createDate).format("yyyy-MM-dd hh:mm"); };
             function group(data) {
                 if (!data['roleId'])
@@ -60,6 +64,7 @@ var aj;
                     return "";
                 return role.name;
             }
+            aj.widget.img.initImageEnlarger(); // 鼠标移动大图
             admin.USER_GROUP = new Vue({
                 el: '.user-group',
                 // mixins: [aj.treeLike],
@@ -218,7 +223,7 @@ var aj;
                 }
             });
             // USER_GROUP.$refs.layer.show();
-            admin.ASSIGN_RIGHT.$refs.assignRight.show();
+            // ASSIGN_RIGHT.$refs.assignRight.show();
             //BAR.$refs.createUI.show();
             //BAR.$refs.form.load(1);
         })(admin = user.admin || (user.admin = {}));

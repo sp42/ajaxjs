@@ -1,4 +1,7 @@
 
+:root {
+  --admin-main-color: #1e6bb8;
+}
 /*
 -------------------------
      常见样式类
@@ -278,6 +281,9 @@ fieldset.aj-div legend {
   }
 }
 
+:root {
+  --admin-main-color: #1e6bb8;
+}
 
 /* AJAXJS Base CSS */
 body,
@@ -363,6 +369,9 @@ textarea {
  * 样式变量
  */
 
+:root {
+  --admin-main-color: #1e6bb8;
+}
 .aj-carousel-base {
   overflow: hidden;
 }
@@ -624,6 +633,9 @@ textarea {
   top: -1%;
 }
 
+:root {
+  --admin-main-color: #1e6bb8;
+}
 .aj-form-calendar {
   font-family: Verdana;
   font-size: 0.8rem;
@@ -788,7 +800,13 @@ textarea {
   min-width: 65px;
 }
 
+:root {
+  --admin-main-color: #1e6bb8;
+}
 
+:root {
+  --admin-main-color: #1e6bb8;
+}
 .aj-btn {
   min-height: 30px;
   font-size: 0.8rem;
@@ -1290,10 +1308,10 @@ textarea {
   top: 7px;
   border-color: transparent white transparent transparent;
 }
-/* 简单的表单布局，适合一列的 */
 .aj-form-row-holder > form {
   margin: 0 2%;
   border: 1px solid #e3e3e3;
+  /* 简单的表单布局，适合一列的 */
 }
 .aj-form-row-holder > form > div {
   border-bottom: 1px solid #e3e3e3;
@@ -1443,6 +1461,9 @@ textarea {
   right: 0;
 }
 
+:root {
+  --admin-main-color: #1e6bb8;
+}
 .aj-file-uploader {
   width: 300px;
 }
@@ -1537,6 +1558,9 @@ textarea {
   vertical-align: top;
 }
 
+:root {
+  --admin-main-color: #1e6bb8;
+}
 .aj-grid,
 .soft-container {
   border: 1px solid lightgray;
@@ -1752,8 +1776,12 @@ textarea {
 .soft-container .main-panel table th {
   border-right: 1px solid #ccc;
   font-size: 0.87rem;
-  padding: 10px;
   text-align: center;
+  height: 39px;
+  padding: 0 20px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .aj-grid .main-panel table tbody tr,
 .soft-container .main-panel table tbody tr {
@@ -1796,7 +1824,20 @@ textarea {
 .soft-container > .bottom-bar {
   border-bottom: 0;
 }
+.mainTable td {
+  height: 40px;
+}
+.aj-grid-inline-edit-row input[type=text] {
+  border: 0;
+  height: 38px;
+  background-color: transparent;
+  width: fit-content;
+  display: block;
+}
 
+:root {
+  --admin-main-color: #1e6bb8;
+}
 .aj-list .no-data {
   padding: 10%;
   color: gray;
@@ -1859,7 +1900,6 @@ textarea {
   font-size: 0.95rem;
   color: gray;
   letter-spacing: 2px;
-  margin: 2%;
 }
 .aj-pager input {
   min-height: 29px;
@@ -1907,12 +1947,14 @@ textarea {
   box-sizing: border-box;
   list-style: none;
 }
+.aj-list.in-one-line .aj-pager {
+  width: max-content;
+}
 .aj-list footer {
   text-align: center;
   font-size: 0.95rem;
   color: gray;
   letter-spacing: 2px;
-  margin: 2%;
 }
 .aj-list footer input {
   min-height: 29px;
@@ -2048,6 +2090,9 @@ textarea {
   }
 }
 
+:root {
+  --admin-main-color: #1e6bb8;
+}
 body {
   font-size: 0.9rem;
 }
@@ -2210,7 +2255,7 @@ p.note {
   border: none;
 }
 .pager {
-  margin: 3% auto;
+  margin: 1% auto;
 }
 .emptyUserAvatar {
   width: 100px;
@@ -2348,6 +2393,9 @@ p.note {
   background-color: lightgray;
 }
 
+:root {
+  --admin-main-color: #1e6bb8;
+}
 .aj-simple-tab-base > ul > li,
 .aj-simple-tab-base > button {
   background-color: #e7e7e7;
@@ -2360,23 +2408,22 @@ p.note {
   height: 35px;
   padding: 8px;
   border: 1px solid transparent;
-  border-bottom: 0;
 }
 .aj-simple-tab-base > ul > li.active,
 .aj-simple-tab-base > button.active,
 .aj-simple-tab-base > ul > li.selected,
 .aj-simple-tab-base > button.selected {
   background-color: white;
-  border-color: red;
+  border-color: var(--admin-main-color);
   z-index: 999999;
 }
 .aj-simple-tab-base > ul > li:hover,
 .aj-simple-tab-base > button:hover {
-  color: red;
+  color: var(--admin-main-color);
 }
 .aj-simple-tab-base > div {
   position: relative;
-  border: 1px solid red;
+  border: 1px solid var(--admin-main-color);
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   z-index: 1;
@@ -2402,23 +2449,22 @@ p.note {
   height: 35px;
   padding: 8px;
   border: 1px solid transparent;
-  border-bottom: 0;
 }
 .aj-simple-tab-horizontal > ul > li.active,
 .aj-simple-tab-horizontal > button.active,
 .aj-simple-tab-horizontal > ul > li.selected,
 .aj-simple-tab-horizontal > button.selected {
   background-color: white;
-  border-color: red;
+  border-color: var(--admin-main-color);
   z-index: 999999;
 }
 .aj-simple-tab-horizontal > ul > li:hover,
 .aj-simple-tab-horizontal > button:hover {
-  color: red;
+  color: var(--admin-main-color);
 }
 .aj-simple-tab-horizontal > div {
   position: relative;
-  border: 1px solid red;
+  border: 1px solid var(--admin-main-color);
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   z-index: 1;
@@ -2458,23 +2504,22 @@ p.note {
   height: 35px;
   padding: 8px;
   border: 1px solid transparent;
-  border-bottom: 0;
 }
 .aj-simple-tab-vertical > ul > li.active,
 .aj-simple-tab-vertical > button.active,
 .aj-simple-tab-vertical > ul > li.selected,
 .aj-simple-tab-vertical > button.selected {
   background-color: white;
-  border-color: red;
+  border-color: var(--admin-main-color);
   z-index: 999999;
 }
 .aj-simple-tab-vertical > ul > li:hover,
 .aj-simple-tab-vertical > button:hover {
-  color: red;
+  color: var(--admin-main-color);
 }
 .aj-simple-tab-vertical > div {
   position: relative;
-  border: 1px solid red;
+  border: 1px solid var(--admin-main-color);
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   z-index: 1;
@@ -2495,6 +2540,7 @@ p.note {
 .aj-simple-tab-vertical > ul > li {
   margin-top: 0;
   border-right: 0;
+  margin-bottom: 2px;
 }
 .aj-simple-tab-vertical > div {
   width: 75%;
@@ -2535,6 +2581,9 @@ p.note {
   overflow: hidden;
 }
 
+:root {
+  --admin-main-color: #1e6bb8;
+}
 .aj-accordion > li h3 {
   cursor: pointer;
 }
@@ -2668,6 +2717,9 @@ p.note {
   background-image: -webkit-gradient(linear, right top, left top, color-stop(0, white), color-stop(1, rgba(255, 255, 255, 0)));
 }
 
+:root {
+  --admin-main-color: #1e6bb8;
+}
 .aj-css-menu {
   margin: 0 auto;
 }
@@ -2748,6 +2800,9 @@ p.note {
   display: block;
 }
 
+:root {
+  --admin-main-color: #1e6bb8;
+}
 .aj-modal {
   animation: fade-in;
   animation-duration: 0.8s;

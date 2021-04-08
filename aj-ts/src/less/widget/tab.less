@@ -6,6 +6,7 @@
 @tab-background-color: #e7e7e7;
 
 .aj-simple-tab-base {
+
     &>ul>li,
     &>button {
         background-color: @tab-background-color;
@@ -19,25 +20,25 @@
         //margin: 3px 0;
         padding         : 8px;
         border          : 1px solid transparent;
-        border-bottom   : 0;
+        // border-bottom   : 0;
 
         &.active,
         &.selected {
             background-color: white;
-            border-color    : @tab-base-color;
+            border-color    : var(--admin-main-color);
             z-index         : 999999;
         }
 
         &:hover {
             // font-weight: bold;
-            color: @tab-base-color;
+            color: var(--admin-main-color);
         }
 
     }
 
     &>div {
         position       : relative;
-        border         : 1px solid @tab-base-color;
+        border         : 1px solid var(--admin-main-color);
         -moz-box-sizing: border-box;
         box-sizing     : border-box;
         z-index        : 1;
@@ -87,6 +88,7 @@
         &>li {
             margin-top  : 0;
             border-right: 0;
+            margin-bottom: 2px;
         }
     }
 
@@ -110,10 +112,10 @@
         height          : 35px;
         //margin: 3px 0;
 
-        padding         : 8px;
-        border          : 1px solid transparent;
-        border-bottom   : 0;
-        z-index         : 0;
+        padding      : 8px;
+        border       : 1px solid transparent;
+        border-bottom: 0;
+        z-index      : 0;
 
         &.active {
             background-color: white;

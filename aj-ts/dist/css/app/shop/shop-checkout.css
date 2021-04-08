@@ -1,6 +1,9 @@
 /**
  * 样式变量
  */
+:root {
+  --admin-main-color: #1e6bb8;
+}
 .shop-checkout section {
   clear: both;
   overflow: hidden;

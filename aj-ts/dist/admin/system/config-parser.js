@@ -47,14 +47,14 @@ var aj;
                     htmlEditor: '<aj-form-html-editor ref="htmlEditor" :fieldName="configObj.id"><textarea class="hide" :name="configObj.id">{{configObj.value}}</textarea></aj-form-html-editor>',
                 };
                 Vue.component("aj-json-form-input-text", {
-                    template: '<input :type="type" :name="configObj.id" :value="configObj.value" :placeholder="configObj.placeholder" :size="configObj.size" />',
+                    template: html(__makeTemplateObject(["\n\t\t\t<input :type=\"type\" :name=\"configObj.id\" :value=\"configObj.value\" :placeholder=\"configObj.placeholder\"\n\t\t\t\t:size=\"configObj.size\" />"], ["\n\t\t\t<input :type=\"type\" :name=\"configObj.id\" :value=\"configObj.value\" :placeholder=\"configObj.placeholder\"\n\t\t\t\t:size=\"configObj.size\" />"])),
                     mixins: [baseFormControl],
                     props: {
-                        type: { default: "text", type: String }
+                        type: { type: String, default: "text" }
                     }
                 });
                 Vue.component("aj-json-form-input-radio", {
-                    template: "<span>\n\t\t\t\t<label v-for=\"(value, key) in options\">\n\t\t\t\t\t<input type=\"radio\" :name=\"configObj.id\" :value=\"key\" :checked=\"getChecked(key)\" /> {{value}} \n\t\t\t\t</label> \n\t\t\t</span>",
+                    template: html(__makeTemplateObject(["\n\t\t\t<span>\n\t\t\t\t<label v-for=\"(value, key) in options\">\n\t\t\t\t\t<input type=\"radio\" :name=\"configObj.id\" :value=\"key\" :checked=\"getChecked(key)\" /> {{value}}\n\t\t\t\t</label>\n\t\t\t</span>"], ["\n\t\t\t<span>\n\t\t\t\t<label v-for=\"(value, key) in options\">\n\t\t\t\t\t<input type=\"radio\" :name=\"configObj.id\" :value=\"key\" :checked=\"getChecked(key)\" /> {{value}}\n\t\t\t\t</label>\n\t\t\t</span>"])),
                     mixins: [baseFormControl, formGetOptions],
                     methods: {
                         getChecked: function (key) {
@@ -70,7 +70,7 @@ var aj;
                     }
                 });
                 Vue.component("aj-json-form-input-checkbox", {
-                    template: html(__makeTemplateObject(["<span>\n\t<input type=\"hidden\" :name=\"configObj.id\" :value=\"configObj.value\" />\n\t<label v-for=\"(value, key) in options\">\n\t\t<input type=\"checkbox\" :value=\"key\" v-model=\"checked\" /> {{value}}\n\t</label>\n</span>"], ["<span>\n\t<input type=\"hidden\" :name=\"configObj.id\" :value=\"configObj.value\" />\n\t<label v-for=\"(value, key) in options\">\n\t\t<input type=\"checkbox\" :value=\"key\" v-model=\"checked\" /> {{value}}\n\t</label>\n</span>"])),
+                    template: html(__makeTemplateObject(["\n\t\t\t<span>\n\t\t\t\t<input type=\"hidden\" :name=\"configObj.id\" :value=\"configObj.value\" />\n\t\t\t\t<label v-for=\"(value, key) in options\">\n\t\t\t\t\t<input type=\"checkbox\" :value=\"key\" v-model=\"checked\" /> {{value}}\n\t\t\t\t</label>\n\t\t\t</span>"], ["\n\t\t\t<span>\n\t\t\t\t<input type=\"hidden\" :name=\"configObj.id\" :value=\"configObj.value\" />\n\t\t\t\t<label v-for=\"(value, key) in options\">\n\t\t\t\t\t<input type=\"checkbox\" :value=\"key\" v-model=\"checked\" /> {{value}}\n\t\t\t\t</label>\n\t\t\t</span>"])),
                     mixins: [baseFormControl, formGetOptions],
                     data: function () {
                         return { checked: [] };
@@ -84,24 +84,21 @@ var aj;
                         });
                     },
                     methods: {
-                        getChecked: function (key) {
-                            var v = this.configObj.value;
-                            key = Number(key);
+                        getChecked: function (_key) {
+                            var v = this.configObj.value, key = Number(_key);
                             return (key & v) === key;
                         }
                     },
                     watch: {
                         checked: function (checked) {
                             var i = 0;
-                            checked.forEach(function (v) {
-                                i += Number(v);
-                            });
+                            checked.forEach(function (v) { return i += Number(v); });
                             this.configObj.value = i;
                         }
                     }
                 });
                 Vue.component("aj-json-form-select", {
-                    template: '<select :name="configObj.id"><option v-for="(value, key) in options" :value="key" :selected="getChecked(key)">{{value}}</option></select>',
+                    template: html(__makeTemplateObject(["\n\t\t\t<select :name=\"configObj.id\">\n\t\t\t\t<option v-for=\"(value, key) in options\" :value=\"key\" :selected=\"getChecked(key)\">{{value}}</option>\n\t\t\t</select>"], ["\n\t\t\t<select :name=\"configObj.id\">\n\t\t\t\t<option v-for=\"(value, key) in options\" :value=\"key\" :selected=\"getChecked(key)\">{{value}}</option>\n\t\t\t</select>"])),
                     mixins: [baseFormControl, formGetOptions],
                     methods: {
                         getChecked: function (key) {
@@ -114,14 +111,10 @@ var aj;
                     }
                 });
                 Vue.component("aj-json-form", {
-                    template: html(__makeTemplateObject(["<form method=\"POST\" action=\".\">\n\t\t\t<div v-for=\"control in controls\">\n\t\t\t\t<div class=\"label\">{{control.config.name}}</div>\n\t\t\t\t<div class=\"input\">\n\t\t\t\t\t<component v-bind:is=\"control\" :config-obj=\"control.config\"></component>\n\t\t\t\t\t<div class=\"sub\">{{control.config.tip}}</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<section class=\"aj-btnsHolder\">\n\t\t\t\t<button>\n\t\t\t\t\t<img :src=\"ajResources.commonAsset + '/icon/save.gif'\" /> \u4FEE\u6539\n\t\t\t\t</button>\n\t\t\t\t<button onclick=\"this.up('form').reset();return false;\">\u590D \u4F4D</button>\n\t\t\t</section>\n\t\t</form>"], ["<form method=\"POST\" action=\".\">\n\t\t\t<div v-for=\"control in controls\">\n\t\t\t\t<div class=\"label\">{{control.config.name}}</div>\n\t\t\t\t<div class=\"input\">\n\t\t\t\t\t<component v-bind:is=\"control\" :config-obj=\"control.config\"></component>\n\t\t\t\t\t<div class=\"sub\">{{control.config.tip}}</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<section class=\"aj-btnsHolder\">\n\t\t\t\t<button>\n\t\t\t\t\t<img :src=\"ajResources.commonAsset + '/icon/save.gif'\" /> \u4FEE\u6539\n\t\t\t\t</button>\n\t\t\t\t<button onclick=\"this.up('form').reset();return false;\">\u590D \u4F4D</button>\n\t\t\t</section>\n\t\t</form>"])),
+                    template: html(__makeTemplateObject(["\n\t\t\t<form method=\"POST\" action=\".\">\n\t\t\t\t<div v-for=\"control in controls\">\n\t\t\t\t\t<div class=\"label\">{{control.config.name}}</div>\n\t\t\t\t\t<div class=\"input\">\n\t\t\t\t\t\t<component v-bind:is=\"control\" :config-obj=\"control.config\"></component>\n\t\t\t\t\t\t<div class=\"sub\">{{control.config.tip}}</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<section class=\"aj-btnsHolder\">\n\t\t\t\t\t<button> \u4FEE\u6539 </button>\n\t\t\t\t\t<button onclick=\"this.up('form').reset();return false;\">\u590D \u4F4D</button>\n\t\t\t\t</section>\n\t\t\t</form>"], ["\n\t\t\t<form method=\"POST\" action=\".\">\n\t\t\t\t<div v-for=\"control in controls\">\n\t\t\t\t\t<div class=\"label\">{{control.config.name}}</div>\n\t\t\t\t\t<div class=\"input\">\n\t\t\t\t\t\t<component v-bind:is=\"control\" :config-obj=\"control.config\"></component>\n\t\t\t\t\t\t<div class=\"sub\">{{control.config.tip}}</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<section class=\"aj-btnsHolder\">\n\t\t\t\t\t<button> \u4FEE\u6539 </button>\n\t\t\t\t\t<button onclick=\"this.up('form').reset();return false;\">\u590D \u4F4D</button>\n\t\t\t\t</section>\n\t\t\t</form>"])),
                     props: {
-                        scheme: {
-                            required: true, type: Object
-                        },
-                        config: {
-                            required: true, type: Object
-                        },
+                        scheme: { required: true, type: Object },
+                        config: { required: true, type: Object },
                         path: { required: true, type: String }
                     },
                     data: function () {
@@ -148,39 +141,28 @@ var aj;
                     },
                     methods: {
                         doRender: function (path) {
-                            var node = findNode(this.scheme, path.split("."));
-                            for (var i in node) {
-                                var control = node[i];
-                                if (!control.name) { // 如果没有 name 表示这是一个父亲节点
-                                    this.doRender(path + "." + i);
-                                    continue;
+                            var node = aj.tree.findNodesHolder(this.scheme, path.split("."));
+                            if (node) {
+                                // console.log(path)
+                                // console.log(node)
+                                for (var i in node) {
+                                    var control = node[i];
+                                    if (!control.name) { // 如果没有 name 表示这是一个父亲节点
+                                        this.doRender(path + "." + i);
+                                        continue;
+                                    }
+                                    control.id = path + "." + i;
+                                    var value = aj.tree.findNodesHolder(this.config, path.split(".")) || {}; // 找到配置值
+                                    control.value = value[i] || "";
+                                    var ui = control.ui || control.type || 'text', template = shortHandsMap[ui] || "<div>\u627E\u4E0D\u5230\u5BF9\u5E94\u7684 " + ui + " \u7EC4\u4EF6</div>";
+                                    if (typeof (template) === 'function')
+                                        template = template(control);
+                                    this.controls.push({ config: control, mixins: [baseFormControl], template: template });
                                 }
-                                control.id = path + "." + i;
-                                var value = findNode(this.config, path.split(".")) || {};
-                                control.value = value[i] || "";
-                                var ui = control.ui || control.type || 'text';
-                                var template = shortHandsMap[ui] || '<div>找不到对应的 ' + ui + ' 组件</div>';
-                                if (typeof (template) === 'function')
-                                    template = template(control);
-                                this.controls.push({ config: control, mixins: [baseFormControl], template: template });
                             }
                         }
                     }
                 });
-                function findNode(obj, queen) {
-                    if (!queen.shift)
-                        return null;
-                    var first = queen.shift();
-                    for (var i in obj) {
-                        if (i === first) {
-                            var target_1 = obj[i];
-                            if (queen.length == 0) // 找到了
-                                return target_1;
-                            else
-                                return findNode(obj[i], queen);
-                        }
-                    }
-                }
             })(configParser = system.configParser || (system.configParser = {}));
         })(system = admin.system || (admin.system = {}));
     })(admin = aj.admin || (aj.admin = {}));

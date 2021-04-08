@@ -14,9 +14,10 @@ namespace aj.list.grid {
                 <td v-for="cellRenderer in columns" :style="styleModifly" class="cell" @dblclick="dbEdit">
                     <span v-if="!isEditMode" v-html="renderCell(rowData, cellRenderer)"></span>
                     <input v-if="canEdit(cellRenderer)" v-model="rowData[cellRenderer]" type="text" size="0" />
-                    <aj-cell-renderer v-if="isEditMode && cellRenderer && cellRenderer.editMode"
-                        :html="rendererEditMode(rowData, cellRenderer)" :form="rowData">
-                    </aj-cell-renderer>
+                    <span v-if="cellRenderer && cellRenderer.isComponent">
+                        <component v-if="!isEditMode || !cellRenderer.editMode" v-bind:is="cellRenderer.renderer(rowData)"></component>
+                        <component v-if="isEditMode && cellRenderer.editMode"   v-bind:is="cellRenderer.editRenderer(rowData)"></component>
+                    </span>
                 </td>
                 <td v-if="showControl" class="control">
                     <aj-cell-renderer v-if="controlUi" :html="controlUi" :form="rowData"></aj-cell-renderer>

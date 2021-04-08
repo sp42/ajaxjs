@@ -17,16 +17,21 @@ interface CellRendererConfig {
      */
     editMode: boolean;
 
-    key: CellRendererKey;
+    /**
+     * 是否嵌入一个 Vue 的组件去参与渲染
+     */
+    isComponent: boolean;
+
+    key?: CellRendererKey;
 
     renderer: CellRendererFn;
 
-    editRenderer: CellRendererFn;
+    editRenderer?: CellRendererFn;
 
     /**
      * 数据类型
      */
-    type: String | Number | Boolean;
+    type?: String | Number | Boolean;
 }
 
 /**

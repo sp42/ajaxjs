@@ -1,3 +1,6 @@
+:root {
+  --admin-main-color: #1e6bb8;
+}
 .aj-grid,
 .soft-container {
   border: 1px solid lightgray;

@@ -306,33 +306,6 @@ var aj;
 })(aj || (aj = {}));
 
 "use strict";
-/**
- * 动态组件，可否换为  component？
- */
-Vue.component('aj-cell-renderer', {
-    props: {
-        html: { type: String, default: '' },
-        form: Object
-    },
-    render: function (h) {
-        if (this.html.indexOf('<aj-') != -1) {
-            var com = Vue.extend({
-                template: this.html,
-                props: {
-                    form: Object
-                }
-            });
-            return h(com, {
-                props: {
-                    form: this.form
-                }
-            });
-        }
-        else {
-            return this._v(this.html); // html
-        }
-    }
-});
 Vue.component('aj-grid-select-row', {
     template: '<a href="#" @click="fireSelect">选择</a>',
     props: { type: { type: String, required: true } },
@@ -636,7 +609,7 @@ var aj;
                 function GridEditRow() {
                     var _this = _super !== null && _super.apply(this, arguments) || this;
                     _this.name = "aj-grid-inline-edit-row";
-                    _this.template = html(__makeTemplateObject(["\n            <tr class=\"aj-grid-inline-edit-row\" :class=\"{editing: isEditMode}\">\n                <td v-if=\"showCheckboxCol\" class=\"selectCheckbox\">\n                    <input type=\"checkbox\" @change=\"selectCheckboxChange\" :data-id=\"id\" />\n                </td>\n                <td v-if=\"showIdCol\">{{id}}</td>\n                <td v-for=\"cellRenderer in columns\" :style=\"styleModifly\" class=\"cell\" @dblclick=\"dbEdit\">\n                    <span v-if=\"!isEditMode\" v-html=\"renderCell(rowData, cellRenderer)\"></span>\n                    <input v-if=\"canEdit(cellRenderer)\" v-model=\"rowData[cellRenderer]\" type=\"text\" size=\"0\" />\n                    <aj-cell-renderer v-if=\"isEditMode && cellRenderer && cellRenderer.editMode\"\n                        :html=\"rendererEditMode(rowData, cellRenderer)\" :form=\"rowData\">\n                    </aj-cell-renderer>\n                </td>\n                <td v-if=\"showControl\" class=\"control\">\n                    <aj-cell-renderer v-if=\"controlUi\" :html=\"controlUi\" :form=\"rowData\"></aj-cell-renderer>\n                    <span @click=\"onEditClk\" class=\"edit\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n                        {{!isEditMode ? \"\u7F16\u8F91\" : \"\u786E\u5B9A\"}}</span>\n                    <span @click=\"dele\" class=\"delete\"><i class=\"fa fa-times\" aria-hidden=\"true\"></i> \u5220\u9664</span>\n                </td>\n            </tr>"], ["\n            <tr class=\"aj-grid-inline-edit-row\" :class=\"{editing: isEditMode}\">\n                <td v-if=\"showCheckboxCol\" class=\"selectCheckbox\">\n                    <input type=\"checkbox\" @change=\"selectCheckboxChange\" :data-id=\"id\" />\n                </td>\n                <td v-if=\"showIdCol\">{{id}}</td>\n                <td v-for=\"cellRenderer in columns\" :style=\"styleModifly\" class=\"cell\" @dblclick=\"dbEdit\">\n                    <span v-if=\"!isEditMode\" v-html=\"renderCell(rowData, cellRenderer)\"></span>\n                    <input v-if=\"canEdit(cellRenderer)\" v-model=\"rowData[cellRenderer]\" type=\"text\" size=\"0\" />\n                    <aj-cell-renderer v-if=\"isEditMode && cellRenderer && cellRenderer.editMode\"\n                        :html=\"rendererEditMode(rowData, cellRenderer)\" :form=\"rowData\">\n                    </aj-cell-renderer>\n                </td>\n                <td v-if=\"showControl\" class=\"control\">\n                    <aj-cell-renderer v-if=\"controlUi\" :html=\"controlUi\" :form=\"rowData\"></aj-cell-renderer>\n                    <span @click=\"onEditClk\" class=\"edit\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n                        {{!isEditMode ? \"\u7F16\u8F91\" : \"\u786E\u5B9A\"}}</span>\n                    <span @click=\"dele\" class=\"delete\"><i class=\"fa fa-times\" aria-hidden=\"true\"></i> \u5220\u9664</span>\n                </td>\n            </tr>"]));
+                    _this.template = html(__makeTemplateObject(["\n            <tr class=\"aj-grid-inline-edit-row\" :class=\"{editing: isEditMode}\">\n                <td v-if=\"showCheckboxCol\" class=\"selectCheckbox\">\n                    <input type=\"checkbox\" @change=\"selectCheckboxChange\" :data-id=\"id\" />\n                </td>\n                <td v-if=\"showIdCol\">{{id}}</td>\n                <td v-for=\"cellRenderer in columns\" :style=\"styleModifly\" class=\"cell\" @dblclick=\"dbEdit\">\n                    <span v-if=\"!isEditMode\" v-html=\"renderCell(rowData, cellRenderer)\"></span>\n                    <input v-if=\"canEdit(cellRenderer)\" v-model=\"rowData[cellRenderer]\" type=\"text\" size=\"0\" />\n                    <span v-if=\"cellRenderer && cellRenderer.isComponent\">\n                        <component v-if=\"!isEditMode || !cellRenderer.editMode\" v-bind:is=\"cellRenderer.renderer(rowData)\"></component>\n                        <component v-if=\"isEditMode && cellRenderer.editMode\"   v-bind:is=\"cellRenderer.editRenderer(rowData)\"></component>\n                    </span>\n                </td>\n                <td v-if=\"showControl\" class=\"control\">\n                    <aj-cell-renderer v-if=\"controlUi\" :html=\"controlUi\" :form=\"rowData\"></aj-cell-renderer>\n                    <span @click=\"onEditClk\" class=\"edit\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n                        {{!isEditMode ? \"\u7F16\u8F91\" : \"\u786E\u5B9A\"}}</span>\n                    <span @click=\"dele\" class=\"delete\"><i class=\"fa fa-times\" aria-hidden=\"true\"></i> \u5220\u9664</span>\n                </td>\n            </tr>"], ["\n            <tr class=\"aj-grid-inline-edit-row\" :class=\"{editing: isEditMode}\">\n                <td v-if=\"showCheckboxCol\" class=\"selectCheckbox\">\n                    <input type=\"checkbox\" @change=\"selectCheckboxChange\" :data-id=\"id\" />\n                </td>\n                <td v-if=\"showIdCol\">{{id}}</td>\n                <td v-for=\"cellRenderer in columns\" :style=\"styleModifly\" class=\"cell\" @dblclick=\"dbEdit\">\n                    <span v-if=\"!isEditMode\" v-html=\"renderCell(rowData, cellRenderer)\"></span>\n                    <input v-if=\"canEdit(cellRenderer)\" v-model=\"rowData[cellRenderer]\" type=\"text\" size=\"0\" />\n                    <span v-if=\"cellRenderer && cellRenderer.isComponent\">\n                        <component v-if=\"!isEditMode || !cellRenderer.editMode\" v-bind:is=\"cellRenderer.renderer(rowData)\"></component>\n                        <component v-if=\"isEditMode && cellRenderer.editMode\"   v-bind:is=\"cellRenderer.editRenderer(rowData)\"></component>\n                    </span>\n                </td>\n                <td v-if=\"showControl\" class=\"control\">\n                    <aj-cell-renderer v-if=\"controlUi\" :html=\"controlUi\" :form=\"rowData\"></aj-cell-renderer>\n                    <span @click=\"onEditClk\" class=\"edit\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n                        {{!isEditMode ? \"\u7F16\u8F91\" : \"\u786E\u5B9A\"}}</span>\n                    <span @click=\"dele\" class=\"delete\"><i class=\"fa fa-times\" aria-hidden=\"true\"></i> \u5220\u9664</span>\n                </td>\n            </tr>"]));
                     _this.props = {
                         initRowData: { type: Object, required: true },
                         showIdCol: { type: Boolean, default: true },
@@ -898,7 +871,6 @@ var aj;
 })(aj || (aj = {}));
 
 "use strict";
-
 var aj;
 (function (aj) {
     var list;
@@ -906,66 +878,127 @@ var aj;
         var tree;
         (function (tree) {
             /**
-             * 下拉分类选择器，异步请求远端获取分类数据
+             * 寻找节点
+             *
+             * @param obj
+             * @param queen
+             * @returns
              */
-            var TreeLikeSelect = /** @class */ (function (_super) {
-                __extends(TreeLikeSelect, _super);
-                function TreeLikeSelect() {
-                    var _this = _super !== null && _super.apply(this, arguments) || this;
-                    _this.name = 'aj-tree-like-select';
-                    _this.template = '<select :name="fieldName" class="aj-select" @change="onSelected" style="min-width:180px;"></select>';
-                    _this.props = {
-                        fieldName: { type: String, required: false, default: 'catalogId' },
-                        apiUrl: { type: String, default: function () { return aj.ctx + '/admin/tree-like/'; } },
-                        isAutoLoad: { type: Boolean, default: true },
-                        isAutoJump: Boolean,
-                        initFieldValue: String
-                    };
-                    _this.apiUrl = "";
-                    /**
-                     * 是否自动跳转 catalogId
-                     */
-                    _this.isAutoJump = false;
-                    _this.isAutoLoad = false;
-                    _this.fieldName = "";
-                    _this.fieldValue = "";
-                    _this.initFieldValue = "";
-                    return _this;
+            function findNodesHolder(obj, queen) {
+                if (!queen.shift)
+                    return null;
+                var first = queen.shift();
+                for (var i in obj) {
+                    if (i === first) {
+                        var target_1 = obj[i];
+                        if (queen.length == 0) // 找到了
+                            return target_1;
+                        else
+                            return findNodesHolder(obj[i], queen);
+                    }
                 }
-                TreeLikeSelect.prototype.data = function () {
-                    return {
-                        fieldValue: this.initFieldValue
-                    };
-                };
-                TreeLikeSelect.prototype.mounted = function () {
-                    this.isAutoLoad && this.getData();
-                };
-                TreeLikeSelect.prototype.onSelected = function (ev) {
-                    var el = ev.target;
-                    this.fieldValue = el.selectedOptions[0].value;
-                    if (this.isAutoJump)
-                        location.assign('?' + this.fieldName + '=' + this.fieldValue);
-                    else
-                        this.BUS && this.BUS.$emit('aj-tree-catelog-select-change', ev, this);
-                };
-                TreeLikeSelect.prototype.getData = function () {
-                    var _this = this;
-                    var fn = function (j) {
-                        var arr = [{ id: 0, name: "请选择分类" }];
-                        tree.rendererOption(arr.concat(j.result), _this.$el, _this.fieldValue, { makeAllOption: false });
-                        if (_this.fieldValue) // 有指定的选中值
-                            //@ts-ignore
-                            aj.form.utils.selectOption.call(_this, _this.fieldValue);
-                    };
-                    // aj.xhr.get(this.ajResources.ctx + this.apiUrl + "/admin/tree-like/getListAndSubByParentId/", fn);
-                    aj.xhr.get(this.apiUrl, fn);
-                };
-                return TreeLikeSelect;
-            }(aj.VueComponent));
-            tree.TreeLikeSelect = TreeLikeSelect;
-            new TreeLikeSelect().register();
+                return null;
+            }
+            tree.findNodesHolder = findNodesHolder;
         })(tree = list.tree || (list.tree = {}));
     })(list = aj.list || (aj.list = {}));
+})(aj || (aj = {}));
+
+"use strict";
+
+var aj;
+(function (aj) {
+    var tree;
+    (function (tree) {
+        /**
+         * 下拉分类选择器，异步请求远端获取分类数据
+         */
+        var TreeLikeSelect = /** @class */ (function (_super) {
+            __extends(TreeLikeSelect, _super);
+            function TreeLikeSelect() {
+                var _this = _super !== null && _super.apply(this, arguments) || this;
+                _this.name = 'aj-tree-like-select';
+                _this.template = '<select :name="fieldName" class="aj-select" @change="onSelected" style="min-width:180px;"></select>';
+                _this.props = {
+                    fieldName: { type: String, required: false, default: 'catalogId' },
+                    apiUrl: { type: String, default: function () { return aj.ctx + '/admin/tree-like/'; } },
+                    isAutoLoad: { type: Boolean, default: true },
+                    isAutoJump: Boolean,
+                    initFieldValue: String
+                };
+                _this.apiUrl = "";
+                /**
+                 * 是否自动跳转 catalogId
+                 */
+                _this.isAutoJump = false;
+                _this.isAutoLoad = true;
+                _this.fieldName = "";
+                _this.fieldValue = "";
+                _this.initFieldValue = "";
+                return _this;
+            }
+            TreeLikeSelect.prototype.data = function () {
+                return {
+                    fieldValue: this.initFieldValue
+                };
+            };
+            TreeLikeSelect.prototype.mounted = function () {
+                this.isAutoLoad && this.getData();
+            };
+            TreeLikeSelect.prototype.onSelected = function (ev) {
+                var el = ev.target;
+                this.fieldValue = el.selectedOptions[0].value;
+                if (this.isAutoJump)
+                    location.assign('?' + this.fieldName + '=' + this.fieldValue);
+                else
+                    this.BUS && this.BUS.$emit('aj-tree-catelog-select-change', ev, this);
+            };
+            TreeLikeSelect.prototype.getData = function () {
+                var _this = this;
+                var fn = function (j) {
+                    var arr = [{ id: 0, name: "请选择分类" }];
+                    rendererOption(arr.concat(j.result), _this.$el, _this.fieldValue, { makeAllOption: false });
+                    if (_this.fieldValue) // 有指定的选中值
+                        //@ts-ignore
+                        aj.form.utils.selectOption.call(_this, _this.fieldValue);
+                };
+                // aj.xhr.get(this.ajResources.ctx + this.apiUrl + "/admin/tree-like/getListAndSubByParentId/", fn);
+                aj.xhr.get(this.apiUrl, fn);
+            };
+            return TreeLikeSelect;
+        }(aj.VueComponent));
+        tree.TreeLikeSelect = TreeLikeSelect;
+        new TreeLikeSelect().register();
+        /**
+         * 渲染 Option 标签的 DOM
+         *
+         * @param jsonArray
+         * @param select
+         * @param selectedId
+         * @param cfg
+         */
+        function rendererOption(jsonArray, select, selectedId, cfg) {
+            if (cfg && cfg.makeAllOption) {
+                var option = document.createElement('option');
+                option.value = option.innerHTML = "全部分类";
+                select.appendChild(option);
+            }
+            // 生成 option
+            var temp = document.createDocumentFragment();
+            tree.output(tree.toTreeMap(jsonArray), function (node, nodeId) {
+                var option = document.createElement('option'); // 节点
+                option.value = nodeId;
+                if (selectedId && selectedId == nodeId) // 选中的
+                    option.selected = true;
+                option.dataset['pid'] = node.pid + "";
+                //option.style= "padding-left:" + (node.level - 1) +"rem;";
+                option.innerHTML = new Array(node.level * 5).join('&nbsp;') + (node.level == 1 ? '' : '└─') + node.name;
+                temp.appendChild(option);
+            });
+            select.appendChild(temp);
+        }
+        tree.rendererOption = rendererOption;
+    })(tree = aj.tree || (aj.tree = {}));
 })(aj || (aj = {}));
 
 "use strict";
@@ -1196,45 +1229,284 @@ var aj;
 
 "use strict";
 
+
+var aj;
+(function (aj) {
+    var tree;
+    (function (tree) {
+        var Tree = /** @class */ (function (_super) {
+            __extends(Tree, _super);
+            function Tree() {
+                var _this = _super !== null && _super.apply(this, arguments) || this;
+                _this.name = 'aj-tree';
+                _this.template = '<ul class="aj-tree"><aj-tree-item :model="treeData"></aj-tree-item></ul>';
+                _this.props = {
+                    apiUrl: String,
+                    topNodeName: String
+                };
+                /**
+                 * 根节点显示名称
+                 */
+                _this.topNodeName = "";
+                _this.apiUrl = "";
+                _this.isAutoLoad = false;
+                _this.treeData = {
+                    name: _this.topNodeName || 'TOP',
+                    children: null
+                };
+                return _this;
+            }
+            Tree.prototype.getData = function () {
+                var _this = this;
+                aj.xhr.get(this.apiUrl, function (j) {
+                    // @ts-ignore
+                    _this.treeData.children = tree.toTreeArray(j.result);
+                });
+                // 递归组件怎么事件上报呢？通过事件 bus
+                this.BUS && this.BUS.$on('treenodeclick', function (data) { return _this.$emit('treenodeclick', data); });
+            };
+            Tree.prototype.mounted = function () {
+                this.getData();
+            };
+            return Tree;
+        }(aj.VueComponent));
+        tree.Tree = Tree;
+        new Tree().register();
+        /**
+         * 注意递归组件的使用
+         */
+        var TreeItem = /** @class */ (function (_super) {
+            __extends(TreeItem, _super);
+            function TreeItem() {
+                var _this = _super !== null && _super.apply(this, arguments) || this;
+                _this.name = 'aj-tree-item';
+                _this.template = html(__makeTemplateObject(["\n                <li>\n                    <div :class=\"{bold: isFolder, node: true}\" @click=\"toggle\">\n                        <span>\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7</span>{{model.name}}\n                        <span v-if=\"isFolder\">[{{open ? '-' : '+'}}]</span>\n                    </div>\n                    <ul v-show=\"open\" v-if=\"isFolder\" :class=\"{show: open}\">\n                        <aj-tree-item class=\"item\" v-for=\"(model, index) in model.children\" :key=\"index\" :model=\"model\">\n                        </aj-tree-item>\n                        <li v-if=\"allowAddNode\" class=\"add\" @click=\"addChild\">+</li>\n                    </ul>\n                </li>\n            "], ["\n                <li>\n                    <div :class=\"{bold: isFolder, node: true}\" @click=\"toggle\">\n                        <span>\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7</span>{{model.name}}\n                        <span v-if=\"isFolder\">[{{open ? '-' : '+'}}]</span>\n                    </div>\n                    <ul v-show=\"open\" v-if=\"isFolder\" :class=\"{show: open}\">\n                        <aj-tree-item class=\"item\" v-for=\"(model, index) in model.children\" :key=\"index\" :model=\"model\">\n                        </aj-tree-item>\n                        <li v-if=\"allowAddNode\" class=\"add\" @click=\"addChild\">+</li>\n                    </ul>\n                </li>\n            "]));
+                _this.props = {
+                    model: Object,
+                    allowAddNode: { type: Boolean, default: false } // 是否允许添加新节点
+                };
+                _this.model = { children: [] };
+                _this.open = false;
+                _this.allowAddNode = false;
+                // isFolder = false;
+                _this.computed = {
+                    isFolder: function () {
+                        return !!(this.model.children && this.model.children.length);
+                    }
+                };
+                return _this;
+            }
+            /**
+             * 点击节点时的方法
+             */
+            TreeItem.prototype.toggle = function () {
+                //@ts-ignore
+                if (this.isFolder)
+                    this.open = !this.open;
+                this.BUS && this.BUS.$emit('tree-node-click', this.model);
+            };
+            /**
+             * 变为文件夹
+             */
+            TreeItem.prototype.changeType = function () {
+                //@ts-ignore
+                if (!this.isFolder) {
+                    Vue.set(this.model, 'children', []);
+                    this.addChild();
+                    this.open = true;
+                }
+            };
+            TreeItem.prototype.addChild = function () {
+                this.model.children.push({
+                    //@ts-ignore
+                    name: 'new stuff'
+                });
+            };
+            return TreeItem;
+        }(aj.VueComponent));
+        tree.TreeItem = TreeItem;
+        new TreeItem().register();
+    })(tree = aj.tree || (aj.tree = {}));
+})(aj || (aj = {}));
+
+"use strict";
 var aj;
 (function (aj) {
     var list;
     (function (list) {
         var tree;
         (function (tree) {
-            var Tree = /** @class */ (function (_super) {
-                __extends(Tree, _super);
-                function Tree() {
-                    var _this = _super !== null && _super.apply(this, arguments) || this;
-                    _this.name = 'aj-tree';
-                    _this.template = '<ul class="aj-tree"><aj-tree-item :model="treeData"></aj-tree-item></ul>';
-                    _this.props = {
-                        apiUrl: String,
-                        topNodeName: String
-                    };
-                    /**
-                     * 根节点显示名称
-                     */
-                    _this.topNodeName = "";
-                    _this.apiUrl = "";
-                    _this.isAutoLoad = false;
-                    _this.treeData = { name: _this.topNodeName || 'TOP', children: null };
-                    return _this;
+            /**
+             * 寻找配置说明的节点
+             *
+             * @param obj
+             * @param queen
+             * @returns
+             */
+            function findNodesHolder(obj, queen) {
+                if (!queen.shift)
+                    return null;
+                var first = queen.shift();
+                for (var i in obj) {
+                    if (i === first) {
+                        var target_1 = obj[i];
+                        if (queen.length == 0) // 找到了
+                            return target_1;
+                        else
+                            return findNodesHolder(obj[i], queen);
+                    }
                 }
-                Tree.prototype.getData = function () {
-                    var _this = this;
-                    // @ts-ignore
-                    aj.xhr.get(this.apiUrl, function (j) { return _this.treeData.children = tree.makeTree(j.result); });
-                    // 递归组件怎么事件上报呢？通过事件 bus
-                    this.BUS && this.BUS.$on('treenodeclick', function (data) { return _this.$emit('treenodeclick', data); });
-                };
-                Tree.prototype.mounted = function () {
-                    this.getData();
-                };
-                return Tree;
-            }(aj.VueComponent));
-            tree.Tree = Tree;
-            new Tree().register();
+                return null;
+            }
+            tree.findNodesHolder = findNodesHolder;
         })(tree = list.tree || (list.tree = {}));
     })(list = aj.list || (aj.list = {}));
+})(aj || (aj = {}));
+
+"use strict";
+var aj;
+(function (aj) {
+    var tree;
+    (function (tree) {
+        /**
+         * 寻找节点
+         *
+         * @param obj
+         * @param queue
+         * @returns
+         */
+        function findNodesHolder(obj, queue) {
+            if (!queue.shift)
+                return null;
+            var first = queue.shift();
+            for (var i in obj) {
+                if (i === first) {
+                    var target_1 = obj[i];
+                    if (queue.length == 0) // 找到了
+                        return target_1;
+                    else
+                        return findNodesHolder(obj[i], queue);
+                }
+            }
+            return null;
+        }
+        tree.findNodesHolder = findNodesHolder;
+        //------------------------------------------------------------------------------
+        /**
+         * 根据传入 id 在一个数组中查找父亲节点
+         *
+         * @param map
+         * @param id
+         */
+        function findParentInArray(arr, id) {
+            for (var i = 0; i < arr.length; i++) {
+                var n = arr[i];
+                if (id == n.id)
+                    return n;
+                var c = n.children;
+                if (c) {
+                    var result = findParentInArray(c, id);
+                    if (result != null)
+                        return result;
+                }
+            }
+            return null;
+        }
+        tree.findParentInArray = findParentInArray;
+        /**
+         * 生成树，将扁平化的数组结构 还原为树状的 Array结构
+         * 父id 必须在子 id 之前，不然下面 findParent() 找不到后面的父节点，故先排序
+         *
+         * @param jsonArray
+         */
+        function toTreeArray(jsonArray) {
+            var arr = [];
+            for (var i = 0, j = jsonArray.length; i < j; i++) {
+                var n = jsonArray[i];
+                if (n.pid === -1)
+                    arr.push(n);
+                else {
+                    var parentNode = findParentInArray(arr, n.pid);
+                    if (parentNode) {
+                        if (!parentNode.children)
+                            parentNode.children = [];
+                        parentNode.children.push(n);
+                    }
+                    else
+                        console.log('parent not found!');
+                }
+            }
+            return arr;
+        }
+        tree.toTreeArray = toTreeArray;
+        /**
+         * 根据传入 id 查找父亲节点
+         *
+         * @param map
+         * @param id
+         */
+        function findParentInMap(map, id) {
+            for (var i in map) {
+                if (i == id)
+                    return map[i];
+                var c = map[i].children;
+                if (c) {
+                    for (var q = 0, p = c.length; q < p; q++) {
+                        var result = findParentInMap(c[q], id);
+                        if (result != null)
+                            return result;
+                    }
+                }
+            }
+            return null;
+        }
+        tree.findParentInMap = findParentInMap;
+        /**
+         * 生成树，将扁平化的数组结构 还原为树状的 Map 结构
+         * 父id 必须在子id之前，不然下面 findParent() 找不到后面的父节点，故前提条件是，这个数组必须先排序
+         *
+         * @param jsonArray
+         */
+        function toTreeMap(jsonArray) {
+            if (!jsonArray)
+                return {};
+            var m = {};
+            for (var i = 0, j = jsonArray.length; i < j; i++) {
+                var n = jsonArray[i], parentNode = findParentInMap(m, n.pid + "");
+                if (parentNode == null) { // 没有父节点，那就表示这是根节点，保存之
+                    m[n.id] = n; // id 是key，value 新建一对象
+                }
+                else { // 有父亲节点，作为孩子节点保存
+                    var obj = {};
+                    obj[n.id] = n;
+                    if (!parentNode.children)
+                        parentNode.children = [];
+                    parentNode.children.push(obj);
+                }
+            }
+            return m;
+        }
+        tree.toTreeMap = toTreeMap;
+        var stack = [];
+        /**
+         * 遍历各个元素，输出
+         *
+         * @param map
+         * @param cb
+         */
+        function output(map, cb) {
+            stack.push(map);
+            for (var i in map) {
+                map[i].level = stack.length; // 层数，也表示缩进多少个字符
+                cb(map[i], i);
+                var c = map[i].children;
+                if (c) {
+                    for (var q = 0, p = c.length; q < p; q++)
+                        output(c[q], cb);
+                }
+            }
+            stack.pop();
+        }
+        tree.output = output;
+    })(tree = aj.tree || (aj.tree = {}));
 })(aj || (aj = {}));

@@ -1,6 +1,9 @@
 /**
  * 样式变量
  */
+:root {
+  --admin-main-color: #1e6bb8;
+}
 .goods-info .gallery {
   float: left;
   width: 40%;

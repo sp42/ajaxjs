@@ -30,7 +30,6 @@ var aj;
              */
             function selectOption(id) {
                 this.$el.$('option', function (i) {
-                    console.log(i.value);
                     if (i.value == id)
                         i.selected = true;
                 });

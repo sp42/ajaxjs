@@ -1,4 +1,4 @@
-namespace aj.list.tree {
+namespace aj.tree {
     interface TreeOption {
         /**
          * 是否创建全部
@@ -29,7 +29,7 @@ namespace aj.list.tree {
          */
         isAutoJump: boolean = false;
 
-        isAutoLoad: boolean = false;
+        isAutoLoad: boolean = true;
 
         fieldName: string = "";
 
@@ -56,7 +56,7 @@ namespace aj.list.tree {
             else
                 this.BUS && this.BUS.$emit('aj-tree-catelog-select-change', ev, this);
         }
-        
+
         getData(): void {
             let fn = (j: RepsonseResult) => {
                 let arr = [{ id: 0, name: "请选择分类" }];
@@ -73,4 +73,38 @@ namespace aj.list.tree {
     }
 
     new TreeLikeSelect().register();
+
+    /**
+     * 渲染 Option 标签的 DOM
+     * 
+     * @param jsonArray 
+     * @param select 
+     * @param selectedId 
+     * @param cfg 
+     */
+    export function rendererOption(jsonArray: TreeNode[], select: HTMLSelectElement, selectedId?: string, cfg?: TreeOption): void {
+        if (cfg && cfg.makeAllOption) {
+            let option: HTMLOptionElement = document.createElement('option');
+            option.value = option.innerHTML = "全部分类";
+            select.appendChild(option);
+        }
+
+        // 生成 option
+        let temp: DocumentFragment = document.createDocumentFragment();
+
+        output(<TreeNode>toTreeMap(jsonArray), (node: TreeNode, nodeId: string) => {
+            let option: HTMLOptionElement = document.createElement('option'); // 节点
+            option.value = nodeId;
+
+            if (selectedId && selectedId == nodeId) // 选中的
+                option.selected = true;
+
+            option.dataset['pid'] = node.pid + "";
+            //option.style= "padding-left:" + (node.level - 1) +"rem;";
+            option.innerHTML = new Array(node.level * 5).join('&nbsp;') + (node.level == 1 ? '' : '└─') + node.name;
+            temp.appendChild(option);
+        });
+
+        select.appendChild(temp);
+    }
 }

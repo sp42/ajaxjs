@@ -1,3 +1,6 @@
+:root {
+  --admin-main-color: #1e6bb8;
+}
 .aj-form-calendar {
   font-family: Verdana;
   font-size: 0.8rem;
