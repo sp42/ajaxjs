@@ -3604,6 +3604,9 @@ var aj;
     (function (list) {
         var grid;
         (function (grid) {
+            Vue.component('foo', {
+                template: '<div>foo</div>'
+            });
             /**
              * 行的 UI
              */
@@ -3612,7 +3615,7 @@ var aj;
                 function GridEditRow() {
                     var _this = _super !== null && _super.apply(this, arguments) || this;
                     _this.name = "aj-grid-inline-edit-row";
-                    _this.template = html(__makeTemplateObject(["\n            <tr class=\"aj-grid-inline-edit-row\" :class=\"{editing: isEditMode}\">\n                <td v-if=\"showCheckboxCol\" class=\"selectCheckbox\">\n                    <input type=\"checkbox\" @change=\"selectCheckboxChange\" :data-id=\"id\" />\n                </td>\n                <td v-if=\"showIdCol\">{{id}}</td>\n                <td v-for=\"cellRenderer in columns\" :style=\"styleModifly\" class=\"cell\" @dblclick=\"dbEdit\">\n                    <span v-if=\"!isEditMode\" v-html=\"renderCell(rowData, cellRenderer)\"></span>\n                    <input v-if=\"canEdit(cellRenderer)\" v-model=\"rowData[cellRenderer]\" type=\"text\" size=\"0\" />\n                    <span v-if=\"cellRenderer && cellRenderer.isComponent\">\n                        <component v-if=\"!isEditMode || !cellRenderer.editMode\" v-bind:is=\"cellRenderer.renderer(rowData)\"></component>\n                        <component v-if=\"isEditMode && cellRenderer.editMode\"   v-bind:is=\"cellRenderer.editRenderer(rowData)\"></component>\n                    </span>\n                </td>\n                <td v-if=\"showControl\" class=\"control\">\n                    <aj-cell-renderer v-if=\"controlUi\" :html=\"controlUi\" :form=\"rowData\"></aj-cell-renderer>\n                    <span @click=\"onEditClk\" class=\"edit\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n                        {{!isEditMode ? \"\u7F16\u8F91\" : \"\u786E\u5B9A\"}}</span>\n                    <span @click=\"dele\" class=\"delete\"><i class=\"fa fa-times\" aria-hidden=\"true\"></i> \u5220\u9664</span>\n                </td>\n            </tr>"], ["\n            <tr class=\"aj-grid-inline-edit-row\" :class=\"{editing: isEditMode}\">\n                <td v-if=\"showCheckboxCol\" class=\"selectCheckbox\">\n                    <input type=\"checkbox\" @change=\"selectCheckboxChange\" :data-id=\"id\" />\n                </td>\n                <td v-if=\"showIdCol\">{{id}}</td>\n                <td v-for=\"cellRenderer in columns\" :style=\"styleModifly\" class=\"cell\" @dblclick=\"dbEdit\">\n                    <span v-if=\"!isEditMode\" v-html=\"renderCell(rowData, cellRenderer)\"></span>\n                    <input v-if=\"canEdit(cellRenderer)\" v-model=\"rowData[cellRenderer]\" type=\"text\" size=\"0\" />\n                    <span v-if=\"cellRenderer && cellRenderer.isComponent\">\n                        <component v-if=\"!isEditMode || !cellRenderer.editMode\" v-bind:is=\"cellRenderer.renderer(rowData)\"></component>\n                        <component v-if=\"isEditMode && cellRenderer.editMode\"   v-bind:is=\"cellRenderer.editRenderer(rowData)\"></component>\n                    </span>\n                </td>\n                <td v-if=\"showControl\" class=\"control\">\n                    <aj-cell-renderer v-if=\"controlUi\" :html=\"controlUi\" :form=\"rowData\"></aj-cell-renderer>\n                    <span @click=\"onEditClk\" class=\"edit\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n                        {{!isEditMode ? \"\u7F16\u8F91\" : \"\u786E\u5B9A\"}}</span>\n                    <span @click=\"dele\" class=\"delete\"><i class=\"fa fa-times\" aria-hidden=\"true\"></i> \u5220\u9664</span>\n                </td>\n            </tr>"]));
+                    _this.template = html(__makeTemplateObject(["\n            <tr class=\"aj-grid-inline-edit-row\" :class=\"{editing: isEditMode}\">\n                <td v-if=\"showCheckboxCol\" class=\"selectCheckbox\">\n                    <input type=\"checkbox\" @change=\"selectCheckboxChange\" :data-id=\"id\" />\n                </td>\n                <td v-if=\"showIdCol\">{{id}}</td>\n                <td v-for=\"cellRenderer in columns\" :style=\"styleModifly\" class=\"cell\" @dblclick=\"dbEdit\">\n                    <span v-if=\"!isEditMode\" v-html=\"renderCell(rowData, cellRenderer)\"></span>\n                    <input v-if=\"canEdit(cellRenderer)\" v-model=\"rowData[cellRenderer]\" type=\"text\" size=\"0\" />\n                    <span v-if=\"cellRenderer && cellRenderer.cmpName\">\n                        <component v-if=\"!isEditMode || !cellRenderer.editMode\" v-bind:is=\"cellRenderer.cmpName\" v-bind=\"cellRenderer.cmpProps(rowData)\"></component>\n                        <component v-if=\"isEditMode && cellRenderer.editMode\" v-bind:is=\"cellRenderer.editCmpName\" v-bind=\"cellRenderer.cmpProps(rowData)\">\n                                    </component> \n                    </span>\n                </td>\n                <td v-if=\"showControl\" class=\"control\">\n                    <aj-cell-renderer v-if=\"controlUi\" :html=\"controlUi\" :form=\"rowData\"></aj-cell-renderer>\n                    <span @click=\"onEditClk\" class=\"edit\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n                        {{!isEditMode ? \"\u7F16\u8F91\" : \"\u786E\u5B9A\"}}</span>\n                    <span @click=\"dele\" class=\"delete\"><i class=\"fa fa-times\" aria-hidden=\"true\"></i> \u5220\u9664</span>\n                </td>\n            </tr>"], ["\n            <tr class=\"aj-grid-inline-edit-row\" :class=\"{editing: isEditMode}\">\n                <td v-if=\"showCheckboxCol\" class=\"selectCheckbox\">\n                    <input type=\"checkbox\" @change=\"selectCheckboxChange\" :data-id=\"id\" />\n                </td>\n                <td v-if=\"showIdCol\">{{id}}</td>\n                <td v-for=\"cellRenderer in columns\" :style=\"styleModifly\" class=\"cell\" @dblclick=\"dbEdit\">\n                    <span v-if=\"!isEditMode\" v-html=\"renderCell(rowData, cellRenderer)\"></span>\n                    <input v-if=\"canEdit(cellRenderer)\" v-model=\"rowData[cellRenderer]\" type=\"text\" size=\"0\" />\n                    <span v-if=\"cellRenderer && cellRenderer.cmpName\">\n                        <component v-if=\"!isEditMode || !cellRenderer.editMode\" v-bind:is=\"cellRenderer.cmpName\" v-bind=\"cellRenderer.cmpProps(rowData)\"></component>\n                        <component v-if=\"isEditMode && cellRenderer.editMode\" v-bind:is=\"cellRenderer.editCmpName\" v-bind=\"cellRenderer.cmpProps(rowData)\">\n                                    </component> \n                    </span>\n                </td>\n                <td v-if=\"showControl\" class=\"control\">\n                    <aj-cell-renderer v-if=\"controlUi\" :html=\"controlUi\" :form=\"rowData\"></aj-cell-renderer>\n                    <span @click=\"onEditClk\" class=\"edit\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n                        {{!isEditMode ? \"\u7F16\u8F91\" : \"\u786E\u5B9A\"}}</span>\n                    <span @click=\"dele\" class=\"delete\"><i class=\"fa fa-times\" aria-hidden=\"true\"></i> \u5220\u9664</span>\n                </td>\n            </tr>"]));
                     _this.props = {
                         initRowData: { type: Object, required: true },
                         showIdCol: { type: Boolean, default: true },
@@ -3986,19 +3989,23 @@ var aj;
                 option.value = option.innerHTML = "全部分类";
                 select.appendChild(option);
             }
-            // 生成 option
-            var temp = document.createDocumentFragment();
-            tree.output(tree.toTreeMap(jsonArray), function (node, nodeId) {
-                var option = document.createElement('option'); // 节点
-                option.value = nodeId;
-                if (selectedId && selectedId == nodeId) // 选中的
-                    option.selected = true;
-                option.dataset['pid'] = node.pid + "";
-                //option.style= "padding-left:" + (node.level - 1) +"rem;";
-                option.innerHTML = new Array(node.level * 5).join('&nbsp;') + (node.level == 1 ? '' : '└─') + node.name;
-                temp.appendChild(option);
-            });
-            select.appendChild(temp);
+            var treeNode = tree.toTreeMap(jsonArray);
+            if (treeNode) {
+                // 生成 option
+                var temp_1 = document.createDocumentFragment();
+                console.log(treeNode);
+                tree.output(treeNode, function (node, nodeId) {
+                    var option = document.createElement('option'); // 节点
+                    option.value = nodeId;
+                    if (selectedId && selectedId == nodeId) // 选中的
+                        option.selected = true;
+                    option.dataset['pid'] = node.pid + "";
+                    //option.style= "padding-left:" + (node.level - 1) +"rem;";
+                    option.innerHTML = new Array(node.level * 5).join('&nbsp;') + (node.level == 1 ? '' : '└─') + node.name;
+                    temp_1.appendChild(option);
+                });
+                select.appendChild(temp_1);
+            }
         }
         tree.rendererOption = rendererOption;
     })(tree = aj.tree || (aj.tree = {}));
@@ -4442,6 +4449,7 @@ var aj;
             return arr;
         }
         tree.toTreeArray = toTreeArray;
+        //------------------------------------------------------------------------------
         /**
          * 根据传入 id 查找父亲节点
          *
@@ -4450,15 +4458,16 @@ var aj;
          */
         function findParentInMap(map, id) {
             for (var i in map) {
+                var obj = map[i];
                 if (i == id)
-                    return map[i];
-                var c = map[i].children;
+                    return obj;
+                if (obj === null)
+                    continue;
+                var c = obj.children;
                 if (c) {
-                    for (var q = 0, p = c.length; q < p; q++) {
-                        var result = findParentInMap(c[q], id);
-                        if (result != null)
-                            return result;
-                    }
+                    var result = findParentInMap(c, id);
+                    if (result != null)
+                        return result;
                 }
             }
             return null;
@@ -4472,19 +4481,21 @@ var aj;
          */
         function toTreeMap(jsonArray) {
             if (!jsonArray)
-                return {};
+                return null;
             var m = {};
             for (var i = 0, j = jsonArray.length; i < j; i++) {
-                var n = jsonArray[i], parentNode = findParentInMap(m, n.pid + "");
-                if (parentNode == null) { // 没有父节点，那就表示这是根节点，保存之
-                    m[n.id] = n; // id 是key，value 新建一对象
-                }
-                else { // 有父亲节点，作为孩子节点保存
-                    var obj = {};
-                    obj[n.id] = n;
-                    if (!parentNode.children)
-                        parentNode.children = [];
-                    parentNode.children.push(obj);
+                var n = jsonArray[i];
+                if (n.pid === -1)
+                    m[n.id] = n;
+                else {
+                    var parentNode = findParentInMap(m, n.pid + "");
+                    if (parentNode) {
+                        if (!parentNode.children)
+                            parentNode.children = {};
+                        parentNode.children[n.id] = n;
+                    }
+                    else
+                        console.log('parent not found!');
                 }
             }
             return m;
@@ -4501,12 +4512,9 @@ var aj;
             stack.push(map);
             for (var i in map) {
                 map[i].level = stack.length; // 层数，也表示缩进多少个字符
-                cb(map[i], i);
+                cb && cb(map[i], i);
                 var c = map[i].children;
-                if (c) {
-                    for (var q = 0, p = c.length; q < p; q++)
-                        output(c[q], cb);
-                }
+                c && output(c, cb);
             }
             stack.pop();
         }

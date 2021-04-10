@@ -165,18 +165,19 @@ namespace aj.tree {
      */
     export function findParentInMap(map: TreeNode, id: string): TreeNode | null {
         for (let i in map) {
+            let obj = map[i];
             if (i == id)
-                return map[i];
+                return obj;
 
-            let c: TreeNode = <TreeNode>map[i].children;
+            if (obj === null)
+                continue;
+
+            let c: TreeNode = <TreeNode>obj.children;
 
             if (c) {
-                for (let j in c) {
-                    let result: TreeNode | null = findParentInMap(c[j], id);
-
-                    if (result != null)
-                        return result;
-                }
+                let result: TreeNode | null = findParentInMap(c, id)
+                if (result != null)
+                    return result;
             }
         }
 

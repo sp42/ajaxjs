@@ -13,20 +13,30 @@ type CellRendererFn = (j: JsonParam) => string;
  */
 interface CellRendererConfig {
     /**
+     * 传入一个 Vue 的组件去参与渲染
+     */
+    cmpName: string;
+
+    /**
+     * 编辑状态下使用何种组件？
+     */
+    editCmpName?: string;
+
+    /**
+     * 组件所依赖的 props 
+     */
+    cmpProps: (j: JsonParam) => JsonParam;
+
+    /**
      * 可否被编辑编辑
      */
     editMode: boolean;
 
-    /**
-     * 是否嵌入一个 Vue 的组件去参与渲染
-     */
-    isComponent: boolean;
-
-    key?: CellRendererKey;
-
-    renderer: CellRendererFn;
+    renderer?: CellRendererFn;
 
     editRenderer?: CellRendererFn;
+
+    key?: CellRendererKey;
 
     /**
      * 数据类型

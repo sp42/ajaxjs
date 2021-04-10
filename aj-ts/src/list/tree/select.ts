@@ -89,22 +89,27 @@ namespace aj.tree {
             select.appendChild(option);
         }
 
-        // 生成 option
-        let temp: DocumentFragment = document.createDocumentFragment();
+        let treeNode: TreeNode | null = toTreeMap(jsonArray);
+        if (treeNode) {
+            // 生成 option
+            let temp: DocumentFragment = document.createDocumentFragment();
+            console.log(treeNode)
 
-        output(<TreeNode>toTreeMap(jsonArray), (node: TreeNode, nodeId: string) => {
-            let option: HTMLOptionElement = document.createElement('option'); // 节点
-            option.value = nodeId;
+            output(<TreeNode>treeNode, (node: TreeNode, nodeId: string) => {
+                let option: HTMLOptionElement = document.createElement('option'); // 节点
+                option.value = nodeId;
 
-            if (selectedId && selectedId == nodeId) // 选中的
-                option.selected = true;
+                if (selectedId && selectedId == nodeId) // 选中的
+                    option.selected = true;
 
-            option.dataset['pid'] = node.pid + "";
-            //option.style= "padding-left:" + (node.level - 1) +"rem;";
-            option.innerHTML = new Array(node.level * 5).join('&nbsp;') + (node.level == 1 ? '' : '└─') + node.name;
-            temp.appendChild(option);
-        });
+                option.dataset['pid'] = node.pid + "";
+                //option.style= "padding-left:" + (node.level - 1) +"rem;";
+                option.innerHTML = new Array(node.level * 5).join('&nbsp;') + (node.level == 1 ? '' : '└─') + node.name;
+                temp.appendChild(option);
+            });
 
-        select.appendChild(temp);
+            select.appendChild(temp);
+        }
+
     }
 }

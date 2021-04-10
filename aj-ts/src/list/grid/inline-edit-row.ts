@@ -1,4 +1,8 @@
 namespace aj.list.grid {
+
+    Vue.component('foo', {
+        template: '<div>foo</div>'
+    })
     /**
      * 行的 UI
      */
@@ -14,9 +18,10 @@ namespace aj.list.grid {
                 <td v-for="cellRenderer in columns" :style="styleModifly" class="cell" @dblclick="dbEdit">
                     <span v-if="!isEditMode" v-html="renderCell(rowData, cellRenderer)"></span>
                     <input v-if="canEdit(cellRenderer)" v-model="rowData[cellRenderer]" type="text" size="0" />
-                    <span v-if="cellRenderer && cellRenderer.isComponent">
-                        <component v-if="!isEditMode || !cellRenderer.editMode" v-bind:is="cellRenderer.renderer(rowData)"></component>
-                        <component v-if="isEditMode && cellRenderer.editMode"   v-bind:is="cellRenderer.editRenderer(rowData)"></component>
+                    <span v-if="cellRenderer && cellRenderer.cmpName">
+                        <component v-if="!isEditMode || !cellRenderer.editMode" v-bind:is="cellRenderer.cmpName" v-bind="cellRenderer.cmpProps(rowData)"></component>
+                        <component v-if="isEditMode && cellRenderer.editMode" v-bind:is="cellRenderer.editCmpName" v-bind="cellRenderer.cmpProps(rowData)">
+                                    </component> 
                     </span>
                 </td>
                 <td v-if="showControl" class="control">
@@ -26,6 +31,7 @@ namespace aj.list.grid {
                     <span @click="dele" class="delete"><i class="fa fa-times" aria-hidden="true"></i> 删除</span>
                 </td>
             </tr>`;
+
 
         props = {
             initRowData: { type: Object, required: true },
@@ -87,7 +93,7 @@ namespace aj.list.grid {
 
             //     return data;
             // },
-
+ 
             /**
              * 修改样式
              * 

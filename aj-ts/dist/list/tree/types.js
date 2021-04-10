@@ -83,15 +83,16 @@ var aj;
          */
         function findParentInMap(map, id) {
             for (var i in map) {
+                var obj = map[i];
                 if (i == id)
-                    return map[i];
-                var c = map[i].children;
+                    return obj;
+                if (obj === null)
+                    continue;
+                var c = obj.children;
                 if (c) {
-                    for (var j in c) {
-                        var result = findParentInMap(c[j], id);
-                        if (result != null)
-                            return result;
-                    }
+                    var result = findParentInMap(c, id);
+                    if (result != null)
+                        return result;
                 }
             }
             return null;

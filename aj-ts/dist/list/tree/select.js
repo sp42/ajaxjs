@@ -89,19 +89,23 @@ var aj;
                 option.value = option.innerHTML = "全部分类";
                 select.appendChild(option);
             }
-            // 生成 option
-            var temp = document.createDocumentFragment();
-            tree.output(tree.toTreeMap(jsonArray), function (node, nodeId) {
-                var option = document.createElement('option'); // 节点
-                option.value = nodeId;
-                if (selectedId && selectedId == nodeId) // 选中的
-                    option.selected = true;
-                option.dataset['pid'] = node.pid + "";
-                //option.style= "padding-left:" + (node.level - 1) +"rem;";
-                option.innerHTML = new Array(node.level * 5).join('&nbsp;') + (node.level == 1 ? '' : '└─') + node.name;
-                temp.appendChild(option);
-            });
-            select.appendChild(temp);
+            var treeNode = tree.toTreeMap(jsonArray);
+            if (treeNode) {
+                // 生成 option
+                var temp_1 = document.createDocumentFragment();
+                console.log(treeNode);
+                tree.output(treeNode, function (node, nodeId) {
+                    var option = document.createElement('option'); // 节点
+                    option.value = nodeId;
+                    if (selectedId && selectedId == nodeId) // 选中的
+                        option.selected = true;
+                    option.dataset['pid'] = node.pid + "";
+                    //option.style= "padding-left:" + (node.level - 1) +"rem;";
+                    option.innerHTML = new Array(node.level * 5).join('&nbsp;') + (node.level == 1 ? '' : '└─') + node.name;
+                    temp_1.appendChild(option);
+                });
+                select.appendChild(temp_1);
+            }
         }
         tree.rendererOption = rendererOption;
     })(tree = aj.tree || (aj.tree = {}));
