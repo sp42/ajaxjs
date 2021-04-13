@@ -252,20 +252,28 @@ public abstract class BaseController<T> implements IController, MvcConstant {
 	 * @return JSON 结果
 	 */
 	public static String toJson(Object obj) {
-		return toJson(obj, true);
+		return toJson(obj, true, true);
 	}
 
 	/**
 	 * 将 Object 转换为 JSON 字符串
 	 * 
-	 * @param obj   普通对象
-	 * @param isAdd 是否添加生成 json 的前缀 json::
+	 * @param obj         普通对象
+	 * @param isAddPerfix 是否添加生成 json 的前缀 json::。有时候在页面上输出 json 作为 JS 代码的一部分，就要设为
+	 *                    false。
+	 * @param isAddResult JSON 是否包裹在 result 下面
 	 * @return JSON 字符串
 	 */
-	public static String toJson(Object obj, boolean isAdd) {
+	public static String toJson(Object obj, boolean isAddPerfix, boolean isAddResult) {
 		String jsonStr = JsonHelper.toJson(obj);
 
-		return "json::" + (isAdd ? "{\"result\":" + jsonStr + "}" : jsonStr);
+		if (isAddResult)
+			jsonStr = "{\"result\":" + jsonStr + "}";
+
+		if (isAddPerfix)
+			jsonStr = "json::" + jsonStr;
+
+		return jsonStr;
 	}
 
 	/**
@@ -275,7 +283,7 @@ public abstract class BaseController<T> implements IController, MvcConstant {
 	 * @return JSON 字符串
 	 */
 	public static String toJson(PageResult<?> pageResult) {
-		String jsonStr = toJson(pageResult, false);
+		String jsonStr = toJson(pageResult, true, false);
 
 		if (jsonStr == null || pageResult == null)
 			jsonStr = "[]";

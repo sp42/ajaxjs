@@ -36,8 +36,7 @@ public class TreeLikeService extends BaseService<Catalog> {
 		 * @param pid
 		 * @return
 		 */
-		@Select(value = "SELECT * FROM common_catalog WHERE `path` LIKE (CONCAT ((SELECT `path` FROM common_catalog WHERE id = ?) , '/%'))", 
-				sqliteValue = "SELECT * FROM common_catalog WHERE `path` LIKE ((SELECT `path` FROM common_catalog WHERE id = ?) || '/%')")
+		@Select(value = "SELECT * FROM common_catalog WHERE `path` LIKE (CONCAT ((SELECT `path` FROM common_catalog WHERE id = ?) , '/%')) ORDER BY pid ", sqliteValue = "SELECT * FROM common_catalog WHERE `path` LIKE ((SELECT `path` FROM common_catalog WHERE id = ?) || '/%')")
 		List<Catalog> getAllChildren(int pid);
 
 		/**
@@ -75,7 +74,7 @@ public class TreeLikeService extends BaseService<Catalog> {
 	 * @return
 	 */
 	public List<Catalog> getAllChildren() {
-		return dao.findList(null);
+		return dao.findList(sql -> sql + " ORDER BY pid");
 	}
 
 	/**

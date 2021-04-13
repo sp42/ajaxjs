@@ -62,8 +62,10 @@ public class DaoSqlHandler {
 					found = true;
 
 					if (obj instanceof Function) {
+						System.out.println("------------");
+						System.out.println(obj);
 						@SuppressWarnings("unchecked")
-						Function<String, String> fn = (Function<String, String>) obj;
+						Function<String, String> fn = (Function<String, String>) obj; // 有 SQLHandler
 						String _sql = fn.apply(sql);
 
 						if (_sql == null)

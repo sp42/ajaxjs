@@ -4,7 +4,7 @@
 	<aj-layer ref="layer">
 		<h3 style="padding-left: 2%; font-weight: bold;">用户组管理</h3>
 
-		<div class="aj-grid user-group">
+		<div class="aj-grid user-group" style="width:960px;">
 			<div class="box padding">你可以在这里添加、修改、删除用户角色</div>
 			<div class="box">
 				<!-- 菜单工具栏-->

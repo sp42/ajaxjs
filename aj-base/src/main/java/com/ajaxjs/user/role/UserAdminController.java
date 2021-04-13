@@ -55,10 +55,8 @@ public class UserAdminController extends BaseController<User> {
 
 		List<Map<String, Object>> userGroups = roleService.getDao().findList(null);
 
-		mv.put("SexGender", UserConstant.SEX_GENDER);
-		mv.put("UserGroups", TreeLikeService.idAsKey(userGroups));
-		mv.put("UserGroupsJson", toJson(TreeLikeService.idAsKey(userGroups), false));
-		mv.put("UserGroupsJSON", toJson(userGroups, false).replaceAll("\"", "'"));
+		mv.put("UserGroupsJSON", toJson(userGroups, false, false));
+		mv.put("UserGroups_IdAsKey", toJson(TreeLikeService.idAsKey(userGroups), false, false));
 
 		// 扩展权限
 		ExtendedRight extendedRight = ComponentMgr.getByInterface(ExtendedRight.class);
@@ -72,11 +70,16 @@ public class UserAdminController extends BaseController<User> {
 	@Path("listJson")
 	@Produces(MediaType.APPLICATION_JSON)
 	@MvcFilter(filters = DataBaseFilter.class)
-	public String listJson(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv, HttpServletRequest r) {
+	public String listJson(@QueryParam(START) int start, @QueryParam(LIMIT) int limit, ModelAndView mv, HttpServletRequest r,
+			@QueryParam("roleId") int roleId) {
 		LOGGER.info("后台-会员列表-json");
 		String[] fields = { "id", "name", "username" };
 
 		Function<String, String> fn = QueryTools.searchQuery(fields, r).andThen(BaseService::betweenCreateDate);
+
+		if (roleId != 0)
+			fn = fn.andThen(QueryTools.by("roleId", roleId));
+
 		return toJson(service.findPagedList(start, limit, fn));
 	}
 
@@ -84,7 +87,7 @@ public class UserAdminController extends BaseController<User> {
 	@MvcFilter(filters = DataBaseFilter.class)
 	@Path(ID_INFO)
 	public String editUI(@PathParam(ID) Long id, ModelAndView mv) {
-		mv.put("UserGroupsJSON", toJson(roleService.getDao().findList(null), false).replaceAll("\"", "'"));
+		mv.put("UserGroupsJSON", toJson(roleService.getDao().findList(null), false, false).replaceAll("\"", "'"));
 		mv.put("SexGender", UserConstant.SEX_GENDER);
 
 		return output(mv, id, "jsp::user/user-edit");

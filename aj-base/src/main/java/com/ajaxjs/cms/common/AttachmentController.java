@@ -247,6 +247,6 @@ public class AttachmentController extends BaseController<Attachment> {
 			public String msg = "上传成功！";
 			public String imgUrl = Encode.urlDecode(info.saveFileName);
 			public String fullUrl = info.fullPath;
-		}, false) : jsonNoOk("上传失败！");
+		}, true, false) : jsonNoOk("上传失败！");
 	}
 }

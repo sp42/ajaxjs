@@ -7,7 +7,7 @@
 			<!-- 树控件 --> 
 			<div class="tree-panel">
 				<h4>用户组</h4>
-				<aj-tree url="/admin/user/user_group/list/?limit=99" top-node-name="用户组"></aj-tree>
+				<!-- <aj-tree url="/admin/user/user_group/list/?limit=99" top-node-name="用户组"></aj-tree> -->
 			</div>
 			<table>
 				<!-- <caption>权限管理系统</caption> -->

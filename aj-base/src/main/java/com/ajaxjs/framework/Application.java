@@ -67,6 +67,7 @@ public class Application implements ServletContextListener, Filter {
 		} catch (Throwable e1) {
 			LOGGER.warning(e1);
 		}
+		
 		onServletStartUp.forEach(action -> action.accept(ctx));
 	}
 

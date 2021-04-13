@@ -24,6 +24,7 @@
 					<div class="box padding">
 						<div class="right">
 							分 类 
+							<select name="roleId" class="aj-select"></select>
 							<%-- <aj-tree-user-role-select :value="${empty param.roleId ? '0' : param.roleId}" :json="${UserGroupsJSON}"></aj-tree-user-role-select> --%>
 						</div>
 						查看系统所有的会员资料
@@ -61,7 +62,7 @@
 						</table> 
 					</div>
 					<div class="box bottom-bar padding">
-						<aj-list class="right in-one-line" api-url="../listJson/" ref="pager" :show-default-ui="false"></aj-list>
+						<aj-list ref="store" class="right in-one-line" api-url="../listJson/" ref="pager" :show-default-ui="false"></aj-list>
 						<div class="stateMsg" v-show="grid.selectedTotal != 0">已选择[{{grid.selectedTotal}}]笔记录</div>
 					</div>
                 </template>
@@ -73,8 +74,11 @@
  		<%@include file="assign-right.jsp" %>
  		
 		<script>
-			window.UserGroupsJson = '${UserGroupsJson}';
+			window.UserGroups = ${UserGroupsJSON};
+			window.UserGroups_IdAsKey = ${UserGroups_IdAsKey};
 		</script>
-		<script src="${aj_static_resource}/dist/user/admin-list.js"></script>
+		<script src="${aj_static_resource}/dist/user/admin/list.js"></script>
+		<script src="${aj_static_resource}/dist/user/admin/user-group.js"></script>
+		<script src="${aj_static_resource}/dist/user/admin/assign-right.js"></script>
 	</body>
 </html>

@@ -42,7 +42,7 @@ public class SectionController extends BaseController<Section> {
 	public static String getEntityProfile(ModelAndView mv) {
 		@SuppressWarnings("unchecked")
 		Map<String, Object> map = (Map<String, Object>) ConfigService.CONFIG.get("data");
-		String json = toJson(map.get("entityProfile"), false);
+		String json = toJson(map.get("entityProfile"), false, false);
 
 		if (mv != null)
 			mv.put("ENTITY_PROFILE", json);
