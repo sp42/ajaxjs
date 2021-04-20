@@ -25,7 +25,6 @@
 						<div class="right">
 							分 类 
 							<select name="roleId" class="aj-select"></select>
-							<%-- <aj-tree-user-role-select :value="${empty param.roleId ? '0' : param.roleId}" :json="${UserGroupsJSON}"></aj-tree-user-role-select> --%>
 						</div>
 						查看系统所有的会员资料
 					</div>
