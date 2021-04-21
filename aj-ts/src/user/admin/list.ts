@@ -1,5 +1,5 @@
 namespace aj.user.admin {
-    let BAR = new Vue({
+    export let MAIN_LIST = new Vue({
         el: '.user-list',
         //     data: {
         //         list: [],
@@ -7,6 +7,24 @@ namespace aj.user.admin {
         //         付款暂停: 0
         //     },
         mounted(): void {
+            // 分类筛选
+            let select: HTMLSelectElement = this.$el.$('select[name=roleId]');
+
+            // @ts-ignore
+            tree.rendererOption(<tree.TreeNode[]>window.UserGroups, select, "", { makeAllOption: true, allOptionName: "用户组" });
+
+            select.onchange = () => {
+                if (select.selectedIndex === 0)
+                    this.$refs.store.extraParam = {};
+                else {
+                    let value: string = select.options[select.selectedIndex].value;
+
+                    this.$refs.store.extraParam = {
+                        roleId: value
+                    };
+                }
+            }
+
             // this.$refs.pager.$on("pager-result", result => {
             //     this.list = result;
             //     this.maxRows = result.length;
@@ -24,9 +42,6 @@ namespace aj.user.admin {
             //     location.assign('../' + id + '/');
             // },
 
-            // onCatalogChange(v) {
-            //     alert(v)
-            // },
             // onCreateClk() { }
         }
     });
@@ -79,7 +94,7 @@ namespace aj.user.admin {
             return "";
 
         // @ts-ignore
-        let role = window.UserGroupsJson[data['roleId']];
+        let role = window.UserGroups_IdAsKey[data['roleId']];
         if (!role)
             return "";
 

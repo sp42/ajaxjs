@@ -5,7 +5,7 @@ var aj;
     (function (user) {
         var admin;
         (function (admin) {
-            var BAR = new Vue({
+            admin.MAIN_LIST = new Vue({
                 el: '.user-list',
                 //     data: {
                 //         list: [],
@@ -13,6 +13,21 @@ var aj;
                 //         付款暂停: 0
                 //     },
                 mounted: function () {
+                    var _this = this;
+                    // 分类筛选
+                    var select = this.$el.$('select[name=roleId]');
+                    // @ts-ignore
+                    aj.tree.rendererOption(window.UserGroups, select, "", { makeAllOption: true, allOptionName: "用户组" });
+                    select.onchange = function () {
+                        if (select.selectedIndex === 0)
+                            _this.$refs.store.extraParam = {};
+                        else {
+                            var value = select.options[select.selectedIndex].value;
+                            _this.$refs.store.extraParam = {
+                                roleId: value
+                            };
+                        }
+                    };
                     // this.$refs.pager.$on("pager-result", result => {
                     //     this.list = result;
                     //     this.maxRows = result.length;
@@ -59,7 +74,7 @@ var aj;
                 if (!data['roleId'])
                     return "";
                 // @ts-ignore
-                var role = window.UserGroupsJson[data['roleId']];
+                var role = window.UserGroups_IdAsKey[data['roleId']];
                 if (!role)
                     return "";
                 return role.name;

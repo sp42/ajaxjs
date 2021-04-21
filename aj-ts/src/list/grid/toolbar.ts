@@ -17,7 +17,7 @@ namespace aj.list.grid {
                     <input type="text" name="keyword" placeholder="请输入关键字" size="12" />
                     <button @click="doSearch"><i class="fa fa-search" style="color:#417BB5;"></i>搜索</button>
                 </form>
-                <aj-form-between-date v-if="betweenDate" class="right"></aj-form-between-date>
+                <aj-form-between-date v-if="betweenDate" class="right" :is-ajax="true"></aj-form-between-date>
                 <ul>
                     <li v-if="create" @click="$emit('on-create-btn-clk')"><i class="fa fa-plus" style="color:#0a90f0;"></i> 新建</li>
                     <li v-if="save" @click="$emit('on-save-btn-clk')"><i class="fa fa-floppy-o"

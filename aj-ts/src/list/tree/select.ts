@@ -3,7 +3,12 @@ namespace aj.tree {
         /**
          * 是否创建全部
          */
-        makeAllOption: boolean;
+        makeAllOption?: boolean;
+
+        /**
+         * 默认为"所有分类", 或者你在这里自定义一个名字
+         */
+        allOptionName?: string;
     }
 
     /**
@@ -85,7 +90,7 @@ namespace aj.tree {
     export function rendererOption(jsonArray: TreeNode[], select: HTMLSelectElement, selectedId?: string, cfg?: TreeOption): void {
         if (cfg && cfg.makeAllOption) {
             let option: HTMLOptionElement = document.createElement('option');
-            option.value = option.innerHTML = "全部分类";
+            option.innerHTML = cfg.allOptionName || "全部分类";
             select.appendChild(option);
         }
 

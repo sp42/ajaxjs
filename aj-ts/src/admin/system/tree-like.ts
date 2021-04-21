@@ -1,4 +1,7 @@
 namespace aj.admin.treeLike {
+    /**
+     * 分类管理
+     */
     interface AdminTreeLike extends Vue {
         /**
          * 渲染

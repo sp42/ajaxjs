@@ -87,3 +87,82 @@ table.listTable {
 .aj-admin-info-btns button:hover {
   background-position: 0px -10px;
 }
+.assign-right {
+  /*模拟对角线*/
+}
+.assign-right h3 {
+  padding-left: 2%;
+  font-weight: bold;
+  text-align: left;
+}
+.assign-right .soft-container .box {
+  text-align: left;
+}
+.assign-right .main-panel {
+  max-height: 500px;
+  min-width: 900px;
+  overflow-y: scroll;
+  border-top: 1px solid white;
+}
+.assign-right .main-panel .tree-panel {
+  float: left;
+}
+.assign-right .main-panel .tree-panel h4 {
+  width: 200px;
+  font-size: 0.8rem;
+  height: 20px;
+  margin-bottom: 5%;
+  background-image: -webkit-linear-gradient(top, #ebf3fc, #dce9f9);
+  border-bottom: 1px solid lightgray;
+}
+.assign-right .main-panel > table {
+  border-left: 1px solid lightgray;
+}
+.assign-right th {
+  padding: 0 !important;
+  font-size: 0.9rem;
+  background-image: -webkit-linear-gradient(top, #ebf3fc, #dce9f9);
+}
+.assign-right caption {
+  font-size: 1.2rem;
+  padding: 2%;
+  font-weight: bold;
+}
+.assign-right .out {
+  border-top: 40px #D6D3D6 solid;
+  /*上边框宽度等于表格第一行行高*/
+  width: 0px;
+  /*让容器宽度为0*/
+  height: 0px;
+  /*让容器高度为0*/
+  border-left: 180px #BDBABD solid;
+  /*左边框宽度等于表格第一行第一格宽度*/
+  position: relative;
+  /*让里面的两个子容器绝对定位*/
+}
+.assign-right b {
+  font-style: normal;
+  display: block;
+  position: absolute;
+  top: -40px;
+  left: -100px;
+  width: 85px;
+}
+.assign-right em {
+  font-style: normal;
+  display: block;
+  position: absolute;
+  top: -25px;
+  left: -170px;
+  width: 55x;
+}
+.assign-right .t1 {
+  text-align: center;
+}
+.assign-right .crud label {
+  cursor: pointer;
+}
+.assign-right .crud.disabled label {
+  color: gray;
+  cursor: not-allowed;
+}

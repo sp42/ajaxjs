@@ -84,18 +84,19 @@ var aj;
                     currentUserGroup: '' // UI 提示用
                 },
                 mounted: function () {
-                    //         // 点击树节点时候，加载用户组的详情信息
-                    //         this.BUS.$on('tree-node-click', (data) => {
-                    //             if (data.id) {
-                    //                 this.userGroupId = data.id;
-                    //                 this.currentUserGroup = data.name;
-                    //                 xhr.get('../user_group/' + data.id + '/', j => this.resRightValue = j.result.accessKey || 0);
-                    //             }
-                    //         });
+                    var _this = this;
+                    // 点击树节点时候，加载用户组的详情信息
+                    this.BUS.$on('tree-node-click', function (data) {
+                        if (data.id) {
+                            _this.userGroupId = data.id;
+                            _this.currentUserGroup = data.name;
+                            aj.xhr.get('../user_group/' + data.id + '/', function (j) { return _this.resRightValue = j.result.accessKey || 0; });
+                        }
+                    });
                 }
             });
             // USER_GROUP.$refs.layer.show();
-            // ASSIGN_RIGHT.$refs.assignRight.show();
+            admin.ASSIGN_RIGHT.$refs.assignRight.show();
             //BAR.$refs.createUI.show();
             //BAR.$refs.form.load(1);
         })(admin = user.admin || (user.admin = {}));

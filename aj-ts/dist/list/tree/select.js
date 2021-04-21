@@ -86,7 +86,7 @@ var aj;
         function rendererOption(jsonArray, select, selectedId, cfg) {
             if (cfg && cfg.makeAllOption) {
                 var option = document.createElement('option');
-                option.value = option.innerHTML = "全部分类";
+                option.innerHTML = cfg.allOptionName || "全部分类";
                 select.appendChild(option);
             }
             var treeNode = tree.toTreeMap(jsonArray);

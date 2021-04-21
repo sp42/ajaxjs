@@ -86,19 +86,19 @@ namespace aj.user.admin {
             currentUserGroup: ''	// UI 提示用
         },
         mounted(): void {
-            //         // 点击树节点时候，加载用户组的详情信息
-            //         this.BUS.$on('tree-node-click', (data) => {
-            //             if (data.id) {
-            //                 this.userGroupId = data.id;
-            //                 this.currentUserGroup = data.name;
-            //                 xhr.get('../user_group/' + data.id + '/', j => this.resRightValue = j.result.accessKey || 0);
-            //             }
-            //         });
+            // 点击树节点时候，加载用户组的详情信息
+            this.BUS.$on('tree-node-click', (data) => {
+                if (data.id) {
+                    this.userGroupId = data.id;
+                    this.currentUserGroup = data.name;
+                    xhr.get('../user_group/' + data.id + '/', j => this.resRightValue = j.result.accessKey || 0);
+                }
+            });
         }
     });
 
     // USER_GROUP.$refs.layer.show();
-    // ASSIGN_RIGHT.$refs.assignRight.show();
+    ASSIGN_RIGHT.$refs.assignRight.show();
     //BAR.$refs.createUI.show();
     //BAR.$refs.form.load(1);
 }
