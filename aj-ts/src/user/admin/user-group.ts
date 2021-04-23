@@ -1,6 +1,6 @@
 namespace aj.user.admin {
     interface USER_GROUP {
-        list: [];
+        list: tree.TreeNode[];
         createOrUpdate: any;
         $refs: any;
         load(): void;
@@ -32,7 +32,7 @@ namespace aj.user.admin {
                 xhr.get('../user_group/list/', (j: RepsonseResult) => {
                     let tree: tree.TreeNode = <tree.TreeNode>aj.tree.toTreeMap(<aj.tree.FlatTreeNodeList>j.result);
 
-                    aj.tree.output(tree, (node, nodeId) => {
+                    aj.tree.output(tree, (node: tree.TreeNode, nodeId) => {
                         let level = node.level - 1;
                         node.indentName = new Array(level * 8).join('&nbsp;') + (level == 0 ? '' : '└─') + node.name;
 

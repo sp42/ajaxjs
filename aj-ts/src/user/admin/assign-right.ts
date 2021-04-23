@@ -24,7 +24,7 @@ namespace aj.user.admin {
         },
         mounted(): void {
             /* 可以通过 props 单向绑定 resRightValue，但每个组件要设置一样属性。这里避免多处重复设置属性  */
-            this.$watch('$parent.$parent.resRightValue', (v) => this.enabled = this.check(v, this.resId));
+            this.$watch('$parent.$parent.resRightValue', (v: any) => this.enabled = this.check(v, this.resId));
         },
         methods: {
             /**
@@ -46,6 +46,7 @@ namespace aj.user.admin {
             },
             userEnableClick(this: RoleCheckRight, ev: Event): void { // 用户点击事件，不是来自数据的变化，修改立刻被保存到服务端
                 let isEnable = (<HTMLInputElement>ev.target).checked,
+                    // @ts-ignore
                     userGroupId = ASSIGN_RIGHT.userGroupId; // 全局变量
 
                 if (userGroupId && this.resId) {
@@ -87,7 +88,7 @@ namespace aj.user.admin {
         },
         mounted(): void {
             // 点击树节点时候，加载用户组的详情信息
-            this.BUS.$on('tree-node-click', (data) => {
+            this.BUS.$on('tree-node-click', (data: BaseObject) => {
                 if (data.id) {
                     this.userGroupId = data.id;
                     this.currentUserGroup = data.name;
@@ -98,7 +99,7 @@ namespace aj.user.admin {
     });
 
     // USER_GROUP.$refs.layer.show();
-    ASSIGN_RIGHT.$refs.assignRight.show();
+    // ASSIGN_RIGHT.$refs.assignRight.show();
     //BAR.$refs.createUI.show();
     //BAR.$refs.form.load(1);
 }

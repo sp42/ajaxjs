@@ -175,27 +175,27 @@ class BinaryTree {
      * 
      * @returns 
      */
-    public findMax(): number {
-        return this.root ? this.findMaxNode(this.root).key : 0;
-    }
+public findMax(): number {
+    return this.root ? this.findMaxNode(this.root).key : 0;
+}
 
-    public findMaxNode(node: TreeNode): TreeNode {
-        if (node && node.right)
-            return this.findMaxNode(node.right);
+public findMaxNode(node: TreeNode): TreeNode {
+    if (node && node.right)
+        return this.findMaxNode(node.right);
 
-        return node;
-    }
+    return node;
+}
 
-    public findMin(): number {
-        return this.root ? this.findMinNode(this.root).key : 0;
-    }
+public findMin(): number {
+    return this.root ? this.findMinNode(this.root).key : 0;
+}
 
-    public findMinNode(node: TreeNode): TreeNode {
-        if (node && node.left)
-            return this.findMinNode(node.left);
+public findMinNode(node: TreeNode): TreeNode {
+    if (node && node.left)
+        return this.findMinNode(node.left);
 
-        return node;
-    }
+    return node;
+}
 
     /**
      * 删除节点
@@ -228,7 +228,7 @@ class BinaryTree {
             node = undefined;
             return node;
         }
-
+ 
         if (!node.left) {
             node = node.right;
             return node;
@@ -246,51 +246,51 @@ class BinaryTree {
         return node;
     }
 
-    /**
-     * 获取二叉树节点个数
-     * 
-     * @returns 二叉树节点个数
-     */
-    public size(): number {
-        return this.root ? this._size(this.root) : 0;
-    }
+/**
+ * 获取二叉树节点个数
+ * 
+ * @returns 二叉树节点个数
+ */
+public size(): number {
+    return this.root ? this._size(this.root) : 0;
+}
 
-    /**
-     * 
-     * @param subTree 
-     * @returns 
-     */
-    private _size(subTree: TreeNode | undefined): number {
-        if (!subTree)
-            return 0;
-        else
-            return 1 + this._size(subTree.left) + this._size(subTree.right);
-    }
+/**
+ * 
+ * @param subTree 
+ * @returns 
+ */
+private _size(subTree: TreeNode | undefined): number {
+    if (!subTree)
+        return 0;
+    else
+        return 1 + this._size(subTree.left) + this._size(subTree.right);
+}
 
-    /**
-     * 获取二叉树层级数
-     * 
-     * @returns 二叉树层级数
-     */
-    public height(): number {
-        return this.root ? this._height(this.root) : 0;
-    }
+/**
+ * 获取二叉树层级数
+ * 
+ * @returns 二叉树层级数
+ */
+public height(): number {
+    return this.root ? this._height(this.root) : 0;
+}
 
-    /**
-     * 
-     * @param subTree 
-     * @returns 
-     */
-    private _height(subTree: TreeNode | undefined): number {
-        if (!subTree)
-            return 0;
-        else {
-            let i = this._height(subTree.left),
-                j = this._height(subTree.right);
+/**
+ * 
+ * @param subTree 
+ * @returns 
+ */
+private _height(subTree: TreeNode | undefined): number {
+    if (!subTree)
+        return 0;
+    else {
+        let i = this._height(subTree.left),
+            j = this._height(subTree.right);
 
-            return i < j ? (j + 1) : (i + 1);
-        }
+        return i < j ? (j + 1) : (i + 1);
     }
+}
 }
 
 // test

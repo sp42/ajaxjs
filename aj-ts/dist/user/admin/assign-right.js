@@ -45,7 +45,9 @@ var aj;
                             this.rightValue += right;
                     },
                     userEnableClick: function (ev) {
-                        var isEnable = ev.target.checked, userGroupId = admin.ASSIGN_RIGHT.userGroupId; // 全局变量
+                        var isEnable = ev.target.checked, 
+                        // @ts-ignore
+                        userGroupId = admin.ASSIGN_RIGHT.userGroupId; // 全局变量
                         if (userGroupId && this.resId) {
                             aj.xhr.post('../user_group/updateResourceRightValue', function (j) { return aj.msg.show(j.msg); }, {
                                 userGroupId: userGroupId,
@@ -96,7 +98,7 @@ var aj;
                 }
             });
             // USER_GROUP.$refs.layer.show();
-            admin.ASSIGN_RIGHT.$refs.assignRight.show();
+            // ASSIGN_RIGHT.$refs.assignRight.show();
             //BAR.$refs.createUI.show();
             //BAR.$refs.form.load(1);
         })(admin = user.admin || (user.admin = {}));
