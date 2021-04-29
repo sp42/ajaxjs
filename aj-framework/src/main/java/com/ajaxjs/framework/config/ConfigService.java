@@ -163,12 +163,7 @@ public class ConfigService implements GetConfig, IComponent {
 		return get(key, null, String.class);
 	}
 
-	/**
-	 * 读取配置并转换其为字符串类型。仅对扁平化后的配置有效，所以参数必须是扁平化的 aaa.bbb.ccc 格式。
-	 * 
-	 * @param key 配置键值
-	 * @return 配置内容
-	 */
+	@Override
 	public String getString(String key) {
 		return getValueAsString(key);
 	}
