@@ -7,10 +7,15 @@ import java.lang.annotation.*;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NotEmail {
-
+	/**
+	 * 
+	 * @return
+	 */
     public boolean email() default true;
 
+    /**
+     * 
+     * @return
+     */
     public String message() default "请注意规范";
-
-
 }
