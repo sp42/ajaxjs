@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.ajaxjs.framework.GetConfig;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ReflectUtil;
@@ -49,7 +50,7 @@ public class MvcDispatcherBase {
 
 	public static final BiFunction<HttpServletRequest, HttpServletResponse, Boolean> dispatcher = (req, resp) -> {
 		if (isEnableSecurityIO == null)
-			isEnableSecurityIO = ConfigService.getValueAsBool("security.isEnableSecurityIO");
+			isEnableSecurityIO = ComponentMgr.getByInterface(GetConfig.class).getValueAsBool("security.isEnableSecurityIO");
 
 		MvcRequest request = new MvcRequest(isEnableSecurityIO ? new SecurityRequest(req) : req);
 		MvcOutput response = new MvcOutput(isEnableSecurityIO ? new SecurityResponse(resp) : resp);
