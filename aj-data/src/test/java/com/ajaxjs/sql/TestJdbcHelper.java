@@ -1,6 +1,5 @@
 package com.ajaxjs.sql;
 
-
 import static com.ajaxjs.sql.JdbcHelper.create;
 import static com.ajaxjs.sql.JdbcHelper.createBean;
 import static com.ajaxjs.sql.JdbcHelper.createMap;
