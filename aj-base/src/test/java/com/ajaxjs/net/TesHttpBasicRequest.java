@@ -13,19 +13,19 @@ import com.ajaxjs.net.http.NetUtil;
 public class TesHttpBasicRequest {
 	String url = "https://www.baidu.com/";
 
-	// @Test
+	 @Test
 	public void testGet() {
 		String html = HttpBasicRequest.simpleGET(url), html2 = NetUtil.get(url);
 		assertEquals(html, html2);// 两种方法作用相同
 	}
 
-	// @Test
+	 @Test
 	public void testForce_GZipGet() {
 		String html = HttpBasicRequest.get(url, true);
 		assertNotNull(html);
 	}
 
-	// @Test
+//	 @Test
 	public void testPost() {
 		String result = HttpBasicRequest.post("http://localhost:8080/post", new HashMap<String, Object>() {
 			private static final long serialVersionUID = 1L;
