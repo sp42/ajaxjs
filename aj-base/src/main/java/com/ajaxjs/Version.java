@@ -62,7 +62,8 @@ public class Version {
 		}
 
 		// 版本检测
-		if (System.getProperty("java.version").contains("1.8.")) {
+		double version = Double.parseDouble(System.getProperty("java.specification.version")); /* or Major Version, get java.runtime.version */
+		if (version > 1.5) {
 		} else {
 			LOGGER.warning("请升级你的 JRE/JDK版本 >= 1.8");
 			System.exit(1);
@@ -74,12 +75,12 @@ public class Version {
 		 */
 		isDebug = !(osName.indexOf("nix") >= 0 || osName.indexOf("nux") >= 0 || osName.indexOf("aix") > 0);
 
-		LOGGER.infoYellow("\n     ___       _       ___  __    __      _   _____        _          __  _____   _____  \n"
-				+ "     /   |     | |     /   | \\ \\  / /     | | /  ___/      | |        / / | ____| |  _  \\ \n"
-				+ "    / /| |     | |    / /| |  \\ \\/ /      | | | |___       | |  __   / /  | |__   | |_| |  \n"
-				+ "   / / | |  _  | |   / / | |   }  {    _  | | \\___  \\      | | /  | / /   |  __|  |  _  {  \n"
-				+ "  / /  | | | |_| |  / /  | |  / /\\ \\  | |_| |  ___| |      | |/   |/ /    | |___  | |_| |  \n"
-				+ " /_/   |_| \\_____/ /_/   |_| /_/  \\_\\ \\_____/ /_____/      |___/|___/     |_____| |_____/ \n");
+//		LOGGER.infoYellow("\n     ___       _       ___  __    __      _   _____        _          __  _____   _____  \n"
+//				+ "     /   |     | |     /   | \\ \\  / /     | | /  ___/      | |        / / | ____| |  _  \\ \n"
+//				+ "    / /| |     | |    / /| |  \\ \\/ /      | | | |___       | |  __   / /  | |__   | |_| |  \n"
+//				+ "   / / | |  _  | |   / / | |   }  {    _  | | \\___  \\      | | /  | / /   |  __|  |  _  {  \n"
+//				+ "  / /  | | | |_| |  / /  | |  / /\\ \\  | |_| |  ___| |      | |/   |/ /    | |___  | |_| |  \n"
+//				+ " /_/   |_| \\_____/ /_/   |_| /_/  \\_\\ \\_____/ /_____/      |___/|___/     |_____| |_____/ \n");
 
 		LOGGER.infoGreen("AJAXJS-Base 加载完毕，当前是[" + (isDebug ? "调试" : "生产环境") + "]模式");
 	}
