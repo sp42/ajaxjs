@@ -37,6 +37,7 @@ import com.ajaxjs.util.ioc.ComponentMgr;
 import com.ajaxjs.util.logger.LogHelper;
 
 @WebListener
+@ServletComponentScan
 @WebFilter(urlPatterns = "/*")
 public class Application implements ServletContextListener, Filter {
 	private static final LogHelper LOGGER = LogHelper.getLog(Application.class);
