@@ -27,7 +27,12 @@ public class GetConfigJson implements GetConfig {
 	 */
 	@SuppressWarnings("unchecked")
 	private <T> T get(String key, T isNullValue, Class<T> vType) {
-		if (!cfgService.isLoaded() || cfgService.getFlatConfig() == null)
+		if(!cfgService.isLoaded()) {
+			LOGGER.warning("配置系统未准备好");
+			return isNullValue;
+		}
+		
+		if (cfgService.getFlatConfig() == null)
 			return isNullValue;
 
 		Object v = cfgService.getFlatConfig().get(key);
@@ -59,5 +64,12 @@ public class GetConfigJson implements GetConfig {
 	public long getLong(String key) {
 		return get(key, 0L, long.class);
 	}
+	
+	public ConfigService getCfgService() {
+		return cfgService;
+	}
 
+	public void setCfgService(ConfigService cfgService) {
+		this.cfgService = cfgService;
+	}
 }

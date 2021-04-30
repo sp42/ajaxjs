@@ -46,4 +46,11 @@ public interface ConfigService {
 	 */
 	public boolean isLoaded();
 
+	/**
+	 * 加载配置
+	 * 
+	 * @param ctx
+	 */
+	public void init(ServletContext ctx);
+
 }

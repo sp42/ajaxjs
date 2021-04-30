@@ -8,7 +8,6 @@ import java.util.Map;
 import javax.script.ScriptException;
 import javax.servlet.ServletContext;
 
-import com.ajaxjs.Version;
 import com.ajaxjs.jsonparser.JsEngineWrapper;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.StreamHelper;
@@ -24,6 +23,14 @@ import com.ajaxjs.util.map.ListMap;
  */
 public class JsonConfigService extends Config implements ConfigService {
 	private static final LogHelper LOGGER = LogHelper.getLog(JsonConfigService.class);
+
+	@Override
+	public void init(ServletContext ctx) {
+		load(ctx.getRealPath("/META-INF/site_config.json"));
+		
+		if (!isLoaded())
+			ctx.setAttribute("aj_allConfig", getConfig()); // 所有配置保存在这里
+	}
 
 	@Override
 	public void load(String cfgPath) {
