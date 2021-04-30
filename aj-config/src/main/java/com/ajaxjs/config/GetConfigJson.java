@@ -10,8 +10,8 @@ import com.ajaxjs.util.logger.LogHelper;
  * @author frank
  *
  */
-public class GetConfigImpl implements GetConfig {
-	private static final LogHelper LOGGER = LogHelper.getLog(GetConfigImpl.class);
+public class GetConfigJson implements GetConfig {
+	private static final LogHelper LOGGER = LogHelper.getLog(GetConfigJson.class);
 
 	/**
 	 * 所有的配置保存在这个 config 中
@@ -21,12 +21,14 @@ public class GetConfigImpl implements GetConfig {
 	/**
 	 * 所有的配置保存在这个 config 中（扁平化处理过的）
 	 */
-	public static Map<String, Object> FLAT_CONFIG;
+	public Map<String, Object> FLAT_CONFIG;
 
 	/**
 	 * 是否加载成功
 	 */
 	public boolean isLoaded;
+	
+	private ConfigService cfgService;
 
 	/**
 	 * 内部的获取方法
@@ -39,7 +41,7 @@ public class GetConfigImpl implements GetConfig {
 	 */
 	@SuppressWarnings("unchecked")
 	private <T> T get(String key, T isNullValue, Class<T> vType) {
-		if (FLAT_CONFIG == null || !isLoaded)
+		if (cfgService.getF == null || !isLoaded)
 			return isNullValue;
 
 		Object v = FLAT_CONFIG.get(key);
