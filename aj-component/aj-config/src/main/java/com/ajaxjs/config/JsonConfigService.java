@@ -8,6 +8,9 @@ import java.util.Map;
 import javax.script.ScriptException;
 import javax.servlet.ServletContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.ajaxjs.Version;
 import com.ajaxjs.jsonparser.JsEngineWrapper;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.StreamHelper;
@@ -27,10 +30,13 @@ public class JsonConfigService extends Config implements ConfigService {
 	@Override
 	public void init(ServletContext ctx) {
 		load(ctx.getRealPath("/META-INF/site_config.json"));
-		
+
 		if (!isLoaded())
 			ctx.setAttribute("aj_allConfig", getConfig()); // 所有配置保存在这里
 	}
+
+	@Autowired
+	private GetConfig getCfg;
 
 	@Override
 	public void load(String cfgPath) {
@@ -46,12 +52,12 @@ public class JsonConfigService extends Config implements ConfigService {
 		setFilePath(cfgPath);
 		setLoaded(true);
 
-//		if (getValueAsBool("isForceProductEnv")) {
-//			LOGGER.infoGreen("强制为生产环境模式 isDebug=false");
-//			Version.isDebug = false;
-//		}
+		if (getCfg.getBol("isForceProductEnv")) {
+			LOGGER.infoGreen("强制为生产环境模式 isDebug=false");
+			Version.isDebug = false;
+		}
 
-//		LOGGER.infoGreen("加载[" + getValueAsString("clientShortName") + "]项目配置成功！All config loaded.");
+		LOGGER.infoGreen("加载[" + getCfg.get("clientShortName") + "]项目配置成功！All config loaded.");
 	}
 
 	@Override
@@ -177,31 +183,16 @@ public class JsonConfigService extends Config implements ConfigService {
 	 * 查找节点的 JavaScript 函数
 	 */
 	// @formatter:off
-	private final static String FIND_NODE = 
-		"function findNode(obj, queen) {\n" + 
-		"			if(!queen.shift) {\n" + 
-		"				return null;\n" + 
-		"			}\n" + 
-		"			var first = queen.shift();\n" + 
-		"			\n" + 
-		"			for(var i in obj) {\n" + 
-		"				if(i === first) {\n" + 
-		"					var target = obj[i];\n" + 
-		"					\n" + 
-		"					if(queen.length == 0) {\n" + 
-		"						// 找到了\n" + 
-		"						return target;\n" + 
-		"					} else {\n" + 
-		"						return arguments.callee(obj[i], queen);\n" + 
-		"					}\n" + 
-		"				}\n" + 
-		"			}\n" + 
-		"		}";
+	private final static String FIND_NODE = "function findNode(obj, queen) {\n" + "			if(!queen.shift) {\n" + "				return null;\n"
+			+ "			}\n" + "			var first = queen.shift();\n" + "			\n" + "			for(var i in obj) {\n"
+			+ "				if(i === first) {\n" + "					var target = obj[i];\n" + "					\n"
+			+ "					if(queen.length == 0) {\n" + "						// 找到了\n" + "						return target;\n"
+			+ "					} else {\n" + "						return arguments.callee(obj[i], queen);\n" + "					}\n" + "				}\n"
+			+ "			}\n" + "		}";
 	// @formatter:on
 
 	/**
-	 * 保存 JSON 配置
-	 * 这个方法好像没用
+	 * 保存 JSON 配置 这个方法好像没用
 	 */
 	public void save() {
 		String jsonStr = JsonHelper.toJson(getConfig());
