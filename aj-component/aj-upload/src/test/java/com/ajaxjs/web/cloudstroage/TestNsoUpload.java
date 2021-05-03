@@ -1,7 +1,6 @@
-package com.ajaxjs.web.upload;
+package com.ajaxjs.web.cloudstroage;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
@@ -13,19 +12,32 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Test;
 
+import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.net.http.NetUtil;
-import com.ajaxjs.util.ioc.EveryClass;
+import com.ajaxjs.web.cloudstroage.nso.NsoHttpUpload;
+import com.ajaxjs.web.cloudstroage.nso.NsoHttpUploader;
 import com.ajaxjs.web.mock.MockRequest;
 import com.ajaxjs.web.mock.MockServletInputStream;
+import com.ajaxjs.web.upload.UploadFileInfo;
 
-public class TestUpload {
+public class TestNsoUpload {
+//	@Test
+	public void testHttpUpload() {
+		ConfigService.load("c:\\project\\aj-website-site_config.json");
+//		System.out.println(listBuk());
+//		createEmptyFile("test.jpg");
+		NsoHttpUpload.uploadFile("C:\\project\\ajaxjs-maven-global.xml");
+	}
+
 	@Test
-	public void testUpload() throws IOException {
+	public void testUploader() throws IOException {
+		ConfigService.load("c:\\project\\aj-website-site_config.json");
+
 		UploadFileInfo uploadFileInfo = new UploadFileInfo();
 		uploadFileInfo.maxSingleFileSize = 1024 * 50000; // 50 MB;
-		uploadFileInfo.allowExtFilenames = new String[] { "txt", "log" };
+		uploadFileInfo.allowExtFilenames = new String[] { "txt", "java" };
 		uploadFileInfo.isFileOverwrite = true;
-		uploadFileInfo.saveFolder = "c:\\temp\\";
+		uploadFileInfo.saveFolder = "c:\\t2\\";
 
 		HttpServletRequest request = MockRequest.mockRequest("foo", "upload");
 		when(request.getMethod()).thenReturn("POST");
@@ -33,18 +45,15 @@ public class TestUpload {
 
 		Map<String, Object> map = new HashMap<>();
 		map.put("name", "foo");
-		String path = EveryClass.getResourcesFromClasspath("com\\ajaxjs\\web\\upload\\newfile.txt");
-		map.put("file23", new File(path));
+		map.put("file23", new File("C:\\temp\\serviceImpl\\InstitutionScoreServiceImpl.java"));
 
 		byte[] b = NetUtil.toFromData(map);
 		when(request.getContentLength()).thenReturn(b.length);
 		when(request.getInputStream()).thenReturn(new MockServletInputStream(b));
 
-		UploadFile uploadRequest = new UploadFile(request, uploadFileInfo);
+		NsoHttpUploader uploadRequest = new NsoHttpUploader(request, uploadFileInfo);
 		assertNotNull(uploadRequest);
 
 		uploadRequest.upload();
-
-		assertTrue(new File("c:\\temp\\newfile.txt").exists());
 	}
 }
