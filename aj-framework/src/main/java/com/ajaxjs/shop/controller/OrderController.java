@@ -11,7 +11,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
-import com.ajaxjs.cms.service.UserAddressService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.filter.DataBaseFilter;
@@ -20,6 +19,7 @@ import com.ajaxjs.shop.model.OrderInfo;
 import com.ajaxjs.shop.model.OrderItem;
 import com.ajaxjs.shop.service.OrderService;
 import com.ajaxjs.shop.service.Pay;
+import com.ajaxjs.shop.service.UserAddressService;
 import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.user.filter.LoginCheck;
 import com.ajaxjs.user.login.LoginController;

@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.ajaxjs.cms.common.AttachmentService;
 import com.ajaxjs.cms.common.TreeLikeService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.config.ConfigService;
@@ -34,8 +33,8 @@ public class GoodsService extends BaseService<Goods> {
 	@Resource("GoodsFormatService")
 	private GoodsFormatService goodsFormatService;
 
-	@Resource
-	private AttachmentService pictureService;
+//	@Resource
+//	private AttachmentService pictureService;
 
 	@Resource("CartService")
 	private CartService shopCartService;
@@ -63,7 +62,7 @@ public class GoodsService extends BaseService<Goods> {
 		Map<String, Object> map = new HashMap<>();
 
 		map.put("info", goods);
-		map.put("formats", goodsFormatService.findByGoodsId(goods.getId()));
+//		map.put("formats", goodsFormatService.findByGoodsId(goods.getId()));
 //		map.put("pics", pictureService.findAttachmentPictureByOwner(goods.getUid())); // banner images
 //		map.put("userHasCollect", userId == 0L ? false : ShopBookmarkService.userHasCollect(userId, id, ShopConstant.ENTRY_GOODS));
 //		map.put("cartGoodsCount", userId == 0L ? 0 : CartService.dao.getCartListCountByUserId(userId));

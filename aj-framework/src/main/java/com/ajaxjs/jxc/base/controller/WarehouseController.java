@@ -13,14 +13,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.model.Address;
-import com.ajaxjs.cms.service.UserAddressService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.framework.QueryTools;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.jxc.base.model.Warehouse;
+import com.ajaxjs.shop.service.Address;
+import com.ajaxjs.shop.service.UserAddressService;
 import com.ajaxjs.sql.annotation.Select;
 import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;

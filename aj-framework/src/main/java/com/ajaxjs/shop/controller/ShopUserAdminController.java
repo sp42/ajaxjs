@@ -41,7 +41,7 @@ public class ShopUserAdminController extends BaseController<User> {
 		List<Map<String, Object>> userGroups = roleService.getDao().findList(null);
 		
 		mv.put("UserGroups", TreeLikeService.idAsKey(userGroups));
-		mv.put("UserGroupsJSON", toJson(userGroups, false).replaceAll("\"", "'"));
+//		mv.put("UserGroupsJSON", toJson(userGroups, false).replaceAll("\"", "'"));
 
 		return output(mv, service.findPagedList(start, limit), "jsp::shop/shop-user-admin-list");
 	}

@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.ajaxjs.cms.model.Address;
-import com.ajaxjs.cms.service.UserAddressService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.shop.ShopConstant;
 import com.ajaxjs.shop.dao.OrderInfoDao;
