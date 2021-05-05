@@ -45,9 +45,21 @@
 			<version>1.2.6</version>
 		</dependency>
 
-		<dependency>
+ 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-workflow</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ajaxjs</groupId>
+			<artifactId>ajaxjs-user</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.ajaxjs</groupId>
+			<artifactId>ajaxjs-developer</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 
