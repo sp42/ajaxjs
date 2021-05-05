@@ -5,10 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.script.ScriptException;
 import javax.servlet.ServletContext;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ajaxjs.Version;
 import com.ajaxjs.jsonparser.JsEngineWrapper;
@@ -35,7 +34,7 @@ public class JsonConfigService extends Config implements ConfigService {
 			ctx.setAttribute("aj_allConfig", getConfig()); // 所有配置保存在这里
 	}
 
-	@Autowired
+	@Inject
 	private GetConfig getCfg;
 
 	@Override
