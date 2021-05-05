@@ -89,7 +89,7 @@
 			<tfoot>
 				<tr>
 					<td colspan="10">
-						<aj-admin-xsl params="<%=com.ajaxjs.web.ServletHelper.getAllQueryParameters(request) %>"></aj-admin-xsl>					
+						<aj-admin-xsl params="<%=com.ajaxjs.web.ServletHelper.getAllQueryParameters(request)%>"></aj-admin-xsl>					
 						<aj-form-betweenDate></aj-form-betweenDate>
 					</td>
 				</tr>

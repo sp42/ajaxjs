@@ -74,7 +74,7 @@
 				<tr>
 					<td colspan="10">
 						<!-- 表格底部菜单 -->
-						<aj-admin-xsl params="<%=com.ajaxjs.web.ServletHelper.getAllQueryParameters(request) %>"></aj-admin-xsl>					
+						<aj-admin-xsl params="<%=com.ajaxjs.web.ServletHelper.getAllQueryParameters(request)%>"></aj-admin-xsl>					
 						<aj-form-between-date></aj-form-between-date>
 					</td>
 				</tr>

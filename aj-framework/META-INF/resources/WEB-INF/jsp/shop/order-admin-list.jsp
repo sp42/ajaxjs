@@ -81,7 +81,7 @@
 					<td colspan="10">
 						一张订单可以包含多个商品，每个商品对应一张子订单，于是一张订单包含多张子订单。
 						
-						<aj-admin-xsl params="<%=com.ajaxjs.web.ServletHelper.getAllQueryParameters(request) %>"></aj-admin-xsl>					
+						<aj-admin-xsl params="<%=com.ajaxjs.web.ServletHelper.getAllQueryParameters(request)%>"></aj-admin-xsl>					
 						<aj-form-between-date></aj-form-between-date>
 					</td>
 				</tr>
