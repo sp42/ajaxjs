@@ -15,7 +15,7 @@
 		<div class="user-list">	
 			<!-- 后台头部导航 -->
 			<aj-admin-header>
-				<template slot="title">${uiName}管理7676</template>
+				<template slot="title">${uiName}管理</template>
 				<template slot="btns"><a :href="ajResources.ctx + '/admin/${shortName}/'">新建</a> | </template>
 			</aj-admin-header>
 
