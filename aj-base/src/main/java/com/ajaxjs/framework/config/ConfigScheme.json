@@ -1,0 +1,453 @@
+{
+	"site": {
+		"titlePrefix": {
+			"name": "网站标题前缀",
+			"tip": "放在 head title 标签中",
+			"type": "string",
+			"ui": "input_text"
+		},
+		"keywords": {
+			"name": "搜索关键字",
+			"tip": "用于 SEO 关键字优化，以便于搜索引擎机器人查找、分类。多个关键字之间用英文 , 逗号分开",
+			"type": "string",
+			"ui": "input_text"
+		},
+		"description": {
+			"name": "网站描述",
+			"tip": "网站的说明文本。通常是一段话介绍网站即可。",
+			"type": "string",
+			"ui": "textarea"
+		},
+		"footCopyright": {
+			"name": "网站标题前缀",
+			"tip": "放在 head title 标签中",
+			"type": "string",
+			"ui": "htmlEditor"
+		}
+	},
+	"clientFullName": {
+		"name": "网站标题前缀",
+		"tip": "放在 head title 标签中"
+	},
+	"clientShortName": {
+		"name": "网站标题前缀",
+		"tip": "放在 head title 标签中"
+	},
+	"isDebug": {
+		"name": "调试模式",
+		"tip": "是否打开调试模式 true=调试中，false=生产环境，null=自动识别",
+		"type": "boolean",
+		"ui": "radio",
+		"option": [
+			"true=是",
+			"false=否",
+			"null=自动"
+		]
+	},
+	"data": {
+		"articleCatalog_Id": {
+			"name": "新闻分类父 id"
+		},
+		"jobCatalog_Id": {
+			"name": "招聘分类父 id",
+			"type": "number"
+		},
+		"database_node": {
+			"name": "调试模式",
+			"tip": "是否打开调试模式 true=调试中，false=生产环境，null=自动识别",
+			"type": "string",
+			"ui": "radio",
+			"option": [
+				"true=是",
+				"false=否",
+				"null=自动"
+			]
+		}
+	},
+	"domain": {
+		"article": {
+			"share": {
+				"name": "显示分享组件",
+				"tip": "在文章详情页面中显示分享组件",
+				"ui": "radio",
+				"type": "boolean"
+			},
+			"neighborRecord": {
+				"name": "显示相邻记录",
+				"tip": "在文章详情页面中显示相邻记录",
+				"ui": "radio",
+				"type": "boolean"
+			},
+			"comment": {
+				"name": "显示评论组件",
+				"tip": "在文章详情页面中显示评论组件",
+				"ui": "radio",
+				"type": "boolean"
+			},
+			"pageHelper": {
+				"name": "显示页面工具",
+				"tip": "在文章详情页面中显示页面工具组件",
+				"ui": "radio",
+				"type": "boolean"
+			},
+			"attachmentDownload": {
+				"name": "附件下载",
+				"tip": "是否开放图文的附件下载在详情页",
+				"ui": "radio",
+				"type": "boolean"
+			}
+		},
+		"shop": {
+			
+		}
+	},
+	"entity": {
+		"physicalDeletion": {
+			"name": "是否物理删除实体",
+			"tip": "是=执行数据库 DELETE 删除命令；否=标记字段为已删除",
+			"ui": "radio",
+			"type": "boolean"
+		},
+		"exportXslPage": {
+			"name": "导出 Excel 时",
+			"tip": "当导出列表数据为 xsl 时，选择哪种读取方式",
+			"ui": "select",
+			"option": [
+				"1=导出当前页的数据",
+				"2=导出所有页的数据"
+			]
+		}
+	},
+	"uploadFile": {
+		"MaxTotalFileSize": {
+			"name": "最大文件",
+			"type": "number"
+		},
+		"MaxSingleFileSize": {
+			"name": "多个文件总容量限制",
+			"type": "number"
+		},
+		"isFileOverwrite": {
+			"name": "是否覆盖文件",
+			"tip": "遇到同名是否覆盖",
+			"ui": "radio",
+			"type": "boolean",
+			"option": [
+				"true=是",
+				"false=否"
+			]
+		},
+		"isAutoNewFileName": {
+			"name": "是否重名",
+			"tip": "上传文件后是否重新自动命名。如果 false 可能遇到重名",
+			"ui": "radio",
+			"type": "boolean",
+			"option": [
+				"true=是",
+				"false=否"
+			]
+		},
+		"saveFolder": {
+			"isUsingRelativePath": {
+				"name": "是否使用相对路径",
+				"tip": "如果是则 SaveFolder 项无效，使用 relativePath 得到的绝对路径来保存",
+				"ui": "radio",
+				"type": "boolean",
+				"option": [
+					"true=是",
+					"false=否"
+				]
+			},
+			"absolutePath": {
+				"name": "绝对目录",
+				"tip": "上传图片的保存目录，磁盘路径",
+				"ui": "select",
+				"option": [
+					"//temp//=本地测试 for Mac：//temp//",
+					"C://temp//=本地测试 for Win：C://temp//",
+					"//dczx//=正式服务器 //sds//"
+				]
+			},
+			"relativePath": {
+				"name": "相对目录",
+				"tip": "外界通过 Web 可以访问的路径"
+			}
+		},
+		"imgPerfix": {
+			"name": "图片前缀",
+			"tip": "图片所在的服务器，通常是云存储地址。后面应以 / 结束",
+			"size": 50
+		},
+		"ObjectStorageService": {
+			"QiuNiuYun": {
+				"accessKey": {
+					"name": "七牛云 AccessKey",
+					"tip": "访问密钥",
+					"size": 50
+				},
+				"secretKey": {
+					"name": "七牛云 SecretKey",
+					"tip": "关键的密钥，注意保密",
+					"size": 50
+				},
+				"bucket": {
+					"name": "七牛云 Bucket",
+					"tip": "空间名称"
+				}
+			}
+		}
+	},
+	"user": {
+		"login": {
+			"loginType": {
+				"name": "开放登录类型",
+				"tip": "开放登录类型",
+				"ui": "checkbox",
+				"option": [
+					"1=口令",
+					"2=三方",
+					"4=Token"
+				]
+			},
+			"passWordLoginType": {
+				"name": "用户id类型",
+				"tip": "口令登录下，支持何种用户id？",
+				"ui": "checkbox",
+				"option": [
+					"1=用户名",
+					"2=邮件",
+					"4=手机"
+				]
+			}
+		},
+		"avatar": {
+			"maxWidth": {
+				"name": "头像最大宽度"
+			},
+			"maxHeight": {
+				"name": "头像最大高度"
+			},
+			"maxSize": {
+				"name": "头像文件最大大小",
+				"tip": "单位：字节"
+			}
+		},
+		"resetPassword": {
+			"mailBody": {
+				"name": "邮件正文模版",
+				"tip": "找回邮件的邮件",
+				"ui": "htmlEditor"
+			}
+		},
+		"oauthLogin": {
+			"weibo": {
+				"AppKey": {
+					"name": "微博登录 App Key",
+					"tip": "相当于 Client_ID"
+				},
+				"AppSecret": {
+					"name": "微博登录 App 密钥",
+					"tip": "相当于 Client_SERCRET，请不要泄漏密钥"
+				},
+				"callbackUrl": {
+					"name": "微博登录回调地址",
+					"tip": "授权回调页"
+				}
+			}
+		}
+	},
+	"mailServer": {
+		"server": {
+			"name": "SMTP 服务器地址",
+			"tip": "发送邮件的 SMTP 服务器"
+		},
+		"user": {
+			"name": "用户名",
+			"tip": "发送邮件的用户名"
+		},
+		"password": {
+			"name": "密码",
+			"tip": "发送邮件的密码"
+		}
+	},
+	"sms": {
+		"aliyun": {
+			"signName": {
+				"name": "阿里云短信签名",
+				"tip": "短信签名-可在阿里云短信控制台中找到"
+			},
+			"templateCode": {
+				"name": "阿里云短信签名",
+				"tip": "短信模板-可在阿里云短信控制台中找到"
+			}
+		}
+	},
+	"Symmetric": {
+		"AES_Key": {
+			"name": "AES 密钥",
+			"tip": "请注意保管，不能外泄"
+		},
+		"apiTimeout": {
+			"name": "API 请求超时",
+			"type": "number",
+			"tip": "超时视为非法请求，单位毫秒"
+		}
+	},
+	"wx_open": {
+		"appId": {
+			"name": "APP ID",
+			"tip": "wx 开头的"
+		},
+		"appSecret": {
+			"name": "APP 密钥",
+			"tip": "注意保密切勿外泄"
+		},
+		"token": {
+			"name": "凭证",
+			"tip": "凭证"
+		}
+	},
+	"mini_program": {
+		"appId": {
+			"name": "APP ID",
+			"tip": "wx 开头的"
+		},
+		"appSecret": {
+			"name": "APP 密钥",
+			"tip": "注意保密切勿外泄"
+		},
+		"SessionId_AesKey": {
+			"name": "凭证",
+			"tip": "凭证"
+		}
+	},
+	"security": {
+		"isEnableSecurityIO": {
+			"name": "是否使用安全请求响应",
+			"tip": "true 表示为使用 SecurityRequest、SecurityResponse",
+			"type": "boolean",
+			"ui": "radio"
+		},
+		"isXXS_Filter": {
+			"name": "是否 XXS 过滤",
+			"tip": "true 表示为跨站脚本攻击检测",
+			"type": "boolean",
+			"ui": "radio"
+		},
+		"isCRLF_Filter": {
+			"name": "是否 CRLF 过滤",
+			"tip": "true 表示为使用响应头拆分过滤",
+			"type": "boolean",
+			"ui": "radio"
+		},
+		"isRefererCheck": {
+			"name": "是否来路检测",
+			"tip": "true 表示为使用来路检测（Referer 字段）",
+			"type": "boolean",
+			"ui": "radio"
+		},
+		"isWhiteList": {
+			"name": "是否启用白名单",
+			"tip": "true 表示为启用白名单",
+			"type": "boolean",
+			"ui": "radio"
+		},
+		"isBlackList": {
+			"name": "是否启用黑名单",
+			"tip": "true 表示为启用黑名单",
+			"type": "boolean",
+			"ui": "radio"
+		},
+		"isCookiesSizeCheck": {
+			"name": "是否 Cookies 大小检查",
+			"tip": "超出 Cookie 允许容量，默认 4KB",
+			"type": "boolean",
+			"ui": "radio"
+		}
+	},
+	"forDelevelopers": {
+		"logAsFile": {
+			"name": "是否保存 log 到文件",
+			"tip": "通过 FileHandler 将 warning 级别以上的日志保存到磁盘文件",
+			"type": "boolean",
+			"ui": "radio"
+		},
+		"logAsFileFolder": {
+			"name": "log 保存目录",
+			"tip": "可输入 win/linux 绝对目录，须注意斜杠转义",
+			"placeholder": "若不设置则为默认值（classpath/LogHelper）",
+			"size": 50
+		},
+		"enableWebSocketLogOutput": {
+			"name": "实时浏览日志",
+			"tip": "通过浏览器 WebSocket 技术查看服务端 Tomcat 输出日志",
+			"type": "boolean",
+			"ui": "radio"
+		}
+	},
+	"shop": {
+		"payment": {
+			"Alipay": {
+				"app_id": {
+					"name": "支付宝 APP ID",
+					"tip": "支付宝商家 ID"
+				},
+				"merchant_private_key": {
+					"name": "支付宝商家私钥",
+					"tip": "注意保密"
+				},
+				"merchant_public_key": {
+					"name": "支付宝应用公钥",
+					"tip": "注意保密",
+					"size": 30
+				},
+				"alipay_public_key": {
+					"name": "支付宝公钥",
+					"tip": "注意保密",
+					"size": 30
+				},
+				"return_url": {
+					"name": "支付宝回调地址",
+					"tip": "同步回调地址，可以是内网地址",
+					"size": 50
+				},
+				"notify_url": {
+					"name": "支付宝回调地址",
+					"tip": "异步回调地址，可以是内网地址",
+					"size": 50
+				}
+			},
+			"wx": {
+				"appId": {
+					"name": "微信 APP ID",
+					"tip": "wx 开头的"
+				},
+				"mchId": {
+					"name": "微信商户 ID",
+					"tip": "在微信商家平台中查找"
+				},
+				"apiSecret": {
+					"name": "微信支付密钥",
+					"tip": "在微信商家平台中查找；注意保密",
+					"size": 30
+				},
+				"notifyUrl": {
+					"name": "微信支付回调地址",
+					"tip": "支付后通知后台验证的公网地址",
+					"size": 50
+				}
+			}
+		},
+		"AllowPayType":	{
+			"name": "允许支付类型",
+			"tip": "请选择开放的支付类型",
+			"ui": "checkbox",
+			"option": [
+				"1=微信支付",
+				"2=支付宝支付",
+				"4=货到付款",
+				"8=积分付款"
+			]
+		}
+	}
+}

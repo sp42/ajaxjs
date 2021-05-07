@@ -23,8 +23,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
-import javax.xml.bind.DatatypeConverter;
-
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -174,7 +172,28 @@ public class Encode {
 		md.update(str.getBytes(StandardCharsets.UTF_8));
 
 		// byte数组转化为16进制字符串输出。注意安卓环境下无此方法
-		return DatatypeConverter.printHexBinary(md.digest()).toLowerCase();
+		return bytesToHex(md.digest()).toLowerCase();
+	};
+
+	private static final byte[] HEX_ARRAY = "0123456789ABCDEF".getBytes(StandardCharsets.US_ASCII);
+
+	/**
+	 * byte数组转化为16进制字符串输出
+	 * 
+	 * @param bytes
+	 * @return
+	 */
+	public static String bytesToHex(byte[] bytes) {
+		byte[] hexChars = new byte[bytes.length * 2];
+
+		for (int j = 0; j < bytes.length; j++) {
+			int v = bytes[j] & 0xFF;
+
+			hexChars[j * 2] = HEX_ARRAY[v >>> 4];
+			hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
+		}
+
+		return new String(hexChars, StandardCharsets.UTF_8);
 	}
 
 	/**

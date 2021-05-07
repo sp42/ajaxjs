@@ -34,9 +34,7 @@ public class TestJsEngineWrapper {
 	public void testLoad() {
 		Object obj;
 
-		String path = TestJsEngineWrapper.class.getResource("test.js").getFile().toString();
-		path = path.replaceFirst("/", "");
-		engine.load(path);
+		engine.load(TestJsEngineWrapper.class.getResource("test.js").getFile().toString());
 		obj = engine.eval("foo");
 		assertNotNull(obj);
 
