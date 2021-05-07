@@ -11,9 +11,14 @@
 
 	<artifactId>ajaxjs-base</artifactId>
 	<name>AJAXJS-Base</name>
-	<description>Base utils</description>
+	<description>AJAXJS aims to full-stack, not only the server-side framework, 
+	but also integrates the front-end library. It's written in HTML5 + Java, a successor to the JVM platform, efficient, secure, stable, cross-platform and many other advantages, but it abandoned the traditional enterprise architecture brought about by the large and bloated, 
+	emphasizing the lightweight, and fast, very suitable for the Internet fast application.</description>
+
+
+
+
 	<version>1.2.6</version>
-	
 	<build>
 		<!-- 复制静态资源 -->
 		<resources>
@@ -53,9 +58,16 @@
 		<dependency>
 			<groupId>org.javassist</groupId>
 			<artifactId>javassist</artifactId>
-			<version>3.22.0-GA</version>
+			<version>3.27.0-GA</version>
 		</dependency>
-		
+
+		<!-- MVC 框架用的注解 -->
+		<dependency>
+			<groupId>javax.ws.rs</groupId>
+			<artifactId>javax.ws.rs-api</artifactId>
+			<version>2.1</version>
+		</dependency>
+
 		<!-- 后端验证 -->
 		<dependency>
 			<groupId>javax.validation</groupId>
@@ -63,13 +75,59 @@
 			<version>2.0.1.Final</version>
 		</dependency>
 
+		<!-- 编译为 jar 包时依赖的 -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>javax.servlet.jsp-api</artifactId>
+			<version>2.2.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.websocket</groupId>
+			<artifactId>javax.websocket-api</artifactId>
+			<version>1.1</version>
+			<scope>provided</scope>
+		</dependency>
+
 		<!-- 模拟对象 -->
-<!-- 		<dependency>
+		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<version>2.0.2-beta</version>
 			<scope>provided</scope>
-		</dependency> -->
+		</dependency>
+
+		<!-- 测试用的数据库驱动 -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.30</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
+		<dependency>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+			<version>3.15.1</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Tomcat JNDI 数据源 -->
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-catalina</artifactId>
+			<version>7.0.37</version>
+			<scope>test</scope>
+		</dependency>
 
 		<!-- <dependency> -->
 		<!-- <groupId>junit</groupId> -->
